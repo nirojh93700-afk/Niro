@@ -135,13 +135,14 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   saisir son texte sur la fiche produit **et** dans un champ dédié au moment du
   paiement Stripe. Pense à revenir vers le client par e-mail pour valider les
   détails de gravure avant fabrication.
-- **Livraison :** forfaits simples selon le type d'articles (les poids variant
-  trop pour un calcul au poids). Réglables dans `src/lib/shipping.js` :
-  - Bijoux / petits objets → **3,90 € (Lettre suivie)** — `LETTER_FLAT`
-  - Décoration bois / colis → **6,90 € (colis suivi)** — `PARCEL_FLAT`
-  - Décoration bois & mariage → **remise en main propre gratuite**
+- **Livraison :** le site **calcule automatiquement** un seul frais de port
+  (le client ne choisit pas). Réglable dans `src/lib/shipping.js` :
+  - Panier de bijoux / petits objets → **3,90 € (Lettre suivie)** — `LETTER_FLAT`
+  - Panier avec déco bois (colis) → tarif **par paliers selon le nombre
+    d'articles déco** (`PARCEL_TIERS`) : 6,90 € (≤ 4), 12,90 € (5–12),
+    19,90 € (13+). Cela couvre les envois lourds/volumineux des mariages.
   - Livraison offerte possible dès un montant : variable `FREE_SHIPPING_THRESHOLD`
-  - Le type de chaque produit se règle dans `src/lib/products.js` :
-    `letter` (part en lettre oui/non) et `pickup` (retrait possible oui/non).
+  - Le type de chaque produit se règle dans `src/lib/products.js` via le champ
+    `letter` (part en lettre suivie oui/non).
 - **Contact :** le formulaire envoie un e-mail via Resend (variable
   `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.
