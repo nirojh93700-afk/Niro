@@ -40,8 +40,22 @@ const fontVars = [cinzel, cinzelDeco, montserrat, greatVibes, allura, pacifico]
   .map((f) => f.variable)
   .join(" ");
 
+// Résout l'URL de base sans jamais planter le build (même si la variable
+// NEXT_PUBLIC_SITE_URL est mal écrite, vide, ou sans https://).
+function resolveMetadataBase() {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
+  for (const candidate of [raw, `https://${raw}`, "https://www.nivcreation.com"]) {
+    try {
+      if (candidate) return new URL(candidate);
+    } catch {
+      // on essaie le candidat suivant
+    }
+  }
+  return new URL("https://www.nivcreation.com");
+}
+
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.com"),
+  metadataBase: resolveMetadataBase(),
   title: {
     default: "Niv Création — Bijoux, mariage & cadeaux personnalisés au laser",
     template: "%s | Niv Création",
