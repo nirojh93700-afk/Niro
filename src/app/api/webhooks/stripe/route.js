@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany } from "@/lib/stock";
+import { recordSiteOrder } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -168,6 +169,26 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     await sendEmail({
       subject: `🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
       html,
+    });
+
+    // Enregistre la vente dans la base (collection siteOrders, sans risque).
+    await recordSiteOrder({
+      ref: orderRef,
+      total: (session.amount_total || 0) / 100,
+      currency,
+      customerName: customer.name || "",
+      customerEmail: customer.email || "",
+      customerPhone: customer.phone || "",
+      shippingName: shipping?.name || "",
+      shippingAddress: shipping?.address || null,
+      shippingMethod: shippingRateName,
+      items: (session.line_items?.data || []).map((li) => ({
+        name: li.price?.product?.name || li.description || "",
+        details: li.price?.product?.description || "",
+        quantity: li.quantity,
+        total: (li.amount_total || 0) / 100,
+      })),
+      stock: event.data.object?.metadata?.stock || "",
     });
 
     return Response.json({ received: true });
