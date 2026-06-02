@@ -121,6 +121,16 @@ export default function ProductDetail({ product }) {
                 Niv Création
               </div>
             )}
+            {/* Aperçu de la gravure directement sur la photo */}
+            {previewLines.length > 0 && (
+              <div className="engrave-overlay" style={product.preview || undefined}>
+                {previewLines.map((line, i) => (
+                  <span key={i} className={`eo-line ${previewFontClass}`} style={{ color: previewColor }}>
+                    {line}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
           {product.images.length > 1 && (
             <div className="gallery-thumbs">
@@ -246,25 +256,11 @@ export default function ProductDetail({ product }) {
                 );
               })}
 
-              {/* Aperçu en direct de la gravure */}
               {hasTextFields && (
-                <div className="engrave-preview">
-                  <span className="ep-label">
-                    Aperçu de la gravure
-                    {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
-                  </span>
-                  <div className="ep-plate">
-                    {previewLines.length ? (
-                      previewLines.map((line, i) => (
-                        <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
-                          {line}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="ep-empty">Votre texte apparaîtra ici…</span>
-                    )}
-                  </div>
-                </div>
+                <p className="ep-label" style={{ marginTop: 4 }}>
+                  Votre gravure s'affiche en direct sur la photo
+                  {fontField && fieldValues[fontField.key] ? ` (${getFontLabel(fieldValues[fontField.key])})` : ""}.
+                </p>
               )}
             </div>
           ) : (

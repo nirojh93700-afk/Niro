@@ -10,7 +10,9 @@ export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux personnalisés" },
   { slug: "mariage", label: "Mariage & Réception" },
   { slug: "cristaux", label: "Cristaux & LED" },
-  { slug: "cadeaux", label: "Cadeaux & Décoration" },
+  { slug: "cles-usb", label: "Clés USB" },
+  { slug: "porte-cles", label: "Porte-clés" },
+  { slug: "cadeaux", label: "Décoration & Cadeaux" },
 ];
 
 // Sous-catégories par catégorie (ex : bijoux femme / homme).
@@ -463,7 +465,7 @@ export const products = [
     pickup: false,
     letter: true,
     title: "Clé USB personnalisée – Cadeau souvenir gravé sur mesure",
-    category: "cadeaux",
+    category: "cles-usb",
     type: "Cadeau personnalisé",
     tagline: "Un souvenir gravé à conserver : mariage, entreprise, cadeau.",
     personalizable: true,
@@ -563,7 +565,7 @@ export const products = [
     pickup: false,
     letter: true,
     title: "Porte-clés en cuir véritable à graver personnalisé",
-    category: "cadeaux",
+    category: "porte-cles",
     type: "Porte-clés personnalisé",
     tagline: "Un porte-clés en cuir, gravé à votre message.",
     personalizable: true,
