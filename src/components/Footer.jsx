@@ -11,6 +11,8 @@ export default function Footer() {
               Atelier français de gravure et découpe laser. Bijoux, décorations
               de mariage et cadeaux personnalisés, fabriqués à la main avec soin.
             </p>
+            <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>
+            <span style={{ display: "block", marginTop: 8 }}>Fabriqué en France 🇫🇷</span>
           </div>
           <div>
             <h4>Boutique</h4>
@@ -27,9 +29,11 @@ export default function Footer() {
             <Link href="/#personnalisation">La personnalisation</Link>
           </div>
           <div>
-            <h4>Contact</h4>
-            <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>
-            <span style={{ display: "block", marginTop: 8 }}>Fabriqué en France 🇫🇷</span>
+            <h4>Informations</h4>
+            <Link href="/retours">Politique de retour</Link>
+            <Link href="/cgv">CGV</Link>
+            <Link href="/mentions-legales">Mentions légales</Link>
+            <Link href="/confidentialite">Confidentialité</Link>
           </div>
         </div>
         <div className="footer-bottom">

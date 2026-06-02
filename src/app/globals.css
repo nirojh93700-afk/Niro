@@ -536,6 +536,46 @@ img {
   margin-bottom: 5px;
 }
 
+/* ---------- Accordéon infos produit ---------- */
+.info-accordion {
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.info-accordion details {
+  border-bottom: 1px solid var(--line);
+}
+.info-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 2px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--ink);
+}
+.info-accordion summary::-webkit-details-marker {
+  display: none;
+}
+.info-accordion summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--gold-dark);
+  transition: transform 0.2s ease;
+}
+.info-accordion details[open] summary::after {
+  content: "−";
+}
+.info-accordion .info-body {
+  padding: 0 2px 18px;
+  white-space: pre-line;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
 /* ---------- Cart drawer ---------- */
 .drawer-overlay {
   position: fixed;

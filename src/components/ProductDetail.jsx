@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useCart } from "./CartContext";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
+import { getProductInfo } from "@/lib/productInfo";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -17,6 +18,7 @@ export default function ProductDetail({ product }) {
 
   const variant = product.variants[variantIndex];
   const hasImages = product.images.length > 0;
+  const info = getProductInfo(product.slug);
 
   function handleAdd() {
     addItem({
@@ -147,6 +149,29 @@ export default function ProductDetail({ product }) {
             className="product-desc"
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
           />
+
+          {info && (
+            <div className="info-accordion">
+              {info.material && (
+                <details>
+                  <summary>📏 Taille & Matériaux</summary>
+                  <div className="info-body">{info.material}</div>
+                </details>
+              )}
+              {info.usage && (
+                <details>
+                  <summary>✨ Personnalisation & Entretien</summary>
+                  <div className="info-body">{info.usage}</div>
+                </details>
+              )}
+              {info.returns && (
+                <details>
+                  <summary>🚚 Expédition & Retour</summary>
+                  <div className="info-body">{info.returns}</div>
+                </details>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

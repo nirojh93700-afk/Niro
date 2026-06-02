@@ -1,0 +1,434 @@
+// =============================================================================
+// Informations détaillées par produit (issues de tes métachamps Shopify)
+// -----------------------------------------------------------------------------
+// Pour chaque produit (par slug) :
+//   material : Taille & Matériaux
+//   usage    : Personnalisation & Entretien
+//   returns  : Expédition & Retour (politique de retour spécifique au produit)
+// Affiché en sections dépliables sur la fiche produit.
+// Texte libre — les retours à la ligne sont conservés à l'affichage.
+// =============================================================================
+
+export const productInfo = {
+  "collier-enveloppe-message-secret": {
+    material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
+
+Pourquoi le 316L
+- Sans nickel : ne provoque pas d'allergies, validé pour peaux sensibles.
+- Composition enrichie en molybdène : résistance exceptionnelle à la corrosion (eau, chlore, sueur, eau salée).
+- Référence des bijoux haut de gamme : conserve son éclat des décennies sans ternir ni se déformer.
+
+Caractéristiques techniques
+- Pendentif : 23 mm × 14 mm, épaisseur 4 mm — léger et discret.
+- Chaîne : 40 cm + 5 cm de rallonge réglable.
+- Finitions : Argent (acier brossé) ou Or rose (revêtement PVD haute durabilité).
+- Plaque intérieure amovible, prête à graver.`,
+    usage: `Comment porter et entretenir votre collier locket
+
+Au quotidien
+- Compatible douche, baignade, sport et transpiration : l'acier 316L ne craint ni l'eau ni le chlore.
+- Évitez le contact direct avec parfums, crèmes et lotions — vaporisez avant de mettre le collier.
+- Plongée ou eau de mer prolongée : rincez à l'eau claire en sortant.
+
+Ouvrir la pochette
+- L'enveloppe s'ouvre via une charnière fluide — soulevez délicatement le rabat.
+- Sortez la plaque intérieure pour la gravure ou pour la remplacer plus tard.
+- Refermez en clipsant doucement — fermeture sécurisée.
+
+Entretien
+- Essuyez avec un chiffon doux après chaque port prolongé.
+- Nettoyage hebdomadaire : trempage 10-15 min dans eau tiède savonneuse, brosse souple, rinçage, séchage.`,
+    returns: `Conditions adaptées au produit personnalisé
+
+Si vous avez fait graver votre message
+- Le pendentif est personnalisé → non remboursable après gravure (article L221-28).
+- Annulation possible dans les 24 h après la commande, avant le démarrage de la gravure.
+
+Si vous commandez le collier seul (sans gravure)
+- Droit de rétractation 14 jours (article L221-18).
+- Retour dans l'emballage d'origine, non porté.
+
+Défaut à l'arrivée (les deux cas)
+- Photo sous 14 jours, échange ou renvoi sans frais.
+- Chaîne cassée, finition défectueuse : remplacement immédiat.
+
+Garantie 316L
+- Le ternissement n'est pas couvert si le collier est exposé à des produits chimiques agressifs (eau de Javel, produits ménagers, parfums concentrés).`,
+  },
+
+  "collier-medaillon-coeur-ouvrable": {
+    material: `Acier inoxydable 316L hypoallergénique
+
+- Sans nickel : adapté aux peaux sensibles, ne ternit pas en usage normal.
+- Médaillon cœur ouvrable, 4 faces gravables.
+- Chaîne 50 cm, poids environ 14 g.
+- Finitions : Argent ou Bicolore (Or & Argent).
+- Livré dans une élégante boîte cadeau noire.`,
+    usage: `Personnalisation & entretien
+
+Personnalisation (4 faces)
+- Face avant (20 caractères max) + 3 pages intérieures (30 caractères max chacune).
+- Sur chaque face : un texte, une photo gravée, ou rien — vous combinez librement.
+- Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
+
+Entretien
+- Essuyez avec un chiffon doux après un port prolongé.
+- Évitez le contact avec parfums et crèmes (vaporisez avant de mettre le bijou).`,
+    returns: `Conditions adaptées au produit personnalisé
+
+Si vous avez fait graver un texte ou une photo
+- Médaillon personnalisé → non remboursable après gravure (article L221-28).
+- Annulation possible dans les 24 h après la commande, avant le démarrage de la gravure.
+
+Annulation
+- Dans les 24 h : remboursement intégral.
+- Au-delà, avant gravure : remboursement moins 10 € de frais (designer affecté).
+- Après gravure : non remboursable.
+
+Défaut à l'arrivée
+- Photo sous 14 jours, refonte ou remboursement.
+- Chaîne cassée, finition défectueuse : remplacement immédiat.`,
+  },
+
+  "bracelet-homme-identite-gourmette": {
+    material: `Acier inoxydable 316L (qualité chirurgicale)
+
+- Chaîne gourmette à gros maillons cubains.
+- Plaque rectangulaire lisse, gravable au laser.
+- Fermoir mousqueton sécurisé.
+- Hypoallergénique, ne noircit pas, résiste à l'oxydation.`,
+    usage: `Personnalisation & entretien
+
+Personnalisation
+- Indiquez le texte à graver (prénom, date, initiales, message) et la police souhaitée.
+- Réalisé sur commande dans notre atelier français.
+
+Entretien
+- Chiffon doux sec après un port prolongé.
+- Évitez parfums, crème solaire et gel hydroalcoolique (oxydation).`,
+    returns: `Conditions adaptées
+
+Version AVEC gravure (personnalisée)
+- Non remboursable après gravure (article L221-28).
+- Annulation possible dans les 24 h, avant le démarrage de la gravure.
+
+Version SANS gravure (standard)
+- Droit de rétractation 14 jours (article L221-18), non porté, emballage d'origine.
+
+Défaut à l'arrivée
+- Photo sous 14 jours, échange ou remboursement.
+- Fermoir cassé, finition défectueuse : remplacement immédiat.
+
+Garantie
+- 6 mois contre les défauts de fabrication (fermoir, finition, oxydation prématurée en usage normal).`,
+  },
+
+  "bracelet-homme-acier-silicone": {
+    material: `Acier inoxydable + gel de silicone souple
+
+- Plaque argentée ou noire au choix, gravable au laser.
+- Bracelet silicone confortable au quotidien.
+- Poids environ 18 g. Hypoallergénique.`,
+    usage: `Personnalisation & entretien
+
+Personnalisation
+- Choisissez la couleur de plaque, indiquez le texte à graver et la police.
+- Réalisé sur commande dans notre atelier français.
+
+Entretien
+- Chiffon doux sec après un port prolongé.
+- Évitez parfums et produits chimiques agressifs.`,
+    returns: `Conditions adaptées
+
+Version AVEC texte (personnalisée)
+- Non remboursable après gravure (article L221-28).
+- Annulation possible dans les 24 h, avant le démarrage de la gravure.
+
+Version SANS texte (standard)
+- Droit de rétractation 14 jours (article L221-18), non porté, emballage d'origine.
+
+Défaut à l'arrivée
+- Photo sous 14 jours, échange ou remboursement.
+- Fermoir cassé, finition défectueuse : remplacement immédiat.
+
+Garantie
+- 6 mois contre les défauts de fabrication.`,
+  },
+
+  "bracelet-homme-cuir-acier": {
+    material: `Cuir véritable noir + acier inoxydable 316L
+
+- Plaque gravable au laser (argentée, dorée ou noire).
+- Longueur 19,5 cm, boucle de sécurité acier.
+- Hypoallergénique, ne noircit pas, résiste à l'oxydation.`,
+    usage: `Personnalisation & entretien
+
+Personnalisation
+- Choisissez la couleur de plaque, indiquez le texte (prénom, date, initiales, coordonnées GPS) et la police.
+- Réalisé sur commande dans notre atelier français.
+
+Entretien
+- Chiffon doux sec après un port prolongé.
+- Tenez le cuir éloigné de l'eau prolongée ; évitez parfums et produits chimiques.`,
+    returns: `Conditions adaptées
+
+Version AVEC texte (personnalisée)
+- Non remboursable après gravure (article L221-28).
+- Annulation possible dans les 24 h, avant le démarrage de la gravure.
+
+Version SANS texte (standard)
+- Droit de rétractation 14 jours (article L221-18), non porté, emballage d'origine.
+
+Défaut à l'arrivée
+- Photo sous 14 jours, échange ou remboursement.
+- Boucle cassée, finition défectueuse : remplacement immédiat.
+
+Garantie
+- 6 mois contre les défauts de fabrication.`,
+  },
+
+  "numero-table-arches-bohemes": {
+    material: `Bois + acrylique miroir — le mixed media tendance 2026
+
+Bois
+- Bois de haute qualité (peuplier ou chêne selon disponibilité), découpé au laser de précision.
+- Épaisseur ~5 mm, suffisamment solide pour ne pas se voiler.
+
+Acrylique
+- Acrylique premium effet miroir doré, gravé/découpé au laser.
+- Hauteur 15 cm pour une visibilité parfaite sans encombrer.
+
+Stabilité
+- Socle ovale assorti inclus.
+- Poids global environ 200 g par numéro de table.`,
+    usage: `Mise en scène sur votre table de mariage
+
+Placement
+- Au centre de la table : pose stable grâce au socle ovale assorti inclus.
+- Hauteur 15 cm : visible sans masquer les convives en face.
+
+Mise en valeur déco
+- Posez-le dans un chemin de table en gaze de coton ivoire.
+- Entourez d'eucalyptus, de gypsophile et de quelques bougies chauffe-plat.
+
+Personnalisation
+- Indiquez le numéro souhaité (ou « Mariés » pour la table d'honneur) et la couleur de l'acrylique.
+
+Après la réception
+- Réutilisables : anniversaires, dîners, décoration permanente.`,
+    returns: `Conditions adaptées au mariage (urgence événementielle)
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà : remboursement moins 15 € (designer affecté).
+- Après gravure : non remboursable (article L221-28).
+
+Commande de dernière minute
+- À moins de 15 jours de l'événement, contactez-nous AVANT de commander pour confirmer la faisabilité.
+- Livraison express disponible.
+
+Défaut à l'arrivée
+- Photo sous 24 h, refonte URGENTE sans frais avec livraison express si délai serré.`,
+  },
+
+  "numero-table-eucalyptus": {
+    material: `Bois clair + branche d'eucalyptus en relief
+
+Bois
+- Bois clair sélectionné (peuplier ou bouleau), découpe laser haute précision.
+- Style arche moderne avec ouverture centrale pour le chiffre.
+
+Branche eucalyptus
+- Motif découpé en relief, fixé sur le bas du support.
+
+Dimensions et poids
+- Hauteur environ 16-17 cm, léger (environ 90 g par numéro).
+- Stable sur surface plane grâce à la base intégrée.`,
+    usage: `Style bohème champêtre par excellence
+
+Placement
+- Idéal sur des tables longues style banquet, avec un chemin de table en gaze ou lin naturel.
+- Entourez de vraies branches d'eucalyptus + chandeliers.
+
+Personnalisation
+- À la commande, précisez le numéro souhaité et la couleur du chiffre (doré, ivoire, noir).
+- La branche d'eucalyptus est le motif standard du modèle.`,
+    returns: `Produit personnalisé — urgence événementielle
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà : remboursement moins 10 €.
+- Après production : non remboursable.
+
+Commande tardive
+- Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
+- Livraison express disponible.
+
+Défaut à l'arrivée
+- Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
+  },
+
+  "ronds-de-serviette-bois": {
+    material: `Bois clair de qualité supérieure
+
+- Bois clair (peuplier ou bouleau), poli lisse pour ne pas accrocher au tissu.
+- Épaisseur environ 3 mm — solide mais discret.
+- Trois formes au choix, gravées au laser de précision.
+- Diamètre intérieur environ 4-4,5 cm.
+- Poids environ 5-10 g par rond.
+
+Quantité
+- Pour les grandes quantités (50+), contactez-nous pour un devis sur mesure.`,
+    usage: `Petit détail qui change tout
+
+À indiquer à la commande
+- Forme : hexagone / cercle / double cœur.
+- Texte gravé : prénom de l'invité / initiales / date.
+- Quantité : nombre de convives + 2-3 de réserve.
+
+Mise en place
+- Glissez la serviette pliée dans le rond, posée à gauche de l'assiette.
+- Effet uniforme (une seule forme) ou personnalisé (mix de formes).
+
+Après le mariage
+- Réutilisables comme marque-place ou souvenir d'invité.`,
+    returns: `Personnalisé par invité — conditions adaptées
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà : remboursement moins 10 € (designer affecté).
+- Après gravure : non remboursable (article L221-28).
+
+Quantité erronée à la livraison
+- Échange ou complément immédiat sans frais si la quantité reçue ne correspond pas à la commande.
+
+Défaut à l'arrivée
+- Photo sous 14 jours, refonte gratuite.
+- Pour un mariage proche : livraison express ajoutée.`,
+  },
+
+  "menu-de-mariage-bois-grave": {
+    material: `Bois noble + lettrage gravé en relief 3D
+
+Bois
+- Bois clair sélectionné, découpe laser haute précision.
+- Forme d'arche moderne, finition mate naturelle.
+
+Lettrage relief
+- Découpe laser fixée en surépaisseur : vrai effet 3D.
+- Couleur au choix : doré, argenté, ivoire, noir mat, rosé.
+
+Dimensions et poids
+- Hauteur environ 18 cm × largeur environ 14 cm.
+- Poids environ 180-220 g. Socle intégré : pose stable.`,
+    usage: `La pièce maîtresse de votre table de réception
+
+Placement
+- Pièce centrale de la table d'honneur, ou un menu par table pour les longs banquets.
+- Posé verticalement sur son socle intégré.
+
+Personnalisation
+- Indiquez les plats (un par ligne), les prénoms à graver et la couleur du lettrage relief.
+- Vérification de la maquette par e-mail avant gravure sur demande.`,
+    returns: `Produit ultra-personnalisé — conditions adaptées à l'événement
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà (avant gravure) : remboursement moins 15 € (designer affecté à votre maquette).
+- Après production : non remboursable (article L221-28).
+
+Commande tardive
+- Moins de 21 jours avant l'événement : contactez-nous AVANT de commander (gravure menu + relief = délai un peu plus long).
+- Livraison express disponible.
+
+Défaut à l'arrivée ou erreur de gravure
+- Photo sous 24 h, refonte URGENTE gratuite + livraison express si le mariage approche.`,
+  },
+
+  "plaque-de-porte-enfant": {
+    material: `Bois clair sélectionné, découpé au laser
+
+Origine et qualité
+- Bois clair de qualité supérieure (peuplier ou bouleau), finition lisse et solide.
+- Découpe laser haute précision : contours nets, détails fins.
+
+Finitions
+- Bois brut : aspect naturel, style scandinave / minimaliste.
+- Marron foncé : teinture pénétrante, style cottage / bohème.
+
+Dimensions et sécurité
+- Format moyen, léger (environ 50-100 g selon le prénom).
+- Bords poncés et arrondis : pas de risque de blessure.`,
+    usage: `Personnalisation, fixation, entretien
+
+À indiquer à la commande
+1. Le prénom de l'enfant (écriture exacte avec accents).
+2. La police souhaitée.
+3. Les animaux sélectionnés (4 max).
+4. La finition (bois brut ou marron foncé).
+
+Fixation
+- Crochet delta, pâte à fixe ou ruban double-face.
+- Vérifiez régulièrement la fixation (sécurité enfant).
+
+Entretien
+- Dépoussiérez avec un chiffon doux sec ; évitez les nettoyants chimiques.`,
+    returns: `Produit personnalisé (gravure prénom unique) — non remboursable après lancement de la fabrication
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà (un designer affecté) : remboursement moins 15 € de frais.
+- Après validation de l'aperçu : la découpe a démarré, plus de remboursement.
+
+Défaut à l'arrivée
+- Photo sous 14 jours après réception, refonte sans frais (renvoi du produit défectueux requis).
+
+Erreur d'orthographe sur le prénom
+- Si la faute vient de notre côté (par rapport à l'aperçu validé) : refonte gratuite.
+- Si la faute vient de la commande initiale (validée à l'aperçu) : refonte avec frais réduits, contactez-nous.`,
+  },
+
+  "cle-usb-personnalisee": {
+    material: `Clé USB design + gravure laser de précision
+
+Spécifications
+- Norme USB 2.0 en standard, USB 3.0 en option pour transferts lourds.
+- Capacités : 8 / 16 / 32 / 64 GB.
+- Connecteur : USB-A (universel) ou USB-C (smartphones récents, MacBook récents).
+
+Matériau et personnalisation
+- Corps en métal ou bois selon le modèle.
+- Gravure laser fine et durable.`,
+    usage: `Personnalisation, usage, conservation
+
+À indiquer à la commande
+- Texte à graver (prénom, date, dédicace) OU logo d'entreprise (fichier vectoriel HD).
+- Capacité et type de connecteur souhaités.
+
+Usages typiques
+- Mariage : film de cérémonie et photos remis aux invités.
+- Entreprise : logo gravé en welcome pack.
+
+Conservation
+- Sauvegardez toujours vos fichiers en parallèle (disque dur ou cloud).
+- Évitez les températures extrêmes ; éjectez correctement la clé.`,
+    returns: `Personnalisée après gravure — non remboursable
+
+Annulation
+- Dans les 24 h suivant la commande : remboursement intégral.
+- Au-delà (commande en préparation) : remboursement moins 10 € de frais.
+- Après gravure : non remboursable (personnalisation unique).
+
+Défaut technique ou de gravure
+- Photo du défaut sous 14 jours après réception.
+- Échange standard sans frais (renvoi du produit défectueux requis).
+
+Garantie technique
+- 12 mois sur le hardware (panne de la clé en usage normal).
+- Pas de garantie sur les données perdues (toujours sauvegarder en parallèle).`,
+  },
+};
+
+export function getProductInfo(slug) {
+  return productInfo[slug] || null;
+}
