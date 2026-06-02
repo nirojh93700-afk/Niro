@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { decrementMany } from "@/lib/stock";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -75,6 +76,17 @@ export async function POST(req) {
 
   if (event.type !== "checkout.session.completed") {
     return Response.json({ received: true });
+  }
+
+  // Décrémente le stock des variantes achetées (si suivi).
+  try {
+    const raw = event.data.object?.metadata?.stock;
+    if (raw) {
+      const pairs = JSON.parse(raw); // [[variantId, qty], ...]
+      await decrementMany(pairs.map(([variantId, qty]) => ({ variantId, qty })));
+    }
+  } catch (e) {
+    console.error("Décrément stock impossible:", e.message);
   }
 
   try {

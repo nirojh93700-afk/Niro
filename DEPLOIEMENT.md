@@ -93,6 +93,7 @@ Avant de cliquer Deploy, déplie **Environment Variables** et ajoute :
 | `RESEND_API_KEY` | ta clé Resend (`re_…`) — *optionnel* |
 | `CONTACT_EMAIL` | `contact.nivcreation@gmail.com` — *optionnel* |
 | `STRIPE_WEBHOOK_SECRET` | secret du webhook (`whsec_…`) — voir étape 3 bis |
+| `ADMIN_PASSWORD` | mot de passe de ta page de gestion `/gestion` (stock) |
 
 > 💡 Astuce : ajoute chaque variable une par une (Nom + Valeur + Add).
 

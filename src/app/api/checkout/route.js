@@ -48,6 +48,7 @@ export async function POST(req) {
   let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
   let letterOnly = true;
   let pickupEligible = false; // remise en main propre possible
+  const boughtVariants = []; // pour décrémenter le stock après paiement
 
   for (const item of items) {
     const match = variantIndex.get(item.variantId);
@@ -60,6 +61,7 @@ export async function POST(req) {
     const quantity = Math.min(Math.max(parseInt(item.quantity, 10) || 1, 1), 99);
     const { product, variant } = match;
 
+    boughtVariants.push({ variantId: variant.id, qty: quantity });
     totalGrams += (product.weight || 200) * quantity;
     subtotal += variant.price * quantity;
     if (!product.letter) {
@@ -96,6 +98,10 @@ export async function POST(req) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
+      metadata: {
+        // sert à décrémenter le stock après paiement (variantId:quantité)
+        stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
+      },
       locale: "fr",
       currency: "eur",
       billing_address_collection: "auto",

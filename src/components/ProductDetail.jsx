@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "./CartContext";
@@ -20,9 +20,19 @@ export default function ProductDetail({ product }) {
   const [added, setAdded] = useState(false);
   const [error, setError] = useState("");
 
+  const [stockMap, setStockMap] = useState({});
+  useEffect(() => {
+    fetch("/api/stock")
+      .then((r) => r.json())
+      .then((d) => setStockMap(d.stock || {}))
+      .catch(() => {});
+  }, []);
+
   const variant = product.variants[variantIndex];
   const hasImages = product.images.length > 0;
   const info = getProductInfo(product.slug);
+  const variantStock = stockMap[variant.id];
+  const soldOut = typeof variantStock === "number" && variantStock <= 0;
 
   // Champs de gravure visibles selon l'option (variante) sélectionnée.
   const visibleFields = (product.personalizationFields || []).filter(
@@ -74,6 +84,7 @@ export default function ProductDetail({ product }) {
   );
 
   function handleAdd() {
+    if (soldOut) return;
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
     if (product.personalizationFields) {
       const missing = visibleFields.find(
@@ -296,10 +307,15 @@ export default function ProductDetail({ product }) {
                 +
               </button>
             </div>
-            <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd}>
-              {added ? "✓ Ajouté au panier" : "Ajouter au panier"}
+            <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut}>
+              {soldOut ? "Épuisé" : added ? "Ajouté au panier" : "Ajouter au panier"}
             </button>
           </div>
+          {typeof variantStock === "number" && (
+            <p style={{ margintop: 0, fontSize: "0.85rem", color: soldOut ? "#b4452f" : "var(--ink-soft)" }}>
+              {soldOut ? "Cette option est momentanément épuisée." : `En stock : ${variantStock}`}
+            </p>
+          )}
 
           <div className="hero-badges" style={{ marginTop: 8 }}>
             <div className="hero-badge"><span>🇫🇷</span> Fabriqué en France</div>

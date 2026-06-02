@@ -525,6 +525,70 @@ img {
   margin-top: 4px;
 }
 
+/* Espace gestion (admin) */
+.admin-block {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.admin-block h3 {
+  margin: 0 0 10px;
+  font-size: 1.02rem;
+}
+.admin-cat {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold-dark);
+  font-family: var(--font-body), sans-serif;
+  margin-left: 8px;
+}
+.admin-row {
+  display: grid;
+  grid-template-columns: 1fr auto 90px 90px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.admin-variant {
+  font-size: 0.9rem;
+}
+.admin-price {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.admin-stock {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  text-align: center;
+}
+.admin-stock.out {
+  border-color: #c87b5e;
+  background: #fdeee8;
+  color: #b4452f;
+}
+.admin-saved {
+  font-size: 0.72rem;
+  color: #256b34;
+}
+@media (max-width: 600px) {
+  .admin-row {
+    grid-template-columns: 1fr 70px;
+    grid-template-areas: "variant stock" "price saved";
+    row-gap: 4px;
+  }
+  .admin-variant { grid-area: variant; }
+  .admin-price { grid-area: price; }
+  .admin-stock { grid-area: stock; }
+  .admin-saved { grid-area: saved; }
+}
+
 /* Upload de photo */
 .photo-dropzone {
   display: flex;
