@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
 import MockupSwitcher from "@/components/MockupSwitcher";
-import { brand, categoryCards, featured, heroImages } from "@/lib/homeContent";
+import { brand, categoryCards, featured } from "@/lib/homeContent";
 
 export const metadata = { title: "Maquette 2 — Immersif plein écran" };
 
@@ -11,16 +11,13 @@ export default function Style2() {
     <>
       <MockupSwitcher current={2} />
 
-      {/* HERO plein écran */}
-      <section className="fs-hero">
-        <div className="bg">
-          <Image src={heroImages.immersive} alt="Atelier Niv Création" fill priority style={{ objectFit: "cover" }} />
-        </div>
-        <div className="overlay" />
+      {/* HERO plein écran — fond de marque général (sans produit) */}
+      <section className="fs-hero brandbg">
         <div className="fs-content">
           <p className="fs-tag">{brand.eyebrow}</p>
           <h1 className="fs-name">Niv Création</h1>
-          <p className="fs-tag" style={{ marginTop: 18 }}>Créations gravées à la main</p>
+          <div className="fs-divider" />
+          <p className="fs-tag">Gravé et personnalisé sur mesure</p>
           <div className="fs-cta">
             <Link href="/boutique" className="btn btn-gold">Découvrir la boutique</Link>
           </div>

@@ -18,9 +18,10 @@ export default function AProposPage() {
             <h1>L'art de graver vos émotions</h1>
             <p>
               Niv Création est un atelier artisanal français spécialisé dans la
-              gravure et la découpe laser. Nous transformons le bois, l'acier
-              inoxydable et l'acrylique en pièces uniques, pensées pour célébrer
-              vos moments les plus précieux.
+              gravure et la découpe laser. Nous personnalisons par gravure vos
+              bijoux, cristaux et cadeaux, et nous dessinons, gravons et
+              découpons nos créations en bois sur mesure — pour célébrer vos
+              moments les plus précieux.
             </p>
             <Link href="/boutique" className="btn btn-gold">Découvrir nos créations</Link>
           </div>
@@ -41,10 +42,10 @@ export default function AProposPage() {
           <div className="product-desc" style={{ borderTop: "none", paddingTop: 0 }}>
             <h3>Un savoir-faire artisanal</h3>
             <p style={{ color: "var(--ink-soft)" }}>
-              Chaque création naît d'un dessin, puis prend vie sous le faisceau
-              précis de notre laser. Cette technique nous permet une finesse de
-              détail exceptionnelle, que ce soit pour graver un prénom sur un
-              bijou ou découper les arches délicates d'un numéro de table.
+              Notre métier, c'est la précision du laser : graver un prénom sur un
+              bijou ou un cristal, et dessiner puis découper les arches délicates
+              d'un numéro de table en bois. Une même exigence de finition sur
+              chaque pièce que nous personnalisons.
             </p>
 
             <h3>Des matériaux choisis avec soin</h3>

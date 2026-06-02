@@ -5,10 +5,10 @@ export const brand = {
   eyebrow: "Atelier français — gravure & découpe laser",
   headline: "L'art de graver vos émotions",
   intro:
-    "Bijoux, décorations de mariage et cadeaux personnalisés, façonnés à la main dans notre atelier. Chaque pièce raconte votre histoire.",
+    "Bijoux, décorations de mariage et cadeaux personnalisés par gravure laser, préparés avec soin dans notre atelier français. Chaque pièce raconte votre histoire.",
   statementEyebrow: "Notre savoir-faire",
   statement:
-    "Chaque création est dessinée puis gravée au laser dans des matières nobles — bois, acier inoxydable, acrylique. Des pièces uniques, pensées pour traverser le temps.",
+    "Nous gravons au laser vos bijoux, cristaux et cadeaux personnalisés. Nos créations en bois sont, elles, dessinées, gravées et découpées sur mesure dans notre atelier.",
   quote: "Chaque pièce raconte votre histoire.",
   trust: ["Fait main en France", "Gravure sur mesure", "Paiement sécurisé", "Expédition soignée"],
 };

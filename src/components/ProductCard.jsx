@@ -1,11 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getPriceFrom } from "@/lib/products";
 import { formatEuro } from "@/lib/format";
 
 export default function ProductCard({ product }) {
-  const priceFrom = getPriceFrom(product);
-  const multiPrice = new Set(product.variants.map((v) => v.price)).size > 1;
+  // Prix affiché = celui de la variante par défaut (la fiche s'ouvre dessus),
+  // pour rester cohérent. On ajoute "dès" seulement si cette variante est aussi
+  // la moins chère et qu'il existe d'autres prix plus élevés.
+  const prices = product.variants.map((v) => v.price);
+  const basePrice = product.variants[0].price;
+  const distinct = new Set(prices).size > 1;
+  const showDes = distinct && basePrice === Math.min(...prices);
   const image = product.images[0];
 
   return (
@@ -28,8 +32,8 @@ export default function ProductCard({ product }) {
         <h3>{product.name}</h3>
         <p className="tagline">{product.tagline}</p>
         <div className="product-price">
-          {multiPrice && <small>dès </small>}
-          {formatEuro(priceFrom)}
+          {showDes && <small>dès </small>}
+          {formatEuro(basePrice)}
         </div>
       </div>
     </Link>
