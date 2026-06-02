@@ -1,36 +1,49 @@
 // =============================================================================
-// Calcul des frais de livraison selon le POIDS du panier
+// Calcul des frais de livraison selon le POIDS et le TYPE du panier
 // -----------------------------------------------------------------------------
-// Tarifs basés sur les grilles 2025 (Mondial Relay point relais & Colissimo
-// domicile suivi). À ajuster librement ici si tes tarifs évoluent.
-// Les montants sont en euros.
+// Tarifs La Poste / Mondial Relay 2025 (France métropolitaine).
+// → Objets légers & fins (bijoux, clé USB, ronds de serviette) : LETTRE SUIVIE
+//   (jusqu'à 2 kg et 3 cm d'épaisseur) — l'option la moins chère.
+// → Décoration bois volumineuse : COLIS (point relais ou domicile Colissimo).
+// Tout est librement ajustable ici. Montants en euros.
 // =============================================================================
 
-// Chaque palier : poids max (en grammes) -> prix point relais / prix domicile.
-const TIERS = [
-  { maxGrams: 500, relais: 3.9, domicile: 5.9 },
-  { maxGrams: 1000, relais: 4.9, domicile: 7.9 },
-  { maxGrams: 2000, relais: 5.9, domicile: 9.9 },
-  { maxGrams: 5000, relais: 6.9, domicile: 14.9 },
-  { maxGrams: 10000, relais: 9.9, domicile: 22.9 },
-  { maxGrams: Infinity, relais: 14.9, domicile: 29.9 },
+// --- Lettre Suivie La Poste (objets fins < 3 cm, jusqu'à 2 kg) -------------
+const LETTER_TIERS = [
+  { maxGrams: 100, price: 3.28 },
+  { maxGrams: 250, price: 5.25 },
+  { maxGrams: 500, price: 7.2 },
+  { maxGrams: 1000, price: 8.9 },
+  { maxGrams: 2000, price: 10.75 },
+];
+
+// --- Colis : point relais (Mondial Relay) & domicile (Colissimo suivi) -----
+const PARCEL_TIERS = [
+  { maxGrams: 250, relais: 4.55, domicile: 5.25 },
+  { maxGrams: 500, relais: 3.9, domicile: 7.35 },
+  { maxGrams: 1000, relais: 4.9, domicile: 9.4 },
+  { maxGrams: 2000, relais: 5.9, domicile: 10.7 },
+  { maxGrams: 5000, relais: 6.9, domicile: 16.6 },
+  { maxGrams: 10000, relais: 9.5, domicile: 24.2 },
+  { maxGrams: Infinity, relais: 14.9, domicile: 30.55 },
 ];
 
 // Livraison offerte à partir de ce montant d'achat (null = désactivé).
 export const FREE_SHIPPING_THRESHOLD = null;
 
-export function getTierForWeight(grams) {
-  return TIERS.find((t) => grams <= t.maxGrams) || TIERS[TIERS.length - 1];
+function pickTier(tiers, grams) {
+  return tiers.find((t) => grams <= t.maxGrams) || tiers[tiers.length - 1];
 }
 
-// Construit les options de livraison Stripe en fonction du poids total
-// et de l'éligibilité à la remise en main propre.
-export function buildShippingOptions({ totalGrams, subtotal, pickupEligible }) {
-  const tier = getTierForWeight(totalGrams);
-  const freeAll =
-    FREE_SHIPPING_THRESHOLD != null && subtotal >= FREE_SHIPPING_THRESHOLD;
+export function getLetterTier(grams) {
+  return pickTier(LETTER_TIERS, grams);
+}
+export function getParcelTier(grams) {
+  return pickTier(PARCEL_TIERS, grams);
+}
 
-  const toRate = (amount, name, desc, days = [2, 5]) => ({
+function rate(amount, name, days) {
+  return {
     shipping_rate_data: {
       type: "fixed_amount",
       fixed_amount: { amount: Math.round(amount * 100), currency: "eur" },
@@ -39,33 +52,37 @@ export function buildShippingOptions({ totalGrams, subtotal, pickupEligible }) {
         minimum: { unit: "business_day", value: days[0] },
         maximum: { unit: "business_day", value: days[1] },
       },
-      metadata: desc ? { info: desc } : undefined,
     },
-  });
+  };
+}
 
+// Construit les options Stripe selon le contenu du panier.
+//   totalGrams    : poids total (g)
+//   subtotal      : sous-total produits (€)
+//   pickupEligible: au moins un article éligible à la remise en main propre
+//   letterOnly    : TOUS les articles sont expédiables en lettre suivie
+export function buildShippingOptions({ totalGrams, subtotal, pickupEligible, letterOnly }) {
+  const free = FREE_SHIPPING_THRESHOLD != null && subtotal >= FREE_SHIPPING_THRESHOLD;
   const options = [];
 
-  // Option gratuite : remise en main propre (déco bois / mariage).
+  // Remise en main propre gratuite (déco bois / mariage).
   if (pickupEligible) {
-    options.push(
-      toRate(0, "Remise en main propre (atelier) — Gratuit", "Décoration bois & mariage", [1, 7])
-    );
+    options.push(rate(0, "Remise en main propre (atelier) — Gratuit", [1, 7]));
   }
 
-  options.push(
-    toRate(
-      freeAll ? 0 : tier.relais,
-      freeAll ? "Point relais — Offert" : "Point relais (Mondial Relay)",
-      "Retrait en point relais"
-    )
-  );
-  options.push(
-    toRate(
-      freeAll ? 0 : tier.domicile,
-      freeAll ? "Livraison à domicile — Offerte" : "Livraison à domicile (Colissimo suivi)",
-      "Livraison suivie à domicile"
-    )
-  );
+  // Lettre suivie possible uniquement si tout est léger/fin ET ≤ 2 kg.
+  if (letterOnly && totalGrams <= 2000) {
+    const t = getLetterTier(totalGrams);
+    options.push(rate(free ? 0 : t.price, free ? "Lettre suivie — Offerte" : "Lettre suivie La Poste", [2, 4]));
+    // On propose aussi le domicile suivi en alternative (réassurance).
+    const p = getParcelTier(totalGrams);
+    options.push(rate(free ? 0 : p.domicile, "Colissimo domicile (suivi)", [2, 4]));
+    return options;
+  }
 
+  // Sinon : colis (relais + domicile) selon le poids.
+  const p = getParcelTier(totalGrams);
+  options.push(rate(free ? 0 : p.relais, free ? "Point relais — Offert" : "Point relais (Mondial Relay)", [3, 6]));
+  options.push(rate(free ? 0 : p.domicile, free ? "Domicile — Offert" : "Livraison à domicile (Colissimo suivi)", [2, 5]));
   return options;
 }

@@ -135,12 +135,17 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   saisir son texte sur la fiche produit **et** dans un champ dédié au moment du
   paiement Stripe. Pense à revenir vers le client par e-mail pour valider les
   détails de gravure avant fabrication.
-- **Livraison :** les frais sont calculés automatiquement selon le **poids
-  total du panier** (voir `src/lib/shipping.js` pour ajuster les tarifs). Le
-  client choisit entre **point relais**, **livraison à domicile**, et
-  **remise en main propre gratuite** (proposée dès que le panier contient une
-  décoration bois/mariage). Le poids de chaque produit se règle dans
-  `src/lib/products.js` (champ `weight`, en grammes) et l'éligibilité au retrait
-  via le champ `pickup`.
+- **Livraison :** les frais sont calculés automatiquement selon le **poids** et
+  le **type** d'articles du panier (tarifs La Poste / Mondial Relay 2025, voir
+  `src/lib/shipping.js`) :
+  - Articles **légers et fins** (bijoux, clé USB, ronds de serviette) →
+    **Lettre Suivie La Poste** (l'option la moins chère : ex. 3,28 € jusqu'à
+    100 g, 5,25 € jusqu'à 250 g).
+  - **Décoration bois volumineuse** → **colis** (point relais Mondial Relay ou
+    domicile Colissimo suivi).
+  - **Remise en main propre — gratuite** dès que le panier contient une déco
+    bois/mariage.
+  - Réglages par produit dans `src/lib/products.js` : `weight` (grammes),
+    `letter` (expédiable en lettre), `pickup` (retrait possible).
 - **Contact :** le formulaire envoie un e-mail via Resend (variable
   `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.

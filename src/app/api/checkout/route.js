@@ -46,6 +46,7 @@ export async function POST(req) {
   let totalGrams = 0;
   let subtotal = 0;
   let pickupEligible = false;
+  let letterOnly = true;
 
   for (const item of items) {
     const match = variantIndex.get(item.variantId);
@@ -61,6 +62,7 @@ export async function POST(req) {
     totalGrams += (product.weight || 200) * quantity;
     subtotal += variant.price * quantity;
     if (product.pickup) pickupEligible = true;
+    if (!product.letter) letterOnly = false;
 
     const descriptionParts = [variant.title];
     if (item.personalization) {
@@ -95,7 +97,7 @@ export async function POST(req) {
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
-      shipping_options: buildShippingOptions({ totalGrams, subtotal, pickupEligible }),
+      shipping_options: buildShippingOptions({ totalGrams, subtotal, pickupEligible, letterOnly }),
       custom_fields: [
         {
           key: "personnalisation",
