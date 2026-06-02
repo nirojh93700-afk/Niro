@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "./CartContext";
+import { CATEGORIES } from "@/lib/products";
 
 export default function Header() {
   const { count, setDrawerOpen, hydrated } = useCart();
@@ -18,10 +19,9 @@ export default function Header() {
 
         <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
           <Link href="/boutique">Boutique</Link>
-          <Link href="/boutique?cat=bijoux&sub=femme">Bijoux femme</Link>
-          <Link href="/boutique?cat=bijoux&sub=homme">Bijoux homme</Link>
-          <Link href="/boutique?cat=mariage">Mariage</Link>
-          <Link href="/boutique?cat=cadeaux">Cadeaux & Déco</Link>
+          {CATEGORIES.map((c) => (
+            <Link key={c.slug} href={`/boutique?cat=${c.slug}`}>{c.short}</Link>
+          ))}
           <Link href="/a-propos">À propos</Link>
           <Link href="/contact">Contact</Link>
         </nav>

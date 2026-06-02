@@ -7,12 +7,12 @@
 // =============================================================================
 
 export const CATEGORIES = [
-  { slug: "bijoux", label: "Bijoux personnalisés" },
-  { slug: "mariage", label: "Mariage & Réception" },
-  { slug: "cristaux", label: "Cristaux & LED" },
-  { slug: "cles-usb", label: "Clés USB" },
-  { slug: "porte-cles", label: "Porte-clés" },
-  { slug: "cadeaux", label: "Décoration & Cadeaux" },
+  { slug: "bijoux", label: "Bijoux personnalisés", short: "Bijoux" },
+  { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
+  { slug: "cristaux", label: "Cristaux & LED", short: "Cristaux" },
+  { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
+  { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
+  { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
 ];
 
 // Sous-catégories par catégorie (ex : bijoux femme / homme).

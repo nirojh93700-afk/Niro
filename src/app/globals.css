@@ -142,14 +142,16 @@ img {
 }
 .nav {
   display: flex;
-  gap: 26px;
+  gap: 16px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .nav a {
-  font-size: 0.93rem;
+  font-size: 0.86rem;
   font-weight: 500;
   color: var(--ink-soft);
   transition: color 0.2s;
+  white-space: nowrap;
 }
 .nav a:hover {
   color: var(--ink);
