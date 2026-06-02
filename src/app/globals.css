@@ -589,6 +589,19 @@ img {
   .admin-saved { grid-area: saved; }
 }
 
+.photo-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.photo-thumbs img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
 /* Upload de photo */
 .photo-dropzone {
   display: flex;

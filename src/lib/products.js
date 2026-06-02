@@ -270,6 +270,7 @@ export const products = [
         { value: "#1c1813", label: "Noir" },
         { value: "#b76e79", label: "Rosé" },
       ] },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/6eab4878-cbeb-4f83-9620-ea38e73359b9_png.webp?v=1775184450",
@@ -314,6 +315,7 @@ export const products = [
         { value: "#b0b0b0", label: "Argenté" },
         { value: "#1c1813", label: "Noir" },
       ] },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/Gemini_Generated_Image_rdfslxrdfslxrdfs.png?v=1776295960",

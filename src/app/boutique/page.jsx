@@ -7,6 +7,9 @@ import {
   getSubcategories,
   getSubcategoryLabel,
 } from "@/lib/products";
+import { getImageOverrides } from "@/lib/stock";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Boutique — toutes nos créations personnalisées",
@@ -14,11 +17,15 @@ export const metadata = {
     "Découvrez tous les bijoux (femme & homme), décorations de mariage et cadeaux personnalisés Niv Création, gravés au laser dans notre atelier français.",
 };
 
-export default function BoutiquePage({ searchParams }) {
+export default async function BoutiquePage({ searchParams }) {
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
+  const overrides = await getImageOverrides();
 
-  let filtered = activeCat ? products.filter((p) => p.category === activeCat) : products;
+  const withImages = products.map((p) =>
+    overrides[p.slug]?.length ? { ...p, images: overrides[p.slug] } : p
+  );
+  let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
   if (activeCat && activeSub) {
     filtered = filtered.filter((p) => p.subcategory === activeSub);
   }

@@ -21,18 +21,30 @@ export default function ProductDetail({ product }) {
   const [error, setError] = useState("");
 
   const [stockMap, setStockMap] = useState({});
+  const [images, setImages] = useState(product.images);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
       .then((d) => setStockMap(d.stock || {}))
       .catch(() => {});
-  }, []);
+    fetch("/api/catalog")
+      .then((r) => r.json())
+      .then((d) => {
+        const ov = d.images?.[product.slug];
+        if (ov && ov.length) setImages(ov);
+      })
+      .catch(() => {});
+  }, [product.slug]);
 
   const variant = product.variants[variantIndex];
-  const hasImages = product.images.length > 0;
+  const hasImages = images.length > 0;
   const info = getProductInfo(product.slug);
   const variantStock = stockMap[variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
+  // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
+  // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
+  const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
+  const originLabel = madeHere ? "Fabriqué en France" : "Gravé en France";
 
   // Champs de gravure visibles selon l'option (variante) sélectionnée.
   const visibleFields = (product.personalizationFields || []).filter(
@@ -102,7 +114,7 @@ export default function ProductDetail({ product }) {
       name: product.name,
       variantTitle: variant.title,
       price: variant.price,
-      image: product.images[0] || null,
+      image: images[0] || null,
       personalization: buildPersonalization(),
       quantity,
     });
@@ -118,7 +130,7 @@ export default function ProductDetail({ product }) {
           <div className="gallery-main">
             {hasImages ? (
               <Image
-                src={product.images[activeImg]}
+                src={images[activeImg]}
                 alt={`${product.name} — visuel ${activeImg + 1}`}
                 width={800}
                 height={800}
@@ -143,9 +155,9 @@ export default function ProductDetail({ product }) {
               </div>
             )}
           </div>
-          {product.images.length > 1 && (
+          {images.length > 1 && (
             <div className="gallery-thumbs">
-              {product.images.map((img, i) => (
+              {images.map((img, i) => (
                 <button
                   key={img}
                   className={i === activeImg ? "active" : ""}
@@ -268,10 +280,26 @@ export default function ProductDetail({ product }) {
               })}
 
               {hasTextFields && (
-                <p className="ep-label" style={{ marginTop: 4 }}>
-                  Votre gravure s'affiche en direct sur la photo
-                  {fontField && fieldValues[fontField.key] ? ` (${getFontLabel(fieldValues[fontField.key])})` : ""}.
-                </p>
+                <div className="engrave-preview">
+                  <span className="ep-label">
+                    Aperçu de l'écriture
+                    {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
+                  </span>
+                  <div className="ep-plate">
+                    {previewLines.length ? (
+                      previewLines.map((line, i) => (
+                        <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
+                          {line}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="ep-empty">Votre texte apparaîtra ici…</span>
+                    )}
+                  </div>
+                  <span className="ep-label" style={{ marginTop: 8 }}>
+                    L'aperçu s'affiche aussi directement sur la photo.
+                  </span>
+                </div>
               )}
             </div>
           ) : (
@@ -318,9 +346,9 @@ export default function ProductDetail({ product }) {
           )}
 
           <div className="hero-badges" style={{ marginTop: 8 }}>
-            <div className="hero-badge"><span>🇫🇷</span> Fabriqué en France</div>
-            <div className="hero-badge"><span>🔒</span> Paiement sécurisé</div>
-            <div className="hero-badge"><span>✦</span> Pièce personnalisée</div>
+            <div className="hero-badge">{originLabel}</div>
+            <div className="hero-badge">Paiement sécurisé</div>
+            <div className="hero-badge">Pièce personnalisée</div>
           </div>
 
           <div
