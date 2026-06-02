@@ -72,6 +72,7 @@ Avant de cliquer Deploy, déplie **Environment Variables** et ajoute :
 | `NEXT_PUBLIC_SITE_URL` | `https://www.nivcreation.com` |
 | `RESEND_API_KEY` | ta clé Resend (`re_…`) — *optionnel* |
 | `CONTACT_EMAIL` | `contact.nivcreation@gmail.com` — *optionnel* |
+| `STRIPE_WEBHOOK_SECRET` | secret du webhook (`whsec_…`) — voir étape 3 bis |
 
 > 💡 Astuce : ajoute chaque variable une par une (Nom + Valeur + Add).
 
@@ -86,6 +87,26 @@ Avant de cliquer Deploy, déplie **Environment Variables** et ajoute :
    - Numéro : `4242 4242 4242 4242`
    - Date : n'importe quelle date future · CVC : `123` · Code postal : `75000`
 3. Tu dois arriver sur la page **« Merci pour votre commande »**. ✅
+
+---
+
+## Étape 3 bis — E-mail récap à chaque commande (pour tes étiquettes) 📩
+
+À chaque commande payée, le site peut t'envoyer un e-mail avec tout le détail
+(produits, personnalisation et **adresse de livraison prête à copier** pour ton
+imprimante d'étiquettes). Pour l'activer :
+
+1. Assure-toi d'avoir renseigné `RESEND_API_KEY` et `CONTACT_EMAIL` (étape 2).
+2. Une fois le site déployé, va dans Stripe : **Développeurs → Webhooks →
+   Ajouter un point de terminaison**.
+3. URL du endpoint : `https://www.nivcreation.com/api/webhooks/stripe`
+   (ou ton adresse Vercel `https://…vercel.app/api/webhooks/stripe` pour tester).
+4. Événement à écouter : **`checkout.session.completed`**.
+5. Valide, puis copie le **« Secret de signature »** (`whsec_…`).
+6. Ajoute-le dans Vercel → Environment Variables sous le nom
+   `STRIPE_WEBHOOK_SECRET`, puis **Redeploy**.
+
+✅ Désormais, chaque commande payée déclenche ton e-mail récap automatique.
 
 ---
 
