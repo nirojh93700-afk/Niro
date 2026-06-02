@@ -162,9 +162,17 @@ export default function ProductDetail({ product }) {
                 <img src={photoSrc} alt="Aperçu de la gravure photo" />
               </div>
             )}
-            {/* Note : on n'écrit pas le texte sur la photo produit (photos
-                fournisseur souvent annotées) — l'aperçu propre est le "témoin"
-                ci-dessous. */}
+            {/* Gravure écrite directement sur la photo du produit (position
+                réglable par produit via product.preview ; sinon centrée). */}
+            {hasImages && previewLines.length > 0 && (
+              <div className="engrave-overlay" style={product.preview || undefined}>
+                {previewLines.map((line, i) => (
+                  <span key={i} className={`eo-line ${previewFontClass}`} style={{ color: previewColor }}>
+                    {line}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
           {images.length > 1 && (
             <div className="gallery-thumbs">

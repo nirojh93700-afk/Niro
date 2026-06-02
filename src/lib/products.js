@@ -139,6 +139,7 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "homme",
+    preview: { top: "45%", bottom: "40%", left: "6%", right: "48%" },
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
       { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
