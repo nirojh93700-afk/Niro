@@ -86,7 +86,7 @@ export const products = [
       { key: "page2", label: "Gravure — page gauche (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
       { key: "page3", label: "Gravure — page droite (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "photoNote", type: "note", text: "Option photo : envoyez votre image par e-mail après la commande (en indiquant votre numéro de commande). Choisissez une photo nette et bien contrastée.", variantContains: "Photo" },
+      { key: "photo", type: "photo", label: "Photo à graver", optional: true, variantContains: "Photo", text: "Choisissez une photo nette, bien éclairée et contrastée pour un rendu optimal." },
     ],
     title: "Collier médaillon cœur ouvrable — 4 faces gravables",
     category: "bijoux",

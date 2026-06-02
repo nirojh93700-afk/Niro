@@ -8,6 +8,7 @@ import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
+import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -177,6 +178,19 @@ export default function ProductDetail({ product }) {
               {visibleFields.map((f) => {
                 if (f.type === "note") {
                   return <p key={f.key} className="perso-hint">{f.text}</p>;
+                }
+                if (f.type === "photo") {
+                  return CLOUDINARY_READY ? (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} />
+                      {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
+                    </div>
+                  ) : (
+                    <p key={f.key} className="perso-hint">
+                      {f.text || "Envoyez votre photo par e-mail après la commande."}
+                    </p>
+                  );
                 }
                 const labelEl = (
                   <label htmlFor={`pf-${f.key}`}>

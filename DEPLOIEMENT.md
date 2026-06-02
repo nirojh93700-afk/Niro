@@ -130,6 +130,26 @@ imprimante d'étiquettes). Pour l'activer :
 
 ---
 
+## Étape 3 ter — Activer l'upload de photo (gravure photo / cristaux) 📷 *(optionnel)*
+
+Pour que le client puisse **téléverser sa photo** (collier médaillon option photo,
+futurs cristaux 3D) directement sur le site :
+
+1. Crée un compte gratuit sur **https://cloudinary.com**.
+2. Va dans **Settings → Upload → Upload presets → Add upload preset**.
+3. Mets **Signing Mode = Unsigned**, enregistre, et note le **nom du preset**.
+4. Note aussi ton **Cloud name** (affiché en haut du tableau de bord).
+5. Dans Netlify → Environment variables, ajoute :
+   - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` = ton cloud name
+   - `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` = le nom du preset
+6. **Redeploy.**
+
+Sans ces variables, le site affiche simplement « envoyez votre photo par e-mail
+après la commande » — rien n'est bloqué. Une fois activé, la photo est
+téléversée et son lien arrive dans ton e-mail récap de commande.
+
+---
+
 ## Étape 4 — Brancher ton domaine www.nivcreation.com 🔗
 
 1. Dans Vercel : projet → **Settings → Domains**.
