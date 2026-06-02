@@ -135,17 +135,15 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   saisir son texte sur la fiche produit **et** dans un champ dédié au moment du
   paiement Stripe. Pense à revenir vers le client par e-mail pour valider les
   détails de gravure avant fabrication.
-- **Livraison :** le site **calcule automatiquement** un seul frais de port
-  (le client ne choisit pas). Réglable dans `src/lib/shipping.js` :
-  - Panier de bijoux / petits objets → **3,90 € (Lettre suivie)** — `LETTER_FLAT`
-  - Panier avec déco bois (colis) → tarif **par paliers selon le nombre
-    d'articles déco** (`PARCEL_TIERS`) : 6,90 € (≤ 4), 12,90 € (5–12),
-    19,90 € (13+). Cela couvre les envois lourds/volumineux des mariages.
-  - **Remise en main propre — gratuite** : proposée en plus (alternative) dès
-    que le panier contient une déco bois/mariage. Le frais de port reste, lui,
-    calculé automatiquement.
-  - Livraison offerte possible dès un montant : variable `FREE_SHIPPING_THRESHOLD`
-  - Le type de chaque produit se règle dans `src/lib/products.js` via les champs
-    `letter` (part en lettre suivie oui/non) et `pickup` (retrait possible oui/non).
+- **Livraison :** plusieurs options proposées au paiement, le client choisit.
+  Réglable dans `src/lib/shipping.js` :
+  - Bijoux / petits objets → **Lettre suivie 3,90 €** ou **Colissimo domicile
+    5,90 €**, et **OFFERTE dès 35 € d'achat** (`BIJOUX_FREE_THRESHOLD`).
+  - Décoration bois (colis) → **toujours payant**, par paliers selon le nombre
+    d'articles (`PARCEL_RELAIS` / `PARCEL_DOMICILE`) : point relais 6,90 €/12,90 €/19,90 €,
+    domicile 8,90 €/14,90 €/22,90 €.
+  - **Remise en main propre → 7 €** (`PICKUP_FEE`), proposée pour la déco/mariage.
+  - Cristal (futurs produits) → offert dès 80 € (`CRYSTAL_FREE_THRESHOLD`, prêt à activer).
+  - Type de chaque produit dans `src/lib/products.js` : `letter` et `pickup`.
 - **Contact :** le formulaire envoie un e-mail via Resend (variable
   `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.
