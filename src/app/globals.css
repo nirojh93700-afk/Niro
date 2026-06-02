@@ -1106,6 +1106,20 @@ img {
   color: var(--paper);
   border-color: var(--ink);
 }
+.filters.subfilters {
+  margin-top: -20px;
+  margin-bottom: 36px;
+}
+.filters.subfilters .filter-chip {
+  font-size: 0.8rem;
+  padding: 7px 15px;
+  background: var(--cream);
+}
+.filters.subfilters .filter-chip.active {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+  color: #fff;
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {

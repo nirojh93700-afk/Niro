@@ -18,7 +18,8 @@ export default function Header() {
 
         <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
           <Link href="/boutique">Boutique</Link>
-          <Link href="/boutique?cat=bijoux">Bijoux</Link>
+          <Link href="/boutique?cat=bijoux&sub=femme">Bijoux femme</Link>
+          <Link href="/boutique?cat=bijoux&sub=homme">Bijoux homme</Link>
           <Link href="/boutique?cat=mariage">Mariage</Link>
           <Link href="/boutique?cat=cadeaux">Cadeaux & Déco</Link>
           <Link href="/a-propos">À propos</Link>

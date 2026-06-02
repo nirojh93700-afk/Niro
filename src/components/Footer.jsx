@@ -16,7 +16,8 @@ export default function Footer() {
           </div>
           <div>
             <h4>Boutique</h4>
-            <Link href="/boutique?cat=bijoux">Bijoux personnalisés</Link>
+            <Link href="/boutique?cat=bijoux&sub=femme">Bijoux femme</Link>
+            <Link href="/boutique?cat=bijoux&sub=homme">Bijoux homme</Link>
             <Link href="/boutique?cat=mariage">Mariage & Réception</Link>
             <Link href="/boutique?cat=cadeaux">Cadeaux & Déco</Link>
             <Link href="/boutique">Tout voir</Link>

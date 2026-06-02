@@ -12,6 +12,14 @@ export const CATEGORIES = [
   { slug: "cadeaux", label: "Cadeaux & Décoration" },
 ];
 
+// Sous-catégories par catégorie (ex : bijoux femme / homme).
+export const SUBCATEGORIES = {
+  bijoux: [
+    { slug: "femme", label: "Bijoux femme" },
+    { slug: "homme", label: "Bijoux homme" },
+  ],
+};
+
 export const products = [
   // ----------------------------- BIJOUX --------------------------------------
   {
@@ -20,6 +28,7 @@ export const products = [
     weight: 120, // grammage emballé (g) — sert au calcul des frais de port
     pickup: false, // remise en main propre possible
     letter: true, // expédiable en Lettre Suivie (léger & fin, < 3 cm)
+    subcategory: "femme", // sous-catégorie bijoux
     title: "Collier Enveloppe Message Secret personnalisable",
     category: "bijoux",
     type: "Collier personnalisé",
@@ -65,6 +74,7 @@ export const products = [
     weight: 150,
     pickup: false,
     letter: true,
+    subcategory: "femme",
     title: "Collier médaillon cœur ouvrable — 4 faces gravables",
     category: "bijoux",
     type: "Collier personnalisé",
@@ -110,6 +120,7 @@ export const products = [
     weight: 160,
     pickup: false,
     letter: true,
+    subcategory: "homme",
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -142,6 +153,7 @@ export const products = [
     weight: 100,
     pickup: false,
     letter: true,
+    subcategory: "homme",
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -176,6 +188,7 @@ export const products = [
     weight: 100,
     pickup: false,
     letter: true,
+    subcategory: "homme",
     title: "Bracelet Homme — Cuir véritable & acier inoxydable gravé",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -425,4 +438,12 @@ export function getPriceFrom(product) {
 
 export function getCategoryLabel(slug) {
   return CATEGORIES.find((c) => c.slug === slug)?.label || slug;
+}
+
+export function getSubcategories(catSlug) {
+  return SUBCATEGORIES[catSlug] || null;
+}
+
+export function getSubcategoryLabel(catSlug, subSlug) {
+  return SUBCATEGORIES[catSlug]?.find((s) => s.slug === subSlug)?.label || subSlug;
 }
