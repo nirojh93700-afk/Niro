@@ -479,7 +479,7 @@ export const products = [
       { key: "police", type: "font", label: "Police", optional: true },
       { key: "logoNote", type: "note", text: "Logo d'entreprise : envoyez votre fichier (vectoriel HD) par e-mail après la commande, avec votre numéro de commande." },
     ],
-    images: [],
+    images: ["/produits/cle_usb_cristal_argent_4gb.jpg"],
     variants: [
       { id: "usb-default", title: "Clé USB gravée", price: 14.99 },
     ],
@@ -517,7 +517,7 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
-    images: [],
+    images: ["/produits/pyramide_en_verre_de_cristal_50mm.jpg"],
     variants: [{ id: "pyramide-cristal-50mm", title: "50 mm", price: 39.9 }],
     descriptionHtml: `<p><strong>Offrez un souvenir gravé pour l'éternité.</strong></p>
 <p>Votre photo est gravée en trois dimensions à l'intérieur d'un cristal optique K9 d'une grande pureté, grâce à un laser de précision. L'image semble flotter au cœur du cristal — un effet saisissant, encore sublimé posé sur un socle lumineux LED.</p>
@@ -547,7 +547,11 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/bracelet_cuir_tresse_a_graver_argente.jpg",
+      "/produits/bracelet_cuir_tresse_a_graver_dore.jpg",
+      "/produits/bracelet_cuir_tresse_a_graver_noir.jpg",
+    ],
     variants: [
       { id: "cuir-tresse-argente", title: "Argenté", price: 14.9 },
       { id: "cuir-tresse-dore", title: "Doré", price: 14.9 },
@@ -578,7 +582,10 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, coordonnées GPS…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/porte_cles_vierges_en_cuir_marron.jpg",
+      "/produits/porte_cles_vierges_en_cuir_noir.jpg",
+    ],
     variants: [
       { id: "porte-cles-cuir-marron", title: "Marron", price: 7.9 },
       { id: "porte-cles-cuir-noir", title: "Noir", price: 7.9 },
@@ -607,7 +614,7 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Nom, date, dédicace…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
-    images: [],
+    images: ["/produits/trophee_en_cristal_vierge_14_cm.jpg"],
     variants: [{ id: "trophee-cristal-14cm", title: "14 cm", price: 69.9 }],
     descriptionHtml: `<p>Un <strong>trophée en cristal optique K9</strong> avec votre photo gravée en 3D à l'intérieur. Une pièce d'exception pour un hommage, une remise de prix ou un souvenir précieux.</p>
 <ul><li>Cristal optique K9 haute pureté</li><li>Hauteur 14 cm</li><li>Gravure photo 3D interne au laser</li></ul>
@@ -627,7 +634,10 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/bracelet_homme_chaine_a_graver_argente.jpg",
+      "/produits/bracelet_homme_chaine_a_graver_noir.jpg",
+    ],
     variants: [
       { id: "chaine-acier-argente", title: "Argenté", price: 24.9 },
       { id: "chaine-acier-noir", title: "Noir", price: 26.9 },
@@ -647,7 +657,7 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: ["/produits/bracelet_a_graver_dore.jpg"],
     variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 17.9 }],
     descriptionHtml: `<p>Bracelet femme délicat en <strong>acier inoxydable doré</strong>, à personnaliser par gravure.</p>
 <ul><li>Acier inoxydable, ne ternit pas</li><li>Gravure fine au laser</li></ul>`,
@@ -664,7 +674,10 @@ export const products = [
       { key: "texte", label: "Prénom et/ou date de naissance", placeholder: "Ex : Lina — 12.06.2024", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg",
+      "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg",
+    ],
     variants: [
       { id: "empreinte-bebe-argente", title: "Argenté", price: 12.5 },
       { id: "empreinte-bebe-dore", title: "Doré", price: 12.5 },
@@ -684,7 +697,7 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: ["/produits/bracelet_femme_coeur_a_graver_dore.jpg"],
     variants: [{ id: "bracelet-coeur-dore", title: "Doré", price: 17.9 }],
     descriptionHtml: `<p>Bracelet femme avec breloque <strong>cœur</strong> gravable, en acier inoxydable doré. Romantique et délicat.</p>`,
   },
@@ -700,7 +713,12 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/bracelet_papillon_ajoure_a_graver_argente.jpg",
+      "/produits/bracelet_papillon_ajoure_a_graver_dore.jpg",
+      "/produits/bracelet_papillon_ajoure_a_graver_noir.jpg",
+      "/produits/bracelet_papillon_ajoure_a_graver_or_rose.jpg",
+    ],
     variants: [
       { id: "papillon-argente", title: "Argenté", price: 17.9 },
       { id: "papillon-dore", title: "Doré", price: 17.9 },
@@ -721,7 +739,7 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: ["/produits/bracelet_homme_double_anneau_a_graver_argente.jpg"],
     variants: [{ id: "double-anneau-argente", title: "Argenté", price: 19.9 }],
     descriptionHtml: `<p>Bracelet homme moderne à <strong>double anneau</strong> en acier inoxydable, plaque gravable au laser.</p>`,
   },
@@ -737,7 +755,10 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/bracelet_homme_rond_retro_a_grave_argente.jpg",
+      "/produits/bracelet_homme_rond_retro_a_grave_noir.jpg",
+    ],
     variants: [
       { id: "rond-retro-argente", title: "Argenté", price: 14.9 },
       { id: "rond-retro-noir", title: "Noir", price: 14.9 },
@@ -759,7 +780,7 @@ export const products = [
       { key: "texte2", label: "Texte — pendentif 2", placeholder: "Ex : prénom", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: ["/produits/collier_c_ur_couple_a_graver_lot_2_pieces_or_rose.jpg"],
     variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 24.9 }],
     descriptionHtml: `<p>Un <strong>lot de 2 colliers</strong> formant un cœur, à graver chacun. Le cadeau parfait pour les amoureux.</p>`,
   },
@@ -775,7 +796,13 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/collier_plaque_a_graver_acier_noir.jpg",
+      "/produits/collier_plaque_a_graver_argente.jpg",
+      "/produits/collier_plaque_a_graver_argente_et_noir.jpg",
+      "/produits/collier_plaque_a_graver_dore.jpg",
+      "/produits/collier_plaque_a_graver_noir.jpg",
+    ],
     variants: [
       { id: "plaque-acier-noir", title: "Acier Noir", price: 20.9 },
       { id: "plaque-argente", title: "Argenté", price: 18.9 },
@@ -798,7 +825,11 @@ export const products = [
       { key: "texte2", label: "Gravure — page 2", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/collier_medaillon_modele_livre_a_graver_argente.jpg",
+      "/produits/collier_medaillon_modele_livre_a_graver_dore.jpg",
+      "/produits/collier_medaillon_modele_livre_a_graver_dore_et_argente.jpg",
+    ],
     variants: [
       { id: "medaillon-livre-argente", title: "Argenté", price: 25.9 },
       { id: "medaillon-livre-dore", title: "Doré", price: 25.9 },
@@ -819,7 +850,10 @@ export const products = [
       { key: "texte2", label: "Texte — pendentif 2", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/collier_pendentif_couple_geometric_puzzle_a_graver_argente.jpg",
+      "/produits/collier_pendentif_couple_geometric_puzzle_a_graver_or_rose.jpg",
+    ],
     variants: [
       { id: "puzzle-argente", title: "Argenté", price: 12.9 },
       { id: "puzzle-or-rose", title: "Or Rose", price: 14.9 },
@@ -838,7 +872,13 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/collier_pendentif_geometrique_a_graver_agente.jpg",
+      "/produits/collier_pendentif_geometrique_a_graver_arc_en_ciel.jpg",
+      "/produits/collier_pendentif_geometrique_a_graver_dore.jpg",
+      "/produits/collier_pendentif_geometrique_a_graver_noir.jpg",
+      "/produits/collier_pendentif_geometrique_a_graver_or_rose.jpg",
+    ],
     variants: [
       { id: "geo-argente", title: "Argenté", price: 16.9 },
       { id: "geo-arc-en-ciel", title: "Arc en Ciel", price: 19.9 },
@@ -863,7 +903,10 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/cle_usb_cristal_argent_4gb.jpg",
+      "/produits/cle_usb_cristal_rose_4gb.jpg",
+    ],
     variants: [{ id: "usb-cristal-4go", title: "4 Go", price: 17.9 }],
     descriptionHtml: `<p>Clé USB en <strong>cristal</strong> avec votre photo gravée en 3D à l'intérieur. Un souvenir et un objet utile à la fois.</p>`,
   },
@@ -880,7 +923,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "logoNote", type: "note", text: "Logo d'entreprise : envoyez votre fichier (vectoriel HD) par e-mail après la commande." },
     ],
-    images: [],
+    images: ["/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg"],
     variants: [{ id: "usb-bois-4go", title: "4 Go", price: 24.9 }],
     descriptionHtml: `<p>Clé USB en <strong>bois</strong> gravée au laser, présentée dans un élégant <strong>coffret bois</strong>. Idéale mariage ou cadeau d'entreprise.</p>`,
   },
@@ -899,7 +942,10 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", maxLength: 25, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
-    images: [],
+    images: [
+      "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg",
+      "/produits/porte_cles_en_cristal_avec_lumiere_led_rectangle.jpg",
+    ],
     variants: [
       { id: "pc-cristal-coeur", title: "Cœur", price: 24.9 },
       { id: "pc-cristal-rectangle", title: "Rectangle", price: 22.9 },
@@ -921,7 +967,7 @@ export const products = [
       { key: "verso", label: "Texte à graver — verso", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: [],
+    images: ["/produits/piece_laiton.jpg"],
     variants: [{ id: "piece-laiton", title: "Laiton", price: 14.9 }],
     descriptionHtml: `<p>Médaille ronde en <strong>laiton</strong>, à graver (recto et verso possibles). Parfaite en porte-bonheur ou souvenir.</p>`,
   },

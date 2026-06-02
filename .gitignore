@@ -28,3 +28,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Clé de service Firebase (ne jamais committer)
+*sa.json
+niv-sa.json
+serviceAccount*.json
