@@ -13,14 +13,51 @@ export default function ProductDetail({ product }) {
   const [activeImg, setActiveImg] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [personalization, setPersonalization] = useState("");
+  const [fieldValues, setFieldValues] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [error, setError] = useState("");
 
   const variant = product.variants[variantIndex];
   const hasImages = product.images.length > 0;
   const info = getProductInfo(product.slug);
 
+  // Champs de gravure visibles selon l'option (variante) sélectionnée.
+  const visibleFields = (product.personalizationFields || []).filter(
+    (f) => !f.variantContains || variant.title.includes(f.variantContains)
+  );
+
+  function setField(key, value) {
+    setFieldValues((prev) => ({ ...prev, [key]: value }));
+  }
+
+  // Construit le texte de personnalisation final (pour le panier / la commande).
+  function buildPersonalization() {
+    if (product.personalizationFields) {
+      return visibleFields
+        .filter((f) => f.type !== "note")
+        .map((f) => {
+          const val = (fieldValues[f.key] || "").trim();
+          return val ? `${f.label} : ${val}` : null;
+        })
+        .filter(Boolean)
+        .join(" · ");
+    }
+    return personalization.trim();
+  }
+
   function handleAdd() {
+    // Vérifie les champs de gravure obligatoires (selon l'option choisie).
+    if (product.personalizationFields) {
+      const missing = visibleFields.find(
+        (f) => f.type !== "note" && !f.optional && !(fieldValues[f.key] || "").trim()
+      );
+      if (missing) {
+        setError(`Merci d'indiquer : ${missing.label}.`);
+        return;
+      }
+    }
+    setError("");
     addItem({
       productSlug: product.slug,
       variantId: variant.id,
@@ -28,7 +65,7 @@ export default function ProductDetail({ product }) {
       variantTitle: variant.title,
       price: variant.price,
       image: product.images[0] || null,
-      personalization: personalization.trim(),
+      personalization: buildPersonalization(),
       quantity,
     });
     setAdded(true);
@@ -105,24 +142,57 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {product.personalizable && (
-            <div className="field">
-              <label htmlFor="perso">
-                {product.personalizationLabel || "Votre personnalisation"}
-                <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>
-                  {" "}
-                  (facultatif ici, à confirmer après commande)
-                </span>
-              </label>
-              <textarea
-                id="perso"
-                placeholder="Ex : Prénom, date, message à graver…"
-                value={personalization}
-                onChange={(e) => setPersonalization(e.target.value)}
-                maxLength={300}
-              />
+          {/* Champs de gravure dynamiques (selon l'option choisie) */}
+          {product.personalizationFields ? (
+            <div style={{ marginBottom: 6 }}>
+              <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 12 }}>
+                Personnalisation — gravure
+              </p>
+              {visibleFields.map((f) =>
+                f.type === "note" ? (
+                  <p key={f.key} className="perso-hint">{f.text}</p>
+                ) : (
+                  <div className="field" key={f.key}>
+                    <label htmlFor={`pf-${f.key}`}>
+                      {f.label}
+                      {f.optional && (
+                        <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>
+                      )}
+                    </label>
+                    <input
+                      id={`pf-${f.key}`}
+                      type="text"
+                      placeholder={f.placeholder || ""}
+                      value={fieldValues[f.key] || ""}
+                      maxLength={f.maxLength || 80}
+                      onChange={(e) => setField(f.key, e.target.value)}
+                    />
+                  </div>
+                )
+              )}
             </div>
+          ) : (
+            product.personalizable && (
+              <div className="field">
+                <label htmlFor="perso">
+                  {product.personalizationLabel || "Votre personnalisation"}
+                  <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>
+                    {" "}
+                    (facultatif ici, à confirmer après commande)
+                  </span>
+                </label>
+                <textarea
+                  id="perso"
+                  placeholder="Ex : Prénom, date, message à graver…"
+                  value={personalization}
+                  onChange={(e) => setPersonalization(e.target.value)}
+                  maxLength={300}
+                />
+              </div>
+            )
           )}
+
+          {error && <div className="notice">{error}</div>}
 
           <div className="qty-row">
             <div className="qty-stepper">

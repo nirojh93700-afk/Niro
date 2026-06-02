@@ -493,6 +493,16 @@ img {
   min-height: 84px;
   resize: vertical;
 }
+.perso-hint {
+  font-size: 0.8rem;
+  color: var(--wood);
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
 .qty-row {
   display: flex;
   align-items: center;

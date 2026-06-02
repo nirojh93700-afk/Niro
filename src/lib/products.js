@@ -29,6 +29,10 @@ export const products = [
     pickup: false, // remise en main propre possible
     letter: true, // expédiable en Lettre Suivie (léger & fin, < 3 cm)
     subcategory: "femme", // sous-catégorie bijoux
+    personalizationFields: [
+      { key: "recto", label: "Texte à graver — recto", placeholder: "Ex : Je t'aime — 12.06.2024", maxLength: 40 },
+      { key: "verso", label: "Texte à graver — verso", placeholder: "Visible au dos de la plaque", maxLength: 40, optional: true, variantContains: "Recto-Verso" },
+    ],
     title: "Collier Enveloppe Message Secret personnalisable",
     category: "bijoux",
     type: "Collier personnalisé",
@@ -75,6 +79,13 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "femme",
+    personalizationFields: [
+      { key: "avant", label: "Gravure — face avant", placeholder: "20 caractères max", maxLength: 20 },
+      { key: "page1", label: "Gravure — page 1 (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
+      { key: "page2", label: "Gravure — page gauche (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
+      { key: "page3", label: "Gravure — page droite (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
+      { key: "photoNote", type: "note", text: "Option photo : envoyez votre image par e-mail après la commande (en indiquant votre numéro de commande). Choisissez une photo nette et bien contrastée.", variantContains: "Photo" },
+    ],
     title: "Collier médaillon cœur ouvrable — 4 faces gravables",
     category: "bijoux",
     type: "Collier personnalisé",
@@ -121,6 +132,10 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "homme",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
+      { key: "police", label: "Police souhaitée", placeholder: "Ex : script, bâton, manuscrite", maxLength: 40, optional: true, variantContains: "Avec" },
+    ],
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -154,6 +169,10 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "homme",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
+      { key: "police", label: "Police souhaitée", placeholder: "Ex : script, bâton, manuscrite", maxLength: 40, optional: true, variantContains: "Avec" },
+    ],
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -189,6 +208,10 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "homme",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
+      { key: "police", label: "Police souhaitée", placeholder: "Ex : script, bâton, manuscrite", maxLength: 40, optional: true, variantContains: "Avec" },
+    ],
     title: "Bracelet Homme — Cuir véritable & acier inoxydable gravé",
     category: "bijoux",
     type: "Bracelet personnalisé",
