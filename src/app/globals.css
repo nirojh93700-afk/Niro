@@ -536,6 +536,219 @@ img {
   margin-bottom: 5px;
 }
 
+/* ====================================================================== */
+/*  MAQUETTES (3 styles d'accueil à comparer)                             */
+/* ====================================================================== */
+.mockbar {
+  position: sticky;
+  top: 72px;
+  z-index: 40;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+}
+.mockbar .lbl {
+  font-size: 0.66rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.mockbar a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.mockbar a.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+/* Bandeau de réassurance épuré, sans emoji */
+.plainstrip {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.plainstrip .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 34px;
+  padding: 20px;
+}
+.plainstrip span {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  position: relative;
+}
+.plainstrip span:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  transform: translateY(-50%);
+}
+
+/* Section "manifeste / savoir-faire" centrée */
+.statement {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.statement .eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  font-weight: 700;
+}
+.statement p {
+  font-family: var(--font-display), serif;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 18px 0 0;
+}
+
+/* Liens "texte" élégants */
+.link-underline {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--gold-dark);
+  padding-bottom: 3px;
+  color: var(--ink);
+}
+.link-underline:hover {
+  color: var(--gold-dark);
+}
+
+/* --- Variante 2 : hero plein écran immersif --- */
+.fs-hero {
+  position: relative;
+  height: calc(100vh - 112px);
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+}
+.fs-hero .bg {
+  position: absolute;
+  inset: 0;
+}
+.fs-hero .bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.fs-hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(28, 24, 19, 0.35), rgba(28, 24, 19, 0.62));
+}
+.fs-hero .fs-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 20px;
+}
+.fs-hero .fs-name {
+  font-family: var(--font-display), serif;
+  font-size: clamp(2.6rem, 7vw, 4.6rem);
+  font-weight: 600;
+  margin: 0;
+  color: #fff;
+}
+.fs-hero .fs-tag {
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.fs-hero .fs-cta {
+  margin-top: 34px;
+}
+.scrollcue {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.66rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.scrollcue .chev {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.85);
+  transform: rotate(45deg);
+  animation: bob 1.6s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: rotate(45deg) translate(0, 0); }
+  50% { transform: rotate(45deg) translate(3px, 3px); }
+}
+
+/* --- Variante 3 : manifeste --- */
+.manifesto {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 50px;
+  align-items: center;
+}
+.manifesto .quote {
+  font-family: var(--font-display), serif;
+  font-size: clamp(1.8rem, 4vw, 2.9rem);
+  line-height: 1.32;
+  color: var(--ink);
+  margin: 18px 0 22px;
+}
+.manifesto .frame {
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: var(--shadow);
+}
+.manifesto .frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 900px) {
+  .manifesto {
+    grid-template-columns: 1fr;
+  }
+  .manifesto .frame {
+    order: -1;
+  }
+}
+
 /* ---------- Accordéon infos produit ---------- */
 .info-accordion {
   margin-top: 22px;
