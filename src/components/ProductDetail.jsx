@@ -88,6 +88,9 @@ export default function ProductDetail({ product }) {
   const colorField = visibleFields.find((f) => f.type === "color");
   const photoField = visibleFields.find((f) => f.type === "photo");
   const photoUrl = photoField ? fieldValues[photoField.key] : "";
+  // Matière de l'échantillon témoin (aperçu) selon le type de produit.
+  const material =
+    product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
   const previewFontClass = getFontClass(fieldValues[fontField?.key] || "playfair");
   const previewColor = (colorField && fieldValues[colorField.key]) || "#3a2f1d";
 
@@ -150,15 +153,14 @@ export default function ProductDetail({ product }) {
                 Niv Création
               </div>
             )}
-            {/* Photo du client "à l'intérieur" du cristal (gravure 3D) */}
-            {product.category === "cristaux" && photoUrl && (
+            {/* Sur une VRAIE photo produit : la gravure se superpose directement */}
+            {hasImages && product.category === "cristaux" && photoUrl && (
               <div className="crystal-photo-overlay">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={photoUrl} alt="Aperçu de la gravure photo" />
               </div>
             )}
-            {/* Aperçu de la gravure (texte) directement sur la photo */}
-            {previewLines.length > 0 && (
+            {hasImages && previewLines.length > 0 && (
               <div className="engrave-overlay" style={product.preview || undefined}>
                 {previewLines.map((line, i) => (
                   <span key={i} className={`eo-line ${previewFontClass}`} style={{ color: previewColor }}>
@@ -304,13 +306,17 @@ export default function ProductDetail({ product }) {
                 );
               })}
 
-              {hasTextFields && (
+              {(hasTextFields || photoField) && (
                 <div className="engrave-preview">
                   <span className="ep-label">
-                    Aperçu de l'écriture
+                    Aperçu témoin de la gravure
                     {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
                   </span>
-                  <div className="ep-plate">
+                  <div className={`ep-plate ${material}`}>
+                    {material === "crystal" && photoUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img className="ep-crystal-photo" src={photoUrl} alt="" />
+                    )}
                     {previewLines.length ? (
                       previewLines.map((line, i) => (
                         <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
@@ -318,12 +324,13 @@ export default function ProductDetail({ product }) {
                         </span>
                       ))
                     ) : (
-                      <span className="ep-empty">Votre texte apparaîtra ici…</span>
+                      <span className="ep-empty">
+                        {material === "crystal"
+                          ? "Votre photo / texte apparaîtra ici, dans le cristal…"
+                          : "Votre texte gravé apparaîtra ici…"}
+                      </span>
                     )}
                   </div>
-                  <span className="ep-label" style={{ marginTop: 8 }}>
-                    L'aperçu s'affiche aussi directement sur la photo.
-                  </span>
                 </div>
               )}
             </div>

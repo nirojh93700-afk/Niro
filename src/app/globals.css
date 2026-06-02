@@ -719,20 +719,47 @@ img {
   display: block;
 }
 .engrave-preview .ep-plate {
+  position: relative;
   border-radius: 12px;
-  min-height: 92px;
+  min-height: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 18px 16px;
+  padding: 20px 16px;
   text-align: center;
-  background:
-    linear-gradient(135deg, #f4ecdd 0%, #e7d6ba 100%);
   border: 1px solid #d8c39e;
-  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.08);
   word-break: break-word;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f4ecdd 0%, #e7d6ba 100%);
+}
+/* Échantillon métal (bijoux, clés, porte-clés) */
+.engrave-preview .ep-plate.metal {
+  background: linear-gradient(135deg, #eceef1 0%, #c6c8cd 42%, #f3f4f6 58%, #bcbec4 100%);
+  border-color: #b3b5bb;
+}
+/* Échantillon bois (mariage) */
+.engrave-preview .ep-plate.wood {
+  background: linear-gradient(135deg, #d9b482 0%, #c08f55 55%, #b07d4a 100%);
+  border-color: #9c6b3f;
+}
+/* Échantillon cristal (cristal 3D) */
+.engrave-preview .ep-plate.crystal {
+  background: linear-gradient(160deg, #e6f1fb 0%, #c2dbf0 50%, #eef5fc 100%);
+  border-color: #a9c6e0;
+}
+.engrave-preview .ep-crystal-photo {
+  position: absolute;
+  inset: 14%;
+  width: auto;
+  height: 72%;
+  margin: auto;
+  max-width: 72%;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: grayscale(1) brightness(1.15) contrast(1.05);
 }
 .engrave-preview .ep-line {
   font-size: clamp(1.2rem, 4.5vw, 1.7rem);
