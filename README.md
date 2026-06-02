@@ -141,8 +141,11 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   - Panier avec déco bois (colis) → tarif **par paliers selon le nombre
     d'articles déco** (`PARCEL_TIERS`) : 6,90 € (≤ 4), 12,90 € (5–12),
     19,90 € (13+). Cela couvre les envois lourds/volumineux des mariages.
+  - **Remise en main propre — gratuite** : proposée en plus (alternative) dès
+    que le panier contient une déco bois/mariage. Le frais de port reste, lui,
+    calculé automatiquement.
   - Livraison offerte possible dès un montant : variable `FREE_SHIPPING_THRESHOLD`
-  - Le type de chaque produit se règle dans `src/lib/products.js` via le champ
-    `letter` (part en lettre suivie oui/non).
+  - Le type de chaque produit se règle dans `src/lib/products.js` via les champs
+    `letter` (part en lettre suivie oui/non) et `pickup` (retrait possible oui/non).
 - **Contact :** le formulaire envoie un e-mail via Resend (variable
   `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.

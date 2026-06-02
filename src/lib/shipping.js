@@ -45,20 +45,33 @@ function rate(amount, name, days) {
   };
 }
 
-// Renvoie UN SEUL frais de livraison, calculé automatiquement.
-//   subtotal   : sous-total produits (€)
-//   letterOnly : TOUS les articles sont expédiables en lettre suivie
-//   totalGrams : poids total estimé (sert au plafond lettre 2 kg)
-//   parcelQty  : nombre d'articles "déco" (colis) dans le panier
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0 }) {
+// Renvoie les options de livraison. Le FRAIS DE PORT est calculé
+// automatiquement par le site (le client ne choisit pas le transporteur).
+// Une seule alternative gratuite est ajoutée si éligible : la remise en
+// main propre (pratique pour les mariages locaux / déco bois).
+//   subtotal      : sous-total produits (€)
+//   letterOnly    : TOUS les articles sont expédiables en lettre suivie
+//   totalGrams    : poids total estimé (sert au plafond lettre 2 kg)
+//   parcelQty     : nombre d'articles "déco" (colis) dans le panier
+//   pickupEligible: au moins un article éligible à la remise en main propre
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, pickupEligible = false }) {
   const free = FREE_SHIPPING_THRESHOLD != null && subtotal >= FREE_SHIPPING_THRESHOLD;
+  const options = [];
 
-  // Panier 100 % bijoux/petits objets et ≤ 2 kg -> lettre suivie.
+  // 1) Le frais de livraison calculé automatiquement.
   if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
-    return [rate(free ? 0 : LETTER_FLAT, free ? "Lettre suivie — Offerte" : "Lettre suivie La Poste", [2, 4])];
+    // Panier 100 % bijoux/petits objets et ≤ 2 kg -> lettre suivie.
+    options.push(rate(free ? 0 : LETTER_FLAT, free ? "Lettre suivie — Offerte" : "Lettre suivie La Poste", [2, 4]));
+  } else {
+    // Sinon -> colis, tarif selon le nombre d'articles déco.
+    const price = parcelPriceForQty(parcelQty || 1);
+    options.push(rate(free ? 0 : price, free ? "Livraison — Offerte" : "Livraison (colis suivi)", [2, 5]));
   }
 
-  // Sinon -> colis, tarif selon le nombre d'articles déco.
-  const price = parcelPriceForQty(parcelQty || 1);
-  return [rate(free ? 0 : price, free ? "Livraison — Offerte" : "Livraison (colis suivi)", [2, 5])];
+  // 2) Alternative gratuite : remise en main propre (déco bois / mariage).
+  if (pickupEligible) {
+    options.push(rate(0, "Remise en main propre (atelier) — Gratuit", [1, 7]));
+  }
+
+  return options;
 }

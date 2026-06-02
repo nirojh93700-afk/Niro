@@ -47,6 +47,7 @@ export async function POST(req) {
   let subtotal = 0;
   let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
   let letterOnly = true;
+  let pickupEligible = false; // remise en main propre possible
 
   for (const item of items) {
     const match = variantIndex.get(item.variantId);
@@ -65,6 +66,7 @@ export async function POST(req) {
       letterOnly = false;
       parcelQty += quantity;
     }
+    if (product.pickup) pickupEligible = true;
 
     const descriptionParts = [variant.title];
     if (item.personalization) {
@@ -99,7 +101,7 @@ export async function POST(req) {
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
-      shipping_options: buildShippingOptions({ totalGrams, subtotal, parcelQty, letterOnly }),
+      shipping_options: buildShippingOptions({ totalGrams, subtotal, parcelQty, letterOnly, pickupEligible }),
       custom_fields: [
         {
           key: "personnalisation",
