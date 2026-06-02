@@ -160,15 +160,9 @@ export default function ProductDetail({ product }) {
                 <img src={photoUrl} alt="Aperçu de la gravure photo" />
               </div>
             )}
-            {hasImages && previewLines.length > 0 && (
-              <div className="engrave-overlay" style={product.preview || undefined}>
-                {previewLines.map((line, i) => (
-                  <span key={i} className={`eo-line ${previewFontClass}`} style={{ color: previewColor }}>
-                    {line}
-                  </span>
-                ))}
-              </div>
-            )}
+            {/* Note : on n'écrit pas le texte sur la photo produit (photos
+                fournisseur souvent annotées) — l'aperçu propre est le "témoin"
+                ci-dessous. */}
           </div>
           {images.length > 1 && (
             <div className="gallery-thumbs">
