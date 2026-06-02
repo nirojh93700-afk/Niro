@@ -139,7 +139,7 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   (le choix relais/domicile reste interne au vendeur). Réglable dans
   `src/lib/shipping.js` :
   - Bijoux / petits objets seuls → **3,90 € (lettre suivie)**, **OFFERT dès
-    35 €** d'achat (`BIJOUX_FREE_THRESHOLD`).
+    45 €** d'achat (`BIJOUX_FREE_THRESHOLD`).
   - Dès qu'il y a une déco (panier mixte inclus) → **un seul colis**, tarif
     **par nombre d'articles déco** (`DECO_TIERS`) : 6,90 € (≤ 4), 12,90 €
     (5–12), 19,90 € (13+). Les bijoux voyagent avec, sans frais en plus.

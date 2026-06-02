@@ -17,7 +17,7 @@
 
 // --- Bijoux / lettre -------------------------------------------------------
 export const LETTER_FLAT = 3.9; // forfait lettre suivie
-export const BIJOUX_FREE_THRESHOLD = 35; // livraison bijoux offerte dès ce montant
+export const BIJOUX_FREE_THRESHOLD = 45; // livraison bijoux offerte dès ce montant
 
 // --- Décoration / colis (UN prix, selon le nombre d'articles déco) ----------
 export const DECO_TIERS = [
