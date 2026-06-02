@@ -9,6 +9,7 @@
 export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux personnalisés" },
   { slug: "mariage", label: "Mariage & Réception" },
+  { slug: "cristaux", label: "Cristaux & LED" },
   { slug: "cadeaux", label: "Cadeaux & Décoration" },
 ];
 
@@ -490,6 +491,100 @@ export const products = [
 <li><strong>Cadeau d'entreprise</strong> — logo gravé pour vos clients ou partenaires.</li>
 <li><strong>Cadeau personnel</strong> — un souvenir gravé qui marque les esprits.</li>
 </ul>`,
+  },
+
+  // ============== IMPORT CATALOGUE (test) ==============
+  {
+    slug: "pyramide-cristal-gravure-3d",
+    name: "Pyramide cristal — Gravure 3D",
+    weight: 320,
+    pickup: true, // fragile : remise en main propre conseillée
+    letter: false,
+    title: "Pyramide en cristal — gravure photo 3D personnalisée",
+    category: "cristaux",
+    type: "Cristal photo 3D",
+    tagline: "Votre photo gravée en 3D au cœur du cristal.",
+    personalizable: true,
+    personalizationLabel: "Photo à graver (+ texte optionnel)",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec un sujet bien détaché sur un fond simple ou sombre." },
+      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date…", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "pyramide-cristal-50mm", title: "50 mm", price: 39.9 }],
+    descriptionHtml: `<p><strong>Offrez un souvenir gravé pour l'éternité.</strong></p>
+<p>Votre photo est gravée en trois dimensions à l'intérieur d'un cristal optique K9 d'une grande pureté, grâce à un laser de précision. L'image semble flotter au cœur du cristal — un effet saisissant, encore sublimé posé sur un socle lumineux LED.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matériau :</strong> cristal optique K9 haute pureté</li>
+<li><strong>Format :</strong> pyramide 50 mm</li>
+<li><strong>Gravure :</strong> photo 3D interne (sub-surface) au laser</li>
+<li><strong>Idéal :</strong> cadeau souvenir, naissance, mariage, hommage</li>
+</ul>
+<p><em>Conseil : une photo nette et contrastée donne le plus beau rendu. Un socle lumineux LED est disponible séparément.</em></p>`,
+  },
+  {
+    slug: "bracelet-homme-cuir-tresse-acier",
+    name: "Bracelet Homme Cuir Tressé & Acier",
+    weight: 90,
+    pickup: false,
+    letter: true,
+    subcategory: "homme",
+    title: "Bracelet homme cuir tressé & acier à graver",
+    category: "bijoux",
+    type: "Bracelet personnalisé",
+    tagline: "Cuir tressé et plaque acier, gravée à votre message.",
+    personalizable: true,
+    personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "cuir-tresse-argente", title: "Argenté", price: 14.9 },
+      { id: "cuir-tresse-dore", title: "Doré", price: 14.9 },
+      { id: "cuir-tresse-noir", title: "Noir", price: 14.9 },
+    ],
+    descriptionHtml: `<p>Un bracelet masculin et intemporel : <strong>cuir véritable tressé</strong> associé à une <strong>plaque en acier inoxydable</strong> gravable.</p>
+<p>Gravez un prénom, une date ou un message pour en faire un cadeau unique (Fête des Pères, anniversaire, Noël).</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matières :</strong> cuir véritable tressé + acier inoxydable</li>
+<li><strong>Finitions :</strong> plaque argentée, dorée ou noire</li>
+<li><strong>Gravure :</strong> laser, réalisée sur commande</li>
+</ul>`,
+  },
+  {
+    slug: "porte-cles-cuir-a-graver",
+    name: "Porte-clés cuir à graver",
+    weight: 50,
+    pickup: false,
+    letter: true,
+    title: "Porte-clés en cuir véritable à graver personnalisé",
+    category: "cadeaux",
+    type: "Porte-clés personnalisé",
+    tagline: "Un porte-clés en cuir, gravé à votre message.",
+    personalizable: true,
+    personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, coordonnées GPS…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "porte-cles-cuir-marron", title: "Marron", price: 7.9 },
+      { id: "porte-cles-cuir-noir", title: "Noir", price: 7.9 },
+    ],
+    descriptionHtml: `<p>Un <strong>porte-clés en cuir véritable</strong>, gravé au laser avec le texte de votre choix : prénom, date, petit mot ou coordonnées GPS d'un lieu qui compte.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> cuir véritable</li>
+<li><strong>Coloris :</strong> marron ou noir</li>
+<li><strong>Gravure :</strong> laser, réalisée sur commande</li>
+</ul>
+<p>Un petit cadeau qui fait toujours plaisir, à offrir ou à s'offrir.</p>`,
   },
 ];
 
