@@ -23,6 +23,7 @@ export default function Footer() {
             <h4>Aide</h4>
             <Link href="/a-propos">À propos</Link>
             <Link href="/contact">Nous contacter</Link>
+            <Link href="/retours">Retours & Remboursements</Link>
             <Link href="/#personnalisation">La personnalisation</Link>
           </div>
           <div>
