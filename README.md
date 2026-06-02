@@ -135,17 +135,13 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   saisir son texte sur la fiche produit **et** dans un champ dédié au moment du
   paiement Stripe. Pense à revenir vers le client par e-mail pour valider les
   détails de gravure avant fabrication.
-- **Livraison :** les frais sont calculés automatiquement selon le **poids** et
-  le **type** d'articles du panier (tarifs La Poste / Mondial Relay 2025, voir
-  `src/lib/shipping.js`) :
-  - Articles **légers et fins** (bijoux, clé USB, ronds de serviette) →
-    **Lettre Suivie La Poste** (l'option la moins chère : ex. 3,28 € jusqu'à
-    100 g, 5,25 € jusqu'à 250 g).
-  - **Décoration bois volumineuse** → **colis** (point relais Mondial Relay ou
-    domicile Colissimo suivi).
-  - **Remise en main propre — gratuite** dès que le panier contient une déco
-    bois/mariage.
-  - Réglages par produit dans `src/lib/products.js` : `weight` (grammes),
-    `letter` (expédiable en lettre), `pickup` (retrait possible).
+- **Livraison :** forfaits simples selon le type d'articles (les poids variant
+  trop pour un calcul au poids). Réglables dans `src/lib/shipping.js` :
+  - Bijoux / petits objets → **3,90 € (Lettre suivie)** — `LETTER_FLAT`
+  - Décoration bois / colis → **6,90 € (colis suivi)** — `PARCEL_FLAT`
+  - Décoration bois & mariage → **remise en main propre gratuite**
+  - Livraison offerte possible dès un montant : variable `FREE_SHIPPING_THRESHOLD`
+  - Le type de chaque produit se règle dans `src/lib/products.js` :
+    `letter` (part en lettre oui/non) et `pickup` (retrait possible oui/non).
 - **Contact :** le formulaire envoie un e-mail via Resend (variable
   `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.
