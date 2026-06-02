@@ -1,37 +1,35 @@
 // =============================================================================
-// Frais de livraison — plusieurs options proposées, le client choisit
+// Frais de livraison — UN SEUL PRIX affiché au client, calculé automatiquement
 // -----------------------------------------------------------------------------
-// • Bijoux / petits objets (lettre) : livraison OFFERTE dès 35 € d'achat,
-//   sinon forfait lettre suivie (+ option Colissimo domicile).
-// • Décoration bois (colis) : TOUJOURS payant, prix par paliers selon le
-//   nombre d'articles déco. Options : point relais, domicile, main propre (7 €).
-// • Cristal (futurs produits) : offert dès 80 € — réglage prêt (CRYSTAL_*).
+// Le client ne choisit pas le transporteur : c'est NOUS qui décidons ensuite
+// d'expédier en point relais ou à domicile (le prix payé est le même).
+//
+// Règles :
+//  • Bijoux / petits objets seuls : forfait lettre suivie, OFFERT dès 35 €.
+//  • Dès qu'il y a une déco (colis) : tout part ensemble dans un seul colis,
+//    on facture le tarif déco selon le NOMBRE d'articles déco. Les bijoux
+//    voyagent avec, sans frais supplémentaire (méthode "article dominant").
+//  • Remise en main propre proposée en plus pour la déco : 7 €.
+//  • Cristal (futurs produits) : offert dès 80 € (réglage prêt).
 //
 // 👉 Tous les montants sont modifiables ci-dessous. Montants en euros.
 // =============================================================================
 
 // --- Bijoux / lettre -------------------------------------------------------
-export const LETTER_FLAT = 3.9; // lettre suivie La Poste
-export const LETTER_DOMICILE = 5.9; // Colissimo domicile (alternative suivie)
+export const LETTER_FLAT = 3.9; // forfait lettre suivie
 export const BIJOUX_FREE_THRESHOLD = 35; // livraison bijoux offerte dès ce montant
 
-// --- Décoration / colis (par quantité d'articles déco) ---------------------
-export const PARCEL_RELAIS = [
-  { maxQty: 4, price: 6.9 },
-  { maxQty: 12, price: 12.9 },
-  { maxQty: Infinity, price: 19.9 },
-];
-export const PARCEL_DOMICILE = [
-  { maxQty: 4, price: 8.9 },
-  { maxQty: 12, price: 14.9 },
-  { maxQty: Infinity, price: 22.9 },
+// --- Décoration / colis (UN prix, selon le nombre d'articles déco) ----------
+export const DECO_TIERS = [
+  { maxQty: 4, price: 6.9 }, // 1 à 4 articles déco
+  { maxQty: 12, price: 12.9 }, // 5 à 12
+  { maxQty: Infinity, price: 19.9 }, // 13 et plus
 ];
 
 // --- Remise en main propre -------------------------------------------------
-export const PICKUP_FEE = 7; // forfait remise en main propre
+export const PICKUP_FEE = 7;
 
 // --- Cristal (réglage prêt pour de futurs produits) ------------------------
-// Mettre `crystal: true` sur un produit dans products.js pour l'activer.
 export const CRYSTAL_FREE_THRESHOLD = 80;
 
 // La lettre suivie est limitée à 2 kg : au-delà, on bascule en colis.
@@ -56,26 +54,23 @@ function rate(amount, name, days) {
   };
 }
 
-// Construit les options de livraison proposées au client.
+// Construit l'option de livraison (un seul prix) + éventuellement la main propre.
 //   subtotal      : sous-total produits (€)
-//   letterOnly    : TOUS les articles sont expédiables en lettre (bijoux)
+//   letterOnly    : TOUS les articles sont des bijoux/petits objets (lettre)
 //   totalGrams    : poids total estimé (plafond lettre 2 kg)
-//   parcelQty     : nombre d'articles "déco" (colis)
+//   parcelQty     : nombre d'articles "déco" (colis) dans le panier
 //   pickupEligible: au moins un article éligible à la remise en main propre
 export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, pickupEligible = false }) {
-  const options = [];
-
-  // --- Panier de bijoux / petits objets (≤ 2 kg) ---------------------------
+  // --- Panier 100 % bijoux / petits objets (≤ 2 kg) ------------------------
   if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
     const free = subtotal >= BIJOUX_FREE_THRESHOLD; // offerte dès 35 €
-    options.push(rate(free ? 0 : LETTER_FLAT, free ? "Lettre suivie — Offerte" : "Lettre suivie La Poste", [2, 4]));
-    options.push(rate(free ? 0 : LETTER_DOMICILE, free ? "Colissimo domicile — Offert" : "Colissimo domicile (suivi)", [2, 4]));
-    return options;
+    return [rate(free ? 0 : LETTER_FLAT, free ? "Livraison — Offerte" : "Livraison (lettre suivie)", [2, 4])];
   }
 
-  // --- Panier avec décoration (colis) : toujours payant --------------------
-  options.push(rate(tierPrice(PARCEL_RELAIS, parcelQty || 1), "Point relais (Mondial Relay)", [3, 6]));
-  options.push(rate(tierPrice(PARCEL_DOMICILE, parcelQty || 1), "Livraison à domicile (Colissimo suivi)", [2, 5]));
+  // --- Panier avec déco (ou mixte) : un seul colis, tarif selon la déco -----
+  const options = [
+    rate(tierPrice(DECO_TIERS, parcelQty || 1), "Livraison (colis suivi)", [2, 5]),
+  ];
   if (pickupEligible) {
     options.push(rate(PICKUP_FEE, "Remise en main propre (atelier)", [1, 7]));
   }

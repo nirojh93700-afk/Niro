@@ -135,15 +135,16 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   saisir son texte sur la fiche produit **et** dans un champ dédié au moment du
   paiement Stripe. Pense à revenir vers le client par e-mail pour valider les
   détails de gravure avant fabrication.
-- **Livraison :** plusieurs options proposées au paiement, le client choisit.
-  Réglable dans `src/lib/shipping.js` :
-  - Bijoux / petits objets → **Lettre suivie 3,90 €** ou **Colissimo domicile
-    5,90 €**, et **OFFERTE dès 35 € d'achat** (`BIJOUX_FREE_THRESHOLD`).
-  - Décoration bois (colis) → **toujours payant**, par paliers selon le nombre
-    d'articles (`PARCEL_RELAIS` / `PARCEL_DOMICILE`) : point relais 6,90 €/12,90 €/19,90 €,
-    domicile 8,90 €/14,90 €/22,90 €.
-  - **Remise en main propre → 7 €** (`PICKUP_FEE`), proposée pour la déco/mariage.
-  - Cristal (futurs produits) → offert dès 80 € (`CRYSTAL_FREE_THRESHOLD`, prêt à activer).
+- **Livraison :** un **seul prix affiché** au client, calculé automatiquement
+  (le choix relais/domicile reste interne au vendeur). Réglable dans
+  `src/lib/shipping.js` :
+  - Bijoux / petits objets seuls → **3,90 € (lettre suivie)**, **OFFERT dès
+    35 €** d'achat (`BIJOUX_FREE_THRESHOLD`).
+  - Dès qu'il y a une déco (panier mixte inclus) → **un seul colis**, tarif
+    **par nombre d'articles déco** (`DECO_TIERS`) : 6,90 € (≤ 4), 12,90 €
+    (5–12), 19,90 € (13+). Les bijoux voyagent avec, sans frais en plus.
+  - **Remise en main propre → 7 €** (`PICKUP_FEE`), proposée pour la déco.
+  - Cristal (futurs produits) → offert dès 80 € (`CRYSTAL_FREE_THRESHOLD`).
   - Type de chaque produit dans `src/lib/products.js` : `letter` et `pickup`.
 - **Contact :** le formulaire envoie un e-mail via Resend (variable
   `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.
