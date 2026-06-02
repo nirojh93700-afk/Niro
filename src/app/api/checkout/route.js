@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { products } from "@/lib/products";
 import { toCents } from "@/lib/format";
+import { buildShippingOptions } from "@/lib/shipping";
 
 // Construit une table variantId -> { product, variant } pour valider côté serveur.
 function buildVariantIndex() {
@@ -42,6 +43,9 @@ export async function POST(req) {
 
   const variantIndex = buildVariantIndex();
   const lineItems = [];
+  let totalGrams = 0;
+  let subtotal = 0;
+  let pickupEligible = false;
 
   for (const item of items) {
     const match = variantIndex.get(item.variantId);
@@ -53,6 +57,10 @@ export async function POST(req) {
     }
     const quantity = Math.min(Math.max(parseInt(item.quantity, 10) || 1, 1), 99);
     const { product, variant } = match;
+
+    totalGrams += (product.weight || 200) * quantity;
+    subtotal += variant.price * quantity;
+    if (product.pickup) pickupEligible = true;
 
     const descriptionParts = [variant.title];
     if (item.personalization) {
@@ -87,6 +95,7 @@ export async function POST(req) {
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
+      shipping_options: buildShippingOptions({ totalGrams, subtotal, pickupEligible }),
       custom_fields: [
         {
           key: "personnalisation",

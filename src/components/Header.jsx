@@ -21,7 +21,8 @@ export default function Header() {
           <Link href="/boutique?cat=bijoux">Bijoux</Link>
           <Link href="/boutique?cat=mariage">Mariage</Link>
           <Link href="/boutique?cat=cadeaux">Cadeaux & Déco</Link>
-          <Link href="/#atelier">L'atelier</Link>
+          <Link href="/a-propos">À propos</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
 
         <div className="header-actions">

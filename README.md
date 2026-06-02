@@ -8,6 +8,10 @@ par gravure & découpe laser), avec paiement par carte bancaire intégré via
 - 💳 **Paiement :** carte bancaire sécurisée (hébergé par Stripe)
 - 🚀 **Hébergement conseillé :** Vercel (gratuit) + ton domaine
 - 🛍️ **13 produits** intégrés (bijoux, mariage, cadeaux)
+- 🚚 **Frais de port automatiques selon le poids** + remise en main propre
+- ✉️ **Page contact + à propos**
+
+> 📘 **Pour mettre le site en ligne, suis le guide pas à pas : [`DEPLOIEMENT.md`](./DEPLOIEMENT.md)**
 
 ---
 
@@ -131,5 +135,12 @@ navigateur. La clé secrète Stripe reste sur le serveur et n'est jamais exposé
   saisir son texte sur la fiche produit **et** dans un champ dédié au moment du
   paiement Stripe. Pense à revenir vers le client par e-mail pour valider les
   détails de gravure avant fabrication.
-- La livraison est laissée « à calculer » : tu peux configurer des frais de port
-  fixes directement dans Stripe Checkout (Réglages → Expédition).
+- **Livraison :** les frais sont calculés automatiquement selon le **poids
+  total du panier** (voir `src/lib/shipping.js` pour ajuster les tarifs). Le
+  client choisit entre **point relais**, **livraison à domicile**, et
+  **remise en main propre gratuite** (proposée dès que le panier contient une
+  décoration bois/mariage). Le poids de chaque produit se règle dans
+  `src/lib/products.js` (champ `weight`, en grammes) et l'éligibilité au retrait
+  via le champ `pickup`.
+- **Contact :** le formulaire envoie un e-mail via Resend (variable
+  `RESEND_API_KEY`). Sans clé, il invite à écrire à l'adresse e-mail directe.

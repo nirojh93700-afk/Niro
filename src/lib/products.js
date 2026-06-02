@@ -17,6 +17,8 @@ export const products = [
   {
     slug: "collier-enveloppe-message-secret",
     name: "Collier Enveloppe Message Secret",
+    weight: 120, // grammage emballé (g) — sert au calcul des frais de port
+    pickup: false, // remise en main propre possible
     title: "Collier Enveloppe Message Secret personnalisable",
     category: "bijoux",
     type: "Collier personnalisé",
@@ -59,6 +61,8 @@ export const products = [
   {
     slug: "collier-medaillon-coeur-ouvrable",
     name: "Collier Médaillon Cœur ouvrable",
+    weight: 150,
+    pickup: false,
     title: "Collier médaillon cœur ouvrable — 4 faces gravables",
     category: "bijoux",
     type: "Collier personnalisé",
@@ -101,6 +105,8 @@ export const products = [
   {
     slug: "bracelet-homme-identite-gourmette",
     name: "Bracelet Homme Identité (Gourmette)",
+    weight: 160,
+    pickup: false,
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -130,6 +136,8 @@ export const products = [
   {
     slug: "bracelet-homme-acier-silicone",
     name: "Bracelet Homme Acier & Silicone",
+    weight: 100,
+    pickup: false,
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -161,6 +169,8 @@ export const products = [
   {
     slug: "bracelet-homme-cuir-acier",
     name: "Bracelet Homme Cuir & Acier",
+    weight: 100,
+    pickup: false,
     title: "Bracelet Homme — Cuir véritable & acier inoxydable gravé",
     category: "bijoux",
     type: "Bracelet personnalisé",
@@ -197,6 +207,8 @@ export const products = [
   {
     slug: "numero-table-arches-bohemes",
     name: "Numéro de table Arches Bohèmes",
+    weight: 250,
+    pickup: true,
     title: "Numéro de table mariage Arches Bohèmes – Bois & acrylique",
     category: "mariage",
     type: "Décoration de mariage",
@@ -230,6 +242,8 @@ export const products = [
   {
     slug: "numero-table-eucalyptus",
     name: "Numéro de table Eucalyptus",
+    weight: 200,
+    pickup: true,
     title: "Numéro de table mariage en bois – Motif branche d'eucalyptus",
     category: "mariage",
     type: "Décoration de mariage",
@@ -257,6 +271,8 @@ export const products = [
   {
     slug: "ronds-de-serviette-bois",
     name: "Ronds de serviette personnalisés",
+    weight: 40,
+    pickup: true,
     title: "Ronds de serviette personnalisés en bois – Hexagone, cœur ou cercle",
     category: "mariage",
     type: "Art de la table",
@@ -291,6 +307,8 @@ export const products = [
   {
     slug: "menu-de-mariage-bois-grave",
     name: "Menu de mariage en bois gravé",
+    weight: 300,
+    pickup: true,
     title: "Menu de mariage en bois gravé — Arche & lettrage relief",
     category: "mariage",
     type: "Menu de mariage",
@@ -320,6 +338,8 @@ export const products = [
   {
     slug: "plaque-de-porte-enfant",
     name: "Plaque de porte enfant",
+    weight: 450,
+    pickup: true,
     title: "Plaque de porte personnalisée prénom & animaux – Chambre enfant",
     category: "cadeaux",
     type: "Décoration chambre enfant",
@@ -349,6 +369,8 @@ export const products = [
   {
     slug: "cle-usb-personnalisee",
     name: "Clé USB personnalisée",
+    weight: 80,
+    pickup: false,
     title: "Clé USB personnalisée – Cadeau souvenir gravé sur mesure",
     category: "cadeaux",
     type: "Cadeau personnalisé",

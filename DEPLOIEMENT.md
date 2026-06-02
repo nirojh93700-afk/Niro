@@ -1,0 +1,145 @@
+# 🚀 Guide de déploiement pas à pas — Niv Création
+
+Ce guide t'explique **dans l'ordre**, en partant de zéro, comment mettre ton
+site en ligne sur **www.nivcreation.com** avec le paiement par carte.
+
+Compte le faire en **30 à 45 minutes**. Aucune compétence technique requise :
+il suffit de copier-coller. ☕
+
+---
+
+## 📋 Vue d'ensemble (les 4 étapes)
+
+1. Récupérer tes **clés Stripe** (paiement)
+2. (Optionnel) Créer une clé **Resend** (formulaire de contact)
+3. **Déployer** le site sur Vercel
+4. **Brancher** ton domaine www.nivcreation.com
+
+---
+
+## Étape 1 — Tes clés Stripe 💳
+
+> Tu as déjà un compte Stripe pour ton autre activité. Conseil : dans Stripe,
+> en haut à gauche, clique sur le nom de ton compte → **« + Créer un compte »**
+> pour ouvrir un compte séparé « Niv Création » (compta et virements distincts).
+> Ce n'est pas obligatoire : tu peux aussi réutiliser ton compte actuel.
+
+1. Connecte-toi sur **https://dashboard.stripe.com**
+2. En haut à droite, laisse le **mode Test** activé pour commencer.
+3. Va dans **Développeurs → Clés API** (ou directement
+   https://dashboard.stripe.com/test/apikeys).
+4. Note ces deux valeurs (clique « Révéler » pour la secrète) :
+   - **Clé publiable** : commence par `pk_test_…`
+   - **Clé secrète** : commence par `sk_test_…`
+
+Garde cet onglet ouvert, tu en auras besoin à l'étape 3.
+
+---
+
+## Étape 2 — Clé Resend (formulaire de contact) ✉️ *(optionnel)*
+
+Le formulaire de contact envoie un e-mail grâce à **Resend** (gratuit jusqu'à
+3 000 e-mails/mois). Si tu sautes cette étape, le formulaire affichera
+simplement ton adresse e-mail directe — ce n'est pas bloquant.
+
+1. Crée un compte sur **https://resend.com**
+2. Menu **API Keys → Create API Key** → copie la clé (`re_…`).
+3. (Plus tard, pour un rendu pro) ajoute et vérifie ton domaine dans
+   **Resend → Domains**, ce qui te permettra d'envoyer depuis
+   `contact@nivcreation.com`. Pour démarrer, l'adresse de test
+   `onboarding@resend.dev` fonctionne.
+
+---
+
+## Étape 3 — Déployer sur Vercel 🌐
+
+### 3.1 Créer le compte
+1. Va sur **https://vercel.com** → **Sign Up** → connecte-toi avec ton compte
+   **GitHub** (celui qui contient ce dépôt).
+
+### 3.2 Importer le projet
+1. Tableau de bord Vercel → **Add New… → Project**.
+2. Trouve le dépôt **Niro** (nirojh93700-afk/Niro) → **Import**.
+3. Vercel détecte automatiquement **Next.js**. Ne touche à rien.
+
+### 3.3 Ajouter les variables d'environnement
+Avant de cliquer Deploy, déplie **Environment Variables** et ajoute :
+
+| Nom | Valeur |
+|-----|--------|
+| `STRIPE_SECRET_KEY` | ta clé secrète Stripe (`sk_test_…`) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | ta clé publiable (`pk_test_…`) |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.nivcreation.com` |
+| `RESEND_API_KEY` | ta clé Resend (`re_…`) — *optionnel* |
+| `CONTACT_EMAIL` | `contact.nivcreation@gmail.com` — *optionnel* |
+
+> 💡 Astuce : ajoute chaque variable une par une (Nom + Valeur + Add).
+
+### 3.4 Déployer
+1. Clique **Deploy**. Patiente ~2 minutes. 🎉
+2. Vercel te donne une adresse de test du type
+   `niro-xxxx.vercel.app` : clique dessus, ton site est déjà en ligne !
+
+### 3.5 Tester un achat (sans vrai paiement)
+1. Ajoute un produit au panier → **Payer**.
+2. Sur la page Stripe, utilise la carte de test :
+   - Numéro : `4242 4242 4242 4242`
+   - Date : n'importe quelle date future · CVC : `123` · Code postal : `75000`
+3. Tu dois arriver sur la page **« Merci pour votre commande »**. ✅
+
+---
+
+## Étape 4 — Brancher ton domaine www.nivcreation.com 🔗
+
+1. Dans Vercel : projet → **Settings → Domains**.
+2. Tape **`nivcreation.com`** → **Add**. Accepte d'ajouter aussi `www`.
+3. Vercel affiche les **enregistrements DNS** à créer. Connecte-toi chez
+   l'endroit où tu as acheté `nivcreation.com` (OVH, Gandi, IONOS, GoDaddy…),
+   section **Zone DNS**, et ajoute ce que Vercel indique, généralement :
+
+   | Type | Nom | Valeur |
+   |------|-----|--------|
+   | `A` | `@` | `76.76.21.21` |
+   | `CNAME` | `www` | `cname.vercel-dns.com` |
+
+   ⚠️ Utilise toujours les valeurs **exactes** affichées dans ton tableau Vercel.
+
+4. Reviens sur Vercel : quand les pastilles passent au **vert** (de quelques
+   minutes à quelques heures), c'est en ligne sur
+   **https://www.nivcreation.com** avec HTTPS automatique. 🔒
+
+---
+
+## 🟢 Passer en mode « réel » (encaisser de vrais paiements)
+
+Quand tout est testé et que tu es prête :
+
+1. Dans Stripe, **active ton compte** (renseigne tes infos pro/bancaires) et
+   bascule du mode **Test** au mode **Réel** (en haut à droite).
+2. Récupère tes clés **live** (`sk_live_…` et `pk_live_…`).
+3. Dans Vercel → Settings → Environment Variables, **remplace** les deux clés
+   Stripe par les versions live, puis **Redeploy** (onglet Deployments → … →
+   Redeploy).
+
+---
+
+## 🔄 Plus tard : passer au domaine .fr
+
+Quand tu auras récupéré `nivcreation.fr` :
+1. Vercel → Settings → Domains → ajoute `nivcreation.fr` (+ DNS comme ci-dessus).
+2. Change la variable `NEXT_PUBLIC_SITE_URL` en `https://www.nivcreation.fr`.
+3. **Redeploy**. Terminé.
+
+---
+
+## 🆘 Petits soucis fréquents
+
+- **« Le paiement n'est pas configuré »** → la variable `STRIPE_SECRET_KEY`
+  manque ou tu n'as pas redéployé après l'avoir ajoutée.
+- **Le formulaire de contact affiche un message d'erreur** → ajoute
+  `RESEND_API_KEY` (ou contacte tes clients via l'e-mail affiché).
+- **Le domaine reste « en attente »** → les DNS mettent parfois quelques heures
+  à se propager. Patiente, puis clique « Refresh » dans Vercel.
+
+Besoin d'aide ? Reviens vers moi avec une capture d'écran de l'étape qui
+bloque. 😊

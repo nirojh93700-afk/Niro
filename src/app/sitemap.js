@@ -4,11 +4,11 @@ export default function sitemap() {
   const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.com").replace(/\/$/, "");
   const now = new Date();
 
-  const staticPages = ["", "/boutique"].map((path) => ({
+  const staticPages = ["", "/boutique", "/a-propos", "/contact"].map((path) => ({
     url: `${base}${path}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: path === "" ? 1 : 0.8,
+    priority: path === "" ? 1 : 0.7,
   }));
 
   const categoryPages = CATEGORIES.map((c) => ({
