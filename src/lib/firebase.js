@@ -94,3 +94,21 @@ export async function recordSiteOrder(order) {
     return false;
   }
 }
+
+// Stocke une photo envoyée par le client (gravure) dans la base.
+// Renvoie l'identifiant du document (réf à transmettre à l'atelier).
+export async function storeCustomerUpload(dataUrl, meta = {}) {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    const ref = await admin.firestore().collection("siteUploads").add({
+      dataUrl,
+      ...meta,
+      createdAt: new Date().toISOString(),
+    });
+    return ref.id;
+  } catch (e) {
+    console.error("Upload photo Firebase:", e.message);
+    return null;
+  }
+}

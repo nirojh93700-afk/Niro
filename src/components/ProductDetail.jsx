@@ -88,6 +88,8 @@ export default function ProductDetail({ product }) {
   const colorField = visibleFields.find((f) => f.type === "color");
   const photoField = visibleFields.find((f) => f.type === "photo");
   const photoUrl = photoField ? fieldValues[photoField.key] : "";
+  // Affichable seulement si c'est une vraie image (URL/data), pas une réf.
+  const photoSrc = photoUrl && (photoUrl.startsWith("http") || photoUrl.startsWith("data:")) ? photoUrl : "";
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
@@ -154,10 +156,10 @@ export default function ProductDetail({ product }) {
               </div>
             )}
             {/* Sur une VRAIE photo produit : la gravure se superpose directement */}
-            {hasImages && product.category === "cristaux" && photoUrl && (
+            {hasImages && product.category === "cristaux" && photoSrc && (
               <div className="crystal-photo-overlay">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photoUrl} alt="Aperçu de la gravure photo" />
+                <img src={photoSrc} alt="Aperçu de la gravure photo" />
               </div>
             )}
             {/* Note : on n'écrit pas le texte sur la photo produit (photos
@@ -234,16 +236,12 @@ export default function ProductDetail({ product }) {
                   return <p key={f.key} className="perso-hint">{f.text}</p>;
                 }
                 if (f.type === "photo") {
-                  return CLOUDINARY_READY ? (
+                  return (
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
-                      <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} />
+                      <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} productSlug={product.slug} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
-                  ) : (
-                    <p key={f.key} className="perso-hint">
-                      {f.text || "Envoyez votre photo par e-mail après la commande."}
-                    </p>
                   );
                 }
                 const labelEl = (
@@ -307,9 +305,9 @@ export default function ProductDetail({ product }) {
                     {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
                   </span>
                   <div className={`ep-plate ${material}`}>
-                    {material === "crystal" && photoUrl && (
+                    {material === "crystal" && photoSrc && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img className="ep-crystal-photo" src={photoUrl} alt="" />
+                      <img className="ep-crystal-photo" src={photoSrc} alt="" />
                     )}
                     {previewLines.length ? (
                       previewLines.map((line, i) => (

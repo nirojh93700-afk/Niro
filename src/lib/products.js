@@ -934,7 +934,7 @@ export const products = [
     name: "Porte-clés Cristal LED — Gravure 3D",
     weight: 120, pickup: false, letter: false,
     title: "Porte-clés cristal LED avec gravure photo 3D",
-    category: "porte-cles", type: "Porte-clés personnalisé",
+    category: "cristaux", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
