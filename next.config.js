@@ -6,6 +6,10 @@ const nextConfig = {
       { protocol: "https", hostname: "cdn.shopify.com" },
     ],
   },
+  // firebase-admin ne doit pas être "bundlé" (sinon le build Netlify échoue).
+  experimental: {
+    serverComponentsExternalPackages: ["firebase-admin"],
+  },
 };
 
 module.exports = nextConfig;
