@@ -32,6 +32,7 @@ export const products = [
     personalizationFields: [
       { key: "recto", label: "Texte à graver — recto", placeholder: "Ex : Je t'aime — 12.06.2024", maxLength: 40 },
       { key: "verso", label: "Texte à graver — verso", placeholder: "Visible au dos de la plaque", maxLength: 40, optional: true, variantContains: "Recto-Verso" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Collier Enveloppe Message Secret personnalisable",
     category: "bijoux",
@@ -84,6 +85,7 @@ export const products = [
       { key: "page1", label: "Gravure — page 1 (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
       { key: "page2", label: "Gravure — page gauche (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
       { key: "page3", label: "Gravure — page droite (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photoNote", type: "note", text: "Option photo : envoyez votre image par e-mail après la commande (en indiquant votre numéro de commande). Choisissez une photo nette et bien contrastée.", variantContains: "Photo" },
     ],
     title: "Collier médaillon cœur ouvrable — 4 faces gravables",
@@ -134,7 +136,7 @@ export const products = [
     subcategory: "homme",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", label: "Police souhaitée", placeholder: "Ex : script, bâton, manuscrite", maxLength: 40, optional: true, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
     ],
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
@@ -171,7 +173,7 @@ export const products = [
     subcategory: "homme",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", label: "Police souhaitée", placeholder: "Ex : script, bâton, manuscrite", maxLength: 40, optional: true, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
     ],
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
     category: "bijoux",
@@ -210,7 +212,7 @@ export const products = [
     subcategory: "homme",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", label: "Police souhaitée", placeholder: "Ex : script, bâton, manuscrite", maxLength: 40, optional: true, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
     ],
     title: "Bracelet Homme — Cuir véritable & acier inoxydable gravé",
     category: "bijoux",
@@ -257,6 +259,15 @@ export const products = [
     tagline: "Bois ajouré et acrylique doré pour une table de mariage chic.",
     personalizable: true,
     personalizationLabel: "Numéro / nom de table + couleur de l'acrylique",
+    personalizationFields: [
+      { key: "numero", label: "Numéro ou nom de la table", placeholder: "Ex : 1, 2… ou « Mariés »", maxLength: 24 },
+      { key: "couleur", type: "color", label: "Couleur de l'acrylique", optional: true, options: [
+        { value: "#c9a24b", label: "Doré" },
+        { value: "#b0b0b0", label: "Argenté" },
+        { value: "#1c1813", label: "Noir" },
+        { value: "#b76e79", label: "Rosé" },
+      ] },
+    ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/6eab4878-cbeb-4f83-9620-ea38e73359b9_png.webp?v=1775184450",
     ],
@@ -293,6 +304,14 @@ export const products = [
     tagline: "Le charme végétal d'une branche d'eucalyptus gravée.",
     personalizable: true,
     personalizationLabel: "Numéro / nom de table + couleur du motif",
+    personalizationFields: [
+      { key: "numero", label: "Numéro ou nom de la table", placeholder: "Ex : 1, 2… ou « Mariés »", maxLength: 24 },
+      { key: "couleur", type: "color", label: "Couleur du chiffre", optional: true, options: [
+        { value: "#c9a24b", label: "Doré" },
+        { value: "#b0b0b0", label: "Argenté" },
+        { value: "#1c1813", label: "Noir" },
+      ] },
+    ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/Gemini_Generated_Image_rdfslxrdfslxrdfs.png?v=1776295960",
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/d9bb3a81-dd45-421f-a4ec-fd5831d3d6b6.webp?v=1776295997",
@@ -323,6 +342,10 @@ export const products = [
     tagline: "Un cadeau d'invité raffiné, gravé à chaque prénom.",
     personalizable: true,
     personalizationLabel: "Prénoms / initiales / date à graver",
+    personalizationFields: [
+      { key: "prenoms", type: "textarea", label: "Prénoms / initiales à graver (un par ligne)", placeholder: "Marie\nPaul\nSophie…", maxLength: 600 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/610876bb-4b83-4b09-a722-356af9af8088.webp?v=1776298326",
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/a0452f63-4f2b-4f6b-833d-e9f8772be649.webp?v=1776298326",
@@ -360,6 +383,17 @@ export const products = [
     tagline: "Un menu en bois, lettrage « Menu » en relief, à vos prénoms.",
     personalizable: true,
     personalizationLabel: "Prénoms des mariés + texte du menu + couleur",
+    personalizationFields: [
+      { key: "prenoms", label: "Prénoms des mariés", placeholder: "Ex : Marie & Paul", maxLength: 40 },
+      { key: "menu", type: "textarea", label: "Texte du menu (un plat par ligne)", placeholder: "Entrée : …\nPlat : …\nDessert : …", maxLength: 400 },
+      { key: "couleur", type: "color", label: "Couleur du lettrage « Menu »", optional: true, options: [
+        { value: "#c9a24b", label: "Doré" },
+        { value: "#b0b0b0", label: "Argenté" },
+        { value: "#1c1813", label: "Noir mat" },
+        { value: "#b76e79", label: "Rosé" },
+      ] },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6547.png?v=1780236313",
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6734.jpg?v=1780236313",
@@ -392,6 +426,15 @@ export const products = [
     tagline: "Le prénom de votre enfant, entouré de ses animaux préférés.",
     personalizable: true,
     personalizationLabel: "Prénom + police + animaux (4 max) + finition",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom de l'enfant", placeholder: "Ex : Lina", maxLength: 20 },
+      { key: "police", type: "font", label: "Police", optional: true },
+      { key: "animaux", type: "textarea", label: "Animaux au choix (4 max)", placeholder: "Ex : Lion, Éléphant, Girafe, Ours", maxLength: 120 },
+      { key: "finition", type: "select", label: "Finition", optional: true, options: [
+        { value: "Bois brut", label: "Bois brut (naturel)" },
+        { value: "Marron foncé", label: "Marron foncé (teinté)" },
+      ] },
+    ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6324.png?v=1775091197",
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6331.png?v=1775091240",
@@ -424,6 +467,11 @@ export const products = [
     tagline: "Un souvenir gravé à conserver : mariage, entreprise, cadeau.",
     personalizable: true,
     personalizationLabel: "Texte / logo à graver",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 40, optional: true },
+      { key: "police", type: "font", label: "Police", optional: true },
+      { key: "logoNote", type: "note", text: "Logo d'entreprise : envoyez votre fichier (vectoriel HD) par e-mail après la commande, avec votre numéro de commande." },
+    ],
     images: [],
     variants: [
       { id: "usb-default", title: "Clé USB gravée", price: 14.99 },

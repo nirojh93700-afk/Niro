@@ -7,6 +7,7 @@ import { useCart } from "./CartContext";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
+import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -31,20 +32,45 @@ export default function ProductDetail({ product }) {
     setFieldValues((prev) => ({ ...prev, [key]: value }));
   }
 
+  // Libellé lisible d'une valeur (police, couleur, liste déroulante).
+  function valueLabel(field, value) {
+    if (!value) return "";
+    if (field.type === "font") return getFontLabel(value);
+    if (field.options) return field.options.find((o) => o.value === value)?.label || value;
+    return value;
+  }
+
   // Construit le texte de personnalisation final (pour le panier / la commande).
   function buildPersonalization() {
     if (product.personalizationFields) {
       return visibleFields
         .filter((f) => f.type !== "note")
         .map((f) => {
-          const val = (fieldValues[f.key] || "").trim();
-          return val ? `${f.label} : ${val}` : null;
+          const raw = (fieldValues[f.key] || "").toString().trim();
+          if (!raw) return null;
+          return `${f.label} : ${valueLabel(f, raw)}`;
         })
         .filter(Boolean)
         .join(" · ");
     }
     return personalization.trim();
   }
+
+  // Police et couleur sélectionnées (pour l'aperçu en direct).
+  const fontField = visibleFields.find((f) => f.type === "font");
+  const colorField = visibleFields.find((f) => f.type === "color");
+  const previewFontClass = getFontClass(fieldValues[fontField?.key] || "playfair");
+  const previewColor = (colorField && fieldValues[colorField.key]) || "#3a2f1d";
+
+  // Lignes de texte à montrer dans l'aperçu (champs texte non vides).
+  const previewLines = visibleFields
+    .filter((f) => f.type === "text" || f.type === "textarea" || (!f.type && true))
+    .flatMap((f) => (fieldValues[f.key] || "").split("\n"))
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const hasTextFields = visibleFields.some(
+    (f) => f.type === "text" || f.type === "textarea" || !f.type
+  );
 
   function handleAdd() {
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
@@ -148,27 +174,83 @@ export default function ProductDetail({ product }) {
               <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 12 }}>
                 Personnalisation — gravure
               </p>
-              {visibleFields.map((f) =>
-                f.type === "note" ? (
-                  <p key={f.key} className="perso-hint">{f.text}</p>
-                ) : (
+              {visibleFields.map((f) => {
+                if (f.type === "note") {
+                  return <p key={f.key} className="perso-hint">{f.text}</p>;
+                }
+                const labelEl = (
+                  <label htmlFor={`pf-${f.key}`}>
+                    {f.label}
+                    {f.optional && (
+                      <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>
+                    )}
+                  </label>
+                );
+                if (f.type === "font" || f.type === "select" || f.type === "color") {
+                  const opts = f.type === "font" ? FONTS.map((x) => ({ value: x.key, label: x.label })) : f.options || [];
+                  return (
+                    <div className="field" key={f.key}>
+                      {labelEl}
+                      <select
+                        id={`pf-${f.key}`}
+                        value={fieldValues[f.key] || ""}
+                        onChange={(e) => setField(f.key, e.target.value)}
+                      >
+                        <option value="">— Choisir —</option>
+                        {opts.map((o) => (
+                          <option key={o.value} value={o.value}>{o.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  );
+                }
+                const max = f.maxLength || 80;
+                const val = fieldValues[f.key] || "";
+                return (
                   <div className="field" key={f.key}>
-                    <label htmlFor={`pf-${f.key}`}>
-                      {f.label}
-                      {f.optional && (
-                        <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>
-                      )}
-                    </label>
-                    <input
-                      id={`pf-${f.key}`}
-                      type="text"
-                      placeholder={f.placeholder || ""}
-                      value={fieldValues[f.key] || ""}
-                      maxLength={f.maxLength || 80}
-                      onChange={(e) => setField(f.key, e.target.value)}
-                    />
+                    {labelEl}
+                    {f.type === "textarea" ? (
+                      <textarea
+                        id={`pf-${f.key}`}
+                        placeholder={f.placeholder || ""}
+                        value={val}
+                        maxLength={max}
+                        onChange={(e) => setField(f.key, e.target.value)}
+                      />
+                    ) : (
+                      <input
+                        id={`pf-${f.key}`}
+                        type="text"
+                        placeholder={f.placeholder || ""}
+                        value={val}
+                        maxLength={max}
+                        onChange={(e) => setField(f.key, e.target.value)}
+                      />
+                    )}
+                    <span className="char-count">{val.length}/{max}</span>
                   </div>
-                )
+                );
+              })}
+
+              {/* Aperçu en direct de la gravure */}
+              {hasTextFields && (
+                <div className="engrave-preview">
+                  <span className="ep-label">
+                    Aperçu de la gravure
+                    {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
+                  </span>
+                  <div className="ep-plate">
+                    {previewLines.length ? (
+                      previewLines.map((line, i) => (
+                        <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
+                          {line}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="ep-empty">Votre texte apparaîtra ici…</span>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           ) : (

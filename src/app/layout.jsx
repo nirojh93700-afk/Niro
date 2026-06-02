@@ -1,4 +1,13 @@
-import { Playfair_Display, Inter } from "next/font/google";
+import {
+  Playfair_Display,
+  Inter,
+  Cinzel,
+  Cinzel_Decorative,
+  Montserrat,
+  Great_Vibes,
+  Allura,
+  Pacifico,
+} from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
@@ -18,6 +27,18 @@ const body = Inter({
   variable: "--font-body",
   display: "swap",
 });
+
+// Polices de gravure (palette Niv Création).
+const cinzel = Cinzel({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-cinzel", display: "swap" });
+const cinzelDeco = Cinzel_Decorative({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-cinzel-deco", display: "swap" });
+const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-montserrat", display: "swap" });
+const greatVibes = Great_Vibes({ subsets: ["latin"], weight: ["400"], variable: "--font-great-vibes", display: "swap" });
+const allura = Allura({ subsets: ["latin"], weight: ["400"], variable: "--font-allura", display: "swap" });
+const pacifico = Pacifico({ subsets: ["latin"], weight: ["400"], variable: "--font-pacifico", display: "swap" });
+
+const fontVars = [cinzel, cinzelDeco, montserrat, greatVibes, allura, pacifico]
+  .map((f) => f.variable)
+  .join(" ");
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.com"),
@@ -46,7 +67,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr" className={`${display.variable} ${body.variable}`}>
+    <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
       <body>
         <CartProvider>
           <Header />
