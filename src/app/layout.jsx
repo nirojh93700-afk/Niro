@@ -20,7 +20,7 @@ const body = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.fr"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.com"),
   title: {
     default: "Niv Création — Bijoux, mariage & cadeaux personnalisés au laser",
     template: "%s | Niv Création",

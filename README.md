@@ -39,19 +39,31 @@ Ensuite, va sur **https://dashboard.stripe.com/apikeys** et copie :
    |-----|--------|
    | `STRIPE_SECRET_KEY` | ta clé secrète Stripe |
    | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | ta clé publique Stripe |
-   | `NEXT_PUBLIC_SITE_URL` | l'adresse du site (ex : `https://www.nivcreation.fr`) |
+   | `NEXT_PUBLIC_SITE_URL` | l'adresse du site : `https://www.nivcreation.com` |
 
 5. Relance un déploiement (**Redeploy**) pour appliquer les variables.
 
-### 3. Brancher ton domaine
-Dans Vercel : **Settings → Domains → Add** → saisis ton domaine
-(ex : `nivcreation.fr`). Vercel t'indique les enregistrements DNS à copier chez
-ton hébergeur de domaine. ⚠️ Si `www.nivcreation.fr` pointe déjà vers ta
-boutique Shopify, choisis un domaine ou sous-domaine différent pour ce nouveau
-site (ex : `boutique.nivcreation.fr`) afin d'éviter tout conflit.
+### 3. Brancher ton domaine (www.nivcreation.com)
+Dans Vercel : **Settings → Domains → Add** → saisis **`nivcreation.com`**
+(Vercel ajoute aussi automatiquement `www.nivcreation.com`).
 
-> 💡 Donne-moi simplement le domaine que tu veux utiliser et je le configure /
-> documente pour toi.
+Vercel affiche ensuite les enregistrements DNS à copier chez le bureau
+d'enregistrement de ton domaine (là où tu as acheté `nivcreation.com`) :
+
+| Type | Nom | Valeur |
+|------|-----|--------|
+| `A` | `@` | `76.76.21.21` |
+| `CNAME` | `www` | `cname.vercel-dns.com` |
+
+> ℹ️ Vercel peut afficher des valeurs légèrement différentes : utilise toujours
+> celles affichées dans **ton** tableau de bord Vercel.
+
+Une fois les DNS propagés (quelques minutes à quelques heures), le site est en
+ligne sur https://www.nivcreation.com avec HTTPS automatique. ✅
+
+> 🔄 **Plus tard, pour passer au `.fr`** : ajoute `nivcreation.fr` dans
+> Vercel → Domains, mets à jour la variable `NEXT_PUBLIC_SITE_URL` en
+> `https://www.nivcreation.fr`, et redéploie. C'est tout.
 
 ---
 

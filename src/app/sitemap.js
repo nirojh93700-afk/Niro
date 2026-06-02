@@ -1,7 +1,7 @@
 import { products, CATEGORIES } from "@/lib/products";
 
 export default function sitemap() {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.fr").replace(/\/$/, "");
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.com").replace(/\/$/, "");
   const now = new Date();
 
   const staticPages = ["", "/boutique"].map((path) => ({
