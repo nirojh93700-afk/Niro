@@ -9,7 +9,7 @@
 export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux personnalisés", short: "Bijoux" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
-  { slug: "cristaux", label: "Cristaux & LED", short: "Cristaux" },
+  { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },

@@ -85,8 +85,26 @@ export default function GestionPage() {
     }
   }
 
+  async function savePromo(variantId, value) {
+    try {
+      const res = await fetch("/api/admin/promo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ variantId, salePrice: value === "" ? null : value }),
+      });
+      if (!res.ok) throw new Error("Échec de l'enregistrement de la promo.");
+      setSaved(variantId);
+      setTimeout(() => setSaved(""), 1500);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
   function updateRow(variantId, value) {
     setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, stock: value } : r)));
+  }
+  function updateRowPromo(variantId, value) {
+    setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, salePrice: value } : r)));
   }
   function updateCatalog(slug, images) {
     setCatalog((prev) => prev.map((c) => (c.slug === slug ? { ...c, overrideImages: images } : c)));
@@ -125,6 +143,7 @@ export default function GestionPage() {
 
         <div className="filters" style={{ justifyContent: "flex-start", marginBottom: 26 }}>
           <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
+          <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
           <button className={`filter-chip ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>Photos</button>
           <button className={`filter-chip ${tab === "reglages" ? "active" : ""}`} onClick={() => setTab("reglages")}>Réglages</button>
         </div>
@@ -148,6 +167,31 @@ export default function GestionPage() {
                       type="number" min="0" placeholder="—" value={r.stock ?? ""}
                       onChange={(e) => updateRow(r.variantId, e.target.value === "" ? "" : Number(e.target.value))}
                       onBlur={(e) => saveStock(r.variantId, e.target.value)} />
+                    <span className="admin-saved">{saved === r.variantId ? "✓" : ""}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* ---------------- PROMOTIONS ---------------- */}
+        {tab === "promos" && (
+          <>
+            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
+              Mets un prix promo (inférieur au prix normal) : le client verra le prix barré + la réduction. Vide = pas de promo.
+            </p>
+            {Object.entries(grouped).map(([slug, g]) => (
+              <div key={slug} className="admin-block">
+                <h3>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></h3>
+                {g.items.map((r) => (
+                  <div className="admin-row" key={r.variantId} style={{ gridTemplateColumns: "1fr auto 100px 70px" }}>
+                    <span className="admin-variant">{r.variantTitle}</span>
+                    <span className="admin-price">{formatEuro(r.price)}</span>
+                    <input className="admin-stock" type="number" min="0" step="0.01"
+                      placeholder="Promo €" value={r.salePrice ?? ""}
+                      onChange={(e) => updateRowPromo(r.variantId, e.target.value === "" ? "" : Number(e.target.value))}
+                      onBlur={(e) => savePromo(r.variantId, e.target.value)} />
                     <span className="admin-saved">{saved === r.variantId ? "✓" : ""}</span>
                   </div>
                 ))}

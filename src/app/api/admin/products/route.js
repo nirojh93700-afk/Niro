@@ -1,15 +1,16 @@
 import { products } from "@/lib/products";
-import { getStockMap, getImageOverrides, isAdmin } from "@/lib/stock";
+import { getStockMap, getImageOverrides, getPromos, isAdmin } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
-// Liste tous les produits + variantes + stock + photos (réservé à l'admin).
+// Liste tous les produits + variantes + stock + photos + promos (admin).
 export async function GET(req) {
   if (!isAdmin(req)) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   const map = await getStockMap();
   const overrides = await getImageOverrides();
+  const promos = await getPromos();
   const rows = [];
   const catalog = [];
   for (const p of products) {
@@ -28,6 +29,7 @@ export async function GET(req) {
         variantId: v.id,
         variantTitle: v.title,
         price: v.price,
+        salePrice: typeof promos[v.id] === "number" ? promos[v.id] : null,
         stock: typeof map[v.id] === "number" ? map[v.id] : null,
       });
     }

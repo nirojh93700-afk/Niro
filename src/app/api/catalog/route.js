@@ -1,9 +1,9 @@
-import { getImageOverrides } from "@/lib/stock";
+import { getImageOverrides, getPromos } from "@/lib/stock";
 
-// Photos ajoutées depuis l'admin (lecture publique, pour la boutique).
+// Photos + promotions ajoutées depuis l'admin (lecture publique).
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const images = await getImageOverrides();
-  return Response.json({ images });
+  const [images, promos] = await Promise.all([getImageOverrides(), getPromos()]);
+  return Response.json({ images, promos });
 }

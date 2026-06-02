@@ -7,7 +7,7 @@ import {
   getSubcategories,
   getSubcategoryLabel,
 } from "@/lib/products";
-import { getImageOverrides } from "@/lib/stock";
+import { getImageOverrides, getPromos } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -20,11 +20,13 @@ export const metadata = {
 export default async function BoutiquePage({ searchParams }) {
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
-  const overrides = await getImageOverrides();
+  const [overrides, promos] = await Promise.all([getImageOverrides(), getPromos()]);
 
-  const withImages = products.map((p) =>
-    overrides[p.slug]?.length ? { ...p, images: overrides[p.slug] } : p
-  );
+  const withImages = products.map((p) => {
+    const images = overrides[p.slug]?.length ? overrides[p.slug] : p.images;
+    const salePrice = promos[p.variants[0].id];
+    return { ...p, images, salePrice: typeof salePrice === "number" ? salePrice : undefined };
+  });
   let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
   if (activeCat && activeSub) {
     filtered = filtered.filter((p) => p.subcategory === activeSub);

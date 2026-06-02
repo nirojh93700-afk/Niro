@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { products } from "@/lib/products";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
+import { getPromos } from "@/lib/stock";
 
 // Construit une table variantId -> { product, variant } pour valider côté serveur.
 function buildVariantIndex() {
@@ -42,6 +43,7 @@ export async function POST(req) {
   }
 
   const variantIndex = buildVariantIndex();
+  const promos = await getPromos();
   const lineItems = [];
   let totalGrams = 0;
   let subtotal = 0;
@@ -61,9 +63,13 @@ export async function POST(req) {
     const quantity = Math.min(Math.max(parseInt(item.quantity, 10) || 1, 1), 99);
     const { product, variant } = match;
 
+    // Applique le prix promo s'il est défini et inférieur au prix normal.
+    const promo = promos[variant.id];
+    const unitPrice = typeof promo === "number" && promo < variant.price ? promo : variant.price;
+
     boughtVariants.push({ variantId: variant.id, qty: quantity });
     totalGrams += (product.weight || 200) * quantity;
-    subtotal += variant.price * quantity;
+    subtotal += unitPrice * quantity;
     if (!product.letter) {
       letterOnly = false;
       parcelQty += quantity;
@@ -79,7 +85,7 @@ export async function POST(req) {
       quantity,
       price_data: {
         currency: "eur",
-        unit_amount: toCents(variant.price), // prix de confiance, issu du catalogue
+        unit_amount: toCents(unitPrice), // prix de confiance (promo appliquée si définie)
         product_data: {
           name: product.name,
           description: descriptionParts.join(" — "),

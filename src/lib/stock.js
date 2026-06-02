@@ -119,6 +119,33 @@ export async function setProductImages(slug, images) {
   return data.images;
 }
 
+// --- Promotions (prix barré) : { variantId: prixPromo } ---------------------
+export async function getPromos() {
+  const data = await getCatalogRaw();
+  return data.promos || {};
+}
+
+export async function setPromo(variantId, salePrice) {
+  const data = await getCatalogRaw();
+  data.promos = data.promos || {};
+  if (salePrice === null || salePrice === "" || salePrice === undefined) {
+    delete data.promos[variantId];
+  } else {
+    data.promos[variantId] = Math.max(0, Math.round(parseFloat(salePrice) * 100) / 100);
+  }
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      await store.setJSON(CATALOG_KEY, data);
+      return data.promos;
+    } catch {
+      // bascule mémoire
+    }
+  }
+  catalogMemory = data;
+  return data.promos;
+}
+
 // Indique quelles intégrations sont configurées (sans révéler les valeurs).
 export function getConfigStatus() {
   return {

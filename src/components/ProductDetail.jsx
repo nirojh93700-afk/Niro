@@ -22,6 +22,7 @@ export default function ProductDetail({ product }) {
 
   const [stockMap, setStockMap] = useState({});
   const [images, setImages] = useState(product.images);
+  const [promos, setPromos] = useState({});
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -32,6 +33,7 @@ export default function ProductDetail({ product }) {
       .then((d) => {
         const ov = d.images?.[product.slug];
         if (ov && ov.length) setImages(ov);
+        setPromos(d.promos || {});
       })
       .catch(() => {});
   }, [product.slug]);
@@ -41,6 +43,8 @@ export default function ProductDetail({ product }) {
   const info = getProductInfo(product.slug);
   const variantStock = stockMap[variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
+  const salePrice = promos[variant.id];
+  const hasPromo = typeof salePrice === "number" && salePrice < variant.price;
   // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
   // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
@@ -82,6 +86,8 @@ export default function ProductDetail({ product }) {
   // Police et couleur sélectionnées (pour l'aperçu en direct).
   const fontField = visibleFields.find((f) => f.type === "font");
   const colorField = visibleFields.find((f) => f.type === "color");
+  const photoField = visibleFields.find((f) => f.type === "photo");
+  const photoUrl = photoField ? fieldValues[photoField.key] : "";
   const previewFontClass = getFontClass(fieldValues[fontField?.key] || "playfair");
   const previewColor = (colorField && fieldValues[colorField.key]) || "#3a2f1d";
 
@@ -113,7 +119,7 @@ export default function ProductDetail({ product }) {
       variantId: variant.id,
       name: product.name,
       variantTitle: variant.title,
-      price: variant.price,
+      price: hasPromo ? salePrice : variant.price,
       image: images[0] || null,
       personalization: buildPersonalization(),
       quantity,
@@ -144,7 +150,14 @@ export default function ProductDetail({ product }) {
                 Niv Création
               </div>
             )}
-            {/* Aperçu de la gravure directement sur la photo */}
+            {/* Photo du client "à l'intérieur" du cristal (gravure 3D) */}
+            {product.category === "cristaux" && photoUrl && (
+              <div className="crystal-photo-overlay">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={photoUrl} alt="Aperçu de la gravure photo" />
+              </div>
+            )}
+            {/* Aperçu de la gravure (texte) directement sur la photo */}
             {previewLines.length > 0 && (
               <div className="engrave-overlay" style={product.preview || undefined}>
                 {previewLines.map((line, i) => (
@@ -183,7 +196,19 @@ export default function ProductDetail({ product }) {
           </div>
           <h1>{product.title}</h1>
           <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{product.tagline}</p>
-          <div className="price-lead">{formatEuro(variant.price)}</div>
+          <div className="price-lead">
+            {hasPromo ? (
+              <>
+                <span className="price-old">{formatEuro(variant.price)}</span>{" "}
+                <span className="price-sale">{formatEuro(salePrice)}</span>{" "}
+                <span className="promo-badge" style={{ position: "static" }}>
+                  -{Math.round((1 - salePrice / variant.price) * 100)}%
+                </span>
+              </>
+            ) : (
+              formatEuro(variant.price)
+            )}
+          </div>
 
           {product.variants.length > 1 && (
             <div className="field">

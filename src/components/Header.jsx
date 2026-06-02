@@ -22,6 +22,7 @@ export default function Header() {
           {CATEGORIES.map((c) => (
             <Link key={c.slug} href={`/boutique?cat=${c.slug}`}>{c.short}</Link>
           ))}
+          <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
           <Link href="/a-propos">À propos</Link>
           <Link href="/contact">Contact</Link>
         </nav>

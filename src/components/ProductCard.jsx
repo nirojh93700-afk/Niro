@@ -11,11 +11,14 @@ export default function ProductCard({ product }) {
   const distinct = new Set(prices).size > 1;
   const showDes = distinct && basePrice === Math.min(...prices);
   const image = product.images[0];
+  const sale = product.salePrice; // promo sur la variante par défaut
+  const hasPromo = typeof sale === "number" && sale < basePrice;
 
   return (
     <Link href={`/produit/${product.slug}`} className="product-card">
       <div className="product-thumb">
         <span className="product-chip">{product.type}</span>
+        {hasPromo && <span className="promo-badge">Promo</span>}
         {image ? (
           <Image
             src={image}
@@ -33,7 +36,14 @@ export default function ProductCard({ product }) {
         <p className="tagline">{product.tagline}</p>
         <div className="product-price">
           {showDes && <small>dès </small>}
-          {formatEuro(basePrice)}
+          {hasPromo ? (
+            <>
+              <span className="price-old">{formatEuro(basePrice)}</span>{" "}
+              <span className="price-sale">{formatEuro(sale)}</span>
+            </>
+          ) : (
+            formatEuro(basePrice)
+          )}
         </div>
       </div>
     </Link>
