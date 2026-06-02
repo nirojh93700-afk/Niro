@@ -6,7 +6,7 @@ par gravure & découpe laser), avec paiement par carte bancaire intégré via
 
 - ⚙️ **Technologie :** Next.js 14 (React) + Stripe Checkout
 - 💳 **Paiement :** carte bancaire sécurisée (hébergé par Stripe)
-- 🚀 **Hébergement conseillé :** Vercel (gratuit) + ton domaine
+- 🚀 **Hébergement conseillé :** Netlify (gratuit, usage commercial autorisé) + ton domaine
 - 🛍️ **13 produits** intégrés (bijoux, mariage, cadeaux)
 - 🚚 **Frais de port automatiques selon le poids** + remise en main propre
 - ✉️ **Page contact + à propos**

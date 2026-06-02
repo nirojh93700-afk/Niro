@@ -51,7 +51,27 @@ simplement ton adresse e-mail directe — ce n'est pas bloquant.
 
 ---
 
-## Étape 3 — Déployer sur Vercel 🌐
+## Étape 3 — Déployer le site 🌐
+
+Tu as deux options d'hébergement. **Netlify est recommandé** (gratuit, autorisé
+pour la vente, et tout fonctionne sans modification). Vercel reste possible
+(plus simple encore, mais ~20 €/mois pour un usage commercial).
+
+### 🟢 Option A — Netlify (gratuit, recommandé)
+1. Va sur **https://netlify.com** → **Sign up** → connecte-toi avec **GitHub**.
+2. **Add new site → Import an existing project** → choisis le dépôt **Niro**.
+3. Netlify détecte Next.js automatiquement (la config `netlify.toml` est déjà
+   dans le projet). Ne touche pas aux réglages de build.
+4. Avant de déployer, ouvre **Site configuration → Environment variables** et
+   ajoute les mêmes variables que dans le tableau ci-dessous (étape 3.3).
+5. Clique **Deploy**. Ton site est en ligne sur une adresse `…netlify.app`.
+6. Pour le webhook Stripe et le domaine : mêmes étapes (3 bis et 4), en
+   remplaçant simplement l'adresse par celle de ton site Netlify / ton domaine.
+
+> Les variables s'ajoutent dans **Site configuration → Environment variables**
+> (au lieu de Vercel), mais ce sont exactement les mêmes noms et valeurs.
+
+### ⚪ Option B — Vercel
 
 ### 3.1 Créer le compte
 1. Va sur **https://vercel.com** → **Sign Up** → connecte-toi avec ton compte

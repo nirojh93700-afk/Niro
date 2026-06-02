@@ -1,0 +1,10 @@
+# Configuration de déploiement Netlify pour Niv Création (Next.js).
+# Netlify détecte Next.js et utilise automatiquement son adaptateur officiel,
+# qui fait tourner les routes serveur (paiement, webhook) en Node.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
