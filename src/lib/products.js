@@ -20,6 +20,8 @@ export const SUBCATEGORIES = {
   bijoux: [
     { slug: "femme", label: "Bijoux femme" },
     { slug: "homme", label: "Bijoux homme" },
+    { slug: "couple", label: "Couple" },
+    { slug: "bebe", label: "Bébé & Naissance" },
   ],
 };
 
@@ -589,6 +591,339 @@ export const products = [
 <li><strong>Gravure :</strong> laser, réalisée sur commande</li>
 </ul>
 <p>Un petit cadeau qui fait toujours plaisir, à offrir ou à s'offrir.</p>`,
+  },
+
+  // ===== Cristaux 3D =====
+  {
+    slug: "trophee-cristal-vierge-3d",
+    name: "Trophée cristal — Gravure 3D",
+    weight: 600, pickup: true, letter: false,
+    title: "Trophée en cristal — gravure photo 3D personnalisée",
+    category: "cristaux", type: "Cristal photo 3D",
+    tagline: "Un trophée en cristal, votre photo gravée en 3D à l'intérieur.",
+    personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette, bien éclairée, sujet bien détaché sur fond simple." },
+      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Nom, date, dédicace…", maxLength: 40, optional: true },
+      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "trophee-cristal-14cm", title: "14 cm", price: 69.9 }],
+    descriptionHtml: `<p>Un <strong>trophée en cristal optique K9</strong> avec votre photo gravée en 3D à l'intérieur. Une pièce d'exception pour un hommage, une remise de prix ou un souvenir précieux.</p>
+<ul><li>Cristal optique K9 haute pureté</li><li>Hauteur 14 cm</li><li>Gravure photo 3D interne au laser</li></ul>
+<p><em>Sublimé par un socle lumineux LED (disponible séparément).</em></p>`,
+  },
+
+  // ===== Bracelets =====
+  {
+    slug: "bracelet-homme-chaine-acier",
+    name: "Bracelet Homme Chaîne Acier",
+    weight: 120, pickup: false, letter: true, subcategory: "homme",
+    title: "Bracelet homme chaîne acier à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Chaîne en acier inoxydable, plaque gravée à votre message.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "chaine-acier-argente", title: "Argenté", price: 24.9 },
+      { id: "chaine-acier-noir", title: "Noir", price: 26.9 },
+    ],
+    descriptionHtml: `<p>Bracelet homme en <strong>acier inoxydable</strong>, plaque gravable au laser. Solide, élégant, intemporel.</p>
+<ul><li>Acier inoxydable hypoallergénique</li><li>Fermoir sécurisé</li><li>Gravure prénom, date ou message</li></ul>`,
+  },
+  {
+    slug: "bracelet-femme-acier",
+    name: "Bracelet Femme Acier",
+    weight: 80, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet femme acier à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un bracelet fin en acier doré, gravé à votre message.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 17.9 }],
+    descriptionHtml: `<p>Bracelet femme délicat en <strong>acier inoxydable doré</strong>, à personnaliser par gravure.</p>
+<ul><li>Acier inoxydable, ne ternit pas</li><li>Gravure fine au laser</li></ul>`,
+  },
+  {
+    slug: "bracelet-empreinte-pied-bebe",
+    name: "Bracelet Empreinte Pied de Bébé",
+    weight: 70, pickup: false, letter: true, subcategory: "bebe",
+    title: "Bracelet empreinte pied de bébé à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Le souvenir d'une naissance, gravé à porter sur soi.",
+    personalizable: true, personalizationLabel: "Prénom & date + police",
+    personalizationFields: [
+      { key: "texte", label: "Prénom et/ou date de naissance", placeholder: "Ex : Lina — 12.06.2024", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "empreinte-bebe-argente", title: "Argenté", price: 12.5 },
+      { id: "empreinte-bebe-dore", title: "Doré", price: 12.5 },
+    ],
+    descriptionHtml: `<p>Un bracelet tendre orné d'une <strong>empreinte de pied de bébé</strong>, à graver au prénom et à la date de naissance. Cadeau de naissance idéal.</p>
+<ul><li>Acier inoxydable hypoallergénique</li><li>Argenté ou doré</li></ul>`,
+  },
+  {
+    slug: "bracelet-femme-coeur",
+    name: "Bracelet Femme Cœur",
+    weight: 80, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet femme cœur à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un cœur en acier doré, gravé à votre message.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "bracelet-coeur-dore", title: "Doré", price: 17.9 }],
+    descriptionHtml: `<p>Bracelet femme avec breloque <strong>cœur</strong> gravable, en acier inoxydable doré. Romantique et délicat.</p>`,
+  },
+  {
+    slug: "bracelet-femme-papillon",
+    name: "Bracelet Femme Papillon ajouré",
+    weight: 80, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet femme papillon ajouré à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un papillon ajouré tout en finesse, à graver.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "papillon-argente", title: "Argenté", price: 17.9 },
+      { id: "papillon-dore", title: "Doré", price: 17.9 },
+      { id: "papillon-noir", title: "Noir", price: 15.9 },
+      { id: "papillon-or-rose", title: "Or Rose", price: 18.9 },
+    ],
+    descriptionHtml: `<p>Bracelet femme orné d'un <strong>papillon ajouré</strong> en acier inoxydable, à personnaliser par gravure. Plusieurs finitions.</p>`,
+  },
+  {
+    slug: "bracelet-homme-double-anneau",
+    name: "Bracelet Homme Double Anneau",
+    weight: 110, pickup: false, letter: true, subcategory: "homme",
+    title: "Bracelet homme double anneau acier à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Deux anneaux d'acier, une plaque à graver.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "double-anneau-argente", title: "Argenté", price: 19.9 }],
+    descriptionHtml: `<p>Bracelet homme moderne à <strong>double anneau</strong> en acier inoxydable, plaque gravable au laser.</p>`,
+  },
+  {
+    slug: "bracelet-homme-rond-retro",
+    name: "Bracelet Homme Rond Rétro",
+    weight: 100, pickup: false, letter: true, subcategory: "homme",
+    title: "Bracelet homme rond rétro acier à graver",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un médaillon rond rétro en acier, à graver.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "rond-retro-argente", title: "Argenté", price: 14.9 },
+      { id: "rond-retro-noir", title: "Noir", price: 14.9 },
+    ],
+    descriptionHtml: `<p>Bracelet homme au style <strong>rétro</strong> avec médaillon rond gravable, en acier inoxydable.</p>`,
+  },
+
+  // ===== Colliers =====
+  {
+    slug: "collier-couple-coeur-lot2",
+    name: "Collier Couple Cœur (lot de 2)",
+    weight: 90, pickup: false, letter: true, subcategory: "couple",
+    title: "Collier couple cœur à graver (lot de 2)",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Deux moitiés de cœur à graver, à partager à deux.",
+    personalizable: true, personalizationLabel: "Texte des 2 pendentifs + police",
+    personalizationFields: [
+      { key: "texte1", label: "Texte — pendentif 1", placeholder: "Ex : prénom", maxLength: 20 },
+      { key: "texte2", label: "Texte — pendentif 2", placeholder: "Ex : prénom", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 24.9 }],
+    descriptionHtml: `<p>Un <strong>lot de 2 colliers</strong> formant un cœur, à graver chacun. Le cadeau parfait pour les amoureux.</p>`,
+  },
+  {
+    slug: "collier-plaque-acier",
+    name: "Collier Plaque Acier",
+    weight: 90, pickup: false, letter: true, subcategory: "homme",
+    title: "Collier plaque acier à graver",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Une plaque d'acier épurée, gravée à votre message.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "plaque-acier-noir", title: "Acier Noir", price: 20.9 },
+      { id: "plaque-argente", title: "Argenté", price: 18.9 },
+      { id: "plaque-argente-noir", title: "Argenté et Noir", price: 21.9 },
+      { id: "plaque-dore", title: "Doré", price: 21.9 },
+      { id: "plaque-noir", title: "Noir", price: 19.9 },
+    ],
+    descriptionHtml: `<p>Collier à <strong>plaque rectangulaire</strong> en acier inoxydable, surface lisse gravable. Style épuré et contemporain.</p>`,
+  },
+  {
+    slug: "collier-medaillon-livre",
+    name: "Collier Médaillon Livre",
+    weight: 120, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier médaillon livre à graver",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
+    personalizable: true, personalizationLabel: "Textes à graver + police",
+    personalizationFields: [
+      { key: "texte1", label: "Gravure — page 1", maxLength: 30 },
+      { key: "texte2", label: "Gravure — page 2", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "medaillon-livre-argente", title: "Argenté", price: 25.9 },
+      { id: "medaillon-livre-dore", title: "Doré", price: 25.9 },
+      { id: "medaillon-livre-bicolore", title: "Doré et Argenté", price: 26.9 },
+    ],
+    descriptionHtml: `<p>Médaillon en forme de <strong>livre</strong> qui s'ouvre, avec pages intérieures gravables. En acier inoxydable.</p>`,
+  },
+  {
+    slug: "collier-couple-puzzle",
+    name: "Collier Couple Puzzle géométrique",
+    weight: 80, pickup: false, letter: true, subcategory: "couple",
+    title: "Collier couple pendentif puzzle géométrique à graver",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Deux pièces qui s'emboîtent, à graver à deux.",
+    personalizable: true, personalizationLabel: "Texte des 2 pendentifs + police",
+    personalizationFields: [
+      { key: "texte1", label: "Texte — pendentif 1", maxLength: 20 },
+      { key: "texte2", label: "Texte — pendentif 2", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "puzzle-argente", title: "Argenté", price: 12.9 },
+      { id: "puzzle-or-rose", title: "Or Rose", price: 14.9 },
+    ],
+    descriptionHtml: `<p>Un duo de pendentifs <strong>puzzle géométrique</strong> qui s'emboîtent, à graver. Symbole d'un lien unique.</p>`,
+  },
+  {
+    slug: "collier-femme-pendentif-geometrique",
+    name: "Collier Femme Pendentif géométrique",
+    weight: 70, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier femme pendentif géométrique à graver",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Un pendentif géométrique tendance, gravé à votre message.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "geo-argente", title: "Argenté", price: 16.9 },
+      { id: "geo-arc-en-ciel", title: "Arc en Ciel", price: 19.9 },
+      { id: "geo-dore", title: "Doré", price: 18.9 },
+      { id: "geo-noir", title: "Noir", price: 18.9 },
+      { id: "geo-or-rose", title: "Or Rose", price: 18.9 },
+    ],
+    descriptionHtml: `<p>Collier femme au <strong>pendentif géométrique</strong> moderne, gravable au laser. Plusieurs finitions, dont arc-en-ciel.</p>`,
+  },
+
+  // ===== Clés USB =====
+  {
+    slug: "cle-usb-cristal-3d",
+    name: "Clé USB Cristal — Gravure 3D",
+    weight: 70, pickup: false, letter: true,
+    title: "Clé USB cristal avec gravure photo 3D",
+    category: "cles-usb", type: "Clé USB personnalisée",
+    tagline: "Une clé USB en cristal, votre photo gravée en 3D.",
+    personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
+      { key: "texte", label: "Texte à graver (optionnel)", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "usb-cristal-4go", title: "4 Go", price: 17.9 }],
+    descriptionHtml: `<p>Clé USB en <strong>cristal</strong> avec votre photo gravée en 3D à l'intérieur. Un souvenir et un objet utile à la fois.</p>`,
+  },
+  {
+    slug: "cle-usb-bois-coffret",
+    name: "Clé USB Bois — Coffret",
+    weight: 150, pickup: false, letter: false,
+    title: "Clé USB bois avec coffret, à graver",
+    category: "cles-usb", type: "Clé USB personnalisée",
+    tagline: "Une clé USB en bois gravée, livrée dans son coffret.",
+    personalizable: true, personalizationLabel: "Texte / logo + police",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 40, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "logoNote", type: "note", text: "Logo d'entreprise : envoyez votre fichier (vectoriel HD) par e-mail après la commande." },
+    ],
+    images: [],
+    variants: [{ id: "usb-bois-4go", title: "4 Go", price: 24.9 }],
+    descriptionHtml: `<p>Clé USB en <strong>bois</strong> gravée au laser, présentée dans un élégant <strong>coffret bois</strong>. Idéale mariage ou cadeau d'entreprise.</p>`,
+  },
+
+  // ===== Porte-clés =====
+  {
+    slug: "porte-cles-cristal-led-3d",
+    name: "Porte-clés Cristal LED — Gravure 3D",
+    weight: 120, pickup: false, letter: false,
+    title: "Porte-clés cristal LED avec gravure photo 3D",
+    category: "porte-cles", type: "Porte-clés personnalisé",
+    tagline: "Un porte-clés en cristal lumineux, votre photo gravée en 3D.",
+    personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
+      { key: "texte", label: "Texte à graver (optionnel)", maxLength: 25, optional: true },
+      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+    ],
+    images: [],
+    variants: [
+      { id: "pc-cristal-coeur", title: "Cœur", price: 24.9 },
+      { id: "pc-cristal-rectangle", title: "Rectangle", price: 22.9 },
+    ],
+    descriptionHtml: `<p>Porte-clés en <strong>cristal</strong> avec LED, votre photo gravée en 3D à l'intérieur. S'illumine d'une simple pression.</p>`,
+  },
+
+  // ===== Pièces métal =====
+  {
+    slug: "piece-ronde-laiton",
+    name: "Pièce ronde laiton à graver",
+    weight: 40, pickup: false, letter: true,
+    title: "Pièce ronde en laiton à graver personnalisée",
+    category: "cadeaux", type: "Pièce à graver",
+    tagline: "Une médaille ronde en laiton, à graver des deux côtés.",
+    personalizable: true, personalizationLabel: "Texte à graver + police",
+    personalizationFields: [
+      { key: "recto", label: "Texte à graver — recto", maxLength: 30 },
+      { key: "verso", label: "Texte à graver — verso", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [],
+    variants: [{ id: "piece-laiton", title: "Laiton", price: 14.9 }],
+    descriptionHtml: `<p>Médaille ronde en <strong>laiton</strong>, à graver (recto et verso possibles). Parfaite en porte-bonheur ou souvenir.</p>`,
   },
 ];
 

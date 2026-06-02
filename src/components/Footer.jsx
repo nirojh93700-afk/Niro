@@ -39,7 +39,12 @@ export default function Footer() {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Niv Création — Tous droits réservés.</span>
-          <span>Paiement sécurisé par Stripe</span>
+          <span>
+            Paiement sécurisé par Stripe ·{" "}
+            <Link href="/gestion" style={{ color: "inherit", textDecoration: "underline" }}>
+              Espace gestion
+            </Link>
+          </span>
         </div>
       </div>
     </footer>
