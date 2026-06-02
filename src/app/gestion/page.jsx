@@ -20,6 +20,7 @@ export default function GestionPage() {
   const [rows, setRows] = useState([]);
   const [catalog, setCatalog] = useState([]);
   const [config, setConfig] = useState(null);
+  const [firebase, setFirebase] = useState(null);
   const [tab, setTab] = useState("stock");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,11 @@ export default function GestionPage() {
       setAuthed(true);
       sessionStorage.setItem("niv-admin-key", adminKey);
       const cfg = await fetch("/api/admin/config", { headers: { "x-admin-key": adminKey } });
-      if (cfg.ok) setConfig((await cfg.json()).config);
+      if (cfg.ok) {
+        const cfgData = await cfg.json();
+        setConfig(cfgData.config);
+        setFirebase(cfgData.firebase || null);
+      }
     } catch (e) {
       setError(e.message);
       setAuthed(false);
@@ -259,6 +264,32 @@ export default function GestionPage() {
                 </div>
               ))}
             </div>
+
+            {/* Diagnostic Firebase (connexion réelle à l'appli de gestion) */}
+            {firebase && (
+              <div className="admin-block" style={{ marginTop: "1rem" }}>
+                <div className="admin-row" style={{ gridTemplateColumns: "1fr auto" }}>
+                  <span className="admin-variant">Connexion à ton application (Firebase)</span>
+                  <span style={{ fontWeight: 600, color: firebase.connected ? "#256b34" : "#b4452f" }}>
+                    {firebase.connected ? "Connecté ✓" : "Non connecté"}
+                  </span>
+                </div>
+                {!firebase.connected && (
+                  <div className="admin-row" style={{ gridTemplateColumns: "1fr" }}>
+                    <span style={{ color: "#b4452f", fontSize: "0.85rem" }}>
+                      {firebase.error}
+                      {firebase.present && !firebase.parsed && " (Recolle la clé : tout le contenu du fichier .json, d'un seul bloc.)"}
+                    </span>
+                  </div>
+                )}
+                {firebase.connected && firebase.projectId && (
+                  <div className="admin-row" style={{ gridTemplateColumns: "1fr" }}>
+                    <span style={{ color: "#256b34", fontSize: "0.85rem" }}>Projet : {firebase.projectId}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
             <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>
               Pour configurer une clé manquante : Netlify → Site configuration → Environment variables (voir le guide DEPLOIEMENT.md).
             </p>

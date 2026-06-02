@@ -27,6 +27,33 @@ export function firebaseReady() {
   return Boolean(process.env.FIREBASE_SERVICE_ACCOUNT);
 }
 
+// Diagnostic complet : la clé est-elle présente, lisible, et connectée à la base ?
+// Renvoie un objet clair pour la page Réglages (sans révéler la clé).
+export async function firebaseDiagnostic() {
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+  if (!raw) {
+    return { present: false, parsed: false, connected: false, error: "Variable FIREBASE_SERVICE_ACCOUNT absente." };
+  }
+  let projectId = null;
+  try {
+    const sa = typeof raw === "string" ? JSON.parse(raw) : raw;
+    projectId = sa.project_id || null;
+  } catch (e) {
+    return { present: true, parsed: false, connected: false, error: "Clé illisible (JSON invalide) : " + e.message };
+  }
+  const a = getApp();
+  if (!a) {
+    return { present: true, parsed: true, connected: false, projectId, error: "Initialisation Firebase impossible (clé refusée)." };
+  }
+  try {
+    // Lecture triviale pour confirmer l'accès réel à la base.
+    await admin.firestore().collection("backup").doc("master").get();
+    return { present: true, parsed: true, connected: true, projectId, error: null };
+  } catch (e) {
+    return { present: true, parsed: true, connected: false, projectId, error: "Connexion à la base échouée : " + e.message };
+  }
+}
+
 // Slug identique à celui de l'appli (pour retrouver la clé produit).
 export function productKeySlug(s) {
   return (s || "")
