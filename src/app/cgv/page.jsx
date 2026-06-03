@@ -8,7 +8,7 @@ const html = `
 <p><em>Dernière mise à jour : juin 2026</em></p>
 
 <h3>1. Identification du vendeur</h3>
-<p>Niv Création — Atelier de personnalisation<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a><br>SIRET : [À COMPLÉTER]<br>Siège social : [À COMPLÉTER]</p>
+<p>Niv Création — Atelier de personnalisation<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a><br>SIRET : [À COMPLÉTER après création de l'auto-entreprise]<br>Siège social : 6 rue d'Armaillé, 75017 Paris</p>
 
 <h3>2. Objet</h3>
 <p>Les présentes CGV régissent les ventes de produits personnalisés réalisés par Niv Création auprès de consommateurs particuliers ou professionnels.</p>

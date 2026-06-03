@@ -31,6 +31,7 @@ export default async function DocumentPage({ params }) {
               <img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.png?v=1780503911" alt="Niv Création" style={{ height: 64, borderRadius: 8 }} />
               <div style={{ fontSize: "0.82rem", color: "var(--ink-soft)", marginTop: 8, lineHeight: 1.5 }}>
                 Niv Création — Atelier de personnalisation<br />
+                6 rue d'Armaillé, 75017 Paris<br />
                 contact.nivcreation@gmail.com · 07 66 15 31 02
               </div>
             </div>
