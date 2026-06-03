@@ -637,11 +637,9 @@ export const products = [
     ],
     images: [
       "/produits/bracelet_homme_chaine_a_graver_argente.jpg",
-      "/produits/bracelet_homme_chaine_a_graver_noir.jpg",
     ],
     variants: [
       { id: "chaine-acier-argente", title: "Argenté", price: 24.9 },
-      { id: "chaine-acier-noir", title: "Noir", price: 26.9 },
     ],
     descriptionHtml: `<p>Bracelet homme en <strong>acier inoxydable</strong>, plaque gravable au laser. Solide, élégant, intemporel.</p>
 <ul><li>Acier inoxydable hypoallergénique</li><li>Fermoir sécurisé</li><li>Gravure prénom, date ou message</li></ul>`,
