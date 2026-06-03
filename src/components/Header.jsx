@@ -12,9 +12,13 @@ export default function Header() {
   return (
     <header className="header">
       <div className="container header-inner">
-        <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
-          <span className="logo-name">Niv Création</span>
-          <span className="logo-sub">Gravure & découpe laser</span>
+        <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Niv Création — accueil">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="logo-img"
+            src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.png?v=1780503911"
+            alt="Niv Création — Atelier de personnalisation"
+          />
         </Link>
 
         <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>

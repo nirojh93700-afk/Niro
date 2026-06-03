@@ -6,8 +6,13 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <div className="brand-name">Niv Création</div>
-            <p style={{ marginTop: 0, maxWidth: 320 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="footer-logo"
+              src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.png?v=1780503911"
+              alt="Niv Création — Atelier de personnalisation"
+            />
+            <p style={{ marginTop: 14, maxWidth: 320 }}>
               Atelier français de gravure et découpe laser. Bijoux, décorations
               de mariage et cadeaux personnalisés, fabriqués à la main avec soin.
             </p>

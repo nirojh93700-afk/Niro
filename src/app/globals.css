@@ -124,21 +124,19 @@ img {
 }
 .logo {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   line-height: 1;
 }
-.logo .logo-name {
-  font-family: var(--font-display), serif;
-  font-size: 1.45rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+.logo .logo-img {
+  height: 56px;
+  width: auto;
+  display: block;
+  border-radius: 8px;
 }
-.logo .logo-sub {
-  font-size: 0.62rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold-dark);
-  margin-top: 3px;
+@media (max-width: 640px) {
+  .logo .logo-img {
+    height: 46px;
+  }
 }
 .nav {
   display: flex;
@@ -1325,6 +1323,13 @@ img {
   font-size: 1.4rem;
   color: #fff;
   margin-bottom: 10px;
+}
+.footer .footer-logo {
+  width: 190px;
+  max-width: 70%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
 }
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
