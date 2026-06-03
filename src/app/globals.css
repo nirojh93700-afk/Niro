@@ -720,9 +720,10 @@ img {
   padding: 12%;
   text-align: center;
   pointer-events: none;
+  font-size: clamp(1.1rem, 4.2vw, 2rem);
 }
 .engrave-overlay .eo-line {
-  font-size: clamp(1.1rem, 4.2vw, 2rem);
+  font-size: inherit;
   line-height: 1.25;
   word-break: break-word;
   opacity: 0.92;

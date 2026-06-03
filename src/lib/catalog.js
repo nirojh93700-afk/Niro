@@ -21,6 +21,7 @@ function applyOverride(product, ov, images, promos) {
       if (ov[f] !== undefined && ov[f] !== "") p[f] = ov[f];
     }
     if (ov.hidden) p.hidden = true;
+    if (ov.preview) p.preview = ov.preview; // zone de gravure réglée dans l'admin
     if (ov.prices) {
       p.variants = p.variants.map((v) =>
         typeof ov.prices[v.id] === "number" ? { ...v, price: ov.prices[v.id] } : v

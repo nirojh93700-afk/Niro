@@ -5,6 +5,7 @@ import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import PhotoUpload, { CLOUDINARY_READY } from "@/components/PhotoUpload";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
+import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
 
 const CONFIG_LABELS = {
@@ -211,6 +212,7 @@ export default function GestionPage() {
           <button className={`filter-chip ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>Statistiques</button>
           <button className={`filter-chip ${tab === "clients" ? "active" : ""}`} onClick={() => setTab("clients")}>Clientes</button>
           <button className={`filter-chip ${tab === "produits" ? "active" : ""}`} onClick={() => setTab("produits")}>Produits</button>
+          <button className={`filter-chip ${tab === "gravure" ? "active" : ""}`} onClick={() => setTab("gravure")}>Gravure</button>
           <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
           <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
           <button className={`filter-chip ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>Photos</button>
@@ -323,6 +325,11 @@ export default function GestionPage() {
         {/* ---------------- PRODUITS ---------------- */}
         {tab === "produits" && (
           <ProductsAdmin adminKey={key} products={editable} onReload={() => load(key)} />
+        )}
+
+        {/* ---------------- GRAVURE ---------------- */}
+        {tab === "gravure" && (
+          <EngravingAdmin adminKey={key} products={editable} onReload={() => load(key)} />
         )}
 
         {/* ---------------- STOCK ---------------- */}
