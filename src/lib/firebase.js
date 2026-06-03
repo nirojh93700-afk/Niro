@@ -113,11 +113,43 @@ export async function recordSiteOrder(order) {
   try {
     await admin.firestore().collection("siteOrders").add({
       ...order,
+      status: "a_preparer",
       createdAt: new Date().toISOString(),
     });
     return true;
   } catch (e) {
     console.error("Enregistrement vente Firebase:", e.message);
+    return false;
+  }
+}
+
+// Renvoie les dernières commandes du site (pour l'admin).
+export async function getSiteOrders(max = 300) {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    const snap = await admin
+      .firestore()
+      .collection("siteOrders")
+      .orderBy("createdAt", "desc")
+      .limit(max)
+      .get();
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error("Lecture commandes Firebase:", e.message);
+    return null;
+  }
+}
+
+// Met à jour le statut d'une commande (a_preparer | expediee).
+export async function updateSiteOrderStatus(id, status) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    await admin.firestore().collection("siteOrders").doc(id).update({ status });
+    return true;
+  } catch (e) {
+    console.error("MAJ statut commande Firebase:", e.message);
     return false;
   }
 }

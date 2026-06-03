@@ -21,7 +21,9 @@ export default function GestionPage() {
   const [catalog, setCatalog] = useState([]);
   const [config, setConfig] = useState(null);
   const [firebase, setFirebase] = useState(null);
-  const [tab, setTab] = useState("stock");
+  const [orders, setOrders] = useState([]);
+  const [ordersReady, setOrdersReady] = useState(false);
+  const [tab, setTab] = useState("commandes");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState("");
@@ -43,6 +45,12 @@ export default function GestionPage() {
         const cfgData = await cfg.json();
         setConfig(cfgData.config);
         setFirebase(cfgData.firebase || null);
+      }
+      const ord = await fetch("/api/admin/orders", { headers: { "x-admin-key": adminKey } });
+      if (ord.ok) {
+        const ordData = await ord.json();
+        setOrders(ordData.orders || []);
+        setOrdersReady(true);
       }
     } catch (e) {
       setError(e.message);
@@ -105,6 +113,19 @@ export default function GestionPage() {
     }
   }
 
+  async function setOrderStatus(id, status) {
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    try {
+      await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ id, status }),
+      });
+    } catch (e) {
+      setError("Échec de la mise à jour du statut.");
+    }
+  }
+
   function updateRow(variantId, value) {
     setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, stock: value } : r)));
   }
@@ -138,6 +159,39 @@ export default function GestionPage() {
   }, {});
   const lowOrOut = rows.filter((r) => typeof r.stock === "number" && r.stock <= 2).length;
 
+  // ---- Calculs commandes / clientes / statistiques ----
+  const fmtDate = (iso) => {
+    try { return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
+    catch { return iso || "—"; }
+  };
+  const ca = orders.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  const nbCmd = orders.length;
+  const panierMoyen = nbCmd ? ca / nbCmd : 0;
+  const aPreparer = orders.filter((o) => o.status !== "expediee").length;
+
+  // Clientes (regroupées par e-mail)
+  const clientsMap = {};
+  for (const o of orders) {
+    const k = (o.customerEmail || o.customerName || "—").toLowerCase();
+    if (!clientsMap[k]) clientsMap[k] = { name: o.customerName || "—", email: o.customerEmail || "", phone: o.customerPhone || "", nb: 0, total: 0, last: o.createdAt };
+    clientsMap[k].nb += 1;
+    clientsMap[k].total += Number(o.total) || 0;
+    if (o.customerPhone && !clientsMap[k].phone) clientsMap[k].phone = o.customerPhone;
+  }
+  const clients = Object.values(clientsMap).sort((a, b) => b.total - a.total);
+
+  // Best-sellers (par article)
+  const sellMap = {};
+  for (const o of orders) {
+    for (const it of o.items || []) {
+      const n = it.name || "Article";
+      if (!sellMap[n]) sellMap[n] = { name: n, qty: 0, total: 0 };
+      sellMap[n].qty += Number(it.quantity) || 0;
+      sellMap[n].total += Number(it.total) || 0;
+    }
+  }
+  const bestSellers = Object.values(sellMap).sort((a, b) => b.qty - a.qty).slice(0, 10);
+
   return (
     <section className="section">
       <div className="container" style={{ maxWidth: 920 }}>
@@ -146,7 +200,12 @@ export default function GestionPage() {
           <h2>Mon site</h2>
         </div>
 
-        <div className="filters" style={{ justifyContent: "flex-start", marginBottom: 26 }}>
+        <div className="filters" style={{ justifyContent: "flex-start", marginBottom: 26, flexWrap: "wrap" }}>
+          <button className={`filter-chip ${tab === "commandes" ? "active" : ""}`} onClick={() => setTab("commandes")}>
+            Commandes{aPreparer > 0 ? ` (${aPreparer})` : ""}
+          </button>
+          <button className={`filter-chip ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>Statistiques</button>
+          <button className={`filter-chip ${tab === "clients" ? "active" : ""}`} onClick={() => setTab("clients")}>Clientes</button>
           <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
           <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
           <button className={`filter-chip ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>Photos</button>
@@ -154,6 +213,106 @@ export default function GestionPage() {
         </div>
 
         {error && <div className="notice">{error}</div>}
+
+        {/* ---------------- COMMANDES ---------------- */}
+        {tab === "commandes" && (
+          <>
+            {!firebase?.connected && (
+              <div className="notice">Connexion à ton application non active : les commandes ne peuvent pas être affichées. (Voir l'onglet Réglages.)</div>
+            )}
+            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
+              {nbCmd} commande{nbCmd > 1 ? "s" : ""} · {aPreparer} à préparer. Marque « Expédiée » une fois envoyée.
+            </p>
+            {ordersReady && nbCmd === 0 && (
+              <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune commande pour le moment. Elles apparaîtront ici automatiquement après chaque vente.</p></div>
+            )}
+            {orders.map((o) => (
+              <div key={o.id} className="admin-block">
+                <div className="admin-row" style={{ gridTemplateColumns: "1fr auto", alignItems: "center" }}>
+                  <h3 style={{ margin: 0 }}>
+                    #{o.ref || o.id?.slice(-6)}{" "}
+                    <span className="admin-cat">{fmtDate(o.createdAt)}</span>
+                  </h3>
+                  <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(o.total)}</span>
+                </div>
+                <div style={{ fontSize: "0.9rem", color: "var(--ink-soft)", margin: "4px 0 8px" }}>
+                  <strong>{o.customerName || "—"}</strong>
+                  {o.customerEmail ? <> · <a href={`mailto:${o.customerEmail}`}>{o.customerEmail}</a></> : null}
+                  {o.customerPhone ? <> · {o.customerPhone}</> : null}
+                  {o.shippingAddress ? (
+                    <div style={{ whiteSpace: "pre-line", marginTop: 4 }}>
+                      📦 {[o.shippingName, o.shippingAddress.line1, o.shippingAddress.line2, `${o.shippingAddress.postal_code || ""} ${o.shippingAddress.city || ""}`.trim(), o.shippingAddress.country].filter(Boolean).join(", ")}
+                      {o.shippingMethod ? ` — ${o.shippingMethod}` : ""}
+                    </div>
+                  ) : null}
+                </div>
+                <ul style={{ margin: "0 0 10px", paddingLeft: 18, fontSize: "0.9rem" }}>
+                  {(o.items || []).map((it, i) => (
+                    <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
+                  ))}
+                </ul>
+                <div className="admin-row" style={{ gridTemplateColumns: "auto auto", justifyContent: "flex-start", gap: 8 }}>
+                  <span style={{ fontWeight: 600, color: o.status === "expediee" ? "#256b34" : "#b4452f" }}>
+                    {o.status === "expediee" ? "✓ Expédiée" : "● À préparer"}
+                  </span>
+                  <button
+                    className="btn btn-outline"
+                    style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                    onClick={() => setOrderStatus(o.id, o.status === "expediee" ? "a_preparer" : "expediee")}
+                  >
+                    {o.status === "expediee" ? "Remettre à préparer" : "Marquer expédiée"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* ---------------- STATISTIQUES ---------------- */}
+        {tab === "stats" && (
+          <>
+            <div className="admin-block" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(ca)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Chiffre d'affaires</div></div>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{nbCmd}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Commandes</div></div>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{formatEuro(panierMoyen)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Panier moyen</div></div>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{clients.length}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Clientes</div></div>
+            </div>
+            <div className="admin-block">
+              <h3>Produits les plus vendus</h3>
+              {bestSellers.length === 0 && <p style={{ color: "var(--ink-soft)", margin: 0 }}>Pas encore de ventes.</p>}
+              {bestSellers.map((b) => (
+                <div className="admin-row" key={b.name} style={{ gridTemplateColumns: "1fr auto auto", gap: 10 }}>
+                  <span className="admin-variant">{b.name}</span>
+                  <span style={{ color: "var(--ink-soft)" }}>{b.qty} vendu{b.qty > 1 ? "s" : ""}</span>
+                  <span className="admin-price">{formatEuro(b.total)}</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Basé sur les {nbCmd} dernières commandes enregistrées.</p>
+          </>
+        )}
+
+        {/* ---------------- CLIENTES ---------------- */}
+        {tab === "clients" && (
+          <>
+            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{clients.length} cliente{clients.length > 1 ? "s" : ""} (classées par total dépensé).</p>
+            {clients.length === 0 && (
+              <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune cliente pour le moment.</p></div>
+            )}
+            {clients.map((c, i) => (
+              <div key={i} className="admin-block">
+                <div className="admin-row" style={{ gridTemplateColumns: "1fr auto" }}>
+                  <span className="admin-variant"><strong>{c.name}</strong></span>
+                  <span className="admin-price">{formatEuro(c.total)}</span>
+                </div>
+                <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>
+                  {c.email ? <a href={`mailto:${c.email}`}>{c.email}</a> : "—"}
+                  {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
 
         {/* ---------------- STOCK ---------------- */}
         {tab === "stock" && (
