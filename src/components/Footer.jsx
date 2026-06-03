@@ -17,6 +17,7 @@ export default function Footer() {
               de mariage et cadeaux personnalisés, fabriqués à la main avec soin.
             </p>
             <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>
+            <a href="tel:+33766153102" style={{ display: "block", marginTop: 4 }}>07 66 15 31 02</a>
             <span style={{ display: "block", marginTop: 8 }}>Fabriqué en France 🇫🇷</span>
           </div>
           <div>

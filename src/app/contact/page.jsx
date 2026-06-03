@@ -26,6 +26,11 @@ export default function ContactPage() {
           <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)" }}>
             contact.nivcreation@gmail.com
           </a>
+          <br />
+          Par téléphone :{" "}
+          <a href="tel:+33766153102" style={{ color: "var(--gold-dark)" }}>
+            07 66 15 31 02
+          </a>
         </p>
       </div>
     </section>

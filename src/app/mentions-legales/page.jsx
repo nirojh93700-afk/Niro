@@ -5,7 +5,7 @@ export const metadata = {
 
 const html = `
 <h3>Éditeur du site</h3>
-<p>Niv Création — Atelier de personnalisation<br>SIRET : [À COMPLÉTER]<br>Adresse : [À COMPLÉTER]<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a></p>
+<p>Niv Création — Atelier de personnalisation<br>SIRET : [À COMPLÉTER]<br>Adresse : [À COMPLÉTER]<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a></p>
 
 <h3>Directeur de la publication</h3>
 <p>[À COMPLÉTER — nom du responsable]</p>
