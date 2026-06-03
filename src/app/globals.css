@@ -1351,6 +1351,12 @@ img {
   color: #fff;
   margin-bottom: 10px;
 }
+@media print {
+  .header, .footer, .announce-bar, .doc-actions, .cart-drawer, .cart-overlay { display: none !important; }
+  .section { padding: 0 !important; }
+  .doc-sheet { border: none !important; box-shadow: none !important; }
+  body { background: #fff !important; }
+}
 .announce-bar {
   background: var(--ink);
   color: var(--cream);

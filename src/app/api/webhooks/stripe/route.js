@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany } from "@/lib/stock";
-import { recordSiteOrder } from "@/lib/firebase";
+import { recordSiteOrder, updateQuoteStatus } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -136,6 +136,14 @@ export async function POST(req) {
 
   if (event.type !== "checkout.session.completed") {
     return Response.json({ received: true });
+  }
+
+  // Si c'est le paiement d'un devis, on le marque "payé".
+  try {
+    const quoteId = event.data.object?.metadata?.quoteId;
+    if (quoteId) await updateQuoteStatus(quoteId, "paye");
+  } catch (e) {
+    console.error("MAJ statut devis:", e.message);
   }
 
   // Décrémente le stock des variantes achetées (si suivi).

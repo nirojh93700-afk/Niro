@@ -154,6 +154,74 @@ export async function updateSiteOrderStatus(id, status) {
   }
 }
 
+// --- Devis & Factures ------------------------------------------------------
+// Crée un devis ou une facture avec numérotation séquentielle (obligation légale
+// pour les factures). Renvoie { id, number }.
+export async function createQuote(data) {
+  const a = getApp();
+  if (!a) return null;
+  const db = admin.firestore();
+  try {
+    const field = data.type === "facture" ? "facture" : "devis";
+    const number = await db.runTransaction(async (t) => {
+      const ref = db.collection("counters").doc("quotes");
+      const snap = await t.get(ref);
+      const cur = (snap.exists && snap.data()[field]) || 0;
+      const next = cur + 1;
+      t.set(ref, { [field]: next }, { merge: true });
+      return next;
+    });
+    const prefix = data.type === "facture" ? "FAC" : "DEV";
+    const num = `${prefix}-${String(number).padStart(4, "0")}`;
+    const ref = await db.collection("siteQuotes").add({
+      ...data,
+      number: num,
+      status: data.type === "facture" ? "facture" : "envoye",
+      createdAt: new Date().toISOString(),
+    });
+    return { id: ref.id, number: num };
+  } catch (e) {
+    console.error("createQuote:", e.message);
+    return null;
+  }
+}
+
+export async function getQuote(id) {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    const doc = await admin.firestore().collection("siteQuotes").doc(id).get();
+    return doc.exists ? { id: doc.id, ...doc.data() } : null;
+  } catch (e) {
+    console.error("getQuote:", e.message);
+    return null;
+  }
+}
+
+export async function listQuotes(max = 100) {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    const snap = await admin.firestore().collection("siteQuotes").orderBy("createdAt", "desc").limit(max).get();
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error("listQuotes:", e.message);
+    return null;
+  }
+}
+
+export async function updateQuoteStatus(id, status) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    await admin.firestore().collection("siteQuotes").doc(id).update({ status });
+    return true;
+  } catch (e) {
+    console.error("updateQuoteStatus:", e.message);
+    return false;
+  }
+}
+
 // Stocke une photo envoyée par le client (gravure) dans la base.
 // Renvoie l'identifiant du document (réf à transmettre à l'atelier).
 export async function storeCustomerUpload(dataUrl, meta = {}) {
