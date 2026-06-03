@@ -13,6 +13,9 @@ const html = `
 <h3>Principe général (article L221-28 du Code de la consommation)</h3>
 <p>Les produits personnalisés ne sont pas remboursables une fois la fabrication lancée — exception au droit de rétractation pour biens confectionnés selon les spécifications du consommateur.</p>
 
+<h3>Articles non personnalisés (sans gravure / modèle vierge)</h3>
+<p>Pour un article commandé <strong>sans personnalisation</strong> (option « sans gravure » / « sans texte », pièce vierge), vous bénéficiez du <strong>droit de rétractation légal de 14 jours</strong> à compter de la réception. Renvoyez-le neuf, non utilisé et dans son emballage d'origine (frais de retour à votre charge) : nous vous remboursons sous 14 jours après réception.</p>
+
 <h3>Annulation avant fabrication</h3>
 <ul>
 <li><strong>Dans les 24 heures après la commande :</strong> remboursement intégral à 100 %.</li>
