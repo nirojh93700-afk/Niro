@@ -51,7 +51,7 @@ const BRAND = {
   gold: "#a98935",
   cream: "#faf6ee",
   ink: "#2b2620",
-  logoUrl: (process.env.LOGO_URL || "").trim(),
+  logoUrl: (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.png?v=1780503911").trim(),
   siteUrl: ((process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").trim().replace(/\/$/, "")),
   siteLabel: "nivcreation.fr",
   contact: process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com",
@@ -60,7 +60,8 @@ const BRAND = {
 
 function brandHeader() {
   if (BRAND.logoUrl) {
-    return `<img src="${BRAND.logoUrl}" alt="Niv Création" width="190" style="display:block;margin:0 auto;max-width:190px;height:auto;">`;
+    // Logo en bannière pleine largeur (son propre fond crème devient l'en-tête).
+    return `<img src="${BRAND.logoUrl}" alt="Niv Création — Atelier de personnalisation" style="display:block;width:100%;max-width:600px;height:auto;border:0;">`;
   }
   // Repli typographique (sans image) — élégant et lisible partout.
   return `<div style="text-align:center;">
@@ -76,7 +77,7 @@ function emailLayout({ heading, bodyHtml }) {
   <div style="background:#f1e9da;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;color:${BRAND.ink};">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #ece3d2;">
-        <tr><td style="background:${BRAND.cream};padding:30px 24px;border-bottom:3px solid #dcc88f;">${brandHeader()}</td></tr>
+        <tr><td style="background:${BRAND.cream};padding:${BRAND.logoUrl ? "0" : "30px 24px"};border-bottom:3px solid #dcc88f;">${brandHeader()}</td></tr>
         <tr><td style="padding:30px 30px 6px;">
           <h1 style="margin:0 0 16px;font-family:Georgia,serif;font-weight:normal;font-size:23px;color:${BRAND.gold};">${heading}</h1>
         </td></tr>
