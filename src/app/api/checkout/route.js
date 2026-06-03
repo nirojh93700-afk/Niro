@@ -141,7 +141,7 @@ export async function POST(req) {
   } catch (err) {
     console.error("Stripe error:", err);
     return Response.json(
-      { error: "Erreur lors de la création du paiement. Réessayez.", detail: err?.message || String(err) },
+      { error: "Erreur lors de la création du paiement. Réessayez." },
       { status: 500 }
     );
   }
