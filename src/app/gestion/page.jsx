@@ -5,6 +5,7 @@ import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import PhotoUpload, { CLOUDINARY_READY } from "@/components/PhotoUpload";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
+import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -213,6 +214,7 @@ export default function GestionPage() {
           <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
           <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
           <button className={`filter-chip ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>Photos</button>
+          <button className={`filter-chip ${tab === "apparence" ? "active" : ""}`} onClick={() => setTab("apparence")}>Apparence</button>
           <button className={`filter-chip ${tab === "reglages" ? "active" : ""}`} onClick={() => setTab("reglages")}>Réglages</button>
         </div>
 
@@ -415,6 +417,9 @@ export default function GestionPage() {
             })}
           </>
         )}
+
+        {/* ---------------- APPARENCE ---------------- */}
+        {tab === "apparence" && <AppearanceAdmin adminKey={key} />}
 
         {/* ---------------- RÉGLAGES ---------------- */}
         {tab === "reglages" && config && (

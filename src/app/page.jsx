@@ -1,7 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
-import { products, getProductBySlug } from "@/lib/products";
+import { getProductBySlug } from "@/lib/products";
+import { getSettings } from "@/lib/stock";
+
+export const dynamic = "force-dynamic";
+
+const HERO_DEFAULTS = {
+  eyebrow: "Atelier français · gravure laser",
+  title: "Des créations uniques, gravées avec émotion.",
+  text: "Bijoux, décorations de mariage et cadeaux personnalisés, façonnés à la main dans notre atelier. Chaque pièce raconte votre histoire.",
+  cta1: "Découvrir la boutique",
+  cta2: "Collection mariage",
+};
 
 const heroImage = getProductBySlug("numero-table-arches-bohemes").images[0];
 
@@ -35,23 +46,33 @@ const featured = [
   "menu-de-mariage-bois-grave",
 ].map(getProductBySlug);
 
-export default function HomePage() {
+export default async function HomePage() {
+  let hero = HERO_DEFAULTS;
+  try {
+    const s = await getSettings();
+    hero = {
+      eyebrow: s.hero?.eyebrow || HERO_DEFAULTS.eyebrow,
+      title: s.hero?.title || HERO_DEFAULTS.title,
+      text: s.hero?.text || HERO_DEFAULTS.text,
+      cta1: s.hero?.cta1 || HERO_DEFAULTS.cta1,
+      cta2: s.hero?.cta2 || HERO_DEFAULTS.cta2,
+    };
+  } catch {
+    // textes par défaut
+  }
   return (
     <>
       {/* HERO */}
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <span className="hero-eyebrow">Atelier français · gravure laser</span>
-            <h1>Des créations uniques, gravées avec émotion.</h1>
-            <p>
-              Bijoux, décorations de mariage et cadeaux personnalisés, façonnés à
-              la main dans notre atelier. Chaque pièce raconte votre histoire.
-            </p>
+            <span className="hero-eyebrow">{hero.eyebrow}</span>
+            <h1>{hero.title}</h1>
+            <p>{hero.text}</p>
             <div className="hero-cta">
-              <Link href="/boutique" className="btn btn-gold">Découvrir la boutique</Link>
+              <Link href="/boutique" className="btn btn-gold">{hero.cta1}</Link>
               <Link href="/boutique?cat=mariage" className="btn btn-outline">
-                Collection mariage
+                {hero.cta2}
               </Link>
             </div>
             <div className="hero-badges">

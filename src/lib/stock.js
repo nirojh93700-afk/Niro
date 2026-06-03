@@ -192,6 +192,30 @@ export async function deleteCustomProduct(slug) {
   return true;
 }
 
+// --- Réglages d'apparence (thème) ------------------------------------------
+const THEME_DEFAULTS = {
+  color: "",                 // couleur principale (or) — vide = défaut du site
+  announce: { enabled: false, text: "", link: "" }, // bandeau d'annonce en haut
+  hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "" }, // accueil (vide = textes par défaut)
+};
+
+export async function getSettings() {
+  const data = await getCatalogRaw();
+  const s = data.settings || {};
+  return {
+    color: s.color || "",
+    announce: { ...THEME_DEFAULTS.announce, ...(s.announce || {}) },
+    hero: { ...THEME_DEFAULTS.hero, ...(s.hero || {}) },
+  };
+}
+
+export async function setSettings(patch) {
+  const data = await getCatalogRaw();
+  data.settings = { ...(data.settings || {}), ...patch };
+  await persistCatalog(data);
+  return data.settings;
+}
+
 async function persistCatalog(data) {
   const store = await getStoreSafe();
   if (store) {

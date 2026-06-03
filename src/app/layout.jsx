@@ -13,6 +13,7 @@ import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import { getSettings } from "@/lib/stock";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -79,10 +80,35 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+// N'accepte qu'une couleur hexadécimale valide (sécurité : pas d'injection CSS).
+function safeHex(c) {
+  return typeof c === "string" && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c.trim()) ? c.trim() : "";
+}
+
+export default async function RootLayout({ children }) {
+  let settings = { color: "", announce: { enabled: false, text: "", link: "" } };
+  try {
+    settings = await getSettings();
+  } catch {
+    // valeurs par défaut si indisponible
+  }
+  const color = safeHex(settings.color);
+  const colorCss = color ? `:root{--gold:${color};--gold-dark:${color};}` : "";
+  const announce = settings.announce || {};
+
   return (
     <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
       <body>
+        {colorCss ? <style dangerouslySetInnerHTML={{ __html: colorCss }} /> : null}
+        {announce.enabled && announce.text ? (
+          <div className="announce-bar">
+            {announce.link ? (
+              <a href={announce.link}>{announce.text}</a>
+            ) : (
+              announce.text
+            )}
+          </div>
+        ) : null}
         <CartProvider>
           <Header />
           <main>{children}</main>
