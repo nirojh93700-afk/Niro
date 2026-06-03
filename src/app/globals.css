@@ -133,9 +133,35 @@ img {
   display: block;
   border-radius: 8px;
 }
+
+/* ---- En-tête centré (logo grand au-dessus, menu en dessous) ---- */
+.header-centered .header-top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
+}
+.header-centered .header-top .header-actions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.header-centered .logo-img {
+  height: 92px;
+  border-radius: 10px;
+}
+.header-centered .nav {
+  justify-content: center;
+  border-top: 1px solid var(--line);
+  padding: 10px 0;
+  margin: 0 auto;
+  max-width: var(--container, 1200px);
+}
 @media (max-width: 640px) {
-  .logo .logo-img {
-    height: 46px;
+  .header-centered .logo-img {
+    height: 64px;
   }
 }
 .nav {
@@ -1437,14 +1463,16 @@ img {
   .nav.open {
     display: flex;
     position: absolute;
-    top: 72px;
+    top: 100%;
     left: 0;
     right: 0;
     background: var(--cream);
     flex-direction: column;
     padding: 16px 20px;
+    border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     gap: 16px;
+    z-index: 60;
   }
   .cart-summary {
     position: static;

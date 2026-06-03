@@ -10,8 +10,8 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="header">
-      <div className="container header-inner">
+    <header className="header header-centered">
+      <div className="container header-top">
         <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Niv Création — accueil">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -20,16 +20,6 @@ export default function Header() {
             alt="Niv Création — Atelier de personnalisation"
           />
         </Link>
-
-        <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
-          <Link href="/boutique">Boutique</Link>
-          {CATEGORIES.map((c) => (
-            <Link key={c.slug} href={`/boutique?cat=${c.slug}`}>{c.short}</Link>
-          ))}
-          <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
-          <Link href="/a-propos">À propos</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
 
         <div className="header-actions">
           <button
@@ -67,6 +57,16 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
+        <Link href="/boutique">Boutique</Link>
+        {CATEGORIES.map((c) => (
+          <Link key={c.slug} href={`/boutique?cat=${c.slug}`}>{c.short}</Link>
+        ))}
+        <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
+        <Link href="/a-propos">À propos</Link>
+        <Link href="/contact">Contact</Link>
+      </nav>
     </header>
   );
 }
