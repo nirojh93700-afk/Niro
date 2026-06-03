@@ -193,19 +193,20 @@ export async function deleteCustomProduct(slug) {
 }
 
 // --- Réglages d'apparence (thème) ------------------------------------------
-const THEME_DEFAULTS = {
-  color: "",                 // couleur principale (or) — vide = défaut du site
-  announce: { enabled: false, text: "", link: "" }, // bandeau d'annonce en haut
-  hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "" }, // accueil (vide = textes par défaut)
-};
-
+// Tout est optionnel : un champ vide = on garde la valeur par défaut du site.
 export async function getSettings() {
   const data = await getCatalogRaw();
   const s = data.settings || {};
   return {
     color: s.color || "",
-    announce: { ...THEME_DEFAULTS.announce, ...(s.announce || {}) },
-    hero: { ...THEME_DEFAULTS.hero, ...(s.hero || {}) },
+    fontHeading: s.fontHeading || "",   // police des titres
+    fontBody: s.fontBody || "",         // police du texte
+    announce: { enabled: false, text: "", link: "", ...(s.announce || {}) },
+    hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },
+    categories: Array.isArray(s.categories) ? s.categories : [], // 3 cartes [{label,sub,image}]
+    atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },
+    sections: { categories: true, trust: true, featured: true, atelier: true, ...(s.sections || {}) },
+    apropos: s.apropos || "", // contenu HTML de la page À propos (vide = défaut)
   };
 }
 

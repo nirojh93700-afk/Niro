@@ -85,15 +85,34 @@ function safeHex(c) {
   return typeof c === "string" && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c.trim()) ? c.trim() : "";
 }
 
+// Polices disponibles -> variable CSS correspondante (déjà chargées plus haut).
+const FONT_VARS = {
+  playfair: "var(--font-display)",
+  cinzel: "var(--font-cinzel)",
+  "cinzel-deco": "var(--font-cinzel-deco)",
+  montserrat: "var(--font-montserrat)",
+  "great-vibes": "var(--font-great-vibes)",
+  allura: "var(--font-allura)",
+  pacifico: "var(--font-pacifico)",
+  inter: "var(--font-body)",
+};
+
 export default async function RootLayout({ children }) {
-  let settings = { color: "", announce: { enabled: false, text: "", link: "" } };
+  let settings = {
+    color: "", fontHeading: "", fontBody: "",
+    announce: { enabled: false, text: "", link: "" },
+  };
   try {
     settings = await getSettings();
   } catch {
     // valeurs par défaut si indisponible
   }
   const color = safeHex(settings.color);
-  const colorCss = color ? `:root{--gold:${color};--gold-dark:${color};}` : "";
+  const rootRules = [];
+  if (color) rootRules.push(`--gold:${color}`, `--gold-dark:${color}`);
+  if (FONT_VARS[settings.fontHeading]) rootRules.push(`--font-display:${FONT_VARS[settings.fontHeading]}`);
+  if (FONT_VARS[settings.fontBody]) rootRules.push(`--font-body:${FONT_VARS[settings.fontBody]}`);
+  const colorCss = rootRules.length ? `:root{${rootRules.join(";")};}` : "";
   const announce = settings.announce || {};
 
   return (

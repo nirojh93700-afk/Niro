@@ -1,6 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getProductBySlug } from "@/lib/products";
+import { getSettings } from "@/lib/stock";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "À propos — l'atelier Niv Création",
@@ -8,7 +11,9 @@ export const metadata = {
     "Niv Création, atelier artisanal français de gravure et découpe laser. Notre histoire, nos matériaux et notre engagement pour des créations personnalisées et durables.",
 };
 
-export default function AProposPage() {
+export default async function AProposPage() {
+  let apropos = "";
+  try { apropos = (await getSettings())?.apropos || ""; } catch { /* défaut */ }
   return (
     <>
       <section className="hero" style={{ padding: "64px 0" }}>
@@ -39,30 +44,38 @@ export default function AProposPage() {
 
       <section className="section">
         <div className="container" style={{ maxWidth: 820 }}>
-          <div className="product-desc" style={{ borderTop: "none", paddingTop: 0 }}>
-            <h3>Un savoir-faire artisanal</h3>
-            <p style={{ color: "var(--ink-soft)" }}>
-              Notre métier, c'est la précision du laser : graver un prénom sur un
-              bijou ou un cristal, et dessiner puis découper les arches délicates
-              d'un numéro de table en bois. Une même exigence de finition sur
-              chaque pièce que nous personnalisons.
-            </p>
+          {apropos ? (
+            <div
+              className="product-desc"
+              style={{ borderTop: "none", paddingTop: 0 }}
+              dangerouslySetInnerHTML={{ __html: apropos }}
+            />
+          ) : (
+            <div className="product-desc" style={{ borderTop: "none", paddingTop: 0 }}>
+              <h3>Un savoir-faire artisanal</h3>
+              <p style={{ color: "var(--ink-soft)" }}>
+                Notre métier, c'est la précision du laser : graver un prénom sur un
+                bijou ou un cristal, et dessiner puis découper les arches délicates
+                d'un numéro de table en bois. Une même exigence de finition sur
+                chaque pièce que nous personnalisons.
+              </p>
 
-            <h3>Des matériaux choisis avec soin</h3>
-            <p style={{ color: "var(--ink-soft)" }}>
-              Nous sélectionnons des matériaux nobles et durables : bois clairs,
-              acier inoxydable 316L hypoallergénique, acrylique premium. Des
-              pièces conçues pour traverser le temps et rester aussi belles
-              qu'au premier jour.
-            </p>
+              <h3>Des matériaux choisis avec soin</h3>
+              <p style={{ color: "var(--ink-soft)" }}>
+                Nous sélectionnons des matériaux nobles et durables : bois clairs,
+                acier inoxydable 316L hypoallergénique, acrylique premium. Des
+                pièces conçues pour traverser le temps et rester aussi belles
+                qu'au premier jour.
+              </p>
 
-            <h3>La personnalisation au cœur de notre métier</h3>
-            <p style={{ color: "var(--ink-soft)" }}>
-              Prénoms, dates, messages, photos gravées… Nous donnons vie à vos
-              idées pour en faire des objets chargés de sens. Chaque commande est
-              réalisée sur mesure, à la main, dans notre atelier.
-            </p>
-          </div>
+              <h3>La personnalisation au cœur de notre métier</h3>
+              <p style={{ color: "var(--ink-soft)" }}>
+                Prénoms, dates, messages, photos gravées… Nous donnons vie à vos
+                idées pour en faire des objets chargés de sens. Chaque commande est
+                réalisée sur mesure, à la main, dans notre atelier.
+              </p>
+            </div>
+          )}
 
           <div className="trust" style={{ borderRadius: "var(--radius)", marginTop: 28 }}>
             <div className="trust-grid">
