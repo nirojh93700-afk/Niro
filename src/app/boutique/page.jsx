@@ -1,13 +1,12 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import {
-  products,
   CATEGORIES,
   getCategoryLabel,
   getSubcategories,
   getSubcategoryLabel,
 } from "@/lib/products";
-import { getImageOverrides, getPromos } from "@/lib/stock";
+import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +19,8 @@ export const metadata = {
 export default async function BoutiquePage({ searchParams }) {
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
-  const [overrides, promos] = await Promise.all([getImageOverrides(), getPromos()]);
+  const withImages = await getCatalog();
 
-  const withImages = products.map((p) => {
-    const images = overrides[p.slug]?.length ? overrides[p.slug] : p.images;
-    const salePrice = promos[p.variants[0].id];
-    return { ...p, images, salePrice: typeof salePrice === "number" ? salePrice : undefined };
-  });
   let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
   if (activeCat && activeSub) {
     filtered = filtered.filter((p) => p.subcategory === activeSub);

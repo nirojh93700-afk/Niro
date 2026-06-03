@@ -1,5 +1,5 @@
-import { products } from "@/lib/products";
 import { getStockMap, getImageOverrides, getPromos, isAdmin } from "@/lib/stock";
+import { getCatalogAdmin } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +11,22 @@ export async function GET(req) {
   const map = await getStockMap();
   const overrides = await getImageOverrides();
   const promos = await getPromos();
+  const products = await getCatalogAdmin();
   const rows = [];
   const catalog = [];
+  const editable = [];
   for (const p of products) {
+    editable.push({
+      slug: p.slug,
+      name: p.name,
+      tagline: p.tagline || "",
+      descriptionHtml: p.descriptionHtml || "",
+      category: p.category,
+      subcategory: p.subcategory || "",
+      hidden: Boolean(p.hidden),
+      custom: Boolean(p.custom),
+      variants: (p.variants || []).map((v) => ({ id: v.id, title: v.title, price: v.price })),
+    });
     catalog.push({
       slug: p.slug,
       name: p.name,
@@ -34,5 +47,5 @@ export async function GET(req) {
       });
     }
   }
-  return Response.json({ rows, catalog });
+  return Response.json({ rows, catalog, editable });
 }

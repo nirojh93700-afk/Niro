@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import PhotoUpload, { CLOUDINARY_READY } from "@/components/PhotoUpload";
+import ProductsAdmin from "@/components/admin/ProductsAdmin";
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -19,6 +20,7 @@ export default function GestionPage() {
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);
   const [catalog, setCatalog] = useState([]);
+  const [editable, setEditable] = useState([]);
   const [config, setConfig] = useState(null);
   const [firebase, setFirebase] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -38,6 +40,7 @@ export default function GestionPage() {
       const data = await res.json();
       setRows(data.rows);
       setCatalog(data.catalog || []);
+      setEditable(data.editable || []);
       setAuthed(true);
       sessionStorage.setItem("niv-admin-key", adminKey);
       const cfg = await fetch("/api/admin/config", { headers: { "x-admin-key": adminKey } });
@@ -206,6 +209,7 @@ export default function GestionPage() {
           </button>
           <button className={`filter-chip ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>Statistiques</button>
           <button className={`filter-chip ${tab === "clients" ? "active" : ""}`} onClick={() => setTab("clients")}>Clientes</button>
+          <button className={`filter-chip ${tab === "produits" ? "active" : ""}`} onClick={() => setTab("produits")}>Produits</button>
           <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
           <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
           <button className={`filter-chip ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>Photos</button>
@@ -312,6 +316,11 @@ export default function GestionPage() {
               </div>
             ))}
           </>
+        )}
+
+        {/* ---------------- PRODUITS ---------------- */}
+        {tab === "produits" && (
+          <ProductsAdmin adminKey={key} products={editable} onReload={() => load(key)} />
         )}
 
         {/* ---------------- STOCK ---------------- */}

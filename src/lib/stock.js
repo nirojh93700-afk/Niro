@@ -146,6 +146,65 @@ export async function setPromo(variantId, salePrice) {
   return data.promos;
 }
 
+// --- Modifications de produits faites depuis l'admin -----------------------
+// overrides : { slug: { name, tagline, title, descriptionHtml, category,
+//                       subcategory, type, hidden, prices:{variantId:nb} } }
+export async function getProductOverrides() {
+  const data = await getCatalogRaw();
+  return data.overrides || {};
+}
+
+export async function setProductOverride(slug, patch) {
+  const data = await getCatalogRaw();
+  data.overrides = data.overrides || {};
+  const cur = data.overrides[slug] || {};
+  const next = { ...cur, ...patch };
+  // nettoie les valeurs vides
+  Object.keys(next).forEach((k) => {
+    if (next[k] === "" || next[k] === null || next[k] === undefined) delete next[k];
+  });
+  if (Object.keys(next).length === 0) delete data.overrides[slug];
+  else data.overrides[slug] = next;
+  await persistCatalog(data);
+  return data.overrides[slug] || {};
+}
+
+// --- Produits créés depuis l'admin (nouveaux produits) ---------------------
+export async function getCustomProducts() {
+  const data = await getCatalogRaw();
+  return data.custom || [];
+}
+
+export async function saveCustomProduct(product) {
+  const data = await getCatalogRaw();
+  data.custom = data.custom || [];
+  const i = data.custom.findIndex((p) => p.slug === product.slug);
+  if (i >= 0) data.custom[i] = product;
+  else data.custom.push(product);
+  await persistCatalog(data);
+  return product;
+}
+
+export async function deleteCustomProduct(slug) {
+  const data = await getCatalogRaw();
+  data.custom = (data.custom || []).filter((p) => p.slug !== slug);
+  await persistCatalog(data);
+  return true;
+}
+
+async function persistCatalog(data) {
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      await store.setJSON(CATALOG_KEY, data);
+      return;
+    } catch {
+      // bascule mémoire
+    }
+  }
+  catalogMemory = data;
+}
+
 // Indique quelles intégrations sont configurées (sans révéler les valeurs).
 export function getConfigStatus() {
   return {

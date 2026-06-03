@@ -1350,6 +1350,27 @@ img {
   color: #fff;
   margin-bottom: 10px;
 }
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.admin-field input,
+.admin-field select,
+.admin-field textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ink);
+}
 .footer .footer-logo {
   width: 190px;
   max-width: 70%;

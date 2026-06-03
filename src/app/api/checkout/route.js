@@ -1,12 +1,13 @@
 import Stripe from "stripe";
-import { products } from "@/lib/products";
+import { getCatalog } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
 import { getPromos } from "@/lib/stock";
 
 // Construit une table variantId -> { product, variant } pour valider côté serveur.
-function buildVariantIndex() {
+async function buildVariantIndex() {
   const index = new Map();
+  const products = await getCatalog();
   for (const product of products) {
     for (const variant of product.variants) {
       index.set(variant.id, { product, variant });
@@ -42,7 +43,7 @@ export async function POST(req) {
     return Response.json({ error: "Votre panier est vide." }, { status: 400 });
   }
 
-  const variantIndex = buildVariantIndex();
+  const variantIndex = await buildVariantIndex();
   const promos = await getPromos();
 
   // Normalise l'URL du site : ajoute https:// si oublié dans la variable

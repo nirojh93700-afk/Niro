@@ -1,28 +1,26 @@
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
-import { products, getProductBySlug, getPriceFrom } from "@/lib/products";
+import { getCatalogBySlug, priceFrom } from "@/lib/catalog";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ handle: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
-export function generateMetadata({ params }) {
-  const product = getProductBySlug(params.handle);
+export async function generateMetadata({ params }) {
+  const product = await getCatalogBySlug(params.handle);
   if (!product) return {};
-  const text = product.descriptionHtml.replace(/<[^>]+>/g, " ").trim().slice(0, 155);
+  const text = (product.descriptionHtml || "").replace(/<[^>]+>/g, " ").trim().slice(0, 155);
   return {
     title: product.title,
     description: text,
     openGraph: {
       title: product.title,
       description: text,
-      images: product.images.length ? [product.images[0]] : [],
+      images: product.images?.length ? [product.images[0]] : [],
     },
   };
 }
 
-export default function ProductPage({ params }) {
-  const product = getProductBySlug(params.handle);
+export default async function ProductPage({ params }) {
+  const product = await getCatalogBySlug(params.handle);
   if (!product) notFound();
 
   const jsonLd = {
@@ -30,12 +28,12 @@ export default function ProductPage({ params }) {
     "@type": "Product",
     name: product.title,
     image: product.images,
-    description: product.descriptionHtml.replace(/<[^>]+>/g, " ").trim(),
+    description: (product.descriptionHtml || "").replace(/<[^>]+>/g, " ").trim(),
     brand: { "@type": "Brand", name: "Niv Création" },
     offers: {
       "@type": "Offer",
       priceCurrency: "EUR",
-      price: getPriceFrom(product).toFixed(2),
+      price: priceFrom(product).toFixed(2),
       availability: "https://schema.org/InStock",
     },
   };

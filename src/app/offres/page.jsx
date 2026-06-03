@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/lib/products";
-import { getImageOverrides, getPromos } from "@/lib/stock";
+import { getPromos } from "@/lib/stock";
+import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -11,19 +11,16 @@ export const metadata = {
 };
 
 export default async function OffresPage() {
-  const [overrides, promos] = await Promise.all([getImageOverrides(), getPromos()]);
+  const [catalog, promos] = await Promise.all([getCatalog(), getPromos()]);
 
-  const onSale = products
+  const onSale = catalog
     .map((p) => {
       // promo applicable à la variante par défaut (sinon n'importe quelle variante)
       const promoVariant = p.variants.find((v) => typeof promos[v.id] === "number" && promos[v.id] < v.price);
       if (!promoVariant) return null;
-      const images = overrides[p.slug]?.length ? overrides[p.slug] : p.images;
-      // pour la vignette, on aligne la 1re variante sur la promo si elle en a une
       const baseSale = promos[p.variants[0].id];
       return {
         ...p,
-        images,
         variants: [promoVariant, ...p.variants.filter((v) => v.id !== promoVariant.id)],
         salePrice: typeof baseSale === "number" ? baseSale : promos[promoVariant.id],
       };
