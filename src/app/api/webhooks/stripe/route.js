@@ -40,20 +40,22 @@ function formatAddress(details) {
     .join("\n");
 }
 
-async function sendEmail({ subject, html }) {
+async function sendEmail({ to, subject, html, replyTo }) {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
   const from = process.env.CONTACT_FROM || "Niv Création <onboarding@resend.dev>";
   if (!apiKey) {
-    console.warn("RESEND_API_KEY manquant : e-mail de commande non envoyé.");
+    console.warn("RESEND_API_KEY manquant : e-mail non envoyé.");
     return;
   }
+  if (!to) return;
+  const payload = { from, to: [to], subject, html };
+  if (replyTo) payload.reply_to = replyTo;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, to: [to], subject, html }),
+    body: JSON.stringify(payload),
   });
-  if (!res.ok) console.error("Resend (commande) erreur:", await res.text());
+  if (!res.ok) console.error("Resend erreur:", await res.text());
 }
 
 export async function POST(req) {
@@ -166,10 +168,45 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         <p style="color:#888;font-size:12px;">⚠️ Pense à demander au client sa photo / son texte de gravure si nécessaire (réponds directement à son e-mail ci-dessus).</p>
       </div>`;
 
+    // 1) E-mail récapitulatif pour la boutique (toi).
+    const ownerEmail = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
     await sendEmail({
+      to: ownerEmail,
       subject: `🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
       html,
+      replyTo: customer.email || undefined,
     });
+
+    // 2) E-mail de confirmation pour la cliente.
+    if (customer.email) {
+      const clientHtml = `
+        <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#2b2620;">
+          <h2 style="color:#a98935;">Merci pour votre commande !</h2>
+          <p>Bonjour ${escapeHtml(customer.name || "")},</p>
+          <p>Nous avons bien reçu votre commande chez <strong>Niv Création</strong> et nous vous en remercions chaleureusement. Chaque pièce étant personnalisée et fabriquée à la main, nous la préparons avec le plus grand soin.</p>
+          <p>Référence de votre commande : <strong>${escapeHtml(orderRef)}</strong></p>
+
+          <h3 style="border-bottom:2px solid #eee;padding-bottom:6px;">Votre commande</h3>
+          <table style="width:100%;border-collapse:collapse;">
+            <tbody>${lines}</tbody>
+          </table>
+          <p style="text-align:right;font-size:16px;margin-top:12px;">
+            Livraison : ${escapeHtml(shippingRateName)} (${euro(shippingAmount, currency)})<br>
+            <strong>Total payé : ${euro(session.amount_total, currency)}</strong>
+          </p>
+
+          ${customFields ? `<h3 style="border-bottom:2px solid #eee;padding-bottom:6px;">Votre personnalisation</h3>${customFields}` : ""}
+
+          <p style="background:#faf6ef;padding:12px;border-radius:8px;">Nous vous tiendrons informée de l'expédition. Pour toute question, ou pour nous transmettre une photo ou un texte de gravure, répondez simplement à cet e-mail.</p>
+          <p style="color:#888;font-size:13px;">À très bientôt,<br>L'atelier Niv Création</p>
+        </div>`;
+      await sendEmail({
+        to: customer.email,
+        subject: `Votre commande Niv Création est confirmée (réf. ${orderRef})`,
+        html: clientHtml,
+        replyTo: ownerEmail,
+      });
+    }
 
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     await recordSiteOrder({
