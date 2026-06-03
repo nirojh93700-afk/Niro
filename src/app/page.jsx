@@ -11,7 +11,7 @@ const HERO_DEFAULTS = {
   text: "Bijoux, décorations de mariage et cadeaux personnalisés, façonnés à la main dans notre atelier. Chaque pièce raconte votre histoire.",
   cta1: "Découvrir la boutique",
   cta2: "Collection mariage",
-  image: getProductBySlug("numero-table-arches-bohemes").images[0],
+  image: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/jewelry-natural-1.jpg?v=1774981669",
 };
 
 const CATEGORY_DEFAULTS = [
