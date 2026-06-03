@@ -96,9 +96,20 @@ export async function POST(req) {
   }
 
   const stripe = new Stripe(secret);
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    new URL(req.url).origin;
+  // Normalise l'URL du site : ajoute https:// si oublié dans la variable
+  // d'environnement, et retombe sur l'origine de la requête en dernier recours.
+  function resolveSiteUrl() {
+    const raw = (process.env.NEXT_PUBLIC_SITE_URL || "").trim().replace(/\/$/, "");
+    for (const candidate of [raw, raw && `https://${raw}`]) {
+      try {
+        if (candidate) return new URL(candidate).origin;
+      } catch {
+        // on essaie le candidat suivant
+      }
+    }
+    return new URL(req.url).origin;
+  }
+  const siteUrl = resolveSiteUrl();
 
   try {
     const session = await stripe.checkout.sessions.create({
