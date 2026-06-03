@@ -44,6 +44,35 @@ export async function POST(req) {
 
   const variantIndex = buildVariantIndex();
   const promos = await getPromos();
+
+  // Normalise l'URL du site : ajoute https:// si oublié dans la variable
+  // d'environnement, et retombe sur l'origine de la requête en dernier recours.
+  function resolveSiteUrl() {
+    const raw = (process.env.NEXT_PUBLIC_SITE_URL || "").trim().replace(/\/$/, "");
+    for (const candidate of [raw, raw && `https://${raw}`]) {
+      try {
+        if (candidate) return new URL(candidate).origin;
+      } catch {
+        // on essaie le candidat suivant
+      }
+    }
+    return new URL(req.url).origin;
+  }
+  const siteUrl = resolveSiteUrl();
+
+  // Stripe exige des URLs d'image absolues : on préfixe les chemins locaux
+  // (/produits/...) par l'adresse du site, et on ignore tout ce qui n'est pas une URL valide.
+  function absoluteImage(src) {
+    if (!src) return null;
+    try {
+      return new URL(src).href; // déjà absolue (https://...)
+    } catch {}
+    try {
+      return new URL(src, siteUrl).href; // chemin local -> absolu
+    } catch {}
+    return null;
+  }
+
   const lineItems = [];
   let totalGrams = 0;
   let subtotal = 0;
@@ -89,27 +118,13 @@ export async function POST(req) {
         product_data: {
           name: product.name,
           description: descriptionParts.join(" — "),
-          images: product.images.length ? [product.images[0]] : [],
+          images: (product.images.map(absoluteImage).filter(Boolean)).slice(0, 1),
         },
       },
     });
   }
 
   const stripe = new Stripe(secret);
-  // Normalise l'URL du site : ajoute https:// si oublié dans la variable
-  // d'environnement, et retombe sur l'origine de la requête en dernier recours.
-  function resolveSiteUrl() {
-    const raw = (process.env.NEXT_PUBLIC_SITE_URL || "").trim().replace(/\/$/, "");
-    for (const candidate of [raw, raw && `https://${raw}`]) {
-      try {
-        if (candidate) return new URL(candidate).origin;
-      } catch {
-        // on essaie le candidat suivant
-      }
-    }
-    return new URL(req.url).origin;
-  }
-  const siteUrl = resolveSiteUrl();
 
   try {
     const session = await stripe.checkout.sessions.create({
