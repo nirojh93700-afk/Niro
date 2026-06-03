@@ -11,7 +11,7 @@ const html = `
 <p>[À COMPLÉTER — nom du responsable]</p>
 
 <h3>Hébergement</h3>
-<p>Le site est hébergé par Vercel Inc.<br>340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis<br>Site : <a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a></p>
+<p>Le site est hébergé par Netlify, Inc.<br>512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis<br>Site : <a href="https://www.netlify.com" target="_blank" rel="noopener">netlify.com</a></p>
 
 <h3>Propriété intellectuelle</h3>
 <p>L'ensemble du contenu du site (textes, images, logo, design) est la propriété exclusive de Niv Création, sauf mention contraire. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>

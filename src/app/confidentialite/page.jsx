@@ -26,7 +26,7 @@ const html = `
 <p>Notre site utilise uniquement un stockage local essentiel au fonctionnement de la boutique (mémorisation de votre panier). La page de paiement, gérée par Stripe, peut déposer des cookies nécessaires à la sécurité de la transaction. Nous n'utilisons pas de cookies publicitaires.</p>
 
 <h3>6. Partage des données</h3>
-<p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Vercel pour l'hébergement, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
+<p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Netlify pour l'hébergement, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
 
 <h3>7. Sécurité</h3>
 <p>Notre site est sécurisé en HTTPS. Les paiements sont traités par Stripe, certifié PCI DSS niveau 1 : vos numéros de carte ne transitent jamais par nos serveurs.</p>

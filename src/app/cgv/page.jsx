@@ -35,8 +35,11 @@ const html = `
 <h3>8. Données personnelles</h3>
 <p>Vos données sont traitées conformément à notre <a href="/confidentialite">politique de confidentialité</a>.</p>
 
-<h3>9. Litiges</h3>
-<p>En cas de litige, vous pouvez recourir gratuitement au médiateur de la consommation à des fins de règlement amiable. À défaut, les tribunaux français sont seuls compétents.</p>
+<h3>9. Litiges et médiation</h3>
+<p>En cas de litige, le client peut recourir gratuitement à un médiateur de la consommation en vue d'un règlement amiable, conformément aux articles L611-1 et suivants du Code de la consommation.</p>
+<p>Médiateur de la consommation dont relève Niv Création : [À COMPLÉTER — nom et coordonnées du médiateur].</p>
+<p>Le client peut également utiliser la plateforme européenne de Règlement en Ligne des Litiges (RLL) : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+<p>À défaut d'accord amiable, les tribunaux français sont seuls compétents.</p>
 
 <h3>10. Acceptation</h3>
 <p>Toute commande vaut acceptation pleine et entière des présentes CGV.</p>
