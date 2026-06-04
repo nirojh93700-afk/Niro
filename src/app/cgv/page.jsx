@@ -17,11 +17,10 @@ const html = `
 <p>Les prix sont indiqués en euros. « TVA non applicable, art. 293 B du CGI » (Niv Création bénéficie de la franchise en base de TVA en tant que micro-entreprise). Le paiement s'effectue intégralement à la commande par carte bancaire via notre prestataire sécurisé Stripe. La commande n'est validée qu'après réception complète du paiement.</p>
 
 <h3>4. Commande et personnalisation</h3>
-<p>Chaque commande personnalisée donne lieu à un échange par e-mail pour la transmission de la photo / du texte à graver, puis à la validation d'un aperçu numérique. La fabrication ne démarre qu'après cette validation.</p>
+<p>Pour une commande personnalisée, le client transmet par e-mail sa photo / son texte à graver. La fabrication démarre dès réception des éléments nécessaires à la personnalisation.</p>
 
 <h3>5. Délais</h3>
 <ul>
-<li>Aperçu sous 24 à 48 h après réception de votre photo / texte</li>
 <li>Fabrication : 2 à 5 jours ouvrés selon le produit</li>
 <li>Expédition : 2 à 4 jours ouvrés</li>
 </ul>
