@@ -94,29 +94,33 @@ function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const above = motifPos !== "below"; // motif au-dessus du nom par défaut
   let topReserve = 0, bottomReserve = 0;
 
-  if (motifVal && FLOWER_URLS[motifVal]) {
-    const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
-    if (pc) {
-      const pw = pc.width || pc.naturalWidth;
-      const ph = pc.height || pc.naturalHeight;
-      let dw = wPx * 0.86;
-      let dh = ph * (dw / pw);
-      const maxH = hPx * 0.42;
-      if (dh > maxH) { dh = maxH; dw = pw * (dh / ph); }
-      const dx = (wPx - dw) / 2; // centré horizontalement
-      const dy = above ? hPx * 0.03 : hPx - dh - hPx * 0.03;
-      ctx.drawImage(pc, dx, dy, dw, dh);
-      const used = dh + hPx * 0.05;
-      if (above) topReserve = used; else bottomReserve = used;
+  if (motifVal && (FLOWER_URLS[motifVal] || GLYPHS[motifVal])) {
+    // Bande fixe pour le motif → même hauteur sur toutes les faces.
+    const BAND_H = hPx * 0.24;
+    const bandTop = above ? hPx * 0.02 : hPx * 0.98 - BAND_H;
+    const bandCY = bandTop + BAND_H / 2;
+
+    if (FLOWER_URLS[motifVal]) {
+      const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
+      if (pc) {
+        const pw = pc.width || pc.naturalWidth;
+        const ph = pc.height || pc.naturalHeight;
+        let dw = wPx * 0.84;
+        let dh = ph * (dw / pw);
+        if (dh > BAND_H) { dh = BAND_H; dw = pw * (dh / ph); }
+        const dx = (wPx - dw) / 2;            // centré horizontalement
+        const dy = bandCY - dh / 2;           // centré dans la bande (même hauteur partout)
+        ctx.drawImage(pc, dx, dy, dw, dh);
+      }
+    } else {
+      const mSize = Math.min(wPx * 0.7, BAND_H * 0.92);
+      const m = GLYPHS[motifVal] + VS_TEXT;
+      ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
+      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, bandCY + 1.4); }
+      ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, bandCY);
     }
-  } else if (motifVal && GLYPHS[motifVal]) {
-    const mSize = wPx * 0.7;
-    const my = above ? hPx * 0.1 : hPx * 0.9;
-    const m = GLYPHS[motifVal] + VS_TEXT;
-    ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
-    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, my + 1.4); }
-    ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, my);
-    if (above) topReserve = hPx * 0.22; else bottomReserve = hPx * 0.22;
+    const reserve = BAND_H + hPx * 0.06;
+    if (above) topReserve = reserve; else bottomReserve = reserve;
   }
 
   const chars = (text || "").trim().split("");
