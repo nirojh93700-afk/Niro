@@ -384,6 +384,30 @@ export default function ProductDetail({ product }) {
             <div className="hero-badge">Pièce personnalisée</div>
           </div>
 
+          {(product.category === "mariage" || product.category === "cadeaux") && (
+            <p
+              style={{
+                marginTop: 12,
+                fontSize: "0.88rem",
+                color: "var(--ink-soft)",
+                background: "#fbf4e6",
+                border: "1px solid #e7d3a1",
+                borderRadius: 10,
+                padding: "10px 12px",
+              }}
+            >
+              💬 Une demande précise ou une personnalisation particulière&nbsp;?{" "}
+              <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
+                Écrivez-moi
+              </a>{" "}
+              ou appelez le{" "}
+              <a href="tel:+33766153102" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
+                07 66 15 31 02
+              </a>
+              .
+            </p>
+          )}
+
           <div
             className="product-desc"
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}

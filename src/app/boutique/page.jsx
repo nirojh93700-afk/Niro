@@ -30,10 +30,14 @@ export default async function BoutiquePage({ searchParams }) {
 
   // Catégories pour lesquelles on propose le contact direct (sur mesure).
   const showCustomContact = activeCat === "mariage" || activeCat === "cadeaux";
+  const customContactHeading =
+    activeCat === "mariage"
+      ? "Un projet pour votre grand jour ?"
+      : "Une création rien que pour vous ?";
   const customContactText =
     activeCat === "mariage"
-      ? "Un mariage à personnaliser (numéros de table, menus, déco sur mesure) ? Parlons-en directement :"
-      : "Une décoration ou un cadeau personnalisé sur bois, une idée unique ? Contactez-moi directement :";
+      ? "Numéros de table, menus, décoration… Dites-moi votre idée, je la réalise sur mesure :"
+      : "Une décoration ou un cadeau personnalisé sur bois, une idée unique ? Parlons-en directement :";
 
   const title = activeSub
     ? getSubcategoryLabel(activeCat, activeSub)
@@ -99,7 +103,7 @@ export default async function BoutiquePage({ searchParams }) {
             }}
           >
             <strong style={{ color: "var(--gold-dark)" }}>
-              Une demande sur mesure&nbsp;?
+              {customContactHeading}
             </strong>
             <p style={{ margin: "6px 0 12px", color: "var(--ink-soft)", fontSize: "0.95rem" }}>
               {customContactText}
