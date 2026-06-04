@@ -703,8 +703,8 @@ export const products = [
       "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg",
     ],
     variants: [
-      { id: "empreinte-bebe-argente", title: "Argenté", price: 12.5 },
-      { id: "empreinte-bebe-dore", title: "Doré", price: 12.5 },
+      { id: "empreinte-bebe-argente", title: "Argenté", price: 12.5, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg" },
+      { id: "empreinte-bebe-dore", title: "Doré", price: 12.5, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet tendre orné d'une <strong>empreinte de pied de bébé</strong>, à graver au prénom et à la date de naissance. Cadeau de naissance idéal.</p>
 <ul><li>Acier inoxydable hypoallergénique</li><li>Argenté ou doré</li></ul>`,
