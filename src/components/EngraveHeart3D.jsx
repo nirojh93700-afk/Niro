@@ -9,8 +9,8 @@ import { useEffect, useRef, useState } from "react";
 // sur une page intérieure. À titre indicatif.
 
 const FINISH = {
-  silver: { base: "#d7d7d7", ink: "rgba(22,20,18,0.92)" },
-  gold:   { base: "#d4af37", ink: "rgba(35,26,8,0.92)" },
+  silver: { base: "#eaeaec", ink: "rgba(22,20,18,0.92)" },
+  gold:   { base: "#e0b94a", ink: "rgba(35,26,8,0.92)" },
 };
 
 const FONT_MAP = {
@@ -287,16 +287,17 @@ export default function EngraveHeart3D({
         scene.add(ring);
       }
 
-      // --- Bélière + chaîne ---
-      const bail = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.026, 16, 32), metalMat("silver"));
-      bail.position.set(hingeX, HH + 0.14, 0);
+      // --- Bélière + chaîne (collées au sommet de la charnière) ---
+      const spineTopY = HH * 0.85;           // sommet du cylindre de charnière
+      const bail = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.024, 16, 32), metalMat("silver"));
+      bail.position.set(hingeX, spineTopY + 0.1, 0);
       scene.add(bail);
       const chainMat = metalMat("gold");
       const mkChain = (sign) => {
         const curve = new THREE.QuadraticBezierCurve3(
-          new THREE.Vector3(hingeX, HH + 0.24, 0),
-          new THREE.Vector3(hingeX + sign * 0.5, HH + 1.0, 0),
-          new THREE.Vector3(hingeX + sign * 0.85, HH + 1.6, 0)
+          new THREE.Vector3(hingeX, spineTopY + 0.2, 0),
+          new THREE.Vector3(hingeX + sign * 0.5, spineTopY + 0.9, 0),
+          new THREE.Vector3(hingeX + sign * 0.85, spineTopY + 1.5, 0)
         );
         return new THREE.Mesh(new THREE.TubeGeometry(curve, 30, 0.02, 8, false), chainMat);
       };
@@ -320,9 +321,9 @@ export default function EngraveHeart3D({
       let raf;
       const animate = () => {
         const t = clock.getElapsedTime();
-        // ouverture/fermeture douce du « livre » (montre les 4 faces)
-        const open = 0.85 + 0.8 * Math.sin(t * 0.5);
-        leaf1.group.rotation.y = -Math.max(0.05, open);
+        // ouverture/fermeture douce : le cœur s'entrouvre (reste UN cœur, pas deux)
+        const open = 0.42 + 0.34 * Math.sin(t * 0.5); // ~5°..43°
+        leaf1.group.rotation.y = -Math.max(0.06, open);
         controls.update();
         renderer.render(scene, camera);
         raf = requestAnimationFrame(animate);
