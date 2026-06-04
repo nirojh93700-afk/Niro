@@ -34,6 +34,9 @@ export default function GestionPage() {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState("");
   const [refunding, setRefunding] = useState("");
+  const [testEmail, setTestEmail] = useState("");
+  const [testMsg, setTestMsg] = useState("");
+  const [testSending, setTestSending] = useState(false);
 
   const load = useCallback(async (adminKey) => {
     setLoading(true);
@@ -153,6 +156,29 @@ export default function GestionPage() {
       setError(e.message);
     } finally {
       setRefunding("");
+    }
+  }
+
+  async function sendTestEmail() {
+    setTestMsg("");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail.trim())) {
+      setTestMsg("Entre une adresse e-mail valide.");
+      return;
+    }
+    setTestSending(true);
+    try {
+      const res = await fetch("/api/admin/test-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ to: testEmail.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Échec de l'envoi.");
+      setTestMsg("✓ E-mail de test envoyé ! Vérifie la boîte de réception (et les spams).");
+    } catch (e) {
+      setTestMsg(e.message);
+    } finally {
+      setTestSending(false);
     }
   }
 
@@ -476,6 +502,24 @@ export default function GestionPage() {
         {/* ---------------- RÉGLAGES ---------------- */}
         {tab === "reglages" && config && (
           <>
+            <div className="admin-block" style={{ display: "grid", gap: 10, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>
+              <h3 style={{ margin: 0 }}>📧 Tester l'e-mail de confirmation client</h3>
+              <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+                Envoie-toi (ou à un proche) le modèle d'e-mail que reçoivent les clients, pour vérifier le rendu.
+              </p>
+              <input
+                type="email"
+                placeholder="adresse@exemple.com"
+                value={testEmail}
+                onChange={(e) => setTestEmail(e.target.value)}
+                style={{ padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 8 }}
+              />
+              <button className="btn btn-gold" onClick={sendTestEmail} disabled={testSending}>
+                {testSending ? "Envoi…" : "Envoyer l'e-mail de test"}
+              </button>
+              {testMsg && <div className="notice" style={{ margin: 0 }}>{testMsg}</div>}
+            </div>
+
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
               État de tes intégrations. Les clés secrètes se règlent dans Netlify (sécurité), elles ne sont jamais stockées ici.
             </p>
