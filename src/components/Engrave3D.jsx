@@ -66,6 +66,34 @@ function getFlowerImg(url) {
   return img;
 }
 
+// Détoure une fleur : fond clair → transparent, lignes sombres → noir net.
+// Retourne un canvas (noir sur transparent) prêt à dessiner, ou null si pas prêt.
+const processedCache = new Map();
+function getProcessedFlower(url) {
+  if (processedCache.has(url)) return processedCache.get(url);
+  const img = getFlowerImg(url);
+  if (!img.complete || !img.naturalWidth) return null;
+  const scale = Math.min(1, 700 / Math.max(img.naturalWidth, img.naturalHeight));
+  const oc = document.createElement("canvas");
+  oc.width = Math.max(1, Math.round(img.naturalWidth * scale));
+  oc.height = Math.max(1, Math.round(img.naturalHeight * scale));
+  const octx = oc.getContext("2d");
+  octx.drawImage(img, 0, 0, oc.width, oc.height);
+  let data;
+  try { data = octx.getImageData(0, 0, oc.width, oc.height); }
+  catch { processedCache.set(url, img); return img; } // si lecture impossible, image brute
+  const d = data.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    let a = 255 - lum;            // sombre → opaque, clair → transparent
+    a = a < 45 ? 0 : Math.min(255, (a - 45) * 1.7);
+    d[i] = 12; d[i + 1] = 12; d[i + 2] = 12; d[i + 3] = a;
+  }
+  octx.putImageData(data, 0, 0);
+  processedCache.set(url, oc);
+  return oc;
+}
+
 // Dessine motif (image ou symbole) + texte (empilé) sur un contexte donné.
 function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const { wPx, hPx } = TEX;
@@ -75,22 +103,17 @@ function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   let topReserve = 0, bottomReserve = 0;
 
   if (motifVal && FLOWER_URLS[motifVal]) {
-    const img = getFlowerImg(FLOWER_URLS[motifVal]);
-    if (img.complete && img.naturalWidth) {
-      let dw = wPx * 0.84;
-      let dh = img.naturalHeight * (dw / img.naturalWidth);
-      const maxH = hPx * 0.4;
-      if (dh > maxH) { dh = maxH; dw = img.naturalWidth * (dh / img.naturalHeight); }
-      const dx = (wPx - dw) / 2;
+    const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
+    if (pc) {
+      const pw = pc.width || pc.naturalWidth;
+      const ph = pc.height || pc.naturalHeight;
+      let dw = wPx * 0.86;
+      let dh = ph * (dw / pw);
+      const maxH = hPx * 0.42;
+      if (dh > maxH) { dh = maxH; dw = pw * (dh / ph); }
+      const dx = (wPx - dw) / 2; // centré horizontalement
       const dy = above ? hPx * 0.03 : hPx - dh - hPx * 0.03;
-      if (bevel) {
-        const prev = ctx.globalCompositeOperation;
-        ctx.globalCompositeOperation = "multiply"; // fond blanc disparaît, lignes = gravure
-        ctx.drawImage(img, dx, dy, dw, dh);
-        ctx.globalCompositeOperation = prev;
-      } else {
-        ctx.drawImage(img, dx, dy, dw, dh); // relief
-      }
+      ctx.drawImage(pc, dx, dy, dw, dh);
       const used = dh + hPx * 0.05;
       if (above) topReserve = used; else bottomReserve = used;
     }
