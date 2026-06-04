@@ -67,6 +67,34 @@ export default function AppearanceAdmin({ adminKey }) {
       </p>
       {msg && <div className="notice">{msg}</div>}
 
+      {/* ACCÈS PRIVÉ AU SITE */}
+      <div className="admin-block" style={{ display: "grid", gap: 10, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>
+        <h3 style={{ margin: 0 }}>🔒 Accès privé au site (code)</h3>
+        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Si activé, les visiteurs doivent entrer un code pour voir le site (idéal avant l'ouverture).
+          Désactive-le le jour où tu ouvres la boutique au public.
+        </p>
+        <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={s.access?.locked || false}
+            style={{ width: "auto" }}
+            onChange={(e) => set({ access: { ...s.access, locked: e.target.checked } })}
+          />
+          Activer le code d'accès (site privé)
+        </label>
+        <label className="admin-field">Code d'accès (à donner aux personnes autorisées)
+          <input
+            value={s.access?.code || ""}
+            placeholder="Ex : NIV2026"
+            onChange={(e) => set({ access: { ...s.access, code: e.target.value } })}
+          />
+        </label>
+        <button className="btn btn-gold" onClick={() => save({ access: s.access }, "Accès enregistré")}>
+          Enregistrer l'accès
+        </button>
+      </div>
+
       {/* COULEUR */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>🎨 Couleur principale</h3>

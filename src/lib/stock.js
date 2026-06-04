@@ -197,10 +197,17 @@ export async function deleteCustomProduct(slug) {
 export async function getSettings() {
   const data = await getCatalogRaw();
   const s = data.settings || {};
+  const acc = s.access || {};
   return {
     color: s.color || "",
     fontHeading: s.fontHeading || "",   // police des titres
     fontBody: s.fontBody || "",         // police du texte
+    // Accès privé : si "locked", le site demande un code avant d'être visible.
+    // Par défaut activé (le temps de l'ouverture), avec un code par défaut modifiable dans l'admin.
+    access: {
+      locked: acc.locked !== false,
+      code: (typeof acc.code === "string" && acc.code.trim()) ? acc.code.trim() : "NIV2026",
+    },
     announce: { enabled: false, text: "", link: "", ...(s.announce || {}) },
     hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },
     categories: Array.isArray(s.categories) ? s.categories : [], // 3 cartes [{label,sub,image}]

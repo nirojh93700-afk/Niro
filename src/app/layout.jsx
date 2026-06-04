@@ -9,10 +9,12 @@ import {
   Pacifico,
 } from "next/font/google";
 import "./globals.css";
+import { cookies } from "next/headers";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import SiteGate from "@/components/SiteGate";
 import { getSettings } from "@/lib/stock";
 
 const display = Playfair_Display({
@@ -115,25 +117,39 @@ export default async function RootLayout({ children }) {
   const colorCss = rootRules.length ? `:root{${rootRules.join(";")};}` : "";
   const announce = settings.announce || {};
 
+  // Accès privé : si activé, on demande un code avant d'afficher le site.
+  const access = settings.access || { locked: false, code: "" };
+  let gateOpen = true;
+  if (access.locked) {
+    const provided = cookies().get("site-access")?.value;
+    gateOpen = Boolean(access.code) && provided === access.code;
+  }
+
   return (
     <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
       <body>
         {colorCss ? <style dangerouslySetInnerHTML={{ __html: colorCss }} /> : null}
-        {announce.enabled && announce.text ? (
-          <div className="announce-bar">
-            {announce.link ? (
-              <a href={announce.link}>{announce.text}</a>
-            ) : (
-              announce.text
-            )}
-          </div>
-        ) : null}
-        <CartProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
+        {gateOpen ? (
+          <>
+            {announce.enabled && announce.text ? (
+              <div className="announce-bar">
+                {announce.link ? (
+                  <a href={announce.link}>{announce.text}</a>
+                ) : (
+                  announce.text
+                )}
+              </div>
+            ) : null}
+            <CartProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <CartDrawer />
+            </CartProvider>
+          </>
+        ) : (
+          <SiteGate />
+        )}
       </body>
     </html>
   );

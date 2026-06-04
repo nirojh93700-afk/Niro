@@ -62,6 +62,12 @@ export async function POST(req) {
     };
   }
   if (typeof body.apropos === "string") patch.apropos = body.apropos.slice(0, 4000);
+  if (body.access && typeof body.access === "object") {
+    patch.access = {
+      locked: Boolean(body.access.locked),
+      code: str(body.access.code, 60).trim(),
+    };
+  }
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }
