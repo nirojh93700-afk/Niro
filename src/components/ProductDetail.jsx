@@ -9,6 +9,7 @@ import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
+import Engrave3D from "./Engrave3D";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -105,6 +106,16 @@ export default function ProductDetail({ product }) {
   const hasTextFields = visibleFields.some(
     (f) => f.type === "text" || f.type === "textarea" || !f.type
   );
+
+  // Aperçu 3D (bijoux à forme simple, ex. collier barre) : textes des faces + finition.
+  const faceTexts = visibleFields
+    .filter((f) => f.type === "text" || f.type === "textarea" || !f.type)
+    .map((f) => fieldValues[f.key] || "");
+  const FINISH_MAP = {
+    "argenté": "silver", "argente": "silver", "doré": "gold", "dore": "gold",
+    "noir": "black", "or rose": "rose", "arc en ciel": "rainbow",
+  };
+  const finish3d = FINISH_MAP[(variant.title || "").toLowerCase()] || "silver";
 
   function handleAdd() {
     if (soldOut) return;
@@ -333,6 +344,10 @@ export default function ProductDetail({ product }) {
                   </div>
                 );
               })}
+
+              {product.engrave3d && (
+                <Engrave3D faces={faceTexts} finish={finish3d} fontClass={previewFontClass} />
+              )}
 
               {(hasTextFields || photoField) && (
                 <div className="engrave-preview">

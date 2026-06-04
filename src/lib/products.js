@@ -866,6 +866,7 @@ export const products = [
     weight: 70, pickup: false, letter: true, subcategory: "femme",
     title: "Collier femme pendentif géométrique à graver",
     category: "bijoux", type: "Collier personnalisé",
+    engrave3d: true, // aperçu 3D : barre gravable sur 4 faces (le client fait pivoter)
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
     personalizationFields: [
