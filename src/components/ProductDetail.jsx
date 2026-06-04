@@ -160,11 +160,16 @@ export default function ProductDetail({ product }) {
 
   // Aperçu 3D cœur ouvrable (médaillon) : 4 faces + finition (argent / bicolore) + photo.
   const any3d = product.engrave3d || product.engraveHeart3d;
+  // Médaillon éventail : 8 faces (couverture, pages 1-6, dos).
   const heartFaces = [
-    fieldValues["avant"] || "",
+    fieldValues["cover"] || "",
     fieldValues["page1"] || "",
     fieldValues["page2"] || "",
     fieldValues["page3"] || "",
+    fieldValues["page4"] || "",
+    fieldValues["page5"] || "",
+    fieldValues["page6"] || "",
+    fieldValues["backcover"] || "",
   ];
   const finishHeart = (variant.title || "").toLowerCase().includes("bicolore") ? "bicolore" : "silver";
   const heartPhoto = photoSrc; // photo réelle uniquement (url/data)
