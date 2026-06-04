@@ -33,3 +33,6 @@ yarn-error.log*
 *sa.json
 niv-sa.json
 serviceAccount*.json
+
+# Fichiers de travail (maquettes, brouillons) — non déployés
+maquette_*.png
