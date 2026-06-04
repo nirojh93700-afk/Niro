@@ -15,6 +15,7 @@ export default function ContactForm() {
     const data = {
       name: form.name.value.trim(),
       email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
       subject: form.subject.value.trim(),
       message: form.message.value.trim(),
     };
@@ -54,8 +55,12 @@ export default function ContactForm() {
         <input id="email" name="email" type="email" required placeholder="vous@exemple.com" />
       </div>
       <div className="field">
+        <label htmlFor="phone">Votre téléphone <span style={{ color: "var(--ink-soft)" }}>(facultatif)</span></label>
+        <input id="phone" name="phone" type="tel" placeholder="Pour être rappelé(e) plus vite" />
+      </div>
+      <div className="field">
         <label htmlFor="subject">Sujet</label>
-        <input id="subject" name="subject" type="text" placeholder="Demande de personnalisation, devis…" />
+        <input id="subject" name="subject" type="text" placeholder="Commande personnalisée bois, déco sur mesure, devis…" />
       </div>
       <div className="field">
         <label htmlFor="message">Votre message</label>

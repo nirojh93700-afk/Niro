@@ -22,6 +22,7 @@ export async function POST(req) {
 
   const name = String(body?.name || "").trim();
   const email = String(body?.email || "").trim();
+  const phone = String(body?.phone || "").trim();
   const subject = String(body?.subject || "").trim() || "Nouveau message";
   const message = String(body?.message || "").trim();
 
@@ -51,6 +52,7 @@ export async function POST(req) {
     <h2>Nouveau message — Niv Création</h2>
     <p><strong>Nom :</strong> ${escapeHtml(name)}</p>
     <p><strong>E-mail :</strong> ${escapeHtml(email)}</p>
+    ${phone ? `<p><strong>Téléphone :</strong> ${escapeHtml(phone)}</p>` : ""}
     <p><strong>Sujet :</strong> ${escapeHtml(subject)}</p>
     <p><strong>Message :</strong></p>
     <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>

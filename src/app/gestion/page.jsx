@@ -8,6 +8,7 @@ import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
+import DeclarationReminder from "@/components/admin/DeclarationReminder";
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -205,6 +206,8 @@ export default function GestionPage() {
           <span className="eyebrow">Espace gestion</span>
           <h2>Mon site</h2>
         </div>
+
+        <DeclarationReminder />
 
         <div className="filters" style={{ justifyContent: "flex-start", marginBottom: 26, flexWrap: "wrap" }}>
           <button className={`filter-chip ${tab === "commandes" ? "active" : ""}`} onClick={() => setTab("commandes")}>
