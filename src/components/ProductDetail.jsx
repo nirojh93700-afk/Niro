@@ -10,6 +10,7 @@ import { getProductInfo } from "@/lib/productInfo";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
+import EngraveHeart3D from "./EngraveHeart3D";
 import MotifPicker from "./MotifPicker";
 
 export default function ProductDetail({ product }) {
@@ -39,7 +40,7 @@ export default function ProductDetail({ product }) {
   // Mobile : le mini 3D flottant apparaît quand la photo est sortie de l'écran
   // et que le grand 3D (en bas) n'est pas encore visible.
   useEffect(() => {
-    if (isWide || !product.engrave3d) { setShowMini(false); return; }
+    if (isWide || !(product.engrave3d || product.engraveHeart3d)) { setShowMini(false); return; }
     const photo = photoRef.current;
     const big = big3dRef.current;
     if (!photo || !big) return;
@@ -49,7 +50,7 @@ export default function ProductDetail({ product }) {
     const o2 = new IntersectionObserver(([e]) => { bigIn = e.isIntersecting; update(); }, { threshold: 0 });
     o1.observe(photo); o2.observe(big);
     return () => { o1.disconnect(); o2.disconnect(); };
-  }, [isWide, product.engrave3d]);
+  }, [isWide, product.engrave3d, product.engraveHeart3d]);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -156,6 +157,17 @@ export default function ProductDetail({ product }) {
   const motifVals = [1, 2, 3, 4].map((i) => fieldValues["motif" + i] || "");
   const motifPositions = [1, 2, 3, 4].map((i) => (fieldValues["motifPos" + i] === "below" ? "below" : "above"));
   const direction3d = fieldValues["sens"] === "down" ? "down" : "up";
+
+  // Aperçu 3D cœur ouvrable (médaillon) : 4 faces + finition (argent / bicolore) + photo.
+  const any3d = product.engrave3d || product.engraveHeart3d;
+  const heartFaces = [
+    fieldValues["avant"] || "",
+    fieldValues["page1"] || "",
+    fieldValues["page2"] || "",
+    fieldValues["page3"] || "",
+  ];
+  const finishHeart = (variant.title || "").toLowerCase().includes("bicolore") ? "bicolore" : "silver";
+  const heartPhoto = photoSrc; // photo réelle uniquement (url/data)
 
   function handleAdd() {
     if (soldOut) return;
@@ -269,10 +281,14 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {product.engrave3d && isWide && (
+          {any3d && isWide && (
             <>
               <div className="engrave3d-sticky">
-                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+                {product.engraveHeart3d ? (
+                  <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} />
+                ) : (
+                  <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+                )}
               </div>
               <div className="engrave3d-spacer" aria-hidden="true" />
             </>
@@ -409,9 +425,13 @@ export default function ProductDetail({ product }) {
                 );
               })}
 
-              {product.engrave3d && !isWide && (
+              {any3d && !isWide && (
                 <div ref={big3dRef}>
-                  <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+                  {product.engraveHeart3d ? (
+                    <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} />
+                  ) : (
+                    <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+                  )}
                 </div>
               )}
 
@@ -522,9 +542,13 @@ export default function ProductDetail({ product }) {
         </div>
       </div>
 
-      {product.engrave3d && !isWide && showMini && (
+      {any3d && !isWide && showMini && (
         <div className="engrave3d-mini">
-          <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} height={200} showHint={false} />
+          {product.engraveHeart3d ? (
+            <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} height={200} showHint={false} />
+          ) : (
+            <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} height={200} showHint={false} />
+          )}
         </div>
       )}
     </div>

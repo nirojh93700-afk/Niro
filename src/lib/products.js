@@ -110,6 +110,7 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "femme",
+    engraveHeart3d: true, // ← aperçu 3D cœur ouvrable (4 faces)
     personalizationFields: [
       { key: "avant", label: "Gravure — face avant", placeholder: "20 caractères max", maxLength: 20 },
       { key: "page1", label: "Gravure — page 1 (intérieur)", placeholder: "30 caractères max", maxLength: 30, optional: true },
