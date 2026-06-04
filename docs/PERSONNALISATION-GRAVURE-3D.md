@@ -116,12 +116,29 @@ La finition est déduite du **titre de la variante** (Argenté→silver, Doré�
 
 ---
 
+## 7 bis. Forme « cœur ouvrable » (médaillon 4 faces) → `EngraveHeart3D.jsx`
+Deuxième forme 3D, pour le **médaillon cœur ouvrable** (`collier-medaillon-coeur-ouvrable`).
+- Flag produit : `engraveHeart3d: true` (au lieu de `engrave3d`).
+- Géométrie : cœur **paramétrique** (courbe), 2 battants extrudés articulés sur une **charnière**
+  (cylindre + anneaux), qui **s'ouvrent comme un livre** (animation douce ouverture/fermeture).
+- 4 faces lues depuis les champs `avant`, `page1`, `page2`, `page3` (textes), `police` (font),
+  `photo` (dessinée sur la page intérieure 1 si présente).
+- Finition déduite de la variante : « Bicolore » → argent dehors / doré dedans, sinon argent.
+- Props : `faces` (4 textes), `finish` (`silver`/`bicolore`), `fontKey`, `photo`, `height`, `showHint`.
+- Branché dans `ProductDetail.jsx` via le flag `any3d = engrave3d || engraveHeart3d` (même
+  placement PC collant / mobile bas + mini flottant que la barre).
+
+> Pour une **3ᵉ forme** (médaille ronde, dog tag…), s'inspirer de ces deux composants :
+> définir la forme (Shape/Geometry), mapper les UV sur la boîte englobante, et dessiner les
+> faces au canvas (réutiliser `fontSpec`).
+
 ## 8. Fichiers concernés (récap)
 | Fichier | Rôle |
 |---|---|
 | `src/lib/products.js` | champs de perso + flag `engrave3d` par produit |
 | `src/lib/motifs.js` | liste des motifs (fleurs images + symboles) |
-| `src/components/Engrave3D.jsx` | le rendu 3D WebGL |
+| `src/components/Engrave3D.jsx` | rendu 3D WebGL — forme **barre** (collier pendentif) |
+| `src/components/EngraveHeart3D.jsx` | rendu 3D WebGL — forme **cœur ouvrable** (médaillon 4 faces) |
 | `src/components/MotifPicker.jsx` | sélecteur de motifs à vignettes + zoom survol |
 | `src/components/ProductDetail.jsx` | branche tout (champs, 3D PC/mobile, mini flottant) |
 | `src/app/globals.css` | `.engrave3d-sticky`, `.engrave3d-spacer`, `.engrave3d-mini`, anti-débordement |
