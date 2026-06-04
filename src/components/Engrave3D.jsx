@@ -1,112 +1,209 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-// Aperçu 3D d'un bijou à forme simple (barre / plaque rectangulaire).
-// Le client fait pivoter l'objet et voit son texte gravé sur les 4 faces,
-// en direct. Pas de photo nécessaire, pas de dépendance (CSS 3D pur).
+// Aperçu 3D photo-réaliste d'un bijou à forme simple (barre / plaque).
+// Vraie 3D WebGL (Three.js) : métal, reflets de studio, gravure sur 4 faces.
+// Le client fait pivoter le bijou et voit son texte en direct. Aucune photo requise.
 
-const FINISHES = {
-  silver: { grad: "linear-gradient(135deg,#f2f2f2,#b7b7b7 45%,#e0e0e0)", edge: "#9a9a9a", ink: "rgba(55,50,44,.9)" },
-  gold:   { grad: "linear-gradient(135deg,#f8ecc0,#c9a648 48%,#eedb93)", edge: "#b1893a", ink: "rgba(70,50,12,.92)" },
-  rose:   { grad: "linear-gradient(135deg,#f4d6d6,#cf9a9a 48%,#e9bfbf)", edge: "#bd8585", ink: "rgba(80,40,40,.9)" },
-  black:  { grad: "linear-gradient(135deg,#4a4a4a,#1b1b1b 48%,#363636)", edge: "#111", ink: "rgba(238,238,238,.92)" },
-  rainbow:{ grad: "linear-gradient(135deg,#ff7eb3,#7ec8ff,#9cff9c,#ffd47e)", edge: "#bbb", ink: "rgba(45,35,35,.9)" },
+const FINISH = {
+  silver: { base: "#d7d7d7", ink: "rgba(40,38,34,0.92)" },
+  gold:   { base: "#d4af37", ink: "rgba(60,42,8,0.92)" },
+  rose:   { base: "#dba8a1", ink: "rgba(70,34,30,0.92)" },
+  black:  { base: "#2d2d2d", ink: "rgba(222,222,222,0.95)" },
+  rainbow:{ base: "#cfd6dd", ink: "rgba(40,35,40,0.9)" },
 };
 
-const W = 48;   // largeur faces avant/arrière
-const D = 32;   // profondeur (faces latérales)
-const H = 240;  // hauteur de la barre
+const FONT_MAP = {
+  playfair: "Georgia, 'Times New Roman', serif",
+  cinzel: "Georgia, serif",
+  "cinzel-deco": "Georgia, serif",
+  montserrat: "Arial, Helvetica, sans-serif",
+  inter: "Arial, Helvetica, sans-serif",
+  "great-vibes": "'Snell Roundhand', 'Brush Script MT', cursive",
+  allura: "'Snell Roundhand', 'Brush Script MT', cursive",
+  pacifico: "'Bradley Hand', cursive",
+};
 
-export default function Engrave3D({ faces = [], finish = "silver", fontClass = "" }) {
-  const [angle, setAngle] = useState(18);
-  const dragging = useRef(false);
-  const lastX = useRef(0);
+// Dessine une face : fond métal + texte gravé (lettres empilées verticalement).
+function faceCanvas(text, finishKey, fontKey, wPx, hPx) {
+  const f = FINISH[finishKey] || FINISH.silver;
+  const c = document.createElement("canvas");
+  c.width = wPx; c.height = hPx;
+  const ctx = c.getContext("2d");
+  if (finishKey === "rainbow") {
+    const g = ctx.createLinearGradient(0, 0, 0, hPx);
+    g.addColorStop(0, "#ff9ec4"); g.addColorStop(0.34, "#9ec9ff");
+    g.addColorStop(0.67, "#9effc0"); g.addColorStop(1, "#ffd89e");
+    ctx.fillStyle = g;
+  } else {
+    ctx.fillStyle = f.base;
+  }
+  ctx.fillRect(0, 0, wPx, hPx);
 
-  // Rotation automatique lente tant que l'utilisateur ne touche pas.
+  const chars = (text || "").trim().split("");
+  if (chars.length) {
+    const fontFamily = FONT_MAP[fontKey] || FONT_MAP.playfair;
+    const n = chars.length;
+    const fontSize = Math.min(wPx * 0.6, (hPx * 0.9) / n);
+    ctx.font = `600 ${fontSize}px ${fontFamily}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const step = hPx / (n + 1);
+    for (let i = 0; i < n; i++) {
+      const y = step * (i + 1);
+      ctx.fillStyle = "rgba(255,255,255,0.22)"; // léger relief clair
+      ctx.fillText(chars[i], wPx / 2 + 1.2, y + 1.2);
+      ctx.fillStyle = f.ink;                     // texte gravé foncé
+      ctx.fillText(chars[i], wPx / 2, y);
+    }
+  }
+  return c;
+}
+
+export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair" }) {
+  const mountRef = useRef(null);
+  const matsRef = useRef([]); // matériaux des 4 faces (pour mise à jour du texte)
+  const threeRef = useRef(null);
+
+  // --- Mise en place de la scène (une seule fois) ---
   useEffect(() => {
-    let id;
-    const tick = () => {
-      if (!dragging.current) setAngle((a) => a + 0.25);
-      id = requestAnimationFrame(tick);
-    };
-    id = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(id);
+    let disposed = false;
+    let cleanup = () => {};
+
+    (async () => {
+      const THREE = await import("three");
+      const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
+      const { RoomEnvironment } = await import("three/examples/jsm/environments/RoomEnvironment.js");
+      if (disposed || !mountRef.current) return;
+
+      const mount = mountRef.current;
+      const width = mount.clientWidth || 320;
+      const height = 340;
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(width, height);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.1;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      mount.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
+      camera.position.set(0, 0, 6.2);
+
+      // Reflets de studio (gratuit, sans fichier HDRI)
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const envMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      scene.environment = envMap;
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+      const key = new THREE.DirectionalLight(0xffffff, 1.1);
+      key.position.set(3, 5, 4);
+      scene.add(key);
+
+      // Géométrie barre (croix carrée), 6 faces.
+      const W = 0.58, H = 2.7, D = 0.58;
+      const geo = new THREE.BoxGeometry(W, H, D);
+      const wPx = 170, hPx = Math.round(wPx * (H / W));
+
+      const f = FINISH[finish] || FINISH.silver;
+      const makeMat = (text) => {
+        const tex = new THREE.CanvasTexture(faceCanvas(text, finish, fontKey, wPx, hPx));
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return new THREE.MeshStandardMaterial({
+          map: tex, color: 0xffffff, metalness: 1.0, roughness: 0.32, envMapIntensity: 1.15,
+        });
+      };
+      const plainMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(f.base), metalness: 1.0, roughness: 0.3, envMapIntensity: 1.15,
+      });
+
+      // Ordre BoxGeometry : +x, -x, +y, -y, +z, -z
+      const mRight = makeMat(faces[2]); // face 3
+      const mLeft = makeMat(faces[3]);  // face 4
+      const mFront = makeMat(faces[0]); // face 1
+      const mBack = makeMat(faces[1]);  // face 2
+      const materials = [mRight, mLeft, plainMat, plainMat, mFront, mBack];
+      matsRef.current = [mFront, mBack, mRight, mLeft]; // ordre faces 1..4
+
+      const mesh = new THREE.Mesh(geo, materials);
+      scene.add(mesh);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableZoom = false;
+      controls.enablePan = false;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 2.2;
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.minPolarAngle = Math.PI / 2.6;
+      controls.maxPolarAngle = Math.PI / 1.7;
+
+      threeRef.current = { THREE, renderer, scene, materials, geo, envMap, pmrem };
+
+      let raf;
+      const animate = () => {
+        controls.update();
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(animate);
+      };
+      animate();
+
+      const onResize = () => {
+        const w = mount.clientWidth || 320;
+        renderer.setSize(w, height);
+        camera.aspect = w / height;
+        camera.updateProjectionMatrix();
+      };
+      window.addEventListener("resize", onResize);
+
+      cleanup = () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", onResize);
+        controls.dispose();
+        materials.forEach((m) => { if (m.map) m.map.dispose(); m.dispose(); });
+        geo.dispose();
+        envMap.dispose();
+        pmrem.dispose();
+        renderer.dispose();
+        if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+      };
+    })();
+
+    return () => { disposed = true; cleanup(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
-  const onDown = (e) => { dragging.current = true; lastX.current = getX(e); };
-  const onMove = (e) => {
-    if (!dragging.current) return;
-    const x = getX(e);
-    setAngle((a) => a + (x - lastX.current) * 0.6);
-    lastX.current = x;
-  };
-  const onUp = () => { dragging.current = false; };
-
-  const f = FINISHES[finish] || FINISHES.silver;
-
-  const faceStyle = (w, h) => ({
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    width: w,
-    height: h,
-    marginLeft: -w / 2,
-    marginTop: -h / 2,
-    background: f.grad,
-    border: `1px solid ${f.edge}`,
-    borderRadius: 5,
-    boxShadow: "inset 0 0 16px rgba(0,0,0,.28)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backfaceVisibility: "hidden",
-    overflow: "hidden",
-  });
-
-  const textStyle = {
-    writingMode: "vertical-rl",
-    textOrientation: "upright",
-    color: f.ink,
-    fontWeight: 600,
-    letterSpacing: 3,
-    fontSize: 14,
-    lineHeight: 1,
-    whiteSpace: "nowrap",
-    maxHeight: H - 16,
-    overflow: "hidden",
-  };
-
-  // Ordre : avant (face1), droite (face3), arrière (face2), gauche (face4).
-  const cfg = [
-    { t: faces[0], w: W, h: H, tf: `translateZ(${D / 2}px)` },
-    { t: faces[2], w: D, h: H, tf: `rotateY(90deg) translateZ(${W / 2}px)` },
-    { t: faces[1], w: W, h: H, tf: `rotateY(180deg) translateZ(${D / 2}px)` },
-    { t: faces[3], w: D, h: H, tf: `rotateY(-90deg) translateZ(${W / 2}px)` },
-  ];
-
-  const anyText = faces.some((t) => (t || "").trim());
+  // --- Mise à jour des textes / police sur les faces (sans recréer la scène) ---
+  useEffect(() => {
+    const ctx = threeRef.current;
+    const mats = matsRef.current;
+    if (!ctx || !mats.length) return;
+    const { THREE } = ctx;
+    const W = 0.58, wPx = 170, hPx = Math.round(wPx * (2.7 / W));
+    const order = [faces[0], faces[1], faces[2], faces[3]];
+    mats.forEach((mat, i) => {
+      const old = mat.map;
+      const tex = new THREE.CanvasTexture(faceCanvas(order[i], finish, fontKey, wPx, hPx));
+      tex.anisotropy = ctx.renderer.capabilities.getMaxAnisotropy();
+      tex.colorSpace = THREE.SRGBColorSpace;
+      mat.map = tex;
+      mat.needsUpdate = true;
+      if (old) old.dispose();
+    });
+  }, [faces, finish, fontKey]);
 
   return (
-    <div className="engrave3d" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, margin: "6px 0 4px" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, margin: "8px 0 4px" }}>
       <div
-        style={{ perspective: "1000px", width: "100%", height: 300, display: "flex", alignItems: "center", justifyContent: "center", cursor: "grab", touchAction: "pan-y", userSelect: "none" }}
-        onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp}
-        onTouchStart={onDown} onTouchMove={onMove} onTouchEnd={onUp}
-      >
-        <div style={{ position: "relative", width: 0, height: 0, transformStyle: "preserve-3d", transform: `rotateX(-10deg) rotateY(${angle}deg)` }}>
-          {cfg.map((c, i) => (
-            <div key={i} style={{ ...faceStyle(c.w, c.h), transform: c.tf }}>
-              <span className={fontClass} style={textStyle}>
-                {(c.t || "").trim()}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+        ref={mountRef}
+        style={{ width: "100%", height: 340, cursor: "grab", touchAction: "pan-y" }}
+      />
       <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>
-        ↔ Faites pivoter le bijou {anyText ? "pour voir vos 4 faces gravées" : "(votre texte apparaîtra sur chaque face)"}
+        ↔ Faites pivoter le bijou pour voir vos 4 faces gravées
       </span>
     </div>
   );

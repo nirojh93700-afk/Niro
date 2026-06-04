@@ -346,7 +346,7 @@ export default function ProductDetail({ product }) {
               })}
 
               {product.engrave3d && (
-                <Engrave3D faces={faceTexts} finish={finish3d} fontClass={previewFontClass} />
+                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} />
               )}
 
               {(hasTextFields || photoField) && (
