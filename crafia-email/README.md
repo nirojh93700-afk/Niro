@@ -58,15 +58,16 @@ Ouvrez `app/auth/action/index.html` et remplacez le bloc `firebaseConfig`
 Console Firebase → ⚙ Paramètres du projet → Vos applications → Configuration SDK.
 (Ces valeurs `apiKey`/`appId` sont publiques, c'est normal.)
 
-### Étape C — Configurer le SMTP
+### Étape C — Configurer le SMTP (choix : 100 % gratuit → Brevo)
 1. `cd functions`
 2. Copiez `.env.example` en `.env`.
-3. Renseignez **un** des 3 blocs (crafia.fr / Brevo / Gmail) — voir le fichier.
-   - **Vous ne savez pas encore quel SMTP utiliser ?** Le plus simple si vous
-     n'avez pas les identifiants de `support@crafia.fr` : créez un compte
-     **Brevo** gratuit (300 emails/jour), générez une clé SMTP, et configurez
-     SPF/DKIM sur `crafia.fr` (Brevo fournit les enregistrements DNS).
-4. `.env` ne doit **jamais** être commité (ajoutez-le à `.gitignore`).
+3. Le bloc **Brevo** est déjà actif par défaut (gratuit à vie, 300 emails/jour) :
+   - Créez un compte sur **brevo.com**, menu « SMTP & API » → créez une clé SMTP,
+     recopiez le login + la clé dans `.env`.
+   - Authentifiez `crafia.fr` dans Brevo (SPF + DKIM) pour que les mails partent
+     bien de `support@crafia.fr` sans finir en spam.
+   - (Les blocs OVH/crafia.fr et Gmail restent disponibles en commentaire.)
+4. `.env` ne doit **jamais** être commité (déjà dans `.gitignore`).
 
 ### Étape D — Installer les dépendances
 ```bash
@@ -88,8 +89,25 @@ Claude Code ne peut pas cliquer ici ; à faire vous-même :
 
 ## 4. Brancher l'app (remplacer les appels natifs)
 
-Dans `crafia_app.html`, là où vous appelez actuellement le SDK Firebase natif,
-remplacez par un appel à nos Cloud Functions. Exemple (SDK web modulaire) :
+> 📄 **Guide détaillé prêt-à-coller** : voir **`INTEGRATION-crafia_app.md`**
+> (remplacements exacts pour les appels `sendEmailVerification` ~14446/~79231 et
+> le flux « mot de passe oublié »). À appliquer dans le projet local.
+
+Le plus simple est le point d'entrée unifié `sendAuthEmail` :
+
+```js
+import { getFunctions, httpsCallable } from "firebase/functions";
+const functions = getFunctions(app, "europe-west1");
+const crafiaCallFn = (name, payload) => httpsCallable(functions, name)(payload || {});
+
+// Mot de passe oublié (utilisateur NON connecté)
+await crafiaCallFn("sendAuthEmail", { type: "reset", email });
+// Vérification d'email (utilisateur CONNECTÉ)
+await crafiaCallFn("sendAuthEmail", { type: "verify" });
+```
+
+Les fonctions séparées `sendPasswordResetEmail` / `sendVerificationEmail` restent
+aussi disponibles si vous préférez. Exemple (SDK web modulaire) :
 
 ```js
 import { getFunctions, httpsCallable } from "firebase/functions";

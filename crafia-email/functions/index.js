@@ -113,6 +113,64 @@ exports.sendVerificationEmail = functions
     return { ok: true };
   });
 
+// --- 3. Dispatcher unifié ---------------------------------------------------
+// Pratique pour l'app : un seul point d'entrée crafiaCallFn('sendAuthEmail', ...).
+//   { type: "reset",  email }  -> email de réinitialisation (utilisateur non connecté)
+//   { type: "verify" }         -> email de vérification (utilisateur connecté)
+exports.sendAuthEmail = functions
+  .region(REGION)
+  .https.onCall(async (data, context) => {
+    const type = String((data && data.type) || "").trim();
+
+    if (type === "reset") {
+      const email = String((data && data.email) || "").trim().toLowerCase();
+      if (!email || !email.includes("@")) {
+        throw new functions.https.HttpsError("invalid-argument", "Adresse email invalide.");
+      }
+      try {
+        const link = await admin
+          .auth()
+          .generatePasswordResetLink(email, actionCodeSettings);
+        const displayName = await displayNameFor(email);
+        await sendMail({ to: email, ...templates.passwordReset({ link, displayName }) });
+      } catch (e) {
+        if (e.code !== "auth/user-not-found") {
+          console.error("sendAuthEmail/reset:", e.message);
+        }
+      }
+      return { ok: true }; // réponse neutre (anti-énumération)
+    }
+
+    if (type === "verify") {
+      if (!context.auth) {
+        throw new functions.https.HttpsError("unauthenticated", "Vous devez être connecté.");
+      }
+      const email = context.auth.token.email;
+      if (!email) {
+        throw new functions.https.HttpsError("failed-precondition", "Aucune adresse email sur ce compte.");
+      }
+      if (context.auth.token.email_verified) {
+        return { ok: true, alreadyVerified: true };
+      }
+      try {
+        const link = await admin
+          .auth()
+          .generateEmailVerificationLink(email, actionCodeSettings);
+        const displayName = context.auth.token.name || (await displayNameFor(email));
+        await sendMail({ to: email, ...templates.emailVerification({ link, displayName }) });
+      } catch (e) {
+        console.error("sendAuthEmail/verify:", e.message);
+        throw new functions.https.HttpsError("internal", "L'envoi de l'email a échoué. Réessayez plus tard.");
+      }
+      return { ok: true };
+    }
+
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      'Type inconnu. Utilisez "reset" ou "verify".'
+    );
+  });
+
 // =============================================================================
 // STRUCTURE PRÉ-CÂBLÉE (à activer plus tard avec tes données d'abonnement).
 // Les templates existent déjà ; il reste à décider QUAND les déclencher.

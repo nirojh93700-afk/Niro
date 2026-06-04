@@ -101,6 +101,7 @@
     .btn:hover { background: var(--gold-deep); }
     .btn:active { transform: translateY(1px); }
     .btn[disabled] { opacity: 0.6; cursor: default; }
+    a.btn { text-decoration: none; text-align: center; }
     .link {
       display: inline-block;
       margin-top: 18px;
@@ -152,7 +153,8 @@
 
       <div class="center hidden" id="actionWrap">
         <div class="msg" id="actionMsg"></div>
-        <a class="link" id="appLink" href="https://app.crafia.fr">Aller sur Crafia</a>
+        <a class="btn hidden" id="primaryBtn" href="https://app.crafia.fr">Aller sur Crafia</a>
+        <a class="link hidden" id="secondaryLink" href="https://app.crafia.fr">Retour à la connexion</a>
       </div>
     </div>
 
@@ -196,6 +198,11 @@
     const oobCode = params.get("oobCode");
     const continueUrl = params.get("continueUrl") || "https://app.crafia.fr";
 
+    // Lien pour redemander un email : ouvre l'app sur l'écran adéquat.
+    // (L'app peut lire ?action=forgot pour rouvrir la fenêtre "mot de passe oublié".)
+    const resendUrl =
+      continueUrl + (continueUrl.includes("?") ? "&" : "?") + "action=forgot";
+
     const els = {
       spinner: document.getElementById("spinner"),
       title: document.getElementById("title"),
@@ -205,9 +212,9 @@
       resetBtn: document.getElementById("resetBtn"),
       actionWrap: document.getElementById("actionWrap"),
       actionMsg: document.getElementById("actionMsg"),
-      appLink: document.getElementById("appLink"),
+      primaryBtn: document.getElementById("primaryBtn"),
+      secondaryLink: document.getElementById("secondaryLink"),
     };
-    els.appLink.href = continueUrl;
 
     function show(el) { el.classList.remove("hidden"); }
     function hide(el) { el.classList.add("hidden"); }
@@ -242,21 +249,50 @@
       }
     }
 
-    function showError(message) {
+    // Configure les deux boutons du bas (un principal or + un lien secondaire).
+    function setButtons({ primaryLabel, primaryHref, secondaryLabel, secondaryHref }) {
+      if (primaryLabel && primaryHref) {
+        els.primaryBtn.textContent = primaryLabel;
+        els.primaryBtn.href = primaryHref;
+        show(els.primaryBtn);
+      } else {
+        hide(els.primaryBtn);
+      }
+      if (secondaryLabel && secondaryHref) {
+        els.secondaryLink.textContent = secondaryLabel;
+        els.secondaryLink.href = secondaryHref;
+        show(els.secondaryLink);
+      } else {
+        hide(els.secondaryLink);
+      }
+    }
+
+    function showError(message, opts = {}) {
       hide(els.spinner);
       hide(els.resetForm);
       setHeader("Lien invalide", "", "⚠");
       show(els.actionWrap);
       els.actionMsg.className = "msg error";
       els.actionMsg.textContent = message;
+      // Sur erreur : proposer de redemander un lien + revenir à la connexion.
+      setButtons({
+        primaryLabel: opts.resend === false ? null : "Renvoyer un lien",
+        primaryHref: resendUrl,
+        secondaryLabel: "Retour à la connexion",
+        secondaryHref: continueUrl,
+      });
     }
 
-    function showSuccess(title, message, icon) {
+    function showSuccess(title, message, icon, primaryLabel) {
       hide(els.resetForm);
       setHeader(title, "", icon || "✓");
       show(els.actionWrap);
       els.actionMsg.className = "msg ok";
       els.actionMsg.textContent = message;
+      setButtons({
+        primaryLabel: primaryLabel || "Aller sur Crafia",
+        primaryHref: continueUrl,
+      });
     }
 
     async function run() {
@@ -297,9 +333,10 @@
               await confirmPasswordReset(auth, oobCode, pw1);
               showSuccess(
                 "Mot de passe modifié",
-                "Votre mot de passe a bien été mis à jour. Vous pouvez maintenant vous connecter."
+                "Votre mot de passe a bien été mis à jour. Vous pouvez maintenant vous connecter.",
+                "✓",
+                "Se connecter"
               );
-              els.appLink.textContent = "Se connecter";
             } catch (err) {
               els.resetBtn.disabled = false;
               els.resetBtn.textContent = "Enregistrer le mot de passe";
