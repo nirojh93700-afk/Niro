@@ -874,7 +874,20 @@ export const products = [
       { key: "face2", label: "Face 2 (facultatif)", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
       { key: "face3", label: "Face 3 (facultatif)", placeholder: "Ex. coordonnées GPS : 48.85, 2.35", maxLength: 23, optional: true },
       { key: "face4", label: "Face 4 (facultatif)", placeholder: "Ex. un mot, des initiales", maxLength: 23, optional: true },
-      { key: "note", type: "note", text: "Laissez vide les faces que vous ne souhaitez pas graver." },
+      { key: "motif", type: "select", label: "Motif à graver (facultatif)", optional: true, options: [
+        { value: "coeur", label: "Cœur ♥" },
+        { value: "etoile", label: "Étoile ★" },
+        { value: "infini", label: "Infini ∞" },
+        { value: "lune", label: "Lune ☾" },
+        { value: "fleur", label: "Fleur ✿" },
+      ] },
+      { key: "motifFace", type: "select", label: "Motif sur quelle face ?", optional: true, options: [
+        { value: "1", label: "Face 1" },
+        { value: "2", label: "Face 2" },
+        { value: "3", label: "Face 3" },
+        { value: "4", label: "Face 4" },
+      ] },
+      { key: "note", type: "note", text: "Laissez vide les faces que vous ne souhaitez pas graver. Vous pouvez aussi ajouter un motif sur la face de votre choix." },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [

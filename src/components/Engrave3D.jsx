@@ -28,7 +28,7 @@ const FONT_MAP = {
 const BAR = { W: 0.5, H: 2.6, D: 0.5 };
 const TEX = { wPx: 170, hPx: Math.round(170 * (BAR.H / BAR.W)) };
 
-function faceCanvas(text, finishKey, fontKey) {
+function faceCanvas(text, motifChar, finishKey, fontKey) {
   const { wPx, hPx } = TEX;
   const f = FINISH[finishKey] || FINISH.silver;
   const c = document.createElement("canvas");
@@ -43,18 +43,32 @@ function faceCanvas(text, finishKey, fontKey) {
     ctx.fillStyle = f.base;
   }
   ctx.fillRect(0, 0, wPx, hPx);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // Motif (symbole) en haut de la face, le cas échéant.
+  let topOffset = 0;
+  if (motifChar) {
+    const mSize = wPx * 0.7;
+    const my = hPx * 0.11;
+    ctx.font = `${mSize}px "Apple Color Emoji", "Segoe UI Symbol", serif`;
+    ctx.fillStyle = "rgba(255,255,255,0.22)";
+    ctx.fillText(motifChar, wPx / 2 + 1.2, my + 1.2);
+    ctx.fillStyle = f.ink;
+    ctx.fillText(motifChar, wPx / 2, my);
+    topOffset = hPx * 0.2;
+  }
 
   const chars = (text || "").trim().split("");
   if (chars.length) {
     const fontFamily = FONT_MAP[fontKey] || FONT_MAP.playfair;
+    const areaH = hPx - topOffset;
     const n = chars.length;
-    const fontSize = Math.min(wPx * 0.58, (hPx * 0.9) / n);
+    const fontSize = Math.min(wPx * 0.58, (areaH * 0.9) / n);
     ctx.font = `600 ${fontSize}px ${fontFamily}`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    const step = hPx / (n + 1);
+    const step = areaH / (n + 1);
     for (let i = 0; i < n; i++) {
-      const y = step * (i + 1);
+      const y = topOffset + step * (i + 1);
       ctx.fillStyle = "rgba(255,255,255,0.22)";
       ctx.fillText(chars[i], wPx / 2 + 1.2, y + 1.2);
       ctx.fillStyle = f.ink;
@@ -64,7 +78,7 @@ function faceCanvas(text, finishKey, fontKey) {
   return c;
 }
 
-export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair" }) {
+export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motif = null }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);
   const threeRef = useRef(null);
@@ -108,8 +122,9 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
 
       const f = FINISH[finish] || FINISH.silver;
 
-      const makeFaceMat = (text) => {
-        const tex = new THREE.CanvasTexture(faceCanvas(text, finish, fontKey));
+      const mFor = (i) => (motif && motif.face === i + 1 ? motif.char : "");
+      const makeFaceMat = (text, motifChar) => {
+        const tex = new THREE.CanvasTexture(faceCanvas(text, motifChar, finish, fontKey));
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
         tex.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -124,10 +139,10 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
 
       // Barre gravée (6 faces : +x,-x,+y,-y,+z,-z)
       const geo = new THREE.BoxGeometry(BAR.W, BAR.H, BAR.D, 1, 1, 1);
-      const mRight = makeFaceMat(faces[2]);
-      const mLeft = makeFaceMat(faces[3]);
-      const mFront = makeFaceMat(faces[0]);
-      const mBack = makeFaceMat(faces[1]);
+      const mRight = makeFaceMat(faces[2], mFor(2));
+      const mLeft = makeFaceMat(faces[3], mFor(3));
+      const mFront = makeFaceMat(faces[0], mFor(0));
+      const mBack = makeFaceMat(faces[1], mFor(1));
       const materials = [mRight, mLeft, metalMat(), metalMat(), mFront, mBack];
       matsRef.current = [mFront, mBack, mRight, mLeft];
       const bar = new THREE.Mesh(geo, materials);
@@ -208,14 +223,15 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     const order = [faces[0], faces[1], faces[2], faces[3]];
     mats.forEach((mat, i) => {
       const old = mat.map;
-      const tex = new THREE.CanvasTexture(faceCanvas(order[i], finish, fontKey));
+      const motifChar = motif && motif.face === i + 1 ? motif.char : "";
+      const tex = new THREE.CanvasTexture(faceCanvas(order[i], motifChar, finish, fontKey));
       tex.anisotropy = ctx.renderer.capabilities.getMaxAnisotropy();
       tex.colorSpace = THREE.SRGBColorSpace;
       mat.map = tex;
       mat.needsUpdate = true;
       if (old) old.dispose();
     });
-  }, [faces, finish, fontKey]);
+  }, [faces, finish, fontKey, motif]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, margin: "8px 0 4px" }}>
