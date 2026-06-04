@@ -141,6 +141,19 @@ export async function getSiteOrders(max = 300) {
   }
 }
 
+// Renvoie une commande précise par son id (pour le remboursement).
+export async function getSiteOrder(id) {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    const doc = await admin.firestore().collection("siteOrders").doc(id).get();
+    return doc.exists ? { id: doc.id, ...doc.data() } : null;
+  } catch (e) {
+    console.error("Lecture commande Firebase:", e.message);
+    return null;
+  }
+}
+
 // Met à jour le statut d'une commande (a_preparer | expediee).
 export async function updateSiteOrderStatus(id, status) {
   const a = getApp();

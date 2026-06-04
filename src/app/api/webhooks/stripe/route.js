@@ -278,6 +278,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     await recordSiteOrder({
       ref: orderRef,
+      paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
       currency,
       customerName: customer.name || "",

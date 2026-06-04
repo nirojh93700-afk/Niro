@@ -33,6 +33,7 @@ export default function GestionPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState("");
+  const [refunding, setRefunding] = useState("");
 
   const load = useCallback(async (adminKey) => {
     setLoading(true);
@@ -130,6 +131,28 @@ export default function GestionPage() {
       });
     } catch (e) {
       setError("Échec de la mise à jour du statut.");
+    }
+  }
+
+  async function refundOrder(o) {
+    if (o.status === "remboursee") return;
+    const label = o.ref || o.id?.slice(-6);
+    if (!window.confirm(`Rembourser entièrement la commande #${label} (${formatEuro(o.total)}) ?\nLe client sera remboursé sur sa carte. Cette action est irréversible.`)) return;
+    setRefunding(o.id);
+    setError("");
+    try {
+      const res = await fetch("/api/admin/refund", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ id: o.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Échec du remboursement.");
+      setOrders((prev) => prev.map((x) => (x.id === o.id ? { ...x, status: "remboursee" } : x)));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setRefunding("");
     }
   }
 
@@ -264,18 +287,32 @@ export default function GestionPage() {
                     <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
                   ))}
                 </ul>
-                <div className="admin-row" style={{ gridTemplateColumns: "auto auto", justifyContent: "flex-start", gap: 8 }}>
-                  <span style={{ fontWeight: 600, color: o.status === "expediee" ? "#256b34" : "#b4452f" }}>
-                    {o.status === "expediee" ? "✓ Expédiée" : "● À préparer"}
-                  </span>
-                  <button
-                    className="btn btn-outline"
-                    style={{ padding: "4px 12px", fontSize: "0.85rem" }}
-                    onClick={() => setOrderStatus(o.id, o.status === "expediee" ? "a_preparer" : "expediee")}
-                  >
-                    {o.status === "expediee" ? "Remettre à préparer" : "Marquer expédiée"}
-                  </button>
-                </div>
+                {o.status === "remboursee" ? (
+                  <div className="admin-row" style={{ gridTemplateColumns: "1fr", justifyContent: "flex-start" }}>
+                    <span style={{ fontWeight: 600, color: "#8a6d3b" }}>↩ Remboursée</span>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 600, color: o.status === "expediee" ? "#256b34" : "#b4452f" }}>
+                      {o.status === "expediee" ? "✓ Expédiée" : "● À préparer"}
+                    </span>
+                    <button
+                      className="btn btn-outline"
+                      style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                      onClick={() => setOrderStatus(o.id, o.status === "expediee" ? "a_preparer" : "expediee")}
+                    >
+                      {o.status === "expediee" ? "Remettre à préparer" : "Marquer expédiée"}
+                    </button>
+                    <button
+                      className="btn btn-outline"
+                      style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }}
+                      onClick={() => refundOrder(o)}
+                      disabled={refunding === o.id}
+                    >
+                      {refunding === o.id ? "Remboursement…" : "↩ Rembourser"}
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </>
