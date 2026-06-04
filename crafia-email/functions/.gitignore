@@ -1,0 +1,3 @@
+# Ne jamais committer les secrets SMTP
+.env
+node_modules/

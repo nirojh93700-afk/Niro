@@ -1,0 +1,42 @@
+// =============================================================================
+// EXTRAIT à intégrer dans votre firebase.json existant.
+// NE REMPLACEZ PAS tout le fichier : ajoutez seulement
+//   - le bloc "functions" (s'il n'existe pas déjà)
+//   - le rewrite "/auth/action" dans le site hosting "app" (et "app-test" pour tester)
+// La page étant à app/auth/action/index.html, Firebase Hosting la sert
+// automatiquement sur /auth/action — le rewrite ci-dessous garantit le bon
+// comportement même avec des paramètres d'URL.
+// =============================================================================
+
+{
+  // (1) Déclarez le dossier des Cloud Functions
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20"
+  },
+
+  // (2) Vos 3 sites hosting existants — montré ici pour "app" et "app-test".
+  // Gardez vos réglages actuels ; ajoutez seulement le rewrite /auth/action.
+  "hosting": [
+    {
+      "site": "app",
+      "public": "app",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "/auth/action", "destination": "/auth/action/index.html" }
+        // ... vos autres rewrites existants (ex. SPA "**" -> /index.html)
+        // IMPORTANT : placez la règle /auth/action AVANT un éventuel
+        // catch-all "**" -> "/index.html", sinon elle ne sera jamais atteinte.
+      ]
+    },
+    {
+      "site": "app-test",
+      "public": "app-test",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "/auth/action", "destination": "/auth/action/index.html" }
+      ]
+    }
+    // ... votre site "vitrine" reste inchangé.
+  ]
+}

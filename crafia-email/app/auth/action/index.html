@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crafia — Action sur votre compte</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    :root {
+      --bg: #1A0F2E;
+      --bg-deep: #120A20;
+      --card: rgba(46, 28, 70, 0.55);
+      --border: rgba(255, 216, 158, 0.18);
+      --gold: #FFD89E;
+      --gold-deep: #E9B873;
+      --text: #EDE7F5;
+      --muted: #B9AECF;
+      --error: #FF9B9B;
+      --ok: #9BE8B6;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100%; }
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 50% -10%, #2A1748 0%, transparent 60%),
+        radial-gradient(900px 500px at 90% 110%, #241634 0%, transparent 55%),
+        var(--bg-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .wrap { width: 100%; max-width: 440px; }
+    .brand {
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .brand span { color: var(--text); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 34px 30px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+    .card::before {
+      content: "";
+      display: block;
+      height: 3px;
+      width: 54px;
+      background: var(--gold);
+      border-radius: 3px;
+      margin: 0 auto 22px;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.3;
+      margin: 0 0 14px;
+      text-align: center;
+      color: var(--text);
+    }
+    p { font-size: 14.5px; line-height: 1.65; color: var(--muted); margin: 0 0 16px; text-align: center; }
+    label { display: block; font-size: 13px; color: var(--muted); margin: 0 0 7px; }
+    input[type="password"] {
+      width: 100%;
+      padding: 13px 14px;
+      font-size: 15px;
+      color: var(--text);
+      background: rgba(18, 10, 32, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.15s;
+    }
+    input[type="password"]:focus { border-color: var(--gold); }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      font-weight: bold;
+      color: #1A0F2E;
+      background: var(--gold);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.05s;
+    }
+    .btn:hover { background: var(--gold-deep); }
+    .btn:active { transform: translateY(1px); }
+    .btn[disabled] { opacity: 0.6; cursor: default; }
+    .link {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .link:hover { text-decoration: underline; }
+    .msg { font-size: 13px; margin: 6px 0 14px; text-align: center; min-height: 18px; }
+    .msg.error { color: var(--error); }
+    .msg.ok { color: var(--ok); }
+    .hint { font-size: 12px; color: var(--muted); text-align: left; margin: -8px 0 16px; }
+    .center { text-align: center; }
+    .spinner {
+      width: 34px; height: 34px;
+      border: 3px solid rgba(255, 216, 158, 0.25);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      margin: 8px auto 18px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .icon { font-size: 40px; text-align: center; margin-bottom: 8px; line-height: 1; }
+    .footer { text-align: center; margin-top: 22px; font-size: 12px; color: #6F6488; }
+    .footer a { color: var(--muted); text-decoration: none; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">Crafia<span>.</span></div>
+    <div class="card" id="card">
+      <div class="center">
+        <div class="spinner" id="spinner"></div>
+        <h1 id="title">Un instant…</h1>
+        <p id="subtitle">Vérification de votre lien.</p>
+      </div>
+
+      <!-- Formulaire de nouveau mot de passe (reset) -->
+      <form id="resetForm" class="hidden" autocomplete="off">
+        <label for="pw1">Nouveau mot de passe</label>
+        <input type="password" id="pw1" autocomplete="new-password" minlength="6" required />
+        <label for="pw2">Confirmez le mot de passe</label>
+        <input type="password" id="pw2" autocomplete="new-password" minlength="6" required />
+        <div class="hint">Au moins 6 caractères.</div>
+        <div class="msg" id="formMsg"></div>
+        <button type="submit" class="btn" id="resetBtn">Enregistrer le mot de passe</button>
+      </form>
+
+      <div class="center hidden" id="actionWrap">
+        <div class="msg" id="actionMsg"></div>
+        <a class="link" id="appLink" href="https://app.crafia.fr">Aller sur Crafia</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Une question&nbsp;? <a href="mailto:support@crafia.fr">support@crafia.fr</a><br />
+      © <span id="year"></span> Crafia
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getAuth,
+      verifyPasswordResetCode,
+      confirmPasswordReset,
+      applyActionCode,
+      checkActionCode,
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    // =========================================================================
+    // À REMPLIR : configuration web de votre projet Firebase "crafia-app".
+    // (Console Firebase > Paramètres du projet > Vos applications > Config SDK)
+    // Ces valeurs sont publiques, c'est normal (le SDK web en a besoin).
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "À_REMPLIR",
+      authDomain: "crafia-app.firebaseapp.com",
+      projectId: "crafia-app",
+      appId: "À_REMPLIR",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    auth.languageCode = "fr";
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // --- Lecture des paramètres du lien Firebase ---
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    const oobCode = params.get("oobCode");
+    const continueUrl = params.get("continueUrl") || "https://app.crafia.fr";
+
+    const els = {
+      spinner: document.getElementById("spinner"),
+      title: document.getElementById("title"),
+      subtitle: document.getElementById("subtitle"),
+      resetForm: document.getElementById("resetForm"),
+      formMsg: document.getElementById("formMsg"),
+      resetBtn: document.getElementById("resetBtn"),
+      actionWrap: document.getElementById("actionWrap"),
+      actionMsg: document.getElementById("actionMsg"),
+      appLink: document.getElementById("appLink"),
+    };
+    els.appLink.href = continueUrl;
+
+    function show(el) { el.classList.remove("hidden"); }
+    function hide(el) { el.classList.add("hidden"); }
+
+    function setHeader(title, subtitle, icon) {
+      hide(els.spinner);
+      els.title.textContent = title;
+      els.subtitle.innerHTML = subtitle || "";
+      if (icon) {
+        const div = document.createElement("div");
+        div.className = "icon";
+        div.textContent = icon;
+        els.title.parentNode.insertBefore(div, els.title);
+      }
+    }
+
+    // Traduit les codes d'erreur Firebase en messages français clairs.
+    function frError(code) {
+      switch (code) {
+        case "auth/expired-action-code":
+          return "Ce lien a expiré. Veuillez refaire votre demande.";
+        case "auth/invalid-action-code":
+          return "Ce lien n'est plus valide (déjà utilisé ou incorrect).";
+        case "auth/user-disabled":
+          return "Ce compte a été désactivé. Contactez le support.";
+        case "auth/user-not-found":
+          return "Aucun compte ne correspond à ce lien.";
+        case "auth/weak-password":
+          return "Mot de passe trop faible (au moins 6 caractères).";
+        default:
+          return "Une erreur est survenue. Réessayez ou contactez le support.";
+      }
+    }
+
+    function showError(message) {
+      hide(els.spinner);
+      hide(els.resetForm);
+      setHeader("Lien invalide", "", "⚠");
+      show(els.actionWrap);
+      els.actionMsg.className = "msg error";
+      els.actionMsg.textContent = message;
+    }
+
+    function showSuccess(title, message, icon) {
+      hide(els.resetForm);
+      setHeader(title, "", icon || "✓");
+      show(els.actionWrap);
+      els.actionMsg.className = "msg ok";
+      els.actionMsg.textContent = message;
+    }
+
+    async function run() {
+      if (!mode || !oobCode) {
+        showError("Lien incomplet ou expiré.");
+        return;
+      }
+
+      try {
+        if (mode === "resetPassword") {
+          // Vérifie le code, récupère l'email associé, puis affiche le formulaire.
+          await verifyPasswordResetCode(auth, oobCode);
+          hide(els.spinner);
+          setHeader(
+            "Nouveau mot de passe",
+            "Choisissez un mot de passe pour votre compte Crafia."
+          );
+          show(els.resetForm);
+
+          els.resetForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const pw1 = document.getElementById("pw1").value;
+            const pw2 = document.getElementById("pw2").value;
+            els.formMsg.className = "msg";
+            if (pw1.length < 6) {
+              els.formMsg.className = "msg error";
+              els.formMsg.textContent = "Au moins 6 caractères.";
+              return;
+            }
+            if (pw1 !== pw2) {
+              els.formMsg.className = "msg error";
+              els.formMsg.textContent = "Les deux mots de passe ne correspondent pas.";
+              return;
+            }
+            els.resetBtn.disabled = true;
+            els.resetBtn.textContent = "Enregistrement…";
+            try {
+              await confirmPasswordReset(auth, oobCode, pw1);
+              showSuccess(
+                "Mot de passe modifié",
+                "Votre mot de passe a bien été mis à jour. Vous pouvez maintenant vous connecter."
+              );
+              els.appLink.textContent = "Se connecter";
+            } catch (err) {
+              els.resetBtn.disabled = false;
+              els.resetBtn.textContent = "Enregistrer le mot de passe";
+              els.formMsg.className = "msg error";
+              els.formMsg.textContent = frError(err.code);
+            }
+          });
+        } else if (mode === "verifyEmail") {
+          await applyActionCode(auth, oobCode);
+          showSuccess(
+            "Adresse confirmée",
+            "Merci ! Votre adresse email est vérifiée. Votre compte Crafia est pleinement actif."
+          );
+        } else if (mode === "recoverEmail") {
+          // Rétablit l'ancienne adresse email (compte compromis / changement non voulu).
+          const info = await checkActionCode(auth, oobCode);
+          await applyActionCode(auth, oobCode);
+          const restored = (info && info.data && info.data.email) || "";
+          showSuccess(
+            "Adresse rétablie",
+            restored
+              ? `Votre adresse email a été rétablie : ${restored}. Pensez à réinitialiser votre mot de passe.`
+              : "Votre adresse email a été rétablie. Pensez à réinitialiser votre mot de passe."
+          );
+        } else if (mode === "verifyAndChangeEmail") {
+          await applyActionCode(auth, oobCode);
+          showSuccess(
+            "Adresse mise à jour",
+            "Votre nouvelle adresse email a bien été confirmée."
+          );
+        } else {
+          showError("Action non reconnue.");
+        }
+      } catch (err) {
+        showError(frError(err && err.code));
+      }
+    }
+
+    run();
+  </script>
+</body>
+</html>
