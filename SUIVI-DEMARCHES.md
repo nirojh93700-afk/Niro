@@ -27,6 +27,7 @@
 - [ ] **Écrire à Les Tricolores** pour ajouter la marque **« Crafia »** (courrier reçu aux 2 noms)
 - [ ] **Configurer Stripe** sur le site (SIRET + IBAN) — une fois le SIRET reçu
 - [ ] **Compléter les mentions légales / CGV** du site (nom, adresse 6 rue d'Armaillé, SIRET)
+- [x] **Brancher le domaine nivcreation.fr** sur le site Netlify (DNS configuré chez Hostinger le 04/06/2026 : ALIAS @ → apex-loadbalancer.netlify.com, CNAME www → exquisite-khapse-7af3a0.netlify.app). HTTPS automatique. `.com` laissé sur Shopify.
 
 ## ℹ️ À garder en tête (plus tard)
 - [ ] **CFE** (taxe locale) : **exonérée la 1re année**. Ensuite due chaque année, **sauf si CA ≤ 5 000 €/an** (alors exonérée).
