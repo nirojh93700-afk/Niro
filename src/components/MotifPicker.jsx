@@ -19,8 +19,12 @@ export default function MotifPicker({ value, onChange }) {
               type="button"
               key={m.value || "none"}
               onClick={() => onChange(m.value)}
-              onMouseEnter={(e) => src && setHover({ src, x: e.clientX, y: e.clientY })}
-              onMouseMove={(e) => src && setHover((h) => (h ? { ...h, x: e.clientX, y: e.clientY } : { src, x: e.clientX, y: e.clientY }))}
+              onMouseEnter={(e) => {
+                if (!src) return;
+                if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return; // pas de popup sur mobile (tactile)
+                setHover({ src, x: e.clientX, y: e.clientY });
+              }}
+              onMouseMove={(e) => src && setHover((h) => (h ? { ...h, x: e.clientX, y: e.clientY } : h))}
               onMouseLeave={() => setHover(null)}
               style={{
                 flex: "0 0 auto", width: 66, padding: 6, cursor: "pointer", textAlign: "center",
@@ -48,9 +52,9 @@ export default function MotifPicker({ value, onChange }) {
         <div
           style={{
             position: "fixed",
-            left: Math.min(Math.max(8, hover.x - 60), (typeof window !== "undefined" ? window.innerWidth : 9999) - 128),
-            top: Math.max(8, hover.y - 138), // au-dessus du curseur, ne couvre pas la rangée
-            width: 120, height: 120, background: "#fff",
+            left: Math.min(Math.max(8, hover.x - 50), (typeof window !== "undefined" ? window.innerWidth : 9999) - 108),
+            top: Math.max(8, hover.y - 150), // bien au-dessus du curseur, ne couvre pas la rangée
+            width: 100, height: 100, background: "#fff",
             border: "1px solid #e7d3a1", borderRadius: 12, boxShadow: "0 8px 26px rgba(0,0,0,.18)",
             padding: 8, zIndex: 1000, pointerEvents: "none",
           }}

@@ -168,7 +168,7 @@ function faceBump(text, motifVal, fontKey, dir, motifPos) {
   return c;
 }
 
-export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "up", motifPositions = [] }) {
+export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "up", motifPositions = [], height = 360, showHint = true }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);
   const threeRef = useRef(null);
@@ -186,7 +186,6 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
 
       const mount = mountRef.current;
       const width = mount.clientWidth || 320;
-      const height = 360;
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -340,14 +339,18 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
   }, [faces, finish, fontKey, motifs, direction, motifPositions, tick]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: "8px 0 4px" }}>
-      <div ref={mountRef} style={{ width: "100%", height: 360, cursor: "grab", touchAction: "pan-y" }} />
-      <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>
-        ↔ Faites pivoter le bijou pour voir vos 4 faces
-      </span>
-      <span style={{ fontSize: "0.72rem", color: "var(--ink-soft)", textAlign: "center", maxWidth: 340, fontStyle: "italic" }}>
-        Aperçu 3D à titre indicatif — le rendu réel de la gravure peut légèrement varier.
-      </span>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>
+      <div ref={mountRef} style={{ width: "100%", height, cursor: "grab", touchAction: "pan-y" }} />
+      {showHint && (
+        <>
+          <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+            ↔ Faites pivoter le bijou pour voir vos 4 faces
+          </span>
+          <span style={{ fontSize: "0.72rem", color: "var(--ink-soft)", textAlign: "center", maxWidth: 340, fontStyle: "italic" }}>
+            Aperçu 3D à titre indicatif — le rendu réel de la gravure peut légèrement varier.
+          </span>
+        </>
+      )}
     </div>
   );
 }

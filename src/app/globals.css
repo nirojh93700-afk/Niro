@@ -457,7 +457,20 @@ img {
 }
 /* Contrôle jusqu'où le 3D descend en suivant (s'arrête vers la police de gravure). */
 .engrave3d-spacer {
-  height: 520px;
+  height: 1050px;
+}
+/* Mini aperçu 3D flottant (mobile) : coin bas-droite, visible pendant la saisie. */
+.engrave3d-mini {
+  position: fixed;
+  right: 10px;
+  bottom: 14px;
+  width: 150px;
+  z-index: 900;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e7d3a1;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  padding: 4px;
 }
 .gallery-main {
   position: relative;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "./CartContext";
@@ -26,6 +26,9 @@ export default function ProductDetail({ product }) {
   const [images, setImages] = useState(product.images);
   const [promos, setPromos] = useState({});
   const [isWide, setIsWide] = useState(true); // ordinateur vs mobile (pour la place du 3D)
+  const [showMini, setShowMini] = useState(false); // mini 3D flottant (mobile)
+  const photoRef = useRef(null);
+  const big3dRef = useRef(null);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 901px)");
     const upd = () => setIsWide(mq.matches);
@@ -33,6 +36,20 @@ export default function ProductDetail({ product }) {
     mq.addEventListener("change", upd);
     return () => mq.removeEventListener("change", upd);
   }, []);
+  // Mobile : le mini 3D flottant apparaît quand la photo est sortie de l'écran
+  // et que le grand 3D (en bas) n'est pas encore visible.
+  useEffect(() => {
+    if (isWide || !product.engrave3d) { setShowMini(false); return; }
+    const photo = photoRef.current;
+    const big = big3dRef.current;
+    if (!photo || !big) return;
+    let photoIn = true, bigIn = false;
+    const update = () => setShowMini(!photoIn && !bigIn);
+    const o1 = new IntersectionObserver(([e]) => { photoIn = e.isIntersecting; update(); }, { threshold: 0 });
+    const o2 = new IntersectionObserver(([e]) => { bigIn = e.isIntersecting; update(); }, { threshold: 0 });
+    o1.observe(photo); o2.observe(big);
+    return () => { o1.disconnect(); o2.disconnect(); };
+  }, [isWide, product.engrave3d]);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -161,7 +178,7 @@ export default function ProductDetail({ product }) {
       <div className="product-layout">
         {/* Galerie */}
         <div>
-          <div className="gallery-main">
+          <div className="gallery-main" ref={photoRef}>
             {hasImages ? (
               <Image
                 src={images[activeImg]}
@@ -375,7 +392,9 @@ export default function ProductDetail({ product }) {
               })}
 
               {product.engrave3d && !isWide && (
-                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+                <div ref={big3dRef}>
+                  <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+                </div>
               )}
 
               {(hasTextFields || photoField) && (
@@ -484,6 +503,12 @@ export default function ProductDetail({ product }) {
           )}
         </div>
       </div>
+
+      {product.engrave3d && !isWide && showMini && (
+        <div className="engrave3d-mini">
+          <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} height={200} showHint={false} />
+        </div>
+      )}
     </div>
   );
 }
