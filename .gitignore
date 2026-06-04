@@ -37,3 +37,6 @@ serviceAccount*.json
 # Fichiers de travail (maquettes, brouillons) — non déployés
 maquette_*.png
 motifs-gravure.zip
+
+# Archives de livraison (motifs, etc.) — non déployées
+*.zip
