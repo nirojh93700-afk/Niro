@@ -61,7 +61,8 @@ function drawCover(ctx, img, W, H) {
 function layoutText(ctx, text, fontKey, maxW, maxH) {
   const words = (text || "").trim().split(/\s+/).filter(Boolean);
   if (!words.length) return null;
-  for (let size = 64; size >= 14; size -= 2) {
+  // taille plafonnée (sinon 1-2 lettres deviennent énormes sur une si petite page)
+  for (let size = 40; size >= 14; size -= 2) {
     ctx.font = fontSpec(fontKey, size);
     const lines = [];
     let cur = "";

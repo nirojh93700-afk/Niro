@@ -3,6 +3,7 @@ import { getCatalog } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
 import { getPromos } from "@/lib/stock";
+import { engravingExtra } from "@/lib/engravingPrice";
 
 // Construit une table variantId -> { product, variant } pour valider côté serveur.
 async function buildVariantIndex() {
@@ -95,7 +96,10 @@ export async function POST(req) {
 
     // Applique le prix promo s'il est défini et inférieur au prix normal.
     const promo = promos[variant.id];
-    const unitPrice = typeof promo === "number" && promo < variant.price ? promo : variant.price;
+    const basePrice = typeof promo === "number" && promo < variant.price ? promo : variant.price;
+    // Recalcul de confiance du supplément de gravure (depuis les champs envoyés).
+    const extra = engravingExtra(product, item.fields || {});
+    const unitPrice = basePrice + extra.amount;
 
     boughtVariants.push({ variantId: variant.id, qty: quantity });
     totalGrams += (product.weight || 200) * quantity;
@@ -107,8 +111,11 @@ export async function POST(req) {
     if (product.pickup) pickupEligible = true;
 
     const descriptionParts = [variant.title];
+    if (extra.amount > 0) {
+      descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
+    }
     if (item.personalization) {
-      descriptionParts.push(`Personnalisation : ${String(item.personalization).slice(0, 240)}`);
+      descriptionParts.push(`Personnalisation : ${String(item.personalization).slice(0, 220)}`);
     }
 
     lineItems.push({

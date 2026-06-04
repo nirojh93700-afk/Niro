@@ -7,6 +7,7 @@ import { useCart } from "./CartContext";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
+import { engravingExtra } from "@/lib/engravingPrice";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
@@ -84,6 +85,10 @@ export default function ProductDetail({ product }) {
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
   const salePrice = promos[variant.id];
   const hasPromo = typeof salePrice === "number" && salePrice < variant.price;
+  // Supplément de gravure (pages de texte en plus de la couverture).
+  const engrave = engravingExtra(product, fieldValues);
+  const basePrice = hasPromo ? salePrice : variant.price;
+  const unitPrice = basePrice + engrave.amount;
   // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
   // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
@@ -192,9 +197,10 @@ export default function ProductDetail({ product }) {
       variantId: variant.id,
       name: product.name,
       variantTitle: variant.title,
-      price: hasPromo ? salePrice : variant.price,
+      price: unitPrice,
       image: images[0] || null,
       personalization: buildPersonalization(),
+      fields: product.engravingPricing ? { ...fieldValues } : undefined,
       quantity,
     });
     setAdded(true);
@@ -315,15 +321,21 @@ export default function ProductDetail({ product }) {
             {hasPromo ? (
               <>
                 <span className="price-old">{formatEuro(variant.price)}</span>{" "}
-                <span className="price-sale">{formatEuro(salePrice)}</span>{" "}
+                <span className="price-sale">{formatEuro(unitPrice)}</span>{" "}
                 <span className="promo-badge" style={{ position: "static" }}>
                   -{Math.round((1 - salePrice / variant.price) * 100)}%
                 </span>
               </>
             ) : (
-              formatEuro(variant.price)
+              formatEuro(unitPrice)
             )}
           </div>
+          {engrave.amount > 0 && (
+            <p style={{ margin: "-12px 0 16px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+              dont <strong>{formatEuro(engrave.amount)}</strong> de gravures supplémentaires
+              ({engrave.pages} page{engrave.pages > 1 ? "s" : ""} en plus de la couverture)
+            </p>
+          )}
 
           {product.variants.length > 1 && (
             <div className="field">

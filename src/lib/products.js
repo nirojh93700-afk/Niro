@@ -110,17 +110,18 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "femme",
-    engraveHeart3d: true, // ← aperçu 3D cœur ouvrable (4 faces)
+    engraveHeart3d: true, // ← aperçu 3D cœur éventail (8 faces)
+    engravingPricing: { perExtraPage: 3, includedKey: "cover" }, // couverture incluse, +3 €/page
     personalizationFields: [
-      { key: "note", type: "note", text: "Ce médaillon s'ouvre en éventail et offre 8 faces à graver : la couverture, 6 pages intérieures et le dos. Remplissez celles que vous souhaitez (les autres resteront vierges)." },
-      { key: "cover", label: "Gravure — Couverture (face avant)", placeholder: "20 caractères max", maxLength: 20 },
-      { key: "page1", label: "Gravure — Page 1", placeholder: "25 caractères max", maxLength: 25, optional: true },
-      { key: "page2", label: "Gravure — Page 2", placeholder: "25 caractères max", maxLength: 25, optional: true },
-      { key: "page3", label: "Gravure — Page 3", placeholder: "25 caractères max", maxLength: 25, optional: true },
-      { key: "page4", label: "Gravure — Page 4", placeholder: "25 caractères max", maxLength: 25, optional: true },
-      { key: "page5", label: "Gravure — Page 5", placeholder: "25 caractères max", maxLength: 25, optional: true },
-      { key: "page6", label: "Gravure — Page 6", placeholder: "25 caractères max", maxLength: 25, optional: true },
-      { key: "backcover", label: "Gravure — Dos (face arrière)", placeholder: "20 caractères max", maxLength: 20, optional: true },
+      { key: "note", type: "note", text: "Ce médaillon s'ouvre en éventail : 8 faces à graver (la couverture, 6 pages intérieures et le dos). La couverture est incluse ; chaque page de texte gravée en plus est à +3 €. Remplissez seulement les faces souhaitées (les autres restent vierges)." },
+      { key: "cover", label: "Gravure — Couverture (incluse)", placeholder: "Prénom, mot court…", maxLength: 18 },
+      { key: "page1", label: "Gravure — Page 1 (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
+      { key: "page2", label: "Gravure — Page 2 (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
+      { key: "page3", label: "Gravure — Page 3 (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
+      { key: "page4", label: "Gravure — Page 4 (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
+      { key: "page5", label: "Gravure — Page 5 (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
+      { key: "page6", label: "Gravure — Page 6 (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
+      { key: "backcover", label: "Gravure — Dos (+3 €)", placeholder: "18 caractères max", maxLength: 18, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photo", type: "photo", label: "Photo à graver (Page 1)", optional: true, variantContains: "Photo", text: "Choisissez une photo nette, bien éclairée et contrastée pour un rendu optimal." },
     ],
