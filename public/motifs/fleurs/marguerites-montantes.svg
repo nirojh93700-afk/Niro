@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 520" fill="none" stroke="#111" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M60 514 C58 460 62 430 60 380"/>
+  <path d="M60 410 C40 404 30 386 30 374 C44 376 55 392 60 410Z"/>
+  <path d="M60 360 C56 320 64 300 60 268"/>
+  <path d="M60 300 C80 294 90 276 90 264 C76 266 65 282 60 300Z"/>
+  <path d="M60 250 C58 215 62 200 60 175"/>
+  <g transform="translate(60 380)">
+    <ellipse cx="0" cy="-15" rx="5" ry="13"/><ellipse cx="14" cy="-5" rx="13" ry="5"/><ellipse cx="9" cy="13" rx="5" ry="13" transform="rotate(35 9 13)"/><ellipse cx="-9" cy="13" rx="5" ry="13" transform="rotate(-35 -9 13)"/><ellipse cx="-14" cy="-5" rx="13" ry="5"/><circle cx="0" cy="0" r="5"/>
+  </g>
+  <g transform="translate(60 268) scale(1.05)">
+    <ellipse cx="0" cy="-15" rx="5" ry="13"/><ellipse cx="14" cy="-5" rx="13" ry="5"/><ellipse cx="9" cy="13" rx="5" ry="13" transform="rotate(35 9 13)"/><ellipse cx="-9" cy="13" rx="5" ry="13" transform="rotate(-35 -9 13)"/><ellipse cx="-14" cy="-5" rx="13" ry="5"/><circle cx="0" cy="0" r="5"/>
+  </g>
+  <g transform="translate(60 165) scale(1.15)">
+    <ellipse cx="0" cy="-15" rx="5" ry="13"/><ellipse cx="14" cy="-5" rx="13" ry="5"/><ellipse cx="9" cy="13" rx="5" ry="13" transform="rotate(35 9 13)"/><ellipse cx="-9" cy="13" rx="5" ry="13" transform="rotate(-35 -9 13)"/><ellipse cx="-14" cy="-5" rx="13" ry="5"/><circle cx="0" cy="0" r="5"/>
+  </g>
+</svg>
