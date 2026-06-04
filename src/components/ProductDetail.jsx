@@ -232,6 +232,12 @@ export default function ProductDetail({ product }) {
               .
             </div>
           )}
+
+          {product.engrave3d && (
+            <div className="engrave3d-sticky">
+              <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+            </div>
+          )}
         </div>
 
         {/* Infos & achat */}
@@ -356,10 +362,6 @@ export default function ProductDetail({ product }) {
                   </div>
                 );
               })}
-
-              {product.engrave3d && (
-                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
-              )}
 
               {(hasTextFields || photoField) && (
                 <div className="engrave-preview">

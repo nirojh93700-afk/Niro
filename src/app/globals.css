@@ -444,6 +444,12 @@ img {
   gap: 48px;
   padding: 44px 0 72px;
 }
+/* Aperçu 3D : suit le défilement sur ordinateur (sous la photo), normal sur mobile. */
+.engrave3d-sticky {
+  position: sticky;
+  top: 84px;
+  margin-top: 18px;
+}
 .gallery-main {
   position: relative;
   border-radius: var(--radius);
@@ -1477,6 +1483,10 @@ img {
   .product-layout,
   .cart-page-grid {
     grid-template-columns: 1fr;
+  }
+  .engrave3d-sticky {
+    position: static;
+    top: auto;
   }
   .hero-visual {
     order: -1;
