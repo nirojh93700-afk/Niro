@@ -16,7 +16,7 @@ export default function Header() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="logo-img"
-            src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.png?v=1780503911"
+            src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111"
             alt="Niv Création — Atelier de personnalisation"
           />
         </Link>
