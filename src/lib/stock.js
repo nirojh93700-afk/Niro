@@ -206,7 +206,7 @@ export async function getSettings() {
     // Par défaut activé (le temps de l'ouverture), avec un code par défaut modifiable dans l'admin.
     access: {
       locked: acc.locked !== false,
-      code: (typeof acc.code === "string" && acc.code.trim()) ? acc.code.trim() : "NIV2026",
+      code: (typeof acc.code === "string" && acc.code.trim()) ? acc.code.trim() : "Niro2026",
     },
     announce: { enabled: false, text: "", link: "", ...(s.announce || {}) },
     hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },

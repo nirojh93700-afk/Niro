@@ -86,7 +86,7 @@ export default function AppearanceAdmin({ adminKey }) {
         <label className="admin-field">Code d'accès (à donner aux personnes autorisées)
           <input
             value={s.access?.code || ""}
-            placeholder="Ex : NIV2026"
+            placeholder="Ex : Niro2026"
             onChange={(e) => set({ access: { ...s.access, code: e.target.value } })}
           />
         </label>
