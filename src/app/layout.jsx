@@ -45,14 +45,14 @@ const fontVars = [cinzel, cinzelDeco, montserrat, greatVibes, allura, pacifico]
 // NEXT_PUBLIC_SITE_URL est mal écrite, vide, ou sans https://).
 function resolveMetadataBase() {
   const raw = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
-  for (const candidate of [raw, `https://${raw}`, "https://www.nivcreation.com"]) {
+  for (const candidate of [raw, `https://${raw}`, "https://nivcreation.fr"]) {
     try {
       if (candidate) return new URL(candidate);
     } catch {
       // on essaie le candidat suivant
     }
   }
-  return new URL("https://www.nivcreation.com");
+  return new URL("https://nivcreation.fr");
 }
 
 export const metadata = {

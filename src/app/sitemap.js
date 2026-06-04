@@ -2,7 +2,7 @@ import { CATEGORIES } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
 
 export default async function sitemap() {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.nivcreation.com").replace(/\/$/, "");
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");
   const now = new Date();
 
   const staticPages = [
