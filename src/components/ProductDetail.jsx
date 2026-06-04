@@ -121,6 +121,7 @@ export default function ProductDetail({ product }) {
   const motif3d = motifKey && MOTIF_CHARS[motifKey]
     ? { char: MOTIF_CHARS[motifKey], face: parseInt(fieldValues["motifFace"] || "1", 10) || 1 }
     : null;
+  const direction3d = fieldValues["sens"] === "up" ? "up" : "down";
 
   function handleAdd() {
     if (soldOut) return;
@@ -351,7 +352,7 @@ export default function ProductDetail({ product }) {
               })}
 
               {product.engrave3d && (
-                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motif={motif3d} />
+                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motif={motif3d} direction={direction3d} />
               )}
 
               {(hasTextFields || photoField) && (

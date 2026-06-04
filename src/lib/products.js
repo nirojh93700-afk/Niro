@@ -887,6 +887,10 @@ export const products = [
         { value: "3", label: "Face 3" },
         { value: "4", label: "Face 4" },
       ] },
+      { key: "sens", type: "select", label: "Sens de gravure", optional: true, options: [
+        { value: "down", label: "De haut en bas" },
+        { value: "up", label: "De bas en haut" },
+      ] },
       { key: "note", type: "note", text: "Laissez vide les faces que vous ne souhaitez pas graver. Vous pouvez aussi ajouter un motif sur la face de votre choix." },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
