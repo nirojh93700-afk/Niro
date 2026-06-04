@@ -3,6 +3,20 @@
 import { useState } from "react";
 import { CATEGORIES, SUBCATEGORIES, getCategoryLabel } from "@/lib/products";
 
+// Regroupe les produits par catégorie, dans l'ordre des CATEGORIES.
+function groupByCategory(products) {
+  const order = CATEGORIES.map((c) => c.slug);
+  const groups = [];
+  for (const cat of CATEGORIES) {
+    const items = products.filter((p) => p.category === cat.slug);
+    if (items.length) groups.push({ slug: cat.slug, label: cat.label, items });
+  }
+  // Produits dont la catégorie n'existe plus / vide → groupe « Autres ».
+  const others = products.filter((p) => !order.includes(p.category));
+  if (others.length) groups.push({ slug: "_autres", label: "Autres", items: others });
+  return groups;
+}
+
 // Édition / création / suppression des produits depuis l'admin.
 export default function ProductsAdmin({ adminKey, products, onReload }) {
   const [openSlug, setOpenSlug] = useState(null);
@@ -39,37 +53,51 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
         />
       )}
 
-      {products.map((p) => (
-        <div key={p.slug} className="admin-block">
-          <div className="admin-row" style={{ gridTemplateColumns: "1fr auto auto", alignItems: "center", gap: 8 }}>
-            <span className="admin-variant">
-              <strong>{p.name}</strong>{" "}
-              <span className="admin-cat">{getCategoryLabel(p.category)}</span>
-              {p.hidden ? <span style={{ color: "#b4452f", marginLeft: 6 }}>· masqué</span> : null}
-              {p.custom ? <span style={{ color: "#256b34", marginLeft: 6 }}>· ajouté</span> : null}
-            </span>
-            <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
-              onClick={() => setOpenSlug(openSlug === p.slug ? null : p.slug)}>
-              {openSlug === p.slug ? "Fermer" : "Modifier"}
-            </button>
-          </div>
+      {groupByCategory(products).map((group) => (
+        <div key={group.slug} style={{ marginBottom: 26 }}>
+          <h3 className="admin-group-title">
+            {group.label} <span className="admin-group-count">{group.items.length}</span>
+          </h3>
 
-          {openSlug === p.slug && (
-            <EditProduct
-              product={p}
-              onSave={async (patch) => {
-                const ok = await post({ action: "edit", slug: p.slug, patch });
-                setMsg(ok ? "Modifications enregistrées ✓" : "Échec.");
-                if (ok) onReload();
-              }}
-              onDelete={p.custom ? async () => {
-                if (!confirm("Supprimer définitivement ce produit ?")) return;
-                const ok = await post({ action: "delete", slug: p.slug });
-                setMsg(ok ? "Produit supprimé ✓" : "Échec.");
-                if (ok) onReload();
-              } : null}
-            />
-          )}
+          {group.items.map((p) => (
+            <div key={p.slug} className="admin-block">
+              <div className="admin-product-row">
+                {p.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img className="admin-thumb" src={p.image} alt={p.name} />
+                ) : (
+                  <span className="admin-thumb admin-thumb-empty">?</span>
+                )}
+                <span className="admin-variant" style={{ minWidth: 0 }}>
+                  <strong>{p.name}</strong>
+                  {p.hidden ? <span style={{ color: "#b4452f", marginLeft: 6 }}>· masqué</span> : null}
+                  {p.custom ? <span style={{ color: "#256b34", marginLeft: 6 }}>· ajouté</span> : null}
+                  <span className="admin-row-sub">{(p.variants || []).length} variante{(p.variants || []).length > 1 ? "s" : ""}</span>
+                </span>
+                <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", whiteSpace: "nowrap" }}
+                  onClick={() => setOpenSlug(openSlug === p.slug ? null : p.slug)}>
+                  {openSlug === p.slug ? "Fermer" : "Modifier"}
+                </button>
+              </div>
+
+              {openSlug === p.slug && (
+                <EditProduct
+                  product={p}
+                  onSave={async (patch) => {
+                    const ok = await post({ action: "edit", slug: p.slug, patch });
+                    setMsg(ok ? "Modifications enregistrées ✓" : "Échec.");
+                    if (ok) onReload();
+                  }}
+                  onDelete={p.custom ? async () => {
+                    if (!confirm("Supprimer définitivement ce produit ?")) return;
+                    const ok = await post({ action: "delete", slug: p.slug });
+                    setMsg(ok ? "Produit supprimé ✓" : "Échec.");
+                    if (ok) onReload();
+                  } : null}
+                />
+              )}
+            </div>
+          ))}
         </div>
       ))}
     </>

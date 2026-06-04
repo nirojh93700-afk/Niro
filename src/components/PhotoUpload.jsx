@@ -57,7 +57,8 @@ export default function PhotoUpload({ value, onChange, productSlug }) {
         });
         const data = await res.json();
         if (!res.ok || !data.ref) throw new Error(data.error || "L'envoi a échoué, réessayez.");
-        onChange("réf:" + data.ref);
+        // URL réelle et affichable (servie depuis la base) — utilisable comme photo produit.
+        onChange("/api/img/" + data.ref);
       }
       setStatus("done");
     } catch (err) {

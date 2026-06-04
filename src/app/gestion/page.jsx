@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
-import PhotoUpload, { CLOUDINARY_READY } from "@/components/PhotoUpload";
+import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
@@ -463,7 +463,7 @@ export default function GestionPage() {
         {tab === "photos" && (
           <>
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
-              Ajoutez les photos de chaque produit : un lien (URL) par ligne{CLOUDINARY_READY ? ", ou téléversez une image." : "."}
+              Ajoutez les photos de chaque produit : choisissez une image depuis votre téléphone ou votre ordinateur, ou collez un lien (URL).
             </p>
             {catalog.map((c) => {
               const current = c.overrideImages?.length ? c.overrideImages : c.baseImages;
@@ -472,26 +472,39 @@ export default function GestionPage() {
                   <h3>{c.name} <span className="admin-cat">{getCategoryLabel(c.category)}</span></h3>
                   <div className="photo-thumbs">
                     {current.map((u) => (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img key={u} src={u} alt="" />
+                      <span key={u} className="photo-thumb-wrap">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={u} alt="" />
+                        <button type="button" className="photo-thumb-del" title="Retirer cette photo"
+                          onClick={() => {
+                            const next = current.filter((x) => x !== u);
+                            updateCatalog(c.slug, next);
+                            saveImages(c.slug, next);
+                          }}>×</button>
+                      </span>
                     ))}
                     {current.length === 0 && <span className="ep-empty">Aucune photo</span>}
                   </div>
-                  <textarea
-                    placeholder="https://… (une URL par ligne)"
-                    defaultValue={(c.overrideImages || []).join("\n")}
-                    onChange={(e) => updateCatalog(c.slug, e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))}
-                    style={{ minHeight: 70, marginTop: 8 }}
-                  />
-                  {CLOUDINARY_READY && (
-                    <div style={{ marginTop: 8 }}>
-                      <PhotoUpload value="" onChange={(url) => {
+                  {UPLOAD_AVAILABLE && (
+                    <div style={{ marginTop: 10 }}>
+                      <PhotoUpload value="" productSlug={c.slug} onChange={(url) => {
                         const next = [...(c.overrideImages || []), url];
                         updateCatalog(c.slug, next);
                         saveImages(c.slug, next);
                       }} />
                     </div>
                   )}
+                  <details style={{ marginTop: 10 }}>
+                    <summary style={{ cursor: "pointer", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+                      Ou coller des liens (URL) — avancé
+                    </summary>
+                    <textarea
+                      placeholder="https://… (une URL par ligne)"
+                      defaultValue={(c.overrideImages || []).join("\n")}
+                      onChange={(e) => updateCatalog(c.slug, e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))}
+                      style={{ minHeight: 70, marginTop: 8 }}
+                    />
+                  </details>
                   <button className="btn btn-outline" style={{ marginTop: 10 }}
                     onClick={() => saveImages(c.slug, c.overrideImages || [])}>
                     Enregistrer les photos {saved === c.slug ? "✓" : ""}

@@ -252,3 +252,17 @@ export async function storeCustomerUpload(dataUrl, meta = {}) {
     return null;
   }
 }
+
+// Récupère une photo stockée (data URL) par son identifiant.
+export async function getCustomerUpload(id) {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    const doc = await admin.firestore().collection("siteUploads").doc(id).get();
+    if (!doc.exists) return null;
+    return doc.data()?.dataUrl || null;
+  } catch (e) {
+    console.error("Lecture photo Firebase:", e.message);
+    return null;
+  }
+}
