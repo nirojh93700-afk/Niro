@@ -21,15 +21,34 @@ export const CATEGORIES = [
 
 // (Les motifs gravables sont définis dans src/lib/motifs.js.)
 
-// Sous-catégories par catégorie (ex : bijoux femme / homme).
+// Sous-catégories par catégorie (ex : bijoux femme / homme). « Pour qui ? »
 export const SUBCATEGORIES = {
   bijoux: [
-    { slug: "femme", label: "Bijoux femme" },
-    { slug: "homme", label: "Bijoux homme" },
+    { slug: "femme", label: "Femme" },
+    { slug: "homme", label: "Homme" },
     { slug: "couple", label: "Couple" },
     { slug: "bebe", label: "Bébé & Naissance" },
   ],
 };
+
+// Deuxième axe de filtre pour les bijoux : le TYPE (collier / bracelet).
+// Permet de combiner « Femme + Collier », « Homme + Bracelet », etc.
+export const JEWEL_TYPES = [
+  { slug: "collier", label: "Colliers" },
+  { slug: "bracelet", label: "Bracelets" },
+];
+
+// Type de bijou déduit du libellé « type » du produit.
+export function getJewelType(product) {
+  const t = (product.type || "").toLowerCase();
+  if (t.includes("collier")) return "collier";
+  if (t.includes("bracelet")) return "bracelet";
+  return null;
+}
+
+export function getJewelTypeLabel(slug) {
+  return JEWEL_TYPES.find((t) => t.slug === slug)?.label || slug;
+}
 
 export const products = [
   // ----------------------------- BIJOUX --------------------------------------

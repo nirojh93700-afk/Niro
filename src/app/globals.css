@@ -1606,7 +1606,19 @@ img {
 }
 .filters.subfilters {
   margin-top: -20px;
+  margin-bottom: 16px;
+}
+.filters.subfilters:last-of-type {
   margin-bottom: 36px;
+}
+.filter-label {
+  align-self: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gold-dark);
+  margin-right: 2px;
 }
 .filters.subfilters .filter-chip {
   font-size: 0.8rem;

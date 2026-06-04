@@ -2,9 +2,12 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import {
   CATEGORIES,
+  JEWEL_TYPES,
   getCategoryLabel,
   getSubcategories,
   getSubcategoryLabel,
+  getJewelType,
+  getJewelTypeLabel,
 } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
 
@@ -19,14 +22,26 @@ export const metadata = {
 export default async function BoutiquePage({ searchParams }) {
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
+  const activeType = searchParams?.type; // bijoux : collier / bracelet
   const withImages = await getCatalog();
 
   let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
   if (activeCat && activeSub) {
     filtered = filtered.filter((p) => p.subcategory === activeSub);
   }
+  if (activeCat === "bijoux" && activeType) {
+    filtered = filtered.filter((p) => getJewelType(p) === activeType);
+  }
 
   const subs = activeCat ? getSubcategories(activeCat) : null;
+  const isBijoux = activeCat === "bijoux";
+
+  // Conserve l'autre facette dans les liens (femme + collier combinables).
+  const baseQs = `cat=${activeCat}`;
+  const subHref = (sub) =>
+    `/boutique?${baseQs}${sub ? `&sub=${sub}` : ""}${activeType ? `&type=${activeType}` : ""}`;
+  const typeHref = (type) =>
+    `/boutique?${baseQs}${activeSub ? `&sub=${activeSub}` : ""}${type ? `&type=${type}` : ""}`;
 
   // Catégories pour lesquelles on propose le contact direct (sur mesure).
   const showCustomContact = activeCat === "mariage" || activeCat === "cadeaux";
@@ -39,11 +54,19 @@ export default async function BoutiquePage({ searchParams }) {
       ? "Numéros de table, menus, décoration… Dites-moi votre idée, je la réalise sur mesure :"
       : "Une décoration ou un cadeau personnalisé sur bois, une idée unique ? Parlons-en directement :";
 
-  const title = activeSub
-    ? getSubcategoryLabel(activeCat, activeSub)
-    : activeCat
-      ? getCategoryLabel(activeCat)
-      : "Toutes nos créations";
+  // Titre : combine le type et le « pour qui » pour les bijoux.
+  let title;
+  if (isBijoux && (activeType || activeSub)) {
+    const typePart = activeType ? getJewelTypeLabel(activeType) : "Bijoux";
+    const subPart = activeSub ? getSubcategoryLabel(activeCat, activeSub).toLowerCase() : "";
+    title = subPart ? `${typePart} ${subPart}` : typePart;
+  } else if (activeSub) {
+    title = getSubcategoryLabel(activeCat, activeSub);
+  } else if (activeCat) {
+    title = getCategoryLabel(activeCat);
+  } else {
+    title = "Toutes nos créations";
+  }
 
   return (
     <section className="section">
@@ -70,8 +93,44 @@ export default async function BoutiquePage({ searchParams }) {
           ))}
         </div>
 
-        {/* Sous-catégories (ex : bijoux femme / homme) */}
-        {subs && (
+        {/* Bijoux : deux axes combinables — Type (collier/bracelet) + Pour qui */}
+        {isBijoux && (
+          <>
+            <div className="filters subfilters">
+              <span className="filter-label">Type :</span>
+              <Link href={typeHref(null)} className={`filter-chip ${!activeType ? "active" : ""}`}>
+                Tous
+              </Link>
+              {JEWEL_TYPES.map((t) => (
+                <Link
+                  key={t.slug}
+                  href={typeHref(t.slug)}
+                  className={`filter-chip ${activeType === t.slug ? "active" : ""}`}
+                >
+                  {t.label}
+                </Link>
+              ))}
+            </div>
+            <div className="filters subfilters">
+              <span className="filter-label">Pour qui :</span>
+              <Link href={subHref(null)} className={`filter-chip ${!activeSub ? "active" : ""}`}>
+                Tous
+              </Link>
+              {subs.map((s) => (
+                <Link
+                  key={s.slug}
+                  href={subHref(s.slug)}
+                  className={`filter-chip ${activeSub === s.slug ? "active" : ""}`}
+                >
+                  {s.label}
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Autres catégories avec sous-catégories simples */}
+        {!isBijoux && subs && (
           <div className="filters subfilters">
             <Link
               href={`/boutique?cat=${activeCat}`}
