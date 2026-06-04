@@ -124,10 +124,8 @@ function faceCanvas(opts) {
   return c;
 }
 
-const PHOTO_IDX = 1; // la photo client s'affiche sur la Page 1
-
 export default function EngraveHeart3D({
-  faces = [], finish = "silver", fontKey = "playfair", photo = "", height = 400, showHint = true,
+  faces = [], finish = "silver", fontKey = "playfair", photo = "", photoIndex = 1, height = 400, showHint = true,
 }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);     // 8 matériaux : couverture, pages 1-6, dos
@@ -216,9 +214,10 @@ export default function EngraveHeart3D({
       const colors = faceColors();
       const faceMat = (idx) => {
         const fc = FINISH[colors[idx]] || FINISH.silver;
-        const withPhoto = (idx === PHOTO_IDX) && photo;
+        const withPhoto = (idx === photoIndex) && photo;
         const map = new THREE.CanvasTexture(faceCanvas({
-          text: faces[idx] || "", fontKey, baseColor: fc.base, ink: fc.ink, photo: withPhoto ? photo : "", bevel: true,
+          // sur la page photo : uniquement la photo, pas de texte.
+          text: withPhoto ? "" : (faces[idx] || ""), fontKey, baseColor: fc.base, ink: fc.ink, photo: withPhoto ? photo : "", bevel: true,
         }));
         map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -371,17 +370,17 @@ export default function EngraveHeart3D({
     const colors = faceColors();
     mats.forEach((mat, i) => {
       const fc = FINISH[colors[i]] || FINISH.silver;
-      const withPhoto = (i === PHOTO_IDX) && photo;
+      const withPhoto = (i === photoIndex) && photo;
       const old = mat.map;
       const map = new THREE.CanvasTexture(faceCanvas({
-        text: faces[i] || "", fontKey, baseColor: fc.base, ink: fc.ink, photo: withPhoto ? photo : "", bevel: true,
+        text: withPhoto ? "" : (faces[i] || ""), fontKey, baseColor: fc.base, ink: fc.ink, photo: withPhoto ? photo : "", bevel: true,
       }));
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.needsUpdate = true;
       if (old) old.dispose();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faces, finish, fontKey, photo, tick]);
+  }, [faces, finish, fontKey, photo, photoIndex, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>
