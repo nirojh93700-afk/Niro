@@ -888,9 +888,13 @@ export const products = [
       { key: "motif3", type: "select", label: "Face 3 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
       { key: "face4", label: "Face 4 — texte", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
       { key: "motif4", type: "select", label: "Face 4 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
-      { key: "sens", type: "select", label: "Sens de gravure", optional: true, options: [
-        { value: "down", label: "De haut en bas (motif en haut)" },
-        { value: "up", label: "De bas en haut (motif en bas)" },
+      { key: "sens", type: "select", label: "Sens du nom", optional: true, options: [
+        { value: "up", label: "Du bas vers le haut" },
+        { value: "down", label: "Du haut vers le bas" },
+      ] },
+      { key: "motifPos", type: "select", label: "Position du motif", optional: true, options: [
+        { value: "above", label: "Au-dessus du nom" },
+        { value: "below", label: "En dessous du nom" },
       ] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "note", type: "note", text: "Laissez vide les faces non gravées. Vous pouvez mettre un motif différent sur chaque face." },

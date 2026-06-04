@@ -29,34 +29,37 @@ const BAR = { W: 0.5, H: 2.6, D: 0.5 };
 const TEX = { wPx: 180, hPx: Math.round(180 * (2.6 / 0.5)) };
 
 // Dessine motif (haut) + texte (empilé) sur un contexte donné.
-function drawFace(ctx, { text, motifChar, fontKey, dir, ink, bevel }) {
+function drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink, bevel }) {
   const { wPx, hPx } = TEX;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  const atBottom = dir === "up"; // motif en bas si gravure de bas en haut
   let topReserve = 0, bottomReserve = 0;
   if (motifChar) {
-    const mSize = wPx * 0.64;
-    const my = atBottom ? hPx * 0.9 : hPx * 0.1;
-    ctx.font = `${mSize}px "Segoe UI Symbol", "Apple Color Emoji", serif`;
-    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(motifChar, wPx / 2 + 1.2, my + 1.4); }
-    ctx.fillStyle = ink; ctx.fillText(motifChar, wPx / 2, my);
-    if (atBottom) bottomReserve = hPx * 0.2; else topReserve = hPx * 0.2;
+    const above = motifPos !== "below"; // par défaut au-dessus du nom
+    const mSize = wPx * 0.7;
+    const my = above ? hPx * 0.1 : hPx * 0.9;
+    const m = motifChar + "\uFE0E"; // force le rendu monochrome (pas d'emoji rouge)
+    ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
+    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, my + 1.4); }
+    ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, my);
+    if (above) topReserve = hPx * 0.22; else bottomReserve = hPx * 0.22;
   }
-  let chars = (text || "").trim().split("");
-  if (dir === "up") chars = chars.reverse();
+  const chars = (text || "").trim().split("");
   if (chars.length) {
     const fontFamily = FONT_MAP[fontKey] || FONT_MAP.playfair;
     const areaTop = topReserve;
-    const areaH = hPx - topReserve - bottomReserve;
+    const areaBot = hPx - bottomReserve;
+    const areaH = areaBot - areaTop;
     const n = chars.length;
-    const fontSize = Math.min(wPx * 0.64, (areaH * 0.96) / n);
-    const lineH = fontSize * 1.0; // lettres serrées (comme une vraie gravure)
+    const fontSize = Math.min(wPx * 0.62, (areaH * 0.96) / n);
+    const lineH = fontSize * 1.05; // serré
     ctx.font = `600 ${fontSize}px ${fontFamily}`;
-    const totalH = n * lineH;
-    const startY = areaTop + (areaH - totalH) / 2 + lineH / 2;
+    // dir "up" : le nom commence en BAS et monte ; "down" : commence en haut.
+    let firstY, stepY;
+    if (dir === "up") { firstY = areaBot - lineH / 2; stepY = -lineH; }
+    else { firstY = areaTop + lineH / 2; stepY = lineH; }
     for (let i = 0; i < n; i++) {
-      const y = startY + i * lineH;
+      const y = firstY + i * stepY;
       if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.2); }
       ctx.fillStyle = ink; ctx.fillText(chars[i], wPx / 2, y);
     }
@@ -64,7 +67,7 @@ function drawFace(ctx, { text, motifChar, fontKey, dir, ink, bevel }) {
 }
 
 // Couleur (albédo) : métal + texte gravé subtil.
-function faceAlbedo(text, motifChar, finishKey, fontKey, dir) {
+function faceAlbedo(text, motifChar, finishKey, fontKey, dir, motifPos) {
   const { wPx, hPx } = TEX;
   const f = FINISH[finishKey] || FINISH.silver;
   const c = document.createElement("canvas");
@@ -77,23 +80,23 @@ function faceAlbedo(text, motifChar, finishKey, fontKey, dir) {
     ctx.fillStyle = g;
   } else { ctx.fillStyle = f.base; }
   ctx.fillRect(0, 0, wPx, hPx);
-  drawFace(ctx, { text, motifChar, fontKey, dir, ink: f.ink, bevel: true });
+  drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink: f.ink, bevel: true });
   return c;
 }
 
 // Relief (bump) : fond blanc, gravure noire (creusée) — donne l'effet réel.
-function faceBump(text, motifChar, fontKey, dir) {
+function faceBump(text, motifChar, fontKey, dir, motifPos) {
   const { wPx, hPx } = TEX;
   const c = document.createElement("canvas");
   c.width = wPx; c.height = hPx;
   const ctx = c.getContext("2d");
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, wPx, hPx);
-  drawFace(ctx, { text, motifChar, fontKey, dir, ink: "#000000", bevel: false });
+  drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink: "#000000", bevel: false });
   return c;
 }
 
-export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "down" }) {
+export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "up", motifPos = "above" }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);
   const threeRef = useRef(null);
@@ -136,8 +139,8 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
       const mFor = (i) => motifs[i] || "";
 
       const makeFaceMat = (text, motifChar) => {
-        const map = new THREE.CanvasTexture(faceAlbedo(text, motifChar, finish, fontKey, direction));
-        const bump = new THREE.CanvasTexture(faceBump(text, motifChar, fontKey, direction));
+        const map = new THREE.CanvasTexture(faceAlbedo(text, motifChar, finish, fontKey, direction, motifPos));
+        const bump = new THREE.CanvasTexture(faceBump(text, motifChar, fontKey, direction, motifPos));
         map.anisotropy = maxAniso; bump.anisotropy = maxAniso;
         map.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -231,15 +234,15 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     mats.forEach((mat, i) => {
       const motifChar = motifs[i] || "";
       const oldMap = mat.map, oldBump = mat.bumpMap;
-      const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifChar, finish, fontKey, direction));
-      const bump = new THREE.CanvasTexture(faceBump(order[i], motifChar, fontKey, direction));
+      const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifChar, finish, fontKey, direction, motifPos));
+      const bump = new THREE.CanvasTexture(faceBump(order[i], motifChar, fontKey, direction, motifPos));
       map.anisotropy = maxAniso; bump.anisotropy = maxAniso;
       map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.bumpMap = bump; mat.needsUpdate = true;
       if (oldMap) oldMap.dispose();
       if (oldBump) oldBump.dispose();
     });
-  }, [faces, finish, fontKey, motifs, direction]);
+  }, [faces, finish, fontKey, motifs, direction, motifPos]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: "8px 0 4px" }}>
