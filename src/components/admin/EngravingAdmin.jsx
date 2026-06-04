@@ -19,21 +19,33 @@ export default function EngravingAdmin({ adminKey, products, onReload }) {
 
   const withPhoto = products.filter((p) => p.image);
 
+  // Position par défaut quand on "Active" sans avoir encore réglé (centrée, ajustable ensuite).
+  const DEFAULT_PREVIEW = { inset: "auto", top: "42%", left: "25%", width: "50%", fontSize: "1.4rem" };
+
   return (
     <>
       <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
-        Place le texte de gravure au bon endroit sur chaque photo. Choisis un produit, règle la position et la taille,
-        regarde l'aperçu, puis enregistre. Tant qu'un produit n'est pas réglé, aucun texte n'apparaît sur sa photo.
+        Pour chaque produit : <strong>Activer</strong> l'aperçu de gravure sur la photo (le texte du client apparaît
+        directement sur l'image), puis <strong>Régler</strong> sa position et sa taille. Désactivé = aucun texte sur la photo.
       </p>
       {msg && <div className="notice">{msg}</div>}
 
       {withPhoto.map((p) => (
         <div key={p.slug} className="admin-block">
-          <div className="admin-row" style={{ gridTemplateColumns: "1fr auto", alignItems: "center" }}>
+          <div className="admin-row" style={{ gridTemplateColumns: "1fr auto auto", alignItems: "center", gap: 8 }}>
             <span className="admin-variant">
               <strong>{p.name}</strong>{" "}
-              {p.preview ? <span style={{ color: "#256b34" }}>· réglé ✓</span> : <span style={{ color: "var(--ink-soft)" }}>· non réglé</span>}
+              {p.preview
+                ? <span style={{ color: "#256b34" }}>· aperçu activé ✓</span>
+                : <span style={{ color: "var(--ink-soft)" }}>· aperçu désactivé</span>}
             </span>
+            <button
+              className="btn btn-outline"
+              style={{ padding: "4px 12px", fontSize: "0.85rem", color: p.preview ? "#b4452f" : "#256b34", borderColor: p.preview ? "#e7b7ad" : "#bfe2c6" }}
+              onClick={() => save(p.slug, p.preview ? null : DEFAULT_PREVIEW)}
+            >
+              {p.preview ? "Désactiver" : "Activer"}
+            </button>
             <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
               onClick={() => setOpenSlug(openSlug === p.slug ? null : p.slug)}>
               {openSlug === p.slug ? "Fermer" : "Régler"}
