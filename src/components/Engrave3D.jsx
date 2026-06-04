@@ -7,11 +7,11 @@ import { useEffect, useRef } from "react";
 // les 4 faces, motif optionnel, sens haut/bas. À titre indicatif.
 
 const FINISH = {
-  silver: { base: "#d7d7d7", ink: "rgba(70,68,64,0.85)" },
-  gold:   { base: "#d4af37", ink: "rgba(95,72,20,0.85)" },
-  rose:   { base: "#dba8a1", ink: "rgba(96,55,50,0.85)" },
-  black:  { base: "#2d2d2d", ink: "rgba(225,225,225,0.9)" },
-  rainbow:{ base: "#cfd6dd", ink: "rgba(70,62,66,0.82)" },
+  silver: { base: "#d7d7d7", ink: "rgba(22,20,18,0.92)" },
+  gold:   { base: "#d4af37", ink: "rgba(35,26,8,0.92)" },
+  rose:   { base: "#dba8a1", ink: "rgba(45,24,22,0.92)" },
+  black:  { base: "#2d2d2d", ink: "rgba(235,235,235,0.92)" },
+  rainbow:{ base: "#cfd6dd", ink: "rgba(25,22,24,0.9)" },
 };
 
 const FONT_MAP = {
@@ -33,27 +33,29 @@ function drawFace(ctx, { text, motifChar, fontKey, dir, ink, bevel }) {
   const { wPx, hPx } = TEX;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  let topOffset = 0;
+  const atBottom = dir === "up"; // motif en bas si gravure de bas en haut
+  let topReserve = 0, bottomReserve = 0;
   if (motifChar) {
-    const mSize = wPx * 0.66;
-    const my = hPx * 0.1;
+    const mSize = wPx * 0.64;
+    const my = atBottom ? hPx * 0.9 : hPx * 0.1;
     ctx.font = `${mSize}px "Segoe UI Symbol", "Apple Color Emoji", serif`;
-    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.fillText(motifChar, wPx / 2 + 1.2, my + 1.4); }
+    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(motifChar, wPx / 2 + 1.2, my + 1.4); }
     ctx.fillStyle = ink; ctx.fillText(motifChar, wPx / 2, my);
-    topOffset = hPx * 0.2;
+    if (atBottom) bottomReserve = hPx * 0.2; else topReserve = hPx * 0.2;
   }
   let chars = (text || "").trim().split("");
   if (dir === "up") chars = chars.reverse();
   if (chars.length) {
     const fontFamily = FONT_MAP[fontKey] || FONT_MAP.playfair;
-    const areaH = hPx - topOffset;
+    const areaTop = topReserve;
+    const areaH = hPx - topReserve - bottomReserve;
     const n = chars.length;
     const fontSize = Math.min(wPx * 0.56, (areaH * 0.9) / n);
     ctx.font = `600 ${fontSize}px ${fontFamily}`;
     const step = areaH / (n + 1);
     for (let i = 0; i < n; i++) {
-      const y = topOffset + step * (i + 1);
-      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.3); }
+      const y = areaTop + step * (i + 1);
+      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.3); }
       ctx.fillStyle = ink; ctx.fillText(chars[i], wPx / 2, y);
     }
   }
@@ -89,7 +91,7 @@ function faceBump(text, motifChar, fontKey, dir) {
   return c;
 }
 
-export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motif = null, direction = "down" }) {
+export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "down" }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);
   const threeRef = useRef(null);
@@ -129,7 +131,7 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
 
       const f = FINISH[finish] || FINISH.silver;
       const maxAniso = renderer.capabilities.getMaxAnisotropy();
-      const mFor = (i) => (motif && motif.face === i + 1 ? motif.char : "");
+      const mFor = (i) => motifs[i] || "";
 
       const makeFaceMat = (text, motifChar) => {
         const map = new THREE.CanvasTexture(faceAlbedo(text, motifChar, finish, fontKey, direction));
@@ -225,7 +227,7 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     const maxAniso = ctx.renderer.capabilities.getMaxAnisotropy();
     const order = [faces[0], faces[1], faces[2], faces[3]];
     mats.forEach((mat, i) => {
-      const motifChar = motif && motif.face === i + 1 ? motif.char : "";
+      const motifChar = motifs[i] || "";
       const oldMap = mat.map, oldBump = mat.bumpMap;
       const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifChar, finish, fontKey, direction));
       const bump = new THREE.CanvasTexture(faceBump(order[i], motifChar, fontKey, direction));
@@ -235,7 +237,7 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
       if (oldMap) oldMap.dispose();
       if (oldBump) oldBump.dispose();
     });
-  }, [faces, finish, fontKey, motif, direction]);
+  }, [faces, finish, fontKey, motifs, direction]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: "8px 0 4px" }}>

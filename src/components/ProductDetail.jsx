@@ -116,11 +116,8 @@ export default function ProductDetail({ product }) {
     "noir": "black", "or rose": "rose", "arc en ciel": "rainbow",
   };
   const finish3d = FINISH_MAP[(variant.title || "").toLowerCase()] || "silver";
-  const MOTIF_CHARS = { coeur: "♥", etoile: "★", infini: "∞", lune: "☾", fleur: "✿" };
-  const motifKey = fieldValues["motif"];
-  const motif3d = motifKey && MOTIF_CHARS[motifKey]
-    ? { char: MOTIF_CHARS[motifKey], face: parseInt(fieldValues["motifFace"] || "1", 10) || 1 }
-    : null;
+  const MOTIF_CHARS = { coeur: "♥", etoile: "★", fleur: "✿", marguerite: "❀", infini: "∞", lune: "☾" };
+  const motifChars = [1, 2, 3, 4].map((i) => MOTIF_CHARS[fieldValues["motif" + i]] || "");
   const direction3d = fieldValues["sens"] === "up" ? "up" : "down";
 
   function handleAdd() {
@@ -352,7 +349,7 @@ export default function ProductDetail({ product }) {
               })}
 
               {product.engrave3d && (
-                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motif={motif3d} direction={direction3d} />
+                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifChars} direction={direction3d} />
               )}
 
               {(hasTextFields || photoField) && (

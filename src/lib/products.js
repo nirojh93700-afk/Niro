@@ -16,6 +16,16 @@ export const CATEGORIES = [
   { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
 ];
 
+// Motifs gravables (aperçu = symbole simple ; gravure réelle = dessin détaillé fourni).
+export const MOTIF_OPTIONS = [
+  { value: "coeur", label: "Cœur ♥" },
+  { value: "etoile", label: "Étoile ★" },
+  { value: "fleur", label: "Fleur ✿" },
+  { value: "marguerite", label: "Marguerite ❀" },
+  { value: "infini", label: "Infini ∞" },
+  { value: "lune", label: "Lune ☾" },
+];
+
 // Sous-catégories par catégorie (ex : bijoux femme / homme).
 export const SUBCATEGORIES = {
   bijoux: [
@@ -870,29 +880,20 @@ export const products = [
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
     personalizationFields: [
-      { key: "face1", label: "Face 1 — texte à graver", placeholder: "Ex. un prénom", maxLength: 23 },
-      { key: "face2", label: "Face 2 (facultatif)", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
-      { key: "face3", label: "Face 3 (facultatif)", placeholder: "Ex. coordonnées GPS : 48.85, 2.35", maxLength: 23, optional: true },
-      { key: "face4", label: "Face 4 (facultatif)", placeholder: "Ex. un mot, des initiales", maxLength: 23, optional: true },
-      { key: "motif", type: "select", label: "Motif à graver (facultatif)", optional: true, options: [
-        { value: "coeur", label: "Cœur ♥" },
-        { value: "etoile", label: "Étoile ★" },
-        { value: "infini", label: "Infini ∞" },
-        { value: "lune", label: "Lune ☾" },
-        { value: "fleur", label: "Fleur ✿" },
-      ] },
-      { key: "motifFace", type: "select", label: "Motif sur quelle face ?", optional: true, options: [
-        { value: "1", label: "Face 1" },
-        { value: "2", label: "Face 2" },
-        { value: "3", label: "Face 3" },
-        { value: "4", label: "Face 4" },
-      ] },
+      { key: "face1", label: "Face 1 — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
+      { key: "motif1", type: "select", label: "Face 1 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "face2", label: "Face 2 — texte", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
+      { key: "motif2", type: "select", label: "Face 2 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "face3", label: "Face 3 — texte", placeholder: "Ex. un mot, un message", maxLength: 23, optional: true },
+      { key: "motif3", type: "select", label: "Face 3 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "face4", label: "Face 4 — texte", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
+      { key: "motif4", type: "select", label: "Face 4 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
       { key: "sens", type: "select", label: "Sens de gravure", optional: true, options: [
-        { value: "down", label: "De haut en bas" },
-        { value: "up", label: "De bas en haut" },
+        { value: "down", label: "De haut en bas (motif en haut)" },
+        { value: "up", label: "De bas en haut (motif en bas)" },
       ] },
-      { key: "note", type: "note", text: "Laissez vide les faces que vous ne souhaitez pas graver. Vous pouvez aussi ajouter un motif sur la face de votre choix." },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note", type: "note", text: "Laissez vide les faces non gravées. Vous pouvez mettre un motif différent sur chaque face." },
     ],
     images: [
       "/produits/collier_pendentif_geometrique_a_graver_agente.jpg",
