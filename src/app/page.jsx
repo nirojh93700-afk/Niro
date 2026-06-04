@@ -168,6 +168,35 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* SUR MESURE — commande personnalisée bois & déco */}
+      <section className="section">
+        <div className="container">
+          <div
+            style={{
+              background: "linear-gradient(135deg, #f7efe0, #fbf7ee)",
+              border: "1px solid #e7d3a1",
+              borderRadius: 18,
+              padding: "40px 28px",
+              textAlign: "center",
+            }}
+          >
+            <span className="eyebrow">Sur mesure</span>
+            <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.2rem)", margin: "8px 0 10px" }}>
+              Une idée précise&nbsp;? Créons-la ensemble
+            </h2>
+            <p style={{ color: "var(--ink-soft)", maxWidth: 560, margin: "0 auto 22px" }}>
+              Objet personnalisé en bois, décoration sur mesure, pièce unique
+              pour un mariage ou un cadeau… Contactez-nous directement, par
+              e-mail ou par téléphone, et donnons vie à votre projet.
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <Link href="/contact" className="btn btn-gold">Demander un projet sur mesure</Link>
+              <a href="tel:+33766153102" className="btn btn-outline">📞 07 66 15 31 02</a>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
