@@ -5,10 +5,10 @@ export const metadata = {
 
 const html = `
 <h3>Éditeur du site</h3>
-<p>Niv Création — Atelier de personnalisation<br>SIRET : [À COMPLÉTER après création de l'auto-entreprise]<br>Siège social : 6 rue d'Armaillé, 75017 Paris<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a></p>
+<p>Niv Création — Atelier de personnalisation<br>Entreprise individuelle (micro-entrepreneur) — Nirojh Kamalanathan<br>SIRET : en cours d'immatriculation (mis à jour dès réception)<br>Siège social : 6 rue d'Armaillé, 75017 Paris<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a></p>
 
 <h3>Directeur de la publication</h3>
-<p>[À COMPLÉTER — nom du responsable]</p>
+<p>Nirojh Kamalanathan</p>
 
 <h3>Hébergement</h3>
 <p>Le site est hébergé par Netlify, Inc.<br>512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis<br>Site : <a href="https://www.netlify.com" target="_blank" rel="noopener">netlify.com</a></p>
