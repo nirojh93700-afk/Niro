@@ -39,6 +39,23 @@ export const FLOWER_URLS = {
 const GLYPHS = { coeur: "♥", etoile: "★", infini: "∞", lune: "☾" };
 const VS_TEXT = String.fromCharCode(0xFE0E); // force le rendu monochrome (anti emoji couleur)
 
+// Vraies polices du site (variables CSS posées par next/font) → utilisées dans le canvas.
+const FONT_VAR = {
+  playfair: "--font-display", cinzel: "--font-cinzel", "cinzel-deco": "--font-cinzel-deco",
+  montserrat: "--font-montserrat", "great-vibes": "--font-great-vibes", allura: "--font-allura",
+  pacifico: "--font-pacifico", inter: "--font-body",
+};
+const SCRIPT_FONTS = new Set(["great-vibes", "allura", "pacifico"]);
+function fontSpec(fontKey, sizePx) {
+  let fam = FONT_MAP[fontKey] || FONT_MAP.playfair;
+  try {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(FONT_VAR[fontKey] || "").trim();
+    if (v) fam = `${v}, ${fam}`;
+  } catch { /* ignore */ }
+  const weight = SCRIPT_FONTS.has(fontKey) ? 400 : 600;
+  return `${weight} ${sizePx}px ${fam}`;
+}
+
 const imageCache = new Map();
 function getFlowerImg(url) {
   if (imageCache.has(url)) return imageCache.get(url);
@@ -89,14 +106,13 @@ function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
 
   const chars = (text || "").trim().split("");
   if (chars.length) {
-    const fontFamily = FONT_MAP[fontKey] || FONT_MAP.playfair;
     const areaTop = topReserve;
     const areaBot = hPx - bottomReserve;
     const areaH = areaBot - areaTop;
     const n = chars.length;
     const fontSize = Math.min(wPx * 0.62, (areaH * 0.96) / n);
     const lineH = fontSize * 1.05; // serré
-    ctx.font = `600 ${fontSize}px ${fontFamily}`;
+    ctx.font = fontSpec(fontKey, fontSize);
     // dir "up" : le nom commence en BAS et monte ; "down" : commence en haut.
     let firstY, stepY;
     if (dir === "up") { firstY = areaBot - lineH / 2; stepY = -lineH; }
@@ -277,6 +293,13 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     });
     return () => { cancelled = true; };
   }, [motifs]);
+
+  // Rafraîchit une fois les polices du site chargées (sinon canvas = police de repli).
+  useEffect(() => {
+    if (typeof document !== "undefined" && document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => setTick((t) => t + 1));
+    }
+  }, []);
 
   // Mise à jour textes / motifs / police / sens / position
   useEffect(() => {
