@@ -12,6 +12,7 @@ export const CATEGORIES = [
   { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
+  { slug: "medailles", label: "Médailles & Pièces", short: "Médailles" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
 ];
 
@@ -958,7 +959,7 @@ export const products = [
     name: "Pièce ronde laiton à graver",
     weight: 40, pickup: false, letter: true,
     title: "Pièce ronde en laiton à graver personnalisée",
-    category: "cadeaux", type: "Pièce à graver",
+    category: "medailles", type: "Pièce à graver",
     tagline: "Une médaille ronde en laiton, à graver des deux côtés.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [

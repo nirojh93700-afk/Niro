@@ -28,6 +28,13 @@ export default async function BoutiquePage({ searchParams }) {
 
   const subs = activeCat ? getSubcategories(activeCat) : null;
 
+  // Catégories pour lesquelles on propose le contact direct (sur mesure).
+  const showCustomContact = activeCat === "mariage" || activeCat === "cadeaux";
+  const customContactText =
+    activeCat === "mariage"
+      ? "Un mariage à personnaliser (numéros de table, menus, déco sur mesure) ? Parlons-en directement :"
+      : "Une décoration ou un cadeau personnalisé sur bois, une idée unique ? Contactez-moi directement :";
+
   const title = activeSub
     ? getSubcategoryLabel(activeCat, activeSub)
     : activeCat
@@ -77,6 +84,34 @@ export default async function BoutiquePage({ searchParams }) {
                 {s.label}
               </Link>
             ))}
+          </div>
+        )}
+
+        {showCustomContact && (
+          <div
+            style={{
+              background: "#fbf4e6",
+              border: "1px solid #e7d3a1",
+              borderRadius: 14,
+              padding: "18px 20px",
+              margin: "0 0 26px",
+              textAlign: "center",
+            }}
+          >
+            <strong style={{ color: "var(--gold-dark)" }}>
+              Une demande sur mesure&nbsp;?
+            </strong>
+            <p style={{ margin: "6px 0 12px", color: "var(--ink-soft)", fontSize: "0.95rem" }}>
+              {customContactText}
+            </p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              <a className="btn btn-gold" href="mailto:contact.nivcreation@gmail.com">
+                ✉️ contact.nivcreation@gmail.com
+              </a>
+              <a className="btn btn-outline" href="tel:+33766153102">
+                📞 07 66 15 31 02
+              </a>
+            </div>
           </div>
         )}
 
