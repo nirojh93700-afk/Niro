@@ -526,6 +526,55 @@ img {
 .field {
   margin-bottom: 18px;
 }
+
+/* Sélecteur visuel de variante (modèle / couleur) */
+.variant-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.variant-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 84px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.variant-swatch.has-img {
+  padding: 6px 6px 8px;
+}
+.variant-swatch img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+.variant-swatch .vs-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: center;
+}
+.variant-swatch .vs-price {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.variant-swatch:hover {
+  border-color: var(--gold);
+}
+.variant-swatch.active {
+  border-color: var(--gold-dark);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
 .field label {
   display: block;
   font-size: 0.85rem;

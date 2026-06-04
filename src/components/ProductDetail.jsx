@@ -67,6 +67,17 @@ export default function ProductDetail({ product }) {
 
   const variant = product.variants[variantIndex];
   const hasImages = images.length > 0;
+  const hasVariantImages = product.variants.some((v) => v.image);
+
+  // Sélectionne une variante et, si elle a une photo, l'affiche dans la galerie.
+  function selectVariant(i) {
+    setVariantIndex(i);
+    const img = product.variants[i]?.image;
+    if (img) {
+      const idx = images.indexOf(img);
+      if (idx >= 0) setActiveImg(idx);
+    }
+  }
   const info = getProductInfo(product.slug);
   const variantStock = stockMap[variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
@@ -295,18 +306,25 @@ export default function ProductDetail({ product }) {
 
           {product.variants.length > 1 && (
             <div className="field">
-              <label htmlFor="variant">Option</label>
-              <select
-                id="variant"
-                value={variantIndex}
-                onChange={(e) => setVariantIndex(Number(e.target.value))}
-              >
+              <label>{hasVariantImages ? "Choisissez votre modèle" : "Choisissez votre option"}</label>
+              <div className="variant-swatches">
                 {product.variants.map((v, i) => (
-                  <option key={v.id} value={i}>
-                    {v.title} — {formatEuro(v.price)}
-                  </option>
+                  <button
+                    key={v.id}
+                    type="button"
+                    className={`variant-swatch${i === variantIndex ? " active" : ""}${v.image ? " has-img" : ""}`}
+                    onClick={() => selectVariant(i)}
+                    aria-pressed={i === variantIndex}
+                  >
+                    {v.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={v.image} alt="" />
+                    )}
+                    <span className="vs-title">{v.title}</span>
+                    <span className="vs-price">{formatEuro(v.price)}</span>
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
           )}
 

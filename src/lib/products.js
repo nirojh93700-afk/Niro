@@ -594,8 +594,8 @@ export const products = [
       "/produits/porte_cles_vierges_en_cuir_noir.jpg",
     ],
     variants: [
-      { id: "porte-cles-cuir-marron", title: "Marron", price: 7.9 },
-      { id: "porte-cles-cuir-noir", title: "Noir", price: 7.9 },
+      { id: "porte-cles-cuir-marron", title: "Marron", price: 7.9, image: "/produits/porte_cles_vierges_en_cuir_marron.jpg" },
+      { id: "porte-cles-cuir-noir", title: "Noir", price: 7.9, image: "/produits/porte_cles_vierges_en_cuir_noir.jpg" },
     ],
     descriptionHtml: `<p>Un <strong>porte-clés en cuir véritable</strong>, gravé au laser avec le texte de votre choix : prénom, date, petit mot ou coordonnées GPS d'un lieu qui compte.</p>
 <h3>Caractéristiques</h3>
@@ -969,8 +969,8 @@ export const products = [
       "/produits/porte_cles_en_cristal_avec_lumiere_led_rectangle.jpg",
     ],
     variants: [
-      { id: "pc-cristal-coeur", title: "Cœur", price: 24.9 },
-      { id: "pc-cristal-rectangle", title: "Rectangle", price: 22.9 },
+      { id: "pc-cristal-coeur", title: "Cœur", price: 24.9, image: "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg" },
+      { id: "pc-cristal-rectangle", title: "Rectangle", price: 22.9, image: "/produits/porte_cles_en_cristal_avec_lumiere_led_rectangle.jpg" },
     ],
     descriptionHtml: `<p>Porte-clés en <strong>cristal</strong> avec LED, votre photo gravée en 3D à l'intérieur. S'illumine d'une simple pression.</p>`,
   },
