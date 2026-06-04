@@ -1606,19 +1606,68 @@ img {
 }
 .filters.subfilters {
   margin-top: -20px;
-  margin-bottom: 16px;
-}
-.filters.subfilters:last-of-type {
   margin-bottom: 36px;
 }
-.filter-label {
-  align-self: center;
+
+/* Filtres à facettes des bijoux (Pour qui + Type), bien alignés, sans chevauchement */
+.facet-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 720px;
+  margin: -8px auto 36px;
+  padding: 18px 20px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.facet-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.facet-label {
+  flex: 0 0 78px;
+  text-align: right;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   color: var(--gold-dark);
-  margin-right: 2px;
+  padding-top: 7px;
+}
+.facet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+.facet-chips .filter-chip {
+  font-size: 0.82rem;
+  padding: 7px 16px;
+  background: var(--paper);
+}
+.facet-chips .filter-chip.active {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+  color: #fff;
+}
+@media (max-width: 600px) {
+  .facet-bar {
+    padding: 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+  .facet-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .facet-label {
+    flex: none;
+    text-align: left;
+    padding-top: 0;
+  }
 }
 .filters.subfilters .filter-chip {
   font-size: 0.8rem;

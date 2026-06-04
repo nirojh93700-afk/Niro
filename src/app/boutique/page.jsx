@@ -93,40 +93,44 @@ export default async function BoutiquePage({ searchParams }) {
           ))}
         </div>
 
-        {/* Bijoux : deux axes combinables — Type (collier/bracelet) + Pour qui */}
+        {/* Bijoux : deux axes combinables — Pour qui (femme/homme…) puis Type */}
         {isBijoux && (
-          <>
-            <div className="filters subfilters">
-              <span className="filter-label">Type :</span>
-              <Link href={typeHref(null)} className={`filter-chip ${!activeType ? "active" : ""}`}>
-                Tous
-              </Link>
-              {JEWEL_TYPES.map((t) => (
-                <Link
-                  key={t.slug}
-                  href={typeHref(t.slug)}
-                  className={`filter-chip ${activeType === t.slug ? "active" : ""}`}
-                >
-                  {t.label}
+          <div className="facet-bar">
+            <div className="facet-row">
+              <span className="facet-label">Pour qui</span>
+              <div className="facet-chips">
+                <Link href={subHref(null)} className={`filter-chip ${!activeSub ? "active" : ""}`}>
+                  Tous
                 </Link>
-              ))}
+                {subs.map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={subHref(s.slug)}
+                    className={`filter-chip ${activeSub === s.slug ? "active" : ""}`}
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
             </div>
-            <div className="filters subfilters">
-              <span className="filter-label">Pour qui :</span>
-              <Link href={subHref(null)} className={`filter-chip ${!activeSub ? "active" : ""}`}>
-                Tous
-              </Link>
-              {subs.map((s) => (
-                <Link
-                  key={s.slug}
-                  href={subHref(s.slug)}
-                  className={`filter-chip ${activeSub === s.slug ? "active" : ""}`}
-                >
-                  {s.label}
+            <div className="facet-row">
+              <span className="facet-label">Type</span>
+              <div className="facet-chips">
+                <Link href={typeHref(null)} className={`filter-chip ${!activeType ? "active" : ""}`}>
+                  Tous
                 </Link>
-              ))}
+                {JEWEL_TYPES.map((t) => (
+                  <Link
+                    key={t.slug}
+                    href={typeHref(t.slug)}
+                    className={`filter-chip ${activeType === t.slug ? "active" : ""}`}
+                  >
+                    {t.label}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </>
+          </div>
         )}
 
         {/* Autres catégories avec sous-catégories simples */}
