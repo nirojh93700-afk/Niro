@@ -18,12 +18,15 @@ export const CATEGORIES = [
 
 // Motifs gravables (aperçu = symbole simple ; gravure réelle = dessin détaillé fourni).
 export const MOTIF_OPTIONS = [
-  { value: "coeur", label: "Cœur ♥" },
-  { value: "etoile", label: "Étoile ★" },
-  { value: "fleur", label: "Fleur ✿" },
-  { value: "marguerite", label: "Marguerite ❀" },
-  { value: "infini", label: "Infini ∞" },
-  { value: "lune", label: "Lune ☾" },
+  { value: "fleur1", label: "Fleur — modèle 1" },
+  { value: "fleur2", label: "Fleur — modèle 2" },
+  { value: "fleur3", label: "Fleur — modèle 3" },
+  { value: "fleur4", label: "Fleur — modèle 4" },
+  { value: "fleur5", label: "Fleur — modèle 5" },
+  { value: "coeur", label: "Cœur" },
+  { value: "etoile", label: "Étoile" },
+  { value: "infini", label: "Infini" },
+  { value: "lune", label: "Lune" },
 ];
 
 // Sous-catégories par catégorie (ex : bijoux femme / homme).

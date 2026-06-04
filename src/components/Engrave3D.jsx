@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Aperçu 3D d'un bijou à forme simple (collier barre / plaque).
-// Vraie 3D WebGL (Three.js) : métal + reflets, gravure en RELIEF (bump map) sur
-// les 4 faces, motif optionnel, sens haut/bas. À titre indicatif.
+// Vraie 3D WebGL (Three.js) : métal + reflets, gravure en relief sur les 4 faces.
+// Motifs : vrais dessins (images) ou symboles. À titre indicatif.
 
 const FINISH = {
   silver: { base: "#d7d7d7", ink: "rgba(22,20,18,0.92)" },
@@ -28,22 +28,65 @@ const FONT_MAP = {
 const BAR = { W: 0.5, H: 2.6, D: 0.5 };
 const TEX = { wPx: 180, hPx: Math.round(180 * (2.6 / 0.5)) };
 
-// Dessine motif (haut) + texte (empilé) sur un contexte donné.
-function drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink, bevel }) {
+// Motifs « image » (vrais dessins fournis) — affichés à l'identique sur le bijou.
+export const FLOWER_URLS = {
+  fleur1: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7704.png?v=1780606228",
+  fleur2: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7707.jpg?v=1780606227",
+  fleur3: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7706.jpg?v=1780606227",
+  fleur4: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705.jpg?v=1780606227",
+  fleur5: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705_8e43e2a1-3cba-4e9e-8eaf-c38765e67998.jpg?v=1780606227",
+};
+const GLYPHS = { coeur: "♥", etoile: "★", infini: "∞", lune: "☾" };
+const VS_TEXT = String.fromCharCode(0xFE0E); // force le rendu monochrome (anti emoji couleur)
+
+const imageCache = new Map();
+function getFlowerImg(url) {
+  if (imageCache.has(url)) return imageCache.get(url);
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = url;
+  imageCache.set(url, img);
+  return img;
+}
+
+// Dessine motif (image ou symbole) + texte (empilé) sur un contexte donné.
+function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const { wPx, hPx } = TEX;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
+  const above = motifPos !== "below"; // motif au-dessus du nom par défaut
   let topReserve = 0, bottomReserve = 0;
-  if (motifChar) {
-    const above = motifPos !== "below"; // par défaut au-dessus du nom
+
+  if (motifVal && FLOWER_URLS[motifVal]) {
+    const img = getFlowerImg(FLOWER_URLS[motifVal]);
+    if (img.complete && img.naturalWidth) {
+      let dw = wPx * 0.84;
+      let dh = img.naturalHeight * (dw / img.naturalWidth);
+      const maxH = hPx * 0.4;
+      if (dh > maxH) { dh = maxH; dw = img.naturalWidth * (dh / img.naturalHeight); }
+      const dx = (wPx - dw) / 2;
+      const dy = above ? hPx * 0.03 : hPx - dh - hPx * 0.03;
+      if (bevel) {
+        const prev = ctx.globalCompositeOperation;
+        ctx.globalCompositeOperation = "multiply"; // fond blanc disparaît, lignes = gravure
+        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.globalCompositeOperation = prev;
+      } else {
+        ctx.drawImage(img, dx, dy, dw, dh); // relief
+      }
+      const used = dh + hPx * 0.05;
+      if (above) topReserve = used; else bottomReserve = used;
+    }
+  } else if (motifVal && GLYPHS[motifVal]) {
     const mSize = wPx * 0.7;
     const my = above ? hPx * 0.1 : hPx * 0.9;
-    const m = motifChar + "\uFE0E"; // force le rendu monochrome (pas d'emoji rouge)
+    const m = GLYPHS[motifVal] + VS_TEXT;
     ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
     if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, my + 1.4); }
     ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, my);
     if (above) topReserve = hPx * 0.22; else bottomReserve = hPx * 0.22;
   }
+
   const chars = (text || "").trim().split("");
   if (chars.length) {
     const fontFamily = FONT_MAP[fontKey] || FONT_MAP.playfair;
@@ -66,8 +109,7 @@ function drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink, bevel }) 
   }
 }
 
-// Couleur (albédo) : métal + texte gravé subtil.
-function faceAlbedo(text, motifChar, finishKey, fontKey, dir, motifPos) {
+function faceAlbedo(text, motifVal, finishKey, fontKey, dir, motifPos) {
   const { wPx, hPx } = TEX;
   const f = FINISH[finishKey] || FINISH.silver;
   const c = document.createElement("canvas");
@@ -80,19 +122,18 @@ function faceAlbedo(text, motifChar, finishKey, fontKey, dir, motifPos) {
     ctx.fillStyle = g;
   } else { ctx.fillStyle = f.base; }
   ctx.fillRect(0, 0, wPx, hPx);
-  drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink: f.ink, bevel: true });
+  drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink: f.ink, bevel: true });
   return c;
 }
 
-// Relief (bump) : fond blanc, gravure noire (creusée) — donne l'effet réel.
-function faceBump(text, motifChar, fontKey, dir, motifPos) {
+function faceBump(text, motifVal, fontKey, dir, motifPos) {
   const { wPx, hPx } = TEX;
   const c = document.createElement("canvas");
   c.width = wPx; c.height = hPx;
   const ctx = c.getContext("2d");
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, wPx, hPx);
-  drawFace(ctx, { text, motifChar, fontKey, dir, motifPos, ink: "#000000", bevel: false });
+  drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink: "#000000", bevel: false });
   return c;
 }
 
@@ -100,6 +141,7 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
   const mountRef = useRef(null);
   const matsRef = useRef([]);
   const threeRef = useRef(null);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     let disposed = false;
@@ -138,9 +180,9 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
       const maxAniso = renderer.capabilities.getMaxAnisotropy();
       const mFor = (i) => motifs[i] || "";
 
-      const makeFaceMat = (text, motifChar) => {
-        const map = new THREE.CanvasTexture(faceAlbedo(text, motifChar, finish, fontKey, direction, motifPos));
-        const bump = new THREE.CanvasTexture(faceBump(text, motifChar, fontKey, direction, motifPos));
+      const makeFaceMat = (text, motifVal) => {
+        const map = new THREE.CanvasTexture(faceAlbedo(text, motifVal, finish, fontKey, direction, motifPos));
+        const bump = new THREE.CanvasTexture(faceBump(text, motifVal, fontKey, direction, motifPos));
         map.anisotropy = maxAniso; bump.anisotropy = maxAniso;
         map.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -223,7 +265,20 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Mise à jour textes / motif / police / sens
+  // Précharge les images de motifs ; rafraîchit l'aperçu une fois chargées.
+  useEffect(() => {
+    let cancelled = false;
+    (motifs || []).forEach((mv) => {
+      const url = FLOWER_URLS[mv];
+      if (url) {
+        const img = getFlowerImg(url);
+        if (!img.complete) img.addEventListener("load", () => { if (!cancelled) setTick((t) => t + 1); }, { once: true });
+      }
+    });
+    return () => { cancelled = true; };
+  }, [motifs]);
+
+  // Mise à jour textes / motifs / police / sens / position
   useEffect(() => {
     const ctx = threeRef.current;
     const mats = matsRef.current;
@@ -232,17 +287,17 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     const maxAniso = ctx.renderer.capabilities.getMaxAnisotropy();
     const order = [faces[0], faces[1], faces[2], faces[3]];
     mats.forEach((mat, i) => {
-      const motifChar = motifs[i] || "";
+      const motifVal = motifs[i] || "";
       const oldMap = mat.map, oldBump = mat.bumpMap;
-      const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifChar, finish, fontKey, direction, motifPos));
-      const bump = new THREE.CanvasTexture(faceBump(order[i], motifChar, fontKey, direction, motifPos));
+      const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifVal, finish, fontKey, direction, motifPos));
+      const bump = new THREE.CanvasTexture(faceBump(order[i], motifVal, fontKey, direction, motifPos));
       map.anisotropy = maxAniso; bump.anisotropy = maxAniso;
       map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.bumpMap = bump; mat.needsUpdate = true;
       if (oldMap) oldMap.dispose();
       if (oldBump) oldBump.dispose();
     });
-  }, [faces, finish, fontKey, motifs, direction, motifPos]);
+  }, [faces, finish, fontKey, motifs, direction, motifPos, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: "8px 0 4px" }}>
