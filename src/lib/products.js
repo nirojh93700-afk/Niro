@@ -12,7 +12,7 @@ export const CATEGORIES = [
   { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
-  { slug: "medailles", label: "Pièces & Médaillons", short: "Médaillons" },
+  { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
 ];
 
