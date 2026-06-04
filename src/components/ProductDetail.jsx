@@ -190,6 +190,33 @@ export default function ProductDetail({ product }) {
               ))}
             </div>
           )}
+
+          {(product.category === "mariage" || product.category === "cadeaux") && (
+            <div
+              style={{
+                marginTop: 14,
+                fontSize: "0.84rem",
+                color: "var(--ink-soft)",
+                background: "#fbf4e6",
+                border: "1px solid #e7d3a1",
+                borderRadius: 10,
+                padding: "10px 12px",
+                lineHeight: 1.5,
+              }}
+            >
+              <strong style={{ color: "var(--gold-dark)" }}>Une demande précise&nbsp;?</strong>
+              <br />
+              Personnalisation particulière ou projet sur mesure :{" "}
+              <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
+                écrivez-moi
+              </a>{" "}
+              ou appelez le{" "}
+              <a href="tel:+33766153102" style={{ color: "var(--gold-dark)", fontWeight: 600, whiteSpace: "nowrap" }}>
+                07 66 15 31 02
+              </a>
+              .
+            </div>
+          )}
         </div>
 
         {/* Infos & achat */}
@@ -383,30 +410,6 @@ export default function ProductDetail({ product }) {
             <div className="hero-badge">Paiement sécurisé</div>
             <div className="hero-badge">Pièce personnalisée</div>
           </div>
-
-          {(product.category === "mariage" || product.category === "cadeaux") && (
-            <p
-              style={{
-                marginTop: 12,
-                fontSize: "0.88rem",
-                color: "var(--ink-soft)",
-                background: "#fbf4e6",
-                border: "1px solid #e7d3a1",
-                borderRadius: 10,
-                padding: "10px 12px",
-              }}
-            >
-              💬 Une demande précise ou une personnalisation particulière&nbsp;?{" "}
-              <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
-                Écrivez-moi
-              </a>{" "}
-              ou appelez le{" "}
-              <a href="tel:+33766153102" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
-                07 66 15 31 02
-              </a>
-              .
-            </p>
-          )}
 
           <div
             className="product-desc"
