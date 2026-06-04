@@ -27,6 +27,7 @@ et surtout **comment ajouter un produit correctement et le publier**.
 | `src/lib/shipping.js` | Frais de livraison (forfaits, paliers) |
 | `src/components/ProductDetail.jsx` | Fiche produit (rend les champs de gravure) |
 | `src/app/boutique/page.jsx` | Catalogue + filtres catégories/sous-catégories |
+| `docs/PERSONNALISATION-GRAVURE-3D.md` | **Guide gravure + aperçu 3D** (motifs, 3D, recette nouveau produit) |
 
 ## 3. Schéma d'un produit (`src/lib/products.js`)
 Chaque produit est un objet du tableau `products`. Champs :
