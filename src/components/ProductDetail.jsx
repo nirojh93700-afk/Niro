@@ -10,6 +10,7 @@ import { getProductInfo } from "@/lib/productInfo";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
+import MotifPicker from "./MotifPicker";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -117,8 +118,8 @@ export default function ProductDetail({ product }) {
   };
   const finish3d = FINISH_MAP[(variant.title || "").toLowerCase()] || "silver";
   const motifVals = [1, 2, 3, 4].map((i) => fieldValues["motif" + i] || "");
+  const motifPositions = [1, 2, 3, 4].map((i) => (fieldValues["motifPos" + i] === "below" ? "below" : "above"));
   const direction3d = fieldValues["sens"] === "down" ? "down" : "up";
-  const motifPos3d = fieldValues["motifPos"] === "below" ? "below" : "above";
 
   function handleAdd() {
     if (soldOut) return;
@@ -294,6 +295,14 @@ export default function ProductDetail({ product }) {
                     </div>
                   );
                 }
+                if (f.type === "motif") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <MotifPicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} />
+                    </div>
+                  );
+                }
                 const labelEl = (
                   <label htmlFor={`pf-${f.key}`}>
                     {f.label}
@@ -349,7 +358,7 @@ export default function ProductDetail({ product }) {
               })}
 
               {product.engrave3d && (
-                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPos={motifPos3d} />
+                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
               )}
 
               {(hasTextFields || photoField) && (

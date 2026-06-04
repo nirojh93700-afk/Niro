@@ -6,6 +6,9 @@
 // Les prix sont en euros (number). Les images pointent vers le CDN Shopify.
 // =============================================================================
 
+import { MOTIF_OPTIONS } from "@/lib/motifs";
+export { MOTIF_OPTIONS };
+
 export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux personnalisés", short: "Bijoux" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
@@ -16,18 +19,7 @@ export const CATEGORIES = [
   { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
 ];
 
-// Motifs gravables (aperçu = symbole simple ; gravure réelle = dessin détaillé fourni).
-export const MOTIF_OPTIONS = [
-  { value: "fleur1", label: "Fleur — modèle 1" },
-  { value: "fleur2", label: "Fleur — modèle 2" },
-  { value: "fleur3", label: "Fleur — modèle 3" },
-  { value: "fleur4", label: "Fleur — modèle 4" },
-  { value: "fleur5", label: "Fleur — modèle 5" },
-  { value: "coeur", label: "Cœur" },
-  { value: "etoile", label: "Étoile" },
-  { value: "infini", label: "Infini" },
-  { value: "lune", label: "Lune" },
-];
+// (Les motifs gravables sont définis dans src/lib/motifs.js.)
 
 // Sous-catégories par catégorie (ex : bijoux femme / homme).
 export const SUBCATEGORIES = {
@@ -884,23 +876,23 @@ export const products = [
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
     personalizationFields: [
       { key: "face1", label: "Face 1 — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
-      { key: "motif1", type: "select", label: "Face 1 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motif1", type: "motif", label: "Face 1 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motifPos1", type: "select", label: "Face 1 — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "face2", label: "Face 2 — texte", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
-      { key: "motif2", type: "select", label: "Face 2 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motif2", type: "motif", label: "Face 2 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motifPos2", type: "select", label: "Face 2 — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "face3", label: "Face 3 — texte", placeholder: "Ex. un mot, un message", maxLength: 23, optional: true },
-      { key: "motif3", type: "select", label: "Face 3 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motif3", type: "motif", label: "Face 3 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motifPos3", type: "select", label: "Face 3 — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "face4", label: "Face 4 — texte", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
-      { key: "motif4", type: "select", label: "Face 4 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motif4", type: "motif", label: "Face 4 — motif (facultatif)", optional: true, options: MOTIF_OPTIONS },
+      { key: "motifPos4", type: "select", label: "Face 4 — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "sens", type: "select", label: "Sens du nom", optional: true, options: [
         { value: "up", label: "Du bas vers le haut" },
         { value: "down", label: "Du haut vers le bas" },
       ] },
-      { key: "motifPos", type: "select", label: "Position du motif", optional: true, options: [
-        { value: "above", label: "Au-dessus du nom" },
-        { value: "below", label: "En dessous du nom" },
-      ] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "note", type: "note", text: "Laissez vide les faces non gravées. Vous pouvez mettre un motif différent sur chaque face." },
+      { key: "note", type: "note", text: "Laissez vide les faces non gravées. Motif et placement (haut/bas) réglables par face." },
     ],
     images: [
       "/produits/collier_pendentif_geometrique_a_graver_agente.jpg",

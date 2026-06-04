@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { FLOWER_URLS, GLYPHS } from "@/lib/motifs";
 
 // Aperçu 3D d'un bijou à forme simple (collier barre / plaque).
 // Vraie 3D WebGL (Three.js) : métal + reflets, gravure en relief sur les 4 faces.
@@ -28,15 +29,6 @@ const FONT_MAP = {
 const BAR = { W: 0.5, H: 2.6, D: 0.5 };
 const TEX = { wPx: 180, hPx: Math.round(180 * (2.6 / 0.5)) };
 
-// Motifs « image » (vrais dessins fournis) — affichés à l'identique sur le bijou.
-export const FLOWER_URLS = {
-  fleur1: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7704.png?v=1780606228",
-  fleur2: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7707.jpg?v=1780606227",
-  fleur3: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7706.jpg?v=1780606227",
-  fleur4: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705.jpg?v=1780606227",
-  fleur5: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705_8e43e2a1-3cba-4e9e-8eaf-c38765e67998.jpg?v=1780606227",
-};
-const GLYPHS = { coeur: "♥", etoile: "★", infini: "∞", lune: "☾" };
 const VS_TEXT = String.fromCharCode(0xFE0E); // force le rendu monochrome (anti emoji couleur)
 
 // Vraies polices du site (variables CSS posées par next/font) → utilisées dans le canvas.
@@ -176,7 +168,7 @@ function faceBump(text, motifVal, fontKey, dir, motifPos) {
   return c;
 }
 
-export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "up", motifPos = "above" }) {
+export default function Engrave3D({ faces = [], finish = "silver", fontKey = "playfair", motifs = [], direction = "up", motifPositions = [] }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);
   const threeRef = useRef(null);
@@ -218,10 +210,11 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
       const f = FINISH[finish] || FINISH.silver;
       const maxAniso = renderer.capabilities.getMaxAnisotropy();
       const mFor = (i) => motifs[i] || "";
+      const pFor = (i) => (motifPositions[i] === "below" ? "below" : "above");
 
-      const makeFaceMat = (text, motifVal) => {
-        const map = new THREE.CanvasTexture(faceAlbedo(text, motifVal, finish, fontKey, direction, motifPos));
-        const bump = new THREE.CanvasTexture(faceBump(text, motifVal, fontKey, direction, motifPos));
+      const makeFaceMat = (text, motifVal, mPos) => {
+        const map = new THREE.CanvasTexture(faceAlbedo(text, motifVal, finish, fontKey, direction, mPos));
+        const bump = new THREE.CanvasTexture(faceBump(text, motifVal, fontKey, direction, mPos));
         map.anisotropy = maxAniso; bump.anisotropy = maxAniso;
         map.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -235,10 +228,10 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
       });
 
       const geo = new THREE.BoxGeometry(BAR.W, BAR.H, BAR.D, 1, 1, 1);
-      const mRight = makeFaceMat(faces[2], mFor(2));
-      const mLeft = makeFaceMat(faces[3], mFor(3));
-      const mFront = makeFaceMat(faces[0], mFor(0));
-      const mBack = makeFaceMat(faces[1], mFor(1));
+      const mRight = makeFaceMat(faces[2], mFor(2), pFor(2));
+      const mLeft = makeFaceMat(faces[3], mFor(3), pFor(3));
+      const mFront = makeFaceMat(faces[0], mFor(0), pFor(0));
+      const mBack = makeFaceMat(faces[1], mFor(1), pFor(1));
       const materials = [mRight, mLeft, metalMat(), metalMat(), mFront, mBack];
       matsRef.current = [mFront, mBack, mRight, mLeft];
       scene.add(new THREE.Mesh(geo, materials));
@@ -334,16 +327,17 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     const order = [faces[0], faces[1], faces[2], faces[3]];
     mats.forEach((mat, i) => {
       const motifVal = motifs[i] || "";
+      const mPos = motifPositions[i] === "below" ? "below" : "above";
       const oldMap = mat.map, oldBump = mat.bumpMap;
-      const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifVal, finish, fontKey, direction, motifPos));
-      const bump = new THREE.CanvasTexture(faceBump(order[i], motifVal, fontKey, direction, motifPos));
+      const map = new THREE.CanvasTexture(faceAlbedo(order[i], motifVal, finish, fontKey, direction, mPos));
+      const bump = new THREE.CanvasTexture(faceBump(order[i], motifVal, fontKey, direction, mPos));
       map.anisotropy = maxAniso; bump.anisotropy = maxAniso;
       map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.bumpMap = bump; mat.needsUpdate = true;
       if (oldMap) oldMap.dispose();
       if (oldBump) oldBump.dispose();
     });
-  }, [faces, finish, fontKey, motifs, direction, motifPos, tick]);
+  }, [faces, finish, fontKey, motifs, direction, motifPositions, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: "8px 0 4px" }}>
