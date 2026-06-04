@@ -43,9 +43,11 @@ Ensuite, applique ceci dans le projet Crafia (dossier de déploiement
    - NE CASSE PAS la connexion Google / Email / Anonyme.
    - NE TOUCHE PAS aux emails métier (factures / devis / commandes de l'artisan).
 
-5. **SMTP (Brevo, gratuit)**
-   - Crée `functions/.env` à partir de `functions/.env.example`.
-   - Demande-moi (Nirojh) la clé SMTP Brevo (login + clé) et mets-la dans `.env`.
+5. **SMTP (OVH — support@crafia.fr)**
+   - Crée `functions/.env` à partir de `functions/.env.example` (le bloc OVH est
+     déjà actif : host `ssl0.ovh.net`, port `465`, secure `true`,
+     user `support@crafia.fr`).
+   - Nirojh renseigne lui-même `SMTP_PASS` (mot de passe de la boîte mail OVH).
    - Vérifie que `.env` est bien dans `.gitignore`.
 
 6. **Dépendances + déploiement TEST d'abord**

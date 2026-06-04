@@ -58,15 +58,17 @@ Ouvrez `app/auth/action/index.html` et remplacez le bloc `firebaseConfig`
 Console Firebase → ⚙ Paramètres du projet → Vos applications → Configuration SDK.
 (Ces valeurs `apiKey`/`appId` sont publiques, c'est normal.)
 
-### Étape C — Configurer le SMTP (choix : 100 % gratuit → Brevo)
+### Étape C — Configurer le SMTP (choix : OVH support@crafia.fr)
 1. `cd functions`
 2. Copiez `.env.example` en `.env`.
-3. Le bloc **Brevo** est déjà actif par défaut (gratuit à vie, 300 emails/jour) :
-   - Créez un compte sur **brevo.com**, menu « SMTP & API » → créez une clé SMTP,
-     recopiez le login + la clé dans `.env`.
-   - Authentifiez `crafia.fr` dans Brevo (SPF + DKIM) pour que les mails partent
-     bien de `support@crafia.fr` sans finir en spam.
-   - (Les blocs OVH/crafia.fr et Gmail restent disponibles en commentaire.)
+3. Le bloc **OVH** est déjà actif (`ssl0.ovh.net`, port `465`, `SMTP_SECURE=true`,
+   `SMTP_USER=support@crafia.fr`). Renseignez seulement `SMTP_PASS` (le mot de
+   passe de la boîte mail `support@crafia.fr`).
+   - Vérifiez le host selon votre offre OVH (MX Plan = `ssl0.ovh.net` ;
+     Email Pro = `pro1.mail.ovh.net`).
+   - Pour la délivrabilité : activez **DKIM** sur la boîte dans l'espace OVH et
+     vérifiez le **SPF** de `crafia.fr` (voir guide).
+   - (Les blocs Brevo et Gmail restent disponibles en commentaire, en secours.)
 4. `.env` ne doit **jamais** être commité (déjà dans `.gitignore`).
 
 ### Étape D — Installer les dépendances
