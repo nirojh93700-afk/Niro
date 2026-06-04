@@ -866,10 +866,14 @@ export const products = [
     weight: 70, pickup: false, letter: true, subcategory: "femme",
     title: "Collier femme pendentif géométrique à graver",
     category: "bijoux", type: "Collier personnalisé",
-    tagline: "Un pendentif géométrique tendance, gravé à votre message.",
-    personalizable: true, personalizationLabel: "Texte à graver + police",
+    tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
+    personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
+      { key: "face1", label: "Face 1 — texte à graver", placeholder: "Ex. un prénom", maxLength: 23 },
+      { key: "face2", label: "Face 2 (facultatif)", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
+      { key: "face3", label: "Face 3 (facultatif)", placeholder: "Ex. coordonnées GPS : 48.85, 2.35", maxLength: 23, optional: true },
+      { key: "face4", label: "Face 4 (facultatif)", placeholder: "Ex. un mot, des initiales", maxLength: 23, optional: true },
+      { key: "note", type: "note", text: "Laissez vide les faces que vous ne souhaitez pas graver." },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
