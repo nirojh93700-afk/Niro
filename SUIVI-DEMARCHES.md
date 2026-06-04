@@ -24,7 +24,7 @@
 ## 🟠 À faire bientôt
 - [ ] **Ouvrir un compte bancaire dédié** à l'activité
   - Pas obligatoire avant 10 000 €/an sur 2  ans, mais **conseillé** (un 2e compte gratuit suffit)
-- [ ] **Écrire à Les Tricolores** pour ajouter la marque **« Crafia »** (courrier reçu aux 2 noms)
+- [x] **Écrire à Les Tricolores** pour ajouter la marque **« Crafia »** (courrier reçu aux 2 noms) — fait le 04/06/2026
 - [ ] **Configurer Stripe** sur le site (SIRET + IBAN) — une fois le SIRET reçu
 - [ ] **Compléter les mentions légales / CGV** du site (nom, adresse 6 rue d'Armaillé, SIRET)
 - [x] **Brancher le domaine nivcreation.fr** sur le site Netlify (DNS configuré chez Hostinger le 04/06/2026 : ALIAS @ → apex-loadbalancer.netlify.com, CNAME www → exquisite-khapse-7af3a0.netlify.app). HTTPS automatique. `.com` laissé sur Shopify.
