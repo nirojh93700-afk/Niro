@@ -50,12 +50,14 @@ function drawFace(ctx, { text, motifChar, fontKey, dir, ink, bevel }) {
     const areaTop = topReserve;
     const areaH = hPx - topReserve - bottomReserve;
     const n = chars.length;
-    const fontSize = Math.min(wPx * 0.56, (areaH * 0.9) / n);
+    const fontSize = Math.min(wPx * 0.64, (areaH * 0.96) / n);
+    const lineH = fontSize * 1.0; // lettres serrées (comme une vraie gravure)
     ctx.font = `600 ${fontSize}px ${fontFamily}`;
-    const step = areaH / (n + 1);
+    const totalH = n * lineH;
+    const startY = areaTop + (areaH - totalH) / 2 + lineH / 2;
     for (let i = 0; i < n; i++) {
-      const y = areaTop + step * (i + 1);
-      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.3); }
+      const y = startY + i * lineH;
+      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.2); }
       ctx.fillStyle = ink; ctx.fillText(chars[i], wPx / 2, y);
     }
   }
