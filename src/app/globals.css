@@ -444,6 +444,10 @@ img {
   gap: 48px;
   padding: 44px 0 72px;
 }
+/* Empêche les colonnes (et la rangée de motifs) de déborder la largeur de l'écran. */
+.product-layout > * {
+  min-width: 0;
+}
 /* Aperçu 3D : suit le défilement sur ordinateur (sous la photo), normal sur mobile. */
 .engrave3d-sticky {
   position: sticky;
