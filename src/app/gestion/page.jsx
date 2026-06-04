@@ -220,14 +220,17 @@ export default function GestionPage() {
     try { return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
     catch { return iso || "—"; }
   };
-  const ca = orders.reduce((s, o) => s + (Number(o.total) || 0), 0);
-  const nbCmd = orders.length;
+  // Les commandes remboursées ne comptent pas dans le chiffre d'affaires / stats.
+  const validOrders = orders.filter((o) => o.status !== "remboursee");
+  const ca = validOrders.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  const nbCmd = validOrders.length;
+  const nbRembourse = orders.length - validOrders.length;
   const panierMoyen = nbCmd ? ca / nbCmd : 0;
-  const aPreparer = orders.filter((o) => o.status !== "expediee").length;
+  const aPreparer = orders.filter((o) => o.status !== "expediee" && o.status !== "remboursee").length;
 
-  // Clientes (regroupées par e-mail)
+  // Clientes (regroupées par e-mail) — hors remboursées
   const clientsMap = {};
-  for (const o of orders) {
+  for (const o of validOrders) {
     const k = (o.customerEmail || o.customerName || "—").toLowerCase();
     if (!clientsMap[k]) clientsMap[k] = { name: o.customerName || "—", email: o.customerEmail || "", phone: o.customerPhone || "", nb: 0, total: 0, last: o.createdAt };
     clientsMap[k].nb += 1;
@@ -236,9 +239,9 @@ export default function GestionPage() {
   }
   const clients = Object.values(clientsMap).sort((a, b) => b.total - a.total);
 
-  // Best-sellers (par article)
+  // Best-sellers (par article) — hors remboursées
   const sellMap = {};
-  for (const o of orders) {
+  for (const o of validOrders) {
     for (const it of o.items || []) {
       const n = it.name || "Article";
       if (!sellMap[n]) sellMap[n] = { name: n, qty: 0, total: 0 };
@@ -364,7 +367,10 @@ export default function GestionPage() {
                 </div>
               ))}
             </div>
-            <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Basé sur les {nbCmd} dernières commandes enregistrées.</p>
+            <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>
+              Basé sur {nbCmd} commande{nbCmd > 1 ? "s" : ""} valide{nbCmd > 1 ? "s" : ""}
+              {nbRembourse > 0 ? ` · ${nbRembourse} remboursée${nbRembourse > 1 ? "s" : ""} non comptée${nbRembourse > 1 ? "s" : ""}` : ""}.
+            </p>
           </>
         )}
 

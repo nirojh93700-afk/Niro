@@ -1,11 +1,10 @@
 // Source unique des motifs gravables (fleurs = images fournies, symboles = SVG/glyphes).
 
 export const MOTIFS = [
-  { value: "fleur1", label: "Fleur — modèle 1", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7704.png?v=1780606228" },
-  { value: "fleur2", label: "Fleur — modèle 2", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7707.jpg?v=1780606227" },
-  { value: "fleur3", label: "Fleur — modèle 3", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7706.jpg?v=1780606227" },
-  { value: "fleur4", label: "Fleur — modèle 4", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705.jpg?v=1780606227" },
-  { value: "fleur5", label: "Fleur — modèle 5", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705_8e43e2a1-3cba-4e9e-8eaf-c38765e67998.jpg?v=1780606227" },
+  { value: "fleur2", label: "Fleur — modèle 1", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7707.jpg?v=1780606227" },
+  { value: "fleur3", label: "Fleur — modèle 2", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7706.jpg?v=1780606227" },
+  { value: "fleur4", label: "Fleur — modèle 3", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705.jpg?v=1780606227" },
+  { value: "fleur5", label: "Fleur — modèle 4", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705_8e43e2a1-3cba-4e9e-8eaf-c38765e67998.jpg?v=1780606227" },
   { value: "coeur", label: "Cœur", kind: "glyph", char: "♥", thumb: "/motifs/coeur.svg" },
   { value: "etoile", label: "Étoile", kind: "glyph", char: "★", thumb: "/motifs/etoile.svg" },
   { value: "infini", label: "Infini", kind: "glyph", char: "∞", thumb: "/motifs/infini.svg" },
