@@ -25,6 +25,14 @@ export default function ProductDetail({ product }) {
   const [stockMap, setStockMap] = useState({});
   const [images, setImages] = useState(product.images);
   const [promos, setPromos] = useState({});
+  const [isWide, setIsWide] = useState(true); // ordinateur vs mobile (pour la place du 3D)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 901px)");
+    const upd = () => setIsWide(mq.matches);
+    upd();
+    mq.addEventListener("change", upd);
+    return () => mq.removeEventListener("change", upd);
+  }, []);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -233,10 +241,13 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {product.engrave3d && (
-            <div className="engrave3d-sticky">
-              <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
-            </div>
+          {product.engrave3d && isWide && (
+            <>
+              <div className="engrave3d-sticky">
+                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+              </div>
+              <div className="engrave3d-spacer" aria-hidden="true" />
+            </>
           )}
         </div>
 
@@ -362,6 +373,10 @@ export default function ProductDetail({ product }) {
                   </div>
                 );
               })}
+
+              {product.engrave3d && !isWide && (
+                <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
+              )}
 
               {(hasTextFields || photoField) && (
                 <div className="engrave-preview">

@@ -48,11 +48,11 @@ export default function MotifPicker({ value, onChange }) {
         <div
           style={{
             position: "fixed",
-            left: Math.min(hover.x + 18, (typeof window !== "undefined" ? window.innerWidth : 9999) - 190),
-            top: Math.max(12, hover.y - 90),
-            width: 168, height: 168, background: "#fff",
-            border: "1px solid #e7d3a1", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,.18)",
-            padding: 10, zIndex: 1000, pointerEvents: "none",
+            left: Math.min(Math.max(8, hover.x - 60), (typeof window !== "undefined" ? window.innerWidth : 9999) - 128),
+            top: Math.max(8, hover.y - 138), // au-dessus du curseur, ne couvre pas la rangée
+            width: 120, height: 120, background: "#fff",
+            border: "1px solid #e7d3a1", borderRadius: 12, boxShadow: "0 8px 26px rgba(0,0,0,.18)",
+            padding: 8, zIndex: 1000, pointerEvents: "none",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

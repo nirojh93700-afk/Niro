@@ -443,6 +443,7 @@ img {
   grid-template-columns: 1.1fr 1fr;
   gap: 48px;
   padding: 44px 0 72px;
+  align-items: start;
 }
 /* Empêche les colonnes (et la rangée de motifs) de déborder la largeur de l'écran. */
 .product-layout > * {
@@ -453,6 +454,10 @@ img {
   position: sticky;
   top: 84px;
   margin-top: 18px;
+}
+/* Contrôle jusqu'où le 3D descend en suivant (s'arrête vers la police de gravure). */
+.engrave3d-spacer {
+  height: 520px;
 }
 .gallery-main {
   position: relative;
@@ -1491,6 +1496,9 @@ img {
   .engrave3d-sticky {
     position: static;
     top: auto;
+  }
+  .engrave3d-spacer {
+    display: none;
   }
   .hero-visual {
     order: -1;
