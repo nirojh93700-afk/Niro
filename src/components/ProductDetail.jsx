@@ -335,8 +335,9 @@ export default function ProductDetail({ product }) {
           </div>
           {engrave.amount > 0 && (
             <p style={{ margin: "-12px 0 16px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>
-              dont <strong>{formatEuro(engrave.amount)}</strong> de gravures supplémentaires
-              ({engrave.pages} page{engrave.pages > 1 ? "s" : ""} en plus de la couverture)
+              dont <strong>{formatEuro(engrave.amount)}</strong> en plus
+              {engrave.pages > 0 && ` · ${engrave.pages} page${engrave.pages > 1 ? "s" : ""} de texte`}
+              {engrave.photo && " · photo gravée"}
             </p>
           )}
 

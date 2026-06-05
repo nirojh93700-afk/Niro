@@ -111,7 +111,8 @@ export const products = [
     letter: true,
     subcategory: "femme",
     engraveHeart3d: true, // ← aperçu 3D cœur éventail (8 faces)
-    engravingPricing: { perExtraPage: 3, includedKey: "cover" }, // couverture incluse, +3 €/page
+    // Couverture (texte) incluse, +3 €/page de texte, photo +5 €.
+    engravingPricing: { perExtraPage: 3, includedKey: "cover", photoKey: "photo", photoSurcharge: 5 },
     personalizationFields: [
       { key: "note", type: "note", text: "Médaillon qui s'ouvre en éventail : 8 faces à graver (couverture + 6 pages + dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +3 €. Remplissez seulement les faces souhaitées, les autres restent vierges. Astuce : les polices manuscrites ou en gras prennent plus de place — avec ces styles, prévoyez un texte plus court (15 caractères, c'est environ un prénom + une date)." },
       { key: "cover", label: "Gravure — Couverture (texte inclus)", placeholder: "Prénom, mot court…", maxLength: 15 },
@@ -123,8 +124,8 @@ export const products = [
       { key: "page6", label: "Gravure — Page 6 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "backcover", label: "Gravure — Dos (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "photo", type: "photo", label: "Photo à graver", optional: true, variantContains: "Photo", text: "Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
-      { key: "photoPage", type: "select", label: "Mettre la photo sur quelle page ?", optional: true, variantContains: "Photo",
+      { key: "photo", type: "photo", label: "Photo à graver (+5 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+5 €). Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
+      { key: "photoPage", type: "select", label: "Mettre la photo sur quelle page ?", optional: true,
         options: [
           { value: "cover", label: "Couverture" },
           { value: "page1", label: "Page 1" },
@@ -151,21 +152,18 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8055354789_4miu.jpg?v=1780366816",
     ],
     variants: [
-      { id: "med-argent-texte", title: "Argent / Texte", price: 25.11 },
-      { id: "med-argent-photo", title: "Argent / Texte + Photo", price: 34.11 },
-      { id: "med-bicolore-texte", title: "Bicolore (Or & Argent) / Texte", price: 28.71 },
-      { id: "med-bicolore-photo", title: "Bicolore (Or & Argent) / Texte + Photo", price: 35.91 },
+      { id: "med-argent-texte", title: "Argent", price: 25.11 },
+      { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 28.71 },
     ],
     descriptionHtml: `<p><strong>Un bijou élégant et intemporel à personnaliser.</strong></p>
-<p>Gardez vos souvenirs les plus précieux près de votre cœur. Le pendentif en forme de cœur s'ouvre comme un petit livre pour révéler quatre faces entièrement personnalisables, à graver selon vos envies.</p>
-<h3>Un médaillon, 4 faces</h3>
+<p>Gardez vos souvenirs les plus précieux près de votre cœur. Le médaillon s'ouvre en éventail comme un petit livre et révèle <strong>8 faces entièrement personnalisables</strong> à graver selon vos envies.</p>
+<h3>Un médaillon, 8 faces</h3>
 <ul>
-<li><strong>Face avant</strong> — 20 caractères max</li>
-<li><strong>Page 1</strong> — 30 caractères max</li>
-<li><strong>Page 2 gauche</strong> — 30 caractères max</li>
-<li><strong>Page 3 droite</strong> — 30 caractères max</li>
+<li><strong>Couverture</strong> — gravure de texte incluse</li>
+<li><strong>Pages 1 à 6</strong> — gravure de texte à +3 € par page</li>
+<li><strong>Dos</strong> — gravure de texte à +3 €</li>
 </ul>
-<p>Sur chaque emplacement : un texte, une photo gravée, ou rien du tout. Vous pouvez combiner texte et photo.</p>
+<p>Sur chaque face : un texte court, ou une <strong>photo gravée (+5 €)</strong> que vous placez sur la page de votre choix (cette page ne porte alors pas de texte).</p>
 <h3>Spécifications</h3>
 <ul>
 <li><strong>Chaîne :</strong> 50 cm — <strong>Poids :</strong> ~14 g</li>

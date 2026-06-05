@@ -302,14 +302,15 @@ export default function EngraveHeart3D({
       threeRef.current = { THREE, renderer, scene };
 
       // angle d'éventail max par feuillet (couverture à gauche, dos à droite)
-      const FAN = 1.2; // ~69° de chaque côté
+      const FAN = 1.4; // ~80° de chaque côté
       const angleFor = (i) => FAN - i * (2 * FAN / (NUM - 1)); // +FAN .. -FAN
 
       const clock = new THREE.Clock();
       let raf;
       const animate = () => {
         const t = clock.getElapsedTime();
-        const spread = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * 0.45)); // 0.25 .. 1.0
+        // cycle complet : cœur fermé (spread 0) → éventail grand ouvert (spread 1) → fermé
+        const spread = 0.5 - 0.5 * Math.cos(t * 0.8);
         for (let i = 0; i < NUM; i++) leaves[i].rotation.z = angleFor(i) * spread;
         controls.update();
         renderer.render(scene, camera);

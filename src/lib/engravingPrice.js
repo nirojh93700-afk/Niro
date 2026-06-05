@@ -15,6 +15,9 @@ export function engravingExtra(product, fields = {}) {
   for (const f of textFields) {
     if ((fields[f.key] || "").toString().trim()) pages++;
   }
-  const amount = pages * (cfg.perExtraPage || 0);
-  return { pages, amount };
+  // Supplément photo (si une photo a été ajoutée).
+  const photoVal = cfg.photoKey ? (fields[cfg.photoKey] || "").toString().trim() : "";
+  const photo = Boolean(photoVal);
+  const amount = pages * (cfg.perExtraPage || 0) + (photo ? (cfg.photoSurcharge || 0) : 0);
+  return { pages, photo, amount };
 }
