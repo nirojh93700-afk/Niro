@@ -1,13 +1,10 @@
-import { storeCustomerUpload } from "@/lib/firebase";
-
 export const dynamic = "force-dynamic";
 
-// Génère un APERÇU de dessin (gratuit) à partir de la description du client,
-// via un générateur d'images libre et sans clé. Le rendu est une inspiration :
-// l'atelier réalise et valide le dessin final avant gravure.
+// Construit l'URL d'un APERÇU de dessin (gratuit, sans clé) à partir de la
+// description du client. L'image est ensuite chargée DIRECTEMENT par le
+// navigateur (le service la génère à la volée) — plus fiable que côté serveur.
 
-// Petit garde-fou : refuse les demandes manifestement inappropriées.
-const BANNED = ["porn", "porno", "nu ", "nue", "sexe", "sexuel", "nazi", "haine", "arme", "drogue", "sang"];
+const BANNED = ["porn", "porno", "nue", "sexe", "sexuel", "nazi", "haine", "drogue"];
 
 export async function POST(req) {
   let body;
@@ -19,25 +16,9 @@ export async function POST(req) {
     return Response.json({ error: "Cette demande ne peut pas être traitée. Décrivez un motif (prénoms, date, fleurs, anneaux…)." }, { status: 400 });
   }
 
-  // On guide le style vers un dessin GRAVABLE : trait noir net, fond blanc, sans couleur.
-  const styled = `elegant black ink line art for laser engraving, clean thin black outlines, monochrome line drawing, white background, minimalist, no shading, no grayscale, decorative, ${desc}`;
-  const seed = Math.floor(Math.random() * 1_000_000);
-  const src = `https://image.pollinations.ai/prompt/${encodeURIComponent(styled)}?width=768&height=768&nologo=true&seed=${seed}`;
-
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25_000);
-    const r = await fetch(src, { signal: ctrl.signal });
-    clearTimeout(timer);
-    if (!r.ok) throw new Error("generation");
-    const buf = Buffer.from(await r.arrayBuffer());
-    const dataUrl = `data:${r.headers.get("content-type") || "image/jpeg"};base64,${buf.toString("base64")}`;
-    // On stocke le dessin (persistant) pour le rattacher à la commande.
-    const id = await storeCustomerUpload(dataUrl, { kind: "design", prompt: desc });
-    if (id) return Response.json({ url: "/api/img/" + id });
-    return Response.json({ url: src }); // pas de stockage : on renvoie le lien direct
-  } catch {
-    // Repli : le navigateur chargera l'image directement depuis le service.
-    return Response.json({ url: src });
-  }
+  // Style guidé pour la gravure : trait noir net, fond blanc, sans couleur.
+  const styled = `black ink line art for laser engraving, clean thin black outlines on white background, monochrome line drawing, minimalist, decorative, no shading, no grayscale, ${desc}`;
+  const seed = body?.seed ? Number(body.seed) : Math.floor(Math.random() * 1_000_000);
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(styled)}?width=640&height=640&nologo=true&seed=${seed}`;
+  return Response.json({ url, seed });
 }
