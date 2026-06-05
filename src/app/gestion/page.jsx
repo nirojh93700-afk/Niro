@@ -36,6 +36,8 @@ export default function GestionPage() {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState("");
   const [refunding, setRefunding] = useState("");
+  const [orderFilter, setOrderFilter] = useState("all");
+  const [orderSearch, setOrderSearch] = useState("");
   const [testEmail, setTestEmail] = useState("");
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
@@ -126,17 +128,33 @@ export default function GestionPage() {
     }
   }
 
-  async function setOrderStatus(id, status) {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+  async function setOrderStatus(id, status, extra = {}) {
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status, ...(extra.tracking != null ? { tracking: extra.tracking } : {}) } : o)));
     try {
-      await fetch("/api/admin/orders", {
+      const res = await fetch("/api/admin/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ id, status }),
+        body: JSON.stringify({ id, status, ...extra }),
       });
+      const d = await res.json().catch(() => ({}));
+      if (extra.notifyCustomer && !d.emailed) {
+        setError("Commande marquée expédiée, mais l'e-mail de suivi n'a pas pu être envoyé (vérifie l'e-mail Resend dans Réglages).");
+      }
     } catch (e) {
       setError("Échec de la mise à jour du statut.");
     }
+  }
+
+  // Marquer expédiée : demande le n° de suivi (optionnel) et propose de prévenir la cliente.
+  async function shipOrder(o) {
+    const input = window.prompt("Numéro de suivi du colis (laisse vide si tu n'en as pas encore) :", o.tracking || "");
+    if (input === null) return; // annulé
+    const tracking = input.trim();
+    let notifyCustomer = false;
+    if (tracking && o.customerEmail) {
+      notifyCustomer = window.confirm(`Envoyer un e-mail à ${o.customerEmail} avec le numéro de suivi ?`);
+    }
+    await setOrderStatus(o.id, "expediee", { tracking, notifyCustomer });
   }
 
   async function refundOrder(o) {
@@ -249,7 +267,22 @@ export default function GestionPage() {
   const nbCmd = validOrders.length;
   const nbRembourse = orders.length - validOrders.length;
   const panierMoyen = nbCmd ? ca / nbCmd : 0;
-  const aPreparer = orders.filter((o) => o.status !== "expediee" && o.status !== "remboursee" && o.status !== "annulee").length;
+  const aPreparer = orders.filter((o) => o.status !== "expediee" && o.status !== "livree" && o.status !== "remboursee" && o.status !== "annulee").length;
+
+  // Filtre + recherche des commandes (comme sur les grandes plateformes).
+  const orderQuery = orderSearch.trim().toLowerCase();
+  const filteredOrders = orders.filter((o) => {
+    const st = o.status || "a_preparer";
+    if (orderFilter === "a_preparer" && !(st === "a_preparer")) return false;
+    if (orderFilter === "expediee" && st !== "expediee") return false;
+    if (orderFilter === "livree" && st !== "livree") return false;
+    if (orderFilter === "annulee" && st !== "annulee" && st !== "remboursee") return false;
+    if (orderQuery) {
+      const hay = `${o.ref || ""} ${o.id || ""} ${o.customerName || ""} ${o.customerEmail || ""} ${(o.items || []).map((i) => i.name).join(" ")}`.toLowerCase();
+      if (!hay.includes(orderQuery)) return false;
+    }
+    return true;
+  });
 
   // Clientes (regroupées par e-mail) — hors remboursées
   const clientsMap = {};
@@ -315,7 +348,35 @@ export default function GestionPage() {
             {ordersReady && nbCmd === 0 && (
               <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune commande pour le moment. Elles apparaîtront ici automatiquement après chaque vente.</p></div>
             )}
-            {orders.map((o) => (
+
+            {orders.length > 0 && (
+              <>
+                <input
+                  value={orderSearch}
+                  onChange={(e) => setOrderSearch(e.target.value)}
+                  placeholder="Rechercher (nom, e-mail, n° de commande, produit)…"
+                  style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 10 }}
+                />
+                <div className="filters" style={{ justifyContent: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 6 }}>
+                  {[
+                    ["all", "Toutes"],
+                    ["a_preparer", "À préparer"],
+                    ["expediee", "Expédiées"],
+                    ["livree", "Livrées"],
+                    ["annulee", "Annulées / remboursées"],
+                  ].map(([val, label]) => (
+                    <button key={val} className={`filter-chip ${orderFilter === val ? "active" : ""}`} style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => setOrderFilter(val)}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {filteredOrders.length === 0 && (
+                  <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune commande ne correspond à ce filtre.</p></div>
+                )}
+              </>
+            )}
+
+            {filteredOrders.map((o) => (
               <div key={o.id} className="admin-block">
                 <div className="admin-row" style={{ gridTemplateColumns: "1fr auto", alignItems: "center" }}>
                   <h3 style={{ margin: 0 }}>
@@ -358,40 +419,58 @@ export default function GestionPage() {
                     </button>
                   </div>
                 ) : (
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <span style={{ fontWeight: 600, color: o.status === "expediee" ? "#256b34" : "#b4452f" }}>
-                      {o.status === "expediee" ? "✓ Expédiée" : "● À préparer"}
-                    </span>
-                    <button
-                      className="btn btn-outline"
-                      style={{ padding: "4px 12px", fontSize: "0.85rem" }}
-                      onClick={() => setOrderStatus(o.id, o.status === "expediee" ? "a_preparer" : "expediee")}
-                    >
-                      {o.status === "expediee" ? "Remettre à préparer" : "Marquer expédiée"}
-                    </button>
-                    <button
-                      className="btn btn-outline"
-                      style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }}
-                      onClick={() => refundOrder(o)}
-                      disabled={refunding === o.id}
-                    >
-                      {refunding === o.id ? "Remboursement…" : "↩ Rembourser"}
-                    </button>
-                    <button
-                      className="btn btn-outline"
-                      style={{ padding: "4px 12px", fontSize: "0.85rem" }}
-                      onClick={() => cancelOrder(o)}
-                    >
-                      ✕ Annuler
-                    </button>
-                    <button
-                      className="btn btn-outline"
-                      style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }}
-                      onClick={() => deleteOrder(o)}
-                    >
-                      🗑 Supprimer
-                    </button>
-                  </div>
+                  <>
+                    {o.tracking && (
+                      <div style={{ fontSize: "0.85rem", marginBottom: 8 }}>
+                        📦 Suivi : <strong>{o.tracking}</strong>{" "}
+                        <a href={`https://parcelsapp.com/en/tracking/${encodeURIComponent(o.tracking)}`} target="_blank" rel="noreferrer">suivre</a>
+                      </div>
+                    )}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                      <span style={{ fontWeight: 600, color: o.status === "livree" ? "#256b34" : o.status === "expediee" ? "#256b34" : "#b4452f" }}>
+                        {o.status === "livree" ? "✓✓ Livrée" : o.status === "expediee" ? "✓ Expédiée" : "● À préparer"}
+                      </span>
+
+                      {(!o.status || o.status === "a_preparer") && (
+                        <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
+                          Marquer expédiée
+                        </button>
+                      )}
+                      {o.status === "expediee" && (
+                        <>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "livree")}>
+                            Marquer livrée
+                          </button>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
+                            {o.tracking ? "Modifier le suivi" : "Ajouter un suivi"}
+                          </button>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "a_preparer")}>
+                            Remettre à préparer
+                          </button>
+                        </>
+                      )}
+                      {o.status === "livree" && (
+                        <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "expediee")}>
+                          Remettre expédiée
+                        </button>
+                      )}
+
+                      <button
+                        className="btn btn-outline"
+                        style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }}
+                        onClick={() => refundOrder(o)}
+                        disabled={refunding === o.id}
+                      >
+                        {refunding === o.id ? "Remboursement…" : "↩ Rembourser"}
+                      </button>
+                      <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => cancelOrder(o)}>
+                        ✕ Annuler
+                      </button>
+                      <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => deleteOrder(o)}>
+                        🗑 Supprimer
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
             ))}

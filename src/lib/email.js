@@ -69,6 +69,27 @@ export async function sendEmail({ to, subject, html, replyTo }) {
   return { ok: true };
 }
 
+// E-mail « commande expédiée » avec numéro de suivi, envoyé à la cliente.
+export function shippedEmail(order, tracking) {
+  const ref = order?.ref || order?.id?.slice(-6) || "";
+  const name = order?.customerName ? order.customerName.split(" ")[0] : "";
+  const trackUrl = `https://parcelsapp.com/en/tracking/${encodeURIComponent(tracking)}`;
+  const items = (order?.items || [])
+    .map((it) => `<tr><td style="padding:6px 0;border-bottom:1px solid #f0eadd;">${escapeHtml(`${it.quantity}× ${it.name}`)}</td></tr>`)
+    .join("");
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour${name ? " " + escapeHtml(name) : ""},</p>
+    <p style="margin:0 0 12px;">Bonne nouvelle : votre commande <strong>#${escapeHtml(ref)}</strong> vient d'être <strong>expédiée</strong> ! 📦</p>
+    <p style="margin:0 0 4px;">Numéro de suivi :</p>
+    <p style="margin:0 0 16px;font-size:18px;font-weight:bold;color:${BRAND.gold};">${escapeHtml(tracking)}</p>
+    <p style="margin:0 0 20px;">
+      <a href="${trackUrl}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-weight:bold;">Suivre mon colis</a>
+    </p>
+    ${items ? `<table style="width:100%;border-collapse:collapse;font-size:14px;"><tbody>${items}</tbody></table>` : ""}
+    <p style="margin:18px 0 0;">Merci pour votre confiance,<br>Niv Création</p>`;
+  return { subject: `Votre commande #${ref} est en route ✦`, html: emailLayout({ heading: "Votre commande est expédiée", bodyHtml: body }) };
+}
+
 // E-mail de démonstration (mêmes style et structure que la confirmation client réelle).
 export function sampleClientEmailHtml() {
   const body = `

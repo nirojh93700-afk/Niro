@@ -1,5 +1,6 @@
 import { isAdmin } from "@/lib/stock";
-import { getSiteOrders, updateSiteOrderStatus, deleteSiteOrder } from "@/lib/firebase";
+import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
+import { sendEmail, shippedEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -26,12 +27,25 @@ export async function POST(req) {
   } catch {
     return Response.json({ error: "Requête invalide." }, { status: 400 });
   }
-  const { id, status } = body || {};
-  if (!id || !["a_preparer", "expediee", "annulee"].includes(status)) {
+  const { id, status, tracking, notifyCustomer } = body || {};
+  if (!id || !["a_preparer", "expediee", "livree", "annulee"].includes(status)) {
     return Response.json({ error: "Paramètres invalides." }, { status: 400 });
   }
-  const ok = await updateSiteOrderStatus(id, status);
-  return Response.json({ ok });
+  const patch = { status };
+  if (typeof tracking === "string") patch.tracking = tracking.trim();
+  const ok = await updateSiteOrder(id, patch);
+
+  // E-mail « expédiée » avec suivi, si demandé et possible.
+  let emailed = false;
+  if (ok && status === "expediee" && notifyCustomer && patch.tracking) {
+    const order = await getSiteOrder(id);
+    if (order?.customerEmail) {
+      const { subject, html } = shippedEmail(order, patch.tracking);
+      const r = await sendEmail({ to: order.customerEmail, subject, html });
+      emailed = r.ok;
+    }
+  }
+  return Response.json({ ok, emailed });
 }
 
 // Supprime définitivement une commande (ex : commande de test).

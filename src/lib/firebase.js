@@ -167,6 +167,18 @@ export async function updateSiteOrderStatus(id, status) {
   }
 }
 
+export async function updateSiteOrder(id, patch) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    await admin.firestore().collection("siteOrders").doc(id).update(patch);
+    return true;
+  } catch (e) {
+    console.error("MAJ commande Firebase:", e.message);
+    return false;
+  }
+}
+
 export async function deleteSiteOrder(id) {
   const a = getApp();
   if (!a) return false;
