@@ -6,6 +6,7 @@ import { getCategoryLabel } from "@/lib/products";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
+import Model3DUpload from "@/components/admin/Model3DUpload";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
@@ -516,6 +517,8 @@ export default function GestionPage() {
                     onClick={() => saveImages(c.slug, c.overrideImages || [])}>
                     Enregistrer les photos {saved === c.slug ? "✓" : ""}
                   </button>
+
+                  <Model3DUpload slug={c.slug} current={c.model3d} adminKey={key} onSaved={() => load(key)} />
                 </div>
               );
             })}

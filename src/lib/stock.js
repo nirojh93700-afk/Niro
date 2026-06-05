@@ -192,6 +192,42 @@ export async function deleteCustomProduct(slug) {
   return true;
 }
 
+// --- Fichiers 3D (.glb / .gltf) --------------------------------------------
+// Stockés dans Netlify Blobs (binaire, peut être lourd). Servis via /api/model3d/<id>.
+const MODEL_STORE = "niv-models";
+async function getModelStore() {
+  try {
+    const { getStore } = await import("@netlify/blobs");
+    return getStore(MODEL_STORE);
+  } catch {
+    return null;
+  }
+}
+
+export async function saveModelFile(buffer, contentType) {
+  const store = await getModelStore();
+  if (!store) return null;
+  const id = "m_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  try {
+    await store.set(id, buffer, { metadata: { contentType: contentType || "model/gltf-binary" } });
+    return id;
+  } catch {
+    return null;
+  }
+}
+
+export async function getModelFile(id) {
+  const store = await getModelStore();
+  if (!store) return null;
+  try {
+    const res = await store.getWithMetadata(id, { type: "arrayBuffer" });
+    if (!res) return null;
+    return { data: res.data, contentType: res.metadata?.contentType || "model/gltf-binary" };
+  } catch {
+    return null;
+  }
+}
+
 // --- Réglages d'apparence (thème) ------------------------------------------
 // Tout est optionnel : un champ vide = on garde la valeur par défaut du site.
 export async function getSettings() {

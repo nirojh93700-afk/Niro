@@ -170,7 +170,8 @@ export default function ProductDetail({ product }) {
   const direction3d = fieldValues["sens"] === "down" ? "down" : "up";
 
   // Aperçu 3D cœur ouvrable (médaillon) : 4 faces + finition (argent / bicolore) + photo.
-  const any3d = product.engrave3d || product.engraveHeart3d;
+  // Aperçu 3D automatique (gravure) — utilisé seulement s'il n'y a PAS de fichier 3D fourni.
+  const any3d = (product.engrave3d || product.engraveHeart3d) && !product.model3d;
   // Médaillon livre : 5 faces (couverture, 3 pages, dos).
   const heartFaces = [
     fieldValues["cover"] || "",

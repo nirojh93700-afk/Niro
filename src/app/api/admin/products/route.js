@@ -26,6 +26,7 @@ export async function GET(req) {
       hidden: Boolean(p.hidden),
       custom: Boolean(p.custom),
       image: p.images?.[0] || "",
+      model3d: p.model3d || "",
       preview: p.preview || null,
       variants: (p.variants || []).map((v) => ({ id: v.id, title: v.title, price: v.price })),
     });
@@ -33,6 +34,7 @@ export async function GET(req) {
       slug: p.slug,
       name: p.name,
       category: p.category,
+      model3d: p.model3d || "",
       baseImages: p.images || [],
       overrideImages: overrides[p.slug] || [],
     });

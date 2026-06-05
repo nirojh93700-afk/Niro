@@ -12,7 +12,7 @@ import {
   getCustomProducts,
 } from "./stock";
 
-const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel"];
+const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d"];
 
 function applyOverride(product, ov, images, promos) {
   const p = { ...product };
