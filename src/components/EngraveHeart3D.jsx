@@ -51,10 +51,11 @@ function getPhotoImg(url) {
 
 const TEXW = 460, TEXH = 400;
 
-function drawCover(ctx, img, W, H) {
+// « contain » : la photo entière tient dans le cadre (pas de rognage).
+function drawContain(ctx, img, W, H) {
   const ir = img.width / img.height, cr = W / H;
   let dw, dh;
-  if (ir > cr) { dh = H; dw = H * ir; } else { dw = W; dh = W / ir; }
+  if (ir > cr) { dw = W; dh = W / ir; } else { dh = H; dw = H * ir; }
   ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
 }
 
@@ -86,14 +87,12 @@ function drawHeartFace(ctx, { text, fontKey, baseColor, ink, photo, bevel }) {
   if (photo) {
     const img = getPhotoImg(photo);
     if (img && img.complete && img.naturalWidth) {
-      const pw = TEXW * 0.6, ph = TEXH * 0.46;
-      const px = (TEXW - pw) / 2, py = TEXH * 0.16;
+      // Cadre dans la partie large du cœur ; photo entière (pas rognée).
+      const pw = TEXW * 0.66, ph = TEXH * 0.56;
+      const px = (TEXW - pw) / 2, py = TEXH * 0.1;
       ctx.save();
       ctx.translate(px, py);
-      ctx.beginPath();
-      ctx.rect(0, 0, pw, ph);
-      ctx.clip();
-      drawCover(ctx, img, pw, ph);
+      drawContain(ctx, img, pw, ph);
       ctx.restore();
     }
   }
