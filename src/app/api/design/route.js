@@ -1,10 +1,16 @@
+import { storeCustomerUpload } from "@/lib/firebase";
+
 export const dynamic = "force-dynamic";
 
-// Construit l'URL d'un APERÇU de dessin (gratuit, sans clé) à partir de la
-// description du client. L'image est ensuite chargée DIRECTEMENT par le
-// navigateur (le service la génère à la volée) — plus fiable que côté serveur.
+// Génère un APERÇU de dessin gravable à partir de la description du client.
+// - Si une clé Cloudflare Workers AI est configurée → service FIABLE (gratuit).
+// - Sinon → repli sur un service libre sans clé (gratuit mais parfois saturé).
+// Dans tous les cas, l'atelier valide / refait le dessin final avant gravure.
 
 const BANNED = ["porn", "porno", "nue", "sexe", "sexuel", "nazi", "haine", "drogue"];
+
+const CF_ACCOUNT = process.env.CLOUDFLARE_ACCOUNT_ID;
+const CF_TOKEN = process.env.CLOUDFLARE_AI_TOKEN;
 
 export async function POST(req) {
   let body;
@@ -16,9 +22,33 @@ export async function POST(req) {
     return Response.json({ error: "Cette demande ne peut pas être traitée. Décrivez un motif (prénoms, date, fleurs, anneaux…)." }, { status: 400 });
   }
 
-  // Style guidé pour la gravure : trait noir net, fond blanc, sans couleur.
   const styled = `black ink line art for laser engraving, clean thin black outlines on white background, monochrome line drawing, minimalist, decorative, no shading, no grayscale, ${desc}`;
+
+  // 1) Service fiable (Cloudflare Workers AI) si configuré.
+  if (CF_ACCOUNT && CF_TOKEN) {
+    try {
+      const r = await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT}/ai/run/@cf/black-forest-labs/flux-1-schnell`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${CF_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: styled, steps: 6 }),
+        }
+      );
+      const j = await r.json();
+      const b64 = j?.result?.image;
+      if (r.ok && b64) {
+        const dataUrl = `data:image/jpeg;base64,${b64}`;
+        const id = await storeCustomerUpload(dataUrl, { kind: "design", prompt: desc });
+        return Response.json({ url: id ? "/api/img/" + id : dataUrl, provider: "cloudflare" });
+      }
+    } catch {
+      // on retombe sur le service libre ci-dessous
+    }
+  }
+
+  // 2) Repli gratuit sans clé (chargé directement par le navigateur).
   const seed = body?.seed ? Number(body.seed) : Math.floor(Math.random() * 1_000_000);
   const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(styled)}?width=640&height=640&nologo=true&seed=${seed}`;
-  return Response.json({ url, seed });
+  return Response.json({ url, seed, provider: "free" });
 }
