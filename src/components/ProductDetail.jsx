@@ -132,8 +132,9 @@ export default function ProductDetail({ product }) {
   const colorField = visibleFields.find((f) => f.type === "color");
   const photoField = visibleFields.find((f) => f.type === "photo");
   const photoUrl = photoField ? fieldValues[photoField.key] : "";
-  // Affichable seulement si c'est une vraie image (URL/data), pas une réf.
-  const photoSrc = photoUrl && (photoUrl.startsWith("http") || photoUrl.startsWith("data:")) ? photoUrl : "";
+  // Affichable si c'est une vraie image : URL externe (http), data:, ou chemin
+  // interne (/api/img/... renvoyé par le téléversement).
+  const photoSrc = photoUrl && (photoUrl.startsWith("http") || photoUrl.startsWith("data:") || photoUrl.startsWith("/")) ? photoUrl : "";
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
