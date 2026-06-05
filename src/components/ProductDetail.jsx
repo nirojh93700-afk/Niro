@@ -12,6 +12,7 @@ import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
 import EngraveHeart3D from "./EngraveHeart3D";
+import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import DesignAssistant from "./DesignAssistant";
 
@@ -294,6 +295,12 @@ export default function ProductDetail({ product }) {
                 07 66 15 31 02
               </a>
               .
+            </div>
+          )}
+
+          {product.model3d && (
+            <div style={{ marginTop: 14, border: "1px solid var(--line)", borderRadius: 14, overflow: "hidden", background: "#faf7f1" }}>
+              <Model3D src={product.model3d} />
             </div>
           )}
 
