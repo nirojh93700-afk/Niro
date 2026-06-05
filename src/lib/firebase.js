@@ -167,6 +167,18 @@ export async function updateSiteOrderStatus(id, status) {
   }
 }
 
+export async function deleteSiteOrder(id) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    await admin.firestore().collection("siteOrders").doc(id).delete();
+    return true;
+  } catch (e) {
+    console.error("Suppression commande Firebase:", e.message);
+    return false;
+  }
+}
+
 // --- Devis & Factures ------------------------------------------------------
 // Crée un devis ou une facture avec numérotation séquentielle (obligation légale
 // pour les factures). Renvoie { id, number }.

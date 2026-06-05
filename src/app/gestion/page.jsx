@@ -161,6 +161,27 @@ export default function GestionPage() {
     }
   }
 
+  async function cancelOrder(o) {
+    const label = o.ref || o.id?.slice(-6);
+    if (!window.confirm(`Annuler la commande #${label} ?\nElle ne comptera plus dans le chiffre d'affaires. (Aucun remboursement n'est effectué — utilise « Rembourser » pour ça.)`)) return;
+    await setOrderStatus(o.id, "annulee");
+  }
+
+  async function deleteOrder(o) {
+    const label = o.ref || o.id?.slice(-6);
+    if (!window.confirm(`Supprimer définitivement la commande #${label} ?\nÀ utiliser surtout pour les commandes de test. Cette action est irréversible.`)) return;
+    setOrders((prev) => prev.filter((x) => x.id !== o.id));
+    try {
+      await fetch("/api/admin/orders", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ id: o.id }),
+      });
+    } catch (e) {
+      setError("Échec de la suppression.");
+    }
+  }
+
   async function sendTestEmail() {
     setTestMsg("");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail.trim())) {
@@ -222,13 +243,13 @@ export default function GestionPage() {
     try { return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
     catch { return iso || "—"; }
   };
-  // Les commandes remboursées ne comptent pas dans le chiffre d'affaires / stats.
-  const validOrders = orders.filter((o) => o.status !== "remboursee");
+  // Les commandes remboursées ou annulées ne comptent pas dans le chiffre d'affaires / stats.
+  const validOrders = orders.filter((o) => o.status !== "remboursee" && o.status !== "annulee");
   const ca = validOrders.reduce((s, o) => s + (Number(o.total) || 0), 0);
   const nbCmd = validOrders.length;
   const nbRembourse = orders.length - validOrders.length;
   const panierMoyen = nbCmd ? ca / nbCmd : 0;
-  const aPreparer = orders.filter((o) => o.status !== "expediee" && o.status !== "remboursee").length;
+  const aPreparer = orders.filter((o) => o.status !== "expediee" && o.status !== "remboursee" && o.status !== "annulee").length;
 
   // Clientes (regroupées par e-mail) — hors remboursées
   const clientsMap = {};
@@ -320,8 +341,21 @@ export default function GestionPage() {
                   ))}
                 </ul>
                 {o.status === "remboursee" ? (
-                  <div className="admin-row" style={{ gridTemplateColumns: "1fr", justifyContent: "flex-start" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                     <span style={{ fontWeight: 600, color: "#8a6d3b" }}>↩ Remboursée</span>
+                    <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => deleteOrder(o)}>
+                      🗑 Supprimer
+                    </button>
+                  </div>
+                ) : o.status === "annulee" ? (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 600, color: "#8a6d3b" }}>✕ Annulée</span>
+                    <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "a_preparer")}>
+                      Rétablir
+                    </button>
+                    <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => deleteOrder(o)}>
+                      🗑 Supprimer
+                    </button>
                   </div>
                 ) : (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -342,6 +376,20 @@ export default function GestionPage() {
                       disabled={refunding === o.id}
                     >
                       {refunding === o.id ? "Remboursement…" : "↩ Rembourser"}
+                    </button>
+                    <button
+                      className="btn btn-outline"
+                      style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                      onClick={() => cancelOrder(o)}
+                    >
+                      ✕ Annuler
+                    </button>
+                    <button
+                      className="btn btn-outline"
+                      style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }}
+                      onClick={() => deleteOrder(o)}
+                    >
+                      🗑 Supprimer
                     </button>
                   </div>
                 )}
