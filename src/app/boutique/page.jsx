@@ -36,6 +36,10 @@ export default async function BoutiquePage({ searchParams }) {
   const subs = activeCat ? getSubcategories(activeCat) : null;
   const isBijoux = activeCat === "bijoux";
 
+  // Catégories à afficher en filtre : celles qui ont au moins un produit visible.
+  const presentCats = new Set(withImages.map((p) => p.category));
+  const menuCategories = CATEGORIES.filter((c) => presentCats.has(c.slug) || c.slug === activeCat);
+
   // Conserve l'autre facette dans les liens (femme + collier combinables).
   const baseQs = `cat=${activeCat}`;
   const subHref = (sub) =>
@@ -82,7 +86,7 @@ export default async function BoutiquePage({ searchParams }) {
           <Link href="/boutique" className={`filter-chip ${!activeCat ? "active" : ""}`}>
             Tout
           </Link>
-          {CATEGORIES.map((c) => (
+          {menuCategories.map((c) => (
             <Link
               key={c.slug}
               href={`/boutique?cat=${c.slug}`}

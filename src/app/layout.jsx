@@ -16,6 +16,8 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import SiteGate from "@/components/SiteGate";
 import { getSettings } from "@/lib/stock";
+import { getCatalog } from "@/lib/catalog";
+import { CATEGORIES } from "@/lib/products";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -117,6 +119,17 @@ export default async function RootLayout({ children }) {
   const colorCss = rootRules.length ? `:root{${rootRules.join(";")};}` : "";
   const announce = settings.announce || {};
 
+  // Catégories du menu : seulement celles qui ont au moins un produit visible
+  // (les produits masqués sont déjà exclus par getCatalog).
+  let menuCategories = CATEGORIES;
+  try {
+    const catalog = await getCatalog();
+    const present = new Set(catalog.map((p) => p.category));
+    menuCategories = CATEGORIES.filter((c) => present.has(c.slug));
+  } catch {
+    // en secours, on garde toutes les catégories
+  }
+
   // Accès privé : si activé, on demande un code avant d'afficher le site.
   const access = settings.access || { locked: false, code: "" };
   let gateOpen = true;
@@ -141,7 +154,7 @@ export default async function RootLayout({ children }) {
               </div>
             ) : null}
             <CartProvider>
-              <Header />
+              <Header categories={menuCategories} />
               <main>{children}</main>
               <Footer />
               <CartDrawer />

@@ -5,9 +5,11 @@ import { useState } from "react";
 import { useCart } from "./CartContext";
 import { CATEGORIES } from "@/lib/products";
 
-export default function Header() {
+export default function Header({ categories }) {
   const { count, setDrawerOpen, hydrated } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  // Catégories à afficher : celles passées (non vides) ou toutes en secours.
+  const menuCats = categories && categories.length ? categories : CATEGORIES;
 
   return (
     <header className="header header-centered">
@@ -60,7 +62,7 @@ export default function Header() {
 
       <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
         <Link href="/boutique">Boutique</Link>
-        {CATEGORIES.map((c) => (
+        {menuCats.map((c) => (
           <Link key={c.slug} href={`/boutique?cat=${c.slug}`}>{c.short}</Link>
         ))}
         <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
