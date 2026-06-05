@@ -89,7 +89,7 @@ function drawHeartFace(ctx, { text, fontKey, baseColor, ink, photo, bevel }) {
     if (img && img.complete && img.naturalWidth) {
       // Cadre dans la partie large du cœur ; photo entière (pas rognée), bien dézoomée.
       const pw = TEXW * 0.42, ph = TEXH * 0.4;
-      const px = (TEXW - pw) / 2, py = TEXH * 0.28;
+      const px = (TEXW - pw) / 2, py = TEXH * 0.33;
       ctx.save();
       ctx.translate(px, py);
       drawContain(ctx, img, pw, ph);
