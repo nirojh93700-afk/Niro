@@ -165,21 +165,18 @@ export default function ProductDetail({ product }) {
 
   // Aperçu 3D cœur ouvrable (médaillon) : 4 faces + finition (argent / bicolore) + photo.
   const any3d = product.engrave3d || product.engraveHeart3d;
-  // Médaillon éventail : 8 faces (couverture, pages 1-6, dos).
+  // Médaillon livre : 5 faces (couverture, 3 pages, dos).
   const heartFaces = [
     fieldValues["cover"] || "",
     fieldValues["page1"] || "",
     fieldValues["page2"] || "",
     fieldValues["page3"] || "",
-    fieldValues["page4"] || "",
-    fieldValues["page5"] || "",
-    fieldValues["page6"] || "",
     fieldValues["backcover"] || "",
   ];
   const finishHeart = (variant.title || "").toLowerCase().includes("bicolore") ? "bicolore" : "silver";
   const heartPhoto = photoSrc; // photo réelle uniquement (url/data)
   // Page choisie pour la photo (la cliente la place où elle veut).
-  const HEART_PAGE_INDEX = { cover: 0, page1: 1, page2: 2, page3: 3, page4: 4, page5: 5, page6: 6, backcover: 7 };
+  const HEART_PAGE_INDEX = { cover: 0, page1: 1, page2: 2, page3: 3, backcover: 4 };
   const heartPhotoIndex = HEART_PAGE_INDEX[fieldValues["photoPage"]] ?? 1;
 
   function handleAdd() {

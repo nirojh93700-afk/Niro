@@ -114,14 +114,11 @@ export const products = [
     // Couverture (texte) incluse, +3 €/page de texte, photo +5 €.
     engravingPricing: { perExtraPage: 3, includedKey: "cover", photoKey: "photo", photoSurcharge: 5 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Médaillon qui s'ouvre en éventail : 8 faces à graver (couverture + 6 pages + dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +3 €. Remplissez seulement les faces souhaitées, les autres restent vierges. Astuce : les polices manuscrites ou en gras prennent plus de place — avec ces styles, prévoyez un texte plus court (15 caractères, c'est environ un prénom + une date)." },
+      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +3 €. Remplissez seulement les faces souhaitées, les autres restent vierges. Astuce : les polices manuscrites ou en gras prennent plus de place — avec ces styles, prévoyez un texte plus court (15 caractères, c'est environ un prénom + une date)." },
       { key: "cover", label: "Gravure — Couverture (texte inclus)", placeholder: "Prénom, mot court…", maxLength: 15 },
       { key: "page1", label: "Gravure — Page 1 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "page2", label: "Gravure — Page 2 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "page3", label: "Gravure — Page 3 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page4", label: "Gravure — Page 4 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page5", label: "Gravure — Page 5 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page6", label: "Gravure — Page 6 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "backcover", label: "Gravure — Dos (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photo", type: "photo", label: "Photo à graver (+5 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+5 €). Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
@@ -131,9 +128,6 @@ export const products = [
           { value: "page1", label: "Page 1" },
           { value: "page2", label: "Page 2" },
           { value: "page3", label: "Page 3" },
-          { value: "page4", label: "Page 4" },
-          { value: "page5", label: "Page 5" },
-          { value: "page6", label: "Page 6" },
           { value: "backcover", label: "Dos" },
         ] },
     ],
@@ -156,11 +150,11 @@ export const products = [
       { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 28.71 },
     ],
     descriptionHtml: `<p><strong>Un bijou élégant et intemporel à personnaliser.</strong></p>
-<p>Gardez vos souvenirs les plus précieux près de votre cœur. Le médaillon s'ouvre en éventail comme un petit livre et révèle <strong>8 faces entièrement personnalisables</strong> à graver selon vos envies.</p>
-<h3>Un médaillon, 8 faces</h3>
+<p>Gardez vos souvenirs les plus précieux près de votre cœur. Le médaillon s'ouvre comme un petit livre et révèle <strong>5 faces entièrement personnalisables</strong> à graver selon vos envies.</p>
+<h3>Un médaillon, 5 faces</h3>
 <ul>
 <li><strong>Couverture</strong> — gravure de texte incluse</li>
-<li><strong>Pages 1 à 6</strong> — gravure de texte à +3 € par page</li>
+<li><strong>Pages 1 à 3</strong> — gravure de texte à +3 € par page</li>
 <li><strong>Dos</strong> — gravure de texte à +3 €</li>
 </ul>
 <p>Sur chaque face : un texte court, ou une <strong>photo gravée (+5 €)</strong> que vous placez sur la page de votre choix (cette page ne porte alors pas de texte).</p>

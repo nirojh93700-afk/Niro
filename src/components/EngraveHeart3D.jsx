@@ -129,18 +129,16 @@ export default function EngraveHeart3D({
   faces = [], finish = "silver", fontKey = "playfair", photo = "", photoIndex = 1, height = 400, showHint = true,
 }) {
   const mountRef = useRef(null);
-  const matsRef = useRef([]);     // 8 matériaux indexés par numéro de face
+  const matsRef = useRef([]);     // 5 matériaux indexés par numéro de face
   const threeRef = useRef(null);
   const [tick, setTick] = useState(0);
 
-  // Couleur des 8 faces : couverture (0) et dos (7) argent, les 6 pages dorées
-  // en bicolore ; tout argent ou tout or sinon.
+  // 5 faces : Couverture (0) + 3 pages (1-3) + Dos (4).
+  // Couverture et dos argent ; les 3 pages dorées en bicolore ; tout argent/or sinon.
   function faceColors() {
-    if (finish === "gold") return Array(8).fill("gold");
-    if (finish === "bicolore") {
-      return ["silver", "gold", "gold", "gold", "gold", "gold", "gold", "silver"];
-    }
-    return Array(8).fill("silver");
+    if (finish === "gold") return Array(5).fill("gold");
+    if (finish === "bicolore") return ["silver", "gold", "gold", "gold", "silver"];
+    return Array(5).fill("silver");
   }
 
   useEffect(() => {
@@ -230,37 +228,30 @@ export default function EngraveHeart3D({
         metalness: 1.0, roughness: 0.26, clearcoat: 0.95, clearcoatRoughness: 0.14, envMapIntensity: 1.35,
       });
 
-      // 4 feuillets recto-verso, reliés à gauche. Faces : leaf k = [2k] (recto) / [2k+1] (verso).
-      const NUM = 4;
+      // 5 feuillets « page », reliés à gauche : Couverture, Page 1, Page 2, Page 3, Dos.
+      // Chaque feuillet porte sa gravure sur le dessus ; on les tourne un par un.
+      const NUM = 5;
       const leaves = [];
-      const matsByIdx = new Array(8);
+      const matsByIdx = new Array(NUM);
       for (let k = 0; k < NUM; k++) {
-        const frontIdx = 2 * k, backIdx = 2 * k + 1;
         const group = new THREE.Group();
-        group.position.set(hingeX, 0, (NUM - 1 - k) * (T + 0.01)); // couverture (k=0) devant
+        group.position.set(hingeX, 0, (NUM - 1 - k) * (T + 0.008)); // couverture (k=0) devant
         const inner = new THREE.Group();
         inner.position.set(-hingeX, 0, 0); // recentre le cœur, pivot au bord gauche
 
         const ext = new THREE.ExtrudeGeometry(shape, { depth: T, bevelEnabled: false });
         ext.translate(0, 0, -T / 2);
-        inner.add(new THREE.Mesh(ext, metalMat(colors[frontIdx])));
+        inner.add(new THREE.Mesh(ext, metalMat(colors[k])));
 
-        const fMat = faceMat(frontIdx);
+        const fMat = faceMat(k);
         const front = new THREE.Mesh(shapeGeo(), fMat);
         front.position.z = T / 2 + 0.003;
         inner.add(front);
 
-        const bMat = faceMat(backIdx);
-        const back = new THREE.Mesh(shapeGeo(), bMat);
-        back.rotation.y = Math.PI;
-        back.position.z = -T / 2 - 0.003;
-        inner.add(back);
-
         group.add(inner);
         scene.add(group);
         leaves.push(group);
-        matsByIdx[frontIdx] = fMat;
-        matsByIdx[backIdx] = bMat;
+        matsByIdx[k] = fMat;
       }
       matsRef.current = matsByIdx;
 
@@ -375,7 +366,7 @@ export default function EngraveHeart3D({
     const { THREE } = ctx;
     const maxAniso = ctx.renderer.capabilities.getMaxAnisotropy();
     const colors = faceColors();
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < mats.length; i++) {
       const mat = mats[i];
       if (!mat) continue;
       const fc = FINISH[colors[i]] || FINISH.silver;
@@ -397,7 +388,7 @@ export default function EngraveHeart3D({
       {showHint && (
         <>
           <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>
-            ↔ Le cœur s'ouvre comme un livre — 8 faces (couverture, 6 pages, dos)
+            ↔ Le cœur s'ouvre comme un livre — 5 faces (couverture, 3 pages, dos)
           </span>
           <span style={{ fontSize: "0.72rem", color: "var(--ink-soft)", textAlign: "center", maxWidth: 340, fontStyle: "italic" }}>
             Aperçu 3D à titre indicatif — le rendu réel de la gravure peut légèrement varier.
