@@ -94,9 +94,12 @@ export default function ProductDetail({ product }) {
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
   const originLabel = madeHere ? "Fabriqué en France" : "Gravé en France";
 
-  // Champs de gravure visibles selon l'option (variante) sélectionnée.
+  // Champs de gravure visibles : selon la variante, et selon un champ requis
+  // (ex. « sur quelle page ? » n'apparaît que si une photo a été ajoutée).
   const visibleFields = (product.personalizationFields || []).filter(
-    (f) => !f.variantContains || variant.title.includes(f.variantContains)
+    (f) =>
+      (!f.variantContains || variant.title.includes(f.variantContains)) &&
+      (!f.requiresField || (fieldValues[f.requiresField] || "").toString().trim())
   );
 
   function setField(key, value) {

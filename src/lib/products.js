@@ -122,7 +122,7 @@ export const products = [
       { key: "backcover", label: "Gravure — Dos (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photo", type: "photo", label: "Photo à graver (+5 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+5 €). Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
-      { key: "photoPage", type: "select", label: "Mettre la photo sur quelle page ?", optional: true,
+      { key: "photoPage", type: "select", label: "Sur quelle page graver la photo ?", requiresField: "photo",
         options: [
           { value: "cover", label: "Couverture" },
           { value: "page1", label: "Page 1" },
