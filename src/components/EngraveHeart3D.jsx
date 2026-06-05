@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Aperçu 3D du médaillon cœur « éventail » (8 faces gravables).
-// Charnière centrale verticale ; les cœurs s'écartent en éventail des deux côtés
-// (Couverture · Pages 1-6 · Dos). Finition argent / bicolore (couvertures argent,
-// pages dorées) / or. À titre indicatif.
+// Aperçu 3D du médaillon cœur qui s'ouvre COMME UN LIVRE (8 faces gravables).
+// Charnière sur le côté ; 4 feuillets (recto-verso) dont on tourne les pages une
+// par une : Couverture / Page 1 — Page 2 / Page 3 — Page 4 / Page 5 — Page 6 / Dos.
+// Finition argent / bicolore (couvertures argent, pages dorées) / or. À titre indicatif.
 
 const FINISH = {
   silver: { base: "#eaeaec", ink: "rgba(22,20,18,0.92)" },
@@ -61,7 +61,6 @@ function drawCover(ctx, img, W, H) {
 function layoutText(ctx, text, fontKey, maxW, maxH) {
   const words = (text || "").trim().split(/\s+/).filter(Boolean);
   if (!words.length) return null;
-  // taille plafonnée (sinon 1-2 lettres deviennent énormes sur une si petite page)
   for (let size = 40; size >= 14; size -= 2) {
     ctx.font = fontSpec(fontKey, size);
     const lines = [];
@@ -124,15 +123,17 @@ function faceCanvas(opts) {
   return c;
 }
 
+function smoothstep(p) { const x = Math.max(0, Math.min(1, p)); return x * x * (3 - 2 * x); }
+
 export default function EngraveHeart3D({
   faces = [], finish = "silver", fontKey = "playfair", photo = "", photoIndex = 1, height = 400, showHint = true,
 }) {
   const mountRef = useRef(null);
-  const matsRef = useRef([]);     // 8 matériaux : couverture, pages 1-6, dos
+  const matsRef = useRef([]);     // 8 matériaux indexés par numéro de face
   const threeRef = useRef(null);
   const [tick, setTick] = useState(0);
 
-  // Couleur des 8 faces : couvertures (1ʳᵉ et dernière) argent, les 6 pages dorées
+  // Couleur des 8 faces : couverture (0) et dos (7) argent, les 6 pages dorées
   // en bicolore ; tout argent ou tout or sinon.
   function faceColors() {
     if (finish === "gold") return Array(8).fill("gold");
@@ -165,7 +166,7 @@ export default function EngraveHeart3D({
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 100);
-      camera.position.set(0, 0, 9.6);
+      camera.position.set(-0.3, 0.2, 8.6);
 
       const pmrem = new THREE.PMREMGenerator(renderer);
       const envMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -187,16 +188,16 @@ export default function EngraveHeart3D({
       }
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
       raw.forEach((p) => { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y); });
-      const scale = 1.7 / (maxY - minY);    // hauteur d'un cœur ~1.7
+      const scale = 2.0 / (maxY - minY);
       const cxv = (minX + maxX) / 2, cyv = (minY + maxY) / 2;
       const pts = raw.map((p) => new THREE.Vector2((p.x - cxv) * scale, (p.y - cyv) * scale));
       const shape = new THREE.Shape(pts);
 
-      const HH = (maxY - minY) / 2 * scale;  // demi-hauteur d'un cœur
-      const T = 0.06;                        // épaisseur d'un feuillet
-      const pivotY = HH * 0.82;              // point de reliure (haut, près de la charnière)
+      const HW = (maxX - minX) / 2 * scale;  // demi-largeur
+      const HH = (maxY - minY) / 2 * scale;  // demi-hauteur
+      const hingeX = -HW * 0.98;             // charnière au bord gauche
+      const T = 0.07;                        // épaisseur d'un feuillet
 
-      // UV remappées sur la boîte englobante.
       function shapeGeo() {
         const g = new THREE.ShapeGeometry(shape, 24);
         g.computeBoundingBox();
@@ -216,7 +217,6 @@ export default function EngraveHeart3D({
         const fc = FINISH[colors[idx]] || FINISH.silver;
         const withPhoto = (idx === photoIndex) && photo;
         const map = new THREE.CanvasTexture(faceCanvas({
-          // sur la page photo : uniquement la photo, pas de texte.
           text: withPhoto ? "" : (faces[idx] || ""), fontKey, baseColor: fc.base, ink: fc.ink, photo: withPhoto ? photo : "", bevel: true,
         }));
         map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
@@ -230,88 +230,95 @@ export default function EngraveHeart3D({
         metalness: 1.0, roughness: 0.26, clearcoat: 0.95, clearcoatRoughness: 0.14, envMapIntensity: 1.35,
       });
 
-      // 8 feuillets « cœur », reliés en haut au centre, qui s'écartent en éventail.
-      const NUM = 8;
+      // 4 feuillets recto-verso, reliés à gauche. Faces : leaf k = [2k] (recto) / [2k+1] (verso).
+      const NUM = 4;
       const leaves = [];
-      const mats = [];
-      const extra = []; // épaisseurs métal
-      for (let i = 0; i < NUM; i++) {
-        const grp = new THREE.Group();
-        grp.position.set(0, pivotY, (NUM - 1 - i) * (T + 0.004)); // couverture (i=0) devant
+      const matsByIdx = new Array(8);
+      for (let k = 0; k < NUM; k++) {
+        const frontIdx = 2 * k, backIdx = 2 * k + 1;
+        const group = new THREE.Group();
+        group.position.set(hingeX, 0, (NUM - 1 - k) * (T + 0.01)); // couverture (k=0) devant
         const inner = new THREE.Group();
-        inner.position.set(0, -pivotY, 0); // recentre le cœur sous la reliure
+        inner.position.set(-hingeX, 0, 0); // recentre le cœur, pivot au bord gauche
 
-        // corps métal (fine épaisseur)
         const ext = new THREE.ExtrudeGeometry(shape, { depth: T, bevelEnabled: false });
         ext.translate(0, 0, -T / 2);
-        inner.add(new THREE.Mesh(ext, metalMat(colors[i])));
+        inner.add(new THREE.Mesh(ext, metalMat(colors[frontIdx])));
 
-        // face gravée (vers +z)
-        const fMat = faceMat(i);
+        const fMat = faceMat(frontIdx);
         const front = new THREE.Mesh(shapeGeo(), fMat);
         front.position.z = T / 2 + 0.003;
         inner.add(front);
 
-        grp.add(inner);
-        scene.add(grp);
-        leaves.push(grp);
-        mats.push(fMat);
-      }
-      matsRef.current = mats;
+        const bMat = faceMat(backIdx);
+        const back = new THREE.Mesh(shapeGeo(), bMat);
+        back.rotation.y = Math.PI;
+        back.position.z = -T / 2 - 0.003;
+        inner.add(back);
 
-      // --- Charnière centrale (cylindre doré strié) ---
-      const spineLen = HH * 1.5;
+        group.add(inner);
+        scene.add(group);
+        leaves.push(group);
+        matsByIdx[frontIdx] = fMat;
+        matsByIdx[backIdx] = bMat;
+      }
+      matsRef.current = matsByIdx;
+
+      // --- Charnière (cylindre doré strié) sur le côté ---
+      const spineLen = HH * 1.7;
       const spineMat = metalMat(finish === "silver" ? "silver" : "gold");
-      const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, spineLen, 24), spineMat);
-      spine.position.set(0, pivotY - spineLen / 2 + HH * 0.15, 0);
+      const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, spineLen, 24), spineMat);
+      spine.position.set(hingeX, 0, 0);
       scene.add(spine);
-      for (let i = 0; i < 7; i++) {
-        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.018, 10, 24), metalMat("silver"));
+      for (let i = -3; i <= 3; i++) {
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.017, 10, 24), metalMat("silver"));
         ring.rotation.x = Math.PI / 2;
-        ring.position.set(0, spine.position.y + (i - 3) * (spineLen / 7), 0);
+        ring.position.set(hingeX, i * (spineLen / 8), 0);
         scene.add(ring);
       }
 
-      // --- Bélière + chaîne (au sommet de la charnière) ---
-      const topY = pivotY + 0.12;
+      // --- Bélière + chaîne (sommet de la charnière) ---
+      const topY = spineLen / 2;
       const bail = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.024, 16, 32), metalMat("silver"));
-      bail.position.set(0, topY + 0.12, 0);
+      bail.position.set(hingeX, topY + 0.12, 0);
       scene.add(bail);
       const chainMat = metalMat("gold");
       const mkChain = (sign) => {
         const curve = new THREE.QuadraticBezierCurve3(
-          new THREE.Vector3(0, topY + 0.22, 0),
-          new THREE.Vector3(sign * 0.55, topY + 0.95, 0),
-          new THREE.Vector3(sign * 0.95, topY + 1.6, 0)
+          new THREE.Vector3(hingeX, topY + 0.22, 0),
+          new THREE.Vector3(hingeX + sign * 0.5, topY + 0.95, 0),
+          new THREE.Vector3(hingeX + sign * 0.85, topY + 1.6, 0)
         );
         return new THREE.Mesh(new THREE.TubeGeometry(curve, 30, 0.02, 8, false), chainMat);
       };
       scene.add(mkChain(-1), mkChain(1));
 
       const controls = new OrbitControls(camera, renderer.domElement);
-      controls.target.set(0, -0.15, 0);
+      controls.target.set(-0.35, -0.1, 0);
       controls.enableZoom = false;
       controls.enablePan = false;
       controls.autoRotate = false;
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
-      controls.minPolarAngle = Math.PI / 2.5;
-      controls.maxPolarAngle = Math.PI / 1.7;
+      controls.minPolarAngle = Math.PI / 2.6;
+      controls.maxPolarAngle = Math.PI / 1.75;
       controls.update();
 
       threeRef.current = { THREE, renderer, scene };
 
-      // angle d'éventail max par feuillet (couverture à gauche, dos à droite)
-      const FAN = 1.4; // ~80° de chaque côté
-      const angleFor = (i) => FAN - i * (2 * FAN / (NUM - 1)); // +FAN .. -FAN
-
+      // Animation « livre » : on tourne les pages une par une, puis on referme.
+      const OPEN = Math.PI * 0.92;   // ~166° (page rabattue à gauche)
+      const PERIOD = 15;             // durée d'un cycle ouverture + fermeture (s)
       const clock = new THREE.Clock();
       let raf;
       const animate = () => {
         const t = clock.getElapsedTime();
-        // cycle complet : cœur fermé (spread 0) → éventail grand ouvert (spread 1) → fermé
-        const spread = 0.5 - 0.5 * Math.cos(t * 0.8);
-        for (let i = 0; i < NUM; i++) leaves[i].rotation.z = angleFor(i) * spread;
+        const tt = (t % PERIOD) / PERIOD;            // 0..1
+        // phase 0..NUM..0 (ouvre les 4 pages, puis referme)
+        const phase = tt < 0.5 ? (tt / 0.5) * NUM : (1 - (tt - 0.5) / 0.5) * NUM;
+        for (let k = 0; k < NUM; k++) {
+          leaves[k].rotation.y = -OPEN * smoothstep(phase - k);
+        }
         controls.update();
         renderer.render(scene, camera);
         raf = requestAnimationFrame(animate);
@@ -338,7 +345,6 @@ export default function EngraveHeart3D({
         });
         envMap.dispose(); pmrem.dispose(); renderer.dispose();
         if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
-        void extra;
       };
     })();
 
@@ -369,7 +375,9 @@ export default function EngraveHeart3D({
     const { THREE } = ctx;
     const maxAniso = ctx.renderer.capabilities.getMaxAnisotropy();
     const colors = faceColors();
-    mats.forEach((mat, i) => {
+    for (let i = 0; i < 8; i++) {
+      const mat = mats[i];
+      if (!mat) continue;
       const fc = FINISH[colors[i]] || FINISH.silver;
       const withPhoto = (i === photoIndex) && photo;
       const old = mat.map;
@@ -379,7 +387,7 @@ export default function EngraveHeart3D({
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.needsUpdate = true;
       if (old) old.dispose();
-    });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [faces, finish, fontKey, photo, photoIndex, tick]);
 
@@ -389,7 +397,7 @@ export default function EngraveHeart3D({
       {showHint && (
         <>
           <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>
-            ↔ Le cœur s'ouvre en éventail — 8 faces (couverture, 6 pages, dos)
+            ↔ Le cœur s'ouvre comme un livre — 8 faces (couverture, 6 pages, dos)
           </span>
           <span style={{ fontSize: "0.72rem", color: "var(--ink-soft)", textAlign: "center", maxWidth: 340, fontStyle: "italic" }}>
             Aperçu 3D à titre indicatif — le rendu réel de la gravure peut légèrement varier.
