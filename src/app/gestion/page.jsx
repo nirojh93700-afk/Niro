@@ -38,6 +38,7 @@ export default function GestionPage() {
   const [refunding, setRefunding] = useState("");
   const [orderFilter, setOrderFilter] = useState("all");
   const [orderSearch, setOrderSearch] = useState("");
+  const [openClient, setOpenClient] = useState(-1);
   const [testEmail, setTestEmail] = useState("");
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
@@ -288,9 +289,10 @@ export default function GestionPage() {
   const clientsMap = {};
   for (const o of validOrders) {
     const k = (o.customerEmail || o.customerName || "—").toLowerCase();
-    if (!clientsMap[k]) clientsMap[k] = { name: o.customerName || "—", email: o.customerEmail || "", phone: o.customerPhone || "", nb: 0, total: 0, last: o.createdAt };
+    if (!clientsMap[k]) clientsMap[k] = { name: o.customerName || "—", email: o.customerEmail || "", phone: o.customerPhone || "", nb: 0, total: 0, last: o.createdAt, orders: [] };
     clientsMap[k].nb += 1;
     clientsMap[k].total += Number(o.total) || 0;
+    clientsMap[k].orders.push({ id: o.id, ref: o.ref || o.id?.slice(-6), status: o.status || "a_preparer", tracking: o.tracking || "", total: o.total, createdAt: o.createdAt });
     if (o.customerPhone && !clientsMap[k].phone) clientsMap[k].phone = o.customerPhone;
   }
   const clients = Object.values(clientsMap).sort((a, b) => b.total - a.total);
@@ -511,16 +513,46 @@ export default function GestionPage() {
             {clients.length === 0 && (
               <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune cliente pour le moment.</p></div>
             )}
+            <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -8 }}>Touche une cliente pour voir ses colis et suivre la livraison.</p>
             {clients.map((c, i) => (
               <div key={i} className="admin-block">
-                <div className="admin-row" style={{ gridTemplateColumns: "1fr auto" }}>
-                  <span className="admin-variant"><strong>{c.name}</strong></span>
-                  <span className="admin-price">{formatEuro(c.total)}</span>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setOpenClient(openClient === i ? -1 : i)}
+                >
+                  <div className="admin-row" style={{ gridTemplateColumns: "1fr auto" }}>
+                    <span className="admin-variant"><strong>{c.name}</strong> <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>{openClient === i ? "▾" : "▸"}</span></span>
+                    <span className="admin-price">{formatEuro(c.total)}</span>
+                  </div>
+                  <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>
+                    {c.email ? <a href={`mailto:${c.email}`} onClick={(e) => e.stopPropagation()}>{c.email}</a> : "—"}
+                    {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
+                  </div>
                 </div>
-                <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>
-                  {c.email ? <a href={`mailto:${c.email}`}>{c.email}</a> : "—"}
-                  {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
-                </div>
+
+                {openClient === i && (
+                  <div style={{ marginTop: 10, borderTop: "1px dashed var(--line)", paddingTop: 10 }}>
+                    {c.orders.map((ord, j) => {
+                      const label = ord.status === "livree" ? "✓✓ Livrée" : ord.status === "expediee" ? "✓ Expédiée" : "● À préparer";
+                      const col = ord.status === "livree" || ord.status === "expediee" ? "#256b34" : "#b4452f";
+                      return (
+                        <div key={j} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", fontSize: "0.88rem", marginBottom: 8 }}>
+                          <strong>#{ord.ref}</strong>
+                          <span style={{ color: "var(--ink-soft)" }}>{fmtDate(ord.createdAt)}</span>
+                          <span style={{ color: col, fontWeight: 600 }}>{label}</span>
+                          <span style={{ color: "var(--ink-soft)" }}>{formatEuro(ord.total)}</span>
+                          {ord.tracking ? (
+                            <a href={`https://parcelsapp.com/en/tracking/${encodeURIComponent(ord.tracking)}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>
+                              📍 Où est le colis ?
+                            </a>
+                          ) : (
+                            <span style={{ color: "var(--ink-soft)", fontStyle: "italic" }}>pas de suivi</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ))}
           </>
