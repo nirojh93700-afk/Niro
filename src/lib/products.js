@@ -950,9 +950,12 @@ export const products = [
     tagline: "Une clé USB en cristal, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
-      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
+      { key: "photo", type: "photo", label: "Photo à graver en 3D", optional: true, text: "Photo nette et contrastée pour un beau rendu." },
       { key: "texte", label: "Texte à graver (optionnel)", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
+      { key: "note-design", type: "note", text: "Pas de dessin sous la main ? Décrivez votre idée (mariage, prénoms, thème…) et générez gratuitement un aperçu. L'atelier réalisera et validera le dessin final avant la gravure." },
+      { key: "designDesc", type: "textarea", label: "Décrire un dessin à créer (optionnel)", placeholder: "Ex : mariage Marie & Paul, 14 juin 2025, fleurs et deux alliances", maxLength: 200, optional: true },
+      { key: "design", type: "design", promptKey: "designDesc", label: "Aperçu du dessin (IA — gratuit)", optional: true },
     ],
     images: [
       "/produits/cle_usb_cristal_argent_4gb.jpg",

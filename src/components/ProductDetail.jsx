@@ -13,6 +13,7 @@ import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
 import EngraveHeart3D from "./EngraveHeart3D";
 import MotifPicker from "./MotifPicker";
+import DesignAssistant from "./DesignAssistant";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -390,6 +391,15 @@ export default function ProductDetail({ product }) {
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <MotifPicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} />
+                    </div>
+                  );
+                }
+                if (f.type === "design") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <DesignAssistant prompt={fieldValues[f.promptKey] || ""} value={fieldValues[f.key] || ""} onChange={(u) => setField(f.key, u)} />
+                      {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
                   );
                 }
