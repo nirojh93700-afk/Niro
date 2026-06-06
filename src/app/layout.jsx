@@ -9,7 +9,7 @@ import {
   Pacifico,
 } from "next/font/google";
 import "./globals.css";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -102,6 +102,18 @@ const FONT_VARS = {
 };
 
 export default async function RootLayout({ children }) {
+  // Espace plateforme (/plateforme) : page autonome, sans portail d'accès ni
+  // habillage boutique (en-tête, pied de page, panier). Il gère sa propre
+  // connexion par mot de passe.
+  const pathname = headers().get("x-pathname") || "";
+  if (pathname.startsWith("/plateforme")) {
+    return (
+      <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
+        <body>{children}</body>
+      </html>
+    );
+  }
+
   let settings = {
     color: "", fontHeading: "", fontBody: "",
     announce: { enabled: false, text: "", link: "" },
