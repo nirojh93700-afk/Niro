@@ -220,9 +220,11 @@ export default function PlateformePage() {
               {clients.map((c) => {
                 const es = ETAT_SITE[c.etatSite] || ETAT_SITE.preparation;
                 const enRetard = c.abonnement?.etat === "retard";
-                const aboLabel = c.abonnement?.formule
-                  ? `${c.abonnement.formule} · ${c.abonnement.prix} €`
-                  : enRetard ? "Retard" : "À configurer";
+                const aboLabel = c.vous
+                  ? "Votre boutique"
+                  : c.abonnement?.formule
+                    ? `${c.abonnement.formule} · ${c.abonnement.prix} €`
+                    : enRetard ? "Retard" : "À configurer";
                 return (
                   <div className="row" key={c.id}>
                     <span className="ava">{c.nom[0]}</span>
@@ -234,7 +236,7 @@ export default function PlateformePage() {
                       <span className="dot" style={{ background: es.green ? GREEN : GOLD, boxShadow: `0 0 10px ${es.green ? GREEN : GOLD}` }} />{es.label}
                     </span>
                     <div style={{ width: 150, textAlign: "right", display: "flex", justifyContent: "flex-end", gap: 10, alignItems: "center" }}>
-                      <span className={"pill" + (enRetard ? "" : " green")} style={{ background: "transparent", border: "none", color: enRetard ? GOLD : "#b6b1a4" }}>{aboLabel}</span>
+                      <span className={"pill" + (enRetard ? "" : " green")} style={{ background: "transparent", border: "none", color: (enRetard || c.vous) ? GOLD : "#b6b1a4" }}>{aboLabel}</span>
                       {c.adminUrl
                         ? <a className="btn ghost" href={c.adminUrl} target="_blank" rel="noreferrer">Admin</a>
                         : <span style={{ color: "#6e6a5e" }}>—</span>}

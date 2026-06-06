@@ -9,6 +9,16 @@
 // Une cliente = une boutique gérée depuis la plateforme.
 export const clients = [
   {
+    id: "niv-creation",
+    nom: "Niv Création",
+    domaine: "nivcreation.fr",
+    etatSite: "en-ligne",
+    abonnement: { formule: null, prix: 0, etat: "aucun" },
+    adminUrl: "/gestion",
+    depuis: "2026-03",
+    vous: true, // votre propre boutique, reliée à la plateforme
+  },
+  {
     id: "boutique-marie",
     nom: "Boutique Marie",
     domaine: "boutique-marie.fr",
