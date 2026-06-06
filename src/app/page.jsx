@@ -10,7 +10,7 @@ const HERO_DEFAULTS = {
   title: "Des créations uniques, gravées avec émotion.",
   text: "Bijoux, décorations de mariage et cadeaux personnalisés, façonnés à la main dans notre atelier. Chaque pièce raconte votre histoire.",
   cta1: "Découvrir la boutique",
-  cta2: "Collection mariage",
+  cta2: "Idées cadeaux",
   image: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/jewelry-natural-1.jpg?v=1774981669",
 };
 
@@ -79,7 +79,7 @@ export default async function HomePage() {
             <p>{hero.text}</p>
             <div className="hero-cta">
               <Link href="/boutique" className="btn btn-gold">{hero.cta1}</Link>
-              <Link href="/boutique?cat=mariage" className="btn btn-outline">{hero.cta2}</Link>
+              <Link href="/boutique?cat=cadeaux" className="btn btn-outline">{hero.cta2}</Link>
             </div>
             <div className="hero-badges">
               <div className="hero-badge"><span>🪵</span> Fait main en France</div>
