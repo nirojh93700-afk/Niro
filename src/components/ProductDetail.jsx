@@ -33,7 +33,6 @@ export default function ProductDetail({ product }) {
   const [showMini, setShowMini] = useState(false); // mini 3D flottant (mobile)
   const photoRef = useRef(null);
   const big3dRef = useRef(null);
-  const endRef = useRef(null);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 901px)");
     const upd = () => setIsWide(mq.matches);
@@ -45,23 +44,28 @@ export default function ProductDetail({ product }) {
   // et que le grand 3D (en bas) n'est pas encore visible.
   useEffect(() => {
     if (isWide || !(product.engrave3d || product.engraveHeart3d)) { setShowMini(false); return; }
-    const photo = photoRef.current;
-    const big = big3dRef.current;
-    const end = endRef.current;
-    if (!photo || !big) return;
-    let photoIn = true, bigIn = false, pastEnd = false;
-    // Le mini ne s'affiche que dans la zone de personnalisation : caché une fois
-    // qu'on a dépassé la zone d'achat (description, infos, pied de page).
-    const update = () => setShowMini(!photoIn && !bigIn && !pastEnd);
-    const o1 = new IntersectionObserver(([e]) => { photoIn = e.isIntersecting; update(); }, { threshold: 0 });
-    const o2 = new IntersectionObserver(([e]) => { bigIn = e.isIntersecting; update(); }, { threshold: 0 });
-    o1.observe(photo); o2.observe(big);
-    let o3;
-    if (end) {
-      o3 = new IntersectionObserver(([e]) => { pastEnd = !e.isIntersecting && e.boundingClientRect.top < 0; update(); }, { threshold: 0 });
-      o3.observe(end);
-    }
-    return () => { o1.disconnect(); o2.disconnect(); o3?.disconnect(); };
+    // Méthode fiable : on calcule les positions à chaque défilement.
+    // Le mini 3D ne s'affiche QUE tant qu'on n'a pas atteint le grand 3D
+    // (il est encore plus bas). Dès qu'on l'a vu/dépassé, plus de mini —
+    // donc rien sur la description ni le pied de page.
+    const compute = () => {
+      const photo = photoRef.current;
+      const big = big3dRef.current;
+      if (!photo || !big) { setShowMini(false); return; }
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const pr = photo.getBoundingClientRect();
+      const br = big.getBoundingClientRect();
+      const photoVisible = pr.bottom > 0 && pr.top < vh;
+      const bigStillBelow = br.top > vh * 0.6; // le grand 3D est encore plus bas
+      setShowMini(!photoVisible && bigStillBelow);
+    };
+    compute();
+    window.addEventListener("scroll", compute, { passive: true });
+    window.addEventListener("resize", compute);
+    return () => {
+      window.removeEventListener("scroll", compute);
+      window.removeEventListener("resize", compute);
+    };
   }, [isWide, product.engrave3d, product.engraveHeart3d]);
   useEffect(() => {
     fetch("/api/stock")
@@ -560,9 +564,6 @@ export default function ProductDetail({ product }) {
             <div className="hero-badge">Paiement sécurisé</div>
             <div className="hero-badge">Pièce personnalisée</div>
           </div>
-
-          {/* Repère de fin de zone d'achat : au-delà, le mini 3D flottant se cache. */}
-          <div ref={endRef} aria-hidden="true" />
 
           <div
             className="product-desc"
