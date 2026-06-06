@@ -139,7 +139,7 @@ export default function GestionPage() {
       });
       const d = await res.json().catch(() => ({}));
       if (extra.notifyCustomer && !d.emailed) {
-        setError("Commande marquée expédiée, mais l'e-mail de suivi n'a pas pu être envoyé (vérifie l'e-mail Resend dans Réglages).");
+        setError("Statut mis à jour, mais l'e-mail au client n'a pas pu être envoyé (vérifie l'e-mail Resend dans Réglages).");
       }
     } catch (e) {
       setError("Échec de la mise à jour du statut.");
@@ -183,7 +183,11 @@ export default function GestionPage() {
   async function cancelOrder(o) {
     const label = o.ref || o.id?.slice(-6);
     if (!window.confirm(`Annuler la commande #${label} ?\nElle ne comptera plus dans le chiffre d'affaires. (Aucun remboursement n'est effectué — utilise « Rembourser » pour ça.)`)) return;
-    await setOrderStatus(o.id, "annulee");
+    let notifyCustomer = false;
+    if (o.customerEmail) {
+      notifyCustomer = window.confirm(`Envoyer un e-mail à ${o.customerEmail} pour la prévenir de l'annulation ?`);
+    }
+    await setOrderStatus(o.id, "annulee", { notifyCustomer });
   }
 
   async function deleteOrder(o) {

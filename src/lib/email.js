@@ -90,6 +90,18 @@ export function shippedEmail(order, tracking) {
   return { subject: `Votre commande #${ref} est en route ✦`, html: emailLayout({ heading: "Votre commande est expédiée", bodyHtml: body }) };
 }
 
+// E-mail « commande annulée », envoyé à la cliente.
+export function cancelledEmail(order) {
+  const ref = order?.ref || order?.id?.slice(-6) || "";
+  const name = order?.customerName ? order.customerName.split(" ")[0] : "";
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour${name ? " " + escapeHtml(name) : ""},</p>
+    <p style="margin:0 0 12px;">Nous vous informons que votre commande <strong>#${escapeHtml(ref)}</strong> a été <strong>annulée</strong>.</p>
+    <p style="margin:0 0 12px;">Si vous avez déjà réglé cette commande, un remboursement vous sera adressé. Pour toute question concernant cette annulation, répondez simplement à cet e-mail : nous sommes à votre écoute.</p>
+    <p style="margin:18px 0 0;color:#7a7268;">Avec toutes nos excuses pour ce contretemps,<br><strong>L'atelier Niv Création</strong></p>`;
+  return { subject: `Votre commande #${ref} a été annulée`, html: emailLayout({ heading: "Votre commande a été annulée", bodyHtml: body }) };
+}
+
 // E-mail de démonstration (mêmes style et structure que la confirmation client réelle).
 export function sampleClientEmailHtml() {
   const body = `

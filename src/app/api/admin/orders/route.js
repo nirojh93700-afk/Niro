@@ -1,6 +1,6 @@
 import { isAdmin } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
-import { sendEmail, shippedEmail } from "@/lib/email";
+import { sendEmail, shippedEmail, cancelledEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -35,14 +35,18 @@ export async function POST(req) {
   if (typeof tracking === "string") patch.tracking = tracking.trim();
   const ok = await updateSiteOrder(id, patch);
 
-  // E-mail « expédiée » avec suivi, si demandé et possible.
+  // E-mail au client (expédition avec suivi, ou annulation), si demandé et possible.
   let emailed = false;
-  if (ok && status === "expediee" && notifyCustomer && patch.tracking) {
+  if (ok && notifyCustomer) {
     const order = await getSiteOrder(id);
     if (order?.customerEmail) {
-      const { subject, html } = shippedEmail(order, patch.tracking);
-      const r = await sendEmail({ to: order.customerEmail, subject, html });
-      emailed = r.ok;
+      let mail = null;
+      if (status === "expediee" && patch.tracking) mail = shippedEmail(order, patch.tracking);
+      else if (status === "annulee") mail = cancelledEmail(order);
+      if (mail) {
+        const r = await sendEmail({ to: order.customerEmail, subject: mail.subject, html: mail.html });
+        emailed = r.ok;
+      }
     }
   }
   return Response.json({ ok, emailed });
