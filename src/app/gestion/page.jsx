@@ -39,6 +39,7 @@ export default function GestionPage() {
   const [orderFilter, setOrderFilter] = useState("all");
   const [orderSearch, setOrderSearch] = useState("");
   const [openClient, setOpenClient] = useState(-1);
+  const [bulkPct, setBulkPct] = useState(20);
   const [testEmail, setTestEmail] = useState("");
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
@@ -124,6 +125,29 @@ export default function GestionPage() {
       if (!res.ok) throw new Error("Échec de l'enregistrement de la promo.");
       setSaved(variantId);
       setTimeout(() => setSaved(""), 1500);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
+  async function applyCategoryPromo(category, percent) {
+    const label = getCategoryLabel(category);
+    if (percent > 0) {
+      if (!window.confirm(`Appliquer une remise de ${percent}% sur tous les « ${label} » ?\nLes clientes paieront réellement ${percent}% de moins que le prix affiché.`)) return;
+    } else {
+      if (!window.confirm(`Retirer toutes les promos sur les « ${label} » ?`)) return;
+    }
+    setError("");
+    try {
+      const res = await fetch("/api/admin/promo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ action: "bulk", category, percent }),
+      });
+      if (!res.ok) throw new Error("Échec de l'application de la remise.");
+      await load(key);
+      setSaved("bulk-" + category);
+      setTimeout(() => setSaved(""), 2000);
     } catch (e) {
       setError(e.message);
     }
@@ -611,6 +635,37 @@ export default function GestionPage() {
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
               Mets un prix promo (inférieur au prix normal) : le client verra le prix barré + la réduction. Vide = pas de promo.
             </p>
+
+            {/* Remise en lot par catégorie */}
+            <div className="admin-block" style={{ display: "grid", gap: 10, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>
+              <h3 style={{ margin: 0 }}>🏷️ Remise rapide sur une catégorie</h3>
+              <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+                Applique une vraie remise sur tous les produits d'une catégorie d'un coup (prix barré + réduction, et la cliente paie vraiment moins). {saved.startsWith("bulk-") ? "✓ Appliqué" : ""}
+              </p>
+              <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                Remise de
+                <input type="number" min="0" max="90" value={bulkPct} style={{ width: 80 }} onChange={(e) => setBulkPct(Number(e.target.value))} />
+                %
+              </label>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {["bijoux", "mariage", "cadeaux"].map((c) => (
+                  <button key={c} className="btn btn-gold" style={{ padding: "6px 14px", fontSize: "0.9rem" }} onClick={() => applyCategoryPromo(c, bulkPct)}>
+                    Appliquer sur {getCategoryLabel(c)}
+                  </button>
+                ))}
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {["bijoux", "mariage", "cadeaux"].map((c) => (
+                  <button key={c} className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={() => applyCategoryPromo(c, 0)}>
+                    Retirer sur {getCategoryLabel(c)}
+                  </button>
+                ))}
+              </div>
+              <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--ink-soft)" }}>
+                ⚠️ Rappel : comme tu viens de monter les prix des bijoux, l'affichage « −20 % » se réfère à ce prix récent. Pour être pleinement en règle (loi Omnibus), l'idéal est d'avoir laissé ce prix en place ~30 jours avant d'annoncer la réduction. À toi de voir.
+              </p>
+            </div>
+
             {Object.entries(grouped).map(([slug, g]) => (
               <div key={slug} className="admin-block">
                 <h3>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></h3>
