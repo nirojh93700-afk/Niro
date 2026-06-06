@@ -10,6 +10,14 @@ Ce dossier rassemble tout ce qu'il faut pour **vendre des boutiques en ligne**
 | **GUIDE-DEBUTANT.md** | **Commencez par celui-ci.** Tout expliqué avec des mots simples : c'est quoi vendre un site, les abonnements, comment ça marche de A à Z. |
 | **OFFRE-COMMERCIALE.md** | La page à montrer aux clients : prestations, formules, prix, déroulé. À adapter à vos tarifs. |
 | **PROCEDURE-NOUVEAU-CLIENT.md** | Le mode d'emploi pour créer un nouveau site client en quelques heures, sans rien casser. |
+| **PLAN-PLATEFORME.md** | La vision « plateforme » : une application qui gère tous les sites (domaines, inscriptions, abonnements, création), expliquée et planifiée par étapes. |
+
+## Les versions PDF (dossier `pdf/`)
+
+| PDF | Pour qui |
+|---|---|
+| **GUIDE-DEBUTANT-ILLUSTRE.pdf** | Pour vous : tout compris en images, pas à pas. |
+| **PLAN-PLATEFORME.pdf** | Pour vous : le plan illustré de la future plateforme. |
 
 ## Les outils techniques fournis avec
 
