@@ -186,11 +186,46 @@ export default async function BoutiquePage({ searchParams }) {
           </div>
         )}
 
-        <div className="product-grid">
-          {filtered.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
+        {activeCat ? (
+          <div className="product-grid">
+            {filtered.map((p) => (
+              <ProductCard key={p.slug} product={p} />
+            ))}
+          </div>
+        ) : (
+          // Vue « Tout » : produits regroupés par thème (au lieu d'être mélangés).
+          menuCategories.map((c) => {
+            const items = withImages.filter((p) => p.category === c.slug);
+            if (!items.length) return null;
+            return (
+              <div key={c.slug} style={{ marginBottom: 44 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    gap: 12,
+                    borderBottom: "1px solid var(--line)",
+                    paddingBottom: 8,
+                    marginBottom: 18,
+                  }}
+                >
+                  <h3 style={{ margin: 0, fontFamily: "Georgia, serif", fontWeight: "normal", color: "var(--gold-dark)" }}>
+                    {c.label}
+                  </h3>
+                  <Link href={`/boutique?cat=${c.slug}`} className="link-underline" style={{ fontSize: "0.9rem", whiteSpace: "nowrap" }}>
+                    Tout voir →
+                  </Link>
+                </div>
+                <div className="product-grid">
+                  {items.map((p) => (
+                    <ProductCard key={p.slug} product={p} />
+                  ))}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </section>
   );
