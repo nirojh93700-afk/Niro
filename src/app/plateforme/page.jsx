@@ -70,7 +70,24 @@ const THEME = `
   .auth-card{padding:42px 38px;width:400px;max-width:100%;text-align:center}
   .auth-card input{width:100%;padding:13px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#fff;font-size:15px;margin-bottom:12px;outline:none}
   .auth-card input::placeholder{color:#8e8a7e}
+  .clickrow{cursor:pointer;transition:background .15s}
+  .clickrow:hover{background:rgba(217,178,90,.05)}
+  .lior-overlay{position:fixed;inset:0;z-index:5;background:rgba(5,4,8,.6);backdrop-filter:blur(4px);display:flex;justify-content:flex-end}
+  .lior-drawer{width:480px;max-width:94vw;height:100%;padding:30px 30px;overflow-y:auto;border-radius:24px 0 0 24px;animation:slidein .25s ease;background:linear-gradient(180deg,#16130d 0%,#0d0b08 100%);border-left:1px solid rgba(217,178,90,.4);box-shadow:-30px 0 60px rgba(0,0,0,.6),inset 1px 0 0 rgba(217,178,90,.15)}
+  @keyframes slidein{from{transform:translateX(40px);opacity:.4}to{transform:translateX(0);opacity:1}}
+  .keyrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+  .keyrow input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#cfc9b8;font-family:monospace;font-size:13px}
+  .close{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#cfc9b8;font-size:18px;cursor:pointer}
 `;
+
+// Les "clés" gérées par cliente (le coffre à clés).
+const VAULT = [
+  { cle: "Stripe — paiement", ph: "sk_live_••••••••••••••••", etat: "Connecté", ok: true },
+  { cle: "Resend — e-mails", ph: "re_••••••••••••••", etat: "Connecté", ok: true },
+  { cle: "Nom de domaine", ph: "—", etat: "Actif", ok: true },
+  { cle: "E-mail professionnel", ph: "contact@…", etat: "Vérifié", ok: true },
+  { cle: "Cloudinary — photos", ph: "non renseigné", etat: "Optionnel", ok: false },
+];
 
 function Background() {
   return (
@@ -103,6 +120,7 @@ export default function PlateformePage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState(null); // cliente ouverte (coffre à clés)
 
   const connecter = useCallback(async (e) => {
     e?.preventDefault();
@@ -226,7 +244,7 @@ export default function PlateformePage() {
                     ? `${c.abonnement.formule} · ${c.abonnement.prix} €`
                     : enRetard ? "Retard" : "À configurer";
                 return (
-                  <div className="row" key={c.id}>
+                  <div className="row clickrow" key={c.id} onClick={() => setSelected(c)}>
                     <span className="ava">{c.nom[0]}</span>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: 15 }}>{c.nom}</div>
@@ -238,7 +256,7 @@ export default function PlateformePage() {
                     <div style={{ width: 150, textAlign: "right", display: "flex", justifyContent: "flex-end", gap: 10, alignItems: "center" }}>
                       <span className={"pill" + (enRetard ? "" : " green")} style={{ background: "transparent", border: "none", color: (enRetard || c.vous) ? GOLD : "#b6b1a4" }}>{aboLabel}</span>
                       {c.adminUrl
-                        ? <a className="btn ghost" href={c.adminUrl} target="_blank" rel="noreferrer">Admin</a>
+                        ? <a className="btn ghost" href={c.adminUrl} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>Admin</a>
                         : <span style={{ color: "#6e6a5e" }}>—</span>}
                     </div>
                   </div>
@@ -259,10 +277,56 @@ export default function PlateformePage() {
           </div>
 
           <p style={{ color: "#6e6a5e", fontSize: 12 }}>
-            Phase 1 — clientes d'exemple. Les prochaines étapes brancheront les vraies clientes, le coffre à clés et l'agent IA.
+            Phase 1 — clientes d'exemple. Cliquez une cliente pour ouvrir son coffre à clés.
           </p>
         </main>
       </div>
+
+      {/* Tiroir : Coffre à clés de la cliente sélectionnée */}
+      {selected && (
+        <div className="lior-overlay" onClick={() => setSelected(null)}>
+          <div className="lior-drawer" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span className="ava" style={{ width: 44, height: 44 }}>{selected.nom[0]}</span>
+                <div>
+                  <div className="serif" style={{ fontSize: 22 }}>{selected.nom}</div>
+                  <div style={{ color: "#8e8a7e", fontSize: 13 }}>{selected.domaine}</div>
+                </div>
+              </div>
+              <button className="close" onClick={() => setSelected(null)}>×</button>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "20px 0 6px" }}>
+              <span style={{ fontSize: 22, color: GOLD, filter: "drop-shadow(0 0 12px rgba(217,178,90,.6))" }}>⬡</span>
+              <div className="lab">Coffre à clés — chiffré</div>
+            </div>
+            <p style={{ color: "#9a9488", fontSize: 13, lineHeight: 1.6, marginBottom: 8 }}>
+              Vous remplissez une fois ; l'application s'en sert automatiquement. Vous ne touchez plus à rien.
+            </p>
+
+            {VAULT.map((k) => (
+              <div className="keyrow" key={k.cle}>
+                <div style={{ minWidth: 150 }}>
+                  <div style={{ fontWeight: 600, fontSize: 14 }}>{k.cle}</div>
+                </div>
+                <input defaultValue="" placeholder={k.ph} disabled />
+                <span className={"pill" + (k.ok ? " green" : "")} style={{ whiteSpace: "nowrap" }}>
+                  <span className="dot" style={{ background: k.ok ? GREEN : GOLD, boxShadow: `0 0 10px ${k.ok ? GREEN : GOLD}` }} />{k.etat}
+                </span>
+              </div>
+            ))}
+
+            <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
+              <button className="btn" style={{ flex: 1, padding: 13 }}>Enregistrer</button>
+              <button className="btn ghost" style={{ padding: 13 }}>Tester</button>
+            </div>
+            <p style={{ color: "#6e6a5e", fontSize: 12, marginTop: 16, lineHeight: 1.5 }}>
+              Démo d'interface. Le stockage chiffré et la connexion réelle des comptes seront activés avant la mise en production.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
