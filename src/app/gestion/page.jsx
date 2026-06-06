@@ -283,6 +283,8 @@ export default function GestionPage() {
     (acc[r.productSlug] = acc[r.productSlug] || { name: r.productName, category: r.category, items: [] }).items.push(r);
     return acc;
   }, {});
+  // Catégories réellement présentes (pour les boutons de remise rapide, mis à jour tout seuls).
+  const promoCats = [...new Set(Object.values(grouped).map((g) => g.category).filter(Boolean))];
   const lowOrOut = rows.filter((r) => typeof r.stock === "number" && r.stock <= 2).length;
 
   // ---- Calculs commandes / clientes / statistiques ----
@@ -648,14 +650,14 @@ export default function GestionPage() {
                 %
               </label>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {["bijoux", "mariage", "cadeaux"].map((c) => (
+                {promoCats.map((c) => (
                   <button key={c} className="btn btn-gold" style={{ padding: "6px 14px", fontSize: "0.9rem" }} onClick={() => applyCategoryPromo(c, bulkPct)}>
                     Appliquer sur {getCategoryLabel(c)}
                   </button>
                 ))}
               </div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {["bijoux", "mariage", "cadeaux"].map((c) => (
+                {promoCats.map((c) => (
                   <button key={c} className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={() => applyCategoryPromo(c, 0)}>
                     Retirer sur {getCategoryLabel(c)}
                   </button>
