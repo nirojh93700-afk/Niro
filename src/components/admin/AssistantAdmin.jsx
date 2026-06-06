@@ -44,9 +44,18 @@ export default function AssistantAdmin({ adminKey, onReload }) {
         body: JSON.stringify(payload),
       }).then((r) => r.ok);
 
+    const postTo = (url, payload) =>
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify(payload),
+      }).then((r) => r.ok);
+
     if (a.type === "hide") return post({ action: "edit", slug: a.slug, patch: { hidden: true } });
     if (a.type === "show") return post({ action: "edit", slug: a.slug, patch: { hidden: false } });
     if (a.type === "price") return post({ action: "edit", slug: a.slug, patch: { prices: { [a.variantId]: Number(a.price) } } });
+    if (a.type === "promo") return postTo("/api/admin/promo", { variantId: a.variantId, salePrice: a.salePrice == null ? null : Number(a.salePrice) });
+    if (a.type === "stock") return postTo("/api/admin/stock", { variantId: a.variantId, stock: Number(a.stock) });
     if (a.type === "text") {
       const patch = {};
       for (const k of ["name", "tagline", "descriptionHtml", "category"]) if (a[k] != null) patch[k] = a[k];

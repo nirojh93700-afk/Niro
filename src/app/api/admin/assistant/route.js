@@ -25,6 +25,8 @@ Types d'action possibles :
 - { "type": "hide", "slug", "label" } : masquer un produit (disparaît du site)
 - { "type": "show", "slug", "label" } : réafficher un produit
 - { "type": "price", "slug", "variantId", "price" (nombre), "label" } : changer un prix
+- { "type": "promo", "slug", "variantId", "salePrice" (nombre), "label" } : mettre un prix promo sur une variante (pour RETIRER une promo, mets "salePrice": null)
+- { "type": "stock", "slug", "variantId", "stock" (nombre entier), "label" } : définir le stock d'une variante (0 = épuisé)
 - { "type": "text", "slug", "name"?, "tagline"?, "descriptionHtml"?, "category"?, "label" } : modifier des textes
 - { "type": "add", "name", "category", "price" (nombre), "tagline"?, "descriptionHtml"?, "label" } : ajouter un produit
 - { "type": "delete", "slug", "label" } : supprimer définitivement un produit ajouté manuellement
@@ -44,10 +46,12 @@ const TOOL = {
         items: {
           type: "object",
           properties: {
-            type: { type: "string", enum: ["hide", "show", "price", "text", "add", "delete"] },
+            type: { type: "string", enum: ["hide", "show", "price", "promo", "stock", "text", "add", "delete"] },
             slug: { type: "string" },
             variantId: { type: "string" },
             price: { type: "number" },
+            salePrice: { type: ["number", "null"] },
+            stock: { type: "number" },
             name: { type: "string" },
             tagline: { type: "string" },
             descriptionHtml: { type: "string" },
