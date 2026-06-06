@@ -183,6 +183,15 @@ export default function PlateformePage() {
     ["Agent IA", "✦", false], ["Coffre à clés", "⬡", false], ["Réglages", "⚙", false],
   ];
 
+  // Phase 2 — synthèse des abonnements (revenus récurrents)
+  const abosActifs = clients.filter((c) => c.abonnement?.etat === "actif");
+  const abosRetard = clients.filter((c) => c.abonnement?.etat === "retard");
+  const parFormule = abosActifs.reduce((acc, c) => {
+    const f = c.abonnement.formule;
+    acc[f] = (acc[f] || 0) + c.abonnement.prix;
+    return acc;
+  }, {});
+
   return (
     <div className="lior">
       <style dangerouslySetInnerHTML={{ __html: THEME }} />
@@ -295,8 +304,45 @@ export default function PlateformePage() {
             </div>
           </div>
 
+          {/* Phase 2 — Abonnements */}
+          <div className="card glass glow" style={{ padding: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <span style={{ color: GOLD }}>◎</span>
+              <div className="lab">Abonnements — revenus récurrents</div>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 28, alignItems: "flex-end", marginTop: 8 }}>
+              <div>
+                <div className="big" style={{ marginTop: 0 }}>{stats.revenusMois} <small>€/mois</small></div>
+                <div className="up">{abosActifs.length} abonnements actifs</div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, flex: 1 }}>
+                {Object.entries(parFormule).map(([f, montant]) => (
+                  <span key={f} className="pill green" style={{ background: "rgba(255,255,255,.05)", color: "#cfc9b8", border: "1px solid rgba(255,255,255,.12)" }}>
+                    {f} · {montant} €
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {abosRetard.length > 0 && (
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,.07)" }}>
+                <div style={{ fontSize: 13, color: "#9a9488", marginBottom: 10 }}>À relancer :</div>
+                {abosRetard.map((c) => (
+                  <div key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap", padding: "6px 0" }}>
+                    <span style={{ fontWeight: 600 }}>{c.nom} <span style={{ color: "#8e8a7e", fontWeight: 400, fontSize: 13 }}>— paiement en retard</span></span>
+                    <button className="btn ghost">Relancer le paiement</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <p style={{ color: "#6e6a5e", fontSize: 12, marginTop: 16, lineHeight: 1.5 }}>
+              Facturation mensuelle automatique via Stripe — la connexion de votre compte Stripe activera l'envoi et le suivi automatiques des paiements.
+            </p>
+          </div>
+
           <p style={{ color: "#6e6a5e", fontSize: 12 }}>
-            Phase 1 — clientes d'exemple. Cliquez une cliente pour ouvrir son coffre à clés.
+            Phase 1 &amp; 2 — données d'exemple. Cliquez une cliente pour ouvrir son coffre à clés.
           </p>
         </main>
       </div>
