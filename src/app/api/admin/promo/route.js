@@ -1,4 +1,4 @@
-import { setPromo, isAdmin } from "@/lib/stock";
+import { setPromo, setPromosMany, isAdmin } from "@/lib/stock";
 import { getCatalogAdmin } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -23,16 +23,16 @@ export async function POST(req) {
       return Response.json({ error: "Paramètres invalides." }, { status: 400 });
     }
     const products = await getCatalogAdmin();
-    let count = 0;
+    const updates = [];
     for (const p of products) {
       if (p.category !== body.category) continue;
       for (const v of p.variants || []) {
         const sale = percent > 0 ? Math.round(v.price * (1 - percent / 100) * 100) / 100 : null;
-        await setPromo(v.id, sale);
-        count++;
+        updates.push({ variantId: v.id, salePrice: sale });
       }
     }
-    return Response.json({ ok: true, count });
+    await setPromosMany(updates); // une seule écriture
+    return Response.json({ ok: true, count: updates.length });
   }
 
   if (!body?.variantId) {

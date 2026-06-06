@@ -146,6 +146,31 @@ export async function setPromo(variantId, salePrice) {
   return data.promos;
 }
 
+// Applique plusieurs promos en une seule lecture/écriture (rapide, pas de délai dépassé).
+export async function setPromosMany(updates) {
+  const data = await getCatalogRaw();
+  data.promos = data.promos || {};
+  for (const u of updates || []) {
+    const sp = u.salePrice;
+    if (sp === null || sp === "" || sp === undefined) {
+      delete data.promos[u.variantId];
+    } else {
+      data.promos[u.variantId] = Math.max(0, Math.round(parseFloat(sp) * 100) / 100);
+    }
+  }
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      await store.setJSON(CATALOG_KEY, data);
+      return data.promos;
+    } catch {
+      // bascule mémoire
+    }
+  }
+  catalogMemory = data;
+  return data.promos;
+}
+
 // --- Modifications de produits faites depuis l'admin -----------------------
 // overrides : { slug: { name, tagline, title, descriptionHtml, category,
 //                       subcategory, type, hidden, prices:{variantId:nb} } }
