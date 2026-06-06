@@ -78,6 +78,25 @@ const THEME = `
   .keyrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.07)}
   .keyrow input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#cfc9b8;font-family:monospace;font-size:13px}
   .close{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#cfc9b8;font-size:18px;cursor:pointer}
+  .rowend{display:flex;justify-content:flex-end;align-items:center;gap:10px;width:150px;text-align:right}
+  /* --- Téléphone --- */
+  @media (max-width:860px){
+    .lior-wrap{flex-direction:column;padding:12px;gap:12px}
+    .side{width:auto;flex:0 0 auto;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-radius:18px}
+    .brand{margin-bottom:0;font-size:18px}
+    .nav{display:none}
+    .side .foot{display:none;margin:0}
+    .bento{display:flex;flex-direction:column;gap:12px}
+    .card{padding:18px}
+    .top h1{font-size:22px}
+    .big{font-size:36px}
+    .cmd{display:none}
+    .row{flex-wrap:wrap;gap:8px 10px}
+    .rowend{width:auto;flex:1 1 100%;justify-content:flex-start}
+    .lior-overlay{align-items:flex-end}
+    .lior-drawer{width:100%;max-width:100%;height:auto;max-height:90vh;border-radius:24px 24px 0 0;animation:slideup .25s ease}
+  }
+  @keyframes slideup{from{transform:translateY(50px);opacity:.4}to{transform:translateY(0);opacity:1}}
 `;
 
 // Les "clés" gérées par cliente (le coffre à clés).
@@ -253,7 +272,7 @@ export default function PlateformePage() {
                     <span className={"pill" + (es.green ? " green" : "")}>
                       <span className="dot" style={{ background: es.green ? GREEN : GOLD, boxShadow: `0 0 10px ${es.green ? GREEN : GOLD}` }} />{es.label}
                     </span>
-                    <div style={{ width: 150, textAlign: "right", display: "flex", justifyContent: "flex-end", gap: 10, alignItems: "center" }}>
+                    <div className="rowend">
                       <span className={"pill" + (enRetard ? "" : " green")} style={{ background: "transparent", border: "none", color: (enRetard || c.vous) ? GOLD : "#b6b1a4" }}>{aboLabel}</span>
                       {c.adminUrl
                         ? <a className="btn ghost" href={c.adminUrl} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>Admin</a>
