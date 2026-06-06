@@ -79,12 +79,12 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685296_55z9.jpg?v=1780366782",
     ],
     variants: [
-      { id: "env-recto-dore", title: "Recto uniquement / Doré", price: 17.92 },
-      { id: "env-recto-argent", title: "Recto uniquement / Argent", price: 17.92 },
-      { id: "env-recto-rose", title: "Recto uniquement / Or Rose", price: 17.92 },
-      { id: "env-rv-dore", title: "Recto-Verso / Doré", price: 19.42 },
-      { id: "env-rv-argent", title: "Recto-Verso / Argent", price: 19.42 },
-      { id: "env-rv-rose", title: "Recto-Verso / Or Rose", price: 19.42 },
+      { id: "env-recto-dore", title: "Recto uniquement / Doré", price: 21.5 },
+      { id: "env-recto-argent", title: "Recto uniquement / Argent", price: 21.5 },
+      { id: "env-recto-rose", title: "Recto uniquement / Or Rose", price: 21.5 },
+      { id: "env-rv-dore", title: "Recto-Verso / Doré", price: 23.3 },
+      { id: "env-rv-argent", title: "Recto-Verso / Argent", price: 23.3 },
+      { id: "env-rv-rose", title: "Recto-Verso / Or Rose", price: 23.3 },
     ],
     descriptionHtml: `<p>Gardez vos mots les plus précieux près de votre cœur avec ce collier locket unique. Chaque modèle est livré avec sa plaque intérieure prête à être gravée pour vous. Le pendentif en forme d'enveloppe s'ouvre réellement pour révéler cette plaque amovible.</p>
 <p>Ce bijou symbolique permet de dissimuler un secret, une date ou un prénom. Sa conception soignée avec charnière fluide et fermeture sécurisée assure élégance et durabilité. Disponible en trois finitions polies pour s'adapter à toutes vos tenues.</p>
@@ -146,8 +146,8 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8055354789_4miu.jpg?v=1780366816",
     ],
     variants: [
-      { id: "med-argent-texte", title: "Argent", price: 25.11 },
-      { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 28.71 },
+      { id: "med-argent-texte", title: "Argent", price: 30.13 },
+      { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 34.45 },
     ],
     descriptionHtml: `<p><strong>Un bijou élégant et intemporel à personnaliser.</strong></p>
 <p>Gardez vos souvenirs les plus précieux près de votre cœur. Le médaillon s'ouvre comme un petit livre et révèle <strong>5 faces entièrement personnalisables</strong> à graver selon vos envies.</p>
@@ -191,8 +191,8 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8134708393_5e02.jpg?v=1780366838",
     ],
     variants: [
-      { id: "gourm-gravure", title: "Avec gravure", price: 24.9 },
-      { id: "gourm-sans", title: "Sans gravure", price: 27.9 },
+      { id: "gourm-gravure", title: "Avec gravure", price: 29.88 },
+      { id: "gourm-sans", title: "Sans gravure", price: 33.48 },
     ],
     descriptionHtml: `<p>Offrez un bijou d'élégance avec ce <strong>bracelet identité homme</strong> personnalisable par gravure laser. La plaque rectangulaire lisse offre un espace idéal pour graver un prénom, une date, un message ou des initiales.</p>
 <p>Monté sur une belle chaîne gourmette à gros maillons cubains en acier inoxydable, il allie solidité, élégance et style contemporain.</p>
@@ -229,10 +229,10 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8084724218_jxik.jpg?v=1780366864",
     ],
     variants: [
-      { id: "sil-argent-sans", title: "Plaque argentée / Sans texte", price: 16.9 },
-      { id: "sil-argent-texte", title: "Plaque argentée / Avec texte", price: 20.9 },
-      { id: "sil-noire-sans", title: "Plaque noire / Sans texte", price: 16.9 },
-      { id: "sil-noire-texte", title: "Plaque noire / Avec texte", price: 20.9 },
+      { id: "sil-argent-sans", title: "Plaque argentée / Sans texte", price: 20.28 },
+      { id: "sil-argent-texte", title: "Plaque argentée / Avec texte", price: 25.08 },
+      { id: "sil-noire-sans", title: "Plaque noire / Sans texte", price: 20.28 },
+      { id: "sil-noire-texte", title: "Plaque noire / Avec texte", price: 25.08 },
     ],
     descriptionHtml: `<p>Offrez un bijou unique grâce à notre <strong>bracelet homme personnalisé par gravure laser</strong>. Chaque pièce est gravée à la demande : prénom, date, message ou initiales.</p>
 <p>Fabriqué en acier inoxydable de qualité associé à un gel de silicone souple, il allie solidité et confort pour un port quotidien agréable.</p>
@@ -268,12 +268,12 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8008797014_pcih.jpg?v=1780366895",
     ],
     variants: [
-      { id: "cuir-argent-sans", title: "Plaque argentée / Sans texte", price: 16.11 },
-      { id: "cuir-argent-texte", title: "Plaque argentée / Avec texte", price: 19.71 },
-      { id: "cuir-dore-sans", title: "Plaque dorée / Sans texte", price: 16.11 },
-      { id: "cuir-dore-texte", title: "Plaque dorée / Avec texte", price: 19.71 },
-      { id: "cuir-noire-sans", title: "Plaque noire / Sans texte", price: 16.11 },
-      { id: "cuir-noire-texte", title: "Plaque noire / Avec texte", price: 19.71 },
+      { id: "cuir-argent-sans", title: "Plaque argentée / Sans texte", price: 19.33 },
+      { id: "cuir-argent-texte", title: "Plaque argentée / Avec texte", price: 23.65 },
+      { id: "cuir-dore-sans", title: "Plaque dorée / Sans texte", price: 19.33 },
+      { id: "cuir-dore-texte", title: "Plaque dorée / Avec texte", price: 23.65 },
+      { id: "cuir-noire-sans", title: "Plaque noire / Sans texte", price: 19.33 },
+      { id: "cuir-noire-texte", title: "Plaque noire / Avec texte", price: 23.65 },
     ],
     descriptionHtml: `<p><strong>Bracelet homme personnalisé en cuir véritable & acier inoxydable.</strong></p>
 <p>Offrez bien plus qu'un bijou : un message gravé qui traverse le temps. Ce bracelet allie l'authenticité du cuir véritable noir à la modernité de l'acier inoxydable 316L, pour un style sobre et masculin.</p>
@@ -590,9 +590,9 @@ export const products = [
       "/produits/bracelet_cuir_tresse_a_graver_noir.jpg",
     ],
     variants: [
-      { id: "cuir-tresse-argente", title: "Argenté", price: 14.9 },
-      { id: "cuir-tresse-dore", title: "Doré", price: 14.9 },
-      { id: "cuir-tresse-noir", title: "Noir", price: 14.9 },
+      { id: "cuir-tresse-argente", title: "Argenté", price: 17.88 },
+      { id: "cuir-tresse-dore", title: "Doré", price: 17.88 },
+      { id: "cuir-tresse-noir", title: "Noir", price: 17.88 },
     ],
     descriptionHtml: `<p>Un bracelet masculin et intemporel : <strong>cuir véritable tressé</strong> associé à une <strong>plaque en acier inoxydable</strong> gravable.</p>
 <p>Gravez un prénom, une date ou un message pour en faire un cadeau unique (Fête des Pères, anniversaire, Noël).</p>
@@ -675,7 +675,7 @@ export const products = [
       "/produits/bracelet_homme_chaine_a_graver_argente.jpg",
     ],
     variants: [
-      { id: "chaine-acier-argente", title: "Argenté", price: 24.9 },
+      { id: "chaine-acier-argente", title: "Argenté", price: 29.88 },
     ],
     descriptionHtml: `<p>Bracelet homme en <strong>acier inoxydable</strong>, plaque gravable au laser. Solide, élégant, intemporel.</p>
 <ul><li>Acier inoxydable hypoallergénique</li><li>Fermoir sécurisé</li><li>Gravure prénom, date ou message</li></ul>`,
@@ -693,7 +693,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: ["/produits/bracelet_a_graver_dore.jpg"],
-    variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 17.9 }],
+    variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 21.48 }],
     descriptionHtml: `<p>Bracelet femme délicat en <strong>acier inoxydable doré</strong>, à personnaliser par gravure.</p>
 <ul><li>Acier inoxydable, ne ternit pas</li><li>Gravure fine au laser</li></ul>`,
   },
@@ -714,8 +714,8 @@ export const products = [
       "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg",
     ],
     variants: [
-      { id: "empreinte-bebe-argente", title: "Argenté", price: 12.5, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg" },
-      { id: "empreinte-bebe-dore", title: "Doré", price: 12.5, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg" },
+      { id: "empreinte-bebe-argente", title: "Argenté", price: 15, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg" },
+      { id: "empreinte-bebe-dore", title: "Doré", price: 15, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet tendre orné d'une <strong>empreinte de pied de bébé</strong>, à graver au prénom et à la date de naissance. Cadeau de naissance idéal.</p>
 <ul><li>Acier inoxydable hypoallergénique</li><li>Argenté ou doré</li></ul>`,
@@ -733,7 +733,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: ["/produits/bracelet_femme_coeur_a_graver_dore.jpg"],
-    variants: [{ id: "bracelet-coeur-dore", title: "Doré", price: 17.9 }],
+    variants: [{ id: "bracelet-coeur-dore", title: "Doré", price: 21.48 }],
     descriptionHtml: `<p>Bracelet femme avec breloque <strong>cœur</strong> gravable, en acier inoxydable doré. Romantique et délicat.</p>`,
   },
   {
@@ -755,10 +755,10 @@ export const products = [
       "/produits/bracelet_papillon_ajoure_a_graver_or_rose.jpg",
     ],
     variants: [
-      { id: "papillon-argente", title: "Argenté", price: 17.9 },
-      { id: "papillon-dore", title: "Doré", price: 17.9 },
-      { id: "papillon-noir", title: "Noir", price: 15.9 },
-      { id: "papillon-or-rose", title: "Or Rose", price: 18.9 },
+      { id: "papillon-argente", title: "Argenté", price: 21.48 },
+      { id: "papillon-dore", title: "Doré", price: 21.48 },
+      { id: "papillon-noir", title: "Noir", price: 19.08 },
+      { id: "papillon-or-rose", title: "Or Rose", price: 22.68 },
     ],
     descriptionHtml: `<p>Bracelet femme orné d'un <strong>papillon ajouré</strong> en acier inoxydable, à personnaliser par gravure. Plusieurs finitions.</p>`,
   },
@@ -775,7 +775,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: ["/produits/bracelet_homme_double_anneau_a_graver_argente.jpg"],
-    variants: [{ id: "double-anneau-argente", title: "Argenté", price: 19.9 }],
+    variants: [{ id: "double-anneau-argente", title: "Argenté", price: 23.88 }],
     descriptionHtml: `<p>Bracelet homme moderne à <strong>double anneau</strong> en acier inoxydable, plaque gravable au laser.</p>`,
   },
   {
@@ -795,8 +795,8 @@ export const products = [
       "/produits/bracelet_homme_rond_retro_a_grave_noir.jpg",
     ],
     variants: [
-      { id: "rond-retro-argente", title: "Argenté", price: 14.9 },
-      { id: "rond-retro-noir", title: "Noir", price: 14.9 },
+      { id: "rond-retro-argente", title: "Argenté", price: 17.88 },
+      { id: "rond-retro-noir", title: "Noir", price: 17.88 },
     ],
     descriptionHtml: `<p>Bracelet homme au style <strong>rétro</strong> avec médaillon rond gravable, en acier inoxydable.</p>`,
   },
@@ -816,7 +816,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: ["/produits/collier_c_ur_couple_a_graver_lot_2_pieces_or_rose.jpg"],
-    variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 24.9 }],
+    variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 29.88 }],
     descriptionHtml: `<p>Un <strong>lot de 2 colliers</strong> formant un cœur, à graver chacun. Le cadeau parfait pour les amoureux.</p>`,
   },
   {
@@ -839,11 +839,11 @@ export const products = [
       "/produits/collier_plaque_a_graver_noir.jpg",
     ],
     variants: [
-      { id: "plaque-acier-noir", title: "Acier Noir", price: 20.9 },
-      { id: "plaque-argente", title: "Argenté", price: 18.9 },
-      { id: "plaque-argente-noir", title: "Argenté et Noir", price: 21.9 },
-      { id: "plaque-dore", title: "Doré", price: 21.9 },
-      { id: "plaque-noir", title: "Noir", price: 19.9 },
+      { id: "plaque-acier-noir", title: "Acier Noir", price: 25.08 },
+      { id: "plaque-argente", title: "Argenté", price: 22.68 },
+      { id: "plaque-argente-noir", title: "Argenté et Noir", price: 26.28 },
+      { id: "plaque-dore", title: "Doré", price: 26.28 },
+      { id: "plaque-noir", title: "Noir", price: 23.88 },
     ],
     descriptionHtml: `<p>Collier à <strong>plaque rectangulaire</strong> en acier inoxydable, surface lisse gravable. Style épuré et contemporain.</p>`,
   },
@@ -866,9 +866,9 @@ export const products = [
       "/produits/collier_medaillon_modele_livre_a_graver_dore_et_argente.jpg",
     ],
     variants: [
-      { id: "medaillon-livre-argente", title: "Argenté", price: 25.9 },
-      { id: "medaillon-livre-dore", title: "Doré", price: 25.9 },
-      { id: "medaillon-livre-bicolore", title: "Doré et Argenté", price: 26.9 },
+      { id: "medaillon-livre-argente", title: "Argenté", price: 31.08 },
+      { id: "medaillon-livre-dore", title: "Doré", price: 31.08 },
+      { id: "medaillon-livre-bicolore", title: "Doré et Argenté", price: 32.28 },
     ],
     descriptionHtml: `<p>Médaillon en forme de <strong>livre</strong> qui s'ouvre, avec pages intérieures gravables. En acier inoxydable.</p>`,
   },
@@ -890,8 +890,8 @@ export const products = [
       "/produits/collier_pendentif_couple_geometric_puzzle_a_graver_or_rose.jpg",
     ],
     variants: [
-      { id: "puzzle-argente", title: "Argenté", price: 12.9 },
-      { id: "puzzle-or-rose", title: "Or Rose", price: 14.9 },
+      { id: "puzzle-argente", title: "Argenté", price: 15.48 },
+      { id: "puzzle-or-rose", title: "Or Rose", price: 17.88 },
     ],
     descriptionHtml: `<p>Un duo de pendentifs <strong>puzzle géométrique</strong> qui s'emboîtent, à graver. Symbole d'un lien unique.</p>`,
   },
@@ -932,11 +932,11 @@ export const products = [
       "/produits/collier_pendentif_geometrique_a_graver_or_rose.jpg",
     ],
     variants: [
-      { id: "geo-argente", title: "Argenté", price: 16.9 },
-      { id: "geo-arc-en-ciel", title: "Arc en Ciel", price: 19.9 },
-      { id: "geo-dore", title: "Doré", price: 18.9 },
-      { id: "geo-noir", title: "Noir", price: 18.9 },
-      { id: "geo-or-rose", title: "Or Rose", price: 18.9 },
+      { id: "geo-argente", title: "Argenté", price: 20.28 },
+      { id: "geo-arc-en-ciel", title: "Arc en Ciel", price: 23.88 },
+      { id: "geo-dore", title: "Doré", price: 22.68 },
+      { id: "geo-noir", title: "Noir", price: 22.68 },
+      { id: "geo-or-rose", title: "Or Rose", price: 22.68 },
     ],
     descriptionHtml: `<p>Collier femme au <strong>pendentif géométrique</strong> moderne, gravable au laser. Plusieurs finitions, dont arc-en-ciel.</p>`,
   },
