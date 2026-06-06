@@ -141,7 +141,7 @@ export default async function HomePage() {
               <p>Une sélection de pièces appréciées, prêtes à être personnalisées pour vous.</p>
             </div>
             <div className="product-grid">
-              {featured.map((p) => (<ProductCard key={p.slug} product={p} />))}
+              {featured.map((p) => (<ProductCard key={p.slug} product={Number(s?.refMarkup) > 0 ? { ...p, refMarkup: Number(s.refMarkup) } : p} />))}
             </div>
             <div style={{ textAlign: "center", marginTop: 40 }}>
               <Link href="/boutique" className="btn btn-primary">Voir toute la boutique</Link>

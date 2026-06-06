@@ -10,6 +10,7 @@ import {
   getPromos,
   getProductOverrides,
   getCustomProducts,
+  getSettings,
 } from "./stock";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d"];
@@ -38,15 +39,18 @@ function applyOverride(product, ov, images, promos) {
 
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).
 export async function getCatalog() {
-  const [images, promos, overrides, custom] = await Promise.all([
+  const [images, promos, overrides, custom, settings] = await Promise.all([
     getImageOverrides(),
     getPromos(),
     getProductOverrides(),
     getCustomProducts(),
+    getSettings().catch(() => ({})),
   ]);
+  const refMarkup = Number(settings?.refMarkup) || 0;
   const base = baseProducts.map((p) => applyOverride(p, overrides[p.slug], images, promos));
   const customApplied = (custom || []).map((p) => applyOverride(p, overrides[p.slug], images, promos));
-  return [...base, ...customApplied].filter((p) => !p.hidden);
+  const all = [...base, ...customApplied].filter((p) => !p.hidden);
+  return refMarkup > 0 ? all.map((p) => ({ ...p, refMarkup })) : all;
 }
 
 // Renvoie aussi les produits masqués (pour l'admin).

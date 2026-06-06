@@ -104,6 +104,11 @@ export default function ProductDetail({ product }) {
   const engrave = engravingExtra(product, fieldValues);
   const basePrice = hasPromo ? salePrice : variant.price;
   const unitPrice = basePrice + engrave.amount;
+  // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
+  const refMarkup = Number(product.refMarkup) || 0;
+  const refPrice = !hasPromo && refMarkup > 0
+    ? Math.round((variant.price * (1 + refMarkup / 100) + engrave.amount) * 100) / 100
+    : 0;
   // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
   // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
@@ -351,6 +356,12 @@ export default function ProductDetail({ product }) {
                 <span className="promo-badge" style={{ position: "static" }}>
                   -{Math.round((1 - salePrice / variant.price) * 100)}%
                 </span>
+              </>
+            ) : refPrice ? (
+              <>
+                <span className="price-ref-label">Prix conseillé</span>{" "}
+                <span className="price-old">{formatEuro(refPrice)}</span>{" "}
+                <span className="price-sale">{formatEuro(unitPrice)}</span>
               </>
             ) : (
               formatEuro(unitPrice)

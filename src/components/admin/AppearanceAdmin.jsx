@@ -67,6 +67,37 @@ export default function AppearanceAdmin({ adminKey }) {
       </p>
       {msg && <div className="notice">{msg}</div>}
 
+      {/* PRIX CONSEILLÉ (comparaison de prix) */}
+      <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+        <h3 style={{ margin: 0 }}>🏷️ Prix conseillé (« moins cher qu'ailleurs »)</h3>
+        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Affiche sur chaque produit un <strong>prix conseillé barré</strong> au-dessus de ton prix, pour montrer que c'est avantageux.
+          Indique de combien de % le prix conseillé est plus haut que ton prix (0 = désactivé).
+          <br />Exemple à 20 % : <span style={{ textDecoration: "line-through" }}>23,90 €</span> → <strong>19,90 €</strong>.
+          <br /><em>Important : à utiliser seulement si tes prix sont réellement plus bas que le marché (garde une preuve). Ce n'est pas affiché comme une « promo ».</em>
+        </p>
+        <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          Prix conseillé plus élevé de
+          <input
+            type="number"
+            min="0"
+            max="90"
+            value={s.refMarkup ?? 0}
+            style={{ width: 90 }}
+            onChange={(e) => set({ refMarkup: e.target.value })}
+          />
+          %
+        </label>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button className="btn btn-gold" onClick={() => save({ refMarkup: Number(s.refMarkup) || 0 }, "Prix conseillé enregistré")}>
+            Enregistrer
+          </button>
+          <button className="btn btn-outline" onClick={() => { set({ refMarkup: 0 }); save({ refMarkup: 0 }, "Prix conseillé désactivé"); }}>
+            Désactiver (tout enlever)
+          </button>
+        </div>
+      </div>
+
       {/* ACCÈS PRIVÉ AU SITE */}
       <div className="admin-block" style={{ display: "grid", gap: 10, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>
         <h3 style={{ margin: 0 }}>🔒 Accès privé au site (code)</h3>

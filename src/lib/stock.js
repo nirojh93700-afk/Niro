@@ -250,6 +250,9 @@ export async function getSettings() {
     atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },
     sections: { categories: true, trust: true, featured: true, atelier: true, ...(s.sections || {}) },
     apropos: s.apropos || "", // contenu HTML de la page À propos (vide = défaut)
+    // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
+    // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
+    refMarkup: Number(s.refMarkup) || 0,
   };
 }
 

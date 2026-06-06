@@ -68,6 +68,10 @@ export async function POST(req) {
       code: str(body.access.code, 60).trim(),
     };
   }
+  if (body.refMarkup !== undefined) {
+    const n = Number(body.refMarkup);
+    patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
+  }
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

@@ -824,6 +824,15 @@ img {
   color: #b4452f;
   font-weight: 700;
 }
+.price-ref-label {
+  display: inline-block;
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  vertical-align: middle;
+}
 .promo-badge {
   position: absolute;
   top: 12px;
