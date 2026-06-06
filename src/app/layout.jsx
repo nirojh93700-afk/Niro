@@ -18,6 +18,7 @@ import SiteGate from "@/components/SiteGate";
 import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/products";
+import { MARQUE } from "@/config/marque";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -62,11 +63,10 @@ function resolveMetadataBase() {
 export const metadata = {
   metadataBase: resolveMetadataBase(),
   title: {
-    default: "Niv Création — Bijoux, mariage & cadeaux personnalisés au laser",
-    template: "%s | Niv Création",
+    default: `${MARQUE.nom} — Bijoux, mariage & cadeaux personnalisés au laser`,
+    template: `%s | ${MARQUE.nomCourt}`,
   },
-  description:
-    "Atelier français de gravure et découpe laser. Bijoux personnalisés, décorations de mariage et cadeaux gravés sur mesure, fabriqués à la main.",
+  description: MARQUE.description,
   keywords: [
     "gravure laser",
     "cadeau personnalisé",
