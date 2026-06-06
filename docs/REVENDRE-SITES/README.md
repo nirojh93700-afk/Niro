@@ -7,6 +7,7 @@ Ce dossier rassemble tout ce qu'il faut pour **vendre des boutiques en ligne**
 
 | Fichier | À quoi ça sert |
 |---|---|
+| **GUIDE-DEBUTANT.md** | **Commencez par celui-ci.** Tout expliqué avec des mots simples : c'est quoi vendre un site, les abonnements, comment ça marche de A à Z. |
 | **OFFRE-COMMERCIALE.md** | La page à montrer aux clients : prestations, formules, prix, déroulé. À adapter à vos tarifs. |
 | **PROCEDURE-NOUVEAU-CLIENT.md** | Le mode d'emploi pour créer un nouveau site client en quelques heures, sans rien casser. |
 
