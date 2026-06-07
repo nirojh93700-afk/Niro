@@ -278,6 +278,12 @@ export async function getSettings() {
     // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
     // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
     refMarkup: Number(s.refMarkup) || 0,
+    // Mode maintenance : si activé, les visiteurs voient une page "en maintenance"
+    // (l'administratrice garde l'accès via le code d'accès).
+    maintenance: {
+      enabled: Boolean(s.maintenance?.enabled),
+      message: typeof s.maintenance?.message === "string" ? s.maintenance.message : "",
+    },
     // Codes postaux où le retrait en main propre est autorisé (atelier en Val-d'Oise 95).
     // Par défaut : 95 + départements voisins. Modifiable dans l'admin.
     pickupZones: (typeof s.pickupZones === "string" && s.pickupZones.trim())

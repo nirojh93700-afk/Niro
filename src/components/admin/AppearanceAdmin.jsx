@@ -67,6 +67,41 @@ export default function AppearanceAdmin({ adminKey }) {
       </p>
       {msg && <div className="notice">{msg}</div>}
 
+      {/* ÉTAT DU SITE — en ligne / privé / maintenance */}
+      {(() => {
+        const maint = s.maintenance?.enabled;
+        const priv = s.access?.locked;
+        const etat = maint ? "🛠️ En maintenance (hors-ligne)" : priv ? "🔒 Privé (code d'accès)" : "🟢 En ligne (public)";
+        const goOnline = () => { const access = { ...s.access, locked: false }; const maintenance = { ...s.maintenance, enabled: false }; set({ access, maintenance }); save({ access, maintenance }, "Site mis EN LIGNE (public)"); };
+        const goPrivate = () => { const access = { ...s.access, locked: true }; const maintenance = { ...s.maintenance, enabled: false }; set({ access, maintenance }); save({ access, maintenance }, "Site mis en mode privé (code d'accès)"); };
+        const goMaint = () => { const maintenance = { ...s.maintenance, enabled: true }; set({ maintenance }); save({ maintenance }, "Site mis EN MAINTENANCE"); };
+        return (
+          <div className="admin-block" style={{ display: "grid", gap: 10, border: "2px solid #e7d3a1", background: "#fbf4e6" }}>
+            <h3 style={{ margin: 0 }}>🌐 État du site</h3>
+            <p style={{ margin: 0, fontSize: "0.9rem" }}>État actuel : <strong>{etat}</strong></p>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button className="btn btn-gold" onClick={goOnline}>🟢 Mettre EN LIGNE</button>
+              <button className="btn btn-outline" onClick={goPrivate}>🔒 Privé (code)</button>
+              <button className="btn btn-outline" onClick={goMaint}>🛠️ Maintenance</button>
+            </div>
+            <label className="admin-field" style={{ marginTop: 4 }}>Message affiché en maintenance (facultatif)
+              <textarea
+                placeholder="Ex. Notre site est momentanément en maintenance, nous revenons très vite !"
+                value={s.maintenance?.message || ""}
+                onChange={(e) => set({ maintenance: { ...s.maintenance, message: e.target.value } })}
+                style={{ minHeight: 60 }}
+              />
+            </label>
+            <button className="btn btn-outline" style={{ justifySelf: "start" }} onClick={() => save({ maintenance: s.maintenance }, "Message de maintenance enregistré")}>
+              Enregistrer le message
+            </button>
+            <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+              En maintenance, les visiteurs voient une page « en maintenance ». Toi, tu gardes l'accès : sur cette page, clique « Accès gestion » et entre ton code d'accès.
+            </p>
+          </div>
+        );
+      })()}
+
       {/* PRIX CONSEILLÉ (comparaison de prix) */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>🏷️ Prix conseillé (« moins cher qu'ailleurs »)</h3>

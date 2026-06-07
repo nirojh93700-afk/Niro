@@ -73,6 +73,12 @@ export async function POST(req) {
     patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
   }
   if (typeof body.pickupZones === "string") patch.pickupZones = body.pickupZones.slice(0, 200);
+  if (body.maintenance && typeof body.maintenance === "object") {
+    patch.maintenance = {
+      enabled: Boolean(body.maintenance.enabled),
+      message: str(body.maintenance.message, 300),
+    };
+  }
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

@@ -130,13 +130,15 @@ export default async function RootLayout({ children }) {
     // en secours, on garde toutes les catégories
   }
 
-  // Accès privé : si activé, on demande un code avant d'afficher le site.
+  // Accès admin : un cookie correspondant au code d'accès débloque tout
+  // (mode privé ET maintenance) — c'est ce qui te permet d'accéder à /gestion.
   const access = settings.access || { locked: false, code: "" };
-  let gateOpen = true;
-  if (access.locked) {
-    const provided = cookies().get("site-access")?.value;
-    gateOpen = Boolean(access.code) && provided === access.code;
-  }
+  const maintenance = settings.maintenance || { enabled: false, message: "" };
+  const provided = cookies().get("site-access")?.value;
+  const hasAccess = Boolean(access.code) && provided === access.code;
+  const showMaintenance = maintenance.enabled && !hasAccess;
+  const showGate = !showMaintenance && access.locked && !hasAccess;
+  const gateOpen = !showMaintenance && !showGate;
 
   return (
     <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
@@ -160,6 +162,8 @@ export default async function RootLayout({ children }) {
               <CartDrawer />
             </CartProvider>
           </>
+        ) : showMaintenance ? (
+          <SiteGate maintenance message={maintenance.message} />
         ) : (
           <SiteGate />
         )}
