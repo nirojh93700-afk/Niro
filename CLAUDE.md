@@ -166,6 +166,10 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Retrait en main propre** : déco/mariage **uniquement** (jamais les bijoux = livraison seule), gratuit,
   sur rendez-vous, limité par code postal (95 + voisins : 78, 92, 93, 75, 60), adresse jamais publiée.
 
+### RÈGLE DE COMMUNICATION (importante)
+- **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
+- Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
+
 ### Reste à faire avant l'ouverture publique
 - **Ouvrir le site au public** : décocher « Activer le code d'accès » dans gestion → Apparence (site encore privé en attendant).
 - **SIRET** : à compléter dans Mentions légales / CGV dès réception (actuellement « en cours d'immatriculation »).
