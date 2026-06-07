@@ -28,7 +28,7 @@ export const DECO_RELAY_TIERS = [
 export const DECO_HOME_EXTRA = 2; // domicile = tarif relais + ce supplément
 
 // --- Remise en main propre -------------------------------------------------
-export const PICKUP_FEE = 7;
+export const PICKUP_FEE = 0;
 
 // La lettre suivie / petit colis relais est limitée à 2 kg.
 const LETTER_MAX_GRAMS = 2000;
