@@ -773,8 +773,47 @@ img {
   justify-content: center;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
-
-/* Upload de photo */
+/* Badge "photo principale" (la 1re photo) */
+.photo-thumb-main {
+  position: absolute;
+  top: -7px;
+  left: -4px;
+  background: var(--gold-dark);
+  color: #fff;
+  font-size: 9px;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+/* Flèches pour réordonner les photos */
+.photo-thumb-moves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+.photo-thumb-moves button {
+  flex: 1;
+  border: none;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.photo-thumb-moves button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.photo-thumb-moves button + button {
+  border-left: 1px solid rgba(255,255,255,0.25);
+}
 .photo-dropzone {
   display: flex;
   align-items: center;

@@ -141,6 +141,16 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
     }
   }
 
+  // Déplace une photo (réordonner) ; la 1re photo est la photo principale.
+  function moveImg(from, to) {
+    if (to < 0 || to >= imgs.length) return;
+    const next = imgs.slice();
+    const [m] = next.splice(from, 1);
+    next.splice(to, 0, m);
+    setImgs(next);
+    saveImages(next);
+  }
+
   return (
     <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
       <label className="admin-field">Nom
@@ -167,16 +177,28 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
       <div>
         <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>Photos {imgSaved ? "✓" : ""}</span>
         <div className="photo-thumbs">
-          {imgs.map((u) => (
+          {imgs.map((u, i) => (
             <span key={u} className="photo-thumb-wrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={u} alt="" />
+              {i === 0 && <span className="photo-thumb-main">Principale</span>}
               <button type="button" className="photo-thumb-del" title="Retirer cette photo"
                 onClick={() => { const next = imgs.filter((x) => x !== u); setImgs(next); saveImages(next); }}>×</button>
+              <span className="photo-thumb-moves">
+                <button type="button" title="Déplacer vers la gauche" disabled={i === 0}
+                  onClick={() => moveImg(i, i - 1)}>‹</button>
+                <button type="button" title="Déplacer vers la droite" disabled={i === imgs.length - 1}
+                  onClick={() => moveImg(i, i + 1)}>›</button>
+              </span>
             </span>
           ))}
           {imgs.length === 0 && <span className="ep-empty">Aucune photo</span>}
         </div>
+        {imgs.length > 1 && (
+          <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "6px 0 0" }}>
+            Utilise les flèches ‹ › pour changer l'ordre. La 1ʳᵉ photo (« Principale ») est celle qui s'affiche sur la vignette.
+          </p>
+        )}
         {UPLOAD_AVAILABLE && (
           <div style={{ marginTop: 10 }}>
             <PhotoUpload value="" multiple productSlug={product.slug} onUpload={(urls) => {
