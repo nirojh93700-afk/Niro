@@ -43,7 +43,7 @@ const html = `
 
 <h3>Retrait en main propre (click &amp; collect)</h3>
 <p>Le retrait en main propre est proposé uniquement pour la décoration et le mariage, dans le secteur de l'atelier (Val-d'Oise et alentours), gratuitement et <strong>sur rendez-vous</strong>. C'est la cliente qui vient récupérer sa commande à l'atelier. Dès que votre commande est prête, nous vous prévenons par e-mail ou téléphone pour convenir d'un créneau ; vous présentez votre <strong>numéro de commande</strong> au retrait.</p>
-<p><strong>Délai de retrait : 14 jours</strong> à compter de notre message vous indiquant que la commande est prête. Au-delà de ce délai, sans retrait de votre part, la commande — étant personnalisée et fabriquée sur mesure — <strong>ne pourra plus être ni remboursée, ni expédiée</strong>. Si vous habitez en dehors du secteur, contactez-nous <strong>avant de commander</strong>.</p>
+<p><strong>Délai de retrait : 14 jours</strong> à compter de notre message vous indiquant que la commande est prête. Au-delà de ce délai, sans retrait de votre part, la commande <strong>ne pourra plus être ni retirée, ni expédiée</strong>. Si vous habitez en dehors du secteur, contactez-nous <strong>avant de commander</strong>.</p>
 
 <h3>Commandes événementielles (mariages notamment)</h3>
 <p>Pour les commandes destinées à un événement à date fixe, contactez-nous AVANT toute commande à moins de 21 jours de l'événement pour confirmer la faisabilité. En cas de défaut, refonte URGENTE et livraison express prioritaire.</p>
