@@ -2,8 +2,18 @@ import Stripe from "stripe";
 import { getCatalog } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
-import { getPromos } from "@/lib/stock";
+import { getPromos, getSettings } from "@/lib/stock";
 import { engravingExtra } from "@/lib/engravingPrice";
+
+// Le retrait en main propre n'est proposé que si le code postal de la cliente
+// est dans la zone autorisée (réglée dans l'admin). Zone vide = pas de restriction.
+function pickupAllowed(cp, zonesStr) {
+  const zones = String(zonesStr || "").split(/[^0-9]+/).map((s) => s.trim()).filter(Boolean);
+  if (!zones.length) return true; // aucune zone définie → pas de restriction
+  const code = String(cp || "").replace(/\D/g, "");
+  if (!code) return false; // zone définie mais pas de code postal fourni → pas de retrait
+  return zones.some((z) => code.startsWith(z));
+}
 
 // Construit une table variantId -> { product, variant } pour valider côté serveur.
 async function buildVariantIndex() {
@@ -44,8 +54,10 @@ export async function POST(req) {
     return Response.json({ error: "Votre panier est vide." }, { status: 400 });
   }
 
+  const postalCode = String(body?.postalCode || "").trim();
   const variantIndex = await buildVariantIndex();
   const promos = await getPromos();
+  const settings = await getSettings().catch(() => ({}));
 
   // Normalise l'URL du site : ajoute https:// si oublié dans la variable
   // d'environnement, et retombe sur l'origine de la requête en dernier recours.
@@ -80,7 +92,7 @@ export async function POST(req) {
   let subtotal = 0;
   let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
   let letterOnly = true;
-  let pickupEligible = false; // remise en main propre possible
+  let hasPickupItem = false; // au moins un article éligible au retrait
   const boughtVariants = []; // pour décrémenter le stock après paiement
 
   for (const item of items) {
@@ -108,7 +120,7 @@ export async function POST(req) {
       letterOnly = false;
       parcelQty += quantity;
     }
-    if (product.pickup) pickupEligible = true;
+    if (product.pickup) hasPickupItem = true;
 
     const descriptionParts = [variant.title];
     if (extra.amount > 0) {
@@ -147,7 +159,10 @@ export async function POST(req) {
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
-      shipping_options: buildShippingOptions({ totalGrams, subtotal, parcelQty, letterOnly, pickupEligible }),
+      shipping_options: buildShippingOptions({
+        totalGrams, subtotal, parcelQty, letterOnly,
+        pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
+      }),
       custom_fields: [
         {
           key: "personnalisation",

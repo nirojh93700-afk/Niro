@@ -278,6 +278,8 @@ export async function getSettings() {
     // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
     // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
     refMarkup: Number(s.refMarkup) || 0,
+    // Codes postaux (ou débuts) où le retrait en main propre est autorisé. Vide = partout.
+    pickupZones: typeof s.pickupZones === "string" ? s.pickupZones : "",
   };
 }
 

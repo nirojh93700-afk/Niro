@@ -10,12 +10,15 @@ export default function CartPage() {
   const { items, total, updateQuantity, removeItem, hydrated } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+
+  const hasPickup = items.some((i) => i.pickup);
 
   async function handleCheckout() {
     setError("");
     setLoading(true);
     try {
-      await startCheckout(items);
+      await startCheckout(items, postalCode);
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -95,6 +98,21 @@ export default function CartPage() {
             <span>Total</span>
             <span>{formatEuro(total)}</span>
           </div>
+          {hasPickup && (
+            <div style={{ marginTop: 16 }}>
+              <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>
+                Votre code postal <span style={{ color: "var(--ink-soft)" }}>(pour proposer le retrait en main propre si vous êtes dans la zone)</span>
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="Ex. 75017"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
+              />
+            </div>
+          )}
           {error && <div className="notice" style={{ marginTop: 16 }}>{error}</div>}
           <button
             className="btn btn-gold btn-block"

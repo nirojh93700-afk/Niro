@@ -226,6 +226,7 @@ export default function ProductDetail({ product }) {
       image: images[0] || null,
       personalization: buildPersonalization(),
       fields: product.engravingPricing ? { ...fieldValues } : undefined,
+      pickup: Boolean(product.pickup),
       quantity,
     });
     setAdded(true);

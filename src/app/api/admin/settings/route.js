@@ -72,6 +72,7 @@ export async function POST(req) {
     const n = Number(body.refMarkup);
     patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
   }
+  if (typeof body.pickupZones === "string") patch.pickupZones = body.pickupZones.slice(0, 200);
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }
