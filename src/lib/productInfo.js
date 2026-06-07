@@ -409,11 +409,7 @@ Annulation
 
 Défaut technique ou de gravure
 - Photo du défaut sous 14 jours après réception.
-- Échange standard sans frais (renvoi du produit défectueux requis).
-
-Garantie technique
-- 12 mois sur le hardware (panne de la clé en usage normal).
-- Pas de garantie sur les données perdues (toujours sauvegarder en parallèle).`,
+- Échange standard sans frais (renvoi du produit défectueux requis).`,
   },
 };
 
