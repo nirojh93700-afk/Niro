@@ -9,7 +9,7 @@ import {
   Pacifico,
 } from "next/font/google";
 import "./globals.css";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,6 +20,7 @@ import WelcomePopup from "@/components/WelcomePopup";
 import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/products";
+import { MARQUE } from "@/config/marque";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -64,11 +65,10 @@ function resolveMetadataBase() {
 export const metadata = {
   metadataBase: resolveMetadataBase(),
   title: {
-    default: "Niv Création — Bijoux, mariage & cadeaux personnalisés au laser",
-    template: "%s | Niv Création",
+    default: `${MARQUE.nom} — Bijoux, mariage & cadeaux personnalisés au laser`,
+    template: `%s | ${MARQUE.nomCourt}`,
   },
-  description:
-    "Atelier français de gravure et découpe laser. Bijoux personnalisés, décorations de mariage et cadeaux gravés sur mesure, fabriqués à la main.",
+  description: MARQUE.description,
   keywords: [
     "gravure laser",
     "cadeau personnalisé",
@@ -117,6 +117,18 @@ const FONT_VARS = {
 };
 
 export default async function RootLayout({ children }) {
+  // Espace plateforme (/plateforme) : page autonome, sans portail d'accès ni
+  // habillage boutique (en-tête, pied de page, panier). Il gère sa propre
+  // connexion par mot de passe.
+  const pathname = headers().get("x-pathname") || "";
+  if (pathname.startsWith("/plateforme")) {
+    return (
+      <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
+        <body>{children}</body>
+      </html>
+    );
+  }
+
   let settings = {
     color: "", fontHeading: "", fontBody: "",
     announce: { enabled: false, text: "", link: "" },

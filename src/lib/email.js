@@ -3,15 +3,18 @@
 // Reprend la même mise en page que l'e-mail de confirmation client.
 // =============================================================================
 
+import { MARQUE, coordonnees } from "@/config/marque";
+
+const _coord = coordonnees();
 export const BRAND = {
-  gold: "#a98935",
-  cream: "#faf6ee",
-  ink: "#2b2620",
-  logoUrl: (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim(),
-  siteUrl: ((process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").trim().replace(/\/$/, "")),
-  siteLabel: "nivcreation.fr",
-  contact: process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com",
-  instagram: (process.env.INSTAGRAM_URL || "https://instagram.com/nivcreation").trim(),
+  gold: MARQUE.couleurs.or,
+  cream: MARQUE.couleurs.creme,
+  ink: MARQUE.couleurs.encre,
+  logoUrl: _coord.logoUrl,
+  siteUrl: _coord.siteUrl,
+  siteLabel: MARQUE.domaine,
+  contact: _coord.contactEmail,
+  instagram: _coord.instagram,
 };
 
 export function escapeHtml(str) {
