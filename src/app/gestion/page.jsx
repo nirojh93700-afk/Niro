@@ -3,10 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
-import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
-import Model3DUpload from "@/components/admin/Model3DUpload";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
@@ -28,7 +26,6 @@ export default function GestionPage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);
-  const [catalog, setCatalog] = useState([]);
   const [editable, setEditable] = useState([]);
   const [config, setConfig] = useState(null);
   const [firebase, setFirebase] = useState(null);
@@ -66,7 +63,6 @@ export default function GestionPage() {
       if (!res.ok) throw new Error("Erreur de chargement.");
       const data = await res.json();
       setRows(data.rows);
-      setCatalog(data.catalog || []);
       setEditable(data.editable || []);
       setAuthed(true);
       sessionStorage.setItem("niv-admin-key", adminKey);
@@ -113,21 +109,6 @@ export default function GestionPage() {
       });
       if (!res.ok) throw new Error("Échec de l'enregistrement.");
       setSaved(variantId);
-      setTimeout(() => setSaved(""), 1500);
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
-  async function saveImages(slug, images) {
-    try {
-      const res = await fetch("/api/admin/images", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ slug, images }),
-      });
-      if (!res.ok) throw new Error("Échec de l'enregistrement des photos.");
-      setSaved(slug);
       setTimeout(() => setSaved(""), 1500);
     } catch (e) {
       setError(e.message);
@@ -381,10 +362,6 @@ export default function GestionPage() {
   function updateRowPromo(variantId, value) {
     setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, salePrice: value } : r)));
   }
-  function updateCatalog(slug, images) {
-    setCatalog((prev) => prev.map((c) => (c.slug === slug ? { ...c, overrideImages: images } : c)));
-  }
-
   if (!authed) {
     return (
       <div className="center-card">
@@ -537,7 +514,6 @@ export default function GestionPage() {
           <button className={`filter-chip ${tab === "gravure" ? "active" : ""}`} onClick={() => setTab("gravure")}>Gravure</button>
           <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
           <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
-          <button className={`filter-chip ${tab === "photos" ? "active" : ""}`} onClick={() => setTab("photos")}>Photos</button>
           <button className={`filter-chip ${tab === "apparence" ? "active" : ""}`} onClick={() => setTab("apparence")}>Apparence</button>
           <button className={`filter-chip ${tab === "reglages" ? "active" : ""}`} onClick={() => setTab("reglages")}>Réglages</button>
         </div>
@@ -1050,64 +1026,6 @@ export default function GestionPage() {
                 ))}
               </div>
             ))}
-          </>
-        )}
-
-        {/* ---------------- PHOTOS ---------------- */}
-        {tab === "photos" && (
-          <>
-            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
-              Ajoutez les photos de chaque produit : choisissez une image depuis votre téléphone ou votre ordinateur, ou collez un lien (URL).
-            </p>
-            {catalog.map((c) => {
-              const current = c.overrideImages?.length ? c.overrideImages : c.baseImages;
-              return (
-                <div key={c.slug} className="admin-block">
-                  <h3>{c.name} <span className="admin-cat">{getCategoryLabel(c.category)}</span></h3>
-                  <div className="photo-thumbs">
-                    {current.map((u) => (
-                      <span key={u} className="photo-thumb-wrap">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={u} alt="" />
-                        <button type="button" className="photo-thumb-del" title="Retirer cette photo"
-                          onClick={() => {
-                            const next = current.filter((x) => x !== u);
-                            updateCatalog(c.slug, next);
-                            saveImages(c.slug, next);
-                          }}>×</button>
-                      </span>
-                    ))}
-                    {current.length === 0 && <span className="ep-empty">Aucune photo</span>}
-                  </div>
-                  {UPLOAD_AVAILABLE && (
-                    <div style={{ marginTop: 10 }}>
-                      <PhotoUpload value="" multiple productSlug={c.slug} onUpload={(urls) => {
-                        const next = [...(c.overrideImages || []), ...urls];
-                        updateCatalog(c.slug, next);
-                        saveImages(c.slug, next);
-                      }} />
-                    </div>
-                  )}
-                  <details style={{ marginTop: 10 }}>
-                    <summary style={{ cursor: "pointer", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
-                      Ou coller des liens (URL) — avancé
-                    </summary>
-                    <textarea
-                      placeholder="https://… (une URL par ligne)"
-                      defaultValue={(c.overrideImages || []).join("\n")}
-                      onChange={(e) => updateCatalog(c.slug, e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))}
-                      style={{ minHeight: 70, marginTop: 8 }}
-                    />
-                  </details>
-                  <button className="btn btn-outline" style={{ marginTop: 10 }}
-                    onClick={() => saveImages(c.slug, c.overrideImages || [])}>
-                    Enregistrer les photos {saved === c.slug ? "✓" : ""}
-                  </button>
-
-                  <Model3DUpload slug={c.slug} current={c.model3d} adminKey={key} onSaved={() => load(key)} />
-                </div>
-              );
-            })}
           </>
         )}
 

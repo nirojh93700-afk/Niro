@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { CATEGORIES, SUBCATEGORIES, getCategoryLabel } from "@/lib/products";
+import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
+import Model3DUpload from "@/components/admin/Model3DUpload";
 
 // Regroupe les produits par catégorie, dans l'ordre des CATEGORIES.
 function groupByCategory(products) {
@@ -83,6 +85,8 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
               {openSlug === p.slug && (
                 <EditProduct
                   product={p}
+                  adminKey={adminKey}
+                  onReload={onReload}
                   onSave={async (patch) => {
                     const ok = await post({ action: "edit", slug: p.slug, patch });
                     setMsg(ok ? "Modifications enregistrées ✓" : "Échec.");
@@ -104,7 +108,7 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
   );
 }
 
-function EditProduct({ product, onSave, onDelete }) {
+function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
   const [name, setName] = useState(product.name || "");
   const [tagline, setTagline] = useState(product.tagline || "");
   const [category, setCategory] = useState(product.category || "cadeaux");
@@ -113,6 +117,29 @@ function EditProduct({ product, onSave, onDelete }) {
   const [prices, setPrices] = useState(
     Object.fromEntries((product.variants || []).map((v) => [v.id, v.price]))
   );
+  // Photos du produit : on part des photos personnalisées si elles existent, sinon des photos d'origine.
+  const [imgs, setImgs] = useState(
+    product.overrideImages?.length ? product.overrideImages : (product.images || [])
+  );
+  const [imgSaved, setImgSaved] = useState(false);
+  const [imgErr, setImgErr] = useState("");
+
+  async function saveImages(next) {
+    setImgErr("");
+    try {
+      const res = await fetch("/api/admin/images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify({ slug: product.slug, images: next }),
+      });
+      if (!res.ok) throw new Error("Échec de l'enregistrement des photos.");
+      setImgSaved(true);
+      setTimeout(() => setImgSaved(false), 1500);
+      onReload && onReload();
+    } catch (e) {
+      setImgErr(e.message);
+    }
+  }
 
   return (
     <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
@@ -136,6 +163,42 @@ function EditProduct({ product, onSave, onDelete }) {
               onChange={(e) => setPrices({ ...prices, [v.id]: e.target.value === "" ? "" : Number(e.target.value) })} />
           </div>
         ))}
+      </div>
+      <div>
+        <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>Photos {imgSaved ? "✓" : ""}</span>
+        <div className="photo-thumbs">
+          {imgs.map((u) => (
+            <span key={u} className="photo-thumb-wrap">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={u} alt="" />
+              <button type="button" className="photo-thumb-del" title="Retirer cette photo"
+                onClick={() => { const next = imgs.filter((x) => x !== u); setImgs(next); saveImages(next); }}>×</button>
+            </span>
+          ))}
+          {imgs.length === 0 && <span className="ep-empty">Aucune photo</span>}
+        </div>
+        {UPLOAD_AVAILABLE && (
+          <div style={{ marginTop: 10 }}>
+            <PhotoUpload value="" multiple productSlug={product.slug} onUpload={(urls) => {
+              const next = [...imgs, ...urls];
+              setImgs(next);
+              saveImages(next);
+            }} />
+          </div>
+        )}
+        <details style={{ marginTop: 10 }}>
+          <summary style={{ cursor: "pointer", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+            Ou coller des liens (URL) — avancé
+          </summary>
+          <textarea
+            placeholder="https://… (une URL par ligne)"
+            defaultValue={imgs.join("\n")}
+            onBlur={(e) => { const next = e.target.value.split("\n").map((s) => s.trim()).filter(Boolean); setImgs(next); saveImages(next); }}
+            style={{ minHeight: 70, marginTop: 8 }}
+          />
+        </details>
+        {imgErr && <span className="char-count" style={{ color: "#b4452f", textAlign: "left" }}>{imgErr}</span>}
+        <Model3DUpload slug={product.slug} current={product.model3d} adminKey={adminKey} onSaved={() => onReload && onReload()} />
       </div>
       <label className="admin-field">Description (texte ou HTML)
         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} style={{ minHeight: 90 }} />
