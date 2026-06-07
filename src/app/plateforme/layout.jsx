@@ -4,6 +4,7 @@
 export const metadata = {
   title: { absolute: "Lior" },
   applicationName: "Lior",
+  manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     title: "Lior",
