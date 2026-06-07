@@ -612,6 +612,19 @@ export default function ProductDetail({ product }) {
               )}
             </div>
           )}
+
+          {product.category === "bijoux" && (
+            <div className="info-accordion" style={{ marginTop: 14 }}>
+              <details>
+                <summary>✨ Qualité &amp; soin</summary>
+                <div className="info-body">Acier inoxydable de qualité, contrôlé avant l'envoi. Gravure laser durable. Fait main en France, avec soin.</div>
+              </details>
+              <details>
+                <summary>🧼 Conseils d'entretien</summary>
+                <div className="info-body">Évitez l'eau de Javel, le parfum et les produits ménagers. Rangez votre bijou à l'abri de l'humidité pour qu'il garde son éclat.</div>
+              </details>
+            </div>
+          )}
         </div>
       </div>
 
