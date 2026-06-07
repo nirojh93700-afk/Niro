@@ -112,8 +112,8 @@ export default function CartPage() {
                 style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
               />
               <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 0" }}>
-                Vous habitez plus loin et souhaitez tout de même venir récupérer en main propre ?
-                Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
+                Retrait sur rendez-vous, à récupérer sous <strong>14 jours</strong> après notre message « commande prête » (au-delà, commande personnalisée perdue : ni remboursée, ni expédiée).
+                <br />Vous habitez plus loin et souhaitez tout de même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
               </p>
             </div>
           )}

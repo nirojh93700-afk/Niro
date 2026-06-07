@@ -574,6 +574,7 @@ export default function ProductDetail({ product }) {
           {product.pickup && (
             <div style={{ marginTop: 12, background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 12, padding: "12px 14px", fontSize: "0.88rem" }}>
               <strong>📍 Retrait en main propre possible</strong> — atelier en <strong>Val-d'Oise (95)</strong> et alentours, gratuit, sur rendez-vous (choisissez l'option au paiement).
+              <br />À retirer sous <strong>14 jours</strong> après notre message « commande prête ». Passé ce délai, la commande personnalisée est perdue (ni remboursée, ni expédiée).
               <br />Vous habitez plus loin et souhaitez quand même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
             </div>
           )}
