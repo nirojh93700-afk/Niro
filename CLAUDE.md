@@ -158,6 +158,13 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **E-mails** : confirmation cliente + alerte commande (vérifier les spams), suivi colis,
   annulation — tous à l'image de la marque (logo + or/crème).
 - **Reçu Stripe** : logo + couleur or réglés ; numéro perso retiré (informations publiques Stripe).
+- **POLITIQUE REMBOURSEMENT — RÈGLE FERME (déjà confirmée, NE PLUS REDEMANDER)** : les **produits
+  personnalisés ne sont JAMAIS remboursés** (droit de rétractation exclu, art. L221-28 ; clause déjà
+  dans les pages Retours/CGV). → Ne JAMAIS proposer remboursement/retour/avoir pour un article
+  personnalisé. Si une commande « retrait » n'est pas venue chercher : on garde, **pas de remboursement**.
+- **Atelier en Val-d'Oise (95)** ; domiciliation légale 6 rue d'Armaillé 75017 Paris = **correcte**, ne pas la remettre en question.
+- **Retrait en main propre** : déco/mariage **uniquement** (jamais les bijoux = livraison seule), gratuit,
+  sur rendez-vous, limité par code postal (95 + voisins : 78, 92, 93, 75, 60), adresse jamais publiée.
 
 ### Reste à faire avant l'ouverture publique
 - **Ouvrir le site au public** : décocher « Activer le code d'accès » dans gestion → Apparence (site encore privé en attendant).
