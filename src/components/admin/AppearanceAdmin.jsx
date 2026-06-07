@@ -102,6 +102,25 @@ export default function AppearanceAdmin({ adminKey }) {
         );
       })()}
 
+      {/* BANDEAU PROMO (annonce en haut du site) */}
+      <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+        <h3 style={{ margin: 0 }}>📣 Bandeau d'annonce (haut du site)</h3>
+        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Affiche un petit bandeau en haut de toutes les pages (ex. « Livraison offerte dès 45 € » ou « −10 % avec le code BIENVENUE10 »).
+        </p>
+        <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <input type="checkbox" style={{ width: "auto" }} checked={s.announce?.enabled || false} onChange={(e) => set({ announce: { ...s.announce, enabled: e.target.checked } })} />
+          Afficher le bandeau
+        </label>
+        <label className="admin-field">Texte
+          <input value={s.announce?.text || ""} placeholder="Ex. Livraison offerte dès 45 € ✦" onChange={(e) => set({ announce: { ...s.announce, text: e.target.value } })} />
+        </label>
+        <label className="admin-field">Lien (facultatif)
+          <input value={s.announce?.link || ""} placeholder="/boutique" onChange={(e) => set({ announce: { ...s.announce, link: e.target.value } })} />
+        </label>
+        <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ announce: s.announce }, "Bandeau enregistré")}>Enregistrer le bandeau</button>
+      </div>
+
       {/* PRIX CONSEILLÉ (comparaison de prix) */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>🏷️ Prix conseillé (« moins cher qu'ailleurs »)</h3>

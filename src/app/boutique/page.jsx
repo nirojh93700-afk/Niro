@@ -23,7 +23,12 @@ export default async function BoutiquePage({ searchParams }) {
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
   const activeType = searchParams?.type; // bijoux : collier / bracelet
+  const activeQ = (searchParams?.q || "").trim().toLowerCase();
   const withImages = await getCatalog();
+
+  const searchResults = activeQ
+    ? withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ))
+    : null;
 
   let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
   if (activeCat && activeSub) {
@@ -77,10 +82,35 @@ export default async function BoutiquePage({ searchParams }) {
       <div className="container">
         <div className="section-head">
           <span className="eyebrow">Boutique</span>
-          <h2>{title}</h2>
+          <h2>{activeQ ? `Recherche : « ${searchParams.q} »` : title}</h2>
           <p>Chaque création est personnalisable et réalisée avec soin en France.</p>
         </div>
 
+        {/* Recherche */}
+        <form method="get" action="/boutique" style={{ display: "flex", gap: 8, maxWidth: 480, margin: "0 auto 22px" }}>
+          <input
+            type="search"
+            name="q"
+            defaultValue={searchParams?.q || ""}
+            placeholder="Rechercher une création…"
+            style={{ flex: 1, padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
+          />
+          <button type="submit" className="btn btn-gold">Rechercher</button>
+        </form>
+
+        {activeQ ? (
+          searchResults.length > 0 ? (
+            <div className="product-grid">
+              {searchResults.map((p) => (<ProductCard key={p.slug} product={p} />))}
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", padding: "20px 0" }}>
+              <p style={{ color: "var(--ink-soft)" }}>Aucun résultat pour « {searchParams.q} ».</p>
+              <Link href="/boutique" className="btn btn-outline">Voir toute la boutique</Link>
+            </div>
+          )
+        ) : (
+        <>
         {/* Catégories principales */}
         <div className="filters">
           <Link href="/boutique" className={`filter-chip ${!activeCat ? "active" : ""}`}>
@@ -225,6 +255,8 @@ export default async function BoutiquePage({ searchParams }) {
               </div>
             );
           })
+        )}
+        </>
         )}
       </div>
     </section>

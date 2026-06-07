@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
-import { getCatalogBySlug, priceFrom } from "@/lib/catalog";
+import ProductCard from "@/components/ProductCard";
+import { getCatalogBySlug, getCatalog, priceFrom } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,14 @@ export async function generateMetadata({ params }) {
 export default async function ProductPage({ params }) {
   const product = await getCatalogBySlug(params.handle);
   if (!product) notFound();
+
+  // Ventes croisées : 4 autres produits (même catégorie en priorité).
+  let related = [];
+  try {
+    const all = (await getCatalog()).filter((p) => p.slug !== product.slug);
+    const sameCat = all.filter((p) => p.category === product.category);
+    related = [...sameCat, ...all.filter((p) => p.category !== product.category)].slice(0, 4);
+  } catch { /* ignore */ }
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -46,6 +55,19 @@ export default async function ProductPage({ params }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProductDetail product={product} />
+      {related.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-head">
+              <span className="eyebrow">À découvrir</span>
+              <h2>Vous aimerez aussi</h2>
+            </div>
+            <div className="product-grid">
+              {related.map((p) => (<ProductCard key={p.slug} product={p} />))}
+            </div>
+          </div>
+        </section>
+      )}
       <ProductReviews slug={product.slug} />
     </>
   );
