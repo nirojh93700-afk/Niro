@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { decrementMany } from "@/lib/stock";
+import { decrementMany, recordCodeUsage } from "@/lib/stock";
 import { recordSiteOrder, updateQuoteStatus } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -155,6 +155,19 @@ export async function POST(req) {
     }
   } catch (e) {
     console.error("Décrément stock impossible:", e.message);
+  }
+
+  // Enregistre l'utilisation du code promo (une seule fois par IP / e-mail).
+  try {
+    const md = event.data.object?.metadata || {};
+    if (md.promoCode) {
+      await recordCodeUsage(md.promoCode, {
+        ip: md.clientIp || "",
+        email: event.data.object?.customer_details?.email || "",
+      });
+    }
+  } catch (e) {
+    console.error("Enregistrement code promo:", e.message);
   }
 
   try {

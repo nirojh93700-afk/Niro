@@ -11,6 +11,7 @@ import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
 import ReviewsAdmin from "@/components/admin/ReviewsAdmin";
+import PromoCodesAdmin from "@/components/admin/PromoCodesAdmin";
 import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
 
@@ -999,6 +1000,9 @@ export default function GestionPage() {
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
               Mets un prix promo (inférieur au prix normal) : le client verra le prix barré + la réduction. Vide = pas de promo.
             </p>
+
+            <PromoCodesAdmin adminKey={key} />
+
 
             {/* Remise en lot par catégorie */}
             <div className="admin-block" style={{ display: "grid", gap: 10, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>

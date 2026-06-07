@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { getCatalog } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
-import { getPromos, getSettings } from "@/lib/stock";
+import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock";
 import { engravingExtra } from "@/lib/engravingPrice";
 
 // Le retrait en main propre n'est proposé que si le code postal de la cliente
@@ -55,6 +55,7 @@ export async function POST(req) {
   }
 
   const postalCode = String(body?.postalCode || "").trim();
+  const promoCode = String(body?.promoCode || "").trim().toUpperCase();
   const variantIndex = await buildVariantIndex();
   const promos = await getPromos();
   const settings = await getSettings().catch(() => ({}));
@@ -146,6 +147,28 @@ export async function POST(req) {
 
   const stripe = new Stripe(secret);
 
+  // IP de la visiteuse (pour limiter un code à une seule utilisation).
+  const clientIp = (req.headers.get("x-nf-client-connection-ip") || (req.headers.get("x-forwarded-for") || "").split(",")[0] || "").trim();
+
+  // Code promo géré dans l'admin → coupon Stripe créé à la volée (pas besoin du dashboard).
+  let discounts;
+  let appliedCode = "";
+  if (promoCode && !(await hasUsedCode(promoCode, { ip: clientIp }))) {
+    try {
+      const codes = await getPromoCodes();
+      const pc = codes[promoCode];
+      if (pc && pc.value > 0) {
+        appliedCode = promoCode;
+        const coupon = await stripe.coupons.create(
+          pc.type === "fixed"
+            ? { amount_off: Math.round(pc.value * 100), currency: "eur", duration: "once", name: `Code ${promoCode}` }
+            : { percent_off: Math.min(100, pc.value), duration: "once", name: `Code ${promoCode}` }
+        );
+        discounts = [{ coupon: coupon.id }];
+      }
+    } catch { /* code ignoré si souci */ }
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -153,10 +176,12 @@ export async function POST(req) {
       metadata: {
         // sert à décrémenter le stock après paiement (variantId:quantité)
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
+        promoCode: appliedCode,
+        clientIp,
       },
       locale: "fr",
       currency: "eur",
-      allow_promotion_codes: true, // la cliente peut entrer un code promo au paiement
+      ...(discounts ? { discounts } : { allow_promotion_codes: true }),
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },

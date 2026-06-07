@@ -253,6 +253,57 @@ export async function getModelFile(id) {
   }
 }
 
+// --- Codes promo (gérés dans l'admin, appliqués au paiement) ---------------
+// { CODE: { type: "percent"|"fixed", value } }
+export async function getPromoCodes() {
+  const data = await getCatalogRaw();
+  return data.promoCodes || {};
+}
+export async function setPromoCode(code, def) {
+  const c = String(code || "").trim().toUpperCase();
+  if (!c) return false;
+  const data = await getCatalogRaw();
+  data.promoCodes = data.promoCodes || {};
+  data.promoCodes[c] = {
+    type: def?.type === "fixed" ? "fixed" : "percent",
+    value: Math.max(0, Number(def?.value) || 0),
+  };
+  await persistCatalog(data);
+  return true;
+}
+// Suivi des utilisations d'un code (une seule fois par visiteuse : IP + e-mail).
+export async function getCodeUsage() {
+  const data = await getCatalogRaw();
+  return data.codeUsage || {};
+}
+export async function hasUsedCode(code, { ip, email } = {}) {
+  const u = (await getCodeUsage())[String(code || "").trim().toUpperCase()];
+  if (!u) return false;
+  if (ip && (u.ips || []).includes(ip)) return true;
+  if (email && (u.emails || []).includes(String(email).toLowerCase())) return true;
+  return false;
+}
+export async function recordCodeUsage(code, { ip, email } = {}) {
+  const c = String(code || "").trim().toUpperCase();
+  if (!c) return;
+  const data = await getCatalogRaw();
+  data.codeUsage = data.codeUsage || {};
+  const u = data.codeUsage[c] || { ips: [], emails: [] };
+  if (ip && !u.ips.includes(ip)) u.ips.push(ip);
+  if (email) { const e = String(email).toLowerCase(); if (!u.emails.includes(e)) u.emails.push(e); }
+  data.codeUsage[c] = u;
+  await persistCatalog(data);
+}
+
+export async function deletePromoCode(code) {
+  const data = await getCatalogRaw();
+  if (data.promoCodes) {
+    delete data.promoCodes[String(code || "").trim().toUpperCase()];
+    await persistCatalog(data);
+  }
+  return true;
+}
+
 // --- Avis clients ----------------------------------------------------------
 // { slug: [{ id, name, rating, text, date, approved }] }
 export async function getReviews() {

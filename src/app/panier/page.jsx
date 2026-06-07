@@ -11,14 +11,34 @@ export default function CartPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoMsg, setPromoMsg] = useState("");
+  const [promoOk, setPromoOk] = useState(false);
 
   const hasPickup = items.some((i) => i.pickup);
+
+  async function applyPromo() {
+    setPromoMsg(""); setPromoOk(false);
+    const code = promoCode.trim();
+    if (!code) return;
+    try {
+      const res = await fetch("/api/promo-validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const d = await res.json();
+      if (d.valid) { setPromoOk(true); setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`); }
+      else if (d.used) setPromoMsg("Ce code a déjà été utilisé.");
+      else setPromoMsg("Code invalide.");
+    } catch { setPromoMsg("Vérification impossible."); }
+  }
 
   async function handleCheckout() {
     setError("");
     setLoading(true);
     try {
-      await startCheckout(items, postalCode);
+      await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "");
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -98,6 +118,22 @@ export default function CartPage() {
             <span>Total</span>
             <span>{formatEuro(total)}</span>
           </div>
+
+          <div style={{ marginTop: 16 }}>
+            <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>Code promo</label>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input
+                type="text"
+                value={promoCode}
+                onChange={(e) => { setPromoCode(e.target.value); setPromoOk(false); setPromoMsg(""); }}
+                placeholder="Ex. BIENVENUE10"
+                style={{ flex: 1, padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", textTransform: "uppercase" }}
+              />
+              <button type="button" className="btn btn-outline" onClick={applyPromo}>Appliquer</button>
+            </div>
+            {promoMsg && <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>}
+          </div>
+
           {hasPickup && (
             <div style={{ marginTop: 16 }}>
               <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>
