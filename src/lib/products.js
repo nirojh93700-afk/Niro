@@ -182,7 +182,7 @@ export const products = [
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
     type: "Bracelet personnalisé",
-    tagline: "Gourmette à maillons cubains, plaque gravée à votre message.",
+    tagline: "Gourmette à maillons cubains, plaque gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police souhaitée",
     images: [
@@ -382,7 +382,7 @@ export const products = [
     title: "Ronds de serviette personnalisés en bois – Hexagone, cœur ou cercle",
     category: "mariage",
     type: "Art de la table",
-    tagline: "Un cadeau d'invité raffiné, gravé à chaque prénom.",
+    tagline: "Un cadeau d'invité raffiné, gravé au prénom de chaque invité.",
     personalizable: true,
     personalizationLabel: "Prénoms / initiales / date à graver",
     personalizationFields: [
@@ -578,7 +578,7 @@ export const products = [
     title: "Bracelet homme cuir tressé & acier à graver",
     category: "bijoux",
     type: "Bracelet personnalisé",
-    tagline: "Cuir tressé et plaque acier, gravée à votre message.",
+    tagline: "Cuir tressé et plaque acier, gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
     personalizationFields: [
@@ -613,7 +613,7 @@ export const products = [
     title: "Porte-clés en cuir véritable à graver personnalisé",
     category: "porte-cles",
     type: "Porte-clés personnalisé",
-    tagline: "Un porte-clés en cuir, gravé à votre message.",
+    tagline: "Un porte-clés en cuir, gravé avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
     personalizationFields: [
@@ -666,7 +666,7 @@ export const products = [
     weight: 120, pickup: false, letter: true, subcategory: "homme",
     title: "Bracelet homme chaîne acier à graver",
     category: "bijoux", type: "Bracelet personnalisé",
-    tagline: "Chaîne en acier inoxydable, plaque gravée à votre message.",
+    tagline: "Chaîne en acier inoxydable, plaque gravée avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
@@ -687,7 +687,7 @@ export const products = [
     weight: 80, pickup: false, letter: true, subcategory: "femme",
     title: "Bracelet femme acier à graver",
     category: "bijoux", type: "Bracelet personnalisé",
-    tagline: "Un bracelet fin en acier doré, gravé à votre message.",
+    tagline: "Un bracelet fin en acier doré, gravé avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
@@ -727,7 +727,7 @@ export const products = [
     weight: 80, pickup: false, letter: true, subcategory: "femme",
     title: "Bracelet femme cœur à graver",
     category: "bijoux", type: "Bracelet personnalisé",
-    tagline: "Un cœur en acier doré, gravé à votre message.",
+    tagline: "Un cœur en acier doré, gravé avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
@@ -826,7 +826,7 @@ export const products = [
     weight: 90, pickup: false, letter: true, subcategory: "homme",
     title: "Collier plaque acier à graver",
     category: "bijoux", type: "Collier personnalisé",
-    tagline: "Une plaque d'acier épurée, gravée à votre message.",
+    tagline: "Une plaque d'acier épurée, gravée avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
