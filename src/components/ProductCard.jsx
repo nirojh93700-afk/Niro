@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatEuro } from "@/lib/format";
+import WishlistButton from "@/components/WishlistButton";
 
 export default function ProductCard({ product }) {
   // Prix affiché = celui de la variante par défaut (la fiche s'ouvre dessus),
@@ -19,9 +20,10 @@ export default function ProductCard({ product }) {
 
   return (
     <Link href={`/produit/${product.slug}`} className="product-card">
-      <div className="product-thumb">
+      <div className="product-thumb" style={{ position: "relative" }}>
         <span className="product-chip">{product.type}</span>
         {hasPromo && <span className="promo-badge">Promo</span>}
+        <WishlistButton slug={product.slug} name={product.name} image={image} price={hasPromo ? sale : basePrice} />
         {image ? (
           <Image
             src={image}

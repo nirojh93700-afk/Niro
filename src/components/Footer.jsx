@@ -40,6 +40,7 @@ export default function Footer() {
           </div>
           <div>
             <h4>Informations</h4>
+            <Link href="/favoris">♥ Mes favoris</Link>
             <Link href="/retours">Politique de retour</Link>
             <Link href="/cgv">CGV</Link>
             <Link href="/mentions-legales">Mentions légales</Link>
