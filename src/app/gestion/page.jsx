@@ -182,10 +182,21 @@ export default function GestionPage() {
     await setOrderStatus(o.id, "expediee", { tracking, notifyCustomer });
   }
 
+  // Une commande est "verrouillée" (non remboursable / non annulable) dès qu'elle
+  // est en gravure / expédiée / livrée, OU passé 24 h après la commande.
+  function isLocked(o) {
+    if (["en_gravure", "expediee", "livree"].includes(o.status)) return true;
+    const t = o.createdAt ? new Date(o.createdAt).getTime() : 0;
+    return t > 0 && Date.now() - t > 24 * 3600 * 1000;
+  }
+
   async function refundOrder(o) {
     if (o.status === "remboursee") return;
     const label = o.ref || o.id?.slice(-6);
-    if (!window.confirm(`Rembourser entièrement la commande #${label} (${formatEuro(o.total)}) ?\nLe client sera remboursé sur sa carte. Cette action est irréversible.`)) return;
+    const warn = isLocked(o)
+      ? "⚠️ Cette commande est en gravure ou dépasse 24 h : un produit personnalisé n'est normalement PAS remboursable.\n\n"
+      : "";
+    if (!window.confirm(`${warn}Rembourser entièrement la commande #${label} (${formatEuro(o.total)}) ?\nLe client sera remboursé sur sa carte. Cette action est irréversible.`)) return;
     setRefunding(o.id);
     setError("");
     try {
@@ -206,7 +217,10 @@ export default function GestionPage() {
 
   async function cancelOrder(o) {
     const label = o.ref || o.id?.slice(-6);
-    if (!window.confirm(`Annuler la commande #${label} ?\nElle ne comptera plus dans le chiffre d'affaires. (Aucun remboursement n'est effectué — utilise « Rembourser » pour ça.)`)) return;
+    const warn = isLocked(o)
+      ? "⚠️ Cette commande est en gravure ou dépasse 24 h : normalement elle n'est plus annulable côté cliente.\n\n"
+      : "";
+    if (!window.confirm(`${warn}Annuler la commande #${label} ?\nElle ne comptera plus dans le chiffre d'affaires. (Aucun remboursement n'est effectué — utilise « Rembourser » pour ça.)`)) return;
     let notifyCustomer = false;
     if (o.customerEmail) {
       notifyCustomer = window.confirm(`Envoyer un e-mail à ${o.customerEmail} pour la prévenir de l'annulation ?`);
@@ -304,7 +318,7 @@ export default function GestionPage() {
   const orderQuery = orderSearch.trim().toLowerCase();
   const filteredOrders = orders.filter((o) => {
     const st = o.status || "a_preparer";
-    if (orderFilter === "a_preparer" && !(st === "a_preparer")) return false;
+    if (orderFilter === "a_preparer" && !(st === "a_preparer" || st === "en_gravure")) return false;
     if (orderFilter === "expediee" && st !== "expediee") return false;
     if (orderFilter === "livree" && st !== "livree") return false;
     if (orderFilter === "annulee" && st !== "annulee" && st !== "remboursee") return false;
@@ -459,10 +473,28 @@ export default function GestionPage() {
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontWeight: 600, color: o.status === "livree" ? "#256b34" : o.status === "expediee" ? "#256b34" : "#b4452f" }}>
-                        {o.status === "livree" ? "✓✓ Livrée" : o.status === "expediee" ? "✓ Expédiée" : "● À préparer"}
+                      <span style={{ fontWeight: 600, color: o.status === "livree" || o.status === "expediee" ? "#256b34" : o.status === "en_gravure" ? "#8a6d3b" : "#b4452f" }}>
+                        {o.status === "livree" ? "✓✓ Livrée" : o.status === "expediee" ? "✓ Expédiée" : o.status === "en_gravure" ? "✏️ En gravure" : "● À préparer"}
+                      </span>
+                      <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: isLocked(o) ? "#f3e2dd" : "#e3f0e3", color: isLocked(o) ? "#b4452f" : "#256b34" }}>
+                        {isLocked(o) ? "🔒 Verrouillée" : "🕒 Annulable (24 h)"}
                       </span>
 
+                      {(!o.status || o.status === "a_preparer") && (
+                        <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "en_gravure")}>
+                          ✏️ Commencer la gravure
+                        </button>
+                      )}
+                      {o.status === "en_gravure" && (
+                        <>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
+                            Marquer expédiée
+                          </button>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "a_preparer")}>
+                            Retour à préparer
+                          </button>
+                        </>
+                      )}
                       {(!o.status || o.status === "a_preparer") && (
                         <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
                           Marquer expédiée

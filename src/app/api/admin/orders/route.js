@@ -28,7 +28,7 @@ export async function POST(req) {
     return Response.json({ error: "Requête invalide." }, { status: 400 });
   }
   const { id, status, tracking, notifyCustomer } = body || {};
-  if (!id || !["a_preparer", "expediee", "livree", "annulee"].includes(status)) {
+  if (!id || !["a_preparer", "en_gravure", "expediee", "livree", "annulee"].includes(status)) {
     return Response.json({ error: "Paramètres invalides." }, { status: 400 });
   }
   const patch = { status };
