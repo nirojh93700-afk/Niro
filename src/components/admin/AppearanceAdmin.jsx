@@ -193,7 +193,7 @@ export default function AppearanceAdmin({ adminKey }) {
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>📍 Retrait en main propre — zone autorisée</h3>
         <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
-          Ton atelier est en <strong>Val-d'Oise (95)</strong>. Le retrait n'est proposé au paiement que si le <strong>code postal</strong> de la cliente
+          Ton atelier est dans le <strong>Val-d'Oise (95)</strong>. Le retrait n'est proposé au paiement que si le <strong>code postal</strong> de la cliente
           commence par l'un de ces codes. Sépare-les par des virgules.
           <br /><strong>Par défaut</strong> (si tu laisses vide) : <code>95, 78, 92, 93, 75, 60</code> (le 95 et les départements voisins).
           <br />Tu peux mettre un département entier (<code>95</code>) ou un code précis (<code>95800</code>).
