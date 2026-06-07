@@ -278,6 +278,10 @@ export async function getSettings() {
     // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
     // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
     refMarkup: Number(s.refMarkup) || 0,
+    // Objectif de chiffre d'affaires mensuel (€) — affiché en jauge dans les stats.
+    salesGoal: Number(s.salesGoal) || 0,
+    // Notes CRM par cliente : { "email_minuscule": "note libre" }.
+    crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
     // Mode maintenance : si activé, les visiteurs voient une page "en maintenance"
     // (l'administratrice garde l'accès via le code d'accès).
     maintenance: {

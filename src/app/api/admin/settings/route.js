@@ -73,6 +73,19 @@ export async function POST(req) {
     patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
   }
   if (typeof body.pickupZones === "string") patch.pickupZones = body.pickupZones.slice(0, 200);
+  if (body.salesGoal !== undefined) {
+    const n = Number(body.salesGoal);
+    patch.salesGoal = Number.isFinite(n) && n > 0 ? Math.round(n) : 0;
+  }
+  if (body.crmNotes && typeof body.crmNotes === "object") {
+    const notes = {};
+    let count = 0;
+    for (const [k, v] of Object.entries(body.crmNotes)) {
+      if (count >= 500) break;
+      if (typeof v === "string" && v.trim()) { notes[String(k).slice(0, 120).toLowerCase()] = v.slice(0, 1000); count++; }
+    }
+    patch.crmNotes = notes;
+  }
   if (body.maintenance && typeof body.maintenance === "object") {
     patch.maintenance = {
       enabled: Boolean(body.maintenance.enabled),

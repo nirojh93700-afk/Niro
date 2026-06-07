@@ -42,6 +42,9 @@ export default function GestionPage() {
   const [bulkPct, setBulkPct] = useState(20);
   const [statYear, setStatYear] = useState(new Date().getFullYear());
   const [crmSearch, setCrmSearch] = useState("");
+  const [siteSettings, setSiteSettings] = useState({ salesGoal: 0, crmNotes: {} });
+  const [goalInput, setGoalInput] = useState("");
+  const [noteDraft, setNoteDraft] = useState({});
   const [testEmail, setTestEmail] = useState("");
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
@@ -70,6 +73,12 @@ export default function GestionPage() {
         const ordData = await ord.json();
         setOrders(ordData.orders || []);
         setOrdersReady(true);
+      }
+      const stg = await fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } });
+      if (stg.ok) {
+        const s = (await stg.json()).settings || {};
+        setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {} });
+        setGoalInput(String(s.salesGoal || ""));
       }
     } catch (e) {
       setError(e.message);
@@ -274,6 +283,46 @@ export default function GestionPage() {
         });
       } catch { /* ignore */ }
     }
+  }
+
+  function downloadCSV(filename, rows) {
+    const csv = rows.map((r) => r.map((cell) => {
+      const s = String(cell ?? "");
+      return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(";")).join("\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function saveSettingsPatch(patch, label) {
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) throw new Error("Échec de l'enregistrement.");
+      const s = (await res.json()).settings || {};
+      setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {} });
+      setSaved(label || "settings");
+      setTimeout(() => setSaved(""), 1500);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
+  function saveGoal() {
+    saveSettingsPatch({ salesGoal: Number(goalInput) || 0 }, "goal");
+  }
+
+  function saveNote(emailKey) {
+    const notes = { ...(siteSettings.crmNotes || {}) };
+    const val = (noteDraft[emailKey] ?? notes[emailKey] ?? "").trim();
+    if (val) notes[emailKey] = val; else delete notes[emailKey];
+    saveSettingsPatch({ crmNotes: notes }, "note-" + emailKey);
   }
 
   async function sendTestEmail() {
@@ -663,6 +712,34 @@ export default function GestionPage() {
               <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{formatEuro(caThisMonth)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>CA ce mois-ci</div></div>
             </div>
 
+            {/* Objectif du mois */}
+            <div className="admin-block">
+              <h3 style={{ marginTop: 0 }}>🎯 Objectif de CA du mois</h3>
+              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginBottom: 10 }}>
+                <input type="number" min="0" value={goalInput} onChange={(e) => setGoalInput(e.target.value)} placeholder="Ex. 1000" style={{ width: 120, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+                <span>€ / mois</span>
+                <button className="btn btn-gold" style={{ padding: "6px 14px" }} onClick={saveGoal}>Enregistrer</button>
+              </div>
+              {siteSettings.salesGoal > 0 ? (
+                (() => {
+                  const pct = Math.min(100, Math.round((caThisMonth / siteSettings.salesGoal) * 100));
+                  return (
+                    <>
+                      <div style={{ background: "#eee", borderRadius: 20, height: 22, overflow: "hidden" }}>
+                        <div style={{ width: `${pct}%`, height: "100%", background: pct >= 100 ? "#256b34" : "var(--gold)", transition: "width .3s" }} />
+                      </div>
+                      <p style={{ margin: "8px 0 0", fontSize: "0.9rem" }}>
+                        <strong>{formatEuro(caThisMonth)}</strong> / {formatEuro(siteSettings.salesGoal)} — <strong>{pct}%</strong>
+                        {pct >= 100 ? " 🎉 Objectif atteint !" : ` · reste ${formatEuro(siteSettings.salesGoal - caThisMonth)}`}
+                      </p>
+                    </>
+                  );
+                })()
+              ) : (
+                <p style={{ color: "var(--ink-soft)", margin: 0, fontSize: "0.85rem" }}>Définis un objectif pour suivre ta progression du mois.</p>
+              )}
+            </div>
+
             {/* Graphique CA par mois */}
             <div className="admin-block">
               <h3 style={{ marginTop: 0 }}>Chiffre d'affaires par mois — {statYear}</h3>
@@ -704,6 +781,18 @@ export default function GestionPage() {
                   <span className="admin-price">{formatEuro(b.total)}</span>
                 </div>
               ))}
+            </div>
+            <div className="admin-block" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button className="btn btn-outline" onClick={() => {
+                const rows = [["Réf", "Date", "Cliente", "Email", "Téléphone", "Statut", "Total (€)", "Articles"]];
+                for (const o of orders) rows.push([o.ref || o.id?.slice(-6), fmtDate(o.createdAt), o.customerName || "", o.customerEmail || "", o.customerPhone || "", o.test ? "test" : (o.status || "a_preparer"), (Number(o.total) || 0).toFixed(2), (o.items || []).map((i) => `${i.quantity}x ${i.name}`).join(" | ")]);
+                downloadCSV("ventes-nivcreation.csv", rows);
+              }}>⬇️ Exporter les ventes (Excel/CSV)</button>
+              <button className="btn btn-outline" onClick={() => {
+                const rows = [["Cliente", "Email", "Téléphone", "Segment", "Nb commandes", "Total (€)", "1ère commande", "Dernière commande"]];
+                for (const c of crmClients) rows.push([c.name, c.email, c.phone, c.segment, c.nb, Number(c.total).toFixed(2), c.first ? fmtDate(c.first) : "", c.last ? fmtDate(c.last) : ""]);
+                downloadCSV("clientes-nivcreation.csv", rows);
+              }}>⬇️ Exporter les clientes (Excel/CSV)</button>
             </div>
             <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>
               Calculé sur les commandes valides (hors tests, annulées et remboursées
@@ -775,6 +864,25 @@ export default function GestionPage() {
                         </div>
                       );
                     })}
+
+                    {(() => {
+                      const nk = (c.email || c.name || "").toLowerCase();
+                      const current = noteDraft[nk] ?? siteSettings.crmNotes?.[nk] ?? "";
+                      return (
+                        <div style={{ marginTop: 6 }}>
+                          <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 4 }}>📝 Note (privée)</label>
+                          <textarea
+                            value={current}
+                            onChange={(e) => setNoteDraft((d) => ({ ...d, [nk]: e.target.value }))}
+                            placeholder="Ex. Préfère l'argenté · cliente mariage · à rappeler…"
+                            style={{ width: "100%", minHeight: 56, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }}
+                          />
+                          <button className="btn btn-outline" style={{ marginTop: 6, padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => saveNote(nk)}>
+                            Enregistrer la note {saved === "note-" + nk ? "✓" : ""}
+                          </button>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
               </div>
