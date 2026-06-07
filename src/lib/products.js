@@ -569,6 +569,7 @@ export const products = [
   },
   {
     slug: "bracelet-homme-cuir-tresse-acier",
+    hidden: true, // retiré du site (doublon visuel avec le Bracelet Cuir & Acier)
     name: "Bracelet Homme Cuir Tressé & Acier",
     weight: 90,
     pickup: false,
