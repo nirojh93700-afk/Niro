@@ -92,6 +92,11 @@ export const metadata = {
     description: "Bijoux, mariage et cadeaux gravés sur mesure, faits main en France.",
     images: [(process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim()],
   },
+  appleWebApp: {
+    capable: true,
+    title: "Niv Création",
+    statusBarStyle: "default",
+  },
 };
 
 // N'accepte qu'une couleur hexadécimale valide (sécurité : pas d'injection CSS).
