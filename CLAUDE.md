@@ -142,3 +142,31 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 
 > En cas d'information manquante ou ambiguë (nombre de faces gravables, prix,
 > couleurs disponibles…), **poser la question à l'utilisatrice** plutôt que d'inventer.
+
+---
+
+## 11. ÉTAT DU PROJET — confirmé par l'utilisatrice (à lire avant de reposer des questions)
+> Ces points ont déjà été confirmés. **Ne pas les redemander.** Mettre à jour cette
+> section quand l'utilisatrice confirme un nouvel élément.
+
+- **Stripe : en mode RÉEL (Live).** Les vrais paiements fonctionnent. (Confirmé.)
+- **Frais de port : corrects.** Les tarifs de livraison correspondent. (Confirmé.)
+- **Variables d'environnement Netlify configurées** : `STRIPE_SECRET_KEY` + webhook (live),
+  `RESEND_API_KEY`, `FIREBASE_SERVICE_ACCOUNT`, `CONTACT_EMAIL`, `ANTHROPIC_API_KEY`,
+  `ANTHROPIC_MODEL`, `NEXT_PUBLIC_SITE_URL`.
+- **Assistant admin (Claude)** : activé et fonctionnel.
+- **E-mails** : confirmation cliente + alerte commande (vérifier les spams), suivi colis,
+  annulation — tous à l'image de la marque (logo + or/crème).
+- **Reçu Stripe** : logo + couleur or réglés ; numéro perso retiré (informations publiques Stripe).
+
+### Reste à faire avant l'ouverture publique
+- **Ouvrir le site au public** : décocher « Activer le code d'accès » dans gestion → Apparence (site encore privé en attendant).
+- **SIRET** : à compléter dans Mentions légales / CGV dès réception (actuellement « en cours d'immatriculation »).
+- **Bijoux** : prix de référence à +25 % ; re-appliquer la remise −20 % (Promotions → Remise rapide) pour retomber sur les prix d'origine.
+- Finir photos + stocks sur les produits restants.
+
+### Fonctionnalités livrées (rappel)
+Modèles 3D (.glb) téléversables · suivi de colis (admin + cliente + e-mail) · commandes
+(annuler/supprimer/rembourser/livrée + filtres/recherche) · assistant (masquer, prix, textes,
+ajout/suppression, stock, promos) · boutique rangée par thème · remise rapide par catégorie ·
+prix conseillé · bouton accueil « Idées cadeaux ».
