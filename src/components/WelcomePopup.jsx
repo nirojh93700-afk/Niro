@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const KEY = "niv-welcome-seen";
+const KEY = "niv-welcome-subscribed"; // posé seulement quand la cliente s'inscrit
 
 export default function WelcomePopup({ enabled, code, text }) {
   const [show, setShow] = useState(false);
@@ -12,14 +12,20 @@ export default function WelcomePopup({ enabled, code, text }) {
 
   useEffect(() => {
     if (!enabled) return;
-    try { if (localStorage.getItem(KEY)) return; } catch { /* ignore */ }
-    const t = setTimeout(() => setShow(true), 500); // dès l'arrivée
+    try {
+      if (localStorage.getItem(KEY)) return;          // déjà inscrite → jamais
+      if (sessionStorage.getItem("niv-welcome-session")) return; // déjà vue cette visite
+    } catch { /* ignore */ }
+    const t = setTimeout(() => {
+      setShow(true);
+      try { sessionStorage.setItem("niv-welcome-session", "1"); } catch { /* ignore */ }
+    }, 500); // dès l'arrivée, une fois par connexion
     return () => clearTimeout(t);
   }, [enabled]);
 
   function close() {
+    // On ferme, mais on NE marque PAS comme inscrite → ça réapparaîtra.
     setShow(false);
-    try { localStorage.setItem(KEY, "1"); } catch { /* ignore */ }
   }
 
   async function submit(e) {
@@ -33,7 +39,7 @@ export default function WelcomePopup({ enabled, code, text }) {
       });
       if (!res.ok) throw new Error("Adresse e-mail invalide.");
       setDone(true);
-      try { localStorage.setItem(KEY, "1"); } catch { /* ignore */ }
+      try { localStorage.setItem(KEY, "1"); } catch { /* ignore */ } // inscrite → ne réapparaît plus
     } catch (e2) { setErr(e2.message); }
   }
 

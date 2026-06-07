@@ -83,6 +83,14 @@ export const metadata = {
       "Bijoux, décorations de mariage et cadeaux gravés sur mesure, fabriqués à la main en France.",
     type: "website",
     locale: "fr_FR",
+    siteName: "Niv Création",
+    images: [{ url: (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim() }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Niv Création — Créations personnalisées au laser",
+    description: "Bijoux, mariage et cadeaux gravés sur mesure, faits main en France.",
+    images: [(process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim()],
   },
 };
 
