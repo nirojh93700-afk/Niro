@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
+import ProductReviews from "@/components/ProductReviews";
 import { getCatalogBySlug, priceFrom } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +46,7 @@ export default async function ProductPage({ params }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProductDetail product={product} />
+      <ProductReviews slug={product.slug} />
     </>
   );
 }

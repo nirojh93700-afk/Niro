@@ -1,9 +1,11 @@
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
+        <NewsletterSignup />
         <div className="footer-grid">
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}

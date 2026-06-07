@@ -10,6 +10,8 @@ import Model3DUpload from "@/components/admin/Model3DUpload";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
+import ReviewsAdmin from "@/components/admin/ReviewsAdmin";
+import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
 
 const CONFIG_LABELS = {
@@ -502,6 +504,8 @@ export default function GestionPage() {
           </button>
           <button className={`filter-chip ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>Statistiques</button>
           <button className={`filter-chip ${tab === "clients" ? "active" : ""}`} onClick={() => setTab("clients")}>Clientes</button>
+          <button className={`filter-chip ${tab === "avis" ? "active" : ""}`} onClick={() => setTab("avis")}>Avis</button>
+          <button className={`filter-chip ${tab === "newsletter" ? "active" : ""}`} onClick={() => setTab("newsletter")}>Newsletter</button>
           <button className={`filter-chip ${tab === "devis" ? "active" : ""}`} onClick={() => setTab("devis")}>Devis / Factures</button>
           <button className={`filter-chip ${tab === "produits" ? "active" : ""}`} onClick={() => setTab("produits")}>Produits</button>
           <button className={`filter-chip ${tab === "assistant" ? "active" : ""}`} onClick={() => setTab("assistant")}>🤖 Assistant</button>
@@ -889,6 +893,12 @@ export default function GestionPage() {
             ))}
           </>
         )}
+
+        {/* ---------------- AVIS ---------------- */}
+        {tab === "avis" && <ReviewsAdmin adminKey={key} />}
+
+        {/* ---------------- NEWSLETTER ---------------- */}
+        {tab === "newsletter" && <NewsletterAdmin adminKey={key} />}
 
         {/* ---------------- DEVIS / FACTURES ---------------- */}
         {tab === "devis" && <QuotesAdmin adminKey={key} />}

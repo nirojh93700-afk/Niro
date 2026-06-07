@@ -253,6 +253,56 @@ export async function getModelFile(id) {
   }
 }
 
+// --- Avis clients ----------------------------------------------------------
+// { slug: [{ id, name, rating, text, date, approved }] }
+export async function getReviews() {
+  const data = await getCatalogRaw();
+  return data.reviews || {};
+}
+export async function addReview(slug, review) {
+  const data = await getCatalogRaw();
+  data.reviews = data.reviews || {};
+  const list = data.reviews[slug] || [];
+  list.push({
+    id: "r_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+    name: String(review.name || "").slice(0, 60) || "Cliente",
+    rating: Math.min(5, Math.max(1, parseInt(review.rating, 10) || 5)),
+    text: String(review.text || "").slice(0, 1000),
+    date: new Date().toISOString(),
+    approved: false,
+  });
+  data.reviews[slug] = list.slice(-300);
+  await persistCatalog(data);
+  return true;
+}
+export async function moderateReview(slug, id, action) {
+  const data = await getCatalogRaw();
+  data.reviews = data.reviews || {};
+  let list = data.reviews[slug] || [];
+  if (action === "delete") list = list.filter((r) => r.id !== id);
+  else if (action === "approve") list = list.map((r) => (r.id === id ? { ...r, approved: true } : r));
+  data.reviews[slug] = list;
+  await persistCatalog(data);
+  return true;
+}
+
+// --- Newsletter (abonnées) -------------------------------------------------
+export async function getSubscribers() {
+  const data = await getCatalogRaw();
+  return data.subscribers || [];
+}
+export async function addSubscriber(email) {
+  const e = String(email || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return false;
+  const data = await getCatalogRaw();
+  data.subscribers = data.subscribers || [];
+  if (!data.subscribers.includes(e)) {
+    data.subscribers.push(e);
+    await persistCatalog(data);
+  }
+  return true;
+}
+
 // --- Réglages d'apparence (thème) ------------------------------------------
 // Tout est optionnel : un champ vide = on garde la valeur par défaut du site.
 export async function getSettings() {
