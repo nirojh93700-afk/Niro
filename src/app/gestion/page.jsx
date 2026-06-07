@@ -40,6 +40,8 @@ export default function GestionPage() {
   const [orderSearch, setOrderSearch] = useState("");
   const [openClient, setOpenClient] = useState(-1);
   const [bulkPct, setBulkPct] = useState(20);
+  const [statYear, setStatYear] = useState(new Date().getFullYear());
+  const [crmSearch, setCrmSearch] = useState("");
   const [testEmail, setTestEmail] = useState("");
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
@@ -385,6 +387,56 @@ export default function GestionPage() {
   }
   const bestSellers = Object.values(sellMap).sort((a, b) => b.qty - a.qty).slice(0, 10);
 
+  // ---- Tableau de bord annuel ----
+  const orderYears = [...new Set(validOrders.map((o) => o.createdAt ? new Date(o.createdAt).getFullYear() : null).filter(Boolean))];
+  if (!orderYears.includes(statYear)) orderYears.push(statYear);
+  orderYears.sort((a, b) => b - a);
+  const MONTHS = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+  const monthlyCA = Array(12).fill(0);
+  const monthlyNb = Array(12).fill(0);
+  let caYear = 0, nbYear = 0;
+  for (const o of validOrders) {
+    if (!o.createdAt) continue;
+    const d = new Date(o.createdAt);
+    if (d.getFullYear() !== statYear) continue;
+    const m = d.getMonth();
+    monthlyCA[m] += Number(o.total) || 0;
+    monthlyNb[m] += 1;
+    caYear += Number(o.total) || 0;
+    nbYear += 1;
+  }
+  const maxMonthly = Math.max(1, ...monthlyCA);
+  const panierYear = nbYear ? caYear / nbYear : 0;
+  const bestMonthIdx = monthlyCA.indexOf(Math.max(...monthlyCA));
+  // Mois en cours (année réelle)
+  const now = new Date();
+  const caThisMonth = validOrders.reduce((s, o) => {
+    if (!o.createdAt) return s;
+    const d = new Date(o.createdAt);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() ? s + (Number(o.total) || 0) : s;
+  }, 0);
+  // Clientes : nouvelles vs récurrentes (≥ 2 commandes)
+  const recurrentes = clients.filter((c) => c.nb >= 2).length;
+  const nouvelles = clients.length - recurrentes;
+
+  // ---- CRM : segments + 1ère/dernière commande ----
+  const vipThreshold = 100; // total dépensé pour être "VIP"
+  const crmClients = clients.map((c) => {
+    const dates = (c.orders || []).map((o) => o.createdAt).filter(Boolean).sort();
+    const first = dates[0] || null;
+    const last = dates[dates.length - 1] || null;
+    let segment = "Nouvelle";
+    if (c.total >= vipThreshold || c.nb >= 4) segment = "VIP";
+    else if (c.nb >= 2) segment = "Fidèle";
+    return { ...c, first, last, segment };
+  });
+  const crmFiltered = crmClients.filter((c) => {
+    const q = crmSearch.trim().toLowerCase();
+    if (!q) return true;
+    return `${c.name} ${c.email} ${c.phone}`.toLowerCase().includes(q);
+  });
+  const segColors = { VIP: "#8a6d3b", "Fidèle": "#256b34", Nouvelle: "#5b6b8a" };
+
   return (
     <section className="section">
       <div className="container" style={{ maxWidth: 920 }}>
@@ -595,14 +647,55 @@ export default function GestionPage() {
         {/* ---------------- STATISTIQUES ---------------- */}
         {tab === "stats" && (
           <>
-            <div className="admin-block" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
-              <div><div style={{ fontSize: "1.6rem", fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(ca)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Chiffre d'affaires</div></div>
-              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{nbCmd}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Commandes</div></div>
-              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{formatEuro(panierMoyen)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Panier moyen</div></div>
-              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{clients.length}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Clientes</div></div>
+            {/* Sélecteur d'année */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+              <strong>Année :</strong>
+              {orderYears.map((y) => (
+                <button key={y} className={`filter-chip ${statYear === y ? "active" : ""}`} style={{ padding: "4px 14px" }} onClick={() => setStatYear(y)}>{y}</button>
+              ))}
             </div>
+
+            {/* KPIs de l'année */}
+            <div className="admin-block" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14 }}>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(caYear)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>CA {statYear}</div></div>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{nbYear}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Commandes {statYear}</div></div>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{formatEuro(panierYear)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Panier moyen</div></div>
+              <div><div style={{ fontSize: "1.6rem", fontWeight: 700 }}>{formatEuro(caThisMonth)}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>CA ce mois-ci</div></div>
+            </div>
+
+            {/* Graphique CA par mois */}
             <div className="admin-block">
-              <h3>Produits les plus vendus</h3>
+              <h3 style={{ marginTop: 0 }}>Chiffre d'affaires par mois — {statYear}</h3>
+              {caYear === 0 ? (
+                <p style={{ color: "var(--ink-soft)", margin: 0 }}>Aucune vente sur cette année.</p>
+              ) : (
+                <>
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 160, marginTop: 10 }}>
+                    {monthlyCA.map((v, i) => (
+                      <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, height: "100%", justifyContent: "flex-end" }} title={`${MONTHS[i]} : ${formatEuro(v)} (${monthlyNb[i]} cmd)`}>
+                        <span style={{ fontSize: "0.62rem", color: "var(--ink-soft)" }}>{v > 0 ? Math.round(v) : ""}</span>
+                        <div style={{ width: "100%", height: `${Math.max(2, (v / maxMonthly) * 120)}px`, background: i === bestMonthIdx && v > 0 ? "var(--gold-dark)" : "var(--gold)", borderRadius: "4px 4px 0 0", opacity: v > 0 ? 1 : 0.25 }} />
+                        <span style={{ fontSize: "0.62rem", color: "var(--ink-soft)" }}>{MONTHS[i]}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {bestMonthIdx >= 0 && monthlyCA[bestMonthIdx] > 0 && (
+                    <p style={{ color: "var(--ink-soft)", fontSize: "0.82rem", marginBottom: 0 }}>Meilleur mois : <strong>{MONTHS[bestMonthIdx]}</strong> ({formatEuro(monthlyCA[bestMonthIdx])}).</p>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Clientes */}
+            <div className="admin-block" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+              <div><div style={{ fontSize: "1.4rem", fontWeight: 700 }}>{clients.length}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>Clientes</div></div>
+              <div><div style={{ fontSize: "1.4rem", fontWeight: 700 }}>{nouvelles}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>Nouvelles</div></div>
+              <div><div style={{ fontSize: "1.4rem", fontWeight: 700, color: "#256b34" }}>{recurrentes}</div><div style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>Fidèles (≥2)</div></div>
+            </div>
+
+            {/* Best-sellers */}
+            <div className="admin-block">
+              <h3>Produits les plus vendus (toutes périodes)</h3>
               {bestSellers.length === 0 && <p style={{ color: "var(--ink-soft)", margin: 0 }}>Pas encore de ventes.</p>}
               {bestSellers.map((b) => (
                 <div className="admin-row" key={b.name} style={{ gridTemplateColumns: "1fr auto auto", gap: 10 }}>
@@ -613,8 +706,8 @@ export default function GestionPage() {
               ))}
             </div>
             <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>
-              Basé sur {nbCmd} commande{nbCmd > 1 ? "s" : ""} valide{nbCmd > 1 ? "s" : ""}
-              {nbRembourse > 0 ? ` · ${nbRembourse} remboursée${nbRembourse > 1 ? "s" : ""} non comptée${nbRembourse > 1 ? "s" : ""}` : ""}.
+              Calculé sur les commandes valides (hors tests, annulées et remboursées
+              {nbRembourse > 0 || nbTest > 0 ? ` : ${nbRembourse} remboursée(s), ${nbTest} test(s) exclus` : ""}).
             </p>
           </>
         )}
@@ -622,24 +715,42 @@ export default function GestionPage() {
         {/* ---------------- CLIENTES ---------------- */}
         {tab === "clients" && (
           <>
-            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{clients.length} cliente{clients.length > 1 ? "s" : ""} (classées par total dépensé).</p>
+            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
+              {clients.length} cliente{clients.length > 1 ? "s" : ""} · classées par total dépensé. Touche une cliente pour voir ses commandes et le suivi.
+            </p>
             {clients.length === 0 && (
               <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune cliente pour le moment.</p></div>
             )}
-            <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -8 }}>Touche une cliente pour voir ses colis et suivre la livraison.</p>
-            {clients.map((c, i) => (
+            {clients.length > 0 && (
+              <input
+                value={crmSearch}
+                onChange={(e) => setCrmSearch(e.target.value)}
+                placeholder="Rechercher une cliente (nom, e-mail, téléphone)…"
+                style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 12 }}
+              />
+            )}
+            {crmFiltered.map((c, i) => (
               <div key={i} className="admin-block">
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => setOpenClient(openClient === i ? -1 : i)}
                 >
-                  <div className="admin-row" style={{ gridTemplateColumns: "1fr auto" }}>
-                    <span className="admin-variant"><strong>{c.name}</strong> <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>{openClient === i ? "▾" : "▸"}</span></span>
+                  <div className="admin-row" style={{ gridTemplateColumns: "1fr auto", alignItems: "center" }}>
+                    <span className="admin-variant">
+                      <strong>{c.name}</strong>{" "}
+                      <span style={{ fontSize: "0.72rem", padding: "1px 8px", borderRadius: 20, background: "#f3efe6", color: segColors[c.segment], fontWeight: 600 }}>
+                        {c.segment === "VIP" ? "⭐ VIP" : c.segment}
+                      </span>{" "}
+                      <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>{openClient === i ? "▾" : "▸"}</span>
+                    </span>
                     <span className="admin-price">{formatEuro(c.total)}</span>
                   </div>
                   <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>
                     {c.email ? <a href={`mailto:${c.email}`} onClick={(e) => e.stopPropagation()}>{c.email}</a> : "—"}
                     {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
+                  </div>
+                  <div style={{ fontSize: "0.8rem", color: "var(--ink-soft)", marginTop: 2 }}>
+                    {c.first ? `1ʳᵉ : ${fmtDate(c.first)}` : ""}{c.last && c.nb > 1 ? ` · dernière : ${fmtDate(c.last)}` : ""}
                   </div>
                 </div>
 
