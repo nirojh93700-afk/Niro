@@ -15,6 +15,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import SiteGate from "@/components/SiteGate";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/products";
@@ -160,6 +161,7 @@ export default async function RootLayout({ children }) {
               <main>{children}</main>
               <Footer />
               <CartDrawer />
+              <WhatsAppButton />
             </CartProvider>
           </>
         ) : showMaintenance ? (
