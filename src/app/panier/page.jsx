@@ -106,11 +106,15 @@ export default function CartPage() {
               <input
                 type="text"
                 inputMode="numeric"
-                placeholder="Ex. 75017"
+                placeholder="Ex. 95800"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
                 style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
               />
+              <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 0" }}>
+                Vous habitez plus loin et souhaitez tout de même venir récupérer en main propre ?
+                Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
+              </p>
             </div>
           )}
           {error && <div className="notice" style={{ marginTop: 16 }}>{error}</div>}
