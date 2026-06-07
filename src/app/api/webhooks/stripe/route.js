@@ -182,7 +182,12 @@ export async function POST(req) {
       })
       .join("");
 
+    // Choix « lancement de la fabrication » (à part, pas une personnalisation).
+    const immediateStart =
+      (session.custom_fields || []).find((f) => f.key === "fabrication")?.dropdown?.value === "immediate";
+
     const customFields = (session.custom_fields || [])
+      .filter((f) => f.key !== "fabrication")
       .map((f) => {
         const val = f.text?.value || f.dropdown?.value || f.numeric?.value || "";
         if (!val) return "";
@@ -200,6 +205,7 @@ export async function POST(req) {
 
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
+        ${immediateStart ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 14px;"><strong>⚡ Fabrication immédiate demandée</strong> — la cliente a renoncé au délai de 24 h. Tu peux lancer la fabrication tout de suite (commande verrouillée).</p>` : ""}
 
         ${sectionTitle("Livraison")}
         <p style="margin:0 0 8px;"><strong>Méthode :</strong> ${escapeHtml(shippingRateName)} (${euro(shippingAmount, currency)})</p>
@@ -289,6 +295,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       shippingName: shipping?.name || "",
       shippingAddress: shipping?.address || null,
       shippingMethod: shippingRateName,
+      immediateStart,
       items: (session.line_items?.data || []).map((li) => ({
         name: li.price?.product?.name || li.description || "",
         details: li.price?.product?.description || "",

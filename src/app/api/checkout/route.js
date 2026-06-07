@@ -170,6 +170,18 @@ export async function POST(req) {
           type: "text",
           optional: true,
         },
+        {
+          key: "fabrication",
+          label: { type: "custom", custom: "Lancement de la fabrication" },
+          type: "dropdown",
+          dropdown: {
+            options: [
+              { label: "Garder 24 h pour modifier ma commande", value: "delai" },
+              { label: "Lancer la fabrication tout de suite (plus rapide)", value: "immediate" },
+            ],
+          },
+          optional: true,
+        },
       ],
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/annule`,

@@ -185,6 +185,7 @@ export default function GestionPage() {
   // Une commande est "verrouillée" (non remboursable / non annulable) dès qu'elle
   // est en gravure / expédiée / livrée, OU passé 24 h après la commande.
   function isLocked(o) {
+    if (o.immediateStart) return true; // la cliente a demandé la fabrication immédiate
     if (["en_gravure", "expediee", "livree"].includes(o.status)) return true;
     const t = o.createdAt ? new Date(o.createdAt).getTime() : 0;
     return t > 0 && Date.now() - t > 24 * 3600 * 1000;
@@ -479,6 +480,11 @@ export default function GestionPage() {
                       <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: isLocked(o) ? "#f3e2dd" : "#e3f0e3", color: isLocked(o) ? "#b4452f" : "#256b34" }}>
                         {isLocked(o) ? "🔒 Verrouillée" : "🕒 Annulable (24 h)"}
                       </span>
+                      {o.immediateStart && (
+                        <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: "#fbf3e6", color: "#8a6d3b" }}>
+                          ⚡ Fabrication immédiate
+                        </span>
+                      )}
 
                       {(!o.status || o.status === "a_preparer") && (
                         <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "en_gravure")}>
