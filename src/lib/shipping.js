@@ -73,9 +73,9 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
     options.push(rate(relay + DECO_HOME_EXTRA, "Livraison à domicile", [2, 5]));
   }
 
-  // --- Remise en main propre (en plus), si éligible ------------------------
+  // --- Retrait en main propre (en plus), si éligible -----------------------
   if (pickupEligible) {
-    options.push(rate(PICKUP_FEE, "Remise en main propre (atelier)", [1, 7]));
+    options.push(rate(PICKUP_FEE, "Retrait en main propre — sur rendez-vous", [1, 7]));
   }
   return options;
 }
