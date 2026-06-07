@@ -278,8 +278,11 @@ export async function getSettings() {
     // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
     // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
     refMarkup: Number(s.refMarkup) || 0,
-    // Codes postaux (ou débuts) où le retrait en main propre est autorisé. Vide = partout.
-    pickupZones: typeof s.pickupZones === "string" ? s.pickupZones : "",
+    // Codes postaux où le retrait en main propre est autorisé (atelier en Val-d'Oise 95).
+    // Par défaut : 95 + départements voisins. Modifiable dans l'admin.
+    pickupZones: (typeof s.pickupZones === "string" && s.pickupZones.trim())
+      ? s.pickupZones
+      : "95, 78, 92, 93, 75, 60",
   };
 }
 

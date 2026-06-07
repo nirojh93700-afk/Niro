@@ -102,13 +102,14 @@ export default function AppearanceAdmin({ adminKey }) {
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>📍 Retrait en main propre — zone autorisée</h3>
         <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
-          Le retrait en main propre n'est proposé au paiement que si le <strong>code postal</strong> de la cliente
-          commence par l'un de ces codes. Sépare-les par des virgules. <strong>Laisse vide = proposé partout.</strong>
-          <br />Exemples : <code>75, 92, 93, 94</code> (Paris + petite couronne), ou <code>75017</code> (un seul code), ou <code>13</code> (tout le département des Bouches-du-Rhône).
+          Ton atelier est en <strong>Val-d'Oise (95)</strong>. Le retrait n'est proposé au paiement que si le <strong>code postal</strong> de la cliente
+          commence par l'un de ces codes. Sépare-les par des virgules.
+          <br /><strong>Par défaut</strong> (si tu laisses vide) : <code>95, 78, 92, 93, 75, 60</code> (le 95 et les départements voisins).
+          <br />Tu peux mettre un département entier (<code>95</code>) ou un code précis (<code>95800</code>).
         </p>
         <input
           type="text"
-          placeholder="Ex. 75, 92, 93, 94"
+          placeholder="95, 78, 92, 93, 75, 60"
           value={s.pickupZones || ""}
           onChange={(e) => set({ pickupZones: e.target.value })}
           style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}

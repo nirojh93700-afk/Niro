@@ -75,7 +75,7 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
 
   // --- Retrait en main propre (en plus), si éligible -----------------------
   if (pickupEligible) {
-    options.push(rate(PICKUP_FEE, "Retrait en main propre — sur rendez-vous", [1, 7]));
+    options.push(rate(PICKUP_FEE, "Retrait en main propre — Val-d'Oise (95), sur rendez-vous", [1, 7]));
   }
   return options;
 }

@@ -101,7 +101,7 @@ export default function CartPage() {
           {hasPickup && (
             <div style={{ marginTop: 16 }}>
               <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>
-                Votre code postal <span style={{ color: "var(--ink-soft)" }}>(pour proposer le retrait en main propre si vous êtes dans la zone)</span>
+                Votre code postal <span style={{ color: "var(--ink-soft)" }}>— notre atelier est en Val-d'Oise (95). Le retrait en main propre est proposé si vous êtes dans le secteur.</span>
               </label>
               <input
                 type="text"
