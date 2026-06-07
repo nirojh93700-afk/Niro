@@ -13,7 +13,7 @@ export default function WelcomePopup({ enabled, code, text }) {
   useEffect(() => {
     if (!enabled) return;
     try { if (localStorage.getItem(KEY)) return; } catch { /* ignore */ }
-    const t = setTimeout(() => setShow(true), 3500);
+    const t = setTimeout(() => setShow(true), 500); // dès l'arrivée
     return () => clearTimeout(t);
   }, [enabled]);
 
