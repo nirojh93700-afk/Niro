@@ -20,50 +20,74 @@ function readAsDataUrl(file) {
   });
 }
 
-export default function PhotoUpload({ value, onChange, productSlug }) {
+export default function PhotoUpload({ value, onChange, onUpload, multiple = false, productSlug }) {
   const [status, setStatus] = useState("idle"); // idle | uploading | done
   const [preview, setPreview] = useState("");
   const [error, setError] = useState("");
+  const [progress, setProgress] = useState("");
+
+  // Envoie un seul fichier et renvoie son URL (Cloudinary ou base de l'atelier).
+  async function uploadOne(file) {
+    if (CLOUDINARY_READY) {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("upload_preset", PRESET);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) throw new Error("L'envoi a échoué, réessayez.");
+      return data.secure_url;
+    }
+    const dataUrl = await readAsDataUrl(file);
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dataUrl, productSlug }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ref) throw new Error(data.error || "L'envoi a échoué, réessayez.");
+    // URL réelle et affichable (servie depuis la base) — utilisable comme photo produit.
+    return "/api/img/" + data.ref;
+  }
 
   async function handleFile(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setError("Merci de choisir une image (jpg, png…).");
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Image trop lourde (5 Mo maximum).");
-      return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    for (const f of files) {
+      if (!f.type.startsWith("image/")) {
+        setError("Merci de choisir des images (jpg, png…).");
+        return;
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        setError(`Image trop lourde (5 Mo maximum)${files.length > 1 ? " : " + f.name : ""}.`);
+        return;
+      }
     }
     setError("");
     setStatus("uploading");
     try {
-      const dataUrl = await readAsDataUrl(file);
-      setPreview(dataUrl);
-      if (CLOUDINARY_READY) {
-        const fd = new FormData();
-        fd.append("file", file);
-        fd.append("upload_preset", PRESET);
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok || !data.secure_url) throw new Error("L'envoi a échoué, réessayez.");
-        onChange(data.secure_url);
-      } else {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ dataUrl, productSlug }),
-        });
-        const data = await res.json();
-        if (!res.ok || !data.ref) throw new Error(data.error || "L'envoi a échoué, réessayez.");
-        // URL réelle et affichable (servie depuis la base) — utilisable comme photo produit.
-        onChange("/api/img/" + data.ref);
+      // Mode multiple (admin) : on envoie chaque photo puis on ajoute toutes les URLs d'un coup.
+      if (multiple || onUpload) {
+        const urls = [];
+        for (let i = 0; i < files.length; i++) {
+          if (files.length > 1) setProgress(`Envoi ${i + 1}/${files.length}…`);
+          urls.push(await uploadOne(files[i]));
+        }
+        setProgress("");
+        if (onUpload) onUpload(urls);
+        else if (onChange) urls.forEach((u) => onChange(u));
+        setStatus("idle"); // on reste prêt pour en ajouter d'autres
+        e.target.value = ""; // permet de re-sélectionner les mêmes fichiers
+        return;
       }
+      // Mode simple (un seul fichier) : aperçu + remplacement.
+      const file = files[0];
+      setPreview(await readAsDataUrl(file));
+      onChange(await uploadOne(file));
       setStatus("done");
     } catch (err) {
       setError(err.message);
       setStatus("idle");
+      setProgress("");
     }
   }
 
@@ -84,8 +108,10 @@ export default function PhotoUpload({ value, onChange, productSlug }) {
         </div>
       ) : (
         <label className="photo-dropzone">
-          <input type="file" accept="image/*" onChange={handleFile} hidden />
-          {status === "uploading" ? "Envoi en cours…" : "Choisir une photo"}
+          <input type="file" accept="image/*" multiple={multiple} onChange={handleFile} hidden />
+          {status === "uploading"
+            ? (progress || "Envoi en cours…")
+            : (multiple ? "Choisir une ou plusieurs photos" : "Choisir une photo")}
         </label>
       )}
       {error && <span className="char-count" style={{ color: "#b4452f", textAlign: "left" }}>{error}</span>}

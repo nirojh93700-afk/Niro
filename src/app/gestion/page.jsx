@@ -1081,8 +1081,8 @@ export default function GestionPage() {
                   </div>
                   {UPLOAD_AVAILABLE && (
                     <div style={{ marginTop: 10 }}>
-                      <PhotoUpload value="" productSlug={c.slug} onChange={(url) => {
-                        const next = [...(c.overrideImages || []), url];
+                      <PhotoUpload value="" multiple productSlug={c.slug} onUpload={(urls) => {
+                        const next = [...(c.overrideImages || []), ...urls];
                         updateCatalog(c.slug, next);
                         saveImages(c.slug, next);
                       }} />
