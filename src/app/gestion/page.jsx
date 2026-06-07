@@ -244,6 +244,36 @@ export default function GestionPage() {
     }
   }
 
+  async function toggleTestOrder(o) {
+    const test = !o.test;
+    setOrders((prev) => prev.map((x) => (x.id === o.id ? { ...x, test } : x)));
+    try {
+      await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ id: o.id, test }),
+      });
+    } catch (e) {
+      setError("Échec de la mise à jour (test).");
+    }
+  }
+
+  async function deleteAllTests() {
+    const tests = orders.filter((o) => o.test);
+    if (tests.length === 0) { setError("Aucune commande marquée « test » à supprimer."); return; }
+    if (!window.confirm(`Supprimer définitivement les ${tests.length} commande(s) marquée(s) « test » ?`)) return;
+    setOrders((prev) => prev.filter((o) => !o.test));
+    for (const o of tests) {
+      try {
+        await fetch("/api/admin/orders", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json", "x-admin-key": key },
+          body: JSON.stringify({ id: o.id }),
+        });
+      } catch { /* ignore */ }
+    }
+  }
+
   async function sendTestEmail() {
     setTestMsg("");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail.trim())) {
@@ -307,13 +337,14 @@ export default function GestionPage() {
     try { return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
     catch { return iso || "—"; }
   };
-  // Les commandes remboursées ou annulées ne comptent pas dans le chiffre d'affaires / stats.
-  const validOrders = orders.filter((o) => o.status !== "remboursee" && o.status !== "annulee");
+  // Les commandes remboursées, annulées ou marquées « test » ne comptent pas dans les stats.
+  const validOrders = orders.filter((o) => o.status !== "remboursee" && o.status !== "annulee" && !o.test);
   const ca = validOrders.reduce((s, o) => s + (Number(o.total) || 0), 0);
   const nbCmd = validOrders.length;
   const nbRembourse = orders.length - validOrders.length;
+  const nbTest = orders.filter((o) => o.test).length;
   const panierMoyen = nbCmd ? ca / nbCmd : 0;
-  const aPreparer = orders.filter((o) => o.status !== "expediee" && o.status !== "livree" && o.status !== "remboursee" && o.status !== "annulee").length;
+  const aPreparer = orders.filter((o) => !o.test && o.status !== "expediee" && o.status !== "livree" && o.status !== "remboursee" && o.status !== "annulee").length;
 
   // Filtre + recherche des commandes (comme sur les grandes plateformes).
   const orderQuery = orderSearch.trim().toLowerCase();
@@ -391,7 +422,13 @@ export default function GestionPage() {
             )}
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
               {nbCmd} commande{nbCmd > 1 ? "s" : ""} · {aPreparer} à préparer. Marque « Expédiée » une fois envoyée.
+              {nbTest > 0 ? ` · ${nbTest} test${nbTest > 1 ? "s" : ""} (non compté${nbTest > 1 ? "s" : ""}).` : ""}
             </p>
+            {nbTest > 0 && (
+              <button className="btn btn-outline" style={{ marginBottom: 14, color: "#b4452f", borderColor: "#e7b7ad" }} onClick={deleteAllTests}>
+                🗑 Supprimer les {nbTest} commande{nbTest > 1 ? "s" : ""} test
+              </button>
+            )}
             {ordersReady && nbCmd === 0 && (
               <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune commande pour le moment. Elles apparaîtront ici automatiquement après chaque vente.</p></div>
             )}
@@ -448,6 +485,14 @@ export default function GestionPage() {
                     <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
                   ))}
                 </ul>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+                  {o.test && (
+                    <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: "#e7e0f0", color: "#5b4b8a", fontWeight: 600 }}>🧪 Commande test (non comptée)</span>
+                  )}
+                  <button className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} onClick={() => toggleTestOrder(o)}>
+                    {o.test ? "Ce n'est pas un test" : "🧪 Marquer comme test"}
+                  </button>
+                </div>
                 {o.status === "remboursee" ? (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                     <span style={{ fontWeight: 600, color: "#8a6d3b" }}>↩ Remboursée</span>
