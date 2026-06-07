@@ -47,6 +47,11 @@ export default function GestionPage() {
   const [siteSettings, setSiteSettings] = useState({ salesGoal: 0, crmNotes: {} });
   const [goalInput, setGoalInput] = useState("");
   const [noteDraft, setNoteDraft] = useState({});
+  const [mailOpen, setMailOpen] = useState("");
+  const [mailSubject, setMailSubject] = useState("");
+  const [mailBody, setMailBody] = useState("");
+  const [mailMsg, setMailMsg] = useState("");
+  const [mailSending, setMailSending] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
@@ -325,6 +330,25 @@ export default function GestionPage() {
     const val = (noteDraft[emailKey] ?? notes[emailKey] ?? "").trim();
     if (val) notes[emailKey] = val; else delete notes[emailKey];
     saveSettingsPatch({ crmNotes: notes }, "note-" + emailKey);
+  }
+
+  async function sendClientEmail(to) {
+    setMailMsg("");
+    if (!mailSubject.trim() || !mailBody.trim()) { setMailMsg("Sujet et message obligatoires."); return; }
+    setMailSending(true);
+    try {
+      const res = await fetch("/api/admin/send-client-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ to, subject: mailSubject, message: mailBody }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || "Échec.");
+      setMailMsg("✓ E-mail envoyé à " + to);
+      setMailSubject(""); setMailBody("");
+      setTimeout(() => { setMailOpen(""); setMailMsg(""); }, 1500);
+    } catch (e) { setMailMsg(e.message); }
+    finally { setMailSending(false); }
   }
 
   async function sendTestEmail() {
@@ -884,6 +908,29 @@ export default function GestionPage() {
                           <button className="btn btn-outline" style={{ marginTop: 6, padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => saveNote(nk)}>
                             Enregistrer la note {saved === "note-" + nk ? "✓" : ""}
                           </button>
+
+                          {c.email && (
+                            <div style={{ marginTop: 12, borderTop: "1px dashed var(--line)", paddingTop: 10 }}>
+                              {mailOpen !== c.email ? (
+                                <button className="btn btn-gold" style={{ padding: "5px 14px", fontSize: "0.85rem" }} onClick={() => { setMailOpen(c.email); setMailSubject(""); setMailBody(""); setMailMsg(""); }}>
+                                  ✉️ Écrire à cette cliente
+                                </button>
+                              ) : (
+                                <div style={{ display: "grid", gap: 8 }}>
+                                  <strong style={{ fontSize: "0.85rem" }}>Écrire à {c.email} (depuis ton e-mail du site)</strong>
+                                  <input value={mailSubject} onChange={(e) => setMailSubject(e.target.value)} placeholder="Sujet" style={{ padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+                                  <textarea value={mailBody} onChange={(e) => setMailBody(e.target.value)} placeholder="Votre message…" style={{ minHeight: 90, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+                                  <div style={{ display: "flex", gap: 8 }}>
+                                    <button className="btn btn-gold" style={{ padding: "6px 14px", fontSize: "0.85rem" }} disabled={mailSending} onClick={() => sendClientEmail(c.email)}>
+                                      {mailSending ? "Envoi…" : "Envoyer"}
+                                    </button>
+                                    <button className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={() => setMailOpen("")}>Annuler</button>
+                                  </div>
+                                  {mailMsg && <div style={{ fontSize: "0.85rem", color: mailMsg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{mailMsg}</div>}
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     })()}
