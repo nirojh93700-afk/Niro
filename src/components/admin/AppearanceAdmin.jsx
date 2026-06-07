@@ -139,7 +139,7 @@ export default function AppearanceAdmin({ adminKey }) {
         </label>
         <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ welcome: s.welcome }, "Fenêtre de bienvenue enregistrée")}>Enregistrer</button>
         <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--ink-soft)" }}>
-          ⚠️ Crée bien ce code dans <strong>Stripe → Coupons → Codes promo</strong> (ex. <code>BIENVENUE10</code> = −10 %), sinon il ne marchera pas au paiement.
+          ⚠️ Crée bien ce code dans <strong>Promotions → 🎟️ Codes promo</strong> (ex. <code>BIENVENUE10</code> = −10 %), sinon il ne réduira rien au paiement. (Plus besoin de Stripe.)
         </p>
       </div>
 
