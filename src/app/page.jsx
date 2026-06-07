@@ -79,7 +79,7 @@ export default async function HomePage() {
             <p>{hero.text}</p>
             <div className="hero-cta">
               <Link href="/boutique" className="btn btn-gold">{hero.cta1}</Link>
-              <Link href="/boutique?cat=cadeaux" className="btn btn-outline">{hero.cta2}</Link>
+              <Link href="/boutique?cat=bijoux" className="btn btn-outline">{hero.cta2}</Link>
             </div>
             <div className="hero-badges">
               <div className="hero-badge"><span>🪵</span> Fait main en France</div>
