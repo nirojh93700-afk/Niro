@@ -385,6 +385,9 @@ export async function getSettings() {
       code: (typeof s.welcome?.code === "string" && s.welcome.code.trim()) ? s.welcome.code.trim() : "BIENVENUE10",
       text: (typeof s.welcome?.text === "string" && s.welcome.text.trim()) ? s.welcome.text.trim() : "−10 % sur votre première commande",
     },
+    // Balises marketing (vides tant que pas configurées dans l'admin).
+    metaPixelId: typeof s.metaPixelId === "string" ? s.metaPixelId.trim() : "",
+    gaId: typeof s.gaId === "string" ? s.gaId.trim() : "",
     // Objectif de chiffre d'affaires mensuel (€) — affiché en jauge dans les stats.
     salesGoal: Number(s.salesGoal) || 0,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.

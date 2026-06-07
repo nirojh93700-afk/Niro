@@ -143,6 +143,21 @@ export default function AppearanceAdmin({ adminKey }) {
         </p>
       </div>
 
+      {/* MARKETING / PUBLICITÉ (balises) */}
+      <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+        <h3 style={{ margin: 0 }}>📈 Publicité & statistiques de visites</h3>
+        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Colle ici tes identifiants quand tu auras créé les comptes (gratuits). Tant que c'est vide, rien ne se charge — donc aucun risque.
+        </p>
+        <label className="admin-field">ID Pixel Meta (Facebook/Instagram) <span style={{ color: "var(--ink-soft)" }}>— chiffres uniquement</span>
+          <input value={s.metaPixelId || ""} placeholder="Ex. 123456789012345" onChange={(e) => set({ metaPixelId: e.target.value })} />
+        </label>
+        <label className="admin-field">ID Google (Analytics / Ads) <span style={{ color: "var(--ink-soft)" }}>— ex. G-XXXXXXX</span>
+          <input value={s.gaId || ""} placeholder="Ex. G-ABCDE12345" onChange={(e) => set({ gaId: e.target.value })} />
+        </label>
+        <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ metaPixelId: s.metaPixelId || "", gaId: s.gaId || "" }, "Balises marketing enregistrées")}>Enregistrer</button>
+      </div>
+
       {/* PRIX CONSEILLÉ (comparaison de prix) */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>🏷️ Prix conseillé (« moins cher qu'ailleurs »)</h3>

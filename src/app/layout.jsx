@@ -150,10 +150,23 @@ export default async function RootLayout({ children }) {
   const showGate = !showMaintenance && access.locked && !hasAccess;
   const gateOpen = !showMaintenance && !showGate;
 
+  // Balises marketing (validées : chiffres pour le Pixel, alphanum pour Google).
+  const pixelId = /^[0-9]{5,30}$/.test(settings.metaPixelId || "") ? settings.metaPixelId : "";
+  const gaId = /^[A-Za-z0-9-]{5,30}$/.test(settings.gaId || "") ? settings.gaId : "";
+
   return (
     <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
       <body>
         {colorCss ? <style dangerouslySetInnerHTML={{ __html: colorCss }} /> : null}
+        {gaId && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');` }} />
+          </>
+        )}
+        {pixelId && (
+          <script dangerouslySetInnerHTML={{ __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${pixelId}');fbq('track','PageView');` }} />
+        )}
         {gateOpen ? (
           <>
             {announce.enabled && announce.text ? (

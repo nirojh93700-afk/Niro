@@ -73,6 +73,8 @@ export async function POST(req) {
     patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
   }
   if (typeof body.pickupZones === "string") patch.pickupZones = body.pickupZones.slice(0, 200);
+  if (typeof body.metaPixelId === "string") patch.metaPixelId = /^[0-9]{0,30}$/.test(body.metaPixelId.trim()) ? body.metaPixelId.trim() : "";
+  if (typeof body.gaId === "string") patch.gaId = /^[A-Za-z0-9-]{0,30}$/.test(body.gaId.trim()) ? body.gaId.trim() : "";
   if (body.welcome && typeof body.welcome === "object") {
     patch.welcome = {
       enabled: Boolean(body.welcome.enabled),
