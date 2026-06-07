@@ -314,9 +314,9 @@ export async function getSettings() {
     fontHeading: s.fontHeading || "",   // police des titres
     fontBody: s.fontBody || "",         // police du texte
     // Accès privé : si "locked", le site demande un code avant d'être visible.
-    // Par défaut activé (le temps de l'ouverture), avec un code par défaut modifiable dans l'admin.
+    // Par défaut : site EN LIGNE (public). Il n'est privé que si l'admin l'active explicitement.
     access: {
-      locked: acc.locked !== false,
+      locked: acc.locked === true,
       code: (typeof acc.code === "string" && acc.code.trim()) ? acc.code.trim() : "Niro2026",
     },
     announce: { enabled: false, text: "", link: "", ...(s.announce || {}) },
