@@ -50,10 +50,7 @@ Si vous commandez le collier seul (sans gravure)
 
 Défaut à l'arrivée (les deux cas)
 - Photo sous 14 jours, échange ou renvoi sans frais.
-- Chaîne cassée, finition défectueuse : remplacement immédiat.
-
-Garantie 316L
-- Le ternissement n'est pas couvert si le collier est exposé à des produits chimiques agressifs (eau de Javel, produits ménagers, parfums concentrés).`,
+- Chaîne cassée, finition défectueuse : remplacement immédiat.`,
   },
 
   "collier-medaillon-coeur-ouvrable": {
@@ -117,10 +114,7 @@ Version SANS gravure (standard)
 
 Défaut à l'arrivée
 - Photo sous 14 jours, échange ou remboursement.
-- Fermoir cassé, finition défectueuse : remplacement immédiat.
-
-Garantie
-- 6 mois contre les défauts de fabrication (fermoir, finition, oxydation prématurée en usage normal).`,
+- Fermoir cassé, finition défectueuse : remplacement immédiat.`,
   },
 
   "bracelet-homme-acier-silicone": {
@@ -149,10 +143,7 @@ Version SANS texte (standard)
 
 Défaut à l'arrivée
 - Photo sous 14 jours, échange ou remboursement.
-- Fermoir cassé, finition défectueuse : remplacement immédiat.
-
-Garantie
-- 6 mois contre les défauts de fabrication.`,
+- Fermoir cassé, finition défectueuse : remplacement immédiat.`,
   },
 
   "bracelet-homme-cuir-acier": {
@@ -181,10 +172,7 @@ Version SANS texte (standard)
 
 Défaut à l'arrivée
 - Photo sous 14 jours, échange ou remboursement.
-- Boucle cassée, finition défectueuse : remplacement immédiat.
-
-Garantie
-- 6 mois contre les défauts de fabrication.`,
+- Boucle cassée, finition défectueuse : remplacement immédiat.`,
   },
 
   "numero-table-arches-bohemes": {
