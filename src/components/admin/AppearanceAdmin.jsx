@@ -121,6 +121,28 @@ export default function AppearanceAdmin({ adminKey }) {
         <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ announce: s.announce }, "Bandeau enregistré")}>Enregistrer le bandeau</button>
       </div>
 
+      {/* FENÊTRE DE BIENVENUE (pop-up inscription + code promo) */}
+      <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+        <h3 style={{ margin: 0 }}>🎁 Fenêtre de bienvenue (inscription + code promo)</h3>
+        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Une fenêtre s'affiche à l'arrivée des visiteuses : elles s'inscrivent à la newsletter et reçoivent un code promo. (Affichée une seule fois par personne.)
+        </p>
+        <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <input type="checkbox" style={{ width: "auto" }} checked={s.welcome?.enabled || false} onChange={(e) => set({ welcome: { ...s.welcome, enabled: e.target.checked } })} />
+          Activer la fenêtre de bienvenue
+        </label>
+        <label className="admin-field">Texte de l'offre
+          <input value={s.welcome?.text || ""} placeholder="−10 % sur votre première commande" onChange={(e) => set({ welcome: { ...s.welcome, text: e.target.value } })} />
+        </label>
+        <label className="admin-field">Code promo à afficher
+          <input value={s.welcome?.code || ""} placeholder="BIENVENUE10" onChange={(e) => set({ welcome: { ...s.welcome, code: e.target.value } })} />
+        </label>
+        <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ welcome: s.welcome }, "Fenêtre de bienvenue enregistrée")}>Enregistrer</button>
+        <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+          ⚠️ Crée bien ce code dans <strong>Stripe → Coupons → Codes promo</strong> (ex. <code>BIENVENUE10</code> = −10 %), sinon il ne marchera pas au paiement.
+        </p>
+      </div>
+
       {/* PRIX CONSEILLÉ (comparaison de prix) */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>🏷️ Prix conseillé (« moins cher qu'ailleurs »)</h3>

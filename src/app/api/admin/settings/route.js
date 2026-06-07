@@ -73,6 +73,13 @@ export async function POST(req) {
     patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
   }
   if (typeof body.pickupZones === "string") patch.pickupZones = body.pickupZones.slice(0, 200);
+  if (body.welcome && typeof body.welcome === "object") {
+    patch.welcome = {
+      enabled: Boolean(body.welcome.enabled),
+      code: str(body.welcome.code, 40).trim(),
+      text: str(body.welcome.text, 160).trim(),
+    };
+  }
   if (body.salesGoal !== undefined) {
     const n = Number(body.salesGoal);
     patch.salesGoal = Number.isFinite(n) && n > 0 ? Math.round(n) : 0;

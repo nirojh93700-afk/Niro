@@ -328,6 +328,12 @@ export async function getSettings() {
     // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
     // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
     refMarkup: Number(s.refMarkup) || 0,
+    // Fenêtre de bienvenue (pop-up inscription + code promo).
+    welcome: {
+      enabled: s.welcome?.enabled === true,
+      code: (typeof s.welcome?.code === "string" && s.welcome.code.trim()) ? s.welcome.code.trim() : "BIENVENUE10",
+      text: (typeof s.welcome?.text === "string" && s.welcome.text.trim()) ? s.welcome.text.trim() : "−10 % sur votre première commande",
+    },
     // Objectif de chiffre d'affaires mensuel (€) — affiché en jauge dans les stats.
     salesGoal: Number(s.salesGoal) || 0,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.
