@@ -1,6 +1,6 @@
 import { isAdmin } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
-import { sendEmail, shippedEmail, cancelledEmail } from "@/lib/email";
+import { sendEmail, shippedEmail, cancelledEmail, reviewRequestEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +50,7 @@ export async function POST(req) {
       let mail = null;
       if (status === "expediee" && patch.tracking) mail = shippedEmail(order, patch.tracking);
       else if (status === "annulee") mail = cancelledEmail(order);
+      else if (status === "livree") mail = reviewRequestEmail(order);
       if (mail) {
         const r = await sendEmail({ to: order.customerEmail, subject: mail.subject, html: mail.html });
         emailed = r.ok;

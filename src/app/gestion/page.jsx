@@ -682,7 +682,10 @@ export default function GestionPage() {
                       )}
                       {o.status === "expediee" && (
                         <>
-                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "livree")}>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => {
+                            const notify = o.customerEmail ? window.confirm(`Marquer livrée. Envoyer un e-mail à ${o.customerEmail} pour demander un avis ?`) : false;
+                            setOrderStatus(o.id, "livree", { notifyCustomer: notify });
+                          }}>
                             Marquer livrée
                           </button>
                           <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>

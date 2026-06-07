@@ -102,6 +102,20 @@ export function cancelledEmail(order) {
   return { subject: `Votre commande #${ref} a été annulée`, html: emailLayout({ heading: "Votre commande a été annulée", bodyHtml: body }) };
 }
 
+// E-mail « demande d'avis » envoyé après livraison.
+export function reviewRequestEmail(order) {
+  const name = order?.customerName ? order.customerName.split(" ")[0] : "";
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour${name ? " " + escapeHtml(name) : ""},</p>
+    <p style="margin:0 0 12px;">Nous espérons que votre commande vous plaît ! 🌸 Votre avis compte beaucoup pour notre petit atelier.</p>
+    <p style="margin:0 0 18px;">Prendriez-vous un instant pour partager votre expérience ? Cela aide d'autres clientes et nous encourage énormément.</p>
+    <p style="margin:0 0 20px;">
+      <a href="${BRAND.siteUrl}/boutique" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-weight:bold;">Laisser un avis</a>
+    </p>
+    <p style="margin:0;color:#7a7268;">Merci infiniment,<br>L'atelier Niv Création</p>`;
+  return { subject: "Votre avis sur votre création Niv Création ✦", html: emailLayout({ heading: "Comment s'est passée votre commande ?", bodyHtml: body }) };
+}
+
 // E-mail de démonstration (mêmes style et structure que la confirmation client réelle).
 export function sampleClientEmailHtml() {
   const body = `

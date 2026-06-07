@@ -156,6 +156,7 @@ export async function POST(req) {
       },
       locale: "fr",
       currency: "eur",
+      allow_promotion_codes: true, // la cliente peut entrer un code promo au paiement
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
