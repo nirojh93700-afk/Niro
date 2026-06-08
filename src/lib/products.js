@@ -855,10 +855,12 @@ export const products = [
     title: "Collier médaillon livre à graver",
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
-    personalizable: true, personalizationLabel: "Textes à graver + police",
+    personalizable: true, personalizationLabel: "Gravure couverture + 3 pages + police",
     personalizationFields: [
-      { key: "texte1", label: "Gravure — page 1", maxLength: 30 },
-      { key: "texte2", label: "Gravure — page 2", maxLength: 30, optional: true },
+      { key: "couverture", label: "Gravure — couverture (face)", maxLength: 30 },
+      { key: "page1", label: "Gravure — page 1 (intérieur)", maxLength: 30, optional: true },
+      { key: "page2", label: "Gravure — page 2 (intérieur)", maxLength: 30, optional: true },
+      { key: "page3", label: "Gravure — page 3 (intérieur)", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -871,7 +873,7 @@ export const products = [
       { id: "medaillon-livre-dore", title: "Doré", price: 40.90 },
       { id: "medaillon-livre-bicolore", title: "Doré et Argenté", price: 41.90 },
     ],
-    descriptionHtml: `<p>Médaillon en forme de <strong>livre</strong> qui s'ouvre, avec pages intérieures gravables. En acier inoxydable.</p>`,
+    descriptionHtml: `<p>Médaillon en forme de <strong>livre</strong> qui s'ouvre. Gravable sur la <strong>couverture</strong> et sur <strong>3 pages à l'intérieur</strong>. En acier inoxydable.</p>`,
   },
   {
     slug: "collier-couple-puzzle",
