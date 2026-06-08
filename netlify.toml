@@ -5,6 +5,10 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  # Économie de minutes de build : si un push ne modifie QUE des fichiers qui
+  # n'affectent pas le site (notes, documentation *.md, dossier docs/), Netlify
+  # saute le build. Un vrai changement de code (re)déclenche bien un build.
+  ignore = "git diff --quiet HEAD^ HEAD -- . ':(exclude)*.md' ':(exclude)docs/'"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
