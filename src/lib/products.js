@@ -67,6 +67,7 @@ export const products = [
     title: "Collier Enveloppe Message Secret personnalisable",
     category: "bijoux",
     type: "Collier personnalisé",
+    engraveEnvelope3d: true, // aperçu 3D : la plaque sort de l'enveloppe et montre la gravure
     tagline: "Le pendentif enveloppe qui s'ouvre sur votre message secret.",
     personalizable: true,
     personalizationLabel: "Texte à graver (à l'intérieur de l'enveloppe)",
