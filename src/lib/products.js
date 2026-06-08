@@ -857,7 +857,7 @@ export const products = [
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
     personalizable: true, personalizationLabel: "Gravure couverture + 3 pages + police",
     personalizationFields: [
-      { key: "couverture", label: "Gravure — couverture (face)", maxLength: 30 },
+      { key: "couverture", label: "Gravure — couverture (face)", maxLength: 30, optional: true },
       { key: "page1", label: "Gravure — page 1 (intérieur)", maxLength: 30, optional: true },
       { key: "page2", label: "Gravure — page 2 (intérieur)", maxLength: 30, optional: true },
       { key: "page3", label: "Gravure — page 3 (intérieur)", maxLength: 30, optional: true },
