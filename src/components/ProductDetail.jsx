@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "./CartContext";
-import { formatEuro } from "@/lib/format";
+import { formatEuro, roundTo90 } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import { engravingExtra } from "@/lib/engravingPrice";
@@ -356,7 +356,7 @@ export default function ProductDetail({ product }) {
           <div className="price-lead">
             {hasPromo ? (
               <>
-                <span className="price-old">{formatEuro(variant.price)}</span>{" "}
+                <span className="price-old">{formatEuro(roundTo90(variant.price))}</span>{" "}
                 <span className="price-sale">{formatEuro(unitPrice)}</span>{" "}
                 <span className="promo-badge" style={{ position: "static" }}>
                   -{Math.round((1 - salePrice / variant.price) * 100)}%
@@ -364,14 +364,14 @@ export default function ProductDetail({ product }) {
               </>
             ) : hasCompare ? (
               <>
-                <span className="price-old">{formatEuro(comparePrice)}</span>{" "}
+                <span className="price-old">{formatEuro(roundTo90(comparePrice))}</span>{" "}
                 <span className="price-sale">{formatEuro(unitPrice)}</span>{" "}
                 <span className="promo-badge" style={{ position: "static" }}>-{comparePct}%</span>
               </>
             ) : refPrice ? (
               <>
                 <span className="price-ref-label">Prix conseillé</span>{" "}
-                <span className="price-old">{formatEuro(refPrice)}</span>{" "}
+                <span className="price-old">{formatEuro(roundTo90(refPrice))}</span>{" "}
                 <span className="price-sale">{formatEuro(unitPrice)}</span>
               </>
             ) : (

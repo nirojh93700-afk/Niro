@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { formatEuro } from "@/lib/format";
+import { formatEuro, roundTo90 } from "@/lib/format";
 import WishlistButton from "@/components/WishlistButton";
 
 export default function ProductCard({ product }) {
@@ -46,18 +46,18 @@ export default function ProductCard({ product }) {
           {showDes && <small>dès </small>}
           {hasPromo ? (
             <>
-              <span className="price-old">{formatEuro(basePrice)}</span>{" "}
+              <span className="price-old">{formatEuro(roundTo90(basePrice))}</span>{" "}
               <span className="price-sale">{formatEuro(sale)}</span>
             </>
           ) : hasCompare ? (
             <>
-              <span className="price-old">{formatEuro(compareAt)}</span>{" "}
+              <span className="price-old">{formatEuro(roundTo90(compareAt))}</span>{" "}
               <span className="price-sale">{formatEuro(basePrice)}</span>
             </>
           ) : refPrice ? (
             <>
               <span className="price-ref-label">Prix conseillé</span>{" "}
-              <span className="price-old">{formatEuro(refPrice)}</span>{" "}
+              <span className="price-old">{formatEuro(roundTo90(refPrice))}</span>{" "}
               <span className="price-sale">{formatEuro(basePrice)}</span>
             </>
           ) : (
