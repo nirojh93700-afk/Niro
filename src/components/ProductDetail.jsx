@@ -109,6 +109,10 @@ export default function ProductDetail({ product }) {
   const refPrice = !hasPromo && refMarkup > 0
     ? Math.round((variant.price * (1 + refMarkup / 100) + engrave.amount) * 100) / 100
     : 0;
+  // Prix barré "permanent" défini sur la variante (deux prix ronds : barré + prix de vente).
+  const hasCompare = !hasPromo && typeof variant.compareAt === "number" && variant.compareAt > variant.price;
+  const comparePrice = hasCompare ? Math.round((variant.compareAt + engrave.amount) * 100) / 100 : 0;
+  const comparePct = hasCompare ? Math.round((1 - variant.price / variant.compareAt) * 100) : 0;
   // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
   // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
@@ -357,6 +361,12 @@ export default function ProductDetail({ product }) {
                 <span className="promo-badge" style={{ position: "static" }}>
                   -{Math.round((1 - salePrice / variant.price) * 100)}%
                 </span>
+              </>
+            ) : hasCompare ? (
+              <>
+                <span className="price-old">{formatEuro(comparePrice)}</span>{" "}
+                <span className="price-sale">{formatEuro(unitPrice)}</span>{" "}
+                <span className="promo-badge" style={{ position: "static" }}>-{comparePct}%</span>
               </>
             ) : refPrice ? (
               <>

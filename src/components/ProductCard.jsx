@@ -17,6 +17,9 @@ export default function ProductCard({ product }) {
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), seulement s'il n'y a pas déjà une promo réelle.
   const refMarkup = Number(product.refMarkup) || 0;
   const refPrice = !hasPromo && refMarkup > 0 ? Math.round(basePrice * (1 + refMarkup / 100) * 100) / 100 : 0;
+  // Prix barré "permanent" défini sur la 1re variante (barré + prix de vente, deux prix ronds).
+  const compareAt = product.variants[0].compareAt;
+  const hasCompare = !hasPromo && typeof compareAt === "number" && compareAt > basePrice;
 
   return (
     <Link href={`/produit/${product.slug}`} className="product-card">
@@ -45,6 +48,11 @@ export default function ProductCard({ product }) {
             <>
               <span className="price-old">{formatEuro(basePrice)}</span>{" "}
               <span className="price-sale">{formatEuro(sale)}</span>
+            </>
+          ) : hasCompare ? (
+            <>
+              <span className="price-old">{formatEuro(compareAt)}</span>{" "}
+              <span className="price-sale">{formatEuro(basePrice)}</span>
             </>
           ) : refPrice ? (
             <>
