@@ -113,6 +113,8 @@ export default function ProductDetail({ product }) {
   const hasCompare = !hasPromo && typeof variant.compareAt === "number" && variant.compareAt > variant.price;
   const comparePrice = hasCompare ? Math.round((variant.compareAt + engrave.amount) * 100) / 100 : 0;
   const comparePct = hasCompare ? Math.round((1 - variant.price / variant.compareAt) * 100) : 0;
+  // Prix barré arrondi en ,90 — uniquement pour les bijoux.
+  const old90 = (x) => (product.category === "bijoux" ? roundTo90(x) : x);
   // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
   // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
@@ -356,7 +358,7 @@ export default function ProductDetail({ product }) {
           <div className="price-lead">
             {hasPromo ? (
               <>
-                <span className="price-old">{formatEuro(roundTo90(variant.price))}</span>{" "}
+                <span className="price-old">{formatEuro(old90(variant.price))}</span>{" "}
                 <span className="price-sale">{formatEuro(unitPrice)}</span>{" "}
                 <span className="promo-badge" style={{ position: "static" }}>
                   -{Math.round((1 - salePrice / variant.price) * 100)}%
@@ -364,14 +366,14 @@ export default function ProductDetail({ product }) {
               </>
             ) : hasCompare ? (
               <>
-                <span className="price-old">{formatEuro(roundTo90(comparePrice))}</span>{" "}
+                <span className="price-old">{formatEuro(old90(comparePrice))}</span>{" "}
                 <span className="price-sale">{formatEuro(unitPrice)}</span>{" "}
                 <span className="promo-badge" style={{ position: "static" }}>-{comparePct}%</span>
               </>
             ) : refPrice ? (
               <>
                 <span className="price-ref-label">Prix conseillé</span>{" "}
-                <span className="price-old">{formatEuro(roundTo90(refPrice))}</span>{" "}
+                <span className="price-old">{formatEuro(old90(refPrice))}</span>{" "}
                 <span className="price-sale">{formatEuro(unitPrice)}</span>
               </>
             ) : (

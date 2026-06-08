@@ -20,6 +20,8 @@ export default function ProductCard({ product }) {
   // Prix barré "permanent" défini sur la 1re variante (barré + prix de vente, deux prix ronds).
   const compareAt = product.variants[0].compareAt;
   const hasCompare = !hasPromo && typeof compareAt === "number" && compareAt > basePrice;
+  // Prix barré arrondi en ,90 — uniquement pour les bijoux.
+  const old90 = (x) => (product.category === "bijoux" ? roundTo90(x) : x);
 
   return (
     <Link href={`/produit/${product.slug}`} className="product-card">
@@ -46,18 +48,18 @@ export default function ProductCard({ product }) {
           {showDes && <small>dès </small>}
           {hasPromo ? (
             <>
-              <span className="price-old">{formatEuro(roundTo90(basePrice))}</span>{" "}
+              <span className="price-old">{formatEuro(old90(basePrice))}</span>{" "}
               <span className="price-sale">{formatEuro(sale)}</span>
             </>
           ) : hasCompare ? (
             <>
-              <span className="price-old">{formatEuro(roundTo90(compareAt))}</span>{" "}
+              <span className="price-old">{formatEuro(old90(compareAt))}</span>{" "}
               <span className="price-sale">{formatEuro(basePrice)}</span>
             </>
           ) : refPrice ? (
             <>
               <span className="price-ref-label">Prix conseillé</span>{" "}
-              <span className="price-old">{formatEuro(roundTo90(refPrice))}</span>{" "}
+              <span className="price-old">{formatEuro(old90(refPrice))}</span>{" "}
               <span className="price-sale">{formatEuro(basePrice)}</span>
             </>
           ) : (
