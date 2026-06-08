@@ -841,7 +841,7 @@ export const products = [
       { key: "verso", label: "Texte à graver — verso (+5 €)", placeholder: "Visible au dos de la plaque", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photo", type: "photo", label: "Photo à graver (+8 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+8 €). Choisissez une photo nette, bien éclairée et contrastée pour un beau rendu." },
-      { key: "photoFace", type: "select", label: "Photo gravée sur quelle face ?", requiresField: "photo", optional: true,
+      { key: "photoFace", type: "select", label: "Photo gravée sur quelle face ? (à choisir)", requiresField: "photo",
         options: [{ value: "recto", label: "Recto (devant)" }, { value: "verso", label: "Verso (derrière)" }] },
       { key: "textPos", type: "select", label: "Texte placé par rapport à la photo", requiresField: "photo", optional: true,
         options: [{ value: "above", label: "Au-dessus de la photo" }, { value: "below", label: "En dessous de la photo" }] },
