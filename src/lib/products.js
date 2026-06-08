@@ -854,6 +854,7 @@ export const products = [
     weight: 120, pickup: false, letter: true, subcategory: "femme",
     title: "Collier médaillon livre à graver",
     category: "bijoux", type: "Collier personnalisé",
+    engraveBook3d: true, // aperçu 3D : médaillon livre qui s'ouvre (couverture + 3 pages)
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
     personalizable: true, personalizationLabel: "Gravure couverture + 3 pages + police",
     personalizationFields: [

@@ -12,6 +12,7 @@ import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
 import EngraveHeart3D from "./EngraveHeart3D";
+import EngraveBook3D from "./EngraveBook3D";
 import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import DesignAssistant from "./DesignAssistant";
@@ -43,7 +44,7 @@ export default function ProductDetail({ product }) {
   // Mobile : le mini 3D flottant apparaît quand la photo est sortie de l'écran
   // et que le grand 3D (en bas) n'est pas encore visible.
   useEffect(() => {
-    if (isWide || !(product.engrave3d || product.engraveHeart3d)) { setShowMini(false); return; }
+    if (isWide || !(product.engrave3d || product.engraveHeart3d || product.engraveBook3d)) { setShowMini(false); return; }
     // Méthode fiable : on calcule les positions à chaque défilement.
     // Le mini 3D ne s'affiche QUE tant qu'on n'a pas atteint le grand 3D
     // (il est encore plus bas). Dès qu'on l'a vu/dépassé, plus de mini —
@@ -66,7 +67,7 @@ export default function ProductDetail({ product }) {
       window.removeEventListener("scroll", compute);
       window.removeEventListener("resize", compute);
     };
-  }, [isWide, product.engrave3d, product.engraveHeart3d]);
+  }, [isWide, product.engrave3d, product.engraveHeart3d, product.engraveBook3d]);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -195,7 +196,20 @@ export default function ProductDetail({ product }) {
 
   // Aperçu 3D cœur ouvrable (médaillon) : 4 faces + finition (argent / bicolore) + photo.
   // Aperçu 3D automatique (gravure) — utilisé seulement s'il n'y a PAS de fichier 3D fourni.
-  const any3d = (product.engrave3d || product.engraveHeart3d) && !product.model3d;
+  const any3d = (product.engrave3d || product.engraveHeart3d || product.engraveBook3d) && !product.model3d;
+  // Médaillon livre : couverture + 3 pages intérieures.
+  const bookFaces = [
+    fieldValues["couverture"] || "",
+    fieldValues["page1"] || "",
+    fieldValues["page2"] || "",
+    fieldValues["page3"] || "",
+  ];
+  const bookTitle = (variant.title || "").toLowerCase();
+  const bookFinish = bookTitle.includes("argent") && bookTitle.includes("dor")
+    ? "bicolore"
+    : bookTitle.includes("dor")
+      ? "gold"
+      : "silver";
   // Médaillon livre : 5 faces (couverture, 3 pages, dos).
   const heartFaces = [
     fieldValues["cover"] || "",
@@ -333,7 +347,9 @@ export default function ProductDetail({ product }) {
           {any3d && isWide && (
             <>
               <div className="engrave3d-sticky">
-                {product.engraveHeart3d ? (
+                {product.engraveBook3d ? (
+                  <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                ) : product.engraveHeart3d ? (
                   <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                 ) : (
                   <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
@@ -504,7 +520,9 @@ export default function ProductDetail({ product }) {
 
               {any3d && !isWide && (
                 <div ref={big3dRef}>
-                  {product.engraveHeart3d ? (
+                  {product.engraveBook3d ? (
+                    <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  ) : product.engraveHeart3d ? (
                     <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                   ) : (
                     <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
@@ -642,7 +660,9 @@ export default function ProductDetail({ product }) {
 
       {any3d && !isWide && showMini && (
         <div className="engrave3d-mini">
-          {product.engraveHeart3d ? (
+          {product.engraveBook3d ? (
+            <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+          ) : product.engraveHeart3d ? (
             <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} height={200} showHint={false} />
           ) : (
             <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} height={200} showHint={false} />
