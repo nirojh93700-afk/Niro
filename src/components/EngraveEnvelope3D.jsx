@@ -64,23 +64,24 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
-function drawSheetFace(ctx, { text, motifVal, fontKey, baseColor, ink, bevel }) {
+function drawSheetFace(ctx, { text, motifVal, motifPos, fontKey, baseColor, ink, bevel }) {
   ctx.fillStyle = baseColor;
   ctx.fillRect(0, 0, TEXW, TEXH);
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  // Motif en haut (si présent), texte en dessous.
-  let topReserve = 0;
+  // Motif au-dessus (défaut) ou en dessous du texte.
+  const above = motifPos !== "below";
+  let topReserve = 0, botReserve = 0;
   if (motifVal) {
     const bandH = TEXH * 0.34;
-    const cy = TEXH * 0.06 + bandH / 2;
+    const cy = above ? TEXH * 0.06 + bandH / 2 : TEXH * 0.94 - bandH / 2;
     if (drawMotifInBox(ctx, motifVal, TEXW / 2, cy, TEXW * 0.42, bandH, ink, bevel)) {
-      topReserve = bandH + TEXH * 0.04;
+      if (above) topReserve = bandH + TEXH * 0.04; else botReserve = bandH + TEXH * 0.04;
     }
   }
   const boxW = TEXW * 0.82;
-  const boxTop = topReserve || TEXH * 0.14;
-  const boxH = TEXH - boxTop - TEXH * 0.1;
+  const boxTop = topReserve || TEXH * 0.12;
+  const boxH = TEXH - boxTop - (botReserve || TEXH * 0.12);
   const lay = layoutText(ctx, text, fontKey, boxW, boxH);
   if (lay) {
     ctx.font = fontSpec(fontKey, lay.size);
@@ -104,7 +105,7 @@ function faceCanvas(opts) {
 function smoothstep(p) { const x = Math.max(0, Math.min(1, p)); return x * x * (3 - 2 * x); }
 
 export default function EngraveEnvelope3D({
-  faces = [], motifs = [], finish = "gold", fontKey = "playfair", twoSided = false, height = 400, showHint = true,
+  faces = [], motifs = [], motifPositions = [], finish = "gold", fontKey = "playfair", twoSided = false, height = 400, showHint = true,
 }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]); // [recto, verso]
@@ -150,8 +151,8 @@ export default function EngraveEnvelope3D({
         color: new THREE.Color(f.metal), metalness: 1.0, roughness: 0.28,
         clearcoat: 0.95, clearcoatRoughness: 0.16, envMapIntensity: 1.35,
       });
-      const sheetFaceMat = (text, motifVal) => {
-        const map = new THREE.CanvasTexture(faceCanvas({ text: text || "", motifVal: motifVal || "", fontKey, baseColor: f.base, ink: f.ink, bevel: false }));
+      const sheetFaceMat = (text, motifVal, motifPos) => {
+        const map = new THREE.CanvasTexture(faceCanvas({ text: text || "", motifVal: motifVal || "", motifPos, fontKey, baseColor: f.base, ink: f.ink, bevel: false }));
         map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
         // Plaque peu « miroir » : on doit bien lire la gravure (la couleur du
         // métal vient du map ; emissiveMap garantit la lisibilité même à l'ombre).
@@ -196,8 +197,8 @@ export default function EngraveEnvelope3D({
 
       // --- Plaque (la « feuille ») qui sort de l'enveloppe ---
       const SW = 1.82, SHt = 1.14, ST = 0.04;
-      const recto = sheetFaceMat(faces[0], motifs[0]);
-      const verso = sheetFaceMat(faces[1], motifs[1]);
+      const recto = sheetFaceMat(faces[0], motifs[0], motifPositions[0]);
+      const verso = sheetFaceMat(faces[1], motifs[1], motifPositions[1]);
       const edge = metalMat();
       const sheet = new THREE.Mesh(
         new THREE.BoxGeometry(SW, SHt, ST),
@@ -322,13 +323,13 @@ export default function EngraveEnvelope3D({
       const mat = mats[i];
       if (!mat) return;
       const old = mat.map;
-      const map = new THREE.CanvasTexture(faceCanvas({ text: text || "", motifVal: motifs[i] || "", fontKey, baseColor: f.base, ink: f.ink, bevel: false }));
+      const map = new THREE.CanvasTexture(faceCanvas({ text: text || "", motifVal: motifs[i] || "", motifPos: motifPositions[i], fontKey, baseColor: f.base, ink: f.ink, bevel: false }));
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.needsUpdate = true;
       if (old) old.dispose();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faces, motifs, finish, fontKey, tick]);
+  }, [faces, motifs, motifPositions, finish, fontKey, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>
