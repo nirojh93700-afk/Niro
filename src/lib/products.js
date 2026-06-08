@@ -831,11 +831,20 @@ export const products = [
     weight: 90, pickup: false, letter: true, subcategory: "homme",
     title: "Collier plaque acier à graver",
     category: "bijoux", type: "Collier personnalisé",
-    tagline: "Une plaque d'acier épurée, gravée avec votre message.",
-    personalizable: true, personalizationLabel: "Texte à graver + police",
+    tagline: "Une plaque d'acier épurée, gravée avec votre texte ou votre photo.",
+    personalizable: true, personalizationLabel: "Texte (recto / verso) + photo + police",
+    // Recto inclus ; gravure du verso +5 € ; photo gravée +8 €.
+    engravingPricing: { perExtraPage: 5, includedKey: "recto", photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "note", type: "note", text: "Plaque gravable des deux côtés. La gravure du RECTO est incluse ; la gravure du VERSO est à +5 €. Vous pouvez aussi faire graver une PHOTO (+8 €). Remplissez seulement ce que vous souhaitez." },
+      { key: "recto", label: "Texte à graver — recto (inclus)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
+      { key: "verso", label: "Texte à graver — verso (+5 €)", placeholder: "Visible au dos de la plaque", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "photo", type: "photo", label: "Photo à graver (+8 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+8 €). Choisissez une photo nette, bien éclairée et contrastée pour un beau rendu." },
+      { key: "photoFace", type: "select", label: "Photo gravée sur quelle face ?", requiresField: "photo", optional: true,
+        options: [{ value: "recto", label: "Recto (devant)" }, { value: "verso", label: "Verso (derrière)" }] },
+      { key: "textPos", type: "select", label: "Texte placé par rapport à la photo", requiresField: "photo", optional: true,
+        options: [{ value: "above", label: "Au-dessus de la photo" }, { value: "below", label: "En dessous de la photo" }] },
     ],
     images: [
       "/produits/collier_plaque_a_graver_acier_noir.jpg",
@@ -851,7 +860,8 @@ export const products = [
       { id: "plaque-dore", title: "Doré", price: 33.90 },
       { id: "plaque-noir", title: "Noir", price: 30.90 },
     ],
-    descriptionHtml: `<p>Collier à <strong>plaque rectangulaire</strong> en acier inoxydable, surface lisse gravable. Style épuré et contemporain.</p>`,
+    descriptionHtml: `<p>Collier à <strong>plaque rectangulaire</strong> en acier inoxydable, surface lisse gravable des deux côtés. Style épuré et contemporain.</p>
+<p>Personnalisez le <strong>recto</strong> (inclus), ajoutez une gravure au <strong>verso</strong> (+5 €) et même une <strong>photo gravée</strong> (+8 €).</p>`,
   },
   {
     slug: "collier-medaillon-livre",
