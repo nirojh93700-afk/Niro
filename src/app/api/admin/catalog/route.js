@@ -4,7 +4,10 @@ import {
   saveCustomProduct,
   deleteCustomProduct,
   clearAllPriceOverrides,
+  saveProductEditAtomic,
+  getCustomProducts,
 } from "@/lib/stock";
+import { products as baseProducts } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
@@ -42,7 +45,26 @@ export async function POST(req) {
   if (action === "edit") {
     const { slug, patch } = body;
     if (!slug || !patch) return Response.json({ error: "Paramètres manquants." }, { status: 400 });
-    const saved = await setProductOverride(slug, patch);
+    // La remise en % est gérée à part (prix promo des variantes), pas stockée
+    // dans l'override.
+    const { discountPct, ...overridePatch } = patch;
+    let promoUpdates = null;
+    if (discountPct !== undefined && discountPct !== "") {
+      const pct = Math.max(0, Math.min(90, Number(discountPct) || 0));
+      // Liste des variantes (produit du code, ou produit ajouté à la main),
+      // avec les prix qui viennent d'être saisis (patch.prices) en priorité.
+      const custom = (await getCustomProducts()).find((p) => p.slug === slug);
+      const baseVariants = (baseProducts.find((p) => p.slug === slug) || custom)?.variants || [];
+      const prices = overridePatch.prices || {};
+      promoUpdates = baseVariants.map((v) => {
+        const price = typeof prices[v.id] === "number" ? prices[v.id] : v.price;
+        return {
+          variantId: v.id,
+          salePrice: pct > 0 ? Math.round(price * (1 - pct / 100) * 100) / 100 : null,
+        };
+      });
+    }
+    const saved = await saveProductEditAtomic(slug, overridePatch, promoUpdates);
     return Response.json({ ok: true, override: saved });
   }
 

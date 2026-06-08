@@ -194,6 +194,32 @@ export async function setProductOverride(slug, patch) {
   return data.overrides[slug] || {};
 }
 
+// Enregistre en UNE seule écriture : les modifications produit (override) ET
+// les prix promo des variantes. Évite que deux écritures successives sur le
+// même stockage (cohérence différée) ne s'écrasent l'une l'autre.
+export async function saveProductEditAtomic(slug, overridePatch, promoUpdates) {
+  const data = await getCatalogRaw();
+  // 1) Override produit (nom, prix, etc.)
+  data.overrides = data.overrides || {};
+  const cur = data.overrides[slug] || {};
+  const next = { ...cur, ...overridePatch };
+  Object.keys(next).forEach((k) => {
+    if (next[k] === "" || next[k] === null || next[k] === undefined) delete next[k];
+  });
+  if (Object.keys(next).length === 0) delete data.overrides[slug];
+  else data.overrides[slug] = next;
+  // 2) Prix promo des variantes (remise en %)
+  if (Array.isArray(promoUpdates)) {
+    data.promos = data.promos || {};
+    for (const u of promoUpdates) {
+      if (typeof u.salePrice === "number") data.promos[u.variantId] = u.salePrice;
+      else delete data.promos[u.variantId];
+    }
+  }
+  await persistCatalog(data);
+  return data.overrides[slug] || {};
+}
+
 // Efface TOUS les prix enregistrés à la main (overrides) en une seule écriture,
 // pour revenir aux prix du catalogue (code). Évite les écritures multiples qui
 // se chevauchent sur le stockage Netlify (cohérence différée).

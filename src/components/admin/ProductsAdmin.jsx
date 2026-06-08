@@ -135,6 +135,13 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
   const [prices, setPrices] = useState(
     Object.fromEntries((product.variants || []).map((v) => [v.id, v.price]))
   );
+  // Remise en % (calculée depuis le prix promo actuel de la 1re variante).
+  const firstPrice = product.variants?.[0]?.price || 0;
+  const initialPct =
+    product.salePrice && firstPrice && product.salePrice < firstPrice
+      ? Math.round((1 - product.salePrice / firstPrice) * 100)
+      : 0;
+  const [discountPct, setDiscountPct] = useState(initialPct);
   // Photos du produit : on part des photos personnalisées si elles existent, sinon des photos d'origine.
   const [imgs, setImgs] = useState(
     product.overrideImages?.length ? product.overrideImages : (product.images || [])
@@ -192,6 +199,14 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
           </div>
         ))}
       </div>
+      <label className="admin-field">Remise (%) sur ce produit
+        <input type="number" min="0" max="90" step="1" value={discountPct}
+          onChange={(e) => setDiscountPct(e.target.value === "" ? "" : Number(e.target.value))} />
+        <span style={{ fontSize: "0.78rem", color: "var(--ink-soft)", fontWeight: 400 }}>
+          0 = aucune remise. La remise s'applique à toutes les variantes et se recalcule
+          automatiquement si tu changes le prix. Le prix barré reste le prix ci-dessus.
+        </span>
+      </label>
       <div>
         <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>Photos {imgSaved ? "✓" : ""}</span>
         <div className="photo-thumbs">
@@ -252,6 +267,7 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
           name, tagline, category, hidden,
           descriptionHtml: desc,
           prices: Object.fromEntries(Object.entries(prices).filter(([, v]) => typeof v === "number")),
+          discountPct: discountPct === "" ? 0 : discountPct,
         })}>Enregistrer</button>
         {onDelete && <button className="btn btn-outline" onClick={onDelete} style={{ color: "#b4452f" }}>Supprimer</button>}
       </div>

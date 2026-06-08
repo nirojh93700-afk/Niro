@@ -28,7 +28,7 @@ export default function ProductCard({ product }) {
     <Link href={`/produit/${product.slug}`} className="product-card">
       <div className="product-thumb" style={{ position: "relative" }}>
         <span className="product-chip">{product.type}</span>
-        {hasPromo && <span className="promo-badge">Promo</span>}
+        {hasPromo && <span className="promo-badge">-{Math.round((1 - sale / basePrice) * 100)}%</span>}
         {hasCompare && <span className="promo-badge">-{comparePct}%</span>}
         <WishlistButton slug={product.slug} name={product.name} image={image} price={hasPromo ? sale : basePrice} />
         {image ? (
