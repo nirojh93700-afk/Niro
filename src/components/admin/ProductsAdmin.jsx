@@ -41,9 +41,27 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
       </p>
       {msg && <div className="notice">{msg}</div>}
 
-      <button className="btn btn-gold" style={{ marginBottom: 18 }} onClick={() => setShowAdd((s) => !s)}>
-        {showAdd ? "Fermer" : "+ Ajouter un produit"}
-      </button>
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 18 }}>
+        <button className="btn btn-gold" onClick={() => setShowAdd((s) => !s)}>
+          {showAdd ? "Fermer" : "+ Ajouter un produit"}
+        </button>
+        <button
+          className="btn btn-outline"
+          onClick={async () => {
+            if (!confirm("Remettre les prix du catalogue ? Cela efface tous les prix modifiés à la main dans l'admin et applique les prix du site.")) return;
+            const res = await fetch("/api/admin/catalog", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+              body: JSON.stringify({ action: "resetPrices" }),
+            });
+            const data = await res.json().catch(() => ({}));
+            setMsg(res.ok ? `Prix du catalogue rétablis ✓ (${data.count || 0} produit${(data.count || 0) > 1 ? "s" : ""})` : "Échec.");
+            if (res.ok) onReload();
+          }}
+        >
+          Remettre les prix du catalogue
+        </button>
+      </div>
 
       {showAdd && (
         <AddProduct

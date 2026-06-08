@@ -3,6 +3,7 @@ import {
   setProductOverride,
   saveCustomProduct,
   deleteCustomProduct,
+  getProductOverrides,
 } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +30,20 @@ export async function POST(req) {
     return Response.json({ error: "Requête invalide." }, { status: 400 });
   }
   const action = body?.action;
+
+  // --- Réinitialiser les prix : efface tous les prix enregistrés dans l'admin
+  // pour revenir aux prix du catalogue (code). ---
+  if (action === "resetPrices") {
+    const overrides = await getProductOverrides();
+    let count = 0;
+    for (const [slug, ov] of Object.entries(overrides)) {
+      if (ov && ov.prices) {
+        await setProductOverride(slug, { prices: null });
+        count += 1;
+      }
+    }
+    return Response.json({ ok: true, count });
+  }
 
   // --- Modifier un produit existant (override) ---
   if (action === "edit") {
