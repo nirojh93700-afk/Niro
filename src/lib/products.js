@@ -831,6 +831,7 @@ export const products = [
     weight: 90, pickup: false, letter: true, subcategory: "homme",
     title: "Collier plaque acier à graver",
     category: "bijoux", type: "Collier personnalisé",
+    engravePlate3d: true, // aperçu 3D : plaque recto/verso avec texte + photo
     tagline: "Une plaque d'acier épurée, gravée avec votre texte ou votre photo.",
     personalizable: true, personalizationLabel: "Texte (recto / verso) + photo + police",
     // Recto inclus ; gravure du verso +5 € ; photo gravée +8 €.
