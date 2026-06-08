@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { drawMotifInBox, preloadMotifs } from "@/lib/motifCanvas";
 
 // Aperçu 3D du médaillon LIVRE qui s'ouvre (forme rectangulaire).
 // Feuillets reliés à gauche par une charnière dorée ; on tourne les pages une
@@ -62,14 +63,23 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
-function drawPageFace(ctx, { text, fontKey, baseColor, ink, bevel }) {
+function drawPageFace(ctx, { text, motifVal, fontKey, baseColor, ink, bevel }) {
   ctx.fillStyle = baseColor;
   ctx.fillRect(0, 0, TEXW, TEXH);
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
+  // Motif en haut (si présent), texte en dessous.
+  let topReserve = 0;
+  if (motifVal) {
+    const bandH = TEXH * 0.26;
+    const cy = TEXH * 0.05 + bandH / 2;
+    if (drawMotifInBox(ctx, motifVal, TEXW / 2, cy, TEXW * 0.66, bandH, ink, bevel)) {
+      topReserve = bandH + TEXH * 0.05;
+    }
+  }
   const boxW = TEXW * 0.74;
-  const boxTop = TEXH * 0.14;
-  const boxH = TEXH * 0.72;
+  const boxTop = topReserve || TEXH * 0.14;
+  const boxH = TEXH - boxTop - TEXH * 0.1;
   const lay = layoutText(ctx, text, fontKey, boxW, boxH);
   if (lay) {
     ctx.font = fontSpec(fontKey, lay.size);
@@ -93,7 +103,7 @@ function faceCanvas(opts) {
 function smoothstep(p) { const x = Math.max(0, Math.min(1, p)); return x * x * (3 - 2 * x); }
 
 export default function EngraveBook3D({
-  faces = [], finish = "silver", fontKey = "playfair", height = 400, showHint = true,
+  faces = [], motifs = [], finish = "silver", fontKey = "playfair", height = 400, showHint = true,
 }) {
   const mountRef = useRef(null);
   const matsRef = useRef([]);
@@ -178,7 +188,7 @@ export default function EngraveBook3D({
       const faceMat = (idx) => {
         const fc = FINISH[colors[idx]] || FINISH.silver;
         const map = new THREE.CanvasTexture(faceCanvas({
-          text: faces[idx] || "", fontKey, baseColor: fc.base, ink: fc.ink, bevel: true,
+          text: faces[idx] || "", motifVal: motifs[idx] || "", fontKey, baseColor: fc.base, ink: fc.ink, bevel: true,
         }));
         map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -308,7 +318,12 @@ export default function EngraveBook3D({
     }
   }, []);
 
-  // Mise à jour des faces (textes / finition / police).
+  // Précharge les images de motifs ; rafraîchit une fois chargées.
+  useEffect(() => {
+    preloadMotifs(motifs, () => setTick((t) => t + 1));
+  }, [motifs]);
+
+  // Mise à jour des faces (textes / motifs / finition / police).
   useEffect(() => {
     const ctx = threeRef.current;
     const mats = matsRef.current;
@@ -322,14 +337,14 @@ export default function EngraveBook3D({
       const fc = FINISH[colors[i]] || FINISH.silver;
       const old = mat.map;
       const map = new THREE.CanvasTexture(faceCanvas({
-        text: faces[i] || "", fontKey, baseColor: fc.base, ink: fc.ink, bevel: true,
+        text: faces[i] || "", motifVal: motifs[i] || "", fontKey, baseColor: fc.base, ink: fc.ink, bevel: true,
       }));
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.needsUpdate = true;
       if (old) old.dispose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faces, finish, fontKey, tick]);
+  }, [faces, motifs, finish, fontKey, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>

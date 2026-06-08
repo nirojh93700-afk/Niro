@@ -9,6 +9,7 @@ export const MOTIFS = [
   { value: "etoile", label: "Étoile", kind: "glyph", char: "★", thumb: "/motifs/etoile.svg" },
   { value: "infini", label: "Infini", kind: "glyph", char: "∞", thumb: "/motifs/infini.svg" },
   { value: "lune", label: "Lune", kind: "glyph", char: "☾", thumb: "/motifs/lune.svg" },
+  { value: "soleil", label: "Soleil", kind: "glyph", char: "☀", thumb: "/motifs/soleil.svg" },
 ];
 
 export function motifThumb(m) {

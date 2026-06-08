@@ -61,7 +61,9 @@ export const products = [
     subcategory: "femme", // sous-catégorie bijoux
     personalizationFields: [
       { key: "recto", label: "Texte à graver — recto", placeholder: "Ex : Je t'aime — 12.06.2024", maxLength: 40 },
+      { key: "motif1", type: "motif", label: "Motif — recto", optional: true },
       { key: "verso", label: "Texte à graver — verso", placeholder: "Visible au dos de la plaque", maxLength: 40, optional: true, variantContains: "Recto-Verso" },
+      { key: "motif2", type: "motif", label: "Motif — verso", optional: true, variantContains: "Recto-Verso" },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Collier Enveloppe Message Secret personnalisable",
@@ -860,9 +862,13 @@ export const products = [
     personalizable: true, personalizationLabel: "Gravure couverture + 3 pages + police",
     personalizationFields: [
       { key: "couverture", label: "Gravure — couverture (face)", maxLength: 30, optional: true },
+      { key: "motif1", type: "motif", label: "Motif — couverture", optional: true },
       { key: "page1", label: "Gravure — page 1 (intérieur)", maxLength: 30, optional: true },
+      { key: "motif2", type: "motif", label: "Motif — page 1", optional: true },
       { key: "page2", label: "Gravure — page 2 (intérieur)", maxLength: 30, optional: true },
+      { key: "motif3", type: "motif", label: "Motif — page 2", optional: true },
       { key: "page3", label: "Gravure — page 3 (intérieur)", maxLength: 30, optional: true },
+      { key: "motif4", type: "motif", label: "Motif — page 3", optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [

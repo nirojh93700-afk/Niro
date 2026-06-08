@@ -358,9 +358,9 @@ export default function ProductDetail({ product }) {
             <>
               <div className="engrave3d-sticky">
                 {product.engraveEnvelope3d ? (
-                  <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  <EngraveEnvelope3D faces={envFaces} motifs={motifVals} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveBook3d ? (
-                  <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  <EngraveBook3D faces={bookFaces} motifs={motifVals} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveHeart3d ? (
                   <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                 ) : (
@@ -533,9 +533,9 @@ export default function ProductDetail({ product }) {
               {any3d && !isWide && (
                 <div ref={big3dRef}>
                   {product.engraveEnvelope3d ? (
-                    <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                    <EngraveEnvelope3D faces={envFaces} motifs={motifVals} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveBook3d ? (
-                    <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                    <EngraveBook3D faces={bookFaces} motifs={motifVals} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveHeart3d ? (
                     <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                   ) : (
@@ -675,9 +675,9 @@ export default function ProductDetail({ product }) {
       {any3d && !isWide && showMini && (
         <div className="engrave3d-mini">
           {product.engraveEnvelope3d ? (
-            <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+            <EngraveEnvelope3D faces={envFaces} motifs={motifVals} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveBook3d ? (
-            <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+            <EngraveBook3D faces={bookFaces} motifs={motifVals} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveHeart3d ? (
             <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} height={200} showHint={false} />
           ) : (
