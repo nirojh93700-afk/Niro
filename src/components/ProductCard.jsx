@@ -20,6 +20,7 @@ export default function ProductCard({ product }) {
   // Prix barré "permanent" défini sur la 1re variante (barré + prix de vente, deux prix ronds).
   const compareAt = product.variants[0].compareAt;
   const hasCompare = !hasPromo && typeof compareAt === "number" && compareAt > basePrice;
+  const comparePct = hasCompare ? Math.round((1 - basePrice / compareAt) * 100) : 0;
   // Prix barré arrondi en ,90 — uniquement pour les bijoux.
   const old90 = (x) => (product.category === "bijoux" ? roundTo90(x) : x);
 
@@ -28,6 +29,7 @@ export default function ProductCard({ product }) {
       <div className="product-thumb" style={{ position: "relative" }}>
         <span className="product-chip">{product.type}</span>
         {hasPromo && <span className="promo-badge">Promo</span>}
+        {hasCompare && <span className="promo-badge">-{comparePct}%</span>}
         <WishlistButton slug={product.slug} name={product.name} image={image} price={hasPromo ? sale : basePrice} />
         {image ? (
           <Image
