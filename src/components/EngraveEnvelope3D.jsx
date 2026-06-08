@@ -141,11 +141,13 @@ export default function EngraveEnvelope3D({
         clearcoat: 0.95, clearcoatRoughness: 0.16, envMapIntensity: 1.35,
       });
       const sheetFaceMat = (text) => {
-        const map = new THREE.CanvasTexture(faceCanvas({ text: text || "", fontKey, baseColor: f.base, ink: f.ink, bevel: true }));
+        const map = new THREE.CanvasTexture(faceCanvas({ text: text || "", fontKey, baseColor: f.base, ink: f.ink, bevel: false }));
         map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
+        // Plaque peu « miroir » : on doit bien lire la gravure (la couleur du
+        // métal vient du map ; emissiveMap garantit la lisibilité même à l'ombre).
         return new THREE.MeshPhysicalMaterial({
-          map, color: 0xffffff, metalness: 1.0, roughness: 0.32,
-          clearcoat: 0.8, clearcoatRoughness: 0.22, envMapIntensity: 1.2,
+          map, emissiveMap: map, emissive: new THREE.Color(0x4a4a4a),
+          color: 0xffffff, metalness: 0.35, roughness: 0.55, envMapIntensity: 0.6,
         });
       };
 
@@ -197,8 +199,10 @@ export default function EngraveEnvelope3D({
       sheetPivot.position.set(0, 0, 0); // démarre cachée dans l'enveloppe
       scene.add(sheetPivot);
 
-      const Y_DOWN = 0;
-      const Y_UP = EH / 2 + SHt * 0.45;
+      // La plaque part du dedans (cachée, z=0) puis vient EN AVANT et un peu en
+      // haut, bien visible face à la caméra.
+      const Y_DOWN = 0, Z_DOWN = 0;
+      const Y_UP = 0.5, Z_UP = 0.55;
 
       // --- Bélière + chaîne ---
       const topY = EH / 2;
@@ -235,23 +239,22 @@ export default function EngraveEnvelope3D({
       let raf;
       const animate = () => {
         const tt = (clock.getElapsedTime() % PERIOD) / PERIOD;
-        let y, rotY;
-        if (tt < 0.26) {                 // montée
-          const p = smoothstep(tt / 0.26);
-          y = Y_DOWN + (Y_UP - Y_DOWN) * p; rotY = 0;
+        let p2, rotY;
+        if (tt < 0.26) {                 // sortie (vers l'avant + un peu en haut)
+          p2 = smoothstep(tt / 0.26); rotY = 0;
         } else if (tt < 0.44) {          // recto visible
-          y = Y_UP; rotY = 0;
+          p2 = 1; rotY = 0;
         } else if (tt < 0.60) {          // retournement (si recto-verso)
-          y = Y_UP; rotY = twoSided ? Math.PI * smoothstep((tt - 0.44) / 0.16) : 0;
+          p2 = 1; rotY = twoSided ? Math.PI * smoothstep((tt - 0.44) / 0.16) : 0;
         } else if (tt < 0.76) {          // verso visible
-          y = Y_UP; rotY = twoSided ? Math.PI : 0;
+          p2 = 1; rotY = twoSided ? Math.PI : 0;
         } else if (tt < 0.86) {          // retour face recto
-          y = Y_UP; rotY = twoSided ? Math.PI * (1 - smoothstep((tt - 0.76) / 0.10)) : 0;
-        } else {                          // descente
-          const p = smoothstep((tt - 0.86) / 0.14);
-          y = Y_UP + (Y_DOWN - Y_UP) * p; rotY = 0;
+          p2 = 1; rotY = twoSided ? Math.PI * (1 - smoothstep((tt - 0.76) / 0.10)) : 0;
+        } else {                          // rentre dans l'enveloppe
+          p2 = 1 - smoothstep((tt - 0.86) / 0.14); rotY = 0;
         }
-        sheetPivot.position.y = y;
+        sheetPivot.position.y = Y_DOWN + (Y_UP - Y_DOWN) * p2;
+        sheetPivot.position.z = Z_DOWN + (Z_UP - Z_DOWN) * p2;
         sheetPivot.rotation.y = rotY;
         controls.update();
         renderer.render(scene, camera);
