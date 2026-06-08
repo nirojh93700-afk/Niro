@@ -3,7 +3,7 @@ import {
   setProductOverride,
   saveCustomProduct,
   deleteCustomProduct,
-  getProductOverrides,
+  clearAllPriceOverrides,
 } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
@@ -34,14 +34,7 @@ export async function POST(req) {
   // --- Réinitialiser les prix : efface tous les prix enregistrés dans l'admin
   // pour revenir aux prix du catalogue (code). ---
   if (action === "resetPrices") {
-    const overrides = await getProductOverrides();
-    let count = 0;
-    for (const [slug, ov] of Object.entries(overrides)) {
-      if (ov && ov.prices) {
-        await setProductOverride(slug, { prices: null });
-        count += 1;
-      }
-    }
+    const count = await clearAllPriceOverrides();
     return Response.json({ ok: true, count });
   }
 

@@ -194,6 +194,25 @@ export async function setProductOverride(slug, patch) {
   return data.overrides[slug] || {};
 }
 
+// Efface TOUS les prix enregistrés à la main (overrides) en une seule écriture,
+// pour revenir aux prix du catalogue (code). Évite les écritures multiples qui
+// se chevauchent sur le stockage Netlify (cohérence différée).
+export async function clearAllPriceOverrides() {
+  const data = await getCatalogRaw();
+  const overrides = data.overrides || {};
+  let count = 0;
+  for (const slug of Object.keys(overrides)) {
+    if (overrides[slug] && overrides[slug].prices) {
+      delete overrides[slug].prices;
+      count += 1;
+      if (Object.keys(overrides[slug]).length === 0) delete overrides[slug];
+    }
+  }
+  data.overrides = overrides;
+  await persistCatalog(data);
+  return count;
+}
+
 // --- Produits créés depuis l'admin (nouveaux produits) ---------------------
 export async function getCustomProducts() {
   const data = await getCatalogRaw();
