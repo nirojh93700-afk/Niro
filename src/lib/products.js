@@ -115,7 +115,7 @@ export const products = [
     // Couverture (texte) incluse, +5 €/page de texte, photo +8 €.
     engravingPricing: { perExtraPage: 5, includedKey: "cover", photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +5 €. Remplissez seulement les faces souhaitées, les autres restent vierges. Astuce : les polices manuscrites ou en gras prennent plus de place — avec ces styles, prévoyez un texte plus court (15 caractères, c'est environ un prénom + une date)." },
+      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +5 €. Remplissez seulement les faces souhaitées, les autres restent vierges." },
       { key: "cover", label: "Gravure — Couverture (texte inclus)", placeholder: "Prénom, mot court…", maxLength: 15 },
       { key: "page1", label: "Gravure — Page 1 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "page2", label: "Gravure — Page 2 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
