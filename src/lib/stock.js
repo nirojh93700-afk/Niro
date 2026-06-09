@@ -425,7 +425,7 @@ export async function getSettings() {
     refMarkup: Number(s.refMarkup) || 0,
     // Fenêtre de bienvenue (pop-up inscription + code promo).
     welcome: {
-      enabled: s.welcome?.enabled === true,
+      enabled: s.welcome?.enabled !== false, // active par défaut (sauf si explicitement décochée)
       code: (typeof s.welcome?.code === "string" && s.welcome.code.trim()) ? s.welcome.code.trim() : "BIENVENUE10",
       text: (typeof s.welcome?.text === "string" && s.welcome.text.trim()) ? s.welcome.text.trim() : "−10 % sur votre première commande",
     },

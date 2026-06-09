@@ -147,10 +147,8 @@ export default async function RootLayout({ children }) {
 
   // Accès admin : un cookie correspondant au code d'accès débloque tout
   // (mode privé ET maintenance) — c'est ce qui te permet d'accéder à /gestion.
-  // VERROU TEMPORAIRE (demandé par l'utilisatrice) : le site reste PRIVÉ tant que
-  // FORCE_PRIVATE = true, même si le réglage admin dit "public". Pour OUVRIR le
-  // site au public, mettre FORCE_PRIVATE = false.
-  const FORCE_PRIVATE = true;
+  // Verrou retiré : le site suit le réglage admin (en ligne / privé).
+  const FORCE_PRIVATE = false;
   // L'admin (/gestion) n'est PAS soumis au code du site : il a déjà son propre
   // mot de passe. Le code du site ne protège que la boutique publique.
   const pathname = headers().get("x-pathname") || "";
