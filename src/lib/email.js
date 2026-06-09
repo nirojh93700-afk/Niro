@@ -69,6 +69,24 @@ export async function sendEmail({ to, subject, html, replyTo }) {
   return { ok: true };
 }
 
+// E-mail de bienvenue (newsletter) avec le code promo, envoyé automatiquement
+// dès l'inscription via la fenêtre d'arrivée.
+export function welcomeEmail(code, offerText) {
+  const offer = (offerText && offerText.trim()) || "Profitez d'une remise sur votre première commande";
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour,</p>
+    <p style="margin:0 0 16px;">Merci de rejoindre <strong>Niv Création</strong> ! 💌 Voici votre <strong>code de bienvenue</strong> :</p>
+    <div style="text-align:center;margin:0 0 8px;">
+      <div style="display:inline-block;font-size:22px;font-weight:bold;letter-spacing:3px;color:${BRAND.gold};background:${BRAND.cream};border:1px dashed #dcc88f;border-radius:10px;padding:14px 26px;">${escapeHtml(code)}</div>
+    </div>
+    <p style="margin:0 0 20px;text-align:center;color:#7a7268;">${escapeHtml(offer)} — à entrer au moment du paiement.</p>
+    <p style="margin:0 0 22px;text-align:center;">
+      <a href="${BRAND.siteUrl}/boutique" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Découvrir la boutique</a>
+    </p>
+    <p style="margin:0;color:#7a7268;">À très vite,<br><strong>L'atelier Niv Création</strong></p>`;
+  return { subject: `Votre code de bienvenue : ${code} ✦`, html: emailLayout({ heading: "Bienvenue chez Niv Création", bodyHtml: body }) };
+}
+
 // E-mail « commande expédiée » avec numéro de suivi, envoyé à la cliente.
 export function shippedEmail(order, tracking) {
   const ref = order?.ref || order?.id?.slice(-6) || "";
