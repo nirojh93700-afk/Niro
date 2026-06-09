@@ -183,6 +183,7 @@ export const products = [
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
     type: "Bracelet personnalisé",
+    engraveGourmette3d: true, // aperçu 3D : plaque gravée sur chaîne gourmette
     tagline: "Gourmette à maillons cubains, plaque gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police souhaitée",
