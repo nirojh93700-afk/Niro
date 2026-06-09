@@ -19,14 +19,14 @@ export async function POST(req) {
   if (body?.type === "percent" && value > 90) {
     return Response.json({ error: "Le pourcentage doit être ≤ 90." }, { status: 400 });
   }
-  await setPromoCode(code, { type: body?.type, value });
-  return Response.json({ ok: true, codes: await getPromoCodes() });
+  const codes = await setPromoCode(code, { type: body?.type, value });
+  return Response.json({ ok: true, codes });
 }
 
 export async function DELETE(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
-  await deletePromoCode(body?.code);
-  return Response.json({ ok: true, codes: await getPromoCodes() });
+  const codes = await deletePromoCode(body?.code);
+  return Response.json({ ok: true, codes });
 }

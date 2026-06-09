@@ -314,7 +314,7 @@ export async function setPromoCode(code, def) {
     value: Math.max(0, Number(def?.value) || 0),
   };
   await persistCatalog(data);
-  return true;
+  return data.promoCodes; // version à jour (évite une relecture parfois en retard)
 }
 // Suivi des utilisations d'un code (une seule fois par visiteuse : IP + e-mail).
 export async function getCodeUsage() {
@@ -342,11 +342,10 @@ export async function recordCodeUsage(code, { ip, email } = {}) {
 
 export async function deletePromoCode(code) {
   const data = await getCatalogRaw();
-  if (data.promoCodes) {
-    delete data.promoCodes[String(code || "").trim().toUpperCase()];
-    await persistCatalog(data);
-  }
-  return true;
+  data.promoCodes = data.promoCodes || {};
+  delete data.promoCodes[String(code || "").trim().toUpperCase()];
+  await persistCatalog(data);
+  return data.promoCodes; // version à jour
 }
 
 // --- Avis clients ----------------------------------------------------------
