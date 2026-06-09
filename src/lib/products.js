@@ -112,17 +112,17 @@ export const products = [
     letter: true,
     subcategory: "femme",
     engraveHeart3d: true, // ← aperçu 3D cœur éventail (8 faces)
-    // Couverture (texte) incluse, +3 €/page de texte, photo +5 €.
-    engravingPricing: { perExtraPage: 3, includedKey: "cover", photoKey: "photo", photoSurcharge: 5 },
+    // Couverture (texte) incluse, +5 €/page de texte, photo +8 €.
+    engravingPricing: { perExtraPage: 5, includedKey: "cover", photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +3 €. Remplissez seulement les faces souhaitées, les autres restent vierges. Astuce : les polices manuscrites ou en gras prennent plus de place — avec ces styles, prévoyez un texte plus court (15 caractères, c'est environ un prénom + une date)." },
+      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +5 €. Remplissez seulement les faces souhaitées, les autres restent vierges. Astuce : les polices manuscrites ou en gras prennent plus de place — avec ces styles, prévoyez un texte plus court (15 caractères, c'est environ un prénom + une date)." },
       { key: "cover", label: "Gravure — Couverture (texte inclus)", placeholder: "Prénom, mot court…", maxLength: 15 },
-      { key: "page1", label: "Gravure — Page 1 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page2", label: "Gravure — Page 2 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page3", label: "Gravure — Page 3 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "backcover", label: "Gravure — Dos (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "page1", label: "Gravure — Page 1 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "page2", label: "Gravure — Page 2 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "page3", label: "Gravure — Page 3 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "backcover", label: "Gravure — Dos (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "photo", type: "photo", label: "Photo à graver (+5 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+5 €). Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
+      { key: "photo", type: "photo", label: "Photo à graver (+8 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+8 €). Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
       { key: "photoPage", type: "select", label: "Sur quelle page graver la photo ?", requiresField: "photo",
         options: [
           { value: "cover", label: "Couverture" },
@@ -155,10 +155,10 @@ export const products = [
 <h3>Un médaillon, 5 faces</h3>
 <ul>
 <li><strong>Couverture</strong> — gravure de texte incluse</li>
-<li><strong>Pages 1 à 3</strong> — gravure de texte à +3 € par page</li>
-<li><strong>Dos</strong> — gravure de texte à +3 €</li>
+<li><strong>Pages 1 à 3</strong> — gravure de texte à +5 € par page</li>
+<li><strong>Dos</strong> — gravure de texte à +5 €</li>
 </ul>
-<p>Sur chaque face : un texte court, ou une <strong>photo gravée (+5 €)</strong> que vous placez sur la page de votre choix (cette page ne porte alors pas de texte).</p>
+<p>Sur chaque face : un texte court, ou une <strong>photo gravée (+8 €)</strong> que vous placez sur la page de votre choix (cette page ne porte alors pas de texte).</p>
 <h3>Spécifications</h3>
 <ul>
 <li><strong>Chaîne :</strong> 50 cm — <strong>Poids :</strong> ~14 g</li>
@@ -867,7 +867,7 @@ export const products = [
     title: "Collier médaillon livre à graver",
     category: "bijoux", type: "Collier personnalisé",
     engraveBook3d: true, // aperçu 3D : médaillon livre qui s'ouvre (couverture + 3 pages)
-    // Couverture incluse ; chaque page intérieure : +3 € (texte) ou +5 € (avec motif).
+    // Couverture incluse ; chaque page intérieure gravée : +5 € (texte ou motif).
     engravingPricing: {
       includedKey: "couverture",
       pages: [
@@ -875,27 +875,27 @@ export const products = [
         { textKey: "page2", motifKey: "motif3" },
         { textKey: "page3", motifKey: "motif4" },
       ],
-      pageText: 3,
+      pageText: 5,
       pageMotif: 5,
     },
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
     personalizable: true, personalizationLabel: "Couverture + 3 pages : texte, motif et police",
     personalizationFields: [
-      { key: "note", type: "note", text: "La couverture est incluse. Chaque page intérieure gravée : +3 € (texte seul) ou +5 € (si vous y ajoutez un motif). Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
+      { key: "note", type: "note", text: "La couverture est incluse. Chaque page intérieure gravée : +5 € (texte ou motif). Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
       { key: "couverture", label: "Gravure — couverture (incluse)", maxLength: 30, optional: true },
       { key: "motif1", type: "motif", label: "Motif — couverture", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Couverture — position du motif", optional: true, requiresField: "motif1",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
-      { key: "page1", label: "Gravure — page 1 (+3 €)", maxLength: 30, optional: true },
-      { key: "motif2", type: "motif", label: "Motif — page 1 (la page passe à +5 €)", optional: true, options: MOTIF_OPTIONS },
+      { key: "page1", label: "Gravure — page 1 (+5 €)", maxLength: 30, optional: true },
+      { key: "motif2", type: "motif", label: "Motif — page 1", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos2", type: "select", label: "Page 1 — position du motif", optional: true, requiresField: "motif2",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
-      { key: "page2", label: "Gravure — page 2 (+3 €)", maxLength: 30, optional: true },
-      { key: "motif3", type: "motif", label: "Motif — page 2 (la page passe à +5 €)", optional: true, options: MOTIF_OPTIONS },
+      { key: "page2", label: "Gravure — page 2 (+5 €)", maxLength: 30, optional: true },
+      { key: "motif3", type: "motif", label: "Motif — page 2", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos3", type: "select", label: "Page 2 — position du motif", optional: true, requiresField: "motif3",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
-      { key: "page3", label: "Gravure — page 3 (+3 €)", maxLength: 30, optional: true },
-      { key: "motif4", type: "motif", label: "Motif — page 3 (la page passe à +5 €)", optional: true, options: MOTIF_OPTIONS },
+      { key: "page3", label: "Gravure — page 3 (+5 €)", maxLength: 30, optional: true },
+      { key: "motif4", type: "motif", label: "Motif — page 3", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos4", type: "select", label: "Page 3 — position du motif", optional: true, requiresField: "motif4",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
