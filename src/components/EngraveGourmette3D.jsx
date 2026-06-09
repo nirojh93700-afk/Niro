@@ -145,7 +145,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
       const bb = faceGeo.boundingBox;
       const pos = faceGeo.attributes.position, uv = faceGeo.attributes.uv;
       for (let i = 0; i < pos.count; i++) {
-        uv.setXY(i, (pos.getX(i) - bb.min.x) / (bb.max.x - bb.min.x), 1 - (pos.getY(i) - bb.min.y) / (bb.max.y - bb.min.y));
+        uv.setXY(i, (pos.getX(i) - bb.min.x) / (bb.max.x - bb.min.x), (pos.getY(i) - bb.min.y) / (bb.max.y - bb.min.y));
       }
       uv.needsUpdate = true;
       const map = new THREE.CanvasTexture(plateCanvas(text, fontKey));
