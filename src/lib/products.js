@@ -786,29 +786,6 @@ export const products = [
     variants: [{ id: "double-anneau-argente", title: "Argenté", price: 30.90 }],
     descriptionHtml: `<p>Bracelet homme moderne à <strong>double anneau</strong> en acier inoxydable, plaque gravable au laser.</p>`,
   },
-  {
-    slug: "bracelet-homme-rond-retro",
-    name: "Bracelet Homme Rond Rétro",
-    weight: 100, pickup: false, letter: true, subcategory: "homme",
-    title: "Bracelet homme rond rétro acier à graver",
-    category: "bijoux", type: "Bracelet personnalisé",
-    tagline: "Un médaillon rond rétro en acier, à graver.",
-    personalizable: true, personalizationLabel: "Texte à graver + police",
-    personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
-    ],
-    images: [
-      "/produits/bracelet_homme_rond_retro_a_grave_argente.jpg",
-      "/produits/bracelet_homme_rond_retro_a_grave_noir.jpg",
-    ],
-    variants: [
-      { id: "rond-retro-argente", title: "Argenté", price: 22.90, image: "/produits/bracelet_homme_rond_retro_a_grave_argente.jpg" },
-      { id: "rond-retro-noir", title: "Noir", price: 22.90, image: "/produits/bracelet_homme_rond_retro_a_grave_noir.jpg" },
-    ],
-    descriptionHtml: `<p>Bracelet homme au style <strong>rétro</strong> avec médaillon rond gravable, en acier inoxydable.</p>`,
-  },
-
   // ===== Colliers =====
   {
     slug: "collier-couple-coeur-lot2",
