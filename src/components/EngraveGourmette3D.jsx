@@ -136,7 +136,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
       shape.lineTo(-hw, -hh + RR);
       shape.quadraticCurveTo(-hw, -hh, -hw + RR, -hh);
 
-      const ext = new THREE.ExtrudeGeometry(shape, { depth: PT, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 2 });
+      const ext = new THREE.ExtrudeGeometry(shape, { depth: PT, bevelEnabled: false });
       ext.translate(0, 0, -PT / 2);
       group.add(new THREE.Mesh(ext, metalMat()));
 
@@ -156,8 +156,13 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
       });
       matRef.current = faceMat;
       const face = new THREE.Mesh(faceGeo, faceMat);
-      face.position.z = PT / 2 + 0.01;
+      face.position.z = PT / 2 + 0.006;
       group.add(face);
+      // Face arrière (même plaque, côté pile) pour ne pas voir « à travers ».
+      const back = new THREE.Mesh(faceGeo, metalMat());
+      back.position.z = -PT / 2 - 0.006;
+      back.rotation.y = Math.PI;
+      group.add(back);
 
       // --- Chaîne à maillons (gourmette) de part et d'autre ---
       const linkR = 0.17, tube = 0.06, gap = 0.21;
