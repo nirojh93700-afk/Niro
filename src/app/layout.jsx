@@ -147,12 +147,16 @@ export default async function RootLayout({ children }) {
 
   // Accès admin : un cookie correspondant au code d'accès débloque tout
   // (mode privé ET maintenance) — c'est ce qui te permet d'accéder à /gestion.
+  // VERROU TEMPORAIRE (demandé par l'utilisatrice) : le site reste PRIVÉ tant que
+  // FORCE_PRIVATE = true, même si le réglage admin dit "public". Pour OUVRIR le
+  // site au public, mettre FORCE_PRIVATE = false.
+  const FORCE_PRIVATE = true;
   const access = settings.access || { locked: false, code: "" };
   const maintenance = settings.maintenance || { enabled: false, message: "" };
   const provided = cookies().get("site-access")?.value;
   const hasAccess = Boolean(access.code) && provided === access.code;
   const showMaintenance = maintenance.enabled && !hasAccess;
-  const showGate = !showMaintenance && access.locked && !hasAccess;
+  const showGate = !showMaintenance && (FORCE_PRIVATE || access.locked) && !hasAccess;
   const gateOpen = !showMaintenance && !showGate;
 
   // Balises marketing (validées : chiffres pour le Pixel, alphanum pour Google).
