@@ -64,26 +64,44 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
-function plateCanvas(text, fontKey, fin) {
+// Petit papillon (silhouette) dessiné dans la couleur de gravure.
+function drawButterfly(ctx, cx, cy, s, color) {
+  ctx.save();
+  ctx.fillStyle = color;
+  const w = s * 0.42;
+  ctx.beginPath(); ctx.ellipse(cx - w * 0.55, cy - s * 0.16, w * 0.62, s * 0.34, -0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx + w * 0.55, cy - s * 0.16, w * 0.62, s * 0.34, 0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx - w * 0.48, cy + s * 0.2, w * 0.5, s * 0.26, 0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx + w * 0.48, cy + s * 0.2, w * 0.5, s * 0.26, -0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx, cy, s * 0.05, s * 0.42, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+
+function plateCanvas(text, fontKey, fin, decor) {
   const c = document.createElement("canvas");
   c.width = TEXW; c.height = TEXH;
   const ctx = c.getContext("2d");
   ctx.fillStyle = fin.base;
   ctx.fillRect(0, 0, TEXW, TEXH);
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  const lay = layoutText(ctx, text, fontKey, TEXW * 0.84, TEXH * 0.7);
+  let textCx = TEXW / 2, textMaxW = TEXW * 0.84;
+  if (decor === "butterfly") {
+    drawButterfly(ctx, TEXW * 0.2, TEXH / 2, TEXH * 0.66, fin.ink);
+    textCx = TEXW * 0.6; textMaxW = TEXW * 0.6;
+  }
+  const lay = layoutText(ctx, text, fontKey, textMaxW, TEXH * 0.7);
   if (lay) {
     ctx.font = fontSpec(fontKey, lay.size);
     const startY = TEXH / 2 - ((lay.lines.length - 1) * lay.lineH) / 2;
     lay.lines.forEach((line, i) => {
-      ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.fillText(line, TEXW / 2 + 1.2, startY + i * lay.lineH + 1.4);
-      ctx.fillStyle = fin.ink; ctx.fillText(line, TEXW / 2, startY + i * lay.lineH);
+      ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.fillText(line, textCx + 1.2, startY + i * lay.lineH + 1.4);
+      ctx.fillStyle = fin.ink; ctx.fillText(line, textCx, startY + i * lay.lineH);
     });
   }
   return c;
 }
 
-export default function EngraveGourmette3D({ text = "", fontKey = "playfair", finish = "silver", band = "chain", slim = false, height = 360, showHint = true }) {
+export default function EngraveGourmette3D({ text = "", fontKey = "playfair", finish = "silver", band = "chain", slim = false, decor = "", height = 360, showHint = true }) {
   const mountRef = useRef(null);
   const matRef = useRef(null);
   const threeRef = useRef(null);
@@ -166,7 +184,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
         uv.setXY(i, (pos.getX(i) - bb.min.x) / (bb.max.x - bb.min.x), (pos.getY(i) - bb.min.y) / (bb.max.y - bb.min.y));
       }
       uv.needsUpdate = true;
-      const map = new THREE.CanvasTexture(plateCanvas(text, fontKey, fin));
+      const map = new THREE.CanvasTexture(plateCanvas(text, fontKey, fin, decor));
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       const faceMat = new THREE.MeshPhysicalMaterial({
         map, emissiveMap: map, emissive: new THREE.Color(0x3a3a3a),
@@ -285,12 +303,12 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
     if (!ctx || !mat) return;
     const { THREE } = ctx;
     const old = mat.map;
-    const m = new THREE.CanvasTexture(plateCanvas(text, fontKey, fin));
+    const m = new THREE.CanvasTexture(plateCanvas(text, fontKey, fin, decor));
     m.anisotropy = ctx.renderer.capabilities.getMaxAnisotropy(); m.colorSpace = THREE.SRGBColorSpace;
     mat.map = m; mat.emissiveMap = m; mat.needsUpdate = true;
     if (old) old.dispose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, fontKey, finish, tick]);
+  }, [text, fontKey, finish, decor, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>

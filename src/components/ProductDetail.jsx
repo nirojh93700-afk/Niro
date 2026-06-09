@@ -383,7 +383,7 @@ export default function ProductDetail({ product }) {
             <>
               <div className="engrave3d-sticky">
                 {(product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d) ? (
-                  <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} />
+                  <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} decor={product.decor3d || ""} />
                 ) : product.engravePlate3d ? (
                   <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveEnvelope3d ? (
@@ -562,7 +562,7 @@ export default function ProductDetail({ product }) {
               {any3d && !isWide && (
                 <div ref={big3dRef}>
                   {(product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d) ? (
-                    <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} />
+                    <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} decor={product.decor3d || ""} />
                   ) : product.engravePlate3d ? (
                     <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveEnvelope3d ? (
@@ -708,7 +708,7 @@ export default function ProductDetail({ product }) {
       {any3d && !isWide && showMini && (
         <div className="engrave3d-mini">
           {(product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d) ? (
-            <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} height={200} showHint={false} />
+            <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} decor={product.decor3d || ""} height={200} showHint={false} />
           ) : product.engravePlate3d ? (
             <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveEnvelope3d ? (

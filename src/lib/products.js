@@ -749,6 +749,7 @@ export const products = [
     title: "Bracelet femme papillon ajouré à graver",
     category: "bijoux", type: "Bracelet personnalisé",
     engraveBar3d: true, // aperçu 3D : barre fine gravée sur chaîne délicate (argent/or/noir/or rose)
+    decor3d: "butterfly", // petit papillon sur la barre
     tagline: "Un papillon ajouré tout en finesse, à graver.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
