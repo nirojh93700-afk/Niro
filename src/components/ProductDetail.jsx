@@ -47,7 +47,7 @@ export default function ProductDetail({ product }) {
   // Mobile : le mini 3D flottant apparaît quand la photo est sortie de l'écran
   // et que le grand 3D (en bas) n'est pas encore visible.
   useEffect(() => {
-    if (isWide || !(product.engrave3d || product.engraveHeart3d || product.engraveBook3d || product.engraveEnvelope3d || product.engravePlate3d || product.engraveGourmette3d)) { setShowMini(false); return; }
+    if (isWide || !(product.engrave3d || product.engraveHeart3d || product.engraveBook3d || product.engraveEnvelope3d || product.engravePlate3d || product.engraveGourmette3d || product.engraveSilicone3d)) { setShowMini(false); return; }
     // Méthode fiable : on calcule les positions à chaque défilement.
     // Le mini 3D ne s'affiche QUE tant qu'on n'a pas atteint le grand 3D
     // (il est encore plus bas). Dès qu'on l'a vu/dépassé, plus de mini —
@@ -70,7 +70,7 @@ export default function ProductDetail({ product }) {
       window.removeEventListener("scroll", compute);
       window.removeEventListener("resize", compute);
     };
-  }, [isWide, product.engrave3d, product.engraveHeart3d, product.engraveBook3d, product.engraveEnvelope3d, product.engravePlate3d, product.engraveGourmette3d]);
+  }, [isWide, product.engrave3d, product.engraveHeart3d, product.engraveBook3d, product.engraveEnvelope3d, product.engravePlate3d, product.engraveGourmette3d, product.engraveSilicone3d]);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -199,9 +199,10 @@ export default function ProductDetail({ product }) {
 
   // Aperçu 3D cœur ouvrable (médaillon) : 4 faces + finition (argent / bicolore) + photo.
   // Aperçu 3D automatique (gravure) — utilisé seulement s'il n'y a PAS de fichier 3D fourni.
-  const any3d = (product.engrave3d || product.engraveHeart3d || product.engraveBook3d || product.engraveEnvelope3d || product.engravePlate3d || product.engraveGourmette3d) && !product.model3d;
-  // Bracelet gourmette : texte gravé sur la plaque.
+  const any3d = (product.engrave3d || product.engraveHeart3d || product.engraveBook3d || product.engraveEnvelope3d || product.engravePlate3d || product.engraveGourmette3d || product.engraveSilicone3d) && !product.model3d;
+  // Bracelet gourmette / silicone : texte gravé sur la plaque.
   const gourmetteText = fieldValues["texte"] || "";
+  const siliconeFinish = (variant.title || "").toLowerCase().includes("noir") ? "black" : "silver";
   // Plaque acier : recto / verso, texte + photo (sur la face choisie).
   const plateFaces = [fieldValues["recto"] || "", fieldValues["verso"] || ""];
   const plateTitle = (variant.title || "").toLowerCase();
@@ -371,8 +372,8 @@ export default function ProductDetail({ product }) {
           {any3d && isWide && (
             <>
               <div className="engrave3d-sticky">
-                {product.engraveGourmette3d ? (
-                  <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                {(product.engraveGourmette3d || product.engraveSilicone3d) ? (
+                  <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={product.engraveSilicone3d ? siliconeFinish : "silver"} band={product.engraveSilicone3d ? "silicone" : "chain"} />
                 ) : product.engravePlate3d ? (
                   <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveEnvelope3d ? (
@@ -550,8 +551,8 @@ export default function ProductDetail({ product }) {
 
               {any3d && !isWide && (
                 <div ref={big3dRef}>
-                  {product.engraveGourmette3d ? (
-                    <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  {(product.engraveGourmette3d || product.engraveSilicone3d) ? (
+                    <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={product.engraveSilicone3d ? siliconeFinish : "silver"} band={product.engraveSilicone3d ? "silicone" : "chain"} />
                   ) : product.engravePlate3d ? (
                     <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveEnvelope3d ? (
@@ -696,8 +697,8 @@ export default function ProductDetail({ product }) {
 
       {any3d && !isWide && showMini && (
         <div className="engrave3d-mini">
-          {product.engraveGourmette3d ? (
-            <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+          {(product.engraveGourmette3d || product.engraveSilicone3d) ? (
+            <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={product.engraveSilicone3d ? siliconeFinish : "silver"} band={product.engraveSilicone3d ? "silicone" : "chain"} height={200} showHint={false} />
           ) : product.engravePlate3d ? (
             <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveEnvelope3d ? (

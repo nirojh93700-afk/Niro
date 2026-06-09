@@ -221,6 +221,7 @@ export const products = [
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
     category: "bijoux",
     type: "Bracelet personnalisé",
+    engraveSilicone3d: true, // aperçu 3D : plaque (argentée/noire) gravée sur bracelet silicone
     tagline: "Silicone souple et plaque acier, confort au quotidien.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police souhaitée",

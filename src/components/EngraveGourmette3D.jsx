@@ -2,10 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Aperçu 3D du bracelet gourmette : une plaque rectangulaire gravée (texte) au
-// centre, montée sur une grosse chaîne à maillons. Acier argenté. À titre indicatif.
+// Aperçu 3D d'un bracelet à plaque gravée. Polyvalent :
+//  • band "chain"    → grosse chaîne (gourmette)
+//  • band "silicone" → bracelet silicone souple
+//  • finish "silver" / "black" → couleur de la plaque
+// À titre indicatif.
 
-const FINISH = { base: "#e7e8ea", ink: "rgba(20,20,20,0.92)", metal: "#d4d6d9" };
+const FIN = {
+  silver: { plate: "#d4d6d9", base: "#e7e8ea", ink: "rgba(20,20,20,0.92)" },
+  black:  { plate: "#2a2a2c", base: "#303033", ink: "rgba(242,242,242,0.95)" },
+};
 
 const FONT_MAP = {
   playfair: "Georgia, 'Times New Roman', serif",
@@ -33,7 +39,6 @@ function fontSpec(fontKey, sizePx) {
   return `${weight} ${sizePx}px ${fam}`;
 }
 
-// Plaque : format paysage.
 const TEXW = 440, TEXH = 220;
 
 function layoutText(ctx, text, fontKey, maxW, maxH) {
@@ -57,11 +62,11 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
-function plateCanvas(text, fontKey) {
+function plateCanvas(text, fontKey, fin) {
   const c = document.createElement("canvas");
   c.width = TEXW; c.height = TEXH;
   const ctx = c.getContext("2d");
-  ctx.fillStyle = FINISH.base;
+  ctx.fillStyle = fin.base;
   ctx.fillRect(0, 0, TEXW, TEXH);
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   const lay = layoutText(ctx, text, fontKey, TEXW * 0.84, TEXH * 0.7);
@@ -69,18 +74,19 @@ function plateCanvas(text, fontKey) {
     ctx.font = fontSpec(fontKey, lay.size);
     const startY = TEXH / 2 - ((lay.lines.length - 1) * lay.lineH) / 2;
     lay.lines.forEach((line, i) => {
-      ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(line, TEXW / 2 + 1.2, startY + i * lay.lineH + 1.4);
-      ctx.fillStyle = FINISH.ink; ctx.fillText(line, TEXW / 2, startY + i * lay.lineH);
+      ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.fillText(line, TEXW / 2 + 1.2, startY + i * lay.lineH + 1.4);
+      ctx.fillStyle = fin.ink; ctx.fillText(line, TEXW / 2, startY + i * lay.lineH);
     });
   }
   return c;
 }
 
-export default function EngraveGourmette3D({ text = "", fontKey = "playfair", height = 360, showHint = true }) {
+export default function EngraveGourmette3D({ text = "", fontKey = "playfair", finish = "silver", band = "chain", height = 360, showHint = true }) {
   const mountRef = useRef(null);
   const matRef = useRef(null);
   const threeRef = useRef(null);
   const [tick, setTick] = useState(0);
+  const fin = FIN[finish] || FIN.silver;
 
   useEffect(() => {
     let disposed = false;
@@ -115,9 +121,16 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
       const fillL = new THREE.DirectionalLight(0xffffff, 0.5); fillL.position.set(-4, 1, 2); scene.add(fillL);
 
       const maxAniso = renderer.capabilities.getMaxAnisotropy();
-      const metalMat = () => new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(FINISH.metal), metalness: 1.0, roughness: 0.25,
+      const plateMetal = () => new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(fin.plate), metalness: 1.0, roughness: 0.25,
         clearcoat: 0.95, clearcoatRoughness: 0.14, envMapIntensity: 1.4,
+      });
+      const chainMetal = () => new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#d4d6d9"), metalness: 1.0, roughness: 0.25,
+        clearcoat: 0.95, clearcoatRoughness: 0.14, envMapIntensity: 1.4,
+      });
+      const siliconeMat = () => new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#1b1b1d"), metalness: 0.0, roughness: 0.85, clearcoat: 0.3, clearcoatRoughness: 0.5,
       });
 
       const group = new THREE.Group();
@@ -138,7 +151,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
 
       const ext = new THREE.ExtrudeGeometry(shape, { depth: PT, bevelEnabled: false });
       ext.translate(0, 0, -PT / 2);
-      group.add(new THREE.Mesh(ext, metalMat()));
+      group.add(new THREE.Mesh(ext, plateMetal()));
 
       const faceGeo = new THREE.ShapeGeometry(shape, 24);
       faceGeo.computeBoundingBox();
@@ -148,7 +161,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
         uv.setXY(i, (pos.getX(i) - bb.min.x) / (bb.max.x - bb.min.x), (pos.getY(i) - bb.min.y) / (bb.max.y - bb.min.y));
       }
       uv.needsUpdate = true;
-      const map = new THREE.CanvasTexture(plateCanvas(text, fontKey));
+      const map = new THREE.CanvasTexture(plateCanvas(text, fontKey, fin));
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       const faceMat = new THREE.MeshPhysicalMaterial({
         map, emissiveMap: map, emissive: new THREE.Color(0x3a3a3a),
@@ -158,27 +171,32 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
       const face = new THREE.Mesh(faceGeo, faceMat);
       face.position.z = PT / 2 + 0.006;
       group.add(face);
-      // Face arrière (même plaque, côté pile) pour ne pas voir « à travers ».
-      const back = new THREE.Mesh(faceGeo, metalMat());
+      const back = new THREE.Mesh(faceGeo, plateMetal());
       back.position.z = -PT / 2 - 0.006;
       back.rotation.y = Math.PI;
       group.add(back);
 
-      // --- Chaîne à maillons (gourmette) de part et d'autre ---
-      const linkR = 0.17, tube = 0.06, gap = 0.21;
-      const addLinks = (sign) => {
-        for (let i = 1; i <= 7; i++) {
-          const x = sign * (hw + i * gap);
-          const y = -0.03 * i * i * 0.12 - 0.0; // très léger arc descendant
-          const link = new THREE.Mesh(new THREE.TorusGeometry(linkR, tube, 12, 28), metalMat());
-          link.position.set(x, y, 0);
-          // maillons cubains : alternance d'orientation
-          if (i % 2 === 0) link.rotation.y = Math.PI / 2;
-          else link.rotation.x = Math.PI / 2;
-          group.add(link);
-        }
-      };
-      addLinks(1); addLinks(-1);
+      // --- Bracelet : chaîne OU silicone ---
+      if (band === "silicone") {
+        const len = 2.4;
+        [1, -1].forEach((sign) => {
+          const strap = new THREE.Mesh(new THREE.BoxGeometry(len, PH * 0.8, 0.1), siliconeMat());
+          strap.position.set(sign * (hw + len / 2 - 0.06), 0, 0);
+          strap.rotation.z = sign * -0.1;
+          group.add(strap);
+        });
+      } else {
+        const linkR = 0.17, tube = 0.06, gap = 0.21;
+        [1, -1].forEach((sign) => {
+          for (let i = 1; i <= 7; i++) {
+            const x = sign * (hw + i * gap);
+            const link = new THREE.Mesh(new THREE.TorusGeometry(linkR, tube, 12, 28), chainMetal());
+            link.position.set(x, 0, 0);
+            if (i % 2 === 0) link.rotation.y = Math.PI / 2; else link.rotation.x = Math.PI / 2;
+            group.add(link);
+          }
+        });
+      }
 
       scene.add(group);
 
@@ -187,7 +205,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
       controls.enableZoom = false;
       controls.enablePan = false;
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 1.6;
+      controls.autoRotateSpeed = 1.4;
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
       controls.minPolarAngle = Math.PI / 2.6;
@@ -225,7 +243,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
 
     return () => { disposed = true; cleanup(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [finish, band]);
 
   useEffect(() => {
     if (typeof document !== "undefined" && document.fonts && document.fonts.ready) {
@@ -233,18 +251,19 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", he
     }
   }, []);
 
-  // Mise à jour du texte / de la police.
+  // Mise à jour du texte / de la police / de la finition.
   useEffect(() => {
     const ctx = threeRef.current;
     const mat = matRef.current;
     if (!ctx || !mat) return;
     const { THREE } = ctx;
     const old = mat.map;
-    const map = new THREE.CanvasTexture(plateCanvas(text, fontKey));
-    map.anisotropy = ctx.renderer.capabilities.getMaxAnisotropy(); map.colorSpace = THREE.SRGBColorSpace;
-    mat.map = map; mat.emissiveMap = map; mat.needsUpdate = true;
+    const m = new THREE.CanvasTexture(plateCanvas(text, fontKey, fin));
+    m.anisotropy = ctx.renderer.capabilities.getMaxAnisotropy(); m.colorSpace = THREE.SRGBColorSpace;
+    mat.map = m; mat.emissiveMap = m; mat.needsUpdate = true;
     if (old) old.dispose();
-  }, [text, fontKey, tick]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text, fontKey, finish, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>
