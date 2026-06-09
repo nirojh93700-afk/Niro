@@ -64,7 +64,7 @@ Défaut à l'arrivée (les deux cas)
     usage: `Personnalisation & entretien
 
 Personnalisation (4 faces)
-- Face avant (20 caractères max) + 3 pages intérieures (30 caractères max chacune).
+- Couverture + 3 pages intérieures + dos (15 caractères max par face).
 - Sur chaque face : un texte, une photo gravée, ou rien — vous combinez librement.
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
 
@@ -235,7 +235,7 @@ Dimensions et poids
     usage: `Style bohème champêtre par excellence
 
 Placement
-- Idéal sur des tables longues style banquet, avec un chemin de table en gaze ou lin naturel.
+- Parfait sur tout type de table (ronde, longue, carrée), avec ou sans chemin de table en gaze ou lin naturel.
 - Entourez de vraies branches d'eucalyptus + chandeliers.
 
 Personnalisation
@@ -312,7 +312,7 @@ Dimensions et poids
     usage: `La pièce maîtresse de votre table de réception
 
 Placement
-- Pièce centrale de la table d'honneur, ou un menu par table pour les longs banquets.
+- Pièce centrale de la table d'honneur, ou un menu par table (tout type de table).
 - Posé verticalement sur son socle intégré.
 
 Personnalisation

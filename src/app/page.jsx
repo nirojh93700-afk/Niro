@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 const HERO_DEFAULTS = {
   eyebrow: "Atelier français · gravure laser",
   title: "Des créations uniques, gravées avec émotion.",
-  text: "Bijoux, décorations de mariage et cadeaux personnalisés, personnalisés dans notre atelier. Chaque pièce raconte votre histoire.",
+  text: "Bijoux, décorations de mariage et cadeaux personnalisés, gravés dans notre atelier. Chaque pièce raconte votre histoire.",
   cta1: "Découvrir la boutique",
   cta2: "Idées cadeaux",
   image: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/jewelry-natural-1.jpg?v=1774981669",
