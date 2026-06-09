@@ -867,21 +867,18 @@ export const products = [
     title: "Collier médaillon livre à graver",
     category: "bijoux", type: "Collier personnalisé",
     engraveBook3d: true, // aperçu 3D : médaillon livre qui s'ouvre (couverture + 3 pages)
-    // Couverture incluse ; chaque page intérieure gravée : +5 € (texte ou motif).
+    // Couverture incluse. Texte sur une page intérieure : +5 €. Motifs : le 1er
+    // est offert, chaque motif suivant : +3 €.
     engravingPricing: {
-      includedKey: "couverture",
-      pages: [
-        { textKey: "page1", motifKey: "motif2" },
-        { textKey: "page2", motifKey: "motif3" },
-        { textKey: "page3", motifKey: "motif4" },
-      ],
-      pageText: 5,
-      pageMotif: 5,
+      textKeys: ["page1", "page2", "page3"],
+      textExtra: 5,
+      motifKeys: ["motif1", "motif2", "motif3", "motif4"],
+      motifExtra: 3,
     },
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
     personalizable: true, personalizationLabel: "Couverture + 3 pages : texte, motif et police",
     personalizationFields: [
-      { key: "note", type: "note", text: "La couverture est incluse. Chaque page intérieure gravée : +5 € (texte ou motif). Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
+      { key: "note", type: "note", text: "La couverture est incluse. Une page intérieure avec texte : +5 €. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €. Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
       { key: "couverture", label: "Gravure — couverture (incluse)", maxLength: 30, optional: true },
       { key: "motif1", type: "motif", label: "Motif — couverture", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Couverture — position du motif", optional: true, requiresField: "motif1",
@@ -942,9 +939,12 @@ export const products = [
     title: "Collier femme pendentif géométrique à graver",
     category: "bijoux", type: "Collier personnalisé",
     engrave3d: true, // aperçu 3D : barre gravable sur 4 faces (le client fait pivoter)
+    // Gravure des 4 faces incluse. Motifs : le 1er offert, chaque motif suivant +3 €.
+    engravingPricing: { motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
     personalizationFields: [
+      { key: "note", type: "note", text: "Gravure des 4 faces (texte) incluse. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
       { key: "face1", label: "Face avant — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
       { key: "motif1", type: "motif", label: "Face avant — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Face avant — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },

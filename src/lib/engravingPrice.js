@@ -18,6 +18,19 @@ export function engravingExtra(product, fields = {}) {
     }
     return { pages, amount };
   }
+
+  // Mode "textKeys / motifKeys" : chaque texte en plus = textExtra ; pour les
+  // motifs, le 1er est OFFERT et chaque motif suivant = motifExtra ; photo en option.
+  if (cfg.textKeys || cfg.motifKeys) {
+    const filled = (k) => k && (fields[k] || "").toString().trim();
+    let amount = 0, pages = 0;
+    for (const k of cfg.textKeys || []) if (filled(k)) { amount += cfg.textExtra || 0; pages += 1; }
+    const motifs = (cfg.motifKeys || []).filter((k) => filled(k)).length;
+    if (motifs > 1) amount += (motifs - 1) * (cfg.motifExtra || 0); // 1er motif offert
+    const photo = Boolean(cfg.photoKey && filled(cfg.photoKey));
+    if (photo) amount += cfg.photoSurcharge || 0;
+    return { pages, motifs, photo, amount };
+  }
   const included = cfg.includedKey;
   // On compte les champs de texte non vides, hors couverture incluse.
   const textFields = (product.personalizationFields || []).filter((f) => {
