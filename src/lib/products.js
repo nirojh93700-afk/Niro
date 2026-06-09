@@ -712,7 +712,7 @@ export const products = [
     tagline: "Le souvenir d'une naissance, gravé à porter sur soi.",
     personalizable: true, personalizationLabel: "Prénom & date + police",
     personalizationFields: [
-      { key: "texte", label: "Prénom et/ou date de naissance", placeholder: "Ex : Lina — 12.06.2024", maxLength: 30 },
+      { key: "texte", label: "Prénom et/ou date de naissance", placeholder: "Ex : Lina — 12.06.2024", maxLength: 20 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
