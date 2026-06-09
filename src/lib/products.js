@@ -261,6 +261,7 @@ export const products = [
     title: "Bracelet Homme — Cuir véritable & acier inoxydable gravé",
     category: "bijoux",
     type: "Bracelet personnalisé",
+    engraveLeather3d: true, // aperçu 3D : plaque (argent/or/noir) gravée sur cuir
     tagline: "L'authenticité du cuir, la modernité de l'acier gravé.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police souhaitée",

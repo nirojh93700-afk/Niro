@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 const FIN = {
   silver: { plate: "#d4d6d9", base: "#e7e8ea", ink: "rgba(20,20,20,0.92)" },
   black:  { plate: "#2a2a2c", base: "#303033", ink: "rgba(242,242,242,0.95)" },
+  gold:   { plate: "#d4af37", base: "#e7d49b", ink: "rgba(40,30,8,0.92)" },
 };
 
 const FONT_MAP = {
@@ -132,6 +133,9 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
       const siliconeMat = () => new THREE.MeshPhysicalMaterial({
         color: new THREE.Color("#1b1b1d"), metalness: 0.0, roughness: 0.85, clearcoat: 0.3, clearcoatRoughness: 0.5,
       });
+      const leatherMat = () => new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#2a1d12"), metalness: 0.0, roughness: 0.78, clearcoat: 0.15, clearcoatRoughness: 0.6,
+      });
 
       const group = new THREE.Group();
 
@@ -176,20 +180,21 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
       back.rotation.y = Math.PI;
       group.add(back);
 
-      // --- Bracelet : chaîne OU silicone ---
-      if (band === "silicone") {
+      // --- Bracelet : chaîne, silicone ou cuir ---
+      if (band === "silicone" || band === "leather") {
+        const strapMat = band === "leather" ? leatherMat : siliconeMat;
         const strapLen = 2.0, strapH = PH * 0.66, strapT = 0.13;
         [1, -1].forEach((sign) => {
           // Embout métal qui maintient la plaque (comme sur la vraie photo).
           const cuff = new THREE.Mesh(new THREE.BoxGeometry(0.18, PH * 1.05, PT + 0.16), plateMetal());
           cuff.position.set(sign * (hw + 0.02), 0, 0);
           group.add(cuff);
-          // Sangle silicone.
-          const strap = new THREE.Mesh(new THREE.BoxGeometry(strapLen, strapH, strapT), siliconeMat());
+          // Sangle (silicone ou cuir).
+          const strap = new THREE.Mesh(new THREE.BoxGeometry(strapLen, strapH, strapT), strapMat());
           strap.position.set(sign * (hw + 0.12 + strapLen / 2), 0, 0);
           group.add(strap);
           // Bout arrondi de la sangle.
-          const cap = new THREE.Mesh(new THREE.CylinderGeometry(strapH / 2, strapH / 2, strapT, 18), siliconeMat());
+          const cap = new THREE.Mesh(new THREE.CylinderGeometry(strapH / 2, strapH / 2, strapT, 18), strapMat());
           cap.rotation.x = Math.PI / 2;
           cap.position.set(sign * (hw + 0.12 + strapLen), 0, 0);
           group.add(cap);
