@@ -9,7 +9,7 @@ import {
   Pacifico,
 } from "next/font/google";
 import "./globals.css";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -151,12 +151,16 @@ export default async function RootLayout({ children }) {
   // FORCE_PRIVATE = true, même si le réglage admin dit "public". Pour OUVRIR le
   // site au public, mettre FORCE_PRIVATE = false.
   const FORCE_PRIVATE = true;
+  // L'admin (/gestion) n'est PAS soumis au code du site : il a déjà son propre
+  // mot de passe. Le code du site ne protège que la boutique publique.
+  const pathname = headers().get("x-pathname") || "";
+  const isAdminPath = pathname.startsWith("/gestion");
   const access = settings.access || { locked: false, code: "" };
   const maintenance = settings.maintenance || { enabled: false, message: "" };
   const provided = cookies().get("site-access-v2")?.value;
   const hasAccess = Boolean(access.code) && provided === access.code;
-  const showMaintenance = maintenance.enabled && !hasAccess;
-  const showGate = !showMaintenance && (FORCE_PRIVATE || access.locked) && !hasAccess;
+  const showMaintenance = maintenance.enabled && !hasAccess && !isAdminPath;
+  const showGate = !showMaintenance && (FORCE_PRIVATE || access.locked) && !hasAccess && !isAdminPath;
   const gateOpen = !showMaintenance && !showGate;
 
   // Balises marketing (validées : chiffres pour le Pixel, alphanum pour Google).
