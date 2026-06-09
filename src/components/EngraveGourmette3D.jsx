@@ -12,6 +12,7 @@ const FIN = {
   silver: { plate: "#d4d6d9", base: "#e7e8ea", ink: "rgba(20,20,20,0.92)" },
   black:  { plate: "#2a2a2c", base: "#303033", ink: "rgba(242,242,242,0.95)" },
   gold:   { plate: "#d4af37", base: "#e7d49b", ink: "rgba(40,30,8,0.92)" },
+  rose:   { plate: "#dba29a", base: "#ecc6bf", ink: "rgba(45,24,22,0.92)" },
 };
 
 const FONT_MAP = {
@@ -82,7 +83,7 @@ function plateCanvas(text, fontKey, fin) {
   return c;
 }
 
-export default function EngraveGourmette3D({ text = "", fontKey = "playfair", finish = "silver", band = "chain", height = 360, showHint = true }) {
+export default function EngraveGourmette3D({ text = "", fontKey = "playfair", finish = "silver", band = "chain", slim = false, height = 360, showHint = true }) {
   const mountRef = useRef(null);
   const matRef = useRef(null);
   const threeRef = useRef(null);
@@ -140,7 +141,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
       const group = new THREE.Group();
 
       // --- Plaque (rectangle paysage, coins arrondis) ---
-      const PW = 1.9, PH = 0.95, RR = 0.2, PT = 0.16;
+      const PW = 1.9, PH = slim ? 0.5 : 0.95, RR = slim ? 0.14 : 0.2, PT = slim ? 0.1 : 0.16;
       const shape = new THREE.Shape();
       const hw = PW / 2, hh = PH / 2;
       shape.moveTo(-hw + RR, -hh);
@@ -198,6 +199,18 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
           cap.rotation.x = Math.PI / 2;
           cap.position.set(sign * (hw + 0.12 + strapLen), 0, 0);
           group.add(cap);
+        });
+      } else if (band === "finechain") {
+        // Chaîne fine (bracelet délicat) — couleur de la plaque.
+        const linkR = 0.07, tube = 0.026, gap = 0.13;
+        [1, -1].forEach((sign) => {
+          for (let i = 1; i <= 11; i++) {
+            const x = sign * (hw + i * gap);
+            const link = new THREE.Mesh(new THREE.TorusGeometry(linkR, tube, 10, 22), plateMetal());
+            link.position.set(x, 0, 0);
+            if (i % 2 === 0) link.rotation.y = Math.PI / 2; else link.rotation.x = Math.PI / 2;
+            group.add(link);
+          }
         });
       } else {
         const linkR = 0.17, tube = 0.06, gap = 0.21;
@@ -257,7 +270,7 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
 
     return () => { disposed = true; cleanup(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finish, band]);
+  }, [finish, band, slim]);
 
   useEffect(() => {
     if (typeof document !== "undefined" && document.fonts && document.fonts.ready) {
