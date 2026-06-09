@@ -157,7 +157,7 @@ export default async function RootLayout({ children }) {
   const isAdminPath = pathname.startsWith("/gestion");
   const access = settings.access || { locked: false, code: "" };
   const maintenance = settings.maintenance || { enabled: false, message: "" };
-  const provided = cookies().get("site-access-v2")?.value;
+  const provided = cookies().get("site-access-v3")?.value;
   const hasAccess = Boolean(access.code) && provided === access.code;
   const showMaintenance = maintenance.enabled && !hasAccess && !isAdminPath;
   const showGate = !showMaintenance && (FORCE_PRIVATE || access.locked) && !hasAccess && !isAdminPath;

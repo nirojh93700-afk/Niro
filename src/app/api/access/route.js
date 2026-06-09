@@ -20,11 +20,12 @@ export async function POST(req) {
     return Response.json({ error: "Code incorrect." }, { status: 401 });
   }
 
-  cookies().set("site-access-v2", code, {
+  // Cookie de SESSION (pas de maxAge) : le code est redemandé à chaque nouvelle
+  // visite (quand le navigateur est fermé/rouvert). Pas de mémorisation longue.
+  cookies().set("site-access-v3", code, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 60, // 60 jours
   });
   return Response.json({ ok: true });
 }
