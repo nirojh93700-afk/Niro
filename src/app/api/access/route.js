@@ -20,7 +20,7 @@ export async function POST(req) {
     return Response.json({ error: "Code incorrect." }, { status: 401 });
   }
 
-  cookies().set("site-access", code, {
+  cookies().set("site-access-v2", code, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
