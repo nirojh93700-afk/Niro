@@ -180,7 +180,7 @@ Défaut à l'arrivée
 
 Bois
 - Bois de haute qualité (peuplier ou chêne selon disponibilité), découpé au laser de précision.
-- Épaisseur ~5 mm, suffisamment solide pour ne pas se voiler.
+- Épaisseur ~3 mm, suffisamment solide pour ne pas se voiler.
 
 Acrylique
 - Acrylique premium effet miroir doré, gravé/découpé au laser.
