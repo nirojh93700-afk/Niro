@@ -122,7 +122,7 @@ export default function ProductDetail({ product }) {
   // "Fabriqué" pour ce qu'elle fabrique (bois/mariage), "Gravé" pour les pièces
   // sourcées qu'elle personnalise par gravure (bijoux, cristaux, etc.).
   const madeHere = product.category === "mariage" || product.slug === "plaque-de-porte-enfant";
-  const originLabel = madeHere ? "Fabriqué en France" : "Gravé en France";
+  const originLabel = madeHere ? "Fabriqué en France" : "Personnalisé en France";
 
   // Champs de gravure visibles : selon la variante, et selon un champ requis
   // (ex. « sur quelle page ? » n'apparaît que si une photo a été ajoutée).

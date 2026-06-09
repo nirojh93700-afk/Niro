@@ -82,7 +82,7 @@ export default async function HomePage() {
               <Link href="/boutique?cat=bijoux" className="btn btn-outline">{hero.cta2}</Link>
             </div>
             <div className="hero-badges">
-              <div className="hero-badge"><span>🇫🇷</span> Gravé en France</div>
+              <div className="hero-badge"><span>🇫🇷</span> Personnalisé en France</div>
               <div className="hero-badge"><span>✦</span> 100% personnalisable</div>
               <div className="hero-badge"><span>🔒</span> Paiement sécurisé</div>
             </div>
@@ -123,7 +123,7 @@ export default async function HomePage() {
       {show.trust && (
         <section className="trust">
           <div className="container trust-grid">
-            <div className="trust-item"><span>🇫🇷</span><strong>Gravure artisanale</strong><small>Atelier français · gravure laser</small></div>
+            <div className="trust-item"><span>🇫🇷</span><strong>Personnalisé en France</strong><small>Atelier français · gravure laser</small></div>
             <div className="trust-item"><span>✦</span><strong>Sur mesure</strong><small>Gravure & découpe laser de précision</small></div>
             <div className="trust-item"><span>🔒</span><strong>Paiement sécurisé</strong><small>Carte bancaire via Stripe</small></div>
             <div className="trust-item"><span>💌</span><strong>Cadeau idéal</strong><small>Une attention qui marque les esprits</small></div>

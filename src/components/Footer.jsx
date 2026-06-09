@@ -21,7 +21,7 @@ export default function Footer() {
             <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>
             <a href="tel:+33766153102" style={{ display: "block", marginTop: 4 }}>07 66 15 31 02</a>
             <span style={{ display: "block", marginTop: 8 }}>6 rue d'Armaillé, 75017 Paris</span>
-            <span style={{ display: "block", marginTop: 8 }}>Gravé en France</span>
+            <span style={{ display: "block", marginTop: 8 }}>Personnalisé en France</span>
           </div>
           <div>
             <h4>Boutique</h4>
