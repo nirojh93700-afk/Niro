@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FLOWER_URLS, GLYPHS } from "@/lib/motifs";
+import { FLOWER_URLS, GLYPHS, GLYPH_THUMBS } from "@/lib/motifs";
 
 // Aperçu 3D d'un bijou à forme simple (collier barre / plaque).
 // Vraie 3D WebGL (Three.js) : métal + reflets, gravure en relief sur les 4 faces.
@@ -86,61 +86,95 @@ function getProcessedFlower(url) {
   return oc;
 }
 
-// Dessine motif (image ou symbole) + texte (empilé) sur un contexte donné.
+// Teinte un symbole SVG à la couleur de gravure (cache par url+couleur).
+const tintCache = new Map();
+function getTintedGlyph(url, ink) {
+  const key = url + "|" + ink;
+  if (tintCache.has(key)) return tintCache.get(key);
+  const img = getFlowerImg(url);
+  if (!img.complete || !img.naturalWidth) return null;
+  const oc = document.createElement("canvas");
+  oc.width = img.naturalWidth; oc.height = img.naturalHeight;
+  const o = oc.getContext("2d");
+  o.drawImage(img, 0, 0);
+  o.globalCompositeOperation = "source-in";
+  o.fillStyle = ink;
+  o.fillRect(0, 0, oc.width, oc.height);
+  tintCache.set(key, oc);
+  return oc;
+}
+
+// Dessine motif (image/SVG) + texte (empilé), le tout CENTRÉ verticalement.
 function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const { wPx, hPx } = TEX;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   const above = motifPos !== "below"; // motif au-dessus du nom par défaut
-  let topReserve = 0, bottomReserve = 0;
+  const hasM = motifVal && (FLOWER_URLS[motifVal] || GLYPHS[motifVal]);
 
-  if (motifVal && (FLOWER_URLS[motifVal] || GLYPHS[motifVal])) {
-    // Bande fixe pour le motif → même hauteur sur toutes les faces.
-    const BAND_H = hPx * 0.24;
-    const bandTop = above ? hPx * 0.02 : hPx * 0.98 - BAND_H;
-    const bandCY = bandTop + BAND_H / 2;
+  const BAND_H = hPx * 0.22;
+  const GAP = hPx * 0.05;
 
+  // Taille du texte (caractères empilés verticalement).
+  const chars = (text || "").trim().split("");
+  let fontSize = 0, lineH = 0, blockH = 0;
+  if (chars.length) {
+    const avail = hPx * 0.94 - (hasM ? BAND_H + GAP : 0);
+    fontSize = Math.min(wPx * 0.62, avail / chars.length);
+    lineH = fontSize * 1.05;
+    blockH = chars.length * lineH;
+  }
+  const motifH = hasM ? BAND_H : 0;
+  const gap = (hasM && chars.length) ? GAP : 0;
+  const total = motifH + gap + blockH;
+  let y = (hPx - total) / 2; // groupe centré verticalement
+
+  const drawMotif = (cy) => {
     if (FLOWER_URLS[motifVal]) {
       const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
       if (pc) {
-        const pw = pc.width || pc.naturalWidth;
-        const ph = pc.height || pc.naturalHeight;
-        let dw = wPx * 0.84;
-        let dh = ph * (dw / pw);
+        const pw = pc.width || pc.naturalWidth, ph = pc.height || pc.naturalHeight;
+        let dw = wPx * 0.84, dh = ph * (dw / pw);
         if (dh > BAND_H) { dh = BAND_H; dw = pw * (dh / ph); }
-        const dx = (wPx - dw) / 2;            // centré horizontalement
-        const dy = bandCY - dh / 2;           // centré dans la bande (même hauteur partout)
-        ctx.drawImage(pc, dx, dy, dw, dh);
+        ctx.drawImage(pc, (wPx - dw) / 2, cy - dh / 2, dw, dh);
+        return;
       }
     } else {
-      const mSize = Math.min(wPx * 0.7, BAND_H * 0.92);
-      const m = GLYPHS[motifVal] + VS_TEXT;
-      ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
-      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, bandCY + 1.4); }
-      ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, bandCY);
+      const g = GLYPH_THUMBS[motifVal] && getTintedGlyph(GLYPH_THUMBS[motifVal], ink);
+      if (g) {
+        let dh = BAND_H * 0.96, dw = g.width * (dh / g.height);
+        if (dw > wPx * 0.84) { dw = wPx * 0.84; dh = g.height * (dw / g.width); }
+        if (bevel) { ctx.globalAlpha = 0.28; ctx.drawImage(g, (wPx - dw) / 2 + 1.2, cy - dh / 2 + 1.4, dw, dh); ctx.globalAlpha = 1; }
+        ctx.drawImage(g, (wPx - dw) / 2, cy - dh / 2, dw, dh);
+        return;
+      }
+      // Repli : symbole de police.
+      if (GLYPHS[motifVal]) {
+        const mSize = Math.min(wPx * 0.7, BAND_H * 0.92);
+        const m = GLYPHS[motifVal] + VS_TEXT;
+        ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
+        if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, cy + 1.4); }
+        ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, cy);
+      }
     }
-    const reserve = BAND_H + hPx * 0.06;
-    if (above) topReserve = reserve; else bottomReserve = reserve;
-  }
+  };
 
-  const chars = (text || "").trim().split("");
-  if (chars.length) {
-    const areaTop = topReserve;
-    const areaBot = hPx - bottomReserve;
-    const areaH = areaBot - areaTop;
-    const n = chars.length;
-    const fontSize = Math.min(wPx * 0.62, (areaH * 0.96) / n);
-    const lineH = fontSize * 1.05; // serré
+  const drawTextBlock = (top) => {
     ctx.font = fontSpec(fontKey, fontSize);
-    // dir "up" : le nom commence en BAS et monte ; "down" : commence en haut.
-    let firstY, stepY;
-    if (dir === "up") { firstY = areaBot - lineH / 2; stepY = -lineH; }
-    else { firstY = areaTop + lineH / 2; stepY = lineH; }
-    for (let i = 0; i < n; i++) {
-      const y = firstY + i * stepY;
-      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.2); }
-      ctx.fillStyle = ink; ctx.fillText(chars[i], wPx / 2, y);
+    for (let i = 0; i < chars.length; i++) {
+      const idx = dir === "up" ? chars.length - 1 - i : i; // "up" : 1er caractère en bas
+      const cy = top + (i + 0.5) * lineH;
+      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[idx], wPx / 2 + 1.1, cy + 1.2); }
+      ctx.fillStyle = ink; ctx.fillText(chars[idx], wPx / 2, cy);
     }
+  };
+
+  if (above) {
+    if (hasM) { drawMotif(y + motifH / 2); y += motifH + gap; }
+    if (chars.length) drawTextBlock(y);
+  } else {
+    if (chars.length) { drawTextBlock(y); y += blockH + gap; }
+    if (hasM) drawMotif(y + motifH / 2);
   }
 }
 
@@ -304,7 +338,7 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
   useEffect(() => {
     let cancelled = false;
     (motifs || []).forEach((mv) => {
-      const url = FLOWER_URLS[mv];
+      const url = FLOWER_URLS[mv] || GLYPH_THUMBS[mv];
       if (url) {
         const img = getFlowerImg(url);
         if (!img.complete) img.addEventListener("load", () => { if (!cancelled) setTick((t) => t + 1); }, { once: true });

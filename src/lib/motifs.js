@@ -9,7 +9,13 @@ export const MOTIFS = [
   { value: "etoile", label: "Étoile", kind: "glyph", char: "★", thumb: "/motifs/etoile.svg" },
   { value: "infini", label: "Infini", kind: "glyph", char: "∞", thumb: "/motifs/infini.svg" },
   { value: "lune", label: "Lune", kind: "glyph", char: "☾", thumb: "/motifs/lune.svg" },
+  { value: "soleil", label: "Soleil", kind: "glyph", char: "☀", thumb: "/motifs/soleil.svg" },
 ];
+
+// value -> SVG (pour dessiner le symbole de façon fiable dans les aperçus 3D).
+export const GLYPH_THUMBS = Object.fromEntries(
+  MOTIFS.filter((m) => m.kind === "glyph").map((m) => [m.value, m.thumb])
+);
 
 export function motifThumb(m) {
   return m.kind === "image" ? m.url : m.thumb;
