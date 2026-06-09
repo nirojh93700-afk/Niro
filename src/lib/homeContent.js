@@ -10,7 +10,7 @@ export const brand = {
   statement:
     "Nous gravons au laser vos bijoux, cristaux et cadeaux personnalisés. Nos créations en bois sont, elles, dessinées, gravées et découpées sur mesure dans notre atelier.",
   quote: "Chaque pièce raconte votre histoire.",
-  trust: ["Fait main en France", "Gravure sur mesure", "Paiement sécurisé", "Expédition soignée"],
+  trust: ["Personnalisé en France", "Gravure sur mesure", "Paiement sécurisé", "Expédition soignée"],
 };
 
 export const categoryCards = [

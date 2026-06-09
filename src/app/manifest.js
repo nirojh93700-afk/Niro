@@ -3,7 +3,7 @@ export default function manifest() {
   return {
     name: "Niv Création",
     short_name: "Niv Création",
-    description: "Bijoux, mariage & cadeaux personnalisés au laser, faits main en France.",
+    description: "Bijoux, mariage & cadeaux personnalisés au laser, personnalisés en France.",
     start_url: "/",
     display: "standalone",
     background_color: "#faf6ee",

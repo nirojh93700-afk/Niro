@@ -89,7 +89,7 @@ function emailLayout({ heading, bodyHtml }) {
           <a href="mailto:${BRAND.contact}" style="color:#e9dfca;text-decoration:none;">${BRAND.contact}</a>
           &nbsp;·&nbsp;
           <a href="${BRAND.instagram}" style="color:#e9dfca;text-decoration:none;">Instagram</a>
-          <div style="margin-top:12px;color:#bdab86;letter-spacing:1px;">✦ Fait main en France · Gravure &amp; découpe laser ✦</div>
+          <div style="margin-top:12px;color:#bdab86;letter-spacing:1px;">✦ Personnalisé en France · Gravure &amp; découpe laser ✦</div>
         </td></tr>
       </table>
       <div style="color:#bdab86;font-size:11px;margin-top:14px;">© Niv Création — Atelier de personnalisation</div>
@@ -269,7 +269,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         `<h3 style="font-family:Georgia,serif;font-weight:normal;font-size:15px;color:${BRAND.gold};border-bottom:1px solid #ece3d2;padding-bottom:6px;margin:22px 0 10px;">${t}</h3>`;
       const clientBody = `
           <p style="margin:0 0 12px;">Bonjour ${escapeHtml(customer.name || "")},</p>
-          <p style="margin:0 0 12px;">Nous avons bien reçu votre commande chez <strong>Niv Création</strong> et nous vous en remercions chaleureusement. Chaque pièce étant personnalisée et fabriquée à la main, nous la préparons avec le plus grand soin.</p>
+          <p style="margin:0 0 12px;">Nous avons bien reçu votre commande chez <strong>Niv Création</strong> et nous vous en remercions chaleureusement. Chaque pièce étant personnalisée et gravée avec soin, nous la préparons avec le plus grand soin.</p>
           <p style="margin:0 0 4px;">Référence de votre commande : <strong>${escapeHtml(orderRef)}</strong></p>
 
           ${clientSection("Votre commande")}

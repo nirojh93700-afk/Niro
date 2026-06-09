@@ -694,7 +694,7 @@ export default function ProductDetail({ product }) {
             <div className="info-accordion" style={{ marginTop: 14 }}>
               <details>
                 <summary>✨ Qualité &amp; soin</summary>
-                <div className="info-body">Acier inoxydable de qualité, contrôlé avant l'envoi. Gravure laser durable. Fait main en France, avec soin.</div>
+                <div className="info-body">Acier inoxydable de qualité, contrôlé avant l'envoi. Gravure laser durable. Personnalisé en France, avec soin.</div>
               </details>
               <details>
                 <summary>🧼 Conseils d'entretien</summary>

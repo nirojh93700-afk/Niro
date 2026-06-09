@@ -43,7 +43,7 @@ export function emailLayout({ heading, bodyHtml }) {
           <a href="${BRAND.siteUrl}" style="color:#e9dfca;text-decoration:none;">${BRAND.siteLabel}</a>
           &nbsp;·&nbsp;
           <a href="mailto:${BRAND.contact}" style="color:#e9dfca;text-decoration:none;">${BRAND.contact}</a>
-          <div style="margin-top:12px;color:#bdab86;letter-spacing:1px;">✦ Fait main en France · Gravure &amp; découpe laser ✦</div>
+          <div style="margin-top:12px;color:#bdab86;letter-spacing:1px;">✦ Personnalisé en France · Gravure &amp; découpe laser ✦</div>
         </td></tr>
       </table>
     </td></tr></table>

@@ -72,14 +72,14 @@ export default async function AProposPage() {
               <p style={{ color: "var(--ink-soft)" }}>
                 Prénoms, dates, messages, photos gravées… Nous donnons vie à vos
                 idées pour en faire des objets chargés de sens. Chaque commande est
-                réalisée sur mesure, à la main, dans notre atelier.
+                réalisée sur mesure dans notre atelier.
               </p>
             </div>
           )}
 
           <div className="trust" style={{ borderRadius: "var(--radius)", marginTop: 28 }}>
             <div className="trust-grid">
-              <div className="trust-item"><span>🪵</span><strong>Fait main</strong><small>en France</small></div>
+              <div className="trust-item"><span>🪵</span><strong>Personnalisé</strong><small>en France</small></div>
               <div className="trust-item"><span>✦</span><strong>Sur mesure</strong><small>100% personnalisable</small></div>
               <div className="trust-item"><span>♻️</span><strong>Matériaux durables</strong><small>nobles & résistants</small></div>
               <div className="trust-item"><span>💌</span><strong>Cadeau parfait</strong><small>pour chaque occasion</small></div>

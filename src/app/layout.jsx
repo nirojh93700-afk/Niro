@@ -68,19 +68,19 @@ export const metadata = {
     template: "%s | Niv Création",
   },
   description:
-    "Atelier français de gravure et découpe laser. Bijoux personnalisés, décorations de mariage et cadeaux gravés sur mesure, fabriqués à la main.",
+    "Atelier français de gravure et découpe laser. Bijoux personnalisés, décorations de mariage et cadeaux gravés sur mesure, personnalisés en France.",
   keywords: [
     "gravure laser",
     "cadeau personnalisé",
     "bijoux personnalisés",
     "décoration mariage",
     "numéro de table",
-    "fait main France",
+    "personnalisé en France",
   ],
   openGraph: {
     title: "Niv Création — Créations personnalisées au laser",
     description:
-      "Bijoux, décorations de mariage et cadeaux gravés sur mesure, fabriqués à la main en France.",
+      "Bijoux, décorations de mariage et cadeaux gravés sur mesure, personnalisés en France.",
     type: "website",
     locale: "fr_FR",
     siteName: "Niv Création",
@@ -89,7 +89,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Niv Création — Créations personnalisées au laser",
-    description: "Bijoux, mariage et cadeaux gravés sur mesure, faits main en France.",
+    description: "Bijoux, mariage et cadeaux gravés sur mesure, personnalisés en France.",
     images: [(process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim()],
   },
   appleWebApp: {
