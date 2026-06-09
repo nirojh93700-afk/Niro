@@ -216,13 +216,15 @@ export default function ProductDetail({ product }) {
       ? "silver"
       : "gold";
   const envTwoSided = (variant.title || "").includes("Recto-Verso");
-  // Médaillon livre : couverture + 3 pages intérieures.
+  // Médaillon livre : couverture + 3 pages intérieures (texte + motif + position).
   const bookFaces = [
     fieldValues["couverture"] || "",
     fieldValues["page1"] || "",
     fieldValues["page2"] || "",
     fieldValues["page3"] || "",
   ];
+  const bookMotifs = [1, 2, 3, 4].map((i) => fieldValues["motif" + i] || "");
+  const bookMotifPositions = [1, 2, 3, 4].map((i) => fieldValues["motifPos" + i] || "hd");
   const bookTitle = (variant.title || "").toLowerCase();
   const bookFinish = bookTitle.includes("argent") && bookTitle.includes("dor")
     ? "bicolore"
@@ -371,7 +373,7 @@ export default function ProductDetail({ product }) {
                 ) : product.engraveEnvelope3d ? (
                   <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveBook3d ? (
-                  <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  <EngraveBook3D faces={bookFaces} motifs={bookMotifs} motifPositions={bookMotifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveHeart3d ? (
                   <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                 ) : (
@@ -548,7 +550,7 @@ export default function ProductDetail({ product }) {
                   ) : product.engraveEnvelope3d ? (
                     <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveBook3d ? (
-                    <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                    <EngraveBook3D faces={bookFaces} motifs={bookMotifs} motifPositions={bookMotifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveHeart3d ? (
                     <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                   ) : (
@@ -692,7 +694,7 @@ export default function ProductDetail({ product }) {
           ) : product.engraveEnvelope3d ? (
             <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveBook3d ? (
-            <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+            <EngraveBook3D faces={bookFaces} motifs={bookMotifs} motifPositions={bookMotifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveHeart3d ? (
             <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} height={200} showHint={false} />
           ) : (

@@ -5,6 +5,19 @@
 export function engravingExtra(product, fields = {}) {
   const cfg = product?.engravingPricing;
   if (!cfg) return { pages: 0, amount: 0 };
+
+  // Mode "pages" : par page supplémentaire, +pageMotif si un motif y est posé,
+  // sinon +pageText si un texte y est gravé (la couverture, elle, est incluse).
+  if (Array.isArray(cfg.pages)) {
+    let amount = 0, pages = 0;
+    for (const pg of cfg.pages) {
+      const hasMotif = pg.motifKey && (fields[pg.motifKey] || "").toString().trim();
+      const hasText = pg.textKey && (fields[pg.textKey] || "").toString().trim();
+      if (hasMotif) { amount += cfg.pageMotif || 0; pages += 1; }
+      else if (hasText) { amount += cfg.pageText || 0; pages += 1; }
+    }
+    return { pages, amount };
+  }
   const included = cfg.includedKey;
   // On compte les champs de texte non vides, hors couverture incluse.
   const textFields = (product.personalizationFields || []).filter((f) => {
