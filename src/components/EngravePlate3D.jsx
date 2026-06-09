@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { drawMotifInBox, preloadMotifs } from "@/lib/motifCanvas";
-
-// Aperçu 3D d'une plaque (dog tag) gravable RECTO / VERSO : texte, motif et
+// Aperçu 3D d'une plaque (dog tag) gravable RECTO / VERSO : texte et
 // PHOTO. La plaque se retourne pour montrer les deux faces ; la photo apparaît
 // sur la face choisie par la cliente. À titre indicatif.
 
@@ -92,16 +90,15 @@ function drawTextBlock(ctx, text, fontKey, top, h, ink) {
   });
 }
 
-function drawPlateFace(ctx, { text, motifVal, motifPos, photo, fontKey, baseColor, ink }) {
+function drawPlateFace(ctx, { text, motifPos, photo, fontKey, baseColor, ink }) {
   ctx.fillStyle = baseColor;
   ctx.fillRect(0, 0, TEXW, TEXH);
 
   const photoImg = photo ? getPhotoImg(photo) : null;
   const hasPhoto = photoImg && photoImg.complete && photoImg.naturalWidth;
-  const above = motifPos !== "below"; // pour texte/motif relativement à la photo
+  const above = motifPos !== "below"; // texte au-dessus ou en dessous de la photo
 
   if (hasPhoto) {
-    // Photo + texte : selon "above" le texte est au-dessus ou en dessous.
     const photoH = TEXH * 0.6, textH = TEXH * 0.28;
     if (above) {
       drawTextBlock(ctx, text, fontKey, TEXH * 0.05, textH, ink);
@@ -113,18 +110,8 @@ function drawPlateFace(ctx, { text, motifVal, motifPos, photo, fontKey, baseColo
     return;
   }
 
-  // Pas de photo : motif (optionnel) + texte centré.
-  let topReserve = 0, botReserve = 0;
-  if (motifVal) {
-    const bandH = TEXH * 0.26;
-    const cy = above ? TEXH * 0.05 + bandH / 2 : TEXH * 0.95 - bandH / 2;
-    if (drawMotifInBox(ctx, motifVal, TEXW / 2, cy, TEXW * 0.6, bandH, ink, false)) {
-      if (above) topReserve = bandH + TEXH * 0.05; else botReserve = bandH + TEXH * 0.05;
-    }
-  }
-  const top = topReserve || TEXH * 0.12;
-  const h = TEXH - top - (botReserve || TEXH * 0.12);
-  drawTextBlock(ctx, text, fontKey, top, h, ink);
+  // Pas de photo : texte centré.
+  drawTextBlock(ctx, text, fontKey, TEXH * 0.12, TEXH * 0.76, ink);
 }
 
 function faceCanvas(opts) {
@@ -137,7 +124,7 @@ function faceCanvas(opts) {
 function smoothstep(p) { const x = Math.max(0, Math.min(1, p)); return x * x * (3 - 2 * x); }
 
 export default function EngravePlate3D({
-  faces = [], motif = "", motifPos = "above", photo = "", photoFace = "recto",
+  faces = [], motifPos = "above", photo = "", photoFace = "recto",
   finish = "silver", fontKey = "playfair", height = 400, showHint = true,
 }) {
   const mountRef = useRef(null);
@@ -187,7 +174,7 @@ export default function EngravePlate3D({
       // Face peu « miroir » → gravure (texte/photo) lisible.
       const faceMat = (text, withPhoto) => {
         const map = new THREE.CanvasTexture(faceCanvas({
-          text, motifVal: motif, motifPos, photo: withPhoto ? photo : "", fontKey, baseColor: f.base, ink: f.ink,
+          text, motifPos, photo: withPhoto ? photo : "", fontKey, baseColor: f.base, ink: f.ink,
         }));
         map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
         return new THREE.MeshPhysicalMaterial({
@@ -328,7 +315,6 @@ export default function EngravePlate3D({
       return () => img.removeEventListener("load", on);
     }
   }, [photo]);
-  useEffect(() => { preloadMotifs([motif], () => setTick((t) => t + 1)); }, [motif]);
   useEffect(() => {
     if (typeof document !== "undefined" && document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => setTick((t) => t + 1));
@@ -351,14 +337,14 @@ export default function EngravePlate3D({
       if (!mat) return;
       const old = mat.map;
       const map = new THREE.CanvasTexture(faceCanvas({
-        text: cfg.text, motifVal: motif, motifPos, photo: cfg.withPhoto ? photo : "", fontKey, baseColor: f.base, ink: f.ink,
+        text: cfg.text, motifPos, photo: cfg.withPhoto ? photo : "", fontKey, baseColor: f.base, ink: f.ink,
       }));
       map.anisotropy = maxAniso; map.colorSpace = THREE.SRGBColorSpace;
       mat.map = map; mat.emissiveMap = map; mat.needsUpdate = true;
       if (old) old.dispose();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faces, motif, motifPos, photo, photoFace, finish, fontKey, tick]);
+  }, [faces, motifPos, photo, photoFace, finish, fontKey, tick]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, margin: showHint ? "8px 0 4px" : 0 }}>

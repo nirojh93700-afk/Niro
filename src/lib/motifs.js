@@ -1,27 +1,24 @@
-// Source unique des motifs gravables — tous en SVG local (fiable, vectoriel,
-// rendu identique partout, idéal pour la gravure). Pas de dépendance aux
-// polices système ni aux images externes.
+// Source unique des motifs gravables (fleurs = images fournies, symboles = SVG/glyphes).
 
 export const MOTIFS = [
-  { value: "fleur", label: "Fleur", svg: "/motifs/fleur.svg" },
-  { value: "branche", label: "Branche fleurie", svg: "/motifs/fleurs/branche-fleurie.svg" },
-  { value: "lavande", label: "Lavande", svg: "/motifs/fleurs/lavande.svg" },
-  { value: "marguerites", label: "Marguerites", svg: "/motifs/fleurs/marguerites-montantes.svg" },
-  { value: "coeur", label: "Cœur", svg: "/motifs/coeur.svg" },
-  { value: "coeur-infini", label: "Cœur infini", svg: "/motifs/coeur-infini.svg" },
-  { value: "etoile", label: "Étoile", svg: "/motifs/etoile.svg" },
-  { value: "infini", label: "Infini", svg: "/motifs/infini.svg" },
-  { value: "lune", label: "Lune", svg: "/motifs/lune.svg" },
-  { value: "soleil", label: "Soleil", svg: "/motifs/soleil.svg" },
-  { value: "eclair", label: "Éclair", svg: "/motifs/eclair.svg" },
-  { value: "patte", label: "Patte", svg: "/motifs/patte.svg" },
+  { value: "fleur2", label: "Fleur — modèle 1", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7707.jpg?v=1780606227" },
+  { value: "fleur3", label: "Fleur — modèle 2", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7706.jpg?v=1780606227" },
+  { value: "fleur4", label: "Fleur — modèle 3", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705.jpg?v=1780606227" },
+  { value: "fleur5", label: "Fleur — modèle 4", kind: "image", url: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_7705_8e43e2a1-3cba-4e9e-8eaf-c38765e67998.jpg?v=1780606227" },
+  { value: "coeur", label: "Cœur", kind: "glyph", char: "♥", thumb: "/motifs/coeur.svg" },
+  { value: "etoile", label: "Étoile", kind: "glyph", char: "★", thumb: "/motifs/etoile.svg" },
+  { value: "infini", label: "Infini", kind: "glyph", char: "∞", thumb: "/motifs/infini.svg" },
+  { value: "lune", label: "Lune", kind: "glyph", char: "☾", thumb: "/motifs/lune.svg" },
 ];
 
 export function motifThumb(m) {
-  return m.svg;
+  return m.kind === "image" ? m.url : m.thumb;
 }
 
-// value -> chemin SVG (utilisé par les aperçus 3D / canvas).
-export const MOTIF_SVG = Object.fromEntries(MOTIFS.map((m) => [m.value, m.svg]));
-
+export const FLOWER_URLS = Object.fromEntries(
+  MOTIFS.filter((m) => m.kind === "image").map((m) => [m.value, m.url])
+);
+export const GLYPHS = Object.fromEntries(
+  MOTIFS.filter((m) => m.kind === "glyph").map((m) => [m.value, m.char])
+);
 export const MOTIF_OPTIONS = MOTIFS.map((m) => ({ value: m.value, label: m.label }));

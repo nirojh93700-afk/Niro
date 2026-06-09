@@ -369,9 +369,9 @@ export default function ProductDetail({ product }) {
                 {product.engravePlate3d ? (
                   <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveEnvelope3d ? (
-                  <EngraveEnvelope3D faces={envFaces} motifs={motifVals} motifPositions={motifPositions} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveBook3d ? (
-                  <EngraveBook3D faces={bookFaces} motifs={motifVals} motifPositions={motifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveHeart3d ? (
                   <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                 ) : (
@@ -546,9 +546,9 @@ export default function ProductDetail({ product }) {
                   {product.engravePlate3d ? (
                     <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveEnvelope3d ? (
-                    <EngraveEnvelope3D faces={envFaces} motifs={motifVals} motifPositions={motifPositions} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                    <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveBook3d ? (
-                    <EngraveBook3D faces={bookFaces} motifs={motifVals} motifPositions={motifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                    <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveHeart3d ? (
                     <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                   ) : (
@@ -690,9 +690,9 @@ export default function ProductDetail({ product }) {
           {product.engravePlate3d ? (
             <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveEnvelope3d ? (
-            <EngraveEnvelope3D faces={envFaces} motifs={motifVals} motifPositions={motifPositions} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+            <EngraveEnvelope3D faces={envFaces} finish={envFinish} twoSided={envTwoSided} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveBook3d ? (
-            <EngraveBook3D faces={bookFaces} motifs={motifVals} motifPositions={motifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
+            <EngraveBook3D faces={bookFaces} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveHeart3d ? (
             <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} height={200} showHint={false} />
           ) : (
