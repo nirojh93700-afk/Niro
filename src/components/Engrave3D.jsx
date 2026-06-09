@@ -104,77 +104,73 @@ function getTintedGlyph(url, ink) {
   return oc;
 }
 
-// Dessine motif (image/SVG) + texte (empilé), le tout CENTRÉ verticalement.
+// Dessine le motif (image fleur ou symbole SVG) centré HORIZONTALEMENT,
+// à la position verticale (cx, cy) demandée, dans une bande de hauteur BAND_H.
+function drawMotifAt(ctx, motifVal, cx, cy, BAND_H, ink, bevel) {
+  const { wPx } = TEX;
+  if (FLOWER_URLS[motifVal]) {
+    const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
+    if (pc) {
+      const pw = pc.width || pc.naturalWidth, ph = pc.height || pc.naturalHeight;
+      let dw = wPx * 0.84, dh = ph * (dw / pw);
+      if (dh > BAND_H) { dh = BAND_H; dw = pw * (dh / ph); }
+      ctx.drawImage(pc, cx - dw / 2, cy - dh / 2, dw, dh);
+    }
+    return;
+  }
+  const g = GLYPH_THUMBS[motifVal] && getTintedGlyph(GLYPH_THUMBS[motifVal], ink);
+  if (g) {
+    let dh = BAND_H * 0.96, dw = g.width * (dh / g.height);
+    if (dw > wPx * 0.84) { dw = wPx * 0.84; dh = g.height * (dw / g.width); }
+    if (bevel) { ctx.globalAlpha = 0.28; ctx.drawImage(g, cx - dw / 2 + 1.2, cy - dh / 2 + 1.4, dw, dh); ctx.globalAlpha = 1; }
+    ctx.drawImage(g, cx - dw / 2, cy - dh / 2, dw, dh);
+    return;
+  }
+  // Repli : symbole de police.
+  if (GLYPHS[motifVal]) {
+    const mSize = Math.min(wPx * 0.7, BAND_H * 0.92);
+    const m = GLYPHS[motifVal] + VS_TEXT;
+    ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
+    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, cx + 1.2, cy + 1.4); }
+    ctx.fillStyle = ink; ctx.fillText(m, cx, cy);
+  }
+}
+
+// Dessine motif + texte. Le motif est placé EN HAUT ou EN BAS (choix de la
+// cliente), et centré horizontalement. Le texte remplit le reste de la face.
 function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const { wPx, hPx } = TEX;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   const above = motifPos !== "below"; // motif au-dessus du nom par défaut
-  const hasM = motifVal && (FLOWER_URLS[motifVal] || GLYPHS[motifVal]);
+  let topReserve = 0, bottomReserve = 0;
 
-  const BAND_H = hPx * 0.22;
-  const GAP = hPx * 0.05;
-
-  // Taille du texte (caractères empilés verticalement).
-  const chars = (text || "").trim().split("");
-  let fontSize = 0, lineH = 0, blockH = 0;
-  if (chars.length) {
-    const avail = hPx * 0.94 - (hasM ? BAND_H + GAP : 0);
-    fontSize = Math.min(wPx * 0.62, avail / chars.length);
-    lineH = fontSize * 1.05;
-    blockH = chars.length * lineH;
+  if (motifVal && (FLOWER_URLS[motifVal] || GLYPHS[motifVal])) {
+    const BAND_H = hPx * 0.22;
+    const bandTop = above ? hPx * 0.03 : hPx * 0.97 - BAND_H; // haut ou bas
+    const bandCY = bandTop + BAND_H / 2;
+    drawMotifAt(ctx, motifVal, wPx / 2, bandCY, BAND_H, ink, bevel);
+    const reserve = BAND_H + hPx * 0.06;
+    if (above) topReserve = reserve; else bottomReserve = reserve;
   }
-  const motifH = hasM ? BAND_H : 0;
-  const gap = (hasM && chars.length) ? GAP : 0;
-  const total = motifH + gap + blockH;
-  let y = (hPx - total) / 2; // groupe centré verticalement
 
-  const drawMotif = (cy) => {
-    if (FLOWER_URLS[motifVal]) {
-      const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
-      if (pc) {
-        const pw = pc.width || pc.naturalWidth, ph = pc.height || pc.naturalHeight;
-        let dw = wPx * 0.84, dh = ph * (dw / pw);
-        if (dh > BAND_H) { dh = BAND_H; dw = pw * (dh / ph); }
-        ctx.drawImage(pc, (wPx - dw) / 2, cy - dh / 2, dw, dh);
-        return;
-      }
-    } else {
-      const g = GLYPH_THUMBS[motifVal] && getTintedGlyph(GLYPH_THUMBS[motifVal], ink);
-      if (g) {
-        let dh = BAND_H * 0.96, dw = g.width * (dh / g.height);
-        if (dw > wPx * 0.84) { dw = wPx * 0.84; dh = g.height * (dw / g.width); }
-        if (bevel) { ctx.globalAlpha = 0.28; ctx.drawImage(g, (wPx - dw) / 2 + 1.2, cy - dh / 2 + 1.4, dw, dh); ctx.globalAlpha = 1; }
-        ctx.drawImage(g, (wPx - dw) / 2, cy - dh / 2, dw, dh);
-        return;
-      }
-      // Repli : symbole de police.
-      if (GLYPHS[motifVal]) {
-        const mSize = Math.min(wPx * 0.7, BAND_H * 0.92);
-        const m = GLYPHS[motifVal] + VS_TEXT;
-        ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
-        if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, cy + 1.4); }
-        ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, cy);
-      }
-    }
-  };
-
-  const drawTextBlock = (top) => {
+  const chars = (text || "").trim().split("");
+  if (chars.length) {
+    const areaTop = topReserve;
+    const areaBot = hPx - bottomReserve;
+    const areaH = areaBot - areaTop;
+    const n = chars.length;
+    const fontSize = Math.min(wPx * 0.62, (areaH * 0.96) / n);
+    const lineH = fontSize * 1.05;
     ctx.font = fontSpec(fontKey, fontSize);
-    for (let i = 0; i < chars.length; i++) {
-      const idx = dir === "up" ? chars.length - 1 - i : i; // "up" : 1er caractère en bas
-      const cy = top + (i + 0.5) * lineH;
-      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[idx], wPx / 2 + 1.1, cy + 1.2); }
-      ctx.fillStyle = ink; ctx.fillText(chars[idx], wPx / 2, cy);
+    let firstY, stepY;
+    if (dir === "up") { firstY = areaBot - lineH / 2; stepY = -lineH; }
+    else { firstY = areaTop + lineH / 2; stepY = lineH; }
+    for (let i = 0; i < n; i++) {
+      const y = firstY + i * stepY;
+      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(chars[i], wPx / 2 + 1.1, y + 1.2); }
+      ctx.fillStyle = ink; ctx.fillText(chars[i], wPx / 2, y);
     }
-  };
-
-  if (above) {
-    if (hasM) { drawMotif(y + motifH / 2); y += motifH + gap; }
-    if (chars.length) drawTextBlock(y);
-  } else {
-    if (chars.length) { drawTextBlock(y); y += blockH + gap; }
-    if (hasM) drawMotif(y + motifH / 2);
   }
 }
 
