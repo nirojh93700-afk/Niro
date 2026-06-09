@@ -55,7 +55,8 @@ export default function WelcomePopup({ enabled, code, text }) {
             <div style={{ fontSize: "2.2rem" }}>🎁</div>
             <h2 style={{ fontFamily: "Georgia, serif", fontWeight: "normal", color: "var(--gold-dark)", margin: "8px 0" }}>Merci !</h2>
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>Voici votre code (on vient aussi de vous l'envoyer par e-mail), à entrer au paiement :</p>
-            <div style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: 2, color: "var(--gold-dark)", background: "#fbf4e6", border: "1px dashed #e7d3a1", borderRadius: 10, padding: "12px", margin: "0 0 16px" }}>{code}</div>
+            <div style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: 2, color: "var(--gold-dark)", background: "#fbf4e6", border: "1px dashed #e7d3a1", borderRadius: 10, padding: "12px", margin: "0 0 12px" }}>{code}</div>
+            <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "0 0 16px" }}>📩 Vous recevez aussi ce code par e-mail. Pensez à vérifier vos <strong>spams / courriers indésirables</strong> (et à nous ajouter à vos contacts).</p>
             <button className="btn btn-gold btn-block" onClick={close}>J'en profite</button>
           </>
         ) : (
