@@ -272,7 +272,7 @@ Quantité
 À indiquer à la commande
 - Forme : hexagone / cercle / double cœur.
 - Texte gravé : prénom de l'invité / initiales / date.
-- Quantité : nombre de convives + 2-3 de réserve.
+- Quantité : le nombre d'invités (vous pouvez en prévoir quelques-uns de plus si vous le souhaitez).
 
 Mise en place
 - Glissez la serviette pliée dans le rond, posée à gauche de l'assiette.
