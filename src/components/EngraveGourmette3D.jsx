@@ -178,12 +178,21 @@ export default function EngraveGourmette3D({ text = "", fontKey = "playfair", fi
 
       // --- Bracelet : chaîne OU silicone ---
       if (band === "silicone") {
-        const len = 2.4;
+        const strapLen = 2.0, strapH = PH * 0.66, strapT = 0.13;
         [1, -1].forEach((sign) => {
-          const strap = new THREE.Mesh(new THREE.BoxGeometry(len, PH * 0.8, 0.1), siliconeMat());
-          strap.position.set(sign * (hw + len / 2 - 0.06), 0, 0);
-          strap.rotation.z = sign * -0.1;
+          // Embout métal qui maintient la plaque (comme sur la vraie photo).
+          const cuff = new THREE.Mesh(new THREE.BoxGeometry(0.18, PH * 1.05, PT + 0.16), plateMetal());
+          cuff.position.set(sign * (hw + 0.02), 0, 0);
+          group.add(cuff);
+          // Sangle silicone.
+          const strap = new THREE.Mesh(new THREE.BoxGeometry(strapLen, strapH, strapT), siliconeMat());
+          strap.position.set(sign * (hw + 0.12 + strapLen / 2), 0, 0);
           group.add(strap);
+          // Bout arrondi de la sangle.
+          const cap = new THREE.Mesh(new THREE.CylinderGeometry(strapH / 2, strapH / 2, strapT, 18), siliconeMat());
+          cap.rotation.x = Math.PI / 2;
+          cap.position.set(sign * (hw + 0.12 + strapLen), 0, 0);
+          group.add(cap);
         });
       } else {
         const linkR = 0.17, tube = 0.06, gap = 0.21;
