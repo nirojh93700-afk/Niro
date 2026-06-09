@@ -1,11 +1,9 @@
 "use client";
 
-// Dessin des motifs (fleurs = images détourées, symboles = glyphes) sur un
-// canvas 2D. Partagé par les aperçus 3D (livre, enveloppe, etc.).
+// Dessin des motifs (tous en SVG local) sur un canvas 2D, teintés à la couleur
+// de gravure. Partagé par les aperçus 3D (barre, livre, enveloppe, plaque…).
 
-import { FLOWER_URLS, GLYPHS } from "@/lib/motifs";
-
-const VS_TEXT = String.fromCharCode(0xfe0e); // rendu monochrome (anti emoji couleur)
+import { MOTIF_SVG } from "@/lib/motifs";
 
 const imageCache = new Map();
 function getImg(url) {
@@ -17,74 +15,49 @@ function getImg(url) {
   return img;
 }
 
-// Détoure une image (fond clair → transparent, lignes sombres → noir net).
-const processedCache = new Map();
-function getProcessedFlower(url) {
-  if (processedCache.has(url)) return processedCache.get(url);
-  const img = getImg(url);
-  if (!img.complete || !img.naturalWidth) return null;
-  const scale = Math.min(1, 700 / Math.max(img.naturalWidth, img.naturalHeight));
-  const oc = document.createElement("canvas");
-  oc.width = Math.max(1, Math.round(img.naturalWidth * scale));
-  oc.height = Math.max(1, Math.round(img.naturalHeight * scale));
-  const octx = oc.getContext("2d");
-  octx.drawImage(img, 0, 0, oc.width, oc.height);
-  let data;
-  try { data = octx.getImageData(0, 0, oc.width, oc.height); }
-  catch { processedCache.set(url, img); return img; }
-  const d = data.data;
-  for (let i = 0; i < d.length; i += 4) {
-    const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-    let a = 255 - lum;
-    a = a < 45 ? 0 : Math.min(255, (a - 45) * 1.7);
-    d[i] = 12; d[i + 1] = 12; d[i + 2] = 12; d[i + 3] = a;
-  }
-  octx.putImageData(data, 0, 0);
-  processedCache.set(url, oc);
-  return oc;
-}
-
 export function hasMotif(value) {
-  return Boolean(value && (FLOWER_URLS[value] || GLYPHS[value]));
+  return Boolean(value && MOTIF_SVG[value]);
 }
 
-// Précharge les images de motifs et rappelle `onReady` une fois chargées.
+// Précharge les SVG de motifs et rappelle `onReady` une fois chargés.
 export function preloadMotifs(values, onReady) {
   (values || []).forEach((v) => {
-    const url = FLOWER_URLS[v];
-    if (url) {
-      const img = getImg(url);
-      if (!img.complete) img.addEventListener("load", onReady, { once: true });
-    }
+    const url = MOTIF_SVG[v];
+    if (!url) return;
+    const img = getImg(url);
+    if (!img.complete) img.addEventListener("load", onReady, { once: true });
   });
 }
 
-// Dessine le motif centré dans une boîte (cx,cy) de taille (maxW,maxH).
-// `ink` = couleur du symbole (pour les glyphes). Renvoie true si dessiné.
+// Dessine le motif centré dans une boîte (cx,cy) de taille (maxW,maxH), teinté
+// en `ink`. Renvoie true si dessiné.
 export function drawMotifInBox(ctx, motifVal, cx, cy, maxW, maxH, ink, bevel) {
-  if (!motifVal) return false;
-  if (FLOWER_URLS[motifVal]) {
-    const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
-    if (!pc) return false;
-    const pw = pc.width || pc.naturalWidth;
-    const ph = pc.height || pc.naturalHeight;
-    let dw = maxW, dh = ph * (dw / pw);
-    if (dh > maxH) { dh = maxH; dw = pw * (dh / ph); }
-    ctx.drawImage(pc, cx - dw / 2, cy - dh / 2, dw, dh);
-    return true;
+  const url = motifVal && MOTIF_SVG[motifVal];
+  if (!url) return false;
+  const img = getImg(url);
+  if (!img.complete || !img.naturalWidth) return false;
+
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  const ir = iw / ih, cr = maxW / maxH;
+  let dw, dh;
+  if (ir > cr) { dw = maxW; dh = maxW / ir; } else { dh = maxH; dw = maxH * ir; }
+  dw = Math.max(1, Math.round(dw)); dh = Math.max(1, Math.round(dh));
+
+  // Teinte : on dessine le SVG puis on le recolore avec l'encre de gravure.
+  const oc = document.createElement("canvas");
+  oc.width = dw; oc.height = dh;
+  const octx = oc.getContext("2d");
+  octx.drawImage(img, 0, 0, dw, dh);
+  octx.globalCompositeOperation = "source-in";
+  octx.fillStyle = ink || "#161412";
+  octx.fillRect(0, 0, dw, dh);
+
+  const x = cx - dw / 2, y = cy - dh / 2;
+  if (bevel) {
+    ctx.globalAlpha = 0.28;
+    ctx.drawImage(oc, x + 1.2, y + 1.4);
+    ctx.globalAlpha = 1;
   }
-  if (GLYPHS[motifVal]) {
-    const size = Math.min(maxW, maxH);
-    ctx.save();
-    ctx.font = `${size}px "Segoe UI Symbol", "Apple Color Emoji", serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    const m = GLYPHS[motifVal] + VS_TEXT;
-    if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, cx + 1.2, cy + 1.4); }
-    ctx.fillStyle = ink;
-    ctx.fillText(m, cx, cy);
-    ctx.restore();
-    return true;
-  }
-  return false;
+  ctx.drawImage(oc, x, y);
+  return true;
 }

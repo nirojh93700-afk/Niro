@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FLOWER_URLS, GLYPHS } from "@/lib/motifs";
+import { drawMotifInBox, hasMotif, preloadMotifs } from "@/lib/motifCanvas";
 
 // Aperçu 3D d'un bijou à forme simple (collier barre / plaque).
 // Vraie 3D WebGL (Three.js) : métal + reflets, gravure en relief sur les 4 faces.
@@ -29,8 +29,6 @@ const FONT_MAP = {
 const BAR = { W: 0.5, H: 2.6, D: 0.5 };
 const TEX = { wPx: 180, hPx: Math.round(180 * (2.6 / 0.5)) };
 
-const VS_TEXT = String.fromCharCode(0xFE0E); // force le rendu monochrome (anti emoji couleur)
-
 // Vraies polices du site (variables CSS posées par next/font) → utilisées dans le canvas.
 const FONT_VAR = {
   playfair: "--font-display", cinzel: "--font-cinzel", "cinzel-deco": "--font-cinzel-deco",
@@ -48,45 +46,7 @@ function fontSpec(fontKey, sizePx) {
   return `${weight} ${sizePx}px ${fam}`;
 }
 
-const imageCache = new Map();
-function getFlowerImg(url) {
-  if (imageCache.has(url)) return imageCache.get(url);
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = url;
-  imageCache.set(url, img);
-  return img;
-}
-
-// Détoure une fleur : fond clair → transparent, lignes sombres → noir net.
-// Retourne un canvas (noir sur transparent) prêt à dessiner, ou null si pas prêt.
-const processedCache = new Map();
-function getProcessedFlower(url) {
-  if (processedCache.has(url)) return processedCache.get(url);
-  const img = getFlowerImg(url);
-  if (!img.complete || !img.naturalWidth) return null;
-  const scale = Math.min(1, 700 / Math.max(img.naturalWidth, img.naturalHeight));
-  const oc = document.createElement("canvas");
-  oc.width = Math.max(1, Math.round(img.naturalWidth * scale));
-  oc.height = Math.max(1, Math.round(img.naturalHeight * scale));
-  const octx = oc.getContext("2d");
-  octx.drawImage(img, 0, 0, oc.width, oc.height);
-  let data;
-  try { data = octx.getImageData(0, 0, oc.width, oc.height); }
-  catch { processedCache.set(url, img); return img; } // si lecture impossible, image brute
-  const d = data.data;
-  for (let i = 0; i < d.length; i += 4) {
-    const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-    let a = 255 - lum;            // sombre → opaque, clair → transparent
-    a = a < 45 ? 0 : Math.min(255, (a - 45) * 1.7);
-    d[i] = 12; d[i + 1] = 12; d[i + 2] = 12; d[i + 3] = a;
-  }
-  octx.putImageData(data, 0, 0);
-  processedCache.set(url, oc);
-  return oc;
-}
-
-// Dessine motif (image ou symbole) + texte (empilé) sur un contexte donné.
+// Dessine motif (SVG teinté) + texte (empilé) sur un contexte donné.
 function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const { wPx, hPx } = TEX;
   ctx.textAlign = "center";
@@ -94,31 +54,12 @@ function drawFace(ctx, { text, motifVal, fontKey, dir, motifPos, ink, bevel }) {
   const above = motifPos !== "below"; // motif au-dessus du nom par défaut
   let topReserve = 0, bottomReserve = 0;
 
-  if (motifVal && (FLOWER_URLS[motifVal] || GLYPHS[motifVal])) {
+  if (motifVal && hasMotif(motifVal)) {
     // Bande fixe pour le motif → même hauteur sur toutes les faces.
     const BAND_H = hPx * 0.24;
     const bandTop = above ? hPx * 0.02 : hPx * 0.98 - BAND_H;
     const bandCY = bandTop + BAND_H / 2;
-
-    if (FLOWER_URLS[motifVal]) {
-      const pc = getProcessedFlower(FLOWER_URLS[motifVal]);
-      if (pc) {
-        const pw = pc.width || pc.naturalWidth;
-        const ph = pc.height || pc.naturalHeight;
-        let dw = wPx * 0.84;
-        let dh = ph * (dw / pw);
-        if (dh > BAND_H) { dh = BAND_H; dw = pw * (dh / ph); }
-        const dx = (wPx - dw) / 2;            // centré horizontalement
-        const dy = bandCY - dh / 2;           // centré dans la bande (même hauteur partout)
-        ctx.drawImage(pc, dx, dy, dw, dh);
-      }
-    } else {
-      const mSize = Math.min(wPx * 0.7, BAND_H * 0.92);
-      const m = GLYPHS[motifVal] + VS_TEXT;
-      ctx.font = `${mSize}px "Segoe UI Symbol", serif`;
-      if (bevel) { ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.fillText(m, wPx / 2 + 1.2, bandCY + 1.4); }
-      ctx.fillStyle = ink; ctx.fillText(m, wPx / 2, bandCY);
-    }
+    drawMotifInBox(ctx, motifVal, wPx / 2, bandCY, wPx * 0.84, BAND_H, ink, bevel);
     const reserve = BAND_H + hPx * 0.06;
     if (above) topReserve = reserve; else bottomReserve = reserve;
   }
@@ -300,17 +241,9 @@ export default function Engrave3D({ faces = [], finish = "silver", fontKey = "pl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Précharge les images de motifs ; rafraîchit l'aperçu une fois chargées.
+  // Précharge les SVG de motifs ; rafraîchit l'aperçu une fois chargés.
   useEffect(() => {
-    let cancelled = false;
-    (motifs || []).forEach((mv) => {
-      const url = FLOWER_URLS[mv];
-      if (url) {
-        const img = getFlowerImg(url);
-        if (!img.complete) img.addEventListener("load", () => { if (!cancelled) setTick((t) => t + 1); }, { once: true });
-      }
-    });
-    return () => { cancelled = true; };
+    preloadMotifs(motifs, () => setTick((t) => t + 1));
   }, [motifs]);
 
   // Rafraîchit une fois les polices du site chargées (sinon canvas = police de repli).
