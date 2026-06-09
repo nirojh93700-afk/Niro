@@ -670,6 +670,7 @@ export const products = [
     weight: 120, pickup: false, letter: true, subcategory: "homme",
     title: "Bracelet homme chaîne acier à graver",
     category: "bijoux", type: "Bracelet personnalisé",
+    engraveGourmette3d: true, // aperçu 3D : plaque gravée sur chaîne acier
     tagline: "Chaîne en acier inoxydable, plaque gravée avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
