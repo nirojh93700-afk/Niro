@@ -176,6 +176,11 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Bijoux** : prix de référence à +25 % ; re-appliquer la remise −20 % (Promotions → Remise rapide) pour retomber sur les prix d'origine.
 - Finir photos + stocks sur les produits restants.
 
+### Actions externes en attente (à faire par l'utilisatrice — RAPPELER si elle demande « où on en est »)
+- **Google Merchant Center** (gratuit, visibilité Google Shopping) : créer le compte, vérifier le site, puis ajouter le flux **`https://nivcreation.fr/flux-google.xml`** (Produits → Flux → Flux planifié). Le flux est déjà généré par le site.
+- **Stripe → Webhooks** : cocher l'événement **`checkout.session.expired`** (nécessaire pour la relance e-mail des paniers abandonnés — déjà codée).
+- **Resend** : vérifier le domaine `nivcreation.fr` (SPF/DKIM/DMARC) pour que les e-mails arrivent en boîte de réception et pas en spam.
+
 ### Fonctionnalités livrées (rappel)
 Modèles 3D (.glb) téléversables · suivi de colis (admin + cliente + e-mail) · commandes
 (annuler/supprimer/rembourser/livrée + filtres/recherche) · assistant (masquer, prix, textes,
