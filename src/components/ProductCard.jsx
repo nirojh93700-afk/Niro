@@ -27,9 +27,9 @@ export default function ProductCard({ product }) {
   return (
     <Link href={`/produit/${product.slug}`} className="product-card">
       <div className="product-thumb" style={{ position: "relative" }}>
-        <span className="product-chip">{product.type}</span>
+        <span className="product-chip" style={product.badge ? { top: 44 } : undefined}>{product.type}</span>
         {product.badge && (
-          <span style={{ position: "absolute", top: 10, left: 10, zIndex: 2, background: "var(--gold-dark, #a98935)", color: "#fff", fontSize: "0.7rem", fontWeight: 700, letterSpacing: ".3px", padding: "3px 9px", borderRadius: 20, boxShadow: "0 2px 8px rgba(0,0,0,.15)" }}>{product.badge}</span>
+          <span style={{ position: "absolute", top: 12, left: 12, zIndex: 2, background: "var(--gold-dark, #a98935)", color: "#fff", fontSize: "0.7rem", fontWeight: 700, letterSpacing: ".3px", padding: "5px 11px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,.15)" }}>{product.badge}</span>
         )}
         {hasPromo && <span className="promo-badge">-{Math.round((1 - sale / basePrice) * 100)}%</span>}
         {hasCompare && <span className="promo-badge">-{comparePct}%</span>}
