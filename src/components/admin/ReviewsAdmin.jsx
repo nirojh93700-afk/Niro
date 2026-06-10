@@ -46,6 +46,7 @@ export default function ReviewsAdmin({ adminKey }) {
             <span className="admin-cat">{r.slug}</span>
           </div>
           <p style={{ whiteSpace: "pre-line", margin: "6px 0 10px" }}>{r.text}</p>
+          {r.photo ? <img src={r.photo} alt="" style={{ maxWidth: 140, borderRadius: 8, marginBottom: 10, display: "block" }} /> : null}
           <div style={{ display: "flex", gap: 8 }}>
             <button className="btn btn-gold" style={{ padding: "5px 14px", fontSize: "0.85rem" }} onClick={() => act(r, "approve")}>✓ Publier</button>
             <button className="btn btn-outline" style={{ padding: "5px 14px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => act(r, "delete")}>🗑 Supprimer</button>
@@ -61,6 +62,7 @@ export default function ReviewsAdmin({ adminKey }) {
             <span className="admin-cat">{r.slug}</span>
           </div>
           <p style={{ whiteSpace: "pre-line", margin: "6px 0 10px" }}>{r.text}</p>
+          {r.photo ? <img src={r.photo} alt="" style={{ maxWidth: 140, borderRadius: 8, marginBottom: 10, display: "block" }} /> : null}
           <button className="btn btn-outline" style={{ padding: "5px 14px", fontSize: "0.85rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => act(r, "delete")}>🗑 Retirer</button>
         </div>
       ))}

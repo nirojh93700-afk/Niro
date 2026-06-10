@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage } from "@/lib/stock";
+import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
 import { recordSiteOrder, updateQuoteStatus } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -292,6 +292,18 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
 
     // 2) E-mail de confirmation pour la cliente.
     if (customer.email) {
+      // Bloc parrainage (uniquement si activé dans l'admin).
+      let referralBlock = "";
+      try {
+        const ref = (await getSettings()).referral || {};
+        if (ref.enabled && ref.code) {
+          referralBlock = `<div style="margin-top:20px;background:${BRAND.cream};border:1px dashed #dcc88f;border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-weight:bold;color:${BRAND.gold};margin-bottom:6px;">Faites plaisir à une amie 💛</div>
+            <div style="font-size:14px;color:#7a7268;margin-bottom:8px;">${escapeHtml(ref.text || "Offrez une remise à une amie")} — partagez ce code :</div>
+            <div style="display:inline-block;font-size:18px;font-weight:bold;letter-spacing:2px;color:${BRAND.gold};background:#fff;border:1px solid #e7d3a1;border-radius:8px;padding:8px 18px;">${escapeHtml(ref.code)}</div>
+          </div>`;
+        }
+      } catch { /* ignore */ }
       const clientSection = (t) =>
         `<h3 style="font-family:Georgia,serif;font-weight:normal;font-size:15px;color:${BRAND.gold};border-bottom:1px solid #ece3d2;padding-bottom:6px;margin:22px 0 10px;">${t}</h3>`;
       const clientBody = `
@@ -309,6 +321,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
           </p>
 
           ${customFields ? `${clientSection("Votre personnalisation")}${customFields}` : ""}
+          ${referralBlock}
 
           ${/retrait en main propre/i.test(shippingRateName)
             ? `<p style="background:#fbf3e6;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;"><strong>Retrait en main propre :</strong> nous vous contacterons très vite (par e-mail ou téléphone) pour convenir ensemble du <strong>lieu et de l'horaire</strong> de retrait. Inutile de vous déplacer avant notre message.</p>`

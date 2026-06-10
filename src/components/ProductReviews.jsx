@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 
 function Stars({ value }) {
   return (
@@ -15,6 +16,7 @@ export default function ProductReviews({ slug }) {
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [text, setText] = useState("");
+  const [photo, setPhoto] = useState("");
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState("");
   const [open, setOpen] = useState(false);
@@ -34,7 +36,7 @@ export default function ProductReviews({ slug }) {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, name, rating, text }),
+        body: JSON.stringify({ slug, name, rating, text, photo }),
       });
       if (!res.ok) throw new Error("Envoi impossible.");
       setSent(true);
@@ -61,6 +63,10 @@ export default function ProductReviews({ slug }) {
             <Stars value={r.rating} />
           </div>
           <p style={{ margin: "6px 0 0", whiteSpace: "pre-line" }}>{r.text}</p>
+          {r.photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={r.photo} alt="Photo de la cliente" loading="lazy" style={{ marginTop: 8, maxWidth: 160, borderRadius: 10, border: "1px solid var(--line)" }} />
+          ) : null}
         </div>
       ))}
 
@@ -78,6 +84,12 @@ export default function ProductReviews({ slug }) {
           </div>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Votre prénom" style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, marginBottom: 10, font: "inherit" }} />
           <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Votre expérience, la qualité, la gravure…" style={{ width: "100%", minHeight: 90, padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }} />
+          {UPLOAD_AVAILABLE && (
+            <div style={{ marginTop: 10 }}>
+              <label style={{ fontSize: "0.85rem", color: "var(--ink-soft)", display: "block", marginBottom: 4 }}>Ajouter une photo de votre bijou (facultatif)</label>
+              <PhotoUpload value={photo} onChange={(url) => setPhoto(url)} productSlug={`avis-${slug}`} />
+            </div>
+          )}
           {err && <p style={{ color: "#b4452f", fontSize: "0.9rem" }}>{err}</p>}
           <button type="submit" className="btn btn-gold" style={{ marginTop: 8 }}>Publier mon avis</button>
         </form>

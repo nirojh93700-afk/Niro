@@ -436,6 +436,7 @@ export async function addReview(slug, review) {
     name: String(review.name || "").slice(0, 60) || "Cliente",
     rating: Math.min(5, Math.max(1, parseInt(review.rating, 10) || 5)),
     text: String(review.text || "").slice(0, 1000),
+    photo: String(review.photo || "").slice(0, 600),
     date: new Date().toISOString(),
     approved: false,
   });
@@ -501,6 +502,13 @@ export async function getSettings() {
       enabled: s.welcome?.enabled !== false, // active par défaut (sauf si explicitement décochée)
       code: (typeof s.welcome?.code === "string" && s.welcome.code.trim()) ? s.welcome.code.trim() : "BIENVENUE10",
       text: (typeof s.welcome?.text === "string" && s.welcome.text.trim()) ? s.welcome.text.trim() : "−10 % sur votre première commande",
+    },
+    // Parrainage : DÉSACTIVÉ par défaut (aucune remise tant que tu ne l'actives pas).
+    // Si activé, un code à partager est ajouté à l'e-mail de confirmation de commande.
+    referral: {
+      enabled: s.referral?.enabled === true,
+      code: typeof s.referral?.code === "string" ? s.referral.code.trim() : "",
+      text: (typeof s.referral?.text === "string" && s.referral.text.trim()) ? s.referral.text.trim() : "−10 % à offrir à une amie",
     },
     // Balises marketing (vides tant que pas configurées dans l'admin).
     metaPixelId: typeof s.metaPixelId === "string" ? s.metaPixelId.trim() : "",

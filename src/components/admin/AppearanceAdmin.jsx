@@ -143,6 +143,28 @@ export default function AppearanceAdmin({ adminKey }) {
         </p>
       </div>
 
+      {/* PARRAINAGE (désactivé par défaut) */}
+      <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+        <h3 style={{ margin: 0 }}>🤝 Parrainage (code à partager après achat)</h3>
+        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Quand c'est activé, chaque cliente reçoit, dans son e-mail de confirmation, un <strong>code à offrir à une amie</strong>. <strong>Désactivé par défaut</strong> : aucune remise tant que tu ne l'actives pas.
+        </p>
+        <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <input type="checkbox" style={{ width: "auto" }} checked={s.referral?.enabled || false} onChange={(e) => set({ referral: { ...s.referral, enabled: e.target.checked } })} />
+          Activer le parrainage
+        </label>
+        <label className="admin-field">Code à partager
+          <input value={s.referral?.code || ""} placeholder="Ex. AMIE10" onChange={(e) => set({ referral: { ...s.referral, code: e.target.value.toUpperCase() } })} />
+        </label>
+        <label className="admin-field">Texte de l'offre
+          <input value={s.referral?.text || ""} placeholder="−10 % à offrir à une amie" onChange={(e) => set({ referral: { ...s.referral, text: e.target.value } })} />
+        </label>
+        <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ referral: s.referral }, "Parrainage enregistré")}>Enregistrer</button>
+        <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+          ⚠️ Crée ce code dans <strong>Promotions → 🎟️ Codes promo</strong> (1 seule utilisation par cliente). Choisis un % qui te laisse une marge : tu ne perds jamais d'argent tant que le prix reste au‑dessus de ton coût.
+        </p>
+      </div>
+
       {/* MARKETING / PUBLICITÉ (balises) */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>📈 Publicité & statistiques de visites</h3>

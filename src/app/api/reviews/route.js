@@ -11,7 +11,7 @@ export async function GET(req) {
   const count = approved.length;
   const average = count ? Math.round((approved.reduce((s, r) => s + r.rating, 0) / count) * 10) / 10 : 0;
   return Response.json({
-    reviews: approved.map((r) => ({ name: r.name, rating: r.rating, text: r.text, date: r.date })),
+    reviews: approved.map((r) => ({ name: r.name, rating: r.rating, text: r.text, photo: r.photo || "", date: r.date })),
     average,
     count,
   });
@@ -21,10 +21,10 @@ export async function GET(req) {
 export async function POST(req) {
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
-  const { slug, name, rating, text } = body || {};
+  const { slug, name, rating, text, photo } = body || {};
   if (!slug || !text || String(text).trim().length < 2) {
     return Response.json({ error: "Avis incomplet." }, { status: 400 });
   }
-  await addReview(slug, { name, rating, text });
+  await addReview(slug, { name, rating, text, photo });
   return Response.json({ ok: true });
 }
