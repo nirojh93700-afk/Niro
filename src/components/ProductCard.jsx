@@ -48,6 +48,11 @@ export default function ProductCard({ product }) {
       </div>
       <div className="product-body">
         <h3>{product.name}</h3>
+        {product.rating?.count > 0 && (
+          <div style={{ fontSize: "0.78rem", color: "var(--gold-dark, #a98935)", margin: "0 0 2px", fontWeight: 600 }}>
+            ★ {product.rating.avg.toFixed(1)} <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>· {product.rating.count} avis</span>
+          </div>
+        )}
         <p className="tagline">{product.tagline}</p>
         <div className="product-price">
           {showDes && <small>dès </small>}

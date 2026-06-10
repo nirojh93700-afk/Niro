@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { getProductBySlug } from "@/lib/products";
-import { getSettings } from "@/lib/stock";
+import { getSettings, getRatingSummaries } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +44,7 @@ function pick(v, def) {
 export default async function HomePage() {
   let s = null;
   try { s = await getSettings(); } catch { /* défauts */ }
+  const ratings = await getRatingSummaries().catch(() => ({}));
 
   const hero = {
     eyebrow: pick(s?.hero?.eyebrow, HERO_DEFAULTS.eyebrow),
@@ -141,7 +142,7 @@ export default async function HomePage() {
               <p>Une sélection de pièces appréciées, prêtes à être personnalisées pour vous.</p>
             </div>
             <div className="product-grid">
-              {featured.map((p) => (<ProductCard key={p.slug} product={Number(s?.refMarkup) > 0 ? { ...p, refMarkup: Number(s.refMarkup) } : p} />))}
+              {featured.map((p) => { const r = ratings[p.slug]; const mk = Number(s?.refMarkup) > 0; return (<ProductCard key={p.slug} product={{ ...p, ...(mk ? { refMarkup: Number(s.refMarkup) } : {}), ...(r ? { rating: r } : {}) }} />); })}
             </div>
             <div style={{ textAlign: "center", marginTop: 40 }}>
               <Link href="/boutique" className="btn btn-primary">Voir toute la boutique</Link>

@@ -3,7 +3,8 @@ import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
 import { getCatalogBySlug, getCatalog, priceFrom } from "@/lib/catalog";
-import { getReviews } from "@/lib/stock";
+import { getReviews, getRatingSummaries } from "@/lib/stock";
+import RecentlyViewed from "@/components/RecentlyViewed";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,8 @@ export default async function ProductPage({ params }) {
     const all = (await getCatalog()).filter((p) => p.slug !== product.slug);
     const sameCat = all.filter((p) => p.category === product.category);
     related = [...sameCat, ...all.filter((p) => p.category !== product.category)].slice(0, 4);
+    const ratings = await getRatingSummaries().catch(() => ({}));
+    related = related.map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
   } catch { /* ignore */ }
 
   const jsonLd = {
@@ -83,6 +86,7 @@ export default async function ProductPage({ params }) {
         </section>
       )}
       <ProductReviews slug={product.slug} />
+      <RecentlyViewed currentSlug={product.slug} />
     </>
   );
 }

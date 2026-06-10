@@ -414,6 +414,19 @@ export async function getReviews() {
   const data = await getCatalogRaw();
   return data.reviews || {};
 }
+
+// Résumé des avis approuvés par produit : { slug: { avg, count } }.
+export async function getRatingSummaries() {
+  const all = await getReviews();
+  const out = {};
+  for (const slug of Object.keys(all)) {
+    const ok = (all[slug] || []).filter((r) => r.approved);
+    if (ok.length) {
+      out[slug] = { avg: Math.round((ok.reduce((s, r) => s + (r.rating || 0), 0) / ok.length) * 10) / 10, count: ok.length };
+    }
+  }
+  return out;
+}
 export async function addReview(slug, review) {
   const data = await getCatalogRaw();
   data.reviews = data.reviews || {};

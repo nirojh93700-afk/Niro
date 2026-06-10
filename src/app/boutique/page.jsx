@@ -10,6 +10,7 @@ import {
   getJewelTypeLabel,
 } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
+import { getRatingSummaries } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,8 @@ export default async function BoutiquePage({ searchParams }) {
   const activeSub = searchParams?.sub;
   const activeType = searchParams?.type; // bijoux : collier / bracelet
   const activeQ = (searchParams?.q || "").trim().toLowerCase();
-  const withImages = await getCatalog();
+  const ratings = await getRatingSummaries().catch(() => ({}));
+  const withImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
 
   const searchResults = activeQ
     ? withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ))
