@@ -181,6 +181,10 @@ export async function POST(req) {
       },
       locale: "fr",
       currency: "eur",
+      // Panier abandonné : la session expire après 3 h ; Stripe génère alors un
+      // lien de reprise (e-mail de relance envoyé par notre webhook).
+      expires_at: Math.floor(Date.now() / 1000) + 3 * 60 * 60,
+      after_expiration: { recovery: { enabled: true } },
       ...(discounts ? { discounts } : { allow_promotion_codes: true }),
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },

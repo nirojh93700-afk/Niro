@@ -134,6 +134,33 @@ export async function POST(req) {
     return Response.json({ error: "Signature invalide." }, { status: 400 });
   }
 
+  // Panier abandonné : la session a expiré sans paiement → e-mail de relance
+  // avec le lien de reprise Stripe (si la cliente avait saisi son e-mail).
+  if (event.type === "checkout.session.expired") {
+    try {
+      const s = event.data.object || {};
+      const to = (s.customer_details?.email || s.customer_email || "").trim();
+      const url = s.after_expiration?.recovery?.url || "";
+      if (to && url && process.env.RESEND_API_KEY) {
+        const html = emailLayout({
+          heading: "Votre panier vous attend",
+          bodyHtml: `
+            <p style="margin:0 0 12px;">Bonjour,</p>
+            <p style="margin:0 0 14px;">Vous étiez sur le point de commander une création personnalisée chez <strong>Niv Création</strong>, mais votre commande n'a pas été finalisée.</p>
+            <p style="margin:0 0 14px;">Bonne nouvelle : votre panier est toujours là. Vous pouvez reprendre exactement là où vous en étiez :</p>
+            <p style="margin:0 0 20px;text-align:center;">
+              <a href="${url}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Reprendre ma commande</a>
+            </p>
+            <p style="margin:0;color:#7a7268;">Une question, une hésitation sur la gravure ? Répondez simplement à cet e-mail, nous serons ravies de vous aider.<br>L'atelier Niv Création</p>`,
+        });
+        await sendEmail({ to, subject: "Votre panier vous attend ✦ Niv Création", html, replyTo: BRAND.contact });
+      }
+    } catch (e) {
+      console.error("Relance panier abandonné:", e.message);
+    }
+    return Response.json({ received: true });
+  }
+
   if (event.type !== "checkout.session.completed") {
     return Response.json({ received: true });
   }

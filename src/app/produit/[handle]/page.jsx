@@ -3,6 +3,7 @@ import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
 import { getCatalogBySlug, getCatalog, priceFrom } from "@/lib/catalog";
+import { getReviews } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -45,8 +46,21 @@ export default async function ProductPage({ params }) {
       priceCurrency: "EUR",
       price: priceFrom(product).toFixed(2),
       availability: "https://schema.org/InStock",
+      url: `https://nivcreation.fr/produit/${product.slug}`,
     },
   };
+
+  // Étoiles d'avis dans Google (si le produit a des avis approuvés).
+  try {
+    const approved = ((await getReviews())[product.slug] || []).filter((r) => r.approved);
+    if (approved.length) {
+      jsonLd.aggregateRating = {
+        "@type": "AggregateRating",
+        ratingValue: (approved.reduce((s, r) => s + r.rating, 0) / approved.length).toFixed(1),
+        reviewCount: approved.length,
+      };
+    }
+  } catch { /* ignore */ }
 
   return (
     <>
