@@ -239,6 +239,66 @@ export async function clearAllPriceOverrides() {
   return count;
 }
 
+// --- BAT / Discussion par commande (validation avant gravure) --------------
+// Blobs : data.bat = { [orderId]: { token, status, customerEmail, customerName,
+// ref, messages: [{ from:"atelier"|"cliente", text, image, decision, at }] } }
+function newBatToken() {
+  return (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 24);
+}
+
+export async function getBatThread(orderId) {
+  const data = await getCatalogRaw();
+  return (data.bat || {})[orderId] || null;
+}
+
+export async function getBatThreadByToken(token) {
+  const t = String(token || "").trim();
+  if (!t) return null;
+  const data = await getCatalogRaw();
+  const bat = data.bat || {};
+  for (const id of Object.keys(bat)) {
+    if (bat[id]?.token === t) return { orderId: id, ...bat[id] };
+  }
+  return null;
+}
+
+// Message de l'atelier (aperçu/texte). Crée le fil si besoin. Écriture unique.
+export async function batAtelierMessage(orderId, info = {}) {
+  const id = String(orderId || "").trim();
+  if (!id) return null;
+  const data = await getCatalogRaw();
+  data.bat = data.bat || {};
+  const th = data.bat[id] || { token: newBatToken(), status: "en_attente", ref: info.ref || "", messages: [] };
+  if (info.customerEmail) th.customerEmail = info.customerEmail;
+  if (info.customerName) th.customerName = info.customerName;
+  if (info.ref) th.ref = info.ref;
+  th.messages.push({ from: "atelier", text: (info.text || "").toString(), image: (info.image || "").toString(), at: Date.now() });
+  th.status = "en_attente";
+  th.updatedAt = Date.now();
+  data.bat[id] = th;
+  await persistCatalog(data);
+  return th;
+}
+
+// Réponse de la cliente (via le lien sécurisé). Écriture unique.
+export async function batCustomerMessage(token, { text, decision } = {}) {
+  const t = String(token || "").trim();
+  if (!t) return null;
+  const data = await getCatalogRaw();
+  const bat = data.bat || {};
+  const id = Object.keys(bat).find((k) => bat[k]?.token === t);
+  if (!id) return null;
+  const th = bat[id];
+  const dec = decision === "valide" ? "valide" : decision === "modif" ? "modif" : "";
+  th.messages.push({ from: "cliente", text: (text || "").toString(), decision: dec, at: Date.now() });
+  if (dec === "valide") th.status = "valide";
+  else if (dec === "modif") th.status = "modif_demandee";
+  th.updatedAt = Date.now();
+  data.bat[id] = th;
+  await persistCatalog(data);
+  return { orderId: id, ...th };
+}
+
 // --- Produits créés depuis l'admin (nouveaux produits) ---------------------
 export async function getCustomProducts() {
   const data = await getCatalogRaw();

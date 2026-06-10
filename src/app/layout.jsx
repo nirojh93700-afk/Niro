@@ -152,7 +152,7 @@ export default async function RootLayout({ children }) {
   // L'admin (/gestion) n'est PAS soumis au code du site : il a déjà son propre
   // mot de passe. Le code du site ne protège que la boutique publique.
   const pathname = headers().get("x-pathname") || "";
-  const isAdminPath = pathname.startsWith("/gestion");
+  const isAdminPath = pathname.startsWith("/gestion") || pathname.startsWith("/suivi");
   const access = settings.access || { locked: false, code: "" };
   const maintenance = settings.maintenance || { enabled: false, message: "" };
   const provided = cookies().get("site-access-v3")?.value;

@@ -87,6 +87,21 @@ export function welcomeEmail(code, offerText) {
   return { subject: `Votre code de bienvenue : ${code} ✦`, html: emailLayout({ heading: "Bienvenue chez Niv Création", bodyHtml: body }) };
 }
 
+// E-mail « aperçu à valider » (BAT) envoyé à la cliente avant la gravure.
+export function batProofEmail({ customerName, ref, message, imageUrl, link }) {
+  const name = customerName ? customerName.split(" ")[0] : "";
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour${name ? " " + escapeHtml(name) : ""},</p>
+    <p style="margin:0 0 14px;">Avant de graver votre commande${ref ? ` <strong>#${escapeHtml(ref)}</strong>` : ""}, voici un <strong>aperçu à valider</strong> :</p>
+    ${message ? `<p style="margin:0 0 14px;white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;">${escapeHtml(message)}</p>` : ""}
+    ${imageUrl ? `<p style="margin:0 0 16px;text-align:center;"><img src="${imageUrl}" alt="Aperçu de votre gravure" style="max-width:100%;border-radius:10px;border:1px solid #ece3d2;"></p>` : ""}
+    <p style="margin:0 0 20px;text-align:center;">
+      <a href="${link}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Voir et valider mon aperçu</a>
+    </p>
+    <p style="margin:0;color:#7a7268;">Sur cette page, vous pourrez <strong>valider</strong> ou <strong>demander une modification</strong>, et échanger avec nous. À très vite,<br>L'atelier Niv Création</p>`;
+  return { subject: `Votre aperçu à valider${ref ? ` — commande #${ref}` : ""} ✦`, html: emailLayout({ heading: "Votre aperçu avant gravure", bodyHtml: body }) };
+}
+
 // E-mail « commande expédiée » avec numéro de suivi, envoyé à la cliente.
 export function shippedEmail(order, tracking) {
   const ref = order?.ref || order?.id?.slice(-6) || "";
