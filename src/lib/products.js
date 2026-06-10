@@ -54,6 +54,7 @@ export const products = [
   // ----------------------------- BIJOUX --------------------------------------
   {
     slug: "collier-enveloppe-message-secret",
+    badge: "Coup de cœur",
     name: "Collier Enveloppe Message Secret",
     weight: 120, // grammage emballé (g) — sert au calcul des frais de port
     pickup: false, // remise en main propre possible
@@ -106,6 +107,7 @@ export const products = [
   },
   {
     slug: "collier-medaillon-coeur-ouvrable",
+    badge: "Coup de cœur",
     name: "Collier Médaillon Cœur ouvrable",
     weight: 150,
     pickup: false,
@@ -249,6 +251,7 @@ export const products = [
   },
   {
     slug: "bracelet-homme-cuir-acier",
+    badge: "Populaire",
     name: "Bracelet Homme Cuir & Acier",
     weight: 100,
     pickup: false,
@@ -705,6 +708,7 @@ export const products = [
   },
   {
     slug: "bracelet-empreinte-pied-bebe",
+    badge: "Naissance",
     name: "Bracelet Empreinte Pied de Bébé",
     weight: 70, pickup: false, letter: true, subcategory: "bebe",
     title: "Bracelet empreinte pied de bébé à graver",
@@ -845,6 +849,7 @@ export const products = [
   },
   {
     slug: "collier-medaillon-livre",
+    badge: "Nouveau",
     name: "Collier Médaillon Livre",
     weight: 120, pickup: false, letter: true, subcategory: "femme",
     title: "Collier médaillon livre à graver",

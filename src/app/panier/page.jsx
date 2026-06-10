@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
+import FreeShippingBar from "@/components/FreeShippingBar";
 
 export default function CartPage() {
   const { items, total, updateQuantity, removeItem, hydrated } = useCart();
@@ -106,6 +107,7 @@ export default function CartPage() {
 
         <aside className="cart-summary">
           <h3>Récapitulatif</h3>
+          <FreeShippingBar />
           <div className="summary-row">
             <span>Sous-total</span>
             <span>{formatEuro(total)}</span>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
+import FreeShippingBar from "./FreeShippingBar";
 
 export default function CartDrawer() {
   const {
@@ -90,6 +91,7 @@ export default function CartDrawer() {
 
         {items.length > 0 && (
           <div className="drawer-foot">
+            <FreeShippingBar compact />
             <div className="drawer-total">
               <span>Sous-total</span>
               <span>{formatEuro(total)}</span>

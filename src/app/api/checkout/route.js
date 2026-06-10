@@ -212,6 +212,12 @@ export async function POST(req) {
           },
           optional: true,
         },
+        {
+          key: "message_cadeau",
+          label: { type: "custom", custom: "C'est un cadeau ? Votre petit mot (joint à la commande)" },
+          type: "text",
+          optional: true,
+        },
       ],
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/annule`,
