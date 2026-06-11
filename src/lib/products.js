@@ -322,7 +322,7 @@ export const products = [
     ],
     variants: [
       { id: "arches-unite", title: "À l'unité (1-9)", price: 18.9 },
-      { id: "arches-lot", title: "Lot de 10+ (prix unitaire)", price: 15.9 },
+      { id: "arches-lot", title: "Lot de 10+ (prix unitaire)", price: 16.9 },
     ],
     descriptionHtml: `<p><strong>Sublimez votre table de mariage avec une signature élégante.</strong></p>
 <p>Le numéro de table « Arches Bohèmes » conjugue la chaleur du bois naturel et l'éclat de l'acrylique pour une touche moderne et raffinée. Pensé pour les mariages bohèmes, champêtres ou minimalistes.</p>
@@ -339,7 +339,7 @@ export const products = [
 <li><strong>Hauteur :</strong> environ 15 cm</li>
 <li><strong>Personnalisation :</strong> gravure laser de précision</li>
 </ul>
-<p><strong>Tarif dégressif :</strong> 18,90 € à l'unité — 15,90 € l'unité dès 10 numéros commandés.</p>`,
+<p><strong>Tarif dégressif :</strong> 18,90 € à l'unité — 16,90 € l'unité dès 10 numéros commandés.</p>`,
   },
   {
     slug: "numero-table-eucalyptus",
