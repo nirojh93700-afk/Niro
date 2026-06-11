@@ -463,7 +463,12 @@ export default function ProductDetail({ product }) {
                       <img src={v.image} alt="" />
                     )}
                     <span className="vs-title">{v.title}</span>
-                    <span className="vs-price">{formatEuro(v.price)}</span>
+                    <span className="vs-price">
+                      {typeof v.compareAt === "number" && v.compareAt > v.price && (
+                        <span className="vs-old">{formatEuro(old90(v.compareAt))}</span>
+                      )}
+                      <span className="vs-now">{formatEuro(v.price)}</span>
+                    </span>
                   </button>
                 ))}
               </div>

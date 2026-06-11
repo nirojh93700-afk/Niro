@@ -566,6 +566,18 @@ img {
 .variant-swatch .vs-price {
   font-size: 0.78rem;
   color: var(--ink-soft);
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.variant-swatch .vs-old {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+.variant-swatch .vs-now {
+  color: var(--gold-dark);
+  font-weight: 600;
 }
 .variant-swatch:hover {
   border-color: var(--gold);
