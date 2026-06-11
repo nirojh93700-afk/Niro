@@ -475,10 +475,16 @@ export const products = [
     type: "Décoration chambre enfant",
     tagline: "Le prénom de votre enfant, entouré de ses animaux préférés.",
     personalizable: true,
-    personalizationLabel: "Prénom + police + animaux (4 max) + finition",
+    personalizationLabel: "Prénom + style d'écriture + animaux (4 max) + finition",
     personalizationFields: [
       { key: "prenom", label: "Prénom de l'enfant", placeholder: "Ex : Lina", maxLength: 20 },
-      { key: "police", type: "font", label: "Police", optional: true },
+      { key: "style", type: "lettering", label: "Style d'écriture (lettres découpées)", options: [
+        { value: "Fleuri", label: "Fleuri", image: "/lettering/fleuri.jpeg" },
+        { value: "Celtique", label: "Celtique", image: "/lettering/celtique.jpeg" },
+        { value: "Art déco", label: "Art déco", image: "/lettering/art-deco.jpeg" },
+        { value: "Élégant", label: "Élégant", image: "/lettering/elegant.jpeg" },
+        { value: "Arrondi", label: "Arrondi", image: "/lettering/arrondi.jpeg" },
+      ] },
       { key: "animaux", type: "textarea", label: "Animaux au choix (4 max)", placeholder: "Ex : Lion, Éléphant, Girafe, Ours", maxLength: 120 },
       { key: "finition", type: "select", label: "Finition", optional: true, options: [
         { value: "Bois brut", label: "Bois brut (naturel)" },

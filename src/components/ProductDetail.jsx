@@ -18,6 +18,7 @@ import EngravePlate3D from "./EngravePlate3D";
 import EngraveGourmette3D from "./EngraveGourmette3D";
 import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
+import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
 
 export default function ProductDetail({ product }) {
@@ -493,6 +494,14 @@ export default function ProductDetail({ product }) {
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <MotifPicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} />
+                    </div>
+                  );
+                }
+                if (f.type === "lettering") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <LetteringPicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} options={f.options || []} />
                     </div>
                   );
                 }

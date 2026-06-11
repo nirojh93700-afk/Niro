@@ -351,7 +351,7 @@ Dimensions et sécurité
 
 À indiquer à la commande
 1. Le prénom de l'enfant (écriture exacte avec accents).
-2. La police souhaitée.
+2. Le style d'écriture souhaité (Fleuri, Celtique, Art déco, Élégant ou Arrondi).
 3. Les animaux sélectionnés (4 max).
 4. La finition (bois brut ou marron foncé).
 
