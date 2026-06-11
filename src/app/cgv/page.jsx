@@ -26,7 +26,7 @@ const html = `
 </ul>
 
 <h3>6. Droit de rétractation</h3>
-<p><strong>Articles personnalisés :</strong> conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux produits personnalisés ou confectionnés selon les spécifications du consommateur (articles gravés, photo ou texte fournis par le client).</p>
+<p><strong>Articles personnalisés :</strong> conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux produits personnalisés ou confectionnés selon les spécifications du consommateur (articles gravés ou découpés sur mesure, photo ou texte fournis par le client).</p>
 <p><strong>Articles non personnalisés :</strong> pour les articles vendus sans personnalisation (option « sans gravure » / « sans texte », modèle vierge), le client dispose d'un délai de rétractation de <strong>14 jours</strong> à compter de la réception pour retourner l'article, neuf, non utilisé et dans son état et emballage d'origine. Les frais de retour sont à la charge du client. Le remboursement intervient sous 14 jours après réception de l'article retourné.</p>
 <p>Voir notre <a href="/retours">politique de retour</a> pour le détail des conditions d'annulation et de défaut.</p>
 

@@ -29,7 +29,7 @@ const FAQ = [
   },
   {
     q: "Puis-je retourner un article personnalisé ?",
-    a: "Un article gravé à votre demande est unique : il ne peut être ni repris ni remboursé (article L221-28 du Code de la consommation). Vous pouvez annuler dans les 24 h suivant la commande, avant le lancement de la gravure. Les articles non personnalisés bénéficient du droit de rétractation de 14 jours.",
+    a: "Un article personnalisé à votre demande (gravé ou découpé sur mesure) est unique : il ne peut être ni repris ni remboursé (article L221-28 du Code de la consommation). Vous pouvez annuler dans les 24 h suivant la commande, avant le lancement de la fabrication. Les articles non personnalisés bénéficient du droit de rétractation de 14 jours.",
   },
   {
     q: "Que faire si mon article arrive abîmé ou avec un défaut ?",

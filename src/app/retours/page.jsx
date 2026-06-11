@@ -28,8 +28,8 @@ const html = `
 <h4>Décoration &amp; Cadeaux bois (mariage, chambre enfant)</h4>
 <ul>
 <li>Annulation 24 h : 100 % remboursé</li>
-<li>Après 24 h, avant gravure : moins 10 € de frais</li>
-<li>Après gravure : non remboursable</li>
+<li>Après 24 h, avant le lancement de la fabrication : moins 10 € de frais</li>
+<li>Dès le lancement de la fabrication (découpe) : non remboursable</li>
 <li>Défaut à l'arrivée : photo sous 24 h, refonte gratuite</li>
 </ul>
 
