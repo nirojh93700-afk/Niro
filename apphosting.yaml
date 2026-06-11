@@ -29,19 +29,37 @@ env:
       - RUNTIME
 
   # --- Secrets (à créer dans Secret Manager : console Firebase → App Hosting) -
+  # availability: RUNTIME uniquement → les secrets ne sont pas lus pendant le
+  # build (next build n'en a pas besoin), seulement au démarrage du serveur.
   - variable: STRIPE_SECRET_KEY
     secret: STRIPE_SECRET_KEY
+    availability:
+      - RUNTIME
   - variable: STRIPE_WEBHOOK_SECRET
     secret: STRIPE_WEBHOOK_SECRET
+    availability:
+      - RUNTIME
   - variable: RESEND_API_KEY
     secret: RESEND_API_KEY
+    availability:
+      - RUNTIME
   - variable: FIREBASE_SERVICE_ACCOUNT
     secret: FIREBASE_SERVICE_ACCOUNT
+    availability:
+      - RUNTIME
   - variable: ADMIN_PASSWORD
     secret: ADMIN_PASSWORD
+    availability:
+      - RUNTIME
   - variable: CONTACT_EMAIL
     secret: CONTACT_EMAIL
+    availability:
+      - RUNTIME
   - variable: ANTHROPIC_API_KEY
     secret: ANTHROPIC_API_KEY
+    availability:
+      - RUNTIME
   - variable: ANTHROPIC_MODEL
     secret: ANTHROPIC_MODEL
+    availability:
+      - RUNTIME
