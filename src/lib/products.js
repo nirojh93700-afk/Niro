@@ -419,6 +419,40 @@ export const products = [
 <p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
   },
   {
+    slug: "etiquette-serviette-initiales",
+    name: "Étiquette de serviette Initiales",
+    weight: 30,
+    pickup: true,
+    letter: true,
+    title: "Étiquette de serviette fleur en bois gravée – Initiales des mariés",
+    category: "mariage",
+    type: "Décoration de mariage",
+    tagline: "Une fleur de bois gravée à vos initiales, nouée à la cordelette.",
+    personalizable: true,
+    personalizationLabel: "Initiales à graver + police",
+    personalizationFields: [
+      { key: "initiales", label: "Initiales à graver", placeholder: "Ex : O & E", maxLength: 12 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/etiquette_serviette_fleur_initiales_blanc.webp",
+      "/produits/etiquette_serviette_fleur_initiales_bordeaux.jpeg",
+      "/produits/etiquette_serviette_fleur_initiales_bleu.jpeg",
+    ],
+    variants: [
+      { id: "etiquette-initiales", title: "À la pièce", price: 5.9 },
+    ],
+    descriptionHtml: `<p>Une <strong>étiquette de serviette en bois</strong> en forme de fleur, gravée aux <strong>initiales des mariés</strong> et nouée autour de la serviette avec sa cordelette naturelle.</p>
+<p>Le détail délicat qui unifie toute votre table : chaque convive découvre vos initiales joliment gravées sur sa serviette.</p>
+<ul>
+<li>✨ <strong>Gravure personnalisée</strong> : vos initiales (ex. « O &amp; E »).</li>
+<li>🌸 Forme fleur avec feuillage gravé, cordelette naturelle incluse.</li>
+<li>🤍 S'accorde à toutes les couleurs de serviettes.</li>
+<li>🪵 Bois clair découpé et gravé au laser — fabrication artisanale française.</li>
+</ul>
+<p>Commandez la quantité souhaitée selon votre nombre de convives.</p>`,
+  },
+  {
     slug: "ronds-de-serviette-bois",
     name: "Ronds de serviette personnalisés",
     weight: 40,

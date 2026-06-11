@@ -290,6 +290,40 @@ Défaut à l'arrivée
 - Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
   },
 
+  "etiquette-serviette-initiales": {
+    material: `Bois clair gravé au laser + cordelette naturelle
+
+- Bois clair (peuplier ou bouleau), découpe et gravure laser de précision.
+- Forme fleur avec feuillage gravé, environ 5 cm.
+- Cordelette naturelle incluse pour nouer autour de la serviette.
+- Très léger (environ 5-10 g par étiquette).`,
+    usage: `Le détail qui unifie votre table
+
+À indiquer à la commande
+- Les initiales à graver (ex. « O & E ») et la police souhaitée.
+- Quantité : choisissez la quantité que vous souhaitez.
+
+Mise en place
+- Nouez la cordelette autour de la serviette roulée ou pliée.
+- S'accorde à toutes les couleurs de serviettes (lin, bordeaux, bleu…).
+
+Après le mariage
+- Réutilisable en étiquette cadeau ou marque-place souvenir.`,
+    returns: `Personnalisé aux initiales — conditions adaptées
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà : remboursement moins 10 €.
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
+
+Quantité erronée à la livraison
+- Échange ou complément immédiat sans frais si la quantité reçue ne correspond pas à la commande.
+
+Défaut à l'arrivée
+- Photo sous 14 jours, refonte gratuite.
+- Pour un mariage proche : livraison express ajoutée.`,
+  },
+
   "ronds-de-serviette-bois": {
     material: `Bois clair de qualité supérieure
 
