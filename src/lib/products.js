@@ -381,6 +381,44 @@ export const products = [
 <p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
   },
   {
+    slug: "numero-table-feuillage",
+    name: "Numéro de table Feuillage",
+    weight: 200,
+    pickup: true,
+    letter: false,
+    title: "Numéro de table mariage en bois découpé au laser – Motif feuillage",
+    category: "mariage",
+    type: "Décoration de mariage",
+    tagline: "Un panneau de bois découpé au laser, orné d'un feuillage gravé.",
+    personalizable: true,
+    personalizationLabel: "Numéro / nom de table + couleur du motif",
+    personalizationFields: [
+      { key: "numero", label: "Numéro ou nom de la table", placeholder: "Ex : 1, 2… ou « Mariés »", maxLength: 24 },
+      { key: "couleur", type: "color", label: "Couleur du chiffre", optional: true, options: [
+        { value: "#c9a24b", label: "Doré" },
+        { value: "#b0b0b0", label: "Argenté" },
+        { value: "#1c1813", label: "Noir" },
+      ] },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/numero_table_rectangulaire_feuillage_bois.png",
+    ],
+    variants: [
+      { id: "feuillage-unite", title: "À l'unité (1-9)", price: 14.9 },
+      { id: "feuillage-lot", title: "Lot de 10+ (prix unitaire)", price: 11.9 },
+    ],
+    descriptionHtml: `<p>Un <strong>numéro de table en bois découpé au laser</strong>, au panneau élégant orné d'un <strong>motif de feuillage gravé</strong>. Posé sur son socle, il habille vos tables avec douceur et raffinement.</p>
+<p>Réalisé à la main dans notre atelier au laser de précision, il s'accorde aussi bien aux mariages champêtres qu'aux réceptions élégantes.</p>
+<ul>
+<li>✨ <strong>100% personnalisable</strong> : numéro ou nom de table selon votre plan de salle.</li>
+<li>🎨 <strong>Couleur du chiffre au choix</strong> : doré, argenté ou noir.</li>
+<li>🌿 Motif feuillage gravé, fin et élégant.</li>
+<li>🪵 Socle inclus — pose stable. Fabrication artisanale française.</li>
+</ul>
+<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
+  },
+  {
     slug: "ronds-de-serviette-bois",
     name: "Ronds de serviette personnalisés",
     weight: 40,

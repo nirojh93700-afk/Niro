@@ -256,6 +256,40 @@ Défaut à l'arrivée
 - Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
   },
 
+  "numero-table-feuillage": {
+    material: `Bois clair découpé au laser
+
+Bois
+- Bois clair sélectionné (peuplier ou bouleau), découpe laser haute précision.
+- Épaisseur ~3 mm, panneau avec motif de feuillage gravé.
+
+Dimensions et stabilité
+- Hauteur environ 16-17 cm, léger (environ 90 g par numéro).
+- Socle inclus : pose stable sur surface plane.`,
+    usage: `Élégance naturelle sur vos tables
+
+Placement
+- Parfait sur tout type de table (ronde, longue, carrée), avec ou sans chemin de table.
+- S'accorde aux décorations champêtres, bohèmes ou élégantes.
+
+Personnalisation
+- À la commande, précisez le numéro (ou le nom de table) et la couleur du chiffre (doré, argenté, noir).
+- Le feuillage gravé est le motif standard du modèle.`,
+    returns: `Produit personnalisé — urgence événementielle
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà : remboursement moins 10 €.
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
+
+Commande tardive
+- Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
+- Livraison express disponible.
+
+Défaut à l'arrivée
+- Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
+  },
+
   "ronds-de-serviette-bois": {
     material: `Bois clair de qualité supérieure
 
