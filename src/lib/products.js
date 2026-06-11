@@ -467,6 +467,7 @@ export const products = [
   {
     slug: "plaque-de-porte-enfant",
     name: "Plaque de porte enfant",
+    noEngravePreview: true, // pas d'aperçu de gravure (lettres découpées, pas de gravure de texte)
     weight: 450,
     pickup: true,
     letter: false,

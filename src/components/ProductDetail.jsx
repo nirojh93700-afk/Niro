@@ -586,7 +586,7 @@ export default function ProductDetail({ product }) {
                 </div>
               )}
 
-              {(hasTextFields || photoField) && (
+              {(hasTextFields || photoField) && !product.noEngravePreview && (
                 <div className="engrave-preview">
                   <span className="ep-label">
                     Aperçu témoin de la gravure
