@@ -24,6 +24,7 @@ export async function GET(req) {
       category: p.category,
       subcategory: p.subcategory || "",
       hidden: Boolean(p.hidden),
+      badge: p.badge || "",
       custom: Boolean(p.custom),
       image: p.images?.[0] || "",
       images: p.images || [],

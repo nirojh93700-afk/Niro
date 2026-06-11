@@ -13,7 +13,7 @@ import {
   getSettings,
 } from "./stock";
 
-const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d"];
+const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
 function applyOverride(product, ov, images, promos) {
   const p = { ...product };
@@ -21,6 +21,7 @@ function applyOverride(product, ov, images, promos) {
     for (const f of EDITABLE) {
       if (ov[f] !== undefined && ov[f] !== "") p[f] = ov[f];
     }
+    if (ov.badge === "none") p.badge = ""; // "Aucun" choisi dans l'admin → retire le badge du catalogue
     if (ov.hidden) p.hidden = true;
     if (ov.preview) p.preview = ov.preview; // zone de gravure réglée dans l'admin
     if (ov.prices) {

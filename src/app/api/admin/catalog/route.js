@@ -97,7 +97,11 @@ export async function POST(req) {
         { key: "police", type: "font", label: "Police de gravure", optional: true },
       ],
       images,
-      variants: [{ id: slug + "-std", title: "Standard", price: Math.round(price * 100) / 100 }],
+      variants: (Array.isArray(p.variants) && p.variants.length
+        ? p.variants
+            .map((v, i) => ({ id: `${slug}-v${i + 1}`, title: String(v.title || "Standard").slice(0, 60), price: Math.round((parseFloat(v.price) || 0) * 100) / 100 }))
+            .filter((v) => v.price > 0)
+        : [{ id: slug + "-std", title: "Standard", price: Math.round(price * 100) / 100 }]),
       descriptionHtml: descHtml.startsWith("<") ? descHtml : `<p>${descHtml || name}</p>`,
     };
     await saveCustomProduct(product);

@@ -24,6 +24,10 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
   const [openSlug, setOpenSlug] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [msg, setMsg] = useState("");
+  const [search, setSearch] = useState("");
+  const shown = search.trim()
+    ? products.filter((p) => `${p.name} ${p.slug} ${p.category}`.toLowerCase().includes(search.trim().toLowerCase()))
+    : products;
 
   async function post(payload) {
     const res = await fetch("/api/admin/catalog", {
@@ -73,7 +77,13 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
         />
       )}
 
-      {groupByCategory(products).map((group) => (
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="🔍 Rechercher un produit (nom, catégorie)…"
+        style={{ width: "100%", padding: "11px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 16 }}
+      />
+      {groupByCategory(shown).map((group) => (
         <div key={group.slug} style={{ marginBottom: 26 }}>
           <h3 className="admin-group-title">
             {group.label} <span className="admin-group-count">{group.items.length}</span>
@@ -130,6 +140,7 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
   const [name, setName] = useState(product.name || "");
   const [tagline, setTagline] = useState(product.tagline || "");
   const [category, setCategory] = useState(product.category || "cadeaux");
+  const [badge, setBadge] = useState(product.badge || "");
   const [hidden, setHidden] = useState(Boolean(product.hidden));
   const [desc, setDesc] = useState(product.descriptionHtml || "");
   const [prices, setPrices] = useState(
@@ -187,6 +198,16 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
       <label className="admin-field">Catégorie
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           {CATEGORIES.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
+        </select>
+      </label>
+      <label className="admin-field">Badge sur la vignette (boutique)
+        <select value={badge} onChange={(e) => setBadge(e.target.value)}>
+          <option value="">Aucun</option>
+          <option value="Nouveau">Nouveau</option>
+          <option value="Coup de cœur">Coup de cœur</option>
+          <option value="Populaire">Populaire</option>
+          <option value="Naissance">Naissance</option>
+          <option value="Bientôt épuisé">Bientôt épuisé</option>
         </select>
       </label>
       <div>
@@ -264,7 +285,7 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
       </label>
       <div style={{ display: "flex", gap: 10 }}>
         <button className="btn btn-gold" onClick={() => onSave({
-          name, tagline, category, hidden,
+          name, tagline, category, hidden, badge: badge || "none",
           descriptionHtml: desc,
           prices: Object.fromEntries(Object.entries(prices).filter(([, v]) => typeof v === "number")),
           discountPct: discountPct === "" ? 0 : discountPct,
@@ -279,10 +300,14 @@ function AddProduct({ onCreate }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("cadeaux");
   const [subcategory, setSubcategory] = useState("");
-  const [price, setPrice] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [type, setType] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState("");
   const [letter, setLetter] = useState(true);
+  // Variantes (au moins une) : titre + prix, comme sur Shopify.
+  const [variants, setVariants] = useState([{ title: "Standard", price: "" }]);
+  const setVar = (i, k, v) => setVariants((vs) => vs.map((x, j) => (j === i ? { ...x, [k]: v } : x)));
   const subs = SUBCATEGORIES[category] || null;
 
   return (
@@ -304,21 +329,44 @@ function AddProduct({ onCreate }) {
           </select>
         </label>
       )}
-      <label className="admin-field">Prix (€) *
-        <input type="number" min="0" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="24.90" />
+      <label className="admin-field">Phrase d'accroche
+        <input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Ex : Le souvenir gravé qui fait fondre les cœurs." />
       </label>
+      <label className="admin-field">Type (affiché sur la vignette)
+        <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Ex : Collier personnalisé, Décoration de mariage…" />
+      </label>
+      <div>
+        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Options & prix (€) *</span>
+        {variants.map((v, i) => (
+          <div key={i} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+            <input value={v.title} onChange={(e) => setVar(i, "title", e.target.value)} placeholder={`Option ${i + 1} (ex : Doré, À l'unité…)`} style={{ flex: 1, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+            <input type="number" min="0" step="0.01" value={v.price} onChange={(e) => setVar(i, "price", e.target.value)} placeholder="24.90" style={{ width: 110, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+            {variants.length > 1 && (
+              <button type="button" className="btn btn-outline" style={{ padding: "4px 10px", color: "#b4452f" }} onClick={() => setVariants((vs) => vs.filter((_, j) => j !== i))}>×</button>
+            )}
+          </div>
+        ))}
+        <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => setVariants((vs) => [...vs, { title: "", price: "" }])}>+ Ajouter une option (couleur, lot…)</button>
+      </div>
       <label className="admin-field">Description
         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} style={{ minHeight: 80 }} placeholder="Décris le produit…" />
       </label>
-      <label className="admin-field">Photos (une URL par ligne)
-        <textarea value={images} onChange={(e) => setImages(e.target.value)} style={{ minHeight: 60 }} placeholder="https://…" />
-      </label>
+      <div>
+        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Photos</span>
+        {UPLOAD_AVAILABLE && (
+          <PhotoUpload value="" multiple onUpload={(urls) => setImages((cur) => [cur, ...urls].filter(Boolean).join("\n"))} />
+        )}
+        <textarea value={images} onChange={(e) => setImages(e.target.value)} style={{ minHeight: 60, marginTop: 8 }} placeholder="Ou colle des liens (une URL par ligne)" />
+      </div>
       <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <input type="checkbox" checked={letter} onChange={(e) => setLetter(e.target.checked)} style={{ width: "auto" }} />
         Petit objet (expédiable en lettre suivie). Décoche si c'est un objet volumineux (colis).
       </label>
       <button className="btn btn-gold" onClick={() => onCreate({
-        name, category, subcategory: subcategory || undefined, price, letter,
+        name, category, subcategory: subcategory || undefined, letter,
+        tagline, type,
+        price: variants[0]?.price,
+        variants: variants.filter((v) => Number(v.price) > 0),
         descriptionHtml: desc,
         images: images.split("\n").map((s) => s.trim()).filter(Boolean),
       })}>Créer le produit</button>
