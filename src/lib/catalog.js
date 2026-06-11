@@ -5,6 +5,7 @@
 // (Server-only : utilise les Blobs.)
 // =============================================================================
 import { products as baseProducts } from "./products";
+import { roundTo90 } from "./format";
 import {
   getImageOverrides,
   getPromos,
@@ -38,15 +39,17 @@ function applyOverride(product, ov, images, promos) {
   return p;
 }
 
-// Remise permanente −10 % sur les bijoux : le prix d'origine (qui finit en ,90)
-// reste affiché barré, la cliente paie réellement 10 % de moins. Pour arrêter la
-// remise, supprimer ce bloc et l'appel à applyBijouxSale ci-dessous.
+// Remise permanente −10 % sur les bijoux. Le prix d'origine (barré) est arrondi
+// pour finir en ,90 ; la cliente paie 10 % de moins (badge −10 % pile).
+// Ex. prix catalogue 24,90 € → barré 22,90 € → payé 20,61 €.
+// Pour arrêter la remise, supprimer ce bloc et l'appel à applyBijouxSale ci-dessous.
 const BIJOUX_SALE = 0.1; // 10 %
 function applyBijouxSale(p) {
   if (p.category !== "bijoux" || !Array.isArray(p.variants)) return p;
   const variants = p.variants.map((v) => {
-    const orig = v.price;
-    return { ...v, price: Math.round(orig * (1 - BIJOUX_SALE) * 100) / 100, compareAt: orig };
+    const barre = roundTo90(v.price * (1 - BIJOUX_SALE)); // prix d'origine barré, fini en ,90
+    const paid = Math.round(barre * (1 - BIJOUX_SALE) * 100) / 100; // −10 % appliqué
+    return { ...v, price: paid, compareAt: barre };
   });
   // La remise −10 % remplace toute ancienne remise rapide (ex. −20 %) sur les bijoux.
   const { salePrice, ...rest } = p;
