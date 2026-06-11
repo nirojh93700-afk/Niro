@@ -209,7 +209,7 @@ Après la réception
 Annulation
 - Dans les 24 h après la commande : remboursement intégral.
 - Au-delà : remboursement moins 15 € (designer affecté).
-- Après gravure : non remboursable (article L221-28).
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
 
 Commande de dernière minute
 - À moins de 15 jours de l'événement, contactez-nous AVANT de commander pour confirmer la faisabilité.
@@ -246,7 +246,7 @@ Personnalisation
 Annulation
 - Dans les 24 h après la commande : remboursement intégral.
 - Au-delà : remboursement moins 10 €.
-- Après production : non remboursable.
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
 
 Commande tardive
 - Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
@@ -285,7 +285,7 @@ Après le mariage
 Annulation
 - Dans les 24 h après la commande : remboursement intégral.
 - Au-delà : remboursement moins 10 € (designer affecté).
-- Après gravure : non remboursable (article L221-28).
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
 
 Quantité erronée à la livraison
 - Échange ou complément immédiat sans frais si la quantité reçue ne correspond pas à la commande.
@@ -323,7 +323,7 @@ Personnalisation
 Annulation
 - Dans les 24 h après la commande : remboursement intégral.
 - Au-delà (avant gravure) : remboursement moins 15 € (designer affecté à votre maquette).
-- Après production : non remboursable (article L221-28).
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
 
 Commande tardive
 - Moins de 21 jours avant l'événement : contactez-nous AVANT de commander (gravure menu + relief = délai un peu plus long).
