@@ -556,7 +556,7 @@ export const products = [
     ],
     variants: [
       { id: "menu-unite", title: "À l'unité (1-9)", price: 34.9 },
-      { id: "menu-lot", title: "Lot de 10+ (prix unitaire)", price: 29.9 },
+      { id: "menu-lot", title: "Lot de 10+ (prix unitaire)", price: 31.9 },
     ],
     descriptionHtml: `<p>Sublimez vos tables de réception avec ce <strong>menu de mariage en bois gravé entièrement personnalisé</strong>. Réalisé à la main au laser de précision, il associe la chaleur du bois clair à l'élégance d'un lettrage « Menu » en relief.</p>
 <p>Forme arche double et socle en bois deux tons pour une présentation raffinée.</p>
@@ -566,7 +566,7 @@ export const products = [
 <li>📏 Dimensions : environ 195 × 195 mm monté sur son socle.</li>
 <li>🪵 Fabrication artisanale française.</li>
 </ul>
-<p><strong>Tarif dégressif :</strong> 34,90 € à l'unité — 29,90 € l'unité dès 10 menus commandés.</p>`,
+<p><strong>Tarif dégressif :</strong> 34,90 € à l'unité — 31,90 € l'unité dès 10 menus commandés.</p>`,
   },
 
   // ----------------------------- CADEAUX & DÉCO ------------------------------
