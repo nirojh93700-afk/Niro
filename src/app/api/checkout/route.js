@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { getCatalog } from "@/lib/catalog";
+import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock";
@@ -57,7 +57,7 @@ export async function POST(req) {
   const postalCode = String(body?.postalCode || "").trim();
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
   const variantIndex = await buildVariantIndex();
-  const promos = await getPromos();
+  const promos = await stripBijouxPromos(await getPromos()); // bijoux : remise permanente uniquement
   const settings = await getSettings().catch(() => ({}));
 
   // Normalise l'URL du site : ajoute https:// si oublié dans la variable

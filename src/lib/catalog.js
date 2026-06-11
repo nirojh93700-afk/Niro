@@ -53,6 +53,26 @@ function applyBijouxSale(p) {
   return { ...rest, variants };
 }
 
+// Ensemble des ids de variantes "bijoux" (pour neutraliser toute ancienne remise
+// rapide : la remise des bijoux est désormais la remise permanente ci-dessus).
+async function getBijouxVariantIds() {
+  const custom = await getCustomProducts().catch(() => []);
+  const ids = new Set();
+  for (const p of [...baseProducts, ...(custom || [])]) {
+    if (p.category === "bijoux") for (const v of p.variants || []) ids.add(v.id);
+  }
+  return ids;
+}
+
+// Retire les promos (remise rapide) qui visent des variantes bijoux : sur les
+// bijoux, seule la remise permanente −10 % s'applique.
+export async function stripBijouxPromos(promos) {
+  const ids = await getBijouxVariantIds();
+  const out = {};
+  for (const k of Object.keys(promos || {})) if (!ids.has(k)) out[k] = promos[k];
+  return out;
+}
+
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).
 export async function getCatalog() {
   const [images, promos, overrides, custom, settings] = await Promise.all([
