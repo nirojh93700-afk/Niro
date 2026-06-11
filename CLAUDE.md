@@ -176,11 +176,26 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Bijoux** : prix de référence à +25 % ; re-appliquer la remise −20 % (Promotions → Remise rapide) pour retomber sur les prix d'origine.
 - Finir photos + stocks sur les produits restants.
 
-### MIGRATION FIREBASE EN COURS (préparée le 11/06/2026 — voir docs/MIGRATION-FIREBASE.md)
-- Netlify a atteint 100 % des minutes de build (reset le 1er juillet) → décision : migrer vers **Firebase App Hosting**.
-- Code prêt et poussé : stockage commutable via `DATA_BACKEND=firestore` (Firestore `siteConfig`, cache 60 s, Storage pour les .glb), `apphosting.yaml`, routes `/api/admin/export` + `/api/admin/import`.
-- **Le site Netlify reste en ligne et prend les commandes pendant toute la migration.** Ne PAS définir `DATA_BACKEND` sur Netlify.
-- Prochaines étapes = côté utilisatrice (plan Blaze, connexion GitHub, secrets, webhook Stripe, test, bascule DNS) — détail dans docs/MIGRATION-FIREBASE.md. L'agent fait la migration des données (export → import) dès que l'URL Firebase existe.
+### MIGRATION FIREBASE — EN COURS DE BASCULE DNS (maj 11/06/2026 soir)
+- Netlify a atteint 100 % des minutes de build → migration vers **Firebase App Hosting**.
+- Code prêt : stockage commutable via `DATA_BACKEND=firestore` (Firestore, cache 60 s, Storage pour .glb), `apphosting.yaml`, routes `/api/admin/export` + `/api/admin/import`.
+- **Le site Netlify reste EN LIGNE et prend les commandes pendant toute la migration.** Ne PAS définir `DATA_BACKEND` sur Netlify.
+
+**FAIT (Firebase App Hosting opérationnel) :**
+- Backend `niv-creation` en `europe-west4`, Node 24, projet `niv-creation` (n° 619294563828), plan Blaze.
+- URL Firebase : **`https://niv-creation--niv-creation.europe-west4.hosted.app`** — testée OK (commande + paiement + annulation + remboursement fonctionnent).
+- 8 secrets créés dans Secret Manager + accès accordé via `firebase apphosting:secrets:grantaccess` (l'IAM manuel ne suffit PAS — toujours utiliser la CLI).
+- `STRIPE_SECRET_KEY` : l'ancienne était révoquée → recréée dans Stripe, mise à jour (version valide `sk_live_`, compte `acct_1Te7Ku0So3AjxkUO`).
+- Webhook Stripe Firebase créé (`/api/stripe/webhook`, events completed/expired/payment_failed) → `STRIPE_WEBHOOK_SECRET` mis à jour.
+- Données migrées une fois (export Netlify → import Firebase : 7 sections catalogue).
+- Bug corrigé : label custom_field cadeau > 50 car. (limite Stripe) — commit `493f10d`.
+
+**EN ATTENTE — BASCULE DNS (domaine chez HOSTINGER, pas OVH ni Netlify) :**
+- DNS géré sur **hpanel.hostinger.com** → nivcreation.fr → DNS / Serveurs de noms. (NS = `dns-parking.com`.)
+- Étape 1 FAITE : TXT `fah-claim=016-02-eb4357c4-...` + CNAME `_acme-challenge_goaabsql7whIflx` ajoutés et **propagés** (vérifiés OK). Reste à cliquer « Valider les enregistrements » dans Firebase.
+- Étape 2 À FAIRE = LA BASCULE : remplacer l'ALIAS `@ → apex-loadbalancer.netlify.com` par l'IP Firebase **`35.219.200.110`** (+ retirer les A Netlify `75.2.60.5` / `99.83.231.61`). C'est CE changement qui bascule le trafic.
+- **AVANT la bascule : refaire une migration données Netlify → Firebase** (récupérer dernières commandes/stock). À faire à une heure creuse.
+- **APRÈS la bascule : VÉRIFIER LES COMMANDES SUR LES DEUX BACKENDS** (Netlify Blobs + Firestore) car pendant la propagation DNS des commandes peuvent tomber sur l'un ou l'autre. Consolider le tout côté Firebase. ← demande explicite de l'utilisatrice.
 - NB : la remise bijoux est désormais **dans le code** (−10 % permanent, catalog.js) — la ligne « +25 % / −20 % » ci-dessus est obsolète.
 
 ### Actions externes en attente (à faire par l'utilisatrice — RAPPELER si elle demande « où on en est »)
