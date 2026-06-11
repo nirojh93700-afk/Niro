@@ -368,7 +368,7 @@ export const products = [
     ],
     variants: [
       { id: "euca-unite", title: "À l'unité (1-9)", price: 14.9 },
-      { id: "euca-lot", title: "Lot de 10+ (prix unitaire)", price: 11.9 },
+      { id: "euca-lot", title: "Lot de 10+ (prix unitaire)", price: 12.9 },
     ],
     descriptionHtml: `<p>Une décoration de table à la fois naturelle, élégante et personnelle. Ce <strong>numéro de table en bois gravé</strong> est orné d'un délicat motif de branche d'eucalyptus.</p>
 <p>Réalisé à la main dans notre atelier au laser de précision, il s'harmonise parfaitement avec une décoration champêtre, bohème ou végétale.</p>
@@ -378,7 +378,7 @@ export const products = [
 <li>🌿 Motif branche d'eucalyptus, idéal mariages champêtres et bohèmes.</li>
 <li>🪵 Fabrication artisanale française.</li>
 </ul>
-<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
+<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 12,90 € l'unité dès 10 numéros commandés.</p>`,
   },
   {
     slug: "numero-table-feuillage",
@@ -406,7 +406,7 @@ export const products = [
     ],
     variants: [
       { id: "feuillage-unite", title: "À l'unité (1-9)", price: 14.9 },
-      { id: "feuillage-lot", title: "Lot de 10+ (prix unitaire)", price: 11.9 },
+      { id: "feuillage-lot", title: "Lot de 10+ (prix unitaire)", price: 12.9 },
     ],
     descriptionHtml: `<p>Un <strong>numéro de table en bois découpé au laser</strong>, au panneau élégant orné d'un <strong>motif de feuillage gravé</strong>. Posé sur son socle, il habille vos tables avec douceur et raffinement.</p>
 <p>Réalisé à la main dans notre atelier au laser de précision, il s'accorde aussi bien aux mariages champêtres qu'aux réceptions élégantes.</p>
@@ -416,7 +416,7 @@ export const products = [
 <li>🌿 Motif feuillage gravé, fin et élégant.</li>
 <li>🪵 Socle inclus — pose stable. Fabrication artisanale française.</li>
 </ul>
-<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
+<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 12,90 € l'unité dès 10 numéros commandés.</p>`,
   },
   {
     slug: "etiquette-serviette-initiales",
@@ -474,7 +474,7 @@ export const products = [
     ],
     variants: [
       { id: "arche-geo-unite", title: "À l'unité (1-9)", price: 14.9 },
-      { id: "arche-geo-lot", title: "Lot de 10+ (prix unitaire)", price: 11.9 },
+      { id: "arche-geo-lot", title: "Lot de 10+ (prix unitaire)", price: 12.9 },
     ],
     descriptionHtml: `<p>Un <strong>numéro de table en bois découpé au laser</strong> en forme d'arche, bordé d'un élégant <strong>motif géométrique ajouré</strong>. Le chiffre, découpé dans un bois foncé, est <strong>fixé en relief</strong> pour un vrai effet 3D.</p>
 <p>L'<strong>année de votre mariage</strong> est gravée sous le numéro — un souvenir à garder bien après le grand jour.</p>
@@ -484,7 +484,7 @@ export const products = [
 <li>◇ Bordure géométrique ajourée, découpée au laser.</li>
 <li>🪵 Socle inclus — pose stable. Fabrication artisanale française.</li>
 </ul>
-<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
+<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 12,90 € l'unité dès 10 numéros commandés.</p>`,
   },
   {
     slug: "ronds-de-serviette-bois",
