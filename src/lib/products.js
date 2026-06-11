@@ -887,22 +887,6 @@ export const products = [
     ],
     descriptionHtml: `<p>Bracelet femme orné d'un <strong>papillon ajouré</strong> en acier inoxydable, à personnaliser par gravure. Plusieurs finitions.</p>`,
   },
-  {
-    slug: "bracelet-homme-double-anneau",
-    name: "Bracelet Homme Double Anneau",
-    weight: 110, pickup: false, letter: true, subcategory: "homme",
-    title: "Bracelet homme double anneau acier à graver",
-    category: "bijoux", type: "Bracelet personnalisé",
-    tagline: "Deux anneaux d'acier, une plaque à graver.",
-    personalizable: true, personalizationLabel: "Texte à graver + police",
-    personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
-    ],
-    images: ["/produits/bracelet_homme_double_anneau_a_graver_argente.jpg"],
-    variants: [{ id: "double-anneau-argente", title: "Argenté", price: 30.90 }],
-    descriptionHtml: `<p>Bracelet homme moderne à <strong>double anneau</strong> en acier inoxydable, plaque gravable au laser.</p>`,
-  },
   // ===== Colliers =====
   {
     slug: "collier-couple-coeur-lot2",

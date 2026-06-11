@@ -120,12 +120,21 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
                     setMsg(ok ? "Modifications enregistrées ✓" : "Échec.");
                     if (ok) onReload();
                   }}
-                  onDelete={p.custom ? async () => {
-                    if (!confirm("Supprimer définitivement ce produit ?")) return;
-                    const ok = await post({ action: "delete", slug: p.slug });
-                    setMsg(ok ? "Produit supprimé ✓" : "Échec.");
-                    if (ok) onReload();
-                  } : null}
+                  onDelete={async () => {
+                    if (p.custom) {
+                      if (!confirm("Supprimer définitivement ce produit ?")) return;
+                      const ok = await post({ action: "delete", slug: p.slug });
+                      setMsg(ok ? "Produit supprimé ✓" : "Échec.");
+                      if (ok) onReload();
+                    } else {
+                      // Produit du catalogue (code) : on ne peut pas l'effacer, on le
+                      // retire du site (masqué). Réversible via la case « Masquer ».
+                      if (!confirm("Retirer ce produit du site ? Il n'apparaîtra plus dans la boutique. (Réversible)")) return;
+                      const ok = await post({ action: "edit", slug: p.slug, patch: { hidden: true } });
+                      setMsg(ok ? "Produit retiré du site ✓" : "Échec.");
+                      if (ok) onReload();
+                    }
+                  }}
                 />
               )}
             </div>
