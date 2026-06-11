@@ -255,6 +255,41 @@ Défaut à l'arrivée
 - Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
   },
 
+  "numero-table-arche-geometrique": {
+    material: `Bois découpé au laser + chiffre en relief
+
+Bois
+- Bois clair sélectionné, découpe laser haute précision.
+- Arche bordée d'un motif géométrique ajouré.
+- Chiffre en bois foncé contrastant, fixé en relief (effet 3D).
+
+Dimensions et stabilité
+- Hauteur environ 16-17 cm, légère et stable.
+- Socle inclus : pose stable sur surface plane.`,
+    usage: `Une pièce élégante sur vos tables
+
+Placement
+- Parfait sur tout type de table (ronde, longue, carrée), avec ou sans chemin de table.
+- S'accorde aux décorations élégantes, bohèmes ou champêtres.
+
+Personnalisation
+- À la commande, précisez le numéro (ou le nom de table) et, si vous le souhaitez, l'année à graver.
+- Le motif géométrique ajouré est le décor standard du modèle.`,
+    returns: `Produit personnalisé — urgence événementielle
+
+Annulation
+- Dans les 24 h après la commande : remboursement intégral.
+- Au-delà : remboursement moins 10 €.
+- Dès le lancement de la fabrication (découpe) : non remboursable (article L221-28).
+
+Commande tardive
+- Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
+- Livraison express disponible.
+
+Défaut à l'arrivée
+- Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
+  },
+
   "numero-table-feuillage": {
     material: `Bois clair découpé au laser
 

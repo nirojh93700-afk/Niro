@@ -453,6 +453,40 @@ export const products = [
 <p>Commandez la quantité souhaitée selon votre nombre de convives.</p>`,
   },
   {
+    slug: "numero-table-arche-geometrique",
+    name: "Numéro de table Arche géométrique",
+    weight: 200,
+    pickup: true,
+    letter: false,
+    title: "Numéro de table mariage en bois – Arche ajourée & chiffre en relief 3D",
+    category: "mariage",
+    type: "Décoration de mariage",
+    tagline: "Une arche ajourée au chiffre en relief, avec l'année de votre mariage.",
+    personalizable: true,
+    personalizationLabel: "Numéro de table + année + police",
+    personalizationFields: [
+      { key: "numero", label: "Numéro ou nom de la table", placeholder: "Ex : 1, 2… ou « Mariés »", maxLength: 24 },
+      { key: "annee", label: "Année à graver", placeholder: "Ex : 2026", maxLength: 8, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/numero_table_arche_geometrique_relief_bois.jpeg",
+    ],
+    variants: [
+      { id: "arche-geo-unite", title: "À l'unité (1-9)", price: 14.9 },
+      { id: "arche-geo-lot", title: "Lot de 10+ (prix unitaire)", price: 11.9 },
+    ],
+    descriptionHtml: `<p>Un <strong>numéro de table en bois découpé au laser</strong> en forme d'arche, bordé d'un élégant <strong>motif géométrique ajouré</strong>. Le chiffre, découpé dans un bois foncé, est <strong>fixé en relief</strong> pour un vrai effet 3D.</p>
+<p>L'<strong>année de votre mariage</strong> est gravée sous le numéro — un souvenir à garder bien après le grand jour.</p>
+<ul>
+<li>✨ <strong>100% personnalisable</strong> : numéro ou nom de table + année.</li>
+<li>🪵 Chiffre en <strong>relief 3D</strong> (bois foncé contrastant).</li>
+<li>◇ Bordure géométrique ajourée, découpée au laser.</li>
+<li>🪵 Socle inclus — pose stable. Fabrication artisanale française.</li>
+</ul>
+<p><strong>Tarif dégressif :</strong> 14,90 € à l'unité — 11,90 € l'unité dès 10 numéros commandés.</p>`,
+  },
+  {
     slug: "ronds-de-serviette-bois",
     name: "Ronds de serviette personnalisés",
     weight: 40,
