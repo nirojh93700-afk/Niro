@@ -493,16 +493,14 @@ export default function GestionPage() {
   const segColors = { VIP: "#8a6d3b", "Fidèle": "#256b34", Nouvelle: "#5b6b8a" };
 
   return (
-    <section className="section">
-      <div className="container" style={{ maxWidth: 920 }}>
-        <div className="section-head" style={{ marginBottom: 20 }}>
-          <span className="eyebrow">Espace gestion</span>
-          <h2>Mon site</h2>
-        </div>
-
-        <DeclarationReminder />
-
-        <div className="admin-nav" style={{ marginBottom: 26 }}>
+    <section className="section admin-section">
+      <div className="container admin-shell">
+        <aside className="admin-sidebar">
+          <div className="admin-sidebar-brand">
+            <span className="eyebrow">Espace gestion</span>
+            <h2>Mon site</h2>
+          </div>
+          <nav className="admin-sidebar-nav">
           {[
             {
               label: "Ventes",
@@ -532,28 +530,30 @@ export default function GestionPage() {
             {
               label: "Réglages",
               tabs: [
-                { id: "assistant", text: "🤖 Assistant" },
+                { id: "assistant", text: "Assistant" },
                 { id: "apparence", text: "Apparence" },
                 { id: "reglages", text: "Réglages" },
               ],
             },
           ].map((group) => (
-            <div className="admin-nav-group" key={group.label}>
-              <span className="admin-nav-label">{group.label}</span>
-              <div className="filters" style={{ justifyContent: "flex-start", flexWrap: "wrap", gap: 8 }}>
-                {group.tabs.map((t) => (
-                  <button
-                    key={t.id}
-                    className={`filter-chip ${tab === t.id ? "active" : ""}`}
-                    onClick={() => setTab(t.id)}
-                  >
-                    {t.text}
-                  </button>
-                ))}
-              </div>
+            <div className="admin-side-group" key={group.label}>
+              <span className="admin-side-label">{group.label}</span>
+              {group.tabs.map((t) => (
+                <button
+                  key={t.id}
+                  className={`admin-side-item ${tab === t.id ? "active" : ""}`}
+                  onClick={() => setTab(t.id)}
+                >
+                  {t.text}
+                </button>
+              ))}
             </div>
           ))}
-        </div>
+          </nav>
+        </aside>
+
+        <div className="admin-content">
+        <DeclarationReminder />
 
         {error && <div className="notice">{error}</div>}
 
@@ -1141,6 +1141,7 @@ export default function GestionPage() {
             </p>
           </>
         )}
+        </div>
       </div>
     </section>
   );
