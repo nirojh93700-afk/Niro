@@ -214,7 +214,7 @@ export async function POST(req) {
         },
         {
           key: "message_cadeau",
-          label: { type: "custom", custom: "C'est un cadeau ? Votre petit mot (joint à la commande)" },
+          label: { type: "custom", custom: "Message cadeau (joint à la commande)" },
           type: "text",
           optional: true,
         },
