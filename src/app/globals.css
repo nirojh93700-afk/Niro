@@ -1657,6 +1657,33 @@ img {
   margin-bottom: 36px;
 }
 
+/* ---------- Navigation groupée de l'admin (comme Shopify) ---------- */
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+.admin-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.admin-nav-group + .admin-nav-group {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.admin-nav-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
 /* Filtres à facettes des bijoux (Pour qui + Type), bien alignés, sans chevauchement */
 .facet-bar {
   display: flex;

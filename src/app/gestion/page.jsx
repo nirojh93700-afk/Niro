@@ -502,22 +502,57 @@ export default function GestionPage() {
 
         <DeclarationReminder />
 
-        <div className="filters" style={{ justifyContent: "flex-start", marginBottom: 26, flexWrap: "wrap" }}>
-          <button className={`filter-chip ${tab === "commandes" ? "active" : ""}`} onClick={() => setTab("commandes")}>
-            Commandes{aPreparer > 0 ? ` (${aPreparer})` : ""}
-          </button>
-          <button className={`filter-chip ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>Statistiques</button>
-          <button className={`filter-chip ${tab === "clients" ? "active" : ""}`} onClick={() => setTab("clients")}>Clientes</button>
-          <button className={`filter-chip ${tab === "avis" ? "active" : ""}`} onClick={() => setTab("avis")}>Avis</button>
-          <button className={`filter-chip ${tab === "newsletter" ? "active" : ""}`} onClick={() => setTab("newsletter")}>Newsletter</button>
-          <button className={`filter-chip ${tab === "devis" ? "active" : ""}`} onClick={() => setTab("devis")}>Devis / Factures</button>
-          <button className={`filter-chip ${tab === "produits" ? "active" : ""}`} onClick={() => setTab("produits")}>Produits</button>
-          <button className={`filter-chip ${tab === "assistant" ? "active" : ""}`} onClick={() => setTab("assistant")}>🤖 Assistant</button>
-          <button className={`filter-chip ${tab === "gravure" ? "active" : ""}`} onClick={() => setTab("gravure")}>Gravure</button>
-          <button className={`filter-chip ${tab === "stock" ? "active" : ""}`} onClick={() => setTab("stock")}>Stock</button>
-          <button className={`filter-chip ${tab === "promos" ? "active" : ""}`} onClick={() => setTab("promos")}>Promotions</button>
-          <button className={`filter-chip ${tab === "apparence" ? "active" : ""}`} onClick={() => setTab("apparence")}>Apparence</button>
-          <button className={`filter-chip ${tab === "reglages" ? "active" : ""}`} onClick={() => setTab("reglages")}>Réglages</button>
+        <div className="admin-nav" style={{ marginBottom: 26 }}>
+          {[
+            {
+              label: "Ventes",
+              tabs: [
+                { id: "commandes", text: `Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
+                { id: "stats", text: "Statistiques" },
+                { id: "clients", text: "Clientes" },
+                { id: "devis", text: "Devis / Factures" },
+              ],
+            },
+            {
+              label: "Catalogue",
+              tabs: [
+                { id: "produits", text: "Produits" },
+                { id: "stock", text: "Stock" },
+                { id: "gravure", text: "Gravure" },
+              ],
+            },
+            {
+              label: "Marketing",
+              tabs: [
+                { id: "promos", text: "Promotions" },
+                { id: "avis", text: "Avis" },
+                { id: "newsletter", text: "Newsletter" },
+              ],
+            },
+            {
+              label: "Réglages",
+              tabs: [
+                { id: "assistant", text: "🤖 Assistant" },
+                { id: "apparence", text: "Apparence" },
+                { id: "reglages", text: "Réglages" },
+              ],
+            },
+          ].map((group) => (
+            <div className="admin-nav-group" key={group.label}>
+              <span className="admin-nav-label">{group.label}</span>
+              <div className="filters" style={{ justifyContent: "flex-start", flexWrap: "wrap", gap: 8 }}>
+                {group.tabs.map((t) => (
+                  <button
+                    key={t.id}
+                    className={`filter-chip ${tab === t.id ? "active" : ""}`}
+                    onClick={() => setTab(t.id)}
+                  >
+                    {t.text}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {error && <div className="notice">{error}</div>}
