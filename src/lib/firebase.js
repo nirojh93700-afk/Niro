@@ -27,6 +27,28 @@ export function firebaseReady() {
   return Boolean(process.env.FIREBASE_SERVICE_ACCOUNT);
 }
 
+// Accès direct à Firestore (ou null si la clé n'est pas configurée).
+// Utilisé par le stockage du site (stock.js) quand DATA_BACKEND=firestore.
+export function getFirestoreDb() {
+  const a = getApp();
+  return a ? admin.firestore() : null;
+}
+
+// Bucket Firebase Storage (fichiers 3D .glb) — nom via FIREBASE_STORAGE_BUCKET,
+// sinon déduit du projet (<project_id>.firebasestorage.app).
+export function getStorageBucketSafe() {
+  const a = getApp();
+  if (!a) return null;
+  try {
+    let pid = null;
+    try { pid = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT).project_id; } catch {}
+    const name = process.env.FIREBASE_STORAGE_BUCKET || (pid ? `${pid}.firebasestorage.app` : null);
+    return name ? admin.storage().bucket(name) : null;
+  } catch {
+    return null;
+  }
+}
+
 // Diagnostic complet : la clé est-elle présente, lisible, et connectée à la base ?
 // Renvoie un objet clair pour la page Réglages (sans révéler la clé).
 export async function firebaseDiagnostic() {

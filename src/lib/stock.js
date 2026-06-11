@@ -1,19 +1,41 @@
 // =============================================================================
-// Gestion du stock — stockage via Netlify Blobs (gratuit, sans compte)
+// Gestion du stock et des données du site (catalogue, promos, réglages…)
 // -----------------------------------------------------------------------------
+// Deux stockages possibles, choisis par la variable d'environnement DATA_BACKEND :
+//   - (défaut)            : Netlify Blobs — comportement historique, inchangé.
+//   - DATA_BACKEND=firestore : Firestore (collection "siteConfig"), pour
+//     l'hébergement Firebase App Hosting. Chaque section est un document
+//     { json: "..." } — pas de souci de noms de champs, et écriture en lot
+//     (atomique, cohérence immédiate).
 // Le stock est une simple table { variantId: nombre }.
 //   - variante absente de la table = stock "non suivi" (produit vendable, pas de badge)
 //   - nombre > 0  = "X en stock"
 //   - nombre = 0  = "épuisé" (achat bloqué)
-// En local (hors Netlify), on retombe sur une mémoire temporaire.
+// En local (sans aucun stockage), on retombe sur une mémoire temporaire.
 // =============================================================================
+import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
+const FS_COLLECTION = "siteConfig"; // collection Firestore (mode firestore)
 
-let memoryFallback = {}; // utilisé en local / si Blobs indisponible
+function useFirestore() {
+  return process.env.DATA_BACKEND === "firestore";
+}
+
+let memoryFallback = {}; // utilisé en local / si stockage indisponible
+
+// Cache mémoire (mode Firestore uniquement) : évite de relire la base à chaque
+// visite — Firestore facture à la lecture. Durée courte (60 s) : les modifs
+// admin restent visibles vite, et le quota gratuit est largement préservé.
+const FS_CACHE_TTL = 60 * 1000;
+const fsCache = { catalog: null, catalogAt: 0, stock: null, stockAt: 0 };
+function cacheCopy(v) {
+  try { return structuredClone(v); } catch { return JSON.parse(JSON.stringify(v)); }
+}
 
 async function getStoreSafe() {
+  if (useFirestore()) return null; // mode Firestore : on n'utilise pas les Blobs
   try {
     const { getStore } = await import("@netlify/blobs");
     return getStore(STORE_NAME);
@@ -22,7 +44,42 @@ async function getStoreSafe() {
   }
 }
 
+// --- Mode Firestore : lecture/écriture d'une section (document JSON) -------
+async function fsReadDoc(name) {
+  const db = getFirestoreDb();
+  if (!db) return null;
+  try {
+    const doc = await db.collection(FS_COLLECTION).doc(name).get();
+    if (!doc.exists) return null;
+    return JSON.parse(doc.data()?.json || "null");
+  } catch (e) {
+    console.error("Firestore lecture " + name + ":", e.message);
+    return null;
+  }
+}
+
+async function fsWriteDoc(name, value) {
+  const db = getFirestoreDb();
+  if (!db) return false;
+  try {
+    await db.collection(FS_COLLECTION).doc(name).set({ json: JSON.stringify(value), updatedAt: new Date().toISOString() });
+    return true;
+  } catch (e) {
+    console.error("Firestore écriture " + name + ":", e.message);
+    return false;
+  }
+}
+
 export async function getStockMap() {
+  if (useFirestore()) {
+    if (fsCache.stock && Date.now() - fsCache.stockAt < FS_CACHE_TTL) return cacheCopy(fsCache.stock);
+    const data = await fsReadDoc(KEY);
+    if (data) {
+      fsCache.stock = cacheCopy(data);
+      fsCache.stockAt = Date.now();
+    }
+    return data || memoryFallback;
+  }
   const store = await getStoreSafe();
   if (store) {
     try {
@@ -36,6 +93,15 @@ export async function getStockMap() {
 }
 
 async function persist(map) {
+  if (useFirestore()) {
+    if (await fsWriteDoc(KEY, map)) {
+      fsCache.stock = cacheCopy(map); // cache à jour immédiatement
+      fsCache.stockAt = Date.now();
+      return;
+    }
+    memoryFallback = map;
+    return;
+  }
   const store = await getStoreSafe();
   if (store) {
     try {
@@ -80,9 +146,33 @@ export function isAdmin(req) {
 
 // --- Photos personnalisées par produit (ajoutées depuis l'admin) -----------
 const CATALOG_KEY = "catalog";
+const FS_SECTION_PREFIX = "catalog__"; // mode Firestore : un document par section
 let catalogMemory = {};
 
 async function getCatalogRaw() {
+  if (useFirestore()) {
+    if (fsCache.catalog && Date.now() - fsCache.catalogAt < FS_CACHE_TTL) return cacheCopy(fsCache.catalog);
+    const db = getFirestoreDb();
+    if (!db) return catalogMemory;
+    try {
+      const snap = await db.collection(FS_COLLECTION).get();
+      const data = {};
+      for (const doc of snap.docs) {
+        if (!doc.id.startsWith(FS_SECTION_PREFIX)) continue;
+        const section = doc.id.slice(FS_SECTION_PREFIX.length);
+        try {
+          const v = JSON.parse(doc.data()?.json || "null");
+          if (v !== null && v !== undefined) data[section] = v;
+        } catch {}
+      }
+      fsCache.catalog = cacheCopy(data);
+      fsCache.catalogAt = Date.now();
+      return data;
+    } catch (e) {
+      console.error("Firestore lecture catalogue:", e.message);
+      return catalogMemory;
+    }
+  }
   const store = await getStoreSafe();
   if (store) {
     try {
@@ -323,9 +413,12 @@ export async function deleteCustomProduct(slug) {
 }
 
 // --- Fichiers 3D (.glb / .gltf) --------------------------------------------
-// Stockés dans Netlify Blobs (binaire, peut être lourd). Servis via /api/model3d/<id>.
+// Binaire, peut être lourd. Servis via /api/model3d/<id>.
+//   - Mode Netlify : Netlify Blobs (store "niv-models").
+//   - Mode Firestore : Firebase Storage (dossier models3d/).
 const MODEL_STORE = "niv-models";
 async function getModelStore() {
+  if (useFirestore()) return null;
   try {
     const { getStore } = await import("@netlify/blobs");
     return getStore(MODEL_STORE);
@@ -335,9 +428,23 @@ async function getModelStore() {
 }
 
 export async function saveModelFile(buffer, contentType) {
+  const id = "m_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  if (useFirestore()) {
+    const bucket = getStorageBucketSafe();
+    if (!bucket) return null;
+    try {
+      await bucket.file("models3d/" + id).save(Buffer.from(buffer), {
+        contentType: contentType || "model/gltf-binary",
+        resumable: false,
+      });
+      return id;
+    } catch (e) {
+      console.error("Storage 3D écriture:", e.message);
+      return null;
+    }
+  }
   const store = await getModelStore();
   if (!store) return null;
-  const id = "m_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   try {
     await store.set(id, buffer, { metadata: { contentType: contentType || "model/gltf-binary" } });
     return id;
@@ -347,6 +454,19 @@ export async function saveModelFile(buffer, contentType) {
 }
 
 export async function getModelFile(id) {
+  if (useFirestore()) {
+    const bucket = getStorageBucketSafe();
+    if (!bucket) return null;
+    try {
+      const file = bucket.file("models3d/" + String(id || ""));
+      const [meta] = await file.getMetadata().catch(() => [null]);
+      if (!meta) return null;
+      const [data] = await file.download();
+      return { data, contentType: meta.contentType || "model/gltf-binary" };
+    } catch {
+      return null;
+    }
+  }
   const store = await getModelStore();
   if (!store) return null;
   try {
@@ -539,6 +659,28 @@ export async function setSettings(patch) {
 }
 
 async function persistCatalog(data) {
+  if (useFirestore()) {
+    const db = getFirestoreDb();
+    if (db) {
+      try {
+        // Écriture en lot (atomique) : un document par section du catalogue.
+        const batch = db.batch();
+        const at = new Date().toISOString();
+        for (const section of Object.keys(data || {})) {
+          const ref = db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + section);
+          batch.set(ref, { json: JSON.stringify(data[section]), updatedAt: at });
+        }
+        await batch.commit();
+        fsCache.catalog = cacheCopy(data); // cache à jour immédiatement
+        fsCache.catalogAt = Date.now();
+        return;
+      } catch (e) {
+        console.error("Firestore écriture catalogue:", e.message);
+      }
+    }
+    catalogMemory = data;
+    return;
+  }
   const store = await getStoreSafe();
   if (store) {
     try {
@@ -549,6 +691,22 @@ async function persistCatalog(data) {
     }
   }
   catalogMemory = data;
+}
+
+// --- Export / import complet (migration Netlify → Firebase) ----------------
+export async function exportAllData() {
+  const [catalog, stockMap] = await Promise.all([getCatalogRaw(), getStockMap()]);
+  return { catalog, stock: stockMap, exportedAt: new Date().toISOString() };
+}
+
+export async function importAllData({ catalog, stock: stockMap } = {}) {
+  let sections = 0;
+  if (catalog && typeof catalog === "object") {
+    await persistCatalog(catalog);
+    sections = Object.keys(catalog).length;
+  }
+  if (stockMap && typeof stockMap === "object") await persist(stockMap);
+  return { sections, stockEntries: stockMap ? Object.keys(stockMap).length : 0 };
 }
 
 // Indique quelles intégrations sont configurées (sans révéler les valeurs).
