@@ -58,7 +58,7 @@ Défaut à l'arrivée (les deux cas)
 
 - Sans nickel : adapté aux peaux sensibles, ne ternit pas en usage normal.
 - Médaillon cœur ouvrable, 4 faces gravables.
-- Chaîne 50 cm, poids environ 14 g.
+- Chaîne 50 cm.
 - Finitions : Argent ou Bicolore (Or & Argent).
 - Livré dans une élégante boîte cadeau noire.`,
     usage: `Personnalisation & entretien
@@ -122,7 +122,7 @@ Défaut à l'arrivée
 
 - Plaque argentée ou noire au choix, gravable au laser.
 - Bracelet silicone confortable au quotidien.
-- Poids environ 18 g. Hypoallergénique.`,
+- Hypoallergénique.`,
     usage: `Personnalisation & entretien
 
 Personnalisation
@@ -187,8 +187,7 @@ Acrylique
 - Hauteur 15 cm pour une visibilité parfaite sans encombrer.
 
 Stabilité
-- Socle ovale assorti inclus.
-- Poids global environ 200 g par numéro de table.`,
+- Socle ovale assorti inclus.`,
     usage: `Mise en scène sur votre table de mariage
 
 Placement
@@ -229,8 +228,8 @@ Bois
 Branche eucalyptus
 - Motif découpé en relief, fixé sur le bas du support.
 
-Dimensions et poids
-- Hauteur environ 16-17 cm, léger (environ 90 g par numéro).
+Dimensions
+- Hauteur environ 16-17 cm, légère et stable.
 - Stable sur surface plane grâce à la base intégrée.`,
     usage: `Style bohème champêtre par excellence
 
@@ -264,7 +263,7 @@ Bois
 - Épaisseur ~3 mm, panneau avec motif de feuillage gravé.
 
 Dimensions et stabilité
-- Hauteur environ 16-17 cm, léger (environ 90 g par numéro).
+- Hauteur environ 16-17 cm, légère et stable.
 - Socle inclus : pose stable sur surface plane.`,
     usage: `Élégance naturelle sur vos tables
 
@@ -295,8 +294,7 @@ Défaut à l'arrivée
 
 - Bois clair (peuplier ou bouleau), découpe et gravure laser de précision.
 - Forme fleur avec feuillage gravé, environ 5 cm.
-- Cordelette naturelle incluse pour nouer autour de la serviette.
-- Très léger (environ 5-10 g par étiquette).`,
+- Cordelette naturelle incluse pour nouer autour de la serviette.`,
     usage: `Le détail qui unifie votre table
 
 À indiquer à la commande
@@ -331,7 +329,6 @@ Défaut à l'arrivée
 - Épaisseur environ 3 mm — solide mais discret.
 - Trois formes au choix, gravées au laser de précision.
 - Diamètre intérieur environ 4-4,5 cm.
-- Poids environ 5-10 g par rond.
 
 Quantité
 - Pour les grandes quantités (50+), contactez-nous pour un devis sur mesure.`,
@@ -374,9 +371,9 @@ Lettrage relief
 - Découpe laser fixée en surépaisseur : vrai effet 3D.
 - Couleur au choix : doré, argenté, ivoire, noir mat, rosé.
 
-Dimensions et poids
+Dimensions
 - Hauteur environ 18 cm × largeur environ 14 cm.
-- Poids environ 180-220 g. Socle intégré : pose stable.`,
+- Socle intégré : pose stable.`,
     usage: `La pièce maîtresse de votre table de réception
 
 Placement
@@ -413,7 +410,7 @@ Finitions
 - Marron foncé : teinture pénétrante, style cottage / bohème.
 
 Dimensions et sécurité
-- Format moyen, léger (environ 50-100 g selon le prénom).
+- Format moyen et léger.
 - Bords poncés et arrondis : pas de risque de blessure.`,
     usage: `Personnalisation, fixation, entretien
 

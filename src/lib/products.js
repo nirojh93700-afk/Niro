@@ -163,7 +163,7 @@ export const products = [
 <p>Sur chaque face : un texte court, ou une <strong>photo gravée (+8 €)</strong> que vous placez sur la page de votre choix (cette page ne porte alors pas de texte).</p>
 <h3>Spécifications</h3>
 <ul>
-<li><strong>Chaîne :</strong> 50 cm — <strong>Poids :</strong> ~14 g</li>
+<li><strong>Chaîne :</strong> 50 cm</li>
 <li><strong>Matériau :</strong> Acier inoxydable hypoallergénique</li>
 <li><strong>Couleurs :</strong> Argent ou Bicolore (Or & Argent)</li>
 <li>🎁 Livré dans une élégante boîte cadeau noire</li>
