@@ -38,6 +38,21 @@ function applyOverride(product, ov, images, promos) {
   return p;
 }
 
+// Remise permanente −10 % sur les bijoux : le prix d'origine (qui finit en ,90)
+// reste affiché barré, la cliente paie réellement 10 % de moins. Pour arrêter la
+// remise, supprimer ce bloc et l'appel à applyBijouxSale ci-dessous.
+const BIJOUX_SALE = 0.1; // 10 %
+function applyBijouxSale(p) {
+  if (p.category !== "bijoux" || !Array.isArray(p.variants)) return p;
+  const variants = p.variants.map((v) => {
+    const orig = v.price;
+    return { ...v, price: Math.round(orig * (1 - BIJOUX_SALE) * 100) / 100, compareAt: orig };
+  });
+  // La remise −10 % remplace toute ancienne remise rapide (ex. −20 %) sur les bijoux.
+  const { salePrice, ...rest } = p;
+  return { ...rest, variants };
+}
+
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).
 export async function getCatalog() {
   const [images, promos, overrides, custom, settings] = await Promise.all([
@@ -48,8 +63,8 @@ export async function getCatalog() {
     getSettings().catch(() => ({})),
   ]);
   const refMarkup = Number(settings?.refMarkup) || 0;
-  const base = baseProducts.map((p) => applyOverride(p, overrides[p.slug], images, promos));
-  const customApplied = (custom || []).map((p) => applyOverride(p, overrides[p.slug], images, promos));
+  const base = baseProducts.map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
+  const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const all = [...base, ...customApplied].filter((p) => !p.hidden);
   return refMarkup > 0 ? all.map((p) => ({ ...p, refMarkup })) : all;
 }
