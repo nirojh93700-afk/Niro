@@ -176,6 +176,13 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Bijoux** : prix de référence à +25 % ; re-appliquer la remise −20 % (Promotions → Remise rapide) pour retomber sur les prix d'origine.
 - Finir photos + stocks sur les produits restants.
 
+### MIGRATION FIREBASE EN COURS (préparée le 11/06/2026 — voir docs/MIGRATION-FIREBASE.md)
+- Netlify a atteint 100 % des minutes de build (reset le 1er juillet) → décision : migrer vers **Firebase App Hosting**.
+- Code prêt et poussé : stockage commutable via `DATA_BACKEND=firestore` (Firestore `siteConfig`, cache 60 s, Storage pour les .glb), `apphosting.yaml`, routes `/api/admin/export` + `/api/admin/import`.
+- **Le site Netlify reste en ligne et prend les commandes pendant toute la migration.** Ne PAS définir `DATA_BACKEND` sur Netlify.
+- Prochaines étapes = côté utilisatrice (plan Blaze, connexion GitHub, secrets, webhook Stripe, test, bascule DNS) — détail dans docs/MIGRATION-FIREBASE.md. L'agent fait la migration des données (export → import) dès que l'URL Firebase existe.
+- NB : la remise bijoux est désormais **dans le code** (−10 % permanent, catalog.js) — la ligne « +25 % / −20 % » ci-dessus est obsolète.
+
 ### Actions externes en attente (à faire par l'utilisatrice — RAPPELER si elle demande « où on en est »)
 - **Google Merchant Center** (gratuit, visibilité Google Shopping) : créer le compte, vérifier le site, puis ajouter le flux **`https://nivcreation.fr/flux-google.xml`** (Produits → Flux → Flux planifié). Le flux est déjà généré par le site.
 - **Stripe → Webhooks** : cocher l'événement **`checkout.session.expired`** (nécessaire pour la relance e-mail des paniers abandonnés — déjà codée).
