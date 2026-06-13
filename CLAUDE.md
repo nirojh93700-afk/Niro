@@ -208,3 +208,36 @@ Modèles 3D (.glb) téléversables · suivi de colis (admin + cliente + e-mail) 
 (annuler/supprimer/rembourser/livrée + filtres/recherche) · assistant (masquer, prix, textes,
 ajout/suppression, stock, promos) · boutique rangée par thème · remise rapide par catégorie ·
 prix conseillé · bouton accueil « Idées cadeaux ».
+
+## 12. ÉQUIPE D'AGENTS IA (maj 13/06/2026)
+> Développé sur la branche `claude/multi-agent-system-unx3q2`, déployé en fast-forward sur la
+> branche du site `claude/site-product-overview-1t2de`. Accès : **/gestion → Réglages →
+> Équipe d'agents → « Ouvrir le centre des agents »** (page dédiée `/gestion/agents`).
+
+**Moteur réutilisable** : `src/lib/agents/registry.js` (objet `AGENTS` + `runAgent` + `triageIncomingEmail`).
+Pour ajouter un agent : une entrée dans `AGENTS` (consigne + outils). Même clé `ANTHROPIC_API_KEY`.
+Fichiers liés : `/api/admin/agents` (liste + exécution), `/gestion/agents/page.jsx` (UI : vue
+d'ensemble, espace par agent, page récap « Comment ça marche »), `/api/admin/social/publish`
+(Instagram), autonomie e-mail branchée dans `/api/contact`, réglages dans `getSettings`
+(`agents.emailAutoReply`, `social.igUserId/igToken`).
+
+**Agents actifs** : 🧭 Chef (orchestrateur, délègue) · ✉️ E-mail (AUTONOME : répond seul aux
+cas simples, remonte les cas spéciaux « à valider ») · ⭐ Avis · 📣 Newsletter · 🎨 Marketing
+(prépare le post + publie sur Instagram si compte connecté) · 🛠️ Technicien/Dev (diagnostic +
+fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies commandes).
+
+**Principe** : cas simples en autonomie, cas spéciaux toujours remontés. Rien ne casse le site
+(bloc isolé, désactivable). Pour RETIRER les agents : supprimer `src/lib/agents/`,
+`src/app/api/admin/agents`, `src/app/api/admin/social`, `src/app/gestion/agents`, l'onglet
+« agents » dans `/gestion/page.jsx`, et le bloc autonome dans `/api/contact/route.js`.
+
+### EN ATTENTE côté utilisatrice (RAPPELER si elle demande « il reste quoi »)
+- **Montage / visuel / fichier 3D** : elle DOIT fournir un produit (photo + nom) → Claude le
+  génère à la demande avec ses outils (génération image/vidéo/3D). ← promis, à faire quand elle l'envoie.
+- **Publication Instagram auto** : connecter un compte Instagram Business + jeton Meta longue
+  durée (perms `instagram_basic` + `instagram_content_publish`) dans le panneau « Publier sur
+  Instagram ». Tant que non connecté : l'agent prépare le post, elle publie elle-même (bouton Copier).
+- **Auto-réponse e-mail** : codée et déployée mais **OFF par défaut**. À activer via l'interrupteur
+  dans le centre des agents quand elle est prête (elle teste avant).
+- **Agent téléphone** : non construit — nécessite un compte Twilio payant + numéro dédié.
+- **Option** : bouton « Générer le 3D » in-app (auto) → nécessiterait une API 3D payante.
