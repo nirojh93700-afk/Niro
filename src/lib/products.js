@@ -1184,7 +1184,7 @@ export const products = [
     // box = zone de placement en fraction du cadre carré ; widthMm = largeur réelle
     // gravable correspondant à maxWidthFrac. À RECALIBRER avec le vrai verre + photo.
     engrave: {
-      box: { top: 0.28, left: 0.20, width: 0.60, height: 0.50 },
+      box: { top: 0.15, left: 0.20, width: 0.60, height: 0.62 },
       widthMm: 65,
       heightMm: 65,
       maxWidthFrac: 0.50,
