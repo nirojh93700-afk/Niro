@@ -1194,6 +1194,18 @@ export const products = [
       diameterMm: 79,
       glassHeightMm: 95,
     },
+    // Gravure au fond du verre : vue de dessus, zone ronde (la base).
+    fondImage: "/produits/verre_a_whisky_fond.jpg",
+    engraveFond: {
+      box: { top: 0.30, left: 0.30, width: 0.40, height: 0.40 },
+      widthMm: 50,
+      heightMm: 50,
+      maxWidthFrac: 0.40,
+      minWidthFrac: 0.08,
+      maxHeightFrac: 0.40,
+      minHeightFrac: 0.08,
+      round: true,
+    },
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, message…", maxLength: 30 },
       { key: "texte2", label: "Deuxième ligne (date, etc.)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },

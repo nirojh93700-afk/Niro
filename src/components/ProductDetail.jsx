@@ -182,6 +182,11 @@ export default function ProductDetail({ product }) {
   // Affichable si c'est une vraie image : URL externe (http), data:, ou chemin
   // interne (/api/img/... renvoyé par le téléversement).
   const photoSrc = photoUrl && (photoUrl.startsWith("http") || photoUrl.startsWith("data:") || photoUrl.startsWith("/")) ? photoUrl : "";
+  // Gravure au fond du verre : vue de dessus + zone ronde dédiée.
+  const isFond = fieldValues["emplacement"] === "fond";
+  const editCfg = isFond && product.engraveFond ? product.engraveFond : product.engrave;
+  const mainSrc = isFond && product.fondImage ? product.fondImage : (images[activeImg]);
+  const showEditor = Boolean(product.engrave) && (isFond || activeImg === 0);
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
@@ -310,7 +315,7 @@ export default function ProductDetail({ product }) {
           <div className="gallery-main" ref={photoRef}>
             {hasImages ? (
               <Image
-                src={images[activeImg]}
+                src={mainSrc}
                 alt={`${product.name} — visuel ${activeImg + 1}`}
                 width={800}
                 height={800}
@@ -334,8 +339,8 @@ export default function ProductDetail({ product }) {
             {/* Logo / photo envoyé par le client, superposé sur la photo du
                 produit (hors cristal), dans la zone de gravure réglée. */}
             {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
-            {hasImages && product.engrave && photoSrc && activeImg === 0 && (
-              <PhotoEngraveLayer photoSrc={photoSrc} cfg={product.engrave} onChange={setPhotoLayout} />
+            {hasImages && showEditor && photoSrc && (
+              <PhotoEngraveLayer key={isFond ? "photo-fond" : "photo-face"} photoSrc={photoSrc} cfg={editCfg} onChange={setPhotoLayout} />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
             {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
@@ -348,12 +353,13 @@ export default function ProductDetail({ product }) {
                 QUE si la zone de gravure a été réglée dans l'admin (product.preview),
                 pour éviter un texte mal placé sur les photos non réglées. */}
             {/* Texte : éditeur interactif (déplaçable + taille) si activé */}
-            {hasImages && product.engrave && previewLines.length > 0 && activeImg === 0 && (
+            {hasImages && showEditor && previewLines.length > 0 && (
               <TextEngraveLayer
+                key={isFond ? "text-fond" : "text-face"}
                 lines={previewLines}
                 fontClass={previewFontClass}
                 color={previewColor}
-                cfg={product.engrave}
+                cfg={editCfg}
                 onChange={setTextLayout}
               />
             )}
@@ -384,8 +390,8 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {/* Aperçu 3D rotatif (verre) — prototype */}
-          {product.engrave && (
+          {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
+          {product.engrave && !isFond && (
             <div style={{ marginTop: 12 }}>
               <button
                 type="button"
