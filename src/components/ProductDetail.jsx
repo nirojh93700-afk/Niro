@@ -22,6 +22,7 @@ import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
+import Glass3D from "./Glass3D";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -34,6 +35,7 @@ export default function ProductDetail({ product }) {
   const [error, setError] = useState("");
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé
+  const [show3d, setShow3d] = useState(false); // aperçu 3D du verre (rotatif)
 
   const [stockMap, setStockMap] = useState({});
   const [images, setImages] = useState(product.images);
@@ -379,6 +381,25 @@ export default function ProductDetail({ product }) {
                   <img src={img} alt="" />
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Aperçu 3D rotatif (verre) — prototype */}
+          {product.engrave && (
+            <div style={{ marginTop: 12 }}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => setShow3d((v) => !v)}
+                style={{ width: "100%", padding: "10px 16px" }}
+              >
+                {show3d ? "Masquer l'aperçu 3D" : "↻ Voir le verre en 3D (le faire tourner)"}
+              </button>
+              {show3d && (
+                <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 14, overflow: "hidden", background: "#f3efe7" }}>
+                  <Glass3D photoSrc={photoSrc} lines={previewLines} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                </div>
+              )}
             </div>
           )}
 
