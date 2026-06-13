@@ -1179,6 +1179,7 @@ export const products = [
     letter: false, // colis : lourd et fragile
     hidden: true, // EN PRÉPARATION — invisible sur la boutique tant que non validé
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
+    previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },

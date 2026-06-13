@@ -320,8 +320,8 @@ export default function ProductDetail({ product }) {
             )}
             {/* Logo / photo envoyé par le client, superposé sur la photo du
                 produit (hors cristal), dans la zone de gravure réglée. */}
-            {hasImages && product.category !== "cristaux" && product.preview && photoSrc && (
-              <div className="engrave-overlay" style={product.preview}>
+            {hasImages && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
+              <div className="engrave-overlay engrave-overlay-photo" style={product.previewPhoto || product.preview}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="eo-photo" src={photoSrc} alt="Aperçu du logo / de la photo gravé" />
               </div>
