@@ -17,6 +17,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { getCatalogAdmin } from "@/lib/catalog";
+import { getSiteOrders } from "@/lib/firebase";
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 
@@ -33,6 +34,40 @@ async function catalogContext() {
   } catch {
     return "(catalogue indisponible)";
   }
+}
+
+// Résumé chiffré des ventes (mêmes règles que l'admin : hors annulées,
+// remboursées et commandes de test).
+async function salesContext() {
+  let orders;
+  try { orders = await getSiteOrders(300); } catch { orders = null; }
+  if (orders === null || !Array.isArray(orders)) {
+    return "(données de commandes indisponibles — connexion non active)";
+  }
+  const valid = orders.filter((o) => o.status !== "remboursee" && o.status !== "annulee" && !o.test);
+  const now = Date.now();
+  const within = (days) => valid.filter((o) => {
+    const t = Date.parse(o.createdAt);
+    return Number.isFinite(t) && now - t <= days * 86400000;
+  });
+  const sum = (arr) => arr.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  const fmt = (n) => (Math.round(n * 100) / 100).toLocaleString("fr-FR");
+  const w = within(7);
+  const m = within(30);
+  const sell = {};
+  for (const o of m) for (const it of o.items || []) {
+    const n = it.name || "Article";
+    sell[n] = (sell[n] || 0) + (Number(it.quantity) || 0);
+  }
+  const top = Object.entries(sell).sort((a, b) => b[1] - a[1]).slice(0, 5)
+    .map(([n, q]) => `${n} (${q})`).join(", ") || "—";
+  return [
+    `Date du jour : ${new Date().toLocaleDateString("fr-FR")}`,
+    `7 derniers jours : ${w.length} commande(s), ${fmt(sum(w))} € de chiffre d'affaires.`,
+    `30 derniers jours : ${m.length} commande(s), ${fmt(sum(m))} € de CA, panier moyen ${m.length ? fmt(sum(m) / m.length) : "0"} €.`,
+    `Total historique (valide) : ${valid.length} commande(s), ${fmt(sum(valid))} € de CA.`,
+    `Meilleures ventes (30 j) : ${top}.`,
+  ].join("\n");
 }
 
 // Règles de marque communes à TOUS les agents qui parlent au nom de la boutique.
@@ -189,6 +224,29 @@ Ton rôle :
 3. Si cela demande une modification du code, rédige une FICHE TECHNIQUE précise (problème, cause, fichiers/zones concernés, solution proposée) destinée au développeur.
 Important : tu ne modifies pas le code toi-même ; tu diagnostiques et tu prépares le travail. Sois rassurant et concret.`,
   },
+
+  // ---------------------------------------------------------------------------
+  // AGENT RAPPORT — bilan des ventes à partir des vraies données de commandes.
+  // ---------------------------------------------------------------------------
+  rapport: {
+    id: "rapport",
+    name: "Agent rapport",
+    emoji: "📊",
+    blurb: "Fait le bilan de tes ventes et te donne des conseils concrets.",
+    placeholder: "Demande ton bilan (ex : « fais le rapport de la semaine »)…",
+    needsOrders: true,
+    buildSystem: (ctx) => `${BRAND_RULES}
+
+Tu es l'analyste de la boutique. Tu fais des BILANS DE VENTES clairs et utiles à la gérante, sans jargon.
+À partir des CHIFFRES RÉELS ci-dessous, rédige un rapport court et structuré :
+- Les chiffres clés (CA, nombre de commandes, panier moyen) sur la période demandée (par défaut : la semaine).
+- Les meilleures ventes.
+- 2 ou 3 conseils concrets et actionnables pour vendre plus (mise en avant d'un produit, idée de promo, relance, post réseaux…).
+Sois concret, positif et bref. Si les données sont indisponibles, dis-le simplement sans inventer de chiffres.
+
+DONNÉES DE VENTES RÉELLES :
+${ctx.sales || "(non chargées)"}`,
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -266,6 +324,7 @@ export async function runAgent(agentId, history) {
 
   const ctx = {};
   if (agent.needsCatalog) ctx.catalog = await catalogContext();
+  if (agent.needsOrders) ctx.sales = await salesContext();
 
   const messages = (history || [])
     .slice(-12)

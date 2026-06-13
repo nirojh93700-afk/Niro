@@ -37,12 +37,14 @@ const EXAMPLES = {
     "Mes e-mails de confirmation partent en spam, que faire ?",
     "Je veux ajouter un champ « date de l'événement » sur les faire-part.",
   ],
+  rapport: [
+    "Fais le bilan de la semaine.",
+    "Comment se vendent mes produits ce mois-ci ?",
+  ],
 };
 
 // Agents prévus mais pas encore activés (feuille de route, affichés grisés).
-const ROADMAP = [
-  { emoji: "📊", name: "Agent rapport", blurb: "Bilan hebdomadaire de tes ventes (à brancher sur tes données)." },
-];
+const ROADMAP = [];
 
 export default function AgentsCenterPage() {
   const [key, setKey] = useState("");
