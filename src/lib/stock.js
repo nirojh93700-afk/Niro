@@ -654,6 +654,12 @@ export async function getSettings() {
     agents: {
       emailAutoReply: s.agents?.emailAutoReply === true,
     },
+    // Réseaux sociaux : identifiants pour la publication Instagram (API Meta).
+    // Vides tant que la gérante ne les a pas renseignés dans le centre des agents.
+    social: {
+      igUserId: typeof s.social?.igUserId === "string" ? s.social.igUserId.trim() : "",
+      igToken: typeof s.social?.igToken === "string" ? s.social.igToken.trim() : "",
+    },
   };
 }
 

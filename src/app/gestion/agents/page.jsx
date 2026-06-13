@@ -375,6 +375,10 @@ function Workspace({ agent, adminKey }) {
               <EmailDraft draft={m.action} adminKey={adminKey}
                 onSent={(label) => setMessages((arr) => arr.map((msg, j) => (j === i ? { ...msg, done: label } : msg)))} />
             )}
+            {/* Réponse texte (avis, newsletter, marketing…) : bouton pour copier. */}
+            {m.role === "assistant" && !m.action && m.content && m.content.length > 20 && (
+              <div><CopyButton text={m.content} /></div>
+            )}
             {m.done && <div style={{ marginTop: 6, fontSize: "0.85rem", color: "#256b34" }}>{m.done}</div>}
           </div>
         ))}
@@ -392,6 +396,8 @@ function Workspace({ agent, adminKey }) {
         />
         <button className="btn btn-gold" onClick={() => send()} disabled={busy}>Envoyer</button>
       </div>
+
+      {agent.id === "marketing" && <SocialPublish adminKey={adminKey} />}
     </div>
   );
 }
@@ -460,6 +466,113 @@ function EmailDraft({ draft, adminKey, onSent }) {
   );
 }
 
+// Petit bouton « Copier » réutilisable (pour récupérer un texte d'agent).
+function CopyButton({ text, label = "Copier" }) {
+  const [done, setDone] = useState(false);
+  return (
+    <button
+      className="btn btn-outline"
+      style={{ fontSize: "0.8rem", padding: "4px 12px", marginTop: 6 }}
+      onClick={() => navigator.clipboard?.writeText(text).then(() => { setDone(true); setTimeout(() => setDone(false), 1500); })}
+    >
+      {done ? "Copié ✓" : label}
+    </button>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// PUBLICATION INSTAGRAM — l'agent marketing peut publier lui-même (en option).
+// Si non configuré : formulaire pour enregistrer l'identifiant + le jeton Meta.
+// Si configuré : champ image (URL https) + légende -> publication directe.
+// ---------------------------------------------------------------------------
+function SocialPublish({ adminKey }) {
+  const [configured, setConfigured] = useState(null); // null = inconnu
+  const [showConfig, setShowConfig] = useState(false);
+  const [igUserId, setIgUserId] = useState("");
+  const [igToken, setIgToken] = useState("");
+  const [savingCfg, setSavingCfg] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [caption, setCaption] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    fetch("/api/admin/social/publish", { headers: { "x-admin-key": adminKey } })
+      .then((r) => r.json())
+      .then((d) => setConfigured(Boolean(d.configured)))
+      .catch(() => setConfigured(false));
+  }, [adminKey]);
+
+  async function saveConfig() {
+    if (savingCfg) return;
+    setSavingCfg(true); setMsg("");
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify({ social: { igUserId: igUserId.trim(), igToken: igToken.trim() } }),
+      });
+      if (res.ok) { setConfigured(Boolean(igUserId.trim() && igToken.trim())); setShowConfig(false); setIgToken(""); setMsg("Connexion enregistrée ✓"); }
+      else setMsg("Échec de l'enregistrement.");
+    } catch { setMsg("Erreur de connexion."); }
+    finally { setSavingCfg(false); }
+  }
+
+  async function publish() {
+    if (busy) return;
+    setBusy(true); setMsg("");
+    try {
+      const res = await fetch("/api/admin/social/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify({ imageUrl: imageUrl.trim(), caption }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (res.ok) { setMsg("Publié sur Instagram ✓"); setImageUrl(""); setCaption(""); }
+      else setMsg(d.error || "Échec de la publication.");
+    } catch { setMsg("Erreur de connexion."); }
+    finally { setBusy(false); }
+  }
+
+  return (
+    <div style={{ marginTop: 16, border: "1px solid var(--line)", borderRadius: 14, padding: 16, background: "var(--paper)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
+        <strong>Publier sur Instagram</strong>
+        {configured === true && !showConfig && (
+          <span style={{ fontSize: "0.78rem", color: "#256b34" }}>Compte connecté ✓ · <button onClick={() => setShowConfig(true)} style={{ background: "none", border: "none", color: "var(--gold)", cursor: "pointer", padding: 0, font: "inherit" }}>reconfigurer</button></span>
+        )}
+      </div>
+
+      {(configured === false || showConfig) && (
+        <div style={{ marginTop: 10 }}>
+          <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem", marginTop: 0 }}>
+            Pour publier directement, connecte ton compte Instagram Business (identifiant + jeton d'accès Meta). Sinon, copie simplement le texte préparé et publie toi-même.
+          </p>
+          <input value={igUserId} onChange={(e) => setIgUserId(e.target.value)} placeholder="Identifiant du compte Instagram (igUserId)"
+            style={{ width: "100%", padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", marginBottom: 8 }} />
+          <input value={igToken} onChange={(e) => setIgToken(e.target.value)} placeholder="Jeton d'accès Meta (longue durée)" type="password"
+            style={{ width: "100%", padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+          <button className="btn btn-gold" style={{ marginTop: 10 }} disabled={savingCfg} onClick={saveConfig}>{savingCfg ? "…" : "Enregistrer la connexion"}</button>
+        </div>
+      )}
+
+      {configured === true && !showConfig && (
+        <div style={{ marginTop: 10 }}>
+          <label style={{ display: "block", fontSize: "0.8rem", color: "var(--ink-soft)", margin: "4px 0 2px" }}>URL de l'image (https)</label>
+          <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://…/visuel.jpg"
+            style={{ width: "100%", padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+          <label style={{ display: "block", fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 2px" }}>Légende</label>
+          <textarea value={caption} onChange={(e) => setCaption(e.target.value)} rows={4}
+            style={{ width: "100%", padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", resize: "vertical" }} />
+          <button className="btn btn-gold" style={{ marginTop: 10 }} disabled={busy || !imageUrl.trim()} onClick={publish}>{busy ? "Publication…" : "Publier maintenant"}</button>
+        </div>
+      )}
+
+      {msg && <div style={{ marginTop: 8, fontSize: "0.85rem", color: msg.includes("✓") ? "#256b34" : "#b00020" }}>{msg}</div>}
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // PAGE DE RÉCAP — tous les agents, ce qu'ils font, leur niveau d'autonomie.
 // ---------------------------------------------------------------------------
@@ -468,7 +581,7 @@ const RECAP = [
   { id: "email", emoji: "✉️", name: "Agent e-mail", what: "Répond aux messages des clientes, dans le ton de la marque, en respectant tes règles (pas de remboursement sur le personnalisé, etc.).", how: "Colle le message d'une cliente : il rédige la réponse, tu relis, tu envoies (ou tu copies). Avec l'auto-réponse activée, il répond seul aux messages simples reçus via le formulaire de contact.", auto: "Autonome (cas simples) · te remonte les cas spéciaux à valider" },
   { id: "avis", emoji: "⭐", name: "Agent avis", what: "Rédige une réponse publique à un avis client.", how: "Colle l'avis : il te propose une réponse courte et juste, que tu copies sur ta fiche produit.", auto: "Brouillon à valider" },
   { id: "newsletter", emoji: "📣", name: "Agent newsletter", what: "Rédige tes campagnes e-mail (objet + message).", how: "Dis l'occasion ou le produit à mettre en avant : il propose des objets et le corps du message.", auto: "Brouillon à valider" },
-  { id: "marketing", emoji: "🎨", name: "Agent marketing", what: "Rédige tes posts réseaux sociaux : légende + hashtags + idée de visuel.", how: "Dis le produit ou le thème : il te donne le texte prêt à publier et une idée de photo.", auto: "Brouillon à valider" },
+  { id: "marketing", emoji: "🎨", name: "Agent marketing", what: "Prépare tes posts réseaux sociaux : légende + hashtags + idée de visuel.", how: "Dis le produit ou le thème : il prépare le post prêt à copier. Tu le publies toi-même, OU il publie sur Instagram à ta place si tu as connecté ton compte pro (panneau « Publier sur Instagram »).", auto: "Prépare tout · publie aussi (si compte connecté)" },
   { id: "technicien", emoji: "🛠️", name: "Technicien / Dev", what: "Diagnostique les soucis techniques du site et prépare une fiche claire.", how: "Décris ton problème : il t'explique la cause et, si besoin d'une modification du code, prépare la fiche pour le développeur (les corrections sont appliquées par Claude Code).", auto: "Diagnostic + fiche" },
   { id: "rapport", emoji: "📊", name: "Agent rapport", what: "Fait le bilan de tes ventes (CA, panier moyen, meilleures ventes) et te donne des conseils.", how: "Demande « fais le rapport de la semaine » : il analyse tes vraies commandes et te répond.", auto: "Sur tes vraies données" },
 ];

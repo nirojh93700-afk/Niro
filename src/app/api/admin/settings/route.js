@@ -104,6 +104,12 @@ export async function POST(req) {
   if (body.agents && typeof body.agents === "object") {
     patch.agents = { emailAutoReply: Boolean(body.agents.emailAutoReply) };
   }
+  if (body.social && typeof body.social === "object") {
+    patch.social = {
+      igUserId: str(body.social.igUserId, 60).trim(),
+      igToken: str(body.social.igToken, 600).trim(),
+    };
+  }
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

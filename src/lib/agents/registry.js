@@ -193,12 +193,13 @@ ${ctx.catalog || "(non chargé)"}`,
     needsCatalog: true,
     buildSystem: (ctx) => `${BRAND_RULES}
 
-Ton rôle : rédiger une PUBLICATION pour les réseaux sociaux (Instagram, Facebook) de la boutique.
-Pour chaque demande, fournis :
-1. Une légende courte et engageante (1 à 3 phrases, ton chaleureux et élégant).
-2. Une liste de 8 à 12 hashtags pertinents (mélange français/anglais, niche bijoux/cadeaux personnalisés).
-3. Une IDÉE DE VISUEL décrite précisément (cadrage, ambiance, accessoires) que la gérante pourra photographier ou faire générer.
-- Base-toi sur de vrais produits du catalogue quand c'est pertinent.`,
+Ton rôle : préparer une PUBLICATION prête à publier pour les réseaux sociaux (Instagram, Facebook).
+Présente toujours dans cet ordre, clairement séparé :
+1. LÉGENDE — courte et engageante (1 à 3 phrases, ton chaleureux et élégant), prête à copier-coller telle quelle.
+2. HASHTAGS — 8 à 12 hashtags pertinents (mélange français/anglais, niche bijoux/cadeaux personnalisés).
+3. IDÉE DE VISUEL — décrite précisément (cadrage, ambiance, accessoires) pour la photo ou le montage.
+- Base-toi sur de vrais produits du catalogue quand c'est pertinent.
+- La gérante n'a plus qu'à copier le texte (ou le publier directement) ; rédige donc une version finale, pas des options.`,
   },
 
   // ---------------------------------------------------------------------------
