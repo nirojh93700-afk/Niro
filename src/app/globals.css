@@ -945,15 +945,33 @@ img {
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px 10px;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 7px 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
+.engrave-editor .ee-toolbar-top {
+  top: 8px;
+  bottom: auto;
+}
+.engrave-editor .ee-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 90px;
+}
+.engrave-editor .ee-ctrl > span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
 .engrave-editor .ee-toolbar input[type="range"] {
   flex: 1;
+  min-width: 60px;
   accent-color: #c9a24b;
 }
 .engrave-editor .ee-size {
@@ -961,6 +979,27 @@ img {
   font-weight: 700;
   white-space: nowrap;
   color: var(--ink);
+}
+
+/* Calque texte déplaçable */
+.engrave-editor .te-block {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.2;
+}
+.engrave-editor .te-block:active {
+  cursor: grabbing;
+}
+.engrave-editor .te-line {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55), 0 -1px 1px rgba(0, 0, 0, 0.35);
 }
 
 /* Logo / photo du client superposé "gravé" sur la photo du produit */

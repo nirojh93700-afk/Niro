@@ -21,6 +21,7 @@ import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
+import TextEngraveLayer from "./TextEngraveLayer";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -32,6 +33,7 @@ export default function ProductDetail({ product }) {
   const [added, setAdded] = useState(false);
   const [error, setError] = useState("");
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé
+  const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé
 
   const [stockMap, setStockMap] = useState({});
   const [images, setImages] = useState(product.images);
@@ -158,9 +160,12 @@ export default function ProductDetail({ product }) {
           return `${f.label} : ${valueLabel(f, raw)}`;
         })
         .filter(Boolean);
-      // Taille + position du logo gravé (éditeur interactif), pour l'atelier.
+      // Taille + position du logo / texte gravé (éditeur interactif), pour l'atelier.
       if (product.engrave && photoSrc && photoLayout?.label) {
         parts.push(`Gravure logo : ${photoLayout.label}`);
+      }
+      if (product.engrave && previewLines.length > 0 && textLayout?.label) {
+        parts.push(`Gravure ${textLayout.label}`);
       }
       return parts.join(" · ");
     }
@@ -340,7 +345,18 @@ export default function ProductDetail({ product }) {
             {/* Gravure écrite directement sur la photo du produit. Ne s'affiche
                 QUE si la zone de gravure a été réglée dans l'admin (product.preview),
                 pour éviter un texte mal placé sur les photos non réglées. */}
-            {hasImages && previewLines.length > 0 && product.preview && (
+            {/* Texte : éditeur interactif (déplaçable + taille) si activé */}
+            {hasImages && product.engrave && previewLines.length > 0 && activeImg === 0 && (
+              <TextEngraveLayer
+                lines={previewLines}
+                fontClass={previewFontClass}
+                color={previewColor}
+                cfg={product.engrave}
+                onChange={setTextLayout}
+              />
+            )}
+            {/* Sinon : texte centré sur la zone fixe */}
+            {hasImages && !product.engrave && previewLines.length > 0 && product.preview && (
               <div className="engrave-overlay" style={product.preview}>
                 {previewLines.map((line, i) => (
                   <span key={i} className={`eo-line ${previewFontClass}`} style={{ color: previewColor }}>

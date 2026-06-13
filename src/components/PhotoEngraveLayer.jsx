@@ -4,30 +4,30 @@ import { useRef, useState, useEffect } from "react";
 
 // Éditeur de placement du logo/photo sur la photo du produit :
 // - glisser pour déplacer (souris + tactile iOS),
-// - curseur pour agrandir / réduire,
-// - mesure réelle en cm affichée en direct (calibrée sur la taille du verre).
-// La taille + position choisies sont renvoyées au parent (→ commande).
+// - 2 curseurs : largeur ET hauteur, avec la mesure réelle en cm en direct,
+// - la taille + position choisies sont renvoyées au parent (→ commande).
 //
-// cfg (product.engrave) :
-//   box          : zone de placement en fraction du cadre carré { top, left, width, height }
-//   widthMm      : largeur réelle gravable (mm) correspondant à maxWidthFrac
-//   maxWidthFrac : taille max du logo, en fraction de la largeur du cadre
-//   minWidthFrac : taille mini
+// cfg (product.engrave) : box {top,left,width,height} (fractions du cadre),
+//   widthMm / heightMm (mm réels pour maxWidthFrac / maxHeightFrac),
+//   maxWidthFrac / minWidthFrac / maxHeightFrac / minHeightFrac.
 export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
   const box = cfg?.box || { top: 0.3, left: 0.2, width: 0.6, height: 0.45 };
   const widthMm = cfg?.widthMm || 65;
-  const maxFrac = cfg?.maxWidthFrac || box.width;
-  const minFrac = cfg?.minWidthFrac || 0.12;
+  const heightMm = cfg?.heightMm || widthMm;
+  const maxW = cfg?.maxWidthFrac || box.width;
+  const minW = cfg?.minWidthFrac || 0.12;
+  const maxH = cfg?.maxHeightFrac || box.height;
+  const minH = cfg?.minHeightFrac || 0.12;
 
   const ref = useRef(null);
   const drag = useRef(null);
-  const [aspect, setAspect] = useState(1); // hauteur / largeur de l'image
-  const [size, setSize] = useState((minFrac + maxFrac) / 2); // largeur logo en fraction du cadre
+  const [sw, setSw] = useState((minW + maxW) / 2); // largeur (fraction du cadre)
+  const [sh, setSh] = useState((minH + maxH) / 2); // hauteur (fraction du cadre)
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
 
-  const wMm = Math.round((size / maxFrac) * widthMm * 10) / 10;
-  const hMm = Math.round(wMm * aspect * 10) / 10;
+  const wMm = Math.round((sw / maxW) * widthMm * 10) / 10;
+  const hMm = Math.round((sh / maxH) * heightMm * 10) / 10;
   const cm = (mm) => (mm / 10).toFixed(1).replace(".", ",");
 
   useEffect(() => {
@@ -43,13 +43,10 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
   }, [wMm, hMm, cx, cy]);
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-
-  function reclamp(nx, ny, s) {
-    const halfW = s / 2;
-    const halfH = (s * aspect) / 2;
+  function reclamp(nx, ny, w, h) {
     return [
-      clamp(nx, box.left + halfW, box.left + box.width - halfW),
-      clamp(ny, box.top + halfH, box.top + box.height - halfH),
+      clamp(nx, box.left + w / 2, box.left + box.width - w / 2),
+      clamp(ny, box.top + h / 2, box.top + box.height - h / 2),
     ];
   }
 
@@ -61,17 +58,19 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
   function onMove(e) {
     if (!drag.current) return;
     const d = drag.current;
-    const [nx, ny] = reclamp(d.cx + (e.clientX - d.px) / d.w, d.cy + (e.clientY - d.py) / d.h, size);
+    const [nx, ny] = reclamp(d.cx + (e.clientX - d.px) / d.w, d.cy + (e.clientY - d.py) / d.h, sw, sh);
     setCx(nx);
     setCy(ny);
   }
   function onUp() {
     drag.current = null;
   }
-  function onSize(v) {
-    const s = Number(v);
-    setSize(s);
-    const [nx, ny] = reclamp(cx, cy, s);
+  function setSize(which, v) {
+    const val = Number(v);
+    const nw = which === "w" ? val : sw;
+    const nh = which === "h" ? val : sh;
+    if (which === "w") setSw(val); else setSh(val);
+    const [nx, ny] = reclamp(cx, cy, nw, nh);
     setCx(nx);
     setCy(ny);
   }
@@ -84,23 +83,21 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
         alt="Logo à graver — glissez pour déplacer"
         className="ee-logo"
         draggable={false}
-        onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
-        style={{ width: `${size * 100}%`, left: `${cx * 100}%`, top: `${cy * 100}%` }}
+        style={{ width: `${sw * 100}%`, height: `${sh * 100}%`, left: `${cx * 100}%`, top: `${cy * 100}%` }}
       />
       <div className="ee-toolbar">
         <span className="ee-size">≈ {cm(wMm)} × {cm(hMm)} cm</span>
-        <input
-          type="range"
-          min={minFrac}
-          max={maxFrac}
-          step="0.005"
-          value={size}
-          onChange={(e) => onSize(e.target.value)}
-          aria-label="Taille de la gravure"
-        />
+        <label className="ee-ctrl">
+          <span>L</span>
+          <input type="range" min={minW} max={maxW} step="0.005" value={sw} onChange={(e) => setSize("w", e.target.value)} aria-label="Largeur de la gravure" />
+        </label>
+        <label className="ee-ctrl">
+          <span>H</span>
+          <input type="range" min={minH} max={maxH} step="0.005" value={sh} onChange={(e) => setSize("h", e.target.value)} aria-label="Hauteur de la gravure" />
+        </label>
       </div>
     </div>
   );
