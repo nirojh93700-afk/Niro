@@ -20,6 +20,7 @@ import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
+import PhotoEngraveLayer from "./PhotoEngraveLayer";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -30,6 +31,7 @@ export default function ProductDetail({ product }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [error, setError] = useState("");
+  const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé
 
   const [stockMap, setStockMap] = useState({});
   const [images, setImages] = useState(product.images);
@@ -148,15 +150,19 @@ export default function ProductDetail({ product }) {
   // Construit le texte de personnalisation final (pour le panier / la commande).
   function buildPersonalization() {
     if (product.personalizationFields) {
-      return visibleFields
+      const parts = visibleFields
         .filter((f) => f.type !== "note")
         .map((f) => {
           const raw = (fieldValues[f.key] || "").toString().trim();
           if (!raw) return null;
           return `${f.label} : ${valueLabel(f, raw)}`;
         })
-        .filter(Boolean)
-        .join(" · ");
+        .filter(Boolean);
+      // Taille + position du logo gravé (éditeur interactif), pour l'atelier.
+      if (product.engrave && photoSrc && photoLayout?.label) {
+        parts.push(`Gravure logo : ${photoLayout.label}`);
+      }
+      return parts.join(" · ");
     }
     return personalization.trim();
   }
@@ -320,7 +326,12 @@ export default function ProductDetail({ product }) {
             )}
             {/* Logo / photo envoyé par le client, superposé sur la photo du
                 produit (hors cristal), dans la zone de gravure réglée. */}
-            {hasImages && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
+            {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
+            {hasImages && product.engrave && photoSrc && activeImg === 0 && (
+              <PhotoEngraveLayer photoSrc={photoSrc} cfg={product.engrave} onChange={setPhotoLayout} />
+            )}
+            {/* Sinon : simple superposition du logo (zone fixe) */}
+            {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
               <div className="engrave-overlay engrave-overlay-photo" style={product.previewPhoto || product.preview}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="eo-photo" src={photoSrc} alt="Aperçu du logo / de la photo gravé" />

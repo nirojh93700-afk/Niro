@@ -916,6 +916,53 @@ img {
   mix-blend-mode: screen;
 }
 
+/* Éditeur de placement du logo (glisser + redimensionner + mesure cm) */
+.engrave-editor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.engrave-editor .ee-logo {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none; /* indispensable pour glisser au doigt (iOS) */
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0.85;
+  filter: grayscale(1) contrast(1.5) brightness(1.08);
+  mix-blend-mode: multiply;
+}
+.engrave-editor .ee-logo:active {
+  cursor: grabbing;
+}
+.engrave-editor .ee-toolbar {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 7px 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.engrave-editor .ee-toolbar input[type="range"] {
+  flex: 1;
+  accent-color: #c9a24b;
+}
+.engrave-editor .ee-size {
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
 /* Logo / photo du client superposé "gravé" sur la photo du produit */
 .engrave-overlay-photo {
   padding: 2%;

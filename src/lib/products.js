@@ -1180,12 +1180,22 @@ export const products = [
     hidden: true, // EN PRÉPARATION — invisible sur la boutique tant que non validé
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
     previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
+    // Éditeur interactif logo (glisser + redimensionner + mesure cm).
+    // box = zone de placement en fraction du cadre carré ; widthMm = largeur réelle
+    // gravable correspondant à maxWidthFrac. À RECALIBRER avec le vrai verre + photo.
+    engrave: {
+      box: { top: 0.30, left: 0.22, width: 0.56, height: 0.44 },
+      widthMm: 65,
+      maxWidthFrac: 0.56,
+      minWidthFrac: 0.12,
+    },
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "note-dessin", type: "note", text: "Envie d'un logo ou d'un dessin gravé ? Décrivez votre idée ci-dessous, ou envoyez directement votre image. (Facultatif)" },
       { key: "idee-dessin", label: "Décrivez votre logo / dessin", placeholder: "Ex : un cerf minimaliste, des initiales entrelacées, un logo…", maxLength: 120, optional: true, noPreview: true },
-      { key: "photo", type: "photo", label: "Ou envoyez votre logo / photo", optional: true, text: "Choisissez une image nette et contrastée pour un meilleur rendu gravé." },
+      { key: "photo", type: "photo", label: "Ou envoyez votre logo / photo", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
+      { key: "note-photo", type: "note", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et plutôt centrés, et un peu d'espace autour du sujet. Évitez les photos sombres, floues, à contre-jour ou trop serrées ; privilégiez 1 à 2 personnes (les grands groupes rendent moins bien). Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
     title: "Verre à whisky gravé personnalisé — prénom, date ou logo",
     category: "cadeaux",
