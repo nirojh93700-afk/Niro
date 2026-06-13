@@ -101,6 +101,9 @@ export async function POST(req) {
       message: str(body.maintenance.message, 300),
     };
   }
+  if (body.agents && typeof body.agents === "object") {
+    patch.agents = { emailAutoReply: Boolean(body.agents.emailAutoReply) };
+  }
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

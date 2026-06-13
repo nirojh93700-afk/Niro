@@ -39,6 +39,8 @@ export default function AgentsCenterPage() {
   const [agents, setAgents] = useState([]);
   const [selected, setSelected] = useState(null); // id de l'agent ouvert, ou null
   const [authError, setAuthError] = useState("");
+  const [autoReply, setAutoReply] = useState(false); // auto-réponse e-mail activée ?
+  const [savingAuto, setSavingAuto] = useState(false);
 
   const loadAgents = useCallback(async (adminKey) => {
     try {
@@ -50,12 +52,36 @@ export default function AgentsCenterPage() {
       setKey(adminKey);
       sessionStorage.setItem("niv-admin-key", adminKey);
       setAuthError("");
+      // Charge le réglage d'autonomie.
+      try {
+        const sr = await fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } });
+        if (sr.ok) setAutoReply(Boolean((await sr.json())?.settings?.agents?.emailAutoReply));
+      } catch { /* ignore */ }
       return true;
     } catch {
       setAuthError("Erreur de connexion.");
       return false;
     }
   }, []);
+
+  async function toggleAutoReply() {
+    if (savingAuto) return;
+    const next = !autoReply;
+    setSavingAuto(true);
+    setAutoReply(next); // optimiste
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ agents: { emailAutoReply: next } }),
+      });
+      if (!res.ok) setAutoReply(!next); // rollback
+    } catch {
+      setAutoReply(!next);
+    } finally {
+      setSavingAuto(false);
+    }
+  }
 
   useEffect(() => {
     const k = sessionStorage.getItem("niv-admin-key");
@@ -120,10 +146,33 @@ export default function AgentsCenterPage() {
             <span className="eyebrow">Espace gestion</span>
             <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold)", margin: "4px 0 0" }}>Mon équipe d'agents</h1>
             <p style={{ color: "var(--ink-soft)", margin: "6px 0 0" }}>
-              Tes assistants IA, chacun spécialisé. Le chef coordonne tout. Rien n'est envoyé sans ta validation.
+              Tes assistants IA, chacun spécialisé. Le chef coordonne tout. Les cas simples peuvent être traités en autonomie, les cas spéciaux te sont toujours remontés.
             </p>
           </div>
           <Link href="/gestion" className="btn btn-outline">← Gestion</Link>
+        </div>
+
+        {/* AUTONOMIE — interrupteur de réponse automatique */}
+        <div style={{
+          marginTop: 20, border: "1px solid var(--line)", borderRadius: 16, padding: "16px 20px",
+          background: autoReply ? "#e7f4ea" : "var(--paper)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <strong>Réponse automatique aux messages du site</strong>
+            <div style={{ color: "var(--ink-soft)", fontSize: "0.9rem", marginTop: 4 }}>
+              {autoReply
+                ? "Activée : l'agent répond seul aux questions simples reçues par le formulaire de contact. Les cas spéciaux te sont toujours remontés « à valider » par e-mail."
+                : "Désactivée : l'agent prépare les réponses mais rien ne part sans toi. Active pour qu'il réponde tout seul aux messages simples."}
+            </div>
+          </div>
+          <button
+            onClick={toggleAutoReply}
+            disabled={savingAuto}
+            className={`btn ${autoReply ? "btn-gold" : "btn-outline"}`}
+            style={{ minWidth: 130 }}
+          >
+            {savingAuto ? "…" : autoReply ? "● Activée" : "Activer"}
+          </button>
         </div>
 
         {/* LE CHEF — en vedette */}
@@ -356,8 +405,13 @@ function EmailDraft({ draft, adminKey, onSent }) {
 
   return (
     <div style={{ marginTop: 10, border: "1px solid var(--gold)", borderRadius: 14, padding: 14, background: "#fffdf7" }}>
-      <strong style={{ fontSize: "0.92rem" }}>Brouillon de réponse</strong>
-      {draft.note && <div style={{ fontSize: "0.82rem", color: "#9a6b00", margin: "6px 0" }}>Note : {draft.note}</div>}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <strong style={{ fontSize: "0.92rem" }}>Brouillon de réponse</strong>
+        {draft.needsValidation
+          ? <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "3px 10px", borderRadius: 999, background: "#fff5e0", color: "#9a6b00" }}>À valider — cas spécial</span>
+          : <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "3px 10px", borderRadius: 999, background: "#e7f4ea", color: "#256b34" }}>Autonome — cas simple</span>}
+      </div>
+      {draft.reason && <div style={{ fontSize: "0.82rem", color: "#9a6b00", margin: "6px 0" }}>{draft.reason}</div>}
 
       <label style={{ display: "block", fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 2px" }}>Destinataire</label>
       <input value={to} onChange={(e) => setTo(e.target.value)} placeholder="adresse@email.fr"

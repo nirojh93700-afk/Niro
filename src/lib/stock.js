@@ -648,6 +648,12 @@ export async function getSettings() {
     pickupZones: (typeof s.pickupZones === "string" && s.pickupZones.trim())
       ? s.pickupZones
       : "95, 78, 92, 93, 75, 60",
+    // Équipe d'agents IA. emailAutoReply : DÉSACTIVÉ par défaut. Quand activé,
+    // l'agent e-mail répond seul aux messages simples du formulaire de contact
+    // (les cas spéciaux sont toujours remontés à la gérante « à valider »).
+    agents: {
+      emailAutoReply: s.agents?.emailAutoReply === true,
+    },
   };
 }
 

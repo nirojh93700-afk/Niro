@@ -59,12 +59,19 @@ export const AGENTS = {
     needsCatalog: true,
     buildSystem: (ctx) => `${BRAND_RULES}
 
-Ton rôle : RÉDIGER la réponse e-mail à une cliente, à la place de la gérante.
-- Quand on te donne le message d'une cliente, appelle l'outil "draft_reply" avec un sujet et un corps de réponse prêts à envoyer.
-- Réponds à toutes les questions posées ; si une information te manque (numéro de commande, détail introuvable), laisse une mention claire entre crochets [à compléter] et signale-le dans "tone_note".
-- Corps en texte simple (pas de HTML), sauts de ligne conservés, paragraphes courts. Signe "L'atelier Niv Création".
-- Si la demande de la cliente concerne un remboursement/retour d'un article personnalisé, refuse avec tact en expliquant la raison, sans jamais être sèche.
-- Si la gérante te parle sans coller d'e-mail (juste une question), réponds normalement sans appeler l'outil.
+Ton rôle : RÉPONDRE aux e-mails des clientes, de façon AUTONOME, à la place de la gérante.
+Pour chaque message reçu, appelle l'outil "draft_reply" avec une réponse prête à envoyer ET une décision : peux-tu répondre seul, ou faut-il l'avis de la gérante ?
+
+Règle d'autonomie (très importante) :
+- "needs_validation" = false (tu réponds SEUL) pour les demandes SIMPLES et courantes : suivi/délai de commande, disponibilité, matériaux, dimensions, options de personnalisation, frais de port, comment commander, remerciements, questions sur un produit du catalogue.
+- "needs_validation" = true (tu DEMANDES la gérante avant envoi) pour tout ce qui est SPÉCIAL ou sensible : demande de remboursement/retour/échange, réclamation ou cliente mécontente, geste commercial/remise, commande sur-mesure ou devis, gros volume / professionnel, litige ou colis perdu, toute demande inhabituelle, OU dès que tu n'es pas sûr de la réponse ou qu'il te manque une information. Dans le doute, mets toujours true.
+- Quand needs_validation = true, rédige quand même une proposition de réponse (la gérante la relira), et explique en une phrase dans "reason" pourquoi tu préfères qu'elle valide.
+
+Style de la réponse :
+- Réponds vraiment à toutes les questions posées. Corps en texte simple (pas de HTML), sauts de ligne conservés, paragraphes courts, chaleureux. Signe "L'atelier Niv Création".
+- Si une information précise te manque (numéro de commande, date exacte), n'invente jamais : reste général et rassurant, et mets needs_validation = true.
+- Pour un remboursement/retour d'article personnalisé : refuse toujours avec tact (jamais sèche), et needs_validation = true.
+- Si la gérante te parle directement (sans message de cliente), réponds-lui normalement sans appeler l'outil.
 
 CATALOGUE ACTUEL (pour répondre aux questions produits/prix) :
 ${ctx.catalog || "(non chargé)"}`,
@@ -72,16 +79,17 @@ ${ctx.catalog || "(non chargé)"}`,
       {
         name: "draft_reply",
         description:
-          "Rédige un brouillon de réponse e-mail prêt à relire et envoyer. À utiliser dès qu'une réponse à une cliente est demandée.",
+          "Rédige la réponse e-mail à une cliente et décide si elle peut partir seule ou doit être validée par la gérante. À utiliser dès qu'on te donne un message de cliente.",
         input_schema: {
           type: "object",
           properties: {
             to: { type: "string", description: "Adresse e-mail de la cliente si elle est connue, sinon laisser vide." },
             subject: { type: "string", description: "Objet de l'e-mail." },
             body: { type: "string", description: "Corps du message en texte simple (sauts de ligne conservés, pas de HTML)." },
-            tone_note: { type: "string", description: "Note courte à l'attention de la gérante (ex : info manquante). Optionnel." },
+            needs_validation: { type: "boolean", description: "true si la gérante doit valider avant envoi (cas spécial/sensible ou doute), false si la réponse peut partir seule (cas simple)." },
+            reason: { type: "string", description: "Si needs_validation=true : en une phrase, pourquoi tu préfères une validation. Sinon vide." },
           },
-          required: ["subject", "body"],
+          required: ["subject", "body", "needs_validation"],
         },
       },
     ],
@@ -91,7 +99,9 @@ ${ctx.catalog || "(non chargé)"}`,
       to: block.input?.to || "",
       subject: block.input?.subject || "",
       body: block.input?.body || "",
-      note: block.input?.tone_note || "",
+      needsValidation: block.input?.needs_validation !== false, // par sécurité : valider par défaut
+      reason: block.input?.reason || "",
+      note: block.input?.reason || "",
     }),
   },
 };
@@ -224,4 +234,38 @@ export async function runAgent(agentId, history) {
     const msg = err?.status === 401 ? "Clé Claude invalide." : "Erreur de l'agent, réessaie.";
     return { error: msg };
   }
+}
+
+// =============================================================================
+// TRIAGE AUTONOME D'UN E-MAIL ENTRANT (formulaire de contact)
+// -----------------------------------------------------------------------------
+// Donne le message d'une cliente à l'agent e-mail. Il rédige une réponse et
+// décide s'il peut répondre seul (cas simple) ou s'il faut une validation
+// (cas spécial). Renvoie { ok, reply, subject, needsValidation, reason }.
+// Ne lève jamais : en cas d'échec, renvoie { ok:false } et l'appelant continue.
+// =============================================================================
+export async function triageIncomingEmail({ name, email, subject, message }) {
+  if (!process.env.ANTHROPIC_API_KEY) return { ok: false, reason: "Clé Claude absente." };
+  const prompt = `E-mail reçu d'une cliente via le formulaire de contact.
+Nom : ${name || "(non précisé)"}
+Adresse : ${email || "(non précisée)"}
+Sujet : ${subject || "(sans sujet)"}
+Message :
+"""
+${message || ""}
+"""
+Rédige la réponse et décide si tu peux répondre seul ou s'il faut la validation de la gérante.`;
+  const res = await runAgent("email", [{ role: "user", content: prompt }]);
+  const a = res?.action;
+  if (!a || a.kind !== "email_draft") {
+    // L'agent n'a pas produit de réponse exploitable -> on remonte à la gérante.
+    return { ok: false, reply: res?.reply || "", needsValidation: true, reason: "Réponse non structurée." };
+  }
+  return {
+    ok: true,
+    reply: a.body || "",
+    subject: a.subject || (subject ? `Re : ${subject}` : "Votre message — Niv Création"),
+    needsValidation: a.needsValidation !== false,
+    reason: a.reason || "",
+  };
 }
