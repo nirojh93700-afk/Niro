@@ -397,7 +397,7 @@ export default function ProductDetail({ product }) {
               </button>
               {show3d && (
                 <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 14, overflow: "hidden", background: "#f3efe7" }}>
-                  <Glass3D photoSrc={photoSrc} lines={previewLines} fontKey={fieldValues[fontField?.key] || "playfair"} />
+                  <Glass3D photoSrc={photoSrc} lines={previewLines} fontKey={fieldValues[fontField?.key] || "playfair"} photoLayout={photoLayout} textLayout={textLayout} cfg={product.engrave} />
                 </div>
               )}
             </div>

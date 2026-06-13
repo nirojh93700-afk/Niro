@@ -1191,6 +1191,8 @@ export const products = [
       minWidthFrac: 0.10,
       maxHeightFrac: 0.50,
       minHeightFrac: 0.10,
+      diameterMm: 79,
+      glassHeightMm: 95,
     },
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, message…", maxLength: 30 },

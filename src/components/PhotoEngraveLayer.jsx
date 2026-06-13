@@ -29,6 +29,10 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
     onChange({
       wMm,
       hMm,
+      cx,
+      cy,
+      size,
+      aspect,
       cxPct: Math.round(cx * 100),
       cyPct: Math.round(cy * 100),
       label: `≈ ${cm(wMm)} × ${cm(hMm)} cm · position ${Math.round(cx * 100)} % / ${Math.round(cy * 100)} %`,

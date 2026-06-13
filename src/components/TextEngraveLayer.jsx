@@ -35,6 +35,9 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
   useEffect(() => {
     if (!onChange) return;
     onChange({
+      cx,
+      cy,
+      scale,
       cxPct: Math.round(cx * 100),
       cyPct: Math.round(cy * 100),
       label: `texte ≈ ${cm(heightMm)} cm de haut · position ${Math.round(cx * 100)} % / ${Math.round(cy * 100)} %`,

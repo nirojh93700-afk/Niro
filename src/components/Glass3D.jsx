@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 
 // Aperçu 3D d'un verre que l'on peut faire tourner, avec la photo / le texte
-// "gravés" (frostés) enroulés autour du verre. À titre indicatif (prototype).
-// Réutilise Three.js (déjà présent sur le site).
+// "gravés" enroulés autour. Le placement et les tailles REPRODUISENT exactement
+// l'éditeur 2D (mêmes positions / dimensions en mm). À titre indicatif.
 
 const FONT_MAP = {
   playfair: "Georgia, 'Times New Roman', serif",
@@ -31,7 +31,6 @@ function fontSpec(key, px) {
   return `${SCRIPT.has(key) ? 400 : 600} ${px}px ${fam}`;
 }
 
-// Charge une image et renvoie une promesse.
 function loadImg(src) {
   return new Promise((res, rej) => {
     const img = new Image();
@@ -42,9 +41,8 @@ function loadImg(src) {
   });
 }
 
-// Convertit une image en "gravure frostée" (blanc translucide sur transparent) :
-// zones sombres → blanc opaque, zones claires → transparent.
-function frostedFromImage(img, maxW) {
+// Image → "gravure" foncée (sombre translucide) sur transparent.
+function engraveFromImage(img, maxW) {
   const scale = Math.min(1, maxW / Math.max(img.naturalWidth, 1));
   const w = Math.max(1, Math.round(img.naturalWidth * scale));
   const h = Math.max(1, Math.round(img.naturalHeight * scale));
@@ -59,17 +57,17 @@ function frostedFromImage(img, maxW) {
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
     let a = 255 - lum;
     a = a < 30 ? 0 : Math.min(255, (a - 30) * 1.9);
-    d[i] = 38; d[i + 1] = 33; d[i + 2] = 27; d[i + 3] = a; // gravure foncée (bien visible)
+    d[i] = 38; d[i + 1] = 33; d[i + 2] = 27; d[i + 3] = a;
   }
   ctx.putImageData(data, 0, 0);
   return c;
 }
 
-export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", height = 380 }) {
+export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", photoLayout, textLayout, cfg, height = 380 }) {
   const mountRef = useRef(null);
   const apiRef = useRef(null);
-  const dataRef = useRef({ photoSrc, lines, fontKey });
-  dataRef.current = { photoSrc, lines, fontKey };
+  const dataRef = useRef({});
+  dataRef.current = { photoSrc, lines, fontKey, photoLayout, textLayout, cfg };
 
   useEffect(() => {
     let disposed = false;
@@ -81,19 +79,13 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
         THREE = await import("three");
         ({ OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js"));
         ({ RoomEnvironment } = await import("three/examples/jsm/environments/RoomEnvironment.js"));
-      } catch {
-        return;
-      }
+      } catch { return; }
       if (disposed || !mountRef.current) return;
       const mount = mountRef.current;
       const width = mount.clientWidth || 320;
 
       let renderer;
-      try {
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      } catch {
-        return;
-      }
+      try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch { return; }
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(width, height);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -111,12 +103,21 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
       const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(3, 5, 4); scene.add(key);
       const fill = new THREE.DirectionalLight(0xffffff, 0.4); fill.position.set(-4, 1, 3); scene.add(fill);
 
-      const R = 1.0;
-      const H = 2.4;
-      const group = new THREE.Group();
-      group.rotation.y = Math.PI; // amène l'avant (gravure) face caméra
+      // Dimensions réelles → monde (R = 1 ↔ rayon réel)
+      const c0 = dataRef.current.cfg || {};
+      const diaMm = c0.diameterMm || 79;
+      const glassHmm = c0.glassHeightMm || 95;
+      const box = c0.box || { top: 0.15, left: 0.2, width: 0.6, height: 0.62 };
+      const widthMm = c0.widthMm || 65;
+      const maxW = c0.maxWidthFrac || 0.5;
+      const mmPerWorld = diaMm / 2;       // R_world = 1
+      const H = glassHmm / mmPerWorld;    // hauteur verre (monde)
+      const mmPerContainer = widthMm / maxW; // mm pour 1.0 de largeur du cadre 2D
 
-      // Verre translucide fiable (pas de transmission : trop lourd/laiteux sur mobile).
+      const R = 1.0;
+      const group = new THREE.Group();
+      group.rotation.y = Math.PI; // amène le centre de la texture (avant) face caméra
+
       const glassMat = new THREE.MeshPhysicalMaterial({
         color: 0xeaf0f2, metalness: 0, roughness: 0.08,
         transparent: true, opacity: 0.22, envMapIntensity: 1.5,
@@ -129,50 +130,60 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
       base.position.y = -H / 2 + H * 0.08;
       group.add(base);
 
-      // Calque "gravure" : cylindre ouvert, texture transparente sauf l'artwork.
+      // Calque gravure : cylindre ouvert. Canvas calé sur la circonférence/hauteur réelles.
+      const cw = 1024;
+      const circMm = Math.PI * diaMm;
+      const pxPerMm = cw / circMm;
+      const engHmm = (box.height / maxW) * widthMm;   // hauteur de la zone d'édition en mm
+      const ch = Math.max(64, Math.round(engHmm * pxPerMm));
+      const engHWorld = engHmm / mmPerWorld;
+
       const engCanvas = document.createElement("canvas");
-      engCanvas.width = 1024; engCanvas.height = 512;
+      engCanvas.width = cw; engCanvas.height = ch;
       const engTex = new THREE.CanvasTexture(engCanvas);
       engTex.colorSpace = THREE.SRGBColorSpace;
       const engMat = new THREE.MeshStandardMaterial({
         map: engTex, transparent: true, roughness: 0.85, metalness: 0,
         depthWrite: false, side: THREE.DoubleSide,
       });
-      const eng = new THREE.Mesh(new THREE.CylinderGeometry(R * 1.004, R * 1.004 * 0.95, H * 0.82, 72, 1, true), engMat);
+      const eng = new THREE.Mesh(new THREE.CylinderGeometry(R * 1.004, R * 1.004 * 0.97, engHWorld, 72, 1, true), engMat);
       group.add(eng);
 
       let photoCanvas = null;
 
       function redraw() {
-        const { lines, fontKey } = dataRef.current;
-        const cw = engCanvas.width, ch = engCanvas.height;
+        const { lines, fontKey, photoLayout, textLayout } = dataRef.current;
         const ctx = engCanvas.getContext("2d");
         ctx.clearRect(0, 0, cw, ch);
-        const midX = cw / 2;
-        let y = ch * 0.5;
+        const cxBox = box.left + box.width / 2;
+        const cyBox = box.top + box.height / 2;
+        // position 2D (fractions du cadre) → px sur le canvas (avant = centre)
+        const toPx = (lx, ly) => [
+          cw / 2 + (lx - cxBox) * mmPerContainer * pxPerMm,
+          ch / 2 + (ly - cyBox) * mmPerContainer * pxPerMm,
+        ];
 
-        if (photoCanvas) {
-          const pw = photoCanvas.width, ph = photoCanvas.height;
-          let dw = cw * 0.30;
-          let dh = ph * (dw / pw);
-          const maxH = ch * 0.6;
-          if (dh > maxH) { dh = maxH; dw = pw * (dh / ph); }
-          const photoTop = lines.length ? ch * 0.18 : ch * 0.5 - dh / 2;
-          ctx.drawImage(photoCanvas, midX - dw / 2, photoTop, dw, dh);
-          y = photoTop + dh + ch * 0.06;
+        if (photoCanvas && photoLayout) {
+          const dw = (photoLayout.wMm || 30) * pxPerMm;
+          const dh = (photoLayout.hMm || 30) * pxPerMm;
+          const [px, py] = toPx(photoLayout.cx ?? cxBox, photoLayout.cy ?? cyBox);
+          ctx.drawImage(photoCanvas, px - dw / 2, py - dh / 2, dw, dh);
         }
 
         const txt = (lines || []).map((l) => l.trim()).filter(Boolean);
-        if (txt.length) {
+        if (txt.length && textLayout) {
+          const fontMm = (textLayout.scale || 0.06) * mmPerContainer;
+          const fontPx = Math.max(8, fontMm * pxPerMm);
+          ctx.font = fontSpec(fontKey, fontPx);
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          const fontPx = Math.round(ch * 0.10);
-          ctx.font = fontSpec(fontKey, fontPx);
-          ctx.fillStyle = "rgba(38,33,27,0.96)"; // texte gravé foncé
+          ctx.fillStyle = "rgba(38,33,27,0.96)";
           ctx.shadowColor = "rgba(255,255,255,0.3)";
           ctx.shadowBlur = 1;
-          const startY = photoCanvas ? y : ch * 0.5 - ((txt.length - 1) * fontPx * 1.25) / 2;
-          txt.forEach((line, i) => ctx.fillText(line, midX, startY + i * fontPx * 1.25));
+          const [px, py] = toPx(textLayout.cx ?? cxBox, textLayout.cy ?? cyBox);
+          const lineH = fontPx * 1.25;
+          const startY = py - ((txt.length - 1) * lineH) / 2;
+          txt.forEach((line, i) => ctx.fillText(line, px, startY + i * lineH));
           ctx.shadowBlur = 0;
         }
         engTex.needsUpdate = true;
@@ -184,14 +195,13 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
           try {
             const img = await loadImg(src);
             if (disposed) return;
-            photoCanvas = frostedFromImage(img, 700);
+            photoCanvas = engraveFromImage(img, 700);
           } catch { photoCanvas = null; }
           redraw();
         },
         redraw,
       };
 
-      // Premier rendu (photo éventuelle + texte)
       apiRef.current.setPhoto(dataRef.current.photoSrc);
       if (document.fonts?.ready) document.fonts.ready.then(() => !disposed && redraw());
 
@@ -200,7 +210,7 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
       controls.enableZoom = false;
       controls.enablePan = false;
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 1.4;
+      controls.autoRotateSpeed = 1.3;
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
       controls.minPolarAngle = Math.PI / 2.4;
@@ -238,7 +248,6 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [height]);
 
-  // Mise à jour quand la photo / le texte / la police changent.
   useEffect(() => {
     if (apiRef.current) apiRef.current.setPhoto(photoSrc);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -246,7 +255,7 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
   useEffect(() => {
     if (apiRef.current) apiRef.current.redraw();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lines.join("|"), fontKey]);
+  }, [lines.join("|"), fontKey, photoLayout, textLayout]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
