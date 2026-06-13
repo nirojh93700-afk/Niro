@@ -5,6 +5,7 @@ import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
+import AgentsAdmin from "@/components/admin/AgentsAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
@@ -531,6 +532,7 @@ export default function GestionPage() {
               label: "Réglages",
               tabs: [
                 { id: "assistant", text: "Assistant" },
+                { id: "agents", text: "Équipe d'agents" },
                 { id: "apparence", text: "Apparence" },
                 { id: "reglages", text: "Réglages" },
               ],
@@ -983,6 +985,8 @@ export default function GestionPage() {
         {tab === "assistant" && (
           <AssistantAdmin adminKey={key} onReload={() => load(key)} />
         )}
+
+        {tab === "agents" && <AgentsAdmin adminKey={key} />}
 
         {/* ---------------- GRAVURE ---------------- */}
         {tab === "gravure" && (
