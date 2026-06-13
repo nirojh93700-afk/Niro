@@ -511,6 +511,31 @@ Défaut technique ou de gravure
 - Photo du défaut sous 14 jours après réception.
 - Échange standard sans frais (renvoi du produit défectueux requis).`,
   },
+
+  "verre-a-whisky-grave": {
+    material: `Verre à whisky (tumbler) à base épaisse
+
+- Verre épais et lourd en main, contenance d'environ 300 ml, hauteur d'environ 9 cm.
+- Surface lisse idéale pour une gravure laser nette et précise.
+- Va au lave-vaisselle (la gravure ne s'efface pas).`,
+    usage: `Personnalisation
+- Texte au choix (prénom, date, message) dans la police de votre choix.
+- Option dessin / logo : décrivez votre idée pour générer un aperçu, ou envoyez votre propre image.
+- La gravure se fait sur une face du verre.
+
+Entretien
+- Lavage à la main recommandé pour préserver la brillance, lave-vaisselle possible.
+- Évitez les chocs thermiques (ne pas passer du congélateur à l'eau chaude).`,
+    returns: `Produit personnalisé après gravure — non remboursable
+
+Annulation
+- Dans les 24 h suivant la commande, avant le démarrage de la gravure : annulation possible.
+- Après gravure : non remboursable (personnalisation unique, article L221-28).
+
+Casse ou défaut à l'arrivée
+- Photo sous 14 jours après réception : remplacement sans frais.
+- Emballage protégé prévu pour un transport sécurisé.`,
+  },
 };
 
 export function getProductInfo(slug) {

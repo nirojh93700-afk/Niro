@@ -177,7 +177,7 @@ export default function ProductDetail({ product }) {
 
   // Lignes de texte à montrer dans l'aperçu (champs texte non vides).
   const previewLines = visibleFields
-    .filter((f) => f.type === "text" || f.type === "textarea" || (!f.type && true))
+    .filter((f) => (f.type === "text" || f.type === "textarea" || !f.type) && !f.noPreview)
     .flatMap((f) => (fieldValues[f.key] || "").split("\n"))
     .map((l) => l.trim())
     .filter(Boolean);

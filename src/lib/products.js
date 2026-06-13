@@ -1169,6 +1169,54 @@ export const products = [
     variants: [{ id: "piece-laiton", title: "Laiton", price: 14.9 }],
     descriptionHtml: `<p>Médaille ronde en <strong>laiton</strong>, à graver (recto et verso possibles). Parfaite en porte-bonheur ou souvenir.</p>`,
   },
+  // ----------------------------- CADEAUX -------------------------------------
+  {
+    slug: "verre-a-whisky-grave",
+    badge: "Nouveau",
+    name: "Verre à whisky gravé",
+    weight: 600, // verre + emballage protégé (fragile)
+    pickup: true, // remise en main propre possible (verre fragile)
+    letter: false, // colis : lourd et fragile
+    hidden: true, // EN PRÉPARATION — invisible sur la boutique tant que non validé
+    preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note-dessin", type: "note", text: "Envie d'un logo ou d'un dessin gravé ? Décrivez votre idée ci-dessous pour en générer un aperçu, ou envoyez directement votre image. (Facultatif)" },
+      { key: "idee-dessin", label: "Décrivez votre dessin / logo", placeholder: "Ex : un cerf minimaliste, des initiales entrelacées, un logo…", maxLength: 120, optional: true, noPreview: true },
+      { key: "dessin", type: "design", promptKey: "idee-dessin", label: "Aperçu du dessin (assistant)", optional: true, text: "L'atelier finalisera ce dessin avant la gravure." },
+      { key: "photo", type: "photo", label: "Ou envoyez votre logo / photo", optional: true, text: "Choisissez une image nette et contrastée pour un meilleur rendu gravé." },
+    ],
+    title: "Verre à whisky gravé personnalisé — prénom, date ou logo",
+    category: "cadeaux",
+    type: "Verre gravé personnalisé",
+    tagline: "Un verre à whisky gravé à votre message : prénom, date, initiales ou logo.",
+    personalizable: true,
+    personalizationLabel: "Texte à graver (+ police, dessin ou logo en option)",
+    images: [
+      "/produits/verre_a_whisky_grave_vide.jpg",
+      "/produits/verre_a_whisky_grave_ambiance.jpg",
+    ],
+    variants: [
+      { id: "verre-whisky-grave", title: "Verre à whisky gravé", price: 22.90 },
+    ],
+    descriptionHtml: `<p><strong>Le verre à whisky personnalisé, gravé à votre message.</strong> Prénom, date, initiales, citation ou logo : chaque verre est gravé sur mesure pour devenir un cadeau unique et raffiné.</p>
+<p>Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour un anniversaire, la Fête des Pères, un cadeau d'entreprise, un témoin de mariage, ou simplement pour se faire plaisir.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Verre :</strong> tumbler à whisky, base épaisse, contenance d'environ 300 ml</li>
+<li><strong>Gravure :</strong> laser, sur une face — texte et/ou dessin / logo</li>
+<li><strong>Personnalisation :</strong> texte au choix, 8 polices, dessin via l'assistant ou votre propre image</li>
+<li><strong>Hauteur :</strong> environ 9 cm</li>
+</ul>
+<h3>Points forts</h3>
+<ul>
+<li>Gravure permanente, qui résiste au lave-vaisselle</li>
+<li>Aperçu en direct de votre texte sur le verre avant de commander</li>
+<li>Emballage protégé pour un transport en toute sécurité</li>
+<li>Une idée cadeau personnalisée, pour homme comme pour femme</li>
+</ul>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------
