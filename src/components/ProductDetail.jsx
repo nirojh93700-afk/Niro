@@ -318,6 +318,14 @@ export default function ProductDetail({ product }) {
                 <img src={photoSrc} alt="Aperçu de la gravure photo" />
               </div>
             )}
+            {/* Logo / photo envoyé par le client, superposé sur la photo du
+                produit (hors cristal), dans la zone de gravure réglée. */}
+            {hasImages && product.category !== "cristaux" && product.preview && photoSrc && (
+              <div className="engrave-overlay" style={product.preview}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="eo-photo" src={photoSrc} alt="Aperçu du logo / de la photo gravé" />
+              </div>
+            )}
             {/* Gravure écrite directement sur la photo du produit. Ne s'affiche
                 QUE si la zone de gravure a été réglée dans l'admin (product.preview),
                 pour éviter un texte mal placé sur les photos non réglées. */}
@@ -598,7 +606,7 @@ export default function ProductDetail({ product }) {
                     {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
                   </span>
                   <div className={`ep-plate ${material}`}>
-                    {material === "crystal" && photoSrc && (
+                    {photoSrc && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img className="ep-crystal-photo" src={photoSrc} alt="" />
                     )}
