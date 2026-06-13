@@ -21,14 +21,27 @@ const EXAMPLES = {
     "Une cliente demande si le bracelet est livré avant Noël…",
     "Réponds à ce message : « Bonjour, puis-je changer la gravure ? »",
   ],
+  avis: [
+    "Réponds à cet avis 5 étoiles : « Magnifique, livraison rapide ! »",
+    "Réponds à cet avis mitigé : « Joli mais reçu un peu tard. »",
+  ],
+  newsletter: [
+    "Une campagne pour la Fête des mères.",
+    "Mets en avant les bracelets prénom.",
+  ],
+  marketing: [
+    "Un post Instagram pour le collier médaillon photo.",
+    "Une idée de post pour les cadeaux de Noël.",
+  ],
+  technicien: [
+    "Mes e-mails de confirmation partent en spam, que faire ?",
+    "Je veux ajouter un champ « date de l'événement » sur les faire-part.",
+  ],
 };
 
 // Agents prévus mais pas encore activés (feuille de route, affichés grisés).
 const ROADMAP = [
-  { emoji: "⭐", name: "Agent avis", blurb: "Répond aux avis clients avec tact." },
-  { emoji: "📣", name: "Agent newsletter", blurb: "Rédige tes campagnes e-mail." },
-  { emoji: "📊", name: "Agent rapport", blurb: "Bilan hebdomadaire de tes ventes." },
-  { emoji: "🎨", name: "Agent marketing", blurb: "Visuels et légendes pour les réseaux." },
+  { emoji: "📊", name: "Agent rapport", blurb: "Bilan hebdomadaire de tes ventes (à brancher sur tes données)." },
 ];
 
 export default function AgentsCenterPage() {
