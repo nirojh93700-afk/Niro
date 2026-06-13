@@ -2,7 +2,11 @@ import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
-import { getCatalogBySlug, getCatalog, priceFrom } from "@/lib/catalog";
+import { getCatalogBySlug, getCatalog, getCatalogAdmin, priceFrom } from "@/lib/catalog";
+
+// Jeton d'aperçu privé : permet d'afficher une fiche d'un produit caché
+// (non publié) via ?apercu=<JETON>, sans qu'il soit visible des clients.
+const PREVIEW_TOKEN = "niv2026";
 import { getReviews, getRatingSummaries } from "@/lib/stock";
 import RecentlyViewed from "@/components/RecentlyViewed";
 
@@ -23,8 +27,15 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function ProductPage({ params }) {
-  const product = await getCatalogBySlug(params.handle);
+export default async function ProductPage({ params, searchParams }) {
+  let product = await getCatalogBySlug(params.handle);
+  // Aperçu privé d'un produit caché (non publié) via ?apercu=<JETON>.
+  let isPreview = false;
+  if (!product && searchParams?.apercu === PREVIEW_TOKEN) {
+    const all = await getCatalogAdmin();
+    product = all.find((p) => p.slug === params.handle) || null;
+    isPreview = !!product;
+  }
   if (!product) notFound();
 
   // Ventes croisées : 4 autres produits (même catégorie en priorité).
@@ -71,6 +82,11 @@ export default async function ProductPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {isPreview && (
+        <div style={{ background: "#fbeec9", color: "#5a4a1d", textAlign: "center", padding: "10px 16px", fontSize: "0.9rem", fontWeight: 600, borderBottom: "1px solid #e7d6a8" }}>
+          Aperçu privé — ce produit n'est pas encore publié (invisible pour les clients).
+        </div>
+      )}
       <ProductDetail product={product} />
       {related.length > 0 && (
         <section className="section">
