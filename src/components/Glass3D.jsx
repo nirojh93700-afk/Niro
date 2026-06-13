@@ -58,8 +58,8 @@ function frostedFromImage(img, maxW) {
   for (let i = 0; i < d.length; i += 4) {
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
     let a = 255 - lum;
-    a = a < 40 ? 0 : Math.min(255, (a - 40) * 1.6);
-    d[i] = 245; d[i + 1] = 245; d[i + 2] = 245; d[i + 3] = a;
+    a = a < 30 ? 0 : Math.min(255, (a - 30) * 1.9);
+    d[i] = 38; d[i + 1] = 33; d[i + 2] = 27; d[i + 3] = a; // gravure foncée (bien visible)
   }
   ctx.putImageData(data, 0, 0);
   return c;
@@ -116,11 +116,11 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
       const group = new THREE.Group();
       group.rotation.y = Math.PI; // amène l'avant (gravure) face caméra
 
+      // Verre translucide fiable (pas de transmission : trop lourd/laiteux sur mobile).
       const glassMat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff, metalness: 0, roughness: 0.06,
-        transmission: 1.0, thickness: 0.7, ior: 1.5,
-        transparent: true, opacity: 1, envMapIntensity: 1.2,
-        clearcoat: 0.4, clearcoatRoughness: 0.1,
+        color: 0xeaf0f2, metalness: 0, roughness: 0.08,
+        transparent: true, opacity: 0.22, envMapIntensity: 1.5,
+        clearcoat: 0.6, clearcoatRoughness: 0.08,
       });
       const body = new THREE.Mesh(new THREE.CylinderGeometry(R, R * 0.95, H, 72, 1, false), glassMat);
       scene.add(group);
@@ -153,7 +153,7 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
 
         if (photoCanvas) {
           const pw = photoCanvas.width, ph = photoCanvas.height;
-          let dw = cw * 0.26;
+          let dw = cw * 0.30;
           let dh = ph * (dw / pw);
           const maxH = ch * 0.6;
           if (dh > maxH) { dh = maxH; dw = pw * (dh / ph); }
@@ -168,9 +168,9 @@ export default function Glass3D({ photoSrc, lines = [], fontKey = "playfair", he
           ctx.textBaseline = "middle";
           const fontPx = Math.round(ch * 0.10);
           ctx.font = fontSpec(fontKey, fontPx);
-          ctx.fillStyle = "rgba(245,245,245,0.95)";
-          ctx.shadowColor = "rgba(0,0,0,0.25)";
-          ctx.shadowBlur = 2;
+          ctx.fillStyle = "rgba(38,33,27,0.96)"; // texte gravé foncé
+          ctx.shadowColor = "rgba(255,255,255,0.3)";
+          ctx.shadowBlur = 1;
           const startY = photoCanvas ? y : ch * 0.5 - ((txt.length - 1) * fontPx * 1.25) / 2;
           txt.forEach((line, i) => ctx.fillText(line, midX, startY + i * fontPx * 1.25));
           ctx.shadowBlur = 0;
