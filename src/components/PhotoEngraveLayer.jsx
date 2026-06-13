@@ -7,7 +7,7 @@ import { useRef, useState, useEffect } from "react";
 // - 1 curseur de taille : agrandit / réduit la photo EN GARDANT SES PROPORTIONS
 //   (jamais coupée, jamais déformée), avec la mesure réelle en cm,
 // - la taille + position choisies sont renvoyées au parent (→ commande).
-export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
+export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = false }) {
   const box = cfg?.box || { top: 0.3, left: 0.2, width: 0.6, height: 0.45 };
   const widthMm = cfg?.widthMm || 65;
   const maxW = cfg?.maxWidthFrac || box.width;
@@ -81,7 +81,7 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange }) {
       <img
         src={photoSrc}
         alt="Logo à graver — glissez pour déplacer"
-        className="ee-logo"
+        className={`ee-logo${light ? " ee-logo-light" : ""}`}
         draggable={false}
         onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}

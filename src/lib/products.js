@@ -1224,9 +1224,11 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte à graver (+ police, dessin ou logo en option)",
     images: [
-      "/produits/verre_a_whisky_grave_vide.jpg",
       "/produits/verre_a_whisky_grave_ambiance.jpg",
+      "/produits/verre_a_whisky_grave_vide.jpg",
+      "/produits/verre_a_whisky_fond.jpg",
     ],
+    engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
       { id: "verre-whisky-grave", title: "Verre à whisky gravé", price: 22.90 },
     ],

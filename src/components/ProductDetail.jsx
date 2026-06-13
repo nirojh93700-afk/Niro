@@ -98,6 +98,17 @@ export default function ProductDetail({ product }) {
   const hasVariantImages = product.variants.some((v) => v.image);
 
   // Sélectionne une variante et, si elle a une photo, l'affiche dans la galerie.
+  // Quand le client choisit l'emplacement, on bascule sur la bonne photo repère.
+  useEffect(() => {
+    if (!product.engrave) return;
+    const emp = fieldValues["emplacement"];
+    let target = -1;
+    if (emp === "fond" && product.fondImage) target = images.indexOf(product.fondImage);
+    else if (emp === "face" && product.engraveImage) target = images.indexOf(product.engraveImage);
+    if (target >= 0) setActiveImg(target);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldValues["emplacement"]]);
+
   function selectVariant(i) {
     setVariantIndex(i);
     const img = product.variants[i]?.image;
@@ -182,11 +193,14 @@ export default function ProductDetail({ product }) {
   // Affichable si c'est une vraie image : URL externe (http), data:, ou chemin
   // interne (/api/img/... renvoyé par le téléversement).
   const photoSrc = photoUrl && (photoUrl.startsWith("http") || photoUrl.startsWith("data:") || photoUrl.startsWith("/")) ? photoUrl : "";
-  // Gravure au fond du verre : vue de dessus + zone ronde dédiée.
-  const isFond = fieldValues["emplacement"] === "fond";
+  // Emplacement de la gravure : face avant, ou fond (vue de dessus, zone ronde).
+  const emplacement = fieldValues["emplacement"];
+  const isFond = emplacement === "fond";
   const editCfg = isFond && product.engraveFond ? product.engraveFond : product.engrave;
-  const mainSrc = isFond && product.fondImage ? product.fondImage : (images[activeImg]);
-  const showEditor = Boolean(product.engrave) && (isFond || activeImg === 0);
+  const mainSrc = images[activeImg];
+  const onFaceImg = images[activeImg] === product.engraveImage;
+  const onFondImg = images[activeImg] === product.fondImage;
+  const showEditor = Boolean(product.engrave) && ((emplacement === "face" && onFaceImg) || (isFond && onFondImg));
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
@@ -340,7 +354,7 @@ export default function ProductDetail({ product }) {
                 produit (hors cristal), dans la zone de gravure réglée. */}
             {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
             {hasImages && showEditor && photoSrc && (
-              <PhotoEngraveLayer key={isFond ? "photo-fond" : "photo-face"} photoSrc={photoSrc} cfg={editCfg} onChange={setPhotoLayout} />
+              <PhotoEngraveLayer key={isFond ? "photo-fond" : "photo-face"} photoSrc={photoSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
             {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
@@ -358,7 +372,7 @@ export default function ProductDetail({ product }) {
                 key={isFond ? "text-fond" : "text-face"}
                 lines={previewLines}
                 fontClass={previewFontClass}
-                color={previewColor}
+                color={isFond ? "#f2efe9" : previewColor}
                 cfg={editCfg}
                 onChange={setTextLayout}
               />
@@ -391,7 +405,7 @@ export default function ProductDetail({ product }) {
           )}
 
           {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
-          {product.engrave && !isFond && (
+          {product.engrave && emplacement === "face" && (
             <div style={{ marginTop: 12 }}>
               <button
                 type="button"
