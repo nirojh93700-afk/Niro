@@ -2,6 +2,30 @@
 
 import { useRef, useState, useEffect } from "react";
 
+// Transforme une image en "gravure blanche" opaque (zones sombres → blanc,
+// zones claires → transparent) : bien visible sur un fond sombre (fond du verre).
+function whiteFrost(img) {
+  const maxW = 700;
+  const scale = Math.min(1, maxW / Math.max(img.naturalWidth, 1));
+  const w = Math.max(1, Math.round(img.naturalWidth * scale));
+  const h = Math.max(1, Math.round(img.naturalHeight * scale));
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const ctx = c.getContext("2d");
+  ctx.drawImage(img, 0, 0, w, h);
+  let data;
+  try { data = ctx.getImageData(0, 0, w, h); } catch { return img.src; }
+  const d = data.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    let a = 255 - lum;
+    a = a < 25 ? 0 : Math.min(255, (a - 25) * 2.0);
+    d[i] = 248; d[i + 1] = 248; d[i + 2] = 244; d[i + 3] = a;
+  }
+  ctx.putImageData(data, 0, 0);
+  return c.toDataURL();
+}
+
 // Éditeur de placement du logo/photo sur la photo du produit :
 // - glisser pour déplacer (souris + tactile iOS),
 // - 1 curseur de taille : agrandit / réduit la photo EN GARDANT SES PROPORTIONS
@@ -16,9 +40,22 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
   const ref = useRef(null);
   const drag = useRef(null);
   const [aspect, setAspect] = useState(1); // hauteur / largeur de l'image
+  const [displaySrc, setDisplaySrc] = useState(photoSrc); // image affichée (frostée si fond)
   const [size, setSize] = useState((minW + maxW) / 2); // largeur (fraction du cadre)
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
+
+  // En mode "clair" (fond du verre, sombre) : on transforme la photo en gravure blanche.
+  useEffect(() => {
+    let cancelled = false;
+    if (!light) { setDisplaySrc(photoSrc); return; }
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => { if (!cancelled) { try { setDisplaySrc(whiteFrost(img)); } catch { setDisplaySrc(photoSrc); } } };
+    img.onerror = () => { if (!cancelled) setDisplaySrc(photoSrc); };
+    img.src = photoSrc;
+    return () => { cancelled = true; };
+  }, [photoSrc, light]);
 
   const wMm = Math.round((size / maxW) * widthMm * 10) / 10;
   const hMm = Math.round(wMm * aspect * 10) / 10;
@@ -79,9 +116,9 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
     <div className="engrave-editor" ref={ref}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={photoSrc}
+        src={displaySrc}
         alt="Logo à graver — glissez pour déplacer"
-        className={`ee-logo${light ? " ee-logo-light" : ""}`}
+        className={`ee-logo${light ? " ee-logo-white" : ""}`}
         draggable={false}
         onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}
