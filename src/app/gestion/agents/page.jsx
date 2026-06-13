@@ -56,6 +56,7 @@ export default function AgentsCenterPage() {
   const [authError, setAuthError] = useState("");
   const [autoReply, setAutoReply] = useState(false); // auto-réponse e-mail activée ?
   const [savingAuto, setSavingAuto] = useState(false);
+  const [showRecap, setShowRecap] = useState(false); // page récap "comment ça marche"
 
   const loadAgents = useCallback(async (adminKey) => {
     try {
@@ -137,6 +138,11 @@ export default function AgentsCenterPage() {
   const workers = agents.filter((a) => a.id !== "chef");
   const openAgent = selected ? agents.find((a) => a.id === selected) : null;
 
+  // --- Page de récap (comment fonctionne l'équipe) -------------------------
+  if (showRecap && !openAgent) {
+    return <RecapView agents={agents} onBack={() => setShowRecap(false)} />;
+  }
+
   // --- Espace de travail d'un agent ----------------------------------------
   if (openAgent) {
     return (
@@ -164,7 +170,10 @@ export default function AgentsCenterPage() {
               Tes assistants IA, chacun spécialisé. Le chef coordonne tout. Les cas simples peuvent être traités en autonomie, les cas spéciaux te sont toujours remontés.
             </p>
           </div>
-          <Link href="/gestion" className="btn btn-outline">← Gestion</Link>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="btn btn-outline" onClick={() => setShowRecap(true)}>Comment ça marche ?</button>
+            <Link href="/gestion" className="btn btn-outline">← Gestion</Link>
+          </div>
         </div>
 
         {/* AUTONOMIE — interrupteur de réponse automatique */}
@@ -448,5 +457,54 @@ function EmailDraft({ draft, adminKey, onSent }) {
       </div>
       {!validEmail && <div style={{ fontSize: "0.8rem", color: "var(--ink-soft)", marginTop: 6 }}>Renseigne une adresse valide pour envoyer (ou « Copier »).</div>}
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// PAGE DE RÉCAP — tous les agents, ce qu'ils font, leur niveau d'autonomie.
+// ---------------------------------------------------------------------------
+const RECAP = [
+  { id: "chef", emoji: "🧭", name: "Chef d'équipe", what: "Tu lui parles normalement, il comprend ta demande et la confie au bon agent, puis te ramène le résultat.", how: "Le point d'entrée idéal : en cas de doute sur quel agent utiliser, parle au Chef.", auto: "Routage automatique" },
+  { id: "email", emoji: "✉️", name: "Agent e-mail", what: "Répond aux messages des clientes, dans le ton de la marque, en respectant tes règles (pas de remboursement sur le personnalisé, etc.).", how: "Colle le message d'une cliente : il rédige la réponse, tu relis, tu envoies (ou tu copies). Avec l'auto-réponse activée, il répond seul aux messages simples reçus via le formulaire de contact.", auto: "Autonome (cas simples) · te remonte les cas spéciaux à valider" },
+  { id: "avis", emoji: "⭐", name: "Agent avis", what: "Rédige une réponse publique à un avis client.", how: "Colle l'avis : il te propose une réponse courte et juste, que tu copies sur ta fiche produit.", auto: "Brouillon à valider" },
+  { id: "newsletter", emoji: "📣", name: "Agent newsletter", what: "Rédige tes campagnes e-mail (objet + message).", how: "Dis l'occasion ou le produit à mettre en avant : il propose des objets et le corps du message.", auto: "Brouillon à valider" },
+  { id: "marketing", emoji: "🎨", name: "Agent marketing", what: "Rédige tes posts réseaux sociaux : légende + hashtags + idée de visuel.", how: "Dis le produit ou le thème : il te donne le texte prêt à publier et une idée de photo.", auto: "Brouillon à valider" },
+  { id: "technicien", emoji: "🛠️", name: "Technicien / Dev", what: "Diagnostique les soucis techniques du site et prépare une fiche claire.", how: "Décris ton problème : il t'explique la cause et, si besoin d'une modification du code, prépare la fiche pour le développeur (les corrections sont appliquées par Claude Code).", auto: "Diagnostic + fiche" },
+  { id: "rapport", emoji: "📊", name: "Agent rapport", what: "Fait le bilan de tes ventes (CA, panier moyen, meilleures ventes) et te donne des conseils.", how: "Demande « fais le rapport de la semaine » : il analyse tes vraies commandes et te répond.", auto: "Sur tes vraies données" },
+];
+
+function RecapView({ agents, onBack }) {
+  const has = (id) => agents.some((a) => a.id === id);
+  return (
+    <section className="section">
+      <div className="container" style={{ maxWidth: 860 }}>
+        <button className="btn btn-outline" style={{ marginBottom: 18 }} onClick={onBack}>← Retour à l'équipe</button>
+        <span className="eyebrow">Espace gestion</span>
+        <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold)", margin: "4px 0 0" }}>Comment fonctionne ton équipe d'agents</h1>
+        <p style={{ color: "var(--ink-soft)" }}>
+          Chaque agent est spécialisé. Le principe : les cas simples sont traités en autonomie, les cas spéciaux ou sensibles te sont toujours remontés pour validation.
+        </p>
+
+        {RECAP.filter((r) => has(r.id)).map((r) => (
+          <div key={r.id} style={{ border: "1px solid var(--line)", borderRadius: 16, padding: 18, marginTop: 14, background: "var(--paper)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Avatar emoji={r.emoji} size={44} />
+              <strong style={{ fontSize: "1.1rem", fontFamily: "Georgia, serif" }}>{r.name}</strong>
+            </div>
+            <p style={{ margin: "10px 0 6px" }}><strong>Ce qu'il fait :</strong> {r.what}</p>
+            <p style={{ margin: "0 0 6px", color: "var(--ink-soft)" }}><strong>Comment l'utiliser :</strong> {r.how}</p>
+            <span style={{ fontSize: "0.78rem", fontWeight: 600, padding: "3px 10px", borderRadius: 999, background: "#e7f4ea", color: "#256b34" }}>{r.auto}</span>
+          </div>
+        ))}
+
+        {/* À venir / hors de l'app */}
+        <h3 style={{ marginTop: 26, fontFamily: "Georgia, serif" }}>Au-delà des agents</h3>
+        <div style={{ border: "1px dashed var(--line)", borderRadius: 16, padding: 18, marginTop: 10, background: "var(--paper)" }}>
+          <p style={{ margin: "0 0 8px" }}>🧊 <strong>Fichiers 3D & visuels</strong> — générés à la demande par le développeur (Claude Code). Donne un produit, le fichier 3D est créé et ajouté.</p>
+          <p style={{ margin: "0 0 8px" }}>🛠️ <strong>Développement du site</strong> — les vraies modifications de code sont faites par Claude Code (pour des raisons de sécurité, un développeur autonome ne peut pas vivre dans le site).</p>
+          <p style={{ margin: 0 }}>📞 <strong>Agent téléphone</strong> — possible, mais nécessite un service de téléphonie (Twilio) avec un numéro dédié. À activer quand tu le souhaites.</p>
+        </div>
+      </div>
+    </section>
   );
 }
