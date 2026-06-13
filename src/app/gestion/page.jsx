@@ -5,7 +5,6 @@ import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
-import AgentsAdmin from "@/components/admin/AgentsAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
@@ -986,7 +985,16 @@ export default function GestionPage() {
           <AssistantAdmin adminKey={key} onReload={() => load(key)} />
         )}
 
-        {tab === "agents" && <AgentsAdmin adminKey={key} />}
+        {tab === "agents" && (
+          <div style={{ border: "1px solid var(--gold)", borderRadius: 16, padding: 24, background: "linear-gradient(135deg, #fffdf7, var(--cream))" }}>
+            <h3 style={{ marginTop: 0, fontFamily: "Georgia, serif", color: "var(--gold)" }}>Centre de commande — Ton équipe d'agents</h3>
+            <p style={{ color: "var(--ink-soft)" }}>
+              Une page dédiée et professionnelle pour piloter tes agents IA : le Chef qui coordonne tout, l'agent e-mail, et les prochains à venir.
+              Chaque agent a son espace de travail. Rien n'est envoyé sans ta validation.
+            </p>
+            <a href="/gestion/agents" className="btn btn-gold">Ouvrir le centre des agents →</a>
+          </div>
+        )}
 
         {/* ---------------- GRAVURE ---------------- */}
         {tab === "gravure" && (
