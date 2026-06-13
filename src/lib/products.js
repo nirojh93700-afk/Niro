@@ -1182,9 +1182,8 @@ export const products = [
     personalizationFields: [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "note-dessin", type: "note", text: "Envie d'un logo ou d'un dessin gravé ? Décrivez votre idée ci-dessous pour en générer un aperçu, ou envoyez directement votre image. (Facultatif)" },
-      { key: "idee-dessin", label: "Décrivez votre dessin / logo", placeholder: "Ex : un cerf minimaliste, des initiales entrelacées, un logo…", maxLength: 120, optional: true, noPreview: true },
-      { key: "dessin", type: "design", promptKey: "idee-dessin", label: "Aperçu du dessin (assistant)", optional: true, text: "L'atelier finalisera ce dessin avant la gravure." },
+      { key: "note-dessin", type: "note", text: "Envie d'un logo ou d'un dessin gravé ? Décrivez votre idée ci-dessous, ou envoyez directement votre image. (Facultatif)" },
+      { key: "idee-dessin", label: "Décrivez votre logo / dessin", placeholder: "Ex : un cerf minimaliste, des initiales entrelacées, un logo…", maxLength: 120, optional: true, noPreview: true },
       { key: "photo", type: "photo", label: "Ou envoyez votre logo / photo", optional: true, text: "Choisissez une image nette et contrastée pour un meilleur rendu gravé." },
     ],
     title: "Verre à whisky gravé personnalisé — prénom, date ou logo",
