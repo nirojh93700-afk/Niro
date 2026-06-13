@@ -1017,9 +1017,9 @@ img {
 }
 /* Gravure au fond (intérieur sombre) : rendu CLAIR (frosté) bien visible */
 .engrave-editor .ee-logo-light {
-  filter: grayscale(1) contrast(1.25) invert(1) brightness(1.1);
+  filter: grayscale(1) contrast(1.7) brightness(1.5);
   mix-blend-mode: screen;
-  opacity: 0.95;
+  opacity: 0.92;
 }
 
 /* Aperçu de la gravure directement sur la photo du produit */
