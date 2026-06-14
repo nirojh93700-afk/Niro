@@ -21,6 +21,10 @@ import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
+import ModeleDesigner from "./ModeleDesigner";
+import ModeleEngraveLayer from "./ModeleEngraveLayer";
+import { MODELES, defaultModele } from "@/lib/modeles";
+import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
@@ -36,6 +40,7 @@ export default function ProductDetail({ product }) {
   const [error, setError] = useState("");
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé
+  const [modeleLayout, setModeleLayout] = useState(null); // taille/position d'un modèle de gravure
   const [show3d, setShow3d] = useState(false); // aperçu 3D du verre (rotatif)
 
   const [stockMap, setStockMap] = useState({});
@@ -167,13 +172,32 @@ export default function ProductDetail({ product }) {
   function buildPersonalization() {
     if (product.personalizationFields) {
       const parts = visibleFields
-        .filter((f) => f.type !== "note")
+        .filter((f) => f.type !== "note" && f.type !== "modele")
         .map((f) => {
           const raw = (fieldValues[f.key] || "").toString().trim();
           if (!raw) return null;
           return `${f.label} : ${valueLabel(f, raw)}`;
         })
         .filter(Boolean);
+      // Modèle de gravure : résumé lisible (textes + police + motif + placement).
+      const mField = visibleFields.find((f) => f.type === "modele");
+      if (mField) {
+        const tpl = MODELES[mField.template];
+        const mv = fieldValues[mField.key];
+        if (tpl && mv && mv.text) {
+          const lines = tpl.lines
+            .map((l) => {
+              const t = (mv.text[l.key] || "").trim();
+              return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;
+            })
+            .filter(Boolean);
+          if (lines.length) parts.push(`Modèle « ${tpl.label} » : ${lines.join(" / ")}`);
+          if (mv.motif && mv.motif !== "aucun") {
+            parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
+          }
+          if (modeleLayout?.label) parts.push(`Gravure ${modeleLayout.label}`);
+        }
+      }
       // Taille + position du logo / texte gravé (éditeur interactif), pour l'atelier.
       if (product.engrave && photoSrc && photoLayout?.label) {
         parts.push(`Gravure logo : ${photoLayout.label}`);
@@ -199,8 +223,13 @@ export default function ProductDetail({ product }) {
   // interne (/api/img/... renvoyé par le téléversement). Le badge a priorité s'il est rempli.
   const photoCandidate = badgeUrl || photoUrl;
   const photoSrc = photoCandidate && (photoCandidate.startsWith("http") || photoCandidate.startsWith("data:") || photoCandidate.startsWith("/")) ? photoCandidate : "";
+  // Modèle de gravure (page dédiée propulsée par le moteur partagé).
+  const modeleField = visibleFields.find((f) => f.type === "modele");
+  const modeleTemplate = modeleField?.template;
+  const modeleVal = modeleField ? (fieldValues[modeleField.key] && fieldValues[modeleField.key].text ? fieldValues[modeleField.key] : defaultModele(modeleTemplate)) : null;
   // Emplacement de la gravure : face avant, ou fond (vue de dessus, zone ronde).
-  const emplacement = fieldValues["emplacement"];
+  // Sur une page "modèle", on part sur la face par défaut pour montrer l'aperçu d'emblée.
+  const emplacement = fieldValues["emplacement"] || (modeleField ? "face" : undefined);
   const isFond = emplacement === "fond";
   const editCfg = isFond && product.engraveFond ? product.engraveFond : product.engrave;
   const mainSrc = images[activeImg];
@@ -303,8 +332,17 @@ export default function ProductDetail({ product }) {
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
     if (product.personalizationFields) {
       const missing = visibleFields.find(
-        (f) => f.type !== "note" && !f.optional && !(fieldValues[f.key] || "").trim()
+        (f) => f.type !== "note" && f.type !== "modele" && !f.optional && !(fieldValues[f.key] || "").trim()
       );
+      // Modèle de gravure : au moins un texte requis (sauf si le champ est facultatif).
+      if (modeleField && !modeleField.optional) {
+        const mv = fieldValues[modeleField.key];
+        const hasText = mv && mv.text && Object.values(mv.text).some((t) => (t || "").trim());
+        if (!hasText) {
+          setError("Merci d'indiquer le texte à graver.");
+          return;
+        }
+      }
       if (missing) {
         setError(`Merci d'indiquer : ${missing.label}.`);
         return;
@@ -359,8 +397,19 @@ export default function ProductDetail({ product }) {
             {/* Logo / photo envoyé par le client, superposé sur la photo du
                 produit (hors cristal), dans la zone de gravure réglée. */}
             {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
-            {hasImages && showEditor && photoSrc && (
+            {hasImages && showEditor && photoSrc && !modeleField && (
               <PhotoEngraveLayer key={isFond ? "photo-fond" : "photo-face"} photoSrc={photoSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
+            )}
+            {/* Calque MODÈLE de gravure (page dédiée) */}
+            {hasImages && showEditor && modeleField && (
+              <ModeleEngraveLayer
+                key={isFond ? "modele-fond" : "modele-face"}
+                template={modeleTemplate}
+                value={modeleVal}
+                color={isFond ? "#f2efe9" : "#3a2f1d"}
+                cfg={editCfg}
+                onChange={setModeleLayout}
+              />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
             {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
@@ -373,7 +422,7 @@ export default function ProductDetail({ product }) {
                 QUE si la zone de gravure a été réglée dans l'admin (product.preview),
                 pour éviter un texte mal placé sur les photos non réglées. */}
             {/* Texte : éditeur interactif (déplaçable + taille) si activé */}
-            {hasImages && showEditor && previewLines.length > 0 && (
+            {hasImages && showEditor && previewLines.length > 0 && !modeleField && (
               <TextEngraveLayer
                 key={isFond ? "text-fond" : "text-face"}
                 lines={previewLines}
@@ -411,7 +460,7 @@ export default function ProductDetail({ product }) {
           )}
 
           {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
-          {product.engrave && emplacement === "face" && (
+          {product.engrave && emplacement === "face" && !modeleField && (
             <div style={{ marginTop: 12 }}>
               <button
                 type="button"
@@ -589,6 +638,15 @@ export default function ProductDetail({ product }) {
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <BadgeDesigner value={fieldValues[f.key] || ""} onChange={(u) => setField(f.key, u)} />
+                      {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
+                    </div>
+                  );
+                }
+                if (f.type === "modele") {
+                  return (
+                    <div className="field" key={f.key}>
+                      {f.label && <label>{f.label}</label>}
+                      <ModeleDesigner template={f.template} value={fieldValues[f.key]} onChange={(val) => setField(f.key, val)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
                   );

@@ -1251,6 +1251,63 @@ export const products = [
 <li>Une idée cadeau personnalisée, pour homme comme pour femme</li>
 </ul>`,
   },
+  {
+    // PAGE MODÈLE — propulsée par le moteur partagé (lib/modeles.js, template "peres").
+    slug: "verre-a-whisky-fete-des-peres",
+    badge: "Nouveau",
+    name: "Verre à whisky — Fête des pères",
+    weight: 600,
+    pickup: true,
+    letter: false,
+    hidden: true, // EN PRÉPARATION — visible via le lien d'aperçu
+    preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
+    engrave: {
+      box: { top: 0.15, left: 0.20, width: 0.60, height: 0.62 },
+      widthMm: 65, heightMm: 65,
+      maxWidthFrac: 0.50, minWidthFrac: 0.10,
+      maxHeightFrac: 0.50, minHeightFrac: 0.10,
+      diameterMm: 79, glassHeightMm: 95,
+    },
+    fondImage: "/produits/verre_a_whisky_fond.jpg",
+    engraveFond: {
+      box: { top: 0.30, left: 0.30, width: 0.40, height: 0.40 },
+      widthMm: 50, heightMm: 50,
+      maxWidthFrac: 0.40, minWidthFrac: 0.08,
+      maxHeightFrac: 0.40, minHeightFrac: 0.08,
+      round: true,
+    },
+    personalizationFields: [
+      { key: "modele", type: "modele", template: "peres", label: "Personnalisez votre gravure", text: "Modifiez chaque ligne et choisissez un motif. L'aperçu se met à jour sur le verre ; vous pouvez le déplacer et le redimensionner. Aperçu indicatif — la gravure finale est optimisée par notre atelier." },
+      { key: "emplacement", type: "select", label: "Emplacement de la gravure", optional: true, options: [
+        { value: "face", label: "Sur la face avant" },
+        { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
+      ] },
+    ],
+    title: "Verre à whisky gravé Fête des pères — cadeau papa, papy personnalisé",
+    category: "cadeaux",
+    type: "Verre gravé Fête des pères",
+    tagline: "Le verre à whisky personnalisé pour la Fête des pères : élu papa / papy de l'année.",
+    personalizable: true,
+    personalizationLabel: "Gravure Fête des pères personnalisable (textes + motif)",
+    images: [
+      "/produits/verre_a_whisky_grave_vide.jpg",
+      "/produits/verre_a_whisky_grave_ambiance.jpg",
+      "/produits/verre_a_whisky_fond.jpg",
+    ],
+    engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
+    variants: [
+      { id: "verre-whisky-fete-des-peres", title: "Verre à whisky gravé", price: 22.90 },
+    ],
+    descriptionHtml: `<p><strong>Le cadeau Fête des pères qui fait mouche.</strong> Un verre à whisky gravé « élu PAPA de l'année » (ou PAPY, TONTON, PARRAIN…), entièrement personnalisable.</p>
+<p>Choisissez vos textes, la police de chaque ligne et un motif : l'aperçu s'affiche en direct sur le verre. Gravure laser permanente, qui résiste au lave-vaisselle.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Verre :</strong> tumbler à whisky, base épaisse, contenance d'environ 300 ml</li>
+<li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre</li>
+<li><strong>Personnalisation :</strong> 3 lignes de texte + motif au choix</li>
+<li><strong>Hauteur :</strong> environ 9 cm</li>
+</ul>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------
