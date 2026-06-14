@@ -531,6 +531,7 @@ export default function GestionPage() {
               label: "Réglages",
               tabs: [
                 { id: "assistant", text: "Assistant" },
+                { id: "agents", text: "Équipe d'agents" },
                 { id: "apparence", text: "Apparence" },
                 { id: "reglages", text: "Réglages" },
               ],
@@ -982,6 +983,17 @@ export default function GestionPage() {
         {/* ---------------- ASSISTANT ---------------- */}
         {tab === "assistant" && (
           <AssistantAdmin adminKey={key} onReload={() => load(key)} />
+        )}
+
+        {tab === "agents" && (
+          <div style={{ border: "1px solid var(--gold)", borderRadius: 16, padding: 24, background: "linear-gradient(135deg, #fffdf7, var(--cream))" }}>
+            <h3 style={{ marginTop: 0, fontFamily: "Georgia, serif", color: "var(--gold)" }}>Centre de commande — Ton équipe d'agents</h3>
+            <p style={{ color: "var(--ink-soft)" }}>
+              Une page dédiée et professionnelle pour piloter tes agents IA : le Chef qui coordonne tout, l'agent e-mail, et les prochains à venir.
+              Chaque agent a son espace de travail. Rien n'est envoyé sans ta validation.
+            </p>
+            <a href="/gestion/agents" className="btn btn-gold">Ouvrir le centre des agents →</a>
+          </div>
         )}
 
         {/* ---------------- GRAVURE ---------------- */}
