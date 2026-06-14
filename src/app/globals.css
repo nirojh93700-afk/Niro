@@ -618,6 +618,15 @@ img {
   margin-bottom: 16px;
   line-height: 1.5;
 }
+.perso-hint-img {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  margin: 0 auto 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
 
 /* Classes de polices de gravure (aperçu) */
 .fnt-playfair { font-family: var(--font-display), serif; }
