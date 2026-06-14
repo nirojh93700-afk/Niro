@@ -559,7 +559,15 @@ export default function ProductDetail({ product }) {
               </p>
               {visibleFields.map((f) => {
                 if (f.type === "note") {
-                  return <p key={f.key} className="perso-hint">{f.text}</p>;
+                  return (
+                    <div key={f.key} className="perso-note">
+                      <p className="perso-hint">{f.text}</p>
+                      {f.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img className="note-guide-img" src={f.image} alt="Guide : bien choisir sa photo à graver" />
+                      )}
+                    </div>
+                  );
                 }
                 if (f.type === "photo") {
                   return (
