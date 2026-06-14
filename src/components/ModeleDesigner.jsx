@@ -2,17 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { MODELES, defaultModele } from "@/lib/modeles";
+import { FONTS, getFontLabel } from "@/lib/fonts";
 import { MOTIF_LIST, Motif } from "./Motif";
 import ModeleArt from "./ModeleArt";
-
-// Choix de polices proposées par ligne (les plus utiles pour la gravure).
-const FONT_CHOICES = [
-  { cls: "fnt-great-vibes", label: "Aa" },
-  { cls: "fnt-allura", label: "Aa" },
-  { cls: "fnt-cinzel", label: "Aa" },
-  { cls: "fnt-playfair", label: "Aa" },
-  { cls: "fnt-montserrat", label: "Aa" },
-];
 
 // Formulaire de personnalisation d'un modèle de gravure (page dédiée).
 // value = { text:{}, fonts:{}, motif } — stocké tel quel dans la commande.
@@ -54,17 +46,19 @@ export default function ModeleDesigner({ template, value, onChange }) {
             onChange={(e) => setText(l.key, e.target.value)}
           />
           <div className="modele-fonts">
-            {FONT_CHOICES.map((f) => (
-              <button
-                type="button"
-                key={f.cls}
-                className={`${f.cls} modele-font-chip${(v.fonts[l.key] || l.font) === f.cls ? " on" : ""}`}
-                onClick={() => setFont(l.key, f.cls)}
-                aria-label={`Police ${f.cls}`}
-              >
-                {f.label}
-              </button>
-            ))}
+            <span className="modele-fonts-lbl">Police :</span>
+            <select
+              className={`modele-font-select ${v.fonts[l.key] || l.font}`}
+              value={v.fonts[l.key] || l.font}
+              onChange={(e) => setFont(l.key, e.target.value)}
+              aria-label={`Police de la ligne ${l.label}`}
+            >
+              {FONTS.map((f) => (
+                <option key={f.key} value={f.cls} className={f.cls}>
+                  {getFontLabel(f.key)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       ))}
