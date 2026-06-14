@@ -619,20 +619,6 @@ img {
   line-height: 1.5;
 }
 
-/* Guide visuel "bonne photo" affiché sous une note */
-.perso-note .perso-hint {
-  margin-bottom: 10px;
-}
-.note-guide-img {
-  display: block;
-  width: 100%;
-  max-width: 440px;
-  margin: 0 auto 16px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-}
-
 /* Classes de polices de gravure (aperçu) */
 .fnt-playfair { font-family: var(--font-display), serif; }
 .fnt-cinzel { font-family: var(--font-cinzel), serif; }
