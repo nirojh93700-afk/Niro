@@ -20,6 +20,7 @@ import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
+import BadgeDesigner from "./BadgeDesigner";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
@@ -190,9 +191,14 @@ export default function ProductDetail({ product }) {
   const colorField = visibleFields.find((f) => f.type === "color");
   const photoField = visibleFields.find((f) => f.type === "photo");
   const photoUrl = photoField ? fieldValues[photoField.key] : "";
+  // Modèle emblème (badge prêt à personnaliser) : génère une image (data URL)
+  // qui passe par le même pipeline d'aperçu que la photo/logo.
+  const badgeField = visibleFields.find((f) => f.type === "badge");
+  const badgeUrl = badgeField ? fieldValues[badgeField.key] : "";
   // Affichable si c'est une vraie image : URL externe (http), data:, ou chemin
-  // interne (/api/img/... renvoyé par le téléversement).
-  const photoSrc = photoUrl && (photoUrl.startsWith("http") || photoUrl.startsWith("data:") || photoUrl.startsWith("/")) ? photoUrl : "";
+  // interne (/api/img/... renvoyé par le téléversement). Le badge a priorité s'il est rempli.
+  const photoCandidate = badgeUrl || photoUrl;
+  const photoSrc = photoCandidate && (photoCandidate.startsWith("http") || photoCandidate.startsWith("data:") || photoCandidate.startsWith("/")) ? photoCandidate : "";
   // Emplacement de la gravure : face avant, ou fond (vue de dessus, zone ronde).
   const emplacement = fieldValues["emplacement"];
   const isFond = emplacement === "fond";
@@ -574,6 +580,15 @@ export default function ProductDetail({ product }) {
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} productSlug={product.slug} />
+                      {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
+                    </div>
+                  );
+                }
+                if (f.type === "badge") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <BadgeDesigner value={fieldValues[f.key] || ""} onChange={(u) => setField(f.key, u)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
                   );
