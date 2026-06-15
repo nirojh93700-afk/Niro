@@ -35,11 +35,11 @@ export default function RoundBadge({ size = 200, top, mid, bot, fontTop, fontMid
       {ring}
       {/* contour du disque + cercle pointillé (pas d'aplat noir) */}
       <circle cx="150" cy="150" r="120" fill="none" stroke={ink} strokeWidth="2.5" />
-      <circle cx="150" cy="150" r="78" fill="none" stroke={ink} strokeWidth="1.5" strokeDasharray="5 5" opacity="0.85" />
+      <circle cx="150" cy="150" r="72" fill="none" stroke={ink} strokeWidth="1.5" strokeDasharray="5 5" opacity="0.85" />
 
       <defs>
         <path id={`top-${uid}`} d="M 81.6 88.4 A 92 92 0 0 1 218.4 88.4" />
-        <path id={`bot-${uid}`} d="M 81.6 211.6 A 92 92 0 0 0 218.4 211.6" />
+        <path id={`bot-${uid}`} d="M 71.2 220.9 A 106 106 0 0 0 228.8 220.9" />
       </defs>
 
       {/* texte du haut, courbé */}
@@ -56,7 +56,7 @@ export default function RoundBadge({ size = 200, top, mid, bot, fontTop, fontMid
       <polygon points={starPoints(260, 150, 13)} fill="none" stroke={ink} strokeWidth="2.2" />
 
       {/* texte du bas, courbé */}
-      <text className={fontBot} fontSize="30" fill={ink} textAnchor="middle">
+      <text className={fontBot} fontSize="26" fill={ink} textAnchor="middle">
         <textPath href={`#bot-${uid}`} startOffset="50%">{bot}</textPath>
       </text>
     </svg>
