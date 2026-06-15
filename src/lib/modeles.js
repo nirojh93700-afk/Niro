@@ -15,12 +15,13 @@ export const MODELES = {
   },
   peres: {
     label: "Fête des pères",
+    style: "badge", // médaillon rond (couronne d'étoiles + bandeau)
     lines: [
-      { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.78 },
-      { key: "mid", label: "Mot central", placeholder: "PAPY", font: "fnt-cinzel", em: 1, bold: true, spacing: "0.06em" },
-      { key: "bot", label: "Texte du bas", placeholder: "DE L'ANNÉE", font: "fnt-cinzel", em: 0.4, spacing: "0.14em" },
+      { key: "top", label: "Texte du haut", placeholder: "ÉLU", font: "fnt-montserrat", em: 0.62, spacing: "0.12em" },
+      { key: "mid", label: "Mot central", placeholder: "PAPA", font: "fnt-montserrat", em: 1, bold: true },
+      { key: "bot", label: "Texte du bas", placeholder: "de l'année", font: "fnt-great-vibes", em: 0.62 },
     ],
-    defaultMotif: "etoile",
+    defaultMotif: "aucun",
   },
   tendresse: {
     label: "Tendresse",

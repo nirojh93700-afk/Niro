@@ -63,7 +63,9 @@ export default function ModeleDesigner({ template, value, onChange }) {
         </div>
       ))}
 
-      {/* choix du motif */}
+      {/* choix du motif (sauf modèle "badge" qui a ses propres graphismes) */}
+      {tpl.style !== "badge" && (
+      <>
       <label className="modele-label">Graphisme</label>
       <div className="modele-motifs">
         {MOTIF_LIST.map((m) => (
@@ -78,6 +80,8 @@ export default function ModeleDesigner({ template, value, onChange }) {
           </button>
         ))}
       </div>
+      </>
+      )}
     </div>
   );
 }
