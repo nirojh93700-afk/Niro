@@ -47,15 +47,23 @@ export default function ModeleArt({ template, value, color = "#fff", base = 28, 
     const top = get("top"), mid = get("mid"), bot = get("bot");
     const sub = tpl.lines.find((l) => l.below);
     const subTxt = sub ? (text[sub.key] || "").trim() || (placeholder ? sub.placeholder : "") : "";
+    // 3e choix : "Image d'origine" = badge figé (image), texte non modifiable.
+    const isImage = value?.bg === "image";
+    const isLight = (color || "").toLowerCase() !== "#3a2f1d";
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1.05 }}>
-        <RoundBadge
-          size={base * 6.2}
-          top={top.txt} mid={mid.txt} bot={bot.txt}
-          fontTop={top.font} fontMid={mid.font} fontBot={bot.font}
-          color={color}
-          filled={value?.bg === "plein"}
-        />
+        {isImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={isLight ? tpl.imageLight : tpl.imageDark} alt="" draggable={false} style={{ width: base * 6.2, height: "auto", display: "block" }} />
+        ) : (
+          <RoundBadge
+            size={base * 6.2}
+            top={top.txt} mid={mid.txt} bot={bot.txt}
+            fontTop={top.font} fontMid={mid.font} fontBot={bot.font}
+            color={color}
+            filled={value?.bg === "plein"}
+          />
+        )}
         {subTxt && (
           <span className={(fonts[sub.key] || sub.font)}
             style={{ color, fontSize: base * (sub.em || 0.5), whiteSpace: "nowrap", marginTop: base * 0.18,

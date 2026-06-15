@@ -16,6 +16,8 @@ export const MODELES = {
   peres: {
     label: "Fête des pères",
     style: "badge", // médaillon rond éditable (couronne d'étoiles + bandeau)
+    imageDark: "/produits/badge-papa-dark.png",   // version "Image d'origine" (texte figé)
+    imageLight: "/produits/badge-papa-light.png",
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "ÉLU", font: "fnt-montserrat", em: 0.62, spacing: "0.12em" },
       { key: "mid", label: "Mot central", placeholder: "PAPA", font: "fnt-montserrat", em: 1, bold: true },

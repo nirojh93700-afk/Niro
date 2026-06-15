@@ -47,12 +47,16 @@ export default function ModeleDesigner({ template, value, onChange }) {
             <button type="button" className={`modele-bg-chip${v.bg === "plein" ? " on" : ""}`} onClick={() => setBg("plein")}>
               Fond plein
             </button>
+            <button type="button" className={`modele-bg-chip${v.bg === "image" ? " on" : ""}`} onClick={() => setBg("image")}>
+              Image d'origine
+            </button>
           </div>
+          {v.bg === "image" && <p className="char-count" style={{ textAlign: "left" }}>Modèle d'origine : le texte du badge est figé (vous pouvez seulement ajouter un prénom/date en dessous).</p>}
         </div>
       )}
 
-      {/* lignes de texte + police par ligne */}
-      {tpl.lines.map((l) => (
+      {/* lignes de texte + police par ligne (le texte du badge est masqué pour l'option "Image d'origine") */}
+      {tpl.lines.filter((l) => v.bg !== "image" || l.below).map((l) => (
         <div className="field" key={l.key}>
           <label>{l.label}</label>
           <input
