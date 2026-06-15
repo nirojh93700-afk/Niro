@@ -63,8 +63,8 @@ export default function ModeleDesigner({ template, value, onChange }) {
         </div>
       ))}
 
-      {/* choix du motif (sauf modèle "badge" qui a ses propres graphismes) */}
-      {tpl.style !== "badge" && (
+      {/* choix du motif (uniquement pour le style empilé classique) */}
+      {!tpl.style && (
       <>
       <label className="modele-label">Graphisme</label>
       <div className="modele-motifs">

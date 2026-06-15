@@ -21,12 +21,14 @@ export default function RoundBadge({ size = 200, top, mid, bot, fontTop, fontMid
   const dark = "#141414";
   const light = "#f4f1ea";
 
-  // Couronne d'étoiles autour du disque.
+  // Couronne d'étoiles autour du disque (deux rangées décalées → effet dense/festonné).
   const ring = [];
-  const N = 24, R = 137;
+  const N = 22;
   for (let i = 0; i < N; i++) {
     const a = (i / N) * 2 * Math.PI;
-    ring.push(<polygon key={i} points={starPoints(150 + R * Math.cos(a), 150 + R * Math.sin(a), 9)} fill={dark} />);
+    ring.push(<polygon key={`o${i}`} points={starPoints(150 + 142 * Math.cos(a), 150 + 142 * Math.sin(a), 8)} fill={dark} />);
+    const a2 = ((i + 0.5) / N) * 2 * Math.PI;
+    ring.push(<polygon key={`i${i}`} points={starPoints(150 + 128 * Math.cos(a2), 150 + 128 * Math.sin(a2), 6.5)} fill={dark} />);
   }
 
   return (
@@ -49,8 +51,8 @@ export default function RoundBadge({ size = 200, top, mid, bot, fontTop, fontMid
       <text x="150" y="151" className={fontMid} fontSize="48" fill={light} textAnchor="middle" dominantBaseline="central" style={{ fontWeight: 800, letterSpacing: "0.04em" }}>
         {mid}
       </text>
-      <polygon points={starPoints(34, 150, 13)} fill={light} />
-      <polygon points={starPoints(266, 150, 13)} fill={light} />
+      <polygon points={starPoints(34, 150, 14)} fill="none" stroke={light} strokeWidth="2.5" />
+      <polygon points={starPoints(266, 150, 14)} fill="none" stroke={light} strokeWidth="2.5" />
 
       {/* texte du bas, courbé */}
       <text className={fontBot} fontSize="30" fill={light} textAnchor="middle">

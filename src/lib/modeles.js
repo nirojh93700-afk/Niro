@@ -15,11 +15,12 @@ export const MODELES = {
   },
   peres: {
     label: "Fête des pères",
-    style: "badge", // médaillon rond (couronne d'étoiles + bandeau)
+    style: "badge", // médaillon rond éditable (couronne d'étoiles + bandeau)
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "ÉLU", font: "fnt-montserrat", em: 0.62, spacing: "0.12em" },
       { key: "mid", label: "Mot central", placeholder: "PAPA", font: "fnt-montserrat", em: 1, bold: true },
       { key: "bot", label: "Texte du bas", placeholder: "de l'année", font: "fnt-great-vibes", em: 0.62 },
+      { key: "sub", label: "Ajouter un prénom ou une date (sous le badge)", placeholder: "Ex : Papa • 2026", font: "fnt-great-vibes", em: 0.5, optional: true, below: true },
     ],
     defaultMotif: "aucun",
   },
