@@ -54,6 +54,7 @@ export default function ModeleArt({ template, value, color = "#fff", base = 28, 
           top={top.txt} mid={mid.txt} bot={bot.txt}
           fontTop={top.font} fontMid={mid.font} fontBot={bot.font}
           color={color}
+          filled={value?.bg === "plein"}
         />
         {subTxt && (
           <span className={(fonts[sub.key] || sub.font)}

@@ -39,5 +39,5 @@ export function defaultModele(template) {
   if (!t) return { text: {}, fonts: {}, motif: "aucun" };
   const fonts = {};
   t.lines.forEach((l) => (fonts[l.key] = l.font));
-  return { text: {}, fonts, motif: t.defaultMotif || "aucun" };
+  return { text: {}, fonts, motif: t.defaultMotif || "aucun", bg: "trait" };
 }

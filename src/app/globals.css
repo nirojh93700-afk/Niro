@@ -710,6 +710,12 @@ img {
 }
 .modele-motif-cell.on { border: 2px solid #c9a24b; background: #faf3e2; }
 .modele-motif-none { font-size: 0.78rem; color: var(--ink-soft); }
+.modele-bg { display: flex; gap: 8px; }
+.modele-bg-chip {
+  flex: 1; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 0.85rem;
+  background: #fff; border: 1px solid var(--line); color: var(--ink);
+}
+.modele-bg-chip.on { border: 2px solid #c9a24b; background: #faf3e2; font-weight: 600; }
 .engrave-editor .me-block { line-height: 1.04; }
 
 /* Classes de polices de gravure (aperçu) */

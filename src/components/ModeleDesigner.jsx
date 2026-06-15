@@ -27,6 +27,7 @@ export default function ModeleDesigner({ template, value, onChange }) {
   function setText(key, val) { onChange({ ...v, text: { ...v.text, [key]: val } }); }
   function setFont(key, cls) { onChange({ ...v, fonts: { ...v.fonts, [key]: cls } }); }
   function setMotif(id) { onChange({ ...v, motif: id }); }
+  function setBg(b) { onChange({ ...v, bg: b }); }
 
   return (
     <div className="modele-designer">
@@ -34,6 +35,21 @@ export default function ModeleDesigner({ template, value, onChange }) {
       <div className="modele-preview">
         <ModeleArt template={template} value={v} color="#fff" base={26} placeholder />
       </div>
+
+      {/* choix du fond (style badge uniquement) */}
+      {tpl.style === "badge" && (
+        <div className="field">
+          <label>Fond du badge</label>
+          <div className="modele-bg">
+            <button type="button" className={`modele-bg-chip${(v.bg || "trait") === "trait" ? " on" : ""}`} onClick={() => setBg("trait")}>
+              Sans fond (au trait)
+            </button>
+            <button type="button" className={`modele-bg-chip${v.bg === "plein" ? " on" : ""}`} onClick={() => setBg("plein")}>
+              Fond plein
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* lignes de texte + police par ligne */}
       {tpl.lines.map((l) => (

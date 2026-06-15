@@ -192,6 +192,7 @@ export default function ProductDetail({ product }) {
             })
             .filter(Boolean);
           if (lines.length) parts.push(`Modèle « ${tpl.label} » : ${lines.join(" / ")}`);
+          if (tpl.style === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : "sans fond (au trait)"}`);
           if (mv.motif && mv.motif !== "aucun") {
             parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
           }
