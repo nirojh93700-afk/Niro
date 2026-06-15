@@ -32,8 +32,10 @@ export default function ModeleDesigner({ template, value, onChange }) {
   function setAddText(on) { onChange({ ...v, addText: on }); }
 
   const layout = v.layout || tpl.layout || tpl.style || "stack";
-  const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple" };
+  const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", label: "Étiquette", stack: "Simple" };
   const showMotif = layout === "classic" || layout === "stack";
+  // En "Étiquette", seul le nom central (mid) est modifiable (+ ajout en dessous).
+  const visibleLines = layout === "label" ? tpl.lines.filter((l) => l.key === "mid" || l.below) : tpl.lines;
 
   return (
     <div className="modele-designer">
@@ -75,7 +77,7 @@ export default function ModeleDesigner({ template, value, onChange }) {
       )}
 
       {/* lignes de texte + police par ligne */}
-      {tpl.lines.map((l) => {
+      {visibleLines.map((l) => {
         // Ligne "ajout sous le badge" : option payante, cochée par défaut.
         if (l.below) {
           const on = v.addText !== false;
@@ -106,10 +108,10 @@ export default function ModeleDesigner({ template, value, onChange }) {
         }
         return (
           <div className="field" key={l.key}>
-            <label>{l.label}</label>
+            <label>{layout === "label" && l.key === "mid" ? "Nom au centre (ex. Dad No.1)" : l.label}</label>
             <input
               value={v.text[l.key] || ""}
-              placeholder={l.placeholder}
+              placeholder={layout === "label" && l.key === "mid" ? "Dad No.1" : l.placeholder}
               maxLength={24}
               onChange={(e) => setText(l.key, e.target.value)}
             />

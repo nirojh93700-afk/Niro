@@ -16,7 +16,9 @@ export const MODELES = {
   peres: {
     label: "Fête des pères",
     layout: "classic", // défaut : maquette empilée (élu / ★ PAPY ★ / DE L'ANNÉE + ancre)
-    layouts: ["classic", "badge"], // la cliente peut basculer Classique / Médaillon rond
+    layouts: ["classic", "badge", "label"], // Classique / Médaillon rond / Étiquette
+    labelImageDark: "/produits/label-pere-dark.png",   // étiquette "Best Father" (cadre + textes fixes)
+    labelImageLight: "/produits/label-pere-light.png",
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.85 },
       { key: "mid", label: "Mot central", placeholder: "PAPY", font: "fnt-cinzel", em: 1, bold: true, spacing: "0.08em" },
