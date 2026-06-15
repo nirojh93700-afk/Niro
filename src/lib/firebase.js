@@ -242,6 +242,16 @@ export async function getOrderSpec(sessionId) {
   }
 }
 
+// La fiche est recopiée dans la commande : on supprime la copie temporaire.
+export async function deleteOrderSpec(sessionId) {
+  const a = getApp();
+  if (!a || !sessionId) return false;
+  try {
+    await admin.firestore().collection("orderSpecs").doc(sessionId).delete();
+    return true;
+  } catch { return false; }
+}
+
 // --- Devis & Factures ------------------------------------------------------
 // Crée un devis ou une facture avec numérotation séquentielle (obligation légale
 // pour les factures). Renvoie { id, number }.

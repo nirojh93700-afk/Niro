@@ -366,7 +366,8 @@ export default function ProductDetail({ product }) {
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null },
-      fields: { ...fieldValues },
+      // on évite de stocker deux fois le modèle (déjà dans "modele")
+      fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
       personalization: buildPersonalization(),
     };
     addItem({

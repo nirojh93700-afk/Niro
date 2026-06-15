@@ -6,6 +6,27 @@ import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock"
 import { saveOrderSpec } from "@/lib/firebase";
 import { engravingExtra } from "@/lib/engravingPrice";
 
+// Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
+// on tronque les textes trop longs et on retire les images "data:" (jamais stockées).
+function sanitizeSpec(spec) {
+  if (!spec || typeof spec !== "object") return null;
+  const clean = (val, depth = 0) => {
+    if (val == null || depth > 6) return val;
+    if (typeof val === "string") {
+      if (val.startsWith("data:")) return "[image envoyée]";
+      return val.length > 400 ? val.slice(0, 400) : val;
+    }
+    if (Array.isArray(val)) return val.slice(0, 40).map((x) => clean(x, depth + 1));
+    if (typeof val === "object") {
+      const out = {};
+      for (const k of Object.keys(val).slice(0, 40)) out[k] = clean(val[k], depth + 1);
+      return out;
+    }
+    return val;
+  };
+  return clean(spec);
+}
+
 // Le retrait en main propre n'est proposé que si le code postal de la cliente
 // est dans la zone autorisée (réglée dans l'admin). Zone vide = pas de restriction.
 function pickupAllowed(cp, zonesStr) {
@@ -227,8 +248,8 @@ export async function POST(req) {
     // Fiche atelier : on mémorise les réglages détaillés, liés à la session
     // (relus par le webhook pour les joindre à la commande). Sans risque si échec.
     try {
-      const specs = items.map((it) => it.spec || null);
-      if (specs.some(Boolean)) await saveOrderSpec(session.id, specs);
+      const specs = items.map((it) => sanitizeSpec(it.spec)).filter(Boolean);
+      if (specs.length) await saveOrderSpec(session.id, specs);
     } catch { /* ignore */ }
 
     return Response.json({ url: session.url });

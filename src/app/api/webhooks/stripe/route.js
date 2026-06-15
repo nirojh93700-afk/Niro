@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
-import { recordSiteOrder, updateQuoteStatus, getOrderSpec } from "@/lib/firebase";
+import { recordSiteOrder, updateQuoteStatus, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -362,6 +362,9 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       })),
       stock: event.data.object?.metadata?.stock || "",
     });
+
+    // La fiche est désormais dans la commande : on supprime la copie temporaire.
+    try { if (orderSpec) await deleteOrderSpec(session.id); } catch { /* ignore */ }
 
     return Response.json({ received: true });
   } catch (err) {
