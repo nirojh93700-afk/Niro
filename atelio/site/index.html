@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelio — Créations personnalisées à la demande, partout dans le monde</title>
+  <meta name="description" content="Atelio est la place de marché internationale de la création personnalisée à la demande : commandez un objet unique à un artisan, suivez sa fabrication en direct, recevez-le où que vous soyez." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23b5651d'/><text x='50' y='70' font-size='62' text-anchor='middle' fill='white' font-family='Georgia'>A</text></svg>" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="wrap nav">
+      <a href="#top" class="brand"><span class="dot">A</span> Atelio</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#how" data-i18n="nav_how">Comment ça marche</a>
+        <a href="#audience" data-i18n="nav_who">Pour qui</a>
+        <a href="#categories" data-i18n="nav_cats">Catégories</a>
+        <a href="#app" data-i18n="nav_app">Application</a>
+        <a href="#pricing" data-i18n="nav_pricing">Tarifs</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang" id="lang">
+          <button data-lang="fr" class="active">FR</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a href="#cta" class="btn btn-primary" data-i18n="nav_cta">Commencer</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow" data-i18n="hero_eyebrow">Marketplace internationale · à la demande</div>
+        <h1 data-i18n="hero_title">Un objet <span class="hl">unique</span>, créé pour vous, où que vous soyez.</h1>
+        <p class="lead" data-i18n="hero_lead">Atelio met en relation des artisans du monde entier et des clients qui veulent du sur-mesure. Configurez votre création, suivez sa fabrication en direct, recevez-la chez vous.</p>
+        <div class="hero-cta">
+          <a href="#cta" class="btn btn-primary" data-i18n="hero_cta1">Trouver une création</a>
+          <a href="#audience" class="btn btn-ghost" data-i18n="hero_cta2">Vendre mes créations</a>
+        </div>
+        <div class="hero-stats">
+          <div class="s"><b>42 Md$</b><span data-i18n="stat1">marché du personnalisé (2024)</span></div>
+          <div class="s"><b>~10%/an</b><span data-i18n="stat2">de croissance</span></div>
+          <div class="s"><b>30%</b><span data-i18n="stat3">de la demande Etsy est du sur-mesure</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="hero-card">
+          <div class="photo"><span class="engrave" id="heroEngrave">Léa &amp; Tom</span></div>
+          <div class="row">
+            <span class="chip" data-i18n="hero_chip">Bijou gravé</span>
+            <span class="price">39,90 €</span>
+          </div>
+          <div class="row"><span class="name">Collier personnalisé</span></div>
+          <div class="status-bar" title="Suivi de fabrication">
+            <div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step"></div>
+          </div>
+          <p style="font-size:.8rem;color:var(--muted);margin-top:8px;" data-i18n="hero_status">En atelier · expédition sous 48 h</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <div class="eyebrow" data-i18n="how_eyebrow">Comment ça marche</div>
+        <h2 data-i18n="how_title">Du besoin à l'objet, en trois étapes</h2>
+        <p class="lead" data-i18n="how_lead">Une expérience pensée pour le sur-mesure, là où les marketplaces généralistes s'arrêtent.</p>
+      </div>
+      <div class="grid-3 steps">
+        <div class="card step-card reveal">
+          <div class="num">01</div>
+          <h3 data-i18n="step1_t">Configurez</h3>
+          <p data-i18n="step1_p">Choisissez une création, personnalisez-la (texte, police, couleur, photo) et visualisez le rendu en direct avant de commander.</p>
+        </div>
+        <div class="card step-card reveal">
+          <div class="num">02</div>
+          <h3 data-i18n="step2_t">L'artisan fabrique</h3>
+          <p data-i18n="step2_p">Un créateur vérifié reçoit votre commande, valide les détails avec vous par messagerie, puis fabrique votre pièce à la main.</p>
+        </div>
+        <div class="card step-card reveal">
+          <div class="num">03</div>
+          <h3 data-i18n="step3_t">Suivez &amp; recevez</h3>
+          <p data-i18n="step3_p">Suivez chaque étape en temps réel — reçue, en atelier, expédiée — et recevez votre création où que vous soyez.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY / VALUE (dark) -->
+  <section class="dark" id="why">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <div class="eyebrow" data-i18n="why_eyebrow">Pourquoi Atelio</div>
+        <h2 data-i18n="why_title">Le spécialiste mondial de la commande personnalisée</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card reveal"><div class="icon">✶</div><h3 data-i18n="why1_t">100% sur-mesure</h3><p data-i18n="why1_p">Configurateur natif avec aperçu en direct : texte, police, couleur, photo, nombre de faces gravées.</p></div>
+        <div class="card reveal"><div class="icon">◷</div><h3 data-i18n="why2_t">Suivi de fabrication</h3><p data-i18n="why2_p">Une timeline transparente, comme un suivi de colis, mais pour la création de votre pièce.</p></div>
+        <div class="card reveal"><div class="icon">🌍</div><h3 data-i18n="why3_t">International</h3><p data-i18n="why3_p">Multilingue, multi-devises, délais et frais affichés clairement. Pensé pour le monde entier.</p></div>
+        <div class="card reveal"><div class="icon">✦</div><h3 data-i18n="why4_t">Artisans vérifiés</h3><p data-i18n="why4_p">Sélection à la main et avis clients. La qualité prime sur la quantité.</p></div>
+        <div class="card reveal"><div class="icon">⇄</div><h3 data-i18n="why5_t">Échange direct</h3><p data-i18n="why5_p">Discutez avec le créateur avant et pendant la commande pour valider chaque détail.</p></div>
+        <div class="card reveal"><div class="icon">🔒</div><h3 data-i18n="why6_t">Paiement sûr</h3><p data-i18n="why6_p">Paiement sécurisé, fonds protégés jusqu'à l'expédition. Apple&nbsp;Pay, Google&nbsp;Pay, carte.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE -->
+  <section id="audience">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <div class="eyebrow" data-i18n="aud_eyebrow">Pour qui</div>
+        <h2 data-i18n="aud_title">Deux mondes, une plateforme</h2>
+      </div>
+      <div class="audience">
+        <div class="panel buyer reveal">
+          <span class="chip" data-i18n="aud_buyer_chip">Clients</span>
+          <h3 style="margin-top:12px;color:var(--brown-800)" data-i18n="aud_buyer_t">Offrez l'unique</h3>
+          <p style="color:var(--muted)" data-i18n="aud_buyer_p">Le cadeau qui a du sens : mariage, naissance, anniversaire. Vous savez exactement ce que vous recevez.</p>
+          <ul>
+            <li data-i18n="aud_buyer_1">Aperçu du rendu avant de payer</li>
+            <li data-i18n="aud_buyer_2">Suivi de fabrication en notifications</li>
+            <li data-i18n="aud_buyer_3">Messagerie directe avec l'artisan</li>
+            <li data-i18n="aud_buyer_4">Livraison internationale suivie</li>
+          </ul>
+          <a href="#cta" class="btn btn-primary" data-i18n="aud_buyer_cta">Trouver une création</a>
+        </div>
+        <div class="panel maker reveal">
+          <span class="chip" style="background:rgba(201,162,75,.2);color:var(--gold)" data-i18n="aud_maker_chip">Créateurs</span>
+          <h3 style="margin-top:12px;color:#fff" data-i18n="aud_maker_t">Vendez sans frontières</h3>
+          <p style="color:#d9c7b2" data-i18n="aud_maker_p">Concentrez-vous sur votre métier. Atelio apporte les clients, les outils et l'international.</p>
+          <ul>
+            <li data-i18n="aud_maker_1">Outils de personnalisation prêts à l'emploi</li>
+            <li data-i18n="aud_maker_2">Gestion des commandes &amp; de l'atelier</li>
+            <li data-i18n="aud_maker_3">Encaissements et paiements automatisés</li>
+            <li data-i18n="aud_maker_4">Assistant IA : fiches, visuels, traduction</li>
+          </ul>
+          <a href="#cta" class="btn btn-light" data-i18n="aud_maker_cta">Devenir créateur</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section id="categories" style="background:var(--cream-2)">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <div class="eyebrow" data-i18n="cat_eyebrow">Catégories</div>
+        <h2 data-i18n="cat_title">Tout ce qui se grave, se découpe, se crée</h2>
+      </div>
+      <div class="cats">
+        <div class="cat reveal"><div class="emo">💍</div><b data-i18n="cat1">Bijoux gravés</b></div>
+        <div class="cat reveal"><div class="emo">💌</div><b data-i18n="cat2">Mariage</b></div>
+        <div class="cat reveal"><div class="emo">🎁</div><b data-i18n="cat3">Cadeaux</b></div>
+        <div class="cat reveal"><div class="emo">🪵</div><b data-i18n="cat4">Déco bois</b></div>
+        <div class="cat reveal"><div class="emo">🍼</div><b data-i18n="cat5">Naissance</b></div>
+        <div class="cat reveal"><div class="emo">🏷️</div><b data-i18n="cat6">Papeterie</b></div>
+        <div class="cat reveal"><div class="emo">🏢</div><b data-i18n="cat7">Cadeaux d'affaires</b></div>
+        <div class="cat reveal"><div class="emo">✨</div><b data-i18n="cat8">Impression 3D</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIGURATOR DEMO -->
+  <section id="demo" class="dark">
+    <div class="wrap app-grid">
+      <div class="reveal">
+        <div class="eyebrow" data-i18n="cfg_eyebrow">Aperçu en direct</div>
+        <h2 data-i18n="cfg_title">Voyez votre gravure avant de commander</h2>
+        <p class="lead" data-i18n="cfg_lead">Tapez un prénom, choisissez une police : l'aperçu se met à jour instantanément. C'est ce qui rassure le client et fait la différence d'Atelio.</p>
+        <div style="margin-top:22px">
+          <label style="display:block;font-weight:700;color:#fff;margin-bottom:6px" data-i18n="cfg_label_text">Texte à graver</label>
+          <input id="engraveInput" maxlength="18" value="Léa &amp; Tom" style="width:100%;max-width:340px;padding:12px 16px;border-radius:10px;border:none;font-size:1rem" />
+          <label style="display:block;font-weight:700;color:#fff;margin:16px 0 6px" data-i18n="cfg_label_font">Police</label>
+          <select id="fontSelect" style="padding:12px 16px;border-radius:10px;border:none;font-size:1rem">
+            <option value="Georgia, serif">Classique</option>
+            <option value="'Brush Script MT', cursive">Manuscrite</option>
+            <option value="'Trebuchet MS', sans-serif">Moderne</option>
+            <option value="'Courier New', monospace">Machine</option>
+          </select>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="hero-card" style="transform:none;max-width:420px;margin:0 auto">
+          <div class="photo"><span class="engrave" id="liveEngrave">Léa &amp; Tom</span></div>
+          <div class="row">
+            <span class="chip" data-i18n="hero_chip">Bijou gravé</span>
+            <span class="price">39,90 €</span>
+          </div>
+          <div class="status-bar"><div class="step done"></div><div class="step done"></div><div class="step"></div><div class="step"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE APP -->
+  <section id="app">
+    <div class="wrap app-grid">
+      <div class="phones reveal">
+        <div class="phone">
+          <div class="screen">
+            <div class="topbar">Atelio · Découvrir</div>
+            <div class="body">
+              <div class="pimg">Léa &amp; Tom</div>
+              <div class="line"></div><div class="line s"></div>
+              <div class="pimg" style="height:70px">♥ Maman</div>
+              <div class="line"></div><div class="line s"></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="screen">
+            <div class="topbar">Personnaliser</div>
+            <div class="body">
+              <div class="pimg">Aperçu</div>
+              <div class="field" data-i18n="ph_field1">Texte : Léa &amp; Tom</div>
+              <div class="field" data-i18n="ph_field2">Police : Classique</div>
+              <div class="field" data-i18n="ph_field3">Couleur : Doré</div>
+              <div style="background:var(--terracotta);color:#fff;text-align:center;border-radius:8px;padding:8px;font-size:.7rem;font-weight:700;margin-top:6px" data-i18n="ph_addcart">Ajouter au panier · 39,90 €</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="screen">
+            <div class="topbar">Suivi</div>
+            <div class="body timeline">
+              <div class="t on"><span class="d"></span><span data-i18n="ph_t1">Commande reçue</span></div>
+              <div class="t on"><span class="d"></span><span data-i18n="ph_t2">Validée par l'artisan</span></div>
+              <div class="t on"><span class="d"></span><span data-i18n="ph_t3">En atelier</span></div>
+              <div class="t"><span class="d"></span><span data-i18n="ph_t4">Expédiée</span></div>
+              <div class="t"><span class="d"></span><span data-i18n="ph_t5">Livrée</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="eyebrow" data-i18n="app_eyebrow">Application mobile</div>
+        <h2 data-i18n="app_title">Votre atelier dans la poche</h2>
+        <p class="lead" data-i18n="app_lead">Découvrez, personnalisez et suivez vos créations depuis votre téléphone. Recevez une notification à chaque étape de la fabrication.</p>
+        <ul style="list-style:none;margin-top:20px">
+          <li style="padding:8px 0 8px 28px;position:relative"><span style="position:absolute;left:0;color:var(--terracotta)">✓</span> <span data-i18n="app_1">Notifications push de suivi de fabrication</span></li>
+          <li style="padding:8px 0 8px 28px;position:relative"><span style="position:absolute;left:0;color:var(--terracotta)">✓</span> <span data-i18n="app_2">Photo à graver depuis l'appareil photo</span></li>
+          <li style="padding:8px 0 8px 28px;position:relative"><span style="position:absolute;left:0;color:var(--terracotta)">✓</span> <span data-i18n="app_3">Paiement Apple Pay / Google Pay</span></li>
+          <li style="padding:8px 0 8px 28px;position:relative"><span style="position:absolute;left:0;color:var(--terracotta)">✓</span> <span data-i18n="app_4">iOS &amp; Android, multilingue</span></li>
+        </ul>
+        <div class="hero-cta">
+          <a href="#cta" class="btn btn-primary" data-i18n="app_cta">Être prévenu du lancement</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" style="background:var(--cream-2)">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <div class="eyebrow" data-i18n="pr_eyebrow">Tarifs créateurs</div>
+        <h2 data-i18n="pr_title">Vous ne payez que quand vous vendez</h2>
+        <p class="lead" data-i18n="pr_lead">Pas de stock à porter, pas de frais cachés. Atelio se rémunère sur une commission claire.</p>
+      </div>
+      <div class="price-grid">
+        <div class="plan reveal">
+          <h3 data-i18n="pr_p1_t">Découverte</h3>
+          <div class="amt">0 €<small data-i18n="pr_p1_sub"> / mois</small></div>
+          <ul>
+            <li data-i18n="pr_p1_1">Mise en ligne gratuite</li>
+            <li data-i18n="pr_p1_2">Commission 15% par vente</li>
+            <li data-i18n="pr_p1_3">Outils de personnalisation</li>
+            <li data-i18n="pr_p1_4">Paiement sécurisé inclus</li>
+          </ul>
+          <a href="#cta" class="btn btn-ghost" data-i18n="pr_p1_cta">Commencer</a>
+        </div>
+        <div class="plan featured reveal">
+          <span class="tag" data-i18n="pr_p2_tag">Populaire</span>
+          <h3 data-i18n="pr_p2_t">Pro</h3>
+          <div class="amt">19 €<small data-i18n="pr_p2_sub"> / mois</small></div>
+          <ul>
+            <li data-i18n="pr_p2_1">Commission réduite à 9%</li>
+            <li data-i18n="pr_p2_2">Mise en avant dans le catalogue</li>
+            <li data-i18n="pr_p2_3">Statistiques &amp; assistant IA</li>
+            <li data-i18n="pr_p2_4">Traduction internationale auto</li>
+          </ul>
+          <a href="#cta" class="btn btn-light" data-i18n="pr_p2_cta">Passer Pro</a>
+        </div>
+        <div class="plan reveal">
+          <h3 data-i18n="pr_p3_t">Maison</h3>
+          <div class="amt" data-i18n="pr_p3_amt">Sur devis</div>
+          <ul>
+            <li data-i18n="pr_p3_1">Pour marques &amp; ateliers à volume</li>
+            <li data-i18n="pr_p3_2">Commission négociée</li>
+            <li data-i18n="pr_p3_3">Vitrine de marque dédiée</li>
+            <li data-i18n="pr_p3_4">Accompagnement prioritaire</li>
+          </ul>
+          <a href="#cta" class="btn btn-ghost" data-i18n="pr_p3_cta">Nous contacter</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap" style="max-width:780px">
+      <div class="section-head center reveal">
+        <div class="eyebrow" data-i18n="faq_eyebrow">Questions fréquentes</div>
+        <h2 data-i18n="faq_title">Tout ce qu'il faut savoir</h2>
+      </div>
+      <div class="faq">
+        <details class="reveal"><summary data-i18n="faq1_q">Comment fonctionne le suivi de fabrication ?</summary><p data-i18n="faq1_a">Chaque commande passe par des étapes claires — reçue, validée, en atelier, expédiée, livrée. Vous êtes notifié à chaque changement, sur le site et dans l'application.</p></details>
+        <details class="reveal"><summary data-i18n="faq2_q">Les créations personnalisées sont-elles remboursables ?</summary><p data-i18n="faq2_a">Un objet fabriqué sur-mesure à votre demande n'est pas remboursable (droit de rétractation exclu). C'est pourquoi vous validez chaque détail avec l'artisan avant la fabrication.</p></details>
+        <details class="reveal"><summary data-i18n="faq3_q">Puis-je vendre mes propres créations ?</summary><p data-i18n="faq3_a">Oui. Créez un compte créateur, publiez vos créations avec leurs options de personnalisation, et recevez vos commandes. Vous ne payez une commission que sur les ventes.</p></details>
+        <details class="reveal"><summary data-i18n="faq4_q">Atelio livre-t-il à l'international ?</summary><p data-i18n="faq4_a">Oui. La plateforme est multilingue et multi-devises ; chaque créateur indique ses zones de livraison, délais et frais. Le suivi de colis est intégré.</p></details>
+        <details class="reveal"><summary data-i18n="faq5_q">Quand l'application mobile sort-elle ?</summary><p data-i18n="faq5_a">Le site est déjà utilisable sur mobile. Les applications iOS et Android arrivent ensuite — inscrivez-vous pour être prévenu du lancement.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <h2 data-i18n="cta_title">Rejoignez Atelio</h2>
+        <p data-i18n="cta_p">Clients, soyez les premiers informés. Créateurs, ouvrez votre atelier au monde entier. Laissez votre e-mail.</p>
+        <form class="cta-form" id="ctaForm">
+          <input type="email" id="ctaEmail" required placeholder="votre@email.com" data-i18n-ph="cta_ph" />
+          <button type="submit" class="btn btn-light" data-i18n="cta_btn">Je m'inscris</button>
+        </form>
+        <div id="cta-msg"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div class="brand" style="color:#fff"><span class="dot">A</span> Atelio</div>
+          <p style="margin-top:12px;max-width:280px" data-i18n="foot_tag">La place de marché internationale de la création personnalisée à la demande.</p>
+        </div>
+        <div>
+          <h4 data-i18n="foot_explore">Explorer</h4>
+          <a href="#how" data-i18n="nav_how">Comment ça marche</a>
+          <a href="#categories" data-i18n="nav_cats">Catégories</a>
+          <a href="#app" data-i18n="nav_app">Application</a>
+        </div>
+        <div>
+          <h4 data-i18n="foot_makers">Créateurs</h4>
+          <a href="#pricing" data-i18n="nav_pricing">Tarifs</a>
+          <a href="#audience" data-i18n="aud_maker_cta">Devenir créateur</a>
+          <a href="#faq" data-i18n="nav_faq">FAQ</a>
+        </div>
+        <div>
+          <h4 data-i18n="foot_legal">Informations</h4>
+          <a href="#" data-i18n="foot_terms">Conditions générales</a>
+          <a href="#" data-i18n="foot_privacy">Confidentialité</a>
+          <a href="#cta" data-i18n="foot_contact">Contact</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <p>© <span id="year"></span> Atelio — <span data-i18n="foot_rights">Concept de marketplace. Tous droits réservés.</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
