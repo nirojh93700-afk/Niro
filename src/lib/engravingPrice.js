@@ -6,6 +6,14 @@ export function engravingExtra(product, fields = {}) {
   const cfg = product?.engravingPricing;
   if (!cfg) return { pages: 0, amount: 0 };
 
+  // Suppléments "à plat" : un champ rempli (ou égal à une valeur) ajoute un montant.
+  // Ex. graver à un 2e emplacement. S'additionne aux autres modes.
+  const flat = (cfg.flatExtras || []).reduce((s, e) => {
+    const v = (fields[e.key] || "").toString().trim();
+    const hit = e.value ? v === e.value : Boolean(v);
+    return hit ? s + (e.amount || 0) : s;
+  }, 0);
+
   // Mode "pages" : par page supplémentaire, +pageMotif si un motif y est posé,
   // sinon +pageText si un texte y est gravé (la couverture, elle, est incluse).
   if (Array.isArray(cfg.pages)) {
@@ -16,7 +24,7 @@ export function engravingExtra(product, fields = {}) {
       if (hasMotif) { amount += cfg.pageMotif || 0; pages += 1; }
       else if (hasText) { amount += cfg.pageText || 0; pages += 1; }
     }
-    return { pages, amount };
+    return { pages, amount: amount + flat };
   }
 
   // Mode "textKeys / motifKeys" : chaque texte en plus = textExtra ; pour les
@@ -29,7 +37,7 @@ export function engravingExtra(product, fields = {}) {
     if (motifs > 1) amount += (motifs - 1) * (cfg.motifExtra || 0); // 1er motif offert
     const photo = Boolean(cfg.photoKey && filled(cfg.photoKey));
     if (photo) amount += cfg.photoSurcharge || 0;
-    return { pages, motifs, photo, amount };
+    return { pages, motifs, photo, amount: amount + flat };
   }
   const included = cfg.includedKey;
   // On compte les champs de texte non vides, hors couverture incluse.
@@ -44,6 +52,6 @@ export function engravingExtra(product, fields = {}) {
   // Supplément photo (si une photo a été ajoutée).
   const photoVal = cfg.photoKey ? (fields[cfg.photoKey] || "").toString().trim() : "";
   const photo = Boolean(photoVal);
-  const amount = pages * (cfg.perExtraPage || 0) + (photo ? (cfg.photoSurcharge || 0) : 0);
+  const amount = pages * (cfg.perExtraPage || 0) + (photo ? (cfg.photoSurcharge || 0) : 0) + flat;
   return { pages, photo, amount };
 }

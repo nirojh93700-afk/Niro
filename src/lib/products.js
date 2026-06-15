@@ -1282,7 +1282,12 @@ export const products = [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
       ] },
+      { key: "deuxEmplacement", type: "select", label: "Graver aussi à un 2e endroit ? (+7 €)", optional: true, options: [
+        { value: "", label: "Non, une seule gravure (incluse)" },
+        { value: "oui", label: "Oui, graver aussi le 2e emplacement (+7 €)" },
+      ] },
     ],
+    engravingPricing: { flatExtras: [{ key: "deuxEmplacement", value: "oui", amount: 7 }] },
     title: "Verre à whisky gravé Fête des pères — cadeau papa, papy personnalisé",
     category: "cadeaux",
     type: "Verre gravé Fête des pères",
