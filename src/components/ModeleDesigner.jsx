@@ -28,6 +28,11 @@ export default function ModeleDesigner({ template, value, onChange }) {
   function setFont(key, cls) { onChange({ ...v, fonts: { ...v.fonts, [key]: cls } }); }
   function setMotif(id) { onChange({ ...v, motif: id }); }
   function setBg(b) { onChange({ ...v, bg: b }); }
+  function setLayout(l) { onChange({ ...v, layout: l }); }
+
+  const layout = v.layout || tpl.layout || tpl.style || "stack";
+  const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple" };
+  const showMotif = layout === "classic" || layout === "stack";
 
   return (
     <div className="modele-designer">
@@ -36,8 +41,22 @@ export default function ModeleDesigner({ template, value, onChange }) {
         <ModeleArt template={template} value={v} color="#fff" base={26} placeholder />
       </div>
 
-      {/* choix du fond (style badge uniquement) */}
-      {tpl.style === "badge" && (
+      {/* choix du style (si le modèle en propose plusieurs) */}
+      {Array.isArray(tpl.layouts) && tpl.layouts.length > 1 && (
+        <div className="field">
+          <label>Style</label>
+          <div className="modele-bg">
+            {tpl.layouts.map((l) => (
+              <button type="button" key={l} className={`modele-bg-chip${layout === l ? " on" : ""}`} onClick={() => setLayout(l)}>
+                {LAYOUT_LABELS[l] || l}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* choix du fond (médaillon rond uniquement) */}
+      {layout === "badge" && (
         <div className="field">
           <label>Fond du badge</label>
           <div className="modele-bg">
@@ -47,16 +66,12 @@ export default function ModeleDesigner({ template, value, onChange }) {
             <button type="button" className={`modele-bg-chip${v.bg === "plein" ? " on" : ""}`} onClick={() => setBg("plein")}>
               Fond plein
             </button>
-            <button type="button" className={`modele-bg-chip${v.bg === "image" ? " on" : ""}`} onClick={() => setBg("image")}>
-              Image d'origine
-            </button>
           </div>
-          {v.bg === "image" && <p className="char-count" style={{ textAlign: "left" }}>Modèle d'origine : le texte du badge est figé (vous pouvez seulement ajouter un prénom/date en dessous).</p>}
         </div>
       )}
 
-      {/* lignes de texte + police par ligne (le texte du badge est masqué pour l'option "Image d'origine") */}
-      {tpl.lines.filter((l) => v.bg !== "image" || l.below).map((l) => (
+      {/* lignes de texte + police par ligne */}
+      {tpl.lines.map((l) => (
         <div className="field" key={l.key}>
           <label>{l.label}</label>
           <input
@@ -83,8 +98,8 @@ export default function ModeleDesigner({ template, value, onChange }) {
         </div>
       ))}
 
-      {/* choix du motif (uniquement pour le style empilé classique) */}
-      {!tpl.style && (
+      {/* choix du motif (styles classique / simple) */}
+      {showMotif && (
       <>
       <label className="modele-label">Graphisme</label>
       <div className="modele-motifs">

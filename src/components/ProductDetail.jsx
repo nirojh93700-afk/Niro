@@ -185,18 +185,16 @@ export default function ProductDetail({ product }) {
         const tpl = MODELES[mField.template];
         const mv = fieldValues[mField.key];
         if (tpl && mv && mv.text) {
-          const isImage = mv.bg === "image";
+          const mLayout = mv.layout || tpl.layout || tpl.style || "stack";
           const lines = tpl.lines
-            // En "Image d'origine", le texte du badge est figé : on ne garde que l'ajout (prénom/date).
-            .filter((l) => !isImage || l.below)
             .map((l) => {
               const t = (mv.text[l.key] || "").trim();
               return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;
             })
             .filter(Boolean);
-          if (isImage) parts.push(`Modèle « ${tpl.label} » : image d'origine (texte figé)`);
-          if (lines.length) parts.push(isImage ? `Ajout : ${lines.join(" / ")}` : `Modèle « ${tpl.label} » : ${lines.join(" / ")}`);
-          if (tpl.style === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : mv.bg === "image" ? "image d'origine" : "sans fond (au trait)"}`);
+          const styleLabel = mLayout === "badge" ? "médaillon rond" : mLayout === "classic" ? "classique" : "";
+          if (lines.length) parts.push(`Modèle « ${tpl.label} »${styleLabel ? ` (${styleLabel})` : ""} : ${lines.join(" / ")}`);
+          if (mLayout === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : "sans fond (au trait)"}`);
           if (mv.motif && mv.motif !== "aucun") {
             parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
           }

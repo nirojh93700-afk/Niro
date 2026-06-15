@@ -15,16 +15,15 @@ export const MODELES = {
   },
   peres: {
     label: "Fête des pères",
-    style: "badge", // médaillon rond éditable (couronne d'étoiles + bandeau)
-    imageDark: "/produits/badge-papa-dark.png",   // version "Image d'origine" (texte figé)
-    imageLight: "/produits/badge-papa-light.png",
+    layout: "classic", // défaut : maquette empilée (élu / ★ PAPY ★ / DE L'ANNÉE + ancre)
+    layouts: ["classic", "badge"], // la cliente peut basculer Classique / Médaillon rond
     lines: [
-      { key: "top", label: "Texte du haut", placeholder: "ÉLU", font: "fnt-montserrat", em: 0.62, spacing: "0.12em" },
-      { key: "mid", label: "Mot central", placeholder: "PAPA", font: "fnt-montserrat", em: 1, bold: true },
-      { key: "bot", label: "Texte du bas", placeholder: "de l'année", font: "fnt-pacifico", em: 0.55 },
-      { key: "sub", label: "Ajouter un prénom ou une date (sous le badge)", placeholder: "Ex : Papa • 2026", font: "fnt-great-vibes", em: 0.5, optional: true, below: true },
+      { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.85 },
+      { key: "mid", label: "Mot central", placeholder: "PAPY", font: "fnt-cinzel", em: 1, bold: true, spacing: "0.08em" },
+      { key: "bot", label: "Texte du bas", placeholder: "DE L'ANNÉE", font: "fnt-cinzel", em: 0.42, spacing: "0.14em" },
+      { key: "sub", label: "Ajouter un prénom ou une date", placeholder: "Ex : Papa • 2026", font: "fnt-pacifico", em: 0.5, optional: true, below: true },
     ],
-    defaultMotif: "aucun",
+    defaultMotif: "ancre",
   },
   tendresse: {
     label: "Tendresse",
@@ -41,5 +40,5 @@ export function defaultModele(template) {
   if (!t) return { text: {}, fonts: {}, motif: "aucun" };
   const fonts = {};
   t.lines.forEach((l) => (fonts[l.key] = l.font));
-  return { text: {}, fonts, motif: t.defaultMotif || "aucun", bg: "trait" };
+  return { text: {}, fonts, motif: t.defaultMotif || "aucun", bg: "trait", layout: t.layout || t.style || "stack" };
 }
