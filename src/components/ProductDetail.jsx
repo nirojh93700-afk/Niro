@@ -187,6 +187,8 @@ export default function ProductDetail({ product }) {
         if (tpl && mv && mv.text) {
           const mLayout = mv.layout || tpl.layout || tpl.style || "stack";
           const lines = tpl.lines
+            // si l'ajout de texte est décoché, on n'inclut pas la ligne "en dessous"
+            .filter((l) => !l.below || mv.addText !== false)
             .map((l) => {
               const t = (mv.text[l.key] || "").trim();
               return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;

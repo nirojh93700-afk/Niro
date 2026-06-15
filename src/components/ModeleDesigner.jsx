@@ -29,6 +29,7 @@ export default function ModeleDesigner({ template, value, onChange }) {
   function setMotif(id) { onChange({ ...v, motif: id }); }
   function setBg(b) { onChange({ ...v, bg: b }); }
   function setLayout(l) { onChange({ ...v, layout: l }); }
+  function setAddText(on) { onChange({ ...v, addText: on }); }
 
   const layout = v.layout || tpl.layout || tpl.style || "stack";
   const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple" };
@@ -41,14 +42,17 @@ export default function ModeleDesigner({ template, value, onChange }) {
         <ModeleArt template={template} value={v} color="#fff" base={26} placeholder />
       </div>
 
-      {/* choix du style (si le modèle en propose plusieurs) */}
+      {/* choix du style (vignettes visuelles) */}
       {Array.isArray(tpl.layouts) && tpl.layouts.length > 1 && (
         <div className="field">
-          <label>Style</label>
-          <div className="modele-bg">
+          <label>Modèle</label>
+          <div className="modele-styles">
             {tpl.layouts.map((l) => (
-              <button type="button" key={l} className={`modele-bg-chip${layout === l ? " on" : ""}`} onClick={() => setLayout(l)}>
-                {LAYOUT_LABELS[l] || l}
+              <button type="button" key={l} className={`modele-style-cell${layout === l ? " on" : ""}`} onClick={() => setLayout(l)}>
+                <span className="modele-style-thumb">
+                  <ModeleArt template={template} value={{ ...v, layout: l }} color="#fff" base={13} placeholder />
+                </span>
+                <span className="modele-style-name">{LAYOUT_LABELS[l] || l}</span>
               </button>
             ))}
           </div>
@@ -71,32 +75,62 @@ export default function ModeleDesigner({ template, value, onChange }) {
       )}
 
       {/* lignes de texte + police par ligne */}
-      {tpl.lines.map((l) => (
-        <div className="field" key={l.key}>
-          <label>{l.label}</label>
-          <input
-            value={v.text[l.key] || ""}
-            placeholder={l.placeholder}
-            maxLength={24}
-            onChange={(e) => setText(l.key, e.target.value)}
-          />
-          <div className="modele-fonts">
-            <span className="modele-fonts-lbl">Police :</span>
-            <select
-              className={`modele-font-select ${v.fonts[l.key] || l.font}`}
-              value={v.fonts[l.key] || l.font}
-              onChange={(e) => setFont(l.key, e.target.value)}
-              aria-label={`Police de la ligne ${l.label}`}
-            >
-              {FONTS.map((f) => (
-                <option key={f.key} value={f.cls} className={f.cls}>
-                  {getFontLabel(f.key)}
-                </option>
-              ))}
-            </select>
+      {tpl.lines.map((l) => {
+        // Ligne "ajout sous le badge" : option payante, cochée par défaut.
+        if (l.below) {
+          const on = v.addText !== false;
+          return (
+            <div className="field" key={l.key}>
+              <label className="modele-check">
+                <input type="checkbox" checked={on} onChange={(e) => setAddText(e.target.checked)} />
+                <span>Ajouter un texte sous le badge <strong>(+3 €)</strong></span>
+              </label>
+              {on && (
+                <>
+                  <input
+                    value={v.text[l.key] || ""}
+                    placeholder={l.placeholder}
+                    maxLength={24}
+                    onChange={(e) => setText(l.key, e.target.value)}
+                  />
+                  <div className="modele-fonts">
+                    <span className="modele-fonts-lbl">Police :</span>
+                    <select className={`modele-font-select ${v.fonts[l.key] || l.font}`} value={v.fonts[l.key] || l.font} onChange={(e) => setFont(l.key, e.target.value)} aria-label="Police du texte ajouté">
+                      {FONTS.map((f) => (<option key={f.key} value={f.cls} className={f.cls}>{getFontLabel(f.key)}</option>))}
+                    </select>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        }
+        return (
+          <div className="field" key={l.key}>
+            <label>{l.label}</label>
+            <input
+              value={v.text[l.key] || ""}
+              placeholder={l.placeholder}
+              maxLength={24}
+              onChange={(e) => setText(l.key, e.target.value)}
+            />
+            <div className="modele-fonts">
+              <span className="modele-fonts-lbl">Police :</span>
+              <select
+                className={`modele-font-select ${v.fonts[l.key] || l.font}`}
+                value={v.fonts[l.key] || l.font}
+                onChange={(e) => setFont(l.key, e.target.value)}
+                aria-label={`Police de la ligne ${l.label}`}
+              >
+                {FONTS.map((f) => (
+                  <option key={f.key} value={f.cls} className={f.cls}>
+                    {getFontLabel(f.key)}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* choix du motif (styles classique / simple) */}
       {showMotif && (

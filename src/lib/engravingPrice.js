@@ -8,11 +8,18 @@ export function engravingExtra(product, fields = {}) {
 
   // Suppléments "à plat" : un champ rempli (ou égal à une valeur) ajoute un montant.
   // Ex. graver à un 2e emplacement. S'additionne aux autres modes.
-  const flat = (cfg.flatExtras || []).reduce((s, e) => {
+  let flat = (cfg.flatExtras || []).reduce((s, e) => {
     const v = (fields[e.key] || "").toString().trim();
     const hit = e.value ? v === e.value : Boolean(v);
     return hit ? s + (e.amount || 0) : s;
   }, 0);
+
+  // Supplément "texte ajouté sous un modèle" : payant tant que la case est cochée
+  // (addText !== false dans l'objet du modèle envoyé).
+  if (cfg.modeleSubExtra) {
+    const mv = fields[cfg.modeleSubExtra.key];
+    if (mv && typeof mv === "object" && mv.addText !== false) flat += cfg.modeleSubExtra.amount || 0;
+  }
 
   // Mode "pages" : par page supplémentaire, +pageMotif si un motif y est posé,
   // sinon +pageText si un texte y est gravé (la couverture, elle, est incluse).

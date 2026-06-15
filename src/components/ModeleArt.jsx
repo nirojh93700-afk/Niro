@@ -33,7 +33,7 @@ export default function ModeleArt({ template, value, color = "#fff", base = 28, 
     </svg>
   );
 
-  const subEl = subTxt ? (
+  const subEl = subTxt && value?.addText !== false ? (
     <span className={fonts[subLine.key] || subLine.font}
       style={{ color, fontSize: base * (subLine.em || 0.5), whiteSpace: "nowrap", marginTop: base * 0.16, opacity: subRaw ? 1 : 0.5 }}>
       {subTxt}

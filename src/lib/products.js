@@ -1287,7 +1287,7 @@ export const products = [
         { value: "oui", label: "Oui, graver aussi le 2e emplacement (+7 €)" },
       ] },
     ],
-    engravingPricing: { flatExtras: [{ key: "deuxEmplacement", value: "oui", amount: 7 }] },
+    engravingPricing: { flatExtras: [{ key: "deuxEmplacement", value: "oui", amount: 7 }], modeleSubExtra: { key: "modele", amount: 3 } },
     title: "Verre à whisky gravé Fête des pères — cadeau papa, papy personnalisé",
     category: "cadeaux",
     type: "Verre gravé Fête des pères",
