@@ -354,6 +354,21 @@ export default function ProductDetail({ product }) {
       }
     }
     setError("");
+    // Fiche atelier : tous les réglages choisis (emplacement, taille, position,
+    // textes, polices, motif, fond, options, photo…) pour graver à l'identique.
+    const itemSpec = {
+      slug: product.slug,
+      name: product.name,
+      variantTitle: variant.title,
+      emplacement: emplacement || "face",
+      deuxEmplacement: fieldValues["deuxEmplacement"] === "oui",
+      modeleTemplate: modeleTemplate || null,
+      modele: modeleField ? modeleVal : null,
+      photoSrc: photoSrc || null,
+      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null },
+      fields: { ...fieldValues },
+      personalization: buildPersonalization(),
+    };
     addItem({
       productSlug: product.slug,
       variantId: variant.id,
@@ -363,6 +378,7 @@ export default function ProductDetail({ product }) {
       image: images[0] || null,
       personalization: buildPersonalization(),
       fields: product.engravingPricing ? { ...fieldValues } : undefined,
+      spec: itemSpec,
       pickup: Boolean(product.pickup),
       quantity,
     });

@@ -13,6 +13,7 @@ import PromoCodesAdmin from "@/components/admin/PromoCodesAdmin";
 import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
 import BatThread from "@/components/admin/BatThread";
+import FicheAtelier from "@/components/admin/FicheAtelier";
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -34,6 +35,7 @@ export default function GestionPage() {
   const [ordersReady, setOrdersReady] = useState(false);
   const [tab, setTab] = useState("commandes");
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
+  const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState("");
@@ -629,13 +631,18 @@ export default function GestionPage() {
                     <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
                   ))}
                 </ul>
-                <div style={{ marginBottom: 8 }}>
+                <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
                     onClick={() => setBatOpen(batOpen === o.id ? null : o.id)}>
                     {batOpen === o.id ? "Fermer la discussion" : "💬 Aperçu à valider / discussion"}
                   </button>
-                  {batOpen === o.id && <BatThread order={o} adminKey={key} />}
+                  <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                    onClick={() => setFicheOpen(ficheOpen === o.id ? null : o.id)}>
+                    {ficheOpen === o.id ? "Fermer la fiche" : "🛠️ Fiche atelier (à graver)"}
+                  </button>
                 </div>
+                {batOpen === o.id && <BatThread order={o} adminKey={key} />}
+                {ficheOpen === o.id && <FicheAtelier spec={o.spec} />}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
                   {o.test && (
                     <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: "#e7e0f0", color: "#5b4b8a", fontWeight: 600 }}>🧪 Commande test (non comptée)</span>

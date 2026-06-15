@@ -3,6 +3,7 @@ import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock";
+import { saveOrderSpec } from "@/lib/firebase";
 import { engravingExtra } from "@/lib/engravingPrice";
 
 // Le retrait en main propre n'est proposé que si le code postal de la cliente
@@ -222,6 +223,13 @@ export async function POST(req) {
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/annule`,
     });
+
+    // Fiche atelier : on mémorise les réglages détaillés, liés à la session
+    // (relus par le webhook pour les joindre à la commande). Sans risque si échec.
+    try {
+      const specs = items.map((it) => it.spec || null);
+      if (specs.some(Boolean)) await saveOrderSpec(session.id, specs);
+    } catch { /* ignore */ }
 
     return Response.json({ url: session.url });
   } catch (err) {

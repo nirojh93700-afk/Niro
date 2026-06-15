@@ -213,6 +213,35 @@ export async function deleteSiteOrder(id) {
   }
 }
 
+// Réglages détaillés de personnalisation (fiche atelier), liés à une session Stripe.
+// Enregistrés à la création du paiement, relus par le webhook pour les joindre à la commande.
+export async function saveOrderSpec(sessionId, spec) {
+  const a = getApp();
+  if (!a || !sessionId) return false;
+  try {
+    await admin.firestore().collection("orderSpecs").doc(sessionId).set({
+      spec,
+      createdAt: new Date().toISOString(),
+    });
+    return true;
+  } catch (e) {
+    console.error("Enregistrement fiche atelier Firebase:", e.message);
+    return false;
+  }
+}
+
+export async function getOrderSpec(sessionId) {
+  const a = getApp();
+  if (!a || !sessionId) return null;
+  try {
+    const doc = await admin.firestore().collection("orderSpecs").doc(sessionId).get();
+    return doc.exists ? (doc.data().spec || null) : null;
+  } catch (e) {
+    console.error("Lecture fiche atelier Firebase:", e.message);
+    return null;
+  }
+}
+
 // --- Devis & Factures ------------------------------------------------------
 // Crée un devis ou une facture avec numérotation séquentielle (obligation légale
 // pour les factures). Renvoie { id, number }.

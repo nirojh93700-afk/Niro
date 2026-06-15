@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
-import { recordSiteOrder, updateQuoteStatus } from "@/lib/firebase";
+import { recordSiteOrder, updateQuoteStatus, getOrderSpec } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -336,9 +336,14 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       });
     }
 
+    // Fiche atelier : réglages détaillés enregistrés à la création du paiement.
+    let orderSpec = null;
+    try { orderSpec = await getOrderSpec(session.id); } catch { /* ignore */ }
+
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     await recordSiteOrder({
       ref: orderRef,
+      spec: orderSpec || null,
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
       currency,

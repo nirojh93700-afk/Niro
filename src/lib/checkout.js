@@ -8,6 +8,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "") {
     quantity: i.quantity,
     personalization: i.personalization || "",
     fields: i.fields,
+    spec: i.spec || null, // réglages détaillés (fiche atelier)
   }));
 
   const res = await fetch("/api/checkout", {
