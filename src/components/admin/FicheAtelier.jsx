@@ -6,9 +6,22 @@
 
 import { getProductBySlug } from "@/lib/products";
 import { MODELES } from "@/lib/modeles";
-import { getFontLabel } from "@/lib/fonts";
+import { getFontLabel, getFontClass } from "@/lib/fonts";
 import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
+
+// Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
+function textLinesOf(item, product) {
+  const fields = item.fields || {};
+  const lines = (product?.personalizationFields || [])
+    .filter((f) => (f.type === "text" || f.type === "textarea" || !f.type) && !f.noPreview)
+    .flatMap((f) => String(fields[f.key] || "").split("\n"))
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const fontField = (product?.personalizationFields || []).find((f) => f.type === "font");
+  const fontKey = fontField ? fields[fontField.key] : null;
+  return { lines, fontClass: getFontClass(fontKey || "playfair") };
+}
 
 const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple", image: "Image" };
 const motifLabel = (id) => (MOTIF_LIST.find((m) => m.id === id) || {}).label || id;
@@ -24,17 +37,22 @@ function GlassPreview({ item }) {
   const cy = lay?.cy ?? 0.45;
   const scale = lay?.scale ?? 0.1;
   const color = isFond ? "#f2efe9" : "#3a2f1d";
+  const txt = !item.modele && !item.photoSrc ? textLinesOf(item, p) : null;
 
   return (
     <div style={{ position: "relative", width: W, maxWidth: "100%", borderRadius: 10, overflow: "hidden", background: "#111" }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={img} alt="" style={{ width: "100%", display: "block" }} />
-      <div style={{ position: "absolute", left: `${cx * 100}%`, top: `${cy * 100}%`, transform: "translate(-50%,-50%)" }}>
+      <div style={{ position: "absolute", left: `${cx * 100}%`, top: `${cy * 100}%`, transform: "translate(-50%,-50%)", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1.15 }}>
         {item.modele ? (
           <ModeleArt template={item.modeleTemplate} value={item.modele} color={color} base={Math.max(10, scale * W)} />
         ) : item.photoSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.photoSrc} alt="" style={{ width: scale * W * 2, filter: isFond ? "brightness(3)" : "grayscale(1) contrast(1.4)", opacity: 0.9 }} />
+        ) : txt && txt.lines.length ? (
+          txt.lines.map((line, i) => (
+            <span key={i} className={txt.fontClass} style={{ color, fontSize: Math.max(10, scale * W), whiteSpace: "nowrap" }}>{line}</span>
+          ))
         ) : null}
       </div>
     </div>
