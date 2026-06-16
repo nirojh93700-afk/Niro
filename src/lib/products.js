@@ -14,6 +14,7 @@ export const CATEGORIES = [
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
+  { slug: "verres", label: "Verres gravés personnalisés", short: "Verres gravés" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
   { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
@@ -28,6 +29,10 @@ export const SUBCATEGORIES = {
     { slug: "homme", label: "Homme" },
     { slug: "couple", label: "Couple" },
     { slug: "bebe", label: "Bébé & Naissance" },
+  ],
+  // Verres gravés : par type de verre (on ajoute champagne/bière/vin quand les produits arrivent).
+  verres: [
+    { slug: "whisky", label: "Verre à whisky" },
   ],
 };
 
@@ -1219,7 +1224,8 @@ export const products = [
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
     title: "Verre à whisky gravé personnalisé — prénom, date ou logo",
-    category: "cadeaux",
+    category: "verres",
+    subcategory: "whisky",
     type: "Verre gravé personnalisé",
     tagline: "Un verre à whisky gravé à votre message : prénom, date, initiales ou logo.",
     personalizable: true,
@@ -1259,7 +1265,7 @@ export const products = [
     weight: 600,
     pickup: true,
     letter: false,
-    hidden: true, // EN PRÉPARATION — visible via le lien d'aperçu
+    hidden: false, // PUBLIÉ (Fête des pères)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
     engrave: {
       box: { top: 0.15, left: 0.20, width: 0.60, height: 0.62 },
@@ -1289,7 +1295,8 @@ export const products = [
     ],
     engravingPricing: { flatExtras: [{ key: "deuxEmplacement", value: "oui", amount: 7 }], modeleSubExtra: { key: "modele", amount: 3 } },
     title: "Verre à whisky gravé Fête des pères — cadeau papa, papy personnalisé",
-    category: "cadeaux",
+    category: "verres",
+    subcategory: "whisky",
     type: "Verre gravé Fête des pères",
     tagline: "Le verre à whisky personnalisé pour la Fête des pères : élu papa / papy de l'année.",
     personalizable: true,
