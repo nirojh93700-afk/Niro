@@ -1232,7 +1232,7 @@ export const products = [
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
     engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }] }, // texte sous la photo = +3 €
-    title: "Verre à whisky gravé personnalisé — prénom, date ou logo",
+    title: "Verre à whisky gravé personnalisé — photo, prénom, date ou logo",
     category: "verres",
     subcategory: "whisky",
     type: "Verre gravé personnalisé",
