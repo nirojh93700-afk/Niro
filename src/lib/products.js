@@ -1232,6 +1232,7 @@ export const products = [
     personalizationLabel: "Texte à graver (+ police, dessin ou logo en option)",
     images: [
       "/produits/verre_a_whisky_grave_ambiance.jpg",
+      "/produits/verre_a_whisky_photo_exemple.jpg",
       "/produits/verre_a_whisky_grave_vide.jpg",
       "/produits/verre_a_whisky_fond.jpg",
     ],
