@@ -1234,7 +1234,6 @@ export const products = [
       "/produits/verre_a_whisky_grave_ambiance.jpg",
       "/produits/verre_a_whisky_grave_vide.jpg",
       "/produits/verre_a_whisky_fond.jpg",
-      "/produits/verre_a_whisky_logo_bourbon.webp",
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
