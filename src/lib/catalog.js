@@ -31,8 +31,8 @@ function applyOverride(product, ov, images, promos) {
       );
     }
   }
-  // Photos ajoutées depuis l'admin
-  if (images[p.slug]?.length) p.images = images[p.slug];
+  // Photos ajoutées depuis l'admin (sauf si le produit verrouille ses images)
+  if (!p.lockImages && images[p.slug]?.length) p.images = images[p.slug];
   // Prix promo (sur la 1re variante, pour l'affichage en vignette)
   const sale = promos[p.variants?.[0]?.id];
   if (typeof sale === "number") p.salePrice = sale;

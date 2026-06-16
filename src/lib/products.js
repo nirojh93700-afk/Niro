@@ -1178,6 +1178,7 @@ export const products = [
   {
     slug: "verre-a-whisky-grave",
     badge: "Nouveau",
+    lockImages: true, // galerie pilotée par le code (ignore l'ancienne liste admin)
     name: "Verre à whisky gravé",
     weight: 600, // verre + emballage protégé (fragile)
     pickup: true, // remise en main propre possible (verre fragile)
