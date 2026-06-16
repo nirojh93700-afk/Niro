@@ -42,15 +42,17 @@ export async function GET(req) {
       overrideImages: overrides[p.slug] || [],
     });
     for (const v of p.variants) {
+      const sk = v.stockId || v.id; // stock partagé par couleur (recto/recto-verso)
       rows.push({
         productSlug: p.slug,
         productName: p.name,
         category: p.category,
         variantId: v.id,
+        stockId: sk,
         variantTitle: v.title,
         price: v.price,
         salePrice: typeof promos[v.id] === "number" ? promos[v.id] : null,
-        stock: typeof map[v.id] === "number" ? map[v.id] : null,
+        stock: typeof map[sk] === "number" ? map[sk] : null,
       });
     }
   }

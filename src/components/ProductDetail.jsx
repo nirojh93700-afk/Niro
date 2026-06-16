@@ -134,7 +134,7 @@ export default function ProductDetail({ product }) {
     }
   }
   const info = getProductInfo(product.slug);
-  const variantStock = stockMap[variant.id];
+  const variantStock = stockMap[variant.stockId || variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
   const salePrice = promos[variant.id];
   const hasPromo = typeof salePrice === "number" && salePrice < variant.price;

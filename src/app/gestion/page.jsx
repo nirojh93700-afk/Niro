@@ -360,8 +360,9 @@ export default function GestionPage() {
     }
   }
 
-  function updateRow(variantId, value) {
-    setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, stock: value } : r)));
+  function updateRow(stockId, value) {
+    // le stock est partagé par couleur : on met à jour toutes les variantes du même stockId
+    setRows((prev) => prev.map((r) => ((r.stockId || r.variantId) === stockId ? { ...r, stock: value } : r)));
   }
   function updateRowPromo(variantId, value) {
     setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, salePrice: value } : r)));
@@ -1017,17 +1018,27 @@ export default function GestionPage() {
             {Object.entries(grouped).map(([slug, g]) => (
               <div key={slug} className="admin-block">
                 <h3>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></h3>
-                {g.items.map((r) => (
-                  <div className="admin-row" key={r.variantId}>
-                    <span className="admin-variant">{r.variantTitle}</span>
-                    <span className="admin-price">{formatEuro(r.price)}</span>
-                    <input className={`admin-stock ${typeof r.stock === "number" && r.stock === 0 ? "out" : ""}`}
-                      type="number" min="0" placeholder="—" value={r.stock ?? ""}
-                      onChange={(e) => updateRow(r.variantId, e.target.value === "" ? "" : Number(e.target.value))}
-                      onBlur={(e) => saveStock(r.variantId, e.target.value)} />
-                    <span className="admin-saved">{saved === r.variantId ? "✓" : ""}</span>
-                  </div>
-                ))}
+                {(() => {
+                  // Stock groupé par couleur : un seul champ par stockId (recto + recto-verso partagés)
+                  const counts = {};
+                  g.items.forEach((r) => { const k = r.stockId || r.variantId; counts[k] = (counts[k] || 0) + 1; });
+                  const seen = new Set();
+                  return g.items.filter((r) => { const k = r.stockId || r.variantId; if (seen.has(k)) return false; seen.add(k); return true; }).map((r) => {
+                    const k = r.stockId || r.variantId;
+                    const grouped = counts[k] > 1;
+                    const label = grouped && r.variantTitle.includes("/") ? r.variantTitle.split("/").pop().trim() : r.variantTitle;
+                    return (
+                      <div className="admin-row" key={k}>
+                        <span className="admin-variant">{label}</span>
+                        <input className={`admin-stock ${typeof r.stock === "number" && r.stock === 0 ? "out" : ""}`}
+                          type="number" min="0" placeholder="—" value={r.stock ?? ""}
+                          onChange={(e) => updateRow(k, e.target.value === "" ? "" : Number(e.target.value))}
+                          onBlur={(e) => saveStock(k, e.target.value)} />
+                        <span className="admin-saved">{saved === k ? "✓" : ""}</span>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             ))}
           </>

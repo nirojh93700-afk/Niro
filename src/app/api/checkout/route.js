@@ -137,7 +137,7 @@ export async function POST(req) {
     const extra = engravingExtra(product, item.fields || {});
     const unitPrice = basePrice + extra.amount;
 
-    boughtVariants.push({ variantId: variant.id, qty: quantity });
+    boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
     totalGrams += (product.weight || 200) * quantity;
     subtotal += unitPrice * quantity;
     if (!product.letter) {

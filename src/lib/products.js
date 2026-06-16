@@ -86,12 +86,12 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685296_55z9.jpg?v=1780366782",
     ],
     variants: [
-      { id: "env-recto-dore", title: "Recto uniquement / Doré", price: 27.90 },
-      { id: "env-recto-argent", title: "Recto uniquement / Argent", price: 27.90 },
-      { id: "env-recto-rose", title: "Recto uniquement / Or Rose", price: 27.90 },
-      { id: "env-rv-dore", title: "Recto-Verso / Doré", price: 29.90 },
-      { id: "env-rv-argent", title: "Recto-Verso / Argent", price: 29.90 },
-      { id: "env-rv-rose", title: "Recto-Verso / Or Rose", price: 29.90 },
+      { id: "env-recto-dore", title: "Recto uniquement / Doré", price: 27.90, stockId: "env-dore" },
+      { id: "env-recto-argent", title: "Recto uniquement / Argent", price: 27.90, stockId: "env-argent" },
+      { id: "env-recto-rose", title: "Recto uniquement / Or Rose", price: 27.90, stockId: "env-rose" },
+      { id: "env-rv-dore", title: "Recto-Verso / Doré", price: 29.90, stockId: "env-dore" },
+      { id: "env-rv-argent", title: "Recto-Verso / Argent", price: 29.90, stockId: "env-argent" },
+      { id: "env-rv-rose", title: "Recto-Verso / Or Rose", price: 29.90, stockId: "env-rose" },
     ],
     descriptionHtml: `<p>Gardez vos mots les plus précieux près de votre cœur avec ce collier locket unique. Chaque modèle est livré avec sa plaque intérieure prête à être gravée pour vous. Le pendentif en forme d'enveloppe s'ouvre réellement pour révéler cette plaque amovible.</p>
 <p>Ce bijou symbolique permet de dissimuler un secret, une date ou un prénom. Sa conception soignée avec charnière fluide et fermeture sécurisée assure élégance et durabilité. Disponible en trois finitions polies pour s'adapter à toutes vos tenues.</p>
