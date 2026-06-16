@@ -17,8 +17,7 @@ function engrave(img, light) {
   let data;
   try { data = ctx.getImageData(0, 0, w, h); } catch { return img.src; }
   const d = data.data;
-  // Même rendu (gravure foncée) pour la face ET le fond, à la demande.
-  const tr = 42, tg = 42, tb = 42;
+  const tr = light ? 248 : 42, tg = light ? 248 : 42, tb = light ? 244 : 42;
   const cxC = w / 2, cyC = h / 2, rx = w / 2, ry = h / 2;
   for (let i = 0; i < d.length; i += 4) {
     const px = (i / 4) % w, py = Math.floor((i / 4) / w);
@@ -128,7 +127,7 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
       <img
         src={displaySrc}
         alt="Logo à graver — glissez pour déplacer"
-        className="ee-logo ee-logo-proc"
+        className={`ee-logo ee-logo-proc${light ? " ee-logo-on-dark" : ""}`}
         draggable={false}
         onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}
