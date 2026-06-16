@@ -1215,7 +1215,7 @@ export const products = [
       round: true,
     },
     personalizationFields: [
-      { key: "emplacement", type: "select", label: "Emplacement de la gravure", default: "face", options: [
+      { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", default: "face", options: [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
         { value: "deux", label: "Les deux : face + fond (+7 €)" },
@@ -1301,7 +1301,7 @@ export const products = [
     },
     personalizationFields: [
       { key: "modele", type: "modele", template: "peres", label: "Personnalisez votre gravure", text: "Modifiez chaque ligne et choisissez un motif. L'aperçu se met à jour sur le verre ; vous pouvez le déplacer et le redimensionner. Aperçu indicatif — la gravure finale est optimisée par notre atelier." },
-      { key: "emplacement", type: "select", label: "Emplacement de la gravure", optional: true, default: "face", options: [
+      { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", optional: true, default: "face", options: [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
         { value: "deux", label: "Les deux : face + fond (+7 €)" },

@@ -792,6 +792,23 @@ export default function ProductDetail({ product }) {
                     )}
                   </label>
                 );
+                if (f.type === "select" && f.asChecks) {
+                  const emp = fieldValues[f.key] || f.default || "";
+                  const faceOn = emp === "face" || emp === "deux";
+                  const fondOn = emp === "fond" || emp === "deux";
+                  const setSides = (nf, nd) => {
+                    let v = nf && nd ? "deux" : nf ? "face" : nd ? "fond" : "face";
+                    setField(f.key, v);
+                  };
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}</label>
+                      <label className="modele-check"><input type="checkbox" checked={faceOn} onChange={(e) => setSides(e.target.checked, fondOn)} /><span>Graver sur la face avant</span></label>
+                      <label className="modele-check"><input type="checkbox" checked={fondOn} onChange={(e) => setSides(faceOn, e.target.checked)} /><span>Graver au fond du verre</span></label>
+                      {faceOn && fondOn && <p className="char-count" style={{ textAlign: "left", color: "var(--gold-dark)" }}>Les deux côtés : +7 €</p>}
+                    </div>
+                  );
+                }
                 if (f.type === "font" || f.type === "select" || f.type === "color") {
                   const opts = f.type === "font" ? FONTS.map((x) => ({ value: x.key, label: x.label })) : f.options || [];
                   return (
