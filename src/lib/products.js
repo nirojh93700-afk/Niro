@@ -1215,7 +1215,7 @@ export const products = [
       round: true,
     },
     personalizationFields: [
-      { key: "emplacement", type: "select", label: "Emplacement de la gravure", options: [
+      { key: "emplacement", type: "select", label: "Emplacement de la gravure", default: "face", options: [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
       ] },
