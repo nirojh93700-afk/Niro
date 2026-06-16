@@ -5,7 +5,7 @@
 // fond, options) + un visuel reconstruit du verre, pour graver à l'identique.
 
 import { getProductBySlug } from "@/lib/products";
-import { MODELES } from "@/lib/modeles";
+import { MODELES, layoutLabel } from "@/lib/modeles";
 import { getFontLabel, getFontClass } from "@/lib/fonts";
 import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
@@ -23,7 +23,6 @@ function textLinesOf(item, product) {
   return { lines, fontClass: getFontClass(fontKey || "playfair") };
 }
 
-const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple", image: "Image" };
 const motifLabel = (id) => (MOTIF_LIST.find((m) => m.id === id) || {}).label || id;
 
 function GlassPreview({ item }) {
@@ -86,7 +85,7 @@ function ItemSheet({ item }) {
 
         {mv && tpl && (
           <>
-            <Row k="Modèle" v={`${tpl.label} — style ${LAYOUT_LABELS[layout] || layout}`} />
+            <Row k="Modèle" v={`${tpl.label} — style ${layoutLabel(tpl, layout)}`} />
             {tpl.lines.map((l) => {
               if (l.below && mv.addText === false) return null;
               const t = (mv.text?.[l.key] || "").trim();

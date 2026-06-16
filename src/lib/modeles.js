@@ -16,9 +16,12 @@ export const MODELES = {
   peres: {
     label: "Fête des pères",
     layout: "classic", // défaut : maquette empilée (élu / ★ PAPY ★ / DE L'ANNÉE + ancre)
-    layouts: ["classic", "badge", "label"], // Classique / Médaillon rond / Papa poule
-    labelImageDark: "/produits/papa-poule-dark.png",   // « L'authentique Papa Poule » (fidèle)
-    labelImageLight: "/produits/papa-poule-light.png",
+    layouts: ["classic", "badge"], // styles vectoriels éditables
+    // Designs "image" fidèles (cadre/textes fixes) : ajouter ici suffit à créer une vignette.
+    imageDesigns: [
+      { id: "papa-poule", name: "Papa poule", dark: "/produits/papa-poule-dark.png", light: "/produits/papa-poule-light.png" },
+      { id: "meilleur-papa", name: "Meilleur Papa", dark: "/produits/meilleur-papa-dark.png", light: "/produits/meilleur-papa-light.png" },
+    ],
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.85 },
       { key: "mid", label: "Mot central", placeholder: "PAPY", font: "fnt-cinzel", em: 1, bold: true, spacing: "0.08em" },
@@ -35,6 +38,21 @@ export const MODELES = {
     defaultMotif: "coeur",
   },
 };
+
+// Liste des vignettes (styles vectoriels + designs image).
+export function layoutOptions(t) {
+  return [...(t?.layouts || []), ...((t?.imageDesigns || []).map((d) => d.id))];
+}
+// Renvoie le design image correspondant à un layout (ou null si style vectoriel).
+export function imageDesign(t, layout) {
+  return (t?.imageDesigns || []).find((d) => d.id === layout) || null;
+}
+// Libellé d'un layout (nom du design image, ou nom du style vectoriel).
+const VECTOR_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple" };
+export function layoutLabel(t, layout) {
+  const d = imageDesign(t, layout);
+  return d ? d.name : (VECTOR_LABELS[layout] || layout);
+}
 
 // Valeur par défaut d'un modèle (textes vides, polices et motif du modèle).
 export function defaultModele(template) {

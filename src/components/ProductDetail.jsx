@@ -23,7 +23,7 @@ import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
 import ModeleDesigner from "./ModeleDesigner";
 import ModeleEngraveLayer from "./ModeleEngraveLayer";
-import { MODELES, defaultModele } from "@/lib/modeles";
+import { MODELES, defaultModele, layoutLabel } from "@/lib/modeles";
 import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
@@ -194,7 +194,7 @@ export default function ProductDetail({ product }) {
               return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;
             })
             .filter(Boolean);
-          const styleLabel = mLayout === "badge" ? "médaillon rond" : mLayout === "classic" ? "classique" : "";
+          const styleLabel = layoutLabel(tpl, mLayout);
           if (lines.length) parts.push(`Modèle « ${tpl.label} »${styleLabel ? ` (${styleLabel})` : ""} : ${lines.join(" / ")}`);
           if (mLayout === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : "sans fond (au trait)"}`);
           if (mv.motif && mv.motif !== "aucun") {

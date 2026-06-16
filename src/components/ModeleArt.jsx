@@ -1,6 +1,6 @@
 "use client";
 
-import { MODELES } from "@/lib/modeles";
+import { MODELES, imageDesign } from "@/lib/modeles";
 import { Motif } from "./Motif";
 import RoundBadge from "./RoundBadge";
 
@@ -57,15 +57,15 @@ export default function ModeleArt({ template, value, color = "#fff", base = 28, 
     );
   }
 
-  // --- Style "étiquette / image fidèle" (ex. Papa Poule) : image fixe + ajout dessous ---
-  if (layout === "label") {
+  // --- Designs "image" fidèles (ex. Papa Poule, Meilleur Papa) : image fixe + ajout dessous ---
+  const design = imageDesign(tpl, layout);
+  if (design) {
     const isLight = (color || "").toLowerCase() !== "#3a2f1d";
-    const src = isLight ? tpl.labelImageLight : tpl.labelImageDark;
     const W = base * 6.2;
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt="" draggable={false} style={{ width: W, maxWidth: "100%", display: "block" }} />
+        <img src={isLight ? design.light : design.dark} alt="" draggable={false} style={{ width: W, maxWidth: "100%", display: "block" }} />
         {subEl}
       </div>
     );

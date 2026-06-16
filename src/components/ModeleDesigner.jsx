@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { MODELES, defaultModele } from "@/lib/modeles";
+import { MODELES, defaultModele, layoutOptions, imageDesign, layoutLabel } from "@/lib/modeles";
 import { FONTS, getFontLabel } from "@/lib/fonts";
 import { MOTIF_LIST, Motif } from "./Motif";
 import ModeleArt from "./ModeleArt";
@@ -32,10 +32,11 @@ export default function ModeleDesigner({ template, value, onChange }) {
   function setAddText(on) { onChange({ ...v, addText: on }); }
 
   const layout = v.layout || tpl.layout || tpl.style || "stack";
-  const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", label: "Papa poule", stack: "Simple" };
+  const options = layoutOptions(tpl);
+  const isImageDesign = Boolean(imageDesign(tpl, layout));
   const showMotif = layout === "classic" || layout === "stack";
-  // Modèle "Papa poule" : design fidèle, on ne propose que l'ajout prénom/date.
-  const visibleLines = layout === "label" ? tpl.lines.filter((l) => l.below) : tpl.lines;
+  // Design "image" fidèle : on ne propose que l'ajout prénom/date.
+  const visibleLines = isImageDesign ? tpl.lines.filter((l) => l.below) : tpl.lines;
 
   return (
     <div className="modele-designer">
@@ -45,16 +46,16 @@ export default function ModeleDesigner({ template, value, onChange }) {
       </div>
 
       {/* choix du style (vignettes visuelles) */}
-      {Array.isArray(tpl.layouts) && tpl.layouts.length > 1 && (
+      {options.length > 1 && (
         <div className="field">
           <label>Modèle</label>
           <div className="modele-styles">
-            {tpl.layouts.map((l) => (
+            {options.map((l) => (
               <button type="button" key={l} className={`modele-style-cell${layout === l ? " on" : ""}`} onClick={() => setLayout(l)}>
                 <span className="modele-style-thumb">
                   <ModeleArt template={template} value={{ ...v, layout: l }} color="#fff" base={13} placeholder />
                 </span>
-                <span className="modele-style-name">{LAYOUT_LABELS[l] || l}</span>
+                <span className="modele-style-name">{layoutLabel(tpl, l)}</span>
               </button>
             ))}
           </div>
