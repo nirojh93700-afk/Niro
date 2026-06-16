@@ -263,6 +263,10 @@ export default function ProductDetail({ product }) {
     .flatMap((f) => (fieldValues[f.key] || "").split("\n"))
     .map((l) => l.trim())
     .filter(Boolean);
+  // Option « étoiles autour du texte » : encadre la 1re ligne de ★ … ★.
+  if (fieldValues["etoiles"] === "oui" && previewLines.length) {
+    previewLines[0] = `★ ${previewLines[0]} ★`;
+  }
   const hasTextFields = visibleFields.some(
     (f) => f.type === "text" || f.type === "textarea" || !f.type
   );
