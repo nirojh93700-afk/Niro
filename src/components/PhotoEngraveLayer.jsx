@@ -2,9 +2,10 @@
 
 import { useRef, useState, useEffect } from "react";
 
-// Transforme une image en "gravure blanche" opaque (zones sombres → blanc,
-// zones claires → transparent) : bien visible sur un fond sombre (fond du verre).
-function whiteFrost(img) {
+// Transforme une photo en "gravure" : monochrome, fond clair rendu transparent,
+// bords adoucis (pas de carré), teinte FONCÉE pour la face (verre clair) ou
+// BLANCHE pour le fond (intérieur sombre). Rend un aperçu proche du laser réel.
+function engrave(img, light) {
   const maxW = 700;
   const scale = Math.min(1, maxW / Math.max(img.naturalWidth, 1));
   const w = Math.max(1, Math.round(img.naturalWidth * scale));
@@ -16,11 +17,19 @@ function whiteFrost(img) {
   let data;
   try { data = ctx.getImageData(0, 0, w, h); } catch { return img.src; }
   const d = data.data;
+  const tr = light ? 248 : 42, tg = light ? 248 : 42, tb = light ? 244 : 42;
+  const cxC = w / 2, cyC = h / 2, rx = w / 2, ry = h / 2;
   for (let i = 0; i < d.length; i += 4) {
+    const px = (i / 4) % w, py = Math.floor((i / 4) / w);
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    // zones sombres = gravure, zones claires = transparent (fond retiré)
     let a = 255 - lum;
-    a = a < 25 ? 0 : Math.min(255, (a - 25) * 2.0);
-    d[i] = 248; d[i + 1] = 248; d[i + 2] = 244; d[i + 3] = a;
+    a = a < 28 ? 0 : Math.min(255, (a - 28) * 1.3);
+    // adoucissement elliptique des bords (supprime le carré)
+    const nx = (px - cxC) / rx, ny = (py - cyC) / ry;
+    const r = Math.sqrt(nx * nx + ny * ny);
+    const f = r < 0.80 ? 1 : Math.max(0, 1 - (r - 0.80) / 0.40);
+    d[i] = tr; d[i + 1] = tg; d[i + 2] = tb; d[i + 3] = Math.round(a * f);
   }
   ctx.putImageData(data, 0, 0);
   return c.toDataURL();
@@ -45,13 +54,13 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
 
-  // En mode "clair" (fond du verre, sombre) : on transforme la photo en gravure blanche.
+  // On transforme TOUJOURS la photo en gravure (face foncée / fond blanc),
+  // fond retiré + bords adoucis, pour un aperçu fidèle.
   useEffect(() => {
     let cancelled = false;
-    if (!light) { setDisplaySrc(photoSrc); return; }
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.onload = () => { if (!cancelled) { try { setDisplaySrc(whiteFrost(img)); } catch { setDisplaySrc(photoSrc); } } };
+    img.onload = () => { if (!cancelled) { try { setDisplaySrc(engrave(img, light)); } catch { setDisplaySrc(photoSrc); } } };
     img.onerror = () => { if (!cancelled) setDisplaySrc(photoSrc); };
     img.src = photoSrc;
     return () => { cancelled = true; };
@@ -118,7 +127,7 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
       <img
         src={displaySrc}
         alt="Logo à graver — glissez pour déplacer"
-        className={`ee-logo${light ? " ee-logo-white" : ""}`}
+        className={`ee-logo ee-logo-proc${light ? " ee-logo-on-dark" : ""}`}
         draggable={false}
         onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}

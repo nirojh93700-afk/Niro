@@ -1049,6 +1049,13 @@ img {
 .engrave-editor .ee-logo:active {
   cursor: grabbing;
 }
+/* Image déjà transformée en gravure (canvas) : pas de filtre CSS, fondu normal */
+.engrave-editor .ee-logo-proc {
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 0.9;
+}
+.engrave-editor .ee-logo-on-dark { opacity: 0.96; }
 .engrave-editor .ee-toolbar {
   position: absolute;
   left: 8px;
