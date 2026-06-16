@@ -1220,9 +1220,13 @@ export const products = [
       { key: "photo", type: "photo", label: "Envoyez votre logo / photo (facultatif)", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
       { key: "texte", label: "Texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true, default: "Joyeux anniversaire" },
       { key: "texte2", label: "Date (sous la photo)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true, default: "2026" },
-      { key: "etoiles", type: "select", label: "Étoiles autour du texte ?", optional: true, options: [
-        { value: "", label: "Non" },
-        { value: "oui", label: "Oui  ★ texte ★" },
+      { key: "decor", type: "select", label: "Décor autour du texte ?", optional: true, options: [
+        { value: "", label: "Aucun" },
+        { value: "★", label: "Étoiles  ★ texte ★" },
+        { value: "♥", label: "Cœurs  ♥ texte ♥" },
+        { value: "✿", label: "Fleurs  ✿ texte ✿" },
+        { value: "◆", label: "Losanges  ◆ texte ◆" },
+        { value: "•", label: "Points  • texte •" },
       ] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
