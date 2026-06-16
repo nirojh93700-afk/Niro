@@ -1218,8 +1218,8 @@ export const products = [
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
       ] },
       { key: "photo", type: "photo", label: "Envoyez votre logo / photo (facultatif)", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
-      { key: "texte", label: "Texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true, default: "Joyeux anniversaire" },
-      { key: "texte2", label: "Date (sous la photo)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true, default: "2026" },
+      { key: "texte", label: "Ajouter un texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true },
+      { key: "texte2", label: "Date (sous la photo)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },
       { key: "decor", type: "select", label: "Décor autour du texte ?", optional: true, options: [
         { value: "", label: "Aucun" },
         { value: "★", label: "Étoiles  ★ texte ★" },
