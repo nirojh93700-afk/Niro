@@ -46,16 +46,10 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
 
-  // En mode "clair" (fond du verre, sombre) : on transforme la photo en gravure blanche.
+  // Même rendu que la face (gravure "surface") aussi pour le fond :
+  // on affiche la photo telle quelle, le style de gravure vient du CSS (.ee-logo).
   useEffect(() => {
-    let cancelled = false;
-    if (!light) { setDisplaySrc(photoSrc); return; }
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => { if (!cancelled) { try { setDisplaySrc(whiteFrost(img)); } catch { setDisplaySrc(photoSrc); } } };
-    img.onerror = () => { if (!cancelled) setDisplaySrc(photoSrc); };
-    img.src = photoSrc;
-    return () => { cancelled = true; };
+    setDisplaySrc(photoSrc);
   }, [photoSrc, light]);
 
   const wMm = Math.round((size / maxW) * widthMm * 10) / 10;
@@ -119,7 +113,7 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
       <img
         src={displaySrc}
         alt="Logo à graver — glissez pour déplacer"
-        className={`ee-logo${light ? " ee-logo-white" : ""}`}
+        className="ee-logo"
         draggable={false}
         onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}
