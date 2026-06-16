@@ -19,15 +19,16 @@ function whiteFrost(img) {
   const cxC = w / 2, cyC = h / 2, rx = w / 2, ry = h / 2;
   for (let i = 0; i < d.length; i += 4) {
     const px = (i / 4) % w, py = Math.floor((i / 4) / w);
-    const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    let lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    lum = Math.max(0, Math.min(255, (lum - 128) * 1.35 + 128)); // contraste
     let a = 255 - lum;
-    // seuil haut = fond clair/gris RETIRÉ (plus de carré), puis montée nette
-    a = a < 50 ? 0 : Math.min(255, (a - 50) * 2.0);
-    // bords adoucis (ellipse) : supprime le carré
+    // blanc frosté DENSE et net (bien visible sur le bois) ; fond clair retiré
+    a = a < 30 ? 0 : Math.min(255, (a - 30) * 2.6);
+    // bords adoucis (ellipse) : pas de carré
     const nx = (px - cxC) / rx, ny = (py - cyC) / ry;
     const r = Math.sqrt(nx * nx + ny * ny);
-    const f = r < 0.82 ? 1 : Math.max(0, 1 - (r - 0.82) / 0.36);
-    d[i] = 250; d[i + 1] = 250; d[i + 2] = 246; d[i + 3] = Math.round(a * f);
+    const f = r < 0.86 ? 1 : Math.max(0, 1 - (r - 0.86) / 0.32);
+    d[i] = 252; d[i + 1] = 252; d[i + 2] = 248; d[i + 3] = Math.round(a * f);
   }
   ctx.putImageData(data, 0, 0);
   return c.toDataURL();
