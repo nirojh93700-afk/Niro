@@ -42,8 +42,8 @@ function whiteFrost(img) {
     const px = j % w, py = (j / w) | 0;
     let nl = ((lumArr[j] - lo) / range) * 255;
     nl = nl < 0 ? 0 : nl > 255 ? 255 : nl;
-    let a = 255 - nl;                                   // sombre -> blanc
-    a = a < 24 ? 0 : Math.min(255, (a - 24) * 1.7);     // fond clair retiré + densité
+    let a = nl;                                        // CLAIR -> blanc (frost positif, naturel)
+    a = a < 30 ? 0 : Math.min(255, (a - 30) * 1.6);    // fond sombre retiré + densité
     const nx = (px - cxC) / rx, ny = (py - cyC) / ry;
     const r = Math.sqrt(nx * nx + ny * ny);
     const f = r < 0.86 ? 1 : Math.max(0, 1 - (r - 0.86) / 0.32);
