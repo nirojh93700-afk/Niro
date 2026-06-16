@@ -1180,6 +1180,7 @@ export const products = [
     badge: "Nouveau",
     lockImages: true, // galerie pilotée par le code (ignore l'ancienne liste admin)
     lockHidden: true, // publication pilotée par le code (ignore un ancien masquage admin)
+    cardImage: "/produits/verre_a_whisky_exemple_face.jpg", // vignette : verre gravé PHOTO (montre l'usage)
     name: "Verre à whisky gravé",
     weight: 600, // verre + emballage protégé (fragile)
     pickup: true, // remise en main propre possible (verre fragile)
