@@ -1201,7 +1201,7 @@ export const products = [
       glassHeightMm: 95,
     },
     // Gravure au fond du verre : vue de dessus, zone ronde (la base).
-    fondImage: "/produits/verre_a_whisky_fond.jpg",
+    fondImage: "/produits/verre_a_whisky_fond_clair.jpg",
     engraveFond: {
       box: { top: 0.30, left: 0.30, width: 0.40, height: 0.40 },
       widthMm: 50,
@@ -1275,7 +1275,7 @@ export const products = [
       maxHeightFrac: 0.50, minHeightFrac: 0.10,
       diameterMm: 79, glassHeightMm: 95,
     },
-    fondImage: "/produits/verre_a_whisky_fond.jpg",
+    fondImage: "/produits/verre_a_whisky_fond_clair.jpg",
     engraveFond: {
       box: { top: 0.30, left: 0.30, width: 0.40, height: 0.40 },
       widthMm: 50, heightMm: 50,

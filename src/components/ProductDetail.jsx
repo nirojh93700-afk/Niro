@@ -438,7 +438,7 @@ export default function ProductDetail({ product }) {
                 key={isFond ? "modele-fond" : "modele-face"}
                 template={modeleTemplate}
                 value={modeleVal}
-                color={isFond ? "#f2efe9" : "#3a2f1d"}
+                color="#3a2f1d"
                 cfg={editCfg}
                 onChange={setModeleLayout}
               />
@@ -459,7 +459,7 @@ export default function ProductDetail({ product }) {
                 key={isFond ? "text-fond" : "text-face"}
                 lines={previewLines}
                 fontClass={previewFontClass}
-                color={isFond ? "#f2efe9" : previewColor}
+                color={previewColor}
                 cfg={editCfg}
                 onChange={setTextLayout}
               />

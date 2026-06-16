@@ -35,7 +35,7 @@ function GlassPreview({ item }) {
   const cx = lay?.cx ?? 0.5;
   const cy = lay?.cy ?? 0.45;
   const scale = lay?.scale ?? 0.1;
-  const color = isFond ? "#f2efe9" : "#3a2f1d";
+  const color = "#3a2f1d"; // fond du verre désormais clair → gravure foncée
   const txt = !item.modele && !item.photoSrc ? textLinesOf(item, p) : null;
 
   return (
@@ -47,7 +47,7 @@ function GlassPreview({ item }) {
           <ModeleArt template={item.modeleTemplate} value={item.modele} color={color} base={Math.max(10, scale * W)} />
         ) : item.photoSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.photoSrc} alt="" style={{ width: scale * W * 2, filter: isFond ? "brightness(3)" : "grayscale(1) contrast(1.4)", opacity: 0.9 }} />
+          <img src={item.photoSrc} alt="" style={{ width: scale * W * 2, filter: "grayscale(1) contrast(1.4)", opacity: 0.9 }} />
         ) : txt && txt.lines.length ? (
           txt.lines.map((line, i) => (
             <span key={i} className={txt.fontClass} style={{ color, fontSize: Math.max(10, scale * W), whiteSpace: "nowrap" }}>{line}</span>
