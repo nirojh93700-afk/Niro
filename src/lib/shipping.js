@@ -19,6 +19,14 @@ export const DECO_TIERS = [
   { maxQty: Infinity, price: 19.9 }, // 13 et plus
 ];
 
+// --- Verres (fragiles) : envoi CROISSANT selon le nombre de verres ----------
+// La Poste facture plus cher quand le colis est plus lourd → le prix monte.
+export const GLASS_TIERS = [
+  { maxQty: 2, price: 9.9 },          // 1 à 2 verres
+  { maxQty: 4, price: 14.9 },         // 3 à 4 verres
+  { maxQty: Infinity, price: 19.9 },  // 5 verres et plus
+];
+
 // --- Retrait en main propre -------------------------------------------------
 export const PICKUP_FEE = 0;
 
@@ -50,14 +58,20 @@ function rate(amount, name, days) {
 //   totalGrams    : poids total estimé (plafond 2 kg)
 //   parcelQty     : nombre d'articles "déco" (colis) dans le panier
 //   pickupEligible: retrait en main propre autorisé (déco/mariage + zone OK)
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, pickupEligible = false }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false }) {
   const options = [];
 
   if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
     const free = subtotal >= BIJOUX_FREE_THRESHOLD;
     options.push(rate(free ? 0 : BIJOUX_HOME, free ? "Livraison à domicile — Offerte" : "Livraison à domicile", [2, 4]));
   } else {
-    options.push(rate(tierPrice(DECO_TIERS, parcelQty || 1), "Livraison à domicile", [2, 5]));
+    // Colis : on prend le plus cher entre les verres (fragiles) et la déco.
+    const decoQty = Math.max(0, parcelQty - glassQty);
+    const prices = [];
+    if (glassQty > 0) prices.push(tierPrice(GLASS_TIERS, glassQty));
+    if (decoQty > 0) prices.push(tierPrice(DECO_TIERS, decoQty));
+    const price = prices.length ? Math.max(...prices) : tierPrice(DECO_TIERS, parcelQty || 1);
+    options.push(rate(price, "Livraison à domicile", [2, 5]));
   }
 
   if (pickupEligible) {

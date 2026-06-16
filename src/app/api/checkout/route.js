@@ -114,6 +114,7 @@ export async function POST(req) {
   let totalGrams = 0;
   let subtotal = 0;
   let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
+  let glassQty = 0;  // nombre de verres (fragiles) — envoi croissant dédié
   let letterOnly = true;
   let hasPickupItem = false; // au moins un article éligible au retrait
   const boughtVariants = []; // pour décrémenter le stock après paiement
@@ -143,6 +144,7 @@ export async function POST(req) {
       letterOnly = false;
       parcelQty += quantity;
     }
+    if (product.category === "verres") glassQty += quantity;
     if (product.pickup) hasPickupItem = true;
 
     const descriptionParts = [variant.title];
@@ -212,7 +214,7 @@ export async function POST(req) {
       phone_number_collection: { enabled: true },
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
       shipping_options: buildShippingOptions({
-        totalGrams, subtotal, parcelQty, letterOnly,
+        totalGrams, subtotal, parcelQty, glassQty, letterOnly,
         pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
       }),
       custom_fields: [
