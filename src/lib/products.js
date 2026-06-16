@@ -1248,7 +1248,7 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-grave", title: "Verre à whisky gravé", price: 22.90 },
+      { id: "verre-whisky-grave", title: "Verre à whisky gravé", price: 26.90 },
     ],
     descriptionHtml: `<p><strong>Le verre à whisky personnalisé, gravé à votre message.</strong> Prénom, date, initiales, citation ou logo : chaque verre est gravé sur mesure pour devenir un cadeau unique et raffiné.</p>
 <p>Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour un anniversaire, la Fête des Pères, un cadeau d'entreprise, un témoin de mariage, ou simplement pour se faire plaisir.</p>
