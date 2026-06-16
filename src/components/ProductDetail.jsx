@@ -479,6 +479,15 @@ export default function ProductDetail({ product }) {
                 ))}
               </div>
             )}
+            {/* Flèches précédent / suivant pour parcourir les photos */}
+            {hasImages && images.length > 1 && (
+              <>
+                <button type="button" className="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente"
+                  onClick={() => setActiveImg((activeImg - 1 + images.length) % images.length)}>‹</button>
+                <button type="button" className="gallery-arrow gallery-arrow-next" aria-label="Photo suivante"
+                  onClick={() => setActiveImg((activeImg + 1) % images.length)}>›</button>
+              </>
+            )}
           </div>
           {images.length > 1 && (
             <div className="gallery-thumbs">
