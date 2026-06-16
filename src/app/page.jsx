@@ -18,6 +18,7 @@ const CATEGORY_DEFAULTS = [
   { slug: "bijoux", label: "Bijoux personnalisés", sub: "Colliers & bracelets gravés", image: getProductBySlug("collier-medaillon-coeur-ouvrable").images[0] },
   { slug: "mariage", label: "Mariage & Réception", sub: "Numéros de table, menus, ronds de serviette", image: getProductBySlug("menu-de-mariage-bois-grave").images[0] },
   { slug: "cadeaux", label: "Cadeaux & Décoration", sub: "Plaques, objets souvenirs gravés", image: getProductBySlug("plaque-de-porte-enfant").images[0] },
+  { slug: "verres", label: "Verres gravés", sub: "Whisky personnalisé, gravure photo & logo", image: "/produits/verre_a_whisky_card.jpg" },
 ];
 
 const ATELIER_DEFAULTS = {

@@ -2,18 +2,30 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "./CartContext";
 import { CATEGORIES } from "@/lib/products";
 
 export default function Header({ categories }) {
   const { count, setDrawerOpen, hydrated } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const showBack = pathname && pathname !== "/";
   // Catégories à afficher : celles passées (non vides) ou toutes en secours.
   const menuCats = categories && categories.length ? categories : CATEGORIES;
 
   return (
     <header className="header header-centered">
       <div className="container header-top">
+        {showBack && (
+          <button className="header-back" onClick={() => router.back()} aria-label="Retour">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+            <span className="header-back-label">Retour</span>
+          </button>
+        )}
         <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Niv Création — accueil">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

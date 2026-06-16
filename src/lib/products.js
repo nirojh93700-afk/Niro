@@ -1261,6 +1261,7 @@ export const products = [
     slug: "verre-a-whisky-fete-des-peres",
     badge: "Nouveau",
     name: "Verre à whisky — Fête des pères",
+    cardImage: "/produits/verre_a_whisky_card.jpg", // vignette : verre GRAVÉ (montre la personnalisation)
     weight: 600,
     pickup: true,
     letter: false,

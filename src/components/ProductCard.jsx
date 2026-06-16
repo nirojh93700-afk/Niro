@@ -11,7 +11,7 @@ export default function ProductCard({ product }) {
   const basePrice = product.variants[0].price;
   const distinct = new Set(prices).size > 1;
   const showDes = distinct && basePrice === Math.min(...prices);
-  const image = product.images[0];
+  const image = product.cardImage || product.images[0];
   const sale = product.salePrice; // promo sur la variante par défaut
   const hasPromo = typeof sale === "number" && sale < basePrice;
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), seulement s'il n'y a pas déjà une promo réelle.
