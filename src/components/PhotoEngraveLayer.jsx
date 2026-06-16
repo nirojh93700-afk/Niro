@@ -2,8 +2,12 @@
 
 import { useRef, useState, useEffect } from "react";
 
-// Transforme une image en "gravure blanche" opaque (zones sombres → blanc,
-// zones claires → transparent) : bien visible sur un fond sombre (fond du verre).
+// Transforme une photo en "gravure blanche" frostée, bien visible sur le fond
+// sombre du verre. Étapes (comme une vraie gravure photo) :
+//   1) niveaux de gris,
+//   2) NORMALISATION d'histogramme (auto-contraste) → toute photo ressort pareil,
+//   3) zones sombres → blanc dense (densité de frost), zones claires → transparent,
+//   4) bords adoucis (ellipse) → pas de carré.
 function whiteFrost(img) {
   const maxW = 700;
   const scale = Math.min(1, maxW / Math.max(img.naturalWidth, 1));
@@ -16,15 +20,30 @@ function whiteFrost(img) {
   let data;
   try { data = ctx.getImageData(0, 0, w, h); } catch { return img.src; }
   const d = data.data;
+  const n = w * h;
+  // Passe 1 : luminance + histogramme
+  const lumArr = new Float32Array(n);
+  const hist = new Uint32Array(256);
+  for (let i = 0, j = 0; i < d.length; i += 4, j++) {
+    const l = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    lumArr[j] = l;
+    hist[l < 0 ? 0 : l > 255 ? 255 : Math.round(l)]++;
+  }
+  // min/max robustes (on ignore 2 % d'extrêmes) → normalisation
+  const clip = n * 0.02;
+  let lo = 0, hi = 255, acc = 0;
+  for (let v = 0; v < 256; v++) { acc += hist[v]; if (acc >= clip) { lo = v; break; } }
+  acc = 0;
+  for (let v = 255; v >= 0; v--) { acc += hist[v]; if (acc >= clip) { hi = v; break; } }
+  const range = hi > lo ? hi - lo : 255;
+  // Passe 2 : normalise, mappe en frost blanc dense, adoucit les bords
   const cxC = w / 2, cyC = h / 2, rx = w / 2, ry = h / 2;
-  for (let i = 0; i < d.length; i += 4) {
-    const px = (i / 4) % w, py = Math.floor((i / 4) / w);
-    let lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-    lum = Math.max(0, Math.min(255, (lum - 128) * 1.35 + 128)); // contraste
-    let a = 255 - lum;
-    // blanc frosté DENSE et net (bien visible sur le bois) ; fond clair retiré
-    a = a < 30 ? 0 : Math.min(255, (a - 30) * 2.6);
-    // bords adoucis (ellipse) : pas de carré
+  for (let i = 0, j = 0; i < d.length; i += 4, j++) {
+    const px = j % w, py = (j / w) | 0;
+    let nl = ((lumArr[j] - lo) / range) * 255;
+    nl = nl < 0 ? 0 : nl > 255 ? 255 : nl;
+    let a = 255 - nl;                                   // sombre -> blanc
+    a = a < 24 ? 0 : Math.min(255, (a - 24) * 1.7);     // fond clair retiré + densité
     const nx = (px - cxC) / rx, ny = (py - cyC) / ry;
     const r = Math.sqrt(nx * nx + ny * ny);
     const f = r < 0.86 ? 1 : Math.max(0, 1 - (r - 0.86) / 0.32);
