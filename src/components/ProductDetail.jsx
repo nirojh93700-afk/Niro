@@ -23,6 +23,8 @@ import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
 import ModeleDesigner from "./ModeleDesigner";
 import ModeleEngraveLayer from "./ModeleEngraveLayer";
+import MotifEngraveLayer from "./MotifEngraveLayer";
+import { Motif } from "./Motif";
 import { MODELES, defaultModele, layoutLabel } from "@/lib/modeles";
 import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
@@ -43,6 +45,7 @@ export default function ProductDetail({ product }) {
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
   const [activeSide, setActiveSide] = useState("face"); // côté en cours de réglage (mode "les deux")
+  const [motifLayoutFond, setMotifLayoutFond] = useState(null); // placement du dessin au fond
   const [modeleLayout, setModeleLayout] = useState(null); // taille/position d'un modèle de gravure
   const [show3d, setShow3d] = useState(false); // aperçu 3D du verre (rotatif)
 
@@ -168,7 +171,8 @@ export default function ProductDetail({ product }) {
     (f) =>
       (!f.variantContains || variant.title.includes(f.variantContains)) &&
       (!f.requiresField || (fieldValues[f.requiresField] || "").toString().trim()) &&
-      (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement)
+      (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement) &&
+      (!f.showIfField || fieldValues[f.showIfField] === f.showIfValue)
   );
 
   function setField(key, value) {
@@ -231,6 +235,9 @@ export default function ProductDetail({ product }) {
       }
       if (dualMode && (fieldValues["texteFond"] || "").trim() && textLayoutFond?.label) {
         parts.push(`Gravure FOND — ${textLayoutFond.label}`);
+      }
+      if (dualMode && fieldValues["fondType"] === "dessin" && fieldValues["motifFond"] && fieldValues["motifFond"] !== "aucun" && motifLayoutFond?.label) {
+        parts.push(`Gravure FOND — dessin « ${fieldValues["motifFond"]} » : ${motifLayoutFond.label}`);
       }
       return parts.join(" · ");
     }
@@ -410,7 +417,7 @@ export default function ProductDetail({ product }) {
       modeleTemplate: modeleTemplate || null,
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
-      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null },
+      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
       personalization: buildPersonalization(),
@@ -474,8 +481,8 @@ export default function ProductDetail({ product }) {
                 <button type="button" className={side === "fond" ? "on" : ""} onClick={() => setActiveSide("fond")}>Fond</button>
               </div>
             )}
-            {/* Calque MODÈLE de gravure (page dédiée) */}
-            {hasImages && showEditor && modeleField && (
+            {/* Calque MODÈLE de gravure — sur la face (pas sur le fond en mode "les deux") */}
+            {hasImages && showEditor && modeleField && !(dualMode && side === "fond") && (
               <ModeleEngraveLayer
                 key={isFond ? "modele-fond" : "modele-face"}
                 template={modeleTemplate}
@@ -484,6 +491,10 @@ export default function ProductDetail({ product }) {
                 cfg={editCfg}
                 onChange={setModeleLayout}
               />
+            )}
+            {/* Fête des pères, côté FOND (mode "les deux") : un DESSIN au choix */}
+            {hasImages && showEditor && modeleField && dualMode && side === "fond" && fieldValues["fondType"] === "dessin" && fieldValues["motifFond"] && fieldValues["motifFond"] !== "aucun" && (
+              <MotifEngraveLayer key="motif-fond" motifId={fieldValues["motifFond"]} color="#3a2f1d" cfg={editCfg} onChange={setMotifLayoutFond} />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
             {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
@@ -496,7 +507,7 @@ export default function ProductDetail({ product }) {
                 QUE si la zone de gravure a été réglée dans l'admin (product.preview),
                 pour éviter un texte mal placé sur les photos non réglées. */}
             {/* Texte : éditeur interactif (déplaçable + taille) si activé */}
-            {hasImages && showEditor && editLines.length > 0 && !modeleField && (
+            {hasImages && showEditor && editLines.length > 0 && (!modeleField || (dualMode && side === "fond" && fieldValues["fondType"] === "texte")) && (
               <TextEngraveLayer
                 key={`text-${side}`}
                 lines={editLines}
@@ -731,6 +742,20 @@ export default function ProductDetail({ product }) {
                       {f.label && <label>{f.label}</label>}
                       <ModeleDesigner template={f.template} value={fieldValues[f.key]} onChange={(val) => setField(f.key, val)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
+                    </div>
+                  );
+                }
+                if (f.type === "motifniv") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <div className="modele-motifs">
+                        {MOTIF_LIST.map((m) => (
+                          <button type="button" key={m.id} className={`modele-motif-cell${(fieldValues[f.key] || "") === m.id ? " on" : ""}`} onClick={() => setField(f.key, m.id)} aria-label={m.label}>
+                            {m.id === "aucun" ? <span className="modele-motif-none">Aucun</span> : <Motif id={m.id} color="#3a2f1d" size={38} />}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   );
                 }

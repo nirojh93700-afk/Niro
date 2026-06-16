@@ -1306,6 +1306,13 @@ export const products = [
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
         { value: "deux", label: "Les deux : face + fond (+7 €)" },
       ] },
+      { key: "note-fond-fp", type: "note", showIfEmplacement: "deux", text: "Vous gravez les DEUX côtés. Au-dessus : la face (le modèle). Ci-dessous : choisissez ce qui sera gravé AU FOND du verre — un texte OU un dessin." },
+      { key: "fondType", type: "select", label: "Au fond du verre : que graver ?", optional: true, showIfEmplacement: "deux", options: [
+        { value: "texte", label: "Un texte" },
+        { value: "dessin", label: "Un dessin (motif)" },
+      ] },
+      { key: "texteFond", label: "Texte du fond", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux", showIfField: "fondType", showIfValue: "texte" },
+      { key: "motifFond", type: "motifniv", label: "Dessin du fond", optional: true, showIfEmplacement: "deux", showIfField: "fondType", showIfValue: "dessin" },
     ],
     engravingPricing: { flatExtras: [{ key: "emplacement", value: "deux", amount: 7 }], modeleSubExtra: { key: "modele", amount: 3 } },
     title: "Verre à whisky gravé Fête des pères — cadeau papa, papy personnalisé",
