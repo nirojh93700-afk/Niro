@@ -21,6 +21,10 @@ export const MODELES = {
     imageDesigns: [
       { id: "papa-poule", name: "Papa poule", dark: "/produits/papa-poule-dark.png", light: "/produits/papa-poule-light.png" },
       { id: "meilleur-papa", name: "Meilleur Papa", dark: "/produits/meilleur-papa-dark.png", light: "/produits/meilleur-papa-light.png" },
+      { id: "jetaime-papa", name: "Je t'aime papa", dark: "/produits/fp-jetaime-dark.png", light: "/produits/fp-jetaime-light.png" },
+      { id: "meilleur-monde", name: "Meilleur papa du monde", dark: "/produits/fp-meilleurmonde-dark.png", light: "/produits/fp-meilleurmonde-light.png" },
+      { id: "poing-coeurs", name: "Poing & cœurs", dark: "/produits/fp-poing-dark.png", light: "/produits/fp-poing-light.png" },
+      { id: "motocross", name: "Motocross", dark: "/produits/fp-motocross-dark.png", light: "/produits/fp-motocross-light.png" },
     ],
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.85 },
