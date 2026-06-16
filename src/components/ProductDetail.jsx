@@ -120,7 +120,7 @@ export default function ProductDetail({ product }) {
     const emp = fieldValues["emplacement"];
     let target = -1;
     if (emp === "fond" && product.fondImage) target = images.indexOf(product.fondImage);
-    else if (emp === "face" && product.engraveImage) target = images.indexOf(product.engraveImage);
+    else if ((emp === "face" || emp === "deux") && product.engraveImage) target = images.indexOf(product.engraveImage);
     if (target >= 0) setActiveImg(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValues["emplacement"]]);
@@ -250,7 +250,7 @@ export default function ProductDetail({ product }) {
   const mainSrc = images[activeImg];
   const onFaceImg = images[activeImg] === product.engraveImage;
   const onFondImg = images[activeImg] === product.fondImage;
-  const showEditor = Boolean(product.engrave) && ((emplacement === "face" && onFaceImg) || (isFond && onFondImg));
+  const showEditor = Boolean(product.engrave) && (((emplacement === "face" || emplacement === "deux") && onFaceImg) || (isFond && onFondImg));
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
@@ -506,7 +506,7 @@ export default function ProductDetail({ product }) {
           )}
 
           {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
-          {product.engrave && emplacement === "face" && !modeleField && (
+          {product.engrave && (emplacement === "face" || emplacement === "deux") && !modeleField && (
             <div style={{ marginTop: 12 }}>
               <button
                 type="button"
