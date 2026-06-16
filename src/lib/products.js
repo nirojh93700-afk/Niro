@@ -1232,6 +1232,9 @@ export const products = [
         { value: "•", label: "Points  • texte •" },
       ] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note-deux", type: "note", showIfEmplacement: "deux", text: "Vous avez choisi de graver les DEUX côtés. Ci-dessus, réglez la gravure de la FACE. Ci-dessous, ajoutez la photo/le texte pour le FOND du verre (gravé centré au fond)." },
+      { key: "photoFond", type: "photo", label: "Photo pour le FOND du verre", optional: true, showIfEmplacement: "deux", text: "2e gravure : cette photo sera gravée au fond du verre (centrée)." },
+      { key: "texteFond", label: "Texte pour le fond (facultatif)", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux" },
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
     engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · gravure face+fond +7 €

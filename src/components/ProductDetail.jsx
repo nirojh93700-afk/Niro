@@ -163,7 +163,8 @@ export default function ProductDetail({ product }) {
   const visibleFields = (product.personalizationFields || []).filter(
     (f) =>
       (!f.variantContains || variant.title.includes(f.variantContains)) &&
-      (!f.requiresField || (fieldValues[f.requiresField] || "").toString().trim())
+      (!f.requiresField || (fieldValues[f.requiresField] || "").toString().trim()) &&
+      (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement)
   );
 
   function setField(key, value) {
