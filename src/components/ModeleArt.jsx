@@ -57,23 +57,15 @@ export default function ModeleArt({ template, value, color = "#fff", base = 28, 
     );
   }
 
-  // --- Style "étiquette" (image fixe type Best Father + nom central modifiable) ---
+  // --- Style "étiquette / image fidèle" (ex. Papa Poule) : image fixe + ajout dessous ---
   if (layout === "label") {
     const isLight = (color || "").toLowerCase() !== "#3a2f1d";
     const src = isLight ? tpl.labelImageLight : tpl.labelImageDark;
-    const mid = get("mid");
     const W = base * 6.2;
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ position: "relative", width: W }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={src} alt="" draggable={false} style={{ width: "100%", display: "block" }} />
-          {mid.txt && (
-            <span className={mid.font} style={{ position: "absolute", left: "50%", top: "36%", transform: "translate(-50%,-50%)", color, fontSize: W * 0.11, fontWeight: 700, whiteSpace: "nowrap", lineHeight: 1, opacity: mid.raw ? 1 : 0.5 }}>
-              {mid.txt}
-            </span>
-          )}
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt="" draggable={false} style={{ width: W, maxWidth: "100%", display: "block" }} />
         {subEl}
       </div>
     );

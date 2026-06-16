@@ -32,10 +32,10 @@ export default function ModeleDesigner({ template, value, onChange }) {
   function setAddText(on) { onChange({ ...v, addText: on }); }
 
   const layout = v.layout || tpl.layout || tpl.style || "stack";
-  const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", label: "Étiquette", stack: "Simple" };
+  const LAYOUT_LABELS = { classic: "Classique", badge: "Médaillon rond", label: "Papa poule", stack: "Simple" };
   const showMotif = layout === "classic" || layout === "stack";
-  // En "Étiquette", seul le nom central (mid) est modifiable (+ ajout en dessous).
-  const visibleLines = layout === "label" ? tpl.lines.filter((l) => l.key === "mid" || l.below) : tpl.lines;
+  // Modèle "Papa poule" : design fidèle, on ne propose que l'ajout prénom/date.
+  const visibleLines = layout === "label" ? tpl.lines.filter((l) => l.below) : tpl.lines;
 
   return (
     <div className="modele-designer">
