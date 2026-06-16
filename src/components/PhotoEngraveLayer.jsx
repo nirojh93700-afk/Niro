@@ -16,12 +16,18 @@ function whiteFrost(img) {
   let data;
   try { data = ctx.getImageData(0, 0, w, h); } catch { return img.src; }
   const d = data.data;
+  const cxC = w / 2, cyC = h / 2, rx = w / 2, ry = h / 2;
   for (let i = 0; i < d.length; i += 4) {
+    const px = (i / 4) % w, py = Math.floor((i / 4) / w);
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
     let a = 255 - lum;
-    // gravure blanche plus dense (moins transparente) sur le fond sombre
-    a = a < 18 ? 0 : Math.min(255, (a - 18) * 2.8);
-    d[i] = 250; d[i + 1] = 250; d[i + 2] = 246; d[i + 3] = a;
+    // seuil haut = fond clair/gris RETIRÉ (plus de carré), puis montée nette
+    a = a < 50 ? 0 : Math.min(255, (a - 50) * 2.0);
+    // bords adoucis (ellipse) : supprime le carré
+    const nx = (px - cxC) / rx, ny = (py - cyC) / ry;
+    const r = Math.sqrt(nx * nx + ny * ny);
+    const f = r < 0.82 ? 1 : Math.max(0, 1 - (r - 0.82) / 0.36);
+    d[i] = 250; d[i + 1] = 250; d[i + 2] = 246; d[i + 3] = Math.round(a * f);
   }
   ctx.putImageData(data, 0, 0);
   return c.toDataURL();
@@ -46,10 +52,18 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
 
-  // Même rendu que la face (gravure "surface") aussi pour le fond :
-  // on affiche la photo telle quelle, le style de gravure vient du CSS (.ee-logo).
+  // Face (verre clair) : photo telle quelle, gravure foncée via le CSS (.ee-logo).
+  // Fond (intérieur sombre) : photo transformée en gravure BLANCHE (fond retiré, bords adoucis),
+  // pour qu'elle ressorte comme le texte.
   useEffect(() => {
-    setDisplaySrc(photoSrc);
+    let cancelled = false;
+    if (!light) { setDisplaySrc(photoSrc); return; }
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => { if (!cancelled) { try { setDisplaySrc(whiteFrost(img)); } catch { setDisplaySrc(photoSrc); } } };
+    img.onerror = () => { if (!cancelled) setDisplaySrc(photoSrc); };
+    img.src = photoSrc;
+    return () => { cancelled = true; };
   }, [photoSrc, light]);
 
   const wMm = Math.round((size / maxW) * widthMm * 10) / 10;
@@ -113,7 +127,7 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
       <img
         src={displaySrc}
         alt="Logo à graver — glissez pour déplacer"
-        className="ee-logo"
+        className={`ee-logo${light ? " ee-logo-white" : ""}`}
         draggable={false}
         onLoad={(e) => setAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)}
         onPointerDown={onDown}
