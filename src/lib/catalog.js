@@ -23,7 +23,7 @@ function applyOverride(product, ov, images, promos) {
       if (ov[f] !== undefined && ov[f] !== "") p[f] = ov[f];
     }
     if (ov.badge === "none") p.badge = ""; // "Aucun" choisi dans l'admin → retire le badge du catalogue
-    if (ov.hidden) p.hidden = true;
+    if (ov.hidden && !product.lockHidden) p.hidden = true; // lockHidden : la publication du code prime
     if (ov.preview) p.preview = ov.preview; // zone de gravure réglée dans l'admin
     if (ov.prices) {
       p.variants = p.variants.map((v) =>
