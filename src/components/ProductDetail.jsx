@@ -93,10 +93,20 @@ export default function ProductDetail({ product }) {
       .then((r) => r.json())
       .then((d) => {
         const ov = d.images?.[product.slug];
-        if (ov && ov.length) setImages(ov);
+        if (ov && ov.length && !product.lockImages) setImages(ov);
         setPromos(d.promos || {});
       })
       .catch(() => {});
+  }, [product.slug]);
+
+  // Valeurs par défaut des champs (ex. texte + date pré-remplis et actifs).
+  useEffect(() => {
+    const defaults = {};
+    (product.personalizationFields || []).forEach((f) => {
+      if (f.default !== undefined) defaults[f.key] = f.default;
+    });
+    if (Object.keys(defaults).length) setFieldValues((prev) => ({ ...defaults, ...prev }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.slug]);
 
   const variant = product.variants[variantIndex];
