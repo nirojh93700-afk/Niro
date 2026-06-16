@@ -1183,7 +1183,7 @@ export const products = [
     weight: 600, // verre + emballage protégé (fragile)
     pickup: true, // remise en main propre possible (verre fragile)
     letter: false, // colis : lourd et fragile
-    hidden: true, // EN PRÉPARATION — invisible sur la boutique tant que non validé
+    hidden: false, // PUBLIÉ (verre à whisky gravé — photo / texte / logo)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
     previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
     // Éditeur interactif logo (glisser + redimensionner + mesure cm).
