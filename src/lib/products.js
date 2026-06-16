@@ -11,10 +11,10 @@ export { MOTIF_OPTIONS };
 
 export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux personnalisés", short: "Bijoux" },
+  { slug: "verres", label: "Verres gravés personnalisés", short: "Verres gravés" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
-  { slug: "verres", label: "Verres gravés personnalisés", short: "Verres gravés" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
   { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
