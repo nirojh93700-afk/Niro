@@ -22,7 +22,7 @@ export const DECO_TIERS = [
 // --- Verres (fragiles) : envoi CROISSANT selon le nombre de verres ----------
 // La Poste facture plus cher quand le colis est plus lourd → le prix monte.
 export const GLASS_TIERS = [
-  { maxQty: 2, price: 9.9 },          // 1 à 2 verres
+  { maxQty: 2, price: 11.9 },         // 1 à 2 verres
   { maxQty: 4, price: 14.9 },         // 3 à 4 verres
   { maxQty: Infinity, price: 19.9 },  // 5 verres et plus
 ];
