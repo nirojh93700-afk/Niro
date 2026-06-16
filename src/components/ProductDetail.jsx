@@ -483,15 +483,19 @@ export default function ProductDetail({ product }) {
           {images.length > 1 && (
             <div className="gallery-thumbs">
               {images.map((img, i) => (
-                <button
-                  key={img}
-                  className={i === activeImg ? "active" : ""}
-                  onClick={() => setActiveImg(i)}
-                  aria-label={`Voir le visuel ${i + 1}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img} alt="" />
-                </button>
+                // On masque la vignette du "fond clair" (image de support, peu jolie) ;
+                // elle reste utilisée pour l'aperçu de gravure au fond.
+                img === product.fondImage ? null : (
+                  <button
+                    key={img}
+                    className={i === activeImg ? "active" : ""}
+                    onClick={() => setActiveImg(i)}
+                    aria-label={`Voir le visuel ${i + 1}`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img} alt="" />
+                  </button>
+                )
               ))}
             </div>
           )}
