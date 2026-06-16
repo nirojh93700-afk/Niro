@@ -243,6 +243,40 @@ export async function POST(req) {
     const sectionTitle = (t) =>
       `<h3 style="font-family:Georgia,serif;font-weight:normal;font-size:15px;color:${BRAND.gold};border-bottom:1px solid #ece3d2;padding-bottom:6px;margin:22px 0 10px;">${t}</h3>`;
 
+    // Fiche atelier : réglages détaillés enregistrés à la création du paiement.
+    // Récupérés ici pour les JOINDRE à l'e-mail (photo du client + récap des réglages).
+    let orderSpec = null;
+    try { orderSpec = await getOrderSpec(session.id); } catch { /* ignore */ }
+
+    // Met une URL d'image en absolu (pour qu'elle s'affiche dans l'e-mail).
+    const absUrl = (u) => {
+      if (!u || typeof u !== "string") return "";
+      if (u.startsWith("http") || u.startsWith("data:")) return u;
+      if (u.startsWith("/")) return BRAND.siteUrl + u;
+      return "";
+    };
+
+    // Section « Personnalisation » : pour chaque article personnalisé, la photo
+    // envoyée par le client (si présente) + le récap exact de ses réglages.
+    const specItems = Array.isArray(orderSpec) ? orderSpec.filter(Boolean) : (orderSpec ? [orderSpec] : []);
+    const persoBlocks = specItems.map((it) => {
+      const photo = absUrl(it.photoSrc);
+      const showPhoto = photo.startsWith("http");
+      const empl = it.emplacement === "fond" ? "Au fond du verre"
+        : it.deuxEmplacement ? "Face avant + fond du verre" : "Face avant";
+      const recap = (it.personalization || "").trim();
+      return `
+        <div style="border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:0 0 12px;background:${BRAND.cream};">
+          <p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${it.variantTitle ? ` — ${escapeHtml(it.variantTitle)}` : ""}</p>
+          ${showPhoto ? `<img src="${photo}" alt="Photo / logo envoyé par le client" style="display:block;max-width:240px;width:100%;border-radius:8px;border:1px solid #ddd;margin:0 0 10px;">` : ""}
+          <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(empl)}</p>
+          ${recap ? `<p style="margin:0;white-space:pre-line;">${escapeHtml(recap)}</p>` : ""}
+        </div>`;
+    }).join("");
+    const persoSection = persoBlocks
+      ? `${sectionTitle("Personnalisation — réglages du client")}${persoBlocks}<p style="color:#998;font-size:12px;margin:0 0 6px;">Visuel reconstitué complet : bouton « Fiche atelier (à graver) » dans la gestion.</p>`
+      : "";
+
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
         ${immediateStart ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 14px;"><strong>⚡ Fabrication immédiate demandée</strong> — la cliente a renoncé au délai de 24 h. Tu peux lancer la fabrication tout de suite (commande verrouillée).</p>` : ""}
@@ -272,7 +306,9 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
           <tbody>${lines}</tbody>
         </table>
 
-        ${customFields ? `${sectionTitle("Personnalisation")}${customFields}` : ""}
+        ${persoSection}
+
+        ${customFields ? `${sectionTitle("Personnalisation (champs Stripe)")}${customFields}` : ""}
 
         <p style="text-align:right;font-size:18px;margin-top:18px;color:${BRAND.gold};">
           <strong>Total payé : ${euro(session.amount_total, currency)}</strong>
@@ -335,10 +371,6 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         replyTo: ownerEmail,
       });
     }
-
-    // Fiche atelier : réglages détaillés enregistrés à la création du paiement.
-    let orderSpec = null;
-    try { orderSpec = await getOrderSpec(session.id); } catch { /* ignore */ }
 
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     await recordSiteOrder({
