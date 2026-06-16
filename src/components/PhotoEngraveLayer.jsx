@@ -68,7 +68,7 @@ export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = fal
   const drag = useRef(null);
   const [aspect, setAspect] = useState(1); // hauteur / largeur de l'image
   const [displaySrc, setDisplaySrc] = useState(photoSrc); // image affichée (frostée si fond)
-  const [size, setSize] = useState((minW + maxW) / 2); // largeur (fraction du cadre)
+  const [size, setSize] = useState(minW + (maxW - minW) * 0.75); // grande par défaut (bien visible)
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
 
