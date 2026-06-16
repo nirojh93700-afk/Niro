@@ -24,7 +24,7 @@ export const MODELES = {
     ],
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.85 },
-      { key: "mid", label: "Mot central", placeholder: "PAPY", font: "fnt-cinzel", em: 1, bold: true, spacing: "0.08em" },
+      { key: "mid", label: "Mot central", placeholder: "PAPA", font: "fnt-cinzel", em: 1, bold: true, spacing: "0.08em" },
       { key: "bot", label: "Texte du bas", placeholder: "DE L'ANNÉE", font: "fnt-cinzel", em: 0.42, spacing: "0.14em" },
       { key: "sub", label: "Ajouter un prénom ou une date", placeholder: "Ex : Papa • 2026", font: "fnt-pacifico", em: 0.5, optional: true, below: true },
     ],
