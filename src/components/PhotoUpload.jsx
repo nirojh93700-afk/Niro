@@ -20,6 +20,35 @@ function readAsDataUrl(file) {
   });
 }
 
+// Compresse / redimensionne la photo dans le navigateur avant l'envoi
+// (la grande majorité des photos dépassent la limite de 1 Mo du stockage).
+// Max 1280 px sur le grand côté, JPEG qualité 0.82 → ~150-500 Ko, qualité OK pour la gravure.
+function compressImage(file, maxDim = 1280, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width: w, height: h } = img;
+        const scale = Math.min(1, maxDim / Math.max(w, h));
+        w = Math.max(1, Math.round(w * scale));
+        h = Math.max(1, Math.round(h * scale));
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h); // fond blanc (PNG transparents)
+        ctx.drawImage(img, 0, 0, w, h);
+        try { resolve(c.toDataURL("image/jpeg", quality)); }
+        catch { resolve(r.result); }
+      };
+      img.onerror = reject;
+      img.src = r.result;
+    };
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
 export default function PhotoUpload({ value, onChange, onUpload, multiple = false, productSlug }) {
   const [status, setStatus] = useState("idle"); // idle | uploading | done
   const [preview, setPreview] = useState("");
@@ -37,7 +66,9 @@ export default function PhotoUpload({ value, onChange, onUpload, multiple = fals
       if (!res.ok || !data.secure_url) throw new Error("L'envoi a échoué, réessayez.");
       return data.secure_url;
     }
-    const dataUrl = await readAsDataUrl(file);
+    // Compression avant l'envoi (sinon dépassement de la limite 1 Mo du stockage).
+    let dataUrl;
+    try { dataUrl = await compressImage(file); } catch { dataUrl = await readAsDataUrl(file); }
     const res = await fetch("/api/upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
