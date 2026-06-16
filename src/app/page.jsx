@@ -29,13 +29,13 @@ const ATELIER_DEFAULTS = {
 };
 
 const featured = [
+  "verre-a-whisky-fete-des-peres",
   "collier-medaillon-coeur-ouvrable",
   "numero-table-arches-bohemes",
   "bracelet-homme-cuir-acier",
   "ronds-de-serviette-bois",
   "plaque-de-porte-enfant",
-  "menu-de-mariage-bois-grave",
-].map(getProductBySlug);
+].map(getProductBySlug).filter(Boolean);
 
 function pick(v, def) {
   return v && String(v).trim() ? v : def;
