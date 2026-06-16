@@ -1246,7 +1246,7 @@ export const products = [
       "/produits/verre_a_whisky_exemple_face.jpg",
       "/produits/verre_a_whisky_exemple_fond.jpg",
       "/produits/verre_a_whisky_grave_vide.jpg",
-      "/produits/verre_a_whisky_fond.jpg",
+      "/produits/verre_a_whisky_fond_clair.jpg",
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
@@ -1317,7 +1317,7 @@ export const products = [
     images: [
       "/produits/verre_a_whisky_grave_vide.jpg",
       "/produits/verre_a_whisky_grave_ambiance.jpg",
-      "/produits/verre_a_whisky_fond.jpg",
+      "/produits/verre_a_whisky_fond_clair.jpg",
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
