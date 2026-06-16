@@ -239,10 +239,10 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8084724218_jxik.jpg?v=1780366864",
     ],
     variants: [
-      { id: "sil-argent-sans", title: "Plaque argentée / Sans texte", price: 26.90 },
-      { id: "sil-argent-texte", title: "Plaque argentée / Avec texte", price: 32.90 },
-      { id: "sil-noire-sans", title: "Plaque noire / Sans texte", price: 26.90 },
-      { id: "sil-noire-texte", title: "Plaque noire / Avec texte", price: 32.90 },
+      { id: "sil-argent-sans", title: "Plaque argentée / Sans texte", price: 26.90, stockId: "sil-argent" },
+      { id: "sil-argent-texte", title: "Plaque argentée / Avec texte", price: 32.90, stockId: "sil-argent" },
+      { id: "sil-noire-sans", title: "Plaque noire / Sans texte", price: 26.90, stockId: "sil-noire" },
+      { id: "sil-noire-texte", title: "Plaque noire / Avec texte", price: 32.90, stockId: "sil-noire" },
     ],
     descriptionHtml: `<p>Offrez un bijou unique grâce à notre <strong>bracelet homme personnalisé par gravure laser</strong>. Chaque pièce est gravée à la demande : prénom, date, message ou initiales.</p>
 <p>Fabriqué en acier inoxydable de qualité associé à un gel de silicone souple, il allie solidité et confort pour un port quotidien agréable.</p>
@@ -280,12 +280,12 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8008797014_pcih.jpg?v=1780366895",
     ],
     variants: [
-      { id: "cuir-argent-sans", title: "Plaque argentée / Sans texte", price: 24.90 },
-      { id: "cuir-argent-texte", title: "Plaque argentée / Avec texte", price: 30.90 },
-      { id: "cuir-dore-sans", title: "Plaque dorée / Sans texte", price: 24.90 },
-      { id: "cuir-dore-texte", title: "Plaque dorée / Avec texte", price: 30.90 },
-      { id: "cuir-noire-sans", title: "Plaque noire / Sans texte", price: 24.90 },
-      { id: "cuir-noire-texte", title: "Plaque noire / Avec texte", price: 30.90 },
+      { id: "cuir-argent-sans", title: "Plaque argentée / Sans texte", price: 24.90, stockId: "cuir-argent" },
+      { id: "cuir-argent-texte", title: "Plaque argentée / Avec texte", price: 30.90, stockId: "cuir-argent" },
+      { id: "cuir-dore-sans", title: "Plaque dorée / Sans texte", price: 24.90, stockId: "cuir-dore" },
+      { id: "cuir-dore-texte", title: "Plaque dorée / Avec texte", price: 30.90, stockId: "cuir-dore" },
+      { id: "cuir-noire-sans", title: "Plaque noire / Sans texte", price: 24.90, stockId: "cuir-noire" },
+      { id: "cuir-noire-texte", title: "Plaque noire / Avec texte", price: 30.90, stockId: "cuir-noire" },
     ],
     descriptionHtml: `<p><strong>Bracelet homme personnalisé en cuir véritable & acier inoxydable.</strong></p>
 <p>Offrez bien plus qu'un bijou : un message gravé qui traverse le temps. Ce bracelet allie l'authenticité du cuir véritable noir à la modernité de l'acier inoxydable 316L, pour un style sobre et masculin.</p>
