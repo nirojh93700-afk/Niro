@@ -259,22 +259,29 @@ export async function POST(req) {
     // Section « Personnalisation » : pour chaque article personnalisé, la photo
     // envoyée par le client (si présente) + le récap exact de ses réglages.
     const specItems = Array.isArray(orderSpec) ? orderSpec.filter(Boolean) : (orderSpec ? [orderSpec] : []);
+    const imgTag = (u, alt) => {
+      const a = absUrl(u);
+      return a.startsWith("http") ? `<img src="${a}" alt="${alt}" style="display:inline-block;max-width:230px;width:100%;border-radius:8px;border:1px solid #ddd;margin:0 8px 10px 0;vertical-align:top;">` : "";
+    };
     const persoBlocks = specItems.map((it) => {
-      const photo = absUrl(it.photoSrc);
-      const showPhoto = photo.startsWith("http");
       const empl = it.emplacement === "fond" ? "Au fond du verre"
         : it.deuxEmplacement ? "Face avant + fond du verre" : "Face avant";
       const recap = (it.personalization || "").trim();
+      // Visuel exact préparé par le client (capture) ; sinon la photo brute envoyée.
+      const visuals = [it.previewImage, it.previewImageFond].filter(Boolean);
+      const imagesHtml = visuals.length
+        ? visuals.map((u, i) => imgTag(u, i === 0 ? "Gravure face — placée par le client" : "Gravure fond — placée par le client")).join("")
+        : imgTag(it.photoSrc, "Photo / logo envoyé par le client");
       return `
         <div style="border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:0 0 12px;background:${BRAND.cream};">
           <p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${it.variantTitle ? ` — ${escapeHtml(it.variantTitle)}` : ""}</p>
-          ${showPhoto ? `<img src="${photo}" alt="Photo / logo envoyé par le client" style="display:block;max-width:240px;width:100%;border-radius:8px;border:1px solid #ddd;margin:0 0 10px;">` : ""}
+          ${imagesHtml}
           <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(empl)}</p>
           ${recap ? `<p style="margin:0;white-space:pre-line;">${escapeHtml(recap)}</p>` : ""}
         </div>`;
     }).join("");
     const persoSection = persoBlocks
-      ? `${sectionTitle("Personnalisation — réglages du client")}${persoBlocks}<p style="color:#998;font-size:12px;margin:0 0 6px;">Visuel reconstitué complet : bouton « Fiche atelier (à graver) » dans la gestion.</p>`
+      ? `${sectionTitle("Personnalisation — réglages du client")}${persoBlocks}<p style="color:#998;font-size:12px;margin:0 0 6px;">Page complète + fichiers à graver (SVG/PDF) : <a href="${BRAND.siteUrl}/gestion/atelier" style="color:${BRAND.gold};">gestion/atelier</a>.</p>`
       : "";
 
     const ownerBody = `

@@ -39,6 +39,7 @@ export default function ProductDetail({ product }) {
   const [fieldValues, setFieldValues] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [preparing, setPreparing] = useState(false); // capture du visuel en cours
   const [error, setError] = useState("");
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé (face)
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
@@ -384,8 +385,43 @@ export default function ProductDetail({ product }) {
   const HEART_PAGE_INDEX = { cover: 0, page1: 1, page2: 2, page3: 3, backcover: 4 };
   const heartPhotoIndex = HEART_PAGE_INDEX[fieldValues["photoPage"]] ?? 1;
 
-  function handleAdd() {
-    if (soldOut) return;
+  const waitMs = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  // Capture l'aperçu tel que le client l'a préparé.
+  //  - hideGlass = false : visuel complet (verre + gravure) → référence.
+  //  - hideGlass = true  : gravure SEULE sur fond transparent → fichier à graver.
+  async function snap(node, hideGlass) {
+    const mod = await import("html-to-image");
+    const filter = (n) => {
+      const c = n.classList;
+      if (!c) return true;
+      if (c.contains("ee-toolbar") || c.contains("side-toggle") || c.contains("gallery-arrow") || c.contains("gallery-thumbs")) return false;
+      if (hideGlass && (c.contains("gallery-bg") || c.contains("placeholder"))) return false;
+      return true;
+    };
+    if (hideGlass) return mod.toPng(node, { cacheBust: true, pixelRatio: 1.8, filter });
+    return mod.toJpeg(node, { cacheBust: true, pixelRatio: 1.6, quality: 0.85, backgroundColor: "#ffffff", filter });
+  }
+  async function uploadDataUrl(dataUrl) {
+    if (!dataUrl) return null;
+    try {
+      const res = await fetch("/api/upload", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dataUrl, productSlug: product.slug }) });
+      const data = await res.json();
+      if (res.ok && data.ref) return "/api/img/" + data.ref;
+    } catch { /* ignore */ }
+    return null;
+  }
+  async function captureSide() {
+    const node = photoRef.current;
+    if (!node) return { preview: null, artwork: null };
+    let preview = null, artwork = null;
+    try { preview = await uploadDataUrl(await snap(node, false)); } catch { /* ignore */ }
+    try { artwork = await uploadDataUrl(await snap(node, true)); } catch { /* ignore */ }
+    return { preview, artwork };
+  }
+
+  async function handleAdd() {
+    if (soldOut || preparing) return;
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
     if (product.personalizationFields) {
       const missing = visibleFields.find(
@@ -406,6 +442,28 @@ export default function ProductDetail({ product }) {
       }
     }
     setError("");
+
+    // Capture du visuel EXACT préparé par le client (verre + gravure placée),
+    // pour la fiche atelier (admin + e-mail) et la génération du fichier à graver.
+    let previewImage = null, previewImageFond = null, artworkImage = null, artworkImageFond = null;
+    if (product.engrave && hasImages) {
+      setPreparing(true);
+      try {
+        if (dualMode) {
+          const orig = activeSide;
+          if (orig !== "face") { setActiveSide("face"); await waitMs(450); } else { await waitMs(150); }
+          ({ preview: previewImage, artwork: artworkImage } = await captureSide());
+          setActiveSide("fond"); await waitMs(450);
+          ({ preview: previewImageFond, artwork: artworkImageFond } = await captureSide());
+          setActiveSide(orig); await waitMs(50);
+        } else {
+          await waitMs(150);
+          ({ preview: previewImage, artwork: artworkImage } = await captureSide());
+        }
+      } catch { /* ignore */ }
+      setPreparing(false);
+    }
+
     // Fiche atelier : tous les réglages choisis (emplacement, taille, position,
     // textes, polices, motif, fond, options, photo…) pour graver à l'identique.
     const itemSpec = {
@@ -417,6 +475,7 @@ export default function ProductDetail({ product }) {
       modeleTemplate: modeleTemplate || null,
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
+      previewImage, previewImageFond, artworkImage, artworkImageFond,
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
@@ -447,6 +506,7 @@ export default function ProductDetail({ product }) {
           <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}`} ref={photoRef}>
             {hasImages ? (
               <Image
+                className="gallery-bg"
                 src={mainSrc}
                 alt={`${product.name} — visuel ${activeImg + 1}`}
                 width={800}
@@ -934,8 +994,8 @@ export default function ProductDetail({ product }) {
                 +
               </button>
             </div>
-            <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut}>
-              {soldOut ? "Épuisé" : added ? "Ajouté au panier" : "Ajouter au panier"}
+            <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing}>
+              {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier" : "Ajouter au panier"}
             </button>
           </div>
           {typeof variantStock === "number" && (
