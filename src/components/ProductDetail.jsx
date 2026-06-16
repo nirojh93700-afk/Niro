@@ -444,7 +444,7 @@ export default function ProductDetail({ product }) {
       <div className="product-layout">
         {/* Galerie */}
         <div>
-          <div className="gallery-main" ref={photoRef}>
+          <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}`} ref={photoRef}>
             {hasImages ? (
               <Image
                 src={mainSrc}

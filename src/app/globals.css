@@ -1141,6 +1141,12 @@ img {
   top: 8px;
   bottom: auto;
 }
+/* Fête des pères (modèle) : la barre de taille passe en bas pour ne pas
+   chevaucher le sélecteur Face / Fond placé en haut de l'aperçu. */
+.gallery-main.toolbar-bottom .engrave-editor .ee-toolbar-top {
+  top: auto;
+  bottom: 8px;
+}
 .engrave-editor .ee-ctrl {
   display: flex;
   align-items: center;
