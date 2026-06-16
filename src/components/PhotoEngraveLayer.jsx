@@ -19,8 +19,9 @@ function whiteFrost(img) {
   for (let i = 0; i < d.length; i += 4) {
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
     let a = 255 - lum;
-    a = a < 25 ? 0 : Math.min(255, (a - 25) * 2.0);
-    d[i] = 248; d[i + 1] = 248; d[i + 2] = 244; d[i + 3] = a;
+    // gravure blanche plus dense (moins transparente) sur le fond sombre
+    a = a < 18 ? 0 : Math.min(255, (a - 18) * 2.8);
+    d[i] = 250; d[i + 1] = 250; d[i + 2] = 246; d[i + 3] = a;
   }
   ctx.putImageData(data, 0, 0);
   return c.toDataURL();

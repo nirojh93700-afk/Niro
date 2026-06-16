@@ -1151,7 +1151,7 @@ img {
 .engrave-editor .ee-logo-white {
   filter: none;
   mix-blend-mode: normal;
-  opacity: 0.96;
+  opacity: 1;
 }
 
 /* Aperçu de la gravure directement sur la photo du produit */
