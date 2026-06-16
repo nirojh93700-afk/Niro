@@ -16,17 +16,11 @@ function whiteFrost(img) {
   let data;
   try { data = ctx.getImageData(0, 0, w, h); } catch { return img.src; }
   const d = data.data;
-  const cxC = w / 2, cyC = h / 2, rx = w / 2, ry = h / 2;
   for (let i = 0; i < d.length; i += 4) {
-    const px = (i / 4) % w, py = Math.floor((i / 4) / w);
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
     let a = 255 - lum;
-    a = a < 22 ? 0 : Math.min(255, (a - 22) * 2.2); // fond clair retiré, sujet plus marqué
-    // bords adoucis (pas de carré)
-    const nx = (px - cxC) / rx, ny = (py - cyC) / ry;
-    const r = Math.sqrt(nx * nx + ny * ny);
-    const f = r < 0.80 ? 1 : Math.max(0, 1 - (r - 0.80) / 0.40);
-    d[i] = 248; d[i + 1] = 248; d[i + 2] = 244; d[i + 3] = Math.round(a * f);
+    a = a < 25 ? 0 : Math.min(255, (a - 25) * 2.0);
+    d[i] = 248; d[i + 1] = 248; d[i + 2] = 244; d[i + 3] = a;
   }
   ctx.putImageData(data, 0, 0);
   return c.toDataURL();
