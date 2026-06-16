@@ -528,6 +528,35 @@ img {
 .gallery-arrow:hover { background: #fff; }
 .gallery-arrow-prev { left: 8px; }
 .gallery-arrow-next { right: 8px; }
+/* Bascule Face / Fond (gravure des deux côtés) */
+.side-toggle {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+  z-index: 6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+.side-toggle button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: 5px 14px;
+  border-radius: 999px;
+}
+.side-toggle button.on {
+  background: var(--ink);
+  color: #fff;
+}
 .gallery-thumbs {
   display: flex;
   gap: 10px;

@@ -38,8 +38,11 @@ export default function ProductDetail({ product }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [error, setError] = useState("");
-  const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé
-  const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé
+  const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé (face)
+  const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
+  const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
+  const [textLayoutFond, setTextLayoutFond] = useState(null);
+  const [activeSide, setActiveSide] = useState("face"); // côté en cours de réglage (mode "les deux")
   const [modeleLayout, setModeleLayout] = useState(null); // taille/position d'un modèle de gravure
   const [show3d, setShow3d] = useState(false); // aperçu 3D du verre (rotatif)
 
@@ -118,12 +121,13 @@ export default function ProductDetail({ product }) {
   useEffect(() => {
     if (!product.engrave) return;
     const emp = fieldValues["emplacement"];
+    const eff = emp === "deux" ? activeSide : emp; // mode "les deux" : on suit le côté en cours
     let target = -1;
-    if (emp === "fond" && product.fondImage) target = images.indexOf(product.fondImage);
-    else if ((emp === "face" || emp === "deux") && product.engraveImage) target = images.indexOf(product.engraveImage);
+    if (eff === "fond" && product.fondImage) target = images.indexOf(product.fondImage);
+    else if (eff === "face" && product.engraveImage) target = images.indexOf(product.engraveImage);
     if (target >= 0) setActiveImg(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fieldValues["emplacement"]]);
+  }, [fieldValues["emplacement"], activeSide]);
 
   function selectVariant(i) {
     setVariantIndex(i);
@@ -216,10 +220,17 @@ export default function ProductDetail({ product }) {
       }
       // Taille + position du logo / texte gravé (éditeur interactif), pour l'atelier.
       if (product.engrave && photoSrc && photoLayout?.label) {
-        parts.push(`Gravure logo : ${photoLayout.label}`);
+        parts.push(`Gravure FACE — logo/photo : ${photoLayout.label}`);
       }
       if (product.engrave && previewLines.length > 0 && textLayout?.label) {
-        parts.push(`Gravure ${textLayout.label}`);
+        parts.push(`Gravure FACE — ${textLayout.label}`);
+      }
+      // Mode "les deux" : placement du fond.
+      if (dualMode && photoSrcFond && photoLayoutFond?.label) {
+        parts.push(`Gravure FOND — photo : ${photoLayoutFond.label}`);
+      }
+      if (dualMode && (fieldValues["texteFond"] || "").trim() && textLayoutFond?.label) {
+        parts.push(`Gravure FOND — ${textLayoutFond.label}`);
       }
       return parts.join(" · ");
     }
@@ -246,12 +257,17 @@ export default function ProductDetail({ product }) {
   // Emplacement de la gravure : face avant, ou fond (vue de dessus, zone ronde).
   // Sur une page "modèle", on part sur la face par défaut pour montrer l'aperçu d'emblée.
   const emplacement = fieldValues["emplacement"] || (modeleField ? "face" : undefined);
-  const isFond = emplacement === "fond";
+  const dualMode = emplacement === "deux"; // graver les DEUX côtés (face + fond)
+  const side = dualMode ? activeSide : (emplacement === "fond" ? "fond" : "face"); // côté affiché
+  const isFond = side === "fond";
   const editCfg = isFond && product.engraveFond ? product.engraveFond : product.engrave;
   const mainSrc = images[activeImg];
   const onFaceImg = images[activeImg] === product.engraveImage;
   const onFondImg = images[activeImg] === product.fondImage;
-  const showEditor = Boolean(product.engrave) && (((emplacement === "face" || emplacement === "deux") && onFaceImg) || (isFond && onFondImg));
+  const showEditor = Boolean(product.engrave) && ((side === "face" && onFaceImg) || (side === "fond" && onFondImg));
+  // Photo dédiée au fond (mode "les deux")
+  const photoUrlFond = fieldValues["photoFond"] || "";
+  const photoSrcFond = photoUrlFond && (photoUrlFond.startsWith("http") || photoUrlFond.startsWith("data:") || photoUrlFond.startsWith("/")) ? photoUrlFond : "";
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
@@ -269,6 +285,19 @@ export default function ProductDetail({ product }) {
   if (decorSym && previewLines.length) {
     previewLines[0] = `${decorSym} ${previewLines[0]} ${decorSym}`;
   }
+  // Mode "les deux" : la photo et le texte affichés dépendent du côté en cours (face / fond).
+  const editPhotoSrc = (dualMode && side === "fond") ? photoSrcFond : photoSrc;
+  let editLines;
+  if (dualMode && side === "fond") {
+    editLines = (fieldValues["texteFond"] || "").split("\n").map((l) => l.trim()).filter(Boolean);
+  } else if (dualMode && side === "face") {
+    editLines = ["texte", "texte2"].flatMap((k) => (fieldValues[k] || "").split("\n")).map((l) => l.trim()).filter(Boolean);
+    if (decorSym && editLines.length) editLines[0] = `${decorSym} ${editLines[0]} ${decorSym}`;
+  } else {
+    editLines = previewLines;
+  }
+  const setPhotoLayoutSide = (dualMode && side === "fond") ? setPhotoLayoutFond : setPhotoLayout;
+  const setTextLayoutSide = (dualMode && side === "fond") ? setTextLayoutFond : setTextLayout;
   const hasTextFields = visibleFields.some(
     (f) => f.type === "text" || f.type === "textarea" || !f.type
   );
@@ -381,7 +410,7 @@ export default function ProductDetail({ product }) {
       modeleTemplate: modeleTemplate || null,
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
-      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null },
+      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
       personalization: buildPersonalization(),
@@ -435,8 +464,15 @@ export default function ProductDetail({ product }) {
             {/* Logo / photo envoyé par le client, superposé sur la photo du
                 produit (hors cristal), dans la zone de gravure réglée. */}
             {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
-            {hasImages && showEditor && photoSrc && !modeleField && (
-              <PhotoEngraveLayer key={isFond ? "photo-fond" : "photo-face"} photoSrc={photoSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
+            {hasImages && showEditor && editPhotoSrc && !modeleField && (
+              <PhotoEngraveLayer key={`photo-${side}`} photoSrc={editPhotoSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayoutSide} />
+            )}
+            {/* Bascule Face / Fond quand on grave les deux côtés */}
+            {hasImages && dualMode && showEditor && (
+              <div className="side-toggle">
+                <button type="button" className={side === "face" ? "on" : ""} onClick={() => setActiveSide("face")}>Face</button>
+                <button type="button" className={side === "fond" ? "on" : ""} onClick={() => setActiveSide("fond")}>Fond</button>
+              </div>
             )}
             {/* Calque MODÈLE de gravure (page dédiée) */}
             {hasImages && showEditor && modeleField && (
@@ -460,14 +496,14 @@ export default function ProductDetail({ product }) {
                 QUE si la zone de gravure a été réglée dans l'admin (product.preview),
                 pour éviter un texte mal placé sur les photos non réglées. */}
             {/* Texte : éditeur interactif (déplaçable + taille) si activé */}
-            {hasImages && showEditor && previewLines.length > 0 && !modeleField && (
+            {hasImages && showEditor && editLines.length > 0 && !modeleField && (
               <TextEngraveLayer
-                key={isFond ? "text-fond" : "text-face"}
-                lines={previewLines}
+                key={`text-${side}`}
+                lines={editLines}
                 fontClass={previewFontClass}
                 color={previewColor}
                 cfg={editCfg}
-                onChange={setTextLayout}
+                onChange={setTextLayoutSide}
               />
             )}
             {/* Sinon : texte centré sur la zone fixe */}
