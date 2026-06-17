@@ -997,7 +997,7 @@ export default function GestionPage() {
         {tab === "promos" && (
           <>
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
-              Mets un prix promo (inférieur au prix normal) : le client verra le prix barré + la réduction. Vide = pas de promo.
+              Toutes tes promotions au même endroit : <strong>codes promo</strong>, <strong>remise rapide par catégorie</strong>, et <strong>prix promo par produit</strong>.
             </p>
 
             <PromoCodesAdmin adminKey={key} />
@@ -1033,9 +1033,29 @@ export default function GestionPage() {
               </p>
             </div>
 
-            {Object.entries(grouped).map(([slug, g]) => (
-              <div key={slug} className="admin-block">
-                <h3>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></h3>
+            <h2 style={{ fontFamily: "Georgia,serif", color: "var(--ink)", marginTop: 24 }}>💸 Prix promo par produit</h2>
+            <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: 0 }}>
+              Mets un prix promo (inférieur au prix normal) : le client verra le prix barré + la réduction. Vide = pas de promo.
+            </p>
+            {(() => {
+              const ORD = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "cles-usb", "porte-cles", "medailles"];
+              const rk = (c) => { const i = ORD.indexOf(c); return i < 0 ? 99 : i; };
+              let lastCat = null;
+              return Object.entries(grouped)
+                .sort((a, b) => (rk(a[1].category) - rk(b[1].category)) || a[1].name.localeCompare(b[1].name))
+                .map(([slug, g]) => {
+                  const head = g.category !== lastCat; lastCat = g.category;
+                  return (
+              <div key={slug}>
+                {head && <h3 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: "20px 0 6px", borderBottom: "2px solid #e7d9bd", paddingBottom: 4 }}>{getCategoryLabel(g.category)}</h3>}
+                <div className="admin-block">
+                <h3 style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {imgBySlug[slug] && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={imgBySlug[slug]} alt="" style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0 }} />
+                  )}
+                  <span>{g.name}</span>
+                </h3>
                 {g.items.map((r) => (
                   <div className="admin-row" key={r.variantId} style={{ gridTemplateColumns: "1fr auto 100px 70px" }}>
                     <span className="admin-variant">{r.variantTitle}</span>
@@ -1047,8 +1067,11 @@ export default function GestionPage() {
                     <span className="admin-saved">{saved === r.variantId ? "✓" : ""}</span>
                   </div>
                 ))}
+                </div>
               </div>
-            ))}
+                  );
+                });
+            })()}
           </>
         )}
 
