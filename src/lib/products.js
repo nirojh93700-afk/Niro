@@ -1324,7 +1324,6 @@ export const products = [
     personalizationLabel: "Gravure Fête des pères personnalisable (textes + motif)",
     images: [
       "/produits/verre_a_whisky_grave_vide.jpg",
-      "/produits/verre_whisky_exemple_meilleurpapa.jpg",
       "/produits/verre_a_whisky_grave_ambiance.jpg",
       "/produits/verre_a_whisky_fond_clair.jpg",
     ],
