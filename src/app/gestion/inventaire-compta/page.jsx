@@ -277,7 +277,9 @@ export default function InventaireComptaPage() {
                       <span>{i.name}</span>
                     </span>
                   </td>
-                  <td style={{ padding: "6px 10px", color: "var(--ink-soft)" }}>{[...new Set(i.titles)].join(" / ")}</td>
+                  <td style={{ padding: "6px 10px", color: "var(--ink-soft)" }}>
+                    {[...new Set(i.titles)].map((t, k) => <div key={k}>{t}</div>)}
+                  </td>
                   <td style={{ padding: "6px 10px", textAlign: "center" }}>
                     <input type="number" min="0" value={cur} placeholder="∞"
                       onChange={(e) => setEdits((ed) => ({ ...ed, [i.id]: e.target.value }))}
