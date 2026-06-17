@@ -88,13 +88,11 @@ export async function POST(req) {
         }],
       });
     } else {
-      // repli : recherche web intégrée d'Anthropic
-      const list = products.map((p) => `- ${p.name} | ${p.category} | ${priceOf(p)}`).join("\n");
-      resp = await client.messages.create({
-        model, max_tokens: 8000, system,
-        tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 12 }],
-        messages: [{ role: "user", content: `Produits :\n${list}\n\nCherche les prix du marché français pour chaque produit. ${rule}` }],
-      });
+      // SÉCURITÉ « rien ne te prélève sans prévenir » : pas de clé Tavily = on ne
+      // lance PAS la recherche payante d'Anthropic. On demande d'ajouter la clé gratuite.
+      return Response.json({
+        error: "Recherche gratuite non configurée. Ajoute la clé TAVILY_API_KEY (gratuite) dans Firebase pour lancer l'analyse — rien n'est facturé tant que ce n'est pas fait.",
+      }, { status: 400 });
     }
   } catch (e) {
     return Response.json({ error: "Analyse impossible : " + (e?.message || String(e)) }, { status: 500 });

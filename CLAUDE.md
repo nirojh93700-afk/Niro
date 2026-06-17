@@ -241,3 +241,22 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   dans le centre des agents quand elle est prête (elle teste avant).
 - **Agent téléphone** : non construit — nécessite un compte Twilio payant + numéro dédié.
 - **Option** : bouton « Générer le 3D » in-app (auto) → nécessiterait une API 3D payante.
+
+### À FAIRE PLUS TARD — 2 branchements optionnels (le site marche très bien sans, RIEN ne casse)
+> L'utilisatrice a dit « on fait plus tard, pas de souci si pas fait ». Ne pas la presser. NB : le connecteur de
+> son APPLI Claude ≠ le branchement du SITE ; il faut les clés ci-dessous dans Firebase pour le site.
+
+1. **Étude de marché — recherche gratuite (Tavily)** : page `/gestion/etude-marche` déjà en ligne (menu Marketing).
+   Pour activer la recherche gratuite, elle doit mettre la clé Tavily dans Firebase :
+   `firebase apphosting:secrets:set TAVILY_API_KEY` puis
+   `firebase apphosting:secrets:grantaccess TAVILY_API_KEY --backend niv-creation`
+   (clé `tvly-…` sur tavily.com → API Keys). PUIS me prévenir → je RÉACTIVE le bloc `TAVILY_API_KEY`
+   commenté dans `apphosting.yaml`. Sécurité en place : sans la clé, le bouton refuse de lancer une recherche
+   payante (pas de prélèvement surprise). En attendant, le fichier Excel de l'étude est déjà fourni.
+
+2. **Gmail → agents (réponses mails clients, JAMAIS d'envoi auto, validation obligatoire)** : à construire.
+   Elle veut le VRAI Gmail branché ET garder le formulaire (les deux). Côté Google (gratuit, une fois) :
+   créer projet Google Cloud → activer Gmail API → ID client OAuth (Desktop) → OAuth Playground avec scope
+   `https://mail.google.com/` → récupérer **Client ID + Client secret + Refresh token**. Elle me donne les 3
+   (ou les met en secrets) → je construis la page admin « Boîte mail (agent) » : l'agent lit les mails, prépare
+   un brouillon, elle clique « Envoyer » / « Modifier » — jamais d'envoi automatique.
