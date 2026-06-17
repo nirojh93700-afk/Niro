@@ -45,7 +45,7 @@ export default function ProductReviews({ slug }) {
 
   return (
     <section className="container" style={{ maxWidth: 760, margin: "0 auto", padding: "10px 16px 40px" }}>
-      <h2 style={{ fontFamily: "Georgia, serif", fontWeight: "normal" }}>Avis clientes</h2>
+      <h2 style={{ fontFamily: "Georgia, serif", fontWeight: "normal" }}>Avis clients</h2>
 
       {data.count > 0 ? (
         <p style={{ margin: "0 0 16px" }}>
@@ -53,7 +53,7 @@ export default function ProductReviews({ slug }) {
           <span style={{ color: "var(--ink-soft)" }}>({data.count} avis)</span>
         </p>
       ) : (
-        <p style={{ color: "var(--ink-soft)" }}>Aucun avis pour le moment — soyez la première !</p>
+        <p style={{ color: "var(--ink-soft)" }}>Aucun avis pour le moment — soyez le premier !</p>
       )}
 
       {data.reviews.map((r, i) => (

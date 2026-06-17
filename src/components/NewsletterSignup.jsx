@@ -23,7 +23,7 @@ export default function NewsletterSignup() {
 
   return (
     <div style={{ textAlign: "center", padding: "8px 0 26px", borderBottom: "1px solid rgba(255,255,255,0.12)", marginBottom: 26 }}>
-      <h4 style={{ margin: "0 0 6px" }}>Restez informée ✦</h4>
+      <h4 style={{ margin: "0 0 6px" }}>Restez informé ✦</h4>
       <p style={{ margin: "0 0 12px", opacity: 0.85, fontSize: "0.9rem" }}>
         Nouveautés, offres et inspirations — directement par e-mail.
       </p>

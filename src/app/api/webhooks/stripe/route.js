@@ -368,7 +368,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
 
           ${/retrait en main propre/i.test(shippingRateName)
             ? `<p style="background:#fbf3e6;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;"><strong>Retrait en main propre :</strong> nous vous contacterons très vite (par e-mail ou téléphone) pour convenir ensemble du <strong>lieu et de l'horaire</strong> de retrait. Inutile de vous déplacer avant notre message.</p>`
-            : `<p style="background:${BRAND.cream};padding:14px;border-radius:10px;border:1px solid #ece3d2;margin-top:18px;">Nous vous tiendrons informée de l'expédition. Pour toute question, ou pour nous transmettre une photo ou un texte de gravure, répondez simplement à cet e-mail.</p>`}
+            : `<p style="background:${BRAND.cream};padding:14px;border-radius:10px;border:1px solid #ece3d2;margin-top:18px;">Nous vous tiendrons au courant de l'expédition. Pour toute question, ou pour nous transmettre une photo ou un texte de gravure, répondez simplement à cet e-mail.</p>`}
           <p style="color:#7a7268;font-size:14px;margin-top:16px;">Avec toute notre gratitude,<br><strong>L'atelier Niv Création</strong></p>`;
       const clientHtml = emailLayout({ heading: "Merci pour votre commande", bodyHtml: clientBody });
       await sendEmail({

@@ -169,7 +169,7 @@ export function sampleClientEmailHtml() {
       Livraison : Lettre suivie (3,90 €)<br>
       <strong style="color:${BRAND.gold};font-size:17px;">Total : 22,80 €</strong>
     </p>
-    <p style="background:${BRAND.cream};padding:14px;border-radius:10px;border:1px solid #ece3d2;margin-top:18px;">Nous vous tiendrons informée de l'expédition. Pour toute question, répondez simplement à cet e-mail.</p>
+    <p style="background:${BRAND.cream};padding:14px;border-radius:10px;border:1px solid #ece3d2;margin-top:18px;">Nous vous tiendrons au courant de l'expédition. Pour toute question, répondez simplement à cet e-mail.</p>
     <p style="color:#7a7268;font-size:14px;margin-top:16px;">Avec toute notre gratitude,<br><strong>L'atelier Niv Création</strong></p>`;
   return emailLayout({ heading: "Merci pour votre commande", bodyHtml: body });
 }

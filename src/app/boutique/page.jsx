@@ -62,7 +62,7 @@ export default async function BoutiquePage({ searchParams }) {
       : "Une création rien que pour vous ?";
   const customContactText =
     activeCat === "mariage"
-      ? "Numéros de table, menus, décoration… Dites-moi votre idée, je la réalise sur mesure :"
+      ? "Numéros de table, menus, décoration… Dites-nous votre idée, nous la réalisons sur mesure :"
       : "Une décoration ou un cadeau personnalisé sur bois, une idée unique ? Parlons-en directement :";
 
   // Titre : combine le type et le « pour qui » pour les bijoux.
