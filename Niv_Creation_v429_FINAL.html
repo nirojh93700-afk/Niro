@@ -3893,7 +3893,7 @@ body.light-mode .hd-v200 {
 // FORCE UPDATE : Désinscrit les anciens SW et force le rechargement
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (function() {
-  const APP_VERSION = 'v428-photo-sync-stable-2026-06-17';
+  const APP_VERSION = 'v429-sync-cost-optim-2026-06-17';
   const lastVersion = localStorage.getItem('app_version');
   
   if (lastVersion !== APP_VERSION) {
@@ -6794,12 +6794,28 @@ async function loadFromFirebase(){
   }
 }
 
+// 🔧 v429 : hub — un SEUL listener réseau sur 'master', relayé à plusieurs abonnés
+// (détection appareil, sync réglages…) au lieu d'ouvrir 3 listeners séparés.
+window._extraMasterSubs = window._extraMasterSubs || [];
+window.subscribeMaster = function(cb){
+  if (typeof cb !== 'function') return function(){};
+  window._extraMasterSubs.push(cb);
+  return function(){
+    var i = window._extraMasterSubs.indexOf(cb);
+    if (i >= 0) window._extraMasterSubs.splice(i, 1);
+  };
+};
+
 // 🎯 NOUVEAU : écoute SEULEMENT le document master (1 listener au lieu de 4)
 function listenToMasterChanges(){
   if(!window.fbDB) return;
   try {
     const masterRef = window.fbDoc(window.fbDB, 'backup', 'master');
     window.fbOnSnapshot(masterRef, (docSnap) => {
+      // 🔧 v429 : relayer le snapshot aux abonnés secondaires AVANT tout filtre
+      try {
+        (window._extraMasterSubs || []).forEach(function(cb){ try { cb(docSnap); } catch(e){} });
+      } catch(e){}
       if(!dataLoaded) return;
       if(!docSnap.exists()) return;
       const master = docSnap.data();
@@ -19950,10 +19966,10 @@ if(typeof window._origFbOnSnapshot === 'undefined' && typeof window.fbOnSnapshot
   // À la place, on surveille les changements via un listener custom.
   
   setTimeout(() => {
-    if(window.fbDB && window.fbDoc && window.fbOnSnapshot){
+    if(window.fbDB && typeof window.subscribeMaster === 'function'){
       try {
-        const masterRef = window.fbDoc(window.fbDB, 'backup', 'master');
-        window.fbOnSnapshot(masterRef, (docSnap) => {
+        // 🔧 v429 : passe par le hub (pas de listener réseau supplémentaire)
+        window.subscribeMaster((docSnap) => {
           if(!docSnap.exists()) return;
           const master = docSnap.data();
           if(!master) return;
@@ -44947,14 +44963,14 @@ input[type="search"]:focus, textarea:focus, select:focus {
   var _v161LastSettingsUpdate = 0;
   
   function setupSettingsListener() {
-    if (!window.fbDB || !window.fbOnSnapshot || !window.fbDoc) return;
+    if (!window.fbDB || typeof window.subscribeMaster !== 'function' || !window.fbDoc) return;
     if (_v161SettingsUnsub) {
       try { _v161SettingsUnsub(); } catch(e){}
     }
-    
+
     try {
-      var masterRef = window.fbDoc(window.fbDB, 'backup', 'master');
-      _v161SettingsUnsub = window.fbOnSnapshot(masterRef, function(snap) {
+      // 🔧 v429 : passe par le hub (pas de listener réseau supplémentaire)
+      _v161SettingsUnsub = window.subscribeMaster(function(snap) {
         if (!snap.exists()) return;
         var d = snap.data();
         if (!d.settings || !d.settingsLastUpdate) return;
@@ -44991,8 +45007,6 @@ input[type="search"]:focus, textarea:focus, select:focus {
             try { applyLanguage(); } catch(e){}
           }
         }, 200);
-      }, function(err) {
-        console.error('[v161] Settings listener error:', err);
       });
     } catch(err) {
       console.error('[v161] setupSettingsListener error:', err);
