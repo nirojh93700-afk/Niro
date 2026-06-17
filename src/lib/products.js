@@ -1344,6 +1344,58 @@ export const products = [
 <li><strong>Hauteur :</strong> environ 9 cm</li>
 </ul>`,
   },
+  {
+    // PAGE TEST (non publiée) — couverts enfants personnalisés (prénom + série d'animaux).
+    // Visible uniquement via ?apercu=niv2026. Prix et aperçu animal à régler.
+    slug: "couverts-enfants-personnalises",
+    badge: "Nouveau",
+    name: "Couverts enfants personnalisés",
+    weight: 180, // jeu de 3 pièces + emballage
+    pickup: false,
+    letter: false, // colis (rigide)
+    hidden: true, // PAGE TEST — non publiée
+    category: "cadeaux",
+    type: "Couverts enfants gravés",
+    tagline: "Le jeu de 3 couverts enfant en inox, gravé au prénom et à une série d'animaux au choix.",
+    personalizable: true,
+    personalizationLabel: "Prénom + série d'animaux à graver",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver", placeholder: "Ex : Ishaan", maxLength: 12 },
+      { key: "serie", type: "select", label: "Série d'animaux", default: "ocean", options: [
+        { value: "ocean", label: "Océan — baleine, dauphin, requin" },
+        { value: "mer", label: "Fonds marins — tortue, hippocampe, poulpe" },
+        { value: "safari", label: "Safari — lion, éléphant, girafe" },
+        { value: "jungle", label: "Jungle — singe, zèbre, rhinocéros" },
+      ] },
+      { key: "police", type: "font", label: "Police du prénom", optional: true },
+      { key: "note-grav", type: "note", text: "Chaque pièce (couteau, fourchette, cuillère) est gravée avec le prénom et un animal de la série choisie, sur le manche. Les animaux gravés présentés sont des exemples de notre gravure ; votre commande est réalisée sur les couverts neufs illustrés." },
+    ],
+    title: "Couverts enfants personnalisés — jeu de 3 gravé prénom et animaux",
+    images: [
+      "/produits/couverts_enfants_set_blanc.jpg",
+      "/produits/couverts_enfants_exemple_prenom.jpg",
+      "/produits/couverts_enfants_exemple_enfant.jpg",
+      "/produits/couverts_enfants_exemple_flatlay.jpg",
+      "/produits/couverts_enfants_series_animaux.jpg",
+      "/produits/couverts_enfants_exemple_ocean.jpg",
+      "/produits/couverts_enfants_set_noir.jpg",
+    ],
+    variants: [
+      // PRIX PROVISOIRE — à confirmer par l'utilisatrice.
+      { id: "couverts-enfants-jeu3", title: "Jeu de 3 — couteau, fourchette, cuillère", price: 24.90 },
+    ],
+    descriptionHtml: `<p><strong>Le jeu de couverts enfant personnalisé, gravé au laser.</strong> Trois pièces adaptées aux petites mains — couteau, fourchette et cuillère — en acier inoxydable poli miroir, gravées au prénom de l'enfant et à une série d'animaux au choix.</p>
+<p>Un cadeau de naissance, d'anniversaire ou de baptême qui accompagne l'enfant au quotidien et donne envie de passer à table.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Composition :</strong> jeu de 3 pièces (couteau, fourchette, cuillère)</li>
+<li><strong>Matière :</strong> acier inoxydable 304 (18/10), poli miroir</li>
+<li><strong>Gravure :</strong> laser, sur le manche — prénom + un animal par pièce</li>
+<li><strong>Séries d'animaux :</strong> océan, fonds marins, safari, jungle</li>
+<li><strong>Entretien :</strong> passe au lave-vaisselle</li>
+<li><strong>Dimensions :</strong> couteau 16,8 cm · fourchette 15 cm · cuillère 14,7 cm</li>
+</ul>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------

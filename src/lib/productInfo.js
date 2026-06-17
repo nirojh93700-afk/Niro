@@ -536,6 +536,25 @@ Casse ou défaut à l'arrivée
 - Photo sous 14 jours après réception : remplacement sans frais.
 - Emballage protégé prévu pour un transport sécurisé.`,
   },
+  "couverts-enfants-personnalises": {
+    material: `Taille & Matériaux
+- Jeu de 3 pièces : couteau, fourchette, cuillère.
+- Acier inoxydable 304 (18/10), poli miroir.
+- Dimensions : couteau 16,8 cm · fourchette 15 cm · cuillère 14,7 cm.
+- Adapté aux mains des enfants, sans bord coupant.`,
+    usage: `Personnalisation & Entretien
+- Gravure laser sur le manche : le prénom + un animal par pièce.
+- Série d'animaux au choix (océan, fonds marins, safari, jungle).
+- Passe au lave-vaisselle, la gravure ne s'efface pas.`,
+    returns: `Produit personnalisé après gravure — non remboursable
+
+Annulation
+- Dans les 24 h suivant la commande, avant le démarrage de la gravure : annulation possible.
+- Après gravure : non remboursable (personnalisation unique, article L221-28).
+
+Défaut à l'arrivée
+- Photo sous 14 jours après réception : remplacement sans frais.`,
+  },
 };
 
 export function getProductInfo(slug) {
