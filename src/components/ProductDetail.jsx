@@ -440,9 +440,11 @@ export default function ProductDetail({ product }) {
     return (_famCache[key] = fam);
   }
   // Motif (ancre, étoile…) teinté à la couleur de gravure, en canvas.
+  // IMPORTANT : on charge le PNG (pas le SVG) — sur iOS, dessiner un SVG sur un
+  // canvas le « contamine » et fait échouer toDataURL (verre vide). Le PNG, non.
   async function tintedMotif(id, color, sizePx) {
     try {
-      const im = await loadImg(`/motifs/${id}.svg`);
+      const im = await loadImg(`/motifs/${id}.png`);
       const s = Math.max(2, Math.round(sizePx));
       const c = document.createElement("canvas"); c.width = s; c.height = s;
       const ctx = c.getContext("2d");
