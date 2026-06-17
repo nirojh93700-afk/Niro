@@ -404,6 +404,35 @@ export default function ProductDetail({ product }) {
     ctx.drawImage(a, zx + (zw - dw) / 2, zy + (zh - dh) / 2, dw, dh);
     return c.toDataURL("image/jpeg", 0.9);
   }
+  // Capture la gravure SEULE (texte/motif déjà rendus à l'écran) sur fond
+  // transparent — on exclut l'image Next.js du verre (sinon capture blanche).
+  async function snapArtwork() {
+    const node = photoRef.current;
+    if (!node) return null;
+    try {
+      const mod = await import("html-to-image");
+      if (document.fonts?.ready) { try { await document.fonts.ready; } catch { /* ignore */ } }
+      return await mod.toPng(node, {
+        cacheBust: true,
+        pixelRatio: 2,
+        filter: (n) => {
+          const c = n.classList;
+          if (!c) return true;
+          return !(c.contains("gallery-bg") || c.contains("ee-toolbar") || c.contains("side-toggle") || c.contains("gallery-arrow") || c.contains("gallery-thumbs") || c.contains("placeholder"));
+        },
+      });
+    } catch { return null; }
+  }
+  // Superpose une capture (gravure transparente) plein cadre sur la photo du verre.
+  async function composeFull(glassUrl, artDataUrl) {
+    const [g, a] = await Promise.all([loadImg(glassUrl), loadImg(artDataUrl)]);
+    const W = g.naturalWidth || 800, H = g.naturalHeight || 800;
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(g, 0, 0, W, H);
+    ctx.drawImage(a, 0, 0, W, H);
+    return c.toDataURL("image/jpeg", 0.9);
+  }
   async function uploadDataUrl(dataUrl) {
     if (!dataUrl) return null;
     try {
@@ -451,9 +480,18 @@ export default function ProductDetail({ product }) {
         // FACE : photo envoyée, sinon design image choisi (Fête des pères).
         const faceArt = photoSrc || (dsg ? dsg.dark : null);
         if (faceArt) {
+          // Cas fiable : on compose l'image/photo sur le verre (canvas).
           artworkImage = faceArt;
           const composed = await composeOnGlass(glass, faceArt, faceBox);
           previewImage = (await uploadDataUrl(composed)) || composed;
+        } else if (modeleField || hasTextFields) {
+          // Cas texte/motif (ex. Classique) : on réutilise le rendu déjà affiché.
+          const art = await snapArtwork();
+          if (art) {
+            artworkImage = (await uploadDataUrl(art)) || art;
+            const composed = await composeFull(glass, art);
+            previewImage = (await uploadDataUrl(composed)) || composed;
+          }
         }
         // FOND (mode « les deux ») : photo du fond si fournie (texte/motif : pas d'image fixe).
         if (dualMode) {
