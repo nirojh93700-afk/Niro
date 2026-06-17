@@ -14,6 +14,24 @@ export default function MerciPage() {
     clearCart();
   }, [clearCart]);
 
+  // Statistiques Google Analytics : « achat » (n'a lieu que si un ID GA est réglé).
+  // On lit le panier mémorisé au moment du paiement, puis on l'efface pour ne pas
+  // compter deux fois si la page est rechargée.
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+    let pending = null;
+    try { pending = JSON.parse(localStorage.getItem("ga-pending-purchase") || "null"); } catch { /* ignore */ }
+    if (!pending) return;
+    const sessionId = new URLSearchParams(window.location.search).get("session_id") || "";
+    window.gtag("event", "purchase", {
+      transaction_id: sessionId || `niv-${Date.now()}`,
+      currency: "EUR",
+      value: pending.value || 0,
+      items: pending.items || [],
+    });
+    try { localStorage.removeItem("ga-pending-purchase"); } catch { /* ignore */ }
+  }, []);
+
   return (
     <div className="center-card">
       <div className="big-emoji">🎉</div>
