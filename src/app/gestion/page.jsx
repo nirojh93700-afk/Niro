@@ -391,6 +391,9 @@ export default function GestionPage() {
   // Catégories réellement présentes (pour les boutons de remise rapide, mis à jour tout seuls).
   const promoCats = [...new Set(Object.values(grouped).map((g) => g.category).filter(Boolean))];
   const lowOrOut = rows.filter((r) => typeof r.stock === "number" && r.stock <= 2).length;
+  // Photo par produit (pour l'onglet Stock).
+  const imgBySlug = {};
+  editable.forEach((e) => { imgBySlug[e.slug] = (e.overrideImages && e.overrideImages[0]) || e.image || (e.images && e.images[0]) || ""; });
 
   // ---- Calculs commandes / clientes / statistiques ----
   const fmtDate = (iso) => {
@@ -1039,7 +1042,13 @@ export default function GestionPage() {
               <div key={slug}>
                 {head && <h2 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: "24px 0 8px", borderBottom: "2px solid #e7d9bd", paddingBottom: 4 }}>{getCategoryLabel(g.category)}</h2>}
                 <div className="admin-block">
-                <h3>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></h3>
+                <h3 style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {imgBySlug[slug] && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={imgBySlug[slug]} alt="" style={{ width: 40, height: 40, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0 }} />
+                  )}
+                  <span>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></span>
+                </h3>
                 {(() => {
                   // Stock groupé par couleur : un seul champ par stockId (recto + recto-verso partagés)
                   const counts = {};
