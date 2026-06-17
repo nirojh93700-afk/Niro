@@ -110,6 +110,23 @@ export async function POST(req) {
       igToken: str(body.social.igToken, 600).trim(),
     };
   }
+  if (body.couvertsZones && typeof body.couvertsZones === "object") {
+    const clamp = (v, min, max, def) => { const n = Number(v); return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : def; };
+    const z = {};
+    for (const k of ["couteau", "fourchette", "grande", "petite"]) {
+      const p = body.couvertsZones[k];
+      if (p && typeof p === "object") {
+        z[k] = {
+          cx: clamp(p.cx, 0, 1, 0.5),
+          nameCy: clamp(p.nameCy, 0, 1, 0.66),
+          animalCy: clamp(p.animalCy, 0, 1, 0.80),
+          animalH: clamp(p.animalH, 0.02, 0.30, 0.065),
+          nameSize: clamp(p.nameSize, 0.01, 0.12, 0.04),
+        };
+      }
+    }
+    patch.couvertsZones = z;
+  }
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

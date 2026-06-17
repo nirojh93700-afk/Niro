@@ -528,6 +528,7 @@ export default function GestionPage() {
                 { id: "produits", text: "Produits" },
                 { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
+                { id: "couverts-reglage", text: "🍴 Réglage couverts", href: "/gestion/couverts-reglage" },
               ],
             },
             {
