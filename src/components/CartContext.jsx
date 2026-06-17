@@ -31,6 +31,21 @@ export function CartProvider({ children }) {
     }
   }, [items, hydrated]);
 
+  // Vidage AUTOMATIQUE après une commande payée : Stripe renvoie sur une URL
+  // contenant "session_id". Quelle que soit la page d'arrivée, on vide le panier.
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("session_id")) {
+        setItems([]);
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    } catch {
+      // ignore
+    }
+  }, [hydrated]);
+
   // Une ligne de panier est unique par variante + personnalisation.
   const lineKey = (variantId, personalization) =>
     `${variantId}::${(personalization || "").trim()}`;
