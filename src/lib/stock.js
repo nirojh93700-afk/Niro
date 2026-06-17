@@ -637,6 +637,8 @@ export async function getSettings() {
     salesGoal: Number(s.salesGoal) || 0,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.
     crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
+    // Positions de gravure des couverts enfants (réglées dans /gestion/couverts-reglage).
+    couvertsZones: (s.couvertsZones && typeof s.couvertsZones === "object") ? s.couvertsZones : {},
     // Mode maintenance : si activé, les visiteurs voient une page "en maintenance"
     // (l'administratrice garde l'accès via le code d'accès).
     maintenance: {
