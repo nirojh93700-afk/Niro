@@ -741,6 +741,11 @@ export default function ProductDetail({ product }) {
               </>
             )}
           </div>
+          {product.engrave && (
+            <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
+              Aperçu affiché en foncé pour la lisibilité. La gravure laser sur verre est <strong>dépolie (effet givré translucide)</strong> — elle n'est ni noire ni colorée.
+            </p>
+          )}
           {images.length > 1 && (
             <div className="gallery-thumbs">
               {images.map((img, i) => (
