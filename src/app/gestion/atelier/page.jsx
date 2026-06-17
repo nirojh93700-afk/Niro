@@ -13,6 +13,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { getProductBySlug } from "@/lib/products";
+import { imageDesign } from "@/lib/modeles";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -22,14 +23,32 @@ function isGlass(slug) {
   return typeof slug === "string" && slug.startsWith("verre");
 }
 
+const isUrl = (s) => typeof s === "string" && (s.startsWith("/") || s.startsWith("http") || s.startsWith("data:"));
+
+// Reconstitue l'image du design choisi depuis les réglages enregistrés
+// (ex. « Je t'aime papa » → /produits/fp-jetaime-dark.png), même si la capture
+// n'a pas eu lieu à la commande.
+function designFromSpec(item) {
+  if (item.modeleTemplate && item.modele && item.modele.layout) {
+    const d = imageDesign(item.modeleTemplate, item.modele.layout);
+    if (d) return d.dark;
+  }
+  return null;
+}
+
 // Réglages de gravure (zone réelle en mm) pour un côté donné.
 function sideConfig(item, side) {
   const p = getProductBySlug(item.slug);
   if (!p) return null;
   const cfg = side === "fond" ? p.engraveFond : p.engrave;
   if (!cfg || !cfg.box) return null;
-  const src = side === "fond" ? item.artworkImageFond : item.artworkImage;
-  const preview = side === "fond" ? item.previewImageFond : item.previewImage;
+  const rawSrc = side === "fond" ? item.artworkImageFond : item.artworkImage;
+  const rawPrev = side === "fond" ? item.previewImageFond : item.previewImage;
+  // Source pour le fichier à graver : l'artwork enregistré, sinon le design
+  // reconstitué, sinon la photo du client (face uniquement).
+  const derived = side === "fond" ? null : (designFromSpec(item) || (isUrl(item.photoSrc) ? item.photoSrc : null));
+  const src = (isUrl(rawSrc) ? rawSrc : null) || derived;
+  const preview = (isUrl(rawPrev) ? rawPrev : null) || src;
   return {
     box: cfg.box,
     widthMm: cfg.widthMm || 60,
@@ -52,6 +71,7 @@ function sidesOf(item) {
 function loadImg(src) {
   return new Promise((res, rej) => {
     const im = new Image();
+    im.crossOrigin = "anonymous"; // évite le canvas "contaminé" sur iPhone (CDN)
     im.onload = () => res(im);
     im.onerror = rej;
     im.src = src;

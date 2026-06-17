@@ -602,7 +602,9 @@ export default function ProductDetail({ product }) {
           try {
             const composed = await composeOnGlass(glass, faceArt, faceBox);
             const up = await uploadDataUrl(composed);
-            previewImage = up || composed || faceArt;
+            // On garde une URL/chemin (jamais un data: qui serait retiré à la
+            // sauvegarde de la commande). Si l'envoi échoue, on garde le design.
+            previewImage = up || faceArt;
           } catch { /* on garde faceArt */ }
         } else if (modeleField) {
           // Cas texte/motif (ex. Classique) : on dessine le modèle sur le verre (canvas).
