@@ -802,6 +802,12 @@ img {
 .modele-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .modele-check input { width: 18px; height: 18px; accent-color: #c9a24b; }
 .engrave-editor .me-block { line-height: 1.04; }
+/* Aperçu « gravure dépolie » (claire/givrée) : léger halo pour rester lisible
+   sur le verre — vaut pour le texte, les motifs et les images de design. */
+.engrave-editor .me-block,
+.engrave-editor .te-block {
+  filter: drop-shadow(0 0 1.5px rgba(35, 28, 18, 0.55)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
 
 /* Classes de polices de gravure (aperçu) */
 .fnt-playfair { font-family: var(--font-display), serif; }

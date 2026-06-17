@@ -31,6 +31,10 @@ import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 
+// Couleur d'aperçu « gravure dépolie » (effet givré translucide, comme le vrai
+// rendu laser sur verre). Le fichier à graver reste en foncé (#3a2f1d) pour l'atelier.
+const ENGRAVE_PREVIEW = "#eef2f4";
+
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
   const [activeImg, setActiveImg] = useState(0);
@@ -299,7 +303,7 @@ export default function ProductDetail({ product }) {
   const material =
     product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
   const previewFontClass = getFontClass(fieldValues[fontField?.key] || "playfair");
-  const previewColor = (colorField && fieldValues[colorField.key]) || "#3a2f1d";
+  const previewColor = (colorField && fieldValues[colorField.key]) || ENGRAVE_PREVIEW;
 
   // Lignes de texte à montrer dans l'aperçu (champs texte non vides).
   const previewLines = visibleFields
@@ -420,6 +424,8 @@ export default function ProductDetail({ product }) {
     const ar = (a.naturalWidth || 1) / (a.naturalHeight || 1);
     let dw = zw, dh = zw / ar;
     if (dh > zh) { dh = zh; dw = zh * ar; }
+    // Léger halo sombre : la gravure givrée (claire) reste lisible sur le verre.
+    ctx.shadowColor = "rgba(35,28,18,0.5)"; ctx.shadowBlur = Math.max(2, W * 0.006);
     ctx.drawImage(a, zx + (zw - dw) / 2, zy + (zh - dh) / 2, dw, dh);
     return c.toDataURL("image/jpeg", 0.9);
   }
@@ -505,6 +511,8 @@ export default function ProductDetail({ product }) {
       if (fit < 1) { base *= fit; ({ totalH, maxW } = measure()); }
 
       ctx.fillStyle = color; ctx.strokeStyle = color; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      // Sur le verre (aperçu givré clair) : léger halo sombre pour rester lisible.
+      if (glassUrl) { ctx.shadowColor = "rgba(35,28,18,0.55)"; ctx.shadowBlur = Math.max(2, base * 0.08); }
       let y = ry + (rh - totalH) / 2;
       for (const r of rows) {
         const fs = base * (r.em || 1);
@@ -580,15 +588,17 @@ export default function ProductDetail({ product }) {
         const faceBox = (product.engrave && product.engrave.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
         const fondBox = (product.engraveFond && product.engraveFond.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
         // FACE : photo envoyée, sinon design image choisi (Fête des pères).
-        const faceArt = photoSrc || (dsg ? dsg.dark : null);
-        if (faceArt) {
+        // Aperçu = version givrée (claire) ; fichier à graver = version foncée.
+        const facePreviewArt = photoSrc || (dsg ? dsg.light : null);
+        const faceFileArt = photoSrc || (dsg ? dsg.dark : null);
+        if (facePreviewArt) {
           // Cas fiable : on compose l'image/photo sur le verre (canvas).
-          artworkImage = faceArt;
-          const composed = await composeOnGlass(glass, faceArt, faceBox);
+          artworkImage = faceFileArt;
+          const composed = await composeOnGlass(glass, facePreviewArt, faceBox);
           previewImage = (await uploadDataUrl(composed)) || composed;
         } else if (modeleField) {
           // Cas texte/motif (ex. Classique) : on dessine le modèle sur le verre (canvas).
-          const composed = await renderModele(modeleVal, modeleTemplate, "#3a2f1d", { glassUrl: glass, box: faceBox });
+          const composed = await renderModele(modeleVal, modeleTemplate, ENGRAVE_PREVIEW, { glassUrl: glass, box: faceBox });
           previewImage = (await uploadDataUrl(composed)) || composed;
           const art = await renderModele(modeleVal, modeleTemplate, "#3a2f1d", { glassUrl: null, box: faceBox });
           artworkImage = (await uploadDataUrl(art)) || art;
@@ -691,14 +701,14 @@ export default function ProductDetail({ product }) {
                 key={isFond ? "modele-fond" : "modele-face"}
                 template={modeleTemplate}
                 value={modeleVal}
-                color="#3a2f1d"
+                color={ENGRAVE_PREVIEW}
                 cfg={editCfg}
                 onChange={setModeleLayout}
               />
             )}
             {/* Fête des pères, côté FOND (mode "les deux") : un DESSIN au choix */}
             {hasImages && showEditor && modeleField && dualMode && side === "fond" && fieldValues["fondType"] === "dessin" && fieldValues["motifFond"] && fieldValues["motifFond"] !== "aucun" && (
-              <MotifEngraveLayer key="motif-fond" motifId={fieldValues["motifFond"]} color="#3a2f1d" cfg={editCfg} onChange={setMotifLayoutFond} />
+              <MotifEngraveLayer key="motif-fond" motifId={fieldValues["motifFond"]} color={ENGRAVE_PREVIEW} cfg={editCfg} onChange={setMotifLayoutFond} />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
             {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
