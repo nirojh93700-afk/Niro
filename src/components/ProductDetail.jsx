@@ -31,9 +31,9 @@ import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 
-// Couleur d'aperçu « gravure dépolie » (effet givré translucide, comme le vrai
-// rendu laser sur verre). Le fichier à graver reste en foncé (#3a2f1d) pour l'atelier.
-const ENGRAVE_PREVIEW = "#eef2f4";
+// Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
+// réel dépoli/givré est montré au client via une vraie photo d'exemple.
+const ENGRAVE_PREVIEW = "#3a2f1d";
 
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
@@ -424,8 +424,6 @@ export default function ProductDetail({ product }) {
     const ar = (a.naturalWidth || 1) / (a.naturalHeight || 1);
     let dw = zw, dh = zw / ar;
     if (dh > zh) { dh = zh; dw = zh * ar; }
-    // Léger halo sombre : la gravure givrée (claire) reste lisible sur le verre.
-    ctx.shadowColor = "rgba(35,28,18,0.5)"; ctx.shadowBlur = Math.max(2, W * 0.006);
     ctx.drawImage(a, zx + (zw - dw) / 2, zy + (zh - dh) / 2, dw, dh);
     return c.toDataURL("image/jpeg", 0.9);
   }
@@ -511,8 +509,6 @@ export default function ProductDetail({ product }) {
       if (fit < 1) { base *= fit; ({ totalH, maxW } = measure()); }
 
       ctx.fillStyle = color; ctx.strokeStyle = color; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      // Sur le verre (aperçu givré clair) : léger halo sombre pour rester lisible.
-      if (glassUrl) { ctx.shadowColor = "rgba(35,28,18,0.55)"; ctx.shadowBlur = Math.max(2, base * 0.08); }
       let y = ry + (rh - totalH) / 2;
       for (const r of rows) {
         const fs = base * (r.em || 1);
@@ -584,17 +580,16 @@ export default function ProductDetail({ product }) {
       setPreparing(true);
       try {
         const dsg = (modeleField && modeleVal && modeleVal.layout) ? imageDesign(modeleTemplate, modeleVal.layout) : null;
-        const glass = images[activeImg] || images[0];
+        // Base stable pour composer : le verre gravable propre (jamais une photo d'exemple).
+        const glass = product.engraveImage || images[0];
         const faceBox = (product.engrave && product.engrave.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
         const fondBox = (product.engraveFond && product.engraveFond.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
-        // FACE : photo envoyée, sinon design image choisi (Fête des pères).
-        // Aperçu = version givrée (claire) ; fichier à graver = version foncée.
-        const facePreviewArt = photoSrc || (dsg ? dsg.light : null);
-        const faceFileArt = photoSrc || (dsg ? dsg.dark : null);
-        if (facePreviewArt) {
+        // FACE : photo envoyée, sinon design image choisi (Fête des pères) — version foncée.
+        const faceArt = photoSrc || (dsg ? dsg.dark : null);
+        if (faceArt) {
           // Cas fiable : on compose l'image/photo sur le verre (canvas).
-          artworkImage = faceFileArt;
-          const composed = await composeOnGlass(glass, facePreviewArt, faceBox);
+          artworkImage = faceArt;
+          const composed = await composeOnGlass(glass, faceArt, faceBox);
           previewImage = (await uploadDataUrl(composed)) || composed;
         } else if (modeleField) {
           // Cas texte/motif (ex. Classique) : on dessine le modèle sur le verre (canvas).
@@ -753,7 +748,7 @@ export default function ProductDetail({ product }) {
           </div>
           {product.engrave && (
             <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
-              Aperçu affiché en foncé pour la lisibilité. La gravure laser sur verre est <strong>dépolie (effet givré translucide)</strong> — elle n'est ni noire ni colorée.
+              Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d'exemple.
             </p>
           )}
           {images.length > 1 && (
