@@ -47118,6 +47118,14 @@ html[data-theme="renaissance_light"] {
 }
 
 /* ════════════════════ LAYOUT ════════════════════ */
+/* 🔧 v428 : réserve la zone encoche / Dynamic Island à la RACINE de l'app,
+   pour que la barre d'état (heure) ne recouvre JAMAIS le contenu, quel que
+   soit l'écran (catalogue, accueil…). Robuste même si env() vaut 0. */
+body.v400-active {
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: border-box;
+}
+
 @media (min-width: 901px) {
   body.v400-active {
     padding-left: 240px;
@@ -47155,8 +47163,9 @@ html[data-theme="renaissance_light"] {
   }
   
   body.v400-active .stats {
-    /* 🔧 v428 : padding majoré pour iPhone 14/15 Pro Dynamic Island (l'heure recouvrait le 1er bloc) */
-    padding-top: calc(env(safe-area-inset-top, 0px) + 96px) !important;
+    /* 🔧 v428 : l'encoche est déjà réservée sur body ; ici on dégage juste le
+       hamburger fixe (☰) en haut à droite. */
+    padding-top: 60px !important;
     flex-wrap: wrap;
     gap: 8px;
   }
@@ -47164,7 +47173,7 @@ html[data-theme="renaissance_light"] {
     flex: 1 1 calc(50% - 4px);
     min-width: 0;
   }
-  body.v400-active .page { padding-top: calc(env(safe-area-inset-top, 0px) + 96px) !important; }
+  body.v400-active .page { padding-top: 60px !important; }
   
   .grid, #catalog-grid, .cat-grid {
     grid-template-columns: 1fr !important;
