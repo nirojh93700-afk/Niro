@@ -20,6 +20,7 @@ export default function EtudeMarchePage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);
+  const [synthese, setSynthese] = useState([]);
   const [date, setDate] = useState("");
   const [source, setSource] = useState("");
   const [running, setRunning] = useState(false);
@@ -35,7 +36,7 @@ export default function EtudeMarchePage() {
       // recharge le dernier résultat enregistré localement
       try {
         const saved = JSON.parse(localStorage.getItem("niv-market-study") || "null");
-        if (saved?.rows) { setRows(saved.rows); setDate(saved.date || ""); }
+        if (saved?.rows) { setRows(saved.rows); setSynthese(saved.synthese || []); setDate(saved.date || ""); setSource(saved.source || ""); }
       } catch { /* ignore */ }
     } catch { setError("Erreur de connexion."); }
   }, []);
@@ -60,8 +61,8 @@ export default function EtudeMarchePage() {
       const data = await res.json();
       if (!res.ok || data.error) { setError(data.error || "Échec de l'analyse."); setRunning(false); return; }
       if (!Array.isArray(data.rows) || !data.rows.length) { setError("Aucun résultat exploitable, réessaie."); setRunning(false); return; }
-      setRows(data.rows); setDate(data.date || new Date().toISOString()); setSource(data.source || "");
-      try { localStorage.setItem("niv-market-study", JSON.stringify({ rows: data.rows, date: data.date })); } catch { /* ignore */ }
+      setRows(data.rows); setSynthese(data.synthese || []); setDate(data.date || new Date().toISOString()); setSource(data.source || "");
+      try { localStorage.setItem("niv-market-study", JSON.stringify({ rows: data.rows, synthese: data.synthese || [], date: data.date, source: data.source })); } catch { /* ignore */ }
     } catch (e) {
       setError("Erreur : " + (e?.message || e));
     }
@@ -73,6 +74,11 @@ export default function EtudeMarchePage() {
     const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
     const lines = [head.map(esc).join(";")];
     rows.forEach((r) => lines.push([r.categorie, r.produit, r.prix, r.bas, r.typique, r.haut, r.position, r.reco].map(esc).join(";")));
+    if (synthese.length) {
+      lines.push("");
+      lines.push(esc("SYNTHÈSE"));
+      synthese.forEach((s) => lines.push(esc("• " + s)));
+    }
     const blob = new Blob(["﻿" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -146,6 +152,15 @@ export default function EtudeMarchePage() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {synthese.length > 0 && (
+        <div style={{ marginTop: 20, background: "#faf6ee", border: "1px solid #ece3d2", borderRadius: 10, padding: "14px 18px" }}>
+          <h3 style={{ marginTop: 0, fontFamily: "Georgia,serif", color: "var(--gold-dark)" }}>Synthèse</h3>
+          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.6, fontSize: "0.9rem" }}>
+            {synthese.map((s, i) => <li key={i} style={{ marginBottom: 6 }}>{s}</li>)}
+          </ul>
         </div>
       )}
 

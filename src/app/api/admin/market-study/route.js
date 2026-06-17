@@ -58,10 +58,12 @@ export async function POST(req) {
     "Tu es analyste pricing e-commerce spécialiste du marché FRANÇAIS des cadeaux personnalisés (gravure laser : bijoux acier, verres, cristal 3D, déco mariage, clés USB). " +
     "Tu réponds UNIQUEMENT par un tableau JSON valide (aucun texte avant/après).";
   const rule =
-    "Renvoie un JSON : un tableau d'objets avec EXACTEMENT ces clés : " +
-    `{"categorie","produit","prix","bas","typique","haut","position","reco"}. ` +
-    "\"position\" vaut \"Sous-évalué\", \"Bien placé\" ou \"Trop cher\". \"reco\" = action courte. " +
-    "Si pas de prix fiable, mets \"n.d.\". Réponds par le JSON seul.";
+    "Renvoie un OBJET JSON avec EXACTEMENT 2 clés : " +
+    `{"rows": [...], "synthese": [...]}. ` +
+    `"rows" = un tableau d'objets {"categorie","produit","prix","bas","typique","haut","position","reco"} ` +
+    "(\"position\" vaut \"Sous-évalué\", \"Bien placé\" ou \"Trop cher\" ; \"reco\" = action courte ; si pas de prix fiable, \"n.d.\"). " +
+    "\"synthese\" = un tableau de 5 à 8 phrases d'analyse professionnelle (où elle laisse de l'argent / produits sous-évalués, où elle est trop chère, tendances du marché, conseil prix et conseil livraison). " +
+    "Réponds par l'OBJET JSON seul, rien d'autre.";
 
   let resp;
   try {
@@ -99,12 +101,18 @@ export async function POST(req) {
   }
 
   const text = (resp.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n").trim();
-  let rows = [];
+  let rows = [], synthese = [];
   try {
-    const m = text.match(/\[[\s\S]*\]/);
-    rows = JSON.parse(m ? m[0] : text);
+    const m = text.match(/\{[\s\S]*\}/);
+    const obj = JSON.parse(m ? m[0] : text);
+    rows = Array.isArray(obj.rows) ? obj.rows : (Array.isArray(obj) ? obj : []);
+    synthese = Array.isArray(obj.synthese) ? obj.synthese : [];
   } catch {
+    // repli : ancien format (tableau simple)
+    try { const a = text.match(/\[[\s\S]*\]/); rows = JSON.parse(a ? a[0] : text); } catch { /* ignore */ }
+  }
+  if (!rows.length) {
     return Response.json({ error: "Réponse non exploitable, réessaie.", raw: text.slice(0, 2000) }, { status: 200 });
   }
-  return Response.json({ rows, date: new Date().toISOString(), source: tavilyKey ? "tavily" : "anthropic" });
+  return Response.json({ rows, synthese, date: new Date().toISOString(), source: tavilyKey ? "tavily" : "anthropic" });
 }
