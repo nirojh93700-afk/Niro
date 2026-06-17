@@ -63,3 +63,8 @@ env:
     secret: ANTHROPIC_MODEL
     availability:
       - RUNTIME
+  # --- Recherche web gratuite pour l'étude de marché (Tavily) -----------------
+  - variable: TAVILY_API_KEY
+    secret: TAVILY_API_KEY
+    availability:
+      - RUNTIME
