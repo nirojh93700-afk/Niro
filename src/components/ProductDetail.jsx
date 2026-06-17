@@ -25,7 +25,7 @@ import ModeleDesigner from "./ModeleDesigner";
 import ModeleEngraveLayer from "./ModeleEngraveLayer";
 import MotifEngraveLayer from "./MotifEngraveLayer";
 import { Motif } from "./Motif";
-import { MODELES, defaultModele, layoutLabel } from "@/lib/modeles";
+import { MODELES, defaultModele, layoutLabel, imageDesign } from "@/lib/modeles";
 import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
@@ -385,22 +385,24 @@ export default function ProductDetail({ product }) {
   const HEART_PAGE_INDEX = { cover: 0, page1: 1, page2: 2, page3: 3, backcover: 4 };
   const heartPhotoIndex = HEART_PAGE_INDEX[fieldValues["photoPage"]] ?? 1;
 
-  const waitMs = (ms) => new Promise((r) => setTimeout(r, ms));
-
-  // Capture l'aperçu tel que le client l'a préparé.
-  //  - hideGlass = false : visuel complet (verre + gravure) → référence.
-  //  - hideGlass = true  : gravure SEULE sur fond transparent → fichier à graver.
-  async function snap(node, hideGlass) {
-    const mod = await import("html-to-image");
-    const filter = (n) => {
-      const c = n.classList;
-      if (!c) return true;
-      if (c.contains("ee-toolbar") || c.contains("side-toggle") || c.contains("gallery-arrow") || c.contains("gallery-thumbs")) return false;
-      if (hideGlass && (c.contains("gallery-bg") || c.contains("placeholder"))) return false;
-      return true;
-    };
-    if (hideGlass) return mod.toPng(node, { cacheBust: true, pixelRatio: 1.8, filter });
-    return mod.toJpeg(node, { cacheBust: true, pixelRatio: 1.6, quality: 0.85, backgroundColor: "#ffffff", filter });
+  function loadImg(src) {
+    return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  }
+  // Compose le visuel EXACT : la photo du verre + l'image/photo choisie, posée
+  // dans la zone gravable. 100 % fiable (canvas + fichiers même origine), contrairement
+  // à une capture d'écran du DOM (qui n'arrivait pas à inclure l'image Next.js).
+  async function composeOnGlass(glassUrl, artUrl, box) {
+    const [g, a] = await Promise.all([loadImg(glassUrl), loadImg(artUrl)]);
+    const W = g.naturalWidth || 800, H = g.naturalHeight || 800;
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(g, 0, 0, W, H);
+    const zx = box.left * W, zy = box.top * H, zw = box.width * W, zh = box.height * H;
+    const ar = (a.naturalWidth || 1) / (a.naturalHeight || 1);
+    let dw = zw, dh = zw / ar;
+    if (dh > zh) { dh = zh; dw = zh * ar; }
+    ctx.drawImage(a, zx + (zw - dw) / 2, zy + (zh - dh) / 2, dw, dh);
+    return c.toDataURL("image/jpeg", 0.9);
   }
   async function uploadDataUrl(dataUrl) {
     if (!dataUrl) return null;
@@ -410,14 +412,6 @@ export default function ProductDetail({ product }) {
       if (res.ok && data.ref) return "/api/img/" + data.ref;
     } catch { /* ignore */ }
     return null;
-  }
-  async function captureSide() {
-    const node = photoRef.current;
-    if (!node) return { preview: null, artwork: null };
-    let preview = null, artwork = null;
-    try { preview = await uploadDataUrl(await snap(node, false)); } catch { /* ignore */ }
-    try { artwork = await uploadDataUrl(await snap(node, true)); } catch { /* ignore */ }
-    return { preview, artwork };
   }
 
   async function handleAdd() {
@@ -443,22 +437,32 @@ export default function ProductDetail({ product }) {
     }
     setError("");
 
-    // Capture du visuel EXACT préparé par le client (verre + gravure placée),
-    // pour la fiche atelier (admin + e-mail) et la génération du fichier à graver.
+    // Visuel EXACT préparé par le client (verre + image/photo posée) + source du
+    // fichier à graver, composés de façon fiable (canvas). Pour l'aperçu panier,
+    // l'e-mail et la page atelier.
     let previewImage = null, previewImageFond = null, artworkImage = null, artworkImageFond = null;
     if (product.engrave && hasImages) {
       setPreparing(true);
       try {
+        const dsg = (modeleField && modeleVal && modeleVal.layout) ? imageDesign(modeleTemplate, modeleVal.layout) : null;
+        const glass = images[activeImg] || images[0];
+        const faceBox = (product.engrave && product.engrave.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
+        const fondBox = (product.engraveFond && product.engraveFond.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
+        // FACE : photo envoyée, sinon design image choisi (Fête des pères).
+        const faceArt = photoSrc || (dsg ? dsg.dark : null);
+        if (faceArt) {
+          artworkImage = faceArt;
+          const composed = await composeOnGlass(glass, faceArt, faceBox);
+          previewImage = (await uploadDataUrl(composed)) || composed;
+        }
+        // FOND (mode « les deux ») : photo du fond si fournie (texte/motif : pas d'image fixe).
         if (dualMode) {
-          const orig = activeSide;
-          if (orig !== "face") { setActiveSide("face"); await waitMs(450); } else { await waitMs(150); }
-          ({ preview: previewImage, artwork: artworkImage } = await captureSide());
-          setActiveSide("fond"); await waitMs(450);
-          ({ preview: previewImageFond, artwork: artworkImageFond } = await captureSide());
-          setActiveSide(orig); await waitMs(50);
-        } else {
-          await waitMs(150);
-          ({ preview: previewImage, artwork: artworkImage } = await captureSide());
+          const fondArt = photoSrcFond || null;
+          if (fondArt) {
+            artworkImageFond = fondArt;
+            const composedF = await composeOnGlass(product.fondImage || glass, fondArt, fondBox);
+            previewImageFond = (await uploadDataUrl(composedF)) || composedF;
+          }
         }
       } catch { /* ignore */ }
       setPreparing(false);

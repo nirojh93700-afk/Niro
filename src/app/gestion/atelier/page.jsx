@@ -58,15 +58,14 @@ function loadImg(src) {
   });
 }
 
-// Recadre la capture (gravure seule) sur la zone réellement gravable.
-async function cropToBox(src, box) {
+// Convertit l'image (design/photo choisi) en dataURL autonome (pour l'embarquer
+// dans le SVG/PDF sans dépendre d'une URL externe).
+async function toDataUrl(src) {
   const im = await loadImg(src);
-  const nw = im.naturalWidth, nh = im.naturalHeight;
-  const sw = Math.max(1, Math.round(box.width * nw));
-  const sh = Math.max(1, Math.round(box.height * nh));
+  const w = im.naturalWidth || 1000, h = im.naturalHeight || 1000;
   const c = document.createElement("canvas");
-  c.width = sw; c.height = sh;
-  c.getContext("2d").drawImage(im, box.left * nw, box.top * nh, box.width * nw, box.height * nh, 0, 0, sw, sh);
+  c.width = w; c.height = h;
+  c.getContext("2d").drawImage(im, 0, 0, w, h);
   return c.toDataURL("image/png");
 }
 
@@ -115,19 +114,17 @@ export default function AtelierPage() {
     const tag = `gravure-${item.slug}-${side}`;
     setBusy(`${item.slug}-${side}-${kind}`);
     try {
+      const art = await toDataUrl(cfg.src);
+      const W = cfg.widthMm, H = cfg.heightMm;
       if (kind === "png") {
-        downloadDataUrl(await cropToBox(cfg.src, cfg.box), `${tag}.png`);
+        downloadDataUrl(art, `${tag}.png`);
       } else if (kind === "svg") {
-        const cropped = await cropToBox(cfg.src, cfg.box);
-        const W = cfg.widthMm, H = cfg.heightMm;
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}"><image x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none" href="${cropped}"/></svg>`;
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}"><image x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="xMidYMid meet" href="${art}"/></svg>`;
         downloadBlob(new Blob([svg], { type: "image/svg+xml" }), `${tag}.svg`);
       } else if (kind === "pdf") {
-        const cropped = await cropToBox(cfg.src, cfg.box);
         const { jsPDF } = await import("jspdf");
-        const W = cfg.widthMm, H = cfg.heightMm;
         const doc = new jsPDF({ unit: "mm", format: [W, H] });
-        doc.addImage(cropped, "PNG", 0, 0, W, H);
+        doc.addImage(art, "PNG", 0, 0, W, H);
         // Page de détails (réglages exacts) pour l'atelier.
         doc.addPage("a4", "portrait");
         doc.setFontSize(13);
