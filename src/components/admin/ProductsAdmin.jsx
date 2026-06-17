@@ -69,11 +69,9 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
 
       {showAdd && (
         <AddProduct
-          onCreate={async (prod) => {
-            const ok = await post({ action: "create", product: prod });
-            setMsg(ok ? "Produit ajouté ✓" : "Échec de l'ajout.");
-            if (ok) { setShowAdd(false); onReload(); }
-          }}
+          adminKey={adminKey}
+          setMsg={setMsg}
+          onDone={() => { setShowAdd(false); onReload(); }}
         />
       )}
 
@@ -305,23 +303,83 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
   );
 }
 
-function AddProduct({ onCreate }) {
+function AddProduct({ adminKey, setMsg, onDone }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("cadeaux");
   const [subcategory, setSubcategory] = useState("");
   const [tagline, setTagline] = useState("");
   const [type, setType] = useState("");
+  const [badge, setBadge] = useState("");
   const [desc, setDesc] = useState("");
-  const [images, setImages] = useState("");
+  const [imgs, setImgs] = useState([]);            // photos (URLs), illimitées + réordonnables
   const [letter, setLetter] = useState(true);
-  // Variantes (au moins une) : titre + prix, comme sur Shopify.
-  const [variants, setVariants] = useState([{ title: "Standard", price: "" }]);
+  const [pickup, setPickup] = useState(false);
+  const [weight, setWeight] = useState("");
+  const [dimL, setDimL] = useState(""); const [dimW, setDimW] = useState(""); const [dimH, setDimH] = useState("");
+  // Variantes : titre + prix + stock (add/suppr).
+  const [variants, setVariants] = useState([{ title: "Standard", price: "", stock: "" }]);
+  const [creating, setCreating] = useState(false);
+  const [createdSlug, setCreatedSlug] = useState("");
   const setVar = (i, k, v) => setVariants((vs) => vs.map((x, j) => (j === i ? { ...x, [k]: v } : x)));
   const subs = SUBCATEGORIES[category] || null;
+
+  function moveImg(from, to) {
+    if (to < 0 || to >= imgs.length) return;
+    const next = imgs.slice(); const [m] = next.splice(from, 1); next.splice(to, 0, m); setImgs(next);
+  }
+
+  async function create() {
+    if (!name.trim()) { setMsg && setMsg("Le nom est obligatoire."); return; }
+    const vs = variants.filter((v) => Number(v.price) > 0);
+    if (!vs.length) { setMsg && setMsg("Indique au moins une option avec un prix."); return; }
+    setCreating(true);
+    try {
+      const res = await fetch("/api/admin/catalog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify({
+          action: "create",
+          product: {
+            name, category, subcategory: subcategory || undefined, type, tagline,
+            badge: badge || undefined, letter, pickup,
+            weight: weight === "" ? undefined : Number(weight),
+            dimL: dimL || undefined, dimW: dimW || undefined, dimH: dimH || undefined,
+            price: vs[0]?.price,
+            variants: vs,
+            descriptionHtml: desc,
+            images: imgs,
+          },
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.slug) {
+        setMsg && setMsg("Produit créé ✓ — tu peux ajouter un modèle 3D ci-dessous, ou cliquer « Terminé ».");
+        setCreatedSlug(data.slug);
+      } else {
+        setMsg && setMsg(data.error || "Échec de l'ajout.");
+      }
+    } catch { setMsg && setMsg("Erreur réseau."); }
+    setCreating(false);
+  }
+
+  // Étape 2 (après création) : modèle 3D optionnel + Terminé.
+  if (createdSlug) {
+    return (
+      <div className="admin-block" style={{ display: "grid", gap: 12 }}>
+        <h3 style={{ marginTop: 0 }}>✓ « {name} » créé</h3>
+        <p style={{ margin: 0, fontSize: "0.88rem", color: "var(--ink-soft)" }}>
+          Dernière étape (facultative) : ajoute un <strong>modèle 3D (.glb)</strong> pour l'aperçu rotatif. Sinon, clique « Terminé ».
+        </p>
+        <Model3DUpload slug={createdSlug} current="" adminKey={adminKey} onSaved={() => { /* gardé en base */ }} />
+        <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={onDone}>Terminé</button>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-block" style={{ display: "grid", gap: 10 }}>
       <h3 style={{ marginTop: 0 }}>Nouveau produit</h3>
+
       <label className="admin-field">Nom *
         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex : Médaillon photo gravé" />
       </label>
@@ -338,47 +396,96 @@ function AddProduct({ onCreate }) {
           </select>
         </label>
       )}
+      <label className="admin-field">Type (affiché sur la vignette)
+        <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Ex : Collier personnalisé…" />
+      </label>
       <label className="admin-field">Phrase d'accroche
         <input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Ex : Le souvenir gravé qui fait fondre les cœurs." />
       </label>
-      <label className="admin-field">Type (affiché sur la vignette)
-        <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Ex : Collier personnalisé, Décoration de mariage…" />
+      <label className="admin-field">Badge sur la vignette
+        <select value={badge} onChange={(e) => setBadge(e.target.value)}>
+          <option value="">Aucun</option>
+          <option value="Nouveau">Nouveau</option>
+          <option value="Coup de cœur">Coup de cœur</option>
+          <option value="Populaire">Populaire</option>
+          <option value="Naissance">Naissance</option>
+          <option value="Bientôt épuisé">Bientôt épuisé</option>
+        </select>
       </label>
+
       <div>
-        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Options & prix (€) *</span>
+        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Options · prix (€) · stock *</span>
         {variants.map((v, i) => (
-          <div key={i} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
-            <input value={v.title} onChange={(e) => setVar(i, "title", e.target.value)} placeholder={`Option ${i + 1} (ex : Doré, À l'unité…)`} style={{ flex: 1, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
-            <input type="number" min="0" step="0.01" value={v.price} onChange={(e) => setVar(i, "price", e.target.value)} placeholder="24.90" style={{ width: 110, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+          <div key={i} style={{ display: "flex", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+            <input value={v.title} onChange={(e) => setVar(i, "title", e.target.value)} placeholder={`Option ${i + 1} (ex : Doré…)`} style={{ flex: "1 1 130px", padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+            <input type="number" min="0" step="0.01" value={v.price} onChange={(e) => setVar(i, "price", e.target.value)} placeholder="Prix €" style={{ width: 90, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+            <input type="number" min="0" step="1" value={v.stock} onChange={(e) => setVar(i, "stock", e.target.value)} placeholder="Stock" style={{ width: 80, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
             {variants.length > 1 && (
               <button type="button" className="btn btn-outline" style={{ padding: "4px 10px", color: "#b4452f" }} onClick={() => setVariants((vs) => vs.filter((_, j) => j !== i))}>×</button>
             )}
           </div>
         ))}
-        <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => setVariants((vs) => [...vs, { title: "", price: "" }])}>+ Ajouter une option (couleur, lot…)</button>
+        <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => setVariants((vs) => [...vs, { title: "", price: "", stock: "" }])}>+ Ajouter une option (couleur, lot…)</button>
+        <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Stock vide = non suivi (vendable sans compteur).</p>
       </div>
+
       <label className="admin-field">Description
         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} style={{ minHeight: 80 }} placeholder="Décris le produit…" />
       </label>
+
       <div>
-        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Photos</span>
-        {UPLOAD_AVAILABLE && (
-          <PhotoUpload value="" multiple onUpload={(urls) => setImages((cur) => [cur, ...urls].filter(Boolean).join("\n"))} />
+        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Photos (autant que tu veux)</span>
+        {imgs.length > 0 && (
+          <div className="photo-thumbs">
+            {imgs.map((u, i) => (
+              <span key={u + i} className="photo-thumb-wrap">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={u} alt="" />
+                {i === 0 && <span className="photo-thumb-main">Principale</span>}
+                <button type="button" className="photo-thumb-del" title="Retirer" onClick={() => setImgs(imgs.filter((x) => x !== u))}>×</button>
+                <span className="photo-thumb-moves">
+                  <button type="button" disabled={i === 0} onClick={() => moveImg(i, i - 1)}>‹</button>
+                  <button type="button" disabled={i === imgs.length - 1} onClick={() => moveImg(i, i + 1)}>›</button>
+                </span>
+              </span>
+            ))}
+          </div>
         )}
-        <textarea value={images} onChange={(e) => setImages(e.target.value)} style={{ minHeight: 60, marginTop: 8 }} placeholder="Ou colle des liens (une URL par ligne)" />
+        {UPLOAD_AVAILABLE && (
+          <div style={{ marginTop: 8 }}>
+            <PhotoUpload value="" multiple onUpload={(urls) => setImgs((cur) => [...cur, ...urls])} />
+          </div>
+        )}
+        <details style={{ marginTop: 8 }}>
+          <summary style={{ cursor: "pointer", fontSize: "0.82rem", color: "var(--ink-soft)" }}>Ou coller des liens (URL)</summary>
+          <textarea defaultValue={imgs.join("\n")} onBlur={(e) => setImgs(e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))} style={{ minHeight: 60, marginTop: 8 }} placeholder="https://… (une URL par ligne)" />
+        </details>
       </div>
-      <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <input type="checkbox" checked={letter} onChange={(e) => setLetter(e.target.checked)} style={{ width: "auto" }} />
-        Petit objet (expédiable en lettre suivie). Décoche si c'est un objet volumineux (colis).
-      </label>
-      <button className="btn btn-gold" onClick={() => onCreate({
-        name, category, subcategory: subcategory || undefined, letter,
-        tagline, type,
-        price: variants[0]?.price,
-        variants: variants.filter((v) => Number(v.price) > 0),
-        descriptionHtml: desc,
-        images: images.split("\n").map((s) => s.trim()).filter(Boolean),
-      })}>Créer le produit</button>
+
+      {/* Livraison */}
+      <details>
+        <summary style={{ cursor: "pointer", fontWeight: 600 }}>📦 Livraison & dimensions (facultatif)</summary>
+        <div style={{ display: "grid", gap: 10, marginTop: 10 }}>
+          <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <input type="checkbox" checked={letter} onChange={(e) => setLetter(e.target.checked)} style={{ width: "auto" }} />
+            Petit objet (lettre suivie). Décoche si volumineux (colis).
+          </label>
+          <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} style={{ width: "auto" }} />
+            Retrait en main propre possible
+          </label>
+          <label className="admin-field">Poids emballé (g)
+            <input type="number" min="0" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="Ex : 150" />
+          </label>
+          <div style={{ display: "flex", gap: 8 }}>
+            <label className="admin-field" style={{ flex: 1 }}>Long. (cm)<input type="number" min="0" value={dimL} onChange={(e) => setDimL(e.target.value)} /></label>
+            <label className="admin-field" style={{ flex: 1 }}>Larg. (cm)<input type="number" min="0" value={dimW} onChange={(e) => setDimW(e.target.value)} /></label>
+            <label className="admin-field" style={{ flex: 1 }}>Haut. (cm)<input type="number" min="0" value={dimH} onChange={(e) => setDimH(e.target.value)} /></label>
+          </div>
+        </div>
+      </details>
+
+      <button className="btn btn-gold" disabled={creating} onClick={create}>{creating ? "Création…" : "Créer le produit"}</button>
     </div>
   );
 }

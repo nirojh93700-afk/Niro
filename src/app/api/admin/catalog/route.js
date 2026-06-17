@@ -6,6 +6,7 @@ import {
   clearAllPriceOverrides,
   saveProductEditAtomic,
   getCustomProducts,
+  setStock,
 } from "@/lib/stock";
 import { products as baseProducts } from "@/lib/products";
 
@@ -79,6 +80,14 @@ export async function POST(req) {
     const slug = (slugify(name) || "produit") + "-" + Math.random().toString(36).slice(2, 6);
     const images = (p.images || []).map((u) => String(u).trim()).filter(Boolean);
     const descHtml = (p.descriptionHtml || "").trim();
+    // Variantes (titre + prix) avec id stable ; on garde le stock saisi pour l'appliquer ensuite.
+    const inVariants = (Array.isArray(p.variants) && p.variants.length ? p.variants : [{ title: "Standard", price }]);
+    const variants = inVariants
+      .map((v, i) => ({ id: `${slug}-v${i + 1}`, title: String(v.title || "Standard").slice(0, 60), price: Math.round((parseFloat(v.price) || 0) * 100) / 100, _stock: v.stock }))
+      .filter((v) => v.price > 0);
+    const dims = (p.dimL || p.dimW || p.dimH)
+      ? { l: Number(p.dimL) || 0, w: Number(p.dimW) || 0, h: Number(p.dimH) || 0 }
+      : undefined;
     const product = {
       slug,
       name,
@@ -90,6 +99,9 @@ export async function POST(req) {
       category: p.category || "cadeaux",
       type: p.type?.trim() || "Création personnalisée",
       tagline: p.tagline?.trim() || "",
+      badge: (p.badge && p.badge !== "none") ? String(p.badge).slice(0, 30) : undefined,
+      model3d: p.model3d ? String(p.model3d).trim() : undefined,
+      dimensions: dims,
       personalizable: true,
       personalizationLabel: p.personalizationLabel?.trim() || "Personnalisation",
       personalizationFields: [
@@ -97,14 +109,16 @@ export async function POST(req) {
         { key: "police", type: "font", label: "Police de gravure", optional: true },
       ],
       images,
-      variants: (Array.isArray(p.variants) && p.variants.length
-        ? p.variants
-            .map((v, i) => ({ id: `${slug}-v${i + 1}`, title: String(v.title || "Standard").slice(0, 60), price: Math.round((parseFloat(v.price) || 0) * 100) / 100 }))
-            .filter((v) => v.price > 0)
-        : [{ id: slug + "-std", title: "Standard", price: Math.round(price * 100) / 100 }]),
+      variants: (variants.length ? variants.map(({ _stock, ...v }) => v) : [{ id: slug + "-std", title: "Standard", price: Math.round(price * 100) / 100 }]),
       descriptionHtml: descHtml.startsWith("<") ? descHtml : `<p>${descHtml || name}</p>`,
     };
     await saveCustomProduct(product);
+    // Stock initial par variante (si renseigné).
+    for (const v of variants) {
+      if (v._stock !== "" && v._stock != null && Number.isFinite(Number(v._stock))) {
+        try { await setStock(v.id, Math.max(0, Math.round(Number(v._stock)))); } catch { /* ignore */ }
+      }
+    }
     return Response.json({ ok: true, slug });
   }
 
