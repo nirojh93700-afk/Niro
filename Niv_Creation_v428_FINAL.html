@@ -6712,6 +6712,7 @@ async function loadFromFirebase(){
         console.log('[v428] Photos préservées au chargement init:', Object.keys(localPhotos).length);
         // 🔧 v428 : récupérer du cloud les photos non préservées en mémoire
         setTimeout(function(){
+          window._v428MissingPhotos = {}; // 🔧 v428 : maj distante → réessayer les photos jadis absentes
           if (typeof window.progressiveDownload === 'function' && !window._v412SyncInProgress) {
             window.progressiveDownload();
           }
@@ -6865,6 +6866,7 @@ function listenToMasterChanges(){
         showSyncStatus('☁️ Updated from cloud');
         // 🔧 v428 : récupérer du cloud les photos non préservées en mémoire
         setTimeout(function(){
+          window._v428MissingPhotos = {}; // 🔧 v428 : maj distante → réessayer les photos jadis absentes
           if (typeof window.progressiveDownload === 'function' && !window._v412SyncInProgress) {
             window.progressiveDownload();
           }
@@ -47496,7 +47498,12 @@ window.progressiveDownload = async function() {
   var loaded = 0;
   var failed = 0;
   
+  // 🔧 v428 : mémoire des photos confirmées ABSENTES du cloud → on évite de les
+  // relire en boucle (chaque relecture = 1 lecture Firestore facturable).
+  window._v428MissingPhotos = window._v428MissingPhotos || {};
+
   // Helper : télécharger UNE photo avec retry (3 essais)
+  // Renvoie : l'image (string) | '__MISSING__' (absente, ne pas réessayer) | null (erreur réseau)
   async function downloadOne(key, retries) {
     retries = retries || 3;
     for (var attempt = 0; attempt < retries; attempt++) {
@@ -47508,7 +47515,7 @@ window.progressiveDownload = async function() {
             return photoData.dataUrl;
           }
         }
-        return null;  // pas de photo pour cette clé
+        return '__MISSING__';  // doc lu, pas de photo pour cette clé
       } catch(e) {
         console.warn('[v412] Échec photo ' + key + ' (essai ' + (attempt+1) + '/' + retries + '): ' + e.message);
         if (attempt < retries - 1) {
@@ -47516,32 +47523,44 @@ window.progressiveDownload = async function() {
         }
       }
     }
-    return null;
+    return null; // erreur réseau après tous les essais
   }
-  
+
   for (var i = 0; i < needPhotos.length; i++) {
     var p = needPhotos[i];
     var key = photoKey(p);
     if (!key) continue;
-    
+
+    // 🔧 v428 : déjà confirmée absente cette session → on n'interroge pas Firebase
+    if (window._v428MissingPhotos[key]) { continue; }
+
     // Pause entre photos (anti-saturation)
     await new Promise(function(r){ setTimeout(r, 150); });
-    
+
     // Si l'utilisateur est inactif (onglet caché), attendre qu'il revienne
     while (document.hidden) {
       await new Promise(function(r){ setTimeout(r, 500); });
     }
-    
-    var photoUrl = await downloadOne(key, 3);
 
-    // 🔧 v428 : si rien sous la clé stable, tenter l'ancienne clé (nom) puis migrer
-    if (!photoUrl) {
+    var res = await downloadOne(key, 3);
+    var missing = (res === '__MISSING__');
+    var photoUrl = (res && !missing) ? res : null;
+
+    // 🔧 v428 : si absente sous la clé stable, tenter l'ancienne clé (nom) puis migrer
+    if (!photoUrl && missing) {
       var legacyKey = photoKeyLegacy(p);
       if (legacyKey && legacyKey !== key) {
-        photoUrl = await downloadOne(legacyKey, 2);
-        if (photoUrl) { try { uploadPhoto(key, photoUrl); } catch(e){} }
+        var lres = await downloadOne(legacyKey, 2);
+        if (lres && lres !== '__MISSING__') {
+          photoUrl = lres;
+          missing = false;
+          try { uploadPhoto(key, photoUrl); } catch(e){}
+        }
       }
     }
+
+    // Confirmée absente partout → on la mémorise pour ne plus la relire
+    if (!photoUrl && missing) { window._v428MissingPhotos[key] = 1; }
 
     if (photoUrl) {
       p.imgData = photoUrl;
