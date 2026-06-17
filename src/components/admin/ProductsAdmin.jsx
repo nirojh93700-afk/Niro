@@ -233,6 +233,42 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
         <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={addVar}>+ Ajouter une variante</button>
         <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Le stock des nouvelles variantes se règle dans <strong>Catalogue → Stock</strong>.</p>
       </div>
+
+      {/* Options de gravure de ce produit (ce que le client remplit sur la fiche) */}
+      {(() => {
+        const fields = (product.personalizationFields || []).filter((f) => f.type !== "note");
+        const ep = product.engravingPricing || {};
+        const flat = Array.isArray(ep.flatExtras) ? ep.flatExtras : [];
+        const TYPE = { text: "texte", textarea: "texte", font: "police", color: "couleur", photo: "photo", select: "choix", modele: "modèle de gravure", motifniv: "motif", badge: "badge" };
+        const supForKey = (k) => {
+          const e = flat.find((x) => x.key === k && x.value === undefined);
+          return e ? ` · +${e.amount} €` : "";
+        };
+        const dualExtra = flat.find((x) => x.value === "deux");
+        const modeleSub = ep.modeleSubExtra;
+        return (
+          <div style={{ border: "1px dashed var(--line)", borderRadius: 8, padding: "10px 12px", background: "#faf6ee" }}>
+            <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>🖊️ Options de gravure (ce que le client remplit sur la fiche)</span>
+            {fields.length ? (
+              <ul style={{ margin: 0, paddingLeft: 18, fontSize: "0.86rem", lineHeight: 1.6 }}>
+                {fields.map((f) => (
+                  <li key={f.key}>
+                    {f.label || f.key}
+                    <span style={{ color: "var(--ink-soft)" }}> — {TYPE[f.type] || (f.type ? f.type : "texte")}{f.optional ? " (facultatif)" : ""}{supForKey(f.key)}</span>
+                  </li>
+                ))}
+                {modeleSub && <li>Texte ajouté au modèle <span style={{ color: "var(--ink-soft)" }}>· +{modeleSub.amount} €</span></li>}
+                {dualExtra && <li>Graver les deux côtés (face + fond) <span style={{ color: "var(--ink-soft)" }}>· +{dualExtra.amount} €</span></li>}
+              </ul>
+            ) : (
+              <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>Aucune option de gravure sur ce produit.</p>
+            )}
+            <p style={{ margin: "8px 0 0", fontSize: "0.76rem", color: "var(--ink-soft)" }}>
+              Ces options s'affichent sur la fiche client. Pour en modifier une (ajouter une face, changer un supplément…), dis-le-moi.
+            </p>
+          </div>
+        );
+      })()}
       <label className="admin-field">Remise (%) sur ce produit
         <input type="number" min="0" max="90" step="1" value={discountPct}
           onChange={(e) => setDiscountPct(e.target.value === "" ? "" : Number(e.target.value))} />

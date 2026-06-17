@@ -31,6 +31,8 @@ export async function GET(req) {
       overrideImages: overrides[p.slug] || [],
       model3d: p.model3d || "",
       preview: p.preview || null,
+      personalizationFields: p.personalizationFields || [],
+      engravingPricing: p.engravingPricing || null,
       variants: (p.variants || []).map((v) => ({ id: v.id, title: v.title, price: v.price })),
     });
     catalog.push({
