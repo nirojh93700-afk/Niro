@@ -166,10 +166,28 @@ export default async function RootLayout({ children }) {
   const pixelId = /^[0-9]{5,30}$/.test(settings.metaPixelId || "") ? settings.metaPixelId : "";
   const gaId = /^[A-Za-z0-9-]{5,30}$/.test(settings.gaId || "") ? settings.gaId : "";
 
+  // Données structurées (SEO) : aide Google à identifier la boutique.
+  const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");
+  const LOGO = (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim();
+  const orgLd = {
+    "@context": "https://schema.org", "@type": "Store",
+    name: "Niv Création", url: SITE_URL, image: LOGO, logo: LOGO,
+    description: "Atelier français de gravure et découpe laser. Bijoux, décorations de mariage et cadeaux personnalisés, personnalisés en France.",
+    sameAs: ["https://instagram.com/nivcreation"],
+    address: { "@type": "PostalAddress", addressCountry: "FR" },
+    areaServed: "FR",
+  };
+  const siteLd = {
+    "@context": "https://schema.org", "@type": "WebSite",
+    name: "Niv Création", url: SITE_URL,
+  };
+
   return (
     <html lang="fr" className={`${display.variable} ${body.variable} ${fontVars}`}>
       <body>
         {colorCss ? <style dangerouslySetInnerHTML={{ __html: colorCss }} /> : null}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {gaId && (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
