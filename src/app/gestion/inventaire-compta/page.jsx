@@ -7,8 +7,13 @@
 // Tout est gratuit : utilise les commandes et les stocks déjà enregistrés.
 // =============================================================================
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, Fragment } from "react";
 import Link from "next/link";
+import { getCategoryLabel } from "@/lib/products";
+
+// Ordre d'affichage des catégories (regroupées, pas mélangées).
+const CAT_ORDER = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "cles-usb", "porte-cles", "medailles"];
+const catRank = (c) => { const i = CAT_ORDER.indexOf(c); return i < 0 ? 99 : i; };
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 
@@ -58,7 +63,7 @@ export default function InventaireComptaPage() {
     if (!byStock[id]) byStock[id] = { id, slug: r.productSlug, name: r.productName, category: r.category, stock: r.stock, price: r.price, titles: [] };
     if (r.variantTitle) byStock[id].titles.push(r.variantTitle);
   }
-  const inv = Object.values(byStock).sort((a, b) => a.name.localeCompare(b.name));
+  const inv = Object.values(byStock).sort((a, b) => (catRank(a.category) - catRank(b.category)) || a.name.localeCompare(b.name));
   const lowCount = inv.filter((i) => typeof i.stock === "number" && i.stock > 0 && i.stock <= 3).length;
   const outCount = inv.filter((i) => i.stock === 0).length;
   const stockUnits = inv.reduce((s, i) => s + (typeof i.stock === "number" ? i.stock : 0), 0);
@@ -260,12 +265,21 @@ export default function InventaireComptaPage() {
             </tr>
           </thead>
           <tbody>
-            {inv.map((i) => {
+            {inv.map((i, idx) => {
               const cur = edits[i.id] != null ? edits[i.id] : (i.stock == null ? "" : i.stock);
               const pending = edits[i.id] != null;
               const bg = pending ? "#fff3cd" : (i.stock === 0 ? "#fbeaea" : (typeof i.stock === "number" && i.stock <= 3 ? "#fdf6e3" : "transparent"));
+              const newCat = idx === 0 || inv[idx - 1].category !== i.category;
               return (
-                <tr key={i.id} style={{ borderTop: "1px solid #eee", background: bg }}>
+                <Fragment key={i.id}>
+                {newCat && (
+                  <tr>
+                    <td colSpan={4} style={{ padding: "10px 10px 4px", fontWeight: 700, color: "var(--gold-dark)", background: "#f3ecdd", borderTop: "2px solid #e7d9bd" }}>
+                      {getCategoryLabel(i.category)}
+                    </td>
+                  </tr>
+                )}
+                <tr style={{ borderTop: "1px solid #eee", background: bg }}>
                   <td style={{ padding: "6px 10px", fontWeight: 600 }}>
                     <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       {imgBySlug[i.slug] ? (
@@ -292,6 +306,7 @@ export default function InventaireComptaPage() {
                     </button>
                   </td>
                 </tr>
+                </Fragment>
               );
             })}
           </tbody>

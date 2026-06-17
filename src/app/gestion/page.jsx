@@ -1038,7 +1038,17 @@ export default function GestionPage() {
                   return g.items.filter((r) => { const k = r.stockId || r.variantId; if (seen.has(k)) return false; seen.add(k); return true; }).map((r) => {
                     const k = r.stockId || r.variantId;
                     const grouped = counts[k] > 1;
-                    const label = grouped && r.variantTitle.includes("/") ? r.variantTitle.split("/").pop().trim() : r.variantTitle;
+                    // Stock partagé par plusieurs variantes : on affiche la partie
+                    // COMMUNE à toutes (= la vraie couleur/option distinctive), pas
+                    // seulement le dernier mot (qui donnait des doublons « Sans texte »).
+                    let label = r.variantTitle;
+                    if (grouped) {
+                      const segs = g.items
+                        .filter((x) => (x.stockId || x.variantId) === k)
+                        .map((x) => (x.variantTitle || "").split("/").map((s) => s.trim()).filter(Boolean));
+                      const common = (segs[0] || []).filter((s) => segs.every((arr) => arr.includes(s)));
+                      label = common.length ? common.join(" / ") : r.variantTitle;
+                    }
                     return (
                       <div className="admin-row" key={k}>
                         <span className="admin-variant">{label}</span>
