@@ -21,6 +21,7 @@ export default function EtudeMarchePage() {
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);
   const [date, setDate] = useState("");
+  const [source, setSource] = useState("");
   const [running, setRunning] = useState(false);
   const [error, setError] = useState("");
 
@@ -54,7 +55,7 @@ export default function EtudeMarchePage() {
       const data = await res.json();
       if (!res.ok || data.error) { setError(data.error || "Échec de l'analyse."); setRunning(false); return; }
       if (!Array.isArray(data.rows) || !data.rows.length) { setError("Aucun résultat exploitable, réessaie."); setRunning(false); return; }
-      setRows(data.rows); setDate(data.date || new Date().toISOString());
+      setRows(data.rows); setDate(data.date || new Date().toISOString()); setSource(data.source || "");
       try { localStorage.setItem("niv-market-study", JSON.stringify({ rows: data.rows, date: data.date })); } catch { /* ignore */ }
     } catch (e) {
       setError("Erreur : " + (e?.message || e));
@@ -107,6 +108,11 @@ export default function EtudeMarchePage() {
         </button>
         {rows.length > 0 && <button className="btn btn-outline" onClick={downloadCSV}>⬇ Télécharger (CSV / Excel)</button>}
         {date && <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>Dernière analyse : {new Date(date).toLocaleString("fr-FR")}</span>}
+        {source && (
+          <span style={{ fontSize: "0.8rem", fontWeight: 600, padding: "2px 10px", borderRadius: 20, background: source === "tavily" ? "#d9ead3" : "#fff3cd", color: "#444" }}>
+            Recherche : {source === "tavily" ? "Tavily (gratuit) ✓" : "Anthropic (payant)"}
+          </span>
+        )}
       </div>
       {error && <div className="notice">{error}</div>}
 
