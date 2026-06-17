@@ -64,7 +64,10 @@ env:
     availability:
       - RUNTIME
   # --- Recherche web gratuite pour l'étude de marché (Tavily) -----------------
-  - variable: TAVILY_API_KEY
-    secret: TAVILY_API_KEY
-    availability:
-      - RUNTIME
+  # DÉSACTIVÉ tant que le secret n'est pas créé dans Firebase (sinon le déploiement
+  # échoue). À réactiver une fois "firebase apphosting:secrets:set TAVILY_API_KEY"
+  # + grantaccess effectués :
+  # - variable: TAVILY_API_KEY
+  #   secret: TAVILY_API_KEY
+  #   availability:
+  #     - RUNTIME
