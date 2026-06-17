@@ -1260,7 +1260,7 @@ export const products = [
 <p>Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour un anniversaire, la Fête des Pères, un cadeau d'entreprise, un témoin de mariage, ou simplement pour se faire plaisir.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Verre :</strong> tumbler à whisky, base épaisse, contenance d'environ 300 ml</li>
+<li><strong>Verre :</strong> verre à whisky, base épaisse, contenance d'environ 300 ml</li>
 <li><strong>Gravure :</strong> laser, sur une face — texte et/ou dessin / logo</li>
 <li><strong>Personnalisation :</strong> texte au choix, 8 polices, dessin via l'assistant ou votre propre image</li>
 <li><strong>Hauteur :</strong> environ 9 cm</li>
@@ -1337,7 +1337,7 @@ export const products = [
 <p>Choisissez vos textes, la police de chaque ligne et un motif : l'aperçu s'affiche en direct sur le verre. Gravure laser permanente, qui résiste au lave-vaisselle.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Verre :</strong> tumbler à whisky, base épaisse, contenance d'environ 300 ml</li>
+<li><strong>Verre :</strong> verre à whisky, base épaisse, contenance d'environ 300 ml</li>
 <li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre</li>
 <li><strong>Personnalisation :</strong> 3 lignes de texte + motif au choix</li>
 <li><strong>Hauteur :</strong> environ 9 cm</li>

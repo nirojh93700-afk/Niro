@@ -513,7 +513,7 @@ Défaut technique ou de gravure
   },
 
   "verre-a-whisky-grave": {
-    material: `Verre à whisky (tumbler) à base épaisse
+    material: `Verre à whisky à base épaisse
 
 - Verre épais et lourd en main, contenance d'environ 300 ml, hauteur d'environ 9 cm.
 - Surface lisse idéale pour une gravure laser nette et précise.
