@@ -514,6 +514,7 @@ export default function GestionPage() {
                 { id: "commandes", text: `Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
                 { id: "atelier", text: "🥃 Atelier (détails commandes)", href: "/gestion/atelier" },
                 { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
+                { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
                 { id: "stats", text: "Statistiques" },
                 { id: "clients", text: "Clientes" },
                 { id: "devis", text: "Devis / Factures" },
