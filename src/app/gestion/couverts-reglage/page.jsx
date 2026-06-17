@@ -33,6 +33,15 @@ export default function CouvertsReglagePage() {
   const [sel, setSel] = useState({ piece: "couteau", which: "name" });
   const boxRef = useRef(null);
   const drag = useRef(null);
+  const zoomRef = useRef(null);
+  const [zoomW, setZoomW] = useState(0);
+  useEffect(() => {
+    const el = zoomRef.current; if (!el) return;
+    const upd = () => setZoomW(el.clientWidth);
+    upd();
+    const ro = new ResizeObserver(upd); ro.observe(el);
+    return () => ro.disconnect();
+  }, [authed, sel.piece]);
 
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
@@ -155,6 +164,31 @@ export default function CouvertsReglagePage() {
           );
         })}
       </div>
+
+      {/* Gros plan du couvert sélectionné (lecture) */}
+      {(() => {
+        const z = zones[sel.piece]; if (!z) return null;
+        const cw = 0.26, ch = 0.5, cyMid = 0.70;
+        return (
+          <div style={{ margin: "14px auto 0", maxWidth: 220 }}>
+            <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", textAlign: "center", margin: "0 0 4px" }}>Gros plan — {PIECES.find((p) => p.key === sel.piece)?.label}</p>
+            <div ref={zoomRef} style={{ position: "relative", width: "100%", aspectRatio: `${cw * 100} / ${ch * 100}`, background: "#fff", borderRadius: 10, border: "1px solid var(--line)", overflow: "hidden" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={BASE} alt="" style={{ position: "absolute", width: `${100 / cw}%`, height: `${100 / ch}%`, left: `${50 - z.cx * 100 / cw}%`, top: `${50 - cyMid * 100 / ch}%`, objectFit: "fill" }} />
+              <span style={{
+                position: "absolute", left: "50%", top: `${50 + (z.nameCy - cyMid) * 100 / ch}%`,
+                transform: `translate(-50%,-50%) rotate(-90deg) scaleX(${z.nameW ?? 1})`, transformOrigin: "center",
+                fontSize: zoomW ? `${z.nameSize * (zoomW / cw)}px` : "16px", fontWeight: 700, color: "#3a2f1d", whiteSpace: "nowrap",
+              }}>Prénom</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={SAMPLE} alt="" style={{
+                position: "absolute", left: "50%", top: `${50 + (z.animalCy - cyMid) * 100 / ch}%`,
+                height: `${z.animalH * 100 / ch}%`, width: z.animalW ? `${z.animalW * 100 / cw}%` : "auto", transform: "translate(-50%,-50%)",
+              }} />
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Sélection pièce + curseurs */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "14px 0 8px" }}>

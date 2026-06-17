@@ -34,8 +34,21 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
     return () => ro.disconnect();
   }, []);
 
+  // Gros plan (zoom) sur le couvert en cours de personnalisation.
+  const [activePiece, setActivePiece] = useState(pieces[0]?.key);
+  const zoomRef = useRef(null);
+  const [zoomW, setZoomW] = useState(0);
+  useEffect(() => {
+    const el = zoomRef.current; if (!el) return;
+    const upd = () => setZoomW(el.clientWidth);
+    upd();
+    const ro = new ResizeObserver(upd); ro.observe(el);
+    return () => ro.disconnect();
+  }, [activePiece]);
+
   function setTheme(k) { onChange({ theme: k, animals: {} }); } // changer de thème remet les animaux à zéro
   function setAnimal(pieceKey, animalKey) {
+    setActivePiece(pieceKey);
     onChange({ theme: v.theme, animals: { ...v.animals, [pieceKey]: animalKey } });
   }
 
@@ -44,7 +57,7 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
       {field.label && <label>{field.label}</label>}
 
       {/* Aperçu : les 4 couverts de face + animal/prénom posés sur chaque manche */}
-      <div ref={boxRef} style={{ position: "relative", width: "100%", maxWidth: 440, margin: "0 auto 16px", aspectRatio: "1 / 1", background: "#fff", borderRadius: 12, border: "1px solid var(--line)" }}>
+      <div ref={boxRef} style={{ position: "relative", width: "100%", maxWidth: 540, margin: "0 auto 16px", aspectRatio: "1 / 1", background: "#fff", borderRadius: 12, border: "1px solid var(--line)" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={field.base} alt="Couverts enfants" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         {pieces.map((p) => {
@@ -78,6 +91,42 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
           );
         })}
       </div>
+
+      {/* Gros plan (zoom) sur le couvert en cours — pour bien voir la gravure */}
+      {(() => {
+        const p = pieces.find((x) => x.key === activePiece) || pieces[0];
+        if (!p) return null;
+        const z = { ...(p.zone || {}), ...(zones[p.key] || {}) };
+        const cx = z.cx ?? 0.5, nameCy = z.nameCy ?? 0.64, animalCy = z.animalCy ?? 0.77;
+        const animalH = z.animalH ?? 0.07, nameSize = z.nameSize ?? 0.04;
+        const ak = v.animals[p.key];
+        const animal = ak ? (theme?.animals || []).find((a) => a.key === ak) : null;
+        const cw = 0.26, ch = 0.5, cyMid = 0.70; // zone du manche à agrandir
+        return (
+          <div style={{ margin: "0 auto 16px", maxWidth: 300 }}>
+            <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", textAlign: "center", margin: "0 0 6px" }}>Gros plan — {p.label}</p>
+            <div ref={zoomRef} style={{ position: "relative", width: "100%", aspectRatio: `${cw * 100} / ${ch * 100}`, background: "#fff", borderRadius: 12, border: "1px solid var(--line)", overflow: "hidden" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={field.base} alt="" style={{ position: "absolute", width: `${100 / cw}%`, height: `${100 / ch}%`, left: `${50 - cx * 100 / cw}%`, top: `${50 - cyMid * 100 / ch}%`, objectFit: "fill" }} />
+              {prenom ? (
+                <span className={fontClass} style={{
+                  position: "absolute", left: "50%", top: `${50 + (nameCy - cyMid) * 100 / ch}%`,
+                  transform: `translate(-50%,-50%) rotate(-90deg) scaleX(${z.nameW ?? 1})`, transformOrigin: "center",
+                  fontSize: zoomW ? `${nameSize * (zoomW / cw)}px` : "18px", color: "#3a2f1d", whiteSpace: "nowrap", fontWeight: 600, pointerEvents: "none",
+                }}>{prenom}</span>
+              ) : null}
+              {animal ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={animal.img} alt={animal.label} style={{
+                  position: "absolute", left: "50%", top: `${50 + (animalCy - cyMid) * 100 / ch}%`,
+                  height: `${animalH * 100 / ch}%`, width: z.animalW ? `${z.animalW * 100 / cw}%` : "auto",
+                  transform: "translate(-50%,-50%)", opacity: 0.9, pointerEvents: "none",
+                }} />
+              ) : null}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Choix du thème */}
       <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
