@@ -1,0 +1,14 @@
+{
+  "name": "Niv Création — Admin",
+  "short_name": "Niv Admin",
+  "description": "Espace de gestion Niv Création : commandes, atelier, produits, étude de marché.",
+  "start_url": "/gestion",
+  "scope": "/gestion",
+  "display": "standalone",
+  "background_color": "#2b2620",
+  "theme_color": "#2b2620",
+  "icons": [
+    { "src": "/gestion/icon", "sizes": "256x256", "type": "image/png" },
+    { "src": "/gestion/apple-icon", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ]
+}
