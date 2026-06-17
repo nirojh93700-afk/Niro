@@ -52,7 +52,7 @@ export function imageDesign(t, layout) {
   return (t?.imageDesigns || []).find((d) => d.id === layout) || null;
 }
 // Libellé d'un layout (nom du design image, ou nom du style vectoriel).
-const VECTOR_LABELS = { classic: "Classique", badge: "Médaillon rond", stack: "Simple" };
+const VECTOR_LABELS = { classic: "élu Papa de l'année", badge: "Médaillon rond", stack: "Simple" };
 export function layoutLabel(t, layout) {
   const d = imageDesign(t, layout);
   return d ? d.name : (VECTOR_LABELS[layout] || layout);
