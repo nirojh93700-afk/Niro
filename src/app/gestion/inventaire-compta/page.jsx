@@ -21,6 +21,9 @@ export default function InventaireComptaPage() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState("");
   const [edits, setEdits] = useState({});     // stockId -> valeur en cours d'édition
+  const [importText, setImportText] = useState("");
+  const [unmatched, setUnmatched] = useState(null); // lignes du fichier non trouvées
+  const [savingAll, setSavingAll] = useState(false);
 
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
@@ -48,12 +51,68 @@ export default function InventaireComptaPage() {
   const byStock = {};
   for (const r of rows) {
     const id = r.stockId || r.variantId;
-    if (!byStock[id]) byStock[id] = { id, name: r.productName, category: r.category, stock: r.stock, titles: [] };
+    if (!byStock[id]) byStock[id] = { id, name: r.productName, category: r.category, stock: r.stock, price: r.price, titles: [] };
     if (r.variantTitle) byStock[id].titles.push(r.variantTitle);
   }
   const inv = Object.values(byStock).sort((a, b) => a.name.localeCompare(b.name));
   const lowCount = inv.filter((i) => typeof i.stock === "number" && i.stock > 0 && i.stock <= 3).length;
   const outCount = inv.filter((i) => i.stock === 0).length;
+  const stockUnits = inv.reduce((s, i) => s + (typeof i.stock === "number" ? i.stock : 0), 0);
+  const stockValue = inv.reduce((s, i) => s + (typeof i.stock === "number" ? i.stock * (Number(i.price) || 0) : 0), 0);
+
+  // --- Import des stocks depuis le fichier (sans renommer : on FAIT CORRESPONDRE) ---
+  const N = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\ba? ?graver\b/g, "").replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+  function bestMatch(fileProd, fileVar) {
+    const fp = new Set(N(fileProd).split(" ").filter((w) => w.length > 2));
+    const fv = N(fileVar);
+    let best = null, bestScore = 0;
+    for (const r of rows) {
+      const spArr = N(r.productName).split(" ").filter((w) => w.length > 2);
+      const sp = new Set(spArr);
+      let common = 0; fp.forEach((w) => { if (sp.has(w)) common++; });
+      const prodScore = common / Math.max(1, Math.min(fp.size, sp.size));
+      const sv = N(r.variantTitle);
+      const colorOk = !fv || sv === fv || sv.includes(fv) || fv.includes(sv) || sv.split(" ").some((w) => w.length > 2 && fv.split(" ").includes(w));
+      const score = prodScore + (colorOk ? 0.6 : 0);
+      if (prodScore >= 0.5 && colorOk && score > bestScore) { best = r; bestScore = score; }
+    }
+    return best;
+  }
+  function analyzeImport() {
+    const found = {}; const miss = [];
+    importText.split("\n").forEach((line) => {
+      if (!line.trim().startsWith("|")) return;
+      const cells = line.split("|").map((c) => c.trim());
+      const qtyM = (cells[1] || "").match(/\d+/);
+      const product = cells[2] || ""; const variante = cells[3] || "";
+      if (!qtyM || !product || product.toLowerCase() === "produit") return;
+      const qty = parseInt(qtyM[0], 10);
+      const m = bestMatch(product, variante);
+      if (m) found[m.stockId || m.variantId] = qty;
+      else miss.push(`${product} — ${variante} (${qty})`);
+    });
+    setEdits((e) => ({ ...e, ...found }));
+    setUnmatched(miss);
+  }
+  async function saveAll() {
+    const ids = Object.keys(edits);
+    if (!ids.length) return;
+    setSavingAll(true);
+    for (const id of ids) {
+      const val = edits[id];
+      const n = val === "" || val == null ? null : Math.max(0, parseInt(val, 10) || 0);
+      try {
+        await fetch("/api/admin/stock", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-admin-key": sessionStorage.getItem("niv-admin-key") || key },
+          body: JSON.stringify({ variantId: id, stock: n }),
+        });
+        setRows((prev) => prev.map((r) => ((r.stockId || r.variantId) === id ? { ...r, stock: n } : r)));
+      } catch { /* on continue */ }
+    }
+    setEdits({});
+    setSavingAll(false);
+  }
 
   async function saveStock(id) {
     const val = edits[id];
@@ -147,6 +206,40 @@ export default function InventaireComptaPage() {
 
       {/* ---------------- INVENTAIRE ---------------- */}
       <h2 style={{ fontFamily: "Georgia,serif", color: "var(--ink)", marginTop: 26 }}>Inventaire — stocks</h2>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", margin: "0 0 10px" }}>
+        {card("Valeur du stock", euro(stockValue))}
+        {card("Articles en stock", String(stockUnits))}
+        {card("Références", String(inv.length))}
+      </div>
+
+      {/* Import depuis le fichier (ne renomme rien : fait correspondre + tu valides) */}
+      <details style={{ border: "1px solid #ece3d2", borderRadius: 10, padding: "10px 14px", marginBottom: 14, background: "#faf6ee" }}>
+        <summary style={{ cursor: "pointer", fontWeight: 600 }}>⬆ Importer les stocks depuis un fichier (colle ton tableau)</summary>
+        <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+          Colle le contenu de ton fichier de stock. Je fais correspondre chaque ligne à tes produits du site
+          (sans rien renommer), je remplis les quantités ci-dessous — tu vérifies, puis « Tout enregistrer ».
+        </p>
+        <textarea value={importText} onChange={(e) => setImportText(e.target.value)} rows={6}
+          placeholder="| Qté | Produit | Variante | Prix |&#10;| 5 | Bracelet ... | Doré | ... |"
+          style={{ width: "100%", border: "1px solid var(--line)", borderRadius: 8, padding: 8, fontFamily: "monospace", fontSize: "0.8rem" }} />
+        <button className="btn btn-outline" style={{ marginTop: 8 }} onClick={analyzeImport} disabled={!importText.trim()}>Analyser & pré-remplir</button>
+        {unmatched && (
+          <div style={{ marginTop: 10, fontSize: "0.82rem" }}>
+            <strong>{Object.keys(edits).length}</strong> quantité(s) pré-remplie(s) ci-dessous (en jaune) — vérifie puis « Tout enregistrer ».
+            {unmatched.length > 0 && (
+              <div style={{ marginTop: 6, color: "#b4452f" }}>
+                ⚠ Non trouvés sur le site ({unmatched.length}) — à saisir à la main si besoin :
+                <ul style={{ margin: "4px 0 0", paddingLeft: 18 }}>{unmatched.map((u, i) => <li key={i}>{u}</li>)}</ul>
+              </div>
+            )}
+          </div>
+        )}
+      </details>
+      {Object.keys(edits).length > 0 && (
+        <button className="btn btn-gold" onClick={saveAll} disabled={savingAll} style={{ marginBottom: 12 }}>
+          {savingAll ? "Enregistrement…" : `💾 Tout enregistrer (${Object.keys(edits).length})`}
+        </button>
+      )}
       <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: 0 }}>
         Modifie une quantité puis « Enregistrer ». Vide = stock non suivi (vendable sans compteur).
         {outCount > 0 && <span style={{ color: "#b4452f", fontWeight: 600 }}> · {outCount} épuisé{outCount > 1 ? "s" : ""}</span>}
@@ -165,7 +258,8 @@ export default function InventaireComptaPage() {
           <tbody>
             {inv.map((i) => {
               const cur = edits[i.id] != null ? edits[i.id] : (i.stock == null ? "" : i.stock);
-              const bg = i.stock === 0 ? "#fbeaea" : (typeof i.stock === "number" && i.stock <= 3 ? "#fdf6e3" : "transparent");
+              const pending = edits[i.id] != null;
+              const bg = pending ? "#fff3cd" : (i.stock === 0 ? "#fbeaea" : (typeof i.stock === "number" && i.stock <= 3 ? "#fdf6e3" : "transparent"));
               return (
                 <tr key={i.id} style={{ borderTop: "1px solid #eee", background: bg }}>
                   <td style={{ padding: "6px 10px", fontWeight: 600 }}>{i.name}</td>
