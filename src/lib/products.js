@@ -1183,7 +1183,7 @@ export const products = [
     cardImage: "/produits/verre_a_whisky_exemple_face.jpg", // vignette : verre gravé PHOTO (montre l'usage)
     name: "Verre à whisky gravé",
     weight: 600, // verre + emballage protégé (fragile)
-    pickup: true, // remise en main propre possible (verre fragile)
+    pickup: false, // verres : livraison seule (pas de retrait en main propre)
     letter: false, // colis : lourd et fragile
     hidden: false, // PUBLIÉ (verre à whisky gravé — photo / texte / logo)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
@@ -1280,7 +1280,7 @@ export const products = [
     name: "Verre à whisky — Fête des pères",
     cardImage: "/produits/verre_a_whisky_card.jpg", // vignette : verre GRAVÉ (montre la personnalisation)
     weight: 600,
-    pickup: true,
+    pickup: false,
     letter: false,
     hidden: false, // PUBLIÉ (Fête des pères)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
