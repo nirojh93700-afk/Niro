@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment } from "react";
+import { getCategoryLabel } from "@/lib/products";
+
+const CAT_ORDER = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "cles-usb", "porte-cles", "medailles"];
+const catRank = (c) => { const i = CAT_ORDER.indexOf(c); return i < 0 ? 99 : i; };
 
 // Réglage de la zone de gravure sur la photo de chaque produit.
 export default function EngravingAdmin({ adminKey, products, onReload }) {
@@ -17,7 +21,8 @@ export default function EngravingAdmin({ adminKey, products, onReload }) {
     if (res.ok) onReload();
   }
 
-  const withPhoto = products.filter((p) => p.image);
+  const withPhoto = products.filter((p) => p.image)
+    .sort((a, b) => (catRank(a.category) - catRank(b.category)) || (a.name || "").localeCompare(b.name || ""));
 
   // Position par défaut quand on "Active" sans avoir encore réglé (centrée, ajustable ensuite).
   const DEFAULT_PREVIEW = { inset: "auto", top: "42%", left: "25%", width: "50%", fontSize: "1.4rem" };
@@ -30,8 +35,12 @@ export default function EngravingAdmin({ adminKey, products, onReload }) {
       </p>
       {msg && <div className="notice">{msg}</div>}
 
-      {withPhoto.map((p) => (
-        <div key={p.slug} className="admin-block">
+      {withPhoto.map((p, idx) => (
+        <Fragment key={p.slug}>
+        {(idx === 0 || withPhoto[idx - 1].category !== p.category) && (
+          <h3 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: "20px 0 6px", borderBottom: "2px solid #e7d9bd", paddingBottom: 4 }}>{getCategoryLabel(p.category)}</h3>
+        )}
+        <div className="admin-block">
           <div className="admin-row" style={{ gridTemplateColumns: "1fr auto auto", alignItems: "center", gap: 8 }}>
             <span className="admin-variant">
               <strong>{p.name}</strong>{" "}
@@ -55,6 +64,7 @@ export default function EngravingAdmin({ adminKey, products, onReload }) {
             <EngraveEditor product={p} onSave={(prev) => save(p.slug, prev)} onDisable={() => save(p.slug, null)} />
           )}
         </div>
+        </Fragment>
       ))}
     </>
   );
