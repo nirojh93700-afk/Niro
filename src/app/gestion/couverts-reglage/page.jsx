@@ -131,20 +131,25 @@ export default function CouvertsReglagePage() {
                 style={{
                   position: "absolute", left: `${z.cx * 100}%`, top: `${z.nameCy * 100}%`,
                   transform: "translate(-50%,-50%) rotate(-90deg)", transformOrigin: "center",
-                  fontSize: `${z.nameSize * (boxRef.current?.clientWidth || 440)}px`, fontWeight: 600, color: "#3a2f1d",
-                  whiteSpace: "nowrap", cursor: "grab", padding: 2, outline: selName ? "2px dashed #c9a24b" : "1px dashed rgba(0,0,0,.25)",
+                  fontSize: `${z.nameSize * (boxRef.current?.clientWidth || 440)}px`, fontWeight: 700, color: "#3a2f1d",
+                  whiteSpace: "nowrap", cursor: "grab", padding: "3px 6px", borderRadius: 5,
+                  background: selName ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)",
+                  border: selName ? "2px solid #b0852f" : "1.5px solid #c9a24b",
                 }}
               >Prénom</span>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={SAMPLE} alt="animal" draggable={false}
+              <div
                 onPointerDown={(e) => onPointerDown(p.key, "animal", e)}
                 style={{
                   position: "absolute", left: `${z.cx * 100}%`, top: `${z.animalCy * 100}%`,
-                  height: `${z.animalH * 100}%`, width: "auto", transform: "translate(-50%,-50%)",
-                  cursor: "grab", outline: selAn ? "2px dashed #c9a24b" : "1px dashed rgba(0,0,0,.25)",
+                  height: `${z.animalH * 100}%`, transform: "translate(-50%,-50%)", cursor: "grab",
+                  display: "flex", alignItems: "center", justifyContent: "center", padding: 3, borderRadius: 6,
+                  background: selAn ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)",
+                  border: selAn ? "2px solid #b0852f" : "1.5px solid #c9a24b",
                 }}
-              />
+              >
+                <img src={SAMPLE} alt="animal" draggable={false} style={{ height: "100%", width: "auto", pointerEvents: "none" }} />
+              </div>
             </div>
           );
         })}
