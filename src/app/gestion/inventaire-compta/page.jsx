@@ -16,6 +16,7 @@ export default function InventaireComptaPage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);       // stock par variante
+  const [imgBySlug, setImgBySlug] = useState({}); // slug produit -> photo
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,6 +38,9 @@ export default function InventaireComptaPage() {
       setAuthed(true);
       const pd = await pr.json();
       setRows(pd.rows || []);
+      const im = {};
+      (pd.editable || []).forEach((e) => { im[e.slug] = (e.overrideImages && e.overrideImages[0]) || e.image || (e.images && e.images[0]) || ""; });
+      setImgBySlug(im);
       if (or.ok) { const od = await or.json(); setOrders(od.orders || []); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
@@ -51,7 +55,7 @@ export default function InventaireComptaPage() {
   const byStock = {};
   for (const r of rows) {
     const id = r.stockId || r.variantId;
-    if (!byStock[id]) byStock[id] = { id, name: r.productName, category: r.category, stock: r.stock, price: r.price, titles: [] };
+    if (!byStock[id]) byStock[id] = { id, slug: r.productSlug, name: r.productName, category: r.category, stock: r.stock, price: r.price, titles: [] };
     if (r.variantTitle) byStock[id].titles.push(r.variantTitle);
   }
   const inv = Object.values(byStock).sort((a, b) => a.name.localeCompare(b.name));
@@ -262,7 +266,17 @@ export default function InventaireComptaPage() {
               const bg = pending ? "#fff3cd" : (i.stock === 0 ? "#fbeaea" : (typeof i.stock === "number" && i.stock <= 3 ? "#fdf6e3" : "transparent"));
               return (
                 <tr key={i.id} style={{ borderTop: "1px solid #eee", background: bg }}>
-                  <td style={{ padding: "6px 10px", fontWeight: 600 }}>{i.name}</td>
+                  <td style={{ padding: "6px 10px", fontWeight: 600 }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {imgBySlug[i.slug] ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={imgBySlug[i.slug]} alt="" style={{ width: 38, height: 38, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0 }} />
+                      ) : (
+                        <span style={{ width: 38, height: 38, borderRadius: 6, background: "#f0ece3", flexShrink: 0 }} />
+                      )}
+                      <span>{i.name}</span>
+                    </span>
+                  </td>
                   <td style={{ padding: "6px 10px", color: "var(--ink-soft)" }}>{[...new Set(i.titles)].join(" / ")}</td>
                   <td style={{ padding: "6px 10px", textAlign: "center" }}>
                     <input type="number" min="0" value={cur} placeholder="∞"
