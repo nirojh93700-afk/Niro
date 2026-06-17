@@ -46,6 +46,11 @@ export default function EtudeMarchePage() {
   }, [auth]);
 
   async function run() {
+    // Règle « rien ne te prélève sans prévenir » : confirmation avant le coût Claude.
+    const ok = window.confirm(
+      "Lancer l'analyse du marché ?\n\n• Recherche web : GRATUITE (Tavily)\n• Synthèse du tableau : Claude = quelques centimes (à ce clic uniquement)\n\nContinuer ?"
+    );
+    if (!ok) return;
     setRunning(true); setError("");
     try {
       const res = await fetch("/api/admin/market-study", {
@@ -144,9 +149,10 @@ export default function EtudeMarchePage() {
         </div>
       )}
 
-      <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", marginTop: 16 }}>
-        Note : l'analyse utilise la recherche web (petit coût par lancement). Lance-la quand tu veux — rien d'automatique.
-        Pour une analyse automatique chaque semaine, dis-le-moi (il faut activer une tâche planifiée).
+      <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", marginTop: 16, lineHeight: 1.5 }}>
+        💡 <strong>Coûts :</strong> la recherche web est <strong>gratuite</strong> (Tavily). La rédaction du tableau (Claude)
+        coûte <strong>quelques centimes par clic</strong> — une confirmation s'affiche avant chaque lancement. Rien
+        d'automatique : rien ne tourne tant que tu ne cliques pas.
       </p>
     </div>
   );
