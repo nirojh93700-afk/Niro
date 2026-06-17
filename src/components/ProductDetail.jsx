@@ -220,7 +220,7 @@ export default function ProductDetail({ product }) {
           if (mv.motif && mv.motif !== "aucun") {
             parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
           }
-          if (modeleLayout?.label) parts.push(`Gravure ${modeleLayout.label}`);
+          if (modeleLayout?.label) parts.push(modeleLayout.label.charAt(0).toUpperCase() + modeleLayout.label.slice(1));
         }
       }
       // Taille + position du logo / texte gravé (éditeur interactif), pour l'atelier.
@@ -487,7 +487,8 @@ export default function ProductDetail({ product }) {
       name: product.name,
       variantTitle: variant.title,
       price: unitPrice,
-      image: images[0] || null,
+      // Vignette panier = le visuel EXACT choisi par le client (sinon photo produit).
+      image: previewImage || photoSrc || images[0] || null,
       personalization: buildPersonalization(),
       fields: product.engravingPricing ? { ...fieldValues } : undefined,
       spec: itemSpec,
