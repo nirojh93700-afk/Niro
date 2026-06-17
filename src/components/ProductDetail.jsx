@@ -409,7 +409,13 @@ export default function ProductDetail({ product }) {
   const heartPhotoIndex = HEART_PAGE_INDEX[fieldValues["photoPage"]] ?? 1;
 
   function loadImg(src) {
-    return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+    return new Promise((res, rej) => {
+      const im = new Image();
+      im.crossOrigin = "anonymous"; // évite le canvas "contaminé" sur iOS (CDN)
+      im.onload = () => res(im);
+      im.onerror = rej;
+      im.src = src;
+    });
   }
   // Compose le visuel EXACT : la photo du verre + l'image/photo choisie, posée
   // dans la zone gravable. 100 % fiable (canvas + fichiers même origine), contrairement
@@ -636,8 +642,8 @@ export default function ProductDetail({ product }) {
       name: product.name,
       variantTitle: variant.title,
       price: unitPrice,
-      // Vignette panier = le visuel EXACT choisi par le client (sinon photo produit).
-      image: previewImage || photoSrc || images[0] || null,
+      // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
+      image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
       personalization: buildPersonalization(true),
       fields: product.engravingPricing ? { ...fieldValues } : undefined,

@@ -19,6 +19,9 @@ export async function GET(_req, { params }) {
     headers: {
       "Content-Type": mime,
       "Cache-Control": "public, max-age=31536000, immutable",
+      // CORS : permet d'utiliser la photo dans un canvas (compo du verre) sans
+      // « contaminer » le canvas sur iOS.
+      "Access-Control-Allow-Origin": "*",
     },
   });
 }
