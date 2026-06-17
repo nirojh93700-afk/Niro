@@ -404,34 +404,117 @@ export default function ProductDetail({ product }) {
     ctx.drawImage(a, zx + (zw - dw) / 2, zy + (zh - dh) / 2, dw, dh);
     return c.toDataURL("image/jpeg", 0.9);
   }
-  // Capture la gravure SEULE (texte/motif déjà rendus à l'écran) sur fond
-  // transparent — on exclut l'image Next.js du verre (sinon capture blanche).
-  async function snapArtwork() {
-    const node = photoRef.current;
-    if (!node) return null;
+  // Résout la vraie font-family d'une classe (.fnt-cinzel…) au moment du rendu.
+  const _famCache = {};
+  function fontFamilyFor(cls) {
+    const key = cls || "fnt-playfair";
+    if (_famCache[key]) return _famCache[key];
+    const s = document.createElement("span");
+    s.className = key; s.style.cssText = "position:absolute;visibility:hidden"; s.textContent = "Ag";
+    document.body.appendChild(s);
+    const fam = getComputedStyle(s).fontFamily || "serif";
+    document.body.removeChild(s);
+    return (_famCache[key] = fam);
+  }
+  // Motif (ancre, étoile…) teinté à la couleur de gravure, en canvas.
+  async function tintedMotif(id, color, sizePx) {
     try {
-      const mod = await import("html-to-image");
-      if (document.fonts?.ready) { try { await document.fonts.ready; } catch { /* ignore */ } }
-      return await mod.toPng(node, {
-        cacheBust: true,
-        pixelRatio: 2,
-        filter: (n) => {
-          const c = n.classList;
-          if (!c) return true;
-          return !(c.contains("gallery-bg") || c.contains("ee-toolbar") || c.contains("side-toggle") || c.contains("gallery-arrow") || c.contains("gallery-thumbs") || c.contains("placeholder"));
-        },
-      });
+      const im = await loadImg(`/motifs/${id}.svg`);
+      const s = Math.max(2, Math.round(sizePx));
+      const c = document.createElement("canvas"); c.width = s; c.height = s;
+      const ctx = c.getContext("2d");
+      ctx.drawImage(im, 0, 0, s, s);
+      ctx.globalCompositeOperation = "source-in";
+      ctx.fillStyle = color; ctx.fillRect(0, 0, s, s);
+      return c;
     } catch { return null; }
   }
-  // Superpose une capture (gravure transparente) plein cadre sur la photo du verre.
-  async function composeFull(glassUrl, artDataUrl) {
-    const [g, a] = await Promise.all([loadImg(glassUrl), loadImg(artDataUrl)]);
-    const W = g.naturalWidth || 800, H = g.naturalHeight || 800;
-    const c = document.createElement("canvas"); c.width = W; c.height = H;
-    const ctx = c.getContext("2d");
-    ctx.drawImage(g, 0, 0, W, H);
-    ctx.drawImage(a, 0, 0, W, H);
-    return c.toDataURL("image/jpeg", 0.9);
+  // Dessine un modèle (texte + motif) à la main sur le verre (ou sur fond
+  // transparent pour le fichier à graver). 100 % fiable : vraies polices via canvas.
+  async function renderModele(mv, template, color, { glassUrl, box }) {
+    const tpl = MODELES[template];
+    let cw, ch, rx, ry, rw, rh, g = null;
+    if (glassUrl) {
+      g = await loadImg(glassUrl);
+      cw = g.naturalWidth || 800; ch = g.naturalHeight || 800;
+      rx = box.left * cw; ry = box.top * ch; rw = box.width * cw; rh = box.height * ch;
+    } else {
+      rw = Math.round(box.width * 1000); rh = Math.round(box.height * 1000);
+      cw = rw; ch = rh; rx = 0; ry = 0;
+    }
+    const cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+    const ctx = cv.getContext("2d");
+    if (g) ctx.drawImage(g, 0, 0, cw, ch);
+    if (document.fonts?.ready) { try { await document.fonts.ready; } catch { /* ignore */ } }
+    if (tpl) {
+      const text = mv?.text || {}, fonts = mv?.fonts || {};
+      const layout = mv?.layout || tpl.layout || "stack";
+      const cx = rx + rw / 2;
+      const get = (k) => { const l = tpl.lines.find((x) => x.key === k); if (!l) return null; const txt = (text[k] || "").trim() || l.placeholder || ""; return txt ? { txt, cls: fonts[k] || l.font, em: l.em || 1, bold: l.bold, mid: k === "mid" } : null; };
+      const subLine = tpl.lines.find((l) => l.below);
+      const subTxt = subLine && mv?.addText !== false ? ((text[subLine.key] || "").trim() || subLine.placeholder || "") : "";
+      const rows = [];
+      if (layout === "classic") {
+        const t = get("top"), m = get("mid"), b = get("bot");
+        if (t) rows.push({ k: "text", ...t });
+        rows.push({ k: "flourish" });
+        if (m) rows.push({ k: "text", ...m });
+        rows.push({ k: "flourish" });
+        if (b) rows.push({ k: "text", ...b });
+        if (mv?.motif && mv.motif !== "aucun") rows.push({ k: "motif", id: mv.motif, em: 0.95 });
+      } else {
+        tpl.lines.filter((l) => !l.below).forEach((l) => { const r = get(l.key); if (r) rows.push({ k: "text", ...r }); });
+        if (mv?.motif && mv.motif !== "aucun") rows.push({ k: "motif", id: mv.motif, em: 1.15 });
+      }
+      if (subTxt && subLine) rows.push({ k: "text", txt: subTxt, cls: fonts[subLine.key] || subLine.font, em: subLine.em || 0.5 });
+
+      let base = Math.min(rw * 0.2, rh * 0.2);
+      const gap = () => base * 0.14;
+      const measure = () => {
+        let totalH = 0, maxW = 0;
+        for (const r of rows) {
+          const fs = base * (r.em || 1);
+          if (r.k === "flourish") { totalH += base * 0.5; maxW = Math.max(maxW, base * 3.6); }
+          else if (r.k === "motif") { totalH += fs; maxW = Math.max(maxW, fs); }
+          else { ctx.font = `${r.bold ? "700 " : ""}${fs}px ${fontFamilyFor(r.cls)}`; const w = ctx.measureText(r.txt).width * (r.mid ? 1.7 : 1); totalH += fs * 1.1; maxW = Math.max(maxW, w); }
+          totalH += gap();
+        }
+        return { totalH, maxW };
+      };
+      let { totalH, maxW } = measure();
+      const fit = Math.min(rw / (maxW || 1), rh / (totalH || 1), 1);
+      if (fit < 1) { base *= fit; ({ totalH, maxW } = measure()); }
+
+      ctx.fillStyle = color; ctx.strokeStyle = color; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      let y = ry + (rh - totalH) / 2;
+      for (const r of rows) {
+        const fs = base * (r.em || 1);
+        if (r.k === "flourish") {
+          const fy = y + base * 0.25, half = base * 1.7;
+          ctx.lineWidth = Math.max(1, base * 0.04);
+          ctx.beginPath(); ctx.moveTo(cx - half, fy); ctx.lineTo(cx + half, fy); ctx.stroke();
+          ctx.beginPath(); ctx.arc(cx - half, fy, base * 0.07, 0, 7); ctx.fill();
+          ctx.beginPath(); ctx.arc(cx + half, fy, base * 0.07, 0, 7); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(cx, fy - base * 0.13); ctx.lineTo(cx + base * 0.1, fy); ctx.lineTo(cx, fy + base * 0.13); ctx.lineTo(cx - base * 0.1, fy); ctx.closePath(); ctx.fill();
+          y += base * 0.5 + gap();
+        } else if (r.k === "motif") {
+          const m = await tintedMotif(r.id, color, fs);
+          if (m) ctx.drawImage(m, cx - fs / 2, y, fs, fs);
+          y += fs + gap();
+        } else {
+          ctx.font = `${r.bold ? "700 " : ""}${fs}px ${fontFamilyFor(r.cls)}`;
+          const ty = y + fs * 0.55;
+          if (r.mid) {
+            const tw = ctx.measureText(r.txt).width, sx = tw / 2 + fs * 0.45, ss = fs * 0.5;
+            const star = await tintedMotif("etoile", color, ss);
+            if (star) { ctx.drawImage(star, cx - sx - ss / 2, ty - ss / 2, ss, ss); ctx.drawImage(star, cx + sx - ss / 2, ty - ss / 2, ss, ss); }
+          }
+          ctx.fillText(r.txt, cx, ty);
+          y += fs * 1.1 + gap();
+        }
+      }
+    }
+    return cv.toDataURL(glassUrl ? "image/jpeg" : "image/png", 0.92);
   }
   async function uploadDataUrl(dataUrl) {
     if (!dataUrl) return null;
@@ -484,14 +567,12 @@ export default function ProductDetail({ product }) {
           artworkImage = faceArt;
           const composed = await composeOnGlass(glass, faceArt, faceBox);
           previewImage = (await uploadDataUrl(composed)) || composed;
-        } else if (modeleField || hasTextFields) {
-          // Cas texte/motif (ex. Classique) : on réutilise le rendu déjà affiché.
-          const art = await snapArtwork();
-          if (art) {
-            artworkImage = (await uploadDataUrl(art)) || art;
-            const composed = await composeFull(glass, art);
-            previewImage = (await uploadDataUrl(composed)) || composed;
-          }
+        } else if (modeleField) {
+          // Cas texte/motif (ex. Classique) : on dessine le modèle sur le verre (canvas).
+          const composed = await renderModele(modeleVal, modeleTemplate, "#3a2f1d", { glassUrl: glass, box: faceBox });
+          previewImage = (await uploadDataUrl(composed)) || composed;
+          const art = await renderModele(modeleVal, modeleTemplate, "#3a2f1d", { glassUrl: null, box: faceBox });
+          artworkImage = (await uploadDataUrl(art)) || art;
         }
         // FOND (mode « les deux ») : photo du fond si fournie (texte/motif : pas d'image fixe).
         if (dualMode) {
