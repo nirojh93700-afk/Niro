@@ -509,6 +509,7 @@ export default function GestionPage() {
               label: "Ventes",
               tabs: [
                 { id: "commandes", text: `Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
+                { id: "atelier", text: "🥃 Atelier (détails commandes)", href: "/gestion/atelier" },
                 { id: "stats", text: "Statistiques" },
                 { id: "clients", text: "Clientes" },
                 { id: "devis", text: "Devis / Factures" },
@@ -528,6 +529,7 @@ export default function GestionPage() {
                 { id: "promos", text: "Promotions" },
                 { id: "avis", text: "Avis" },
                 { id: "newsletter", text: "Newsletter" },
+                { id: "etude-marche", text: "📊 Étude de marché", href: "/gestion/etude-marche" },
               ],
             },
             {
@@ -543,13 +545,19 @@ export default function GestionPage() {
             <div className="admin-side-group" key={group.label}>
               <span className="admin-side-label">{group.label}</span>
               {group.tabs.map((t) => (
-                <button
-                  key={t.id}
-                  className={`admin-side-item ${tab === t.id ? "active" : ""}`}
-                  onClick={() => setTab(t.id)}
-                >
-                  {t.text}
-                </button>
+                t.href ? (
+                  <a key={t.id} href={t.href} className="admin-side-item" style={{ textDecoration: "none" }}>
+                    {t.text}
+                  </a>
+                ) : (
+                  <button
+                    key={t.id}
+                    className={`admin-side-item ${tab === t.id ? "active" : ""}`}
+                    onClick={() => setTab(t.id)}
+                  >
+                    {t.text}
+                  </button>
+                )
               ))}
             </div>
           ))}
