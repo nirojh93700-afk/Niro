@@ -21,6 +21,28 @@
   } catch(e) {}
 })();
 </script>
+<!-- 🔋 v430 : économie batterie — met en pause les boucles setInterval quand
+     l'app est en arrière-plan (onglet caché / téléphone verrouillé).
+     AUCUN changement quand l'app est visible : la callback s'exécute normalement. -->
+<script id="v430-interval-saver">
+(function(){
+  try {
+    if (window._v430IntervalSaver) return;
+    window._v430IntervalSaver = true;
+    var _setInterval = window.setInterval.bind(window);
+    window.setInterval = function(fn, delay){
+      if (typeof fn !== 'function') return _setInterval.apply(null, arguments);
+      var extra = Array.prototype.slice.call(arguments, 2);
+      var wrapped = function(){
+        // En arrière-plan : on saute le travail (économie CPU/batterie).
+        if (document.hidden) return;
+        try { return fn.apply(this, extra); } catch(e){ /* ne casse pas la boucle */ }
+      };
+      return _setInterval(wrapped, delay);
+    };
+  } catch(e) {}
+})();
+</script>
 <style id="v400-antiflash-css">
 html { background: #0d1421; }
 html[data-preload-theme="light"] { background: #f5f1e8; }
@@ -3893,7 +3915,7 @@ body.light-mode .hd-v200 {
 // FORCE UPDATE : Désinscrit les anciens SW et force le rechargement
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (function() {
-  const APP_VERSION = 'v429-sync-cost-optim-2026-06-17';
+  const APP_VERSION = 'v430-battery-safety-2026-06-17';
   const lastVersion = localStorage.getItem('app_version');
   
   if (lastVersion !== APP_VERSION) {
@@ -7043,7 +7065,30 @@ window.addEventListener('beforeunload', (e) => {
   }
 });
 
-// ============ COMPATIBILITÉ : anciennes fonctions redirigées ============
+// 🔧 v430 : protection anti-perte sur MOBILE — beforeunload ne se déclenche
+// souvent PAS sur iPhone quand on balaie l'app. On sauvegarde donc aussi dès
+// que l'app passe en arrière-plan (pagehide + visibilitychange→hidden).
+function _v430FlushSave(){
+  try {
+    if (typeof data !== 'undefined') localStorage.setItem('niv_catalogue', JSON.stringify(data));
+    if (typeof sales !== 'undefined') localStorage.setItem('niv_sales', JSON.stringify(sales));
+    if (typeof categories !== 'undefined') localStorage.setItem('niv_categories', JSON.stringify(categories));
+    if (typeof coords !== 'undefined') localStorage.setItem('niv_coords', JSON.stringify(coords));
+  } catch(err){}
+  // Flush la sync Firebase en attente (debounce) si dispo
+  try {
+    if (typeof firebaseSaveTimer !== 'undefined' && firebaseSaveTimer && typeof saveAllToFirebase === 'function') {
+      clearTimeout(firebaseSaveTimer);
+      saveAllToFirebase(true);
+    }
+  } catch(err){}
+}
+document.addEventListener('visibilitychange', function(){
+  if (document.hidden) _v430FlushSave();
+});
+window.addEventListener('pagehide', _v430FlushSave);
+
+
 
 async function saveProductToFirebase(product, index){
   // Plus besoin de sauvegarder produit par produit
@@ -47189,6 +47234,14 @@ body.v400-active {
     flex: 1 1 calc(50% - 4px);
     min-width: 0;
   }
+  /* 🔧 v430 : cartes stats plus compactes sur mobile → le catalogue est
+     atteint plus vite (moins de défilement). */
+  body.v400-active .stats > .sc {
+    padding: 8px 10px !important;
+    min-width: 0 !important;
+  }
+  body.v400-active .stats > .sc .vl { font-size: 15px !important; }
+  body.v400-active .stats > .sc .lb { font-size: 8px !important; letter-spacing: 1px !important; }
   body.v400-active .page { padding-top: 60px !important; }
   
   .grid, #catalog-grid, .cat-grid {

@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Seuls les comptes Google autorisés peuvent lire/écrire.
+    function autorise() {
+      return request.auth != null
+        && request.auth.token.email in [
+          'nirojh93700@gmail.com'
+        ];
+    }
+    match /{document=**} {
+      allow read, write: if autorise();
+    }
+  }
+}
