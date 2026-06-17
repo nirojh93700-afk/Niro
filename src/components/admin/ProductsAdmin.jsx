@@ -150,9 +150,11 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
   const [badge, setBadge] = useState(product.badge || "");
   const [hidden, setHidden] = useState(Boolean(product.hidden));
   const [desc, setDesc] = useState(product.descriptionHtml || "");
-  const [prices, setPrices] = useState(
-    Object.fromEntries((product.variants || []).map((v) => [v.id, v.price]))
-  );
+  // Variantes éditables : on peut changer le titre/prix, en ajouter et en retirer.
+  const [vars, setVars] = useState((product.variants || []).map((v) => ({ id: v.id, title: v.title, price: v.price })));
+  const setVarField = (i, k, val) => setVars((vs) => vs.map((x, j) => (j === i ? { ...x, [k]: val } : x)));
+  const addVar = () => setVars((vs) => [...vs, { id: `${product.slug}-x${Math.random().toString(36).slice(2, 6)}`, title: "", price: "" }]);
+  const removeVar = (i) => setVars((vs) => vs.filter((_, j) => j !== i));
   // Remise en % (calculée depuis le prix promo actuel de la 1re variante).
   const firstPrice = product.variants?.[0]?.price || 0;
   const initialPct =
@@ -218,14 +220,18 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
         </select>
       </label>
       <div>
-        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Prix par variante (€)</span>
-        {(product.variants || []).map((v) => (
-          <div className="admin-row" key={v.id} style={{ gridTemplateColumns: "1fr 110px" }}>
-            <span className="admin-variant">{v.title}</span>
-            <input type="number" min="0" step="0.01" value={prices[v.id] ?? ""}
-              onChange={(e) => setPrices({ ...prices, [v.id]: e.target.value === "" ? "" : Number(e.target.value) })} />
+        <span className="admin-field" style={{ display: "block", marginBottom: 4 }}>Options / variantes (titre · prix €)</span>
+        {vars.map((v, i) => (
+          <div key={v.id} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+            <input value={v.title} onChange={(e) => setVarField(i, "title", e.target.value)} placeholder={`Option ${i + 1} (ex : Doré…)`} style={{ flex: 1, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+            <input type="number" min="0" step="0.01" value={v.price ?? ""} onChange={(e) => setVarField(i, "price", e.target.value === "" ? "" : Number(e.target.value))} placeholder="Prix €" style={{ width: 100, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+            {vars.length > 1 && (
+              <button type="button" className="btn btn-outline" style={{ padding: "4px 10px", color: "#b4452f" }} onClick={() => removeVar(i)}>×</button>
+            )}
           </div>
         ))}
+        <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={addVar}>+ Ajouter une variante</button>
+        <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Le stock des nouvelles variantes se règle dans <strong>Catalogue → Stock</strong>.</p>
       </div>
       <label className="admin-field">Remise (%) sur ce produit
         <input type="number" min="0" max="90" step="1" value={discountPct}
@@ -291,12 +297,16 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
         Masquer ce produit (invisible sur le site)
       </label>
       <div style={{ display: "flex", gap: 10 }}>
-        <button className="btn btn-gold" onClick={() => onSave({
-          name, tagline, category, hidden, badge: badge || "none",
-          descriptionHtml: desc,
-          prices: Object.fromEntries(Object.entries(prices).filter(([, v]) => typeof v === "number")),
-          discountPct: discountPct === "" ? 0 : discountPct,
-        })}>Enregistrer</button>
+        <button className="btn btn-gold" onClick={() => {
+          const cleanVars = vars.filter((v) => v.title.trim() && Number(v.price) > 0).map((v) => ({ id: v.id, title: v.title.trim(), price: Math.round(Number(v.price) * 100) / 100 }));
+          onSave({
+            name, tagline, category, hidden, badge: badge || "none",
+            descriptionHtml: desc,
+            variants: cleanVars,
+            prices: Object.fromEntries(cleanVars.map((v) => [v.id, v.price])),
+            discountPct: discountPct === "" ? 0 : discountPct,
+          });
+        }}>Enregistrer</button>
         {onDelete && <button className="btn btn-outline" onClick={onDelete} style={{ color: "#b4452f" }}>Supprimer</button>}
       </div>
     </div>

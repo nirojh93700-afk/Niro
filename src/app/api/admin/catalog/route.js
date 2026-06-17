@@ -55,7 +55,9 @@ export async function POST(req) {
       // Liste des variantes (produit du code, ou produit ajouté à la main),
       // avec les prix qui viennent d'être saisis (patch.prices) en priorité.
       const custom = (await getCustomProducts()).find((p) => p.slug === slug);
-      const baseVariants = (baseProducts.find((p) => p.slug === slug) || custom)?.variants || [];
+      const baseVariants = (Array.isArray(overridePatch.variants) && overridePatch.variants.length)
+        ? overridePatch.variants
+        : ((baseProducts.find((p) => p.slug === slug) || custom)?.variants || []);
       const prices = overridePatch.prices || {};
       promoUpdates = baseVariants.map((v) => {
         const price = typeof prices[v.id] === "number" ? prices[v.id] : v.price;

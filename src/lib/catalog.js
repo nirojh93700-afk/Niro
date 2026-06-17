@@ -25,6 +25,12 @@ function applyOverride(product, ov, images, promos) {
     if (ov.badge === "none") p.badge = ""; // "Aucun" choisi dans l'admin → retire le badge du catalogue
     if (ov.hidden && !product.lockHidden) p.hidden = true; // lockHidden : la publication du code prime
     if (ov.preview) p.preview = ov.preview; // zone de gravure réglée dans l'admin
+    // Liste de variantes modifiée dans l'admin (ajout/suppression d'options).
+    if (Array.isArray(ov.variants) && ov.variants.length) {
+      p.variants = ov.variants
+        .filter((v) => v && v.id && v.title && typeof v.price === "number")
+        .map((v) => ({ id: v.id, title: v.title, price: v.price, ...(v.stockId ? { stockId: v.stockId } : {}) }));
+    }
     if (ov.prices) {
       p.variants = p.variants.map((v) =>
         typeof ov.prices[v.id] === "number" ? { ...v, price: ov.prices[v.id] } : v
