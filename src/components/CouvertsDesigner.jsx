@@ -1,0 +1,84 @@
+"use client";
+
+// =============================================================================
+// Éditeur « Couverts enfants » — la cliente choisit un thème puis un animal
+// pour chaque couvert (couteau, fourchette, grande/petite cuillère). L'animal
+// + le prénom s'affichent automatiquement au bon endroit sur l'aperçu.
+// Auto-suffisant : reçoit prénom + police en props (depuis les autres champs).
+// =============================================================================
+import { getFontClass } from "@/lib/fonts";
+
+export default function CouvertsDesigner({ field, value, onChange, prenom = "", fontKey = "" }) {
+  const themes = field.themes || [];
+  const pieces = field.pieces || [];
+  const v = value && value.animals ? value : { theme: themes[0]?.key, animals: {} };
+  const theme = themes.find((t) => t.key === v.theme) || themes[0];
+  const fontClass = getFontClass(fontKey);
+
+  function setTheme(k) { onChange({ theme: k, animals: {} }); } // changer de thème remet les animaux à zéro
+  function setAnimal(pieceKey, animalKey) {
+    onChange({ theme: v.theme, animals: { ...v.animals, [pieceKey]: animalKey } });
+  }
+
+  return (
+    <div className="field">
+      {field.label && <label>{field.label}</label>}
+
+      {/* Aperçu : les 4 couverts de face + animal/prénom posés sur chaque manche */}
+      <div style={{ position: "relative", width: "100%", maxWidth: 440, margin: "0 auto 16px", aspectRatio: "1 / 1", background: "#fff", borderRadius: 12, border: "1px solid var(--line)" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={field.base} alt="Couverts enfants" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+        {pieces.map((p) => {
+          const ak = v.animals[p.key];
+          const animal = ak ? (theme?.animals || []).find((a) => a.key === ak) : null;
+          const z = p.zone || { cx: 0.5, cy: 0.7, w: 0.08 };
+          return (
+            <div key={p.key}>
+              {prenom ? (
+                <span className={fontClass} style={{
+                  position: "absolute", left: `${z.cx * 100}%`, top: `${(z.cy - 0.085) * 100}%`,
+                  transform: "translate(-50%, -50%) rotate(-90deg)", transformOrigin: "center",
+                  fontSize: `${(z.w || 0.08) * 42}px`, lineHeight: 1, color: "#3a2f1d",
+                  whiteSpace: "nowrap", fontWeight: 600, pointerEvents: "none",
+                }}>{prenom}</span>
+              ) : null}
+              {animal ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={animal.img} alt={animal.label} style={{
+                  position: "absolute", left: `${z.cx * 100}%`, top: `${(z.cy + 0.05) * 100}%`,
+                  width: `${z.w * 100}%`, transform: "translate(-50%, -50%)", opacity: 0.88, pointerEvents: "none",
+                }} />
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Choix du thème */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+        {themes.map((t) => (
+          <button type="button" key={t.key} className={`filter-chip ${v.theme === t.key ? "active" : ""}`}
+            style={{ padding: "4px 16px" }} onClick={() => setTheme(t.key)}>{t.label}</button>
+        ))}
+      </div>
+
+      {/* Un animal par couvert */}
+      {pieces.map((p) => (
+        <div key={p.key} style={{ marginBottom: 12 }}>
+          <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: 6 }}>{p.label}</label>
+          <div className="modele-motifs">
+            <button type="button" className={`modele-motif-cell${!v.animals[p.key] ? " on" : ""}`} onClick={() => setAnimal(p.key, "")} aria-label="Aucun">
+              <span className="modele-motif-none">Aucun</span>
+            </button>
+            {(theme?.animals || []).map((a) => (
+              <button type="button" key={a.key} className={`modele-motif-cell${v.animals[p.key] === a.key ? " on" : ""}`} onClick={() => setAnimal(p.key, a.key)} aria-label={a.label}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={a.img} alt={a.label} style={{ width: 40, height: 40, objectFit: "contain" }} />
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

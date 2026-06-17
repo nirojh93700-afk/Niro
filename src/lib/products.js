@@ -1362,7 +1362,34 @@ export const products = [
     personalizationFields: [
       { key: "prenom", label: "Prénom à graver", placeholder: "Ex : Ishaan", maxLength: 12 },
       { key: "police", type: "font", label: "Police du prénom", optional: true },
-      { key: "note-grav", type: "note", text: "La cliente choisira un animal pour chaque couvert (couteau, fourchette, grande et petite cuillère). Le prénom et l'animal sont gravés sur le manche. Sélecteur d'animaux et aperçu en cours de réglage." },
+      { key: "couverts", type: "couverts", label: "Choisissez un animal pour chaque couvert",
+        base: "/produits/couverts_enfants_4_face.jpg",
+        pieces: [
+          { key: "couteau", label: "Couteau", zone: { cx: 0.19, cy: 0.76, w: 0.085 } },
+          { key: "fourchette", label: "Fourchette", zone: { cx: 0.385, cy: 0.76, w: 0.085 } },
+          { key: "grande", label: "Grande cuillère", zone: { cx: 0.61, cy: 0.76, w: 0.085 } },
+          { key: "petite", label: "Petite cuillère", zone: { cx: 0.815, cy: 0.78, w: 0.075 } },
+        ],
+        themes: [
+          { key: "savane", label: "Savane", animals: [
+            { key: "lion", label: "Lion", img: "/animaux/savane/lion.png" },
+            { key: "elephant", label: "Éléphant", img: "/animaux/savane/elephant.png" },
+            { key: "girafe", label: "Girafe", img: "/animaux/savane/girafe.png" },
+            { key: "zebre", label: "Zèbre", img: "/animaux/savane/zebre.png" },
+            { key: "rhinoceros", label: "Rhinocéros", img: "/animaux/savane/rhinoceros.png" },
+            { key: "singe", label: "Singe", img: "/animaux/savane/singe.png" },
+          ] },
+          { key: "mer", label: "Mer", animals: [
+            { key: "baleine", label: "Baleine", img: "/animaux/mer/baleine.png" },
+            { key: "dauphin", label: "Dauphin", img: "/animaux/mer/dauphin.png" },
+            { key: "requin", label: "Requin", img: "/animaux/mer/requin.png" },
+            { key: "tortue", label: "Tortue", img: "/animaux/mer/tortue.png" },
+            { key: "hippocampe", label: "Hippocampe", img: "/animaux/mer/hippocampe.png" },
+            { key: "poulpe", label: "Poulpe", img: "/animaux/mer/poulpe.png" },
+          ] },
+        ],
+      },
+      { key: "note-grav", type: "note", text: "Chaque couvert est gravé sur le manche avec le prénom et l'animal choisi. Aperçu indicatif ; la gravure finale est optimisée par notre atelier." },
     ],
     title: "Couverts enfants personnalisés — jeu de 4 gravé prénom et animaux",
     images: [

@@ -23,6 +23,7 @@ import LetteringPicker from "./LetteringPicker";
 import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
 import ModeleDesigner from "./ModeleDesigner";
+import CouvertsDesigner from "./CouvertsDesigner";
 import ModeleEngraveLayer from "./ModeleEngraveLayer";
 import MotifEngraveLayer from "./MotifEngraveLayer";
 import { Motif } from "./Motif";
@@ -212,7 +213,7 @@ export default function ProductDetail({ product }) {
   function buildPersonalization(forClient = false) {
     if (product.personalizationFields) {
       const parts = visibleFields
-        .filter((f) => f.type !== "note" && f.type !== "modele")
+        .filter((f) => f.type !== "note" && f.type !== "modele" && f.type !== "couverts")
         // Côté cliente : on ne garde que les textes saisis (pas emplacement, police, etc.).
         .filter((f) => !forClient || f.type === "text" || f.type === "textarea" || !f.type)
         .map((f) => {
@@ -251,6 +252,26 @@ export default function ProductDetail({ product }) {
               parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
             }
             if (modeleLayout?.label) parts.push(modeleLayout.label.charAt(0).toUpperCase() + modeleLayout.label.slice(1));
+          }
+        }
+      }
+      // Couverts enfants : thème + un animal par couvert.
+      const cField = visibleFields.find((f) => f.type === "couverts");
+      if (cField) {
+        const cv = fieldValues[cField.key];
+        if (cv && cv.animals) {
+          const th = (cField.themes || []).find((t) => t.key === cv.theme);
+          const lines = (cField.pieces || [])
+            .map((p) => {
+              const ak = cv.animals[p.key];
+              const al = ak ? ((th?.animals || []).find((a) => a.key === ak) || {}).label : null;
+              return al ? `${p.label} : ${al}` : null;
+            })
+            .filter(Boolean);
+          if (lines.length) {
+            parts.push(forClient
+              ? `Animaux (${th?.label || cv.theme}) — ${lines.join(", ")}`
+              : `Thème ${th?.label || cv.theme} · ${lines.join(" · ")}`);
           }
         }
       }
@@ -575,7 +596,7 @@ export default function ProductDetail({ product }) {
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
     if (product.personalizationFields) {
       const missing = visibleFields.find(
-        (f) => f.type !== "note" && f.type !== "modele" && !f.optional && !(fieldValues[f.key] || "").trim()
+        (f) => f.type !== "note" && f.type !== "modele" && f.type !== "couverts" && !f.optional && !(fieldValues[f.key] || "").trim()
       );
       // Modèle de gravure : au moins un texte requis (sauf si le champ est facultatif).
       if (modeleField && !modeleField.optional) {
@@ -994,6 +1015,18 @@ export default function ProductDetail({ product }) {
                       <ModeleDesigner template={f.template} value={fieldValues[f.key]} onChange={(val) => setField(f.key, val)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
+                  );
+                }
+                if (f.type === "couverts") {
+                  return (
+                    <CouvertsDesigner
+                      key={f.key}
+                      field={f}
+                      value={fieldValues[f.key]}
+                      onChange={(val) => setField(f.key, val)}
+                      prenom={fieldValues["prenom"] || ""}
+                      fontKey={fieldValues["police"] || ""}
+                    />
                   );
                 }
                 if (f.type === "motifniv") {
