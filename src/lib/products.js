@@ -200,8 +200,8 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8134708393_5e02.jpg?v=1780366838",
     ],
     variants: [
-      { id: "gourm-gravure", title: "Avec gravure", price: 38.90, stockId: "gourm" },
-      { id: "gourm-sans", title: "Sans gravure", price: 43.90, stockId: "gourm" },
+      { id: "gourm-gravure", title: "Avec gravure", price: 43.90, stockId: "gourm" },
+      { id: "gourm-sans", title: "Sans gravure", price: 38.90, stockId: "gourm" },
     ],
     descriptionHtml: `<p>Offrez un bijou d'élégance avec ce <strong>bracelet identité homme</strong> personnalisable par gravure laser. La plaque rectangulaire lisse offre un espace idéal pour graver un prénom, une date, un message ou des initiales.</p>
 <p>Monté sur une belle chaîne gourmette à gros maillons cubains en acier inoxydable, il allie solidité, élégance et style contemporain.</p>
