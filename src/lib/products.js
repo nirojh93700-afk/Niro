@@ -1404,7 +1404,11 @@ export const products = [
     title: "Couverts enfants personnalisés — jeu de 4 gravé prénom et animaux",
     images: [
       "/produits/couverts_enfants_4_face.jpg",
-      "/produits/couverts_enfants_4_noir.jpg",
+      "/produits/couverts_enfants_ex_prenom.jpg",
+      "/produits/couverts_enfants_ex_enfant.jpg",
+      "/produits/couverts_enfants_ex_ocean.jpg",
+      "/produits/couverts_enfants_ex_animaux.jpg",
+      "/produits/couverts_enfants_ex_flatlay.jpg",
       "/produits/couverts_enfants_couteau.jpg",
       "/produits/couverts_enfants_fourchette.jpg",
       "/produits/couverts_enfants_grande_cuillere.jpg",
