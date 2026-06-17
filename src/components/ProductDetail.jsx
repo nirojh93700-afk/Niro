@@ -1006,7 +1006,6 @@ export default function ProductDetail({ product }) {
                   };
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}</label>
                       <label className="modele-check"><input type="checkbox" checked={faceOn} onChange={(e) => setSides(e.target.checked, fondOn)} /><span>Graver sur la face avant</span></label>
                       <label className="modele-check"><input type="checkbox" checked={fondOn} onChange={(e) => setSides(faceOn, e.target.checked)} /><span>Graver au fond du verre</span></label>
                       {faceOn && fondOn && <p className="char-count" style={{ textAlign: "left", color: "var(--gold-dark)" }}>Les deux côtés : +7 €</p>}
