@@ -1365,10 +1365,10 @@ export const products = [
       { key: "couverts", type: "couverts", label: "Choisissez un animal pour chaque couvert",
         base: "/produits/couverts_enfants_4_face.jpg",
         pieces: [
-          { key: "couteau", label: "Couteau", zone: { cx: 0.19, cy: 0.76, w: 0.085 } },
-          { key: "fourchette", label: "Fourchette", zone: { cx: 0.385, cy: 0.76, w: 0.085 } },
-          { key: "grande", label: "Grande cuillère", zone: { cx: 0.61, cy: 0.76, w: 0.085 } },
-          { key: "petite", label: "Petite cuillère", zone: { cx: 0.815, cy: 0.78, w: 0.075 } },
+          { key: "couteau", label: "Couteau", zone: { cx: 0.19, nameCy: 0.66, animalCy: 0.80, animalH: 0.065 } },
+          { key: "fourchette", label: "Fourchette", zone: { cx: 0.385, nameCy: 0.66, animalCy: 0.80, animalH: 0.065 } },
+          { key: "grande", label: "Grande cuillère", zone: { cx: 0.61, nameCy: 0.66, animalCy: 0.80, animalH: 0.065 } },
+          { key: "petite", label: "Petite cuillère", zone: { cx: 0.815, nameCy: 0.68, animalCy: 0.81, animalH: 0.06 } },
         ],
         themes: [
           { key: "savane", label: "Savane", animals: [

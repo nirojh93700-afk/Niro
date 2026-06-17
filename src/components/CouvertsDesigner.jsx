@@ -31,22 +31,27 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
         {pieces.map((p) => {
           const ak = v.animals[p.key];
           const animal = ak ? (theme?.animals || []).find((a) => a.key === ak) : null;
-          const z = p.zone || { cx: 0.5, cy: 0.7, w: 0.08 };
+          const z = p.zone || {};
+          const cx = z.cx ?? 0.5;
+          const nameCy = z.nameCy ?? 0.64;
+          const animalCy = z.animalCy ?? 0.77;
+          const animalH = z.animalH ?? 0.07; // taille limitée par la HAUTEUR (petit)
           return (
             <div key={p.key}>
               {prenom ? (
                 <span className={fontClass} style={{
-                  position: "absolute", left: `${z.cx * 100}%`, top: `${(z.cy - 0.085) * 100}%`,
+                  position: "absolute", left: `${cx * 100}%`, top: `${nameCy * 100}%`,
                   transform: "translate(-50%, -50%) rotate(-90deg)", transformOrigin: "center",
-                  fontSize: `${(z.w || 0.08) * 42}px`, lineHeight: 1, color: "#3a2f1d",
+                  fontSize: "clamp(13px, 4.2vw, 20px)", lineHeight: 1, color: "#3a2f1d",
                   whiteSpace: "nowrap", fontWeight: 600, pointerEvents: "none",
                 }}>{prenom}</span>
               ) : null}
               {animal ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={animal.img} alt={animal.label} style={{
-                  position: "absolute", left: `${z.cx * 100}%`, top: `${(z.cy + 0.05) * 100}%`,
-                  width: `${z.w * 100}%`, transform: "translate(-50%, -50%)", opacity: 0.88, pointerEvents: "none",
+                  position: "absolute", left: `${cx * 100}%`, top: `${animalCy * 100}%`,
+                  height: `${animalH * 100}%`, width: "auto", transform: "translate(-50%, -50%)",
+                  opacity: 0.9, pointerEvents: "none",
                 }} />
               ) : null}
             </div>
