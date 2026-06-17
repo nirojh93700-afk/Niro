@@ -1047,7 +1047,8 @@ export default function GestionPage() {
                         .filter((x) => (x.stockId || x.variantId) === k)
                         .map((x) => (x.variantTitle || "").split("/").map((s) => s.trim()).filter(Boolean));
                       const common = (segs[0] || []).filter((s) => segs.every((arr) => arr.includes(s)));
-                      label = common.length ? common.join(" / ") : r.variantTitle;
+                      // option seule (avec/sans gravure) sans couleur commune → pas de sous-étiquette
+                      label = common.length ? common.join(" / ") : "";
                     }
                     return (
                       <div className="admin-row" key={k}>

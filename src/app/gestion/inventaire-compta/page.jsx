@@ -292,7 +292,12 @@ export default function InventaireComptaPage() {
                     </span>
                   </td>
                   <td style={{ padding: "6px 10px", color: "var(--ink-soft)" }}>
-                    {[...new Set(i.titles)].map((t, k) => <div key={k}>{t}</div>)}
+                    {(() => {
+                      // On affiche la COULEUR (partie commune des variantes), pas l'option gravure/texte.
+                      const segs = [...new Set(i.titles)].map((t) => t.split("/").map((s) => s.trim()).filter(Boolean));
+                      const common = (segs[0] || []).filter((s) => segs.every((arr) => arr.includes(s)));
+                      return common.length ? common.join(" / ") : "";
+                    })()}
                   </td>
                   <td style={{ padding: "6px 10px", textAlign: "center" }}>
                     <input type="number" min="0" value={cur} placeholder="∞"
