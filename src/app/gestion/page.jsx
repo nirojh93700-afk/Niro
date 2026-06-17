@@ -1027,8 +1027,18 @@ export default function GestionPage() {
             <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
               {rows.length} variantes · {lowOrOut} en stock bas ou épuisé. Vide = « non suivi ». Le stock baisse à chaque vente.
             </p>
-            {Object.entries(grouped).map(([slug, g]) => (
-              <div key={slug} className="admin-block">
+            {(() => {
+              const ORD = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "cles-usb", "porte-cles", "medailles"];
+              const rk = (c) => { const i = ORD.indexOf(c); return i < 0 ? 99 : i; };
+              let lastCat = null;
+              return Object.entries(grouped)
+                .sort((a, b) => (rk(a[1].category) - rk(b[1].category)) || a[1].name.localeCompare(b[1].name))
+                .map(([slug, g]) => {
+                  const head = g.category !== lastCat; lastCat = g.category;
+                  return (
+              <div key={slug}>
+                {head && <h2 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: "24px 0 8px", borderBottom: "2px solid #e7d9bd", paddingBottom: 4 }}>{getCategoryLabel(g.category)}</h2>}
+                <div className="admin-block">
                 <h3>{g.name} <span className="admin-cat">{getCategoryLabel(g.category)}</span></h3>
                 {(() => {
                   // Stock groupé par couleur : un seul champ par stockId (recto + recto-verso partagés)
@@ -1062,8 +1072,11 @@ export default function GestionPage() {
                     );
                   });
                 })()}
+                </div>
               </div>
-            ))}
+                  );
+                });
+            })()}
           </>
         )}
 
