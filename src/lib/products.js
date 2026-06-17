@@ -258,6 +258,7 @@ export const products = [
     slug: "bracelet-homme-cuir-acier",
     badge: "Populaire",
     name: "Bracelet Homme Cuir & Acier",
+    hidden: true, // masqué (doublon sans stock du modèle tressé) — demandé par l'utilisatrice
     weight: 100,
     pickup: false,
     letter: true,
