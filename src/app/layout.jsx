@@ -63,6 +63,7 @@ function resolveMetadataBase() {
 
 export const metadata = {
   metadataBase: resolveMetadataBase(),
+  manifest: "/manifest.webmanifest",
   title: {
     default: "Niv Création — Bijoux, mariage & cadeaux personnalisés au laser",
     template: "%s | Niv Création",
