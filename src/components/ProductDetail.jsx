@@ -188,40 +188,59 @@ export default function ProductDetail({ product }) {
     return value;
   }
 
-  // Construit le texte de personnalisation final (pour le panier / la commande).
-  function buildPersonalization() {
+  // Construit le texte de personnalisation.
+  //  - forClient = true  : version courte et propre pour la cliente (panier/checkout),
+  //                        SANS les détails techniques (taille, position, emplacement…).
+  //  - forClient = false : version COMPLÈTE pour l'atelier (admin / e-mail / fiche).
+  function buildPersonalization(forClient = false) {
     if (product.personalizationFields) {
       const parts = visibleFields
         .filter((f) => f.type !== "note" && f.type !== "modele")
+        // Côté cliente : on ne garde que les textes saisis (pas emplacement, police, etc.).
+        .filter((f) => !forClient || f.type === "text" || f.type === "textarea" || !f.type)
         .map((f) => {
           const raw = (fieldValues[f.key] || "").toString().trim();
           if (!raw) return null;
-          return `${f.label} : ${valueLabel(f, raw)}`;
+          return forClient ? valueLabel(f, raw) : `${f.label} : ${valueLabel(f, raw)}`;
         })
         .filter(Boolean);
-      // Modèle de gravure : résumé lisible (textes + police + motif + placement).
+      // Modèle de gravure.
       const mField = visibleFields.find((f) => f.type === "modele");
       if (mField) {
         const tpl = MODELES[mField.template];
         const mv = fieldValues[mField.key];
         if (tpl && mv && mv.text) {
           const mLayout = mv.layout || tpl.layout || tpl.style || "stack";
-          const lines = tpl.lines
-            // si l'ajout de texte est décoché, on n'inclut pas la ligne "en dessous"
-            .filter((l) => !l.below || mv.addText !== false)
-            .map((l) => {
-              const t = (mv.text[l.key] || "").trim();
-              return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;
-            })
-            .filter(Boolean);
           const styleLabel = layoutLabel(tpl, mLayout);
-          if (lines.length) parts.push(`Modèle « ${tpl.label} »${styleLabel ? ` (${styleLabel})` : ""} : ${lines.join(" / ")}`);
-          if (mLayout === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : "sans fond (au trait)"}`);
-          if (mv.motif && mv.motif !== "aucun") {
-            parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
+          if (forClient) {
+            // Version cliente : juste les textes gravés (ou le nom du visuel choisi).
+            const clTexts = tpl.lines
+              .filter((l) => !l.below || mv.addText !== false)
+              .map((l) => (mv.text[l.key] || "").trim())
+              .filter(Boolean);
+            parts.push(`Gravure : ${clTexts.length ? clTexts.join(" / ") : styleLabel}`);
+          } else {
+            const lines = tpl.lines
+              .filter((l) => !l.below || mv.addText !== false)
+              .map((l) => {
+                const t = (mv.text[l.key] || "").trim();
+                return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;
+              })
+              .filter(Boolean);
+            if (lines.length) parts.push(`Modèle « ${tpl.label} »${styleLabel ? ` (${styleLabel})` : ""} : ${lines.join(" / ")}`);
+            else parts.push(`Modèle « ${tpl.label} » (${styleLabel})`);
+            if (mLayout === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : "sans fond (au trait)"}`);
+            if (mv.motif && mv.motif !== "aucun") {
+              parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
+            }
+            if (modeleLayout?.label) parts.push(modeleLayout.label.charAt(0).toUpperCase() + modeleLayout.label.slice(1));
           }
-          if (modeleLayout?.label) parts.push(modeleLayout.label.charAt(0).toUpperCase() + modeleLayout.label.slice(1));
         }
+      }
+      // Côté cliente : on s'arrête là (pas de mesures ni de positions).
+      if (forClient) {
+        if (photoSrc) parts.push("Photo personnalisée");
+        return parts.join(" · ");
       }
       // Taille + position du logo / texte gravé (éditeur interactif), pour l'atelier.
       if (product.engrave && photoSrc && photoLayout?.label) {
@@ -612,7 +631,8 @@ export default function ProductDetail({ product }) {
       price: unitPrice,
       // Vignette panier = le visuel EXACT choisi par le client (sinon photo produit).
       image: previewImage || photoSrc || images[0] || null,
-      personalization: buildPersonalization(),
+      // Côté cliente : récap court (les détails techniques restent pour l'atelier).
+      personalization: buildPersonalization(true),
       fields: product.engravingPricing ? { ...fieldValues } : undefined,
       spec: itemSpec,
       pickup: Boolean(product.pickup),
