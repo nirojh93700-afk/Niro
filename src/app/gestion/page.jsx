@@ -509,14 +509,17 @@ export default function GestionPage() {
           <nav className="admin-sidebar-nav">
           {[
             {
-              label: "Ventes",
+              label: "Commandes",
               tabs: [
                 { id: "commandes", text: `Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
-                { id: "atelier", text: "🥃 Atelier (détails commandes)", href: "/gestion/atelier" },
-                { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
-                { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
-                { id: "stats", text: "Statistiques" },
+                { id: "atelier", text: "🥃 Atelier (à graver)", href: "/gestion/atelier" },
                 { id: "devis", text: "Devis / Factures" },
+              ],
+            },
+            {
+              label: "Clients",
+              tabs: [
+                { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
               ],
             },
             {
@@ -525,6 +528,13 @@ export default function GestionPage() {
                 { id: "produits", text: "Produits" },
                 { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
+              ],
+            },
+            {
+              label: "Finances",
+              tabs: [
+                { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
+                { id: "stats", text: "Statistiques" },
               ],
             },
             {
@@ -537,10 +547,15 @@ export default function GestionPage() {
               ],
             },
             {
-              label: "Réglages",
+              label: "Assistant & IA",
               tabs: [
                 { id: "assistant", text: "Assistant" },
                 { id: "agents", text: "Équipe d'agents" },
+              ],
+            },
+            {
+              label: "Réglages",
+              tabs: [
                 { id: "apparence", text: "Apparence" },
                 { id: "reglages", text: "Réglages" },
               ],
