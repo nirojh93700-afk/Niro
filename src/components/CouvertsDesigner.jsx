@@ -61,7 +61,7 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
               {prenom ? (
                 <span className={fontClass} style={{
                   position: "absolute", left: `${cx * 100}%`, top: `${nameCy * 100}%`,
-                  transform: "translate(-50%, -50%) rotate(-90deg)", transformOrigin: "center",
+                  transform: `translate(-50%, -50%) rotate(-90deg) scaleX(${z.nameW ?? 1})`, transformOrigin: "center",
                   fontSize: nameSize && boxW ? `${nameSize * boxW}px` : "clamp(13px, 4.2vw, 20px)", lineHeight: 1, color: "#3a2f1d",
                   whiteSpace: "nowrap", fontWeight: 600, pointerEvents: "none",
                 }}>{prenom}</span>
@@ -70,7 +70,7 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={animal.img} alt={animal.label} style={{
                   position: "absolute", left: `${cx * 100}%`, top: `${animalCy * 100}%`,
-                  height: `${animalH * 100}%`, width: "auto", transform: "translate(-50%, -50%)",
+                  height: `${animalH * 100}%`, width: z.animalW ? `${z.animalW * 100}%` : "auto", transform: "translate(-50%, -50%)",
                   opacity: 0.9, pointerEvents: "none",
                 }} />
               ) : null}

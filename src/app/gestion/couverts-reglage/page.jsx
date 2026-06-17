@@ -130,7 +130,7 @@ export default function CouvertsReglagePage() {
                 onPointerDown={(e) => onPointerDown(p.key, "name", e)}
                 style={{
                   position: "absolute", left: `${z.cx * 100}%`, top: `${z.nameCy * 100}%`,
-                  transform: "translate(-50%,-50%) rotate(-90deg)", transformOrigin: "center",
+                  transform: `translate(-50%,-50%) rotate(-90deg) scaleX(${z.nameW ?? 1})`, transformOrigin: "center",
                   fontSize: `${z.nameSize * (boxRef.current?.clientWidth || 440)}px`, fontWeight: 700, color: "#3a2f1d",
                   whiteSpace: "nowrap", cursor: "grab", padding: "3px 6px", borderRadius: 5,
                   background: selName ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)",
@@ -142,13 +142,14 @@ export default function CouvertsReglagePage() {
                 onPointerDown={(e) => onPointerDown(p.key, "animal", e)}
                 style={{
                   position: "absolute", left: `${z.cx * 100}%`, top: `${z.animalCy * 100}%`,
-                  height: `${z.animalH * 100}%`, transform: "translate(-50%,-50%)", cursor: "grab",
+                  height: `${z.animalH * 100}%`, width: z.animalW ? `${z.animalW * 100}%` : "auto",
+                  transform: "translate(-50%,-50%)", cursor: "grab",
                   display: "flex", alignItems: "center", justifyContent: "center", padding: 3, borderRadius: 6,
                   background: selAn ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)",
                   border: selAn ? "2px solid #b0852f" : "1.5px solid #c9a24b",
                 }}
               >
-                <img src={SAMPLE} alt="animal" draggable={false} style={{ height: "100%", width: "auto", pointerEvents: "none" }} />
+                <img src={SAMPLE} alt="animal" draggable={false} style={{ height: "100%", width: z.animalW ? "100%" : "auto", pointerEvents: "none" }} />
               </div>
             </div>
           );
@@ -169,19 +170,42 @@ export default function CouvertsReglagePage() {
 
       <div className="admin-block">
         <strong>{PIECES.find((p) => p.key === sel.piece)?.label} — {sel.which === "name" ? "Prénom" : "Animal"}</strong>
-        <div style={{ marginTop: 10 }}>
-          <label style={{ fontSize: "0.85rem" }}>Taille</label>
-          {sel.which === "name" ? (
-            <input type="range" min="0.02" max="0.10" step="0.002" value={cur.nameSize}
-              onChange={(e) => setZones((z) => ({ ...z, [sel.piece]: { ...z[sel.piece], nameSize: Number(e.target.value) } }))}
-              style={{ width: "100%" }} />
-          ) : (
-            <input type="range" min="0.03" max="0.20" step="0.005" value={cur.animalH}
-              onChange={(e) => setZones((z) => ({ ...z, [sel.piece]: { ...z[sel.piece], animalH: Number(e.target.value) } }))}
-              style={{ width: "100%" }} />
-          )}
-        </div>
-        <p style={{ fontSize: "0.75rem", color: "var(--ink-soft)", margin: "8px 0 0" }}>Astuce : glisse-déplace directement le carré sur l'image pour le positionner.</p>
+        {sel.which === "name" ? (
+          <>
+            <div style={{ marginTop: 10 }}>
+              <label style={{ fontSize: "0.85rem" }}>Hauteur (taille du texte)</label>
+              <input type="range" min="0.02" max="0.10" step="0.002" value={cur.nameSize}
+                onChange={(e) => setZones((z) => ({ ...z, [sel.piece]: { ...z[sel.piece], nameSize: Number(e.target.value) } }))}
+                style={{ width: "100%" }} />
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <label style={{ fontSize: "0.85rem" }}>Largeur</label>
+              <input type="range" min="0.5" max="1.6" step="0.05" value={cur.nameW ?? 1}
+                onChange={(e) => setZones((z) => ({ ...z, [sel.piece]: { ...z[sel.piece], nameW: Number(e.target.value) } }))}
+                style={{ width: "100%" }} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div style={{ marginTop: 10 }}>
+              <label style={{ fontSize: "0.85rem" }}>Hauteur</label>
+              <input type="range" min="0.03" max="0.20" step="0.005" value={cur.animalH}
+                onChange={(e) => setZones((z) => ({ ...z, [sel.piece]: { ...z[sel.piece], animalH: Number(e.target.value) } }))}
+                style={{ width: "100%" }} />
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <label style={{ fontSize: "0.85rem" }}>Largeur</label>
+              <input type="range" min="0.03" max="0.22" step="0.005" value={cur.animalW ?? cur.animalH}
+                onChange={(e) => setZones((z) => ({ ...z, [sel.piece]: { ...z[sel.piece], animalW: Number(e.target.value) } }))}
+                style={{ width: "100%" }} />
+              <button className="filter-chip" style={{ padding: "2px 10px", marginTop: 6 }}
+                onClick={() => setZones((z) => { const c = { ...z[sel.piece] }; delete c.animalW; return { ...z, [sel.piece]: c }; })}>
+                Largeur auto (garder les proportions)
+              </button>
+            </div>
+          </>
+        )}
+        <p style={{ fontSize: "0.75rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>Astuce : glisse-déplace directement le carré sur l'image pour le positionner.</p>
       </div>
 
       <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 14 }}>

@@ -123,6 +123,8 @@ export async function POST(req) {
           animalH: clamp(p.animalH, 0.02, 0.30, 0.065),
           nameSize: clamp(p.nameSize, 0.01, 0.12, 0.04),
         };
+        const aw = Number(p.animalW); if (Number.isFinite(aw)) z[k].animalW = Math.min(0.30, Math.max(0.02, aw));
+        const nw = Number(p.nameW); if (Number.isFinite(nw)) z[k].nameW = Math.min(2, Math.max(0.4, nw));
       }
     }
     patch.couvertsZones = z;
