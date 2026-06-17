@@ -1300,7 +1300,7 @@ export const products = [
       round: true,
     },
     personalizationFields: [
-      { key: "modele", type: "modele", template: "peres", label: "Personnalisez votre gravure", text: "Modifiez chaque ligne et choisissez un motif. L'aperçu se met à jour sur le verre ; vous pouvez le déplacer et le redimensionner. Aperçu indicatif — la gravure finale est optimisée par notre atelier." },
+      { key: "modele", type: "modele", template: "peres", optional: true, label: "Personnalisez votre gravure", text: "Modifiez chaque ligne et choisissez un motif, OU choisissez simplement un visuel prêt à graver (sans rien remplir). L'aperçu se met à jour sur le verre ; vous pouvez le déplacer et le redimensionner. Aperçu indicatif — la gravure finale est optimisée par notre atelier." },
       { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", optional: true, default: "face", options: [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
