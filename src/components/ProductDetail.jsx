@@ -595,10 +595,15 @@ export default function ProductDetail({ product }) {
         // FACE : photo envoyée, sinon design image choisi (Fête des pères) — version foncée.
         const faceArt = photoSrc || (dsg ? dsg.dark : null);
         if (faceArt) {
-          // Cas fiable : on compose l'image/photo sur le verre (canvas).
+          // GARANTI : on montre au moins l'image/design choisi (même si le canvas
+          // échoue sur certains tel.). Puis on tente la jolie compo sur le verre.
           artworkImage = faceArt;
-          const composed = await composeOnGlass(glass, faceArt, faceBox);
-          previewImage = (await uploadDataUrl(composed)) || composed;
+          previewImage = faceArt;
+          try {
+            const composed = await composeOnGlass(glass, faceArt, faceBox);
+            const up = await uploadDataUrl(composed);
+            previewImage = up || composed || faceArt;
+          } catch { /* on garde faceArt */ }
         } else if (modeleField) {
           // Cas texte/motif (ex. Classique) : on dessine le modèle sur le verre (canvas).
           const composed = await renderModele(modeleVal, modeleTemplate, ENGRAVE_PREVIEW, { glassUrl: glass, box: faceBox });
