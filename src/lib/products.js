@@ -1358,42 +1358,34 @@ export const products = [
     type: "Couverts enfants gravés",
     tagline: "Le jeu de 3 couverts enfant en inox, gravé au prénom et à une série d'animaux au choix.",
     personalizable: true,
-    personalizationLabel: "Prénom + série d'animaux à graver",
+    personalizationLabel: "Prénom + un animal par couvert à graver",
     personalizationFields: [
       { key: "prenom", label: "Prénom à graver", placeholder: "Ex : Ishaan", maxLength: 12 },
-      { key: "serie", type: "select", label: "Série d'animaux", default: "ocean", options: [
-        { value: "ocean", label: "Océan — baleine, dauphin, requin" },
-        { value: "mer", label: "Fonds marins — tortue, hippocampe, poulpe" },
-        { value: "safari", label: "Safari — lion, éléphant, girafe" },
-        { value: "jungle", label: "Jungle — singe, zèbre, rhinocéros" },
-      ] },
       { key: "police", type: "font", label: "Police du prénom", optional: true },
-      { key: "note-grav", type: "note", text: "Chaque pièce (couteau, fourchette, cuillère) est gravée avec le prénom et un animal de la série choisie, sur le manche. Les animaux gravés présentés sont des exemples de notre gravure ; votre commande est réalisée sur les couverts neufs illustrés." },
+      { key: "note-grav", type: "note", text: "La cliente choisira un animal pour chaque couvert (couteau, fourchette, grande et petite cuillère). Le prénom et l'animal sont gravés sur le manche. Sélecteur d'animaux et aperçu en cours de réglage." },
     ],
-    title: "Couverts enfants personnalisés — jeu de 3 gravé prénom et animaux",
+    title: "Couverts enfants personnalisés — jeu de 4 gravé prénom et animaux",
     images: [
-      "/produits/couverts_enfants_set_blanc.jpg",
-      "/produits/couverts_enfants_exemple_prenom.jpg",
-      "/produits/couverts_enfants_exemple_enfant.jpg",
-      "/produits/couverts_enfants_exemple_flatlay.jpg",
-      "/produits/couverts_enfants_series_animaux.jpg",
-      "/produits/couverts_enfants_exemple_ocean.jpg",
-      "/produits/couverts_enfants_set_noir.jpg",
+      "/produits/couverts_enfants_4_face.jpg",
+      "/produits/couverts_enfants_4_noir.jpg",
+      "/produits/couverts_enfants_couteau.jpg",
+      "/produits/couverts_enfants_fourchette.jpg",
+      "/produits/couverts_enfants_grande_cuillere.jpg",
+      "/produits/couverts_enfants_petite_cuillere.jpg",
     ],
     variants: [
       // PRIX PROVISOIRE — à confirmer par l'utilisatrice.
-      { id: "couverts-enfants-jeu3", title: "Jeu de 3 — couteau, fourchette, cuillère", price: 24.90 },
+      { id: "couverts-enfants-jeu4", title: "Jeu de 4 — couteau, fourchette, grande et petite cuillère", price: 24.90 },
     ],
-    descriptionHtml: `<p><strong>Le jeu de couverts enfant personnalisé, gravé au laser.</strong> Trois pièces adaptées aux petites mains — couteau, fourchette et cuillère — en acier inoxydable poli miroir, gravées au prénom de l'enfant et à une série d'animaux au choix.</p>
+    descriptionHtml: `<p><strong>Le jeu de couverts enfant personnalisé, gravé au laser.</strong> Quatre pièces adaptées aux petites mains — couteau, fourchette, grande et petite cuillère — en acier inoxydable poli miroir, gravées au prénom de l'enfant et à un animal au choix par pièce.</p>
 <p>Un cadeau de naissance, d'anniversaire ou de baptême qui accompagne l'enfant au quotidien et donne envie de passer à table.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Composition :</strong> jeu de 3 pièces (couteau, fourchette, cuillère)</li>
+<li><strong>Composition :</strong> jeu de 4 pièces (couteau, fourchette, grande cuillère, petite cuillère)</li>
 <li><strong>Matière :</strong> acier inoxydable 304 (18/10), poli miroir</li>
-<li><strong>Gravure :</strong> laser, sur le manche — prénom + un animal par pièce</li>
-<li><strong>Séries d'animaux :</strong> océan, fonds marins, safari, jungle</li>
+<li><strong>Gravure :</strong> laser, sur le manche — prénom + un animal par couvert</li>
 <li><strong>Entretien :</strong> passe au lave-vaisselle</li>
-<li><strong>Dimensions :</strong> couteau 16,8 cm · fourchette 15 cm · cuillère 14,7 cm</li>
+<li><strong>Dimensions :</strong> couteau 16,8 cm · fourchette 15 cm · grande cuillère 14,7 cm · petite cuillère 12,5 cm</li>
 </ul>`,
   },
 ];

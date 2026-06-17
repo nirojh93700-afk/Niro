@@ -538,13 +538,13 @@ Casse ou défaut à l'arrivée
   },
   "couverts-enfants-personnalises": {
     material: `Taille & Matériaux
-- Jeu de 3 pièces : couteau, fourchette, cuillère.
+- Jeu de 4 pièces : couteau, fourchette, grande et petite cuillère.
 - Acier inoxydable 304 (18/10), poli miroir.
-- Dimensions : couteau 16,8 cm · fourchette 15 cm · cuillère 14,7 cm.
+- Dimensions : couteau 16,8 cm · fourchette 15 cm · grande cuillère 14,7 cm · petite cuillère 12,5 cm.
 - Adapté aux mains des enfants, sans bord coupant.`,
     usage: `Personnalisation & Entretien
-- Gravure laser sur le manche : le prénom + un animal par pièce.
-- Série d'animaux au choix (océan, fonds marins, safari, jungle).
+- Gravure laser sur le manche : le prénom + un animal par couvert.
+- Un animal au choix pour chaque pièce.
 - Passe au lave-vaisselle, la gravure ne s'efface pas.`,
     returns: `Produit personnalisé après gravure — non remboursable
 
