@@ -8,6 +8,7 @@ import { formatEuro, roundTo90 } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import { engravingExtra } from "@/lib/engravingPrice";
+import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
@@ -68,14 +69,17 @@ export default function ProductDetail({ product }) {
     mq.addEventListener("change", upd);
     return () => mq.removeEventListener("change", upd);
   }, []);
-  // Statistiques Google Analytics : « produit vu » (n'a lieu que si un ID GA est réglé).
+  // Statistiques « produit vu » : compteur intégré (1 fois/produit par session,
+  // frugal) + Google Analytics (si un ID GA est réglé).
   useEffect(() => {
-    if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-    window.gtag("event", "view_item", {
-      currency: "EUR",
-      value: product.variants?.[0]?.price || 0,
-      items: [{ item_id: product.slug, item_name: product.name, item_category: product.category }],
-    });
+    trackOnce("vi-" + product.slug, "view_item", { slug: product.slug });
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "view_item", {
+        currency: "EUR",
+        value: product.variants?.[0]?.price || 0,
+        items: [{ item_id: product.slug, item_name: product.name, item_category: product.category }],
+      });
+    }
   }, [product.slug]);
   // Mobile : le mini 3D flottant apparaît quand la photo est sortie de l'écran
   // et que le grand 3D (en bas) n'est pas encore visible.
@@ -667,8 +671,8 @@ export default function ProductDetail({ product }) {
       pickup: Boolean(product.pickup),
       quantity,
     });
-    // Statistiques Google Analytics (n'a lieu que si un identifiant GA est réglé) :
-    // ajout au panier, pour suivre le parcours d'achat.
+    // Statistiques « ajout au panier » : compteur intégré + Google Analytics.
+    track("add_to_cart", { slug: product.slug, value: Number((unitPrice * quantity).toFixed(2)) });
     if (typeof window !== "undefined" && typeof window.gtag === "function") {
       window.gtag("event", "add_to_cart", {
         currency: "EUR",

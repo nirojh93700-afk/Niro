@@ -1,5 +1,7 @@
 "use client";
 
+import { track } from "@/lib/track";
+
 // Envoie le panier au serveur pour créer une session Stripe Checkout,
 // puis redirige le client vers la page de paiement sécurisée Stripe.
 export async function startCheckout(items, postalCode = "", promoCode = "") {
@@ -27,6 +29,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "") {
   if (typeof window !== "undefined") {
     const gaItems = items.map((i) => ({ item_id: i.variantId, item_name: i.name, item_variant: i.variantTitle, price: i.price, quantity: i.quantity }));
     const total = Number(items.reduce((s, i) => s + (i.price || 0) * (i.quantity || 1), 0).toFixed(2));
+    track("begin_checkout", { value: total });
     if (typeof window.gtag === "function") {
       window.gtag("event", "begin_checkout", { currency: "EUR", value: total, items: gaItems });
     }

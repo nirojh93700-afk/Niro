@@ -76,6 +76,100 @@ export async function firebaseDiagnostic() {
   }
 }
 
+// =============================================================================
+// STATISTIQUES DE VISITES (compteur intégré, façon Shopify)
+// -----------------------------------------------------------------------------
+// Collection "siteAnalytics" : un document par jour (id = AAAA-MM-JJ, heure de
+// Paris). Compteurs incrémentés à chaque événement (visites, vues produit,
+// ajouts panier, paiements, ventes). Aucune donnée personnelle n'est stockée.
+// =============================================================================
+function parisDate(d = new Date()) {
+  // Format AAAA-MM-JJ dans le fuseau de Paris (en-CA produit cet ordre).
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(d);
+}
+
+export async function recordAnalyticsEvent(event, data = {}) {
+  const a = getApp();
+  if (!a) return false;
+  const inc = admin.firestore.FieldValue.increment;
+  const date = parisDate();
+  const slug = (data.slug || "").toString().toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 60);
+  const value = Math.max(0, Number(data.value) || 0);
+  const update = { date };
+  switch (event) {
+    case "session": update.sessions = inc(1); break;
+    case "pageview": update.pageviews = inc(1); break;
+    case "view_item":
+      update.viewItem = inc(1);
+      if (slug) update.viewsByProduct = { [slug]: inc(1) };
+      break;
+    case "add_to_cart":
+      update.addToCart = inc(1);
+      if (slug) update.cartByProduct = { [slug]: inc(1) };
+      break;
+    case "begin_checkout": update.beginCheckout = inc(1); break;
+    case "purchase":
+      update.purchase = inc(1);
+      update.revenue = inc(value);
+      break;
+    default: return false;
+  }
+  try {
+    await admin.firestore().collection("siteAnalytics").doc(date).set(update, { merge: true });
+    return true;
+  } catch (e) {
+    console.error("Analytics enregistrement:", e.message);
+    return false;
+  }
+}
+
+// Agrège les N derniers jours pour le tableau de bord admin.
+export async function getAnalyticsSummary(days = 30) {
+  const a = getApp();
+  if (!a) return null;
+  const n = Math.min(120, Math.max(1, Number(days) || 30));
+  const ids = [];
+  const now = new Date();
+  for (let i = 0; i < n; i++) {
+    ids.push(parisDate(new Date(now.getTime() - i * 86400000)));
+  }
+  try {
+    const refs = ids.map((id) => admin.firestore().collection("siteAnalytics").doc(id));
+    const snaps = await admin.firestore().getAll(...refs);
+    const byDate = {};
+    for (const s of snaps) if (s.exists) byDate[s.id] = s.data();
+    const num = (v) => (typeof v === "number" ? v : 0);
+    const series = ids.slice().reverse().map((id) => {
+      const d = byDate[id] || {};
+      return {
+        date: id,
+        sessions: num(d.sessions), pageviews: num(d.pageviews),
+        viewItem: num(d.viewItem), addToCart: num(d.addToCart),
+        beginCheckout: num(d.beginCheckout), purchase: num(d.purchase),
+        revenue: num(d.revenue),
+      };
+    });
+    const totals = series.reduce((t, d) => ({
+      sessions: t.sessions + d.sessions, pageviews: t.pageviews + d.pageviews,
+      viewItem: t.viewItem + d.viewItem, addToCart: t.addToCart + d.addToCart,
+      beginCheckout: t.beginCheckout + d.beginCheckout, purchase: t.purchase + d.purchase,
+      revenue: t.revenue + d.revenue,
+    }), { sessions: 0, pageviews: 0, viewItem: 0, addToCart: 0, beginCheckout: 0, purchase: 0, revenue: 0 });
+    const views = {}, carts = {};
+    for (const id of ids) {
+      const d = byDate[id]; if (!d) continue;
+      for (const [k, v] of Object.entries(d.viewsByProduct || {})) views[k] = (views[k] || 0) + num(v);
+      for (const [k, v] of Object.entries(d.cartByProduct || {})) carts[k] = (carts[k] || 0) + num(v);
+    }
+    return { days: n, series, totals, views, carts };
+  } catch (e) {
+    console.error("Analytics lecture:", e.message);
+    return null;
+  }
+}
+
 // Slug identique à celui de l'appli (pour retrouver la clé produit).
 export function productKeySlug(s) {
   return (s || "")

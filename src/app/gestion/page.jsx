@@ -534,7 +534,8 @@ export default function GestionPage() {
               label: "Finances",
               tabs: [
                 { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
-                { id: "stats", text: "Statistiques" },
+                { id: "stats", text: "Statistiques (ventes)" },
+                { id: "visiteurs", text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
               ],
             },
             {
