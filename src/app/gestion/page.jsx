@@ -516,7 +516,6 @@ export default function GestionPage() {
                 { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
                 { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
                 { id: "stats", text: "Statistiques" },
-                { id: "clients", text: "Clientes" },
                 { id: "devis", text: "Devis / Factures" },
               ],
             },
@@ -878,117 +877,6 @@ export default function GestionPage() {
           </>
         )}
 
-        {/* ---------------- CLIENTES ---------------- */}
-        {tab === "clients" && (
-          <>
-            <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
-              {clients.length} cliente{clients.length > 1 ? "s" : ""} · classées par total dépensé. Touche une cliente pour voir ses commandes et le suivi.
-            </p>
-            {clients.length === 0 && (
-              <div className="admin-block"><p style={{ margin: 0, color: "var(--ink-soft)" }}>Aucune cliente pour le moment.</p></div>
-            )}
-            {clients.length > 0 && (
-              <input
-                value={crmSearch}
-                onChange={(e) => setCrmSearch(e.target.value)}
-                placeholder="Rechercher une cliente (nom, e-mail, téléphone)…"
-                style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 12 }}
-              />
-            )}
-            {crmFiltered.map((c, i) => (
-              <div key={i} className="admin-block">
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setOpenClient(openClient === i ? -1 : i)}
-                >
-                  <div className="admin-row" style={{ gridTemplateColumns: "1fr auto", alignItems: "center" }}>
-                    <span className="admin-variant">
-                      <strong>{c.name}</strong>{" "}
-                      <span style={{ fontSize: "0.72rem", padding: "1px 8px", borderRadius: 20, background: "#f3efe6", color: segColors[c.segment], fontWeight: 600 }}>
-                        {c.segment === "VIP" ? "⭐ VIP" : c.segment}
-                      </span>{" "}
-                      <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}>{openClient === i ? "▾" : "▸"}</span>
-                    </span>
-                    <span className="admin-price">{formatEuro(c.total)}</span>
-                  </div>
-                  <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>
-                    {c.email ? <a href={`mailto:${c.email}`} onClick={(e) => e.stopPropagation()}>{c.email}</a> : "—"}
-                    {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
-                  </div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--ink-soft)", marginTop: 2 }}>
-                    {c.first ? `1ʳᵉ : ${fmtDate(c.first)}` : ""}{c.last && c.nb > 1 ? ` · dernière : ${fmtDate(c.last)}` : ""}
-                  </div>
-                </div>
-
-                {openClient === i && (
-                  <div style={{ marginTop: 10, borderTop: "1px dashed var(--line)", paddingTop: 10 }}>
-                    {c.orders.map((ord, j) => {
-                      const label = ord.status === "livree" ? "✓✓ Livrée" : ord.status === "expediee" ? "✓ Expédiée" : "● À préparer";
-                      const col = ord.status === "livree" || ord.status === "expediee" ? "#256b34" : "#b4452f";
-                      return (
-                        <div key={j} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", fontSize: "0.88rem", marginBottom: 8 }}>
-                          <strong>#{ord.ref}</strong>
-                          <span style={{ color: "var(--ink-soft)" }}>{fmtDate(ord.createdAt)}</span>
-                          <span style={{ color: col, fontWeight: 600 }}>{label}</span>
-                          <span style={{ color: "var(--ink-soft)" }}>{formatEuro(ord.total)}</span>
-                          {ord.tracking ? (
-                            <a href={`https://parcelsapp.com/en/tracking/${encodeURIComponent(ord.tracking)}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>
-                              📍 Où est le colis ?
-                            </a>
-                          ) : (
-                            <span style={{ color: "var(--ink-soft)", fontStyle: "italic" }}>pas de suivi</span>
-                          )}
-                        </div>
-                      );
-                    })}
-
-                    {(() => {
-                      const nk = (c.email || c.name || "").toLowerCase();
-                      const current = noteDraft[nk] ?? siteSettings.crmNotes?.[nk] ?? "";
-                      return (
-                        <div style={{ marginTop: 6 }}>
-                          <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 4 }}>📝 Note (privée)</label>
-                          <textarea
-                            value={current}
-                            onChange={(e) => setNoteDraft((d) => ({ ...d, [nk]: e.target.value }))}
-                            placeholder="Ex. Préfère l'argenté · cliente mariage · à rappeler…"
-                            style={{ width: "100%", minHeight: 56, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }}
-                          />
-                          <button className="btn btn-outline" style={{ marginTop: 6, padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => saveNote(nk)}>
-                            Enregistrer la note {saved === "note-" + nk ? "✓" : ""}
-                          </button>
-
-                          {c.email && (
-                            <div style={{ marginTop: 12, borderTop: "1px dashed var(--line)", paddingTop: 10 }}>
-                              {mailOpen !== c.email ? (
-                                <button className="btn btn-gold" style={{ padding: "5px 14px", fontSize: "0.85rem" }} onClick={() => { setMailOpen(c.email); setMailSubject(""); setMailBody(""); setMailMsg(""); }}>
-                                  ✉️ Écrire à cette cliente
-                                </button>
-                              ) : (
-                                <div style={{ display: "grid", gap: 8 }}>
-                                  <strong style={{ fontSize: "0.85rem" }}>Écrire à {c.email} (depuis ton e-mail du site)</strong>
-                                  <input value={mailSubject} onChange={(e) => setMailSubject(e.target.value)} placeholder="Sujet" style={{ padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
-                                  <textarea value={mailBody} onChange={(e) => setMailBody(e.target.value)} placeholder="Votre message…" style={{ minHeight: 90, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
-                                  <div style={{ display: "flex", gap: 8 }}>
-                                    <button className="btn btn-gold" style={{ padding: "6px 14px", fontSize: "0.85rem" }} disabled={mailSending} onClick={() => sendClientEmail(c.email)}>
-                                      {mailSending ? "Envoi…" : "Envoyer"}
-                                    </button>
-                                    <button className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={() => setMailOpen("")}>Annuler</button>
-                                  </div>
-                                  {mailMsg && <div style={{ fontSize: "0.85rem", color: mailMsg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{mailMsg}</div>}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })()}
-                  </div>
-                )}
-              </div>
-            ))}
-          </>
-        )}
 
         {/* ---------------- AVIS ---------------- */}
         {tab === "avis" && <ReviewsAdmin adminKey={key} />}
