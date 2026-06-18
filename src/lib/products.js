@@ -1345,19 +1345,19 @@ export const products = [
 </ul>`,
   },
   {
-    // PAGE TEST (non publiée) — couverts enfants personnalisés (prénom + série d'animaux).
-    // Visible uniquement via ?apercu=niv2026. Prix et aperçu animal à régler.
+    // PAGE TEST (non publiée) — couverts enfants personnalisés (prénom + un animal par couvert).
+    // Visible uniquement via ?apercu=niv2026.
     slug: "couverts-enfants-personnalises",
     badge: "Nouveau",
     name: "Couverts enfants personnalisés",
-    weight: 180, // jeu de 3 pièces + emballage
+    weight: 200, // jeu de 4 pièces + emballage
     pickup: false,
     letter: false, // colis (rigide)
     freeShipping: true, // livraison offerte (incluse dans le prix)
     hidden: true, // PAGE TEST — non publiée
     category: "cadeaux",
     type: "Couverts enfants gravés",
-    tagline: "Le jeu de 3 couverts enfant en inox, gravé au prénom et à une série d'animaux au choix.",
+    tagline: "Le jeu de 4 couverts enfant en inox, gravé au prénom et à un animal au choix sur chaque pièce.",
     personalizable: true,
     personalizationLabel: "Prénom + un animal par couvert à graver",
     personalizationFields: [
