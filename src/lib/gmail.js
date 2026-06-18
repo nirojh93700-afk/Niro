@@ -21,7 +21,8 @@ export async function gmailAccessToken({ clientId, clientSecret, refreshToken })
   });
   const data = await res.json();
   if (!res.ok || !data.access_token) {
-    throw new Error(data.error_description || data.error || "Connexion Gmail refusée.");
+    const detail = [data.error, data.error_description].filter(Boolean).join(" — ");
+    throw new Error(detail || "Connexion Gmail refusée.");
   }
   return data.access_token;
 }
