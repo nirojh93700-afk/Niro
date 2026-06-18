@@ -1358,7 +1358,7 @@ export const products = [
     hidden: false, // PUBLIÉ
     category: "cadeaux",
     type: "Couverts enfants gravés",
-    tagline: "Le jeu de 4 couverts enfants en inox, gravés au prénom et à un animal au choix sur chaque pièce.",
+    tagline: "Le jeu de 4 couverts enfants en inox, personnalisés avec le prénom et un animal au choix sur chaque pièce.",
     personalizable: true,
     personalizationLabel: "Prénom + un animal par couvert à graver",
     personalizationFields: [
@@ -1403,7 +1403,7 @@ export const products = [
       },
       { key: "note-grav", type: "note", text: "Chaque couvert est gravé sur le manche avec le prénom et l'animal choisi. Aperçu indicatif ; la gravure finale est optimisée par notre atelier." },
     ],
-    title: "Couverts enfants personnalisés — jeu de 4 gravé au prénom et à un animal",
+    title: "Couverts enfants personnalisés — jeu de 4, prénom et animal au choix gravés",
     images: [
       "/produits/couverts_enfants_4_face.jpg",
       "/produits/couverts_enfants_ex_prenom.jpg",
@@ -1420,7 +1420,7 @@ export const products = [
       // PRIX PROVISOIRE — à confirmer par l'utilisatrice.
       { id: "couverts-enfants-jeu4", title: "Jeu de 4 — couteau, fourchette, grande et petite cuillère", price: 34.90 },
     ],
-    descriptionHtml: `<p><strong>Le jeu de couverts enfant personnalisé, gravé au laser.</strong> Quatre pièces adaptées aux petites mains — couteau, fourchette, grande et petite cuillère — en acier inoxydable poli miroir, gravées au prénom de l'enfant et à un animal au choix par pièce.</p>
+    descriptionHtml: `<p><strong>Le jeu de couverts enfant personnalisé, gravé au laser.</strong> Quatre pièces adaptées aux petites mains — couteau, fourchette, grande et petite cuillère — en acier inoxydable poli miroir, personnalisées avec le prénom de l'enfant et un animal au choix par pièce.</p>
 <p>Un cadeau de naissance, d'anniversaire ou de baptême qui accompagne l'enfant au quotidien et donne envie de passer à table.</p>
 <h3>Caractéristiques</h3>
 <ul>
