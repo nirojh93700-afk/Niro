@@ -21,16 +21,16 @@ const PIECES = [
 ];
 const DEFAULTS = {
   base: {
-    couteau: { cx: 0.213, nameCy: 0.62, animalCy: 0.80, animalH: 0.055, nameSize: 0.035 },
-    fourchette: { cx: 0.396, nameCy: 0.62, animalCy: 0.80, animalH: 0.055, nameSize: 0.035 },
-    grande: { cx: 0.619, nameCy: 0.62, animalCy: 0.80, animalH: 0.055, nameSize: 0.035 },
-    petite: { cx: 0.821, nameCy: 0.66, animalCy: 0.82, animalH: 0.05, nameSize: 0.035 },
+    couteau: { cx: 0.207, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
+    fourchette: { cx: 0.40, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
+    grande: { cx: 0.62, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
+    petite: { cx: 0.82, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
   },
   zoom: {
-    couteau: { cx: 0.145, nameCy: 0.42, animalCy: 0.80, animalH: 0.22, nameSize: 0.03 },
-    fourchette: { cx: 0.365, nameCy: 0.42, animalCy: 0.80, animalH: 0.22, nameSize: 0.03 },
-    grande: { cx: 0.63, nameCy: 0.42, animalCy: 0.80, animalH: 0.22, nameSize: 0.03 },
-    petite: { cx: 0.871, nameCy: 0.42, animalCy: 0.80, animalH: 0.22, nameSize: 0.03 },
+    couteau: { cx: 0.144, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
+    fourchette: { cx: 0.366, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
+    grande: { cx: 0.63, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
+    petite: { cx: 0.872, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
   },
 };
 const mergeSet = (def, saved) => {
@@ -92,6 +92,18 @@ export default function CouvertsReglagePage() {
         body: JSON.stringify({ couvertsZones: zones }),
       });
       setMsg(res.ok ? "Enregistré ✓ (recharge la fiche pour voir)" : "Échec de l'enregistrement.");
+    } catch { setMsg("Erreur réseau."); }
+  }
+
+  async function resetAllAndSave() {
+    setZones(DEFAULTS);
+    setMsg("");
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ couvertsZones: DEFAULTS }),
+      });
+      setMsg(res.ok ? "Tout remis propre et enregistré ✓ (recharge la fiche)" : "Échec.");
     } catch { setMsg("Erreur réseau."); }
   }
 
@@ -208,10 +220,14 @@ export default function CouvertsReglagePage() {
         <p style={{ fontSize: "0.75rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>Astuce : glisse directement le carré sur l'image pour le positionner.</p>
       </div>
 
-      <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 14 }}>
+      <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 14, flexWrap: "wrap" }}>
         <button className="btn btn-gold" onClick={save}>Enregistrer</button>
         <button className="btn" onClick={() => setZones((z) => ({ ...z, [view]: DEFAULTS[view] }))} style={{ border: "1px solid var(--line)" }}>Réinitialiser cette vue</button>
         {msg ? <span style={{ fontSize: "0.85rem", color: msg.includes("✓") ? "#256b34" : "#b3261e" }}>{msg}</span> : null}
+      </div>
+      <div style={{ marginTop: 16, padding: 14, background: "#faf7f0", borderRadius: 10, border: "1px solid var(--line)" }}>
+        <p style={{ margin: "0 0 8px", fontSize: "0.9rem" }}><strong>Tout est décalé ?</strong> Clique ici pour remettre des positions propres et alignées (les deux vues), puis recharge la fiche.</p>
+        <button className="btn btn-gold" onClick={resetAllAndSave}>Tout remettre propre et enregistrer</button>
       </div>
     </div>
   );
