@@ -1354,6 +1354,7 @@ export const products = [
     pickup: false,
     letter: false, // colis (rigide)
     freeShipping: true, // livraison offerte (incluse dans le prix)
+    noCustomCta: true, // pas le bloc "projet sur mesure / téléphone" (perso via le configurateur)
     hidden: true, // PAGE TEST — non publiée
     category: "cadeaux",
     type: "Couverts enfants gravés",

@@ -844,7 +844,7 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {(product.category === "mariage" || product.category === "cadeaux") && (
+          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux") && (
             <div
               style={{
                 marginTop: 14,
@@ -861,7 +861,7 @@ export default function ProductDetail({ product }) {
               <br />
               Personnalisation particulière ou projet sur mesure :{" "}
               <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
-                écrivez-moi
+                écrivez-nous
               </a>{" "}
               ou appelez le{" "}
               <a href="tel:+33766153102" style={{ color: "var(--gold-dark)", fontWeight: 600, whiteSpace: "nowrap" }}>
