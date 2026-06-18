@@ -639,6 +639,8 @@ export async function getSettings() {
     crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
     // Positions de gravure des couverts enfants (réglées dans /gestion/couverts-reglage).
     couvertsZones: (s.couvertsZones && typeof s.couvertsZones === "object") ? s.couvertsZones : {},
+    // Gmail connecté ? (vrai/faux seulement — les identifiants ne sont JAMAIS exposés ici).
+    gmailConnected: Boolean(s.gmail?.refreshToken),
     // Mode maintenance : si activé, les visiteurs voient une page "en maintenance"
     // (l'administratrice garde l'accès via le code d'accès).
     maintenance: {
@@ -670,6 +672,25 @@ export async function setSettings(patch) {
   data.settings = { ...(data.settings || {}), ...patch };
   await persistCatalog(data);
   return data.settings;
+}
+
+// Identifiants Gmail (agent e-mail) — lecture côté serveur uniquement,
+// jamais renvoyés par getSettings() (donc jamais exposés au public).
+export async function getGmailCreds() {
+  const data = await getCatalogRaw();
+  const g = (data.settings || {}).gmail || {};
+  return { clientId: g.clientId || "", clientSecret: g.clientSecret || "", refreshToken: g.refreshToken || "" };
+}
+
+export async function setGmailCreds({ clientId, clientSecret, refreshToken }) {
+  const data = await getCatalogRaw();
+  data.settings = { ...(data.settings || {}), gmail: {
+    clientId: String(clientId || "").trim(),
+    clientSecret: String(clientSecret || "").trim(),
+    refreshToken: String(refreshToken || "").trim(),
+  } };
+  await persistCatalog(data);
+  return true;
 }
 
 async function persistCatalog(data) {

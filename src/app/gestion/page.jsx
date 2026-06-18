@@ -553,6 +553,7 @@ export default function GestionPage() {
               tabs: [
                 { id: "assistant", text: "Assistant" },
                 { id: "agents", text: "Équipe d'agents" },
+                { id: "boite-mail", text: "✉️ Boîte mail (agent)", href: "/gestion/boite-mail" },
               ],
             },
             {
