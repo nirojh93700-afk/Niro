@@ -1,43 +1,35 @@
 "use client";
 
 // =============================================================================
-// RÉGLAGE COUVERTS (admin) — place le prénom et l'animal sur chaque couvert,
-// pour DEUX vues : la photo normale et le gros plan des manches (vraies photos).
-// Glisse les carrés, ajuste la taille, Enregistre. Le site garde tes positions.
+// RÉGLAGE COUVERTS (admin) — méthode gros plan. UN seul réglage (taille +
+// position du prénom et de l'animal) appliqué à TOUS les couverts (même taille).
+// Glisse les carrés sur le manche, ajuste la taille, Enregistre.
 // =============================================================================
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-const IMAGES = {
-  base: { src: "/produits/couverts_enfants_4_face.jpg", aspect: "1 / 1" },
-  zoom: { src: "/produits/couverts_enfants_zoom.jpg", aspect: "1076 / 565" },
-};
 const SAMPLE = "/animaux/savane/lion.png";
-const PIECES = [
-  { key: "couteau", label: "Couteau" },
-  { key: "fourchette", label: "Fourchette" },
-  { key: "grande", label: "Grande cuillère" },
-  { key: "petite", label: "Petite cuillère" },
+const HANDLES = [
+  { key: "couteau", label: "Couteau", img: "/produits/couverts_manche_couteau.jpg" },
+  { key: "fourchette", label: "Fourchette", img: "/produits/couverts_manche_fourchette.jpg" },
+  { key: "grande", label: "Grande cuillère", img: "/produits/couverts_manche_grande.jpg" },
+  { key: "petite", label: "Petite cuillère", img: "/produits/couverts_manche_petite.jpg" },
 ];
-const DEFAULTS = {
-  base: {
-    couteau: { cx: 0.207, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
-    fourchette: { cx: 0.40, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
-    grande: { cx: 0.62, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
-    petite: { cx: 0.82, nameCy: 0.70, animalCy: 0.82, animalH: 0.05, nameSize: 0.03 },
-  },
-  zoom: {
-    couteau: { cx: 0.144, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
-    fourchette: { cx: 0.366, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
-    grande: { cx: 0.63, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
-    petite: { cx: 0.872, nameCy: 0.45, animalCy: 0.80, animalH: 0.16, nameSize: 0.03 },
-  },
-};
-const mergeSet = (def, saved) => {
-  const out = {};
-  for (const k of Object.keys(def)) out[k] = { ...def[k], ...((saved || {})[k] || {}) };
-  return out;
-};
+const DEF = { cx: 0.5, nameY: 0.47, animalY: 0.71, nameSize: 0.17, animalH: 0.11 };
+
+function Preview({ img, pos, prenom = "Ishaan" }) {
+  const ref = useRef(null); const [w, setW] = useState(0);
+  useEffect(() => { const el = ref.current; if (!el) return; const u = () => setW(el.clientWidth); u(); const ro = new ResizeObserver(u); ro.observe(el); return () => ro.disconnect(); }, []);
+  return (
+    <div ref={ref} style={{ position: "relative", width: "100%", aspectRatio: "174 / 615", background: "#fff", borderRadius: 10, border: "1px solid var(--line)", overflow: "hidden" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={img} alt="" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+      <span style={{ position: "absolute", left: `${pos.cx * 100}%`, top: `${pos.nameY * 100}%`, transform: `translate(-50%,-50%) rotate(-90deg) scaleX(${pos.nameW ?? 1})`, transformOrigin: "center", fontSize: w ? `${pos.nameSize * w}px` : "20px", fontWeight: 700, color: "#3a2f1d", whiteSpace: "nowrap" }}>{prenom}</span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={SAMPLE} alt="" style={{ position: "absolute", left: `${pos.cx * 100}%`, top: `${pos.animalY * 100}%`, transform: "translate(-50%,-50%)", height: `${pos.animalH * 100}%`, width: pos.animalW ? `${pos.animalW * 100}%` : "auto" }} />
+    </div>
+  );
+}
 
 export default function CouvertsReglagePage() {
   const [key, setKey] = useState("");
@@ -45,9 +37,8 @@ export default function CouvertsReglagePage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
-  const [zones, setZones] = useState(DEFAULTS);
-  const [view, setView] = useState("base"); // base | zoom
-  const [sel, setSel] = useState({ piece: "couteau", which: "name" });
+  const [pos, setPos] = useState(DEF);
+  const [which, setWhich] = useState("name");
   const boxRef = useRef(null);
   const drag = useRef(null);
 
@@ -59,51 +50,28 @@ export default function CouvertsReglagePage() {
       sessionStorage.setItem("niv-admin-key", adminKey);
       setAuthed(true);
       const s = (await res.json()).settings || {};
-      const cz = s.couvertsZones || {};
-      setZones({ base: mergeSet(DEFAULTS.base, cz.base), zoom: mergeSet(DEFAULTS.zoom, cz.zoom) });
+      if (s.couvertsZones?.handle) setPos({ ...DEF, ...s.couvertsZones.handle });
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    const saved = sessionStorage.getItem("niv-admin-key");
-    if (saved) { setKey(saved); load(saved); }
-  }, [load]);
+  useEffect(() => { const s = sessionStorage.getItem("niv-admin-key"); if (s) { setKey(s); load(s); } }, [load]);
 
-  function onPointerDown(piece, which, e) { e.preventDefault(); setSel({ piece, which }); drag.current = { piece, which }; }
+  function onPointerDown(w, e) { e.preventDefault(); setWhich(w); drag.current = w; }
   function onPointerMove(e) {
     if (!drag.current || !boxRef.current) return;
     const r = boxRef.current.getBoundingClientRect();
     const cx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
     const cy = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
-    const { piece, which } = drag.current;
-    setZones((z) => ({ ...z, [view]: { ...z[view], [piece]: { ...z[view][piece], cx, [which === "name" ? "nameCy" : "animalCy"]: cy } } }));
+    setPos((p) => ({ ...p, cx, [drag.current === "name" ? "nameY" : "animalY"]: cy }));
   }
   function onPointerUp() { drag.current = null; }
-  function setField(field, val) {
-    setZones((z) => ({ ...z, [view]: { ...z[view], [sel.piece]: { ...z[view][sel.piece], [field]: val } } }));
-  }
 
   async function save() {
     setMsg("");
     try {
-      const res = await fetch("/api/admin/settings", {
-        method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ couvertsZones: zones }),
-      });
-      setMsg(res.ok ? "Enregistré ✓ (recharge la fiche pour voir)" : "Échec de l'enregistrement.");
-    } catch { setMsg("Erreur réseau."); }
-  }
-
-  async function resetAllAndSave() {
-    setZones(DEFAULTS);
-    setMsg("");
-    try {
-      const res = await fetch("/api/admin/settings", {
-        method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ couvertsZones: DEFAULTS }),
-      });
-      setMsg(res.ok ? "Tout remis propre et enregistré ✓ (recharge la fiche)" : "Échec.");
+      const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ couvertsZones: { handle: pos } }) });
+      setMsg(res.ok ? "Enregistré ✓ (recharge la fiche)" : "Échec.");
     } catch { setMsg("Erreur réseau."); }
   }
 
@@ -111,9 +79,7 @@ export default function CouvertsReglagePage() {
     return (
       <div className="container" style={{ maxWidth: 420, padding: "40px 16px" }}>
         <h1 style={{ fontSize: "1.4rem" }}>Réglage des couverts</h1>
-        <input type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Mot de passe admin"
-          onKeyDown={(e) => e.key === "Enter" && load(key)}
-          style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+        <input type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Mot de passe admin" onKeyDown={(e) => e.key === "Enter" && load(key)} style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
         {error ? <p style={{ color: "#b3261e" }}>{error}</p> : null}
         <button className="btn btn-gold" style={{ marginTop: 10 }} onClick={() => load(key)} disabled={loading}>Entrer</button>
         <p style={{ marginTop: 16 }}><Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour</Link></p>
@@ -121,113 +87,71 @@ export default function CouvertsReglagePage() {
     );
   }
 
-  const set = zones[view];
-  const cur = set[sel.piece];
-  const img = IMAGES[view];
-  const bw = boxRef.current?.clientWidth || 440;
-
   return (
-    <div className="container" style={{ padding: "24px 16px 60px", maxWidth: 620 }}>
+    <div className="container" style={{ padding: "24px 16px 60px", maxWidth: 560 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
         <h1 style={{ fontSize: "1.4rem", margin: 0 }}>Réglage des couverts</h1>
         <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Gestion</Link>
       </div>
+      <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem" }}>Glisse le carré <strong>« Prénom »</strong> et le carré <strong>animal</strong>, ajuste la taille. Ce réglage s'applique <strong>à tous les couverts</strong> (même taille partout).</p>
 
-      {/* Choix de la vue */}
-      <div style={{ display: "flex", gap: 8, margin: "12px 0" }}>
-        <button className={`filter-chip ${view === "base" ? "active" : ""}`} style={{ padding: "5px 16px" }} onClick={() => setView("base")}>Vue normale</button>
-        <button className={`filter-chip ${view === "zoom" ? "active" : ""}`} style={{ padding: "5px 16px" }} onClick={() => setView("zoom")}>Gros plan (zoom)</button>
-      </div>
-      <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem", marginTop: 0 }}>
-        Glisse le carré <strong>« Prénom »</strong> et le carré <strong>animal</strong> sur chaque couvert, ajuste la taille, puis <strong>Enregistre</strong>. Règle les <strong>deux vues</strong>.
-      </p>
-
-      <div
-        ref={boxRef}
-        onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerLeave={onPointerUp}
-        style={{ position: "relative", width: "100%", aspectRatio: img.aspect, background: "#fff", borderRadius: 12, border: "1px solid var(--line)", touchAction: "none", userSelect: "none" }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={img.src} alt="Couverts" draggable={false} style={{ width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }} />
-        {PIECES.map((p) => {
-          const z = set[p.key];
-          const selName = sel.piece === p.key && sel.which === "name";
-          const selAn = sel.piece === p.key && sel.which === "animal";
-          return (
-            <div key={p.key}>
-              <span onPointerDown={(e) => onPointerDown(p.key, "name", e)} style={{
-                position: "absolute", left: `${z.cx * 100}%`, top: `${z.nameCy * 100}%`,
-                transform: `translate(-50%,-50%) rotate(-90deg) scaleX(${z.nameW ?? 1})`, transformOrigin: "center",
-                fontSize: `${z.nameSize * bw}px`, fontWeight: 700, color: "#3a2f1d", whiteSpace: "nowrap",
-                cursor: "grab", padding: "3px 6px", borderRadius: 5,
-                background: selName ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)", border: selName ? "2px solid #b0852f" : "1.5px solid #c9a24b",
-              }}>Prénom</span>
-              <div onPointerDown={(e) => onPointerDown(p.key, "animal", e)} style={{
-                position: "absolute", left: `${z.cx * 100}%`, top: `${z.animalCy * 100}%`,
-                height: `${z.animalH * 100}%`, width: z.animalW ? `${z.animalW * 100}%` : "auto",
-                transform: "translate(-50%,-50%)", cursor: "grab", display: "flex", alignItems: "center", justifyContent: "center", padding: 3, borderRadius: 6,
-                background: selAn ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)", border: selAn ? "2px solid #b0852f" : "1.5px solid #c9a24b",
-              }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={SAMPLE} alt="" draggable={false} style={{ height: "100%", width: z.animalW ? "100%" : "auto", pointerEvents: "none" }} />
-              </div>
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-start" }}>
+        {/* Manche d'édition */}
+        <div style={{ width: 180 }}>
+          <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", textAlign: "center", margin: "0 0 4px" }}>Place ici</p>
+          <div ref={boxRef} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerLeave={onPointerUp}
+            style={{ position: "relative", width: "100%", aspectRatio: "174 / 615", background: "#fff", borderRadius: 10, border: "1px solid var(--line)", overflow: "hidden", touchAction: "none", userSelect: "none" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={HANDLES[0].img} alt="" draggable={false} style={{ width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }} />
+            <span onPointerDown={(e) => onPointerDown("name", e)} style={{ position: "absolute", left: `${pos.cx * 100}%`, top: `${pos.nameY * 100}%`, transform: `translate(-50%,-50%) rotate(-90deg) scaleX(${pos.nameW ?? 1})`, transformOrigin: "center", fontSize: `${pos.nameSize * (boxRef.current?.clientWidth || 180)}px`, fontWeight: 700, color: "#3a2f1d", whiteSpace: "nowrap", cursor: "grab", padding: "2px 5px", borderRadius: 5, background: which === "name" ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)", border: which === "name" ? "2px solid #b0852f" : "1.5px solid #c9a24b" }}>Prénom</span>
+            <div onPointerDown={(e) => onPointerDown("animal", e)} style={{ position: "absolute", left: `${pos.cx * 100}%`, top: `${pos.animalY * 100}%`, transform: "translate(-50%,-50%)", height: `${pos.animalH * 100}%`, width: pos.animalW ? `${pos.animalW * 100}%` : "auto", cursor: "grab", display: "flex", padding: 2, borderRadius: 6, background: which === "animal" ? "rgba(201,162,75,.45)" : "rgba(201,162,75,.22)", border: which === "animal" ? "2px solid #b0852f" : "1.5px solid #c9a24b" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={SAMPLE} alt="" draggable={false} style={{ height: "100%", width: pos.animalW ? "100%" : "auto", pointerEvents: "none" }} />
             </div>
-          );
-        })}
+          </div>
+        </div>
+
+        {/* Curseurs */}
+        <div className="admin-block" style={{ flex: 1, minWidth: 220 }}>
+          <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
+            <button className={`filter-chip ${which === "name" ? "active" : ""}`} style={{ padding: "4px 12px" }} onClick={() => setWhich("name")}>Prénom</button>
+            <button className={`filter-chip ${which === "animal" ? "active" : ""}`} style={{ padding: "4px 12px" }} onClick={() => setWhich("animal")}>Animal</button>
+          </div>
+          {which === "name" ? (
+            <>
+              <label style={{ fontSize: "0.85rem" }}>Taille du prénom</label>
+              <input type="range" min="0.06" max="0.40" step="0.005" value={pos.nameSize} onChange={(e) => setPos((p) => ({ ...p, nameSize: Number(e.target.value) }))} style={{ width: "100%" }} />
+              <label style={{ fontSize: "0.85rem" }}>Largeur du prénom</label>
+              <input type="range" min="0.5" max="1.6" step="0.05" value={pos.nameW ?? 1} onChange={(e) => setPos((p) => ({ ...p, nameW: Number(e.target.value) }))} style={{ width: "100%" }} />
+            </>
+          ) : (
+            <>
+              <label style={{ fontSize: "0.85rem" }}>Taille de l'animal (hauteur)</label>
+              <input type="range" min="0.05" max="0.40" step="0.005" value={pos.animalH} onChange={(e) => setPos((p) => ({ ...p, animalH: Number(e.target.value) }))} style={{ width: "100%" }} />
+              <label style={{ fontSize: "0.85rem" }}>Largeur de l'animal</label>
+              <input type="range" min="0.1" max="0.8" step="0.01" value={pos.animalW ?? 0.35} onChange={(e) => setPos((p) => ({ ...p, animalW: Number(e.target.value) }))} style={{ width: "100%" }} />
+              <button className="filter-chip" style={{ padding: "2px 10px", marginTop: 6 }} onClick={() => setPos((p) => { const c = { ...p }; delete c.animalW; return c; })}>Largeur auto (proportions)</button>
+            </>
+          )}
+          <p style={{ fontSize: "0.74rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>Astuce : glisse les carrés sur le manche pour la position.</p>
+        </div>
       </div>
 
-      {/* Sélection pièce + élément */}
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "14px 0 8px" }}>
-        {PIECES.map((p) => (
-          <button key={p.key} className={`filter-chip ${sel.piece === p.key ? "active" : ""}`} style={{ padding: "4px 12px" }}
-            onClick={() => setSel({ piece: p.key, which: sel.which })}>{p.label}</button>
+      {/* Aperçu sur les 4 couverts (même réglage partout) */}
+      <p style={{ fontSize: "0.85rem", fontWeight: 600, margin: "18px 0 6px" }}>Aperçu sur les 4 couverts</p>
+      <div style={{ display: "flex", gap: 8, justifyContent: "space-between" }}>
+        {HANDLES.map((h) => (
+          <div key={h.key} style={{ flex: 1 }}>
+            <Preview img={h.img} pos={pos} />
+            <p style={{ textAlign: "center", fontSize: "0.7rem", color: "var(--ink-soft)", margin: "3px 0 0" }}>{h.label}</p>
+          </div>
         ))}
       </div>
-      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-        <button className={`filter-chip ${sel.which === "name" ? "active" : ""}`} style={{ padding: "4px 12px" }} onClick={() => setSel({ ...sel, which: "name" })}>Prénom</button>
-        <button className={`filter-chip ${sel.which === "animal" ? "active" : ""}`} style={{ padding: "4px 12px" }} onClick={() => setSel({ ...sel, which: "animal" })}>Animal</button>
-      </div>
 
-      <div className="admin-block">
-        <strong>{view === "base" ? "Vue normale" : "Zoom"} — {PIECES.find((p) => p.key === sel.piece)?.label} — {sel.which === "name" ? "Prénom" : "Animal"}</strong>
-        {sel.which === "name" ? (
-          <>
-            <div style={{ marginTop: 10 }}>
-              <label style={{ fontSize: "0.85rem" }}>Hauteur (taille du texte)</label>
-              <input type="range" min="0.02" max="0.12" step="0.002" value={cur.nameSize} onChange={(e) => setField("nameSize", Number(e.target.value))} style={{ width: "100%" }} />
-            </div>
-            <div style={{ marginTop: 8 }}>
-              <label style={{ fontSize: "0.85rem" }}>Largeur</label>
-              <input type="range" min="0.5" max="1.6" step="0.05" value={cur.nameW ?? 1} onChange={(e) => setField("nameW", Number(e.target.value))} style={{ width: "100%" }} />
-            </div>
-          </>
-        ) : (
-          <>
-            <div style={{ marginTop: 10 }}>
-              <label style={{ fontSize: "0.85rem" }}>Hauteur</label>
-              <input type="range" min="0.03" max="0.40" step="0.005" value={cur.animalH} onChange={(e) => setField("animalH", Number(e.target.value))} style={{ width: "100%" }} />
-            </div>
-            <div style={{ marginTop: 8 }}>
-              <label style={{ fontSize: "0.85rem" }}>Largeur</label>
-              <input type="range" min="0.03" max="0.40" step="0.005" value={cur.animalW ?? cur.animalH} onChange={(e) => setField("animalW", Number(e.target.value))} style={{ width: "100%" }} />
-              <button className="filter-chip" style={{ padding: "2px 10px", marginTop: 6 }}
-                onClick={() => setZones((z) => { const c = { ...z[view][sel.piece] }; delete c.animalW; return { ...z, [view]: { ...z[view], [sel.piece]: c } }; })}>
-                Largeur auto (garder les proportions)
-              </button>
-            </div>
-          </>
-        )}
-        <p style={{ fontSize: "0.75rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>Astuce : glisse directement le carré sur l'image pour le positionner.</p>
-      </div>
-
-      <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 14, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
         <button className="btn btn-gold" onClick={save}>Enregistrer</button>
-        <button className="btn" onClick={() => setZones((z) => ({ ...z, [view]: DEFAULTS[view] }))} style={{ border: "1px solid var(--line)" }}>Réinitialiser cette vue</button>
+        <button className="btn" onClick={() => setPos(DEF)} style={{ border: "1px solid var(--line)" }}>Réinitialiser</button>
         {msg ? <span style={{ fontSize: "0.85rem", color: msg.includes("✓") ? "#256b34" : "#b3261e" }}>{msg}</span> : null}
-      </div>
-      <div style={{ marginTop: 16, padding: 14, background: "#faf7f0", borderRadius: 10, border: "1px solid var(--line)" }}>
-        <p style={{ margin: "0 0 8px", fontSize: "0.9rem" }}><strong>Tout est décalé ?</strong> Clique ici pour remettre des positions propres et alignées (les deux vues), puis recharge la fiche.</p>
-        <button className="btn btn-gold" onClick={resetAllAndSave}>Tout remettre propre et enregistrer</button>
       </div>
     </div>
   );
