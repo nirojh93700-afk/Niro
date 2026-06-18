@@ -501,7 +501,7 @@ export const products = [
     title: "Ronds de serviette personnalisés en bois – Hexagone, cœur ou cercle",
     category: "mariage",
     type: "Art de la table",
-    tagline: "Un cadeau d'invité raffiné, gravé au prénom de chaque invité.",
+    tagline: "Un cadeau d'invité raffiné, gravé du prénom de chaque convive.",
     personalizable: true,
     personalizationLabel: "Prénoms / initiales / date à graver",
     personalizationFields: [
@@ -846,7 +846,7 @@ export const products = [
       { id: "empreinte-bebe-argente", title: "Argenté", price: 19.90, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg" },
       { id: "empreinte-bebe-dore", title: "Doré", price: 19.90, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg" },
     ],
-    descriptionHtml: `<p>Un bracelet tendre orné d'une <strong>empreinte de pied de bébé</strong>, à graver au prénom et à la date de naissance. Cadeau de naissance idéal.</p>
+    descriptionHtml: `<p>Un bracelet tendre orné d'une <strong>empreinte de pied de bébé</strong>, personnalisé avec le prénom et la date de naissance. Cadeau de naissance idéal.</p>
 <ul><li>Acier inoxydable hypoallergénique</li><li>Argenté ou doré</li></ul>`,
   },
   {
