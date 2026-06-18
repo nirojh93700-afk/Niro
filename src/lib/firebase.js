@@ -257,6 +257,19 @@ export async function getSiteOrders(max = 300) {
   }
 }
 
+// Cherche une commande déjà enregistrée pour une session Stripe (anti-doublon).
+export async function findSiteOrderBySession(sessionId) {
+  const a = getApp();
+  if (!a || !sessionId) return null;
+  try {
+    const snap = await admin.firestore().collection("siteOrders").where("sessionId", "==", sessionId).limit(1).get();
+    return snap.empty ? null : { id: snap.docs[0].id, ...snap.docs[0].data() };
+  } catch (e) {
+    console.error("findSiteOrderBySession:", e.message);
+    return null;
+  }
+}
+
 // Renvoie une commande précise par son id (pour le remboursement).
 export async function getSiteOrder(id) {
   const a = getApp();

@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
-import { recordSiteOrder, updateQuoteStatus, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
+import { recordSiteOrder, updateQuoteStatus, getOrderSpec, deleteOrderSpec, findSiteOrderBySession } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -163,6 +163,17 @@ export async function POST(req) {
 
   if (event.type !== "checkout.session.completed") {
     return Response.json({ received: true });
+  }
+
+  // ANTI-DOUBLON : si Stripe renvoie le même événement (ou le rejoue), on ne
+  // retraite pas la commande (pas de doublon, pas de double e-mail / stock).
+  try {
+    const sid = event.data.object?.id;
+    if (sid && (await findSiteOrderBySession(sid))) {
+      return Response.json({ received: true, duplicate: true });
+    }
+  } catch (e) {
+    console.error("Vérif doublon commande:", e.message);
   }
 
   // Si c'est le paiement d'un devis, on le marque "payé".
@@ -382,6 +393,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     await recordSiteOrder({
       ref: orderRef,
+      sessionId: session.id, // anti-doublon (si l'événement est rejoué)
       spec: orderSpec || null,
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
