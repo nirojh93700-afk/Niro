@@ -1,5 +1,5 @@
 import { isAdmin, getGmailCreds, setGmailCreds, updateGmail } from "@/lib/stock";
-import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply } from "@/lib/gmail";
+import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply, gmailMarkRead } from "@/lib/gmail";
 import Anthropic from "@anthropic-ai/sdk";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +45,8 @@ export async function GET(req) {
     if (action === "message") {
       const id = url.searchParams.get("id");
       const m = await gmailGetMessage(token, id, true);
+      await gmailMarkRead(token, id); // ouvert = marqué lu (synchro Gmail)
+      if (m) m.unread = false;
       return Response.json({ message: m });
     }
   } catch (e) {

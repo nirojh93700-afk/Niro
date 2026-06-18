@@ -136,8 +136,23 @@ export async function gmailGetMessage(token, id, full = true) {
     references: header(headers, "References"),
     snippet: data.snippet || "",
     labelIds: data.labelIds || [],
+    unread: (data.labelIds || []).includes("UNREAD"),
     body: full ? extractBody(data.payload) : "",
   };
+}
+
+// Marque un message comme lu (retire le label UNREAD) — synchronisé avec Gmail.
+export async function gmailMarkRead(token, id) {
+  try {
+    await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}/modify`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ removeLabelIds: ["UNREAD"] }),
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // Encode un en-tête (sujet) avec accents pour l'e-mail.

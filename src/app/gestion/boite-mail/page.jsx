@@ -78,6 +78,7 @@ export default function BoiteMailPage() {
 
   async function openMessage(m) {
     setOpen({ ...m, body: "" }); setDraft(""); setBusy("open");
+    setMessages((list) => list.map((x) => (x.id === m.id ? { ...x, unread: false } : x))); // marqué lu tout de suite
     try {
       const res = await fetch(`/api/admin/gmail?action=message&id=${m.id}`, { headers: hdr(key) });
       const j = await res.json();
@@ -179,12 +180,18 @@ export default function BoiteMailPage() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {messages.map((m) => (
-                <button key={m.id} onClick={() => openMessage(m)} style={{ textAlign: "left", background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: 12, cursor: "pointer" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                    <strong style={{ fontSize: "0.92rem" }}>{m.fromName}</strong>
-                    <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem", whiteSpace: "nowrap" }}>{fmtDate(m.date)}</span>
+                <button key={m.id} onClick={() => openMessage(m)} style={{ textAlign: "left", background: m.unread ? "#fffdf6" : "#fff", border: m.unread ? "1px solid #e7d3a1" : "1px solid var(--line)", borderRadius: 10, padding: 12, cursor: "pointer" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
+                      {m.unread ? <span style={{ width: 9, height: 9, borderRadius: "50%", background: "var(--gold)", flexShrink: 0 }} /> : null}
+                      <strong style={{ fontSize: "0.92rem", fontWeight: m.unread ? 800 : 600 }}>{m.fromName}</strong>
+                    </span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+                      {m.unread ? <span style={{ fontSize: "0.62rem", background: "var(--gold)", color: "#fff", borderRadius: 6, padding: "1px 6px", fontWeight: 700 }}>Nouveau</span> : <span style={{ fontSize: "0.66rem", color: "var(--ink-soft)" }}>lu</span>}
+                      <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{fmtDate(m.date)}</span>
+                    </span>
                   </div>
-                  <div style={{ fontSize: "0.88rem", fontWeight: 600 }}>{m.subject || "(sans objet)"}</div>
+                  <div style={{ fontSize: "0.88rem", fontWeight: m.unread ? 700 : 500 }}>{m.subject || "(sans objet)"}</div>
                   <div style={{ color: "var(--ink-soft)", fontSize: "0.82rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.snippet}</div>
                 </button>
               ))}
