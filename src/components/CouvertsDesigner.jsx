@@ -47,11 +47,11 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
   const theme = themes.find((t) => t.key === v.theme) || themes[0];
   const fontClass = getFontClass(fontKey);
 
-  const [pos, setPos] = useState(DEF);
+  const [zones, setZones] = useState({});
   useEffect(() => {
     let on = true;
     fetch("/api/couverts-zones").then((r) => r.json()).then((d) => {
-      if (on && d.zones?.handle) setPos({ ...DEF, ...d.zones.handle });
+      if (on && d.zones?.handles) setZones(d.zones.handles);
     }).catch(() => {});
     return () => { on = false; };
   }, []);
@@ -71,7 +71,7 @@ export default function CouvertsDesigner({ field, value, onChange, prenom = "", 
           const animal = ak ? (theme?.animals || []).find((a) => a.key === ak) : null;
           return (
             <div key={p.key} style={{ width: "23%", minWidth: 78, maxWidth: 130 }}>
-              <Closeup image={handleImg(p)} prenom={prenom} fontClass={fontClass} animal={animal} pos={pos} />
+              <Closeup image={handleImg(p)} prenom={prenom} fontClass={fontClass} animal={animal} pos={zones[p.key]} />
               <p style={{ textAlign: "center", fontSize: "0.72rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>{p.label}</p>
             </div>
           );

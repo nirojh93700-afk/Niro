@@ -133,19 +133,25 @@ export async function POST(req) {
       return z;
     };
     patch.couvertsZones = { base: parseSet(body.couvertsZones.base), zoom: parseSet(body.couvertsZones.zoom) };
-    // Méthode gros plan : UN réglage commun appliqué à tous les couverts (même taille).
-    const hb = body.couvertsZones.handle;
+    // Méthode gros plan : un réglage PAR couvert (chacun ajustable).
+    const hb = body.couvertsZones.handles;
     if (hb && typeof hb === "object") {
-      const h = {
-        cx: clamp(hb.cx, 0, 1, 0.5),
-        nameY: clamp(hb.nameY, 0, 1, 0.47),
-        animalY: clamp(hb.animalY, 0, 1, 0.71),
-        nameSize: clamp(hb.nameSize, 0.03, 0.45, 0.17),
-        animalH: clamp(hb.animalH, 0.03, 0.5, 0.11),
-      };
-      const aw = Number(hb.animalW); if (Number.isFinite(aw)) h.animalW = Math.min(0.9, Math.max(0.05, aw));
-      const nw = Number(hb.nameW); if (Number.isFinite(nw)) h.nameW = Math.min(2, Math.max(0.4, nw));
-      patch.couvertsZones.handle = h;
+      const h = {};
+      for (const k of ["couteau", "fourchette", "grande", "petite"]) {
+        const p = hb[k];
+        if (p && typeof p === "object") {
+          h[k] = {
+            cx: clamp(p.cx, 0, 1, 0.5),
+            nameY: clamp(p.nameY, 0, 1, 0.47),
+            animalY: clamp(p.animalY, 0, 1, 0.71),
+            nameSize: clamp(p.nameSize, 0.03, 0.45, 0.17),
+            animalH: clamp(p.animalH, 0.03, 0.5, 0.11),
+          };
+          const aw = Number(p.animalW); if (Number.isFinite(aw)) h[k].animalW = Math.min(0.9, Math.max(0.05, aw));
+          const nw = Number(p.nameW); if (Number.isFinite(nw)) h[k].nameW = Math.min(2, Math.max(0.4, nw));
+        }
+      }
+      patch.couvertsZones.handles = h;
     }
   }
   const saved = await setSettings(patch);
