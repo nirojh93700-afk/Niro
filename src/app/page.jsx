@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import NewArrivalsToast from "@/components/NewArrivalsToast";
 import { getProductBySlug } from "@/lib/products";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 
@@ -30,12 +31,12 @@ const ATELIER_DEFAULTS = {
 };
 
 const featured = [
+  "couverts-enfants-personnalises",
   "verre-a-whisky-fete-des-peres",
   "collier-medaillon-coeur-ouvrable",
   "numero-table-arches-bohemes",
   "bracelet-homme-cuir-acier",
   "ronds-de-serviette-bois",
-  "plaque-de-porte-enfant",
 ].map(getProductBySlug).filter(Boolean);
 
 function pick(v, def) {
@@ -69,6 +70,10 @@ export default async function HomePage() {
     image: pick(s?.atelier?.image, ATELIER_DEFAULTS.image),
   };
   const show = { categories: true, trust: true, featured: true, atelier: true, ...(s?.sections || {}) };
+  // Nouveautés pour la petite fenêtre flottante (produits visibles taggés « Nouveau »).
+  const newItems = featured
+    .filter((p) => p.badge === "Nouveau" && !p.hidden)
+    .map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));
 
   return (
     <>
@@ -199,6 +204,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <NewArrivalsToast items={newItems} />
     </>
   );
 }

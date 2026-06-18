@@ -1355,7 +1355,7 @@ export const products = [
     letter: false, // colis (rigide)
     freeShipping: true, // livraison offerte (incluse dans le prix)
     noCustomCta: true, // pas le bloc "projet sur mesure / téléphone" (perso via le configurateur)
-    hidden: true, // PAGE TEST — non publiée
+    hidden: false, // PUBLIÉ
     category: "cadeaux",
     type: "Couverts enfants gravés",
     tagline: "Le jeu de 4 couverts enfant en inox, gravé au prénom et à un animal au choix sur chaque pièce.",
