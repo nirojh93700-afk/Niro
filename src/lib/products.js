@@ -1358,7 +1358,7 @@ export const products = [
     hidden: false, // PUBLIÉ
     category: "cadeaux",
     type: "Couverts enfants gravés",
-    tagline: "Le jeu de 4 couverts enfant en inox, gravé au prénom et à un animal au choix sur chaque pièce.",
+    tagline: "Le jeu de 4 couverts enfants en inox, gravés au prénom et à un animal au choix sur chaque pièce.",
     personalizable: true,
     personalizationLabel: "Prénom + un animal par couvert à graver",
     personalizationFields: [
@@ -1403,7 +1403,7 @@ export const products = [
       },
       { key: "note-grav", type: "note", text: "Chaque couvert est gravé sur le manche avec le prénom et l'animal choisi. Aperçu indicatif ; la gravure finale est optimisée par notre atelier." },
     ],
-    title: "Couverts enfants personnalisés — jeu de 4 gravé prénom et animaux",
+    title: "Couverts enfants personnalisés — jeu de 4 gravé au prénom et à un animal",
     images: [
       "/produits/couverts_enfants_4_face.jpg",
       "/produits/couverts_enfants_ex_prenom.jpg",
