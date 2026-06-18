@@ -13,6 +13,17 @@ export default function NewArrivalsToast({ items = [] }) {
   const [i, setI] = useState(0);
   const [open, setOpen] = useState(false);
   const [closed, setClosed] = useState(false);
+  const [mobile, setMobile] = useState(false);
+
+  // S'adapte à l'écran : carte en bas à gauche sur ordinateur, bandeau large
+  // remonté sur mobile (pour ne pas gêner le bouton flottant de la boutique).
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 600px)");
+    const upd = () => setMobile(mq.matches);
+    upd();
+    mq.addEventListener("change", upd);
+    return () => mq.removeEventListener("change", upd);
+  }, []);
 
   useEffect(() => {
     if (!items.length) return;
@@ -41,10 +52,12 @@ export default function NewArrivalsToast({ items = [] }) {
     <div
       aria-live="polite"
       style={{
-        position: "fixed", left: 16, bottom: 16, zIndex: 60, width: 300, maxWidth: "calc(100vw - 32px)",
+        position: "fixed", zIndex: 60,
+        left: mobile ? 10 : 24, right: mobile ? 10 : "auto", bottom: mobile ? 84 : 24,
+        width: mobile ? "auto" : 320, maxWidth: "calc(100vw - 20px)",
         background: "#fff", borderRadius: 14, boxShadow: "0 10px 34px rgba(0,0,0,.18)", border: "1px solid #ece3d2",
-        display: "flex", alignItems: "center", gap: 12, padding: 10,
-        transform: open ? "translateY(0)" : "translateY(140%)", opacity: open ? 1 : 0,
+        display: "flex", alignItems: "center", gap: 12, padding: mobile ? 12 : 10,
+        transform: open ? "translateY(0)" : "translateY(160%)", opacity: open ? 1 : 0,
         transition: "transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease", pointerEvents: open ? "auto" : "none",
       }}
     >
