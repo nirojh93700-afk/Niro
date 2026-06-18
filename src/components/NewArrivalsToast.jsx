@@ -56,21 +56,21 @@ export default function NewArrivalsToast({ items = [] }) {
         left: mobile ? 10 : 24, right: mobile ? 10 : "auto", bottom: mobile ? 84 : 24,
         width: mobile ? "auto" : 320, maxWidth: "calc(100vw - 20px)",
         background: "#fff", borderRadius: 14, boxShadow: "0 10px 34px rgba(0,0,0,.18)", border: "1px solid #ece3d2",
-        display: "flex", alignItems: "center", gap: 12, padding: mobile ? 12 : 10,
+        padding: mobile ? 12 : 10,
         transform: open ? "translateY(0)" : "translateY(160%)", opacity: open ? 1 : 0,
         transition: "transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease", pointerEvents: open ? "auto" : "none",
       }}
     >
-      <Link href={`/produit/${p.slug}`} style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none", color: "inherit", flex: 1, minWidth: 0 }}>
+      <Link href={`/produit/${p.slug}`} style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none", color: "inherit", cursor: "pointer" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.image} alt={p.name} style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 10, flexShrink: 0, background: "#faf7f0" }} />
-        <span style={{ minWidth: 0 }}>
+        <span style={{ minWidth: 0, paddingRight: 18 }}>
           <span style={{ display: "block", fontSize: "0.66rem", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--gold-dark)", fontWeight: 700 }}>Nouveauté ✦</span>
           <span style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
           <span style={{ display: "block", fontSize: "0.78rem", color: "var(--gold-dark)" }}>Découvrir →</span>
         </span>
       </Link>
-      <button onClick={dismiss} aria-label="Fermer" style={{ flexShrink: 0, alignSelf: "flex-start", border: "none", background: "transparent", fontSize: 18, lineHeight: 1, color: "#9a8f7d", cursor: "pointer", padding: 4 }}>✕</button>
+      <button onClick={dismiss} aria-label="Fermer" style={{ position: "absolute", top: 6, right: 6, border: "none", background: "rgba(255,255,255,.85)", borderRadius: 999, width: 26, height: 26, fontSize: 15, lineHeight: 1, color: "#9a8f7d", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
     </div>
   );
 }
