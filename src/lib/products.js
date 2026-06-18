@@ -1418,7 +1418,7 @@ export const products = [
     ],
     variants: [
       // PRIX PROVISOIRE — à confirmer par l'utilisatrice.
-      { id: "couverts-enfants-jeu4", title: "Jeu de 4 — couteau, fourchette, grande et petite cuillère", price: 29.90 },
+      { id: "couverts-enfants-jeu4", title: "Jeu de 4 — couteau, fourchette, grande et petite cuillère", price: 34.90 },
     ],
     descriptionHtml: `<p><strong>Le jeu de couverts enfant personnalisé, gravé au laser.</strong> Quatre pièces adaptées aux petites mains — couteau, fourchette, grande et petite cuillère — en acier inoxydable poli miroir, gravées au prénom de l'enfant et à un animal au choix par pièce.</p>
 <p>Un cadeau de naissance, d'anniversaire ou de baptême qui accompagne l'enfant au quotidien et donne envie de passer à table.</p>
