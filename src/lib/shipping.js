@@ -58,10 +58,13 @@ function rate(amount, name, days) {
 //   totalGrams    : poids total estimé (plafond 2 kg)
 //   parcelQty     : nombre d'articles "déco" (colis) dans le panier
 //   pickupEligible: retrait en main propre autorisé (déco/mariage + zone OK)
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false }) {
   const options = [];
 
-  if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
+  if (freeShipping) {
+    // Tous les articles ont la livraison incluse → livraison offerte.
+    options.push(rate(0, "Livraison à domicile — Offerte", [2, 5]));
+  } else if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
     const free = subtotal >= BIJOUX_FREE_THRESHOLD;
     options.push(rate(free ? 0 : BIJOUX_HOME, free ? "Livraison à domicile — Offerte" : "Livraison à domicile", [2, 4]));
   } else {
