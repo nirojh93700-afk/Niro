@@ -27,6 +27,25 @@ export async function gmailAccessToken({ clientId, clientSecret, refreshToken })
   return data.access_token;
 }
 
+// Échange un code d'autorisation (flux « Connecter avec Google ») contre un
+// refresh token, avec les identifiants du client de la gérante.
+export async function exchangeCodeForTokens({ clientId, clientSecret, code, redirectUri }) {
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: clientId, client_secret: clientSecret, code,
+      redirect_uri: redirectUri, grant_type: "authorization_code",
+    }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    const detail = [data.error, data.error_description].filter(Boolean).join(" — ");
+    throw new Error(detail || "Échange du code refusé.");
+  }
+  return data; // { access_token, refresh_token, ... }
+}
+
 function header(headers, name) {
   const h = (headers || []).find((x) => x.name.toLowerCase() === name.toLowerCase());
   return h ? h.value : "";

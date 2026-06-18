@@ -18,8 +18,9 @@ export default function BoiteMailPage() {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  // Connexion
-  const [cid, setCid] = useState(""); const [csec, setCsec] = useState(""); const [rtok, setRtok] = useState("");
+  // Connexion (flux « Connecter avec Google »)
+  const [cid, setCid] = useState(""); const [csec, setCsec] = useState("");
+  const REDIRECT_URI = (typeof window !== "undefined" ? window.location.origin : "https://nivcreation.fr") + "/api/admin/gmail/callback";
 
   // Boîte
   const [messages, setMessages] = useState([]);
@@ -54,17 +55,25 @@ export default function BoiteMailPage() {
     setBusy("");
   }
 
-  useEffect(() => { const s = sessionStorage.getItem("niv-admin-key"); if (s) { setKey(s); load(s); } }, [load]);
+  useEffect(() => {
+    const s = sessionStorage.getItem("niv-admin-key"); if (s) { setKey(s); load(s); }
+    // Retour de Google après « Connecter avec Google »
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get("connected")) setMsg("Gmail connecté ✓");
+      if (p.get("error")) setError("Connexion Google : " + p.get("error"));
+      if (p.get("connected") || p.get("error")) window.history.replaceState({}, "", "/gestion/boite-mail");
+    } catch { /* ignore */ }
+  }, [load]);
 
-  async function saveCreds() {
+  async function connectGoogle() {
     setMsg(""); setError(""); setBusy("save");
     try {
-      const res = await fetch("/api/admin/gmail", { method: "POST", headers: { "Content-Type": "application/json", ...hdr(key) }, body: JSON.stringify({ action: "saveCreds", clientId: cid.trim(), clientSecret: csec.trim(), refreshToken: rtok.trim() }) });
+      const res = await fetch("/api/admin/gmail", { method: "POST", headers: { "Content-Type": "application/json", ...hdr(key) }, body: JSON.stringify({ action: "authUrl", clientId: cid.trim(), clientSecret: csec.trim() }) });
       const j = await res.json();
-      if (!res.ok) setError(j.error || "Échec.");
-      else { setConnected(true); setMsg("Gmail connecté ✓"); setCid(""); setCsec(""); setRtok(""); loadInbox(); }
-    } catch { setError("Erreur réseau."); }
-    setBusy("");
+      if (!res.ok) { setError(j.error || "Échec."); setBusy(""); return; }
+      window.location.href = j.url; // redirection vers Google (affiche « Niv Mail »)
+    } catch { setError("Erreur réseau."); setBusy(""); }
   }
 
   async function openMessage(m) {
@@ -124,15 +133,17 @@ export default function BoiteMailPage() {
 
       {!connected ? (
         <div className="admin-block">
-          <h3 style={{ marginTop: 0 }}>Connecter ton Gmail</h3>
-          <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>Colle ici les 3 codes obtenus chez Google (ils restent privés, stockés dans ton admin) :</p>
+          <h3 style={{ marginTop: 0 }}>Connecter ton Gmail (1 clic)</h3>
+          <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem", margin: "0 0 6px" }}>
+            <strong>Avant :</strong> dans Google Cloud → Identifiants → client « Niv Mail » → <strong>URI de redirection autorisés</strong>, ajoute exactement cette adresse :
+          </p>
+          <code style={{ display: "block", background: "#faf7f0", border: "1px solid var(--line)", borderRadius: 8, padding: "8px 10px", fontSize: "0.78rem", wordBreak: "break-all", marginBottom: 14 }}>{REDIRECT_URI}</code>
+          <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem", margin: "0 0 6px" }}>Puis colle juste tes 2 codes et clique le bouton (Google affichera « Niv Mail » et créera le token tout seul) :</p>
           <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Client ID</label>
           <input value={cid} onChange={(e) => setCid(e.target.value)} placeholder="619…apps.googleusercontent.com" style={{ width: "100%", padding: 10, border: "1px solid var(--line)", borderRadius: 8, marginBottom: 10, font: "inherit" }} />
           <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Client secret</label>
-          <input value={csec} onChange={(e) => setCsec(e.target.value)} placeholder="GOCSPX-…" style={{ width: "100%", padding: 10, border: "1px solid var(--line)", borderRadius: 8, marginBottom: 10, font: "inherit" }} />
-          <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Refresh token</label>
-          <input value={rtok} onChange={(e) => setRtok(e.target.value)} placeholder="1//04…" style={{ width: "100%", padding: 10, border: "1px solid var(--line)", borderRadius: 8, marginBottom: 12, font: "inherit" }} />
-          <button className="btn btn-gold" onClick={saveCreds} disabled={busy === "save"}>{busy === "save" ? "Connexion…" : "Connecter Gmail"}</button>
+          <input value={csec} onChange={(e) => setCsec(e.target.value)} placeholder="GOCSPX-…" style={{ width: "100%", padding: 10, border: "1px solid var(--line)", borderRadius: 8, marginBottom: 12, font: "inherit" }} />
+          <button className="btn btn-gold" onClick={connectGoogle} disabled={busy === "save"}>{busy === "save" ? "Redirection…" : "Connecter avec Google"}</button>
         </div>
       ) : open ? (
         <div className="admin-block">

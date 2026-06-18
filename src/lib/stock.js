@@ -679,18 +679,24 @@ export async function setSettings(patch) {
 export async function getGmailCreds() {
   const data = await getCatalogRaw();
   const g = (data.settings || {}).gmail || {};
-  return { clientId: g.clientId || "", clientSecret: g.clientSecret || "", refreshToken: g.refreshToken || "" };
+  return { clientId: g.clientId || "", clientSecret: g.clientSecret || "", refreshToken: g.refreshToken || "", oauthState: g.oauthState || "" };
+}
+
+// Met à jour partiellement les infos Gmail (sans écraser le reste).
+export async function updateGmail(patch) {
+  const data = await getCatalogRaw();
+  const cur = (data.settings || {}).gmail || {};
+  data.settings = { ...(data.settings || {}), gmail: { ...cur, ...patch } };
+  await persistCatalog(data);
+  return true;
 }
 
 export async function setGmailCreds({ clientId, clientSecret, refreshToken }) {
-  const data = await getCatalogRaw();
-  data.settings = { ...(data.settings || {}), gmail: {
+  return updateGmail({
     clientId: String(clientId || "").trim(),
     clientSecret: String(clientSecret || "").trim(),
     refreshToken: String(refreshToken || "").trim(),
-  } };
-  await persistCatalog(data);
-  return true;
+  });
 }
 
 async function persistCatalog(data) {

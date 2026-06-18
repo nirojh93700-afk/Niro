@@ -1,4 +1,4 @@
-import { isAdmin, getGmailCreds, setGmailCreds } from "@/lib/stock";
+import { isAdmin, getGmailCreds, setGmailCreds, updateGmail } from "@/lib/stock";
 import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply } from "@/lib/gmail";
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -58,6 +58,29 @@ export async function POST(req) {
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const action = body?.action;
+
+  // Flux « Connecter avec Google » : enregistre Client ID + secret, crée un
+  // jeton d'état (anti-CSRF) et renvoie l'URL d'autorisation Google (qui
+  // affichera bien l'appli « Niv Mail » de la gérante).
+  if (action === "authUrl") {
+    const clientId = String(body.clientId || "").trim();
+    const clientSecret = String(body.clientSecret || "").trim();
+    if (!clientId || !clientSecret) return Response.json({ error: "Client ID et Client secret requis." }, { status: 400 });
+    const state = "niv-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    await updateGmail({ clientId, clientSecret, oauthState: state });
+    const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");
+    const redirectUri = `${SITE}/api/admin/gmail/callback`;
+    const url = "https://accounts.google.com/o/oauth2/v2/auth?" + new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "code",
+      scope: "https://mail.google.com/",
+      access_type: "offline",
+      prompt: "consent",
+      state,
+    }).toString();
+    return Response.json({ url, redirectUri });
+  }
 
   // Enregistrer les identifiants (collés par la gérante) + test de connexion.
   if (action === "saveCreds") {
