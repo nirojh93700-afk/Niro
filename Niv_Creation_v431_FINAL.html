@@ -3915,7 +3915,7 @@ body.light-mode .hd-v200 {
 // FORCE UPDATE : Désinscrit les anciens SW et force le rechargement
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (function() {
-  const APP_VERSION = 'v430-battery-safety-2026-06-17';
+  const APP_VERSION = 'v431-antijump-sync-2026-06-17';
   const lastVersion = localStorage.getItem('app_version');
   
   if (lastVersion !== APP_VERSION) {
@@ -6843,6 +6843,13 @@ function listenToMasterChanges(){
       const master = docSnap.data();
       // Si la dernière mise à jour vient de nous, on ignore (pas de boucle)
       if(master.lastUpdate && master.lastUpdate <= lastFirebaseSave + 1000) return;
+      // 🔧 v431 : ne PAS perturber une saisie en cours (modal d'édition ouvert).
+      // On saute cette mise à jour pour ne pas effacer le formulaire ni faire "sauter"
+      // l'écran ; elle sera reprise au prochain changement ou à la fermeture du modal.
+      try {
+        var _em = document.getElementById('modal');
+        if (_em && _em.classList && _em.classList.contains('open')) return;
+      } catch(e){}
       // Mise à jour distante : on actualise les données locales
       if(master.products && Array.isArray(master.products)){
         // 🔧 v428 : préserver les photos locales via clé STABLE (pid) + ancienne clé (nom)
@@ -6875,32 +6882,41 @@ function listenToMasterChanges(){
         if(typeof quotes !== "undefined" && master.quotes) quotes = master.quotes;
         if(typeof expenses !== 'undefined' && master.expenses) expenses = master.expenses;
         lastFirebaseSave = master.lastUpdate;
-        // 🔧 v414 : préserver la page active + scroll pendant la sync
-        var savedActivePage = null;
-        try {
-          var act = document.querySelector('.page.active');
-          if (act) savedActivePage = act.id;
-        } catch(e) {}
-        var savedScrollY = window.scrollY || 0;
-        
-        renderAll();
-        if(typeof renderSales === 'function') renderSales();
-        
-        // Restaurer la page active si elle a été changée
-        try {
-          if (savedActivePage) {
-            var stillActive = document.querySelector('.page.active');
-            if (!stillActive || stillActive.id !== savedActivePage) {
-              // Forcer le retour à la page d'origine
-              document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-              var target = document.getElementById(savedActivePage);
-              if (target) target.classList.add('active');
-            }
-          }
-          // Restaurer le scroll
-          window.scrollTo(0, savedScrollY);
-        } catch(e) {}
-        
+        // 🔧 v431 : rendu DÉBOUNCÉ — on regroupe les mises à jour rapprochées en
+        // un seul rafraîchissement (après 500 ms de calme) pour que l'écran ne
+        // "saute" plus en boucle quand l'autre appareil sauvegarde souvent.
+        if (!window._v431RenderFromSync) {
+          window._v431RenderFromSync = function(){
+            // Ne pas rafraîchir si on est en train de saisir (modal ouvert)
+            try {
+              var _m = document.getElementById('modal');
+              if (_m && _m.classList && _m.classList.contains('open')) {
+                clearTimeout(window._v431RenderTimer);
+                window._v431RenderTimer = setTimeout(window._v431RenderFromSync, 1500);
+                return;
+              }
+            } catch(e){}
+            var savedActivePage = null;
+            try { var act = document.querySelector('.page.active'); if (act) savedActivePage = act.id; } catch(e){}
+            var savedScrollY = window.scrollY || 0;
+            try { renderAll(); } catch(e){}
+            try { if (typeof renderSales === 'function') renderSales(); } catch(e){}
+            try {
+              if (savedActivePage) {
+                var stillActive = document.querySelector('.page.active');
+                if (!stillActive || stillActive.id !== savedActivePage) {
+                  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+                  var target = document.getElementById(savedActivePage);
+                  if (target) target.classList.add('active');
+                }
+              }
+              window.scrollTo(0, savedScrollY);
+            } catch(e){}
+          };
+        }
+        clearTimeout(window._v431RenderTimer);
+        window._v431RenderTimer = setTimeout(window._v431RenderFromSync, 500);
+
         showSyncStatus('☁️ Updated from cloud');
         // 🔧 v428 : récupérer du cloud les photos non préservées en mémoire
         setTimeout(function(){
