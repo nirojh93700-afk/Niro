@@ -3915,7 +3915,7 @@ body.light-mode .hd-v200 {
 // FORCE UPDATE : Désinscrit les anciens SW et force le rechargement
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (function() {
-  const APP_VERSION = 'v433-scan-button-2026-06-19';
+  const APP_VERSION = 'v434-photos-indexeddb-2026-06-19';
   const lastVersion = localStorage.getItem('app_version');
   
   if (lastVersion !== APP_VERSION) {
@@ -47652,7 +47652,9 @@ window.progressiveDownload = async function() {
     if (photoUrl) {
       p.imgData = photoUrl;
       loaded++;
-      
+      // 🔧 v434 : persister la photo dans IndexedDB (évite le re-téléchargement en boucle)
+      try { if (window.idbPutPhoto) window.idbPutPhoto(key, photoUrl); } catch(e){}
+
       // Sauvegarder TRÈS souvent (toutes les 3 photos) pour ne rien perdre
       if (loaded % 3 === 0) {
         try { localStorage.setItem('niv_catalogue', JSON.stringify(data)); } catch(e) {}
@@ -49976,6 +49978,95 @@ console.log('[v400] Module chargé - tape syncPhotos() pour pousser photos vers 
   
   // Démarrer après 8s pour laisser tout charger
   setTimeout(forcePhotoSync, 8000);
+})();
+</script>
+
+<!-- 🔧 v434 : photos stockées en IndexedDB (grande capacité) au lieu de localStorage
+     (~5 Mo sur iPhone → saturait, échec de sauvegarde, re-téléchargements en boucle, crash).
+     localStorage 'niv_catalogue' est gardé LÉGER (sans photos). -->
+<script id="v434-photo-idb">
+(function(){
+  'use strict';
+
+  // ---- 1. localStorage 'niv_catalogue' SANS photos (évite le dépassement de quota iPhone) ----
+  try {
+    var _origSetItem = localStorage.setItem.bind(localStorage);
+    localStorage.setItem = function(key, value){
+      if (key === 'niv_catalogue' && typeof value === 'string' && value.length > 150000 && value.indexOf('data:image') !== -1) {
+        try {
+          var arr = JSON.parse(value);
+          if (Array.isArray(arr)) {
+            var lean = arr.map(function(p){
+              var c = {};
+              for (var kk in p) { if (kk!=='imgData' && kk!=='photo' && kk!=='photos') c[kk]=p[kk]; }
+              return c;
+            });
+            return _origSetItem('niv_catalogue', JSON.stringify(lean));
+          }
+        } catch(e){}
+      }
+      return _origSetItem(key, value);
+    };
+  } catch(e){}
+
+  // ---- 2. Stockage photos en IndexedDB ----
+  var DB='niv_photos', STORE='ph', _db=null, _open=null;
+  function open(){
+    if (_db) return Promise.resolve(_db);
+    if (_open) return _open;
+    _open = new Promise(function(res,rej){
+      try {
+        var r = indexedDB.open(DB,1);
+        r.onupgradeneeded=function(e){ var db=e.target.result; if(!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE); };
+        r.onsuccess=function(e){ _db=e.target.result; res(_db); };
+        r.onerror=function(){ rej(r.error); };
+      } catch(e){ rej(e); }
+    });
+    return _open;
+  }
+  window.idbPutPhoto=function(key,url){
+    if(!key||!url) return Promise.resolve(false);
+    return open().then(function(db){ return new Promise(function(res){
+      try { var tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).put(url,key); tx.oncomplete=function(){res(true);}; tx.onerror=function(){res(false);}; }
+      catch(e){ res(false); }
+    });}).catch(function(){return false;});
+  };
+  window.idbGetAllPhotos=function(){
+    return open().then(function(db){ return new Promise(function(res){
+      var out={};
+      try { var tx=db.transaction(STORE,'readonly'); var cur=tx.objectStore(STORE).openCursor();
+        cur.onsuccess=function(e){ var c=e.target.result; if(c){ out[c.key]=c.value; c.continue(); } else res(out); };
+        cur.onerror=function(){ res(out); };
+      } catch(e){ res(out); }
+    });}).catch(function(){return {};});
+  };
+
+  function K(p){ try { return (window.photoKey?window.photoKey(p):null); } catch(e){ return null; } }
+  function getPh(p){ return p.imgData||p.photo||(p.photos&&p.photos[0])||null; }
+
+  // ---- 3. Au chargement : ré-hydrater les photos depuis IndexedDB + y sauver celles en mémoire ----
+  var done=false;
+  function hydrate(){
+    try {
+      if(done) return;
+      if(typeof data==='undefined'||!Array.isArray(data)||data.length===0) return;
+      done=true;
+      if(typeof window.ensurePids==='function') window.ensurePids(data);
+      window.idbGetAllPhotos().then(function(map){
+        var changed=0;
+        data.forEach(function(p){
+          var k=K(p); if(!k) return;
+          if(!getPh(p) && map[k]){ p.imgData=map[k]; changed++; }
+          else if(getPh(p) && !map[k]){ window.idbPutPhoto(k, getPh(p)); }
+        });
+        if(changed>0 && typeof renderAll==='function'){ try{ renderAll(); }catch(e){} }
+        console.log('[v434] Photos ré-hydratées depuis IndexedDB:', changed);
+      });
+    } catch(e){ done=false; }
+  }
+  var tries=0;
+  var iv=setInterval(function(){ tries++; if(done||tries>40){ clearInterval(iv); return; } hydrate(); }, 800);
+  setTimeout(hydrate, 1200);
 })();
 </script>
 
