@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
-import { recordSiteOrder, updateQuoteStatus, getOrderSpec, deleteOrderSpec, findSiteOrderBySession } from "@/lib/firebase";
+import { recordSiteOrder, updateQuoteStatus, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -166,10 +166,12 @@ export async function POST(req) {
   }
 
   // ANTI-DOUBLON : si Stripe renvoie le même événement (ou le rejoue), on ne
-  // retraite pas la commande (pas de doublon, pas de double e-mail / stock).
+  // retraite pas la commande. On vérifie la session ET l'identifiant de paiement
+  // (ce dernier couvre aussi les anciennes commandes sans sessionId).
   try {
     const sid = event.data.object?.id;
-    if (sid && (await findSiteOrderBySession(sid))) {
+    const pi = (event.data.object?.payment_intent || "").toString();
+    if ((sid && (await findSiteOrderBySession(sid))) || (pi && (await findSiteOrderByPaymentIntent(pi)))) {
       return Response.json({ received: true, duplicate: true });
     }
   } catch (e) {

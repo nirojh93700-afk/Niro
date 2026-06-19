@@ -270,6 +270,20 @@ export async function findSiteOrderBySession(sessionId) {
   }
 }
 
+// Cherche une commande par identifiant de paiement Stripe (couvre aussi les
+// anciennes commandes qui n'ont pas de sessionId enregistré).
+export async function findSiteOrderByPaymentIntent(paymentIntentId) {
+  const a = getApp();
+  if (!a || !paymentIntentId) return null;
+  try {
+    const snap = await admin.firestore().collection("siteOrders").where("paymentIntentId", "==", paymentIntentId).limit(1).get();
+    return snap.empty ? null : { id: snap.docs[0].id, ...snap.docs[0].data() };
+  } catch (e) {
+    console.error("findSiteOrderByPaymentIntent:", e.message);
+    return null;
+  }
+}
+
 // Renvoie une commande précise par son id (pour le remboursement).
 export async function getSiteOrder(id) {
   const a = getApp();
