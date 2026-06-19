@@ -411,6 +411,31 @@ export default function GestionPage() {
 
   // Filtre + recherche des commandes (comme sur les grandes plateformes).
   const orderQuery = orderSearch.trim().toLowerCase();
+  // Repérage des doublons possibles : même cliente (e-mail) + même(s) article(s)
+  // à moins de 30 jours d'intervalle. On ALERTE seulement (on ne supprime rien) :
+  // un 2e paiement peut être une vraie nouvelle commande, à vérifier avant de fabriquer.
+  const dupIds = (() => {
+    const groups = {};
+    for (const o of orders) {
+      if (o.test || o.status === "annulee" || o.status === "remboursee") continue;
+      const email = (o.customerEmail || "").toLowerCase().trim();
+      const sig = (o.items || []).map((i) => `${(i.name || "").toLowerCase()}|${i.quantity}`).sort().join(";");
+      if (!email || !sig) continue;
+      (groups[email + "::" + sig] ||= []).push(o);
+    }
+    const ids = new Set();
+    for (const arr of Object.values(groups)) {
+      if (arr.length < 2) continue;
+      const times = arr.map((o) => +new Date(o.createdAt || 0));
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+          if (Math.abs(times[i] - times[j]) <= 30 * 86400000) { ids.add(arr[i].id); ids.add(arr[j].id); }
+        }
+      }
+    }
+    return ids;
+  })();
+
   const filteredOrders = orders.filter((o) => {
     const st = o.status || "a_preparer";
     if (orderFilter === "a_preparer" && !(st === "a_preparer" || st === "en_gravure")) return false;
@@ -649,6 +674,11 @@ export default function GestionPage() {
                   </h3>
                   <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(o.total)}</span>
                 </div>
+                {dupIds.has(o.id) && (
+                  <div style={{ margin: "6px 0 0", padding: "7px 10px", background: "#fdecea", border: "1px solid #f1b0a8", borderRadius: 8, color: "#b3261e", fontSize: "0.82rem", fontWeight: 600 }}>
+                    ⚠️ Possible doublon — même cliente et même(s) article(s) qu'une autre commande récente. Vérifie avant de fabriquer (ne fabrique qu'une fois si c'est le même paiement).
+                  </div>
+                )}
                 <div style={{ fontSize: "0.9rem", color: "var(--ink-soft)", margin: "4px 0 8px" }}>
                   <strong>{o.customerName || "—"}</strong>
                   {o.customerEmail ? <> · <a href={`mailto:${o.customerEmail}`}>{o.customerEmail}</a></> : null}
