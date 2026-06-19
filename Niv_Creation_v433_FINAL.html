@@ -3915,7 +3915,7 @@ body.light-mode .hd-v200 {
 // FORCE UPDATE : Désinscrit les anciens SW et force le rechargement
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 (function() {
-  const APP_VERSION = 'v432-qr-scan-fab-2026-06-19';
+  const APP_VERSION = 'v433-scan-button-2026-06-19';
   const lastVersion = localStorage.getItem('app_version');
   
   if (lastVersion !== APP_VERSION) {
@@ -49978,6 +49978,29 @@ console.log('[v400] Module chargé - tape syncPhotos() pour pousser photos vers 
   setTimeout(forcePhotoSync, 8000);
 })();
 </script>
+
+<!-- 🔧 v433 : bouton flottant DÉDIÉ pour le scan QR (toujours visible, indépendant
+     des anciens FAB qui se masquaient entre eux). En bas à droite, violet. -->
+<button id="niv-scan-fab" type="button" title="Scanner QR" aria-label="Scanner QR"
+  onclick="if(typeof openScan==='function'){openScan();}else{alert('Scanner indisponible');}">📷</button>
+<style id="niv-scan-fab-css">
+#niv-scan-fab{
+  position:fixed; right:18px;
+  bottom:calc(env(safe-area-inset-bottom, 0px) + 92px);
+  z-index:2147483600;
+  width:60px; height:60px; border-radius:50%;
+  background:linear-gradient(135deg,#A855F7,#7C3AED);
+  color:#fff; border:2px solid rgba(255,255,255,.55);
+  font-size:27px; line-height:1; cursor:pointer;
+  box-shadow:0 6px 22px rgba(124,58,237,.55);
+  display:flex; align-items:center; justify-content:center;
+  padding:0; -webkit-tap-highlight-color:transparent;
+}
+#niv-scan-fab:active{ transform:scale(.93); }
+@media (max-width:700px){
+  #niv-scan-fab{ bottom:calc(env(safe-area-inset-bottom, 0px) + 96px); right:16px; }
+}
+</style>
 
 </body>
 </html>
