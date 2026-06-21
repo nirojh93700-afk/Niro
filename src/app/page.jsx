@@ -1,6 +1,8 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import NewArrivalsToast from "@/components/NewArrivalsToast";
+import HeroIntro from "@/components/HeroIntro";
+import Reveal from "@/components/Reveal";
 import { getProductBySlug } from "@/lib/products";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 
@@ -80,24 +82,28 @@ export default async function HomePage() {
       {/* HERO */}
       <section className="hero">
         <div className="container hero-grid">
-          <div>
-            <span className="hero-eyebrow">{hero.eyebrow}</span>
-            <h1>{hero.title}</h1>
-            <p>{hero.text}</p>
-            <div className="hero-cta">
-              <Link href="/boutique" className="btn btn-gold">{hero.cta1}</Link>
-              <Link href="/boutique?cat=bijoux" className="btn btn-outline">{hero.cta2}</Link>
-            </div>
-            <div className="hero-badges">
-              <div className="hero-badge"><span>🇫🇷</span> Personnalisé en France</div>
-              <div className="hero-badge"><span>✦</span> 100% personnalisable</div>
-              <div className="hero-badge"><span>🔒</span> Paiement sécurisé</div>
-            </div>
-          </div>
-          <div className="hero-visual">
+          <HeroIntro hero={hero} />
+          <Reveal className="hero-visual" delay={0.15} y={32}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={hero.image} alt="Création Niv Création" width={700} height={700} />
-          </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* SIGNATURE — phrase manifeste (le meilleur des maquettes) */}
+      <section className="section signature-band">
+        <div className="container">
+          <Reveal className="statement">
+            <span className="eyebrow">L'atelier Niv Création</span>
+            <p>
+              Chaque pièce est dessinée puis gravée au laser dans notre atelier
+              français. Un prénom, une date, un message&nbsp;: nous transformons
+              vos émotions en objets qui traversent le temps.
+            </p>
+            <div style={{ marginTop: 26 }}>
+              <Link href="/a-propos" className="link-underline">Découvrir notre histoire</Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -105,21 +111,23 @@ export default async function HomePage() {
       {show.categories && (
         <section className="section" id="collections">
           <div className="container">
-            <div className="section-head">
+            <Reveal className="section-head">
               <span className="eyebrow">Nos univers</span>
               <h2>Explorez nos collections</h2>
               <p>Trois familles de créations, une même exigence : la personnalisation soignée.</p>
-            </div>
+            </Reveal>
             <div className="cat-grid">
-              {cats.map((cat) => (
-                <Link href={`/boutique?cat=${cat.slug}`} key={cat.slug} className="cat-card">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={cat.image} alt={cat.label} width={500} height={650} />
-                  <div className="cat-overlay">
-                    <h3>{cat.label}</h3>
-                    <span>{cat.sub}</span>
-                  </div>
-                </Link>
+              {cats.map((cat, i) => (
+                <Reveal key={cat.slug} delay={i * 0.08} y={28}>
+                  <Link href={`/boutique?cat=${cat.slug}`} className="cat-card">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={cat.image} alt={cat.label} width={500} height={650} />
+                    <div className="cat-overlay">
+                      <h3>{cat.label}</h3>
+                      <span>{cat.sub}</span>
+                    </div>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -142,17 +150,17 @@ export default async function HomePage() {
       {show.featured && (
         <section className="section">
           <div className="container">
-            <div className="section-head">
+            <Reveal className="section-head">
               <span className="eyebrow">Coups de cœur</span>
               <h2>Nos créations phares</h2>
               <p>Une sélection de pièces appréciées, prêtes à être personnalisées pour vous.</p>
-            </div>
+            </Reveal>
             <div className="product-grid">
-              {featured.map((p) => { const r = ratings[p.slug]; const mk = Number(s?.refMarkup) > 0; return (<ProductCard key={p.slug} product={{ ...p, ...(mk ? { refMarkup: Number(s.refMarkup) } : {}), ...(r ? { rating: r } : {}) }} />); })}
+              {featured.map((p, i) => { const r = ratings[p.slug]; const mk = Number(s?.refMarkup) > 0; return (<Reveal key={p.slug} delay={(i % 3) * 0.08} y={26}><ProductCard product={{ ...p, ...(mk ? { refMarkup: Number(s.refMarkup) } : {}), ...(r ? { rating: r } : {}) }} /></Reveal>); })}
             </div>
-            <div style={{ textAlign: "center", marginTop: 40 }}>
+            <Reveal style={{ textAlign: "center", marginTop: 40 }}>
               <Link href="/boutique" className="btn btn-primary">Voir toute la boutique</Link>
-            </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -161,17 +169,17 @@ export default async function HomePage() {
       {show.atelier && (
         <section className="section" id="atelier" style={{ background: "var(--paper)" }}>
           <div className="container hero-grid">
-            <div className="hero-visual">
+            <Reveal className="hero-visual" y={32}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={atelier.image} alt="L'atelier Niv Création" width={700} height={700} />
-            </div>
-            <div>
+            </Reveal>
+            <Reveal delay={0.1}>
               <span className="hero-eyebrow">{atelier.eyebrow}</span>
               <h2 style={{ fontSize: "clamp(1.8rem,3.5vw,2.5rem)", marginTop: 0 }}>{atelier.title}</h2>
               <p style={{ color: "var(--ink-soft)" }}>{atelier.text1}</p>
               <p style={{ color: "var(--ink-soft)" }} id="personnalisation">{atelier.text2}</p>
               <Link href="/boutique" className="btn btn-outline">Commander une création</Link>
-            </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -179,7 +187,8 @@ export default async function HomePage() {
       {/* SUR MESURE — commande personnalisée bois & déco */}
       <section className="section">
         <div className="container">
-          <div
+          <Reveal
+            className="surmesure-card"
             style={{
               background: "linear-gradient(135deg, #f7efe0, #fbf7ee)",
               border: "1px solid #e7d3a1",
@@ -201,7 +210,7 @@ export default async function HomePage() {
               <Link href="/contact" className="btn btn-gold">Demander un projet sur mesure</Link>
               <a href="tel:+33766153102" className="btn btn-outline">📞 07 66 15 31 02</a>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
       <NewArrivalsToast items={newItems} />

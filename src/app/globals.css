@@ -2199,3 +2199,137 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* ====================================================================== */
+/*  FINITION « PRO MAX » — polish global (animations & micro-interactions) */
+/* ====================================================================== */
+html { scroll-behavior: smooth; }
+
+/* Boutons : effet de brillance + relief plus marqué */
+.btn {
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
+}
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+}
+.btn-gold::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: skewX(-18deg);
+  transition: left 0.6s ease;
+}
+.btn-gold:hover { transform: translateY(-2px); }
+.btn-gold:hover::after { left: 130%; }
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-outline:hover { transform: translateY(-2px); }
+
+/* Titres de section : petit filet doré sous le h2 */
+.section-head h2 { position: relative; }
+.section-head h2::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 2px;
+  margin: 16px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+}
+
+/* Cartes catégories : relief + libellé qui remonte au survol */
+.cat-card {
+  box-shadow: 0 14px 36px rgba(43, 38, 32, 0.12);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease;
+}
+.cat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 50px rgba(43, 38, 32, 0.2);
+}
+.cat-card .cat-overlay {
+  transition: background 0.4s ease;
+}
+.cat-card:hover .cat-overlay {
+  background: linear-gradient(180deg, transparent 25%, rgba(28, 24, 19, 0.85) 100%);
+}
+.cat-card .cat-overlay h3 {
+  transform: translateY(6px);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cat-card:hover .cat-overlay h3 { transform: translateY(0); }
+
+/* Cartes produit : relief plus doux et accent doré au survol */
+.product-card {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 44px rgba(43, 38, 32, 0.16);
+  border-color: var(--gold);
+}
+.product-thumb img { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+.product-card:hover .product-thumb img { transform: scale(1.05); }
+
+/* Section signature (phrase manifeste) */
+.signature-band {
+  background:
+    radial-gradient(900px 360px at 50% -20%, rgba(194, 161, 78, 0.12), transparent 60%),
+    var(--paper);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Carte « sur mesure » : léger relief au survol */
+.surmesure-card {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+  box-shadow: 0 12px 30px rgba(169, 137, 53, 0.1);
+}
+.surmesure-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(169, 137, 53, 0.18);
+}
+
+/* Liens de navigation : soulignement animé */
+.nav a {
+  position: relative;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 1.5px;
+  background: var(--gold-dark);
+  transition: width 0.25s ease;
+}
+.nav a:hover::after { width: 100%; }
+
+/* Image du hero : zoom très lent, vivant */
+.hero-visual img { transition: transform 6s ease; }
+.hero-visual:hover img { transform: scale(1.04); }
+
+/* Accessibilité : couper les animations si l'utilisateur le demande */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn-gold::after { display: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
