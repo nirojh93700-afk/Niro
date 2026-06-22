@@ -13,11 +13,13 @@
     "@anthropic-ai/sdk": "^0.100.1",
     "@netlify/blobs": "^8.1.0",
     "firebase-admin": "^13.10.0",
+    "framer-motion": "^12.40.0",
     "html-to-image": "^1.11.13",
     "jspdf": "^4.2.1",
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sonner": "^2.0.7",
     "stripe": "^16.12.0",
     "three": "^0.184.0"
   }
