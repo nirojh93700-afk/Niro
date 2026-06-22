@@ -38,11 +38,16 @@ export default function SurMesurePage() {
   const mat = MATERIALS.find((m) => m.key === material) || MATERIALS[0];
 
   function generate() {
-    if (!idea.trim()) { toast.error("Décris d'abord ton idée pour générer un aperçu."); return; }
+    if (idea.trim().length < 8) { toast.error("Décris ton idée plus précisément (objet, texte à graver, style…)."); return; }
     setGenLoading(true);
-    const prompt = `laser engraved ${mat.en}, ${idea}, custom personalized object, elegant product photo, soft studio lighting, clean neutral background, high detail, realistic`;
-    const seed = Math.floor(Math.random() * 100000);
-    setPreviewUrl(`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&nologo=true&seed=${seed}`);
+    setPreviewUrl(""); // reset
+    fetch("/api/sur-mesure/preview", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ material: mat.en, idea }),
+    })
+      .then((r) => r.json())
+      .then((j) => { if (j.url) setPreviewUrl(j.url); else { setGenLoading(false); toast.error(j.error || "Générateur indisponible."); } })
+      .catch(() => { setGenLoading(false); toast.error("Erreur réseau."); });
   }
 
   async function submit() {
@@ -104,8 +109,11 @@ export default function SurMesurePage() {
 
       {/* 2. Idée */}
       <motion.h3 {...fade} style={{ fontFamily: "var(--font-display)" }}>2. Votre idée</motion.h3>
+      <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "0 0 6px" }}>
+        Plus vous êtes précise (l'objet, le texte à graver, le style, l'occasion), plus l'aperçu sera fidèle.
+      </p>
       <textarea value={idea} onChange={(e) => setIdea(e.target.value)} rows={4}
-        placeholder="Ex : un panneau en bois gravé « Famille Martin », avec un olivier, environ 30 cm, pour offrir à une crémaillère…"
+        placeholder="Ex : une planche en bois gravée « Joyeux anniversaire Lucas », avec une fusée et des étoiles, environ 30 cm, pour les 6 ans de mon fils."
         style={{ width: "100%", padding: 12, border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 12 }} />
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
         <input value={dims} onChange={(e) => setDims(e.target.value)} placeholder="Dimensions (ex. 30 × 20 cm)" style={{ flex: 1, minWidth: 160, padding: 10, border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }} />
@@ -114,8 +122,8 @@ export default function SurMesurePage() {
 
       {/* Générateur d'aperçu (gratuit) */}
       <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 14 }}>
-        <motion.button type="button" className="btn btn-gold" onClick={generate} whileTap={{ scale: 0.96 }}>✨ Générer un aperçu</motion.button>
-        <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Aperçu indicatif — la faisabilité et le rendu final sont validés par l'atelier.</span>
+        <motion.button type="button" className="btn btn-gold" onClick={generate} whileTap={{ scale: 0.96 }}>✨ Générer une inspiration</motion.button>
+        <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Aperçu d'ambiance (inspiration) — pas le rendu exact. Faisabilité et rendu final validés par l'atelier.</span>
       </div>
       <AnimatePresence>
         {previewUrl ? (
