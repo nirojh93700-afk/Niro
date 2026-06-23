@@ -4,7 +4,7 @@
 > **À lire AVANT toute génération de vidéo/image payante.**
 
 ## ⭐ RÈGLES NON NÉGOCIABLES (demandées explicitement — TOUJOURS appliquer)
-1. **TOUJOURS de la musique / du son** dans la vidéo finale. Jamais de vidéo muette livrée.
+1. **Jamais de vidéo muette livrée.** MAIS : **musique seulement s'il n'y a PAS de script parlé.** Si le mannequin parle (voix/script) → **PAS de musique** (la voix porte la vidéo). Musique = uniquement pour les vidéos sans parole.
 2. **TOUJOURS montrer le mannequin (une personne entière, visage visible)** — JAMAIS juste une main ou un poignet seul.
 3. **Vidéos LES PLUS LONGUES possible** (viser le max du modèle, ex. 15 s, ou enchaîner plusieurs plans).
 
