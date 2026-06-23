@@ -28,6 +28,7 @@ et surtout **comment ajouter un produit correctement et le publier**.
 | `src/components/ProductDetail.jsx` | Fiche produit (rend les champs de gravure) |
 | `src/app/boutique/page.jsx` | Catalogue + filtres catégories/sous-catégories |
 | `docs/PERSONNALISATION-GRAVURE-3D.md` | **Guide gravure + aperçu 3D** (motifs, 3D, recette nouveau produit) |
+| `docs/PUBS-VIDEO-LECONS.md` | **Pubs vidéo (Higgsfield) : leçons & défauts à NE PAS refaire** — à lire avant toute génération vidéo/image payante |
 
 ## 3. Schéma d'un produit (`src/lib/products.js`)
 Chaque produit est un objet du tableau `products`. Champs :
