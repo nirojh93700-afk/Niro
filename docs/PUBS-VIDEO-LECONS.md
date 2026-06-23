@@ -3,6 +3,11 @@
 > Journal des erreurs commises pendant la création de pubs vidéo, pour ne pas recommencer.
 > **À lire AVANT toute génération de vidéo/image payante.**
 
+## ⭐ RÈGLES NON NÉGOCIABLES (demandées explicitement — TOUJOURS appliquer)
+1. **TOUJOURS de la musique / du son** dans la vidéo finale. Jamais de vidéo muette livrée.
+2. **TOUJOURS montrer le mannequin (une personne entière, visage visible)** — JAMAIS juste une main ou un poignet seul.
+3. **Vidéos LES PLUS LONGUES possible** (viser le max du modèle, ex. 15 s, ou enchaîner plusieurs plans).
+
 ## ⭐ RECETTE VALIDÉE — Mannequin qui PARLE et PRÉSENTE le vrai produit (à suivre TOUJOURS)
 > Demande explicite de l'utilisatrice : **un mannequin qui parle, en français, bouche synchronisée, qui présente le VRAI produit.** Si je ne peux pas faire ça, je NE fais PAS et je le dis. Ne plus jamais improviser ni changer de mannequin.
 
