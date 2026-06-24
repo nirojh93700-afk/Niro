@@ -103,6 +103,18 @@ export async function POST(req) {
     }
     patch.crmNotes = notes;
   }
+  if (body.crmTags && typeof body.crmTags === "object") {
+    const tags = {};
+    let count = 0;
+    for (const [k, v] of Object.entries(body.crmTags)) {
+      if (count >= 500) break;
+      if (Array.isArray(v) && v.length) {
+        tags[String(k).slice(0, 120).toLowerCase()] = v.slice(0, 12).map((t) => String(t).slice(0, 24)).filter(Boolean);
+        count++;
+      }
+    }
+    patch.crmTags = tags;
+  }
   if (body.maintenance && typeof body.maintenance === "object") {
     patch.maintenance = {
       enabled: Boolean(body.maintenance.enabled),

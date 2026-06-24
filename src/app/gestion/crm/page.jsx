@@ -46,7 +46,7 @@ export default function CrmPage() {
       setAuthed(true);
       const od = await or.json();
       setOrders(od.orders || []);
-      if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); }
+      if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }
       if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
@@ -109,6 +109,44 @@ export default function CrmPage() {
       setSavedNote(k); setTimeout(() => setSavedNote(""), 1500);
     } catch { setError("Échec de l'enregistrement de la note."); }
   }
+
+  // --- Étiquettes (tags) par cliente ---
+  const [tags, setTags] = useState({});
+  const [tagDraft, setTagDraft] = useState({});
+  async function saveTags(next) {
+    setTags(next);
+    try {
+      await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": sessionStorage.getItem("niv-admin-key") || key }, body: JSON.stringify({ crmTags: next }) });
+    } catch { /* ignore */ }
+  }
+  function addTag(emailKey, value) {
+    const t = String(value || "").trim(); if (!t) return;
+    const cur = tags[emailKey] || [];
+    if (cur.includes(t)) return;
+    saveTags({ ...tags, [emailKey]: [...cur, t].slice(0, 12) });
+  }
+  function removeTag(emailKey, t) {
+    const cur = (tags[emailKey] || []).filter((x) => x !== t);
+    const next = { ...tags }; if (cur.length) next[emailKey] = cur; else delete next[emailKey];
+    saveTags(next);
+  }
+
+  // --- CA par mois (12 derniers mois) ---
+  const monthlyCA = (() => {
+    const arr = Array.from({ length: 12 }, (_, i) => ({ m: 0, label: "" }));
+    const now = new Date();
+    const months = [];
+    for (let i = 11; i >= 0; i--) { const d = new Date(now.getFullYear(), now.getMonth() - i, 1); months.push({ key: `${d.getFullYear()}-${d.getMonth()}`, label: d.toLocaleDateString("fr-FR", { month: "short" }) }); }
+    const idx = Object.fromEntries(months.map((mo, i) => [mo.key, i]));
+    months.forEach((mo, i) => { arr[i].label = mo.label; });
+    for (const o of valid) {
+      if (!o.createdAt) continue;
+      const d = new Date(o.createdAt); const k = `${d.getFullYear()}-${d.getMonth()}`;
+      if (k in idx) arr[idx[k]].m += Number(o.total) || 0;
+    }
+    return arr;
+  })();
+  const maxCA = Math.max(1, ...monthlyCA.map((x) => x.m));
 
   // --- Anniversaires (remise à venir, 3 jours avant) ---
   const [birthdays, setBirthdays] = useState({});
@@ -262,6 +300,20 @@ export default function CrmPage() {
         {card("À relancer", String(kpis.relance))}
       </div>
 
+      {/* Graphique CA par mois */}
+      <div className="admin-block" style={{ marginBottom: 14 }}>
+        <h3 style={{ margin: "0 0 10px" }}>📈 Chiffre d'affaires — 12 derniers mois</h3>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 130 }}>
+          {monthlyCA.map((mo, i) => (
+            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, height: "100%", justifyContent: "flex-end" }} title={`${mo.label} : ${euro(mo.m)}`}>
+              <span style={{ fontSize: "0.6rem", color: "var(--ink-soft)" }}>{mo.m > 0 ? Math.round(mo.m) : ""}</span>
+              <div style={{ width: "100%", height: `${Math.max(2, (mo.m / maxCA) * 100)}px`, background: "var(--gold)", borderRadius: "4px 4px 0 0", opacity: mo.m > 0 ? 1 : 0.25 }} />
+              <span style={{ fontSize: "0.6rem", color: "var(--ink-soft)" }}>{mo.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
         {chip("all", "Tous")}
         {chip("VIP", "⭐ VIP")}
@@ -289,9 +341,14 @@ export default function CrmPage() {
 
       {/* Campagne remise */}
       <div className="admin-block" style={{ marginBottom: 14 }}>
-        <button className="btn btn-gold" style={{ padding: "8px 16px" }} onClick={() => setCampOpen(!campOpen)}>
-          {campOpen ? "Fermer la campagne" : "🎁 Envoyer une remise à mes clientes"}
-        </button>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button className="btn btn-gold" style={{ padding: "8px 16px" }} onClick={() => setCampOpen(!campOpen)}>
+            {campOpen ? "Fermer la campagne" : "🎁 Envoyer une remise à mes clientes"}
+          </button>
+          <button className="btn btn-outline" style={{ padding: "8px 16px" }} onClick={() => { setCampSeg("relance"); setCampSubject("Vous nous manquez ✦ Niv Création"); setCampMsg("Bonjour {PRENOM},\n\nCela fait un moment ! Pour vous revoir, profitez de -{PCT}% sur votre prochaine commande avec le code {CODE}.\n\nÀ très vite,\nL'atelier Niv Création"); setCampOpen(true); }}>
+            🔔 Relancer les inactives
+          </button>
+        </div>
         {campOpen && (
           <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
             <div>
@@ -372,7 +429,22 @@ export default function CrmPage() {
                 );
               })}
 
-              <div style={{ marginTop: 8 }}>
+              <div style={{ marginTop: 10 }}>
+                <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 4 }}>🏷️ Étiquettes</label>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                  {(tags[c.key] || []).map((t) => (
+                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "#f3efe6", borderRadius: 16, padding: "2px 6px 2px 10px", fontSize: "0.8rem" }}>
+                      {t}
+                      <button onClick={() => removeTag(c.key, t)} aria-label="retirer" style={{ border: "none", background: "transparent", cursor: "pointer", color: "#9a8f7d", fontSize: 14, lineHeight: 1 }}>×</button>
+                    </span>
+                  ))}
+                  <input value={tagDraft[c.key] || ""} onChange={(e) => setTagDraft((d) => ({ ...d, [c.key]: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === "Enter") { addTag(c.key, tagDraft[c.key]); setTagDraft((d) => ({ ...d, [c.key]: "" })); } }}
+                    placeholder="ajouter une étiquette + Entrée" style={{ padding: "5px 9px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", fontSize: "0.8rem", minWidth: 170 }} />
+                </div>
+              </div>
+
+              <div style={{ marginTop: 10 }}>
                 <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 4 }}>📝 Note privée</label>
                 <textarea value={noteDraft[c.key] ?? notes[c.key] ?? ""} onChange={(e) => setNoteDraft((d) => ({ ...d, [c.key]: e.target.value }))}
                   placeholder="Ex. Préfère l'argenté · cliente mariage · à rappeler…"

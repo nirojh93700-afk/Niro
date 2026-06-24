@@ -656,6 +656,7 @@ export async function getSettings() {
     salesGoal: Number(s.salesGoal) || 0,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.
     crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
+    crmTags: (s.crmTags && typeof s.crmTags === "object") ? s.crmTags : {},
     // Positions de gravure des couverts enfants (réglées dans /gestion/couverts-reglage).
     couvertsZones: (s.couvertsZones && typeof s.couvertsZones === "object") ? s.couvertsZones : {},
     // Gmail connecté ? (vrai/faux seulement — les identifiants ne sont JAMAIS exposés ici).
