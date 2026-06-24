@@ -1,4 +1,4 @@
-import { addSubscriber, getSettings } from "@/lib/stock";
+import { addSubscriber, setBirthday, getSettings } from "@/lib/stock";
 import { sendEmail, welcomeEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +11,8 @@ export async function POST(req) {
   const email = (body?.email || "").toString().trim();
   const ok = await addSubscriber(email);
   if (!ok) return Response.json({ error: "Adresse e-mail invalide." }, { status: 400 });
+  // Anniversaire facultatif (pour la remise d'anniversaire).
+  if (body?.birthday) { try { await setBirthday(email, body.birthday); } catch { /* ignore */ } }
 
   // E-mail de bienvenue avec le code (n'empêche pas l'inscription si l'envoi échoue).
   let emailed = false;

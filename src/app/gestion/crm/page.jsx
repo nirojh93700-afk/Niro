@@ -36,9 +36,10 @@ export default function CrmPage() {
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
     try {
-      const [or, st] = await Promise.all([
+      const [or, st, nl] = await Promise.all([
         fetch("/api/admin/orders", { headers: { "x-admin-key": adminKey } }),
         fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } }),
+        fetch("/api/admin/newsletter", { headers: { "x-admin-key": adminKey } }),
       ]);
       if (!or.ok) { setError("Mot de passe incorrect."); setLoading(false); return; }
       sessionStorage.setItem("niv-admin-key", adminKey);
@@ -46,6 +47,7 @@ export default function CrmPage() {
       const od = await or.json();
       setOrders(od.orders || []);
       if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); }
+      if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
   }, []);
@@ -106,6 +108,46 @@ export default function CrmPage() {
       });
       setSavedNote(k); setTimeout(() => setSavedNote(""), 1500);
     } catch { setError("Échec de l'enregistrement de la note."); }
+  }
+
+  // --- Anniversaires (remise à venir, 3 jours avant) ---
+  const [birthdays, setBirthdays] = useState({});
+  const [bdaySending, setBdaySending] = useState(false);
+  const [bdayMsg, setBdayMsg] = useState("");
+
+  // Clientes dont l'anniversaire tombe dans les 3 prochains jours (J inclus).
+  const upcomingBirthdays = (() => {
+    const today = new Date();
+    const out = [];
+    for (const [email, date] of Object.entries(birthdays || {})) {
+      const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(date || "");
+      if (!m) continue;
+      const mm = +m[1], dd = +m[2];
+      for (let add = 0; add <= 3; add++) {
+        const d = new Date(today); d.setDate(today.getDate() + add);
+        if (d.getMonth() + 1 === mm && d.getDate() === dd) { out.push({ email, date, inDays: add }); break; }
+      }
+    }
+    return out.sort((a, b) => a.inDays - b.inDays);
+  })();
+
+  async function sendBirthdayDiscount() {
+    if (!upcomingBirthdays.length) return;
+    const code = "ANNIV15";
+    if (!confirm(`Créer le code ${code} (-15 %) et l'envoyer à ${upcomingBirthdays.length} cliente(s) qui ont bientôt leur anniversaire ?`)) return;
+    setBdaySending(true); setBdayMsg("");
+    const ak = sessionStorage.getItem("niv-admin-key") || key;
+    try {
+      await fetch("/api/admin/promo-codes", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": ak }, body: JSON.stringify({ code, type: "percent", value: 15 }) });
+      let ok = 0;
+      for (const b of upcomingBirthdays) {
+        const message = `Bonjour,\n\nToute l'équipe Niv Création vous souhaite un très joyeux anniversaire en avance.\nPour l'occasion, profitez de -15 % sur votre commande avec le code ${code}.\n\nBelle journée,\nL'atelier Niv Création`;
+        try { const r = await fetch("/api/admin/send-client-email", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": ak }, body: JSON.stringify({ to: b.email, subject: "Joyeux anniversaire ✦ une surprise pour vous", message }) }); if (r.ok) ok++; } catch { /* ignore */ }
+        await new Promise((res) => setTimeout(res, 350));
+      }
+      setBdayMsg(`✓ Envoyé à ${ok} cliente(s). Code ${code} actif.`);
+    } catch { setBdayMsg("Erreur pendant l'envoi."); }
+    setBdaySending(false);
   }
 
   // --- Campagne remise (envoyer un code promo à un groupe de clientes) ---
@@ -228,6 +270,22 @@ export default function CrmPage() {
         {chip("relance", `À relancer (${kpis.relance})`)}
         <button className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem", marginLeft: "auto" }} onClick={exportCSV}>⬇ Export CSV</button>
       </div>
+
+      {/* Anniversaires à venir (3 jours avant) */}
+      {upcomingBirthdays.length > 0 && (
+        <div className="admin-block" style={{ marginBottom: 14, background: "#fbf4e6", border: "1px solid #e7d3a1" }}>
+          <h3 style={{ margin: "0 0 6px" }}>🎂 Anniversaires à venir ({upcomingBirthdays.length})</h3>
+          <ul style={{ margin: "0 0 10px", paddingLeft: 18, fontSize: "0.88rem" }}>
+            {upcomingBirthdays.map((b) => (
+              <li key={b.email}>{b.email} — {b.inDays === 0 ? "aujourd'hui" : `dans ${b.inDays} j`}</li>
+            ))}
+          </ul>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+            <button className="btn btn-gold" onClick={sendBirthdayDiscount} disabled={bdaySending}>{bdaySending ? "Envoi…" : "Envoyer la remise d'anniversaire (−15 %)"}</button>
+            {bdayMsg ? <span style={{ fontSize: "0.85rem", color: bdayMsg.startsWith("✓") ? "#256b34" : "var(--ink-soft)" }}>{bdayMsg}</span> : null}
+          </div>
+        </div>
+      )}
 
       {/* Campagne remise */}
       <div className="admin-block" style={{ marginBottom: 14 }}>

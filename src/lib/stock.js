@@ -580,6 +580,23 @@ export async function getSubscribers() {
   const data = await getCatalogRaw();
   return data.subscribers || [];
 }
+// Anniversaires (opt-in) : { "email": "AAAA-MM-JJ" }. Stockés à part pour ne
+// rien casser de la liste d'abonnées existante.
+export async function getBirthdays() {
+  const data = await getCatalogRaw();
+  return data.birthdays || {};
+}
+export async function setBirthday(email, date) {
+  const e = String(email || "").trim().toLowerCase();
+  const d = String(date || "").trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return false;
+  const data = await getCatalogRaw();
+  data.birthdays = data.birthdays || {};
+  data.birthdays[e] = d;
+  await persistCatalog(data);
+  return true;
+}
+
 export async function addSubscriber(email) {
   const e = String(email || "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return false;

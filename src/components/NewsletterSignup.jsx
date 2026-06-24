@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
+  const [birthday, setBirthday] = useState("");
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
 
@@ -14,7 +15,7 @@ export default function NewsletterSignup() {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, birthday: birthday || undefined }),
       });
       if (!res.ok) throw new Error("Adresse invalide.");
       setDone(true);
@@ -28,9 +29,9 @@ export default function NewsletterSignup() {
         Nouveautés, offres et inspirations — directement par e-mail.
       </p>
       {done ? (
-        <p style={{ margin: 0, color: "#dcc88f" }}>Merci, vous êtes inscrite ! 🌸</p>
+        <p style={{ margin: 0, color: "#dcc88f" }}>Merci, votre inscription est bien prise en compte ✦</p>
       ) : (
-        <form onSubmit={submit} style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        <form onSubmit={submit} style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
           <input
             type="email"
             required
@@ -39,6 +40,15 @@ export default function NewsletterSignup() {
             placeholder="Votre e-mail"
             style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)", color: "#fff", minWidth: 220 }}
           />
+          <label style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", fontSize: "0.72rem", opacity: 0.8 }}>
+            <span style={{ marginBottom: 2 }}>Anniversaire (facultatif) — pour une surprise</span>
+            <input
+              type="date"
+              value={birthday}
+              onChange={(e) => setBirthday(e.target.value)}
+              style={{ padding: "9px 12px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)", color: "#fff" }}
+            />
+          </label>
           <button type="submit" className="btn btn-gold" style={{ padding: "10px 20px" }}>S'inscrire</button>
         </form>
       )}

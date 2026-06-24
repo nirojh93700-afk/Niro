@@ -1,4 +1,4 @@
-import { isAdmin, getSubscribers } from "@/lib/stock";
+import { isAdmin, getSubscribers, getBirthdays } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const subs = await getSubscribers();
-  return Response.json({ count: subs.length, subscribers: subs });
+  const birthdays = await getBirthdays();
+  return Response.json({ count: subs.length, subscribers: subs, birthdays });
 }
 
 // Envoi d'une campagne newsletter à toutes les abonnées (via Resend / e-mail du site).
