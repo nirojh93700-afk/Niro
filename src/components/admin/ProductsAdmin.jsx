@@ -344,6 +344,14 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
           });
         }}>Enregistrer</button>
         {onDelete && <button className="btn btn-outline" onClick={onDelete} style={{ color: "#b4452f" }}>Supprimer</button>}
+        <button className="btn btn-outline" title="Efface tes anciennes modifs sur ce produit et revient à la version d'origine"
+          onClick={async () => {
+            if (!confirm("Réinitialiser ce produit ? Cela efface tes modifications enregistrées (variantes, prix, nom…) et revient à la version d'origine.")) return;
+            try {
+              const res = await fetch("/api/admin/catalog", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ action: "resetProduct", slug: product.slug }) });
+              if (res.ok) { alert("Réinitialisé ✓"); onReload && onReload(); } else alert("Échec.");
+            } catch { alert("Erreur réseau."); }
+          }}>↺ Réinitialiser</button>
       </div>
     </div>
   );

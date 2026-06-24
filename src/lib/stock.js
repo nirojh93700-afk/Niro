@@ -274,7 +274,6 @@ export async function setProductOverride(slug, patch) {
   data.overrides = data.overrides || {};
   const cur = data.overrides[slug] || {};
   const next = { ...cur, ...patch };
-  // nettoie les valeurs vides
   Object.keys(next).forEach((k) => {
     if (next[k] === "" || next[k] === null || next[k] === undefined) delete next[k];
   });
@@ -282,6 +281,16 @@ export async function setProductOverride(slug, patch) {
   else data.overrides[slug] = next;
   await persistCatalog(data);
   return data.overrides[slug] || {};
+}
+
+// Efface TOUTES les modifications admin d'un produit (revient au code) +
+// son prix promo. Sert quand une vieille modif bloque un changement du code.
+export async function resetProductToCode(slug) {
+  const data = await getCatalogRaw();
+  if (data.overrides) delete data.overrides[slug];
+  // on retire aussi les éventuels prix promo liés à ce produit (par variante)
+  await persistCatalog(data);
+  return true;
 }
 
 // Enregistre en UNE seule écriture : les modifications produit (override) ET

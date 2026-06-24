@@ -254,52 +254,6 @@ export const products = [
 <li>🎁 Idéal Fête des Pères, anniversaire, Noël, Saint-Valentin</li>
 </ul>`,
   },
-  {
-    slug: "bracelet-homme-cuir-acier",
-    badge: "Populaire",
-    name: "Bracelet Homme Cuir & Acier",
-    hidden: true, // regroupé avec le Cuir Tressé & Acier (un seul en vente) — demandé par l'utilisatrice
-    weight: 100,
-    pickup: false,
-    letter: true,
-    subcategory: "homme",
-    personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
-    ],
-    title: "Bracelet Homme — Cuir véritable & acier inoxydable gravé",
-    category: "bijoux",
-    type: "Bracelet personnalisé",
-    engraveLeather3d: true, // aperçu 3D : plaque (argent/or/noir) gravée sur cuir
-    tagline: "L'authenticité du cuir, la modernité de l'acier gravé.",
-    personalizable: true,
-    personalizationLabel: "Texte à graver + police souhaitée",
-    images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8056490795_5cio.jpg?v=1780366894",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8008573224_ltde.jpg?v=1780366894",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8056490789_3bjk.jpg?v=1780366894",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8008797014_pcih.jpg?v=1780366895",
-    ],
-    variants: [
-      { id: "cuir-argent-sans", title: "Plaque argentée / Sans texte", price: 24.90, stockId: "cuir-argent" },
-      { id: "cuir-argent-texte", title: "Plaque argentée / Avec texte", price: 30.90, stockId: "cuir-argent" },
-      { id: "cuir-dore-sans", title: "Plaque dorée / Sans texte", price: 24.90, stockId: "cuir-dore" },
-      { id: "cuir-dore-texte", title: "Plaque dorée / Avec texte", price: 30.90, stockId: "cuir-dore" },
-      { id: "cuir-noire-sans", title: "Plaque noire / Sans texte", price: 24.90, stockId: "cuir-noire" },
-      { id: "cuir-noire-texte", title: "Plaque noire / Avec texte", price: 30.90, stockId: "cuir-noire" },
-    ],
-    descriptionHtml: `<p><strong>Bracelet homme personnalisé en cuir véritable & acier inoxydable.</strong></p>
-<p>Offrez bien plus qu'un bijou : un message gravé qui traverse le temps. Ce bracelet allie l'authenticité du cuir véritable noir à la modernité de l'acier inoxydable 316L, pour un style sobre et masculin.</p>
-<h3>Caractéristiques</h3>
-<ul>
-<li><strong>Matières :</strong> Cuir véritable + acier inoxydable 316L</li>
-<li><strong>Longueur :</strong> 19,5 cm</li>
-<li><strong>Fermoir :</strong> Boucle de sécurité acier</li>
-<li><em>Hypoallergénique • Ne noircit pas • Résistant à l'oxydation</em></li>
-</ul>
-<p>Personnalisez avec un prénom, une date, des initiales, un message court ou des coordonnées GPS.</p>`,
-  },
-
   // ----------------------------- MARIAGE -------------------------------------
   {
     slug: "numero-table-arches-bohemes",

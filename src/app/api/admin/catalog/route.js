@@ -7,6 +7,7 @@ import {
   saveProductEditAtomic,
   getCustomProducts,
   setStock,
+  resetProductToCode,
 } from "@/lib/stock";
 import { products as baseProducts } from "@/lib/products";
 
@@ -122,6 +123,14 @@ export async function POST(req) {
       }
     }
     return Response.json({ ok: true, slug });
+  }
+
+  // --- Réinitialiser un produit (effacer les modifs admin → revenir au code) ---
+  if (action === "resetProduct") {
+    const { slug } = body;
+    if (!slug) return Response.json({ error: "Slug manquant." }, { status: 400 });
+    await resetProductToCode(slug);
+    return Response.json({ ok: true });
   }
 
   // --- Supprimer un produit créé dans l'admin ---
