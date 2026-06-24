@@ -136,8 +136,11 @@ export default async function RootLayout({ children }) {
   if (FONT_VARS[settings.fontBody]) rootRules.push(`--font-body:${FONT_VARS[settings.fontBody]}`);
   const colorCss = rootRules.length ? `:root{${rootRules.join(";")};}` : "";
   const announce = settings.announce || {};
-  // Bandeau Soldes : affiché seulement si activé ET dans la période (début/fin).
-  const sb = settings.salesBanner || {};
+  // Bandeau Soldes : l'admin a la priorité dès qu'un texte y est saisi (on/off).
+  // Sinon, on active automatiquement le bandeau des soldes d'été (s'arrête le 21/07).
+  const adminSb = settings.salesBanner || {};
+  const SALES_DEFAULT = { enabled: true, text: "Profitez de nos prix réduits pour les soldes d'été ✦", start: "2026-06-24", end: "2026-07-21" };
+  const sb = adminSb.text ? adminSb : SALES_DEFAULT;
   const nowMs = Date.now();
   const sbStartOk = !sb.start || nowMs >= new Date(sb.start).getTime();
   const sbEndOk = !sb.end || nowMs <= (new Date(sb.end).getTime() + 86400000); // inclut le jour de fin
