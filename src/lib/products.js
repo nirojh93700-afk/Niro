@@ -258,7 +258,7 @@ export const products = [
     slug: "bracelet-homme-cuir-acier",
     badge: "Populaire",
     name: "Bracelet Homme Cuir & Acier",
-    hidden: true, // masqué (doublon sans stock du modèle tressé) — demandé par l'utilisatrice
+    hidden: false, // visible
     weight: 100,
     pickup: false,
     letter: true,
@@ -630,7 +630,7 @@ export const products = [
     weight: 80,
     pickup: false,
     letter: true,
-    hidden: true, // doublon visuel avec la Clé USB Cristal 3D (même photo) — masquée
+    hidden: false, // visible
     title: "Clé USB personnalisée – Cadeau souvenir gravé sur mesure",
     category: "cles-usb",
     type: "Cadeau personnalisé",
