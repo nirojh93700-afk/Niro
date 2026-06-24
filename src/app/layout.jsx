@@ -18,6 +18,7 @@ import SiteGate from "@/components/SiteGate";
 import ShopButton from "@/components/ShopButton";
 import WelcomePopup from "@/components/WelcomePopup";
 import SiteAnalytics from "@/components/SiteAnalytics";
+import SalesBanner from "@/components/SalesBanner";
 import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/products";
@@ -135,6 +136,12 @@ export default async function RootLayout({ children }) {
   if (FONT_VARS[settings.fontBody]) rootRules.push(`--font-body:${FONT_VARS[settings.fontBody]}`);
   const colorCss = rootRules.length ? `:root{${rootRules.join(";")};}` : "";
   const announce = settings.announce || {};
+  // Bandeau Soldes : affiché seulement si activé ET dans la période (début/fin).
+  const sb = settings.salesBanner || {};
+  const nowMs = Date.now();
+  const sbStartOk = !sb.start || nowMs >= new Date(sb.start).getTime();
+  const sbEndOk = !sb.end || nowMs <= (new Date(sb.end).getTime() + 86400000); // inclut le jour de fin
+  const showSales = Boolean(sb.enabled && sb.text && sbStartOk && sbEndOk);
 
   // Catégories du menu : seulement celles qui ont au moins un produit visible
   // (les produits masqués sont déjà exclus par getCatalog).
@@ -200,6 +207,9 @@ export default async function RootLayout({ children }) {
         )}
         {gateOpen ? (
           <>
+            {showSales ? (
+              <SalesBanner text={sb.text} end={sb.end ? `${sb.end}T23:59:59` : ""} link={announce.link || "/boutique"} />
+            ) : null}
             {announce.enabled && announce.text ? (
               <div className="announce-bar">
                 {announce.link ? (

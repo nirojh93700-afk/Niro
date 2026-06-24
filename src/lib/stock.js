@@ -609,6 +609,8 @@ export async function getSettings() {
       code: (typeof acc.code === "string" && acc.code.trim()) ? acc.code.trim() : "Niro2026",
     },
     announce: { enabled: false, text: "", link: "", ...(s.announce || {}) },
+    // Bandeau Soldes animé (dates de début/fin réglables ; s'arrête tout seul).
+    salesBanner: { enabled: false, text: "", start: "", end: "", ...(s.salesBanner || {}) },
     hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },
     categories: Array.isArray(s.categories) ? s.categories : [], // 3 cartes [{label,sub,image}]
     atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },

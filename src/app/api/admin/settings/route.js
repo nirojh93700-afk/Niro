@@ -34,6 +34,14 @@ export async function POST(req) {
       link: str(body.announce.link, 200),
     };
   }
+  if (body.salesBanner && typeof body.salesBanner === "object") {
+    patch.salesBanner = {
+      enabled: Boolean(body.salesBanner.enabled),
+      text: str(body.salesBanner.text, 120),
+      start: str(body.salesBanner.start, 30),
+      end: str(body.salesBanner.end, 30),
+    };
+  }
   if (body.hero && typeof body.hero === "object") {
     const h = body.hero;
     patch.hero = {

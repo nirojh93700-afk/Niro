@@ -206,6 +206,29 @@ export default function AppearanceAdmin({ adminKey }) {
           </div>
 
           <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+            <h3 style={{ margin: 0 }}>✦ Bandeau SOLDES (animé, avec compte à rebours)</h3>
+            <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+              Bandeau doré animé en haut du site. Il s'affiche <strong>uniquement</strong> entre la date de début et la date de fin, puis s'arrête tout seul. Idéal pour les soldes (réutilisable à chaque saison).
+            </p>
+            <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <input type="checkbox" style={{ width: "auto" }} checked={s.salesBanner?.enabled || false} onChange={(e) => set({ salesBanner: { ...s.salesBanner, enabled: e.target.checked } })} />
+              Activer le bandeau Soldes
+            </label>
+            <label className="admin-field">Texte
+              <input value={s.salesBanner?.text || ""} placeholder="Ex. Profitez des soldes d'été sur une sélection de créations !" onChange={(e) => set({ salesBanner: { ...s.salesBanner, text: e.target.value } })} />
+            </label>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <label className="admin-field" style={{ flex: 1, minWidth: 150 }}>Date de début
+                <input type="date" value={s.salesBanner?.start || ""} onChange={(e) => set({ salesBanner: { ...s.salesBanner, start: e.target.value } })} />
+              </label>
+              <label className="admin-field" style={{ flex: 1, minWidth: 150 }}>Date de fin
+                <input type="date" value={s.salesBanner?.end || ""} onChange={(e) => set({ salesBanner: { ...s.salesBanner, end: e.target.value } })} />
+              </label>
+            </div>
+            <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ salesBanner: s.salesBanner }, "Bandeau Soldes enregistré")}>Enregistrer le bandeau Soldes</button>
+          </div>
+
+          <div className="admin-block" style={{ display: "grid", gap: 10 }}>
             <h3 style={{ margin: 0 }}>🎁 Fenêtre de bienvenue (inscription + code promo)</h3>
             <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
               Une fenêtre s'affiche à l'arrivée des visiteurs : inscription newsletter + code promo. (Affichée une seule fois par personne.)
