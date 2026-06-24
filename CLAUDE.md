@@ -260,3 +260,35 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
    `https://mail.google.com/` → récupérer **Client ID + Client secret + Refresh token**. Elle me donne les 3
    (ou les met en secrets) → je construis la page admin « Boîte mail (agent) » : l'agent lit les mails, prépare
    un brouillon, elle clique « Envoyer » / « Modifier » — jamais d'envoi automatique.
+
+## 13. À FAIRE PAR L'UTILISATRICE — liste consolidée (maj 24/06/2026)
+> Récap des actions qui restent **côté utilisatrice** (à faire quand elle veut). Tout le code est prêt.
+
+### Priorité / quand elle veut
+- [ ] **Générateur sur-mesure en qualité « pro » (payant)** : créer un compte **OpenAI** + une **clé API**, puis soit
+  mettre le secret Firebase `OPENAI_API_KEY` (puis grantaccess), soit me demander d'ajouter un **champ admin** pour la coller.
+  Tant que pas de clé → le générateur **gratuit** (Pollinations) fonctionne (0 €). Page : `/sur-mesure` (démo, pas encore au menu).
+- [ ] **Remise anniversaire 100 % automatique** : définir le secret `CRON_SECRET` (Firebase) + créer un **planificateur
+  Google Cloud Scheduler** (gratuit) qui appelle 1×/jour `https://nivcreation.fr/api/cron/birthdays?token=CRON_SECRET`.
+  En attendant : le **semi-auto** est déjà dans le CRM (encadré « 🎂 Anniversaires à venir » + bouton).
+- [ ] **Publier la page « Projet sur mesure »** : quand elle valide la démo `/sur-mesure`, me dire → je l'ajoute au menu.
+- [ ] **Activer le bandeau SOLDES** quand voulu : Apparence → Bandeau & pop-ups → « ✦ Bandeau SOLDES » (texte + dates).
+
+### Déjà en attente (rappels des sections précédentes)
+- [ ] **Ouvrir le site au public** : décocher « code d'accès » (Apparence → Accès & état) si encore privé.
+- [ ] **Stripe → activer l'événement `checkout.session.expired`** (relance paniers abandonnés).
+- [ ] **Resend** : vérifier le domaine `nivcreation.fr` (SPF/DKIM/DMARC) pour éviter les spams.
+- [ ] **Google Merchant Center** : ajouter le flux `https://nivcreation.fr/flux-google.xml`.
+- [ ] **Instagram Business** : connecter pour la publication auto (sinon l'agent prépare, elle publie).
+- [ ] **Tavily** : clé `TAVILY_API_KEY` (Firebase) pour l'étude de marché en ligne (optionnel).
+- [ ] **SIRET** : compléter dans Mentions légales / CGV dès réception.
+
+### À me confirmer (côté Claude, en attente de sa réponse)
+- [ ] **Règle de remboursement (palier du milieu)** : après 24 h, est-ce **retenue de 10 €** (mis par défaut) ou **−10 %** ?
+  (L'indicateur auto sur chaque commande affiche « retenue de 10 € » pour l'instant.)
+
+### FAIT récemment (pour info)
+- Google Analytics branché (ID `G-RMBERKLVN9` collé) · Webhook Stripe réparé + anti-doublon (session + paiement) ·
+  Boîte mail Gmail connectée (lecture + brouillon + envoi sur validation) · Compteur visites intégré ·
+  Couverts enfants personnalisés PUBLIÉS (34,90 € port offert, éditeur par couvert) · CRM enrichi
+  (campagne remise, anniversaires, tags, graphique CA, relance) · Bandeau Soldes animé · Page sur-mesure (démo).
