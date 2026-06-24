@@ -195,6 +195,21 @@ export default function GestionPage() {
     return t > 0 && Date.now() - t > 24 * 3600 * 1000;
   }
 
+  // Statut de remboursement AUTOMATIQUE selon le délai + l'état de fabrication.
+  // Règle : 0-24 h = remboursement intégral · au-delà de 24 h (avant fabrication)
+  // = remboursement partiel (retenue de 10 €) · dès la fabrication = plus de remboursement.
+  function refundStatus(o) {
+    const st = o.status || "a_preparer";
+    if (st === "remboursee") return { txt: "Déjà remboursée", bg: "#eee", color: "#555" };
+    if (st === "annulee") return { txt: "Commande annulée", bg: "#eee", color: "#555" };
+    const started = o.immediateStart || ["en_gravure", "expediee", "livree"].includes(st);
+    if (started) return { txt: "Remboursement : NON — fabrication lancée (produit personnalisé)", bg: "#fdecea", color: "#b3261e" };
+    const t = o.createdAt ? new Date(o.createdAt).getTime() : 0;
+    const ageH = t ? (Date.now() - t) / 3600000 : 999;
+    if (ageH <= 24) return { txt: `Remboursement : INTÉGRAL possible (encore ${Math.max(0, Math.round(24 - ageH))} h sur les 24 h)`, bg: "#e7f5ea", color: "#256b34" };
+    return { txt: "Remboursement : PARTIEL (retenue de 10 €) — délai 24 h dépassé, tant que la fabrication n'est pas lancée", bg: "#fbf4e6", color: "#8a6d3b" };
+  }
+
   async function refundOrder(o) {
     if (o.status === "remboursee") return;
     const label = o.ref || o.id?.slice(-6);
@@ -679,6 +694,9 @@ export default function GestionPage() {
                     ⚠️ Possible doublon — même cliente et même(s) article(s) qu'une autre commande récente. Vérifie avant de fabriquer (ne fabrique qu'une fois si c'est le même paiement).
                   </div>
                 )}
+                {(() => { const r = refundStatus(o); return (
+                  <div style={{ margin: "6px 0 0", padding: "6px 10px", background: r.bg, borderRadius: 8, color: r.color, fontSize: "0.8rem", fontWeight: 600 }}>{r.txt}</div>
+                ); })()}
                 <div style={{ fontSize: "0.9rem", color: "var(--ink-soft)", margin: "4px 0 8px" }}>
                   <strong>{o.customerName || "—"}</strong>
                   {o.customerEmail ? <> · <a href={`mailto:${o.customerEmail}`}>{o.customerEmail}</a></> : null}
