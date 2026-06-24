@@ -258,7 +258,7 @@ export const products = [
     slug: "bracelet-homme-cuir-acier",
     badge: "Populaire",
     name: "Bracelet Homme Cuir & Acier",
-    hidden: false, // visible
+    hidden: true, // regroupé avec le Cuir Tressé & Acier (un seul en vente) — demandé par l'utilisatrice
     weight: 100,
     pickup: false,
     letter: true,
@@ -708,18 +708,22 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
     ],
     images: [
       "/produits/bracelet_cuir_tresse_a_graver_argente.jpg",
       "/produits/bracelet_cuir_tresse_a_graver_dore.jpg",
       "/produits/bracelet_cuir_tresse_a_graver_noir.jpg",
     ],
+    // Stock suivi PAR COULEUR (stockId) ; le prix change selon Sans/Avec gravure.
     variants: [
-      { id: "cuir-tresse-argente", title: "Argenté", price: 22.90, image: "/produits/bracelet_cuir_tresse_a_graver_argente.jpg" },
-      { id: "cuir-tresse-dore", title: "Doré", price: 22.90, image: "/produits/bracelet_cuir_tresse_a_graver_dore.jpg" },
-      { id: "cuir-tresse-noir", title: "Noir", price: 22.90, image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
+      { id: "cuir-tresse-argente-sans", title: "Argenté / Sans texte", price: 22.90, stockId: "cuir-argent", image: "/produits/bracelet_cuir_tresse_a_graver_argente.jpg" },
+      { id: "cuir-tresse-argente-texte", title: "Argenté / Avec texte", price: 28.90, stockId: "cuir-argent", image: "/produits/bracelet_cuir_tresse_a_graver_argente.jpg" },
+      { id: "cuir-tresse-dore-sans", title: "Doré / Sans texte", price: 22.90, stockId: "cuir-dore", image: "/produits/bracelet_cuir_tresse_a_graver_dore.jpg" },
+      { id: "cuir-tresse-dore-texte", title: "Doré / Avec texte", price: 28.90, stockId: "cuir-dore", image: "/produits/bracelet_cuir_tresse_a_graver_dore.jpg" },
+      { id: "cuir-tresse-noir-sans", title: "Noir / Sans texte", price: 22.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
+      { id: "cuir-tresse-noir-texte", title: "Noir / Avec texte", price: 28.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet masculin et intemporel : <strong>cuir véritable tressé</strong> associé à une <strong>plaque en acier inoxydable</strong> gravable.</p>
 <p>Gravez un prénom, une date ou un message pour en faire un cadeau unique (Fête des Pères, anniversaire, Noël).</p>
