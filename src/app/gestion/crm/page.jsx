@@ -108,6 +108,52 @@ export default function CrmPage() {
     } catch { setError("Échec de l'enregistrement de la note."); }
   }
 
+  // --- Campagne remise (envoyer un code promo à un groupe de clientes) ---
+  const [campOpen, setCampOpen] = useState(false);
+  const [campSeg, setCampSeg] = useState("all");
+  const [campPct, setCampPct] = useState(10);
+  const [campCode, setCampCode] = useState("MERCI10");
+  const [campSubject, setCampSubject] = useState("Une remise rien que pour vous ✦ Niv Création");
+  const [campMsg, setCampMsg] = useState("Bonjour {PRENOM},\n\nMerci pour votre confiance chez Niv Création.\nPour vous remercier, profitez de -{PCT}% sur votre prochaine commande avec le code {CODE}.\n\nÀ très vite,\nL'atelier Niv Création");
+  const [campRunning, setCampRunning] = useState(false);
+  const [campResult, setCampResult] = useState("");
+
+  function campRecipients() {
+    return clients.filter((c) => c.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)).filter((c) => {
+      if (campSeg === "all") return true;
+      if (campSeg === "relance") return c.inactive;
+      return c.segment === campSeg;
+    });
+  }
+
+  async function runCampaign() {
+    const recip = campRecipients();
+    if (!recip.length) { setCampResult("Aucune cliente dans ce groupe."); return; }
+    const code = campCode.trim().toUpperCase();
+    if (!code || !(campPct > 0)) { setCampResult("Code et pourcentage requis."); return; }
+    if (!confirm(`Créer le code ${code} (-${campPct}%) et l'envoyer à ${recip.length} cliente(s) ?`)) return;
+    setCampRunning(true); setCampResult("");
+    const ak = sessionStorage.getItem("niv-admin-key") || key;
+    try {
+      // 1) créer/mettre à jour le code promo
+      await fetch("/api/admin/promo-codes", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": ak }, body: JSON.stringify({ code, type: "percent", value: Number(campPct) }) });
+      // 2) envoyer l'e-mail à chaque cliente
+      let ok = 0, fail = 0;
+      for (const c of recip) {
+        const prenom = (c.name || "").split(" ")[0] || "";
+        const message = campMsg.replaceAll("{PRENOM}", prenom).replaceAll("{CODE}", code).replaceAll("{PCT}", String(campPct));
+        try {
+          const r = await fetch("/api/admin/send-client-email", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": ak }, body: JSON.stringify({ to: c.email, subject: campSubject, message }) });
+          if (r.ok) ok++; else fail++;
+        } catch { fail++; }
+        await new Promise((res) => setTimeout(res, 350)); // petite pause anti-limite
+        setCampResult(`Envoi en cours… ${ok + fail}/${recip.length}`);
+      }
+      setCampResult(`✓ Terminé : ${ok} envoyé(s)${fail ? `, ${fail} échec(s)` : ""}. Code ${code} actif.`);
+    } catch { setCampResult("Erreur pendant la campagne."); }
+    setCampRunning(false);
+  }
+
   async function sendMail(to) {
     setMailSending(true); setMailMsg("");
     try {
@@ -181,6 +227,45 @@ export default function CrmPage() {
         {chip("Nouvelle", "Nouveaux")}
         {chip("relance", `À relancer (${kpis.relance})`)}
         <button className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem", marginLeft: "auto" }} onClick={exportCSV}>⬇ Export CSV</button>
+      </div>
+
+      {/* Campagne remise */}
+      <div className="admin-block" style={{ marginBottom: 14 }}>
+        <button className="btn btn-gold" style={{ padding: "8px 16px" }} onClick={() => setCampOpen(!campOpen)}>
+          {campOpen ? "Fermer la campagne" : "🎁 Envoyer une remise à mes clientes"}
+        </button>
+        {campOpen && (
+          <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
+            <div>
+              <label style={{ fontSize: "0.85rem", fontWeight: 600, display: "block", marginBottom: 4 }}>Envoyer à</label>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {[["all", "Toutes"], ["VIP", "⭐ VIP"], ["Fidèle", "Fidèles"], ["Nouvelle", "Nouvelles"], ["relance", "À relancer"]].map(([v, l]) => (
+                  <button key={v} className={`filter-chip ${campSeg === v ? "active" : ""}`} style={{ padding: "4px 12px" }} onClick={() => setCampSeg(v)}>{l}</button>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "6px 0 0" }}>{campRecipients().length} cliente(s) recevront l'e-mail.</p>
+            </div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Remise (%)
+                <input type="number" min="1" max="90" value={campPct} onChange={(e) => { const v = e.target.value; setCampPct(v); setCampCode("MERCI" + (v || "")); }} style={{ display: "block", width: 100, padding: 8, border: "1px solid var(--line)", borderRadius: 8, font: "inherit", marginTop: 4 }} />
+              </label>
+              <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Code
+                <input value={campCode} onChange={(e) => setCampCode(e.target.value.toUpperCase())} style={{ display: "block", width: 160, padding: 8, border: "1px solid var(--line)", borderRadius: 8, font: "inherit", marginTop: 4 }} />
+              </label>
+            </div>
+            <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Objet
+              <input value={campSubject} onChange={(e) => setCampSubject(e.target.value)} style={{ display: "block", width: "100%", padding: 8, border: "1px solid var(--line)", borderRadius: 8, font: "inherit", marginTop: 4 }} />
+            </label>
+            <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Message
+              <textarea value={campMsg} onChange={(e) => setCampMsg(e.target.value)} rows={6} style={{ display: "block", width: "100%", padding: 10, border: "1px solid var(--line)", borderRadius: 8, font: "inherit", marginTop: 4 }} />
+            </label>
+            <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: 0 }}>Astuce : <code>{"{PRENOM}"}</code>, <code>{"{CODE}"}</code> et <code>{"{PCT}"}</code> sont remplacés automatiquement.</p>
+            <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+              <button className="btn btn-gold" onClick={runCampaign} disabled={campRunning}>{campRunning ? "Envoi…" : `Créer le code + envoyer (${campRecipients().length})`}</button>
+              {campResult ? <span style={{ fontSize: "0.85rem", color: campResult.startsWith("✓") ? "#256b34" : "var(--ink-soft)" }}>{campResult}</span> : null}
+            </div>
+          </div>
+        )}
       </div>
 
       <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher (nom, e-mail, téléphone)…"
