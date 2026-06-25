@@ -15,6 +15,7 @@ export const CATEGORIES = [
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
+  { slug: "lampes", label: "Lampes lumineuses", short: "Lampes" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
   { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
@@ -1398,9 +1399,9 @@ export const products = [
     letter: false, // colis (volumineux et fragile)
     hidden: false, // PUBLIÉ
     cardImage: "/produits/psg-lampe-bleu.jpg",
-    category: "cadeaux",
+    category: "lampes",
     type: "Lampe LED déco",
-    tagline: "Lampe décorative ronde à l'effigie du Paris Saint-Germain : plaque acrylique gravée, socle bois et éclairage LED bleu et rouge aux couleurs du club.",
+    tagline: "Lampe décorative ronde à l'effigie du Paris Saint-Germain : bois découpé au laser, socle bois et éclairage LED bleu et rouge aux couleurs du club.",
     personalizable: false,
     title: "Lampe LED Paris Saint-Germain — décoration lumineuse gravée, socle bois",
     images: [
@@ -1411,13 +1412,15 @@ export const products = [
     variants: [
       { id: "lampe-psg-standard", title: "Lampe LED PSG", price: 34.90 },
     ],
-    descriptionHtml: `<p><strong>La lampe lumineuse à l'effigie du Paris Saint-Germain.</strong> Une décoration ronde découpée et gravée au laser, montée sur un socle en bois, qui s'illumine aux couleurs du club.</p>
+    descriptionHtml: `<p><strong>La lampe lumineuse à l'effigie du Paris Saint-Germain.</strong> Une décoration ronde découpée au laser, montée sur un socle en bois, dont le motif s'illumine aux couleurs du club.</p>
 <p>Posée sur un bureau, une étagère ou une table de chevet, elle crée une ambiance chaleureuse et fait un cadeau idéal pour tous les supporters parisiens.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> contreplaqué de tilleul 3 mm et plaque acrylique gravée au laser</li>
+<li><strong>Matière :</strong> contreplaqué de tilleul 3 mm, découpé au laser</li>
+<li><strong>Motif :</strong> logo du club découpé, rétroéclairé par les LED</li>
 <li><strong>Éclairage :</strong> LED bleu et rouge, les couleurs du club</li>
 <li><strong>Allumage :</strong> interrupteur situé à l'arrière (sans télécommande)</li>
+<li><strong>Alimentation :</strong> à pile</li>
 <li><strong>Socle :</strong> en bois, la lampe se tient debout toute seule</li>
 <li><strong>Dimensions :</strong> environ 18 cm de large pour 13,5 cm de haut</li>
 <li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>

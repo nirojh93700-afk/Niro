@@ -845,7 +845,7 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux" || product.category === "verres") && (
+          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux" || product.category === "verres" || product.category === "lampes") && (
             <CustomRequestBox product={product} />
           )}
 

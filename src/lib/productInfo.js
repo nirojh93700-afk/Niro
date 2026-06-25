@@ -558,11 +558,11 @@ Défaut à l'arrivée
   "lampe-led-paris-saint-germain": {
     material: `Taille & Matériaux
 - Lampe ronde sur socle bois.
-- Contreplaqué de tilleul 3 mm et plaque acrylique gravée au laser.
+- Contreplaqué de tilleul 3 mm, découpé au laser (motif rétroéclairé).
 - Éclairage LED bleu et rouge, aux couleurs du club.
 - Dimensions : environ 18 cm de large pour 13,5 cm de haut.`,
     usage: `Utilisation & Entretien
-- Allumage par interrupteur situé à l'arrière (sans télécommande).
+- Fonctionne à pile, allumage par interrupteur situé à l'arrière (sans télécommande).
 - Lumière fixe bleue et rouge.
 - Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
     returns: `Expédition & Retour
