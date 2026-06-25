@@ -40,6 +40,13 @@ export default async function BoutiquePage({ searchParams }) {
     filtered = filtered.filter((p) => getJewelType(p) === activeType);
   }
 
+  // Les produits suivent l'ordre des sous-catégories de la famille (tri stable).
+  if (activeCat) {
+    const subOrder = (getSubcategories(activeCat) || []).map((s) => s.slug);
+    const rank = (p) => { const i = subOrder.indexOf(p.subcategory); return i < 0 ? 999 : i; };
+    filtered = [...filtered].sort((a, b) => rank(a) - rank(b));
+  }
+
   const subs = activeCat ? getSubcategories(activeCat) : null;
   const isBijoux = activeCat === "bijoux";
 
@@ -227,7 +234,9 @@ export default async function BoutiquePage({ searchParams }) {
         ) : (
           // Vue « Tout » : produits regroupés par thème (au lieu d'être mélangés).
           menuCategories.map((c) => {
-            const items = withImages.filter((p) => p.category === c.slug);
+            const subOrder = (getSubcategories(c.slug) || []).map((s) => s.slug);
+            const rank = (p) => { const i = subOrder.indexOf(p.subcategory); return i < 0 ? 999 : i; };
+            const items = withImages.filter((p) => p.category === c.slug).sort((a, b) => rank(a) - rank(b));
             if (!items.length) return null;
             return (
               <div key={c.slug} style={{ marginBottom: 44 }}>
