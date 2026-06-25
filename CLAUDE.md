@@ -283,6 +283,12 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
 - [ ] **Tavily** : clé `TAVILY_API_KEY` (Firebase) pour l'étude de marché en ligne (optionnel).
 - [ ] **SIRET** : compléter dans Mentions légales / CGV dès réception.
 
+### À TESTER (côté utilisatrice, quand elle veut)
+- [ ] **Demande sur mesure → devis → commande automatique** (verres gravés + mariage) :
+  1. Sur une fiche verre/mariage, bouton **« Faire une demande particulière »** → le client écrit + envoie → elle reçoit l'e-mail.
+  2. **Gestion → Devis & factures** : créer un devis, recopier la demande dans le champ **« Demande du client / à fabriquer »**, mettre le prix.
+  3. Payer le devis (test à 1 €) → vérifier que : devis passe en **« Payé »**, **commande créée** dans Gestion → Commandes avec l'encadré bleu **« 📋 Sur mesure — ce que le client a demandé »**, e-mail **« 🛎️ Commande »** reçu, et **adresse + téléphone** bien demandés au paiement.
+
 ### À me confirmer (côté Claude, en attente de sa réponse)
 - [ ] **Règle de remboursement (palier du milieu)** : après 24 h, est-ce **retenue de 10 €** (mis par défaut) ou **−10 %** ?
   (L'indicateur auto sur chaque commande affiche « retenue de 10 € » pour l'instant.)
