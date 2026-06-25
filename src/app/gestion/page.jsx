@@ -708,6 +708,12 @@ export default function GestionPage() {
                     </div>
                   ) : null}
                 </div>
+                {(o.surMesure || o.demande) ? (
+                  <div style={{ margin: "0 0 10px", padding: "8px 12px", background: "#eef6ff", border: "1px solid #cfe0f0", borderRadius: 8, fontSize: "0.85rem", whiteSpace: "pre-line", color: "#2b5d8a" }}>
+                    <strong>📋 Sur mesure{o.quoteNumber ? ` — devis ${o.quoteNumber}` : ""} · ce que le client a demandé :</strong>
+                    {o.demande ? `\n${o.demande}` : "\nVoir le détail des articles ci-dessous."}
+                  </div>
+                ) : null}
                 <ul style={{ margin: "0 0 10px", paddingLeft: 18, fontSize: "0.9rem" }}>
                   {(o.items || []).map((it, i) => (
                     <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>

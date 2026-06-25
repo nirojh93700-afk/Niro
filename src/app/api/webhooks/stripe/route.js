@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
-import { recordSiteOrder, updateQuoteStatus, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
+import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -178,10 +178,15 @@ export async function POST(req) {
     console.error("Vérif doublon commande:", e.message);
   }
 
-  // Si c'est le paiement d'un devis, on le marque "payé".
+  // Si c'est le paiement d'un devis (commande sur mesure), on le marque "payé"
+  // ET on récupère la demande du client pour la JOINDRE à la commande.
+  let quote = null;
   try {
     const quoteId = event.data.object?.metadata?.quoteId;
-    if (quoteId) await updateQuoteStatus(quoteId, "paye");
+    if (quoteId) {
+      quote = await getQuote(quoteId);
+      await updateQuoteStatus(quoteId, "paye");
+    }
   } catch (e) {
     console.error("MAJ statut devis:", e.message);
   }
@@ -297,8 +302,19 @@ export async function POST(req) {
       ? `${sectionTitle("Personnalisation — réglages du client")}${persoBlocks}<p style="color:#998;font-size:12px;margin:0 0 6px;">Page complète + fichiers à graver (SVG/PDF) : <a href="${BRAND.siteUrl}/gestion/atelier" style="color:${BRAND.gold};">gestion/atelier</a>.</p>`
       : "";
 
+    // Commande sur mesure (issue d'un devis) : on met la demande du client EN HAUT,
+    // c'est ce que la gérante doit fabriquer.
+    const demandeText = (quote?.note || "").trim();
+    const demandeBlock = quote
+      ? `<div style="background:#eef6ff;border:1px solid #bcd4ea;padding:14px 16px;border-radius:10px;margin:0 0 16px;">
+           <strong style="color:#2b5d8a;">📋 Commande sur mesure${quote.number ? ` (devis ${escapeHtml(quote.number)})` : ""}</strong>
+           ${demandeText ? `<p style="margin:8px 0 0;white-space:pre-line;">${escapeHtml(demandeText)}</p>` : `<p style="margin:8px 0 0;color:#7a7268;">Voir le détail des articles ci-dessous.</p>`}
+         </div>`
+      : "";
+
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
+        ${demandeBlock}
         ${immediateStart ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 14px;"><strong>⚡ Fabrication immédiate demandée</strong> — la cliente a renoncé au délai de 24 h. Tu peux lancer la fabrication tout de suite (commande verrouillée).</p>` : ""}
 
         ${sectionTitle("Livraison")}
@@ -397,6 +413,10 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       ref: orderRef,
       sessionId: session.id, // anti-doublon (si l'événement est rejoué)
       spec: orderSpec || null,
+      // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).
+      demande: quote ? (quote.note || "").trim() : "",
+      quoteNumber: quote?.number || "",
+      surMesure: Boolean(quote),
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
       currency,

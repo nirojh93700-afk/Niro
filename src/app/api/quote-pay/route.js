@@ -26,6 +26,8 @@ export async function POST(req) {
   }
   const siteUrl = resolveSiteUrl();
   const stripe = new Stripe(secret);
+  // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
+  const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -33,6 +35,10 @@ export async function POST(req) {
       locale: "fr",
       currency: "eur",
       customer_email: q.client?.email || undefined,
+      // Commande sur mesure : on récupère l'adresse + le téléphone du client pour
+      // que la commande créée soit directement expédiable.
+      phone_number_collection: { enabled: true },
+      shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
       line_items: q.items.map((it) => ({
         quantity: it.qty,
         price_data: {

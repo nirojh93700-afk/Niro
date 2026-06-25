@@ -101,8 +101,8 @@ export default function QuotesAdmin({ adminKey }) {
           <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}
             onClick={() => setItems([...items, { desc: "", qty: 1, price: "" }])}>+ Ligne</button>
 
-          <label className="admin-field">Note (facultatif)
-            <textarea value={note} onChange={(e) => setNote(e.target.value)} style={{ minHeight: 60 }} placeholder="Délai, précisions…" />
+          <label className="admin-field">Demande du client / à fabriquer (recopie ici sa demande)
+            <textarea value={note} onChange={(e) => setNote(e.target.value)} style={{ minHeight: 70 }} placeholder="Ex. : gravure logo + date, sur les 2 faces, livraison avant le 12… (s'affichera automatiquement dans la commande une fois payée)" />
           </label>
 
           <div style={{ textAlign: "right", fontWeight: 700, color: "var(--gold-dark)" }}>Total : {formatEuro(total)}</div>
