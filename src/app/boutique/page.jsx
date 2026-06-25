@@ -1,16 +1,16 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import {
-  CATEGORIES,
-  JEWEL_TYPES,
-  getCategoryLabel,
-  getSubcategories,
-  getSubcategoryLabel,
-  getJewelType,
-  getJewelTypeLabel,
-} from "@/lib/products";
+import { JEWEL_TYPES, getJewelType, getJewelTypeLabel } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
-import { getRatingSummaries } from "@/lib/stock";
+import { getRatingSummaries, getTaxonomy } from "@/lib/stock";
+import {
+  resolveCategories,
+  resolveSubcategories,
+  resolveProductOrder,
+  categoryLabelFrom,
+  subcategoryLabelFrom,
+  makeProductSorter,
+} from "@/lib/taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,15 @@ export default async function BoutiquePage({ searchParams }) {
   const ratings = await getRatingSummaries().catch(() => ({}));
   const withImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
 
+  // Taxonomie vivante (réglée dans l'admin, repli sur le code).
+  const taxonomy = await getTaxonomy().catch(() => ({}));
+  const CATS = resolveCategories(taxonomy);
+  const SUBS = resolveSubcategories(taxonomy);
+  const PRODUCT_ORDER = resolveProductOrder(taxonomy);
+  const getCategoryLabel = (slug) => categoryLabelFrom(CATS, slug);
+  const getSubcategoryLabel = (cat, sub) => subcategoryLabelFrom(SUBS, cat, sub);
+  const getSubcategories = (cat) => SUBS[cat] || null;
+
   const searchResults = activeQ
     ? withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ))
     : null;
@@ -40,11 +49,9 @@ export default async function BoutiquePage({ searchParams }) {
     filtered = filtered.filter((p) => getJewelType(p) === activeType);
   }
 
-  // Les produits suivent l'ordre des sous-catégories de la famille (tri stable).
+  // Ordre des produits : réglage admin (productOrder) puis ordre des sous-catégories.
   if (activeCat) {
-    const subOrder = (getSubcategories(activeCat) || []).map((s) => s.slug);
-    const rank = (p) => { const i = subOrder.indexOf(p.subcategory); return i < 0 ? 999 : i; };
-    filtered = [...filtered].sort((a, b) => rank(a) - rank(b));
+    filtered = [...filtered].sort(makeProductSorter(activeCat, SUBS, PRODUCT_ORDER));
   }
 
   const subs = activeCat ? getSubcategories(activeCat) : null;
@@ -52,7 +59,7 @@ export default async function BoutiquePage({ searchParams }) {
 
   // Catégories à afficher en filtre : celles qui ont au moins un produit visible.
   const presentCats = new Set(withImages.map((p) => p.category));
-  const menuCategories = CATEGORIES.filter((c) => presentCats.has(c.slug) || c.slug === activeCat);
+  const menuCategories = CATS.filter((c) => presentCats.has(c.slug) || c.slug === activeCat);
 
   // Conserve l'autre facette dans les liens (femme + collier combinables).
   const baseQs = `cat=${activeCat}`;
@@ -234,9 +241,9 @@ export default async function BoutiquePage({ searchParams }) {
         ) : (
           // Vue « Tout » : produits regroupés par thème (au lieu d'être mélangés).
           menuCategories.map((c) => {
-            const subOrder = (getSubcategories(c.slug) || []).map((s) => s.slug);
-            const rank = (p) => { const i = subOrder.indexOf(p.subcategory); return i < 0 ? 999 : i; };
-            const items = withImages.filter((p) => p.category === c.slug).sort((a, b) => rank(a) - rank(b));
+            const items = withImages
+              .filter((p) => p.category === c.slug)
+              .sort(makeProductSorter(c.slug, SUBS, PRODUCT_ORDER));
             if (!items.length) return null;
             return (
               <div key={c.slug} style={{ marginBottom: 44 }}>

@@ -269,6 +269,21 @@ export async function getProductOverrides() {
   return data.overrides || {};
 }
 
+// Taxonomie réglée depuis l'admin : { categories:[{slug,label,short}],
+// subcategories:{cat:[{slug,label}]}, productOrder:{cat:[slug,...]} }.
+// Vide = on utilise la taxonomie du code (products.js) en repli.
+export async function getTaxonomy() {
+  const data = await getCatalogRaw();
+  return data.taxonomy || {};
+}
+
+export async function saveTaxonomy(next) {
+  const data = await getCatalogRaw();
+  data.taxonomy = next && typeof next === "object" ? next : {};
+  await persistCatalog(data);
+  return data.taxonomy;
+}
+
 export async function setProductOverride(slug, patch) {
   const data = await getCatalogRaw();
   data.overrides = data.overrides || {};

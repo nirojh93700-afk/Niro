@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { CATEGORIES, SUBCATEGORIES, getCategoryLabel } from "@/lib/products";
+import { useState, useEffect } from "react";
+import { CATEGORIES as DEF_CATS, SUBCATEGORIES as DEF_SUBS } from "@/lib/products";
+import { resolveCategories, resolveSubcategories } from "@/lib/taxonomy";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import Model3DUpload from "@/components/admin/Model3DUpload";
 
-// Regroupe les produits par catégorie, dans l'ordre des CATEGORIES.
-function groupByCategory(products) {
-  const order = CATEGORIES.map((c) => c.slug);
+// Regroupe les produits par catégorie, dans l'ordre des catégories (vivantes).
+function groupByCategory(products, cats) {
+  const order = cats.map((c) => c.slug);
   const groups = [];
-  for (const cat of CATEGORIES) {
+  for (const cat of cats) {
     const items = products.filter((p) => p.category === cat.slug);
     if (items.length) groups.push({ slug: cat.slug, label: cat.label, items });
   }
@@ -25,6 +26,19 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
   const [showAdd, setShowAdd] = useState(false);
   const [msg, setMsg] = useState("");
   const [search, setSearch] = useState("");
+  // Catégories vivantes (réglées dans « Catégories & ordre »), repli sur le code.
+  const [cats, setCats] = useState(DEF_CATS);
+  const [subsMap, setSubsMap] = useState(DEF_SUBS);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/admin/taxonomy", { headers: { "x-admin-key": adminKey } });
+        const d = await res.json().catch(() => ({}));
+        setCats(resolveCategories(d.taxonomy || {}));
+        setSubsMap(resolveSubcategories(d.taxonomy || {}));
+      } catch { /* repli défauts */ }
+    })();
+  }, [adminKey]);
   const shown = search.trim()
     ? products.filter((p) => `${p.name} ${p.slug} ${p.category}`.toLowerCase().includes(search.trim().toLowerCase()))
     : products;
@@ -70,6 +84,8 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
       {showAdd && (
         <AddProduct
           adminKey={adminKey}
+          cats={cats}
+          subsMap={subsMap}
           setMsg={setMsg}
           onDone={() => { setShowAdd(false); onReload(); }}
         />
@@ -81,7 +97,7 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
         placeholder="🔍 Rechercher un produit (nom, catégorie)…"
         style={{ width: "100%", padding: "11px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 16 }}
       />
-      {groupByCategory(shown).map((group) => (
+      {groupByCategory(shown, cats).map((group) => (
         <div key={group.slug} style={{ marginBottom: 26 }}>
           <h3 className="admin-group-title">
             {group.label} <span className="admin-group-count">{group.items.length}</span>
@@ -112,6 +128,7 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
                 <EditProduct
                   product={p}
                   adminKey={adminKey}
+                  cats={cats}
                   onReload={onReload}
                   onSave={async (patch) => {
                     const ok = await post({ action: "edit", slug: p.slug, patch });
@@ -143,7 +160,7 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
   );
 }
 
-function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
+function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onDelete }) {
   const [name, setName] = useState(product.name || "");
   const [tagline, setTagline] = useState(product.tagline || "");
   const [category, setCategory] = useState(product.category || "cadeaux");
@@ -206,7 +223,7 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
       </label>
       <label className="admin-field">Catégorie
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          {CATEGORIES.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
+          {cats.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
         </select>
       </label>
       <label className="admin-field">Badge sur la vignette (boutique)
@@ -357,7 +374,7 @@ function EditProduct({ product, adminKey, onReload, onSave, onDelete }) {
   );
 }
 
-function AddProduct({ adminKey, setMsg, onDone }) {
+function AddProduct({ adminKey, cats = DEF_CATS, subsMap = DEF_SUBS, setMsg, onDone }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("cadeaux");
   const [subcategory, setSubcategory] = useState("");
@@ -375,7 +392,7 @@ function AddProduct({ adminKey, setMsg, onDone }) {
   const [creating, setCreating] = useState(false);
   const [createdSlug, setCreatedSlug] = useState("");
   const setVar = (i, k, v) => setVariants((vs) => vs.map((x, j) => (j === i ? { ...x, [k]: v } : x)));
-  const subs = SUBCATEGORIES[category] || null;
+  const subs = subsMap[category] || null;
 
   function moveImg(from, to) {
     if (to < 0 || to >= imgs.length) return;
@@ -439,7 +456,7 @@ function AddProduct({ adminKey, setMsg, onDone }) {
       </label>
       <label className="admin-field">Catégorie
         <select value={category} onChange={(e) => { setCategory(e.target.value); setSubcategory(""); }}>
-          {CATEGORIES.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
+          {cats.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
         </select>
       </label>
       {subs && (

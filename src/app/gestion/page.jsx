@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { formatEuro } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
+import TaxonomyAdmin from "@/components/admin/TaxonomyAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
@@ -566,6 +567,7 @@ export default function GestionPage() {
               label: "Catalogue",
               tabs: [
                 { id: "produits", text: "Produits" },
+                { id: "categories", text: "🗂️ Catégories & ordre" },
                 { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
                 { id: "couverts-reglage", text: "🍴 Réglage couverts", href: "/gestion/couverts-reglage" },
@@ -962,6 +964,11 @@ export default function GestionPage() {
         {/* ---------------- PRODUITS ---------------- */}
         {tab === "produits" && (
           <ProductsAdmin adminKey={key} products={editable} onReload={() => load(key)} />
+        )}
+
+        {/* ---------------- CATÉGORIES & ORDRE ---------------- */}
+        {tab === "categories" && (
+          <TaxonomyAdmin adminKey={key} products={editable} />
         )}
 
         {/* ---------------- ASSISTANT ---------------- */}
