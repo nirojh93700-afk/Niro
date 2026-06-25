@@ -555,6 +555,21 @@ Annulation
 Défaut à l'arrivée
 - Photo sous 14 jours après réception : remplacement sans frais.`,
   },
+  "lampe-led-paris-saint-germain": {
+    material: `Taille & Matériaux
+- Lampe ronde sur socle bois.
+- Contreplaqué de tilleul 3 mm et plaque acrylique gravée au laser.
+- Éclairage LED bleu et rouge, aux couleurs du club.
+- Dimensions : environ 18 cm de large pour 13,5 cm de haut.`,
+    usage: `Utilisation & Entretien
+- Allumage par interrupteur situé à l'arrière (sans télécommande).
+- Lumière fixe bleue et rouge.
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+    returns: `Expédition & Retour
+- Objet fragile : expédié soigneusement protégé.
+- Retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
+- À l'arrivée, en cas de casse : envoyez-nous une photo sous 14 jours, on remplace sans frais.`,
+  },
 };
 
 export function getProductInfo(slug) {

@@ -1389,6 +1389,40 @@ export const products = [
 <li><strong>Dimensions :</strong> couteau 16,8 cm · fourchette 15 cm · grande cuillère 14,7 cm · petite cuillère 12,5 cm</li>
 </ul>`,
   },
+  {
+    slug: "lampe-led-paris-saint-germain",
+    badge: "Nouveau",
+    name: "Lampe LED PSG",
+    weight: 700, // lampe bois + plaque acrylique + socle, emballage protégé (fragile)
+    pickup: true, // déco : remise en main propre possible
+    letter: false, // colis (volumineux et fragile)
+    hidden: false, // PUBLIÉ
+    cardImage: "/produits/psg-lampe-bleu.jpg",
+    category: "cadeaux",
+    type: "Lampe LED déco",
+    tagline: "Lampe décorative ronde à l'effigie du Paris Saint-Germain : plaque acrylique gravée, socle bois et éclairage LED bleu et rouge aux couleurs du club.",
+    personalizable: false,
+    title: "Lampe LED Paris Saint-Germain — décoration lumineuse gravée, socle bois",
+    images: [
+      "/produits/psg-lampe-bleu.jpg",
+      "/produits/psg-lampe-couleur.jpg",
+      "/produits/psg-lampe-ambiance.jpg",
+    ],
+    variants: [
+      { id: "lampe-psg-standard", title: "Lampe LED PSG", price: 34.90 },
+    ],
+    descriptionHtml: `<p><strong>La lampe lumineuse à l'effigie du Paris Saint-Germain.</strong> Une décoration ronde découpée et gravée au laser, montée sur un socle en bois, qui s'illumine aux couleurs du club.</p>
+<p>Posée sur un bureau, une étagère ou une table de chevet, elle crée une ambiance chaleureuse et fait un cadeau idéal pour tous les supporters parisiens.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> contreplaqué de tilleul 3 mm et plaque acrylique gravée au laser</li>
+<li><strong>Éclairage :</strong> LED bleu et rouge, les couleurs du club</li>
+<li><strong>Allumage :</strong> interrupteur situé à l'arrière (sans télécommande)</li>
+<li><strong>Socle :</strong> en bois, la lampe se tient debout toute seule</li>
+<li><strong>Dimensions :</strong> environ 18 cm de large pour 13,5 cm de haut</li>
+<li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
+</ul>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------
