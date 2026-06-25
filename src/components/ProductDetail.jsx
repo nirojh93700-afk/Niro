@@ -24,6 +24,7 @@ import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
 import ModeleDesigner from "./ModeleDesigner";
 import CouvertsDesigner from "./CouvertsDesigner";
+import CustomRequestBox from "./CustomRequestBox";
 import ModeleEngraveLayer from "./ModeleEngraveLayer";
 import MotifEngraveLayer from "./MotifEngraveLayer";
 import { Motif } from "./Motif";
@@ -844,31 +845,8 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux") && (
-            <div
-              style={{
-                marginTop: 14,
-                fontSize: "0.84rem",
-                color: "var(--ink-soft)",
-                background: "#fbf4e6",
-                border: "1px solid #e7d3a1",
-                borderRadius: 10,
-                padding: "10px 12px",
-                lineHeight: 1.5,
-              }}
-            >
-              <strong style={{ color: "var(--gold-dark)" }}>Une demande précise&nbsp;?</strong>
-              <br />
-              Personnalisation particulière ou projet sur mesure :{" "}
-              <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)", fontWeight: 600 }}>
-                écrivez-nous
-              </a>{" "}
-              ou appelez le{" "}
-              <a href="tel:+33766153102" style={{ color: "var(--gold-dark)", fontWeight: 600, whiteSpace: "nowrap" }}>
-                07 66 15 31 02
-              </a>
-              .
-            </div>
+          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux" || product.category === "verres") && (
+            <CustomRequestBox product={product} />
           )}
 
           {product.model3d && (
