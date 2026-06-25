@@ -1445,7 +1445,7 @@ export const products = [
       "/produits/psg-lampe-ambiance.jpg",
     ],
     variants: [
-      { id: "lampe-psg-standard", title: "Lampe LED PSG", price: 34.90 },
+      { id: "lampe-psg-standard", title: "Lampe LED PSG", price: 29.90 },
     ],
     descriptionHtml: `<p><strong>La lampe lumineuse à l'effigie du Paris Saint-Germain.</strong> Une décoration ronde découpée au laser, montée sur un socle en bois, dont le motif s'illumine aux couleurs du club.</p>
 <p>Posée sur un bureau, une étagère ou une table de chevet, elle crée une ambiance chaleureuse et fait un cadeau idéal pour tous les supporters parisiens.</p>
