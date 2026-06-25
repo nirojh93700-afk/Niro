@@ -5,7 +5,7 @@ export const metadata = {
 
 const html = `
 <h3>Éditeur du site</h3>
-<p>Niv Création — Atelier de personnalisation<br>Entreprise individuelle (micro-entrepreneur) — Nirojh Kamalanathan<br>SIREN : 105 914 774<br>Siège social : 6 rue d'Armaillé, 75017 Paris<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a></p>
+<p>Niv Création — Atelier de personnalisation<br>Entreprise individuelle (micro-entrepreneur) — Nirojh Kamalanathan<br>SIRET : 105 914 774 00010<br>Siège social : 6 rue d'Armaillé, 75017 Paris<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a></p>
 
 <h3>Directeur de la publication</h3>
 <p>Nirojh Kamalanathan</p>

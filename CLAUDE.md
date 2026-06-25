@@ -172,7 +172,7 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 
 ### Reste à faire avant l'ouverture publique
 - **Ouvrir le site au public** : décocher « Activer le code d'accès » dans gestion → Apparence (site encore privé en attendant).
-- **SIREN** : `105 914 774` renseigné dans Mentions légales + CGV (fait le 25/06/2026).
+- **SIRET** : `105 914 774 00010` renseigné dans Mentions légales + CGV (fait le 25/06/2026).
 - **Catégories & ordre (admin)** : page `/gestion → Catalogue → 🗂️ Catégories & ordre` (`TaxonomyAdmin.jsx`). L'utilisatrice peut ajouter/renommer/supprimer/réordonner les catégories ET sous-catégories, et réordonner les produits dans chaque catégorie (flèches ▲▼ + Enregistrer). Stocké en base (`taxonomy` dans le blob catalogue, via `getTaxonomy`/`saveTaxonomy`), repli sûr sur le code (`CATEGORIES`/`SUBCATEGORIES` de products.js). La boutique fusionne via `src/lib/taxonomy.js` (`resolveCategories`/`resolveSubcategories`/`resolveProductOrder`/`makeProductSorter`). NB : renommer ne change que le libellé, pas l'identifiant (slug) — la logique produit (bijoux −10 %, crystal3d…) reste intacte.
 - **Bijoux** : prix de référence à +25 % ; re-appliquer la remise −20 % (Promotions → Remise rapide) pour retomber sur les prix d'origine.
 - Finir photos + stocks sur les produits restants.
@@ -282,7 +282,7 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
 - [ ] **Google Merchant Center** : ajouter le flux `https://nivcreation.fr/flux-google.xml`.
 - [ ] **Instagram Business** : connecter pour la publication auto (sinon l'agent prépare, elle publie).
 - [ ] **Tavily** : clé `TAVILY_API_KEY` (Firebase) pour l'étude de marché en ligne (optionnel).
-- [x] **SIREN** : `105 914 774` ajouté dans Mentions légales + CGV (fourni le 25/06/2026). SIRET complet (14 chiffres) à ajouter si besoin plus tard.
+- [x] **SIRET** : `105 914 774 00010` ajouté dans Mentions légales + CGV (fourni le 25/06/2026).
 
 ### À TESTER (côté utilisatrice, quand elle veut)
 - [ ] **Demande sur mesure → devis → commande automatique** (verres gravés + mariage) :
