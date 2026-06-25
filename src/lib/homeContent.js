@@ -37,11 +37,11 @@ export const categoryCards = [
 export const featured = [
   "collier-medaillon-coeur-ouvrable",
   "numero-table-arches-bohemes",
-  "bracelet-homme-cuir-acier",
+  "lampe-led-paris-saint-germain",
   "ronds-de-serviette-bois",
   "plaque-de-porte-enfant",
   "menu-de-mariage-bois-grave",
-].map(getProductBySlug);
+].map(getProductBySlug).filter(Boolean);
 
 export const heroImages = {
   editorial: getProductBySlug("menu-de-mariage-bois-grave").images[0],

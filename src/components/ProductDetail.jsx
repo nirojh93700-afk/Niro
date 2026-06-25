@@ -336,7 +336,7 @@ export default function ProductDetail({ product }) {
   const photoSrcFond = photoUrlFond && (photoUrlFond.startsWith("http") || photoUrlFond.startsWith("data:") || photoUrlFond.startsWith("/")) ? photoUrlFond : "";
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
-    product.category === "cristaux" ? "crystal" : product.category === "mariage" ? "wood" : "metal";
+    product.crystal3d ? "crystal" : product.category === "mariage" ? "wood" : "metal";
   const previewFontClass = getFontClass(fieldValues[fontField?.key] || "playfair");
   const previewColor = (colorField && fieldValues[colorField.key]) || ENGRAVE_PREVIEW;
 
@@ -730,7 +730,7 @@ export default function ProductDetail({ product }) {
               </div>
             )}
             {/* Sur une VRAIE photo produit : la gravure se superpose directement */}
-            {hasImages && product.category === "cristaux" && photoSrc && (
+            {hasImages && product.crystal3d && photoSrc && (
               <div className="crystal-photo-overlay">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={photoSrc} alt="Aperçu de la gravure photo" />
@@ -765,7 +765,7 @@ export default function ProductDetail({ product }) {
               <MotifEngraveLayer key="motif-fond" motifId={fieldValues["motifFond"]} color={ENGRAVE_PREVIEW} cfg={editCfg} onChange={setMotifLayoutFond} />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
-            {hasImages && !product.engrave && product.category !== "cristaux" && (product.previewPhoto || product.preview) && photoSrc && (
+            {hasImages && !product.engrave && !product.crystal3d && (product.previewPhoto || product.preview) && photoSrc && (
               <div className="engrave-overlay engrave-overlay-photo" style={product.previewPhoto || product.preview}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="eo-photo" src={photoSrc} alt="Aperçu du logo / de la photo gravé" />
@@ -845,7 +845,7 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux" || product.category === "verres" || product.category === "lampes") && (
+          {!product.noCustomCta && (product.category === "mariage" || product.category === "cadeaux" || product.category === "verres" || product.category === "deco") && (
             <CustomRequestBox product={product} />
           )}
 

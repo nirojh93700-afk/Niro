@@ -55,7 +55,7 @@ export default async function BoutiquePage({ searchParams }) {
     `/boutique?${baseQs}${activeSub ? `&sub=${activeSub}` : ""}${type ? `&type=${type}` : ""}`;
 
   // Catégories pour lesquelles on propose le contact direct (sur mesure).
-  const showCustomContact = activeCat === "mariage" || activeCat === "cadeaux";
+  const showCustomContact = activeCat === "mariage" || activeCat === "cadeaux" || activeCat === "deco";
   const customContactHeading =
     activeCat === "mariage"
       ? "Un projet pour votre grand jour ?"

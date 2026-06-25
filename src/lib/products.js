@@ -10,21 +10,16 @@ import { MOTIF_OPTIONS } from "@/lib/motifs";
 export { MOTIF_OPTIONS };
 
 export const CATEGORIES = [
-  { slug: "bijoux", label: "Bijoux personnalisés", short: "Bijoux" },
-  { slug: "verres", label: "Verres gravés personnalisés", short: "Verres gravés" },
+  { slug: "bijoux", label: "Bijoux", short: "Bijoux" },
+  { slug: "verres", label: "Verres gravés", short: "Verres" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
-  { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
-  { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
-  { slug: "lampes", label: "Lampes lumineuses", short: "Lampes" },
-  { slug: "couverts", label: "Couverts personnalisés", short: "Couverts" },
-  { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
-  { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
-  { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
+  { slug: "deco", label: "Déco & Maison", short: "Déco" },
+  { slug: "cadeaux", label: "Cadeaux & Accessoires", short: "Cadeaux" },
 ];
 
 // (Les motifs gravables sont définis dans src/lib/motifs.js.)
 
-// Sous-catégories par catégorie (ex : bijoux femme / homme). « Pour qui ? »
+// Sous-catégories par catégorie. La boutique affiche automatiquement ces filtres.
 export const SUBCATEGORIES = {
   bijoux: [
     { slug: "femme", label: "Femme" },
@@ -35,6 +30,22 @@ export const SUBCATEGORIES = {
   // Verres gravés : par type de verre (on ajoute champagne/bière/vin quand les produits arrivent).
   verres: [
     { slug: "whisky", label: "Verre à whisky" },
+  ],
+  mariage: [
+    { slug: "tables", label: "Numéros de table" },
+    { slug: "table-deco", label: "Ronds & étiquettes" },
+    { slug: "menus", label: "Menus" },
+  ],
+  deco: [
+    { slug: "lampes", label: "Lampes" },
+    { slug: "cristal", label: "Cristal 3D" },
+    { slug: "plaques", label: "Plaques" },
+    { slug: "couverts", label: "Couverts" },
+  ],
+  cadeaux: [
+    { slug: "cles-usb", label: "Clés USB" },
+    { slug: "porte-cles", label: "Porte-clés" },
+    { slug: "medaillons", label: "Médaillons" },
   ],
 };
 
@@ -264,6 +275,7 @@ export const products = [
     pickup: true,
     letter: false,
     title: "Numéro de table mariage Arches Bohèmes – Bois & acrylique",
+    subcategory: "tables",
     category: "mariage",
     type: "Décoration de mariage",
     tagline: "Bois ajouré et acrylique doré pour une table de mariage chic.",
@@ -310,6 +322,7 @@ export const products = [
     pickup: true,
     letter: false,
     title: "Numéro de table mariage en bois – Motif branche d'eucalyptus",
+    subcategory: "tables",
     category: "mariage",
     type: "Décoration de mariage",
     tagline: "Le charme végétal d'une branche d'eucalyptus gravée.",
@@ -349,6 +362,7 @@ export const products = [
     pickup: true,
     letter: false,
     title: "Numéro de table mariage en bois découpé au laser – Motif feuillage",
+    subcategory: "tables",
     category: "mariage",
     type: "Décoration de mariage",
     tagline: "Un panneau de bois découpé au laser, orné d'un feuillage gravé.",
@@ -387,6 +401,7 @@ export const products = [
     pickup: true,
     letter: true,
     title: "Étiquette de serviette fleur en bois gravée – Initiales des mariés",
+    subcategory: "table-deco",
     category: "mariage",
     type: "Décoration de mariage",
     tagline: "Une fleur de bois gravée à vos initiales, nouée à la cordelette.",
@@ -421,6 +436,7 @@ export const products = [
     pickup: true,
     letter: false,
     title: "Numéro de table mariage en bois – Arche ajourée & chiffre en relief 3D",
+    subcategory: "tables",
     category: "mariage",
     type: "Décoration de mariage",
     tagline: "Une arche ajourée au chiffre en relief, avec l'année de votre mariage.",
@@ -455,6 +471,7 @@ export const products = [
     pickup: true,
     letter: true,
     title: "Ronds de serviette personnalisés en bois – Hexagone, cœur ou cercle",
+    subcategory: "table-deco",
     category: "mariage",
     type: "Art de la table",
     tagline: "Un cadeau d'invité raffiné, gravé du prénom de chaque convive.",
@@ -496,6 +513,7 @@ export const products = [
     pickup: true,
     letter: false,
     title: "Menu de mariage en bois gravé — Arche & lettrage relief",
+    subcategory: "menus",
     category: "mariage",
     type: "Menu de mariage",
     tagline: "Un menu en bois, lettrage « Menu » en relief, à vos prénoms.",
@@ -540,7 +558,8 @@ export const products = [
     pickup: true,
     letter: false,
     title: "Plaque de porte personnalisée prénom & animaux – Chambre enfant",
-    category: "cadeaux",
+    subcategory: "plaques",
+    category: "deco",
     type: "Décoration chambre enfant",
     tagline: "Le prénom de votre enfant, entouré de ses animaux préférés.",
     personalizable: true,
@@ -588,7 +607,8 @@ export const products = [
     letter: true,
     hidden: false, // visible
     title: "Clé USB personnalisée – Cadeau souvenir gravé sur mesure",
-    category: "cles-usb",
+    subcategory: "cles-usb",
+    category: "cadeaux",
     type: "Cadeau personnalisé",
     tagline: "Un souvenir gravé à conserver : mariage, entreprise, cadeau.",
     personalizable: true,
@@ -626,7 +646,9 @@ export const products = [
     pickup: true, // fragile : remise en main propre conseillée
     letter: false,
     title: "Pyramide en cristal — gravure photo 3D personnalisée",
-    category: "cristaux",
+    subcategory: "cristal",
+    crystal3d: true,
+    category: "deco",
     type: "Cristal photo 3D",
     tagline: "Votre photo gravée en 3D au cœur du cristal.",
     personalizable: true,
@@ -697,7 +719,8 @@ export const products = [
     pickup: false,
     letter: true,
     title: "Porte-clés en cuir véritable à graver personnalisé",
-    category: "porte-cles",
+    subcategory: "porte-cles",
+    category: "cadeaux",
     type: "Porte-clés personnalisé",
     tagline: "Un porte-clés en cuir, gravé avec votre message.",
     personalizable: true,
@@ -730,7 +753,9 @@ export const products = [
     name: "Trophée cristal — Gravure 3D",
     weight: 600, pickup: true, letter: false,
     title: "Trophée en cristal — gravure photo 3D personnalisée",
-    category: "cristaux", type: "Cristal photo 3D",
+    subcategory: "cristal",
+    crystal3d: true,
+    category: "deco", type: "Cristal photo 3D",
     tagline: "Un trophée en cristal, votre photo gravée en 3D à l'intérieur.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
@@ -1038,7 +1063,8 @@ export const products = [
     name: "Clé USB Cristal — Gravure 3D",
     weight: 70, pickup: false, letter: true,
     title: "Clé USB cristal avec gravure photo 3D",
-    category: "cles-usb", type: "Clé USB personnalisée",
+    subcategory: "cles-usb",
+    category: "cadeaux", type: "Clé USB personnalisée",
     tagline: "Une clé USB en cristal, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
@@ -1058,7 +1084,8 @@ export const products = [
     name: "Clé USB Bois — Coffret",
     weight: 150, pickup: false, letter: false,
     title: "Clé USB bois avec coffret, à graver",
-    category: "cles-usb", type: "Clé USB personnalisée",
+    subcategory: "cles-usb",
+    category: "cadeaux", type: "Clé USB personnalisée",
     tagline: "Une clé USB en bois gravée, livrée dans son coffret.",
     personalizable: true, personalizationLabel: "Texte / logo + police",
     personalizationFields: [
@@ -1077,7 +1104,9 @@ export const products = [
     name: "Porte-clés Cristal LED Cœur — Gravure 3D",
     weight: 120, pickup: false, letter: false,
     title: "Porte-clés cristal LED cœur avec gravure photo 3D",
-    category: "cristaux", type: "Porte-clés cristal 3D",
+    subcategory: "porte-cles",
+    crystal3d: true,
+    category: "cadeaux", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés cœur en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
@@ -1099,7 +1128,9 @@ export const products = [
     name: "Porte-clés Cristal LED Rectangle — Gravure 3D",
     weight: 120, pickup: false, letter: false,
     title: "Porte-clés cristal LED rectangle avec gravure photo 3D",
-    category: "cristaux", type: "Porte-clés cristal 3D",
+    subcategory: "porte-cles",
+    crystal3d: true,
+    category: "cadeaux", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés rectangle en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
@@ -1123,7 +1154,8 @@ export const products = [
     name: "Pièce ronde laiton à graver",
     weight: 40, pickup: false, letter: true,
     title: "Pièce ronde en laiton à graver personnalisée",
-    category: "medailles", type: "Pièce à graver",
+    subcategory: "medaillons",
+    category: "cadeaux", type: "Pièce à graver",
     tagline: "Une médaille ronde en laiton, à graver des deux côtés.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
     personalizationFields: [
@@ -1316,7 +1348,8 @@ export const products = [
     freeShipping: true, // livraison offerte (incluse dans le prix)
     noCustomCta: true, // pas le bloc "projet sur mesure / téléphone" (perso via le configurateur)
     hidden: false, // PUBLIÉ
-    category: "couverts",
+    subcategory: "couverts",
+    category: "deco",
     type: "Couverts enfants gravés",
     tagline: "Le jeu de 4 couverts enfants en inox, personnalisés avec le prénom et un animal au choix sur chaque pièce.",
     personalizable: true,
@@ -1400,7 +1433,8 @@ export const products = [
     letter: false, // colis (volumineux et fragile)
     hidden: false, // PUBLIÉ
     cardImage: "/produits/psg-lampe-bleu.jpg",
-    category: "lampes",
+    subcategory: "lampes",
+    category: "deco",
     type: "Lampe LED déco",
     tagline: "Lampe décorative ronde à l'effigie du Paris Saint-Germain : bois découpé au laser, socle bois et éclairage LED bleu et rouge aux couleurs du club.",
     personalizable: false,

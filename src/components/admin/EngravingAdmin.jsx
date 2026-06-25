@@ -3,7 +3,7 @@
 import { useState, Fragment } from "react";
 import { getCategoryLabel } from "@/lib/products";
 
-const CAT_ORDER = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "couverts", "cles-usb", "porte-cles", "medailles"];
+const CAT_ORDER = ["bijoux", "verres", "mariage", "deco", "cadeaux"];
 const catRank = (c) => { const i = CAT_ORDER.indexOf(c); return i < 0 ? 99 : i; };
 
 // Réglage de la zone de gravure sur la photo de chaque produit.
