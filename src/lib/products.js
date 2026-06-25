@@ -37,10 +37,10 @@ export const SUBCATEGORIES = {
     { slug: "menus", label: "Menus" },
   ],
   deco: [
-    { slug: "lampes", label: "Lampes" },
-    { slug: "cristal", label: "Cristal 3D" },
     { slug: "plaques", label: "Plaques" },
     { slug: "couverts", label: "Couverts" },
+    { slug: "lampes", label: "Lampes" },
+    { slug: "cristal", label: "Cristal 3D" },
   ],
   cadeaux: [
     { slug: "cles-usb", label: "Clés USB" },
