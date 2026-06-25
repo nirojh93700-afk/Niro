@@ -16,6 +16,7 @@ export const CATEGORIES = [
   { slug: "cristaux", label: "Cristal 3D", short: "Cristal 3D" },
   { slug: "cadeaux", label: "Décoration & Cadeaux", short: "Déco & Cadeaux" },
   { slug: "lampes", label: "Lampes lumineuses", short: "Lampes" },
+  { slug: "couverts", label: "Couverts personnalisés", short: "Couverts" },
   { slug: "cles-usb", label: "Clés USB", short: "Clés USB" },
   { slug: "porte-cles", label: "Porte-clés", short: "Porte-clés" },
   { slug: "medailles", label: "Médaillons & Pièces", short: "Médaillons" },
@@ -1315,7 +1316,7 @@ export const products = [
     freeShipping: true, // livraison offerte (incluse dans le prix)
     noCustomCta: true, // pas le bloc "projet sur mesure / téléphone" (perso via le configurateur)
     hidden: false, // PUBLIÉ
-    category: "cadeaux",
+    category: "couverts",
     type: "Couverts enfants gravés",
     tagline: "Le jeu de 4 couverts enfants en inox, personnalisés avec le prénom et un animal au choix sur chaque pièce.",
     personalizable: true,

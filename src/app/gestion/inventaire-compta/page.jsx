@@ -12,7 +12,7 @@ import Link from "next/link";
 import { getCategoryLabel } from "@/lib/products";
 
 // Ordre d'affichage des catégories (regroupées, pas mélangées).
-const CAT_ORDER = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "cles-usb", "porte-cles", "medailles"];
+const CAT_ORDER = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "couverts", "cles-usb", "porte-cles", "medailles"];
 const catRank = (c) => { const i = CAT_ORDER.indexOf(c); return i < 0 ? 99 : i; };
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });

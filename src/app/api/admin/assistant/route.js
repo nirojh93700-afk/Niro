@@ -31,7 +31,7 @@ Types d'action possibles :
 - { "type": "add", "name", "category", "price" (nombre), "tagline"?, "descriptionHtml"?, "label" } : ajouter un produit
 - { "type": "delete", "slug", "label" } : supprimer définitivement un produit ajouté manuellement
 
-Catégories valides : bijoux, verres, mariage, cristaux, cadeaux, lampes, cles-usb, porte-cles, medailles.`;
+Catégories valides : bijoux, verres, mariage, cristaux, cadeaux, lampes, couverts, cles-usb, porte-cles, medailles.`;
 
 const TOOL = {
   name: "propose_changes",

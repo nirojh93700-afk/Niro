@@ -992,7 +992,7 @@ export default function GestionPage() {
               {rows.length} variantes · {lowOrOut} en stock bas ou épuisé. Vide = « non suivi ». Le stock baisse à chaque vente.
             </p>
             {(() => {
-              const ORD = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "cles-usb", "porte-cles", "medailles"];
+              const ORD = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "couverts", "cles-usb", "porte-cles", "medailles"];
               const rk = (c) => { const i = ORD.indexOf(c); return i < 0 ? 99 : i; };
               let lastCat = null;
               return Object.entries(grouped)
@@ -1095,7 +1095,7 @@ export default function GestionPage() {
               Mets un prix promo (inférieur au prix normal) : le client verra le prix barré + la réduction. Vide = pas de promo.
             </p>
             {(() => {
-              const ORD = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "cles-usb", "porte-cles", "medailles"];
+              const ORD = ["bijoux", "verres", "mariage", "cristaux", "cadeaux", "lampes", "couverts", "cles-usb", "porte-cles", "medailles"];
               const rk = (c) => { const i = ORD.indexOf(c); return i < 0 ? 99 : i; };
               let lastCat = null;
               return Object.entries(grouped)
