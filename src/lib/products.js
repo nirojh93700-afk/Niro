@@ -1467,6 +1467,41 @@ export const products = [
 <li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
 </ul>`,
   },
+  {
+    slug: "arbre-de-vie-lumineux",
+    badge: "Nouveau",
+    name: "Lampe Arbre de Vie",
+    weight: 400, // panneau bois + socle + pile, emballage protégé
+    pickup: true, // déco : remise en main propre possible
+    letter: false, // colis (volumineux)
+    hidden: false, // PUBLIÉ
+    cardImage: "/produits/arbre-vie-lumineux-1.jpg",
+    subcategory: "lampes",
+    category: "deco",
+    type: "Lampe LED déco",
+    tagline: "Une lampe d'ambiance au motif Arbre de Vie, finement découpé au laser dans le bois.",
+    personalizable: false,
+    title: "Lampe Arbre de Vie en bois — veilleuse déco rétroéclairée LED",
+    images: [
+      "/produits/arbre-vie-lumineux-1.jpg",
+      "/produits/arbre-vie-lumineux-2.jpg",
+      "/produits/arbre-vie-lumineux-3.jpg",
+    ],
+    variants: [
+      { id: "arbre-vie-lumineux-standard", title: "Lampe Arbre de Vie", price: 29.90 },
+    ],
+    descriptionHtml: `<p><strong>La lampe d'ambiance Arbre de Vie.</strong> Un panneau en bois découpé au laser, au motif Arbre de Vie finement ajouré, qui diffuse une lumière douce et chaleureuse.</p>
+<p>Symbole de force, de sérénité et de lien familial, l'Arbre de Vie habille votre intérieur d'une décoration lumineuse et apaisante — sur une table de chevet, un buffet ou une étagère. Un cadeau plein de sens.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> contreplaqué de tilleul 3 mm, découpé au laser</li>
+<li><strong>Motif :</strong> Arbre de Vie ajouré, rétroéclairé</li>
+<li><strong>Éclairage :</strong> LED, lumière chaude (couleur unique)</li>
+<li><strong>Alimentation :</strong> à pile (interrupteur à l'arrière)</li>
+<li><strong>Forme :</strong> carrée à coins arrondis, se tient debout toute seule</li>
+<li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
+</ul>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------
