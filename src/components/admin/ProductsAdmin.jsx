@@ -5,6 +5,7 @@ import { CATEGORIES as DEF_CATS, SUBCATEGORIES as DEF_SUBS } from "@/lib/product
 import { resolveCategories, resolveSubcategories } from "@/lib/taxonomy";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import Model3DUpload from "@/components/admin/Model3DUpload";
+import { MarginBox, EngravingBuilder, SeasonalFields, makeTierVariant } from "@/components/admin/ProductFormParts";
 
 // Regroupe les produits par catégorie, dans l'ordre des catégories (vivantes).
 function groupByCategory(products, cats) {
@@ -167,6 +168,12 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
   const [badge, setBadge] = useState(product.badge || "");
   const [hidden, setHidden] = useState(Boolean(product.hidden));
   const [featured, setFeatured] = useState(Boolean(product.featured));
+  const [cost, setCost] = useState(product.cost ?? "");
+  const [lowStock, setLowStock] = useState(product.lowStockThreshold ?? "");
+  const [seasonal, setSeasonal] = useState(product.seasonal || null);
+  const [fields, setFields] = useState((product.personalizationFields || []).map((f) => ({ ...f })));
+  const [fieldsEdited, setFieldsEdited] = useState(false);
+  const setFieldsDirty = (next) => { setFields(next); setFieldsEdited(true); };
   const [desc, setDesc] = useState(product.descriptionHtml || "");
   // Variantes éditables : on peut changer le titre/prix, en ajouter et en retirer.
   const [vars, setVars] = useState((product.variants || []).map((v) => ({ id: v.id, title: v.title, price: v.price })));
@@ -248,45 +255,29 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
             )}
           </div>
         ))}
-        <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={addVar}>+ Ajouter une variante</button>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={addVar}>+ Ajouter une variante</button>
+          <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => {
+            const qty = prompt("Tarif dégressif — quantité du lot (ex : 20) ?"); if (!qty) return;
+            const u = prompt("Prix par pièce dans ce lot (ex : 3.50) ?"); if (!u) return;
+            setVars((vs) => [...vs, makeTierVariant(product.slug, qty, u)]);
+          }}>+ Tarif dégressif (lot)</button>
+        </div>
         <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Le stock des nouvelles variantes se règle dans <strong>Catalogue → Stock</strong>.</p>
       </div>
 
-      {/* Options de gravure de ce produit (ce que le client remplit sur la fiche) */}
-      {(() => {
-        const fields = (product.personalizationFields || []).filter((f) => f.type !== "note");
-        const ep = product.engravingPricing || {};
-        const flat = Array.isArray(ep.flatExtras) ? ep.flatExtras : [];
-        const TYPE = { text: "texte", textarea: "texte", font: "police", color: "couleur", photo: "photo", select: "choix", modele: "modèle de gravure", motifniv: "motif", badge: "badge" };
-        const supForKey = (k) => {
-          const e = flat.find((x) => x.key === k && x.value === undefined);
-          return e ? ` · +${e.amount} €` : "";
-        };
-        const dualExtra = flat.find((x) => x.value === "deux");
-        const modeleSub = ep.modeleSubExtra;
-        return (
-          <div style={{ border: "1px dashed var(--line)", borderRadius: 8, padding: "10px 12px", background: "#faf6ee" }}>
-            <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>🖊️ Options de gravure (ce que le client remplit sur la fiche)</span>
-            {fields.length ? (
-              <ul style={{ margin: 0, paddingLeft: 18, fontSize: "0.86rem", lineHeight: 1.6 }}>
-                {fields.map((f) => (
-                  <li key={f.key}>
-                    {f.label || f.key}
-                    <span style={{ color: "var(--ink-soft)" }}> — {TYPE[f.type] || (f.type ? f.type : "texte")}{f.optional ? " (facultatif)" : ""}{supForKey(f.key)}</span>
-                  </li>
-                ))}
-                {modeleSub && <li>Texte ajouté au modèle <span style={{ color: "var(--ink-soft)" }}>· +{modeleSub.amount} €</span></li>}
-                {dualExtra && <li>Graver les deux côtés (face + fond) <span style={{ color: "var(--ink-soft)" }}>· +{dualExtra.amount} €</span></li>}
-              </ul>
-            ) : (
-              <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>Aucune option de gravure sur ce produit.</p>
-            )}
-            <p style={{ margin: "8px 0 0", fontSize: "0.76rem", color: "var(--ink-soft)" }}>
-              Ces options s'affichent sur la fiche client. Pour en modifier une (ajouter une face, changer un supplément…), dis-le-moi.
-            </p>
-          </div>
-        );
-      })()}
+      {/* Gravure / personnalisation — éditable directement */}
+      <EngravingBuilder fields={fields} setFields={setFieldsDirty} />
+      {product.engravingPricing && (
+        <p style={{ fontSize: "0.76rem", color: "#9a7d1a", margin: "-4px 0 0" }}>
+          ⚠️ Ce produit a des suppléments de gravure spéciaux (prix par face/photo) gérés à part. Modifier les champs ici ne touche pas ces suppléments — dis-le-moi en cas de doute.
+        </p>
+      )}
+      <MarginBox cost={cost} setCost={setCost} price={vars[0]?.price} />
+      <SeasonalFields seasonal={seasonal} setSeasonal={setSeasonal} />
+      <label className="admin-field">Alerte stock bas si stock ≤
+        <input type="number" min="0" value={lowStock} onChange={(e) => setLowStock(e.target.value)} placeholder="Ex : 5 (laisser vide = non suivi)" />
+      </label>
       <label className="admin-field">Remise (%) sur ce produit
         <input type="number" min="0" max="90" step="1" value={discountPct}
           onChange={(e) => setDiscountPct(e.target.value === "" ? "" : Number(e.target.value))} />
@@ -363,6 +354,10 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
             variants: cleanVars,
             prices: Object.fromEntries(cleanVars.map((v) => [v.id, v.price])),
             discountPct: discountPct === "" ? 0 : discountPct,
+            cost: cost === "" ? "" : Number(cost),
+            lowStockThreshold: lowStock === "" ? "" : Number(lowStock),
+            seasonal: seasonal && seasonal.hideOutOfSeason ? seasonal : null,
+            ...(fieldsEdited ? { personalizationFields: fields } : {}),
           });
         }}>Enregistrer</button>
         {onDelete && <button className="btn btn-outline" onClick={onDelete} style={{ color: "#b4452f" }}>Supprimer</button>}
@@ -394,6 +389,15 @@ function AddProduct({ adminKey, cats = DEF_CATS, subsMap = DEF_SUBS, setMsg, onD
   const [dimL, setDimL] = useState(""); const [dimW, setDimW] = useState(""); const [dimH, setDimH] = useState("");
   // Variantes : titre + prix + stock (add/suppr).
   const [variants, setVariants] = useState([{ title: "Standard", price: "", stock: "" }]);
+  const [cost, setCost] = useState("");
+  const [lowStock, setLowStock] = useState("");
+  const [featured, setFeatured] = useState(false);
+  const [seasonal, setSeasonal] = useState(null);
+  // Gravure : par défaut « texte à graver » + police (retire-les pour un produit sans gravure).
+  const [fields, setFields] = useState([
+    { key: "texte", label: "Texte à graver", placeholder: "Votre texte…", maxLength: 40, optional: true },
+    { key: "police", type: "font", label: "Police de gravure", optional: true },
+  ]);
   const [creating, setCreating] = useState(false);
   const [createdSlug, setCreatedSlug] = useState("");
   const setVar = (i, k, v) => setVariants((vs) => vs.map((x, j) => (j === i ? { ...x, [k]: v } : x)));
@@ -424,6 +428,11 @@ function AddProduct({ adminKey, cats = DEF_CATS, subsMap = DEF_SUBS, setMsg, onD
             variants: vs,
             descriptionHtml: desc,
             images: imgs,
+            cost: cost === "" ? undefined : Number(cost),
+            lowStockThreshold: lowStock === "" ? undefined : Number(lowStock),
+            featured: featured || undefined,
+            seasonal: seasonal && seasonal.hideOutOfSeason ? seasonal : undefined,
+            personalizationFields: fields,
           },
         }),
       });
@@ -501,12 +510,32 @@ function AddProduct({ adminKey, cats = DEF_CATS, subsMap = DEF_SUBS, setMsg, onD
             )}
           </div>
         ))}
-        <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => setVariants((vs) => [...vs, { title: "", price: "", stock: "" }])}>+ Ajouter une option (couleur, lot…)</button>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => setVariants((vs) => [...vs, { title: "", price: "", stock: "" }])}>+ Ajouter une option (couleur, lot…)</button>
+          <button type="button" className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => {
+            const qty = prompt("Tarif dégressif — quantité du lot (ex : 20) ?"); if (!qty) return;
+            const u = prompt("Prix par pièce dans ce lot (ex : 3.50) ?"); if (!u) return;
+            const t = makeTierVariant(name, qty, u);
+            setVariants((vs) => [...vs, { title: t.title, price: t.price, stock: "" }]);
+          }}>+ Tarif dégressif (lot)</button>
+        </div>
         <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Stock vide = non suivi (vendable sans compteur).</p>
       </div>
 
+      <MarginBox cost={cost} setCost={setCost} price={variants[0]?.price} />
+      <EngravingBuilder fields={fields} setFields={setFields} />
+
       <label className="admin-field">Description
         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} style={{ minHeight: 80 }} placeholder="Décris le produit…" />
+      </label>
+
+      <SeasonalFields seasonal={seasonal} setSeasonal={setSeasonal} />
+      <label className="admin-field">Alerte stock bas si stock ≤
+        <input type="number" min="0" value={lowStock} onChange={(e) => setLowStock(e.target.value)} placeholder="Ex : 5 (laisser vide = non suivi)" />
+      </label>
+      <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} style={{ width: "auto" }} />
+        ⭐ Mettre en avant sur la page d'accueil
       </label>
 
       <div>

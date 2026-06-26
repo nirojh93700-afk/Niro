@@ -25,6 +25,13 @@ function applyOverride(product, ov, images, promos) {
     if (ov.badge === "none") p.badge = ""; // "Aucun" choisi dans l'admin → retire le badge du catalogue
     if (ov.hidden !== undefined) p.hidden = Boolean(ov.hidden); // l'admin décide (publier/masquer) — prime TOUJOURS sur le code
     if (ov.featured !== undefined) p.featured = Boolean(ov.featured); // mis en avant sur l'accueil (réglé dans l'admin)
+    if (ov.cost !== undefined && ov.cost !== "") p.cost = Number(ov.cost) || 0; // coût de revient (admin : marge)
+    if (ov.lowStockThreshold !== undefined && ov.lowStockThreshold !== "") p.lowStockThreshold = Number(ov.lowStockThreshold); // seuil d'alerte stock
+    if (Array.isArray(ov.personalizationFields)) { // champs de gravure réglés dans l'admin
+      p.personalizationFields = ov.personalizationFields;
+      p.personalizable = ov.personalizationFields.length > 0;
+    }
+    if (ov.seasonal && typeof ov.seasonal === "object") p.seasonal = ov.seasonal; // édition saisonnière
     if (ov.preview) p.preview = ov.preview; // zone de gravure réglée dans l'admin
     // Liste de variantes modifiée dans l'admin (ajout/suppression d'options).
     if (Array.isArray(ov.variants) && ov.variants.length) {
@@ -44,6 +51,17 @@ function applyOverride(product, ov, images, promos) {
   const sale = promos[p.variants?.[0]?.id];
   if (typeof sale === "number") p.salePrice = sale;
   return p;
+}
+
+// Produit en édition saisonnière à masquer hors période ? (récurrence annuelle, sur MM-JJ)
+function outOfSeason(p) {
+  const s = p.seasonal;
+  if (!s || !s.hideOutOfSeason || !s.start || !s.end) return false;
+  const today = new Date().toISOString().slice(5, 10); // MM-JJ
+  const start = String(s.start).slice(5, 10);
+  const end = String(s.end).slice(5, 10);
+  if (start <= end) return !(today >= start && today <= end);
+  return !(today >= start || today <= end); // période à cheval sur le Nouvel An
 }
 
 // Remise permanente −10 % sur les bijoux. Le prix d'origine (barré) est arrondi
@@ -95,7 +113,7 @@ export async function getCatalog() {
   const refMarkup = Number(settings?.refMarkup) || 0;
   const base = baseProducts.map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
-  const all = [...base, ...customApplied].filter((p) => !p.hidden);
+  const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
   return refMarkup > 0 ? all.map((p) => ({ ...p, refMarkup })) : all;
 }
 
