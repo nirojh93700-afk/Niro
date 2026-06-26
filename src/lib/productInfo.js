@@ -612,6 +612,21 @@ Défaut à l'arrivée
 - Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
+  "bougeoir-fleur-de-lotus": {
+    material: `Taille & Matériaux
+- Porte-bougie en forme de fleur de lotus.
+- Bois découpé au laser.
+- Reçoit une bougie chauffe-plat (non incluse).`,
+    usage: `Utilisation & Entretien
+- Déposer une bougie chauffe-plat au centre.
+- Personnalisation facultative : prénom, nom ou date gravé.
+- Ne jamais laisser une bougie allumée sans surveillance ; tenir loin des matières inflammables.
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+    returns: `Expédition & Retour
+- Objet expédié soigneusement protégé.
+- Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans personnalisation : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine.
+- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
 };
 
 export function getProductInfo(slug) {

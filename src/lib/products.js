@@ -1584,6 +1584,46 @@ export const products = [
 </ul>
 <p><em>Conseil sécurité : ne jamais laisser une bougie allumée sans surveillance.</em></p>`,
   },
+  {
+    slug: "bougeoir-fleur-de-lotus",
+    badge: "Nouveau",
+    name: "Bougeoir Fleur de Lotus",
+    weight: 250,
+    pickup: true,
+    letter: false,
+    hidden: false,
+    cardImage: "/produits/bougeoir-lotus-1.jpg",
+    subcategory: "bougeoirs",
+    category: "deco",
+    type: "Bougeoir déco",
+    tagline: "Un porte-bougie en bois en forme de fleur de lotus, découpé au laser — à personnaliser d'un prénom ou d'une date.",
+    personalizable: true,
+    personalizationLabel: "Texte à graver (facultatif)",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver (prénom, nom ou date)", placeholder: "Ex : Marie & Paul — 2026", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note", type: "note", text: "Personnalisation facultative : laissez vide pour le modèle sans texte. La gravure est discrète (pourtour ou pétale)." },
+    ],
+    title: "Bougeoir Fleur de Lotus en bois personnalisé — porte-bougie chauffe-plat déco",
+    images: [
+      "/produits/bougeoir-lotus-1.jpg",
+      "/produits/bougeoir-lotus-2.jpg",
+      "/produits/bougeoir-lotus-3.jpg",
+    ],
+    variants: [
+      { id: "bougeoir-lotus-standard", title: "Bougeoir Fleur de Lotus", price: 16.90 },
+    ],
+    descriptionHtml: `<p><strong>Le porte-bougie fleur de lotus.</strong> Une fleur de lotus en bois, découpée au laser, qui accueille une bougie chauffe-plat pour une ambiance douce et apaisante.</p>
+<p>Symbole de pureté et de sérénité, le lotus habille votre table, votre buffet ou votre coin détente d'une touche zen et naturelle. Personnalisez-le d'un prénom ou d'une date pour en faire un cadeau unique.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> bois découpé au laser, forme fleur de lotus</li>
+<li><strong>Usage :</strong> reçoit une bougie chauffe-plat (non incluse)</li>
+<li><strong>Personnalisation :</strong> prénom, nom ou date gravé (facultatif)</li>
+<li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
+</ul>
+<p><em>Conseil sécurité : ne jamais laisser une bougie allumée sans surveillance.</em></p>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------
