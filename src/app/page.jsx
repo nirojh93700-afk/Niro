@@ -3,6 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import NewArrivalsToast from "@/components/NewArrivalsToast";
 import { getProductBySlug } from "@/lib/products";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
+import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -31,14 +32,15 @@ const ATELIER_DEFAULTS = {
   image: getProductBySlug("ronds-de-serviette-bois").images[0],
 };
 
-const featured = [
+// Repli si aucun produit n'est coché « mis en avant » dans l'admin.
+const FEATURED_FALLBACK = [
   "couverts-enfants-personnalises",
   "lampe-led-paris-saint-germain",
   "verre-a-whisky-fete-des-peres",
   "collier-medaillon-coeur-ouvrable",
   "numero-table-arches-bohemes",
   "ronds-de-serviette-bois",
-].map(getProductBySlug).filter(Boolean);
+];
 
 function pick(v, def) {
   return v && String(v).trim() ? v : def;
@@ -48,6 +50,15 @@ export default async function HomePage() {
   let s = null;
   try { s = await getSettings(); } catch { /* défauts */ }
   const ratings = await getRatingSummaries().catch(() => ({}));
+
+  // Produits mis en avant : ceux cochés « ⭐ mis en avant » dans l'admin,
+  // sinon une sélection par défaut. (Repli sûr sur le code.)
+  const catalog = await getCatalog().catch(() => []);
+  const flagged = catalog.filter((p) => p.featured);
+  const featured = (flagged.length
+    ? flagged
+    : FEATURED_FALLBACK.map((sl) => catalog.find((p) => p.slug === sl) || getProductBySlug(sl)).filter(Boolean)
+  ).slice(0, 8);
 
   const hero = {
     eyebrow: pick(s?.hero?.eyebrow, HERO_DEFAULTS.eyebrow),

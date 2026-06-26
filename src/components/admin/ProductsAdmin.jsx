@@ -166,6 +166,7 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
   const [category, setCategory] = useState(product.category || "cadeaux");
   const [badge, setBadge] = useState(product.badge || "");
   const [hidden, setHidden] = useState(Boolean(product.hidden));
+  const [featured, setFeatured] = useState(Boolean(product.featured));
   const [desc, setDesc] = useState(product.descriptionHtml || "");
   // Variantes éditables : on peut changer le titre/prix, en ajouter et en retirer.
   const [vars, setVars] = useState((product.variants || []).map((v) => ({ id: v.id, title: v.title, price: v.price })));
@@ -349,11 +350,15 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
         <input type="checkbox" checked={hidden} onChange={(e) => setHidden(e.target.checked)} style={{ width: "auto" }} />
         Masquer ce produit (invisible sur le site)
       </label>
+      <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} style={{ width: "auto" }} />
+        ⭐ Mettre en avant sur la page d'accueil (« Nos créations phares »)
+      </label>
       <div style={{ display: "flex", gap: 10 }}>
         <button className="btn btn-gold" onClick={() => {
           const cleanVars = vars.filter((v) => v.title.trim() && Number(v.price) > 0).map((v) => ({ id: v.id, title: v.title.trim(), price: Math.round(Number(v.price) * 100) / 100 }));
           onSave({
-            name, tagline, category, hidden, badge: badge || "none",
+            name, tagline, category, hidden, featured, badge: badge || "none",
             descriptionHtml: desc,
             variants: cleanVars,
             prices: Object.fromEntries(cleanVars.map((v) => [v.id, v.price])),

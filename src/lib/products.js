@@ -1475,16 +1475,22 @@ export const products = [
     pickup: true, // déco : remise en main propre possible
     letter: false, // colis (volumineux)
     hidden: false, // PUBLIÉ
-    cardImage: "/produits/arbre-vie-lumineux-1.jpg",
+    cardImage: "/produits/arbre-vie-lumineux-2.jpg",
     subcategory: "lampes",
     category: "deco",
     type: "Lampe LED déco",
-    tagline: "Une lampe d'ambiance au motif Arbre de Vie, finement découpé au laser dans le bois.",
-    personalizable: false,
-    title: "Lampe Arbre de Vie en bois — veilleuse déco rétroéclairée LED",
+    tagline: "Une lampe d'ambiance au motif Arbre de Vie, découpé au laser dans le bois — à personnaliser d'un prénom ou d'une date.",
+    personalizable: true,
+    personalizationLabel: "Texte à graver (facultatif)",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver (prénom, date ou court message)", placeholder: "Ex : Famille Martin — 2026", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note", type: "note", text: "Personnalisation facultative : laissez vide pour le modèle sans texte. Le texte est gravé discrètement sous l'arbre." },
+    ],
+    title: "Lampe Arbre de Vie en bois personnalisée — veilleuse déco rétroéclairée LED",
     images: [
-      "/produits/arbre-vie-lumineux-1.jpg",
       "/produits/arbre-vie-lumineux-2.jpg",
+      "/produits/arbre-vie-lumineux-1.jpg",
       "/produits/arbre-vie-lumineux-3.jpg",
     ],
     variants: [
