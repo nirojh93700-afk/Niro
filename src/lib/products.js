@@ -478,8 +478,14 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Prénoms / initiales / date à graver",
     personalizationFields: [
+      { key: "forme", type: "select", label: "Forme", options: [
+        { value: "Hexagone", label: "Hexagone" },
+        { value: "Cercle", label: "Cercle" },
+        { value: "Double cœur", label: "Double cœur" },
+      ] },
       { key: "prenoms", type: "textarea", label: "Prénoms / initiales à graver (un par ligne)", placeholder: "Marie\nPaul\nSophie…", maxLength: 600 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note", type: "note", text: "Tarif dégressif : 4,50 € à l'unité, 3,50 €/pièce dès 20, 2,90 €/pièce dès 50. Indiquez un prénom par ligne (autant que de pièces commandées)." },
     ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/610876bb-4b83-4b09-a722-356af9af8088.webp?v=1776298326",
@@ -487,9 +493,9 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/Gemini_Generated_Image_nzbs5vnzbs5vnzbs.png?v=1776298347",
     ],
     variants: [
-      { id: "rond-hexagone", title: "Hexagone", price: 7.5 },
-      { id: "rond-cercle", title: "Cercle", price: 7.5 },
-      { id: "rond-coeur", title: "Double cœur", price: 7.5 },
+      { id: "rond-unite", title: "À l'unité", price: 4.50 },
+      { id: "rond-lot20", title: "Lot de 20 (3,50 €/pièce)", price: 70.00 },
+      { id: "rond-lot50", title: "Lot de 50 (2,90 €/pièce)", price: 145.00 },
     ],
     descriptionHtml: `<p><strong>Sublimez vos tables de réception avec une attention raffinée pour chaque convive.</strong></p>
 <p>Alliant le charme du bois naturel à une gravure laser haut de gamme, ces ronds de serviette deviennent de véritables pièces de décoration — et un cadeau d'invité que vos proches conserveront longtemps.</p>

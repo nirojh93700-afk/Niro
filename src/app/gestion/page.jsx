@@ -568,6 +568,7 @@ export default function GestionPage() {
               tabs: [
                 { id: "produits", text: "Produits" },
                 { id: "categories", text: "🗂️ Catégories & ordre" },
+                { id: "tailles", text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
                 { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
                 { id: "couverts-reglage", text: "🍴 Réglage couverts", href: "/gestion/couverts-reglage" },
