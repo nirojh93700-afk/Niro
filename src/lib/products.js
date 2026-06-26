@@ -1511,7 +1511,7 @@ export const products = [
   {
     slug: "veilleuse-arbre-de-vie-ronde",
     badge: "Nouveau",
-    name: "Veilleuse Arbre de Vie Celtique",
+    name: "Veilleuse Arbre de Vie Ronde",
     weight: 400, // panneau bois rond + socle + pile, emballage protégé
     pickup: true,
     letter: false,
@@ -1528,14 +1528,14 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "note", type: "note", text: "Personnalisation facultative : laissez vide pour le modèle sans texte." },
     ],
-    title: "Veilleuse Arbre de Vie Celtique en bois personnalisée — lampe d'ambiance LED ronde",
+    title: "Veilleuse Arbre de Vie Ronde en bois personnalisée — lampe d'ambiance LED",
     images: [
       "/produits/arbre-vie-rond-1.jpg",
       "/produits/arbre-vie-rond-2.jpg",
       "/produits/arbre-vie-rond-3.jpg",
     ],
     variants: [
-      { id: "veilleuse-arbre-vie-ronde-standard", title: "Veilleuse Arbre de Vie Celtique", price: 29.90 },
+      { id: "veilleuse-arbre-vie-ronde-standard", title: "Veilleuse Arbre de Vie Ronde", price: 29.90 },
     ],
     descriptionHtml: `<p><strong>La veilleuse d'ambiance Arbre de Vie.</strong> Un disque en bois découpé au laser, au motif Arbre de Vie celtique finement ajouré, qui diffuse une lumière douce et chaleureuse.</p>
 <p>Symbole de force, de sérénité et de lien familial, elle crée une atmosphère apaisante sur une table de chevet, un buffet ou une étagère. Un cadeau plein de sens.</p>

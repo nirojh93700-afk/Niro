@@ -34,6 +34,8 @@ const ATELIER_DEFAULTS = {
 
 // Repli si aucun produit n'est coché « mis en avant » dans l'admin.
 const FEATURED_FALLBACK = [
+  "arbre-de-vie-lumineux",
+  "veilleuse-arbre-de-vie-ronde",
   "couverts-enfants-personnalises",
   "lampe-led-paris-saint-germain",
   "verre-a-whisky-fete-des-peres",
