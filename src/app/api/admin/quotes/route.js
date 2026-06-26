@@ -1,7 +1,16 @@
 import { isAdmin } from "@/lib/stock";
-import { createQuote, listQuotes, updateQuoteStatus } from "@/lib/firebase";
+import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote } from "@/lib/firebase";
+import { sendEmail, quoteEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
+
+function siteOrigin(req) {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL || "").trim().replace(/\/$/, "");
+  for (const c of [raw, raw && `https://${raw}`]) {
+    try { if (c) return new URL(c).origin; } catch {}
+  }
+  try { return new URL(req.url).origin; } catch { return ""; }
+}
 
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
@@ -17,6 +26,24 @@ export async function POST(req) {
   if (body.action === "status") {
     const ok = await updateQuoteStatus(body.id, String(body.status || "").slice(0, 20));
     return Response.json({ ok });
+  }
+
+  if (body.action === "delete") {
+    if (!body.id) return Response.json({ error: "Identifiant manquant." }, { status: 400 });
+    const ok = await deleteQuote(body.id);
+    return Response.json({ ok });
+  }
+
+  // Envoi du devis / de la facture par e-mail à la cliente (avec lien pour payer).
+  if (body.action === "send") {
+    const q = await getQuote(body.id);
+    if (!q) return Response.json({ error: "Document introuvable." }, { status: 404 });
+    const to = (body.email || q.client?.email || "").trim();
+    if (!to) return Response.json({ error: "Aucune adresse e-mail pour ce document." }, { status: 400 });
+    const link = `${siteOrigin(req)}/document/${body.id}`;
+    const mail = quoteEmail(q, link);
+    const r = await sendEmail({ to, subject: mail.subject, html: mail.html });
+    return Response.json({ ok: r.ok, to, error: r.ok ? undefined : "L'envoi de l'e-mail a échoué." });
   }
 
   // Création d'un devis ou d'une facture

@@ -26,6 +26,30 @@ export default function QuotesAdmin({ adminKey }) {
   }
   useEffect(() => { load(); }, []); // eslint-disable-line
 
+  async function sendQuote(q) {
+    const to = (q.client?.email || "").trim() || prompt("E-mail du destinataire ?");
+    if (!to) { setMsg("Indique une adresse e-mail."); return; }
+    setMsg("Envoi en cours…");
+    const res = await fetch("/api/admin/quotes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+      body: JSON.stringify({ action: "send", id: q.id, email: to }),
+    });
+    const d = await res.json().catch(() => ({}));
+    setMsg(d.ok ? `Devis envoyé par e-mail à ${d.to} ✓` : (d.error || "Échec de l'envoi."));
+  }
+
+  async function removeQuote(q) {
+    if (!confirm(`Supprimer définitivement ${q.number} ?`)) return;
+    const res = await fetch("/api/admin/quotes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+      body: JSON.stringify({ action: "delete", id: q.id }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (d.ok) { setMsg(`${q.number} supprimé ✓`); load(); } else setMsg(d.error || "Échec de la suppression.");
+  }
+
   const total = items.reduce((s, it) => s + (parseInt(it.qty, 10) || 0) * (parseFloat(it.price) || 0), 0);
 
   async function create() {
@@ -123,10 +147,20 @@ export default function QuotesAdmin({ adminKey }) {
             <span className="admin-price">{formatEuro(q.total)}</span>
           </div>
           <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>{q.client?.name || "—"}{q.client?.email ? ` · ${q.client.email}` : ""}</div>
-          <a className="btn btn-outline" href={`/document/${q.id}`} target="_blank" rel="noopener"
-            style={{ marginTop: 8, padding: "4px 12px", fontSize: "0.85rem" }}>
-            Ouvrir / copier le lien à envoyer
-          </a>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+            <a className="btn btn-outline" href={`/document/${q.id}`} target="_blank" rel="noopener"
+              style={{ padding: "4px 12px", fontSize: "0.85rem" }}>
+              Ouvrir / copier le lien
+            </a>
+            <button className="btn btn-gold" onClick={() => sendQuote(q)}
+              style={{ padding: "4px 12px", fontSize: "0.85rem" }}>
+              ✉️ Envoyer par e-mail
+            </button>
+            <button className="btn btn-outline" onClick={() => removeQuote(q)}
+              style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f" }}>
+              Supprimer
+            </button>
+          </div>
         </div>
       ))}
     </>

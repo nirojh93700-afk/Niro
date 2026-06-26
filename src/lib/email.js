@@ -149,6 +149,33 @@ export function reviewRequestEmail(order) {
   return { subject: "Votre avis sur votre création Niv Création ✦", html: emailLayout({ heading: "Comment s'est passée votre commande ?", bodyHtml: body }) };
 }
 
+// E-mail envoyé à la cliente avec son devis / sa facture + lien pour payer en ligne.
+export function quoteEmail(q, link) {
+  const isFacture = q?.type === "facture";
+  const titre = isFacture ? "facture" : "devis";
+  const name = q?.client?.name ? escapeHtml(String(q.client.name).split(" ")[0]) : "";
+  const fmt = (n) => `${Number(n || 0).toFixed(2).replace(".", ",")} €`;
+  const rows = (Array.isArray(q?.items) ? q.items : [])
+    .map((it) => `<tr><td style="padding:6px 0;border-bottom:1px solid #f0eadd;">${escapeHtml(it.desc || "")}${it.qty > 1 ? ` × ${it.qty}` : ""}</td><td style="padding:6px 0;border-bottom:1px solid #f0eadd;text-align:right;white-space:nowrap;">${fmt(it.qty * it.price)}</td></tr>`)
+    .join("");
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour${name ? " " + name : ""},</p>
+    <p style="margin:0 0 14px;">Voici votre <strong>${titre}${q?.number ? ` ${escapeHtml(q.number)}` : ""}</strong> de la part de l'atelier Niv Création.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;margin:0 0 8px;">
+      <tbody>${rows}</tbody>
+    </table>
+    <p style="margin:0 0 18px;text-align:right;font-size:16px;"><strong style="color:${BRAND.gold};">Total : ${fmt(q?.total)}</strong></p>
+    ${q?.note ? `<p style="margin:0 0 16px;white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;">${escapeHtml(q.note)}</p>` : ""}
+    <p style="margin:0 0 20px;text-align:center;">
+      <a href="${link}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Voir ${isFacture ? "et régler ma facture" : "et accepter mon devis"}</a>
+    </p>
+    <p style="margin:0;color:#7a7268;font-size:13px;">${isFacture ? "Vous pouvez régler en ligne en toute sécurité par carte bancaire." : "Devis valable 30 jours. La fabrication démarre après acceptation et paiement."} Une question ? Répondez simplement à cet e-mail.<br>L'atelier Niv Création</p>`;
+  return {
+    subject: `Votre ${titre}${q?.number ? ` ${q.number}` : ""} — Niv Création`,
+    html: emailLayout({ heading: `Votre ${titre}`, bodyHtml: body }),
+  };
+}
+
 // E-mail de démonstration (mêmes style et structure que la confirmation client réelle).
 export function sampleClientEmailHtml() {
   const body = `

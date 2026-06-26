@@ -429,6 +429,18 @@ export async function listQuotes(max = 100) {
   }
 }
 
+export async function deleteQuote(id) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    await admin.firestore().collection("siteQuotes").doc(id).delete();
+    return true;
+  } catch (e) {
+    console.error("deleteQuote:", e.message);
+    return false;
+  }
+}
+
 export async function updateQuoteStatus(id, status) {
   const a = getApp();
   if (!a) return false;
