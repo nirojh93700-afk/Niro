@@ -1553,7 +1553,7 @@ export const products = [
   {
     slug: "bougeoir-mandala-bois",
     badge: "Nouveau",
-    name: "Bougeoir Flottant Mandala",
+    name: "Bougeoir Flottant",
     weight: 300, // structure bois multi-étages
     pickup: true,
     letter: false,
@@ -1564,14 +1564,14 @@ export const products = [
     type: "Bougeoir déco",
     tagline: "Un bougeoir flottant en bois, au motif mandala finement découpé au laser.",
     personalizable: false,
-    title: "Bougeoir Flottant Mandala en bois — porte-bougie chauffe-plat déco zen",
+    title: "Bougeoir Flottant en bois — porte-bougie chauffe-plat déco zen",
     images: [
       "/produits/bougeoir-mandala-1.jpg",
       "/produits/bougeoir-mandala-2.jpg",
       "/produits/bougeoir-mandala-3.jpg",
     ],
     variants: [
-      { id: "bougeoir-mandala-standard", title: "Bougeoir Flottant Mandala", price: 22.90 },
+      { id: "bougeoir-mandala-standard", title: "Bougeoir Flottant", price: 22.90 },
     ],
     descriptionHtml: `<p><strong>Le bougeoir flottant Arbre de Vie au motif mandala.</strong> Une structure en bois à étages, découpée au laser et ornée de mandalas ajourés, qui accueille une bougie chauffe-plat pour une ambiance douce et apaisante.</p>
 <p>Posé sur une table basse, un buffet ou un coin détente, il diffuse une lumière chaleureuse à travers ses motifs. Idéal pour une décoration zen, un cadeau bien-être ou un moment de relaxation.</p>
