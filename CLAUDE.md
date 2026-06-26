@@ -206,6 +206,15 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Stripe → Webhooks** : cocher l'événement **`checkout.session.expired`** (nécessaire pour la relance e-mail des paniers abandonnés — déjà codée).
 - **Resend** : vérifier le domaine `nivcreation.fr` (SPF/DKIM/DMARC) pour que les e-mails arrivent en boîte de réception et pas en spam.
 
+### Fenêtre « Ajouter / Modifier un produit » enrichie (maj 26/06/2026)
+> Inspirée des systèmes des autres apps (Crafia / app de gestion Niv) mais **adaptée au site** (modèle products.js).
+Briques dans `src/components/admin/ProductFormParts.jsx` (`MarginBox`, `EngravingBuilder`, `SeasonalFields`, `makeTierVariant`), branchées dans `ProductsAdmin.jsx` (création ET édition). Stockage : champs `cost`, `lowStockThreshold`, `seasonal`, `personalizationFields` gérés dans `catalog.js` (applyOverride) + route `/api/admin/catalog` (sanitizers `sanitizePersonalizationFields`/`sanitizeSeasonal`).
+- **Coût + marge en direct** : champ coût → marge €/% + voyant (pas de « prix conseillé » trompeur : le bois coûte ~0 €, le prix se fixe au marché/temps).
+- **Gravure configurable** : ajouter/réordonner les champs (texte, texte long, choix, police, couleur, photo, note) avec libellé/facultatif/maxLength/options. En édition, l'override `personalizationFields` n'est envoyé QUE si modifié (préserve les produits à `engravingPricing` complexes — avertissement affiché).
+- **Tarifs dégressifs** : bouton « + Tarif dégressif (lot) » → génère une variante « Lot de N (X €/pièce) ».
+- **Stock** : seuil d'alerte `lowStockThreshold`. **Saisonnier** : `seasonal {name,start,end,hideOutOfSeason}` → masqué hors période (récurrence annuelle MM-JJ, filtré dans `getCatalog`).
+- **Mise en avant accueil** : case `featured` (override) → page d'accueil lit les produits `featured` (repli `FEATURED_FALLBACK` dans `src/app/page.jsx`).
+
 ### Fonctionnalités livrées (rappel)
 Modèles 3D (.glb) téléversables · suivi de colis (admin + cliente + e-mail) · commandes
 (annuler/supprimer/rembourser/livrée + filtres/recherche) · assistant (masquer, prix, textes,
