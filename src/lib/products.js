@@ -1614,7 +1614,7 @@ export const products = [
       { id: "bougeoir-lotus-simple", title: "Sans personnalisation", price: 16.90 },
       { id: "bougeoir-lotus-grave", title: "Avec gravure (prénom, nom ou date)", price: 21.90 },
     ],
-    descriptionHtml: `<p><strong>Une fleur de lotus découpée au laser dans notre atelier — pas en usine.</strong> Chaque bougeoir est dessiné, découpé et fini à la main chez nous, en France. Une pièce singulière, pas un objet de production de masse.</p>
+    descriptionHtml: `<p><strong>Une fleur de lotus découpée au laser dans notre atelier — pas en usine.</strong> Chaque bougeoir est découpé et fini à la main chez nous, en France. Une pièce singulière, pas un objet de production de masse.</p>
 <p>Le bois naturel et la finesse de la découpe laser offrent des détails impossibles à obtenir en grande série. Symbole de pureté et de sérénité, le lotus diffuse une lumière douce et apaisante sur une table, un buffet ou un coin détente.</p>
 <p><strong>Personnalisez-le d'un prénom, d'un nom ou d'une date</strong> : il devient un cadeau unique et plein de sens — anniversaire, mariage, naissance, remerciement.</p>
 <h3>Caractéristiques</h3>
