@@ -2199,3 +2199,46 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Section NOUVEAUTÉS ──────────────────────────────────────────── */
+/* Brillance discrète qui balaie le badge « Nouveau » (attire l'œil, reste chic) */
+@keyframes badgeShine {
+  0%   { background-position: -130% 0; }
+  55%, 100% { background-position: 230% 0; }
+}
+.new-arrivals .card-badge {
+  background-image:
+    linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.55) 12%, transparent 26%),
+    linear-gradient(var(--gold-dark, #a98935), var(--gold-dark, #a98935));
+  background-size: 230% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  animation: badgeShine 3.4s ease-in-out infinite;
+}
+.new-arrivals .product-card { animation: naRise 0.5s ease both; }
+@keyframes naRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* MOBILE : carrousel horizontal qu'on fait défiler au doigt (scroll-snap) */
+@media (max-width: 640px) {
+  .new-arrivals .product-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 -18px;
+    padding: 4px 18px 12px;
+  }
+  .new-arrivals .product-grid::-webkit-scrollbar { display: none; }
+  .new-arrivals .product-card {
+    flex: 0 0 80%;
+    scroll-snap-align: center;
+  }
+}
+
+/* Respecte les préférences "réduire les animations" */
+@media (prefers-reduced-motion: reduce) {
+  .new-arrivals .card-badge,
+  .new-arrivals .product-card { animation: none; }
+}

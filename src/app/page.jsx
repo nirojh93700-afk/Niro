@@ -83,11 +83,11 @@ export default async function HomePage() {
     text2: pick(s?.atelier?.text2, ATELIER_DEFAULTS.text2),
     image: pick(s?.atelier?.image, ATELIER_DEFAULTS.image),
   };
-  const show = { categories: true, trust: true, featured: true, atelier: true, ...(s?.sections || {}) };
-  // Nouveautés pour la petite fenêtre flottante (produits visibles taggés « Nouveau »).
-  const newItems = featured
-    .filter((p) => p.badge === "Nouveau" && !p.hidden)
-    .map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));
+  const show = { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, ...(s?.sections || {}) };
+  // Nouveautés : TOUS les produits taggés « Nouveau » (les plus récents d'abord).
+  const newProducts = catalog.filter((p) => p.badge === "Nouveau").reverse().slice(0, 8);
+  // Pour la petite fenêtre flottante.
+  const newItems = newProducts.map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));
 
   return (
     <>
@@ -114,6 +114,25 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* NOUVEAUTÉS — alimenté automatiquement par le badge « Nouveau » */}
+      {show.newArrivals && newProducts.length > 0 && (
+        <section className="section new-arrivals" style={{ background: "linear-gradient(180deg,#fbf4e6 0%,#fffdf9 65%)", borderTop: "1px solid #efe2c2" }}>
+          <div className="container">
+            <div className="section-head">
+              <span className="eyebrow" style={{ color: "var(--gold-dark)" }}>✦ Vient d'arriver</span>
+              <h2>Nos nouveautés</h2>
+              <p>Les dernières créations sorties de notre atelier — à découvrir en avant-première.</p>
+            </div>
+            <div className="product-grid">
+              {newProducts.map((p) => { const r = ratings[p.slug]; const mk = Number(s?.refMarkup) > 0; return (<ProductCard key={p.slug} product={{ ...p, ...(mk ? { refMarkup: Number(s.refMarkup) } : {}), ...(r ? { rating: r } : {}) }} />); })}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 34 }}>
+              <Link href="/boutique" className="btn btn-gold">Découvrir toutes les nouveautés</Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CATÉGORIES */}
       {show.categories && (
