@@ -191,7 +191,9 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - Données migrées une fois (export Netlify → import Firebase : 7 sections catalogue).
 - Bug corrigé : label custom_field cadeau > 50 car. (limite Stripe) — commit `493f10d`.
 
-**EN ATTENTE — BASCULE DNS (domaine chez HOSTINGER, pas OVH ni Netlify) :**
+**BASCULE DNS — FAITE (vérifiée le 26/06/2026).** `nivcreation.fr` ET l'adresse `…hosted.app` renvoient désormais le MÊME backend Firebase (en-tête `cache-tag: 619294563828:niv-creation` sur les deux → projet niv-creation). Il n'y a donc plus qu'UN seul backend en ligne (Firebase/Firestore). Reste à VÉRIFIER/CONSOLIDER : une commande tombée sur l'ANCIEN Netlify juste avant la bascule peut ne pas être dans Firestore — à recopier si elle existe (export Netlify → import Firebase).
+
+**Historique — BASCULE DNS (domaine chez HOSTINGER, pas OVH ni Netlify) :**
 - DNS géré sur **hpanel.hostinger.com** → nivcreation.fr → DNS / Serveurs de noms. (NS = `dns-parking.com`.)
 - Étape 1 FAITE : TXT `fah-claim=016-02-eb4357c4-...` + CNAME `_acme-challenge_goaabsql7whIflx` ajoutés et **propagés** (vérifiés OK). Reste à cliquer « Valider les enregistrements » dans Firebase.
 - Étape 2 À FAIRE = LA BASCULE : remplacer l'ALIAS `@ → apex-loadbalancer.netlify.com` par l'IP Firebase **`35.219.200.110`** (+ retirer les A Netlify `75.2.60.5` / `99.83.231.61`). C'est CE changement qui bascule le trafic.
