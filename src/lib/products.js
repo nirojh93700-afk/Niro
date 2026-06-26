@@ -40,6 +40,7 @@ export const SUBCATEGORIES = {
     { slug: "plaques", label: "Plaques" },
     { slug: "couverts", label: "Couverts" },
     { slug: "lampes", label: "Lampes" },
+    { slug: "bougeoirs", label: "Bougeoirs" },
     { slug: "cristal", label: "Cristal 3D" },
   ],
   cadeaux: [
@@ -1548,6 +1549,40 @@ export const products = [
 <li><strong>Forme :</strong> ronde, se tient debout toute seule</li>
 <li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
 </ul>`,
+  },
+  {
+    slug: "bougeoir-mandala-bois",
+    badge: "Nouveau",
+    name: "Bougeoir Mandala",
+    weight: 300, // structure bois multi-étages
+    pickup: true,
+    letter: false,
+    hidden: false,
+    cardImage: "/produits/bougeoir-mandala-1.jpg",
+    subcategory: "bougeoirs",
+    category: "deco",
+    type: "Bougeoir déco",
+    tagline: "Un bougeoir flottant en bois, au motif mandala finement découpé au laser.",
+    personalizable: false,
+    title: "Bougeoir Mandala en bois — porte-bougie chauffe-plat déco zen",
+    images: [
+      "/produits/bougeoir-mandala-1.jpg",
+      "/produits/bougeoir-mandala-2.jpg",
+      "/produits/bougeoir-mandala-3.jpg",
+    ],
+    variants: [
+      { id: "bougeoir-mandala-standard", title: "Bougeoir Mandala", price: 22.90 },
+    ],
+    descriptionHtml: `<p><strong>Le bougeoir flottant Arbre de Vie au motif mandala.</strong> Une structure en bois à étages, découpée au laser et ornée de mandalas ajourés, qui accueille une bougie chauffe-plat pour une ambiance douce et apaisante.</p>
+<p>Posé sur une table basse, un buffet ou un coin détente, il diffuse une lumière chaleureuse à travers ses motifs. Idéal pour une décoration zen, un cadeau bien-être ou un moment de relaxation.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> bois découpé au laser, motifs mandala ajourés</li>
+<li><strong>Structure :</strong> design « flottant » à étages, montée à la main</li>
+<li><strong>Usage :</strong> reçoit une bougie chauffe-plat (non incluse)</li>
+<li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
+</ul>
+<p><em>Conseil sécurité : ne jamais laisser une bougie allumée sans surveillance.</em></p>`,
   },
 ];
 

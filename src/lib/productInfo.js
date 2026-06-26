@@ -598,6 +598,20 @@ Défaut à l'arrivée
 - Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
+  "bougeoir-mandala-bois": {
+    material: `Taille & Matériaux
+- Bougeoir « flottant » à étages, motifs mandala ajourés.
+- Bois découpé au laser, monté à la main.
+- Reçoit une bougie chauffe-plat (non incluse).`,
+    usage: `Utilisation & Entretien
+- Déposer une bougie chauffe-plat dans l'emplacement prévu.
+- Ne jamais laisser une bougie allumée sans surveillance ; tenir loin des matières inflammables.
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+    returns: `Expédition & Retour
+- Objet expédié soigneusement protégé.
+- Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
+- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
 };
 
 export function getProductInfo(slug) {
