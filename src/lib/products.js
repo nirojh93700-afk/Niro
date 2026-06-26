@@ -1596,13 +1596,13 @@ export const products = [
     subcategory: "bougeoirs",
     category: "deco",
     type: "Bougeoir déco",
-    tagline: "Un porte-bougie en bois en forme de fleur de lotus, découpé au laser — à personnaliser d'un prénom ou d'une date.",
+    tagline: "Un porte-bougie fleur de lotus en bois, découpé à la main dans notre atelier — à personnaliser d'un prénom ou d'une date.",
     personalizable: true,
-    personalizationLabel: "Texte à graver (facultatif)",
+    personalizationLabel: "Gravure (option)",
     personalizationFields: [
-      { key: "texte", label: "Texte à graver (prénom, nom ou date)", placeholder: "Ex : Marie & Paul — 2026", maxLength: 30, optional: true },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "note", type: "note", text: "Personnalisation facultative : laissez vide pour le modèle sans texte. La gravure est discrète (pourtour ou pétale)." },
+      { key: "texte", label: "Texte à graver (prénom, nom ou date)", placeholder: "Ex : Marie & Paul — 2026", maxLength: 30, variantContains: "gravure" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "gravure" },
+      { key: "note", type: "note", text: "Choisissez « Avec gravure » pour personnaliser (prénom, nom ou date). La gravure est discrète (pourtour ou pétale)." },
     ],
     title: "Bougeoir Fleur de Lotus en bois personnalisé — porte-bougie chauffe-plat déco",
     images: [
@@ -1611,16 +1611,18 @@ export const products = [
       "/produits/bougeoir-lotus-3.jpg",
     ],
     variants: [
-      { id: "bougeoir-lotus-standard", title: "Bougeoir Fleur de Lotus", price: 16.90 },
+      { id: "bougeoir-lotus-simple", title: "Sans personnalisation", price: 16.90 },
+      { id: "bougeoir-lotus-grave", title: "Avec gravure (prénom, nom ou date)", price: 21.90 },
     ],
-    descriptionHtml: `<p><strong>Le porte-bougie fleur de lotus.</strong> Une fleur de lotus en bois, découpée au laser, qui accueille une bougie chauffe-plat pour une ambiance douce et apaisante.</p>
-<p>Symbole de pureté et de sérénité, le lotus habille votre table, votre buffet ou votre coin détente d'une touche zen et naturelle. Personnalisez-le d'un prénom ou d'une date pour en faire un cadeau unique.</p>
+    descriptionHtml: `<p><strong>Une fleur de lotus découpée au laser dans notre atelier — pas en usine.</strong> Chaque bougeoir est dessiné, découpé et fini à la main chez nous, en France. Une pièce singulière, pas un objet de production de masse.</p>
+<p>Le bois naturel et la finesse de la découpe laser offrent des détails impossibles à obtenir en grande série. Symbole de pureté et de sérénité, le lotus diffuse une lumière douce et apaisante sur une table, un buffet ou un coin détente.</p>
+<p><strong>Personnalisez-le d'un prénom, d'un nom ou d'une date</strong> : il devient un cadeau unique et plein de sens — anniversaire, mariage, naissance, remerciement.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> bois découpé au laser, forme fleur de lotus</li>
-<li><strong>Usage :</strong> reçoit une bougie chauffe-plat (non incluse)</li>
-<li><strong>Personnalisation :</strong> prénom, nom ou date gravé (facultatif)</li>
-<li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
+<li>Découpé et fini <strong>à la main dans notre atelier français</strong> (pas de fabrication en chaîne)</li>
+<li><strong>Bois naturel</strong> découpé au laser, finition soignée</li>
+<li>Reçoit une <strong>bougie chauffe-plat</strong> (non incluse)</li>
+<li><strong>Gravure au choix</strong> : prénom, nom ou date (option +5 €)</li>
 </ul>
 <p><em>Conseil sécurité : ne jamais laisser une bougie allumée sans surveillance.</em></p>`,
   },

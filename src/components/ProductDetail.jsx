@@ -1227,6 +1227,16 @@ export default function ProductDetail({ product }) {
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
           />
 
+          {/* Argument « fait main » sur la déco & le mariage (vend le savoir-faire). */}
+          {(product.category === "mariage" || product.category === "deco") && (
+            <div style={{ background: "linear-gradient(135deg,#fbf4e6,#fffdf9)", border: "1px solid #e7d3a1", borderRadius: 14, padding: "16px 18px", margin: "18px 0 4px" }}>
+              <strong style={{ color: "var(--gold-dark)", display: "block", marginBottom: 6 }}>✦ Fait main dans notre atelier français</strong>
+              <p style={{ margin: 0, fontSize: "0.92rem", color: "var(--ink-soft)", lineHeight: 1.55 }}>
+                Chaque pièce est dessinée, découpée et finie <strong>à la main chez nous</strong> — pas de production de masse, pas de fabrication en chaîne. La découpe laser permet des détails impossibles en grande série. Vous recevez une <strong>création unique</strong>, en matières naturelles, pensée pour durer et pour offrir.
+              </p>
+            </div>
+          )}
+
           {info && (
             <div className="info-accordion">
               {info.material && (
