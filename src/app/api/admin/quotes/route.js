@@ -42,8 +42,8 @@ export async function POST(req) {
     if (!to) return Response.json({ error: "Aucune adresse e-mail pour ce document." }, { status: 400 });
     const link = `${siteOrigin(req)}/document/${body.id}`;
     const mail = quoteEmail(q, link);
-    const r = await sendEmail({ to, subject: mail.subject, html: mail.html });
-    return Response.json({ ok: r.ok, to, error: r.ok ? undefined : "L'envoi de l'e-mail a échoué." });
+    const r = await sendEmail({ to, subject: mail.subject, html: mail.html, replyTo: process.env.CONTACT_EMAIL });
+    return Response.json({ ok: r.ok, to, error: r.ok ? undefined : (r.error || "L'envoi de l'e-mail a échoué.") });
   }
 
   // Création d'un devis ou d'une facture
