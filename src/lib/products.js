@@ -1508,6 +1508,47 @@ export const products = [
 <li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
 </ul>`,
   },
+  {
+    slug: "veilleuse-arbre-de-vie-ronde",
+    badge: "Nouveau",
+    name: "Veilleuse Arbre de Vie",
+    weight: 400, // panneau bois rond + socle + pile, emballage protégé
+    pickup: true,
+    letter: false,
+    hidden: false,
+    cardImage: "/produits/arbre-vie-rond-1.jpg",
+    subcategory: "lampes",
+    category: "deco",
+    type: "Lampe LED déco",
+    tagline: "Une veilleuse ronde au motif Arbre de Vie celtique, découpé au laser dans le bois — à personnaliser.",
+    personalizable: true,
+    personalizationLabel: "Texte à graver (facultatif)",
+    personalizationFields: [
+      { key: "texte", label: "Texte à graver (prénom, date ou court message)", placeholder: "Ex : Famille Martin — 2026", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note", type: "note", text: "Personnalisation facultative : laissez vide pour le modèle sans texte." },
+    ],
+    title: "Veilleuse Arbre de Vie ronde en bois personnalisée — lampe d'ambiance LED",
+    images: [
+      "/produits/arbre-vie-rond-1.jpg",
+      "/produits/arbre-vie-rond-2.jpg",
+      "/produits/arbre-vie-rond-3.jpg",
+    ],
+    variants: [
+      { id: "veilleuse-arbre-vie-ronde-standard", title: "Veilleuse Arbre de Vie", price: 29.90 },
+    ],
+    descriptionHtml: `<p><strong>La veilleuse d'ambiance Arbre de Vie.</strong> Un disque en bois découpé au laser, au motif Arbre de Vie celtique finement ajouré, qui diffuse une lumière douce et chaleureuse.</p>
+<p>Symbole de force, de sérénité et de lien familial, elle crée une atmosphère apaisante sur une table de chevet, un buffet ou une étagère. Un cadeau plein de sens.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> contreplaqué de tilleul 3 mm, découpé au laser</li>
+<li><strong>Motif :</strong> Arbre de Vie celtique ajouré, rétroéclairé</li>
+<li><strong>Éclairage :</strong> LED, lumière chaude (couleur unique)</li>
+<li><strong>Alimentation :</strong> à pile (interrupteur à l'arrière)</li>
+<li><strong>Forme :</strong> ronde, se tient debout toute seule</li>
+<li><strong>Fabrication :</strong> artisanale, dans notre atelier en France</li>
+</ul>`,
+  },
 ];
 
 // --- Helpers ----------------------------------------------------------------

@@ -584,6 +584,20 @@ Défaut à l'arrivée
 - Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
+  "veilleuse-arbre-de-vie-ronde": {
+    material: `Taille & Matériaux
+- Disque rond, motif Arbre de Vie celtique ajouré.
+- Contreplaqué de tilleul 3 mm, découpé au laser.
+- Se tient debout (déco à poser).`,
+    usage: `Utilisation & Entretien
+- Fonctionne à pile, allumage par interrupteur à l'arrière.
+- Lumière chaude (couleur unique).
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+    returns: `Expédition & Retour
+- Objet expédié soigneusement protégé.
+- Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
+- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
 };
 
 export function getProductInfo(slug) {
