@@ -63,46 +63,56 @@ export async function GET(req) {
     return Response.json({ points: [], error: "Point relais indisponible pour le moment." }, { status: 200 });
   }
 
-  const qs = new URLSearchParams({
-    shippingOfferCode: OFFER_CODE,
-    type: "ARRIVAL",
-    countryIsoCode: country,
-    zipCode: zip,
-  });
-  if (city) qs.set("city", city);
-
   const auth = "Basic " + Buffer.from(`${appId}:${appSecret}`).toString("base64");
+  const admin = isAdmin(req);
 
-  try {
-    const r = await fetch(`${BASE}?${qs.toString()}`, {
-      method: "GET",
-      headers: { Authorization: auth, Accept: "application/json" },
+  // Boxtal exige un paramètre `operationType`. La valeur exacte n'est pas
+  // documentée publiquement → on essaie les valeurs plausibles jusqu'à obtenir
+  // une réponse. Un override `?op=` permet de tester une valeur précise (admin).
+  const opOverride = url.searchParams.get("op");
+  const opCandidates = opOverride ? [opOverride] : ["DELIVERY", "COLLECTION", "ARRIVAL", "PICKUP"];
+
+  const attempts = [];
+  for (const op of opCandidates) {
+    const qs = new URLSearchParams({
+      shippingOfferCode: OFFER_CODE,
+      operationType: op,
+      countryIsoCode: country,
+      zipCode: zip,
     });
-    const text = await r.text();
-    let data;
-    try { data = JSON.parse(text); } catch { data = null; }
+    if (city) qs.set("city", city);
 
-    if (!r.ok) {
-      const body = { points: [], error: "Aucun point relais trouvé pour ce code postal." };
-      if (isAdmin(req)) body._debug = { status: r.status, body: text.slice(0, 800) };
-      return Response.json(body, { status: 200 });
+    let r, text, data;
+    try {
+      r = await fetch(`${BASE}?${qs.toString()}`, {
+        method: "GET",
+        headers: { Authorization: auth, Accept: "application/json" },
+      });
+      text = await r.text();
+      try { data = JSON.parse(text); } catch { data = null; }
+    } catch (e) {
+      attempts.push({ op, error: String(e).slice(0, 200) });
+      continue;
     }
 
-    // La liste peut être renvoyée directement, ou sous une clé (parcelPoints…).
+    if (admin) attempts.push({ op, status: r.status, bodyStart: text.slice(0, 400) });
+
+    if (!r.ok) continue; // mauvaise valeur d'operationType → on essaie la suivante
+
     const list = Array.isArray(data)
       ? data
-      : (data?.parcelPoints || data?.points || data?.items || data?.content || data?.results || []);
+      : (data?.parcelPoints || data?.points || data?.items || data?.content || data?.results || data?.parcelPointList || []);
     const points = (Array.isArray(list) ? list : []).map(normalize).filter((p) => p.code);
 
-    const body = { points };
-    if (isAdmin(req)) body._raw = Array.isArray(data) ? data.slice(0, 2) : data;
+    const body = { points, op };
+    if (admin) body._raw = Array.isArray(data) ? data.slice(0, 2) : data;
     return Response.json(body, {
       status: 200,
       headers: { "Cache-Control": "public, max-age=120" },
     });
-  } catch (e) {
-    const body = { points: [], error: "Recherche momentanément indisponible." };
-    if (isAdmin(req)) body._debug = { error: String(e).slice(0, 300) };
-    return Response.json(body, { status: 200 });
   }
+
+  const body = { points: [], error: "Aucun point relais trouvé pour ce code postal." };
+  if (admin) body._debug = attempts;
+  return Response.json(body, { status: 200 });
 }
