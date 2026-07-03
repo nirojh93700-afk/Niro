@@ -1,5 +1,15 @@
 # Guide agent — Boutique Niv Création
 
+## 🚚 INTÉGRATION BOXTAL (point relais / transporteurs) — CONNEXION RÉSOLUE (03/07/2026)
+> API v3 Boxtal. La connexion fonctionne : ne PAS repartir de zéro.
+- **Auth = OAuth client_credentials en Basic Auth** sur `POST https://api.boxtal.com/iam/account-app/token` (test : `api.boxtal.build`). Renvoie `{accessToken}` (JWT, ~1h).
+- **PIÈGE qui a coûté cher** : le login/mot de passe de l'auth = la **« clé d'accès »** + la **« clé secrète »** de l'app (PAS l'`app-…` ID !). Sur developer.boxtal.com → l'app a 3 valeurs : *ID application* (`app-…`, inutile pour l'auth), *clé d'accès* (login), *clé secrète* (password). Basic = base64(cléAccès:cléSecrète).
+- **Clés stockées** dans `settings.boxtal` : `appId` = clé d'accès, `appSecret` = clé secrète (voir `getBoxtalCreds()`/`updateBoxtal()` dans `stock.js`). Saisies dans **Gestion → Réglages** (composant `BoxtalKeys`). Activation + prix dans **Gestion → Livraison** (`ShippingAdmin`).
+- **Appels API** : `Authorization: Bearer <accessToken>`. Endpoints v3 utiles : `GET /shipping/v3.1/content-category` · `GET /shipping/v3.2/parcel-point-by-network` (carte points relais) · `POST /shipping/v3.1/shipping-order` (créer expédition) · `GET /shipping/v3.1/shipping-order/{id}/shipping-document` (étiquette PDF) · `GET .../tracking`.
+- **Outil de diag** : `/api/admin/boxtal-test` (admin) pour tester la connexion.
+- **Reste à construire** : lib client Boxtal (token caché + cotation par poids + points relais), sélecteur transporteur/point relais sur la page panier (Stripe hébergé ne peut pas afficher de carte → choix AVANT paiement), création expédition au webhook, bouton « imprimer l'étiquette » sur la page commande admin. Règle prix : max(4,90 €, coût réel Boxtal + petite marge).
+
+
 ## 🎬 RECETTE VIDÉO PUB (à refaire pareil à chaque demande de vidéo)
 > Quand l'utilisatrice demande une vidéo/pub, produire CE style par défaut. Si elle dit « améliore », améliorer sur cette base.
 Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) et **`tools/video/pub_ia_higgsfield.py`** (clips animés par l'IA Higgsfield, payant).
