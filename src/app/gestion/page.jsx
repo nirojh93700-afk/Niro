@@ -10,6 +10,7 @@ import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
 import ShippingAdmin from "@/components/admin/ShippingAdmin";
+import BoxtalKeys from "@/components/admin/BoxtalKeys";
 import ReviewsAdmin from "@/components/admin/ReviewsAdmin";
 import PromoCodesAdmin from "@/components/admin/PromoCodesAdmin";
 import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
@@ -1182,6 +1183,9 @@ export default function GestionPage() {
                 </div>
               ))}
             </div>
+
+            {/* Clés API Boxtal (point relais) — rangées ici avec les autres. */}
+            <BoxtalKeys adminKey={key} />
 
             {/* Diagnostic Firebase (connexion réelle à l'appli de gestion) */}
             {firebase && (

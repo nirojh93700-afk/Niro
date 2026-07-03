@@ -124,12 +124,7 @@ export default function ShippingAdmin({ adminKey }) {
       const res = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-        body: JSON.stringify({ boxtal: {
-          enabled: boxtal.enabled,
-          pointRelaisPrice: Number(boxtal.pointRelaisPrice),
-          appId: boxtal.appId,
-          ...(boxtal.secret ? { appSecret: boxtal.secret } : {}),
-        } }),
+        body: JSON.stringify({ boxtal: { enabled: boxtal.enabled, pointRelaisPrice: Number(boxtal.pointRelaisPrice) } }),
       });
       if (res.ok) {
         const d = (await res.json()).settings;
@@ -223,6 +218,11 @@ export default function ShippingAdmin({ adminKey }) {
 
       {msg && <div className="notice">{msg}</div>}
 
+      <h2 style={{ margin: "10px 0 0", paddingBottom: 6, borderBottom: "2px solid #e7d3a1", fontSize: "1.15rem" }}>🏠 Livraison à domicile</h2>
+      <p style={{ margin: "2px 0 0", color: "var(--ink-soft)", fontSize: "0.86rem" }}>
+        Plusieurs tarifs selon le type d'article (bijoux, déco, verres) + le retrait en main propre.
+      </p>
+
       {/* ============ BIJOUX (Lettre suivie) ============ */}
       <div className="admin-block" style={{ display: "grid", gap: 10 }}>
         <h3 style={{ margin: 0 }}>💍 Bijoux & petits objets — Lettre suivie (≤ 2 kg)</h3>
@@ -281,8 +281,11 @@ export default function ShippingAdmin({ adminKey }) {
       </div>
 
       {/* ============ POINT RELAIS (Boxtal) ============ */}
+      <h2 style={{ margin: "22px 0 0", paddingBottom: 6, borderBottom: "2px solid #c9a24b", fontSize: "1.15rem" }}>📍 Point relais</h2>
+      <p style={{ margin: "2px 0 0", color: "var(--ink-soft)", fontSize: "0.86rem" }}>
+        Livraison en point relais (tous les transporteurs via Boxtal) — souvent moins chère que le domicile.
+      </p>
       <div className="admin-block" style={{ display: "grid", gap: 10, borderColor: "#c9a24b" }}>
-        <h3 style={{ margin: 0 }}>📍 Point relais (Boxtal) — tous les transporteurs</h3>
         <p style={{ margin: 0, color: "var(--ink-soft)", fontSize: "0.88rem" }}>
           Ajoute au paiement une option <strong>« Livraison en point relais »</strong> (moins chère que le domicile).
           Objectif : la cliente choisit son transporteur + son point relais sur une carte (comme sur Boxtal).
@@ -296,22 +299,9 @@ export default function ShippingAdmin({ adminKey }) {
           <input type="number" min="0" step="0.1" value={boxtal.pointRelaisPrice}
             onChange={(e) => setBoxtalState({ ...boxtal, pointRelaisPrice: e.target.value })} />
         </label>
-        <div style={{ background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 10, padding: "12px", display: "grid", gap: 10 }}>
-          <strong style={{ fontSize: "0.9rem" }}>🔑 Tes clés Boxtal (developer.boxtal.com)</strong>
-          <label className="admin-field">
-            Identifiant (App ID / clé publique)
-            <input value={boxtal.appId} onChange={(e) => setBoxtalState({ ...boxtal, appId: e.target.value })} placeholder="Colle ton App ID Boxtal" autoComplete="off" />
-          </label>
-          <label className="admin-field">
-            Clé secrète {boxtal.hasSecret && <span style={{ color: "#256b34", fontWeight: 600 }}>· déjà enregistrée ✓</span>}
-            <input type="password" value={boxtal.secret} onChange={(e) => setBoxtalState({ ...boxtal, secret: e.target.value })}
-              placeholder={boxtal.hasSecret ? "•••••••• (laisse vide pour ne pas changer)" : "Colle ta clé secrète Boxtal"} autoComplete="new-password" />
-          </label>
-          <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--ink-soft)" }}>
-            🔒 Tes clés sont stockées en sécurité côté serveur et <strong>jamais réaffichées</strong> ni exposées au public.
-            Tant qu'elles ne sont pas en place, l'option point relais fonctionne à <strong>prix fixe</strong> (la cliente t'indique son point par message). Une fois les clés là, on active la <strong>carte + le choix du transporteur</strong> au paiement.
-          </p>
-        </div>
+        <p style={{ margin: 0, fontSize: "0.82rem", color: "var(--ink-soft)", background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 10, padding: "10px 12px" }}>
+          🔑 Tes <strong>clés Boxtal</strong> se collent dans <strong>Gestion → Réglages</strong> (avec les autres clés). Ici tu règles juste l'activation et le prix. Tant que les clés ne sont pas en place, l'option marche à <strong>prix fixe</strong> (la cliente t'indique son point relais par message).
+        </p>
         <button className="btn btn-gold" onClick={saveBoxtal} disabled={saving} style={{ justifySelf: "start" }}>
           {saving ? "Enregistrement…" : "💾 Enregistrer le point relais"}
         </button>
