@@ -17,6 +17,16 @@
 - **Structure `POST /shipping/v3.1/shipping-order`** (reconstituée par les erreurs 422) : `{ shippingOfferCode, shipment: { fromAddress, toAddress, returnAddress, packages[] } }`. Chaque *address* = `{ type, contact, location }`. Chaque *package* = `{ length, width, height, weight (>0), value }`. Reste à trouver les sous-champs exacts de contact/location/type/value (itérer sur les 400/422). Étiquette = via webhook `DOCUMENT_CREATED` ou `GET /shipping-order/{id}/shipping-document`.
 - **Points relais (marche)** : `GET /shipping/v3.2/parcel-point-by-shipping-offer?shippingOfferCode=MONR-CpourToi&type=ARRIVAL&countryIsoCode=FR&zipCode=…&city=…` (ou `parcel-point-by-network` avec `searchNetworks`).
 
+### ÉTAT ACTUEL & REPRISE (décision de la gérante, 04/07)
+- **OPTION B active** (choix de la gérante) : au paiement, option « Livraison en point relais — 4,90 € » (fixe, réglable dans Gestion → Livraison). La gérante crée/imprime l'étiquette **elle-même sur boxtal.com** (paiement carte/PayPal). **Rien d'autre à faire, ça marche.**
+- **OPTION A « tout depuis mon site » = à construire PLUS TARD** (quand elle aura du volume). Checklist de reprise :
+  1. **Elle** : activer sur Boxtal le **« paiement différé par prélèvement »** (Moyen de paiement → mandat SEPA, IBAN+BIC). Sans ça, création d'étiquette impossible.
+  2. **Moi** : lib `src/lib/boxtal.js` (token caché via `/iam/account-app/token` en Basic base64(cléAccès:cléSecrète), clés dans `settings.boxtal` via `getBoxtalCreds()`).
+  3. **Moi** : sur la **page panier**, sélecteur de point relais (carte) via `parcel-point-by-shipping-offer` (Stripe hébergé ne peut pas → choisir AVANT Stripe), stocker le point relais choisi sur la commande.
+  4. **Moi** : bouton **« Imprimer l'étiquette »** sur la fiche commande admin → `POST /shipping/v3.1/shipping-order` (structure ci-dessus, finir de découvrir contact/location/type/value via les erreurs 422/400) → étiquette via webhook `DOCUMENT_CREATED` (souscription) ou `GET /shipping-order/{id}/shipping-document`.
+  5. **Tester en env test** `api.boxtal.build` (compte test) pour ne pas créer de vraies étiquettes facturées.
+  - **Prix auto par poids (v1)** = OPTIONNEL (la gérante est OK avec le prix fixe). L'app v1 existe (clés sur son compte Boxtal) mais l'endpoint cotation v1 reste à trouver ; non nécessaire pour l'Option A.
+
 
 ## 🎬 RECETTE VIDÉO PUB (à refaire pareil à chaque demande de vidéo)
 > Quand l'utilisatrice demande une vidéo/pub, produire CE style par défaut. Si elle dit « améliore », améliorer sur cette base.
