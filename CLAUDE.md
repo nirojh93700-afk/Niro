@@ -1,5 +1,18 @@
 # Guide agent — Boutique Niv Création
 
+## 🎬 RECETTE VIDÉO PUB (à refaire pareil à chaque demande de vidéo)
+> Quand l'utilisatrice demande une vidéo/pub, produire CE style par défaut. Si elle dit « améliore », améliorer sur cette base.
+Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) et **`tools/video/pub_ia_higgsfield.py`** (clips animés par l'IA Higgsfield, payant).
+- **Outils (gratuits, à réinstaller après un redémarrage du conteneur)** : `pip install Pillow imageio imageio-ffmpeg gTTS numpy` (ffmpeg via `imageio_ffmpeg.get_ffmpeg_exe()`). Voix FR = gTTS (gratuit).
+- **Style imposé** : format **vertical 1080×1920** (mobile/reels) ; **rythme RAPIDE et vivant** (segments ~2,2 s, coupures nettes) ; **zoom dynamique** sur chaque photo ; **beat rythmé** (~112 BPM) + nappe douce ; **voix off FR accélérée** (atempo 1,12 — moins « endormie ») ; **sous-titres** + nom du produit (pas de prix) ; carte d'intro « NiV CRÉATION » + carte finale **nivcreation.fr / Fait main en France** ; couleurs marque (or #c9a24b, crème, encre) ; police titres = DejaVuSerif-Bold.
+- **Photos** : télécharger depuis `https://nivcreation.fr/produits/<fichier>` (marche même si le dépôt local est vide).
+- **Sortie** : ré-encoder LÉGER + faststart (`scale=720:1280`, crf 26, `-movflags +faststart`) → ~3-6 Mo, facile à ouvrir sur téléphone. Toujours l'envoyer via SendUserFile.
+- **Varier les produits** à chaque fois (ne pas reprendre toujours les mêmes) ; possibilité d'ajouter d'autres produits sur demande.
+- **À CHAQUE vidéo** : joindre une **description** + des **tags** (format Insta, ~10 hashtags).
+- **CRÉDITS Higgsfield = payant** : ne JAMAIS lancer sans confirmer, annoncer le coût (`get_cost:true` preflight, ~7,5 crédits/clip 5 s), et attendre l'accord. Le montage gratuit (`pub_gratuite.py`) est la version par défaut.
+
+---
+
 Ce fichier explique à **tout agent Claude** comment travailler sur ce dépôt,
 et surtout **comment ajouter un produit correctement et le publier**.
 
