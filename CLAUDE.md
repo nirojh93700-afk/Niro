@@ -9,6 +9,14 @@
 - **Outil de diag** : `/api/admin/boxtal-test` (admin) pour tester la connexion.
 - **Reste à construire** : lib client Boxtal (token caché + cotation par poids + points relais), sélecteur transporteur/point relais sur la page panier (Stripe hébergé ne peut pas afficher de carte → choix AVANT paiement), création expédition au webhook, bouton « imprimer l'étiquette » sur la page commande admin. Règle prix : max(4,90 €, coût réel Boxtal + petite marge).
 
+### Boxtal — découvertes du 04/07/2026 (à réutiliser)
+- **2 apps** : une **API v1** (pour les PRIX/devis) + une **API v3** (relais/commande/étiquette). Chacune a *clé d'accès* + *clé secrète* (l'App ID `app-…` n'est PAS l'auth). Les DEUX s'authentifient sur `/iam/account-app/token`.
+- ⚠️ **v3 ne fait PAS de devis/prix** (dit noir sur blanc dans leur doc : « pas possible en v3, évolution future → utiliser l'API v1 »). Donc **prix auto par poids = API v1** (endpoint pas encore trouvé : `envoimoinscher.com/api/v1/cotation` → 405, `api.boxtal.com/api/v1/…` → 403 WAF ; à creuser via la doc v1).
+- ⚠️ **Créer une commande exige que le compte Boxtal ait le « paiement différé par prélèvement » activé** (sinon impossible). Créer une vraie commande en prod = **facturé** → tester en env test `api.boxtal.build` avec un compte de test.
+- **Codes d'offres** (POST shipping-order, champ `shippingOfferCode`) : Mondial Relay point relais = `MONR-CpourToi` · Mondial domicile = `MONR-DomicileFrance` · Colissimo point retrait = `POFR-ColissimoPickupStation` · Colissimo domicile = `POFR-ColissimoAccess`/`POFR-ColissimoExpert` · Colis Privé relais = `COPR-CoprRelaisRelaisNat` · Chrono Shop2Shop = `CHRP-ChronoShoptoShop` · Relais Colis = `SOGP-RelaisColis` · UPS relais = `UPSE-StandardAccessPoint`.
+- **Structure `POST /shipping/v3.1/shipping-order`** (reconstituée par les erreurs 422) : `{ shippingOfferCode, shipment: { fromAddress, toAddress, returnAddress, packages[] } }`. Chaque *address* = `{ type, contact, location }`. Chaque *package* = `{ length, width, height, weight (>0), value }`. Reste à trouver les sous-champs exacts de contact/location/type/value (itérer sur les 400/422). Étiquette = via webhook `DOCUMENT_CREATED` ou `GET /shipping-order/{id}/shipping-document`.
+- **Points relais (marche)** : `GET /shipping/v3.2/parcel-point-by-shipping-offer?shippingOfferCode=MONR-CpourToi&type=ARRIVAL&countryIsoCode=FR&zipCode=…&city=…` (ou `parcel-point-by-network` avec `searchNetworks`).
+
 
 ## 🎬 RECETTE VIDÉO PUB (à refaire pareil à chaque demande de vidéo)
 > Quand l'utilisatrice demande une vidéo/pub, produire CE style par défaut. Si elle dit « améliore », améliorer sur cette base.
