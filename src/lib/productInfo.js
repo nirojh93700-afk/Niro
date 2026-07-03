@@ -9,6 +9,21 @@
 // Texte libre — les retours à la ligne sont conservés à l'affichage.
 // =============================================================================
 
+// Fiche commune aux porte-stylos Coupe du Monde (un produit par pays).
+const WORLDCUP_PEN_INFO = {
+  material: `Taille & Matériaux
+- Porte-stylo de bureau, motif spécial Coupe du Monde 2026.
+- Bois découpé au laser, aux couleurs de la nation.
+- Le stylo n'est pas inclus. Livré à plat (montage simple).`,
+  usage: `Utilisation & Entretien
+- Assemblage en quelques secondes (pièces à clipser).
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+  returns: `Expédition & Retour
+- Expédié à plat en lettre suivie, soigneusement protégé.
+- Fabriqué à la demande = non remboursable une fois la découpe lancée (article L221-28).
+- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+};
+
 export const productInfo = {
   "collier-enveloppe-message-secret": {
     material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
@@ -627,19 +642,10 @@ Défaut à l'arrivée
 - Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans personnalisation : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine.
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
-  "porte-stylo-coq-coupe-du-monde": {
-    material: `Taille & Matériaux
-- Porte-stylo de bureau, motif spécial Coupe du Monde 2026.
-- Bois découpé au laser, aux couleurs de la nation choisie.
-- Le stylo n'est pas inclus. Livré à plat (montage simple).`,
-    usage: `Utilisation & Entretien
-- Choisissez votre pays à la commande.
-- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
-    returns: `Expédition & Retour
-- Expédié à plat en lettre suivie, soigneusement protégé.
-- Fabriqué à la demande selon le pays choisi = non remboursable une fois la découpe lancée (article L221-28).
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
-  },
+  "porte-stylo-coq-coupe-du-monde": WORLDCUP_PEN_INFO,
+  "porte-stylo-portugal-coupe-du-monde": WORLDCUP_PEN_INFO,
+  "porte-stylo-argentine-coupe-du-monde": WORLDCUP_PEN_INFO,
+  "porte-stylo-espagne-coupe-du-monde": WORLDCUP_PEN_INFO,
 };
 
 export function getProductInfo(slug) {
