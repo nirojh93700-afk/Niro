@@ -78,6 +78,17 @@ export async function POST(req) {
 
   const postalCode = String(body?.postalCode || "").trim();
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+
+  // Choix de livraison fait sur le panier (avant Stripe).
+  const deliveryMethod = body?.deliveryMethod === "relais" ? "relais" : (body?.deliveryMethod === "domicile" ? "domicile" : "");
+  const rp = body?.relaisPoint && typeof body.relaisPoint === "object" ? body.relaisPoint : null;
+  // Étiquette courte pour Stripe (nom + ville) et adresse complète pour la commande.
+  const relaisLabel = rp
+    ? [String(rp.name || "").slice(0, 45), String(rp.city || "").slice(0, 25)].filter(Boolean).join(", ")
+    : "";
+  const relaisFull = rp
+    ? [rp.name, rp.street, [rp.zipCode, rp.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240)
+    : "";
   const variantIndex = await buildVariantIndex();
   const promos = await stripBijouxPromos(await getPromos()); // bijoux : remise permanente uniquement
   const settings = await getSettings().catch(() => ({}));
@@ -204,6 +215,8 @@ export async function POST(req) {
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
         promoCode: appliedCode,
         clientIp,
+        // Point relais choisi sur le panier (adresse complète pour la commande).
+        ...(relaisFull ? { relaisPoint: relaisFull } : {}),
       },
       locale: "fr",
       currency: "eur",
@@ -220,6 +233,8 @@ export async function POST(req) {
         pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
         config: settings?.shipping, // tarifs personnalisés (admin)
         boxtal: settings?.boxtal, // option point relais (admin)
+        deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)
+        relaisLabel,    // nom du point relais choisi (affiché dans Stripe)
       }),
       custom_fields: [
         {

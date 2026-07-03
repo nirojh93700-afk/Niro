@@ -4,7 +4,7 @@ import { track } from "@/lib/track";
 
 // Envoie le panier au serveur pour créer une session Stripe Checkout,
 // puis redirige le client vers la page de paiement sécurisée Stripe.
-export async function startCheckout(items, postalCode = "", promoCode = "") {
+export async function startCheckout(items, postalCode = "", promoCode = "", delivery = null) {
   const payload = items.map((i) => ({
     variantId: i.variantId,
     quantity: i.quantity,
@@ -16,7 +16,15 @@ export async function startCheckout(items, postalCode = "", promoCode = "") {
   const res = await fetch("/api/checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ items: payload, postalCode, promoCode }),
+    body: JSON.stringify({
+      items: payload,
+      postalCode,
+      promoCode,
+      // Choix de livraison fait sur le panier : "domicile" ou "relais" + le
+      // point relais sélectionné sur la carte (le cas échéant).
+      deliveryMethod: delivery?.method || "",
+      relaisPoint: delivery?.relais || null,
+    }),
   });
 
   const data = await res.json();

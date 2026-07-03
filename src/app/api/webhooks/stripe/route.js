@@ -319,8 +319,9 @@ export async function POST(req) {
 
         ${sectionTitle("Livraison")}
         <p style="margin:0 0 8px;"><strong>Méthode :</strong> ${escapeHtml(shippingRateName)} (${euro(shippingAmount, currency)})</p>
+        ${session.metadata?.relaisPoint ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 8px;"><strong>📍 Point relais choisi par le client :</strong><br>${escapeHtml(session.metadata.relaisPoint)}</p>` : ""}
         <p style="background:${BRAND.cream};padding:14px;border-radius:10px;white-space:pre-line;border:1px solid #ece3d2;">
-<strong>Adresse de livraison (pour ton étiquette) :</strong>
+<strong>${session.metadata?.relaisPoint ? "Coordonnées du client (contact) :" : "Adresse de livraison (pour ton étiquette) :"}</strong>
 ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
 
         ${sectionTitle("Client")}
@@ -426,6 +427,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       shippingName: shipping?.name || "",
       shippingAddress: shipping?.address || null,
       shippingMethod: shippingRateName,
+      relaisPoint: session.metadata?.relaisPoint || "",
       immediateStart,
       items: (session.line_items?.data || []).map((li) => ({
         name: li.price?.product?.name || li.description || "",

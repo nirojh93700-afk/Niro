@@ -12,6 +12,8 @@ export async function GET() {
     {
       bijouxHome: cfg.bijouxHome,
       bijouxFreeThreshold: cfg.bijouxFreeThreshold,
+      // Option point relais activée dans l'admin ? (pour afficher la carte au panier)
+      pointRelais: settings?.boxtal?.enabled === true,
     },
     { headers: { "Cache-Control": "public, max-age=60" } }
   );

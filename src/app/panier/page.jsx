@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
 import FreeShippingBar from "@/components/FreeShippingBar";
+import RelaisPicker from "@/components/RelaisPicker";
 
 export default function CartPage() {
   const { items, total, updateQuantity, removeItem, hydrated } = useCart();
@@ -15,6 +16,21 @@ export default function CartPage() {
   const [promoCode, setPromoCode] = useState("");
   const [promoMsg, setPromoMsg] = useState("");
   const [promoOk, setPromoOk] = useState(false);
+
+  // Livraison : la cliente choisit entre "domicile" et "relais" (point relais).
+  const [relaisEnabled, setRelaisEnabled] = useState(false);
+  const [deliveryMethod, setDeliveryMethod] = useState("domicile");
+  const [relais, setRelais] = useState(null);
+
+  // L'option point relais s'affiche uniquement si elle est activée dans l'admin.
+  useEffect(() => {
+    let ok = true;
+    fetch("/api/shipping-config")
+      .then((r) => r.json())
+      .then((d) => { if (ok) setRelaisEnabled(Boolean(d?.pointRelais)); })
+      .catch(() => {});
+    return () => { ok = false; };
+  }, []);
 
   const hasPickup = items.some((i) => i.pickup);
 
@@ -37,9 +53,18 @@ export default function CartPage() {
 
   async function handleCheckout() {
     setError("");
+    // Si la cliente a choisi « point relais », elle doit d'abord sélectionner
+    // son point relais sur la carte avant de payer.
+    if (relaisEnabled && deliveryMethod === "relais" && !relais) {
+      setError("Choisissez d'abord votre point relais sur la carte.");
+      return;
+    }
     setLoading(true);
     try {
-      await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "");
+      const delivery = relaisEnabled
+        ? { method: deliveryMethod, relais: deliveryMethod === "relais" ? relais : null }
+        : null;
+      await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "", delivery);
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -120,6 +145,43 @@ export default function CartPage() {
             <span>Total</span>
             <span>{formatEuro(total)}</span>
           </div>
+
+          {relaisEnabled && (
+            <div style={{ marginTop: 18 }}>
+              <label style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>
+                Mode de livraison
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => { setDeliveryMethod("domicile"); setError(""); }}
+                  style={{
+                    padding: "12px 10px",
+                    border: `1.5px solid ${deliveryMethod === "domicile" ? "var(--gold-dark, #b8860b)" : "var(--line)"}`,
+                    background: deliveryMethod === "domicile" ? "rgba(184,134,11,.08)" : "#fff",
+                    borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: deliveryMethod === "domicile" ? 600 : 400,
+                  }}
+                >
+                  🏠 À domicile
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setDeliveryMethod("relais"); setError(""); }}
+                  style={{
+                    padding: "12px 10px",
+                    border: `1.5px solid ${deliveryMethod === "relais" ? "var(--gold-dark, #b8860b)" : "var(--line)"}`,
+                    background: deliveryMethod === "relais" ? "rgba(184,134,11,.08)" : "#fff",
+                    borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: deliveryMethod === "relais" ? 600 : 400,
+                  }}
+                >
+                  📍 Point relais
+                </button>
+              </div>
+              {deliveryMethod === "relais" && (
+                <RelaisPicker selected={relais} onSelect={(p) => { setRelais(p); setError(""); }} />
+              )}
+            </div>
+          )}
 
           <div style={{ marginTop: 16 }}>
             <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>Code promo</label>

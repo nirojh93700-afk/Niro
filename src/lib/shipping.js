@@ -115,18 +115,22 @@ function rate(amount, name, days) {
 //   parcelQty     : nombre d'articles "déco" (colis) dans le panier
 //   pickupEligible: retrait en main propre autorisé (déco/mariage + zone OK)
 //   config        : tarifs personnalisés (réglages admin) — facultatif
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal }) {
-  const cfg = resolveShippingConfig(config);
-  const options = [];
+// Calcule le prix « point relais » (par poids), plancher = prix admin (4,90 €).
+function pointRelaisPrice(totalGrams, boxtal, freeShipping) {
+  if (freeShipping) return 0;
+  const floor = Number.isFinite(Number(boxtal?.pointRelaisPrice)) ? Number(boxtal.pointRelaisPrice) : 4.9;
+  return Math.max(floor, pointRelaisPriceByWeight(totalGrams));
+}
 
+// Construit les options « livraison à domicile » (+ verres/déco selon le panier).
+function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping }) {
+  const options = [];
   if (freeShipping) {
-    // Tous les articles ont la livraison incluse → livraison offerte.
     options.push(rate(0, "Livraison à domicile — Offerte", [2, 5]));
   } else if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
     const free = subtotal >= cfg.bijouxFreeThreshold;
     options.push(rate(free ? 0 : cfg.bijouxHome, free ? "Livraison à domicile — Offerte" : "Livraison à domicile", [2, 4]));
   } else {
-    // Colis : on prend le plus cher entre les verres (fragiles) et la déco.
     const decoQty = Math.max(0, parcelQty - glassQty);
     const prices = [];
     if (glassQty > 0) prices.push(tierPrice(cfg.glassTiers, glassQty));
@@ -134,16 +138,30 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
     const price = prices.length ? Math.max(...prices) : tierPrice(cfg.decoTiers, parcelQty || 1);
     options.push(rate(price, "Livraison à domicile", [2, 5]));
   }
+  return options;
+}
 
-  // Option Point relais (Boxtal) — activée dans Gestion → Livraison.
-  // PRIX AUTOMATIQUE PAR POIDS (basé sur la grille Boxtal Mondial Relay point
-  // relais + marge). Plancher = prix réglé dans l'admin (défaut 4,90 €), pour
-  // que la cliente ne perde jamais d'argent. Coûts réels TTC : ≤1kg ~4,20 €,
-  // 1-2kg ~5,90 €, 2-5kg ~6,25 €.
-  if (boxtal && boxtal.enabled && !freeShipping) {
-    const floor = Number.isFinite(Number(boxtal.pointRelaisPrice)) ? Number(boxtal.pointRelaisPrice) : 4.9;
-    const price = Math.max(floor, pointRelaisPriceByWeight(totalGrams));
-    options.push(rate(price, "Livraison en point relais", [3, 6]));
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "" }) {
+  const cfg = resolveShippingConfig(config);
+  const boxtalOn = Boolean(boxtal && boxtal.enabled);
+
+  // La cliente a CHOISI « point relais » sur la page panier (et a sélectionné
+  // son point relais sur la carte) → Stripe n'affiche QUE cette option, au
+  // prix calculé par poids, avec le nom du point relais choisi.
+  if (boxtalOn && deliveryMethod === "relais") {
+    const price = pointRelaisPrice(totalGrams, boxtal, freeShipping);
+    const name = relaisLabel ? `Point relais — ${String(relaisLabel).slice(0, 80)}` : "Livraison en point relais";
+    return [rate(price, name, [3, 6])];
+  }
+
+  // Sinon : livraison à domicile (+ retrait en main propre si éligible).
+  const options = homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
+
+  // Compatibilité : si l'option point relais est activée mais que la cliente
+  // n'a pas explicitement choisi « domicile » sur le panier (ancien cache JS,
+  // ou pas de choix), on propose aussi le point relais dans Stripe — sans carte.
+  if (boxtalOn && deliveryMethod !== "domicile" && !freeShipping) {
+    options.push(rate(pointRelaisPrice(totalGrams, boxtal, false), "Livraison en point relais", [3, 6]));
   }
 
   if (pickupEligible) {
