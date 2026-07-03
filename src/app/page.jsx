@@ -120,7 +120,7 @@ export default async function HomePage() {
         <div style={{ background: "linear-gradient(135deg,#0a1a3f 0%,#12275c 55%,#1c1206 100%)", color: "#f4e6c2", padding: "26px 18px", textAlign: "center" }}>
           <div style={{ fontSize: "1.4rem", marginBottom: 4 }}>⚽ 🏆 ⭐</div>
           <strong style={{ fontFamily: "Georgia, serif", fontSize: "clamp(1.3rem,4.5vw,1.9rem)", display: "block" }}>Spécial Coupe du Monde 2026</strong>
-          <span style={{ color: "#e7ddc7", fontSize: "0.98rem" }}>Déco aux couleurs de votre nation, à personnaliser →</span>
+          <span style={{ color: "#e7ddc7", fontSize: "0.98rem" }}>Déco en bois aux couleurs de votre nation →</span>
         </div>
       </Link>
 
