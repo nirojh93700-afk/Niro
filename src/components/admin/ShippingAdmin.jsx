@@ -98,7 +98,7 @@ function TierEditor({ rows, onChange, unit }) {
 
 export default function ShippingAdmin({ adminKey }) {
   const [form, setForm] = useState(null);
-  const [boxtal, setBoxtalState] = useState({ enabled: false, pointRelaisPrice: 4.9 });
+  const [boxtal, setBoxtalState] = useState({ enabled: false, pointRelaisPrice: 4.9, appId: "", secret: "", hasSecret: false });
   const [msg, setMsg] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -110,7 +110,7 @@ export default function ShippingAdmin({ adminKey }) {
         if (res.ok) {
           const data = (await res.json()).settings;
           setForm(toForm(resolveShippingConfig(data?.shipping)));
-          if (data?.boxtal) setBoxtalState({ enabled: !!data.boxtal.enabled, pointRelaisPrice: data.boxtal.pointRelaisPrice ?? 4.9 });
+          if (data?.boxtal) setBoxtalState({ enabled: !!data.boxtal.enabled, pointRelaisPrice: data.boxtal.pointRelaisPrice ?? 4.9, appId: data.boxtal.appId || "", secret: "", hasSecret: !!data.boxtal.hasSecret });
         }
       } finally {
         setLoading(false);
@@ -124,11 +124,16 @@ export default function ShippingAdmin({ adminKey }) {
       const res = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-        body: JSON.stringify({ boxtal: { enabled: boxtal.enabled, pointRelaisPrice: Number(boxtal.pointRelaisPrice) } }),
+        body: JSON.stringify({ boxtal: {
+          enabled: boxtal.enabled,
+          pointRelaisPrice: Number(boxtal.pointRelaisPrice),
+          appId: boxtal.appId,
+          ...(boxtal.secret ? { appSecret: boxtal.secret } : {}),
+        } }),
       });
       if (res.ok) {
         const d = (await res.json()).settings;
-        if (d?.boxtal) setBoxtalState({ enabled: !!d.boxtal.enabled, pointRelaisPrice: d.boxtal.pointRelaisPrice ?? 4.9 });
+        if (d?.boxtal) setBoxtalState({ enabled: !!d.boxtal.enabled, pointRelaisPrice: d.boxtal.pointRelaisPrice ?? 4.9, appId: d.boxtal.appId || "", secret: "", hasSecret: !!d.boxtal.hasSecret });
         setMsg("Point relais enregistré ✓ — appliqué immédiatement au paiement.");
       } else setMsg("Échec de l'enregistrement. Réessaie.");
     } catch { setMsg("Échec de l'enregistrement. Réessaie."); }
@@ -291,10 +296,21 @@ export default function ShippingAdmin({ adminKey }) {
           <input type="number" min="0" step="0.1" value={boxtal.pointRelaisPrice}
             onChange={(e) => setBoxtalState({ ...boxtal, pointRelaisPrice: e.target.value })} />
         </label>
-        <div style={{ background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 10, padding: "10px 12px", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
-          🔑 Tes <strong>clés Boxtal</strong> se mettent dans les <strong>secrets</strong> (là où sont tes autres clés), sous les noms <code>BOXTAL_APP_ID</code> et <code>BOXTAL_APP_SECRET</code>.
-          Tant que les clés ne sont pas en place, l'option apparaît à <strong>prix fixe</strong> (ci-dessus) et la cliente t'indique son point relais par message.
-          Une fois les clés en place, on active la <strong>carte des points relais + le choix du transporteur</strong> au paiement.
+        <div style={{ background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 10, padding: "12px", display: "grid", gap: 10 }}>
+          <strong style={{ fontSize: "0.9rem" }}>🔑 Tes clés Boxtal (developer.boxtal.com)</strong>
+          <label className="admin-field">
+            Identifiant (App ID / clé publique)
+            <input value={boxtal.appId} onChange={(e) => setBoxtalState({ ...boxtal, appId: e.target.value })} placeholder="Colle ton App ID Boxtal" autoComplete="off" />
+          </label>
+          <label className="admin-field">
+            Clé secrète {boxtal.hasSecret && <span style={{ color: "#256b34", fontWeight: 600 }}>· déjà enregistrée ✓</span>}
+            <input type="password" value={boxtal.secret} onChange={(e) => setBoxtalState({ ...boxtal, secret: e.target.value })}
+              placeholder={boxtal.hasSecret ? "•••••••• (laisse vide pour ne pas changer)" : "Colle ta clé secrète Boxtal"} autoComplete="new-password" />
+          </label>
+          <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--ink-soft)" }}>
+            🔒 Tes clés sont stockées en sécurité côté serveur et <strong>jamais réaffichées</strong> ni exposées au public.
+            Tant qu'elles ne sont pas en place, l'option point relais fonctionne à <strong>prix fixe</strong> (la cliente t'indique son point par message). Une fois les clés là, on active la <strong>carte + le choix du transporteur</strong> au paiement.
+          </p>
         </div>
         <button className="btn btn-gold" onClick={saveBoxtal} disabled={saving} style={{ justifySelf: "start" }}>
           {saving ? "Enregistrement…" : "💾 Enregistrer le point relais"}

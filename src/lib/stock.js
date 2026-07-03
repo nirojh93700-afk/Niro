@@ -711,11 +711,12 @@ export async function getSettings() {
       igUserId: typeof s.social?.igUserId === "string" ? s.social.igUserId.trim() : "",
       igToken: typeof s.social?.igToken === "string" ? s.social.igToken.trim() : "",
     },
-    // Point relais (Boxtal) : activation + prix, réglés dans Gestion → Livraison.
-    // Les CLÉS API Boxtal ne sont PAS ici : elles se mettent dans les secrets
-    // d'environnement (BOXTAL_APP_ID / BOXTAL_APP_SECRET), comme la clé Stripe.
+    // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
+    // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {
       enabled: s.boxtal?.enabled === true,
+      appId: typeof s.boxtal?.appId === "string" ? s.boxtal.appId : "",
+      hasSecret: Boolean(s.boxtal?.appSecret),
       pointRelaisPrice: Number.isFinite(Number(s.boxtal?.pointRelaisPrice)) ? Number(s.boxtal.pointRelaisPrice) : 4.9,
     },
   };
@@ -741,6 +742,31 @@ export async function updateGmail(patch) {
   const data = await getCatalogRaw();
   const cur = (data.settings || {}).gmail || {};
   data.settings = { ...(data.settings || {}), gmail: { ...cur, ...patch } };
+  await persistCatalog(data);
+  return true;
+}
+
+// Clés API Boxtal (point relais) — lecture SERVEUR uniquement (jamais exposées
+// par getSettings, qui ne renvoie que hasSecret).
+export async function getBoxtalCreds() {
+  const data = await getCatalogRaw();
+  const b = (data.settings || {}).boxtal || {};
+  return { appId: b.appId || "", appSecret: b.appSecret || "" };
+}
+
+// Met à jour partiellement les infos Boxtal (sans écraser la clé si non fournie).
+export async function updateBoxtal(patch) {
+  const data = await getCatalogRaw();
+  const cur = (data.settings || {}).boxtal || {};
+  const next = { ...cur };
+  if (patch.appId !== undefined) next.appId = String(patch.appId || "").trim().slice(0, 200);
+  if (patch.appSecret) next.appSecret = String(patch.appSecret).trim().slice(0, 300); // uniquement si fournie
+  if (patch.enabled !== undefined) next.enabled = Boolean(patch.enabled);
+  if (patch.pointRelaisPrice !== undefined) {
+    const p = Number(patch.pointRelaisPrice);
+    next.pointRelaisPrice = Number.isFinite(p) && p >= 0 && p <= 100 ? Math.round(p * 100) / 100 : 4.9;
+  }
+  data.settings = { ...(data.settings || {}), boxtal: next };
   await persistCatalog(data);
   return true;
 }

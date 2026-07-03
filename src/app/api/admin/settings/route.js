@@ -1,4 +1,4 @@
-import { isAdmin, getSettings, setSettings } from "@/lib/stock";
+import { isAdmin, getSettings, setSettings, updateBoxtal } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -113,11 +113,13 @@ export async function POST(req) {
     patch.shipping = sh; // objet vide = retour aux tarifs d'origine
   }
   if (body.boxtal && typeof body.boxtal === "object") {
-    const p = Number(body.boxtal.pointRelaisPrice);
-    patch.boxtal = {
-      enabled: Boolean(body.boxtal.enabled),
-      pointRelaisPrice: Number.isFinite(p) && p >= 0 && p <= 100 ? Math.round(p * 100) / 100 : 4.9,
-    };
+    // La clé secrète est fusionnée à part (jamais écrasée si non renvoyée).
+    await updateBoxtal({
+      enabled: body.boxtal.enabled,
+      pointRelaisPrice: body.boxtal.pointRelaisPrice,
+      appId: body.boxtal.appId,
+      appSecret: body.boxtal.appSecret, // uniquement si non vide
+    });
   }
   if (typeof body.metaPixelId === "string") patch.metaPixelId = /^[0-9]{0,30}$/.test(body.metaPixelId.trim()) ? body.metaPixelId.trim() : "";
   if (typeof body.gaId === "string") patch.gaId = /^[A-Za-z0-9-]{0,30}$/.test(body.gaId.trim()) ? body.gaId.trim() : "";
