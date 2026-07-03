@@ -1643,7 +1643,10 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Votre pays (et prénom en option)",
     personalizationFields: [
-      { key: "pays", label: "Votre pays", placeholder: "Ex : France", maxLength: 30 },
+      { key: "pays", type: "select", label: "Choisissez votre pays", options: [
+        { value: "France", label: "France 🇫🇷 (coq gaulois)" },
+        { value: "Portugal", label: "Portugal 🇵🇹 (blason F.P.F.)" },
+      ] },
       { key: "prenom", label: "Prénom à graver sur le socle (facultatif)", placeholder: "Ex : Lucas", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "note", type: "note", text: "Choisissez votre pays. Vous pouvez aussi ajouter un prénom sur le socle (gratuit). Le stylo n'est pas inclus." },
@@ -1651,7 +1654,9 @@ export const products = [
     title: "Porte-stylo Coupe du Monde 2026 en bois — coq gaulois, aux couleurs de votre nation",
     images: [
       "/produits/porte-stylo-coq-1.jpg",
+      "/produits/porte-stylo-portugal-1.jpg",
       "/produits/porte-stylo-coq-2.jpg",
+      "/produits/porte-stylo-portugal-2.jpg",
       "/produits/porte-stylo-coq-3.jpg",
     ],
     variants: [
