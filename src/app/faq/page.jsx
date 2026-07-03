@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getSettings } from "@/lib/stock";
+import { resolveShippingConfig } from "@/lib/shipping";
 
 export const metadata = {
   title: "Questions fréquentes (FAQ)",
@@ -19,10 +21,8 @@ const FAQ = [
     q: "Puis-je voir un aperçu avant la gravure définitive ?",
     a: "Oui. Pour les commandes personnalisées, nous pouvons vous envoyer par e-mail un aperçu à valider avant de lancer la gravure : vous validez ou demandez une modification en un clic.",
   },
-  {
-    q: "Quels sont les frais de livraison ?",
-    a: "Les bijoux voyagent en Lettre Suivie, avec livraison offerte dès 45 € d'achat. Les décorations (bois, mariage) sont expédiées en colis suivi, avec un tarif selon la quantité. Le montant exact s'affiche automatiquement au moment du paiement.",
-  },
+  // NB : la réponse « frais de livraison » est générée dans FaqPage (seuil de
+  // livraison offerte lu dans les réglages admin — Gestion → 🚚 Livraison).
   {
     q: "Proposez-vous le retrait en main propre ?",
     a: "Oui, pour les décorations et créations de mariage uniquement (pas les bijoux), gratuitement et sur rendez-vous, dans le Val-d'Oise (95) et les départements voisins. L'option s'affiche au paiement si votre code postal est éligible.",
@@ -49,11 +49,26 @@ const FAQ = [
   },
 ];
 
-export default function FaqPage() {
+export const dynamic = "force-dynamic";
+
+export default async function FaqPage() {
+  // Seuil « livraison offerte » : suit les tarifs réglés dans l'admin.
+  const settings = await getSettings().catch(() => ({}));
+  const cfg = resolveShippingConfig(settings?.shipping);
+  const seuil = `${String(cfg.bijouxFreeThreshold).replace(".", ",")} €`;
+  const faq = [
+    ...FAQ.slice(0, 3),
+    {
+      q: "Quels sont les frais de livraison ?",
+      a: `Les bijoux voyagent en Lettre Suivie, avec livraison offerte dès ${seuil} d'achat. Les décorations (bois, mariage) sont expédiées en colis suivi, avec un tarif selon la quantité. Le montant exact s'affiche automatiquement au moment du paiement.`,
+    },
+    ...FAQ.slice(3),
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQ.map((f) => ({
+    mainEntity: faq.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -70,7 +85,7 @@ export default function FaqPage() {
         <Link href="/contact" className="link-underline">Écrivez-nous</Link>, nous répondons rapidement.
       </p>
       <div style={{ marginTop: 26, display: "grid", gap: 10 }}>
-        {FAQ.map((f, i) => (
+        {faq.map((f, i) => (
           <details key={i} style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 12, padding: "14px 18px" }}>
             <summary style={{ cursor: "pointer", fontWeight: 600 }}>{f.q}</summary>
             <p style={{ margin: "10px 0 2px", color: "var(--ink-soft)", lineHeight: 1.6 }}>{f.a}</p>

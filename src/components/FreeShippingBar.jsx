@@ -1,19 +1,31 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useCart } from "./CartContext";
 import { getProductBySlug } from "@/lib/products";
-import { BIJOUX_FREE_THRESHOLD as SEUIL } from "@/lib/shipping";
+import { BIJOUX_FREE_THRESHOLD } from "@/lib/shipping";
 import { formatEuro } from "@/lib/format";
 
 // Barre de progression « livraison offerte » (s'affiche pour un panier 100 %
-// bijoux, livraison offerte dès 45 €) + petit bandeau de réassurance.
+// bijoux) + petit bandeau de réassurance. Le seuil suit les tarifs réglés
+// dans l'admin (Gestion → Réglages → 🚚 Livraison), repli sur le code.
 export default function FreeShippingBar({ compact = false }) {
   const { items, total } = useCart();
+  const [seuil, setSeuil] = useState(BIJOUX_FREE_THRESHOLD);
+  useEffect(() => {
+    fetch("/api/shipping-config")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        const n = Number(d?.bijouxFreeThreshold);
+        if (Number.isFinite(n) && n >= 0) setSeuil(n);
+      })
+      .catch(() => {});
+  }, []);
   if (!items.length) return null;
 
   const allBijoux = items.every((i) => getProductBySlug(i.productSlug)?.category === "bijoux");
-  const remaining = Math.max(0, SEUIL - total);
-  const pct = Math.min(100, Math.round((total / SEUIL) * 100));
+  const remaining = Math.max(0, seuil - total);
+  const pct = seuil > 0 ? Math.min(100, Math.round((total / seuil) * 100)) : 100;
 
   return (
     <div style={{ margin: compact ? "0 0 10px" : "0 0 14px" }}>

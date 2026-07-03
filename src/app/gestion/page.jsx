@@ -9,6 +9,7 @@ import AssistantAdmin from "@/components/admin/AssistantAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
 import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
+import ShippingAdmin from "@/components/admin/ShippingAdmin";
 import ReviewsAdmin from "@/components/admin/ReviewsAdmin";
 import PromoCodesAdmin from "@/components/admin/PromoCodesAdmin";
 import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
@@ -603,6 +604,7 @@ export default function GestionPage() {
               label: "Réglages",
               tabs: [
                 { id: "apparence", text: "Apparence" },
+                { id: "livraison", text: "🚚 Livraison (tarifs)" },
                 { id: "reglages", text: "Réglages" },
               ],
             },
@@ -1142,6 +1144,9 @@ export default function GestionPage() {
 
         {/* ---------------- APPARENCE ---------------- */}
         {tab === "apparence" && <AppearanceAdmin adminKey={key} />}
+
+        {/* ---------------- LIVRAISON (tarifs) ---------------- */}
+        {tab === "livraison" && <ShippingAdmin adminKey={key} />}
 
         {/* ---------------- RÉGLAGES ---------------- */}
         {tab === "reglages" && config && (

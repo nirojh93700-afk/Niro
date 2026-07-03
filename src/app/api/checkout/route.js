@@ -218,6 +218,7 @@ export async function POST(req) {
       shipping_options: buildShippingOptions({
         totalGrams, subtotal, parcelQty, glassQty, letterOnly, freeShipping: allFreeShip,
         pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
+        config: settings?.shipping, // tarifs personnalisés (admin)
       }),
       custom_fields: [
         {

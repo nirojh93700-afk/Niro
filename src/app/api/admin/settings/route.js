@@ -81,6 +81,37 @@ export async function POST(req) {
     patch.refMarkup = Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 90) : 0;
   }
   if (typeof body.pickupZones === "string") patch.pickupZones = body.pickupZones.slice(0, 200);
+  if (body.shipping && typeof body.shipping === "object") {
+    // Frais de livraison : montants en euros (2 décimales max). Un champ absent
+    // ou invalide n'est pas stocké → le tarif par défaut du code s'applique.
+    const price = (v, max = 1000) => {
+      const n = Number(v);
+      return Number.isFinite(n) && n >= 0 && n <= max ? Math.round(n * 100) / 100 : undefined;
+    };
+    const tiers = (arr) => {
+      if (!Array.isArray(arr)) return undefined;
+      const list = arr.slice(0, 8).map((t) => {
+        const p = price(t?.price);
+        if (p === undefined) return null;
+        const q = Number(t?.maxQty);
+        // maxQty null = « et plus » (dernier palier)
+        return { maxQty: Number.isFinite(q) && q > 0 ? Math.min(Math.round(q), 999) : null, price: p };
+      }).filter(Boolean);
+      return list.length ? list : undefined;
+    };
+    const sh = {};
+    const bijouxHome = price(body.shipping.bijouxHome);
+    if (bijouxHome !== undefined) sh.bijouxHome = bijouxHome;
+    const bijouxFreeThreshold = price(body.shipping.bijouxFreeThreshold, 10000);
+    if (bijouxFreeThreshold !== undefined) sh.bijouxFreeThreshold = bijouxFreeThreshold;
+    const decoTiers = tiers(body.shipping.decoTiers);
+    if (decoTiers) sh.decoTiers = decoTiers;
+    const glassTiers = tiers(body.shipping.glassTiers);
+    if (glassTiers) sh.glassTiers = glassTiers;
+    const pickupFee = price(body.shipping.pickupFee);
+    if (pickupFee !== undefined) sh.pickupFee = pickupFee;
+    patch.shipping = sh; // objet vide = retour aux tarifs d'origine
+  }
   if (typeof body.metaPixelId === "string") patch.metaPixelId = /^[0-9]{0,30}$/.test(body.metaPixelId.trim()) ? body.metaPixelId.trim() : "";
   if (typeof body.gaId === "string") patch.gaId = /^[A-Za-z0-9-]{0,30}$/.test(body.gaId.trim()) ? body.gaId.trim() : "";
   if (body.welcome && typeof body.welcome === "object") {

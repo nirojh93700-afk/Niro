@@ -104,6 +104,14 @@ Le site calcule **un seul frais** automatiquement (voir `src/lib/shipping.js`) :
 - `pickup:true` → ajoute l'option « Remise en main propre » (7 €).
 → Bien renseigner `weight`, `letter`, `pickup` sur chaque nouveau produit.
 
+**Tarifs modifiables dans l'admin (maj 03/07/2026)** : page **Gestion → Réglages → 🚚 Livraison
+(tarifs)** (`src/components/admin/ShippingAdmin.jsx`). Tous les montants (bijoux, seuil offert,
+paliers déco, paliers verres, retrait) sont stockés en réglages (`settings.shipping`, sanitizé
+dans `/api/admin/settings`) et appliqués au checkout via `resolveShippingConfig()` — repli sûr
+sur les constantes du code si un champ est vide/invalide. La barre « livraison offerte » du
+panier (`FreeShippingBar`) lit le seuil via `/api/shipping-config` ; la FAQ le lit côté serveur.
+Les valeurs de `shipping.js` restent les tarifs PAR DÉFAUT (bouton « Rétablir » dans l'admin).
+
 ## 7. Infos détaillées (`src/lib/productInfo.js`)
 Pour une fiche complète, ajouter une entrée `"slug": { material, usage, returns }`
 (texte libre, sauts de ligne conservés) :

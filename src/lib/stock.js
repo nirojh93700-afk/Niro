@@ -696,6 +696,9 @@ export async function getSettings() {
     pickupZones: (typeof s.pickupZones === "string" && s.pickupZones.trim())
       ? s.pickupZones
       : "95, 78, 92, 93, 75, 60",
+    // Frais de livraison personnalisés (Gestion → Réglages → 🚚 Livraison).
+    // Objet vide = tarifs par défaut du code (src/lib/shipping.js).
+    shipping: (s.shipping && typeof s.shipping === "object") ? s.shipping : {},
     // Équipe d'agents IA. emailAutoReply : DÉSACTIVÉ par défaut. Quand activé,
     // l'agent e-mail répond seul aux messages simples du formulaire de contact
     // (les cas spéciaux sont toujours remontés à la gérante « à valider »).
