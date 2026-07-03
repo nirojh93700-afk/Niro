@@ -1646,6 +1646,7 @@ export const products = [
       { key: "pays", type: "select", label: "Choisissez votre pays", options: [
         { value: "France", label: "France 🇫🇷 (coq gaulois)" },
         { value: "Portugal", label: "Portugal 🇵🇹 (blason F.P.F.)" },
+        { value: "Argentine", label: "Argentine 🇦🇷 (blason A.F.A.)" },
       ] },
       { key: "note", type: "note", text: "Choisissez votre pays. Le stylo n'est pas inclus." },
     ],
@@ -1653,8 +1654,10 @@ export const products = [
     images: [
       "/produits/porte-stylo-coq-1.jpg",
       "/produits/porte-stylo-portugal-1.jpg",
+      "/produits/porte-stylo-argentine-1.jpg",
       "/produits/porte-stylo-coq-2.jpg",
       "/produits/porte-stylo-portugal-2.jpg",
+      "/produits/porte-stylo-argentine-2.jpg",
       "/produits/porte-stylo-coq-3.jpg",
     ],
     variants: [
