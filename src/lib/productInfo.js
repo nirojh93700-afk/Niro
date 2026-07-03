@@ -632,13 +632,12 @@ Défaut à l'arrivée
 - Porte-stylo de bureau, motif spécial Coupe du Monde 2026.
 - Bois découpé au laser, aux couleurs de la nation choisie.
 - Le stylo n'est pas inclus. Livré à plat (montage simple).`,
-    usage: `Personnalisation & Entretien
+    usage: `Utilisation & Entretien
 - Choisissez votre pays à la commande.
-- Prénom en option sur le socle (gratuit).
 - Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié à plat en lettre suivie, soigneusement protégé.
-- Personnalisé (pays/prénom) = non remboursable une fois la gravure lancée (article L221-28).
+- Fabriqué à la demande selon le pays choisi = non remboursable une fois la découpe lancée (article L221-28).
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
 };

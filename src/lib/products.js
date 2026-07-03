@@ -1641,15 +1641,13 @@ export const products = [
     type: "Déco de bureau",
     tagline: "Le porte-stylo en bois aux couleurs de votre nation — spécial Coupe du Monde 2026.",
     personalizable: true,
-    personalizationLabel: "Votre pays (et prénom en option)",
+    personalizationLabel: "Votre pays",
     personalizationFields: [
       { key: "pays", type: "select", label: "Choisissez votre pays", options: [
         { value: "France", label: "France 🇫🇷 (coq gaulois)" },
         { value: "Portugal", label: "Portugal 🇵🇹 (blason F.P.F.)" },
       ] },
-      { key: "prenom", label: "Prénom à graver sur le socle (facultatif)", placeholder: "Ex : Lucas", maxLength: 15, optional: true },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "note", type: "note", text: "Choisissez votre pays. Vous pouvez aussi ajouter un prénom sur le socle (gratuit). Le stylo n'est pas inclus." },
+      { key: "note", type: "note", text: "Choisissez votre pays. Le stylo n'est pas inclus." },
     ],
     title: "Porte-stylo Coupe du Monde 2026 en bois — coq gaulois, aux couleurs de votre nation",
     images: [
@@ -1663,11 +1661,10 @@ export const products = [
       { id: "porte-stylo-coq-standard", title: "Porte-stylo Coupe du Monde", price: 14.90 },
     ],
     descriptionHtml: `<p><strong>Supportez votre équipe avec style.</strong> Ce porte-stylo en bois, découpé au laser, célèbre la <strong>Coupe du Monde 2026</strong> aux couleurs de la nation de votre choix.</p>
-<p>Posé sur un bureau, il tient fièrement votre stylo (non inclus) et affiche votre drapeau. Le cadeau parfait pour tous les supporters. Ajoutez un prénom sur le socle pour un cadeau unique.</p>
+<p>Posé sur un bureau, il tient fièrement votre stylo (non inclus) et affiche votre drapeau. Le cadeau parfait pour tous les supporters.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Pays au choix</strong> : sélectionnez votre nation à la commande</li>
-<li><strong>Prénom en option</strong> gravé sur le socle (gratuit)</li>
 <li><strong>Matière</strong> : bois découpé au laser, finition soignée</li>
 <li>Découpé et fini <strong>à la main dans notre atelier français</strong></li>
 <li>Livré à plat (montage simple, quelques secondes)</li>
