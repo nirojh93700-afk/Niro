@@ -627,6 +627,20 @@ Défaut à l'arrivée
 - Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans personnalisation : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine.
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
+  "porte-stylo-coq-coupe-du-monde": {
+    material: `Taille & Matériaux
+- Porte-stylo de bureau, motif spécial Coupe du Monde 2026.
+- Bois découpé au laser, aux couleurs de la nation choisie.
+- Le stylo n'est pas inclus. Livré à plat (montage simple).`,
+    usage: `Personnalisation & Entretien
+- Choisissez votre pays à la commande.
+- Prénom en option sur le socle (gratuit).
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+    returns: `Expédition & Retour
+- Expédié à plat en lettre suivie, soigneusement protégé.
+- Personnalisé (pays/prénom) = non remboursable une fois la gravure lancée (article L221-28).
+- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
 };
 
 export function getProductInfo(slug) {

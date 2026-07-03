@@ -115,6 +115,15 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* BANNIÈRE COUPE DU MONDE 2026 */}
+      <Link href="/coupe-du-monde" style={{ display: "block", textDecoration: "none" }}>
+        <div style={{ background: "linear-gradient(135deg,#0a1a3f 0%,#12275c 55%,#1c1206 100%)", color: "#f4e6c2", padding: "26px 18px", textAlign: "center" }}>
+          <div style={{ fontSize: "1.4rem", marginBottom: 4 }}>⚽ 🏆 ⭐</div>
+          <strong style={{ fontFamily: "Georgia, serif", fontSize: "clamp(1.3rem,4.5vw,1.9rem)", display: "block" }}>Spécial Coupe du Monde 2026</strong>
+          <span style={{ color: "#e7ddc7", fontSize: "0.98rem" }}>Déco aux couleurs de votre nation, à personnaliser →</span>
+        </div>
+      </Link>
+
       {/* NOUVEAUTÉS — alimenté automatiquement par le badge « Nouveau » */}
       {show.newArrivals && newProducts.length > 0 && (
         <section className="section new-arrivals" style={{ background: "linear-gradient(180deg,#fbf4e6 0%,#fffdf9 65%)", borderTop: "1px solid #efe2c2" }}>
