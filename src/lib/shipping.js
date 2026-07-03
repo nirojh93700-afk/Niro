@@ -94,7 +94,7 @@ function rate(amount, name, days) {
 //   parcelQty     : nombre d'articles "déco" (colis) dans le panier
 //   pickupEligible: retrait en main propre autorisé (déco/mariage + zone OK)
 //   config        : tarifs personnalisés (réglages admin) — facultatif
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal }) {
   const cfg = resolveShippingConfig(config);
   const options = [];
 
@@ -112,6 +112,14 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
     if (decoQty > 0) prices.push(tierPrice(cfg.decoTiers, decoQty));
     const price = prices.length ? Math.max(...prices) : tierPrice(cfg.decoTiers, parcelQty || 1);
     options.push(rate(price, "Livraison à domicile", [2, 5]));
+  }
+
+  // Option Point relais (Boxtal) — activée dans Gestion → Livraison.
+  // Version simple : prix fixe (la cliente indique son point relais par message).
+  if (boxtal && boxtal.enabled && !freeShipping) {
+    const pr = Number(boxtal.pointRelaisPrice);
+    const price = Number.isFinite(pr) && pr >= 0 ? pr : 4.9;
+    options.push(rate(price, "Livraison en point relais", [3, 6]));
   }
 
   if (pickupEligible) {

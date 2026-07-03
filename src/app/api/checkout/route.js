@@ -219,6 +219,7 @@ export async function POST(req) {
         totalGrams, subtotal, parcelQty, glassQty, letterOnly, freeShipping: allFreeShip,
         pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
         config: settings?.shipping, // tarifs personnalisés (admin)
+        boxtal: settings?.boxtal, // option point relais (admin)
       }),
       custom_fields: [
         {

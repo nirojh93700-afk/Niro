@@ -112,6 +112,13 @@ export async function POST(req) {
     if (pickupFee !== undefined) sh.pickupFee = pickupFee;
     patch.shipping = sh; // objet vide = retour aux tarifs d'origine
   }
+  if (body.boxtal && typeof body.boxtal === "object") {
+    const p = Number(body.boxtal.pointRelaisPrice);
+    patch.boxtal = {
+      enabled: Boolean(body.boxtal.enabled),
+      pointRelaisPrice: Number.isFinite(p) && p >= 0 && p <= 100 ? Math.round(p * 100) / 100 : 4.9,
+    };
+  }
   if (typeof body.metaPixelId === "string") patch.metaPixelId = /^[0-9]{0,30}$/.test(body.metaPixelId.trim()) ? body.metaPixelId.trim() : "";
   if (typeof body.gaId === "string") patch.gaId = /^[A-Za-z0-9-]{0,30}$/.test(body.gaId.trim()) ? body.gaId.trim() : "";
   if (body.welcome && typeof body.welcome === "object") {

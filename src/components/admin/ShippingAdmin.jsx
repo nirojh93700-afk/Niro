@@ -98,6 +98,7 @@ function TierEditor({ rows, onChange, unit }) {
 
 export default function ShippingAdmin({ adminKey }) {
   const [form, setForm] = useState(null);
+  const [boxtal, setBoxtalState] = useState({ enabled: false, pointRelaisPrice: 4.9 });
   const [msg, setMsg] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -109,12 +110,30 @@ export default function ShippingAdmin({ adminKey }) {
         if (res.ok) {
           const data = (await res.json()).settings;
           setForm(toForm(resolveShippingConfig(data?.shipping)));
+          if (data?.boxtal) setBoxtalState({ enabled: !!data.boxtal.enabled, pointRelaisPrice: data.boxtal.pointRelaisPrice ?? 4.9 });
         }
       } finally {
         setLoading(false);
       }
     })();
   }, [adminKey]);
+
+  async function saveBoxtal() {
+    setSaving(true); setMsg("");
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify({ boxtal: { enabled: boxtal.enabled, pointRelaisPrice: Number(boxtal.pointRelaisPrice) } }),
+      });
+      if (res.ok) {
+        const d = (await res.json()).settings;
+        if (d?.boxtal) setBoxtalState({ enabled: !!d.boxtal.enabled, pointRelaisPrice: d.boxtal.pointRelaisPrice ?? 4.9 });
+        setMsg("Point relais enregistré ✓ — appliqué immédiatement au paiement.");
+      } else setMsg("Échec de l'enregistrement. Réessaie.");
+    } catch { setMsg("Échec de l'enregistrement. Réessaie."); }
+    finally { setSaving(false); }
+  }
 
   async function post(shipping, label) {
     setSaving(true);
@@ -254,6 +273,32 @@ export default function ShippingAdmin({ adminKey }) {
           <input type="number" min="0" step="0.5" value={form.pickupFee}
             onChange={(e) => set({ pickupFee: e.target.value })} />
         </label>
+      </div>
+
+      {/* ============ POINT RELAIS (Boxtal) ============ */}
+      <div className="admin-block" style={{ display: "grid", gap: 10, borderColor: "#c9a24b" }}>
+        <h3 style={{ margin: 0 }}>📍 Point relais (Boxtal) — tous les transporteurs</h3>
+        <p style={{ margin: 0, color: "var(--ink-soft)", fontSize: "0.88rem" }}>
+          Ajoute au paiement une option <strong>« Livraison en point relais »</strong> (moins chère que le domicile).
+          Objectif : la cliente choisit son transporteur + son point relais sur une carte (comme sur Boxtal).
+        </p>
+        <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <input type="checkbox" checked={boxtal.enabled} onChange={(e) => setBoxtalState({ ...boxtal, enabled: e.target.checked })} style={{ width: "auto" }} />
+          Proposer la livraison en point relais au paiement
+        </label>
+        <label className="admin-field" style={{ maxWidth: 240 }}>
+          Prix du point relais (€)
+          <input type="number" min="0" step="0.1" value={boxtal.pointRelaisPrice}
+            onChange={(e) => setBoxtalState({ ...boxtal, pointRelaisPrice: e.target.value })} />
+        </label>
+        <div style={{ background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 10, padding: "10px 12px", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+          🔑 Tes <strong>clés Boxtal</strong> se mettent dans les <strong>secrets</strong> (là où sont tes autres clés), sous les noms <code>BOXTAL_APP_ID</code> et <code>BOXTAL_APP_SECRET</code>.
+          Tant que les clés ne sont pas en place, l'option apparaît à <strong>prix fixe</strong> (ci-dessus) et la cliente t'indique son point relais par message.
+          Une fois les clés en place, on active la <strong>carte des points relais + le choix du transporteur</strong> au paiement.
+        </div>
+        <button className="btn btn-gold" onClick={saveBoxtal} disabled={saving} style={{ justifySelf: "start" }}>
+          {saving ? "Enregistrement…" : "💾 Enregistrer le point relais"}
+        </button>
       </div>
 
       {/* ============ ACTIONS ============ */}

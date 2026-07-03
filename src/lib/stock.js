@@ -711,6 +711,13 @@ export async function getSettings() {
       igUserId: typeof s.social?.igUserId === "string" ? s.social.igUserId.trim() : "",
       igToken: typeof s.social?.igToken === "string" ? s.social.igToken.trim() : "",
     },
+    // Point relais (Boxtal) : activation + prix, réglés dans Gestion → Livraison.
+    // Les CLÉS API Boxtal ne sont PAS ici : elles se mettent dans les secrets
+    // d'environnement (BOXTAL_APP_ID / BOXTAL_APP_SECRET), comme la clé Stripe.
+    boxtal: {
+      enabled: s.boxtal?.enabled === true,
+      pointRelaisPrice: Number.isFinite(Number(s.boxtal?.pointRelaisPrice)) ? Number(s.boxtal.pointRelaisPrice) : 4.9,
+    },
   };
 }
 
