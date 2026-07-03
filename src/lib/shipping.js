@@ -73,6 +73,27 @@ function tierPrice(tiers, qty) {
   return t.price;
 }
 
+// Prix « point relais » calculé AUTOMATIQUEMENT selon le poids, à partir de la
+// grille tarifaire Boxtal (Mondial Relay point relais). Coûts réels TTC extraits
+// de la grille (HT × 1,20) + petite marge pour couvrir emballage/temps :
+//   ≤ 1 kg  : coût ~4,21 € → 4,90 €
+//   1–2 kg  : coût ~5,88 € → 6,50 €
+//   2–5 kg  : coût ~6,25 € → 6,90 €
+// La cliente ne perd jamais d'argent : chaque palier est au-dessus du coût réel.
+// Le plancher admin (défaut 4,90 €) s'applique par-dessus côté buildShippingOptions.
+const POINT_RELAIS_TIERS = [
+  { maxGrams: 1000, price: 4.9 },
+  { maxGrams: 2000, price: 6.5 },
+  { maxGrams: 5000, price: 6.9 },
+  { maxGrams: Infinity, price: 8.9 },
+];
+
+function pointRelaisPriceByWeight(grams) {
+  const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
+  const t = POINT_RELAIS_TIERS.find((x) => g <= x.maxGrams) || POINT_RELAIS_TIERS[POINT_RELAIS_TIERS.length - 1];
+  return t.price;
+}
+
 function rate(amount, name, days) {
   return {
     shipping_rate_data: {
@@ -115,10 +136,13 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
   }
 
   // Option Point relais (Boxtal) — activée dans Gestion → Livraison.
-  // Version simple : prix fixe (la cliente indique son point relais par message).
+  // PRIX AUTOMATIQUE PAR POIDS (basé sur la grille Boxtal Mondial Relay point
+  // relais + marge). Plancher = prix réglé dans l'admin (défaut 4,90 €), pour
+  // que la cliente ne perde jamais d'argent. Coûts réels TTC : ≤1kg ~4,20 €,
+  // 1-2kg ~5,90 €, 2-5kg ~6,25 €.
   if (boxtal && boxtal.enabled && !freeShipping) {
-    const pr = Number(boxtal.pointRelaisPrice);
-    const price = Number.isFinite(pr) && pr >= 0 ? pr : 4.9;
+    const floor = Number.isFinite(Number(boxtal.pointRelaisPrice)) ? Number(boxtal.pointRelaisPrice) : 4.9;
+    const price = Math.max(floor, pointRelaisPriceByWeight(totalGrams));
     options.push(rate(price, "Livraison en point relais", [3, 6]));
   }
 
