@@ -18,20 +18,22 @@ function pick(obj, ...keys) {
   return undefined;
 }
 
-// Transforme un point relais Boxtal (forme variable) en objet simple et stable
-// pour l'affichage : code, nom, adresse, cp, ville, coordonnées, horaires.
-function normalize(p) {
-  const loc = p?.location || p?.address || p || {};
-  const coord = p?.coordinates || p?.position || p?.geo || loc || {};
+// Transforme un point relais Boxtal en objet simple et stable pour l'affichage.
+// Forme réelle Boxtal : { distanceFromSearchLocation, parcelPoint: { code, name,
+// location: { street, city, postalCode, position: { latitude, longitude } } } }.
+function normalize(raw) {
+  const p = raw?.parcelPoint || raw || {};
+  const loc = p.location || p.address || {};
+  const pos = loc.position || p.coordinates || p.position || p.geo || {};
   const street = pick(loc, "street", "streetLine", "address", "line1");
   const streetStr = Array.isArray(street) ? street.filter(Boolean).join(" ") : street;
-  const lat = Number(pick(coord, "latitude", "lat", "y"));
-  const lng = Number(pick(coord, "longitude", "lng", "lon", "x"));
+  const lat = Number(pick(pos, "latitude", "lat", "y"));
+  const lng = Number(pick(pos, "longitude", "lng", "lon", "x"));
   return {
     code: String(pick(p, "code", "id", "parcelPointCode", "reference") || ""),
     name: String(pick(p, "name", "label", "networkName") || "Point relais"),
     street: String(streetStr || ""),
-    zipCode: String(pick(loc, "zipCode", "postalCode", "zip", "cp") || ""),
+    zipCode: String(pick(loc, "postalCode", "zipCode", "zip", "cp") || ""),
     city: String(pick(loc, "city", "town", "ville") || ""),
     lat: Number.isFinite(lat) ? lat : null,
     lng: Number.isFinite(lng) ? lng : null,
@@ -70,7 +72,7 @@ export async function GET(req) {
   // documentée publiquement → on essaie les valeurs plausibles jusqu'à obtenir
   // une réponse. Un override `?op=` permet de tester une valeur précise (admin).
   const opOverride = url.searchParams.get("op");
-  const opCandidates = opOverride ? [opOverride] : ["DELIVERY", "COLLECTION", "ARRIVAL", "PICKUP"];
+  const opCandidates = opOverride ? [opOverride] : ["ARRIVAL", "DELIVERY", "COLLECTION", "PICKUP"];
 
   const attempts = [];
   for (const op of opCandidates) {
@@ -101,7 +103,7 @@ export async function GET(req) {
 
     const list = Array.isArray(data)
       ? data
-      : (data?.parcelPoints || data?.points || data?.items || data?.content || data?.results || data?.parcelPointList || []);
+      : (data?.content || data?.parcelPoints || data?.points || data?.items || data?.results || data?.parcelPointList || []);
     const points = (Array.isArray(list) ? list : []).map(normalize).filter((p) => p.code);
 
     const body = { points, op };
