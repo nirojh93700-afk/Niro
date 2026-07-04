@@ -7,15 +7,6 @@ import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
-const HERO_DEFAULTS = {
-  eyebrow: "Atelier français · gravure laser",
-  title: "Des créations uniques, gravées avec émotion.",
-  text: "Bijoux, décorations de mariage et cadeaux personnalisés, gravés dans notre atelier. Chaque pièce raconte votre histoire.",
-  cta1: "Découvrir la boutique",
-  cta2: "Idées cadeaux",
-  image: "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/jewelry-natural-1.jpg?v=1774981669",
-};
-
 const CATEGORY_DEFAULTS = [
   { slug: "bijoux", label: "Bijoux", sub: "Colliers & bracelets gravés", image: getProductBySlug("collier-medaillon-coeur-ouvrable").images[0] },
   { slug: "mariage", label: "Mariage & Réception", sub: "Numéros de table, menus, ronds de serviette", image: getProductBySlug("menu-de-mariage-bois-grave").images[0] },
@@ -62,14 +53,6 @@ export default async function HomePage() {
     : FEATURED_FALLBACK.map((sl) => catalog.find((p) => p.slug === sl) || getProductBySlug(sl)).filter(Boolean)
   ).slice(0, 8);
 
-  const hero = {
-    eyebrow: pick(s?.hero?.eyebrow, HERO_DEFAULTS.eyebrow),
-    title: pick(s?.hero?.title, HERO_DEFAULTS.title),
-    text: pick(s?.hero?.text, HERO_DEFAULTS.text),
-    cta1: pick(s?.hero?.cta1, HERO_DEFAULTS.cta1),
-    cta2: pick(s?.hero?.cta2, HERO_DEFAULTS.cta2),
-    image: pick(s?.hero?.image, HERO_DEFAULTS.image),
-  };
   const cats = CATEGORY_DEFAULTS.map((c, i) => ({
     ...c,
     label: pick(s?.categories?.[i]?.label, c.label),
@@ -91,26 +74,59 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="hero">
-        <div className="container hero-grid">
+      {/* HERO — Cristal Photo 3D (produit phare) */}
+      <section className="cr-hero">
+        <style>{`
+          .cr-hero{position:relative;overflow:hidden;background:
+            radial-gradient(90% 120% at 88% 12%, rgba(61,120,152,.30), transparent 55%),
+            radial-gradient(80% 100% at 6% 100%, rgba(201,162,75,.20), transparent 55%),
+            linear-gradient(160deg,#0e151d,#05070a 70%);color:#f3efe6}
+          .cr-wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:24px;padding:clamp(30px,5vw,60px) clamp(20px,5vw,48px)}
+          @media(max-width:840px){.cr-wrap{grid-template-columns:1fr;text-align:center}}
+          .cr-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#e2c67e;border:1px solid rgba(201,162,75,.35);border-radius:999px;padding:7px 14px;margin-bottom:20px}
+          .cr-dot{width:6px;height:6px;border-radius:50%;background:#c9a24b;animation:crpulse 2.4s infinite}
+          @keyframes crpulse{0%{box-shadow:0 0 0 0 rgba(201,162,75,.55)}70%{box-shadow:0 0 0 10px rgba(201,162,75,0)}100%{box-shadow:0 0 0 0 rgba(201,162,75,0)}}
+          .cr-hero h1{font-family:Georgia,serif;font-weight:600;font-size:clamp(2.1rem,5.5vw,3.6rem);line-height:1.05;letter-spacing:-.015em;margin:0 0 16px;color:#fff}
+          .cr-shine{background:linear-gradient(92deg,#fff 20%,#e2c67e 45%,#fff 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+          .cr-lede{color:#b9c2cc;font-size:clamp(1rem,2.2vw,1.14rem);max-width:46ch;margin:0 0 26px;line-height:1.6}
+          @media(max-width:840px){.cr-lede{margin-left:auto;margin-right:auto}}
+          .cr-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+          @media(max-width:840px){.cr-cta{justify-content:center}}
+          .cr-btn{border-radius:14px;padding:15px 28px;font-weight:700;font-size:1rem;text-decoration:none;background:linear-gradient(135deg,#c9a24b,#e2c67e);color:#1a1206;box-shadow:0 10px 30px rgba(201,162,75,.28);transition:transform .15s}
+          .cr-btn:hover{transform:translateY(-2px)}
+          .cr-link2{color:#e7edf2;text-decoration:none;font-size:.96rem;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:2px}
+          .cr-badges{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;color:#8f9aa5;font-size:.8rem}
+          @media(max-width:840px){.cr-badges{justify-content:center}}
+          .cr-badges b{color:#cfd6dd;font-weight:600}
+          .cr-viz{position:relative;display:grid;place-items:center;min-height:300px}
+          .cr-halo{position:absolute;width:74%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(120,180,220,.35),rgba(201,162,75,.12) 45%,transparent 66%);filter:blur(18px);animation:crbreathe 5s ease-in-out infinite}
+          @keyframes crbreathe{0%,100%{transform:scale(.96);opacity:.75}50%{transform:scale(1.05);opacity:1}}
+          .cr-shot{position:relative;width:min(400px,82%);border-radius:18px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.6);animation:crfloat 6s ease-in-out infinite;-webkit-mask-image:radial-gradient(120% 120% at 50% 40%,#000 72%,transparent 100%);mask-image:radial-gradient(120% 120% at 50% 40%,#000 72%,transparent 100%)}
+          .cr-shot img{display:block;width:100%;height:auto}
+          @keyframes crfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+          @media(prefers-reduced-motion:reduce){.cr-shot,.cr-halo,.cr-dot{animation:none}}
+        `}</style>
+        <div className="cr-wrap">
           <div>
-            <span className="hero-eyebrow">{hero.eyebrow}</span>
-            <h1>{hero.title}</h1>
-            <p>{hero.text}</p>
-            <div className="hero-cta">
-              <Link href="/boutique" className="btn btn-gold">{hero.cta1}</Link>
-              <Link href="/boutique?cat=bijoux" className="btn btn-outline">{hero.cta2}</Link>
+            <span className="cr-eyebrow"><span className="cr-dot"></span> Nouveau · Fait main en France</span>
+            <h1>Votre photo,<br/><span className="cr-shine">sculptée dans le cristal.</span></h1>
+            <p className="cr-lede">Gravure photo 3D au cœur d&apos;un cristal K9, réalisée dans notre atelier. Un cadeau qui capte la lumière — et l&apos;émotion.</p>
+            <div className="cr-cta">
+              <Link href="/produit/cristal-photo-3d-vertical" className="cr-btn">Créer mon cristal →</Link>
+              <Link href="/boutique?cat=deco" className="cr-link2">Voir les tailles &amp; prix</Link>
             </div>
-            <div className="hero-badges">
-              <div className="hero-badge"><span>🇫🇷</span> Personnalisé en France</div>
-              <div className="hero-badge"><span>✦</span> 100% personnalisable</div>
-              <div className="hero-badge"><span>🔒</span> Paiement sécurisé</div>
+            <div className="cr-badges">
+              <span>🇫🇷 <b>Gravé en France</b></span>
+              <span>💎 <b>Cristal K9</b> premium</span>
+              <span>🚚 <b>Livraison suivie</b></span>
             </div>
           </div>
-          <div className="hero-visual">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={hero.image} alt="Création Niv Création" width={700} height={700} />
+          <div className="cr-viz">
+            <div className="cr-halo"></div>
+            <div className="cr-shot">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/produits/cristal-v-bebe.jpg" alt="Cristal photo 3D personnalisé" />
+            </div>
           </div>
         </div>
       </section>
