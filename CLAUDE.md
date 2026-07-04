@@ -69,7 +69,8 @@ et surtout **comment ajouter un produit correctement et le publier**.
 | `src/components/ProductDetail.jsx` | Fiche produit (rend les champs de gravure) |
 | `src/app/boutique/page.jsx` | Catalogue + filtres catégories/sous-catégories |
 | `docs/PERSONNALISATION-GRAVURE-3D.md` | **Guide gravure + aperçu 3D** (motifs, 3D, recette nouveau produit) |
-| `docs/couts-cristal-alibaba.md` | **Coûts d'achat gamme CRISTAL 3D** (reçu Alibaba avr. 2026 : coût rendu par taille, transport compris — base pour fixer les prix de vente) |
+| `docs/couts-cristal-alibaba.md` | **Coûts d'achat gamme CRISTAL 3D** (reçu Alibaba avr. 2026 : coût rendu par taille, transport compris) |
+| `docs/cristal-3d-plan.md` | **DOSSIER Cristal 3D** (plan de vente : achats, prix concurrents, prix conseillés, mise en page fiche, marketing, plan d'action — en cours, gravure à trancher) |
 
 ## 3. Schéma d'un produit (`src/lib/products.js`)
 Chaque produit est un objet du tableau `products`. Champs :
