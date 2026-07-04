@@ -1436,7 +1436,7 @@ export const products = [
     badge: "Nouveau",
     name: "Lampe LED PSG",
     weight: 700, // lampe bois + plaque acrylique + socle, emballage protégé (fragile)
-    pickup: true, // déco : remise en main propre possible
+    pickup: false, // envoi seul (pas de retrait)
     letter: false, // colis (volumineux et fragile)
     hidden: false, // PUBLIÉ
     cardImage: "/produits/psg-lampe-bleu.jpg",
@@ -1473,7 +1473,7 @@ export const products = [
     badge: "Nouveau",
     name: "Lampe Arbre de Vie",
     weight: 400, // panneau bois + socle + pile, emballage protégé
-    pickup: true, // déco : remise en main propre possible
+    pickup: false, // envoi seul (pas de retrait)
     letter: false, // colis (volumineux)
     hidden: false, // PUBLIÉ
     cardImage: "/produits/arbre-vie-lumineux-2.jpg",
@@ -1514,7 +1514,7 @@ export const products = [
     badge: "Nouveau",
     name: "Veilleuse Arbre de Vie Ronde",
     weight: 400, // panneau bois rond + socle + pile, emballage protégé
-    pickup: true,
+    pickup: false, // envoi seul (pas de retrait)
     letter: false,
     hidden: false,
     cardImage: "/produits/arbre-vie-rond-1.jpg",
@@ -1555,7 +1555,7 @@ export const products = [
     badge: "Nouveau",
     name: "Bougeoir Flottant",
     weight: 300, // structure bois multi-étages
-    pickup: true,
+    pickup: false, // envoi seul (pas de retrait)
     letter: false,
     hidden: false,
     cardImage: "/produits/bougeoir-mandala-1.jpg",
@@ -1589,7 +1589,7 @@ export const products = [
     badge: "Nouveau",
     name: "Bougeoir Fleur de Lotus",
     weight: 250,
-    pickup: true,
+    pickup: false, // envoi seul (pas de retrait)
     letter: false,
     hidden: false,
     cardImage: "/produits/bougeoir-lotus-1.jpg",

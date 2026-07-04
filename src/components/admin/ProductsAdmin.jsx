@@ -168,6 +168,7 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
   const [badge, setBadge] = useState(product.badge || "");
   const [hidden, setHidden] = useState(Boolean(product.hidden));
   const [featured, setFeatured] = useState(Boolean(product.featured));
+  const [pickup, setPickup] = useState(Boolean(product.pickup));
   const [cost, setCost] = useState(product.cost ?? "");
   const [lowStock, setLowStock] = useState(product.lowStockThreshold ?? "");
   const [seasonal, setSeasonal] = useState(product.seasonal || null);
@@ -345,11 +346,15 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} style={{ width: "auto" }} />
         ⭐ Mettre en avant sur la page d'accueil (« Nos créations phares »)
       </label>
+      <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} style={{ width: "auto" }} />
+        🤝 Retrait en main propre possible (déco/mariage volumineux — jamais les bijoux)
+      </label>
       <div style={{ display: "flex", gap: 10 }}>
         <button className="btn btn-gold" onClick={() => {
           const cleanVars = vars.filter((v) => v.title.trim() && Number(v.price) > 0).map((v) => ({ id: v.id, title: v.title.trim(), price: Math.round(Number(v.price) * 100) / 100 }));
           onSave({
-            name, tagline, category, hidden, featured, badge: badge || "none",
+            name, tagline, category, hidden, featured, pickup, badge: badge || "none",
             descriptionHtml: desc,
             variants: cleanVars,
             prices: Object.fromEntries(cleanVars.map((v) => [v.id, v.price])),

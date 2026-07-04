@@ -104,6 +104,9 @@ export async function POST(req) {
     if (overridePatch.seasonal !== undefined) {
       overridePatch.seasonal = sanitizeSeasonal(overridePatch.seasonal) || null; // null = retiré (cleanup)
     }
+    if (overridePatch.pickup !== undefined) {
+      overridePatch.pickup = Boolean(overridePatch.pickup); // retrait en main propre possible
+    }
     let promoUpdates = null;
     if (discountPct !== undefined && discountPct !== "") {
       const pct = Math.max(0, Math.min(90, Number(discountPct) || 0));
