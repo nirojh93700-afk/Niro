@@ -737,7 +737,26 @@ export default function ProductDetail({ product }) {
                 Niv Création
               </div>
             )}
-            {/* (L'aperçu de la photo se fait dans la case « cristal » dédiée
+            {/* Cristal 3D : dès que le client charge SA photo, elle s'affiche
+                ici en GRAND dans un cristal (comme la maquette test). */}
+            {product.crystal3d && photoSrc && (
+              <div className="crystal-hero">
+                <div className="ch-block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="ch-photo" src={photoSrc} alt="Votre photo dans le cristal" />
+                  {previewLines.length > 0 && (
+                    <div className="ch-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%", fontSize: `calc(clamp(1.1rem, 4vw, 1.9rem) * ${crystalTextPos?.scale ?? 1})` }}>
+                      {previewLines.map((l, i) => (
+                        <span key={i} className={previewFontClass}>{l}</span>
+                      ))}
+                    </div>
+                  )}
+                  <span className="ch-shine" aria-hidden="true" />
+                </div>
+                <span className="ch-badge">✓ Votre aperçu</span>
+              </div>
+            )}
+            {/* (L'aperçu de la photo se fait aussi dans la case « cristal » dédiée
                 plus bas — pas de superposition sur la photo produit réelle,
                 qui serait mal alignée.) */}
             {/* Logo / photo envoyé par le client, superposé sur la photo du
@@ -1162,11 +1181,13 @@ export default function ProductDetail({ product }) {
                         ))
                       )
                     ) : (
-                      <span className="ep-empty">
-                        {material === "crystal"
-                          ? "Votre photo / texte apparaîtra ici, dans le cristal…"
-                          : "Votre texte gravé apparaîtra ici…"}
-                      </span>
+                      !photoSrc && (
+                        <span className="ep-empty">
+                          {material === "crystal"
+                            ? "Votre photo apparaîtra ici, dans le cristal…"
+                            : "Votre texte gravé apparaîtra ici…"}
+                        </span>
+                      )
                     )}
                   </div>
                   {material === "crystal" && previewLines.length > 0 && (
