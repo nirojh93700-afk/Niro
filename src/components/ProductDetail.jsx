@@ -915,14 +915,19 @@ export default function ProductDetail({ product }) {
           <h1>{product.title}</h1>
           <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{product.tagline}</p>
           {product.rating?.count > 0 && (
-            <div className="pd-rating" title={`${product.rating.avg}/5`}>
+            <button
+              type="button"
+              className="pd-rating"
+              title="Voir les avis"
+              onClick={() => document.getElementById("avis")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+            >
               <span className="pd-stars" aria-hidden="true">
                 {"★★★★★".slice(0, Math.round(product.rating.avg))}
                 <span className="pd-stars-empty">{"★★★★★".slice(Math.round(product.rating.avg))}</span>
               </span>
               <strong>{product.rating.avg.toFixed(1).replace(".", ",")}/5</strong>
               <span className="pd-rating-count">· {product.rating.count} avis</span>
-            </div>
+            </button>
           )}
           <div className="price-lead">
             {hasPromo ? (

@@ -44,7 +44,7 @@ export default function ProductReviews({ slug }) {
   }
 
   return (
-    <section className="container" style={{ maxWidth: 760, margin: "0 auto", padding: "10px 16px 40px" }}>
+    <section id="avis" className="container" style={{ maxWidth: 760, margin: "0 auto", padding: "10px 16px 40px", scrollMarginTop: 80 }}>
       <h2 style={{ fontFamily: "Georgia, serif", fontWeight: "normal" }}>Avis clients</h2>
 
       {data.count > 0 ? (

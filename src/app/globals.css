@@ -1513,7 +1513,7 @@ img {
 .variant-swatches.crystal-sizes .variant-swatch {
   display: block; text-align: left; padding: 13px 15px; border-radius: 12px; position: relative;
 }
-.variant-swatches.crystal-sizes .vs-title { display: block; font-size: 1.02rem; font-weight: 700; color: var(--gold-dark, #b8862b); }
+.variant-swatches.crystal-sizes .vs-title { display: block; font-size: 1.05rem; font-weight: 700; color: #3d7898; }
 .variant-swatches.crystal-sizes .vs-sub { display: block; font-size: 0.82rem; color: var(--ink-soft); margin-top: 2px; }
 .variant-swatches.crystal-sizes .vs-price { position: absolute; top: 13px; right: 15px; }
 .variant-swatches.crystal-sizes .vs-price .vs-now { color: var(--gold-dark, #b8862b); font-weight: 700; }

@@ -801,10 +801,10 @@ export const products = [
       "/produits/cristal-v-guide.png",
     ],
     variants: [
-      { id: "cristal-v-petit", title: "Petit — 5×5×8 cm (1-2 pers.)", price: 39.9 },
-      { id: "cristal-v-moyen", title: "Moyen — 5×6×10 cm (2-3 pers.)", price: 59.9 },
-      { id: "cristal-v-grand", title: "Grand — 6×8×12 cm (famille)", price: 99.9 },
-      { id: "cristal-v-xl", title: "XL — 6×10×15 cm (grand groupe)", price: 149.9 },
+      { id: "cristal-v-petit", title: "Petit — 5×5×8 cm · 1-2 personnes", price: 39.9 },
+      { id: "cristal-v-moyen", title: "Moyen — 5×6×10 cm · 2-3 personnes", price: 59.9 },
+      { id: "cristal-v-grand", title: "Grand — 6×8×12 cm · Famille (jusqu'à 4)", price: 99.9 },
+      { id: "cristal-v-xl", title: "XL — 6×10×15 cm · Grand groupe (jusqu'à 6)", price: 149.9 },
     ],
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Un cadeau qui capte la lumière — et l'émotion.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
@@ -835,10 +835,10 @@ export const products = [
       "/produits/cristal-h-guide.png",
     ],
     variants: [
-      { id: "cristal-h-petit", title: "Petit — 8×5×5 cm (1-2 pers.)", price: 39.9 },
-      { id: "cristal-h-moyen", title: "Moyen — 10×6×5 cm (2-3 pers.)", price: 59.9 },
-      { id: "cristal-h-grand", title: "Grand — 12×8×6 cm (famille)", price: 99.9 },
-      { id: "cristal-h-xl", title: "XL — 15×10×6 cm (grand groupe)", price: 149.9 },
+      { id: "cristal-h-petit", title: "Petit — 8×5×5 cm · 1-2 personnes", price: 39.9 },
+      { id: "cristal-h-moyen", title: "Moyen — 10×6×5 cm · 2-3 personnes", price: 59.9 },
+      { id: "cristal-h-grand", title: "Grand — 12×8×6 cm · Famille (jusqu'à 4)", price: 99.9 },
+      { id: "cristal-h-xl", title: "XL — 15×10×6 cm · Grand groupe (jusqu'à 6)", price: 149.9 },
     ],
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Format paysage, idéal pour un couple, un groupe ou une photo large.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>

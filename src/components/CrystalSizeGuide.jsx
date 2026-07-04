@@ -2,10 +2,10 @@
 // des blocs de cristal dessinés À L'ÉCHELLE, avec dimensions, poids et nombre
 // de personnes conseillé. Rendu identique en vertical (portrait) et horizontal.
 const SIZES = [
-  { k: "Petit", dim: "5×5×8 cm", w: "~0,5 kg", icon: "🧑", ppl: "1 personne" },
-  { k: "Moyen", dim: "5×6×10 cm", w: "~0,8 kg", icon: "👥", ppl: "1-2 personnes" },
-  { k: "Grand", dim: "6×8×12 cm", w: "~1,4 kg", icon: "👨‍👩‍👧", ppl: "Famille (2-4)" },
-  { k: "XL", dim: "6×10×15 cm", w: "~2,3 kg", icon: "👨‍👩‍👧‍👦", ppl: "Grand groupe (jusqu'à 5)" },
+  { k: "Petit", dim: "5×5×8 cm", w: "~0,5 kg", icon: "👥", ppl: "1-2 personnes" },
+  { k: "Moyen", dim: "5×6×10 cm", w: "~0,8 kg", icon: "👥", ppl: "2-3 personnes" },
+  { k: "Grand", dim: "6×8×12 cm", w: "~1,4 kg", icon: "👨‍👩‍👧", ppl: "Famille (jusqu'à 4)" },
+  { k: "XL", dim: "6×10×15 cm", w: "~2,3 kg", icon: "👨‍👩‍👧‍👦", ppl: "Grand groupe (jusqu'à 6)" },
 ];
 
 export default function CrystalSizeGuide({ horizontal = false }) {
