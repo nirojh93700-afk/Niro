@@ -24,6 +24,24 @@ const WORLDCUP_PEN_INFO = {
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
 };
 
+// Fiche commune aux cristaux photo 3D (bloc vertical / horizontal).
+const CRISTAL_INFO = {
+  material: `Taille & Matériaux
+- Cristal optique K9 haute pureté (le cristal des cadeaux haut de gamme).
+- 4 tailles : Petit (~0,5 kg), Moyen (~0,8 kg), Grand (~1,4 kg), XL (~2,3 kg).
+- Format vertical (portrait) ou horizontal (paysage), selon la version choisie.
+- Gravure photo 3D interne (sub-surface) au laser, réalisée dans notre atelier en France.`,
+  usage: `Personnalisation & Entretien
+- Envoyez une photo nette et bien éclairée, les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net.
+- Texte à graver en option : vous le placez et le redimensionnez vous-même dans l'aperçu.
+- Entretien : dépoussiérer avec un chiffon doux et sec (microfibre). Ne pas immerger, éviter les chocs — le cristal est fragile.
+- Astuce : près d'une source de lumière (ou sur un socle lumineux), l'effet 3D est sublimé.`,
+  returns: `Expédition & Retour
+- Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
+- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- En cas de casse à l'arrivée : envoyez-nous une photo sous 48 h, nous le remplaçons sans frais.`,
+};
+
 export const productInfo = {
   "collier-enveloppe-message-secret": {
     material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
@@ -646,6 +664,8 @@ Défaut à l'arrivée
   "porte-stylo-portugal-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-argentine-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-espagne-coupe-du-monde": WORLDCUP_PEN_INFO,
+  "cristal-photo-3d-vertical": CRISTAL_INFO,
+  "cristal-photo-3d-horizontal": CRISTAL_INFO,
 };
 
 export function getProductInfo(slug) {
