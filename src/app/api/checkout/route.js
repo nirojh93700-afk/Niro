@@ -80,7 +80,7 @@ export async function POST(req) {
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
 
   // Choix de livraison fait sur le panier (avant Stripe).
-  const deliveryMethod = body?.deliveryMethod === "relais" ? "relais" : (body?.deliveryMethod === "domicile" ? "domicile" : "");
+  const deliveryMethod = ["relais", "domicile", "retrait"].includes(body?.deliveryMethod) ? body.deliveryMethod : "";
   const rp = body?.relaisPoint && typeof body.relaisPoint === "object" ? body.relaisPoint : null;
   // Étiquette courte pour Stripe (nom + ville) et adresse complète pour la commande.
   const relaisLabel = rp

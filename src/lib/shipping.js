@@ -141,31 +141,38 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
   return options;
 }
 
+const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vous";
+
 export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "" }) {
   const cfg = resolveShippingConfig(config);
   const boxtalOn = Boolean(boxtal && boxtal.enabled);
+  const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
 
-  // La cliente a CHOISI « point relais » sur la page panier (et a sélectionné
-  // son point relais sur la carte) → Stripe n'affiche QUE cette option, au
-  // prix calculé par poids, avec le nom du point relais choisi.
-  if (boxtalOn && deliveryMethod === "relais") {
+  // --- Choix explicite fait sur la page panier -----------------------------
+  // Point relais : Stripe n'affiche QUE cette option (prix par poids + nom du
+  // point relais choisi sur la carte).
+  if (deliveryMethod === "relais" && boxtalOn) {
     const price = pointRelaisPrice(totalGrams, boxtal, freeShipping);
     const name = relaisLabel ? `Point relais — ${String(relaisLabel).slice(0, 80)}` : "Livraison en point relais";
     return [rate(price, name, [3, 6])];
   }
-
-  // Sinon : livraison à domicile (+ retrait en main propre si éligible).
-  const options = homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
-
-  // Compatibilité : si l'option point relais est activée mais que la cliente
-  // n'a pas explicitement choisi « domicile » sur le panier (ancien cache JS,
-  // ou pas de choix), on propose aussi le point relais dans Stripe — sans carte.
-  if (boxtalOn && deliveryMethod !== "domicile" && !freeShipping) {
-    options.push(rate(pointRelaisPrice(totalGrams, boxtal, false), "Livraison en point relais", [3, 6]));
+  // Retrait en main propre : uniquement si le panier y est éligible (déco/mariage)
+  // ET le code postal est dans la zone. Sinon repli sûr sur la livraison à domicile.
+  if (deliveryMethod === "retrait") {
+    return pickupEligible ? [rate(cfg.pickupFee, PICKUP_LABEL, [1, 7])] : home();
+  }
+  // Domicile : livraison à domicile seule.
+  if (deliveryMethod === "domicile") {
+    return home();
   }
 
+  // --- Aucun choix explicite (ancien cache JS) : on propose tout le dispo ---
+  const options = home();
+  if (boxtalOn && !freeShipping) {
+    options.push(rate(pointRelaisPrice(totalGrams, boxtal, false), "Livraison en point relais", [3, 6]));
+  }
   if (pickupEligible) {
-    options.push(rate(cfg.pickupFee, "Retrait en main propre — Val-d'Oise (95), sur rendez-vous", [1, 7]));
+    options.push(rate(cfg.pickupFee, PICKUP_LABEL, [1, 7]));
   }
   return options;
 }

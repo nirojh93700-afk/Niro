@@ -53,17 +53,19 @@ export default function CartPage() {
 
   async function handleCheckout() {
     setError("");
-    // Si la cliente a choisi « point relais », elle doit d'abord sélectionner
-    // son point relais sur la carte avant de payer.
-    if (relaisEnabled && deliveryMethod === "relais" && !relais) {
+    // Point relais : il faut d'abord choisir son relais sur la carte.
+    if (deliveryMethod === "relais" && !relais) {
       setError("Choisissez d'abord votre point relais sur la carte.");
+      return;
+    }
+    // Retrait en main propre : il faut un code postal (vérifié en zone côté serveur).
+    if (deliveryMethod === "retrait" && postalCode.replace(/\D/g, "").length < 4) {
+      setError("Entrez votre code postal pour le retrait en main propre.");
       return;
     }
     setLoading(true);
     try {
-      const delivery = relaisEnabled
-        ? { method: deliveryMethod, relais: deliveryMethod === "relais" ? relais : null }
-        : null;
+      const delivery = { method: deliveryMethod, relais: deliveryMethod === "relais" ? relais : null };
       await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "", delivery);
     } catch (e) {
       setError(e.message);
@@ -146,38 +148,36 @@ export default function CartPage() {
             <span>{formatEuro(total)}</span>
           </div>
 
-          {relaisEnabled && (
+          {(relaisEnabled || hasPickup) && (
             <div style={{ marginTop: 18 }}>
               <label style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>
                 Mode de livraison
               </label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                <button
-                  type="button"
-                  onClick={() => { setDeliveryMethod("domicile"); setError(""); }}
-                  style={{
-                    padding: "12px 10px",
-                    border: `1.5px solid ${deliveryMethod === "domicile" ? "var(--gold-dark, #b8860b)" : "var(--line)"}`,
-                    background: deliveryMethod === "domicile" ? "rgba(184,134,11,.08)" : "#fff",
-                    borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: deliveryMethod === "domicile" ? 600 : 400,
-                  }}
-                >
-                  🏠 À domicile
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setDeliveryMethod("relais"); setError(""); }}
-                  style={{
-                    padding: "12px 10px",
-                    border: `1.5px solid ${deliveryMethod === "relais" ? "var(--gold-dark, #b8860b)" : "var(--line)"}`,
-                    background: deliveryMethod === "relais" ? "rgba(184,134,11,.08)" : "#fff",
-                    borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: deliveryMethod === "relais" ? 600 : 400,
-                  }}
-                >
-                  📍 Point relais
-                </button>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {[
+                  { key: "domicile", label: "🏠 À domicile", show: true },
+                  { key: "relais", label: "📍 Point relais", show: relaisEnabled },
+                  { key: "retrait", label: "🤝 Retrait en main propre", show: hasPickup },
+                ].filter((o) => o.show).map((o) => (
+                  <button
+                    key={o.key}
+                    type="button"
+                    onClick={() => { setDeliveryMethod(o.key); setError(""); }}
+                    style={{
+                      flex: "1 1 45%",
+                      padding: "12px 10px",
+                      border: `1.5px solid ${deliveryMethod === o.key ? "var(--gold-dark, #b8860b)" : "var(--line)"}`,
+                      background: deliveryMethod === o.key ? "rgba(184,134,11,.08)" : "#fff",
+                      borderRadius: 10, cursor: "pointer", font: "inherit",
+                      fontWeight: deliveryMethod === o.key ? 600 : 400,
+                    }}
+                  >
+                    {o.label}
+                  </button>
+                ))}
               </div>
-              {deliveryMethod === "relais" && (
+
+              {deliveryMethod === "relais" && relaisEnabled && (
                 <>
                   <RelaisPicker selected={relais} onSelect={(p) => { setRelais(p); setError(""); }} />
                   {relais && (
@@ -187,6 +187,26 @@ export default function CartPage() {
                     </p>
                   )}
                 </>
+              )}
+
+              {deliveryMethod === "retrait" && hasPickup && (
+                <div style={{ marginTop: 12 }}>
+                  <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>
+                    Votre code postal <span style={{ color: "var(--ink-soft)" }}>— notre atelier est dans le Val-d'Oise (95). Le retrait en main propre est proposé si vous êtes dans le secteur.</span>
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Ex. 95800"
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
+                  />
+                  <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 0" }}>
+                    Retrait sur rendez-vous : c'est vous qui venez récupérer à l'atelier, sous <strong>14 jours</strong> après notre message « commande prête » (passé ce délai, la commande ne pourra plus être ni retirée, ni expédiée).
+                    <br />Vous habitez plus loin et souhaitez tout de même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
+                  </p>
+                </div>
               )}
             </div>
           )}
@@ -206,25 +226,6 @@ export default function CartPage() {
             {promoMsg && <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>}
           </div>
 
-          {hasPickup && (
-            <div style={{ marginTop: 16 }}>
-              <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>
-                Votre code postal <span style={{ color: "var(--ink-soft)" }}>— notre atelier est dans le Val-d'Oise (95). Le retrait en main propre est proposé si vous êtes dans le secteur.</span>
-              </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="Ex. 95800"
-                value={postalCode}
-                onChange={(e) => setPostalCode(e.target.value)}
-                style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
-              />
-              <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 0" }}>
-                Retrait sur rendez-vous : c'est vous qui venez récupérer à l'atelier, sous <strong>14 jours</strong> après notre message « commande prête » (passé ce délai, la commande ne pourra plus être ni retirée, ni expédiée).
-                <br />Vous habitez plus loin et souhaitez tout de même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
-              </p>
-            </div>
-          )}
           {error && <div className="notice" style={{ marginTop: 16 }}>{error}</div>}
           <button
             className="btn btn-gold btn-block"
