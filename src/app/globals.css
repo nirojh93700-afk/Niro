@@ -505,6 +505,9 @@ img {
   height: 100%;
   object-fit: cover;
 }
+/* Cristaux : photo principale affichée en ENTIER (pas de zoom/coupe) */
+.gallery-main.gallery-contain img { object-fit: contain; }
+.gallery-main.gallery-contain { background: #f3efe6; }
 /* Flèches de navigation entre les photos */
 .gallery-arrow {
   position: absolute;

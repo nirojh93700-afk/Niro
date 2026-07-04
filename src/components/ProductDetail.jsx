@@ -713,7 +713,7 @@ export default function ProductDetail({ product }) {
       <div className="product-layout">
         {/* Galerie */}
         <div>
-          <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}`} ref={photoRef}>
+          <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}${product.crystal3d ? " gallery-contain" : ""}`} ref={photoRef}>
             {hasImages ? (
               <Image
                 className="gallery-bg"
