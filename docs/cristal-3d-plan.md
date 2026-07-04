@@ -87,7 +87,13 @@ Structure gagnante observée sur MasterPics / LOOXIS / Zephyr :
 9. **Galerie d'exemples** + avant/après (photo 2D → cristal 3D).
 10. **Avis clients** + FAQ.
 
-Correspondance avec l'existant Niv : `ProductDetail.jsx` gère déjà variants (tailles), upload photo (Cloudinary), aperçu 3D (`Engrave3D`), champs de gravure, badges de réassurance, bloc retrait. → il suffit de configurer : variants = tailles, champs = photo + texte + select socle + select coffret, et une note « guide des tailles ».
+Correspondance avec l'existant Niv : `ProductDetail.jsx` gère déjà variants (tailles), upload photo (Cloudinary), aperçu 3D (`Engrave3D`), champs de gravure, badges de réassurance, bloc retrait. → il suffit de configurer : variants = tailles, champs = photo + texte + select socle, et une note « guide des tailles ».
+
+**Décisions gérante (aperçu validé) :**
+- **Pages séparées** : Bloc **Vertical** et Bloc **Horizontal** = 2 fiches distinctes (comme Zephyr). Raison : mieux guider le client + photos dédiées + SEO. → 4 fiches blocs deviennent 8 (4 tailles × 2 sens), mais présentées en 2 produits (vertical / horizontal) avec 4 tailles chacun.
+- **Aperçu photo dans le cristal** : la photo du client s'affiche DANS le bloc (rendu « gravé »). Faisable côté site (upload + overlay N&B). Le vrai 3D est produit par la machine xTool sur le cristal final.
+- **Guide des tailles par NOMBRE DE PERSONNES** : essentiel (demande gérante) — « plus il y a de personnes, plus il faut un grand bloc pour que les visages restent nets ». Petit=1 pers, Moyen=1-2, Grand=famille, XL=grand groupe.
+- **Vraies photos produits** : la gérante enverra les photos réelles des blocs → remplacer la maquette.
 
 ## 5. Marketing & occasions (à décliner toute l'année)
 Saint-Valentin & couples · Fête des mères/pères · Naissance & bébé · **Mariage** (lien gamme mariage) · Hommage/souvenir (proche, animal) · Noël & anniversaires.
