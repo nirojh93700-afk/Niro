@@ -46,6 +46,11 @@ Transport réparti **au poids** (cristal dense). « Coût rendu » = prix fourni
 > ⚠️ Les **socles lumineux** sont UNIQUEMENT pour les **blocs et le cœur** (pour les poser/illuminer). Les **porte-clés ont leur propre LED intégrée** → JAMAIS de socle pour les porte-clés.
 **Emballage** : prévoir mousse de calage (~1-2 €/pièce) — le cristal casse.
 
+**Options (add-ons) validées avec la gérante :**
+- **Socle lumineux LED rotatif** : +19,90 € (blocs + cœur uniquement ; porte-clés ont leur LED).
+- **Texte / date gravé** : **PAYANT +4,90 €** (décision gérante — MasterPics le fait gratuit, on reste raisonnable mais on gagne). Modifiable (6,90 / 9,90 € si elle veut plus de marge).
+- **Coffret cadeau** : **PAS ENCORE** (la gérante n'a pas de coffrets). À AJOUTER PLUS TARD (~+9,90 €) quand elle en aura. Retiré de l'aperçu pour l'instant, gardé en mémo.
+
 ## 3 bis. COMBIEN TU GAGNES SI TU VENDS TOUT (projection)
 Chiffre d'affaires si tout le stock (250 pièces) est vendu au prix conseillé :
 | Produit | Stock | Prix | Total |
