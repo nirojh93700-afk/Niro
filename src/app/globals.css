@@ -1279,15 +1279,14 @@ img {
 }
 /* Échantillon cristal (cristal 3D) — effet verre givré */
 .engrave-preview .ep-plate.crystal {
-  min-height: 200px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  min-height: 220px;
+  border: 1px solid rgba(150, 185, 215, 0.35);
   background:
-    linear-gradient(135deg, rgba(255,255,255,0.72), rgba(206,225,236,0.34) 40%, rgba(150,180,200,0.45)),
-    linear-gradient(160deg, #e9f0f6, #c9dbe9);
+    radial-gradient(120% 90% at 50% 6%, rgba(120,160,200,0.32), transparent 62%),
+    linear-gradient(160deg, #1a2430, #0b0f16);
   box-shadow:
-    inset 0 0 26px rgba(255,255,255,0.55),
-    inset 0 -30px 40px rgba(90,120,150,0.22),
-    0 10px 26px rgba(40,60,90,0.13);
+    inset 0 0 30px rgba(120,160,200,0.18),
+    0 10px 26px rgba(20,30,45,0.3);
 }
 /* Reflet en haut du cristal */
 .engrave-preview .ep-plate.crystal::before {
@@ -1316,10 +1315,10 @@ img {
   margin: auto;
   max-width: 84%;
   object-fit: contain;
-  opacity: 0.74;
+  opacity: 0.9;
   border-radius: 6px;
-  mix-blend-mode: luminosity;
-  filter: grayscale(1) contrast(1.18) brightness(1.12);
+  mix-blend-mode: screen;
+  filter: grayscale(1) contrast(1.08) brightness(1.06);
 }
 /* Reflet lumineux qui balaie le cristal (comme la maquette) */
 .engrave-preview .ep-plate.crystal .ep-shine {
@@ -1342,9 +1341,10 @@ img {
 .engrave-preview .ep-plate.crystal .ep-line {
   position: relative;
   z-index: 2;
-  color: #33414f !important;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+  color: #e8eef4 !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55);
 }
+.engrave-preview .ep-plate.crystal .ep-empty { color: #9fb0c1; }
 /* Texte DÉPLAÇABLE sur le cristal (le client le glisse où il veut) */
 .engrave-preview .ep-plate.crystal .ctd-zone {
   position: absolute;
@@ -1361,8 +1361,8 @@ img {
   align-items: center;
   gap: 2px;
   padding: 4px 8px;
-  color: #33414f;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.55);
+  color: #e8eef4;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55);
   font-size: clamp(1.05rem, 4.2vw, 1.6rem);
   line-height: 1.15;
   white-space: nowrap;
@@ -1402,8 +1402,8 @@ img {
     transform: translate(-50%, -50%);
     z-index: 2;
     display: flex; flex-direction: column; align-items: center;
-    color: #33414f;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.55);
+    color: #e8eef4;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.55);
     font-size: 0.62rem; line-height: 1.1;
     white-space: nowrap; pointer-events: none;
   }
