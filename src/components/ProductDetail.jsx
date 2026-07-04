@@ -1174,6 +1174,25 @@ export default function ProductDetail({ product }) {
                     </span>
                   )}
                 </div>
+                {/* Mini aperçu cristal flottant (bas-droite sur mobile), visible pendant la saisie */}
+                {material === "crystal" && (photoSrc || previewLines.length > 0) && (
+                  <div className="crystal-mini" aria-hidden="true">
+                    <div className="ep-plate crystal">
+                      {photoSrc && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img className="ep-crystal-photo" src={photoSrc} alt="" />
+                      )}
+                      <span className="ep-shine" />
+                      {previewLines.length > 0 && (
+                        <div className="crystal-mini-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%" }}>
+                          {previewLines.map((l, i) => (
+                            <span key={i} className={previewFontClass}>{l}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               )}
             </div>
           ) : (

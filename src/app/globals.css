@@ -1383,6 +1383,30 @@ img {
   box-shadow: 0 1px 5px rgba(0,0,0,0.35);
   z-index: 4;
 }
+/* Mini aperçu cristal flottant (visible pendant la saisie, comme les bijoux) */
+.crystal-mini { display: none; }
+@media (max-width: 900px) {
+  .crystal-mini {
+    position: fixed;
+    right: 10px; bottom: 14px;
+    width: 132px; z-index: 900;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.28));
+  }
+  .crystal-mini .ep-plate.crystal {
+    min-height: 0; height: 158px; width: 132px; padding: 0; border-radius: 12px;
+  }
+  .crystal-mini .ep-crystal-photo { inset: 8%; height: 84%; max-width: 84%; }
+  .crystal-mini-text {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex; flex-direction: column; align-items: center;
+    color: #33414f;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.55);
+    font-size: 0.62rem; line-height: 1.1;
+    white-space: nowrap; pointer-events: none;
+  }
+}
 .engrave-preview .ep-line {
   font-size: clamp(1.2rem, 4.5vw, 1.7rem);
   line-height: 1.25;
