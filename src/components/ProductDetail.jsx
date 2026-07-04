@@ -741,17 +741,19 @@ export default function ProductDetail({ product }) {
                 ici en GRAND dans un cristal (comme la maquette test). */}
             {product.crystal3d && photoSrc && (
               <div className="crystal-hero">
-                <div className="ch-block">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="ch-photo" src={photoSrc} alt="Votre photo dans le cristal" />
-                  {previewLines.length > 0 && (
-                    <div className="ch-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%", fontSize: `calc(clamp(1.1rem, 4vw, 1.9rem) * ${crystalTextPos?.scale ?? 1})` }}>
-                      {previewLines.map((l, i) => (
-                        <span key={i} className={previewFontClass}>{l}</span>
-                      ))}
-                    </div>
-                  )}
-                  <span className="ch-shine" aria-hidden="true" />
+                <div className="ch-wrap">
+                  <div className="ch-block">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="ch-photo" src={photoSrc} alt="Votre photo dans le cristal" />
+                    {previewLines.length > 0 && (
+                      <div className="ch-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%", fontSize: `calc(clamp(1.1rem, 4vw, 1.9rem) * ${crystalTextPos?.scale ?? 1})` }}>
+                        {previewLines.map((l, i) => (
+                          <span key={i} className={previewFontClass}>{l}</span>
+                        ))}
+                      </div>
+                    )}
+                    <span className="ch-shine" aria-hidden="true" />
+                  </div>
                 </div>
                 <span className="ch-badge">✓ Votre aperçu</span>
               </div>

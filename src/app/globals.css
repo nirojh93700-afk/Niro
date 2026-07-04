@@ -1390,21 +1390,47 @@ img {
   position: absolute; inset: 0; z-index: 5; overflow: hidden; border-radius: inherit;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background:
-    radial-gradient(120% 80% at 50% 8%, #eef4f8, transparent 60%),
-    linear-gradient(180deg, #f3eee2, #e7ddc8);
+    radial-gradient(120% 75% at 50% 12%, #f2f7fb, transparent 55%),
+    linear-gradient(180deg, #eef0ea, #dcd3c0);
 }
+/* Enveloppe : donne l'ancrage 3D (ombre portée + reflet au sol) au bloc */
+.gallery-main .crystal-hero .ch-wrap {
+  position: relative; width: 62%; height: 76%; display: grid; place-items: center;
+  filter: drop-shadow(0 26px 22px rgba(24,34,50,0.30));
+}
+.gallery-main .crystal-hero .ch-wrap::after {
+  content: ""; position: absolute; bottom: -4%; left: 14%; width: 72%; height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(30,44,64,0.30), transparent 72%);
+  filter: blur(4px);
+}
+/* Le BLOC de cristal : verre épais avec biseau (clair en haut-gauche, sombre en
+   bas-droite) → on voit un volume, pas un cadre plat. */
 .gallery-main .crystal-hero .ch-block {
-  position: relative; width: 66%; height: 74%; border-radius: 12px; overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.72), rgba(206,225,236,0.34) 40%, rgba(150,180,200,0.45)),
-    linear-gradient(160deg, #e9f0f6, #c9dbe9);
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: inset 0 0 26px rgba(255,255,255,0.55), inset 0 -30px 40px rgba(90,120,150,0.22);
+  position: relative; width: 100%; height: 100%; border-radius: 10px; overflow: hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(210,228,240,0.42) 42%, rgba(140,172,196,0.5));
+  box-shadow:
+    inset 6px 6px 14px rgba(255,255,255,0.85),
+    inset -8px -10px 20px rgba(70,100,128,0.5),
+    inset 0 0 0 1px rgba(255,255,255,0.5),
+    inset 0 0 34px rgba(255,255,255,0.4);
+}
+/* Arête haute (épaisseur du bloc) */
+.gallery-main .crystal-hero .ch-block::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 9%; z-index: 4;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  pointer-events: none;
+}
+/* Arête droite (épaisseur latérale) */
+.gallery-main .crystal-hero .ch-block::after {
+  content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 8%; z-index: 4;
+  background: linear-gradient(270deg, rgba(120,150,175,0.45), rgba(120,150,175,0));
+  pointer-events: none;
 }
 .gallery-main .crystal-hero .ch-photo {
-  position: absolute; inset: 7%; width: 86%; height: 86%; margin: auto;
-  object-fit: cover; opacity: 0.74;
-  mix-blend-mode: luminosity; filter: grayscale(1) contrast(1.18) brightness(1.12);
+  position: absolute; inset: 11%; width: 78%; height: 78%; margin: auto;
+  object-fit: cover; border-radius: 5px; opacity: 0.92;
+  filter: grayscale(1) contrast(1.12) brightness(1.05);
 }
 .gallery-main .crystal-hero .ch-shine {
   position: absolute; top: 0; left: -35%; width: 36%; height: 100%;
@@ -1413,7 +1439,7 @@ img {
   animation: ep-sweep 5s ease-in-out infinite; pointer-events: none; z-index: 3;
 }
 .gallery-main .crystal-hero .ch-text {
-  position: absolute; transform: translate(-50%, -50%); z-index: 2;
+  position: absolute; transform: translate(-50%, -50%); z-index: 5;
   display: flex; flex-direction: column; align-items: center;
   color: #33414f; text-shadow: 0 1px 2px rgba(255,255,255,0.5);
   white-space: nowrap; line-height: 1.15; text-align: center;
