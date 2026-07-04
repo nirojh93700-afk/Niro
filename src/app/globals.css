@@ -1355,6 +1355,7 @@ img {
 .engrave-preview .ep-plate.crystal .ctd-text {
   position: absolute;
   transform: translate(-50%, -50%);
+  touch-action: none;
   cursor: grab;
   display: flex;
   flex-direction: column;

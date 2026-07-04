@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Placement + redimensionnement du texte gravé sur l'aperçu cristal
-// (comme le verre gravé / les bijoux). Le client glisse le texte et change sa
-// taille avec la poignée. On renvoie position + taille + libellé pour l'atelier.
+// Placement + redimensionnement du texte gravé sur l'aperçu cristal.
+// Utilise les Pointer Events + setPointerCapture : le doigt/souris reste
+// « capturé » pendant le glissement (pas de scroll parasite sur mobile),
+// exactement comme le verre gravé. On renvoie position + taille + libellé.
 function labelFor(x, y, scale) {
   const v = y < 34 ? "en haut" : y > 66 ? "en bas" : "au milieu";
   const h = x < 34 ? "à gauche" : x > 66 ? "à droite" : "au centre";
@@ -24,53 +25,62 @@ export default function CrystalTextDrag({ lines, fontClass, onChange }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pos.x, pos.y, scale]);
 
-  function coords(e) {
-    const t = e.touches && e.touches[0];
-    return { cx: t ? t.clientX : e.clientX, cy: t ? t.clientY : e.clientY };
-  }
-  function onMove(e) {
-    if (!mode.current) return;
+  function moveTo(clientX, clientY) {
     const r = zoneRef.current && zoneRef.current.getBoundingClientRect();
     if (!r) return;
+    setPos({
+      x: Math.max(10, Math.min(90, ((clientX - r.left) / r.width) * 100)),
+      y: Math.max(10, Math.min(90, ((clientY - r.top) / r.height) * 100)),
+    });
+  }
+
+  function onPointerMove(e) {
+    if (!mode.current) return;
     e.preventDefault();
-    const { cx, cy } = coords(e);
     if (mode.current === "move") {
-      setPos({
-        x: Math.max(12, Math.min(88, ((cx - r.left) / r.width) * 100)),
-        y: Math.max(12, Math.min(88, ((cy - r.top) / r.height) * 100)),
-      });
+      moveTo(e.clientX, e.clientY);
     } else {
-      const s = startRef.current.scale + (cy - startRef.current.cy) / 120;
+      const s = startRef.current.scale + (e.clientY - startRef.current.cy) / 120;
       setScale(Math.max(0.6, Math.min(2.4, s)));
     }
   }
-  function startMove(e) { mode.current = "move"; onMove(e); }
-  function startResize(e) { e.stopPropagation(); mode.current = "resize"; startRef.current = { cy: coords(e).cy, scale }; }
-  function end() { mode.current = null; }
+  function endPointer(e) {
+    mode.current = null;
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+  }
+  function startMove(e) {
+    e.preventDefault();
+    mode.current = "move";
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+    moveTo(e.clientX, e.clientY);
+  }
+  function startResize(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    mode.current = "resize";
+    startRef.current = { cy: e.clientY, scale };
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+  }
 
   return (
-    <div
-      ref={zoneRef}
-      className="ctd-zone"
-      onMouseMove={onMove}
-      onMouseUp={end}
-      onMouseLeave={end}
-      onTouchMove={onMove}
-      onTouchEnd={end}
-    >
+    <div ref={zoneRef} className="ctd-zone">
       <div
         className="ctd-text"
         style={{ left: pos.x + "%", top: pos.y + "%", fontSize: `calc(clamp(1.05rem, 4.2vw, 1.6rem) * ${scale})` }}
-        onMouseDown={startMove}
-        onTouchStart={startMove}
+        onPointerDown={startMove}
+        onPointerMove={onPointerMove}
+        onPointerUp={endPointer}
+        onPointerCancel={endPointer}
       >
         {lines.map((l, i) => (
           <span key={i} className={fontClass}>{l}</span>
         ))}
         <span
           className="ctd-handle"
-          onMouseDown={startResize}
-          onTouchStart={startResize}
+          onPointerDown={startResize}
+          onPointerMove={onPointerMove}
+          onPointerUp={endPointer}
+          onPointerCancel={endPointer}
           title="Redimensionner"
           aria-hidden="true"
         >⤡</span>
