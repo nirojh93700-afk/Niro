@@ -1310,15 +1310,15 @@ img {
 }
 .engrave-preview .ep-crystal-photo {
   position: absolute;
-  inset: 10%;
+  inset: 9%;
   width: auto;
-  height: 82%;
+  height: 84%;
   margin: auto;
-  max-width: 82%;
+  max-width: 84%;
   object-fit: contain;
-  opacity: 0.78;
-  mix-blend-mode: luminosity;
-  filter: grayscale(1) brightness(1.12) contrast(1.12);
+  opacity: 0.92;
+  border-radius: 6px;
+  filter: grayscale(1) contrast(1.08) brightness(1.02);
 }
 /* Reflet lumineux qui balaie le cristal (comme la maquette) */
 .engrave-preview .ep-plate.crystal .ep-shine {
