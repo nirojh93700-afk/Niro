@@ -43,6 +43,12 @@ export default async function HomePage() {
   let s = null;
   try { s = await getSettings(); } catch { /* défauts */ }
   const ratings = await getRatingSummaries().catch(() => ({}));
+  // Note globale de la boutique (moyenne pondérée de tous les avis produits).
+  const _rv = Object.values(ratings);
+  const siteReviewCount = _rv.reduce((s, r) => s + (r.count || 0), 0);
+  const siteRating = siteReviewCount
+    ? Math.round((_rv.reduce((s, r) => s + r.avg * r.count, 0) / siteReviewCount) * 10) / 10
+    : 0;
 
   // Produits mis en avant : ceux cochés « ⭐ mis en avant » dans l'admin,
   // sinon une sélection par défaut. (Repli sûr sur le code.)
@@ -188,6 +194,19 @@ export default async function HomePage() {
       {/* BANDEAU CONFIANCE */}
       {show.trust && (
         <section className="trust">
+          {siteReviewCount > 0 && (
+            <div className="container">
+              <div className="site-rating">
+                <span className="sr-stars" aria-hidden="true">
+                  {"★★★★★".slice(0, Math.round(siteRating))}
+                  <span className="sr-stars-empty">{"★★★★★".slice(Math.round(siteRating))}</span>
+                </span>
+                <strong>{siteRating.toFixed(1).replace(".", ",")}/5</strong>
+                <span className="sr-count">· {siteReviewCount} avis clients</span>
+                <span className="sr-verified">Avis vérifiés</span>
+              </div>
+            </div>
+          )}
           <div className="container trust-grid">
             <div className="trust-item"><span>🇫🇷</span><strong>Personnalisé en France</strong><small>Atelier français · gravure laser</small></div>
             <div className="trust-item"><span>✦</span><strong>Sur mesure</strong><small>Gravure & découpe laser de précision</small></div>

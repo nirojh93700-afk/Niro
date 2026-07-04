@@ -7,6 +7,7 @@ import { useCart } from "./CartContext";
 import { formatEuro, roundTo90 } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
+import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { PICKUP_MIN_GRAMS } from "@/lib/shipping";
 import { track, trackOnce } from "@/lib/track";
@@ -913,6 +914,16 @@ export default function ProductDetail({ product }) {
           </div>
           <h1>{product.title}</h1>
           <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{product.tagline}</p>
+          {product.rating?.count > 0 && (
+            <div className="pd-rating" title={`${product.rating.avg}/5`}>
+              <span className="pd-stars" aria-hidden="true">
+                {"★★★★★".slice(0, Math.round(product.rating.avg))}
+                <span className="pd-stars-empty">{"★★★★★".slice(Math.round(product.rating.avg))}</span>
+              </span>
+              <strong>{product.rating.avg.toFixed(1).replace(".", ",")}/5</strong>
+              <span className="pd-rating-count">· {product.rating.count} avis</span>
+            </div>
+          )}
           <div className="price-lead">
             {hasPromo ? (
               <>
@@ -949,8 +960,13 @@ export default function ProductDetail({ product }) {
           {product.variants.length > 1 && (
             <div className="field">
               <label>{hasVariantImages ? "Choisissez votre modèle" : "Choisissez votre option"}</label>
-              <div className="variant-swatches">
-                {product.variants.map((v, i) => (
+              <div className={`variant-swatches${product.crystal3d ? " crystal-sizes" : ""}`}>
+                {product.variants.map((v, i) => {
+                  // Cristal : on scinde « Nom — dimensions (personnes) » comme la maquette.
+                  const cm = product.crystal3d ? v.title.split(/\s+—\s+/) : null;
+                  const vName = cm ? cm[0] : v.title;
+                  const vSub = cm && cm[1] ? cm[1] : "";
+                  return (
                   <button
                     key={v.id}
                     type="button"
@@ -962,7 +978,8 @@ export default function ProductDetail({ product }) {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={v.image} alt="" />
                     )}
-                    <span className="vs-title">{v.title}</span>
+                    <span className="vs-title">{vName}</span>
+                    {vSub && <span className="vs-sub">{vSub}</span>}
                     <span className="vs-price">
                       {typeof v.compareAt === "number" && v.compareAt > v.price && (
                         <span className="vs-old">{formatEuro(old90(v.compareAt))}</span>
@@ -970,7 +987,8 @@ export default function ProductDetail({ product }) {
                       <span className="vs-now">{formatEuro(v.price)}</span>
                     </span>
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1198,22 +1216,24 @@ export default function ProductDetail({ product }) {
                     </span>
                   )}
                 </div>
-                {/* Mini aperçu cristal flottant (bas-droite sur mobile), visible pendant la saisie */}
+                {/* Mini aperçu cristal flottant (bas-droite sur mobile), visible pendant la saisie.
+                    Styles AUTONOMES (cm-*) : ne dépendent plus de .engrave-preview. */}
                 {material === "crystal" && (photoSrc || previewLines.length > 0) && (
                   <div className="crystal-mini" aria-hidden="true">
-                    <div className="ep-plate crystal">
+                    <div className="cm-block">
                       {photoSrc && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img className="ep-crystal-photo" src={photoSrc} alt="" />
+                        <img className="cm-photo" src={photoSrc} alt="" />
                       )}
-                      <span className="ep-shine" />
+                      <span className="cm-shine" />
                       {previewLines.length > 0 && (
-                        <div className="crystal-mini-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%" }}>
+                        <div className="cm-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%" }}>
                           {previewLines.map((l, i) => (
                             <span key={i} className={previewFontClass}>{l}</span>
                           ))}
                         </div>
                       )}
+                      <span className="cm-badge">Aperçu</span>
                     </div>
                   </div>
                 )}
@@ -1285,6 +1305,10 @@ export default function ProductDetail({ product }) {
             className="product-desc"
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
           />
+
+          {product.crystal3d && (
+            <CrystalSizeGuide horizontal={product.slug.includes("horizontal")} />
+          )}
 
           {/* Argument « fait main » sur la déco & le mariage (vend le savoir-faire). */}
           {(product.category === "mariage" || product.category === "deco") && (

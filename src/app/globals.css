@@ -1451,30 +1451,98 @@ img {
 }
 @media (prefers-reduced-motion: reduce) { .gallery-main .crystal-hero .ch-shine { animation: none; opacity: 0.2; } }
 
-/* Mini aperçu cristal flottant (visible pendant la saisie, comme les bijoux) */
+/* Mini aperçu cristal FLOTTANT (visible pendant la saisie sur mobile).
+   Styles autonomes : même rendu « bloc de verre » que le grand aperçu. */
 .crystal-mini { display: none; }
 @media (max-width: 900px) {
   .crystal-mini {
     position: fixed;
-    right: 10px; bottom: 14px;
-    width: 132px; z-index: 900;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.28));
+    right: 12px; bottom: 84px;   /* au-dessus du bouton « La boutique » */
+    width: 118px; z-index: 70;
+    filter: drop-shadow(0 10px 22px rgba(20,30,45,0.35));
   }
-  .crystal-mini .ep-plate.crystal {
-    min-height: 0; height: 158px; width: 132px; padding: 0; border-radius: 12px;
+  .crystal-mini .cm-block {
+    position: relative; width: 118px; height: 148px; border-radius: 10px; overflow: hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(210,228,240,0.42) 42%, rgba(140,172,196,0.5));
+    box-shadow:
+      inset 4px 4px 10px rgba(255,255,255,0.85),
+      inset -6px -8px 16px rgba(70,100,128,0.5),
+      inset 0 0 0 1px rgba(255,255,255,0.5);
   }
-  .crystal-mini .ep-crystal-photo { inset: 8%; height: 84%; max-width: 84%; }
-  .crystal-mini-text {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    z-index: 2;
+  .crystal-mini .cm-photo {
+    position: absolute; inset: 12%; width: 76%; height: 76%; margin: auto;
+    object-fit: cover; border-radius: 4px; opacity: 0.92;
+    filter: grayscale(1) contrast(1.12) brightness(1.05);
+  }
+  .crystal-mini .cm-shine {
+    position: absolute; top: 0; left: -35%; width: 36%; height: 100%; transform: skewX(-18deg);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    pointer-events: none;
+  }
+  .crystal-mini .cm-text {
+    position: absolute; transform: translate(-50%, -50%); z-index: 5;
     display: flex; flex-direction: column; align-items: center;
-    color: #e8eef4;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.55);
-    font-size: 0.62rem; line-height: 1.1;
-    white-space: nowrap; pointer-events: none;
+    color: #33414f; text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+    font-size: 0.6rem; line-height: 1.1; white-space: nowrap; pointer-events: none; text-align: center;
+  }
+  .crystal-mini .cm-badge {
+    position: absolute; top: 6px; left: 6px; z-index: 6;
+    background: rgba(201,162,75,0.94); color: #1a1206;
+    font-size: 0.55rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;
   }
 }
+
+/* Note GLOBALE de la boutique (accueil) — bandeau « Avis vérifiés » */
+.site-rating {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 9px; margin: 0 auto 22px; padding: 12px 18px;
+  background: #fffdf8; border: 1px solid #ecdfc2; border-radius: 999px;
+  max-width: max-content; box-shadow: 0 6px 18px rgba(120,95,30,0.07);
+}
+.site-rating .sr-stars { color: #d8a93a; letter-spacing: 2px; font-size: 1.15rem; }
+.site-rating .sr-stars-empty { color: #e4d5b0; }
+.site-rating strong { font-size: 1.05rem; color: var(--ink); }
+.site-rating .sr-count { color: var(--ink-soft); }
+.site-rating .sr-verified {
+  font-size: 0.72rem; font-weight: 700; color: #3f7d55; background: #eaf5ee;
+  padding: 3px 9px; border-radius: 999px;
+}
+
+/* Note d'avis près du titre/prix (comme la maquette) */
+.pd-rating {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin: 2px 0 12px; font-size: 0.95rem;
+}
+.pd-rating .pd-stars { color: #d8a93a; letter-spacing: 1px; font-size: 1.02rem; }
+.pd-rating .pd-stars-empty { color: #d8c9a3; }
+.pd-rating strong { color: var(--ink); }
+.pd-rating .pd-rating-count { color: var(--ink-soft); }
+
+/* Cartes de taille cristal (nom + sous-titre + prix), façon maquette */
+.variant-swatches.crystal-sizes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 420px) { .variant-swatches.crystal-sizes { grid-template-columns: 1fr; } }
+.variant-swatches.crystal-sizes .variant-swatch {
+  display: block; text-align: left; padding: 13px 15px; border-radius: 12px; position: relative;
+}
+.variant-swatches.crystal-sizes .vs-title { display: block; font-size: 1.02rem; font-weight: 700; color: var(--gold-dark, #b8862b); }
+.variant-swatches.crystal-sizes .vs-sub { display: block; font-size: 0.82rem; color: var(--ink-soft); margin-top: 2px; }
+.variant-swatches.crystal-sizes .vs-price { position: absolute; top: 13px; right: 15px; }
+.variant-swatches.crystal-sizes .vs-price .vs-now { color: var(--gold-dark, #b8862b); font-weight: 700; }
+
+/* Guide des tailles cristal (blocs à l'échelle) — reproduit la maquette */
+.crystal-guide-section { margin: 24px 0 8px; }
+.crystal-guide-section h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 600; margin: 0 0 6px; }
+.crystal-guide-section .cg-hint { color: var(--ink-soft); font-size: 0.9rem; margin: 0 0 22px; }
+.crystal-guide { display: flex; align-items: flex-end; justify-content: center; gap: clamp(14px, 4vw, 40px); flex-wrap: wrap; }
+.crystal-guide .cg-item { text-align: center; width: 120px; }
+.crystal-guide .cg-block {
+  margin: 0 auto 12px; border-radius: 6px; position: relative;
+  background: linear-gradient(135deg, rgba(255,255,255,0.72), rgba(206,225,236,0.34) 40%, rgba(150,180,200,0.3));
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: inset 0 0 14px rgba(255,255,255,0.5), 0 8px 18px rgba(20,30,45,0.16);
+}
+.crystal-guide .cg-item b { font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; color: var(--gold-dark, #b8862b); }
+.crystal-guide .cg-d { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.55; display: block; margin-top: 3px; }
 .engrave-preview .ep-line {
   font-size: clamp(1.2rem, 4.5vw, 1.7rem);
   line-height: 1.25;

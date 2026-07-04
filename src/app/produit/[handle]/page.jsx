@@ -38,6 +38,12 @@ export default async function ProductPage({ params, searchParams }) {
   }
   if (!product) notFound();
 
+  // Note d'avis du produit (affichée près du prix + étoiles Google).
+  try {
+    const sum = await getRatingSummaries();
+    if (sum[product.slug]) product = { ...product, rating: sum[product.slug] };
+  } catch { /* ignore */ }
+
   // Ventes croisées : 4 autres produits (même catégorie en priorité).
   let related = [];
   try {
