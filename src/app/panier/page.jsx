@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
+import { PICKUP_MIN_GRAMS } from "@/lib/shipping";
 import FreeShippingBar from "@/components/FreeShippingBar";
 import RelaisPicker from "@/components/RelaisPicker";
 
@@ -32,7 +33,10 @@ export default function CartPage() {
     return () => { ok = false; };
   }, []);
 
-  const hasPickup = items.some((i) => i.pickup);
+  // Retrait en main propre proposé : article « mariage » marqué, OU panier lourd
+  // (≥ 2 kg) car l'expédition d'un colis lourd coûte cher.
+  const totalGrams = items.reduce((s, i) => s + (Number(i.weight) || 200) * (i.quantity || 1), 0);
+  const hasPickup = items.some((i) => i.pickup) || totalGrams >= PICKUP_MIN_GRAMS;
 
   async function applyPromo() {
     setPromoMsg(""); setPromoOk(false);

@@ -691,6 +691,7 @@ export default function ProductDetail({ product }) {
       fields: product.engravingPricing ? { ...fieldValues } : undefined,
       spec: itemSpec,
       pickup: Boolean(product.pickup),
+      weight: Number(product.weight) || 200, // poids (g) — pour proposer le retrait si lourd
       quantity,
     });
     // Statistiques « ajout au panier » : compteur intégré + Google Analytics.

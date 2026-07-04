@@ -30,6 +30,12 @@ export const GLASS_TIERS = [
 // --- Retrait en main propre -------------------------------------------------
 export const PICKUP_FEE = 0;
 
+// Le retrait en main propre est proposé automatiquement dès que le panier
+// dépasse ce poids (colis lourd = expédition chère → venir chercher est
+// intéressant). Il reste aussi proposé pour les articles « mariage » marqués
+// `pickup: true`, quel que soit le poids.
+export const PICKUP_MIN_GRAMS = 2000; // 2 kg
+
 // La lettre suivie est limitée à 2 kg : au-delà, on bascule en colis.
 const LETTER_MAX_GRAMS = 2000;
 

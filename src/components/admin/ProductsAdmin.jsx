@@ -346,9 +346,11 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} style={{ width: "auto" }} />
         ⭐ Mettre en avant sur la page d'accueil (« Nos créations phares »)
       </label>
-      <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} style={{ width: "auto" }} />
-        🤝 Retrait en main propre possible (déco/mariage volumineux — jamais les bijoux)
+      <label className="admin-field" style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}>
+        <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} style={{ width: "auto", marginTop: 3 }} />
+        <span>🤝 Retrait en main propre possible (mariage / gros articles)
+          <br /><span style={{ fontSize: "0.82rem", color: "#7a6f5c" }}>Le retrait s'affiche aussi <strong>tout seul</strong> pour toute commande de plus de <strong>2 kg</strong> (colis lourd = envoi cher). Jamais pour les bijoux.</span>
+        </span>
       </label>
       <div style={{ display: "flex", gap: 10 }}>
         <button className="btn btn-gold" onClick={() => {
@@ -580,9 +582,11 @@ function AddProduct({ adminKey, cats = DEF_CATS, subsMap = DEF_SUBS, setMsg, onD
             <input type="checkbox" checked={letter} onChange={(e) => setLetter(e.target.checked)} style={{ width: "auto" }} />
             Petit objet (lettre suivie). Décoche si volumineux (colis).
           </label>
-          <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} style={{ width: "auto" }} />
-            Retrait en main propre possible
+          <label className="admin-field" style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}>
+            <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} style={{ width: "auto", marginTop: 3 }} />
+            <span>Retrait en main propre possible (mariage / gros articles)
+              <br /><span style={{ fontSize: "0.82rem", color: "#7a6f5c" }}>Le retrait s'affiche aussi <strong>tout seul</strong> pour toute commande de plus de <strong>2 kg</strong> (colis lourd = envoi cher). Jamais pour les bijoux.</span>
+            </span>
           </label>
           <label className="admin-field">Poids emballé (g)
             <input type="number" min="0" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="Ex : 150" />

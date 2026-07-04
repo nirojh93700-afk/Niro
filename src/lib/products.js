@@ -562,7 +562,7 @@ export const products = [
     name: "Plaque de porte enfant",
     noEngravePreview: true, // pas d'aperçu de gravure (lettres découpées, pas de gravure de texte)
     weight: 450,
-    pickup: true,
+    pickup: false,
     letter: false,
     title: "Plaque de porte personnalisée prénom & animaux – Chambre enfant",
     subcategory: "plaques",
@@ -650,7 +650,7 @@ export const products = [
     slug: "pyramide-cristal-gravure-3d",
     name: "Pyramide cristal — Gravure 3D",
     weight: 320,
-    pickup: true, // fragile : remise en main propre conseillée
+    pickup: false, // envoi seul (retrait auto si lourd)
     letter: false,
     title: "Pyramide en cristal — gravure photo 3D personnalisée",
     subcategory: "cristal",
@@ -758,7 +758,7 @@ export const products = [
   {
     slug: "trophee-cristal-vierge-3d",
     name: "Trophée cristal — Gravure 3D",
-    weight: 600, pickup: true, letter: false,
+    weight: 600, pickup: false, letter: false,
     title: "Trophée en cristal — gravure photo 3D personnalisée",
     subcategory: "cristal",
     crystal3d: true,
@@ -1633,7 +1633,7 @@ export const products = [
     badge: "Nouveau",
     name: "Porte-stylo France",
     weight: 200,
-    pickup: true,
+    pickup: false,
     letter: true, // expédié à plat en lettre suivie
     hidden: false,
     cardImage: "/produits/porte-stylo-coq-1.jpg",
@@ -1667,7 +1667,7 @@ export const products = [
     badge: "Nouveau",
     name: "Porte-stylo Portugal",
     weight: 200,
-    pickup: true,
+    pickup: false,
     letter: true,
     hidden: false,
     cardImage: "/produits/porte-stylo-portugal-1.jpg",
@@ -1700,7 +1700,7 @@ export const products = [
     badge: "Nouveau",
     name: "Porte-stylo Argentine",
     weight: 200,
-    pickup: true,
+    pickup: false,
     letter: true,
     hidden: false,
     cardImage: "/produits/porte-stylo-argentine-1.jpg",
@@ -1733,7 +1733,7 @@ export const products = [
     badge: "Nouveau",
     name: "Porte-stylo Espagne",
     weight: 200,
-    pickup: true,
+    pickup: false,
     letter: true,
     hidden: false,
     cardImage: "/produits/porte-stylo-espagne-1.jpg",
