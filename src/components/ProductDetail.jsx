@@ -8,6 +8,7 @@ import { formatEuro, roundTo90 } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import { engravingExtra } from "@/lib/engravingPrice";
+import { PICKUP_MIN_GRAMS } from "@/lib/shipping";
 import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
@@ -1206,9 +1207,10 @@ export default function ProductDetail({ product }) {
             </p>
           )}
 
-          {product.pickup && (
+          {product.category !== "bijoux" && (product.pickup || (Number(product.weight) || 0) >= PICKUP_MIN_GRAMS) && (
             <div style={{ marginTop: 12, background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 12, padding: "12px 14px", fontSize: "0.88rem" }}>
               <strong>📍 Retrait en main propre possible</strong> — atelier dans le <strong>Val-d'Oise (95)</strong> et alentours, gratuit, sur rendez-vous (choisissez l'option au paiement).
+              <br /><span style={{ color: "#7a6f5c" }}>Proposé pour les articles de mariage et les commandes de plus de <strong>2 kg</strong> (les gros colis coûtent cher à expédier).</span>
               <br />C'est vous qui venez récupérer votre commande à l'atelier, sous <strong>14 jours</strong> après notre message « commande prête ». Passé ce délai, la commande ne pourra plus être ni retirée, ni expédiée.
               <br />Vous habitez plus loin et souhaitez quand même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
             </div>
