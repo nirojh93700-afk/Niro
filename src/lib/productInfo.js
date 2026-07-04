@@ -42,6 +42,23 @@ const CRISTAL_INFO = {
 - En cas de casse à l'arrivée : envoyez-nous une photo sous 48 h, nous le remplaçons sans frais.`,
 };
 
+// Fiche commune aux porte-clés cristal LED (cœur / rectangle).
+const CRISTAL_LED_KEYRING_INFO = {
+  material: `Taille & Matériaux
+- Porte-clés en cristal optique avec LED intégrée (s'illumine d'une simple pression).
+- Forme cœur ou rectangle selon la version choisie.
+- Gravure photo 3D interne (sub-surface) au laser, réalisée dans notre atelier en France.
+- Pile bouton d'origine incluse (remplaçable).`,
+  usage: `Personnalisation & Entretien
+- Envoyez une photo nette et bien éclairée, le visage bien visible (une personne rend le mieux sur ce petit format).
+- Appuyez sur le cristal pour l'allumer : l'effet 3D ressort superbement dans le noir.
+- Entretien : chiffon doux et sec. Ne pas immerger (composant électronique), éviter les chocs.`,
+  returns: `Expédition & Retour
+- Expédié en colis suivi, soigneusement protégé (le cristal est fragile).
+- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
+- En cas de casse ou de LED défectueuse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
+};
+
 export const productInfo = {
   "collier-enveloppe-message-secret": {
     material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
@@ -660,6 +677,280 @@ Défaut à l'arrivée
 - Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans personnalisation : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine.
 - En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
   },
+  "pyramide-cristal-gravure-3d": {
+    material: `Taille & Matériaux
+- Cristal optique K9 haute pureté, forme pyramide.
+- Base 50 mm — objet compact (~320 g), à poser sur un bureau ou une étagère.
+- Gravure photo 3D interne au laser, réalisée dans notre atelier en France.
+- Socle lumineux LED disponible séparément (sublime l'effet 3D).`,
+    usage: `Personnalisation & Entretien
+- Envoyez une photo nette et bien éclairée, le visage bien visible. Une seule personne rend le mieux sur ce format.
+- Placez la pyramide près d'une source de lumière : l'image semble flotter au cœur du cristal.
+- Entretien : chiffon doux et sec (microfibre). Ne pas immerger, éviter les chocs — le cristal est fragile.`,
+    returns: `Expédition & Retour
+- Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
+- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
+- En cas de casse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
+  },
+
+  "trophee-cristal-vierge-3d": {
+    material: `Taille & Matériaux
+- Trophée en cristal optique K9 haute pureté, hauteur 14 cm (~600 g).
+- Gravure photo 3D interne au laser, réalisée dans notre atelier en France.
+- Pièce d'exception pour un hommage, une remise de prix ou un souvenir.
+- Socle lumineux LED disponible séparément.`,
+    usage: `Personnalisation & Entretien
+- Envoyez une photo nette et bien éclairée. Un texte (nom, date, dédicace) peut accompagner la photo.
+- Posé près d'une lumière ou sur un socle LED, l'effet 3D est spectaculaire.
+- Entretien : chiffon doux et sec. Ne pas immerger, éviter les chocs — le cristal est fragile.`,
+    returns: `Expédition & Retour
+- Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
+- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
+- En cas de casse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
+  },
+
+  "cle-usb-cristal-3d": {
+    material: `Taille & Matériaux
+- Clé USB en cristal, capacité 4 Go.
+- Votre photo gravée en 3D à l'intérieur du cristal, au laser.
+- Un souvenir et un objet utile à la fois (idéal pour offrir des photos ou des vidéos).`,
+    usage: `Personnalisation & Entretien
+- Envoyez une photo nette et bien éclairée, le visage bien visible.
+- Compatible ordinateur (port USB standard). Retirez la clé proprement avant de la débrancher.
+- Entretien : chiffon doux et sec. Ne pas immerger, éviter les chocs — le cristal est fragile.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
+- Clé défectueuse ou cassée à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "cle-usb-bois-coffret": {
+    material: `Taille & Matériaux
+- Clé USB en bois véritable, capacité 4 Go, gravée au laser.
+- Livrée dans un élégant coffret en bois assorti.
+- Idéale pour un mariage (remise des photos) ou un cadeau d'entreprise.`,
+    usage: `Utilisation & Entretien
+- Gravure d'un prénom, d'une date ou d'un logo au laser.
+- Compatible ordinateur (port USB standard). Retirez la clé proprement avant de la débrancher.
+- Entretien : chiffon doux et sec ; ne pas immerger (le bois n'aime pas l'eau).`,
+    returns: `Expédition & Retour
+- Expédié en colis suivi, soigneusement protégé.
+- Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans gravure : retour possible sous 14 jours, non utilisé, dans son emballage d'origine.
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "piece-ronde-laiton": {
+    material: `Taille & Matériaux
+- Médaille ronde en laiton doré, à graver.
+- Gravure au laser possible au recto et au verso.
+- Parfaite en porte-bonheur, souvenir ou breloque à glisser dans un portefeuille.`,
+    usage: `Personnalisation & Entretien
+- Indiquez le texte (et/ou le motif) souhaité pour chaque face.
+- Le laiton peut légèrement patiner avec le temps — c'est naturel ; un chiffon à métaux lui rend son éclat.
+- Entretien : essuyez avec un chiffon doux, évitez l'humidité prolongée.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "porte-cles-cuir-a-graver": {
+    material: `Taille & Matériaux
+- Porte-clés en cuir véritable, gravé au laser.
+- Coloris : marron ou noir.
+- Anneau métallique solide.`,
+    usage: `Personnalisation & Entretien
+- Gravure du texte de votre choix : prénom, date, petit mot ou coordonnées GPS d'un lieu qui compte.
+- Le cuir véritable se patine joliment avec le temps.
+- Entretien : chiffon doux ; évitez l'eau et l'humidité prolongée.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "bracelet-homme-cuir-tresse-acier": {
+    material: `Taille & Matériaux
+- Cuir véritable tressé + plaque en acier inoxydable gravable.
+- Finitions de la plaque : argentée, dorée ou noire.
+- Fermoir sécurisé. Bracelet masculin et intemporel.`,
+    usage: `Personnalisation & Entretien
+- Option « Avec texte » : gravez un prénom, une date ou un message sur la plaque acier.
+- L'acier 316L ne ternit pas ; le cuir se patine avec le temps.
+- Entretien : essuyez avec un chiffon doux ; évitez de mouiller le cuir (l'eau abîme le cuir véritable).`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Avec gravure = non remboursable une fois la gravure lancée (article L221-28). Sans gravure : retour possible sous 14 jours, non porté, dans son emballage d'origine.
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "bracelet-homme-chaine-acier": {
+    material: `Taille & Matériaux
+- Bracelet homme en acier inoxydable 316L hypoallergénique, finition argentée.
+- Chaîne solide + plaque gravable au laser.
+- Fermoir sécurisé. Style élégant et intemporel.`,
+    usage: `Personnalisation & Entretien
+- Gravez un prénom, une date ou un message sur la plaque.
+- L'acier 316L résiste à l'eau, au chlore et à la transpiration ; il ne ternit pas.
+- Entretien : chiffon doux après un port prolongé ; nettoyage à l'eau tiède savonneuse si besoin.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "bracelet-femme-acier": {
+    material: `Taille & Matériaux
+- Bracelet femme fin en acier inoxydable doré.
+- Surface gravable au laser (gravure fine).
+- Acier 316L : ne ternit pas, adapté aux peaux sensibles.`,
+    usage: `Personnalisation & Entretien
+- Gravez un prénom, une date ou un petit mot.
+- Compatible douche et transpiration ; évitez le contact direct avec parfums et crèmes.
+- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "bracelet-empreinte-pied-bebe": {
+    material: `Taille & Matériaux
+- Bracelet en acier inoxydable hypoallergénique, orné d'une empreinte de pied de bébé.
+- Finition argentée ou dorée.
+- Le souvenir d'une naissance, à porter sur soi.`,
+    usage: `Personnalisation & Entretien
+- Personnalisez avec le prénom et la date de naissance.
+- L'acier 316L résiste à l'eau et ne ternit pas ; idéal au quotidien.
+- Entretien : chiffon doux ; évitez le contact direct avec parfums et crèmes.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "bracelet-femme-coeur": {
+    material: `Taille & Matériaux
+- Bracelet femme en acier inoxydable doré, breloque cœur gravable.
+- Acier 316L : ne ternit pas, adapté aux peaux sensibles.
+- Romantique et délicat.`,
+    usage: `Personnalisation & Entretien
+- Gravez un prénom, une date ou un message sur le cœur.
+- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
+- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "bracelet-femme-papillon": {
+    material: `Taille & Matériaux
+- Bracelet femme orné d'un papillon ajouré en acier inoxydable.
+- Finitions : argenté, doré, noir ou or rose.
+- Acier 316L : ne ternit pas, adapté aux peaux sensibles.`,
+    usage: `Personnalisation & Entretien
+- Gravez un prénom, une date ou un petit mot.
+- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
+- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "collier-couple-coeur-lot2": {
+    material: `Taille & Matériaux
+- Lot de 2 colliers en acier inoxydable, finition or rose.
+- Les deux pendentifs forment un cœur une fois réunis, à graver chacun.
+- Acier 316L : ne ternit pas, adapté aux peaux sensibles.`,
+    usage: `Personnalisation & Entretien
+- Gravez chaque moitié (prénoms, date, petit mot) — le cadeau parfait pour les amoureux.
+- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
+- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "collier-plaque-acier": {
+    material: `Taille & Matériaux
+- Collier à plaque rectangulaire en acier inoxydable, surface lisse gravable des deux côtés.
+- Finitions : argenté, doré, noir, acier noir, argenté et noir.
+- Style épuré et contemporain.`,
+    usage: `Personnalisation & Entretien
+- Recto inclus ; gravure au verso (+5 €) et photo gravée (+8 €) en option.
+- Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
+- Entretien : chiffon doux ; l'acier 316L résiste à l'eau et ne ternit pas.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "collier-medaillon-livre": {
+    material: `Taille & Matériaux
+- Médaillon en forme de livre qui s'ouvre, en acier inoxydable.
+- Gravable sur la couverture et sur 3 pages à l'intérieur.
+- Finitions : argenté, doré, doré et argenté.`,
+    usage: `Personnalisation & Entretien
+- Sur chaque face : un texte, une photo gravée, ou rien — vous combinez librement.
+- Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
+- Entretien : chiffon doux ; l'acier 316L ne ternit pas en usage normal.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "collier-couple-puzzle": {
+    material: `Taille & Matériaux
+- Duo de pendentifs « puzzle » géométrique qui s'emboîtent, en acier inoxydable.
+- Finitions : argenté ou or rose.
+- Symbole d'un lien unique, à partager à deux.`,
+    usage: `Personnalisation & Entretien
+- Gravez chaque pièce (prénoms, date, petit mot).
+- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
+- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "collier-femme-pendentif-geometrique": {
+    material: `Taille & Matériaux
+- Collier femme au pendentif géométrique (barre verticale), en acier inoxydable.
+- Gravable sur ses 4 faces : prénoms, dates, coordonnées…
+- Finitions : argenté, doré, noir, or rose, arc-en-ciel.`,
+    usage: `Personnalisation & Entretien
+- Répartissez vos textes sur les 4 faces de la barre.
+- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
+- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "verre-a-whisky-fete-des-peres": {
+    material: `Taille & Matériaux
+- Verre à whisky en verre épais, gravure laser permanente.
+- Texte « élu PAPA de l'année » (ou PAPY, TONTON, PARRAIN…), entièrement personnalisable.
+- Aperçu en direct : choisissez vos textes, la police de chaque ligne et un motif.`,
+    usage: `Personnalisation & Entretien
+- Composez vos lignes et choisissez la police et le motif ; l'aperçu s'affiche sur le verre.
+- Gravure permanente qui résiste au lave-vaisselle.
+- Manipulez comme un verre classique (le verre reste fragile aux chocs).`,
+    returns: `Expédition & Retour
+- Expédié en colis suivi, soigneusement protégé (verre fragile).
+- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
+- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+  },
+
+  "porte-cles-cristal-led-coeur": CRISTAL_LED_KEYRING_INFO,
+  "porte-cles-cristal-led-rectangle": CRISTAL_LED_KEYRING_INFO,
   "porte-stylo-coq-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-portugal-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-argentine-coupe-du-monde": WORLDCUP_PEN_INFO,
