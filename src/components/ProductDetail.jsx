@@ -731,13 +731,9 @@ export default function ProductDetail({ product }) {
                 Niv Création
               </div>
             )}
-            {/* Sur une VRAIE photo produit : la gravure se superpose directement */}
-            {hasImages && product.crystal3d && photoSrc && (
-              <div className="crystal-photo-overlay">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photoSrc} alt="Aperçu de la gravure photo" />
-              </div>
-            )}
+            {/* (L'aperçu de la photo se fait dans la case « cristal » dédiée
+                plus bas — pas de superposition sur la photo produit réelle,
+                qui serait mal alignée.) */}
             {/* Logo / photo envoyé par le client, superposé sur la photo du
                 produit (hors cristal), dans la zone de gravure réglée. */}
             {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
