@@ -113,8 +113,8 @@ export default async function HomePage() {
             <h1>Votre photo,<br/><span className="cr-shine">sculptée dans le cristal.</span></h1>
             <p className="cr-lede">Gravure photo 3D au cœur d&apos;un cristal K9, réalisée dans notre atelier. Un cadeau qui capte la lumière — et l&apos;émotion.</p>
             <div className="cr-cta">
-              <Link href="/produit/cristal-photo-3d-vertical" className="cr-btn">Créer mon cristal →</Link>
-              <Link href="/boutique?cat=deco" className="cr-link2">Voir les tailles &amp; prix</Link>
+              <Link href="/cristaux" className="cr-btn">Créer mon cristal →</Link>
+              <Link href="/cristaux" className="cr-link2">Voir les tailles &amp; prix</Link>
             </div>
             <div className="cr-badges">
               <span>🇫🇷 <b>Gravé en France</b></span>
