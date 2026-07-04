@@ -78,9 +78,9 @@ export default async function HomePage() {
       <section className="cr-hero">
         <style>{`
           .cr-hero{position:relative;overflow:hidden;background:
-            radial-gradient(90% 120% at 88% 12%, rgba(61,120,152,.30), transparent 55%),
-            radial-gradient(80% 100% at 6% 100%, rgba(201,162,75,.20), transparent 55%),
-            linear-gradient(160deg,#0e151d,#05070a 70%);color:#f3efe6}
+            radial-gradient(90% 120% at 85% 10%, rgba(214,175,95,.24), transparent 55%),
+            radial-gradient(80% 100% at 5% 100%, rgba(201,162,75,.16), transparent 55%),
+            linear-gradient(160deg,#241a0c,#120c05 72%);color:#f5efe2}
           .cr-wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:24px;padding:clamp(30px,5vw,60px) clamp(20px,5vw,48px)}
           @media(max-width:840px){.cr-wrap{grid-template-columns:1fr;text-align:center}}
           .cr-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#e2c67e;border:1px solid rgba(201,162,75,.35);border-radius:999px;padding:7px 14px;margin-bottom:20px}
@@ -99,7 +99,7 @@ export default async function HomePage() {
           @media(max-width:840px){.cr-badges{justify-content:center}}
           .cr-badges b{color:#cfd6dd;font-weight:600}
           .cr-viz{position:relative;display:grid;place-items:center;min-height:300px}
-          .cr-halo{position:absolute;width:74%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(120,180,220,.35),rgba(201,162,75,.12) 45%,transparent 66%);filter:blur(18px);animation:crbreathe 5s ease-in-out infinite}
+          .cr-halo{position:absolute;width:74%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(232,204,140,.42),rgba(201,162,75,.16) 45%,transparent 66%);filter:blur(18px);animation:crbreathe 5s ease-in-out infinite}
           @keyframes crbreathe{0%,100%{transform:scale(.96);opacity:.75}50%{transform:scale(1.05);opacity:1}}
           .cr-shot{position:relative;width:min(400px,82%);border-radius:18px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.6);animation:crfloat 6s ease-in-out infinite;-webkit-mask-image:radial-gradient(120% 120% at 50% 40%,#000 72%,transparent 100%);mask-image:radial-gradient(120% 120% at 50% 40%,#000 72%,transparent 100%)}
           .cr-shot img{display:block;width:100%;height:auto}
