@@ -808,14 +808,6 @@ export const products = [
     ],
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Un cadeau qui capte la lumière — et l'émotion.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
-<h3>Quelle taille choisir ?</h3>
-<ul>
-<li><strong>Petit</strong> — 5×5×8 cm — 1 à 2 personnes</li>
-<li><strong>Moyen</strong> — 5×6×10 cm — 2 à 3 personnes</li>
-<li><strong>Grand</strong> — 6×8×12 cm — famille (jusqu'à 4)</li>
-<li><strong>XL</strong> — 6×10×15 cm — grand groupe (jusqu'à 6)</li>
-</ul>
-<p><em>Plus il y a de personnes sur la photo, plus il faut un grand cristal pour que chaque visage reste net.</em></p>
 <h3>Idéal pour</h3>
 <p>Un couple, une naissance, une famille, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },
@@ -850,14 +842,6 @@ export const products = [
     ],
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Format paysage, idéal pour un couple, un groupe ou une photo large.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
-<h3>Quelle taille choisir ?</h3>
-<ul>
-<li><strong>Petit</strong> — 8×5×5 cm — 1 à 2 personnes</li>
-<li><strong>Moyen</strong> — 10×6×5 cm — 2 à 3 personnes</li>
-<li><strong>Grand</strong> — 12×8×6 cm — famille (jusqu'à 4)</li>
-<li><strong>XL</strong> — 15×10×6 cm — grand groupe (jusqu'à 6)</li>
-</ul>
-<p><em>Plus il y a de personnes sur la photo, plus il faut un grand cristal pour que chaque visage reste net.</em></p>
 <h3>Idéal pour</h3>
 <p>Une famille, un groupe d'amis, un couple, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },
