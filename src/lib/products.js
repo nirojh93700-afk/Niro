@@ -793,7 +793,6 @@ export const products = [
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
-      "/produits/cristal-v-bebe.jpg",
       "/produits/cristal-v-enfant-chat.jpg",
       "/produits/cristal-v-couple.jpg",
       "/produits/cristal-v-femme.jpg",
@@ -840,6 +839,7 @@ export const products = [
       "/produits/cristal-h-famille.jpg",
       "/produits/cristal-h-couple.jpg",
       "/produits/cristal-h-amis.jpg",
+      "/produits/cristal-v-bebe.jpg",
       "/produits/cristal-h-guide.png",
     ],
     variants: [
