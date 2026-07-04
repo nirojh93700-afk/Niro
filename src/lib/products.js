@@ -776,6 +776,91 @@ export const products = [
 <ul><li>Cristal optique K9 haute pureté</li><li>Hauteur 14 cm</li><li>Gravure photo 3D interne au laser</li></ul>
 <p><em>Sublimé par un socle lumineux LED (disponible séparément).</em></p>`,
   },
+  {
+    slug: "cristal-photo-3d-vertical",
+    name: "Cristal Photo 3D — Vertical",
+    weight: 900, pickup: false, letter: false,
+    title: "Cristal photo 3D vertical (portrait) — gravure personnalisée en France",
+    subcategory: "cristal",
+    crystal3d: true,
+    category: "deco", type: "Cristal photo 3D",
+    tagline: "Votre photo gravée en 3D au cœur du cristal — format portrait.",
+    featured: true,
+    personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
+      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
+      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+    ],
+    images: [
+      "/produits/cristal-v-bebe.jpg",
+      "/produits/cristal-v-enfant-chat.jpg",
+      "/produits/cristal-v-couple.jpg",
+      "/produits/cristal-v-femme.jpg",
+      "/produits/cristal-v-enfant-chien.jpg",
+      "/produits/cristal-v-jeunes.jpg",
+      "/produits/cristal-v-guide.png",
+    ],
+    variants: [
+      { id: "cristal-v-petit", title: "Petit — 5×5×8 cm (1-2 pers.)", price: 39.9 },
+      { id: "cristal-v-moyen", title: "Moyen — 5×6×10 cm (2-3 pers.)", price: 59.9 },
+      { id: "cristal-v-grand", title: "Grand — 6×8×12 cm (famille)", price: 99.9 },
+      { id: "cristal-v-xl", title: "XL — 6×10×15 cm (grand groupe)", price: 149.9 },
+    ],
+    descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Un cadeau qui capte la lumière — et l'émotion.</p>
+<p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
+<h3>Quelle taille choisir ?</h3>
+<ul>
+<li><strong>Petit</strong> — 5×5×8 cm — 1 à 2 personnes</li>
+<li><strong>Moyen</strong> — 5×6×10 cm — 2 à 3 personnes</li>
+<li><strong>Grand</strong> — 6×8×12 cm — famille (jusqu'à 4)</li>
+<li><strong>XL</strong> — 6×10×15 cm — grand groupe (jusqu'à 6)</li>
+</ul>
+<p><em>Plus il y a de personnes sur la photo, plus il faut un grand cristal pour que chaque visage reste net.</em></p>
+<h3>Idéal pour</h3>
+<p>Un couple, une naissance, une famille, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
+  },
+  {
+    slug: "cristal-photo-3d-horizontal",
+    name: "Cristal Photo 3D — Horizontal",
+    weight: 900, pickup: false, letter: false,
+    title: "Cristal photo 3D horizontal (paysage) — gravure personnalisée en France",
+    subcategory: "cristal",
+    crystal3d: true,
+    category: "deco", type: "Cristal photo 3D",
+    tagline: "Votre photo gravée en 3D au cœur du cristal — format paysage.",
+    featured: true,
+    personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
+      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
+      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+    ],
+    images: [
+      "/produits/cristal-h-famille.jpg",
+      "/produits/cristal-h-couple.jpg",
+      "/produits/cristal-h-amis.jpg",
+      "/produits/cristal-h-guide.png",
+    ],
+    variants: [
+      { id: "cristal-h-petit", title: "Petit — 8×5×5 cm (1-2 pers.)", price: 39.9 },
+      { id: "cristal-h-moyen", title: "Moyen — 10×6×5 cm (2-3 pers.)", price: 59.9 },
+      { id: "cristal-h-grand", title: "Grand — 12×8×6 cm (famille)", price: 99.9 },
+      { id: "cristal-h-xl", title: "XL — 15×10×6 cm (grand groupe)", price: 149.9 },
+    ],
+    descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Format paysage, idéal pour un couple, un groupe ou une photo large.</p>
+<p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
+<h3>Quelle taille choisir ?</h3>
+<ul>
+<li><strong>Petit</strong> — 8×5×5 cm — 1 à 2 personnes</li>
+<li><strong>Moyen</strong> — 10×6×5 cm — 2 à 3 personnes</li>
+<li><strong>Grand</strong> — 12×8×6 cm — famille (jusqu'à 4)</li>
+<li><strong>XL</strong> — 15×10×6 cm — grand groupe (jusqu'à 6)</li>
+</ul>
+<p><em>Plus il y a de personnes sur la photo, plus il faut un grand cristal pour que chaque visage reste net.</em></p>
+<h3>Idéal pour</h3>
+<p>Une famille, un groupe d'amis, un couple, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
+  },
 
   // ===== Bracelets =====
   {
