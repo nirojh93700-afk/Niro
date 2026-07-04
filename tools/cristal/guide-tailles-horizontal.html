@@ -1,0 +1,95 @@
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:1200px;background:#0b0e13}
+  body{overflow:hidden;font-family:Georgia,"Times New Roman",serif;
+    background:radial-gradient(125% 95% at 50% -5%, #1e2a37, #0b0e13 68%);color:#f3efe6;position:relative}
+  .brand{position:absolute;top:56px;left:0;right:0;text-align:center;letter-spacing:.42em;text-transform:uppercase;font-size:20px;color:#c9a24b}
+  .brand b{color:#e7cf92}
+  h1{position:absolute;top:92px;left:0;right:0;text-align:center;font-size:54px;font-weight:600;letter-spacing:.5px}
+  .sub{position:absolute;top:172px;left:0;right:0;text-align:center;font-family:Arial,sans-serif;font-size:22px;color:#aeb7bf}
+
+  .scene{position:absolute;left:60px;right:60px;top:360px;height:540px;display:flex;align-items:flex-end;justify-content:center;gap:34px}
+  .shelf{position:absolute;left:60px;right:60px;top:862px;height:3px;background:linear-gradient(90deg,transparent,#3a4652 20%,#3a4652 80%,transparent)}
+
+  .phone{width:200px;height:105px;border-radius:20px;border:5px solid #4a5560;background:linear-gradient(160deg,#222c36,#161c23);position:relative;flex:0 0 auto}
+  .phone::before{content:"";position:absolute;top:50%;right:12px;transform:translateY(-50%);width:6px;height:40px;border-radius:6px;background:#3a4652}
+  .phscreen{position:absolute;inset:12px 26px 12px 12px;border-radius:8px;background:linear-gradient(160deg,#5b6b78,#8fa0ac);opacity:.5}
+  .phlabel{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:Arial,sans-serif;font-size:17px;color:#9aa3ab}
+
+  .item{flex:0 0 auto;display:flex;flex-direction:column;align-items:center}
+  .block{position:relative;border-radius:8px;overflow:hidden;
+    background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(180,205,222,.42) 42%,rgba(120,150,175,.4));
+    border:1px solid rgba(255,255,255,.65);box-shadow:inset 0 0 24px rgba(255,255,255,.55), 0 14px 34px rgba(0,0,0,.45)}
+  .block .ph{position:absolute;inset:12% 10% 0;opacity:.62}
+  .block .lb{position:absolute;top:-2px;left:0;right:0;height:16px;background:linear-gradient(180deg,rgba(255,255,255,.5),transparent)}
+  .glow{width:82%;height:16px;margin-top:5px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(120,180,220,.85),rgba(201,162,75,.4) 55%,transparent 72%);filter:blur(4px)}
+
+  .cap{margin-top:26px;text-align:center}
+  .cap .nm{font-size:31px;color:#e7cf92;font-weight:600}
+  .cap .dm{font-family:Arial,sans-serif;font-size:19px;color:#cfd5da;margin-top:5px}
+  .cap .pp{font-family:Arial,sans-serif;font-size:19px;color:#f3efe6;margin-top:9px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+  .badge{display:inline-block;min-width:30px;height:30px;line-height:30px;border-radius:16px;background:#c9a24b;color:#14110c;font-weight:800;font-family:Arial,sans-serif;font-size:16px;text-align:center;padding:0 9px}
+
+  .foot{position:absolute;left:0;right:0;bottom:104px;text-align:center;padding:0 70px}
+  .foot .msg{font-size:28px;color:#f3efe6;line-height:1.42}
+  .foot .msg b{color:#e7cf92}
+  .foot .site{font-family:Arial,sans-serif;font-size:19px;color:#aeb7bf;margin-top:18px;letter-spacing:.06em}
+  .arrow{position:absolute;left:250px;top:640px;font-size:46px;color:#c9a24b;font-family:Arial,sans-serif}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef3f6"/><stop offset="1" stop-color="#7f8d98"/></linearGradient></defs>
+  <symbol id="fam1" viewBox="0 0 120 108"><g fill="url(#fg)">
+    <circle cx="60" cy="36" r="21"/><path d="M20 108 C22 72 40 58 60 58 C80 58 98 72 100 108 Z"/></g></symbol>
+  <symbol id="fam2" viewBox="0 0 120 108"><g fill="url(#fg)">
+    <circle cx="40" cy="36" r="17"/><path d="M8 108 C10 76 25 62 40 62 C55 62 70 76 72 108 Z"/>
+    <circle cx="83" cy="36" r="17"/><path d="M51 108 C53 76 68 62 83 62 C98 62 113 76 115 108 Z"/></g></symbol>
+  <symbol id="fam3" viewBox="0 0 120 108"><g fill="url(#fg)">
+    <circle cx="28" cy="30" r="15"/><path d="M0 108 C2 74 15 60 28 60 C41 60 54 74 56 108 Z"/>
+    <circle cx="92" cy="32" r="14"/><path d="M64 108 C66 76 79 62 92 62 C105 62 118 76 120 108 Z"/>
+    <circle cx="50" cy="54" r="11"/><path d="M30 108 C32 84 40 74 50 74 C60 74 68 84 70 108 Z"/>
+    <circle cx="72" cy="56" r="10"/><path d="M54 108 C56 86 64 77 72 77 C80 77 88 86 90 108 Z"/></g></symbol>
+  <symbol id="fam5" viewBox="0 0 120 108"><g fill="url(#fg)">
+    <circle cx="24" cy="30" r="12"/><circle cx="60" cy="26" r="12"/><circle cx="96" cy="30" r="12"/>
+    <circle cx="42" cy="50" r="12"/><circle cx="78" cy="50" r="12"/><circle cx="60" cy="56" r="11"/>
+    <path d="M2 108 C4 80 14 70 24 70 C31 70 37 75 40 81 C43 75 52 70 60 70 C68 70 77 75 80 81 C83 75 89 70 96 70 C106 70 116 80 118 108 Z"/></g></symbol>
+</svg>
+
+<div class="brand">Ni<b>V</b> Création · Gravé en France</div>
+<h1>Quelle taille choisir&nbsp;?</h1>
+<div class="sub">Bloc horizontal (paysage) — selon le nombre de personnes sur votre photo</div>
+
+<div class="arrow">&#10230;</div>
+<div class="shelf"></div>
+<div class="scene">
+  <div class="phone"><div class="phscreen"></div><div class="phlabel">Portable</div></div>
+
+  <div class="item">
+    <div class="block" style="width:120px;height:75px"><div class="lb"></div><svg class="ph" viewBox="0 0 120 108" preserveAspectRatio="xMidYMax meet"><use href="#fam2"/></svg></div>
+    <div class="glow"></div>
+    <div class="cap"><div class="nm">Petit</div><div class="dm">8 × 5 × 5 cm · ~0,5 kg</div><div class="pp"><span class="badge">1-2</span> Couple</div></div>
+  </div>
+
+  <div class="item">
+    <div class="block" style="width:150px;height:90px"><div class="lb"></div><svg class="ph" viewBox="0 0 120 108" preserveAspectRatio="xMidYMax meet"><use href="#fam3"/></svg></div>
+    <div class="glow"></div>
+    <div class="cap"><div class="nm">Moyen</div><div class="dm">10 × 6 × 5 cm · ~0,8 kg</div><div class="pp"><span class="badge">2-3</span> personnes</div></div>
+  </div>
+
+  <div class="item">
+    <div class="block" style="width:186px;height:124px"><div class="lb"></div><svg class="ph" viewBox="0 0 120 108" preserveAspectRatio="xMidYMax meet"><use href="#fam3"/></svg></div>
+    <div class="glow"></div>
+    <div class="cap"><div class="nm">Grand</div><div class="dm">12 × 8 × 6 cm · ~1,4 kg</div><div class="pp"><span class="badge">2-4</span> Famille</div></div>
+  </div>
+
+  <div class="item">
+    <div class="block" style="width:228px;height:152px"><div class="lb"></div><svg class="ph" viewBox="0 0 120 108" preserveAspectRatio="xMidYMax meet"><use href="#fam5"/></svg></div>
+    <div class="glow"></div>
+    <div class="cap"><div class="nm">XL</div><div class="dm">15 × 10 × 6 cm · ~2,3 kg</div><div class="pp"><span class="badge">5-6</span> Grand groupe</div></div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="msg">Plus il y a de <b>personnes</b> sur la photo, plus il faut un <b>grand cristal</b><br>— pour que chaque visage reste net et détaillé.</div>
+  <div class="site">nivcreation.fr · Cristal photo 3D personnalisé</div>
+</div>

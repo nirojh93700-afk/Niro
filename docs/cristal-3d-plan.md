@@ -107,6 +107,12 @@ Correspondance avec l'existant Niv : `ProductDetail.jsx` gère déjà variants (
 > Le XL (~2,3 kg) déclenche le **retrait en main propre auto** (seuil 2 kg) — cohérent.
 > Aperçu construit dans la fiche (pas juste une image) : rangée de 4 blocs à l'échelle + poids + nb de personnes.
 
+**Images « guide des tailles » (validées, à mettre dans la galerie photos produit) :**
+Générateurs HTML sauvegardés dans `tools/cristal/guide-tailles-vertical.html` et `guide-tailles-horizontal.html`
+(rendu PNG 1200×1200 via Chromium headless). Fond sombre élégant, or/crème, « Portable » comme repère,
+famille gravée visible dans chaque cristal, nb de personnes croissant. Répartition validée :
+**Petit = Couple (1-2) · Moyen = 2-3 · Grand = Famille (2-4) · XL = Grand groupe (5-6)** — identique vertical/horizontal.
+
 ## 5. Marketing & occasions (à décliner toute l'année)
 Saint-Valentin & couples · Fête des mères/pères · Naissance & bébé · **Mariage** (lien gamme mariage) · Hommage/souvenir (proche, animal) · Noël & anniversaires.
 Arguments : cristal **K9 premium** · **gravé en France** (vs 10-12 j d'import) · socle **lumineux** rotatif · **livraison offerte** dès seuil · **garantie casse**.
