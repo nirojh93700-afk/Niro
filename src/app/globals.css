@@ -1369,6 +1369,20 @@ img {
   border-radius: 6px;
 }
 .engrave-preview .ep-plate.crystal .ctd-text:active { cursor: grabbing; background: rgba(255,255,255,0.18); }
+/* Poignée de redimensionnement (comme le verre gravé) */
+.engrave-preview .ep-plate.crystal .ctd-handle {
+  position: absolute;
+  right: -11px; bottom: -11px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #c9a24b;
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 12px; line-height: 1;
+  cursor: nwse-resize;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.35);
+  z-index: 4;
+}
 .engrave-preview .ep-line {
   font-size: clamp(1.2rem, 4.5vw, 1.7rem);
   line-height: 1.25;

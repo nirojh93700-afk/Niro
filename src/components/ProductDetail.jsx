@@ -1170,7 +1170,7 @@ export default function ProductDetail({ product }) {
                   </div>
                   {material === "crystal" && previewLines.length > 0 && (
                     <span className="char-count" style={{ textAlign: "left", color: "var(--ink-soft)" }}>
-                      ✋ Glissez le texte pour le placer où vous voulez sur le cristal.
+                      ✋ Glissez le texte pour le placer, et la poignée dorée pour changer sa taille.
                     </span>
                   )}
                 </div>
