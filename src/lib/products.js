@@ -11,6 +11,7 @@ export { MOTIF_OPTIONS };
 
 export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux", short: "Bijoux" },
+  { slug: "cristal", label: "Cristal Photo 3D", short: "Cristal" },
   { slug: "verres", label: "Verres gravés", short: "Verres" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "deco", label: "Déco & Maison", short: "Déco" },
@@ -41,7 +42,6 @@ export const SUBCATEGORIES = {
     { slug: "couverts", label: "Couverts" },
     { slug: "lampes", label: "Lampes" },
     { slug: "bougeoirs", label: "Bougeoir" },
-    { slug: "cristal", label: "Cristal 3D" },
   ],
   cadeaux: [
     { slug: "cles-usb", label: "Clés USB" },
@@ -655,7 +655,7 @@ export const products = [
     title: "Pyramide en cristal — gravure photo 3D personnalisée",
     subcategory: "cristal",
     crystal3d: true,
-    category: "deco",
+    category: "cristal",
     type: "Cristal photo 3D",
     tagline: "Votre photo gravée en 3D au cœur du cristal.",
     personalizable: true,
@@ -762,7 +762,7 @@ export const products = [
     title: "Trophée en cristal — gravure photo 3D personnalisée",
     subcategory: "cristal",
     crystal3d: true,
-    category: "deco", type: "Cristal photo 3D",
+    category: "cristal", type: "Cristal photo 3D",
     tagline: "Un trophée en cristal, votre photo gravée en 3D à l'intérieur.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
@@ -783,7 +783,7 @@ export const products = [
     title: "Cristal photo 3D vertical (portrait) — gravure personnalisée en France",
     subcategory: "cristal",
     crystal3d: true,
-    category: "deco", type: "Cristal photo 3D",
+    category: "cristal", type: "Cristal photo 3D",
     tagline: "Votre photo gravée en 3D au cœur du cristal — format portrait.",
     featured: true,
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
@@ -818,7 +818,7 @@ export const products = [
     title: "Cristal photo 3D horizontal (paysage) — gravure personnalisée en France",
     subcategory: "cristal",
     crystal3d: true,
-    category: "deco", type: "Cristal photo 3D",
+    category: "cristal", type: "Cristal photo 3D",
     tagline: "Votre photo gravée en 3D au cœur du cristal — format paysage.",
     featured: true,
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
