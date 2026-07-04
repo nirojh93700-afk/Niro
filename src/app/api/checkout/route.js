@@ -227,6 +227,10 @@ export async function POST(req) {
       ...(discounts ? { discounts } : { allow_promotion_codes: true }),
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
+      // On collecte toujours l'adresse : Stripe n'affiche/ne facture les frais de
+      // livraison (dont le point relais 4,90 €) que si l'adresse est demandée.
+      // Pour un point relais, cette adresse sert de contact (le colis part au
+      // relais choisi sur le panier, enregistré à part sur la commande).
       shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
       shipping_options: buildShippingOptions({
         totalGrams, subtotal, parcelQty, glassQty, letterOnly, freeShipping: allFreeShip,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import { formatEuro } from "@/lib/format";
@@ -20,7 +20,21 @@ export default function CartDrawer() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Si l'option point relais est activée, le paiement DOIT passer par la page
+  // panier (choix domicile/relais + carte des points relais) avant Stripe.
+  const [relaisEnabled, setRelaisEnabled] = useState(false);
+  useEffect(() => {
+    let ok = true;
+    fetch("/api/shipping-config")
+      .then((r) => r.json())
+      .then((d) => { if (ok) setRelaisEnabled(Boolean(d?.pointRelais)); })
+      .catch(() => {});
+    return () => { ok = false; };
+  }, []);
+
   async function handleCheckout() {
+    // Point relais activé → on passe par le panier pour choisir la livraison.
+    if (relaisEnabled) { goToCart(); return; }
     setError("");
     setLoading(true);
     try {
@@ -99,15 +113,17 @@ export default function CartDrawer() {
             <p className="drawer-note">Frais de livraison calculés au paiement.</p>
             {error && <div className="notice">{error}</div>}
             <button className="btn btn-gold btn-block" onClick={handleCheckout} disabled={loading}>
-              {loading ? "Redirection…" : "Payer maintenant"}
+              {loading ? "Redirection…" : (relaisEnabled ? "Commander" : "Payer maintenant")}
             </button>
-            <button
-              className="btn btn-outline btn-block"
-              style={{ marginTop: 10 }}
-              onClick={goToCart}
-            >
-              Voir le panier
-            </button>
+            {!relaisEnabled && (
+              <button
+                className="btn btn-outline btn-block"
+                style={{ marginTop: 10 }}
+                onClick={goToCart}
+              >
+                Voir le panier
+              </button>
+            )}
           </div>
         )}
       </aside>
