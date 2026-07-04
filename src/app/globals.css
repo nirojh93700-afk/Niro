@@ -1344,6 +1344,31 @@ img {
   color: #33414f !important;
   text-shadow: 0 1px 1px rgba(255,255,255,0.5);
 }
+/* Texte DÉPLAÇABLE sur le cristal (le client le glisse où il veut) */
+.engrave-preview .ep-plate.crystal .ctd-zone {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  touch-action: none;
+}
+.engrave-preview .ep-plate.crystal .ctd-text {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  color: #33414f;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.55);
+  font-size: clamp(1.05rem, 4.2vw, 1.6rem);
+  line-height: 1.15;
+  white-space: nowrap;
+  user-select: none;
+  border-radius: 6px;
+}
+.engrave-preview .ep-plate.crystal .ctd-text:active { cursor: grabbing; background: rgba(255,255,255,0.18); }
 .engrave-preview .ep-line {
   font-size: clamp(1.2rem, 4.5vw, 1.7rem);
   line-height: 1.25;

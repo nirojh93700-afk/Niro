@@ -21,6 +21,7 @@ import EngraveGourmette3D from "./EngraveGourmette3D";
 import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
+import CrystalTextDrag from "./CrystalTextDrag";
 import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
 import ModeleDesigner from "./ModeleDesigner";
@@ -51,6 +52,7 @@ export default function ProductDetail({ product }) {
   const [error, setError] = useState("");
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé (face)
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
+  const [crystalTextPos, setCrystalTextPos] = useState(null); // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
   const [activeSide, setActiveSide] = useState("face"); // côté en cours de réglage (mode "les deux")
@@ -298,6 +300,10 @@ export default function ProductDetail({ product }) {
       }
       if (dualMode && fieldValues["fondType"] === "dessin" && fieldValues["motifFond"] && fieldValues["motifFond"] !== "aucun" && motifLayoutFond?.label) {
         parts.push(`Gravure FOND — dessin « ${fieldValues["motifFond"]} » : ${motifLayoutFond.label}`);
+      }
+      // Cristal : placement du texte choisi par le client (glisser-déposer).
+      if (product.crystal3d && previewLines.length > 0 && crystalTextPos?.label) {
+        parts.push(`Texte gravé placé : ${crystalTextPos.label}`);
       }
       return parts.join(" · ");
     }
@@ -674,7 +680,7 @@ export default function ProductDetail({ product }) {
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
       previewImage, previewImageFond, artworkImage, artworkImageFond,
-      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null },
+      layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null, crystalText: crystalTextPos || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
       personalization: buildPersonalization(),
@@ -1145,11 +1151,15 @@ export default function ProductDetail({ product }) {
                     )}
                     {material === "crystal" && <span className="ep-shine" aria-hidden="true" />}
                     {previewLines.length ? (
-                      previewLines.map((line, i) => (
-                        <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
-                          {line}
-                        </span>
-                      ))
+                      material === "crystal" ? (
+                        <CrystalTextDrag lines={previewLines} fontClass={previewFontClass} onChange={setCrystalTextPos} />
+                      ) : (
+                        previewLines.map((line, i) => (
+                          <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
+                            {line}
+                          </span>
+                        ))
+                      )
                     ) : (
                       <span className="ep-empty">
                         {material === "crystal"
@@ -1158,6 +1168,11 @@ export default function ProductDetail({ product }) {
                       </span>
                     )}
                   </div>
+                  {material === "crystal" && previewLines.length > 0 && (
+                    <span className="char-count" style={{ textAlign: "left", color: "var(--ink-soft)" }}>
+                      ✋ Glissez le texte pour le placer où vous voulez sur le cristal.
+                    </span>
+                  )}
                 </div>
               )}
             </div>
