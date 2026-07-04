@@ -67,12 +67,18 @@ Arguments : cristal **K9 premium** · **gravé en France** (vs 10-12 j d'import)
 ## 6. Livraison (déjà en place, juillet 2026)
 Cristal lourd (0,5-2,3 kg) → **retrait auto dès 2 kg** (gros blocs), **point relais** (carte), frais **au poids**. Cf. logique livraison du site.
 
-## 7. POINT CRUCIAL À TRANCHER — la gravure
-Les cristaux sont des **blocs vierges (blank)**. Mettre la photo dedans = **gravure laser sous-surface**. 3 scénarios :
-- **A** — machine laser 3D à l'atelier (contrôle + marge max, investissement machine).
-- **B** — sous-traitance gravure en France (zéro machine, coût + délai/pièce).
-- **C** — gravure par le fournisseur en Chine (délai long, incompatible « rapide/France » → à éviter).
-→ **En attente de la réponse de la gérante.** Conditionne prix, délai et promesse.
+## 7. LA GRAVURE — RÉSOLU ✅ (Scénario A : en interne)
+**La gérante possède un `xTool F2 Ultra UV`** (laser UV 355 nm, 5W). C'est LA machine
+adaptée : **gravure 3D sous-surface à l'intérieur du cristal K9** (effet « photo qui
+flotte », comme MasterPics), + logiciel **IA photo 2D → modèle 3D**, précision <10 µm,
+double caméra 48 MP. **Exige du cristal K9 = exactement ce qui a été acheté.**
+→ **Gravure faite EN INTERNE, à l'atelier (Val-d'Oise, France).** Conséquences :
+- Marge MAXIMALE (grille de prix §3 pleinement valable, pas de coût de sous-traitance).
+- Positionnement « **gravé en France, rapide** » = 100 % vrai (vs 10-12 j d'import des géants).
+- Workflow : client envoie sa photo → logiciel xTool convertit en 3D → gravure dans le bloc K9 → socle LED → expédition/retrait.
+- **À faire par la gérante avant lancement** : s'entraîner sur quelques blocs (courbe
+  d'apprentissage machine + logiciel), valider la qualité photo→3D, définir le temps de
+  gravure par taille (impacte le délai annoncé).
 
 ## 8. Plan d'action
 1. Gérante : confirmer la **gravure** (A/B/C) + valider la grille de prix.
