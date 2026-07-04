@@ -93,7 +93,19 @@ Correspondance avec l'existant Niv : `ProductDetail.jsx` gère déjà variants (
 - **Pages séparées** : Bloc **Vertical** et Bloc **Horizontal** = 2 fiches distinctes (comme Zephyr). Raison : mieux guider le client + photos dédiées + SEO. → 4 fiches blocs deviennent 8 (4 tailles × 2 sens), mais présentées en 2 produits (vertical / horizontal) avec 4 tailles chacun.
 - **Aperçu photo dans le cristal** : la photo du client s'affiche DANS le bloc (rendu « gravé »). Faisable côté site (upload + overlay N&B). Le vrai 3D est produit par la machine xTool sur le cristal final.
 - **Guide des tailles par NOMBRE DE PERSONNES** : essentiel (demande gérante) — « plus il y a de personnes, plus il faut un grand bloc pour que les visages restent nets ». Petit=1 pers, Moyen=1-2, Grand=famille, XL=grand groupe.
-- **Vraies photos produits** : la gérante enverra les photos réelles des blocs → remplacer la maquette.
+- **Vraies photos produits** : la gérante enverra **2 photos réelles** des blocs → à ajouter (en plus de la maquette).
+- **RÈGLE FERME : TOUT EN FRANÇAIS sur le site** (les guides des concurrents sont en anglais → on refait tout en français, jamais copier leur texte anglais).
+
+**Guide des tailles (français, tailles réelles Niv) — inspiré de l'image concurrent n°1 (téléphone pour l'échelle + nb de personnes) :**
+| Taille | Bloc vertical | Bloc horizontal | Poids | Personnes | Prix |
+|---|---|---|---|---|---|
+| Petit | 5×5×8 cm | 8×5×5 cm | ~0,5 kg | 1 (H: 1-2) | 39,90 € |
+| Moyen | 5×6×10 cm | 10×6×5 cm | ~0,8 kg | 1-2 (H: 2-3) | 59,90 € |
+| Grand | 6×8×12 cm | 12×8×6 cm | ~1,4 kg | Famille 2-4 | 99,90 € |
+| XL | 6×10×15 cm | 15×10×6 cm | ~2,3 kg | Grand groupe (5-6) | 149,90 € |
+> Message clé : « Plus il y a de personnes, plus il faut un grand cristal (visages nets). »
+> Le XL (~2,3 kg) déclenche le **retrait en main propre auto** (seuil 2 kg) — cohérent.
+> Aperçu construit dans la fiche (pas juste une image) : rangée de 4 blocs à l'échelle + poids + nb de personnes.
 
 ## 5. Marketing & occasions (à décliner toute l'année)
 Saint-Valentin & couples · Fête des mères/pères · Naissance & bébé · **Mariage** (lien gamme mariage) · Hommage/souvenir (proche, animal) · Noël & anniversaires.
