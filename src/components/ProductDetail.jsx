@@ -90,7 +90,7 @@ export default function ProductDetail({ product }) {
   // Mobile : le mini 3D flottant apparaît quand la photo est sortie de l'écran
   // et que le grand 3D (en bas) n'est pas encore visible.
   useEffect(() => {
-    if (isWide || !(product.engrave3d || product.engraveHeart3d || product.engraveBook3d || product.engraveEnvelope3d || product.engravePlate3d || product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d)) { setShowMini(false); return; }
+    if (isWide || !(product.engrave3d || product.engraveHeart3d || product.engraveBook3d || product.engraveEnvelope3d || product.engravePlate3d || product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d || product.crystal3d)) { setShowMini(false); return; }
     // Méthode fiable : on calcule les positions à chaque défilement.
     // Le mini 3D ne s'affiche QUE tant qu'on n'a pas atteint le grand 3D
     // (il est encore plus bas). Dès qu'on l'a vu/dépassé, plus de mini —
@@ -113,7 +113,7 @@ export default function ProductDetail({ product }) {
       window.removeEventListener("scroll", compute);
       window.removeEventListener("resize", compute);
     };
-  }, [isWide, product.engrave3d, product.engraveHeart3d, product.engraveBook3d, product.engraveEnvelope3d, product.engravePlate3d, product.engraveGourmette3d, product.engraveSilicone3d, product.engraveLeather3d, product.engraveBar3d]);
+  }, [isWide, product.engrave3d, product.engraveHeart3d, product.engraveBook3d, product.engraveEnvelope3d, product.engravePlate3d, product.engraveGourmette3d, product.engraveSilicone3d, product.engraveLeather3d, product.engraveBar3d, product.crystal3d]);
   useEffect(() => {
     fetch("/api/stock")
       .then((r) => r.json())
@@ -1179,7 +1179,7 @@ export default function ProductDetail({ product }) {
 
               {(hasTextFields || photoField) && !product.noEngravePreview && (
                 <>
-                <div className="engrave-preview">
+                <div className="engrave-preview" ref={product.crystal3d ? big3dRef : null}>
                   <span className="ep-label">
                     Aperçu témoin de la gravure
                     {fontField && fieldValues[fontField.key] ? ` — ${getFontLabel(fieldValues[fontField.key])}` : ""}
@@ -1216,27 +1216,6 @@ export default function ProductDetail({ product }) {
                     </span>
                   )}
                 </div>
-                {/* Mini aperçu cristal flottant (bas-droite sur mobile), visible pendant la saisie.
-                    Styles AUTONOMES (cm-*) : ne dépendent plus de .engrave-preview. */}
-                {material === "crystal" && (photoSrc || previewLines.length > 0) && (
-                  <div className="crystal-mini" aria-hidden="true">
-                    <div className="cm-block">
-                      {photoSrc && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img className="cm-photo" src={photoSrc} alt="" />
-                      )}
-                      <span className="cm-shine" />
-                      {previewLines.length > 0 && (
-                        <div className="cm-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%" }}>
-                          {previewLines.map((l, i) => (
-                            <span key={i} className={previewFontClass}>{l}</span>
-                          ))}
-                        </div>
-                      )}
-                      <span className="cm-badge">Aperçu</span>
-                    </div>
-                  </div>
-                )}
                 </>
               )}
             </div>
@@ -1358,9 +1337,24 @@ export default function ProductDetail({ product }) {
         </div>
       </div>
 
-      {any3d && !isWide && showMini && (
-        <div className="engrave3d-mini">
-          {(product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d) ? (
+      {(any3d || product.crystal3d) && !isWide && showMini && (photoSrc || previewLines.length > 0 || !product.crystal3d) && (
+        <div className={`engrave3d-mini${product.crystal3d ? " crystal" : ""}`}>
+          {product.crystal3d ? (
+            <div className="cm-block">
+              {photoSrc && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="cm-photo" src={photoSrc} alt="" />
+              )}
+              <span className="cm-shine" />
+              {previewLines.length > 0 && (
+                <div className="cm-text" style={{ left: (crystalTextPos?.x ?? 50) + "%", top: (crystalTextPos?.y ?? 78) + "%" }}>
+                  {previewLines.map((l, i) => (
+                    <span key={i} className={previewFontClass}>{l}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (product.engraveGourmette3d || product.engraveSilicone3d || product.engraveLeather3d || product.engraveBar3d) ? (
             <EngraveGourmette3D text={gourmetteText} fontKey={fieldValues[fontField?.key] || "playfair"} finish={braceletFin} band={braceletBand} slim={braceletSlim} decor={product.decor3d || ""} height={200} showHint={false} />
           ) : product.engravePlate3d ? (
             <EngravePlate3D faces={plateFaces} motifPos={fieldValues["textPos"]} photo={photoSrc} photoFace={fieldValues["photoFace"] || "recto"} finish={plateFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />

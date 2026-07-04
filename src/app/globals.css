@@ -1451,45 +1451,33 @@ img {
 }
 @media (prefers-reduced-motion: reduce) { .gallery-main .crystal-hero .ch-shine { animation: none; opacity: 0.2; } }
 
-/* Mini aperçu cristal FLOTTANT (visible pendant la saisie sur mobile).
-   Styles autonomes : même rendu « bloc de verre » que le grand aperçu. */
-.crystal-mini { display: none; }
-@media (max-width: 900px) {
-  .crystal-mini {
-    position: fixed;
-    right: 12px; bottom: 84px;   /* au-dessus du bouton « La boutique » */
-    width: 118px; z-index: 70;
-    filter: drop-shadow(0 10px 22px rgba(20,30,45,0.35));
-  }
-  .crystal-mini .cm-block {
-    position: relative; width: 118px; height: 148px; border-radius: 10px; overflow: hidden;
-    background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(210,228,240,0.42) 42%, rgba(140,172,196,0.5));
-    box-shadow:
-      inset 4px 4px 10px rgba(255,255,255,0.85),
-      inset -6px -8px 16px rgba(70,100,128,0.5),
-      inset 0 0 0 1px rgba(255,255,255,0.5);
-  }
-  .crystal-mini .cm-photo {
-    position: absolute; inset: 12%; width: 76%; height: 76%; margin: auto;
-    object-fit: cover; border-radius: 4px; opacity: 0.92;
-    filter: grayscale(1) contrast(1.12) brightness(1.05);
-  }
-  .crystal-mini .cm-shine {
-    position: absolute; top: 0; left: -35%; width: 36%; height: 100%; transform: skewX(-18deg);
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-    pointer-events: none;
-  }
-  .crystal-mini .cm-text {
-    position: absolute; transform: translate(-50%, -50%); z-index: 5;
-    display: flex; flex-direction: column; align-items: center;
-    color: #33414f; text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-    font-size: 0.6rem; line-height: 1.1; white-space: nowrap; pointer-events: none; text-align: center;
-  }
-  .crystal-mini .cm-badge {
-    position: absolute; top: 6px; left: 6px; z-index: 6;
-    background: rgba(201,162,75,0.94); color: #1a1206;
-    font-size: 0.55rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;
-  }
+/* Mini aperçu cristal FLOTTANT (réutilise le conteneur .engrave3d-mini des
+   bijoux : même position, même déclenchement au défilement). */
+.engrave3d-mini.crystal { padding: 0; background: transparent; border: none; box-shadow: none;
+  filter: drop-shadow(0 10px 22px rgba(20,30,45,0.35)); }
+.engrave3d-mini.crystal .cm-block {
+  position: relative; width: 118px; height: 150px; border-radius: 10px; overflow: hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(210,228,240,0.42) 42%, rgba(140,172,196,0.5));
+  box-shadow:
+    inset 4px 4px 10px rgba(255,255,255,0.85),
+    inset -6px -8px 16px rgba(70,100,128,0.5),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+}
+.engrave3d-mini.crystal .cm-photo {
+  position: absolute; inset: 12%; width: 76%; height: 76%; margin: auto;
+  object-fit: cover; border-radius: 4px; opacity: 0.92;
+  filter: grayscale(1) contrast(1.12) brightness(1.05);
+}
+.engrave3d-mini.crystal .cm-shine {
+  position: absolute; top: 0; left: -35%; width: 36%; height: 100%; transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  pointer-events: none;
+}
+.engrave3d-mini.crystal .cm-text {
+  position: absolute; transform: translate(-50%, -50%); z-index: 5;
+  display: flex; flex-direction: column; align-items: center;
+  color: #33414f; text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+  font-size: 0.6rem; line-height: 1.1; white-space: nowrap; pointer-events: none; text-align: center;
 }
 
 /* Note GLOBALE de la boutique (accueil) — bandeau « Avis vérifiés » */
