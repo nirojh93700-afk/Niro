@@ -43,7 +43,31 @@ Transport réparti **au poids** (cristal dense). « Coût rendu » = prix fourni
 | Socle LED rotatif (option) | 2,70-3,50 € | 25-39 € (MasterPics) | **+19,90 €** | +16 € |
 
 **Stratégie socle** : seulement 25 socles pour 125 blocs → socle en **option payante (+19,90 €)** sur les petits/moyens, **offert** sur les grands (99,90 €+) pour justifier le prix.
+> ⚠️ Les **socles lumineux** sont UNIQUEMENT pour les **blocs et le cœur** (pour les poser/illuminer). Les **porte-clés ont leur propre LED intégrée** → JAMAIS de socle pour les porte-clés.
 **Emballage** : prévoir mousse de calage (~1-2 €/pièce) — le cristal casse.
+
+## 3 bis. COMBIEN TU GAGNES SI TU VENDS TOUT (projection)
+Chiffre d'affaires si tout le stock (250 pièces) est vendu au prix conseillé :
+| Produit | Stock | Prix | Total |
+|---|---|---|---|
+| Bloc 5×5×8 | 50 | 39,90 € | 1 995 € |
+| Bloc 5×6×10 | 50 | 59,90 € | 2 995 € |
+| Bloc 6×8×12 | 10 | 99,90 € | 999 € |
+| Bloc 6×10×15 | 10 | 149,90 € | 1 499 € |
+| Cœur 10×10×5 | 5 | 89,90 € | 449,50 € |
+| Porte-clés cœur | 50 | 16,90 € | 845 € |
+| Porte-clés rectangle | 50 | 14,90 € | 745 € |
+| Socles LED (option +19,90 €) | 25 | 19,90 € | 497,50 € |
+| **CA TOTAL si tout vendu** | 250 | | **≈ 10 025 €** |
+
+**Bénéfice net** = CA − stock déjà payé − emballage :
+- CA total : **+10 025 €**
+- Stock déjà payé (achat + transport + frais) : **−1 130 €**
+- Emballage (mousse/coffrets, ~230 €) : **−230 €**
+- = **BÉNÉFICE NET ≈ 8 665 €** (investissement 1 130 € → retour ×7,6)
+
+Scénario prudent (≈70 % vendu, quelques casses/promos) : CA ~7 000 € → **bénéfice ~5 700 €**.
+> Non compté : ton temps de gravure, la pub, la casse éventuelle. À surveiller mais la marge encaisse largement.
 
 ## 4. Mise en page de la fiche produit (repris des concurrents, adapté au site)
 Structure gagnante observée sur MasterPics / LOOXIS / Zephyr :
