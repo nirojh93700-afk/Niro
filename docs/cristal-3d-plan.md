@@ -47,7 +47,7 @@ Transport réparti **au poids** (cristal dense). « Coût rendu » = prix fourni
 **Emballage** : prévoir mousse de calage (~1-2 €/pièce) — le cristal casse.
 
 **Options (add-ons) validées avec la gérante :**
-- **Socle lumineux LED rotatif** : +19,90 € (blocs + cœur uniquement ; porte-clés ont leur LED).
+- **Socle lumineux LED rotatif** : +19,90 € (blocs + cœur ; porte-clés ont leur LED). ⏳ **REPORTÉ AU LANCEMENT** — à ajouter PLUS TARD (comme cœur/porte-clés). Ne PAS le mettre sur les 2 premières fiches blocs.
 - **Texte / date gravé** : **PAYANT +4,90 €** (décision gérante — MasterPics le fait gratuit, on reste raisonnable mais on gagne). Modifiable (6,90 / 9,90 € si elle veut plus de marge).
 - **Coffret cadeau** : **PAS ENCORE** (la gérante n'a pas de coffrets). À AJOUTER PLUS TARD (~+9,90 €) quand elle en aura. Retiré de l'aperçu pour l'instant, gardé en mémo.
 
@@ -134,7 +134,16 @@ double caméra 48 MP. **Exige du cristal K9 = exactement ce qui a été acheté.
   gravure par taille (impacte le délai annoncé).
 
 ## 8. Plan d'action
-1. Gérante : confirmer la **gravure** (A/B/C) + valider la grille de prix.
-2. Moi : créer les **fiches produit** (4 tailles blocs + cœur + 2 porte-clés) avec upload photo, aperçu 3D, options socle/texte/coffret, poids/livraison.
-3. Moi : **visuels + vidéo** (cristal qui tourne sur socle lumineux) pour accueil + réseaux.
-4. Publier une **collection « Cristal Photo 3D »** rangée par occasion, avec guide des tailles.
+### LANCEMENT 1 — décision gérante : SEULEMENT les 2 blocs (vertical + horizontal)
+- **Uniquement** Bloc vertical + Bloc horizontal. Cœur, porte-clés = PLUS TARD.
+- Chaque bloc : 4 tailles + guide des tailles (nb de personnes), prix 39,90/59,90/99,90/149,90 €,
+  upload photo + aperçu, **option texte gravé +4,90 €**, galerie (photos + vidéo), livraison en place.
+- ⏳ **PAS de socle lumineux au lancement** (reporté, comme cœur/porte-clés).
+- Noms de produits + prix : à confirmer avec la gérante avant build.
+- Galeries maquette (déjà montées) : horizontal = vidéo + famille(texte) + couple + amis + bébé ;
+  vertical = bébé + enfant&chat(texte) + couple + femme + enfant&chien.
+
+### PLUS TARD
+- Ajouter le **socle lumineux** (+19,90 €) sur les blocs et le cœur.
+- Publier le **Cœur** (89,90 €) et les **Porte-clés** (16,90 / 14,90 €).
+- Coffret cadeau (+9,90 €).
