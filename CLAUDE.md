@@ -221,6 +221,11 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
 
+### RÈGLE — RESPECTER LES TESTS / MAQUETTES VALIDÉS (TRÈS IMPORTANTE, demande explicite)
+- Quand une **maquette / un test** (artifact) est validé par la gérante, il faut le **REPRODUIRE FIDÈLEMENT** sur le vrai site — **copier** le rendu du test, juste **l'adapter** aux couleurs/structure du site. NE PAS réinventer un rendu différent, sinon « les tests ne servent à rien ».
+- **TESTER SOI-MÊME le rendu** (rendu HTML → screenshot via Chromium headless : `/opt/pw-browsers/chromium-1194/chrome-linux/chrome --headless --screenshot=...`) AVANT de dire à la gérante que c'est bon. Ne pas lui faire vérifier chaque détail.
+- Ex. aperçu cristal 3D : la photo du client s'affiche dans un **bloc de verre** (comme la maquette `apercu-fiche-cristal.html`) : verre bleuté clair + `mix-blend-mode:luminosity` + `filter:grayscale(1) contrast(1.18) brightness(1.12)` opacity .74 + reflet animé. Le grand aperçu remplace l'image du haut dès l'upload (`.crystal-hero` dans `ProductDetail.jsx`).
+
 ### Reste à faire avant l'ouverture publique
 - **Ouvrir le site au public** : décocher « Activer le code d'accès » dans gestion → Apparence (site encore privé en attendant).
 - **SIRET** : `105 914 774 00010` renseigné dans Mentions légales + CGV (fait le 25/06/2026).
