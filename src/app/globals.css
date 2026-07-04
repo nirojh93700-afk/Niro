@@ -1320,6 +1320,30 @@ img {
   mix-blend-mode: luminosity;
   filter: grayscale(1) brightness(1.12) contrast(1.12);
 }
+/* Reflet lumineux qui balaie le cristal (comme la maquette) */
+.engrave-preview .ep-plate.crystal .ep-shine {
+  position: absolute;
+  top: 0; left: -35%;
+  width: 36%; height: 100%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  animation: ep-sweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes ep-sweep {
+  0%, 60% { left: -40%; }
+  82%, 100% { left: 125%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .engrave-preview .ep-plate.crystal .ep-shine { animation: none; opacity: 0.15; }
+}
+/* Texte gravé sur le cristal (au-dessus de la photo, effet gravé sombre) */
+.engrave-preview .ep-plate.crystal .ep-line {
+  position: relative;
+  z-index: 2;
+  color: #33414f !important;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+}
 .engrave-preview .ep-line {
   font-size: clamp(1.2rem, 4.5vw, 1.7rem);
   line-height: 1.25;

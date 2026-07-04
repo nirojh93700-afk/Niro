@@ -1143,6 +1143,7 @@ export default function ProductDetail({ product }) {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img className="ep-crystal-photo" src={photoSrc} alt="" />
                     )}
+                    {material === "crystal" && <span className="ep-shine" aria-hidden="true" />}
                     {previewLines.length ? (
                       previewLines.map((line, i) => (
                         <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
