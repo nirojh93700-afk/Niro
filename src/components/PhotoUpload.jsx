@@ -57,18 +57,18 @@ export default function PhotoUpload({ value, onChange, onUpload, multiple = fals
 
   // Envoie un seul fichier et renvoie son URL (Cloudinary ou base de l'atelier).
   async function uploadOne(file) {
+    // Compression AVANT l'envoi (photos de téléphone souvent >5 Mo → réduites à ~300 Ko).
+    let dataUrl;
+    try { dataUrl = await compressImage(file); } catch { dataUrl = await readAsDataUrl(file); }
     if (CLOUDINARY_READY) {
       const fd = new FormData();
-      fd.append("file", file);
+      fd.append("file", dataUrl); // Cloudinary accepte les data URI (image déjà réduite)
       fd.append("upload_preset", PRESET);
       const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok || !data.secure_url) throw new Error("L'envoi a échoué, réessayez.");
       return data.secure_url;
     }
-    // Compression avant l'envoi (sinon dépassement de la limite 1 Mo du stockage).
-    let dataUrl;
-    try { dataUrl = await compressImage(file); } catch { dataUrl = await readAsDataUrl(file); }
     const res = await fetch("/api/upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -88,8 +88,8 @@ export default function PhotoUpload({ value, onChange, onUpload, multiple = fals
         setError("Merci de choisir des images (jpg, png…).");
         return;
       }
-      if (f.size > 5 * 1024 * 1024) {
-        setError(`Image trop lourde (5 Mo maximum)${files.length > 1 ? " : " + f.name : ""}.`);
+      if (f.size > 25 * 1024 * 1024) {
+        setError(`Image trop lourde (25 Mo maximum)${files.length > 1 ? " : " + f.name : ""}.`);
         return;
       }
     }
