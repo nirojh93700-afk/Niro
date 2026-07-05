@@ -761,7 +761,7 @@ export default function ProductDetail({ product }) {
                   <img className="cr-bg" src={crystalZone.img} alt="" />
                   <div
                     className="cr-overlay"
-                    style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%", transform: `rotate(${crystalZone.rotation || 0}deg)` }}
+                    style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%", transform: `perspective(900px) rotateX(${crystalZone.rx || 0}deg) rotateY(${crystalZone.ry || 0}deg) rotate(${crystalZone.rotation || 0}deg)` }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -1395,7 +1395,7 @@ export default function ProductDetail({ product }) {
               <img className="cr-bg" src={crystalZone.img} alt="" />
               <div
                 className="cr-overlay"
-                style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%", transform: `rotate(${crystalZone.rotation || 0}deg)` }}
+                style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%", transform: `perspective(900px) rotateX(${crystalZone.rx || 0}deg) rotateY(${crystalZone.ry || 0}deg) rotate(${crystalZone.rotation || 0}deg)` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="cr-photo" src={photoSrc} alt="" style={{ opacity: crystalZone.opacity ?? 0.72, mixBlendMode: crystalZone.blend || "screen", filter: (crystalZone.bw ? "grayscale(1) " : "") + "contrast(1.12) brightness(1.08)" }} />

@@ -21,7 +21,11 @@ const START = {
   "cristal-photo-3d-horizontal": { left: 30, top: 30, width: 42, height: 32, rotation: -3 },
 };
 function defZone(p) {
-  return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, rotation: 0, opacity: 0.72, blend: "screen", bw: 1, ...(START[p.slug] || {}) };
+  return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, rotation: 0, ry: 0, rx: 0, opacity: 0.72, blend: "screen", bw: 1, ...(START[p.slug] || {}) };
+}
+// Transformation appliquée à la zone : inclinaison (rotation à plat) + perspective 3D.
+function zoneTransform(z) {
+  return `perspective(900px) rotateX(${z?.rx || 0}deg) rotateY(${z?.ry || 0}deg) rotate(${z?.rotation || 0}deg)`;
 }
 
 export default function CristalReglage() {
@@ -127,7 +131,7 @@ export default function CristalReglage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {z?.img && <img src={z.img} alt="" draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }} />}
         {z && (
-          <div onPointerDown={(e) => onDown("move", e)} style={{ position: "absolute", left: z.left + "%", top: z.top + "%", width: z.width + "%", height: z.height + "%", overflow: "hidden", borderRadius: 4, cursor: "grab", outline: "2px solid #c9a24b", outlineOffset: -1, transform: `rotate(${z.rotation || 0}deg)` }}>
+          <div onPointerDown={(e) => onDown("move", e)} style={{ position: "absolute", left: z.left + "%", top: z.top + "%", width: z.width + "%", height: z.height + "%", overflow: "hidden", borderRadius: 4, cursor: "grab", outline: "2px solid #c9a24b", outlineOffset: -1, transform: zoneTransform(z) }}>
             {sample ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={sample} alt="" draggable={false} style={{ width: "100%", height: "100%", objectFit: "contain", opacity: z.opacity, mixBlendMode: z.blend, filter: (z.bw ? "grayscale(1) " : "") + "contrast(1.12) brightness(1.08)", pointerEvents: "none" }} />
@@ -162,6 +166,16 @@ export default function CristalReglage() {
           <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Inclinaison</span>
           <input type="range" min="-30" max="30" step="1" value={z?.rotation ?? 0} onChange={(e) => setZ({ rotation: Number(e.target.value) })} style={{ flex: 1 }} />
           <span style={{ width: 42, textAlign: "right", fontSize: ".85rem" }}>{Math.round(z?.rotation ?? 0)}°</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Perspective ↔</span>
+          <input type="range" min="-50" max="50" step="1" value={z?.ry ?? 0} onChange={(e) => setZ({ ry: Number(e.target.value) })} style={{ flex: 1 }} />
+          <span style={{ width: 42, textAlign: "right", fontSize: ".85rem" }}>{Math.round(z?.ry ?? 0)}°</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Perspective ↕</span>
+          <input type="range" min="-50" max="50" step="1" value={z?.rx ?? 0} onChange={(e) => setZ({ rx: Number(e.target.value) })} style={{ flex: 1 }} />
+          <span style={{ width: 42, textAlign: "right", fontSize: ".85rem" }}>{Math.round(z?.rx ?? 0)}°</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Luminosité</span>
