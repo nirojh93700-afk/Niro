@@ -574,6 +574,7 @@ export default function GestionPage() {
                 { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
                 { id: "couverts-reglage", text: "🍴 Réglage couverts", href: "/gestion/couverts-reglage" },
+                { id: "cristal-reglage", text: "💎 Réglage cristaux (photo)", href: "/gestion/cristal-reglage" },
               ],
             },
             {

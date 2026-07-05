@@ -214,6 +214,25 @@ export async function POST(req) {
       patch.couvertsZones.handles = h;
     }
   }
+  // Zones de gravure des cristaux (réglées dans /gestion/cristal-reglage) :
+  // pour chaque produit, où placer la photo du client sur la vraie photo du cristal.
+  if (body.crystalZones && typeof body.crystalZones === "object") {
+    const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
+    const out = {};
+    for (const [slug, z] of Object.entries(body.crystalZones)) {
+      if (!z || typeof z !== "object") continue;
+      out[String(slug).slice(0, 80)] = {
+        img: typeof z.img === "string" ? z.img.slice(0, 300) : "",
+        left: num(z.left, 20), top: num(z.top, 40),
+        width: num(z.width, 30), height: num(z.height, 30),
+        opacity: Math.max(0.2, Math.min(1, num(z.opacity, 0.72))),
+        blend: ["screen", "normal", "luminosity", "multiply"].includes(z.blend) ? z.blend : "screen",
+        bw: z.bw ? 1 : 0,
+      };
+    }
+    patch.crystalZones = out;
+  }
+
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

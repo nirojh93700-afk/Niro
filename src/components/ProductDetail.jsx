@@ -53,7 +53,8 @@ export default function ProductDetail({ product }) {
   const [error, setError] = useState("");
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé (face)
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
-  const [crystalTextPos, setCrystalTextPos] = useState(null); // placement du texte sur l'aperçu cristal
+  const [crystalTextPos, setCrystalTextPos] = useState(null);
+  const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
   const [activeSide, setActiveSide] = useState("face"); // côté en cours de réglage (mode "les deux")
@@ -128,6 +129,14 @@ export default function ProductDetail({ product }) {
       })
       .catch(() => {});
   }, [product.slug]);
+  // Zone de gravure du cristal réglée dans l'admin (/gestion/cristal-reglage).
+  useEffect(() => {
+    if (!product.crystal3d) return;
+    fetch("/api/crystal-zones")
+      .then((r) => r.json())
+      .then((d) => { const z = d.zones?.[product.slug]; if (z && z.img) setCrystalZone(z); })
+      .catch(() => {});
+  }, [product.slug, product.crystal3d]);
 
   // Valeurs par défaut des champs (ex. texte + date pré-remplis et actifs).
   useEffect(() => {
@@ -741,17 +750,23 @@ export default function ProductDetail({ product }) {
             {/* Cristal 3D : dès que le client charge SA photo, elle s'affiche
                 ici en GRAND dans un cristal (comme la maquette test). */}
             {product.crystal3d && photoSrc && (
-              product.previewTemplate ? (
-                /* Aperçu RÉALISTE : la photo du client s'incruste dans la vraie photo du cristal */
+              crystalZone ? (
+                /* Aperçu RÉEL : la photo du client s'incruste dans la vraie photo du cristal,
+                   à la zone réglée dans l'admin (/gestion/cristal-reglage). */
                 <div className="crystal-hero crystal-real">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="cr-bg" src={product.previewTemplate.img} alt="" />
+                  <img className="cr-bg" src={crystalZone.img} alt="" />
                   <div
-                    className={`cr-overlay${product.previewTemplate.shape === "coeur" ? " cr-coeur" : ""}`}
-                    style={{ left: product.previewTemplate.zone.left + "%", top: product.previewTemplate.zone.top + "%", width: product.previewTemplate.zone.width + "%", height: product.previewTemplate.zone.height + "%" }}
+                    className="cr-overlay"
+                    style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="cr-photo" src={photoSrc} alt="Votre photo dans le cristal" style={{ opacity: product.previewTemplate.opacity ?? 0.72 }} />
+                    <img
+                      className="cr-photo"
+                      src={photoSrc}
+                      alt="Votre photo dans le cristal"
+                      style={{ opacity: crystalZone.opacity ?? 0.72, mixBlendMode: crystalZone.blend || "screen", filter: (crystalZone.bw ? "grayscale(1) " : "") + "contrast(1.12) brightness(1.08)" }}
+                    />
                   </div>
                   <span className="ch-badge">✓ Votre aperçu</span>
                 </div>
@@ -1359,17 +1374,17 @@ export default function ProductDetail({ product }) {
       </div>
 
       {(any3d || product.crystal3d) && !isWide && showMini && (photoSrc || previewLines.length > 0 || !product.crystal3d) && (
-        <div className={`engrave3d-mini${product.crystal3d ? (product.previewTemplate ? " crystal crystal-real" : " crystal") : ""}`}>
-          {product.crystal3d && product.previewTemplate ? (
+        <div className={`engrave3d-mini${product.crystal3d ? (crystalZone ? " crystal crystal-real" : " crystal") : ""}`}>
+          {product.crystal3d && crystalZone ? (
             <div className="cm-real">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="cr-bg" src={product.previewTemplate.img} alt="" />
+              <img className="cr-bg" src={crystalZone.img} alt="" />
               <div
-                className={`cr-overlay${product.previewTemplate.shape === "coeur" ? " cr-coeur" : ""}`}
-                style={{ left: product.previewTemplate.zone.left + "%", top: product.previewTemplate.zone.top + "%", width: product.previewTemplate.zone.width + "%", height: product.previewTemplate.zone.height + "%" }}
+                className="cr-overlay"
+                style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="cr-photo" src={photoSrc} alt="" style={{ opacity: product.previewTemplate.opacity ?? 0.72 }} />
+                <img className="cr-photo" src={photoSrc} alt="" style={{ opacity: crystalZone.opacity ?? 0.72, mixBlendMode: crystalZone.blend || "screen", filter: (crystalZone.bw ? "grayscale(1) " : "") + "contrast(1.12) brightness(1.08)" }} />
               </div>
             </div>
           ) : product.crystal3d ? (

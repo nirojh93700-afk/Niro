@@ -1188,8 +1188,6 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
-      { key: "texte", label: "Texte à graver (optionnel)", maxLength: 25, optional: true },
-      { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
       "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg",
@@ -1212,8 +1210,6 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
-      { key: "texte", label: "Texte à graver (optionnel)", maxLength: 25, optional: true },
-      { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
       "/produits/porte_cles_en_cristal_avec_lumiere_led_rectangle.jpg",
