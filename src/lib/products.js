@@ -1184,7 +1184,7 @@ export const products = [
     crystal3d: true,
     crystalShape: "coeur",
     // Aperçu réaliste : la photo du client s'incruste dans la VRAIE photo du cristal.
-    previewTemplate: { img: "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg", zone: { left: 10, top: 41, width: 41, height: 40 }, shape: "coeur", opacity: 0.72 },
+    previewTemplate: { img: "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg", zone: { left: 15, top: 50, width: 30, height: 26 }, shape: "rect", opacity: 0.72 },
     category: "cadeaux", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés cœur en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
