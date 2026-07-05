@@ -831,7 +831,7 @@ export const products = [
       "/produits/cristal-h-famille.jpg",
       "/produits/cristal-h-couple.jpg",
       "/produits/cristal-h-amis.jpg",
-      "/produits/cristal-v-bebe.jpg",
+      "/produits/cristal-h-demo-couple.jpg",
       "/produits/cristal-h-guide.png",
     ],
     variants: [
