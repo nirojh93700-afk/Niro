@@ -793,10 +793,10 @@ export const products = [
     ],
     video: "/produits/cristal-video-vertical.mp4",
     images: [
+      "/produits/cristal-v-femme.jpg",
       "/produits/cristal-bloc-v-creme.jpg",
       "/produits/cristal-v-enfant-chat.jpg",
       "/produits/cristal-v-couple.jpg",
-      "/produits/cristal-v-femme.jpg",
       "/produits/cristal-v-enfant-chien.jpg",
       "/produits/cristal-v-jeunes.jpg",
       "/produits/cristal-v-guide.png",
@@ -831,10 +831,9 @@ export const products = [
     ],
     video: "/produits/cristal-video-horizontal.mp4",
     images: [
+      "/produits/cristal-h-amis.jpg",
       "/produits/cristal-bloc-h-creme.jpg",
       "/produits/cristal-h-famille.jpg",
-      "/produits/cristal-h-couple.jpg",
-      "/produits/cristal-h-amis.jpg",
       "/produits/cristal-h-demo-couple.jpg",
       "/produits/cristal-h-guide.png",
     ],
