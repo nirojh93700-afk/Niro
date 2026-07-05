@@ -17,6 +17,7 @@ const BLENDS = [
 const START = {
   "porte-cles-cristal-led-coeur": { left: 15, top: 50, width: 30, height: 26 },
   "porte-cles-cristal-led-rectangle": { left: 48.5, top: 43.5, width: 24, height: 37 },
+  "cristal-photo-3d-horizontal": { left: 19, top: 28, width: 52, height: 44 },
 };
 function defZone(p) {
   return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, rotation: 0, opacity: 0.72, blend: "screen", bw: 1, ...(START[p.slug] || {}) };
