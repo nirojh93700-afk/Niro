@@ -1216,6 +1216,8 @@ export const products = [
     ],
     images: [
       "/produits/cristal-pcles-rect-creme.jpg",
+      "/produits/porte-cles-rect-creme-2.jpg",
+      "/produits/porte-cles-rect-demo-chien.jpg",
       "/produits/porte_cles_en_cristal_avec_lumiere_led_rectangle.jpg",
     ],
     variants: [
