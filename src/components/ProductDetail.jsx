@@ -741,6 +741,21 @@ export default function ProductDetail({ product }) {
             {/* Cristal 3D : dès que le client charge SA photo, elle s'affiche
                 ici en GRAND dans un cristal (comme la maquette test). */}
             {product.crystal3d && photoSrc && (
+              product.previewTemplate ? (
+                /* Aperçu RÉALISTE : la photo du client s'incruste dans la vraie photo du cristal */
+                <div className="crystal-hero crystal-real">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="cr-bg" src={product.previewTemplate.img} alt="" />
+                  <div
+                    className={`cr-overlay${product.previewTemplate.shape === "coeur" ? " cr-coeur" : ""}`}
+                    style={{ left: product.previewTemplate.zone.left + "%", top: product.previewTemplate.zone.top + "%", width: product.previewTemplate.zone.width + "%", height: product.previewTemplate.zone.height + "%" }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="cr-photo" src={photoSrc} alt="Votre photo dans le cristal" style={{ opacity: product.previewTemplate.opacity ?? 0.72 }} />
+                  </div>
+                  <span className="ch-badge">✓ Votre aperçu</span>
+                </div>
+              ) : (
               <div className="crystal-hero">
                 <div className="ch-wrap">
                   <div className={`ch-block${product.crystalShape ? " ch-" + product.crystalShape : ""}`}>
@@ -758,6 +773,7 @@ export default function ProductDetail({ product }) {
                 </div>
                 <span className="ch-badge">✓ Votre aperçu</span>
               </div>
+              )
             )}
             {/* (L'aperçu de la photo se fait aussi dans la case « cristal » dédiée
                 plus bas — pas de superposition sur la photo produit réelle,
@@ -1343,8 +1359,20 @@ export default function ProductDetail({ product }) {
       </div>
 
       {(any3d || product.crystal3d) && !isWide && showMini && (photoSrc || previewLines.length > 0 || !product.crystal3d) && (
-        <div className={`engrave3d-mini${product.crystal3d ? " crystal" : ""}`}>
-          {product.crystal3d ? (
+        <div className={`engrave3d-mini${product.crystal3d ? (product.previewTemplate ? " crystal crystal-real" : " crystal") : ""}`}>
+          {product.crystal3d && product.previewTemplate ? (
+            <div className="cm-real">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="cr-bg" src={product.previewTemplate.img} alt="" />
+              <div
+                className={`cr-overlay${product.previewTemplate.shape === "coeur" ? " cr-coeur" : ""}`}
+                style={{ left: product.previewTemplate.zone.left + "%", top: product.previewTemplate.zone.top + "%", width: product.previewTemplate.zone.width + "%", height: product.previewTemplate.zone.height + "%" }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="cr-photo" src={photoSrc} alt="" style={{ opacity: product.previewTemplate.opacity ?? 0.72 }} />
+              </div>
+            </div>
+          ) : product.crystal3d ? (
             <div className={`cm-block${product.crystalShape ? " cm-" + product.crystalShape : ""}`}>
               {photoSrc && (
                 // eslint-disable-next-line @next/next/no-img-element

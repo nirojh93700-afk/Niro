@@ -1461,6 +1461,21 @@ img {
 }
 @media (prefers-reduced-motion: reduce) { .gallery-main .crystal-hero .ch-shine { animation: none; opacity: 0.2; } }
 
+/* Aperçu RÉALISTE : la vraie photo du cristal + la photo du client incrustée dedans */
+.gallery-main .crystal-hero.crystal-real { background: #f3efe6; }
+.gallery-main .crystal-hero .cr-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+}
+.gallery-main .crystal-hero .cr-overlay { position: absolute; overflow: hidden; }
+.gallery-main .crystal-hero .cr-overlay.cr-coeur {
+  clip-path: polygon(50% 97%, 20% 72%, 3% 46%, 3% 27%, 17% 13%, 34% 13%, 50% 30%, 66% 13%, 83% 13%, 97% 27%, 97% 46%, 80% 72%);
+}
+.gallery-main .crystal-hero .cr-photo {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(1) contrast(1.12) brightness(1.08);
+  mix-blend-mode: screen;
+}
+
 /* Mini aperçu cristal FLOTTANT (réutilise le conteneur .engrave3d-mini des
    bijoux : même position, même déclenchement au défilement). */
 .engrave3d-mini.crystal { padding: 0; background: transparent; border: none; box-shadow: none;
@@ -1483,6 +1498,15 @@ img {
   clip-path: polygon(50% 97%, 20% 72%, 3% 46%, 3% 27%, 17% 13%, 34% 13%, 50% 30%, 66% 13%, 83% 13%, 97% 27%, 97% 46%, 80% 72%);
 }
 .engrave3d-mini.crystal .cm-block.cm-coeur { border-radius: 0; }
+/* Mini avec aperçu réaliste (vraie photo du cristal) */
+.engrave3d-mini.crystal-real { background: transparent; }
+.engrave3d-mini .cm-real { position: relative; width: 118px; border-radius: 10px; overflow: hidden; }
+.engrave3d-mini .cm-real .cr-bg { display: block; width: 100%; }
+.engrave3d-mini .cm-real .cr-overlay { position: absolute; overflow: hidden; }
+.engrave3d-mini .cm-real .cr-overlay.cr-coeur {
+  clip-path: polygon(50% 97%, 20% 72%, 3% 46%, 3% 27%, 17% 13%, 34% 13%, 50% 30%, 66% 13%, 83% 13%, 97% 27%, 97% 46%, 80% 72%);
+}
+.engrave3d-mini .cm-real .cr-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.12) brightness(1.08); mix-blend-mode: screen; }
 .engrave3d-mini.crystal .cm-shine {
   position: absolute; top: 0; left: -35%; width: 36%; height: 100%; transform: skewX(-18deg);
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
