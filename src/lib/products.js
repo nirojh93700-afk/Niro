@@ -1193,6 +1193,7 @@ export const products = [
     ],
     images: [
       "/produits/cristal-pcles-coeur-creme.jpg",
+      "/produits/porte-cles-coeur-demo.jpg",
       "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg",
     ],
     variants: [
