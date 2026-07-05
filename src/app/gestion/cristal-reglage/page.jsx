@@ -17,7 +17,7 @@ const BLENDS = [
 const START = {
   "porte-cles-cristal-led-coeur": { left: 15, top: 50, width: 30, height: 26 },
   "porte-cles-cristal-led-rectangle": { left: 48.5, top: 43.5, width: 24, height: 37 },
-  "cristal-photo-3d-horizontal": { left: 19, top: 28, width: 52, height: 44 },
+  "cristal-photo-3d-horizontal": { left: 30, top: 29, width: 43, height: 34, rotation: -3 },
 };
 function defZone(p) {
   return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, rotation: 0, opacity: 0.72, blend: "screen", bw: 1, ...(START[p.slug] || {}) };
@@ -140,10 +140,13 @@ export default function CristalReglage() {
 
       {/* Contrôles */}
       <div style={{ display: "grid", gap: 12, maxWidth: 420, margin: "14px auto 0" }}>
-        <label className="btn btn-outline" style={{ textAlign: "center", cursor: "pointer" }}>
-          📷 Charger une photo témoin
-          <input type="file" accept="image/*" onChange={onSample} hidden />
-        </label>
+        <div style={{ display: "flex", gap: 8 }}>
+          <label className="btn btn-outline" style={{ flex: 1, textAlign: "center", cursor: "pointer" }}>
+            📷 Charger une photo témoin
+            <input type="file" accept="image/*" onChange={onSample} hidden />
+          </label>
+          <button className="btn btn-outline" style={{ flex: "none" }} onClick={() => setZones((prev) => ({ ...prev, [sel]: defZone(product) }))} title="Replacer le cadre au centre de la face avant">↺ Replacer au centre</button>
+        </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Largeur</span>
           <input type="range" min="6" max="96" step="0.5" value={z?.width ?? 30} onChange={(e) => setZ({ width: Number(e.target.value) })} style={{ flex: 1 }} />
