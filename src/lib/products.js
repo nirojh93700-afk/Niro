@@ -792,6 +792,7 @@ export const products = [
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     video: "/produits/cristal-video-vertical.mp4",
+    videoPoster: "/produits/cristal-video-vertical-poster.jpg",
     images: [
       "/produits/cristal-v-femme.jpg",
       "/produits/cristal-bloc-v-creme.jpg",
@@ -830,6 +831,7 @@ export const products = [
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     video: "/produits/cristal-video-horizontal.mp4",
+    videoPoster: "/produits/cristal-video-horizontal-poster.jpg",
     images: [
       "/produits/cristal-h-amis.jpg",
       "/produits/cristal-bloc-h-creme.jpg",

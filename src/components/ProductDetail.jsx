@@ -743,7 +743,7 @@ export default function ProductDetail({ product }) {
               <video
                 className="gallery-bg gallery-video"
                 src={activeMedia}
-                poster={images[0]}
+                poster={product.videoPoster || images[0]}
                 autoPlay
                 loop
                 muted
@@ -916,7 +916,7 @@ export default function ProductDetail({ product }) {
                   >
                     {isVid ? (
                       // eslint-disable-next-line jsx-a11y/media-has-caption
-                      <video src={m} muted playsInline preload="metadata" poster={images[0]} />
+                      <video src={m} muted playsInline preload="metadata" poster={product.videoPoster || images[0]} />
                     ) : (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={m} alt="" />
