@@ -130,8 +130,6 @@ export default function ProductDetail({ product }) {
       })
       .catch(() => {});
   }, [product.slug]);
-  // Quand la cliente charge/change sa photo, on réaffiche l'aperçu cristal.
-  useEffect(() => { if (photoSrc) setCrystalPreviewActive(true); }, [photoSrc]);
   // Zone de gravure du cristal réglée dans l'admin (/gestion/cristal-reglage).
   useEffect(() => {
     if (!product.crystal3d) return;
@@ -336,6 +334,8 @@ export default function ProductDetail({ product }) {
   // interne (/api/img/... renvoyé par le téléversement). Le badge a priorité s'il est rempli.
   const photoCandidate = badgeUrl || photoUrl;
   const photoSrc = photoCandidate && (photoCandidate.startsWith("http") || photoCandidate.startsWith("data:") || photoCandidate.startsWith("/")) ? photoCandidate : "";
+  // Quand la cliente charge/change sa photo, on réaffiche l'aperçu cristal.
+  useEffect(() => { if (photoSrc) setCrystalPreviewActive(true); }, [photoSrc]);
   // Modèle de gravure (page dédiée propulsée par le moteur partagé).
   const modeleField = visibleFields.find((f) => f.type === "modele");
   const modeleTemplate = modeleField?.template;
