@@ -1182,6 +1182,7 @@ export const products = [
     title: "Porte-clés cristal LED cœur avec gravure photo 3D",
     subcategory: "porte-cles",
     crystal3d: true,
+    crystalShape: "coeur",
     category: "cadeaux", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés cœur en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",

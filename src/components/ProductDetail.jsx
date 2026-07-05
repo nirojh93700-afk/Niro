@@ -743,7 +743,7 @@ export default function ProductDetail({ product }) {
             {product.crystal3d && photoSrc && (
               <div className="crystal-hero">
                 <div className="ch-wrap">
-                  <div className="ch-block">
+                  <div className={`ch-block${product.crystalShape ? " ch-" + product.crystalShape : ""}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img className="ch-photo" src={photoSrc} alt="Votre photo dans le cristal" />
                     {previewLines.length > 0 && (
@@ -1290,7 +1290,7 @@ export default function ProductDetail({ product }) {
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
           />
 
-          {product.crystal3d && (
+          {product.crystal3d && product.variants.length > 1 && (
             <CrystalSizeGuide horizontal={product.slug.includes("horizontal")} />
           )}
 
@@ -1345,7 +1345,7 @@ export default function ProductDetail({ product }) {
       {(any3d || product.crystal3d) && !isWide && showMini && (photoSrc || previewLines.length > 0 || !product.crystal3d) && (
         <div className={`engrave3d-mini${product.crystal3d ? " crystal" : ""}`}>
           {product.crystal3d ? (
-            <div className="cm-block">
+            <div className={`cm-block${product.crystalShape ? " cm-" + product.crystalShape : ""}`}>
               {photoSrc && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img className="cm-photo" src={photoSrc} alt="" />

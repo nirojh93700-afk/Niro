@@ -1433,6 +1433,15 @@ img {
   object-fit: cover; border-radius: 5px; opacity: 0.92;
   filter: grayscale(1) contrast(1.12) brightness(1.05);
 }
+/* Forme CŒUR (porte-clés cœur) : le bloc et la photo prennent la forme d'un cœur */
+.gallery-main .crystal-hero .ch-block.ch-coeur,
+.gallery-main .crystal-hero .ch-block.ch-coeur .ch-photo {
+  clip-path: polygon(50% 97%, 20% 72%, 3% 46%, 3% 27%, 17% 13%, 34% 13%, 50% 30%, 66% 13%, 83% 13%, 97% 27%, 97% 46%, 80% 72%);
+}
+.gallery-main .crystal-hero .ch-block.ch-coeur { border-radius: 0; }
+.gallery-main .crystal-hero .ch-block.ch-coeur::before,
+.gallery-main .crystal-hero .ch-block.ch-coeur::after { display: none; }
+.gallery-main .crystal-hero .ch-block.ch-coeur .ch-photo { inset: 16% 10% 12%; width: 80%; height: 74%; border-radius: 0; }
 .gallery-main .crystal-hero .ch-shine {
   position: absolute; top: 0; left: -35%; width: 36%; height: 100%;
   transform: skewX(-18deg);
@@ -1469,6 +1478,11 @@ img {
   object-fit: cover; border-radius: 4px; opacity: 0.92;
   filter: grayscale(1) contrast(1.12) brightness(1.05);
 }
+.engrave3d-mini.crystal .cm-block.cm-coeur,
+.engrave3d-mini.crystal .cm-block.cm-coeur .cm-photo {
+  clip-path: polygon(50% 97%, 20% 72%, 3% 46%, 3% 27%, 17% 13%, 34% 13%, 50% 30%, 66% 13%, 83% 13%, 97% 27%, 97% 46%, 80% 72%);
+}
+.engrave3d-mini.crystal .cm-block.cm-coeur { border-radius: 0; }
 .engrave3d-mini.crystal .cm-shine {
   position: absolute; top: 0; left: -35%; width: 36%; height: 100%; transform: skewX(-18deg);
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
