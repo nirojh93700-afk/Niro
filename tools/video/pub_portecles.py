@@ -64,7 +64,7 @@ def card(big,small,big2=None):
     return im
 def tts(text,dst):
     mp3=dst.replace(".wav",".mp3");gTTS(text,lang="fr",tld="fr",slow=False).save(mp3)
-    subprocess.run([FF,"-y","-i",mp3,"-filter:a","atempo=1.0","-ar",str(SR),"-ac","1",dst],
+    subprocess.run([FF,"-y","-i",mp3,"-filter:a","asetrate=44100*1.08,aresample=44100,atempo=0.985","-ar",str(SR),"-ac","1",dst],
         stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=True)
     with wave.open(dst) as w:return w.getnframes()/SR
 
