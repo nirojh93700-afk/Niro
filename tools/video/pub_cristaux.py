@@ -17,12 +17,12 @@ B="https://nivcreation.fr/produits/"
 
 # (fichier, nom, sous-titre, voix)
 P=[
- ("cristal-v-couple.jpg","Cristal Photo 3D","Votre photo sculptée dans le cristal.","Le cristal photo 3D, votre photo sculptée dans le verre."),
+ ("cristal-v-couple.jpg","Cristal Photo 3D","Votre photo sculptée dans le cristal.","Le cristal photo 3D. Votre photo, sculptée dans le verre."),
  ("cristal-h-demo-couple.jpg","Format Horizontal","Vos souvenirs en grand.","Le format horizontal, pour vos souvenirs en grand."),
- ("porte-cles-coeur-demo.jpg","Porte-clés Cœur LED","Votre photo, partout avec vous.","Le porte-clés cœur lumineux, votre photo partout avec vous."),
- ("porte-cles-rect-demo-chien.jpg","Porte-clés Cristal LED","Même vos animaux, gravés.","Le porte-clés cristal lumineux, même vos animaux."),
  ("cristal-v-femme.jpg","Cristal Portrait","Un cadeau qui capte la lumière.","Un cadeau qui capte la lumière, et l'émotion."),
- ("trophee_en_cristal_vierge_14_cm.jpg","Trophée Cristal","Un hommage d'exception.","Le trophée en cristal, un hommage d'exception."),
+ ("cristal-h-famille.jpg","En Famille","Toute la famille dans le cristal.","Toute la famille, réunie dans le cristal."),
+ ("porte-cles-coeur-demo.jpg","Porte-clés Cœur LED","Votre photo, partout avec vous.","Le porte-clés cœur lumineux. Votre photo, partout avec vous."),
+ ("porte-cles-rect-demo-chien.jpg","Porte-clés Cristal LED","Même vos animaux, gravés.","Le porte-clés cristal lumineux. Même vos animaux."),
 ]
 INTRO_VO="Niv Création présente le cristal photo 3D."
 CTA_VO="Créez le vôtre sur nivcréation point f r."
@@ -65,8 +65,8 @@ def card(big,small,big2=None):
         f2=F(SANSB,44);w2=d.textlength(big2,font=f2);d.text(((W-w2)//2,H//2+60),big2,font=f2,fill=(120,100,60))
     return im
 def tts(text,dst):
-    mp3=dst.replace(".wav",".mp3");gTTS(text,lang="fr",slow=False).save(mp3)
-    subprocess.run([FF,"-y","-i",mp3,"-filter:a","atempo=1.12","-ar",str(SR),"-ac","1",dst],
+    mp3=dst.replace(".wav",".mp3");gTTS(text,lang="fr",tld="fr",slow=False).save(mp3)
+    subprocess.run([FF,"-y","-i",mp3,"-filter:a","atempo=1.0","-ar",str(SR),"-ac","1",dst],
         stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=True)
     with wave.open(dst) as w:return w.getnframes()/SR
 
@@ -81,7 +81,7 @@ for i,(f,name,sub,vo) in enumerate(P):
 dc=tts(CTA_VO,f"{OUT}/cvo_cta.wav");segs.append(("card",card("nivcreation.fr","Votre photo dans le cristal","Fait main · en France").convert("RGB"),None,max(MIN,PRE+dc+0.5),f"{OUT}/cvo_cta.wav"))
 
 # rendu
-wri=imageio.get_writer(f"{OUT}/cristaux_silent.mp4",fps=FPS,codec="libx264",quality=8,
+wri=imageio.get_writer(f"{OUT}/cristaux2_silent.mp4",fps=FPS,codec="libx264",quality=8,
     macro_block_size=1,ffmpeg_params=["-pix_fmt","yuv420p"],ffmpeg_log_level="error")
 cream=Image.new("RGB",(W,H),CREAM)
 for kind,img,ov,dur,vo in segs:
@@ -123,13 +123,13 @@ while t<total:
 pad=np.zeros(N,dtype=np.float32)
 for fq in (220.0,277.18,329.63):pad+=np.sin(2*np.pi*fq*tt)
 pad=pad/np.max(np.abs(pad))*0.06*(0.6+0.4*np.sin(2*np.pi*0.12*tt))
-mix=voice+bt*0.5+pad;fade=int(0.5*SR);mix[:fade]*=np.linspace(0,1,fade);mix[-fade:]*=np.linspace(1,0,fade)
+mix=voice;fade=int(0.5*SR);mix[:fade]*=np.linspace(0,1,fade);mix[-fade:]*=np.linspace(1,0,fade)
 mix=np.clip(mix,-1,1);sst=np.stack([mix,mix],1)
-with wave.open(f"{OUT}/cristaux_audio.wav","wb") as w:
+with wave.open(f"{OUT}/cristaux2_audio.wav","wb") as w:
     w.setnchannels(2);w.setsampwidth(2);w.setframerate(SR);w.writeframes((sst*32767).astype(np.int16).tobytes())
 
-subprocess.run([FF,"-y","-i",f"{OUT}/cristaux_silent.mp4","-i",f"{OUT}/cristaux_audio.wav",
+subprocess.run([FF,"-y","-i",f"{OUT}/cristaux2_silent.mp4","-i",f"{OUT}/cristaux2_audio.wav",
     "-vf","scale=720:1280","-c:v","libx264","-profile:v","main","-pix_fmt","yuv420p","-crf","26","-preset","medium",
-    "-c:a","aac","-b:a","150k","-movflags","+faststart","-shortest",f"{OUT}/niv-pub-cristaux.mp4"],
+    "-c:a","aac","-b:a","150k","-movflags","+faststart","-shortest",f"{OUT}/niv-pub-cristaux-v2.mp4"],
     stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=True)
-print("DUREE %.1fs"%total,"| taille",os.path.getsize(f"{OUT}/niv-pub-cristaux.mp4"))
+print("DUREE %.1fs"%total,"| taille",os.path.getsize(f"{OUT}/niv-pub-cristaux-v2.mp4"))
