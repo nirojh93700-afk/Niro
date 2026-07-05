@@ -683,6 +683,8 @@ export async function getSettings() {
     crmTags: (s.crmTags && typeof s.crmTags === "object") ? s.crmTags : {},
     // Positions de gravure des couverts enfants (réglées dans /gestion/couverts-reglage).
     couvertsZones: (s.couvertsZones && typeof s.couvertsZones === "object") ? s.couvertsZones : {},
+    // Zones de gravure des cristaux (réglées dans /gestion/cristal-reglage).
+    crystalZones: (s.crystalZones && typeof s.crystalZones === "object") ? s.crystalZones : {},
     // Gmail connecté ? (vrai/faux seulement — les identifiants ne sont JAMAIS exposés ici).
     gmailConnected: Boolean(s.gmail?.refreshToken),
     // Mode maintenance : si activé, les visiteurs voient une page "en maintenance"
