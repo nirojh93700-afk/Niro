@@ -828,7 +828,7 @@ export const products = [
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
-      "/produits/cristal-bloc-h-vide.jpg",
+      "/produits/cristal-bloc-h-creme.jpg",
       "/produits/cristal-h-famille.jpg",
       "/produits/cristal-h-couple.jpg",
       "/produits/cristal-h-amis.jpg",
