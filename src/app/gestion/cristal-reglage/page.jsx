@@ -15,8 +15,9 @@ const BLENDS = [
 
 // Pré-placement de départ par produit (ajustable ensuite avec les curseurs).
 const START = {
-  "porte-cles-cristal-led-coeur": { left: 15, top: 50, width: 30, height: 26 },
-  "porte-cles-cristal-led-rectangle": { left: 48.5, top: 43.5, width: 24, height: 37 },
+  "porte-cles-cristal-led-coeur": { left: 30, top: 51, width: 27, height: 24, rotation: 0 },
+  "porte-cles-cristal-led-rectangle": { left: 45, top: 41, width: 31, height: 35, rotation: 0 },
+  "cristal-photo-3d-vertical": { left: 30, top: 27, width: 42, height: 41, rotation: -3 },
   "cristal-photo-3d-horizontal": { left: 30, top: 30, width: 42, height: 32, rotation: -3 },
 };
 function defZone(p) {

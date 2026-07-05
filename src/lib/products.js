@@ -793,6 +793,7 @@ export const products = [
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
+      "/produits/cristal-bloc-v-creme.jpg",
       "/produits/cristal-v-enfant-chat.jpg",
       "/produits/cristal-v-couple.jpg",
       "/produits/cristal-v-femme.jpg",
@@ -1191,6 +1192,7 @@ export const products = [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
     ],
     images: [
+      "/produits/cristal-pcles-coeur-creme.jpg",
       "/produits/porte_cles_en_cristal_avec_lumiere_led_coeur.jpg",
     ],
     variants: [
@@ -1213,6 +1215,7 @@ export const products = [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
     ],
     images: [
+      "/produits/cristal-pcles-rect-creme.jpg",
       "/produits/porte_cles_en_cristal_avec_lumiere_led_rectangle.jpg",
     ],
     variants: [
