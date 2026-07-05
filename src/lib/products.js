@@ -787,6 +787,7 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
@@ -823,6 +824,7 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
@@ -1188,6 +1190,7 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
     ],
     images: [
       "/produits/cristal-pcles-coeur-creme.jpg",
@@ -1212,6 +1215,7 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
     ],
     images: [
       "/produits/cristal-pcles-rect-creme.jpg",
