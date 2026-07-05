@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-import os, subprocess, wave
+import os, subprocess, wave, asyncio
+os.environ.setdefault('SSL_CERT_FILE','/root/.ccr/ca-bundle.crt')
+os.environ.setdefault('REQUESTS_CA_BUNDLE','/root/.ccr/ca-bundle.crt')
+import edge_tts
+VOICE='fr-FR-DeniseNeural'
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from gtts import gTTS
@@ -63,8 +67,12 @@ def card(big,small,big2=None):
         f2=F(SANSB,44);w2=d.textlength(big2,font=f2);d.text(((W-w2)//2,H//2+60),big2,font=f2,fill=(120,100,60))
     return im
 def tts(text,dst):
-    mp3=dst.replace(".wav",".mp3");gTTS(text,lang="fr",tld="fr",slow=False).save(mp3)
-    subprocess.run([FF,"-y","-i",mp3,"-filter:a","asetrate=44100*1.08,aresample=44100,atempo=0.985","-ar",str(SR),"-ac","1",dst],
+    mp3=dst.replace(".wav",".mp3")
+    async def _g():
+        c=edge_tts.Communicate(text, VOICE, rate="+12%", proxy=os.environ.get("HTTPS_PROXY"))
+        await c.save(mp3)
+    asyncio.run(_g())
+    subprocess.run([FF,"-y","-i",mp3,"-ar",str(SR),"-ac","1",dst],
         stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=True)
     with wave.open(dst) as w:return w.getnframes()/SR
 
