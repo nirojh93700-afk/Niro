@@ -870,6 +870,11 @@ export default function ProductDetail({ product }) {
               Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d'exemple.
             </p>
           )}
+          {product.crystal3d && photoSrc && (
+            <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
+              Aperçu <strong>indicatif</strong> : votre photo est simplement posée sur une image du cristal pour vous donner une idée. Le rendu réel est une <strong>gravure 3D au laser à l'intérieur du cristal</strong>, retravaillée par notre atelier pour un résultat optimal.
+            </p>
+          )}
           {(images.length > 1 || (product.crystal3d && photoSrc)) && (
             <div className="gallery-thumbs">
               {product.crystal3d && photoSrc && (
