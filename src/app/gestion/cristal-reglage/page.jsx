@@ -13,8 +13,13 @@ const BLENDS = [
   { v: "luminosity", label: "Gravé" },
 ];
 
+// Pré-placement de départ par produit (ajustable ensuite avec les curseurs).
+const START = {
+  "porte-cles-cristal-led-coeur": { left: 15, top: 50, width: 30, height: 26 },
+  "porte-cles-cristal-led-rectangle": { left: 48.5, top: 43.5, width: 24, height: 37 },
+};
 function defZone(p) {
-  return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, opacity: 0.72, blend: "screen", bw: 1 };
+  return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, rotation: 0, opacity: 0.72, blend: "screen", bw: 1, ...(START[p.slug] || {}) };
 }
 
 export default function CristalReglage() {
@@ -120,10 +125,10 @@ export default function CristalReglage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {z?.img && <img src={z.img} alt="" draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }} />}
         {z && (
-          <div onPointerDown={(e) => onDown("move", e)} style={{ position: "absolute", left: z.left + "%", top: z.top + "%", width: z.width + "%", height: z.height + "%", overflow: "hidden", borderRadius: 4, cursor: "grab", outline: "2px solid #c9a24b", outlineOffset: -1 }}>
+          <div onPointerDown={(e) => onDown("move", e)} style={{ position: "absolute", left: z.left + "%", top: z.top + "%", width: z.width + "%", height: z.height + "%", overflow: "hidden", borderRadius: 4, cursor: "grab", outline: "2px solid #c9a24b", outlineOffset: -1, transform: `rotate(${z.rotation || 0}deg)` }}>
             {sample ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={sample} alt="" draggable={false} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: z.opacity, mixBlendMode: z.blend, filter: (z.bw ? "grayscale(1) " : "") + "contrast(1.12) brightness(1.08)", pointerEvents: "none" }} />
+              <img src={sample} alt="" draggable={false} style={{ width: "100%", height: "100%", objectFit: "contain", opacity: z.opacity, mixBlendMode: z.blend, filter: (z.bw ? "grayscale(1) " : "") + "contrast(1.12) brightness(1.08)", pointerEvents: "none" }} />
             ) : (
               <div style={{ width: "100%", height: "100%", background: "rgba(255,255,255,.25)", display: "grid", placeItems: "center", color: "#fff", fontSize: ".7rem", textAlign: "center", padding: 4 }}>zone photo</div>
             )}
@@ -138,6 +143,21 @@ export default function CristalReglage() {
           📷 Charger une photo témoin
           <input type="file" accept="image/*" onChange={onSample} hidden />
         </label>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Largeur</span>
+          <input type="range" min="6" max="96" step="0.5" value={z?.width ?? 30} onChange={(e) => setZ({ width: Number(e.target.value) })} style={{ flex: 1 }} />
+          <span style={{ width: 42, textAlign: "right", fontSize: ".85rem" }}>{Math.round(z?.width ?? 30)}%</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Hauteur</span>
+          <input type="range" min="6" max="96" step="0.5" value={z?.height ?? 30} onChange={(e) => setZ({ height: Number(e.target.value) })} style={{ flex: 1 }} />
+          <span style={{ width: 42, textAlign: "right", fontSize: ".85rem" }}>{Math.round(z?.height ?? 30)}%</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Inclinaison</span>
+          <input type="range" min="-30" max="30" step="1" value={z?.rotation ?? 0} onChange={(e) => setZ({ rotation: Number(e.target.value) })} style={{ flex: 1 }} />
+          <span style={{ width: 42, textAlign: "right", fontSize: ".85rem" }}>{Math.round(z?.rotation ?? 0)}°</span>
+        </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ width: 90, fontSize: ".85rem", color: "var(--ink-soft)" }}>Luminosité</span>
           <input type="range" min="30" max="100" value={Math.round((z?.opacity ?? 0.72) * 100)} onChange={(e) => setZ({ opacity: Number(e.target.value) / 100 })} style={{ flex: 1 }} />

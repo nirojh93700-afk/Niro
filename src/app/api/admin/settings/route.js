@@ -225,6 +225,7 @@ export async function POST(req) {
         img: typeof z.img === "string" ? z.img.slice(0, 300) : "",
         left: num(z.left, 20), top: num(z.top, 40),
         width: num(z.width, 30), height: num(z.height, 30),
+        rotation: Math.max(-45, Math.min(45, num(z.rotation, 0))),
         opacity: Math.max(0.2, Math.min(1, num(z.opacity, 0.72))),
         blend: ["screen", "normal", "luminosity", "multiply"].includes(z.blend) ? z.blend : "screen",
         bw: z.bw ? 1 : 0,
