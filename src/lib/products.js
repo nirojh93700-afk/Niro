@@ -791,6 +791,7 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
+    video: "/produits/cristal-video-vertical.mp4",
     images: [
       "/produits/cristal-bloc-v-creme.jpg",
       "/produits/cristal-v-enfant-chat.jpg",
@@ -828,6 +829,7 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
+    video: "/produits/cristal-video-horizontal.mp4",
     images: [
       "/produits/cristal-bloc-h-creme.jpg",
       "/produits/cristal-h-famille.jpg",

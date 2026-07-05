@@ -348,6 +348,11 @@ export default function ProductDetail({ product }) {
   const isFond = side === "fond";
   const editCfg = isFond && product.engraveFond ? product.engraveFond : product.engrave;
   const mainSrc = images[activeImg];
+  // Vidéo produit (mp4) : ajoutée EN PREMIER dans la galerie si le produit en a une.
+  // Pour les produits sans vidéo, galleryMedia === images (aucun changement).
+  const galleryMedia = product.video ? [product.video, ...images] : images;
+  const activeMedia = galleryMedia[activeImg] ?? mainSrc;
+  const activeIsVideo = /\.(mp4|webm|ogv|mov)$/i.test(String(activeMedia || ""));
   const onFaceImg = images[activeImg] === product.engraveImage;
   const onFondImg = images[activeImg] === product.fondImage;
   const showEditor = Boolean(product.engrave) && ((side === "face" && onFaceImg) || (side === "fond" && onFondImg));
@@ -733,10 +738,22 @@ export default function ProductDetail({ product }) {
         {/* Galerie */}
         <div>
           <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}${product.crystal3d ? " gallery-contain" : ""}`} ref={photoRef}>
-            {hasImages ? (
+            {activeIsVideo ? (
+              // eslint-disable-next-line jsx-a11y/media-has-caption
+              <video
+                className="gallery-bg gallery-video"
+                src={activeMedia}
+                poster={images[0]}
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+            ) : hasImages ? (
               <Image
                 className="gallery-bg"
-                src={mainSrc}
+                src={activeMedia}
                 alt={`${product.name} — visuel ${activeImg + 1}`}
                 width={800}
                 height={800}
@@ -856,12 +873,12 @@ export default function ProductDetail({ product }) {
               </div>
             )}
             {/* Flèches précédent / suivant pour parcourir les photos */}
-            {hasImages && images.length > 1 && (
+            {galleryMedia.length > 1 && (
               <>
                 <button type="button" className="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente"
-                  onClick={() => { setActiveImg((activeImg - 1 + images.length) % images.length); setCrystalPreviewActive(false); }}>‹</button>
+                  onClick={() => { setActiveImg((activeImg - 1 + galleryMedia.length) % galleryMedia.length); setCrystalPreviewActive(false); }}>‹</button>
                 <button type="button" className="gallery-arrow gallery-arrow-next" aria-label="Photo suivante"
-                  onClick={() => { setActiveImg((activeImg + 1) % images.length); setCrystalPreviewActive(false); }}>›</button>
+                  onClick={() => { setActiveImg((activeImg + 1) % galleryMedia.length); setCrystalPreviewActive(false); }}>›</button>
               </>
             )}
           </div>
@@ -875,7 +892,7 @@ export default function ProductDetail({ product }) {
               Aperçu <strong>indicatif</strong> : votre photo est simplement posée sur une image du cristal pour vous donner une idée. Le rendu réel est une <strong>gravure 3D au laser à l'intérieur du cristal</strong>, retravaillée par notre atelier pour un résultat optimal.
             </p>
           )}
-          {(images.length > 1 || (product.crystal3d && photoSrc)) && (
+          {(galleryMedia.length > 1 || (product.crystal3d && photoSrc)) && (
             <div className="gallery-thumbs">
               {product.crystal3d && photoSrc && (
                 <button
@@ -888,17 +905,25 @@ export default function ProductDetail({ product }) {
                   <img src={photoSrc} alt="" />
                 </button>
               )}
-              {images.map((img, i) => (
-                <button
-                  key={img}
-                  className={!crystalPreviewActive && i === activeImg ? "active" : ""}
-                  onClick={() => { setActiveImg(i); setCrystalPreviewActive(false); }}
-                  aria-label={`Voir le visuel ${i + 1}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img} alt="" />
-                </button>
-              ))}
+              {galleryMedia.map((m, i) => {
+                const isVid = /\.(mp4|webm|ogv|mov)$/i.test(String(m));
+                return (
+                  <button
+                    key={m}
+                    className={`${!crystalPreviewActive && i === activeImg ? "active" : ""}${isVid ? " thumb-video" : ""}`}
+                    onClick={() => { setActiveImg(i); setCrystalPreviewActive(false); }}
+                    aria-label={isVid ? "Voir la vidéo" : `Voir le visuel ${i + 1}`}
+                  >
+                    {isVid ? (
+                      // eslint-disable-next-line jsx-a11y/media-has-caption
+                      <video src={m} muted playsInline preload="metadata" poster={images[0]} />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={m} alt="" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           )}
 
