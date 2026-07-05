@@ -652,31 +652,30 @@ export const products = [
     weight: 320,
     pickup: false, // envoi seul (retrait auto si lourd)
     letter: false,
-    title: "Pyramide en cristal — gravure photo 3D personnalisée",
+    title: "Pyramide en cristal — gravure texte personnalisée",
     subcategory: "cristal",
     crystal3d: true,
     category: "cristal",
-    type: "Cristal photo 3D",
-    tagline: "Votre photo gravée en 3D au cœur du cristal.",
+    type: "Pyramide cristal gravée",
+    tagline: "Une pyramide en cristal, gravée avec le texte de votre choix (prénom, date, petit mot).",
     personalizable: true,
-    personalizationLabel: "Photo à graver (+ texte optionnel)",
+    personalizationLabel: "Texte à graver",
     personalizationFields: [
-      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec un sujet bien détaché sur un fond simple ou sombre." },
-      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date…", maxLength: 30, optional: true },
-      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+      { key: "texte", type: "textarea", label: "Texte à graver (prénom, date, petit mot…)", placeholder: "Ex :\nFamille Martin\n2026", maxLength: 90 },
+      { key: "police", type: "font", label: "Police" },
     ],
     images: ["/produits/pyramide_en_verre_de_cristal_50mm.jpg"],
     variants: [{ id: "pyramide-cristal-50mm", title: "50 mm", price: 39.9 }],
     descriptionHtml: `<p><strong>Offrez un souvenir gravé pour l'éternité.</strong></p>
-<p>Votre photo est gravée en trois dimensions à l'intérieur d'un cristal optique K9 d'une grande pureté, grâce à un laser de précision. L'image semble flotter au cœur du cristal — un effet saisissant, encore sublimé posé sur un socle lumineux LED.</p>
+<p>Le texte de votre choix (prénom, date, dédicace) est gravé en profondeur à l'intérieur d'un cristal optique K9 d'une grande pureté, au laser de précision — un effet saisissant, encore sublimé posé sur un socle lumineux LED.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matériau :</strong> cristal optique K9 haute pureté</li>
 <li><strong>Format :</strong> pyramide 50 mm</li>
-<li><strong>Gravure :</strong> photo 3D interne (sub-surface) au laser</li>
+<li><strong>Gravure :</strong> texte gravé en profondeur au laser</li>
 <li><strong>Idéal :</strong> cadeau souvenir, naissance, mariage, hommage</li>
 </ul>
-<p><em>Conseil : une photo nette et contrastée donne le plus beau rendu. Un socle lumineux LED est disponible séparément.</em></p>`,
+<p><em>Un socle lumineux LED est disponible séparément.</em></p>`,
   },
   {
     slug: "bracelet-homme-cuir-tresse-acier",
@@ -759,21 +758,20 @@ export const products = [
     slug: "trophee-cristal-vierge-3d",
     name: "Trophée cristal — Gravure 3D",
     weight: 600, pickup: false, letter: false,
-    title: "Trophée en cristal — gravure photo 3D personnalisée",
+    title: "Trophée en cristal — gravure texte personnalisée",
     subcategory: "cristal",
     crystal3d: true,
-    category: "cristal", type: "Cristal photo 3D",
-    tagline: "Un trophée en cristal, votre photo gravée en 3D à l'intérieur.",
-    personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
+    category: "cristal", type: "Trophée cristal gravé",
+    tagline: "Un trophée en cristal, gravé avec le texte de votre choix (nom, date, dédicace).",
+    personalizable: true, personalizationLabel: "Texte à graver",
     personalizationFields: [
-      { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette, bien éclairée, sujet bien détaché sur fond simple." },
-      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Nom, date, dédicace…", maxLength: 40, optional: true },
-      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+      { key: "texte", type: "textarea", label: "Texte à graver (nom, événement, date, dédicace…)", placeholder: "Ex :\nMeilleur joueur 2026\nTournoi de printemps — Juin 2026", maxLength: 120 },
+      { key: "police", type: "font", label: "Police" },
     ],
     images: ["/produits/trophee_en_cristal_vierge_14_cm.jpg"],
     variants: [{ id: "trophee-cristal-14cm", title: "14 cm", price: 69.9 }],
-    descriptionHtml: `<p>Un <strong>trophée en cristal optique K9</strong> avec votre photo gravée en 3D à l'intérieur. Une pièce d'exception pour un hommage, une remise de prix ou un souvenir précieux.</p>
-<ul><li>Cristal optique K9 haute pureté</li><li>Hauteur 14 cm</li><li>Gravure photo 3D interne au laser</li></ul>
+    descriptionHtml: `<p>Un <strong>trophée en cristal optique K9</strong> gravé avec le texte de votre choix (nom, date, dédicace). Une pièce d'exception pour un hommage, une remise de prix ou un souvenir précieux.</p>
+<ul><li>Cristal optique K9 haute pureté</li><li>Hauteur 14 cm</li><li>Gravure texte interne au laser</li></ul>
 <p><em>Sublimé par un socle lumineux LED (disponible séparément).</em></p>`,
   },
   {

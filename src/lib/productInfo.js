@@ -681,31 +681,31 @@ Défaut à l'arrivée
     material: `Taille & Matériaux
 - Cristal optique K9 haute pureté, forme pyramide.
 - Base 50 mm — objet compact (~320 g), à poser sur un bureau ou une étagère.
-- Gravure photo 3D interne au laser, réalisée dans notre atelier en France.
-- Socle lumineux LED disponible séparément (sublime l'effet 3D).`,
+- Gravure TEXTE interne au laser (nom, date, dédicace…), réalisée dans notre atelier en France.
+- Socle lumineux LED disponible séparément (sublime l'effet).`,
     usage: `Personnalisation & Entretien
-- Envoyez une photo nette et bien éclairée, le visage bien visible. Une seule personne rend le mieux sur ce format.
-- Placez la pyramide près d'une source de lumière : l'image semble flotter au cœur du cristal.
+- Indiquez le texte à graver (prénom, date, petit mot). Vous le placez et le dimensionnez dans l'aperçu.
+- Placez la pyramide près d'une source de lumière : le texte semble flotter au cœur du cristal.
 - Entretien : chiffon doux et sec (microfibre). Ne pas immerger, éviter les chocs — le cristal est fragile.`,
     returns: `Expédition & Retour
 - Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
-- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
+- Produit personnalisé (gravé à votre texte) = non remboursable une fois la gravure lancée (article L221-28).
 - En cas de casse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
   },
 
   "trophee-cristal-vierge-3d": {
     material: `Taille & Matériaux
 - Trophée en cristal optique K9 haute pureté, hauteur 14 cm (~600 g).
-- Gravure photo 3D interne au laser, réalisée dans notre atelier en France.
+- Gravure TEXTE interne au laser (nom, événement, date…), réalisée dans notre atelier en France.
 - Pièce d'exception pour un hommage, une remise de prix ou un souvenir.
 - Socle lumineux LED disponible séparément.`,
     usage: `Personnalisation & Entretien
-- Envoyez une photo nette et bien éclairée. Un texte (nom, date, dédicace) peut accompagner la photo.
-- Posé près d'une lumière ou sur un socle LED, l'effet 3D est spectaculaire.
+- Indiquez le texte à graver (nom, événement, date, dédicace). Vous le placez et le dimensionnez dans l'aperçu.
+- Posé près d'une lumière ou sur un socle LED, le rendu est spectaculaire.
 - Entretien : chiffon doux et sec. Ne pas immerger, éviter les chocs — le cristal est fragile.`,
     returns: `Expédition & Retour
 - Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
-- Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
+- Produit personnalisé (gravé à votre texte) = non remboursable une fois la gravure lancée (article L221-28).
 - En cas de casse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
   },
 
