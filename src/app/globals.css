@@ -1487,7 +1487,10 @@ img {
   gap: 9px; margin: 0 auto 22px; padding: 12px 18px;
   background: #fffdf8; border: 1px solid #ecdfc2; border-radius: 999px;
   max-width: max-content; box-shadow: 0 6px 18px rgba(120,95,30,0.07);
+  text-decoration: none; color: inherit; cursor: pointer; transition: box-shadow .15s, transform .15s;
 }
+a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: translateY(-1px); }
+.site-rating .sr-verified { cursor: pointer; }
 .site-rating .sr-stars { color: #d8a93a; letter-spacing: 2px; font-size: 1.15rem; }
 .site-rating .sr-stars-empty { color: #e4d5b0; }
 .site-rating strong { font-size: 1.05rem; color: var(--ink); }

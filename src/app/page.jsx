@@ -196,15 +196,15 @@ export default async function HomePage() {
         <section className="trust">
           {siteReviewCount > 0 && (
             <div className="container">
-              <div className="site-rating">
+              <Link href="/avis" className="site-rating" title="Lire les avis clients">
                 <span className="sr-stars" aria-hidden="true">
                   {"★★★★★".slice(0, Math.round(siteRating))}
                   <span className="sr-stars-empty">{"★★★★★".slice(Math.round(siteRating))}</span>
                 </span>
                 <strong>{siteRating.toFixed(1).replace(".", ",")}/5</strong>
                 <span className="sr-count">· {siteReviewCount} avis clients</span>
-                <span className="sr-verified">Avis vérifiés</span>
-              </div>
+                <span className="sr-verified">Lire les avis →</span>
+              </Link>
             </div>
           )}
           <div className="container trust-grid">

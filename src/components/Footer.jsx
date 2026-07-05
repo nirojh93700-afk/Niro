@@ -34,6 +34,7 @@ export default function Footer() {
           <div>
             <h4>Aide</h4>
             <Link href="/faq">Questions fréquentes (FAQ)</Link>
+            <Link href="/avis">Avis clients</Link>
             <Link href="/a-propos">À propos</Link>
             <Link href="/contact">Nous contacter</Link>
             <Link href="/retours">Retours & Remboursements</Link>
