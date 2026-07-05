@@ -573,8 +573,7 @@ export default function GestionPage() {
                 { id: "tailles", text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
                 { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
-                { id: "couverts-reglage", text: "🍴 Réglage couverts", href: "/gestion/couverts-reglage" },
-                { id: "cristal-reglage", text: "💎 Réglage cristaux (photo)", href: "/gestion/cristal-reglage" },
+                { id: "reglages-produits", text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
               ],
             },
             {

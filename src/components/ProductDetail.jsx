@@ -54,7 +54,8 @@ export default function ProductDetail({ product }) {
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé (face)
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
   const [crystalTextPos, setCrystalTextPos] = useState(null);
-  const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin // placement du texte sur l'aperçu cristal
+  const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
+  const [crystalPreviewActive, setCrystalPreviewActive] = useState(true); // affiche l'aperçu OU les photos produit // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
   const [activeSide, setActiveSide] = useState("face"); // côté en cours de réglage (mode "les deux")
@@ -129,6 +130,8 @@ export default function ProductDetail({ product }) {
       })
       .catch(() => {});
   }, [product.slug]);
+  // Quand la cliente charge/change sa photo, on réaffiche l'aperçu cristal.
+  useEffect(() => { if (photoSrc) setCrystalPreviewActive(true); }, [photoSrc]);
   // Zone de gravure du cristal réglée dans l'admin (/gestion/cristal-reglage).
   useEffect(() => {
     if (!product.crystal3d) return;
@@ -749,7 +752,7 @@ export default function ProductDetail({ product }) {
             )}
             {/* Cristal 3D : dès que le client charge SA photo, elle s'affiche
                 ici en GRAND dans un cristal (comme la maquette test). */}
-            {product.crystal3d && photoSrc && (
+            {product.crystal3d && photoSrc && crystalPreviewActive && (
               crystalZone ? (
                 /* Aperçu RÉEL : la photo du client s'incruste dans la vraie photo du cristal,
                    à la zone réglée dans l'admin (/gestion/cristal-reglage). */
@@ -856,9 +859,9 @@ export default function ProductDetail({ product }) {
             {hasImages && images.length > 1 && (
               <>
                 <button type="button" className="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente"
-                  onClick={() => setActiveImg((activeImg - 1 + images.length) % images.length)}>‹</button>
+                  onClick={() => { setActiveImg((activeImg - 1 + images.length) % images.length); setCrystalPreviewActive(false); }}>‹</button>
                 <button type="button" className="gallery-arrow gallery-arrow-next" aria-label="Photo suivante"
-                  onClick={() => setActiveImg((activeImg + 1) % images.length)}>›</button>
+                  onClick={() => { setActiveImg((activeImg + 1) % images.length); setCrystalPreviewActive(false); }}>›</button>
               </>
             )}
           </div>
@@ -867,13 +870,24 @@ export default function ProductDetail({ product }) {
               Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d'exemple.
             </p>
           )}
-          {images.length > 1 && (
+          {(images.length > 1 || (product.crystal3d && photoSrc)) && (
             <div className="gallery-thumbs">
+              {product.crystal3d && photoSrc && (
+                <button
+                  className={crystalPreviewActive ? "active" : ""}
+                  onClick={() => setCrystalPreviewActive(true)}
+                  aria-label="Voir votre aperçu"
+                  title="Votre aperçu"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photoSrc} alt="" />
+                </button>
+              )}
               {images.map((img, i) => (
                 <button
                   key={img}
-                  className={i === activeImg ? "active" : ""}
-                  onClick={() => setActiveImg(i)}
+                  className={!crystalPreviewActive && i === activeImg ? "active" : ""}
+                  onClick={() => { setActiveImg(i); setCrystalPreviewActive(false); }}
                   aria-label={`Voir le visuel ${i + 1}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
