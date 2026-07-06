@@ -790,7 +790,7 @@ export const products = [
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
-      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED rotatif", text: "Socle lumineux LED rotatif (en option) : pose et illumine votre cristal, avec des couleurs qui changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
+      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED", text: "Socle lumineux LED (en option) : pose et illumine votre cristal, avec des couleurs qui changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED", optional: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED — +19,90 €" }] },
     ],
     engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9 }] },
@@ -814,7 +814,7 @@ export const products = [
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Un cadeau qui capte la lumière — et l'émotion.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
 <h3>Socle lumineux LED (en option)</h3>
-<p>Ajoutez le socle lumineux rotatif pour illuminer votre cristal, avec des couleurs qui changent au toucher. Il <strong>fonctionne sur une prise secteur</strong> et <strong>tout est fourni</strong> : câble USB et adaptateur de prise. La forme du socle s'adapte à la taille choisie.</p>
+<p>Ajoutez le socle lumineux pour illuminer votre cristal, avec des couleurs qui changent au toucher. Il <strong>fonctionne sur une prise secteur</strong> et <strong>tout est fourni</strong> : câble USB et adaptateur de prise. La forme du socle s'adapte à la taille choisie.</p>
 <h3>Idéal pour</h3>
 <p>Un couple, une naissance, une famille, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },
@@ -834,7 +834,7 @@ export const products = [
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
-      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED rotatif", text: "Socle lumineux LED rotatif (en option) : pose et illumine votre cristal, avec des couleurs qui changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
+      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED", text: "Socle lumineux LED (en option) : pose et illumine votre cristal, avec des couleurs qui changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED", optional: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED — +19,90 €" }] },
     ],
     engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9 }] },
@@ -856,7 +856,7 @@ export const products = [
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Format paysage, idéal pour un couple, un groupe ou une photo large.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
 <h3>Socle lumineux LED (en option)</h3>
-<p>Ajoutez le socle lumineux rotatif pour illuminer votre cristal, avec des couleurs qui changent au toucher. Il <strong>fonctionne sur une prise secteur</strong> et <strong>tout est fourni</strong> : câble USB et adaptateur de prise. La forme du socle s'adapte à la taille choisie.</p>
+<p>Ajoutez le socle lumineux pour illuminer votre cristal, avec des couleurs qui changent au toucher. Il <strong>fonctionne sur une prise secteur</strong> et <strong>tout est fourni</strong> : câble USB et adaptateur de prise. La forme du socle s'adapte à la taille choisie.</p>
 <h3>Idéal pour</h3>
 <p>Une famille, un groupe d'amis, un couple, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },
