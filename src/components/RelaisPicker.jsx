@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { pointRelaisPriceByWeight } from "@/lib/shipping";
+
+const euro = (n) => `${Number(n).toFixed(2).replace(".", ",")} €`;
+const samePoint = (a, b) => a && b && a.code === b.code && a.carrier === b.carrier;
 
 // Carte + liste des points relais (Mondial Relay via Boxtal). La cliente tape
 // son code postal, la carte s'ouvre avec les points relais autour d'elle, elle
@@ -46,7 +50,9 @@ function pinIcon(L, active) {
   });
 }
 
-export default function RelaisPicker({ country = "FR", selected, onSelect }) {
+export default function RelaisPicker({ country = "FR", selected, onSelect, weightGrams = 0 }) {
+  // Prix estimé pour un point selon son transporteur et le poids du panier.
+  const priceFor = (p) => pointRelaisPriceByWeight(weightGrams, p?.carrier);
   const [zip, setZip] = useState("");
   const [city, setCity] = useState("");
   const [points, setPoints] = useState([]);
@@ -104,9 +110,9 @@ export default function RelaisPicker({ country = "FR", selected, onSelect }) {
         markersRef.current = [];
         const bounds = [];
         withCoords.forEach((p) => {
-          const active = selected && selected.code === p.code;
+          const active = samePoint(selected, p);
           const m = L.marker([p.lat, p.lng], { icon: pinIcon(L, active) }).addTo(mapRef.current);
-          m.bindPopup(`<strong>${p.name}</strong><br>${p.street}<br>${p.zipCode} ${p.city}`);
+          m.bindPopup(`<strong>${p.name}</strong><br>${p.street}<br>${p.zipCode} ${p.city}<br><em>${p.carrierName || ""} — ${euro(priceFor(p))}</em>`);
           m.on("click", () => onSelect && onSelect(p));
           markersRef.current.push(m);
           bounds.push([p.lat, p.lng]);
@@ -127,7 +133,7 @@ export default function RelaisPicker({ country = "FR", selected, onSelect }) {
     markersRef.current.forEach((m, i) => {
       const p = withCoords[i];
       if (!p) return;
-      m.setIcon(pinIcon(L, selected && selected.code === p.code));
+      m.setIcon(pinIcon(L, samePoint(selected, p)));
     });
   }, [selected, points]);
 
@@ -142,7 +148,7 @@ export default function RelaisPicker({ country = "FR", selected, onSelect }) {
   function chooseManual() {
     const label = manual.trim();
     if (label.length < 3) { setError("Indiquez le nom et la ville du point relais."); return; }
-    onSelect && onSelect({ code: "manual:" + label.slice(0, 40), name: label.slice(0, 80), manual: true, city: "", street: "", zipCode: zip });
+    onSelect && onSelect({ code: "manual:" + label.slice(0, 40), name: label.slice(0, 80), manual: true, city: "", street: "", zipCode: zip, carrier: "MONR", carrierName: "Mondial Relay", offer: "MONR-CpourToi" });
   }
 
   return (
@@ -182,11 +188,11 @@ export default function RelaisPicker({ country = "FR", selected, onSelect }) {
       {points.length > 0 && (
         <div style={{ marginTop: 12, maxHeight: 240, overflowY: "auto", display: "grid", gap: 8 }}>
           {points.map((p) => {
-            const active = selected && selected.code === p.code;
+            const active = samePoint(selected, p);
             return (
               <button
                 type="button"
-                key={p.code}
+                key={`${p.carrier}:${p.code}`}
                 onClick={() => chooseFromList(p)}
                 style={{
                   textAlign: "left",
@@ -198,12 +204,16 @@ export default function RelaisPicker({ country = "FR", selected, onSelect }) {
                   font: "inherit",
                 }}
               >
-                <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
                   <strong style={{ fontSize: "0.95rem" }}>{active ? "✓ " : "📍 "}{p.name}</strong>
+                  <span style={{ fontSize: "0.86rem", fontWeight: 700, color: "var(--gold-dark, #a98935)", whiteSpace: "nowrap" }}>{euro(priceFor(p))}</span>
                 </div>
                 <div style={{ fontSize: "0.84rem", color: "var(--ink-soft)" }}>
                   {p.street} — {p.zipCode} {p.city}
                 </div>
+                {p.carrierName && (
+                  <div style={{ fontSize: "0.76rem", color: "var(--ink-soft)", marginTop: 2 }}>via {p.carrierName}</div>
+                )}
               </button>
             );
           })}
@@ -232,6 +242,7 @@ export default function RelaisPicker({ country = "FR", selected, onSelect }) {
       {selected && (
         <p style={{ marginTop: 12, fontSize: "0.9rem", color: "#256b34", fontWeight: 600 }}>
           ✓ Point relais choisi : {selected.name}{selected.city ? ` — ${selected.zipCode} ${selected.city}` : ""}
+          {selected.carrierName ? ` (${selected.carrierName} — ${euro(priceFor(selected))})` : ""}
         </p>
       )}
     </div>

@@ -89,12 +89,16 @@ export async function POST(req) {
   // Choix de livraison fait sur le panier (avant Stripe).
   const deliveryMethod = ["relais", "domicile", "retrait"].includes(body?.deliveryMethod) ? body.deliveryMethod : "";
   const rp = body?.relaisPoint && typeof body.relaisPoint === "object" ? body.relaisPoint : null;
+  // Transporteur du point relais choisi (Mondial Relay, Relais Colis, Colissimo…)
+  // → sert à facturer le bon tarif au poids et à créer l'étiquette.
+  const relaisCarrier = rp ? String(rp.carrier || "").toUpperCase().slice(0, 8) : "";
+  const relaisCarrierName = rp ? String(rp.carrierName || "").slice(0, 40) : "";
   // Étiquette courte pour Stripe (nom + ville) et adresse complète pour la commande.
   const relaisLabel = rp
     ? [String(rp.name || "").slice(0, 45), String(rp.city || "").slice(0, 25)].filter(Boolean).join(", ")
     : "";
   const relaisFull = rp
-    ? [rp.name, rp.street, [rp.zipCode, rp.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240)
+    ? [relaisCarrierName, rp.name, rp.street, [rp.zipCode, rp.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240)
     : "";
   const variantIndex = await buildVariantIndex();
   const promos = await stripBijouxPromos(await getPromos()); // bijoux : remise permanente uniquement
@@ -252,6 +256,7 @@ export async function POST(req) {
         boxtal: settings?.boxtal, // option point relais (admin)
         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)
         relaisLabel,    // nom du point relais choisi (affiché dans Stripe)
+        relaisCarrier,  // transporteur du point relais → tarif au poids correct
       }),
       custom_fields: [
         {

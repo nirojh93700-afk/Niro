@@ -222,7 +222,7 @@ export default function CartPage() {
 
               {deliveryMethod === "relais" && relaisEnabled && (
                 <>
-                  <RelaisPicker selected={relais} onSelect={(p) => { setRelais(p); setError(""); }} />
+                  <RelaisPicker selected={relais} onSelect={(p) => { setRelais(p); setError(""); }} weightGrams={totalGrams} />
                   {relais && (
                     <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
                       À l'étape suivante, vous indiquerez seulement vos coordonnées (nom, téléphone) :

@@ -97,10 +97,35 @@ const POINT_RELAIS_TIERS = [
   { maxGrams: Infinity, price: 15.9 },
 ];
 
-function pointRelaisPriceByWeight(grams) {
+// -----------------------------------------------------------------------------
+// TRANSPORTEURS point relais (Boxtal). Le client voit TOUS les points relais
+// autour de lui (tous transporteurs) et clique sur le plus proche ; le prix
+// s'ajuste au transporteur du point choisi. `offer` = code d'offre Boxtal (sert
+// à récupérer les points ET à créer l'étiquette). `tiers` = grille par poids
+// (au-dessus du coût réel → jamais de perte). Mondial Relay = grille de base
+// validée ; les autres un peu au-dessus (coût réel plus élevé).
+// Pour retirer un transporteur : l'enlever de cette liste. Pour l'activer, il
+// doit aussi être activé sur le compte Boxtal (sinon aucun point ne remonte).
+// -----------------------------------------------------------------------------
+export const RELAIS_CARRIERS = [
+  { code: "MONR", offer: "MONR-CpourToi", name: "Mondial Relay", tiers: [[1000, 4.9], [2000, 6.5], [3000, 7.5], [5000, 8.5], [10000, 9.9], [15000, 12.9], [Infinity, 15.9]] },
+  { code: "SOGP", offer: "SOGP-RelaisColis", name: "Relais Colis", tiers: [[1000, 5.5], [2000, 6.9], [3000, 7.9], [5000, 8.9], [10000, 10.9], [15000, 13.9], [Infinity, 16.9]] },
+  { code: "POFR", offer: "POFR-ColissimoPickupStation", name: "Colissimo (La Poste)", tiers: [[1000, 5.5], [2000, 7.5], [5000, 10.9], [10000, 15.9], [15000, 20.9], [Infinity, 25.9]] },
+  { code: "CHRP", offer: "CHRP-ChronoShoptoShop", name: "Chrono Shop2Shop", tiers: [[1000, 5.9], [2000, 7.5], [3000, 8.5], [5000, 9.9], [10000, 12.9], [Infinity, 16.9]] },
+  { code: "UPSE", offer: "UPSE-StandardAccessPoint", name: "UPS Point Relais", tiers: [[1000, 6.9], [2000, 8.9], [5000, 12.9], [10000, 17.9], [Infinity, 24.9]] },
+];
+
+export function relaisCarrierByCode(code) {
+  const c = String(code || "").toUpperCase();
+  return RELAIS_CARRIERS.find((x) => x.code === c) || RELAIS_CARRIERS[0];
+}
+
+// Prix point relais pour un transporteur donné, selon le poids (repli : Mondial Relay).
+export function pointRelaisPriceByWeight(grams, carrierCode) {
   const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
-  const t = POINT_RELAIS_TIERS.find((x) => g <= x.maxGrams) || POINT_RELAIS_TIERS[POINT_RELAIS_TIERS.length - 1];
-  return t.price;
+  const c = relaisCarrierByCode(carrierCode);
+  for (const [max, price] of c.tiers) if (g <= max) return price;
+  return c.tiers[c.tiers.length - 1][1];
 }
 
 // Livraison à DOMICILE (Colissimo) : grille par poids réel, pour que les colis
@@ -191,10 +216,10 @@ function rate(amount, name, days) {
 //   pickupEligible: retrait en main propre autorisé (déco/mariage + zone OK)
 //   config        : tarifs personnalisés (réglages admin) — facultatif
 // Calcule le prix « point relais » (par poids), plancher = prix admin (4,90 €).
-function pointRelaisPrice(totalGrams, boxtal, freeShipping) {
+function pointRelaisPrice(totalGrams, boxtal, freeShipping, carrierCode) {
   if (freeShipping) return 0;
   const floor = Number.isFinite(Number(boxtal?.pointRelaisPrice)) ? Number(boxtal.pointRelaisPrice) : 4.9;
-  return Math.max(floor, pointRelaisPriceByWeight(totalGrams));
+  return Math.max(floor, pointRelaisPriceByWeight(totalGrams, carrierCode));
 }
 
 // Construit les options « livraison à domicile » (+ verres/déco selon le panier).
@@ -222,7 +247,7 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
 
 const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vous";
 
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", country = "" }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "" }) {
   const cfg = resolveShippingConfig(config);
   // Hors France (+ Monaco) : tarif Europe par zone/poids, une seule option.
   const zone = shippingZone(country);
@@ -236,8 +261,10 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
   // Point relais : Stripe n'affiche QUE cette option (prix par poids + nom du
   // point relais choisi sur la carte).
   if (deliveryMethod === "relais" && boxtalOn) {
-    const price = pointRelaisPrice(totalGrams, boxtal, freeShipping);
-    const name = relaisLabel ? `Point relais — ${String(relaisLabel).slice(0, 80)}` : "Livraison en point relais";
+    const price = pointRelaisPrice(totalGrams, boxtal, freeShipping, relaisCarrier);
+    const carrierName = relaisCarrier ? relaisCarrierByCode(relaisCarrier).name : "";
+    const label = [carrierName, relaisLabel].filter(Boolean).join(" — ").slice(0, 90);
+    const name = label ? `Point relais ${label}` : "Livraison en point relais";
     return [rate(price, name, [3, 6])];
   }
   // Retrait en main propre : uniquement si le panier y est éligible (déco/mariage)
