@@ -832,7 +832,7 @@ export const products = [
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
-      { key: "note-socle", type: "note", image: "/produits/socle-led-carre.jpg", imageAlt: "Socle lumineux LED rotatif", text: "Socle lumineux LED rotatif (en option) : pose et illumine votre cristal, avec des couleurs qui changent au toucher. Livré avec câble et prise. L'effet 3D est sublimé, surtout le soir." },
+      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageAlt: "Socle lumineux LED rotatif", text: "Socle lumineux LED rotatif (en option) : pose et illumine votre cristal, avec des couleurs qui changent au toucher. Livré avec câble et prise. L'effet 3D est sublimé, surtout le soir." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED", optional: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED — +19,90 €" }] },
     ],
     engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9 }] },

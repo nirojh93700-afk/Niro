@@ -12,6 +12,8 @@ import {
   getProductOverrides,
   getCustomProducts,
   getSettings,
+  getStockMap,
+  productSoldOut,
 } from "./stock";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
@@ -104,18 +106,24 @@ export async function stripBijouxPromos(promos) {
 
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).
 export async function getCatalog() {
-  const [images, promos, overrides, custom, settings] = await Promise.all([
+  const [images, promos, overrides, custom, settings, stock] = await Promise.all([
     getImageOverrides(),
     getPromos(),
     getProductOverrides(),
     getCustomProducts(),
     getSettings().catch(() => ({})),
+    getStockMap().catch(() => ({})),
   ]);
   const refMarkup = Number(settings?.refMarkup) || 0;
   const base = baseProducts.map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
-  return refMarkup > 0 ? all.map((p) => ({ ...p, refMarkup })) : all;
+  // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
+  return all.map((p) => ({
+    ...p,
+    ...(refMarkup > 0 ? { refMarkup } : {}),
+    soldOut: productSoldOut(p, stock),
+  }));
 }
 
 // Renvoie aussi les produits masqués (pour l'admin).

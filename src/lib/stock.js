@@ -139,6 +139,17 @@ export async function decrementMany(items) {
   return map;
 }
 
+// Renvoie true si TOUTES les variantes suivies du produit sont à 0 (rupture).
+// Un produit sans aucun stock suivi n'est jamais "en rupture" (stock illimité).
+export function productSoldOut(product, stockMap) {
+  if (!product || !Array.isArray(product.variants) || !stockMap) return false;
+  const tracked = product.variants
+    .map((v) => stockMap[v.stockId || v.id])
+    .filter((s) => typeof s === "number");
+  if (tracked.length === 0) return false; // aucune variante suivie → pas de rupture
+  return tracked.every((s) => s <= 0);
+}
+
 export function isAdmin(req) {
   const key = req.headers.get("x-admin-key");
   return Boolean(process.env.ADMIN_PASSWORD) && key === process.env.ADMIN_PASSWORD;

@@ -33,6 +33,9 @@ export default function ProductCard({ product }) {
         )}
         {hasPromo && <span className="promo-badge">-{Math.round((1 - sale / basePrice) * 100)}%</span>}
         {hasCompare && <span className="promo-badge">-{comparePct}%</span>}
+        {product.soldOut && (
+          <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, background: "#b23b3b", color: "#fff", fontSize: "0.7rem", fontWeight: 700, letterSpacing: ".3px", padding: "5px 11px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,.2)" }}>Rupture de stock</span>
+        )}
         <WishlistButton slug={product.slug} name={product.name} image={image} price={hasPromo ? sale : basePrice} />
         {image ? (
           <Image
@@ -41,6 +44,7 @@ export default function ProductCard({ product }) {
             width={500}
             height={500}
             sizes="(max-width: 540px) 100vw, (max-width: 900px) 50vw, 33vw"
+            style={product.soldOut ? { filter: "grayscale(0.6)", opacity: 0.72 } : undefined}
           />
         ) : (
           <div className="placeholder">Niv</div>
