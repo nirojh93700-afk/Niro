@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
-import { PICKUP_MIN_GRAMS } from "@/lib/shipping";
 import FreeShippingBar from "@/components/FreeShippingBar";
 import RelaisPicker from "@/components/RelaisPicker";
 
@@ -52,10 +51,10 @@ export default function CartPage() {
     return () => { ok = false; };
   }, []);
 
-  // Retrait en main propre proposé : article « mariage » marqué, OU panier lourd
-  // (≥ 2 kg) car l'expédition d'un colis lourd coûte cher.
+  // Retrait en main propre proposé UNIQUEMENT si un article du panier est marqué
+  // « retrait possible » (les articles mariage). Jamais déclenché par le poids.
   const totalGrams = items.reduce((s, i) => s + (Number(i.weight) || 200) * (i.quantity || 1), 0);
-  const hasPickup = items.some((i) => i.pickup) || totalGrams >= PICKUP_MIN_GRAMS;
+  const hasPickup = items.some((i) => i.pickup);
   // Point relais dispo : France, ou pays d'Europe desservis par Mondial Relay.
   const relaisPossible = relaisEnabled && (isFrance || EU_RELAIS_COUNTRIES.includes(country));
   const retraitPossible = isFrance && hasPickup;

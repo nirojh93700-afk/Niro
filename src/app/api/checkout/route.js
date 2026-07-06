@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
-import { buildShippingOptions, PICKUP_MIN_GRAMS } from "@/lib/shipping";
+import { buildShippingOptions } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock";
 import { saveOrderSpec } from "@/lib/firebase";
 import { engravingExtra } from "@/lib/engravingPrice";
@@ -251,7 +251,7 @@ export async function POST(req) {
         country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
         // Retrait proposé si un article mariage est marqué OU si le colis est
         // lourd (≥ 2 kg), et seulement dans la zone autorisée.
-        pickupEligible: (hasPickupItem || totalGrams >= PICKUP_MIN_GRAMS) && pickupAllowed(postalCode, settings?.pickupZones),
+        pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
         config: settings?.shipping, // tarifs personnalisés (admin)
         boxtal: settings?.boxtal, // option point relais (admin)
         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)
