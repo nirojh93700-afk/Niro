@@ -9,6 +9,20 @@ import { PICKUP_MIN_GRAMS } from "@/lib/shipping";
 import FreeShippingBar from "@/components/FreeShippingBar";
 import RelaisPicker from "@/components/RelaisPicker";
 
+// Pays de livraison proposés (doivent correspondre à SHIPPING_COUNTRIES côté serveur).
+const COUNTRIES = [
+  { code: "FR", label: "France" },
+  { code: "MC", label: "Monaco" },
+  { code: "BE", label: "Belgique" },
+  { code: "LU", label: "Luxembourg" },
+  { code: "NL", label: "Pays-Bas" },
+  { code: "DE", label: "Allemagne" },
+  { code: "ES", label: "Espagne" },
+  { code: "IT", label: "Italie" },
+  { code: "PT", label: "Portugal" },
+  { code: "CH", label: "Suisse" },
+];
+
 export default function CartPage() {
   const { items, total, updateQuantity, removeItem, hydrated } = useCart();
   const [loading, setLoading] = useState(false);
@@ -22,6 +36,8 @@ export default function CartPage() {
   const [relaisEnabled, setRelaisEnabled] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState("domicile");
   const [relais, setRelais] = useState(null);
+  const [country, setCountry] = useState("FR");
+  const isFrance = country === "FR" || country === "MC";
 
   // L'option point relais s'affiche uniquement si elle est activée dans l'admin.
   useEffect(() => {
@@ -57,20 +73,22 @@ export default function CartPage() {
 
   async function handleCheckout() {
     setError("");
-    // Point relais : il faut d'abord choisir son relais sur la carte.
-    if (deliveryMethod === "relais" && !relais) {
+    // Point relais : il faut d'abord choisir son relais sur la carte (France uniquement).
+    if (isFrance && deliveryMethod === "relais" && !relais) {
       setError("Choisissez d'abord votre point relais sur la carte.");
       return;
     }
     // Retrait en main propre : il faut un code postal (vérifié en zone côté serveur).
-    if (deliveryMethod === "retrait" && postalCode.replace(/\D/g, "").length < 4) {
+    if (isFrance && deliveryMethod === "retrait" && postalCode.replace(/\D/g, "").length < 4) {
       setError("Entrez votre code postal pour le retrait en main propre.");
       return;
     }
     setLoading(true);
     try {
-      const delivery = { method: deliveryMethod, relais: deliveryMethod === "relais" ? relais : null };
-      await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "", delivery);
+      // Hors France : livraison à domicile uniquement (tarif Europe par poids).
+      const method = isFrance ? deliveryMethod : "domicile";
+      const delivery = { method, relais: method === "relais" ? relais : null };
+      await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "", delivery, country);
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -152,7 +170,28 @@ export default function CartPage() {
             <span>{formatEuro(total)}</span>
           </div>
 
-          {(relaisEnabled || hasPickup) && (
+          <div style={{ marginTop: 18 }}>
+            <label htmlFor="cart-country" style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>
+              Pays de livraison
+            </label>
+            <select
+              id="cart-country"
+              value={country}
+              onChange={(e) => { setCountry(e.target.value); const fr = e.target.value === "FR" || e.target.value === "MC"; if (!fr) setDeliveryMethod("domicile"); setError(""); }}
+              style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", background: "#fff" }}
+            >
+              {COUNTRIES.map((c) => (
+                <option key={c.code} value={c.code}>{c.label}</option>
+              ))}
+            </select>
+            {!isFrance && (
+              <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
+                Livraison à domicile en Europe — le tarif exact (selon le poids et le pays) s'affiche à l'étape du paiement.
+              </p>
+            )}
+          </div>
+
+          {isFrance && (relaisEnabled || hasPickup) && (
             <div style={{ marginTop: 18 }}>
               <label style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>
                 Mode de livraison

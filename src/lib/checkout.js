@@ -4,7 +4,7 @@ import { track } from "@/lib/track";
 
 // Envoie le panier au serveur pour créer une session Stripe Checkout,
 // puis redirige le client vers la page de paiement sécurisée Stripe.
-export async function startCheckout(items, postalCode = "", promoCode = "", delivery = null) {
+export async function startCheckout(items, postalCode = "", promoCode = "", delivery = null, country = "FR") {
   const payload = items.map((i) => ({
     variantId: i.variantId,
     quantity: i.quantity,
@@ -20,6 +20,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
       items: payload,
       postalCode,
       promoCode,
+      country, // pays de livraison (France par défaut ; sinon tarif Europe)
       // Choix de livraison fait sur le panier : "domicile" ou "relais" + le
       // point relais sélectionné sur la carte (le cas échéant).
       deliveryMethod: delivery?.method || "",

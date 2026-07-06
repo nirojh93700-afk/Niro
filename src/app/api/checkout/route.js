@@ -78,6 +78,13 @@ export async function POST(req) {
 
   const postalCode = String(body?.postalCode || "").trim();
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+  // Pays de livraison choisi sur le panier (défaut France). Détermine la zone de
+  // tarif (France/Europe) et restreint l'adresse Stripe au pays choisi.
+  const country = SHIPPING_COUNTRIES.includes(String(body?.country || "").toUpperCase())
+    ? String(body.country).toUpperCase()
+    : "FR";
+  const isFrance = country === "FR" || country === "MC";
+  const allowedCountries = isFrance ? ["FR", "MC"] : [country];
 
   // Choix de livraison fait sur le panier (avant Stripe).
   const deliveryMethod = ["relais", "domicile", "retrait"].includes(body?.deliveryMethod) ? body.deliveryMethod : "";
@@ -234,9 +241,10 @@ export async function POST(req) {
       // livraison (dont le point relais 4,90 €) que si l'adresse est demandée.
       // Pour un point relais, cette adresse sert de contact (le colis part au
       // relais choisi sur le panier, enregistré à part sur la commande).
-      shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
+      shipping_address_collection: { allowed_countries: allowedCountries },
       shipping_options: buildShippingOptions({
         totalGrams, subtotal, parcelQty, glassQty, letterOnly, freeShipping: allFreeShip,
+        country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
         // Retrait proposé si un article mariage est marqué OU si le colis est
         // lourd (≥ 2 kg), et seulement dans la zone autorisée.
         pickupEligible: (hasPickupItem || totalGrams >= PICKUP_MIN_GRAMS) && pickupAllowed(postalCode, settings?.pickupZones),

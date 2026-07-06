@@ -122,6 +122,53 @@ function homePriceByWeight(grams) {
   return t.price;
 }
 
+// -----------------------------------------------------------------------------
+// LIVRAISON EUROPE (hors France) — par ZONE et par POIDS réel.
+// Tarifs relevés le 06/07/2026 sur les grilles Colissimo International (Zone A/B)
+// + Lettre suivie internationale pour les petits objets, avec marge → la cliente
+// ne perd JAMAIS d'argent. La France (+ Monaco) garde ses tarifs habituels.
+//   EU1 = Belgique, Luxembourg, Pays-Bas, Allemagne (proche)
+//   EU2 = Espagne, Italie, Portugal
+//   CH  = Suisse (hors UE : douane, plus cher)
+// -----------------------------------------------------------------------------
+const EU_ZONE_OF = { BE: "EU1", LU: "EU1", NL: "EU1", DE: "EU1", ES: "EU2", IT: "EU2", PT: "EU2", CH: "CH" };
+const EU_TIERS = {
+  // letter = petits objets (bijoux) en lettre suivie internationale (≤ 2 kg)
+  // parcel = colis (dès qu'il y a un objet plus gros/fragile)
+  EU1: {
+    letter: [[250, 6.9], [500, 9.9], [2000, 12.9]],
+    parcel: [[1000, 16.9], [2000, 22.9], [5000, 32.9], [10000, 46.9], [Infinity, 74.9]],
+  },
+  EU2: {
+    letter: [[250, 7.9], [500, 10.9], [2000, 14.9]],
+    parcel: [[1000, 18.9], [2000, 24.9], [5000, 36.9], [10000, 52.9], [Infinity, 84.9]],
+  },
+  CH: {
+    letter: [[250, 8.9], [500, 12.9], [2000, 17.9]],
+    parcel: [[1000, 22.9], [2000, 29.9], [5000, 44.9], [10000, 64.9], [Infinity, 99.9]],
+  },
+};
+
+// Zone d'un pays : "FR" (France + Monaco, tarifs habituels), sinon EU1/EU2/CH.
+export function shippingZone(country) {
+  const c = String(country || "").toUpperCase();
+  if (!c || c === "FR" || c === "MC") return "FR";
+  return EU_ZONE_OF[c] || "FR";
+}
+
+function tierByGrams(tiers, grams) {
+  const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
+  for (const [max, price] of tiers) if (g <= max) return price;
+  return tiers[tiers.length - 1][1];
+}
+
+// Option de livraison Europe : un seul tarif « à domicile », au poids réel.
+function europeOptions(zoneKey, { letterOnly, totalGrams }) {
+  const z = EU_TIERS[zoneKey] || EU_TIERS.EU1;
+  const grid = letterOnly && totalGrams <= 2000 ? z.letter : z.parcel;
+  return [rate(tierByGrams(grid, totalGrams), "Livraison en Europe — à domicile", [4, 8])];
+}
+
 function rate(amount, name, days) {
   return {
     shipping_rate_data: {
@@ -175,8 +222,13 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
 
 const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vous";
 
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "" }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", country = "" }) {
   const cfg = resolveShippingConfig(config);
+  // Hors France (+ Monaco) : tarif Europe par zone/poids, une seule option.
+  const zone = shippingZone(country);
+  if (zone !== "FR") {
+    return europeOptions(zone, { letterOnly, totalGrams });
+  }
   const boxtalOn = Boolean(boxtal && boxtal.enabled);
   const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
 
