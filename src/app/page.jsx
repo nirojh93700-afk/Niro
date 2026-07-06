@@ -73,8 +73,13 @@ export default async function HomePage() {
     image: pick(s?.atelier?.image, ATELIER_DEFAULTS.image),
   };
   const show = { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, ...(s?.sections || {}) };
-  // Nouveautés : TOUS les produits taggés « Nouveau » (les plus récents d'abord).
-  const newProducts = catalog.filter((p) => p.badge === "Nouveau").reverse().slice(0, 8);
+  // Nouveautés : TOUS les produits taggés « Nouveau ». Les verres gravés en tête
+  // (ordre catalogue), puis le reste (les plus récents d'abord).
+  const allNew = catalog.filter((p) => p.badge === "Nouveau");
+  const newProducts = [
+    ...allNew.filter((p) => p.category === "verres"),
+    ...allNew.filter((p) => p.category !== "verres").reverse(),
+  ].slice(0, 8);
   // Pour la petite fenêtre flottante.
   const newItems = newProducts.map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));
 
