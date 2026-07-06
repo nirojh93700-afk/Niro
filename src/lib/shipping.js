@@ -80,18 +80,21 @@ function tierPrice(tiers, qty) {
 }
 
 // Prix « point relais » calculé AUTOMATIQUEMENT selon le poids, à partir de la
-// grille tarifaire Boxtal (Mondial Relay point relais). Coûts réels TTC extraits
-// de la grille (HT × 1,20) + petite marge pour couvrir emballage/temps :
-//   ≤ 1 kg  : coût ~4,21 € → 4,90 €
-//   1–2 kg  : coût ~5,88 € → 6,50 €
-//   2–5 kg  : coût ~6,25 € → 6,90 €
+// grille tarifaire Boxtal (Mondial Relay point relais) + marge emballage/temps.
+// Paliers relevés (06/07/2026) pour ne JAMAIS perdre d'argent sur les colis
+// lourds / paniers à plusieurs objets, tout en restant dans les prix du marché :
+//   ≤ 1 kg : 4,90 € · ≤ 2 kg : 6,50 € · ≤ 3 kg : 7,50 € · ≤ 5 kg : 8,50 €
+//   ≤ 10 kg : 9,90 € · ≤ 15 kg : 12,90 € · > 15 kg : 15,90 €
 // La cliente ne perd jamais d'argent : chaque palier est au-dessus du coût réel.
 // Le plancher admin (défaut 4,90 €) s'applique par-dessus côté buildShippingOptions.
 const POINT_RELAIS_TIERS = [
   { maxGrams: 1000, price: 4.9 },
   { maxGrams: 2000, price: 6.5 },
-  { maxGrams: 5000, price: 6.9 },
-  { maxGrams: Infinity, price: 8.9 },
+  { maxGrams: 3000, price: 7.5 },
+  { maxGrams: 5000, price: 8.5 },
+  { maxGrams: 10000, price: 9.9 },
+  { maxGrams: 15000, price: 12.9 },
+  { maxGrams: Infinity, price: 15.9 },
 ];
 
 function pointRelaisPriceByWeight(grams) {
@@ -109,7 +112,8 @@ const HOME_WEIGHT_TIERS = [
   { maxGrams: 2000, price: 8.9 },
   { maxGrams: 5000, price: 14.9 },
   { maxGrams: 10000, price: 22.9 },
-  { maxGrams: Infinity, price: 29.9 },
+  { maxGrams: 15000, price: 28.9 },
+  { maxGrams: Infinity, price: 34.9 },
 ];
 
 function homePriceByWeight(grams) {
