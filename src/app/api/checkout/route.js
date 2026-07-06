@@ -146,7 +146,7 @@ export async function POST(req) {
     const promo = promos[variant.id];
     const basePrice = typeof promo === "number" && promo < variant.price ? promo : variant.price;
     // Recalcul de confiance du supplément de gravure (depuis les champs envoyés).
-    const extra = engravingExtra(product, item.fields || {});
+    const extra = engravingExtra(product, item.fields || {}, variant.id);
     const unitPrice = basePrice + extra.amount;
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });

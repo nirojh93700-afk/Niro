@@ -791,9 +791,9 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
-      { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED — +19,90 €" }] },
+      { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9 }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9 } }] },
     video: "/produits/cristal-video-vertical.mp4",
     videoPoster: "/produits/cristal-video-vertical-poster.jpg",
     images: [
@@ -835,9 +835,9 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
-      { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED — +19,90 €" }] },
+      { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9 }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-h-petit": 14.9 } }] },
     video: "/produits/cristal-video-horizontal.mp4",
     videoPoster: "/produits/cristal-video-horizontal-poster.jpg",
     images: [

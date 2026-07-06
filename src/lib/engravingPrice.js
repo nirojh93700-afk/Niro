@@ -2,16 +2,21 @@
 // (incluse) ajoute un montant. Utilisé côté client (affichage) ET côté serveur
 // (recalcul de confiance au paiement), pour éviter toute triche.
 
-export function engravingExtra(product, fields = {}) {
+export function engravingExtra(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
   if (!cfg) return { pages: 0, amount: 0 };
 
   // Suppléments "à plat" : un champ rempli (ou égal à une valeur) ajoute un montant.
   // Ex. graver à un 2e emplacement. S'additionne aux autres modes.
+  // `amountByVariant` permet un montant différent selon la taille choisie
+  // (ex. socle du Petit bloc moins cher que celui des grandes tailles).
   let flat = (cfg.flatExtras || []).reduce((s, e) => {
     const v = (fields[e.key] || "").toString().trim();
     const hit = e.value ? v === e.value : Boolean(v);
-    return hit ? s + (e.amount || 0) : s;
+    const amt = (e.amountByVariant && variantId && e.amountByVariant[variantId] != null)
+      ? e.amountByVariant[variantId]
+      : (e.amount || 0);
+    return hit ? s + amt : s;
   }, 0);
 
   // Supplément "texte ajouté sous un modèle" : payant tant que la case est cochée

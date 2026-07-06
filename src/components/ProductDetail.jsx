@@ -180,7 +180,7 @@ export default function ProductDetail({ product }) {
   const salePrice = promos[variant.id];
   const hasPromo = typeof salePrice === "number" && salePrice < variant.price;
   // Supplément de gravure (pages de texte en plus de la couverture).
-  const engrave = engravingExtra(product, fieldValues);
+  const engrave = engravingExtra(product, fieldValues, variant.id);
   const basePrice = hasPromo ? salePrice : variant.price;
   const unitPrice = basePrice + engrave.amount;
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
@@ -1197,6 +1197,14 @@ export default function ProductDetail({ product }) {
                 }
                 if (f.type === "font" || f.type === "select" || f.type === "color") {
                   const opts = f.type === "font" ? FONTS.map((x) => ({ value: x.key, label: x.label })) : f.options || [];
+                  // Option "à prix" (ex. socle) : le prix affiché dépend de la taille choisie.
+                  const priceForOpt = (optValue) => {
+                    if (!f.priced) return null;
+                    const fe = (product.engravingPricing?.flatExtras || []).find((e) => e.key === f.key && e.value === optValue);
+                    if (!fe) return null;
+                    const amt = (fe.amountByVariant && fe.amountByVariant[variant.id] != null) ? fe.amountByVariant[variant.id] : (fe.amount || 0);
+                    return amt > 0 ? amt : null;
+                  };
                   return (
                     <div className="field" key={f.key}>
                       {labelEl}
@@ -1206,9 +1214,11 @@ export default function ProductDetail({ product }) {
                         onChange={(e) => setField(f.key, e.target.value)}
                       >
                         <option value="">— Choisir —</option>
-                        {opts.map((o) => (
-                          <option key={o.value} value={o.value}>{o.label}</option>
-                        ))}
+                        {opts.map((o) => {
+                          const amt = priceForOpt(o.value);
+                          const label = amt ? `${o.label} — +${amt.toFixed(2).replace(".", ",")} €` : o.label;
+                          return <option key={o.value} value={o.value}>{label}</option>;
+                        })}
                       </select>
                     </div>
                   );
