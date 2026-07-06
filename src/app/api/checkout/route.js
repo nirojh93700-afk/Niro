@@ -139,7 +139,7 @@ export async function POST(req) {
   let glassQty = 0;  // nombre de verres (fragiles) — envoi croissant dédié
   let letterOnly = true;
   let allFreeShip = true; // tous les articles ont la livraison offerte
-  let hasPickupItem = false; // au moins un article éligible au retrait
+  let allPickup = true; // retrait proposé seulement si TOUS les articles sont éligibles (mariage)
   const boughtVariants = []; // pour décrémenter le stock après paiement
 
   for (const item of items) {
@@ -172,7 +172,7 @@ export async function POST(req) {
     }
     if (product.category === "verres") glassQty += quantity;
     if (!product.freeShipping) allFreeShip = false;
-    if (product.pickup) hasPickupItem = true;
+    if (!product.pickup) allPickup = false;
 
     const descriptionParts = [variant.title];
     if (extra.amount > 0) {
@@ -251,7 +251,7 @@ export async function POST(req) {
         country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
         // Retrait proposé si un article mariage est marqué OU si le colis est
         // lourd (≥ 2 kg), et seulement dans la zone autorisée.
-        pickupEligible: hasPickupItem && pickupAllowed(postalCode, settings?.pickupZones),
+        pickupEligible: allPickup && pickupAllowed(postalCode, settings?.pickupZones),
         config: settings?.shipping, // tarifs personnalisés (admin)
         boxtal: settings?.boxtal, // option point relais (admin)
         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)

@@ -51,10 +51,11 @@ export default function CartPage() {
     return () => { ok = false; };
   }, []);
 
-  // Retrait en main propre proposé UNIQUEMENT si un article du panier est marqué
-  // « retrait possible » (les articles mariage). Jamais déclenché par le poids.
+  // Retrait en main propre proposé UNIQUEMENT si TOUS les articles du panier sont
+  // marqués « retrait possible » (mariage). Dès qu'il y a un produit à expédier
+  // (cristal, déco…), le retrait n'est pas proposé. Jamais déclenché par le poids.
   const totalGrams = items.reduce((s, i) => s + (Number(i.weight) || 200) * (i.quantity || 1), 0);
-  const hasPickup = items.some((i) => i.pickup);
+  const hasPickup = items.length > 0 && items.every((i) => i.pickup);
   // Point relais dispo : France, ou pays d'Europe desservis par Mondial Relay.
   const relaisPossible = relaisEnabled && (isFrance || EU_RELAIS_COUNTRIES.includes(country));
   const retraitPossible = isFrance && hasPickup;
