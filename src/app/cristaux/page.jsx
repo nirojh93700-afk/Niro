@@ -18,10 +18,20 @@ export default async function CristauxPage() {
   const ratings = await getRatingSummaries().catch(() => ({}));
   let s = null; try { s = await getSettings(); } catch { /* défauts */ }
   const mk = Number(s?.refMarkup) > 0;
-  // Les blocs photo (vertical / horizontal) d'abord, puis le reste de la gamme cristal.
+  // Ordre voulu : blocs d'abord, puis les porte-clés, puis clé USB, puis
+  // trophée et pyramide en bas.
+  const crystalRank = (p) => {
+    const s = p.slug || "";
+    if (s.startsWith("cristal-photo-3d")) return 0; // blocs vertical / horizontal
+    if (s.includes("porte-cles-cristal")) return 1; // porte-clés cristal
+    if (s.includes("cle-usb-cristal")) return 2;     // clé USB
+    if (s.includes("trophee")) return 4;             // trophée
+    if (s.includes("pyramide")) return 5;            // pyramide
+    return 3;                                         // autres cristaux
+  };
   const items = catalog
     .filter((p) => p.crystal3d)
-    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+    .sort((a, b) => crystalRank(a) - crystalRank(b));
 
   return (
     <>
