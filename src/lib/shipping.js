@@ -174,6 +174,15 @@ const EU_TIERS = {
   },
 };
 
+// POINT RELAIS EUROPE (Mondial Relay). Seuls ces pays ont des points relais
+// Mondial Relay (l'Allemagne et la Suisse = domicile uniquement). Grille par
+// poids et par zone, au-dessus du coût réel (0,5 kg ≈ 9,50 € BE/LU/NL).
+const EU_RELAIS_COUNTRIES = ["BE", "LU", "NL", "ES", "PT", "IT"];
+const EU_RELAIS_TIERS = {
+  EU1: [[1000, 9.9], [2000, 11.9], [5000, 16.9], [10000, 22.9], [Infinity, 29.9]], // BE, LU, NL
+  EU2: [[1000, 11.9], [2000, 13.9], [5000, 19.9], [10000, 26.9], [Infinity, 34.9]], // ES, PT, IT
+};
+
 // Zone d'un pays : "FR" (France + Monaco, tarifs habituels), sinon EU1/EU2/CH.
 export function shippingZone(country) {
   const c = String(country || "").toUpperCase();
@@ -181,10 +190,26 @@ export function shippingZone(country) {
   return EU_ZONE_OF[c] || "FR";
 }
 
+// Zone de point relais Europe d'un pays (EU1/EU2), ou null si pas de relais.
+export function europeRelaisZone(country) {
+  const c = String(country || "").toUpperCase();
+  if (!EU_RELAIS_COUNTRIES.includes(c)) return null;
+  const z = shippingZone(c);
+  return EU_RELAIS_TIERS[z] ? z : null;
+}
+
 function tierByGrams(tiers, grams) {
   const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
   for (const [max, price] of tiers) if (g <= max) return price;
   return tiers[tiers.length - 1][1];
+}
+
+// Prix d'un point relais selon le poids, le transporteur ET le pays :
+// France → grille du transporteur ; Europe (BE/LU/NL/ES/PT/IT) → grille zone.
+export function relaisPointPrice(grams, carrierCode, country = "FR") {
+  const rz = europeRelaisZone(country);
+  if (rz) return tierByGrams(EU_RELAIS_TIERS[rz], grams);
+  return pointRelaisPriceByWeight(grams, carrierCode);
 }
 
 // Option de livraison Europe : un seul tarif « à domicile », au poids réel.
@@ -249,12 +274,20 @@ const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vou
 
 export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "" }) {
   const cfg = resolveShippingConfig(config);
-  // Hors France (+ Monaco) : tarif Europe par zone/poids, une seule option.
+  const boxtalOn = Boolean(boxtal && boxtal.enabled);
+  // Hors France (+ Monaco) : tarif Europe par zone/poids.
   const zone = shippingZone(country);
   if (zone !== "FR") {
+    // Point relais Europe (Mondial Relay) là où c'est disponible et choisi.
+    const rz = europeRelaisZone(country);
+    if (deliveryMethod === "relais" && boxtalOn && rz) {
+      const price = tierByGrams(EU_RELAIS_TIERS[rz], totalGrams);
+      const carrierName = relaisCarrier ? relaisCarrierByCode(relaisCarrier).name : "Mondial Relay";
+      const label = [carrierName, relaisLabel].filter(Boolean).join(" — ").slice(0, 90);
+      return [rate(price, `Point relais ${label}`, [4, 8])];
+    }
     return europeOptions(zone, { letterOnly, totalGrams });
   }
-  const boxtalOn = Boolean(boxtal && boxtal.enabled);
   const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
 
   // --- Choix explicite fait sur la page panier -----------------------------

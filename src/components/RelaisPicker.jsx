@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { pointRelaisPriceByWeight } from "@/lib/shipping";
+import { relaisPointPrice } from "@/lib/shipping";
 
 const euro = (n) => `${Number(n).toFixed(2).replace(".", ",")} €`;
 const samePoint = (a, b) => a && b && a.code === b.code && a.carrier === b.carrier;
@@ -51,8 +51,8 @@ function pinIcon(L, active) {
 }
 
 export default function RelaisPicker({ country = "FR", selected, onSelect, weightGrams = 0 }) {
-  // Prix estimé pour un point selon son transporteur et le poids du panier.
-  const priceFor = (p) => pointRelaisPriceByWeight(weightGrams, p?.carrier);
+  // Prix estimé pour un point selon son transporteur, le poids et le pays.
+  const priceFor = (p) => relaisPointPrice(weightGrams, p?.carrier, country);
   const [zip, setZip] = useState("");
   const [city, setCity] = useState("");
   const [points, setPoints] = useState([]);

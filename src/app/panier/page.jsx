@@ -9,6 +9,9 @@ import { PICKUP_MIN_GRAMS } from "@/lib/shipping";
 import FreeShippingBar from "@/components/FreeShippingBar";
 import RelaisPicker from "@/components/RelaisPicker";
 
+// Pays d'Europe où le point relais (Mondial Relay) est disponible.
+const EU_RELAIS_COUNTRIES = ["BE", "LU", "NL", "ES", "PT", "IT"];
+
 // Pays de livraison proposés (doivent correspondre à SHIPPING_COUNTRIES côté serveur).
 const COUNTRIES = [
   { code: "FR", label: "France" },
@@ -53,6 +56,9 @@ export default function CartPage() {
   // (≥ 2 kg) car l'expédition d'un colis lourd coûte cher.
   const totalGrams = items.reduce((s, i) => s + (Number(i.weight) || 200) * (i.quantity || 1), 0);
   const hasPickup = items.some((i) => i.pickup) || totalGrams >= PICKUP_MIN_GRAMS;
+  // Point relais dispo : France, ou pays d'Europe desservis par Mondial Relay.
+  const relaisPossible = relaisEnabled && (isFrance || EU_RELAIS_COUNTRIES.includes(country));
+  const retraitPossible = isFrance && hasPickup;
 
   async function applyPromo() {
     setPromoMsg(""); setPromoOk(false);
@@ -73,20 +79,22 @@ export default function CartPage() {
 
   async function handleCheckout() {
     setError("");
-    // Point relais : il faut d'abord choisir son relais sur la carte (France uniquement).
-    if (isFrance && deliveryMethod === "relais" && !relais) {
+    // Point relais : il faut d'abord choisir son relais sur la carte.
+    if (relaisPossible && deliveryMethod === "relais" && !relais) {
       setError("Choisissez d'abord votre point relais sur la carte.");
       return;
     }
     // Retrait en main propre : il faut un code postal (vérifié en zone côté serveur).
-    if (isFrance && deliveryMethod === "retrait" && postalCode.replace(/\D/g, "").length < 4) {
+    if (retraitPossible && deliveryMethod === "retrait" && postalCode.replace(/\D/g, "").length < 4) {
       setError("Entrez votre code postal pour le retrait en main propre.");
       return;
     }
     setLoading(true);
     try {
-      // Hors France : livraison à domicile uniquement (tarif Europe par poids).
-      const method = isFrance ? deliveryMethod : "domicile";
+      // On ne garde que les modes réellement disponibles pour ce pays.
+      let method = deliveryMethod;
+      if (method === "relais" && !relaisPossible) method = "domicile";
+      if (method === "retrait" && !retraitPossible) method = "domicile";
       const delivery = { method, relais: method === "relais" ? relais : null };
       await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "", delivery, country);
     } catch (e) {
@@ -177,21 +185,21 @@ export default function CartPage() {
             <select
               id="cart-country"
               value={country}
-              onChange={(e) => { setCountry(e.target.value); const fr = e.target.value === "FR" || e.target.value === "MC"; if (!fr) setDeliveryMethod("domicile"); setError(""); }}
+              onChange={(e) => { setCountry(e.target.value); setDeliveryMethod("domicile"); setRelais(null); setError(""); }}
               style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", background: "#fff" }}
             >
               {COUNTRIES.map((c) => (
                 <option key={c.code} value={c.code}>{c.label}</option>
               ))}
             </select>
-            {!isFrance && (
+            {!isFrance && !relaisPossible && (
               <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
                 Livraison à domicile en Europe — le tarif exact (selon le poids et le pays) s'affiche à l'étape du paiement.
               </p>
             )}
           </div>
 
-          {isFrance && (relaisEnabled || hasPickup) && (
+          {(relaisPossible || retraitPossible) && (
             <div style={{ marginTop: 18 }}>
               <label style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>
                 Mode de livraison
@@ -199,8 +207,8 @@ export default function CartPage() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {[
                   { key: "domicile", label: "🏠 À domicile", show: true },
-                  { key: "relais", label: "📍 Point relais", show: relaisEnabled },
-                  { key: "retrait", label: "🤝 Retrait en main propre", show: hasPickup },
+                  { key: "relais", label: "📍 Point relais", show: relaisPossible },
+                  { key: "retrait", label: "🤝 Retrait en main propre", show: retraitPossible },
                 ].filter((o) => o.show).map((o) => (
                   <button
                     key={o.key}
@@ -220,9 +228,9 @@ export default function CartPage() {
                 ))}
               </div>
 
-              {deliveryMethod === "relais" && relaisEnabled && (
+              {deliveryMethod === "relais" && relaisPossible && (
                 <>
-                  <RelaisPicker selected={relais} onSelect={(p) => { setRelais(p); setError(""); }} weightGrams={totalGrams} />
+                  <RelaisPicker selected={relais} onSelect={(p) => { setRelais(p); setError(""); }} weightGrams={totalGrams} country={country} />
                   {relais && (
                     <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
                       À l'étape suivante, vous indiquerez seulement vos coordonnées (nom, téléphone) :
@@ -232,7 +240,7 @@ export default function CartPage() {
                 </>
               )}
 
-              {deliveryMethod === "retrait" && hasPickup && (
+              {deliveryMethod === "retrait" && retraitPossible && (
                 <div style={{ marginTop: 12 }}>
                   <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>
                     Votre code postal <span style={{ color: "var(--ink-soft)" }}>— notre atelier est dans le Val-d'Oise (95). Le retrait en main propre est proposé si vous êtes dans le secteur.</span>
