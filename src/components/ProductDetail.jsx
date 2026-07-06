@@ -1081,12 +1081,14 @@ export default function ProductDetail({ product }) {
               </p>
               {visibleFields.map((f) => {
                 if (f.type === "note") {
+                  // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).
+                  const noteImg = (f.imageByVariant && f.imageByVariant[variant.id]) || f.image;
                   return (
                     <div key={f.key}>
                       {f.text && <p className="perso-hint">{f.text}</p>}
-                      {f.image && (
+                      {noteImg && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={f.image} alt={f.imageAlt || "Conseils pour réussir votre photo"} className="perso-hint-img" />
+                        <img src={noteImg} alt={f.imageAlt || "Conseils pour réussir votre photo"} className="perso-hint-img" />
                       )}
                     </div>
                   );
