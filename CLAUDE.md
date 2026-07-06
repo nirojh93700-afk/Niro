@@ -147,6 +147,11 @@ Le site calcule **un seul frais** automatiquement (voir `src/lib/shipping.js`) :
 - `pickup:true` → ajoute l'option « Remise en main propre » (7 €).
 → Bien renseigner `weight`, `letter`, `pickup` sur chaque nouveau produit.
 
+**Poids AUTOMATIQUE par taille + options (maj 06/07/2026)** : le port se calcule sur le **poids réel du panier** (somme des poids × quantités), donc c'est correct pour plusieurs articles OU un mélange (bijou + bloc…), et automatique dès qu'un produit a un poids.
+- **Poids par variante** : mettre `weight` (g, EMBALLÉ) **sur chaque variante** si les tailles pèsent différemment (ex. blocs cristal : petit 750 / moyen 1100 / grand 1800 / XL 2800). Repli : `product.weight`. Le checkout lit `variant.weight || product.weight`.
+- **Poids d'une option** (ex. socle) : ajouter `weight` (et `weightByVariant`) sur l'entrée `engravingPricing.flatExtras` → ajouté au port quand l'option est prise (`engravingExtra().weight`).
+- **Point relais** = grille par poids (`POINT_RELAIS_TIERS`). **Domicile** = max(tarif par quantité déco/verres, grille par poids `HOME_WEIGHT_TIERS`) → les colis lourds ne sont jamais sous-facturés, les petits produits ne changent pas.
+
 **Tarifs modifiables dans l'admin (maj 03/07/2026)** : page **Gestion → Réglages → 🚚 Livraison
 (tarifs)** (`src/components/admin/ShippingAdmin.jsx`). Tous les montants (bijoux, seuil offert,
 paliers déco, paliers verres, retrait) sont stockés en réglages (`settings.shipping`, sanitizé

@@ -100,6 +100,24 @@ function pointRelaisPriceByWeight(grams) {
   return t.price;
 }
 
+// Livraison à DOMICILE (Colissimo) : grille par poids réel, pour que les colis
+// lourds (plusieurs blocs cristal, ou un mix bijou + bloc) soient facturés au
+// juste prix et jamais sous-facturés. Les articles légers (≤ 1 kg) restent sous
+// le tarif « déco » (6,90 €) → aucun changement pour les petits produits.
+const HOME_WEIGHT_TIERS = [
+  { maxGrams: 1000, price: 6.9 },
+  { maxGrams: 2000, price: 8.9 },
+  { maxGrams: 5000, price: 14.9 },
+  { maxGrams: 10000, price: 22.9 },
+  { maxGrams: Infinity, price: 29.9 },
+];
+
+function homePriceByWeight(grams) {
+  const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
+  const t = HOME_WEIGHT_TIERS.find((x) => g <= x.maxGrams) || HOME_WEIGHT_TIERS[HOME_WEIGHT_TIERS.length - 1];
+  return t.price;
+}
+
 function rate(amount, name, days) {
   return {
     shipping_rate_data: {
@@ -117,7 +135,7 @@ function rate(amount, name, days) {
 // Options de livraison proposées au paiement.
 //   subtotal      : sous-total produits (€)
 //   letterOnly    : TOUS les articles sont des bijoux/petits objets (≤ 2 kg)
-//   totalGrams    : poids total estimé (plafond 2 kg)
+//   totalGrams    : poids total réel du panier (somme des poids × quantités)
 //   parcelQty     : nombre d'articles "déco" (colis) dans le panier
 //   pickupEligible: retrait en main propre autorisé (déco/mariage + zone OK)
 //   config        : tarifs personnalisés (réglages admin) — facultatif
@@ -141,7 +159,11 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
     const prices = [];
     if (glassQty > 0) prices.push(tierPrice(cfg.glassTiers, glassQty));
     if (decoQty > 0) prices.push(tierPrice(cfg.decoTiers, decoQty));
-    const price = prices.length ? Math.max(...prices) : tierPrice(cfg.decoTiers, parcelQty || 1);
+    const qtyPrice = prices.length ? Math.max(...prices) : tierPrice(cfg.decoTiers, parcelQty || 1);
+    // Prix final = le plus élevé entre le tarif « par quantité » (déco/verres) et
+    // le tarif « par poids réel » : les colis lourds passent au bon tarif, les
+    // petits produits ne changent pas.
+    const price = Math.max(qtyPrice, homePriceByWeight(totalGrams));
     options.push(rate(price, "Livraison à domicile", [2, 5]));
   }
   return options;

@@ -150,7 +150,10 @@ export async function POST(req) {
     const unitPrice = basePrice + extra.amount;
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
-    totalGrams += (product.weight || 200) * quantity;
+    // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle),
+    // multiplié par la quantité → frais de port corrects pour n'importe quel panier.
+    const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0);
+    totalGrams += unitGrams * quantity;
     subtotal += unitPrice * quantity;
     if (!product.letter) {
       letterOnly = false;

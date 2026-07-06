@@ -793,7 +793,7 @@ export const products = [
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9 } }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-v-petit": 300 } }] },
     video: "/produits/cristal-video-vertical.mp4",
     videoPoster: "/produits/cristal-video-vertical-poster.jpg",
     images: [
@@ -806,10 +806,10 @@ export const products = [
       "/produits/cristal-v-guide.png",
     ],
     variants: [
-      { id: "cristal-v-petit", stockId: "bloc-cristal-petit", title: "Petit — 5×5×8 cm · Couple (1-2)", price: 39.9 },
-      { id: "cristal-v-moyen", stockId: "bloc-cristal-moyen", title: "Moyen — 5×6×10 cm · 2-3 personnes", price: 59.9 },
-      { id: "cristal-v-grand", stockId: "bloc-cristal-grand", title: "Grand — 6×8×12 cm · Famille (2-4)", price: 99.9 },
-      { id: "cristal-v-xl", stockId: "bloc-cristal-xl", title: "XL — 6×10×15 cm · Grand groupe (5-6)", price: 149.9 },
+      { id: "cristal-v-petit", stockId: "bloc-cristal-petit", title: "Petit — 5×5×8 cm · Couple (1-2)", price: 39.9, weight: 750 },
+      { id: "cristal-v-moyen", stockId: "bloc-cristal-moyen", title: "Moyen — 5×6×10 cm · 2-3 personnes", price: 59.9, weight: 1100 },
+      { id: "cristal-v-grand", stockId: "bloc-cristal-grand", title: "Grand — 6×8×12 cm · Famille (2-4)", price: 99.9, weight: 1800 },
+      { id: "cristal-v-xl", stockId: "bloc-cristal-xl", title: "XL — 6×10×15 cm · Grand groupe (5-6)", price: 149.9, weight: 2800 },
     ],
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Un cadeau qui capte la lumière — et l'émotion.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
@@ -837,7 +837,7 @@ export const products = [
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-h-petit": 14.9 } }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-h-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-h-petit": 300 } }] },
     video: "/produits/cristal-video-horizontal.mp4",
     videoPoster: "/produits/cristal-video-horizontal-poster.jpg",
     images: [
@@ -848,10 +848,10 @@ export const products = [
       "/produits/cristal-h-guide.png",
     ],
     variants: [
-      { id: "cristal-h-petit", stockId: "bloc-cristal-petit", title: "Petit — 8×5×5 cm · Couple (1-2)", price: 39.9 },
-      { id: "cristal-h-moyen", stockId: "bloc-cristal-moyen", title: "Moyen — 10×6×5 cm · 2-3 personnes", price: 59.9 },
-      { id: "cristal-h-grand", stockId: "bloc-cristal-grand", title: "Grand — 12×8×6 cm · Famille (2-4)", price: 99.9 },
-      { id: "cristal-h-xl", stockId: "bloc-cristal-xl", title: "XL — 15×10×6 cm · Grand groupe (5-6)", price: 149.9 },
+      { id: "cristal-h-petit", stockId: "bloc-cristal-petit", title: "Petit — 8×5×5 cm · Couple (1-2)", price: 39.9, weight: 750 },
+      { id: "cristal-h-moyen", stockId: "bloc-cristal-moyen", title: "Moyen — 10×6×5 cm · 2-3 personnes", price: 59.9, weight: 1100 },
+      { id: "cristal-h-grand", stockId: "bloc-cristal-grand", title: "Grand — 12×8×6 cm · Famille (2-4)", price: 99.9, weight: 1800 },
+      { id: "cristal-h-xl", stockId: "bloc-cristal-xl", title: "XL — 15×10×6 cm · Grand groupe (5-6)", price: 149.9, weight: 2800 },
     ],
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Format paysage, idéal pour un couple, un groupe ou une photo large.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>

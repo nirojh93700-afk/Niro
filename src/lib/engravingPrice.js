@@ -4,20 +4,27 @@
 
 export function engravingExtra(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
-  if (!cfg) return { pages: 0, amount: 0 };
+  if (!cfg) return { pages: 0, amount: 0, weight: 0 };
 
   // Suppléments "à plat" : un champ rempli (ou égal à une valeur) ajoute un montant.
-  // Ex. graver à un 2e emplacement. S'additionne aux autres modes.
+  // Ex. graver à un 2e emplacement, ou ajouter un socle. S'additionne aux autres modes.
   // `amountByVariant` permet un montant différent selon la taille choisie
   // (ex. socle du Petit bloc moins cher que celui des grandes tailles).
-  let flat = (cfg.flatExtras || []).reduce((s, e) => {
+  // `weight`/`weightByVariant` = poids (g) ajouté par l'option (ex. socle) pour
+  // que les frais de port restent corrects.
+  let flat = 0;
+  let flatWeight = 0;
+  for (const e of cfg.flatExtras || []) {
     const v = (fields[e.key] || "").toString().trim();
     const hit = e.value ? v === e.value : Boolean(v);
-    const amt = (e.amountByVariant && variantId && e.amountByVariant[variantId] != null)
+    if (!hit) continue;
+    flat += (e.amountByVariant && variantId && e.amountByVariant[variantId] != null)
       ? e.amountByVariant[variantId]
       : (e.amount || 0);
-    return hit ? s + amt : s;
-  }, 0);
+    flatWeight += (e.weightByVariant && variantId && e.weightByVariant[variantId] != null)
+      ? e.weightByVariant[variantId]
+      : (e.weight || 0);
+  }
 
   // Supplément "texte ajouté sous un modèle" : payant tant que la case est cochée
   // (addText !== false dans l'objet du modèle envoyé).
@@ -36,7 +43,7 @@ export function engravingExtra(product, fields = {}, variantId = null) {
       if (hasMotif) { amount += cfg.pageMotif || 0; pages += 1; }
       else if (hasText) { amount += cfg.pageText || 0; pages += 1; }
     }
-    return { pages, amount: amount + flat };
+    return { pages, amount: amount + flat, weight: flatWeight };
   }
 
   // Mode "textKeys / motifKeys" : chaque texte en plus = textExtra ; pour les
@@ -49,7 +56,7 @@ export function engravingExtra(product, fields = {}, variantId = null) {
     if (motifs > 1) amount += (motifs - 1) * (cfg.motifExtra || 0); // 1er motif offert
     const photo = Boolean(cfg.photoKey && filled(cfg.photoKey));
     if (photo) amount += cfg.photoSurcharge || 0;
-    return { pages, motifs, photo, amount: amount + flat };
+    return { pages, motifs, photo, amount: amount + flat, weight: flatWeight };
   }
   const included = cfg.includedKey;
   // On compte les champs de texte non vides, hors couverture incluse.
@@ -65,5 +72,5 @@ export function engravingExtra(product, fields = {}, variantId = null) {
   const photoVal = cfg.photoKey ? (fields[cfg.photoKey] || "").toString().trim() : "";
   const photo = Boolean(photoVal);
   const amount = pages * (cfg.perExtraPage || 0) + (photo ? (cfg.photoSurcharge || 0) : 0) + flat;
-  return { pages, photo, amount };
+  return { pages, photo, amount, weight: flatWeight };
 }
