@@ -553,6 +553,20 @@ export default function GestionPage() {
     annulee: ["ann", "Annulée"], remboursee: ["ann", "Remboursée"],
   };
   const dashDate = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  // Stock des blocs cristal (partagé vertical + horizontal) pour le tableau de bord.
+  const blocStockRows = [
+    { key: "bloc-cristal-petit", label: "Petit" },
+    { key: "bloc-cristal-moyen", label: "Moyen" },
+    { key: "bloc-cristal-grand", label: "Grand" },
+    { key: "bloc-cristal-xl", label: "XL" },
+  ].map((b) => {
+    const r = rows.find((x) => (x.stockId || x.variantId) === b.key);
+    return { ...b, stock: r && typeof r.stock === "number" ? r.stock : null };
+  });
+  const hasBlocStock = blocStockRows.some((b) => b.stock !== null);
+  const blocMax = Math.max(1, ...blocStockRows.map((b) => b.stock || 0));
+  const ruptures = rows.filter((r) => typeof r.stock === "number" && r.stock === 0);
+  const lowStock = rows.filter((r) => typeof r.stock === "number" && r.stock > 0 && r.stock <= 5);
 
   return (
     <section className="section admin-section">
@@ -676,46 +690,92 @@ export default function GestionPage() {
             </div>
 
             <div className="dash-two">
-              <div className="dash-panel">
-                <div className="dash-ph"><h3>Dernières commandes</h3><button type="button" onClick={() => setTab("commandes")}>Tout voir →</button></div>
-                {recentOrders.length === 0 ? (
-                  <p style={{ padding: "16px 18px", color: "var(--ink-soft)", margin: 0 }}>Aucune commande pour le moment.</p>
-                ) : recentOrders.map((o) => {
-                  const [cls, label] = DASH_CHIPS[o.status || "a_preparer"] || ["prep", "À préparer"];
-                  const summary = (o.items || []).map((i) => i.name).filter(Boolean).slice(0, 2).join(", ") || "Commande";
-                  return (
-                    <div className="dash-orow" key={o.id}>
-                      <span className="id">#{o.ref || o.id?.slice(-6)}</span>
-                      <span>{summary}<br /><span className="who">{o.customerName || o.customerEmail || "—"}</span></span>
-                      <span className="pr">{formatEuro(o.total)}</span>
-                      <span className={`dash-chip ${cls}`}>{label}</span>
-                    </div>
-                  );
-                })}
+              <div className="dash-col">
+                <div className="dash-panel">
+                  <div className="dash-ph"><h3>Dernières commandes</h3><button type="button" onClick={() => setTab("commandes")}>Tout voir →</button></div>
+                  {recentOrders.length === 0 ? (
+                    <p style={{ padding: "16px 18px", color: "var(--ink-soft)", margin: 0 }}>Aucune commande pour le moment.</p>
+                  ) : recentOrders.map((o) => {
+                    const [cls, label] = DASH_CHIPS[o.status || "a_preparer"] || ["prep", "À préparer"];
+                    const summary = (o.items || []).map((i) => i.name).filter(Boolean).slice(0, 2).join(", ") || "Commande";
+                    return (
+                      <div className="dash-orow" key={o.id}>
+                        <span className="id">#{o.ref || o.id?.slice(-6)}</span>
+                        <span>{summary}<br /><span className="who">{o.customerName || o.customerEmail || "—"}</span></span>
+                        <span className="pr">{formatEuro(o.total)}</span>
+                        <span className={`dash-chip ${cls}`}>{label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {hasBlocStock && (
+                  <div className="dash-panel">
+                    <div className="dash-ph"><h3>Stock — blocs cristal (partagé V + H)</h3><button type="button" onClick={() => setTab("stock")}>Gérer →</button></div>
+                    {blocStockRows.map((b) => {
+                      const s = b.stock;
+                      const out = s === 0;
+                      const low = s !== null && s > 0 && s <= 5;
+                      const pct = s === null ? 0 : Math.round((s / blocMax) * 100);
+                      const color = out ? "#b4452f" : low ? "#d08a2a" : "linear-gradient(90deg,#e2c67e,#a98935)";
+                      return (
+                        <div className="dash-stockrow" key={b.key}>
+                          <span className="sl">{b.label}</span>
+                          <span className="dash-bar"><i style={{ width: `${pct}%`, background: color }} /></span>
+                          {s === null ? (
+                            <span className="dash-sq" style={{ color: "var(--ink-soft)" }}>non suivi</span>
+                          ) : out ? (
+                            <span className="dash-rupt">RUPTURE</span>
+                          ) : (
+                            <span className={`dash-sq ${low ? "low" : ""}`}>{s} rest.</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
-              <div className="dash-panel">
-                <div className="dash-ph"><h3>À faire</h3></div>
-                <button type="button" className="dash-todo" onClick={() => setTab("commandes")}>
-                  <span className="ic">📦</span>
-                  <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir les commandes" : "Rien en attente 🎉"}</small></span>
-                  <span className="go">→</span>
-                </button>
-                <a href="/gestion/atelier" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
-                  <span className="ic">🥃</span>
-                  <span><b>Atelier — pièces à graver</b><small>Visuels &amp; fichiers à graver{enGravure > 0 ? ` · ${enGravure} en gravure` : ""}</small></span>
-                  <span className="go">→</span>
-                </a>
-                <button type="button" className="dash-todo" onClick={() => setTab("avis")}>
-                  <span className="ic">⭐</span>
-                  <span><b>Avis clients</b><small>Valider ou masquer les avis</small></span>
-                  <span className="go">→</span>
-                </button>
-                <button type="button" className="dash-todo" onClick={() => setTab("stock")}>
-                  <span className="ic">📊</span>
-                  <span><b>Stock</b><small>Vérifier les ruptures et réapprovisionner</small></span>
-                  <span className="go">→</span>
-                </button>
+              <div className="dash-col">
+                <div className="dash-panel">
+                  <div className="dash-ph"><h3>À faire</h3></div>
+                  <button type="button" className="dash-todo" onClick={() => setTab("commandes")}>
+                    <span className="ic">📦</span>
+                    <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir les commandes" : "Rien en attente 🎉"}</small></span>
+                    <span className="go">→</span>
+                  </button>
+                  <a href="/gestion/atelier" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
+                    <span className="ic">🥃</span>
+                    <span><b>Atelier — pièces à graver</b><small>Visuels &amp; fichiers à graver{enGravure > 0 ? ` · ${enGravure} en gravure` : ""}</small></span>
+                    <span className="go">→</span>
+                  </a>
+                  <button type="button" className="dash-todo" onClick={() => setTab("avis")}>
+                    <span className="ic">⭐</span>
+                    <span><b>Avis clients</b><small>Valider ou masquer les avis</small></span>
+                    <span className="go">→</span>
+                  </button>
+                  <button type="button" className="dash-todo" onClick={() => setTab("stock")}>
+                    <span className="ic">📊</span>
+                    <span><b>Stock</b><small>Vérifier les ruptures et réapprovisionner</small></span>
+                    <span className="go">→</span>
+                  </button>
+                </div>
+
+                <div className="dash-panel">
+                  <div className="dash-ph"><h3>Assistant</h3></div>
+                  <div className="dash-assist">
+                    {ruptures.length > 0 ? (
+                      <>« <b>{ruptures.length} produit{ruptures.length > 1 ? "s" : ""} en rupture</b> — la vignette affiche automatiquement le badge « Rupture de stock ». Voulez-vous que je prépare un e-mail au fournisseur ? »</>
+                    ) : lowStock.length > 0 ? (
+                      <>« Le stock de <b>{lowStock.length} produit{lowStock.length > 1 ? "s" : ""}</b> est bientôt épuisé. Pensez à réapprovisionner avant la rupture. »</>
+                    ) : (
+                      <>« Tout est sous contrôle 🎉 Je peux préparer un post pour vos réseaux, répondre aux e-mails, ou analyser vos ventes — dites-moi. »</>
+                    )}
+                    <div style={{ marginTop: 14 }}>
+                      <button type="button" className="dash-abtn gold" onClick={() => setTab("assistant")}>Ouvrir l&apos;assistant</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </>
