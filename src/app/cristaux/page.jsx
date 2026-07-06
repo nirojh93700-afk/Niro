@@ -61,7 +61,7 @@ export default async function CristauxPage() {
               <div className="section-head">
                 <span className="eyebrow" style={{ color: "var(--gold-dark)" }}>✦ Choisissez votre cristal</span>
                 <h2>Nos cristaux photo 3D</h2>
-                <p>Bloc vertical (portrait), bloc horizontal (paysage)… chacun en plusieurs tailles selon le nombre de personnes.</p>
+                <p>Vos souvenirs gravés en 3D au cœur du cristal : blocs photo, porte-clés, trophées… en plusieurs tailles, pour toutes vos occasions.</p>
               </div>
               <div className="product-grid">
                 {items.map((p) => {
