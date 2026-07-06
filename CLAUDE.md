@@ -228,6 +228,14 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
 
+### MAQUETTE EN ATTENTE — NOUVEAU THÈME « L'ÉCRIN » (enregistrée le 06/07/2026, à appliquer PLUS TARD)
+> La gérante a demandé d'**enregistrer la maquette telle quelle** pour l'appliquer plus tard. Quand elle dira « applique le nouveau thème » : **reproduire EXACTEMENT** cette maquette (règle ci-dessous), sans réinventer.
+- **Fichier** : `docs/maquettes/theme-ecrin.html` (autonome, images intégrées — ouvrir dans un navigateur pour revoir). Artifact : https://claude.ai/code/artifact/3e4f0c71-7b5c-4288-84cf-831970af0ab7
+- **Contenu** : 2 vues avec boutons de bascule en haut — 🛍️ le SITE (accueil) et ⚙️ l'ADMIN (Gestion).
+- **Principe** : mêmes couleurs de marque (or #c9a24b/#a98935/#e2c67e, crème #fbf7ee/#f3e8d3, encre #1a1206/#241a0c), nouveau décor « écrin de bijouterie ».
+- **Site** : bandeau d'entrée SOMBRE (encre + halo or, photo cristal dans cadre doré double filet + reflet balayant + trait laser qui se grave sous le titre) · ruban marquee doré défilant (France ✦ 4,9/5 ✦ Europe…) · univers en mosaïque asymétrique 4 photos avec zoom au survol · cartes produit à cadre fin doré (photo zoome, carte se soulève, liseré blanc intérieur au survol) · 3 étapes « Comment ça marche » (bord haut doré) · avis en grande citation serif italique qui tourne toutes les ~5 s · bande finale sombre « Sur mesure » · apparitions douces au scroll (IntersectionObserver `.rv/.in`), `prefers-reduced-motion` respecté.
+- **Admin** : menu latéral SOMBRE groupé (vraies rubriques de /gestion) avec pastilles dorées de compteurs · « Bonjour 👋 » + 4 tuiles chiffres (liseré or à gauche, tabular-nums) · commandes avec chips de statut (À préparer sable/or, À graver mauve, Expédiée verte, Livrée grise) · stock en barres (orange = bas, rouge RUPTURE) · panneau « À faire aujourd'hui » · panneau Assistant. Mobile : menu horizontal défilant.
+
 ### RÈGLE — RESPECTER LES TESTS / MAQUETTES VALIDÉS (TRÈS IMPORTANTE, demande explicite)
 - Quand une **maquette / un test** (artifact) est validé par la gérante, il faut le **REPRODUIRE FIDÈLEMENT** sur le vrai site — **copier** le rendu du test, juste **l'adapter** aux couleurs/structure du site. NE PAS réinventer un rendu différent, sinon « les tests ne servent à rien ».
 - **TESTER SOI-MÊME le rendu** (rendu HTML → screenshot via Chromium headless : `/opt/pw-browsers/chromium-1194/chrome-linux/chrome --headless --screenshot=...`) AVANT de dire à la gérante que c'est bon. Ne pas lui faire vérifier chaque détail.
