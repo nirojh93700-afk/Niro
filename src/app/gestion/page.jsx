@@ -36,7 +36,7 @@ export default function GestionPage() {
   const [firebase, setFirebase] = useState(null);
   const [orders, setOrders] = useState([]);
   const [ordersReady, setOrdersReady] = useState(false);
-  const [tab, setTab] = useState("commandes");
+  const [tab, setTab] = useState("accueil");
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [error, setError] = useState("");
@@ -541,6 +541,19 @@ export default function GestionPage() {
   });
   const segColors = { VIP: "#8a6d3b", "Fidèle": "#256b34", Nouvelle: "#5b6b8a" };
 
+  // ---- Tableau de bord (accueil) : données réelles ----
+  const enGravure = orders.filter((o) => !o.test && (o.status || "a_preparer") === "en_gravure").length;
+  const recentOrders = [...orders]
+    .filter((o) => !o.test)
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+    .slice(0, 5);
+  const DASH_CHIPS = {
+    a_preparer: ["prep", "À préparer"], en_gravure: ["grav", "En gravure"],
+    expediee: ["exp", "Expédiée"], livree: ["liv", "Livrée"],
+    annulee: ["ann", "Annulée"], remboursee: ["ann", "Remboursée"],
+  };
+  const dashDate = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+
   return (
     <section className="section admin-section">
       <div className="container admin-shell">
@@ -550,6 +563,9 @@ export default function GestionPage() {
             <h2>Mon site</h2>
           </div>
           <nav className="admin-sidebar-nav">
+          <div className="admin-side-group">
+            <button className={`admin-side-item ${tab === "accueil" ? "active" : ""}`} onClick={() => setTab("accueil")}>🏠 Accueil</button>
+          </div>
           {[
             {
               label: "Commandes",
@@ -636,6 +652,74 @@ export default function GestionPage() {
         <DeclarationReminder />
 
         {error && <div className="notice">{error}</div>}
+
+        {/* ---------------- ACCUEIL (tableau de bord) ---------------- */}
+        {tab === "accueil" && (
+          <>
+            <div className="dash-top">
+              <div className="dash-hi">
+                <h1>Bonjour 👋</h1>
+                <p style={{ textTransform: "capitalize" }}>{dashDate} · voici ce qui se passe sur votre boutique.</p>
+              </div>
+              <div className="dash-actions">
+                <button type="button" className="dash-abtn gold" onClick={() => setTab("produits")}>+ Ajouter un produit</button>
+                <button type="button" className="dash-abtn" onClick={() => setTab("promos")}>🏷️ Remise rapide</button>
+                <button type="button" className="dash-abtn" onClick={() => setTab("stats")}>📊 Statistiques</button>
+              </div>
+            </div>
+
+            <div className="dash-tiles">
+              <div className="dash-tile"><small>À préparer</small><b>{aPreparer}</b></div>
+              <div className="dash-tile"><small>CA — ce mois</small><b>{formatEuro(caThisMonth)}</b></div>
+              <div className="dash-tile"><small>Commandes</small><b>{validOrders.length}</b></div>
+              <div className="dash-tile"><small>Clientes</small><b>{clients.length}</b></div>
+            </div>
+
+            <div className="dash-two">
+              <div className="dash-panel">
+                <div className="dash-ph"><h3>Dernières commandes</h3><button type="button" onClick={() => setTab("commandes")}>Tout voir →</button></div>
+                {recentOrders.length === 0 ? (
+                  <p style={{ padding: "16px 18px", color: "var(--ink-soft)", margin: 0 }}>Aucune commande pour le moment.</p>
+                ) : recentOrders.map((o) => {
+                  const [cls, label] = DASH_CHIPS[o.status || "a_preparer"] || ["prep", "À préparer"];
+                  const summary = (o.items || []).map((i) => i.name).filter(Boolean).slice(0, 2).join(", ") || "Commande";
+                  return (
+                    <div className="dash-orow" key={o.id}>
+                      <span className="id">#{o.ref || o.id?.slice(-6)}</span>
+                      <span>{summary}<br /><span className="who">{o.customerName || o.customerEmail || "—"}</span></span>
+                      <span className="pr">{formatEuro(o.total)}</span>
+                      <span className={`dash-chip ${cls}`}>{label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="dash-panel">
+                <div className="dash-ph"><h3>À faire</h3></div>
+                <button type="button" className="dash-todo" onClick={() => setTab("commandes")}>
+                  <span className="ic">📦</span>
+                  <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir les commandes" : "Rien en attente 🎉"}</small></span>
+                  <span className="go">→</span>
+                </button>
+                <a href="/gestion/atelier" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
+                  <span className="ic">🥃</span>
+                  <span><b>Atelier — pièces à graver</b><small>Visuels &amp; fichiers à graver{enGravure > 0 ? ` · ${enGravure} en gravure` : ""}</small></span>
+                  <span className="go">→</span>
+                </a>
+                <button type="button" className="dash-todo" onClick={() => setTab("avis")}>
+                  <span className="ic">⭐</span>
+                  <span><b>Avis clients</b><small>Valider ou masquer les avis</small></span>
+                  <span className="go">→</span>
+                </button>
+                <button type="button" className="dash-todo" onClick={() => setTab("stock")}>
+                  <span className="ic">📊</span>
+                  <span><b>Stock</b><small>Vérifier les ruptures et réapprovisionner</small></span>
+                  <span className="go">→</span>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* ---------------- COMMANDES ---------------- */}
         {tab === "commandes" && (
