@@ -191,6 +191,7 @@ export async function POST(req) {
           name: product.name,
           description: descriptionParts.join(" — "),
           images: (product.images.map(absoluteImage).filter(Boolean)).slice(0, 1),
+          metadata: { slug: product.slug }, // pour l'e-mail « laisser un avis » (lien direct vers le produit)
         },
       },
     });

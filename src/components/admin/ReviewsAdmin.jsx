@@ -2,9 +2,17 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-export default function ReviewsAdmin({ adminKey }) {
+export default function ReviewsAdmin({ adminKey, products = [] }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Nom lisible du produit à partir de son identifiant (repli : l'identifiant).
+  const nameBySlug = {};
+  (products || []).forEach((p) => { if (p && p.slug) nameBySlug[p.slug] = p.name || p.slug; });
+  const ProductTag = ({ slug }) => (
+    <a href={`/produit/${slug}#avis`} target="_blank" rel="noreferrer" className="admin-cat" style={{ textDecoration: "none" }} title="Voir la fiche produit">
+      {nameBySlug[slug] || slug}
+    </a>
+  );
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -43,7 +51,7 @@ export default function ReviewsAdmin({ adminKey }) {
         <div key={r.id} className="admin-block">
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
             <strong>{r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span></strong>
-            <span className="admin-cat">{r.slug}</span>
+            <ProductTag slug={r.slug} />
           </div>
           <p style={{ whiteSpace: "pre-line", margin: "6px 0 10px" }}>{r.text}</p>
           {r.photo ? <img src={r.photo} alt="" style={{ maxWidth: 140, borderRadius: 8, marginBottom: 10, display: "block" }} /> : null}
@@ -59,7 +67,7 @@ export default function ReviewsAdmin({ adminKey }) {
         <div key={r.id} className="admin-block" style={{ opacity: 0.85 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
             <strong>{r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span></strong>
-            <span className="admin-cat">{r.slug}</span>
+            <ProductTag slug={r.slug} />
           </div>
           <p style={{ whiteSpace: "pre-line", margin: "6px 0 10px" }}>{r.text}</p>
           {r.photo ? <img src={r.photo} alt="" style={{ maxWidth: 140, borderRadius: 8, marginBottom: 10, display: "block" }} /> : null}

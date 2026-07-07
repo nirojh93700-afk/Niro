@@ -1101,7 +1101,7 @@ export default function GestionPage() {
 
 
         {/* ---------------- AVIS ---------------- */}
-        {tab === "avis" && <ReviewsAdmin adminKey={key} />}
+        {tab === "avis" && <ReviewsAdmin adminKey={key} products={editable} />}
 
         {/* ---------------- NEWSLETTER ---------------- */}
         {tab === "newsletter" && <NewsletterAdmin adminKey={key} />}

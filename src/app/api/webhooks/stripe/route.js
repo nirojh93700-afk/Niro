@@ -432,6 +432,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       items: (session.line_items?.data || []).map((li) => ({
         name: li.price?.product?.name || li.description || "",
         details: li.price?.product?.description || "",
+        slug: li.price?.product?.metadata?.slug || "", // pour le lien avis direct
         quantity: li.quantity,
         total: (li.amount_total || 0) / 100,
       })),
