@@ -652,27 +652,31 @@ export const products = [
     weight: 320,
     pickup: false, // envoi seul (retrait auto si lourd)
     letter: false,
-    title: "Pyramide en cristal — gravure texte personnalisée",
+    title: "Pyramide en cristal — gravure photo 3D personnalisée",
     subcategory: "cristal",
     crystal3d: true,
     category: "cristal",
     type: "Pyramide cristal gravée",
-    tagline: "Une pyramide en cristal, gravée avec le texte de votre choix (prénom, date, petit mot).",
+    tagline: "Une pyramide en cristal, avec votre photo gravée en 3D à l'intérieur.",
+    // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
+    // remettre ces 2 champs (et retirer la photo) pour restaurer la gravure texte :
+    // { key: "texte", type: "textarea", label: "Texte à graver (prénom, date, petit mot…)", placeholder: "Ex :\nFamille Martin\n2026", maxLength: 90 },
+    // { key: "police", type: "font", label: "Police" },
     personalizable: true,
-    personalizationLabel: "Texte à graver",
+    personalizationLabel: "Photo à graver en 3D",
     personalizationFields: [
-      { key: "texte", type: "textarea", label: "Texte à graver (prénom, date, petit mot…)", placeholder: "Ex :\nFamille Martin\n2026", maxLength: 90 },
-      { key: "police", type: "font", label: "Police" },
+      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec le(s) visage(s) bien visible(s)." },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
     ],
     images: ["/produits/pyramide_en_verre_de_cristal_50mm.jpg"],
     variants: [{ id: "pyramide-cristal-50mm", title: "50 mm", price: 39.9 }],
     descriptionHtml: `<p><strong>Offrez un souvenir gravé pour l'éternité.</strong></p>
-<p>Le texte de votre choix (prénom, date, dédicace) est gravé en profondeur à l'intérieur d'un cristal optique K9 d'une grande pureté, au laser de précision — un effet saisissant, encore sublimé posé sur un socle lumineux LED.</p>
+<p>La photo de votre choix est gravée en 3D en profondeur à l'intérieur d'un cristal optique K9 d'une grande pureté, au laser de précision — un effet saisissant, encore sublimé posé sur un socle lumineux LED.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matériau :</strong> cristal optique K9 haute pureté</li>
 <li><strong>Format :</strong> pyramide 50 mm</li>
-<li><strong>Gravure :</strong> texte gravé en profondeur au laser</li>
+<li><strong>Gravure :</strong> photo gravée en 3D en profondeur au laser</li>
 <li><strong>Idéal :</strong> cadeau souvenir, naissance, mariage, hommage</li>
 </ul>
 <p><em>Un socle lumineux LED est disponible séparément.</em></p>`,
@@ -787,8 +791,9 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
-      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
-      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+      // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
+      // { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
+      // { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
@@ -831,8 +836,9 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
-      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
-      { key: "police", type: "font", label: "Police (si texte)", optional: true },
+      // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
+      // { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
+      // { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "Pour un beau rendu : photo nette et bien éclairée, visage(s) au centre avec un peu d'espace autour. Évitez les photos sombres, trop serrées ou avec le visage caché." },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. La forme du socle s'adapte à la taille choisie." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },

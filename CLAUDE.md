@@ -224,6 +224,12 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Retrait en main propre** : déco/mariage **uniquement** (jamais les bijoux = livraison seule), gratuit,
   sur rendez-vous, limité par code postal (95 + voisins : 78, 92, 93, 75, 60), adresse jamais publiée.
 
+### TEXTE RETIRÉ DES CRISTAUX — TEMPORAIRE (07/07/2026, À REMETTRE quand la gérante le dira)
+> Le champ « texte à graver » a été retiré des cristaux ; **tout est sauvegardé en commentaire** dans `src/lib/products.js` (chercher « TEXTE RETIRÉ TEMPORAIREMENT »). Pour remettre : décommenter les champs `texte`/`police`.
+- **Blocs vertical + horizontal** : photo uniquement (texte optionnel retiré, en commentaire).
+- **Pyramide** (`pyramide-cristal-gravure-3d`) : passée de TEXTE → **PHOTO** (photo 3D + guide). Le texte d'origine (textarea+police) est en commentaire ; titre/tagline/description mis à jour en « photo ». Pour revenir au texte : remettre les 2 champs commentés, retirer le champ photo, et remettre les libellés « texte ».
+- **Porte-clés cristal** (Cœur, Rectangle) : déjà photo uniquement (jamais de texte).
+
 ### RÈGLE DE COMMUNICATION (importante)
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
