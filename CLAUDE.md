@@ -234,6 +234,12 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
 
+### MAQUETTES CRISTAL 3D SUR MESURE — ENREGISTRÉES (08/07/2026, à appliquer quand la gérante le dira)
+> Deux maquettes validées en test, **sauvegardées telles quelles** dans `docs/maquettes/`. Quand la gérante dit « mets-le / applique », reproduire **EXACTEMENT** (règle maquettes). Décision : proposer **LES DEUX** (modèles prêts + photo perso), **même prix que les blocs par taille** (Petit 39,90 · Moyen 59,90 · Grand 99,90 · XL 149,90).
+- **`docs/maquettes/cristal-surmesure-section.html`** : section à ajouter en haut de `/cristaux` — titre « Gravez ce que vous voulez dans le cristal », tags (Photo/Animal/Dessin/Logo/Objet — **PAS** Couple&famille, déjà couvert par les blocs photo), 3 étapes, **galerie de 8 exemples** (cœur, sirène, dessin enfant, baleines, oiseaux, colibri, portrait, objet/échecs — images fournies par la gérante, IMG_9083..9089 + 8958), 2 cartes format (vertical/horizontal) → boutons vers les blocs.
+- **`docs/maquettes/cristal-configurateur.html`** : configurateur d'achat — le client choisit un **modèle prêt** (les 8) OU **« Ma propre photo »**, puis **format** (vertical/horizontal) + **taille** (prix des blocs), aperçu à gauche, total + « Ajouter au panier ». À brancher au panier/paiement existant (modèle prêt = achat direct ; photo perso = upload comme les blocs actuels).
+- **À vérifier côté gérante** : que le fournisseur peut produire ces modèles (cœur, sirène, échecs… = modèles standards, normalement oui).
+
 ### MAQUETTE EN ATTENTE — NOUVEAU THÈME « L'ÉCRIN » (enregistrée le 06/07/2026, à appliquer PLUS TARD)
 > La gérante a demandé d'**enregistrer la maquette telle quelle** pour l'appliquer plus tard. Quand elle dira « applique le nouveau thème » : **reproduire EXACTEMENT** cette maquette (règle ci-dessous), sans réinventer.
 - **Fichier** : `docs/maquettes/theme-ecrin.html` (autonome, images intégrées — ouvrir dans un navigateur pour revoir). Artifact : https://claude.ai/code/artifact/3e4f0c71-7b5c-4288-84cf-831970af0ab7
