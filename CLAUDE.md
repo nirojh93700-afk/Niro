@@ -1,5 +1,13 @@
 # Guide agent — Boutique Niv Création
 
+## 🛒 METTRE UN PRODUIT SUR ETSY — RECETTE ENREGISTRÉE (08/07/2026)
+> Quand la gérante dit « mets ce produit sur Etsy », suivre **`docs/etsy/RECETTE-ETSY.md`** (recette complète + textes prêts dans `docs/etsy/`).
+- **Méthode** : la gérante utilise **Claude pour Chrome** (extension navigateur). Nous, on ne touche PAS à Etsy — on **prépare un TEXTE** qu'elle colle dans Claude pour Chrome, qui remplit les fiches à sa place. Boutique : **NivCreationArtisanat**.
+- **PRIX ETSY = prix du site × 1,45** (arrondi ,90 sup.) : couvre frais Etsy ~14 % + remise boutique 10 % + pubs ~13 %. Ex. blocs : Petit 57,90 · Moyen 86,90 · Grand 144,90 · XL 217,90 · socle 21,90/28,90.
+- **Règles du texte** : français, pas d'emojis, personnalisé = fait à la commande, **brouillon** (ne rien publier), fiches une par une, INTERDICTION de toucher aux bijoux/autres produits. Photos = garder le site ouvert dans un onglet (Claude pour Chrome les récupère). Perso = champ « Photo à graver » obligatoire.
+- **Livraison** : profils par type — blocs lourds France 12,90 / EU 29,90 ; socle léger France 6,90 / EU 14,90 ; bijoux = petit colis. Ne jamais laisser le tarif bijoux sur du lourd.
+- **Socle en option** : soit fiche séparée (simple), soit 2e variation « Socle » + prix varient sur les 2 variations = 8 prix totaux (détaillé dans la recette).
+
 ## 🚚 INTÉGRATION BOXTAL (point relais / transporteurs) — CONNEXION RÉSOLUE (03/07/2026)
 > API v3 Boxtal. La connexion fonctionne : ne PAS repartir de zéro.
 - **Auth = OAuth client_credentials en Basic Auth** sur `POST https://api.boxtal.com/iam/account-app/token` (test : `api.boxtal.build`). Renvoie `{accessToken}` (JWT, ~1h).

@@ -1,0 +1,33 @@
+RÔLE
+Tu continues sur ma boutique Etsy « Niv Création ». Il faut PARAMÉTRER LA LIVRAISON UNIQUEMENT pour mes 2 BLOCS de cristal photo 3D (le vertical ET l'horizontal). NE TOUCHE À AUCUN AUTRE PRODUIT (ni pyramide, ni porte-clés, ni bijoux, ni rien d'autre) — SEULEMENT ces 2 blocs. Actuellement la livraison a été prise par défaut comme pour les bijoux : c'est TROP BAS. Les cristaux sont lourds et fragiles, il faut des frais de port plus élevés, sinon je perds de l'argent.
+
+CE QU'IL FAUT FAIRE
+Crée un profil de livraison dédié « Blocs cristal » (Etsy > Paramètres de la boutique > Options d'expédition > Nouveau profil d'expédition), puis applique-le aux 2 fiches de blocs cristal. Si tu ne peux pas créer un profil, modifie directement la livraison sur chaque fiche.
+
+RÉGLAGES DE LIVRAISON À METTRE
+- Lieu d'expédition : France.
+- Délai de préparation (fabrication à la commande) : 1 à 2 semaines.
+- Tarifs FIXES par destination :
+    • France : 12,90 €
+    • Union Européenne : 29,90 €
+    • Reste du monde : DÉSACTIVÉ (ne pas expédier pour l'instant). Si Etsy oblige un tarif monde, mets 49,90 €.
+- « Article supplémentaire » (si le client en commande plusieurs) : +8,00 € par article en plus (France), +18,00 € (Europe).
+- PAS de livraison gratuite : ces cristaux sont lourds, la livraison doit être payante.
+
+IMPORTANT
+- Applique ces réglages UNIQUEMENT aux DEUX fiches : « Cristal photo 3D vertical » ET « Cristal photo 3D horizontal ». Aucune autre fiche ne doit être modifiée.
+- Laisse les fiches en BROUILLON. Ne publie rien sans mon accord.
+- Quand c'est fait, dis-moi « Livraison paramétrée sur les 2 blocs » et montre-moi un récap des tarifs que tu as mis. Si un champ te bloque (ex. calcul automatique, poids demandé), demande-moi.
+
+
+⚠️ INTERDICTION ABSOLUE
+- Ne modifie AUCUN prix et AUCUN réglage des BIJOUX (ni leur livraison, ni leur profil d'expédition, ni leurs fiches).
+- Ne touche à aucun réglage global de la boutique ni au profil de livraison des bijoux.
+- Tu changes UNIQUEMENT la livraison des 2 blocs cristal. Tout le reste (bijoux, autres cristaux, réglages) doit rester EXACTEMENT comme avant. Si tu as un doute, demande-moi avant de modifier quoi que ce soit.
+
+INFO POIDS (si Etsy demande le poids et les dimensions du colis, par taille) :
+    • Petit : 0,75 kg — 8×5×5 cm
+    • Moyen : 1,1 kg — 10×6×5 cm
+    • Grand : 1,8 kg — 12×8×6 cm
+    • XL : 2,8 kg — 15×10×6 cm
+  (emballage fragile inclus)

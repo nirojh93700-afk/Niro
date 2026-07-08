@@ -1,0 +1,27 @@
+CONTEXTE
+Sur ma fiche de bloc cristal (celle ouverte : Cristal photo 3D), je veux ajouter le SOCLE LUMINEUX en OPTION payante, en plus de la variation Taille qui existe déjà (Petit/Moyen/Grand/XL). Sur Etsy, il faut une 2e variation « Socle » et activer les prix sur les 2 variations : le prix de chaque combinaison est le PRIX TOTAL.
+
+À FAIRE (onglet « Options de l'article » puis « Prix et stock »)
+1. Garde la variation « Taille » existante (Petit, Moyen, Grand, XL).
+2. Ajoute une 2e variation nommée « Socle » avec 2 options EXACTEMENT :
+     - « Sans socle »
+     - « Avec socle LED »
+3. Active « Les prix varient » sur la variation « Socle » (la Taille a déjà les prix). Le but : obtenir un prix pour CHAQUE combinaison Taille × Socle (8 lignes).
+4. Renseigne les 8 PRIX TOTAUX suivants (ce sont des prix complets, pas des suppléments) :
+     - Petit + Sans socle : 57,90 €
+     - Petit + Avec socle LED : 79,80 €
+     - Moyen + Sans socle : 86,90 €
+     - Moyen + Avec socle LED : 115,80 €
+     - Grand + Sans socle : 144,90 €
+     - Grand + Avec socle LED : 173,80 €
+     - XL + Sans socle : 217,90 €
+     - XL + Avec socle LED : 246,80 €
+5. Quantité : 10 pour chaque (ou laisse la quantité gérée par la Taille si Etsy ne permet qu'une variation pour le stock).
+6. Dans la description, précise : « Petit socle carré pour la taille Petit ; grand socle rectangle pour Moyen, Grand et XL. Livré avec câble USB et prise. »
+7. Enregistre en BROUILLON. Ne publie pas sans mon accord.
+
+SI ÇA BLOQUE
+- Si Etsy ne te laisse pas faire varier le prix par les 2 variations, dis-le moi tout de suite (on fera le socle en fiche séparée à la place). N'invente pas de prix.
+
+INTERDICTION
+- Ne touche à aucun autre produit ni réglage. Uniquement cette fiche de bloc.
