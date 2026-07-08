@@ -98,6 +98,11 @@ def tts(text,dst):
 def clean(t):
     t=re.sub(r"\s+"," ",t or "").strip()
     return t
+def short(t,maxlen=78):
+    t=clean(t)
+    if len(t)<=maxlen: return t
+    cut=t[:maxlen].rsplit(" ",1)[0].rstrip(" ,;:—-")
+    return cut+"…"
 def euro(p):
     if p is None: return ""
     s=("%.2f"%float(p)).replace(".",",")
@@ -109,10 +114,8 @@ def photo_captions(prod, n):
     name=prod["name"]
     tl=clean(prod["tagline"])
     bl=[clean(b) for b in prod.get("bullets",[]) if clean(b)]
-    # titre court = 2-3 mots depuis le nom
-    short=name
     # 1re photo : nom + tagline
-    caps.append((name, tl[:80], tl or f"Découvrez {name}."))
+    caps.append((name, short(tl), tl or f"Découvrez {name}."))
     # photos suivantes : puiser dans les bullets
     pool=bl[:]
     fallback=[
@@ -128,9 +131,9 @@ def photo_captions(prod, n):
             # séparer "Label : valeur"
             if " : " in b:
                 lab,val=b.split(" : ",1)
-                caps.append((lab.strip().capitalize(), val.strip()[:80], f"{lab.strip()} : {val.strip()}"))
+                caps.append((lab.strip().capitalize(), short(val), f"{lab.strip()} : {val.strip()}"))
             else:
-                caps.append((short, b[:80], b))
+                caps.append((name, short(b), b))
         else:
             t,su,vo=fallback[fi%len(fallback)];fi+=1
             caps.append((t,su,vo))
