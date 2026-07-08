@@ -12,7 +12,14 @@ import imageio_ffmpeg, imageio
 OUT="/tmp/claude-0/-home-user-Niro/376b8974-977b-5216-a92d-7f2497266b32/scratchpad"
 FF=imageio_ffmpeg.get_ffmpeg_exe()
 W,H,FPS,SR=1080,1920,30,44100
-GOLD=(201,162,75);CREAM=(250,246,238);INK=(26,18,10);WHITE=(255,255,255);SOFT=(235,220,180)
+# Couleurs EXACTES du site (src/app/globals.css)
+GOLD=(194,161,78)       # --gold  #c2a14e
+GOLD_DARK=(169,137,53)  # --gold-dark #a98935
+CREAM=(250,246,239)     # --cream #faf6ef
+PAPER=(255,253,249)     # --paper #fffdf9
+INK=(43,38,32)          # --ink #2b2620
+INK_SOFT=(90,82,71)     # --ink-soft #5a5247
+WHITE=(255,255,255);SOFT=(235,220,180)
 SERIFB="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
 SANS="/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
 SANSB="/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
@@ -60,8 +67,8 @@ def wrap(d,t,f,mw):
 def overlay(title,sub):
     im=Image.new("RGBA",(W,H),(0,0,0,0))
     band=Image.new("L",(1,H),0);p=band.load()
-    for y in range(H):p[0,y]=int(225*max(0,(y-1040)/(H-1040))**1.08)
-    dark=Image.new("RGBA",(W,H),(14,10,6,255));dark.putalpha(band.resize((W,H)))
+    for y in range(H):p[0,y]=int(230*max(0,(y-1020)/(H-1020))**1.05)
+    dark=Image.new("RGBA",(W,H),(INK[0],INK[1],INK[2],255));dark.putalpha(band.resize((W,H)))
     im=Image.alpha_composite(im,dark);d=ImageDraw.Draw(im)
     d.line([(60,H-392),(180,H-392)],fill=GOLD,width=5)
     d.text((60,H-368),title,font=F(SERIFB,66),fill=GOLD)
@@ -70,24 +77,27 @@ def overlay(title,sub):
     d.text((60,H-84),"nivcreation.fr",font=F(SANSB,34),fill=SOFT)
     return im
 def card(big,small,big2=None,dark=False):
-    bg=INK if dark else CREAM
-    im=Image.new("RGB",(W,H),bg);d=ImageDraw.Draw(im)
-    d.rectangle([0,0,W,14],fill=GOLD);d.rectangle([0,H-14,W,H],fill=GOLD)
-    if dark:
-        halo=Image.new("L",(W,H),0);hd=ImageDraw.Draw(halo)
-        hd.ellipse([W//2-460,H//2-560,W//2+460,H//2-40],fill=70)
-        halo=halo.filter(ImageFilter.GaussianBlur(120))
-        gold=Image.new("RGB",(W,H),GOLD);im=Image.composite(gold,im,halo)
-        d=ImageDraw.Draw(im)
+    # Carte CLAIRE (crème) comme le site, filets or, titre or, sous-titre encre
+    im=Image.new("RGB",(W,H),CREAM);d=ImageDraw.Draw(im)
+    # léger dégradé crème → paper vers le haut (comme les sections du site)
+    grad=Image.new("L",(1,H),0);gp=grad.load()
+    for y in range(H):gp[0,y]=int(255*(1-y/H))
+    paper=Image.new("RGB",(W,H),PAPER)
+    im=Image.composite(paper,im,grad.resize((W,H)))
+    d=ImageDraw.Draw(im)
+    # filets or haut/bas (dégradé or → or foncé comme les boutons du site)
+    d.rectangle([0,0,W,12],fill=GOLD);d.rectangle([0,H-12,W,H],fill=GOLD_DARK)
     fB=F(SERIFB,92)
-    lines=wrap(d,big,fB,W-140);y=H//2-150-((len(lines)-1)*56)
+    lines=wrap(d,big,fB,W-140);y=H//2-160-((len(lines)-1)*56)
     for ln in lines:
-        wb=d.textlength(ln,font=fB);d.text(((W-wb)//2,y),ln,font=fB,fill=GOLD);y+=110
+        wb=d.textlength(ln,font=fB);d.text(((W-wb)//2,y),ln,font=fB,fill=GOLD_DARK);y+=110
+    # petit filet or centré
+    d.line([(W//2-70,y+6),(W//2+70,y+6)],fill=GOLD,width=4)
     fS=F(SANS,50);ws=d.textlength(small,font=fS)
-    d.text(((W-ws)//2,y+18),small,font=fS,fill=(WHITE if dark else INK))
+    d.text(((W-ws)//2,y+30),small,font=fS,fill=INK)
     if big2:
         f2=F(SANSB,42);w2=d.textlength(big2,font=f2)
-        d.text(((W-w2)//2,y+96),big2,font=f2,fill=SOFT if dark else (120,100,60))
+        d.text(((W-w2)//2,y+108),big2,font=f2,fill=INK_SOFT)
     return im
 def tts(text,dst):
     mp3=dst.replace(".wav",".mp3")
@@ -102,13 +112,13 @@ def tts(text,dst):
 segs=[]
 ZW,ZH=int(W*1.20),int(H*1.20)
 di=tts(INTRO_VO,f"{OUT}/CVi.wav")
-segs.append({"kind":"card","img":card("Couverts enfants","Personnalisés, gravés au laser",dark=True).convert("RGB"),"ov":None,"dur":max(MIN,PRE+di+0.35),"vo":f"{OUT}/CVi.wav"})
+segs.append({"kind":"card","img":card("Couverts enfants","Personnalisés, gravés au laser").convert("RGB"),"ov":None,"dur":max(MIN,PRE+di+0.35),"vo":f"{OUT}/CVi.wav"})
 for i,(f,title,sub,vo) in enumerate(P):
     src=dl(f);im=Image.open(src).convert("RGB");zi=cover(im,ZW,ZH)
     ov=overlay(title,sub);dv=tts(vo,f"{OUT}/CV{i}.wav")
     segs.append({"kind":"prod","img":zi,"ov":ov,"dur":max(MIN,PRE+dv+0.4),"vo":f"{OUT}/CV{i}.wav","dir":i%2})
 dc=tts(CTA_VO,f"{OUT}/CVc.wav")
-segs.append({"kind":"card","img":card("34,90 €","Livraison offerte","nivcreation.fr",dark=True).convert("RGB"),"ov":None,"dur":max(MIN,PRE+dc+0.55),"vo":f"{OUT}/CVc.wav"})
+segs.append({"kind":"card","img":card("34,90 €","Livraison offerte","nivcreation.fr").convert("RGB"),"ov":None,"dur":max(MIN,PRE+dc+0.55),"vo":f"{OUT}/CVc.wav"})
 
 def render_seg(s):
     nf=max(1,int(round(s["dur"]*FPS)));frames=[]
