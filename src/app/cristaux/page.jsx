@@ -3,6 +3,7 @@
 // (vertical / horizontal…), puis la taille et le prix sur la fiche.
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import CristalVivant from "@/components/CristalVivant";
 import { getCatalog } from "@/lib/catalog";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 
@@ -35,24 +36,11 @@ export default async function CristauxPage() {
 
   return (
     <>
-      {/* BANNIÈRE */}
-      <section style={{ position: "relative", overflow: "hidden", textAlign: "center", padding: "clamp(40px,7vw,72px) 18px",
-        background: "radial-gradient(90% 120% at 85% 8%, rgba(201,162,75,.20), transparent 55%), radial-gradient(80% 100% at 5% 100%, rgba(201,162,75,.14), transparent 55%), linear-gradient(160deg,#faf5ea,#f1e6d2 78%)" }}>
-        <div className="container" style={{ maxWidth: 760 }}>
-          <span style={{ display: "inline-block", border: "1px solid rgba(201,162,75,.55)", color: "#a5822f", fontWeight: 700, letterSpacing: 2, fontSize: "0.74rem", padding: "7px 14px", borderRadius: 999, textTransform: "uppercase" }}>
-            Fait main en France
-          </span>
-          <h1 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(2.1rem,6vw,3.2rem)", margin: "16px 0 10px", color: "#241a0c", lineHeight: 1.08 }}>
-            Cristal Photo 3D
-          </h1>
-          <p style={{ fontSize: "clamp(1rem,3vw,1.2rem)", color: "#6f6453", margin: 0 }}>
-            Votre photo sculptée en 3D au cœur d'un cristal K9. Choisissez votre version, votre taille — et nous gravons le reste.
-          </p>
-        </div>
-      </section>
+      {/* EXPÉRIENCE ANIMÉE (maquette cristal-vivant validée) */}
+      <CristalVivant />
 
       {/* COLLECTION */}
-      <section className="section">
+      <section className="section" id="cristaux-collection">
         <div className="container">
           {items.length === 0 ? (
             <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>La collection arrive très bientôt. 💎</p>
