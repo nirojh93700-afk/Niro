@@ -1,49 +1,63 @@
 "use client";
-// Bannière animée AUTOMATIQUE de /cristaux (version compacte demandée par la gérante) :
-// l'animation se joue toute seule, sur UN seul écran — le laser grave la photo dans le
-// cristal (étincelles + reflet), puis le socle multicolore s'allume en continu.
-// Les produits arrivent juste en dessous : pas de long défilement.
+// Haut de /cristaux en MULTI-FENÊTRES (bento) — reproduction fidèle de la maquette
+// validée docs/maquettes/cristal-multifenetres.html : tout est visible d'un coup,
+// la grande fenêtre joue l'animation de gravure laser toute seule (puis socle
+// multicolore en continu), chaque fenêtre clique vers sa fiche.
 // Respecte prefers-reduced-motion (photo affichée directement, sans effets).
 import { useEffect, useRef } from "react";
-
-const IMG_COUPLE = "/produits/cristal-v-couple.jpg";
+import Link from "next/link";
 
 const CSS = `
-#cv-hero{position:relative;min-height:92svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6vh;overflow:hidden;padding:26px 0 30px;background:linear-gradient(180deg,#fffdf9,#faf6ef 40%,#f3ece0)}
-#cv-hero .cv-kicker{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#a98935}
-#cv-hero h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(24px,6.4vw,42px);color:#2b2620;text-align:center;line-height:1.12;padding:0 24px;margin:6px 0 0}
-#cv-hero h1 em{font-style:normal;color:#a98935}
-.cv-stage{position:relative;width:min(84vw,480px)}
-.cv-frame{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 26px 54px rgba(43,38,32,.26),0 0 0 1px rgba(194,161,78,.35);aspect-ratio:760/481;background:#f3ece0}
-.cv-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.cv-photo{clip-path:inset(0 0 100% 0)}
-.cv-blank{display:flex;align-items:center;justify-content:center;position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 20%,#fffdf8,#f0e8d8 70%,#e7dcc5)}
-.cv-blank .cv-ghost{width:36%;aspect-ratio:2/3;border-radius:8px;border:1.5px solid rgba(194,161,78,.55);background:linear-gradient(115deg,rgba(255,255,255,.85),rgba(240,232,214,.35) 45%,rgba(255,255,255,.7));box-shadow:inset 0 0 22px rgba(194,161,78,.18)}
-.cv-laser{position:absolute;left:-4%;width:108%;height:3px;z-index:4;border-radius:3px;background:linear-gradient(90deg,transparent,#fff 18%,#e2c67e 50%,#fff 82%,transparent);box-shadow:0 0 14px 3px rgba(226,198,126,.95),0 0 40px 10px rgba(226,198,126,.5);opacity:0}
-.cv-laser .cv-ldot{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0 30%,#e2c67e 60%,transparent 70%);box-shadow:0 0 22px 8px rgba(255,246,220,.95)}
-.cv-spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 8px 2px rgba(255,250,230,.9);opacity:0;z-index:3}
-.cv-halo{position:absolute;inset:-26%;z-index:-1;pointer-events:none;background:radial-gradient(circle at 50% 55%,rgba(226,198,126,.5),rgba(226,198,126,0) 60%);opacity:.25}
-.cv-sweep{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.75) 50%,rgba(255,255,255,.5) 54%,transparent 70%);transform:translateX(-120%)}
-.cv-ledglow{position:absolute;left:10%;right:10%;bottom:-11%;height:30%;border-radius:50%;filter:blur(20px);opacity:0;z-index:-1}
-.cv-rim{position:absolute;inset:0;border-radius:14px;mix-blend-mode:screen;pointer-events:none;z-index:2}
-.cv-cap{min-height:30px;text-align:center;font-size:clamp(15px,4.2vw,20px);color:#2b2620;padding:0 26px;position:relative;width:100%}
-.cv-cap p{position:absolute;left:0;right:0;top:0;opacity:0;margin:0;transition:opacity .35s}
-.cv-cap p b{color:#a98935}
-.cv-down{display:inline-flex;align-items:center;gap:8px;color:#a98935;font-weight:700;font-size:14px;text-decoration:none;border:1px solid rgba(194,161,78,.55);padding:9px 20px;border-radius:40px;background:rgba(255,253,249,.7)}
-.cv-down span{display:inline-block;animation:cvb 1.6s ease-in-out infinite}
-@keyframes cvb{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-@media (prefers-reduced-motion:reduce){
- .cv-photo{clip-path:none!important}.cv-laser,.cv-sweep{display:none!important}
- .cv-cap p:last-child{opacity:1!important}.cv-down span{animation:none}
+.cvb-wrap{max-width:1020px;margin:0 auto;padding:18px 14px 34px}
+.cvb-head{text-align:center;padding:14px 8px 14px}
+.cvb-head .cvb-k{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#a98935}
+.cvb-head h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(24px,6vw,40px);margin:6px 0 4px;color:#2b2620}
+.cvb-head h1 em{font-style:normal;color:#a98935}
+.cvb-head p{color:#5a5247;font-size:clamp(13px,3.6vw,16px);margin:0}
+.cvb{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto}
+.cvb-tile{position:relative;min-width:0;border-radius:16px;overflow:hidden;background:#fffdf9;box-shadow:0 10px 26px rgba(43,38,32,.12),0 0 0 1px rgba(194,161,78,.28)}
+.cvb-tile a.cvb-cover{position:absolute;inset:0;z-index:8}
+.cvb-img{position:relative;aspect-ratio:1/1}
+.cvb-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cvb-lab{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:22px 10px 9px;color:#fff;background:linear-gradient(transparent,rgba(23,15,6,.82));font-size:12.5px;text-align:center;line-height:1.35}
+.cvb-lab b{display:block;font-size:14px;color:#e2c67e}
+.cvb-price{position:absolute;top:8px;right:8px;z-index:3;background:rgba(255,253,249,.95);color:#2b2620;font-weight:700;font-size:11.5px;padding:4px 9px;border-radius:20px;border:1px solid #e7ddcd}
+#cvb-anim{grid-column:1 / -1}
+#cvb-anim .cvb-stage{position:relative;aspect-ratio:16/10;background:radial-gradient(120% 90% at 50% 18%,#fffdf8,#f0e8d8 70%,#e7dcc5)}
+#cvb-anim .cvb-ph{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);width:58%;max-width:330px;aspect-ratio:760/481;border-radius:10px;overflow:hidden;box-shadow:0 18px 40px rgba(43,38,32,.30),0 0 0 1px rgba(194,161,78,.4)}
+#cvb-anim .cvb-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(0 0 100% 0)}
+#cvb-anim .cvb-ghost{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34%;aspect-ratio:2/3;border-radius:6px;border:1.5px solid rgba(194,161,78,.5);background:linear-gradient(115deg,rgba(255,255,255,.8),rgba(240,232,214,.3) 45%,rgba(255,255,255,.65))}
+#cvb-anim .cvb-laser{position:absolute;left:-4%;width:108%;height:2.5px;border-radius:3px;opacity:0;z-index:4;background:linear-gradient(90deg,transparent,#fff 18%,#e2c67e 50%,#fff 82%,transparent);box-shadow:0 0 12px 3px rgba(226,198,126,.95),0 0 34px 9px rgba(226,198,126,.5)}
+#cvb-anim .cvb-glow{position:absolute;left:22%;right:22%;bottom:2%;height:16%;border-radius:50%;filter:blur(16px);opacity:0;z-index:1}
+#cvb-anim .cvb-cap{position:absolute;left:0;right:0;bottom:7px;z-index:5;text-align:center;font-size:clamp(12px,3.4vw,15px);color:#2b2620}
+#cvb-anim .cvb-cap b{color:#a98935}
+#cvb-anim .cvb-badge{position:absolute;top:9px;left:10px;z-index:5;background:rgba(43,38,32,.85);color:#e2c67e;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;padding:5px 10px;border-radius:20px}
+#cvb-socle .cvb-img{background:#17120c}
+#cvb-socle img{opacity:.94}
+#cvb-socle .cvb-lg{position:absolute;left:14%;right:14%;bottom:6%;height:26%;border-radius:50%;filter:blur(16px);z-index:2;opacity:.9}
+.cvb-info{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;aspect-ratio:1/1;text-align:center;padding:12px;background:linear-gradient(160deg,#fffdf9,#f6efe1)}
+.cvb-info .cvb-stars{color:#a98935;font-size:16px;letter-spacing:2px}
+.cvb-info b{font-family:Georgia,'Times New Roman',serif;font-size:15.5px;color:#2b2620}
+.cvb-info span{color:#5a5247;font-size:12px;line-height:1.4}
+#cvb-go{background:linear-gradient(150deg,#332a1d,#2b2620)}
+#cvb-go .cvb-info{background:none}
+#cvb-go b{color:#e2c67e;font-size:16px}
+#cvb-go span{color:#cfc6b2}
+#cvb-go .cvb-btn{margin-top:6px;background:linear-gradient(135deg,#c2a14e,#a98935);color:#fff;font-weight:700;font-size:13px;padding:9px 20px;border-radius:30px;box-shadow:0 8px 20px rgba(194,161,78,.4)}
+@media(min-width:760px){
+ .cvb{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #cvb-anim{grid-column:1/3;grid-row:1/3}
+ #cvb-anim .cvb-stage{height:100%;aspect-ratio:auto}
 }
+@media (prefers-reduced-motion:reduce){#cvb-anim .cvb-ph img{clip-path:none!important}#cvb-anim .cvb-laser{display:none}}
 `;
 
-// petites étincelles déterministes
-function seededSparks(n) {
-  let seed = 7;
-  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-  return Array.from({ length: n }, () => ({ x: 8 + rnd() * 84, y: 6 + rnd() * 88 }));
-}
+const CAPS = [
+  "Le laser <b>s'allume</b>…",
+  "Chaque détail se grave, <b>point par point</b>.",
+  "Votre souvenir <b>prend vie</b>.",
+  "Posé sur son <b>socle multicolore</b>.",
+];
 
 export default function CristalVivant() {
   const root = useRef(null);
@@ -51,92 +65,103 @@ export default function CristalVivant() {
   useEffect(() => {
     const R = root.current;
     if (!R) return;
-    const $ = (s) => R.querySelector(s);
     const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-    const lerp = (a, b, t) => a + (b - a) * t;
     const ease = (t) => t * t * (3 - 2 * t);
-
-    const photo = $(".cv-photo"), laser = $(".cv-laser"), ldot = $(".cv-ldot");
-    const halo = $(".cv-halo"), sweep = $(".cv-sweep");
-    const ledglow = $(".cv-ledglow"), rim = $(".cv-rim");
-    const caps = [...R.querySelectorAll(".cv-cap p")];
-    const sparks = [...R.querySelectorAll(".cv-spark")].map((e) => ({ e, y: parseFloat(e.dataset.y) }));
+    const ph = R.querySelector("#cvb-anim .cvb-ph img");
+    const la = R.querySelector("#cvb-anim .cvb-laser");
+    const gl = R.querySelector("#cvb-anim .cvb-glow");
+    const cap = R.querySelector("#cvb-anim .cvb-cap");
+    const slg = R.querySelector("#cvb-socle .cvb-lg");
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) { photo.style.clipPath = "none"; return; }
+    if (mq.matches) { ph.style.clipPath = "none"; cap.innerHTML = CAPS[3]; return; }
 
-    const T_GRAVE = 4.6;    // durée de la gravure
-    const T_SWEEP = 0.9;    // reflet après gravure
-    let raf = 0; const t0 = performance.now();
-
-    const frame = (now) => {
-      const t = (now - t0) / 1000;
-      // --- gravure automatique (une fois) ---
-      const reveal = ease(clamp(t / T_GRAVE, 0, 1));
-      photo.style.clipPath = `inset(0 0 ${(1 - reveal) * 100}% 0)`;
-      const lv = t < T_GRAVE ? 1 : 0;
-      laser.style.opacity = lv * clamp(t / 0.4, 0, 1);
-      laser.style.top = reveal * 100 + "%";
-      ldot.style.left = 50 + 46 * Math.sin(t * 3.1) + "%";
-      halo.style.opacity = 0.25 + 0.55 * reveal;
-      sparks.forEach((o) => {
-        const d = reveal - o.y;
-        o.e.style.opacity = d > 0 ? clamp(1 - d * 4, 0, 1) * 0.95 : 0;
-        o.e.style.transform = `scale(${d > 0 ? lerp(1.6, 0.4, clamp(d * 4, 0, 1)) : 0})`;
-      });
-      // --- reflet : juste après la gravure, puis toutes les ~7 s ---
-      let sw = -1;
-      if (t > T_GRAVE && t < T_GRAVE + T_SWEEP) sw = (t - T_GRAVE) / T_SWEEP;
-      else if (t > T_GRAVE + T_SWEEP) { const c = (t - T_GRAVE - T_SWEEP) % 7; if (c < T_SWEEP) sw = c / T_SWEEP; }
-      sweep.style.opacity = sw >= 0 && sw <= 1 ? 1 : 0;
-      sweep.style.transform = `translateX(${lerp(-120, 120, clamp(sw, 0, 1))}%)`;
-      // --- socle multicolore : s'allume après la gravure et tourne en continu ---
-      const led = clamp((t - T_GRAVE + 0.6) / 1.2, 0, 1);
-      const hue = (t * 42) % 360;
-      ledglow.style.opacity = 0.9 * led;
-      ledglow.style.background = `radial-gradient(closest-side,hsl(${hue} 95% 62%),hsl(${(hue + 40) % 360} 90% 50% / .45) 60%,transparent)`;
-      rim.style.background = `radial-gradient(120% 120% at 50% 110%,hsl(${hue} 95% 60% / ${0.26 * led}),transparent 55%)`;
-      // --- légendes ---
-      const slots = [[0.2, 1.7], [1.7, 3.2], [3.2, 4.8]];
-      caps.forEach((c, i) => {
-        if (i < 3) { const [a, b] = slots[i]; c.style.opacity = t >= a && t < b ? 1 : 0; }
-        else c.style.opacity = t >= 4.8 ? 1 : 0; // ligne finale (socle) reste affichée
-      });
-      raf = requestAnimationFrame(frame);
+    let raf = 0;
+    const t0 = performance.now();
+    const fr = (now) => {
+      const t = (now - t0) / 1000, G = 4.4;
+      const r = ease(clamp(t / G, 0, 1));
+      ph.style.clipPath = `inset(0 0 ${(1 - r) * 100}% 0)`;
+      la.style.opacity = t < G ? clamp(t / 0.4, 0, 1) : 0;
+      la.style.top = r * 100 + "%";
+      const led = clamp((t - G + 0.5) / 1.2, 0, 1), hue = (t * 42) % 360;
+      gl.style.opacity = 0.85 * led;
+      gl.style.background = `radial-gradient(closest-side,hsl(${hue} 95% 62%),transparent)`;
+      if (slg) slg.style.background = `radial-gradient(closest-side,hsl(${(hue + 120) % 360} 95% 60%),transparent)`;
+      const idx = t < 1.6 ? 0 : t < 3.1 ? 1 : t < 4.9 ? 2 : 3;
+      if (cap.dataset.i !== String(idx)) { cap.dataset.i = String(idx); cap.innerHTML = CAPS[idx]; }
+      raf = requestAnimationFrame(fr);
     };
-    raf = requestAnimationFrame(frame);
+    raf = requestAnimationFrame(fr);
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const sparks = seededSparks(40);
   return (
     <div ref={root}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <section id="cv-hero">
-        <div className="cv-kicker">Niv Création · Gravure laser 3D</div>
-        <h1>Votre photo devient <em>cristal</em></h1>
-        <div className="cv-stage">
-          <div className="cv-halo" />
-          <div className="cv-ledglow" />
-          <div className="cv-frame">
-            <div className="cv-blank"><div className="cv-ghost" /></div>
-            <img className="cv-photo" src={IMG_COUPLE} alt="Cristal photo 3D gravé — couple" />
-            {sparks.map((s, i) => (
-              <div key={i} className="cv-spark" data-y={s.y / 100} style={{ left: s.x + "%", top: s.y + "%" }} />
-            ))}
-            <div className="cv-laser"><div className="cv-ldot" /></div>
-            <div className="cv-sweep" />
-            <div className="cv-rim" />
+      <div className="cvb-wrap">
+        <header className="cvb-head">
+          <div className="cvb-k">Niv Création · Gravure laser 3D</div>
+          <h1>Votre photo devient <em>cristal</em></h1>
+          <p>Tout est là, d&apos;un coup d&apos;œil — choisissez votre fenêtre.</p>
+        </header>
+
+        <div className="cvb">
+          <div className="cvb-tile" id="cvb-anim">
+            <div className="cvb-stage">
+              <div className="cvb-badge">En direct de l&apos;atelier</div>
+              <div className="cvb-ghost" />
+              <div className="cvb-ph"><img src="/produits/cristal-v-couple.jpg" alt="Gravure laser 3D dans le cristal" />
+                <div className="cvb-laser" /></div>
+              <div className="cvb-glow" />
+              <div className="cvb-cap" dangerouslySetInnerHTML={{ __html: CAPS[0] }} />
+            </div>
+          </div>
+
+          <div className="cvb-tile">
+            <Link className="cvb-cover" href="/produit/cristal-photo-3d-vertical" aria-label="Bloc vertical" />
+            <div className="cvb-img"><img src="/produits/cristal-v-femme.jpg" alt="Bloc cristal vertical" />
+              <span className="cvb-price">dès 39,90 €</span>
+              <div className="cvb-lab"><b>Bloc vertical</b>portraits &amp; duos</div></div>
+          </div>
+
+          <div className="cvb-tile">
+            <Link className="cvb-cover" href="/produit/cristal-photo-3d-horizontal" aria-label="Bloc horizontal" />
+            <div className="cvb-img"><img src="/produits/cristal-h-demo-couple.jpg" alt="Bloc cristal horizontal" />
+              <span className="cvb-price">dès 39,90 €</span>
+              <div className="cvb-lab"><b>Bloc horizontal</b>familles &amp; groupes</div></div>
+          </div>
+
+          <div className="cvb-tile">
+            <Link className="cvb-cover" href="/produit/porte-cles-cristal-led-coeur" aria-label="Porte-clés cristal LED" />
+            <div className="cvb-img"><img src="/produits/porte-cles-coeur-demo.jpg" alt="Porte-clés cristal LED cœur" />
+              <span className="cvb-price">dès 22,90 €</span>
+              <div className="cvb-lab"><b>Porte-clés LED</b>cœur ou rectangle</div></div>
+          </div>
+
+          <div className="cvb-tile" id="cvb-socle">
+            <Link className="cvb-cover" href="/produit/cristal-photo-3d-vertical" aria-label="Socle lumineux (option sur les blocs)" />
+            <div className="cvb-img"><img src="/produits/socle-led-rectangle.jpg" alt="Socle lumineux LED" />
+              <span className="cvb-price">dès 14,90 €</span>
+              <div className="cvb-lg" />
+              <div className="cvb-lab"><b>Socle lumineux</b>multicolore, en option</div></div>
+          </div>
+
+          <div className="cvb-tile"><div className="cvb-info">
+            <div className="cvb-stars">★★★★★</div><b>4,9 / 5</b>
+            <span>Gravé en France,<br />dans notre atelier</span>
+          </div></div>
+
+          <div className="cvb-tile" id="cvb-go">
+            <a className="cvb-cover" href="#cristaux-collection" aria-label="Voir tous les cristaux" />
+            <div className="cvb-info">
+              <b>Pyramide · Trophée · Clé USB</b>
+              <span>et tous les autres cristaux</span>
+              <span className="cvb-btn">Tout voir ▸</span>
+            </div>
           </div>
         </div>
-        <div className="cv-cap">
-          <p>Le laser <b>s&apos;allume</b>.</p>
-          <p>Chaque détail se grave, <b>point par point</b>.</p>
-          <p>Votre souvenir <b>prend vie</b>.</p>
-          <p>Posé sur son <b>socle lumineux multicolore</b>.</p>
-        </div>
-        <a className="cv-down" href="#cristaux-collection">Choisir mon cristal <span>▾</span></a>
-      </section>
+      </div>
     </div>
   );
 }
