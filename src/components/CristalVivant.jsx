@@ -22,6 +22,7 @@ const CSS = `
 .cvb-lab{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:22px 10px 9px;color:#fff;background:linear-gradient(transparent,rgba(23,15,6,.82));font-size:12.5px;text-align:center;line-height:1.35}
 .cvb-lab b{display:block;font-size:14px;color:#e2c67e}
 .cvb-price{position:absolute;top:8px;right:8px;z-index:3;background:rgba(255,253,249,.95);color:#2b2620;font-weight:700;font-size:11.5px;padding:4px 9px;border-radius:20px;border:1px solid #e7ddcd}
+.cvb-note{position:absolute;top:8px;left:8px;z-index:3;background:rgba(43,38,32,.82);color:#e2c67e;font-weight:700;font-size:11px;padding:4px 8px;border-radius:20px}
 #cvb-anim{grid-column:1 / -1}
 #cvb-anim .cvb-stage{position:relative;aspect-ratio:16/10;background:radial-gradient(120% 90% at 50% 18%,#fffdf8,#f0e8d8 70%,#e7dcc5)}
 #cvb-anim .cvb-ph{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);width:58%;max-width:330px;aspect-ratio:760/481;border-radius:10px;overflow:hidden;box-shadow:0 18px 40px rgba(43,38,32,.30),0 0 0 1px rgba(194,161,78,.4)}
@@ -59,7 +60,19 @@ const CAPS = [
   "Posé sur son <b>socle multicolore</b>.",
 ];
 
-export default function CristalVivant() {
+const euro = (n) => (Number(n) % 1 === 0 ? String(Number(n)) : Number(n).toFixed(2).replace(".", ",")) + " €";
+// sous-titre court par produit (repli : le type)
+const SUBS = {
+  "cristal-photo-3d-vertical": "portraits & duos",
+  "cristal-photo-3d-horizontal": "familles & groupes",
+  "porte-cles-cristal-led-coeur": "cœur lumineux",
+  "porte-cles-cristal-led-rectangle": "rectangle lumineux",
+  "cle-usb-cristal-3d": "souvenir + mémoire",
+  "trophee-cristal-vierge-3d": "récompenses gravées",
+  "pyramide-cristal-gravure-3d": "photo en pyramide",
+};
+
+export default function CristalVivant({ products = [] }) {
   const root = useRef(null);
 
   useEffect(() => {
@@ -118,26 +131,17 @@ export default function CristalVivant() {
             </div>
           </div>
 
-          <div className="cvb-tile">
-            <Link className="cvb-cover" href="/produit/cristal-photo-3d-vertical" aria-label="Bloc vertical" />
-            <div className="cvb-img"><img src="/produits/cristal-v-femme.jpg" alt="Bloc cristal vertical" />
-              <span className="cvb-price">dès 39,90 €</span>
-              <div className="cvb-lab"><b>Bloc vertical</b>portraits &amp; duos</div></div>
-          </div>
-
-          <div className="cvb-tile">
-            <Link className="cvb-cover" href="/produit/cristal-photo-3d-horizontal" aria-label="Bloc horizontal" />
-            <div className="cvb-img"><img src="/produits/cristal-h-demo-couple.jpg" alt="Bloc cristal horizontal" />
-              <span className="cvb-price">dès 39,90 €</span>
-              <div className="cvb-lab"><b>Bloc horizontal</b>familles &amp; groupes</div></div>
-          </div>
-
-          <div className="cvb-tile">
-            <Link className="cvb-cover" href="/produit/porte-cles-cristal-led-coeur" aria-label="Porte-clés cristal LED" />
-            <div className="cvb-img"><img src="/produits/porte-cles-coeur-demo.jpg" alt="Porte-clés cristal LED cœur" />
-              <span className="cvb-price">dès 22,90 €</span>
-              <div className="cvb-lab"><b>Porte-clés LED</b>cœur ou rectangle</div></div>
-          </div>
+          {products.map((p) => (
+            <div className="cvb-tile" key={p.slug}>
+              <Link className="cvb-cover" href={`/produit/${p.slug}`} aria-label={p.name} />
+              <div className="cvb-img">
+                {p.image ? <img src={p.image} alt={p.name} /> : null}
+                {p.price ? <span className="cvb-price">dès {euro(p.price)}</span> : null}
+                {p.rating ? <span className="cvb-note">★ {String(p.rating.avg).replace(".", ",")}</span> : null}
+                <div className="cvb-lab"><b>{p.name.replace(/\s*—\s*gravure 3d\s*$/i, "")}</b>{SUBS[p.slug] || p.type || "gravure 3D personnalisée"}</div>
+              </div>
+            </div>
+          ))}
 
           <div className="cvb-tile" id="cvb-socle">
             <Link className="cvb-cover" href="/produit/cristal-photo-3d-vertical" aria-label="Socle lumineux (option sur les blocs)" />
@@ -151,15 +155,6 @@ export default function CristalVivant() {
             <div className="cvb-stars">★★★★★</div><b>4,9 / 5</b>
             <span>Gravé en France,<br />dans notre atelier</span>
           </div></div>
-
-          <div className="cvb-tile" id="cvb-go">
-            <a className="cvb-cover" href="#cristaux-collection" aria-label="Voir tous les cristaux" />
-            <div className="cvb-info">
-              <b>Pyramide · Trophée · Clé USB</b>
-              <span>et tous les autres cristaux</span>
-              <span className="cvb-btn">Tout voir ▸</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

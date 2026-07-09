@@ -2,10 +2,9 @@
 // Le bandeau d'accueil « Créer mon cristal » mène ici : le client choisit sa version
 // (vertical / horizontal…), puis la taille et le prix sur la fiche.
 import Link from "next/link";
-import ProductCard from "@/components/ProductCard";
 import CristalVivant from "@/components/CristalVivant";
 import { getCatalog } from "@/lib/catalog";
-import { getSettings, getRatingSummaries } from "@/lib/stock";
+import { getRatingSummaries } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -17,8 +16,6 @@ export const metadata = {
 export default async function CristauxPage() {
   const catalog = await getCatalog().catch(() => []);
   const ratings = await getRatingSummaries().catch(() => ({}));
-  let s = null; try { s = await getSettings(); } catch { /* défauts */ }
-  const mk = Number(s?.refMarkup) > 0;
   // Ordre voulu : blocs d'abord, puis les porte-clés, puis clé USB, puis
   // trophée et pyramide en bas.
   const crystalRank = (p) => {
@@ -33,33 +30,31 @@ export default async function CristauxPage() {
   const items = catalog
     .filter((p) => p.crystal3d)
     .sort((a, b) => crystalRank(a) - crystalRank(b));
+  // Fenêtres produits pour la grille multi-fenêtres (photo, prix « dès », note)
+  const tiles = items.map((p) => {
+    const prices = (p.variants || []).map((v) => Number(v.price)).filter((n) => n > 0);
+    const r = ratings[p.slug];
+    return {
+      slug: p.slug,
+      name: p.name,
+      type: p.type || "",
+      image: (p.images || [])[0] || "",
+      price: prices.length ? Math.min(...prices) : null,
+      rating: r && r.count ? { avg: r.avg, count: r.count } : null,
+    };
+  });
 
   return (
     <>
-      {/* EXPÉRIENCE ANIMÉE (maquette cristal-vivant validée) */}
-      <CristalVivant />
+      {/* MULTI-FENÊTRES : animation + les produits en fenêtres */}
+      <CristalVivant products={tiles} />
 
-      {/* COLLECTION */}
-      <section className="section" id="cristaux-collection">
+      <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           {items.length === 0 ? (
             <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>La collection arrive très bientôt. 💎</p>
-          ) : (
-            <>
-              <div className="section-head">
-                <span className="eyebrow" style={{ color: "var(--gold-dark)" }}>✦ Choisissez votre cristal</span>
-                <h2>Nos cristaux photo 3D</h2>
-                <p>Vos souvenirs gravés en 3D au cœur du cristal : blocs photo, porte-clés, trophées… en plusieurs tailles, pour toutes vos occasions.</p>
-              </div>
-              <div className="product-grid">
-                {items.map((p) => {
-                  const r = ratings[p.slug];
-                  return <ProductCard key={p.slug} product={{ ...p, ...(mk ? { refMarkup: Number(s.refMarkup) } : {}), ...(r ? { rating: r } : {}) }} />;
-                })}
-              </div>
-            </>
-          )}
-          <p style={{ textAlign: "center", marginTop: 34 }}>
+          ) : null}
+          <p style={{ textAlign: "center", marginTop: 10 }}>
             <Link href="/boutique" className="link-underline">← Retour à toute la boutique</Link>
           </p>
         </div>
