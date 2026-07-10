@@ -649,6 +649,7 @@ export const products = [
   {
     slug: "pyramide-cristal-gravure-3d",
     name: "Pyramide cristal — Gravure 3D",
+    hidden: true, // masqué du site (demande gérante 10/07/2026) — republiable via Gestion → Catalogue
     weight: 320,
     pickup: false, // envoi seul (retrait auto si lourd)
     letter: false,
@@ -761,6 +762,7 @@ export const products = [
   {
     slug: "trophee-cristal-vierge-3d",
     name: "Trophée cristal — Gravure 3D",
+    hidden: true, // masqué du site (demande gérante 10/07/2026) — republiable via Gestion → Catalogue
     weight: 600, pickup: false, letter: false,
     title: "Trophée en cristal — gravure texte personnalisée",
     subcategory: "cristal",

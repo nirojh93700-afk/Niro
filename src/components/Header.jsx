@@ -13,7 +13,10 @@ export default function Header({ categories }) {
   const pathname = usePathname();
   const showBack = pathname && pathname !== "/";
   // Catégories à afficher : celles passées (non vides) ou toutes en secours.
-  const menuCats = categories && categories.length ? categories : CATEGORIES;
+  // La famille cristal a sa propre entrée « 💎 Cristal Photo 3D » (page /cristaux) :
+  // on retire la catégorie « Cristal » du menu pour ne pas l'avoir en double.
+  const menuCats = (categories && categories.length ? categories : CATEGORIES)
+    .filter((c) => c.slug !== "cristal");
 
   return (
     <header className="header header-centered">
