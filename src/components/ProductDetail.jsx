@@ -986,7 +986,7 @@ export default function ProductDetail({ product }) {
               {getCategoryLabel(product.category)}
             </Link>
           </div>
-          <h1>{product.title}</h1>
+          <h1>{product.heading || product.title}</h1>
           <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{product.tagline}</p>
           {product.rating?.count > 0 && (
             <button
@@ -1036,7 +1036,29 @@ export default function ProductDetail({ product }) {
             </p>
           )}
 
-          {product.variants.length > 1 && (
+          {product.variants.length > 1 && product.genderPick && (
+            <div className="field">
+              <div className="step-label">1. Choisissez le modèle</div>
+              <div className="gender-pick">
+                {product.variants.map((v, i) => {
+                  const g = /fille/i.test(v.title) ? "f" : "g";
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      className={`gp-btn ${g}${i === variantIndex ? " active" : ""}`}
+                      onClick={() => selectVariant(i)}
+                      aria-pressed={i === variantIndex}
+                    >
+                      <span className="gp-dot" /> {g === "f" ? "Fille" : "Garçon"}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {product.variants.length > 1 && !product.genderPick && (
             <div className="field">
               <label>{hasVariantImages ? "Choisissez votre modèle" : "Choisissez votre option"}</label>
               <div className={`variant-swatches${product.crystal3d ? " crystal-sizes" : ""}`}>
@@ -1075,9 +1097,13 @@ export default function ProductDetail({ product }) {
           {/* Champs de gravure dynamiques (selon l'option choisie) */}
           {product.personalizationFields ? (
             <div style={{ marginBottom: 6 }}>
-              <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 12 }}>
-                Personnalisation — gravure
-              </p>
+              {product.genderPick ? (
+                <div className="step-label">2. Personnalisez la gravure</div>
+              ) : (
+                <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 12 }}>
+                  Personnalisation — gravure
+                </p>
+              )}
               {visibleFields.map((f) => {
                 if (f.type === "note") {
                   // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).

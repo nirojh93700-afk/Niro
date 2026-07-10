@@ -2611,3 +2611,42 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .new-arrivals .card-badge,
   .new-arrivals .product-card { animation: none; }
 }
+
+/* ============================================================
+   NAISSANCE — carte moitié-moitié (fidèle à la maquette) +
+   boutons modèle Fille/Garçon rose/bleu sur la fiche produit.
+   ============================================================ */
+.naissance-grid{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:720px){.naissance-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.naissance-card{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(43,38,32,.09);text-decoration:none;color:inherit;
+  transition:transform .2s, box-shadow .2s}
+.naissance-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(43,38,32,.16)}
+.naissance-card .nc-ph{position:relative;display:flex;aspect-ratio:1/1;overflow:hidden}
+.naissance-card .nc-half{flex:1;min-width:0;width:50%;height:100%;object-fit:cover;display:block}
+.naissance-card .nc-single{width:100%;height:100%;object-fit:cover;display:block}
+.naissance-card .nc-div{position:absolute;top:0;bottom:0;left:50%;width:2.5px;transform:translateX(-50%);z-index:2;
+  background:linear-gradient(180deg,#e2c67e,#a98935);box-shadow:0 0 8px rgba(226,198,126,.7)}
+.naissance-card .nc-tag{position:absolute;top:8px;z-index:3;font-size:10px;font-weight:800;letter-spacing:.5px;
+  text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:20px}
+.naissance-card .nc-tag.f{left:8px;background:#c98aa6}
+.naissance-card .nc-tag.g{right:8px;background:#6f96bf}
+.naissance-card .nc-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.naissance-card .nc-body h3{font-family:Georgia,"Times New Roman",serif;font-size:1rem;margin:0;color:var(--ink)}
+.naissance-card .nc-sub{color:var(--ink-soft);font-size:.8rem;line-height:1.35;flex:1}
+.naissance-card .nc-row{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.naissance-card .nc-price{font-weight:800;font-size:1.05rem;color:var(--ink)}
+.naissance-card .nc-btn{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;font-weight:700;
+  font-size:.78rem;padding:8px 15px;border-radius:30px}
+
+/* Fiche produit : sélecteur de modèle en pilules Fille/Garçon (rose/bleu) */
+.gender-pick{display:flex;gap:10px}
+.gender-pick .gp-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  font-family:Georgia,"Times New Roman",serif;font-size:1rem;padding:13px;border-radius:14px;
+  border:1.5px solid var(--line);background:var(--paper);color:var(--ink-soft);transition:.15s}
+.gender-pick .gp-btn .gp-dot{width:12px;height:12px;border-radius:50%}
+.gender-pick .gp-btn.f .gp-dot{background:#c98aa6}
+.gender-pick .gp-btn.g .gp-dot{background:#6f96bf}
+.gender-pick .gp-btn.f.active{border-color:#c98aa6;background:#fdf3f7;color:#a85f80}
+.gender-pick .gp-btn.g.active{border-color:#6f96bf;background:#eef4fb;color:#4d6f97}
+.step-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-soft);margin:2px 0 8px}

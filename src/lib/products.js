@@ -1865,6 +1865,8 @@ export const products = [
   {
     slug: "plaque-de-naissance",
     name: "Plaque de naissance",
+    heading: "Plaque de naissance personnalisée", // titre court sur la fiche (comme la maquette)
+    genderPick: true, // sélecteur de modèle en pilules Fille/Garçon (rose/bleu)
     badge: "Nouveau",
     weight: 250, // plaque bois + chevalet + emballage
     pickup: false,
