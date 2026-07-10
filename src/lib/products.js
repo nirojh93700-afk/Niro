@@ -12,6 +12,7 @@ export { MOTIF_OPTIONS };
 export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux", short: "Bijoux" },
   { slug: "cristal", label: "Cristal Photo 3D", short: "Cristal" },
+  { slug: "naissance", label: "Naissance", short: "Naissance" },
   { slug: "verres", label: "Verres gravés", short: "Verres" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "deco", label: "Déco & Maison", short: "Déco" },
@@ -70,6 +71,60 @@ export function getJewelTypeLabel(slug) {
 }
 
 export const products = [
+  // --------------------------- NAISSANCE -------------------------------------
+  // Plaque de naissance en bois gravé : UN produit, 2 modèles (Fille / Garçon)
+  // via des variantes-à-image (la photo change selon le modèle choisi). Carte
+  // « moitié-moitié » via cardImage. Personnalisation : prénom + infos bébé + photo.
+  {
+    slug: "plaque-de-naissance",
+    name: "Plaque de naissance",
+    badge: "Nouveau",
+    weight: 250, // plaque bois + chevalet + emballage
+    pickup: false,
+    letter: false, // colis (rigide)
+    category: "naissance",
+    type: "Souvenir de naissance",
+    tagline: "Une plaque de naissance en bois gravé, personnalisée aux informations de bébé — modèle fille ou garçon.",
+    cardImage: "/produits/plaque-naissance-duo.jpg", // carte « moitié-moitié » Fille/Garçon
+    personalizable: true,
+    personalizationLabel: "Prénom + date, poids, heure, taille (+ photo en option)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom du bébé", placeholder: "Ex : Marius", maxLength: 14 },
+      { key: "date", label: "Date de naissance", placeholder: "Ex : 12 mars 2026", maxLength: 22 },
+      { key: "poids", label: "Poids", placeholder: "Ex : 3 kg 400", maxLength: 12, optional: true },
+      { key: "heure", label: "Heure de naissance", placeholder: "Ex : 8 h 43", maxLength: 10, optional: true },
+      { key: "taille", label: "Taille", placeholder: "Ex : 52 cm", maxLength: 10, optional: true },
+      { key: "police", type: "font", label: "Style d'écriture du prénom", optional: true },
+      { key: "photo", type: "photo", label: "Photo du bébé à graver", optional: true, text: "Facultatif : la photo est gravée discrètement sur le bois, à côté du prénom. Photo nette et bien éclairée." },
+      { key: "note-grav", type: "note", text: "La plaque est fabriquée à la commande et gravée au laser en France. Livrée avec son chevalet." },
+    ],
+    title: "Plaque de naissance personnalisée en bois — prénom, date, poids, taille",
+    // Photos : d'abord la fille (modèle par défaut), puis le garçon.
+    images: [
+      "/produits/plaque-naissance-fille-1.jpg",
+      "/produits/plaque-naissance-fille-2.jpg",
+      "/produits/plaque-naissance-fille-3.jpg",
+      "/produits/plaque-naissance-fille-4.jpg",
+      "/produits/plaque-naissance-garcon-1.jpg",
+      "/produits/plaque-naissance-garcon-2.jpg",
+      "/produits/plaque-naissance-garcon-3.jpg",
+      "/produits/plaque-naissance-garcon-4.jpg",
+    ],
+    // Les 2 modèles = variantes à image (la galerie change quand on choisit).
+    variants: [
+      { id: "plaque-naissance-fille", title: "Modèle Fille (ovale)", price: 14.90, image: "/produits/plaque-naissance-fille-1.jpg" },
+      { id: "plaque-naissance-garcon", title: "Modèle Garçon (rond)", price: 14.90, image: "/produits/plaque-naissance-garcon-1.jpg" },
+    ],
+    descriptionHtml: `<p><strong>La plaque de naissance en bois gravé, à personnaliser.</strong> Un souvenir tendre et intemporel pour célébrer l'arrivée de bébé, gravé au laser dans notre atelier en France.</p>
+<p>Choisissez le <strong>modèle fille</strong> (cadre ovale festonné) ou le <strong>modèle garçon</strong> (couronne en corde), puis personnalisez-le avec le <strong>prénom</strong>, la <strong>date de naissance</strong>, le <strong>poids</strong>, l'<strong>heure</strong> et la <strong>taille</strong>. Vous pouvez aussi, si vous le souhaitez, ajouter la <strong>photo du bébé</strong> gravée sur le bois.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li>Bois de tilleul, découpé et gravé au laser</li>
+<li>Livrée avec son chevalet (à poser sur un meuble)</li>
+<li>Fabriquée à la commande, personnalisée</li>
+<li>Idéale comme cadeau de naissance ou de baptême</li>
+</ul>`,
+  },
   // ----------------------------- BIJOUX --------------------------------------
   {
     slug: "collier-enveloppe-message-secret",

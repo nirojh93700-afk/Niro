@@ -60,6 +60,19 @@ const CRISTAL_LED_KEYRING_INFO = {
 };
 
 export const productInfo = {
+  "plaque-de-naissance": {
+    material: `Taille & Matériaux
+- Plaque en bois de tilleul, découpée et gravée au laser.
+- Deux modèles au choix : Fille (cadre ovale festonné) ou Garçon (couronne en corde).
+- Livrée avec son chevalet pour la poser sur un meuble.`,
+    usage: `Personnalisation & Entretien
+- Personnalisée avec le prénom, la date de naissance, le poids, l'heure et la taille.
+- Option : photo du bébé gravée discrètement sur le bois.
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger dans l'eau.`,
+    returns: `Expédition & Retour
+- Fabriquée à la commande et personnalisée : ni repris ni échangé (article personnalisé).
+- Expédiée sous 3 à 5 jours ouvrés en colis suivi.`,
+  },
   "collier-enveloppe-message-secret": {
     material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
 
