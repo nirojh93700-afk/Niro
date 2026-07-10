@@ -63,7 +63,13 @@ export default function ProductDetail({ product }) {
   const [show3d, setShow3d] = useState(false); // aperçu 3D du verre (rotatif)
 
   const [stockMap, setStockMap] = useState({});
-  const [images, setImages] = useState(product.images);
+  // Galerie initiale : si le produit a des galeries par modèle (genderPick),
+  // on part de celle du 1er modèle (sinon toutes les photos mélangées).
+  const [images, setImages] = useState(
+    product.genderPick && product.variants?.[0]?.gallery?.length
+      ? product.variants[0].gallery
+      : product.images
+  );
   const [promos, setPromos] = useState({});
   const [isWide, setIsWide] = useState(true); // ordinateur vs mobile (pour la place du 3D)
   const [showMini, setShowMini] = useState(false); // mini 3D flottant (mobile)
@@ -124,7 +130,7 @@ export default function ProductDetail({ product }) {
       .then((r) => r.json())
       .then((d) => {
         const ov = d.images?.[product.slug];
-        if (ov && ov.length && !product.lockImages) setImages(ov);
+        if (ov && ov.length && !product.lockImages && !product.genderPick) setImages(ov);
         setPromos(d.promos || {});
       })
       .catch(() => {});
@@ -167,7 +173,15 @@ export default function ProductDetail({ product }) {
 
   function selectVariant(i) {
     setVariantIndex(i);
-    const img = product.variants[i]?.image;
+    const v = product.variants[i];
+    // Modèle avec sa propre galerie (genderPick) : on remplace la galerie entière
+    // par les photos de ce modèle → Garçon = photos garçon, Fille = photos fille.
+    if (v?.gallery?.length) {
+      setImages(v.gallery);
+      setActiveImg(0);
+      return;
+    }
+    const img = v?.image;
     if (img) {
       const idx = images.indexOf(img);
       if (idx >= 0) setActiveImg(idx);
