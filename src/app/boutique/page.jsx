@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { JEWEL_TYPES, getJewelType, getJewelTypeLabel } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
@@ -21,12 +22,17 @@ export const metadata = {
 };
 
 export default async function BoutiquePage({ searchParams }) {
+  // La famille cristal a sa page dédiée /cristaux (multi-fenêtres animée) : on
+  // évite un doublon dans la boutique en y renvoyant directement.
+  if (searchParams?.cat === "cristal") redirect("/cristaux");
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
   const activeType = searchParams?.type; // bijoux : collier / bracelet
   const activeQ = (searchParams?.q || "").trim().toLowerCase();
   const ratings = await getRatingSummaries().catch(() => ({}));
-  const withImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
+  const allWithImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
+  // Les cristaux vivent sur /cristaux : on ne les liste pas dans la grille boutique.
+  const withImages = allWithImages.filter((p) => !p.crystal3d && p.category !== "cristal");
 
   // Taxonomie vivante (réglée dans l'admin, repli sur le code).
   const taxonomy = await getTaxonomy().catch(() => ({}));
@@ -58,8 +64,9 @@ export default async function BoutiquePage({ searchParams }) {
   const isBijoux = activeCat === "bijoux";
 
   // Catégories à afficher en filtre : celles qui ont au moins un produit visible.
+  // On garde « Cristal Photo 3D » comme raccourci (il renvoie vers /cristaux).
   const presentCats = new Set(withImages.map((p) => p.category));
-  const menuCategories = CATS.filter((c) => presentCats.has(c.slug) || c.slug === activeCat);
+  const menuCategories = CATS.filter((c) => presentCats.has(c.slug) || c.slug === activeCat || c.slug === "cristal");
 
   // Conserve l'autre facette dans les liens (femme + collier combinables).
   const baseQs = `cat=${activeCat}`;
@@ -135,7 +142,7 @@ export default async function BoutiquePage({ searchParams }) {
           {menuCategories.map((c) => (
             <Link
               key={c.slug}
-              href={`/boutique?cat=${c.slug}`}
+              href={c.slug === "cristal" ? "/cristaux" : `/boutique?cat=${c.slug}`}
               className={`filter-chip ${activeCat === c.slug && !activeSub ? "active" : ""}`}
             >
               {c.label}
