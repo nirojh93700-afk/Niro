@@ -99,21 +99,23 @@ export const products = [
       { key: "note-grav", type: "note", text: "La plaque est fabriquée à la commande et gravée au laser en France. Livrée avec son chevalet." },
     ],
     title: "Plaque de naissance personnalisée en bois — prénom, date, poids, taille",
-    // Photos : d'abord la fille (modèle par défaut), puis le garçon.
+    // Photos : d'abord le garçon (modèle par défaut, montre des exemples remplis),
+    // puis la fille (les photos fille sont sur plaque vierge).
     images: [
-      "/produits/plaque-naissance-fille-1.jpg",
-      "/produits/plaque-naissance-fille-2.jpg",
-      "/produits/plaque-naissance-fille-3.jpg",
-      "/produits/plaque-naissance-fille-4.jpg",
       "/produits/plaque-naissance-garcon-1.jpg",
       "/produits/plaque-naissance-garcon-2.jpg",
       "/produits/plaque-naissance-garcon-3.jpg",
       "/produits/plaque-naissance-garcon-4.jpg",
+      "/produits/plaque-naissance-fille-1.jpg",
+      "/produits/plaque-naissance-fille-2.jpg",
+      "/produits/plaque-naissance-fille-3.jpg",
+      "/produits/plaque-naissance-fille-4.jpg",
     ],
     // Les 2 modèles = variantes à image (la galerie change quand on choisit).
+    // Garçon en premier (par défaut) car ses photos montrent la plaque remplie.
     variants: [
-      { id: "plaque-naissance-fille", title: "Modèle Fille (ovale)", price: 14.90, image: "/produits/plaque-naissance-fille-1.jpg" },
       { id: "plaque-naissance-garcon", title: "Modèle Garçon (rond)", price: 14.90, image: "/produits/plaque-naissance-garcon-1.jpg" },
+      { id: "plaque-naissance-fille", title: "Modèle Fille (ovale)", price: 14.90, image: "/produits/plaque-naissance-fille-1.jpg" },
     ],
     descriptionHtml: `<p><strong>La plaque de naissance en bois gravé, à personnaliser.</strong> Un souvenir tendre et intemporel pour célébrer l'arrivée de bébé, gravé au laser dans notre atelier en France.</p>
 <p>Choisissez le <strong>modèle fille</strong> (cadre ovale festonné) ou le <strong>modèle garçon</strong> (couronne en corde), puis personnalisez-le avec le <strong>prénom</strong>, la <strong>date de naissance</strong>, le <strong>poids</strong>, l'<strong>heure</strong> et la <strong>taille</strong>. Vous pouvez aussi, si vous le souhaitez, ajouter la <strong>photo du bébé</strong> gravée sur le bois.</p>
