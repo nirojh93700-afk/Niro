@@ -10,9 +10,15 @@ import { CATEGORIES as DEF_CATEGORIES, SUBCATEGORIES as DEF_SUBCATEGORIES } from
 export function resolveCategories(stored) {
   const arr = stored?.categories;
   if (Array.isArray(arr) && arr.length) {
-    return arr
+    const resolved = arr
       .filter((c) => c && c.slug)
       .map((c) => ({ slug: c.slug, label: c.label || c.slug, short: c.short || c.label || c.slug }));
+    // Ajoute automatiquement les catégories du code absentes du réglage admin
+    // (nouvelles familles comme « naissance ») → elles apparaissent dans le menu
+    // sans avoir à les recréer à la main dans Gestion → Catégories.
+    const have = new Set(resolved.map((c) => c.slug));
+    for (const c of DEF_CATEGORIES) if (!have.has(c.slug)) resolved.push(c);
+    return resolved;
   }
   return DEF_CATEGORIES;
 }
