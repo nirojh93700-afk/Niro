@@ -1163,7 +1163,8 @@ export const products = [
     weight: 70, pickup: false, letter: true,
     title: "Clé USB cristal avec gravure photo 3D",
     subcategory: "cles-usb",
-    category: "cadeaux", type: "Clé USB personnalisée",
+    crystal3d: true, // fait partie de la famille cristal (page /cristaux), plus dans Cadeaux
+    category: "cristal", type: "Clé USB cristal 3D",
     tagline: "Une clé USB en cristal, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
@@ -1206,7 +1207,7 @@ export const products = [
     subcategory: "porte-cles",
     crystal3d: true,
     crystalShape: "coeur",
-    category: "cadeaux", type: "Porte-clés cristal 3D",
+    category: "cristal", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés cœur en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
@@ -1231,7 +1232,7 @@ export const products = [
     title: "Porte-clés cristal LED rectangle avec gravure photo 3D",
     subcategory: "porte-cles",
     crystal3d: true,
-    category: "cadeaux", type: "Porte-clés cristal 3D",
+    category: "cristal", type: "Porte-clés cristal 3D",
     tagline: "Un porte-clés rectangle en cristal lumineux, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
