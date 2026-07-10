@@ -78,7 +78,7 @@ export default function Header({ categories }) {
       <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
         <Link href="/boutique">Boutique</Link>
         {menuCats.map((c) => (
-          <Link key={c.slug} href={`/boutique?cat=${c.slug}`}>{c.short}</Link>
+          <Link key={c.slug} href={c.slug === "naissance" ? "/naissance" : `/boutique?cat=${c.slug}`}>{c.short}</Link>
         ))}
         <Link href="/cristaux" style={{ color: "#a5822f", fontWeight: 700 }}>💎 Cristal Photo 3D</Link>
         <Link href="/coupe-du-monde" style={{ color: "#1c3f8a", fontWeight: 700 }}>🏆 Coupe du Monde</Link>
