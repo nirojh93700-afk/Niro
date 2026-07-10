@@ -30,8 +30,11 @@ export default async function CristauxPage() {
   const items = catalog
     .filter((p) => p.crystal3d)
     .sort((a, b) => crystalRank(a) - crystalRank(b));
-  // Fenêtres produits pour la grille multi-fenêtres (photo, prix « dès », note)
-  const tiles = items.map((p) => {
+  // Fenêtres produits pour la grille multi-fenêtres (photo, prix « dès », note).
+  // Trophée + pyramide retirés des fenêtres (demande gérante 10/07/2026) — la clé
+  // USB reste rangée avec les porte-clés cristal.
+  const HIDDEN_TILES = ["trophee-cristal-vierge-3d", "pyramide-cristal-gravure-3d"];
+  const tiles = items.filter((p) => !HIDDEN_TILES.includes(p.slug)).map((p) => {
     const prices = (p.variants || []).map((v) => Number(v.price)).filter((n) => n > 0);
     const r = ratings[p.slug];
     return {
