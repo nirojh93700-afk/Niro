@@ -60,6 +60,18 @@ const CRISTAL_LED_KEYRING_INFO = {
 };
 
 export const productInfo = {
+  "plaque-de-naissance-coeur": {
+    material: `Taille & Matériaux
+- Plaque ronde en bois de tilleul, découpée et gravée au laser.
+- Motif « mains en cœur » (parent + bébé), déjà gravé.
+- Livrée avec son chevalet.`,
+    usage: `Personnalisation & Entretien
+- Personnalisée avec le prénom et la date de naissance (Né le… / Née le…).
+- Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
+    returns: `Expédition & Retour
+- Fabriquée à la commande et personnalisée : ni reprise ni échangée.
+- Expédiée sous 3 à 5 jours ouvrés en colis suivi.`,
+  },
   "plaque-de-naissance": {
     material: `Taille & Matériaux
 - Plaque en bois de tilleul, découpée et gravée au laser.
