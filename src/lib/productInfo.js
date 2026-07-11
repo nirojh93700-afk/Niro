@@ -64,9 +64,11 @@ export const productInfo = {
     material: `Taille & Matériaux
 - Plaque ronde en bois de tilleul, découpée et gravée au laser.
 - Motif « mains en cœur » (parent + bébé), déjà gravé.
+- Deux fentes pour glisser le bracelet de naissance de la maternité.
 - Livrée avec son chevalet.`,
     usage: `Personnalisation & Entretien
 - Personnalisée avec le prénom et la date de naissance (Né le… / Née le…).
+- Glissez le bracelet de naissance de bébé dans les deux fentes prévues.
 - Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
     returns: `Expédition & Retour
 - Fabriquée à la commande et personnalisée : ni reprise ni échangée.

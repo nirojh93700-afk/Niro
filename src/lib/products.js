@@ -1945,8 +1945,8 @@ export const products = [
     pickup: false,
     letter: false,
     category: "naissance",
-    type: "Souvenir de naissance",
-    tagline: "Une plaque de naissance ronde en bois gravé — deux mains formant un cœur, avec le prénom et la date de bébé.",
+    type: "Support bracelet de naissance",
+    tagline: "Une plaque ronde « mains en cœur », gravée au prénom et à la date de bébé — avec un emplacement pour glisser son bracelet de naissance de la maternité.",
     personalizable: true,
     personalizationLabel: "Prénom + date de naissance",
     personalizationFields: [
@@ -1959,7 +1959,7 @@ export const products = [
       { key: "police", type: "font", label: "Style d'écriture du prénom", optional: true },
       { key: "note-grav", type: "note", text: "Le dessin « mains en cœur » est déjà gravé. Nous ajoutons le prénom en haut et « Né(e) le … » en bas. Fabriquée à la commande, gravée au laser en France, livrée avec son chevalet." },
     ],
-    title: "Plaque de naissance mains en cœur personnalisée — prénom et date",
+    title: "Plaque de naissance mains en cœur — support bracelet de naissance personnalisé",
     images: [
       "/produits/plaque-naissance-coeur-1.jpg",
       "/produits/plaque-naissance-coeur-2.jpg",
@@ -1971,9 +1971,11 @@ export const products = [
     ],
     descriptionHtml: `<p><strong>La plaque de naissance « mains en cœur », à personnaliser.</strong> Deux mains — celle d'un parent et celle de bébé — forment un cœur, gravées au laser dans notre atelier en France.</p>
 <p>Nous ajoutons le <strong>prénom</strong> de bébé en haut et sa <strong>date de naissance</strong> en bas (« Né le… » ou « Née le… »). Un souvenir tendre et neutre, qui convient aux petites filles comme aux petits garçons.</p>
+<p><strong>Un emplacement pour le bracelet de naissance.</strong> Deux petites fentes, au poignet du bébé, permettent de <strong>glisser le bracelet de la maternité</strong> — ce tout premier bracelet remis à la naissance. Il est ainsi mis en valeur et conservé sans être abîmé.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li>Plaque ronde en bois de tilleul, découpée et gravée au laser</li>
+<li>Emplacement (2 fentes) pour glisser le bracelet de naissance de la maternité</li>
 <li>Livrée avec son chevalet</li>
 <li>Fabriquée à la commande, personnalisée</li>
 <li>Idéale comme cadeau de naissance ou de baptême</li>
