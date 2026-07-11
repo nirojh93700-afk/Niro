@@ -1967,7 +1967,7 @@ export const products = [
       "/produits/plaque-naissance-coeur-4.jpg",
     ],
     variants: [
-      { id: "plaque-naissance-coeur", title: "Plaque ronde — mains en cœur", price: 14.90 },
+      { id: "plaque-naissance-coeur", title: "Plaque ronde — mains en cœur", price: 11.90 },
     ],
     descriptionHtml: `<p><strong>La plaque de naissance « mains en cœur », à personnaliser.</strong> Deux mains — celle d'un parent et celle de bébé — forment un cœur, gravées au laser dans notre atelier en France.</p>
 <p>Nous ajoutons le <strong>prénom</strong> de bébé en haut et sa <strong>date de naissance</strong> en bas (« Né le… » ou « Née le… »). Un souvenir tendre et neutre, qui convient aux petites filles comme aux petits garçons.</p>
