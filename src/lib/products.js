@@ -1938,8 +1938,8 @@ export const products = [
   // Modèle NEUTRE « mains en cœur » (fille ou garçon) : prénom + date.
   {
     slug: "plaque-de-naissance-coeur",
-    name: "Plaque de naissance cœur",
-    heading: "Plaque de naissance mains en cœur",
+    name: "Plaque de naissance cœur — porte-bracelet",
+    heading: "Plaque de naissance cœur — porte-bracelet",
     badge: "Nouveau",
     weight: 250,
     pickup: false,
