@@ -22,6 +22,26 @@ export default function Footer() {
             <a href="tel:+33766153102" style={{ display: "block", marginTop: 4 }}>07 66 15 31 02</a>
             <span style={{ display: "block", marginTop: 8 }}>6 rue d'Armaillé, 75017 Paris</span>
             <span style={{ display: "block", marginTop: 8 }}>Personnalisé en France</span>
+
+            {/* Suivez-nous sur Instagram (QR à scanner + lien cliquable mobile) */}
+            <div className="footer-insta">
+              <a
+                href="https://www.instagram.com/nivcreation.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Suivez Niv Création sur Instagram"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="footer-insta-qr" src="/instagram-qr.png" alt="QR code Instagram Niv Création" />
+              </a>
+              <div className="footer-insta-txt">
+                <span className="fi-title">Suivez-nous sur Instagram</span>
+                <a href="https://www.instagram.com/nivcreation.fr" target="_blank" rel="noopener noreferrer" className="fi-handle">
+                  @nivcreation.fr
+                </a>
+                <span className="fi-sub">Scannez le code ou touchez le lien</span>
+              </div>
+            </div>
           </div>
           <div>
             <h4>Boutique</h4>

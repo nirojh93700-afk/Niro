@@ -2650,3 +2650,12 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .gender-pick .gp-btn.f.active{border-color:#c98aa6;background:#fdf3f7;color:#a85f80}
 .gender-pick .gp-btn.g.active{border-color:#6f96bf;background:#eef4fb;color:#4d6f97}
 .step-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-soft);margin:2px 0 8px}
+
+/* Footer — bloc Instagram (QR + lien) */
+.footer-insta{display:flex;align-items:center;gap:14px;margin-top:18px}
+.footer-insta-qr{width:88px;height:88px;border-radius:12px;background:#fff;padding:6px;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);display:block}
+.footer-insta-txt{display:flex;flex-direction:column;gap:2px}
+.footer-insta-txt .fi-title{font-weight:700}
+.footer-insta-txt .fi-handle{color:#e2c67e;font-weight:700}
+.footer-insta-txt .fi-sub{font-size:.78rem;opacity:.75}
