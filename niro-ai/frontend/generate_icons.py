@@ -1,5 +1,6 @@
-"""Génère les icônes NIRO pour la PWA."""
-import subprocess, sys
+"""Génère les icônes Jarvis pour la PWA."""
+import subprocess, sys, os
+from pathlib import Path
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -41,17 +42,20 @@ def make_icon(size):
     except Exception:
         font = ImageFont.load_default()
 
-    text = 'NIRO'
+    text = 'J'
     bb = draw.textbbox((0, 0), text, font=font)
     tw, th = bb[2] - bb[0], bb[3] - bb[1]
     draw.text((cx - tw//2, cy - th//2 - bb[1]), text, fill=(0, 212, 255, 255), font=font)
 
     return img
 
+ICONS_DIR = Path(__file__).parent / 'icons'
+ICONS_DIR.mkdir(exist_ok=True)
+
 for size, name in [(192, 'icon-192'), (512, 'icon-512'), (180, 'icon-180')]:
     img = make_icon(size)
-    path = f'icons/{name}.png'
-    img.save(path)
+    path = ICONS_DIR / f'{name}.png'
+    img.save(str(path))
     print(f'✓ {path}')
 
 print('Icônes générées.')
