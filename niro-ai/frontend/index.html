@@ -1176,15 +1176,31 @@ function getCookie(name) {
   return v ? v.pop() : ''
 }
 
+function diag(msg) {
+  let el = document.getElementById('diag-banner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'diag-banner';
+    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;'
+      + 'background:rgba(255,60,60,0.92);color:#fff;font:12px/1.4 monospace;'
+      + 'padding:6px 10px;text-align:center;white-space:pre-wrap;';
+    el.onclick = () => el.remove();
+    document.body.appendChild(el);
+  }
+  el.textContent = '🔎 ' + msg + '  (toucher pour fermer)';
+}
+
 async function connect() {
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   const token = await getToken();
+  diag('Étape 1 : jeton ' + (token ? 'OK (' + token.slice(0,6) + '…)' : 'ABSENT → login') + ' — connexion WebSocket…');
   if (!token) { window.location.href = '/login'; return; }
   ws = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(token)}`);
 
   ws.onopen = () => {
     statusDot.className = 'dot';
     statusText.textContent = 'EN LIGNE';
+    const b = document.getElementById('diag-banner'); if (b) b.remove();
     setCore('veille', '');
     // Réinitialiser l'état en cas de reconnexion
     isThinking = false;
@@ -1199,16 +1215,19 @@ async function connect() {
   };
 
   ws.onclose = (e) => {
+    diag('WebSocket fermé — code ' + e.code + (e.reason ? ' (' + e.reason + ')' : '') + '. Analyse…');
     if (e.code === 4401) {
-      // Vieux token en mémoire ? On le jette et on retente une fois avec le cookie
+      // Session/jeton refusé par le serveur
       if (!window._triedFreshToken) {
         window._triedFreshToken = true;
         sessionStorage.removeItem('niro_token');
-        setTimeout(connect, 200);
+        diag('Jeton refusé (4401) → je récupère un nouveau jeton et je réessaie…');
+        setTimeout(connect, 300);
         return;
       }
       sessionStorage.removeItem('niro_token');
-      window.location.href = '/login';
+      diag('Jeton toujours refusé → retour à la page de code PIN.');
+      setTimeout(() => { window.location.href = '/login'; }, 1500);
       return;
     }
     statusDot.className = 'dot offline';
@@ -1218,20 +1237,25 @@ async function connect() {
       .then(r => r.json())
       .then(d => {
         if (!d.authenticated) {
-          // Session expirée → on repart au login proprement
           sessionStorage.removeItem('niro_token');
-          window.location.href = '/login';
+          diag('Session expirée côté serveur → retour au code PIN.');
+          setTimeout(() => { window.location.href = '/login'; }, 1500);
         } else {
           statusText.textContent = 'RECONNEXION…';
+          diag('Le Mac répond et la session est bonne, mais le WebSocket (code ' + e.code + ') ne s\'ouvre pas. Nouvel essai dans 3 s…');
         }
       })
-      .catch(() => { statusText.textContent = 'MAC INJOIGNABLE'; });
+      .catch(() => {
+        statusText.textContent = 'MAC INJOIGNABLE';
+        diag('Le Mac ne répond plus (HTTP échoue). Mac en veille ou Jarvis arrêté ?');
+      });
     setTimeout(connect, 3000);
   };
 
   ws.onerror = () => {
     statusDot.className = 'dot offline';
     statusText.textContent = 'ERREUR';
+    diag('Erreur WebSocket sur ' + proto + '://' + location.host + '/ws');
   };
 
   ws.onmessage = (evt) => {
