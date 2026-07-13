@@ -504,6 +504,13 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                 conversation = [{"role": "system", "content": build_system_prompt()}]
                 await ws.send_json({"type": "cleared"})
 
+            elif msg_type == "greet":
+                greeting = "Bonjour Nirojh. Je suis opérationnel et prêt à vous assister."
+                await ws.send_json({"type": "token", "content": greeting})
+                await ws.send_json({"type": "done", "content": greeting})
+                await speak(greeting)
+                conversation.append({"role": "assistant", "content": greeting})
+
             elif msg_type == "stop_voice":
                 subprocess.run(["killall", "say"], capture_output=True)
 

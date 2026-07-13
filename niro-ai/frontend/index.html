@@ -644,6 +644,7 @@ header {
 // ─── État global ─────────────────────────────────────────────────────────────
 let ws = null;
 let isThinking = false;
+let hasGreeted = false;
 let isRecording = false;
 let recognition = null;
 let currentNiroMsg = null;
@@ -691,6 +692,15 @@ async function connect() {
     statusDot.className = 'dot';
     statusText.textContent = 'EN LIGNE';
     setCore('veille', '');
+    // Réinitialiser l'état en cas de reconnexion
+    isThinking = false;
+    btnSend.disabled = false;
+    removeThinkingDots();
+    // Salutation automatique au premier démarrage
+    if (!hasGreeted) {
+      hasGreeted = true;
+      ws.send(JSON.stringify({ type: 'greet' }));
+    }
   };
 
   ws.onclose = (e) => {
