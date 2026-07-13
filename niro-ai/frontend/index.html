@@ -181,6 +181,29 @@ header {
   text-transform: uppercase;
 }
 
+/* Horloge live style Jarvis */
+.jarvis-clock {
+  margin-left: 24px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.jc-time {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0,212,255,0.5);
+  font-variant-numeric: tabular-nums;
+}
+.jc-date {
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  color: rgba(0,212,255,0.4);
+  text-transform: uppercase;
+}
+@media (max-width: 700px) { .jarvis-clock { display: none; } }
+
 .header-right {
   margin-left: auto;
   display: flex;
@@ -261,9 +284,26 @@ header {
   animation: rotate linear infinite;
 }
 
-.ring-1 { inset: 0; border-top-color: var(--cyan); animation-duration: 8s; }
-.ring-2 { inset: 12px; border-right-color: rgba(0,212,255,0.5); animation-duration: 12s; animation-direction: reverse; }
+.ring-1 { inset: 0; border-top-color: var(--cyan); border-bottom-color: rgba(0,212,255,0.15); animation-duration: 8s; }
+.ring-2 { inset: 12px; border-right-color: rgba(0,212,255,0.5); border-left-color: rgba(0,212,255,0.12); animation-duration: 12s; animation-direction: reverse; }
 .ring-3 { inset: 26px; border-bottom-color: rgba(0,100,255,0.4); animation-duration: 16s; }
+
+/* Graduations façon réacteur Arc (petits traits autour) */
+.ring-ticks {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(0,212,255,0.5) 0deg 1deg,
+      transparent 1deg 6deg
+    );
+  -webkit-mask: radial-gradient(circle, transparent 0 46%, #000 46% 50%, transparent 50%);
+          mask: radial-gradient(circle, transparent 0 46%, #000 46% 50%, transparent 50%);
+  animation: rotate 40s linear infinite;
+  opacity: 0.55;
+}
 
 @keyframes rotate { to { transform: rotate(360deg); } }
 
@@ -271,22 +311,31 @@ header {
   position: absolute;
   inset: 40px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,212,255,0.15), rgba(0,50,100,0.1));
-  border: 1px solid rgba(0,212,255,0.3);
+  background:
+    radial-gradient(circle at center, rgba(120,235,255,0.55) 0%, rgba(0,180,255,0.28) 22%, rgba(0,60,120,0.12) 48%, transparent 70%);
+  border: 1px solid rgba(0,212,255,0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   letter-spacing: 3px;
-  color: rgba(0,212,255,0.6);
+  color: rgba(0,212,255,0.75);
   text-transform: uppercase;
   transition: all 0.3s;
+  box-shadow: 0 0 24px rgba(0,212,255,0.25), inset 0 0 26px rgba(0,212,255,0.14);
+  animation: reactor-pulse 3.5s ease-in-out infinite;
+}
+
+@keyframes reactor-pulse {
+  0%,100% { box-shadow: 0 0 22px rgba(0,212,255,0.22), inset 0 0 24px rgba(0,212,255,0.12); }
+  50%     { box-shadow: 0 0 38px rgba(0,212,255,0.42), inset 0 0 32px rgba(0,212,255,0.22); }
 }
 
 .core.thinking {
-  background: radial-gradient(circle, rgba(0,212,255,0.3), rgba(0,50,100,0.2));
+  background: radial-gradient(circle at center, rgba(150,240,255,0.7), rgba(0,180,255,0.35) 30%, rgba(0,50,100,0.2) 60%, transparent 75%);
   border-color: var(--cyan);
-  box-shadow: 0 0 30px rgba(0,212,255,0.4), inset 0 0 20px rgba(0,212,255,0.1);
+  box-shadow: 0 0 40px rgba(0,212,255,0.5), inset 0 0 26px rgba(0,212,255,0.22);
+  animation: reactor-pulse 1.2s ease-in-out infinite;
 }
 
 .core.speaking {
@@ -566,6 +615,10 @@ header {
   <header>
     <span class="logo">Jarvis</span>
     <span class="model-badge" id="model-badge">—</span>
+    <div class="jarvis-clock" id="jarvis-clock">
+      <span class="jc-time" id="jc-time">--:--:--</span>
+      <span class="jc-date" id="jc-date">—</span>
+    </div>
     <div class="header-right">
       <div class="clients-badge">
         📱 <span class="clients-count" id="clients-count">1</span> appareil(s)
@@ -607,6 +660,7 @@ header {
 
     <div class="center">
       <div class="ring-container">
+        <div class="ring-ticks"></div>
         <div class="ring ring-1"></div>
         <div class="ring ring-2"></div>
         <div class="ring ring-3"></div>
@@ -1221,6 +1275,18 @@ async function logout() {
   sessionStorage.removeItem('niro_token')
   window.location.href = '/login'
 }
+
+// ─── Horloge live style Jarvis ───────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const p = n => String(n).padStart(2, '0');
+  const t = document.getElementById('jc-time');
+  const d = document.getElementById('jc-date');
+  if (t) t.textContent = `${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
+  if (d) d.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+}
+updateClock();
+setInterval(updateClock, 1000);
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 connect();
