@@ -17,10 +17,14 @@ echo ""
 echo "  Serveur Central — M4 Max 48Go"
 echo ""
 
+# ── 0. Chemins ─────────────────────────────────────────────
+export PATH="/opt/homebrew/bin:$PATH"
+export OLLAMA_MODELS="/Volumes/VERBATIM HD/niro-models"
+
 # ── 1. Ollama ──────────────────────────────────────────────
 if ! pgrep -x "ollama" > /dev/null; then
   echo "🧠 Démarrage de Ollama..."
-  ollama serve &>/tmp/niro-ollama.log &
+  /opt/homebrew/bin/ollama serve &>/tmp/niro-ollama.log &
   sleep 4
 else
   echo "✓ Ollama actif"
