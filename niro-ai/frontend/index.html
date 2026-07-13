@@ -1120,6 +1120,7 @@ header::after {
       <button class="btn-upload" title="Envoyer une image" onclick="document.getElementById('file-input').click()">📎</button>
       <input type="file" id="file-input" accept="image/*">
     </div>
+    <button class="btn-icon" id="btn-speaker" title="Jarvis parle sur cet appareil" onclick="toggleSpeaker()">🔊</button>
     <button class="btn-icon" id="btn-voice" title="Microphone" onclick="toggleVoice()">🎙️</button>
     <button class="btn-icon" id="btn-stop-voice" title="Arrêter la voix" onclick="stopVoice()" style="display:none">🔇</button>
     <button class="btn-send" id="btn-send" onclick="sendMessage()">ENVOYER</button>
@@ -1373,8 +1374,8 @@ function handleMessage(data) {
       setTimeout(() => { const p = document.getElementById('ops-panel'); if (p) p.classList.remove('show'); }, 8000);
       // Si la réponse contient des photos/vidéos → les afficher au centre
       autoViewer(data.content);
-      // Mode conversation vocale : Jarvis parle sur CET appareil puis réécoute
-      if (voiceMode) speakOnDevice(data.content);
+      // Voix sur CET appareil : en mode conversation OU si le haut-parleur est activé
+      if (voiceMode || deviceVoice) speakOnDevice(data.content);
       messages.scrollTop = messages.scrollHeight;
       break;
 
@@ -1574,7 +1575,7 @@ function sendMessage() {
 
   addMsg('user', text);
   // mute_voice : en mode conversation, c'est CET appareil qui parle (pas le Mac)
-  const payload = { type: 'message', content: text, mute_voice: voiceMode };
+  const payload = { type: 'message', content: text, mute_voice: voiceMode || deviceVoice };
   if (pollMode) apiSend(payload); else ws.send(JSON.stringify(payload));
   textInput.value = '';
 }
@@ -1592,6 +1593,29 @@ textInput.addEventListener('keydown', (e) => {
 // haute SUR CET APPAREIL → il vous réécoute automatiquement. Réappuyez pour arrêter.
 let voiceMode = false;
 let clientSpeaking = false;
+// Haut-parleur : Jarvis lit ses réponses SUR CET APPAREIL (indispensable sur iPhone,
+// où la voix du Mac ne s'entend évidemment pas)
+let deviceVoice = localStorage.getItem('jarvis-device-voice') === '1';
+
+function updateSpeakerBtn() {
+  const b = document.getElementById('btn-speaker');
+  if (!b) return;
+  b.textContent = deviceVoice ? '🔊' : '🔈';
+  b.style.opacity = deviceVoice ? '1' : '0.45';
+  b.title = deviceVoice ? 'Voix activée sur cet appareil (toucher pour couper)' : 'Toucher pour que Jarvis parle sur cet appareil';
+}
+
+function toggleSpeaker() {
+  deviceVoice = !deviceVoice;
+  localStorage.setItem('jarvis-device-voice', deviceVoice ? '1' : '0');
+  updateSpeakerBtn();
+  if (deviceVoice) {
+    // Le premier toucher débloque l'audio iOS + confirmation vocale immédiate
+    speakOnDevice('Voix activée.');
+  } else {
+    try { speechSynthesis.cancel(); } catch(e) {}
+  }
+}
 
 function speechSupported() {
   return ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
@@ -2048,6 +2072,7 @@ updateWeather();
 setInterval(updateWeather, 600000);
 
 // ─── Init ─────────────────────────────────────────────────────────────────
+updateSpeakerBtn();
 connect();
 fetchStatus();
 setInterval(updateClientsCount, 30000);
