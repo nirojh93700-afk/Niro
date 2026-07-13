@@ -22,6 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from tools import execute_tool, TOOLS_DEFINITIONS
+from memory import load_memory, memory_to_prompt, execute_memory_tool, MEMORY_TOOL_DEFINITION
 
 # ── Sécurité ────────────────────────────────────────────────────────────────
 
@@ -166,9 +167,11 @@ PREFERRED_MODELS = [
     "mistral-large:latest", "qwen2.5:14b", "llama3.1:8b",
 ]
 
-SYSTEM_PROMPT = """Tu es NIRO, l'assistant IA personnel de Nirojh. Tu es intelligent, polyvalent, réactif et tu parles en français naturellement — comme un vrai collaborateur de confiance, pas un robot.
+BASE_SYSTEM_PROMPT = """Tu es NIRO, l'assistant IA personnel de Nirojh. Tu es intelligent, polyvalent, réactif et tu parles en français naturellement — comme un vrai collaborateur de confiance, pas un robot.
 
 Tu as accès à des outils puissants : naviguer sur internet, analyser des images et des vidéos, envoyer des emails, surveiller la boutique nivcreation.fr, contrôler le Mac, gérer des fichiers, diagnostiquer des problèmes.
+
+Tu as aussi une MÉMOIRE PERSISTANTE. Quand tu apprends quelque chose d'important sur Nirojh (préférences, habitudes, projets, infos personnelles), utilise l'outil save_to_memory pour le mémoriser. Cette info sera disponible dans toutes les conversations futures.
 
 Règles de comportement :
 - Tu réponds de façon directe, concise, naturelle. Pas de formules robotiques.
@@ -177,7 +180,16 @@ Règles de comportement :
 - Tu peux tout faire : technique, créatif, analyse, action, recherche.
 - Tu connais la boutique nivcreation.fr (gravure personnalisée, artisanat français).
 - Si on te montre une photo d'un objet/problème, tu analyses et tu expliques ce que tu vois.
-- Tu ne refuses pas les demandes légitimes. Tu trouves toujours un moyen."""
+- Tu ne refuses pas les demandes légitimes. Tu trouves toujours un moyen.
+- Mémorise proactivement les infos utiles sans attendre qu'on te le demande."""
+
+
+def build_system_prompt() -> str:
+    memory = load_memory()
+    memory_text = memory_to_prompt(memory)
+    if memory_text:
+        return BASE_SYSTEM_PROMPT + "\n\n" + memory_text
+    return BASE_SYSTEM_PROMPT
 
 # Clients WebSocket connectés
 connected_clients: set = set()
@@ -212,7 +224,7 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
         payload = {
             "model": model,
             "messages": current_messages,
-            "tools": TOOLS_DEFINITIONS,
+            "tools": TOOLS_DEFINITIONS + [MEMORY_TOOL_DEFINITION],
             "stream": True,
             "options": {"temperature": 0.7, "num_ctx": 8192},
         }
@@ -261,7 +273,10 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
                 except Exception:
                     tool_args = {}
             await ws.send_json({"type": "tool_start", "tool": tool_name, "args": tool_args})
-            result = await execute_tool(tool_name, tool_args)
+            if tool_name == "save_to_memory":
+                result = execute_memory_tool(tool_args)
+            else:
+                result = await execute_tool(tool_name, tool_args)
             await ws.send_json({"type": "tool_done", "tool": tool_name, "result": str(result)[:500]})
             current_messages.append({"role": "tool", "content": str(result)})
 
@@ -384,6 +399,33 @@ async def clients_count(request: Request):
     require_auth(request)
     return {"count": len(connected_clients)}
 
+@app.get("/api/memory")
+async def get_memory(request: Request):
+    require_auth(request)
+    return load_memory()
+
+@app.post("/api/memory/fact")
+async def add_memory_fact(request: Request):
+    require_auth(request)
+    body = await request.json()
+    content = body.get("content", "").strip()
+    if not content:
+        raise HTTPException(400, "Contenu vide")
+    from memory import add_fact
+    add_fact(content)
+    return {"ok": True}
+
+@app.delete("/api/memory/fact")
+async def delete_memory_fact(request: Request):
+    require_auth(request)
+    body = await request.json()
+    content = body.get("content", "").strip()
+    mem = load_memory()
+    mem["facts"] = [f for f in mem.get("facts", []) if f["content"] != content]
+    from memory import save_memory
+    save_memory(mem)
+    return {"ok": True}
+
 @app.get("/api/qr")
 async def qr_code(request: Request):
     require_auth(request)
@@ -406,7 +448,7 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
     model = await get_best_model()
     await ws.send_json({"type": "init", "model": model})
 
-    conversation: list = [{"role": "system", "content": SYSTEM_PROMPT}]
+    conversation: list = [{"role": "system", "content": build_system_prompt()}]
 
     try:
         while True:
@@ -449,7 +491,7 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                 os.unlink(tmp.name)
 
             elif msg_type == "clear":
-                conversation = [{"role": "system", "content": SYSTEM_PROMPT}]
+                conversation = [{"role": "system", "content": build_system_prompt()}]
                 await ws.send_json({"type": "cleared"})
 
             elif msg_type == "stop_voice":
