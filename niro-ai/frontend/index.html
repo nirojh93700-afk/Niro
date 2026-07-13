@@ -705,7 +705,7 @@ async function connect() {
   };
 
   ws.onclose = (e) => {
-    if (e.code === 4401 || e.code === 1006) {
+    if (e.code === 4401) {
       sessionStorage.removeItem('niro_token');
       window.location.href = '/login';
       return;
