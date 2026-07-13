@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIRO — Assistant IA</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cyan: #00d4ff;
+  --cyan2: #00aacc;
+  --blue: #0055ff;
+  --dark: #010b14;
+  --dark2: #021020;
+  --panel: rgba(2, 16, 32, 0.95);
+  --border: rgba(0, 212, 255, 0.15);
+  --glow: 0 0 20px rgba(0, 212, 255, 0.3);
+  --text: #cce8f0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--dark);
+  color: var(--text);
+  font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+}
+
+/* ── Grid ── */
+.app {
+  display: grid;
+  grid-template-rows: 56px 1fr 110px;
+  grid-template-columns: 1fr 360px;
+  height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, var(--dark2), var(--dark));
+  position: relative;
+  z-index: 20;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 10px;
+  color: var(--cyan);
+  text-shadow: 0 0 30px var(--cyan), 0 0 60px rgba(0,212,255,0.3);
+}
+
+.model-badge {
+  margin-left: 20px;
+  padding: 3px 10px;
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 20px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(0,212,255,0.6);
+  text-transform: uppercase;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(0,212,255,0.5);
+}
+
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+  animation: blink 2.5s ease-in-out infinite;
+}
+
+.dot.offline { background: #ff4444; box-shadow: 0 0 8px #ff4444; animation: none; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.btn-clear {
+  background: none;
+  border: 1px solid rgba(0,212,255,0.2);
+  color: rgba(0,212,255,0.4);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-clear:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ── Main visualizer ── */
+.main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.ring-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.2);
+  animation: rotate linear infinite;
+}
+
+.ring-1 { inset: 0; border-top-color: var(--cyan); animation-duration: 8s; }
+.ring-2 { inset: 12px; border-right-color: rgba(0,212,255,0.5); animation-duration: 12s; animation-direction: reverse; }
+.ring-3 { inset: 26px; border-bottom-color: rgba(0,100,255,0.4); animation-duration: 16s; }
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+.core {
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,255,0.15), rgba(0,50,100,0.1));
+  border: 1px solid rgba(0,212,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(0,212,255,0.6);
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+
+.core.thinking {
+  background: radial-gradient(circle, rgba(0,212,255,0.3), rgba(0,50,100,0.2));
+  border-color: var(--cyan);
+  box-shadow: 0 0 30px rgba(0,212,255,0.4), inset 0 0 20px rgba(0,212,255,0.1);
+}
+
+.core.speaking {
+  background: radial-gradient(circle, rgba(0,180,80,0.2), rgba(0,80,40,0.1));
+  border-color: #00ff88;
+  box-shadow: 0 0 30px rgba(0,255,100,0.3);
+}
+
+.state-label {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: rgba(0,212,255,0.4);
+  text-transform: uppercase;
+  min-height: 20px;
+  text-align: center;
+}
+
+/* HUD corners */
+.hud { position: absolute; }
+.hud.tl { top: 16px; left: 16px; border-top: 1px solid rgba(0,212,255,0.3); border-left: 1px solid rgba(0,212,255,0.3); width: 50px; height: 50px; }
+.hud.tr { top: 16px; right: 16px; border-top: 1px solid rgba(0,212,255,0.3); border-right: 1px solid rgba(0,212,255,0.3); width: 50px; height: 50px; }
+.hud.bl { bottom: 16px; left: 16px; border-bottom: 1px solid rgba(0,212,255,0.3); border-left: 1px solid rgba(0,212,255,0.3); width: 50px; height: 50px; }
+.hud.br { bottom: 16px; right: 16px; border-bottom: 1px solid rgba(0,212,255,0.3); border-right: 1px solid rgba(0,212,255,0.3); width: 50px; height: 50px; }
+
+/* Waveform bars (voice visualizer) */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 30px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.waveform.active { opacity: 1; }
+.waveform .bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--cyan);
+  animation: wave 1s ease-in-out infinite;
+}
+.waveform .bar:nth-child(1) { animation-delay: 0s; }
+.waveform .bar:nth-child(2) { animation-delay: 0.1s; }
+.waveform .bar:nth-child(3) { animation-delay: 0.2s; }
+.waveform .bar:nth-child(4) { animation-delay: 0.3s; }
+.waveform .bar:nth-child(5) { animation-delay: 0.4s; }
+.waveform .bar:nth-child(6) { animation-delay: 0.3s; }
+.waveform .bar:nth-child(7) { animation-delay: 0.2s; }
+.waveform .bar:nth-child(8) { animation-delay: 0.1s; }
+.waveform .bar:nth-child(9) { animation-delay: 0s; }
+@keyframes wave {
+  0%,100% { height: 4px; }
+  50% { height: 24px; }
+}
+
+/* ── Chat panel ── */
+.panel {
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  backdrop-filter: blur(20px);
+}
+
+.panel-header {
+  padding: 12px 18px;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(0,212,255,0.35);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+
+.messages::-webkit-scrollbar { width: 3px; }
+.messages::-webkit-scrollbar-track { background: transparent; }
+.messages::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
+
+.msg {
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  animation: fadeIn 0.2s ease;
+  word-break: break-word;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.msg.user {
+  background: rgba(0,80,200,0.18);
+  border: 1px solid rgba(0,100,255,0.25);
+  color: #d0e8ff;
+  align-self: flex-end;
+  max-width: 95%;
+}
+
+.msg.niro {
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.12);
+  color: var(--text);
+  align-self: flex-start;
+  max-width: 98%;
+}
+
+.msg.tool {
+  background: rgba(255,160,0,0.05);
+  border: 1px solid rgba(255,160,0,0.2);
+  color: #ffa040;
+  font-size: 11.5px;
+  font-family: 'SF Mono', 'Menlo', monospace;
+}
+
+.msg.error {
+  background: rgba(255,60,60,0.08);
+  border: 1px solid rgba(255,60,60,0.25);
+  color: #ff8080;
+  font-size: 12px;
+}
+
+.msg-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 4px;
+}
+
+.thinking-dots {
+  display: flex;
+  gap: 5px;
+  padding: 10px 12px;
+}
+.thinking-dots span {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: dots 1.3s ease-in-out infinite;
+}
+.thinking-dots span:nth-child(2) { animation-delay: 0.15s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dots { 0%,80%,100%{transform:scale(0.6);opacity:0.3} 40%{transform:scale(1);opacity:1} }
+
+/* ── Input area ── */
+.input-area {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--dark2), var(--dark));
+}
+
+.input-wrap {
+  flex: 1;
+  position: relative;
+}
+
+#text-input {
+  width: 100%;
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 8px;
+  padding: 13px 50px 13px 18px;
+  color: #e0f4ff;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+#text-input:focus {
+  border-color: rgba(0,212,255,0.5);
+  box-shadow: 0 0 0 1px rgba(0,212,255,0.1), 0 0 20px rgba(0,212,255,0.08);
+}
+
+#text-input::placeholder { color: rgba(0,212,255,0.2); }
+
+.btn-upload {
+  position: absolute;
+  right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: rgba(0,212,255,0.3);
+  cursor: pointer; font-size: 18px;
+  transition: color 0.2s;
+  padding: 4px;
+}
+.btn-upload:hover { color: var(--cyan); }
+
+#file-input { display: none; }
+
+.btn-icon {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.25);
+  background: rgba(0,212,255,0.04);
+  color: rgba(0,212,255,0.6);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-icon:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.08); }
+.btn-icon.active { background: var(--cyan); color: var(--dark); border-color: var(--cyan); box-shadow: 0 0 20px rgba(0,212,255,0.5); }
+
+.btn-send {
+  height: 46px;
+  padding: 0 22px;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.3);
+  color: var(--cyan);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-send:hover { background: var(--cyan); color: var(--dark); }
+.btn-send:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Image preview */
+.img-preview {
+  position: fixed;
+  bottom: 130px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+.img-preview.show { display: flex; }
+.img-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+.img-preview-text { font-size: 12px; color: rgba(0,212,255,0.6); }
+.btn-remove-img { background: none; border: none; color: #ff6060; cursor: pointer; font-size: 18px; }
+
+/* Scan line effect */
+.scanline {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.15), transparent);
+  animation: scan 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes scan { 0%{top:0} 100%{top:100vh} }
+</style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<div class="app">
+  <!-- Header -->
+  <header>
+    <span class="logo">NIRO</span>
+    <span class="model-badge" id="model-badge">—</span>
+    <div class="header-right">
+      <div class="status-pill">
+        <div class="dot" id="status-dot"></div>
+        <span id="status-text">CONNEXION…</span>
+      </div>
+      <button class="btn-clear" onclick="clearChat()">EFFACER</button>
+    </div>
+  </header>
+
+  <!-- Visualizer -->
+  <div class="main">
+    <canvas id="canvas"></canvas>
+    <div class="hud tl"></div>
+    <div class="hud tr"></div>
+    <div class="hud bl"></div>
+    <div class="hud br"></div>
+
+    <div class="center">
+      <div class="ring-container">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="core" id="core">NIRO</div>
+      </div>
+      <div class="waveform" id="waveform">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <div class="state-label" id="state-label"></div>
+    </div>
+  </div>
+
+  <!-- Chat panel -->
+  <div class="panel">
+    <div class="panel-header">Journal de conversation</div>
+    <div class="messages" id="messages">
+      <div class="msg niro">
+        <div class="msg-label">NIRO</div>
+        Bonjour. Je suis NIRO, votre assistant personnel. Que puis-je faire pour vous ?
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <div class="input-wrap">
+      <input type="text" id="text-input" placeholder="Parlez ou écrivez…" autocomplete="off">
+      <button class="btn-upload" title="Envoyer une image" onclick="document.getElementById('file-input').click()">📎</button>
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+    <button class="btn-icon" id="btn-voice" title="Microphone" onclick="toggleVoice()">🎙️</button>
+    <button class="btn-icon" id="btn-stop-voice" title="Arrêter la voix" onclick="stopVoice()" style="display:none">🔇</button>
+    <button class="btn-send" id="btn-send" onclick="sendMessage()">ENVOYER</button>
+  </div>
+</div>
+
+<!-- Image preview -->
+<div class="img-preview" id="img-preview">
+  <img id="preview-img" src="" alt="preview">
+  <div class="img-preview-text">Image prête à envoyer</div>
+  <button class="btn-remove-img" onclick="removeImage()">✕</button>
+</div>
+
+<script>
+// ─── État global ─────────────────────────────────────────────────────────────
+let ws = null;
+let isThinking = false;
+let isRecording = false;
+let recognition = null;
+let currentNiroMsg = null;
+let pendingImageB64 = null;
+let pendingImageQuestion = null;
+
+const messages = document.getElementById('messages');
+const textInput = document.getElementById('text-input');
+const core = document.getElementById('core');
+const stateLabel = document.getElementById('state-label');
+const waveform = document.getElementById('waveform');
+const statusDot = document.getElementById('status-dot');
+const statusText = document.getElementById('status-text');
+const modelBadge = document.getElementById('model-badge');
+const btnSend = document.getElementById('btn-send');
+const btnVoice = document.getElementById('btn-voice');
+const btnStopVoice = document.getElementById('btn-stop-voice');
+
+// ─── Connexion WebSocket ─────────────────────────────────────────────────────
+function connect() {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${location.host}/ws`);
+
+  ws.onopen = () => {
+    statusDot.className = 'dot';
+    statusText.textContent = 'EN LIGNE';
+    setCore('veille', '');
+  };
+
+  ws.onclose = () => {
+    statusDot.className = 'dot offline';
+    statusText.textContent = 'HORS LIGNE';
+    setTimeout(connect, 3000);
+  };
+
+  ws.onerror = () => {
+    statusDot.className = 'dot offline';
+    statusText.textContent = 'ERREUR';
+  };
+
+  ws.onmessage = (evt) => {
+    const data = JSON.parse(evt.data);
+    handleMessage(data);
+  };
+}
+
+function handleMessage(data) {
+  switch (data.type) {
+    case 'init':
+      modelBadge.textContent = data.model || '—';
+      break;
+
+    case 'thinking':
+      isThinking = true;
+      setCore('thinking', 'TRAITEMENT…');
+      btnSend.disabled = true;
+      addThinkingDots();
+      break;
+
+    case 'token':
+      // Premier token → créer le message NIRO
+      if (!currentNiroMsg) {
+        removeThinkingDots();
+        currentNiroMsg = createMsg('niro', '');
+      }
+      currentNiroMsg.innerHTML = `<div class="msg-label">NIRO</div>` +
+        escapeHtml(getCurrentNiroText() + data.content);
+      messages.scrollTop = messages.scrollHeight;
+      break;
+
+    case 'tool_start':
+      addMsg('tool', `⚙ ${toolName(data.tool)} — ${JSON.stringify(data.args).slice(0, 100)}`);
+      setCore('thinking', data.tool.toUpperCase().replace(/_/g,' '));
+      break;
+
+    case 'tool_done':
+      addMsg('tool', `✓ ${toolName(data.tool)}: ${data.result}`);
+      break;
+
+    case 'done':
+      isThinking = false;
+      currentNiroMsg = null;
+      setCore('veille', '');
+      btnSend.disabled = false;
+      btnStopVoice.style.display = 'flex';
+      setTimeout(() => btnStopVoice.style.display = 'none', 15000);
+      messages.scrollTop = messages.scrollHeight;
+      break;
+
+    case 'error':
+      isThinking = false;
+      currentNiroMsg = null;
+      removeThinkingDots();
+      addMsg('error', '⚠ ' + data.content);
+      setCore('veille', '');
+      btnSend.disabled = false;
+      break;
+
+    case 'cleared':
+      messages.innerHTML = '';
+      addMsg('niro', 'Conversation effacée. Que puis-je faire pour vous ?');
+      break;
+  }
+}
+
+function getCurrentNiroText() {
+  if (!currentNiroMsg) return '';
+  const label = currentNiroMsg.querySelector('.msg-label');
+  if (label) {
+    const clone = currentNiroMsg.cloneNode(true);
+    clone.querySelector('.msg-label').remove();
+    return clone.textContent;
+  }
+  return currentNiroMsg.textContent;
+}
+
+// ─── UI helpers ─────────────────────────────────────────────────────────────
+function setCore(state, label) {
+  core.className = 'core ' + (state === 'thinking' ? 'thinking' : state === 'speaking' ? 'speaking' : '');
+  core.textContent = state === 'veille' ? 'NIRO' : label || 'NIRO';
+  stateLabel.textContent = state === 'thinking' ? 'En cours…' : state === 'speaking' ? 'En train de parler' : '';
+  waveform.className = 'waveform' + (state === 'recording' ? ' active' : '');
+}
+
+function createMsg(type, text) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + type;
+  const label = type === 'niro' ? 'NIRO' : type === 'user' ? 'VOUS' : type === 'tool' ? 'OUTIL' : '⚠';
+  div.innerHTML = `<div class="msg-label">${label}</div>${escapeHtml(text)}`;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div;
+}
+
+function addMsg(type, text) {
+  return createMsg(type, text);
+}
+
+function addThinkingDots() {
+  removeThinkingDots();
+  const div = document.createElement('div');
+  div.className = 'thinking-dots';
+  div.id = 'thinking-dots';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function removeThinkingDots() {
+  const d = document.getElementById('thinking-dots');
+  if (d) d.remove();
+}
+
+function toolName(name) {
+  const map = {
+    browse_url: 'Navigation web',
+    search_web: 'Recherche',
+    take_screenshot: 'Capture d\'écran',
+    check_boutique: 'Boutique',
+    send_email: 'Email',
+    mac_applescript: 'Mac (AppleScript)',
+    mac_shell: 'Mac (Terminal)',
+    read_file: 'Lecture fichier',
+    write_file: 'Écriture fichier',
+    list_files: 'Liste fichiers',
+    get_system_info: 'Infos système',
+    set_reminder: 'Rappel',
+    calculate: 'Calcul',
+  };
+  return map[name] || name;
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
+}
+
+// ─── Envoi de message ────────────────────────────────────────────────────────
+function sendMessage() {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  if (isThinking) return;
+
+  const text = textInput.value.trim();
+
+  if (pendingImageB64) {
+    // Envoi image + question
+    const question = text || 'Qu\'est-ce que tu vois sur cette image ?';
+    addMsg('user', `[Image] ${question}`);
+    ws.send(JSON.stringify({ type: 'image', data: pendingImageB64, question }));
+    removeImage();
+    textInput.value = '';
+    return;
+  }
+
+  if (!text) return;
+
+  addMsg('user', text);
+  ws.send(JSON.stringify({ type: 'message', content: text }));
+  textInput.value = '';
+}
+
+textInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// ─── Voix (Web Speech API) ───────────────────────────────────────────────────
+function toggleVoice() {
+  if (isRecording) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
+
+function startRecording() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Votre navigateur ne supporte pas la reconnaissance vocale.\nUtilisez Chrome ou Safari.');
+    return;
+  }
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'fr-FR';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    btnVoice.classList.add('active');
+    setCore('recording', 'ÉCOUTE');
+    waveform.className = 'waveform active';
+  };
+
+  recognition.onresult = (e) => {
+    let transcript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript;
+    }
+    textInput.value = transcript;
+    if (e.results[e.results.length - 1].isFinal) {
+      stopRecording();
+      if (transcript.trim()) {
+        setTimeout(sendMessage, 300);
+      }
+    }
+  };
+
+  recognition.onend = () => stopRecording();
+  recognition.onerror = () => stopRecording();
+  recognition.start();
+}
+
+function stopRecording() {
+  isRecording = false;
+  if (recognition) { try { recognition.stop(); } catch(e){} recognition = null; }
+  btnVoice.classList.remove('active');
+  waveform.className = 'waveform';
+  if (!isThinking) setCore('veille', '');
+}
+
+function stopVoice() {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'stop_voice' }));
+  }
+  btnStopVoice.style.display = 'none';
+}
+
+// ─── Image upload ────────────────────────────────────────────────────────────
+document.getElementById('file-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const b64 = ev.target.result.split(',')[1];
+    pendingImageB64 = b64;
+    document.getElementById('preview-img').src = ev.target.result;
+    document.getElementById('img-preview').classList.add('show');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+function removeImage() {
+  pendingImageB64 = null;
+  document.getElementById('img-preview').classList.remove('show');
+  document.getElementById('preview-img').src = '';
+}
+
+// ─── Clear ───────────────────────────────────────────────────────────────────
+function clearChat() {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'clear' }));
+  }
+}
+
+// ─── Canvas particles ────────────────────────────────────────────────────────
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const particles = Array.from({length: 80}, () => ({
+  x: Math.random(),
+  y: Math.random(),
+  vx: (Math.random() - 0.5) * 0.0003,
+  vy: (Math.random() - 0.5) * 0.0003,
+  r: Math.random() * 1.5 + 0.5,
+  a: Math.random() * 0.4 + 0.1,
+}));
+
+function drawCanvas() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Gradient fond
+  const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)/2);
+  grad.addColorStop(0, 'rgba(0,40,80,0.15)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Particules + connexions
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = 1;
+    if (p.x > 1) p.x = 0;
+    if (p.y < 0) p.y = 1;
+    if (p.y > 1) p.y = 0;
+
+    const px = p.x * W, py = p.y * H;
+    ctx.beginPath();
+    ctx.arc(px, py, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,212,255,${p.a})`;
+    ctx.fill();
+  });
+
+  // Connexions entre particules proches
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = (particles[i].x - particles[j].x) * W;
+      const dy = (particles[i].y - particles[j].y) * H;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 80) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x * W, particles[i].y * H);
+        ctx.lineTo(particles[j].x * W, particles[j].y * H);
+        ctx.strokeStyle = `rgba(0,212,255,${0.06 * (1 - dist/80)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(drawCanvas);
+}
+drawCanvas();
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+connect();
+</script>
+</body>
+</html>
