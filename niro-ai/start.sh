@@ -22,6 +22,16 @@ export PATH="/opt/homebrew/bin:$PATH"
 export OLLAMA_KEEP_ALIVE=-1
 export OLLAMA_MAX_LOADED_MODELS=1
 
+# ── 0 bis. Tuer TOUT ancien serveur Jarvis (sinon l'ancien code bugué reste actif) ──
+echo "🧹 Arrêt de tout ancien serveur Jarvis..."
+pkill -f "uvicorn main:app" 2>/dev/null
+# Libérer le port 7777 s'il est encore occupé
+OCC=$(lsof -ti tcp:7777 2>/dev/null)
+if [ -n "$OCC" ]; then
+  echo "$OCC" | xargs kill -9 2>/dev/null
+fi
+sleep 1
+
 # ── 1. Ollama ──────────────────────────────────────────────
 # On teste si Ollama RÉPOND vraiment (pas juste si un processus existe)
 if ! ollama list &>/dev/null; then
