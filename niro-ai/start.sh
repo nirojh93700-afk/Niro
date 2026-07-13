@@ -23,20 +23,28 @@ export OLLAMA_KEEP_ALIVE=-1
 export OLLAMA_MAX_LOADED_MODELS=1
 
 # ── 1. Ollama ──────────────────────────────────────────────
-if ! pgrep -x "ollama" > /dev/null; then
+# On teste si Ollama RÉPOND vraiment (pas juste si un processus existe)
+if ! ollama list &>/dev/null; then
   echo "🧠 Démarrage de Ollama..."
+  # Tuer tout processus fantôme qui ne répond pas
+  pkill ollama 2>/dev/null; sleep 1
   /opt/homebrew/bin/ollama serve &>/tmp/niro-ollama.log &
-  # Attendre qu'Ollama soit prêt (max 15s)
-  for i in $(seq 1 15); do
+  # Attendre qu'Ollama réponde vraiment (max 20s)
+  for i in $(seq 1 20); do
     ollama list &>/dev/null && break
     sleep 1
   done
-else
+fi
+if ollama list &>/dev/null; then
   echo "✓ Ollama actif"
+else
+  echo "⚠ Ollama ne répond pas — vérifiez /tmp/niro-ollama.log"
 fi
 
 # ── 2. Modèle ──────────────────────────────────────────────
-if ollama list 2>/dev/null | grep -q "qwen2.5:72b"; then
+if ollama list 2>/dev/null | grep -q "qwen2.5:32b"; then
+  echo "✓ Modèle : qwen2.5:32b (rapide)"
+elif ollama list 2>/dev/null | grep -q "qwen2.5:72b"; then
   echo "✓ Modèle : qwen2.5:72b"
 elif ollama list 2>/dev/null | grep -q "llama3.3:70b"; then
   echo "✓ Modèle : llama3.3:70b"
