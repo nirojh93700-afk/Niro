@@ -215,7 +215,7 @@ async def speak(text: str):
     subprocess.Popen(["say", "-v", "Thomas", "-r", "180", clean],
                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
+async def chat_with_ollama(messages: list, model: str, ws: WebSocket, mute_voice: bool = False):
     current_messages = list(messages)
     seen_calls = {}  # anti-boucle : (outil, args) -> nb d'appels
     for _ in range(6):
@@ -254,7 +254,7 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
 
         if not tool_calls_buffer:
             await ws.send_json({"type": "done", "content": content_buffer})
-            if content_buffer.strip():
+            if content_buffer.strip() and not mute_voice:
                 await speak(content_buffer)
             return content_buffer
 
@@ -301,7 +301,8 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
         if final.strip():
             await ws.send_json({"type": "token", "content": final})
             await ws.send_json({"type": "done", "content": final})
-            await speak(final)
+            if not mute_voice:
+                await speak(final)
             return final
     except Exception:
         pass
@@ -527,7 +528,8 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                     conversation = conversation[:1] + conversation[-40:]
                 await ws.send_json({"type": "thinking"})
                 try:
-                    response = await chat_with_ollama(conversation, model, ws)
+                    response = await chat_with_ollama(conversation, model, ws,
+                                                      mute_voice=bool(data.get("mute_voice")))
                     if response:
                         conversation.append({"role": "assistant", "content": response})
                 except Exception as e:
