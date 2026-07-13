@@ -37,39 +37,6 @@ html, body {
   overflow: hidden;
 }
 
-/* ── Mobile responsive ── */
-@media (max-width: 700px) {
-  .app {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: 50px 1fr auto !important;
-    height: 100dvh;
-  }
-  /* Sur portable : on affiche la conversation en plein écran, pas l'anneau */
-  .main { display: none !important; }
-  .panel {
-    position: static !important;
-    width: auto !important;
-    height: auto !important;
-    margin: 8px !important;
-    grid-column: 1;
-    grid-row: 2;
-    display: flex !important;
-    flex-direction: column;
-    min-height: 0;
-    animation: none !important;
-  }
-  .messages { flex: 1; overflow-y: auto; }
-  .input-area {
-    grid-column: 1;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    flex-wrap: wrap;
-  }
-  .input-wrap { flex: 1 1 100%; }
-  .logo { font-size: 16px; letter-spacing: 6px; }
-  #text-input { font-size: 16px; }
-  .btn-send { padding: 0 18px; font-size: 11px; }
-}
-
 /* ── QR Modal ── */
 .modal-overlay {
   display: none;
@@ -430,8 +397,6 @@ header {
 .circuit-svg .pulse { animation: dashmove 3s linear infinite; stroke-dasharray: 4 8; }
 @keyframes dashmove { to { stroke-dashoffset: -24; } }
 
-@media (max-width: 700px) { .hud-layer { display: none; } }
-
 /* ── Panneau "Opérations en direct" (ce que Jarvis fait) ── */
 .ops-panel {
   position: absolute;
@@ -489,6 +454,7 @@ header {
 
 /* ── Visionneuse centrale (résultats : photos, vidéos) ── */
 .viewer {
+  pointer-events: auto;
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.96);
@@ -952,6 +918,72 @@ header::after {
 
 @media (prefers-reduced-motion: reduce) {
   .ring-dash1, .ring-dash2, .radar-sweep, .gauge::after { animation: none; }
+}
+
+/* ═══ MOBILE (en fin de style pour gagner la cascade) ═══ */
+@media (max-width: 700px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: 50px minmax(0, 1fr) auto !important;
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+  }
+  /* Header compact : garder logo, statut, verrou */
+  header { padding: 0 12px; min-width: 0; overflow: hidden; }
+  .logo { font-size: 15px; letter-spacing: 5px; }
+  .model-badge, .jarvis-clock, .clients-badge { display: none !important; }
+  .btn-clear { padding: 4px 8px; font-size: 9px; letter-spacing: 1px; }
+  .header-right { gap: 8px; }
+
+  /* Conversation plein écran */
+  .panel {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 8px !important;
+    grid-column: 1;
+    grid-row: 2;
+    display: flex !important;
+    flex-direction: column;
+    min-height: 0;
+    animation: none !important;
+  }
+  .messages { flex: 1; overflow-y: auto; }
+
+  /* Le décor (réacteur, jauges…) disparaît, mais opérations + visionneuse restent par-dessus */
+  .main {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 30;
+    pointer-events: none;
+  }
+  .main #canvas, .main .center, .main .hud,
+  .main .date-ring, .main .gauge, .main .weather-card, .main .circuit-svg {
+    display: none !important;
+  }
+  .hud-layer { position: fixed !important; inset: 0 !important; pointer-events: none; }
+  .ops-panel {
+    position: fixed !important;
+    left: 10px !important; right: 10px !important;
+    bottom: 120px !important; top: auto !important;
+    width: auto !important; max-height: 180px;
+    animation: none !important;
+  }
+  .viewer {
+    position: fixed !important;
+    width: 94vw !important; max-height: 72vh;
+  }
+
+  .input-area {
+    grid-column: 1;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    flex-wrap: wrap;
+  }
+  .input-wrap { flex: 1 1 100%; }
+  #text-input { font-size: 16px; }
+  .btn-send { padding: 0 18px; font-size: 11px; }
 }
 </style>
 </head>
