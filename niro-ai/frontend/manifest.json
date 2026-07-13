@@ -1,6 +1,6 @@
 {
-  "name": "NIRO — Assistant IA",
-  "short_name": "NIRO",
+  "name": "Jarvis — Assistant IA",
+  "short_name": "Jarvis",
   "description": "Assistant IA personnel",
   "start_url": "/",
   "display": "standalone",

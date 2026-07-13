@@ -1,6 +1,6 @@
 """
-NIRO — Mémoire persistante
-Sauvegarde automatiquement ce que NIRO apprend sur l'utilisateur.
+Jarvis — Mémoire persistante
+Sauvegarde automatiquement ce que Jarvis apprend sur l'utilisateur.
 """
 
 import json
@@ -102,7 +102,7 @@ MEMORY_TOOL_DEFINITION = {
     "type": "function",
     "function": {
         "name": "save_to_memory",
-        "description": "Sauvegarde une information importante dans la mémoire persistante de NIRO. Utilise cet outil quand tu apprends quelque chose d'important sur Nirojh : préférences, habitudes, projets, infos personnelles, décisions prises. Cette information sera disponible dans toutes les conversations futures.",
+        "description": "Sauvegarde une information importante dans la mémoire persistante de Jarvis. Utilise cet outil quand tu apprends quelque chose d'important sur Nirojh : préférences, habitudes, projets, infos personnelles, décisions prises. Cette information sera disponible dans toutes les conversations futures.",
         "parameters": {
             "type": "object",
             "properties": {

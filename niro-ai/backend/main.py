@@ -167,7 +167,7 @@ PREFERRED_MODELS = [
     "mistral-large:latest", "qwen2.5:14b", "llama3.1:8b",
 ]
 
-BASE_SYSTEM_PROMPT = """Tu es NIRO, l'assistant IA personnel de Nirojh. Tu es intelligent, polyvalent, réactif et tu parles en français naturellement — comme un vrai collaborateur de confiance, pas un robot.
+BASE_SYSTEM_PROMPT = """Tu es Jarvis, l'assistant IA personnel de Nirojh. Tu es intelligent, polyvalent, réactif et tu parles en français naturellement — comme un vrai collaborateur de confiance, pas un robot.
 
 Tu as accès à des outils puissants : naviguer sur internet, analyser des images et des vidéos, envoyer des emails, surveiller la boutique nivcreation.fr, contrôler le Mac, gérer des fichiers, diagnostiquer des problèmes.
 
@@ -505,7 +505,7 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                 await ws.send_json({"type": "cleared"})
 
             elif msg_type == "greet":
-                greeting = "Bonjour Nirojh. Je suis opérationnel et prêt à vous assister."
+                greeting = "Bonjour Nirojh. Jarvis opérationnel, prêt à vous assister."
                 await ws.send_json({"type": "token", "content": greeting})
                 await ws.send_json({"type": "done", "content": greeting})
                 await speak(greeting)
