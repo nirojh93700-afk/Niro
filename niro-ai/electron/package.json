@@ -1,0 +1,43 @@
+{
+  "name": "niro",
+  "productName": "NIRO",
+  "version": "1.0.0",
+  "description": "Assistant IA Personnel",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac --dir",
+    "dist": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "ai.niro.assistant",
+    "productName": "NIRO",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "icon.icns",
+      "target": [
+        { "target": "dmg", "arch": ["arm64"] }
+      ],
+      "darkModeSupport": true,
+      "minimumSystemVersion": "13.0"
+    },
+    "dmg": {
+      "title": "NIRO — Assistant IA",
+      "background": null,
+      "window": { "width": 540, "height": 360 }
+    },
+    "extraResources": [
+      { "from": "../backend", "to": "backend" },
+      { "from": "../frontend", "to": "frontend" }
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.0"
+  }
+}
