@@ -1242,7 +1242,18 @@ async function connect() {
           setTimeout(() => { window.location.href = '/login'; }, 1500);
         } else {
           statusText.textContent = 'RECONNEXION…';
-          diag('Le Mac répond et la session est bonne, mais le WebSocket (code ' + e.code + ') ne s\'ouvre pas. Nouvel essai dans 3 s…');
+          // Vérifier CE QUI TOURNE vraiment sur le Mac
+          fetch('/api/version').then(r => r.ok ? r.json() : null).then(v => {
+            if (!v) {
+              diag('⚠️ LE MAC FAIT TOURNER L\'ANCIEN CODE. Sur le Mac : Ctrl+C puis  cd ~/Niro/niro-ai && git pull && ./start.sh');
+            } else if (!v.websocket_support) {
+              diag('⚠️ CAUSE TROUVÉE : le support WebSocket manque sur le Mac (serveur v' + v.version + '). Sur le Mac :  python3 -m pip install websockets  puis relancez ./start.sh');
+            } else {
+              diag('Serveur v' + v.version + ' OK, WebSocket supporté, mais la connexion se coupe (code ' + e.code + '). Nouvel essai…');
+            }
+          }).catch(() => {
+            diag('Le Mac répond mais /api/version échoue — ancien code probable. Relancez ./start.sh après git pull.');
+          });
         }
       })
       .catch(() => {

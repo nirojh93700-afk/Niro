@@ -399,6 +399,19 @@ async def root(request: Request):
         return FileResponse(str(FRONTEND_DIR / "login.html"))
     return FileResponse(str(FRONTEND_DIR / "index.html"))
 
+JARVIS_VERSION = "2.2"
+
+@app.get("/api/version")
+async def version():
+    """Version du serveur + état du support WebSocket (sans auth, pour diagnostic)."""
+    ws_ok = False
+    try:
+        from uvicorn.protocols.websockets.auto import AutoWebSocketsProtocol
+        ws_ok = AutoWebSocketsProtocol is not None
+    except Exception:
+        pass
+    return {"version": JARVIS_VERSION, "websocket_support": ws_ok}
+
 @app.get("/api/status")
 async def status(request: Request):
     require_auth(request)

@@ -106,13 +106,29 @@ sleep 1
 open "http://localhost:$PORT" 2>/dev/null &
 
 # psutil pour les jauges système (installe en silence si absent)
-python3 -c "import psutil" 2>/dev/null || pip3 install psutil --quiet 2>/dev/null &
+# IMPORTANT : python3 -m pip (et PAS pip3) pour installer dans LE python qui lance Jarvis
+python3 -c "import psutil" 2>/dev/null || python3 -m pip install psutil --quiet 2>/dev/null &
 
 # Librairie WebSocket : sans elle uvicorn REFUSE les connexions temps réel
 # (symptôme : la page se charge mais reste HORS LIGNE / code 1006)
-if ! python3 -c "import websockets" 2>/dev/null && ! python3 -c "import wsproto" 2>/dev/null; then
-  echo "📦 Installation du support WebSocket (une seule fois)..."
-  pip3 install websockets --quiet
+WSCHECK=$(python3 - <<'PY'
+try:
+    from uvicorn.protocols.websockets.auto import AutoWebSocketsProtocol as A
+    print("OK" if A else "MISSING")
+except Exception:
+    print("MISSING")
+PY
+)
+if [ "$WSCHECK" != "OK" ]; then
+  echo "📦 Support WebSocket MANQUANT → installation dans le bon Python..."
+  python3 -m pip install websockets --quiet
+  WSCHECK=$(python3 -c "from uvicorn.protocols.websockets.auto import AutoWebSocketsProtocol as A; print('OK' if A else 'MISSING')" 2>/dev/null)
+fi
+if [ "$WSCHECK" = "OK" ]; then
+  echo "✓ Support WebSocket : OK"
+else
+  echo "❌ SUPPORT WEBSOCKET TOUJOURS MANQUANT — les appareils resteront HORS LIGNE."
+  echo "   Lancez :  python3 -m pip install websockets"
 fi
 
 # ── 6. Lancer le serveur ───────────────────────────────────
