@@ -924,13 +924,18 @@ header::after {
 @media (max-width: 700px) {
   .app {
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: 50px minmax(0, 1fr) auto !important;
+    grid-template-rows: calc(50px + env(safe-area-inset-top)) minmax(0, 1fr) auto !important;
     height: 100dvh;
     width: 100vw;
     overflow: hidden;
   }
-  /* Header compact : garder logo, statut, verrou */
-  header { padding: 0 12px; min-width: 0; overflow: hidden; }
+  /* Header compact : garder logo, statut, verrou — sous la barre d'état iPhone */
+  header {
+    padding: 0 12px;
+    padding-top: env(safe-area-inset-top);
+    min-width: 0;
+    overflow: hidden;
+  }
   .logo { font-size: 15px; letter-spacing: 5px; }
   .model-badge, .jarvis-clock, .clients-badge { display: none !important; }
   .btn-clear { padding: 4px 8px; font-size: 9px; letter-spacing: 1px; }
