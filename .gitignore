@@ -40,3 +40,4 @@ motifs-gravure.zip
 
 # Archives de livraison (motifs, etc.) — non déployées
 *.zip
+__pycache__/
