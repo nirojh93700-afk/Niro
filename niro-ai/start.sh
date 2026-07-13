@@ -7,12 +7,11 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 PORT=7777
 
 echo ""
-echo "  ███╗   ██╗██╗██████╗  ██████╗ "
-echo "  ████╗  ██║██║██╔══██╗██╔═══██╗"
-echo "  ██╔██╗ ██║██║██████╔╝██║   ██║"
-echo "  ██║╚██╗██║██║██╔══██╗██║   ██║"
-echo "  ██║ ╚████║██║██║  ██║╚██████╔╝"
-echo "  ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝ ╚═════╝ "
+echo "        _                  _     "
+echo "       | |  __ _  _ __ __| | __ "
+echo "    _  | | / _\` || '__|/ _\` |/ _|"
+echo "   | |_| || (_| || |  | (_| |\__ \\"
+echo "    \___/  \__,_||_|   \__,_||___/"
 echo ""
 echo "  Serveur Central — M4 Max 48Go"
 echo ""
@@ -50,13 +49,13 @@ MDNS_PID=$!
 # ── 5. Affichage des URLs d'accès ─────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  NIRO est accessible depuis tous vos appareils :"
+echo "  Jarvis est accessible depuis tous vos appareils :"
 echo ""
 echo "  Sur ce Mac         →  http://localhost:$PORT"
 if [ -n "$LOCAL_IP" ]; then
 echo "  iPhone / iPad      →  http://$LOCAL_IP:$PORT"
 echo "  MacBook Pro        →  http://$LOCAL_IP:$PORT"
-echo "  Tout appareil WiFi →  http://niro.local:$PORT"
+echo "  Tout appareil WiFi →  http://jarvis.local:$PORT"
 echo ""
 echo "  📱 Scannez le QR dans l'interface pour accéder depuis votre téléphone"
 fi
