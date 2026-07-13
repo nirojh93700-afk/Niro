@@ -27,6 +27,99 @@ html, body {
   overflow: hidden;
 }
 
+/* ── Mobile responsive ── */
+@media (max-width: 700px) {
+  .app {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 50px 1fr 100px !important;
+  }
+  .panel { display: none; }
+  .main { grid-column: 1; }
+  .input-area { grid-column: 1; padding: 12px 14px; }
+  .ring-container { width: 140px; height: 140px; }
+  .logo { font-size: 16px; letter-spacing: 6px; }
+  #text-input { font-size: 16px; }
+  .btn-send { padding: 0 14px; font-size: 10px; }
+}
+
+/* ── QR Modal ── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  text-align: center;
+  max-width: 340px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.modal h2 {
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.modal p { font-size: 13px; color: rgba(0,212,255,0.5); margin-bottom: 20px; }
+.qr-box {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0 auto 20px;
+  display: inline-block;
+}
+.qr-box canvas { display: block; }
+.network-url {
+  font-size: 13px;
+  color: var(--cyan);
+  background: rgba(0,212,255,0.06);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-family: monospace;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+.btn-close-modal {
+  background: none;
+  border: 1px solid rgba(0,212,255,0.3);
+  color: rgba(0,212,255,0.6);
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.btn-close-modal:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* Indicateur nombre de clients connectés */
+.clients-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(0,212,255,0.4);
+}
+.clients-count {
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 10px;
+  color: var(--cyan);
+}
+
 /* ── Grid ── */
 .app {
   display: grid;
@@ -452,13 +545,34 @@ header {
     <span class="logo">NIRO</span>
     <span class="model-badge" id="model-badge">—</span>
     <div class="header-right">
+      <div class="clients-badge">
+        📱 <span class="clients-count" id="clients-count">1</span> appareil(s)
+      </div>
       <div class="status-pill">
         <div class="dot" id="status-dot"></div>
         <span id="status-text">CONNEXION…</span>
       </div>
+      <button class="btn-clear" onclick="showQR()" title="Connecter un appareil" style="margin-right:6px">📱 APPAREILS</button>
       <button class="btn-clear" onclick="clearChat()">EFFACER</button>
     </div>
   </header>
+
+  <!-- QR Modal -->
+  <div class="modal-overlay" id="qr-modal" onclick="if(event.target===this)hideQR()">
+    <div class="modal">
+      <h2>Connecter un appareil</h2>
+      <p>Scannez ce QR depuis votre iPhone, iPad ou MacBook<br>
+      (même réseau WiFi)</p>
+      <div class="qr-box">
+        <canvas id="qr-canvas" width="180" height="180"></canvas>
+      </div>
+      <div class="network-url" id="network-url">Récupération de l'URL…</div>
+      <p style="font-size:11px;margin-bottom:16px;color:rgba(0,212,255,0.35)">
+        Ou installez <strong>Tailscale</strong> pour accéder depuis n'importe où dans le monde
+      </p>
+      <button class="btn-close-modal" onclick="hideQR()">FERMER</button>
+    </div>
+  </div>
 
   <!-- Visualizer -->
   <div class="main">
@@ -888,8 +1002,71 @@ function drawCanvas() {
 }
 drawCanvas();
 
+// ─── Infos réseau + QR ───────────────────────────────────────────────────────
+let networkUrl = null;
+
+async function fetchStatus() {
+  try {
+    const r = await fetch('/api/status');
+    const data = await r.json();
+    if (data.model) modelBadge.textContent = data.model;
+    if (data.network_url) {
+      networkUrl = data.network_url;
+    }
+  } catch(e) {}
+}
+
+function showQR() {
+  document.getElementById('qr-modal').classList.add('show');
+  const urlEl = document.getElementById('network-url');
+  const url = networkUrl || `http://niro.local:7777`;
+  urlEl.textContent = url;
+  drawQR(url);
+}
+
+function hideQR() {
+  document.getElementById('qr-modal').classList.remove('show');
+}
+
+// QR code minimaliste (algorithme simplifié pour les URLs courtes)
+function drawQR(text) {
+  const canvas = document.getElementById('qr-canvas');
+  const ctx = canvas.getContext('2d');
+  const size = 180;
+  canvas.width = size; canvas.height = size;
+
+  // Utiliser l'API Google Charts pour générer le QR (fallback propre)
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  // On génère via une API QR tierce-partie simple
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(text)}&bgcolor=ffffff&color=010b14&margin=2`;
+  img.onload = () => { ctx.drawImage(img, 0, 0, size, size); };
+  img.onerror = () => {
+    // Fallback : afficher l'URL en texte
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = '#010b14';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('QR non disponible', size/2, size/2 - 8);
+    ctx.fillText('(pas internet)', size/2, size/2 + 8);
+  };
+  img.src = qrUrl;
+}
+
+// Compteur d'appareils connectés (via un endpoint serveur)
+async function updateClientsCount() {
+  try {
+    const r = await fetch('/api/clients');
+    const data = await r.json();
+    document.getElementById('clients-count').textContent = data.count || 1;
+  } catch(e) {}
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────
 connect();
+fetchStatus();
+setInterval(updateClientsCount, 5000);
 </script>
 </body>
 </html>

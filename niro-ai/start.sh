@@ -1,9 +1,10 @@
 #!/bin/bash
-# ──────────────────────────────────────────────
-#  NIRO — Lancement
-# ──────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────
+#  NIRO — Lancement (Serveur central — tous appareils)
+# ──────────────────────────────────────────────────────────
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
+PORT=7777
 
 echo ""
 echo "  ███╗   ██╗██╗██████╗  ██████╗ "
@@ -13,41 +14,77 @@ echo "  ██║╚██╗██║██║██╔══██╗██║
 echo "  ██║ ╚████║██║██║  ██║╚██████╔╝"
 echo "  ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝ ╚═════╝ "
 echo ""
-echo "  Assistant IA Personnel — M4 Max 48Go"
+echo "  Serveur Central — M4 Max 48Go"
 echo ""
 
-# Vérifier Ollama
+# ── 1. Ollama ──────────────────────────────────────────────
 if ! pgrep -x "ollama" > /dev/null; then
   echo "🧠 Démarrage de Ollama..."
   ollama serve &>/tmp/niro-ollama.log &
-  sleep 3
+  sleep 4
 else
   echo "✓ Ollama actif"
 fi
 
-# Vérifier le modèle
-echo "🔍 Vérification du modèle..."
+# ── 2. Modèle ──────────────────────────────────────────────
 if ollama list 2>/dev/null | grep -q "qwen2.5:72b"; then
-  export NIRO_MODEL="qwen2.5:72b"
   echo "✓ Modèle : qwen2.5:72b"
 elif ollama list 2>/dev/null | grep -q "llama3.3:70b"; then
-  export NIRO_MODEL="llama3.3:70b"
   echo "✓ Modèle : llama3.3:70b"
 else
-  echo "⚠ Aucun grand modèle trouvé. Lancement avec ce qui est disponible..."
+  echo "⚠ Modèle par défaut (lancez ./install.sh pour le meilleur modèle)"
 fi
 
-# Lancer le backend
+# ── 3. IP locale (WiFi) ────────────────────────────────────
+LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
+
+# ── 4. mDNS — accessible via niro.local ───────────────────
+# Enregistrer le service Bonjour/mDNS (natif macOS)
+dns-sd -R "NIRO Assistant" _http._tcp local $PORT &>/tmp/niro-mdns.log &
+MDNS_PID=$!
+
+# ── 5. Affichage des URLs d'accès ─────────────────────────
 echo ""
-echo "🚀 Lancement de NIRO sur http://localhost:7777"
-echo "   Ouvrez cette URL dans Safari ou Chrome"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  NIRO est accessible depuis tous vos appareils :"
 echo ""
-echo "   Ctrl+C pour arrêter"
+echo "  Sur ce Mac         →  http://localhost:$PORT"
+if [ -n "$LOCAL_IP" ]; then
+echo "  iPhone / iPad      →  http://$LOCAL_IP:$PORT"
+echo "  MacBook Pro        →  http://$LOCAL_IP:$PORT"
+echo "  Tout appareil WiFi →  http://niro.local:$PORT"
+echo ""
+echo "  📱 Scannez le QR dans l'interface pour accéder depuis votre téléphone"
+fi
+
+# Tailscale (si installé)
+if command -v tailscale &>/dev/null; then
+  TAIL_IP=$(tailscale ip -4 2>/dev/null || echo "")
+  if [ -n "$TAIL_IP" ]; then
+    echo ""
+    echo "  🌐 Partout dans le monde (Tailscale) :"
+    echo "     http://$TAIL_IP:$PORT"
+  fi
+fi
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "  Ctrl+C pour arrêter"
 echo ""
 
-cd "$DIR/backend"
-python3 -m uvicorn main:app --host 0.0.0.0 --port 7777 --reload
-
-# Ouvrir Safari automatiquement
+# Ouvrir Safari sur ce Mac
 sleep 1
-open -a Safari "http://localhost:7777" 2>/dev/null || open "http://localhost:7777"
+open "http://localhost:$PORT" 2>/dev/null &
+
+# ── 6. Lancer le serveur ───────────────────────────────────
+cd "$DIR/backend"
+
+# Passer l'IP locale au backend (pour le QR code)
+export NIRO_LOCAL_IP="$LOCAL_IP"
+export NIRO_PORT="$PORT"
+
+python3 -m uvicorn main:app --host 0.0.0.0 --port $PORT
+
+# Nettoyage à l'arrêt
+kill $MDNS_PID 2>/dev/null

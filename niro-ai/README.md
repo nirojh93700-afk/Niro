@@ -1,9 +1,19 @@
-# NIRO — Assistant IA Personnel
+# NIRO — Assistant IA Personnel (Serveur Central)
 
-Assistant IA local style JARVIS pour Mac Studio M4 Max.
-100% local, 0 cloud, 0 abonnement.
+Le Mac Studio M4 Max est le **cerveau central**. Tous vos appareils s'y connectent.
 
-## Installation (une seule fois)
+```
+Mac Studio M4 Max 48Go
+        │
+        ├── 🖥️ Ce Mac         → http://localhost:7777
+        ├── 📱 iPhone          → http://192.168.x.x:7777
+        ├── 📱 iPad            → http://192.168.x.x:7777
+        └── 💻 MacBook Pro     → http://192.168.x.x:7777
+```
+
+---
+
+## Installation (une seule fois sur le Mac Studio)
 
 ```bash
 cd niro-ai
@@ -11,11 +21,9 @@ chmod +x install.sh start.sh
 ./install.sh
 ```
 
-Le script installe automatiquement :
-- Ollama (moteur IA local)
-- Qwen 2.5 72B (le cerveau — 40 Go, meilleur modèle open source)
-- LLaVA 13B (vision — pour analyser les images)
-- FastAPI (le serveur)
+Durée : 30-60 min (téléchargement du modèle 70B = 40 Go).
+
+---
 
 ## Lancement
 
@@ -23,50 +31,81 @@ Le script installe automatiquement :
 ./start.sh
 ```
 
-Puis ouvrir : **http://localhost:7777**
+Le terminal affiche les URLs d'accès pour chaque appareil.
+
+---
+
+## Accès depuis les autres appareils
+
+### Sur le même WiFi (domicile / bureau)
+
+Ouvrez simplement dans un navigateur :
+- **http://niro.local:7777** (si le Mac est allumé)
+- ou l'IP affichée au démarrage : **http://192.168.x.x:7777**
+
+Fonctionne sur : iPhone Safari, iPad Safari, MacBook Chrome/Safari, Android Chrome.
+
+### Depuis n'importe où dans le monde (Tailscale)
+
+Tailscale crée un réseau privé entre vos appareils — comme si vous étiez toujours chez vous.
+
+**Sur le Mac Studio :**
+```bash
+brew install tailscale
+sudo tailscale up
+```
+
+**Sur chaque autre appareil :**
+- iPhone/iPad : App Store → "Tailscale" → Se connecter avec le même compte
+- MacBook : brew install tailscale
+
+Une fois connecté, NIRO est accessible via l'IP Tailscale du Mac Studio (affichée dans `./start.sh`).
+
+---
 
 ## Ce que NIRO peut faire
 
-- Répondre à tout en français, naturellement
-- Naviguer sur internet et vous résumer ce qu'il trouve
-- Surveiller votre boutique nivcreation.fr
-- Envoyer des emails (après config)
-- Contrôler votre Mac (ouvrir des apps, gérer des fichiers)
-- Analyser des images (montrez-lui une photo d'un problème)
-- Gérer vos fichiers
-- Lire les infos système (CPU, mémoire, disque)
-- Créer des rappels
-- Faire des calculs
+| Capacité | Détail |
+|----------|--------|
+| 💬 Conversation | Réponses naturelles en français, voix Thomas |
+| 🌐 Web | Navigue, recherche, résume n'importe quelle page |
+| 🛍️ Boutique | Surveille nivcreation.fr, détecte les problèmes |
+| 📧 Email | Envoie des emails (après config ~/.niro/email.json) |
+| 🖥️ Mac | Contrôle le Mac via AppleScript et Terminal |
+| 📁 Fichiers | Lit, écrit, liste, organise |
+| 📷 Vision | Analyse les photos que vous lui montrez |
+| 💻 Système | CPU, mémoire, disque, réseau, processus |
+| ⏰ Rappels | Notifications Mac à l'heure choisie |
+| 🔢 Calculs | Maths, finance, conversions |
 
-## Configuration email (optionnel)
+---
 
-Créez `~/.niro/email.json` :
+## Architecture technique
+
+```
+Mac Studio (serveur)
+├── Ollama          → cerveau IA (qwen2.5:72b, 100% local)
+├── FastAPI         → serveur web + WebSocket
+├── tools.py        → 13 outils connectés
+└── frontend/       → interface JARVIS (n'importe quel navigateur)
+```
+
+Chaque appareil connecté a sa propre **conversation indépendante**.
+Le cerveau IA (Ollama) est partagé : il traite les demandes une par une.
+
+---
+
+## Configuration email
+
+`~/.niro/email.json` :
 ```json
 {
   "smtp": "smtp.gmail.com",
   "port": 587,
   "user": "votre@gmail.com",
-  "password": "mot-de-passe-application-google",
+  "password": "mot-de-passe-application",
   "from": "NIRO <votre@gmail.com>"
 }
 ```
 
-Pour Gmail : Compte Google → Sécurité → Mots de passe des applications.
-
-## Utilisation
-
-- **Texte** : écrivez dans la zone en bas + Entrée
-- **Voix** : cliquez sur 🎙️, parlez, NIRO répond à voix haute (Thomas, voix française)
-- **Image** : cliquez sur 📎, choisissez une image, posez votre question
-- **Effacer** : bouton EFFACER en haut à droite
-
-## Modèles compatibles (par ordre de préférence)
-
-| Modèle | RAM requise | Qualité |
-|--------|------------|---------|
-| qwen2.5:72b | 45 Go | ★★★★★ Recommandé pour M4 Max 48Go |
-| llama3.3:70b | 43 Go | ★★★★★ Alternatif |
-| qwen2.5:32b | 20 Go | ★★★★☆ |
-| qwen2.5:14b | 9 Go | ★★★☆☆ |
-
-Pour changer : `ollama pull <nom-du-modèle>`
+Gmail : Compte Google → Sécurité → Mots de passe des applications → Créer.

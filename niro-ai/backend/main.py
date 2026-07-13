@@ -19,7 +19,21 @@ import uvicorn
 
 from tools import execute_tool, TOOLS_DEFINITIONS
 
+# Clients WebSocket connectés (multi-appareils)
+connected_clients: set = set()
+
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="NIRO AI")
+
+# CORS — autoriser tous les appareils du réseau local
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
@@ -203,18 +217,46 @@ async def root():
 @app.get("/api/status")
 async def status():
     model = await get_best_model()
+    local_ip = os.getenv("NIRO_LOCAL_IP", "")
+    port = os.getenv("NIRO_PORT", "7777")
     try:
         async with httpx.AsyncClient(timeout=3.0) as client:
             r = await client.get(f"{OLLAMA_BASE}/api/tags")
             ollama_ok = r.status_code == 200
     except Exception:
         ollama_ok = False
-    return {"status": "ok", "model": model, "ollama": ollama_ok}
+    return {
+        "status": "ok",
+        "model": model,
+        "ollama": ollama_ok,
+        "local_ip": local_ip,
+        "port": port,
+        "network_url": f"http://{local_ip}:{port}" if local_ip else None,
+        "clients": len(connected_clients),
+    }
+
+
+@app.get("/api/clients")
+async def clients_count():
+    return {"count": len(connected_clients)}
+
+
+@app.get("/api/qr")
+async def qr_code():
+    """Génère un QR code pour accéder depuis un téléphone."""
+    local_ip = os.getenv("NIRO_LOCAL_IP", "")
+    port = os.getenv("NIRO_PORT", "7777")
+    if not local_ip:
+        return {"error": "IP locale non disponible"}
+    url = f"http://{local_ip}:{port}"
+    # QR code en SVG via l'API publique (ou génération locale)
+    return {"url": url}
 
 
 @app.websocket("/ws")
 async def websocket_endpoint(ws: WebSocket):
     await ws.accept()
+    connected_clients.add(id(ws))
     model = await get_best_model()
 
     # Envoyer le modèle actif au client
@@ -284,6 +326,8 @@ async def websocket_endpoint(ws: WebSocket):
 
     except WebSocketDisconnect:
         pass
+    finally:
+        connected_clients.discard(id(ws))
 
 
 if __name__ == "__main__":
