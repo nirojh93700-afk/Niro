@@ -1176,6 +1176,49 @@ function getCookie(name) {
   return v ? v.pop() : ''
 }
 
+// ═══ MODE COMPATIBLE : si le WebSocket est bloqué (réseau/filtre), la
+// conversation passe automatiquement par des requêtes HTTP classiques. ═══
+let pollMode = false;
+let wsFails = 0;
+
+function enterPollMode() {
+  if (pollMode) return;
+  pollMode = true;
+  statusDot.className = 'dot';
+  statusText.textContent = 'EN LIGNE ✻';
+  const b = document.getElementById('diag-banner'); if (b) b.remove();
+  isThinking = false;
+  btnSend.disabled = false;
+  removeThinkingDots();
+  if (!hasGreeted) { hasGreeted = true; apiSend({ type: 'greet' }); }
+}
+
+async function apiSend(payload) {
+  try {
+    const r = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    if (r.status === 401) { window.location.href = '/login'; return; }
+    if (!r.ok) { handleMessage({ type: 'error', content: 'Erreur serveur ' + r.status }); return; }
+    const { chat_id } = await r.json();
+    let cursor = 0;
+    while (true) {
+      const p = await fetch('/api/chat/poll?chat_id=' + chat_id + '&cursor=' + cursor, { credentials: 'include' });
+      if (!p.ok) break;
+      const d = await p.json();
+      d.events.forEach(ev => handleMessage(ev));
+      cursor = d.cursor;
+      if (d.done) break;
+      await new Promise(res => setTimeout(res, 700));
+    }
+  } catch (e) {
+    handleMessage({ type: 'error', content: 'Connexion perdue pendant la réponse.' });
+  }
+}
+
 function diag(msg) {
   let el = document.getElementById('diag-banner');
   if (!el) {
@@ -1198,6 +1241,8 @@ async function connect() {
   ws = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(token)}`);
 
   ws.onopen = () => {
+    pollMode = false;   // le WebSocket remarche → mode normal
+    wsFails = 0;
     statusDot.className = 'dot';
     statusText.textContent = 'EN LIGNE';
     const b = document.getElementById('diag-banner'); if (b) b.remove();
@@ -1241,32 +1286,28 @@ async function connect() {
           diag('Session expirée côté serveur → retour au code PIN.');
           setTimeout(() => { window.location.href = '/login'; }, 1500);
         } else {
-          statusText.textContent = 'RECONNEXION…';
-          // Vérifier CE QUI TOURNE vraiment sur le Mac
-          fetch('/api/version').then(r => r.ok ? r.json() : null).then(v => {
-            if (!v) {
-              diag('⚠️ LE MAC FAIT TOURNER L\'ANCIEN CODE. Sur le Mac : Ctrl+C puis  cd ~/Niro/niro-ai && git pull && ./start.sh');
-            } else if (!v.websocket_support) {
-              diag('⚠️ CAUSE TROUVÉE : le support WebSocket manque sur le Mac (serveur v' + v.version + '). Sur le Mac :  python3 -m pip install websockets  puis relancez ./start.sh');
-            } else {
-              diag('Serveur v' + v.version + ' OK, WebSocket supporté, mais la connexion se coupe (code ' + e.code + '). Nouvel essai…');
-            }
-          }).catch(() => {
-            diag('Le Mac répond mais /api/version échoue — ancien code probable. Relancez ./start.sh après git pull.');
-          });
+          // Le Mac répond + session bonne mais le WebSocket ne passe pas
+          wsFails++;
+          if (wsFails >= 2) {
+            // → MODE COMPATIBLE automatique : la conversation passe en HTTP classique
+            enterPollMode();
+          } else {
+            statusText.textContent = 'RECONNEXION…';
+          }
         }
       })
       .catch(() => {
         statusText.textContent = 'MAC INJOIGNABLE';
         diag('Le Mac ne répond plus (HTTP échoue). Mac en veille ou Jarvis arrêté ?');
       });
-    setTimeout(connect, 3000);
+    // En mode compatible, on reteste le WebSocket discrètement toutes les 30 s
+    setTimeout(connect, pollMode ? 30000 : 3000);
   };
 
   ws.onerror = () => {
+    if (pollMode) return;  // le mode compatible gère déjà tout
     statusDot.className = 'dot offline';
     statusText.textContent = 'ERREUR';
-    diag('Erreur WebSocket sur ' + proto + '://' + location.host + '/ws');
   };
 
   ws.onmessage = (evt) => {
@@ -1502,8 +1543,8 @@ function escapeHtml(str) {
 
 // ─── Envoi de message ────────────────────────────────────────────────────────
 function sendMessage() {
-  if (!ws || ws.readyState !== WebSocket.OPEN) return;
   if (isThinking) return;
+  if (!pollMode && (!ws || ws.readyState !== WebSocket.OPEN)) return;
 
   opsClear();  // nouvelle demande = nouveau journal d'opérations
   hideViewer();
@@ -1514,7 +1555,8 @@ function sendMessage() {
     const question = text || 'Qu\'est-ce que tu vois sur cette image ?';
     addMsg('user', `[Image] ${question}`);
     showViewer([{ type: 'img', src: 'data:image/jpeg;base64,' + pendingImageB64 }], '📷 Image envoyée');
-    ws.send(JSON.stringify({ type: 'image', data: pendingImageB64, question }));
+    const payload = { type: 'image', data: pendingImageB64, question };
+    if (pollMode) apiSend(payload); else ws.send(JSON.stringify(payload));
     removeImage();
     textInput.value = '';
     return;
@@ -1524,7 +1566,8 @@ function sendMessage() {
 
   addMsg('user', text);
   // mute_voice : en mode conversation, c'est CET appareil qui parle (pas le Mac)
-  ws.send(JSON.stringify({ type: 'message', content: text, mute_voice: voiceMode }));
+  const payload = { type: 'message', content: text, mute_voice: voiceMode };
+  if (pollMode) apiSend(payload); else ws.send(JSON.stringify(payload));
   textInput.value = '';
 }
 
@@ -1654,7 +1697,8 @@ function speakOnDevice(text) {
 }
 
 function stopVoice() {
-  if (ws && ws.readyState === WebSocket.OPEN) {
+  if (pollMode) apiSend({ type: 'stop_voice' });
+  else if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify({ type: 'stop_voice' }));
   }
   btnStopVoice.style.display = 'none';
@@ -1683,7 +1727,8 @@ function removeImage() {
 
 // ─── Clear ───────────────────────────────────────────────────────────────────
 function clearChat() {
-  if (ws && ws.readyState === WebSocket.OPEN) {
+  if (pollMode) apiSend({ type: 'clear' });
+  else if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify({ type: 'clear' }));
   }
 }

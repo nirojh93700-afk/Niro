@@ -399,7 +399,7 @@ async def root(request: Request):
         return FileResponse(str(FRONTEND_DIR / "login.html"))
     return FileResponse(str(FRONTEND_DIR / "index.html"))
 
-JARVIS_VERSION = "2.2"
+JARVIS_VERSION = "2.3"
 
 @app.get("/api/version")
 async def version():
@@ -504,6 +504,95 @@ async def qr_code(request: Request):
     port = os.getenv("NIRO_PORT", "7777")
     url = f"http://{local_ip}:{port}" if local_ip else f"http://niro.local:{port}"
     return {"url": url}
+
+# ── MODE COMPATIBLE (secours sans WebSocket) ──────────────────────────────────
+# Certains réseaux/filtres laissent passer les pages mais bloquent les WebSockets.
+# Ce mode fait transiter la conversation par des requêtes HTTP classiques :
+# POST /api/chat lance le traitement, GET /api/chat/poll récupère les événements.
+
+POLL_CHATS: dict = {}        # chat_id -> {"events": [...], "done": bool}
+CONVERSATIONS: dict = {}     # session_token -> historique de conversation
+
+class PollSink:
+    """Se comporte comme un WebSocket pour chat_with_ollama, mais stocke les événements."""
+    def __init__(self, store: dict):
+        self.store = store
+    async def send_json(self, obj):
+        self.store["events"].append(obj)
+
+@app.post("/api/chat")
+async def api_chat(request: Request):
+    require_auth(request)
+    token = get_session_token(request)
+    body = await request.json()
+    msg_type = body.get("type", "message")
+
+    conv = CONVERSATIONS.setdefault(token, [{"role": "system", "content": build_system_prompt()}])
+    chat_id = secrets.token_urlsafe(9)
+    store = {"events": [], "done": False}
+    POLL_CHATS[chat_id] = store
+
+    async def run():
+        sink = PollSink(store)
+        try:
+            if msg_type == "greet":
+                greeting = "Bonjour Nirojh. Jarvis opérationnel, prêt à vous assister."
+                await sink.send_json({"type": "token", "content": greeting})
+                await sink.send_json({"type": "done", "content": greeting})
+                conv.append({"role": "assistant", "content": greeting})
+            elif msg_type == "clear":
+                CONVERSATIONS[token] = [{"role": "system", "content": build_system_prompt()}]
+                await sink.send_json({"type": "cleared"})
+            elif msg_type == "stop_voice":
+                subprocess.run(["killall", "say"], capture_output=True)
+                await sink.send_json({"type": "done", "content": ""})
+            elif msg_type == "image":
+                image_data = body.get("data", "")
+                question = body.get("question", "Qu'est-ce que tu vois sur cette image ?")
+                conv.append({
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": question},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_data}"}}
+                    ]
+                })
+                await sink.send_json({"type": "thinking"})
+                model = await get_best_model()
+                resp = await chat_with_ollama(conv, model, sink)
+                if resp:
+                    conv.append({"role": "assistant", "content": resp})
+            else:
+                user_text = (body.get("content") or "").strip()
+                if user_text:
+                    conv.append({"role": "user", "content": user_text})
+                    if len(conv) > 42:
+                        CONVERSATIONS[token] = conv[:1] + conv[-40:]
+                    await sink.send_json({"type": "thinking"})
+                    model = await get_best_model()
+                    resp = await chat_with_ollama(CONVERSATIONS[token], model, sink,
+                                                  mute_voice=bool(body.get("mute_voice")))
+                    if resp:
+                        CONVERSATIONS[token].append({"role": "assistant", "content": resp})
+        except Exception as e:
+            store["events"].append({"type": "error", "content": f"Erreur : {e}"})
+        finally:
+            store["done"] = True
+
+    asyncio.create_task(run())
+    return {"chat_id": chat_id}
+
+@app.get("/api/chat/poll")
+async def api_chat_poll(request: Request, chat_id: str, cursor: int = 0):
+    require_auth(request)
+    store = POLL_CHATS.get(chat_id)
+    if not store:
+        raise HTTPException(404, "Conversation inconnue")
+    events = store["events"][cursor:]
+    new_cursor = cursor + len(events)
+    done = store["done"] and new_cursor >= len(store["events"])
+    if done:
+        POLL_CHATS.pop(chat_id, None)
+    return {"events": events, "cursor": new_cursor, "done": done}
 
 # ── WebSocket (protégé par token en query param) ──────────────────────────────
 
