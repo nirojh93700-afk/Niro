@@ -54,7 +54,11 @@ ollama pull qwen2.5:72b
 # ── 6. Dépendances Python ─────────────────────────────────
 echo ""
 echo "📚 Dépendances Python..."
-pip3 install fastapi uvicorn httpx python-multipart --quiet
+pip3 install fastapi uvicorn httpx python-multipart Pillow --quiet
+
+# ── 6b. Icônes PWA ────────────────────────────────────────
+echo "🎨 Génération des icônes..."
+python3 "$(dirname "$0")/frontend/generate_icons.py"
 
 # ── 7. Dossier config ─────────────────────────────────────
 mkdir -p ~/.niro
