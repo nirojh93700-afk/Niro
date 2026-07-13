@@ -163,7 +163,7 @@ FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 OLLAMA_BASE = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 
 PREFERRED_MODELS = [
-    "qwen2.5:72b", "llama3.3:70b", "qwen2.5:32b",
+    "qwen2.5:32b", "qwen2.5:72b", "llama3.3:70b",
     "mistral-large:latest", "qwen2.5:14b", "llama3.1:8b",
 ]
 
