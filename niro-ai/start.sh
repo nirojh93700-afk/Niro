@@ -87,6 +87,9 @@ echo ""
 sleep 1
 open "http://localhost:$PORT" 2>/dev/null &
 
+# psutil pour les jauges système (installe en silence si absent)
+python3 -c "import psutil" 2>/dev/null || pip3 install psutil --quiet 2>/dev/null &
+
 # ── 6. Lancer le serveur ───────────────────────────────────
 cd "$DIR/backend"
 

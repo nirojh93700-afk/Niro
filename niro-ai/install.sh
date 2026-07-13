@@ -54,7 +54,7 @@ ollama pull qwen2.5:72b
 # ── 6. Dépendances Python ─────────────────────────────────
 echo ""
 echo "📚 Dépendances Python..."
-pip3 install fastapi uvicorn httpx python-multipart Pillow --quiet
+pip3 install fastapi uvicorn httpx python-multipart Pillow psutil --quiet
 
 # ── 6b. Icônes PWA ────────────────────────────────────────
 echo "🎨 Génération des icônes..."
