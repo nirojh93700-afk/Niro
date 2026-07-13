@@ -399,6 +399,14 @@ async def clients_count(request: Request):
     require_auth(request)
     return {"count": len(connected_clients)}
 
+@app.get("/api/auth/ws-token")
+async def ws_token(request: Request):
+    """Retourne le token de session pour le WebSocket (le cookie HttpOnly n'est pas lisible en JS)."""
+    token = get_session_token(request)
+    if not is_valid_session(token):
+        raise HTTPException(status_code=401, detail="Non authentifié")
+    return {"token": token}
+
 @app.get("/api/memory")
 async def get_memory(request: Request):
     require_auth(request)

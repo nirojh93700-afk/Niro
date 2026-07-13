@@ -663,9 +663,18 @@ const btnVoice = document.getElementById('btn-voice');
 const btnStopVoice = document.getElementById('btn-stop-voice');
 
 // ─── Connexion WebSocket ─────────────────────────────────────────────────────
-function getToken() {
-  // Token stocké à la connexion
-  return sessionStorage.getItem('niro_token') || getCookie('niro_session') || ''
+async function getToken() {
+  // D'abord sessionStorage, sinon on demande au serveur (cookie HttpOnly non lisible en JS)
+  const stored = sessionStorage.getItem('niro_token')
+  if (stored) return stored
+  try {
+    const r = await fetch('/api/auth/ws-token', { credentials: 'include' })
+    if (r.ok) {
+      const data = await r.json()
+      if (data.token) { sessionStorage.setItem('niro_token', data.token); return data.token }
+    }
+  } catch(e) {}
+  return ''
 }
 
 function getCookie(name) {
@@ -673,9 +682,9 @@ function getCookie(name) {
   return v ? v.pop() : ''
 }
 
-function connect() {
+async function connect() {
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  const token = getToken();
+  const token = await getToken();
   ws = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(token)}`);
 
   ws.onopen = () => {
