@@ -251,6 +251,9 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
                         chunk = json.loads(line)
                     except json.JSONDecodeError:
                         continue
+                    if "error" in chunk:
+                        await ws.send_json({"type": "error", "content": f"Ollama : {chunk['error']}"})
+                        return ""
                     msg = chunk.get("message", {})
                     content_piece = msg.get("content", "")
                     if content_piece:
