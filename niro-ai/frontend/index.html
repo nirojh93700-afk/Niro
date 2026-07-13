@@ -1191,7 +1191,7 @@ function enterPollMode() {
   isThinking = false;
   btnSend.disabled = false;
   removeThinkingDots();
-  if (!hasGreeted) { hasGreeted = true; apiSend({ type: 'greet' }); }
+  if (!hasGreeted) { hasGreeted = true; apiSend({ type: 'greet', mute_voice: deviceVoice || voiceMode }); }
 }
 
 async function apiSend(payload) {
@@ -1256,7 +1256,7 @@ async function connect() {
     // Salutation automatique au premier démarrage
     if (!hasGreeted) {
       hasGreeted = true;
-      ws.send(JSON.stringify({ type: 'greet' }));
+      ws.send(JSON.stringify({ type: 'greet', mute_voice: deviceVoice || voiceMode }));
     }
   };
 
@@ -1593,9 +1593,22 @@ textInput.addEventListener('keydown', (e) => {
 // haute SUR CET APPAREIL → il vous réécoute automatiquement. Réappuyez pour arrêter.
 let voiceMode = false;
 let clientSpeaking = false;
-// Haut-parleur : Jarvis lit ses réponses SUR CET APPAREIL (indispensable sur iPhone,
-// où la voix du Mac ne s'entend évidemment pas)
-let deviceVoice = localStorage.getItem('jarvis-device-voice') === '1';
+// Haut-parleur : Jarvis lit ses réponses SUR CET APPAREIL.
+// Activé par défaut → chaque appareil est indépendant : l'iPhone parle sur
+// l'iPhone, le Mac sur le Mac. Tout reste enregistré sur le Mac.
+let deviceVoice = (localStorage.getItem('jarvis-device-voice') || '1') === '1';
+
+// iOS exige un premier toucher pour autoriser le son : on le débloque
+// automatiquement au premier contact avec la page (n'importe lequel).
+function unlockAudioOnce() {
+  try {
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    speechSynthesis.speak(u);
+  } catch(e) {}
+}
+document.addEventListener('click', unlockAudioOnce, { once: true, capture: true });
+document.addEventListener('touchend', unlockAudioOnce, { once: true, capture: true });
 
 function updateSpeakerBtn() {
   const b = document.getElementById('btn-speaker');

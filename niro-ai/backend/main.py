@@ -539,6 +539,8 @@ async def api_chat(request: Request):
                 greeting = "Bonjour Nirojh. Jarvis opérationnel, prêt à vous assister."
                 await sink.send_json({"type": "token", "content": greeting})
                 await sink.send_json({"type": "done", "content": greeting})
+                if not body.get("mute_voice"):
+                    await speak(greeting)
                 conv.append({"role": "assistant", "content": greeting})
             elif msg_type == "clear":
                 CONVERSATIONS[token] = [{"role": "system", "content": build_system_prompt()}]
@@ -689,7 +691,8 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                 greeting = "Bonjour Nirojh. Jarvis opérationnel, prêt à vous assister."
                 await ws.send_json({"type": "token", "content": greeting})
                 await ws.send_json({"type": "done", "content": greeting})
-                await speak(greeting)
+                if not data.get("mute_voice"):
+                    await speak(greeting)
                 conversation.append({"role": "assistant", "content": greeting})
 
             elif msg_type == "stop_voice":
