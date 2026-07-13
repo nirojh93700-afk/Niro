@@ -438,7 +438,9 @@ async def qr_code(request: Request):
 
 @app.websocket("/ws")
 async def websocket_endpoint(ws: WebSocket, token: str = ""):
-    # Vérifier l'authentification avant d'accepter
+    # Accepter aussi le cookie niro_session si le token query param est vide
+    if not token:
+        token = ws.cookies.get("niro_session", "")
     if not is_valid_session(token):
         await ws.close(code=4401, reason="Non authentifié")
         return
