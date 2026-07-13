@@ -108,6 +108,13 @@ open "http://localhost:$PORT" 2>/dev/null &
 # psutil pour les jauges système (installe en silence si absent)
 python3 -c "import psutil" 2>/dev/null || pip3 install psutil --quiet 2>/dev/null &
 
+# Librairie WebSocket : sans elle uvicorn REFUSE les connexions temps réel
+# (symptôme : la page se charge mais reste HORS LIGNE / code 1006)
+if ! python3 -c "import websockets" 2>/dev/null && ! python3 -c "import wsproto" 2>/dev/null; then
+  echo "📦 Installation du support WebSocket (une seule fois)..."
+  pip3 install websockets --quiet
+fi
+
 # ── 6. Lancer le serveur ───────────────────────────────────
 cd "$DIR/backend"
 

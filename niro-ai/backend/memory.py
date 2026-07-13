@@ -65,7 +65,11 @@ def memory_to_prompt(memory: dict) -> str:
         recent = facts[-20:]  # Les 20 derniers faits
         lines.append("Faits mémorisés :")
         for f in recent:
-            lines.append(f"  - {f['content']} (mémorisé le {f['date']})")
+            # Robuste : un fait mal formé ne doit jamais faire crasher la connexion
+            if isinstance(f, dict):
+                lines.append(f"  - {f.get('content', '?')} (mémorisé le {f.get('date', '?')})")
+            else:
+                lines.append(f"  - {f}")
 
     if len(lines) == 1:
         return ""

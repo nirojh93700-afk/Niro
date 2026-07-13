@@ -507,10 +507,28 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
         return
 
     connected_clients.add(id(ws))
-    model = await get_best_model()
-    await ws.send_json({"type": "init", "model": model})
 
-    conversation: list = [{"role": "system", "content": build_system_prompt()}]
+    # Toute erreur d'initialisation est CAPTURÉE et envoyée au client + journalisée
+    # (sinon : crash silencieux → fermeture 1006 sans explication)
+    try:
+        model = await get_best_model()
+        await ws.send_json({"type": "init", "model": model})
+        conversation: list = [{"role": "system", "content": build_system_prompt()}]
+    except Exception as e:
+        import traceback
+        err = traceback.format_exc()
+        try:
+            Path("/tmp/jarvis-ws-error.log").write_text(err)
+        except Exception:
+            pass
+        print(f"[JARVIS] ERREUR à l'initialisation WebSocket :\n{err}")
+        try:
+            await ws.send_json({"type": "error", "content": f"Erreur serveur à la connexion : {e}"})
+            await ws.close(code=1011, reason=str(e)[:100])
+        except Exception:
+            pass
+        connected_clients.discard(id(ws))
+        return
 
     try:
         while True:
