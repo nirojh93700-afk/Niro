@@ -1199,12 +1199,32 @@ async function connect() {
 
   ws.onclose = (e) => {
     if (e.code === 4401) {
+      // Vieux token en mémoire ? On le jette et on retente une fois avec le cookie
+      if (!window._triedFreshToken) {
+        window._triedFreshToken = true;
+        sessionStorage.removeItem('niro_token');
+        setTimeout(connect, 200);
+        return;
+      }
       sessionStorage.removeItem('niro_token');
       window.location.href = '/login';
       return;
     }
     statusDot.className = 'dot offline';
     statusText.textContent = 'HORS LIGNE';
+    // Diagnostic : le Mac répond-il encore ? La session est-elle encore bonne ?
+    fetch('/api/auth/check', { credentials: 'include' })
+      .then(r => r.json())
+      .then(d => {
+        if (!d.authenticated) {
+          // Session expirée → on repart au login proprement
+          sessionStorage.removeItem('niro_token');
+          window.location.href = '/login';
+        } else {
+          statusText.textContent = 'RECONNEXION…';
+        }
+      })
+      .catch(() => { statusText.textContent = 'MAC INJOIGNABLE'; });
     setTimeout(connect, 3000);
   };
 
