@@ -1189,6 +1189,7 @@ async function connect() {
     // Réinitialiser l'état en cas de reconnexion
     isThinking = false;
     btnSend.disabled = false;
+    window._triedFreshToken = false;  // reconnexion réussie → réarmer la récupération de jeton
     removeThinkingDots();
     // Salutation automatique au premier démarrage
     if (!hasGreeted) {

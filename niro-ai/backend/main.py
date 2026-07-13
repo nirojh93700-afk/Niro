@@ -496,6 +496,9 @@ async def qr_code(request: Request):
 
 @app.websocket("/ws")
 async def websocket_endpoint(ws: WebSocket, token: str = ""):
+    # IMPORTANT : accepter D'ABORD, sinon le navigateur reçoit un code 1006
+    # générique et ne peut pas savoir que la session a expiré (boucle "reconnexion").
+    await ws.accept()
     # Accepter aussi le cookie niro_session si le token query param est vide
     if not token:
         token = ws.cookies.get("niro_session", "")
@@ -503,7 +506,6 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
         await ws.close(code=4401, reason="Non authentifié")
         return
 
-    await ws.accept()
     connected_clients.add(id(ws))
     model = await get_best_model()
     await ws.send_json({"type": "init", "model": model})
