@@ -273,7 +273,8 @@ async def browse_url(url: str) -> str:
 async def search_web(query: str, max_results: int = 5) -> str:
     """Recherche DuckDuckGo (via l'API lite)."""
     try:
-        url = f"https://api.duckduckgo.com/?q={query}&format=json&no_html=1&skip_disambig=1"
+        from urllib.parse import quote_plus
+        url = f"https://api.duckduckgo.com/?q={quote_plus(query)}&format=json&no_html=1&skip_disambig=1"
         async with httpx.AsyncClient(timeout=10.0) as client:
             r = await client.get(url)
             data = r.json()
@@ -303,21 +304,23 @@ async def search_web(query: str, max_results: int = 5) -> str:
 
 async def take_screenshot() -> str:
     """Prend une capture d'écran (macOS)."""
+    tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+    tmp.close()
     try:
-        tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-        tmp.close()
         result = subprocess.run(
             ["screencapture", "-x", tmp.name],
             capture_output=True, timeout=10
         )
         if result.returncode == 0:
             size = os.path.getsize(tmp.name)
-            os.unlink(tmp.name)
             return f"Capture d'écran prise ({size // 1024} Ko). Fichier disponible pour analyse."
         else:
             return "Impossible de prendre la capture d'écran."
     except Exception as e:
         return f"Erreur screenshot : {e}"
+    finally:
+        try: os.unlink(tmp.name)
+        except Exception: pass
 
 
 async def check_boutique(deep: bool = False) -> str:
@@ -475,7 +478,7 @@ async def get_system_info(info_type: str = "all") -> str:
 
         if info_type in ("processes", "all"):
             r = subprocess.run(
-                ["ps", "aux", "--sort=-%cpu"],
+                ["ps", "aux", "-r"],
                 capture_output=True, text=True, timeout=5
             )
             lines = r.stdout.split("\n")[:11]
@@ -489,15 +492,13 @@ async def get_system_info(info_type: str = "all") -> str:
 
 async def set_reminder(message: str, minutes: int = None, time: str = None) -> str:
     """Crée un rappel via AppleScript."""
+    safe_msg = message.replace("\\", "\\\\").replace('"', '\\"')
     if minutes:
-        script = f'''
-        delay {minutes * 60}
-        display notification "{message}" with title "NIRO" sound name "Glass"
-        '''
+        script = f'delay {int(minutes) * 60}\ndisplay notification "{safe_msg}" with title "Jarvis" sound name "Glass"'
         subprocess.Popen(["osascript", "-e", script])
         return f"Rappel programmé dans {minutes} minute(s) : {message}"
     else:
-        script = f'display notification "{message}" with title "Jarvis" sound name "Glass"'
+        script = f'display notification "{safe_msg}" with title "Jarvis" sound name "Glass"'
         subprocess.Popen(["osascript", "-e", script])
         return f"Notification envoyée : {message}"
 

@@ -454,7 +454,10 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
 
     try:
         while True:
-            data = await ws.receive_json()
+            try:
+                data = await ws.receive_json()
+            except Exception:
+                continue
             msg_type = data.get("type", "message")
 
             if msg_type == "message":
@@ -462,6 +465,9 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                 if not user_text:
                     continue
                 conversation.append({"role": "user", "content": user_text})
+                # Limiter l'historique : system + 20 derniers échanges max
+                if len(conversation) > 42:
+                    conversation = conversation[:1] + conversation[-40:]
                 await ws.send_json({"type": "thinking"})
                 try:
                     response = await chat_with_ollama(conversation, model, ws)
@@ -490,7 +496,9 @@ async def websocket_endpoint(ws: WebSocket, token: str = ""):
                         conversation.append({"role": "assistant", "content": response})
                 except Exception as e:
                     await ws.send_json({"type": "error", "content": str(e)})
-                os.unlink(tmp.name)
+                finally:
+                    try: os.unlink(tmp.name)
+                    except Exception: pass
 
             elif msg_type == "clear":
                 conversation = [{"role": "system", "content": build_system_prompt()}]

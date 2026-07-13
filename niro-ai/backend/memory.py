@@ -26,10 +26,13 @@ DEFAULT_MEMORY = {
 def load_memory() -> dict:
     try:
         data = json.loads(MEMORY_FILE.read_text())
-        # Fusionner avec les defaults pour les champs manquants
         for key, val in DEFAULT_MEMORY.items():
             if key not in data:
                 data[key] = val
+            elif isinstance(val, dict) and isinstance(data[key], dict):
+                for subkey, subval in val.items():
+                    if subkey not in data[key]:
+                        data[key][subkey] = subval
         return data
     except Exception:
         return dict(DEFAULT_MEMORY)

@@ -721,8 +721,12 @@ async function connect() {
   };
 
   ws.onmessage = (evt) => {
-    const data = JSON.parse(evt.data);
-    handleMessage(data);
+    try {
+      const data = JSON.parse(evt.data);
+      handleMessage(data);
+    } catch(e) {
+      console.error('Message WebSocket invalide:', e);
+    }
   };
 }
 
@@ -1054,7 +1058,7 @@ let networkUrl = null;
 
 async function fetchStatus() {
   try {
-    const r = await fetch('/api/status');
+    const r = await fetch('/api/status', { credentials: 'include' });
     const data = await r.json();
     if (data.model) modelBadge.textContent = data.model;
     if (data.network_url) {
@@ -1104,7 +1108,7 @@ function drawQR(text) {
 // Compteur d'appareils connectés (via un endpoint serveur)
 async function updateClientsCount() {
   try {
-    const r = await fetch('/api/clients');
+    const r = await fetch('/api/clients', { credentials: 'include' });
     const data = await r.json();
     document.getElementById('clients-count').textContent = data.count || 1;
   } catch(e) {}

@@ -26,7 +26,11 @@ export OLLAMA_MAX_LOADED_MODELS=1
 if ! pgrep -x "ollama" > /dev/null; then
   echo "🧠 Démarrage de Ollama..."
   /opt/homebrew/bin/ollama serve &>/tmp/niro-ollama.log &
-  sleep 4
+  # Attendre qu'Ollama soit prêt (max 15s)
+  for i in $(seq 1 15); do
+    ollama list &>/dev/null && break
+    sleep 1
+  done
 else
   echo "✓ Ollama actif"
 fi
@@ -43,10 +47,11 @@ fi
 # ── 3. IP locale (WiFi) ────────────────────────────────────
 LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
 
-# ── 4. mDNS — accessible via niro.local ───────────────────
-# Enregistrer le service Bonjour/mDNS (natif macOS)
-dns-sd -R "NIRO Assistant" _http._tcp local $PORT &>/tmp/niro-mdns.log &
-MDNS_PID=$!
+# ── 4. mDNS — accessible via jarvis.local ─────────────────
+if command -v dns-sd &>/dev/null; then
+  dns-sd -R "Jarvis" _http._tcp local $PORT &>/tmp/niro-mdns.log &
+  MDNS_PID=$!
+fi
 
 # ── 5. Affichage des URLs d'accès ─────────────────────────
 echo ""
@@ -92,4 +97,4 @@ export NIRO_PORT="$PORT"
 python3 -m uvicorn main:app --host 0.0.0.0 --port $PORT
 
 # Nettoyage à l'arrêt
-kill $MDNS_PID 2>/dev/null
+kill $MDNS_PID 2>/dev/null || true
