@@ -197,6 +197,39 @@ TOOLS_DEFINITIONS = [
     {
         "type": "function",
         "function": {
+            "name": "blender_run_script",
+            "description": "Exécute un script Python dans Blender en arrière-plan. Utilise pour créer des objets 3D, modifier une scène, appliquer des matériaux, exporter un fichier, corriger une erreur Blender, automatiser une tâche 3D. Blender doit être installé sur le Mac.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "script": {"type": "string", "description": "Script Python Blender (bpy) à exécuter"},
+                    "blend_file": {"type": "string", "description": "Chemin vers le fichier .blend à ouvrir (optionnel, laisse vide pour une scène vide)"},
+                    "output_file": {"type": "string", "description": "Chemin de sortie pour sauvegarder le résultat .blend (optionnel)"},
+                    "description": {"type": "string", "description": "Ce que fait ce script"}
+                },
+                "required": ["script", "description"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "blender_render",
+            "description": "Lance un rendu Blender d'un fichier .blend et sauvegarde l'image résultante",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "blend_file": {"type": "string", "description": "Chemin vers le fichier .blend"},
+                    "output_path": {"type": "string", "description": "Chemin de sortie de l'image (ex: /Users/nirojh/Desktop/rendu.png)"},
+                    "frame": {"type": "integer", "description": "Numéro de frame à rendre (défaut 1)"}
+                },
+                "required": ["blend_file", "output_path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "calculate",
             "description": "Effectue des calculs mathématiques ou financiers",
             "parameters": {
@@ -461,13 +494,106 @@ async def set_reminder(message: str, minutes: int = None, time: str = None) -> s
         delay {minutes * 60}
         display notification "{message}" with title "NIRO" sound name "Glass"
         '''
-        # Lancer en arrière-plan
         subprocess.Popen(["osascript", "-e", script])
         return f"Rappel programmé dans {minutes} minute(s) : {message}"
     else:
-        script = f'display notification "{message}" with title "NIRO" sound name "Glass"'
+        script = f'display notification "{message}" with title "Jarvis" sound name "Glass"'
         subprocess.Popen(["osascript", "-e", script])
         return f"Notification envoyée : {message}"
+
+
+async def blender_run_script(script: str, description: str, blend_file: str = "", output_file: str = "") -> str:
+    """Exécute un script Python dans Blender en arrière-plan."""
+    # Chercher Blender
+    blender_paths = [
+        "/Applications/Blender.app/Contents/MacOS/Blender",
+        "/usr/local/bin/blender",
+        "/opt/homebrew/bin/blender",
+    ]
+    blender = None
+    for p in blender_paths:
+        if os.path.exists(p):
+            blender = p
+            break
+    if not blender:
+        # Essayer via shell
+        r = subprocess.run(["which", "blender"], capture_output=True, text=True)
+        if r.returncode == 0:
+            blender = r.stdout.strip()
+    if not blender:
+        return "Blender introuvable. Assurez-vous que Blender est installé dans /Applications/Blender.app"
+
+    # Écrire le script dans un fichier temporaire
+    tmp_script = tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode="w")
+
+    # Ajouter la sauvegarde automatique si output_file est précisé
+    full_script = script
+    if output_file:
+        full_script += f"\nimport bpy\nbpy.ops.wm.save_as_mainfile(filepath='{output_file}')\nprint('Fichier sauvegardé : {output_file}')"
+
+    tmp_script.write(full_script)
+    tmp_script.close()
+
+    try:
+        cmd = [blender, "--background"]
+        if blend_file and os.path.exists(os.path.expanduser(blend_file)):
+            cmd += [os.path.expanduser(blend_file)]
+        cmd += ["--python", tmp_script.name]
+
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        output = (result.stdout + result.stderr).strip()
+
+        # Filtrer les lignes Blender inutiles pour garder ce qui est pertinent
+        lines = [l for l in output.split("\n") if l.strip() and not l.startswith("Blender") and "Warning" not in l]
+        clean_output = "\n".join(lines[-20:])  # Garder les 20 dernières lignes
+
+        if result.returncode == 0:
+            return f"✓ Script Blender exécuté ({description})\n{clean_output}"
+        else:
+            return f"Erreur Blender (code {result.returncode}) :\n{clean_output}"
+    except subprocess.TimeoutExpired:
+        return "Timeout : le script Blender a pris trop de temps (> 2 min)."
+    except Exception as e:
+        return f"Erreur : {e}"
+    finally:
+        os.unlink(tmp_script.name)
+
+
+async def blender_render(blend_file: str, output_path: str, frame: int = 1) -> str:
+    """Lance un rendu Blender."""
+    blender_paths = [
+        "/Applications/Blender.app/Contents/MacOS/Blender",
+        "/usr/local/bin/blender",
+        "/opt/homebrew/bin/blender",
+    ]
+    blender = None
+    for p in blender_paths:
+        if os.path.exists(p):
+            blender = p
+            break
+    if not blender:
+        return "Blender introuvable."
+
+    blend_expanded = os.path.expanduser(blend_file)
+    output_expanded = os.path.expanduser(output_path)
+
+    if not os.path.exists(blend_expanded):
+        return f"Fichier .blend introuvable : {blend_file}"
+
+    try:
+        cmd = [blender, "--background", blend_expanded, "--render-output", output_expanded,
+               "--render-frame", str(frame), "--render-format", "PNG"]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        output = (result.stdout + result.stderr).strip()
+        lines = [l for l in output.split("\n") if "Saved" in l or "Error" in l or "Fra:" in l]
+        if result.returncode == 0:
+            return f"✓ Rendu terminé → {output_path}\n" + "\n".join(lines[-5:])
+        else:
+            return f"Erreur rendu : {chr(10).join(lines[-10:])}"
+    except subprocess.TimeoutExpired:
+        return "Timeout rendu (> 5 min)."
+    except Exception as e:
+        return f"Erreur : {e}"
 
 
 async def calculate(expression: str) -> str:
@@ -498,6 +624,8 @@ TOOL_MAP = {
     "get_system_info": get_system_info,
     "set_reminder": set_reminder,
     "calculate": calculate,
+    "blender_run_script": blender_run_script,
+    "blender_render": blender_render,
 }
 
 
