@@ -1236,7 +1236,7 @@ function diag(msg) {
 async function connect() {
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   const token = await getToken();
-  diag('Étape 1 : jeton ' + (token ? 'OK (' + token.slice(0,6) + '…)' : 'ABSENT → login') + ' — connexion WebSocket…');
+  if (!pollMode) diag('Étape 1 : jeton ' + (token ? 'OK (' + token.slice(0,6) + '…)' : 'ABSENT → login') + ' — connexion WebSocket…');
   if (!token) { window.location.href = '/login'; return; }
   ws = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(token)}`);
 
@@ -1260,6 +1260,14 @@ async function connect() {
   };
 
   ws.onclose = (e) => {
+    // En mode compatible : le re-test échoué reste TOTALEMENT silencieux
+    if (pollMode) {
+      statusDot.className = 'dot';
+      statusText.textContent = 'EN LIGNE ✻';
+      const b = document.getElementById('diag-banner'); if (b) b.remove();
+      setTimeout(connect, 30000);
+      return;
+    }
     diag('WebSocket fermé — code ' + e.code + (e.reason ? ' (' + e.reason + ')' : '') + '. Analyse…');
     if (e.code === 4401) {
       // Session/jeton refusé par le serveur
