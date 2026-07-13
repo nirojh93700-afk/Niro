@@ -19,6 +19,8 @@ echo ""
 # ── 0. Chemins ─────────────────────────────────────────────
 export PATH="/opt/homebrew/bin:$PATH"
 export OLLAMA_MODELS="/Volumes/VERBATIM HD/niro-models"
+export OLLAMA_KEEP_ALIVE=-1
+export OLLAMA_MAX_LOADED_MODELS=1
 
 # ── 1. Ollama ──────────────────────────────────────────────
 if ! pgrep -x "ollama" > /dev/null; then
