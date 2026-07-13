@@ -49,6 +49,19 @@ TOOLS_DEFINITIONS = [
     {
         "type": "function",
         "function": {
+            "name": "get_weather",
+            "description": "Donne la météo actuelle (température, ressenti, vent, min/max du jour). Utilise cet outil pour TOUTE question météo/température. Ne PAS chercher la météo sur internet, utilise cet outil.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string", "description": "Ville (optionnel, défaut = Val-d'Oise où habite Nirojh)"}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "take_screenshot",
             "description": "Prend une capture d'écran du Mac et retourne une description de ce qui est affiché",
             "parameters": {
@@ -609,11 +622,55 @@ async def calculate(expression: str) -> str:
         return f"Erreur de calcul : {e}"
 
 
+async def get_weather(city: str = "") -> str:
+    """Météo actuelle via open-meteo (gratuit, sans clé)."""
+    try:
+        lat, lon, loc = 49.0, 2.1, city or "Val-d'Oise"
+        # Géocoder la ville si précisée
+        if city:
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                g = await client.get(
+                    "https://geocoding-api.open-meteo.com/v1/search",
+                    params={"name": city, "count": 1, "language": "fr"},
+                )
+                gd = g.json()
+                if gd.get("results"):
+                    r0 = gd["results"][0]
+                    lat, lon, loc = r0["latitude"], r0["longitude"], r0["name"]
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            w = await client.get(
+                "https://api.open-meteo.com/v1/forecast",
+                params={
+                    "latitude": lat, "longitude": lon,
+                    "current": "temperature_2m,apparent_temperature,weather_code,wind_speed_10m",
+                    "daily": "temperature_2m_max,temperature_2m_min",
+                    "timezone": "auto",
+                },
+            )
+            wd = w.json()
+        cur = wd.get("current", {})
+        daily = wd.get("daily", {})
+        codes = {0: "ciel clair", 1: "peu nuageux", 2: "nuageux", 3: "couvert",
+                 45: "brouillard", 51: "bruine", 61: "pluie", 63: "pluie",
+                 65: "forte pluie", 71: "neige", 80: "averses", 95: "orage"}
+        desc = codes.get(cur.get("weather_code"), "variable")
+        t = cur.get("temperature_2m")
+        ress = cur.get("apparent_temperature")
+        tmax = daily.get("temperature_2m_max", [None])[0]
+        tmin = daily.get("temperature_2m_min", [None])[0]
+        return (f"Météo à {loc} : {t}°C ({desc}), ressenti {ress}°C, "
+                f"vent {cur.get('wind_speed_10m')} km/h. "
+                f"Aujourd'hui min {tmin}°C / max {tmax}°C.")
+    except Exception as e:
+        return f"Impossible de récupérer la météo : {e}"
+
+
 # ─── Dispatcher ─────────────────────────────────────────────────────────────
 
 TOOL_MAP = {
     "browse_url": browse_url,
     "search_web": search_web,
+    "get_weather": get_weather,
     "take_screenshot": take_screenshot,
     "check_boutique": check_boutique,
     "send_email": send_email,

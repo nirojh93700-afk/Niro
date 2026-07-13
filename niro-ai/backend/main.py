@@ -209,7 +209,8 @@ async def speak(text: str):
 
 async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
     current_messages = list(messages)
-    for _ in range(10):
+    seen_calls = {}  # anti-boucle : (outil, args) -> nb d'appels
+    for _ in range(6):
         payload = {
             "model": model,
             "messages": current_messages,
@@ -264,6 +265,12 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
                     tool_args = json.loads(tool_args)
                 except Exception:
                     tool_args = {}
+            # Anti-boucle : si le même outil+arguments est appelé plus de 2 fois, on stoppe
+            call_key = f"{tool_name}:{json.dumps(tool_args, sort_keys=True)}"
+            seen_calls[call_key] = seen_calls.get(call_key, 0) + 1
+            if seen_calls[call_key] > 2:
+                current_messages.append({"role": "tool", "content": "Cet outil a déjà été appelé avec les mêmes arguments. Réponds directement à l'utilisateur avec ce que tu sais, sans réessayer."})
+                continue
             await ws.send_json({"type": "tool_start", "tool": tool_name, "args": tool_args})
             if tool_name == "save_to_memory":
                 result = execute_memory_tool(tool_args)
@@ -272,7 +279,25 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
             await ws.send_json({"type": "tool_done", "tool": tool_name, "result": str(result)[:500]})
             current_messages.append({"role": "tool", "content": str(result)})
 
-    await ws.send_json({"type": "done", "content": "Limite d'itérations atteinte."})
+    # Dernier tour sans outils : forcer une réponse en texte
+    payload = {
+        "model": model,
+        "messages": current_messages + [{"role": "user", "content": "Réponds maintenant directement en français, sans outil."}],
+        "stream": False,
+        "options": {"temperature": 0.7, "num_ctx": 4096},
+    }
+    try:
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            r = await client.post(f"{OLLAMA_BASE}/api/chat", json=payload)
+            final = r.json().get("message", {}).get("content", "")
+        if final.strip():
+            await ws.send_json({"type": "token", "content": final})
+            await ws.send_json({"type": "done", "content": final})
+            await speak(final)
+            return final
+    except Exception:
+        pass
+    await ws.send_json({"type": "done", "content": "Je n'ai pas pu terminer la demande."})
 
 # ── Routes statiques (toujours accessibles) ───────────────────────────────────
 
