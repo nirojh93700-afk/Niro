@@ -761,7 +761,7 @@ function handleMessage(data) {
         removeThinkingDots();
         currentNiroMsg = createMsg('niro', '');
       }
-      currentNiroMsg.innerHTML = `<div class="msg-label">NIRO</div>` +
+      currentNiroMsg.innerHTML = `<div class="msg-label">Jarvis</div>` +
         escapeHtml(getCurrentNiroText() + data.content);
       messages.scrollTop = messages.scrollHeight;
       break;
@@ -1158,7 +1158,7 @@ function showInstallBanner () {
     <style>@keyframes slideUp{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}</style>
     <div style="font-size:28px">📱</div>
     <div style="flex:1">
-      <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:3px">Installer NIRO</div>
+      <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:3px">Installer Jarvis</div>
       <div style="font-size:11px;color:rgba(0,212,255,0.45)">Accès rapide depuis l'écran d'accueil</div>
     </div>
     <button onclick="installApp()" style="background:#00d4ff;border:none;color:#010b14;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer">INSTALLER</button>
@@ -1198,11 +1198,11 @@ function checkIOSInstall () {
         text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.5);
       `
       tip.innerHTML = `
-        <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:8px">Installer NIRO sur iPhone / iPad</div>
+        <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:8px">Installer Jarvis sur iPhone / iPad</div>
         <div style="font-size:12px;color:rgba(0,212,255,0.5);line-height:1.7">
           1. Appuyez sur <strong style="color:rgba(0,212,255,0.8)">⬆️ Partager</strong> en bas de Safari<br>
           2. Choisissez <strong style="color:rgba(0,212,255,0.8)">Sur l'écran d'accueil</strong><br>
-          3. NIRO apparaît comme une vraie app 📱
+          3. Jarvis apparaît comme une vraie app 📱
         </div>
         <button onclick="this.parentNode.remove();localStorage.setItem('niro-ios-shown','1')"
           style="margin-top:14px;background:none;border:1px solid rgba(0,212,255,0.3);color:rgba(0,212,255,0.5);padding:7px 20px;border-radius:6px;font-size:11px;letter-spacing:2px;cursor:pointer">
@@ -1216,7 +1216,7 @@ function checkIOSInstall () {
 
 // ─── Déconnexion ─────────────────────────────────────────────────────────────
 async function logout() {
-  if (!confirm('Se déconnecter de NIRO ?')) return
+  if (!confirm('Se déconnecter de Jarvis ?')) return
   await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
   sessionStorage.removeItem('niro_token')
   window.location.href = '/login'
