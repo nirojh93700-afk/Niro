@@ -564,6 +564,7 @@ header {
       </div>
       <button class="btn-clear" onclick="showQR()" title="Connecter un appareil" style="margin-right:6px">📱 APPAREILS</button>
       <button class="btn-clear" onclick="clearChat()">EFFACER</button>
+      <button class="btn-clear" onclick="logout()" title="Se déconnecter" style="border-color:rgba(255,60,60,0.3);color:rgba(255,100,100,0.5)">🔒</button>
     </div>
   </header>
 
@@ -662,9 +663,20 @@ const btnVoice = document.getElementById('btn-voice');
 const btnStopVoice = document.getElementById('btn-stop-voice');
 
 // ─── Connexion WebSocket ─────────────────────────────────────────────────────
+function getToken() {
+  // Token stocké à la connexion
+  return sessionStorage.getItem('niro_token') || getCookie('niro_session') || ''
+}
+
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')
+  return v ? v.pop() : ''
+}
+
 function connect() {
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  ws = new WebSocket(`${proto}://${location.host}/ws`);
+  const token = getToken();
+  ws = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(token)}`);
 
   ws.onopen = () => {
     statusDot.className = 'dot';
@@ -672,7 +684,12 @@ function connect() {
     setCore('veille', '');
   };
 
-  ws.onclose = () => {
+  ws.onclose = (e) => {
+    if (e.code === 4401) {
+      // Session expirée → retour à la connexion
+      window.location.href = '/login'
+      return
+    }
     statusDot.className = 'dot offline';
     statusText.textContent = 'HORS LIGNE';
     setTimeout(connect, 3000);
@@ -1159,6 +1176,14 @@ function checkIOSInstall () {
       document.body.appendChild(tip)
     }, 3000)
   }
+}
+
+// ─── Déconnexion ─────────────────────────────────────────────────────────────
+async function logout() {
+  if (!confirm('Se déconnecter de NIRO ?')) return
+  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+  sessionStorage.removeItem('niro_token')
+  window.location.href = '/login'
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────

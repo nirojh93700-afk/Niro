@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>NIRO — Connexion</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NIRO">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<link rel="manifest" href="/manifest.json">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cyan:#00d4ff; --dark:#010b14; }
+
+body {
+  background: var(--dark);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, 'SF Pro Display', sans-serif;
+  color: var(--cyan);
+  overflow: hidden;
+}
+
+/* Particules */
+canvas { position:fixed; inset:0; pointer-events:none; z-index:0; }
+
+.card {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 48px 40px;
+  background: rgba(2,16,32,0.92);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 60px rgba(0,212,255,0.04);
+  width: min(380px, 90vw);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+
+/* Anneau animé */
+.ring-wrap { position:relative; width:100px; height:100px; }
+.ring {
+  position:absolute; border-radius:50%;
+  border: 1.5px solid rgba(0,212,255,0.2);
+  animation: spin linear infinite;
+}
+.r1 { inset:0; border-top-color:var(--cyan); animation-duration:6s; }
+.r2 { inset:10px; border-right-color:rgba(0,212,255,0.5); animation-duration:9s; animation-direction:reverse; }
+.r3 { inset:22px; border-bottom-color:rgba(0,100,255,0.4); animation-duration:13s; }
+.core {
+  position:absolute; inset:34px; border-radius:50%;
+  background:radial-gradient(circle,rgba(0,212,255,0.1),transparent);
+  border:1px solid rgba(0,212,255,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:8px; letter-spacing:2px; color:rgba(0,212,255,0.5);
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+.logo {
+  font-size:28px; font-weight:800; letter-spacing:10px;
+  text-shadow: 0 0 30px var(--cyan), 0 0 60px rgba(0,212,255,0.3);
+}
+.subtitle {
+  font-size:11px; letter-spacing:3px; color:rgba(0,212,255,0.35);
+  text-transform:uppercase; margin-top:-20px;
+}
+
+/* PIN */
+.pin-label {
+  font-size:11px; letter-spacing:3px; color:rgba(0,212,255,0.4);
+  text-transform:uppercase; align-self:flex-start;
+}
+.pin-dots {
+  display:flex; gap:14px;
+}
+.pin-dot {
+  width:16px; height:16px; border-radius:50%;
+  border:1.5px solid rgba(0,212,255,0.3);
+  background:transparent;
+  transition: all 0.15s;
+}
+.pin-dot.filled {
+  background:var(--cyan);
+  border-color:var(--cyan);
+  box-shadow:0 0 10px rgba(0,212,255,0.5);
+}
+.pin-dot.error {
+  background:#ff4444; border-color:#ff4444;
+  box-shadow:0 0 10px rgba(255,68,68,0.5);
+  animation:shake 0.3s ease;
+}
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* Pavé numérique */
+.numpad {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:12px; width:100%;
+}
+.key {
+  height:56px; border-radius:10px;
+  background:rgba(0,212,255,0.04);
+  border:1px solid rgba(0,212,255,0.12);
+  color:var(--cyan); font-size:20px; font-weight:300;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition: all 0.12s; user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.key:active, .key.pressed {
+  background:rgba(0,212,255,0.15);
+  border-color:rgba(0,212,255,0.4);
+  transform:scale(0.94);
+}
+.key.del { font-size:18px; }
+.key.empty { cursor:default; background:none; border:none; }
+
+.error-msg {
+  font-size:12px; color:#ff6060; letter-spacing:1px;
+  text-align:center; min-height:16px;
+}
+
+.hint {
+  font-size:11px; color:rgba(0,212,255,0.25); text-align:center; line-height:1.6;
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="card">
+  <div class="ring-wrap">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="core">NIRO</div>
+  </div>
+
+  <div class="logo">NIRO</div>
+  <div class="subtitle">Assistant IA Personnel</div>
+
+  <div class="pin-label">Code PIN</div>
+  <div class="pin-dots" id="dots"></div>
+
+  <div class="numpad" id="numpad"></div>
+
+  <div class="error-msg" id="err"></div>
+  <div class="hint" id="hint">Entrez votre code PIN pour accéder à NIRO</div>
+</div>
+
+<script>
+// Particules fond
+const canvas = document.getElementById('c')
+const ctx = canvas.getContext('2d')
+function resize() { canvas.width = innerWidth; canvas.height = innerHeight }
+resize(); window.addEventListener('resize', resize)
+const pts = Array.from({length:50}, () => ({
+  x: Math.random(), y: Math.random(),
+  vx: (Math.random()-.5)*.0004, vy: (Math.random()-.5)*.0004,
+  r: Math.random()*1.2+.4, a: Math.random()*.3+.08
+}))
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height)
+  pts.forEach(p => {
+    p.x = (p.x + p.vx + 1) % 1; p.y = (p.y + p.vy + 1) % 1
+    ctx.beginPath(); ctx.arc(p.x*canvas.width, p.y*canvas.height, p.r, 0, Math.PI*2)
+    ctx.fillStyle = `rgba(0,212,255,${p.a})`; ctx.fill()
+  })
+  requestAnimationFrame(draw)
+}
+draw()
+
+// PIN logic
+const PIN_LENGTH = 6
+let pin = ''
+let locked = false
+
+// Dots
+const dotsEl = document.getElementById('dots')
+for (let i = 0; i < PIN_LENGTH; i++) {
+  const d = document.createElement('div')
+  d.className = 'pin-dot'; d.id = `dot-${i}`
+  dotsEl.appendChild(d)
+}
+
+// Pavé
+const numpad = document.getElementById('numpad')
+const keys = [
+  '1','2','3',
+  '4','5','6',
+  '7','8','9',
+  '','0','⌫'
+]
+keys.forEach(k => {
+  const btn = document.createElement('button')
+  btn.className = 'key' + (k === '' ? ' empty' : k === '⌫' ? ' del' : '')
+  btn.textContent = k
+  btn.setAttribute('data-key', k)
+  if (k !== '') {
+    btn.addEventListener('click', () => pressKey(k))
+    btn.addEventListener('touchstart', e => { e.preventDefault(); btn.classList.add('pressed') })
+    btn.addEventListener('touchend', e => { e.preventDefault(); btn.classList.remove('pressed'); pressKey(k) })
+  }
+  numpad.appendChild(btn)
+})
+
+function updateDots() {
+  for (let i = 0; i < PIN_LENGTH; i++) {
+    const d = document.getElementById(`dot-${i}`)
+    d.className = 'pin-dot' + (i < pin.length ? ' filled' : '')
+  }
+}
+
+function pressKey(k) {
+  if (locked) return
+  if (k === '⌫') {
+    pin = pin.slice(0, -1)
+    updateDots()
+    document.getElementById('err').textContent = ''
+  } else if (/\d/.test(k) && pin.length < PIN_LENGTH) {
+    pin += k
+    updateDots()
+    if (pin.length === PIN_LENGTH) setTimeout(submit, 120)
+  }
+}
+
+// Clavier physique
+document.addEventListener('keydown', e => {
+  if (/^\d$/.test(e.key)) pressKey(e.key)
+  else if (e.key === 'Backspace') pressKey('⌫')
+  else if (e.key === 'Enter' && pin.length === PIN_LENGTH) submit()
+})
+
+async function submit() {
+  locked = true
+  const errEl = document.getElementById('err')
+  errEl.textContent = ''
+
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin }),
+      credentials: 'include',
+    })
+    const data = await r.json()
+
+    if (r.ok) {
+      // Stocker le token pour le WebSocket
+      if (data.token) sessionStorage.setItem('niro_token', data.token)
+      // Rediriger
+      window.location.href = '/'
+    } else {
+      // Erreur PIN
+      for (let i = 0; i < PIN_LENGTH; i++) {
+        document.getElementById(`dot-${i}`).className = 'pin-dot error'
+      }
+      errEl.textContent = data.detail || 'Code PIN incorrect'
+      setTimeout(() => {
+        pin = ''; updateDots(); locked = false
+        errEl.textContent = ''
+      }, 800)
+
+      if (r.status === 429) {
+        errEl.textContent = data.detail
+        locked = true
+        document.getElementById('hint').textContent = ''
+      }
+    }
+  } catch(e) {
+    errEl.textContent = 'Erreur de connexion au serveur'
+    pin = ''; updateDots(); locked = false
+  }
+}
+</script>
+</body>
+</html>

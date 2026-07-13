@@ -1,53 +1,169 @@
 """
 NIRO — Assistant IA Personnel
-Backend FastAPI + Ollama + Outils
+Backend FastAPI + Ollama + Outils + Sécurité (PIN + sessions)
 """
 
 import asyncio
 import json
 import os
+import secrets
+import hashlib
 import subprocess
 import base64
 import tempfile
+import time
 from pathlib import Path
 from typing import Optional
 import httpx
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, Response, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from tools import execute_tool, TOOLS_DEFINITIONS
 
-# Clients WebSocket connectés (multi-appareils)
-connected_clients: set = set()
+# ── Sécurité ────────────────────────────────────────────────────────────────
 
-from fastapi.middleware.cors import CORSMiddleware
+CONFIG_DIR = Path.home() / ".niro"
+CONFIG_DIR.mkdir(exist_ok=True)
+PIN_FILE = CONFIG_DIR / "pin.hash"
+SESSION_FILE = CONFIG_DIR / "sessions.json"
+
+def _load_sessions() -> dict:
+    try:
+        return json.loads(SESSION_FILE.read_text())
+    except Exception:
+        return {}
+
+def _save_sessions(sessions: dict):
+    SESSION_FILE.write_text(json.dumps(sessions))
+
+def get_pin_hash() -> Optional[str]:
+    try:
+        return PIN_FILE.read_text().strip()
+    except Exception:
+        return None
+
+def set_pin(pin: str):
+    h = hashlib.sha256(pin.encode()).hexdigest()
+    PIN_FILE.write_text(h)
+    PIN_FILE.chmod(0o600)
+
+def check_pin(pin: str) -> bool:
+    stored = get_pin_hash()
+    if not stored:
+        return False
+    return hashlib.sha256(pin.encode()).hexdigest() == stored
+
+def create_session() -> str:
+    token = secrets.token_urlsafe(32)
+    sessions = _load_sessions()
+    sessions[token] = {"created": time.time(), "last_used": time.time()}
+    _save_sessions(sessions)
+    return token
+
+def is_valid_session(token: str) -> bool:
+    if not token:
+        return False
+    sessions = _load_sessions()
+    if token not in sessions:
+        return False
+    # Session valide 30 jours
+    s = sessions[token]
+    if time.time() - s["created"] > 30 * 86400:
+        del sessions[token]
+        _save_sessions(sessions)
+        return False
+    # Mettre à jour last_used
+    sessions[token]["last_used"] = time.time()
+    _save_sessions(sessions)
+    return True
+
+def revoke_all_sessions():
+    _save_sessions({})
+
+def get_session_token(request: Request) -> Optional[str]:
+    # Chercher dans le cookie ou le header Authorization
+    token = request.cookies.get("niro_session")
+    if not token:
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            token = auth[7:]
+    return token
+
+def require_auth(request: Request):
+    """Lève une exception si non authentifié."""
+    token = get_session_token(request)
+    if not is_valid_session(token):
+        raise HTTPException(status_code=401, detail="Non authentifié")
+
+# Si aucun PIN n'est configuré, en créer un par défaut au démarrage
+def ensure_pin():
+    if not get_pin_hash():
+        default_pin = "".join([str(secrets.randbelow(10)) for _ in range(6)])
+        set_pin(default_pin)
+        print(f"\n{'═'*50}")
+        print(f"  🔐 NIRO — CODE PIN : {default_pin}")
+        print(f"  Utilisez ce code pour vous connecter.")
+        print(f"  Changeable dans Réglages → Sécurité")
+        print(f"{'═'*50}\n")
+        return default_pin
+    return None
+
+# ── Rate limiting (anti-brute-force) ────────────────────────────────────────
+_attempts: dict = {}   # ip → {count, first_attempt}
+MAX_ATTEMPTS = 5
+LOCKOUT_SECONDS = 300  # 5 minutes
+
+def check_rate_limit(ip: str) -> bool:
+    """Retourne False si l'IP est bloquée."""
+    now = time.time()
+    a = _attempts.get(ip, {"count": 0, "first": now})
+    if now - a["first"] > LOCKOUT_SECONDS:
+        _attempts[ip] = {"count": 0, "first": now}
+        return True
+    if a["count"] >= MAX_ATTEMPTS:
+        return False
+    return True
+
+def record_attempt(ip: str, success: bool):
+    now = time.time()
+    if success:
+        _attempts.pop(ip, None)
+        return
+    a = _attempts.get(ip, {"count": 0, "first": now})
+    a["count"] += 1
+    _attempts[ip] = a
+
+# ── App ──────────────────────────────────────────────────────────────────────
 
 app = FastAPI(title="NIRO AI")
 
-# CORS — autoriser tous les appareils du réseau local
+# CORS — restreint aux origines locales (pas wildcard en prod)
+ALLOWED_ORIGINS = [
+    "http://localhost:7777",
+    "http://niro.local:7777",
+]
+# Ajouter l'IP locale si disponible
+_local_ip = os.getenv("NIRO_LOCAL_IP", "")
+if _local_ip:
+    ALLOWED_ORIGINS.append(f"http://{_local_ip}:7777")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
-app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
-
 OLLAMA_BASE = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 
-# Modèles par ordre de préférence (selon ce qui est installé)
 PREFERRED_MODELS = [
-    "qwen2.5:72b",
-    "llama3.3:70b",
-    "qwen2.5:32b",
-    "mistral-large:latest",
-    "qwen2.5:14b",
-    "llama3.1:8b",
+    "qwen2.5:72b", "llama3.3:70b", "qwen2.5:32b",
+    "mistral-large:latest", "qwen2.5:14b", "llama3.1:8b",
 ]
 
 SYSTEM_PROMPT = """Tu es NIRO, l'assistant IA personnel de Nirojh. Tu es intelligent, polyvalent, réactif et tu parles en français naturellement — comme un vrai collaborateur de confiance, pas un robot.
@@ -63,9 +179,12 @@ Règles de comportement :
 - Si on te montre une photo d'un objet/problème, tu analyses et tu expliques ce que tu vois.
 - Tu ne refuses pas les demandes légitimes. Tu trouves toujours un moyen."""
 
+# Clients WebSocket connectés
+connected_clients: set = set()
+
+# ── Helpers Ollama ────────────────────────────────────────────────────────────
 
 async def get_best_model() -> str:
-    """Retourne le meilleur modèle disponible dans Ollama."""
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
             r = await client.get(f"{OLLAMA_BASE}/api/tags")
@@ -74,60 +193,34 @@ async def get_best_model() -> str:
                 for model in PREFERRED_MODELS:
                     if model in installed:
                         return model
-                # Si aucun préféré, prendre le premier disponible
                 if installed:
                     return next(iter(installed))
     except Exception:
         pass
     return PREFERRED_MODELS[0]
 
-
 async def speak(text: str):
-    """Voix Mac (Thomas = voix française naturelle)."""
-    # Nettoyage du texte pour la synthèse
     clean = text.replace("*", "").replace("#", "").replace("`", "").replace("_", " ")
-    # Limiter à 500 chars pour la fluidité
     if len(clean) > 500:
         clean = clean[:497] + "..."
-    subprocess.Popen(
-        ["say", "-v", "Thomas", "-r", "180", clean],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-
+    subprocess.Popen(["say", "-v", "Thomas", "-r", "180", clean],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
-    """
-    Boucle agentique : Ollama → outils → Ollama → réponse finale.
-    Stream les tokens vers le WebSocket en temps réel.
-    """
     current_messages = list(messages)
-    max_iterations = 10
-
-    for iteration in range(max_iterations):
-        # Appel Ollama avec streaming
+    for _ in range(10):
         payload = {
             "model": model,
             "messages": current_messages,
             "tools": TOOLS_DEFINITIONS,
             "stream": True,
-            "options": {
-                "temperature": 0.7,
-                "num_ctx": 8192,
-            }
+            "options": {"temperature": 0.7, "num_ctx": 8192},
         }
-
         tool_calls_buffer = []
         content_buffer = ""
-        current_tool_call = None
 
         async with httpx.AsyncClient(timeout=120.0) as client:
-            async with client.stream(
-                "POST",
-                f"{OLLAMA_BASE}/api/chat",
-                json=payload,
-            ) as response:
-
+            async with client.stream("POST", f"{OLLAMA_BASE}/api/chat", json=payload) as response:
                 async for line in response.aiter_lines():
                     if not line.strip():
                         continue
@@ -135,44 +228,29 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
                         chunk = json.loads(line)
                     except json.JSONDecodeError:
                         continue
-
                     msg = chunk.get("message", {})
-                    done = chunk.get("done", False)
-
-                    # Contenu texte → stream vers le client
                     content_piece = msg.get("content", "")
                     if content_piece:
                         content_buffer += content_piece
-                        await ws.send_json({
-                            "type": "token",
-                            "content": content_piece
-                        })
-
-                    # Appels d'outils
+                        await ws.send_json({"type": "token", "content": content_piece})
                     tool_calls = msg.get("tool_calls", [])
                     if tool_calls:
                         tool_calls_buffer.extend(tool_calls)
-
-                    if done:
+                    if chunk.get("done", False):
                         break
 
-        # Pas d'appels d'outils → réponse finale
         if not tool_calls_buffer:
             await ws.send_json({"type": "done", "content": content_buffer})
-            # Voix
             if content_buffer.strip():
                 await speak(content_buffer)
             return content_buffer
 
-        # Il y a des appels d'outils → les exécuter
-        # Ajouter le message assistant avec les tool_calls
         current_messages.append({
             "role": "assistant",
             "content": content_buffer,
-            "tool_calls": tool_calls_buffer
+            "tool_calls": tool_calls_buffer,
         })
 
-        # Exécuter chaque outil
         for tc in tool_calls_buffer:
             fn = tc.get("function", {})
             tool_name = fn.get("name", "")
@@ -182,40 +260,107 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
                     tool_args = json.loads(tool_args)
                 except Exception:
                     tool_args = {}
-
-            # Notifier l'UI de l'outil en cours
-            await ws.send_json({
-                "type": "tool_start",
-                "tool": tool_name,
-                "args": tool_args
-            })
-
-            # Exécuter l'outil
+            await ws.send_json({"type": "tool_start", "tool": tool_name, "args": tool_args})
             result = await execute_tool(tool_name, tool_args)
+            await ws.send_json({"type": "tool_done", "tool": tool_name, "result": str(result)[:500]})
+            current_messages.append({"role": "tool", "content": str(result)})
 
-            await ws.send_json({
-                "type": "tool_done",
-                "tool": tool_name,
-                "result": str(result)[:500]
-            })
+    await ws.send_json({"type": "done", "content": "Limite d'itérations atteinte."})
 
-            # Ajouter le résultat dans l'historique
-            current_messages.append({
-                "role": "tool",
-                "content": str(result)
-            })
+# ── Routes statiques (toujours accessibles) ───────────────────────────────────
 
-    # Sécurité : si on dépasse max_iterations
-    await ws.send_json({"type": "done", "content": "J'ai atteint la limite d'itérations."})
+@app.get("/manifest.json")
+async def manifest():
+    return FileResponse(str(FRONTEND_DIR / "manifest.json"))
 
+@app.get("/sw.js")
+async def service_worker():
+    return FileResponse(str(FRONTEND_DIR / "sw.js"), media_type="application/javascript")
+
+@app.get("/offline.html")
+async def offline():
+    return FileResponse(str(FRONTEND_DIR / "offline.html"))
+
+@app.get("/icons/{name}")
+async def icon(name: str):
+    p = FRONTEND_DIR / "icons" / name
+    if not p.exists() or not p.suffix in ('.png', '.ico', '.svg'):
+        raise HTTPException(404)
+    return FileResponse(str(p))
+
+# ── Authentification ──────────────────────────────────────────────────────────
+
+@app.get("/login")
+async def login_page():
+    return FileResponse(str(FRONTEND_DIR / "login.html"))
+
+@app.post("/api/auth/login")
+async def login(request: Request, response: Response):
+    ip = request.client.host
+    if not check_rate_limit(ip):
+        remaining = int(LOCKOUT_SECONDS - (time.time() - _attempts.get(ip, {}).get("first", 0)))
+        raise HTTPException(429, f"Trop de tentatives. Réessayez dans {remaining//60} min.")
+
+    body = await request.json()
+    pin = str(body.get("pin", "")).strip()
+
+    if not check_pin(pin):
+        record_attempt(ip, success=False)
+        attempts_left = MAX_ATTEMPTS - _attempts.get(ip, {}).get("count", 0)
+        raise HTTPException(401, f"Code PIN incorrect. {attempts_left} tentative(s) restante(s).")
+
+    record_attempt(ip, success=True)
+    token = create_session()
+    response.set_cookie(
+        key="niro_session",
+        value=token,
+        max_age=30 * 86400,
+        httponly=True,
+        samesite="strict",
+    )
+    return {"ok": True, "token": token}
+
+@app.post("/api/auth/logout")
+async def logout(request: Request, response: Response):
+    token = get_session_token(request)
+    if token:
+        sessions = _load_sessions()
+        sessions.pop(token, None)
+        _save_sessions(sessions)
+    response.delete_cookie("niro_session")
+    return {"ok": True}
+
+@app.post("/api/auth/change-pin")
+async def change_pin(request: Request):
+    require_auth(request)
+    body = await request.json()
+    old_pin = str(body.get("old_pin", "")).strip()
+    new_pin = str(body.get("new_pin", "")).strip()
+    if not check_pin(old_pin):
+        raise HTTPException(401, "Ancien PIN incorrect.")
+    if len(new_pin) < 4:
+        raise HTTPException(400, "Le nouveau PIN doit faire au moins 4 chiffres.")
+    set_pin(new_pin)
+    revoke_all_sessions()
+    return {"ok": True, "message": "PIN changé. Reconnectez-vous sur tous vos appareils."}
+
+@app.get("/api/auth/check")
+async def auth_check(request: Request):
+    token = get_session_token(request)
+    return {"authenticated": is_valid_session(token)}
+
+# ── Routes protégées ──────────────────────────────────────────────────────────
 
 @app.get("/")
-async def root():
+async def root(request: Request):
+    token = get_session_token(request)
+    if not is_valid_session(token):
+        return FileResponse(str(FRONTEND_DIR / "login.html"))
     return FileResponse(str(FRONTEND_DIR / "index.html"))
 
-
 @app.get("/api/status")
-async def status():
+async def status(request: Request):
+    require_auth(request)
     model = await get_best_model()
     local_ip = os.getenv("NIRO_LOCAL_IP", "")
     port = os.getenv("NIRO_PORT", "7777")
@@ -232,39 +377,36 @@ async def status():
         "local_ip": local_ip,
         "port": port,
         "network_url": f"http://{local_ip}:{port}" if local_ip else None,
-        "clients": len(connected_clients),
     }
 
-
 @app.get("/api/clients")
-async def clients_count():
+async def clients_count(request: Request):
+    require_auth(request)
     return {"count": len(connected_clients)}
 
-
 @app.get("/api/qr")
-async def qr_code():
-    """Génère un QR code pour accéder depuis un téléphone."""
+async def qr_code(request: Request):
+    require_auth(request)
     local_ip = os.getenv("NIRO_LOCAL_IP", "")
     port = os.getenv("NIRO_PORT", "7777")
-    if not local_ip:
-        return {"error": "IP locale non disponible"}
-    url = f"http://{local_ip}:{port}"
-    # QR code en SVG via l'API publique (ou génération locale)
+    url = f"http://{local_ip}:{port}" if local_ip else f"http://niro.local:{port}"
     return {"url": url}
 
+# ── WebSocket (protégé par token en query param) ──────────────────────────────
 
 @app.websocket("/ws")
-async def websocket_endpoint(ws: WebSocket):
+async def websocket_endpoint(ws: WebSocket, token: str = ""):
+    # Vérifier l'authentification avant d'accepter
+    if not is_valid_session(token):
+        await ws.close(code=4401, reason="Non authentifié")
+        return
+
     await ws.accept()
     connected_clients.add(id(ws))
     model = await get_best_model()
-
-    # Envoyer le modèle actif au client
     await ws.send_json({"type": "init", "model": model})
 
-    conversation: list = [
-        {"role": "system", "content": SYSTEM_PROMPT}
-    ]
+    conversation: list = [{"role": "system", "content": SYSTEM_PROMPT}]
 
     try:
         while True:
@@ -275,30 +417,21 @@ async def websocket_endpoint(ws: WebSocket):
                 user_text = data.get("content", "").strip()
                 if not user_text:
                     continue
-
                 conversation.append({"role": "user", "content": user_text})
                 await ws.send_json({"type": "thinking"})
-
                 try:
                     response = await chat_with_ollama(conversation, model, ws)
                     if response:
                         conversation.append({"role": "assistant", "content": response})
                 except Exception as e:
-                    await ws.send_json({
-                        "type": "error",
-                        "content": f"Erreur : {str(e)}"
-                    })
+                    await ws.send_json({"type": "error", "content": f"Erreur : {str(e)}"})
 
             elif msg_type == "image":
-                # Image envoyée depuis l'UI (base64)
                 image_data = data.get("data", "")
-                question = data.get("question", "Qu'est-ce que tu vois sur cette image ?")
-
-                # Sauvegarder temporairement
+                question = data.get("question", "Qu\'est-ce que tu vois sur cette image ?")
                 tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
                 tmp.write(base64.b64decode(image_data))
                 tmp.close()
-
                 conversation.append({
                     "role": "user",
                     "content": [
@@ -307,14 +440,12 @@ async def websocket_endpoint(ws: WebSocket):
                     ]
                 })
                 await ws.send_json({"type": "thinking"})
-
                 try:
                     response = await chat_with_ollama(conversation, model, ws)
                     if response:
                         conversation.append({"role": "assistant", "content": response})
                 except Exception as e:
                     await ws.send_json({"type": "error", "content": str(e)})
-
                 os.unlink(tmp.name)
 
             elif msg_type == "clear":
@@ -331,4 +462,5 @@ async def websocket_endpoint(ws: WebSocket):
 
 
 if __name__ == "__main__":
+    ensure_pin()
     uvicorn.run("main:app", host="0.0.0.0", port=7777, reload=False)
