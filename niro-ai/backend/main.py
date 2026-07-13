@@ -391,6 +391,30 @@ async def clients_count(request: Request):
     require_auth(request)
     return {"count": len(connected_clients)}
 
+@app.get("/api/system")
+async def system_stats(request: Request):
+    """Stats du Mac pour les jauges Jarvis (CPU, RAM, disque, batterie)."""
+    require_auth(request)
+    stats = {"cpu": None, "ram": None, "disk": None, "battery": None}
+    try:
+        import psutil
+        stats["cpu"] = round(psutil.cpu_percent(interval=0.1))
+        stats["ram"] = round(psutil.virtual_memory().percent)
+        stats["disk"] = round(psutil.disk_usage("/").percent)
+        batt = psutil.sensors_battery()
+        if batt is not None:
+            stats["battery"] = round(batt.percent)
+    except Exception:
+        # Repli sans psutil : disque via df, le reste laissé à null (le front anime)
+        try:
+            r = subprocess.run(["df", "-k", "/"], capture_output=True, text=True, timeout=3)
+            parts = r.stdout.strip().splitlines()[-1].split()
+            used, total = int(parts[2]), int(parts[1])
+            stats["disk"] = round(used / total * 100)
+        except Exception:
+            pass
+    return stats
+
 @app.get("/api/auth/ws-token")
 async def ws_token(request: Request):
     """Retourne le token de session pour le WebSocket (le cookie HttpOnly n'est pas lisible en JS)."""

@@ -344,6 +344,87 @@ header {
   box-shadow: 0 0 30px rgba(0,255,100,0.3);
 }
 
+/* ── HUD Jarvis : jauges, dates, circuits, météo ── */
+.hud-layer { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.hud-layer .gauge, .hud-layer .date-ring, .hud-layer .weather-card { pointer-events: auto; }
+
+/* Jauges circulaires (CPU/RAM/Disque/Énergie) */
+.gauge {
+  position: absolute;
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at center, rgba(2,16,32,0.7) 60%, transparent 62%),
+    conic-gradient(var(--cyan) calc(var(--val,0) * 1%), rgba(0,212,255,0.08) 0);
+  border: 1px solid rgba(0,212,255,0.15);
+  box-shadow: 0 0 18px rgba(0,212,255,0.1), inset 0 0 18px rgba(0,0,0,0.6);
+  -webkit-mask: none;
+}
+.gauge::before {
+  content: '';
+  position: absolute; inset: 8px;
+  border-radius: 50%;
+  background: rgba(1,11,20,0.92);
+  border: 1px solid rgba(0,212,255,0.12);
+}
+.gauge .g-val { position: relative; font-size: 20px; font-weight: 700; color: var(--cyan); text-shadow: 0 0 12px rgba(0,212,255,0.5); font-variant-numeric: tabular-nums; }
+.gauge .g-lbl { position: relative; font-size: 8px; letter-spacing: 3px; color: rgba(0,212,255,0.45); text-transform: uppercase; margin-top: 2px; }
+
+.gauge.g-cpu  { top: 12%; left: 6%; }
+.gauge.g-ram  { top: 42%; left: 3%; }
+.gauge.g-disk { top: 42%; right: 3%; }
+.gauge.g-batt { top: 12%; right: 6%; }
+
+/* Anneau de dates 01→30 en haut */
+.date-ring {
+  position: absolute;
+  top: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid rgba(0,212,255,0.12);
+  border-radius: 20px;
+  background: rgba(2,16,32,0.4);
+  max-width: 80%; overflow: hidden;
+}
+.date-ring .d {
+  font-size: 10px; letter-spacing: 1px;
+  color: rgba(0,212,255,0.3);
+  font-variant-numeric: tabular-nums;
+  transition: all 0.3s;
+}
+.date-ring .d.today {
+  color: #010b14; background: var(--cyan);
+  border-radius: 4px; padding: 1px 5px;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(0,212,255,0.6);
+}
+
+/* Carte météo style Jarvis */
+.weather-card {
+  position: absolute;
+  bottom: 20px; left: 24px;
+  padding: 12px 16px;
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 10px;
+  background: rgba(2,16,32,0.55);
+  backdrop-filter: blur(8px);
+  min-width: 150px;
+}
+.weather-card .w-loc { font-size: 9px; letter-spacing: 2px; color: rgba(0,212,255,0.4); text-transform: uppercase; }
+.weather-card .w-temp { font-size: 26px; font-weight: 700; color: var(--cyan); text-shadow: 0 0 14px rgba(0,212,255,0.4); line-height: 1.1; }
+.weather-card .w-desc { font-size: 10px; color: rgba(0,212,255,0.5); }
+
+/* Lignes de circuit (SVG) */
+.circuit-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.5; }
+.circuit-svg path { stroke: rgba(0,212,255,0.25); stroke-width: 1; fill: none; }
+.circuit-svg circle { fill: rgba(0,212,255,0.5); }
+.circuit-svg .pulse { animation: dashmove 3s linear infinite; stroke-dasharray: 4 8; }
+@keyframes dashmove { to { stroke-dashoffset: -24; } }
+
+@media (max-width: 700px) { .hud-layer { display: none; } }
+
 .state-label {
   font-size: 12px;
   letter-spacing: 4px;
@@ -657,6 +738,31 @@ header {
     <div class="hud tr"></div>
     <div class="hud bl"></div>
     <div class="hud br"></div>
+
+    <!-- Couche HUD Jarvis -->
+    <div class="hud-layer">
+      <svg class="circuit-svg" preserveAspectRatio="none">
+        <path class="pulse" d="M 130 120 Q 300 150 500 300" />
+        <path class="pulse" d="M 90 300 Q 280 320 500 320" />
+        <path class="pulse" d="M 900 120 Q 700 160 520 300" />
+        <path class="pulse" d="M 940 300 Q 740 320 540 320" />
+        <circle cx="130" cy="120" r="3" /><circle cx="90" cy="300" r="3" />
+        <circle cx="900" cy="120" r="3" /><circle cx="940" cy="300" r="3" />
+      </svg>
+
+      <div class="date-ring" id="date-ring"></div>
+
+      <div class="gauge g-cpu"  style="--val:0"><span class="g-val" id="gv-cpu">–</span><span class="g-lbl">CPU</span></div>
+      <div class="gauge g-ram"  style="--val:0"><span class="g-val" id="gv-ram">–</span><span class="g-lbl">RAM</span></div>
+      <div class="gauge g-disk" style="--val:0"><span class="g-val" id="gv-disk">–</span><span class="g-lbl">Disque</span></div>
+      <div class="gauge g-batt" style="--val:0"><span class="g-val" id="gv-batt">–</span><span class="g-lbl">Énergie</span></div>
+
+      <div class="weather-card" id="weather-card">
+        <div class="w-loc" id="w-loc">Localisation…</div>
+        <div class="w-temp" id="w-temp">–°</div>
+        <div class="w-desc" id="w-desc">Météo</div>
+      </div>
+    </div>
 
     <div class="center">
       <div class="ring-container">
@@ -1287,6 +1393,75 @@ function updateClock() {
 }
 updateClock();
 setInterval(updateClock, 1000);
+
+// ─── Anneau de dates (01→30) ─────────────────────────────────────────────────
+function buildDateRing() {
+  const el = document.getElementById('date-ring');
+  if (!el) return;
+  const now = new Date();
+  const today = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  let html = '';
+  for (let d = 1; d <= daysInMonth; d++) {
+    html += `<span class="d${d === today ? ' today' : ''}">${String(d).padStart(2,'0')}</span>`;
+  }
+  el.innerHTML = html;
+}
+buildDateRing();
+
+// ─── Jauges système (CPU/RAM/Disque/Énergie) ─────────────────────────────────
+function setGauge(id, val) {
+  const span = document.getElementById('gv-' + id);
+  if (!span) return;
+  const gauge = span.closest('.gauge');
+  if (val === null || val === undefined) {
+    // Pas de donnée → animation légère décorative
+    const fake = 20 + Math.round(Math.random() * 30);
+    if (gauge) gauge.style.setProperty('--val', fake);
+    span.textContent = '—';
+  } else {
+    if (gauge) gauge.style.setProperty('--val', val);
+    span.textContent = val + '%';
+  }
+}
+async function updateSystem() {
+  try {
+    const r = await fetch('/api/system', { credentials: 'include' });
+    const s = await r.json();
+    setGauge('cpu', s.cpu);
+    setGauge('ram', s.ram);
+    setGauge('disk', s.disk);
+    setGauge('batt', s.battery);
+  } catch(e) {
+    setGauge('cpu', null); setGauge('ram', null);
+    setGauge('disk', null); setGauge('batt', null);
+  }
+}
+updateSystem();
+setInterval(updateSystem, 4000);
+
+// ─── Météo (via open-meteo, gratuit, sans clé) ───────────────────────────────
+async function updateWeather() {
+  try {
+    // Géolocalisation approx via IP (gratuit)
+    let lat = 49.0, lon = 2.1, city = 'Val-d\'Oise';
+    try {
+      const g = await fetch('https://ipapi.co/json/');
+      if (g.ok) { const gd = await g.json(); lat = gd.latitude; lon = gd.longitude; city = gd.city || city; }
+    } catch(e) {}
+    const w = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
+    const wd = await w.json();
+    const t = Math.round(wd.current.temperature_2m);
+    const codes = { 0:'Ciel clair',1:'Peu nuageux',2:'Nuageux',3:'Couvert',45:'Brouillard',51:'Bruine',61:'Pluie',63:'Pluie',65:'Forte pluie',71:'Neige',80:'Averses',95:'Orage' };
+    document.getElementById('w-loc').textContent = city;
+    document.getElementById('w-temp').textContent = t + '°';
+    document.getElementById('w-desc').textContent = codes[wd.current.weather_code] || 'Météo';
+  } catch(e) {
+    document.getElementById('w-loc').textContent = 'Météo indisponible';
+  }
+}
+updateWeather();
+setInterval(updateWeather, 600000);
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 connect();
