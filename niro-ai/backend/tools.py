@@ -86,8 +86,23 @@ TOOLS_DEFINITIONS = [
     {
         "type": "function",
         "function": {
+            "name": "read_emails",
+            "description": "Lit les derniers emails REÇUS dans les boîtes mail de Nirojh (boutique et perso). Utilise cet outil quand on te demande de lire, consulter, vérifier ou résumer les emails/mails reçus.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "count": {"type": "integer", "description": "Nombre d'emails à lire (défaut 5, max 15)"},
+                    "account": {"type": "string", "description": "Filtrer sur une boîte précise (ex: 'boutique', 'perso', ou une adresse). Vide = toutes les boîtes."},
+                    "unread_only": {"type": "boolean", "description": "Si true, seulement les emails non lus"}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "send_email",
-            "description": "Envoie un email. Utilise les paramètres SMTP configurés.",
+            "description": "Envoie un email. N'utilise QUE si Nirojh donne une vraie adresse de destinataire.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -389,6 +404,63 @@ async def send_email(to: str, subject: str, body: str) -> str:
         return f"Erreur envoi email : {e}"
 
 
+async def read_emails(count: int = 5, account: str = "", unread_only: bool = False) -> str:
+    """Lit les derniers emails reçus via IMAP (comptes dans ~/.niro/email_accounts.json)."""
+    import imaplib, email as email_mod
+    from email.header import decode_header
+
+    config_path = Path.home() / ".niro" / "email_accounts.json"
+    if not config_path.exists():
+        return ("Aucune boîte mail connectée. Créez ~/.niro/email_accounts.json avec la liste des comptes "
+                "(user, password = mot de passe d'application Gmail, imap).")
+    try:
+        accounts = json.loads(config_path.read_text())
+    except Exception as e:
+        return f"Erreur lecture config email : {e}"
+    if isinstance(accounts, dict):
+        accounts = [accounts]
+
+    def _decode(s):
+        if not s:
+            return ""
+        parts = decode_header(s)
+        out = ""
+        for txt, enc in parts:
+            if isinstance(txt, bytes):
+                try: out += txt.decode(enc or "utf-8", errors="replace")
+                except Exception: out += txt.decode("utf-8", errors="replace")
+            else:
+                out += txt
+        return out
+
+    count = max(1, min(int(count), 15))
+    results = []
+    for acc in accounts:
+        name = acc.get("name", acc.get("user", "?"))
+        if account and account.lower() not in name.lower() and account.lower() not in acc.get("user", "").lower():
+            continue
+        try:
+            M = imaplib.IMAP4_SSL(acc.get("imap", "imap.gmail.com"))
+            M.login(acc["user"], acc["password"])
+            M.select("INBOX")
+            crit = "UNSEEN" if unread_only else "ALL"
+            typ, data = M.search(None, crit)
+            ids = data[0].split()
+            latest = ids[-count:][::-1]
+            results.append(f"── Boîte {name} ({len(ids)} messages, {len(latest)} affichés) ──")
+            for i in latest:
+                typ, msg_data = M.fetch(i, "(RFC822.HEADER)")
+                msg = email_mod.message_from_bytes(msg_data[0][1])
+                frm = _decode(msg.get("From", ""))
+                subj = _decode(msg.get("Subject", "(sans objet)"))
+                date = msg.get("Date", "")
+                results.append(f"• De : {frm}\n  Objet : {subj}\n  Date : {date}")
+            M.logout()
+        except Exception as e:
+            results.append(f"── Boîte {name} : erreur de connexion ({e}) ──")
+    return "\n".join(results) if results else "Aucun email trouvé."
+
+
 async def mac_applescript(script: str, description: str) -> str:
     """Exécute un script AppleScript."""
     try:
@@ -673,6 +745,7 @@ TOOL_MAP = {
     "get_weather": get_weather,
     "take_screenshot": take_screenshot,
     "check_boutique": check_boutique,
+    "read_emails": read_emails,
     "send_email": send_email,
     "mac_applescript": mac_applescript,
     "mac_shell": mac_shell,
