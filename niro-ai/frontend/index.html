@@ -425,6 +425,61 @@ header {
 
 @media (max-width: 700px) { .hud-layer { display: none; } }
 
+/* ── Panneau "Opérations en direct" (ce que Jarvis fait) ── */
+.ops-panel {
+  position: absolute;
+  bottom: 20px; right: 24px;
+  width: 300px; max-height: 260px;
+  display: none;
+  flex-direction: column;
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 10px;
+  background: rgba(2,16,32,0.82);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 26px rgba(0,212,255,0.12), inset 0 0 24px rgba(0,0,0,0.4);
+  pointer-events: auto;
+  overflow: hidden;
+  z-index: 8;
+}
+.ops-panel.show { display: flex; animation: opsIn 0.25s ease; }
+@keyframes opsIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.ops-head {
+  padding: 8px 12px;
+  font-size: 8.5px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cyan);
+  border-bottom: 1px solid rgba(0,212,255,0.15);
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(90deg, rgba(0,212,255,0.1), transparent);
+}
+.ops-head .live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #00ff88; box-shadow: 0 0 8px #00ff88;
+  animation: blink 1s ease-in-out infinite;
+}
+.ops-list { padding: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.ops-list::-webkit-scrollbar { width: 3px; }
+.ops-list::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
+.ops-step {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.1);
+  font-size: 11.5px; line-height: 1.4;
+  animation: fadeIn 0.2s ease;
+}
+.ops-step .ops-icon { font-size: 15px; flex-shrink: 0; }
+.ops-step .ops-txt { flex: 1; color: var(--text); }
+.ops-step .ops-sub { display: block; font-size: 9.5px; color: rgba(0,212,255,0.4); margin-top: 1px; }
+.ops-step .ops-state { flex-shrink: 0; font-size: 12px; }
+.ops-step.running .ops-state::after {
+  content: ''; display: inline-block; width: 10px; height: 10px;
+  border: 2px solid rgba(0,212,255,0.25); border-top-color: var(--cyan);
+  border-radius: 50%; animation: rotate 0.7s linear infinite;
+}
+.ops-step.done { border-color: rgba(0,255,136,0.25); }
+.ops-step.done .ops-state::after { content: '✓'; color: #00ff88; }
+
 .state-label {
   font-size: 12px;
   letter-spacing: 4px;
@@ -782,6 +837,11 @@ header {
         <div class="w-temp" id="w-temp">–°</div>
         <div class="w-desc" id="w-desc">Météo</div>
       </div>
+
+      <div class="ops-panel" id="ops-panel">
+        <div class="ops-head"><span class="live-dot"></span> Opérations en direct</div>
+        <div class="ops-list" id="ops-list"></div>
+      </div>
     </div>
 
     <div class="center">
@@ -947,12 +1007,12 @@ function handleMessage(data) {
       break;
 
     case 'tool_start':
-      addMsg('tool', `⚙ ${toolName(data.tool)} — ${JSON.stringify(data.args).slice(0, 100)}`);
-      setCore('thinking', data.tool.toUpperCase().replace(/_/g,' '));
+      opsAddStep(data.tool, data.args);
+      setCore('thinking', toolInfo(data.tool).label.toUpperCase());
       break;
 
     case 'tool_done':
-      addMsg('tool', `✓ ${toolName(data.tool)}: ${data.result}`);
+      opsDoneStep(data.tool);
       break;
 
     case 'done':
@@ -962,6 +1022,8 @@ function handleMessage(data) {
       btnSend.disabled = false;
       btnStopVoice.style.display = 'flex';
       setTimeout(() => btnStopVoice.style.display = 'none', 15000);
+      // Laisser le journal d'opérations visible 8s puis le masquer
+      setTimeout(() => { const p = document.getElementById('ops-panel'); if (p) p.classList.remove('show'); }, 8000);
       messages.scrollTop = messages.scrollHeight;
       break;
 
@@ -1029,23 +1091,63 @@ function removeThinkingDots() {
   if (d) d.remove();
 }
 
-function toolName(name) {
-  const map = {
-    browse_url: 'Navigation web',
-    search_web: 'Recherche',
-    take_screenshot: 'Capture d\'écran',
-    check_boutique: 'Boutique',
-    send_email: 'Email',
-    mac_applescript: 'Mac (AppleScript)',
-    mac_shell: 'Mac (Terminal)',
-    read_file: 'Lecture fichier',
-    write_file: 'Écriture fichier',
-    list_files: 'Liste fichiers',
-    get_system_info: 'Infos système',
-    set_reminder: 'Rappel',
-    calculate: 'Calcul',
-  };
-  return map[name] || name;
+const TOOL_INFO = {
+  browse_url:       { icon: '🌐', label: 'Ouverture de la page web' },
+  search_web:       { icon: '🔍', label: 'Recherche sur internet' },
+  get_weather:      { icon: '🌤️', label: 'Consultation de la météo' },
+  take_screenshot:  { icon: '📸', label: 'Capture d\'écran' },
+  check_boutique:   { icon: '🛍️', label: 'Vérification de la boutique' },
+  read_emails:      { icon: '📧', label: 'Lecture des emails' },
+  send_email:       { icon: '✉️', label: 'Envoi d\'un email' },
+  mac_applescript:  { icon: '🖥️', label: 'Contrôle du Mac' },
+  mac_shell:        { icon: '⌨️', label: 'Commande sur le Mac' },
+  read_file:        { icon: '📄', label: 'Lecture d\'un fichier' },
+  write_file:       { icon: '📝', label: 'Écriture d\'un fichier' },
+  list_files:       { icon: '📁', label: 'Liste des fichiers' },
+  get_system_info:  { icon: '📊', label: 'Infos système du Mac' },
+  set_reminder:     { icon: '⏰', label: 'Création d\'un rappel' },
+  calculate:        { icon: '🧮', label: 'Calcul' },
+  blender_run_script:{ icon: '🎨', label: 'Contrôle de Blender' },
+  blender_render:   { icon: '🖼️', label: 'Rendu Blender' },
+  save_to_memory:   { icon: '🧠', label: 'Mémorisation' },
+};
+function toolInfo(name) { return TOOL_INFO[name] || { icon: '⚙️', label: name }; }
+function toolName(name) { return toolInfo(name).label; }
+
+// ─── Panneau "Opérations en direct" ──────────────────────────────────────────
+function opsClear() {
+  const list = document.getElementById('ops-list');
+  const panel = document.getElementById('ops-panel');
+  if (list) list.innerHTML = '';
+  if (panel) panel.classList.remove('show');
+}
+function opsAddStep(tool, args) {
+  const list = document.getElementById('ops-list');
+  const panel = document.getElementById('ops-panel');
+  if (!list || !panel) return;
+  panel.classList.add('show');
+  const info = toolInfo(tool);
+  const step = document.createElement('div');
+  step.className = 'ops-step running';
+  step.dataset.tool = tool;
+  let sub = '';
+  try {
+    const a = typeof args === 'string' ? JSON.parse(args) : args;
+    const vals = Object.values(a || {}).filter(v => typeof v !== 'object').join(' · ');
+    if (vals) sub = `<span class="ops-sub">${escapeHtml(String(vals).slice(0,60))}</span>`;
+  } catch(e) {}
+  step.innerHTML = `<span class="ops-icon">${info.icon}</span>`
+    + `<span class="ops-txt">${escapeHtml(info.label)}${sub}</span>`
+    + `<span class="ops-state"></span>`;
+  list.appendChild(step);
+  list.scrollTop = list.scrollHeight;
+}
+function opsDoneStep(tool) {
+  const list = document.getElementById('ops-list');
+  if (!list) return;
+  const steps = list.querySelectorAll(`.ops-step.running[data-tool="${tool}"]`);
+  const last = steps[steps.length - 1];
+  if (last) { last.classList.remove('running'); last.classList.add('done'); }
 }
 
 function escapeHtml(str) {
@@ -1061,6 +1163,7 @@ function sendMessage() {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   if (isThinking) return;
 
+  opsClear();  // nouvelle demande = nouveau journal d'opérations
   const text = textInput.value.trim();
 
   if (pendingImageB64) {
