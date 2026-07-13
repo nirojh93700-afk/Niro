@@ -231,7 +231,7 @@ async def chat_with_ollama(messages: list, model: str, ws: WebSocket):
         tool_calls_buffer = []
         content_buffer = ""
 
-        async with httpx.AsyncClient(timeout=120.0) as client:
+        async with httpx.AsyncClient(timeout=600.0) as client:
             async with client.stream("POST", f"{OLLAMA_BASE}/api/chat", json=payload) as response:
                 async for line in response.aiter_lines():
                     if not line.strip():
