@@ -41,15 +41,27 @@ html, body {
 @media (max-width: 700px) {
   .app {
     grid-template-columns: 1fr !important;
-    grid-template-rows: 50px 1fr 100px !important;
+    grid-template-rows: 50px 1fr auto !important;
+    height: 100dvh;
   }
-  .panel { display: none; }
-  .main { grid-column: 1; }
-  .input-area { grid-column: 1; padding: 12px 14px; }
-  .ring-container { width: 140px; height: 140px; }
+  /* Sur portable : on affiche la conversation en plein écran, pas l'anneau */
+  .main { display: none !important; }
+  .panel {
+    grid-column: 1;
+    display: flex !important;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .messages { flex: 1; overflow-y: auto; }
+  .input-area {
+    grid-column: 1;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    flex-wrap: wrap;
+  }
+  .input-wrap { flex: 1 1 100%; }
   .logo { font-size: 16px; letter-spacing: 6px; }
   #text-input { font-size: 16px; }
-  .btn-send { padding: 0 14px; font-size: 10px; }
+  .btn-send { padding: 0 18px; font-size: 11px; }
 }
 
 /* ── QR Modal ── */
