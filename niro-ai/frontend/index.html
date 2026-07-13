@@ -686,6 +686,7 @@ function getCookie(name) {
 async function connect() {
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   const token = await getToken();
+  if (!token) { window.location.href = '/login'; return; }
   ws = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(token)}`);
 
   ws.onopen = () => {
@@ -704,10 +705,10 @@ async function connect() {
   };
 
   ws.onclose = (e) => {
-    if (e.code === 4401) {
-      // Session expirée → retour à la connexion
-      window.location.href = '/login'
-      return
+    if (e.code === 4401 || e.code === 1006) {
+      sessionStorage.removeItem('niro_token');
+      window.location.href = '/login';
+      return;
     }
     statusDot.className = 'dot offline';
     statusText.textContent = 'HORS LIGNE';
