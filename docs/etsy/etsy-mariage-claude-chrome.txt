@@ -1,0 +1,152 @@
+TEXTE À COLLER DANS CLAUDE POUR CHROME — DÉCORATIONS DE MARIAGE
+(boutique Etsy : NivCreationArtisanat)
+
+────────────────────────────────────────────────────────
+RÔLE
+Tu crées mes fiches Etsy en recopiant mon site nivcreation.fr. Garde mon site
+ouvert dans un onglet : pour chaque produit, ouvre sa page
+https://nivcreation.fr/produit/<slug> pour récupérer la description et les
+photos (clic droit sur la photo → Enregistrer l'image → charge-les dans Etsy,
+3 à 5 photos par fiche).
+
+RÈGLES (à respecter pour CHAQUE fiche)
+- En FRANÇAIS, ton élégant, AUCUN emoji dans le contenu.
+- Produits PERSONNALISÉS = faits à la commande (activer « personnalisation »
+  sur Etsy, champ de texte pour la demande de l'acheteur).
+- ENREGISTRE EN BROUILLON. Ne publie RIEN sans mon accord.
+- Fais les fiches UNE PAR UNE. Si un champ te bloque, demande-moi (n'invente pas).
+- PRIX : utilise les prix Etsy indiqués ci-dessous (déjà +45 %), PAS ceux du site.
+- INTERDICTION : ne modifie AUCUN autre produit ni réglage, surtout PAS les
+  bijoux ni leurs prix.
+- À la fin de chaque fiche : préviens-moi quand c'est fait.
+
+────────────────────────────────────────────────────────
+LIVRAISON — CRÉER 2 PROFILS (puis les affecter selon le produit)
+
+PROFIL A — « Mariage léger » (étiquettes, ronds de serviette)
+  France 4,90 € · Union Européenne 9,90 € · reste du monde désactivé.
+  Délai de fabrication : 1 à 2 semaines.
+
+PROFIL B — « Mariage bois » (numéros de table, menus)
+  France 6,90 € · Union Européenne 14,90 € · article supplémentaire +2 € (FR) /
+  +4 € (EU). Délai de fabrication : 1 à 2 semaines.
+
+Matériaux (à mettre sur toutes les fiches) : bois (contreplaqué de tilleul /
+bouleau), découpe et gravure laser. (Certains numéros ont un chiffre acrylique
+doré — voir la fiche.)
+
+Catégorie Etsy : Maison et décoration > Fêtes et occasions > Mariage.
+
+────────────────────────────────────────────────────────
+LES 7 FICHES À CRÉER (une par une, en brouillon)
+
+════════════════════════════════════════════
+1) NUMÉRO DE TABLE — ARCHES BOHÈMES
+Page : https://nivcreation.fr/produit/numero-table-arches-bohemes
+Titre Etsy : Numéro de table mariage bohème — bois ajouré et arche dorée, personnalisé
+Description : reprendre celle du site. Résumé : numéro de table en bois ajouré
+avec arche en acrylique doré, style bohème chic, personnalisé au numéro (et
+couleur/police au choix). Fait à la commande.
+VARIATION « Quantité » (les prix varient), prix TOTAUX :
+   - 1 numéro : 27,90 €
+   - Lot de 10 numéros : 249,00 €
+Personnalisation : ACTIVÉE — « Numéro souhaité + couleur + police (facultatif) ».
+Livraison : PROFIL B (Mariage bois).
+Tags (13 max) : numero de table, mariage boheme, deco mariage, numero table bois,
+table mariage, mariage champetre, decoration table, arche doree, fait main,
+personnalise, mariage 2026, wedding, centre de table.
+
+════════════════════════════════════════════
+2) NUMÉRO DE TABLE — EUCALYPTUS
+Page : https://nivcreation.fr/produit/numero-table-eucalyptus
+Titre Etsy : Numéro de table mariage eucalyptus — bois gravé végétal, personnalisé
+Description : numéro de table en bois gravé d'une branche d'eucalyptus, esprit
+végétal et champêtre, personnalisé au numéro. Fait à la commande.
+VARIATION « Quantité » (les prix varient), prix TOTAUX :
+   - 1 numéro : 21,90 €
+   - Lot de 10 numéros : 189,00 €
+Personnalisation : ACTIVÉE — « Numéro + couleur + police (facultatif) ».
+Livraison : PROFIL B.
+Tags : numero de table, eucalyptus, mariage champetre, deco mariage, numero
+table bois, table mariage, mariage vegetal, decoration table, fait main,
+personnalise, mariage 2026, wedding, greenery.
+
+════════════════════════════════════════════
+3) NUMÉRO DE TABLE — FEUILLAGE
+Page : https://nivcreation.fr/produit/numero-table-feuillage
+Titre Etsy : Numéro de table mariage feuillage — panneau bois découpé, personnalisé
+Description : panneau de bois découpé au laser orné d'un feuillage gravé,
+personnalisé au numéro. Fait à la commande.
+VARIATION « Quantité » (les prix varient), prix TOTAUX :
+   - 1 numéro : 21,90 €
+   - Lot de 10 numéros : 189,00 €
+Personnalisation : ACTIVÉE — « Numéro + couleur + police (facultatif) ».
+Livraison : PROFIL B.
+Tags : numero de table, feuillage, deco mariage, numero table bois, table
+mariage, mariage champetre, decoration table, mariage vegetal, fait main,
+personnalise, mariage 2026, wedding, greenery.
+
+════════════════════════════════════════════
+4) NUMÉRO DE TABLE — ARCHE GÉOMÉTRIQUE
+Page : https://nivcreation.fr/produit/numero-table-arche-geometrique
+Titre Etsy : Numéro de table mariage arche géométrique — chiffre relief et année, personnalisé
+Description : arche ajourée avec chiffre en relief et l'année du mariage,
+personnalisée au numéro. Fait à la commande.
+VARIATION « Quantité » (les prix varient), prix TOTAUX :
+   - 1 numéro : 21,90 €
+   - Lot de 10 numéros : 189,00 €
+Personnalisation : ACTIVÉE — « Numéro + année + police (facultatif) ».
+Livraison : PROFIL B.
+Tags : numero de table, arche geometrique, deco mariage, numero table bois,
+table mariage, mariage moderne, decoration table, chiffre relief, fait main,
+personnalise, mariage 2026, wedding, minimaliste.
+
+════════════════════════════════════════════
+5) MENU DE MARIAGE EN BOIS GRAVÉ
+Page : https://nivcreation.fr/produit/menu-de-mariage-bois-grave
+Titre Etsy : Menu de mariage en bois gravé — lettrage relief, aux prénoms des mariés
+Description : menu en bois avec le mot « Menu » en relief, personnalisé aux
+prénoms des mariés et au texte du menu. Fait à la commande.
+VARIATION « Quantité » (les prix varient), prix TOTAUX :
+   - 1 menu : 50,90 €
+   - Lot de 10 menus : 469,00 €
+Personnalisation : ACTIVÉE — « Prénoms + texte du menu + couleur/police (facultatif) ».
+Livraison : PROFIL B.
+Tags : menu mariage, menu bois, deco mariage, menu grave, table mariage, menu
+personnalise, mariage champetre, lettrage relief, fait main, personnalise,
+mariage 2026, wedding, menu de table.
+
+════════════════════════════════════════════
+6) ÉTIQUETTE DE SERVIETTE — INITIALES
+Page : https://nivcreation.fr/produit/etiquette-serviette-initiales
+Titre Etsy : Étiquette de serviette mariage — fleur en bois gravée aux initiales
+Description : fleur en bois gravée à vos initiales, nouée d'une cordelette, pour
+habiller les serviettes. Faite à la commande.
+PRIX : 8,90 € la pièce. (Pas de variation ; l'acheteur choisit la quantité
+souhaitée — Etsy multiplie automatiquement.)
+Personnalisation : ACTIVÉE — « Initiales + police (facultatif) ».
+Livraison : PROFIL A (Mariage léger).
+Tags : etiquette serviette, marque place, deco mariage, rond de serviette,
+initiales, mariage champetre, table mariage, cadeau invite, fait main,
+personnalise, mariage 2026, wedding, serviette.
+
+════════════════════════════════════════════
+7) RONDS DE SERVIETTE PERSONNALISÉS
+Page : https://nivcreation.fr/produit/ronds-de-serviette-bois
+Titre Etsy : Ronds de serviette mariage en bois — gravés au prénom de chaque invité
+Description : rond de serviette en bois gravé au prénom de chaque convive, un
+cadeau d'invité raffiné (forme au choix). Fait à la commande.
+VARIATION « Quantité » (les prix varient), prix TOTAUX :
+   - 1 rond : 6,90 €
+   - Lot de 20 ronds : 101,90 €
+   - Lot de 50 ronds : 210,90 €
+Personnalisation : ACTIVÉE — « Forme + liste des prénoms + police (facultatif) ».
+Livraison : PROFIL A pour 1 pièce ; PROFIL B pour les lots (20/50).
+Tags : rond de serviette, marque place, deco mariage, prenom invite, cadeau
+invite, mariage champetre, table mariage, rond serviette bois, fait main,
+personnalise, mariage 2026, wedding, porte serviette.
+
+────────────────────────────────────────────────────────
+RAPPEL FINAL
+Tout en BROUILLON. Une fiche à la fois. Ne touche pas aux bijoux ni aux autres
+produits. Préviens-moi après chaque fiche pour que je vérifie les photos.
