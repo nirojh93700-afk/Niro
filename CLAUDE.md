@@ -229,6 +229,7 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
   dans les pages Retours/CGV). → Ne JAMAIS proposer remboursement/retour/avoir pour un article
   personnalisé. Si une commande « retrait » n'est pas venue chercher : on garde, **pas de remboursement**.
 - **Atelier en Val-d'Oise (95)** ; domiciliation légale 6 rue d'Armaillé 75017 Paris = **correcte**, ne pas la remettre en question.
+- **URSSAF : déclaration FAITE** (activité déclarée à l'URSSAF — confirmé par la gérante le 11/07/2026). Ne plus le redemander ni le rappeler.
 - **Retrait en main propre** : déco/mariage **uniquement** (jamais les bijoux = livraison seule), gratuit,
   sur rendez-vous, limité par code postal (95 + voisins : 78, 92, 93, 75, 60), adresse jamais publiée.
 
