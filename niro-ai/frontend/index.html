@@ -1367,6 +1367,8 @@ function handleMessage(data) {
 
     case 'tool_done':
       opsDoneStep(data.tool);
+      // Si un outil renvoie une image/vidéo (ex: génération d'image) → l'afficher au centre
+      if (data.result) autoViewer(data.result);
       break;
 
     case 'done':
@@ -1468,6 +1470,14 @@ const TOOL_INFO = {
   blender_run_script:{ icon: '🎨', label: 'Contrôle de Blender' },
   blender_render:   { icon: '🖼️', label: 'Rendu Blender' },
   save_to_memory:   { icon: '🧠', label: 'Mémorisation' },
+  generate_image:   { icon: '🎨', label: 'Génération d\'une image' },
+  download_file:    { icon: '⬇️', label: 'Téléchargement' },
+  calendar_add:     { icon: '📅', label: 'Ajout à l\'agenda' },
+  calendar_list:    { icon: '📅', label: 'Lecture de l\'agenda' },
+  play_music:       { icon: '🎵', label: 'Musique' },
+  get_news:         { icon: '📰', label: 'Actualités' },
+  open_app:         { icon: '🚀', label: 'Ouverture d\'app / site' },
+  read_document:    { icon: '📑', label: 'Lecture d\'un document' },
 };
 function toolInfo(name) { return TOOL_INFO[name] || { icon: '⚙️', label: name }; }
 function toolName(name) { return toolInfo(name).label; }

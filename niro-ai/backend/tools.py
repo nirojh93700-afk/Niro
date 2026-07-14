@@ -269,6 +269,123 @@ TOOLS_DEFINITIONS = [
             }
         }
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "generate_image",
+            "description": "Génère une image à partir d'une description texte (gratuit). Utilise pour créer une illustration, un visuel, une image de produit, un dessin. Renvoie l'URL de l'image — INCLUS cette URL dans ta réponse pour qu'elle s'affiche.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "prompt": {"type": "string", "description": "Description détaillée de l'image à générer (en anglais de préférence pour un meilleur résultat)"},
+                    "save": {"type": "boolean", "description": "Si true, télécharge aussi l'image dans le dossier Images du Mac"}
+                },
+                "required": ["prompt"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "download_file",
+            "description": "Télécharge un fichier depuis une URL vers le dossier Téléchargements du Mac. Utilise quand Nirojh demande de télécharger quelque chose.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "URL complète du fichier à télécharger"},
+                    "filename": {"type": "string", "description": "Nom du fichier (optionnel)"}
+                },
+                "required": ["url"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "calendar_add",
+            "description": "Ajoute un événement au calendrier du Mac (app Calendrier/Agenda). Utilise pour noter un rendez-vous, une réunion, une tâche datée.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Titre de l'événement"},
+                    "date": {"type": "string", "description": "Date et heure de début, format 'YYYY-MM-DD HH:MM'"},
+                    "duration_min": {"type": "integer", "description": "Durée en minutes (défaut 60)"},
+                    "notes": {"type": "string", "description": "Notes (optionnel)"}
+                },
+                "required": ["title", "date"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "calendar_list",
+            "description": "Liste les prochains événements du calendrier du Mac.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "days": {"type": "integer", "description": "Nombre de jours à venir à afficher (défaut 7)"}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "play_music",
+            "description": "Joue de la musique sur le Mac (app Musique/Apple Music, ou Spotify). Utilise pour lancer une chanson, un artiste, une playlist, ou mettre en pause.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Ce qu'il faut jouer (artiste, chanson, playlist), ou 'pause'/'play'/'suivant'/'précédent'"},
+                    "app": {"type": "string", "enum": ["music", "spotify"], "description": "Application à utiliser (défaut music = Apple Music)"}
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_news",
+            "description": "Récupère les dernières actualités (titres du jour). Utilise pour donner les infos, l'actualité, les news.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "topic": {"type": "string", "description": "Sujet (optionnel : 'france', 'monde', 'tech', 'sport'…). Vide = actualités générales."},
+                    "count": {"type": "integer", "description": "Nombre de titres (défaut 6)"}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "open_app",
+            "description": "Ouvre une application ou un site web sur le Mac. Utilise pour lancer une app (Safari, Notes, Photos…) ou ouvrir un site.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "target": {"type": "string", "description": "Nom de l'app (ex: 'Safari', 'Notes') OU une URL de site (ex: 'https://youtube.com')"}
+                },
+                "required": ["target"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_document",
+            "description": "Lit et résume le contenu d'un document (PDF, texte, Word) présent sur le Mac.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Chemin complet du fichier"}
+                },
+                "required": ["path"]
+            }
+        }
+    },
 ]
 
 # ─── Implémentation des outils ──────────────────────────────────────────────
@@ -737,6 +854,235 @@ async def get_weather(city: str = "") -> str:
         return f"Impossible de récupérer la météo : {e}"
 
 
+async def generate_image(prompt: str, save: bool = False) -> str:
+    """Génère une image via Pollinations (gratuit, sans clé)."""
+    from urllib.parse import quote
+    seed = abs(hash(prompt)) % 100000
+    url = f"https://image.pollinations.ai/prompt/{quote(prompt)}?width=1024&height=1024&nologo=true&seed={seed}"
+    saved_msg = ""
+    if save:
+        try:
+            dest_dir = Path.home() / "Pictures" / "Jarvis"
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            safe = "".join(c for c in prompt[:40] if c.isalnum() or c in " -_").strip().replace(" ", "_")
+            dest = dest_dir / f"{safe or 'image'}_{seed}.jpg"
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                r = await client.get(url)
+                dest.write_bytes(r.content)
+            saved_msg = f" (enregistrée dans {dest})"
+        except Exception as e:
+            saved_msg = f" (échec enregistrement : {e})"
+    return f"Image générée{saved_msg}. URL à afficher : {url}"
+
+
+async def download_file(url: str, filename: str = "") -> str:
+    """Télécharge un fichier dans le dossier Téléchargements du Mac."""
+    try:
+        dest_dir = Path.home() / "Downloads"
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        if not filename:
+            filename = url.split("/")[-1].split("?")[0] or "fichier"
+        dest = dest_dir / filename
+        async with httpx.AsyncClient(timeout=120.0, follow_redirects=True) as client:
+            async with client.stream("GET", url) as r:
+                if r.status_code != 200:
+                    return f"Échec du téléchargement (code {r.status_code})."
+                with open(dest, "wb") as f:
+                    async for chunk in r.aiter_bytes():
+                        f.write(chunk)
+        size = dest.stat().st_size
+        return f"✓ Téléchargé : {dest} ({size // 1024} Ko)"
+    except Exception as e:
+        return f"Erreur téléchargement : {e}"
+
+
+async def calendar_add(title: str, date: str, duration_min: int = 60, notes: str = "") -> str:
+    """Ajoute un événement au calendrier via AppleScript."""
+    import datetime
+    try:
+        dt = datetime.datetime.strptime(date.strip(), "%Y-%m-%d %H:%M")
+    except Exception:
+        try:
+            dt = datetime.datetime.strptime(date.strip(), "%Y-%m-%d")
+        except Exception:
+            return "Date invalide. Format attendu : AAAA-MM-JJ HH:MM."
+    end = dt + datetime.timedelta(minutes=int(duration_min or 60))
+    def _as_date(d):
+        return (f'(current date) - (get (current date)) + '
+                f'(date "{d.day:02d}/{d.month:02d}/{d.year} {d.hour:02d}:{d.minute:02d}:00")')
+    safe_title = title.replace('"', '\\"')
+    safe_notes = (notes or "").replace('"', '\\"')
+    script = f'''
+    set startDate to (current date)
+    set year of startDate to {dt.year}
+    set month of startDate to {dt.month}
+    set day of startDate to {dt.day}
+    set hours of startDate to {dt.hour}
+    set minutes of startDate to {dt.minute}
+    set seconds of startDate to 0
+    set endDate to startDate + ({int(duration_min or 60)} * minutes)
+    tell application "Calendar"
+      tell calendar 1
+        make new event with properties {{summary:"{safe_title}", start date:startDate, end date:endDate, description:"{safe_notes}"}}
+      end tell
+    end tell
+    return "ok"
+    '''
+    try:
+        r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True, timeout=20)
+        if r.returncode == 0:
+            return f"✓ Événement ajouté au calendrier : « {title} » le {dt.strftime('%d/%m/%Y à %H:%M')}."
+        return f"Erreur calendrier : {r.stderr.strip()}"
+    except Exception as e:
+        return f"Erreur : {e}"
+
+
+async def calendar_list(days: int = 7) -> str:
+    """Liste les événements à venir via AppleScript."""
+    script = f'''
+    set output to ""
+    set today to current date
+    set laterDate to today + ({int(days or 7)} * days)
+    tell application "Calendar"
+      repeat with cal in calendars
+        set evts to (every event of cal whose start date ≥ today and start date ≤ laterDate)
+        repeat with e in evts
+          set output to output & (summary of e) & " — " & (start date of e as string) & linefeed
+        end repeat
+      end repeat
+    end tell
+    return output
+    '''
+    try:
+        r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True, timeout=25)
+        if r.returncode == 0:
+            out = r.stdout.strip()
+            return f"Événements des {days} prochains jours :\n{out}" if out else "Aucun événement à venir."
+        return f"Erreur calendrier : {r.stderr.strip()}"
+    except Exception as e:
+        return f"Erreur : {e}"
+
+
+async def play_music(query: str, app: str = "music") -> str:
+    """Contrôle la musique via AppleScript (Apple Music ou Spotify)."""
+    q = query.strip().lower()
+    app_name = "Spotify" if app == "spotify" else "Music"
+    controls = {
+        "pause": "pause", "stop": "pause", "play": "play", "lecture": "play",
+        "suivant": "next track", "next": "next track",
+        "précédent": "previous track", "precedent": "previous track", "previous": "previous track",
+    }
+    try:
+        if q in controls:
+            script = f'tell application "{app_name}" to {controls[q]}'
+        else:
+            safe = query.replace('"', '\\"')
+            if app == "spotify":
+                script = f'tell application "Spotify" to play'
+            else:
+                script = f'''
+                tell application "Music"
+                  set results to (every track whose name contains "{safe}" or artist contains "{safe}")
+                  if results is not {{}} then
+                    play item 1 of results
+                    return "Lecture : " & (name of item 1 of results) & " — " & (artist of item 1 of results)
+                  else
+                    return "Rien trouvé pour {safe} dans la bibliothèque."
+                  end if
+                end tell
+                '''
+        r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True, timeout=20)
+        if r.returncode == 0:
+            return r.stdout.strip() or f"✓ {app_name} : {query}"
+        return f"Erreur musique : {r.stderr.strip()}"
+    except Exception as e:
+        return f"Erreur : {e}"
+
+
+async def get_news(topic: str = "", count: int = 6) -> str:
+    """Récupère les actualités via le flux RSS Google Actualités (gratuit)."""
+    from urllib.parse import quote_plus
+    import re as _re
+    try:
+        if topic:
+            url = f"https://news.google.com/rss/search?q={quote_plus(topic)}&hl=fr&gl=FR&ceid=FR:fr"
+        else:
+            url = "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr"
+        async with httpx.AsyncClient(timeout=12.0, follow_redirects=True) as client:
+            r = await client.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        # On ne prend que les titres des <item> (pas le titre du flux lui-même)
+        items = _re.findall(r"<item>(.*?)</item>", r.text, _re.DOTALL)
+        titles = []
+        for it in items:
+            m = _re.search(r"<title>(.*?)</title>", it, _re.DOTALL)
+            if m:
+                t = m.group(1).replace("<![CDATA[", "").replace("]]>", "").strip()
+                if t and "Google Actualités" not in t:
+                    titles.append(t)
+        titles = titles[:int(count or 6)]
+        if not titles:
+            return "Aucune actualité trouvée."
+        head = f"Actualités{' — ' + topic if topic else ''} :"
+        return head + "\n" + "\n".join(f"• {t}" for t in titles)
+    except Exception as e:
+        return f"Erreur actualités : {e}"
+
+
+async def open_app(target: str) -> str:
+    """Ouvre une app ou un site web sur le Mac."""
+    try:
+        t = target.strip()
+        if t.startswith("http://") or t.startswith("https://") or "." in t.split()[0]:
+            url = t if t.startswith("http") else "https://" + t
+            subprocess.run(["open", url], timeout=10)
+            return f"✓ Ouvert : {url}"
+        else:
+            r = subprocess.run(["open", "-a", t], capture_output=True, text=True, timeout=10)
+            if r.returncode == 0:
+                return f"✓ Application ouverte : {t}"
+            return f"Impossible d'ouvrir « {t} » : {r.stderr.strip()}"
+    except Exception as e:
+        return f"Erreur : {e}"
+
+
+async def read_document(path: str) -> str:
+    """Lit un document (PDF, texte, Word) et retourne son contenu."""
+    try:
+        p = Path(path).expanduser()
+        if not p.exists():
+            return f"Fichier introuvable : {path}"
+        suffix = p.suffix.lower()
+        if suffix == ".pdf":
+            # Extraire le texte du PDF via pdftotext (souvent présent) sinon fallback
+            try:
+                r = subprocess.run(["pdftotext", str(p), "-"], capture_output=True, text=True, timeout=30)
+                text = r.stdout
+            except FileNotFoundError:
+                try:
+                    from pypdf import PdfReader
+                    text = "\n".join((pg.extract_text() or "") for pg in PdfReader(str(p)).pages)
+                except Exception:
+                    return "Pour lire les PDF, installez l'outil : brew install poppler (ou pip install pypdf)."
+        elif suffix in (".txt", ".md", ".csv", ".json", ".log"):
+            text = p.read_text(encoding="utf-8", errors="replace")
+        elif suffix in (".docx",):
+            try:
+                import zipfile, re as _re
+                with zipfile.ZipFile(str(p)) as z:
+                    xml = z.read("word/document.xml").decode("utf-8", "replace")
+                text = _re.sub(r"<[^>]+>", " ", xml.replace("</w:p>", "\n"))
+            except Exception as e:
+                return f"Impossible de lire ce Word : {e}"
+        else:
+            return f"Type de fichier non pris en charge : {suffix}"
+        text = text.strip()
+        if not text:
+            return "Le document semble vide ou illisible (peut-être scanné/image)."
+        return f"Contenu de {p.name} ({len(text)} caractères) :\n\n{text[:6000]}"
+    except Exception as e:
+        return f"Erreur lecture document : {e}"
+
+
 # ─── Dispatcher ─────────────────────────────────────────────────────────────
 
 TOOL_MAP = {
@@ -757,6 +1103,14 @@ TOOL_MAP = {
     "calculate": calculate,
     "blender_run_script": blender_run_script,
     "blender_render": blender_render,
+    "generate_image": generate_image,
+    "download_file": download_file,
+    "calendar_add": calendar_add,
+    "calendar_list": calendar_list,
+    "play_music": play_music,
+    "get_news": get_news,
+    "open_app": open_app,
+    "read_document": read_document,
 }
 
 
