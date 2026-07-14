@@ -941,20 +941,26 @@ header::after {
   .btn-clear { padding: 4px 8px; font-size: 9px; letter-spacing: 1px; }
   .header-right { gap: 8px; }
 
-  /* Conversation plein écran */
+  /* Conversation plein écran — hauteur bornée pour que les messages DÉFILENT */
   .panel {
     position: static !important;
     width: auto !important;
-    height: auto !important;
+    height: 100% !important;      /* remplit la ligne, ne grandit pas avec le contenu */
     margin: 8px !important;
     grid-column: 1;
     grid-row: 2;
     display: flex !important;
     flex-direction: column;
-    min-height: 0;
+    min-height: 0 !important;
+    overflow: hidden !important;
     animation: none !important;
   }
-  .messages { flex: 1; overflow-y: auto; }
+  .messages {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;      /* indispensable : permet au flex-enfant de défiler */
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
 
   /* Le décor (réacteur, jauges…) disparaît, mais opérations + visionneuse restent par-dessus */
   .main {
