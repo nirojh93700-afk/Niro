@@ -739,6 +739,34 @@ export default function GestionPage() {
               <div className="dash-col">
                 <div className="dash-panel">
                   <div className="dash-ph"><h3>À faire</h3></div>
+                  {(() => {
+                    // Rappel automatique : déclaration URSSAF (mensuelle). On déclare
+                    // le CA du mois PRÉCÉDENT, à faire avant la fin du mois EN COURS.
+                    const now = new Date();
+                    const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+                    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                    const periode = `${MOIS[prev.getMonth()]} ${prev.getFullYear()}`;
+                    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    const deadline = `${lastDay.getDate()} ${MOIS[lastDay.getMonth()]}`;
+                    const daysLeft = Math.max(0, Math.ceil((lastDay - now) / 86400000));
+                    const urgent = daysLeft <= 10;
+                    return (
+                      <a
+                        href="https://www.autoentrepreneur.urssaf.fr/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="dash-todo"
+                        style={{ textDecoration: "none", color: "inherit", ...(urgent ? { background: "#fdeee8", boxShadow: "inset 3px 0 0 #b4452f" } : {}) }}
+                      >
+                        <span className="ic">🧾</span>
+                        <span>
+                          <b>Déclaration URSSAF{urgent ? " — c'est bientôt la fin !" : ""}</b>
+                          <small>Déclarez votre chiffre d'affaires de {periode} avant le {deadline}{daysLeft > 0 ? ` · ${daysLeft} j restants` : " · aujourd'hui !"}</small>
+                        </span>
+                        <span className="go">→</span>
+                      </a>
+                    );
+                  })()}
                   <button type="button" className="dash-todo" onClick={() => setTab("commandes")}>
                     <span className="ic">📦</span>
                     <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir les commandes" : "Rien en attente 🎉"}</small></span>
