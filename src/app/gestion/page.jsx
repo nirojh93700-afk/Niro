@@ -519,6 +519,14 @@ export default function GestionPage() {
     const d = new Date(o.createdAt);
     return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() ? s + (Number(o.total) || 0) : s;
   }, 0);
+  // CA du mois PRÉCÉDENT = montant exact à déclarer à l'URSSAF ce mois-ci
+  // (chiffre d'affaires encaissé des commandes payées ; 0 s'il n'y a pas eu de vente).
+  const _prevMois = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const caToDeclare = validOrders.reduce((s, o) => {
+    if (!o.createdAt) return s;
+    const d = new Date(o.createdAt);
+    return d.getFullYear() === _prevMois.getFullYear() && d.getMonth() === _prevMois.getMonth() ? s + (Number(o.total) || 0) : s;
+  }, 0);
   // Clientes : nouvelles vs récurrentes (≥ 2 commandes)
   const recurrentes = clients.filter((c) => c.nb >= 2).length;
   const nouvelles = clients.length - recurrentes;
@@ -750,6 +758,7 @@ export default function GestionPage() {
                     const deadline = `${lastDay.getDate()} ${MOIS[lastDay.getMonth()]}`;
                     const daysLeft = Math.max(0, Math.ceil((lastDay - now) / 86400000));
                     const urgent = daysLeft <= 10;
+                    const montant = formatEuro(caToDeclare);
                     return (
                       <a
                         href="https://www.autoentrepreneur.urssaf.fr/"
@@ -760,8 +769,12 @@ export default function GestionPage() {
                       >
                         <span className="ic">🧾</span>
                         <span>
-                          <b>Déclaration URSSAF{urgent ? " — c'est bientôt la fin !" : ""}</b>
-                          <small>Déclarez votre chiffre d'affaires de {periode} avant le {deadline}{daysLeft > 0 ? ` · ${daysLeft} j restants` : " · aujourd'hui !"}</small>
+                          <b>URSSAF — à déclarer : {caToDeclare > 0 ? montant : "0 € (rien à déclarer)"}</b>
+                          <small>
+                            {caToDeclare > 0
+                              ? `Chiffre d'affaires de ${periode} (montant encaissé). À déclarer avant le ${deadline}${daysLeft > 0 ? ` · ${daysLeft} j restants` : " · aujourd'hui !"}`
+                              : `Aucune vente en ${periode} → déclarez « 0 » avant le ${deadline}${daysLeft > 0 ? ` · ${daysLeft} j restants` : ""}`}
+                          </small>
                         </span>
                         <span className="go">→</span>
                       </a>
