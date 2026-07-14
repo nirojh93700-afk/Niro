@@ -920,81 +920,138 @@ header::after {
   .ring-dash1, .ring-dash2, .radar-sweep, .gauge::after { animation: none; }
 }
 
-/* ═══ MOBILE (en fin de style pour gagner la cascade) ═══ */
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE — VRAI JARVIS (réacteur héros qui réagit, conversation dessous)
+   ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 700px) {
+  html, body { overflow-x: hidden !important; max-width: 100vw; }
   .app {
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: calc(50px + env(safe-area-inset-top)) minmax(0, 1fr) auto !important;
+    grid-template-rows:
+      calc(46px + env(safe-area-inset-top))   /* header */
+      38vh                                     /* réacteur héros */
+      minmax(0, 1fr)                           /* conversation */
+      auto !important;                         /* saisie */
     height: 100dvh;
-    width: 100vw;
+    width: 100% !important;
+    max-width: 100vw;
     overflow: hidden;
   }
-  /* Header compact : garder logo, statut, verrou — sous la barre d'état iPhone */
+
+  /* Header compact sous la barre d'état */
   header {
     padding: 0 12px;
     padding-top: env(safe-area-inset-top);
-    min-width: 0;
-    overflow: hidden;
+    min-width: 0; overflow: hidden;
+    background: linear-gradient(180deg, rgba(2,16,32,0.9), transparent);
+    border-bottom: none;
   }
   .logo { font-size: 15px; letter-spacing: 5px; }
   .model-badge, .jarvis-clock, .clients-badge { display: none !important; }
-  .btn-clear { padding: 4px 8px; font-size: 9px; letter-spacing: 1px; }
-  .header-right { gap: 8px; }
+  .btn-clear { padding: 4px 7px; font-size: 8px; letter-spacing: 1px; }
+  .header-right { gap: 6px; }
 
-  /* Conversation plein écran — hauteur bornée pour que les messages DÉFILENT */
-  .panel {
-    position: static !important;
-    width: auto !important;
-    height: 100% !important;      /* remplit la ligne, ne grandit pas avec le contenu */
-    margin: 8px !important;
-    grid-column: 1;
-    grid-row: 2;
-    display: flex !important;
-    flex-direction: column;
-    min-height: 0 !important;
-    overflow: hidden !important;
-    animation: none !important;
-  }
-  .messages {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;      /* indispensable : permet au flex-enfant de défiler */
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Le décor (réacteur, jauges…) disparaît, mais opérations + visionneuse restent par-dessus */
+  /* ── LE RÉACTEUR EN HÉROS (rangée 2) ── */
   .main {
-    display: block !important;
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 30;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1; grid-row: 2;
+    min-width: 0 !important;
+    width: 100% !important;
+    z-index: 1;
     pointer-events: none;
+    overflow: hidden !important;
   }
-  .main #canvas, .main .center, .main .hud,
-  .main .date-ring, .main .gauge, .main .weather-card, .main .circuit-svg {
-    display: none !important;
+  .main #canvas { display: block !important; }
+  /* On masque les widgets encombrants, on garde le réacteur pur et net */
+  .main .date-ring, .main .gauge, .main .weather-card,
+  .main .circuit-svg, .main .hud, .main .data-tag { display: none !important; }
+  .center { gap: 14px !important; }
+  .ring-container { width: 190px !important; height: 190px !important; }
+  .core { font-size: 13px !important; letter-spacing: 3px !important; }
+  .state-label {
+    font-size: 13px !important; letter-spacing: 5px !important;
+    color: var(--cyan) !important; text-shadow: 0 0 14px rgba(0,212,255,0.4);
+    min-height: 18px;
   }
-  .hud-layer { position: fixed !important; inset: 0 !important; pointer-events: none; }
+
+  /* La couche HUD (opérations + visionneuse) flotte par-dessus tout */
+  .hud-layer {
+    position: fixed !important; inset: 0 !important;
+    pointer-events: none; z-index: 40;
+  }
   .ops-panel {
     position: fixed !important;
     left: 10px !important; right: 10px !important;
-    bottom: 120px !important; top: auto !important;
-    width: auto !important; max-height: 180px;
-    animation: none !important;
+    bottom: calc(120px + env(safe-area-inset-bottom)) !important; top: auto !important;
+    width: auto !important; max-height: 200px;
+    animation: holoIn 0.4s ease-out !important;
   }
   .viewer {
     position: fixed !important;
-    width: 94vw !important; max-height: 72vh;
+    width: 94vw !important; max-height: 74vh;
   }
 
-  .input-area {
-    grid-column: 1;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    flex-wrap: wrap;
+  /* ── CONVERSATION (rangée 3) : verre encadré, défile ── */
+  .panel {
+    position: static !important;
+    width: auto !important; height: 100% !important;
+    margin: 6px 10px !important;
+    grid-column: 1; grid-row: 3;
+    display: flex !important; flex-direction: column;
+    min-height: 0 !important; overflow: hidden !important;
+    background: rgba(2,16,32,0.6) !important;
+    animation: none !important;
   }
-  .input-wrap { flex: 1 1 100%; }
+  .panel-header { padding: 8px 14px; font-size: 8px; }
+  .messages {
+    flex: 1 1 auto !important; min-height: 0 !important; min-width: 0 !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+  }
+  .msg { font-size: 14px; max-width: 88% !important; }
+  .input-wrap { min-width: 0 !important; }
+
+  /* ── BARRE DE SAISIE (rangée 4) : gros bouton micro central ── */
+  .input-area {
+    grid-column: 1; grid-row: 4;
+    display: grid !important;
+    grid-template-columns: 1fr auto auto auto;
+    grid-template-areas: "field field field field" "up speak mic send";
+    gap: 8px;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    align-items: center;
+    background: linear-gradient(0deg, rgba(2,16,32,0.95), rgba(2,16,32,0.6));
+    border-top: 1px solid var(--border);
+  }
+  .input-wrap { grid-area: field; }
   #text-input { font-size: 16px; }
-  .btn-send { padding: 0 18px; font-size: 11px; }
+  .btn-upload { position: static; }
+  #btn-speaker { grid-area: up; }
+  #btn-voice {
+    grid-area: mic;
+    width: 58px !important; height: 58px !important;
+    font-size: 24px !important;
+    background: radial-gradient(circle, rgba(0,212,255,0.25), rgba(0,80,160,0.15)) !important;
+    border: 1.5px solid var(--cyan) !important;
+    box-shadow: 0 0 18px rgba(0,212,255,0.35) !important;
+  }
+  #btn-voice.active {
+    animation: micPulse 1.1s ease-in-out infinite !important;
+  }
+  @keyframes micPulse {
+    0%,100% { box-shadow: 0 0 18px rgba(0,212,255,0.4); transform: scale(1); }
+    50%     { box-shadow: 0 0 34px rgba(0,212,255,0.8); transform: scale(1.06); }
+  }
+  #btn-stop-voice { grid-area: speak; }
+  .btn-send { grid-area: send; padding: 0 14px; font-size: 10px; height: 44px; }
+
+  /* Quand Jarvis écoute/parle, le halo derrière le réacteur s'intensifie */
+  .core.thinking, .core.speaking { transform: scale(1.05); }
 }
 </style>
 </head>
