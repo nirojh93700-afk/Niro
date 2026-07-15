@@ -146,7 +146,7 @@ export default function TaxonomyAdmin({ adminKey, products = [] }) {
               <input
                 value={c.label}
                 onChange={(e) => renameCat(ci, e.target.value)}
-                style={{ flex: "1 1 200px", padding: "8px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", fontWeight: 600 }}
+                style={{ flex: "1 1 200px", minWidth: 0, padding: "8px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", fontWeight: 600 }}
               />
               <span className="admin-group-count">{prods.length} produit{prods.length > 1 ? "s" : ""}</span>
               <button className="btn btn-outline" style={{ padding: "4px 10px", color: "#b4452f" }} onClick={() => deleteCat(c.slug)}>Supprimer</button>
@@ -158,13 +158,13 @@ export default function TaxonomyAdmin({ adminKey, products = [] }) {
               <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>Sous-catégories</span>
               {sl.length === 0 && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>Aucune sous-catégorie.</p>}
               {sl.map((s, si) => (
-                <div key={s.slug} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                <div key={s.slug} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={arrowBtn} disabled={si === 0} onClick={() => moveSub(c.slug, si, -1)}>▲</button>
                   <button className="btn btn-outline" style={arrowBtn} disabled={si === sl.length - 1} onClick={() => moveSub(c.slug, si, 1)}>▼</button>
                   <input
                     value={s.label}
                     onChange={(e) => renameSub(c.slug, si, e.target.value)}
-                    style={{ flex: "1 1 160px", padding: "6px 9px", border: "1px solid var(--line)", borderRadius: 7, font: "inherit" }}
+                    style={{ flex: "1 1 160px", minWidth: 0, padding: "6px 9px", border: "1px solid var(--line)", borderRadius: 7, font: "inherit" }}
                   />
                   <button className="btn btn-outline" style={{ padding: "3px 9px", color: "#b4452f" }} onClick={() => deleteSub(c.slug, s.slug)}>×</button>
                 </div>
@@ -177,7 +177,7 @@ export default function TaxonomyAdmin({ adminKey, products = [] }) {
               <span className="admin-field" style={{ display: "block", marginBottom: 6 }}>Ordre des produits (tel qu'affiché dans la boutique)</span>
               {prods.length === 0 && <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>Aucun produit dans cette catégorie.</p>}
               {prods.map((p, pi) => (
-                <div key={p.slug} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <div key={p.slug} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
                   <span style={{ width: 22, textAlign: "right", color: "var(--ink-soft)", fontSize: "0.8rem" }}>{pi + 1}.</span>
                   <button className="btn btn-outline" style={arrowBtn} disabled={pi === 0} onClick={() => moveProduct(c.slug, pi, -1)}>▲</button>
                   <button className="btn btn-outline" style={arrowBtn} disabled={pi === prods.length - 1} onClick={() => moveProduct(c.slug, pi, 1)}>▼</button>
