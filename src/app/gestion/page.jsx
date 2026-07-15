@@ -49,8 +49,10 @@ export default function GestionPage() {
   const [bulkPct, setBulkPct] = useState(20);
   const [statYear, setStatYear] = useState(new Date().getFullYear());
   const [crmSearch, setCrmSearch] = useState("");
-  const [siteSettings, setSiteSettings] = useState({ salesGoal: 0, crmNotes: {} });
+  const [siteSettings, setSiteSettings] = useState({ salesGoal: 0, crmNotes: {}, ventesExternes: [] });
   const [goalInput, setGoalInput] = useState("");
+  const [veMontant, setVeMontant] = useState("");
+  const [veSource, setVeSource] = useState("Etsy");
   const [noteDraft, setNoteDraft] = useState({});
   const [mailOpen, setMailOpen] = useState("");
   const [mailSubject, setMailSubject] = useState("");
@@ -88,7 +90,7 @@ export default function GestionPage() {
       const stg = await fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } });
       if (stg.ok) {
         const s = (await stg.json()).settings || {};
-        setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {} });
+        setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
       }
     } catch (e) {
@@ -317,7 +319,7 @@ export default function GestionPage() {
       });
       if (!res.ok) throw new Error("Échec de l'enregistrement.");
       const s = (await res.json()).settings || {};
-      setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {} });
+      setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
       setSaved(label || "settings");
       setTimeout(() => setSaved(""), 1500);
     } catch (e) {
@@ -327,6 +329,18 @@ export default function GestionPage() {
 
   function saveGoal() {
     saveSettingsPatch({ salesGoal: Number(goalInput) || 0 }, "goal");
+  }
+  // Ventes hors site (Etsy, main propre…) : ajout / suppression pour le mois à déclarer.
+  function addVenteExterne(moisKey) {
+    const montant = Number(String(veMontant).replace(",", "."));
+    if (!Number.isFinite(montant) || montant <= 0) { setError("Entrez un montant valide."); return; }
+    const list = [...(siteSettings.ventesExternes || []), { id: String(Date.now()), mois: moisKey, montant: Math.round(montant * 100) / 100, source: veSource || "Autre" }];
+    setVeMontant("");
+    saveSettingsPatch({ ventesExternes: list }, "vente-ext");
+  }
+  function removeVenteExterne(id) {
+    const list = (siteSettings.ventesExternes || []).filter((v) => v.id !== id);
+    saveSettingsPatch({ ventesExternes: list }, "vente-ext");
   }
 
   function saveNote(emailKey) {
@@ -522,11 +536,16 @@ export default function GestionPage() {
   // CA du mois PRÉCÉDENT = montant exact à déclarer à l'URSSAF ce mois-ci
   // (chiffre d'affaires encaissé des commandes payées ; 0 s'il n'y a pas eu de vente).
   const _prevMois = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const caToDeclare = validOrders.reduce((s, o) => {
+  const _prevKey = `${_prevMois.getFullYear()}-${String(_prevMois.getMonth() + 1).padStart(2, "0")}`;
+  const caSitePrev = validOrders.reduce((s, o) => {
     if (!o.createdAt) return s;
     const d = new Date(o.createdAt);
     return d.getFullYear() === _prevMois.getFullYear() && d.getMonth() === _prevMois.getMonth() ? s + (Number(o.total) || 0) : s;
   }, 0);
+  // Ventes hors site (Etsy, main propre…) saisies pour ce mois → ajoutées au total.
+  const ventesExt = Array.isArray(siteSettings.ventesExternes) ? siteSettings.ventesExternes : [];
+  const caExtPrev = ventesExt.filter((v) => v.mois === _prevKey).reduce((s, v) => s + (Number(v.montant) || 0), 0);
+  const caToDeclare = caSitePrev + caExtPrev;
   // Clientes : nouvelles vs récurrentes (≥ 2 commandes)
   const recurrentes = clients.filter((c) => c.nb >= 2).length;
   const nouvelles = clients.length - recurrentes;
@@ -800,6 +819,48 @@ export default function GestionPage() {
                     <span><b>Stock</b><small>Vérifier les ruptures et réapprovisionner</small></span>
                     <span className="go">→</span>
                   </button>
+                </div>
+
+                <div className="dash-panel">
+                  <div className="dash-ph"><h3>Ventes hors site (URSSAF)</h3></div>
+                  <div style={{ padding: "12px 16px" }}>
+                    {(() => {
+                      const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+                      const label = `${MOIS[_prevMois.getMonth()]} ${_prevMois.getFullYear()}`;
+                      const list = ventesExt.filter((v) => v.mois === _prevKey);
+                      return (
+                        <>
+                          <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "0 0 10px" }}>
+                            Ajoutez ici vos ventes faites <b>ailleurs que sur le site</b> (Etsy, main propre, virement…) pour le mois à déclarer (<b>{label}</b>). Elles s'ajoutent automatiquement au total URSSAF.
+                          </p>
+                          {list.length > 0 && (
+                            <div style={{ marginBottom: 10 }}>
+                              {list.map((v) => (
+                                <div key={v.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "6px 0", borderBottom: "1px solid var(--line)" }}>
+                                  <span style={{ fontSize: "0.85rem" }}>{v.source || "Autre"}</span>
+                                  <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                    <b>{formatEuro(v.montant)}</b>
+                                    <button type="button" onClick={() => removeVenteExterne(v.id)} title="Supprimer" style={{ border: "none", background: "none", color: "#b4452f", cursor: "pointer", fontSize: "1rem" }}>×</button>
+                                  </span>
+                                </div>
+                              ))}
+                              <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 8, fontWeight: 700 }}>
+                                <span>Sous-total hors site</span><span>{formatEuro(caExtPrev)}</span>
+                              </div>
+                            </div>
+                          )}
+                          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                            <input value={veSource} onChange={(e) => setVeSource(e.target.value)} placeholder="Etsy, main propre…"
+                              style={{ flex: "1 1 120px", minWidth: 0, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+                            <input value={veMontant} onChange={(e) => setVeMontant(e.target.value)} inputMode="decimal" placeholder="Montant €"
+                              style={{ width: 100, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+                            <button type="button" className="dash-abtn gold" onClick={() => addVenteExterne(_prevKey)} style={{ whiteSpace: "nowrap" }}>+ Ajouter</button>
+                          </div>
+                          {saved === "vente-ext" && <p style={{ color: "#4d7a3a", fontSize: "0.8rem", marginTop: 8 }}>Enregistré ✓</p>}
+                        </>
+                      );
+                    })()}
+                  </div>
                 </div>
 
                 <div className="dash-panel">

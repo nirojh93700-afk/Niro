@@ -134,6 +134,15 @@ export async function POST(req) {
     const n = Number(body.salesGoal);
     patch.salesGoal = Number.isFinite(n) && n > 0 ? Math.round(n) : 0;
   }
+  // Ventes hors site (Etsy, main propre, virement…) à ajouter au CA déclaré URSSAF.
+  if (Array.isArray(body.ventesExternes)) {
+    patch.ventesExternes = body.ventesExternes.slice(0, 240).map((v) => {
+      const mois = /^\d{4}-\d{2}$/.test(String(v?.mois || "")) ? String(v.mois) : "";
+      const montant = Number(v?.montant);
+      if (!mois || !Number.isFinite(montant) || montant < 0) return null;
+      return { id: str(v?.id, 40) || String(Math.random()).slice(2, 10), mois, montant: Math.round(montant * 100) / 100, source: str(v?.source, 40) };
+    }).filter(Boolean);
+  }
   if (body.crmNotes && typeof body.crmNotes === "object") {
     const notes = {};
     let count = 0;
