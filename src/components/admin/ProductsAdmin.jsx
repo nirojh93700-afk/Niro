@@ -22,7 +22,7 @@ function groupByCategory(products, cats) {
 }
 
 // Édition / création / suppression des produits depuis l'admin.
-export default function ProductsAdmin({ adminKey, products, onReload }) {
+export default function ProductsAdmin({ adminKey, products, onReload, stockBySlug = {}, onStockChange, onStockSave, stockSaved }) {
   const [openSlug, setOpenSlug] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [msg, setMsg] = useState("");
@@ -121,9 +121,32 @@ export default function ProductsAdmin({ adminKey, products, onReload }) {
                 </span>
                 <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", whiteSpace: "nowrap" }}
                   onClick={() => setOpenSlug(openSlug === p.slug ? null : p.slug)}>
-                  {openSlug === p.slug ? "Fermer" : "Modifier"}
+                  {openSlug === p.slug ? "Fermer" : "Modifier la fiche"}
                 </button>
               </div>
+
+              {/* Stock du produit — réuni ici (plus besoin d'un onglet séparé). */}
+              {(stockBySlug[p.slug] || []).length > 0 && (
+                <div className="admin-stock-line">
+                  {stockBySlug[p.slug].map((s) => {
+                    const out = typeof s.value === "number" && s.value === 0;
+                    const low = typeof s.value === "number" && s.value > 0 && s.value <= 2;
+                    return (
+                      <span key={s.key} className={`admin-stock-pill ${out ? "out" : low ? "low" : s.value == null ? "none" : "ok"}`}>
+                        <span className="asp-dot" />
+                        <span className="asp-lab">{s.label || "Stock"}{out ? " · RUPTURE" : ""}</span>
+                        <input
+                          type="number" min="0" placeholder="—"
+                          value={s.value ?? ""}
+                          onChange={(e) => onStockChange && onStockChange(s.key, e.target.value === "" ? "" : Number(e.target.value))}
+                          onBlur={(e) => onStockSave && onStockSave(s.key, e.target.value)}
+                        />
+                        <span className="asp-ok">{stockSaved === s.key ? "✓" : ""}</span>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
 
               {openSlug === p.slug && (
                 <EditProduct

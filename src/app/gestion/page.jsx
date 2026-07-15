@@ -427,6 +427,31 @@ export default function GestionPage() {
   const imgBySlug = {};
   editable.forEach((e) => { imgBySlug[e.slug] = (e.overrideImages && e.overrideImages[0]) || e.image || (e.images && e.images[0]) || ""; });
 
+  // Stock prêt à afficher PAR PRODUIT (pour la page fusionnée Produits & Stock).
+  // Reprend EXACTEMENT la logique de l'onglet Stock (un champ par stockId, libellé
+  // commun pour les variantes partagées) → aucun changement de comportement.
+  const stockBySlug = {};
+  for (const [slug, g] of Object.entries(grouped)) {
+    const counts = {};
+    g.items.forEach((r) => { const k = r.stockId || r.variantId; counts[k] = (counts[k] || 0) + 1; });
+    const seen = new Set();
+    stockBySlug[slug] = g.items
+      .filter((r) => { const k = r.stockId || r.variantId; if (seen.has(k)) return false; seen.add(k); return true; })
+      .map((r) => {
+        const k = r.stockId || r.variantId;
+        const isGrouped = counts[k] > 1;
+        let label = r.variantTitle;
+        if (isGrouped) {
+          const segs = g.items
+            .filter((x) => (x.stockId || x.variantId) === k)
+            .map((x) => (x.variantTitle || "").split("/").map((s) => s.trim()).filter(Boolean));
+          const common = (segs[0] || []).filter((s) => segs.every((arr) => arr.includes(s)));
+          label = common.length ? common.join(" / ") : r.variantTitle;
+        }
+        return { key: k, label, value: r.stock };
+      });
+  }
+
   // ---- Calculs commandes / clientes / statistiques ----
   const fmtDate = (iso) => {
     try { return new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
@@ -625,10 +650,9 @@ export default function GestionPage() {
             {
               label: "Catalogue",
               tabs: [
-                { id: "produits", text: "Produits" },
+                { id: "produits", text: "Produits & Stock" },
                 { id: "categories", text: "🗂️ Catégories & ordre" },
                 { id: "tailles", text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
-                { id: "stock", text: "Stock" },
                 { id: "gravure", text: "Gravure" },
                 { id: "reglages-produits", text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
               ],
@@ -738,7 +762,7 @@ export default function GestionPage() {
 
                 {hasBlocStock && (
                   <div className="dash-panel">
-                    <div className="dash-ph"><h3>Stock — blocs cristal (partagé V + H)</h3><button type="button" onClick={() => setTab("stock")}>Gérer →</button></div>
+                    <div className="dash-ph"><h3>Stock — blocs cristal (partagé V + H)</h3><button type="button" onClick={() => setTab("produits")}>Gérer →</button></div>
                     {blocStockRows.map((b) => {
                       const s = b.stock;
                       const out = s === 0;
@@ -814,7 +838,7 @@ export default function GestionPage() {
                     <span><b>Avis clients</b><small>Valider ou masquer les avis</small></span>
                     <span className="go">→</span>
                   </button>
-                  <button type="button" className="dash-todo" onClick={() => setTab("stock")}>
+                  <button type="button" className="dash-todo" onClick={() => setTab("produits")}>
                     <span className="ic">📊</span>
                     <span><b>Stock</b><small>Vérifier les ruptures et réapprovisionner</small></span>
                     <span className="go">→</span>
@@ -1213,7 +1237,15 @@ export default function GestionPage() {
 
         {/* ---------------- PRODUITS ---------------- */}
         {tab === "produits" && (
-          <ProductsAdmin adminKey={key} products={editable} onReload={() => load(key)} />
+          <ProductsAdmin
+            adminKey={key}
+            products={editable}
+            onReload={() => load(key)}
+            stockBySlug={stockBySlug}
+            onStockChange={updateRow}
+            onStockSave={saveStock}
+            stockSaved={saved}
+          />
         )}
 
         {/* ---------------- CATÉGORIES & ORDRE ---------------- */}

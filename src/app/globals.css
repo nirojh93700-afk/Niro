@@ -2659,3 +2659,19 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .footer-insta-txt .fi-title{font-weight:700}
 .footer-insta-txt .fi-handle{color:#e2c67e;font-weight:700}
 .footer-insta-txt .fi-sub{font-size:.78rem;opacity:.75}
+
+/* Page Produits & Stock — pastilles de stock sous chaque produit (mobile + PC) */
+.admin-stock-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.admin-stock-pill{display:inline-flex;align-items:center;gap:7px;background:#faf5e6;border:1px solid var(--line);
+  border-radius:22px;padding:4px 8px 4px 11px;font-size:.82rem;color:var(--ink);max-width:100%}
+.admin-stock-pill .asp-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;background:#b9ac93}
+.admin-stock-pill.ok .asp-dot{background:#4d7a3a}
+.admin-stock-pill.low .asp-dot{background:#d08a2a}
+.admin-stock-pill.out{border-color:#e6b3a5;background:#fdeee8}
+.admin-stock-pill.out .asp-dot{background:#b4452f}
+.admin-stock-pill.out .asp-lab{color:#b4452f;font-weight:700}
+.admin-stock-pill .asp-lab{color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.admin-stock-pill input{width:44px;text-align:center;border:1px solid var(--line);border-radius:8px;
+  padding:4px 2px;font:inherit;background:#fff;-moz-appearance:textfield}
+.admin-stock-pill input::-webkit-outer-spin-button,.admin-stock-pill input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.admin-stock-pill .asp-ok{color:#4d7a3a;font-weight:700;width:10px}
