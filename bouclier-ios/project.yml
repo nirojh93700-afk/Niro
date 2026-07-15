@@ -1,0 +1,93 @@
+# Projet Xcode généré par XcodeGen — https://github.com/yonaskolb/XcodeGen
+# Génération : depuis bouclier-ios/, lancer  `xcodegen generate`  puis ouvrir Bouclier.xcodeproj
+name: Bouclier
+options:
+  bundleIdPrefix: fr.niro
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    # ⚠️ Renseignez votre Team ID Apple Developer (Xcode > Settings > Accounts),
+    #    ou laissez Xcode le régler automatiquement à l'ouverture.
+    DEVELOPMENT_TEAM: ""
+
+targets:
+  # ── Application principale ────────────────────────────────────────────────
+  Bouclier:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.niro.bouclier
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_ENTITLEMENTS: App/Bouclier.entitlements
+        INFOPLIST_KEY_CFBundleDisplayName: Bouclier
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
+    dependencies:
+      - target: CallDirectory
+      - target: MessageFilter
+
+  # ── Extension : blocage d'appels (liste de numéros) ──────────────────────
+  CallDirectory:
+    type: app-extension
+    platform: iOS
+    sources:
+      - CallDirectory
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.niro.bouclier.CallDirectory
+        INFOPLIST_FILE: CallDirectory/Info.plist
+        CODE_SIGN_ENTITLEMENTS: CallDirectory/CallDirectory.entitlements
+
+  # ── Extension : filtrage des SMS (analyse en temps réel) ─────────────────
+  MessageFilter:
+    type: app-extension
+    platform: iOS
+    sources:
+      - MessageFilter
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.niro.bouclier.MessageFilter
+        INFOPLIST_FILE: MessageFilter/Info.plist
+        CODE_SIGN_ENTITLEMENTS: MessageFilter/MessageFilter.entitlements
+
+  # ── Tests unitaires du moteur d'analyse ──────────────────────────────────
+  # Le moteur est accessible via `@testable import Bouclier` : ne PAS recompiler
+  # Shared/ ici, sinon doublons de symboles.
+  BouclierTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.niro.bouclier.Tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Bouclier
+
+schemes:
+  Bouclier:
+    build:
+      targets:
+        Bouclier: all
+        CallDirectory: all
+        MessageFilter: all
+    run:
+      config: Debug
+    test:
+      targets:
+        - BouclierTests

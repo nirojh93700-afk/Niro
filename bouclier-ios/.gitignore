@@ -1,0 +1,11 @@
+# Projet Xcode généré par XcodeGen (regénérable via `xcodegen generate`)
+Bouclier.xcodeproj/
+
+# Xcode / macOS
+.DS_Store
+xcuserdata/
+*.xcuserstate
+DerivedData/
+build/
+*.ipa
+*.dSYM.zip
