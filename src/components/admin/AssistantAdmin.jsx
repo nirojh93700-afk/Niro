@@ -136,7 +136,7 @@ export default function AssistantAdmin({ adminKey, onReload }) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") send(); }}
           placeholder="Votre demande…"
-          style={{ flex: 1, padding: "12px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
+          style={{ flex: 1, minWidth: 0, padding: "12px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
         />
         <button className="btn btn-gold" onClick={send} disabled={busy}>Envoyer</button>
       </div>
