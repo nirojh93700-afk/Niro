@@ -2686,3 +2686,19 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .variant-swatch.sold-out .vs-title{text-decoration:line-through;color:var(--ink-soft)}
 .variant-swatch .vs-out{position:absolute;top:6px;right:6px;z-index:2;background:#b4452f;color:#fff;
   font-size:.62rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:20px}
+
+/* ============================================================
+   TRÈS GRANDS ÉCRANS (ultra-larges 32:9, > 2100px) :
+   on encadre tout le site dans une largeur confortable, centré,
+   avec les côtés dans une teinte douce de la marque.
+   → N'affecte QUE les écrans > 2100px. Portables/desktops ≤ 1920px
+     inchangés (0 changement).
+   ============================================================ */
+@media (min-width: 2100px) {
+  html { background: #e6dcc9; }
+  body {
+    max-width: 1760px;
+    margin: 0 auto;
+    box-shadow: 0 0 80px rgba(43, 38, 32, 0.10);
+  }
+}
