@@ -117,7 +117,7 @@ export default async function BoutiquePage({ searchParams }) {
             name="q"
             defaultValue={searchParams?.q || ""}
             placeholder="Rechercher une création…"
-            style={{ flex: 1, padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
+            style={{ flex: 1, minWidth: 0, padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
           />
           <button type="submit" className="btn btn-gold">Rechercher</button>
         </form>

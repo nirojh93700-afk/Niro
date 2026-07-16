@@ -53,8 +53,14 @@ img {
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 clamp(16px, 4vw, 40px);
 }
+
+/* Le conteneur s'élargit tout seul sur les grands écrans (les portables et
+   tablettes ≤ 1499px ne bougent pas), pour utiliser l'espace au lieu de rester
+   coincé au milieu. */
+@media (min-width: 1500px) { :root { --max: 1320px; } }
+@media (min-width: 1800px) { :root { --max: 1440px; } }
 
 /* ---------- Boutons ---------- */
 .btn {
@@ -336,7 +342,7 @@ img {
 /* ---------- Catégories ---------- */
 .cat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
   gap: 22px;
 }
 .cat-card {
@@ -377,9 +383,12 @@ img {
 }
 
 /* ---------- Grille produits ---------- */
+/* Colonnes AUTOMATIQUES : le navigateur en met autant que la largeur le permet
+   (1 sur petit téléphone/petite fenêtre, jusqu'à 4-5 sur grand écran). S'adapte
+   en continu quand on redimensionne — pas de paliers brusques. */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 26px;
 }
 .product-card {
@@ -2523,12 +2532,6 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .hero-visual {
     order: -1;
   }
-  .cat-grid {
-    grid-template-columns: 1fr;
-  }
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .trust-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
@@ -2561,9 +2564,6 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   }
 }
 @media (max-width: 540px) {
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
   .footer-grid {
     grid-template-columns: 1fr;
   }
