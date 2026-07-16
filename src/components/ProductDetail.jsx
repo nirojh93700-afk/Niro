@@ -1081,14 +1081,18 @@ export default function ProductDetail({ product }) {
                   const cm = product.crystal3d ? v.title.split(/\s+—\s+/) : null;
                   const vName = cm ? cm[0] : v.title;
                   const vSub = cm && cm[1] ? cm[1] : "";
+                  // Stock de CETTE option : si à 0, on marque l'option « Épuisé ».
+                  const vStock = stockMap[v.stockId || v.id];
+                  const vOut = typeof vStock === "number" && vStock <= 0;
                   return (
                   <button
                     key={v.id}
                     type="button"
-                    className={`variant-swatch${i === variantIndex ? " active" : ""}${v.image ? " has-img" : ""}`}
+                    className={`variant-swatch${i === variantIndex ? " active" : ""}${v.image ? " has-img" : ""}${vOut ? " sold-out" : ""}`}
                     onClick={() => selectVariant(i)}
                     aria-pressed={i === variantIndex}
                   >
+                    {vOut && <span className="vs-out">Épuisé</span>}
                     {v.image && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={v.image} alt="" />
