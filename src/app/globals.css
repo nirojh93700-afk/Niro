@@ -2675,3 +2675,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   padding:4px 2px;font:inherit;background:#fff;-moz-appearance:textfield}
 .admin-stock-pill input::-webkit-outer-spin-button,.admin-stock-pill input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .admin-stock-pill .asp-ok{color:#4d7a3a;font-weight:700;width:10px}
+
+/* Note « photo vérifiée par l'atelier » sous chaque champ photo */
+.photo-check-note{margin-top:8px;font-size:.82rem;line-height:1.45;color:#5a5247;
+  background:#fbf6ea;border:1px solid #e7d3a1;border-radius:8px;padding:9px 12px}

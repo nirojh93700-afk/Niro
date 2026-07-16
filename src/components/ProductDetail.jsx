@@ -1138,6 +1138,9 @@ export default function ProductDetail({ product }) {
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} productSlug={product.slug} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
+                      <p className="photo-check-note">
+                        Votre photo est vérifiée par notre atelier avant la gravure. Si elle est trop floue, trop sombre ou de qualité insuffisante pour un beau rendu, nous vous recontactons pour la confirmer ou en choisir une autre — afin que votre souvenir soit parfait.
+                      </p>
                     </div>
                   );
                 }
