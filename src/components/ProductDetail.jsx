@@ -1423,7 +1423,7 @@ export default function ProductDetail({ product }) {
                     >
                       {o.photo ? <img src={o.photo} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", flex: "0 0 40px" }} /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
                       <span style={{ minWidth: 0 }}>
-                        <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{clientName}{isPack && <span style={{ background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, borderRadius: 20, padding: "1px 7px", marginLeft: 6 }}>MEILLEUR CHOIX</span>}</strong>
+                        <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{clientName}{isPack && <span style={{ display: "inline-block", whiteSpace: "nowrap", background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".2px", borderRadius: 20, padding: "2px 8px", marginLeft: 6, verticalAlign: "middle" }}>MEILLEUR CHOIX</span>}</strong>
                         {o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}
                       </span>
                       <span style={{ marginLeft: "auto", fontWeight: 700, fontSize: "0.85rem", whiteSpace: "nowrap" }}>
