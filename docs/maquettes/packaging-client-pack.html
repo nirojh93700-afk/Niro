@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette client — Emballage avec pack (collier)</title>
+<style>
+  :root{--gold:#c2a14e;--gold-dark:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+  .demo{max-width:520px;margin:0 auto;padding:24px 16px 60px}
+  .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:10px 16px;font-size:.85rem;margin-bottom:20px}
+  h1{font-family:Georgia,serif;font-size:1.3rem;margin:0 0 4px}
+  .price{color:#b4452f;font-weight:700;font-size:1.2rem;margin:0 0 18px}
+  .pack-title{font-weight:700;font-size:.95rem;margin-bottom:3px}
+  .pack-sub{color:var(--ink-soft);font-size:.83rem;margin:0 0 12px}
+  .opts{display:grid;gap:10px}
+  .opt{display:flex;align-items:center;gap:13px;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;position:relative;transition:.15s}
+  .opt.sel{border-color:var(--gold);box-shadow:0 0 0 2px rgba(194,161,78,.25)}
+  .opt.sel::after{content:"✓";position:absolute;top:8px;right:13px;color:var(--gold-dark);font-weight:800}
+  .ill{width:50px;height:50px;flex:0 0 50px;border-radius:10px;display:grid;place-items:center;font-size:1.5rem;background:#efe4cf}
+  .txt{min-width:0}
+  .txt b{display:block;font-size:.92rem}
+  .txt span{display:block;color:var(--ink-soft);font-size:.8rem}
+  .pr{margin-left:auto;font-weight:700;font-size:.9rem;white-space:nowrap;padding-right:16px}
+  .best{border-color:var(--gold);background:linear-gradient(180deg,#fffaf0,#fff)}
+  .badge{display:inline-block;background:var(--gold);color:#1a1206;font-size:.64rem;font-weight:800;letter-spacing:.04em;border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+  .strike{color:var(--ink-soft);text-decoration:line-through;font-weight:400;font-size:.8rem;margin-right:5px}
+  .total{display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 16px;font-weight:700;margin-top:16px}
+  .btn{display:block;width:100%;margin-top:12px;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#1a1206;font-weight:700;font-size:1rem;border:0;border-radius:999px;padding:15px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="demo-note">MAQUETTE — rendu client sur une fiche COLLIER, avec tes prix et le Pack Collier. Cliquez pour tester.</div>
+  <h1>Collier Enveloppe Message Secret</h1>
+  <p class="price">24,90 €</p>
+
+  <div class="pack-title">Votre emballage</div>
+  <p class="pack-sub">Choisissez votre présentation cadeau.</p>
+  <div class="opts" id="opts">
+    <label class="opt" data-p="0"><span class="ill">✖️</span><span class="txt"><b>Sans emballage cadeau</b><span>Livré protégé, sans écrin</span></span><span class="pr">0 €</span></label>
+    <label class="opt" data-p="1.2"><span class="ill">🛍️</span><span class="txt"><b>Sac cadeau</b><span>Sac papier beige au logo</span></span><span class="pr">+ 1,20 €</span></label>
+    <label class="opt" data-p="3"><span class="ill">🎁</span><span class="txt"><b>Boîte carré</b><span>Écrin rigide beige 9×9 cm</span></span><span class="pr">+ 3,00 €</span></label>
+    <label class="opt" data-p="1.9"><span class="ill">👝</span><span class="txt"><b>Pochette microfibre</b><span>Protection / voyage</span></span><span class="pr">+ 1,90 €</span></label>
+    <label class="opt best" data-p="4.9"><span class="ill">✨</span><span class="txt"><b>Pack Collier<span class="badge">MEILLEUR CHOIX</span></b><span>Sac + boîte carré + pochette microfibre</span></span><span class="pr"><span class="strike">6,10 €</span>+ 4,90 €</span></label>
+  </div>
+
+  <div class="total"><span>Total</span><span id="tt">24,90 €</span></div>
+  <button class="btn">Ajouter au panier</button>
+</div>
+<script>
+  const base=24.90, opts=document.querySelectorAll('.opt'), tt=document.getElementById('tt');
+  opts.forEach(o=>o.addEventListener('click',()=>{opts.forEach(x=>x.classList.remove('sel'));o.classList.add('sel');
+    tt.textContent=(base+parseFloat(o.dataset.p)).toFixed(2).replace('.',',')+' €';}));
+</script>
+</body>
+</html>
