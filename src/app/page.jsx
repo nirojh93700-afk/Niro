@@ -1,7 +1,8 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import NewArrivalsToast from "@/components/NewArrivalsToast";
-import PaymentBand from "@/components/PaymentBand";
+import { PaymentLogos } from "@/components/PaymentBand";
+import PayInfoModal from "@/components/PayInfo";
 import { getProductBySlug } from "@/lib/products";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
@@ -220,11 +221,15 @@ export default async function HomePage() {
             <div className="trust-item"><span>🔒</span><strong>Paiement sécurisé</strong><small>Carte bancaire via Stripe</small></div>
             <div className="trust-item"><span>💌</span><strong>Cadeau idéal</strong><small>Une attention qui marque les esprits</small></div>
           </div>
+          {/* Paiement : logos + plusieurs fois, regroupé dans le même bandeau */}
+          <div className="container trust-pay">
+            <PaymentLogos dark />
+            <p className="trust-pay-line">
+              💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="trust-pay-link" />
+            </p>
+          </div>
         </section>
       )}
-
-      {/* BANDEAU PAIEMENT (sécurisé + plusieurs fois) */}
-      <PaymentBand />
 
       {/* PRODUITS PHARES */}
       {show.featured && (

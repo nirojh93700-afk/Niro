@@ -2757,3 +2757,31 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .pay-logos .plg{background:#fff;border:1px solid #e7ddcd;border-radius:8px;height:36px;min-width:56px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,.05)}
 .pay-logos .plg svg{display:block}
 .pay-logos .plg-klarna{background:#FFB3C7;border-color:#ff9dbb;color:#0b0b0b;font-weight:800;font-size:.84rem}
+
+/* ── Fenêtre "En savoir plus" paiement + contenu (partagé avec /paiement) ── */
+.payinfo-overlay{position:fixed;inset:0;z-index:1000;background:rgba(20,15,8,.55);display:flex;align-items:flex-start;justify-content:center;padding:24px 14px;overflow-y:auto}
+.payinfo-modal{background:var(--paper);color:var(--ink);border-radius:18px;max-width:640px;width:100%;padding:24px 22px 26px;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.3);margin:auto}
+.payinfo-close{position:absolute;top:12px;right:14px;border:0;background:var(--cream);width:34px;height:34px;border-radius:50%;font-size:1.3rem;cursor:pointer;color:var(--ink-soft);line-height:1}
+.pi-eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dark);font-weight:700;margin:0}
+.pi-title{font-family:var(--font-display),Georgia,serif;font-size:1.5rem;margin:4px 0 10px}
+.payinfo .pi-intro{color:var(--ink-soft);font-size:.92rem;margin:0 0 16px}
+.pi-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.pi-card{background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:14px;padding:15px 16px}
+.pi-card .pi-h{font-weight:800;font-size:1.02rem;font-style:italic;margin-bottom:8px}
+.pi-card ul{margin:0;padding-left:18px;color:var(--ink-soft);font-size:.86rem;line-height:1.5}
+.pi-card ul li{margin-bottom:5px}
+.pi-card ul li strong{color:var(--ink)}
+.pi-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.pi-step{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;position:relative}
+.pi-step .pi-n{position:absolute;top:7px;right:10px;color:var(--gold-l);font-weight:800}
+.pi-step .pi-ic{font-size:1.4rem}
+.pi-step strong{display:block;font-size:.85rem;margin:5px 0 2px}
+.pi-step small{color:var(--ink-soft);font-size:.74rem}
+.pi-legal{color:var(--ink-soft);font-size:.78rem;line-height:1.55;background:var(--cream);border-radius:10px;padding:11px 13px;margin:6px 0 0}
+@media(max-width:520px){.pi-steps{grid-template-columns:1fr}}
+
+/* Partie paiement REGROUPÉE dans le bandeau réassurance (accueil) */
+.trust-pay{margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);text-align:center}
+.trust-pay .trust-pay-line{margin:14px 0 0;color:#cbb98f;font-size:.88rem}
+.trust-pay .trust-pay-line strong{color:#fff}
+.trust-pay-link{color:var(--gold-l);text-decoration:underline;white-space:nowrap;font-weight:600}
