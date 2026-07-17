@@ -1414,6 +1414,13 @@ export default function ProductDetail({ product }) {
             <div className="hero-badge">Paiement sécurisé</div>
             <div className="hero-badge">Pièce personnalisée</div>
           </div>
+
+          {product.category === "bijoux" && (
+            <p style={{ fontSize: "0.88rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
+              <strong style={{ color: "var(--gold-dark)" }}>✦ Livré prêt à offrir</strong> — chaque bijou est
+              présenté dans son écrin avec sa pochette, aux couleurs de la boutique.
+            </p>
+          )}
           <p style={{ fontSize: "0.85rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
             🕒 Personnalisé à la commande : fabrication 2 à 5 jours ouvrés + expédition 2 à 4 jours ouvrés.
           </p>
