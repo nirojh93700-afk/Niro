@@ -52,16 +52,12 @@ export function packagingExtra(product, selectedIds = []) {
   const labels = [];
   const chosen = [];
   for (const o of pk.options) {
-    if (o.free) {
-      weight += Number(o.weight) || 0;
-      labels.push(`${o.name} (offert)`);
-      chosen.push(o.id);
-    } else if (sel.has(o.id)) {
-      amount += Number(o.price) || 0;
-      weight += Number(o.weight) || 0;
-      labels.push(`${o.name} (+${(Number(o.price) || 0).toFixed(2)} €)`);
-      chosen.push(o.id);
-    }
+    if (!sel.has(o.id)) continue;
+    const price = Number(o.price) || 0;
+    amount += price;
+    weight += Number(o.weight) || 0;
+    labels.push(o.free || price === 0 ? `${o.name} (offert)` : `${o.name} (+${price.toFixed(2)} €)`);
+    chosen.push(o.id);
   }
   return { amount: Math.round(amount * 100) / 100, weight, labels, chosen };
 }

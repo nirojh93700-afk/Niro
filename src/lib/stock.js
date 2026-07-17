@@ -14,6 +14,7 @@
 // En local (sans aucun stockage), on retombe sur une mémoire temporaire.
 // =============================================================================
 import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
+import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
@@ -727,8 +728,13 @@ export async function getSettings() {
     // Emballages (page Gestion → Packaging).
     // packaging = bibliothèque : [ { id, name, desc, buy, sell, weight, photo } ].
     // productPackaging = attribution par produit : { [slug]: { on, ids, free } }.
-    packaging: Array.isArray(s.packaging) ? s.packaging : [],
-    productPackaging: (s.productPackaging && typeof s.productPackaging === "object") ? s.productPackaging : {},
+    // packagingLive = INTERRUPTEUR MAÎTRE : tant qu'il est false, RIEN ne s'affiche
+    //   sur le site (même si des produits sont configurés). Défaut : false.
+    // Tant que la gérante n'a rien enregistré, on pré-remplit avec la config de
+    // départ (ses prix/règles) pour qu'elle n'ait qu'à ajouter les photos.
+    packagingLive: s.packagingLive === true,
+    packaging: Array.isArray(s.packaging) ? s.packaging : DEFAULT_PACKAGING,
+    productPackaging: (s.productPackaging && typeof s.productPackaging === "object") ? s.productPackaging : DEFAULT_PRODUCT_PACKAGING,
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {

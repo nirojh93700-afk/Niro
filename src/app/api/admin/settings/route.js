@@ -245,6 +245,8 @@ export async function POST(req) {
     patch.crystalZones = out;
   }
 
+  // Emballages — interrupteur maître « visible sur le site ».
+  if (typeof body.packagingLive === "boolean") patch.packagingLive = body.packagingLive;
   // Emballages — bibliothèque (Gestion → Packaging).
   if (Array.isArray(body.packaging)) {
     const price = (v) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : 0; };

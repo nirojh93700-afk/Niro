@@ -116,6 +116,8 @@ export async function getCatalog() {
     getStockMap().catch(() => ({})),
   ]);
   const refMarkup = Number(settings?.refMarkup) || 0;
+  // Emballages : affichés UNIQUEMENT si l'interrupteur maître est activé.
+  const pkgLive = settings?.packagingLive === true;
   const pkgLib = settings?.packaging;
   const pkgAssign = settings?.productPackaging || {};
   const base = baseProducts.map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
@@ -123,7 +125,7 @@ export async function getCatalog() {
   const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
   return all.map((p) => {
-    const packaging = resolvePackaging(pkgAssign[p.slug], pkgLib);
+    const packaging = pkgLive ? resolvePackaging(pkgAssign[p.slug], pkgLib) : null;
     return {
       ...p,
       ...(refMarkup > 0 ? { refMarkup } : {}),

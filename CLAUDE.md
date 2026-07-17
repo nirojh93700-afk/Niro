@@ -239,6 +239,13 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Pyramide** (`pyramide-cristal-gravure-3d`) : passée de TEXTE → **PHOTO** (photo 3D + guide). Le texte d'origine (textarea+police) est en commentaire ; titre/tagline/description mis à jour en « photo ». Pour revenir au texte : remettre les 2 champs commentés, retirer le champ photo, et remettre les libellés « texte ».
 - **Porte-clés cristal** (Cœur, Rectangle) : déjà photo uniquement (jamais de texte).
 
+### PACKAGING / EMBALLAGES — construit le 17/07/2026 (masqué tant que non activé)
+> Page **Gestion → Catalogue → 📦 Packaging & emballages** (`/gestion/emballages`, `src/app/gestion/emballages/page.jsx`).
+- **Bibliothèque** d'emballages dans `settings.packaging` (`[{id,name,desc,buy,sell,weight,photo}]`) + **attribution par produit** `settings.productPackaging` (`{slug:{on,ids,free}}`). Sanitizers dans `/api/admin/settings`. Config de DÉPART pré-remplie (prix/règles de la gérante) dans `src/lib/packagingSeed.js` (s'affiche tant qu'elle n'a rien enregistré → elle ajoute juste les photos).
+- **INTERRUPTEUR MAÎTRE** `settings.packagingLive` (défaut **false**) : tant qu'il est false, `getCatalog` n'attache PAS `product.packaging` → **RIEN sur le site** (fiches inchangées). L'admin a le toggle « visible sur le site ». Activation = la gérante coche + Enregistre (ou on met `packagingLive:true`).
+- **Fiche** (`ProductDetail.jsx`) : si `product.packaging.on`, sélecteur « Votre emballage » en mode **choisir UNE formule** (radio) : Sans emballage / Sac / Boîte / Microfibre / Pack (mis en avant « meilleur choix »). Prix recalculé côté serveur au checkout (`packagingExtra` dans `src/lib/packaging.js`, appelé dans `/api/checkout`), poids ajouté au colis, emballage écrit sur la commande (description Stripe).
+- Prix confirmés : Sac 1,20 · Boîte cadeau 3 (colliers) / 5 (bracelets) · Microfibre 1,90 · **Pack Collier 5,50**. Règles : sac+microfibre sur tous les bijoux · boîte cadeau (carrée) sur colliers + 3 bracelets fins (Femme Cœur/Papillon/Acier) · boîte cadeau (allongée) sur les autres bracelets. Maquettes validées : `docs/maquettes/admin-packaging.html` + `packaging-client-pack.html`. **Reste à trancher** : Pack Bracelet (oui/non) — non créé pour l'instant.
+
 ### RÈGLE — RIEN SUR LE SITE SANS VALIDATION (17/07/2026, demande explicite après incident)
 - **INTERDIT de modifier le site visible** (fiches, pages, textes clients) **sans l'accord explicite de la gérante**. Le circuit est TOUJOURS : **maquette d'abord → elle valide → « applique » → alors seulement on touche au site.**
 - En cas de doute sur ce qu'un « oui » valide exactement : **demander**, ne pas déduire.

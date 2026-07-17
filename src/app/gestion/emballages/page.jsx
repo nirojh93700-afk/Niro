@@ -23,6 +23,7 @@ export default function EmballagesAdmin() {
   const [msg, setMsg] = useState("");
   const [lib, setLib] = useState([]);              // bibliothèque d'emballages
   const [assign, setAssign] = useState({});        // { slug: { on, ids, free } }
+  const [live, setLive] = useState(false);         // interrupteur maître (visible sur le site)
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("bijoux");
 
@@ -48,6 +49,7 @@ export default function EmballagesAdmin() {
       const { settings } = await res.json();
       setLib(Array.isArray(settings.packaging) ? settings.packaging : []);
       setAssign(settings.productPackaging && typeof settings.productPackaging === "object" ? settings.productPackaging : {});
+      setLive(settings.packagingLive === true);
       setAuthed(true);
       try { sessionStorage.setItem("niv-admin-key", k); } catch { /* ignore */ }
       setMsg("");
@@ -60,7 +62,7 @@ export default function EmballagesAdmin() {
       const res = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ packaging: lib, productPackaging: assign }),
+        body: JSON.stringify({ packaging: lib, productPackaging: assign, packagingLive: live }),
       });
       if (!res.ok) throw new Error("Échec de l'enregistrement.");
       const { settings } = await res.json();
@@ -126,6 +128,23 @@ export default function EmballagesAdmin() {
       <h1 style={{ fontFamily: "Georgia, serif", marginBottom: 2 }}>Packaging &amp; emballages</h1>
       <p style={{ color: "var(--ink-soft)", fontSize: ".92rem", marginTop: 0 }}>
         Créez vos emballages (photo + prix d'achat + prix de vente), puis cochez ceux qui vont avec chaque produit. Ils s'afficheront tout seuls sur la fiche.
+      </p>
+
+      {/* Interrupteur maître : tant qu'il est OFF, rien n'est visible sur le site. */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, background: live ? "#f2faf3" : "#fbf4e6", border: "1.5px solid " + (live ? "#cfe6d3" : "#e7d3a1"), borderRadius: 14, padding: "13px 16px", margin: "4px 0 8px" }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <strong style={{ display: "block" }}>{live ? "✅ Packaging VISIBLE sur le site" : "🔒 Packaging masqué (invisible sur le site)"}</strong>
+          <span style={{ color: "var(--ink-soft)", fontSize: ".82rem" }}>
+            {live ? "Les clientes voient le choix d'emballage sur les fiches." : "Réglez vos emballages et photos tranquillement. Activez quand vous êtes prête."}
+          </span>
+        </div>
+        <button onClick={() => setLive((v) => !v)} aria-label="Afficher sur le site"
+          style={{ position: "relative", width: 52, height: 30, flex: "0 0 52px", borderRadius: 20, background: live ? "var(--gold)" : "#d6ccb8", border: 0, cursor: "pointer" }}>
+          <span style={{ position: "absolute", top: 3, left: live ? 25 : 3, width: 24, height: 24, borderRadius: "50%", background: "#fff", transition: ".15s" }} />
+        </button>
+      </div>
+      <p style={{ color: "var(--ink-soft)", fontSize: ".8rem", margin: "0 0 6px" }}>
+        Pensez à cliquer <b>💾 Enregistrer</b> en bas après vos changements (l'interrupteur aussi s'enregistre).
       </p>
 
       {/* ══ 1. BIBLIOTHÈQUE ══ */}
