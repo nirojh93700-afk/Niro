@@ -10,6 +10,7 @@ import { getProductInfo } from "@/lib/productInfo";
 import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
+import PayInfoModal from "@/components/PayInfo";
 import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
@@ -1053,6 +1054,10 @@ export default function ProductDetail({ product }) {
               formatEuro(unitPrice)
             )}
           </div>
+          {/* Paiement en plusieurs fois — sous le prix (comme les grands sites) */}
+          <p className="pd-nfois">
+            💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="pd-nfois-link" />
+          </p>
           {engrave.amount > 0 && (
             <p style={{ margin: "-12px 0 16px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>
               dont <strong>{formatEuro(engrave.amount)}</strong> en plus
