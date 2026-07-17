@@ -41,10 +41,13 @@ export default function MerciPage() {
       <div className="big-emoji">🎉</div>
       <h1>Merci pour votre commande !</h1>
       <p style={{ color: "var(--ink-soft)" }}>
-        Votre paiement a bien été reçu. Vous allez recevoir un e-mail de
-        confirmation. Pour les créations personnalisées, nous reviendrons vers
-        vous afin de valider les détails de la gravure.
+        Votre paiement a bien été reçu. Voici ce qui se passe ensuite :
       </p>
+      <div className="merci-steps">
+        <div className="merci-step"><span className="n">1</span><div className="ic">📧</div><b>Confirmation</b><small>Un e-mail récapitulatif vous est envoyé</small></div>
+        <div className="merci-step"><span className="n">2</span><div className="ic">✏️</div><b>Gravure</b><small>Pour les pièces personnalisées, nous validons les détails avec vous</small></div>
+        <div className="merci-step"><span className="n">3</span><div className="ic">🚚</div><b>Expédition</b><small>Envoi suivi + numéro de suivi par e-mail</small></div>
+      </div>
       <p style={{ color: "var(--ink-soft)" }}>
         Une question ?{" "}
         <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)" }}>

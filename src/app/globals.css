@@ -2712,3 +2712,27 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .pd-perso b{color:var(--gold-dark)}
 .pd-perso p{margin:5px 0 0;font-size:.88rem;color:var(--ink-soft)}
 @media(max-width:360px){.trust-cards{grid-template-columns:1fr}}
+
+/* ============================================================
+   TEXTES EMBELLIS (maquette validée 17/07) — À propos, Panier, Contact, Merci
+   ============================================================ */
+.sf-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:8px}
+.sf-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 16px;border-top:3px solid var(--gold)}
+.sf-card .sf-ic{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#fbf4e6,#f3e8d3);display:grid;place-items:center;font-size:1.5rem;margin-bottom:10px}
+.sf-card h3{font-family:var(--font-display),Georgia,serif;font-size:1.05rem;margin:0 0 6px;border:0;padding:0}
+.sf-card p{margin:0;color:var(--ink-soft);font-size:.9rem}
+.info-callout{display:flex;gap:12px;background:#fbf4e6;border:1px solid #e7d3a1;border-left:4px solid var(--gold);border-radius:12px;padding:13px 15px;font-size:.86rem;margin:8px 0 0}
+.info-callout .ci{font-size:1.25rem;flex:0 0 auto;line-height:1.2}
+.contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.contact-card{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s}
+.contact-card:hover{border-color:var(--gold);box-shadow:0 4px 14px rgba(194,161,78,.14)}
+.contact-card .ci{width:42px;height:42px;border-radius:10px;background:var(--cream);display:grid;place-items:center;font-size:1.3rem;flex:0 0 auto}
+.contact-card b{display:block;font-size:.92rem}
+.contact-card small{color:var(--ink-soft);font-size:.8rem;word-break:break-word}
+.merci-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.merci-step{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px 12px;text-align:center;position:relative}
+.merci-step .n{position:absolute;top:9px;right:12px;color:var(--gold-l);font-weight:800;font-size:1.1rem}
+.merci-step .ic{font-size:1.6rem}
+.merci-step b{display:block;font-size:.9rem;margin:7px 0 3px}
+.merci-step small{color:var(--ink-soft);font-size:.78rem}
+@media(max-width:520px){.contact-cards,.merci-steps{grid-template-columns:1fr}}

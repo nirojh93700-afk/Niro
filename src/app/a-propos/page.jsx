@@ -51,29 +51,22 @@ export default async function AProposPage() {
               dangerouslySetInnerHTML={{ __html: apropos }}
             />
           ) : (
-            <div className="product-desc" style={{ borderTop: "none", paddingTop: 0 }}>
-              <h3>Un savoir-faire artisanal</h3>
-              <p style={{ color: "var(--ink-soft)" }}>
-                Notre métier, c'est la précision du laser : graver un prénom sur un
-                bijou ou un cristal, et dessiner puis découper les arches délicates
-                d'un numéro de table en bois. Une même exigence de finition sur
-                chaque pièce que nous personnalisons.
-              </p>
-
-              <h3>Des matériaux choisis avec soin</h3>
-              <p style={{ color: "var(--ink-soft)" }}>
-                Nous sélectionnons des matériaux nobles et durables : bois clairs,
-                acier inoxydable 316L hypoallergénique, acrylique premium. Des
-                pièces conçues pour traverser le temps et rester aussi belles
-                qu'au premier jour.
-              </p>
-
-              <h3>La personnalisation au cœur de notre métier</h3>
-              <p style={{ color: "var(--ink-soft)" }}>
-                Prénoms, dates, messages, photos gravées… Nous donnons vie à vos
-                idées pour en faire des objets chargés de sens. Chaque commande est
-                réalisée sur mesure dans notre atelier.
-              </p>
+            <div className="sf-cards">
+              <div className="sf-card">
+                <div className="sf-ic">🔧</div>
+                <h3>Un savoir-faire artisanal</h3>
+                <p>La précision du laser : graver un prénom sur un bijou ou un cristal, dessiner puis découper les arches délicates d'un numéro de table en bois. Une même exigence de finition sur chaque pièce.</p>
+              </div>
+              <div className="sf-card">
+                <div className="sf-ic">🌿</div>
+                <h3>Des matériaux choisis avec soin</h3>
+                <p>Des matériaux nobles et durables : bois clairs, acier inoxydable 316L hypoallergénique, acrylique premium. Des pièces conçues pour traverser le temps et rester aussi belles qu'au premier jour.</p>
+              </div>
+              <div className="sf-card">
+                <div className="sf-ic">✏️</div>
+                <h3>La personnalisation au cœur de notre métier</h3>
+                <p>Prénoms, dates, messages, photos gravées… Nous donnons vie à vos idées pour en faire des objets chargés de sens. Chaque commande est réalisée sur mesure dans notre atelier.</p>
+              </div>
             </div>
           )}
 

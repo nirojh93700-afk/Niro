@@ -48,17 +48,16 @@ export default function ContactPage() {
 
         <ContactForm />
 
-        <p style={{ textAlign: "center", marginTop: 28, color: "var(--ink-soft)" }}>
-          Ou directement par e-mail :{" "}
-          <a href="mailto:contact.nivcreation@gmail.com" style={{ color: "var(--gold-dark)" }}>
-            contact.nivcreation@gmail.com
+        <div className="contact-cards">
+          <a className="contact-card" href="mailto:contact.nivcreation@gmail.com">
+            <span className="ci">✉️</span>
+            <span><b>Par e-mail</b><small>contact.nivcreation@gmail.com</small></span>
           </a>
-          <br />
-          Par téléphone :{" "}
-          <a href="tel:+33766153102" style={{ color: "var(--gold-dark)" }}>
-            07 66 15 31 02
+          <a className="contact-card" href="tel:+33766153102">
+            <span className="ci">📞</span>
+            <span><b>Par téléphone</b><small>07 66 15 31 02</small></span>
           </a>
-        </p>
+        </div>
       </div>
     </section>
   );

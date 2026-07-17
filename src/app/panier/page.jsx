@@ -253,10 +253,13 @@ export default function CartPage() {
                     onChange={(e) => setPostalCode(e.target.value)}
                     style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
                   />
-                  <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", margin: "8px 0 0" }}>
-                    Retrait sur rendez-vous : c'est vous qui venez récupérer à l'atelier, sous <strong>14 jours</strong> après notre message « commande prête » (passé ce délai, la commande ne pourra plus être ni retirée, ni expédiée).
-                    <br />Vous habitez plus loin et souhaitez tout de même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
-                  </p>
+                  <div className="info-callout">
+                    <span className="ci">📍</span>
+                    <span>
+                      <strong>Retrait sur rendez-vous</strong> à l'atelier : à récupérer sous <strong>14 jours</strong> après notre message « commande prête » (passé ce délai, la commande ne pourra plus être ni retirée, ni expédiée).
+                      <br />Vous habitez plus loin et souhaitez tout de même venir récupérer ? Écrivez-nous <strong>avant de commander</strong> : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>.
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
