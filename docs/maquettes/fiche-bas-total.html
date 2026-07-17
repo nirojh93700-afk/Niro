@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Bas de fiche : total + badges retravaillés</title>
+<style>
+  :root{--gold:#c2a14e;--gold-dark:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+  .demo{max-width:520px;margin:0 auto;padding:22px 16px 60px}
+  .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:10px 16px;font-size:.85rem;margin-bottom:18px}
+
+  /* Emballage (rappel, mini) */
+  .pack-title{font-weight:700;font-size:.95rem;margin:0 0 8px}
+  .opts{display:grid;gap:9px;margin-bottom:18px}
+  .opt{display:flex;align-items:center;gap:11px;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:10px 13px;cursor:pointer;transition:.15s}
+  .opt.sel{border-color:var(--gold);background:#fffaf0;box-shadow:0 0 0 2px rgba(194,161,78,.22)}
+  .opt .ic{font-size:1.3rem}
+  .opt b{font-size:.9rem}
+  .opt small{display:block;color:var(--ink-soft);font-size:.76rem}
+  .opt .p{margin-left:auto;font-weight:700;font-size:.85rem;white-space:nowrap}
+  .strike{color:var(--ink-soft);text-decoration:line-through;font-weight:400;font-size:.78rem;margin-right:4px}
+
+  /* ══ TOTAL + BOUTON ══ */
+  .buybar{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;margin:6px 0 20px;box-shadow:0 6px 20px rgba(43,38,32,.06)}
+  .totrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px}
+  .totrow .lab{color:var(--ink-soft);font-size:.9rem}
+  .totrow .val{font-size:1.5rem;font-weight:800;color:var(--ink)}
+  .totrow .val .u{font-size:.8rem;color:var(--ink-soft);font-weight:600;margin-left:6px}
+  .buyrow{display:flex;gap:10px}
+  .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+  .qty button{border:0;background:none;font-size:1.2rem;width:40px;height:46px;cursor:pointer;color:var(--ink)}
+  .qty span{min-width:26px;text-align:center;font-weight:700}
+  .add{flex:1;border:0;border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#1a1206;font-weight:800;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+  .add .ap{background:rgba(26,18,6,.14);border-radius:999px;padding:3px 11px;font-size:.92rem}
+
+  /* ══ BADGES DE CONFIANCE (retravaillés) ══ */
+  .trust{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 20px}
+  .tc{display:flex;align-items:center;gap:10px;border-radius:12px;padding:11px 12px;border:1.5px solid}
+  .tc .ti{font-size:1.35rem;line-height:1}
+  .tc b{font-size:.86rem;display:block}
+  .tc small{color:var(--ink-soft);font-size:.72rem}
+  .tc.fr{background:#f4f7fb;border-color:#d5e2ef}
+  .tc.pay{background:#f2faf3;border-color:#cfe6d3}
+  .tc.hand{background:#fbf4e6;border-color:#e7d3a1}
+  .tc.ship{background:#f8f0f7;border-color:#e6cfe2}
+
+  .pcard{background:linear-gradient(135deg,#fbf4e6,#fffdf9);border:1px solid #e7d3a1;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+  .pcard b{color:var(--gold-dark)}
+  .pcard p{margin:5px 0 0;font-size:.9rem;color:var(--ink-soft)}
+  h3{font-family:Georgia,serif;font-size:1.05rem;margin:16px 0 6px}
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="demo-note">MAQUETTE — bas de fiche produit : total à jour près du bouton + badges retravaillés. Cliquez les emballages, le total bouge.</div>
+
+  <div class="pack-title">Votre emballage</div>
+  <div class="opts" id="opts">
+    <label class="opt" data-p="0"><span class="ic">✖️</span><span><b>Sans emballage cadeau</b><small>Livré protégé, sans boîte</small></span><span class="p">0 €</span></label>
+    <label class="opt" data-p="1.7"><span class="ic">🛍️</span><span><b>Sac cadeau</b><small>Sac papier beige au logo</small></span><span class="p">+ 1,70 €</span></label>
+    <label class="opt" data-p="3.9"><span class="ic">🎁</span><span><b>Boîte cadeau</b><small>Boîte carton 9×9 cm</small></span><span class="p">+ 3,90 €</span></label>
+    <label class="opt sel" data-p="5.5"><span class="ic">✨</span><span><b>Pack boîte cadeau</b><small>Sac + boîte + microfibre</small></span><span class="p"><span class="strike">8,30 €</span>+ 5,50 €</span></label>
+  </div>
+
+  <!-- LE TOTAL + BOUTON (le cœur de la maquette) -->
+  <div class="buybar">
+    <div class="totrow"><span class="lab">Total</span><span class="val" id="tot">27,91 €<span class="u">tout compris</span></span></div>
+    <div class="buyrow">
+      <div class="qty"><button onclick="q(-1)">−</button><span id="q">1</span><button onclick="q(1)">+</button></div>
+      <button class="add">Ajouter au panier <span class="ap" id="ap">27,91 €</span></button>
+    </div>
+  </div>
+
+  <!-- BADGES retravaillés -->
+  <div class="trust">
+    <div class="tc fr"><span class="ti">🇫🇷</span><span><b>Personnalisé en France</b><small>Gravé dans notre atelier</small></span></div>
+    <div class="tc pay"><span class="ti">🔒</span><span><b>Paiement sécurisé</b><small>Carte &amp; PayPal</small></span></div>
+    <div class="tc hand"><span class="ti">✋</span><span><b>Fait main</b><small>Pièce unique</small></span></div>
+    <div class="tc ship"><span class="ti">🚚</span><span><b>Livraison suivie</b><small>Colis &amp; point relais</small></span></div>
+  </div>
+
+  <div class="pcard">
+    <b>✦ Pièce personnalisée</b>
+    <p>🕐 Personnalisé à la commande : fabrication 2 à 5 jours ouvrés + expédition 2 à 4 jours ouvrés.</p>
+  </div>
+</div>
+
+<script>
+  const base=22.41; let qty=1, extra=5.5;
+  const opts=document.querySelectorAll('.opt'), tot=document.getElementById('tot'), ap=document.getElementById('ap'), qs=document.getElementById('q');
+  function fmt(n){return n.toFixed(2).replace('.',',')+' €';}
+  function render(){const t=(base+extra)*qty; tot.innerHTML=fmt(t)+'<span class="u">tout compris</span>'; ap.textContent=fmt(t); qs.textContent=qty;}
+  opts.forEach(o=>o.addEventListener('click',()=>{opts.forEach(x=>x.classList.remove('sel'));o.classList.add('sel');extra=parseFloat(o.dataset.p);render();}));
+  function q(d){qty=Math.max(1,qty+d);render();}
+  render();
+</script>
+</body>
+</html>
