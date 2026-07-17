@@ -1406,6 +1406,9 @@ export default function ProductDetail({ product }) {
                 {product.packaging.options.map((o) => {
                   const on = pkgSel[0] === o.id;
                   const isPack = /pack/i.test(o.name);
+                  // Côté client, les packs s'affichent tous « Pack boîte cadeau »
+                  // (dans l'admin ils gardent Pack Collier / Pack Bracelet).
+                  const clientName = isPack ? "Pack boîte cadeau" : o.name;
                   return (
                     <button
                       key={o.id}
@@ -1415,7 +1418,7 @@ export default function ProductDetail({ product }) {
                     >
                       {o.photo ? <img src={o.photo} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", flex: "0 0 40px" }} /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
                       <span style={{ minWidth: 0 }}>
-                        <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{o.name}{isPack && <span style={{ background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, borderRadius: 20, padding: "1px 7px", marginLeft: 6 }}>MEILLEUR CHOIX</span>}</strong>
+                        <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{clientName}{isPack && <span style={{ background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, borderRadius: 20, padding: "1px 7px", marginLeft: 6 }}>MEILLEUR CHOIX</span>}</strong>
                         {o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}
                       </span>
                       <span style={{ marginLeft: "auto", fontWeight: 700, fontSize: "0.85rem" }}>{o.price > 0 ? "+" + formatEuro(o.price) : "Offert"}</span>
