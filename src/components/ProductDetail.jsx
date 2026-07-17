@@ -1054,10 +1054,6 @@ export default function ProductDetail({ product }) {
               formatEuro(unitPrice)
             )}
           </div>
-          {/* Paiement en plusieurs fois — sous le prix (comme les grands sites) */}
-          <p className="pd-nfois">
-            💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="pd-nfois-link" />
-          </p>
           {engrave.amount > 0 && (
             <p style={{ margin: "-12px 0 16px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>
               dont <strong>{formatEuro(engrave.amount)}</strong> en plus
@@ -1453,6 +1449,10 @@ export default function ProductDetail({ product }) {
               <span className="val">{formatEuro(unitPrice * quantity)}</span>
             </div>
           )}
+          {/* Paiement en plusieurs fois — juste après le total, avant le bouton */}
+          <p className="pd-nfois">
+            💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="pd-nfois-link" />
+          </p>
           <div className="qty-row">
             <div className="qty-stepper">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Moins">
