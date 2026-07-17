@@ -53,7 +53,7 @@
   <div class="demo-note">MAQUETTE de la page <b>Gestion → Packaging</b>, remplie avec TES prix et TES règles. Le vrai outil te laisse tout modifier.</div>
 
   <h1>Packaging &amp; emballages</h1>
-  <p class="lead">Vos emballages, puis l'attribution : sac sur tous les bijoux · boîte carré + microfibre sur les colliers · boîte longue sur les bracelets.</p>
+  <p class="lead">Vos emballages, puis l'attribution : sac + microfibre sur tous les bijoux · boîte carré sur les colliers · boîte longue sur les bracelets.</p>
 
   <!-- ══ 1. MES EMBALLAGES ══ -->
   <h2>📦 Mes emballages</h2>
@@ -100,7 +100,7 @@
   <div class="grouphead">Colliers — sac + boîte carré + microfibre + Pack</div>
   <div id="colliers"></div>
 
-  <div class="grouphead">Bracelets — sac + boîte longue</div>
+  <div class="grouphead">Bracelets — sac + boîte longue + microfibre</div>
   <div id="bracelets"></div>
 </div>
 
@@ -108,7 +108,7 @@
   const COLLIERS=["Collier Enveloppe Message Secret","Collier Médaillon Cœur ouvrable","Collier Couple Cœur (lot de 2)","Collier Plaque Acier","Collier Médaillon Livre","Collier Couple Puzzle géométrique","Collier Femme Pendentif géométrique"];
   const BRACELETS=["Bracelet Homme Identité (Gourmette)","Bracelet Homme Acier & Silicone","Bracelet Homme Cuir Tressé & Acier","Bracelet Homme Chaîne Acier","Bracelet Femme Acier","Bracelet Empreinte Pied de Bébé","Bracelet Femme Cœur","Bracelet Femme Papillon ajouré"];
   const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>5,50 €</b></span>`;
-  const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte longue <b>+5,00 €</b></span>`;
+  const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte longue <b>+5,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
   function row(name,chips){return `<div class="prow"><div class="prow-top"><div class="thumb">💠</div><div class="prow-name"><b>${name}</b><span>Packaging activé</span></div><div class="switch"></div></div><div class="chips">${chips}</div></div>`;}
   document.getElementById('colliers').innerHTML=COLLIERS.map(n=>row(n,CHIPS_COL)).join('');
   document.getElementById('bracelets').innerHTML=BRACELETS.map(n=>row(n,CHIPS_BRA)).join('');
