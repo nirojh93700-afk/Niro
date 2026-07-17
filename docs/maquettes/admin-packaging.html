@@ -86,8 +86,8 @@
     <div class="pcard pack">
       <div class="ph">✨<span class="add">＋ photo</span></div>
       <div class="body"><b>Pack Collier</b><small>Sac + boîte carré + microfibre</small>
-        <div class="pxrow"><div class="px"><label>Achat</label><b>2,97 €</b></div><div class="px vente"><label>Vente</label><b>4,90 €</b></div></div>
-        <div class="marge">Marge : +1,93 €</div></div>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>2,97 €</b></div><div class="px vente"><label>Vente</label><b>5,50 €</b></div></div>
+        <div class="marge">Marge : +2,53 €</div></div>
     </div>
     <div class="addpack">＋ Ajouter un emballage</div>
   </div>
@@ -107,7 +107,7 @@
 <script>
   const COLLIERS=["Collier Enveloppe Message Secret","Collier Médaillon Cœur ouvrable","Collier Couple Cœur (lot de 2)","Collier Plaque Acier","Collier Médaillon Livre","Collier Couple Puzzle géométrique","Collier Femme Pendentif géométrique"];
   const BRACELETS=["Bracelet Homme Identité (Gourmette)","Bracelet Homme Acier & Silicone","Bracelet Homme Cuir Tressé & Acier","Bracelet Homme Chaîne Acier","Bracelet Femme Acier","Bracelet Empreinte Pied de Bébé","Bracelet Femme Cœur","Bracelet Femme Papillon ajouré"];
-  const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>4,90 €</b></span>`;
+  const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>5,50 €</b></span>`;
   const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte longue <b>+5,00 €</b></span>`;
   function row(name,chips){return `<div class="prow"><div class="prow-top"><div class="thumb">💠</div><div class="prow-name"><b>${name}</b><span>Packaging activé</span></div><div class="switch"></div></div><div class="chips">${chips}</div></div>`;}
   document.getElementById('colliers').innerHTML=COLLIERS.map(n=>row(n,CHIPS_COL)).join('');
