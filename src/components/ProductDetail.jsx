@@ -1441,6 +1441,13 @@ export default function ProductDetail({ product }) {
 
           {error && <div className="notice">{error}</div>}
 
+          {/* Total à jour (option + gravure + emballage), juste avant le bouton */}
+          {!soldOut && (
+            <div className="pd-total">
+              <span className="lab">Total</span>
+              <span className="val">{formatEuro(unitPrice * quantity)}<span className="u">tout compris</span></span>
+            </div>
+          )}
           <div className="qty-row">
             <div className="qty-stepper">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Moins">
@@ -1452,7 +1459,7 @@ export default function ProductDetail({ product }) {
               </button>
             </div>
             <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing}>
-              {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier" : "Ajouter au panier"}
+              {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : `Ajouter au panier · ${formatEuro(unitPrice * quantity)}`}
             </button>
           </div>
           {typeof variantStock === "number" && (
@@ -1470,14 +1477,16 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          <div className="hero-badges" style={{ marginTop: 8 }}>
-            <div className="hero-badge">{originLabel}</div>
-            <div className="hero-badge">Paiement sécurisé</div>
-            <div className="hero-badge">Pièce personnalisée</div>
+          <div className="trust-cards">
+            <div className="tcard fr"><span className="ti">🇫🇷</span><span><b>{originLabel}</b><small>Dans notre atelier</small></span></div>
+            <div className="tcard pay"><span className="ti">🔒</span><span><b>Paiement sécurisé</b><small>Carte &amp; PayPal</small></span></div>
+            <div className="tcard hand"><span className="ti">✋</span><span><b>Fait main</b><small>Pièce unique</small></span></div>
+            <div className="tcard ship"><span className="ti">🚚</span><span><b>Livraison suivie</b><small>Colis &amp; point relais</small></span></div>
           </div>
-          <p style={{ fontSize: "0.85rem", color: "var(--ink-soft)", margin: "10px 0 0" }}>
-            🕒 Personnalisé à la commande : fabrication 2 à 5 jours ouvrés + expédition 2 à 4 jours ouvrés.
-          </p>
+          <div className="pd-perso">
+            <b>✦ Pièce personnalisée</b>
+            <p>🕒 Personnalisé à la commande : fabrication 2 à 5 jours ouvrés + expédition 2 à 4 jours ouvrés.</p>
+          </div>
 
           <div
             className="product-desc"

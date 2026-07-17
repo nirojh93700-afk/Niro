@@ -2690,3 +2690,25 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .variant-swatch .vs-out{position:absolute;top:6px;right:6px;z-index:2;background:#b4452f;color:#fff;
   font-size:.62rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:20px}
 
+
+/* ============================================================
+   BAS DE FICHE PRODUIT : total près du bouton + badges de confiance
+   (maquette validée 17/07/2026 — remplace le texte brut des badges)
+   ============================================================ */
+.pd-total{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 8px}
+.pd-total .lab{color:var(--ink-soft);font-size:.9rem}
+.pd-total .val{font-size:1.4rem;font-weight:800;color:var(--ink)}
+.pd-total .val .u{font-size:.76rem;color:var(--ink-soft);font-weight:600;margin-left:6px}
+.trust-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 6px}
+.tcard{display:flex;align-items:center;gap:10px;border-radius:12px;padding:11px 12px;border:1.5px solid}
+.tcard .ti{font-size:1.3rem;line-height:1;flex:0 0 auto}
+.tcard b{font-size:.85rem;display:block;line-height:1.2}
+.tcard small{color:var(--ink-soft);font-size:.72rem}
+.tcard.fr{background:#f4f7fb;border-color:#d5e2ef}
+.tcard.pay{background:#f2faf3;border-color:#cfe6d3}
+.tcard.hand{background:#fbf4e6;border-color:#e7d3a1}
+.tcard.ship{background:#f8f0f7;border-color:#e6cfe2}
+.pd-perso{background:linear-gradient(135deg,#fbf4e6,#fffdf9);border:1px solid #e7d3a1;border-radius:14px;padding:13px 16px;margin:14px 0 4px}
+.pd-perso b{color:var(--gold-dark)}
+.pd-perso p{margin:5px 0 0;font-size:.88rem;color:var(--ink-soft)}
+@media(max-width:360px){.trust-cards{grid-template-columns:1fr}}
