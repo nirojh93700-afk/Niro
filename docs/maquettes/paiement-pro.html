@@ -14,9 +14,14 @@
   .totbox .lab{font-weight:700}
   .totbox .val{font-size:1.35rem;font-weight:800;color:var(--gold-dark)}
 
-  .klarna{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 13px;margin-bottom:12px;font-size:.86rem}
-  .klogo{background:#FFB3C7;color:#0b0b0b;font-weight:800;border-radius:7px;padding:3px 9px;font-size:.82rem;letter-spacing:.2px;flex:0 0 auto}
-  .klarna b{color:#111}
+  .facil{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:12px}
+  .facil .ft{font-weight:700;font-size:.82rem;margin-bottom:8px;color:var(--ink)}
+  .fline{display:flex;align-items:center;gap:10px;font-size:.85rem;margin:6px 0}
+  .fline b{color:#111}
+  .fline .seuil{color:var(--ink-soft);font-size:.78rem}
+  .klogo{background:#FFB3C7;color:#0b0b0b;font-weight:800;border-radius:7px;padding:3px 9px;font-size:.8rem;flex:0 0 58px;text-align:center}
+  .pplogo{border:1px solid #e7ddcd;border-radius:7px;padding:3px 8px;font-size:.8rem;font-style:italic;font-weight:800;flex:0 0 58px;text-align:center}
+  .pplogo .a{color:#003087}.pplogo .b{color:#009CDE}
 
   .row{display:flex;gap:10px}
   .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
@@ -37,10 +42,17 @@
 
   <div class="totbox"><span class="lab">Total tout compris</span><span class="val">57,80 €</span></div>
 
-  <!-- Klarna : mention honnête (3x dès 50 €, sinon "plus tard") -->
-  <div class="klarna">
-    <span class="klogo">Klarna</span>
-    <span>Payez en <b>3 fois sans frais</b> — 3× 19,27 €, ou plus tard</span>
+  <!-- Facilités de paiement : PayPal 4x + Klarna 3x, avec seuils -->
+  <div class="facil">
+    <div class="ft">💳 Payez en plusieurs fois, sans frais</div>
+    <div class="fline">
+      <span class="pplogo"><span class="a">Pay</span><span class="b">Pal</span></span>
+      <span><b>4 fois sans frais</b> — 4× 14,45 € <span class="seuil">· dès 30 €</span></span>
+    </div>
+    <div class="fline">
+      <span class="klogo">Klarna</span>
+      <span><b>3 fois sans frais</b> — 3× 19,27 € <span class="seuil">· dès 50 € (ou payez plus tard)</span></span>
+    </div>
   </div>
 
   <div class="row">
