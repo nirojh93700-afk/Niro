@@ -1462,9 +1462,11 @@ export default function ProductDetail({ product }) {
               {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : `Ajouter au panier · ${formatEuro(unitPrice * quantity)}`}
             </button>
           </div>
-          {typeof variantStock === "number" && (
-            <p style={{ margintop: 0, fontSize: "0.85rem", color: soldOut ? "#b4452f" : "var(--ink-soft)" }}>
-              {soldOut ? "Cette option est momentanément épuisée." : `En stock : ${variantStock}`}
+          {/* Stock masqué pour les clientes : on n'affiche QUE l'alerte « épuisé »
+             (le compteur exact reste visible dans la gestion). */}
+          {soldOut && (
+            <p style={{ marginTop: 8, fontSize: "0.85rem", color: "#b4452f" }}>
+              Cette option est momentanément épuisée.
             </p>
           )}
 

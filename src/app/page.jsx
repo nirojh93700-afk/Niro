@@ -107,9 +107,10 @@ export default async function HomePage() {
           .cr-btn{border-radius:14px;padding:15px 28px;font-weight:700;font-size:1rem;text-decoration:none;background:linear-gradient(135deg,#c9a24b,#e2c67e);color:#1a1206;box-shadow:0 10px 30px rgba(201,162,75,.28);transition:transform .15s}
           .cr-btn:hover{transform:translateY(-2px)}
           .cr-link2{color:#5a4a2a;text-decoration:none;font-size:.96rem;border-bottom:1px solid rgba(0,0,0,.2);padding-bottom:2px}
-          .cr-badges{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;color:#8a7f6c;font-size:.8rem}
+          .cr-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
           @media(max-width:840px){.cr-badges{justify-content:center}}
-          .cr-badges b{color:#4a3f2a;font-weight:600}
+          .cr-badges span{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#6f6453;background:rgba(201,162,75,.10);border:1px solid rgba(201,162,75,.38);border-radius:999px;padding:6px 13px}
+          .cr-badges b{color:#4a3f2a;font-weight:700}
           .cr-viz{position:relative;display:grid;place-items:center;min-height:300px}
           .cr-halo{position:absolute;width:74%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(214,175,95,.34),rgba(201,162,75,.14) 45%,transparent 66%);filter:blur(18px);animation:crbreathe 5s ease-in-out infinite}
           @keyframes crbreathe{0%,100%{transform:scale(.96);opacity:.75}50%{transform:scale(1.05);opacity:1}}
