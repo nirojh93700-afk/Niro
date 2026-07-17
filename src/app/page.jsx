@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import NewArrivalsToast from "@/components/NewArrivalsToast";
+import PaymentBand from "@/components/PaymentBand";
 import { getProductBySlug } from "@/lib/products";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
@@ -221,6 +222,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* BANDEAU PAIEMENT (sécurisé + plusieurs fois) */}
+      <PaymentBand />
 
       {/* PRODUITS PHARES */}
       {show.featured && (
