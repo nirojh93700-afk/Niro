@@ -2736,3 +2736,8 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .merci-step b{display:block;font-size:.9rem;margin:7px 0 3px}
 .merci-step small{color:var(--ink-soft);font-size:.78rem}
 @media(max-width:520px){.contact-cards,.merci-steps{grid-template-columns:1fr}}
+
+/* Option 3 : total « tout compris » dans un encadré doré (au-dessus du bouton) */
+.pd-totbox{background:linear-gradient(135deg,#fbf4e6,#fffdf9);border:1px solid #e7d3a1;border-radius:14px;padding:11px 15px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:14px 0 10px}
+.pd-totbox .lab{font-weight:700}
+.pd-totbox .val{font-size:1.35rem;font-weight:800;color:var(--gold-dark);white-space:nowrap}

@@ -1441,7 +1441,13 @@ export default function ProductDetail({ product }) {
 
           {error && <div className="notice">{error}</div>}
 
-          {/* Le total (option + gravure + emballage) est affiché sur le bouton lui-même. */}
+          {/* Total « tout compris » (option + gravure + emballage) dans un encadré doré. */}
+          {!soldOut && (
+            <div className="pd-totbox">
+              <span className="lab">Total tout compris</span>
+              <span className="val">{formatEuro(unitPrice * quantity)}</span>
+            </div>
+          )}
           <div className="qty-row">
             <div className="qty-stepper">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Moins">
@@ -1453,7 +1459,7 @@ export default function ProductDetail({ product }) {
               </button>
             </div>
             <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing}>
-              {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : `Ajouter au panier · ${formatEuro(unitPrice * quantity)}`}
+              {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : "Ajouter au panier"}
             </button>
           </div>
           {/* Stock masqué pour les clientes : on n'affiche QUE l'alerte « épuisé »
