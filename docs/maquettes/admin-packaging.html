@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Page Packaging (Gestion)</title>
+<style>
+  :root{--gold:#c2a14e;--gold-dark:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--cream2:#f3ece0;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+  .wrap{max-width:920px;margin:0 auto;padding:22px 16px 70px}
+  .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:11px 16px;font-size:.86rem;margin-bottom:20px}
+  h1{font-family:Georgia,serif;font-size:1.5rem;margin:0 0 3px}
+  .lead{color:var(--ink-soft);font-size:.9rem;margin:0 0 22px}
+  h2{font-size:1.05rem;color:var(--gold-dark);margin:26px 0 4px;display:flex;align-items:center;gap:8px}
+  .h2sub{color:var(--ink-soft);font-size:.82rem;margin:0 0 14px}
+
+  /* ── Cartes emballages ── */
+  .packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .pcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .pcard .ph{aspect-ratio:16/10;background:#efe4cf;display:grid;place-items:center;color:#b3a17e;font-size:.78rem;position:relative;border-bottom:1px solid var(--line)}
+  .pcard .ph .ill{position:absolute;inset:0;display:grid;place-items:center}
+  .pcard .ph .add{position:absolute;bottom:7px;right:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:.72rem;color:var(--ink-soft)}
+  .pcard .body{padding:11px 13px}
+  .pcard b{display:block;font-size:.92rem}
+  .pcard .pr{color:var(--ink);font-weight:700;font-size:.9rem;margin-top:2px}
+  .pcard .pr.free{color:#256b34}
+  .pcard small{display:block;color:var(--ink-soft);font-size:.76rem;margin-top:3px}
+  .addpack{border:1.5px dashed var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold-dark);font-weight:700;cursor:pointer;min-height:150px;background:#fffdf7}
+
+  /* ── Attribution par produit ── */
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tools input{flex:1;min-width:160px;padding:9px 13px;border:1px solid var(--line);border-radius:9px;font:inherit}
+  .prow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:11px}
+  .prow.off{opacity:.55}
+  .prow-top{display:flex;align-items:center;gap:12px}
+  .thumb{width:46px;height:46px;flex:0 0 46px;border-radius:9px;background:var(--cream2);display:grid;place-items:center;font-size:1.2rem}
+  .prow-name{flex:1;min-width:0}
+  .prow-name b{display:block;font-size:.95rem}
+  .prow-name span{color:var(--ink-soft);font-size:.78rem}
+  .switch{position:relative;width:46px;height:26px;flex:0 0 46px;border-radius:20px;background:#d6ccb8;cursor:pointer;transition:.15s}
+  .switch.on{background:var(--gold)}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.15s}
+  .switch.on::after{left:23px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;padding-left:58px}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:22px;padding:6px 12px;font-size:.82rem;cursor:pointer;color:var(--ink-soft);transition:.12s;user-select:none}
+  .chip .p{font-weight:700;color:var(--ink)}
+  .chip.on{border-color:var(--gold);background:#fffaf0;color:var(--ink)}
+  .chip.on::before{content:"✓ ";color:var(--gold-dark);font-weight:800}
+  .chip .def{font-size:.7rem;background:#eaf5ec;color:#256b34;border-radius:12px;padding:0 6px;margin-left:2px}
+  .hint{padding-left:58px;margin-top:7px;font-size:.76rem;color:var(--ink-soft)}
+  .save{position:sticky;bottom:12px;margin-top:18px;display:flex;justify-content:flex-end}
+  .save button{background:linear-gradient(135deg,var(--gold),var(--gold-l));border:0;color:#1a1206;font-weight:700;font-size:.95rem;border-radius:999px;padding:13px 30px;cursor:pointer;box-shadow:0 8px 22px rgba(194,161,78,.35)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo-note">MAQUETTE de la future page <b>Gestion → Packaging</b>. Cliquez les emballages sur chaque produit et l'interrupteur pour tester. Rien n'est réel ici.</div>
+
+  <h1>Packaging &amp; emballages</h1>
+  <p class="lead">Créez vos emballages (avec photo + prix), puis cochez ceux qui vont avec chaque produit. Ils s'afficheront tout seuls sur la fiche du produit.</p>
+
+  <!-- ══ 1. MES EMBALLAGES ══ -->
+  <h2>📦 Mes emballages</h2>
+  <p class="h2sub">Votre bibliothèque d'emballages. Ajoutez-en autant que vous voulez, chacun avec sa photo et son prix.</p>
+  <div class="packs">
+    <div class="pcard">
+      <div class="ph"><span class="ill">🛍️</span><span class="add">＋ photo</span></div>
+      <div class="body"><b>Sachet cadeau beige</b><div class="pr free">Offert</div><small>Sachet papier au logo</small></div>
+    </div>
+    <div class="pcard">
+      <div class="ph"><span class="ill">🎁</span><span class="add">＋ photo</span></div>
+      <div class="body"><b>Écrin coulissant beige</b><div class="pr">+ 1,90 €</div><small>Boîte rigide 9×9 cm</small></div>
+    </div>
+    <div class="pcard">
+      <div class="ph"><span class="ill">📥</span><span class="add">＋ photo</span></div>
+      <div class="body"><b>Boîte tiroir rectangle</b><div class="pr">+ 1,90 €</div><small>Bracelets &amp; colliers longs</small></div>
+    </div>
+    <div class="pcard">
+      <div class="ph"><span class="ill">👝</span><span class="add">＋ photo</span></div>
+      <div class="body"><b>Pochette microfibre</b><div class="pr">+ 1,50 €</div><small>Protection / voyage</small></div>
+    </div>
+    <div class="addpack">＋ Ajouter un emballage</div>
+  </div>
+
+  <!-- ══ 2. ATTRIBUTION PAR PRODUIT ══ -->
+  <h2>🏷️ Attribuer aux produits</h2>
+  <p class="h2sub">Pour chaque produit : activez le packaging, cochez les emballages proposés, et marquez celui « offert » d'un clic long (double-clic ici).</p>
+  <div class="tools"><input placeholder="Rechercher un produit…" oninput="filt(this.value)"></div>
+
+  <div id="list"></div>
+
+  <div class="save"><button>💾 Enregistrer</button></div>
+</div>
+
+<script>
+  const OPTS=[
+    {k:"sachet",n:"Sachet",pr:"Offert"},
+    {k:"ecrin",n:"Écrin coulissant",pr:"+1,90 €"},
+    {k:"tiroir",n:"Boîte tiroir",pr:"+1,90 €"},
+    {k:"pochette",n:"Pochette microfibre",pr:"+1,50 €"},
+  ];
+  // état pré-rempli pour la démo (ce que la gérante réglera elle-même)
+  const PRODUCTS=[
+    {n:"Collier Enveloppe Message Secret",e:"💌",on:true, sel:["sachet","ecrin","pochette"], def:"sachet"},
+    {n:"Collier Médaillon Cœur ouvrable", e:"💛",on:true, sel:["sachet","ecrin","pochette"], def:"sachet"},
+    {n:"Bracelet Femme Cœur",             e:"💗",on:true, sel:["sachet","tiroir","pochette"], def:"sachet"},
+    {n:"Bracelet Homme Identité",         e:"⌚",on:true, sel:["sachet","tiroir"],            def:"sachet"},
+    {n:"Bracelet Femme Papillon ajouré",  e:"🦋",on:false,sel:["sachet","tiroir","pochette"], def:"sachet"},
+    {n:"Clé USB personnalisée",           e:"🔌",on:false,sel:[],                             def:null},
+  ];
+  const list=document.getElementById('list');
+  function render(){
+    list.innerHTML='';
+    PRODUCTS.forEach((p,i)=>{
+      const row=document.createElement('div'); row.className='prow'+(p.on?'':' off'); row.dataset.n=p.n.toLowerCase();
+      row.innerHTML=`
+        <div class="prow-top">
+          <div class="thumb">${p.e}</div>
+          <div class="prow-name"><b>${p.n}</b><span>${p.on?'Packaging activé':'Packaging désactivé'}</span></div>
+          <div class="switch ${p.on?'on':''}" onclick="tog(${i})"></div>
+        </div>
+        <div class="chips">${OPTS.map(o=>{
+          const on=p.sel.includes(o.k); const isdef=p.def===o.k;
+          return `<span class="chip ${on?'on':''}" onclick="pick(${i},'${o.k}')" ondblclick="mkdef(${i},'${o.k}')">
+            ${o.n} <span class="p">${o.pr}</span>${isdef?'<span class="def">offert</span>':''}</span>`;
+        }).join('')}</div>
+        <div class="hint">Cliquez un emballage pour le proposer · double-clic = celui « offert » par défaut.</div>`;
+      list.appendChild(row);
+    });
+  }
+  function tog(i){PRODUCTS[i].on=!PRODUCTS[i].on;render();}
+  function pick(i,k){const p=PRODUCTS[i];const j=p.sel.indexOf(k);
+    if(j>=0){p.sel.splice(j,1);if(p.def===k)p.def=p.sel[0]||null;}else p.sel.push(k);render();}
+  function mkdef(i,k){if(PRODUCTS[i].sel.includes(k))PRODUCTS[i].def=k;render();}
+  function filt(q){q=q.toLowerCase();[...list.children].forEach(r=>r.style.display=r.dataset.n.includes(q)?'':'none');}
+  render();
+</script>
+</body>
+</html>
