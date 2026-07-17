@@ -239,6 +239,10 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Pyramide** (`pyramide-cristal-gravure-3d`) : passée de TEXTE → **PHOTO** (photo 3D + guide). Le texte d'origine (textarea+police) est en commentaire ; titre/tagline/description mis à jour en « photo ». Pour revenir au texte : remettre les 2 champs commentés, retirer le champ photo, et remettre les libellés « texte ».
 - **Porte-clés cristal** (Cœur, Rectangle) : déjà photo uniquement (jamais de texte).
 
+### RÈGLE — RIEN SUR LE SITE SANS VALIDATION (17/07/2026, demande explicite après incident)
+- **INTERDIT de modifier le site visible** (fiches, pages, textes clients) **sans l'accord explicite de la gérante**. Le circuit est TOUJOURS : **maquette d'abord → elle valide → « applique » → alors seulement on touche au site.**
+- En cas de doute sur ce qu'un « oui » valide exactement : **demander**, ne pas déduire.
+
 ### RÈGLE DE COMMUNICATION (importante)
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
