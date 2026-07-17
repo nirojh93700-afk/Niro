@@ -56,11 +56,10 @@ img {
   padding: 0 clamp(16px, 4vw, 40px);
 }
 
-/* Le conteneur s'élargit tout seul sur les grands écrans (les portables et
-   tablettes ≤ 1499px ne bougent pas), pour utiliser l'espace au lieu de rester
-   coincé au milieu. */
-@media (min-width: 1500px) { :root { --max: 1320px; } }
-@media (min-width: 1800px) { :root { --max: 1440px; } }
+/* Sur ordinateur, le site S'ÉTIRE sur toute la largeur de l'écran (94 % de
+   la fenêtre, quelle que soit sa taille) au lieu de rester bloqué au milieu.
+   En dessous de 1240px (téléphones/tablettes), rien ne change. */
+@media (min-width: 1240px) { :root { --max: min(94vw, 2800px); } }
 
 /* ---------- Boutons ---------- */
 .btn {
@@ -183,7 +182,7 @@ img {
   border-top: 1px solid var(--line);
   padding: 10px 0;
   margin: 0 auto;
-  max-width: var(--container, 1200px);
+  max-width: var(--max);
 }
 @media (max-width: 640px) {
   .header-centered .logo-img {
@@ -290,6 +289,10 @@ img {
   border-radius: 22px;
   overflow: hidden;
   box-shadow: var(--shadow);
+  /* sur les très grands écrans, la photo reste à taille raisonnable */
+  width: 100%;
+  max-width: 680px;
+  justify-self: center;
 }
 .hero-visual img {
   width: 100%;
@@ -2267,7 +2270,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 
 /* ---------- Back-office : barre latérale (style pro) ---------- */
 .admin-shell {
-  max-width: 1180px;
+  max-width: min(96vw, 1900px);
   display: grid;
   grid-template-columns: 248px minmax(0, 1fr);
   gap: 32px;
@@ -2687,18 +2690,3 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .variant-swatch .vs-out{position:absolute;top:6px;right:6px;z-index:2;background:#b4452f;color:#fff;
   font-size:.62rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:20px}
 
-/* ============================================================
-   TRÈS GRANDS ÉCRANS (ultra-larges 32:9, > 2100px) :
-   on encadre tout le site dans une largeur confortable, centré,
-   avec les côtés dans une teinte douce de la marque.
-   → N'affecte QUE les écrans > 2100px. Portables/desktops ≤ 1920px
-     inchangés (0 changement).
-   ============================================================ */
-@media (min-width: 2100px) {
-  html { background: #e6dcc9; }
-  body {
-    max-width: 1760px;
-    margin: 0 auto;
-    box-shadow: 0 0 80px rgba(43, 38, 32, 0.10);
-  }
-}

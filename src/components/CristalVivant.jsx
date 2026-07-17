@@ -9,6 +9,7 @@ import Link from "next/link";
 
 const CSS = `
 .cvb-wrap{max-width:1020px;margin:0 auto;padding:18px 14px 34px}
+@media(min-width:1240px){.cvb-wrap{max-width:min(88vw,1560px)}}
 .cvb-head{text-align:center;padding:14px 8px 14px}
 .cvb-head .cvb-k{font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#a98935}
 .cvb-head h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(24px,6vw,40px);margin:6px 0 4px;color:#2b2620}

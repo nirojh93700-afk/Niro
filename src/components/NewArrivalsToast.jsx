@@ -27,6 +27,8 @@ export default function NewArrivalsToast({ items = [] }) {
 
   useEffect(() => {
     if (!items.length) return;
+    // Jamais dans l'espace de gestion (réservé aux clientes du site).
+    if (typeof window !== "undefined" && window.location.pathname.startsWith("/gestion")) return;
     try { if (sessionStorage.getItem("niv-newtoast-off")) return; } catch {}
     let idx = 0;
     let showTimer, hideTimer, nextTimer;

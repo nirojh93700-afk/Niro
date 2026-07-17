@@ -93,7 +93,7 @@ export default async function HomePage() {
             radial-gradient(90% 120% at 85% 8%, rgba(201,162,75,.20), transparent 55%),
             radial-gradient(80% 100% at 5% 100%, rgba(201,162,75,.14), transparent 55%),
             linear-gradient(160deg,#faf5ea,#f1e6d2 78%);color:#241a0c}
-          .cr-wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:24px;padding:clamp(30px,5vw,60px) clamp(20px,5vw,48px)}
+          .cr-wrap{max-width:var(--max,1180px);margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:24px;padding:clamp(30px,5vw,60px) clamp(20px,5vw,48px)}
           @media(max-width:840px){.cr-wrap{grid-template-columns:1fr;text-align:center}}
           .cr-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#a5822f;border:1px solid rgba(201,162,75,.55);border-radius:999px;padding:7px 14px;margin-bottom:20px}
           .cr-dot{width:6px;height:6px;border-radius:50%;background:#c9a24b;animation:crpulse 2.4s infinite}

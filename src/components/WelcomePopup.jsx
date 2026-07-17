@@ -12,6 +12,8 @@ export default function WelcomePopup({ enabled, code, text }) {
 
   useEffect(() => {
     if (!enabled) return;
+    // Jamais dans l'espace de gestion (réservé aux clientes du site).
+    if (typeof window !== "undefined" && window.location.pathname.startsWith("/gestion")) return;
     try {
       if (localStorage.getItem(KEY)) return;          // déjà inscrite → jamais
       if (sessionStorage.getItem("niv-welcome-session")) return; // déjà vue cette visite
