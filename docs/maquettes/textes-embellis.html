@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Textes embellis (À propos, Panier, Contact, Merci)</title>
+<style>
+  :root{--gold:#c2a14e;--gold-dark:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+  .demo{max-width:820px;margin:0 auto;padding:24px 18px 70px}
+  .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:11px 16px;font-size:.86rem;margin-bottom:22px}
+  .sec{margin-bottom:34px}
+  .sec-lab{display:inline-block;background:var(--ink);color:#fff;border-radius:8px;padding:3px 10px;font-size:.72rem;font-weight:700;letter-spacing:.05em;margin-bottom:12px}
+  h2{font-family:Georgia,serif;font-size:1.35rem;margin:0 0 14px}
+  .before{color:var(--ink-soft);font-size:.82rem;font-style:italic;margin:0 0 10px}
+
+  /* À propos — 3 cartes savoir-faire */
+  .sf{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .sfc{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 16px;border-top:3px solid var(--gold)}
+  .sfc .ic{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#fbf4e6,#f3e8d3);display:grid;place-items:center;font-size:1.5rem;margin-bottom:10px}
+  .sfc h3{font-family:Georgia,serif;font-size:1.05rem;margin:0 0 6px}
+  .sfc p{margin:0;color:var(--ink-soft);font-size:.88rem}
+
+  /* Encadré info (panier) */
+  .callout{display:flex;gap:12px;background:#fbf4e6;border:1px solid #e7d3a1;border-left:4px solid var(--gold);border-radius:12px;padding:13px 15px;font-size:.88rem}
+  .callout .ci{font-size:1.3rem}
+  .callout b{color:var(--gold-dark)}
+
+  /* Contact — 2 cartes */
+  .cc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .cc{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit}
+  .cc .ci{width:42px;height:42px;border-radius:10px;background:var(--cream);display:grid;place-items:center;font-size:1.3rem}
+  .cc b{display:block;font-size:.92rem}
+  .cc small{color:var(--ink-soft);font-size:.8rem}
+  @media(max-width:520px){.cc-row{grid-template-columns:1fr}}
+
+  /* Merci — étapes */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .step{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px 12px;text-align:center;position:relative}
+  .step .n{position:absolute;top:10px;right:12px;color:var(--gold-l);font-weight:800;font-size:1.1rem}
+  .step .ic{font-size:1.6rem}
+  .step b{display:block;font-size:.9rem;margin:7px 0 3px}
+  .step small{color:var(--ink-soft);font-size:.76rem}
+  @media(max-width:520px){.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="demo-note">MAQUETTE — mêmes textes, mais présentés proprement (cartes, encadrés, icônes) au lieu du texte brut. 4 endroits du site.</div>
+
+  <!-- À PROPOS -->
+  <div class="sec">
+    <span class="sec-lab">Page À propos</span>
+    <p class="before">Avant : 3 gros blocs de texte empilés (mur de texte).</p>
+    <div class="sf">
+      <div class="sfc"><div class="ic">🔧</div><h3>Un savoir-faire artisanal</h3><p>La précision du laser : graver un prénom sur un bijou ou un cristal, découper les arches délicates d'un numéro de table en bois. Même exigence de finition sur chaque pièce.</p></div>
+      <div class="sfc"><div class="ic">🌿</div><h3>Des matériaux choisis avec soin</h3><p>Matériaux nobles et durables : bois clairs, acier inoxydable 316L hypoallergénique, acrylique premium. Des pièces conçues pour traverser le temps.</p></div>
+      <div class="sfc"><div class="ic">✏️</div><h3>La personnalisation au cœur</h3><p>Prénoms, dates, messages, photos gravées… Nous donnons vie à vos idées. Chaque commande est réalisée sur mesure dans notre atelier.</p></div>
+    </div>
+  </div>
+
+  <!-- PANIER -->
+  <div class="sec">
+    <span class="sec-lab">Panier — note retrait</span>
+    <p class="before">Avant : petit paragraphe gris dense.</p>
+    <div class="callout">
+      <span class="ci">📍</span>
+      <span><b>Retrait en main propre</b> — atelier en Val-d'Oise (95), gratuit, sur rendez-vous. À récupérer sous <b>14 jours</b> après notre message « commande prête ». Proposé pour les articles déco / mariage.</span>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="sec">
+    <span class="sec-lab">Page Contact</span>
+    <p class="before">Avant : « par e-mail / par téléphone » en texte simple.</p>
+    <div class="cc-row">
+      <a class="cc" href="#"><span class="ci">✉️</span><span><b>Par e-mail</b><small>contact.nivcreation@gmail.com</small></span></a>
+      <a class="cc" href="#"><span class="ci">📞</span><span><b>Par téléphone</b><small>07 66 15 31 02</small></span></a>
+    </div>
+  </div>
+
+  <!-- MERCI -->
+  <div class="sec">
+    <span class="sec-lab">Page Merci (après achat)</span>
+    <p class="before">Avant : 2 paragraphes plats.</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><div class="ic">📧</div><b>Confirmation</b><small>Un e-mail récapitulatif vous est envoyé</small></div>
+      <div class="step"><span class="n">2</span><div class="ic">✏️</div><b>Gravure</b><small>Nous préparons et gravons votre pièce</small></div>
+      <div class="step"><span class="n">3</span><div class="ic">🚚</div><b>Expédition</b><small>Envoi suivi + numéro de suivi par e-mail</small></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
