@@ -724,6 +724,11 @@ export async function getSettings() {
       igUserId: typeof s.social?.igUserId === "string" ? s.social.igUserId.trim() : "",
       igToken: typeof s.social?.igToken === "string" ? s.social.igToken.trim() : "",
     },
+    // Emballages (page Gestion → Packaging).
+    // packaging = bibliothèque : [ { id, name, desc, buy, sell, weight, photo } ].
+    // productPackaging = attribution par produit : { [slug]: { on, ids, free } }.
+    packaging: Array.isArray(s.packaging) ? s.packaging : [],
+    productPackaging: (s.productPackaging && typeof s.productPackaging === "object") ? s.productPackaging : {},
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {

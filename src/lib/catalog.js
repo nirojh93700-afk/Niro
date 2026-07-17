@@ -6,6 +6,7 @@
 // =============================================================================
 import { products as baseProducts } from "./products";
 import { roundTo90 } from "./format";
+import { resolvePackaging } from "./packaging";
 import {
   getImageOverrides,
   getPromos,
@@ -115,15 +116,21 @@ export async function getCatalog() {
     getStockMap().catch(() => ({})),
   ]);
   const refMarkup = Number(settings?.refMarkup) || 0;
+  const pkgLib = settings?.packaging;
+  const pkgAssign = settings?.productPackaging || {};
   const base = baseProducts.map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
-  return all.map((p) => ({
-    ...p,
-    ...(refMarkup > 0 ? { refMarkup } : {}),
-    soldOut: productSoldOut(p, stock),
-  }));
+  return all.map((p) => {
+    const packaging = resolvePackaging(pkgAssign[p.slug], pkgLib);
+    return {
+      ...p,
+      ...(refMarkup > 0 ? { refMarkup } : {}),
+      ...(packaging ? { packaging } : {}),
+      soldOut: productSoldOut(p, stock),
+    };
+  });
 }
 
 // Renvoie aussi les produits masqués (pour l'admin).

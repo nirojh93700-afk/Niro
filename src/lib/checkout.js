@@ -10,6 +10,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
     quantity: i.quantity,
     personalization: i.personalization || "",
     fields: i.fields,
+    packaging: Array.isArray(i.packaging) ? i.packaging : [], // emballages payants choisis (ids)
     spec: i.spec || null, // réglages détaillés (fiche atelier)
   }));
 

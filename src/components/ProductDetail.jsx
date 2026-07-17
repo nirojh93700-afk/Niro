@@ -9,6 +9,7 @@ import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import { engravingExtra } from "@/lib/engravingPrice";
+import { packagingExtra } from "@/lib/packaging";
 import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
@@ -47,6 +48,7 @@ export default function ProductDetail({ product }) {
   const [personalization, setPersonalization] = useState("");
   const [fieldValues, setFieldValues] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const [pkgSel, setPkgSel] = useState([]); // emballages payants choisis (ids)
   const [added, setAdded] = useState(false);
   const [preparing, setPreparing] = useState(false); // capture du visuel en cours
   const [error, setError] = useState("");
@@ -194,8 +196,10 @@ export default function ProductDetail({ product }) {
   const hasPromo = typeof salePrice === "number" && salePrice < variant.price;
   // Supplément de gravure (pages de texte en plus de la couverture).
   const engrave = engravingExtra(product, fieldValues, variant.id);
+  // Supplément d'emballage (écrin / pochette choisis) — le sachet offert est inclus d'office.
+  const pkg = packagingExtra(product, pkgSel);
   const basePrice = hasPromo ? salePrice : variant.price;
-  const unitPrice = basePrice + engrave.amount;
+  const unitPrice = basePrice + engrave.amount + pkg.amount;
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
   const refMarkup = Number(product.refMarkup) || 0;
   const refPrice = !hasPromo && refMarkup > 0
@@ -715,6 +719,7 @@ export default function ProductDetail({ product }) {
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
       personalization: buildPersonalization(),
+      packaging: pkg.labels.length ? pkg.labels.join(", ") : null, // emballage pour la fiche atelier
     };
     addItem({
       productSlug: product.slug,
@@ -727,9 +732,10 @@ export default function ProductDetail({ product }) {
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
       personalization: buildPersonalization(true),
       fields: product.engravingPricing ? { ...fieldValues } : undefined,
+      packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
       spec: itemSpec,
       pickup: Boolean(product.pickup),
-      weight: (Number(variant.weight) || Number(product.weight) || 200) + (engrave.weight || 0), // poids (g) réel par taille + options (socle) — port & retrait corrects
+      weight: (Number(variant.weight) || Number(product.weight) || 200) + (engrave.weight || 0) + (pkg.weight || 0), // poids (g) réel par taille + options (socle, emballage) — port & retrait corrects
       quantity,
     });
     // Statistiques « ajout au panier » : compteur intégré + Google Analytics.
@@ -1376,6 +1382,41 @@ export default function ProductDetail({ product }) {
                 />
               </div>
             )
+          )}
+
+          {product.packaging?.on && product.packaging.options?.length > 0 && (
+            <div style={{ margin: "6px 0 18px" }}>
+              <div style={{ fontWeight: 700, fontSize: "0.95rem", marginBottom: 3 }}>Votre emballage</div>
+              <p style={{ margin: "0 0 10px", color: "var(--ink-soft)", fontSize: "0.83rem" }}>
+                Chaque bijou part déjà prêt à offrir — ajoutez un écrin si vous le souhaitez.
+              </p>
+              <div style={{ display: "grid", gap: 9 }}>
+                {product.packaging.options.map((o) => {
+                  if (o.free) {
+                    return (
+                      <div key={o.id} style={{ display: "flex", alignItems: "center", gap: 11, border: "1.5px solid #cfe6d3", background: "#f2faf3", borderRadius: 12, padding: "11px 13px" }}>
+                        {o.photo ? <img src={o.photo} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", flex: "0 0 40px" }} /> : <span style={{ fontSize: "1.3rem" }}>🛍️</span>}
+                        <span style={{ minWidth: 0 }}><strong style={{ display: "block", fontSize: "0.9rem" }}>{o.name}</strong>{o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}</span>
+                        <span style={{ marginLeft: "auto", color: "#256b34", fontWeight: 700, fontSize: "0.85rem" }}>Offert</span>
+                      </div>
+                    );
+                  }
+                  const on = pkgSel.includes(o.id);
+                  return (
+                    <button
+                      key={o.id}
+                      type="button"
+                      onClick={() => setPkgSel((s) => (on ? s.filter((x) => x !== o.id) : [...s, o.id]))}
+                      style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: on ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: on ? "#fffaf0" : "var(--paper)", borderRadius: 12, padding: "11px 13px", boxShadow: on ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}
+                    >
+                      {o.photo ? <img src={o.photo} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", flex: "0 0 40px" }} /> : <span style={{ fontSize: "1.3rem" }}>🎁</span>}
+                      <span style={{ minWidth: 0 }}><strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{o.name}</strong>{o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}</span>
+                      <span style={{ marginLeft: "auto", fontWeight: 700, fontSize: "0.85rem" }}>+{formatEuro(o.price)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
 
           {error && <div className="notice">{error}</div>}

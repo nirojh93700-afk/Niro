@@ -245,6 +245,41 @@ export async function POST(req) {
     patch.crystalZones = out;
   }
 
+  // Emballages — bibliothèque (Gestion → Packaging).
+  if (Array.isArray(body.packaging)) {
+    const price = (v) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : 0; };
+    const slugify = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+    const seen = new Set();
+    patch.packaging = body.packaging
+      .filter((it) => it && typeof it === "object")
+      .slice(0, 40)
+      .map((it, i) => {
+        let id = slugify(it.id) || slugify(it.name) || `emb-${i + 1}`;
+        while (seen.has(id)) id = id + "-" + (i + 1);
+        seen.add(id);
+        return {
+          id,
+          name: String(it.name || "Emballage").slice(0, 60),
+          desc: String(it.desc || "").slice(0, 120),
+          buy: price(it.buy),
+          sell: price(it.sell),
+          weight: Math.max(0, Math.min(5000, Math.round(Number(it.weight) || 0))),
+          photo: typeof it.photo === "string" ? it.photo.slice(0, 400) : "",
+        };
+      });
+  }
+  // Emballages — attribution par produit : { [slug]: { on, ids, free } }.
+  if (body.productPackaging && typeof body.productPackaging === "object") {
+    const out = {};
+    for (const [slug, a] of Object.entries(body.productPackaging)) {
+      if (!a || typeof a !== "object") continue;
+      const ids = Array.isArray(a.ids) ? [...new Set(a.ids.map((x) => String(x).slice(0, 40)))].slice(0, 20) : [];
+      const free = Array.isArray(a.free) ? a.free.map((x) => String(x).slice(0, 40)).filter((x) => ids.includes(x)) : [];
+      out[String(slug).slice(0, 80)] = { on: a.on === true, ids, free };
+    }
+    patch.productPackaging = out;
+  }
+
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }

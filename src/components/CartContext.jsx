@@ -52,7 +52,12 @@ export function CartProvider({ children }) {
 
   const addItem = useCallback((item) => {
     setItems((prev) => {
-      const key = lineKey(item.variantId, item.personalization);
+      // La ligne est aussi distinguée par l'emballage choisi (sinon un même bijou
+      // avec/sans écrin fusionnerait à tort).
+      const pkgKey = Array.isArray(item.packaging) && item.packaging.length
+        ? "::pkg=" + item.packaging.slice().sort().join(",")
+        : "";
+      const key = lineKey(item.variantId, item.personalization) + pkgKey;
       const existing = prev.find((i) => i.key === key);
       if (existing) {
         return prev.map((i) =>

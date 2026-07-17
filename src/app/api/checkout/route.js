@@ -5,6 +5,7 @@ import { buildShippingOptions } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock";
 import { saveOrderSpec } from "@/lib/firebase";
 import { engravingExtra } from "@/lib/engravingPrice";
+import { packagingExtra } from "@/lib/packaging";
 
 // Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
 // on tronque les textes trop longs et on retire les images "data:" (jamais stockées).
@@ -158,12 +159,14 @@ export async function POST(req) {
     const basePrice = typeof promo === "number" && promo < variant.price ? promo : variant.price;
     // Recalcul de confiance du supplément de gravure (depuis les champs envoyés).
     const extra = engravingExtra(product, item.fields || {}, variant.id);
-    const unitPrice = basePrice + extra.amount;
+    // Recalcul de confiance de l'emballage choisi (prix depuis le catalogue serveur).
+    const pkg = packagingExtra(product, item.packaging || []);
+    const unitPrice = basePrice + extra.amount + pkg.amount;
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
-    // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle),
+    // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle, emballage),
     // multiplié par la quantité → frais de port corrects pour n'importe quel panier.
-    const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0);
+    const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0);
     totalGrams += unitGrams * quantity;
     subtotal += unitPrice * quantity;
     if (!product.letter) {
@@ -177,6 +180,9 @@ export async function POST(req) {
     const descriptionParts = [variant.title];
     if (extra.amount > 0) {
       descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
+    }
+    if (pkg.labels.length) {
+      descriptionParts.push(`Emballage : ${pkg.labels.join(", ")}`);
     }
     if (item.personalization) {
       descriptionParts.push(`Personnalisation : ${String(item.personalization).slice(0, 220)}`);
