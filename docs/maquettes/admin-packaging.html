@@ -23,9 +23,15 @@
   .pcard .ph .add{position:absolute;bottom:7px;right:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:.72rem;color:var(--ink-soft)}
   .pcard .body{padding:11px 13px}
   .pcard b{display:block;font-size:.92rem}
-  .pcard .pr{color:var(--ink);font-weight:700;font-size:.9rem;margin-top:2px}
-  .pcard .pr.free{color:#256b34}
-  .pcard small{display:block;color:var(--ink-soft);font-size:.76rem;margin-top:3px}
+  .pcard small{display:block;color:var(--ink-soft);font-size:.76rem;margin:3px 0 8px}
+  .pxrow{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:6px}
+  .px{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+  .px label{display:block;font-size:.66rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
+  .px b{font-size:.9rem;font-weight:700}
+  .px.vente b{color:#b4452f}
+  .marge{margin-top:7px;font-size:.78rem;font-weight:700}
+  .marge.pos{color:#256b34}
+  .marge.gift{color:var(--ink-soft);font-weight:600}
   .addpack{border:1.5px dashed var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold-dark);font-weight:700;cursor:pointer;min-height:150px;background:#fffdf7}
 
   /* ── Attribution par produit ── */
@@ -62,23 +68,35 @@
 
   <!-- ══ 1. MES EMBALLAGES ══ -->
   <h2>📦 Mes emballages</h2>
-  <p class="h2sub">Votre bibliothèque d'emballages. Ajoutez-en autant que vous voulez, chacun avec sa photo et son prix.</p>
+  <p class="h2sub">Votre bibliothèque d'emballages. Chacun avec sa photo, son <b>prix d'achat</b> et son <b>prix de vente</b> — la marge se calcule toute seule.</p>
   <div class="packs">
     <div class="pcard">
       <div class="ph"><span class="ill">🛍️</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Sachet cadeau beige</b><div class="pr free">Offert</div><small>Sachet papier au logo</small></div>
+      <div class="body"><b>Sachet cadeau beige</b><small>Sachet papier au logo</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>1,00 €</b></div><div class="px vente"><label>Vente</label><b>Offert</b></div></div>
+        <div class="marge gift">Offert — coût absorbé (−1,00 €)</div>
+      </div>
     </div>
     <div class="pcard">
       <div class="ph"><span class="ill">🎁</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Écrin coulissant beige</b><div class="pr">+ 1,90 €</div><small>Boîte rigide 9×9 cm</small></div>
+      <div class="body"><b>Écrin coulissant beige</b><small>Boîte rigide 9×9 cm</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>0,97 €</b></div><div class="px vente"><label>Vente</label><b>1,90 €</b></div></div>
+        <div class="marge pos">Marge : +0,93 €</div>
+      </div>
     </div>
     <div class="pcard">
       <div class="ph"><span class="ill">📥</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Boîte tiroir rectangle</b><div class="pr">+ 1,90 €</div><small>Bracelets &amp; colliers longs</small></div>
+      <div class="body"><b>Boîte tiroir rectangle</b><small>Bracelets &amp; colliers longs</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>0,95 €</b></div><div class="px vente"><label>Vente</label><b>1,90 €</b></div></div>
+        <div class="marge pos">Marge : +0,95 €</div>
+      </div>
     </div>
     <div class="pcard">
       <div class="ph"><span class="ill">👝</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Pochette microfibre</b><div class="pr">+ 1,50 €</div><small>Protection / voyage</small></div>
+      <div class="body"><b>Pochette microfibre</b><small>Protection / voyage</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>1,00 €</b></div><div class="px vente"><label>Vente</label><b>1,50 €</b></div></div>
+        <div class="marge pos">Marge : +0,50 €</div>
+      </div>
     </div>
     <div class="addpack">＋ Ajouter un emballage</div>
   </div>
