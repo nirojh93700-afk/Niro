@@ -12,14 +12,12 @@
   .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:11px 16px;font-size:.86rem;margin-bottom:20px}
   h1{font-family:Georgia,serif;font-size:1.5rem;margin:0 0 3px}
   .lead{color:var(--ink-soft);font-size:.9rem;margin:0 0 22px}
-  h2{font-size:1.05rem;color:var(--gold-dark);margin:26px 0 4px;display:flex;align-items:center;gap:8px}
+  h2{font-size:1.05rem;color:var(--gold-dark);margin:26px 0 4px}
   .h2sub{color:var(--ink-soft);font-size:.82rem;margin:0 0 14px}
-
-  /* ── Cartes emballages ── */
-  .packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
   .pcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .pcard .ph{aspect-ratio:16/10;background:#efe4cf;display:grid;place-items:center;color:#b3a17e;font-size:.78rem;position:relative;border-bottom:1px solid var(--line)}
-  .pcard .ph .ill{position:absolute;inset:0;display:grid;place-items:center}
+  .pcard.pack{border:1.5px solid var(--gold)}
+  .pcard .ph{aspect-ratio:16/10;background:#efe4cf;display:grid;place-items:center;font-size:1.7rem;position:relative;border-bottom:1px solid var(--line)}
   .pcard .ph .add{position:absolute;bottom:7px;right:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:.72rem;color:var(--ink-soft)}
   .pcard .body{padding:11px 13px}
   .pcard b{display:block;font-size:.92rem}
@@ -29,136 +27,91 @@
   .px label{display:block;font-size:.66rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
   .px b{font-size:.9rem;font-weight:700}
   .px.vente b{color:#b4452f}
-  .marge{margin-top:7px;font-size:.78rem;font-weight:700}
-  .marge.pos{color:#256b34}
-  .marge.gift{color:var(--ink-soft);font-weight:600}
+  .marge{margin-top:7px;font-size:.78rem;font-weight:700;color:#256b34}
   .addpack{border:1.5px dashed var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold-dark);font-weight:700;cursor:pointer;min-height:150px;background:#fffdf7}
-
-  /* ── Attribution par produit ── */
   .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-  .tools input{flex:1;min-width:160px;padding:9px 13px;border:1px solid var(--line);border-radius:9px;font:inherit}
+  .tools input,.tools select{padding:9px 13px;border:1px solid var(--line);border-radius:9px;font:inherit}
+  .tools input{flex:1;min-width:160px}
+  .grouphead{font-weight:700;color:var(--gold-dark);margin:18px 0 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em}
   .prow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:11px}
-  .prow.off{opacity:.55}
   .prow-top{display:flex;align-items:center;gap:12px}
-  .thumb{width:46px;height:46px;flex:0 0 46px;border-radius:9px;background:var(--cream2);display:grid;place-items:center;font-size:1.2rem}
+  .thumb{width:44px;height:44px;flex:0 0 44px;border-radius:9px;background:var(--cream2);display:grid;place-items:center;font-size:1.2rem}
   .prow-name{flex:1;min-width:0}
-  .prow-name b{display:block;font-size:.95rem}
+  .prow-name b{display:block;font-size:.94rem}
   .prow-name span{color:var(--ink-soft);font-size:.78rem}
-  .switch{position:relative;width:46px;height:26px;flex:0 0 46px;border-radius:20px;background:#d6ccb8;cursor:pointer;transition:.15s}
-  .switch.on{background:var(--gold)}
-  .switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.15s}
-  .switch.on::after{left:23px}
-  .grp{padding-left:58px;margin-top:11px}
-  .grp-lab{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:5px;font-weight:700}
-  .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:22px;padding:6px 12px;font-size:.82rem;cursor:pointer;color:var(--ink-soft);transition:.12s;user-select:none}
-  .chip .p{font-weight:700;color:var(--ink)}
-  .chip.on{border-color:var(--gold);background:#fffaf0;color:var(--ink)}
-  .chip.on::before{content:"✓ ";color:var(--gold-dark);font-weight:800}
-  .chip.fixed{border-color:#cfe6d3;background:#f2faf3;color:var(--ink);cursor:default}
-  .chip.fixed::before{content:"✓ ";color:#256b34;font-weight:800}
-  .chip .def{font-size:.7rem;background:#eaf5ec;color:#256b34;border-radius:12px;padding:0 6px;margin-left:2px}
-  .save{position:sticky;bottom:12px;margin-top:18px;display:flex;justify-content:flex-end}
-  .save button{background:linear-gradient(135deg,var(--gold),var(--gold-l));border:0;color:#1a1206;font-weight:700;font-size:.95rem;border-radius:999px;padding:13px 30px;cursor:pointer;box-shadow:0 8px 22px rgba(194,161,78,.35)}
+  .switch{position:relative;width:46px;height:26px;flex:0 0 46px;border-radius:20px;background:var(--gold);cursor:pointer}
+  .switch::after{content:"";position:absolute;top:3px;left:23px;width:20px;height:20px;border-radius:50%;background:#fff}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;padding-left:56px}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--gold);background:#fffaf0;border-radius:22px;padding:6px 12px;font-size:.82rem;color:var(--ink)}
+  .chip::before{content:"✓ ";color:var(--gold-dark);font-weight:800}
+  .chip.pk{background:linear-gradient(180deg,#fff6e2,#fff);border-color:var(--gold-dark)}
+  .chip b{font-weight:700}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="demo-note">MAQUETTE de la future page <b>Gestion → Packaging</b>. Cliquez les emballages sur chaque produit et l'interrupteur pour tester. Rien n'est réel ici.</div>
+  <div class="demo-note">MAQUETTE de la page <b>Gestion → Packaging</b>, remplie avec TES prix et TES règles. Le vrai outil te laisse tout modifier.</div>
 
   <h1>Packaging &amp; emballages</h1>
-  <p class="lead">Créez vos emballages (avec photo + prix), puis cochez ceux qui vont avec chaque produit. Ils s'afficheront tout seuls sur la fiche du produit.</p>
+  <p class="lead">Vos emballages, puis l'attribution : sac sur tous les bijoux · boîte carré + microfibre sur les colliers · boîte longue sur les bracelets.</p>
 
   <!-- ══ 1. MES EMBALLAGES ══ -->
   <h2>📦 Mes emballages</h2>
-  <p class="h2sub">Votre bibliothèque d'emballages. Chacun avec sa photo, son <b>prix d'achat</b> et son <b>prix de vente</b> — la marge se calcule toute seule.</p>
+  <p class="h2sub">Photo + prix d'achat + prix de vente — la marge se calcule toute seule.</p>
   <div class="packs">
     <div class="pcard">
-      <div class="ph"><span class="ill">🛍️</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Sachet cadeau beige</b><small>Sachet papier au logo</small>
-        <div class="pxrow"><div class="px"><label>Achat</label><b>1,00 €</b></div><div class="px vente"><label>Vente</label><b>Offert</b></div></div>
-        <div class="marge gift">Offert — coût absorbé (−1,00 €)</div>
-      </div>
+      <div class="ph">🛍️<span class="add">＋ photo</span></div>
+      <div class="body"><b>Sac cadeau</b><small>Sac papier beige au logo</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>1,00 €</b></div><div class="px vente"><label>Vente</label><b>1,20 €</b></div></div>
+        <div class="marge">Marge : +0,20 €</div></div>
     </div>
     <div class="pcard">
-      <div class="ph"><span class="ill">🎁</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Écrin coulissant beige</b><small>Boîte rigide 9×9 cm</small>
-        <div class="pxrow"><div class="px"><label>Achat</label><b>0,97 €</b></div><div class="px vente"><label>Vente</label><b>1,90 €</b></div></div>
-        <div class="marge pos">Marge : +0,93 €</div>
-      </div>
+      <div class="ph">🎁<span class="add">＋ photo</span></div>
+      <div class="body"><b>Boîte carré</b><small>Écrin rigide 9×9 cm (colliers)</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>0,97 €</b></div><div class="px vente"><label>Vente</label><b>3,00 €</b></div></div>
+        <div class="marge">Marge : +2,03 €</div></div>
     </div>
     <div class="pcard">
-      <div class="ph"><span class="ill">📥</span><span class="add">＋ photo</span></div>
-      <div class="body"><b>Boîte tiroir rectangle</b><small>Bracelets &amp; colliers longs</small>
-        <div class="pxrow"><div class="px"><label>Achat</label><b>0,95 €</b></div><div class="px vente"><label>Vente</label><b>1,90 €</b></div></div>
-        <div class="marge pos">Marge : +0,95 €</div>
-      </div>
+      <div class="ph">📥<span class="add">＋ photo</span></div>
+      <div class="body"><b>Boîte longue</b><small>Boîte tiroir (bracelets)</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>0,95 €</b></div><div class="px vente"><label>Vente</label><b>5,00 €</b></div></div>
+        <div class="marge">Marge : +4,05 €</div></div>
     </div>
     <div class="pcard">
-      <div class="ph"><span class="ill">👝</span><span class="add">＋ photo</span></div>
+      <div class="ph">👝<span class="add">＋ photo</span></div>
       <div class="body"><b>Pochette microfibre</b><small>Protection / voyage</small>
-        <div class="pxrow"><div class="px"><label>Achat</label><b>1,00 €</b></div><div class="px vente"><label>Vente</label><b>1,50 €</b></div></div>
-        <div class="marge pos">Marge : +0,50 €</div>
-      </div>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>1,00 €</b></div><div class="px vente"><label>Vente</label><b>1,90 €</b></div></div>
+        <div class="marge">Marge : +0,90 €</div></div>
+    </div>
+    <div class="pcard pack">
+      <div class="ph">✨<span class="add">＋ photo</span></div>
+      <div class="body"><b>Pack Collier</b><small>Sac + boîte carré + microfibre</small>
+        <div class="pxrow"><div class="px"><label>Achat</label><b>2,97 €</b></div><div class="px vente"><label>Vente</label><b>4,90 €</b></div></div>
+        <div class="marge">Marge : +1,93 €</div></div>
     </div>
     <div class="addpack">＋ Ajouter un emballage</div>
   </div>
 
-  <!-- ══ 2. ATTRIBUTION PAR PRODUIT ══ -->
+  <!-- ══ 2. ATTRIBUTION ══ -->
   <h2>🏷️ Attribuer aux produits</h2>
-  <p class="h2sub">Pour chaque bijou : le <b>sachet</b> est toujours inclus (offert). Choisissez <b>une des deux boîtes</b>, et activez la <b>pochette microfibre</b> si le bijou rentre dedans.</p>
-  <div class="tools"><input placeholder="Rechercher un produit…" oninput="filt(this.value)"></div>
+  <p class="h2sub">Déjà pré-rempli selon vos règles. Vous pouvez tout changer produit par produit.</p>
+  <div class="tools"><input placeholder="Rechercher un produit…" disabled><select disabled><option>Toutes catégories</option></select></div>
 
-  <div id="list"></div>
+  <div class="grouphead">Colliers — sac + boîte carré + microfibre + Pack</div>
+  <div id="colliers"></div>
 
-  <div class="save"><button>💾 Enregistrer</button></div>
+  <div class="grouphead">Bracelets — sac + boîte longue</div>
+  <div id="bracelets"></div>
 </div>
 
 <script>
-  // Par bijou : sachet TOUJOURS inclus (offert) · UNE des 2 boîtes · pochette optionnelle.
-  // box = "ecrin" | "tiroir" | null   ·   pochette = true/false
-  const PRODUCTS=[
-    {n:"Collier Enveloppe Message Secret",e:"💌",on:true, box:"ecrin",  pochette:true},
-    {n:"Collier Médaillon Cœur ouvrable", e:"💛",on:true, box:"ecrin",  pochette:true},
-    {n:"Bracelet Femme Cœur",             e:"💗",on:true, box:"tiroir", pochette:true},
-    {n:"Bracelet Homme Identité",         e:"⌚",on:true, box:"tiroir", pochette:false},
-    {n:"Bracelet Femme Papillon ajouré",  e:"🦋",on:false,box:"tiroir", pochette:true},
-    {n:"Clé USB personnalisée",           e:"🔌",on:false,box:null,     pochette:false},
-  ];
-  const list=document.getElementById('list');
-  function render(){
-    list.innerHTML='';
-    PRODUCTS.forEach((p,i)=>{
-      const row=document.createElement('div'); row.className='prow'+(p.on?'':' off'); row.dataset.n=p.n.toLowerCase();
-      row.innerHTML=`
-        <div class="prow-top">
-          <div class="thumb">${p.e}</div>
-          <div class="prow-name"><b>${p.n}</b><span>${p.on?'Packaging activé':'Packaging désactivé'}</span></div>
-          <div class="switch ${p.on?'on':''}" onclick="tog(${i})"></div>
-        </div>
-        <div class="grp">
-          <div class="grp-lab">Toujours inclus</div>
-          <div class="chips"><span class="chip fixed">Sachet cadeau <span class="def">offert</span></span></div>
-        </div>
-        <div class="grp">
-          <div class="grp-lab">Boîte de ce bijou — choisir une</div>
-          <div class="chips">
-            <span class="chip ${p.box==='ecrin'?'on':''}" onclick="setbox(${i},'ecrin')">Écrin coulissant <span class="p">+1,90 €</span></span>
-            <span class="chip ${p.box==='tiroir'?'on':''}" onclick="setbox(${i},'tiroir')">Boîte tiroir <span class="p">+1,90 €</span></span>
-          </div>
-        </div>
-        <div class="grp">
-          <div class="grp-lab">Pochette microfibre — si le bijou rentre dedans</div>
-          <div class="chips"><span class="chip ${p.pochette?'on':''}" onclick="togpoch(${i})">Pochette microfibre <span class="p">+1,50 €</span></span></div>
-        </div>`;
-      list.appendChild(row);
-    });
-  }
-  function tog(i){PRODUCTS[i].on=!PRODUCTS[i].on;render();}
-  function setbox(i,k){PRODUCTS[i].box=(PRODUCTS[i].box===k?null:k);render();}
-  function togpoch(i){PRODUCTS[i].pochette=!PRODUCTS[i].pochette;render();}
-  function filt(q){q=q.toLowerCase();[...list.children].forEach(r=>r.style.display=r.dataset.n.includes(q)?'':'none');}
-  render();
+  const COLLIERS=["Collier Enveloppe Message Secret","Collier Médaillon Cœur ouvrable","Collier Couple Cœur (lot de 2)","Collier Plaque Acier","Collier Médaillon Livre","Collier Couple Puzzle géométrique","Collier Femme Pendentif géométrique"];
+  const BRACELETS=["Bracelet Homme Identité (Gourmette)","Bracelet Homme Acier & Silicone","Bracelet Homme Cuir Tressé & Acier","Bracelet Homme Chaîne Acier","Bracelet Femme Acier","Bracelet Empreinte Pied de Bébé","Bracelet Femme Cœur","Bracelet Femme Papillon ajouré"];
+  const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>4,90 €</b></span>`;
+  const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte longue <b>+5,00 €</b></span>`;
+  function row(name,chips){return `<div class="prow"><div class="prow-top"><div class="thumb">💠</div><div class="prow-name"><b>${name}</b><span>Packaging activé</span></div><div class="switch"></div></div><div class="chips">${chips}</div></div>`;}
+  document.getElementById('colliers').innerHTML=COLLIERS.map(n=>row(n,CHIPS_COL)).join('');
+  document.getElementById('bracelets').innerHTML=BRACELETS.map(n=>row(n,CHIPS_BRA)).join('');
 </script>
 </body>
 </html>
