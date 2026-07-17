@@ -1441,13 +1441,7 @@ export default function ProductDetail({ product }) {
 
           {error && <div className="notice">{error}</div>}
 
-          {/* Total à jour (option + gravure + emballage), juste avant le bouton */}
-          {!soldOut && (
-            <div className="pd-total">
-              <span className="lab">Total</span>
-              <span className="val">{formatEuro(unitPrice * quantity)}<span className="u">tout compris</span></span>
-            </div>
-          )}
+          {/* Le total (option + gravure + emballage) est affiché sur le bouton lui-même. */}
           <div className="qty-row">
             <div className="qty-stepper">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Moins">
