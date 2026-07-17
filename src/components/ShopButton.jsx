@@ -1,7 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // Bouton flottant raccourci vers la boutique (tous les produits).
+// Masqué dans l'espace de gestion (réservé aux clientes du site).
 export default function ShopButton() {
+  const pathname = usePathname();
+  if (pathname && pathname.startsWith("/gestion")) return null;
+
   return (
     <Link
       href="/boutique"

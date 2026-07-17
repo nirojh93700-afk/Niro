@@ -11,7 +11,8 @@ export const DEFAULT_PACKAGING = [
   { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 3.0, weight: 60, photo: "" },
   { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 5.0, weight: 70, photo: "" },
   { id: "microfibre", name: "Pochette microfibre", desc: "Protection / voyage", buy: 1.0, sell: 1.9, weight: 15, photo: "" },
-  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte cadeau + microfibre", buy: 2.97, sell: 5.5, weight: 85, photo: "" },
+  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte carrée + microfibre", buy: 2.97, sell: 5.5, weight: 85, photo: "" },
+  { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte allongée + microfibre", buy: 2.95, sell: 7.5, weight: 95, photo: "" },
 ];
 
 const COLLIERS = ["collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique"];
@@ -22,7 +23,7 @@ const BRACELETS_CARRE = ["bracelet-femme-acier", "bracelet-femme-coeur", "bracel
 export const DEFAULT_PRODUCT_PACKAGING = (() => {
   const out = {};
   for (const s of COLLIERS) out[s] = { on: true, ids: ["sac", "boite-carree", "microfibre", "pack-collier"], free: [] };
-  for (const s of BRACELETS_LONG) out[s] = { on: true, ids: ["sac", "boite-allongee", "microfibre"], free: [] };
-  for (const s of BRACELETS_CARRE) out[s] = { on: true, ids: ["sac", "boite-carree", "microfibre"], free: [] };
+  for (const s of BRACELETS_LONG) out[s] = { on: true, ids: ["sac", "boite-allongee", "microfibre", "pack-bracelet"], free: [] };
+  for (const s of BRACELETS_CARRE) out[s] = { on: true, ids: ["sac", "boite-carree", "microfibre", "pack-collier"], free: [] };
   return out;
 })();
