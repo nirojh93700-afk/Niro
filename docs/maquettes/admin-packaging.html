@@ -100,18 +100,24 @@
   <div class="grouphead">Colliers — sac + boîte carré + microfibre + Pack</div>
   <div id="colliers"></div>
 
-  <div class="grouphead">Bracelets — sac + boîte longue + microfibre</div>
+  <div class="grouphead">Bracelets (boîte longue) — sac + boîte longue + microfibre</div>
   <div id="bracelets"></div>
+
+  <div class="grouphead">Bracelets fins (boîte carré) — sac + boîte carré + microfibre</div>
+  <div id="braceletsCarre"></div>
 </div>
 
 <script>
   const COLLIERS=["Collier Enveloppe Message Secret","Collier Médaillon Cœur ouvrable","Collier Couple Cœur (lot de 2)","Collier Plaque Acier","Collier Médaillon Livre","Collier Couple Puzzle géométrique","Collier Femme Pendentif géométrique"];
-  const BRACELETS=["Bracelet Homme Identité (Gourmette)","Bracelet Homme Acier & Silicone","Bracelet Homme Cuir Tressé & Acier","Bracelet Homme Chaîne Acier","Bracelet Femme Acier","Bracelet Empreinte Pied de Bébé","Bracelet Femme Cœur","Bracelet Femme Papillon ajouré"];
+  const BRACELETS=["Bracelet Homme Identité (Gourmette)","Bracelet Homme Acier & Silicone","Bracelet Homme Cuir Tressé & Acier","Bracelet Homme Chaîne Acier","Bracelet Empreinte Pied de Bébé"];
+  const BRACELETS_CARRE=["Bracelet Femme Cœur","Bracelet Femme Papillon ajouré","Bracelet Femme Acier"];
   const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>5,50 €</b></span>`;
   const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte longue <b>+5,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
   function row(name,chips){return `<div class="prow"><div class="prow-top"><div class="thumb">💠</div><div class="prow-name"><b>${name}</b><span>Packaging activé</span></div><div class="switch"></div></div><div class="chips">${chips}</div></div>`;}
+  const CHIPS_BRA_CARRE=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
   document.getElementById('colliers').innerHTML=COLLIERS.map(n=>row(n,CHIPS_COL)).join('');
   document.getElementById('bracelets').innerHTML=BRACELETS.map(n=>row(n,CHIPS_BRA)).join('');
+  document.getElementById('braceletsCarre').innerHTML=BRACELETS_CARRE.map(n=>row(n,CHIPS_BRA_CARRE)).join('');
 </script>
 </body>
 </html>
