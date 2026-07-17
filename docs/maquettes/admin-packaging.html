@@ -53,7 +53,7 @@
   <div class="demo-note">MAQUETTE de la page <b>Gestion → Packaging</b>, remplie avec TES prix et TES règles. Le vrai outil te laisse tout modifier.</div>
 
   <h1>Packaging &amp; emballages</h1>
-  <p class="lead">Vos emballages, puis l'attribution : sac + microfibre sur tous les bijoux · écrin carré sur les colliers · écrin allongé sur les bracelets.</p>
+  <p class="lead">Vos emballages, puis l'attribution : sac + microfibre sur tous les bijoux · boîte cadeau carrée sur les colliers · boîte cadeau allongée sur les bracelets.</p>
 
   <!-- ══ 1. MES EMBALLAGES ══ -->
   <h2>📦 Mes emballages</h2>
@@ -67,13 +67,13 @@
     </div>
     <div class="pcard">
       <div class="ph">🎁<span class="add">＋ photo</span></div>
-      <div class="body"><b>Écrin carré</b><small>Écrin rigide 9×9 cm (colliers)</small>
+      <div class="body"><b>Boîte cadeau carrée</b><small>Boîte carton 9×9 cm (colliers)</small>
         <div class="pxrow"><div class="px"><label>Achat</label><b>0,97 €</b></div><div class="px vente"><label>Vente</label><b>3,00 €</b></div></div>
         <div class="marge">Marge : +2,03 €</div></div>
     </div>
     <div class="pcard">
       <div class="ph">📥<span class="add">＋ photo</span></div>
-      <div class="body"><b>Écrin allongé</b><small>Écrin rigide, format bracelet</small>
+      <div class="body"><b>Boîte cadeau allongée</b><small>Boîte carton, format bracelet</small>
         <div class="pxrow"><div class="px"><label>Achat</label><b>0,95 €</b></div><div class="px vente"><label>Vente</label><b>5,00 €</b></div></div>
         <div class="marge">Marge : +4,05 €</div></div>
     </div>
@@ -85,7 +85,7 @@
     </div>
     <div class="pcard pack">
       <div class="ph">✨<span class="add">＋ photo</span></div>
-      <div class="body"><b>Pack Collier</b><small>Sac + écrin carré + microfibre</small>
+      <div class="body"><b>Pack Collier</b><small>Sac + boîte cadeau carrée + microfibre</small>
         <div class="pxrow"><div class="px"><label>Achat</label><b>2,97 €</b></div><div class="px vente"><label>Vente</label><b>5,50 €</b></div></div>
         <div class="marge">Marge : +2,53 €</div></div>
     </div>
@@ -97,13 +97,13 @@
   <p class="h2sub">Déjà pré-rempli selon vos règles. Vous pouvez tout changer produit par produit.</p>
   <div class="tools"><input placeholder="Rechercher un produit…" disabled><select disabled><option>Toutes catégories</option></select></div>
 
-  <div class="grouphead">Colliers — sac + écrin carré + microfibre + Pack</div>
+  <div class="grouphead">Colliers — sac + boîte cadeau carrée + microfibre + Pack</div>
   <div id="colliers"></div>
 
-  <div class="grouphead">Bracelets (écrin allongé) — sac + écrin allongé + microfibre</div>
+  <div class="grouphead">Bracelets (boîte cadeau allongée) — sac + boîte cadeau allongée + microfibre</div>
   <div id="bracelets"></div>
 
-  <div class="grouphead">Bracelets fins (écrin carré) — sac + écrin carré + microfibre</div>
+  <div class="grouphead">Bracelets fins (boîte cadeau carrée) — sac + boîte cadeau carrée + microfibre</div>
   <div id="braceletsCarre"></div>
 </div>
 
@@ -111,10 +111,10 @@
   const COLLIERS=["Collier Enveloppe Message Secret","Collier Médaillon Cœur ouvrable","Collier Couple Cœur (lot de 2)","Collier Plaque Acier","Collier Médaillon Livre","Collier Couple Puzzle géométrique","Collier Femme Pendentif géométrique"];
   const BRACELETS=["Bracelet Homme Identité (Gourmette)","Bracelet Homme Acier & Silicone","Bracelet Homme Cuir Tressé & Acier","Bracelet Homme Chaîne Acier","Bracelet Empreinte Pied de Bébé"];
   const BRACELETS_CARRE=["Bracelet Femme Cœur","Bracelet Femme Papillon ajouré","Bracelet Femme Acier"];
-  const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Écrin carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>5,50 €</b></span>`;
-  const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Écrin allongé <b>+5,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
+  const CHIPS_COL=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte cadeau carrée <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span><span class="chip pk">Pack Collier <b>5,50 €</b></span>`;
+  const CHIPS_BRA=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte cadeau allongée <b>+5,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
   function row(name,chips){return `<div class="prow"><div class="prow-top"><div class="thumb">💠</div><div class="prow-name"><b>${name}</b><span>Packaging activé</span></div><div class="switch"></div></div><div class="chips">${chips}</div></div>`;}
-  const CHIPS_BRA_CARRE=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Écrin carré <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
+  const CHIPS_BRA_CARRE=`<span class="chip">Sac <b>+1,20 €</b></span><span class="chip">Boîte cadeau carrée <b>+3,00 €</b></span><span class="chip">Microfibre <b>+1,90 €</b></span>`;
   document.getElementById('colliers').innerHTML=COLLIERS.map(n=>row(n,CHIPS_COL)).join('');
   document.getElementById('bracelets').innerHTML=BRACELETS.map(n=>row(n,CHIPS_BRA)).join('');
   document.getElementById('braceletsCarre').innerHTML=BRACELETS_CARRE.map(n=>row(n,CHIPS_BRA_CARRE)).join('');
