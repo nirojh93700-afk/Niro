@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Paiement en plusieurs fois + logos</title>
+<style>
+  :root{--gold:#c2a14e;--gold-dark:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+  .demo{max-width:480px;margin:0 auto;padding:22px 16px 60px}
+  .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:10px 16px;font-size:.85rem;margin-bottom:20px}
+  .totbox{background:linear-gradient(135deg,#fbf4e6,#fffdf9);border:1px solid #e7d3a1;border-radius:14px;padding:11px 15px;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .totbox .lab{font-weight:700}
+  .totbox .val{font-size:1.35rem;font-weight:800;color:var(--gold-dark)}
+
+  /* Klarna 3x */
+  .klarna{display:flex;align-items:center;gap:9px;background:#ffe6f0;border:1px solid #ffb3d1;border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:.86rem}
+  .klarna .kbadge{background:#ffb3c7;color:#17120e;font-weight:800;border-radius:6px;padding:2px 8px;font-size:.8rem}
+  .klarna b{color:#111}
+
+  .row{display:flex;gap:10px}
+  .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+  .qty button{border:0;background:none;font-size:1.15rem;width:38px;height:46px;cursor:pointer}
+  .qty span{min-width:24px;text-align:center;font-weight:700}
+  .add{flex:1;border:0;border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#1a1206;font-weight:800;font-size:1rem;cursor:pointer;height:46px}
+
+  /* Logos paiement */
+  .pays{margin-top:14px;text-align:center}
+  .pays .lab{color:var(--ink-soft);font-size:.76rem;margin-bottom:7px}
+  .pays .logos{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .plog{background:#fff;border:1px solid var(--line);border-radius:7px;padding:4px 9px;font-size:.72rem;font-weight:700;color:#333;display:inline-flex;align-items:center;gap:4px}
+  .plog.klr{background:#ffb3c7;border-color:#ff9dbb}
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="demo-note">MAQUETTE — comment afficher « paiement en plusieurs fois » (Klarna) + les logos de paiement, sur la fiche produit.</div>
+
+  <!-- Total (Option 3, déjà en place) -->
+  <div class="totbox"><span class="lab">Total tout compris</span><span class="val">27,91 €</span></div>
+
+  <!-- Klarna 3x -->
+  <div class="klarna">
+    <span class="kbadge">Klarna</span>
+    <span>ou <b>3× 9,30 €</b> — paiement en 3 fois <b>sans frais</b></span>
+  </div>
+
+  <!-- Quantité + bouton -->
+  <div class="row">
+    <div class="qty"><button>−</button><span>1</span><button>+</button></div>
+    <button class="add">Ajouter au panier</button>
+  </div>
+
+  <!-- Logos de paiement acceptés -->
+  <div class="pays">
+    <div class="lab">Paiement 100 % sécurisé</div>
+    <div class="logos">
+      <span class="plog">💳 Visa</span>
+      <span class="plog">Mastercard</span>
+      <span class="plog">CB</span>
+      <span class="plog">PayPal</span>
+      <span class="plog">Apple&nbsp;Pay</span>
+      <span class="plog">G&nbsp;Pay</span>
+      <span class="plog klr">Klarna 3×</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
