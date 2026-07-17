@@ -9,7 +9,7 @@
 // Hausse INTERMÉDIAIRE à l'unité (entre-deux : ni trop, ni trop peu → le pack
 // affiche ~2,80 € d'économie). Coûts inchangés. Packs inchangés (5,50 / 7,50).
 export const DEFAULT_PACKAGING = [
-  { id: "sac", name: "Sac cadeau", desc: "Sac papier beige au logo", buy: 1.0, sell: 1.7, weight: 10, photo: "" },
+  { id: "sac", name: "Sac cadeau", desc: "Sac carton beige", buy: 1.0, sell: 1.7, weight: 10, photo: "" },
   { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 3.9, weight: 60, photo: "" },
   { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 5.9, weight: 70, photo: "" },
   { id: "microfibre", name: "Pochette microfibre", desc: "Protection / voyage", buy: 1.0, sell: 2.7, weight: 15, photo: "" },
