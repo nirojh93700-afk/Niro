@@ -198,6 +198,11 @@ export default function ProductDetail({ product }) {
   const engrave = engravingExtra(product, fieldValues, variant.id);
   // Supplément d'emballage (écrin / pochette choisis) — le sachet offert est inclus d'office.
   const pkg = packagingExtra(product, pkgSel);
+  // Prix « si acheté séparément » = somme des emballages individuels (hors pack, hors offert).
+  // Sert à afficher l'économie du pack (prix barré → prix pack).
+  const pkgSinglesSum = Math.round((product.packaging?.options || [])
+    .filter((x) => !/pack/i.test(x.name) && !x.free)
+    .reduce((s, x) => s + (Number(x.price) || 0), 0) * 100) / 100;
   const basePrice = hasPromo ? salePrice : variant.price;
   const unitPrice = basePrice + engrave.amount + pkg.amount;
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
@@ -1421,7 +1426,12 @@ export default function ProductDetail({ product }) {
                         <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{clientName}{isPack && <span style={{ background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, borderRadius: 20, padding: "1px 7px", marginLeft: 6 }}>MEILLEUR CHOIX</span>}</strong>
                         {o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}
                       </span>
-                      <span style={{ marginLeft: "auto", fontWeight: 700, fontSize: "0.85rem" }}>{o.price > 0 ? "+" + formatEuro(o.price) : "Offert"}</span>
+                      <span style={{ marginLeft: "auto", fontWeight: 700, fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+                        {isPack && pkgSinglesSum > o.price && (
+                          <span style={{ color: "var(--ink-soft)", textDecoration: "line-through", fontWeight: 400, fontSize: "0.78rem", marginRight: 5 }}>{formatEuro(pkgSinglesSum)}</span>
+                        )}
+                        {o.price > 0 ? "+" + formatEuro(o.price) : "Offert"}
+                      </span>
                     </button>
                   );
                 })}

@@ -6,13 +6,15 @@
 // =============================================================================
 
 // Bibliothèque d'emballages (prix confirmés par la gérante).
+// Prix « vente » gonflés à l'unité pour que le PACK apparaisse comme une vraie
+// affaire (économie ~3,40 € affichée en prix barré sur la fiche). Coûts inchangés.
 export const DEFAULT_PACKAGING = [
-  { id: "sac", name: "Sac cadeau", desc: "Sac papier beige au logo", buy: 1.0, sell: 1.2, weight: 10, photo: "" },
-  { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 3.0, weight: 60, photo: "" },
-  { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 5.0, weight: 70, photo: "" },
-  { id: "microfibre", name: "Pochette microfibre", desc: "Protection / voyage", buy: 1.0, sell: 1.9, weight: 15, photo: "" },
-  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte carrée + microfibre", buy: 2.97, sell: 5.5, weight: 85, photo: "" },
-  { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte allongée + microfibre", buy: 2.95, sell: 7.5, weight: 95, photo: "" },
+  { id: "sac", name: "Sac cadeau", desc: "Sac papier beige au logo", buy: 1.0, sell: 1.9, weight: 10, photo: "" },
+  { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 4.5, weight: 60, photo: "" },
+  { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 6.5, weight: 70, photo: "" },
+  { id: "microfibre", name: "Pochette microfibre", desc: "Protection / voyage", buy: 1.0, sell: 2.9, weight: 15, photo: "" },
+  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte carrée + microfibre", buy: 2.97, sell: 5.9, weight: 85, photo: "" },
+  { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte allongée + microfibre", buy: 2.95, sell: 7.9, weight: 95, photo: "" },
 ];
 
 const COLLIERS = ["collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique"];
