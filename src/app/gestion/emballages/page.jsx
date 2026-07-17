@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { products, getCategoryLabel } from "@/lib/products";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
+import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "@/lib/packagingSeed";
 
 // =============================================================================
 // Gestion → Packaging & emballages
@@ -70,6 +71,16 @@ export default function EmballagesAdmin() {
       setAssign(settings.productPackaging || assign);
       setMsg("Enregistré ✓ — les fiches produit utilisent maintenant ces emballages.");
     } catch (e) { setMsg(e.message); }
+  }
+
+  // Recharge la configuration recommandée (6 emballages + dispatch complet),
+  // en GARDANT les photos déjà mises (associées par id).
+  function loadRecommended() {
+    const photoById = {};
+    lib.forEach((it) => { if (it && it.id && it.photo) photoById[it.id] = it.photo; });
+    setLib(DEFAULT_PACKAGING.map((it) => ({ ...it, photo: photoById[it.id] || it.photo || "" })));
+    setAssign(JSON.parse(JSON.stringify(DEFAULT_PRODUCT_PACKAGING)));
+    setMsg("Configuration recommandée chargée (vos photos sont gardées). Vérifiez, puis cliquez Enregistrer.");
   }
 
   // ---- Bibliothèque ----
@@ -147,6 +158,15 @@ export default function EmballagesAdmin() {
         Pensez à cliquer <b>💾 Enregistrer</b> en bas après vos changements (l'interrupteur aussi s'enregistre).
       </p>
 
+      {/* Bouton : recharge la config recommandée (garde les photos) */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", background: "#fffdf7", border: "1px dashed var(--gold)", borderRadius: 12, padding: "11px 14px", margin: "2px 0 6px" }}>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <strong style={{ display: "block", fontSize: ".92rem" }}>Remettre la configuration recommandée</strong>
+          <span style={{ color: "var(--ink-soft)", fontSize: ".8rem" }}>Recharge les 6 emballages (dont les 2 packs) + l'attribution complète colliers/bracelets. <b>Vos photos sont gardées.</b></span>
+        </div>
+        <button onClick={loadRecommended} style={{ border: "1.5px solid var(--gold)", background: "var(--gold)", color: "#1a1206", fontWeight: 700, borderRadius: 999, padding: "10px 18px", cursor: "pointer", font: "inherit" }}>🔄 Charger</button>
+      </div>
+
       {/* ══ 1. BIBLIOTHÈQUE ══ */}
       <h2 style={{ color: "var(--gold-dark)", fontSize: "1.05rem", marginTop: 24 }}>📦 Mes emballages</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: 14 }}>
@@ -220,10 +240,13 @@ export default function EmballagesAdmin() {
                 {lib.map((it) => {
                   const on = a.ids.includes(it.id);
                   const free = a.free.includes(it.id);
+                  // Distingue les 2 boîtes homonymes dans l'admin (le client, lui, voit juste "Boîte cadeau").
+                  const dup = lib.filter((x) => x.name === it.name).length > 1;
+                  const hint = dup && it.desc ? (/collier|9.?9|carr/i.test(it.desc) ? " carrée" : /bracelet|allong/i.test(it.desc) ? " allongée" : "") : "";
                   return (
-                    <span key={it.id} style={{ display: "inline-flex", alignItems: "center", gap: 7, border: "1.5px solid " + (on ? "var(--gold)" : "var(--line)"), background: on ? "#fffaf0" : "#fff", borderRadius: 22, padding: "6px 10px", fontSize: ".82rem" }}>
+                    <span key={it.id} title={it.desc || ""} style={{ display: "inline-flex", alignItems: "center", gap: 7, border: "1.5px solid " + (on ? "var(--gold)" : "var(--line)"), background: on ? "#fffaf0" : "#fff", borderRadius: 22, padding: "6px 10px", fontSize: ".82rem" }}>
                       <span onClick={() => toggleId(p.slug, it.id)} style={{ cursor: "pointer", userSelect: "none", color: on ? "var(--ink)" : "var(--ink-soft)" }}>
-                        {on ? "✓ " : ""}{it.name || "(sans nom)"} <b>{free ? "offert" : (Number(it.sell) > 0 ? "+" + euro(it.sell) : "offert")}</b>
+                        {on ? "✓ " : ""}{it.name || "(sans nom)"}{hint} <b>{free ? "offert" : (Number(it.sell) > 0 ? "+" + euro(it.sell) : "offert")}</b>
                       </span>
                       {on && (
                         <button onClick={() => toggleFree(p.slug, it.id)} title="Marquer offert / payant"
