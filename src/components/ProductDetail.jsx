@@ -37,6 +37,7 @@ import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
+import ZoomThumb from "./ZoomThumb";
 
 // Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
@@ -1422,7 +1423,7 @@ export default function ProductDetail({ product }) {
                       onClick={() => setPkgSel([o.id])}
                       style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: on || isPack ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: on ? "#fffaf0" : (isPack ? "linear-gradient(180deg,#fffaf0,#fff)" : "var(--paper)"), borderRadius: 12, padding: "11px 13px", boxShadow: on ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}
                     >
-                      {o.photo ? <img src={o.photo} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", flex: "0 0 40px" }} /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
+                      {o.photo ? <ZoomThumb photo={o.photo} label={clientName} size={40} /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
                       <span style={{ minWidth: 0 }}>
                         <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{clientName}{isPack && <span style={{ display: "inline-block", whiteSpace: "nowrap", background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".2px", borderRadius: 20, padding: "2px 8px", marginLeft: 6, verticalAlign: "middle" }}>MEILLEUR CHOIX</span>}</strong>
                         {o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}
