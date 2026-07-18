@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Zoom photo emballage</title>
+<style>
+  :root{--gold:#c2a14e;--gold-dark:#a98935;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+  .demo{max-width:480px;margin:0 auto;padding:22px 16px 60px}
+  .demo-note{background:#241a0c;color:#f3e8d3;border-radius:12px;padding:10px 16px;font-size:.85rem;margin-bottom:18px}
+  .pack-title{font-weight:700;font-size:.95rem;margin:0 0 3px}
+  .hint{color:var(--ink-soft);font-size:.78rem;margin:0 0 12px}
+  .opts{display:grid;gap:9px}
+  .opt{display:flex;align-items:center;gap:11px;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:10px 13px}
+  .opt.sel{border-color:var(--gold);background:#fffaf0;box-shadow:0 0 0 2px rgba(194,161,78,.22)}
+  .thumb{width:44px;height:44px;flex:0 0 44px;border-radius:9px;overflow:hidden;cursor:zoom-in;position:relative;border:1px solid var(--line)}
+  .thumb img,.thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb::after{content:"🔍";position:absolute;bottom:1px;right:1px;font-size:.6rem;background:rgba(255,255,255,.85);border-radius:4px;padding:0 2px}
+  .opt b{font-size:.9rem}
+  .opt small{display:block;color:var(--ink-soft);font-size:.76rem}
+  .opt .p{margin-left:auto;font-weight:700;font-size:.85rem;white-space:nowrap}
+
+  /* Petite fenêtre de zoom */
+  .zoom-overlay{position:fixed;inset:0;background:rgba(20,15,8,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
+  .zoom-card{background:#fff;border-radius:16px;padding:12px;max-width:320px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .zoom-card img,.zoom-card svg{width:100%;height:auto;border-radius:10px;display:block}
+  .zoom-card .cap{text-align:center;font-size:.85rem;font-weight:700;margin-top:8px}
+  .zoom-close{position:absolute;top:-12px;right:-12px;width:34px;height:34px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.2);font-size:1.3rem;cursor:pointer;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="demo-note">MAQUETTE — appuyez sur une PHOTO d'emballage : une petite fenêtre s'ouvre avec la photo agrandie (pas en plein écran).</div>
+
+  <div class="pack-title">Votre emballage</div>
+  <p class="hint">💡 Appuyez sur une photo pour l'agrandir.</p>
+  <div class="opts">
+    <div class="opt sel">
+      <span class="thumb" onclick="zoom('boite','Boîte cadeau')">
+        <svg viewBox="0 0 44 44"><rect width="44" height="44" fill="#efe0c2"/><rect x="7" y="16" width="30" height="20" rx="2" fill="#f7efdd" stroke="#a98935"/><rect x="7" y="16" width="30" height="7" fill="#e6d3a8"/><rect x="20" y="9" width="4" height="27" fill="#c2a14e"/></svg>
+      </span>
+      <span><b>Boîte cadeau</b><small>Boîte carton 9×9 cm</small></span>
+      <span class="p">+ 3,90 €</span>
+    </div>
+    <div class="opt">
+      <span class="thumb" onclick="zoom('sac','Sac cadeau')">
+        <svg viewBox="0 0 44 44"><rect width="44" height="44" fill="#f3e8d3"/><path d="M11 15 h22 l-2 22 H13 Z" fill="#fbf7ee" stroke="#a98935"/><path d="M15 15 c0-9 14-9 14 0" fill="none" stroke="#a98935"/></svg>
+      </span>
+      <span><b>Sac cadeau</b><small>Sac carton beige</small></span>
+      <span class="p">+ 1,70 €</span>
+    </div>
+    <div class="opt">
+      <span class="thumb" onclick="zoom('poch','Pochette microfibre')">
+        <svg viewBox="0 0 44 44"><rect width="44" height="44" fill="#e6d8bd"/><path d="M9 14 l26 4 -3 24 -26-4 Z" fill="#f2e6cd" stroke="#a98935"/></svg>
+      </span>
+      <span><b>Pochette microfibre</b><small>Protection / voyage</small></span>
+      <span class="p">+ 2,70 €</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SVGS={
+    boite:'<svg viewBox="0 0 300 300"><rect width="300" height="300" fill="#efe0c2"/><rect x="45" y="105" width="210" height="140" rx="10" fill="#f7efdd" stroke="#a98935" stroke-width="4"/><rect x="45" y="105" width="210" height="48" fill="#e6d3a8"/><rect x="138" y="55" width="24" height="190" fill="#c2a14e"/></svg>',
+    sac:'<svg viewBox="0 0 300 300"><rect width="300" height="300" fill="#f3e8d3"/><path d="M78 100 h145 l-14 150 H92 Z" fill="#fbf7ee" stroke="#a98935" stroke-width="4"/><path d="M100 100 c0-60 100-60 100 0" fill="none" stroke="#a98935" stroke-width="4"/></svg>',
+    poch:'<svg viewBox="0 0 300 300"><rect width="300" height="300" fill="#e6d8bd"/><path d="M60 95 l180 28 -20 160 -180-28 Z" fill="#f2e6cd" stroke="#a98935" stroke-width="4"/></svg>'
+  };
+  function zoom(key,label){
+    const ov=document.createElement('div'); ov.className='zoom-overlay';
+    ov.innerHTML='<div class="zoom-card"><button class="zoom-close">×</button>'+SVGS[key]+'<div class="cap">'+label+'</div></div>';
+    ov.onclick=()=>ov.remove();
+    ov.querySelector('.zoom-card').onclick=e=>e.stopPropagation();
+    ov.querySelector('.zoom-close').onclick=()=>ov.remove();
+    document.body.appendChild(ov);
+  }
+</script>
+</body>
+</html>
