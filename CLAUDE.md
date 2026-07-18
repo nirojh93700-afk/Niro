@@ -413,3 +413,22 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   Boîte mail Gmail connectée (lecture + brouillon + envoi sur validation) · Compteur visites intégré ·
   Couverts enfants personnalisés PUBLIÉS (34,90 € port offert, éditeur par couvert) · CRM enrichi
   (campagne remise, anniversaires, tags, graphique CA, relance) · Bandeau Soldes animé · Page sur-mesure (démo).
+
+## 14. NOUVEAU PRODUIT — GOBELET ISOTHERME 40 oz À GRAVER (en préparation, 18/07/2026)
+> Nouvelle gamme : grand gobelet isotherme 40 oz (1,1 L) type « Stanley » (acier inox double paroi, anse + paille), **gravure laser personnalisée**. Maquette validée en cours, **PAS ENCORE EN LIGNE** (attend « applique »).
+- **Titre validé** : « Gobelet isotherme 40 oz à graver ». Catégorie envisagée : Boutique / Cadeaux (à confirmer).
+- **Prix** : recherche marché faite (Amazon basique ~20 € ; Etsy gravé artisanal 30–45 €). **Reco = 34,90 €** (option prix barré 39,90 €). **En attente du choix de la gérante.**
+- **4 coloris**, chacun avec **3 photos** (Vierge / Gravé exemple / Accessoires inclus) — déjà classées :
+  - **Crème** : IMG_9303 (vierge) · IMG_9304 (gravé floral) · IMG_9305 (accessoires)
+  - **Blanc** : IMG_9308 (vierge, liseré arc-en-ciel) · IMG_9309 (gravé « Follow the Stars ») · IMG_9310 (accessoires)
+  - **Bleu marine** : IMG_9295 (vierge) · IMG_9296 (gravé « The Future is Bright ») · IMG_9297 (accessoires)
+  - **Rose** : IMG_9299 (vierge) · IMG_9300 (gravé floral, anse rose) · IMG_9301 (accessoires)
+  - NB : les rendus gravés « Follow the Stars » / « The Future is Bright » sont des **textes anglais de démo** (à valider ou remplacer).
+- **Accessoires inclus** (visibles sur les photos accessoires) : paille inox + paille coudée, goupillon de nettoyage, couvercle avec bouchon, joint/stoppeur paille, petit tournevis.
+- **Maquettes faites** (scratchpad, à refaire/committer si besoin) : fiche produit (galerie vierge/gravé/accessoires + sélecteur 4 coloris + zone gravure + « Ajouter au panier »), Avant/Après gobelet & carafe, récap couleurs. Style marque or/crème. Mention **« Gravé en France »** (PAS « fait main » : elle grave, elle ne fabrique pas le gobelet).
+- **Carafe à whisky** : même logique Avant/Après (vierge → gravé) existe aussi (IMG_9312 vierge / IMG_9414 gravé démo).
+
+### TÂCHE EN COURS — CATALOGUE DE DESSINS GRAVABLES (18/07/2026)
+> On va proposer aux clients une bibliothèque de **motifs/dessins gravables** (fleurs, animaux, etc.) au choix sur le gobelet. La gérante envoie des **planches d'exemples avec des NUMÉROS** sur chaque dessin.
+- **Ma mission** : pour **chaque numéro**, retrouver **UN PAR UN l'image d'origine / source téléchargeable** (haute déf) pour qu'elle puisse la télécharger.
+- Limite technique : pas d'outil de recherche par image inversée → je procède par description du motif + recherche web ; certains motifs (packs connus, motifs courants) seront trouvables, d'autres non. Toujours procéder **un dessin à la fois**, dans l'ordre des numéros.
