@@ -486,7 +486,12 @@ export default function ProductDetail({ product }) {
     fieldValues["page3"] || "",
     fieldValues["backcover"] || "",
   ];
-  const finishHeart = (variant.title || "").toLowerCase().includes("bicolore") ? "bicolore" : "silver";
+  const finishHeart = (() => {
+    const t = (variant.title || "").toLowerCase();
+    if (t.includes("bicolore")) return "bicolore";
+    if (t.includes("doré") || t.includes("dore")) return "gold"; // médaillon doré → aperçu 3D or
+    return "silver";
+  })();
   const heartPhoto = photoSrc; // photo réelle uniquement (url/data)
   // Page choisie pour la photo (la cliente la place où elle veut).
   const HEART_PAGE_INDEX = { cover: 0, page1: 1, page2: 2, page3: 3, backcover: 4 };
@@ -994,7 +999,7 @@ export default function ProductDetail({ product }) {
                 ) : product.engraveBook3d ? (
                   <EngraveBook3D faces={bookFaces} motifs={bookMotifs} motifPositions={bookMotifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                 ) : product.engraveHeart3d ? (
-                  <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
+                  <EngraveHeart3D key={finishHeart} faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                 ) : (
                   <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
                 )}
@@ -1321,7 +1326,7 @@ export default function ProductDetail({ product }) {
                   ) : product.engraveBook3d ? (
                     <EngraveBook3D faces={bookFaces} motifs={bookMotifs} motifPositions={bookMotifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} />
                   ) : product.engraveHeart3d ? (
-                    <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
+                    <EngraveHeart3D key={finishHeart} faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} />
                   ) : (
                     <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} />
                   )}
@@ -1591,7 +1596,7 @@ export default function ProductDetail({ product }) {
           ) : product.engraveBook3d ? (
             <EngraveBook3D faces={bookFaces} motifs={bookMotifs} motifPositions={bookMotifPositions} finish={bookFinish} fontKey={fieldValues[fontField?.key] || "playfair"} height={200} showHint={false} />
           ) : product.engraveHeart3d ? (
-            <EngraveHeart3D faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} height={200} showHint={false} />
+            <EngraveHeart3D key={finishHeart} faces={heartFaces} finish={finishHeart} fontKey={fieldValues[fontField?.key] || "playfair"} photo={heartPhoto} photoIndex={heartPhotoIndex} height={200} showHint={false} />
           ) : (
             <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} height={200} showHint={false} />
           )}
