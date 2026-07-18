@@ -170,6 +170,7 @@ export const products = [
     ],
     variants: [
       { id: "med-argent-texte", title: "Argent", price: 38.90 },
+      { id: "med-dore-texte", title: "Doré", price: 38.90 },
       { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 44.90 },
     ],
     descriptionHtml: `<p><strong>Un bijou élégant et intemporel à personnaliser.</strong></p>
@@ -185,7 +186,7 @@ export const products = [
 <ul>
 <li><strong>Chaîne :</strong> 50 cm</li>
 <li><strong>Matériau :</strong> Acier inoxydable hypoallergénique</li>
-<li><strong>Couleurs :</strong> Argent ou Bicolore (Or & Argent)</li>
+<li><strong>Couleurs :</strong> Argent, Doré ou Bicolore (Or & Argent)</li>
 <li>🎁 Livré dans une élégante boîte cadeau noire</li>
 </ul>
 <p><em>Option photo : choisissez une image nette, bien éclairée et contrastée pour un rendu optimal.</em></p>`,
