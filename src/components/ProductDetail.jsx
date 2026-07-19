@@ -1426,7 +1426,7 @@ export default function ProductDetail({ product }) {
                       key={o.id}
                       type="button"
                       onClick={() => setPkgSel([o.id])}
-                      style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: on || isPack ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: on ? "#fffaf0" : (isPack ? "linear-gradient(180deg,#fffaf0,#fff)" : "var(--paper)"), borderRadius: 12, padding: "11px 13px", boxShadow: on ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}
+                      style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: on ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: on ? "#fffaf0" : (isPack ? "linear-gradient(180deg,#fffaf0,#fff)" : "var(--paper)"), borderRadius: 12, padding: "11px 13px", boxShadow: on ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}
                     >
                       {o.photo ? <ZoomThumb photo={o.photo} label={clientName} size={40} /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
                       <span style={{ minWidth: 0 }}>
