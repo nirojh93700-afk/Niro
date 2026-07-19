@@ -18,6 +18,7 @@ export default function ProductReviews({ slug }) {
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const [err, setErr] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -30,8 +31,10 @@ export default function ProductReviews({ slug }) {
 
   async function submit(e) {
     e.preventDefault();
+    if (sending) return; // évite le double envoi (avis en double)
     setErr("");
     if (text.trim().length < 2) { setErr("Écris quelques mots."); return; }
+    setSending(true);
     try {
       const res = await fetch("/api/reviews", {
         method: "POST",
@@ -40,7 +43,7 @@ export default function ProductReviews({ slug }) {
       });
       if (!res.ok) throw new Error("Envoi impossible.");
       setSent(true);
-    } catch (e2) { setErr(e2.message); }
+    } catch (e2) { setErr(e2.message); } finally { setSending(false); }
   }
 
   return (
@@ -91,7 +94,9 @@ export default function ProductReviews({ slug }) {
             </div>
           )}
           {err && <p style={{ color: "#b4452f", fontSize: "0.9rem" }}>{err}</p>}
-          <button type="submit" className="btn btn-gold" style={{ marginTop: 8 }}>Publier mon avis</button>
+          <button type="submit" className="btn btn-gold" style={{ marginTop: 8 }} disabled={sending}>
+            {sending ? "Envoi…" : "Publier mon avis"}
+          </button>
         </form>
       )}
     </section>

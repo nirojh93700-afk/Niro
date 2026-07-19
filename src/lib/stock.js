@@ -583,22 +583,61 @@ export async function getRatingSummaries() {
   }
   return out;
 }
-export async function addReview(slug, review) {
+// Signature d'un avis pour repérer les doublons (même nom + même texte).
+function reviewKey(r) {
+  const norm = (s) => String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
+  return norm(r.name) + "|" + norm(r.text);
+}
+
+export async function addReview(slug, review, { approved = false } = {}) {
   const data = await getCatalogRaw();
   data.reviews = data.reviews || {};
   const list = data.reviews[slug] || [];
-  list.push({
+  // Date personnalisée (avis recopié depuis Instagram/WhatsApp…) sinon aujourd'hui.
+  const customDate = /^\d{4}-\d{2}-\d{2}/.test(String(review.date || "")) ? new Date(review.date).toISOString() : "";
+  const entry = {
     id: "r_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
     name: String(review.name || "").slice(0, 60) || "Cliente",
     rating: Math.min(5, Math.max(1, parseInt(review.rating, 10) || 5)),
     text: String(review.text || "").slice(0, 1000),
     photo: String(review.photo || "").slice(0, 600),
-    date: new Date().toISOString(),
-    approved: false,
-  });
+    date: customDate || new Date().toISOString(),
+    approved: approved === true,
+  };
+  // Anti-doublon : un avis identique déjà présent (double clic, double envoi) est ignoré.
+  if (list.some((r) => reviewKey(r) === reviewKey(entry))) return false;
+  list.push(entry);
   data.reviews[slug] = list.slice(-300);
   await persistCatalog(data);
   return true;
+}
+
+// Supprime les avis en double (même produit + même nom + même texte).
+// On garde un seul exemplaire — de préférence la version approuvée (publiée).
+// Renvoie le nombre d'avis retirés.
+export async function dedupeReviews() {
+  const data = await getCatalogRaw();
+  const all = data.reviews || {};
+  let removed = 0;
+  for (const slug of Object.keys(all)) {
+    const seen = new Map();
+    for (const r of all[slug] || []) {
+      const k = reviewKey(r);
+      const kept = seen.get(k);
+      if (!kept) {
+        seen.set(k, r);
+      } else {
+        if (!kept.approved && r.approved) seen.set(k, r); // on préfère l'exemplaire publié
+        removed++;
+      }
+    }
+    all[slug] = [...seen.values()];
+  }
+  if (removed) {
+    data.reviews = all;
+    await persistCatalog(data);
+  }
+  return removed;
 }
 export async function moderateReview(slug, id, action) {
   const data = await getCatalogRaw();
