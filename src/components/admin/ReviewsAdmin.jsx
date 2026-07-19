@@ -212,10 +212,8 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
 
   const ReviewCard = ({ r, isPending }) => (
     <div className="admin-block" style={isPending ? undefined : { opacity: 0.92 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
-        <strong>{r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span>
-          {r.date ? <span style={{ color: "var(--ink-soft)", fontWeight: 400, fontSize: "0.8rem", marginLeft: 6 }}>{r.date.slice(0, 10)}</span> : null}
-        </strong>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+        <strong>{r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span></strong>
         <ProductTag slug={r.slug} />
       </div>
       {editId === r.id ? (
