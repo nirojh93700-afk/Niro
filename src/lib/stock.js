@@ -571,12 +571,28 @@ export async function getReviews() {
   return data.reviews || {};
 }
 
+// Doublons d'affichage : même texte sous des prénoms différents → les clientes
+// ne voient qu'UN exemplaire de chaque texte (rien n'est supprimé de la base ;
+// l'admin voit toujours tout dans Gestion → Avis pour retoucher/supprimer).
+export function uniqueReviewTexts(list) {
+  const seen = new Set();
+  const out = [];
+  for (const r of list || []) {
+    const k = String(r.text || "").trim().toLowerCase().replace(/\s+/g, " ");
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(r);
+  }
+  return out;
+}
+
 // Résumé des avis approuvés par produit : { slug: { avg, count } }.
+// (Compté après filtrage des doublons, pour rester cohérent avec l'affichage.)
 export async function getRatingSummaries() {
   const all = await getReviews();
   const out = {};
   for (const slug of Object.keys(all)) {
-    const ok = (all[slug] || []).filter((r) => r.approved);
+    const ok = uniqueReviewTexts((all[slug] || []).filter((r) => r.approved));
     if (ok.length) {
       out[slug] = { avg: Math.round((ok.reduce((s, r) => s + (r.rating || 0), 0) / ok.length) * 10) / 10, count: ok.length };
     }

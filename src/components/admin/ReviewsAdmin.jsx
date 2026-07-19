@@ -179,10 +179,28 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
   const pending = reviews.filter((r) => !r.approved);
   const approved = reviews.filter((r) => r.approved);
 
+  // Repère les textes en double (même texte sous plusieurs prénoms) : sur le
+  // site, un seul exemplaire est montré aux clientes ; ici on les signale pour
+  // pouvoir les retoucher avec ✏️ Modifier.
+  const textCount = {};
+  reviews.forEach((r) => {
+    const k = String(r.text || "").trim().toLowerCase().replace(/\s+/g, " ");
+    textCount[k] = (textCount[k] || 0) + 1;
+  });
+  const isDup = (r) => textCount[String(r.text || "").trim().toLowerCase().replace(/\s+/g, " ")] > 1;
+  const nbDups = reviews.filter(isDup).length;
+
   const ReviewCard = ({ r, isPending }) => (
     <div className="admin-block" style={isPending ? undefined : { opacity: 0.9 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-        <strong>{r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span></strong>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
+        <strong>
+          {r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span>
+          {isDup(r) && (
+            <span style={{ marginLeft: 8, fontSize: "0.72rem", fontWeight: 600, color: "#8a5a00", background: "#fdf1d7", border: "1px solid #ecd9a8", borderRadius: 20, padding: "2px 9px", verticalAlign: "middle" }}>
+              doublon — un seul visible sur le site
+            </span>
+          )}
+        </strong>
         <ProductTag slug={r.slug} />
       </div>
       {editId === r.id ? (
@@ -212,6 +230,13 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
         Les avis déposés par les clientes apparaissent ici. Ils ne sont visibles sur le site qu'après ta validation.
         Le bouton ✏️ Modifier permet de retoucher un avis (par exemple reformuler un doublon).
       </p>
+      {nbDups > 0 && (
+        <div className="notice" style={{ marginBottom: 12 }}>
+          ⚠️ {nbDups} avis partagent un texte identique (pastille « doublon »). Pas d'inquiétude :
+          les clientes n'en voient qu'UN seul exemplaire sur le site. Tu peux les reformuler avec ✏️ Modifier
+          — dès que le texte devient différent, l'avis redevient visible.
+        </div>
+      )}
 
       <AddReviewForm adminKey={adminKey} products={products} onAdded={load} />
 
