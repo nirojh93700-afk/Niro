@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getReviews, uniqueReviewTexts } from "@/lib/stock";
+import { getReviews } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -28,16 +28,13 @@ export default async function AvisPage() {
   for (const p of catalog) nameOf[p.slug] = p.name || p.title || p.slug;
 
   // Tous les avis approuvés, avec le nom du produit, les plus récents d'abord.
-  let all = [];
+  const all = [];
   for (const [slug, list] of Object.entries(reviewsBySlug)) {
     for (const r of list || []) {
       if (r.approved) all.push({ ...r, slug, product: nameOf[slug] || null });
     }
   }
   all.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-  // Doublons masqués (même texte sous plusieurs prénoms) — rien n'est supprimé
-  // de la base, l'admin voit toujours tout dans Gestion → Avis.
-  all = uniqueReviewTexts(all);
 
   const count = all.length;
   const average = count ? Math.round((all.reduce((s, r) => s + (r.rating || 0), 0) / count) * 10) / 10 : 0;

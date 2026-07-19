@@ -1,4 +1,4 @@
-import { getReviews, addReview, uniqueReviewTexts } from "@/lib/stock";
+import { getReviews, addReview } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -7,8 +7,7 @@ export async function GET(req) {
   const slug = new URL(req.url).searchParams.get("slug");
   if (!slug) return Response.json({ reviews: [], average: 0, count: 0 });
   const all = await getReviews();
-  // Doublons masqués à l'affichage (même texte sous plusieurs prénoms).
-  const approved = uniqueReviewTexts((all[slug] || []).filter((r) => r.approved));
+  const approved = (all[slug] || []).filter((r) => r.approved);
   const count = approved.length;
   const average = count ? Math.round((approved.reduce((s, r) => s + r.rating, 0) / count) * 10) / 10 : 0;
   return Response.json({
