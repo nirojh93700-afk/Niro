@@ -38,7 +38,6 @@ import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
-import FicheFreeShipping from "./FicheFreeShipping";
 
 // Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
@@ -1456,8 +1455,6 @@ export default function ProductDetail({ product }) {
               <span className="val">{formatEuro(unitPrice * quantity)}</span>
             </div>
           )}
-          {/* Barre « livraison offerte » (bijoux) — enlève le choc des frais de port */}
-          {!soldOut && <FicheFreeShipping price={unitPrice * quantity} category={product.category} />}
           {/* Paiement en plusieurs fois — juste après le total, avant le bouton */}
           <p className="pd-nfois">
             💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="pd-nfois-link" />
