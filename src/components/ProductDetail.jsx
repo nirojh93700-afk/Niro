@@ -1113,7 +1113,7 @@ export default function ProductDetail({ product }) {
                     {vOut && <span className="vs-out">Épuisé</span>}
                     {v.image && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={v.image} alt="" />
+                      <img src={v.image} alt={`${product.name} — ${vName}`} />
                     )}
                     <span className="vs-title">{vName}</span>
                     {vSub && <span className="vs-sub">{vSub}</span>}
