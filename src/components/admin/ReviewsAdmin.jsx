@@ -66,6 +66,7 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState("");
+  const [filterSlug, setFilterSlug] = useState(""); // "" = tous les produits
   // Nom lisible du produit à partir de son identifiant (repli : l'identifiant).
   const nameBySlug = {};
   (products || []).forEach((p) => { if (p && p.slug) nameBySlug[p.slug] = p.name || p.slug; });
@@ -97,8 +98,15 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
 
   if (loading) return <p style={{ color: "var(--ink-soft)" }}>Chargement…</p>;
 
-  const pending = reviews.filter((r) => !r.approved);
-  const approved = reviews.filter((r) => r.approved);
+  // Liste des produits qui ont des avis (avec compteur), pour le filtre.
+  const countBySlug = {};
+  reviews.forEach((r) => { countBySlug[r.slug] = (countBySlug[r.slug] || 0) + 1; });
+  const slugsWithReviews = Object.keys(countBySlug)
+    .sort((a, b) => (nameBySlug[a] || a).localeCompare(nameBySlug[b] || b, "fr"));
+
+  const shown = filterSlug ? reviews.filter((r) => r.slug === filterSlug) : reviews;
+  const pending = shown.filter((r) => !r.approved);
+  const approved = shown.filter((r) => r.approved);
 
   const ReviewCard = ({ r, isPending }) => (
     <div className="admin-block" style={isPending ? undefined : { opacity: 0.9 }}>
@@ -133,6 +141,24 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
         Les avis déposés par les clientes apparaissent ici. Ils ne sont visibles sur le site qu'après ta validation.
         Le bouton ✏️ Modifier permet de retoucher un avis (par exemple reformuler un doublon).
       </p>
+
+      {/* Filtre par produit */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+        <label className="admin-field" style={{ flex: "0 1 340px", minWidth: 0 }}>
+          Trier par produit
+          <select value={filterSlug} onChange={(e) => setFilterSlug(e.target.value)}>
+            <option value="">Tous les produits ({reviews.length} avis)</option>
+            {slugsWithReviews.map((s) => (
+              <option key={s} value={s}>{nameBySlug[s] || s} ({countBySlug[s]})</option>
+            ))}
+          </select>
+        </label>
+        {filterSlug && (
+          <button className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={() => setFilterSlug("")}>
+            ✕ Tout afficher
+          </button>
+        )}
+      </div>
 
       <h3>À valider ({pending.length})</h3>
       {pending.length === 0 && <p style={{ color: "var(--ink-soft)" }}>Aucun avis en attente.</p>}
