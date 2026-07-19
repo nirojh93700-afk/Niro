@@ -1,0 +1,114 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<title>Maquette — Livraison offerte + Avis clients</title>
+<style>
+  :root{--gold:#c2a14e;--gold-d:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#6b6252;--line:#e7ddcd;--green:#3f7d4f}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:900px;background:var(--cream);color:var(--ink);font-family:'Helvetica Neue',Arial,sans-serif;padding:0 0 40px}
+  .flag{background:#241a0c;color:#f3e8d3;font-size:12px;letter-spacing:2px;text-align:center;padding:8px;text-transform:uppercase}
+  .wrap{max-width:820px;margin:0 auto;padding:26px 24px}
+  h1{font-family:Georgia,serif;font-size:30px;font-weight:700;margin:2px 0 6px}
+  .crumb{font-size:12px;color:var(--ink-soft);letter-spacing:1px;text-transform:uppercase}
+  .stars{color:var(--gold);font-size:15px;letter-spacing:2px}
+  .stars span{color:var(--ink-soft);font-size:13px;margin-left:6px}
+  .price{font-family:Georgia,serif;font-size:30px;font-weight:700;margin:12px 0 4px}
+  .price .old{font-size:17px;color:var(--ink-soft);text-decoration:line-through;font-weight:400;margin-left:8px}
+
+  /* --- 1) BANDEAU LIVRAISON OFFERTE --- */
+  .ship{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:14px 16px;margin:16px 0}
+  .ship .top{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:600;margin-bottom:10px}
+  .ship .top .em{font-size:18px}
+  .ship .top b{color:var(--gold-d)}
+  .bar{height:10px;border-radius:20px;background:#eee4cf;overflow:hidden}
+  .bar .fill{height:100%;width:70%;border-radius:20px;background:linear-gradient(90deg,var(--gold-l),var(--gold-d))}
+  .ship .lvls{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-soft);margin-top:7px}
+
+  .add{height:52px;background:linear-gradient(180deg,#cdaa57,#a98935);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.5px;box-shadow:0 8px 20px rgba(169,137,53,.3);margin-top:6px}
+  .reassure{display:flex;gap:18px;justify-content:center;margin-top:12px;font-size:12px;color:var(--ink-soft)}
+  .reassure span{display:flex;align-items:center;gap:5px}
+
+  /* --- 2) BLOC AVIS --- */
+  .reviews{margin-top:34px;border-top:1px solid var(--line);padding-top:26px}
+  .rev-head{display:flex;align-items:center;gap:22px;margin-bottom:20px;flex-wrap:wrap}
+  .rev-score{text-align:center}
+  .rev-score .n{font-family:Georgia,serif;font-size:52px;font-weight:700;line-height:1;color:var(--ink)}
+  .rev-score .s{color:var(--gold);font-size:18px;letter-spacing:2px}
+  .rev-score .c{font-size:12px;color:var(--ink-soft);margin-top:3px}
+  .rev-bars{flex:1;min-width:240px}
+  .rev-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-soft);margin:3px 0}
+  .rev-bar .t{width:42px}
+  .rev-bar .b{flex:1;height:7px;background:#eee4cf;border-radius:20px;overflow:hidden}
+  .rev-bar .b i{display:block;height:100%;background:var(--gold)}
+  .rev-title{font-family:Georgia,serif;font-size:20px;font-weight:700;margin-bottom:14px}
+  .rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .rev-card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:15px 16px}
+  .rev-card .rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+  .rev-card .who{display:flex;align-items:center;gap:9px}
+  .rev-card .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,var(--gold-l),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+  .rev-card .name{font-size:13.5px;font-weight:700}
+  .rev-card .vf{font-size:10.5px;color:var(--green);font-weight:600}
+  .rev-card .st{color:var(--gold);font-size:12px;letter-spacing:1px}
+  .rev-card p{font-size:13.5px;line-height:1.5;color:#453e33;margin-top:6px}
+  .rev-note{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:14px;font-style:italic}
+</style></head>
+<body>
+  <div class="flag">Maquette — livraison offerte + avis (aperçu, pas encore en ligne)</div>
+  <div class="wrap">
+    <div class="crumb">Boutique / Bijoux</div>
+    <h1>Collier Médaillon Cœur ouvrable</h1>
+    <div class="stars">★★★★★ <span>4,8 / 5 · 23 avis</span></div>
+    <div class="price">28,71 €<span class="old">31,90 €</span></div>
+
+    <!-- 1) LIVRAISON OFFERTE -->
+    <div class="ship">
+      <div class="top"><span class="em">🚚</span><span>Plus que <b>10,29 €</b> et votre <b>livraison est offerte</b> !</span></div>
+      <div class="bar"><div class="fill"></div></div>
+      <div class="lvls"><span>0 €</span><span>Livraison offerte dès 39 €</span></div>
+    </div>
+
+    <div class="add">Ajouter au panier</div>
+    <div class="reassure">
+      <span>🔒 Paiement sécurisé</span>
+      <span>✦ Gravé en France</span>
+      <span>↩ Fait à la commande</span>
+    </div>
+
+    <!-- 2) AVIS CLIENTS -->
+    <div class="reviews">
+      <div class="rev-head">
+        <div class="rev-score">
+          <div class="n">4,8</div>
+          <div class="s">★★★★★</div>
+          <div class="c">23 avis</div>
+        </div>
+        <div class="rev-bars">
+          <div class="rev-bar"><span class="t">5 ★</span><span class="b"><i style="width:88%"></i></span></div>
+          <div class="rev-bar"><span class="t">4 ★</span><span class="b"><i style="width:9%"></i></span></div>
+          <div class="rev-bar"><span class="t">3 ★</span><span class="b"><i style="width:3%"></i></span></div>
+          <div class="rev-bar"><span class="t">2 ★</span><span class="b"><i style="width:0%"></i></span></div>
+          <div class="rev-bar"><span class="t">1 ★</span><span class="b"><i style="width:0%"></i></span></div>
+        </div>
+      </div>
+
+      <div class="rev-title">Ce qu'en disent les clientes</div>
+      <div class="rev-grid">
+        <div class="rev-card">
+          <div class="rc-top"><div class="who"><span class="av">S</span><div><div class="name">Sophie L.</div><div class="vf">✔ Achat vérifié</div></div></div><div class="st">★★★★★</div></div>
+          <p>Magnifique médaillon, la gravure est nette et fine. Emballage soigné, livré rapidement. Ma maman a adoré !</p>
+        </div>
+        <div class="rev-card">
+          <div class="rc-top"><div class="who"><span class="av">M</span><div><div class="name">Marie D.</div><div class="vf">✔ Achat vérifié</div></div></div><div class="st">★★★★★</div></div>
+          <p>Très beau cadeau personnalisé, de qualité. Le rendu est exactement comme sur les photos. Je recommande.</p>
+        </div>
+        <div class="rev-card">
+          <div class="rc-top"><div class="who"><span class="av">C</span><div><div class="name">Camille R.</div><div class="vf">✔ Achat vérifié</div></div></div><div class="st">★★★★☆</div></div>
+          <p>Joli et bien fini. Un peu d'attente car fait main, mais ça vaut le coup pour un bijou unique.</p>
+        </div>
+        <div class="rev-card">
+          <div class="rc-top"><div class="who"><span class="av">J</span><div><div class="name">Julie P.</div><div class="vf">✔ Achat vérifié</div></div></div><div class="st">★★★★★</div></div>
+          <p>Service au top, réponse rapide à mes questions. Le collier est encore plus beau en vrai. Merci !</p>
+        </div>
+      </div>
+      <div class="rev-note">Les avis viennent de vraies clientes (recopiés de la boutique Etsy).</div>
+    </div>
+  </div>
+</body></html>
