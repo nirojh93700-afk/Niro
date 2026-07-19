@@ -1,4 +1,4 @@
-import { isAdmin, getReviews, moderateReview, addReview, dedupeReviews } from "@/lib/stock";
+import { isAdmin, getReviews, moderateReview, addReview, updateReview } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -14,18 +14,12 @@ export async function GET(req) {
   return Response.json({ reviews: flat });
 }
 
-// Approuver / supprimer / ajouter un avis, ou nettoyer les doublons.
+// Approuver / supprimer / modifier / ajouter un avis.
 export async function POST(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const { slug, id, action } = body || {};
-
-  // Nettoyage : retire les avis en double (même produit + nom + texte).
-  if (action === "dedupe") {
-    const removed = await dedupeReviews();
-    return Response.json({ ok: true, removed });
-  }
 
   // Ajout manuel par la gérante (avis reçu ailleurs : Instagram, WhatsApp, e-mail…)
   // → publié directement (pas besoin de re-valider son propre ajout).
@@ -40,6 +34,14 @@ export async function POST(req) {
       { approved: true }
     );
     if (!added) return Response.json({ error: "Cet avis existe déjà (doublon)." }, { status: 409 });
+    return Response.json({ ok: true });
+  }
+
+  // Modification d'un avis existant (retoucher un doublon, corriger une coquille).
+  if (action === "edit") {
+    if (!slug || !id) return Response.json({ error: "Paramètres invalides." }, { status: 400 });
+    const ok = await updateReview(slug, id, { name: body.name, rating: body.rating, text: body.text, date: body.date });
+    if (!ok) return Response.json({ error: "Avis introuvable." }, { status: 404 });
     return Response.json({ ok: true });
   }
 

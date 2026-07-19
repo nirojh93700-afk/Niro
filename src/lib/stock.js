@@ -612,32 +612,23 @@ export async function addReview(slug, review, { approved = false } = {}) {
   return true;
 }
 
-// Supprime les avis en double (même produit + même nom + même texte).
-// On garde un seul exemplaire — de préférence la version approuvée (publiée).
-// Renvoie le nombre d'avis retirés.
-export async function dedupeReviews() {
+// Modifie un avis existant (prénom, note, texte, date) — pour retoucher un
+// doublon ou corriger une coquille sans le supprimer.
+export async function updateReview(slug, id, patch) {
   const data = await getCatalogRaw();
-  const all = data.reviews || {};
-  let removed = 0;
-  for (const slug of Object.keys(all)) {
-    const seen = new Map();
-    for (const r of all[slug] || []) {
-      const k = reviewKey(r);
-      const kept = seen.get(k);
-      if (!kept) {
-        seen.set(k, r);
-      } else {
-        if (!kept.approved && r.approved) seen.set(k, r); // on préfère l'exemplaire publié
-        removed++;
-      }
-    }
-    all[slug] = [...seen.values()];
-  }
-  if (removed) {
-    data.reviews = all;
-    await persistCatalog(data);
-  }
-  return removed;
+  data.reviews = data.reviews || {};
+  const list = data.reviews[slug] || [];
+  const idx = list.findIndex((r) => r.id === id);
+  if (idx === -1) return false;
+  const next = { ...list[idx] };
+  if (typeof patch.name === "string" && patch.name.trim()) next.name = patch.name.trim().slice(0, 60);
+  if (patch.rating !== undefined) next.rating = Math.min(5, Math.max(1, parseInt(patch.rating, 10) || next.rating));
+  if (typeof patch.text === "string" && patch.text.trim().length >= 2) next.text = patch.text.slice(0, 1000);
+  if (/^\d{4}-\d{2}-\d{2}/.test(String(patch.date || ""))) next.date = new Date(patch.date).toISOString();
+  list[idx] = next;
+  data.reviews[slug] = list;
+  await persistCatalog(data);
+  return true;
 }
 export async function moderateReview(slug, id, action) {
   const data = await getCatalogRaw();
