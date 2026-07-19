@@ -38,6 +38,7 @@ import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
+import TrustSection from "./TrustSection";
 
 // Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
@@ -1557,6 +1558,8 @@ export default function ProductDetail({ product }) {
           )}
         </div>
       </div>
+
+      <TrustSection />
 
       {(any3d || product.crystal3d) && !isWide && showMini && (photoSrc || previewLines.length > 0 || !product.crystal3d) && (
         <div className={`engrave3d-mini${product.crystal3d ? (crystalZone ? " crystal crystal-real" : " crystal") : ""}`}>

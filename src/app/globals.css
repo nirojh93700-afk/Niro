@@ -2790,3 +2790,35 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .pd-nfois{font-size:.82rem;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:2px 0 16px}
 .pd-nfois strong{color:var(--ink)}
 .pd-nfois-link{color:var(--gold-dark);text-decoration:underline;white-space:nowrap;font-weight:600}
+
+/* ===== Section confiance (réassurance client, sans avis) — TrustSection.jsx ===== */
+.confiance{max-width:var(--max);margin:34px auto 0;padding:26px 16px 6px;border-top:1px solid var(--line)}
+.cf-eyebrow{text-align:center;font-size:.72rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dark);font-weight:700;margin:0}
+.cf-title{font-family:var(--font-display),Georgia,serif;font-size:1.7rem;font-weight:700;text-align:center;margin:6px 0 4px}
+.cf-sub{text-align:center;color:var(--ink-soft);font-size:.95rem;margin:0 0 22px}
+.cf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cf-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 15px;text-align:center;box-shadow:0 8px 22px rgba(43,38,32,.05)}
+.cf-ic{font-size:1.6rem}
+.cf-t{font-family:var(--font-display),Georgia,serif;font-size:1rem;font-weight:700;margin:7px 0 3px}
+.cf-d{font-size:.8rem;color:var(--ink-soft);line-height:1.45}
+.cf-real{margin-top:26px}
+.cf-real-h{font-family:var(--font-display),Georgia,serif;font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:12px}
+.cf-shots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cf-shot{aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.cf-shot img{width:100%;height:100%;object-fit:cover;display:block}
+.cf-insta{margin-top:24px;display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#fff7ea,#fdeef3);border:1px solid var(--line);border-radius:16px;padding:16px 20px;text-decoration:none;color:inherit}
+.cf-ig{width:52px;height:52px;flex:0 0 52px;border-radius:14px;background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.cf-ig-tx{flex:1}
+.cf-ig-tx b{font-family:var(--font-display),Georgia,serif;font-size:1.05rem}
+.cf-ig-tx span{display:block;font-size:.82rem;color:var(--ink-soft);margin-top:2px}
+.cf-ig-btn{background:var(--ink);color:#fff;border-radius:30px;padding:10px 18px;font-size:.84rem;font-weight:700;white-space:nowrap}
+.cf-pay{margin-top:22px;text-align:center}
+.cf-pay-lab{font-size:.72rem;letter-spacing:1px;color:var(--ink-soft);text-transform:uppercase;margin-bottom:9px}
+.cf-footline{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;text-align:center;font-size:.8rem;color:var(--ink-soft);margin-top:18px}
+.cf-footline span{white-space:nowrap}
+@media(max-width:760px){
+  .cf-grid{grid-template-columns:1fr 1fr}
+  .cf-shots{grid-template-columns:1fr 1fr}
+  .cf-insta{flex-wrap:wrap}
+  .cf-insta .cf-ig-btn{width:100%;text-align:center}
+}
