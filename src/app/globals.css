@@ -2242,26 +2242,38 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 /* ---------- Filtres boutique ---------- */
 .filters {
   display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
   margin-bottom: 36px;
 }
+.filters::-webkit-scrollbar { display: none; }
+/* Sur grand écran, les catégories tiennent : on recentre et on autorise le retour à la ligne. */
+@media (min-width: 900px) {
+  .filters { flex-wrap: wrap; justify-content: center; overflow: visible; }
+}
 .filter-chip {
+  flex: 0 0 auto;
+  white-space: nowrap;
   padding: 9px 18px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--paper);
   cursor: pointer;
   font-size: 0.88rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--ink-soft);
   transition: all 0.2s;
 }
 .filter-chip.active {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+  background: linear-gradient(180deg, #cdaa57, #a98935);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 14px rgba(169, 137, 53, 0.28);
 }
 .filters.subfilters {
   margin-top: -20px;
@@ -2476,10 +2488,14 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 }
 .facet-chips {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
   gap: 8px;
   flex: 1;
+  min-width: 0;
 }
+.facet-chips::-webkit-scrollbar { display: none; }
 .facet-chips .filter-chip {
   font-size: 0.82rem;
   padding: 7px 16px;
