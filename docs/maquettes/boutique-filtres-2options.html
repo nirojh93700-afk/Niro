@@ -1,0 +1,76 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Filtres boutique, 2 options</title>
+<style>
+  :root{--gold:#c2a14e;--gold-d:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#efe7d7;color:var(--ink);font-family:'Helvetica Neue',Arial,sans-serif;width:460px;padding:0 0 30px}
+  .flag{background:#241a0c;color:#f3e8d3;font-size:11px;letter-spacing:2px;text-align:center;padding:8px;text-transform:uppercase}
+  .opt-label{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--gold-d);padding:20px 16px 8px;display:flex;align-items:center;gap:8px}
+  .opt-label .tag{font-family:Arial;font-size:10px;letter-spacing:1px;background:var(--gold);color:#1a1206;border-radius:20px;padding:3px 9px;text-transform:uppercase}
+  .panel{background:var(--cream);margin:0 12px;border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(43,38,32,.08)}
+
+  /* commun : recherche */
+  .search{display:flex;align-items:center;background:#fff;border:1px solid var(--line);border-radius:30px;padding:4px 4px 4px 15px;margin:14px}
+  .search input{flex:1;border:0;outline:0;font-size:14px;background:none;color:var(--ink-soft)}
+  .search .go{width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#cdaa57,#a98935);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+
+  /* ---------- OPTION A : pills + onglets soulignés ---------- */
+  .a-cats{display:flex;gap:8px;overflow-x:auto;padding:0 14px 4px;scrollbar-width:none}
+  .a-cats::-webkit-scrollbar{display:none}
+  .a-cat{flex:0 0 auto;padding:9px 16px;border-radius:24px;border:1px solid var(--line);background:var(--paper);font-size:13.5px;font-weight:600;color:var(--ink-soft);white-space:nowrap}
+  .a-cat.on{background:linear-gradient(180deg,#cdaa57,#a98935);border-color:transparent;color:#fff}
+  .a-subs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 12px;margin-top:10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fffdf8}
+  .a-subs::-webkit-scrollbar{display:none}
+  .a-sub{flex:0 0 auto;padding:11px 12px;font-size:13px;font-weight:600;color:var(--ink-soft);white-space:nowrap;border-bottom:2.5px solid transparent}
+  .a-sub.on{color:var(--gold-d);border-bottom-color:var(--gold)}
+
+  /* ---------- OPTION B : menu texte souligné + chips ---------- */
+  .b-cats{display:flex;gap:20px;overflow-x:auto;scrollbar-width:none;padding:2px 16px 0;border-bottom:1px solid var(--line)}
+  .b-cats::-webkit-scrollbar{display:none}
+  .b-cat{flex:0 0 auto;padding:10px 0 12px;font-size:14px;font-weight:600;color:var(--ink-soft);white-space:nowrap;border-bottom:2.5px solid transparent;font-family:Georgia,serif}
+  .b-cat.on{color:var(--ink);border-bottom-color:var(--gold)}
+  .b-subs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:12px 16px 14px}
+  .b-subs::-webkit-scrollbar{display:none}
+  .b-sub{flex:0 0 auto;padding:7px 14px;border-radius:20px;background:#fff;border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--ink-soft);white-space:nowrap}
+  .b-sub.on{background:#f6ead0;border-color:var(--gold-l);color:var(--gold-d)}
+
+  .count{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 16px;font-size:12.5px;color:var(--ink-soft)}
+  .count b{color:var(--ink)}
+  .sort{border:1px solid var(--line);background:#fff;border-radius:18px;padding:6px 12px;font-size:12px}
+</style></head>
+<body>
+  <div class="flag">Maquette — 2 options de filtres (pas encore en ligne)</div>
+
+  <!-- OPTION A -->
+  <div class="opt-label"><span class="tag">Option A</span> Pills + onglets soulignés</div>
+  <div class="panel">
+    <div class="search"><input placeholder="Rechercher une création…"><span class="go">🔍</span></div>
+    <div class="a-cats">
+      <span class="a-cat">Tout</span><span class="a-cat">Bijoux</span><span class="a-cat">Cristal 3D</span>
+      <span class="a-cat">Naissance</span><span class="a-cat">Verres</span><span class="a-cat">Mariage</span>
+      <span class="a-cat on">Déco &amp; Maison</span><span class="a-cat">Cadeaux</span>
+    </div>
+    <div class="a-subs">
+      <span class="a-sub on">Tout</span><span class="a-sub">Plaques</span><span class="a-sub">Couverts</span>
+      <span class="a-sub">Lampes</span><span class="a-sub">Bougeoir</span><span class="a-sub">Porte-stylos</span>
+    </div>
+    <div class="count"><span><b>12 créations</b> · Déco &amp; Maison</span><span class="sort">Trier : Nouveautés ▾</span></div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="opt-label"><span class="tag">Option B</span> Menu élégant + chips</div>
+  <div class="panel">
+    <div class="search"><input placeholder="Rechercher une création…"><span class="go">🔍</span></div>
+    <div class="b-cats">
+      <span class="b-cat">Tout</span><span class="b-cat">Bijoux</span><span class="b-cat">Cristal 3D</span>
+      <span class="b-cat">Naissance</span><span class="b-cat">Verres</span><span class="b-cat">Mariage</span>
+      <span class="b-cat on">Déco &amp; Maison</span><span class="b-cat">Cadeaux</span>
+    </div>
+    <div class="b-subs">
+      <span class="b-sub on">Tout</span><span class="b-sub">Plaques</span><span class="b-sub">Couverts</span>
+      <span class="b-sub">Lampes</span><span class="b-sub">Bougeoir</span><span class="b-sub">Porte-stylos</span>
+    </div>
+    <div class="count"><span><b>12 créations</b> · Déco &amp; Maison</span><span class="sort">Trier : Nouveautés ▾</span></div>
+  </div>
+</body></html>
