@@ -81,7 +81,6 @@ export default function Header({ categories }) {
           <Link key={c.slug} href={c.slug === "naissance" ? "/naissance" : `/boutique?cat=${c.slug}`}>{c.short}</Link>
         ))}
         <Link href="/cristaux" style={{ color: "#a5822f", fontWeight: 700 }}>💎 Cristal Photo 3D</Link>
-        <Link href="/coupe-du-monde" style={{ color: "#1c3f8a", fontWeight: 700 }}>🏆 Coupe du Monde</Link>
         <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
         <Link href="/a-propos">À propos</Link>
         <Link href="/contact">Contact</Link>
