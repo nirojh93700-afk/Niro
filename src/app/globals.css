@@ -2275,9 +2275,18 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   border-color: transparent;
   box-shadow: 0 6px 14px rgba(169, 137, 53, 0.28);
 }
+/* Sous-catégories = onglets soulignés (comme la maquette Option A), pas des pastilles. */
 .filters.subfilters {
-  margin-top: -20px;
-  margin-bottom: 36px;
+  gap: 2px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: flex-start;
+  margin-top: -14px;
+  margin-bottom: 34px;
+  padding: 0 2px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #fffdf8;
 }
 
 /* ---------- Back-office : barre latérale (style pro) ---------- */
@@ -2498,13 +2507,19 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .facet-chips::-webkit-scrollbar { display: none; }
 .facet-chips .filter-chip {
   font-size: 0.82rem;
-  padding: 7px 16px;
-  background: var(--paper);
+  padding: 8px 10px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 2.5px solid transparent;
+  box-shadow: none;
 }
 .facet-chips .filter-chip.active {
-  background: var(--gold-dark);
-  border-color: var(--gold-dark);
-  color: #fff;
+  background: none;
+  color: var(--gold-dark);
+  border-color: transparent;
+  border-bottom-color: var(--gold);
+  box-shadow: none;
 }
 @media (max-width: 600px) {
   .facet-bar {
@@ -2524,14 +2539,21 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   }
 }
 .filters.subfilters .filter-chip {
-  font-size: 0.8rem;
-  padding: 7px 15px;
-  background: var(--cream);
+  font-size: 0.82rem;
+  padding: 11px 13px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 2.5px solid transparent;
+  box-shadow: none;
+  color: var(--ink-soft);
 }
 .filters.subfilters .filter-chip.active {
-  background: var(--gold-dark);
-  border-color: var(--gold-dark);
-  color: #fff;
+  background: none;
+  color: var(--gold-dark);
+  border-color: transparent;
+  border-bottom-color: var(--gold);
+  box-shadow: none;
 }
 
 /* ---------- Responsive ---------- */
