@@ -1739,10 +1739,10 @@ export const products = [
     cardImage: "/produits/porte-stylo-coq-1.jpg",
     subcategory: "porte-stylos",
     category: "deco",
-    type: "Coupe du Monde 2026",
-    tagline: "Le porte-stylo en bois aux couleurs des Bleus — coq gaulois, spécial Coupe du Monde 2026.",
+    type: "Porte-stylo bois",
+    tagline: "Le porte-stylo en bois aux couleurs des Bleus — coq gaulois, pour les supporters.",
     personalizable: false,
-    title: "Porte-stylo France en bois — coq gaulois, Coupe du Monde 2026",
+    title: "Porte-stylo France en bois — coq gaulois, aux couleurs des Bleus",
     images: [
       "/produits/porte-stylo-coq-1.jpg",
       "/produits/porte-stylo-coq-2.jpg",
@@ -1751,11 +1751,11 @@ export const products = [
     variants: [
       { id: "porte-stylo-coq-standard", title: "Porte-stylo France", price: 14.90 },
     ],
-    descriptionHtml: `<p><strong>Supportez les Bleus avec style.</strong> Ce porte-stylo en bois, découpé au laser, célèbre la <strong>Coupe du Monde 2026</strong> aux couleurs de la France, avec son fier coq gaulois.</p>
+    descriptionHtml: `<p><strong>Supportez les Bleus avec style.</strong> Ce porte-stylo en bois, découpé au laser, aux couleurs de la France, avec son fier coq gaulois.</p>
 <p>Posé sur un bureau, il tient fièrement votre stylo (non inclus). Le cadeau parfait pour tous les supporters.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Motif :</strong> coq gaulois + « FRANCE » + bandeau Coupe du Monde 2026</li>
+<li><strong>Motif :</strong> coq gaulois + « FRANCE »</li>
 <li><strong>Matière :</strong> bois découpé au laser, finition soignée</li>
 <li>Découpé et fini <strong>à la main dans notre atelier français</strong></li>
 <li>Livré à plat (montage simple, quelques secondes)</li>
@@ -1773,10 +1773,10 @@ export const products = [
     cardImage: "/produits/porte-stylo-portugal-1.jpg",
     subcategory: "porte-stylos",
     category: "deco",
-    type: "Coupe du Monde 2026",
-    tagline: "Le porte-stylo en bois aux couleurs du Portugal — « A paixão que nos une », spécial Coupe du Monde 2026.",
+    type: "Porte-stylo bois",
+    tagline: "Le porte-stylo en bois aux couleurs du Portugal — « A paixão que nos une ».",
     personalizable: false,
-    title: "Porte-stylo Portugal en bois — Coupe du Monde 2026",
+    title: "Porte-stylo Portugal en bois — aux couleurs du Portugal",
     images: [
       "/produits/porte-stylo-portugal-1.jpg",
       "/produits/porte-stylo-portugal-2.jpg",
@@ -1784,11 +1784,11 @@ export const products = [
     variants: [
       { id: "porte-stylo-portugal-standard", title: "Porte-stylo Portugal", price: 14.90 },
     ],
-    descriptionHtml: `<p><strong>Força Portugal !</strong> Ce porte-stylo en bois, découpé au laser, célèbre la <strong>Coupe du Monde 2026</strong> aux couleurs du Portugal — « A paixão que nos une ».</p>
+    descriptionHtml: `<p><strong>Força Portugal !</strong> Ce porte-stylo en bois, découpé au laser, aux couleurs du Portugal — « A paixão que nos une ».</p>
 <p>Posé sur un bureau, il tient fièrement votre stylo (non inclus). Le cadeau parfait pour tous les supporters lusitaniens.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Motif :</strong> blason + « PORTUGAL » + bandeau Coupe du Monde 2026</li>
+<li><strong>Motif :</strong> blason + « PORTUGAL »</li>
 <li><strong>Matière :</strong> bois découpé au laser, finition soignée</li>
 <li>Découpé et fini <strong>à la main dans notre atelier français</strong></li>
 <li>Livré à plat (montage simple, quelques secondes)</li>
@@ -1806,10 +1806,10 @@ export const products = [
     cardImage: "/produits/porte-stylo-argentine-1.jpg",
     subcategory: "porte-stylos",
     category: "deco",
-    type: "Coupe du Monde 2026",
-    tagline: "Le porte-stylo en bois aux couleurs de l'Argentine — « Pasión por el fútbol », spécial Coupe du Monde 2026.",
+    type: "Porte-stylo bois",
+    tagline: "Le porte-stylo en bois aux couleurs de l'Argentine — « Pasión por el fútbol ».",
     personalizable: false,
-    title: "Porte-stylo Argentine en bois — Coupe du Monde 2026",
+    title: "Porte-stylo Argentine en bois — aux couleurs de l'Albiceleste",
     images: [
       "/produits/porte-stylo-argentine-1.jpg",
       "/produits/porte-stylo-argentine-2.jpg",
@@ -1817,11 +1817,11 @@ export const products = [
     variants: [
       { id: "porte-stylo-argentine-standard", title: "Porte-stylo Argentine", price: 14.90 },
     ],
-    descriptionHtml: `<p><strong>Vamos Argentina !</strong> Ce porte-stylo en bois, découpé au laser, célèbre la <strong>Coupe du Monde 2026</strong> aux couleurs de l'Albiceleste — « Pasión por el fútbol ».</p>
+    descriptionHtml: `<p><strong>Vamos Argentina !</strong> Ce porte-stylo en bois, découpé au laser, aux couleurs de l'Albiceleste — « Pasión por el fútbol ».</p>
 <p>Posé sur un bureau, il tient fièrement votre stylo (non inclus). Le cadeau parfait pour tous les supporters argentins.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Motif :</strong> blason + « ARGENTINE » + bandeau Coupe du Monde 2026</li>
+<li><strong>Motif :</strong> blason + « ARGENTINE »</li>
 <li><strong>Matière :</strong> bois découpé au laser, finition soignée</li>
 <li>Découpé et fini <strong>à la main dans notre atelier français</strong></li>
 <li>Livré à plat (montage simple, quelques secondes)</li>
@@ -1839,10 +1839,10 @@ export const products = [
     cardImage: "/produits/porte-stylo-espagne-1.jpg",
     subcategory: "porte-stylos",
     category: "deco",
-    type: "Coupe du Monde 2026",
-    tagline: "Le porte-stylo en bois aux couleurs de l'Espagne — « El sueño de una nación », spécial Coupe du Monde 2026.",
+    type: "Porte-stylo bois",
+    tagline: "Le porte-stylo en bois aux couleurs de l'Espagne — « El sueño de una nación ».",
     personalizable: false,
-    title: "Porte-stylo Espagne en bois — Coupe du Monde 2026",
+    title: "Porte-stylo Espagne en bois — aux couleurs de la Roja",
     images: [
       "/produits/porte-stylo-espagne-1.jpg",
       "/produits/porte-stylo-espagne-2.jpg",
@@ -1850,11 +1850,11 @@ export const products = [
     variants: [
       { id: "porte-stylo-espagne-standard", title: "Porte-stylo Espagne", price: 14.90 },
     ],
-    descriptionHtml: `<p><strong>¡Vamos España !</strong> Ce porte-stylo en bois, découpé au laser, célèbre la <strong>Coupe du Monde 2026</strong> aux couleurs de la Roja — « El sueño de una nación ».</p>
+    descriptionHtml: `<p><strong>¡Vamos España !</strong> Ce porte-stylo en bois, découpé au laser, aux couleurs de la Roja — « El sueño de una nación ».</p>
 <p>Posé sur un bureau, il tient fièrement votre stylo (non inclus). Le cadeau parfait pour tous les supporters espagnols.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Motif :</strong> blason + « ESPAGNE » + bandeau Coupe du Monde 2026</li>
+<li><strong>Motif :</strong> blason + « ESPAGNE »</li>
 <li><strong>Matière :</strong> bois découpé au laser, finition soignée</li>
 <li>Découpé et fini <strong>à la main dans notre atelier français</strong></li>
 <li>Livré à plat (montage simple, quelques secondes)</li>
