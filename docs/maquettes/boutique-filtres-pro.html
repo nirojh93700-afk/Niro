@@ -1,0 +1,79 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Filtres boutique pro</title>
+<style>
+  :root{--gold:#c2a14e;--gold-d:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#5a5247;--line:#e7ddcd}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--cream);color:var(--ink);font-family:'Helvetica Neue',Arial,sans-serif;width:430px}
+  .flag{background:#241a0c;color:#f3e8d3;font-size:11px;letter-spacing:2px;text-align:center;padding:7px;text-transform:uppercase}
+  .wrap{padding:16px 14px 30px}
+
+  /* Recherche compacte */
+  .search{display:flex;align-items:center;background:#fff;border:1px solid var(--line);border-radius:30px;padding:4px 4px 4px 16px;box-shadow:0 4px 14px rgba(43,38,32,.05)}
+  .search input{flex:1;border:0;outline:0;font-size:15px;background:none;color:var(--ink)}
+  .search .go{width:40px;height:40px;border-radius:50%;background:linear-gradient(180deg,#cdaa57,#a98935);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+
+  /* Catégories : barre défilante 1 ligne */
+  .cats{display:flex;gap:8px;overflow-x:auto;padding:16px 2px 4px;scrollbar-width:none}
+  .cats::-webkit-scrollbar{display:none}
+  .cat{flex:0 0 auto;padding:9px 16px;border-radius:24px;border:1px solid var(--line);background:var(--paper);font-size:14px;font-weight:600;color:var(--ink-soft);white-space:nowrap}
+  .cat.on{background:linear-gradient(180deg,#cdaa57,#a98935);border-color:transparent;color:#fff;box-shadow:0 6px 14px rgba(169,137,53,.3)}
+
+  /* Sous-catégories : ligne fine sous la catégorie, style onglets */
+  .subs-wrap{margin-top:10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fffdf8}
+  .subs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 2px}
+  .subs::-webkit-scrollbar{display:none}
+  .sub{flex:0 0 auto;padding:11px 13px;font-size:13.5px;font-weight:600;color:var(--ink-soft);white-space:nowrap;border-bottom:2.5px solid transparent}
+  .sub.on{color:var(--gold-d);border-bottom-color:var(--gold)}
+
+  .count{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 10px;font-size:13px;color:var(--ink-soft)}
+  .count b{color:var(--ink)}
+  .sort{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:18px;padding:6px 12px;font-size:12.5px}
+
+  /* Aperçu produits (décor) */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .card .ph{aspect-ratio:1/1;background:linear-gradient(135deg,#f3e8d3,#e9dcc2);display:flex;align-items:center;justify-content:center;font-size:34px}
+  .card .nm{font-size:13px;font-weight:600;padding:9px 10px 2px}
+  .card .pr{font-size:13px;color:var(--gold-d);font-weight:700;padding:0 10px 10px}
+</style></head>
+<body>
+  <div class="flag">Maquette — filtres boutique (pas encore en ligne)</div>
+  <div class="wrap">
+
+    <div class="search"><input placeholder="Rechercher une création…"><span class="go">🔍</span></div>
+
+    <!-- Catégories : une seule ligne, on fait défiler -->
+    <div class="cats">
+      <span class="cat">Tout</span>
+      <span class="cat">Bijoux</span>
+      <span class="cat">Cristal 3D</span>
+      <span class="cat">Naissance</span>
+      <span class="cat">Verres</span>
+      <span class="cat">Mariage</span>
+      <span class="cat on">Déco & Maison</span>
+      <span class="cat">Cadeaux</span>
+    </div>
+
+    <!-- Sous-catégories : onglets fins soulignés -->
+    <div class="subs-wrap">
+      <div class="subs">
+        <span class="sub on">Tout</span>
+        <span class="sub">Plaques</span>
+        <span class="sub">Couverts</span>
+        <span class="sub">Lampes</span>
+        <span class="sub">Bougeoir</span>
+        <span class="sub">Porte-stylos</span>
+      </div>
+    </div>
+
+    <div class="count"><span><b>12 créations</b> · Déco & Maison</span><span class="sort">Trier : Nouveautés ▾</span></div>
+
+    <div class="grid">
+      <div class="card"><div class="ph">🪵</div><div class="nm">Lampe Arbre de Vie</div><div class="pr">29,90 €</div></div>
+      <div class="card"><div class="ph">🕯️</div><div class="nm">Bougeoir Fleur de Lotus</div><div class="pr">16,90 €</div></div>
+      <div class="card"><div class="ph">🖊️</div><div class="nm">Porte-stylo France</div><div class="pr">14,90 €</div></div>
+      <div class="card"><div class="ph">🍽️</div><div class="nm">Couverts enfants</div><div class="pr">34,90 €</div></div>
+    </div>
+  </div>
+</body></html>
