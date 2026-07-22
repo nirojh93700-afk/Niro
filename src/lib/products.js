@@ -1880,7 +1880,10 @@ export const products = [
     personalizationLabel: "Gravure personnalisée (motifs, texte, logo ou photo)",
     // Configurateur de gravure : côté + motifs par zone (choisis au numéro dans les
     // planches). 4 motifs inclus, +2,90 € au-delà. Recalcul serveur via motifCount.
-    motifComposer: { included: 4, extra: 2.9, maxNum: 79 },
+    motifComposer: { included: 4, extra: 2.9, maxNum: 79, planches: [
+      "/motifs/planche-01.png", "/motifs/planche-02.png", "/motifs/planche-03.png", "/motifs/planche-04.png", "/motifs/planche-05.png",
+      "/motifs/planche-06.png", "/motifs/planche-07.png", "/motifs/planche-08.png", "/motifs/planche-09.png", "/motifs/planche-10.png",
+    ] },
     personalizationFields: [
       { key: "note", type: "note", text: "Choisissez vos motifs ci-dessus (par numéro), et/ou ajoutez un texte à graver." },
       { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit message…", maxLength: 30, optional: true },

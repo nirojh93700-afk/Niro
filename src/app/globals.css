@@ -2895,3 +2895,9 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .gc-price{display:flex;flex-direction:column;gap:3px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line);font-size:.86rem}
 .gc-price .gc-ok{color:#256b34;font-weight:600}
 .gc-price .gc-note{font-size:.76rem;color:var(--ink-soft)}
+
+/* Panneau « Voir les motifs » du configurateur gobelet */
+.gc-cat{margin:8px 0 2px}
+.gc-catbtn{width:100%;padding:11px;border:1.5px dashed var(--gold);border-radius:10px;background:#fffdf6;color:var(--gold-dark);font-weight:700;font-size:.86rem;cursor:pointer}
+.gc-sheets{margin-top:10px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:10px;background:#fff;border:1px solid var(--line);border-radius:10px}
+.gc-sheets img{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;display:block}

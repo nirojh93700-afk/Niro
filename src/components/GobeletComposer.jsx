@@ -22,12 +22,13 @@ const ZONES = [
   { key: "droite", label: "Droite" },
 ];
 
-export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79, onChange }) {
+export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79, planches = [], onChange }) {
   const [side, setSide] = useState("face");
   const [motifs, setMotifs] = useState([]); // [{ zone, num }]
   const [zone, setZone] = useState("principal");
   const [num, setNum] = useState("");
   const [msg, setMsg] = useState("");
+  const [showMotifs, setShowMotifs] = useState(false);
 
   const zoneLabel = (k) => ZONES.find((z) => z.key === k)?.label || k;
   const sideLabel = (k) => SIDES.find((s) => s.key === k)?.label || k;
@@ -80,6 +81,22 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
           <button type="button" className="gc-rm" onClick={() => remove(i)} aria-label="Retirer">×</button>
         </div>
       ))}
+
+      {planches.length > 0 && (
+        <div className="gc-cat">
+          <button type="button" className="gc-catbtn" onClick={() => setShowMotifs((v) => !v)}>
+            {showMotifs ? "▲ Masquer les motifs" : "📖 Voir les motifs (pour choisir un numéro)"}
+          </button>
+          {showMotifs && (
+            <div className="gc-sheets">
+              {planches.map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={i} src={src} alt={`Planche de motifs ${i + 1}`} loading="lazy" />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {zonesLibres.length > 0 && (
         <div className="gc-add">

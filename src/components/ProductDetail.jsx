@@ -1436,6 +1436,7 @@ export default function ProductDetail({ product }) {
                 included={product.motifComposer.included || 4}
                 extra={product.motifComposer.extra || 2.9}
                 maxNum={product.motifComposer.maxNum || 79}
+                planches={product.motifComposer.planches || []}
                 onChange={setComposition}
               />
             </div>
