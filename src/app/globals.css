@@ -2860,3 +2860,16 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .cf-insta{flex-wrap:wrap}
   .cf-insta .cf-ig-btn{width:100%;text-align:center}
 }
+
+/* ===== Pastilles couleur sous la grande photo (gobelet & produits à galerie/coloris) ===== */
+.color-swatches{margin-top:14px}
+.color-swatches .cs-label{font-size:.9rem;color:var(--ink-soft);margin-bottom:8px}
+.color-swatches .cs-label strong{color:var(--ink)}
+.color-swatches .cs-row{display:flex;gap:10px;flex-wrap:wrap}
+.cs-btn{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;cursor:pointer;padding:0;width:72px}
+.cs-btn img{width:64px;height:64px;object-fit:cover;border-radius:12px;border:2px solid var(--line);background:#fff;transition:border-color .15s,box-shadow .15s}
+.cs-btn .cs-name{font-size:.72rem;color:var(--ink-soft);text-align:center;line-height:1.15}
+.cs-btn.active img{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,161,78,.22)}
+.cs-btn.active .cs-name{color:var(--gold-dark);font-weight:600}
+.cs-btn:hover img{border-color:var(--gold-l)}
+.cs-btn.sold-out img{opacity:.5;filter:grayscale(.6)}

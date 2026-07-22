@@ -160,6 +160,10 @@ export default function ProductDetail({ product }) {
   }, [product.slug]);
 
   const variant = product.variants[variantIndex];
+  // Coloris avec galerie propre (ex. gobelet) : pastilles SOUS la grande photo,
+  // et on masque le sélecteur d'option de droite. Cliquer change la grande photo.
+  const colorGallery = product.variants?.length > 1 && !product.genderPick &&
+    product.variants.some((v) => Array.isArray(v.gallery) && v.gallery.length);
   const hasImages = images.length > 0;
   const hasVariantImages = product.variants.some((v) => v.image);
 
@@ -959,6 +963,30 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
+          {/* Pastilles couleur SOUS la grande photo (produits à galerie par coloris). */}
+          {colorGallery && (
+            <div className="color-swatches">
+              <div className="cs-label">Couleur : <strong>{variant.title}</strong></div>
+              <div className="cs-row">
+                {product.variants.map((v, i) => {
+                  const vStock = stockMap[v.stockId || v.id];
+                  const vOut = typeof vStock === "number" && vStock <= 0;
+                  return (
+                    <button key={v.id} type="button"
+                      className={`cs-btn${i === variantIndex ? " active" : ""}${vOut ? " sold-out" : ""}`}
+                      onClick={() => selectVariant(i)} aria-pressed={i === variantIndex} title={v.title}>
+                      {v.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={v.image} alt={v.title} />
+                      )}
+                      <span className="cs-name">{v.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
           {product.engrave && (emplacement === "face" || emplacement === "deux") && !modeleField && (
             <div style={{ marginTop: 12 }}>
@@ -1091,7 +1119,7 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {product.variants.length > 1 && !product.genderPick && (
+          {product.variants.length > 1 && !product.genderPick && !colorGallery && (
             <div className="field">
               <label>{hasVariantImages ? "Choisissez votre modèle" : "Choisissez votre option"}</label>
               <div className={`variant-swatches${product.crystal3d ? " crystal-sizes" : ""}`}>
