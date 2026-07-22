@@ -432,3 +432,10 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
 > On va proposer aux clients une bibliothèque de **motifs/dessins gravables** (fleurs, animaux, etc.) au choix sur le gobelet. La gérante envoie des **planches d'exemples avec des NUMÉROS** sur chaque dessin.
 - **Ma mission** : pour **chaque numéro**, retrouver **UN PAR UN l'image d'origine / source téléchargeable** (haute déf) pour qu'elle puisse la télécharger.
 - Limite technique : pas d'outil de recherche par image inversée → je procède par description du motif + recherche web ; certains motifs (packs connus, motifs courants) seront trouvables, d'autres non. Toujours procéder **un dessin à la fois**, dans l'ordre des numéros.
+
+### OUTIL DE NUMÉROTATION DES PLANCHES — MÉTHODE VALIDÉE (22/07/2026)
+> La gérante numérote elle-même les motifs (elle sait où sont les vrais motifs). Ne plus deviner les emplacements.
+- **Outil interactif** (artifact) : page web où elle **clique sur chaque motif** pour poser un numéro (auto-incrément), glisse pour ajuster, double-tap pour supprimer. Champ **« Départ n° »** pour continuer la numérotation d'une planche à l'autre. Généré par script Python (image en base64 data-URI + JS canvas). Fichier type : `scratchpad/outil-numerotation.html`.
+- **⚠️ Le téléchargement direct bloque sur iPhone.** La méthode fiable = bouton **« 📋 Copier le code »** → elle colle le code ici → JE régénère l'image finale avec Pillow (badges = cercle rouge #d32f2f, contour blanc, r≈W×0.032) et je l'enregistre/renvoie.
+- **Workflow par planche** : (1) nouvelle planche → rebâtir l'outil (même URL, republish) avec l'image dedans ; (2) elle met « Départ n° » = numéro suivant (continuité) ; (3) elle pose les numéros + « Copier le code » ; (4) je rends l'image finale.
+- **Compteur** : Planche « couples » = 1–9 (test). Planche « fleurs/papillons » IMG_9549 = **1–10** (placements de la gérante, enregistrée). **Prochaine planche : continuer à partir de 11.**
