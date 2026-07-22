@@ -1885,18 +1885,22 @@ export const products = [
       { key: "photo", type: "photo", label: "Ou envoyez un logo / une photo (optionnel)", optional: true, text: "Optionnel : un logo ou une photo à graver. Vous pouvez aussi nous l'envoyer par message après la commande." },
     ],
     title: "Gobelet isotherme 40 oz à graver — personnalisé (anse + paille)",
+    // Galerie initiale = coloris Crème (variante par défaut). Chaque coloris a sa
+    // propre galerie (gravé / vierge / accessoires) dans variants[].gallery.
     images: [
       "/produits/gobelet-creme-grave.png",
-      "/produits/gobelet-rose-grave.png",
-      "/produits/gobelet-marine-grave.png",
-      "/produits/gobelet-blanc-grave.png",
+      "/produits/gobelet-creme-vierge.png",
       "/produits/gobelet-creme-accessoires.png",
     ],
     variants: [
-      { id: "gobelet-40oz-creme", title: "Crème", price: 39.90, image: "/produits/gobelet-creme-vierge.png" },
-      { id: "gobelet-40oz-blanc", title: "Blanc", price: 39.90, image: "/produits/gobelet-blanc-vierge.png" },
-      { id: "gobelet-40oz-marine", title: "Bleu marine", price: 39.90, image: "/produits/gobelet-marine-vierge.png" },
-      { id: "gobelet-40oz-rose", title: "Rose", price: 39.90, image: "/produits/gobelet-rose-vierge.png" },
+      { id: "gobelet-40oz-creme", title: "Crème", price: 39.90, image: "/produits/gobelet-creme-vierge.png",
+        gallery: ["/produits/gobelet-creme-grave.png", "/produits/gobelet-creme-vierge.png", "/produits/gobelet-creme-accessoires.png"] },
+      { id: "gobelet-40oz-blanc", title: "Blanc", price: 39.90, image: "/produits/gobelet-blanc-vierge.png",
+        gallery: ["/produits/gobelet-blanc-grave.png", "/produits/gobelet-blanc-vierge.png", "/produits/gobelet-blanc-accessoires.png"] },
+      { id: "gobelet-40oz-marine", title: "Bleu marine", price: 39.90, image: "/produits/gobelet-marine-vierge.png",
+        gallery: ["/produits/gobelet-marine-grave.png", "/produits/gobelet-marine-vierge.png", "/produits/gobelet-marine-accessoires.png"] },
+      { id: "gobelet-40oz-rose", title: "Rose", price: 39.90, image: "/produits/gobelet-rose-vierge.png",
+        gallery: ["/produits/gobelet-rose-grave.png", "/produits/gobelet-rose-vierge.png", "/produits/gobelet-rose-accessoires.png"] },
     ],
     descriptionHtml: `<p><strong>Un grand gobelet isotherme 40 oz (1,1 L)</strong> en acier inoxydable double paroi, avec anse et paille. Il garde vos boissons <strong>chaudes ou froides pendant des heures</strong> et se glisse dans le porte-gobelet de la voiture.</p>
 <h3>Détails</h3>
