@@ -928,6 +928,30 @@ export default function ProductDetail({ product }) {
               Aperçu <strong>indicatif</strong> : votre photo est simplement posée sur une image du cristal pour vous donner une idée. Le rendu réel est une <strong>gravure 3D au laser à l'intérieur du cristal</strong>, retravaillée par notre atelier pour un résultat optimal.
             </p>
           )}
+          {/* Pastilles couleur JUSTE SOUS la grande photo, avant les vignettes. */}
+          {colorGallery && (
+            <div className="color-swatches">
+              <div className="cs-label">Couleur : <strong>{variant.title}</strong></div>
+              <div className="cs-row">
+                {product.variants.map((v, i) => {
+                  const vStock = stockMap[v.stockId || v.id];
+                  const vOut = typeof vStock === "number" && vStock <= 0;
+                  return (
+                    <button key={v.id} type="button"
+                      className={`cs-btn${i === variantIndex ? " active" : ""}${vOut ? " sold-out" : ""}`}
+                      onClick={() => selectVariant(i)} aria-pressed={i === variantIndex} title={v.title}>
+                      {v.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={v.image} alt={v.title} />
+                      )}
+                      <span className="cs-name">{v.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {(galleryMedia.length > 1 || (product.crystal3d && photoSrc)) && (
             <div className="gallery-thumbs">
               {product.crystal3d && photoSrc && (
@@ -963,29 +987,6 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {/* Pastilles couleur SOUS la grande photo (produits à galerie par coloris). */}
-          {colorGallery && (
-            <div className="color-swatches">
-              <div className="cs-label">Couleur : <strong>{variant.title}</strong></div>
-              <div className="cs-row">
-                {product.variants.map((v, i) => {
-                  const vStock = stockMap[v.stockId || v.id];
-                  const vOut = typeof vStock === "number" && vStock <= 0;
-                  return (
-                    <button key={v.id} type="button"
-                      className={`cs-btn${i === variantIndex ? " active" : ""}${vOut ? " sold-out" : ""}`}
-                      onClick={() => selectVariant(i)} aria-pressed={i === variantIndex} title={v.title}>
-                      {v.image && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={v.image} alt={v.title} />
-                      )}
-                      <span className="cs-name">{v.title}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
 
           {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
           {product.engrave && (emplacement === "face" || emplacement === "deux") && !modeleField && (
