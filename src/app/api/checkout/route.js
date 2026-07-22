@@ -161,7 +161,16 @@ export async function POST(req) {
     const extra = engravingExtra(product, item.fields || {}, variant.id);
     // Recalcul de confiance de l'emballage choisi (prix depuis le catalogue serveur).
     const pkg = packagingExtra(product, item.packaging || []);
-    const unitPrice = basePrice + extra.amount + pkg.amount;
+    // Recalcul de confiance du configurateur gobelet : motifs en plus de l'inclus.
+    let motifExtra = 0, motifExtraCount = 0;
+    if (product.motifComposer) {
+      const inc = Number(product.motifComposer.included) || 4;
+      const per = Number(product.motifComposer.extra) || 2.9;
+      const mc = Math.max(0, Math.min(20, parseInt(item.fields?.motifCount, 10) || 0));
+      motifExtraCount = Math.max(0, mc - inc);
+      motifExtra = Math.round(motifExtraCount * per * 100) / 100;
+    }
+    const unitPrice = basePrice + extra.amount + pkg.amount + motifExtra;
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
     // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle, emballage),
@@ -180,6 +189,9 @@ export async function POST(req) {
     const descriptionParts = [variant.title];
     if (extra.amount > 0) {
       descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
+    }
+    if (motifExtra > 0) {
+      descriptionParts.push(`${motifExtraCount} motif(s) en plus (+${motifExtra.toFixed(2)} €)`);
     }
     if (pkg.labels.length) {
       descriptionParts.push(`Emballage : ${pkg.labels.join(", ")}`);

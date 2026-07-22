@@ -39,6 +39,7 @@ import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
 import TrustSection from "./TrustSection";
+import GobeletComposer from "./GobeletComposer";
 
 // Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
@@ -52,6 +53,7 @@ export default function ProductDetail({ product }) {
   const [fieldValues, setFieldValues] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [pkgSel, setPkgSel] = useState([]); // emballages payants choisis (ids)
+  const [composition, setComposition] = useState(null); // configurateur gobelet (côté + motifs)
   const [added, setAdded] = useState(false);
   const [preparing, setPreparing] = useState(false); // capture du visuel en cours
   const [error, setError] = useState("");
@@ -211,7 +213,7 @@ export default function ProductDetail({ product }) {
     .filter((x) => !/pack/i.test(x.name) && !x.free)
     .reduce((s, x) => s + (Number(x.price) || 0), 0) * 100) / 100;
   const basePrice = hasPromo ? salePrice : variant.price;
-  const unitPrice = basePrice + engrave.amount + pkg.amount;
+  const unitPrice = basePrice + engrave.amount + pkg.amount + (composition?.extraAmount || 0);
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
   const refMarkup = Number(product.refMarkup) || 0;
   const refPrice = !hasPromo && refMarkup > 0
@@ -735,7 +737,8 @@ export default function ProductDetail({ product }) {
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null, crystalText: crystalTextPos || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
-      personalization: buildPersonalization(),
+      personalization: [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
+      composition: composition || null, // configurateur gobelet (côté + motifs) pour l'atelier
       packaging: pkg.labels.length ? pkg.labels.join(", ") : null, // emballage pour la fiche atelier
     };
     addItem({
@@ -747,8 +750,8 @@ export default function ProductDetail({ product }) {
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
-      personalization: buildPersonalization(true),
-      fields: product.engravingPricing ? { ...fieldValues } : undefined,
+      personalization: [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "),
+      fields: (product.engravingPricing || product.motifComposer) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
       spec: itemSpec,
       pickup: Boolean(product.pickup),
@@ -1424,6 +1427,18 @@ export default function ProductDetail({ product }) {
                 />
               </div>
             )
+          )}
+
+          {product.motifComposer && (
+            <div style={{ margin: "6px 0 16px" }}>
+              <div style={{ fontWeight: 700, fontSize: "0.95rem", marginBottom: 6 }}>Composez votre gravure</div>
+              <GobeletComposer
+                included={product.motifComposer.included || 4}
+                extra={product.motifComposer.extra || 2.9}
+                maxNum={product.motifComposer.maxNum || 79}
+                onChange={setComposition}
+              />
+            </div>
           )}
 
           {product.packaging?.on && product.packaging.options?.length > 0 && (

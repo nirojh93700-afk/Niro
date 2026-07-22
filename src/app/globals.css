@@ -2873,3 +2873,25 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .cs-btn.active .cs-name{color:var(--gold-dark);font-weight:600}
 .cs-btn:hover img{border-color:var(--gold-l)}
 .cs-btn.sold-out img{opacity:.5;filter:grayscale(.6)}
+
+/* ===== Configurateur gravure gobelet (GobeletComposer.jsx) ===== */
+.gc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin:6px 0 4px}
+.gc-lbl{font-size:.9rem;font-weight:700;margin:4px 0 9px;display:flex;justify-content:space-between;align-items:baseline}
+.gc-c{font-size:.78rem;font-weight:600;color:var(--gold-dark)}
+.gc-sides{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.gc-side{flex:1 1 auto;min-width:90px;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.85rem;font-weight:600;color:var(--ink-soft);cursor:pointer}
+.gc-side.on{border-color:var(--gold);background:#fffaf0;color:var(--gold-dark);box-shadow:0 0 0 2px rgba(194,161,78,.22)}
+.gc-empty{font-size:.83rem;color:var(--ink-soft);margin:0 0 10px}
+.gc-mot{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 12px;margin-bottom:7px}
+.gc-mot.main{border-color:var(--gold-l);background:#fffaf0}
+.gc-num{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.15)}
+.gc-mz{flex:1;font-size:.88rem;font-weight:600}
+.gc-rm{background:none;border:0;color:#b4452f;font-size:1.3rem;cursor:pointer;line-height:1}
+.gc-add{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.gc-add select{flex:1 1 130px;min-width:0;height:42px;border:1px solid var(--line);border-radius:9px;padding:0 10px;font:inherit;background:#fff}
+.gc-add input{flex:0 1 120px;min-width:0;height:42px;border:1px solid var(--line);border-radius:9px;padding:0 12px;font:inherit;background:#fff}
+.gc-addbtn{height:42px;padding:0 16px;border:0;border-radius:9px;background:linear-gradient(180deg,#cdaa57,#a98935);color:#fff;font-weight:700;font-size:.86rem;cursor:pointer;white-space:nowrap}
+.gc-msg{margin:6px 0 0;font-size:.82rem;color:#b4452f}
+.gc-price{display:flex;flex-direction:column;gap:3px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line);font-size:.86rem}
+.gc-price .gc-ok{color:#256b34;font-weight:600}
+.gc-price .gc-note{font-size:.76rem;color:var(--ink-soft)}
