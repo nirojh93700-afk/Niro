@@ -1882,6 +1882,11 @@ export const products = [
       { key: "note", type: "note", text: "Ajoutez ce que vous voulez : prénom, date, message, initiales, logo… Gravé au laser dans notre atelier." },
       { key: "texte", label: "Votre texte à graver", placeholder: "Prénom, date, petit message…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "emplacement", type: "select", label: "Emplacement de la gravure", options: [
+        { value: "face", label: "Face avant (devant l'anse)" },
+        { value: "gauche", label: "Côté gauche" },
+        { value: "droite", label: "Côté droit" },
+      ] },
       { key: "photo", type: "photo", label: "Ou envoyez un logo / une photo (optionnel)", optional: true, text: "Optionnel : un logo ou une photo à graver. Vous pouvez aussi nous l'envoyer par message après la commande." },
     ],
     title: "Gobelet isotherme 40 oz à graver — personnalisé (anse + paille)",
