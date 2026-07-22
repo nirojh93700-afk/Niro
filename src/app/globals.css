@@ -2908,3 +2908,22 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .gc-zoom-in{position:relative;max-width:640px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:12px;padding:10px}
 .gc-zoom-in img{width:100%;height:auto;display:block;border-radius:8px}
 .gc-zoom-x{position:absolute;top:-12px;right:-12px;width:36px;height:36px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:1.4rem;cursor:pointer;color:var(--ink);z-index:2}
+/* Bascule Motif / Texte + pastille texte */
+.gc-modes{display:flex;gap:8px;margin:10px 0 8px}
+.gc-mode{flex:1;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.84rem;font-weight:600;color:var(--ink-soft);cursor:pointer}
+.gc-mode.on{border-color:var(--gold);background:#fffaf0;color:var(--gold-dark);box-shadow:0 0 0 2px rgba(194,161,78,.22)}
+.gc-addwrap .gc-add{margin-top:0}
+.gc-add input[type="text"]{flex:1 1 160px}
+.gc-num.t{background:var(--ink);color:#fff;font-size:.82rem}
+
+/* ===== Aperçu gobelet (GobeletPreview.jsx) — pastilles posées sur la photo ===== */
+.gp{display:flex;flex-direction:column;align-items:center;gap:8px}
+.gp-stage{position:relative;width:100%;max-width:260px;aspect-ratio:3/4;background:#faf7f1;border-radius:14px;overflow:hidden}
+.gp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.gp-badge{position:absolute;transform:translate(-50%,-50%);min-width:26px;height:26px;padding:0 6px;border-radius:13px;background:var(--gold);color:var(--ink);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;white-space:nowrap;max-width:70%}
+.gp-badge.gp-main{background:var(--gold-dark);color:#fff}
+.gp-badge.gp-text{background:var(--ink);color:#fff;font-weight:700;font-size:.72rem;overflow:hidden;text-overflow:ellipsis}
+.gp-cap{font-size:.76rem;color:var(--ink-soft);text-align:center}
+.gp-mini .gp-stage{max-width:150px}
+.gp-mini .gp-cap{font-size:.66rem}
+.gp-mini-wrap{padding:8px!important}

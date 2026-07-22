@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { formatEuro } from "@/lib/format";
 
-// Configurateur de gravure du gobelet : le client choisit un CÔTÉ, un motif
-// PRINCIPAL, puis d'autres motifs par ZONE (choisis par numéro dans le catalogue
-// des planches). Compteur + supplément au-delà de `included` motifs.
-// Le résultat (côté + motifs + nombre) remonte via onChange pour être enregistré
-// sur la commande et facturé au paiement (recalcul serveur via motifCount).
+// Configurateur de gravure du gobelet : le client choisit un CÔTÉ, puis place
+// des éléments par ZONE — soit un MOTIF (choisi par numéro dans les planches),
+// soit un TEXTE (qu'il tape lui-même). Compteur + supplément au-delà de
+// `included` éléments. Le résultat (côté + éléments + nombre) remonte via
+// onChange pour l'aperçu (gobelet en bas à droite), l'enregistrement sur la
+// commande et la facturation au paiement (recalcul serveur via motifCount).
 const SIDES = [
   { key: "face", label: "Face" },
   { key: "gauche", label: "Côté gauche" },
@@ -24,22 +25,31 @@ const ZONES = [
 
 export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79, planches = [], onChange }) {
   const [side, setSide] = useState("face");
-  const [motifs, setMotifs] = useState([]); // [{ zone, num }]
+  const [motifs, setMotifs] = useState([]); // [{ zone, num }] ou [{ zone, text }]
   const [zone, setZone] = useState("principal");
   const [num, setNum] = useState("");
+  const [txt, setTxt] = useState("");
+  const [mode, setMode] = useState("motif"); // "motif" | "texte"
   const [msg, setMsg] = useState("");
   const [zoom, setZoom] = useState(null); // planche agrandie (aperçu)
 
   const zoneLabel = (k) => ZONES.find((z) => z.key === k)?.label || k;
   const sideLabel = (k) => SIDES.find((s) => s.key === k)?.label || k;
 
-  function addMotif() {
+  function add() {
     setMsg("");
-    const n = parseInt(num, 10);
-    if (!(n >= 1 && n <= maxNum)) { setMsg(`Choisissez un numéro entre 1 et ${maxNum}.`); return; }
     if (motifs.some((m) => m.zone === zone)) { setMsg(`La zone « ${zoneLabel(zone)} » est déjà prise.`); return; }
-    setMotifs((list) => [...list, { zone, num: n }]);
-    setNum("");
+    if (mode === "texte") {
+      const t = txt.trim();
+      if (!t) { setMsg("Écrivez le texte à graver."); return; }
+      setMotifs((list) => [...list, { zone, text: t }]);
+      setTxt("");
+    } else {
+      const n = parseInt(num, 10);
+      if (!(n >= 1 && n <= maxNum)) { setMsg(`Choisissez un numéro entre 1 et ${maxNum}.`); return; }
+      setMotifs((list) => [...list, { zone, num: n }]);
+      setNum("");
+    }
     // zone suivante libre
     const next = ZONES.find((z) => !motifs.some((m) => m.zone === z.key) && z.key !== zone);
     if (next) setZone(next.key);
@@ -54,7 +64,9 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
     const ordered = ["principal", "haut", "bas", "gauche", "droite"]
       .map((z) => motifs.find((m) => m.zone === z)).filter(Boolean);
     const summary = ordered.length
-      ? `${sideLabel(side)} — ` + ordered.map((m) => `${zoneLabel(m.zone)} n°${m.num}`).join(" · ")
+      ? `${sideLabel(side)} — ` + ordered.map((m) =>
+          m.text != null ? `${zoneLabel(m.zone)} texte « ${m.text} »` : `${zoneLabel(m.zone)} n°${m.num}`
+        ).join(" · ")
       : "";
     onChange && onChange({ side, motifs, count, extraAmount, summary });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,13 +83,13 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
         ))}
       </div>
 
-      <div className="gc-lbl">Vos motifs <span className="gc-c">{count} {count > included ? `(${included} inclus + ${extraCount})` : `/ ${included} inclus`}</span></div>
+      <div className="gc-lbl">Votre gravure <span className="gc-c">{count} {count > included ? `(${included} inclus + ${extraCount})` : `/ ${included} inclus`}</span></div>
 
-      {motifs.length === 0 && <p className="gc-empty">Ajoutez au moins un motif (le principal). Choisissez son numéro dans les planches.</p>}
+      {motifs.length === 0 && <p className="gc-empty">Ajoutez au moins un élément (motif ou texte). Choisissez le numéro d'un motif dans les planches, ou écrivez votre texte.</p>}
       {motifs.map((m, i) => (
         <div key={i} className={`gc-mot${m.zone === "principal" ? " main" : ""}`}>
-          <span className="gc-num">{m.num}</span>
-          <span className="gc-mz">{zoneLabel(m.zone)}</span>
+          <span className={`gc-num${m.text != null ? " t" : ""}`}>{m.text != null ? "T" : m.num}</span>
+          <span className="gc-mz">{zoneLabel(m.zone)}{m.text != null ? ` — « ${m.text} »` : ""}</span>
           <button type="button" className="gc-rm" onClick={() => remove(i)} aria-label="Retirer">×</button>
         </div>
       ))}
@@ -98,21 +110,31 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
       )}
 
       {zonesLibres.length > 0 && (
-        <div className="gc-add">
-          <select value={zone} onChange={(e) => setZone(e.target.value)} aria-label="Zone">
-            {zonesLibres.map((z) => <option key={z.key} value={z.key}>{z.label}</option>)}
-          </select>
-          <input type="number" min="1" max={maxNum} value={num} onChange={(e) => setNum(e.target.value)} placeholder={`N° (1–${maxNum})`} aria-label="Numéro du motif" />
-          <button type="button" className="gc-addbtn" onClick={addMotif}>＋ Ajouter</button>
+        <div className="gc-addwrap">
+          <div className="gc-modes">
+            <button type="button" className={`gc-mode${mode === "motif" ? " on" : ""}`} onClick={() => { setMode("motif"); setMsg(""); }}>Un motif</button>
+            <button type="button" className={`gc-mode${mode === "texte" ? " on" : ""}`} onClick={() => { setMode("texte"); setMsg(""); }}>Un texte</button>
+          </div>
+          <div className="gc-add">
+            <select value={zone} onChange={(e) => setZone(e.target.value)} aria-label="Zone">
+              {zonesLibres.map((z) => <option key={z.key} value={z.key}>{z.label}</option>)}
+            </select>
+            {mode === "texte" ? (
+              <input type="text" maxLength={40} value={txt} onChange={(e) => setTxt(e.target.value)} placeholder="Votre texte (prénom, date…)" aria-label="Texte à graver" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }} />
+            ) : (
+              <input type="number" min="1" max={maxNum} value={num} onChange={(e) => setNum(e.target.value)} placeholder={`N° (1–${maxNum})`} aria-label="Numéro du motif" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }} />
+            )}
+            <button type="button" className="gc-addbtn" onClick={add}>＋ Ajouter</button>
+          </div>
         </div>
       )}
       {msg && <p className="gc-msg">{msg}</p>}
 
       <div className="gc-price">
         {extraCount > 0
-          ? <span><b>{extraCount} motif(s) en plus</b> : +{formatEuro(extraAmount)}</span>
-          : <span className="gc-ok">✓ Jusqu'à {included} motifs inclus dans le prix</span>}
-        <span className="gc-note">Au-delà de {included} : +{formatEuro(extra)} / motif</span>
+          ? <span><b>{extraCount} élément(s) en plus</b> : +{formatEuro(extraAmount)}</span>
+          : <span className="gc-ok">✓ Jusqu'à {included} éléments inclus dans le prix</span>}
+        <span className="gc-note">Au-delà de {included} : +{formatEuro(extra)} / élément</span>
       </div>
 
       {zoom && (

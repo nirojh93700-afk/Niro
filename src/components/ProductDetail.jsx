@@ -40,6 +40,7 @@ import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
 import TrustSection from "./TrustSection";
 import GobeletComposer from "./GobeletComposer";
+import GobeletPreview from "./GobeletPreview";
 
 // Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
@@ -1040,6 +1041,15 @@ export default function ProductDetail({ product }) {
               <div className="engrave3d-spacer" aria-hidden="true" />
             </>
           )}
+
+          {product.motifComposer && isWide && (
+            <>
+              <div className="engrave3d-sticky">
+                <GobeletPreview image={variant?.image || images[activeImg]} composition={composition} />
+              </div>
+              <div className="engrave3d-spacer" aria-hidden="true" />
+            </>
+          )}
         </div>
 
         {/* Infos & achat */}
@@ -1648,6 +1658,12 @@ export default function ProductDetail({ product }) {
           ) : (
             <Engrave3D faces={faceTexts} finish={finish3d} fontKey={fieldValues[fontField?.key] || "playfair"} motifs={motifVals} direction={direction3d} motifPositions={motifPositions} height={200} showHint={false} />
           )}
+        </div>
+      )}
+
+      {product.motifComposer && !isWide && composition?.motifs?.length > 0 && (
+        <div className="engrave3d-mini gp-mini-wrap">
+          <GobeletPreview image={variant?.image || images[activeImg]} composition={composition} mini />
         </div>
       )}
     </div>
