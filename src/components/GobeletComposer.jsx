@@ -28,7 +28,7 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
   const [zone, setZone] = useState("principal");
   const [num, setNum] = useState("");
   const [msg, setMsg] = useState("");
-  const [showMotifs, setShowMotifs] = useState(false);
+  const [zoom, setZoom] = useState(null); // planche agrandie (aperçu)
 
   const zoneLabel = (k) => ZONES.find((z) => z.key === k)?.label || k;
   const sideLabel = (k) => SIDES.find((s) => s.key === k)?.label || k;
@@ -84,17 +84,16 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
 
       {planches.length > 0 && (
         <div className="gc-cat">
-          <button type="button" className="gc-catbtn" onClick={() => setShowMotifs((v) => !v)}>
-            {showMotifs ? "▲ Masquer les motifs" : "📖 Voir les motifs (pour choisir un numéro)"}
-          </button>
-          {showMotifs && (
-            <div className="gc-sheets">
-              {planches.map((src, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={src} alt={`Planche de motifs ${i + 1}`} loading="lazy" />
-              ))}
-            </div>
-          )}
+          <div className="gc-cat-h">✦ Choisissez un motif — {maxNum} modèles <span>(touchez pour agrandir et lire les numéros)</span></div>
+          <div className="gc-strip">
+            {planches.map((src, i) => (
+              <button type="button" key={i} className="gc-thumb" onClick={() => setZoom(src)} aria-label={`Agrandir la planche ${i + 1}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={`Planche de motifs ${i + 1}`} loading="lazy" />
+                <span className="gc-thumb-n">Planche {i + 1}</span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -115,6 +114,16 @@ export default function GobeletComposer({ included = 4, extra = 2.9, maxNum = 79
           : <span className="gc-ok">✓ Jusqu'à {included} motifs inclus dans le prix</span>}
         <span className="gc-note">Au-delà de {included} : +{formatEuro(extra)} / motif</span>
       </div>
+
+      {zoom && (
+        <div className="gc-zoom" onClick={() => setZoom(null)} role="dialog" aria-modal="true">
+          <div className="gc-zoom-in" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="gc-zoom-x" onClick={() => setZoom(null)} aria-label="Fermer">×</button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={zoom} alt="Planche de motifs" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
