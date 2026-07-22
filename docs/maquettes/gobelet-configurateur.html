@@ -1,0 +1,91 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maquette — Configurateur gravure gobelet</title>
+<style>
+  :root{--gold:#c2a14e;--gold-d:#a98935;--gold-l:#e2c67e;--cream:#faf6ef;--paper:#fffdf9;--ink:#2b2620;--ink-soft:#6b6252;--line:#e7ddcd}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:460px;background:var(--cream);color:var(--ink);font-family:'Helvetica Neue',Arial,sans-serif}
+  .flag{background:#241a0c;color:#f3e8d3;font-size:11px;letter-spacing:2px;text-align:center;padding:8px;text-transform:uppercase}
+  .wrap{padding:16px 14px 26px}
+  .eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-d);font-weight:700}
+  h1{font-family:Georgia,serif;font-size:24px;margin:3px 0 12px}
+  .lbl{font-size:12px;font-weight:700;letter-spacing:.4px;margin:14px 0 7px;text-transform:uppercase;color:var(--ink-soft)}
+  /* côté */
+  .sides{display:flex;gap:8px}
+  .side{flex:1;text-align:center;padding:9px 4px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);font-size:13px;font-weight:600;color:var(--ink-soft)}
+  .side.on{border-color:var(--gold);background:#fffaf0;color:var(--gold-d);box-shadow:0 0 0 2px rgba(194,161,78,.22)}
+  /* gobelet */
+  .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;margin-top:8px;padding:10px;display:flex;justify-content:center}
+  .stage img{height:360px;object-fit:contain}
+  .rotate{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--ink-soft)}
+  .pin{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--gold);color:var(--ink);border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+  .pin.main{width:42px;height:42px;font-size:17px;box-shadow:0 4px 12px rgba(169,137,53,.5);border-color:var(--gold-l)}
+  .pin small{position:absolute;top:-16px;font-size:8px;background:var(--ink);color:#fff;padding:1px 5px;border-radius:8px;white-space:nowrap;letter-spacing:.3px}
+  /* liste motifs */
+  .mot{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:9px 12px;margin-bottom:7px}
+  .mot .zn{width:74px;font-size:12px;color:var(--ink-soft);font-weight:700}
+  .mot .num{width:34px;height:34px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.15)}
+  .mot .nm{flex:1;font-size:13.5px}
+  .mot .nm b{display:block}
+  .mot .rm{color:#b4452f;font-size:18px}
+  .mot.main{border-color:var(--gold-l);background:#fffaf0}
+  .add{border:1.5px dashed var(--gold);border-radius:11px;background:#fffdf6;padding:11px;text-align:center;font-size:13.5px;color:var(--gold-d);font-weight:700;margin-bottom:12px}
+  /* picker */
+  .picker{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .picker .h{font-size:12.5px;font-weight:700;margin-bottom:9px}
+  .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+  .chip{aspect-ratio:1/1;border:1px solid var(--line);border-radius:9px;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--ink)}
+  .chip.sel{border-color:var(--gold);background:#fffaf0;color:var(--gold-d);box-shadow:0 0 0 2px rgba(194,161,78,.22)}
+  /* compteur + prix */
+  .count{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:14px;font-size:13px}
+  .count b{color:var(--ink)}
+  .count .free{color:#256b34;font-weight:700}
+  .totbox{display:flex;align-items:center;justify-content:space-between;margin-top:12px;background:linear-gradient(180deg,#fffaf0,#fff);border:1.5px solid var(--gold);border-radius:12px;padding:12px 14px}
+  .totbox .lab{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px}
+  .totbox .val{font-family:Georgia,serif;font-size:22px;font-weight:700}
+  .cta{height:52px;background:linear-gradient(180deg,#cdaa57,#a98935);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-top:12px;box-shadow:0 8px 20px rgba(169,137,53,.3)}
+</style></head>
+<body>
+  <div class="flag">Maquette — configurateur de gravure (aperçu, pas en ligne)</div>
+  <div class="wrap">
+    <div class="eyebrow">✦ Gobelet 40 oz</div>
+    <h1>Composez votre gravure</h1>
+
+    <div class="lbl">1. Choisissez le côté</div>
+    <div class="sides">
+      <span class="side">Face</span>
+      <span class="side">Gauche</span>
+      <span class="side on">Côté droit</span>
+      <span class="side">Tout autour</span>
+    </div>
+
+    <div class="lbl">2. Placez vos motifs · aperçu 3D</div>
+    <div class="stage">
+      <img src="/root/.claude/uploads/376b8974-977b-5216-a92d-7f2497266b32/a6d02fa3-IMG_9303.png">
+      <span class="pin main" style="top:44%;left:56%"><small>Principal</small>12</span>
+      <span class="pin" style="top:24%;left:60%"><small>Haut</small>45</span>
+      <span class="pin" style="top:66%;left:58%"><small>Bas</small>3</span>
+      <div class="rotate">↻ Tournez le gobelet pour voir le rendu</div>
+    </div>
+
+    <div class="lbl">Vos motifs (3 / 4 inclus)</div>
+    <div class="mot main"><span class="num">12</span><span class="nm"><b>Motif principal</b><span style="color:var(--ink-soft);font-size:12px">Côté droit — centre</span></span><span class="rm">×</span></div>
+    <div class="mot"><span class="zn">▲ Haut</span><span class="num">45</span><span class="nm">Papillon</span><span class="rm">×</span></div>
+    <div class="mot"><span class="zn">▼ Bas</span><span class="num">3</span><span class="nm">Cœur floral</span><span class="rm">×</span></div>
+    <div class="add">＋ Ajouter un motif (choisir un numéro)</div>
+
+    <div class="picker">
+      <div class="h">Choisissez un numéro dans le catalogue</div>
+      <div class="grid">
+        <span class="chip">1</span><span class="chip">2</span><span class="chip sel">3</span><span class="chip">4</span><span class="chip">5</span><span class="chip">6</span>
+        <span class="chip">7</span><span class="chip">8</span><span class="chip">9</span><span class="chip">10</span><span class="chip">11</span><span class="chip sel">12</span>
+        <span class="chip">…</span><span class="chip">45</span><span class="chip">46</span><span class="chip">67</span><span class="chip">68</span><span class="chip">79</span>
+      </div>
+    </div>
+
+    <div class="count"><span><b>3 motifs</b> placés</span><span class="free">✓ Inclus (jusqu'à 4)</span></div>
+    <div class="count" style="margin-top:6px;color:var(--ink-soft)"><span>Au-delà de 4 motifs</span><span><b>+2,90 €</b> / motif</span></div>
+
+    <div class="totbox"><span class="lab">Total tout compris</span><span class="val">39,90 €</span></div>
+    <div class="cta">Ajouter au panier</div>
+  </div>
+</body></html>
