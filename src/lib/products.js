@@ -1860,6 +1860,54 @@ export const products = [
 <li>Livré à plat (montage simple, quelques secondes)</li>
 </ul>`,
   },
+  // ------------------- GOBELET ISOTHERME 40 oz (MASQUÉ, prêt à publier) -------
+  // PAS ENCORE PUBLIÉ (hidden:true). Pour le mettre en ligne : passer hidden:false
+  // (ou Gestion → Catalogue). Reste à finaliser avec la gérante : stock par
+  // coloris + éventuel prix barré (promo −20 %) + remplacer les rendus gravés
+  // « Follow the Stars » / « The Future is Bright » (textes de démo anglais).
+  {
+    slug: "gobelet-isotherme-40oz",
+    hidden: true,
+    badge: "Nouveau",
+    name: "Gobelet isotherme 40 oz",
+    weight: 700, // gobelet acier double paroi + accessoires (emballé) → colis
+    pickup: false,
+    letter: false,
+    category: "cadeaux",
+    type: "Gobelet à graver",
+    tagline: "Grand gobelet isotherme 40 oz (1,1 L) avec anse et paille — gravé selon vos envies.",
+    personalizable: true,
+    personalizationLabel: "Gravure personnalisée (texte, logo ou photo)",
+    personalizationFields: [
+      { key: "note", type: "note", text: "Ajoutez ce que vous voulez : prénom, date, message, initiales, logo… Gravé au laser dans notre atelier." },
+      { key: "texte", label: "Votre texte à graver", placeholder: "Prénom, date, petit message…", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "photo", type: "photo", label: "Ou envoyez un logo / une photo (optionnel)", optional: true, text: "Optionnel : un logo ou une photo à graver. Vous pouvez aussi nous l'envoyer par message après la commande." },
+    ],
+    title: "Gobelet isotherme 40 oz à graver — personnalisé (anse + paille)",
+    images: [
+      "/produits/gobelet-creme-grave.png",
+      "/produits/gobelet-rose-grave.png",
+      "/produits/gobelet-marine-grave.png",
+      "/produits/gobelet-blanc-grave.png",
+      "/produits/gobelet-creme-accessoires.png",
+    ],
+    variants: [
+      { id: "gobelet-40oz-creme", title: "Crème", price: 39.90, image: "/produits/gobelet-creme-vierge.png" },
+      { id: "gobelet-40oz-blanc", title: "Blanc", price: 39.90, image: "/produits/gobelet-blanc-vierge.png" },
+      { id: "gobelet-40oz-marine", title: "Bleu marine", price: 39.90, image: "/produits/gobelet-marine-vierge.png" },
+      { id: "gobelet-40oz-rose", title: "Rose", price: 39.90, image: "/produits/gobelet-rose-vierge.png" },
+    ],
+    descriptionHtml: `<p><strong>Un grand gobelet isotherme 40 oz (1,1 L)</strong> en acier inoxydable double paroi, avec anse et paille. Il garde vos boissons <strong>chaudes ou froides pendant des heures</strong> et se glisse dans le porte-gobelet de la voiture.</p>
+<h3>Détails</h3>
+<ul>
+<li><strong>Coloris :</strong> Crème, Blanc, Bleu marine, Rose</li>
+<li><strong>Gravure au laser</strong> personnalisée : prénom, date, message, initiales, logo…</li>
+<li>Couvercle avec paille réutilisable + goupillon inclus</li>
+<li>Gravé à la commande, dans notre atelier en France</li>
+</ul>
+<p><em>Envoyez votre idée ou votre photo par message, on s'occupe du reste.</em></p>`,
+  },
   // --------------------------- NAISSANCE -------------------------------------
   // Plaque de naissance en bois gravé : UN produit, 2 modèles (Fille / Garçon)
   // via des variantes-à-image (la photo change selon le modèle choisi). Carte
