@@ -141,6 +141,10 @@ export async function POST(req) {
   let letterOnly = true;
   let allFreeShip = true; // tous les articles ont la livraison offerte
   let allPickup = true; // retrait proposé seulement si TOUS les articles sont éligibles (mariage)
+  // Livraison offerte par SEUIL sur colis (ex. verres : lot de 4 ≥ 45 € → offerte).
+  // Sûr : ne s'applique que si TOUS les colis du panier portent freeShipThreshold.
+  let allColisThreshFree = true;
+  let colisThresh = Infinity;
   const boughtVariants = []; // pour décrémenter le stock après paiement
 
   for (const item of items) {
@@ -181,6 +185,8 @@ export async function POST(req) {
     if (!product.letter) {
       letterOnly = false;
       parcelQty += quantity;
+      if (product.freeShipThreshold) colisThresh = Math.min(colisThresh, Number(product.freeShipThreshold));
+      else allColisThreshFree = false;
     }
     if (product.category === "verres") glassQty += quantity;
     if (!product.freeShipping) allFreeShip = false;
@@ -266,7 +272,8 @@ export async function POST(req) {
       // relais choisi sur le panier, enregistré à part sur la commande).
       shipping_address_collection: { allowed_countries: allowedCountries },
       shipping_options: buildShippingOptions({
-        totalGrams, subtotal, parcelQty, glassQty, letterOnly, freeShipping: allFreeShip,
+        totalGrams, subtotal, parcelQty, glassQty, letterOnly,
+        freeShipping: allFreeShip || (allColisThreshFree && parcelQty > 0 && subtotal >= colisThresh),
         country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
         // Retrait proposé si un article mariage est marqué OU si le colis est
         // lourd (≥ 2 kg), et seulement dans la zone autorisée.

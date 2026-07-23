@@ -32,6 +32,8 @@ export const SUBCATEGORIES = {
   // Verres gravés : par type de verre (on ajoute champagne/bière/vin quand les produits arrivent).
   verres: [
     { slug: "whisky", label: "Verre à whisky" },
+    { slug: "vin", label: "Verre à vin" },
+    { slug: "champagne", label: "Flûte à champagne" },
   ],
   mariage: [
     { slug: "tables", label: "Numéros de table" },
@@ -1403,7 +1405,7 @@ export const products = [
     // Menu de personnalisation en 2 onglets visibles : les modèles d'un côté,
     // la lettre fleurie de l'autre (comme le gobelet). Rien n'est supprimé.
     personaTabs: [
-      { key: "modeles", label: "Modèles", sub: "visuels prêts" },
+      { key: "modeles", label: "Modèles", sub: "visuels prêts", catchAll: true },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale A→Z", fields: ["lettreFleurie"] },
     ],
     personalizationFields: [
@@ -1449,6 +1451,129 @@ export const products = [
 <li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre</li>
 <li><strong>Personnalisation :</strong> un modèle au choix (ou vos propres textes) + prénom / date, ou une lettre fleurie</li>
 <li><strong>Hauteur :</strong> environ 9 cm</li>
+</ul>`,
+  },
+  {
+    slug: "verre-a-vin-grave",
+    badge: "Nouveau",
+    name: "Verre à vin gravé",
+    weight: 500, // fragile : verre + emballage protégé (repli ; poids réel par variante)
+    pickup: false, // verres : livraison seule
+    letter: false, // colis (fragile)
+    hidden: false, // PUBLIÉ
+    freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4) — n'affecte que ce produit
+    cardImage: "/produits/verre_vin_grave.jpg",
+    title: "Verre à vin gravé personnalisé — prénom, date, monogramme ou modèle au choix",
+    category: "verres",
+    subcategory: "vin",
+    type: "Verre gravé personnalisé",
+    tagline: "Un verre à vin en cristal, gravé à votre façon : choisissez un modèle (n°1 à 19), une lettre fleurie ou votre texte.",
+    personalizable: true,
+    personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
+    images: [
+      "/produits/verre_vin_ambiance.jpg",
+      "/produits/verre_vin_grave.jpg",
+      "/produits/verre_vin_vierge.jpg",
+      "/produits/verre_vin_set.jpg",
+    ],
+    personaTabs: [
+      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
+      { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
+      { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
+    ],
+    personalizationFields: [
+      { key: "stylenote", type: "note", image: "/produits/styles_verre_all.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 19) et notez le numéro qui vous plaît." },
+      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 18", maxLength: 8, optional: true },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
+      { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
+      { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
+      { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17), le prénom et la date sont gravés dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple / monogramme." },
+      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
+    ],
+    variants: [
+      { id: "verre-vin-1", stockId: "verre-vin-1", title: "À l'unité", price: 12.90, weight: 500 },
+      { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 24.90, weight: 900 },
+      { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4 — livraison offerte", price: 49.90, weight: 1600 },
+    ],
+    descriptionHtml: `<p><strong>Un verre à vin en cristal, gravé à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 19 : couples, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
+<p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès le lot de 4.</strong></p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Verre :</strong> verre à vin en cristal, contenance ~36 cl</li>
+<li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
+<li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
+<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte sur le lot de 4)</li>
+</ul>
+<h3>Points forts</h3>
+<ul>
+<li>Gravure permanente, qui résiste au lave-vaisselle</li>
+<li>Aperçu en direct de votre gravure avant de commander</li>
+<li>Emballage protégé pour un transport en toute sécurité</li>
+<li>Gravé en France, dans notre atelier</li>
+</ul>`,
+  },
+  {
+    slug: "flute-a-champagne-gravee",
+    badge: "Nouveau",
+    name: "Flûte à champagne gravée",
+    weight: 450,
+    pickup: false,
+    letter: false,
+    hidden: false,
+    freeShipThreshold: 45,
+    cardImage: "/produits/flute_set.jpg",
+    title: "Flûte à champagne gravée personnalisée — prénom, date, monogramme ou modèle",
+    category: "verres",
+    subcategory: "champagne",
+    type: "Verre gravé personnalisé",
+    tagline: "Une flûte à champagne gravée à votre façon : choisissez un modèle (n°1 à 19), une lettre fleurie ou votre texte.",
+    personalizable: true,
+    personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
+    images: [
+      "/produits/flute_ambiance.jpg",
+      "/produits/flute_set.jpg",
+      "/produits/flute_vierge.jpg",
+    ],
+    personaTabs: [
+      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
+      { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
+      { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
+    ],
+    personalizationFields: [
+      { key: "stylenote", type: "note", image: "/produits/styles_verre_all.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 19) et notez le numéro qui vous plaît." },
+      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 18", maxLength: 8, optional: true },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
+      { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
+      { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
+      { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17), le prénom et la date sont gravés dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple / monogramme." },
+      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
+    ],
+    variants: [
+      { id: "flute-1", stockId: "flute-1", title: "À l'unité", price: 12.90, weight: 450 },
+      { id: "flute-2", stockId: "flute-2", title: "Lot de 2", price: 24.90, weight: 800 },
+      { id: "flute-4", stockId: "flute-4", title: "Lot de 4 — livraison offerte", price: 49.90, weight: 1400 },
+    ],
+    descriptionHtml: `<p><strong>Une flûte à champagne gravée à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 19 : couples, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
+<p>Gravure laser permanente, qui résiste au lave-vaisselle. Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire. <strong>Livraison offerte dès le lot de 4.</strong></p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Verre :</strong> flûte à champagne, contenance ~21 cl (Ø 6,3 × H 21,4 cm)</li>
+<li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
+<li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
+<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte sur le lot de 4)</li>
+</ul>
+<h3>Points forts</h3>
+<ul>
+<li>Gravure permanente, qui résiste au lave-vaisselle</li>
+<li>Aperçu en direct de votre gravure avant de commander</li>
+<li>Emballage protégé pour un transport en toute sécurité</li>
+<li>Gravé en France, dans notre atelier</li>
 </ul>`,
   },
   {

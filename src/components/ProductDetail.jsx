@@ -247,8 +247,15 @@ export default function ProductDetail({ product }) {
   // Chaque onglet = { key, label, sub, fields:[...clés] }. Les champs non listés
   // vont dans le PREMIER onglet (par défaut). N'affecte que les produits qui le déclarent.
   const personaTabs = product.personaTabs || null;
-  const tabOf = (key) =>
-    personaTabs ? (personaTabs.find((t) => (t.fields || []).includes(key))?.key || personaTabs[0].key) : null;
+  // Onglet d'un champ : celui qui le liste ; sinon l'onglet "catchAll" ; sinon
+  // "*" = champ commun toujours visible (sous les onglets, comme les maquettes).
+  const tabOf = (key) => {
+    if (!personaTabs) return null;
+    const inTab = personaTabs.find((t) => (t.fields || []).includes(key));
+    if (inTab) return inTab.key;
+    const catchAll = personaTabs.find((t) => t.catchAll);
+    return catchAll ? catchAll.key : "*";
+  };
   const curPersonaTab = personaTab || (personaTabs ? personaTabs[0].key : null);
 
   function setField(key, value) {
@@ -1209,7 +1216,7 @@ export default function ProductDetail({ product }) {
                 </div>
               )}
               {visibleFields.map((f) => {
-                if (personaTabs && tabOf(f.key) !== curPersonaTab) return null;
+                if (personaTabs && tabOf(f.key) !== "*" && tabOf(f.key) !== curPersonaTab) return null;
                 if (f.type === "note") {
                   // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).
                   const noteImg = (f.imageByVariant && f.imageByVariant[variant.id]) || f.image;
