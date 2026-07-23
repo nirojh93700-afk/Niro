@@ -1468,11 +1468,12 @@ export const products = [
     category: "verres",
     subcategory: "vin",
     type: "Verre gravé personnalisé",
-    tagline: "Un verre à vin en cristal, gravé à votre façon : choisissez un modèle (n°1 à 19), une lettre fleurie ou votre texte.",
+    tagline: "Un verre à vin en cristal, gravé à votre façon : choisissez un modèle (n°1 à 20), une lettre fleurie ou votre texte.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
       "/produits/verre_vin_ambiance.jpg",
+      "/produits/verre_vin_exemple_dale.jpg",
       "/produits/verre_vin_grave.jpg",
       "/produits/verre_vin_vierge.jpg",
       "/produits/verre_vin_set.jpg",
@@ -1483,15 +1484,15 @@ export const products = [
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
     personalizationFields: [
-      { key: "stylenote", type: "note", image: "/produits/styles_verre_all.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 19) et notez le numéro qui vous plaît." },
-      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 18", maxLength: 8, optional: true },
+      { key: "stylenote", type: "note", image: "/produits/styles_verre_vin.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 20) et notez le numéro qui vous plaît." },
+      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 20", maxLength: 8, optional: true },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
       { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
       { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17), le prénom et la date sont gravés dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple / monogramme." },
+      { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17) et le monogramme (n°20 : initiale, nom, date), le texte est gravé dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
     ],
     variants: [
@@ -1499,7 +1500,7 @@ export const products = [
       { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 24.90, weight: 900 },
       { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4 — livraison offerte", price: 49.90, weight: 1600 },
     ],
-    descriptionHtml: `<p><strong>Un verre à vin en cristal, gravé à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 19 : couples, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
+    descriptionHtml: `<p><strong>Un verre à vin en cristal, gravé à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
 <p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès le lot de 4.</strong></p>
 <h3>Caractéristiques</h3>
 <ul>
