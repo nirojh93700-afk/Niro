@@ -352,6 +352,10 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
 `src/app/api/admin/agents`, `src/app/api/admin/social`, `src/app/gestion/agents`, l'onglet
 « agents » dans `/gestion/page.jsx`, et le bloc autonome dans `/api/contact/route.js`.
 
+### AGENTS AUTOMATIQUES (maj 24/07/2026)
+- **Agent e-mail autonome** : déjà codé. S'active via l'interrupteur `agents.emailAutoReply` (Gestion → Équipe d'agents). Quand ON, `/api/contact` appelle `triageIncomingEmail` → répond SEUL aux cas simples (envoi Resend) et remonte les cas spéciaux « à valider ». Laissé OFF par défaut (la gérante teste avant). Réglage « live » (Firestore) — pas modifiable depuis le code.
+- **Rapport / Newsletter / Marketing automatiques** : endpoint **`/api/cron/agents?token=CRON_SECRET`** (`src/app/api/cron/agents/route.js`). Lance les agents `rapport`/`newsletter`/`marketing` (ou un seul avec `&task=`) et **envoie le résultat par e-mail à la gérante** (`BRAND.contact`) pour relecture — rien n'est diffusé aux clients/Instagram sans elle. À planifier via **Google Cloud Scheduler** (comme `/api/cron/birthdays`), 1×/semaine. Nécessite `CRON_SECRET` (secret Firebase) + `ANTHROPIC_API_KEY` (déjà là). Post Instagram auto = seulement quand le compte IG Business sera connecté (sinon le brouillon arrive par mail).
+
 ### EN ATTENTE côté utilisatrice (RAPPELER si elle demande « il reste quoi »)
 - **Montage / visuel / fichier 3D** : elle DOIT fournir un produit (photo + nom) → Claude le
   génère à la demande avec ses outils (génération image/vidéo/3D). ← promis, à faire quand elle l'envoie.
