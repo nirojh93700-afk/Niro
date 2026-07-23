@@ -1462,6 +1462,7 @@ export const products = [
     letter: false, // colis (fragile)
     hidden: false, // PUBLIÉ
     freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4) — n'affecte que ce produit
+    photoContain: true, // photos hautes (verres) : voir le verre en entier (pas de rognage)
     cardImage: "/produits/verre_vin_grave.jpg",
     title: "Verre à vin gravé personnalisé — prénom, date, monogramme ou modèle au choix",
     category: "verres",
@@ -1524,6 +1525,7 @@ export const products = [
     letter: false,
     hidden: false,
     freeShipThreshold: 45,
+    photoContain: true, // photos hautes (flûte) : voir le verre en entier
     cardImage: "/produits/flute_set.jpg",
     title: "Flûte à champagne gravée personnalisée — prénom, date, monogramme ou modèle",
     category: "verres",

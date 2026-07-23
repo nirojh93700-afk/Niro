@@ -794,7 +794,7 @@ export default function ProductDetail({ product }) {
       <div className="product-layout">
         {/* Galerie */}
         <div>
-          <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}${product.crystal3d ? " gallery-contain" : ""}`} ref={photoRef}>
+          <div className={`gallery-main${modeleField ? " toolbar-bottom" : ""}${product.crystal3d || product.photoContain ? " gallery-contain" : ""}`} ref={photoRef}>
             {activeIsVideo ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption
               <video
