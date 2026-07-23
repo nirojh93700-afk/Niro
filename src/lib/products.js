@@ -1589,7 +1589,7 @@ export const products = [
     pickup: false,
     letter: false, // colis lourd et fragile
     hidden: false, // PUBLIÉ
-    freeShipping: true, // livraison offerte
+    freeShipThreshold: 45, // livraison offerte dès 45 € (carafe 54,90 € toujours offerte, et cohérent en panier mixte verres/carafe)
     cardImage: "/produits/carafe_gravee.jpg",
     title: "Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception",
     category: "verres",
