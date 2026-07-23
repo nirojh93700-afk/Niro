@@ -1342,9 +1342,9 @@ export const products = [
     category: "verres",
     subcategory: "whisky",
     type: "Verre photo personnalisé",
-    tagline: "Un verre à whisky gravé à votre message : prénom, date, initiales ou logo.",
+    tagline: "Votre photo gravée sur un verre à whisky : un portrait, un souvenir — cadeau unique et durable.",
     personalizable: true,
-    personalizationLabel: "Texte à graver (+ police, dessin ou logo en option)",
+    personalizationLabel: "Votre photo à graver (+ texte, date ou logo en option)",
     images: [
       "/produits/verre_a_whisky_grave_ambiance.jpg",
       "/produits/verre_a_whisky_exemple_face.jpg",
@@ -1354,21 +1354,22 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-grave", title: "Verre à whisky gravé", price: 26.90 },
+      { id: "verre-whisky-grave", title: "Verre à whisky portrait personnalisé", price: 26.90 },
     ],
-    descriptionHtml: `<p><strong>Le verre à whisky personnalisé, gravé à votre message.</strong> Prénom, date, initiales, citation ou logo : chaque verre est gravé sur mesure pour devenir un cadeau unique et raffiné.</p>
-<p>Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour un anniversaire, la Fête des Pères, un cadeau d'entreprise, un témoin de mariage, ou simplement pour se faire plaisir.</p>
+    descriptionHtml: `<p><strong>Votre photo gravée sur un verre à whisky.</strong> Un portrait, une photo de famille, un souvenir : votre image est transformée en gravure façon dessin, puis gravée au laser sur le verre — un cadeau unique et émouvant.</p>
+<p>Vous pouvez aussi ajouter un texte (prénom, date, message), un dessin ou votre logo. Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour la Fête des Pères, un anniversaire, un cadeau de couple, un souvenir de famille ou un cadeau d'entreprise.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Verre :</strong> verre à whisky, base épaisse, contenance d'environ 300 ml</li>
-<li><strong>Gravure :</strong> laser, sur une face — texte et/ou dessin / logo</li>
-<li><strong>Personnalisation :</strong> texte au choix, 8 polices, dessin via l'assistant ou votre propre image</li>
+<li><strong>Gravure :</strong> laser, sur une face — votre photo (portrait), et/ou texte, dessin ou logo</li>
+<li><strong>Personnalisation :</strong> votre photo, plus texte au choix (8 polices) et dessin via l'assistant</li>
 <li><strong>Hauteur :</strong> environ 9 cm</li>
 </ul>
 <h3>Points forts</h3>
 <ul>
+<li>Votre photo transformée en gravure, retravaillée à la main par notre atelier</li>
 <li>Gravure permanente, qui résiste au lave-vaisselle</li>
-<li>Aperçu en direct de votre texte sur le verre avant de commander</li>
+<li>Aperçu en direct sur le verre avant de commander</li>
 <li>Emballage protégé pour un transport en toute sécurité</li>
 <li>Une idée cadeau personnalisée, pour homme comme pour femme</li>
 </ul>`,
