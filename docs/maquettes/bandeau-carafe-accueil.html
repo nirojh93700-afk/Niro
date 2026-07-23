@@ -8,22 +8,27 @@
 .fake{border:1px dashed var(--line);border-radius:12px;padding:14px;text-align:center;color:var(--ink-soft);font-size:13px;margin-bottom:14px;background:#fffdf7}
 
 /* ===== LE BANDEAU ===== */
-.lim{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(150deg,#241a0c,#120c05 75%);color:#f5efe2;display:grid;grid-template-columns:1.15fr .85fr;min-height:230px;box-shadow:0 14px 40px rgba(36,26,12,.28)}
+.lim{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(150deg,#241a0c,#120c05 75%);color:#f5efe2;display:grid;grid-template-columns:1.15fr .85fr;min-height:230px;box-shadow:0 14px 40px rgba(36,26,12,.28);animation:lmglow 3.6s ease-in-out infinite}
+@keyframes lmglow{0%,100%{box-shadow:0 14px 40px rgba(36,26,12,.28)}50%{box-shadow:0 16px 52px rgba(201,162,75,.4)}}
 .lim .txt{padding:26px 22px 24px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:12px;position:relative;z-index:2}
 .lim .tag{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-l);border:1px solid rgba(226,198,126,.5);border-radius:999px;padding:7px 14px;font-weight:700}
 .lim .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--gold-l);animation:pulse 1.8s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
 .lim h2{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:clamp(21px,4.6vw,30px);line-height:1.15;color:#fff;font-weight:600}
-.lim h2 em{font-style:normal;background:linear-gradient(90deg,#e2c67e,#f6e7bd,#e2c67e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lim h2 em{font-style:normal;background:linear-gradient(90deg,#e2c67e,#f6e7bd,#e2c67e,#f6e7bd,#e2c67e);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:lmshimmer 3s linear infinite}
+@keyframes lmshimmer{to{background-position:-200% center}}
 .lim p{margin:0;font-size:13.5px;color:#cdbfa4;max-width:34ch}
-.lim .cta{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 20px;border-radius:999px;box-shadow:0 6px 18px rgba(201,162,75,.4)}
+.lim .cta{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 20px;border-radius:999px;box-shadow:0 6px 18px rgba(201,162,75,.4);animation:lmbtn 2.4s ease-in-out infinite}
+.lim .cta:hover{animation:none;transform:translateY(-2px)}
+@keyframes lmbtn{0%,100%{transform:translateY(0);box-shadow:0 6px 18px rgba(201,162,75,.4)}50%{transform:translateY(-3px);box-shadow:0 12px 26px rgba(201,162,75,.6)}}
 .lim .pic{position:relative;min-height:200px}
-.lim .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.lim .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;animation:lmzoom 9s ease-in-out infinite}
+@keyframes lmzoom{0%,100%{transform:scale(1.03)}50%{transform:scale(1.11)}}
 .lim .pic::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#120c05 0%,rgba(18,12,5,0) 42%);z-index:1}
 .lim .shine{position:absolute;top:-40%;left:-30%;width:36%;height:180%;background:linear-gradient(100deg,transparent,rgba(255,244,214,.13),transparent);transform:rotate(12deg);animation:sweep 4.5s ease-in-out infinite;z-index:2;pointer-events:none}
 @keyframes sweep{0%{left:-36%}55%{left:110%}100%{left:110%}}
 @media(max-width:560px){.lim{grid-template-columns:1fr}.lim .pic{order:-1;min-height:170px}.lim .pic::before{background:linear-gradient(0deg,#120c05 4%,rgba(18,12,5,0) 55%)}}
-@media(prefers-reduced-motion:reduce){.lim .shine{animation:none;opacity:0}.lim .tag .dot{animation:none}}
+@media(prefers-reduced-motion:reduce){.lim,.lim .shine,.lim .tag .dot,.lim .cta,.lim .pic img,.lim h2 em{animation:none}.lim .shine{opacity:0}}
 </style>
 <div class="topban">MAQUETTE — BANDEAU ACCUEIL « CARAFE ÉDITION LIMITÉE » (RIEN SUR LE SITE)</div>
 <p class="note">Voici le bandeau tel qu'il apparaîtrait sur la page d'accueil, juste sous l'entrée du site (avant « Nos nouveautés »). Fond sombre + or (mêmes codes que le site), reflet qui balaie la photo, point doré qui pulse.</p>

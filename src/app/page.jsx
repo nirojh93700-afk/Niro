@@ -153,22 +153,27 @@ export default async function HomePage() {
         <section style={{ padding: "8px 0 4px" }}>
           <div className="container">
             <style>{`
-              .limed{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(150deg,#241a0c,#120c05 75%);color:#f5efe2;display:grid;grid-template-columns:1.15fr .85fr;min-height:230px;box-shadow:0 14px 40px rgba(36,26,12,.28)}
+              .limed{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(150deg,#241a0c,#120c05 75%);color:#f5efe2;display:grid;grid-template-columns:1.15fr .85fr;min-height:230px;box-shadow:0 14px 40px rgba(36,26,12,.28);animation:lmglow 3.6s ease-in-out infinite}
+              @keyframes lmglow{0%,100%{box-shadow:0 14px 40px rgba(36,26,12,.28)}50%{box-shadow:0 16px 52px rgba(201,162,75,.4)}}
               .limed .lm-txt{padding:26px 24px;display:flex;flex-direction:column;justify-content:center;gap:12px;z-index:2}
               .limed .lm-tag{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:#e2c67e;border:1px solid rgba(226,198,126,.5);border-radius:999px;padding:7px 14px;font-weight:700;align-self:flex-start}
               .limed .lm-dot{width:7px;height:7px;border-radius:50%;background:#e2c67e;animation:lmpulse 1.8s infinite}
               @keyframes lmpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
               .limed h2{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:clamp(21px,4.4vw,30px);line-height:1.15;color:#fff;font-weight:600}
-              .limed h2 em{font-style:normal;background:linear-gradient(90deg,#e2c67e,#f6e7bd,#e2c67e);-webkit-background-clip:text;background-clip:text;color:transparent}
+              .limed h2 em{font-style:normal;background:linear-gradient(90deg,#e2c67e,#f6e7bd,#e2c67e,#f6e7bd,#e2c67e);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:lmshimmer 3s linear infinite}
+              @keyframes lmshimmer{to{background-position:-200% center}}
               .limed p{margin:0;font-size:13.5px;color:#cdbfa4;max-width:34ch}
-              .limed .lm-cta{align-self:flex-start;background:linear-gradient(135deg,#c9a24b,#a98935);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(201,162,75,.4)}
+              .limed .lm-cta{align-self:flex-start;background:linear-gradient(135deg,#c9a24b,#a98935);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(201,162,75,.4);animation:lmbtn 2.4s ease-in-out infinite}
+              .limed .lm-cta:hover{animation:none;transform:translateY(-2px)}
+              @keyframes lmbtn{0%,100%{transform:translateY(0);box-shadow:0 6px 18px rgba(201,162,75,.4)}50%{transform:translateY(-3px);box-shadow:0 12px 26px rgba(201,162,75,.6)}}
               .limed .lm-pic{position:relative;min-height:200px}
-              .limed .lm-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+              .limed .lm-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:lmzoom 9s ease-in-out infinite}
+              @keyframes lmzoom{0%,100%{transform:scale(1.03)}50%{transform:scale(1.11)}}
               .limed .lm-pic::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#120c05,rgba(18,12,5,0) 44%);z-index:1}
               .limed .lm-shine{position:absolute;top:-40%;left:-30%;width:36%;height:180%;background:linear-gradient(100deg,transparent,rgba(255,244,214,.13),transparent);transform:rotate(12deg);animation:lmsweep 4.5s ease-in-out infinite;z-index:2;pointer-events:none}
               @keyframes lmsweep{0%{left:-36%}55%{left:110%}100%{left:110%}}
               @media(max-width:560px){.limed{grid-template-columns:1fr}.limed .lm-pic{order:-1;min-height:160px}.limed .lm-pic::before{background:linear-gradient(0deg,#120c05 6%,rgba(18,12,5,0) 55%)}}
-              @media(prefers-reduced-motion:reduce){.limed .lm-shine{animation:none;opacity:0}.limed .lm-dot{animation:none}}
+              @media(prefers-reduced-motion:reduce){.limed,.limed .lm-shine,.limed .lm-dot,.limed .lm-cta,.limed .lm-pic img,.limed h2 em{animation:none}.limed .lm-shine{opacity:0}}
             `}</style>
             <div className="limed">
               <div className="lm-txt">
