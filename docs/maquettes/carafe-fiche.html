@@ -92,7 +92,7 @@
   .lbtn:hover{border-color:var(--gold-l)}
   .lbtn.on{border-color:var(--gold);background:#fffaf0;color:var(--gold-d);box-shadow:0 0 0 2px rgba(194,161,78,.22)}
   .lettres-note{font-size:12.5px;color:var(--ink-soft);margin-top:6px}
-.alpha-img{width:100%;max-width:460px;display:block;margin:0 auto 10px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}</style>
+.alpha-img{width:100%;max-width:460px;display:block;margin:0 auto 10px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}.ship{background:#eef7ee;color:#2f7d43;font-size:13px;font-weight:700;border-radius:20px;padding:4px 12px;margin-left:6px}</style>
 <div class="flag">Maquette — fiche carafe (pas en ligne)</div>
 <div class="hdr"><div class="logo">Ni<b>V</b> CRÉATION</div><div class="nav"><span>Accueil</span><span class="on">Boutique</span><span>Sur mesure</span><span>Contact</span></div><div class="cart">🛍</div></div>
 <div class="wrap">
@@ -111,8 +111,7 @@
     <h1>Carafe à whisky gravée</h1>
     <div class="stars">★★★★★ <span>Nouveau</span></div>
     <div class="tagline">Carafe en verre taillé avec bouchon, gravée selon vos envies : prénom, date, message, initiales ou logo. Un cadeau d'exception.</div>
-    <div class="prov">Prix provisoire — à confirmer ensemble</div>
-    <div class="price"><span class="now">59,90 €</span><span class="old">79,90 €</span><span class="pct">-25 %</span></div>
+    <div class="price"><span class="now">54,90 €</span><span class="ship">Livraison offerte</span></div>
     <div class="npay">ou en plusieurs fois avec PayPal / Klarna</div>
     <div class="perso">
       <div class="h">Personnalisez votre carafe</div>
@@ -150,11 +149,11 @@
     </div>
     <div class="perso" style="margin-top:14px">
       <div class="h">Ajoutez des verres assortis ?</div>
-      <div class="s">Des verres à whisky gravés au même style / nom que la carafe — un vrai coffret. (Verre 26,90 € à l'unité → 24,90 € en coffret, un peu remisé.)</div>
+      <div class="s">Des verres à whisky gravés au même style / nom que la carafe — un vrai coffret. (Verre 26,90 € à l'unité → 24,90 € en coffret. Livraison offerte sur tout le coffret.)</div>
       <label class="opt on"><input type="radio" name="verres" value="0" data-full="0" checked> Carafe seule <span class="pl">inclus</span></label>
       <label class="opt"><input type="radio" name="verres" value="49.80" data-full="53.80"> + 2 verres gravés assortis <span class="pl"><s style="color:#b09">53,80</s> +49,80 €</span></label>
       <label class="opt"><input type="radio" name="verres" value="99.60" data-full="107.60"> + 4 verres gravés assortis <span class="pl"><s>107,60</s> +99,60 €</span></label>
-      <div class="totline"><span>Total</span><b id="total">59,90 €</b></div>
+      <div class="totline"><span>Total</span><b id="total">54,90 €</b></div>
     </div>
     <div class="qty-row"><div class="qty"><span>−</span><b>1</b><span>＋</span></div><div class="add">Ajouter au panier</div></div>
     <div class="trust"><div class="b"><b>✦</b>Gravé en France</div><div class="b"><b>🎁</b>Cadeau d'exception</div><div class="b"><b>🥃</b>Verre taillé</div><div class="b"><b>✉</b>Photo par message</div></div>
@@ -206,7 +205,7 @@ function openZoomC(src){var o=document.createElement("div");o.className="mq-zoom
 })();
 
 (function(){
-  var BASE=59.90;
+  var BASE=54.90;
   var radios=document.querySelectorAll('input[name="verres"]');
   var tot=document.getElementById("total");
   function fmt(n){return n.toFixed(2).replace(".",",")+" €";}
