@@ -1378,7 +1378,7 @@ export const products = [
     // PAGE MODÈLE — propulsée par le moteur partagé (lib/modeles.js, template "peres").
     slug: "verre-a-whisky-fete-des-peres",
     badge: "Nouveau",
-    name: "Verre à whisky — Fête des pères",
+    name: "Verre à whisky à personnaliser",
     cardImage: "/produits/verre_a_whisky_card.jpg", // vignette : verre GRAVÉ (montre la personnalisation)
     weight: 600,
     pickup: false,
@@ -1423,11 +1423,11 @@ export const products = [
       { key: "motifFond", type: "motifniv", label: "Dessin du fond", optional: true, showIfEmplacement: "deux", showIfField: "fondType", showIfValue: "dessin" },
     ],
     engravingPricing: { flatExtras: [{ key: "emplacement", value: "deux", amount: 7 }], modeleSubExtra: { key: "modele", amount: 3 } },
-    title: "Verre à whisky gravé Fête des pères — cadeau papa, papy personnalisé",
+    title: "Verre à whisky à personnaliser — modèles gravés (Route 66, Bourbon…) et prénom",
     category: "verres",
     subcategory: "whisky",
-    type: "Verre gravé Fête des pères",
-    tagline: "Le verre à whisky personnalisé pour la Fête des pères : élu papa / papy de l'année.",
+    type: "Verre gravé personnalisé",
+    tagline: "Un verre à whisky gravé à votre façon : choisissez un modèle (Route 66, Bourbon, colombes…) et ajoutez votre prénom.",
     personalizable: true,
     personalizationLabel: "Gravure Fête des pères personnalisable (textes + motif)",
     images: [
@@ -1439,15 +1439,15 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-fete-des-peres", title: "Verre à whisky gravé", price: 22.90 },
+      { id: "verre-whisky-fete-des-peres", title: "Verre à whisky à personnaliser", price: 22.90 },
     ],
-    descriptionHtml: `<p><strong>Le cadeau Fête des pères qui fait mouche.</strong> Un verre à whisky gravé « élu PAPA de l'année » (ou PAPY, TONTON, PARRAIN…), entièrement personnalisable.</p>
-<p>Choisissez vos textes, la police de chaque ligne et un motif : l'aperçu s'affiche en direct sur le verre. Gravure laser permanente, qui résiste au lave-vaisselle.</p>
+    descriptionHtml: `<p><strong>Le verre à whisky que vous composez vous-même.</strong> Choisissez un modèle prêt à graver — Route 66, The Bourbon Room, colombes & cœur, « Whisky de… » (votre prénom), « élu PAPA de l'année »… — et ajoutez votre prénom ou votre date.</p>
+<p>Choisissez vos textes, la police de chaque ligne et le modèle : l'aperçu s'affiche en direct sur le verre. Gravure laser permanente, qui résiste au lave-vaisselle. Idéal pour un anniversaire, la Fête des pères, un cadeau de couple, un souvenir ou un cadeau d'entreprise.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Verre :</strong> verre à whisky, base épaisse, contenance d'environ 300 ml</li>
 <li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre</li>
-<li><strong>Personnalisation :</strong> 3 lignes de texte + motif au choix</li>
+<li><strong>Personnalisation :</strong> un modèle au choix (ou vos propres textes) + prénom / date, ou une lettre fleurie</li>
 <li><strong>Hauteur :</strong> environ 9 cm</li>
 </ul>`,
   },

@@ -25,6 +25,11 @@ export const MODELES = {
       { id: "meilleur-monde", name: "Meilleur papa du monde", dark: "/produits/fp-meilleurmonde-dark.png", light: "/produits/fp-meilleurmonde-light.png" },
       { id: "poing-coeurs", name: "Poing & cœurs", dark: "/produits/fp-poing-dark.png", light: "/produits/fp-poing-light.png" },
       { id: "motocross", name: "Motocross", dark: "/produits/fp-motocross-dark.png", light: "/produits/fp-motocross-light.png" },
+      { id: "route66", name: "Route 66", dark: "/produits/fp-route66-dark.png", light: "/produits/fp-route66-light.png" },
+      { id: "jackdaniels", name: "Jack Daniel's", dark: "/produits/fp-jackdaniels-dark.png", light: "/produits/fp-jackdaniels-light.png" },
+      { id: "bourbonroom", name: "The Bourbon Room", dark: "/produits/fp-bourbonroom-dark.png", light: "/produits/fp-bourbonroom-light.png" },
+      { id: "colombes", name: "Colombes & cœur", dark: "/produits/fp-colombes-dark.png", light: "/produits/fp-colombes-light.png" },
+      { id: "whiskyde", name: "Whisky de… (prénom au choix)", dark: "/produits/fp-whiskyde-dark.png", light: "/produits/fp-whiskyde-light.png" },
     ],
     lines: [
       { key: "top", label: "Texte du haut", placeholder: "élu", font: "fnt-great-vibes", em: 0.85 },
