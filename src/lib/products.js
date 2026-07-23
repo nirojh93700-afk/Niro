@@ -1580,6 +1580,68 @@ export const products = [
 </ul>`,
   },
   {
+    slug: "carafe-a-whisky-gravee",
+    badge: "Édition limitée",
+    featured: true, // mise en avant sur la page d'accueil
+    name: "Carafe à whisky gravée",
+    weight: 1700, // carafe en verre taillé + emballage protégé
+    pickup: false,
+    letter: false, // colis lourd et fragile
+    hidden: false, // PUBLIÉ
+    freeShipping: true, // livraison offerte
+    cardImage: "/produits/carafe_gravee.jpg",
+    title: "Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception",
+    category: "cadeaux",
+    tagline: "Carafe en verre taillé avec bouchon, gravée selon vos envies : prénom, date, message, initiales ou modèle. Un cadeau d'exception — édition limitée.",
+    personalizable: true,
+    personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
+    images: [
+      "/produits/carafe_ambiance.jpg",
+      "/produits/carafe_gravee.jpg",
+      "/produits/carafe_produit.jpg",
+      "/produits/carafe_bar.jpg",
+    ],
+    personaTabs: [
+      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 34", fields: ["stylenote", "numstyle"] },
+      { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
+      { key: "texte", label: "Texte seul", sub: "prénom, message", fields: ["textenote"] },
+    ],
+    personalizationFields: [
+      { key: "stylenote", type: "note", image: "/produits/styles_carafe_all.png", imageAlt: "Styles gravables numérotés 1 à 34", text: "Regardez les styles ci-dessous (n°1 à 34) et notez le numéro qui vous plaît." },
+      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 6 · 21 · 34", maxLength: 8, optional: true },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
+      { key: "textenote", type: "note", text: "Écrivez votre prénom / message / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
+      { key: "prenom", label: "Prénom / nom", placeholder: "Ex. Stephan", maxLength: 40, optional: true },
+      { key: "initiale", label: "Initiale(s) — monogramme", placeholder: "Ex. K · JR", maxLength: 4, optional: true },
+      { key: "role", label: "Rôle (si le style le prévoit)", placeholder: "Ex. Groom · Best Man", maxLength: 20, optional: true },
+      { key: "date", label: "Date / année (option)", placeholder: "Ex. 1989 · 09.09.25", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "noteinfo", type: "note", text: "Pour un modèle décoré (monogramme, banderole, lettre fleurie…), le nom est gravé dans l'écriture d'origine du modèle, par défaut. La police sert au texte simple." },
+      { key: "coffret", type: "select", label: "Ajouter des verres assortis ? (coffret)", optional: true, options: [
+        { value: "", label: "Carafe seule" },
+        { value: "2verres", label: "+ 2 verres gravés assortis (+49,80 €)" },
+        { value: "4verres", label: "+ 4 verres gravés assortis (+99,60 €)" },
+      ] },
+      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre logo — envoyez-la par message." },
+    ],
+    engravingPricing: { flatExtras: [
+      { key: "coffret", value: "2verres", amount: 49.80, weight: 900 },
+      { key: "coffret", value: "4verres", amount: 99.60, weight: 1800 },
+    ] },
+    variants: [
+      { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
+    ],
+    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 34), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
+<p>Gravure laser personnalisée, réalisée à la commande dans notre atelier en France. Un cadeau d'exception (fête des pères, anniversaire, retraite, mariage…). <strong>Livraison offerte.</strong> Possibilité d'ajouter des <strong>verres assortis</strong> gravés au même style, pour un vrai coffret.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Carafe :</strong> verre taillé, bouchon à facettes, contenance ~750 ml</li>
+<li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
+<li><strong>Coffret (option) :</strong> + 2 ou + 4 verres à whisky gravés assortis</li>
+<li><strong>Édition limitée</strong> — série gravée à la main</li>
+</ul>`,
+  },
+  {
     // PAGE TEST (non publiée) — couverts enfants personnalisés (prénom + un animal par couvert).
     // Visible uniquement via ?apercu=niv2026.
     slug: "couverts-enfants-personnalises",
