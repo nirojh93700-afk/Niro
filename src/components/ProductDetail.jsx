@@ -53,6 +53,7 @@ export default function ProductDetail({ product }) {
   const [variantIndex, setVariantIndex] = useState(0);
   const [personalization, setPersonalization] = useState("");
   const [fieldValues, setFieldValues] = useState({});
+  const [personaTab, setPersonaTab] = useState(null); // onglet de perso actif (produits avec personaTabs)
   const [quantity, setQuantity] = useState(1);
   const [pkgSel, setPkgSel] = useState([]); // emballages payants choisis (ids)
   const [composition, setComposition] = useState(null); // configurateur gobelet (côté + motifs)
@@ -241,6 +242,14 @@ export default function ProductDetail({ product }) {
       (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement) &&
       (!f.showIfField || fieldValues[f.showIfField] === f.showIfValue)
   );
+
+  // Menu de personnalisation par onglets (opt-in via product.personaTabs).
+  // Chaque onglet = { key, label, sub, fields:[...clés] }. Les champs non listés
+  // vont dans le PREMIER onglet (par défaut). N'affecte que les produits qui le déclarent.
+  const personaTabs = product.personaTabs || null;
+  const tabOf = (key) =>
+    personaTabs ? (personaTabs.find((t) => (t.fields || []).includes(key))?.key || personaTabs[0].key) : null;
+  const curPersonaTab = personaTab || (personaTabs ? personaTabs[0].key : null);
 
   function setField(key, value) {
     setFieldValues((prev) => ({ ...prev, [key]: value }));
@@ -1184,7 +1193,23 @@ export default function ProductDetail({ product }) {
                   Personnalisation — gravure
                 </p>
               )}
+              {personaTabs && (
+                <div className="persona-tabs">
+                  {personaTabs.map((t) => (
+                    <button
+                      type="button"
+                      key={t.key}
+                      className={`persona-tab${curPersonaTab === t.key ? " on" : ""}`}
+                      onClick={() => setPersonaTab(t.key)}
+                    >
+                      {t.label}
+                      {t.sub && <span className="pt-sub">{t.sub}</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
               {visibleFields.map((f) => {
+                if (personaTabs && tabOf(f.key) !== curPersonaTab) return null;
                 if (f.type === "note") {
                   // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).
                   const noteImg = (f.imageByVariant && f.imageByVariant[variant.id]) || f.image;

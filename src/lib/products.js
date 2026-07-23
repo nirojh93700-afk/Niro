@@ -1399,6 +1399,12 @@ export const products = [
       maxHeightFrac: 0.40, minHeightFrac: 0.08,
       round: true,
     },
+    // Menu de personnalisation en 2 onglets visibles : les modèles d'un côté,
+    // la lettre fleurie de l'autre (comme le gobelet). Rien n'est supprimé.
+    personaTabs: [
+      { key: "modeles", label: "Modèles", sub: "visuels prêts" },
+      { key: "lettre", label: "Lettre fleurie", sub: "une initiale A→Z", fields: ["lettreFleurie"] },
+    ],
     personalizationFields: [
       { key: "modele", type: "modele", template: "peres", optional: true, label: "Personnalisez votre gravure", text: "Modifiez chaque ligne et choisissez un motif, OU choisissez simplement un visuel prêt à graver (sans rien remplir). L'aperçu se met à jour sur le verre ; vous pouvez le déplacer et le redimensionner. Aperçu indicatif — la gravure finale est optimisée par notre atelier." },
       { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", optional: true, default: "face", options: [

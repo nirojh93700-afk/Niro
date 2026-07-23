@@ -2969,3 +2969,27 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   color: var(--ink-soft);
   margin-top: 8px;
 }
+
+/* Menu de personnalisation par onglets (product.personaTabs — ex. verre Fête des pères) */
+.persona-tabs { display: flex; gap: 8px; margin: 0 0 16px; }
+.persona-tab {
+  flex: 1 1 0;
+  padding: 13px 8px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.2;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.persona-tab .pt-sub { display: block; font-size: 0.72rem; font-weight: 400; margin-top: 2px; color: var(--ink-soft); }
+.persona-tab.on {
+  border-color: var(--gold);
+  background: #fffaf0;
+  color: var(--gold-dark);
+  box-shadow: 0 0 0 2px rgba(194, 161, 78, .22);
+}
