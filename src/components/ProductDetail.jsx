@@ -23,6 +23,7 @@ import EngraveGourmette3D from "./EngraveGourmette3D";
 import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
+import LettreFleuriePicker from "./LettreFleuriePicker";
 import CrystalTextDrag from "./CrystalTextDrag";
 import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
@@ -1274,6 +1275,15 @@ export default function ProductDetail({ product }) {
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <DesignAssistant prompt={fieldValues[f.promptKey] || ""} value={fieldValues[f.key] || ""} onChange={(u) => setField(f.key, u)} />
+                      {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
+                    </div>
+                  );
+                }
+                if (f.type === "lettreFleurie") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <LettreFleuriePicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} image={f.image} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
                   );

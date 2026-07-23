@@ -1332,6 +1332,7 @@ export const products = [
         { value: "•", label: "Points  • texte •" },
       ] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie (option)", text: "Envie d'une initiale fleurie ? Regardez l'alphabet et cliquez votre lettre — elle sera gravée dans ce style fleuri." },
       { key: "note-deux", type: "note", showIfEmplacement: "deux", text: "Vous avez choisi de graver les DEUX côtés. Ci-dessus, réglez la gravure de la FACE. Ci-dessous, ajoutez la photo/le texte pour le FOND du verre (gravé centré au fond)." },
       { key: "photoFond", type: "photo", label: "Photo pour le FOND du verre", optional: true, showIfEmplacement: "deux", text: "2e gravure : cette photo sera gravée au fond du verre (centrée)." },
       { key: "texteFond", label: "Texte pour le fond (facultatif)", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux" },
@@ -1406,6 +1407,7 @@ export const products = [
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
         { value: "deux", label: "Les deux : face + fond (+7 €)" },
       ] },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie (option)", text: "Envie d'une initiale fleurie ? Regardez l'alphabet et cliquez votre lettre — elle sera gravée dans ce style fleuri." },
       { key: "note-fond-fp", type: "note", showIfEmplacement: "deux", text: "Vous gravez les DEUX côtés. Au-dessus : la face (le modèle). Ci-dessous : choisissez ce qui sera gravé AU FOND du verre — un texte OU un dessin." },
       { key: "fondType", type: "select", label: "Au fond du verre : que graver ?", optional: true, showIfEmplacement: "deux", options: [
         { value: "texte", label: "Un texte" },

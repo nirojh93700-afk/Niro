@@ -2927,3 +2927,45 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .gp-mini .gp-stage{max-width:150px}
 .gp-mini .gp-cap{font-size:.66rem}
 .gp-mini-wrap{padding:8px!important}
+
+/* Sélecteur "Lettre fleurie" (option sur les verres à whisky) */
+.lettre-fleurie .lf-alpha {
+  width: 100%;
+  max-width: 440px;
+  display: block;
+  margin: 0 auto 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px;
+}
+.lettre-fleurie .lf-letters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.lettre-fleurie .lf-btn {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+}
+.lettre-fleurie .lf-btn:hover { border-color: var(--gold); }
+.lettre-fleurie .lf-btn.on {
+  border-color: var(--gold);
+  background: #fffaf0;
+  color: var(--gold-dark);
+  box-shadow: 0 0 0 2px rgba(194, 161, 78, .22);
+}
+.lettre-fleurie .lf-note {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
