@@ -13,7 +13,7 @@ export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux", short: "Bijoux" },
   { slug: "cristal", label: "Cristal Photo 3D", short: "Cristal" },
   { slug: "naissance", label: "Naissance", short: "Naissance" },
-  { slug: "verres", label: "Verres gravés", short: "Verres" },
+  { slug: "verres", label: "Verres & Carafes", short: "Verres & Carafes" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "deco", label: "Déco & Maison", short: "Déco" },
   { slug: "cadeaux", label: "Cadeaux & Accessoires", short: "Cadeaux" },
@@ -34,6 +34,7 @@ export const SUBCATEGORIES = {
     { slug: "whisky", label: "Verre à whisky" },
     { slug: "vin", label: "Verre à vin" },
     { slug: "champagne", label: "Flûte à champagne" },
+    { slug: "carafes", label: "Carafe" },
   ],
   mariage: [
     { slug: "tables", label: "Numéros de table" },
@@ -1591,7 +1592,8 @@ export const products = [
     freeShipping: true, // livraison offerte
     cardImage: "/produits/carafe_gravee.jpg",
     title: "Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception",
-    category: "cadeaux",
+    category: "verres",
+    subcategory: "carafes",
     tagline: "Carafe en verre taillé avec bouchon, gravée selon vos envies : prénom, date, message, initiales ou modèle. Un cadeau d'exception — édition limitée.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",

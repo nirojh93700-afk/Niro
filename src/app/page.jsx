@@ -13,7 +13,7 @@ const CATEGORY_DEFAULTS = [
   { slug: "bijoux", label: "Bijoux", sub: "Colliers & bracelets gravés", image: getProductBySlug("collier-medaillon-coeur-ouvrable").images[0] },
   { slug: "mariage", label: "Mariage & Réception", sub: "Numéros de table, menus, ronds de serviette", image: getProductBySlug("menu-de-mariage-bois-grave").images[0] },
   { slug: "cadeaux", label: "Cadeaux & Accessoires", sub: "Clés USB, porte-clés, médaillons", image: getProductBySlug("cle-usb-personnalisee").images[0] },
-  { slug: "verres", label: "Verres gravés", sub: "Whisky personnalisé, gravure photo & logo", image: "/produits/verre_a_whisky_card.jpg" },
+  { slug: "verres", label: "Verres & Carafes", sub: "Whisky, vin, champagne & carafe gravés", image: "/produits/verre_a_whisky_card.jpg" },
   { slug: "deco", label: "Déco & Maison", sub: "Lampes, cristal 3D, couverts", image: getProductBySlug("lampe-led-paris-saint-germain").images[0] },
 ];
 
