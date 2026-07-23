@@ -250,6 +250,11 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **INTERDIT de modifier le site visible** (fiches, pages, textes clients) **sans l'accord explicite de la gérante**. Le circuit est TOUJOURS : **maquette d'abord → elle valide → « applique » → alors seulement on touche au site.**
 - En cas de doute sur ce qu'un « oui » valide exactement : **demander**, ne pas déduire.
 
+### RÈGLE — NE PAS MODIFIER LES MAQUETTES SANS DEMANDER (23/07/2026, demande explicite)
+- **INTERDIT de modifier une maquette (artifact) sans demander d'abord l'accord de la gérante.** Même pour une « amélioration » évidente : on **propose et on attend son feu vert** avant de toucher/republier une maquette existante.
+- Vaut pour TOUTES les maquettes (gobelet, carafe, cristal, thème, etc.). Republier une maquette = une modification → demander avant.
+- Exception : si elle demande explicitement le changement, on le fait (c'est déjà son accord).
+
 ### RÈGLE DE COMMUNICATION (importante)
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
