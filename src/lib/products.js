@@ -1281,7 +1281,7 @@ export const products = [
     lockImages: true, // galerie pilotée par le code (ignore l'ancienne liste admin)
     lockHidden: true, // publication pilotée par le code (ignore un ancien masquage admin)
     cardImage: "/produits/verre_a_whisky_exemple_face.jpg", // vignette : verre gravé PHOTO (montre l'usage)
-    name: "Verre à whisky gravé",
+    name: "Verre à whisky portrait personnalisé",
     weight: 600, // verre + emballage protégé (fragile)
     pickup: false, // verres : livraison seule (pas de retrait en main propre)
     letter: false, // colis : lourd et fragile
@@ -1338,10 +1338,10 @@ export const products = [
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
     engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · gravure face+fond +7 €
-    title: "Verre à whisky gravé personnalisé — photo, prénom, date ou logo",
+    title: "Verre à whisky portrait personnalisé — photo gravée, cadeau papa, couple ou souvenir",
     category: "verres",
     subcategory: "whisky",
-    type: "Verre gravé personnalisé",
+    type: "Verre photo personnalisé",
     tagline: "Un verre à whisky gravé à votre message : prénom, date, initiales ou logo.",
     personalizable: true,
     personalizationLabel: "Texte à graver (+ police, dessin ou logo en option)",
