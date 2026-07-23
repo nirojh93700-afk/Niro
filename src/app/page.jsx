@@ -140,10 +140,10 @@ export default async function HomePage() {
           </div>
           <div className="cr-viz">
             <div className="cr-halo"></div>
-            <div className="cr-shot">
+            <Link href="/cristaux" className="cr-shot" aria-label="Voir les cristaux photo 3D" style={{ display: "block", cursor: "pointer" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/produits/cristal-v-bebe.jpg" alt="Cristal photo 3D personnalisé" />
-            </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -182,10 +182,10 @@ export default async function HomePage() {
                 <p>Verre taillé, bouchon à facettes, gravée à votre prénom ou au modèle de votre choix. Livraison offerte.</p>
                 <Link href="/produit/carafe-a-whisky-gravee" className="lm-cta">Découvrir la carafe →</Link>
               </div>
-              <div className="lm-pic">
+              <Link href="/produit/carafe-a-whisky-gravee" className="lm-pic" aria-label="Découvrir la carafe" style={{ display: "block" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={(carafeLim.images && carafeLim.images[0]) || "/produits/carafe_ambiance.jpg"} alt="Carafe à whisky gravée — édition limitée" />
-              </div>
+              </Link>
               <div className="lm-shine"></div>
             </div>
           </div>
