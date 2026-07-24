@@ -68,7 +68,7 @@ export default function ProductDetail({ product }) {
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
   const [crystalTextPos, setCrystalTextPos] = useState(null);
   const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
-  const [motifZone, setMotifZone] = useState(null); // zone de gravure verres/carafe (cadre incliné)
+  const [motifZone, setMotifZone] = useState(product.motifZone || null); // zone de gravure verres/carafe (repli code, sinon réglage admin)
   const [crystalPreviewActive, setCrystalPreviewActive] = useState(true); // affiche l'aperçu OU les photos produit // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
@@ -164,7 +164,7 @@ export default function ProductDetail({ product }) {
     if (!product.styleImages) return;
     fetch("/api/crystal-zones")
       .then((r) => r.json())
-      .then((d) => { const z = d.zones?.[product.slug]; if (z && z.on) setMotifZone(z); })
+      .then((d) => { const z = d.zones?.[product.slug]; if (z && z.on) setMotifZone(z); else if (product.motifZone) setMotifZone(product.motifZone); })
       .catch(() => {});
   }, [product.slug, product.styleImages]);
 
