@@ -1006,7 +1006,17 @@ export default function ProductDetail({ product }) {
                 fontClass={previewFontClass}
                 color={previewColor}
                 cfg={editCfg}
-                initCyFrac={styleMotifSrc && !styleZone ? 0.85 : undefined}
+                {...(styleMotifSrc && !styleZone
+                  ? (() => {
+                      // Modèle-image SANS zone d'écriture (ex. couples) : on protège le
+                      // logo — le texte se pose SOUS le motif et ne peut pas remonter.
+                      const box = editCfg?.box || { top: 0.17, height: 0.24 };
+                      const mb = photoLayout
+                        ? (photoLayout.cy ?? 0.29) + (photoLayout.size ?? 0.28) * (photoLayout.aspect ?? 1) / 2
+                        : box.top + box.height;
+                      return { initCy: Math.max(0.3, Math.min(0.9, mb + 0.05)), yMin: Math.min(0.9, mb + 0.02), yMax: 0.95 };
+                    })()
+                  : {})}
                 onChange={setTextLayoutSide}
               />
             )}

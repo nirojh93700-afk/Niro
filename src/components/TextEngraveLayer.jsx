@@ -6,20 +6,33 @@ import { useRef, useState, useEffect } from "react";
 // - glisser pour déplacer (souris + tactile iOS),
 // - curseur pour la taille du texte (hauteur en cm indicative),
 // - position + taille renvoyées au parent (→ commande).
-export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChange, initCyFrac }) {
+export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChange, initCyFrac, initCy, yMin, yMax }) {
   const box = cfg?.box || { top: 0.3, left: 0.2, width: 0.6, height: 0.45 };
   const widthMm = cfg?.widthMm || 65;
   const maxW = cfg?.maxWidthFrac || box.width;
   const mmPerFrame = widthMm / maxW; // mm pour 100 % de la largeur du cadre
+  // Plage verticale autorisée : par défaut le cadre ; sinon la zone fournie
+  // (ex. SOUS le motif, pour ne jamais écrire par-dessus le logo).
+  const loY = typeof yMin === "number" ? yMin : box.top;
+  const hiY = typeof yMax === "number" ? yMax : box.top + box.height;
 
   const ref = useRef(null);
   const drag = useRef(null);
+  const userMoved = useRef(false); // devient vrai si le client déplace le texte à la main
   const [w, setW] = useState(0); // largeur réelle du cadre (px)
   const [scale, setScale] = useState(0.06); // taille police, fraction de la largeur du cadre
   const [cx, setCx] = useState(box.left + box.width / 2);
-  // Position verticale de départ : au milieu du cadre par défaut, ou à l'endroit
-  // de l'espace pour écrire du modèle (initCyFrac, fraction 0=haut → 1=bas du cadre).
-  const [cy, setCy] = useState(box.top + box.height * (typeof initCyFrac === "number" ? initCyFrac : 0.5));
+  // Position verticale de départ : sous le motif (initCy) si fourni, sinon dans le
+  // cadre (initCyFrac : 0=haut → 1=bas). Se met à jour tant que le client n'a pas
+  // déplacé le texte lui-même (suit le bas du motif quand il change de taille).
+  const [cy, setCy] = useState(
+    typeof initCy === "number" ? initCy : box.top + box.height * (typeof initCyFrac === "number" ? initCyFrac : 0.5)
+  );
+  useEffect(() => {
+    if (userMoved.current || typeof initCy !== "number") return;
+    setCy(Math.max(loY, Math.min(hiY, initCy)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initCy]);
   const measureRef = useRef(null);
   const [fitPx, setFitPx] = useState(null); // taille de police max qui rentre dans le cadre
 
@@ -74,8 +87,9 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
   function onMove(e) {
     if (!drag.current) return;
     const d = drag.current;
+    userMoved.current = true; // le client place le texte lui-même
     setCx(clamp(d.cx + (e.clientX - d.px) / d.w, box.left, box.left + box.width));
-    setCy(clamp(d.cy + (e.clientY - d.py) / d.h, box.top, box.top + box.height));
+    setCy(clamp(d.cy + (e.clientY - d.py) / d.h, loY, hiY));
   }
   function onUp() {
     drag.current = null;
