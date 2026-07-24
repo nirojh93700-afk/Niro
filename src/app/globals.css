@@ -3018,9 +3018,12 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .ss-note { font-size: 0.78rem; color: var(--ink-soft); margin: 0; }
 
 /* Fenêtre « sera gravé ici » + main de déplacement (verres) */
-.mtz-bubble { background: #fff; border: 1.5px solid var(--gold); border-radius: 10px; padding: 7px 10px; box-shadow: 0 6px 18px rgba(60,45,15,.18); max-width: 42%; text-align: center; }
-.mtz-cap { display: block; font-size: 10px; font-weight: 800; letter-spacing: .04em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 3px; }
-.mtz-txt { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; word-break: break-word; white-space: normal; }
+.mtz-wrap { z-index: 4; }
+.mtz-bubble { position: absolute; transform: translateY(-50%); background: #fff; border: 1.5px solid var(--gold); border-radius: 10px; padding: 6px 9px; box-shadow: 0 6px 18px rgba(60,45,15,.2); max-width: 34%; text-align: center; }
+.mtz-bubble.mtz-right { right: 4px; }
+.mtz-bubble.mtz-left { left: 4px; }
+.mtz-cap { display: block; font-size: 9.5px; font-weight: 800; letter-spacing: .03em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 2px; }
+.mtz-txt { display: flex; flex-direction: column; line-height: 1.08; font-size: 13px; word-break: break-word; white-space: normal; }
 .drag-hint { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--ink-soft); background: #fff7e6; border: 1px solid var(--gold-light, #e2c67e); border-radius: 10px; padding: 8px 12px; margin: 8px 0 2px; }
 .drag-hint .dh-hand { font-size: 1.05rem; animation: dhmove 2.2s ease-in-out infinite; }
 @keyframes dhmove { 0%,100% { transform: translateX(0); } 50% { transform: translateX(7px); } }
