@@ -1357,7 +1357,7 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-grave", title: "Verre à whisky portrait personnalisé", price: 24.90 },
+      { id: "verre-whisky-grave", title: "Verre à whisky portrait personnalisé", price: 19.90 },
     ],
     descriptionHtml: `<p><strong>Votre photo gravée sur un verre à whisky.</strong> Un portrait, une photo de famille, un souvenir : votre image est transformée en gravure façon dessin, puis gravée au laser sur le verre — un cadeau unique et émouvant.</p>
 <p>Vous pouvez aussi ajouter un texte (prénom, date, message), un dessin ou votre logo. Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour la Fête des Pères, un anniversaire, un cadeau de couple, un souvenir de famille ou un cadeau d'entreprise.</p>
@@ -1621,14 +1621,14 @@ export const products = [
       { key: "noteinfo", type: "note", text: "Pour un modèle décoré (monogramme, banderole, lettre fleurie…), le nom est gravé dans l'écriture d'origine du modèle, par défaut. La police sert au texte simple." },
       { key: "coffret", type: "select", label: "Ajouter des verres assortis ? (coffret)", optional: true, options: [
         { value: "", label: "Carafe seule" },
-        { value: "2verres", label: "+ 2 verres gravés assortis (+49,80 €)" },
-        { value: "4verres", label: "+ 4 verres gravés assortis (+99,60 €)" },
+        { value: "2verres", label: "+ 2 verres gravés assortis (+35,80 € — verre à 17,90 € au lieu de 19,90 €)" },
+        { value: "4verres", label: "+ 4 verres gravés assortis (+71,60 € — verre à 17,90 € au lieu de 19,90 €)" },
       ] },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre logo — envoyez-la par message." },
     ],
     engravingPricing: { flatExtras: [
-      { key: "coffret", value: "2verres", amount: 49.80, weight: 900 },
-      { key: "coffret", value: "4verres", amount: 99.60, weight: 1800 },
+      { key: "coffret", value: "2verres", amount: 35.80, weight: 900 },
+      { key: "coffret", value: "4verres", amount: 71.60, weight: 1800 },
     ] },
     variants: [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
