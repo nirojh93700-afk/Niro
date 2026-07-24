@@ -425,6 +425,22 @@ export default function ProductDetail({ product }) {
   if (decorSym && previewLines.length) {
     previewLines[0] = `${decorSym} ${previewLines[0]} ${decorSym}`;
   }
+  // Verres SANS champ « emplacement » (vin, flûte, carafe) : dès que le client écrit
+  // son premier texte, on bascule la galerie sur la photo du verre vierge pour montrer
+  // la gravure en direct (même expérience que le verre à whisky). Une seule fois — le
+  // client reste libre de naviguer dans les photos ensuite.
+  const hadPreviewTextRef = useRef(false);
+  useEffect(() => {
+    if (!product.engrave || !product.engraveImage) return;
+    if ((product.personalizationFields || []).some((f) => f.key === "emplacement")) return;
+    const hasText = previewLines.length > 0;
+    if (hasText && !hadPreviewTextRef.current) {
+      const idx = images.indexOf(product.engraveImage);
+      if (idx >= 0) setActiveImg(idx);
+    }
+    hadPreviewTextRef.current = hasText;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [previewLines.length]);
   // Mode "les deux" : la photo et le texte affichés dépendent du côté en cours (face / fond).
   const editPhotoSrc = (dualMode && side === "fond") ? photoSrcFond : photoSrc;
   let editLines;

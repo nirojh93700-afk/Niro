@@ -1479,6 +1479,14 @@ export const products = [
       "/produits/verre_vin_vierge.jpg",
       "/produits/verre_vin_set.jpg",
     ],
+    // Aperçu en direct sur le verre : quand le client écrit, on bascule sur la
+    // photo du verre VIDE (verre_vin_vierge) et le texte se pose sur la coupe,
+    // déplaçable + taille en cm (même système que les verres à whisky).
+    engraveImage: "/produits/verre_vin_vierge.jpg",
+    engrave: {
+      box: { top: 0.17, left: 0.36, width: 0.28, height: 0.24 },
+      widthMm: 70, maxWidthFrac: 0.28, minWidthFrac: 0.08,
+    },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
@@ -1486,7 +1494,7 @@ export const products = [
     ],
     personalizationFields: [
       { key: "stylenote", type: "note", image: "/produits/styles_verre_vin.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 20) et notez le numéro qui vous plaît." },
-      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 20", maxLength: 8, optional: true },
+      { key: "numstyle", noPreview: true, label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 20", maxLength: 8, optional: true },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
@@ -1541,6 +1549,12 @@ export const products = [
       "/produits/flute_set.jpg",
       "/produits/flute_vierge.jpg",
     ],
+    // Aperçu en direct sur la flûte VIDE (flute_vierge) — texte sur la coupe, déplaçable.
+    engraveImage: "/produits/flute_vierge.jpg",
+    engrave: {
+      box: { top: 0.14, left: 0.41, width: 0.18, height: 0.26 },
+      widthMm: 45, maxWidthFrac: 0.18, minWidthFrac: 0.06,
+    },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
@@ -1548,7 +1562,7 @@ export const products = [
     ],
     personalizationFields: [
       { key: "stylenote", type: "note", image: "/produits/styles_verre_all.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 19) et notez le numéro qui vous plaît." },
-      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 18", maxLength: 8, optional: true },
+      { key: "numstyle", noPreview: true, label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 18", maxLength: 8, optional: true },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
@@ -1600,9 +1614,16 @@ export const products = [
     images: [
       "/produits/carafe_ambiance.jpg",
       "/produits/carafe_gravee.jpg",
+      "/produits/carafe_vierge.jpg",
       "/produits/carafe_produit.jpg",
       "/produits/carafe_bar.jpg",
     ],
+    // Aperçu en direct sur la carafe VIDE (carafe_vierge) — texte sur le corps, déplaçable.
+    engraveImage: "/produits/carafe_vierge.jpg",
+    engrave: {
+      box: { top: 0.48, left: 0.37, width: 0.26, height: 0.22 },
+      widthMm: 60, maxWidthFrac: 0.26, minWidthFrac: 0.08,
+    },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 34", fields: ["stylenote", "numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
@@ -1610,7 +1631,7 @@ export const products = [
     ],
     personalizationFields: [
       { key: "stylenote", type: "note", image: "/produits/styles_carafe_all.png", imageAlt: "Styles gravables numérotés 1 à 34", text: "Regardez les styles ci-dessous (n°1 à 34) et notez le numéro qui vous plaît." },
-      { key: "numstyle", label: "N° du style choisi", placeholder: "Ex. 6 · 21 · 34", maxLength: 8, optional: true },
+      { key: "numstyle", noPreview: true, label: "N° du style choisi", placeholder: "Ex. 6 · 21 · 34", maxLength: 8, optional: true },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez votre prénom / message / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénom / nom", placeholder: "Ex. Stephan", maxLength: 40, optional: true },
