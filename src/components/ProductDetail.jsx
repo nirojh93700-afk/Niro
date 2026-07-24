@@ -69,6 +69,7 @@ export default function ProductDetail({ product }) {
   const [crystalTextPos, setCrystalTextPos] = useState(null);
   const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
   const [motifZone, setMotifZone] = useState(product.motifZone || null); // zone de gravure verres/carafe (repli code, sinon réglage admin)
+  const [motifAspect, setMotifAspect] = useState(1); // hauteur/largeur du motif posé (cadre fixe)
   const [crystalPreviewActive, setCrystalPreviewActive] = useState(true); // affiche l'aperçu OU les photos produit // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
@@ -940,7 +941,7 @@ export default function ProductDetail({ product }) {
               <div className="engrave-editor" style={{ pointerEvents: "none" }}>
                 <div className="mz-fixed" style={{ left: motifZone.left + "%", top: motifZone.top + "%", width: motifZone.width + "%", height: motifZone.height + "%", transform: `perspective(900px) rotateX(${motifZone.rx || 0}deg) rotateY(${motifZone.ry || 0}deg) rotate(${motifZone.rotation || 0}deg)` }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={styleMotifSrc} alt="" style={{ width: "100%", height: "100%", objectFit: "contain", mixBlendMode: "multiply", filter: "grayscale(1) contrast(1.15) brightness(1.02)", opacity: 0.92 }} />
+                  <img src={styleMotifSrc} alt="" onLoad={(e) => setMotifAspect((e.target.naturalHeight / e.target.naturalWidth) || 1)} style={{ width: "100%", height: "100%", objectFit: "contain", mixBlendMode: "multiply", filter: "grayscale(1) contrast(1.15) brightness(1.02)", opacity: 0.92 }} />
                 </div>
               </div>
             )}
@@ -955,7 +956,9 @@ export default function ProductDetail({ product }) {
                 hasName={previewLines.filter((l) => l !== (fieldValues["date"] || "").trim()).length > 0}
                 hasDate={Boolean((fieldValues["date"] || "").trim())}
                 zone={styleZone}
-                motifLayout={photoLayout}
+                motifLayout={motifZone
+                  ? { cx: (motifZone.left + motifZone.width / 2) / 100, cy: (motifZone.top + motifZone.height / 2) / 100, size: Math.min(motifZone.width / 100, (motifZone.height / 100) / (motifAspect || 1)), aspect: motifAspect || 1 }
+                  : photoLayout}
               />
             )}
             {/* Bascule Face / Fond quand on grave les deux côtés */}
