@@ -1487,8 +1487,6 @@ export const products = [
       box: { top: 0.17, left: 0.36, width: 0.28, height: 0.24 },
       widthMm: 70, maxWidthFrac: 0.28, minWidthFrac: 0.08,
     },
-    // Cadre de gravure sur la coupe — repli code (réglage admin activé = prioritaire).
-    motifZone: { left: 36, top: 17, width: 28, height: 24, rotation: 0, ry: 0, rx: 0 },
     // Bibliothèque des motifs par numéro de style : quand le client tape le n°,
     // le motif se pose sur le verre (déplaçable). À compléter au fur et à mesure
     // que la gérante fournit les visuels propres (1 par numéro).
@@ -1619,8 +1617,6 @@ export const products = [
       box: { top: 0.14, left: 0.41, width: 0.18, height: 0.26 },
       widthMm: 45, maxWidthFrac: 0.18, minWidthFrac: 0.06,
     },
-    // Cadre de gravure sur la coupe étroite — repli code (réglage admin = prioritaire).
-    motifZone: { left: 43, top: 24, width: 16, height: 16, rotation: 0, ry: 0, rx: 0 },
     // Motifs à graver (mêmes 19 modèles que le verre à vin) + zones d'écriture.
     styleImages: {
       "1": "/produits/vin-motif-01.png", "2": "/produits/vin-motif-02.png", "3": "/produits/vin-motif-03.png",
