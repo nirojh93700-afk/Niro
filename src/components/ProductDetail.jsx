@@ -37,6 +37,8 @@ import { MODELES, defaultModele, layoutLabel, imageDesign } from "@/lib/modeles"
 import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import MiniGlassPreview from "./MiniGlassPreview";
+import MotifTextZone from "./MotifTextZone";
+import StyleScroller from "./StyleScroller";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
@@ -439,6 +441,9 @@ export default function ProductDetail({ product }) {
   // du client est gravé DANS le style du modèle, au milieu — on ne l'affiche donc
   // PAS en plus sur le verre (mais on le garde pour l'atelier / la commande).
   const styleTextInMotif = (product.styleTextInMotif || []).map(String).includes(styleNum);
+  // Zone d'écriture du modèle choisi (banderole/cadre) : le texte y est verrouillé,
+  // centré, et la police s'auto-réduit pour toujours tenir dedans.
+  const styleZone = (product.styleTextZone && product.styleTextZone[styleNum]) || null;
   const hadPreviewTextRef = useRef(false);
   useEffect(() => {
     if (!product.engrave || !product.engraveImage) return;
@@ -460,7 +465,7 @@ export default function ProductDetail({ product }) {
     editLines = ["texte", "texte2"].flatMap((k) => (fieldValues[k] || "").split("\n")).map((l) => l.trim()).filter(Boolean);
     if (decorSym && editLines.length) editLines[0] = `${decorSym} ${editLines[0]} ${decorSym}`;
   } else {
-    editLines = styleTextInMotif ? [] : previewLines;
+    editLines = (styleTextInMotif || (styleZone && styleMotifSrc)) ? [] : previewLines;
   }
   const setPhotoLayoutSide = (dualMode && side === "fond") ? setPhotoLayoutFond : setPhotoLayout;
   const setTextLayoutSide = (dualMode && side === "fond") ? setTextLayoutFond : setTextLayout;
@@ -922,6 +927,19 @@ export default function ProductDetail({ product }) {
             {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && (
               <PhotoEngraveLayer key={`style-${styleNum}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
+            {/* Fenêtre « sera gravé ici » : montre le texte du client + une flèche vers
+                l'endroit exact du modèle (banderole, cadre, écriture du modèle). */}
+            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && styleZone && previewLines.length > 0 && (
+              <MotifTextZone
+                key={`zone-${styleNum}`}
+                lines={previewLines}
+                fontClass={previewFontClass}
+                color={previewColor}
+                zone={styleZone}
+                motifLayout={photoLayout}
+                onChange={setTextLayout}
+              />
+            )}
             {/* Bascule Face / Fond quand on grave les deux côtés */}
             {hasImages && dualMode && showEditor && (
               <div className="side-toggle">
@@ -995,6 +1013,13 @@ export default function ProductDetail({ product }) {
             <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
               Aperçu <strong>indicatif</strong> : votre photo est simplement posée sur une image du cristal pour vous donner une idée. Le rendu réel est une <strong>gravure 3D au laser à l'intérieur du cristal</strong>, retravaillée par notre atelier pour un résultat optimal.
             </p>
+          )}
+          {/* Petite main : explique qu'on peut tout déplacer sur la photo. */}
+          {showEditor && (editPhotoSrc || styleMotifSrc || editLines.length > 0 || previewLines.length > 0) && (
+            <div className="drag-hint">
+              <span className="dh-hand" aria-hidden="true">👆</span>
+              <span>Touchez et <b>glissez</b> le dessin, le texte et les chiffres pour les placer <b>où vous voulez</b> sur le verre — le curseur règle la taille.</span>
+            </div>
           )}
           {(galleryMedia.length > 1 || (product.crystal3d && photoSrc)) && (
             <div className="gallery-thumbs">
@@ -1264,6 +1289,19 @@ export default function ProductDetail({ product }) {
               )}
               {visibleFields.map((f) => {
                 if (personaTabs && tabOf(f.key) !== "*" && tabOf(f.key) !== curPersonaTab) return null;
+                if (f.type === "stylepicker") {
+                  return (
+                    <div className="field" key={f.key}>
+                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <StyleScroller
+                        images={product.styleImages || {}}
+                        groups={f.groups || []}
+                        value={fieldValues[f.key] || ""}
+                        onChange={(v) => setField(f.key, v)}
+                      />
+                    </div>
+                  );
+                }
                 if (f.type === "note") {
                   // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).
                   const noteImg = (f.imageByVariant && f.imageByVariant[variant.id]) || f.image;

@@ -1510,6 +1510,7 @@ export const products = [
       "17": "/produits/vin-motif-17.png",
       "18": "/produits/vin-motif-18.png",
       "19": "/produits/vin-motif-19.png",
+      "20": "/produits/vin-motif-20.png",
       "21": "/produits/vin-motif-21.png",
       "22": "/produits/vin-motif-22.png",
       "23": "/produits/vin-motif-23.png",
@@ -1520,19 +1521,25 @@ export const products = [
     // le prénom du client est gravé dans ce style par l'atelier — on ne le superpose
     // pas (ça chevaucherait l'exemple). Les cadres/banderoles VIDES (18-19, 21-24)
     // ne sont PAS ici : le prénom tapé s'affiche dedans, dans l'espace pour écrire.
-    styleTextInMotif: ["14", "15", "16", "17", "25"],
-    // Position verticale par défaut du prénom pour les modèles avec espace pour écrire
-    // (banderole en bas = 10-13 ; banderoles 18-19). Fraction du cadre (0 haut → 1 bas).
-    // Les cadres 21-24 gardent le centre (0,5) par défaut. Le client peut toujours déplacer.
-    styleTextY: { "10": 0.92, "11": 0.92, "12": 0.92, "13": 0.9, "18": 0.58, "19": 0.62 },
+    styleTextInMotif: ["14", "15", "16", "17", "20", "25"],
+    // Endroit où le texte du client sera gravé DANS chaque modèle (fraction du motif) :
+    // montré au client par une petite fenêtre + flèche (le texte n'est pas superposé au dessin).
+    styleTextZone: {
+      "10": { x: 0.5, y: 0.90 }, "11": { x: 0.5, y: 0.88 }, "12": { x: 0.5, y: 0.88 }, "13": { x: 0.5, y: 0.90 },
+      "14": { x: 0.5, y: 0.20 }, "15": { x: 0.5, y: 0.22 }, "16": { x: 0.5, y: 0.78 }, "17": { x: 0.5, y: 0.48 },
+      "18": { x: 0.5, y: 0.53 }, "19": { x: 0.5, y: 0.62 }, "20": { x: 0.5, y: 0.55 },
+      "21": { x: 0.5, y: 0.60 }, "22": { x: 0.5, y: 0.60 }, "23": { x: 0.5, y: 0.58 }, "24": { x: 0.5, y: 0.63 }, "25": { x: 0.5, y: 0.45 },
+    },
     personaTabs: [
-      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
+      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
     personalizationFields: [
-      { key: "stylenote", type: "note", image: "/produits/styles_verre_vin.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 20) et notez le numéro qui vous plaît." },
-      { key: "numstyle", noPreview: true, label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 20", maxLength: 8, optional: true },
+      { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
+        { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
+        { label: "Noms & cadres (14–25)", nums: ["14","15","16","17","18","19","20","21","22","23","24","25"] },
+      ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
@@ -1593,14 +1600,32 @@ export const products = [
       box: { top: 0.14, left: 0.41, width: 0.18, height: 0.26 },
       widthMm: 45, maxWidthFrac: 0.18, minWidthFrac: 0.06,
     },
+    // Motifs à graver (mêmes 19 modèles que le verre à vin) + zones d'écriture.
+    styleImages: {
+      "1": "/produits/vin-motif-01.png", "2": "/produits/vin-motif-02.png", "3": "/produits/vin-motif-03.png",
+      "4": "/produits/vin-motif-04.png", "5": "/produits/vin-motif-05.png", "6": "/produits/vin-motif-06.png",
+      "7": "/produits/vin-motif-07.png", "8": "/produits/vin-motif-08.png", "9": "/produits/vin-motif-09.png",
+      "10": "/produits/vin-motif-10.png", "11": "/produits/vin-motif-11.png", "12": "/produits/vin-motif-12.png",
+      "13": "/produits/vin-motif-13.png", "14": "/produits/vin-motif-14.png", "15": "/produits/vin-motif-15.png",
+      "16": "/produits/vin-motif-16.png", "17": "/produits/vin-motif-17.png", "18": "/produits/vin-motif-18.png",
+      "19": "/produits/vin-motif-19.png",
+    },
+    styleTextInMotif: ["14", "15", "16", "17"],
+    styleTextZone: {
+      "10": { x: 0.5, y: 0.90 }, "11": { x: 0.5, y: 0.88 }, "12": { x: 0.5, y: 0.88 }, "13": { x: 0.5, y: 0.90 },
+      "14": { x: 0.5, y: 0.20 }, "15": { x: 0.5, y: 0.22 }, "16": { x: 0.5, y: 0.78 }, "17": { x: 0.5, y: 0.48 },
+      "18": { x: 0.5, y: 0.53 }, "19": { x: 0.5, y: 0.62 },
+    },
     personaTabs: [
-      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
+      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
     personalizationFields: [
-      { key: "stylenote", type: "note", image: "/produits/styles_verre_all.png", imageAlt: "Styles gravables numérotés 1 à 19", text: "Regardez les styles ci-dessous (n°1 à 19) et notez le numéro qui vous plaît." },
-      { key: "numstyle", noPreview: true, label: "N° du style choisi", placeholder: "Ex. 3 · 14 · 18", maxLength: 8, optional: true },
+      { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
+        { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
+        { label: "Noms & banderoles (14–19)", nums: ["14","15","16","17","18","19"] },
+      ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
