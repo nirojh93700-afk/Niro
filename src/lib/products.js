@@ -1516,6 +1516,10 @@ export const products = [
       "24": "/produits/vin-motif-24.png",
       "25": "/produits/vin-motif-25.png",
     },
+    // Modèles qui portent DÉJÀ le prénom/le texte (noms & dates, cadres, banderoles) :
+    // le prénom tapé par le client est gravé DANS le style du modèle (au milieu) et
+    // ne se superpose pas en plus sur le verre.
+    styleTextInMotif: ["14", "15", "16", "17", "18", "19", "21", "22", "23", "24", "25"],
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
@@ -1598,7 +1602,7 @@ export const products = [
       { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
       { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17), le prénom et la date sont gravés dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple / monogramme." },
+      { key: "noteinfo", type: "note", text: "Pour les modèles qui contiennent déjà un prénom ou un cadre (n°14 à 25), votre prénom et votre date sont gravés AU MILIEU du modèle, dans son écriture — ils ne s'affichent donc pas en plus sur l'aperçu. La police ci-dessus sert au texte simple (modèles couples n°1 à 13)." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
     ],
     variants: [

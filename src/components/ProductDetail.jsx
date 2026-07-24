@@ -435,6 +435,10 @@ export default function ProductDetail({ product }) {
   // bibliothèque styleImages { "1": "/produits/…", … }). Se pose comme la photo.
   const styleNum = (fieldValues["numstyle"] || "").trim();
   const styleMotifSrc = (product.styleImages && product.styleImages[styleNum]) || "";
+  // Modèles qui contiennent DÉJÀ le texte (prénoms/cadres/banderoles) : le prénom
+  // du client est gravé DANS le style du modèle, au milieu — on ne l'affiche donc
+  // PAS en plus sur le verre (mais on le garde pour l'atelier / la commande).
+  const styleTextInMotif = (product.styleTextInMotif || []).map(String).includes(styleNum);
   const hadPreviewTextRef = useRef(false);
   useEffect(() => {
     if (!product.engrave || !product.engraveImage) return;
@@ -456,7 +460,7 @@ export default function ProductDetail({ product }) {
     editLines = ["texte", "texte2"].flatMap((k) => (fieldValues[k] || "").split("\n")).map((l) => l.trim()).filter(Boolean);
     if (decorSym && editLines.length) editLines[0] = `${decorSym} ${editLines[0]} ${decorSym}`;
   } else {
-    editLines = previewLines;
+    editLines = styleTextInMotif ? [] : previewLines;
   }
   const setPhotoLayoutSide = (dualMode && side === "fond") ? setPhotoLayoutFond : setPhotoLayout;
   const setTextLayoutSide = (dualMode && side === "fond") ? setTextLayoutFond : setTextLayout;
@@ -822,7 +826,7 @@ export default function ProductDetail({ product }) {
           contain={Boolean(product.photoContain)}
           artSrc={editPhotoSrc || styleMotifSrc}
           artLayout={photoLayout}
-          lines={previewLines}
+          lines={styleTextInMotif ? [] : previewLines}
           textLayout={textLayout}
           fontClass={previewFontClass}
           color={previewColor}
