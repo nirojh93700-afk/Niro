@@ -1521,6 +1521,10 @@ export const products = [
     // pas (ça chevaucherait l'exemple). Les cadres/banderoles VIDES (18-19, 21-24)
     // ne sont PAS ici : le prénom tapé s'affiche dedans, dans l'espace pour écrire.
     styleTextInMotif: ["14", "15", "16", "17", "25"],
+    // Position verticale par défaut du prénom pour les modèles avec espace pour écrire
+    // (banderole en bas = 10-13 ; banderoles 18-19). Fraction du cadre (0 haut → 1 bas).
+    // Les cadres 21-24 gardent le centre (0,5) par défaut. Le client peut toujours déplacer.
+    styleTextY: { "10": 0.92, "11": 0.92, "12": 0.92, "13": 0.9, "18": 0.58, "19": 0.62 },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },

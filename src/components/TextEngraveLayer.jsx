@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from "react";
 // - glisser pour déplacer (souris + tactile iOS),
 // - curseur pour la taille du texte (hauteur en cm indicative),
 // - position + taille renvoyées au parent (→ commande).
-export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChange }) {
+export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChange, initCyFrac }) {
   const box = cfg?.box || { top: 0.3, left: 0.2, width: 0.6, height: 0.45 };
   const widthMm = cfg?.widthMm || 65;
   const maxW = cfg?.maxWidthFrac || box.width;
@@ -17,7 +17,9 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
   const [w, setW] = useState(0); // largeur réelle du cadre (px)
   const [scale, setScale] = useState(0.06); // taille police, fraction de la largeur du cadre
   const [cx, setCx] = useState(box.left + box.width / 2);
-  const [cy, setCy] = useState(box.top + box.height / 2);
+  // Position verticale de départ : au milieu du cadre par défaut, ou à l'endroit
+  // de l'espace pour écrire du modèle (initCyFrac, fraction 0=haut → 1=bas du cadre).
+  const [cy, setCy] = useState(box.top + box.height * (typeof initCyFrac === "number" ? initCyFrac : 0.5));
 
   useEffect(() => {
     const el = ref.current;

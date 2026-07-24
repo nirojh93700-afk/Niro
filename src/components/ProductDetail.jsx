@@ -957,11 +957,12 @@ export default function ProductDetail({ product }) {
             {/* Texte : éditeur interactif (déplaçable + taille) si activé */}
             {hasImages && showEditor && editLines.length > 0 && (!modeleField || (dualMode && side === "fond" && fieldValues["fondType"] === "texte")) && (
               <TextEngraveLayer
-                key={`text-${side}`}
+                key={`text-${side}-${styleNum}`}
                 lines={editLines}
                 fontClass={previewFontClass}
                 color={previewColor}
                 cfg={editCfg}
+                initCyFrac={(product.styleTextY && product.styleTextY[styleNum]) ?? undefined}
                 onChange={setTextLayoutSide}
               />
             )}
