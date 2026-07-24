@@ -20,6 +20,8 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
   // Position verticale de départ : au milieu du cadre par défaut, ou à l'endroit
   // de l'espace pour écrire du modèle (initCyFrac, fraction 0=haut → 1=bas du cadre).
   const [cy, setCy] = useState(box.top + box.height * (typeof initCyFrac === "number" ? initCyFrac : 0.5));
+  const measureRef = useRef(null);
+  const [fitPx, setFitPx] = useState(null); // taille de police max qui rentre dans le cadre
 
   useEffect(() => {
     const el = ref.current;
@@ -31,6 +33,21 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
     return () => ro.disconnect();
   }, []);
 
+  // AUTO-AJUSTEMENT : mesure la largeur du texte (à une taille de référence) et
+  // réduit la police si besoin pour qu'il rentre dans la largeur du cadre.
+  useEffect(() => {
+    const el = measureRef.current;
+    if (!el || !w) { setFitPx(null); return; }
+    let maxLineW = 0;
+    for (const child of el.children) maxLineW = Math.max(maxLineW, child.getBoundingClientRect().width);
+    const per1px = maxLineW / 100; // largeur pour 1px de police
+    const targetPx = maxW * w * 0.94; // largeur utile du cadre (petite marge)
+    const maxFit = per1px > 0 ? targetPx / per1px : 9999;
+    const desired = scale * w;
+    setFitPx(Math.min(desired, maxFit));
+  }, [lines.join(""), scale, w, maxW]);
+  const fontPx = Math.max(7, fitPx != null ? fitPx : scale * w);
+
   const heightMm = Math.round(scale * mmPerFrame * 10) / 10;
   const cm = (mm) => (mm / 10).toFixed(1).replace(".", ",");
 
@@ -40,12 +57,13 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
       cx,
       cy,
       scale,
+      fitScale: w > 0 ? fontPx / w : scale, // taille réelle (après auto-ajustement)
       cxPct: Math.round(cx * 100),
       cyPct: Math.round(cy * 100),
       label: `texte ≈ ${cm(heightMm)} cm de haut · position ${Math.round(cx * 100)} % / ${Math.round(cy * 100)} %`,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heightMm, cx, cy]);
+  }, [heightMm, cx, cy, fontPx]);
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   function onDown(e) {
@@ -70,12 +88,22 @@ export default function TextEngraveLayer({ lines, fontClass, color, cfg, onChang
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
-        style={{ left: `${cx * 100}%`, top: `${cy * 100}%`, fontSize: `${Math.max(8, scale * w)}px` }}
+        style={{ left: `${cx * 100}%`, top: `${cy * 100}%`, fontSize: `${fontPx}px` }}
       >
         {lines.map((line, i) => (
           <span key={i} className={`te-line ${fontClass}`} style={{ color }}>
             {line}
           </span>
+        ))}
+      </div>
+      {/* Mesure invisible (police 100px) pour calculer l'auto-ajustement. */}
+      <div
+        ref={measureRef}
+        aria-hidden="true"
+        style={{ position: "absolute", left: -99999, top: 0, visibility: "hidden", whiteSpace: "nowrap", fontSize: "100px", pointerEvents: "none" }}
+      >
+        {lines.map((line, i) => (
+          <div key={i} className={fontClass}>{line}</div>
         ))}
       </div>
       <div className="ee-toolbar ee-toolbar-top">

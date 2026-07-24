@@ -43,7 +43,7 @@ export default function MiniGlassPreview({
             style={{
               left: `${(tL.cx ?? 0.5) * 100}%`,
               top: `${(tL.cy ?? 0.5) * 100}%`,
-              fontSize: `${Math.max(6, (tL.scale ?? 0.06) * MW)}px`,
+              fontSize: `${Math.max(5, (tL.fitScale ?? tL.scale ?? 0.06) * MW)}px`,
               color,
             }}
           >
