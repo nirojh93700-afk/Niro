@@ -36,6 +36,7 @@ import { Motif } from "./Motif";
 import { MODELES, defaultModele, layoutLabel, imageDesign } from "@/lib/modeles";
 import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
+import MiniGlassPreview from "./MiniGlassPreview";
 import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
@@ -54,6 +55,7 @@ export default function ProductDetail({ product }) {
   const [personalization, setPersonalization] = useState("");
   const [fieldValues, setFieldValues] = useState({});
   const [personaTab, setPersonaTab] = useState(null); // onglet de perso actif (produits avec personaTabs)
+  const [showGlassMini, setShowGlassMini] = useState(true); // mini-aperçu flottant du verre (vraie photo)
   const [quantity, setQuantity] = useState(1);
   const [pkgSel, setPkgSel] = useState([]); // emballages payants choisis (ids)
   const [composition, setComposition] = useState(null); // configurateur gobelet (côté + motifs)
@@ -811,6 +813,22 @@ export default function ProductDetail({ product }) {
 
   return (
     <div className="container">
+      {/* Mini-aperçu flottant (bas à droite) : le verre + la gravure en petit,
+          reste visible quand le client descend composer. */}
+      {product.engrave && product.engraveImage && showEditor && showGlassMini &&
+        (editPhotoSrc || styleMotifSrc || previewLines.length > 0) && (
+        <MiniGlassPreview
+          glassSrc={product.engraveImage}
+          contain={Boolean(product.photoContain)}
+          artSrc={editPhotoSrc || styleMotifSrc}
+          artLayout={photoLayout}
+          lines={previewLines}
+          textLayout={textLayout}
+          fontClass={previewFontClass}
+          color={previewColor}
+          onClose={() => setShowGlassMini(false)}
+        />
+      )}
       <div className="product-layout">
         {/* Galerie */}
         <div>
