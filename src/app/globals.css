@@ -3023,9 +3023,9 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 /* Flèches « gravé ici » : étiquette sur le côté (hors du logo) + flèche vers le point */
 .mtz-arrows { z-index: 5; }
 .mtz-arrows svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.mtz-flag { position: absolute; transform: translateY(-50%); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .02em; padding: 2px 8px; border-radius: 7px; border: 1.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.4); white-space: nowrap; z-index: 6; }
-.mtz-flag.t { left: 2%; background: #2563eb; }
-.mtz-flag.d { right: 2%; background: #e0731f; }
+.mtz-flag { position: absolute; transform: translateY(-50%); font-size: 8.5px; font-weight: 700; letter-spacing: .01em; padding: 1px 5px; border-radius: 5px; background: rgba(255,255,255,.9); border: 1px solid; white-space: nowrap; z-index: 6; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+.mtz-flag.t { left: 2%; color: #2563eb; border-color: rgba(37,99,235,.6); }
+.mtz-flag.d { right: 2%; color: #e0731f; border-color: rgba(224,115,31,.6); }
 
 /* Légende sous la photo (jamais coupée) : rappelle où / quoi est gravé */
 .grav-legend { background: #fff; border: 1px solid var(--gold-light, #e2c67e); border-radius: 10px; padding: 10px 12px; margin: 8px 0 2px; }
