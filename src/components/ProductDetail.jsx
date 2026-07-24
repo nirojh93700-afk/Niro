@@ -927,17 +927,17 @@ export default function ProductDetail({ product }) {
             {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && (
               <PhotoEngraveLayer key={`style-${styleNum}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
-            {/* Fenêtre « sera gravé ici » : montre le texte du client + une flèche vers
-                l'endroit exact du modèle (banderole, cadre, écriture du modèle). */}
+            {/* Texte gravé DANS le modèle, aux emplacements exacts : nom au point "t",
+                date au point "d". La police se réduit pour tenir dans le modèle. */}
             {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && styleZone && previewLines.length > 0 && (
               <MotifTextZone
                 key={`zone-${styleNum}`}
-                lines={previewLines}
+                nameLines={previewLines.filter((l) => l !== (fieldValues["date"] || "").trim())}
+                dateLines={(fieldValues["date"] || "").trim() ? [(fieldValues["date"] || "").trim()] : []}
                 fontClass={previewFontClass}
                 color={previewColor}
                 zone={styleZone}
                 motifLayout={photoLayout}
-                onChange={setTextLayout}
               />
             )}
             {/* Bascule Face / Fond quand on grave les deux côtés */}

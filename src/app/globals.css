@@ -3023,8 +3023,14 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .mtz-bubble.mtz-right { right: 4px; }
 .mtz-bubble.mtz-left { left: 4px; }
 .mtz-cap { display: block; font-size: 9.5px; font-weight: 800; letter-spacing: .03em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 2px; }
-.mtz-txt { display: flex; flex-direction: column; line-height: 1.08; font-size: 13px; word-break: break-word; white-space: normal; }
+.mtz-row { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+.mtz-key { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.mtz-txt { display: flex; flex-direction: column; line-height: 1.08; font-size: 13px; word-break: break-word; white-space: normal; text-align: left; }
 .drag-hint { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--ink-soft); background: #fff7e6; border: 1px solid var(--gold-light, #e2c67e); border-radius: 10px; padding: 8px 12px; margin: 8px 0 2px; }
 .drag-hint .dh-hand { font-size: 1.05rem; animation: dhmove 2.2s ease-in-out infinite; }
 @keyframes dhmove { 0%,100% { transform: translateX(0); } 50% { transform: translateX(7px); } }
 @media (prefers-reduced-motion: reduce) { .drag-hint .dh-hand { animation: none; } }
+
+/* Texte gravé en place dans le modèle (aux points fournis) */
+.mtz-inplace { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; line-height: 1.05; text-align: center; white-space: nowrap; pointer-events: none; }
+.mtz-meas { position: absolute; left: -99999px; top: 0; visibility: hidden; white-space: nowrap; font-size: 100px; }
