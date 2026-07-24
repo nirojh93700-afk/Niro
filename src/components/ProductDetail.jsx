@@ -980,7 +980,7 @@ export default function ProductDetail({ product }) {
                 fontClass={previewFontClass}
                 color={previewColor}
                 cfg={editCfg}
-                initCyFrac={(product.styleTextY && product.styleTextY[styleNum]) ?? undefined}
+                initCyFrac={styleMotifSrc && !styleZone ? 0.85 : undefined}
                 onChange={setTextLayoutSide}
               />
             )}
