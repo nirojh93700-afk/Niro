@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const s = await getSettings();
-    return Response.json({ zones: s?.crystalZones || {} });
+    return Response.json({ zones: s?.crystalZones || {}, textZones: s?.motifTextZones || {} });
   } catch {
-    return Response.json({ zones: {} });
+    return Response.json({ zones: {}, textZones: {} });
   }
 }

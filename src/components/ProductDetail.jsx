@@ -70,6 +70,7 @@ export default function ProductDetail({ product }) {
   const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
   const [motifZone, setMotifZone] = useState(product.motifZone || null); // zone de gravure verres/carafe (repli code, sinon réglage admin)
   const [motifAspect, setMotifAspect] = useState(1); // hauteur/largeur du motif posé (cadre fixe)
+  const [adminTextZones, setAdminTextZones] = useState(null); // points Nom/Date réglés dans l'admin
   const [crystalPreviewActive, setCrystalPreviewActive] = useState(true); // affiche l'aperçu OU les photos produit // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
@@ -165,7 +166,10 @@ export default function ProductDetail({ product }) {
     if (!product.styleImages) return;
     fetch("/api/crystal-zones")
       .then((r) => r.json())
-      .then((d) => { const z = d.zones?.[product.slug]; if (z && z.on) setMotifZone(z); else if (product.motifZone) setMotifZone(product.motifZone); })
+      .then((d) => {
+        const z = d.zones?.[product.slug]; if (z && z.on) setMotifZone(z); else if (product.motifZone) setMotifZone(product.motifZone);
+        const tz = d.textZones?.[product.slug]; if (tz && Object.keys(tz).length) setAdminTextZones(tz);
+      })
       .catch(() => {});
   }, [product.slug, product.styleImages]);
 
@@ -454,7 +458,8 @@ export default function ProductDetail({ product }) {
   const styleTextInMotif = (product.styleTextInMotif || []).map(String).includes(styleNum);
   // Zone d'écriture du modèle choisi (banderole/cadre) : le texte y est verrouillé,
   // centré, et la police s'auto-réduit pour toujours tenir dedans.
-  const styleZone = (product.styleTextZone && product.styleTextZone[styleNum]) || null;
+  // Points Nom/Date : priorité aux réglages admin (même page que le cadre), repli sur le code.
+  const styleZone = (adminTextZones && adminTextZones[styleNum]) || (product.styleTextZone && product.styleTextZone[styleNum]) || null;
   const hadPreviewTextRef = useRef(false);
   useEffect(() => {
     if (!product.engrave || !product.engraveImage) return;

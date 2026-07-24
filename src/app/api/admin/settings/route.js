@@ -246,6 +246,27 @@ export async function POST(req) {
     patch.crystalZones = out;
   }
 
+  // Points de gravure Nom/Date par modèle (verres/carafe) — réglés dans /gestion/cristal-reglage.
+  // Forme : { slug: { "10": { t:{x,y}, d:{x,y} }, ... } }. Fraction 0..1 du dessin.
+  if (body.motifTextZones && typeof body.motifTextZones === "object") {
+    const fr = (v) => { const n = Number(v); return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : null; };
+    const pt = (p) => (p && typeof p === "object" && fr(p.x) != null && fr(p.y) != null) ? { x: fr(p.x), y: fr(p.y) } : null;
+    const out = {};
+    for (const [slug, byNum] of Object.entries(body.motifTextZones)) {
+      if (!byNum || typeof byNum !== "object") continue;
+      const zones = {};
+      for (const [n, z] of Object.entries(byNum)) {
+        if (!z || typeof z !== "object") continue;
+        const e = {};
+        if (pt(z.t)) e.t = pt(z.t);
+        if (pt(z.d)) e.d = pt(z.d);
+        if (e.t || e.d) zones[String(n).slice(0, 6)] = e;
+      }
+      if (Object.keys(zones).length) out[String(slug).slice(0, 80)] = zones;
+    }
+    patch.motifTextZones = out;
+  }
+
   // Emballages — interrupteur maître « visible sur le site ».
   if (typeof body.packagingLive === "boolean") patch.packagingLive = body.packagingLive;
   // Emballages — bibliothèque (Gestion → Packaging).

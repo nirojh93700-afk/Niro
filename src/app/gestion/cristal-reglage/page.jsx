@@ -48,12 +48,18 @@ export default function CristalReglage() {
   const [sel, setSel] = useState(cristaux[0]?.slug || "");
   const [zones, setZones] = useState({});
   const [sample, setSample] = useState("");
+  const [textZones, setTextZones] = useState({}); // { slug: { n: { t:{x,y}, d:{x,y} } } }
+  const [ptKind, setPtKind] = useState("t"); // point en cours : "t" (nom) ou "d" (date)
+  const [ptMotif, setPtMotif] = useState(""); // n° du modèle édité pour les points
   const boxRef = useRef(null);
+  const ptRef = useRef(null);
+  const ptStart = useRef(null);
   const mode = useRef(null);
   const start = useRef(null);
 
   const product = cristaux.find((p) => p.slug === sel) || cristaux[0];
   const z = zones[sel] || (product ? defZone(product) : null);
+  const motifEntries = product?.styleImages ? Object.entries(product.styleImages) : [];
 
   async function load(k) {
     setMsg("Chargement…");
@@ -71,9 +77,39 @@ export default function CristalReglage() {
         init[p.slug] = merged;
       }
       setZones(init);
+      setTextZones(s.motifTextZones || {});
       setAuthed(true);
       setMsg("");
     } catch (e) { setMsg(e.message); }
+  }
+
+  // Poser un point Nom/Date sur le modèle (tap-safe : ignore les défilements).
+  function onPtDown(e) {
+    if (e.target.dataset?.pt) { ptStart.current = null; return; }
+    ptStart.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+  }
+  function onPtUp(n, e) {
+    const s = ptStart.current; ptStart.current = null;
+    if (!s) return;
+    if (Math.abs(e.clientX - s.x) > 9 || Math.abs(e.clientY - s.y) > 11 || Date.now() - s.t > 600) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    const y = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+    setTextZones((prev) => {
+      const bySlug = { ...(prev[sel] || {}) };
+      const cur = { ...(bySlug[n] || {}) };
+      cur[ptKind] = { x: +x.toFixed(4), y: +y.toFixed(4) };
+      bySlug[n] = cur;
+      return { ...prev, [sel]: bySlug };
+    });
+  }
+  function removePt(n, k) {
+    setTextZones((prev) => {
+      const bySlug = { ...(prev[sel] || {}) };
+      const cur = { ...(bySlug[n] || {}) }; delete cur[k];
+      if (!cur.t && !cur.d) delete bySlug[n]; else bySlug[n] = cur;
+      return { ...prev, [sel]: bySlug };
+    });
   }
 
   function setZ(patch) { setZones((prev) => ({ ...prev, [sel]: { ...(prev[sel] || defZone(product)), ...patch } })); }
@@ -98,7 +134,7 @@ export default function CristalReglage() {
   async function save() {
     setMsg("Enregistrement…");
     try {
-      const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ crystalZones: zones }) });
+      const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ crystalZones: zones, motifTextZones: textZones }) });
       if (!res.ok) throw new Error("Échec de l'enregistrement.");
       setMsg("Enregistré ✓ — la fiche produit utilise maintenant ces réglages.");
     } catch (e) { setMsg(e.message); }
@@ -232,6 +268,50 @@ export default function CristalReglage() {
             <input type="checkbox" checked={Boolean(z?.on)} onChange={(e) => setZ({ on: e.target.checked ? 1 : 0 })} />
             <span>Afficher ce cadre sur la fiche produit (le motif choisi s'y posera). Décoché = placement libre par le client.</span>
           </label>
+        )}
+        {/* Points de gravure Nom / Date par modèle (verres/carafe) */}
+        {isGlass(product) && motifEntries.length > 0 && (
+          <div style={{ border: "1.5px solid var(--line)", borderRadius: 12, padding: 12, background: "var(--card)" }}>
+            <h3 style={{ fontFamily: "Georgia, serif", fontSize: "1rem", margin: "0 0 4px" }}>Points de gravure — Nom &amp; Date</h3>
+            <p style={{ fontSize: ".82rem", color: "var(--ink-soft)", margin: "0 0 10px" }}>Choisis un modèle, puis <b>tape</b> sur le dessin où le <b style={{ color: "#2563eb" }}>Nom</b> et la <b style={{ color: "#e0731f" }}>Date</b> seront gravés. Ces repères s'afficheront au client. Un point Nom suffit s'il n'y a pas de date.</p>
+            {/* Vignettes des modèles */}
+            <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "2px 0 8px" }}>
+              {motifEntries.map(([n, url]) => {
+                const has = textZones[sel]?.[n];
+                return (
+                  <button key={n} type="button" onClick={() => setPtMotif(n)} style={{ flex: "0 0 auto", width: 58, borderRadius: 8, border: "2px solid " + (ptMotif === n ? "#b0852f" : has ? "#8bbf8b" : "var(--line)"), background: "#fff", padding: 3, cursor: "pointer", position: "relative" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={`n°${n}`} style={{ width: "100%", height: 48, objectFit: "contain" }} />
+                    <span style={{ position: "absolute", top: 1, left: 3, fontSize: 10, fontWeight: 800, color: "#a98935" }}>{n}</span>
+                    {has && <span style={{ position: "absolute", top: 1, right: 3, fontSize: 11 }}>✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+            {ptMotif && product.styleImages[ptMotif] ? (
+              <>
+                <div style={{ display: "flex", gap: 8, margin: "6px 0 10px" }}>
+                  <button type="button" onClick={() => setPtKind("t")} style={{ flex: 1, border: "2px solid " + (ptKind === "t" ? "#2563eb" : "var(--line)"), color: ptKind === "t" ? "#2563eb" : "var(--ink)", background: "#fff", borderRadius: 10, padding: 8, cursor: "pointer", font: "inherit", fontWeight: 800, fontSize: ".85rem" }}>● Nom / texte</button>
+                  <button type="button" onClick={() => setPtKind("d")} style={{ flex: 1, border: "2px solid " + (ptKind === "d" ? "#e0731f" : "var(--line)"), color: ptKind === "d" ? "#e0731f" : "var(--ink)", background: "#fff", borderRadius: 10, padding: 8, cursor: "pointer", font: "inherit", fontWeight: 800, fontSize: ".85rem" }}>● Date</button>
+                </div>
+                <div ref={ptRef} onPointerDown={onPtDown} onPointerUp={(e) => onPtUp(ptMotif, e)}
+                  style={{ position: "relative", width: "100%", maxWidth: 340, margin: "0 auto", background: "#fff", border: "1px solid var(--line)", borderRadius: 10, overflow: "hidden", touchAction: "pan-y", userSelect: "none" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={product.styleImages[ptMotif]} alt="" draggable={false} style={{ width: "100%", display: "block", maxHeight: 300, objectFit: "contain", pointerEvents: "none" }} />
+                  {["t", "d"].map((k) => {
+                    const p = textZones[sel]?.[ptMotif]?.[k]; if (!p) return null;
+                    return (
+                      <span key={k} data-pt={k} onClick={(e) => { e.stopPropagation(); removePt(ptMotif, k); }}
+                        style={{ position: "absolute", left: `${p.x * 100}%`, top: `${p.y * 100}%`, transform: "translate(-50%,-50%)", width: 22, height: 22, borderRadius: "50%", background: k === "t" ? "#2563eb" : "#e0731f", color: "#fff", border: "2px solid #fff", boxShadow: "0 1px 5px rgba(0,0,0,.45)", fontSize: 11, fontWeight: 800, display: "grid", placeItems: "center", cursor: "pointer" }}>{k === "t" ? "N" : "D"}</span>
+                    );
+                  })}
+                </div>
+                <p style={{ fontSize: ".78rem", color: "var(--ink-soft)", textAlign: "center", margin: "6px 0 0" }}>Touche un point pour le retirer. Fais défiler normalement, un point ne se pose que sur un tap.</p>
+              </>
+            ) : (
+              <p style={{ fontSize: ".82rem", color: "var(--ink-soft)", margin: 0 }}>Touche une vignette ci-dessus pour placer ses points.</p>
+            )}
+          </div>
         )}
         <button className="btn btn-gold" onClick={save}>Enregistrer</button>
         {msg && <p style={{ textAlign: "center", color: msg.includes("✓") ? "#3f7d55" : "#b4452f", fontSize: ".9rem" }}>{msg}</p>}
