@@ -63,7 +63,13 @@ export default function CristalReglage() {
       const s = await res.json();
       const saved = s.crystalZones || {};
       const init = {};
-      for (const p of cristaux) init[p.slug] = saved[p.slug] ? { ...defZone(p), ...saved[p.slug] } : defZone(p);
+      for (const p of cristaux) {
+        const merged = saved[p.slug] ? { ...defZone(p), ...saved[p.slug] } : defZone(p);
+        // Verres/carafe : le fond est TOUJOURS la photo du verre vide (celle de la
+        // fiche). On ignore une éventuelle ancienne photo enregistrée par erreur.
+        if (isGlass(p)) merged.img = p.engraveImage || merged.img;
+        init[p.slug] = merged;
+      }
       setZones(init);
       setAuthed(true);
       setMsg("");
@@ -127,14 +133,19 @@ export default function CristalReglage() {
         ))}
       </div>
 
-      {/* Choix de la photo produit (template) */}
-      {product?.images?.length > 1 && (
+      {/* Choix de la photo produit (template) — cristaux uniquement */}
+      {!isGlass(product) && product?.images?.length > 1 && (
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
           {product.images.filter((im) => !/guide/.test(im)).map((im) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={im} src={im} alt="" onClick={() => setZ({ img: im })} style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, cursor: "pointer", border: "2px solid " + (z.img === im ? "#b0852f" : "transparent") }} />
           ))}
         </div>
+      )}
+      {isGlass(product) && (
+        <p style={{ fontSize: ".82rem", color: "#8a6d1f", background: "#fff7e6", border: "1px solid var(--gold-l, #e2c67e)", borderRadius: 8, padding: "8px 10px", margin: "0 0 12px" }}>
+          Placement sur le <b>verre vide</b> — c'est la seule photo où le client verra son motif. Les autres photos (ambiance, déjà gravées) restent des photos de présentation, on n'y touche pas.
+        </p>
       )}
 
       {/* Motif témoin (verres/carafe) : poser un vrai logo dans le cadre pour viser juste */}
