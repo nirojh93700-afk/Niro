@@ -1743,21 +1743,48 @@ export const products = [
       "27": "/produits/carafe-motif-27.png", "28": "/produits/carafe-motif-28.png",
       "29": "/produits/carafe-motif-29.png", "30": "/produits/carafe-motif-30.png",
       "31": "/produits/carafe-motif-31.png", "32": "/produits/carafe-motif-32.png",
-      "33": "/produits/carafe-motif-33.png", "34": "/produits/carafe-motif-34.png",
     },
     // Tous les modèles carafe contiennent déjà leur texte/nom d'exemple : on ne
     // superpose PAS le texte du client (il serait gravé dans l'écriture du modèle).
-    styleTextInMotif: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34"],
+    styleTextInMotif: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32"],
+    // Emplacements exacts Nom (t) / Date (d) sur chaque modèle (placés par la gérante).
+    styleTextZone: {
+      "1": { t: { x: 0.546, y: 0.7809 }, d: { x: 0.5025, y: 0.9767 } },
+      "2": { t: { x: 0.5189, y: 0.5013 }, d: { x: 0.5008, y: 0.9671 } },
+      "4": { t: { x: 0.5099, y: 0.8877 }, d: { x: 0.4959, y: 0.987 } },
+      "5": { t: { x: 0.4926, y: 0.7034 }, d: { x: 0.5304, y: 0.93 } },
+      "6": { t: { x: 0.5386, y: 0.8694 }, d: { x: 0.4959, y: 0.9754 } },
+      "7": { t: { x: 0.4844, y: 0.9047 }, d: { x: 0.5041, y: 0.9842 } },
+      "8": { t: { x: 0.5, y: 0.2425 }, d: { x: 0.5033, y: 0.982 } },
+      "9": { d: { x: 0.4934, y: 0.9858 } },
+      "10": { d: { x: 0.5057, y: 0.952 } },
+      "11": { d: { x: 0.454, y: 0.9674 } },
+      "12": { d: { x: 0.5525, y: 0.9709 } },
+      "13": { t: { x: 0.486, y: 0.8959 }, d: { x: 0.4844, y: 0.9875 } },
+      "14": { t: { x: 0.491, y: 0.4912 }, d: { x: 0.5172, y: 0.9746 } },
+      "15": { t: { x: 0.6076, y: 0.5898 }, d: { x: 0.5764, y: 0.975 } },
+      "16": { t: { x: 0.5099, y: 0.4326 }, d: { x: 0.4934, y: 0.9502 } },
+      "17": { t: { x: 0.5534, y: 0.5464 }, d: { x: 0.4828, y: 0.9938 } },
+      "18": { t: { x: 0.5575, y: 0.1661 }, d: { x: 0.5599, y: 0.824 } },
+      "21": { t: { x: 0.5074, y: 0.7301 }, d: { x: 0.5057, y: 0.9696 } },
+      "22": { t: { x: 0.4984, y: 0.0767 }, d: { x: 0.509, y: 0.9277 } },
+      "23": { t: { x: 0.5222, y: 0.6231 } },
+      "24": { t: { x: 0.5887, y: 0.2268 }, d: { x: 0.5772, y: 0.91 } },
+      "25": { t: { x: 0.5172, y: 0.7599 }, d: { x: 0.4836, y: 0.9089 } },
+      "26": { t: { x: 0.5, y: 0.6308 }, d: { x: 0.5107, y: 0.9432 } },
+      "27": { t: { x: 0.5025, y: 0.1745 }, d: { x: 0.5, y: 0.7359 } },
+      "28": { t: { x: 0.4893, y: 0.3841 }, d: { x: 0.5025, y: 0.6557 } },
+    },
     personaTabs: [
-      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 34", fields: ["numstyle"] },
+      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 32", fields: ["numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, message", fields: ["textenote"] },
     ],
     personalizationFields: [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
-        { label: "Monogrammes & noms (1–18)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"] },
-        { label: "Mariage & rôles (19–30)", nums: ["19","20","21","22","23","24","25","26","27","28","29","30"] },
-        { label: "Whisky & déco (31–34)", nums: ["31","32","33","34"] },
+        { label: "Monogrammes & noms (1–17)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17"] },
+        { label: "Mariage & rôles (18–28)", nums: ["18","19","20","21","22","23","24","25","26","27","28"] },
+        { label: "Whisky & déco (29–32)", nums: ["29","30","31","32"] },
       ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez votre prénom / message / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
@@ -1781,7 +1808,7 @@ export const products = [
     variants: [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
     ],
-    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 34), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
+    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 32), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
 <p>Gravure laser personnalisée, réalisée à la commande dans notre atelier en France. Un cadeau d'exception (fête des pères, anniversaire, retraite, mariage…). <strong>Livraison offerte.</strong> Possibilité d'ajouter des <strong>verres assortis</strong> gravés au même style, pour un vrai coffret.</p>
 <h3>Caractéristiques</h3>
 <ul>
