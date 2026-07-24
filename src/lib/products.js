@@ -1495,6 +1495,11 @@ export const products = [
       "2": "/produits/vin-motif-02.png",
       "3": "/produits/vin-motif-03.png",
       "4": "/produits/vin-motif-04.png",
+      "5": "/produits/vin-motif-05.png",
+      "6": "/produits/vin-motif-06.png",
+      "7": "/produits/vin-motif-07.png",
+      "8": "/produits/vin-motif-08.png",
+      "9": "/produits/vin-motif-09.png",
     },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
