@@ -1492,6 +1492,9 @@ export const products = [
     // que la gérante fournit les visuels propres (1 par numéro).
     styleImages: {
       "1": "/produits/vin-motif-01.png",
+      "2": "/produits/vin-motif-02.png",
+      "3": "/produits/vin-motif-03.png",
+      "4": "/produits/vin-motif-04.png",
     },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
