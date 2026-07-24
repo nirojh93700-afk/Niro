@@ -1487,6 +1487,12 @@ export const products = [
       box: { top: 0.17, left: 0.36, width: 0.28, height: 0.24 },
       widthMm: 70, maxWidthFrac: 0.28, minWidthFrac: 0.08,
     },
+    // Bibliothèque des motifs par numéro de style : quand le client tape le n°,
+    // le motif se pose sur le verre (déplaçable). À compléter au fur et à mesure
+    // que la gérante fournit les visuels propres (1 par numéro).
+    styleImages: {
+      "1": "/produits/vin-motif-01.png",
+    },
     personaTabs: [
       { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["stylenote", "numstyle"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },

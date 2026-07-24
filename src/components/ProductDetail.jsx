@@ -429,18 +429,22 @@ export default function ProductDetail({ product }) {
   // son premier texte, on bascule la galerie sur la photo du verre vierge pour montrer
   // la gravure en direct (même expérience que le verre à whisky). Une seule fois — le
   // client reste libre de naviguer dans les photos ensuite.
+  // Motif du STYLE choisi (n°) : image posée sur le verre (si le produit a une
+  // bibliothèque styleImages { "1": "/produits/…", … }). Se pose comme la photo.
+  const styleNum = (fieldValues["numstyle"] || "").trim();
+  const styleMotifSrc = (product.styleImages && product.styleImages[styleNum]) || "";
   const hadPreviewTextRef = useRef(false);
   useEffect(() => {
     if (!product.engrave || !product.engraveImage) return;
     if ((product.personalizationFields || []).some((f) => f.key === "emplacement")) return;
-    const hasText = previewLines.length > 0;
-    if (hasText && !hadPreviewTextRef.current) {
+    const hasContent = previewLines.length > 0 || Boolean(styleMotifSrc);
+    if (hasContent && !hadPreviewTextRef.current) {
       const idx = images.indexOf(product.engraveImage);
       if (idx >= 0) setActiveImg(idx);
     }
-    hadPreviewTextRef.current = hasText;
+    hadPreviewTextRef.current = hasContent;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewLines.length]);
+  }, [previewLines.length, styleMotifSrc]);
   // Mode "les deux" : la photo et le texte affichés dépendent du côté en cours (face / fond).
   const editPhotoSrc = (dualMode && side === "fond") ? photoSrcFond : photoSrc;
   let editLines;
@@ -891,6 +895,10 @@ export default function ProductDetail({ product }) {
             {/* Éditeur interactif (glisser + redimensionner + mesure cm) si activé */}
             {hasImages && showEditor && editPhotoSrc && !modeleField && (
               <PhotoEngraveLayer key={`photo-${side}`} photoSrc={editPhotoSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayoutSide} />
+            )}
+            {/* Motif du style choisi (n°) posé sur le verre — si pas de photo cliente. */}
+            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && (
+              <PhotoEngraveLayer key={`style-${styleNum}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
             {/* Bascule Face / Fond quand on grave les deux côtés */}
             {hasImages && dualMode && showEditor && (
