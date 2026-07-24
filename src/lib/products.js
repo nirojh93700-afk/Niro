@@ -1516,6 +1516,15 @@ export const products = [
       "23": "/produits/vin-motif-23.png",
       "24": "/produits/vin-motif-24.png",
       "25": "/produits/vin-motif-25.png",
+      "26": "/produits/motif-rose-birthday.png",
+      "27": "/produits/motif-couple-fleurs.png",
+      "28": "/produits/motif-couple-coeur.png",
+      "29": "/produits/motif-mains-coeur.png",
+      "30": "/produits/motif-fee-lune.png",
+      "31": "/produits/motif-musique.png",
+      "32": "/produits/motif-cheval.png",
+      "33": "/produits/motif-colombes.png",
+      "34": "/produits/motif-lions-coeur.png",
     },
     // Modèles avec un EXEMPLE de prénom déjà dessiné (noms & dates baked-in) :
     // le prénom du client est gravé dans ce style par l'atelier — on ne le superpose
@@ -1550,6 +1559,7 @@ export const products = [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
         { label: "Noms & cadres (14–25)", nums: ["14","15","16","17","18","19","20","21","22","23","24","25"] },
+        { label: "Dessins & occasions (26–34)", nums: ["26","27","28","29","30","31","32","33","34"] },
       ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
@@ -1626,6 +1636,11 @@ export const products = [
       "13": "/produits/vin-motif-13.png", "14": "/produits/vin-motif-14.png", "15": "/produits/vin-motif-15.png",
       "16": "/produits/vin-motif-16.png", "17": "/produits/vin-motif-17.png", "18": "/produits/vin-motif-18.png",
       "19": "/produits/vin-motif-19.png",
+      "20": "/produits/motif-rose-birthday.png", "21": "/produits/motif-couple-fleurs.png",
+      "22": "/produits/motif-couple-coeur.png", "23": "/produits/motif-mains-coeur.png",
+      "24": "/produits/motif-fee-lune.png", "25": "/produits/motif-musique.png",
+      "26": "/produits/motif-cheval.png", "27": "/produits/motif-colombes.png",
+      "28": "/produits/motif-lions-coeur.png",
     },
     styleTextInMotif: ["14", "15", "16", "17"],
     styleTextZone: {
@@ -1650,6 +1665,7 @@ export const products = [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
         { label: "Noms & banderoles (14–19)", nums: ["14","15","16","17","18","19"] },
+        { label: "Dessins & occasions (20–28)", nums: ["20","21","22","23","24","25","26","27","28"] },
       ] },
       { key: "gravnote", type: "note", text: "Ou choisissez un style de gravure d'après ces exemples réels : votre prénom et votre date seront gravés DANS ce style." },
       { key: "gravureExemple", type: "lettering", noPreview: true, optional: true, label: "Style de gravure (exemple)", options: [
