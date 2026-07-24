@@ -1591,6 +1591,12 @@ export const products = [
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
       "/produits/flute_ambiance.jpg",
+      "/produits/flute-grav-06.webp",
+      "/produits/flute-grav-03.webp",
+      "/produits/flute-grav-05.webp",
+      "/produits/flute-grav-01.jpg",
+      "/produits/flute-grav-04.webp",
+      "/produits/flute-grav-02.webp",
       "/produits/flute_set.jpg",
       "/produits/flute_vierge.jpg",
     ],
@@ -1617,7 +1623,8 @@ export const products = [
       "18": { x: 0.5, y: 0.53 }, "19": { x: 0.5, y: 0.62 },
     },
     personaTabs: [
-      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 19", fields: ["numstyle"] },
+      { key: "motifs", label: "Modèles (n°)", sub: "dessins", fields: ["numstyle"] },
+      { key: "gravures", label: "Gravures (photos)", sub: "styles réels", fields: ["gravnote", "gravureExemple"] },
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
@@ -1625,6 +1632,15 @@ export const products = [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
         { label: "Noms & banderoles (14–19)", nums: ["14","15","16","17","18","19"] },
+      ] },
+      { key: "gravnote", type: "note", text: "Ou choisissez un style de gravure d'après ces exemples réels : votre prénom et votre date seront gravés DANS ce style." },
+      { key: "gravureExemple", type: "lettering", noPreview: true, optional: true, label: "Style de gravure (exemple)", options: [
+        { value: "prenoms-coeur", label: "Prénoms & cœur", image: "/produits/flute-grav-06.webp" },
+        { value: "cadre-bagues", label: "Cadre & bagues", image: "/produits/flute-grav-03.webp" },
+        { value: "couronne", label: "Couronne feuillage", image: "/produits/flute-grav-05.webp" },
+        { value: "monogramme", label: "Monogramme & banderole", image: "/produits/flute-grav-01.jpg" },
+        { value: "prenoms-script", label: "Prénoms script", image: "/produits/flute-grav-04.webp" },
+        { value: "plume", label: "Plume", image: "/produits/flute-grav-02.webp" },
       ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
