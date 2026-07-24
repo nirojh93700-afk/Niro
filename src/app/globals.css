@@ -3020,13 +3020,12 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 /* Motif posé dans le CADRE incliné réglé par la gérante (verres/carafe) */
 .mz-fixed { position: absolute; transform-origin: center; pointer-events: none; }
 
-/* Pastilles « ici c'est gravé » posées SUR le verre (aux points exacts) */
-.mtz-dot { position: absolute; transform: translate(-50%, -50%); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .02em; padding: 2px 7px; border-radius: 9px; border: 1.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.45); white-space: nowrap; z-index: 5; pointer-events: none; }
-.mtz-dot::after { content: ""; position: absolute; left: 50%; bottom: -5px; transform: translateX(-50%); border: 4px solid transparent; }
-.mtz-dot-t { background: #2563eb; }
-.mtz-dot-t::after { border-top-color: #2563eb; }
-.mtz-dot-d { background: #e0731f; }
-.mtz-dot-d::after { border-top-color: #e0731f; }
+/* Flèches « gravé ici » : étiquette sur le côté (hors du logo) + flèche vers le point */
+.mtz-arrows { z-index: 5; }
+.mtz-arrows svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.mtz-flag { position: absolute; transform: translateY(-50%); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .02em; padding: 2px 8px; border-radius: 7px; border: 1.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.4); white-space: nowrap; z-index: 6; }
+.mtz-flag.t { left: 2%; background: #2563eb; }
+.mtz-flag.d { right: 2%; background: #e0731f; }
 
 /* Légende sous la photo (jamais coupée) : rappelle où / quoi est gravé */
 .grav-legend { background: #fff; border: 1px solid var(--gold-light, #e2c67e); border-radius: 10px; padding: 10px 12px; margin: 8px 0 2px; }
