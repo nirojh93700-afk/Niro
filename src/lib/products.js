@@ -1357,7 +1357,7 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-grave", title: "Verre à whisky portrait personnalisé", price: 26.90 },
+      { id: "verre-whisky-grave", title: "Verre à whisky portrait personnalisé", price: 24.90 },
     ],
     descriptionHtml: `<p><strong>Votre photo gravée sur un verre à whisky.</strong> Un portrait, une photo de famille, un souvenir : votre image est transformée en gravure façon dessin, puis gravée au laser sur le verre — un cadeau unique et émouvant.</p>
 <p>Vous pouvez aussi ajouter un texte (prénom, date, message), un dessin ou votre logo. Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour la Fête des Pères, un anniversaire, un cadeau de couple, un souvenir de famille ou un cadeau d'entreprise.</p>
@@ -1442,7 +1442,7 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-fete-des-peres", title: "Verre à whisky à personnaliser", price: 22.90 },
+      { id: "verre-whisky-fete-des-peres", title: "Verre à whisky à personnaliser", price: 19.90 },
     ],
     descriptionHtml: `<p><strong>Le verre à whisky que vous composez vous-même.</strong> Choisissez un modèle prêt à graver — Route 66, The Bourbon Room, colombes & cœur, « Whisky de… » (votre prénom), « élu PAPA de l'année »… — et ajoutez votre prénom ou votre date.</p>
 <p>Choisissez vos textes, la police de chaque ligne et le modèle : l'aperçu s'affiche en direct sur le verre. Gravure laser permanente, qui résiste au lave-vaisselle. Idéal pour un anniversaire, la Fête des pères, un cadeau de couple, un souvenir ou un cadeau d'entreprise.</p>
