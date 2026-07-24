@@ -19,9 +19,21 @@ const START = {
   "porte-cles-cristal-led-rectangle": { left: 45, top: 41, width: 31, height: 35, rotation: 0 },
   "cristal-photo-3d-vertical": { left: 30, top: 27, width: 42, height: 41, rotation: -3 },
   "cristal-photo-3d-horizontal": { left: 30, top: 30, width: 42, height: 32, rotation: -3 },
+  // Verres & carafe : cadre sur la face avant (à ajuster : la carafe est un peu de biais).
+  "carafe-a-whisky-gravee": { left: 37, top: 48, width: 26, height: 22, rotation: 0, ry: 0 },
+  "verre-a-vin-grave": { left: 36, top: 17, width: 28, height: 24, rotation: 0, ry: 0 },
+  "flute-a-champagne-gravee": { left: 40, top: 30, width: 20, height: 22, rotation: 0, ry: 0 },
 };
+function isGlass(p) { return Boolean(p.styleImages && p.engrave); }
 function defZone(p) {
-  return { img: p.images?.[0] || "", left: 20, top: 40, width: 30, height: 30, rotation: 0, ry: 0, rx: 0, opacity: 0.72, blend: "screen", bw: 1, ...(START[p.slug] || {}) };
+  const glass = isGlass(p);
+  return {
+    img: (glass ? p.engraveImage : p.images?.[0]) || p.images?.[0] || "",
+    left: 20, top: 40, width: 30, height: 30, rotation: 0, ry: 0, rx: 0,
+    opacity: glass ? 0.9 : 0.72, blend: glass ? "multiply" : "screen", bw: 1,
+    on: glass ? 0 : 1, // verres/carafe : n'apparaît sur la fiche qu'une fois activé
+    ...(START[p.slug] || {}),
+  };
 }
 // Transformation appliquée à la zone : inclinaison (rotation à plat) + perspective 3D.
 function zoneTransform(z) {
@@ -29,7 +41,7 @@ function zoneTransform(z) {
 }
 
 export default function CristalReglage() {
-  const cristaux = useMemo(() => products.filter((p) => p.crystal3d), []);
+  const cristaux = useMemo(() => products.filter((p) => p.crystal3d || (p.styleImages && p.engrave)), []);
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [msg, setMsg] = useState("");
@@ -105,8 +117,8 @@ export default function CristalReglage() {
 
   return (
     <main className="container" style={{ maxWidth: 720, margin: "20px auto", padding: 16 }}>
-      <h1 style={{ fontFamily: "Georgia, serif" }}>Réglage cristaux — placer la photo</h1>
-      <p style={{ color: "var(--ink-soft)", fontSize: ".92rem" }}>Choisissez un cristal, puis glissez le cadre sur la zone gravée et redimensionnez-le avec la poignée dorée. La photo témoin sert d'exemple. Enregistrez : la fiche produit affichera la photo du client exactement à cet endroit.</p>
+      <h1 style={{ fontFamily: "Georgia, serif" }}>Réglage aperçu — cristaux, verres &amp; carafe</h1>
+      <p style={{ color: "var(--ink-soft)", fontSize: ".92rem" }}>Choisissez un produit, puis glissez le cadre sur la face à graver et redimensionnez-le avec la poignée dorée. Réglez l'<b>inclinaison</b> et la <b>perspective</b> pour suivre l'angle du verre/de la carafe. Pour les verres, cliquez un <b>logo témoin</b> pour viser juste. Enregistrez : la fiche posera le motif choisi exactement dans ce cadre.</p>
 
       {/* Sélecteur de produit */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "14px 0" }}>
@@ -122,6 +134,19 @@ export default function CristalReglage() {
             // eslint-disable-next-line @next/next/no-img-element
             <img key={im} src={im} alt="" onClick={() => setZ({ img: im })} style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, cursor: "pointer", border: "2px solid " + (z.img === im ? "#b0852f" : "transparent") }} />
           ))}
+        </div>
+      )}
+
+      {/* Motif témoin (verres/carafe) : poser un vrai logo dans le cadre pour viser juste */}
+      {isGlass(product) && product.styleImages && (
+        <div style={{ marginBottom: 12 }}>
+          <p style={{ fontSize: ".82rem", color: "var(--ink-soft)", margin: "0 0 6px" }}>Logo témoin (pour bien placer le cadre) :</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {Object.entries(product.styleImages).slice(0, 12).map(([n, url]) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={n} src={url} alt={`n°${n}`} title={`n°${n}`} onClick={() => setSample(url)} style={{ width: 46, height: 46, objectFit: "contain", background: "#fff", borderRadius: 8, cursor: "pointer", padding: 3, border: "2px solid " + (sample === url ? "#b0852f" : "var(--line)") }} />
+            ))}
+          </div>
         </div>
       )}
 
@@ -191,6 +216,12 @@ export default function CristalReglage() {
           <button onClick={() => setZ({ bw: 1 })} style={{ flex: 1, border: "1.5px solid " + (z?.bw ? "#b0852f" : "var(--line)"), background: z?.bw ? "rgba(201,162,75,.14)" : "var(--card)", borderRadius: 10, padding: 8, cursor: "pointer", font: "inherit", fontSize: ".82rem" }}>Noir &amp; blanc (gravure)</button>
           <button onClick={() => setZ({ bw: 0 })} style={{ flex: 1, border: "1.5px solid " + (!z?.bw ? "#b0852f" : "var(--line)"), background: !z?.bw ? "rgba(201,162,75,.14)" : "var(--card)", borderRadius: 10, padding: 8, cursor: "pointer", font: "inherit", fontSize: ".82rem" }}>Couleur</button>
         </div>
+        {isGlass(product) && (
+          <label style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: "1.5px solid " + (z?.on ? "#b0852f" : "var(--line)"), borderRadius: 10, background: z?.on ? "rgba(201,162,75,.12)" : "var(--card)", cursor: "pointer", fontSize: ".9rem" }}>
+            <input type="checkbox" checked={Boolean(z?.on)} onChange={(e) => setZ({ on: e.target.checked ? 1 : 0 })} />
+            <span>Afficher ce cadre sur la fiche produit (le motif choisi s'y posera). Décoché = placement libre par le client.</span>
+          </label>
+        )}
         <button className="btn btn-gold" onClick={save}>Enregistrer</button>
         {msg && <p style={{ textAlign: "center", color: msg.includes("✓") ? "#3f7d55" : "#b4452f", fontSize: ".9rem" }}>{msg}</p>}
       </div>

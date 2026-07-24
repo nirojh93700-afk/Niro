@@ -68,6 +68,7 @@ export default function ProductDetail({ product }) {
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
   const [crystalTextPos, setCrystalTextPos] = useState(null);
   const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
+  const [motifZone, setMotifZone] = useState(null); // zone de gravure verres/carafe (cadre incliné)
   const [crystalPreviewActive, setCrystalPreviewActive] = useState(true); // affiche l'aperçu OU les photos produit // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
   const [textLayoutFond, setTextLayoutFond] = useState(null);
@@ -157,6 +158,15 @@ export default function ProductDetail({ product }) {
       .then((d) => { const z = d.zones?.[product.slug]; if (z && z.img) setCrystalZone(z); })
       .catch(() => {});
   }, [product.slug, product.crystal3d]);
+  // Zone de gravure des VERRES/CARAFE (cadre incliné placé dans l'admin) : le
+  // motif choisi s'y pose à l'angle exact. Repli : placement libre si non réglé.
+  useEffect(() => {
+    if (!product.styleImages) return;
+    fetch("/api/crystal-zones")
+      .then((r) => r.json())
+      .then((d) => { const z = d.zones?.[product.slug]; if (z && z.on) setMotifZone(z); })
+      .catch(() => {});
+  }, [product.slug, product.styleImages]);
 
   // Valeurs par défaut des champs (ex. texte + date pré-remplis et actifs).
   useEffect(() => {
@@ -830,7 +840,7 @@ export default function ProductDetail({ product }) {
           glassSrc={product.engraveImage}
           contain={Boolean(product.photoContain)}
           artSrc={editPhotoSrc || styleMotifSrc}
-          artLayout={photoLayout}
+          artLayout={motifZone && styleMotifSrc && !editPhotoSrc ? { cx: (motifZone.left + motifZone.width / 2) / 100, cy: (motifZone.top + motifZone.height / 2) / 100, size: motifZone.width / 100 } : photoLayout}
           lines={styleTextInMotif ? [] : previewLines}
           textLayout={textLayout}
           fontClass={previewFontClass}
@@ -923,8 +933,18 @@ export default function ProductDetail({ product }) {
             {hasImages && showEditor && editPhotoSrc && !modeleField && (
               <PhotoEngraveLayer key={`photo-${side}`} photoSrc={editPhotoSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayoutSide} />
             )}
-            {/* Motif du style choisi (n°) posé sur le verre — si pas de photo cliente. */}
-            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && (
+            {/* Motif du style choisi (n°) posé sur le verre. Si la gérante a réglé un
+                CADRE incliné (motifZone) : le motif s'y pose à l'angle exact (fixe).
+                Sinon : placement libre (le client glisse / redimensionne). */}
+            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && motifZone && (
+              <div className="engrave-editor" style={{ pointerEvents: "none" }}>
+                <div className="mz-fixed" style={{ left: motifZone.left + "%", top: motifZone.top + "%", width: motifZone.width + "%", height: motifZone.height + "%", transform: `perspective(900px) rotateX(${motifZone.rx || 0}deg) rotateY(${motifZone.ry || 0}deg) rotate(${motifZone.rotation || 0}deg)` }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={styleMotifSrc} alt="" style={{ width: "100%", height: "100%", objectFit: "contain", mixBlendMode: "multiply", filter: "grayscale(1) contrast(1.15) brightness(1.02)", opacity: 0.92 }} />
+                </div>
+              </div>
+            )}
+            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && !motifZone && (
               <PhotoEngraveLayer key={`style-${styleNum}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
             {/* Texte gravé DANS le modèle, aux emplacements exacts : nom au point "t",

@@ -8,8 +8,8 @@ const TOOLS = [
   {
     href: "/gestion/cristal-reglage",
     icon: "💎",
-    title: "Réglage cristaux (photo)",
-    desc: "Placez la photo du client sur la vraie photo de chaque cristal (cœur, rectangle, pyramide, trophée, blocs). Vous glissez le cadre, vous enregistrez : la fiche produit l'utilise.",
+    title: "Réglage cristaux, verres & carafe",
+    desc: "Placez le cadre de gravure sur la vraie photo (cristaux, verres à vin, flûtes, carafe). Réglez l'inclinaison + la perspective pour suivre l'angle du verre, cochez « afficher sur la fiche » : le motif choisi s'y posera pile au bon endroit.",
   },
   {
     href: "/gestion/couverts-reglage",

@@ -240,6 +240,7 @@ export async function POST(req) {
         opacity: Math.max(0.2, Math.min(1, num(z.opacity, 0.72))),
         blend: ["screen", "normal", "luminosity", "multiply"].includes(z.blend) ? z.blend : "screen",
         bw: z.bw ? 1 : 0,
+        on: z.on ? 1 : 0,
       };
     }
     patch.crystalZones = out;
