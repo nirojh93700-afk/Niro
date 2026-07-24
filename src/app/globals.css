@@ -3005,6 +3005,16 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 @media(max-width:520px){.mini-glass{width:124px}.mini-stage{width:124px;height:124px}}
 
 /* Sélecteur de modèles par défilement horizontal (verres) */
+/* Personnalisation par verre (lots vin/flûte) */
+.perglass { border: 1.5px solid var(--gold-light, #e2c67e); border-radius: 12px; padding: 10px 12px; margin: 0 0 14px; background: #fffdf7; }
+.pg-choice { display: flex; gap: 8px; }
+.pg-opt { flex: 1; padding: 9px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
+.pg-opt.on { border-color: var(--gold); background: #fffaf0; color: var(--gold-dark, #a98935); }
+.pg-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.pg-tab { padding: 7px 14px; border: 1.5px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+.pg-tab.on { border-color: var(--gold); background: var(--gold); color: #fff; }
+.pg-hint { font-size: 0.78rem; color: var(--ink-soft); margin: 8px 0 0; }
+
 .style-scroller { margin: 4px 0 8px; }
 .ss-chips { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 .ss-chip { padding: 8px 14px; border: 1.5px solid var(--line); border-radius: 999px; background: #fff; font-size: 0.82rem; font-weight: 700; color: var(--ink-soft); cursor: pointer; }

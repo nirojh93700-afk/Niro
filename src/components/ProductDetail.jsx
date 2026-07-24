@@ -57,6 +57,10 @@ export default function ProductDetail({ product }) {
   const [personalization, setPersonalization] = useState("");
   const [fieldValues, setFieldValues] = useState({});
   const [personaTab, setPersonaTab] = useState(null); // onglet de perso actif (produits avec personaTabs)
+  // Personnalisation PAR VERRE (lots vin/flûte) : chaque verre peut être gravé différemment.
+  const [perGlass, setPerGlass] = useState(false);
+  const [activeGlass, setActiveGlass] = useState(0);
+  const [glassConfigs, setGlassConfigs] = useState([]);
   const [showGlassMini, setShowGlassMini] = useState(true); // mini-aperçu flottant du verre (vraie photo)
   const [quantity, setQuantity] = useState(1);
   const [pkgSel, setPkgSel] = useState([]); // emballages payants choisis (ids)
@@ -184,6 +188,9 @@ export default function ProductDetail({ product }) {
   }, [product.slug]);
 
   const variant = product.variants[variantIndex];
+  // Lot de N verres (vin/flûte) : on lit le nombre dans le titre de la variante.
+  const glassQty = (() => { const m = /lot de\s*(\d+)/i.exec(variant?.title || ""); return m ? parseInt(m[1], 10) : 1; })();
+  const supportsPerGlass = Boolean(product.styleImages) && glassQty > 1;
   // Coloris avec galerie propre (ex. gobelet) : pastilles SOUS la grande photo,
   // et on masque le sélecteur d'option de droite. Cliquer change la grande photo.
   const colorGallery = product.variants?.length > 1 && !product.genderPick &&
@@ -206,6 +213,8 @@ export default function ProductDetail({ product }) {
 
   function selectVariant(i) {
     setVariantIndex(i);
+    // Changement de lot : on repart d'une perso unique (évite un état par-verre incohérent).
+    if (perGlass) { setPerGlass(false); setActiveGlass(0); setGlassConfigs([]); }
     const v = product.variants[i];
     // Modèle avec sa propre galerie (genderPick) : on remplace la galerie entière
     // par les photos de ce modèle → Garçon = photos garçon, Fille = photos fille.
@@ -387,6 +396,45 @@ export default function ProductDetail({ product }) {
       return parts.join(" · ");
     }
     return personalization.trim();
+  }
+
+  // --- Personnalisation PAR VERRE (lots vin/flûte) ---
+  // Résumé court d'un verre (modèle + prénom + date + police) pour la commande.
+  function glassSummary(fv, forClient = false) {
+    const p = [];
+    if ((fv.numstyle || "").trim()) p.push(`modèle n°${fv.numstyle.trim()}`);
+    if ((fv.lettreFleurie || "").trim()) p.push(`lettre fleurie « ${fv.lettreFleurie.trim()} »`);
+    if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
+    if ((fv.initiale || "").trim()) p.push(`initiale ${fv.initiale.trim()}`);
+    if ((fv.date || "").trim()) p.push(`date ${fv.date.trim()}`);
+    if (!forClient && (fv.police || "").trim()) p.push(`police ${getFontLabel(fv.police)}`);
+    return p.join(" · ") || "à préciser";
+  }
+  function syncedGlassConfigs() {
+    const a = [...glassConfigs];
+    a[activeGlass] = { ...fieldValues };
+    for (let i = 0; i < glassQty; i++) if (!a[i]) a[i] = {};
+    return a.slice(0, glassQty);
+  }
+  function perGlassText(forClient) {
+    return syncedGlassConfigs().map((fv, i) => `Verre ${i + 1} : ${glassSummary(fv, forClient)}`).join(forClient ? "  |  " : "  |  ");
+  }
+  function switchGlass(i) {
+    const a = [...glassConfigs];
+    a[activeGlass] = { ...fieldValues };
+    if (!a[i]) a[i] = {};
+    setGlassConfigs(a);
+    setFieldValues(a[i]);
+    setActiveGlass(i);
+  }
+  function enablePerGlass(on) {
+    if (on) {
+      const a = Array.from({ length: glassQty }, (_, i) => (i === 0 ? { ...fieldValues } : {}));
+      setGlassConfigs(a); setActiveGlass(0); setPerGlass(true);
+    } else {
+      setFieldValues(glassConfigs[0] || fieldValues);
+      setPerGlass(false); setActiveGlass(0);
+    }
   }
 
   // Police et couleur sélectionnées (pour l'aperçu en direct).
@@ -802,7 +850,8 @@ export default function ProductDetail({ product }) {
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null, crystalText: crystalTextPos || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
-      personalization: [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
+      perGlass: perGlass ? syncedGlassConfigs() : null, // détail par verre (lot personnalisé)
+      personalization: perGlass ? perGlassText(false) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
       composition: composition || null, // configurateur gobelet (côté + motifs) pour l'atelier
       packaging: pkg.labels.length ? pkg.labels.join(", ") : null, // emballage pour la fiche atelier
     };
@@ -815,7 +864,7 @@ export default function ProductDetail({ product }) {
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
-      personalization: [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "),
+      personalization: perGlass ? perGlassText(true) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "),
       fields: (product.engravingPricing || product.motifComposer) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
       spec: itemSpec,
@@ -1327,6 +1376,25 @@ export default function ProductDetail({ product }) {
                 <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 12 }}>
                   Personnalisation — gravure
                 </p>
+              )}
+              {/* Lot de N verres : chaque verre identique ou personnalisé différemment */}
+              {supportsPerGlass && (
+                <div className="perglass">
+                  <div className="pg-choice">
+                    <button type="button" className={`pg-opt${!perGlass ? " on" : ""}`} onClick={() => enablePerGlass(false)}>Les {glassQty} identiques</button>
+                    <button type="button" className={`pg-opt${perGlass ? " on" : ""}`} onClick={() => enablePerGlass(true)}>Chacun différent</button>
+                  </div>
+                  {perGlass && (
+                    <>
+                      <div className="pg-tabs">
+                        {Array.from({ length: glassQty }, (_, i) => (
+                          <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
+                        ))}
+                      </div>
+                      <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>
+                    </>
+                  )}
+                </div>
               )}
               {personaTabs && (
                 <div className="persona-tabs">
