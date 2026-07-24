@@ -3017,15 +3017,23 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .ss-ph img { max-width: 100%; max-height: 64px; object-fit: contain; }
 .ss-note { font-size: 0.78rem; color: var(--ink-soft); margin: 0; }
 
-/* Fenêtre « sera gravé ici » + main de déplacement (verres) */
-.mtz-wrap { z-index: 4; }
-.mtz-bubble { position: absolute; transform: translateY(-50%); background: #fff; border: 1.5px solid var(--gold); border-radius: 10px; padding: 6px 9px; box-shadow: 0 6px 18px rgba(60,45,15,.2); max-width: 34%; text-align: center; }
-.mtz-bubble.mtz-right { right: 4px; }
-.mtz-bubble.mtz-left { left: 4px; }
-.mtz-cap { display: block; font-size: 9.5px; font-weight: 800; letter-spacing: .03em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 2px; }
-.mtz-row { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
-.mtz-key { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
-.mtz-txt { display: flex; flex-direction: column; line-height: 1.08; font-size: 13px; word-break: break-word; white-space: normal; text-align: left; }
+/* Pastilles « ici c'est gravé » posées SUR le verre (aux points exacts) */
+.mtz-dot { position: absolute; transform: translate(-50%, -50%); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .02em; padding: 2px 7px; border-radius: 9px; border: 1.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.45); white-space: nowrap; z-index: 5; pointer-events: none; }
+.mtz-dot::after { content: ""; position: absolute; left: 50%; bottom: -5px; transform: translateX(-50%); border: 4px solid transparent; }
+.mtz-dot-t { background: #2563eb; }
+.mtz-dot-t::after { border-top-color: #2563eb; }
+.mtz-dot-d { background: #e0731f; }
+.mtz-dot-d::after { border-top-color: #e0731f; }
+
+/* Légende sous la photo (jamais coupée) : rappelle où / quoi est gravé */
+.grav-legend { background: #fff; border: 1px solid var(--gold-light, #e2c67e); border-radius: 10px; padding: 10px 12px; margin: 8px 0 2px; }
+.grav-legend .gl-title { font-size: 0.82rem; font-weight: 700; color: var(--ink, #241a0c); margin: 0 0 6px; }
+.grav-legend .gl-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 0.86rem; }
+.grav-legend .gl-key { flex: 0 0 auto; color: #fff; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; padding: 2px 8px; border-radius: 20px; }
+.grav-legend .gl-key-t { background: #2563eb; }
+.grav-legend .gl-key-d { background: #e0731f; }
+.grav-legend .gl-val { color: var(--ink, #241a0c); font-weight: 600; word-break: break-word; }
+.grav-legend .gl-note { font-size: 0.74rem; color: var(--ink-soft); margin: 6px 0 0; }
 .drag-hint { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--ink-soft); background: #fff7e6; border: 1px solid var(--gold-light, #e2c67e); border-radius: 10px; padding: 8px 12px; margin: 8px 0 2px; }
 .drag-hint .dh-hand { font-size: 1.05rem; animation: dhmove 2.2s ease-in-out infinite; }
 @keyframes dhmove { 0%,100% { transform: translateX(0); } 50% { transform: translateX(7px); } }

@@ -932,10 +932,8 @@ export default function ProductDetail({ product }) {
             {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && styleZone && previewLines.length > 0 && (
               <MotifTextZone
                 key={`zone-${styleNum}`}
-                nameLines={previewLines.filter((l) => l !== (fieldValues["date"] || "").trim())}
-                dateLines={(fieldValues["date"] || "").trim() ? [(fieldValues["date"] || "").trim()] : []}
-                fontClass={previewFontClass}
-                color={previewColor}
+                hasName={previewLines.filter((l) => l !== (fieldValues["date"] || "").trim()).length > 0}
+                hasDate={Boolean((fieldValues["date"] || "").trim())}
                 zone={styleZone}
                 motifLayout={photoLayout}
               />
@@ -1019,6 +1017,26 @@ export default function ProductDetail({ product }) {
             <div className="drag-hint">
               <span className="dh-hand" aria-hidden="true">👆</span>
               <span>Touchez et <b>glissez</b> le dessin, le texte et les chiffres pour les placer <b>où vous voulez</b> sur le verre — le curseur règle la taille.</span>
+            </div>
+          )}
+          {/* Légende sous la photo (jamais coupée) : rappelle OÙ le nom et la date
+              seront gravés sur le modèle choisi, avec le texte saisi par le client. */}
+          {showEditor && styleMotifSrc && styleZone && previewLines.length > 0 && (
+            <div className="grav-legend">
+              <p className="gl-title">Sur ce modèle, voici ce qui sera gravé :</p>
+              {previewLines.filter((l) => l !== (fieldValues["date"] || "").trim()).length > 0 && (
+                <p className="gl-row">
+                  <span className="gl-key gl-key-t">Nom / texte</span>
+                  <span className="gl-val">{previewLines.filter((l) => l !== (fieldValues["date"] || "").trim()).join(" ")}</span>
+                </p>
+              )}
+              {(fieldValues["date"] || "").trim() && (
+                <p className="gl-row">
+                  <span className="gl-key gl-key-d">Date</span>
+                  <span className="gl-val">{(fieldValues["date"] || "").trim()}</span>
+                </p>
+              )}
+              <p className="gl-note">Les pastilles bleue (nom) et orange (date) sur la photo montrent l'endroit exact de la gravure.</p>
             </div>
           )}
           {(galleryMedia.length > 1 || (product.crystal3d && photoSrc)) && (
