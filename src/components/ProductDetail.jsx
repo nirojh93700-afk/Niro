@@ -190,7 +190,7 @@ export default function ProductDetail({ product }) {
   const variant = product.variants[variantIndex];
   // Lot de N verres (vin/flûte) : on lit le nombre dans le titre de la variante.
   const glassQty = (() => { const m = /lot de\s*(\d+)/i.exec(variant?.title || ""); return m ? parseInt(m[1], 10) : 1; })();
-  const supportsPerGlass = Boolean(product.styleImages) && glassQty > 1;
+  const supportsPerGlass = (Boolean(product.styleImages) || Boolean(product.perGlassLot)) && glassQty > 1;
   // Coloris avec galerie propre (ex. gobelet) : pastilles SOUS la grande photo,
   // et on masque le sélecteur d'option de droite. Cliquer change la grande photo.
   const colorGallery = product.variants?.length > 1 && !product.genderPick &&
@@ -404,9 +404,13 @@ export default function ProductDetail({ product }) {
     const p = [];
     if ((fv.numstyle || "").trim()) p.push(`modèle n°${fv.numstyle.trim()}`);
     if ((fv.lettreFleurie || "").trim()) p.push(`lettre fleurie « ${fv.lettreFleurie.trim()} »`);
+    if (fv.photo) p.push("photo/logo fourni");
     if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
+    if ((fv.texte || "").trim()) p.push(`« ${fv.texte.trim()} »`);
     if ((fv.initiale || "").trim()) p.push(`initiale ${fv.initiale.trim()}`);
     if ((fv.date || "").trim()) p.push(`date ${fv.date.trim()}`);
+    if ((fv.texte2 || "").trim()) p.push(`date ${fv.texte2.trim()}`);
+    if (!forClient && fv.emplacement && fv.emplacement !== "face") p.push(`emplacement : ${fv.emplacement}`);
     if (!forClient && (fv.police || "").trim()) p.push(`police ${getFontLabel(fv.police)}`);
     return p.join(" · ") || "à préciser";
   }

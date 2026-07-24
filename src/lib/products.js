@@ -1288,6 +1288,8 @@ export const products = [
     weight: 600, // verre + emballage protégé (fragile)
     pickup: false, // verres : livraison seule (pas de retrait en main propre)
     letter: false, // colis : lourd et fragile
+    freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4 = 71,90 €)
+    perGlassLot: true, // lot 2/4 : chaque verre peut être gravé différemment (photo/texte)
     hidden: false, // PUBLIÉ (verre à whisky gravé — photo / texte / logo)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
     previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
@@ -1357,7 +1359,9 @@ export const products = [
     ],
     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
     variants: [
-      { id: "verre-whisky-grave", title: "Verre à whisky portrait personnalisé", price: 19.90 },
+      { id: "verre-whisky-grave", title: "À l'unité", price: 19.90, weight: 600 },
+      { id: "verre-whisky-grave-2", stockId: "verre-whisky-grave-2", title: "Lot de 2", price: 37.90, weight: 1100 },
+      { id: "verre-whisky-grave-4", stockId: "verre-whisky-grave-4", title: "Lot de 4 — livraison offerte", price: 71.90, weight: 2000 },
     ],
     descriptionHtml: `<p><strong>Votre photo gravée sur un verre à whisky.</strong> Un portrait, une photo de famille, un souvenir : votre image est transformée en gravure façon dessin, puis gravée au laser sur le verre — un cadeau unique et émouvant.</p>
 <p>Vous pouvez aussi ajouter un texte (prénom, date, message), un dessin ou votre logo. Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour la Fête des Pères, un anniversaire, un cadeau de couple, un souvenir de famille ou un cadeau d'entreprise.</p>
