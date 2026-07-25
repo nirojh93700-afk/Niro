@@ -871,6 +871,7 @@ export default function ProductDetail({ product }) {
       personalization: perGlass ? perGlassText(true) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "),
       fields: (product.engravingPricing || product.motifComposer) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
+      perGlass: perGlass ? syncedGlassConfigs() : null, // lot personnalisé : options comptées PAR verre au paiement
       spec: itemSpec,
       pickup: Boolean(product.pickup),
       weight: (Number(variant.weight) || Number(product.weight) || 200) + (engrave.weight || 0) + (pkg.weight || 0), // poids (g) réel par taille + options (socle, emballage) — port & retrait corrects

@@ -1822,6 +1822,7 @@ export const products = [
         { value: "2verres", label: "+ 2 verres gravés assortis (+35,80 € — verre à 17,90 € au lieu de 19,90 €)" },
         { value: "4verres", label: "+ 4 verres gravés assortis (+71,60 € — verre à 17,90 € au lieu de 19,90 €)" },
       ] },
+      { key: "coffretnote", type: "note", text: "Bon à savoir : les verres assortis du coffret sont gravés dans le MÊME style que votre carafe (même modèle / gravure choisie ci-dessus), pour un ensemble coordonné." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre logo — envoyez-la par message." },
     ],
     engravingPricing: { flatExtras: [

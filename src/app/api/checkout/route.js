@@ -162,7 +162,16 @@ export async function POST(req) {
     const promo = promos[variant.id];
     const basePrice = typeof promo === "number" && promo < variant.price ? promo : variant.price;
     // Recalcul de confiance du supplément de gravure (depuis les champs envoyés).
-    const extra = engravingExtra(product, item.fields || {}, variant.id);
+    // Lot personnalisé PAR verre : on additionne les options (texte, deux faces…) de CHAQUE verre.
+    let extra;
+    if (Array.isArray(item.perGlass) && item.perGlass.length > 0) {
+      extra = item.perGlass.slice(0, 12).reduce((acc, fv) => {
+        const e = engravingExtra(product, fv || {}, variant.id);
+        return { amount: acc.amount + (e.amount || 0), weight: acc.weight + (e.weight || 0) };
+      }, { amount: 0, weight: 0 });
+    } else {
+      extra = engravingExtra(product, item.fields || {}, variant.id);
+    }
     // Recalcul de confiance de l'emballage choisi (prix depuis le catalogue serveur).
     const pkg = packagingExtra(product, item.packaging || []);
     // Recalcul de confiance du configurateur gobelet : motifs en plus de l'inclus.
