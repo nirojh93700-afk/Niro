@@ -1009,11 +1009,30 @@ export default function GestionPage() {
                     {o.demande ? `\n${o.demande}` : "\nVoir le détail des articles ci-dessous."}
                   </div>
                 ) : null}
-                <ul style={{ margin: "0 0 10px", paddingLeft: 18, fontSize: "0.9rem" }}>
+                <ul style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: "0.9rem" }}>
                   {(o.items || []).map((it, i) => (
                     <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
                   ))}
                 </ul>
+                {(() => {
+                  const itemsSubtotal = (o.items || []).reduce((s, it) => s + (Number(it.total) || 0), 0);
+                  // Livraison : prix enregistré si dispo, sinon calculée (total − produits).
+                  const shipping = o.shippingPrice != null ? Number(o.shippingPrice) : Math.max(0, (Number(o.total) || 0) - itemsSubtotal);
+                  return (
+                    <div style={{ margin: "0 0 10px", padding: "8px 12px", background: "#faf6ee", border: "1px solid #ece0c4", borderRadius: 8, fontSize: "0.88rem" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", padding: "2px 0" }}>
+                        <span>Sous-total produits</span><span>{formatEuro(itemsSubtotal)}</span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", padding: "2px 0" }}>
+                        <span>Livraison{o.shippingMethod ? ` — ${o.shippingMethod}` : ""}</span>
+                        <span>{shipping > 0 ? formatEuro(shipping) : "Offerte"}</span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 0 0", marginTop: 4, borderTop: "1px solid #ece0c4", fontWeight: 700, color: "var(--gold-dark)" }}>
+                        <span>Total payé</span><span>{formatEuro(o.total)}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
                 {(o.demandeGravure || o.messageGraver) && (
                   <div style={{ background: "#fbf3e6", border: "1px solid #e7d3a1", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem", whiteSpace: "pre-line" }}>
                     <strong>✍️ Texte demandé par la cliente (à graver) :</strong>
