@@ -8,8 +8,14 @@ export default function BatThread({ order, adminKey }) {
   const [thread, setThread] = useState(null);
   const [text, setText] = useState("");
   const [image, setImage] = useState("");
+  const [to, setTo] = useState(order.customerEmail || "");
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState("");
+
+  // Reprend l'adresse de la commande (ou celle déjà enregistrée dans le fil).
+  useEffect(() => {
+    setTo((prev) => prev || order.customerEmail || thread?.customerEmail || "");
+  }, [order.customerEmail, thread?.customerEmail]);
 
   const load = useCallback(async () => {
     try {
@@ -20,8 +26,11 @@ export default function BatThread({ order, adminKey }) {
 
   useEffect(() => { load(); }, [load]);
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to.trim());
+
   async function send() {
     if (!text.trim() && !image.trim()) { setMsg("Ajoute un message ou un aperçu."); return; }
+    if (!emailValid) { setMsg("Renseigne d'abord l'adresse e-mail de la cliente (ci-dessus)."); return; }
     setSending(true); setMsg("");
     try {
       const res = await fetch("/api/admin/bat", {
@@ -29,7 +38,7 @@ export default function BatThread({ order, adminKey }) {
         headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
         body: JSON.stringify({
           orderId: order.id, ref: order.ref || order.id?.slice(-6),
-          customerEmail: order.customerEmail || "", customerName: order.customerName || "",
+          customerEmail: to.trim(), customerName: order.customerName || "",
           text: text.trim(), image: image.trim(),
         }),
       });
@@ -37,7 +46,7 @@ export default function BatThread({ order, adminKey }) {
       if (!res.ok) { setMsg(d.error || "Échec."); return; }
       setThread(d.thread);
       setText(""); setImage("");
-      setMsg(d.emailed ? "✓ Aperçu envoyé par e-mail à la cliente." : "✓ Enregistré (e-mail non envoyé : vérifie l'adresse).");
+      setMsg(d.emailed ? "✓ Aperçu envoyé par e-mail à la cliente." : "✓ Enregistré, mais l'e-mail n'est pas parti (l'adresse a peut-être été refusée). Réessaie.");
     } catch { setMsg("Échec de l'envoi."); }
     finally { setSending(false); }
   }
@@ -72,6 +81,14 @@ export default function BatThread({ order, adminKey }) {
         </div>
       )}
 
+      <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 700, color: "var(--gold-dark)", marginBottom: 4 }}>
+        E-mail de la cliente (le mail part à cette adresse)
+      </label>
+      <input type="email" value={to} onChange={(e) => setTo(e.target.value)} placeholder="ex. cliente@email.com"
+        style={{ width: "100%", padding: 10, border: `1px solid ${to && !emailValid ? "#d99" : "var(--line)"}`, borderRadius: 10, font: "inherit", marginBottom: to && !emailValid ? 4 : 10 }} />
+      {to && !emailValid ? <div style={{ fontSize: "0.78rem", color: "#b4452f", marginBottom: 10 }}>Adresse e-mail incomplète.</div> : null}
+      {!to ? <div style={{ fontSize: "0.78rem", color: "#b4452f", marginBottom: 10 }}>Cette commande n'a pas d'adresse enregistrée : saisis l'e-mail de la cliente pour pouvoir envoyer.</div> : null}
+
       <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Message à la cliente (ex. « Voici l'aperçu de votre gravure, dites-moi si ça vous convient »)"
         style={{ width: "100%", minHeight: 70, padding: 10, border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 8 }} />
 
@@ -84,7 +101,7 @@ export default function BatThread({ order, adminKey }) {
       {image ? <div style={{ fontSize: "0.78rem", color: "#256b34", marginTop: 4 }}>Aperçu prêt à envoyer ✓</div> : null}
 
       <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 10 }}>
-        <button className="btn btn-gold" style={{ padding: "8px 16px" }} disabled={sending} onClick={send}>
+        <button className="btn btn-gold" style={{ padding: "8px 16px", opacity: emailValid ? 1 : 0.55 }} disabled={sending || !emailValid} onClick={send}>
           {sending ? "Envoi…" : "Envoyer l'aperçu à la cliente"}
         </button>
         <button className="btn btn-outline" style={{ padding: "8px 12px" }} onClick={load}>Rafraîchir</button>
