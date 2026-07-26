@@ -27,6 +27,7 @@ export async function POST(req) {
   const codes = await setPromoCode(code, {
     type: body?.type, value,
     ambassador: body?.ambassador, commission: body?.commission, reusable: body?.reusable,
+    days: body?.days,
   });
   return Response.json({ ok: true, codes, stats: await getCodeStats() });
 }

@@ -11,6 +11,7 @@ export default function PromoCodesAdmin({ adminKey }) {
   const [ambassador, setAmbassador] = useState("");
   const [commission, setCommission] = useState("");
   const [reusable, setReusable] = useState(false);
+  const [days, setDays] = useState("");
   const [msg, setMsg] = useState("");
 
   const load = useCallback(async () => {
@@ -32,12 +33,13 @@ export default function PromoCodesAdmin({ adminKey }) {
         code: code.trim(), type, value: Number(value),
         ambassador: ambassador.trim(), commission: Number(commission) || 0,
         reusable: reusable || Number(commission) > 0, // un code ambassadeur est réutilisable
+        days: days === "" ? 0 : Number(days) || 0, // durée de validité (0 = illimité)
       }),
     });
     const d = await res.json();
     if (!res.ok) { setMsg(d.error || "Erreur."); return; }
     setCodes(d.codes || {}); setStats(d.stats || {});
-    setCode(""); setValue(""); setAmbassador(""); setCommission(""); setReusable(false);
+    setCode(""); setValue(""); setAmbassador(""); setCommission(""); setReusable(false); setDays("");
     setMsg("✓ Code enregistré.");
   }
 
@@ -64,6 +66,11 @@ export default function PromoCodesAdmin({ adminKey }) {
   const list = Object.entries(codes);
   const ambassadeurs = list.filter(([, d]) => Number(d.commission) > 0);
   const eur = (n) => (Number(n) || 0).toFixed(2).replace(".", ",") + " €";
+  function validity(def) {
+    if (!def.expiresAt) return "illimité";
+    const d = new Date(def.expiresAt).toLocaleDateString("fr-FR");
+    return def.expiresAt < Date.now() ? `expiré (${d})` : `jusqu'au ${d}`;
+  }
   function refLink(c) {
     const base = (typeof window !== "undefined" && window.location?.origin) || "https://nivcreation.fr";
     return `${base}/?ref=${encodeURIComponent(c)}`;
@@ -101,9 +108,12 @@ export default function PromoCodesAdmin({ adminKey }) {
             <input type="checkbox" checked={reusable} onChange={(e) => setReusable(e.target.checked)} style={{ width: "auto" }} />
             Réutilisable (plusieurs clients)
           </label>
+          <label style={{ fontSize: ".82rem", color: "var(--ink-soft)" }}>Valable :</label>
+          <input type="number" min="0" value={days} onChange={(e) => setDays(e.target.value)} placeholder="jours" style={{ width: 90, padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
+          <span style={{ fontSize: ".82rem", color: "var(--ink-soft)" }}>jours (vide = illimité)</span>
           <button className="btn btn-gold" style={{ padding: "8px 16px", marginLeft: "auto" }} onClick={add}>Ajouter / Modifier</button>
         </div>
-        <p style={{ margin: 0, fontSize: ".78rem", color: "var(--ink-soft)" }}>Astuce : dès qu'une commission &gt; 0 est mise, le code devient automatiquement réutilisable (code ambassadeur).</p>
+        <p style={{ margin: 0, fontSize: ".78rem", color: "var(--ink-soft)" }}>Astuce : commission &gt; 0 → le code devient un ambassadeur (réutilisable + lien). « Valable » : laisse vide pour illimité, ou mets 7 / 10 / 30 jours…</p>
       </div>
       {msg && <p style={{ margin: 0, fontSize: "0.85rem", color: msg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{msg}</p>}
 
@@ -115,7 +125,7 @@ export default function PromoCodesAdmin({ adminKey }) {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".85rem", background: "#fff" }}>
               <thead>
                 <tr style={{ background: "#faf6ef", color: "var(--gold-dark, #a98935)" }}>
-                  {["Code", "Ambassadeur", "Réduc. client", "Commission", "Commandes", "Ventes", "Commission due", "Versé", "À verser", ""].map((h) => (
+                  {["Code", "Ambassadeur", "Réduc. client", "Commission", "Validité", "Commandes", "Ventes", "Commission due", "Versé", "À verser", ""].map((h) => (
                     <th key={h} style={{ border: "1px solid var(--line)", padding: "6px 8px", textAlign: "left", whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
@@ -130,6 +140,7 @@ export default function PromoCodesAdmin({ adminKey }) {
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px" }}>{def.ambassador || "—"}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px" }}>{def.type === "fixed" ? `−${def.value} €` : `−${def.value} %`}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px" }}>{def.commission} %</td>
+                      <td style={{ border: "1px solid var(--line)", padding: "6px 8px", whiteSpace: "nowrap", color: def.expiresAt && def.expiresAt < Date.now() ? "#b4452f" : "inherit" }}>{validity(def)}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px", textAlign: "center" }}>{s.orders || 0}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px" }}>{eur(s.sales)}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px" }}>{eur(s.commission)}</td>
@@ -167,7 +178,7 @@ export default function PromoCodesAdmin({ adminKey }) {
           <h4 style={{ margin: "4px 0 6px", color: "var(--gold-dark, #a98935)" }}>Codes promo classiques</h4>
           {list.filter(([, d]) => !(Number(d.commission) > 0)).map(([c, def]) => (
             <div key={c} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, padding: "6px 0", borderTop: "1px solid var(--line)" }}>
-              <span><strong>{c}</strong> — {def.type === "fixed" ? `−${def.value} €` : `−${def.value} %`}{def.reusable ? " · réutilisable" : ""}</span>
+              <span><strong>{c}</strong> — {def.type === "fixed" ? `−${def.value} €` : `−${def.value} %`}{def.reusable ? " · réutilisable" : ""} · <span style={{ color: def.expiresAt && def.expiresAt < Date.now() ? "#b4452f" : "var(--ink-soft)" }}>{validity(def)}</span></span>
               <button className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => del(c)}>Supprimer</button>
             </div>
           ))}

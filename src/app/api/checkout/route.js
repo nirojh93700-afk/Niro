@@ -244,7 +244,8 @@ export async function POST(req) {
       const pc = codes[promoCode];
       // Code ambassadeur (reusable) : utilisable plusieurs fois. Sinon : 1 fois/cliente.
       const blocked = pc && !pc.reusable && (await hasUsedCode(promoCode, { ip: clientIp }));
-      if (pc && pc.value > 0 && !blocked) {
+      const expired = pc && pc.expiresAt && Date.now() > pc.expiresAt;
+      if (pc && pc.value > 0 && !blocked && !expired) {
         appliedCode = promoCode;
         const coupon = await stripe.coupons.create(
           pc.type === "fixed"

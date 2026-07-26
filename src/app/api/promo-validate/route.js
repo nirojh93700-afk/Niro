@@ -15,6 +15,8 @@ export async function POST(req) {
   const codes = await getPromoCodes();
   const pc = codes[code];
   if (!pc) return Response.json({ valid: false });
+  // Code expiré (durée de validité dépassée) → invalide.
+  if (pc.expiresAt && Date.now() > pc.expiresAt) return Response.json({ valid: false, expired: true });
   // Code ambassadeur (reusable) : pas de limite « une fois par cliente ».
   if (!pc.reusable && await hasUsedCode(code, { ip: clientIp(req) })) {
     return Response.json({ valid: false, used: true });

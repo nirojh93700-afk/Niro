@@ -526,6 +526,11 @@ export async function setPromoCode(code, def) {
   const data = await getCatalogRaw();
   data.promoCodes = data.promoCodes || {};
   const prev = data.promoCodes[c] || {};
+  // Durée de validité (jours) : 0 / vide = illimité. Si fournie, on (re)calcule
+  // la date d'expiration à partir de maintenant.
+  const daysGiven = def?.days != null && def?.days !== "";
+  const days = daysGiven ? Math.max(0, Math.floor(Number(def.days) || 0)) : (prev.days || 0);
+  const expiresAt = daysGiven ? (days > 0 ? Date.now() + days * 86400000 : 0) : (prev.expiresAt || 0);
   data.promoCodes[c] = {
     type: def?.type === "fixed" ? "fixed" : "percent",
     value: Math.max(0, Number(def?.value) || 0),
@@ -533,6 +538,7 @@ export async function setPromoCode(code, def) {
     ambassador: def?.ambassador != null ? String(def.ambassador).slice(0, 60) : (prev.ambassador || ""),
     commission: def?.commission != null ? Math.max(0, Math.min(100, Number(def.commission) || 0)) : (prev.commission || 0),
     reusable: def?.reusable != null ? Boolean(def.reusable) : Boolean(prev.reusable),
+    days, expiresAt,
   };
   await persistCatalog(data);
   return data.promoCodes; // version à jour (évite une relecture parfois en retard)
