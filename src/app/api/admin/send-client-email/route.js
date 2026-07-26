@@ -1,14 +1,14 @@
-import { isAdmin } from "@/lib/stock";
+import { isAdmin, getGmailCreds } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
+import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 // Envoie un e-mail à une cliente depuis l'admin (avec l'e-mail du site, à ton image).
+// Priorité Gmail (marche vers toute adresse, sans domaine vérifié), Resend en secours.
 export async function POST(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
-  if (!process.env.RESEND_API_KEY) {
-    return Response.json({ error: "E-mail non configuré (RESEND_API_KEY)." }, { status: 503 });
-  }
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const to = String(body?.to || "").trim();
@@ -22,7 +22,21 @@ export async function POST(req) {
     bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
       <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
   });
-  const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact });
-  if (!r.ok) return Response.json({ error: "Échec de l'envoi." }, { status: 500 });
-  return Response.json({ ok: true });
+
+  // 1) Gmail en priorité.
+  try {
+    const creds = await getGmailCreds();
+    if (creds?.refreshToken) {
+      const token = await gmailAccessToken(creds);
+      await gmailSendHtml(token, { to, subject, html, bcc: BRAND.contact });
+      return Response.json({ ok: true, via: "gmail" });
+    }
+  } catch { /* on tente Resend */ }
+
+  // 2) Secours Resend.
+  if (process.env.RESEND_API_KEY) {
+    const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
+    if (r.ok) return Response.json({ ok: true, via: "resend" });
+  }
+  return Response.json({ error: "Échec de l'envoi (Gmail non connecté et Resend indisponible)." }, { status: 500 });
 }
