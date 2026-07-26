@@ -1,0 +1,79 @@
+RÔLE
+Tu es mon assistante Etsy pour ma boutique « NivCreationArtisanat ». Tu travailles en français, en BROUILLON (tu ne publies rien). Tu ne touches QU'À mes fiches verres / carafe / emballage — jamais aux bijoux ni à aucun autre produit ni prix.
+
+============================================================
+PARTIE A — CORRECTIONS URGENTES SUR LA FICHE « VERRE À VIN » (déjà créée)
+Ne recrée PAS la fiche, corrige seulement ces points :
+1. TAGS : supprime les tags faux (carafe, whisky…) — ils n'ont rien à faire ici. Mets uniquement les tags « verre à vin » (liste en Partie C).
+2. DÉLAI DE PRÉPARATION : passe de « 1 à 2 semaines » à « 3 à 5 jours ouvrés ».
+3. LIVRAISON : France 6,90 € avec article supplémentaire +2,00 € ; Union Européenne 14,90 € avec article supplémentaire +6,00 € (ne laisse PAS 0 € sur l'article supplémentaire EU).
+4. STOCK : 20 par variante.
+5. PHOTO : ajoute la photo des 2 verres « Geniet meer niet » (lien : https://nivcreation.fr/produits/verre_vin_geniet.jpg), en 2e position.
+6. MODÈLE : ajoute dans la description « Modèle n°37 : Geniet meer niet ». Les modèles vont maintenant de 1 à 37.
+Quand c'est corrigé, dis-moi « verre à vin corrigé ».
+
+============================================================
+PARTIE B — RÉGLAGES CORRECTS (à appliquer sur CHAQUE fiche : vin, flûte, whisky, carafe)
+- DÉLAI DE PRÉPARATION : 3 à 5 jours ouvrés (JAMAIS 1-2 semaines).
+- LIVRAISON :
+   • Verres (vin, flûte, whisky) — profil « Verres (fragile) » :
+        France 6,90 € · article supplémentaire +2,00 €
+        Union Européenne 14,90 € · article supplémentaire +6,00 €
+        Reste du monde : désactivé
+   • Carafe — profil « Carafe (fragile, lourd) » :
+        France 9,90 € · article supplémentaire +4,00 €
+        Union Européenne 24,90 € · article supplémentaire +8,00 €
+        Reste du monde : désactivé
+- STOCK : 20 par variante pour les verres ; 10 par variante pour la carafe.
+- PRIX : toujours les « Prix Etsy » ci-dessous (déjà majorés +45 %). Je mets ensuite -10 % en remise boutique.
+- PAS d'emojis, ton élégant, produit personnalisé = fait à la commande.
+
+COMMENT LE CLIENT CHOISIT LE MODÈLE À GRAVER (à écrire pareil sur vin, flûte, whisky, carafe) :
+- Active « Personnalisation » (obligatoire).
+- Instructions à l'acheteur (à copier) :
+  « Tous les modèles sont numérotés sur nivcreation.fr (page du produit). Dans la personnalisation, indiquez : le NUMÉRO du modèle choisi (ou "lettre fleurie" + l'initiale), le(s) prénom(s), la date, et la police souhaitée. Pour graver VOTRE photo ou logo, envoyez-la par message Etsy juste après la commande. »
+- Dans la description, ajoute : « Découvrez tous les modèles numérotés sur nivcreation.fr, puis indiquez le numéro choisi à la commande. »
+
+============================================================
+PARTIE C — LES FICHES (descriptions, prix Etsy, modèles, photos, tags)
+
+### VERRE À VIN GRAVÉ
+Page : https://nivcreation.fr/produit/verre-a-vin-grave
+Titre : Verre à vin gravé personnalisé — prénom, date, monogramme ou modèle au choix (cristal)
+Description : Un verre à vin en cristal, gravé à votre façon : un modèle prêt (couples, monogrammes, prénoms et dates, banderoles, dessins), une lettre fleurie, ou votre propre texte. Modèles numérotés 1 à 37 sur nivcreation.fr. Gravure laser permanente, résiste au lave-vaisselle. Cadeau couple, mariage, anniversaire, crémaillère. Fait main en France.
+Variation « Quantité » : À l'unité 18,90 € · Lot de 2 36,90 € · Lot de 4 72,90 €
+Photos : les photos de ma page + celle des verres « Geniet » (https://nivcreation.fr/produits/verre_vin_geniet.jpg).
+TAGS (13) : verre a vin, verre vin grave, verre personnalise, gravure verre, cadeau couple, cadeau mariage, verre cristal, lettre fleurie, cadeau cremaillere, verre a vin personnalise, cadeau anniversaire, art de la table, fait main france
+
+### FLÛTE À CHAMPAGNE GRAVÉE
+Page : https://nivcreation.fr/produit/flute-a-champagne-gravee
+Titre : Flûte à champagne gravée personnalisée — prénom, date, monogramme ou modèle (cristal)
+Description : Une flûte à champagne en cristal, gravée à votre façon : un modèle au choix (1 à 30 sur nivcreation.fr), une lettre fleurie ou votre texte. Idéale mariage, fiançailles, fêtes. Gravure laser permanente, résiste au lave-vaisselle. Fait main en France.
+Variation « Quantité » : À l'unité 18,90 € · Lot de 2 36,90 € · Lot de 4 72,90 €
+TAGS (13) : flute champagne, flute gravee, verre personnalise, gravure verre, cadeau mariage, cadeau fiancailles, flute personnalisee, coupe champagne, cadeau couple, verre cristal, nouvel an, art de la table, fait main france
+
+### VERRE À WHISKY GRAVÉ
+Page : https://nivcreation.fr/produit/verre-a-whisky-grave
+Titre : Verre à whisky gravé personnalisé — photo, prénom, message (cadeau homme)
+Description : Un verre à whisky gravé selon vos envies : votre photo/logo, un prénom, une date ou un message, sur la face avant ou au fond du verre. Un cadeau qui a du caractère (fête des pères, anniversaire, retraite). Gravure laser durable. Fait main en France.
+Variation « Quantité » : À l'unité 28,90 € · Lot de 2 55,90 € · Lot de 4 104,90 €
+Personnalisation : le client indique le texte, l'emplacement (face/fond) et la police ; pour une photo/logo, envoi par message après commande.
+TAGS (13) : verre a whisky, verre whisky grave, cadeau homme, cadeau papa, verre personnalise, gravure verre, whisky, cadeau retraite, verre gravure photo, cadeau anniversaire homme, tumbler, cadeau fete des peres, art de la table
+
+### CARAFE À WHISKY GRAVÉE
+Page : https://nivcreation.fr/produit/carafe-a-whisky-gravee
+Titre : Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception (verre taillé)
+Description : Une carafe à whisky en verre taillé, bouchon à facettes, gravée à votre façon : un modèle au choix (1 à 33 sur nivcreation.fr, dont n°33 « Original Whiskey Since 1892 »), une lettre fleurie ou votre texte. Option coffret : + 2 ou + 4 verres assortis, gravés dans le MÊME style que la carafe. Gravure laser à la commande. Édition limitée, fait main en France.
+Variation « Formule » : Carafe seule 79,90 € · Carafe + 2 verres 131,90 € · Carafe + 4 verres 183,90 €
+Photos : les photos de ma page + celle « Original Whiskey » (https://nivcreation.fr/produits/carafe_whiskey_1892.jpg).
+TAGS (13) : carafe whisky, carafe gravee, cadeau homme, cadeau papa, whisky, coffret whisky, carafe personnalisee, verre taille, cadeau exception, edition limitee, cadeau retraite, decanter, art de la table
+
+### EMBALLAGE CADEAU (fiche séparée à ajouter au panier)
+Titre : Emballage cadeau — sac, boîte cadeau, pochette microfibre ou pack (à ajouter à votre commande)
+Description : Offrez un bel emballage à votre commande : ajoutez cette option à votre panier en même temps que votre produit, nous l'emballons avec soin. Formules au choix ci-dessous. Fait en France.
+Variation « Formule » : Sac 2,90 € · Boîte carrée 5,90 € · Boîte allongée 8,90 € · Microfibre 4,90 € · Pack Collier 8,90 € · Pack Bracelet 10,90 €
+Personnalisation : NON. Livraison : 0 € (part avec le produit). Délai 1 à 3 jours. Stock 50. Photos : je les ajouterai.
+TAGS (13) : emballage cadeau, boite cadeau, sac cadeau, pochette microfibre, ecrin bijou, gift wrap, emballage bijou, coffret cadeau, option cadeau, pack cadeau, emballage soigne, fait en france, cadeau
+
+============================================================
+QUAND C'EST FAIT : dis-moi pour chaque fiche « créée/corrigée en brouillon » + un récap (titre, variantes/prix, livraison France+EU, délai, stock, tags). Si un champ te bloque, demande-moi. NE PUBLIE RIEN sans mon accord.
