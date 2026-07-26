@@ -39,13 +39,19 @@ export async function POST(req) {
   if (!th) return Response.json({ error: "Échec." }, { status: 500 });
 
   let emailed = false;
+  let emailError = "";
   const to = (th.customerEmail || body?.customerEmail || "").trim();
-  if (to && process.env.RESEND_API_KEY) {
+  if (!to) {
+    emailError = "Aucune adresse e-mail sur cette commande.";
+  } else if (!process.env.RESEND_API_KEY) {
+    emailError = "Envoi d'e-mails non configuré (RESEND_API_KEY).";
+  } else {
     const link = `${BRAND.siteUrl}/suivi/${th.token}`;
     const { subject, html } = batProofEmail({ customerName: th.customerName, ref: th.ref, message: text, imageUrl: image, link });
     // Copie cachée à la gérante : elle reçoit une copie de chaque mail envoyé à la cliente.
     const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
     emailed = Boolean(r?.ok);
+    if (!emailed) emailError = String(r?.error || "Envoi refusé.").slice(0, 300);
   }
-  return Response.json({ ok: true, thread: th, emailed });
+  return Response.json({ ok: true, thread: th, emailed, emailError, to });
 }

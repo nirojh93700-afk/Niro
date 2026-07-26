@@ -55,20 +55,28 @@ export async function sendEmail({ to, subject, html, replyTo, bcc }) {
   const from = process.env.CONTACT_FROM || "Niv Création <onboarding@resend.dev>";
   if (!apiKey) return { ok: false, error: "RESEND_API_KEY manquant." };
   if (!to) return { ok: false, error: "Destinataire manquant." };
-  const payload = { from, to: [to], subject, html };
-  if (replyTo) payload.reply_to = replyTo;
-  // Copie cachée (ex. la gérante reçoit une copie des mails envoyés aux clientes).
-  if (bcc && String(bcc).toLowerCase() !== String(to).toLowerCase()) payload.bcc = [bcc];
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    const detail = await res.text();
-    return { ok: false, error: detail };
+
+  async function post(payload) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return res.ok ? { ok: true } : { ok: false, error: await res.text() };
   }
-  return { ok: true };
+
+  const base = { from, to: [to], subject, html };
+  if (replyTo) base.reply_to = replyTo;
+  // Copie cachée (ex. la gérante reçoit une copie des mails envoyés aux clientes).
+  const useBcc = bcc && String(bcc).toLowerCase() !== String(to).toLowerCase();
+
+  // 1er essai AVEC le bcc. Si Resend le refuse, on renvoie SANS le bcc pour
+  // que la cliente reçoive quand même son e-mail (la copie est secondaire).
+  let r = await post(useBcc ? { ...base, bcc: [bcc] } : base);
+  if (!r.ok && useBcc) {
+    r = await post(base);
+  }
+  return r;
 }
 
 // E-mail de bienvenue (newsletter) avec le code promo, envoyé automatiquement

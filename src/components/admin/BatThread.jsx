@@ -61,7 +61,9 @@ export default function BatThread({ order, adminKey }) {
       if (!res.ok) { setMsg(d.error || "Échec."); return; }
       setThread(d.thread);
       setText(""); setImage("");
-      setMsg(d.emailed ? "✓ Aperçu envoyé par e-mail à la cliente." : "✓ Enregistré, mais l'e-mail n'est pas parti (l'adresse a peut-être été refusée). Réessaie.");
+      setMsg(d.emailed
+        ? `✓ Aperçu envoyé par e-mail à ${d.to || "la cliente"} (vous recevez une copie).`
+        : `⚠ Enregistré, mais l'e-mail n'est PAS parti. Raison : ${d.emailError || "inconnue"}`);
     } catch { setMsg("Échec de l'envoi."); }
     finally { setSending(false); }
   }
