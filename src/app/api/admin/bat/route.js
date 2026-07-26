@@ -1,7 +1,16 @@
-import { isAdmin, getBatThread, batAtelierMessage } from "@/lib/stock";
+import { isAdmin, getBatThread, batAtelierMessage, resetBatThread } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
+
+// Effacer la conversation d'aperçu d'une commande (recommencer à zéro).
+export async function DELETE(req) {
+  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  const orderId = new URL(req.url).searchParams.get("orderId") || "";
+  if (!orderId) return Response.json({ error: "Commande manquante." }, { status: 400 });
+  await resetBatThread(orderId);
+  return Response.json({ ok: true });
+}
 
 // Lire le fil de discussion / BAT d'une commande (admin).
 export async function GET(req) {

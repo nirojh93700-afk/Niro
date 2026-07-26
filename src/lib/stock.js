@@ -406,6 +406,19 @@ export async function batAtelierMessage(orderId, info = {}) {
   return th;
 }
 
+// Efface complètement le fil / la conversation d'aperçu d'une commande
+// (permet de « recommencer à zéro »). Écriture unique.
+export async function resetBatThread(orderId) {
+  const id = String(orderId || "").trim();
+  if (!id) return false;
+  const data = await getCatalogRaw();
+  if (data.bat && data.bat[id]) {
+    delete data.bat[id];
+    await persistCatalog(data);
+  }
+  return true;
+}
+
 // Réponse de la cliente (via le lien sécurisé). Écriture unique.
 export async function batCustomerMessage(token, { text, decision } = {}) {
   const t = String(token || "").trim();

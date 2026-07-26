@@ -28,6 +28,21 @@ export default function BatThread({ order, adminKey }) {
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to.trim());
 
+  // Efface toute la conversation d'aperçu (pour recommencer à zéro).
+  async function resetThread() {
+    if (!window.confirm("Effacer toute la conversation d'aperçu de cette commande ? (à faire seulement si la cliente n'a rien reçu — cela permet de recommencer à zéro)")) return;
+    setSending(true); setMsg("");
+    try {
+      const res = await fetch(`/api/admin/bat?orderId=${encodeURIComponent(order.id)}`, {
+        method: "DELETE", headers: { "x-admin-key": adminKey },
+      });
+      if (!res.ok) { setMsg("Échec de la suppression."); return; }
+      setThread(null); setText(""); setImage("");
+      setMsg("✓ Conversation effacée. Vous pouvez recommencer.");
+    } catch { setMsg("Échec de la suppression."); }
+    finally { setSending(false); }
+  }
+
   async function send() {
     if (!text.trim() && !image.trim()) { setMsg("Ajoute un message ou un aperçu."); return; }
     if (!emailValid) { setMsg("Renseigne d'abord l'adresse e-mail de la cliente (ci-dessus)."); return; }
@@ -105,6 +120,11 @@ export default function BatThread({ order, adminKey }) {
           {sending ? "Envoi…" : "Envoyer l'aperçu à la cliente"}
         </button>
         <button className="btn btn-outline" style={{ padding: "8px 12px" }} onClick={load}>Rafraîchir</button>
+        {(thread?.messages || []).length > 0 && (
+          <button className="btn btn-outline" style={{ padding: "8px 12px", marginLeft: "auto", color: "#b4452f", borderColor: "#e0b4a8" }} disabled={sending} onClick={resetThread}>
+            🗑 Effacer la conversation
+          </button>
+        )}
       </div>
       {msg && <p style={{ margin: "8px 0 0", fontSize: "0.85rem", color: msg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{msg}</p>}
     </div>
