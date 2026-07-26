@@ -316,7 +316,7 @@ export async function POST(req) {
         },
         {
           key: "message_cadeau",
-          label: { type: "custom", custom: "Message cadeau (joint à la commande)" },
+          label: { type: "custom", custom: "Message ou date à graver (facultatif)" },
           type: "text",
           optional: true,
         },
