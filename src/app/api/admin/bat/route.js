@@ -1,6 +1,6 @@
 import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
-import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage } from "@/lib/gmail";
+import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage, gmailSendHtml } from "@/lib/gmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -127,18 +127,36 @@ export async function POST(req) {
 
   let emailed = false;
   let emailError = "";
+  let via = "";
   const to = (th.customerEmail || body?.customerEmail || "").trim();
   if (!to) {
     emailError = "Aucune adresse e-mail sur cette commande.";
-  } else if (!process.env.RESEND_API_KEY) {
-    emailError = "Envoi d'e-mails non configuré (RESEND_API_KEY).";
   } else {
     const link = `${BRAND.siteUrl}/suivi/${th.token}`;
     const { subject, html } = batProofEmail({ customerName: th.customerName, ref: th.ref, message: text, imageUrl: image, link });
-    // Copie cachée à la gérante : elle reçoit une copie de chaque mail envoyé à la cliente.
-    const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
-    emailed = Boolean(r?.ok);
-    if (!emailed) emailError = friendlyEmailError(r?.error);
+
+    // 1) PRIORITÉ : envoi via Gmail (ta boîte connectée) — fonctionne vers
+    //    n'importe quelle cliente, SANS domaine vérifié. Le mail part de ta
+    //    vraie adresse et les réponses reviennent dans ta boîte (→ discussion).
+    try {
+      const creds = await getGmailCreds();
+      if (creds?.refreshToken) {
+        const token = await gmailAccessToken(creds);
+        await gmailSendHtml(token, { to, subject, html, bcc: BRAND.contact });
+        emailed = true;
+        via = "gmail";
+      }
+    } catch (e) {
+      emailError = "Gmail : " + String(e?.message || "").slice(0, 200);
+    }
+
+    // 2) SECOURS : Resend (si Gmail non connecté ou en échec).
+    if (!emailed && process.env.RESEND_API_KEY) {
+      const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
+      if (r?.ok) { emailed = true; via = "resend"; emailError = ""; }
+      else emailError = friendlyEmailError(r?.error);
+    }
+    if (!emailed && !emailError) emailError = "Aucun service d'e-mail disponible (Gmail non connecté et RESEND_API_KEY manquant).";
   }
-  return Response.json({ ok: true, thread: th, emailed, emailError, to });
+  return Response.json({ ok: true, thread: th, emailed, emailError, to, via });
 }

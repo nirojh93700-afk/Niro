@@ -195,6 +195,31 @@ function encodeHeader(s) {
   return "=?UTF-8?B?" + Buffer.from(s, "utf-8").toString("base64") + "?=";
 }
 
+// Envoie un e-mail HTML (à l'image de la marque) via Gmail, à n'importe quelle
+// adresse. Contrairement à Resend, Gmail n'exige pas de domaine vérifié.
+export async function gmailSendHtml(token, { to, subject, html, bcc }) {
+  const lines = [
+    `To: ${to}`,
+    `Subject: ${encodeHeader(subject || "")}`,
+  ];
+  if (bcc && String(bcc).toLowerCase() !== String(to).toLowerCase()) lines.push(`Bcc: ${bcc}`);
+  lines.push(
+    "MIME-Version: 1.0",
+    'Content-Type: text/html; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+  );
+  const raw = lines.join("\r\n") + "\r\n\r\n" + Buffer.from(html || "", "utf-8").toString("base64");
+  const encoded = Buffer.from(raw, "utf-8").toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const res = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ raw: encoded }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || "Envoi Gmail impossible.");
+  return data;
+}
+
 // Envoie une réponse dans le même fil (déclenché manuellement par l'admin).
 export async function gmailSendReply(token, { to, subject, body, threadId, inReplyTo, references }) {
   const subj = subject?.startsWith("Re:") ? subject : `Re: ${subject || ""}`;
