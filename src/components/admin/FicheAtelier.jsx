@@ -100,6 +100,13 @@ function ItemSheet({ item }) {
         {item.photoSrc && !mv && <Row k="Logo / photo" v="fournie par la cliente (voir visuel)" />}
         {lay?.label && <Row k="Taille / position" v={lay.label} />}
         {item.personalization && <Row k="Résumé" v={item.personalization} />}
+        {item.photoSrc && (
+          <div style={{ margin: "8px 0" }}>
+            <a href={item.photoSrc} download target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "7px 14px", fontSize: "0.82rem", display: "inline-block", textDecoration: "none" }}>
+              ⬇ Télécharger la photo du client
+            </a>
+          </div>
+        )}
 
         <details style={{ marginTop: 8 }}>
           <summary style={{ cursor: "pointer", fontSize: "0.8rem", color: "#888" }}>Tous les réglages (brut)</summary>
