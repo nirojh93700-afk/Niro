@@ -50,13 +50,15 @@ export function emailLayout({ heading, bodyHtml }) {
   </div>`;
 }
 
-export async function sendEmail({ to, subject, html, replyTo }) {
+export async function sendEmail({ to, subject, html, replyTo, bcc }) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.CONTACT_FROM || "Niv Création <onboarding@resend.dev>";
   if (!apiKey) return { ok: false, error: "RESEND_API_KEY manquant." };
   if (!to) return { ok: false, error: "Destinataire manquant." };
   const payload = { from, to: [to], subject, html };
   if (replyTo) payload.reply_to = replyTo;
+  // Copie cachée (ex. la gérante reçoit une copie des mails envoyés aux clientes).
+  if (bcc && String(bcc).toLowerCase() !== String(to).toLowerCase()) payload.bcc = [bcc];
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -90,16 +92,24 @@ export function welcomeEmail(code, offerText) {
 // E-mail « aperçu à valider » (BAT) envoyé à la cliente avant la gravure.
 export function batProofEmail({ customerName, ref, message, imageUrl, link }) {
   const name = customerName ? customerName.split(" ")[0] : "";
+  const hasImg = Boolean(imageUrl);
+  // Wording adaptatif : avec image = « aperçu à valider » ; sans image = simple message.
+  const intro = hasImg
+    ? `Avant de graver votre commande${ref ? ` <strong>#${escapeHtml(ref)}</strong>` : ""}, voici un <strong>aperçu à valider</strong> :`
+    : `Un petit message concernant votre commande${ref ? ` <strong>#${escapeHtml(ref)}</strong>` : ""} :`;
   const body = `
     <p style="margin:0 0 12px;">Bonjour${name ? " " + escapeHtml(name) : ""},</p>
-    <p style="margin:0 0 14px;">Avant de graver votre commande${ref ? ` <strong>#${escapeHtml(ref)}</strong>` : ""}, voici un <strong>aperçu à valider</strong> :</p>
+    <p style="margin:0 0 14px;">${intro}</p>
     ${message ? `<p style="margin:0 0 14px;white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;">${escapeHtml(message)}</p>` : ""}
-    ${imageUrl ? `<p style="margin:0 0 16px;text-align:center;"><img src="${imageUrl}" alt="Aperçu de votre gravure" style="max-width:100%;border-radius:10px;border:1px solid #ece3d2;"></p>` : ""}
+    ${hasImg ? `<p style="margin:0 0 16px;text-align:center;"><img src="${imageUrl}" alt="Aperçu de votre gravure" style="max-width:100%;border-radius:10px;border:1px solid #ece3d2;"></p>` : ""}
     <p style="margin:0 0 20px;text-align:center;">
-      <a href="${link}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Voir et valider mon aperçu</a>
+      <a href="${link}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">${hasImg ? "Voir et valider mon aperçu" : "Répondre à ce message"}</a>
     </p>
-    <p style="margin:0;color:#7a7268;">Sur cette page, vous pourrez <strong>valider</strong> ou <strong>demander une modification</strong>, et échanger avec nous. À très vite,<br>L'atelier Niv Création</p>`;
-  return { subject: `Votre aperçu à valider${ref ? ` — commande #${ref}` : ""} ✦`, html: emailLayout({ heading: "Votre aperçu avant gravure", bodyHtml: body }) };
+    <p style="margin:0;color:#7a7268;">Sur cette page, vous pourrez ${hasImg ? "<strong>valider</strong> ou <strong>demander une modification</strong>, et " : ""}échanger avec nous. À très vite,<br>L'atelier Niv Création</p>`;
+  return {
+    subject: hasImg ? `Votre aperçu à valider${ref ? ` — commande #${ref}` : ""} ✦` : `Votre commande${ref ? ` #${ref}` : ""} — un message de Niv Création ✦`,
+    html: emailLayout({ heading: hasImg ? "Votre aperçu avant gravure" : "Un message concernant votre commande", bodyHtml: body }),
+  };
 }
 
 // E-mail « commande expédiée » avec numéro de suivi, envoyé à la cliente.
