@@ -1621,7 +1621,6 @@ export const products = [
     images: [
       "/produits/flute_ambiance.jpg",
       "/produits/flute-grav-06.webp",
-      "/produits/flute-grav-03.webp",
       "/produits/flute-grav-05.webp",
       "/produits/flute-grav-01.jpg",
       "/produits/flute-grav-04.webp",
@@ -1679,7 +1678,6 @@ export const products = [
       { key: "gravnote", type: "note", text: "Ou choisissez un style de gravure d'après ces exemples réels : votre prénom et votre date seront gravés DANS ce style." },
       { key: "gravureExemple", type: "lettering", noPreview: true, optional: true, label: "Style de gravure (exemple)", options: [
         { value: "prenoms-coeur", label: "Prénoms & cœur", image: "/produits/flute-grav-06.webp" },
-        { value: "cadre-bagues", label: "Cadre & bagues", image: "/produits/flute-grav-03.webp" },
         { value: "couronne", label: "Couronne feuillage", image: "/produits/flute-grav-05.webp" },
         { value: "monogramme", label: "Monogramme & banderole", image: "/produits/flute-grav-01.jpg" },
         { value: "prenoms-script", label: "Prénoms script", image: "/produits/flute-grav-04.webp" },
