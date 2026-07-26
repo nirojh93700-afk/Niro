@@ -890,6 +890,10 @@ export default function ProductDetail({ product }) {
     setTimeout(() => setAdded(false), 2000);
   }
 
+  // Cristal : l'aperçu se pose TOUJOURS sur un cristal VIERGE (le bloc), jamais sur
+  // une image déjà gravée (sinon on voit 2 photos). On force le bloc vierge du produit.
+  const crystalBase = (product.images || []).find((i) => /bloc/.test(i)) || crystalZone?.img;
+
   return (
     <div className="container">
       {/* Mini-aperçu flottant (bas à droite) : le verre + la gravure en petit,
@@ -949,7 +953,7 @@ export default function ProductDetail({ product }) {
                    à la zone réglée dans l'admin (/gestion/cristal-reglage). */
                 <div className="crystal-hero crystal-real">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="cr-bg" src={crystalZone.img} alt="" />
+                  <img className="cr-bg" src={crystalBase} alt="" />
                   <div
                     className="cr-overlay"
                     style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%", transform: `perspective(900px) rotateX(${crystalZone.rx || 0}deg) rotateY(${crystalZone.ry || 0}deg) rotate(${crystalZone.rotation || 0}deg)` }}
@@ -1882,7 +1886,7 @@ export default function ProductDetail({ product }) {
           {product.crystal3d && crystalZone ? (
             <div className="cm-real">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="cr-bg" src={crystalZone.img} alt="" />
+              <img className="cr-bg" src={crystalBase} alt="" />
               <div
                 className="cr-overlay"
                 style={{ left: crystalZone.left + "%", top: crystalZone.top + "%", width: crystalZone.width + "%", height: crystalZone.height + "%", transform: `perspective(900px) rotateX(${crystalZone.rx || 0}deg) rotateY(${crystalZone.ry || 0}deg) rotate(${crystalZone.rotation || 0}deg)` }}

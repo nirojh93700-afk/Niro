@@ -25,10 +25,12 @@ const START = {
   "flute-a-champagne-gravee": { left: 40, top: 30, width: 20, height: 22, rotation: 0, ry: 0 },
 };
 function isGlass(p) { return Boolean(p.styleImages && p.engrave); }
+// Cristal : le fond de l'aperçu doit être le BLOC VIERGE (pas une image déjà gravée).
+function blockImg(p) { return (p.images || []).find((i) => /bloc/.test(i)) || ""; }
 function defZone(p) {
   const glass = isGlass(p);
   return {
-    img: (glass ? p.engraveImage : p.images?.[0]) || p.images?.[0] || "",
+    img: (glass ? p.engraveImage : (blockImg(p) || p.images?.[0])) || p.images?.[0] || "",
     left: 20, top: 40, width: 30, height: 30, rotation: 0, ry: 0, rx: 0,
     opacity: glass ? 0.9 : 0.72, blend: glass ? "multiply" : "screen", bw: 1,
     on: glass ? 0 : 1, // verres/carafe : n'apparaît sur la fiche qu'une fois activé
@@ -71,9 +73,10 @@ export default function CristalReglage() {
       const init = {};
       for (const p of cristaux) {
         const merged = saved[p.slug] ? { ...defZone(p), ...saved[p.slug] } : defZone(p);
-        // Verres/carafe : le fond est TOUJOURS la photo du verre vide (celle de la
-        // fiche). On ignore une éventuelle ancienne photo enregistrée par erreur.
+        // Verres/carafe : fond = photo du verre vide. Cristaux : fond = bloc VIERGE
+        // (on ignore une ancienne image « déjà gravée » enregistrée par erreur).
         if (isGlass(p)) merged.img = p.engraveImage || merged.img;
+        else if (blockImg(p)) merged.img = blockImg(p);
         init[p.slug] = merged;
       }
       setZones(init);
