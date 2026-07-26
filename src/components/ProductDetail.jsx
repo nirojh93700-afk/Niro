@@ -1512,7 +1512,12 @@ export default function ProductDetail({ product }) {
                   return (
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
-                      <LetteringPicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} options={f.options || []} />
+                      <LetteringPicker value={fieldValues[f.key] || ""} onChange={(v) => {
+                        setField(f.key, v);
+                        // Clic sur un style-exemple : la grande photo affiche directement cette photo.
+                        const opt = (f.options || []).find((o) => o.value === v);
+                        if (opt?.image) { const idx = galleryMedia.indexOf(opt.image); if (idx >= 0) { setActiveImg(idx); setCrystalPreviewActive(false); } }
+                      }} options={f.options || []} />
                     </div>
                   );
                 }
