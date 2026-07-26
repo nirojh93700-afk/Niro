@@ -1478,6 +1478,7 @@ export const products = [
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
       "/produits/verre_vin_ambiance.jpg",
+      "/produits/verre_vin_geniet.jpg",
       "/produits/verre_vin_exemple_dale.jpg",
       "/produits/verre_vin_grave.jpg",
       "/produits/verre_vin_vierge.jpg",
@@ -1531,6 +1532,7 @@ export const products = [
       "34": "/produits/motif-lions-coeur.png",
       "35": "/produits/motif-maries-1.png",
       "36": "/produits/motif-maries-2.png",
+      "37": "/produits/motif-geniet.png",
     },
     // Modèles avec un EXEMPLE de prénom déjà dessiné (noms & dates baked-in) :
     // le prénom du client est gravé dans ce style par l'atelier — on ne le superpose
@@ -1565,7 +1567,7 @@ export const products = [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
         { label: "Noms & cadres (14–25)", nums: ["14","15","16","17","18","19","20","21","22","23","24","25"] },
-        { label: "Dessins & occasions (26–36)", nums: ["26","27","28","29","30","31","32","33","34","35","36"] },
+        { label: "Dessins & occasions (26–37)", nums: ["26","27","28","29","30","31","32","33","34","35","36","37"] },
       ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
