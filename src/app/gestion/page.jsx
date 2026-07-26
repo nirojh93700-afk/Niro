@@ -975,7 +975,14 @@ export default function GestionPage() {
                     #{o.ref || o.id?.slice(-6)}{" "}
                     <span className="admin-cat">{fmtDate(o.createdAt)}</span>
                   </h3>
-                  <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(o.total)}</span>
+                  <span style={{ textAlign: "right" }}>
+                    <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(o.total)}</span>
+                    {o.shippingPrice != null && (
+                      <span style={{ display: "block", fontSize: "0.72rem", color: "var(--ink-soft)", fontWeight: 400 }}>
+                        dont livraison {formatEuro(o.shippingPrice)}
+                      </span>
+                    )}
+                  </span>
                 </div>
                 {dupIds.has(o.id) && (
                   <div style={{ margin: "6px 0 0", padding: "7px 10px", background: "#fdecea", border: "1px solid #f1b0a8", borderRadius: 8, color: "#b3261e", fontSize: "0.82rem", fontWeight: 600 }}>

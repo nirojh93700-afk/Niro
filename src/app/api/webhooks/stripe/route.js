@@ -435,6 +435,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       shippingName: shipping?.name || "",
       shippingAddress: shipping?.address || null,
       shippingMethod: shippingRateName,
+      shippingPrice: (shippingAmount || 0) / 100, // frais de livraison payés (pour le détail commande)
       relaisPoint: session.metadata?.relaisPoint || "",
       immediateStart,
       items: (session.line_items?.data || []).map((li) => ({
