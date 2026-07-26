@@ -113,6 +113,27 @@ export async function gmailListClientMessages(token, max = 20) {
   return out;
 }
 
+// Liste les messages VENANT d'une adresse précise (réponses d'une cliente),
+// avec leur corps complet. Sert à remonter les réponses par e-mail dans le
+// fil d'aperçu (BAT) de la commande correspondante.
+export async function gmailListFromSender(token, fromEmail, max = 10) {
+  const email = (fromEmail || "").trim();
+  if (!email) return [];
+  const q = encodeURIComponent(`from:${email} newer_than:90d`);
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=${max}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  const ids = (data.messages || []).map((m) => m.id);
+  const out = [];
+  for (const id of ids) {
+    const m = await gmailGetMessage(token, id, true);
+    if (m) out.push(m);
+  }
+  return out;
+}
+
 // Récupère un message (entêtes + extrait, ou corps complet si full=true).
 export async function gmailGetMessage(token, id, full = true) {
   const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full`, {

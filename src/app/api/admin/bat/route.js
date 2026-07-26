@@ -1,7 +1,36 @@
-import { isAdmin, getBatThread, batAtelierMessage, resetBatThread } from "@/lib/stock";
+import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
+import { gmailAccessToken, gmailListFromSender } from "@/lib/gmail";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+// Va chercher dans Gmail les réponses de la cliente (mails venant de son
+// adresse, reçus APRÈS notre dernier message) et les importe dans le fil.
+// Silencieux si Gmail non connecté ou en cas d'erreur (la discussion s'affiche
+// quand même).
+async function syncGmailReplies(orderId, th) {
+  try {
+    if (!th?.customerEmail) return;
+    const creds = await getGmailCreds();
+    if (!creds?.refreshToken) return;
+    // Dernier message envoyé par l'atelier = point de départ pour les réponses.
+    const lastAtelierAt = (th.messages || [])
+      .filter((m) => m.from === "atelier")
+      .reduce((mx, m) => Math.max(mx, Number(m.at) || 0), 0);
+    if (!lastAtelierAt) return;
+    const token = await gmailAccessToken(creds);
+    const mails = await gmailListFromSender(token, th.customerEmail, 10);
+    const toImport = [];
+    for (const m of mails) {
+      const at = Date.parse(m.date || "") || 0;
+      // On ne garde que ce qui est arrivé après notre message (= une réponse).
+      if (at && at < lastAtelierAt - 60000) continue;
+      toImport.push({ gmailId: m.id, text: m.body || m.snippet || "", at: at || Date.now() });
+    }
+    if (toImport.length) await batImportEmails(orderId, toImport);
+  } catch { /* Gmail indisponible : on n'empêche jamais l'affichage du fil. */ }
+}
 
 // Effacer la conversation d'aperçu d'une commande (recommencer à zéro).
 export async function DELETE(req) {
@@ -16,7 +45,13 @@ export async function DELETE(req) {
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const orderId = new URL(req.url).searchParams.get("orderId") || "";
-  return Response.json({ thread: await getBatThread(orderId) });
+  let th = await getBatThread(orderId);
+  // Remonte les réponses reçues par e-mail (Gmail) dans le fil, puis relit.
+  if (th) {
+    await syncGmailReplies(orderId, th);
+    th = await getBatThread(orderId);
+  }
+  return Response.json({ thread: th });
 }
 
 // Envoyer un aperçu / message à la cliente (admin) + e-mail avec lien sécurisé.

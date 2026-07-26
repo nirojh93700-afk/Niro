@@ -406,6 +406,33 @@ export async function batAtelierMessage(orderId, info = {}) {
   return th;
 }
 
+// Importe des réponses reçues par e-mail (Gmail) dans le fil d'aperçu d'une
+// commande. Dédoublonnage par identifiant Gmail (jamais deux fois le même mail).
+// msgs = [{ gmailId, text, at }]. Écriture unique si au moins un ajout.
+export async function batImportEmails(orderId, msgs = []) {
+  const id = String(orderId || "").trim();
+  if (!id || !Array.isArray(msgs) || !msgs.length) return 0;
+  const data = await getCatalogRaw();
+  const th = (data.bat || {})[id];
+  if (!th) return 0;
+  th.importedGmailIds = th.importedGmailIds || [];
+  let added = 0;
+  for (const m of msgs) {
+    const gid = String(m?.gmailId || "").trim();
+    if (!gid || th.importedGmailIds.includes(gid)) continue;
+    th.messages.push({ from: "cliente", text: String(m?.text || "").trim(), at: Number(m?.at) || Date.now(), viaEmail: true, gmailId: gid });
+    th.importedGmailIds.push(gid);
+    added++;
+  }
+  if (added) {
+    th.status = th.status === "valide" ? "valide" : "modif_demandee";
+    th.updatedAt = Date.now();
+    data.bat[id] = th;
+    await persistCatalog(data);
+  }
+  return added;
+}
+
 // Efface complètement le fil / la conversation d'aperçu d'une commande
 // (permet de « recommencer à zéro »). Écriture unique.
 export async function resetBatThread(orderId) {

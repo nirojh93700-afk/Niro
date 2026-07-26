@@ -87,6 +87,7 @@ export default function BatThread({ order, adminKey }) {
             <div key={i} style={{ background: m.from === "atelier" ? "#fff" : "#f3ece0", border: "1px solid var(--line)", borderRadius: 10, padding: 10, marginLeft: m.from === "cliente" ? 24 : 0, marginRight: m.from === "atelier" ? 24 : 0 }}>
               <div style={{ fontSize: 11, color: "var(--gold-dark)", fontWeight: 700, marginBottom: 4 }}>
                 {m.from === "atelier" ? "Toi" : "Cliente"}
+                {m.viaEmail ? " · 📧 par e-mail" : ""}
                 {m.decision === "valide" ? " · ✅ Validé" : m.decision === "modif" ? " · ✏️ Modif demandée" : ""}
                 {" · "}{new Date(m.at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
               </div>
