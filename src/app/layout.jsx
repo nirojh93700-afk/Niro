@@ -17,6 +17,7 @@ import CartDrawer from "@/components/CartDrawer";
 import SiteGate from "@/components/SiteGate";
 import ShopButton from "@/components/ShopButton";
 import WelcomePopup from "@/components/WelcomePopup";
+import RefCapture from "@/components/RefCapture";
 import SiteAnalytics from "@/components/SiteAnalytics";
 import SalesBanner from "@/components/SalesBanner";
 import { getSettings } from "@/lib/stock";
@@ -229,6 +230,7 @@ export default async function RootLayout({ children }) {
               <CartDrawer />
               <ShopButton />
               <WelcomePopup enabled={settings.welcome?.enabled} code={settings.welcome?.code} text={settings.welcome?.text} />
+              <RefCapture />
               <SiteAnalytics />
             </CartProvider>
           </>

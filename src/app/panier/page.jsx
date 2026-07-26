@@ -60,6 +60,23 @@ export default function CartPage() {
   const relaisPossible = relaisEnabled && (isFrance || EU_RELAIS_COUNTRIES.includes(country));
   const retraitPossible = isFrance && hasPickup;
 
+  // Lien d'affiliation : si le client est arrivé via le lien d'un ambassadeur
+  // (?ref=CODE mémorisé), on applique son code automatiquement (30 jours).
+  useEffect(() => {
+    if (promoCode) return;
+    let raw;
+    try { raw = localStorage.getItem("niv-ref"); } catch { return; }
+    if (!raw) return;
+    let ref;
+    try { ref = JSON.parse(raw); } catch { return; }
+    if (!ref?.code || Date.now() - (ref.ts || 0) > 30 * 24 * 3600 * 1000) return;
+    fetch("/api/promo-validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: ref.code }) })
+      .then((r) => r.json())
+      .then((d) => { if (d.valid) { setPromoCode(ref.code); setPromoOk(true); setPromoMsg(`✓ Recommandé par un ambassadeur — code ${ref.code} appliqué (${d.label}).`); } })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function applyPromo() {
     setPromoMsg(""); setPromoOk(false);
     const code = promoCode.trim();

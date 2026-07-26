@@ -64,6 +64,15 @@ export default function PromoCodesAdmin({ adminKey }) {
   const list = Object.entries(codes);
   const ambassadeurs = list.filter(([, d]) => Number(d.commission) > 0);
   const eur = (n) => (Number(n) || 0).toFixed(2).replace(".", ",") + " €";
+  function refLink(c) {
+    const base = (typeof window !== "undefined" && window.location?.origin) || "https://nivcreation.fr";
+    return `${base}/?ref=${encodeURIComponent(c)}`;
+  }
+  function copyLink(c) {
+    const url = refLink(c);
+    try { navigator.clipboard.writeText(url); } catch { /* ignore */ }
+    window.prompt("Lien de l'ambassadeur (copié) — partage-le :", url);
+  }
 
   return (
     <div className="admin-block" style={{ display: "grid", gap: 12, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>
@@ -127,7 +136,8 @@ export default function PromoCodesAdmin({ adminKey }) {
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px" }}>{eur(s.paid)}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px", fontWeight: 700, color: due > 0 ? "#b4452f" : "#256b34" }}>{eur(due)}</td>
                       <td style={{ border: "1px solid var(--line)", padding: "6px 8px", whiteSpace: "nowrap" }}>
-                        {due > 0 && <button className="btn btn-outline" style={{ padding: "3px 8px", fontSize: ".75rem" }} onClick={() => markPaid(c, s.commission)}>Marquer versé</button>}
+                        <button className="btn btn-outline" style={{ padding: "3px 8px", fontSize: ".75rem" }} onClick={() => copyLink(c)}>Copier le lien</button>
+                        {due > 0 && <button className="btn btn-outline" style={{ padding: "3px 8px", fontSize: ".75rem", marginLeft: 6 }} onClick={() => markPaid(c, s.commission)}>Marquer versé</button>}
                         <button className="btn btn-outline" style={{ padding: "3px 8px", fontSize: ".75rem", color: "#b4452f", borderColor: "#e7b7ad", marginLeft: 6 }} onClick={() => del(c)}>Suppr.</button>
                       </td>
                     </tr>
