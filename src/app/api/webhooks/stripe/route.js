@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage, getSettings } from "@/lib/stock";
+import { decrementMany, recordCodeUsage, recordCommission, getSettings } from "@/lib/stock";
 import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -204,12 +204,17 @@ export async function POST(req) {
 
   // Enregistre l'utilisation du code promo (une seule fois par IP / e-mail).
   try {
-    const md = event.data.object?.metadata || {};
+    const obj = event.data.object || {};
+    const md = obj.metadata || {};
     if (md.promoCode) {
       await recordCodeUsage(md.promoCode, {
         ip: md.clientIp || "",
-        email: event.data.object?.customer_details?.email || "",
+        email: obj.customer_details?.email || "",
       });
+      // Commission ambassadeur : ventes = total payé − livraison (en euros).
+      const shipping = obj.shipping_cost?.amount_total ?? 0;
+      const sales = Math.max(0, ((obj.amount_total ?? 0) - shipping) / 100);
+      await recordCommission(md.promoCode, sales);
     }
   } catch (e) {
     console.error("Enregistrement code promo:", e.message);

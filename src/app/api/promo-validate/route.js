@@ -15,7 +15,8 @@ export async function POST(req) {
   const codes = await getPromoCodes();
   const pc = codes[code];
   if (!pc) return Response.json({ valid: false });
-  if (await hasUsedCode(code, { ip: clientIp(req) })) {
+  // Code ambassadeur (reusable) : pas de limite « une fois par cliente ».
+  if (!pc.reusable && await hasUsedCode(code, { ip: clientIp(req) })) {
     return Response.json({ valid: false, used: true });
   }
   return Response.json({

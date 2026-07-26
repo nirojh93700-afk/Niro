@@ -525,12 +525,52 @@ export async function setPromoCode(code, def) {
   if (!c) return false;
   const data = await getCatalogRaw();
   data.promoCodes = data.promoCodes || {};
+  const prev = data.promoCodes[c] || {};
   data.promoCodes[c] = {
     type: def?.type === "fixed" ? "fixed" : "percent",
     value: Math.max(0, Number(def?.value) || 0),
+    // Affiliation / ambassadeur (optionnel) :
+    ambassador: def?.ambassador != null ? String(def.ambassador).slice(0, 60) : (prev.ambassador || ""),
+    commission: def?.commission != null ? Math.max(0, Math.min(100, Number(def.commission) || 0)) : (prev.commission || 0),
+    reusable: def?.reusable != null ? Boolean(def.reusable) : Boolean(prev.reusable),
   };
   await persistCatalog(data);
   return data.promoCodes; // version à jour (évite une relecture parfois en retard)
+}
+// --- Suivi des commissions ambassadeurs -----------------------------------
+// data.codeStats[CODE] = { orders, sales (€), commission (€), paid (€) }
+export async function getCodeStats() {
+  const data = await getCatalogRaw();
+  return data.codeStats || {};
+}
+// Enregistre une vente réalisée avec un code : incrémente commandes, ventes et
+// commission due (au taux du code au moment de la commande).
+export async function recordCommission(code, salesEuro) {
+  const c = String(code || "").trim().toUpperCase();
+  if (!c) return;
+  const sales = Math.max(0, Number(salesEuro) || 0);
+  const data = await getCatalogRaw();
+  const pc = (data.promoCodes || {})[c];
+  if (!pc || !(Number(pc.commission) > 0)) return; // pas un code ambassadeur → rien
+  data.codeStats = data.codeStats || {};
+  const s = data.codeStats[c] || { orders: 0, sales: 0, commission: 0, paid: 0 };
+  s.orders += 1;
+  s.sales = Math.round((s.sales + sales) * 100) / 100;
+  s.commission = Math.round((s.commission + sales * pc.commission / 100) * 100) / 100;
+  data.codeStats[c] = s;
+  await persistCatalog(data);
+}
+// Marque une commission comme versée (ajoute au total payé).
+export async function setCommissionPaid(code, amountEuro) {
+  const c = String(code || "").trim().toUpperCase();
+  if (!c) return {};
+  const data = await getCatalogRaw();
+  data.codeStats = data.codeStats || {};
+  const s = data.codeStats[c] || { orders: 0, sales: 0, commission: 0, paid: 0 };
+  s.paid = Math.max(0, Math.round((Number(amountEuro) || 0) * 100) / 100);
+  data.codeStats[c] = s;
+  await persistCatalog(data);
+  return data.codeStats;
 }
 // Suivi des utilisations d'un code (une seule fois par visiteuse : IP + e-mail).
 export async function getCodeUsage() {

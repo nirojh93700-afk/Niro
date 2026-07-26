@@ -238,11 +238,13 @@ export async function POST(req) {
   // Code promo géré dans l'admin → coupon Stripe créé à la volée (pas besoin du dashboard).
   let discounts;
   let appliedCode = "";
-  if (promoCode && !(await hasUsedCode(promoCode, { ip: clientIp }))) {
+  if (promoCode) {
     try {
       const codes = await getPromoCodes();
       const pc = codes[promoCode];
-      if (pc && pc.value > 0) {
+      // Code ambassadeur (reusable) : utilisable plusieurs fois. Sinon : 1 fois/cliente.
+      const blocked = pc && !pc.reusable && (await hasUsedCode(promoCode, { ip: clientIp }));
+      if (pc && pc.value > 0 && !blocked) {
         appliedCode = promoCode;
         const coupon = await stripe.coupons.create(
           pc.type === "fixed"
