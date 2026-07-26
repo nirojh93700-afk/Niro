@@ -1733,6 +1733,7 @@ export const products = [
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
       "/produits/carafe_ambiance.jpg",
+      "/produits/carafe_whiskey_1892.jpg",
       "/produits/carafe_gravee.jpg",
       "/produits/carafe_vierge.jpg",
       "/produits/carafe_produit.jpg",
@@ -1766,10 +1767,11 @@ export const products = [
       "27": "/produits/carafe-motif-27.png", "28": "/produits/carafe-motif-28.png",
       "29": "/produits/carafe-motif-29.png", "30": "/produits/carafe-motif-30.png",
       "31": "/produits/carafe-motif-31.png", "32": "/produits/carafe-motif-32.png",
+      "33": "/produits/carafe-motif-33.png",
     },
     // Tous les modèles carafe contiennent déjà leur texte/nom d'exemple : on ne
     // superpose PAS le texte du client (il serait gravé dans l'écriture du modèle).
-    styleTextInMotif: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32"],
+    styleTextInMotif: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33"],
     // Emplacements exacts Nom (t) / Date (d) sur chaque modèle (placés par la gérante).
     styleTextZone: {
       "1": { t: { x: 0.546, y: 0.7809 }, d: { x: 0.5025, y: 0.9767 } },
@@ -1807,7 +1809,7 @@ export const products = [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Monogrammes & noms (1–17)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17"] },
         { label: "Mariage & rôles (18–28)", nums: ["18","19","20","21","22","23","24","25","26","27","28"] },
-        { label: "Whisky & déco (29–32)", nums: ["29","30","31","32"] },
+        { label: "Whisky & déco (29–33)", nums: ["29","30","31","32","33"] },
       ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez votre prénom / message / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
@@ -1832,7 +1834,7 @@ export const products = [
     variants: [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
     ],
-    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 32), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
+    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 33), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
 <p>Gravure laser personnalisée, réalisée à la commande dans notre atelier en France. Un cadeau d'exception (fête des pères, anniversaire, retraite, mariage…). <strong>Livraison offerte.</strong> Possibilité d'ajouter des <strong>verres assortis</strong> gravés au même style, pour un vrai coffret.</p>
 <h3>Caractéristiques</h3>
 <ul>
