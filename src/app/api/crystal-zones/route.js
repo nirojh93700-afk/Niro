@@ -1,4 +1,5 @@
 import { getSettings } from "@/lib/stock";
+import { CRYSTAL_ZONES_LOCK } from "@/lib/crystalZonesLock";
 
 export const dynamic = "force-dynamic";
 
@@ -7,8 +8,11 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const s = await getSettings();
-    return Response.json({ zones: s?.crystalZones || {}, textZones: s?.motifTextZones || {} });
+    // Les réglages CRISTAL verrouillés (code) priment sur la base → ne se dérèglent plus.
+    // Les verres/carafe restent pilotés par l'admin (base de données).
+    const zones = { ...(s?.crystalZones || {}), ...CRYSTAL_ZONES_LOCK };
+    return Response.json({ zones, textZones: s?.motifTextZones || {} });
   } catch {
-    return Response.json({ zones: {}, textZones: {} });
+    return Response.json({ zones: { ...CRYSTAL_ZONES_LOCK }, textZones: {} });
   }
 }
