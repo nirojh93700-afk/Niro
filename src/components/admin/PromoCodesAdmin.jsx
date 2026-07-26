@@ -146,6 +146,18 @@ export default function PromoCodesAdmin({ adminKey }) {
               </tbody>
             </table>
           </div>
+          {/* Liens d'affiliation à partager (comme Amazon) */}
+          <div style={{ marginTop: 12, background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: ".85rem", fontWeight: 700, color: "var(--gold-dark, #a98935)", marginBottom: 6 }}>🔗 Liens à partager — chaque ambassadeur envoie SON lien</div>
+            <p style={{ fontSize: ".78rem", color: "var(--ink-soft)", margin: "0 0 8px" }}>Le client clique sur le lien → le code s'applique tout seul au paiement, et la commission de l'ambassadeur est comptée (valable 30 jours).</p>
+            {ambassadeurs.map(([c, def]) => (
+              <div key={c} style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", padding: "5px 0", borderTop: "1px solid var(--line)" }}>
+                <b style={{ minWidth: 100, fontSize: ".85rem" }}>{def.ambassador || c}</b>
+                <code style={{ background: "#faf6ef", border: "1px solid var(--line)", borderRadius: 6, padding: "4px 8px", flex: 1, minWidth: 180, fontSize: ".8rem", wordBreak: "break-all" }}>{refLink(c)}</code>
+                <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: ".8rem" }} onClick={() => copyLink(c)}>Copier</button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
