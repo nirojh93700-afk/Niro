@@ -11,6 +11,8 @@ export const viewport = {
   themeColor: "#2b2620",
 };
 
+import GestionShell from "@/components/admin/GestionShell";
+
 export default function GestionLayout({ children }) {
-  return children;
+  return <GestionShell>{children}</GestionShell>;
 }

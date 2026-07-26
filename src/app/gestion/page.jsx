@@ -37,6 +37,17 @@ export default function GestionPage() {
   const [orders, setOrders] = useState([]);
   const [ordersReady, setOrdersReady] = useState(false);
   const [tab, setTab] = useState("accueil");
+  // Ouvre le bon onglet quand on arrive depuis la barre latérale d'une sous-page
+  // (lien /gestion#produits, #commandes…). Se met à jour aussi si le hash change.
+  useEffect(() => {
+    const applyHash = () => {
+      const h = (typeof window !== "undefined" ? window.location.hash : "").replace("#", "").trim();
+      if (h) setTab(h);
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [error, setError] = useState("");
@@ -996,6 +1007,13 @@ export default function GestionPage() {
                     <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
                   ))}
                 </ul>
+                {(o.demandeGravure || o.messageGraver) && (
+                  <div style={{ background: "#fbf3e6", border: "1px solid #e7d3a1", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem", whiteSpace: "pre-line" }}>
+                    <strong>✍️ Texte demandé par la cliente (à graver) :</strong>
+                    {o.demandeGravure ? `\nPrécisions gravure : ${o.demandeGravure}` : ""}
+                    {o.messageGraver ? `\nMessage / date à graver : ${o.messageGraver}` : ""}
+                  </div>
+                )}
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
                     onClick={() => setBatOpen(batOpen === o.id ? null : o.id)}>

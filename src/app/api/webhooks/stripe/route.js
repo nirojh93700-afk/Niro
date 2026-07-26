@@ -419,6 +419,9 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       ref: orderRef,
       sessionId: session.id, // anti-doublon (si l'événement est rejoué)
       spec: orderSpec || null,
+      // Textes tapés par la cliente au paiement (précisions gravure + date/message à graver).
+      demandeGravure: (session.custom_fields || []).find((f) => f.key === "personnalisation")?.text?.value || "",
+      messageGraver: (session.custom_fields || []).find((f) => f.key === "message_cadeau")?.text?.value || "",
       // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).
       demande: quote ? (quote.note || "").trim() : "",
       quoteNumber: quote?.number || "",
