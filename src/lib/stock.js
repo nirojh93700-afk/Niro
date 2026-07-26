@@ -400,6 +400,7 @@ export async function batAtelierMessage(orderId, info = {}) {
   if (info.ref) th.ref = info.ref;
   th.messages.push({ from: "atelier", text: (info.text || "").toString(), image: (info.image || "").toString(), at: Date.now() });
   th.status = "en_attente";
+  th.clientUnread = false; // on répond → plus de « non lu »
   th.updatedAt = Date.now();
   data.bat[id] = th;
   await persistCatalog(data);
@@ -426,11 +427,46 @@ export async function batImportEmails(orderId, msgs = []) {
   }
   if (added) {
     th.status = th.status === "valide" ? "valide" : "modif_demandee";
+    th.clientUnread = true; // pastille « nouvelle réponse » sur la commande
     th.updatedAt = Date.now();
     data.bat[id] = th;
     await persistCatalog(data);
   }
   return added;
+}
+
+// Métadonnées légères de tous les fils d'aperçu (pour la vérification globale
+// des nouvelles réponses + les pastilles côté Commandes).
+export async function getBatThreadsMeta() {
+  const data = await getCatalogRaw();
+  const bat = data.bat || {};
+  return Object.keys(bat).map((orderId) => {
+    const th = bat[orderId] || {};
+    const lastAtelierAt = (th.messages || [])
+      .filter((m) => m.from === "atelier")
+      .reduce((mx, m) => Math.max(mx, Number(m.at) || 0), 0);
+    return {
+      orderId,
+      customerEmail: th.customerEmail || "",
+      lastAtelierAt,
+      importedGmailIds: th.importedGmailIds || [],
+      clientUnread: Boolean(th.clientUnread),
+    };
+  });
+}
+
+// Marque le fil d'une commande comme lu (retire la pastille). Écriture unique.
+export async function markBatRead(orderId) {
+  const id = String(orderId || "").trim();
+  if (!id) return false;
+  const data = await getCatalogRaw();
+  const th = (data.bat || {})[id];
+  if (th && th.clientUnread) {
+    th.clientUnread = false;
+    data.bat[id] = th;
+    await persistCatalog(data);
+  }
+  return true;
 }
 
 // Efface complètement le fil / la conversation d'aperçu d'une commande
@@ -459,6 +495,7 @@ export async function batCustomerMessage(token, { text, decision } = {}) {
   th.messages.push({ from: "cliente", text: (text || "").toString(), decision: dec, at: Date.now() });
   if (dec === "valide") th.status = "valide";
   else if (dec === "modif") th.status = "modif_demandee";
+  th.clientUnread = true; // pastille « nouvelle réponse » sur la commande
   th.updatedAt = Date.now();
   data.bat[id] = th;
   await persistCatalog(data);

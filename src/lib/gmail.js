@@ -134,6 +134,18 @@ export async function gmailListFromSender(token, fromEmail, max = 10) {
   return out;
 }
 
+// Liste seulement les IDENTIFIANTS des messages récents de la boîte (léger).
+// Sert à la vérification globale « nouvelles réponses » sans tout télécharger.
+export async function gmailListInboxIds(token, max = 30) {
+  const q = encodeURIComponent("in:inbox -category:promotions -category:social -category:forums newer_than:90d");
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=${max}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  return (data.messages || []).map((m) => m.id);
+}
+
 // Récupère un message (entêtes + extrait, ou corps complet si full=true).
 export async function gmailGetMessage(token, id, full = true) {
   const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full`, {

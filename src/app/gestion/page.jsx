@@ -49,6 +49,7 @@ export default function GestionPage() {
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
+  const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -112,6 +113,15 @@ export default function GestionPage() {
     }
   }, []);
 
+  // Vérifie les nouvelles réponses des clientes (lien + e-mail Gmail) et
+  // récupère la liste des commandes « non lues » pour les pastilles.
+  const loadBatUnread = useCallback(async (adminKey) => {
+    try {
+      const res = await fetch("/api/admin/bat?action=unread", { headers: { "x-admin-key": adminKey } });
+      if (res.ok) setBatUnread((await res.json()).unread || []);
+    } catch { /* ignore */ }
+  }, []);
+
   useEffect(() => {
     const k = sessionStorage.getItem("niv-admin-key");
     if (k) {
@@ -119,6 +129,11 @@ export default function GestionPage() {
       load(k);
     }
   }, [load]);
+
+  // Au chargement (une fois connectée) : vérifie les réponses non lues.
+  useEffect(() => {
+    if (authed && key) loadBatUnread(key);
+  }, [authed, key, loadBatUnread]);
 
   async function saveStock(variantId, value) {
     try {
@@ -1041,9 +1056,14 @@ export default function GestionPage() {
                   </div>
                 )}
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
-                    onClick={() => setBatOpen(batOpen === o.id ? null : o.id)}>
+                  <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", position: "relative", borderColor: batUnread.includes(o.id) ? "#c9a24b" : undefined }}
+                    onClick={() => { const opening = batOpen !== o.id; setBatOpen(opening ? o.id : null); if (opening) setBatUnread((u) => u.filter((x) => x !== o.id)); }}>
                     {batOpen === o.id ? "Fermer la discussion" : "💬 Aperçu à valider / discussion"}
+                    {batUnread.includes(o.id) && batOpen !== o.id && (
+                      <span style={{ marginLeft: 6, background: "#d64545", color: "#fff", fontSize: "0.7rem", fontWeight: 700, padding: "1px 7px", borderRadius: 20 }}>
+                        Nouvelle réponse
+                      </span>
+                    )}
                   </button>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
                     onClick={() => setFicheOpen(ficheOpen === o.id ? null : o.id)}>

@@ -1,6 +1,6 @@
-import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds } from "@/lib/stock";
+import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
-import { gmailAccessToken, gmailListFromSender } from "@/lib/gmail";
+import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage } from "@/lib/gmail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -42,13 +42,54 @@ export async function DELETE(req) {
 }
 
 // Lire le fil de discussion / BAT d'une commande (admin).
+// Vérification GLOBALE : une seule lecture Gmail, on importe les réponses dans
+// tous les fils concernés, et on renvoie la liste des commandes « non lues »
+// (pour les pastilles côté page Commandes).
+async function syncAllAndListUnread() {
+  const metas = await getBatThreadsMeta();
+  try {
+    const creds = await getGmailCreds();
+    if (creds?.refreshToken) {
+      // Adresses des fils en attente d'une réponse (on a déjà écrit à la cliente).
+      const byEmail = new Map();
+      for (const m of metas) {
+        if (m.customerEmail && m.lastAtelierAt) byEmail.set(m.customerEmail.toLowerCase(), m);
+      }
+      if (byEmail.size) {
+        const token = await gmailAccessToken(creds);
+        const ids = await gmailListInboxIds(token, 30);
+        // On ignore les mails déjà importés (dans n'importe quel fil).
+        const alreadyImported = new Set(metas.flatMap((m) => m.importedGmailIds));
+        for (const id of ids) {
+          if (alreadyImported.has(id)) continue;
+          const msg = await gmailGetMessage(token, id, true);
+          if (!msg) continue;
+          const meta = byEmail.get((msg.fromEmail || "").toLowerCase());
+          if (!meta) continue;
+          const at = Date.parse(msg.date || "") || 0;
+          if (at && at < meta.lastAtelierAt - 60000) continue;
+          await batImportEmails(meta.orderId, [{ gmailId: id, text: msg.body || msg.snippet || "", at: at || Date.now() }]);
+        }
+      }
+    }
+  } catch { /* Gmail indisponible : on renvoie les non-lus déjà connus. */ }
+  const fresh = await getBatThreadsMeta();
+  return fresh.filter((m) => m.clientUnread).map((m) => m.orderId);
+}
+
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
-  const orderId = new URL(req.url).searchParams.get("orderId") || "";
+  const url = new URL(req.url);
+  // Vérification globale des nouvelles réponses (pastilles).
+  if (url.searchParams.get("action") === "unread") {
+    return Response.json({ unread: await syncAllAndListUnread() });
+  }
+  const orderId = url.searchParams.get("orderId") || "";
   let th = await getBatThread(orderId);
   // Remonte les réponses reçues par e-mail (Gmail) dans le fil, puis relit.
   if (th) {
     await syncGmailReplies(orderId, th);
+    await markBatRead(orderId); // ouvert = lu (retire la pastille)
     th = await getBatThread(orderId);
   }
   return Response.json({ thread: th });
