@@ -497,7 +497,9 @@ img {
   right: 10px;
   bottom: 14px;
   width: 150px;
-  z-index: 900;
+  /* Sous le panier (drawer z-index 100) : l'aperçu flottant ne doit jamais
+     recouvrir le panier ni le bouton « Commander ». */
+  z-index: 55;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid #e7d3a1;
   border-radius: 14px;

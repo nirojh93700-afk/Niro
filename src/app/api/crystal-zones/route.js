@@ -8,9 +8,11 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const s = await getSettings();
-    // Les réglages CRISTAL verrouillés (code) priment sur la base → ne se dérèglent plus.
-    // Les verres/carafe restent pilotés par l'admin (base de données).
-    const zones = { ...(s?.crystalZones || {}), ...CRYSTAL_ZONES_LOCK };
+    // Priorité : TES réglages admin (base de données) priment. Le verrou (code)
+    // ne sert que de valeur par défaut de secours pour un cristal jamais réglé
+    // (il évite un placement « au hasard » si la base est vide). Ainsi, dès que
+    // tu ajustes un cristal dans l'admin, TON réglage s'applique et reste.
+    const zones = { ...CRYSTAL_ZONES_LOCK, ...(s?.crystalZones || {}) };
     return Response.json({ zones, textZones: s?.motifTextZones || {} });
   } catch {
     return Response.json({ zones: { ...CRYSTAL_ZONES_LOCK }, textZones: {} });

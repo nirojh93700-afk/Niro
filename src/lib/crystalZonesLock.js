@@ -1,8 +1,8 @@
-// Réglages CRISTAL VERROUILLÉS (demande de la gérante : « il faut plus les bouger »).
-// Ces valeurs (validées le 26/07/2026) sont la SOURCE pour l'aperçu des cristaux :
-// elles priment sur la base de données, donc l'aperçu ne peut plus se dérégler.
-// Pour changer un placement cristal : modifier ce fichier (l'outil de réglage
-// admin ne touche plus aux cristaux ; il reste actif pour les verres/carafe).
+// Réglages CRISTAL par DÉFAUT (valeurs de secours validées le 26/07/2026).
+// Priorité : les réglages faits dans l'admin (base de données) PRIMENT. Ces
+// valeurs ne s'appliquent que si un cristal n'a jamais été réglé dans l'admin
+// (elles évitent un placement « au hasard » si la base est vide). L'outil de
+// réglage admin pilote de nouveau les cristaux (comme les verres/carafe).
 export const CRYSTAL_ZONES_LOCK = {
   "cristal-photo-3d-vertical": { img: "/produits/cristal-bloc-v-creme.jpg", left: 30, top: 27, width: 42, height: 41, rotation: -3, ry: 0, rx: 0, opacity: 0.72, blend: "screen", bw: 1, on: 1 },
   "cristal-photo-3d-horizontal": { img: "/produits/cristal-bloc-h-creme.jpg", left: 30, top: 30, width: 42, height: 32, rotation: -3, ry: 0, rx: 0, opacity: 0.72, blend: "screen", bw: 1, on: 1 },
