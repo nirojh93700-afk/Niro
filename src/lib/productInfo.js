@@ -21,7 +21,7 @@ const WORLDCUP_PEN_INFO = {
   returns: `Expédition & Retour
 - Expédié à plat en lettre suivie, soigneusement protégé.
 - Fabriqué à la demande = non remboursable une fois la découpe lancée (article L221-28).
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
 };
 
 // Fiche commune aux cristaux photo 3D (bloc vertical / horizontal).
@@ -39,7 +39,7 @@ const CRISTAL_INFO = {
   returns: `Expédition & Retour
 - Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
 - Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
-- En cas de casse à l'arrivée : envoyez-nous une photo sous 48 h, nous le remplaçons sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
 };
 
 // Fiche commune aux porte-clés cristal LED (cœur / rectangle).
@@ -56,7 +56,7 @@ const CRISTAL_LED_KEYRING_INFO = {
   returns: `Expédition & Retour
 - Expédié en colis suivi, soigneusement protégé (le cristal est fragile).
 - Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
-- En cas de casse ou de LED défectueuse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
 };
 
 export const productInfo = {
@@ -125,9 +125,8 @@ Si vous commandez le collier seul (sans gravure)
 - Droit de rétractation 14 jours (article L221-18).
 - Retour dans l'emballage d'origine, non porté.
 
-Défaut à l'arrivée (les deux cas)
-- Photo sous 14 jours, échange ou renvoi sans frais.
-- Chaîne cassée, finition défectueuse : remplacement immédiat.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "collier-medaillon-coeur-ouvrable": {
@@ -159,9 +158,8 @@ Annulation
 - Au-delà, avant gravure : remboursement moins 10 € de frais (designer affecté).
 - Après gravure : non remboursable.
 
-Défaut à l'arrivée
-- Photo sous 14 jours, refonte ou remboursement.
-- Chaîne cassée, finition défectueuse : remplacement immédiat.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-homme-identite-gourmette": {
@@ -189,9 +187,8 @@ Version AVEC gravure (personnalisée)
 Version SANS gravure (standard)
 - Droit de rétractation 14 jours (article L221-18), non porté, emballage d'origine.
 
-Défaut à l'arrivée
-- Photo sous 14 jours, échange ou remboursement.
-- Fermoir cassé, finition défectueuse : remplacement immédiat.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-homme-acier-silicone": {
@@ -218,9 +215,8 @@ Version AVEC texte (personnalisée)
 Version SANS texte (standard)
 - Droit de rétractation 14 jours (article L221-18), non porté, emballage d'origine.
 
-Défaut à l'arrivée
-- Photo sous 14 jours, échange ou remboursement.
-- Fermoir cassé, finition défectueuse : remplacement immédiat.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-homme-cuir-acier": {
@@ -247,9 +243,8 @@ Version AVEC texte (personnalisée)
 Version SANS texte (standard)
 - Droit de rétractation 14 jours (article L221-18), non porté, emballage d'origine.
 
-Défaut à l'arrivée
-- Photo sous 14 jours, échange ou remboursement.
-- Boucle cassée, finition défectueuse : remplacement immédiat.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "numero-table-arches-bohemes": {
@@ -291,8 +286,8 @@ Commande de dernière minute
 - À moins de 15 jours de l'événement, contactez-nous AVANT de commander pour confirmer la faisabilité.
 - Livraison express disponible.
 
-Défaut à l'arrivée
-- Photo sous 24 h, refonte URGENTE sans frais avec livraison express si délai serré.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "numero-table-eucalyptus": {
@@ -328,8 +323,8 @@ Commande tardive
 - Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
 - Livraison express disponible.
 
-Défaut à l'arrivée
-- Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "numero-table-arche-geometrique": {
@@ -363,8 +358,8 @@ Commande tardive
 - Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
 - Livraison express disponible.
 
-Défaut à l'arrivée
-- Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "numero-table-feuillage": {
@@ -397,8 +392,8 @@ Commande tardive
 - Moins de 15 jours avant l'événement : nous contacter pour confirmer la faisabilité.
 - Livraison express disponible.
 
-Défaut à l'arrivée
-- Photo sous 24 h, refonte gratuite + livraison express si délai serré.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "etiquette-serviette-initiales": {
@@ -429,9 +424,8 @@ Annulation
 Quantité erronée à la livraison
 - Échange ou complément immédiat sans frais si la quantité reçue ne correspond pas à la commande.
 
-Défaut à l'arrivée
-- Photo sous 14 jours, refonte gratuite.
-- Pour un mariage proche : livraison express ajoutée.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "ronds-de-serviette-bois": {
@@ -467,9 +461,8 @@ Annulation
 Quantité erronée à la livraison
 - Échange ou complément immédiat sans frais si la quantité reçue ne correspond pas à la commande.
 
-Défaut à l'arrivée
-- Photo sous 14 jours, refonte gratuite.
-- Pour un mariage proche : livraison express ajoutée.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "menu-de-mariage-bois-grave": {
@@ -506,8 +499,8 @@ Commande tardive
 - Moins de 21 jours avant l'événement : contactez-nous AVANT de commander (gravure menu + relief = délai un peu plus long).
 - Livraison express disponible.
 
-Défaut à l'arrivée ou erreur de gravure
-- Photo sous 24 h, refonte URGENTE gratuite + livraison express si le mariage approche.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "plaque-de-porte-enfant": {
@@ -545,8 +538,8 @@ Annulation
 - Au-delà (un designer affecté) : remboursement moins 15 € de frais.
 - Après validation de l'aperçu : la découpe a démarré, plus de remboursement.
 
-Défaut à l'arrivée
-- Photo sous 14 jours après réception, refonte sans frais (renvoi du produit défectueux requis).
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.
 
 Erreur d'orthographe sur le prénom
 - Si la faute vient de notre côté (par rapport à l'aperçu validé) : refonte gratuite.
@@ -609,9 +602,8 @@ Annulation
 - Dans les 24 h suivant la commande, avant le démarrage de la gravure : annulation possible.
 - Après gravure : non remboursable (personnalisation unique, article L221-28).
 
-Casse ou défaut à l'arrivée
-- Photo sous 14 jours après réception : remplacement sans frais.
-- Emballage protégé prévu pour un transport sécurisé.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "couverts-enfants-personnalises": {
     material: `Taille & Matériaux
@@ -629,8 +621,8 @@ Annulation
 - Dans les 24 h suivant la commande, avant le démarrage de la gravure : annulation possible.
 - Après gravure : non remboursable (personnalisation unique, article L221-28).
 
-Défaut à l'arrivée
-- Photo sous 14 jours après réception : remplacement sans frais.`,
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "lampe-led-paris-saint-germain": {
     material: `Taille & Matériaux
@@ -645,7 +637,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Objet fragile : expédié soigneusement protégé.
 - Retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
-- À l'arrivée, en cas de casse : envoyez-nous une photo sous 14 jours, on remplace sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "arbre-de-vie-lumineux": {
     material: `Taille & Matériaux
@@ -659,7 +651,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Objet expédié soigneusement protégé.
 - Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "veilleuse-arbre-de-vie-ronde": {
     material: `Taille & Matériaux
@@ -673,7 +665,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Objet expédié soigneusement protégé.
 - Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "bougeoir-mandala-bois": {
     material: `Taille & Matériaux
@@ -687,7 +679,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Objet expédié soigneusement protégé.
 - Article non personnalisé : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine (frais de retour à votre charge).
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "bougeoir-fleur-de-lotus": {
     material: `Taille & Matériaux
@@ -702,7 +694,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Objet expédié soigneusement protégé.
 - Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans personnalisation : retour possible sous 14 jours s'il n'a pas servi, dans son emballage d'origine.
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
   "pyramide-cristal-gravure-3d": {
     material: `Taille & Matériaux
@@ -717,7 +709,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
 - Produit personnalisé (gravé à votre texte) = non remboursable une fois la gravure lancée (article L221-28).
-- En cas de casse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "trophee-cristal-vierge-3d": {
@@ -733,7 +725,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en colis suivi, dans un emballage renforcé (le cristal est fragile).
 - Produit personnalisé (gravé à votre texte) = non remboursable une fois la gravure lancée (article L221-28).
-- En cas de casse à l'arrivée : photo sous 48 h, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "cle-usb-cristal-3d": {
@@ -748,7 +740,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Produit personnalisé (gravé à votre photo) = non remboursable une fois la gravure lancée (article L221-28).
-- Clé défectueuse ou cassée à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "cle-usb-bois-coffret": {
@@ -763,7 +755,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en colis suivi, soigneusement protégé.
 - Personnalisé = non remboursable une fois la gravure lancée (article L221-28). Sans gravure : retour possible sous 14 jours, non utilisé, dans son emballage d'origine.
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "piece-ronde-laiton": {
@@ -778,7 +770,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "porte-cles-cuir-a-graver": {
@@ -793,7 +785,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-homme-cuir-tresse-acier": {
@@ -808,7 +800,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Avec gravure = non remboursable une fois la gravure lancée (article L221-28). Sans gravure : retour possible sous 14 jours, non porté, dans son emballage d'origine.
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-homme-chaine-acier": {
@@ -823,7 +815,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-femme-acier": {
@@ -838,7 +830,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-empreinte-pied-bebe": {
@@ -853,7 +845,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-femme-coeur": {
@@ -868,7 +860,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "bracelet-femme-papillon": {
@@ -883,7 +875,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "collier-couple-coeur-lot2": {
@@ -898,7 +890,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "collier-plaque-acier": {
@@ -913,7 +905,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "collier-medaillon-livre": {
@@ -928,7 +920,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "collier-couple-puzzle": {
@@ -943,7 +935,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "collier-femme-pendentif-geometrique": {
@@ -958,7 +950,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- Défaut à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "verre-a-whisky-fete-des-peres": {
@@ -973,7 +965,7 @@ Défaut à l'arrivée
     returns: `Expédition & Retour
 - Expédié en colis suivi, soigneusement protégé (verre fragile).
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
-- En cas de casse à l'arrivée : photo sous 14 jours, remplacement sans frais.`,
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
   "porte-cles-cristal-led-coeur": CRISTAL_LED_KEYRING_INFO,
