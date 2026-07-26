@@ -33,6 +33,7 @@ const CRISTAL_INFO = {
 - Gravure photo 3D interne (sub-surface) au laser, réalisée dans notre atelier en France.`,
   usage: `Personnalisation & Entretien
 - Envoyez une photo nette et bien éclairée, les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net.
+- La gravure 3D met en valeur les personnes (ou l'animal / l'objet) de la photo : le décor d'arrière-plan n'est pas reproduit — c'est cette mise en valeur du sujet qui crée le bel effet 3D.
 - Texte à graver en option : vous le placez et le redimensionnez vous-même dans l'aperçu.
 - Entretien : dépoussiérer avec un chiffon doux et sec (microfibre). Ne pas immerger, éviter les chocs — le cristal est fragile.
 - Astuce : près d'une source de lumière (ou sur un socle lumineux), l'effet 3D est sublimé.`,

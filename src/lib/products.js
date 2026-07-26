@@ -798,7 +798,7 @@ export const products = [
     featured: true,
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
-      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
+      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net. La gravure 3D met en valeur les personnes (ou l'animal / l'objet) de la photo : le décor d'arrière-plan n'est pas reproduit — c'est cette mise en valeur du sujet qui crée le bel effet 3D dans le cristal." },
       // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
       { key: "texte", label: "Texte à graver (optionnel) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
@@ -843,7 +843,7 @@ export const products = [
     featured: true,
     personalizable: true, personalizationLabel: "Photo à graver (+ texte optionnel)",
     personalizationFields: [
-      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net." },
+      { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net. La gravure 3D met en valeur les personnes (ou l'animal / l'objet) de la photo : le décor d'arrière-plan n'est pas reproduit — c'est cette mise en valeur du sujet qui crée le bel effet 3D dans le cristal." },
       // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
       { key: "texte", label: "Texte à graver (optionnel) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
