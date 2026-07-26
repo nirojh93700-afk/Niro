@@ -5,6 +5,17 @@ import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessa
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+// Traduit les erreurs Resend courantes en message clair et actionnable.
+function friendlyEmailError(raw) {
+  const s = String(raw || "").toLowerCase();
+  if (/only send testing emails|verify a domain|not verified|own email address/.test(s)) {
+    return "Le service d'e-mails (Resend) refuse d'envoyer vers une adresse cliente tant que le domaine nivcreation.fr n'est pas vérifié. → À faire une seule fois : vérifier le domaine dans Resend (resend.com/domains) puis mettre CONTACT_FROM = une adresse @nivcreation.fr.";
+  }
+  if (/rate limit|too many/.test(s)) return "Trop d'envois d'un coup (limite Resend). Réessaie dans une minute.";
+  if (/invalid.*from|from.*invalid/.test(s)) return "Adresse expéditeur (CONTACT_FROM) invalide : elle doit être une adresse @nivcreation.fr d'un domaine vérifié.";
+  return String(raw || "Envoi refusé par le service d'e-mails.").slice(0, 300);
+}
+
 // Va chercher dans Gmail les réponses de la cliente (mails venant de son
 // adresse, reçus APRÈS notre dernier message) et les importe dans le fil.
 // Silencieux si Gmail non connecté ou en cas d'erreur (la discussion s'affiche
@@ -127,7 +138,7 @@ export async function POST(req) {
     // Copie cachée à la gérante : elle reçoit une copie de chaque mail envoyé à la cliente.
     const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
     emailed = Boolean(r?.ok);
-    if (!emailed) emailError = String(r?.error || "Envoi refusé.").slice(0, 300);
+    if (!emailed) emailError = friendlyEmailError(r?.error);
   }
   return Response.json({ ok: true, thread: th, emailed, emailError, to });
 }
