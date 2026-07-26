@@ -1,0 +1,81 @@
+RÔLE
+Tu continues sur ma boutique Etsy « NivCreationArtisanat ». Tu crées mes fiches en recopiant mon site nivcreation.fr. Tu travailles dans le tableau de bord vendeur Etsy, en français.
+
+⚠️ IMPORTANT (à respecter pour CHAQUE fiche)
+- Crée les fiches UNE PAR UNE. Ne modifie AUCUN autre produit ni prix ni réglage existant (surtout pas les bijoux).
+- ENREGISTRE EN BROUILLON. Ne publie RIEN sans mon accord.
+- FRANÇAIS, ton élégant, PAS d'emojis dans le contenu.
+- Produits PERSONNALISÉS = faits à la commande.
+- PRIX : utilise les prix Etsy ci-dessous (déjà majorés), PAS ceux du site.
+- PHOTOS : garde mon site ouvert dans un onglet → page produit → clic droit sur les photos → Enregistrer l'image → charge-les sur Etsy (3 à 5). Si ça bloque, laisse vide, je les mettrai.
+- Si un champ te bloque, demande-moi (n'invente pas).
+
+===========================================================
+FICHE 1 — VERRE À VIN GRAVÉ
+Page source : https://nivcreation.fr/produit/verre-a-vin-grave
+- Titre : « Verre à vin gravé personnalisé — prénom, date, monogramme ou modèle au choix (cristal) »
+- À propos : Fait main · Fait à la commande.
+- Description :
+  « Un verre à vin en cristal, gravé à votre façon. Choisissez un modèle prêt (couples, monogramme, prénoms et dates, banderoles), une lettre fleurie, ou votre propre texte.
+   Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère).
+   Personnalisation : indiquez dans la note le numéro du modèle choisi, le ou les prénoms, et la date. Pour graver votre PHOTO ou votre logo, envoyez-la par message Etsy après la commande.
+   Fait main en France, dans notre atelier. »
+- Matériaux : verre cristal.
+- Personnalisation : ACTIVÉE (case « Personnalisation »). Instructions à l'acheteur : « Indiquez le numéro du modèle (ou lettre fleurie), le(s) prénom(s), la date, et la police souhaitée. Photo à graver : envoyez-la par message après commande. »
+- VARIANTES (variation « Quantité ») avec prix Etsy :
+    • À l'unité : 18,90 €
+    • Lot de 2 : 36,90 €
+    • Lot de 4 : 72,90 €
+  Quantité : 10 par variante.
+
+===========================================================
+FICHE 2 — FLÛTE À CHAMPAGNE GRAVÉE
+Page source : https://nivcreation.fr/produit/flute-a-champagne-gravee
+- Titre : « Flûte à champagne gravée personnalisée — prénom, date, monogramme ou modèle (cristal) »
+- À propos : Fait main · Fait à la commande.
+- Description :
+  « Une flûte à champagne en cristal, gravée à votre façon : un modèle au choix, une lettre fleurie ou votre texte. Idéale pour un mariage, des fiançailles ou trinquer aux grandes occasions.
+   Gravure laser permanente qui résiste au lave-vaisselle.
+   Personnalisation : indiquez dans la note le numéro du modèle, le(s) prénom(s) et la date. Pour graver votre photo/logo, envoyez-la par message Etsy après commande.
+   Fait main en France. »
+- Matériaux : verre cristal.
+- Personnalisation : ACTIVÉE. Mêmes instructions que la Fiche 1.
+- VARIANTES (variation « Quantité ») avec prix Etsy :
+    • À l'unité : 18,90 €
+    • Lot de 2 : 36,90 €
+    • Lot de 4 : 72,90 €
+  Quantité : 10 par variante.
+
+===========================================================
+FICHE 3 — VERRE À WHISKY GRAVÉ
+Page source : https://nivcreation.fr/produit/verre-a-whisky-grave
+- Titre : « Verre à whisky gravé personnalisé — photo, prénom, message (cadeau homme) »
+- À propos : Fait main · Fait à la commande.
+- Description :
+  « Un verre à whisky gravé selon vos envies : votre photo/logo, un prénom, une date ou un message. Un cadeau qui a du caractère (fête des pères, anniversaire, retraite).
+   Gravure sur la face avant ou au fond du verre. Gravure laser durable.
+   Personnalisation : indiquez le texte à graver, l'emplacement (face ou fond) et la police. Pour une photo/logo, envoyez-la par message Etsy après commande.
+   Fait main en France. »
+- Matériaux : verre.
+- Personnalisation : ACTIVÉE. Instructions : « Texte à graver, emplacement (face/fond), police. Photo/logo : par message après commande. »
+- VARIANTES (variation « Quantité ») avec prix Etsy :
+    • À l'unité : 28,90 €
+    • Lot de 2 : 55,90 €
+    • Lot de 4 : 104,90 €
+  Quantité : 10 par variante.
+
+===========================================================
+LIVRAISON (les 3 fiches) — profil « Verres (fragile) »
+- France : 6,90 € · article supplémentaire +2,00 €
+- Union Européenne : 14,90 €
+- Reste du monde : désactivé (ou 24,90 €)
+- Délai de préparation : 1 à 2 semaines (gravure à la commande).
+- Emballage protégé pour le transport.
+
+TAGS (13 max, à adapter par fiche) :
+verre grave, cadeau personnalise, gravure laser, verre a vin, flute champagne, verre whisky, cadeau couple, cadeau mariage, cristal, monogramme, fait main france, cadeau homme, art de la table.
+
+CATÉGORIE ETSY : Maison et déco > Cuisine et arts de la table > Verres et verrerie.
+
+QUAND C'EST FAIT
+- Dis-moi « Fiches verres créées en brouillon » + un récap (titres, variantes/prix, livraison). Je vérifie, j'ajoute les photos, puis je te dirai de publier. Si un champ te bloque, demande-moi.
