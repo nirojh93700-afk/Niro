@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
@@ -50,6 +50,23 @@ export default function CartPage() {
       .catch(() => {});
     return () => { ok = false; };
   }, []);
+
+  // Mémorise les choix de livraison (pays, domicile/relais, point relais) pour
+  // que le client n'ait PAS à les refaire s'il quitte puis revient au panier.
+  const choicesLoaded = useRef(false);
+  useEffect(() => {
+    try {
+      const s = JSON.parse(localStorage.getItem("niv-cart-choices") || "{}");
+      if (s.country && COUNTRIES.some((c) => c.code === s.country)) setCountry(s.country);
+      if (s.deliveryMethod === "domicile" || s.deliveryMethod === "relais") setDeliveryMethod(s.deliveryMethod);
+      if (s.relais && typeof s.relais === "object") setRelais(s.relais);
+    } catch { /* ignore */ }
+    choicesLoaded.current = true;
+  }, []);
+  useEffect(() => {
+    if (!choicesLoaded.current) return;
+    try { localStorage.setItem("niv-cart-choices", JSON.stringify({ country, deliveryMethod, relais })); } catch { /* ignore */ }
+  }, [country, deliveryMethod, relais]);
 
   // Retrait en main propre proposé UNIQUEMENT si TOUS les articles du panier sont
   // marqués « retrait possible » (mariage). Dès qu'il y a un produit à expédier
