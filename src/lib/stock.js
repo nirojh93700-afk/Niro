@@ -477,6 +477,76 @@ export async function markBatRead(orderId) {
   return true;
 }
 
+// =============================================================================
+// MESSAGES PROGRAMMÉS (file d'attente) + REGISTRE anti-doublon des règles auto.
+// Stockés dans le blob catalogue : data.scheduled = [ {id,to,name,subject,body,
+// sendAt,createdAt,sent,sentAt,error,source,orderId} ], data.autoSent = {ruleId:{orderId:true}}.
+// =============================================================================
+function newId(p) { return p + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }
+
+export async function getScheduledEmails() {
+  const data = await getCatalogRaw();
+  return data.scheduled || [];
+}
+
+export async function addScheduledEmail({ to, name, subject, body, sendAt, source, orderId }) {
+  const data = await getCatalogRaw();
+  data.scheduled = data.scheduled || [];
+  const item = {
+    id: newId("sch_"),
+    to: String(to || "").trim(),
+    name: String(name || "").trim(),
+    subject: String(subject || "").slice(0, 200),
+    body: String(body || "").slice(0, 6000),
+    sendAt: Number(sendAt) || Date.now(),
+    createdAt: Date.now(),
+    sent: false, sentAt: 0, error: "",
+    source: source || "manuel",
+    orderId: orderId || "",
+  };
+  data.scheduled.push(item);
+  // On garde la file raisonnable (200 derniers).
+  if (data.scheduled.length > 200) data.scheduled = data.scheduled.slice(-200);
+  await persistCatalog(data);
+  return item;
+}
+
+export async function cancelScheduledEmail(id) {
+  const data = await getCatalogRaw();
+  const before = (data.scheduled || []).length;
+  data.scheduled = (data.scheduled || []).filter((s) => s.id !== id);
+  if (data.scheduled.length !== before) await persistCatalog(data);
+  return true;
+}
+
+export async function markScheduledSent(id, { ok, error } = {}) {
+  const data = await getCatalogRaw();
+  const s = (data.scheduled || []).find((x) => x.id === id);
+  if (s) {
+    s.sent = Boolean(ok);
+    s.sentAt = Date.now();
+    s.error = ok ? "" : String(error || "").slice(0, 200);
+    await persistCatalog(data);
+  }
+  return s || null;
+}
+
+// Registre anti-doublon des règles automatiques (une règle ne s'envoie qu'une
+// fois par commande).
+export async function hasAutoSent(ruleId, orderId) {
+  const data = await getCatalogRaw();
+  return Boolean(data.autoSent?.[ruleId]?.[orderId]);
+}
+
+export async function markAutoSent(ruleId, orderId) {
+  const data = await getCatalogRaw();
+  data.autoSent = data.autoSent || {};
+  data.autoSent[ruleId] = data.autoSent[ruleId] || {};
+  data.autoSent[ruleId][orderId] = true;
+  await persistCatalog(data);
+  return true;
+}
+
 // Efface complètement le fil / la conversation d'aperçu d'une commande
 // (permet de « recommencer à zéro »). Écriture unique.
 export async function resetBatThread(orderId) {

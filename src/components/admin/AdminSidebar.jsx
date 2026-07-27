@@ -12,7 +12,10 @@ const GROUPS = [
     { text: "🥃 Atelier (à graver)", href: "/gestion/atelier" },
     { text: "Devis / Factures", href: "/gestion#devis" },
   ] },
-  { label: "Clients", items: [{ text: "👥 CRM — clients", href: "/gestion/crm" }] },
+  { label: "Clients", items: [
+    { text: "👥 CRM — clients", href: "/gestion/crm" },
+    { text: "✉️ Messages (programmés + auto)", href: "/gestion/messages" },
+  ] },
   { label: "Catalogue", items: [
     { text: "Produits & Stock", href: "/gestion#produits" },
     { text: "🗂️ Catégories & ordre", href: "/gestion#categories" },

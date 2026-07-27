@@ -304,6 +304,29 @@ export async function POST(req) {
     patch.productPackaging = out;
   }
 
+  // Modèles de message enregistrés (réutilisables) : [{id,name,subject,body}]
+  if (Array.isArray(body.messageTemplates)) {
+    patch.messageTemplates = body.messageTemplates.slice(0, 40).map((t) => ({
+      id: str(t?.id, 40) || ("tpl_" + Math.random().toString(36).slice(2, 8)),
+      name: str(t?.name, 80),
+      subject: str(t?.subject, 200),
+      body: str(t?.body, 6000),
+    })).filter((t) => t.name || t.body);
+  }
+
+  // Règles d'envoi automatique : [{id,name,subject,body,delayDays,trigger,active}]
+  if (Array.isArray(body.autoRules)) {
+    patch.autoRules = body.autoRules.slice(0, 20).map((r) => ({
+      id: str(r?.id, 40) || ("rule_" + Math.random().toString(36).slice(2, 8)),
+      name: str(r?.name, 80),
+      subject: str(r?.subject, 200),
+      body: str(r?.body, 6000),
+      delayDays: Math.max(0, Math.min(365, Math.round(Number(r?.delayDays) || 0))),
+      trigger: r?.trigger === "livree" ? "livree" : "commande",
+      active: Boolean(r?.active),
+    })).filter((r) => r.name || r.body);
+  }
+
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }
