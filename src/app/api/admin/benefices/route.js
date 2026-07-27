@@ -37,6 +37,9 @@ export async function GET(req) {
     const mk = monthKey(o.createdAt);
     const inMonth = mk === curMonth;
     const inYear = mk.startsWith(curYear);
+    // Livraison encaissée (pour info) — couverte par les clientes, neutre sur le bénéfice.
+    const ship = Number(o.shippingPrice) || 0;
+    per.all.shipping += ship; if (inYear) per.year.shipping += ship; if (inMonth) per.month.shipping += ship;
     for (const it of (o.items || [])) {
       const qty = Number(it.quantity) || 1;
       const rev = Number(it.total) || 0;
@@ -59,7 +62,7 @@ export async function GET(req) {
     }
   }
 
-  const finish = (b) => { b.profit = round(b.revenue - b.cost); b.revenue = round(b.revenue); b.cost = round(b.cost); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
+  const finish = (b) => { b.profit = round(b.revenue - b.cost); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
   finish(per.month); finish(per.year); finish(per.all);
 
   // Série des 12 derniers mois (ordre chronologique).
@@ -88,5 +91,5 @@ export async function GET(req) {
   });
 }
 
-function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0 }; }
+function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0 }; }
 function round(n) { return Math.round((Number(n) || 0) * 100) / 100; }

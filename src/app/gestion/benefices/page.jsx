@@ -108,6 +108,15 @@ export default function BeneficesPage() {
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
 
+      {/* Livraison — info seulement (couverte par les clientes, neutre sur le bénéfice) */}
+      <div style={{ ...card, background: "#faf6ee", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, padding: "12px 16px" }}>
+        <span style={{ fontSize: "0.9rem" }}>🚚 <strong>Livraison encaissée</strong> (payée par les clientes) — {periodLabel.toLowerCase()}</span>
+        <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{euro(p.shipping || 0)}</span>
+      </div>
+      <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "-8px 0 14px" }}>
+        La livraison est <strong>neutre</strong> : les clientes couvrent ce que tu paies au transporteur → elle n&apos;est pas comptée dans le bénéfice, juste affichée pour info.
+      </p>
+
       {/* Alerte coûts manquants */}
       {data.missingCost?.count > 0 && (
         <div style={{ ...card, background: "#fbf3e6", borderColor: "#e7d3a1" }}>
