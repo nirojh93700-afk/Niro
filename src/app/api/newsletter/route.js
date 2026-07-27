@@ -1,5 +1,6 @@
 import { addSubscriber, setBirthday, getSettings } from "@/lib/stock";
-import { sendEmail, welcomeEmail } from "@/lib/email";
+import { welcomeEmail, BRAND } from "@/lib/email";
+import { sendClientMail } from "@/lib/clientMail";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,8 @@ export async function POST(req) {
     const code = (w.code || "").toString().trim();
     if (code) {
       const { subject, html } = welcomeEmail(code, w.text);
-      const r = await sendEmail({ to: email, subject, html });
+      // Gmail en priorité (arrive vraiment), Resend en secours ; copie à la gérante.
+      const r = await sendClientMail({ to: email, subject, html, bcc: BRAND.contact });
       emailed = Boolean(r?.ok);
     }
   } catch { /* ignore */ }
