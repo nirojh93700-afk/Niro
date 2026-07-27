@@ -2373,6 +2373,8 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .admin-content {
   min-width: 0;
 }
+/* Bouton menu mobile : masqué sur ordinateur. */
+.admin-side-toggle { display: none; }
 
 /* Tableau de bord admin « L'Écrin » */
 .dash-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
@@ -2424,8 +2426,8 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 @media (max-width: 900px) { .dash-two { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .dash-tiles { grid-template-columns: repeat(2, 1fr); } .dash-orow { grid-template-columns: 52px 1fr auto; } .dash-orow .dash-chip { grid-column: 2 / 4; justify-self: start; } }
 
-/* Mobile : la barre latérale devient une BARRE HORIZONTALE qui défile (maquette),
-   pour que le tableau de bord soit visible tout de suite. */
+/* Mobile : la barre latérale devient un MENU DÉROULANT (bouton + liste verticale).
+   Fini la barre horizontale qui défile : plus rien ne « disparaît ». */
 @media (max-width: 820px) {
   .admin-shell {
     grid-template-columns: 1fr;
@@ -2434,39 +2436,54 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .admin-sidebar {
     position: static;
     top: auto;
-    padding: 6px;
+    padding: 8px;
     border-radius: 14px;
+    gap: 0;
   }
   .admin-sidebar-brand {
     display: none;
   }
+  /* Bouton d'ouverture du menu */
+  .admin-side-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #f3e8d3;
+    font: 700 0.98rem system-ui;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  /* Liste : cachée par défaut, ouverte au clic */
   .admin-sidebar-nav {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+    max-height: 70vh;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    gap: 4px;
+  }
+  .admin-sidebar-nav.open {
+    display: flex;
   }
   .admin-side-group {
-    flex-direction: row;
-    flex: 0 0 auto;
-    gap: 2px;
+    flex-direction: column;
+    gap: 1px;
   }
   .admin-side-label {
-    display: none;
+    display: block;
+    padding: 6px 16px 3px;
   }
   .admin-side-item {
-    padding: 8px 13px;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    border-left: none;
-    border-bottom: 2px solid transparent;
+    padding: 11px 16px;
+    font-size: 0.95rem;
+    white-space: normal;
+    border-left: 2px solid transparent;
     border-radius: 8px;
-  }
-  .admin-side-item.active {
-    border-left: none;
-    border-bottom-color: var(--gold, #c9a24b);
-    border-radius: 8px 8px 0 0;
   }
 }
 

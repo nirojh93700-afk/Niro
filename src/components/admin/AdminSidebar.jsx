@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 // Barre latérale de gestion PARTAGÉE (affichée sur les sous-pages : Atelier, CRM,
 // Emballages…) pour que le menu ne disparaisse jamais. Les onglets internes de la
@@ -50,13 +51,19 @@ const GROUPS = [
 
 export default function AdminSidebar() {
   const path = usePathname();
+  const [open, setOpen] = useState(false); // menu déroulant mobile
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
         <span className="eyebrow">Espace gestion</span>
         <h2>Mon site</h2>
       </div>
-      <nav className="admin-sidebar-nav">
+      {/* Bouton visible seulement sur mobile : ouvre/ferme le menu déroulant. */}
+      <button type="button" className="admin-side-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <span>☰ Menu gestion</span>
+        <span aria-hidden>{open ? "▲" : "▼"}</span>
+      </button>
+      <nav className={`admin-sidebar-nav${open ? " open" : ""}`}>
         {GROUPS.map((group, gi) => (
           <div className="admin-side-group" key={group.label || gi}>
             {group.label && <span className="admin-side-label">{group.label}</span>}
@@ -64,7 +71,7 @@ export default function AdminSidebar() {
               const isPage = it.href.startsWith("/gestion/");
               const active = isPage && path === it.href;
               return (
-                <a key={it.href} href={it.href} className={`admin-side-item${active ? " active" : ""}`} style={{ textDecoration: "none" }}>
+                <a key={it.href} href={it.href} onClick={() => setOpen(false)} className={`admin-side-item${active ? " active" : ""}`} style={{ textDecoration: "none" }}>
                   {it.text}
                 </a>
               );
