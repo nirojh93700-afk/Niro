@@ -1,6 +1,7 @@
 import { isAdmin } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
-import { sendEmail, shippedEmail, cancelledEmail, reviewRequestEmail } from "@/lib/email";
+import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
+import { sendClientMail } from "@/lib/clientMail";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,8 @@ export async function POST(req) {
       else if (status === "annulee") mail = cancelledEmail(order);
       else if (status === "livree") mail = reviewRequestEmail(order);
       if (mail) {
-        const r = await sendEmail({ to: order.customerEmail, subject: mail.subject, html: mail.html });
+        // Gmail en priorité (arrive vers toute adresse), Resend en secours ; copie à la gérante.
+        const r = await sendClientMail({ to: order.customerEmail, subject: mail.subject, html: mail.html, bcc: BRAND.contact });
         emailed = r.ok;
       }
     }
