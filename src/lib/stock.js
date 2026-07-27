@@ -442,13 +442,21 @@ export async function getBatThreadsMeta() {
   const bat = data.bat || {};
   return Object.keys(bat).map((orderId) => {
     const th = bat[orderId] || {};
-    const lastAtelierAt = (th.messages || [])
+    const msgs = th.messages || [];
+    const lastAtelierAt = msgs
       .filter((m) => m.from === "atelier")
       .reduce((mx, m) => Math.max(mx, Number(m.at) || 0), 0);
+    // Dernier message de la cliente (pour l'aperçu dans le widget).
+    const lastClient = [...msgs].reverse().find((m) => m.from === "cliente") || null;
     return {
       orderId,
       customerEmail: th.customerEmail || "",
+      customerName: th.customerName || "",
+      ref: th.ref || "",
+      status: th.status || "",
       lastAtelierAt,
+      lastClientText: lastClient ? String(lastClient.text || "").trim() : "",
+      lastClientAt: lastClient ? (Number(lastClient.at) || 0) : 0,
       importedGmailIds: th.importedGmailIds || [],
       clientUnread: Boolean(th.clientUnread),
     };

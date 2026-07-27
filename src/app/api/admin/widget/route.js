@@ -35,7 +35,21 @@ export async function GET(req) {
   const aPreparer = real.filter((o) => active(o) && (!o.status || o.status === "a_preparer")).length;
   const enGravure = real.filter((o) => o.status === "en_gravure").length;
   let newMessages = 0;
-  try { newMessages = (await getBatThreadsMeta()).filter((m) => m.clientUnread).length; } catch { /* ignore */ }
+  let messages = [];
+  try {
+    const metas = await getBatThreadsMeta();
+    const unread = metas.filter((m) => m.clientUnread);
+    newMessages = unread.length;
+    messages = unread
+      .sort((a, b) => (b.lastClientAt || 0) - (a.lastClientAt || 0))
+      .slice(0, 6)
+      .map((m) => ({
+        name: m.customerName || "Cliente",
+        ref: m.ref || "",
+        status: m.status === "valide" ? "Validé" : m.status === "modif_demandee" ? "Modif demandée" : "Message",
+        text: (m.lastClientText || "").replace(/\s+/g, " ").slice(0, 90),
+      }));
+  } catch { /* ignore */ }
 
   // Objectif du mois (réglages) + total à encaisser (devis/factures non payés).
   let monthGoal = 0;
@@ -71,6 +85,7 @@ export async function GET(req) {
     newMessages,
     monthGoal: Math.round(monthGoal * 100) / 100,
     toCollect: Math.round(toCollect * 100) / 100,
+    messages,
     recent,
   });
 }
