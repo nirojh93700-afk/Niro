@@ -800,13 +800,13 @@ export const products = [
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net. La gravure 3D met en valeur les personnes (ou l'animal / l'objet) de la photo : le décor d'arrière-plan n'est pas reproduit — c'est cette mise en valeur du sujet qui crée le bel effet 3D dans le cristal." },
       // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
-      { key: "texte", label: "Texte à graver (optionnel) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
+      { key: "texte", label: "Texte à graver (optionnel, +5 €) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. Petit socle carré pour la taille Petit ; grand socle rectangle pour les tailles Moyen, Grand et XL." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-v-petit": 300 } }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-v-petit": 300 } }, { key: "texte", amount: 5 }] },
     video: "/produits/cristal-video-vertical.mp4",
     videoPoster: "/produits/cristal-video-vertical-poster.jpg",
     images: [
@@ -845,13 +845,13 @@ export const products = [
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec les visages bien visibles. Plus il y a de personnes, plus il faut un grand cristal pour que chaque visage reste net. La gravure 3D met en valeur les personnes (ou l'animal / l'objet) de la photo : le décor d'arrière-plan n'est pas reproduit — c'est cette mise en valeur du sujet qui crée le bel effet 3D dans le cristal." },
       // ⏸️ TEXTE RETIRÉ TEMPORAIREMENT (07/07/2026, demande gérante — À REMETTRE) :
-      { key: "texte", label: "Texte à graver (optionnel) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
+      { key: "texte", label: "Texte à graver (optionnel, +5 €) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. Petit socle carré pour la taille Petit ; grand socle rectangle pour les tailles Moyen, Grand et XL." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-h-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-h-petit": 300 } }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-h-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-h-petit": 300 } }, { key: "texte", amount: 5 }] },
     video: "/produits/cristal-video-horizontal.mp4",
     videoPoster: "/produits/cristal-video-horizontal-poster.jpg",
     images: [
