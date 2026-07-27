@@ -28,7 +28,10 @@ const motifLabel = (id) => (MOTIF_LIST.find((m) => m.id === id) || {}).label || 
 function GlassPreview({ item }) {
   const p = getProductBySlug(item.slug);
   const isFond = item.emplacement === "fond";
-  const img = (isFond ? p?.fondImage : p?.engraveImage) || p?.images?.[0];
+  // Cristaux : on grave dans un cristal VIERGE (image « bloc »), jamais sur la
+  // photo d'exemple déjà gravée (sinon la photo cliente se pose sur une gravure).
+  const blockImg = p?.crystal3d ? (p?.images || []).find((i) => /bloc/.test(i)) : null;
+  const img = blockImg || (isFond ? p?.fondImage : p?.engraveImage) || p?.images?.[0];
   if (!img) return null;
   const W = 300;
   const lay = item.layout?.modele || item.layout?.photo || item.layout?.text;
