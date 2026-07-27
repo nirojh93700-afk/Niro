@@ -681,6 +681,7 @@ export default function GestionPage() {
               label: "Clients",
               tabs: [
                 { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
+                { id: "messages", text: "✉️ Messages (programmés + auto)", href: "/gestion/messages" },
               ],
             },
             {
