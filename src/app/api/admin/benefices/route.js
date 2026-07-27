@@ -1,6 +1,7 @@
 import { isAdmin } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
+import { unitCostForItem } from "@/lib/productCosts";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -15,13 +16,9 @@ export async function GET(req) {
 
   const [orders, catalog] = await Promise.all([getSiteOrders(500), getCatalogAdmin()]);
   const products = Array.isArray(catalog) ? catalog : [];
-  // Index coût par slug + par nom (repli).
-  const costBySlug = {}, costByName = {}, nameBySlug = {};
-  for (const p of products) {
-    const c = Number(p.cost);
-    nameBySlug[p.slug] = p.name || p.slug;
-    if (Number.isFinite(c) && c > 0) { costBySlug[p.slug] = c; if (p.name) costByName[p.name.toLowerCase()] = c; }
-  }
+  // Index produit par slug (pour retrouver la variante + son coût d'achat).
+  const bySlug = {}, nameBySlug = {};
+  for (const p of products) { bySlug[p.slug] = p; nameBySlug[p.slug] = p.name || p.slug; }
 
   const now = Date.now();
   const curMonth = monthKey(now);
@@ -44,8 +41,7 @@ export async function GET(req) {
       const qty = Number(it.quantity) || 1;
       const rev = Number(it.total) || 0;
       const slug = it.slug || "";
-      let unitCost = costBySlug[slug];
-      if (unitCost == null && it.name) unitCost = costByName[String(it.name).toLowerCase()];
+      const unitCost = unitCostForItem(it, bySlug[slug]);
       const hasCost = unitCost != null;
       const cost = hasCost ? unitCost * qty : 0;
       if (!hasCost) { missing.add(it.name || slug || "?"); missingUnits += qty; }
