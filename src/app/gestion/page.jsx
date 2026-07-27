@@ -237,7 +237,12 @@ export default function GestionPage() {
     if (started) return { txt: "Remboursement : NON — fabrication lancée (produit personnalisé)", bg: "#fdecea", color: "#b3261e" };
     const t = o.createdAt ? new Date(o.createdAt).getTime() : 0;
     const ageH = t ? (Date.now() - t) / 3600000 : 999;
-    if (ageH <= 24) return { txt: `Remboursement : INTÉGRAL possible (encore ${Math.max(0, Math.round(24 - ageH))} h sur les 24 h)`, bg: "#e7f5ea", color: "#256b34" };
+    if (ageH <= 24) {
+      const remMin = Math.max(0, Math.round(24 * 60 - ageH * 60));
+      const h = Math.floor(remMin / 60), m = remMin % 60;
+      const left = h > 0 ? `${h} h ${m} min` : `${m} min`;
+      return { txt: `Remboursement : INTÉGRAL possible (encore ${left} sur les 24 h)`, bg: "#e7f5ea", color: "#256b34" };
+    }
     return { txt: "Remboursement : PARTIEL (retenue de 10 €) — délai 24 h dépassé, tant que la fabrication n'est pas lancée", bg: "#fbf4e6", color: "#8a6d3b" };
   }
 
