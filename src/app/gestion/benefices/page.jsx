@@ -24,19 +24,21 @@ function Tile({ label, value, sub, accent, big }) {
   );
 }
 
-// Graphique en barres (SVG) — bénéfice par mois.
+// Graphique en barres (SVG) — bénéfice par mois. On montre les 6 derniers mois
+// et le graphique tient sur la largeur de l'écran (lisible sur mobile).
 function Chart({ series }) {
-  const W = 720, H = 220, padB = 26, padT = 14, padL = 4;
-  const n = series.length;
-  const max = Math.max(1, ...series.map((s) => Math.max(s.revenue, s.profit)));
+  const data = series.slice(-6);
+  const W = 380, H = 200, padB = 24, padT = 12, padL = 4;
+  const n = data.length;
+  const max = Math.max(1, ...data.map((s) => Math.max(s.revenue, s.profit)));
   const bw = (W - padL * 2) / n;
   return (
-    <div style={{ overflowX: "auto" }}>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", minWidth: 560, height: "auto", display: "block" }}>
+    <div>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }}>
         {[0.25, 0.5, 0.75, 1].map((g, i) => (
           <line key={i} x1={padL} x2={W - padL} y1={padT + (H - padT - padB) * (1 - g)} y2={padT + (H - padT - padB) * (1 - g)} stroke="#eee6d5" strokeWidth="1" />
         ))}
-        {series.map((s, i) => {
+        {data.map((s, i) => {
           const x = padL + i * bw;
           const zone = H - padT - padB;
           const rev = (s.revenue / max) * zone;
@@ -130,7 +132,7 @@ export default function BeneficesPage() {
 
       {/* Graphique */}
       <div style={card}>
-        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Bénéfice par mois (12 derniers mois)</h2>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Bénéfice par mois (6 derniers mois)</h2>
         <Chart series={data.series} />
       </div>
 
@@ -138,7 +140,7 @@ export default function BeneficesPage() {
       <div style={card}>
         <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Détail par produit (depuis le début)</h2>
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem", minWidth: 560 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem", minWidth: 430 }}>
             <thead>
               <tr style={{ textAlign: "left", color: "var(--ink-soft)", borderBottom: "2px solid #eadfc4" }}>
                 <th style={{ padding: "8px 6px" }}>Produit</th>
