@@ -1,5 +1,12 @@
 # Guide agent — Boutique Niv Création
 
+## 📦 FOURNISSEUR BOÎTES / EMBALLAGES PERSONNALISÉS — « Guardidea-Rachel » (enregistré 27/07/2026)
+> Quand la gérante parle du **fournisseur de boîtes / emballages**, c'est **Guardidea-Rachel** (contact **WhatsApp**, anglophone). C'est aussi elle qui fait déjà les **boîtes à bijoux** de la gérante.
+- **Personnalisation** : oui, à la marque Niv Création (même couleur + mêmes textes/logo que les boîtes bijoux déjà commandées).
+- **Sur-mesure (nouvelle taille)** : possible MAIS **MOQ 300 pièces par taille** (nouvelle découpe « die cut »). Plus grande taille **standard** dispo (sans MOQ) = **25×17×8 cm** (jugée trop petite/basse par la gérante).
+- **Boîtes voulues** (vides, **sans mousse** — la gérante cale elle-même au papier bulle) : **cristaux ≈ 25×20×15 cm** (une seule taille pour toutes les tailles de cristal) · **verres 2 pièces ≈ 28×20×12 cm** (verres ~21 cm de haut, flûte Ø6,3×21,4 cm). En attente : tailles standard proches + prix.
+- La gérante communique avec elle **en français** (la fournisseuse traduit). Toujours proposer les messages en français, clairs et courts.
+
 ## 🛒 METTRE UN PRODUIT SUR ETSY — RECETTE ENREGISTRÉE (08/07/2026)
 > Quand la gérante dit « mets ce produit sur Etsy », suivre **`docs/etsy/RECETTE-ETSY.md`** (recette complète + textes prêts dans `docs/etsy/`).
 - **Méthode** : la gérante utilise **Claude pour Chrome** (extension navigateur). Nous, on ne touche PAS à Etsy — on **prépare un TEXTE** qu'elle colle dans Claude pour Chrome, qui remplit les fiches à sa place. Boutique : **NivCreationArtisanat**.
