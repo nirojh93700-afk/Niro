@@ -133,7 +133,10 @@ export async function POST(req) {
     emailError = "Aucune adresse e-mail sur cette commande.";
   } else {
     const link = `${BRAND.siteUrl}/suivi/${th.token}`;
-    const { subject, html } = batProofEmail({ customerName: th.customerName, ref: th.ref, message: text, imageUrl: image, link });
+    // L'e-mail a besoin d'une adresse d'image COMPLÈTE (une URL relative
+    // « /api/img/… » s'affiche cassée dans la boîte mail de la cliente).
+    const absImage = image && image.startsWith("/") ? BRAND.siteUrl + image : image;
+    const { subject, html } = batProofEmail({ customerName: th.customerName, ref: th.ref, message: text, imageUrl: absImage, link });
 
     // 1) PRIORITÉ : envoi via Gmail (ta boîte connectée) — fonctionne vers
     //    n'importe quelle cliente, SANS domaine vérifié. Le mail part de ta
