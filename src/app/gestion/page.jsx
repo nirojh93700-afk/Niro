@@ -37,6 +37,7 @@ export default function GestionPage() {
   const [orders, setOrders] = useState([]);
   const [ordersReady, setOrdersReady] = useState(false);
   const [tab, setTab] = useState("accueil");
+  const [menuOpen, setMenuOpen] = useState(false); // menu déroulant mobile
   // Ouvre le bon onglet quand on arrive depuis la barre latérale d'une sous-page
   // (lien /gestion#produits, #commandes…). Se met à jour aussi si le hash change.
   useEffect(() => {
@@ -659,9 +660,13 @@ export default function GestionPage() {
             <span className="eyebrow">Espace gestion</span>
             <h2>Mon site</h2>
           </div>
-          <nav className="admin-sidebar-nav">
+          <button type="button" className="admin-side-toggle" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
+            <span>☰ Menu gestion</span>
+            <span aria-hidden>{menuOpen ? "▲" : "▼"}</span>
+          </button>
+          <nav className={`admin-sidebar-nav${menuOpen ? " open" : ""}`}>
           <div className="admin-side-group">
-            <button className={`admin-side-item ${tab === "accueil" ? "active" : ""}`} onClick={() => setTab("accueil")}>🏠 Accueil</button>
+            <button className={`admin-side-item ${tab === "accueil" ? "active" : ""}`} onClick={() => { setTab("accueil"); setMenuOpen(false); }}>🏠 Accueil</button>
           </div>
           {[
             {
@@ -727,14 +732,14 @@ export default function GestionPage() {
               <span className="admin-side-label">{group.label}</span>
               {group.tabs.map((t) => (
                 t.href ? (
-                  <a key={t.id} href={t.href} className="admin-side-item" style={{ textDecoration: "none" }}>
+                  <a key={t.id} href={t.href} onClick={() => setMenuOpen(false)} className="admin-side-item" style={{ textDecoration: "none" }}>
                     {t.text}
                   </a>
                 ) : (
                   <button
                     key={t.id}
                     className={`admin-side-item ${tab === t.id ? "active" : ""}`}
-                    onClick={() => setTab(t.id)}
+                    onClick={() => { setTab(t.id); setMenuOpen(false); }}
                   >
                     {t.text}
                   </button>
