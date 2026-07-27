@@ -41,6 +41,11 @@ function pick(v, def) {
   return v && String(v).trim() ? v : def;
 }
 
+// Canonical de la page d'accueil (le reste des métadonnées vient du layout racine).
+export const metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default async function HomePage() {
   let s = null;
   try { s = await getSettings(); } catch { /* défauts */ }

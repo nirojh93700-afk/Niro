@@ -3,6 +3,7 @@ import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
 import { getCatalogBySlug, getCatalog, getCatalogAdmin, priceFrom } from "@/lib/catalog";
+import { getCategoryLabel } from "@/lib/products";
 
 // Jeton d'aperçu privé : permet d'afficher une fiche d'un produit caché
 // (non publié) via ?apercu=<JETON>, sans qu'il soit visible des clients.
@@ -19,12 +20,20 @@ export async function generateMetadata({ params }) {
   return {
     title: product.title,
     description: text,
+    alternates: { canonical: `/produit/${params.handle}` },
     openGraph: {
       title: product.title,
       description: text,
       images: product.images?.length ? [product.images[0]] : [],
     },
   };
+}
+
+// URL de la catégorie du produit (cristal et naissance ont leur page dédiée).
+function categoryUrl(cat) {
+  if (cat === "cristal") return "/cristaux";
+  if (cat === "naissance") return "/naissance";
+  return `/boutique?cat=${cat}`;
 }
 
 export default async function ProductPage({ params, searchParams }) {
@@ -70,6 +79,21 @@ export default async function ProductPage({ params, searchParams }) {
     },
   };
 
+  // Fil d'Ariane (BreadcrumbList) : « Accueil › Boutique › Catégorie › Produit »
+  // → affiché par Google à la place de l'URL brute (meilleur taux de clic).
+  const catLabel = getCategoryLabel(product.category) || "Boutique";
+  const catUrl = categoryUrl(product.category);
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Accueil", item: "https://nivcreation.fr" },
+      { "@type": "ListItem", position: 2, name: "Boutique", item: "https://nivcreation.fr/boutique" },
+      { "@type": "ListItem", position: 3, name: catLabel, item: `https://nivcreation.fr${catUrl}` },
+      { "@type": "ListItem", position: 4, name: product.title },
+    ],
+  };
+
   // Étoiles d'avis dans Google (si le produit a des avis approuvés).
   try {
     const approved = ((await getReviews())[product.slug] || []).filter((r) => r.approved);
@@ -88,6 +112,18 @@ export default async function ProductPage({ params, searchParams }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      {/* Fil d'Ariane visible (bon pour la cliente ET pour Google). */}
+      <nav className="container" aria-label="Fil d'Ariane" style={{ fontSize: "0.82rem", color: "var(--ink-soft)", padding: "12px 0 0" }}>
+        <a href="/" style={{ color: "inherit", textDecoration: "none" }}>Accueil</a>
+        <span style={{ margin: "0 6px" }}>›</span>
+        <a href="/boutique" style={{ color: "inherit", textDecoration: "none" }}>Boutique</a>
+        <span style={{ margin: "0 6px" }}>›</span>
+        <a href={catUrl} style={{ color: "inherit", textDecoration: "none" }}>{catLabel}</a>
+      </nav>
       {isPreview && (
         <div style={{ background: "#fbeec9", color: "#5a4a1d", textAlign: "center", padding: "10px 16px", fontSize: "0.9rem", fontWeight: 600, borderBottom: "1px solid #e7d6a8" }}>
           Aperçu privé — ce produit n'est pas encore publié (invisible pour les clients).

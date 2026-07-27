@@ -19,6 +19,9 @@ export const metadata = {
   title: "Boutique — toutes nos créations personnalisées",
   description:
     "Découvrez tous les bijoux (femme & homme), décorations de mariage et cadeaux personnalisés Niv Création, gravés au laser dans notre atelier français.",
+  // Canonical fixe sur /boutique : les variantes à filtres (?cat=, ?sub=) ne sont
+  // pas indexées comme des doublons.
+  alternates: { canonical: "/boutique" },
 };
 
 export default async function BoutiquePage({ searchParams }) {

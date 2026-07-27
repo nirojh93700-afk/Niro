@@ -8,6 +8,11 @@ export default async function sitemap() {
   const staticPages = [
     "",
     "/boutique",
+    "/cristaux",
+    "/naissance",
+    "/offres",
+    "/avis",
+    "/faq",
     "/a-propos",
     "/contact",
     "/retours",
@@ -18,7 +23,7 @@ export default async function sitemap() {
     url: `${base}${path}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: path === "" ? 1 : 0.7,
+    priority: path === "" ? 1 : path === "/cristaux" ? 0.9 : 0.7,
   }));
 
   const categoryPages = CATEGORIES.map((c) => ({
