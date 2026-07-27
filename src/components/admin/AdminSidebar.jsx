@@ -25,6 +25,7 @@ const GROUPS = [
     { text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
   ] },
   { label: "Finances", items: [
+    { text: "💰 Bénéfices", href: "/gestion/benefices" },
     { text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
     { text: "Statistiques (ventes)", href: "/gestion#stats" },
     { text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
