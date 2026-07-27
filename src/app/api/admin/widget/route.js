@@ -1,5 +1,5 @@
-import { getBatThreadsMeta } from "@/lib/stock";
-import { getSiteOrders } from "@/lib/firebase";
+import { getBatThreadsMeta, getSettings } from "@/lib/stock";
+import { getSiteOrders, listQuotes } from "@/lib/firebase";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -37,6 +37,15 @@ export async function GET(req) {
   let newMessages = 0;
   try { newMessages = (await getBatThreadsMeta()).filter((m) => m.clientUnread).length; } catch { /* ignore */ }
 
+  // Objectif du mois (réglages) + total à encaisser (devis/factures non payés).
+  let monthGoal = 0;
+  try { monthGoal = Number((await getSettings())?.salesGoal) || 0; } catch { /* ignore */ }
+  let toCollect = 0;
+  try {
+    const quotes = (await listQuotes(150)) || [];
+    toCollect = quotes.filter((q) => q.status !== "paye").reduce((s, q) => s + (Number(q.total) || 0), 0);
+  } catch { /* ignore */ }
+
   const statusLabel = (o) => o.status === "livree" ? "Livrée" : o.status === "expediee" ? "Expédiée"
     : o.status === "en_gravure" ? "En fabrication" : o.status === "annulee" ? "Annulée"
     : o.status === "remboursee" ? "Remboursée" : "À préparer";
@@ -60,6 +69,8 @@ export async function GET(req) {
     aPreparer,
     enGravure,
     newMessages,
+    monthGoal: Math.round(monthGoal * 100) / 100,
+    toCollect: Math.round(toCollect * 100) / 100,
     recent,
   });
 }
