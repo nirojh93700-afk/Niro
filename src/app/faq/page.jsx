@@ -11,7 +11,7 @@ export const metadata = {
 const FAQ = [
   {
     q: "Quels sont les délais de fabrication et de livraison ?",
-    a: "Chaque pièce est personnalisée à la commande : comptez 2 à 5 jours ouvrés de fabrication selon le produit, puis 2 à 4 jours ouvrés d'expédition. Vous recevez un e-mail avec le numéro de suivi dès l'envoi.",
+    a: "Chaque pièce est personnalisée à la commande : comptez 3 à 5 jours ouvrés de fabrication. Vous avez 24 h pour modifier votre commande avant le lancement (ou cochez « fabrication immédiate » au paiement pour un démarrage direct). Une fois prête, elle est expédiée en colis suivi et vous recevez le numéro de suivi par e-mail ; le délai de livraison dépend ensuite du transporteur.",
   },
   {
     q: "Comment se passe la personnalisation (gravure) ?",

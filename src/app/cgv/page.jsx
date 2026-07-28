@@ -21,8 +21,9 @@ const html = `
 
 <h3>5. Délais</h3>
 <ul>
-<li>Fabrication : 2 à 5 jours ouvrés selon le produit</li>
-<li>Expédition : 2 à 4 jours ouvrés</li>
+<li>Fabrication : 3 à 5 jours ouvrés selon le produit</li>
+<li>Vous disposez de 24 h pour modifier votre commande avant le lancement de la fabrication (ou choisissez « fabrication immédiate » au paiement pour un démarrage direct)</li>
+<li>Une fois prête, la commande est expédiée en colis suivi ; le délai de livraison dépend ensuite du transporteur</li>
 </ul>
 
 <h3>6. Droit de rétractation</h3>

@@ -1819,7 +1819,7 @@ export default function ProductDetail({ product }) {
           </div>
           <div className="pd-perso">
             <b>✦ Pièce personnalisée</b>
-            <p>🕒 Personnalisé à la commande : fabrication 2 à 5 jours ouvrés + expédition 2 à 4 jours ouvrés.</p>
+            <p>🕒 Personnalisé à la commande : fabrication 3 à 5 jours ouvrés, puis expédiée en colis suivi (le délai de livraison dépend du transporteur).</p>
           </div>
 
           <div

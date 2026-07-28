@@ -73,7 +73,7 @@ export const productInfo = {
 - Dépoussiérer avec un chiffon doux et sec ; ne pas immerger.`,
     returns: `Expédition & Retour
 - Fabriquée à la commande et personnalisée : ni reprise ni échangée.
-- Expédiée sous 3 à 5 jours ouvrés en colis suivi.`,
+- Fabrication 3 à 5 jours ouvrés, puis expédiée en colis suivi (le délai de livraison dépend du transporteur).`,
   },
   "plaque-de-naissance": {
     material: `Taille & Matériaux
@@ -86,7 +86,7 @@ export const productInfo = {
 - Dépoussiérer avec un chiffon doux et sec ; ne pas immerger dans l'eau.`,
     returns: `Expédition & Retour
 - Fabriquée à la commande et personnalisée : ni repris ni échangé (article personnalisé).
-- Expédiée sous 3 à 5 jours ouvrés en colis suivi.`,
+- Fabrication 3 à 5 jours ouvrés, puis expédiée en colis suivi (le délai de livraison dépend du transporteur).`,
   },
   "collier-enveloppe-message-secret": {
     material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)

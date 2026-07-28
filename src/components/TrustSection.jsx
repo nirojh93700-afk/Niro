@@ -58,7 +58,7 @@ export default function TrustSection() {
       </div>
 
       <div className="cf-footline">
-        <span>🕒 Fabrication 2 à 5 j ouvrés</span>
+        <span>🕒 Fabrication 3 à 5 j ouvrés</span>
         <span>🚚 Expédition suivie</span>
         <span>✦ Personnalisé en France</span>
       </div>

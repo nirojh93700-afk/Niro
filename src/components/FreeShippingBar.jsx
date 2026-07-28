@@ -46,7 +46,7 @@ export default function FreeShippingBar({ compact = false }) {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", fontSize: "0.74rem", color: "var(--ink-soft)" }}>
         <span>🇫🇷 Personnalisé en France</span>
         <span>🔒 Paiement sécurisé</span>
-        <span>🕒 Fabrication 2 à 5 j</span>
+        <span>🕒 Fabrication 3 à 5 j</span>
       </div>
     </div>
   );
