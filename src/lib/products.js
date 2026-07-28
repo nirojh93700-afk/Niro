@@ -1470,7 +1470,7 @@ export const products = [
     hidden: false, // PUBLIÉ
     freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4) — n'affecte que ce produit
     photoContain: true, // photos hautes (verres) : voir le verre en entier (pas de rognage)
-    cardImage: "/produits/verre_vin_grave.jpg",
+    cardImage: "/produits/verre_vin_geniet.jpg",
     title: "Verre à vin gravé personnalisé — prénom, date, monogramme ou modèle au choix",
     category: "verres",
     subcategory: "vin",
@@ -1479,8 +1479,8 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
-      "/produits/verre_vin_ambiance.jpg",
       "/produits/verre_vin_geniet.jpg",
+      "/produits/verre_vin_ambiance.jpg",
       "/produits/verre_vin_exemple_dale.jpg",
       "/produits/verre_vin_grave.jpg",
       "/produits/verre_vin_vierge.jpg",
