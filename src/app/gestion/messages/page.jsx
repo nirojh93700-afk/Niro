@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { MESSAGE_TEMPLATES_SEED } from "@/lib/messageTemplatesSeed";
 
 // =============================================================================
 // Gestion → Messages clients (programmés + règles automatiques)
@@ -26,8 +27,9 @@ export default function MessagesAdmin() {
   const [rules, setRules] = useState([]);
   const [scheduled, setScheduled] = useState([]);
   const [orders, setOrders] = useState([]);
-  // Formulaire « programmer »
-  const [f, setF] = useState({ to: "", name: "", subject: "", body: "", date: "", time: "" });
+  // Formulaire « programmer / envoyer »
+  const [f, setF] = useState({ to: "", name: "", ref: "", subject: "", body: "", date: "", time: "" });
+  const [sending, setSending] = useState(false);
 
   const load = useCallback(async (k) => {
     try {
@@ -66,10 +68,43 @@ export default function MessagesAdmin() {
   function updRule(i, patch) { setRules((r) => r.map((x, j) => (j === i ? { ...x, ...patch } : x))); }
   function delRule(i) { setRules((r) => r.filter((_, j) => j !== i)); }
 
-  // ---- Programmer ----
+  // ---- Modèles prêts (chargés d'un clic) ----
+  function loadSeedTemplates() {
+    // Ajoute les modèles prêts qui ne sont pas déjà présents (par nom).
+    const names = new Set(templates.map((t) => (t.name || "").trim().toLowerCase()));
+    const toAdd = MESSAGE_TEMPLATES_SEED.filter((s) => !names.has(s.name.toLowerCase()))
+      .map((s) => ({ ...s, id: "tpl_" + Math.random().toString(36).slice(2, 8) }));
+    if (!toAdd.length) { setMsg("Les modèles prêts sont déjà présents."); return; }
+    const next = [...templates, ...toAdd];
+    setTemplates(next);
+    saveSettings({ messageTemplates: next }, `${toAdd.length} modèle(s) prêt(s) ajouté(s) et enregistré(s) ✓`);
+  }
+
+  // ---- Programmer / Envoyer ----
   function pickClient(e) {
     const o = orders.find((x) => x.id === e.target.value);
-    if (o) setF((f) => ({ ...f, to: o.customerEmail || "", name: o.customerName || "" }));
+    if (o) setF((f) => ({ ...f, to: o.customerEmail || "", name: o.customerName || "", ref: o.ref || (o.id || "").slice(-6) }));
+  }
+  // Charge un modèle (par id) dans le formulaire d'envoi.
+  function pickTemplate(e) {
+    const t = templates.find((x) => x.id === e.target.value);
+    if (t) setF((f) => ({ ...f, subject: t.subject || "", body: t.body || "" }));
+  }
+  // Envoi IMMÉDIAT au client sélectionné (s'adapte : prénom, réf, solde cagnotte).
+  async function sendNow() {
+    setMsg("");
+    if (!f.to || !f.subject.trim() || !f.body.trim()) { setMsg("E-mail, sujet et message obligatoires."); return; }
+    setSending(true);
+    try {
+      const r = await fetch("/api/admin/send-now", {
+        method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ to: f.to, name: f.name, ref: f.ref, subject: f.subject, body: f.body }),
+      });
+      const d = await r.json();
+      if (r.ok) { setMsg(`Message envoyé à ${f.to} ✓`); setF({ to: "", name: "", ref: "", subject: "", body: "", date: "", time: "" }); }
+      else setMsg(d.error || "Échec de l'envoi.");
+    } catch { setMsg("Échec de l'envoi."); }
+    finally { setSending(false); }
   }
   async function schedule() {
     setMsg("");
@@ -79,7 +114,7 @@ export default function MessagesAdmin() {
     if (!sendAt || sendAt < Date.now()) { setMsg("La date/heure doit être dans le futur."); return; }
     const r = await fetch("/api/admin/scheduled", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ to: f.to, name: f.name, subject: f.subject, body: f.body, sendAt }) });
     const d = await r.json();
-    if (r.ok) { setMsg("Message programmé pour le " + fmtWhen(sendAt) + " ✓"); setF({ to: "", name: "", subject: "", body: "", date: "", time: "" }); load(key); }
+    if (r.ok) { setMsg("Message programmé pour le " + fmtWhen(sendAt) + " ✓"); setF({ to: "", name: "", ref: "", subject: "", body: "", date: "", time: "" }); load(key); }
     else setMsg(d.error || "Échec.");
   }
   async function cancelScheduled(id) {
@@ -99,9 +134,10 @@ export default function MessagesAdmin() {
       <p style={{ color: "var(--ink-soft)", marginTop: -6 }}>Écris des modèles, programme un envoi à l&apos;heure que tu veux, ou crée des règles automatiques. Les envois partent par ta boîte Gmail (copie cachée à toi).</p>
       {msg && <p style={{ background: "#f6efdd", border: "1px solid #e7d3a1", borderRadius: 8, padding: "8px 12px", color: "#7a5c17" }}>{msg}</p>}
 
-      {/* 1. PROGRAMMER UN MESSAGE */}
+      {/* 1. ENVOYER / PROGRAMMER UN MESSAGE */}
       <div style={box}>
-        <h2 style={{ marginTop: 0 }}>📅 Programmer un message</h2>
+        <h2 style={{ marginTop: 0 }}>✉️ Envoyer un message</h2>
+        <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -6 }}>Choisissez une cliente, un modèle prêt, puis <strong>Envoyer maintenant</strong> — ou programmez-le pour plus tard. Le message s&apos;adapte à la cliente ({"{prenom}"}, {"{ref}"}, {"{solde}"} de cagnotte).</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <div>
             <span style={label}>Choisir une cliente (commande)</span>
@@ -118,6 +154,18 @@ export default function MessagesAdmin() {
           </div>
         </div>
         <div style={{ marginTop: 10 }}>
+          <span style={label}>Modèle prêt</span>
+          <select style={input} onChange={pickTemplate} defaultValue="">
+            <option value="">— choisir un modèle (remplit le sujet + le message) —</option>
+            {templates.map((t) => (<option key={t.id} value={t.id}>{t.name || "(sans nom)"}</option>))}
+          </select>
+          {templates.length === 0 && (
+            <div style={{ fontSize: "0.78rem", color: "var(--ink-soft)", marginTop: 4 }}>
+              Aucun modèle. <button type="button" onClick={loadSeedTemplates} style={{ background: "none", border: "none", color: "var(--gold-dark)", textDecoration: "underline", cursor: "pointer", font: "inherit", padding: 0 }}>Charger les modèles prêts</button>.
+            </div>
+          )}
+        </div>
+        <div style={{ marginTop: 10 }}>
           <span style={label}>Sujet</span>
           <input style={input} value={f.subject} onChange={(e) => setF({ ...f, subject: e.target.value })} placeholder="Ex. Des nouvelles de votre commande" />
         </div>
@@ -126,10 +174,16 @@ export default function MessagesAdmin() {
           <textarea style={{ ...input, minHeight: 120 }} value={f.body} onChange={(e) => setF({ ...f, body: e.target.value })} placeholder="Bonjour {prenom}, ..." />
           <div style={{ fontSize: "0.75rem", color: "var(--ink-soft)" }}>Astuce : {"{prenom}"}, {"{nom}"} et {"{ref}"} sont remplacés automatiquement (surtout utile pour les règles auto).</div>
         </div>
+        <div style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          <button className="btn btn-gold" style={{ padding: "11px 22px", fontWeight: 700 }} onClick={sendNow} disabled={sending}>
+            {sending ? "Envoi…" : "✉️ Envoyer maintenant"}
+          </button>
+          <span style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>ou programmer pour plus tard :</span>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: 10, marginTop: 10, alignItems: "end" }}>
           <div><span style={label}>Date d&apos;envoi</span><input type="date" style={input} value={f.date} onChange={(e) => setF({ ...f, date: e.target.value })} /></div>
           <div><span style={label}>Heure</span><input type="time" style={input} value={f.time} onChange={(e) => setF({ ...f, time: e.target.value })} /></div>
-          <button className="btn btn-gold" style={{ padding: "10px 16px" }} onClick={schedule}>Programmer</button>
+          <button className="btn btn-outline" style={{ padding: "10px 16px" }} onClick={schedule}>Programmer</button>
         </div>
       </div>
 
@@ -171,8 +225,9 @@ export default function MessagesAdmin() {
             </div>
           </div>
         ))}
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button className="btn btn-outline" style={{ padding: "6px 12px" }} onClick={addTemplate}>+ Ajouter un modèle</button>
+          <button className="btn btn-outline" style={{ padding: "6px 12px" }} onClick={loadSeedTemplates}>✨ Charger les modèles prêts</button>
           <button className="btn btn-gold" style={{ padding: "6px 12px" }} onClick={() => saveSettings({ messageTemplates: templates }, "Modèles enregistrés ✓")}>Enregistrer les modèles</button>
         </div>
       </div>

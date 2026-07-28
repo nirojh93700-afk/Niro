@@ -261,6 +261,11 @@ export function reviewRequestEmail(order) {
     <p style="margin:0 0 12px;">Nous espérons que votre commande vous plaît ! 🌸 Votre avis compte beaucoup pour notre petit atelier.</p>
     <p style="margin:0 0 18px;">Prendriez-vous un instant pour noter ${products.length > 1 ? "vos créations" : "votre création"} ? Un clic suffit — cela aide d'autres clientes et nous encourage énormément.</p>
     <p style="margin:0 0 20px;">${ctaHtml}</p>
+    <div style="background:linear-gradient(150deg,#241a0c,#3a2c12);border-radius:12px;padding:16px 18px;margin:0 0 20px;color:#f3e8d3;">
+      <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e2c67e;margin-bottom:4px;">Votre cagnotte fidélité</div>
+      <p style="margin:0 0 12px;font-size:14px;color:#d8c9a6;">Bonne nouvelle : cette commande vous a rapporté du cashback ! Retrouvez votre cagnotte et utilisez-la sur votre prochaine commande.</p>
+      <a href="${BRAND.siteUrl}/espace" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:bold;">Voir ma cagnotte</a>
+    </div>
     <p style="margin:0;color:#7a7268;">Merci infiniment,<br>L'atelier Niv Création</p>`;
   return { subject: "Votre avis sur votre création Niv Création ✦", html: emailLayout({ heading: "Comment s'est passée votre commande ?", bodyHtml: body }) };
 }
