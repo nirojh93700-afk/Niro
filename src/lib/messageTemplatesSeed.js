@@ -115,3 +115,28 @@ Merci pour votre patience : nous mettons tout en œuvre pour vous l'expédier au
 L'atelier Niv Création`,
   },
 ];
+
+// Règles AUTOMATIQUES prêtes à l'emploi (Gestion → Messages → Règles automatiques).
+// Balises remplacées : {prenom} {nom} {ref} (le solde de cagnotte n'est pas
+// disponible dans les règles auto → on renvoie vers l'espace « Mon compte »).
+export const AUTO_RULES_SEED = [
+  {
+    id: "rule_avis_j2",
+    name: "Avis + cagnotte (2 jours après livraison)",
+    trigger: "livree",
+    delayDays: 2,
+    active: true,
+    subject: "Votre avis compte pour nous, {prenom} ✦",
+    body:
+`Bonjour {prenom},
+
+Vous avez dû recevoir votre commande {ref} — nous espérons qu'elle vous plaît !
+
+Votre avis est précieux pour notre petit atelier et aide d'autres clientes. Prendriez-vous un instant pour noter votre création sur notre site ? Un clic suffit.
+
+Bonne nouvelle : cette commande vous a rapporté du cashback. Retrouvez votre cagnotte fidélité dans votre espace « Mon compte » sur nivcreation.fr/espace — à utiliser sur votre prochaine commande.
+
+Merci infiniment,
+L'atelier Niv Création`,
+  },
+];

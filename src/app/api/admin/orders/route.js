@@ -1,4 +1,4 @@
-import { isAdmin } from "@/lib/stock";
+import { isAdmin, getSettings } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
@@ -51,7 +51,17 @@ export async function POST(req) {
       let mail = null;
       if (status === "expediee" && patch.tracking) mail = shippedEmail(order, patch.tracking);
       else if (status === "annulee") mail = cancelledEmail(order);
-      else if (status === "livree") mail = reviewRequestEmail(order);
+      else if (status === "livree") {
+        // Si une règle automatique « après la livraison » est active (ex. avis à
+        // J+2), elle enverra l'e-mail d'avis au bon moment → on n'envoie PAS
+        // l'e-mail immédiat ici, pour éviter un doublon. Sinon, envoi immédiat.
+        let hasLivreeRule = false;
+        try {
+          const st = await getSettings();
+          hasLivreeRule = (st?.autoRules || []).some((r) => r.active && r.trigger === "livree" && r.body);
+        } catch { /* en cas de doute, on envoie l'e-mail immédiat */ }
+        if (!hasLivreeRule) mail = reviewRequestEmail(order);
+      }
       if (mail) {
         // Gmail en priorité (arrive vers toute adresse), Resend en secours ; copie à la gérante.
         const r = await sendClientMail({ to: order.customerEmail, subject: mail.subject, html: mail.html, bcc: BRAND.contact });

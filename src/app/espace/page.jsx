@@ -10,29 +10,35 @@ export const metadata = { title: "Mon espace", robots: { index: false, follow: f
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
 const fmtDate = (ts) => { try { return new Date(ts).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }); } catch { return ""; } };
 
-const STEPS = ["Commandée", "En fabrication", "Expédiée", "Livrée"];
+const STEPS = [
+  { label: "Commande confirmée", desc: "Reçue et confirmée" },
+  { label: "En préparation", desc: "Gravure en cours" },
+  { label: "Expédiée", desc: "Colis en route" },
+  { label: "Livrée", desc: "Colis remis" },
+];
 const REACHED = { a_preparer: 0, en_gravure: 1, expediee: 2, livree: 3 };
 const statusChip = (s) => {
   if (s === "livree") return { t: "Livrée", bg: "#e3efe4", c: "#2f6b3d" };
   if (s === "expediee") return { t: "Expédiée", bg: "#f7ead0", c: "#8a6414" };
-  if (s === "en_gravure") return { t: "En fabrication", bg: "#efe4f2", c: "#6b4a7a" };
+  if (s === "en_gravure") return { t: "En préparation", bg: "#efe4f2", c: "#6b4a7a" };
   if (s === "annulee") return { t: "Annulée", bg: "#f3e2df", c: "#a24336" };
   if (s === "remboursee") return { t: "Remboursée", bg: "#eee", c: "#666" };
-  return { t: "En préparation", bg: "#f7ead0", c: "#8a6414" };
+  return { t: "Commande confirmée", bg: "#f7ead0", c: "#8a6414" };
 };
 
 function Timeline({ status }) {
   const reached = REACHED[status] ?? 0;
   return (
     <table width="100%" style={{ textAlign: "center", borderCollapse: "collapse" }}><tbody><tr>
-      {STEPS.map((label, i) => {
+      {STEPS.map((step, i) => {
         const done = i <= reached, current = i === reached + 1;
         const bg = done ? "#2e8b57" : current ? "#c9a24b" : "#e6ddc8";
         const color = done || current ? "#fff" : "#a99";
         return (
-          <td key={i} width="25%" style={{ verticalAlign: "top" }}>
+          <td key={i} width="25%" style={{ verticalAlign: "top", padding: "0 3px" }}>
             <div style={{ width: 30, height: 30, borderRadius: "50%", background: bg, color, margin: "0 auto", lineHeight: "30px", fontWeight: 700 }}>{done ? "✓" : i + 1}</div>
-            <div style={{ fontSize: 11, marginTop: 6, color: done || current ? "#2b2620" : "#b3a88f", fontWeight: current ? 700 : 400 }}>{label}</div>
+            <div style={{ fontSize: 11.5, marginTop: 6, color: done || current ? "#2b2620" : "#b3a88f", fontWeight: current ? 700 : 500 }}>{step.label}</div>
+            <div style={{ fontSize: 10, marginTop: 2, color: current ? "#8a6414" : "#b3a88f" }}>{step.desc}</div>
           </td>
         );
       })}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { MESSAGE_TEMPLATES_SEED } from "@/lib/messageTemplatesSeed";
+import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "@/lib/messageTemplatesSeed";
 
 // =============================================================================
 // Gestion → Messages clients (programmés + règles automatiques)
@@ -65,6 +65,15 @@ export default function MessagesAdmin() {
 
   // ---- Règles ----
   function addRule() { setRules((r) => [...r, { id: "rule_" + Math.random().toString(36).slice(2, 8), name: "", subject: "", body: "", delayDays: 3, trigger: "commande", active: false }]); }
+  function loadSeedRules() {
+    const names = new Set(rules.map((r) => (r.name || "").trim().toLowerCase()));
+    const toAdd = AUTO_RULES_SEED.filter((s) => !names.has(s.name.toLowerCase()))
+      .map((s) => ({ ...s, id: "rule_" + Math.random().toString(36).slice(2, 8) }));
+    if (!toAdd.length) { setMsg("La règle prête est déjà présente."); return; }
+    const next = [...rules, ...toAdd];
+    setRules(next);
+    saveSettings({ autoRules: next }, "Règle prête ajoutée et activée ✓");
+  }
   function updRule(i, patch) { setRules((r) => r.map((x, j) => (j === i ? { ...x, ...patch } : x))); }
   function delRule(i) { setRules((r) => r.filter((_, j) => j !== i)); }
 
@@ -260,8 +269,9 @@ export default function MessagesAdmin() {
             </div>
           </div>
         ))}
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button className="btn btn-outline" style={{ padding: "6px 12px" }} onClick={addRule}>+ Ajouter une règle</button>
+          <button className="btn btn-outline" style={{ padding: "6px 12px" }} onClick={loadSeedRules}>✨ Charger la règle prête (avis 2 j après livraison)</button>
           <button className="btn btn-gold" style={{ padding: "6px 12px" }} onClick={() => saveSettings({ autoRules: rules }, "Règles enregistrées ✓")}>Enregistrer les règles</button>
         </div>
       </div>
