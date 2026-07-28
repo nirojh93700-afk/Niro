@@ -15,6 +15,7 @@
 // =============================================================================
 import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
+import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
@@ -1062,6 +1063,13 @@ export async function getSettings() {
     cashbackPercent: (s.cashbackPercent != null && Number.isFinite(Number(s.cashbackPercent)))
       ? Math.max(0, Math.min(20, Number(s.cashbackPercent)))
       : 5,
+    // Modèles de message prêts à l'emploi. Par défaut = modèles fournis (la gérante
+    // peut les modifier / en ajouter dans Gestion → Messages ; sauvegarde persistante).
+    messageTemplates: Array.isArray(s.messageTemplates) ? s.messageTemplates : MESSAGE_TEMPLATES_SEED,
+    // Règles d'envoi automatique. Par défaut = règle « avis + cagnotte 2 j après
+    // livraison » ACTIVE (le site envoie tout seul). La gérante garde le contrôle
+    // total (modifier / désactiver / supprimer dans Gestion → Messages).
+    autoRules: Array.isArray(s.autoRules) ? s.autoRules : AUTO_RULES_SEED,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.
     crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
     crmTags: (s.crmTags && typeof s.crmTags === "object") ? s.crmTags : {},
