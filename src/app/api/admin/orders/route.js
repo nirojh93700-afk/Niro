@@ -41,6 +41,11 @@ export async function POST(req) {
   }
   const patch = { status };
   if (typeof tracking === "string") patch.tracking = tracking.trim();
+  // Horodatage du changement de statut (sert aux règles auto « X jours après
+  // expédition/livraison »). Chaîne ISO, comme createdAt.
+  const nowIso = new Date().toISOString();
+  if (status === "expediee") patch.shippedAt = nowIso;
+  if (status === "livree") patch.deliveredAt = nowIso;
   const ok = await updateSiteOrder(id, patch);
 
   // E-mail au client (expédition avec suivi, ou annulation), si demandé et possible.

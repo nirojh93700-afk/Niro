@@ -45,12 +45,15 @@ export async function runScheduledJobs() {
       for (const o of orders) {
         if (o.test || !o.customerEmail) continue;
         if (["annulee", "remboursee"].includes(o.status)) continue;
+        // Les dates sont stockées en chaîne ISO (ex. "2026-07-20T10:00:00Z") :
+        // on parse avec Date (Number() renverrait NaN sur une date ISO).
+        const ts = (v) => { const n = new Date(v).getTime(); return Number.isFinite(n) ? n : 0; };
         let baseTs;
         if (rule.trigger === "livree") {
           if (o.status !== "livree") continue;
-          baseTs = Number(o.deliveredAt || o.shippedAt || o.updatedAt || o.createdAt) || 0;
+          baseTs = ts(o.deliveredAt) || ts(o.shippedAt) || ts(o.updatedAt) || ts(o.createdAt);
         } else {
-          baseTs = Number(o.createdAt) || 0;
+          baseTs = ts(o.createdAt);
         }
         if (!baseTs) continue;
         const dueAt = baseTs + rule.delayDays * DAY;

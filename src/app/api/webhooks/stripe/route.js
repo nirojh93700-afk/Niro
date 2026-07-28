@@ -414,6 +414,49 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       });
     }
 
+    // Cagnotte : on traite le débit + le cashback AVANT d'enregistrer la commande,
+    // pour que le débit ne soit jamais sauté si l'enregistrement échoue (chaque bloc
+    // est isolé et anti-double via orderRef → aucun risque de double débit/crédit).
+    // Cagnotte UTILISÉE au paiement (débit).
+    try {
+      const mdC = session.metadata || event.data.object?.metadata || {};
+      const cEmail = String(mdC.cagnotteEmail || "").trim();
+      const cAmount = Number(mdC.cagnotteAmount) || 0;
+      if (cEmail && cAmount > 0) {
+        await debitCagnotte(cEmail, cAmount, orderRef);
+      }
+    } catch (e) {
+      console.error("Débit cagnotte:", e.message);
+    }
+
+    // Cashback fidélité gagné sur cette commande (crédit).
+    try {
+      const st = await getSettings();
+      const pct = Number(st.cashbackPercent) || 0;
+      // Montant produits (hors livraison), en euros. Base du cashback.
+      const produits = Math.max(0, ((session.amount_total || 0) - (shippingAmount || 0)) / 100);
+      // 1) Cashback de la cliente (crédité sur SA cagnotte, réutilisable ensuite).
+      if (pct > 0 && customer.email && produits > 0) {
+        const gain = Math.round(produits * pct) / 100; // produits × pct / 100, arrondi centime
+        await creditCagnotte(customer.email, gain, "Cashback fidélité", orderRef);
+      }
+      // 2) Cashback ambassadeur : si le code porte une adresse e-mail d'ambassadeur,
+      //    sa commission est aussi versée sur SA cagnotte (en plus du suivi codeStats).
+      const md2 = session.metadata || event.data.object?.metadata || {};
+      if (md2.promoCode) {
+        const codes = await getPromoCodes();
+        const pc = codes[String(md2.promoCode).trim().toUpperCase()];
+        const amb = String(pc?.ambassador || "").trim();
+        const commPct = Number(pc?.commission) || 0;
+        if (commPct > 0 && produits > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(amb)) {
+          const gainAmb = Math.round(produits * commPct) / 100;
+          await creditCagnotte(amb, gainAmb, "Commission ambassadeur", orderRef);
+        }
+      }
+    } catch (e) {
+      console.error("Cashback cagnotte:", e.message);
+    }
+
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     await recordSiteOrder({
       ref: orderRef,
@@ -447,49 +490,6 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       })),
       stock: event.data.object?.metadata?.stock || "",
     });
-
-    // Cagnotte UTILISÉE au paiement : on la débite maintenant (après paiement réussi).
-    // Isolé : ne doit jamais empêcher l'enregistrement de la commande. debitCagnotte
-    // ne descend jamais sous zéro et l'orderId évite un double débit si l'événement est rejoué.
-    try {
-      const mdC = session.metadata || event.data.object?.metadata || {};
-      const cEmail = String(mdC.cagnotteEmail || "").trim();
-      const cAmount = Number(mdC.cagnotteAmount) || 0;
-      if (cEmail && cAmount > 0) {
-        await debitCagnotte(cEmail, cAmount, orderRef);
-      }
-    } catch (e) {
-      console.error("Débit cagnotte:", e.message);
-    }
-
-    // Cashback fidélité (cagnotte). Isolé dans son propre try/catch : ne doit
-    // JAMAIS empêcher l'enregistrement de la commande ni le paiement.
-    try {
-      const st = await getSettings();
-      const pct = Number(st.cashbackPercent) || 0;
-      // Montant produits (hors livraison), en euros. Base du cashback.
-      const produits = Math.max(0, ((session.amount_total || 0) - (shippingAmount || 0)) / 100);
-      // 1) Cashback de la cliente (crédité sur SA cagnotte, réutilisable ensuite).
-      if (pct > 0 && customer.email && produits > 0) {
-        const gain = Math.round(produits * pct) / 100; // produits × pct / 100, arrondi centime
-        await creditCagnotte(customer.email, gain, "Cashback fidélité", orderRef);
-      }
-      // 2) Cashback ambassadeur : si le code porte une adresse e-mail d'ambassadeur,
-      //    sa commission est aussi versée sur SA cagnotte (en plus du suivi codeStats).
-      const md2 = session.metadata || event.data.object?.metadata || {};
-      if (md2.promoCode) {
-        const codes = await getPromoCodes();
-        const pc = codes[String(md2.promoCode).trim().toUpperCase()];
-        const amb = String(pc?.ambassador || "").trim();
-        const commPct = Number(pc?.commission) || 0;
-        if (commPct > 0 && produits > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(amb)) {
-          const gainAmb = Math.round(produits * commPct) / 100;
-          await creditCagnotte(amb, gainAmb, "Commission ambassadeur", orderRef);
-        }
-      }
-    } catch (e) {
-      console.error("Cashback cagnotte:", e.message);
-    }
 
     // La fiche est désormais dans la commande : on supprime la copie temporaire.
     try { if (orderSpec) await deleteOrderSpec(session.id); } catch { /* ignore */ }
