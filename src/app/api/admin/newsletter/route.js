@@ -1,5 +1,6 @@
 import { isAdmin, getSubscribers, getBirthdays } from "@/lib/stock";
-import { sendEmail, emailLayout, escapeHtml } from "@/lib/email";
+import { emailLayout, escapeHtml } from "@/lib/email";
+import { sendClientMail } from "@/lib/clientMail";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,6 @@ export async function GET(req) {
 // Envoi d'une campagne newsletter à toutes les abonnées (via Resend / e-mail du site).
 export async function POST(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
-  if (!process.env.RESEND_API_KEY) {
-    return Response.json({ error: "E-mail non configuré (RESEND_API_KEY manquant)." }, { status: 503 });
-  }
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const subject = String(body?.subject || "").trim();
@@ -33,7 +31,9 @@ export async function POST(req) {
   let sent = 0;
   for (const to of subs) {
     try {
-      const r = await sendEmail({ to, subject, html });
+      // Gmail en priorité (arrive vraiment), Resend en secours. Pas de copie
+      // cachée ici (sinon la gérante recevrait un mail par abonnée).
+      const r = await sendClientMail({ to, subject, html, bcc: "" });
       if (r.ok) sent++;
     } catch { /* continue */ }
   }
