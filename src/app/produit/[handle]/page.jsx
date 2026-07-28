@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
 function categoryUrl(cat) {
   if (cat === "cristal") return "/cristaux";
   if (cat === "naissance") return "/naissance";
-  return `/boutique?cat=${cat}`;
+  return `/boutique/${cat}`;
 }
 
 export default async function ProductPage({ params, searchParams }) {

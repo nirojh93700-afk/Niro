@@ -1260,7 +1260,7 @@ export default function ProductDetail({ product }) {
           <div className="breadcrumb">
             <Link href="/boutique">Boutique</Link>
             {" / "}
-            <Link href={`/boutique?cat=${product.category}`}>
+            <Link href={product.category === "cristal" ? "/cristaux" : product.category === "naissance" ? "/naissance" : `/boutique/${product.category}`}>
               {getCategoryLabel(product.category)}
             </Link>
           </div>

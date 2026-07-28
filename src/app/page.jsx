@@ -227,7 +227,7 @@ export default async function HomePage() {
             </div>
             <div className="cat-grid">
               {cats.map((cat) => (
-                <Link href={`/boutique?cat=${cat.slug}`} key={cat.slug} className="cat-card">
+                <Link href={cat.slug === "cristal" ? "/cristaux" : cat.slug === "naissance" ? "/naissance" : `/boutique/${cat.slug}`} key={cat.slug} className="cat-card">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={cat.image} alt={cat.label} width={500} height={650} />
                   <div className="cat-overlay">

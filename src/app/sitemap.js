@@ -26,12 +26,16 @@ export default async function sitemap() {
     priority: path === "" ? 1 : path === "/cristaux" ? 0.9 : 0.7,
   }));
 
-  const categoryPages = CATEGORIES.map((c) => ({
-    url: `${base}/boutique?cat=${c.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.7,
-  }));
+  // Vraies adresses de catégories (/boutique/X). Cristal et naissance ont déjà
+  // leur page dédiée (/cristaux, /naissance) dans staticPages.
+  const categoryPages = CATEGORIES
+    .filter((c) => c.slug !== "cristal" && c.slug !== "naissance")
+    .map((c) => ({
+      url: `${base}/boutique/${c.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
 
   const catalog = await getCatalog();
   const productPages = catalog.map((p) => ({

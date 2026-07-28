@@ -19,6 +19,22 @@ const nextConfig = {
       { source: "/motifs/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
     ];
   },
+  // SEO : les anciennes adresses à filtre /boutique?cat=X renvoient (301) vers
+  // les vraies adresses /boutique/X (cristal et naissance vers leurs pages dédiées).
+  // Les autres paramètres (sub, type) sont conservés automatiquement.
+  async redirects() {
+    const cats = ["bijoux", "verres", "mariage", "deco", "cadeaux"];
+    return [
+      { source: "/boutique", has: [{ type: "query", key: "cat", value: "cristal" }], destination: "/cristaux", permanent: true },
+      { source: "/boutique", has: [{ type: "query", key: "cat", value: "naissance" }], destination: "/naissance", permanent: true },
+      ...cats.map((c) => ({
+        source: "/boutique",
+        has: [{ type: "query", key: "cat", value: c }],
+        destination: `/boutique/${c}`,
+        permanent: true,
+      })),
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -146,7 +146,7 @@ export default async function BoutiquePage({ searchParams }) {
           {menuCategories.map((c) => (
             <Link
               key={c.slug}
-              href={c.slug === "cristal" ? "/cristaux" : c.slug === "naissance" ? "/naissance" : `/boutique?cat=${c.slug}`}
+              href={c.slug === "cristal" ? "/cristaux" : c.slug === "naissance" ? "/naissance" : `/boutique/${c.slug}`}
               className={`filter-chip ${activeCat === c.slug && !activeSub ? "active" : ""}`}
             >
               {c.label}
@@ -198,7 +198,7 @@ export default async function BoutiquePage({ searchParams }) {
         {!isBijoux && subs && (
           <div className="filters subfilters">
             <Link
-              href={`/boutique?cat=${activeCat}`}
+              href={`/boutique/${activeCat}`}
               className={`filter-chip ${!activeSub ? "active" : ""}`}
             >
               Tous les {getCategoryLabel(activeCat).toLowerCase()}
@@ -206,7 +206,7 @@ export default async function BoutiquePage({ searchParams }) {
             {subs.map((s) => (
               <Link
                 key={s.slug}
-                href={`/boutique?cat=${activeCat}&sub=${s.slug}`}
+                href={`/boutique/${activeCat}?sub=${s.slug}`}
                 className={`filter-chip ${activeSub === s.slug ? "active" : ""}`}
               >
                 {s.label}
@@ -272,7 +272,7 @@ export default async function BoutiquePage({ searchParams }) {
                   <h3 style={{ margin: 0, fontFamily: "Georgia, serif", fontWeight: "normal", color: "var(--gold-dark)" }}>
                     {c.label}
                   </h3>
-                  <Link href={`/boutique?cat=${c.slug}`} className="link-underline" style={{ fontSize: "0.9rem", whiteSpace: "nowrap" }}>
+                  <Link href={`/boutique/${c.slug}`} className="link-underline" style={{ fontSize: "0.9rem", whiteSpace: "nowrap" }}>
                     Tout voir →
                   </Link>
                 </div>
