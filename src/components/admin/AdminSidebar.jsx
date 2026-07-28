@@ -9,43 +9,44 @@ import { useState } from "react";
 const GROUPS = [
   { label: "", items: [{ text: "🏠 Accueil", href: "/gestion#accueil" }] },
   { label: "Commandes", items: [
-    { text: "Commandes", href: "/gestion#commandes" },
+    { text: "🧾 Commandes", href: "/gestion#commandes" },
     { text: "🥃 Atelier (à graver)", href: "/gestion/atelier" },
-    { text: "Devis / Factures", href: "/gestion#devis" },
+    { text: "📄 Devis / Factures", href: "/gestion#devis" },
   ] },
-  { label: "Clients", items: [
+  { label: "Clients & fidélité", items: [
     { text: "👥 CRM — clients", href: "/gestion/crm" },
+    { text: "🎁 Fidélité & cashback", href: "/gestion/fidelite" },
     { text: "✉️ Messages (programmés + auto)", href: "/gestion/messages" },
   ] },
   { label: "Catalogue", items: [
-    { text: "Produits & Stock", href: "/gestion#produits" },
+    { text: "🏷️ Produits & Stock", href: "/gestion#produits" },
     { text: "🗂️ Catégories & ordre", href: "/gestion#categories" },
     { text: "📦 Packaging & emballages", href: "/gestion/emballages" },
     { text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
-    { text: "Gravure", href: "/gestion#gravure" },
+    { text: "✍️ Gravure", href: "/gestion#gravure" },
     { text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
   ] },
-  { label: "Finances", items: [
-    { text: "💰 Bénéfices", href: "/gestion/benefices" },
-    { text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
-    { text: "Statistiques (ventes)", href: "/gestion#stats" },
-    { text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
-  ] },
   { label: "Marketing", items: [
-    { text: "Promotions", href: "/gestion#promos" },
-    { text: "Avis", href: "/gestion#avis" },
-    { text: "Newsletter", href: "/gestion#newsletter" },
+    { text: "🎟️ Promotions & ambassadeurs", href: "/gestion#promos" },
+    { text: "⭐ Avis", href: "/gestion#avis" },
+    { text: "📣 Newsletter", href: "/gestion#newsletter" },
     { text: "📊 Étude de marché", href: "/gestion/etude-marche" },
   ] },
+  { label: "Finances & statistiques", items: [
+    { text: "💰 Bénéfices", href: "/gestion/benefices" },
+    { text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
+    { text: "📊 Statistiques (ventes)", href: "/gestion#stats" },
+    { text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
+  ] },
   { label: "Assistant & IA", items: [
-    { text: "Assistant", href: "/gestion#assistant" },
-    { text: "Équipe d'agents", href: "/gestion#agents" },
-    { text: "✉️ Boîte mail (agent)", href: "/gestion/boite-mail" },
+    { text: "🧭 Assistant", href: "/gestion#assistant" },
+    { text: "🤖 Équipe d'agents", href: "/gestion#agents" },
+    { text: "📬 Boîte mail (agent)", href: "/gestion/boite-mail" },
   ] },
   { label: "Réglages", items: [
-    { text: "Apparence", href: "/gestion#apparence" },
+    { text: "🎨 Apparence", href: "/gestion#apparence" },
     { text: "🚚 Livraison (tarifs)", href: "/gestion#livraison" },
-    { text: "Réglages", href: "/gestion#reglages" },
+    { text: "⚙️ Réglages", href: "/gestion#reglages" },
   ] },
 ];
 

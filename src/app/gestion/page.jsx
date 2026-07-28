@@ -64,7 +64,6 @@ export default function GestionPage() {
   const [crmSearch, setCrmSearch] = useState("");
   const [siteSettings, setSiteSettings] = useState({ salesGoal: 0, crmNotes: {}, ventesExternes: [] });
   const [goalInput, setGoalInput] = useState("");
-  const [cashbackInput, setCashbackInput] = useState("5");
   const [veMontant, setVeMontant] = useState("");
   const [veSource, setVeSource] = useState("Etsy");
   const [noteDraft, setNoteDraft] = useState({});
@@ -106,7 +105,6 @@ export default function GestionPage() {
         const s = (await stg.json()).settings || {};
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
-        setCashbackInput(String(s.cashbackPercent != null ? s.cashbackPercent : 5));
       }
     } catch (e) {
       setError(e.message);
@@ -363,11 +361,6 @@ export default function GestionPage() {
 
   function saveGoal() {
     saveSettingsPatch({ salesGoal: Number(goalInput) || 0 }, "goal");
-  }
-  function saveCashback() {
-    const n = Math.max(0, Math.min(20, Number(String(cashbackInput).replace(",", ".")) || 0));
-    saveSettingsPatch({ cashbackPercent: n }, "cashback");
-    setCashbackInput(String(n));
   }
   // Ventes hors site (Etsy, main propre…) : ajout / suppression pour le mois à déclarer.
   function addVenteExterne(moisKey) {
@@ -679,61 +672,62 @@ export default function GestionPage() {
             {
               label: "Commandes",
               tabs: [
-                { id: "commandes", text: `Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
+                { id: "commandes", text: `🧾 Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
                 { id: "atelier", text: "🥃 Atelier (à graver)", href: "/gestion/atelier" },
-                { id: "devis", text: "Devis / Factures" },
+                { id: "devis", text: "📄 Devis / Factures" },
               ],
             },
             {
-              label: "Clients",
+              label: "Clients & fidélité",
               tabs: [
                 { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
+                { id: "fidelite", text: "🎁 Fidélité & cashback", href: "/gestion/fidelite" },
                 { id: "messages", text: "✉️ Messages (programmés + auto)", href: "/gestion/messages" },
               ],
             },
             {
               label: "Catalogue",
               tabs: [
-                { id: "produits", text: "Produits & Stock" },
+                { id: "produits", text: "🏷️ Produits & Stock" },
                 { id: "categories", text: "🗂️ Catégories & ordre" },
                 { id: "packaging", text: "📦 Packaging & emballages", href: "/gestion/emballages" },
                 { id: "tailles", text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
-                { id: "gravure", text: "Gravure" },
+                { id: "gravure", text: "✍️ Gravure" },
                 { id: "reglages-produits", text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
-              ],
-            },
-            {
-              label: "Finances",
-              tabs: [
-                { id: "benefices", text: "💰 Bénéfices", href: "/gestion/benefices" },
-                { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
-                { id: "stats", text: "Statistiques (ventes)" },
-                { id: "visiteurs", text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
               ],
             },
             {
               label: "Marketing",
               tabs: [
-                { id: "promos", text: "Promotions" },
-                { id: "avis", text: "Avis" },
-                { id: "newsletter", text: "Newsletter" },
+                { id: "promos", text: "🎟️ Promotions & ambassadeurs" },
+                { id: "avis", text: "⭐ Avis" },
+                { id: "newsletter", text: "📣 Newsletter" },
                 { id: "etude-marche", text: "📊 Étude de marché", href: "/gestion/etude-marche" },
+              ],
+            },
+            {
+              label: "Finances & statistiques",
+              tabs: [
+                { id: "benefices", text: "💰 Bénéfices", href: "/gestion/benefices" },
+                { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
+                { id: "stats", text: "📊 Statistiques (ventes)" },
+                { id: "visiteurs", text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
               ],
             },
             {
               label: "Assistant & IA",
               tabs: [
-                { id: "assistant", text: "Assistant" },
-                { id: "agents", text: "Équipe d'agents" },
-                { id: "boite-mail", text: "✉️ Boîte mail (agent)", href: "/gestion/boite-mail" },
+                { id: "assistant", text: "🧭 Assistant" },
+                { id: "agents", text: "🤖 Équipe d'agents" },
+                { id: "boite-mail", text: "📬 Boîte mail (agent)", href: "/gestion/boite-mail" },
               ],
             },
             {
               label: "Réglages",
               tabs: [
-                { id: "apparence", text: "Apparence" },
+                { id: "apparence", text: "🎨 Apparence" },
                 { id: "livraison", text: "🚚 Livraison (tarifs)" },
-                { id: "reglages", text: "Réglages" },
+                { id: "reglages", text: "⚙️ Réglages" },
               ],
             },
           ].map((group) => (
@@ -1246,20 +1240,6 @@ export default function GestionPage() {
               ) : (
                 <p style={{ color: "var(--ink-soft)", margin: 0, fontSize: "0.85rem" }}>Définis un objectif pour suivre ta progression du mois.</p>
               )}
-            </div>
-
-            {/* Cashback fidélité (cagnotte) */}
-            <div className="admin-block">
-              <h3 style={{ marginTop: 0 }}>🎁 Cashback fidélité (cagnotte)</h3>
-              <p style={{ color: "var(--ink-soft)", margin: "0 0 10px", fontSize: "0.9rem" }}>
-                Pourcentage du montant produits (hors livraison) crédité dans la cagnotte de la cliente après chaque commande payée. Elle le retrouve dans « Mon espace ». Mettre <strong>0</strong> pour désactiver.
-              </p>
-              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                <input type="number" min="0" max="20" step="0.5" value={cashbackInput} onChange={(e) => setCashbackInput(e.target.value)} style={{ width: 90, padding: "8px 10px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} />
-                <span>% par commande</span>
-                <button className="btn btn-gold" style={{ padding: "6px 14px" }} onClick={saveCashback}>Enregistrer</button>
-                {saved === "cashback" && <span style={{ color: "#256b34", fontSize: "0.85rem" }}>✓ Enregistré</span>}
-              </div>
             </div>
 
             {/* Graphique CA par mois */}
