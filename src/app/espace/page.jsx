@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { getSiteOrders } from "@/lib/firebase";
-import { getCagnotte } from "@/lib/stock";
+import { getCagnotte, getSettings } from "@/lib/stock";
 import EspaceLogin from "@/components/EspaceLogin";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +49,8 @@ export default async function EspacePage({ searchParams }) {
     .filter((o) => (o.customerEmail || "").toLowerCase() === email && !o.test)
     .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   const cag = await getCagnotte(email);
+  let cashbackPct = 5;
+  try { cashbackPct = Number((await getSettings()).cashbackPercent) || 0; } catch { /* défaut 5 */ }
   const firstName = (orders[0]?.customerName || "").split(" ")[0] || "";
   const active = orders.find((o) => !["livree", "annulee", "remboursee"].includes(o.status)) || orders[0];
 
@@ -71,10 +73,12 @@ export default async function EspacePage({ searchParams }) {
           <div style={{ fontFamily: "Georgia, serif", fontSize: 40, color: "#fff", fontWeight: "bold", margin: "4px 0 2px" }}>{euro(cag.balance)}</div>
           <div style={{ fontSize: 13, color: "#c9b78d" }}>Utilisable à votre prochaine commande (jusqu&apos;à 50 % du panier).</div>
         </div>
-        <div style={{ background: "rgba(226,198,126,.15)", border: "1px solid rgba(226,198,126,.4)", borderRadius: 12, padding: "12px 16px", textAlign: "center" }}>
-          <div style={{ fontSize: 22, fontWeight: 800, color: "#e2c67e" }}>+5 %</div>
-          <div style={{ fontSize: 11, color: "#c9b78d" }}>de cagnotte<br />sur chaque achat</div>
-        </div>
+        {cashbackPct > 0 && (
+          <div style={{ background: "rgba(226,198,126,.15)", border: "1px solid rgba(226,198,126,.4)", borderRadius: 12, padding: "12px 16px", textAlign: "center" }}>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "#e2c67e" }}>+{String(cashbackPct).replace(".", ",")} %</div>
+            <div style={{ fontSize: 11, color: "#c9b78d" }}>de cagnotte<br />sur chaque achat</div>
+          </div>
+        )}
       </div>
 
       {/* Suivi de la commande en cours */}

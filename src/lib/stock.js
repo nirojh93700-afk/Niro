@@ -999,6 +999,11 @@ export async function getSettings() {
     gaId: typeof s.gaId === "string" ? s.gaId.trim() : "",
     // Objectif de chiffre d'affaires mensuel (€) — affiché en jauge dans les stats.
     salesGoal: Number(s.salesGoal) || 0,
+    // Cashback fidélité (cagnotte) : % du montant produits crédité après paiement.
+    // Défaut 5 %. Bornes 0–20 % (0 = désactivé). Réglable dans l'admin.
+    cashbackPercent: (s.cashbackPercent != null && Number.isFinite(Number(s.cashbackPercent)))
+      ? Math.max(0, Math.min(20, Number(s.cashbackPercent)))
+      : 5,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.
     crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
     crmTags: (s.crmTags && typeof s.crmTags === "object") ? s.crmTags : {},

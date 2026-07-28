@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage, recordCommission, getSettings } from "@/lib/stock";
+import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, getPromoCodes } from "@/lib/stock";
 import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -447,6 +447,35 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       })),
       stock: event.data.object?.metadata?.stock || "",
     });
+
+    // Cashback fidélité (cagnotte). Isolé dans son propre try/catch : ne doit
+    // JAMAIS empêcher l'enregistrement de la commande ni le paiement.
+    try {
+      const st = await getSettings();
+      const pct = Number(st.cashbackPercent) || 0;
+      // Montant produits (hors livraison), en euros. Base du cashback.
+      const produits = Math.max(0, ((session.amount_total || 0) - (shippingAmount || 0)) / 100);
+      // 1) Cashback de la cliente (crédité sur SA cagnotte, réutilisable ensuite).
+      if (pct > 0 && customer.email && produits > 0) {
+        const gain = Math.round(produits * pct) / 100; // produits × pct / 100, arrondi centime
+        await creditCagnotte(customer.email, gain, "Cashback fidélité", orderRef);
+      }
+      // 2) Cashback ambassadeur : si le code porte une adresse e-mail d'ambassadeur,
+      //    sa commission est aussi versée sur SA cagnotte (en plus du suivi codeStats).
+      const md2 = session.metadata || event.data.object?.metadata || {};
+      if (md2.promoCode) {
+        const codes = await getPromoCodes();
+        const pc = codes[String(md2.promoCode).trim().toUpperCase()];
+        const amb = String(pc?.ambassador || "").trim();
+        const commPct = Number(pc?.commission) || 0;
+        if (commPct > 0 && produits > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(amb)) {
+          const gainAmb = Math.round(produits * commPct) / 100;
+          await creditCagnotte(amb, gainAmb, "Commission ambassadeur", orderRef);
+        }
+      }
+    } catch (e) {
+      console.error("Cashback cagnotte:", e.message);
+    }
 
     // La fiche est désormais dans la commande : on supprime la copie temporaire.
     try { if (orderSpec) await deleteOrderSpec(session.id); } catch { /* ignore */ }

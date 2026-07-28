@@ -134,6 +134,11 @@ export async function POST(req) {
     const n = Number(body.salesGoal);
     patch.salesGoal = Number.isFinite(n) && n > 0 ? Math.round(n) : 0;
   }
+  // Cashback fidélité (cagnotte) : % du montant produits crédité après paiement (0–20).
+  if (body.cashbackPercent !== undefined) {
+    const n = Number(body.cashbackPercent);
+    patch.cashbackPercent = Number.isFinite(n) ? Math.max(0, Math.min(20, Math.round(n * 10) / 10)) : 5;
+  }
   // Ventes hors site (Etsy, main propre, virement…) à ajouter au CA déclaré URSSAF.
   if (Array.isArray(body.ventesExternes)) {
     patch.ventesExternes = body.ventesExternes.slice(0, 240).map((v) => {
