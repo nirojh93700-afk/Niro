@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, getPromoCodes } from "@/lib/stock";
+import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes } from "@/lib/stock";
 import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -447,6 +447,20 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       })),
       stock: event.data.object?.metadata?.stock || "",
     });
+
+    // Cagnotte UTILISÉE au paiement : on la débite maintenant (après paiement réussi).
+    // Isolé : ne doit jamais empêcher l'enregistrement de la commande. debitCagnotte
+    // ne descend jamais sous zéro et l'orderId évite un double débit si l'événement est rejoué.
+    try {
+      const mdC = session.metadata || event.data.object?.metadata || {};
+      const cEmail = String(mdC.cagnotteEmail || "").trim();
+      const cAmount = Number(mdC.cagnotteAmount) || 0;
+      if (cEmail && cAmount > 0) {
+        await debitCagnotte(cEmail, cAmount, orderRef);
+      }
+    } catch (e) {
+      console.error("Débit cagnotte:", e.message);
+    }
 
     // Cashback fidélité (cagnotte). Isolé dans son propre try/catch : ne doit
     // JAMAIS empêcher l'enregistrement de la commande ni le paiement.

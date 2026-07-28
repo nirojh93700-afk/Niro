@@ -2,7 +2,9 @@ import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
-import { getPromos, getSettings, getPromoCodes, hasUsedCode } from "@/lib/stock";
+import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte } from "@/lib/stock";
+import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
+import { cookies } from "next/headers";
 import { saveOrderSpec } from "@/lib/firebase";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
@@ -257,6 +259,32 @@ export async function POST(req) {
     } catch { /* code ignoré si souci */ }
   }
 
+  // Cagnotte fidélité : la cliente CONNECTÉE peut payer une partie avec sa cagnotte
+  // (jusqu'à 50 % du sous-total). L'e-mail vient de la SESSION SIGNÉE (jamais du
+  // client) → aucune fraude possible. Un seul coupon Stripe autorisé : la cagnotte
+  // ne s'applique donc PAS si un code promo est déjà appliqué (exclusif, géré côté UI).
+  let cagnotteEmail = "";
+  let cagnotteAmount = 0;
+  if (body?.useCagnotte === true && !discounts) {
+    try {
+      const sessEmail = readSession(cookies().get(SESSION_COOKIE)?.value);
+      if (sessEmail) {
+        const { balance } = await getCagnotte(sessEmail);
+        const subtotalCents = toCents(subtotal);
+        const maxCents = Math.floor(subtotalCents * 0.5);      // plafond : 50 % du panier
+        const useCents = Math.min(toCents(balance), maxCents); // jamais plus que le solde
+        if (useCents > 0) {
+          const coupon = await stripe.coupons.create({
+            amount_off: useCents, currency: "eur", duration: "once", name: "Ma cagnotte fidélité",
+          });
+          discounts = [{ coupon: coupon.id }];
+          cagnotteEmail = sessEmail;
+          cagnotteAmount = Math.round(useCents) / 100; // montant à débiter après paiement
+        }
+      }
+    } catch { /* cagnotte ignorée si souci — le paiement continue normalement */ }
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -266,6 +294,8 @@ export async function POST(req) {
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
         promoCode: appliedCode,
         clientIp,
+        // Cagnotte utilisée (débitée après paiement par le webhook). Vide si non utilisée.
+        ...(cagnotteEmail && cagnotteAmount > 0 ? { cagnotteEmail, cagnotteAmount: String(cagnotteAmount) } : {}),
         // Point relais choisi sur le panier (adresse complète pour la commande).
         ...(relaisFull ? { relaisPoint: relaisFull } : {}),
       },

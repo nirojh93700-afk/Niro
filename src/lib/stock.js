@@ -896,6 +896,11 @@ export async function debitCagnotte(email, amount, orderId = "") {
   const data = await getCatalogRaw();
   data.cagnotte = data.cagnotte || {};
   const c = data.cagnotte[e] || { balance: 0, history: [] };
+  // Anti-double débit : si cette commande a déjà débité la cagnotte (événement
+  // Stripe rejoué), on ne débite pas une seconde fois.
+  if (orderId && (c.history || []).some((h) => h.orderId === orderId && h.amount < 0)) {
+    return 0;
+  }
   const used = Math.min(c.balance, want);
   if (used <= 0) return 0;
   c.balance = Math.round((c.balance - used) * 100) / 100;

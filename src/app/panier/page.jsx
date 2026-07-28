@@ -34,6 +34,10 @@ export default function CartPage() {
   const [promoMsg, setPromoMsg] = useState("");
   const [promoOk, setPromoOk] = useState(false);
 
+  // Cagnotte fidélité de la cliente connectée (chargée si elle a un espace + un solde).
+  const [cagnotte, setCagnotte] = useState(null); // { email, balance }
+  const [useCagnotte, setUseCagnotte] = useState(false);
+
   // Livraison : la cliente choisit entre "domicile" et "relais" (point relais).
   const [relaisEnabled, setRelaisEnabled] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState("domicile");
@@ -50,6 +54,21 @@ export default function CartPage() {
       .catch(() => {});
     return () => { ok = false; };
   }, []);
+
+  // Cagnotte : si la cliente est connectée à son espace et a un solde, on le propose.
+  useEffect(() => {
+    let ok = true;
+    fetch("/api/espace/me")
+      .then((r) => r.json())
+      .then((d) => { if (ok && d?.loggedIn && d.balance > 0) setCagnotte({ email: d.email, balance: d.balance }); })
+      .catch(() => {});
+    return () => { ok = false; };
+  }, []);
+
+  // Montant réellement utilisable : min(solde, 50 % du sous-total). Exclusif avec le code promo.
+  const cagnotteUsable = cagnotte
+    ? Math.min(cagnotte.balance, Math.floor(total * 50) / 100)
+    : 0;
 
   // Mémorise les choix de livraison (pays, domicile/relais, point relais) pour
   // que le client n'ait PAS à les refaire s'il quitte puis revient au panier.
@@ -130,7 +149,10 @@ export default function CartPage() {
       if (method === "relais" && !relaisPossible) method = "domicile";
       if (method === "retrait" && !retraitPossible) method = "domicile";
       const delivery = { method, relais: method === "relais" ? relais : null };
-      await startCheckout(items, postalCode, promoOk ? promoCode.trim() : "", delivery, country);
+      // Cagnotte et code promo sont exclusifs (un seul coupon Stripe). Si la cagnotte
+      // est cochée, elle a la priorité et le code promo n'est pas envoyé.
+      const wantCagnotte = Boolean(useCagnotte && cagnotteUsable > 0);
+      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte);
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -203,13 +225,19 @@ export default function CartPage() {
             <span>Sous-total</span>
             <span>{formatEuro(total)}</span>
           </div>
+          {useCagnotte && cagnotteUsable > 0 && (
+            <div className="summary-row" style={{ color: "#256b34" }}>
+              <span>Cagnotte fidélité</span>
+              <span>−{formatEuro(cagnotteUsable)}</span>
+            </div>
+          )}
           <div className="summary-row">
             <span>Livraison</span>
             <span>Calculée au paiement</span>
           </div>
           <div className="summary-total">
             <span>Total</span>
-            <span>{formatEuro(total)}</span>
+            <span>{formatEuro(useCagnotte && cagnotteUsable > 0 ? Math.max(0, total - cagnotteUsable) : total)}<span style={{ fontSize: "0.7rem", fontWeight: 400, color: "var(--ink-soft)" }}> + livraison</span></span>
           </div>
 
           <div style={{ marginTop: 18 }}>
@@ -299,7 +327,26 @@ export default function CartPage() {
             </div>
           )}
 
-          <div style={{ marginTop: 16 }}>
+          {cagnotte && cagnotteUsable > 0 && (
+            <div style={{ marginTop: 16, background: "linear-gradient(150deg,#241a0c,#3a2c12)", borderRadius: 12, padding: "14px 16px", color: "#f3e8d3" }}>
+              <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={useCagnotte}
+                  onChange={(e) => { setUseCagnotte(e.target.checked); if (e.target.checked) { setPromoOk(false); setPromoMsg(""); } }}
+                  style={{ marginTop: 3, width: 18, height: 18, accentColor: "#c9a24b", flexShrink: 0 }}
+                />
+                <span>
+                  <span style={{ fontWeight: 700, color: "#e2c67e" }}>Utiliser ma cagnotte fidélité</span>
+                  <span style={{ display: "block", fontSize: "0.85rem", color: "#c9b78d", marginTop: 2 }}>
+                    Solde : {formatEuro(cagnotte.balance)} · j&apos;utilise <strong style={{ color: "#fff" }}>{formatEuro(cagnotteUsable)}</strong> sur cette commande (jusqu&apos;à 50 % du panier).
+                  </span>
+                </span>
+              </label>
+            </div>
+          )}
+
+          <div style={{ marginTop: 16, opacity: useCagnotte ? 0.5 : 1, pointerEvents: useCagnotte ? "none" : "auto" }}>
             <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>Code promo</label>
             <div style={{ display: "flex", gap: 8 }}>
               <input
@@ -307,11 +354,14 @@ export default function CartPage() {
                 value={promoCode}
                 onChange={(e) => { setPromoCode(e.target.value); setPromoOk(false); setPromoMsg(""); }}
                 placeholder="Ex. BIENVENUE10"
+                disabled={useCagnotte}
                 style={{ flex: 1, padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", textTransform: "uppercase" }}
               />
-              <button type="button" className="btn btn-outline" onClick={applyPromo}>Appliquer</button>
+              <button type="button" className="btn btn-outline" onClick={applyPromo} disabled={useCagnotte}>Appliquer</button>
             </div>
-            {promoMsg && <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>}
+            {useCagnotte
+              ? <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: "var(--ink-soft)" }}>Cagnotte et code promo ne se cumulent pas.</p>
+              : (promoMsg && <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>)}
           </div>
 
           {error && <div className="notice" style={{ marginTop: 16 }}>{error}</div>}
