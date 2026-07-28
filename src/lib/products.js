@@ -1617,7 +1617,7 @@ export const products = [
     hidden: false,
     freeShipThreshold: 45,
     photoContain: true, // photos hautes (flûte) : voir le verre en entier
-    cardImage: "/produits/flute_set.jpg",
+    cardImage: "/produits/flute-grav-01.jpg",
     title: "Flûte à champagne gravée personnalisée — prénom, date, monogramme ou modèle",
     category: "verres",
     subcategory: "champagne",
@@ -1626,10 +1626,10 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
+      "/produits/flute-grav-01.jpg",
       "/produits/flute_ambiance.jpg",
       "/produits/flute-grav-06.webp",
       "/produits/flute-grav-05.webp",
-      "/produits/flute-grav-01.jpg",
       "/produits/flute-grav-04.webp",
       "/produits/flute-grav-02.webp",
       "/produits/flute_set.jpg",
