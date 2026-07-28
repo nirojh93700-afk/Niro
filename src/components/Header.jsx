@@ -39,7 +39,7 @@ export default function Header({ categories }) {
         </Link>
 
         <div className="header-actions">
-          <Link href="/espace" className="cart-btn" aria-label="Mon espace" style={{ display: "inline-flex" }}>
+          <Link href="/espace" className="cart-btn" aria-label="Mon espace" style={{ display: "inline-flex", transform: "translateX(8px)" }}>
             <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="8" r="4" />
               <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
