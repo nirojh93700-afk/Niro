@@ -90,6 +90,11 @@ export default function Header({ categories }) {
         <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
         <Link href="/a-propos">À propos</Link>
         <Link href="/contact">Contact</Link>
+        <Link href="/espace" className="nav-account">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "-3px", marginRight: 6 }}>
+            <circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+          </svg>Mon compte
+        </Link>
       </nav>
     </header>
   );

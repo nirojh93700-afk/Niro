@@ -205,6 +205,19 @@ img {
 .nav a:hover {
   color: var(--ink);
 }
+.nav a.nav-account {
+  color: var(--gold-dark, #a98935);
+  font-weight: 600;
+  border: 1px solid #e3d3ab;
+  border-radius: 999px;
+  padding: 5px 14px;
+  display: inline-flex;
+  align-items: center;
+}
+.nav a.nav-account:hover {
+  background: var(--cream, #faf6ee);
+  color: var(--gold-dark, #a98935);
+}
 .header-actions {
   display: flex;
   align-items: center;

@@ -860,7 +860,11 @@ export async function getCagnotte(email) {
   const e = normEmail(email);
   const data = await getCatalogRaw();
   const c = (data.cagnotte || {})[e];
-  return { balance: Math.round(((c?.balance) || 0) * 100) / 100, history: c?.history || [] };
+  const balance = Math.round(((c?.balance) || 0) * 100) / 100;
+  const updatedAt = c?.updatedAt || (c?.history?.[0]?.at) || 0;
+  // Date d'expiration = dernière activité + 12 mois (uniquement si solde > 0).
+  const expiresAt = balance > 0 && updatedAt ? updatedAt + CAGNOTTE_EXPIRY_DAYS * 86400000 : 0;
+  return { balance, history: c?.history || [], updatedAt, expiresAt };
 }
 
 // Ajoute (crédite) un montant à la cagnotte d'une cliente. Écriture unique.
@@ -877,6 +881,8 @@ export async function creditCagnotte(email, amount, reason = "", orderId = "") {
   }
   c.balance = Math.round((c.balance + amt) * 100) / 100;
   c.history = [{ amount: amt, reason: String(reason).slice(0, 80), orderId: String(orderId), at: Date.now() }, ...(c.history || [])].slice(0, 100);
+  c.updatedAt = Date.now(); // toute activité repousse l'expiration (12 mois d'inactivité)
+  c.remindedAt = 0;         // nouvelle activité → on pourra re-rappeler plus tard
   data.cagnotte[e] = c;
   await persistCatalog(data);
   return { balance: c.balance };
@@ -894,9 +900,56 @@ export async function debitCagnotte(email, amount, orderId = "") {
   if (used <= 0) return 0;
   c.balance = Math.round((c.balance - used) * 100) / 100;
   c.history = [{ amount: -used, reason: "Utilisé sur une commande", orderId: String(orderId), at: Date.now() }, ...(c.history || [])].slice(0, 100);
+  c.updatedAt = Date.now();
+  c.remindedAt = 0;
   data.cagnotte[e] = c;
   await persistCatalog(data);
   return used;
+}
+
+// --- Expiration de la cagnotte (12 mois d'inactivité) ----------------------
+// Un rappel e-mail est envoyé ~30 jours avant l'expiration (voir /api/cron/cashback).
+export const CAGNOTTE_EXPIRY_DAYS = 365;      // expire après 12 mois sans activité
+export const CAGNOTTE_REMIND_BEFORE = 30;     // rappel 30 jours avant
+
+// Liste toutes les cagnottes avec un solde > 0 (pour le cron de rappel/expiration).
+export async function listCagnottes() {
+  const data = await getCatalogRaw();
+  const out = [];
+  for (const [email, c] of Object.entries(data.cagnotte || {})) {
+    const balance = Math.round(((c?.balance) || 0) * 100) / 100;
+    if (balance <= 0) continue;
+    const lastAt = c?.updatedAt || (c?.history?.[0]?.at) || 0;
+    out.push({ email, balance, updatedAt: lastAt, remindedAt: c?.remindedAt || 0 });
+  }
+  return out;
+}
+
+// Note qu'un rappel d'expiration a été envoyé (évite les doublons).
+export async function markCagnotteReminded(email) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw();
+  const c = (data.cagnotte || {})[e];
+  if (!c) return;
+  c.remindedAt = Date.now();
+  data.cagnotte[e] = c;
+  await persistCatalog(data);
+}
+
+// Expire (remet à zéro) la cagnotte d'une cliente inactive depuis trop longtemps.
+export async function expireCagnotte(email) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw();
+  const c = (data.cagnotte || {})[e];
+  if (!c || !(c.balance > 0)) return null;
+  const lost = c.balance;
+  c.history = [{ amount: -lost, reason: "Cashback expiré (12 mois)", orderId: "", at: Date.now() }, ...(c.history || [])].slice(0, 100);
+  c.balance = 0;
+  c.updatedAt = Date.now();
+  c.remindedAt = 0;
+  data.cagnotte[e] = c;
+  await persistCatalog(data);
+  return lost;
 }
 
 // Jeton de connexion « lien magique » (expire en 20 min). Écriture unique.

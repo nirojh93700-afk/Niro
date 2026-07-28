@@ -97,6 +97,38 @@ export function welcomeEmail(code, offerText) {
   return { subject: `Votre code de bienvenue : ${code} ✦`, html: emailLayout({ heading: "Bienvenue chez Niv Création", bodyHtml: body }) };
 }
 
+// E-mail de rappel « cagnotte fidélité » : la cliente a un solde à utiliser
+// (et, si `daysLeft` est fourni, qui expire bientôt). Ton professionnel, non alarmant.
+export function cashbackReminderEmail({ firstName = "", balance = 0, daysLeft = null } = {}) {
+  const eur = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
+  const name = firstName ? " " + escapeHtml(String(firstName)) : "";
+  const soon = Number.isFinite(daysLeft) && daysLeft != null && daysLeft <= 45;
+  const heading = soon ? "Votre cagnotte expire bientôt" : "Votre cagnotte fidélité vous attend";
+  const alerte = soon
+    ? `<p style="margin:0 0 16px;text-align:center;color:#a24336;font-weight:bold;">⏳ Attention : votre cagnotte expire dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""}. Pensez à en profiter avant qu'elle ne disparaisse.</p>`
+    : `<p style="margin:0 0 16px;text-align:center;color:#7a7268;">Utilisable dès votre prochaine commande (jusqu'à 50 % du panier).</p>`;
+  const body = `
+    <p style="margin:0 0 12px;">Bonjour${name},</p>
+    <p style="margin:0 0 18px;">Bonne nouvelle : il vous reste de l'argent à dépenser dans votre <strong>cagnotte fidélité</strong> Niv Création.</p>
+    <div style="text-align:center;margin:0 0 6px;">
+      <div style="display:inline-block;background:linear-gradient(150deg,#241a0c,#3a2c12);border-radius:14px;padding:20px 34px;color:#fff;">
+        <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e2c67e;">Ma cagnotte</div>
+        <div style="font-family:Georgia,serif;font-size:36px;font-weight:bold;margin-top:4px;">${eur(balance)}</div>
+      </div>
+    </div>
+    ${alerte}
+    <p style="margin:0 0 22px;text-align:center;">
+      <a href="${BRAND.siteUrl}/espace" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Voir ma cagnotte</a>
+      &nbsp;
+      <a href="${BRAND.siteUrl}/boutique" style="display:inline-block;background:${BRAND.cream};color:${BRAND.gold};border:1px solid #dcc88f;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Faire un achat</a>
+    </p>
+    <p style="margin:0;color:#7a7268;">À très vite,<br><strong>L'atelier Niv Création</strong></p>`;
+  const subject = soon
+    ? `⏳ Votre cagnotte de ${eur(balance)} expire bientôt`
+    : `Vous avez ${eur(balance)} dans votre cagnotte ✦`;
+  return { subject, html: emailLayout({ heading, bodyHtml: body }) };
+}
+
 // E-mail newsletter « Nouveautés » — professionnel, avec cartes produits (photo,
 // nom, prix, bouton). `products` = [{ name, tagline, price, image, url }].
 export function newsletterProductsEmail({ subject, intro, heading, products = [] }) {

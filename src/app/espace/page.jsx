@@ -72,6 +72,9 @@ export default async function EspacePage({ searchParams }) {
           <div style={{ fontSize: 12, letterSpacing: 2, textTransform: "uppercase", color: "#e2c67e" }}>Ma cagnotte fidélité</div>
           <div style={{ fontFamily: "Georgia, serif", fontSize: 40, color: "#fff", fontWeight: "bold", margin: "4px 0 2px" }}>{euro(cag.balance)}</div>
           <div style={{ fontSize: 13, color: "#c9b78d" }}>Utilisable à votre prochaine commande (jusqu&apos;à 50 % du panier).</div>
+          {cag.balance > 0 && cag.expiresAt ? (
+            <div style={{ fontSize: 12, color: "#b8a67a", marginTop: 4 }}>Valable jusqu&apos;au {fmtDate(cag.expiresAt)}.</div>
+          ) : null}
         </div>
         {cashbackPct > 0 && (
           <div style={{ background: "rgba(226,198,126,.15)", border: "1px solid rgba(226,198,126,.4)", borderRadius: 12, padding: "12px 16px", textAlign: "center" }}>
