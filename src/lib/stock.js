@@ -1125,6 +1125,24 @@ export async function setSettings(patch) {
   return data.settings;
 }
 
+// --- Déclencheur intégré (heartbeat) ---------------------------------------
+// Mémorise la dernière exécution de chaque tâche (data.cronState) pour ne les
+// relancer qu'à intervalle voulu, même si le site reçoit beaucoup de visites.
+// claimJob() pose le nouveau timestamp AVANT d'exécuter (verrou optimiste) :
+// deux visites simultanées ne lancent pas la tâche deux fois.
+export async function claimJob(key, minIntervalMs) {
+  const k = String(key || "");
+  if (!k) return false;
+  const data = await getCatalogRaw();
+  data.cronState = data.cronState || {};
+  const last = Number(data.cronState[k]) || 0;
+  const now = Date.now();
+  if (now - last < minIntervalMs) return false; // trop tôt → on ne relance pas
+  data.cronState[k] = now;
+  await persistCatalog(data);
+  return true;
+}
+
 // Identifiants Gmail (agent e-mail) — lecture côté serveur uniquement,
 // jamais renvoyés par getSettings() (donc jamais exposés au public).
 export async function getGmailCreds() {

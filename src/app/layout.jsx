@@ -19,6 +19,7 @@ import ShopButton from "@/components/ShopButton";
 import WelcomePopup from "@/components/WelcomePopup";
 import RefCapture from "@/components/RefCapture";
 import SiteAnalytics from "@/components/SiteAnalytics";
+import Heartbeat from "@/components/Heartbeat";
 import SalesBanner from "@/components/SalesBanner";
 import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
@@ -232,6 +233,7 @@ export default async function RootLayout({ children }) {
               <WelcomePopup enabled={settings.welcome?.enabled} code={settings.welcome?.code} text={settings.welcome?.text} />
               <RefCapture />
               <SiteAnalytics />
+              <Heartbeat />
             </CartProvider>
           </>
         ) : showMaintenance ? (
