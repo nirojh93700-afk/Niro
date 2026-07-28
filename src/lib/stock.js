@@ -847,6 +847,84 @@ export async function getSubscribers() {
   const data = await getCatalogRaw();
   return data.subscribers || [];
 }
+
+// =============================================================================
+// ESPACE CLIENT : cagnotte fidélité (avoir) + jetons de connexion « lien magique ».
+// Stocké dans le blob catalogue : data.cagnotte = { email: { balance, history } },
+// data.magic = { token: { email, exp } }. N'affecte rien d'existant.
+// =============================================================================
+const normEmail = (e) => String(e || "").trim().toLowerCase();
+const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+export async function getCagnotte(email) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw();
+  const c = (data.cagnotte || {})[e];
+  return { balance: Math.round(((c?.balance) || 0) * 100) / 100, history: c?.history || [] };
+}
+
+// Ajoute (crédite) un montant à la cagnotte d'une cliente. Écriture unique.
+export async function creditCagnotte(email, amount, reason = "", orderId = "") {
+  const e = normEmail(email);
+  const amt = Math.round((Number(amount) || 0) * 100) / 100;
+  if (!validEmail(e) || amt <= 0) return null;
+  const data = await getCatalogRaw();
+  data.cagnotte = data.cagnotte || {};
+  const c = data.cagnotte[e] || { balance: 0, history: [] };
+  // Anti-doublon : ne crédite pas deux fois la même commande pour la même raison.
+  if (orderId && (c.history || []).some((h) => h.orderId === orderId && h.reason === reason && h.amount > 0)) {
+    return { balance: c.balance };
+  }
+  c.balance = Math.round((c.balance + amt) * 100) / 100;
+  c.history = [{ amount: amt, reason: String(reason).slice(0, 80), orderId: String(orderId), at: Date.now() }, ...(c.history || [])].slice(0, 100);
+  data.cagnotte[e] = c;
+  await persistCatalog(data);
+  return { balance: c.balance };
+}
+
+// Débite (utilise) un montant. Renvoie le montant réellement débité (jamais > solde).
+export async function debitCagnotte(email, amount, orderId = "") {
+  const e = normEmail(email);
+  const want = Math.round((Number(amount) || 0) * 100) / 100;
+  if (!validEmail(e) || want <= 0) return 0;
+  const data = await getCatalogRaw();
+  data.cagnotte = data.cagnotte || {};
+  const c = data.cagnotte[e] || { balance: 0, history: [] };
+  const used = Math.min(c.balance, want);
+  if (used <= 0) return 0;
+  c.balance = Math.round((c.balance - used) * 100) / 100;
+  c.history = [{ amount: -used, reason: "Utilisé sur une commande", orderId: String(orderId), at: Date.now() }, ...(c.history || [])].slice(0, 100);
+  data.cagnotte[e] = c;
+  await persistCatalog(data);
+  return used;
+}
+
+// Jeton de connexion « lien magique » (expire en 20 min). Écriture unique.
+export async function createMagicToken(email) {
+  const e = normEmail(email);
+  if (!validEmail(e)) return null;
+  const token = (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 28);
+  const data = await getCatalogRaw();
+  data.magic = data.magic || {};
+  // Nettoyage des jetons expirés.
+  const now = Date.now();
+  for (const t of Object.keys(data.magic)) { if ((data.magic[t]?.exp || 0) < now) delete data.magic[t]; }
+  data.magic[token] = { email: e, exp: now + 20 * 60 * 1000 };
+  await persistCatalog(data);
+  return token;
+}
+
+// Valide et consomme un jeton → renvoie l'e-mail (ou null). Usage unique.
+export async function consumeMagicToken(token) {
+  const t = String(token || "").trim();
+  if (!t) return null;
+  const data = await getCatalogRaw();
+  const rec = (data.magic || {})[t];
+  if (!rec || (rec.exp || 0) < Date.now()) return null;
+  delete data.magic[t];
+  await persistCatalog(data);
+  return rec.email;
+}
 // Anniversaires (opt-in) : { "email": "AAAA-MM-JJ" }. Stockés à part pour ne
 // rien casser de la liste d'abonnées existante.
 export async function getBirthdays() {
