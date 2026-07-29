@@ -423,7 +423,7 @@ export default function CrmPage() {
                     <span style={{ color: col, fontWeight: 600 }}>{label}</span>
                     <span style={{ color: "var(--ink-soft)" }}>{euro(ord.total)}</span>
                     {ord.tracking && (
-                      <a href={`https://parcelsapp.com/en/tracking/${encodeURIComponent(ord.tracking)}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>📍 Suivi</a>
+                      <a href="https://shipping.boxtal.com/" target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} title="Ouvrir tes envois sur Boxtal">📍 Suivi Boxtal</a>
                     )}
                   </div>
                 );
