@@ -1,5 +1,6 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes } from "@/lib/stock";
+import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail } from "@/lib/stock";
+import { sendClientMail } from "@/lib/clientMail";
 import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -369,6 +370,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     });
 
     // 2) E-mail de confirmation pour la cliente.
+    let clientConfirmed = false, clientConfirmSubject = "";
     if (customer.email) {
       // Bloc parrainage (uniquement si activé dans l'admin).
       let referralBlock = "";
@@ -406,12 +408,13 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
             : `<p style="background:${BRAND.cream};padding:14px;border-radius:10px;border:1px solid #ece3d2;margin-top:18px;">Nous vous tiendrons au courant de l'expédition. Pour toute question, ou pour nous transmettre une photo ou un texte de gravure, répondez simplement à cet e-mail.</p>`}
           <p style="color:#7a7268;font-size:14px;margin-top:16px;">Avec toute notre gratitude,<br><strong>L'atelier Niv Création</strong></p>`;
       const clientHtml = emailLayout({ heading: "Merci pour votre commande", bodyHtml: clientBody });
-      await sendEmail({
-        to: customer.email,
-        subject: `Votre commande Niv Création est confirmée (réf. ${orderRef})`,
-        html: clientHtml,
-        replyTo: ownerEmail,
-      });
+      // Gmail en priorité (arrive vers toute adresse) ; Resend en secours. Isolé :
+      // ne doit jamais empêcher l'enregistrement de la commande.
+      clientConfirmSubject = `Votre commande Niv Création est confirmée (réf. ${orderRef})`;
+      try {
+        const rc = await sendClientMail({ to: customer.email, subject: clientConfirmSubject, html: clientHtml });
+        clientConfirmed = Boolean(rc?.ok);
+      } catch { clientConfirmed = false; }
     }
 
     // Cagnotte : on traite le débit + le cashback AVANT d'enregistrer la commande,
@@ -458,7 +461,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     }
 
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
-    await recordSiteOrder({
+    const newOrderId = await recordSiteOrder({
       ref: orderRef,
       sessionId: session.id, // anti-doublon (si l'événement est rejoué)
       spec: orderSpec || null,
@@ -490,6 +493,14 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       })),
       stock: event.data.object?.metadata?.stock || "",
     });
+
+    // Journalise l'e-mail de confirmation dans le fil de la commande (suivi admin,
+    // invisible au client). Uniquement si l'e-mail est bien parti et la commande créée.
+    if (clientConfirmed && newOrderId && typeof newOrderId === "string") {
+      try {
+        await logOrderEmail(newOrderId, { subject: clientConfirmSubject, customerEmail: customer.email, customerName: customer.name || "", ref: orderRef });
+      } catch { /* le journal ne doit jamais bloquer */ }
+    }
 
     // La fiche est désormais dans la commande : on supprime la copie temporaire.
     try { if (orderSpec) await deleteOrderSpec(session.id); } catch { /* ignore */ }

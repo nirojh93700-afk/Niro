@@ -227,12 +227,12 @@ export async function recordSiteOrder(order) {
   const a = getApp();
   if (!a) return false;
   try {
-    await admin.firestore().collection("siteOrders").add({
+    const ref = await admin.firestore().collection("siteOrders").add({
       ...order,
       status: "a_preparer",
       createdAt: new Date().toISOString(),
     });
-    return true;
+    return ref.id; // identifiant de la commande créée (chaîne = toujours "truthy")
   } catch (e) {
     console.error("Enregistrement vente Firebase:", e.message);
     return false;
