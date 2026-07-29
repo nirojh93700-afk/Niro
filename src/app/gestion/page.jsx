@@ -1115,7 +1115,7 @@ export default function GestionPage() {
                     {o.tracking && (
                       <div style={{ fontSize: "0.85rem", marginBottom: 8 }}>
                         📦 Suivi : <strong>{o.tracking}</strong>{" "}
-                        <a href="https://shipping.boxtal.com/" target="_blank" rel="noreferrer" title="Ouvrir tes envois sur Boxtal">suivre sur Boxtal</a>
+                        <a href="https://shipping.boxtal.com/fr/fr/centrale-expeditions/suivi" target="_blank" rel="noreferrer" title="Ouvrir le suivi sur Boxtal">suivre sur Boxtal</a>
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
