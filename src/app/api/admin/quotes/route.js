@@ -1,6 +1,7 @@
 import { isAdmin } from "@/lib/stock";
 import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote } from "@/lib/firebase";
-import { sendEmail, quoteEmail } from "@/lib/email";
+import { quoteEmail } from "@/lib/email";
+import { sendClientMail } from "@/lib/clientMail";
 
 export const dynamic = "force-dynamic";
 
@@ -42,7 +43,8 @@ export async function POST(req) {
     if (!to) return Response.json({ error: "Aucune adresse e-mail pour ce document." }, { status: 400 });
     const link = `${siteOrigin(req)}/document/${body.id}`;
     const mail = quoteEmail(q, link);
-    const r = await sendEmail({ to, subject: mail.subject, html: mail.html, replyTo: process.env.CONTACT_EMAIL });
+    // Gmail en priorité (arrive vers toute adresse), Resend en secours.
+    const r = await sendClientMail({ to, subject: mail.subject, html: mail.html });
     return Response.json({ ok: r.ok, to, error: r.ok ? undefined : (r.error || "L'envoi de l'e-mail a échoué.") });
   }
 
