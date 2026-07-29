@@ -72,7 +72,7 @@ export default function BatThread({ order, adminKey }) {
     en_attente: "⏳ En attente de réponse",
     valide: "✅ Validé par la cliente",
     modif_demandee: "✏️ Modification demandée",
-  }[thread?.status] || "Aucun échange pour l'instant";
+  }[thread?.status] || ((thread?.messages || []).length ? "📧 Historique des messages" : "Aucun échange pour l'instant");
 
   return (
     <div style={{ marginTop: 12, background: "#fbf7ef", border: "1px solid #e7d3a1", borderRadius: 12, padding: 14 }}>

@@ -10,7 +10,8 @@ function publicView(th) {
   return {
     ref: th.ref || "",
     status: th.status || "en_attente",
-    messages: (th.messages || []).map((m) => ({ from: m.from, text: m.text, image: m.image || "", decision: m.decision || "", at: m.at })),
+    // Le journal des e-mails envoyés (kind:"log") est PRIVÉ (admin) : jamais renvoyé au client.
+    messages: (th.messages || []).filter((m) => m.kind !== "log").map((m) => ({ from: m.from, text: m.text, image: m.image || "", decision: m.decision || "", at: m.at })),
   };
 }
 

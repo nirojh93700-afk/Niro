@@ -478,6 +478,27 @@ export async function markBatRead(orderId) {
   return true;
 }
 
+// Journalise un e-mail ENVOYÉ à la cliente dans le fil de sa commande (suivi de
+// tous les messages). Léger : n'ajoute qu'une entrée « atelier » et NE TOUCHE PAS
+// au statut du BAT ni à la pastille « non lu » (ce n'est qu'un journal d'envoi).
+// Crée le fil s'il n'existe pas (statut vide → pas de faux « en attente »).
+export async function logOrderEmail(orderId, { subject = "", text = "", customerEmail = "", customerName = "", ref = "" } = {}) {
+  const id = String(orderId || "").trim();
+  if (!id) return null;
+  const data = await getCatalogRaw();
+  data.bat = data.bat || {};
+  const th = data.bat[id] || { token: newBatToken(), status: "", ref: ref || "", messages: [] };
+  if (customerEmail && !th.customerEmail) th.customerEmail = customerEmail;
+  if (customerName && !th.customerName) th.customerName = customerName;
+  if (ref && !th.ref) th.ref = ref;
+  const body = [subject ? `« ${subject} »` : "", (text || "").toString()].filter(Boolean).join("\n");
+  th.messages.push({ from: "atelier", text: `📧 E-mail envoyé ${body}`.trim(), at: Date.now(), viaEmail: true, kind: "log" });
+  th.updatedAt = Date.now();
+  data.bat[id] = th;
+  await persistCatalog(data);
+  return th;
+}
+
 // =============================================================================
 // MESSAGES PROGRAMMÉS (file d'attente) + REGISTRE anti-doublon des règles auto.
 // Stockés dans le blob catalogue : data.scheduled = [ {id,to,name,subject,body,

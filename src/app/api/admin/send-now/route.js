@@ -1,4 +1,4 @@
-import { isAdmin, getCagnotte } from "@/lib/stock";
+import { isAdmin, getCagnotte, logOrderEmail } from "@/lib/stock";
 import { sendClientMail, brandedMessage } from "@/lib/clientMail";
 import { BRAND } from "@/lib/email";
 
@@ -29,6 +29,7 @@ export async function POST(req) {
   const bodyRaw = String(body?.body || "").trim();
   const name = String(body?.name || "").trim();
   const ref = String(body?.ref || "").trim();
+  const orderId = String(body?.orderId || "").trim(); // commande liée (pour le journal)
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return Response.json({ error: "Adresse e-mail invalide." }, { status: 400 });
   if (!subjectRaw || !bodyRaw) return Response.json({ error: "Sujet et message obligatoires." }, { status: 400 });
 
@@ -40,6 +41,14 @@ export async function POST(req) {
   const subject = fill(subjectRaw, ctx);
   const html = brandedMessage(subject, fill(bodyRaw, ctx));
   const r = await sendClientMail({ to, subject, html, bcc: BRAND.contact });
-  if (r?.ok) return Response.json({ ok: true, via: r.via });
+  if (r?.ok) {
+    // Journalise dans le fil de la commande si une commande est liée.
+    if (orderId) {
+      try {
+        await logOrderEmail(orderId, { subject, text: fill(bodyRaw, ctx), customerEmail: to, customerName: name, ref });
+      } catch { /* le journal ne doit jamais bloquer l'envoi */ }
+    }
+    return Response.json({ ok: true, via: r.via });
+  }
   return Response.json({ error: r?.error || "Envoi impossible (Gmail non connecté ?)." }, { status: 500 });
 }

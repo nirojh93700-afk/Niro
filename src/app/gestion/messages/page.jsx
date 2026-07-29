@@ -28,7 +28,7 @@ export default function MessagesAdmin() {
   const [scheduled, setScheduled] = useState([]);
   const [orders, setOrders] = useState([]);
   // Formulaire « programmer / envoyer »
-  const [f, setF] = useState({ to: "", name: "", ref: "", subject: "", body: "", date: "", time: "" });
+  const [f, setF] = useState({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" });
   const [sending, setSending] = useState(false);
 
   const load = useCallback(async (k) => {
@@ -92,7 +92,7 @@ export default function MessagesAdmin() {
   // ---- Programmer / Envoyer ----
   function pickClient(e) {
     const o = orders.find((x) => x.id === e.target.value);
-    if (o) setF((f) => ({ ...f, to: o.customerEmail || "", name: o.customerName || "", ref: o.ref || (o.id || "").slice(-6) }));
+    if (o) setF((f) => ({ ...f, to: o.customerEmail || "", name: o.customerName || "", ref: o.ref || (o.id || "").slice(-6), orderId: o.id || "" }));
   }
   // Charge un modèle (par id) dans le formulaire d'envoi.
   function pickTemplate(e) {
@@ -107,10 +107,10 @@ export default function MessagesAdmin() {
     try {
       const r = await fetch("/api/admin/send-now", {
         method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ to: f.to, name: f.name, ref: f.ref, subject: f.subject, body: f.body }),
+        body: JSON.stringify({ to: f.to, name: f.name, ref: f.ref, orderId: f.orderId, subject: f.subject, body: f.body }),
       });
       const d = await r.json();
-      if (r.ok) { setMsg(`Message envoyé à ${f.to} ✓`); setF({ to: "", name: "", ref: "", subject: "", body: "", date: "", time: "" }); }
+      if (r.ok) { setMsg(`Message envoyé à ${f.to} ✓`); setF({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" }); }
       else setMsg(d.error || "Échec de l'envoi.");
     } catch { setMsg("Échec de l'envoi."); }
     finally { setSending(false); }
@@ -123,7 +123,7 @@ export default function MessagesAdmin() {
     if (!sendAt || sendAt < Date.now()) { setMsg("La date/heure doit être dans le futur."); return; }
     const r = await fetch("/api/admin/scheduled", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ to: f.to, name: f.name, subject: f.subject, body: f.body, sendAt }) });
     const d = await r.json();
-    if (r.ok) { setMsg("Message programmé pour le " + fmtWhen(sendAt) + " ✓"); setF({ to: "", name: "", ref: "", subject: "", body: "", date: "", time: "" }); load(key); }
+    if (r.ok) { setMsg("Message programmé pour le " + fmtWhen(sendAt) + " ✓"); setF({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" }); load(key); }
     else setMsg(d.error || "Échec.");
   }
   async function cancelScheduled(id) {

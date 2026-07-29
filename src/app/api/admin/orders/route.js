@@ -1,4 +1,4 @@
-import { isAdmin, getSettings } from "@/lib/stock";
+import { isAdmin, getSettings, logOrderEmail } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
@@ -71,6 +71,12 @@ export async function POST(req) {
         // Gmail en priorité (arrive vers toute adresse), Resend en secours ; copie à la gérante.
         const r = await sendClientMail({ to: order.customerEmail, subject: mail.subject, html: mail.html, bcc: BRAND.contact });
         emailed = r.ok;
+        // Journalise l'e-mail dans le fil de la commande (suivi des messages envoyés).
+        if (r.ok) {
+          try {
+            await logOrderEmail(id, { subject: mail.subject, customerEmail: order.customerEmail, customerName: order.customerName, ref: order.ref });
+          } catch { /* le journal ne doit jamais bloquer */ }
+        }
       }
     }
   }

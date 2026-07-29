@@ -60,7 +60,7 @@ export default function SuiviPage({ params }) {
       </p>
       {statusLabel && <p style={{ textAlign: "center", fontWeight: 700, color: "#a98935" }}>{statusLabel}</p>}
 
-      {(thread?.messages || []).map((m, i) => (
+      {(thread?.messages || []).filter((m) => m.kind !== "log").map((m, i) => (
         <div key={i} style={{ ...card, background: m.from === "atelier" ? "#faf6ee" : "#fff", marginLeft: m.from === "cliente" ? 30 : 0, marginRight: m.from === "atelier" ? 30 : 0 }}>
           <div style={{ fontSize: 12, color: "#a98935", fontWeight: 700, marginBottom: 6 }}>
             {m.from === "atelier" ? "Niv Création" : "Vous"}
