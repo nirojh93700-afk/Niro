@@ -26,9 +26,9 @@ export default function DocumentActions({ id, type, status }) {
 
   return (
     <div className="doc-actions" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 24 }}>
-      {type === "devis" && status !== "paye" && (
+      {status !== "paye" && (
         <button className="btn btn-gold" onClick={pay} disabled={loading}>
-          {loading ? "Redirection…" : "Accepter et payer en ligne"}
+          {loading ? "Redirection…" : (type === "facture" ? "Payer en ligne" : "Accepter et payer en ligne")}
         </button>
       )}
       {status === "paye" && (
