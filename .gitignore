@@ -40,3 +40,9 @@ motifs-gravure.zip
 
 # Archives de livraison (motifs, etc.) — non déployées
 *.zip
+
+# Skills HyperFrames installés localement (générés)
+/.agents/
+/.claude/skills/
+# Sorties de rendu vidéo (regénérables)
+/videos/niv-produits/renders/

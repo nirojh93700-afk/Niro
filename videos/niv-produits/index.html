@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #faf6ee; }
+      body { font-family: "EB Garamond", Georgia, serif; }
+      .fill { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      .scene { position: absolute; inset: 0; }
+      .photo { object-fit: cover; }
+      .frame { position: absolute; inset: 26px; border: 2px solid rgba(226,198,126,.55); pointer-events: none; }
+      .frame2 { position: absolute; inset: 40px; border: 1px solid rgba(226,198,126,.30); pointer-events: none; }
+      .grad { position: absolute; left:0; right:0; bottom:0; height: 900px;
+        background: linear-gradient(to top, rgba(12,8,3,.82), rgba(12,8,3,0)); }
+      .cap { position: absolute; left: 0; right: 0; bottom: 150px; text-align: center; color: #fff; }
+      .eyebrow { font-size: 30px; letter-spacing: 10px; color: #e2c67e; }
+      .rule { width: 92px; height: 2px; background: #e2c67e; margin: 26px auto; opacity: .9; }
+      .title { font-size: 82px; font-weight: 700; color: #fff; line-height: 1.1; }
+      .tag { font-size: 40px; color: #eee6d2; margin-top: 14px; }
+      .foot { position: absolute; left:0; right:0; bottom: 70px; text-align:center; color:#e2c67e; font-size: 30px; letter-spacing: 4px; }
+      .card { background: #faf6ee; }
+      .inner { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+      .brandN { font-size: 220px; font-weight: 700; color: #a98935; line-height: 1; }
+      .brandC { font-size: 64px; letter-spacing: 20px; color: #241a0c; margin-top: 6px; }
+      .goldrule { width: 240px; height: 2px; background: #c9a24b; margin: 34px 0; }
+      .subtle { font-size: 36px; letter-spacing: 3px; color: #7a6f5c; }
+      .site { font-size: 82px; font-weight: 700; color: #a98935; letter-spacing: 2px; }
+      .cardline { font-size: 42px; letter-spacing: 2px; color: #7a6f5c; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+
+      <div class="clip fill card" data-start="0" data-duration="15" data-track-index="0"></div>
+
+      <div id="intro" class="clip fill card" data-start="0" data-duration="3.2" data-track-index="1">
+        <div class="inner">
+          <div class="brandN">NiV</div>
+          <div class="brandC">CRÉATION</div>
+          <div class="goldrule"></div>
+          <div class="subtle">Atelier de personnalisation</div>
+        </div>
+        <div class="frame"></div><div class="frame2"></div>
+      </div>
+
+      <div id="s1" class="clip fill" data-start="2.9" data-duration="4.4" data-track-index="2">
+        <div class="scene">
+          <img class="fill photo" data-s1 src="assets/carafe_gravee.jpg" alt="" />
+          <div class="grad"></div><div class="frame"></div>
+          <div class="cap" data-layout-allow-overlap>
+            <div class="eyebrow">NOUVEAUTÉ</div><div class="rule"></div>
+            <div class="title">Carafe à whisky<br/>gravée</div>
+            <div class="tag">Gravée à votre nom, votre date</div>
+          </div>
+          <div class="foot" data-layout-allow-overlap>·&nbsp;&nbsp;Gravé en France&nbsp;&nbsp;·</div>
+        </div>
+      </div>
+
+      <div id="s2" class="clip fill" data-start="7.0" data-duration="4.2" data-track-index="3">
+        <div class="scene">
+          <img class="fill photo" data-s2 src="assets/carafe_ambiance.jpg" alt="" />
+          <div class="grad"></div><div class="frame"></div>
+          <div class="cap" data-layout-allow-overlap>
+            <div class="title" style="font-size:66px">Un cadeau d'exception</div>
+            <div class="tag">Fait main dans notre atelier</div>
+          </div>
+          <div class="foot" data-layout-allow-overlap>·&nbsp;&nbsp;Gravé en France&nbsp;&nbsp;·</div>
+        </div>
+      </div>
+
+      <div id="s3" class="clip fill" data-start="10.9" data-duration="2.6" data-track-index="4">
+        <div class="scene">
+          <img class="fill photo" data-s3 src="assets/carafe_whiskey_1892.jpg" alt="" />
+          <div class="grad"></div><div class="frame"></div>
+          <div class="cap" data-layout-allow-overlap>
+            <div class="tag" style="font-size:42px;color:#f3e8d3">Anniversaire · Mariage · Réussite</div>
+          </div>
+          <div class="foot" data-layout-allow-overlap>·&nbsp;&nbsp;Gravé en France&nbsp;&nbsp;·</div>
+        </div>
+      </div>
+
+      <div id="outro" class="clip fill card" data-start="13.2" data-duration="1.8" data-track-index="5">
+        <div class="inner">
+          <div class="cardline">Fait à la main en France</div>
+          <div class="goldrule"></div>
+          <div class="site">nivcreation.fr</div>
+        </div>
+        <div class="frame"></div><div class="frame2"></div>
+      </div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // INTRO — apparition douce (sur le wrapper interne)
+      tl.from("#intro .inner", { opacity: 0, y: 24, duration: 0.9, ease: "power2.out" }, 0.1);
+
+      // Chaque plan : fondu d'entrée (crossfade sur la scène précédente) + zoom lent + légende
+      function plan(sel, imgSel, t0, dur) {
+        tl.fromTo(sel + " .scene", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power1.out" }, t0);
+        tl.fromTo(imgSel, { scale: 1.0 }, { scale: 1.08, duration: dur, ease: "none" }, t0);
+        tl.from(sel + " .cap", { opacity: 0, y: 36, duration: 0.9, ease: "power2.out" }, t0 + 0.35);
+      }
+      plan("#s1", "[data-s1]", 2.9, 4.4);
+      plan("#s2", "[data-s2]", 7.0, 4.2);
+      plan("#s3", "[data-s3]", 10.9, 2.6);
+
+      // OUTRO
+      tl.from("#outro .inner", { opacity: 0, y: 20, duration: 0.9, ease: "power2.out" }, 13.3);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
