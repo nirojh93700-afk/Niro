@@ -137,7 +137,7 @@ if __name__ == "__main__":
     PRODUCTS = {
         "carafe": (["/produits/carafe_gravee.jpg", "/produits/carafe_ambiance.jpg", "/produits/carafe_whiskey_1892.jpg"],
                    ["Carafe à whisky", "gravée"], "Gravée à votre nom, votre date"),
-        "verre-vin": (["/produits/verre_vin_geniet.jpg", "/produits/verre_vin_ambiance.jpg"],
+        "verre-vin": (["/produits/verre_vin_geniet.jpg", "/produits/verre_vin_geniet.jpg"],
                       ["Verre à vin", "personnalisé"], "Un prénom, une date, un souvenir"),
         "plaque": (["/produits/collier_plaque_a_graver_argente_et_noir.jpg", "/produits/collier_plaque_a_graver_argente.jpg", "/produits/collier_plaque_a_graver_dore.jpg"],
                    ["Collier plaque", "acier à graver"], "Le bijou qui porte vos mots"),
