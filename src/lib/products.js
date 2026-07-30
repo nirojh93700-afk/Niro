@@ -713,11 +713,11 @@ export const products = [
     ],
     // Stock suivi PAR COULEUR (stockId) ; le prix change selon Sans/Avec gravure.
     variants: [
-      { id: "cuir-tresse-argente-sans", title: "Argenté / Sans texte", price: 22.90, stockId: "cuir-argent", image: "/produits/bracelet_cuir_tresse_a_graver_argente.jpg" },
+      { id: "cuir-tresse-argente-sans", title: "Argenté / Sans texte", price: 24.90, stockId: "cuir-argent", image: "/produits/bracelet_cuir_tresse_a_graver_argente.jpg" },
       { id: "cuir-tresse-argente-texte", title: "Argenté / Avec texte", price: 28.90, stockId: "cuir-argent", image: "/produits/bracelet_cuir_tresse_a_graver_argente.jpg" },
-      { id: "cuir-tresse-dore-sans", title: "Doré / Sans texte", price: 22.90, stockId: "cuir-dore", image: "/produits/bracelet_cuir_tresse_a_graver_dore.jpg" },
+      { id: "cuir-tresse-dore-sans", title: "Doré / Sans texte", price: 24.90, stockId: "cuir-dore", image: "/produits/bracelet_cuir_tresse_a_graver_dore.jpg" },
       { id: "cuir-tresse-dore-texte", title: "Doré / Avec texte", price: 28.90, stockId: "cuir-dore", image: "/produits/bracelet_cuir_tresse_a_graver_dore.jpg" },
-      { id: "cuir-tresse-noir-sans", title: "Noir / Sans texte", price: 22.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
+      { id: "cuir-tresse-noir-sans", title: "Noir / Sans texte", price: 24.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
       { id: "cuir-tresse-noir-texte", title: "Noir / Avec texte", price: 28.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet masculin et intemporel : <strong>cuir véritable tressé</strong> associé à une <strong>plaque en acier inoxydable</strong> gravable.</p>
