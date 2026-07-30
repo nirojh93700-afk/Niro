@@ -10,92 +10,105 @@
       body { font-family: "EB Garamond", Georgia, serif; color: #f3e8d3; }
       .fill { position: absolute; inset: 0; width: 1080px; height: 1920px; }
       .scene { position: absolute; inset: 0; }
-      .ink { background: radial-gradient(120% 90% at 50% 40%, #241a0c 0%, #141008 70%); }
+      .ink { background: radial-gradient(120% 90% at 50% 42%, #241a0c 0%, #141008 72%); }
       .photo { object-fit: cover; }
       .pwrap { position: absolute; inset: 0; overflow: hidden; }
-      .grad { position: absolute; left:0; right:0; bottom:0; height: 1000px;
-        background: linear-gradient(to top, rgba(10,7,2,.9), rgba(10,7,2,0)); }
-      .sweep { position: absolute; top:0; bottom:0; left:-60%; width: 55%;
-        background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,.45) 50%, transparent 80%);
-        mix-blend-mode: screen; }
-      .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-      .eyebrow { font-size: 30px; letter-spacing: 12px; color: #c9a24b; }
+      .grad { position: absolute; left:0; right:0; bottom:0; height: 1100px;
+        background: linear-gradient(to top, rgba(10,7,2,.92), rgba(10,7,2,0)); }
+      .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 90px; }
+      .cap { position:absolute; left:0; right:0; bottom: 300px; text-align:center; padding:0 80px; }
+      .eyebrow { font-size: 30px; letter-spacing: 12px; color: #c9a24b; margin-bottom: 22px; }
+      .h-small { font-size: 44px; color: #b7a988; }
+      .h-big { font-size: 92px; font-weight: 700; color: #fff; line-height: 1.12; margin-top: 14px; }
+      .story { font-size: 74px; font-weight: 700; color: #fff; line-height: 1.16; }
+      .story.gold { color: #c9a24b; }
+      .kw { font-size: 96px; font-weight: 700; color: #fff; position:absolute; left:0; right:0; text-align:center; padding:0 70px; }
       .gline { height: 2px; background: linear-gradient(90deg, transparent, #c9a24b, transparent); transform: scaleX(0); }
-      .title { font-size: 88px; font-weight: 700; color: #fff; line-height: 1.08; white-space: nowrap; }
-      .titlewrap { overflow: hidden; }
-      .under { width: 220px; height: 2px; background: #c9a24b; margin: 22px auto 0; transform: scaleX(0); transform-origin: center; }
-      .tag { font-size: 40px; color: #e9dcc2; }
-      .cap { position: absolute; left:0; right:0; bottom: 260px; text-align:center; }
-      .foot { position:absolute; left:0; right:0; bottom: 90px; text-align:center; color:#c9a24b; font-size: 30px; letter-spacing: 4px; }
-      .brandN { font-size: 240px; font-weight: 700; color: #c9a24b; line-height: 1; }
-      .brandC { font-size: 66px; letter-spacing: 22px; color: #f3e8d3; }
-      .kw { font-size: 96px; font-weight: 700; color: #fff; position:absolute; left:0; right:0; text-align:center; }
-      .site { font-size: 92px; font-weight: 700; color: #c9a24b; letter-spacing: 2px; }
-      .sub { font-size: 34px; letter-spacing: 3px; color: #b7a988; }
-      /* cadre doré qui se dessine */
-      .gf { position:absolute; background:#c9a24b; }
-      .gf.t { top:40px; left:40px; right:40px; height:2px; transform:scaleX(0); transform-origin:left; }
-      .gf.b { bottom:40px; left:40px; right:40px; height:2px; transform:scaleX(0); transform-origin:right; }
-      .gf.l { top:40px; bottom:40px; left:40px; width:2px; transform:scaleY(0); transform-origin:top; }
-      .gf.r { top:40px; bottom:40px; right:40px; width:2px; transform:scaleY(0); transform-origin:bottom; }
+      .brandN { font-size: 210px; font-weight: 700; color: #c9a24b; line-height: 1; }
+      .brandC { font-size: 60px; letter-spacing: 20px; color: #f3e8d3; }
+      .site { font-size: 86px; font-weight: 700; color: #c9a24b; letter-spacing: 2px; }
+      .sub { font-size: 36px; letter-spacing: 2px; color: #b7a988; }
+      .mlabel { position:absolute; left:0; right:0; bottom: 150px; text-align:center; color:#f3e8d3; font-size: 52px; font-weight:700; padding:0 80px; text-shadow:0 2px 18px rgba(0,0,0,.7); }
+      .mframe { position:absolute; inset:30px; border:2px solid rgba(226,198,126,.45); pointer-events:none; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1080" data-height="1920">
 
-      <div class="clip fill ink" data-start="0" data-duration="15" data-track-index="0"></div>
+      <div class="clip fill ink" data-start="0" data-duration="36" data-track-index="0"></div>
 
-      <!-- INTRO : ligne dorée qui se dessine + marque -->
-      <div id="intro" class="clip fill ink" data-start="0" data-duration="3.3" data-track-index="1">
+      <!-- HOOK -->
+      <div id="hook" class="clip fill ink" data-start="0" data-duration="3.9" data-track-index="1">
         <div class="center">
-          <div class="brandN" id="i-n">NiV</div>
-          <div class="gline" id="i-line" style="width:360px; margin:10px 0 24px"></div>
-          <div class="brandC" id="i-c">CRÉATION</div>
-          <div class="sub" id="i-s" style="margin-top:26px">Atelier de personnalisation</div>
+          <div class="h-small" id="hk-a">On m'a dit :</div>
+          <div class="h-big" id="hk-b">«&nbsp;C'est juste<br/>un objet.&nbsp;»</div>
         </div>
       </div>
 
-      <!-- PLAN 1 : révélation photo + reflet + titre gravé -->
-      <div id="s1" class="clip fill" data-start="3.0" data-duration="5.0" data-track-index="2">
+      <!-- SOUVENIR -->
+      <div id="sc" class="clip fill" data-start="3.6" data-duration="3.7" data-track-index="2">
         <div class="scene">
-          <div class="pwrap"><img class="fill photo" id="p1" src="assets/carafe_gravee.jpg" alt="" /><div class="sweep" id="sweep1"></div></div>
+          <div class="pwrap"><img class="fill photo" id="p-c" src="assets/cristal-h-demo-couple.jpg" alt="" /></div>
           <div class="grad"></div>
           <div class="cap" data-layout-allow-overlap>
-            <div class="eyebrow" id="s1-eye">NOUVEAUTÉ</div>
-            <div class="titlewrap"><div class="title" id="s1-title" style="clip-path:inset(0 100% 0 0)">Carafe à whisky gravée</div></div>
-            <div class="under" id="s1-under"></div>
+            <div class="eyebrow" id="sc-eye">NIV CRÉATION</div>
+            <div class="story" id="sc-1">Alors je grave<br/>vos souvenirs.</div>
           </div>
-          <div class="foot" id="s1-foot" data-layout-allow-overlap>·&nbsp;&nbsp;Gravé en France&nbsp;&nbsp;·</div>
         </div>
       </div>
 
-      <!-- KINETIC : mots qui apparaissent en rythme -->
-      <div id="kin" class="clip fill ink" data-start="7.7" data-duration="4.0" data-track-index="3">
+      <!-- MONTAGE (7 produits) -->
+      <div id="m1" class="clip fill" data-start="7.0" data-duration="1.6" data-track-index="3"><div class="scene"><div class="pwrap"><img class="fill photo" id="im1" src="assets/cristal-v-couple.jpg" alt="" /></div></div></div>
+      <div id="m2" class="clip fill" data-start="8.2" data-duration="1.5" data-track-index="4"><div class="scene"><div class="pwrap"><img class="fill photo" id="im2" src="assets/carafe_gravee.jpg" alt="" /></div></div></div>
+      <div id="m3" class="clip fill" data-start="9.3" data-duration="1.5" data-track-index="5"><div class="scene"><div class="pwrap"><img class="fill photo" id="im3" src="assets/verre_vin_geniet.jpg" alt="" /></div></div></div>
+      <div id="m4" class="clip fill" data-start="10.4" data-duration="1.5" data-track-index="6"><div class="scene"><div class="pwrap"><img class="fill photo" id="im4" src="assets/flute-grav-01.jpg" alt="" /></div></div></div>
+      <div id="m5" class="clip fill" data-start="11.5" data-duration="1.5" data-track-index="7"><div class="scene"><div class="pwrap"><img class="fill photo" id="im5" src="assets/cristal-pcles-coeur-creme.jpg" alt="" /></div></div></div>
+      <div id="m6" class="clip fill" data-start="12.6" data-duration="1.5" data-track-index="8"><div class="scene"><div class="pwrap"><img class="fill photo" id="im6" src="assets/couverts_enfants_ex_prenom.jpg" alt="" /></div></div></div>
+      <div id="m7" class="clip fill" data-start="13.7" data-duration="1.7" data-track-index="9"><div class="scene"><div class="pwrap"><img class="fill photo" id="im7" src="assets/collier_plaque_a_graver_argente_et_noir.jpg" alt="" /></div></div></div>
+      <div id="mlab" class="clip fill" data-start="7.1" data-duration="8.2" data-track-index="10">
+        <div class="grad"></div>
+        <div class="mframe" id="mfr"></div>
+        <div class="mlabel" id="mlabel" data-layout-allow-overlap>Des dizaines de créations<br/>à personnaliser.</div>
+      </div>
+
+      <!-- KINETIC -->
+      <div id="kin" class="clip fill ink" data-start="15.0" data-duration="4.9" data-track-index="11">
         <div class="scene">
-          <div class="kw" id="k1" style="top:820px">Un prénom.</div>
-          <div class="kw" id="k2" style="top:820px">Une date.</div>
-          <div class="kw" id="k3" style="top:820px; color:#c9a24b">Un souvenir gravé.</div>
+          <div class="kw" id="k1" style="top:840px">Une photo.</div>
+          <div class="kw" id="k2" style="top:840px">Un prénom.</div>
+          <div class="kw" id="k3" style="top:790px; color:#c9a24b; font-size:78px">Un moment qu'on ne<br/>veut pas oublier.</div>
         </div>
       </div>
 
-      <!-- PLAN 2 : cadre doré qui se dessine -->
-      <div id="s2" class="clip fill" data-start="11.4" data-duration="2.4" data-track-index="4">
+      <!-- HISTOIRE (flûtes) -->
+      <div id="sw" class="clip fill" data-start="19.7" data-duration="5.3" data-track-index="12">
         <div class="scene">
-          <div class="pwrap"><img class="fill photo" id="p2" src="assets/carafe_whiskey_1892.jpg" alt="" /></div>
+          <div class="pwrap"><img class="fill photo" id="p-w" src="assets/flute-grav-01.jpg" alt="" /></div>
           <div class="grad"></div>
-          <div class="gf t" id="gf-t"></div><div class="gf b" id="gf-b"></div><div class="gf l" id="gf-l"></div><div class="gf r" id="gf-r"></div>
-          <div class="cap" data-layout-allow-overlap style="bottom:220px">
-            <div class="tag" id="s2-tag" style="font-size:46px;color:#fff">Un cadeau d'exception</div>
+          <div class="cap" data-layout-allow-overlap>
+            <div class="story" id="sw-1">Chaque commande,<br/>c'est une histoire.</div>
+            <div class="story gold" id="sw-2" style="margin-top:16px">La vôtre.</div>
           </div>
+        </div>
+      </div>
+
+      <!-- VALEURS -->
+      <div id="val" class="clip fill ink" data-start="24.7" data-duration="5.0" data-track-index="13">
+        <div class="center">
+          <div class="story" id="v-1" style="font-size:80px">Fait main,<br/>en France.</div>
+          <div class="gline" id="v-line" style="width:220px; margin:34px 0"></div>
+          <div class="story gold" id="v-2" style="font-size:64px">Avec le cœur.</div>
         </div>
       </div>
 
       <!-- OUTRO -->
-      <div id="outro" class="clip fill ink" data-start="13.6" data-duration="1.4" data-track-index="5">
+      <div id="outro" class="clip fill ink" data-start="29.5" data-duration="6.5" data-track-index="14">
         <div class="center">
-          <div class="sub" id="o-1">Fait à la main en France</div>
-          <div class="gline" id="o-line" style="width:260px; margin:20px 0 22px"></div>
+          <div class="brandN" id="o-n">NiV</div>
+          <div class="brandC" id="o-c">CRÉATION</div>
+          <div class="gline" id="o-line" style="width:280px; margin:26px 0"></div>
           <div class="site" id="o-site">nivcreation.fr</div>
+          <div class="sub" id="o-sub" style="margin-top:22px">Offrez un souvenir, pas juste un cadeau.</div>
         </div>
       </div>
 
@@ -105,44 +118,55 @@
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
 
-      // INTRO
-      tl.from("#i-n", { opacity: 0, scale: 0.85, duration: 0.8, ease: "power3.out" }, 0.1)
-        .to("#i-line", { scaleX: 1, duration: 0.7, ease: "power2.out" }, 0.5)
-        .from("#i-c", { opacity: 0, y: 18, duration: 0.8, ease: "power2.out" }, 0.7)
-        .from("#i-s", { opacity: 0, duration: 0.6 }, 1.1);
+      // HOOK (voix 0.4–3.7)
+      tl.from("#hk-a", { opacity: 0, y: 16, duration: 0.6, ease: "power2.out" }, 0.2)
+        .from("#hk-b", { opacity: 0, y: 26, duration: 0.8, ease: "power3.out" }, 0.8);
 
-      // PLAN 1 — photo reveal + zoom lent + reflet + titre gravé (wipe) + soulignement
-      tl.from("#s1 .scene", { opacity: 0, duration: 0.5 }, 3.0)
-        .fromTo("#p1", { scale: 1.12 }, { scale: 1.0, duration: 5.0, ease: "none" }, 3.0)
-        .from("#s1-eye", { opacity: 0, y: 20, duration: 0.6 }, 3.5)
-        .to("#s1-title", { clipPath: "inset(0 0% 0 0)", duration: 1.1, ease: "power2.inOut" }, 3.8)  // gravure du titre
-        .to("#s1-under", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 4.7)
-        .fromTo("#sweep1", { x: -650 }, { x: 1250, duration: 1.1, ease: "power1.inOut" }, 4.2)       // reflet
-        .from("#s1-foot", { opacity: 0, duration: 0.6 }, 4.6);
+      // SOUVENIR (voix 3.9–6.9)
+      tl.from("#sc .scene", { opacity: 0, duration: 0.6 }, 3.6)
+        .fromTo("#p-c", { scale: 1.1 }, { scale: 1.0, duration: 3.7, ease: "none" }, 3.6)
+        .from("#sc-eye", { opacity: 0, y: 16, duration: 0.5 }, 4.2)
+        .from("#sc-1", { opacity: 0, y: 30, duration: 0.9, ease: "power2.out" }, 4.5);
 
-      // KINETIC — 3 mots qui se succèdent
-      function word(sel, t) {
-        tl.fromTo(sel, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, t)
-          .to(sel, { opacity: 0, y: -30, duration: 0.45, ease: "power1.in" }, t + 1.05);
+      // MONTAGE (voix 7.1–14.85) — 7 produits, fondus enchaînés + léger zoom
+      function m(sel, img, t0, dur) {
+        tl.fromTo(sel + " .scene", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, t0);
+        tl.fromTo(img, { scale: 1.08 }, { scale: 1.0, duration: dur + 0.3, ease: "none" }, t0);
       }
-      tl.set("#k1", { opacity: 0 }, 7.7); tl.set("#k2", { opacity: 0 }, 7.7); tl.set("#k3", { opacity: 0 }, 7.7);
-      word("#k1", 7.9); word("#k2", 9.0);
-      // dernier mot reste plus longtemps
-      tl.fromTo("#k3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 10.1);
+      m("#m1", "#im1", 7.0, 1.6); m("#m2", "#im2", 8.2, 1.5); m("#m3", "#im3", 9.3, 1.5);
+      m("#m4", "#im4", 10.4, 1.5); m("#m5", "#im5", 11.5, 1.5); m("#m6", "#im6", 12.6, 1.5);
+      m("#m7", "#im7", 13.7, 1.7);
+      tl.from("#mlabel", { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, 7.4)
+        .to("#mlabel", { opacity: 0, duration: 0.4 }, 14.6)
+        .set("#mlabel", { opacity: 0 }, 15.0);
 
-      // PLAN 2 — cadre doré qui se dessine
-      tl.from("#s2 .scene", { opacity: 0, duration: 0.5 }, 11.4)
-        .fromTo("#p2", { scale: 1.08 }, { scale: 1.0, duration: 2.4, ease: "none" }, 11.4)
-        .to("#gf-t", { scaleX: 1, duration: 0.5, ease: "power2.out" }, 11.7)
-        .to("#gf-r", { scaleY: 1, duration: 0.5, ease: "power2.out" }, 11.9)
-        .to("#gf-b", { scaleX: 1, duration: 0.5, ease: "power2.out" }, 12.1)
-        .to("#gf-l", { scaleY: 1, duration: 0.5, ease: "power2.out" }, 12.3)
-        .from("#s2-tag", { opacity: 0, y: 24, duration: 0.7, ease: "power2.out" }, 12.2);
+      // KINETIC (voix 15.1–19.6)
+      function word(sel, t) {
+        tl.fromTo(sel, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, t)
+          .to(sel, { opacity: 0, y: -28, duration: 0.42, ease: "power1.in" }, t + 1.3);
+      }
+      tl.set("#k1", { opacity: 0 }, 15.0); tl.set("#k2", { opacity: 0 }, 15.0); tl.set("#k3", { opacity: 0 }, 15.0);
+      word("#k1", 15.4); word("#k2", 16.8);
+      tl.fromTo("#k3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 18.2);
 
-      // OUTRO
-      tl.from("#o-1", { opacity: 0, y: 16, duration: 0.6 }, 13.7)
-        .to("#o-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 13.9)
-        .from("#o-site", { opacity: 0, y: 18, duration: 0.7, ease: "power3.out" }, 14.1);
+      // HISTOIRE (voix 19.9–24.8)
+      tl.from("#sw .scene", { opacity: 0, duration: 0.6 }, 19.7)
+        .fromTo("#p-w", { scale: 1.1 }, { scale: 1.0, duration: 5.3, ease: "none" }, 19.7)
+        .from("#sw-1", { opacity: 0, y: 30, duration: 0.9, ease: "power2.out" }, 20.3)
+        .from("#sw-2", { opacity: 0, y: 22, duration: 0.8, ease: "power2.out" }, 22.6);
+
+      // VALEURS (voix 25.1–29.5)
+      tl.from("#val .center", { opacity: 0, duration: 0.5 }, 24.7)
+        .from("#v-1", { opacity: 0, y: 24, duration: 0.8, ease: "power2.out" }, 25.1)
+        .to("#v-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 26.3)
+        .from("#v-2", { opacity: 0, y: 20, duration: 0.8, ease: "power2.out" }, 26.8);
+
+      // OUTRO (voix 29.8–35.2)
+      tl.from("#o-n", { opacity: 0, scale: 0.9, duration: 0.7, ease: "power3.out" }, 29.8)
+        .from("#o-c", { opacity: 0, y: 14, duration: 0.6 }, 30.2)
+        .to("#o-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 30.5)
+        .from("#o-site", { opacity: 0, y: 16, duration: 0.7, ease: "power3.out" }, 30.7)
+        .from("#o-sub", { opacity: 0, duration: 0.6 }, 31.3);
 
       window.__timelines["main"] = tl;
     </script>
