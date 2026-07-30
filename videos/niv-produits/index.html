@@ -28,24 +28,23 @@
       .brandC { font-size: 60px; letter-spacing: 20px; color: #f3e8d3; }
       .site { font-size: 86px; font-weight: 700; color: #c9a24b; letter-spacing: 2px; }
       .sub { font-size: 36px; letter-spacing: 2px; color: #b7a988; }
-      .foot { position:absolute; left:0; right:0; bottom: 120px; text-align:center; color:#e9dcc2; font-size: 40px; padding:0 90px; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="23" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1080" data-height="1920">
 
-      <div class="clip fill ink" data-start="0" data-duration="23" data-track-index="0"></div>
+      <div class="clip fill ink" data-start="0" data-duration="32" data-track-index="0"></div>
 
       <!-- HOOK -->
-      <div id="hook" class="clip fill ink" data-start="0" data-duration="3.9" data-track-index="1">
+      <div id="hook" class="clip fill ink" data-start="0" data-duration="4.2" data-track-index="1">
         <div class="center">
           <div class="h-small" id="hk-a">On m'a dit :</div>
           <div class="h-big" id="hk-b">«&nbsp;C'est juste<br/>un objet.&nbsp;»</div>
         </div>
       </div>
 
-      <!-- SOUVENIR GRAVÉ (cristal couple) -->
-      <div id="sc" class="clip fill" data-start="3.6" data-duration="5.6" data-track-index="2">
+      <!-- SOUVENIR (cristal couple) -->
+      <div id="sc" class="clip fill" data-start="3.9" data-duration="5.9" data-track-index="2">
         <div class="scene">
           <div class="pwrap"><img class="fill photo" id="p-c" src="assets/cristal-h-demo-couple.jpg" alt="" /></div>
           <div class="grad"></div>
@@ -58,7 +57,7 @@
       </div>
 
       <!-- KINETIC -->
-      <div id="kin" class="clip fill ink" data-start="8.9" data-duration="4.2" data-track-index="3">
+      <div id="kin" class="clip fill ink" data-start="9.2" data-duration="6.9" data-track-index="3">
         <div class="scene">
           <div class="kw" id="k1" style="top:840px">Une photo.</div>
           <div class="kw" id="k2" style="top:840px">Un prénom.</div>
@@ -66,8 +65,8 @@
         </div>
       </div>
 
-      <!-- HISTOIRE (table ambiance) -->
-      <div id="sw" class="clip fill" data-start="12.9" data-duration="4.4" data-track-index="4">
+      <!-- HISTOIRE -->
+      <div id="sw" class="clip fill" data-start="15.6" data-duration="5.7" data-track-index="4">
         <div class="scene">
           <div class="pwrap"><img class="fill photo" id="p-w" src="assets/carafe_ambiance.jpg" alt="" /></div>
           <div class="grad"></div>
@@ -78,8 +77,8 @@
         </div>
       </div>
 
-      <!-- ATELIER / VALEURS -->
-      <div id="val" class="clip fill ink" data-start="17.2" data-duration="3.1" data-track-index="5">
+      <!-- VALEURS -->
+      <div id="val" class="clip fill ink" data-start="20.8" data-duration="5.2" data-track-index="5">
         <div class="center">
           <div class="story" id="v-1" style="font-size:80px">Fait main,<br/>en France.</div>
           <div class="gline" id="v-line" style="width:220px; margin:34px 0"></div>
@@ -88,7 +87,7 @@
       </div>
 
       <!-- OUTRO -->
-      <div id="outro" class="clip fill ink" data-start="20.2" data-duration="2.8" data-track-index="6">
+      <div id="outro" class="clip fill ink" data-start="25.5" data-duration="6.5" data-track-index="6">
         <div class="center">
           <div class="brandN" id="o-n">NiV</div>
           <div class="brandC" id="o-c">CRÉATION</div>
@@ -104,44 +103,44 @@
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
 
-      // HOOK
+      // HOOK (voix 0.5–3.8)
       tl.from("#hk-a", { opacity: 0, y: 16, duration: 0.6, ease: "power2.out" }, 0.2)
-        .from("#hk-b", { opacity: 0, y: 26, duration: 0.8, ease: "power3.out" }, 0.7);
+        .from("#hk-b", { opacity: 0, y: 26, duration: 0.8, ease: "power3.out" }, 0.8);
 
-      // SOUVENIR
-      tl.from("#sc .scene", { opacity: 0, duration: 0.6 }, 3.6)
-        .fromTo("#p-c", { scale: 1.12 }, { scale: 1.0, duration: 5.6, ease: "none" }, 3.6)
-        .from("#sc-eye", { opacity: 0, y: 16, duration: 0.6 }, 4.2)
-        .from("#sc-1", { opacity: 0, y: 30, duration: 0.9, ease: "power2.out" }, 4.5)
-        .from("#sc-2", { opacity: 0, y: 22, duration: 0.8, ease: "power2.out" }, 5.6);
+      // SOUVENIR (voix 4.4–9.2)
+      tl.from("#sc .scene", { opacity: 0, duration: 0.6 }, 3.9)
+        .fromTo("#p-c", { scale: 1.12 }, { scale: 1.0, duration: 5.9, ease: "none" }, 3.9)
+        .from("#sc-eye", { opacity: 0, y: 16, duration: 0.6 }, 4.6)
+        .from("#sc-1", { opacity: 0, y: 30, duration: 0.9, ease: "power2.out" }, 4.9)
+        .from("#sc-2", { opacity: 0, y: 22, duration: 0.8, ease: "power2.out" }, 7.6);
 
-      // KINETIC
+      // KINETIC (voix 9.6–15.6)
       function word(sel, t) {
         tl.fromTo(sel, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, t)
-          .to(sel, { opacity: 0, y: -28, duration: 0.42, ease: "power1.in" }, t + 1.0);
+          .to(sel, { opacity: 0, y: -28, duration: 0.42, ease: "power1.in" }, t + 1.35);
       }
-      tl.set("#k1", { opacity: 0 }, 8.9); tl.set("#k2", { opacity: 0 }, 8.9); tl.set("#k3", { opacity: 0 }, 8.9);
-      word("#k1", 9.1); word("#k2", 10.2);
-      tl.fromTo("#k3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 11.3);
+      tl.set("#k1", { opacity: 0 }, 9.2); tl.set("#k2", { opacity: 0 }, 9.2); tl.set("#k3", { opacity: 0 }, 9.2);
+      word("#k1", 9.8); word("#k2", 11.3);
+      tl.fromTo("#k3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 12.9);
 
-      // HISTOIRE
-      tl.from("#sw .scene", { opacity: 0, duration: 0.6 }, 12.9)
-        .fromTo("#p-w", { scale: 1.1 }, { scale: 1.0, duration: 4.4, ease: "none" }, 12.9)
-        .from("#sw-1", { opacity: 0, y: 30, duration: 0.9, ease: "power2.out" }, 13.4)
-        .from("#sw-2", { opacity: 0, y: 22, duration: 0.8, ease: "power2.out" }, 14.4);
+      // HISTOIRE (voix 16.0–20.9)
+      tl.from("#sw .scene", { opacity: 0, duration: 0.6 }, 15.6)
+        .fromTo("#p-w", { scale: 1.1 }, { scale: 1.0, duration: 5.7, ease: "none" }, 15.6)
+        .from("#sw-1", { opacity: 0, y: 30, duration: 0.9, ease: "power2.out" }, 16.2)
+        .from("#sw-2", { opacity: 0, y: 22, duration: 0.8, ease: "power2.out" }, 18.6);
 
-      // VALEURS
-      tl.from("#val .center", { opacity: 0, duration: 0.5 }, 17.2)
-        .from("#v-1", { opacity: 0, y: 24, duration: 0.8, ease: "power2.out" }, 17.4)
-        .to("#v-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 18.0)
-        .from("#v-2", { opacity: 0, y: 20, duration: 0.8, ease: "power2.out" }, 18.3);
+      // VALEURS (voix 21.2–25.6)
+      tl.from("#val .center", { opacity: 0, duration: 0.5 }, 20.8)
+        .from("#v-1", { opacity: 0, y: 24, duration: 0.8, ease: "power2.out" }, 21.2)
+        .to("#v-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 22.4)
+        .from("#v-2", { opacity: 0, y: 20, duration: 0.8, ease: "power2.out" }, 22.9);
 
-      // OUTRO
-      tl.from("#o-n", { opacity: 0, scale: 0.9, duration: 0.7, ease: "power3.out" }, 20.4)
-        .from("#o-c", { opacity: 0, y: 14, duration: 0.6 }, 20.8)
-        .to("#o-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 21.1)
-        .from("#o-site", { opacity: 0, y: 16, duration: 0.7, ease: "power3.out" }, 21.3)
-        .from("#o-sub", { opacity: 0, duration: 0.6 }, 21.8);
+      // OUTRO (voix 26.0–31.4)
+      tl.from("#o-n", { opacity: 0, scale: 0.9, duration: 0.7, ease: "power3.out" }, 25.9)
+        .from("#o-c", { opacity: 0, y: 14, duration: 0.6 }, 26.3)
+        .to("#o-line", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 26.7)
+        .from("#o-site", { opacity: 0, y: 16, duration: 0.7, ease: "power3.out" }, 26.9)
+        .from("#o-sub", { opacity: 0, duration: 0.6 }, 27.8);
 
       window.__timelines["main"] = tl;
     </script>
