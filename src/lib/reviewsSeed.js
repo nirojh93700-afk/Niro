@@ -37,7 +37,7 @@ export const REVIEWS_SEED = {
       name: "Marc L.",
       rating: 5,
       text:
-        "Offert à mon mari pour la fête des Pères avec sa date de naissance et ses initiales gravées. La carafe fait vraiment très haut de gamme, le verre est lourd et brillant, et la gravure est super nette. Il était bluffé par la qualité, un magnifique cadeau d'exception !",
+        "Offert à mon mari avec sa date de naissance et ses initiales gravées. La carafe fait vraiment très haut de gamme, le verre est lourd et brillant, et la gravure est super nette. Il était bluffé par la qualité, un magnifique cadeau d'exception !",
       date: "2026-07-29",
     },
   ],
