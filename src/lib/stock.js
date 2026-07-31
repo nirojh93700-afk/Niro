@@ -1173,7 +1173,9 @@ export async function getSettings() {
     //   sur le site (même si des produits sont configurés). Défaut : false.
     // Tant que la gérante n'a rien enregistré, on pré-remplit avec la config de
     // départ (ses prix/règles) pour qu'elle n'ait qu'à ajouter les photos.
-    packagingLive: s.packagingLive === true,
+    // Emballages VISIBLES sur le site par défaut (demande de la gérante). Elle
+    // peut toujours les masquer en enregistrant packagingLive:false dans l'admin.
+    packagingLive: s.packagingLive !== false,
     packaging: Array.isArray(s.packaging) ? s.packaging : DEFAULT_PACKAGING,
     // FUSION config de départ + réglages enregistrés : la config du code sert de
     // BASE (donc tout nouveau bijou ajouté à DEFAULT_PRODUCT_PACKAGING reçoit
