@@ -219,6 +219,13 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
      les bijoux), `badge:"Nouveau"`, `type`, photos optimisées (~1200px, <300 Ko).
    - En résumé : **regarder un produit existant du même genre et copier TOUTE sa config** (pas que
      le nom/prix/photo). Si un bijou, il doit se comporter comme les autres bijoux de bout en bout.
+   - **⚠️ GRAVURE = TOUJOURS UNE OPTION PAYANTE, JAMAIS INCLUSE** (demande explicite de la gérante).
+     Ne jamais mettre la gravure « incluse/offerte ». Toujours une variante **« Sans gravure » / « Avec
+     gravure » (+ supplément, ex. +3 €)** avec les champs de gravure en `variantContains:"Avec"` (modèle :
+     `bracelet-homme-cuir-tresse-acier` = 3 couleurs × Sans/Avec, ou `collier-coeur-zircon`).
+   - **COÛT D'ACHAT = prix fournisseur + FRAIS DE PORT/IMPORT** (jamais le prix article seul). Pour la
+     commande Nihao NHFR607182266419 : +18,8 % environ (port 20,21 € / produits 107,66 €). Voir
+     `docs/commande-fournisseur-NHFR607182266419.md`.
 5. **Vérifier** : `npm run build` doit réussir (corriger toute erreur).
 6. **Publier** : `git add -A && git commit -m "Ajout produit : <nom>"` puis
    `git push origin claude/site-product-overview-1t2de`.

@@ -27,6 +27,12 @@
 | NH48187310 | S070 | 1,09 € | 4 | Bracelet chaîne serpent ovale, or | — |
 | NH50095921 | BR-2389S01 | 2,34 € | 4 | Bracelet acier 304 3-en-1 NK, étiquette incurvée vierge (gravable), couleur acier | — |
 
+## ⚠️ COÛT RÉEL = achat + FRAIS DE PORT
+- Produits **107,66 €** + **port 20,21 €** = **127,87 €** payés. Le port ajoute **~+18,8 %** sur chaque article.
+- **Coût réel par pièce = coût article × 1,188** (répartition moyenne ; en réalité au poids). Exemples :
+  collier zircon 1,56 → **~1,85 €** · bracelet OT cœur 0,79-1,09 → **~0,94-1,30 €**.
+- Toujours calculer les marges sur ce **coût réel** (port compris), pas sur le prix article seul.
+
 ## Notes prix de vente (bijoux)
 - Le site applique une **remise permanente -10 %** sur les bijoux : le `price` saisi dans `products.js`
   est le **prix catalogue interne**. Affiché = `roundTo90(price × 0,9)` (prix barré), payé = `× 0,9` encore.

@@ -1020,9 +1020,9 @@ export const products = [
     tagline: "Une médaille cœur à graver sur une chaîne à fermoir T-bar — doré, or rose ou argenté.",
     personalizable: true, personalizationLabel: "Gravure sur le cœur (prénom, date, message) + police",
     personalizationFields: [
-      { key: "note", type: "note", text: "La médaille en forme de cœur se grave. Laissez vide pour un cœur sobre, ou ajoutez un prénom, une date ou un petit message (texte court conseillé)." },
-      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, optional: true },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note", type: "note", text: "La médaille cœur peut être gravée (en option). Choisissez une finition « Avec gravure » pour ajouter un prénom, une date ou un petit message sur le cœur (texte court conseillé)." },
+      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
     ],
     images: [
       "/produits/bracelet-coeur-ot-trio.jpg",
@@ -1033,18 +1033,21 @@ export const products = [
       "/produits/bracelet-coeur-ot-dore-2.jpg",
     ],
     variants: [
-      { id: "bracelet-coeur-ot-dore", title: "Doré", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-rose", title: "Or Rose", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-argent", title: "Argenté", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
     ],
-    descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong> à graver, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
-<p>Faites graver un <strong>prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
+    descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong>, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
+<p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
 <li><strong>Finitions :</strong> doré, or rose, argenté</li>
 <li><strong>Fermoir :</strong> T-bar (OT), facile à mettre</li>
-<li><strong>Gravure :</strong> laser, sur la médaille cœur (en option, incluse)</li>
+<li><strong>Gravure :</strong> laser, sur la médaille cœur — en option (+3 €)</li>
 </ul>`,
   },
   // ===== Colliers =====
