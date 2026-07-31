@@ -140,7 +140,7 @@ export default async function HomePage() {
             <div className="cr-badges">
               <span>🇫🇷 <b>Gravé en France</b></span>
               <span>💎 <b>Cristal K9</b> premium</span>
-              <span>🚚 <b>Livraison suivie</b></span>
+              <span>🚚 <b>Livraison rapide</b> &amp; suivie</span>
             </div>
           </div>
           <div className="cr-viz">
