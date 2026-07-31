@@ -22,6 +22,7 @@ const GROUPS = [
     { text: "🏷️ Produits & Stock", href: "/gestion#produits" },
     { text: "🗂️ Catégories & ordre", href: "/gestion#categories" },
     { text: "📦 Packaging & emballages", href: "/gestion/emballages" },
+    { text: "🛡️ Santé du catalogue", href: "/gestion/sante" },
     { text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
     { text: "✍️ Gravure", href: "/gestion#gravure" },
     { text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },

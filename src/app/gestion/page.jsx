@@ -691,6 +691,7 @@ export default function GestionPage() {
                 { id: "produits", text: "🏷️ Produits & Stock" },
                 { id: "categories", text: "🗂️ Catégories & ordre" },
                 { id: "packaging", text: "📦 Packaging & emballages", href: "/gestion/emballages" },
+                { id: "sante", text: "🛡️ Santé du catalogue", href: "/gestion/sante" },
                 { id: "tailles", text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
                 { id: "gravure", text: "✍️ Gravure" },
                 { id: "reglages-produits", text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
