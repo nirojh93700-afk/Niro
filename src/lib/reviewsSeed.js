@@ -28,4 +28,12 @@ export const REVIEWS_SEED = {
       date: "2026-07-29",
     },
   ],
+  "verre-a-vin-grave": [
+    {
+      name: "Camille D.",
+      rating: 5,
+      text: "Super idée cadeau pour une amie fan de vin. Reçu très vite et très bien emballé.",
+      date: "2026-07-30",
+    },
+  ],
 };
