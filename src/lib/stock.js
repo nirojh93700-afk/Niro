@@ -1175,7 +1175,14 @@ export async function getSettings() {
     // départ (ses prix/règles) pour qu'elle n'ait qu'à ajouter les photos.
     packagingLive: s.packagingLive === true,
     packaging: Array.isArray(s.packaging) ? s.packaging : DEFAULT_PACKAGING,
-    productPackaging: (s.productPackaging && typeof s.productPackaging === "object") ? s.productPackaging : DEFAULT_PRODUCT_PACKAGING,
+    // FUSION config de départ + réglages enregistrés : la config du code sert de
+    // BASE (donc tout nouveau bijou ajouté à DEFAULT_PRODUCT_PACKAGING reçoit
+    // automatiquement son packaging), et les réglages de la gérante l'emportent
+    // par produit (ses choix perso sont gardés). Sans cette fusion, un produit
+    // ajouté dans le code n'apparaîtrait jamais si elle a déjà enregistré une fois.
+    productPackaging: (s.productPackaging && typeof s.productPackaging === "object")
+      ? { ...DEFAULT_PRODUCT_PACKAGING, ...s.productPackaging }
+      : DEFAULT_PRODUCT_PACKAGING,
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {
