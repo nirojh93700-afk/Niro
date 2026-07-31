@@ -1058,6 +1058,8 @@ export const products = [
     ],
     images: [
       "/produits/collier-coeur-zircon-1.jpg",
+      "/produits/collier-coeur-zircon-5.jpg",
+      "/produits/collier-coeur-zircon-6.jpg",
       "/produits/collier-coeur-zircon-2.jpg",
       "/produits/collier-coeur-zircon-3.jpg",
       "/produits/collier-coeur-zircon-4.jpg",
