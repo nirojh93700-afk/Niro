@@ -16,6 +16,7 @@
 import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
+import { REVIEWS_SEED } from "./reviewsSeed";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
@@ -791,7 +792,36 @@ export async function deletePromoCode(code) {
 // { slug: [{ id, name, rating, text, date, approved }] }
 export async function getReviews() {
   const data = await getCatalogRaw();
-  return data.reviews || {};
+  return mergeSeedReviews(data.reviews || {});
+}
+
+// Fusionne les avis semés dans le code (reviewsSeed.js) avec ceux du stockage.
+// Les avis stockés (ajoutés/modifiés dans l'admin) ont la priorité : un avis semé
+// dont le « prénom + texte » existe déjà en base est ignoré (pas de doublon).
+function mergeSeedReviews(stored) {
+  const out = { ...stored };
+  for (const [slug, seeds] of Object.entries(REVIEWS_SEED || {})) {
+    const list = (out[slug] || []).slice();
+    const seen = new Set(list.map(reviewKey));
+    (seeds || []).forEach((s, i) => {
+      const entry = {
+        id: `seed_${slug}_${i}`,
+        name: String(s.name || "").slice(0, 60) || "Cliente",
+        rating: Math.min(5, Math.max(1, parseInt(s.rating, 10) || 5)),
+        text: String(s.text || "").slice(0, 1000),
+        photo: String(s.photo || "").slice(0, 600),
+        date: /^\d{4}-\d{2}-\d{2}/.test(String(s.date || "")) ? new Date(s.date).toISOString() : new Date().toISOString(),
+        approved: true,
+        seeded: true,
+      };
+      if (entry.text.length >= 2 && !seen.has(reviewKey(entry))) {
+        list.push(entry);
+        seen.add(reviewKey(entry));
+      }
+    });
+    if (list.length) out[slug] = list;
+  }
+  return out;
 }
 
 // Résumé des avis approuvés par produit : { slug: { avg, count } }.
