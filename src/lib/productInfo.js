@@ -909,6 +909,21 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "collier-coeur-zircon": {
+    material: `Taille & Matériaux
+- Pendentif cœur ouvert doré entrelacé d'un anneau serti de zircons taille princesse.
+- Matière : acier inoxydable 304, placage or 18 carats (PVD), zircons.
+- Chaîne fine à maille ajustable. Doré brillant, résistant à l'eau et ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Se porte tel quel, ou avec gravure en option : prénom, initiales ou date au laser sur le côté du cœur (texte court conseillé, la surface est fine).
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.

@@ -1043,6 +1043,39 @@ export const products = [
 <p>Personnalisez le <strong>recto</strong> (inclus), ajoutez une gravure au <strong>verso</strong> (+5 €) et même une <strong>photo gravée</strong> (+8 €).</p>`,
   },
   {
+    slug: "collier-coeur-zircon",
+    badge: "Nouveau",
+    name: "Collier Cœur & Zircon doré",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier cœur doré & anneau serti de zircon — cadeau femme, gravure prénom en option",
+    category: "bijoux", type: "Collier cadeau",
+    tagline: "Un cœur ouvert entrelacé d'un anneau serti de zircons — doré, brillant, à offrir.",
+    personalizable: true, personalizationLabel: "Gravure prénom / initiales en option (côté du cœur)",
+    personalizationFields: [
+      { key: "note", type: "note", text: "Ce collier peut se porter tel quel ou être personnalisé. Choisissez « Avec gravure » pour faire graver au laser un prénom, des initiales ou une date sur le côté du cœur (surface fine : texte court conseillé)." },
+      { key: "texte", label: "Texte à graver (prénom, initiales, date)", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 15, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+    ],
+    images: [
+      "/produits/collier-coeur-zircon-1.jpg",
+      "/produits/collier-coeur-zircon-2.jpg",
+      "/produits/collier-coeur-zircon-3.jpg",
+      "/produits/collier-coeur-zircon-4.jpg",
+    ],
+    variants: [
+      { id: "collier-coeur-zircon-sans", title: "Sans gravure", price: 27.90, stockId: "collier-coeur-zircon" },
+      { id: "collier-coeur-zircon-avec", title: "Avec gravure", price: 30.90, stockId: "collier-coeur-zircon" },
+    ],
+    descriptionHtml: `<p>Un <strong>cœur ouvert doré</strong> entrelacé d'un <strong>anneau serti de zircons</strong> taille princesse : un bijou lumineux et romantique, idéal à offrir (Saint-Valentin, anniversaire, « je t'aime »).</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, placage or 18 carats (PVD), zircons</li>
+<li><strong>Finition :</strong> doré brillant, résistant à l'eau et ne ternit pas</li>
+<li><strong>Chaîne :</strong> maille fine, longueur ajustable</li>
+<li><strong>Gravure en option :</strong> prénom, initiales ou date gravés au laser sur le côté du cœur (choisir « Avec gravure »)</li>
+</ul>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",
