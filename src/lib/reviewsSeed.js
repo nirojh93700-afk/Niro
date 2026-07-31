@@ -42,4 +42,18 @@ export const REVIEWS_SEED = {
       date: "2026-07-30",
     },
   ],
+  "flute-a-champagne-gravee": [
+    {
+      name: "Romane T.",
+      rating: 5,
+      text: "Offert à des amis pour leur anniversaire de mariage, ils étaient émus aux larmes.",
+      date: "2026-07-29",
+    },
+    {
+      name: "Alexia P.",
+      rating: 4,
+      text: "Très satisfaite de mon achat, belle finition de l'atelier.",
+      date: "2026-07-30",
+    },
+  ],
 };
