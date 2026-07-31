@@ -1,17 +1,22 @@
 // Avis clients RÉELS reçus hors site (Instagram, WhatsApp, e-mail, retours de
-// commande) et recopiés ici pour qu'ils s'affichent sur les fiches produit.
+// commande) et recopiés ici. Ils sont IMPORTÉS UNE SEULE FOIS dans la base au
+// premier chargement du site (voir ensureSeedReviews() dans stock.js), puis ils
+// deviennent de vrais avis en base : entièrement MODIFIABLES et SUPPRIMABLES
+// depuis Gestion → Avis, comme n'importe quel autre.
 //
-// Ils fusionnent avec les avis ajoutés depuis Gestion → Avis : le dédoublonnage
-// se fait sur « prénom + texte », donc si un avis identique est ajouté dans
-// l'admin, il n'apparaît pas en double (la version de l'admin, modifiable, gagne).
+// Chaque avis a un `id` stable et unique : c'est lui qui garantit qu'un avis
+// n'est importé qu'une fois (même après une modification/suppression dans
+// l'admin, il ne réapparaît pas).
 //
-// Pour AJOUTER un avis : ajouter une entrée { name, rating, text, date } sous le
-// bon slug produit ci-dessous. La date est au format AAAA-MM-JJ.
-// Pour RETIRER un avis semé : supprimer son entrée ici (les avis semés ne sont
-// pas supprimables depuis l'admin, ils viennent du code).
+// Pour AJOUTER un avis : ajouter une entrée { id, name, rating, text, date } sous
+// le bon slug produit, avec un `id` NOUVEAU et unique (jamais réutilisé). La date
+// est au format AAAA-MM-JJ. Il sera importé au prochain déploiement.
+// Ne PAS réutiliser un ancien `id`, ne pas renuméroter : l'id est la mémoire de
+// « déjà importé ».
 export const REVIEWS_SEED = {
   "verre-a-whisky-fete-des-peres": [
     {
+      id: "avis-thomas-d-whisky-route66",
       name: "Thomas D.",
       rating: 5,
       text:
@@ -19,6 +24,7 @@ export const REVIEWS_SEED = {
       date: "2026-07-28",
     },
     {
+      id: "avis-yoann-d-whisky",
       name: "Yoann D.",
       rating: 4,
       text: "Très joli verre personnalisé, emballage nickel. Bon rapport qualité-prix.",
@@ -27,6 +33,7 @@ export const REVIEWS_SEED = {
   ],
   "carafe-a-whisky-gravee": [
     {
+      id: "avis-marc-l-carafe",
       name: "Marc L.",
       rating: 5,
       text:
@@ -36,6 +43,7 @@ export const REVIEWS_SEED = {
   ],
   "verre-a-vin-grave": [
     {
+      id: "avis-camille-d-vin",
       name: "Camille D.",
       rating: 5,
       text: "Super idée cadeau pour une amie fan de vin. Reçu très vite et très bien emballé.",
@@ -44,12 +52,14 @@ export const REVIEWS_SEED = {
   ],
   "flute-a-champagne-gravee": [
     {
+      id: "avis-romane-t-flute",
       name: "Romane T.",
       rating: 5,
       text: "Offert à des amis pour leur anniversaire de mariage, ils étaient émus aux larmes.",
       date: "2026-07-29",
     },
     {
+      id: "avis-alexia-p-flute",
       name: "Alexia P.",
       rating: 4,
       text: "Très satisfaite de mon achat, belle finition de l'atelier.",
@@ -58,6 +68,7 @@ export const REVIEWS_SEED = {
   ],
   "porte-stylo-coq-coupe-du-monde": [
     {
+      id: "avis-vincent-l-porte-stylo",
       name: "Vincent L.",
       rating: 4,
       text: "Reçu rapidement, emballage soigné. Très satisfait !",

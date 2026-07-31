@@ -791,37 +791,47 @@ export async function deletePromoCode(code) {
 // --- Avis clients ----------------------------------------------------------
 // { slug: [{ id, name, rating, text, date, approved }] }
 export async function getReviews() {
+  await ensureSeedReviews();
   const data = await getCatalogRaw();
-  return mergeSeedReviews(data.reviews || {});
+  return data.reviews || {};
 }
 
-// Fusionne les avis semés dans le code (reviewsSeed.js) avec ceux du stockage.
-// Les avis stockés (ajoutés/modifiés dans l'admin) ont la priorité : un avis semé
-// dont le « prénom + texte » existe déjà en base est ignoré (pas de doublon).
-function mergeSeedReviews(stored) {
-  const out = { ...stored };
+// Importe UNE SEULE FOIS dans la base les avis semés dans le code (reviewsSeed.js).
+// Chaque avis semé porte un `id` stable : on retient les id déjà importés dans
+// data.importedReviewSeeds, donc un avis n'est jamais réimporté — même après avoir
+// été modifié ou supprimé dans l'admin (il ne « repousse » pas). Une fois importés,
+// ce sont de vrais avis en base, modifiables et supprimables depuis Gestion → Avis.
+// Sécurité doublon : un avis semé dont le « prénom + texte » existe déjà en base
+// (ex. ajouté à la main) n'est pas réinséré, mais son id est quand même marqué importé.
+async function ensureSeedReviews() {
+  const data = await getCatalogRaw();
+  const imported = new Set(data.importedReviewSeeds || []);
+  let changed = false;
+  data.reviews = data.reviews || {};
   for (const [slug, seeds] of Object.entries(REVIEWS_SEED || {})) {
-    const list = (out[slug] || []).slice();
-    const seen = new Set(list.map(reviewKey));
-    (seeds || []).forEach((s, i) => {
+    for (const s of seeds || []) {
+      if (!s || !s.id || imported.has(s.id)) continue;
+      const text = String(s.text || "").slice(0, 1000);
+      if (text.length < 2) { imported.add(s.id); changed = true; continue; }
       const entry = {
-        id: `seed_${slug}_${i}`,
+        id: "r_" + s.id,
         name: String(s.name || "").slice(0, 60) || "Cliente",
         rating: Math.min(5, Math.max(1, parseInt(s.rating, 10) || 5)),
-        text: String(s.text || "").slice(0, 1000),
+        text,
         photo: String(s.photo || "").slice(0, 600),
         date: /^\d{4}-\d{2}-\d{2}/.test(String(s.date || "")) ? new Date(s.date).toISOString() : new Date().toISOString(),
         approved: true,
-        seeded: true,
       };
-      if (entry.text.length >= 2 && !seen.has(reviewKey(entry))) {
-        list.push(entry);
-        seen.add(reviewKey(entry));
-      }
-    });
-    if (list.length) out[slug] = list;
+      const list = data.reviews[slug] || (data.reviews[slug] = []);
+      if (!list.some((r) => reviewKey(r) === reviewKey(entry))) list.push(entry);
+      imported.add(s.id);
+      changed = true;
+    }
   }
-  return out;
+  if (changed) {
+    data.importedReviewSeeds = [...imported];
+    await persistCatalog(data);
+  }
 }
 
 // Résumé des avis approuvés par produit : { slug: { avg, count } }.
