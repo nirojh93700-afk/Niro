@@ -13,7 +13,7 @@ export const DEFAULT_PACKAGING = [
   { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 3.9, weight: 60, photo: "" },
   { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 5.9, weight: 70, photo: "" },
   { id: "microfibre", name: "Pochette microfibre", desc: "Protection / voyage", buy: 1.0, sell: 2.7, weight: 15, photo: "" },
-  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte cadeau + microfibre", buy: 2.97, sell: 5.5, weight: 85, photo: "" },
+  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte cadeau + microfibre", buy: 2.97, sell: 6.5, weight: 85, photo: "" },
   { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte cadeau + microfibre", buy: 2.95, sell: 7.5, weight: 95, photo: "" },
 ];
 
