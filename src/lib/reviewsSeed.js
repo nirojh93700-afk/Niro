@@ -56,4 +56,12 @@ export const REVIEWS_SEED = {
       date: "2026-07-30",
     },
   ],
+  "porte-stylo-coq-coupe-du-monde": [
+    {
+      name: "Vincent L.",
+      rating: 4,
+      text: "Reçu rapidement, emballage soigné. Très satisfait !",
+      date: "2026-07-30",
+    },
+  ],
 };
