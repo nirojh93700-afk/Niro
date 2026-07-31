@@ -909,6 +909,21 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "bracelet-coeur-a-graver-ot": {
+    material: `Taille & Matériaux
+- Bracelet à médaille en forme de cœur (gravable) sur chaîne à maillons, fermoir T-bar (OT).
+- Matière : acier inoxydable, disponible en doré, or rose et argenté.
+- Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
+    usage: `Personnalisation & Entretien
+- Gravure en option sur la médaille cœur : prénom, date ou petit message (texte court conseillé).
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "bracelet-coeur-acier": {
     material: `Taille & Matériaux
 - Bracelet à cœur ouvert délicat sur chaîne fine en acier inoxydable 304, couleur argent.

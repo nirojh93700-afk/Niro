@@ -1010,6 +1010,43 @@ export const products = [
 <li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
 </ul>`,
   },
+  {
+    slug: "bracelet-coeur-a-graver-ot",
+    badge: "Nouveau",
+    name: "Bracelet Cœur à graver",
+    weight: 55, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet cœur à graver, fermoir T-bar — médaille cœur personnalisée, doré / or rose / argenté",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Une médaille cœur à graver sur une chaîne à fermoir T-bar — doré, or rose ou argenté.",
+    personalizable: true, personalizationLabel: "Gravure sur le cœur (prénom, date, message) + police",
+    personalizationFields: [
+      { key: "note", type: "note", text: "La médaille en forme de cœur se grave. Laissez vide pour un cœur sobre, ou ajoutez un prénom, une date ou un petit message (texte court conseillé)." },
+      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/bracelet-coeur-ot-trio.jpg",
+      "/produits/bracelet-coeur-ot-dore.jpg",
+      "/produits/bracelet-coeur-ot-rose.jpg",
+      "/produits/bracelet-coeur-ot-argent.jpg",
+      "/produits/bracelet-coeur-ot-dore-porte.jpg",
+      "/produits/bracelet-coeur-ot-dore-2.jpg",
+    ],
+    variants: [
+      { id: "bracelet-coeur-ot-dore", title: "Doré", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-rose", title: "Or Rose", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-argent", title: "Argenté", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+    ],
+    descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong> à graver, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
+<p>Faites graver un <strong>prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré, or rose, argenté</li>
+<li><strong>Fermoir :</strong> T-bar (OT), facile à mettre</li>
+<li><strong>Gravure :</strong> laser, sur la médaille cœur (en option, incluse)</li>
+</ul>`,
+  },
   // ===== Colliers =====
   {
     slug: "collier-couple-coeur-lot2",
