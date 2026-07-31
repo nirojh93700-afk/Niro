@@ -36,6 +36,18 @@ async function catalogContext() {
   }
 }
 
+// Surveillance du catalogue (produits mal configurés : bijou sans emballage,
+// sans fiche, sans photo, sans prix) — injectée dans l'agent Technicien.
+async function auditContext() {
+  try {
+    const { auditCatalog, auditSummaryText } = await import("@/lib/catalogAudit");
+    const a = await auditCatalog();
+    return auditSummaryText(a);
+  } catch {
+    return "(vérification du catalogue indisponible)";
+  }
+}
+
 // Résumé chiffré des ventes (mêmes règles que l'admin : hors annulées,
 // remboursées et commandes de test).
 async function salesContext() {
@@ -213,10 +225,11 @@ Présente toujours dans cet ordre, clairement séparé :
     id: "technicien",
     name: "Technicien / Dev",
     emoji: "🛠️",
-    blurb: "Diagnostique les soucis du site et prépare une fiche claire pour le développeur.",
-    placeholder: "Décris le problème ou la fonctionnalité voulue (ex : « les e-mails partent en spam »)…",
+    blurb: "Surveille le catalogue (produits mal configurés), diagnostique les soucis du site et prépare une fiche pour le développeur.",
+    placeholder: "Décris le problème ou demande « vérifie le catalogue »…",
     needsCatalog: false,
-    buildSystem: () => `${BRAND_RULES}
+    needsAudit: true,
+    buildSystem: (ctx) => `${BRAND_RULES}
 
 Tu es le TECHNICIEN / support informatique de la boutique. La gérante n'est pas développeuse : parle simplement, sans jargon inutile.
 Stack du site : Next.js 14 (App Router, JavaScript), Stripe (paiement), Resend (e-mails), Firebase App Hosting / Firestore (données), domaine chez Hostinger.
@@ -225,7 +238,11 @@ Ton rôle :
 1. Comprendre le problème ou le besoin décrit, poser une question courte si c'est ambigu.
 2. Donner un DIAGNOSTIC clair (cause probable) et, si la gérante peut régler elle-même (ex : un réglage, un spam, une variable d'environnement), explique les étapes simplement.
 3. Si cela demande une modification du code, rédige une FICHE TECHNIQUE précise (problème, cause, fichiers/zones concernés, solution proposée) destinée au développeur.
-Important : tu ne modifies pas le code toi-même ; tu diagnostiques et tu prépares le travail. Sois rassurant et concret.`,
+4. SURVEILLANCE DU CATALOGUE : tu vérifies en permanence que les produits sont bien configurés. Si la gérante demande « vérifie le catalogue / est-ce que tout va bien », liste les produits à corriger ci-dessous, en clair, avec quoi faire (ex. « bijou sans emballage → Gestion → Packaging »). Si tout est OK, rassure-la.
+Important : tu ne modifies pas le code toi-même ; tu diagnostiques et tu prépares le travail. Sois rassurant et concret.
+
+ÉTAT ACTUEL DU CATALOGUE (vérification automatique) :
+${ctx?.audit || "(non chargé)"}`,
   },
 
   // ---------------------------------------------------------------------------
@@ -328,6 +345,7 @@ export async function runAgent(agentId, history) {
   const ctx = {};
   if (agent.needsCatalog) ctx.catalog = await catalogContext();
   if (agent.needsOrders) ctx.sales = await salesContext();
+  if (agent.needsAudit) ctx.audit = await auditContext();
 
   const messages = (history || [])
     .slice(-12)

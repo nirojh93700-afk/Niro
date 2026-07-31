@@ -69,6 +69,27 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 }
 
+// Surveillance automatique du catalogue : détecte les produits mal configurés
+// (bijou sans emballage, sans fiche, sans photo, sans prix) et ALERTE la gérante
+// PAR E-MAIL uniquement s'il y a quelque chose à corriger.
+async function runSante() {
+  const { auditCatalog, auditSummaryText, importantIssueCount } = await import("@/lib/catalogAudit");
+  const audit = await auditCatalog();
+  const important = importantIssueCount(audit);
+  // On n'alerte QUE s'il y a des points importants (bijou sans emballage, sans
+  // photo, sans prix). Les « fiches détaillées » manquantes (mineur) n'alertent pas.
+  if (!important) return { key: "sante", ok: true, issues: 0 };
+  const text = auditSummaryText(audit);
+  const html = emailLayout({
+    heading: "Surveillance du catalogue — à corriger ✦",
+    bodyHtml: `<p style="margin:0 0 12px;color:#7a7268;">Vérification automatique du catalogue. ${important} point(s) important(s) à corriger (les autres produits sont OK) :</p>
+      <div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(text)}</div>
+      <p style="margin:14px 0 0;color:#7a7268;font-size:13px;">Un bijou « sans emballage » se règle dans Gestion → Packaging (ou en demandant à l'agent Technicien).</p>`,
+  });
+  const sent = await sendEmail({ to: BRAND.contact, subject: `[Surveillance] ${important} produit(s) à corriger`, html, replyTo: BRAND.contact });
+  return { key: "sante", ok: Boolean(sent?.ok), issues: important };
+}
+
 export async function GET(req) {
   const url = new URL(req.url);
   const token = url.searchParams.get("token") || "";
@@ -77,12 +98,20 @@ export async function GET(req) {
   if (token !== secret) return Response.json({ error: "Jeton invalide." }, { status: 401 });
 
   const task = url.searchParams.get("task") || "";
-  const keys = task && TASKS[task] ? [task] : Object.keys(TASKS);
+  // "sante" = surveillance catalogue (déterministe, pas un agent IA).
+  const keys = task
+    ? (TASKS[task] ? [task] : [])
+    : Object.keys(TASKS);
 
   const results = [];
   for (const k of keys) {
     try { results.push(await runOne(k)); }
     catch (e) { results.push({ key: k, ok: false, error: e?.message || "erreur" }); }
+  }
+  // Surveillance du catalogue : lancée avec "tout" (pas de task) ou via &task=sante.
+  if (!task || task === "sante") {
+    try { results.push(await runSante()); }
+    catch (e) { results.push({ key: "sante", ok: false, error: e?.message || "erreur" }); }
   }
   return Response.json({ ok: true, results });
 }
