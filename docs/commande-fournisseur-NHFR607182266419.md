@@ -13,7 +13,7 @@
 | NH48414022 | XLY228 | 0,48 € | 5 | Bracelet acier ange minimaliste personnalisé | — |
 | NH48414023 | XLJ228 | 0,59 € | 5 | Bracelet acier ange minimaliste personnalisé (variante) | — |
 | NH44661418 | N05490g | 1,93 € | 5 | Pendentif cœur acier 304, PVD or 18 K, chaîne câble, fermoir mousqueton | — |
-| NH52514682 | S02216 | 0,52 € | 5 | Bracelet cœur torsadé, couleur acier | — |
+| NH52514682 | S02216 | 0,52 € | 5 | Bracelet cœur torsadé, couleur acier | ✅ **EN LIGNE** : `bracelet-coeur-acier` (16,90 € barré → 15,21 €, sans gravure) |
 | NH52514476 | S020 | 0,52 € | 5 | Bracelet chaîne croisée en relief, or | — |
 | NH52514578 | S0102-OT | 0,69 € | 5 | Bracelet chaîne épaisse boucle OT, or | — |
 | NH48702466 | 7702 | 0,79 € | 5 | Bracelet boucle OT cœur, couleur acier | — |

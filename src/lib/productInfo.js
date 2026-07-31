@@ -909,6 +909,20 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "bracelet-coeur-acier": {
+    material: `Taille & Matériaux
+- Bracelet à cœur ouvert délicat sur chaîne fine en acier inoxydable 304, couleur argent.
+- Poids ~15 g. Fermoir mousqueton avec chaîne d'extension réglable.
+- Finition brillante, résistante à l'eau et qui ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Bijou cadeau prêt à offrir (non personnalisé).
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Bijou non personnalisé : échange possible sous 14 jours, article non porté.
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-coeur-zircon": {
     material: `Taille & Matériaux
 - Pendentif cœur ouvert doré entrelacé d'un anneau serti de zircons taille princesse.

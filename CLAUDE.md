@@ -207,6 +207,18 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
    couleur, photo…).
 4. **Ajouter** l'objet produit dans `src/lib/products.js` (et une entrée dans
    `src/lib/productInfo.js`).
+4bis. **⚠️ RÈGLE OBLIGATOIRE — UN NOUVEAU PRODUIT DOIT RESSEMBLER AUX AUTRES DU MÊME TYPE.**
+   Ne jamais ajouter un produit « nu ». Le configurer **exactement comme ses semblables** :
+   - **Packaging / emballages** : ajouter le slug dans `src/lib/packagingSeed.js`
+     (`DEFAULT_PRODUCT_PACKAGING`). **Un bijou = comme les autres bijoux** : un **collier** →
+     liste `COLLIERS` (sac + boîte carrée + microfibre + pack-collier) ; un **bracelet femme fin**
+     → `BRACELETS_CARRE` ; un **bracelet homme/long** → `BRACELETS_LONG` (boîte allongée +
+     pack-bracelet). Sinon la fiche n'a pas le sélecteur « Votre emballage » que les autres ont.
+   - **Fiche détaillée** : entrée dans `productInfo.js` (Taille & Matériaux, Entretien, Retour).
+   - **Champs communs** : `weight`, `letter`, `pickup`, `category`, `subcategory` (femme/homme pour
+     les bijoux), `badge:"Nouveau"`, `type`, photos optimisées (~1200px, <300 Ko).
+   - En résumé : **regarder un produit existant du même genre et copier TOUTE sa config** (pas que
+     le nom/prix/photo). Si un bijou, il doit se comporter comme les autres bijoux de bout en bout.
 5. **Vérifier** : `npm run build` doit réussir (corriger toute erreur).
 6. **Publier** : `git add -A && git commit -m "Ajout produit : <nom>"` puis
    `git push origin claude/site-product-overview-1t2de`.

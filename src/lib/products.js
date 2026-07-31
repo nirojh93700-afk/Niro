@@ -985,6 +985,31 @@ export const products = [
     ],
     descriptionHtml: `<p>Bracelet femme orné d'un <strong>papillon ajouré</strong> en acier inoxydable, à personnaliser par gravure. Plusieurs finitions.</p>`,
   },
+  {
+    slug: "bracelet-coeur-acier",
+    badge: "Nouveau",
+    name: "Bracelet Cœur argenté",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet cœur ouvert argenté — acier inoxydable, cadeau femme délicat",
+    category: "bijoux", type: "Bracelet",
+    tagline: "Un cœur ouvert tout en finesse sur une chaîne fine argentée — délicat, à offrir.",
+    personalizable: false,
+    images: [
+      "/produits/bracelet-coeur-acier-1.jpg",
+      "/produits/bracelet-coeur-acier-2.jpg",
+      "/produits/bracelet-coeur-acier-3.jpg",
+    ],
+    variants: [
+      { id: "bracelet-coeur-acier-argente", title: "Argenté", price: 18.90, stockId: "bracelet-coeur-acier" },
+    ],
+    descriptionHtml: `<p>Un <strong>cœur ouvert délicat</strong> posé sur une chaîne fine en acier inoxydable argenté : un bracelet léger et intemporel, idéal à offrir (Saint-Valentin, anniversaire, entre amies).</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, couleur argent</li>
+<li><strong>Finition :</strong> brillante, résistante à l'eau et ne ternit pas</li>
+<li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
+</ul>`,
+  },
   // ===== Colliers =====
   {
     slug: "collier-couple-coeur-lot2",
