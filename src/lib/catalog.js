@@ -6,7 +6,7 @@
 // =============================================================================
 import { products as baseProducts } from "./products";
 import { roundTo90 } from "./format";
-import { resolvePackaging } from "./packaging";
+import { resolvePackaging, defaultPackagingFor } from "./packaging";
 import {
   getImageOverrides,
   getPromos,
@@ -125,7 +125,10 @@ export async function getCatalog() {
   const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
   return all.map((p) => {
-    const packaging = pkgLive ? resolvePackaging(pkgAssign[p.slug], pkgLib) : null;
+    // Correction auto : un bijou sans attribution explicite reçoit son emballage
+    // par défaut selon son type (impossible d'oublier le packaging d'un bijou).
+    const assign = pkgAssign[p.slug] || defaultPackagingFor(p);
+    const packaging = pkgLive ? resolvePackaging(assign, pkgLib) : null;
     return {
       ...p,
       ...(refMarkup > 0 ? { refMarkup } : {}),

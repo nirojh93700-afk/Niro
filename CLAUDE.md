@@ -388,6 +388,14 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   « vérifie le catalogue » à tout moment.
 - **Règle liée** : §10 point 4bis — un nouveau bijou DOIT être configuré comme les autres (packaging inclus).
   C'est cette surveillance qui rattrape un oubli.
+- **🔧 CORRECTION AUTOMATIQUE (maj 31/07/2026)** : `defaultPackagingFor(product)` dans `src/lib/packaging.js`
+  attribue un emballage par défaut à TOUT bijou selon son type (collier / bracelet homme-long /
+  bracelet femme-fin / autre), même sans config. Appliqué dans `getCatalog` (affichage) ET reconnu par
+  l'audit → **impossible d'oublier le packaging d'un bijou**, la correction est structurelle (pas besoin
+  d'un agent qui répare après coup). De plus `getSettings` FUSIONNE la config de départ du code avec les
+  réglages enregistrés (`{ ...DEFAULT_PRODUCT_PACKAGING, ...enregistré }`) → un nouveau bijou est couvert
+  même si la gérante a déjà enregistré la page Packaging. La visibilité côté client reste pilotée par
+  l'interrupteur maître `settings.packagingLive`.
 
 ### EN ATTENTE côté utilisatrice (RAPPELER si elle demande « il reste quoi »)
 - **Montage / visuel / fichier 3D** : elle DOIT fournir un produit (photo + nom) → Claude le

@@ -11,6 +11,27 @@
 // (fait dans catalog.js). packagingExtra() calcule le supplément choisi.
 // =============================================================================
 
+// Attribution AUTOMATIQUE par défaut pour un bijou sans configuration explicite.
+// FILET DE SÉCURITÉ : tout bijou reçoit un emballage cohérent selon son type
+// (collier / bracelet homme-long / bracelet femme-fin / autre), même si personne
+// ne l'a configuré dans l'admin ni dans le code. C'est la « correction auto » :
+// impossible d'oublier le packaging d'un bijou. Ids = ceux de DEFAULT_PACKAGING.
+export function defaultPackagingFor(product) {
+  if (!product || product.category !== "bijoux") return null;
+  const t = `${product.slug || ""} ${product.name || ""} ${product.type || ""} ${product.title || ""}`.toLowerCase();
+  const isCollier = /collier|pendentif|cha[iî]ne|m[eé]daillon|sautoir/.test(t);
+  const isBracelet = /bracelet|jonc|gourmette/.test(t);
+  if (isCollier) return { on: true, ids: ["sac", "boite-carree", "microfibre", "pack-collier"], free: [] };
+  if (isBracelet) {
+    const isLong = product.subcategory === "homme" || /homme|gourmette|jonc|long/.test(t);
+    return isLong
+      ? { on: true, ids: ["sac", "boite-allongee", "microfibre", "pack-bracelet"], free: [] }
+      : { on: true, ids: ["sac", "boite-carree", "microfibre", "pack-collier"], free: [] };
+  }
+  // Autre bijou (boucles, bague, broche…) : sac + boîte carrée + microfibre.
+  return { on: true, ids: ["sac", "boite-carree", "microfibre"], free: [] };
+}
+
 // Construit product.packaging à partir de l'attribution du produit + la biblio.
 export function resolvePackaging(assign, library) {
   if (!assign || !assign.on) return null;

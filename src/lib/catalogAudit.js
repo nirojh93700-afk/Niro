@@ -14,6 +14,7 @@
 import { getCatalogAdmin } from "./catalog";
 import { getSettings } from "./stock";
 import { productInfo } from "./productInfo";
+import { defaultPackagingFor } from "./packaging";
 
 const RANK = { haute: 0, moyenne: 1, basse: 2 };
 
@@ -42,11 +43,14 @@ export async function auditCatalog() {
     // 3. Fiche détaillée (mineur : beaucoup de produits s'en passent → priorité basse)
     if (!productInfo[p.slug]) add(p, "fiche", "basse", "Pas de fiche détaillée (Taille & Matériaux / Entretien / Retour)");
 
-    // 4. Emballage — bijoux uniquement (cohérence avec les autres bijoux)
+    // 4. Emballage — bijoux uniquement. Un bijou est couvert soit par sa config
+    // explicite, soit par la correction automatique (defaultPackagingFor). Il n'est
+    // signalé que si, malgré tout, aucune option ne peut être construite (cas rare :
+    // bibliothèque d'emballages vidée/renommée par la gérante).
     if (p.category === "bijoux") {
-      const a = pkgAssign[p.slug];
+      const a = pkgAssign[p.slug] || defaultPackagingFor(p);
       const ok = a && a.on === true && Array.isArray(a.ids) && a.ids.length > 0;
-      if (!ok) add(p, "emballage", "moyenne", "Bijou sans emballage configuré (sac / boîte / microfibre / pack) — à aligner sur les autres bijoux");
+      if (!ok) add(p, "emballage", "moyenne", "Bijou sans emballage configurable (vérifier la bibliothèque d'emballages)");
     }
   }
 
