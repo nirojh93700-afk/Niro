@@ -1033,12 +1033,12 @@ export const products = [
       "/produits/bracelet-coeur-ot-dore-2.jpg",
     ],
     variants: [
-      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
-      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore" },
+      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore" },
+      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose" },
+      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose" },
+      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent" },
+      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent" },
     ],
     descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong>, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
 <p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
