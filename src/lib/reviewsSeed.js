@@ -18,6 +18,12 @@ export const REVIEWS_SEED = {
         "J'ai commandé le verre à whisky personnalisé avec le modèle Route 66 et mon prénom. Reçu très rapidement, emballage ultra sécurisé. Le rendu du laser sur le verre est top, ça fait un super verre perso pour mes petites soirées. Je recommande à 100 %.",
       date: "2026-07-28",
     },
+    {
+      name: "Yoann D.",
+      rating: 4,
+      text: "Très joli verre personnalisé, emballage nickel. Bon rapport qualité-prix.",
+      date: "2026-07-30",
+    },
   ],
   "carafe-a-whisky-gravee": [
     {
