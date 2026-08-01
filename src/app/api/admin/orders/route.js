@@ -36,7 +36,7 @@ export async function POST(req) {
     return Response.json({ ok });
   }
 
-  if (!id || !["a_preparer", "en_gravure", "expediee", "livree", "annulee"].includes(status)) {
+  if (!id || !["a_preparer", "en_gravure", "expediee", "livree", "annulee", "remise_main_propre"].includes(status)) {
     return Response.json({ error: "Paramètres invalides." }, { status: 400 });
   }
   const patch = { status };
@@ -46,6 +46,9 @@ export async function POST(req) {
   const nowIso = new Date().toISOString();
   if (status === "expediee") patch.shippedAt = nowIso;
   if (status === "livree") patch.deliveredAt = nowIso;
+  // Remise en main propre = la commande a été remise en personne (déco/mariage).
+  // On horodate remisAt ET deliveredAt (elle est "reçue") pour les règles auto.
+  if (status === "remise_main_propre") { patch.remisAt = nowIso; patch.deliveredAt = nowIso; }
   const ok = await updateSiteOrder(id, patch);
 
   // E-mail au client (expédition avec suivi, ou annulation), si demandé et possible.

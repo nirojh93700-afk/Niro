@@ -222,7 +222,7 @@ export default function GestionPage() {
   // est en gravure / expédiée / livrée, OU passé 24 h après la commande.
   function isLocked(o) {
     if (o.immediateStart) return true; // la cliente a demandé la fabrication immédiate
-    if (["en_gravure", "expediee", "livree"].includes(o.status)) return true;
+    if (["en_gravure", "expediee", "livree", "remise_main_propre"].includes(o.status)) return true;
     const t = o.createdAt ? new Date(o.createdAt).getTime() : 0;
     return t > 0 && Date.now() - t > 24 * 3600 * 1000;
   }
@@ -496,7 +496,7 @@ export default function GestionPage() {
   const nbRembourse = orders.length - validOrders.length;
   const nbTest = orders.filter((o) => o.test).length;
   const panierMoyen = nbCmd ? ca / nbCmd : 0;
-  const aPreparer = orders.filter((o) => !o.test && o.status !== "expediee" && o.status !== "livree" && o.status !== "remboursee" && o.status !== "annulee").length;
+  const aPreparer = orders.filter((o) => !o.test && o.status !== "expediee" && o.status !== "livree" && o.status !== "remise_main_propre" && o.status !== "remboursee" && o.status !== "annulee").length;
 
   // Filtre + recherche des commandes (comme sur les grandes plateformes).
   const orderQuery = orderSearch.trim().toLowerCase();
@@ -529,7 +529,7 @@ export default function GestionPage() {
     const st = o.status || "a_preparer";
     if (orderFilter === "a_preparer" && !(st === "a_preparer" || st === "en_gravure")) return false;
     if (orderFilter === "expediee" && st !== "expediee") return false;
-    if (orderFilter === "livree" && st !== "livree") return false;
+    if (orderFilter === "livree" && st !== "livree" && st !== "remise_main_propre") return false;
     if (orderFilter === "annulee" && st !== "annulee" && st !== "remboursee") return false;
     if (orderQuery) {
       const hay = `${o.ref || ""} ${o.id || ""} ${o.customerName || ""} ${o.customerEmail || ""} ${(o.items || []).map((i) => i.name).join(" ")}`.toLowerCase();
@@ -634,6 +634,7 @@ export default function GestionPage() {
   const DASH_CHIPS = {
     a_preparer: ["prep", "À préparer"], en_gravure: ["grav", "En gravure"],
     expediee: ["exp", "Expédiée"], livree: ["liv", "Livrée"],
+    remise_main_propre: ["liv", "Remise en main propre"],
     annulee: ["ann", "Annulée"], remboursee: ["ann", "Remboursée"],
   };
   const dashDate = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
@@ -1120,8 +1121,8 @@ export default function GestionPage() {
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontWeight: 600, color: o.status === "livree" || o.status === "expediee" ? "#256b34" : o.status === "en_gravure" ? "#8a6d3b" : "#b4452f" }}>
-                        {o.status === "livree" ? "✓✓ Livrée" : o.status === "expediee" ? "✓ Expédiée" : o.status === "en_gravure" ? "✏️ En fabrication" : "● À préparer"}
+                      <span style={{ fontWeight: 600, color: o.status === "livree" || o.status === "expediee" || o.status === "remise_main_propre" ? "#256b34" : o.status === "en_gravure" ? "#8a6d3b" : "#b4452f" }}>
+                        {o.status === "livree" ? "✓✓ Livrée" : o.status === "remise_main_propre" ? "🤝 Remise en main propre" : o.status === "expediee" ? "✓ Expédiée" : o.status === "en_gravure" ? "✏️ En fabrication" : "● À préparer"}
                       </span>
                       <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: isLocked(o) ? "#f3e2dd" : "#e3f0e3", color: isLocked(o) ? "#b4452f" : "#256b34" }}>
                         {isLocked(o) ? "🔒 Verrouillée" : "🕒 Annulable (24 h)"}
@@ -1142,15 +1143,23 @@ export default function GestionPage() {
                           <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
                             Marquer expédiée
                           </button>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "remise_main_propre")}>
+                            🤝 Remise en main propre
+                          </button>
                           <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "a_preparer")}>
                             Retour à préparer
                           </button>
                         </>
                       )}
                       {(!o.status || o.status === "a_preparer") && (
-                        <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
-                          Marquer expédiée
-                        </button>
+                        <>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
+                            Marquer expédiée
+                          </button>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "remise_main_propre")}>
+                            🤝 Remise en main propre
+                          </button>
+                        </>
                       )}
                       {o.status === "expediee" && (
                         <>
@@ -1171,6 +1180,11 @@ export default function GestionPage() {
                       {o.status === "livree" && (
                         <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "expediee")}>
                           Remettre expédiée
+                        </button>
+                      )}
+                      {o.status === "remise_main_propre" && (
+                        <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "a_preparer")}>
+                          Remettre à préparer
                         </button>
                       )}
 
