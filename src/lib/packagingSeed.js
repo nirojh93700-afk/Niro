@@ -19,7 +19,7 @@ export const DEFAULT_PACKAGING = [
 
 const COLLIERS = ["collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique", "collier-coeur-zircon", "collier-perle-solitaire"];
 const BRACELETS_LONG = ["bracelet-homme-identite-gourmette", "bracelet-homme-acier-silicone", "bracelet-homme-cuir-tresse-acier", "bracelet-homme-chaine-acier", "bracelet-empreinte-pied-bebe"];
-const BRACELETS_CARRE = ["bracelet-femme-acier", "bracelet-femme-coeur", "bracelet-femme-papillon", "bracelet-coeur-acier", "bracelet-coeur-a-graver-ot"];
+const BRACELETS_CARRE = ["bracelet-femme-acier", "bracelet-femme-coeur", "bracelet-femme-papillon", "bracelet-coeur-acier", "bracelet-coeur-a-graver-ot", "bracelet-ange"];
 
 // Attribution par produit : { slug: { on, ids, free } }.
 export const DEFAULT_PRODUCT_PACKAGING = (() => {

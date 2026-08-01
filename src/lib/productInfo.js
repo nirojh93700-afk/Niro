@@ -924,6 +924,20 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "bracelet-ange": {
+    material: `Taille & Matériaux
+- Bracelet à breloque « ange » sur chaîne fine en acier inoxydable, doré ou argenté.
+- Fermoir mousqueton avec chaîne d'extension réglable.
+- Résistant à l'eau, ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Bijou cadeau prêt à offrir (non personnalisé) — un joli porte-bonheur.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Bijou non personnalisé : échange possible sous 14 jours, article non porté.
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "bracelet-coeur-acier": {
     material: `Taille & Matériaux
 - Bracelet à cœur ouvert délicat sur chaîne fine en acier inoxydable 304, couleur argent.

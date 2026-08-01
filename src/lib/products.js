@@ -1011,6 +1011,34 @@ export const products = [
 </ul>`,
   },
   {
+    slug: "bracelet-ange",
+    badge: "Nouveau",
+    name: "Bracelet Ange",
+    weight: 35, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet ange minimaliste — chaîne fine acier, doré ou argenté, cadeau femme",
+    category: "bijoux", type: "Bracelet",
+    tagline: "Un petit ange gardien sur une chaîne fine — doré ou argenté, délicat à offrir.",
+    personalizable: false,
+    images: [
+      "/produits/bracelet-ange-1.jpg",
+      "/produits/bracelet-ange-2.jpg",
+      "/produits/bracelet-ange-3.jpg",
+      "/produits/bracelet-ange-4.jpg",
+      "/produits/bracelet-ange-5.jpg",
+    ],
+    variants: [
+      { id: "bracelet-ange-dore", title: "Doré", price: 18.90, stockId: "bracelet-ange-dore" },
+      { id: "bracelet-ange-argente", title: "Argenté", price: 18.90, stockId: "bracelet-ange-argente" },
+    ],
+    descriptionHtml: `<p>Un bijou tendre et délicat : un petit <strong>ange gardien</strong> posé sur une <strong>chaîne fine</strong> en acier inoxydable. Un joli cadeau porte-bonheur (naissance, communion, anniversaire, entre amies).</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré ou argenté</li>
+<li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
+</ul>`,
+  },
+  {
     slug: "bracelet-coeur-a-graver-ot",
     badge: "Nouveau",
     name: "Bracelet Cœur à graver",
