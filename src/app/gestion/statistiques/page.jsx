@@ -11,6 +11,8 @@ import Link from "next/link";
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 const fmtDay = (iso) => { const [, m, d] = (iso || "").split("-"); return d && m ? `${d}/${m}` : iso; };
+const WEEKDAYS = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
+const fmtWeekday = (iso) => { const [y, m, d] = (iso || "").split("-").map(Number); if (!y || !m || !d) return ""; return WEEKDAYS[new Date(y, m - 1, d).getDay()]; };
 
 export default function StatsPage() {
   const [key, setKey] = useState("");
@@ -60,6 +62,9 @@ export default function StatsPage() {
   const series = data?.series || [];
   const conv = t.sessions > 0 ? (t.purchase / t.sessions) * 100 : 0;
   const abandoned = Math.max(0, (t.addToCart || 0) - (t.purchase || 0));
+  // Chiffres du JOUR (date de Paris, même format que le compteur serveur).
+  const todayIso = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
+  const today = series.find((d) => d.date === todayIso) || { sessions: 0, viewItem: 0, addToCart: 0, purchase: 0, revenue: 0 };
   const maxS = Math.max(1, ...series.map((d) => d.sessions));
 
   // Top produits (par vues), avec ajouts panier associés.
@@ -110,6 +115,17 @@ export default function StatsPage() {
         </div>
       ) : (
         <>
+          {/* Aujourd'hui */}
+          <div className="admin-block" style={{ background: "#241a0c", marginBottom: 14, padding: "14px 18px" }}>
+            <div style={{ fontSize: "0.78rem", color: "#c9a24b", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".03em", marginBottom: 8 }}>Aujourd&apos;hui</div>
+            <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
+              <div><b style={{ fontSize: "1.6rem", color: "#f3e8d3", fontVariantNumeric: "tabular-nums" }}>{today.sessions}</b><div style={{ fontSize: "0.8rem", color: "#b7a988" }}>visiteurs</div></div>
+              <div><b style={{ fontSize: "1.6rem", color: "#f3e8d3", fontVariantNumeric: "tabular-nums" }}>{today.viewItem}</b><div style={{ fontSize: "0.8rem", color: "#b7a988" }}>produits vus</div></div>
+              <div><b style={{ fontSize: "1.6rem", color: "#f3e8d3", fontVariantNumeric: "tabular-nums" }}>{today.addToCart}</b><div style={{ fontSize: "0.8rem", color: "#b7a988" }}>ajouts panier</div></div>
+              <div><b style={{ fontSize: "1.6rem", color: today.purchase > 0 ? "#e2c67e" : "#f3e8d3", fontVariantNumeric: "tabular-nums" }}>{today.purchase}</b><div style={{ fontSize: "0.8rem", color: "#b7a988" }}>vente(s){today.revenue > 0 ? ` · ${euro(today.revenue)}` : ""}</div></div>
+            </div>
+          </div>
+
           {/* KPIs principaux */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
             <Kpi label="Visiteurs" value={t.sessions} sub={`sur ${days} jours`} />
@@ -128,10 +144,12 @@ export default function StatsPage() {
             ) : (
               <div style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 150, marginTop: 10, overflowX: "auto" }}>
                 {series.map((d) => (
-                  <div key={d.date} title={`${fmtDay(d.date)} : ${d.sessions} visiteur(s), ${d.purchase} vente(s)`}
+                  <div key={d.date} title={`${fmtWeekday(d.date)} ${fmtDay(d.date)} : ${d.sessions} visiteur(s), ${d.purchase} vente(s)`}
                     style={{ flex: "1 0 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 3, height: "100%", justifyContent: "flex-end" }}>
                     <div style={{ width: "100%", height: `${Math.max(2, (d.sessions / maxS) * 120)}px`, background: d.purchase > 0 ? "var(--gold-dark)" : "var(--gold)", borderRadius: "3px 3px 0 0", minWidth: 6 }} />
-                    <span style={{ fontSize: "0.55rem", color: "var(--ink-soft)", whiteSpace: "nowrap" }}>{fmtDay(d.date)}</span>
+                    <span style={{ fontSize: "0.55rem", color: "var(--ink-soft)", whiteSpace: "nowrap", textAlign: "center", lineHeight: 1.15 }}>
+                      <b style={{ color: "var(--ink)", fontWeight: 700 }}>{fmtWeekday(d.date)}</b><br />{fmtDay(d.date)}
+                    </span>
                   </div>
                 ))}
               </div>
