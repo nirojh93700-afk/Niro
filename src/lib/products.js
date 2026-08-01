@@ -1108,6 +1108,33 @@ export const products = [
 <p>Personnalisez le <strong>recto</strong> (inclus), ajoutez une gravure au <strong>verso</strong> (+5 €) et même une <strong>photo gravée</strong> (+8 €).</p>`,
   },
   {
+    slug: "collier-perle-solitaire",
+    badge: "Nouveau",
+    name: "Collier Perle solitaire",
+    weight: 35, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier perle solitaire doré — chaîne fine plaquée or, cadeau femme minimaliste",
+    category: "bijoux", type: "Collier",
+    tagline: "Une perle délicate sur une chaîne fine dorée — élégant, minimaliste, à offrir.",
+    personalizable: false,
+    images: [
+      "/produits/collier-perle-1.jpg",
+      "/produits/collier-perle-2.jpg",
+      "/produits/collier-perle-3.jpg",
+      "/produits/collier-perle-4.jpg",
+    ],
+    variants: [
+      { id: "collier-perle-solitaire-dore", title: "Doré", price: 21.90, stockId: "collier-perle-solitaire" },
+    ],
+    descriptionHtml: `<p>Un bijou tout en délicatesse : une <strong>perle solitaire</strong> posée sur une <strong>chaîne fine plaquée or</strong>. Minimaliste et intemporel, il se porte au quotidien comme pour une occasion.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, plaqué or véritable (PVD)</li>
+<li><strong>Perle :</strong> perle nacrée</li>
+<li><strong>Finition :</strong> résistante à l'eau, ne ternit pas</li>
+<li><strong>Fermoir :</strong> mousqueton</li>
+</ul>`,
+  },
+  {
     slug: "collier-coeur-zircon",
     badge: "Nouveau",
     name: "Collier Cœur & Zircon doré",
