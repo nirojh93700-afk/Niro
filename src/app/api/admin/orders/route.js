@@ -36,6 +36,20 @@ export async function POST(req) {
     return Response.json({ ok });
   }
 
+  // Envoyer MAINTENANT la demande d'avis au client (bouton admin, à la demande).
+  // Utilise le même e-mail (avec lien direct vers la fiche produit #avis) que la
+  // règle automatique, mais immédiatement.
+  if (id && body?.action === "review") {
+    const order = await getSiteOrder(id);
+    if (!order?.customerEmail) return Response.json({ ok: false, error: "Cette commande n'a pas d'e-mail client." }, { status: 400 });
+    const mail = reviewRequestEmail(order);
+    const r = await sendClientMail({ to: order.customerEmail, subject: mail.subject, html: mail.html, bcc: BRAND.contact });
+    if (r?.ok) {
+      try { await logOrderEmail(id, { subject: mail.subject, customerEmail: order.customerEmail, customerName: order.customerName, ref: order.ref }); } catch { /* le journal ne bloque jamais */ }
+    }
+    return Response.json({ ok: Boolean(r?.ok), emailed: Boolean(r?.ok), error: r?.error });
+  }
+
   if (!id || !["a_preparer", "en_gravure", "expediee", "livree", "annulee", "remise_main_propre"].includes(status)) {
     return Response.json({ error: "Paramètres invalides." }, { status: 400 });
   }

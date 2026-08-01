@@ -206,6 +206,22 @@ export default function GestionPage() {
     }
   }
 
+  // Envoyer MAINTENANT la demande d'avis au client (bouton, à la demande).
+  async function askReview(o) {
+    if (!o.customerEmail) { setError("Cette commande n'a pas d'e-mail client."); return; }
+    if (!window.confirm(`Envoyer la demande d'avis à ${o.customerName || o.customerEmail} maintenant ?`)) return;
+    try {
+      const res = await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ id: o.id, action: "review" }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (d.ok) setError(`✓ Demande d'avis envoyée à ${o.customerEmail}.`);
+      else setError(d.error || "L'e-mail n'a pas pu être envoyé (Gmail/Resend).");
+    } catch { setError("Échec de l'envoi de la demande d'avis."); }
+  }
+
   // Marquer expédiée : demande le n° de suivi (optionnel) et propose de prévenir la cliente.
   async function shipOrder(o) {
     const input = window.prompt("Numéro de suivi du colis (laisse vide si tu n'en as pas encore) :", o.tracking || "");
@@ -1188,6 +1204,11 @@ export default function GestionPage() {
                       {o.status === "remise_main_propre" && (
                         <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "a_preparer")}>
                           Remettre à préparer
+                        </button>
+                      )}
+                      {["expediee", "livree", "remise_main_propre"].includes(o.status) && o.customerEmail && (
+                        <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#8a6d3b", borderColor: "#e2c67e" }} onClick={() => askReview(o)}>
+                          ✉️ Demander un avis
                         </button>
                       )}
 
