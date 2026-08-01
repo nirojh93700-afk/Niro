@@ -24,6 +24,7 @@ export default function FideliteAdmin() {
   const [pct, setPct] = useState("5");
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState({ cagnottes: [], total: 0, count: 0 });
+  const [amb, setAmb] = useState({ codes: {}, stats: {} });
 
   const load = useCallback(async (k) => {
     try {
@@ -34,6 +35,9 @@ export default function FideliteAdmin() {
       setAuthed(true);
       const c = await fetch("/api/admin/cagnottes", { headers: { "x-admin-key": k } });
       if (c.ok) setData(await c.json());
+      // Ambassadeurs (codes + commissions) — pour la section intégrée.
+      const p = await fetch("/api/admin/promo-codes", { headers: { "x-admin-key": k } });
+      if (p.ok) { const pd = await p.json(); setAmb({ codes: pd.codes || {}, stats: pd.stats || {} }); }
     } catch { /* ignore */ }
   }, []);
 
@@ -59,6 +63,22 @@ export default function FideliteAdmin() {
   if (!authed) {
     return <div style={{ padding: 24 }}><p>Connecte-toi d&apos;abord sur la page Gestion, puis reviens ici.</p></div>;
   }
+
+  // Ambassadeurs : codes avec une commission > 0, enrichis de leurs statistiques.
+  const ambassadors = Object.entries(amb.codes || {})
+    .filter(([, def]) => Number(def?.commission) > 0)
+    .map(([code, def]) => {
+      const s = (amb.stats || {})[code] || {};
+      const commTotal = Number(s.commission) || 0;
+      const paid = Number(s.paid) || 0;
+      return {
+        code, name: def.ambassador || code, pct: Number(def.commission) || 0,
+        orders: Number(s.orders) || 0, sales: Number(s.sales) || 0,
+        commTotal, paid, due: Math.max(0, commTotal - paid),
+      };
+    })
+    .sort((a, b) => b.due - a.due);
+  const totalDue = ambassadors.reduce((t, a) => t + a.due, 0);
 
   return (
     <div style={{ maxWidth: 820, margin: "0 auto", padding: "8px 14px 60px" }}>
@@ -121,6 +141,51 @@ export default function FideliteAdmin() {
               </tbody>
             </table>
           </div>
+        )}
+      </div>
+
+      {/* Ambassadeurs & commissions (intégré) */}
+      <div style={card}>
+        <h2 style={{ marginTop: 0 }}>Ambassadeurs &amp; commissions</h2>
+        <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem", marginTop: -6 }}>
+          Combien chaque ambassadeur t&apos;a rapporté, et ce qu&apos;il te reste à lui verser. Tout se met à jour <strong>automatiquement</strong> à chaque commande passée avec son code. Pour créer/gérer un code : Marketing → Promotions &amp; ambassadeurs.
+        </p>
+        {ambassadors.length === 0 ? (
+          <p style={{ color: "var(--ink-soft)" }}>Aucun ambassadeur pour l&apos;instant. Crée un code avec une commission dans Marketing → Promotions &amp; ambassadeurs.</p>
+        ) : (
+          <>
+            <div style={{ ...card, background: "linear-gradient(150deg,#241a0c,#3a2c12)", border: "none", color: "#f3e8d3", marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+              <span style={{ fontSize: "0.82rem", letterSpacing: 1, textTransform: "uppercase", color: "#e2c67e" }}>Total commissions à verser</span>
+              <span style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: "bold", color: "#fff" }}>{euro(totalDue)}</span>
+            </div>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem", minWidth: 520 }}>
+                <thead>
+                  <tr>
+                    {["Ambassadeur", "Code", "Cmd", "Ventes", "Commission", "Versé", "À verser"].map((h, i) => (
+                      <th key={h} style={{ textAlign: i <= 1 ? "left" : "right", borderBottom: "2px solid #eadfc4", padding: "8px 6px", color: "var(--ink-soft)", fontWeight: 700, whiteSpace: "nowrap" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {ambassadors.map((a) => (
+                    <tr key={a.code} style={{ borderBottom: "1px solid #f0eadd" }}>
+                      <td style={{ padding: "8px 6px" }}>{a.name}</td>
+                      <td style={{ padding: "8px 6px", fontFamily: "monospace", color: "var(--gold-dark)" }}>{a.code} <span style={{ color: "var(--ink-soft)", fontSize: "0.75rem" }}>({a.pct} %)</span></td>
+                      <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{a.orders}</td>
+                      <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{euro(a.sales)}</td>
+                      <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{euro(a.commTotal)}</td>
+                      <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "var(--ink-soft)" }}>{euro(a.paid)}</td>
+                      <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 700, color: a.due > 0 ? "#b4452f" : "#256b34" }}>{euro(a.due)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", marginTop: 8 }}>
+              Pour marquer une commission comme <strong>versée</strong> : Marketing → Promotions &amp; ambassadeurs (bouton « marquer payé »).
+            </p>
+          </>
         )}
       </div>
     </div>
