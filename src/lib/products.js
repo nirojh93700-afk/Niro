@@ -1020,6 +1020,7 @@ export const products = [
     tagline: "Un bracelet à gros maillons dorés, tendance et lumineux — se porte au quotidien.",
     personalizable: false,
     images: [
+      "/produits/bracelet-maille-0.jpg",
       "/produits/bracelet-maille-1.jpg",
       "/produits/bracelet-maille-2.jpg",
       "/produits/bracelet-maille-3.jpg",
