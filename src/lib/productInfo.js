@@ -966,6 +966,20 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "collier-coeur-scintillant": {
+    material: `Taille & Matériaux
+- Pendentif double cœur serti de zircons + pierre centrale scintillante, sur chaîne fine.
+- Matière : acier inoxydable 304 plaqué or 18 carats (PVD). Fermoir mousqueton.
+- Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
+    usage: `Personnalisation & Entretien
+- Bijou cadeau prêt à offrir (non personnalisé).
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur les pierres.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Bijou non personnalisé : échange possible sous 14 jours, article non porté.
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-perle-solitaire": {
     material: `Taille & Matériaux
 - Collier à perle solitaire sur chaîne fine, acier inoxydable 304 plaqué or véritable (PVD).

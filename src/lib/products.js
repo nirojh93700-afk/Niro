@@ -1162,6 +1162,32 @@ export const products = [
 <p>Personnalisez le <strong>recto</strong> (inclus), ajoutez une gravure au <strong>verso</strong> (+5 €) et même une <strong>photo gravée</strong> (+8 €).</p>`,
   },
   {
+    slug: "collier-coeur-scintillant",
+    badge: "Nouveau",
+    name: "Collier Cœur scintillant doré",
+    weight: 35, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier cœur doré à zircons — pendentif cœur brillant, cadeau femme romantique",
+    category: "bijoux", type: "Collier",
+    tagline: "Un pendentif double cœur pavé de zircons, avec une pierre centrale scintillante — à offrir.",
+    personalizable: false,
+    images: [
+      "/produits/collier-coeur-scintillant-1.jpg",
+      "/produits/collier-coeur-scintillant-2.jpg",
+      "/produits/collier-coeur-scintillant-3.jpg",
+    ],
+    variants: [
+      { id: "collier-coeur-scintillant-dore", title: "Doré", price: 27.90, stockId: "collier-coeur-scintillant" },
+    ],
+    descriptionHtml: `<p>Un pendentif <strong>double cœur</strong> serti de zircons, avec une <strong>pierre centrale scintillante</strong> qui capte la lumière, sur une fine chaîne dorée. Romantique et lumineux, un cadeau qui touche (Saint-Valentin, anniversaire, fête des Mères).</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, plaqué or 18 carats (PVD)</li>
+<li><strong>Pierres :</strong> zircons (pavé + pierre centrale)</li>
+<li><strong>Finition :</strong> résistante à l'eau, ne ternit pas</li>
+<li><strong>Fermoir :</strong> mousqueton</li>
+</ul>`,
+  },
+  {
     slug: "collier-perle-solitaire",
     badge: "Nouveau",
     name: "Collier Perle solitaire",
