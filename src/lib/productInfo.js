@@ -924,6 +924,20 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "bracelet-maille-trombone": {
+    material: `Taille & Matériaux
+- Bracelet à gros maillons ovales texturés (maille trombone), acier inoxydable 304 doré.
+- Poids ~15 g. Fermoir mousqueton avec chaîne d'extension réglable.
+- Résistant à l'eau, ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Bijou tendance prêt à porter (non personnalisé), à porter seul ou en accumulation.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Bijou non personnalisé : échange possible sous 14 jours, article non porté.
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "bracelet-ange": {
     material: `Taille & Matériaux
 - Bracelet à breloque « ange » sur chaîne fine en acier inoxydable, doré ou argenté.
