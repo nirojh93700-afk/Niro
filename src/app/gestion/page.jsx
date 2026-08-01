@@ -1169,6 +1169,9 @@ export default function GestionPage() {
                           }}>
                             Marquer livrée
                           </button>
+                          <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => setOrderStatus(o.id, "remise_main_propre")}>
+                            🤝 Remise en main propre
+                          </button>
                           <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={() => shipOrder(o)}>
                             {o.tracking ? "Modifier le suivi" : "Ajouter un suivi"}
                           </button>
