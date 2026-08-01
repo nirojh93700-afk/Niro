@@ -51,6 +51,7 @@ export default function GestionPage() {
   }, []);
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
   const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
+  const [pendingReviews, setPendingReviews] = useState(0); // nouveaux avis clients à valider
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -105,6 +106,12 @@ export default function GestionPage() {
         const s = (await stg.json()).settings || {};
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
+      }
+      // Compteur d'avis à valider (nouveaux avis clients en attente).
+      const rev = await fetch("/api/admin/reviews", { headers: { "x-admin-key": adminKey } });
+      if (rev.ok) {
+        const rd = await rev.json();
+        setPendingReviews((rd.reviews || []).filter((r) => !r.approved).length);
       }
     } catch (e) {
       setError(e.message);
@@ -779,6 +786,12 @@ export default function GestionPage() {
         {/* ---------------- ACCUEIL (tableau de bord) ---------------- */}
         {tab === "accueil" && (
           <>
+            {pendingReviews > 0 && (
+              <div className="notice" style={{ background: "#fbf3e6", borderColor: "#e2c67e", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+                <span>⭐ <b>{pendingReviews} nouvel{pendingReviews > 1 ? "s" : ""} avis à valider</b> — un client a laissé un avis. Validez-le pour qu&apos;il s&apos;affiche sur le site.</span>
+                <button className="btn btn-gold" style={{ padding: "6px 16px" }} onClick={() => setTab("avis")}>Voir les avis →</button>
+              </div>
+            )}
             <div className="dash-top">
               <div className="dash-hi">
                 <h1>Bonjour 👋</h1>
@@ -793,6 +806,7 @@ export default function GestionPage() {
 
             <div className="dash-tiles">
               <div className="dash-tile"><small>À préparer</small><b>{aPreparer}</b></div>
+              <div className="dash-tile" style={pendingReviews > 0 ? { cursor: "pointer", outline: "2px solid #e2c67e" } : undefined} onClick={() => pendingReviews > 0 && setTab("avis")}><small>Avis à valider</small><b>{pendingReviews}</b></div>
               <div className="dash-tile"><small>CA — ce mois</small><b>{formatEuro(caThisMonth)}</b></div>
               <div className="dash-tile"><small>Commandes</small><b>{validOrders.length}</b></div>
               <div className="dash-tile"><small>Clientes</small><b>{clients.length}</b></div>
