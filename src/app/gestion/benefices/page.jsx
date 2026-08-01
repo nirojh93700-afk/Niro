@@ -68,6 +68,11 @@ export default function BeneficesPage() {
   const [data, setData] = useState(null);
   const [period, setPeriod] = useState("month");
   const [err, setErr] = useState("");
+  const [expenses, setExpenses] = useState([]);
+  const [expLabel, setExpLabel] = useState("");
+  const [expAmount, setExpAmount] = useState("");
+  const [expDate, setExpDate] = useState("");
+  const [expMsg, setExpMsg] = useState("");
 
   const load = useCallback(async (k) => {
     try {
@@ -79,16 +84,56 @@ export default function BeneficesPage() {
     } catch { setErr("Erreur de chargement."); }
   }, []);
 
+  const loadExpenses = useCallback(async (k) => {
+    try {
+      const res = await fetch("/api/admin/settings", { headers: { "x-admin-key": k } });
+      if (res.ok) { const { settings } = await res.json(); setExpenses(Array.isArray(settings?.expenses) ? settings.expenses : []); }
+    } catch { /* ignore */ }
+  }, []);
+
   useEffect(() => {
     const k = typeof window !== "undefined" ? sessionStorage.getItem("niv-admin-key") : "";
-    if (k) { setKey(k); load(k); }
-  }, [load]);
+    if (k) { setKey(k); load(k); loadExpenses(k); }
+  }, [load, loadExpenses]);
+
+  async function persistExpenses(next, k = key) {
+    setExpenses(next);
+    try {
+      await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": k },
+        body: JSON.stringify({ expenses: next }),
+      });
+    } catch { setExpMsg("Enregistrement impossible."); }
+  }
+  function addExpense() {
+    const amount = Math.max(0, Math.round((parseFloat(String(expAmount).replace(",", ".")) || 0) * 100) / 100);
+    if (!expLabel.trim() && !amount) { setExpMsg("Indique un libellé et un montant."); return; }
+    const e = {
+      id: "dep_" + Math.random().toString(36).slice(2, 8),
+      label: expLabel.trim().slice(0, 80),
+      amount,
+      date: /^\d{4}-\d{2}-\d{2}/.test(expDate) ? expDate : new Date().toISOString().slice(0, 10),
+      category: "",
+    };
+    persistExpenses([e, ...expenses]);
+    setExpLabel(""); setExpAmount(""); setExpDate(""); setExpMsg("Ajouté ✓");
+  }
+  function removeExpense(id) { persistExpenses(expenses.filter((e) => e.id !== id)); }
 
   if (!authed) return <div style={{ padding: 24 }}><p>{err || "Connecte-toi sur la page Gestion, puis reviens ici."}</p></div>;
   if (!data) return <div style={{ padding: 24 }}><p>Chargement…</p></div>;
 
   const p = data[period] || data.month;
   const periodLabel = { month: "Ce mois", year: "Cette année", all: "Depuis le début" }[period];
+
+  // Dépenses de la période sélectionnée (par date), puis bénéfice net.
+  const now = new Date();
+  const ymNow = now.toISOString().slice(0, 7);
+  const yNow = String(now.getFullYear());
+  const inPeriod = (d) => period === "all" ? true : period === "year" ? String(d || "").slice(0, 4) === yNow : String(d || "").slice(0, 7) === ymNow;
+  const periodExpenses = expenses.filter((e) => inPeriod(e.date)).reduce((s, e) => s + (Number(e.amount) || 0), 0);
+  const netProfit = (p.profit || 0) - periodExpenses;
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "8px 14px 60px" }}>
@@ -118,6 +163,55 @@ export default function BeneficesPage() {
       <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "-8px 0 14px" }}>
         La livraison est <strong>neutre</strong> : les clientes couvrent ce que tu paies au transporteur → elle n&apos;est pas comptée dans le bénéfice, juste affichée pour info.
       </p>
+
+      {/* Dépenses & charges */}
+      <div style={card}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Dépenses &amp; charges</h2>
+        <p style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 0 }}>
+          Tout ce que tu achètes pour fonctionner : <strong>fournitures d&apos;expédition</strong> (cartons, scotch fragile, papier bulle, étiquettes), matériel, petites charges. C&apos;est déduit pour obtenir ton <strong>bénéfice net</strong>.
+        </p>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-end", marginBottom: 12 }}>
+          <label style={{ flex: "2 1 160px" }}>
+            <div style={{ fontSize: "0.78rem", color: "var(--ink-soft)" }}>Libellé</div>
+            <input value={expLabel} onChange={(e) => setExpLabel(e.target.value)} placeholder="Ex. Scotch fragile (Amazon)" style={{ width: "100%", padding: "8px 10px", border: "1px solid #eadfc4", borderRadius: 8, font: "inherit" }} />
+          </label>
+          <label style={{ flex: "1 1 90px" }}>
+            <div style={{ fontSize: "0.78rem", color: "var(--ink-soft)" }}>Montant €</div>
+            <input value={expAmount} onChange={(e) => setExpAmount(e.target.value)} inputMode="decimal" placeholder="7,99" style={{ width: "100%", padding: "8px 10px", border: "1px solid #eadfc4", borderRadius: 8, font: "inherit" }} />
+          </label>
+          <label style={{ flex: "1 1 120px" }}>
+            <div style={{ fontSize: "0.78rem", color: "var(--ink-soft)" }}>Date</div>
+            <input type="date" value={expDate} onChange={(e) => setExpDate(e.target.value)} style={{ width: "100%", padding: "8px 10px", border: "1px solid #eadfc4", borderRadius: 8, font: "inherit" }} />
+          </label>
+          <button className="btn btn-gold" onClick={addExpense} style={{ padding: "8px 16px" }}>Ajouter</button>
+        </div>
+        {expMsg && <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", marginTop: -4 }}>{expMsg}</p>}
+        {expenses.length > 0 ? (
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem" }}>
+              <tbody>
+                {expenses.map((e) => (
+                  <tr key={e.id} style={{ borderBottom: "1px solid #f0eadd" }}>
+                    <td style={{ padding: "6px 4px", color: "var(--ink-soft)", whiteSpace: "nowrap" }}>{e.date}</td>
+                    <td style={{ padding: "6px 8px" }}>{e.label}</td>
+                    <td style={{ padding: "6px 4px", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 700 }}>{euro(e.amount)}</td>
+                    <td style={{ padding: "6px 4px", textAlign: "right" }}><button onClick={() => removeExpense(e.id)} title="Supprimer" style={{ background: "none", border: 0, cursor: "pointer", color: "#b4452f", fontSize: "1rem" }}>✕</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>Aucune dépense enregistrée pour l&apos;instant.</p>}
+      </div>
+
+      {/* Bénéfice net après dépenses */}
+      <div style={{ ...card, background: "#241a0c", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+        <div>
+          <div style={{ fontSize: "0.78rem", color: "#c9a24b", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".03em" }}>Bénéfice net — {periodLabel}</div>
+          <div style={{ fontSize: "0.78rem", color: "#b7a988", marginTop: 2 }}>Bénéfice {euro(p.profit)} − dépenses {euro(periodExpenses)}</div>
+        </div>
+        <div style={{ fontSize: "1.9rem", fontWeight: 800, color: netProfit >= 0 ? "#e2c67e" : "#e78d7a", fontVariantNumeric: "tabular-nums" }}>{euro(netProfit)}</div>
+      </div>
 
       {/* Alerte coûts manquants */}
       {data.missingCost?.count > 0 && (
@@ -169,7 +263,7 @@ export default function BeneficesPage() {
       </div>
 
       <p style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>
-        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Les frais de port et d&apos;emballage ne sont pas comptés ici (revenus et dépenses séparés).
+        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> ne compte que produits vendus − coût d&apos;achat ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
       </p>
     </div>
   );

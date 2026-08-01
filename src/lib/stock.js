@@ -1185,6 +1185,9 @@ export async function getSettings() {
     productPackaging: (s.productPackaging && typeof s.productPackaging === "object")
       ? { ...DEFAULT_PRODUCT_PACKAGING, ...s.productPackaging }
       : DEFAULT_PRODUCT_PACKAGING,
+    // Dépenses / charges (fournitures d'expédition, cartons, scotch…) pour le
+    // bénéfice net (Gestion → Bénéfices).
+    expenses: Array.isArray(s.expenses) ? s.expenses : [],
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {

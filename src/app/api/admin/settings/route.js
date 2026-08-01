@@ -332,6 +332,23 @@ export async function POST(req) {
     })).filter((r) => r.name || r.body);
   }
 
+  // Dépenses / charges (fournitures d'expédition, cartons, scotch, étiquettes,
+  // frais divers…) : [{ id, label, amount, date, category }]. Réduisent le
+  // bénéfice net dans Gestion → Bénéfices.
+  if (Array.isArray(body.expenses)) {
+    patch.expenses = body.expenses
+      .filter((e) => e && typeof e === "object")
+      .slice(0, 500)
+      .map((e) => ({
+        id: str(e.id, 40) || ("dep_" + Math.random().toString(36).slice(2, 8)),
+        label: str(e.label, 80),
+        amount: Math.max(0, Math.round((Number(e.amount) || 0) * 100) / 100),
+        date: /^\d{4}-\d{2}-\d{2}/.test(String(e.date || "")) ? String(e.date).slice(0, 10) : new Date().toISOString().slice(0, 10),
+        category: str(e.category, 40),
+      }))
+      .filter((e) => e.label || e.amount > 0);
+  }
+
   const saved = await setSettings(patch);
   return Response.json({ ok: true, settings: saved });
 }
