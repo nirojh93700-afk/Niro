@@ -8,9 +8,25 @@
 // =============================================================================
 
 import { NextResponse } from "next/server";
-import { getData, saveData, computeStats, slugify } from "@/lib/plateforme-store";
+import { getData, saveData, computeStats, slugify, saveSiteHtml, deleteSiteHtml } from "@/lib/plateforme-store";
 
 export const dynamic = "force-dynamic";
+
+// Ajoute une fois HB Auto-Clé (premier vrai client) à la liste, sans jamais la
+// réimposer si la propriétaire l'a supprimée ensuite (drapeau settings.seededHb).
+async function ensureSeeds(data) {
+  if (data.settings?.seededHb) return data;
+  if (!data.clients.some((c) => c.id === "hb-auto-cle")) {
+    data.clients.push({
+      id: "hb-auto-cle", nom: "HB Auto-Clé", domaine: "", etatSite: "en-ligne",
+      abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: null,
+      depuis: new Date().toISOString().slice(0, 7), keys: {},
+      site: { on: true, url: "/site/hb-auto-cle", updatedAt: new Date().toISOString().slice(0, 10) },
+    });
+  }
+  data.settings = { ...data.settings, seededHb: true };
+  return await saveData(data);
+}
 
 function attendu() {
   return (process.env.PLATFORM_PASSWORD || process.env.ADMIN_PASSWORD || "").trim();
@@ -23,7 +39,7 @@ function autorise(req) {
 
 export async function GET(req) {
   if (!autorise(req)) return NextResponse.json({ error: "Mot de passe incorrect." }, { status: 401 });
-  const data = await getData();
+  const data = await ensureSeeds(await getData());
   return NextResponse.json({ clients: data.clients, stats: computeStats(data.clients), settings: data.settings });
 }
 
@@ -71,6 +87,25 @@ export async function POST(req) {
     }
     case "saveReglages": {
       data.settings = { ...data.settings, ...(body.settings || {}) };
+      break;
+    }
+    case "saveSite": {
+      // Héberge le HTML du site dans Lior et donne un lien public /site/<id>.
+      const i = data.clients.findIndex((x) => x.id === body.id);
+      if (i === -1) return NextResponse.json({ error: "Cliente introuvable." }, { status: 404 });
+      const html = String(body.html || "");
+      if (!html.trim()) return NextResponse.json({ error: "Le fichier du site est vide." }, { status: 400 });
+      await saveSiteHtml(body.id, html);
+      data.clients[i].site = { on: true, url: `/site/${body.id}`, bytes: html.length, updatedAt: new Date().toISOString().slice(0, 10) };
+      if (data.clients[i].etatSite === "preparation") data.clients[i].etatSite = "en-ligne";
+      break;
+    }
+    case "deleteSite": {
+      const i = data.clients.findIndex((x) => x.id === body.id);
+      if (i !== -1) {
+        await deleteSiteHtml(body.id);
+        data.clients[i].site = { on: false };
+      }
       break;
     }
     case "check": {

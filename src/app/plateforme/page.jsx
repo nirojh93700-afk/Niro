@@ -289,8 +289,9 @@ export default function PlateformePage() {
               {clients.map((c) => (
                 <ClientRow key={c.id} c={c} actions={
                   <div className="rowend">
+                    {c.site?.on && <a className="btn ghost" href={c.site.url} target="_blank" rel="noopener" title="Voir le site en ligne">↗ Site</a>}
                     <button className="btn ghost" onClick={() => setSelected(c)}>⬡</button>
-                    <button className="btn ghost" onClick={() => setEditing({ id: c.id, nom: c.nom, domaine: c.domaine, etatSite: c.etatSite, formule: c.abonnement?.formule || "", etat: c.abonnement?.etat || "aucun", adminUrl: c.adminUrl || "" })}>Modifier</button>
+                    <button className="btn ghost" onClick={() => setEditing({ id: c.id, nom: c.nom, domaine: c.domaine, etatSite: c.etatSite, formule: c.abonnement?.formule || "", etat: c.abonnement?.etat || "aucun", adminUrl: c.adminUrl || "", siteOn: c.site?.on || false, siteUrl: c.site?.url || "" })}>Modifier</button>
                     {!c.vous && <button className="btn danger" onClick={async () => { if (confirm(`Supprimer ${c.nom} ?`)) await api("deleteClient", { id: c.id }); }}>×</button>}
                   </div>
                 } />
@@ -382,7 +383,13 @@ function Coffre({ client, onClose, api }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span className="ava" style={{ width: 44, height: 44 }}>{client.nom[0]}</span>
-            <div><div className="serif" style={{ fontSize: 22 }}>{client.nom}</div><div style={{ color: "#8e8a7e", fontSize: 13 }}>{client.domaine || "—"}</div></div>
+            <div>
+              <div className="serif" style={{ fontSize: 22 }}>{client.nom}</div>
+              <div style={{ color: "#8e8a7e", fontSize: 13 }}>
+                {client.domaine || "—"}
+                {client.site?.on && <> · <a href={client.site.url} target="_blank" rel="noopener" style={{ color: GOLD }}>voir le site ↗</a></>}
+              </div>
+            </div>
           </div>
           <button className="close" onClick={onClose}>×</button>
         </div>
@@ -409,7 +416,18 @@ function Coffre({ client, onClose, api }) {
 
 function EditModal({ editing, settings, api, busy, onClose }) {
   const [f, setF] = useState(editing);
+  const [siteMsg, setSiteMsg] = useState("");
   const formules = settings.formules || [];
+
+  async function onFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!/\.html?$/i.test(file.name)) { setSiteMsg("Choisissez un fichier .html"); return; }
+    const text = await file.text();
+    setF({ ...f, siteHtml: text, siteName: file.name });
+    setSiteMsg("");
+  }
+
   async function save() {
     const prix = formules.find((x) => x.nom === f.formule)?.prix || 0;
     const client = {
@@ -417,7 +435,15 @@ function EditModal({ editing, settings, api, busy, onClose }) {
       abonnement: { formule: f.formule || null, prix: f.formule ? prix : 0, etat: f.formule ? f.etat : "aucun" },
     };
     const r = f.isNew ? await api("createClient", { client }) : await api("updateClient", { client: { id: f.id, ...client } });
-    if (r.ok) onClose(); else alert(r.json?.error || "Erreur");
+    if (!r.ok) { alert(r.json?.error || "Erreur"); return; }
+    // Récupère l'identifiant (pour un nouveau site, il est calculé côté serveur à partir du nom).
+    let id = f.id;
+    if (!id) { const cree = (r.json.clients || []).find((x) => x.nom === f.nom); id = cree?.id; }
+    if (f.siteHtml && id) {
+      const rs = await api("saveSite", { id, html: f.siteHtml });
+      if (!rs.ok) { alert(rs.json?.error || "Le site n'a pas pu être enregistré."); return; }
+    }
+    onClose();
   }
   return (
     <div className="ov center" onClick={onClose}>
@@ -447,6 +473,22 @@ function EditModal({ editing, settings, api, busy, onClose }) {
         )}
         <label className="flab">Lien vers l'admin (optionnel)</label>
         <input className="inp" value={f.adminUrl} onChange={(e) => setF({ ...f, adminUrl: e.target.value })} placeholder="https://…/gestion" />
+
+        {/* Site hébergé dans Lior */}
+        <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid rgba(255,255,255,.08)" }}>
+          <label className="flab" style={{ marginTop: 0 }}>Site du client — fichier HTML hébergé dans Lior</label>
+          {(f.siteOn || f.siteHtml) && (
+            <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 10 }}>
+              <span className="pill green"><span className="dot" style={{ background: GREEN, boxShadow: `0 0 10px ${GREEN}` }} />Hébergé</span>
+              {f.siteUrl && !f.siteHtml && <a className="btn ghost" href={f.siteUrl} target="_blank" rel="noopener">Ouvrir le site ↗</a>}
+              {f.siteHtml && <span style={{ color: GREEN, fontSize: 13 }}>✓ {f.siteName} — cliquez « Enregistrer »</span>}
+            </div>
+          )}
+          <input type="file" accept=".html,text/html" onChange={onFile} style={{ fontSize: 13, color: "#cfc9b8" }} />
+          <p style={{ color: "#6e6a5e", fontSize: 12, marginTop: 8, lineHeight: 1.5 }}>Déposez le fichier HTML complet du site. Lior l'héberge et crée un lien public <b style={{ color: "#b6b1a4" }}>/site/{f.id || "…"}</b> à donner à votre client.</p>
+          {siteMsg && <div style={{ color: "#e87a6a", fontSize: 13, marginTop: 6 }}>{siteMsg}</div>}
+        </div>
+
         <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
           <button className="btn" style={{ flex: 1, justifyContent: "center", padding: 13 }} disabled={busy || !f.nom} onClick={save}>{busy ? "…" : "Enregistrer"}</button>
           <button className="btn ghost" style={{ padding: 13 }} onClick={onClose}>Annuler</button>

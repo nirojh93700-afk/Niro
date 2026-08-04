@@ -16,6 +16,7 @@ const KEY = "data";
 const DEFAULT_DATA = {
   clients: [
     { id: "niv-creation", nom: "Niv Création", domaine: "nivcreation.fr", etatSite: "en-ligne", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: "/gestion", depuis: "2026-03", vous: true, keys: {} },
+    { id: "hb-auto-cle", nom: "HB Auto-Clé", domaine: "", etatSite: "en-ligne", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: null, depuis: "2026-08", keys: {}, site: { on: true, url: "/site/hb-auto-cle", updatedAt: "2026-08-04" } },
     { id: "boutique-marie", nom: "Boutique Marie", domaine: "boutique-marie.fr", etatSite: "en-ligne", abonnement: { formule: "Active", prix: 59, etat: "actif" }, adminUrl: "https://boutique-marie.fr/gestion", depuis: "2026-03", keys: {} },
     { id: "atelier-du-bois", nom: "Atelier du Bois", domaine: "atelierdubois.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "actif" }, adminUrl: "https://atelierdubois.fr/gestion", depuis: "2026-04", keys: {} },
     { id: "savonnerie-lou", nom: "Savonnerie Lou", domaine: "savonnerie-lou.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "retard" }, adminUrl: "https://savonnerie-lou.fr/gestion", depuis: "2026-04", keys: {} },
@@ -32,6 +33,8 @@ const DEFAULT_DATA = {
 };
 
 let memoryFallback = null;
+// Repli mémoire pour le HTML des sites hébergés (local / si Blobs indisponible).
+let memSites = {};
 
 async function getStoreSafe() {
   try {
@@ -76,8 +79,57 @@ function normalize(data) {
   const d = data || {};
   return {
     clients: Array.isArray(d.clients) ? d.clients.map((c) => ({ keys: {}, abonnement: { formule: null, prix: 0, etat: "aucun" }, ...c })) : [],
-    settings: { formules: d.settings?.formules || DEFAULT_DATA.settings.formules },
+    settings: {
+      formules: d.settings?.formules || DEFAULT_DATA.settings.formules,
+      seededHb: d.settings?.seededHb || false,
+    },
   };
+}
+
+// =============================================================================
+// Sites hébergés DANS Lior : le HTML de chaque site est rangé dans un blob à
+// part (clé `site-<id>`) pour ne pas alourdir le blob principal des clientes.
+// Servis publiquement par la route /site/<id>.
+// =============================================================================
+export async function getSiteHtml(id) {
+  const key = `site-${id}`;
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      const html = await store.get(key, { type: "text" });
+      if (html) return html;
+    } catch {
+      // bascule mémoire
+    }
+  }
+  return memSites[id] || null;
+}
+
+export async function saveSiteHtml(id, html) {
+  const key = `site-${id}`;
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      await store.set(key, html);
+      return true;
+    } catch {
+      // bascule mémoire
+    }
+  }
+  memSites[id] = html;
+  return true;
+}
+
+export async function deleteSiteHtml(id) {
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      await store.delete(`site-${id}`);
+    } catch {
+      // ignore
+    }
+  }
+  delete memSites[id];
 }
 
 // Calcule les chiffres du tableau de bord à partir des clientes.
