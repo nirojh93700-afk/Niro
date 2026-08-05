@@ -15,6 +15,22 @@ const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("fr-FR", { day:
 const DAY = 86400000;
 const segColors = { VIP: "#8a6d3b", "Fidèle": "#256b34", Nouvelle: "#5b6b8a" };
 
+// Onglet "hub" : mène vers un outil existant (rangé sous le CRM, rien n'est supprimé).
+function HubTab({ emoji, title, desc, href, cta, secondaryHref, secondaryCta, extra }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid #eadfc4", borderRadius: 14, padding: "24px 20px", textAlign: "center", maxWidth: 520, margin: "6px auto 0", boxShadow: "0 1px 3px rgba(60,45,15,.05)" }}>
+      <div style={{ fontSize: 40, marginBottom: 6 }}>{emoji}</div>
+      <h2 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: "0 0 6px" }}>{title}</h2>
+      <p style={{ color: "var(--ink-soft)", fontSize: "0.92rem", margin: "0 auto 16px", maxWidth: 430, lineHeight: 1.55 }}>{desc}</p>
+      {extra}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        <Link href={href} className="btn btn-gold" style={{ padding: "9px 20px" }}>{cta} →</Link>
+        {secondaryHref && <Link href={secondaryHref} className="btn btn-outline" style={{ padding: "9px 20px" }}>{secondaryCta}</Link>}
+      </div>
+    </div>
+  );
+}
+
 export default function CrmPage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
@@ -24,6 +40,7 @@ export default function CrmPage() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [seg, setSeg] = useState("all");
+  const [crmTab, setCrmTab] = useState("clients");
   const [open, setOpen] = useState(-1);
   const [noteDraft, setNoteDraft] = useState({});
   const [savedNote, setSavedNote] = useState("");
@@ -286,12 +303,21 @@ export default function CrmPage() {
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>👥 CRM — clients</h1>
+        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>CRM</h1>
         <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour à la gestion</Link>
       </div>
+      <p style={{ color: "var(--ink-soft)", marginTop: 4 }}>Tous tes clients et tes échanges, au même endroit — bien rangés.</p>
       {loading && <p>Chargement…</p>}
       {error && <div className="notice">{error}</div>}
 
+      {/* Onglets du CRM (chaque onglet = un outil existant, regroupé ici) */}
+      <div style={{ display: "flex", gap: 7, overflowX: "auto", padding: "4px 0 10px", margin: "8px 0 16px", borderBottom: "1px solid var(--line)" }}>
+        {[["clients", "👥 Clients"], ["messages", "💬 Messages & modèles"], ["mail", "📩 Boîte mail"], ["campagnes", "📣 Campagnes & relances"], ["fidelite", "🎁 Fidélité & parrainage"], ["avis", "⭐ Avis"]].map(([id, txt]) => (
+          <button key={id} onClick={() => setCrmTab(id)} style={{ flex: "0 0 auto", padding: "8px 13px", borderRadius: 999, border: "1px solid var(--line)", fontSize: "0.85rem", fontWeight: 600, whiteSpace: "nowrap", cursor: "pointer", background: crmTab === id ? "#241a0c" : "#fff", color: crmTab === id ? "#f3e8d3" : "var(--ink-soft)" }}>{txt}</button>
+        ))}
+      </div>
+
+      {crmTab === "clients" && (<>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", margin: "12px 0" }}>
         {card("Clients", String(kpis.clients))}
         {card("CA total", euro(kpis.ca))}
@@ -480,6 +506,35 @@ export default function CrmPage() {
       <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", marginTop: 14 }}>
         « À relancer » = clients sans commande depuis plus de 90 jours. Données issues des vraies commandes (hors tests, annulées, remboursées). Gratuit.
       </p>
+      </>)}
+
+      {crmTab === "messages" && (
+        <HubTab emoji="💬" title="Messages & modèles"
+          desc="Tes modèles de messages réutilisables (parrainage, remerciement, avis, cashback…), à réutiliser dans la fiche d'un client ou à copier pour WhatsApp — et les envois programmés / automatiques."
+          href="/gestion/messages" cta="Ouvrir les messages" />
+      )}
+      {crmTab === "mail" && (
+        <HubTab emoji="📩" title="Boîte mail"
+          desc="Tes échanges e-mail avec les clients, depuis ta boîte Gmail connectée : lire, répondre, envoyer."
+          href="/gestion/boite-mail" cta="Ouvrir la boîte mail" />
+      )}
+      {crmTab === "campagnes" && (
+        <HubTab emoji="📣" title="Campagnes & relances"
+          desc="Envoie une remise à un groupe de clients (fidèles, à relancer…) : le bouton « Campagne » est dans l'onglet Clients. Ici, gère la newsletter et les envois programmés."
+          href="/gestion/messages" cta="Envois programmés"
+          secondaryHref="/gestion#newsletter" secondaryCta="Newsletter"
+          extra={<div style={{ marginBottom: 14 }}><button className="btn btn-outline" style={{ padding: "8px 18px" }} onClick={() => setCrmTab("clients")}>← Faire une campagne (onglet Clients)</button></div>} />
+      )}
+      {crmTab === "fidelite" && (
+        <HubTab emoji="🎁" title="Fidélité & parrainage"
+          desc="Le cashback de chaque cliente et les commissions de tes parrains, mis à jour automatiquement à chaque commande."
+          href="/gestion/fidelite" cta="Ouvrir Fidélité & parrainage" />
+      )}
+      {crmTab === "avis" && (
+        <HubTab emoji="⭐" title="Avis"
+          desc="Les avis clients à valider avant qu'ils s'affichent sur le site (tu gardes le contrôle : rien ne s'affiche sans ta validation)."
+          href="/gestion#avis" cta="Gérer les avis" />
+      )}
     </div>
   );
 }
