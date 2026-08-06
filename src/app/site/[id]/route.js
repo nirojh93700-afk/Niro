@@ -1,11 +1,11 @@
 // =============================================================================
 // Route publique des sites hébergés dans Lior : /site/<id>
 // -----------------------------------------------------------------------------
-// Renvoie directement le HTML du site (aucune connexion requise). C'est le lien
-// que la propriétaire donne à son client. Le HTML vient des Netlify Blobs
-// (site uploadé dans l'app). À défaut, on bascule sur une copie statique
-// livrée avec l'app (public/sites/<id>.html) — ce qui garantit qu'un site de
-// départ comme HB Auto-Clé est en ligne dès le déploiement.
+// Renvoie le HTML du site UNIQUEMENT s'il a été déposé volontairement dans
+// l'app (action saveSite, rangé dans les Netlify Blobs). Rien n'est publié
+// automatiquement : tant que la propriétaire n'a pas mis un site en ligne pour
+// ce client, l'adresse répond « introuvable ». C'est ce qui garantit qu'une
+// maquette ne devient publique qu'après validation.
 // =============================================================================
 
 import { getSiteHtml } from "@/lib/plateforme-store";
@@ -21,13 +21,11 @@ export async function GET(req, { params }) {
     return new Response(html, {
       headers: {
         "content-type": "text/html; charset=utf-8",
-        "cache-control": "public, max-age=60",
+        "cache-control": "no-store",
       },
     });
   }
-
-  // Repli : copie statique livrée avec l'app (public/sites/<id>.html).
-  return Response.redirect(new URL(`/sites/${id}.html`, req.url), 307);
+  return notFound();
 }
 
 function notFound() {

@@ -12,19 +12,25 @@ import { getData, saveData, computeStats, slugify, saveSiteHtml, deleteSiteHtml 
 
 export const dynamic = "force-dynamic";
 
-// Ajoute une fois HB Auto-Clé (premier vrai client) à la liste, sans jamais la
-// réimposer si la propriétaire l'a supprimée ensuite (drapeau settings.seededHb).
-async function ensureSeeds(data) {
-  if (data.settings?.seededHb) return data;
-  if (!data.clients.some((c) => c.id === "hb-auto-cle")) {
-    data.clients.push({
-      id: "hb-auto-cle", nom: "HB Auto-Clé", domaine: "", etatSite: "en-ligne",
-      abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: null,
-      depuis: new Date().toISOString().slice(0, 7), keys: {},
-      site: { on: true, url: "/site/hb-auto-cle", updatedAt: new Date().toISOString().slice(0, 10) },
-    });
+// Rien n'est publié ni ajouté automatiquement : un site n'est mis en ligne que
+// lorsque la propriétaire dépose son fichier (action saveSite). On nettoie une
+// seule fois une éventuelle fiche HB Auto-Clé ajoutée automatiquement par une
+// version précédente (si elle n'a pas été retravaillée), pour ne rien laisser
+// en ligne avant validation du client.
+async function ensureCleanup(data) {
+  if (data.settings?.hbCleaned) return data;
+  const i = data.clients.findIndex((c) => c.id === "hb-auto-cle");
+  if (i !== -1) {
+    const c = data.clients[i];
+    const intacte = (!c.keys || Object.keys(c.keys).length === 0) && !c.abonnement?.formule;
+    if (intacte) {
+      data.clients.splice(i, 1); // fiche non retravaillée : on la retire
+    } else if (c.site?.on) {
+      data.clients[i].site = { on: false }; // fiche gardée mais dépubliée
+    }
+    try { await deleteSiteHtml("hb-auto-cle"); } catch {}
   }
-  data.settings = { ...data.settings, seededHb: true };
+  data.settings = { ...data.settings, hbCleaned: true };
   return await saveData(data);
 }
 
@@ -39,7 +45,7 @@ function autorise(req) {
 
 export async function GET(req) {
   if (!autorise(req)) return NextResponse.json({ error: "Mot de passe incorrect." }, { status: 401 });
-  const data = await ensureSeeds(await getData());
+  const data = await ensureCleanup(await getData());
   return NextResponse.json({ clients: data.clients, stats: computeStats(data.clients), settings: data.settings });
 }
 

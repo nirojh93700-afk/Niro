@@ -38,15 +38,15 @@ comme « sa boutique »).
 ## Ce qui est FAIT (fonctionnel, sans clé)
 - Connexion par mot de passe.
 - **Sites hébergés DANS Lior (maj 04/08/2026)** : dans la modale « Nouveau site / Modifier »,
-  bouton **fichier HTML** → le site est stocké (Netlify Blobs, clé `site-<id>`) et servi
-  publiquement sur **`/site/<id>`** (route `src/app/site/[id]/route.js`) — lien à donner au client.
-  Actions API : `saveSite` / `deleteSite`. Repli sûr : si pas de blob, `/site/<id>` redirige vers
-  la copie statique `public/sites/<id>.html` (garantit un site de départ en ligne dès le déploiement).
-  Boutons « ↗ Site » (liste clientes) + « voir le site » (coffre à clés).
-- **HB Auto-Clé** (premier vrai client, serrurier auto-moto 95) ajouté automatiquement une fois
-  (`ensureSeeds` dans l'API, respecte une suppression via `settings.seededHb`). Site déjà en ligne :
-  `/site/hb-auto-cle` (source : `public/sites/hb-auto-cle.html`). Pour le remplacer : déposer un
-  nouveau fichier HTML depuis la modale du client.
+  bouton **fichier HTML** → le site est stocké (Netlify Blobs, clé `site-<id>`) et servi sur
+  **`/site/<id>`** (route `src/app/site/[id]/route.js`) — lien à donner au client.
+  Actions API : `saveSite` / `deleteSite`. Boutons « ↗ Site » (liste clientes) + « voir le site » (coffre).
+  ⚠️ **Rien n'est publié automatiquement** : tant qu'aucun fichier n'a été déposé pour un client,
+  `/site/<id>` répond **404**. Une maquette ne devient publique qu'après un dépôt volontaire
+  (donc après validation du client). `deleteSite` la retire de la ligne.
+- Pas de client ajouté d'office. `ensureCleanup` (API) retire **une seule fois** une éventuelle
+  fiche HB Auto-Clé auto-ajoutée par une version antérieure (drapeau `settings.hbCleaned`), pour
+  ne rien laisser en ligne avant validation.
 - **Clientes** : ajouter / modifier / supprimer (persisté).
 - **Coffre à clés** par cliente (enregistre Stripe/Resend/domaine/e-mail/Cloudinary).
 - **Abonnements** : revenus récurrents, « marquer payé ».

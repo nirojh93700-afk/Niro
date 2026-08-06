@@ -16,7 +16,6 @@ const KEY = "data";
 const DEFAULT_DATA = {
   clients: [
     { id: "niv-creation", nom: "Niv Création", domaine: "nivcreation.fr", etatSite: "en-ligne", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: "/gestion", depuis: "2026-03", vous: true, keys: {} },
-    { id: "hb-auto-cle", nom: "HB Auto-Clé", domaine: "", etatSite: "en-ligne", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: null, depuis: "2026-08", keys: {}, site: { on: true, url: "/site/hb-auto-cle", updatedAt: "2026-08-04" } },
     { id: "boutique-marie", nom: "Boutique Marie", domaine: "boutique-marie.fr", etatSite: "en-ligne", abonnement: { formule: "Active", prix: 59, etat: "actif" }, adminUrl: "https://boutique-marie.fr/gestion", depuis: "2026-03", keys: {} },
     { id: "atelier-du-bois", nom: "Atelier du Bois", domaine: "atelierdubois.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "actif" }, adminUrl: "https://atelierdubois.fr/gestion", depuis: "2026-04", keys: {} },
     { id: "savonnerie-lou", nom: "Savonnerie Lou", domaine: "savonnerie-lou.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "retard" }, adminUrl: "https://savonnerie-lou.fr/gestion", depuis: "2026-04", keys: {} },
@@ -82,6 +81,7 @@ function normalize(data) {
     settings: {
       formules: d.settings?.formules || DEFAULT_DATA.settings.formules,
       seededHb: d.settings?.seededHb || false,
+      hbCleaned: d.settings?.hbCleaned || false,
     },
   };
 }
