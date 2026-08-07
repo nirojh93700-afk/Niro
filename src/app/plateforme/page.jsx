@@ -8,7 +8,7 @@
 // Connexion par mot de passe (ADMIN_PASSWORD). Adapté téléphone + ordinateur.
 // =============================================================================
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 const GOLD = "#d9b25a";
 const GREEN = "#59d39a";
@@ -94,6 +94,13 @@ const THEME = `
   .close{width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#cfc9b8;font-size:18px;cursor:pointer;flex:0 0 auto}
   .rowend{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex:0 0 auto}
   .botnav{display:none}
+  /* Notifications (toast) + bannière stockage */
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;padding:12px 20px;border-radius:14px;font-size:14px;font-weight:600;box-shadow:0 14px 40px rgba(0,0,0,.5);animation:toastin .25s ease;max-width:92vw;text-align:center}
+  .toast.ok{background:linear-gradient(120deg,#1d3527,#14251b);border:1px solid rgba(89,211,154,.5);color:var(--green)}
+  .toast.err{background:linear-gradient(120deg,#3a1d1a,#251412);border:1px solid rgba(232,122,106,.5);color:#e87a6a}
+  @keyframes toastin{from{transform:translateX(-50%) translateY(16px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+  .banner{padding:13px 18px;border-radius:14px;background:rgba(217,120,60,.12);border:1px solid rgba(217,150,60,.45);color:#e8b06a;font-size:13px;line-height:1.5}
+  .confirm-txt{color:#cfc9b8;font-size:15px;line-height:1.6;margin:6px 0 20px}
   /* --- Téléphone --- */
   @media (max-width:860px){
     .lior-wrap{flex-direction:column;padding:12px;gap:12px;padding-bottom:86px}
@@ -109,6 +116,9 @@ const THEME = `
     .botnav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:#9a9488;cursor:pointer;flex:1;padding:4px 0}
     .botnav a.on{color:var(--gold)}
     .botnav .bic{font-size:18px}
+    .btn{min-height:42px}
+    .close{width:42px;height:42px}
+    .toast{bottom:84px}
   }
 `;
 
@@ -143,17 +153,51 @@ export default function PlateformePage() {
   const [editing, setEditing] = useState(null);      // cliente en édition / création
   const [checks, setChecks] = useState(null);        // résultats surveillance
   const [busy, setBusy] = useState(false);
+  const [rester, setRester] = useState(true);        // « Rester connectée »
+  const [confirmAsk, setConfirmAsk] = useState(null); // { message, onYes } — modale intégrée
+  const [toast, setToast] = useState(null);           // { msg, type } — notification
+  const toastTimer = useRef(null);
 
-  const connecter = useCallback(async (e) => {
+  const notifier = useCallback((msg, type = "ok") => {
+    setToast({ msg, type });
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 3200);
+  }, []);
+
+  const connecter = useCallback(async (e, motDePasse) => {
     e?.preventDefault();
+    const cle = motDePasse ?? code;
     setLoading(true); setError("");
     try {
-      const res = await fetch("/api/plateforme", { headers: { "x-platform-key": code } });
-      if (!res.ok) { setError("Mot de passe incorrect."); setLoading(false); return; }
-      setData(await res.json()); setAuthed(true);
+      const res = await fetch("/api/plateforme", { headers: { "x-platform-key": cle } });
+      if (!res.ok) {
+        setError("Mot de passe incorrect.");
+        try { localStorage.removeItem("lior-key"); } catch {}
+        setLoading(false);
+        return;
+      }
+      setData(await res.json());
+      setCode(cle);
+      setAuthed(true);
+      // « Rester connectée » : mémorise le mot de passe sur CET appareil uniquement.
+      try { if (rester) localStorage.setItem("lior-key", cle); } catch {}
     } catch { setError("Erreur de connexion."); }
     setLoading(false);
-  }, [code]);
+  }, [code, rester]);
+
+  // Connexion automatique si « Rester connectée » a été cochée sur cet appareil.
+  useEffect(() => {
+    try {
+      const sauvee = localStorage.getItem("lior-key");
+      if (sauvee) connecter(null, sauvee);
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const deconnecter = useCallback(() => {
+    try { localStorage.removeItem("lior-key"); } catch {}
+    setAuthed(false); setCode(""); setView("dashboard");
+  }, []);
 
   // Appel d'écriture générique.
   const api = useCallback(async (action, payload = {}) => {
@@ -191,6 +235,10 @@ export default function PlateformePage() {
               </button>
             </div>
             {error && <div style={{ color: "#e87a6a", fontSize: 13, marginBottom: 12 }}>{error}</div>}
+            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "#9a9488", fontSize: 13, marginBottom: 14, cursor: "pointer", justifyContent: "center" }}>
+              <input type="checkbox" checked={rester} onChange={(e) => setRester(e.target.checked)} style={{ accentColor: GOLD, width: 16, height: 16 }} />
+              Rester connectée sur cet appareil
+            </label>
             <button type="submit" className="btn" disabled={loading} style={{ width: "100%", padding: 13, fontSize: 15, justifyContent: "center" }}>
               {loading ? "Connexion…" : "Se connecter"}
             </button>
@@ -224,6 +272,7 @@ export default function PlateformePage() {
           <div style={{ fontWeight: 600, fontSize: 15 }}>{c.nom}</div>
           <div style={{ color: "#8e8a7e", fontSize: 12 }}>{c.domaine || "—"}</div>
         </div>
+        {(c.exemple) && <span className="pill soon">exemple</span>}
         <span className={"pill" + (es.green ? " green" : "")}><span className="dot" style={{ background: es.green ? GREEN : GOLD, boxShadow: `0 0 10px ${es.green ? GREEN : GOLD}` }} />{es.label}</span>
         <span style={{ color: (enRetard || c.vous) ? GOLD : "#b6b1a4", fontSize: 13, whiteSpace: "nowrap" }}>{abo}</span>
         {actions}
@@ -244,7 +293,10 @@ export default function PlateformePage() {
               <a key={v} className={view === v ? "on" : ""} onClick={() => setView(v)}><span className="ic">{ic}</span>{t}</a>
             ))}
           </nav>
-          <div className="foot">Niro — espace privé<br />Connectée · sécurisé</div>
+          <div className="foot">
+            Niro — espace privé<br />Connectée · sécurisé<br />
+            <a onClick={deconnecter} style={{ color: GOLD, cursor: "pointer" }}>Se déconnecter</a>
+          </div>
         </aside>
 
         <main className="main">
@@ -255,6 +307,14 @@ export default function PlateformePage() {
             </div>
             <div className="av">N</div>
           </div>
+
+          {data.storage === "ephemere" && (
+            <div className="banner">
+              ⚠ <b>Stockage non branché</b> — vos modifications ne seront pas conservées pour l'instant
+              (les données d'exemple reviendront). C'est un réglage côté hébergement, pas une erreur de
+              votre part : demandez à l'assistant d'activer le stockage persistant (Netlify Blobs).
+            </div>
+          )}
 
           {/* ----- TABLEAU DE BORD ----- */}
           {view === "dashboard" && (
@@ -298,7 +358,13 @@ export default function PlateformePage() {
                     {c.site?.on && <a className="btn ghost" href={c.site.url} target="_blank" rel="noopener" title="Voir le site en ligne">↗ Site</a>}
                     <button className="btn ghost" onClick={() => setSelected(c)}>⬡</button>
                     <button className="btn ghost" onClick={() => setEditing({ id: c.id, nom: c.nom, domaine: c.domaine, etatSite: c.etatSite, formule: c.abonnement?.formule || "", etat: c.abonnement?.etat || "aucun", adminUrl: c.adminUrl || "", siteOn: c.site?.on || false, siteUrl: c.site?.url || "" })}>Modifier</button>
-                    {!c.vous && <button className="btn danger" onClick={async () => { if (confirm(`Supprimer ${c.nom} ?`)) await api("deleteClient", { id: c.id }); }}>×</button>}
+                    {!c.vous && <button className="btn danger" disabled={busy} onClick={() => setConfirmAsk({
+                      message: `Supprimer « ${c.nom} » ? Cette action retire aussi son site hébergé.`,
+                      onYes: async () => {
+                        const r = await api("deleteClient", { id: c.id });
+                        notifier(r.ok ? `« ${c.nom} » supprimée.` : (r.json?.error || "La suppression a échoué."), r.ok ? "ok" : "err");
+                      },
+                    })}>× Supprimer</button>}
                   </div>
                 } />
               ))}
@@ -321,7 +387,7 @@ export default function PlateformePage() {
                   {abosRetard.map((c) => (
                     <div key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap", padding: "6px 0" }}>
                       <span style={{ fontWeight: 600 }}>{c.nom} <span style={{ color: "#8e8a7e", fontWeight: 400, fontSize: 13 }}>— en retard</span></span>
-                      <button className="btn ghost" onClick={async () => { await api("updateClient", { client: { id: c.id, abonnement: { ...c.abonnement, etat: "actif" } } }); }}>Marquer payé</button>
+                      <button className="btn ghost" disabled={busy} onClick={async () => { const r = await api("updateClient", { client: { id: c.id, abonnement: { ...c.abonnement, etat: "actif" } } }); notifier(r.ok ? "Abonnement marqué payé." : "Échec de la mise à jour.", r.ok ? "ok" : "err"); }}>Marquer payé</button>
                     </div>
                   ))}
                 </div>
@@ -354,7 +420,7 @@ export default function PlateformePage() {
           )}
 
           {/* ----- RÉGLAGES ----- */}
-          {view === "reglages" && <Reglages settings={settings} api={api} busy={busy} />}
+          {view === "reglages" && <Reglages settings={settings} api={api} busy={busy} clients={clients} notifier={notifier} setConfirmAsk={setConfirmAsk} deconnecter={deconnecter} />}
 
           <p style={{ color: "#6e6a5e", fontSize: 12 }}>Données enregistrées · Lior — Phases 1 &amp; 2.</p>
         </main>
@@ -371,7 +437,27 @@ export default function PlateformePage() {
       {selected && <Coffre client={selected} onClose={() => setSelected(null)} api={api} />}
 
       {/* Édition / création de cliente (modale) */}
-      {editing && <EditModal editing={editing} settings={settings} api={api} busy={busy} onClose={() => setEditing(null)} />}
+      {editing && <EditModal editing={editing} settings={settings} api={api} busy={busy} onClose={() => setEditing(null)} notifier={notifier} />}
+
+      {/* Confirmation intégrée (remplace confirm(), bloqué en app installée iPhone) */}
+      {confirmAsk && (
+        <div className="ov center" onClick={() => setConfirmAsk(null)}>
+          <div className="modal" style={{ width: 400 }} onClick={(e) => e.stopPropagation()}>
+            <div className="serif" style={{ fontSize: 21 }}>Confirmer</div>
+            <p className="confirm-txt">{confirmAsk.message}</p>
+            <div style={{ display: "flex", gap: 12 }}>
+              <button className="btn danger" style={{ flex: 1, justifyContent: "center", padding: 13 }} disabled={busy}
+                onClick={async () => { const fn = confirmAsk.onYes; setConfirmAsk(null); await fn(); }}>
+                Oui, supprimer
+              </button>
+              <button className="btn ghost" style={{ flex: 1, justifyContent: "center", padding: 13 }} onClick={() => setConfirmAsk(null)}>Annuler</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification */}
+      {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}
     </div>
   );
 }
@@ -420,9 +506,10 @@ function Coffre({ client, onClose, api }) {
   );
 }
 
-function EditModal({ editing, settings, api, busy, onClose }) {
+function EditModal({ editing, settings, api, busy, onClose, notifier }) {
   const [f, setF] = useState(editing);
   const [siteMsg, setSiteMsg] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   const formules = settings.formules || [];
 
   async function onFile(e) {
@@ -441,14 +528,14 @@ function EditModal({ editing, settings, api, busy, onClose }) {
       abonnement: { formule: f.formule || null, prix: f.formule ? prix : 0, etat: f.formule ? f.etat : "aucun" },
     };
     const r = f.isNew ? await api("createClient", { client }) : await api("updateClient", { client: { id: f.id, ...client } });
-    if (!r.ok) { alert(r.json?.error || "Erreur"); return; }
-    // Récupère l'identifiant (pour un nouveau site, il est calculé côté serveur à partir du nom).
-    let id = f.id;
-    if (!id) { const cree = (r.json.clients || []).find((x) => x.nom === f.nom); id = cree?.id; }
+    if (!r.ok) { setErrMsg(r.json?.error || "L'enregistrement a échoué. Réessayez."); return; }
+    // Identifiant : renvoyé directement par le serveur pour une création.
+    const id = f.id || r.json.createdId;
     if (f.siteHtml && id) {
       const rs = await api("saveSite", { id, html: f.siteHtml });
-      if (!rs.ok) { alert(rs.json?.error || "Le site n'a pas pu être enregistré."); return; }
+      if (!rs.ok) { setErrMsg(rs.json?.error || "Le site n'a pas pu être enregistré."); return; }
     }
+    notifier?.(f.isNew ? "Cliente créée." : "Modifications enregistrées.");
     onClose();
   }
   return (
@@ -495,6 +582,7 @@ function EditModal({ editing, settings, api, busy, onClose }) {
           {siteMsg && <div style={{ color: "#e87a6a", fontSize: 13, marginTop: 6 }}>{siteMsg}</div>}
         </div>
 
+        {errMsg && <div style={{ color: "#e87a6a", fontSize: 13, marginTop: 12 }}>{errMsg}</div>}
         <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
           <button className="btn" style={{ flex: 1, justifyContent: "center", padding: 13 }} disabled={busy || !f.nom} onClick={save}>{busy ? "…" : "Enregistrer"}</button>
           <button className="btn ghost" style={{ padding: 13 }} onClick={onClose}>Annuler</button>
@@ -504,26 +592,53 @@ function EditModal({ editing, settings, api, busy, onClose }) {
   );
 }
 
-function Reglages({ settings, api, busy }) {
+function Reglages({ settings, api, busy, clients = [], notifier, setConfirmAsk, deconnecter }) {
   const [formules, setFormules] = useState(settings.formules || []);
   const [saved, setSaved] = useState(false);
+  const nbExemples = clients.filter((c) => c.exemple && !c.vous).length;
   return (
-    <div className="card glass" style={{ maxWidth: 560 }}>
-      <div className="lab">Formules d'abonnement</div>
-      <p style={{ color: "#9a9488", fontSize: 13, margin: "8px 0 16px" }}>Ces formules apparaissent au choix quand vous créez ou modifiez une cliente.</p>
-      {formules.map((x, i) => (
-        <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, alignItems: "center" }}>
-          <input className="inp" style={{ flex: 1 }} value={x.nom} onChange={(e) => { const n = [...formules]; n[i] = { ...n[i], nom: e.target.value }; setFormules(n); setSaved(false); }} />
-          <input className="inp" type="number" style={{ width: 100 }} value={x.prix} onChange={(e) => { const n = [...formules]; n[i] = { ...n[i], prix: Number(e.target.value) }; setFormules(n); setSaved(false); }} />
-          <span style={{ color: "#8e8a7e" }}>€</span>
-          <button className="close" onClick={() => { setFormules(formules.filter((_, j) => j !== i)); setSaved(false); }}>×</button>
+    <>
+      <div className="card glass" style={{ maxWidth: 560 }}>
+        <div className="lab">Formules d'abonnement</div>
+        <p style={{ color: "#9a9488", fontSize: 13, margin: "8px 0 16px" }}>Ces formules apparaissent au choix quand vous créez ou modifiez une cliente.</p>
+        {formules.map((x, i) => (
+          <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, alignItems: "center" }}>
+            <input className="inp" style={{ flex: 1 }} value={x.nom} onChange={(e) => { const n = [...formules]; n[i] = { ...n[i], nom: e.target.value }; setFormules(n); setSaved(false); }} />
+            <input className="inp" type="number" style={{ width: 100 }} value={x.prix} onChange={(e) => { const n = [...formules]; n[i] = { ...n[i], prix: Number(e.target.value) }; setFormules(n); setSaved(false); }} />
+            <span style={{ color: "#8e8a7e" }}>€</span>
+            <button className="close" onClick={() => { setFormules(formules.filter((_, j) => j !== i)); setSaved(false); }}>×</button>
+          </div>
+        ))}
+        <button className="btn ghost" style={{ marginTop: 6 }} onClick={() => setFormules([...formules, { nom: "Nouvelle formule", prix: 0 }])}>+ Ajouter une formule</button>
+        <div style={{ display: "flex", gap: 12, marginTop: 20, alignItems: "center" }}>
+          <button className="btn" disabled={busy} onClick={async () => { const r = await api("saveReglages", { settings: { formules } }); if (r.ok) { setSaved(true); notifier?.("Formules enregistrées."); } }}>{busy ? "…" : "Enregistrer"}</button>
+          {saved && <span style={{ color: GREEN, fontSize: 13 }}>✓ Enregistré</span>}
         </div>
-      ))}
-      <button className="btn ghost" style={{ marginTop: 6 }} onClick={() => setFormules([...formules, { nom: "Nouvelle formule", prix: 0 }])}>+ Ajouter une formule</button>
-      <div style={{ display: "flex", gap: 12, marginTop: 20, alignItems: "center" }}>
-        <button className="btn" disabled={busy} onClick={async () => { const r = await api("saveReglages", { settings: { formules } }); if (r.ok) setSaved(true); }}>{busy ? "…" : "Enregistrer"}</button>
-        {saved && <span style={{ color: GREEN, fontSize: 13 }}>✓ Enregistré</span>}
       </div>
-    </div>
+
+      <div className="card glass" style={{ maxWidth: 560 }}>
+        <div className="lab">Nettoyage</div>
+        <p style={{ color: "#9a9488", fontSize: 13, margin: "8px 0 14px" }}>
+          {nbExemples > 0
+            ? `Il reste ${nbExemples} boutique${nbExemples > 1 ? "s" : ""} d'exemple (Boutique Marie, Atelier du Bois…). Supprimez-les toutes d'un coup quand vous n'en avez plus besoin.`
+            : "Aucune boutique d'exemple restante — votre liste est propre."}
+        </p>
+        {nbExemples > 0 && (
+          <button className="btn danger" disabled={busy} onClick={() => setConfirmAsk?.({
+            message: `Supprimer les ${nbExemples} boutiques d'exemple ? Vos vraies clientes et votre boutique ne seront pas touchées.`,
+            onYes: async () => {
+              const r = await api("purgeExamples");
+              notifier?.(r.ok ? "Boutiques d'exemple supprimées." : "La suppression a échoué.", r.ok ? "ok" : "err");
+            },
+          })}>× Supprimer les boutiques d'exemple</button>
+        )}
+      </div>
+
+      <div className="card glass" style={{ maxWidth: 560 }}>
+        <div className="lab">Session</div>
+        <p style={{ color: "#9a9488", fontSize: 13, margin: "8px 0 14px" }}>Se déconnecter efface aussi la connexion automatique de cet appareil.</p>
+        <button className="btn ghost" onClick={deconnecter}>Se déconnecter</button>
+      </div>
+    </>
   );
 }

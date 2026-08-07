@@ -12,15 +12,19 @@
 const STORE_NAME = "lior-plateforme";
 const KEY = "data";
 
+// Identifiants des boutiques d'exemple (pour la purge, même sur des données
+// enregistrées avant l'ajout du drapeau `exemple`).
+export const EXAMPLE_IDS = ["boutique-marie", "atelier-du-bois", "savonnerie-lou", "ceramique-claire", "fleurs-de-sel"];
+
 // Données de départ (exemples) — l'utilisatrice les modifie/supprime ensuite.
 const DEFAULT_DATA = {
   clients: [
     { id: "niv-creation", nom: "Niv Création", domaine: "nivcreation.fr", etatSite: "en-ligne", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: "/gestion", depuis: "2026-03", vous: true, keys: {} },
-    { id: "boutique-marie", nom: "Boutique Marie", domaine: "boutique-marie.fr", etatSite: "en-ligne", abonnement: { formule: "Active", prix: 59, etat: "actif" }, adminUrl: "https://boutique-marie.fr/gestion", depuis: "2026-03", keys: {} },
-    { id: "atelier-du-bois", nom: "Atelier du Bois", domaine: "atelierdubois.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "actif" }, adminUrl: "https://atelierdubois.fr/gestion", depuis: "2026-04", keys: {} },
-    { id: "savonnerie-lou", nom: "Savonnerie Lou", domaine: "savonnerie-lou.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "retard" }, adminUrl: "https://savonnerie-lou.fr/gestion", depuis: "2026-04", keys: {} },
-    { id: "ceramique-claire", nom: "Céramique Claire", domaine: "ceramique-claire.fr", etatSite: "maintenance", abonnement: { formule: "Premium", prix: 99, etat: "actif" }, adminUrl: "https://ceramique-claire.fr/gestion", depuis: "2026-05", keys: {} },
-    { id: "fleurs-de-sel", nom: "Fleurs de Sel", domaine: "fleursdesel.fr", etatSite: "preparation", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: null, depuis: "2026-06", keys: {} },
+    { id: "boutique-marie", nom: "Boutique Marie", domaine: "boutique-marie.fr", etatSite: "en-ligne", abonnement: { formule: "Active", prix: 59, etat: "actif" }, adminUrl: "https://boutique-marie.fr/gestion", depuis: "2026-03", keys: {}, exemple: true },
+    { id: "atelier-du-bois", nom: "Atelier du Bois", domaine: "atelierdubois.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "actif" }, adminUrl: "https://atelierdubois.fr/gestion", depuis: "2026-04", keys: {}, exemple: true },
+    { id: "savonnerie-lou", nom: "Savonnerie Lou", domaine: "savonnerie-lou.fr", etatSite: "en-ligne", abonnement: { formule: "Sérénité", prix: 29, etat: "retard" }, adminUrl: "https://savonnerie-lou.fr/gestion", depuis: "2026-04", keys: {}, exemple: true },
+    { id: "ceramique-claire", nom: "Céramique Claire", domaine: "ceramique-claire.fr", etatSite: "maintenance", abonnement: { formule: "Premium", prix: 99, etat: "actif" }, adminUrl: "https://ceramique-claire.fr/gestion", depuis: "2026-05", keys: {}, exemple: true },
+    { id: "fleurs-de-sel", nom: "Fleurs de Sel", domaine: "fleursdesel.fr", etatSite: "preparation", abonnement: { formule: null, prix: 0, etat: "aucun" }, adminUrl: null, depuis: "2026-06", keys: {}, exemple: true },
   ],
   settings: {
     formules: [
@@ -38,10 +42,39 @@ let memSites = {};
 async function getStoreSafe() {
   try {
     const { getStore } = await import("@netlify/blobs");
+    // Secours : si le « zéro config » échoue en production, on peut fournir
+    // NETLIFY_SITE_ID + NETLIFY_BLOBS_TOKEN dans les variables d'environnement.
+    const siteID = (process.env.NETLIFY_SITE_ID || "").trim();
+    const token = (process.env.NETLIFY_BLOBS_TOKEN || "").trim();
+    if (siteID && token) return getStore({ name: STORE_NAME, siteID, token });
     return getStore(STORE_NAME);
   } catch {
     return null;
   }
+}
+
+// Vérifie UNE FOIS par instance si le stockage persistant fonctionne vraiment
+// (écriture + relecture d'une sonde). Sert à avertir l'interface quand les
+// modifications ne seraient pas conservées (repli mémoire éphémère).
+let storageStatus = null;
+export async function storageHealth() {
+  if (storageStatus) return storageStatus;
+  const store = await getStoreSafe();
+  if (store) {
+    try {
+      const stamp = String(Date.now());
+      await store.set("__sonde", stamp);
+      const lu = await store.get("__sonde", { type: "text" });
+      if (lu === stamp) {
+        storageStatus = "ok";
+        return storageStatus;
+      }
+    } catch {
+      // sonde en échec → éphémère
+    }
+  }
+  storageStatus = "ephemere";
+  return storageStatus;
 }
 
 export async function getData() {

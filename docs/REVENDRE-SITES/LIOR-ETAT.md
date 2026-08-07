@@ -36,7 +36,18 @@ comme « sa boutique »).
 - En local (`npm run dev`), repli en mémoire (non persistant).
 
 ## Ce qui est FAIT (fonctionnel, sans clé)
-- Connexion par mot de passe.
+- Connexion par mot de passe (+ bouton œil, case « Rester connectée » via localStorage
+  `lior-key`, déconnexion dans Réglages et la barre latérale).
+- **Audit qualité (maj)** : plus aucun `confirm()`/`alert()` (bloqués en PWA iOS) →
+  modale de confirmation + notifications (toasts) intégrées. Sonde de santé du
+  stockage (`storageHealth`) : l'API renvoie `storage: "ok"|"ephemere"` et l'UI
+  affiche une bannière si les écritures ne persistent pas (Blobs indisponible ;
+  secours possible via env `NETLIFY_SITE_ID`+`NETLIFY_BLOBS_TOKEN`). Boutiques
+  d'exemple marquées `exemple: true` + action API `purgeExamples` (bouton dans
+  Réglages → Nettoyage). Gardes serveur : `deleteClient` refuse la boutique
+  `vous`, supprime le site hébergé associé ; `updateClient` en liste blanche
+  (ne peut plus écraser keys/site/vous). `createClient` renvoie `createdId`.
+  Mot de passe comparé à temps constant + délai anti-rafale. Timeout check 6 s.
 - **Sites hébergés DANS Lior (maj 04/08/2026)** : dans la modale « Nouveau site / Modifier »,
   bouton **fichier HTML** → le site est stocké (Netlify Blobs, clé `site-<id>`) et servi sur
   **`/site/<id>`** (route `src/app/site/[id]/route.js`) — lien à donner au client.

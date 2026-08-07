@@ -8,7 +8,8 @@
 // =============================================================================
 
 import { NextResponse } from "next/server";
-import { getData, saveData, computeStats, slugify, saveSiteHtml, deleteSiteHtml } from "@/lib/plateforme-store";
+import { timingSafeEqual } from "node:crypto";
+import { getData, saveData, computeStats, slugify, saveSiteHtml, deleteSiteHtml, storageHealth, EXAMPLE_IDS } from "@/lib/plateforme-store";
 
 export const dynamic = "force-dynamic";
 
@@ -37,23 +38,34 @@ async function ensureCleanup(data) {
 function attendu() {
   return (process.env.PLATFORM_PASSWORD || process.env.ADMIN_PASSWORD || "").trim();
 }
-function autorise(req) {
+// Comparaison à temps constant (empêche de deviner le mot de passe par mesure du temps).
+function memeSecret(a, b) {
+  const ba = Buffer.from(String(a));
+  const bb = Buffer.from(String(b));
+  if (ba.length !== bb.length) return false;
+  try { return timingSafeEqual(ba, bb); } catch { return false; }
+}
+async function autorise(req) {
   const exp = attendu();
   if (!exp) return true; // aucun mot de passe configuré = mode démo
-  return (req.headers.get("x-platform-key") || "").trim() === exp;
+  const ok = memeSecret((req.headers.get("x-platform-key") || "").trim(), exp);
+  if (!ok) await new Promise((r) => setTimeout(r, 350)); // freine les essais en rafale
+  return ok;
 }
 
 export async function GET(req) {
-  if (!autorise(req)) return NextResponse.json({ error: "Mot de passe incorrect." }, { status: 401 });
+  if (!(await autorise(req))) return NextResponse.json({ error: "Mot de passe incorrect." }, { status: 401 });
   const data = await ensureCleanup(await getData());
-  return NextResponse.json({ clients: data.clients, stats: computeStats(data.clients), settings: data.settings });
+  const storage = await storageHealth();
+  return NextResponse.json({ clients: data.clients, stats: computeStats(data.clients), settings: data.settings, storage });
 }
 
 export async function POST(req) {
-  if (!autorise(req)) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  if (!(await autorise(req))) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   const body = await req.json().catch(() => ({}));
   const { action } = body;
   const data = await getData();
+  let createdId = null;
 
   switch (action) {
     case "createClient": {
@@ -72,17 +84,42 @@ export async function POST(req) {
         depuis: new Date().toISOString().slice(0, 7),
         keys: {},
       });
+      createdId = id;
       break;
     }
     case "updateClient": {
       const c = body.client || {};
       const i = data.clients.findIndex((x) => x.id === c.id);
       if (i === -1) return NextResponse.json({ error: "Cliente introuvable." }, { status: 404 });
-      data.clients[i] = { ...data.clients[i], ...c, keys: data.clients[i].keys };
+      // Liste blanche : seuls ces champs sont modifiables ici. Les clés, le site
+      // hébergé et les marqueurs (vous/exemple) ne peuvent pas être écrasés.
+      const avant = data.clients[i];
+      data.clients[i] = {
+        ...avant,
+        nom: c.nom !== undefined ? c.nom : avant.nom,
+        domaine: c.domaine !== undefined ? c.domaine : avant.domaine,
+        etatSite: c.etatSite !== undefined ? c.etatSite : avant.etatSite,
+        adminUrl: c.adminUrl !== undefined ? c.adminUrl : avant.adminUrl,
+        abonnement: c.abonnement !== undefined ? c.abonnement : avant.abonnement,
+      };
       break;
     }
     case "deleteClient": {
+      const cible = data.clients.find((x) => x.id === body.id);
+      if (!cible) break; // déjà supprimée : on renvoie simplement l'état à jour
+      if (cible.vous) return NextResponse.json({ error: "Impossible de supprimer votre propre boutique." }, { status: 400 });
+      await deleteSiteHtml(body.id); // retire aussi son site hébergé (sinon il resterait en ligne)
       data.clients = data.clients.filter((x) => x.id !== body.id);
+      break;
+    }
+    case "purgeExamples": {
+      // Supprime d'un coup toutes les boutiques d'exemple (et leurs sites hébergés).
+      const aSupprimer = data.clients.filter((x) => !x.vous && (x.exemple || EXAMPLE_IDS.includes(x.id)));
+      for (const c of aSupprimer) {
+        try { await deleteSiteHtml(c.id); } catch {}
+      }
+      const ids = new Set(aSupprimer.map((c) => c.id));
+      data.clients = data.clients.filter((x) => !ids.has(x.id));
       break;
     }
     case "saveKeys": {
@@ -124,7 +161,7 @@ export async function POST(req) {
             const url = c.domaine.startsWith("http") ? c.domaine : `https://${c.domaine}`;
             try {
               const ctrl = new AbortController();
-              const t = setTimeout(() => ctrl.abort(), 8000);
+              const t = setTimeout(() => ctrl.abort(), 6000); // sous la limite des fonctions Netlify (10 s)
               const res = await fetch(url, { method: "GET", signal: ctrl.signal, redirect: "follow" });
               clearTimeout(t);
               results[c.id] = { online: res.ok || res.status < 500, status: res.status };
@@ -140,5 +177,6 @@ export async function POST(req) {
   }
 
   const saved = await saveData(data);
-  return NextResponse.json({ clients: saved.clients, stats: computeStats(saved.clients), settings: saved.settings });
+  const storage = await storageHealth();
+  return NextResponse.json({ clients: saved.clients, stats: computeStats(saved.clients), settings: saved.settings, storage, createdId });
 }
