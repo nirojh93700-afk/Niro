@@ -58,8 +58,15 @@ comme « sa boutique »).
 - Pas de client ajouté d'office. `ensureCleanup` (API) retire **une seule fois** une éventuelle
   fiche HB Auto-Clé auto-ajoutée par une version antérieure (drapeau `settings.hbCleaned`), pour
   ne rien laisser en ligne avant validation.
-- **Clientes** : ajouter / modifier / supprimer (persisté).
+- **Clientes** : ajouter / modifier / supprimer (persisté) + recherche rapide.
+- **Fiche cliente** (tiroir ⬡) : checklist de lancement 6 étapes (badge 🚀 x/6 sur la
+  ligne, « Lancée ✓ » à 6/6), contact (e-mail/tél), notes libres, coffre à clés —
+  enregistrés ensemble via l'action API `saveFiche`.
 - **Coffre à clés** par cliente (enregistre Stripe/Resend/domaine/e-mail/Cloudinary).
+- **Graphique réel** sur le tableau de bord : barres des revenus par formule
+  (plus de courbe décorative).
+- **Sauvegarde** : Réglages → « Télécharger une sauvegarde » (JSON complet).
+- **Surveillance automatique** : le test des sites se lance à l'ouverture de la vue.
 - **Abonnements** : revenus récurrents, « marquer payé ».
 - **Surveillance** : test HTTP réel des sites.
 - **Réglages** : formules d'abonnement éditables.

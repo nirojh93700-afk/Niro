@@ -128,6 +128,23 @@ export async function POST(req) {
       data.clients[i].keys = { ...(data.clients[i].keys || {}), ...(body.keys || {}) };
       break;
     }
+    case "saveFiche": {
+      // Fiche cliente complète : clés + contact + notes + checklist de lancement.
+      const i = data.clients.findIndex((x) => x.id === body.id);
+      if (i === -1) return NextResponse.json({ error: "Cliente introuvable." }, { status: 404 });
+      const c = data.clients[i];
+      if (body.keys) c.keys = { ...(c.keys || {}), ...body.keys };
+      if (body.contact !== undefined) {
+        c.contact = { email: String(body.contact?.email || "").slice(0, 200), tel: String(body.contact?.tel || "").slice(0, 40) };
+      }
+      if (body.notes !== undefined) c.notes = String(body.notes || "").slice(0, 4000);
+      if (body.checklist !== undefined) {
+        const cl = {};
+        for (const k of ["maquette", "domaine", "enligne", "emails", "stripe", "abo"]) cl[k] = Boolean(body.checklist?.[k]);
+        c.checklist = cl;
+      }
+      break;
+    }
     case "saveReglages": {
       data.settings = { ...data.settings, ...(body.settings || {}) };
       break;

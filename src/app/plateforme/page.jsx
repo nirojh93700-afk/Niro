@@ -35,6 +35,16 @@ const KEY_FIELDS = [
   ["cloudinary", "Cloudinary — photos", "cloud name"],
 ];
 
+// Checklist de lancement d'un site cliente (suivi visuel de l'avancement).
+const CHECK_STEPS = [
+  ["maquette", "Maquette validée par la cliente"],
+  ["domaine", "Nom de domaine acheté"],
+  ["enligne", "Site mis en ligne"],
+  ["emails", "E-mails configurés"],
+  ["stripe", "Paiement Stripe connecté"],
+  ["abo", "Abonnement en place"],
+];
+
 const THEME = `
   .lior *{box-sizing:border-box;margin:0;padding:0}
   .lior{--gold:${GOLD};--green:${GREEN};color:#efe9dc;font-family:'Inter','Helvetica Neue',Arial,sans-serif;min-height:100vh}
@@ -130,16 +140,29 @@ function Background() {
   );
 }
 
-const CHART = (
-  <svg viewBox="0 0 460 140" width="100%" height="120" style={{ marginTop: "auto" }}>
-    <defs>
-      <linearGradient id="liorg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={GOLD} stopOpacity="0.5" /><stop offset="100%" stopColor={GOLD} stopOpacity="0" /></linearGradient>
-      <filter id="liorglow"><feGaussianBlur stdDeviation="3.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-    </defs>
-    <path d="M0,110 C60,100 90,60 150,72 C210,84 250,34 310,40 C370,46 410,18 460,14 L460,140 L0,140 Z" fill="url(#liorg)" />
-    <path d="M0,110 C60,100 90,60 150,72 C210,84 250,34 310,40 C370,46 410,18 460,14" fill="none" stroke={GOLD} strokeWidth="3" filter="url(#liorglow)" />
-  </svg>
-);
+// Graphique RÉEL : répartition des revenus mensuels par formule (données vraies,
+// plus de courbe décorative).
+function BarresRevenus({ parFormule }) {
+  const entrees = Object.entries(parFormule);
+  if (!entrees.length) {
+    return <p style={{ color: "#8e8a7e", fontSize: 13, marginTop: "auto" }}>Aucun abonnement actif pour l'instant — vos revenus s'afficheront ici.</p>;
+  }
+  const max = Math.max(...entrees.map(([, m]) => m));
+  return (
+    <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 10 }}>
+      {entrees.map(([formule, montant]) => (
+        <div key={formule}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#b6b1a4", marginBottom: 4 }}>
+            <span>{formule}</span><span style={{ color: GOLD, fontWeight: 700 }}>{montant} €</span>
+          </div>
+          <div style={{ height: 10, borderRadius: 6, background: "rgba(255,255,255,.07)", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${Math.max(8, (montant / max) * 100)}%`, borderRadius: 6, background: `linear-gradient(90deg, ${GOLD}, #b9822f)`, boxShadow: `0 0 12px rgba(217,178,90,.5)` }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function PlateformePage() {
   const [code, setCode] = useState("");
@@ -199,6 +222,16 @@ export default function PlateformePage() {
     setAuthed(false); setCode(""); setView("dashboard");
   }, []);
 
+  const [filtre, setFiltre] = useState(""); // recherche rapide dans Mes clientes
+
+  // Surveillance : lance le test automatiquement à l'ouverture de la vue.
+  useEffect(() => {
+    if (authed && view === "surveillance" && checks === null && !busy) {
+      api("check").then((r) => { if (r.ok) setChecks(r.json.results || {}); });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, authed]);
+
   // Appel d'écriture générique.
   const api = useCallback(async (action, payload = {}) => {
     setBusy(true);
@@ -256,7 +289,7 @@ export default function PlateformePage() {
     dashboard: ["Bonjour Niro", "Votre constellation de boutiques, en temps réel."],
     clients: ["Mes clientes", "Ajoutez, modifiez et gérez chaque boutique."],
     abonnements: ["Abonnements", "Vos revenus récurrents et les relances."],
-    surveillance: ["Surveillance", "Testez en direct si les sites répondent."],
+    surveillance: ["Surveillance", "Le test se lance tout seul à l'ouverture — retestez quand vous voulez."],
     reglages: ["Réglages", "Vos formules d'abonnement."],
   };
 
@@ -273,6 +306,12 @@ export default function PlateformePage() {
           <div style={{ color: "#8e8a7e", fontSize: 12 }}>{c.domaine || "—"}</div>
         </div>
         {(c.exemple) && <span className="pill soon">exemple</span>}
+        {!c.vous && (() => {
+          const faits = CHECK_STEPS.filter(([k]) => c.checklist?.[k]).length;
+          return faits >= CHECK_STEPS.length
+            ? <span className="pill green">Lancée ✓</span>
+            : <span className="pill" title="Étapes de lancement faites">🚀 {faits}/{CHECK_STEPS.length}</span>;
+        })()}
         <span className={"pill" + (es.green ? " green" : "")}><span className="dot" style={{ background: es.green ? GREEN : GOLD, boxShadow: `0 0 10px ${es.green ? GREEN : GOLD}` }} />{es.label}</span>
         <span style={{ color: (enRetard || c.vous) ? GOLD : "#b6b1a4", fontSize: 13, whiteSpace: "nowrap" }}>{abo}</span>
         {actions}
@@ -324,7 +363,7 @@ export default function PlateformePage() {
                   <div className="lab">Revenus récurrents · mois</div>
                   <div className="big">{stats.revenusMois} <small>€</small></div>
                   <div className="up">▲ {stats.abosActifs} abonnements actifs</div>
-                  {CHART}
+                  <BarresRevenus parFormule={parFormule} />
                 </div>
                 <div className="card glass"><div className="lab">Sites en ligne</div><div className="big">{stats.enLigne}</div><div className="up">sur {stats.total} boutiques</div></div>
                 <div className="card glass"><div className="lab">Alertes</div><div className="big">{stats.alertes}</div><div className="up" style={{ color: stats.alertes ? GOLD : GREEN }}>● à vérifier</div></div>
@@ -348,11 +387,14 @@ export default function PlateformePage() {
           {/* ----- CLIENTES ----- */}
           {view === "clients" && (
             <div className="card glass">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, gap: 10, flexWrap: "wrap" }}>
                 <div className="lab">{clients.length} boutiques</div>
-                <button className="btn" onClick={() => setEditing({ isNew: true, nom: "", domaine: "", etatSite: "preparation", formule: "", etat: "aucun", adminUrl: "" })}>+ Nouveau site</button>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", flex: "1 1 auto", justifyContent: "flex-end" }}>
+                  <input className="inp" style={{ maxWidth: 220 }} placeholder="🔎 Rechercher…" value={filtre} onChange={(e) => setFiltre(e.target.value)} />
+                  <button className="btn" onClick={() => setEditing({ isNew: true, nom: "", domaine: "", etatSite: "preparation", formule: "", etat: "aucun", adminUrl: "" })}>+ Nouveau site</button>
+                </div>
               </div>
-              {clients.map((c) => (
+              {clients.filter((c) => !filtre.trim() || `${c.nom} ${c.domaine}`.toLowerCase().includes(filtre.trim().toLowerCase())).map((c) => (
                 <ClientRow key={c.id} c={c} actions={
                   <div className="rowend">
                     {c.site?.on && <a className="btn ghost" href={c.site.url} target="_blank" rel="noopener" title="Voir le site en ligne">↗ Site</a>}
@@ -433,8 +475,8 @@ export default function PlateformePage() {
         ))}
       </nav>
 
-      {/* Coffre à clés (tiroir) */}
-      {selected && <Coffre client={selected} onClose={() => setSelected(null)} api={api} />}
+      {/* Fiche cliente (tiroir) : lancement, contact, coffre à clés, notes */}
+      {selected && <Coffre client={selected} onClose={() => setSelected(null)} api={api} notifier={notifier} />}
 
       {/* Édition / création de cliente (modale) */}
       {editing && <EditModal editing={editing} settings={settings} api={api} busy={busy} onClose={() => setEditing(null)} notifier={notifier} />}
@@ -465,10 +507,20 @@ export default function PlateformePage() {
 // =============================================================================
 // Sous-composants
 // =============================================================================
-function Coffre({ client, onClose, api }) {
+function Coffre({ client, onClose, api, notifier }) {
   const [keys, setKeys] = useState({ ...(client.keys || {}) });
+  const [contact, setContact] = useState({ email: client.contact?.email || "", tel: client.contact?.tel || "" });
+  const [notes, setNotes] = useState(client.notes || "");
+  const [checklist, setChecklist] = useState({ ...(client.checklist || {}) });
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
+  const faits = CHECK_STEPS.filter(([k]) => checklist[k]).length;
+  const secTitre = (icone, titre) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "20px 0 6px" }}>
+      <span style={{ fontSize: 20, color: GOLD, filter: "drop-shadow(0 0 12px rgba(217,178,90,.6))" }}>{icone}</span>
+      <div className="lab">{titre}</div>
+    </div>
+  );
   return (
     <div className="ov right" onClick={onClose}>
       <div className="lior-drawer" onClick={(e) => e.stopPropagation()}>
@@ -485,10 +537,30 @@ function Coffre({ client, onClose, api }) {
           </div>
           <button className="close" onClick={onClose}>×</button>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "18px 0 6px" }}>
-          <span style={{ fontSize: 22, color: GOLD, filter: "drop-shadow(0 0 12px rgba(217,178,90,.6))" }}>⬡</span>
-          <div className="lab">Coffre à clés</div>
+
+        {!client.vous && (
+          <>
+            {secTitre("🚀", `Lancement — ${faits}/${CHECK_STEPS.length} étapes`)}
+            <div style={{ height: 8, borderRadius: 5, background: "rgba(255,255,255,.08)", overflow: "hidden", marginBottom: 10 }}>
+              <div style={{ height: "100%", width: `${(faits / CHECK_STEPS.length) * 100}%`, background: `linear-gradient(90deg, ${GOLD}, ${GREEN})`, borderRadius: 5, transition: "width .3s" }} />
+            </div>
+            {CHECK_STEPS.map(([k, label]) => (
+              <label key={k} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", cursor: "pointer", color: checklist[k] ? "#efe9dc" : "#9a9488", fontSize: 14 }}>
+                <input type="checkbox" checked={Boolean(checklist[k])} style={{ accentColor: GOLD, width: 18, height: 18 }}
+                  onChange={(e) => { setChecklist({ ...checklist, [k]: e.target.checked }); setSaved(false); }} />
+                {label}
+              </label>
+            ))}
+          </>
+        )}
+
+        {secTitre("☎", "Contact de la cliente")}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <input className="inp" style={{ flex: "1 1 180px" }} placeholder="E-mail" value={contact.email} onChange={(e) => { setContact({ ...contact, email: e.target.value }); setSaved(false); }} />
+          <input className="inp" style={{ flex: "1 1 130px" }} placeholder="Téléphone" value={contact.tel} onChange={(e) => { setContact({ ...contact, tel: e.target.value }); setSaved(false); }} />
         </div>
+
+        {secTitre("⬡", "Coffre à clés")}
         <p style={{ color: "#9a9488", fontSize: 13, lineHeight: 1.6, marginBottom: 6 }}>Vous remplissez une fois ; l'application s'en sert automatiquement.</p>
         {KEY_FIELDS.map(([k, label, ph]) => (
           <div className="keyrow" key={k}>
@@ -496,8 +568,19 @@ function Coffre({ client, onClose, api }) {
             <input className="inp" style={{ flex: 1, fontFamily: "monospace", fontSize: 13 }} placeholder={ph} value={keys[k] || ""} onChange={(e) => { setKeys({ ...keys, [k]: e.target.value }); setSaved(false); }} />
           </div>
         ))}
+
+        {secTitre("✎", "Notes")}
+        <textarea className="inp" rows={4} placeholder="Vos notes sur cette cliente (demandes, idées, à ne pas oublier…)" value={notes}
+          onChange={(e) => { setNotes(e.target.value); setSaved(false); }} style={{ resize: "vertical", fontFamily: "inherit" }} />
+
         <div style={{ display: "flex", gap: 12, marginTop: 20, alignItems: "center" }}>
-          <button className="btn" disabled={busy} onClick={async () => { setBusy(true); const r = await api("saveKeys", { id: client.id, keys }); setBusy(false); if (r.ok) setSaved(true); }}>{busy ? "Enregistrement…" : "Enregistrer"}</button>
+          <button className="btn" disabled={busy} onClick={async () => {
+            setBusy(true);
+            const r = await api("saveFiche", { id: client.id, keys, contact, notes, checklist });
+            setBusy(false);
+            if (r.ok) { setSaved(true); notifier?.("Fiche enregistrée."); }
+            else notifier?.(r.json?.error || "L'enregistrement a échoué.", "err");
+          }}>{busy ? "Enregistrement…" : "Enregistrer la fiche"}</button>
           {saved && <span style={{ color: GREEN, fontSize: 13 }}>✓ Enregistré</span>}
         </div>
         <p style={{ color: "#6e6a5e", fontSize: 12, marginTop: 16, lineHeight: 1.5 }}>Enregistré en sécurité côté serveur. Le chiffrement renforcé sera activé avant la mise en production.</p>
@@ -632,6 +715,24 @@ function Reglages({ settings, api, busy, clients = [], notifier, setConfirmAsk, 
             },
           })}>× Supprimer les boutiques d'exemple</button>
         )}
+      </div>
+
+      <div className="card glass" style={{ maxWidth: 560 }}>
+        <div className="lab">Sauvegarde</div>
+        <p style={{ color: "#9a9488", fontSize: 13, margin: "8px 0 14px" }}>
+          Téléchargez une copie de toutes vos données (clientes, fiches, formules) — à garder
+          précieusement, comme une assurance.
+        </p>
+        <button className="btn ghost" onClick={() => {
+          const jour = new Date().toISOString().slice(0, 10);
+          const blob = new Blob([JSON.stringify({ date: jour, clients, settings }, null, 2)], { type: "application/json" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = `lior-sauvegarde-${jour}.json`;
+          a.click();
+          URL.revokeObjectURL(a.href);
+          notifier?.("Sauvegarde téléchargée.");
+        }}>⬇ Télécharger une sauvegarde</button>
       </div>
 
       <div className="card glass" style={{ maxWidth: 560 }}>
