@@ -137,6 +137,7 @@ export default function PlateformePage() {
   const [data, setData] = useState({ clients: [], stats: {}, settings: { formules: [] } });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
   const [view, setView] = useState("dashboard");
   const [selected, setSelected] = useState(null);   // cliente -> coffre à clés
   const [editing, setEditing] = useState(null);      // cliente en édition / création
@@ -183,7 +184,12 @@ export default function PlateformePage() {
             <div className="orb" style={{ margin: "0 auto 16px", width: 50, height: 50, fontSize: 24 }}>L</div>
             <h1 className="serif" style={{ fontSize: 28, margin: "0 0 4px" }}>Lior<span style={{ color: GOLD }}>.</span></h1>
             <p style={{ color: "#9a9488", fontSize: 14, margin: "0 0 22px" }}>Votre espace privé de gestion</p>
-            <input type="password" value={code} onChange={(e) => setCode(e.target.value)} placeholder="Mot de passe" autoFocus />
+            <div style={{ position: "relative", marginBottom: 12 }}>
+              <input type={showPwd ? "text" : "password"} value={code} onChange={(e) => setCode(e.target.value)} placeholder="Mot de passe" autoFocus style={{ marginBottom: 0, paddingRight: 74 }} />
+              <button type="button" onClick={() => setShowPwd((v) => !v)} style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", background: "transparent", border: "none", color: GOLD, fontSize: 13, fontWeight: 600, cursor: "pointer", padding: "6px 8px" }}>
+                {showPwd ? "🙈 Cacher" : "👁 Voir"}
+              </button>
+            </div>
             {error && <div style={{ color: "#e87a6a", fontSize: 13, marginBottom: 12 }}>{error}</div>}
             <button type="submit" className="btn" disabled={loading} style={{ width: "100%", padding: 13, fontSize: 15, justifyContent: "center" }}>
               {loading ? "Connexion…" : "Se connecter"}
