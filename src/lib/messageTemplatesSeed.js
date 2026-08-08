@@ -151,6 +151,8 @@ L'atelier Niv Création`,
 
 Vous vous êtes inscrite récemment — merci ! Petit rappel : votre code BIENVENUE10 (−10 % sur votre première commande) est toujours valable.
 
+Et pour vous faire plaisir en toute sérénité, vous pouvez payer en plusieurs fois sans frais : 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).
+
 En ce moment, nos clientes adorent nos cristaux photo 3D et nos bijoux gravés — fait main en France, livraison rapide et suivie.
 
 Découvrez tout sur nivcreation.fr et profitez de vos −10 % !
