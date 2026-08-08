@@ -1145,7 +1145,12 @@ export async function getSettings() {
     // Règles d'envoi automatique. Par défaut = règle « avis + cagnotte 2 j après
     // livraison » ACTIVE (le site envoie tout seul). La gérante garde le contrôle
     // total (modifier / désactiver / supprimer dans Gestion → Messages).
-    autoRules: Array.isArray(s.autoRules) ? s.autoRules : AUTO_RULES_SEED,
+    // Fusion : on garde les règles enregistrées ET on ajoute les règles du code
+    // absentes (par id) — ainsi une nouvelle règle seed (ex. relance inscription)
+    // s'active même si la gérante a déjà enregistré des règles.
+    autoRules: Array.isArray(s.autoRules)
+      ? [...s.autoRules, ...AUTO_RULES_SEED.filter((r) => r && !s.autoRules.some((x) => x && x.id === r.id))]
+      : AUTO_RULES_SEED,
     // Notes CRM par cliente : { "email_minuscule": "note libre" }.
     crmNotes: (s.crmNotes && typeof s.crmNotes === "object") ? s.crmNotes : {},
     crmTags: (s.crmTags && typeof s.crmTags === "object") ? s.crmTags : {},

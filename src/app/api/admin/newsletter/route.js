@@ -39,8 +39,15 @@ export async function POST(req) {
 
   if (!subject) return Response.json({ error: "Sujet obligatoire." }, { status: 400 });
 
-  const subs = await getSubscribers();
-  if (!subs.length) return Response.json({ error: "Aucune abonnée pour le moment." }, { status: 400 });
+  const allSubs = await getSubscribers();
+  // Destinataires : soit une SÉLECTION envoyée par l'admin (recipients), soit
+  // toutes les abonnées. On ne garde que des e-mails valides.
+  const rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const picked = Array.isArray(body?.recipients)
+    ? body.recipients.map((e) => String(e || "").trim().toLowerCase()).filter((e) => rx.test(e))
+    : null;
+  const subs = (picked && picked.length) ? [...new Set(picked)] : allSubs;
+  if (!subs.length) return Response.json({ error: "Aucun destinataire." }, { status: 400 });
 
   let html;
   if (slugs.length) {

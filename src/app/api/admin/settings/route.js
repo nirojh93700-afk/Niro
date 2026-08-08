@@ -327,7 +327,7 @@ export async function POST(req) {
       subject: str(r?.subject, 200),
       body: str(r?.body, 6000),
       delayDays: Math.max(0, Math.min(365, Math.round(Number(r?.delayDays) || 0))),
-      trigger: r?.trigger === "livree" ? "livree" : "commande",
+      trigger: ["livree", "inscription"].includes(r?.trigger) ? r.trigger : "commande",
       active: Boolean(r?.active),
     })).filter((r) => r.name || r.body);
   }

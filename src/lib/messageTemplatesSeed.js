@@ -139,4 +139,23 @@ Bonne nouvelle : cette commande vous a rapporté du cashback. Retrouvez votre ca
 Merci infiniment,
 L'atelier Niv Création`,
   },
+  {
+    id: "rule_relance_inscription_j4",
+    name: "Relance inscrits sans commande (4 jours)",
+    trigger: "inscription",
+    delayDays: 4,
+    active: true,
+    subject: "Votre −10 % vous attend chez Niv Création 💛",
+    body:
+`Bonjour,
+
+Vous vous êtes inscrite récemment — merci ! Petit rappel : votre code BIENVENUE10 (−10 % sur votre première commande) est toujours valable.
+
+En ce moment, nos clientes adorent nos cristaux photo 3D et nos bijoux gravés — fait main en France, livraison rapide et suivie.
+
+Découvrez tout sur nivcreation.fr et profitez de vos −10 % !
+
+À très vite,
+L'atelier Niv Création`,
+  },
 ];

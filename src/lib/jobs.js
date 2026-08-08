@@ -7,6 +7,7 @@
 import {
   getScheduledEmails, markScheduledSent, getSettings, hasAutoSent, markAutoSent,
   listCagnottes, markCagnotteReminded, expireCagnotte, getBirthdays, setPromoCode,
+  getSubscribersDetailed,
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
@@ -41,7 +42,9 @@ export async function runScheduledJobs() {
   const rules = (settings?.autoRules || []).filter((r) => r.active && r.body && r.delayDays >= 0);
   if (rules.length) {
     const orders = (await getSiteOrders(300)) || [];
+    // Règles basées sur les commandes (commande / livrée).
     for (const rule of rules) {
+      if (rule.trigger === "inscription") continue; // traité séparément ci-dessous
       for (const o of orders) {
         if (o.test || !o.customerEmail) continue;
         if (["annulee", "remboursee"].includes(o.status)) continue;
@@ -65,6 +68,32 @@ export async function runScheduledJobs() {
         const r = await sendClientMail({ to: o.customerEmail, subject, html });
         await markAutoSent(rule.id, o.id);
         if (r.ok) sentAuto++; else failed++;
+      }
+    }
+
+    // Règles "inscription" : relance des abonnées newsletter X jours après leur
+    // inscription, UNIQUEMENT si elles n'ont pas commandé. Une seule fois chacune.
+    const inscRules = rules.filter((r) => r.trigger === "inscription");
+    if (inscRules.length) {
+      const detailed = await getSubscribersDetailed().catch(() => []);
+      const buyers = new Set((orders || []).map((o) => (o.customerEmail || "").toLowerCase()).filter(Boolean));
+      const ts = (v) => { const n = new Date(v).getTime(); return Number.isFinite(n) ? n : 0; };
+      for (const rule of inscRules) {
+        for (const s of detailed) {
+          const email = (s.email || "").toLowerCase();
+          if (!email || !s.date) continue;          // pas de date connue → on ne relance pas
+          if (buyers.has(email)) continue;           // a déjà commandé → pas de relance
+          const baseTs = ts(s.date);
+          if (!baseTs) continue;
+          const dueAt = baseTs + rule.delayDays * DAY;
+          if (dueAt > now || now - dueAt > 3 * DAY) continue;
+          if (await hasAutoSent(rule.id, "sub:" + email)) continue;
+          const subject = fill(rule.subject || "Un message de Niv Création", {});
+          const html = brandedMessage(subject, fill(rule.body, {}));
+          const r = await sendClientMail({ to: email, subject, html, bcc: "" });
+          await markAutoSent(rule.id, "sub:" + email);
+          if (r.ok) sentAuto++; else failed++;
+        }
       }
     }
   }

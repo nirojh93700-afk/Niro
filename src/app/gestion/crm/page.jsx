@@ -50,6 +50,30 @@ export default function CrmPage() {
   const [mailMsg, setMailMsg] = useState("");
   const [mailSending, setMailSending] = useState(false);
   const [subs, setSubs] = useState([]); // abonnées newsletter : [{email,date}]
+  const [selSubs, setSelSubs] = useState(() => new Set()); // e-mails sélectionnés pour l'envoi
+  const [nlSubject, setNlSubject] = useState("Votre −10 % vous attend chez Niv Création 💛");
+  const [nlBody, setNlBody] = useState("Bonjour,\n\nVous vous êtes inscrite récemment — merci ! Petit rappel : votre code BIENVENUE10 (−10 % sur votre première commande) est toujours valable.\n\nEn ce moment, nos clientes adorent nos cristaux photo 3D et nos bijoux gravés — fait main en France, livraison rapide et suivie.\n\nDécouvrez tout sur nivcreation.fr et profitez de vos −10 % !\n\nÀ très vite,\nNiv Création");
+  const [nlSending, setNlSending] = useState(false);
+  const [nlMsg, setNlMsg] = useState("");
+  function toggleSub(email) { setSelSubs((prev) => { const n = new Set(prev); n.has(email) ? n.delete(email) : n.add(email); return n; }); }
+  async function sendNewsletterTo() {
+    const recipients = [...selSubs];
+    if (!recipients.length) { setNlMsg("Sélectionne au moins une personne."); return; }
+    if (!nlSubject.trim()) { setNlMsg("Ajoute un sujet."); return; }
+    if (!window.confirm(`Envoyer ce mail à ${recipients.length} personne(s) ?`)) return;
+    setNlSending(true); setNlMsg("");
+    try {
+      const r = await fetch("/api/admin/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ subject: nlSubject, message: nlBody, recipients }),
+      });
+      const d = await r.json();
+      if (r.ok && d.ok) { setNlMsg(`✓ Envoyé à ${d.sent}/${d.total} personne(s).`); setSelSubs(new Set()); }
+      else setNlMsg(d.error || "Échec de l'envoi.");
+    } catch { setNlMsg("Erreur réseau."); }
+    setNlSending(false);
+  }
 
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
@@ -537,23 +561,33 @@ export default function CrmPage() {
                 <h2 style={{ margin: 0, fontFamily: "Georgia,serif", color: "var(--gold-dark)" }}>Abonnées newsletter ({list.length})</h2>
                 <button className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={exportSubs} disabled={!list.length}>⬇ Exporter (CSV)</button>
               </div>
-              <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem", margin: "6px 0 12px" }}>
-                Elles ont reçu ton code <b>−10 %</b>. Celles marquées <b style={{ color: "#b4452f" }}>pas encore commandé</b> sont à relancer.
-                {nonAcheteurs > 0 && <> ({nonAcheteurs} à relancer)</>}
+              <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem", margin: "6px 0 10px" }}>
+                Elles ont reçu ton code <b>−10 %</b>. <b>Coche qui tu veux</b>, écris ton message en bas, et <b>envoie en une fois</b>. Les <b style={{ color: "#b4452f" }}>pas encore commandé</b> sont à relancer.
               </p>
+              {list.length > 0 && (
+                <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 10, alignItems: "center" }}>
+                  <button className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.82rem" }} onClick={() => setSelSubs(new Set(list.map((s) => s.email)))}>Tout sélectionner</button>
+                  <button className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.82rem" }} onClick={() => setSelSubs(new Set(list.filter((s) => !buyers.has((s.email || "").toLowerCase())).map((s) => s.email)))}>Les non-acheteurs ({nonAcheteurs})</button>
+                  <button className="btn btn-outline" style={{ padding: "5px 12px", fontSize: "0.82rem" }} onClick={() => setSelSubs(new Set())}>Aucun</button>
+                  <span style={{ color: "var(--gold-dark)", fontWeight: 700, fontSize: "0.85rem" }}>{selSubs.size} sélectionné(s)</span>
+                </div>
+              )}
               {list.length === 0 ? (
                 <p style={{ color: "var(--ink-soft)" }}>Aucune abonnée pour l&apos;instant.</p>
               ) : (
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem" }}>
                     <thead><tr>
+                      <th style={{ width: 28, borderBottom: "2px solid #eadfc4", padding: "7px 6px" }}></th>
                       {["E-mail", "Inscrite le", "Statut"].map((h, i) => <th key={h} style={{ textAlign: i === 0 ? "left" : "right", borderBottom: "2px solid #eadfc4", padding: "7px 6px", color: "var(--ink-soft)", fontWeight: 700, whiteSpace: "nowrap" }}>{h}</th>)}
                     </tr></thead>
                     <tbody>
                       {list.map((s) => {
                         const bought = buyers.has((s.email || "").toLowerCase());
+                        const sel = selSubs.has(s.email);
                         return (
-                          <tr key={s.email} style={{ borderBottom: "1px solid #f0eadd" }}>
+                          <tr key={s.email} onClick={() => toggleSub(s.email)} style={{ borderBottom: "1px solid #f0eadd", background: sel ? "#fbf6ea" : "transparent", cursor: "pointer" }}>
+                            <td style={{ padding: "7px 6px", textAlign: "center" }}><input type="checkbox" checked={sel} readOnly /></td>
                             <td style={{ padding: "7px 6px", wordBreak: "break-all" }}>{s.email}</td>
                             <td style={{ padding: "7px 6px", textAlign: "right", color: "var(--ink-soft)", whiteSpace: "nowrap" }}>{fmtD(s.date)}</td>
                             <td style={{ padding: "7px 6px", textAlign: "right", whiteSpace: "nowrap" }}>
@@ -564,6 +598,17 @@ export default function CrmPage() {
                       })}
                     </tbody>
                   </table>
+                </div>
+              )}
+              {list.length > 0 && (
+                <div style={{ marginTop: 14, borderTop: "1px solid #eadfc4", paddingTop: 14 }}>
+                  <div style={{ fontWeight: 700, marginBottom: 8 }}>Écris le message à envoyer <span style={{ color: "var(--gold-dark)" }}>({selSubs.size} destinataire{selSubs.size > 1 ? "s" : ""})</span></div>
+                  <input value={nlSubject} onChange={(e) => setNlSubject(e.target.value)} placeholder="Sujet du mail" style={{ width: "100%", padding: "9px 11px", border: "1px solid var(--line)", borderRadius: 8, marginBottom: 8, font: "inherit" }} />
+                  <textarea value={nlBody} onChange={(e) => setNlBody(e.target.value)} rows={7} placeholder="Votre message…" style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", resize: "vertical" }} />
+                  <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginTop: 8 }}>
+                    <button className="btn btn-gold" style={{ padding: "9px 20px" }} disabled={nlSending || !selSubs.size} onClick={sendNewsletterTo}>{nlSending ? "Envoi…" : `Envoyer aux ${selSubs.size} sélectionné(s)`}</button>
+                    {nlMsg && <span style={{ color: nlMsg.startsWith("✓") ? "#256b34" : "#b4452f", fontSize: "0.88rem" }}>{nlMsg}</span>}
+                  </div>
                 </div>
               )}
             </div>
