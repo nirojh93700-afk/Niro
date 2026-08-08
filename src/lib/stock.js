@@ -905,9 +905,21 @@ export async function moderateReview(slug, id, action) {
 }
 
 // --- Newsletter (abonnées) -------------------------------------------------
+// Renvoie la liste des e-mails abonnés (normalisée) — compatible ancien format
+// (tableau de chaînes) ET nouveau format (tableau d'objets {email,date}).
 export async function getSubscribers() {
   const data = await getCatalogRaw();
-  return data.subscribers || [];
+  return (data.subscribers || [])
+    .map((s) => (typeof s === "string" ? s : (s && s.email) || ""))
+    .filter(Boolean);
+}
+
+// Liste détaillée : [{ email, date }] (date "" pour les anciens abonnés).
+export async function getSubscribersDetailed() {
+  const data = await getCatalogRaw();
+  return (data.subscribers || [])
+    .map((s) => (typeof s === "string" ? { email: s, date: "" } : { email: (s && s.email) || "", date: (s && s.date) || "" }))
+    .filter((x) => x.email);
 }
 
 // =============================================================================
@@ -1067,8 +1079,11 @@ export async function addSubscriber(email) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return false;
   const data = await getCatalogRaw();
   data.subscribers = data.subscribers || [];
-  if (!data.subscribers.includes(e)) {
-    data.subscribers.push(e);
+  // Compatible ancien format (chaînes) : on vérifie l'existence sur l'e-mail,
+  // et on enregistre le NOUVEL abonné avec sa date d'inscription.
+  const exists = data.subscribers.some((s) => (typeof s === "string" ? s : s?.email) === e);
+  if (!exists) {
+    data.subscribers.push({ email: e, date: new Date().toISOString() });
     await persistCatalog(data);
   }
   return true;

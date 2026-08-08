@@ -1,4 +1,4 @@
-import { isAdmin, getSubscribers, getBirthdays } from "@/lib/stock";
+import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays } from "@/lib/stock";
 import { emailLayout, escapeHtml, newsletterProductsEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 import { getCatalog, priceFrom } from "@/lib/catalog";
@@ -10,7 +10,7 @@ const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replac
 // Abonnées + liste de produits (pour le sélecteur de nouveautés).
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
-  const subs = await getSubscribers();
+  const subs = await getSubscribersDetailed();
   const birthdays = await getBirthdays();
   let products = [];
   try {

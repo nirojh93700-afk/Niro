@@ -49,6 +49,7 @@ export default function CrmPage() {
   const [mailBody, setMailBody] = useState("");
   const [mailMsg, setMailMsg] = useState("");
   const [mailSending, setMailSending] = useState(false);
+  const [subs, setSubs] = useState([]); // abonnées newsletter : [{email,date}]
 
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
@@ -64,7 +65,7 @@ export default function CrmPage() {
       const od = await or.json();
       setOrders(od.orders || []);
       if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }
-      if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); }
+      if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); setSubs(Array.isArray(n.subscribers) ? n.subscribers : []); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
   }, []);
@@ -518,13 +519,62 @@ export default function CrmPage() {
           desc="Tes échanges e-mail avec les clients, depuis ta boîte Gmail connectée : lire, répondre, envoyer."
           href="/gestion/boite-mail" cta="Ouvrir la boîte mail" />
       )}
-      {crmTab === "campagnes" && (
-        <HubTab emoji="📣" title="Campagnes & relances"
-          desc="Envoie une remise à un groupe de clients (fidèles, à relancer…) : le bouton « Campagne » est dans l'onglet Clients. Ici, gère la newsletter et les envois programmés."
-          href="/gestion/messages" cta="Envois programmés"
-          secondaryHref="/gestion#newsletter" secondaryCta="Newsletter"
-          extra={<div style={{ marginBottom: 14 }}><button className="btn btn-outline" style={{ padding: "8px 18px" }} onClick={() => setCrmTab("clients")}>← Faire une campagne (onglet Clients)</button></div>} />
-      )}
+      {crmTab === "campagnes" && (() => {
+        const buyers = new Set(orders.filter((o) => !o.test).map((o) => (o.customerEmail || "").toLowerCase()).filter(Boolean));
+        const list = [...subs].sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+        const nonAcheteurs = list.filter((s) => !buyers.has((s.email || "").toLowerCase())).length;
+        const fmtD = (d) => { if (!d) return "—"; try { return new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "2-digit" }); } catch { return "—"; } };
+        const exportSubs = () => {
+          const rows = [["Email", "Date inscription", "A commandé"]].concat(list.map((s) => [s.email, s.date ? new Date(s.date).toLocaleDateString("fr-FR") : "", buyers.has((s.email || "").toLowerCase()) ? "oui" : "non"]));
+          const csv = "﻿" + rows.map((r) => r.map((x) => `"${String(x ?? "").replace(/"/g, '""')}"`).join(";")).join("\n");
+          const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "abonnees-newsletter.csv"; a.click();
+          setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        };
+        return (
+          <div>
+            <div style={{ background: "#fff", border: "1px solid #eadfc4", borderRadius: 14, padding: "16px 18px", marginBottom: 14 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                <h2 style={{ margin: 0, fontFamily: "Georgia,serif", color: "var(--gold-dark)" }}>Abonnées newsletter ({list.length})</h2>
+                <button className="btn btn-outline" style={{ padding: "6px 14px", fontSize: "0.85rem" }} onClick={exportSubs} disabled={!list.length}>⬇ Exporter (CSV)</button>
+              </div>
+              <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem", margin: "6px 0 12px" }}>
+                Elles ont reçu ton code <b>−10 %</b>. Celles marquées <b style={{ color: "#b4452f" }}>pas encore commandé</b> sont à relancer.
+                {nonAcheteurs > 0 && <> ({nonAcheteurs} à relancer)</>}
+              </p>
+              {list.length === 0 ? (
+                <p style={{ color: "var(--ink-soft)" }}>Aucune abonnée pour l&apos;instant.</p>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem" }}>
+                    <thead><tr>
+                      {["E-mail", "Inscrite le", "Statut"].map((h, i) => <th key={h} style={{ textAlign: i === 0 ? "left" : "right", borderBottom: "2px solid #eadfc4", padding: "7px 6px", color: "var(--ink-soft)", fontWeight: 700, whiteSpace: "nowrap" }}>{h}</th>)}
+                    </tr></thead>
+                    <tbody>
+                      {list.map((s) => {
+                        const bought = buyers.has((s.email || "").toLowerCase());
+                        return (
+                          <tr key={s.email} style={{ borderBottom: "1px solid #f0eadd" }}>
+                            <td style={{ padding: "7px 6px", wordBreak: "break-all" }}>{s.email}</td>
+                            <td style={{ padding: "7px 6px", textAlign: "right", color: "var(--ink-soft)", whiteSpace: "nowrap" }}>{fmtD(s.date)}</td>
+                            <td style={{ padding: "7px 6px", textAlign: "right", whiteSpace: "nowrap" }}>
+                              <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 999, background: bought ? "#eaf3ec" : "#fbecea", color: bought ? "#2e6b3e" : "#b4452f", border: `1px solid ${bought ? "#cfe6d4" : "#f0cfc9"}` }}>{bought ? "cliente ✓" : "pas encore commandé"}</span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+            <HubTab emoji="📣" title="Campagnes & relances"
+              desc="Envoie une remise à un groupe de clients (le bouton « Campagne » est dans l'onglet Clients), ou une newsletter à toutes tes abonnées."
+              href="/gestion/messages" cta="Envois programmés"
+              secondaryHref="/gestion#newsletter" secondaryCta="Newsletter"
+              extra={<div style={{ marginBottom: 14 }}><button className="btn btn-outline" style={{ padding: "8px 18px" }} onClick={() => setCrmTab("clients")}>← Faire une campagne (onglet Clients)</button></div>} />
+          </div>
+        );
+      })()}
       {crmTab === "fidelite" && (
         <HubTab emoji="🎁" title="Fidélité & parrainage"
           desc="Le cashback de chaque cliente et les commissions de tes parrains, mis à jour automatiquement à chaque commande."
