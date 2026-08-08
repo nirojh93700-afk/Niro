@@ -1,6 +1,7 @@
-import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays } from "@/lib/stock";
+import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays, getGmailCreds } from "@/lib/stock";
 import { emailLayout, escapeHtml, newsletterProductsEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
+import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 import { getCatalog, priceFrom } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -70,12 +71,26 @@ export async function POST(req) {
     html = emailLayout({ heading: subject, bodyHtml });
   }
 
-  let sent = 0;
+  // Envoi de masse : on récupère le jeton Gmail UNE SEULE fois (bien plus rapide
+  // et fiable que de le refaire à chaque e-mail — évite les timeouts). Repli
+  // Resend par e-mail si Gmail n'est pas connecté.
+  let sent = 0, failed = 0;
+  let gmailToken = null;
+  try {
+    const creds = await getGmailCreds();
+    if (creds?.refreshToken) gmailToken = await gmailAccessToken(creds);
+  } catch { gmailToken = null; }
+
   for (const to of subs) {
     try {
-      const r = await sendClientMail({ to, subject, html, bcc: "" });
-      if (r.ok) sent++;
-    } catch { /* continue */ }
+      if (gmailToken) {
+        await gmailSendHtml(gmailToken, { to, subject, html, bcc: "" });
+        sent++;
+      } else {
+        const r = await sendClientMail({ to, subject, html, bcc: "" });
+        if (r?.ok) sent++; else failed++;
+      }
+    } catch { failed++; }
   }
-  return Response.json({ ok: true, sent, total: subs.length });
+  return Response.json({ ok: true, sent, total: subs.length, failed });
 }
