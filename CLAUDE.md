@@ -500,10 +500,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Sortie** : ✅ tout va bien · ⚠️ points à surveiller · ❌ problèmes à corriger (+ code de sortie 1).
 - **Piège connu** : Next.js insère le texte « Page introuvable » dans TOUTES les pages (composant
   404 embarqué) → ne jamais détecter une erreur avec ce texte, se fier au **code HTTP**.
-- **Dernier audit (13/08/2026)** : tout fonctionne (85 vérifications ✔). Seul point ouvert →
-  `bougeoir-mandala-bois` est masqué dans l'admin mais reste annoncé dans `sitemap.xml` (fichier
-  généré à la compilation, donc figé) → Google tombe sur une erreur 404. **Correction proposée,
-  en attente de l'accord de la gérante** : rendre le plan du site dynamique (`revalidate`).
+- **Dernier audit (13/08/2026)** : ✅ tout fonctionne, aucun problème (83-85 vérifications).
+- **Correctif issu de cet audit (13/08/2026)** : `src/app/sitemap.js` était **figé à la compilation**
+  → un produit masqué depuis l'admin (`bougeoir-mandala-bois`) restait annoncé à Google (erreur 404)
+  et un nouveau produit n'y apparaissait qu'au déploiement suivant. Corrigé par
+  `export const dynamic = "force-dynamic"` (même méthode que `flux-google.xml`, déjà dynamique).
+  ⚠️ `export const revalidate = …` n'est PAS pris en compte sur `sitemap.js` (reste ○ Static au
+  build) — utiliser `force-dynamic`. Vérifié en ligne : 74 → 73 adresses, le produit masqué a disparu.
 
 ## 14. NOUVEAU PRODUIT — GOBELET ISOTHERME 40 oz À GRAVER (en préparation, 18/07/2026)
 > Nouvelle gamme : grand gobelet isotherme 40 oz (1,1 L) type « Stanley » (acier inox double paroi, anse + paille), **gravure laser personnalisée**. Maquette validée en cours, **PAS ENCORE EN LIGNE** (attend « applique »).
