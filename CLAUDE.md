@@ -1,5 +1,12 @@
 # Guide agent — Boutique Niv Création
 
+## 🚫 RÈGLE D'OR — NE JAMAIS TOUCHER AUX APPLIS / SITES EN LIGNE SANS DEMANDE EXPLICITE (enregistré 13/08/2026)
+> **Demande ferme de la gérante, valable pour TOUTES les conversations et TOUS ses projets.**
+- **INTERDIT** de modifier, déployer, republier, reconfigurer ou supprimer quoi que ce soit sur un **site, une application ou un projet EN LIGNE** de la gérante (boutique Niv Création `nivcreation.fr`, projets Firebase `niv-creation`/`crafia-app`/`niv-social`, Stripe, réglages, agents, etc.) **sans qu'elle le demande explicitement**.
+- Cela vaut pour **tous ses projets**, pas seulement la boutique : ne toucher à AUCUN de ses services en ligne de sa propre initiative.
+- **Préparer / proposer / montrer une maquette = OK.** **Appliquer / mettre en ligne / déployer = SEULEMENT sur sa demande explicite.** En cas de doute : **demander d'abord**, ne jamais déduire un accord.
+- Un nouveau projet **isolé** (ex. app voyage sur un projet Firebase neuf) ne compte pas comme « toucher » à ses projets existants — mais le déploiement final reste **à sa main / sur sa demande**.
+
 ## 📦 FOURNISSEUR BOÎTES / EMBALLAGES PERSONNALISÉS — « Guardidea-Rachel » (enregistré 27/07/2026)
 > Quand la gérante parle du **fournisseur de boîtes / emballages**, c'est **Guardidea-Rachel** (contact **WhatsApp**, anglophone). C'est aussi elle qui fait déjà les **boîtes à bijoux** de la gérante.
 - **Personnalisation** : oui, à la marque Niv Création (même couleur + mêmes textes/logo que les boîtes bijoux déjà commandées).
