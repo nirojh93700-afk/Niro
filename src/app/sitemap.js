@@ -1,6 +1,14 @@
 import { CATEGORIES } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
 
+// Le plan du site était figé à la compilation : un produit masqué depuis
+// l'admin restait annoncé à Google (qui tombait sur une erreur 404), et un
+// nouveau produit n'y apparaissait qu'au déploiement suivant. On le régénère
+// donc à chaque demande, à partir du catalogue réel (même méthode que le flux
+// Google Shopping `flux-google.xml`, qui fonctionne déjà ainsi ; le catalogue
+// est mis en cache 60 s côté serveur, donc aucun surcoût).
+export const dynamic = "force-dynamic";
+
 export default async function sitemap() {
   const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");
   const now = new Date();
