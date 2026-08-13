@@ -479,6 +479,32 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   Couverts enfants personnalisés PUBLIÉS (34,90 € port offert, éditeur par couvert) · CRM enrichi
   (campagne remise, anniversaires, tags, graphique CA, relance) · Bandeau Soldes animé · Page sur-mesure (démo).
 
+## 🔍 « VÉRIFIE MON SITE » — AUDIT COMPLET AUTOMATIQUE (créé le 13/08/2026)
+> **Quand la gérante dit « vérifie mon site », « est-ce que tout va bien », « fais un audit »** →
+> lancer **`node tools/audit-site.mjs`** et lui rendre le résultat en français, court et clair.
+> Ne PAS improviser une vérification à la main : l'outil existe pour que rien ne soit oublié.
+
+```
+node tools/audit-site.mjs              # audit complet (~1 min avec la compilation)
+node tools/audit-site.mjs --rapide     # sans compiler le code (~20 s)
+node tools/audit-site.mjs --paiement   # teste EN PLUS le paiement Stripe (aucun prélèvement)
+node tools/audit-site.mjs --site https://autre-adresse
+```
+**Ce qu'il contrôle (lecture seule, ne modifie rien)** : 1) les 21 pages du site (+ vitesse) ·
+2) TOUTES les fiches produits du plan Google · 3) TOUTES les photos produits (~360, détecte une
+photo cassée) · 4) les services : frais de livraison, promos, avis, stock, **points relais Boxtal**,
+**paiement Stripe** · 5) la cohérence du catalogue (doublons d'identifiants = panier cassé, prix
+manquant, produit sans photo, fiche détaillée manquante, produits masqués) · 6) la compilation du code.
+- **Photos** : une photo en échec est **re-testée une seconde fois, plus lentement** avant d'être
+  signalée (les hébergeurs bloquent parfois les requêtes rapprochées → faux positifs).
+- **Sortie** : ✅ tout va bien · ⚠️ points à surveiller · ❌ problèmes à corriger (+ code de sortie 1).
+- **Piège connu** : Next.js insère le texte « Page introuvable » dans TOUTES les pages (composant
+  404 embarqué) → ne jamais détecter une erreur avec ce texte, se fier au **code HTTP**.
+- **Dernier audit (13/08/2026)** : tout fonctionne (85 vérifications ✔). Seul point ouvert →
+  `bougeoir-mandala-bois` est masqué dans l'admin mais reste annoncé dans `sitemap.xml` (fichier
+  généré à la compilation, donc figé) → Google tombe sur une erreur 404. **Correction proposée,
+  en attente de l'accord de la gérante** : rendre le plan du site dynamique (`revalidate`).
+
 ## 14. NOUVEAU PRODUIT — GOBELET ISOTHERME 40 oz À GRAVER (en préparation, 18/07/2026)
 > Nouvelle gamme : grand gobelet isotherme 40 oz (1,1 L) type « Stanley » (acier inox double paroi, anse + paille), **gravure laser personnalisée**. Maquette validée en cours, **PAS ENCORE EN LIGNE** (attend « applique »).
 - **Titre validé** : « Gobelet isotherme 40 oz à graver ». Catégorie envisagée : Boutique / Cadeaux (à confirmer).
