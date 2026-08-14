@@ -81,6 +81,9 @@ export async function POST(req) {
 
   const postalCode = String(body?.postalCode || "").trim();
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+  // E-mail saisi au panier pour le code promo (limite « une fois par personne »).
+  const promoEmailRaw = String(body?.promoEmail || "").trim().toLowerCase();
+  const promoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(promoEmailRaw) ? promoEmailRaw : "";
   // Pays de livraison choisi sur le panier (défaut France). Détermine la zone de
   // tarif (France/Europe) et restreint l'adresse Stripe au pays choisi.
   const country = SHIPPING_COUNTRIES.includes(String(body?.country || "").toUpperCase())
@@ -270,8 +273,12 @@ export async function POST(req) {
     try {
       const codes = await getPromoCodes();
       const pc = codes[promoCode];
-      // Code ambassadeur (reusable) : utilisable plusieurs fois. Sinon : 1 fois/cliente.
-      const blocked = pc && !pc.reusable && (await hasUsedCode(promoCode, { ip: clientIp }));
+      // Code ambassadeur (reusable) : utilisable plusieurs fois. Sinon : 1 fois
+      // PAR PERSONNE — on contrôle sur l'e-mail saisi au panier (fiable), et à
+      // défaut sur l'adresse internet (ancien comportement, garde-fou).
+      const blocked = pc && !pc.reusable && (promoEmail
+        ? await hasUsedCode(promoCode, { email: promoEmail })
+        : await hasUsedCode(promoCode, { ip: clientIp }));
       const expired = pc && pc.expiresAt && Date.now() > pc.expiresAt;
       if (pc && pc.value > 0 && !blocked && !expired) {
         appliedCode = promoCode;
@@ -320,6 +327,9 @@ export async function POST(req) {
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
         promoCode: appliedCode,
         clientIp,
+        // E-mail saisi au panier : enregistré comme « ayant utilisé le code »,
+        // même si la cliente en saisit un autre sur la page de paiement.
+        ...(appliedCode && promoEmail ? { promoEmail } : {}),
         // Cagnotte utilisée (débitée après paiement par le webhook). Vide si non utilisée.
         ...(cagnotteEmail && cagnotteAmount > 0 ? { cagnotteEmail, cagnotteAmount: String(cagnotteAmount) } : {}),
         // Point relais choisi sur le panier (adresse complète pour la commande).

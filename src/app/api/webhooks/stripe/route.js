@@ -212,6 +212,12 @@ export async function POST(req) {
         ip: md.clientIp || "",
         email: obj.customer_details?.email || "",
       });
+      // E-mail saisi au panier pour obtenir la remise : on l'enregistre aussi,
+      // sinon il suffirait d'en indiquer un autre au paiement pour réutiliser
+      // un code à usage unique.
+      if (md.promoEmail && md.promoEmail !== (obj.customer_details?.email || "").toLowerCase()) {
+        await recordCodeUsage(md.promoCode, { email: md.promoEmail });
+      }
       // Commission ambassadeur : ventes = total payé − livraison (en euros).
       const shipping = obj.shipping_cost?.amount_total ?? 0;
       const sales = Math.max(0, ((obj.amount_total ?? 0) - shipping) / 100);

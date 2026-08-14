@@ -33,6 +33,10 @@ export default function CartPage() {
   const [promoCode, setPromoCode] = useState("");
   const [promoMsg, setPromoMsg] = useState("");
   const [promoOk, setPromoOk] = useState(false);
+  // E-mail demandé pour appliquer un code à usage unique : le blocage se fait
+  // alors par PERSONNE (e-mail) et non plus par connexion internet, qui bloquait
+  // à tort deux personnes d'un même foyer et laissait passer un changement de réseau.
+  const [promoEmail, setPromoEmail] = useState("");
 
   // Cagnotte fidélité de la cliente connectée (chargée si elle a un espace + un solde).
   const [cagnotte, setCagnotte] = useState(null); // { email, balance }
@@ -117,15 +121,18 @@ export default function CartPage() {
     setPromoMsg(""); setPromoOk(false);
     const code = promoCode.trim();
     if (!code) return;
+    const email = promoEmail.trim().toLowerCase();
     try {
       const res = await fetch("/api/promo-validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, email }),
       });
       const d = await res.json();
       if (d.valid) { setPromoOk(true); setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`); }
-      else if (d.used) setPromoMsg("Ce code a déjà été utilisé.");
+      else if (d.needEmail) setPromoMsg("Entrez votre e-mail pour utiliser ce code.");
+      else if (d.used) setPromoMsg("Ce code a déjà été utilisé avec cette adresse e-mail.");
+      else if (d.expired) setPromoMsg("Ce code a expiré.");
       else setPromoMsg("Code invalide.");
     } catch { setPromoMsg("Vérification impossible."); }
   }
@@ -152,7 +159,7 @@ export default function CartPage() {
       // Cagnotte et code promo sont exclusifs (un seul coupon Stripe). Si la cagnotte
       // est cochée, elle a la priorité et le code promo n'est pas envoyé.
       const wantCagnotte = Boolean(useCagnotte && cagnotteUsable > 0);
-      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte);
+      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase());
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -348,6 +355,15 @@ export default function CartPage() {
 
           <div style={{ marginTop: 16, opacity: useCagnotte ? 0.5 : 1, pointerEvents: useCagnotte ? "none" : "auto" }}>
             <label style={{ display: "block", fontSize: "0.88rem", marginBottom: 6 }}>Code promo</label>
+            <input
+              type="email"
+              value={promoEmail}
+              onChange={(e) => { setPromoEmail(e.target.value); setPromoOk(false); setPromoMsg(""); }}
+              placeholder="Votre e-mail"
+              autoComplete="email"
+              disabled={useCagnotte}
+              style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 8 }}
+            />
             <div style={{ display: "flex", gap: 8 }}>
               <input
                 type="text"
@@ -361,7 +377,9 @@ export default function CartPage() {
             </div>
             {useCagnotte
               ? <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: "var(--ink-soft)" }}>Cagnotte et code promo ne se cumulent pas.</p>
-              : (promoMsg && <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>)}
+              : (promoMsg
+                ? <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>
+                : <p style={{ fontSize: "0.78rem", margin: "6px 0 0", color: "var(--ink-soft)" }}>Votre e-mail sert uniquement à vérifier que le code n&apos;a pas déjà été utilisé.</p>)}
           </div>
 
           {error && <div className="notice" style={{ marginTop: 16 }}>{error}</div>}

@@ -27,8 +27,15 @@ export async function POST(req) {
   // Code expiré (durée de validité dépassée) → invalide.
   if (pc.expiresAt && Date.now() > pc.expiresAt) return Response.json({ valid: false, expired: true });
   // Code ambassadeur (reusable) : pas de limite « une fois par cliente ».
-  if (!pc.reusable && await hasUsedCode(code, { ip: clientIp(req) })) {
-    return Response.json({ valid: false, used: true });
+  // Code à usage unique : on vérifie PAR PERSONNE (e-mail). L'ancienne
+  // vérification par adresse internet bloquait à tort deux personnes d'un même
+  // foyer, et laissait passer un simple changement de réseau (wifi → 4G).
+  // L'adresse internet ne sert plus que de garde-fou si aucun e-mail n'est donné.
+  if (!pc.reusable) {
+    const email = String(body?.email || "").trim().toLowerCase();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) return Response.json({ valid: false, needEmail: true });
+    if (await hasUsedCode(code, { email })) return Response.json({ valid: false, used: true });
   }
   return Response.json({
     valid: true,
