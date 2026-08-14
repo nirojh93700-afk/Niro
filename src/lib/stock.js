@@ -721,6 +721,40 @@ export async function setPromoCode(code, def) {
   await persistCatalog(data);
   return data.promoCodes; // version à jour (évite une relecture parfois en retard)
 }
+// --- Code de BIENVENUE : création automatique ------------------------------
+// Le code de bienvenue (pop-up d'inscription + e-mail « −10 % ») n'était qu'un
+// TEXTE d'affichage : il fallait le recréer À LA MAIN dans Promotions, sinon il
+// était refusé au paiement (« code non valide ») alors qu'on l'avait promis par
+// e-mail. On l'enregistre donc automatiquement comme VRAI code promo.
+// Sûr : si le code existe déjà, on n'y touche pas (les réglages faits à la main
+// dans Promotions — valeur, durée, réutilisable — sont toujours prioritaires).
+function remiseDepuisTexte(texte) {
+  const t = String(texte || "");
+  const pourcent = /(\d+(?:[.,]\d+)?)\s*%/.exec(t);
+  if (pourcent) return { type: "percent", value: Number(pourcent[1].replace(",", ".")) };
+  const euros = /(\d+(?:[.,]\d+)?)\s*€/.exec(t);
+  if (euros) return { type: "fixed", value: Number(euros[1].replace(",", ".")) };
+  return { type: "percent", value: 10 }; // valeur par défaut = celle annoncée partout
+}
+
+export async function ensureWelcomeCode() {
+  try {
+    const s = await getSettings();
+    const w = s?.welcome || {};
+    if (w.enabled === false) return null; // fenêtre de bienvenue désactivée
+    const code = String(w.code || "").trim().toUpperCase();
+    if (!code) return null;
+    const codes = await getPromoCodes();
+    if (codes[code]) return code; // déjà créé → on ne modifie rien
+    const { type, value } = remiseDepuisTexte(w.text);
+    if (!(value > 0)) return null;
+    await setPromoCode(code, { type, value });
+    return code;
+  } catch {
+    return null; // ne doit jamais bloquer une inscription ou un paiement
+  }
+}
+
 // --- Suivi des commissions ambassadeurs -----------------------------------
 // data.codeStats[CODE] = { orders, sales (€), commission (€), paid (€) }
 export async function getCodeStats() {

@@ -1,4 +1,4 @@
-import { addSubscriber, setBirthday, getSettings } from "@/lib/stock";
+import { addSubscriber, setBirthday, getSettings, ensureWelcomeCode } from "@/lib/stock";
 import { welcomeEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 
@@ -22,6 +22,9 @@ export async function POST(req) {
     const w = settings?.welcome || {};
     const code = (w.code || "").toString().trim();
     if (code) {
+      // On s'assure que le code promis dans l'e-mail EXISTE vraiment, sinon il
+      // serait refusé au paiement.
+      await ensureWelcomeCode();
       const { subject, html } = welcomeEmail(code, w.text);
       // Gmail en priorité (arrive vraiment), Resend en secours ; copie à la gérante.
       const r = await sendClientMail({ to: email, subject, html, bcc: BRAND.contact });

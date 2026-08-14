@@ -290,14 +290,22 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
   }
   const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
 
+  // Bijoux (lettre suivie) : la livraison est offerte dès le seuil (45 €). Ce
+  // seuil ne s'appliquait qu'à la livraison à DOMICILE — la cliente qui
+  // choisissait un point relais payait quand même. Incohérent avec la promesse
+  // affichée « livraison offerte dès 45 € » → le seuil vaut pour les DEUX.
+  const bijouxOffert = letterOnly && totalGrams <= LETTER_MAX_GRAMS && subtotal >= cfg.bijouxFreeThreshold;
+  const portOffert = freeShipping || bijouxOffert;
+
   // --- Choix explicite fait sur la page panier -----------------------------
   // Point relais : Stripe n'affiche QUE cette option (prix par poids + nom du
   // point relais choisi sur la carte).
   if (deliveryMethod === "relais" && boxtalOn) {
-    const price = pointRelaisPrice(totalGrams, boxtal, freeShipping, relaisCarrier);
+    const price = pointRelaisPrice(totalGrams, boxtal, portOffert, relaisCarrier);
     const carrierName = relaisCarrier ? relaisCarrierByCode(relaisCarrier).name : "";
     const label = [carrierName, relaisLabel].filter(Boolean).join(" — ").slice(0, 90);
-    const name = label ? `Point relais ${label}` : "Livraison en point relais";
+    const base = label ? `Point relais ${label}` : "Livraison en point relais";
+    const name = price === 0 ? `${base} — Offerte`.slice(0, 100) : base;
     return [rate(price, name, [3, 6])];
   }
   // Retrait en main propre : uniquement si le panier y est éligible (déco/mariage)
@@ -312,7 +320,7 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
 
   // --- Aucun choix explicite (ancien cache JS) : on propose tout le dispo ---
   const options = home();
-  if (boxtalOn && !freeShipping) {
+  if (boxtalOn && !portOffert) {
     options.push(rate(pointRelaisPrice(totalGrams, boxtal, false), "Livraison en point relais", [3, 6]));
   }
   if (pickupEligible) {

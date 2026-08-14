@@ -1,4 +1,4 @@
-import { getPromoCodes, hasUsedCode } from "@/lib/stock";
+import { getPromoCodes, hasUsedCode, ensureWelcomeCode } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +12,17 @@ export async function POST(req) {
   try { body = await req.json(); } catch { return Response.json({ valid: false }); }
   const code = String(body?.code || "").trim().toUpperCase();
   if (!code) return Response.json({ valid: false });
-  const codes = await getPromoCodes();
-  const pc = codes[code];
+  let codes = await getPromoCodes();
+  let pc = codes[code];
+  // Code de bienvenue promis par e-mail mais jamais créé dans Promotions : on
+  // le crée à la volée pour qu'il fonctionne (au lieu d'être refusé à tort).
+  if (!pc) {
+    const bienvenue = await ensureWelcomeCode();
+    if (bienvenue === code) {
+      codes = await getPromoCodes();
+      pc = codes[code];
+    }
+  }
   if (!pc) return Response.json({ valid: false });
   // Code expiré (durée de validité dépassée) → invalide.
   if (pc.expiresAt && Date.now() > pc.expiresAt) return Response.json({ valid: false, expired: true });
