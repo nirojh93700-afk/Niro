@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail } from "@/lib/stock";
+import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode } from "@/lib/stock";
 import { sendClientMail } from "@/lib/clientMail";
 import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
 
@@ -377,6 +377,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       try {
         const ref = (await getSettings()).referral || {};
         if (ref.enabled && ref.code) {
+          // Le code partagé doit exister vraiment, sinon l'amie se le voit refuser.
+          await ensureReferralCode();
           referralBlock = `<div style="margin-top:20px;background:${BRAND.cream};border:1px dashed #dcc88f;border-radius:12px;padding:16px;text-align:center;">
             <div style="font-weight:bold;color:${BRAND.gold};margin-bottom:6px;">Faites plaisir à une amie 💛</div>
             <div style="font-size:14px;color:#7a7268;margin-bottom:8px;">${escapeHtml(ref.text || "Offrez une remise à une amie")} — partagez ce code :</div>

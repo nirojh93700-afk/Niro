@@ -755,6 +755,27 @@ export async function ensureWelcomeCode() {
   }
 }
 
+// Même problème pour le code de PARRAINAGE (« partagez ce code avec une amie »,
+// glissé dans l'e-mail de confirmation quand il est activé) : il n'était jamais
+// créé non plus. Il est réutilisable, puisqu'il est fait pour être partagé.
+export async function ensureReferralCode() {
+  try {
+    const s = await getSettings();
+    const r = s?.referral || {};
+    if (!r.enabled) return null; // parrainage désactivé → aucun code promis
+    const code = String(r.code || "").trim().toUpperCase();
+    if (!code) return null;
+    const codes = await getPromoCodes();
+    if (codes[code]) return code; // déjà créé → on ne modifie rien
+    const { type, value } = remiseDepuisTexte(r.text);
+    if (!(value > 0)) return null;
+    await setPromoCode(code, { type, value, reusable: true });
+    return code;
+  } catch {
+    return null;
+  }
+}
+
 // --- Suivi des commissions ambassadeurs -----------------------------------
 // data.codeStats[CODE] = { orders, sales (€), commission (€), paid (€) }
 export async function getCodeStats() {

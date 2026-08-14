@@ -1,4 +1,4 @@
-import { getPromoCodes, hasUsedCode, ensureWelcomeCode } from "@/lib/stock";
+import { getPromoCodes, hasUsedCode, ensureWelcomeCode, ensureReferralCode } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -17,8 +17,8 @@ export async function POST(req) {
   // Code de bienvenue promis par e-mail mais jamais créé dans Promotions : on
   // le crée à la volée pour qu'il fonctionne (au lieu d'être refusé à tort).
   if (!pc) {
-    const bienvenue = await ensureWelcomeCode();
-    if (bienvenue === code) {
+    const [bienvenue, parrainage] = await Promise.all([ensureWelcomeCode(), ensureReferralCode()]);
+    if (bienvenue === code || parrainage === code) {
       codes = await getPromoCodes();
       pc = codes[code];
     }

@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
 import { buildShippingOptions } from "@/lib/shipping";
-import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte } from "@/lib/stock";
+import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
 import { saveOrderSpec } from "@/lib/firebase";
@@ -196,7 +196,12 @@ export async function POST(req) {
     if (!product.letter) {
       letterOnly = false;
       parcelQty += quantity;
-      if (product.freeShipThreshold) colisThresh = Math.min(colisThresh, Number(product.freeShipThreshold));
+      // Un produit « livraison toujours offerte » ne doit PAS annuler la
+      // gratuité au seuil : sinon un panier mixte (ex. couverts enfants
+      // « port offert » + carafe « livraison offerte dès 45 € ») facturait le
+      // port alors que les DEUX fiches promettent la livraison offerte.
+      if (product.freeShipping) { /* toujours offert → ne bloque rien */ }
+      else if (product.freeShipThreshold) colisThresh = Math.min(colisThresh, Number(product.freeShipThreshold));
       else allColisThreshFree = false;
     }
     if (product.category === "verres") glassQty += quantity;
@@ -231,6 +236,27 @@ export async function POST(req) {
       },
     });
   }
+
+  // Sécurité RUPTURE DE STOCK : jusqu'ici, rien n'empêchait de payer un article
+  // épuisé (la page produit le grise, mais un panier resté ouvert ou deux
+  // clientes en même temps passaient au travers). On refuse avant le paiement.
+  // Même règle que l'affichage : seules les variantes réellement suivies en
+  // stock (valeur numérique) sont contrôlées — les autres restent illimitées.
+  try {
+    const stockMap = await getStockMap();
+    const besoins = new Map();
+    for (const b of boughtVariants) besoins.set(b.variantId, (besoins.get(b.variantId) || 0) + b.qty);
+    for (const [sid, qte] of besoins) {
+      const dispo = stockMap[sid];
+      if (typeof dispo === "number" && dispo < qte) {
+        return Response.json({
+          error: dispo <= 0
+            ? "Un article de votre panier vient d'être épuisé. Retirez-le pour continuer."
+            : `Il ne reste que ${dispo} exemplaire(s) d'un article de votre panier.`,
+        }, { status: 400 });
+      }
+    }
+  } catch { /* lecture du stock impossible → on ne bloque pas la vente */ }
 
   const stripe = new Stripe(secret);
 
