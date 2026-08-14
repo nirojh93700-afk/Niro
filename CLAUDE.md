@@ -508,6 +508,30 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   ⚠️ `export const revalidate = …` n'est PAS pris en compte sur `sitemap.js` (reste ○ Static au
   build) — utiliser `force-dynamic`. Vérifié en ligne : 74 → 73 adresses, le produit masqué a disparu.
 
+## ✅ RÈGLE — TOUTE PROMESSE FAITE À LA CLIENTE DOIT MARCHER POUR DE VRAI (14/08/2026)
+> Suite à la découverte que **le code BIENVENUE10 promis par e-mail était refusé au paiement**
+> (il n'existait que comme TEXTE d'affichage). Avant d'annoncer quoi que ce soit à une cliente
+> (code promo, livraison offerte, cadeau…), **vérifier que le mécanisme existe côté serveur** —
+> et le tester en ligne (`/api/promo-validate`, panier réel), pas seulement lire le code.
+- **Codes promo automatiques** : `ensureWelcomeCode()` / `ensureReferralCode()` (`src/lib/stock.js`)
+  créent le vrai code promo à partir des réglages (`settings.welcome` / `settings.referral`), en
+  déduisant la remise du texte (« −10 % » → percent 10 ; « −5 € » → fixed 5). Appelés depuis
+  `/api/newsletter` (inscription), `/api/promo-validate` (saisie au panier) et le webhook Stripe
+  (code de parrainage dans l'e-mail de commande). **Ne JAMAIS écraser un code déjà réglé à la main**
+  dans Promotions : si le code existe, on n'y touche pas. Vérifié en ligne le 14/08 → `valid:true, −10 %`.
+- **LIVRAISON OFFERTE = les DEUX modes.** Le seuil bijoux (45 €) ne s'appliquait qu'au domicile :
+  le **point relais restait facturé 4,90 €** malgré la promesse affichée. Corrigé dans
+  `buildShippingOptions` (`portOffert = freeShipping || bijouxOffert`), libellé « — Offerte ».
+  Les colis lourds (cristaux, déco) restent facturés normalement (vérifié cas par cas).
+- **Panier mixte** : un produit `freeShipping:true` (couverts enfants) annulait la gratuité au
+  seuil d'un produit `freeShipThreshold` (carafe) → port facturé alors que les DEUX fiches
+  promettent la livraison offerte. Corrigé dans `/api/checkout` (un produit toujours offert ne
+  bloque plus le seuil des autres).
+- **Rupture de stock** : le paiement d'un article épuisé était possible (page produit grisée
+  seulement côté navigateur). `/api/checkout` refuse désormais avant paiement, **même règle que
+  l'affichage** (seules les variantes suivies numériquement sont contrôlées). Important vu la règle
+  « produit personnalisé jamais remboursé » : on ne veut pas encaisser ce qu'on ne peut pas fabriquer.
+
 ## 14. NOUVEAU PRODUIT — GOBELET ISOTHERME 40 oz À GRAVER (en préparation, 18/07/2026)
 > Nouvelle gamme : grand gobelet isotherme 40 oz (1,1 L) type « Stanley » (acier inox double paroi, anse + paille), **gravure laser personnalisée**. Maquette validée en cours, **PAS ENCORE EN LIGNE** (attend « applique »).
 - **Titre validé** : « Gobelet isotherme 40 oz à graver ». Catégorie envisagée : Boutique / Cadeaux (à confirmer).
