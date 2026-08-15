@@ -1,5 +1,6 @@
 import { getSettings } from "@/lib/stock";
 import { resolveShippingConfig } from "@/lib/shipping";
+import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,12 @@ export async function GET() {
       bijouxFreeThreshold: cfg.bijouxFreeThreshold,
       // Option point relais activée dans l'admin ? (pour afficher la carte au panier)
       pointRelais: settings?.boxtal?.enabled === true,
+      // 🏖️ Mode vacances actif ? (null si éteint — la fiche produit et le panier
+      // affichent le délai annoncé, voir src/lib/vacation.js)
+      vacation: (() => {
+        const v = vacationActive(settings?.vacation);
+        return v ? { message: vacationMessage(v), gift: vacationGiftMessage(v) } : null;
+      })(),
     },
     { headers: { "Cache-Control": "public, max-age=60" } }
   );

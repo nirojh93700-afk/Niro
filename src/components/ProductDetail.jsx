@@ -8,6 +8,7 @@ import { formatEuro, roundTo90 } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import CrystalSizeGuide from "@/components/CrystalSizeGuide";
+import VacationNotice from "@/components/VacationNotice";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
 import PayInfoModal from "@/components/PayInfo";
@@ -1780,6 +1781,8 @@ export default function ProductDetail({ product }) {
           <p className="pd-nfois">
             💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="pd-nfois-link" />
           </p>
+          {/* 🏖️ Mode vacances : n'affiche rien tant qu'il n'est pas activé. */}
+          <VacationNotice compact />
           <div className="qty-row">
             <div className="qty-stepper">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Moins">

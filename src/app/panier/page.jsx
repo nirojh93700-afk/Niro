@@ -6,6 +6,7 @@ import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
 import FreeShippingBar from "@/components/FreeShippingBar";
+import VacationNotice from "@/components/VacationNotice";
 import RelaisPicker from "@/components/RelaisPicker";
 
 // Pays d'Europe où le point relais (Mondial Relay) est disponible.
@@ -228,6 +229,8 @@ export default function CartPage() {
         <aside className="cart-summary">
           <h3>Récapitulatif</h3>
           <FreeShippingBar />
+          {/* 🏖️ Mode vacances : n'affiche rien tant qu'il n'est pas activé. */}
+          <VacationNotice compact />
           <div className="summary-row">
             <span>Sous-total</span>
             <span>{formatEuro(total)}</span>

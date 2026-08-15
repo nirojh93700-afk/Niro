@@ -23,6 +23,7 @@ import Heartbeat from "@/components/Heartbeat";
 import SalesBanner from "@/components/SalesBanner";
 import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
+import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 import { CATEGORIES } from "@/lib/products";
 
 const display = Playfair_Display({
@@ -148,6 +149,12 @@ export default async function RootLayout({ children }) {
   const sbEndOk = !sb.end || nowMs <= (new Date(sb.end).getTime() + 86400000); // inclut le jour de fin
   const showSales = Boolean(sb.enabled && sb.text && sbStartOk && sbEndOk);
 
+  // 🏖️ Mode vacances : bandeau d'annonce du délai (éteint par défaut ; s'allume
+  // et s'éteint tout seul aux dates réglées dans Gestion → Apparence).
+  const vac = vacationActive(settings.vacation);
+  const vacMsg = vac ? vacationMessage(vac) : "";
+  const vacGift = vac ? vacationGiftMessage(vac) : "";
+
   // Catégories du menu : seulement celles qui ont au moins un produit visible
   // (les produits masqués sont déjà exclus par getCatalog).
   let menuCategories = CATEGORIES;
@@ -222,6 +229,12 @@ export default async function RootLayout({ children }) {
                 ) : (
                   announce.text
                 )}
+              </div>
+            ) : null}
+            {vacMsg ? (
+              <div style={{ background: "#fdf6e8", borderBottom: "1px solid #e7d3a1", color: "#6b5516", textAlign: "center", padding: "9px 16px", fontSize: "0.9rem", lineHeight: 1.45 }}>
+                <span aria-hidden="true">🏖️</span> {vacMsg}
+                {vacGift ? <span style={{ display: "block", fontSize: "0.84rem", color: "#8a6d1f" }}>🎁 {vacGift}</span> : null}
               </div>
             ) : null}
             <CartProvider>

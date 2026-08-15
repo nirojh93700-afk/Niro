@@ -42,6 +42,18 @@ export async function POST(req) {
       end: str(body.salesBanner.end, 30),
     };
   }
+  // 🏖️ Mode vacances (annonce du délai + cadeau optionnel) — éteint par défaut.
+  if (body.vacation && typeof body.vacation === "object") {
+    patch.vacation = {
+      enabled: Boolean(body.vacation.enabled),
+      start: str(body.vacation.start, 30),
+      end: str(body.vacation.end, 30),
+      resume: str(body.vacation.resume, 30),
+      text: str(body.vacation.text, 300),
+      gift: Boolean(body.vacation.gift),
+      giftText: str(body.vacation.giftText, 300),
+    };
+  }
   if (body.hero && typeof body.hero === "object") {
     const h = body.hero;
     patch.hero = {

@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode } from "@/lib/stock";
 import { sendClientMail } from "@/lib/clientMail";
 import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
+import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -409,6 +410,16 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       } catch { /* ignore */ }
       const clientSection = (t) =>
         `<h3 style="font-family:Georgia,serif;font-weight:normal;font-size:15px;color:${BRAND.gold};border-bottom:1px solid #ece3d2;padding-bottom:6px;margin:22px 0 10px;">${t}</h3>`;
+      // 🏖️ Mode vacances : la cliente est prévenue du délai DANS sa confirmation
+      // (elle ne peut pas dire qu'elle ne savait pas). Rien si le mode est éteint.
+      let vacationBlock = "";
+      try {
+        const v = vacationActive((await getSettings())?.vacation);
+        if (v) {
+          const gift = vacationGiftMessage(v);
+          vacationBlock = `<p style="background:#fdf6e8;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;">🏖️ ${escapeHtml(vacationMessage(v))}${gift ? `<br><span style="color:#8a6d1f;">🎁 ${escapeHtml(gift)}</span>` : ""}</p>`;
+        }
+      } catch { /* jamais bloquant */ }
       const clientBody = `
           <p style="margin:0 0 12px;">Bonjour ${escapeHtml(customer.name || "")},</p>
           <p style="margin:0 0 12px;">Nous avons bien reçu votre commande chez <strong>Niv Création</strong> et nous vous en remercions chaleureusement. Chaque pièce étant personnalisée et gravée avec soin, nous la préparons avec le plus grand soin.</p>
@@ -424,6 +435,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
           </p>
 
           ${customFields ? `${clientSection("Votre personnalisation")}${customFields}` : ""}
+          ${vacationBlock}
           ${referralBlock}
 
           ${/retrait en main propre/i.test(shippingRateName)

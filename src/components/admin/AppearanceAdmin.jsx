@@ -229,6 +229,43 @@ export default function AppearanceAdmin({ adminKey }) {
           </div>
 
           <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+            <h3 style={{ margin: 0 }}>🏖️ Mode vacances (annonce du délai)</h3>
+            <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+              La boutique <strong>reste ouverte</strong> : les clientes commandent normalement, mais le délai est annoncé
+              <strong> partout</strong> (bandeau en haut du site, fiche produit, panier, et dans l&apos;e-mail de confirmation).
+              Avec des dates, tout s&apos;allume et s&apos;éteint <strong>tout seul</strong>. Tant que la case n&apos;est pas cochée, rien ne s&apos;affiche.
+            </p>
+            <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <input type="checkbox" style={{ width: "auto" }} checked={s.vacation?.enabled || false} onChange={(e) => set({ vacation: { ...s.vacation, enabled: e.target.checked } })} />
+              Activer le mode vacances
+            </label>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <label className="admin-field" style={{ flex: 1, minWidth: 140 }}>Début des congés
+                <input type="date" value={s.vacation?.start || ""} onChange={(e) => set({ vacation: { ...s.vacation, start: e.target.value } })} />
+              </label>
+              <label className="admin-field" style={{ flex: 1, minWidth: 140 }}>Fin des congés
+                <input type="date" value={s.vacation?.end || ""} onChange={(e) => set({ vacation: { ...s.vacation, end: e.target.value } })} />
+              </label>
+              <label className="admin-field" style={{ flex: 1, minWidth: 140 }}>Reprise des expéditions
+                <input type="date" value={s.vacation?.resume || ""} onChange={(e) => set({ vacation: { ...s.vacation, resume: e.target.value } })} />
+              </label>
+            </div>
+            <label className="admin-field">Message personnalisé (facultatif — sinon un message clair est écrit tout seul avec vos dates)
+              <input value={s.vacation?.text || ""} placeholder="Ex. Atelier en congés du 20 au 31 août — les expéditions reprennent le 1er septembre." onChange={(e) => set({ vacation: { ...s.vacation, text: e.target.value } })} />
+            </label>
+            <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <input type="checkbox" style={{ width: "auto" }} checked={s.vacation?.gift || false} onChange={(e) => set({ vacation: { ...s.vacation, gift: e.target.checked } })} />
+              🎁 Cadeau offert : annoncer un petit cadeau dans chaque commande passée pendant les congés
+            </label>
+            {s.vacation?.gift ? (
+              <label className="admin-field">Message du cadeau (facultatif)
+                <input value={s.vacation?.giftText || ""} placeholder="Ex. Un petit cadeau sera glissé dans votre colis pour vous remercier de votre patience." onChange={(e) => set({ vacation: { ...s.vacation, giftText: e.target.value } })} />
+              </label>
+            ) : null}
+            <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ vacation: s.vacation }, "Mode vacances enregistré")}>Enregistrer le mode vacances</button>
+          </div>
+
+          <div className="admin-block" style={{ display: "grid", gap: 10 }}>
             <h3 style={{ margin: 0 }}>🎁 Fenêtre de bienvenue (inscription + code promo)</h3>
             <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
               Une fenêtre s'affiche à l'arrivée des visiteurs : inscription newsletter + code promo. (Affichée une seule fois par personne.)

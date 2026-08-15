@@ -1,0 +1,213 @@
+<title>Mode vacances</title>
+<style>
+  :root {
+    --gold: #c9a24b; --gold-dark: #a98935; --cream: #fbf7ee; --cream-deep: #f3e8d3;
+    --ink: #241a0c; --ink-soft: #7a7268; --line: #e6dcc8;
+    --vac-bg: #fdf6e8; --vac-border: #e7d3a1; --vac-ink: #6b5516; --vac-soft: #8a6d1f;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--cream); color: var(--ink);
+    font: 16px/1.55 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    padding: 28px 16px 60px;
+  }
+  .page { max-width: 760px; margin: 0 auto; display: grid; gap: 26px; }
+  h1, h2, .serif { font-family: Georgia, "Times New Roman", serif; font-weight: normal; }
+  h1 { font-size: 1.9rem; text-wrap: balance; }
+  .lead { color: var(--ink-soft); max-width: 62ch; }
+
+  .off-note {
+    background: #fff; border: 2px dashed var(--gold); border-radius: 14px;
+    padding: 14px 18px; font-size: 0.95rem;
+  }
+  .off-note strong { color: var(--gold-dark); }
+
+  .scene { display: grid; gap: 10px; }
+  .scene-label {
+    display: inline-flex; align-items: center; gap: 8px; justify-self: start;
+    background: var(--ink); color: #e2c67e; border-radius: 999px;
+    padding: 4px 14px; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .frame {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 10px 24px rgba(36, 26, 12, 0.07);
+  }
+  .frame .note { padding: 10px 16px; font-size: 0.82rem; color: var(--ink-soft); border-top: 1px solid var(--line); background: var(--cream); }
+
+  /* — Scène 1 : bandeau site (styles EXACTS du vrai site) — */
+  .vac-banner {
+    background: var(--vac-bg); border-bottom: 1px solid var(--vac-border);
+    color: var(--vac-ink); text-align: center; padding: 9px 16px;
+    font-size: 0.9rem; line-height: 1.45;
+  }
+  .vac-banner .gift { display: block; font-size: 0.84rem; color: var(--vac-soft); }
+  .fake-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px; border-bottom: 1px solid var(--line); background: #fff;
+  }
+  .fake-logo { font-family: Georgia, serif; font-size: 1.15rem; letter-spacing: 0.06em; }
+  .fake-logo span { color: var(--gold-dark); }
+  .fake-menu { display: flex; gap: 16px; font-size: 0.82rem; color: var(--ink-soft); }
+
+  /* — Encart vacances (fiche + panier), styles EXACTS du composant — */
+  .vac-note {
+    background: var(--vac-bg); border: 1px solid var(--vac-border); border-radius: 10px;
+    padding: 8px 12px; margin: 10px 0; font-size: 0.84rem; color: var(--vac-ink); line-height: 1.45;
+  }
+  .vac-note .gift { display: block; margin-top: 4px; color: var(--vac-soft); font-size: 0.8rem; }
+
+  .mock { padding: 18px 22px; }
+  .price { font-size: 1.35rem; font-weight: 700; }
+  .price small { color: var(--ink-soft); font-weight: 400; font-size: 0.85rem; }
+  .nfois { font-size: 0.85rem; color: var(--ink-soft); margin-top: 6px; }
+  .buyrow { display: flex; gap: 10px; margin-top: 12px; }
+  .qty { display: flex; align-items: center; gap: 14px; border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; }
+  .btn-gold {
+    flex: 1; text-align: center; background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+    color: #fff; border-radius: 999px; padding: 11px 18px; font-weight: 700; border: 0; font-size: 1rem;
+  }
+  .sumrow { display: flex; justify-content: space-between; padding: 7px 0; font-size: 0.95rem; }
+  .sumrow.total { border-top: 1px solid var(--line); font-weight: 700; margin-top: 4px; padding-top: 12px; }
+
+  /* — Scène 4 : e-mail — */
+  .mail { background: var(--cream); padding: 22px; }
+  .mail-card { background: #fff; border-radius: 14px; max-width: 480px; margin: 0 auto; overflow: hidden; border: 1px solid var(--line); }
+  .mail-head { background: var(--ink); color: #e2c67e; text-align: center; padding: 16px; font-family: Georgia, serif; letter-spacing: 0.05em; }
+  .mail-body { padding: 18px 20px; font-size: 0.9rem; }
+  .mail-vac { background: var(--vac-bg); border: 1px solid var(--vac-border); border-radius: 10px; padding: 12px 14px; margin-top: 14px; }
+  .mail-vac .gift { color: var(--vac-soft); }
+
+  /* — Scène 5 : réglage admin — */
+  .admin { padding: 18px 22px; display: grid; gap: 12px; }
+  .admin h3 { font-size: 1.05rem; }
+  .admin p { font-size: 0.85rem; color: var(--ink-soft); max-width: 60ch; }
+  .check { display: flex; align-items: center; gap: 9px; font-size: 0.95rem; }
+  .box { width: 19px; height: 19px; border: 2px solid var(--gold-dark); border-radius: 4px; display: inline-block; position: relative; flex-shrink: 0; }
+  .box.on { background: var(--gold-dark); }
+  .box.on::after { content: "✓"; color: #fff; position: absolute; inset: 0; text-align: center; line-height: 17px; font-size: 13px; }
+  .dates { display: flex; gap: 10px; flex-wrap: wrap; }
+  .field { flex: 1; min-width: 150px; display: grid; gap: 4px; font-size: 0.8rem; color: var(--ink-soft); }
+  .field .input { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; background: #fff; color: var(--ink); font-size: 0.9rem; }
+  .btn-save { justify-self: start; background: linear-gradient(180deg, var(--gold), var(--gold-dark)); color: #fff; border-radius: 999px; padding: 9px 22px; font-weight: 700; font-size: 0.9rem; }
+
+  .footer-note { font-size: 0.9rem; color: var(--ink-soft); max-width: 62ch; }
+  .footer-note strong { color: var(--ink); }
+</style>
+
+<div class="page">
+  <header>
+    <h1>Mode vacances</h1>
+    <p class="lead">La boutique reste ouverte et continue de vendre : le délai est simplement annoncé partout, pour que chaque cliente commande en connaissance de cause. Exemple ci-dessous avec des congés du 20 au 31 août.</p>
+  </header>
+
+  <div class="off-note">
+    <strong>Actuellement : ÉTEINT.</strong> Rien de tout cela ne s'affiche sur le site aujourd'hui.
+    Tout est prêt et s'allumera uniquement quand tu diras « active le mode vacances » (ou en cochant la case dans Gestion → Apparence).
+    Avec les dates, il s'éteint <strong>tout seul</strong> au retour.
+  </div>
+
+  <!-- Scène 1 -->
+  <section class="scene">
+    <span class="scene-label">1 · En haut de toutes les pages du site</span>
+    <div class="frame">
+      <div class="vac-banner">
+        🏖️ Notre atelier est en congés du 20 au 31 août — vous pouvez commander normalement, chaque création sera préparée avec soin dès notre retour. Les expéditions reprennent le 1er septembre.
+        <span class="gift">🎁 Pour vous remercier de votre patience, un petit cadeau sera glissé dans chaque commande passée pendant nos congés.</span>
+      </div>
+      <div class="fake-header">
+        <div class="fake-logo">NiV <span>CRÉATION</span></div>
+        <nav class="fake-menu"><span>Bijoux</span><span>Mariage</span><span>Cristal 3D</span><span>Contact</span></nav>
+      </div>
+      <div class="note">Le bandeau se place au-dessus du menu, dans les tons crème et or de la marque — visible sans être agressif.</div>
+    </div>
+  </section>
+
+  <!-- Scène 2 -->
+  <section class="scene">
+    <span class="scene-label">2 · Sur chaque fiche produit</span>
+    <div class="frame">
+      <div class="mock">
+        <div class="serif" style="font-size:1.25rem;">Collier cœur serti de zircon</div>
+        <div class="price" style="margin-top:6px;">22,41 € <small><s>24,90 €</s> · −10 %</small></div>
+        <p class="nfois">💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal ou 3× avec Klarna.</p>
+        <div class="vac-note">
+          🏖️ Notre atelier est en congés du 20 au 31 août — vous pouvez commander normalement, chaque création sera préparée avec soin dès notre retour. Les expéditions reprennent le 1er septembre.
+          <span class="gift">🎁 Pour vous remercier de votre patience, un petit cadeau sera glissé dans chaque commande passée pendant nos congés.</span>
+        </div>
+        <div class="buyrow">
+          <div class="qty"><span>−</span><strong>1</strong><span>+</span></div>
+          <button class="btn-gold" type="button">Ajouter au panier</button>
+        </div>
+      </div>
+      <div class="note">Juste au-dessus du bouton d'achat : la cliente voit le délai <em>avant</em> d'ajouter au panier — impossible de le rater.</div>
+    </div>
+  </section>
+
+  <!-- Scène 3 -->
+  <section class="scene">
+    <span class="scene-label">3 · Sur la page panier</span>
+    <div class="frame">
+      <div class="mock">
+        <div class="serif" style="font-size:1.15rem;">Récapitulatif</div>
+        <div class="vac-note">
+          🏖️ Notre atelier est en congés du 20 au 31 août — vous pouvez commander normalement, chaque création sera préparée avec soin dès notre retour. Les expéditions reprennent le 1er septembre.
+          <span class="gift">🎁 Pour vous remercier de votre patience, un petit cadeau sera glissé dans chaque commande passée pendant nos congés.</span>
+        </div>
+        <div class="sumrow"><span>Sous-total</span><span>24,90 €</span></div>
+        <div class="sumrow"><span>Livraison</span><span>Calculée au paiement</span></div>
+        <div class="sumrow total"><span>Total</span><span>24,90 €</span></div>
+        <button class="btn-gold" type="button" style="width:100%;margin-top:12px;">Procéder au paiement</button>
+      </div>
+      <div class="note">Dernier rappel avant le paiement — c'est la protection contre « je ne savais pas » (important : produits personnalisés jamais remboursés).</div>
+    </div>
+  </section>
+
+  <!-- Scène 4 -->
+  <section class="scene">
+    <span class="scene-label">4 · Dans l'e-mail de confirmation</span>
+    <div class="frame">
+      <div class="mail">
+        <div class="mail-card">
+          <div class="mail-head">NiV CRÉATION</div>
+          <div class="mail-body">
+            <p><strong>Merci pour votre commande</strong></p>
+            <p style="color:var(--ink-soft);margin-top:6px;">Référence : <strong>0IR8QKHS</strong> · Total payé : <strong style="color:var(--gold-dark);">49,69 €</strong></p>
+            <div class="mail-vac">
+              🏖️ Notre atelier est en congés du 20 au 31 août — vous pouvez commander normalement, chaque création sera préparée avec soin dès notre retour. Les expéditions reprennent le 1er septembre.<br>
+              <span class="gift">🎁 Pour vous remercier de votre patience, un petit cadeau sera glissé dans votre colis.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Le délai est écrit noir sur blanc dans sa confirmation : la cliente a une trace, toi aussi.</div>
+    </div>
+  </section>
+
+  <!-- Scène 5 -->
+  <section class="scene">
+    <span class="scene-label">5 · Ton réglage — Gestion → Apparence</span>
+    <div class="frame">
+      <div class="admin">
+        <h3>🏖️ Mode vacances (annonce du délai)</h3>
+        <p>La boutique <strong>reste ouverte</strong> : les clientes commandent normalement, mais le délai est annoncé partout. Avec des dates, tout s'allume et s'éteint tout seul.</p>
+        <label class="check"><span class="box on"></span> Activer le mode vacances</label>
+        <div class="dates">
+          <div class="field">Début des congés <span class="input">20/08/2026</span></div>
+          <div class="field">Fin des congés <span class="input">31/08/2026</span></div>
+          <div class="field">Reprise des expéditions <span class="input">01/09/2026</span></div>
+        </div>
+        <div class="field">Message personnalisé (facultatif — sinon le message est écrit tout seul avec tes dates)
+          <span class="input" style="color:var(--ink-soft);">Ex. Atelier en congés du 20 au 31 août…</span>
+        </div>
+        <label class="check"><span class="box on"></span> 🎁 Cadeau offert : annoncer un petit cadeau dans chaque commande passée pendant les congés</label>
+        <span class="btn-save">Enregistrer le mode vacances</span>
+      </div>
+      <div class="note">Trois dates, deux cases — c'est tout. Tu peux aussi me donner tes dates et je règle tout à ta place.</div>
+    </div>
+  </section>
+
+  <p class="footer-note">
+    <strong>Pour l'activer le moment venu :</strong> dis-moi simplement « active le mode vacances du … au … » — ou coche la case toi-même dans Gestion → Apparence.
+    À la date de fin, tout disparaît automatiquement, même si tu n'es pas encore rentrée.
+  </p>
+</div>

@@ -1163,6 +1163,11 @@ export async function getSettings() {
     announce: { enabled: false, text: "", link: "", ...(s.announce || {}) },
     // Bandeau Soldes animé (dates de début/fin réglables ; s'arrête tout seul).
     salesBanner: { enabled: false, text: "", start: "", end: "", ...(s.salesBanner || {}) },
+    // 🏖️ Mode vacances : ÉTEINT par défaut. Quand activé (+ dates), le site
+    // annonce le délai partout (bandeau, fiche, panier, e-mail de confirmation)
+    // et s'éteint tout seul à la date de fin. `gift` = cadeau offert pendant
+    // les congés (message en plus). Voir src/lib/vacation.js.
+    vacation: { enabled: false, start: "", end: "", resume: "", text: "", gift: false, giftText: "", ...(s.vacation || {}) },
     hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },
     categories: Array.isArray(s.categories) ? s.categories : [], // 3 cartes [{label,sub,image}]
     atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },

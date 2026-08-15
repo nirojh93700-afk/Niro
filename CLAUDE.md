@@ -532,6 +532,22 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   l'affichage** (seules les variantes suivies numériquement sont contrôlées). Important vu la règle
   « produit personnalisé jamais remboursé » : on ne veut pas encaisser ce qu'on ne peut pas fabriquer.
 
+## 🏖️ MODE VACANCES — CONSTRUIT ET ÉTEINT (15/08/2026, à activer SEULEMENT sur demande)
+> La gérante part bientôt en vacances. **Tout le mécanisme est en place mais ÉTEINT**
+> (`settings.vacation.enabled = false` par défaut). **NE JAMAIS l'activer sans sa demande explicite**
+> (« active le mode vacances du … au … »). Maquette validée : `docs/maquettes/mode-vacances.html`
+> (artifact https://claude.ai/code/artifact/d84e78d4-0f30-440f-b6d5-9d4a52cea804).
+- **Principe** : la boutique RESTE OUVERTE (jamais fermée — ventes + référencement préservés) ; le délai
+  est annoncé partout : bandeau haut de site (`layout.jsx`), encart fiche produit + panier
+  (`VacationNotice.jsx`, alimenté par `/api/shipping-config` → `vacation: null` si éteint), et
+  paragraphe dans l'e-mail de confirmation cliente (webhook Stripe). Logique : `src/lib/vacation.js`.
+- **Réglage** : Gestion → Apparence → « 🏖️ Mode vacances » — case Activer + 3 dates (début, fin,
+  reprise des expéditions) + message personnalisé (sinon message auto avec les dates) + option
+  **🎁 cadeau** (« un petit cadeau glissé dans chaque commande passée pendant les congés »).
+  Avec les dates, s'allume/s'éteint TOUT SEUL (jour de fin inclus).
+- **Pour activer** : cocher dans l'admin OU régler `settings.vacation` (enabled + dates). Vérifié :
+  éteint → `vacation:null`, rien nulle part ; le build passe ; rendu réel testé (fiche + panier).
+
 ## 14. NOUVEAU PRODUIT — GOBELET ISOTHERME 40 oz À GRAVER (en préparation, 18/07/2026)
 > Nouvelle gamme : grand gobelet isotherme 40 oz (1,1 L) type « Stanley » (acier inox double paroi, anse + paille), **gravure laser personnalisée**. Maquette validée en cours, **PAS ENCORE EN LIGNE** (attend « applique »).
 - **Titre validé** : « Gobelet isotherme 40 oz à graver ». Catégorie envisagée : Boutique / Cadeaux (à confirmer).
