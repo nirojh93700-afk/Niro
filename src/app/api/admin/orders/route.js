@@ -50,6 +50,43 @@ export async function POST(req) {
     return Response.json({ ok: Boolean(r?.ok), emailed: Boolean(r?.ok), error: r?.error });
   }
 
+  // Compléter une commande DÉJÀ passée avec le détail du prix (sous-total avant
+  // remise, remise, code promo, photos des articles) en le relisant chez Stripe.
+  // Sert aux commandes enregistrées AVANT l'amélioration « Détail du prix » —
+  // les nouvelles commandes ont déjà tout dès le paiement.
+  if (id && body?.action === "syncPricing") {
+    const order = await getSiteOrder(id);
+    if (!order?.sessionId) return Response.json({ ok: false, error: "Commande sans référence de paiement." }, { status: 400 });
+    const secret = process.env.STRIPE_SECRET_KEY;
+    if (!secret) return Response.json({ ok: false, error: "Clé Stripe absente." }, { status: 500 });
+    try {
+      const { default: Stripe } = await import("stripe");
+      const stripe = new Stripe(secret);
+      const session = await stripe.checkout.sessions.retrieve(order.sessionId, {
+        expand: ["line_items.data.price.product"],
+      });
+      const patch = {
+        subtotal: (session.amount_subtotal || 0) / 100,
+        discount: (session.total_details?.amount_discount || 0) / 100,
+        promoCode: order.promoCode || session.metadata?.promoCode || "",
+        cagnotteUsed: Number(order.cagnotteUsed || session.metadata?.cagnotteAmount || 0) || 0,
+        items: (session.line_items?.data || []).map((li, i) => ({
+          ...(order.items?.[i] || {}),
+          name: li.price?.product?.name || li.description || order.items?.[i]?.name || "",
+          image: (li.price?.product?.images || [])[0] || order.items?.[i]?.image || "",
+          quantity: li.quantity,
+          unitPrice: (li.price?.unit_amount || 0) / 100,
+          subtotal: (li.amount_subtotal || 0) / 100,
+          total: (li.amount_total || 0) / 100,
+        })),
+      };
+      const ok = await updateSiteOrder(id, patch);
+      return Response.json({ ok, patch: { subtotal: patch.subtotal, discount: patch.discount, promoCode: patch.promoCode } });
+    } catch (e) {
+      return Response.json({ ok: false, error: e.message }, { status: 500 });
+    }
+  }
+
   if (!id || !["a_preparer", "en_gravure", "expediee", "livree", "annulee", "remise_main_propre"].includes(status)) {
     return Response.json({ error: "Paramètres invalides." }, { status: 400 });
   }
