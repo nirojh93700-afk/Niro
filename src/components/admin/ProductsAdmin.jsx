@@ -22,7 +22,7 @@ function groupByCategory(products, cats) {
 }
 
 // Édition / création / suppression des produits depuis l'admin.
-export default function ProductsAdmin({ adminKey, products, onReload, stockBySlug = {}, onStockChange, onStockSave, stockSaved }) {
+export default function ProductsAdmin({ adminKey, products, onReload, stockBySlug = {}, onStockChange, onStockSave, stockSaved, optionRows = [] }) {
   const [openSlug, setOpenSlug] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [msg, setMsg] = useState("");
@@ -178,6 +178,37 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
               )}
             </div>
           ))}
+
+          {/* Accessoires vendus en OPTION sur les fiches de cette catégorie
+             (ex. socle lumineux LED des cristaux) : ce sont de vrais articles en
+             stock, mais pas des produits du catalogue. On les range avec leur
+             famille, à la fin du groupe. */}
+          {optionRows.filter((r) => r.category === group.slug).length > 0 && (
+            <div className="admin-block" style={{ borderLeft: "3px solid var(--gold, #c9a24b)" }}>
+              <h4 style={{ margin: "0 0 4px", display: "flex", alignItems: "center", gap: 8 }}>
+                📦 <span>Accessoires en option — stock</span>
+              </h4>
+              <p style={{ margin: "0 0 10px", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+                Vendus en option sur les fiches ci-dessus. Vide = « non suivi » (vente illimitée).
+              </p>
+              {optionRows.filter((r) => r.category === group.slug).map((r) => (
+                <div className="admin-row" key={r.stockId}>
+                  {r.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={r.image} alt="" style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0, marginRight: 8 }} />
+                  )}
+                  <span className="admin-variant">{r.variantTitle}</span>
+                  <input
+                    className={`admin-stock ${r.stock === 0 ? "out" : ""}`}
+                    type="number" min="0" placeholder="—" value={r.stock ?? ""}
+                    onChange={(e) => onStockChange?.(r.stockId, e.target.value === "" ? "" : Number(e.target.value))}
+                    onBlur={(e) => onStockSave?.(r.stockId, e.target.value)}
+                  />
+                  <span className="admin-saved">{stockSaved === r.stockId ? "✓" : ""}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </>
