@@ -244,6 +244,12 @@ export async function POST(req) {
         // Photo du produit : permet de reconnaître la commande d'un coup d'œil
         // depuis le téléphone, sans ouvrir la gestion.
         const photo = (li.price?.product?.images || [])[0] || "";
+        // Couleur / modèle commandé : c'est toujours le 1er élément des détails
+        // (le titre de la variante). On le met en évidence pour ne pas graver la
+        // mauvaise version, et on ne le répète pas dans la ligne de détails.
+        const premier = details.split(" — ")[0].trim();
+        const couleur = premier && !premier.startsWith("Personnalisation") && !premier.startsWith("Emballage") ? premier : "";
+        const reste = couleur && details.startsWith(couleur) ? details.slice(couleur.length).replace(/^\s*—\s*/, "") : details;
         const photoHtml = photo
           ? `<img src="${escapeHtml(photo)}" alt="" width="54" height="54" style="width:54px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #e7d3a1;display:block;">`
           : "";
@@ -252,8 +258,8 @@ export async function POST(req) {
         return `<tr>
           <td style="padding:8px 0 8px 8px;border-bottom:1px solid #eee;width:62px;">${photoHtml}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">
-            <strong>${escapeHtml(name)}</strong><br>
-            <span style="color:#666;font-size:13px;">${escapeHtml(details)}</span>
+            <strong>${escapeHtml(name)}</strong>${couleur ? ` <span style="display:inline-block;padding:1px 9px;border-radius:999px;background:#f7ecd4;border:1px solid #e0c88a;color:#8a6d1f;font-size:12px;font-weight:bold;">${escapeHtml(couleur)}</span>` : ""}<br>
+            <span style="color:#666;font-size:13px;">${escapeHtml(reste)}</span>
           </td>
           <td style="padding:8px;border-bottom:1px solid #eee;text-align:center;">${li.quantity}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap;">${euro(li.amount_total, currency)}</td>

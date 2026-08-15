@@ -496,6 +496,22 @@ export default function GestionPage() {
     return s.previewImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
   };
 
+  // Couleur / modèle commandé (Argent, Doré, Moyen…). Il était noyé au début de
+  // la ligne de détails : on le sort en évidence pour ne pas graver la mauvaise
+  // version. Repli sur le 1er élément des détails (toujours le nom de l'option).
+  const couleurArticle = (spec, it, index) => {
+    const s = Array.isArray(spec) ? (spec.find((x) => x && x.slug === it.slug) || spec[index]) : null;
+    if (s?.variantTitle) return s.variantTitle;
+    const premier = String(it.details || "").split(" — ")[0].trim();
+    return premier && !premier.startsWith("Personnalisation") && !premier.startsWith("Emballage") ? premier : "";
+  };
+
+  // Détails SANS la couleur (déjà affichée à part) pour éviter de la répéter.
+  const detailsSansCouleur = (it, couleur) => {
+    const d = String(it.details || "");
+    return couleur && d.startsWith(couleur) ? d.slice(couleur.length).replace(/^\s*—\s*/, "") : d;
+  };
+
   // Stock prêt à afficher PAR PRODUIT (pour la page fusionnée Produits & Stock).
   // Reprend EXACTEMENT la logique de l'onglet Stock (un champ par stockId, libellé
   // commun pour les variantes partagées) → aucun changement de comportement.
@@ -1090,6 +1106,8 @@ export default function GestionPage() {
                   {(o.items || []).map((it, i) => {
                     const photo = it.image || photoProduit(it.slug);
                     const apercu = apercuAtelier(o.spec, it.slug, i);
+                    const couleur = couleurArticle(o.spec, it, i);
+                    const reste = detailsSansCouleur(it, couleur);
                     return (
                       <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderBottom: i < (o.items.length - 1) ? "1px solid #f2ece0" : "none" }}>
                         {photo ? (
@@ -1104,7 +1122,12 @@ export default function GestionPage() {
                         )}
                         <span style={{ flex: 1, minWidth: 0 }}>
                           <strong>{it.quantity}× {it.name}</strong>
-                          {it.details ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{it.details}</span> : null}
+                          {couleur && (
+                            <span style={{ display: "inline-block", marginLeft: 8, padding: "1px 9px", borderRadius: 999, background: "#f7ecd4", border: "1px solid #e0c88a", color: "#8a6d1f", fontSize: "0.8rem", fontWeight: 700, verticalAlign: "middle" }}>
+                              {couleur}
+                            </span>
+                          )}
+                          {reste ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{reste}</span> : null}
                         </span>
                         <span style={{ whiteSpace: "nowrap", fontWeight: 600 }}>{formatEuro(it.total)}</span>
                       </li>
