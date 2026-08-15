@@ -241,7 +241,16 @@ export async function POST(req) {
       .map((li) => {
         const name = li.price?.product?.name || li.description || "Article";
         const details = li.price?.product?.description || "";
+        // Photo du produit : permet de reconnaître la commande d'un coup d'œil
+        // depuis le téléphone, sans ouvrir la gestion.
+        const photo = (li.price?.product?.images || [])[0] || "";
+        const photoHtml = photo
+          ? `<img src="${escapeHtml(photo)}" alt="" width="54" height="54" style="width:54px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #e7d3a1;display:block;">`
+          : "";
+        // La cellule photo est TOUJOURS présente (vide si pas de photo), sinon
+        // les colonnes du tableau se décalent par rapport à l'en-tête.
         return `<tr>
+          <td style="padding:8px 0 8px 8px;border-bottom:1px solid #eee;width:62px;">${photoHtml}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">
             <strong>${escapeHtml(name)}</strong><br>
             <span style="color:#666;font-size:13px;">${escapeHtml(details)}</span>
@@ -347,7 +356,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="text-align:left;color:#998;font-size:12px;">
-              <th style="padding:8px;">Produit</th>
+              <th style="padding:8px;" colspan="2">Produit</th>
               <th style="padding:8px;text-align:center;">Qté</th>
               <th style="padding:8px;text-align:right;">Total</th>
             </tr>
@@ -482,6 +491,12 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       surMesure: Boolean(quote),
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
+      // Détail de la vente (pour l'encadré « Détail du prix » dans l'admin) :
+      // sous-total AVANT remise, remise appliquée, code utilisé, cagnotte.
+      subtotal: (session.amount_subtotal || 0) / 100,
+      discount: (session.total_details?.amount_discount || 0) / 100,
+      promoCode: session.metadata?.promoCode || "",
+      cagnotteUsed: Number(session.metadata?.cagnotteAmount || 0) || 0,
       currency,
       customerName: customer.name || "",
       customerEmail: customer.email || "",
@@ -496,8 +511,11 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         name: li.price?.product?.name || li.description || "",
         details: li.price?.product?.description || "",
         slug: li.price?.product?.metadata?.slug || "", // pour le lien avis direct
+        image: (li.price?.product?.images || [])[0] || "", // vignette dans l'admin
         quantity: li.quantity,
-        total: (li.amount_total || 0) / 100,
+        unitPrice: (li.price?.unit_amount || 0) / 100, // prix unitaire avant remise
+        subtotal: (li.amount_subtotal || 0) / 100,     // ligne avant remise
+        total: (li.amount_total || 0) / 100,           // ligne après remise
       })),
       stock: event.data.object?.metadata?.stock || "",
     });

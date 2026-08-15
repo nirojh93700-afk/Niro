@@ -482,6 +482,20 @@ export default function GestionPage() {
   const imgBySlug = {};
   editable.forEach((e) => { imgBySlug[e.slug] = (e.overrideImages && e.overrideImages[0]) || e.image || (e.images && e.images[0]) || ""; });
 
+  // Photo d'un produit commandé. Les commandes récentes enregistrent la photo
+  // avec la ligne ; pour les ANCIENNES, on la retrouve dans le catalogue grâce à
+  // l'identifiant du produit (aucune donnée à reprendre).
+  const photoProduit = (slug) => (slug ? imgBySlug[slug] || "" : "");
+
+  // Aperçu de ce que la cliente a demandé (photo qu'elle a envoyée ou rendu de
+  // la gravure), quand il existe — cristaux, gobelet, gravure photo…
+  const apercuAtelier = (spec, slug, index) => {
+    if (!Array.isArray(spec) || !spec.length) return "";
+    const s = spec.find((x) => x && x.slug === slug) || spec[index] || null;
+    if (!s) return "";
+    return s.previewImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
+  };
+
   // Stock prêt à afficher PAR PRODUIT (pour la page fusionnée Produits & Stock).
   // Reprend EXACTEMENT la logique de l'onglet Stock (un champ par stockId, libellé
   // commun pour les variantes partagées) → aucun changement de comportement.
@@ -1069,27 +1083,70 @@ export default function GestionPage() {
                     {o.demande ? `\n${o.demande}` : "\nVoir le détail des articles ci-dessous."}
                   </div>
                 ) : null}
-                <ul style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: "0.9rem" }}>
-                  {(o.items || []).map((it, i) => (
-                    <li key={i}>{it.quantity}× {it.name}{it.details ? ` — ${it.details}` : ""} ({formatEuro(it.total)})</li>
-                  ))}
+                {/* Articles avec vignette : photo du produit (enregistrée sur la
+                    commande, sinon retrouvée dans le catalogue par son identifiant)
+                    et, si la cliente a envoyé une photo/un aperçu, la vignette atelier. */}
+                <ul style={{ margin: "0 0 8px", padding: 0, listStyle: "none", fontSize: "0.9rem" }}>
+                  {(o.items || []).map((it, i) => {
+                    const photo = it.image || photoProduit(it.slug);
+                    const apercu = apercuAtelier(o.spec, it.slug, i);
+                    return (
+                      <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderBottom: i < (o.items.length - 1) ? "1px solid #f2ece0" : "none" }}>
+                        {photo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={photo} alt="" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: "1px solid #e7d3a1", flexShrink: 0 }} />
+                        ) : (
+                          <span style={{ width: 54, height: 54, borderRadius: 8, background: "#f3ece0", border: "1px solid #e7d3a1", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🎁</span>
+                        )}
+                        {apercu && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={apercu} alt="Aperçu de la gravure" title="Ce que la cliente a demandé" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: "2px solid var(--gold-dark, #a98935)", flexShrink: 0, background: "#fff" }} />
+                        )}
+                        <span style={{ flex: 1, minWidth: 0 }}>
+                          <strong>{it.quantity}× {it.name}</strong>
+                          {it.details ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{it.details}</span> : null}
+                        </span>
+                        <span style={{ whiteSpace: "nowrap", fontWeight: 600 }}>{formatEuro(it.total)}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
                 {(() => {
-                  const itemsSubtotal = (o.items || []).reduce((s, it) => s + (Number(it.total) || 0), 0);
-                  // Livraison : prix enregistré si dispo, sinon calculée (total − produits).
-                  const shipping = o.shippingPrice != null ? Number(o.shippingPrice) : Math.max(0, (Number(o.total) || 0) - itemsSubtotal);
+                  const total = Number(o.total) || 0;
+                  const remise = Number(o.discount) || 0;
+                  const cagnotte = Number(o.cagnotteUsed) || 0;
+                  // Sous-total AVANT remise : enregistré sur les commandes récentes,
+                  // sinon reconstitué depuis les lignes (anciennes commandes).
+                  const lignes = (o.items || []).reduce((s, it) => s + (Number(it.subtotal ?? it.total) || 0), 0);
+                  const sousTotal = Number(o.subtotal) || lignes;
+                  const shipping = o.shippingPrice != null ? Number(o.shippingPrice) : Math.max(0, total - lignes);
+                  const ligne = (libelle, valeur, style = {}) => (
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "2px 0", gap: 12, ...style }}>
+                      <span>{libelle}</span><span style={{ whiteSpace: "nowrap" }}>{valeur}</span>
+                    </div>
+                  );
                   return (
                     <div style={{ margin: "0 0 10px", padding: "8px 12px", background: "#faf6ee", border: "1px solid #ece0c4", borderRadius: 8, fontSize: "0.88rem" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", padding: "2px 0" }}>
-                        <span>Sous-total produits</span><span>{formatEuro(itemsSubtotal)}</span>
-                      </div>
-                      <div style={{ display: "flex", justifyContent: "space-between", padding: "2px 0" }}>
-                        <span>Livraison{o.shippingMethod ? ` — ${o.shippingMethod}` : ""}</span>
-                        <span>{shipping > 0 ? formatEuro(shipping) : "Offerte"}</span>
-                      </div>
-                      <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 0 0", marginTop: 4, borderTop: "1px solid #ece0c4", fontWeight: 700, color: "var(--gold-dark)" }}>
-                        <span>Total payé</span><span>{formatEuro(o.total)}</span>
-                      </div>
+                      <div style={{ fontWeight: 700, color: "var(--gold-dark)", marginBottom: 4 }}>Détail du prix</div>
+                      {ligne("Sous-total produits (avant remise)", formatEuro(sousTotal))}
+                      {remise > 0 && ligne(
+                        `Remise${o.promoCode ? ` — code ${o.promoCode}` : ""}`,
+                        `− ${formatEuro(remise)}`,
+                        { color: "#b4452f" }
+                      )}
+                      {cagnotte > 0 && ligne("Cagnotte fidélité utilisée", `− ${formatEuro(cagnotte)}`, { color: "#b4452f" })}
+                      {ligne(
+                        `Livraison${o.shippingMethod ? ` — ${o.shippingMethod}` : ""}`,
+                        shipping > 0 ? formatEuro(shipping) : "Offerte"
+                      )}
+                      {ligne("Total payé", formatEuro(total), {
+                        padding: "4px 0 0", marginTop: 4, borderTop: "1px solid #ece0c4", fontWeight: 700, color: "var(--gold-dark)",
+                      })}
+                      {remise > 0 && (
+                        <div style={{ marginTop: 4, fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+                          Cette remise vous a coûté {formatEuro(remise)}.
+                        </div>
+                      )}
                     </div>
                   );
                 })()}
