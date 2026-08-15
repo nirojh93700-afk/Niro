@@ -481,6 +481,9 @@ export default function GestionPage() {
   // Photo par produit (pour l'onglet Stock).
   const imgBySlug = {};
   editable.forEach((e) => { imgBySlug[e.slug] = (e.overrideImages && e.overrideImages[0]) || e.image || (e.images && e.images[0]) || ""; });
+  // Les options suivies en stock (socles LED) ne sont pas des produits du
+  // catalogue : leur photo est portée par la ligne elle-même.
+  rows.forEach((r) => { if (r.image && !imgBySlug[r.productSlug]) imgBySlug[r.productSlug] = r.image; });
 
   // Photo d'un produit commandé. Les commandes récentes enregistrent la photo
   // avec la ligne ; pour les ANCIENNES, on la retrouve dans le catalogue grâce à
@@ -1535,6 +1538,10 @@ export default function GestionPage() {
                     }
                     return (
                       <div className="admin-row" key={k}>
+                        {r.image && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={r.image} alt="" style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0, marginRight: 8 }} />
+                        )}
                         <span className="admin-variant">{label}</span>
                         <input className={`admin-stock ${typeof r.stock === "number" && r.stock === 0 ? "out" : ""}`}
                           type="number" min="0" placeholder="—" value={r.stock ?? ""}
