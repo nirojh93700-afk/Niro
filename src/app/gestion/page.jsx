@@ -1454,15 +1454,47 @@ export default function GestionPage() {
 
         {/* ---------------- PRODUITS ---------------- */}
         {tab === "produits" && (
-          <ProductsAdmin
-            adminKey={key}
-            products={editable}
-            onReload={() => load(key)}
-            stockBySlug={stockBySlug}
-            onStockChange={updateRow}
-            onStockSave={saveStock}
-            stockSaved={saved}
-          />
+          <>
+            {/* Options vendues en accessoire (socles LED) : ce sont de vrais
+               articles en stock, mais pas des produits du catalogue — sans ce
+               bloc, ils n'apparaîtraient sur AUCUNE page. */}
+            {rows.some((r) => r.isOption) && (
+              <div className="admin-block" style={{ marginBottom: 18 }}>
+                <h3 style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 0 }}>
+                  📦 <span>Options &amp; accessoires <span className="admin-cat">stock</span></span>
+                </h3>
+                <p style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+                  Articles vendus en option sur une fiche produit (ex. socle lumineux LED des cristaux).
+                  Vide = « non suivi » (vente illimitée). Le stock baisse à chaque vente.
+                </p>
+                {rows.filter((r) => r.isOption).map((r) => (
+                  <div className="admin-row" key={r.stockId}>
+                    {r.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={r.image} alt="" style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0, marginRight: 8 }} />
+                    )}
+                    <span className="admin-variant">{r.variantTitle}</span>
+                    <input
+                      className={`admin-stock ${r.stock === 0 ? "out" : ""}`}
+                      type="number" min="0" placeholder="—" value={r.stock ?? ""}
+                      onChange={(e) => updateRow(r.stockId, e.target.value === "" ? "" : Number(e.target.value))}
+                      onBlur={(e) => saveStock(r.stockId, e.target.value)}
+                    />
+                    <span className="admin-saved">{saved === r.stockId ? "✓" : ""}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <ProductsAdmin
+              adminKey={key}
+              products={editable}
+              onReload={() => load(key)}
+              stockBySlug={stockBySlug}
+              onStockChange={updateRow}
+              onStockSave={saveStock}
+              stockSaved={saved}
+            />
+          </>
         )}
 
         {/* ---------------- CATÉGORIES & ORDRE ---------------- */}
