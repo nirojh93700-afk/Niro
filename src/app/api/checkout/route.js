@@ -173,8 +173,12 @@ export async function POST(req) {
     if (Array.isArray(item.perGlass) && item.perGlass.length > 0) {
       extra = item.perGlass.slice(0, 12).reduce((acc, fv) => {
         const e = engravingExtra(product, fv || {}, variant.id);
-        return { amount: acc.amount + (e.amount || 0), weight: acc.weight + (e.weight || 0) };
-      }, { amount: 0, weight: 0 });
+        return {
+          amount: acc.amount + (e.amount || 0),
+          weight: acc.weight + (e.weight || 0),
+          stockIds: [...acc.stockIds, ...(e.stockIds || [])], // options suivies en stock
+        };
+      }, { amount: 0, weight: 0, stockIds: [] });
     } else {
       extra = engravingExtra(product, item.fields || {}, variant.id);
     }
@@ -192,6 +196,10 @@ export async function POST(req) {
     const unitPrice = basePrice + extra.amount + pkg.amount + motifExtra;
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
+    // Options qui consomment un vrai article du stock (ex. socle lumineux LED) :
+    // elles sont décomptées comme un produit, sinon on pourrait en vendre plus
+    // qu'on n'en a. Le contrôle de rupture ci-dessous les couvre aussi.
+    for (const sid of extra.stockIds || []) boughtVariants.push({ variantId: sid, qty: quantity });
     // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle, emballage),
     // multiplié par la quantité → frais de port corrects pour n'importe quel panier.
     const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0);

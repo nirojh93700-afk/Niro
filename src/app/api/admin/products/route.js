@@ -58,5 +58,33 @@ export async function GET(req) {
       });
     }
   }
+
+  // Options suivies en stock (ex. socle lumineux LED) : ce sont de vrais articles
+  // achetés en quantité limitée, mais vendus comme une OPTION et non comme une
+  // variante — sans cette ligne, elles n'apparaîtraient nulle part dans le stock.
+  const extrasVus = new Set();
+  for (const p of products) {
+    for (const e of p.engravingPricing?.flatExtras || []) {
+      const ids = [e.stockId, ...Object.values(e.stockIdByVariant || {})].filter(Boolean);
+      for (const sid of ids) {
+        if (extrasVus.has(sid)) continue; // stock commun à plusieurs produits
+        extrasVus.add(sid);
+        rows.push({
+          productSlug: p.slug,
+          productName: "Options (accessoires)",
+          category: p.category,
+          variantId: sid,
+          stockId: sid,
+          variantTitle: sid === "socle-led-carre" ? "Socle LED — petit (carré)"
+            : sid === "socle-led-rectangle" ? "Socle LED — grand (rectangle)"
+            : sid,
+          price: null,
+          salePrice: null,
+          stock: typeof map[sid] === "number" ? map[sid] : null,
+          isOption: true,
+        });
+      }
+    }
+  }
   return Response.json({ rows, catalog, editable });
 }
