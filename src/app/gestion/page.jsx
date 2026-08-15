@@ -1128,7 +1128,10 @@ export default function GestionPage() {
                   return (
                     <div style={{ margin: "0 0 10px", padding: "8px 12px", background: "#faf6ee", border: "1px solid #ece0c4", borderRadius: 8, fontSize: "0.88rem" }}>
                       <div style={{ fontWeight: 700, color: "var(--gold-dark)", marginBottom: 4 }}>Détail du prix</div>
-                      {ligne("Sous-total produits (avant remise)", formatEuro(sousTotal))}
+                      {/* « avant remise » seulement quand la remise est connue :
+                          les commandes passées avant cette amélioration n'ont pas
+                          l'information, on n'affiche donc pas une mention trompeuse. */}
+                      {ligne(`Sous-total produits${remise > 0 || cagnotte > 0 ? " (avant remise)" : ""}`, formatEuro(sousTotal))}
                       {remise > 0 && ligne(
                         `Remise${o.promoCode ? ` — code ${o.promoCode}` : ""}`,
                         `− ${formatEuro(remise)}`,
