@@ -6,6 +6,7 @@ import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getSto
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
 import { saveOrderSpec } from "@/lib/firebase";
+import { vacationActive } from "@/lib/vacation";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
 
@@ -369,7 +370,10 @@ export async function POST(req) {
           type: "text",
           optional: true,
         },
-        {
+        // 🏖️ Mode vacances : on RETIRE le choix « Lancement de la fabrication »
+        // (impossible de promettre « tout de suite » pendant les congés). Il
+        // revient automatiquement dès que le mode vacances s'éteint.
+        ...(vacationActive(settings?.vacation) ? [] : [{
           key: "fabrication",
           label: { type: "custom", custom: "Lancement de la fabrication" },
           type: "dropdown",
@@ -380,7 +384,7 @@ export async function POST(req) {
             ],
           },
           optional: true,
-        },
+        }]),
         {
           key: "message_cadeau",
           label: { type: "custom", custom: "Message ou date à graver (facultatif)" },
