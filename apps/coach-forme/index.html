@@ -16,6 +16,7 @@
     --cardio-soft:#fbe6e0;
     --gold:#c9a24b;
     --gold-soft:#f6edd8;
+    --low:#5f93c8;
     --shadow:0 10px 30px rgba(26,35,31,.08);
   }
   @media (prefers-color-scheme: dark){
@@ -34,6 +35,7 @@
       --cardio-soft:#3d241d;
       --gold:#d8b566;
       --gold-soft:#3a3021;
+      --low:#6fa8dd;
       --shadow:0 10px 30px rgba(0,0,0,.35);
     }
   }
@@ -52,10 +54,12 @@
     --cardio-soft:#3d241d;
     --gold:#d8b566;
     --gold-soft:#3a3021;
+    --low:#6fa8dd;
     --shadow:0 10px 30px rgba(0,0,0,.35);
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none !important}
   html{-webkit-text-size-adjust:100%}
   body{
     background:var(--bg);
@@ -254,6 +258,50 @@
   .delta-down{color:var(--accent-ink)}
   .delta-up{color:var(--cardio)}
 
+  /* Profil & tableau de bord */
+  .pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+  .pf-grid label{display:flex;flex-direction:column;gap:5px;font-size:.78rem;font-weight:700;color:var(--ink2)}
+  .pf-grid input,.pf-grid select{
+    font:inherit;font-size:1rem;font-weight:600;color:var(--ink);
+    background:var(--surface);border:1.5px solid var(--line);border-radius:12px;
+    padding:10px 12px;min-width:0;width:100%;
+  }
+  .pf-grid input:focus-visible,.pf-grid select:focus-visible{outline:2px solid var(--accent);border-color:var(--accent)}
+  .profil-sum{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .profil-sum .v{font-size:.93rem;color:var(--ink2)}
+  .profil-sum .v strong{color:var(--ink)}
+  .pill{
+    display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;padding:4px 11px;border-radius:999px;color:#fff;
+  }
+  .gauge{
+    position:relative;height:10px;border-radius:999px;margin:16px 2px 6px;
+    background:linear-gradient(to right,var(--low) 0 14%,var(--accent) 14% 40%,var(--gold) 40% 60%,var(--cardio) 60% 100%);
+  }
+  .gauge i{
+    position:absolute;top:50%;width:18px;height:18px;border-radius:50%;
+    background:var(--ink);border:3px solid var(--surface);
+    transform:translate(-50%,-50%);
+  }
+  .gauge-l{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);padding:0 2px}
+  .goalbar{height:12px;border-radius:999px;background:var(--surface2);overflow:hidden;margin:10px 0 6px}
+  .goalbar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s ease}
+  .goal-note{font-size:.85rem;color:var(--muted)}
+  .grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .grid4 .tile{box-shadow:none;background:var(--surface2);border:none}
+  .grid4 .big{font-size:1.25rem}
+  .kcal3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;text-align:center}
+  .kcal3 div{background:var(--surface2);border-radius:14px;padding:12px 6px}
+  .kcal3 .big{font-size:1.15rem;font-weight:900}
+  .kcal3 .lbl{font-size:.72rem;color:var(--muted);margin-top:2px}
+  .kcal3 .obj{outline:2px solid var(--accent)}
+  .mens-sum{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .mens-sum .row{display:flex;justify-content:space-between;align-items:baseline;font-size:.93rem;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .mens-sum .row:last-child{border-bottom:none}
+  .mens-sum .lbl{color:var(--ink2)}
+  .mens-sum .val{font-weight:700}
+  .mens-sum .d{font-size:.83rem;margin-left:6px}
+
   .chart-card{padding:18px 10px 10px}
   #chart{width:100%;height:auto;display:block}
   .chart-empty{padding:26px 16px;text-align:center;color:var(--muted);font-size:.92rem}
@@ -403,8 +451,8 @@
 
     <!-- ================= SUIVI ================= -->
     <section class="tab" id="tab-suivi">
-      <p class="eyebrow">Ta courbe</p>
-      <h2>Suivi du poids</h2>
+      <p class="eyebrow">Ton tableau de bord</p>
+      <h2>Suivi détaillé</h2>
       <p style="font-size:.92rem;margin:6px 0 14px">Pèse-toi <strong style="color:var(--ink)">2 fois par semaine, le matin à jeun</strong>, toujours dans les mêmes conditions. C'est la tendance sur la semaine qui compte, pas le chiffre du jour.</p>
 
       <form class="weigh-form" id="weighForm">
@@ -412,19 +460,51 @@
         <button class="btn" type="submit">Ajouter</button>
       </form>
 
-      <div class="stats3" id="stats3" hidden>
-        <div class="tile"><div class="big num" id="stStart">–</div><div class="lbl">Départ</div></div>
-        <div class="tile"><div class="big num" id="stNow">–</div><div class="lbl">Aujourd'hui</div></div>
-        <div class="tile"><div class="big num" id="stDelta">–</div><div class="lbl">Évolution</div></div>
+      <!-- Profil -->
+      <div class="card" id="profilCard">
+        <div class="profil-sum" id="profilView" hidden>
+          <div class="v" id="profilSum"></div>
+          <button class="btn ghost" id="profilEdit" type="button">Modifier</button>
+        </div>
+        <form id="profilForm">
+          <h3>Ton profil</h3>
+          <p style="font-size:.88rem;margin-top:4px">Sert à calculer ton IMC, ta fourchette de poids idéale, tes calories et ta date d'arrivée estimée.</p>
+          <div class="pf-grid">
+            <label>Taille (cm)<input id="pfH" type="number" inputmode="numeric" min="120" max="220" placeholder="165" required></label>
+            <label>Âge<input id="pfAge" type="number" inputmode="numeric" min="15" max="90" placeholder="30" required></label>
+            <label>Sexe<select id="pfSexe"><option value="f">Femme</option><option value="h">Homme</option></select></label>
+            <label>Poids objectif (kg)<input id="pfGoal" type="number" inputmode="decimal" step="0.1" min="30" max="250" placeholder="62" required></label>
+          </div>
+          <button class="btn" type="submit">Enregistrer mon profil</button>
+        </form>
       </div>
+
+      <!-- Tableau de bord calculé (IMC, progression, calories) -->
+      <div id="dash"></div>
 
       <div class="card chart-card">
         <div id="chartHost"></div>
       </div>
 
+      <!-- Mensurations -->
+      <div class="card">
+        <h3>Mensurations</h3>
+        <p style="font-size:.88rem;margin-top:4px">Le mètre ruban voit ce que la balance ne voit pas : quand tu prends du muscle, le poids stagne mais les centimètres partent. Mesure-toi 1 fois par semaine.</p>
+        <form id="mensForm">
+          <div class="pf-grid">
+            <label>Tour de taille (cm)<input id="mTaille" type="number" inputmode="decimal" step="0.5" min="40" max="200"></label>
+            <label>Hanches (cm)<input id="mHanches" type="number" inputmode="decimal" step="0.5" min="40" max="200"></label>
+            <label>Cuisse (cm)<input id="mCuisse" type="number" inputmode="decimal" step="0.5" min="20" max="120"></label>
+            <label>Bras (cm)<input id="mBras" type="number" inputmode="decimal" step="0.5" min="15" max="80"></label>
+          </div>
+          <button class="btn" type="submit">Enregistrer mes mesures</button>
+        </form>
+        <div class="mens-sum" id="mensSum"></div>
+      </div>
+
       <div class="card" id="histCard" hidden>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3>Historique</h3>
+          <h3>Historique des pesées</h3>
           <button class="btn ghost" id="clearBtn" type="button">Tout effacer</button>
         </div>
         <ul class="wlist" id="wlist"></ul>
@@ -703,21 +783,32 @@ function updateProgress(){
 }
 updateProgress();
 
-/* ================= Suivi du poids ================= */
-const W_KEY = "cs-poids";
-let weights = [];
+/* ================= Suivi détaillé ================= */
+const W_KEY = "cs-poids", P_KEY = "cs-profil", M_KEY = "cs-mens";
+let weights = [], profil = null, mens = [];
 try { weights = JSON.parse(localStorage.getItem(W_KEY)) || []; } catch (e) { weights = []; }
+try { profil = JSON.parse(localStorage.getItem(P_KEY)); } catch (e) { profil = null; }
+try { mens = JSON.parse(localStorage.getItem(M_KEY)) || []; } catch (e) { mens = []; }
 
-const fmtKg = v => v.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+const fmt1 = v => v.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const fmtKg = v => fmt1(v) + " kg";
 const fmtDate = iso => new Date(iso + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+const todayIso = () => {
+  const t = new Date();
+  return t.getFullYear() + "-" + String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0");
+};
+const num = el => {
+  const v = parseFloat(String(el.value).replace(",", "."));
+  return isFinite(v) ? v : null;
+};
 
+/* --- Pesées --- */
 document.getElementById("weighForm").addEventListener("submit", e => {
   e.preventDefault();
   const input = document.getElementById("kgInput");
-  const v = parseFloat(String(input.value).replace(",", "."));
-  if (!isFinite(v) || v < 30 || v > 250) return;
-  const today = new Date();
-  const iso = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+  const v = num(input);
+  if (v === null || v < 30 || v > 250) return;
+  const iso = todayIso();
   const existing = weights.find(w => w.d === iso);
   if (existing) existing.kg = v; else weights.push({ d: iso, kg: v });
   weights.sort((a, b) => a.d < b.d ? -1 : 1);
@@ -732,28 +823,245 @@ document.getElementById("clearBtn").addEventListener("click", () => {
   renderSuivi();
 });
 
-function renderSuivi(){
-  const stats = document.getElementById("stats3");
-  const hist = document.getElementById("histCard");
-  const list = document.getElementById("wlist");
-  const chartHost = document.getElementById("chartHost");
+/* --- Profil --- */
+document.getElementById("profilForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const h = num(document.getElementById("pfH"));
+  const age = num(document.getElementById("pfAge"));
+  const goal = num(document.getElementById("pfGoal"));
+  const sexe = document.getElementById("pfSexe").value;
+  if (h === null || age === null || goal === null) return;
+  profil = { h, age, sexe, goal };
+  localStorage.setItem(P_KEY, JSON.stringify(profil));
+  renderSuivi();
+});
+document.getElementById("profilEdit").addEventListener("click", () => {
+  document.getElementById("profilView").hidden = true;
+  document.getElementById("profilForm").hidden = false;
+});
 
-  if (weights.length === 0) {
-    stats.hidden = true; hist.hidden = true;
-    chartHost.innerHTML = `<div class="chart-empty">Ajoute ta première pesée pour voir ta courbe apparaître ici.</div>`;
+function renderProfil(){
+  const view = document.getElementById("profilView");
+  const form = document.getElementById("profilForm");
+  if (!profil) { view.hidden = true; form.hidden = false; return; }
+  document.getElementById("pfH").value = profil.h;
+  document.getElementById("pfAge").value = profil.age;
+  document.getElementById("pfSexe").value = profil.sexe;
+  document.getElementById("pfGoal").value = profil.goal;
+  document.getElementById("profilSum").innerHTML =
+    `<strong>Ton profil</strong> — ${profil.h} cm · ${profil.age} ans · objectif <strong class="num">${fmtKg(profil.goal)}</strong>`;
+  view.hidden = false; form.hidden = true;
+}
+
+/* --- IMC --- */
+function bmiCat(b){
+  if (b < 18.5) return { l: "Poids insuffisant", c: "var(--low)" };
+  if (b < 25)   return { l: "Poids normal",      c: "var(--accent)" };
+  if (b < 30)   return { l: "Surpoids",           c: "var(--gold)" };
+  return          { l: "Obésité",                 c: "var(--cardio)" };
+}
+
+/* --- Tableau de bord --- */
+function renderDash(){
+  const dash = document.getElementById("dash");
+  const last = weights.length ? weights[weights.length - 1] : null;
+  const first = weights.length ? weights[0] : null;
+  const parts = [];
+
+  if (!last && !profil) {
+    dash.innerHTML = `<div class="card accent"><h3>Commence ici</h3>
+      <p style="margin-top:6px;font-size:.93rem">Ajoute ta <strong style="color:var(--ink)">première pesée</strong> ci-dessus et remplis ton <strong style="color:var(--ink)">profil</strong> : l'application calculera ton IMC, ton poids idéal, tes calories et ta progression — comme une vraie appli de coaching.</p></div>`;
     return;
   }
 
-  const first = weights[0], last = weights[weights.length - 1];
-  const delta = last.kg - first.kg;
-  stats.hidden = false;
-  document.getElementById("stStart").textContent = fmtKg(first.kg);
-  document.getElementById("stNow").textContent = fmtKg(last.kg);
-  const dEl = document.getElementById("stDelta");
-  dEl.textContent = (delta > 0 ? "+" : "") + delta.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
-  dEl.className = "big num " + (delta <= 0 ? "delta-down" : "delta-up");
+  /* Résumé chiffres */
+  if (last) {
+    const delta = last.kg - first.kg;
+    const deltaTxt = (delta > 0 ? "+" : "") + fmt1(delta) + " kg";
+    const restant = profil && last.kg > profil.goal ? last.kg - profil.goal : null;
+    parts.push(`<div class="card">
+      <h3>Où tu en es</h3>
+      <div class="grid4">
+        <div class="tile"><div class="big num">${fmtKg(first.kg)}</div><div class="lbl">Poids de départ (${fmtDate(first.d)})</div></div>
+        <div class="tile"><div class="big num">${fmtKg(last.kg)}</div><div class="lbl">Poids actuel (${fmtDate(last.d)})</div></div>
+        <div class="tile"><div class="big num ${delta <= 0 ? "delta-down" : "delta-up"}">${deltaTxt}</div><div class="lbl">Depuis le départ</div></div>
+        <div class="tile"><div class="big num">${restant !== null ? fmt1(restant) + " kg" : "—"}</div><div class="lbl">${restant !== null ? "Restant jusqu'à l'objectif" : "Objectif : remplis ton profil"}</div></div>
+      </div>
+    </div>`);
+  }
 
-  /* liste */
+  /* IMC */
+  if (profil && last) {
+    const m = profil.h / 100;
+    const bmi = last.kg / (m * m);
+    const cat = bmiCat(bmi);
+    const pos = Math.min(98, Math.max(2, (bmi - 15) / 25 * 100));
+    const idealLo = 18.5 * m * m, idealHi = 24.9 * m * m;
+    const inRange = bmi >= 18.5 && bmi < 25;
+    parts.push(`<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <h3>Ton IMC</h3>
+        <span class="pill" style="background:${cat.c}">${cat.l}</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+        <span class="num" style="font-size:2.2rem;font-weight:900;letter-spacing:-.02em">${fmt1(bmi)}</span>
+        <span style="font-size:.85rem;color:var(--muted)">kg/m² pour ${profil.h} cm</span>
+      </div>
+      <div class="gauge"><i style="left:${pos.toFixed(1)}%"></i></div>
+      <div class="gauge-l"><span>15</span><span>18,5</span><span>25</span><span>30</span><span>40</span></div>
+      <p style="font-size:.9rem;margin-top:12px">Pour ta taille, le poids de forme se situe entre <strong style="color:var(--ink)" class="num">${fmt1(idealLo)}</strong> et <strong style="color:var(--ink)" class="num">${fmt1(idealHi)} kg</strong>.${inRange ? " Tu es déjà dans la zone idéale : l'objectif devient le raffermissement, pas la balance." : ""}</p>
+    </div>`);
+  }
+
+  /* Progression vers l'objectif */
+  if (profil && last && first.kg > profil.goal) {
+    const total = first.kg - profil.goal;
+    const done = Math.min(Math.max(first.kg - last.kg, 0), total);
+    const pct = total > 0 ? done / total * 100 : 0;
+
+    let rateTxt = "—", etaTxt = "Encore un peu de données…";
+    if (weights.length >= 2) {
+      const days = (new Date(weights[weights.length - 1].d) - new Date(weights[0].d)) / 864e5;
+      if (days >= 3) {
+        const perWeek = (last.kg - first.kg) / days * 7;
+        rateTxt = (perWeek > 0 ? "+" : "") + fmt1(perWeek) + " kg";
+        if (perWeek < -0.05 && last.kg > profil.goal) {
+          const etaDays = (last.kg - profil.goal) / (-perWeek / 7);
+          if (etaDays <= 400) {
+            etaTxt = "vers le " + new Date(Date.now() + etaDays * 864e5).toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+          } else {
+            etaTxt = "Accélère un peu le rythme";
+          }
+        } else if (last.kg <= profil.goal) {
+          etaTxt = "Objectif atteint !";
+        } else {
+          etaTxt = "La courbe doit descendre d'abord";
+        }
+      } else {
+        etaTxt = "Repèse-toi dans quelques jours";
+      }
+    }
+    parts.push(`<div class="card">
+      <h3>Progression vers ${fmtKg(profil.goal)}</h3>
+      <div class="goalbar"><i style="width:${pct.toFixed(1)}%"></i></div>
+      <p class="goal-note num">${fmt1(done)} kg perdus sur ${fmt1(total)} — <strong style="color:var(--ink)">${Math.round(pct)} %</strong> du chemin</p>
+      <div class="grid4">
+        <div class="tile"><div class="big num ${rateTxt.startsWith("+") ? "delta-up" : "delta-down"}">${rateTxt}</div><div class="lbl">Rythme moyen par semaine (idéal : −0,5 à −1 kg)</div></div>
+        <div class="tile"><div class="big num" style="font-size:1.05rem">${etaTxt}</div><div class="lbl">Objectif estimé à ce rythme</div></div>
+      </div>
+    </div>`);
+  }
+
+  /* Calories */
+  if (profil && last) {
+    const bmr = 10 * last.kg + 6.25 * profil.h - 5 * profil.age + (profil.sexe === "f" ? -161 : 5);
+    const maint = bmr * 1.4;
+    const floor = profil.sexe === "f" ? 1300 : 1500;
+    const target = Math.max(floor, maint - 400);
+    const r10 = v => (Math.round(v / 10) * 10).toLocaleString("fr-FR");
+    parts.push(`<div class="card">
+      <h3>Tes calories</h3>
+      <div class="kcal3">
+        <div><div class="big num">${r10(bmr)}</div><div class="lbl">Métabolisme de base</div></div>
+        <div><div class="big num">${r10(maint)}</div><div class="lbl">Maintien du poids</div></div>
+        <div class="obj"><div class="big num">${r10(target)}</div><div class="lbl">Objectif pour perdre</div></div>
+      </div>
+      <p style="font-size:.85rem;margin-top:12px;color:var(--muted)">Estimation (formule Mifflin-St Jeor, activité légère). Vise la colonne verte les jours sans sport ; les jours de salle, tu peux manger un peu plus. Jamais en dessous de ${floor.toLocaleString("fr-FR")} kcal.</p>
+    </div>`);
+  }
+
+  dash.innerHTML = parts.join("");
+}
+
+/* --- Mensurations --- */
+const MENS_FIELDS = [
+  ["ta", "mTaille", "Tour de taille"],
+  ["ha", "mHanches", "Hanches"],
+  ["cu", "mCuisse", "Cuisse"],
+  ["br", "mBras", "Bras"],
+];
+document.getElementById("mensForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const entry = { d: todayIso() };
+  let hasOne = false;
+  MENS_FIELDS.forEach(([key, id]) => {
+    const v = num(document.getElementById(id));
+    if (v !== null && v > 0) { entry[key] = v; hasOne = true; }
+  });
+  if (!hasOne) return;
+  const existing = mens.find(x => x.d === entry.d);
+  if (existing) Object.assign(existing, entry); else mens.push(entry);
+  mens.sort((a, b) => a.d < b.d ? -1 : 1);
+  localStorage.setItem(M_KEY, JSON.stringify(mens));
+  MENS_FIELDS.forEach(([, id]) => document.getElementById(id).value = "");
+  renderMens();
+});
+
+function renderMens(){
+  const host = document.getElementById("mensSum");
+  const rows = [];
+  MENS_FIELDS.forEach(([key, , label]) => {
+    const withVal = mens.filter(x => typeof x[key] === "number");
+    if (!withVal.length) return;
+    const f = withVal[0][key], l = withVal[withVal.length - 1][key];
+    const d = l - f;
+    const deltaHtml = withVal.length > 1
+      ? ` <span class="d num ${d <= 0 ? "delta-down" : "delta-up"}">(${d > 0 ? "+" : ""}${fmt1(d)})</span>`
+      : "";
+    rows.push(`<div class="row"><span class="lbl">${label}</span><span><span class="val num">${fmt1(f)} → ${fmt1(l)} cm</span>${deltaHtml}</span></div>`);
+  });
+  host.innerHTML = rows.join("");
+}
+
+/* --- Courbe --- */
+function renderChart(){
+  const chartHost = document.getElementById("chartHost");
+  if (weights.length === 0) {
+    chartHost.innerHTML = `<div class="chart-empty">Ajoute ta première pesée pour voir ta courbe apparaître ici.</div>`;
+    return;
+  }
+  if (weights.length === 1) {
+    chartHost.innerHTML = `<div class="chart-empty">Première pesée enregistrée : ${fmtKg(weights[0].kg)}. La courbe se dessinera à partir de la deuxième.</div>`;
+    return;
+  }
+  const first = weights[0], last = weights[weights.length - 1];
+  const W = 520, H = 220, padL = 44, padR = 20, padT = 18, padB = 30;
+  const kgs = weights.map(w => w.kg);
+  const goal = profil ? profil.goal : null;
+  let lo = Math.min(...kgs), hi = Math.max(...kgs);
+  if (goal !== null && goal < lo && lo - goal <= 12) lo = goal;
+  if (goal !== null && goal > hi && goal - hi <= 12) hi = goal;
+  const span = Math.max(hi - lo, 1);
+  lo -= span * 0.18; hi += span * 0.18;
+  const x = i => padL + (W - padL - padR) * (i / (weights.length - 1));
+  const y = v => padT + (H - padT - padB) * (1 - (v - lo) / (hi - lo));
+  const pts = weights.map((w, i) => [x(i), y(w.kg)]);
+  const path = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  const area = path + ` L ${pts[pts.length - 1][0].toFixed(1)} ${H - padB} L ${pts[0][0].toFixed(1)} ${H - padB} Z`;
+  const gridVals = [lo + (hi - lo) * 0.25, lo + (hi - lo) * 0.5, lo + (hi - lo) * 0.75];
+  const lastP = pts[pts.length - 1];
+  const lastLabelY = Math.max(padT + 10, lastP[1] - 12);
+  const goalY = goal !== null && goal >= lo && goal <= hi ? y(goal) : null;
+
+  chartHost.innerHTML = `<svg id="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe d'évolution du poids">
+    ${gridVals.map(v => `<line x1="${padL}" x2="${W - padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--line)" stroke-width="1"/>
+      <text x="${padL - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--muted)" class="num">${v.toFixed(1)}</text>`).join("")}
+    ${goalY !== null ? `<line x1="${padL}" x2="${W - padR}" y1="${goalY.toFixed(1)}" y2="${goalY.toFixed(1)}" stroke="var(--gold)" stroke-width="1.8" stroke-dasharray="6 5"/>
+      <text x="${W - padR}" y="${(goalY - 6).toFixed(1)}" text-anchor="end" font-size="11" font-weight="700" fill="var(--gold)" class="num">Objectif ${fmt1(goal)}</text>` : ""}
+    <path d="${area}" fill="var(--accent)" opacity="0.10"/>
+    <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i === pts.length - 1 ? 6 : 4}" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"><title>${fmtDate(weights[i].d)} : ${fmtKg(weights[i].kg)}</title></circle>`).join("")}
+    <text x="${(lastP[0] - 4).toFixed(1)}" y="${lastLabelY.toFixed(1)}" text-anchor="end" font-size="13" font-weight="700" fill="var(--ink)" class="num">${fmtKg(last.kg)}</text>
+    <text x="${padL}" y="${H - 8}" font-size="11" fill="var(--muted)">${fmtDate(first.d)}</text>
+    <text x="${W - padR}" y="${H - 8}" text-anchor="end" font-size="11" fill="var(--muted)">${fmtDate(last.d)}</text>
+  </svg>`;
+}
+
+/* --- Historique --- */
+function renderList(){
+  const hist = document.getElementById("histCard");
+  const list = document.getElementById("wlist");
+  if (weights.length === 0) { hist.hidden = true; return; }
   hist.hidden = false;
   list.innerHTML = weights.slice().reverse().map((w, i) => {
     const realIdx = weights.length - 1 - i;
@@ -764,36 +1072,14 @@ function renderSuivi(){
     localStorage.setItem(W_KEY, JSON.stringify(weights));
     renderSuivi();
   }));
+}
 
-  /* courbe */
-  if (weights.length === 1) {
-    chartHost.innerHTML = `<div class="chart-empty">Première pesée enregistrée : ${fmtKg(first.kg)}. La courbe se dessinera à partir de la deuxième.</div>`;
-    return;
-  }
-  const W = 520, H = 220, padL = 44, padR = 20, padT = 18, padB = 30;
-  const kgs = weights.map(w => w.kg);
-  let lo = Math.min(...kgs), hi = Math.max(...kgs);
-  const span = Math.max(hi - lo, 1);
-  lo -= span * 0.18; hi += span * 0.18;
-  const x = i => padL + (W - padL - padR) * (weights.length === 1 ? 0.5 : i / (weights.length - 1));
-  const y = v => padT + (H - padT - padB) * (1 - (v - lo) / (hi - lo));
-  const pts = weights.map((w, i) => [x(i), y(w.kg)]);
-  const path = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
-  const area = path + ` L ${pts[pts.length - 1][0].toFixed(1)} ${H - padB} L ${pts[0][0].toFixed(1)} ${H - padB} Z`;
-  const gridVals = [lo + (hi - lo) * 0.25, lo + (hi - lo) * 0.5, lo + (hi - lo) * 0.75];
-  const lastP = pts[pts.length - 1];
-  const lastLabelY = Math.max(padT + 10, lastP[1] - 12);
-
-  chartHost.innerHTML = `<svg id="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe d'évolution du poids">
-    ${gridVals.map(v => `<line x1="${padL}" x2="${W - padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--line)" stroke-width="1"/>
-      <text x="${padL - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--muted)" class="num">${v.toFixed(1)}</text>`).join("")}
-    <path d="${area}" fill="var(--accent)" opacity="0.10"/>
-    <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i === pts.length - 1 ? 6 : 4}" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"><title>${fmtDate(weights[i].d)} : ${fmtKg(weights[i].kg)}</title></circle>`).join("")}
-    <text x="${(lastP[0] - 4).toFixed(1)}" y="${lastLabelY.toFixed(1)}" text-anchor="end" font-size="13" font-weight="700" fill="var(--ink)" class="num">${fmtKg(last.kg)}</text>
-    <text x="${padL}" y="${H - 8}" font-size="11" fill="var(--muted)">${fmtDate(first.d)}</text>
-    <text x="${W - padR}" y="${H - 8}" text-anchor="end" font-size="11" fill="var(--muted)">${fmtDate(last.d)}</text>
-  </svg>`;
+function renderSuivi(){
+  renderProfil();
+  renderDash();
+  renderChart();
+  renderList();
+  renderMens();
 }
 renderSuivi();
 
