@@ -1,0 +1,802 @@
+<title>Coach Silhouette</title>
+<style>
+  /* ---------- Tokens ---------- */
+  :root{
+    --bg:#f3f6f4;
+    --surface:#ffffff;
+    --surface2:#e9efeb;
+    --ink:#1a231f;
+    --ink2:#4c5a53;
+    --muted:#7d8a83;
+    --line:#dde5e0;
+    --accent:#149467;
+    --accent-ink:#0d6b4b;
+    --accent-soft:#dcf0e7;
+    --cardio:#e05c43;
+    --cardio-soft:#fbe6e0;
+    --gold:#c9a24b;
+    --gold-soft:#f6edd8;
+    --shadow:0 10px 30px rgba(26,35,31,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#121815;
+      --surface:#1b2420;
+      --surface2:#232e28;
+      --ink:#e8ede9;
+      --ink2:#b3c0b8;
+      --muted:#84928a;
+      --line:#2c3831;
+      --accent:#3cc08e;
+      --accent-ink:#7adfb6;
+      --accent-soft:#1d3a2e;
+      --cardio:#f0765d;
+      --cardio-soft:#3d241d;
+      --gold:#d8b566;
+      --gold-soft:#3a3021;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#121815;
+    --surface:#1b2420;
+    --surface2:#232e28;
+    --ink:#e8ede9;
+    --ink2:#b3c0b8;
+    --muted:#84928a;
+    --line:#2c3831;
+    --accent:#3cc08e;
+    --accent-ink:#7adfb6;
+    --accent-soft:#1d3a2e;
+    --cardio:#f0765d;
+    --cardio-soft:#3d241d;
+    --gold:#d8b566;
+    --gold-soft:#3a3021;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px;line-height:1.55;
+    padding-bottom:calc(78px + env(safe-area-inset-bottom));
+    min-height:100vh;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 18px}
+
+  /* ---------- Typography ---------- */
+  .display{
+    font-weight:900;letter-spacing:-.01em;line-height:1.08;
+    text-transform:uppercase;text-wrap:balance;
+  }
+  .eyebrow{
+    font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-ink);
+  }
+  h2{font-size:1.35rem;font-weight:800;letter-spacing:-.01em;margin-bottom:4px;text-wrap:balance}
+  h3{font-size:1.02rem;font-weight:700}
+  p{color:var(--ink2)}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* ---------- Header ---------- */
+  header{
+    padding:26px 0 18px;
+  }
+  header .brand{
+    display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  }
+  header .brand svg{flex:none}
+  header .brand span{
+    font-size:.8rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);
+  }
+  header h1{font-size:2rem}
+  header h1 em{font-style:normal;color:var(--accent)}
+  header .sub{margin-top:8px;font-size:.95rem}
+
+  /* ---------- Cards & sections ---------- */
+  section.tab{display:none;animation:fade .25s ease}
+  section.tab.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){
+    section.tab{animation:none}
+  }
+
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:18px;box-shadow:var(--shadow);margin-bottom:16px;
+  }
+  .card + h2, .grid + h2{margin-top:26px}
+  .card.accent{background:var(--accent-soft);border-color:transparent}
+  .card.gold{background:var(--gold-soft);border-color:transparent}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+
+  .tile{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:14px;box-shadow:var(--shadow);
+  }
+  .tile .big{font-size:1.5rem;font-weight:900;letter-spacing:-.02em;color:var(--ink)}
+  .tile .lbl{font-size:.78rem;color:var(--muted);margin-top:2px;line-height:1.3}
+
+  ul.tips{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:10px}
+  ul.tips li{
+    position:relative;padding-left:19px;color:var(--ink2);font-size:.95rem;
+  }
+  ul.tips li::before{
+    content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:50%;
+    background:var(--accent);
+  }
+  ul.tips li strong{color:var(--ink)}
+  ul.tips.warn li::before{background:var(--cardio)}
+
+  .truth{
+    display:flex;gap:12px;background:var(--gold-soft);border-radius:14px;
+    padding:14px;margin:14px 0;
+  }
+  .truth svg{flex:none;margin-top:2px}
+  .truth p{font-size:.92rem;color:var(--ink)}
+  .truth p strong{color:var(--ink)}
+
+  /* ---------- Body map ---------- */
+  .bodymap{
+    display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center;
+  }
+  @media (max-width:420px){ .bodymap{grid-template-columns:132px 1fr} }
+  .bodymap svg{width:100%;height:auto;display:block}
+  .silhouette{fill:var(--surface2)}
+  .zone{
+    fill:var(--accent);opacity:.14;cursor:pointer;
+    transition:opacity .15s ease;
+    stroke:var(--accent);stroke-width:0;
+  }
+  .zone:hover{opacity:.35}
+  .zone.sel{opacity:.55;stroke-width:2}
+  .zone:focus-visible{outline:none;opacity:.45;stroke-width:2}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
+    border-radius:999px;padding:9px 14px;font-size:.88rem;font-weight:600;
+    cursor:pointer;font-family:inherit;
+  }
+  .chip.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* Zone detail */
+  #zoneDetail{margin-top:18px}
+  .zone-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .zone-head h2{margin:0}
+  .badge{
+    font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);
+  }
+  .sec-label{
+    display:flex;align-items:center;gap:8px;margin:18px 0 10px;
+    font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  }
+  .sec-label.burn{color:var(--cardio)}
+  .sec-label.strong{color:var(--accent-ink)}
+  .sec-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .exo{
+    display:grid;grid-template-columns:1fr auto;gap:4px 12px;
+    padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  .exo:last-child{border-bottom:none}
+  .exo .n{font-weight:700;color:var(--ink)}
+  .exo .m{font-size:.85rem;color:var(--muted);grid-column:1}
+  .exo .r{
+    font-size:.85rem;font-weight:700;color:var(--accent-ink);
+    background:var(--accent-soft);border-radius:8px;padding:3px 9px;
+    align-self:start;white-space:nowrap;
+  }
+  .exo .r.cardio{color:var(--cardio);background:var(--cardio-soft)}
+  .exo .tip{grid-column:1 / -1;font-size:.85rem;color:var(--ink2)}
+
+  /* ---------- Programme ---------- */
+  .week{margin-bottom:22px}
+  .week-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .week-num{
+    flex:none;width:44px;height:44px;border-radius:14px;
+    background:var(--ink);color:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:1.15rem;
+  }
+  .week-head .t{font-weight:800;font-size:1.05rem}
+  .week-head .s{font-size:.85rem;color:var(--muted)}
+  .session{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);
+  }
+  .session label{
+    display:flex;gap:12px;align-items:flex-start;cursor:pointer;
+  }
+  .session input[type=checkbox]{
+    appearance:none;-webkit-appearance:none;flex:none;
+    width:24px;height:24px;border-radius:8px;border:2px solid var(--line);
+    background:var(--surface);margin-top:2px;cursor:pointer;position:relative;
+  }
+  .session input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent)}
+  .session input[type=checkbox]:checked::after{
+    content:"";position:absolute;left:7px;top:3px;width:6px;height:11px;
+    border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);
+  }
+  .session input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .session .st{font-weight:700}
+  .session .sd{font-size:.88rem;color:var(--ink2);margin-top:2px}
+  .session.done .st{color:var(--muted);text-decoration:line-through}
+  .progressbar{
+    height:10px;border-radius:999px;background:var(--surface2);overflow:hidden;margin:6px 0 20px;
+  }
+  .progressbar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s ease}
+  .prog-note{font-size:.85rem;color:var(--muted);margin-bottom:4px}
+
+  /* ---------- Suivi ---------- */
+  .weigh-form{display:flex;gap:10px;margin-bottom:16px}
+  .weigh-form input{
+    flex:1;font:inherit;font-size:1.05rem;font-weight:600;color:var(--ink);
+    background:var(--surface);border:1.5px solid var(--line);border-radius:14px;
+    padding:12px 14px;min-width:0;
+  }
+  .weigh-form input:focus-visible{outline:2px solid var(--accent);border-color:var(--accent)}
+  .btn{
+    font:inherit;font-weight:700;border:none;border-radius:14px;cursor:pointer;
+    background:var(--accent);color:#fff;padding:12px 20px;
+  }
+  .btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+  .btn.ghost{background:var(--surface2);color:var(--ink2);font-weight:600;font-size:.85rem;padding:8px 14px}
+  .stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .stats3 .tile{padding:12px}
+  .stats3 .big{font-size:1.25rem}
+  .delta-down{color:var(--accent-ink)}
+  .delta-up{color:var(--cardio)}
+
+  .chart-card{padding:18px 10px 10px}
+  #chart{width:100%;height:auto;display:block}
+  .chart-empty{padding:26px 16px;text-align:center;color:var(--muted);font-size:.92rem}
+  .wlist{list-style:none;margin-top:8px}
+  .wlist li{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:9px 4px;border-bottom:1px solid var(--line);font-size:.93rem;
+  }
+  .wlist li:last-child{border-bottom:none}
+  .wlist .d{color:var(--muted)}
+  .wlist .kg{font-weight:700}
+  .wlist button{
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 8px;
+  }
+
+  /* ---------- Tab bar ---------- */
+  nav.tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:var(--surface);border-top:1px solid var(--line);
+    padding:8px max(10px, env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));
+  }
+  nav.tabbar .row{
+    max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+  }
+  .tabbtn{
+    font:inherit;background:none;border:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    padding:6px 2px;border-radius:12px;color:var(--muted);
+    font-size:.68rem;font-weight:700;letter-spacing:.04em;
+  }
+  .tabbtn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tabbtn.active{color:var(--accent-ink)}
+  .tabbtn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Coach Silhouette</span>
+    </div>
+    <h1 class="display">Ton programme<br><em>salle &amp; minceur</em></h1>
+    <p class="sub">Choisis une zone du corps, suis les exercices machine par machine, et vois ta courbe descendre.</p>
+  </header>
+
+  <main>
+
+    <!-- ================= ACCUEIL ================= -->
+    <section class="tab active" id="tab-accueil">
+      <div class="card accent">
+        <p class="eyebrow">Ta question</p>
+        <h2>Perdre du poids en 3 semaines, c'est possible ?</h2>
+        <p style="margin-top:6px"><strong style="color:var(--ink)">Oui.</strong> De façon saine et durable, tu peux viser <strong style="color:var(--ink)">1,5 à 3 kg en 3 semaines</strong> (environ 0,5 à 1 kg par semaine). La première semaine, la balance descend souvent plus vite : c'est surtout de l'eau, c'est normal — continue. Au-delà de 1 kg par semaine, on perd du muscle et on reprend tout après : on ne cherche pas ça.</p>
+      </div>
+
+      <h2>Les 4 chiffres qui font tout</h2>
+      <div class="grid2" style="margin-top:12px">
+        <div class="tile"><div class="big num">−300 à −500</div><div class="lbl">calories par jour : le déficit qui fait perdre, sans s'affamer</div></div>
+        <div class="tile"><div class="big num">3–4</div><div class="lbl">séances de salle par semaine, jamais 2 jours identiques d'affilée</div></div>
+        <div class="tile"><div class="big num">8 000+</div><div class="lbl">pas par jour en dehors de la salle : ça compte énormément</div></div>
+        <div class="tile"><div class="big num">1,5–2 L</div><div class="lbl">d'eau par jour, et 7 à 8 h de sommeil (le manque de sommeil fait stocker)</div></div>
+      </div>
+
+      <div class="card">
+        <h3>La règle d'or de la perte de poids</h3>
+        <p style="margin-top:6px;font-size:.95rem">On perd du poids <strong style="color:var(--ink)">à 70 % dans l'assiette</strong> et à 30 % à la salle. La salle sert à brûler des calories, à protéger tes muscles et à dessiner ta silhouette. Les deux ensemble = résultat visible en 3 semaines.</p>
+      </div>
+
+      <h2>Dans l'assiette</h2>
+      <div class="card" style="margin-top:12px">
+        <ul class="tips">
+          <li><strong>Des protéines à chaque repas</strong> — œufs, poulet, poisson, yaourt grec, lentilles. Ça coupe la faim et protège le muscle.</li>
+          <li><strong>La moitié de l'assiette en légumes</strong> — volume, fibres, presque pas de calories.</li>
+          <li><strong>Zéro calorie liquide</strong> — sodas, jus, alcool : c'est le levier le plus rapide. Eau, café, thé sans sucre.</li>
+          <li><strong>Féculents : une portion poing fermé</strong> — riz, pâtes, pain : on réduit, on ne supprime pas.</li>
+          <li><strong>Pas de régime extrême</strong> — si tu as faim en permanence, tu craqueras. Un écart par semaine est prévu, pas grave.</li>
+        </ul>
+      </div>
+
+      <h2>À la salle, les 3 erreurs à éviter</h2>
+      <div class="card" style="margin-top:12px">
+        <ul class="tips warn">
+          <li><strong>Faire uniquement du cardio.</strong> Sans renforcement, tu perds du muscle et la silhouette reste « molle ». Toujours machines + cardio.</li>
+          <li><strong>Faire 500 abdos pour un ventre plat.</strong> On ne choisit pas où l'on perd : c'est le déficit calorique qui fait fondre, les machines qui raffermissent la zone.</li>
+          <li><strong>Charger trop lourd trop vite.</strong> Semaine 1 : charges légères, tu apprends les machines. Les courbatures ne doivent pas t'empêcher de revenir.</li>
+        </ul>
+      </div>
+
+      <div class="card gold">
+        <h3>Comment utiliser l'application</h3>
+        <p style="margin-top:6px;font-size:.93rem">1 — Onglet <strong style="color:var(--ink)">Corps</strong> : touche la zone qui te gêne, tu obtiens les machines et exercices exacts. 2 — Onglet <strong style="color:var(--ink)">Programme</strong> : tes 3 semaines, séance par séance, à cocher. 3 — Onglet <strong style="color:var(--ink)">Suivi</strong> : pèse-toi 2 fois par semaine, le matin à jeun, et regarde la courbe.</p>
+      </div>
+    </section>
+
+    <!-- ================= CORPS ================= -->
+    <section class="tab" id="tab-corps">
+      <p class="eyebrow">Cible ta zone</p>
+      <h2>Touche la partie du corps à travailler</h2>
+      <p style="font-size:.92rem;margin:6px 0 16px">Pour chaque zone : ce qui fait <strong style="color:var(--cardio)">fondre</strong> et ce qui <strong style="color:var(--accent-ink)">raffermit</strong>, avec les vraies machines de ta salle.</p>
+
+      <div class="card">
+        <div class="bodymap">
+          <svg viewBox="0 0 200 430" role="img" aria-label="Silhouette : touche une zone du corps">
+            <!-- silhouette -->
+            <g class="silhouette">
+              <circle cx="100" cy="30" r="21"/>
+              <rect x="92" y="48" width="16" height="14" rx="6"/>
+              <path d="M63 62 h74 c6 0 10 5 10 11 l-6 66 c-8 10 -8 26 -3 40 l4 22 c0 8 -6 13 -13 13 H71 c-7 0 -13 -5 -13 -13 l4 -22 c5 -14 5 -30 -3 -40 l-6 -66 c0 -6 4 -11 10 -11 Z"/>
+              <rect x="38" y="66" width="17" height="118" rx="8.5" transform="rotate(6 46 66)"/>
+              <rect x="145" y="66" width="17" height="118" rx="8.5" transform="rotate(-6 154 66)"/>
+              <path d="M62 214 h34 l-2 92 -4 96 c0 6 -5 10 -11 10 h-4 c-6 0 -10 -4 -10 -9 l-3 -97 Z"/>
+              <path d="M104 214 h34 l0 92 -3 97 c0 5 -4 9 -10 9 h-4 c-6 0 -11 -4 -11 -10 l-4 -96 Z"/>
+            </g>
+            <!-- zones cliquables -->
+            <g id="mapZones">
+              <rect class="zone" data-zone="bras" x="36" y="64" width="21" height="122" rx="10" transform="rotate(6 46 66)" tabindex="0" role="button" aria-label="Zone bras et épaules"/>
+              <rect class="zone" data-zone="bras" x="143" y="64" width="21" height="122" rx="10" transform="rotate(-6 154 66)" tabindex="0" role="button" aria-label="Zone bras et épaules"/>
+              <rect class="zone" data-zone="ventre" x="66" y="104" width="68" height="56" rx="16" tabindex="0" role="button" aria-label="Zone ventre et taille"/>
+              <rect class="zone" data-zone="fessiers" x="62" y="162" width="76" height="50" rx="16" tabindex="0" role="button" aria-label="Zone fessiers et hanches"/>
+              <rect class="zone" data-zone="cuisses" x="63" y="214" width="74" height="100" rx="18" tabindex="0" role="button" aria-label="Zone cuisses et jambes"/>
+            </g>
+          </svg>
+          <div>
+            <div class="chips" id="zoneChips"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="zoneDetail"></div>
+    </section>
+
+    <!-- ================= PROGRAMME ================= -->
+    <section class="tab" id="tab-programme">
+      <p class="eyebrow">3 semaines</p>
+      <h2>Ton programme, séance par séance</h2>
+      <p style="font-size:.92rem;margin:6px 0 14px">Coche chaque séance faite. Chaque séance commence par 5 min d'échauffement (vélo ou tapis, allure tranquille) et finit par 5 min d'étirements.</p>
+      <p class="prog-note num"><span id="progCount">0</span> / 11 séances faites</p>
+      <div class="progressbar"><i id="progBar" style="width:0%"></i></div>
+      <div id="programme"></div>
+      <div class="card gold">
+        <h3>Et après les 3 semaines ?</h3>
+        <p style="margin-top:6px;font-size:.93rem">Tu gardes le rythme de la semaine 3 et tu augmentes doucement les charges chaque semaine. La perte de poids durable, c'est 2 à 4 kg par mois — les 3 premières semaines servent à lancer la machine et installer l'habitude.</p>
+      </div>
+    </section>
+
+    <!-- ================= SUIVI ================= -->
+    <section class="tab" id="tab-suivi">
+      <p class="eyebrow">Ta courbe</p>
+      <h2>Suivi du poids</h2>
+      <p style="font-size:.92rem;margin:6px 0 14px">Pèse-toi <strong style="color:var(--ink)">2 fois par semaine, le matin à jeun</strong>, toujours dans les mêmes conditions. C'est la tendance sur la semaine qui compte, pas le chiffre du jour.</p>
+
+      <form class="weigh-form" id="weighForm">
+        <input type="number" inputmode="decimal" step="0.1" min="30" max="250" id="kgInput" placeholder="Ton poids (kg)" aria-label="Poids en kilogrammes" required>
+        <button class="btn" type="submit">Ajouter</button>
+      </form>
+
+      <div class="stats3" id="stats3" hidden>
+        <div class="tile"><div class="big num" id="stStart">–</div><div class="lbl">Départ</div></div>
+        <div class="tile"><div class="big num" id="stNow">–</div><div class="lbl">Aujourd'hui</div></div>
+        <div class="tile"><div class="big num" id="stDelta">–</div><div class="lbl">Évolution</div></div>
+      </div>
+
+      <div class="card chart-card">
+        <div id="chartHost"></div>
+      </div>
+
+      <div class="card" id="histCard" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>Historique</h3>
+          <button class="btn ghost" id="clearBtn" type="button">Tout effacer</button>
+        </div>
+        <ul class="wlist" id="wlist"></ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<nav class="tabbar" aria-label="Navigation">
+  <div class="row">
+    <button class="tabbtn active" data-tab="accueil" type="button">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Accueil
+    </button>
+    <button class="tabbtn" data-tab="corps" type="button">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.6"/><path d="M12 8v7"/><path d="M7 10h10"/><path d="M12 15l-3.5 6M12 15l3.5 6"/></svg>
+      Corps
+    </button>
+    <button class="tabbtn" data-tab="programme" type="button">
+      <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M9 15l2 2 4-4"/></svg>
+      Programme
+    </button>
+    <button class="tabbtn" data-tab="suivi" type="button">
+      <svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M4 19V5"/><path d="M6 15l4-4 3 3 5-6"/></svg>
+      Suivi
+    </button>
+  </div>
+</nav>
+
+<script>
+/* ================= Données zones ================= */
+const ZONES = {
+  ventre: {
+    name: "Ventre & taille",
+    badge: "Zone la plus demandée",
+    truth: "On ne choisit pas où l'on perd la graisse : le ventre fond grâce au déficit calorique + cardio. Les abdos, eux, se renforcent avec le gainage — c'est le duo des deux qui donne un ventre plat et tonique.",
+    burn: [
+      { n: "Tapis de course incliné", m: "Marche rapide, pente 5 à 8 %", r: "25–30 min", tip: "Le brûleur n°1 pour le ventre : intensité modérée, tu dois pouvoir parler." },
+      { n: "Rameur", m: "Machine à ramer", r: "10–15 min", tip: "Brûle beaucoup et gaine le ventre à chaque tirage." },
+    ],
+    strong: [
+      { n: "Planche (gainage)", m: "Tapis de sol", r: "3 × 30–45 s", tip: "Corps bien droit, ventre serré. L'exercice le plus efficace pour un ventre plat." },
+      { n: "Crunch", m: "Tapis ou machine à abdos", r: "3 × 15", tip: "Monte doucement, sans tirer sur la nuque." },
+      { n: "Relevés de genoux", m: "Chaise romaine (dos appuyé)", r: "3 × 12", tip: "Cible le bas du ventre, la zone la plus tenace." },
+      { n: "Rotations russes", m: "Tapis + petit disque ou ballon", r: "3 × 20", tip: "Pour la taille et les obliques." },
+    ],
+    conseils: [
+      "Le ventre est très sensible à l'alimentation : sucre, alcool et sodas se stockent d'abord là.",
+      "Un ventre gonflé le soir est souvent de la digestion, pas de la graisse : mange plus lentement.",
+    ],
+  },
+  cuisses: {
+    name: "Cuisses & jambes",
+    badge: "Grosses brûleuses de calories",
+    truth: "Les cuisses portent les plus gros muscles du corps : les travailler brûle énormément de calories, même au repos. C'est la zone la plus rentable pour perdre du poids globalement.",
+    burn: [
+      { n: "Vélo", m: "Vélo droit ou elliptique", r: "15–20 min", tip: "Résistance moyenne : les jambes chauffent, sans douleur aux genoux." },
+      { n: "Escalier", m: "Stairmaster (escalier roulant)", r: "10 min", tip: "Très intense : commence doucement, tiens la rampe si besoin." },
+    ],
+    strong: [
+      { n: "Presse à cuisses", m: "Machine presse (assise, on pousse avec les pieds)", r: "3 × 12", tip: "La machine reine pour les jambes, guidée et sûre pour débuter." },
+      { n: "Leg extension", m: "Machine à quadriceps (on tend les jambes)", r: "3 × 12", tip: "Dessine l'avant de la cuisse." },
+      { n: "Leg curl", m: "Machine ischios (on plie les jambes)", r: "3 × 12", tip: "L'arrière de la cuisse, souvent oublié — important pour l'équilibre." },
+      { n: "Fentes marchées", m: "Poids du corps, puis petits haltères", r: "3 × 10 par jambe", tip: "Genou avant au-dessus de la cheville, buste droit." },
+    ],
+    conseils: [
+      "La sensation de jambes lourdes diminue vite avec le vélo régulier.",
+      "Muscler les cuisses ne les « grossit » pas avec ces charges : ça raffermit et affine la silhouette.",
+    ],
+  },
+  fessiers: {
+    name: "Fessiers & hanches",
+    badge: "Galbe & posture",
+    truth: "Chez la plupart des femmes, hanches et fessiers stockent en premier et déstockent en dernier : sois patiente sur cette zone. En attendant que la graisse fonde, le muscle se dessine dessous — le galbe arrive avant la balance.",
+    burn: [
+      { n: "Escalier", m: "Stairmaster", r: "10–15 min", tip: "Le meilleur cardio fessiers : chaque marche les fait travailler." },
+      { n: "Tapis incliné", m: "Marche rapide, pente 8–10 %", r: "20 min", tip: "La pente déplace l'effort des cuisses vers les fessiers." },
+    ],
+    strong: [
+      { n: "Hip thrust", m: "Machine dédiée ou banc + barre", r: "3 × 12", tip: "L'exercice n°1 des fessiers : pousse avec les talons, serre en haut 1 seconde." },
+      { n: "Abduction", m: "Machine à abduction (on écarte les jambes)", r: "3 × 15", tip: "Cible le côté des hanches, dessine le galbe." },
+      { n: "Kickback poulie", m: "Poulie basse + sangle cheville", r: "3 × 12 par jambe", tip: "Jambe tendue vers l'arrière, sans cambrer le dos." },
+      { n: "Fentes bulgares", m: "Banc + poids du corps", r: "3 × 10 par jambe", tip: "Pied arrière posé sur le banc : intense mais très efficace." },
+    ],
+    conseils: [
+      "Serre volontairement les fessiers sur chaque répétition : si tu ne les sens pas, ils ne travaillent pas.",
+      "2 séances fessiers par semaine suffisent — ils ont besoin de repos pour se dessiner.",
+    ],
+  },
+  bras: {
+    name: "Bras & épaules",
+    badge: "Résultats rapides",
+    truth: "Les bras répondent vite : en 3 semaines tu sentiras déjà la différence de fermeté, surtout l'arrière du bras (triceps), la zone qui « pend ». Petites charges, gestes propres.",
+    burn: [
+      { n: "Rameur", m: "Machine à ramer", r: "10 min", tip: "Cardio qui fait travailler bras, épaules et dos en même temps." },
+      { n: "Vélo elliptique", m: "Avec les poignées mobiles", r: "15 min", tip: "Pousse et tire vraiment avec les bras, pas seulement les jambes." },
+    ],
+    strong: [
+      { n: "Extension triceps", m: "Poulie haute + corde", r: "3 × 12", tip: "LA machine pour l'arrière du bras : coudes collés au corps." },
+      { n: "Curl biceps", m: "Haltères 2 à 4 kg", r: "3 × 12", tip: "Monte en 1 seconde, redescends en 2 : la descente compte autant." },
+      { n: "Développé épaules", m: "Machine épaules ou haltères légers", r: "3 × 10", tip: "Des épaules toniques donnent l'illusion d'une taille plus fine." },
+      { n: "Dips assistés", m: "Machine à dips avec assistance", r: "3 × 8", tip: "Règle l'assistance haut au début : c'est intense pour les triceps." },
+    ],
+    conseils: [
+      "Non, tu ne prendras pas de « gros bras » : avec ces charges, on raffermit, on ne gonfle pas.",
+      "Alterne toujours un exercice de poussée et un exercice de tirage.",
+    ],
+  },
+  dos: {
+    name: "Dos & posture",
+    badge: "Silhouette redressée",
+    truth: "Un dos musclé change ta silhouette immédiatement : épaules en arrière, port de tête, taille visuellement plus fine. C'est aussi la meilleure protection contre le mal de dos au quotidien.",
+    burn: [
+      { n: "Rameur", m: "Machine à ramer", r: "12–15 min", tip: "Le cardio parfait pour le dos : dos droit, on tire avec les coudes." },
+    ],
+    strong: [
+      { n: "Tirage vertical", m: "Poulie haute (barre large)", r: "3 × 12", tip: "Tire la barre vers le haut de la poitrine, épaules basses." },
+      { n: "Rowing assis", m: "Machine à tirage horizontal", r: "3 × 12", tip: "Serre les omoplates à chaque tirage." },
+      { n: "Face pull", m: "Poulie + corde, hauteur visage", r: "3 × 15", tip: "Petit exercice magique pour la posture et l'arrière des épaules." },
+      { n: "Superman", m: "Tapis de sol", r: "3 × 12", tip: "Allongée sur le ventre, décolle bras et jambes 2 secondes : renforce le bas du dos." },
+    ],
+    conseils: [
+      "Si tu travailles assise toute la journée, le dos est ta priorité cachée : 1 séance par semaine minimum.",
+      "Jamais de douleur vive dans le bas du dos : si ça pince, réduis la charge tout de suite.",
+    ],
+  },
+  corps: {
+    name: "Corps entier & cardio",
+    badge: "Brûlage maximal",
+    truth: "Pour perdre du poids, rien ne bat les séances corps entier : plus de muscles qui travaillent = plus de calories brûlées, pendant ET après la séance. C'est la base de ton programme 3 semaines.",
+    burn: [
+      { n: "HIIT vélo", m: "Vélo : 30 s rapide / 60 s tranquille", r: "8–10 tours", tip: "20 minutes qui brûlent autant qu'une heure de cardio doux. Semaine 3 seulement." },
+      { n: "Tapis incliné", m: "Marche rapide, pente 5 %", r: "30 min", tip: "La valeur sûre : facile à tenir, brûle bien, zéro impact." },
+      { n: "Cours collectifs", m: "Body pump, cycling, cardio-boxe…", r: "45 min", tip: "La motivation du groupe : parfaite pour tenir les 3 semaines." },
+    ],
+    strong: [
+      { n: "Circuit machines", m: "Presse + tirage vertical + développé + abdos", r: "3 tours × 12", tip: "Enchaîne les 4 machines sans pause, 90 s de repos entre les tours." },
+      { n: "Squat", m: "Poids du corps, puis barre guidée (Smith)", r: "3 × 10", tip: "Le mouvement le plus complet : jambes, fessiers, gainage." },
+      { n: "Gainage complet", m: "Planche + planche latérale", r: "3 × 30 s chaque", tip: "À la fin de chaque séance, quelle que soit la zone du jour." },
+    ],
+    conseils: [
+      "La meilleure séance est celle que tu fais vraiment : 40 minutes régulières battent 2 heures une fois par mois.",
+      "Marche 8 000 pas les jours sans salle : c'est ce qui fait la différence sur 3 semaines.",
+    ],
+  },
+};
+
+/* ================= Programme 3 semaines ================= */
+const PROGRAMME = [
+  {
+    t: "Prise en main", s: "On apprend les machines, charges légères",
+    sessions: [
+      { t: "Séance 1 — Corps entier découverte", d: "Circuit machines 2 tours × 12 (presse, tirage vertical, développé épaules, crunch) + 20 min tapis incliné." },
+      { t: "Séance 2 — Bas du corps + ventre", d: "Presse 3×12 · leg curl 3×12 · abduction 3×15 · planche 3×30 s + 15 min vélo." },
+      { t: "Séance 3 — Haut du corps + cardio", d: "Tirage vertical 3×12 · rowing 3×12 · triceps poulie 3×12 · curl 3×12 + 12 min rameur." },
+    ],
+  },
+  {
+    t: "Le rythme s'installe", s: "4 séances, charges un peu plus lourdes, cardio plus long",
+    sessions: [
+      { t: "Séance 4 — Cuisses & fessiers", d: "Presse 3×12 · hip thrust 3×12 · fentes 3×10 · abduction 3×15 + 15 min escalier ou tapis pente 8 %." },
+      { t: "Séance 5 — Dos, bras & ventre", d: "Tirage vertical 3×12 · rowing 3×12 · triceps 3×12 · relevés de genoux 3×12 + 12 min rameur." },
+      { t: "Séance 6 — Cardio long", d: "35 min : 20 min tapis incliné + 15 min vélo, allure où tu peux parler. Gainage 3×40 s pour finir." },
+      { t: "Séance 7 — Corps entier", d: "Circuit 3 tours × 12 (presse, tirage, développé, crunch), 90 s de repos entre les tours." },
+    ],
+  },
+  {
+    t: "On intensifie", s: "Moins de repos, premiers intervalles — c'est la semaine des résultats",
+    sessions: [
+      { t: "Séance 8 — Bas du corps renforcé", d: "Presse 3×12 (plus lourd) · hip thrust 3×12 · leg extension 3×12 · fentes bulgares 3×8 + 10 min escalier." },
+      { t: "Séance 9 — HIIT + gainage", d: "Échauffement 5 min puis HIIT vélo 8 × (30 s rapide / 60 s calme). Planche 3×45 s + planche latérale 2×30 s." },
+      { t: "Séance 10 — Haut du corps complet", d: "Tirage 3×12 · rowing 3×12 · développé épaules 3×10 · triceps 3×12 · curl 3×12 + 10 min rameur." },
+      { t: "Séance 11 — Séance plaisir + bilan", d: "Cours collectif OU circuit corps entier 3 tours + 20 min du cardio que tu préfères. Pèse-toi demain matin à jeun : bilan des 3 semaines." },
+    ],
+  },
+];
+
+/* ================= Navigation ================= */
+const tabs = document.querySelectorAll("section.tab");
+const tabBtns = document.querySelectorAll(".tabbtn");
+function showTab(id){
+  tabs.forEach(s => s.classList.toggle("active", s.id === "tab-" + id));
+  tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === id));
+  window.scrollTo({ top: 0 });
+}
+tabBtns.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
+
+/* ================= Corps : zones ================= */
+const chipsHost = document.getElementById("zoneChips");
+Object.entries(ZONES).forEach(([key, z]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.dataset.zone = key; b.textContent = z.name;
+  b.addEventListener("click", () => selectZone(key));
+  chipsHost.appendChild(b);
+});
+document.querySelectorAll(".zone").forEach(el => {
+  el.addEventListener("click", () => selectZone(el.dataset.zone));
+  el.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectZone(el.dataset.zone); }
+  });
+});
+
+function exoRow(e, cardio){
+  return `<div class="exo">
+    <div class="n">${e.n}</div>
+    <div class="r${cardio ? " cardio" : ""} num">${e.r}</div>
+    <div class="m">${e.m}</div>
+    <div class="tip">${e.tip}</div>
+  </div>`;
+}
+
+function selectZone(key){
+  const z = ZONES[key];
+  if (!z) return;
+  document.querySelectorAll(".zone").forEach(el => el.classList.toggle("sel", el.dataset.zone === key));
+  document.querySelectorAll(".chip").forEach(el => el.classList.toggle("sel", el.dataset.zone === key));
+  const host = document.getElementById("zoneDetail");
+  host.innerHTML = `
+    <div class="zone-head"><h2>${z.name}</h2><span class="badge">${z.badge}</span></div>
+    <div class="truth">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="var(--gold)" stroke-width="2"/><path d="M12 8v5M12 16v.5" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <p><strong>Bon à savoir —</strong> ${z.truth}</p>
+    </div>
+    <div class="card">
+      <div class="sec-label burn">Faire fondre — cardio</div>
+      ${z.burn.map(e => exoRow(e, true)).join("")}
+      <div class="sec-label strong">Raffermir — machines &amp; renfo</div>
+      ${z.strong.map(e => exoRow(e, false)).join("")}
+    </div>
+    <div class="card">
+      <h3>Les conseils du coach</h3>
+      <ul class="tips">${z.conseils.map(c => `<li>${c}</li>`).join("")}</ul>
+    </div>`;
+  host.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+/* ================= Programme : rendu + coches ================= */
+const PROG_KEY = "cs-prog";
+let progDone = {};
+try { progDone = JSON.parse(localStorage.getItem(PROG_KEY)) || {}; } catch (e) { progDone = {}; }
+
+const progHost = document.getElementById("programme");
+let sessionIdx = 0;
+const TOTAL_SESSIONS = PROGRAMME.reduce((n, w) => n + w.sessions.length, 0);
+PROGRAMME.forEach((w, wi) => {
+  const week = document.createElement("div");
+  week.className = "week";
+  week.innerHTML = `<div class="week-head">
+      <div class="week-num num">${wi + 1}</div>
+      <div><div class="t">Semaine ${wi + 1} — ${w.t}</div><div class="s">${w.s}</div></div>
+    </div>`;
+  w.sessions.forEach(s => {
+    const id = "s" + sessionIdx++;
+    const div = document.createElement("div");
+    div.className = "session" + (progDone[id] ? " done" : "");
+    div.innerHTML = `<label>
+        <input type="checkbox" ${progDone[id] ? "checked" : ""} data-id="${id}">
+        <span><span class="st">${s.t}</span><span class="sd" style="display:block">${s.d}</span></span>
+      </label>`;
+    div.querySelector("input").addEventListener("change", ev => {
+      progDone[id] = ev.target.checked;
+      if (!ev.target.checked) delete progDone[id];
+      localStorage.setItem(PROG_KEY, JSON.stringify(progDone));
+      div.classList.toggle("done", ev.target.checked);
+      updateProgress();
+    });
+    week.appendChild(div);
+  });
+  progHost.appendChild(week);
+});
+function updateProgress(){
+  const n = Object.keys(progDone).length;
+  document.getElementById("progCount").textContent = n;
+  document.getElementById("progBar").style.width = (n / TOTAL_SESSIONS * 100) + "%";
+}
+updateProgress();
+
+/* ================= Suivi du poids ================= */
+const W_KEY = "cs-poids";
+let weights = [];
+try { weights = JSON.parse(localStorage.getItem(W_KEY)) || []; } catch (e) { weights = []; }
+
+const fmtKg = v => v.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+const fmtDate = iso => new Date(iso + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+
+document.getElementById("weighForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const input = document.getElementById("kgInput");
+  const v = parseFloat(String(input.value).replace(",", "."));
+  if (!isFinite(v) || v < 30 || v > 250) return;
+  const today = new Date();
+  const iso = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+  const existing = weights.find(w => w.d === iso);
+  if (existing) existing.kg = v; else weights.push({ d: iso, kg: v });
+  weights.sort((a, b) => a.d < b.d ? -1 : 1);
+  localStorage.setItem(W_KEY, JSON.stringify(weights));
+  input.value = "";
+  renderSuivi();
+});
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (!confirm("Effacer tout l'historique de poids ?")) return;
+  weights = [];
+  localStorage.removeItem(W_KEY);
+  renderSuivi();
+});
+
+function renderSuivi(){
+  const stats = document.getElementById("stats3");
+  const hist = document.getElementById("histCard");
+  const list = document.getElementById("wlist");
+  const chartHost = document.getElementById("chartHost");
+
+  if (weights.length === 0) {
+    stats.hidden = true; hist.hidden = true;
+    chartHost.innerHTML = `<div class="chart-empty">Ajoute ta première pesée pour voir ta courbe apparaître ici.</div>`;
+    return;
+  }
+
+  const first = weights[0], last = weights[weights.length - 1];
+  const delta = last.kg - first.kg;
+  stats.hidden = false;
+  document.getElementById("stStart").textContent = fmtKg(first.kg);
+  document.getElementById("stNow").textContent = fmtKg(last.kg);
+  const dEl = document.getElementById("stDelta");
+  dEl.textContent = (delta > 0 ? "+" : "") + delta.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+  dEl.className = "big num " + (delta <= 0 ? "delta-down" : "delta-up");
+
+  /* liste */
+  hist.hidden = false;
+  list.innerHTML = weights.slice().reverse().map((w, i) => {
+    const realIdx = weights.length - 1 - i;
+    return `<li><span class="d">${fmtDate(w.d)}</span><span style="display:flex;align-items:center;gap:4px"><span class="kg num">${fmtKg(w.kg)}</span><button type="button" data-del="${realIdx}" aria-label="Supprimer cette pesée">✕</button></span></li>`;
+  }).join("");
+  list.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
+    weights.splice(parseInt(b.dataset.del, 10), 1);
+    localStorage.setItem(W_KEY, JSON.stringify(weights));
+    renderSuivi();
+  }));
+
+  /* courbe */
+  if (weights.length === 1) {
+    chartHost.innerHTML = `<div class="chart-empty">Première pesée enregistrée : ${fmtKg(first.kg)}. La courbe se dessinera à partir de la deuxième.</div>`;
+    return;
+  }
+  const W = 520, H = 220, padL = 44, padR = 20, padT = 18, padB = 30;
+  const kgs = weights.map(w => w.kg);
+  let lo = Math.min(...kgs), hi = Math.max(...kgs);
+  const span = Math.max(hi - lo, 1);
+  lo -= span * 0.18; hi += span * 0.18;
+  const x = i => padL + (W - padL - padR) * (weights.length === 1 ? 0.5 : i / (weights.length - 1));
+  const y = v => padT + (H - padT - padB) * (1 - (v - lo) / (hi - lo));
+  const pts = weights.map((w, i) => [x(i), y(w.kg)]);
+  const path = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  const area = path + ` L ${pts[pts.length - 1][0].toFixed(1)} ${H - padB} L ${pts[0][0].toFixed(1)} ${H - padB} Z`;
+  const gridVals = [lo + (hi - lo) * 0.25, lo + (hi - lo) * 0.5, lo + (hi - lo) * 0.75];
+  const lastP = pts[pts.length - 1];
+  const lastLabelY = Math.max(padT + 10, lastP[1] - 12);
+
+  chartHost.innerHTML = `<svg id="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe d'évolution du poids">
+    ${gridVals.map(v => `<line x1="${padL}" x2="${W - padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--line)" stroke-width="1"/>
+      <text x="${padL - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--muted)" class="num">${v.toFixed(1)}</text>`).join("")}
+    <path d="${area}" fill="var(--accent)" opacity="0.10"/>
+    <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i === pts.length - 1 ? 6 : 4}" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"><title>${fmtDate(weights[i].d)} : ${fmtKg(weights[i].kg)}</title></circle>`).join("")}
+    <text x="${(lastP[0] - 4).toFixed(1)}" y="${lastLabelY.toFixed(1)}" text-anchor="end" font-size="13" font-weight="700" fill="var(--ink)" class="num">${fmtKg(last.kg)}</text>
+    <text x="${padL}" y="${H - 8}" font-size="11" fill="var(--muted)">${fmtDate(first.d)}</text>
+    <text x="${W - padR}" y="${H - 8}" text-anchor="end" font-size="11" fill="var(--muted)">${fmtDate(last.d)}</text>
+  </svg>`;
+}
+renderSuivi();
+
+/* zone par défaut : ventre (la plus demandée) */
+selectZone("ventre");
+</script>
