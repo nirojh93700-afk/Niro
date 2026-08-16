@@ -317,6 +317,92 @@
     background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 8px;
   }
 
+  /* ---------- Lecteur de séance ---------- */
+  #player{
+    position:fixed;inset:0;z-index:100;background:var(--bg);
+    display:flex;flex-direction:column;
+    padding:calc(10px + env(safe-area-inset-top)) 0 calc(12px + env(safe-area-inset-bottom));
+  }
+  body.playing{overflow:hidden}
+  .pl-head{display:flex;align-items:center;gap:10px;padding:4px 16px 10px}
+  .pl-head .pl-close{
+    flex:none;width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--surface2);color:var(--ink);font-size:1.05rem;font-weight:700;
+  }
+  .pl-head .pl-title{flex:1;min-width:0}
+  .pl-head .pl-title .t{font-weight:800;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pl-head .pl-title .s{font-size:.78rem;color:var(--muted)}
+  .pl-head .pl-clock{font-weight:800;font-size:1rem;color:var(--ink2)}
+  .pl-prog{display:flex;gap:4px;padding:0 16px 10px}
+  .pl-prog i{flex:1;height:4px;border-radius:99px;background:var(--surface2)}
+  .pl-prog i.on{background:var(--accent)}
+  .pl-body{flex:1;overflow-y:auto;padding:4px 18px;display:flex;flex-direction:column}
+  .pl-foot{padding:10px 18px 0;display:flex;gap:10px}
+  .pl-foot .btn{flex:1;padding:16px;font-size:1.05rem;border-radius:16px}
+  .btn.big-go{background:var(--accent)}
+  .btn.warn{background:var(--surface2);color:var(--ink2)}
+
+  .ex-img{
+    position:relative;border-radius:18px;overflow:hidden;background:#fff;
+    aspect-ratio:3/2;box-shadow:var(--shadow);
+  }
+  .ex-img img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transition:opacity .45s ease;
+  }
+  .ex-img img.show{opacity:1}
+  .ex-img .pict{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--accent-soft)}
+  .ex-img .pict svg{width:56%;height:56%}
+  @media (prefers-reduced-motion: reduce){ .ex-img img{transition:none} }
+
+  .pl-exname{font-size:1.35rem;font-weight:900;letter-spacing:-.01em;margin-top:14px;text-wrap:balance}
+  .pl-exmach{font-size:.9rem;color:var(--muted);margin-top:2px}
+  .pl-phase{
+    font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    margin-top:16px;color:var(--accent-ink);
+  }
+  .pl-phase.rest{color:var(--cardio)}
+  .pl-count{
+    font-size:4.6rem;font-weight:900;letter-spacing:-.03em;line-height:1;
+    font-variant-numeric:tabular-nums;margin-top:2px;
+  }
+  .pl-reps{font-size:2.2rem;font-weight:900;margin-top:2px}
+  .pl-sets{font-size:.95rem;color:var(--ink2);margin-top:4px}
+  .pl-tip{
+    margin-top:auto;padding:12px 14px;background:var(--gold-soft);border-radius:14px;
+    font-size:.88rem;color:var(--ink);
+  }
+  .pl-next{
+    margin-top:auto;display:flex;align-items:center;gap:12px;
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px;
+  }
+  .pl-next .th{flex:none;width:64px;height:46px;border-radius:10px;overflow:hidden;background:var(--accent-soft)}
+  .pl-next .th img{width:100%;height:100%;object-fit:cover}
+  .pl-next .th svg{width:100%;height:100%;padding:6px}
+  .pl-next .nx-l{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .pl-next .nx-n{font-weight:700;font-size:.95rem}
+
+  .prev-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .prev-list li{
+    display:flex;align-items:center;gap:12px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px;padding:9px 12px;
+  }
+  .prev-list .th{flex:none;width:62px;height:44px;border-radius:10px;overflow:hidden;background:var(--accent-soft)}
+  .prev-list .th img{width:100%;height:100%;object-fit:cover}
+  .prev-list .th svg{width:100%;height:100%;padding:5px}
+  .prev-list .n{font-weight:700;font-size:.92rem}
+  .prev-list .d{font-size:.8rem;color:var(--muted)}
+  .pl-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+  .pl-done .trophy{width:90px;height:90px;border-radius:50%;background:var(--gold-soft);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+  .pl-done h2{font-size:1.6rem}
+  .pl-done .stats{display:flex;gap:12px;margin-top:14px}
+  .pl-done .stats div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 18px}
+  .pl-done .stats .b{font-weight:900;font-size:1.3rem}
+  .pl-done .stats .l{font-size:.75rem;color:var(--muted)}
+  .session .start-btn{
+    margin-top:10px;width:100%;padding:11px;font-size:.95rem;border-radius:12px;
+  }
+
   /* ---------- Tab bar ---------- */
   nav.tabbar{
     position:fixed;left:0;right:0;bottom:0;z-index:50;
@@ -569,6 +655,8 @@
 
   </main>
 </div>
+
+<div id="player" hidden></div>
 
 <nav class="tabbar" aria-label="Navigation">
   <div class="row">
@@ -1138,6 +1226,328 @@ function renderSuivi(){
   renderMens();
 }
 renderSuivi();
+
+/* ================= Séance guidée (lecteur) ================= */
+const PICTOS = {
+  velo: `<svg viewBox="0 0 100 70" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round"><circle cx="24" cy="50" r="14"/><circle cx="76" cy="50" r="14"/><path d="M24 50 L44 50 L58 28 L70 28 M52 50 L44 50 M58 28 L64 50 M46 26 h10"/></svg>`,
+  tapis: `<svg viewBox="0 0 100 70" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round"><path d="M10 58 L90 50"/><circle cx="52" cy="14" r="6"/><path d="M52 20 L50 36 L42 50 M50 36 L58 48 M52 24 L64 30 M52 24 L40 32"/></svg>`,
+  rameur: `<svg viewBox="0 0 100 70" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round"><path d="M8 58 h84"/><circle cx="38" cy="26" r="6"/><path d="M38 32 L46 44 L62 44 M46 44 L34 52 M38 34 L22 40 M68 58 L62 44"/></svg>`,
+  escalier: `<svg viewBox="0 0 100 70" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round"><path d="M12 62 h20 v-14 h20 v-14 h20 v-14 h16"/><circle cx="40" cy="16" r="6"/><path d="M40 22 L38 34 L30 44 M38 34 L46 42"/></svg>`,
+  stretch: `<svg viewBox="0 0 100 70" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round"><circle cx="50" cy="12" r="6"/><path d="M50 18 L50 38 M50 24 L30 16 M50 24 L70 16 M50 38 L36 58 M50 38 L64 58"/></svg>`,
+};
+const EXOS = {
+  echauffement: { n: "Échauffement", m: "Vélo ou tapis, allure tranquille", pict: "velo", tip: "On chauffe les muscles pour éviter les blessures : allure facile, tu dois pouvoir chanter." },
+  etirements: { n: "Étirements", m: "Jambes, dos, épaules — en douceur", pict: "stretch", tip: "Tiens chaque étirement 20 à 30 secondes, sans à-coups, en respirant profondément." },
+  tapis: { n: "Tapis incliné", m: "Marche rapide, pente 5 à 8 %", pict: "tapis", tip: "Ne t'accroche pas aux poignées : bras qui balancent, ventre serré." },
+  velo: { n: "Vélo", m: "Résistance moyenne", pict: "velo", tip: "Règle la selle à hauteur de ta hanche debout. Jambes qui chauffent = bonne résistance." },
+  rameur: { n: "Rameur", m: "Dos droit, tire avec les coudes", pict: "rameur", tip: "L'ordre du geste : pousse les jambes, penche le buste, tire les bras. Puis l'inverse." },
+  escalier: { n: "Escalier (stairmaster)", m: "Rythme régulier", pict: "escalier", tip: "Pose tout le pied sur la marche, serre les fessiers à chaque montée." },
+  hiit: { n: "Sprint vélo", m: "30 s le plus vite possible", pict: "velo", tip: "Donne tout pendant 30 s, puis pédale tout doucement pendant la récupération." },
+  presse: { n: "Presse à cuisses", m: "Machine presse", img: ["presse-0", "presse-1"], tip: "Pousse avec les talons, dos et tête collés au dossier, genoux jamais verrouillés." },
+  legext: { n: "Leg extension", m: "Machine à quadriceps", img: ["legext-0", "legext-1"], tip: "Monte en 1 s, redescends en 2 s, sans balancer." },
+  legcurl: { n: "Leg curl", m: "Machine ischios", img: ["legcurl-0", "legcurl-1"], tip: "Plie doucement, retiens la charge à la remontée." },
+  tirage: { n: "Tirage vertical", m: "Poulie haute, barre large", img: ["tirage-0", "tirage-1"], tip: "Tire la barre vers le haut de la poitrine, épaules basses, buste presque droit." },
+  rowing: { n: "Rowing assis", m: "Tirage horizontal", img: ["rowing-0", "rowing-1"], tip: "Serre les omoplates à chaque tirage, dos droit." },
+  devep: { n: "Développé épaules", m: "Haltères, assise", img: ["devep-0", "devep-1"], tip: "Monte les haltères au-dessus de la tête sans cambrer le dos." },
+  curl: { n: "Curl biceps", m: "Haltères", img: ["curl-0", "curl-1"], tip: "Coudes collés au corps, descente lente." },
+  triceps: { n: "Extension triceps", m: "Poulie haute + corde", img: ["triceps-0", "triceps-1"], tip: "Coudes collés au corps, écarte la corde en bas du mouvement." },
+  crunch: { n: "Crunch", m: "Tapis de sol", img: ["crunch-0", "crunch-1"], tip: "Décolle les épaules, pas le bas du dos. Ne tire jamais sur ta nuque." },
+  planche: { n: "Planche (gainage)", m: "Tapis de sol", img: ["planche-1"], tip: "Corps aligné des épaules aux talons, ventre serré, respire !" },
+  sideplank: { n: "Planche latérale", m: "Tapis de sol", img: ["sideplank-0"], tip: "Hanches hautes, corps bien droit. Change de côté à chaque série." },
+  releves: { n: "Relevés de jambes", m: "Banc ou chaise romaine", img: ["releves-0", "releves-1"], tip: "Bas du dos plaqué, remonte les jambes sans élan." },
+  hipthrust: { n: "Hip thrust", m: "Banc + barre ou machine", img: ["hipthrust-0", "hipthrust-1"], tip: "Pousse avec les talons, serre fort les fessiers 1 s en haut." },
+  abduction: { n: "Abduction", m: "Machine à abduction", img: ["abduction-0", "abduction-1"], tip: "Écarte lentement, retiens le retour — c'est là que ça travaille." },
+  fentes: { n: "Fentes", m: "Poids du corps ou haltères", img: ["fentes-0", "fentes-1"], tip: "Genou avant au-dessus de la cheville, buste droit. Alterne les jambes." },
+  bulgares: { n: "Fentes bulgares", m: "Pied arrière sur un banc", img: ["bulgares-0", "bulgares-1"], tip: "Intense ! Descends doucement, pousse avec le talon avant." },
+};
+/* Étapes : {ex, sets, reps} = séries à répétitions · {ex, time} = chrono (s) · rest = repos (s) */
+const ECH = { ex: "echauffement", time: 300 };
+const ETI = { ex: "etirements", time: 300 };
+const PLANS = [
+  [ECH, { ex: "presse", sets: 2, reps: 12, rest: 60 }, { ex: "tirage", sets: 2, reps: 12, rest: 60 }, { ex: "devep", sets: 2, reps: 12, rest: 60 }, { ex: "crunch", sets: 2, reps: 15, rest: 45 }, { ex: "tapis", time: 1200 }, ETI],
+  [ECH, { ex: "presse", sets: 3, reps: 12, rest: 60 }, { ex: "legcurl", sets: 3, reps: 12, rest: 60 }, { ex: "abduction", sets: 3, reps: 15, rest: 45 }, { ex: "planche", sets: 3, time: 30, rest: 30 }, { ex: "velo", time: 900 }, ETI],
+  [ECH, { ex: "tirage", sets: 3, reps: 12, rest: 60 }, { ex: "rowing", sets: 3, reps: 12, rest: 60 }, { ex: "triceps", sets: 3, reps: 12, rest: 45 }, { ex: "curl", sets: 3, reps: 12, rest: 45 }, { ex: "rameur", time: 720 }, ETI],
+  [ECH, { ex: "presse", sets: 3, reps: 12, rest: 60 }, { ex: "hipthrust", sets: 3, reps: 12, rest: 60 }, { ex: "fentes", sets: 3, reps: 10, rest: 60 }, { ex: "abduction", sets: 3, reps: 15, rest: 45 }, { ex: "escalier", time: 900 }, ETI],
+  [ECH, { ex: "tirage", sets: 3, reps: 12, rest: 60 }, { ex: "rowing", sets: 3, reps: 12, rest: 60 }, { ex: "triceps", sets: 3, reps: 12, rest: 45 }, { ex: "releves", sets: 3, reps: 12, rest: 45 }, { ex: "rameur", time: 720 }, ETI],
+  [ECH, { ex: "tapis", time: 1200 }, { ex: "velo", time: 900 }, { ex: "planche", sets: 3, time: 40, rest: 30 }, ETI],
+  [ECH, { ex: "presse", sets: 3, reps: 12, rest: 45 }, { ex: "tirage", sets: 3, reps: 12, rest: 45 }, { ex: "devep", sets: 3, reps: 12, rest: 45 }, { ex: "crunch", sets: 3, reps: 15, rest: 45 }, ETI],
+  [ECH, { ex: "presse", sets: 3, reps: 12, rest: 75 }, { ex: "hipthrust", sets: 3, reps: 12, rest: 60 }, { ex: "legext", sets: 3, reps: 12, rest: 60 }, { ex: "bulgares", sets: 3, reps: 8, rest: 60 }, { ex: "escalier", time: 600 }, ETI],
+  [ECH, { ex: "hiit", sets: 8, time: 30, rest: 60 }, { ex: "planche", sets: 3, time: 45, rest: 30 }, { ex: "sideplank", sets: 2, time: 30, rest: 20 }, ETI],
+  [ECH, { ex: "tirage", sets: 3, reps: 12, rest: 60 }, { ex: "rowing", sets: 3, reps: 12, rest: 60 }, { ex: "devep", sets: 3, reps: 10, rest: 60 }, { ex: "triceps", sets: 3, reps: 12, rest: 45 }, { ex: "curl", sets: 3, reps: 12, rest: 45 }, { ex: "rameur", time: 600 }, ETI],
+  [ECH, { ex: "presse", sets: 3, reps: 12, rest: 45 }, { ex: "tirage", sets: 3, reps: 12, rest: 45 }, { ex: "devep", sets: 3, reps: 12, rest: 45 }, { ex: "crunch", sets: 3, reps: 15, rest: 45 }, { ex: "velo", time: 1200 }, ETI],
+];
+const SESSION_TITLES = PROGRAMME.flatMap(w => w.sessions.map(s => s.t));
+
+function stepDur(st){
+  const sets = st.sets || 1;
+  const work = st.time ? st.time : (st.reps || 12) * 4;
+  return sets * work + (sets - (st.time && !st.sets ? 1 : 0)) * (st.rest || 0) + 15;
+}
+function planDur(plan){ return Math.round(plan.reduce((a, s) => a + stepDur(s), 0) / 60); }
+function fmtClock(s){
+  s = Math.max(0, Math.round(s));
+  return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+/* --- Sons (WebAudio, aucun fichier) --- */
+let AC = null;
+function initAudio(){
+  try {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === "suspended") AC.resume();
+  } catch (e) { /* pas de son dispo */ }
+}
+function tone(f, dur, delay, vol){
+  if (!AC) return;
+  try {
+    const o = AC.createOscillator(), g = AC.createGain();
+    const t = AC.currentTime + (delay || 0);
+    o.type = "sine"; o.frequency.value = f;
+    g.gain.setValueAtTime(vol || 0.3, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(AC.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  } catch (e) {}
+}
+const sndTick = () => tone(880, 0.09);
+function sndGo(){ tone(660, 0.14, 0); tone(880, 0.16, 0.15); tone(1174, 0.35, 0.3); if (navigator.vibrate) navigator.vibrate([180, 70, 180]); }
+function sndDone(){ [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.3, i * 0.16)); if (navigator.vibrate) navigator.vibrate([250, 100, 250, 100, 400]); }
+
+/* --- Moteur --- */
+const P = {
+  open: false, plan: null, sid: 0, si: 0, set: 1,
+  phase: "", tLeft: 0, lastT: 0, elapsed: 0, paused: false,
+  loop: null, anim: null, lastWhole: null, wake: null,
+};
+const playerEl = document.getElementById("player");
+
+function exThumb(ex){
+  const e = EXOS[ex];
+  return e.img
+    ? `<div class="th"><img src="exos/${e.img[0]}.jpg" alt=""></div>`
+    : `<div class="th">${PICTOS[e.pict]}</div>`;
+}
+function exMedia(ex){
+  const e = EXOS[ex];
+  if (e.img) {
+    return `<div class="ex-img">${e.img.map((f, i) => `<img src="exos/${f}.jpg" alt="${e.n}" class="${i === 0 ? "show" : ""}" data-f="${i}">`).join("")}</div>`;
+  }
+  return `<div class="ex-img"><div class="pict">${PICTOS[e.pict]}</div></div>`;
+}
+function startAnim(){
+  stopAnim();
+  const imgs = playerEl.querySelectorAll(".ex-img img");
+  if (imgs.length < 2) return;
+  let cur = 0;
+  P.anim = setInterval(() => {
+    cur = 1 - cur;
+    imgs.forEach(im => im.classList.toggle("show", +im.dataset.f === cur));
+  }, 1100);
+}
+function stopAnim(){ if (P.anim) { clearInterval(P.anim); P.anim = null; } }
+
+function stepLabel(st){
+  if (st.time && !st.sets) return fmtClock(st.time);
+  if (st.time) return `${st.sets} × ${st.time} s`;
+  return `${st.sets} × ${st.reps} répétitions`;
+}
+
+function openPlayer(sid){
+  initAudio();
+  P.open = true; P.sid = sid; P.plan = PLANS[sid];
+  P.si = 0; P.set = 1; P.elapsed = 0; P.paused = false; P.phase = "preview";
+  document.body.classList.add("playing");
+  playerEl.hidden = false;
+  if (navigator.wakeLock && navigator.wakeLock.request) {
+    navigator.wakeLock.request("screen").then(w => { P.wake = w; }).catch(() => {});
+  }
+  renderPreview();
+}
+function closePlayer(){
+  P.open = false;
+  stopAnim();
+  if (P.loop) { clearInterval(P.loop); P.loop = null; }
+  if (P.wake) { P.wake.release().catch(() => {}); P.wake = null; }
+  document.body.classList.remove("playing");
+  playerEl.hidden = true;
+}
+function headHtml(sub){
+  const total = P.plan.length;
+  return `<div class="pl-head">
+      <button class="pl-close" type="button" id="plQuit" aria-label="Quitter">✕</button>
+      <div class="pl-title"><div class="t">${SESSION_TITLES[P.sid]}</div><div class="s">${sub}</div></div>
+      <div class="pl-clock num" id="plClock">${fmtClock(P.elapsed)}</div>
+    </div>
+    <div class="pl-prog">${P.plan.map((_, i) => `<i class="${i < P.si || (i === P.si && P.phase === "done") ? "on" : (i === P.si ? "on" : "")}"></i>`).join("")}</div>`;
+}
+function wireQuit(){
+  playerEl.querySelector("#plQuit").addEventListener("click", () => {
+    if (P.phase === "preview" || P.phase === "done" || confirm("Quitter la séance en cours ?")) closePlayer();
+  });
+}
+
+function renderPreview(){
+  const plan = P.plan;
+  playerEl.innerHTML = `${headHtml("Aperçu de la séance")}
+    <div class="pl-body">
+      <p class="eyebrow">≈ ${planDur(plan)} minutes</p>
+      <h2 style="margin-top:2px">Ta séance du jour</h2>
+      <ul class="prev-list">
+        ${plan.map(st => `<li>${exThumb(st.ex)}<div><div class="n">${EXOS[st.ex].n}</div><div class="d">${stepLabel(st)}</div></div></li>`).join("")}
+      </ul>
+    </div>
+    <div class="pl-foot"><button class="btn big-go" id="plGo" type="button">C'est parti</button></div>`;
+  wireQuit();
+  playerEl.querySelector("#plGo").addEventListener("click", () => { initAudio(); beginStep(0); });
+}
+
+function beginStep(si){
+  P.si = si; P.set = 1;
+  startWork();
+}
+function startWork(){
+  const st = P.plan[P.si];
+  P.phase = "work";
+  if (st.time) { P.tLeft = st.time * 1000; P.lastWhole = null; }
+  renderWork();
+  startLoop();
+}
+function startRest(sec, nextLabel){
+  P.phase = "rest";
+  P.tLeft = sec * 1000; P.lastWhole = null;
+  renderRest(nextLabel);
+  startLoop();
+}
+function nextAfterWork(){
+  const st = P.plan[P.si];
+  const sets = st.sets || 1;
+  if (P.set < sets) {
+    P.set++;
+    startRest(st.rest || 45, { ex: st.ex, label: `Série ${P.set} / ${sets}` });
+  } else if (P.si < P.plan.length - 1) {
+    const nx = P.plan[P.si + 1];
+    P.si++; P.set = 1;
+    startRest(st.rest || 30, { ex: nx.ex, label: EXOS[nx.ex].n });
+  } else {
+    finish();
+  }
+}
+function renderWork(){
+  const st = P.plan[P.si];
+  const e = EXOS[st.ex];
+  const sets = st.sets || 1;
+  const setTxt = sets > 1 ? `Série ${P.set} / ${sets}` : "";
+  playerEl.innerHTML = `${headHtml(`Exercice ${P.si + 1} / ${P.plan.length}`)}
+    <div class="pl-body">
+      ${exMedia(st.ex)}
+      <div class="pl-exname">${e.n}</div>
+      <div class="pl-exmach">${e.m}</div>
+      <div class="pl-phase">${st.time ? "En cours" : "À toi de jouer"}${setTxt ? " — " + setTxt : ""}</div>
+      ${st.time
+        ? `<div class="pl-count num" id="plCount">${fmtClock(P.tLeft / 1000)}</div>`
+        : `<div class="pl-reps num">${st.reps} répétitions</div><div class="pl-sets">Charge : celle où les 2 dernières répétitions sont difficiles mais propres.</div>`}
+      <div class="pl-tip">${e.tip}</div>
+    </div>
+    <div class="pl-foot">
+      ${st.time ? `<button class="btn warn" id="plPause" type="button">${P.paused ? "Reprendre" : "Pause"}</button>` : ""}
+      ${st.time
+        ? `<button class="btn warn" id="plSkip" type="button">Passer</button>`
+        : `<button class="btn big-go" id="plDoneSet" type="button">✓ Série terminée</button>`}
+    </div>`;
+  wireQuit();
+  startAnim();
+  const pauseBtn = playerEl.querySelector("#plPause");
+  if (pauseBtn) pauseBtn.addEventListener("click", () => { P.paused = !P.paused; pauseBtn.textContent = P.paused ? "Reprendre" : "Pause"; });
+  const skipBtn = playerEl.querySelector("#plSkip");
+  if (skipBtn) skipBtn.addEventListener("click", () => { sndGo(); nextAfterWork(); });
+  const doneBtn = playerEl.querySelector("#plDoneSet");
+  if (doneBtn) doneBtn.addEventListener("click", () => { sndGo(); nextAfterWork(); });
+}
+function renderRest(next){
+  playerEl.innerHTML = `${headHtml(`Exercice ${P.si + 1} / ${P.plan.length}`)}
+    <div class="pl-body">
+      <div class="pl-phase rest" style="margin-top:26px">Repos — respire</div>
+      <div class="pl-count num" id="plCount">${fmtClock(P.tLeft / 1000)}</div>
+      <div class="pl-next">${exThumb(next.ex)}<div><div class="nx-l">À suivre</div><div class="nx-n">${next.label}</div></div></div>
+    </div>
+    <div class="pl-foot">
+      <button class="btn warn" id="plPlus" type="button">+ 15 s</button>
+      <button class="btn big-go" id="plSkipRest" type="button">Passer le repos</button>
+    </div>`;
+  wireQuit();
+  stopAnim();
+  playerEl.querySelector("#plPlus").addEventListener("click", () => { P.tLeft += 15000; });
+  playerEl.querySelector("#plSkipRest").addEventListener("click", () => { endCountdown(); });
+}
+function startLoop(){
+  if (P.loop) clearInterval(P.loop);
+  P.lastT = Date.now();
+  P.loop = setInterval(() => {
+    const now = Date.now();
+    const dt = now - P.lastT;
+    P.lastT = now;
+    if (P.paused) return;
+    P.elapsed += dt / 1000;
+    const clock = playerEl.querySelector("#plClock");
+    if (clock) clock.textContent = fmtClock(P.elapsed);
+    if (P.phase === "work" && !P.plan[P.si].time) return;
+    if (P.phase !== "work" && P.phase !== "rest") return;
+    P.tLeft -= dt;
+    const el = playerEl.querySelector("#plCount");
+    if (el) el.textContent = fmtClock(P.tLeft / 1000);
+    const whole = Math.ceil(P.tLeft / 1000);
+    if (whole !== P.lastWhole) {
+      P.lastWhole = whole;
+      if (whole > 0 && whole <= 3) sndTick();
+    }
+    if (P.tLeft <= 0) endCountdown();
+  }, 200);
+}
+function endCountdown(){
+  if (P.phase === "rest") { sndGo(); startWork(); }
+  else if (P.phase === "work") { sndGo(); nextAfterWork(); }
+}
+function finish(){
+  if (P.loop) { clearInterval(P.loop); P.loop = null; }
+  stopAnim();
+  P.phase = "done";
+  sndDone();
+  const sid = "s" + P.sid;
+  if (!progDone[sid]) {
+    progDone[sid] = true;
+    localStorage.setItem(PROG_KEY, JSON.stringify(progDone));
+    const cb = document.querySelector(`.session input[data-id="${sid}"]`);
+    if (cb) { cb.checked = true; cb.closest(".session").classList.add("done"); }
+    updateProgress();
+  }
+  const nSets = P.plan.reduce((a, s) => a + (s.sets || 1), 0);
+  playerEl.innerHTML = `${headHtml("Séance terminée")}
+    <div class="pl-body">
+      <div class="pl-done">
+        <div class="trophy"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0Z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></div>
+        <h2 class="display">Bravo !</h2>
+        <p>Séance faite et cochée dans ton programme.</p>
+        <div class="stats">
+          <div><div class="b num">${fmtClock(P.elapsed)}</div><div class="l">Durée</div></div>
+          <div><div class="b num">${P.plan.length}</div><div class="l">Exercices</div></div>
+          <div><div class="b num">${nSets}</div><div class="l">Séries</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="pl-foot"><button class="btn big-go" id="plEnd" type="button">Terminer</button></div>`;
+  wireQuit();
+  playerEl.querySelector("#plEnd").addEventListener("click", closePlayer);
+}
+
+/* Boutons « Démarrer » sur chaque séance */
+document.querySelectorAll(".session").forEach((div, idx) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "btn start-btn";
+  b.textContent = "▶  Démarrer la séance guidée";
+  b.addEventListener("click", () => openPlayer(idx));
+  div.appendChild(b);
+});
 
 /* zone par défaut : ventre (la plus demandée) */
 selectZone("ventre");
