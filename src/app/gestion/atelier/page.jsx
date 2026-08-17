@@ -12,7 +12,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { getProductBySlug } from "@/lib/products";
+import { getProductBySlug, CATEGORIES, getCategoryLabel } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
 import { TableGravure } from "@/lib/engravingSheet";
 
@@ -193,69 +193,100 @@ export default function AtelierPage() {
       {loading && <p>Chargement…</p>}
       {!loading && !orders.length && <p style={{ color: "var(--ink-soft)" }}>Aucune commande à graver pour l'instant.</p>}
 
-      {orders.map((o) => {
-        const date = o.createdAt ? new Date(o.createdAt).toLocaleString("fr-FR") : "";
-        const items = (o.spec || []).filter(Boolean);
-        return (
-          <div key={o.id} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "16px 0", background: "#fff" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, borderBottom: "1px solid #eee", paddingBottom: 8, marginBottom: 12 }}>
-              <strong>Commande {o.ref || o.id?.slice(-8)?.toUpperCase()}</strong>
-              <span style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>{o.customerName || "—"}{date ? ` · ${date}` : ""}{o.status ? ` · ${o.status}` : ""}</span>
-            </div>
+      {(() => {
+        // ---- REGROUPEMENT PAR TYPE DE PRODUIT (demande de la gérante) ----
+        // Une section par catégorie (Bijoux, Cristal Photo 3D, Verres…), avec un
+        // titre clair — les produits ne sont plus mélangés commande par commande.
+        // Chaque article garde sa commande d'origine (réf, cliente, date, statut).
+        const travaux = [];
+        for (const o of orders) {
+          for (const item of (o.spec || []).filter(Boolean)) {
+            const cat = getProductBySlug(item.slug)?.category || "autres";
+            travaux.push({ o, item, cat });
+          }
+        }
+        const ordre = [...CATEGORIES.map((c) => c.slug), "autres"];
+        const groupes = ordre
+          .map((slug) => ({
+            slug,
+            label: slug === "autres" ? "Autres" : getCategoryLabel(slug),
+            travaux: travaux.filter((t) => t.cat === slug),
+          }))
+          .filter((g) => g.travaux.length);
 
-            {items.map((item, idx) => (
-              <div key={idx} style={{ padding: "10px 0", borderTop: idx ? "1px dashed #e3dccb" : "none" }}>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>{item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}</div>
-                {/* Tableau professionnel « quel texte sur quelle face » (tous produits). */}
-                <TableGravure item={item} titre={false} />
-                {isGlass(item.slug) && (
-                  <p style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--ink-soft)", whiteSpace: "pre-line" }}>
-                    Emplacement : {item.emplacement === "fond" ? "Au fond du verre" : item.deuxEmplacement ? "Face avant + fond" : "Face avant"}
-                  </p>
-                )}
+        const STATUTS = {
+          a_preparer: ["À préparer", "#fbf3e6", "#8a6d1f"],
+          en_gravure: ["En gravure", "#efe6f7", "#5b4b8a"],
+          expediee: ["Expédiée", "#e6f2e8", "#256b34"],
+          livree: ["Livrée", "#ececec", "#666"],
+          remise_main_propre: ["Remise en main propre", "#e6f2e8", "#256b34"],
+        };
 
-                <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
-                  {isGlass(item.slug) && sidesOf(item).map((side) => {
-                    const cfg = sideConfig(item, side);
-                    const preview = cfg?.preview;
-                    const canFile = Boolean(cfg?.src);
-                    const k = (kind) => busy === `${item.slug}-${side}-${kind}`;
-                    return (
-                      <div key={side} style={{ width: 240, maxWidth: "100%" }}>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>
-                          {side === "fond" ? "Fond du verre" : "Face avant"} {cfg ? `· zone ${cfg.widthMm}×${cfg.heightMm} mm` : ""}
-                        </div>
-                        {preview ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={preview} alt={`Gravure ${side} placée par le client`} style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd", background: "#111" }} />
-                        ) : (
-                          <div style={{ width: "100%", aspectRatio: "1", borderRadius: 8, border: "1px dashed #ccc", display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa", fontSize: "0.8rem", textAlign: "center", padding: 8 }}>
-                            Visuel non capturé<br />(commande antérieure)
+        return groupes.map((g) => (
+          <section key={g.slug} style={{ marginBottom: 34 }}>
+            <h2 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", borderBottom: "2px solid #e7d9bd", paddingBottom: 6, margin: "26px 0 4px" }}>
+              {g.label} <span style={{ fontSize: "0.85rem", color: "var(--ink-soft)", fontWeight: 400 }}>· {g.travaux.length} gravure{g.travaux.length > 1 ? "s" : ""}</span>
+            </h2>
+
+            {g.travaux.map(({ o, item }, idx) => {
+              const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString("fr-FR") : "";
+              const [stLbl, stBg, stFg] = STATUTS[o.status] || [o.status || "", "#eee", "#666"];
+              return (
+                <div key={`${o.id}-${idx}`} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "14px 0", background: "#fff" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                    <strong style={{ fontSize: "1.02rem" }}>{item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}</strong>
+                    <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+                      Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {o.customerName || "—"}{date ? ` · ${date}` : ""}
+                      {stLbl ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: stBg, color: stFg, fontWeight: 600 }}>{stLbl}</span> : null}
+                    </span>
+                  </div>
+
+                  {/* Tableau professionnel « quel texte sur quelle face ». */}
+                  <TableGravure item={item} titre={false} />
+
+                  <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
+                    {isGlass(item.slug) && sidesOf(item).map((side) => {
+                      const cfg = sideConfig(item, side);
+                      const preview = cfg?.preview;
+                      const canFile = Boolean(cfg?.src);
+                      const k = (kind) => busy === `${item.slug}-${side}-${kind}`;
+                      return (
+                        <div key={side} style={{ width: 240, maxWidth: "100%" }}>
+                          <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>
+                            {side === "fond" ? "Fond du verre" : "Face avant"} {cfg ? `· zone ${cfg.widthMm}×${cfg.heightMm} mm` : ""}
                           </div>
-                        )}
-                        <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
-                          <button className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem" }} disabled={!canFile || Boolean(busy)} onClick={() => makeFile(item, side, "png")}>{k("png") ? "…" : "PNG"}</button>
-                          <button className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem" }} disabled={!canFile || Boolean(busy)} onClick={() => makeFile(item, side, "svg")}>{k("svg") ? "…" : "SVG"}</button>
-                          <button className="btn btn-gold" style={{ padding: "4px 10px", fontSize: "0.8rem" }} disabled={!canFile || Boolean(busy)} onClick={() => makeFile(item, side, "pdf")}>{k("pdf") ? "…" : "PDF"}</button>
+                          {preview ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={preview} alt={`Gravure ${side} placée par le client`} style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd", background: "#111" }} />
+                          ) : (
+                            <div style={{ width: "100%", aspectRatio: "1", borderRadius: 8, border: "1px dashed #ccc", display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa", fontSize: "0.8rem", textAlign: "center", padding: 8 }}>
+                              Visuel non capturé<br />(commande antérieure)
+                            </div>
+                          )}
+                          <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+                            <button className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem" }} disabled={!canFile || Boolean(busy)} onClick={() => makeFile(item, side, "png")}>{k("png") ? "…" : "PNG"}</button>
+                            <button className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem" }} disabled={!canFile || Boolean(busy)} onClick={() => makeFile(item, side, "svg")}>{k("svg") ? "…" : "SVG"}</button>
+                            <button className="btn btn-gold" style={{ padding: "4px 10px", fontSize: "0.8rem" }} disabled={!canFile || Boolean(busy)} onClick={() => makeFile(item, side, "pdf")}>{k("pdf") ? "…" : "PDF"}</button>
+                          </div>
+                          {!canFile && <p style={{ fontSize: "0.72rem", color: "#aaa", margin: "4px 0 0" }}>Fichier à graver dispo dès la prochaine commande.</p>}
                         </div>
-                        {!canFile && <p style={{ fontSize: "0.72rem", color: "#aaa", margin: "4px 0 0" }}>Fichier à graver dispo dès la prochaine commande.</p>}
+                      );
+                    })}
+                    {item.photoSrc && (
+                      <div style={{ width: 160 }}>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>Photo envoyée</div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={item.photoSrc} alt="Photo du client" style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd" }} />
+                        <a href={item.photoSrc} download style={{ fontSize: "0.78rem", color: "var(--gold-dark)" }}>Télécharger</a>
                       </div>
-                    );
-                  })}
-                  {item.photoSrc && (
-                    <div style={{ width: 160 }}>
-                      <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>Photo envoyée</div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.photoSrc} alt="Photo du client" style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd" }} />
-                      <a href={item.photoSrc} download style={{ fontSize: "0.78rem", color: "var(--gold-dark)" }}>Télécharger</a>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        );
-      })}
+              );
+            })}
+          </section>
+        ));
+      })()}
     </div>
   );
 }
