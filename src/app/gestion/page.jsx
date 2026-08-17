@@ -18,6 +18,7 @@ import DeclarationReminder from "@/components/admin/DeclarationReminder";
 import BatThread from "@/components/admin/BatThread";
 import FicheAtelier from "@/components/admin/FicheAtelier";
 import FichePapier from "@/components/admin/FichePapier";
+import BoxtalCopie from "@/components/admin/BoxtalCopie";
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -54,6 +55,7 @@ export default function GestionPage() {
   const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
   const [pendingReviews, setPendingReviews] = useState(0); // nouveaux avis clients à valider
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
+  const [boxtalOpen, setBoxtalOpen] = useState(null); // id de commande dont le panneau « Envoi Boxtal » est ouvert
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState("");
@@ -1214,7 +1216,14 @@ export default function GestionPage() {
                     }}>
                     🖨️ Imprimer la fiche
                   </button>
+                  {/* Formulaire boxtal.com prêt à copier-coller (en attendant
+                     l'automatisation de l'étiquette). */}
+                  <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                    onClick={() => setBoxtalOpen(boxtalOpen === o.id ? null : o.id)}>
+                    {boxtalOpen === o.id ? "Fermer l'envoi" : "📦 Envoi Boxtal"}
+                  </button>
                 </div>
+                {boxtalOpen === o.id && <BoxtalCopie order={o} />}
                 {batOpen === o.id && <BatThread order={o} adminKey={key} />}
                 {ficheOpen === o.id && (
                   <>
