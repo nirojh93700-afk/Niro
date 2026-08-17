@@ -13,32 +13,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import FicheAtelier from "@/components/admin/FicheAtelier";
-import { getProductBySlug } from "@/lib/products";
-import { getFontLabel } from "@/lib/fonts";
-
-// « Quel texte sur quelle face » : une ligne par face réellement gravée.
-// Les libellés du site (« Gravure — Page 1 (+5 €) ») sont nettoyés de leur prix,
-// inutile à l'atelier. Les faces laissées vides ne sont pas listées.
-function lignesGravure(item) {
-  const produit = getProductBySlug(item.slug);
-  const champs = item.fields || {};
-  const lignes = [];
-  for (const f of produit?.personalizationFields || []) {
-    if (f.type === "note" || f.type === "photo") continue;
-    const brut = champs[f.key];
-    if (typeof brut !== "string" || !brut.trim()) continue;
-    const face = String(f.label || f.key)
-      .replace(/^Gravure\s*[—-]\s*/i, "")
-      .replace(/\s*\(\s*\+?[\d.,]+\s*€\s*\)/gi, "")
-      .replace(/\s*\(texte inclus\)/gi, "")
-      .trim();
-    let texte = brut.trim();
-    if (f.type === "font") texte = getFontLabel(texte) || texte;
-    else if (f.type === "select") texte = (f.options || []).find((o) => o.value === texte)?.label || texte;
-    lignes.push({ face: f.type === "font" ? "Police de gravure" : face, texte, police: f.type === "font" });
-  }
-  return lignes;
-}
+import { TableGravure } from "@/lib/engravingSheet";
 
 export default function FichePapier({ order, fmtDate }) {
   const [pret, setPret] = useState(false);
@@ -102,33 +77,9 @@ export default function FichePapier({ order, fmtDate }) {
         ) : null}
       </div>
 
-      {/* Tableau « à graver » : une face par ligne, dans l'ordre de la fiche
-         produit. C'est ce qu'on lit devant la machine. */}
-      {(order.spec || []).map((item, i) => {
-        const lignes = lignesGravure(item);
-        if (!lignes.length) return null;
-        return (
-          <div key={i} style={{ marginBottom: 14 }}>
-            <h3 style={{ margin: "0 0 6px", fontFamily: "Georgia,serif", fontSize: "1.05rem" }}>
-              À graver — {item.name}{item.variantTitle ? ` (${item.variantTitle})` : ""}
-            </h3>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.95rem" }}>
-              <tbody>
-                {lignes.map((l, j) => (
-                  <tr key={j} style={{ background: l.police ? "#f7f2e6" : "transparent" }}>
-                    <td style={{ border: "1px solid #999", padding: "6px 10px", width: "38%", fontWeight: 600 }}>
-                      {l.face}
-                    </td>
-                    <td style={{ border: "1px solid #999", padding: "6px 10px", fontSize: l.police ? "0.95rem" : "1.15rem" }}>
-                      {l.texte}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      })}
+      {/* Tableau « à graver » : une face par ligne (module partagé avec la
+         page Atelier). C'est ce qu'on lit devant la machine. */}
+      {(order.spec || []).map((item, i) => <TableGravure key={i} item={item} />)}
 
       <FicheAtelier spec={order.spec} />
 

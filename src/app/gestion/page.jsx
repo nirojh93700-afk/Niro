@@ -1017,7 +1017,7 @@ export default function GestionPage() {
         {tab === "commandes" && (
           <>
             <a href="/gestion/atelier" className="btn btn-gold" style={{ display: "inline-block", marginBottom: 14, textDecoration: "none" }}>
-              🥃 Atelier — verres gravés (visuels + fichiers à graver)
+              🛠️ Atelier — tout à graver (tableaux + visuels + fichiers)
             </a>
             {!firebase?.connected && (
               <div className="notice">Connexion à ton application non active : les commandes ne peuvent pas être affichées. (Voir l'onglet Réglages.)</div>

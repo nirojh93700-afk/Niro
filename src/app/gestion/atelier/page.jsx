@@ -14,6 +14,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { getProductBySlug } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
+import { TableGravure } from "@/lib/engravingSheet";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -116,7 +117,9 @@ export default function AtelierPage() {
       const data = await res.json();
       sessionStorage.setItem("niv-admin-key", adminKey);
       setAuthed(true);
-      setOrders((data.orders || []).filter((o) => Array.isArray(o.spec) && o.spec.some((it) => it && isGlass(it.slug))));
+      // TOUTES les commandes à graver (bijoux, cristaux, verres…), les plus récentes
+      // d'abord — plus seulement les verres.
+      setOrders((data.orders || []).filter((o) => Array.isArray(o.spec) && o.spec.length));
     } catch {
       setError("Erreur de chargement.");
     }
@@ -163,7 +166,7 @@ export default function AtelierPage() {
   if (!authed) {
     return (
       <div className="container" style={{ maxWidth: 420, padding: "60px 16px" }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)" }}>Atelier — verres gravés</h1>
+        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)" }}>Atelier — à graver</h1>
         <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>Accès réservé.</p>
         <input type="password" placeholder="Mot de passe" value={key} onChange={(e) => setKey(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && load(key)}
@@ -180,19 +183,19 @@ export default function AtelierPage() {
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>🥃 Atelier — verres gravés</h1>
+        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>🛠️ Atelier — à graver</h1>
         <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour à la gestion</Link>
       </div>
       <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>
-        {orders.length} commande{orders.length > 1 ? "s" : ""} de verre gravé. Visuel exact préparé par le client, réglages précis et fichier prêt à graver (PNG / SVG / PDF à l'échelle réelle).
+        {orders.length} commande{orders.length > 1 ? "s" : ""} à graver — tous les produits (bijoux, cristaux, verres…). Tableau « quel texte sur quelle face », visuel du client, et fichier prêt à graver pour les verres (PNG / SVG / PDF à l'échelle réelle).
       </p>
 
       {loading && <p>Chargement…</p>}
-      {!loading && !orders.length && <p style={{ color: "var(--ink-soft)" }}>Aucune commande de verre gravé pour l'instant.</p>}
+      {!loading && !orders.length && <p style={{ color: "var(--ink-soft)" }}>Aucune commande à graver pour l'instant.</p>}
 
       {orders.map((o) => {
         const date = o.createdAt ? new Date(o.createdAt).toLocaleString("fr-FR") : "";
-        const glassItems = (o.spec || []).filter((it) => it && isGlass(it.slug));
+        const items = (o.spec || []).filter(Boolean);
         return (
           <div key={o.id} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "16px 0", background: "#fff" }}>
             <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, borderBottom: "1px solid #eee", paddingBottom: 8, marginBottom: 12 }}>
@@ -200,16 +203,19 @@ export default function AtelierPage() {
               <span style={{ color: "var(--ink-soft)", fontSize: "0.85rem" }}>{o.customerName || "—"}{date ? ` · ${date}` : ""}{o.status ? ` · ${o.status}` : ""}</span>
             </div>
 
-            {glassItems.map((item, idx) => (
+            {items.map((item, idx) => (
               <div key={idx} style={{ padding: "10px 0", borderTop: idx ? "1px dashed #e3dccb" : "none" }}>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>{item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}</div>
-                <p style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--ink-soft)", whiteSpace: "pre-line" }}>
-                  Emplacement : {item.emplacement === "fond" ? "Au fond du verre" : item.deuxEmplacement ? "Face avant + fond" : "Face avant"}
-                  {item.personalization ? `\n${item.personalization}` : ""}
-                </p>
+                {/* Tableau professionnel « quel texte sur quelle face » (tous produits). */}
+                <TableGravure item={item} titre={false} />
+                {isGlass(item.slug) && (
+                  <p style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--ink-soft)", whiteSpace: "pre-line" }}>
+                    Emplacement : {item.emplacement === "fond" ? "Au fond du verre" : item.deuxEmplacement ? "Face avant + fond" : "Face avant"}
+                  </p>
+                )}
 
                 <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
-                  {sidesOf(item).map((side) => {
+                  {isGlass(item.slug) && sidesOf(item).map((side) => {
                     const cfg = sideConfig(item, side);
                     const preview = cfg?.preview;
                     const canFile = Boolean(cfg?.src);
