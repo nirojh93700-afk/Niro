@@ -30,7 +30,9 @@ function dimsParDefaut(items) {
   if (cats.has("cristal")) return { L: 25, l: 20, H: 15 };  // boîte cristaux
   if (cats.has("verres")) return { L: 30, l: 20, H: 15 };   // verres protégés
   if (cats.has("deco") || cats.has("mariage")) return { L: 30, l: 25, H: 10 };
-  return { L: 20, l: 15, H: 5 };                            // bijoux
+  // Bijoux : carton HORLIMER 305×229×76 mm acheté par la gérante (assez grand
+  // pour le bijou + le Pack emballage : sac, boîte cadeau, microfibre).
+  return { L: 31, l: 23, H: 8 };
 }
 
 // Poids estimé (kg) depuis le catalogue : produit × quantité + marge emballage.
