@@ -3094,3 +3094,28 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 /* Texte gravé en place dans le modèle (aux points fournis) */
 .mtz-inplace { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; line-height: 1.05; text-align: center; white-space: nowrap; pointer-events: none; }
 .mtz-meas { position: absolute; left: -99999px; top: 0; visibility: hidden; white-space: nowrap; font-size: 100px; }
+
+/* ===========================================================================
+   IMPRESSION DE LA FICHE ATELIER (admin)
+   ---------------------------------------------------------------------------
+   Le bouton « 🖨️ Imprimer la fiche » ajoute la classe `impression-fiche` sur le
+   body puis lance l'impression. La feuille (composant FichePapier) est rendue
+   dans un PORTAIL, donc en enfant DIRECT du body : on masque tous les autres
+   enfants du body, ce qui évite les pages blanches du reste de l'écran.
+   =========================================================================== */
+.zone-impression { display: none; }
+
+@media print {
+  body.impression-fiche > *:not(.zone-impression) { display: none !important; }
+  body.impression-fiche .zone-impression {
+    display: block !important;
+    background: #fff; color: #000; padding: 0; margin: 0;
+  }
+  body.impression-fiche .entete-impression {
+    border-bottom: 2px solid #c9a24b;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  /* Évite de couper un article en deux pages. */
+  body.impression-fiche .zone-impression > * { break-inside: avoid; }
+}

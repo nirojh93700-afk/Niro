@@ -17,6 +17,7 @@ import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
 import BatThread from "@/components/admin/BatThread";
 import FicheAtelier from "@/components/admin/FicheAtelier";
+import FichePapier from "@/components/admin/FichePapier";
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -1200,9 +1201,30 @@ export default function GestionPage() {
                     onClick={() => setFicheOpen(ficheOpen === o.id ? null : o.id)}>
                     {ficheOpen === o.id ? "Fermer la fiche" : "🛠️ Fiche atelier (à graver)"}
                   </button>
+                  {/* Fiche papier à emporter à la machine : ouvre la fiche puis
+                     lance l'impression (seule la fiche s'imprime, voir globals.css). */}
+                  <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                    onClick={() => {
+                      setFicheOpen(o.id);
+                      setTimeout(() => {
+                        document.body.classList.add("impression-fiche");
+                        window.print();
+                        setTimeout(() => document.body.classList.remove("impression-fiche"), 300);
+                      }, 250);
+                    }}>
+                    🖨️ Imprimer la fiche
+                  </button>
                 </div>
                 {batOpen === o.id && <BatThread order={o} adminKey={key} />}
-                {ficheOpen === o.id && <FicheAtelier spec={o.spec} />}
+                {ficheOpen === o.id && (
+                  <>
+                    <FicheAtelier spec={o.spec} />
+                    {/* Copie destinée UNIQUEMENT au papier, placée à la racine de
+                       la page (portail) : ainsi l'impression ne sort que cette
+                       feuille, sans les pages blanches du reste de l'écran. */}
+                    <FichePapier order={o} fmtDate={fmtDate} />
+                  </>
+                )}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
                   {o.test && (
                     <span style={{ fontSize: "0.78rem", padding: "2px 8px", borderRadius: 20, background: "#e7e0f0", color: "#5b4b8a", fontWeight: 600 }}>🧪 Commande test (non comptée)</span>
