@@ -86,6 +86,10 @@ export default function BoxtalCopie({ order }) {
         {order.relaisPoint ? " Livraison en POINT RELAIS : choisis le point ci-dessous sur la carte Boxtal." : ""}
       </p>
 
+      {/* Tout en haut du formulaire Boxtal : sert à retrouver l'envoi sur la
+         facture Boxtal → on y met le n° de commande du site. */}
+      <Ligne label="Référence interne" valeur={order.ref || ""} gras />
+
       <Titre>Départ (atelier)</Titre>
       {DEPART.map(([l, v]) => <Ligne key={l} label={l} valeur={v} />)}
 
