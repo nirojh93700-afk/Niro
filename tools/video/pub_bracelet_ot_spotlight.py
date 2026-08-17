@@ -74,7 +74,7 @@ for i,(f,name,sub,vo) in enumerate(P):
     src=dl(f);im=Image.open(src).convert("RGB");zi=cover(im,ZW,ZH)
     ov=overlay(name,sub);dv=tts(vo,f"{OUT}/cvo{i}.wav")
     segs.append(("prod",zi,ov,max(MIN,PRE+dv+0.35),f"{OUT}/cvo{i}.wav"))
-dc=tts(CTA_VO,f"{OUT}/ovo_cta.wav");segs.append(("card",card("nivcreation.fr","Commandez & personnalisez","Fait main · en France").convert("RGB"),None,max(MIN,PRE+dc+0.5),f"{OUT}/ovo_cta.wav"))
+dc=tts(CTA_VO,f"{OUT}/ovo_cta.wav");segs.append(("card",card("nivcreation.fr","Commandez & personnalisez","Livraison rapide & suivie").convert("RGB"),None,max(MIN,PRE+dc+0.5),f"{OUT}/ovo_cta.wav"))
 
 wri=imageio.get_writer(f"{OUT}/ot_silent.mp4",fps=FPS,codec="libx264",quality=8,
     macro_block_size=1,ffmpeg_params=["-pix_fmt","yuv420p"],ffmpeg_log_level="error")
