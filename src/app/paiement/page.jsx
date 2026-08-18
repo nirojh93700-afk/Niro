@@ -1,7 +1,7 @@
 import { PayInfoContent } from "@/components/PayInfo";
 
 export const metadata = {
-  title: "Paiement sécurisé & en plusieurs fois | Niv Création",
+  title: "Paiement sécurisé & en plusieurs fois",
   description: "Payez par carte, PayPal, Apple Pay, Google Pay, Klarna… et réglez en plusieurs fois sans frais : 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). Toutes les règles.",
 };
 

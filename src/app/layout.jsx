@@ -66,7 +66,7 @@ function resolveMetadataBase() {
   return new URL("https://nivcreation.fr");
 }
 
-export const metadata = {
+const metadataBase_ = {
   metadataBase: resolveMetadataBase(),
   manifest: "/manifest.webmanifest",
   title: {
@@ -104,6 +104,15 @@ export const metadata = {
     statusBarStyle: "default",
   },
 };
+
+// Métadonnées finales : les infos ci-dessus + le code de vérification Google
+// Search Console, collé par la gérante dans Gestion → Réglages (aucune
+// modification de code nécessaire pour le changer).
+export async function generateMetadata() {
+  let google = "";
+  try { google = (await getSettings())?.googleVerification || ""; } catch { /* jamais bloquant */ }
+  return google ? { ...metadataBase_, verification: { google } } : metadataBase_;
+}
 
 // N'accepte qu'une couleur hexadécimale valide (sécurité : pas d'injection CSS).
 function safeHex(c) {

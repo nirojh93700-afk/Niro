@@ -342,7 +342,18 @@ export default function AppearanceAdmin({ adminKey }) {
             <label className="admin-field">ID Google (Analytics / Ads) <span style={{ color: "var(--ink-soft)" }}>— ex. G-XXXXXXX</span>
               <input value={s.gaId || ""} placeholder="Ex. G-ABCDE12345" onChange={(e) => set({ gaId: e.target.value })} />
             </label>
-            <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ metaPixelId: s.metaPixelId || "", gaId: s.gaId || "" }, "Balises marketing enregistrées")}>Enregistrer</button>
+            {/* Google Search Console : prouve à Google que le site est bien le tien.
+               Indispensable pour demander l'indexation et voir tes mots-clés. */}
+            <label className="admin-field">Code Google Search Console <span style={{ color: "var(--ink-soft)" }}>— pour être référencée sur Google</span>
+              <input value={s.googleVerification || ""} placeholder="Ex. AbCdEf123-xyz_456" onChange={(e) => set({ googleVerification: e.target.value })} />
+            </label>
+            <p style={{ margin: "-4px 0 0", fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+              Sur <strong>search.google.com/search-console</strong> → ajouter la propriété <strong>nivcreation.fr</strong> →
+              méthode « <strong>Balise HTML</strong> ». Google donne un code du type
+              <code style={{ background: "#f3ece0", padding: "1px 5px", borderRadius: 4 }}>content=&quot;AbCdEf123…&quot;</code> :
+              colle <strong>uniquement le code entre guillemets</strong> ici, enregistre, puis clique « Valider » chez Google.
+            </p>
+            <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ metaPixelId: s.metaPixelId || "", gaId: s.gaId || "", googleVerification: s.googleVerification || "" }, "Balises marketing enregistrées")}>Enregistrer</button>
           </div>
         </>
       )}

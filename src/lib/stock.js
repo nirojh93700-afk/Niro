@@ -1210,6 +1210,9 @@ export async function getSettings() {
     // Balises marketing (vides tant que pas configurées dans l'admin).
     metaPixelId: typeof s.metaPixelId === "string" ? s.metaPixelId.trim() : "",
     gaId: typeof s.gaId === "string" ? s.gaId.trim() : "",
+    // Code de vérification Google Search Console (balise meta). Se colle dans
+    // Gestion → Réglages : Google demande de prouver qu'on possède le site.
+    googleVerification: typeof s.googleVerification === "string" ? s.googleVerification.trim() : "",
     // Objectif de chiffre d'affaires mensuel (€) — affiché en jauge dans les stats.
     salesGoal: Number(s.salesGoal) || 0,
     // Cashback fidélité (cagnotte) : % du montant produits crédité après paiement.

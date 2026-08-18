@@ -135,6 +135,10 @@ export async function POST(req) {
   }
   if (typeof body.metaPixelId === "string") patch.metaPixelId = /^[0-9]{0,30}$/.test(body.metaPixelId.trim()) ? body.metaPixelId.trim() : "";
   if (typeof body.gaId === "string") patch.gaId = /^[A-Za-z0-9-]{0,30}$/.test(body.gaId.trim()) ? body.gaId.trim() : "";
+  // Code de vérification Google Search Console (chaîne fournie par Google).
+  if (typeof body.googleVerification === "string") {
+    patch.googleVerification = /^[A-Za-z0-9_-]{0,80}$/.test(body.googleVerification.trim()) ? body.googleVerification.trim() : "";
+  }
   if (body.welcome && typeof body.welcome === "object") {
     patch.welcome = {
       enabled: Boolean(body.welcome.enabled),

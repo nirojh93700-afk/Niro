@@ -8,7 +8,7 @@ import { getSettings, getRatingSummaries } from "@/lib/stock";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Coupe du Monde 2026 — Déco en bois aux couleurs de votre nation | Niv Création",
+  title: "Coupe du Monde 2026 — Déco en bois aux couleurs de votre nation",
   description: "Découvrez notre collection spéciale Coupe du Monde 2026 : déco et cadeaux en bois découpés au laser, aux couleurs de votre équipe nationale. Fait main en France.",
 };
 

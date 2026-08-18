@@ -8,7 +8,7 @@ import { getCatalog } from "@/lib/catalog";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Plaque de naissance personnalisée en bois — gravée en France | Niv Création",
+  title: "Plaque de naissance personnalisée en bois — gravée en France",
   description:
     "Plaque de naissance en bois gravé, personnalisée aux informations de bébé (prénom, date, poids, heure, taille). Modèle fille ou garçon, faite main en France.",
 };
