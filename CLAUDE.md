@@ -1,5 +1,17 @@
 # Guide agent — Boutique Niv Création
 
+## 📦 À FAIRE PAR LA GÉRANTE — REP EMBALLAGES / IDU (enregistré 18/08/2026, IMPORTANT — la rappeler)
+> **Démarche administrative en attente, à faire « plus tard » (demande de la gérante).** Quand elle
+> demande « où j'en suis / qu'est-ce qu'il reste » ou reparle des emballages/Etsy/REP, **le lui rappeler**.
+- **Quoi** : adhérer à un éco-organisme (**Léko** `leko-organisme.fr` ou **Citeo** `citeo.com`), obtenir
+  l'**IDU (Identifiant Unique ADEME)**, payer l'éco-contribution (~95–110 €/an, forfait petit volume),
+  puis **coller l'IDU dans Etsy** (Conformité / EPR). **Risque concret : sans IDU, Etsy peut bloquer le
+  compte vendeur.** Sur nivcreation.fr rien ne bloque, mais l'obligation légale existe.
+- **Récap complet pas-à-pas** : `docs/rep-emballages-idu.md` (SIRET 105 914 774 00010, forfait, étapes).
+- **PPWR** (règlement UE emballages) = pas de démarche, juste faire des emballages recyclables / sans vide
+  inutile — déjà le cas. Ne pas l'inquiéter avec ça.
+- Ne PAS faire la démarche à sa place (administratif, son compte). Rôle = lui rendre le récap clair + rappeler.
+
 ## 🚫 RÈGLE D'OR — NE JAMAIS TOUCHER AUX APPLIS / SITES EN LIGNE SANS DEMANDE EXPLICITE (enregistré 13/08/2026)
 > **Demande ferme de la gérante, valable pour TOUTES les conversations et TOUS ses projets.**
 - **INTERDIT** de modifier, déployer, republier, reconfigurer ou supprimer quoi que ce soit sur un **site, une application ou un projet EN LIGNE** de la gérante (boutique Niv Création `nivcreation.fr`, projets Firebase `niv-creation`/`crafia-app`/`niv-social`, Stripe, réglages, agents, etc.) **sans qu'elle le demande explicitement**.
