@@ -17,17 +17,35 @@ function esc(s) {
 //   · verre (fragile) → 11,90 €
 //   · déco / mariage / cristal (colis) → 6,90 € mini, plus selon le poids réel
 // La livraison offerte dès 45 € est gérée par le réglage du compte Merchant.
-function feedShippingFR(p) {
-  let price;
-  if (p.freeShipping) price = 0;
-  else if (p.letter) price = 4.9;
-  else if (p.category === "verres") price = 11.9;
-  else {
-    const w = Number(p.variants?.[0]?.weight) || Number(p.weight) || 500;
-    const byWeight = w <= 1000 ? 6.9 : w <= 2000 ? 8.9 : w <= 5000 ? 14.9 : w <= 10000 ? 22.9 : w <= 15000 ? 28.9 : 34.9;
-    price = Math.max(6.9, byWeight);
-  }
-  return `<g:shipping><g:country>FR</g:country><g:price>${price.toFixed(2)} EUR</g:price></g:shipping>`;
+function poidsProduit(p) {
+  return Number(p.variants?.[0]?.weight) || Number(p.weight) || 500;
+}
+
+// FRANCE (1 exemplaire). Livraison offerte dès 45 € gérée par le compte Merchant.
+function portFR(p) {
+  if (p.freeShipping) return 0;
+  if (p.letter) return 4.9;
+  if (p.category === "verres") return 11.9;
+  const w = poidsProduit(p);
+  const byWeight = w <= 1000 ? 6.9 : w <= 2000 ? 8.9 : w <= 5000 ? 14.9 : w <= 10000 ? 22.9 : w <= 15000 ? 28.9 : 34.9;
+  return Math.max(6.9, byWeight);
+}
+
+// BELGIQUE / LUXEMBOURG (zone EU1) — aligné sur EU_TIERS de shipping.js.
+// Sans ces tarifs, Google refuse les produits pour BE et LU (« infos de
+// livraison manquantes »). L'Europe n'a PAS de livraison offerte au seuil.
+function portEU1(p) {
+  if (p.freeShipping) return 0;
+  const w = poidsProduit(p);
+  if (p.letter) return w <= 250 ? 6.9 : w <= 500 ? 9.9 : 12.9;        // lettre suivie EU1
+  return w <= 1000 ? 16.9 : w <= 2000 ? 22.9 : w <= 5000 ? 32.9 : w <= 10000 ? 46.9 : 74.9; // colis EU1
+}
+
+// Blocs de livraison du produit pour les 3 pays diffusés (FR, BE, LU).
+function feedShipping(p) {
+  const bloc = (pays, prix) => `<g:shipping><g:country>${pays}</g:country><g:price>${prix.toFixed(2)} EUR</g:price></g:shipping>`;
+  const eu = portEU1(p);
+  return bloc("FR", portFR(p)) + bloc("BE", eu) + bloc("LU", eu);
 }
 
 // Flux produits pour Google Merchant Center (Google Shopping, gratuit).
@@ -42,6 +60,14 @@ export async function GET() {
     const img = p.images[0];
     const extra = (p.images || []).slice(1, 11).map((u) => `<g:additional_image_link>${esc(u)}</g:additional_image_link>`).join("");
     const cat = p.category === "mariage" ? "Décoration de mariage" : p.category === "bijoux" ? "Bijoux personnalisés" : "Cadeaux personnalisés";
+    // Catégorie officielle Google (recommandée pour bien classer le produit).
+    const slug = p.slug || "";
+    const googleCat =
+      p.category === "bijoux" ? "Apparel & Accessories > Jewelry"
+      : p.category === "verres" ? "Home & Garden > Kitchen & Dining > Barware"
+      : /couvert/.test(slug) ? "Home & Garden > Kitchen & Dining > Tableware > Flatware"
+      : /usb|cle-usb/.test(slug) ? "Electronics > Computer Components > Storage Devices > USB Flash Drives"
+      : "Home & Garden > Decor";
     return `<item>
   <g:id>${esc(p.slug)}</g:id>
   <g:title>${esc(p.title || p.name)}</g:title>
@@ -54,7 +80,8 @@ export async function GET() {
   <g:brand>Niv Création</g:brand>
   <g:identifier_exists>no</g:identifier_exists>
   <g:product_type>${esc(cat)}</g:product_type>
-  ${feedShippingFR(p)}
+  <g:google_product_category>${esc(googleCat)}</g:google_product_category>
+  ${feedShipping(p)}
 </item>`;
   }).join("\n");
 
