@@ -2073,7 +2073,10 @@ export const products = [
     weight: 200, // jeu de 4 pièces + emballage
     pickup: false,
     letter: false, // colis (rigide)
-    freeShipping: true, // livraison offerte (incluse dans le prix)
+    // Livraison COMME LES BIJOUX / VERRES : port payant en dessous de 45 €,
+    // OFFERTE dès 45 € d'achat (au lieu de toujours offerte). Demande de la
+    // gérante le 18/08/2026.
+    freeShipThreshold: 45,
     noCustomCta: true, // pas le bloc "projet sur mesure / téléphone" (perso via le configurateur)
     hidden: false, // PUBLIÉ
     subcategory: "couverts",
