@@ -8,7 +8,8 @@ import { getCategoryLabel } from "@/lib/products";
 // Jeton d'aperçu privé : permet d'afficher une fiche d'un produit caché
 // (non publié) via ?apercu=<JETON>, sans qu'il soit visible des clients.
 const PREVIEW_TOKEN = "niv2026";
-import { getReviews, getRatingSummaries } from "@/lib/stock";
+import { getReviews, getRatingSummaries, getSettings } from "@/lib/stock";
+import { resolveShippingConfig } from "@/lib/shipping";
 import RecentlyViewed from "@/components/RecentlyViewed";
 
 export const dynamic = "force-dynamic";
@@ -63,6 +64,46 @@ export default async function ProductPage({ params, searchParams }) {
     related = related.map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
   } catch { /* ignore */ }
 
+  // --- Balisage produit pour Google ------------------------------------------
+  // Google Search Console signalait « shippingDetails » et « hasMerchantReturnPolicy »
+  // manquants (rapports « Extraits de produits » et « Fiches de marchand »).
+  // On déclare EXACTEMENT ce qui est déjà publié sur le site :
+  //  · livraison France, offerte dès le seuil bijoux (page Livraison / FAQ) ;
+  //  · retours : produit PERSONNALISÉ = non remboursable (art. L221-28, page
+  //    Retours) ; produit sans personnalisation = 14 jours, retour à la charge
+  //    du client. Rien n'est promis de plus que les CGV.
+  const shipCfg = resolveShippingConfig((await getSettings().catch(() => ({})))?.shipping);
+  const livraisonFr = {
+    "@type": "OfferShippingDetails",
+    shippingRate: {
+      "@type": "MonetaryAmount",
+      value: product.letter ? shipCfg.bijouxHome : 0,
+      currency: "EUR",
+    },
+    shippingDestination: { "@type": "DefinedRegion", addressCountry: "FR" },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      // Fabrication à la commande (3 à 5 jours ouvrés, cf. FAQ) puis transport.
+      handlingTime: { "@type": "QuantitativeValue", minValue: 3, maxValue: 5, unitCode: "DAY" },
+      transitTime: { "@type": "QuantitativeValue", minValue: 2, maxValue: 5, unitCode: "DAY" },
+    },
+  };
+  const retour = product.personalizable
+    ? {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "FR",
+        // Bien confectionné selon les spécifications du client : pas de rétractation.
+        returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+      }
+    : {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "FR",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/ReturnShippingFees",
+      };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -70,12 +111,16 @@ export default async function ProductPage({ params, searchParams }) {
     image: product.images,
     description: (product.descriptionHtml || "").replace(/<[^>]+>/g, " ").trim(),
     brand: { "@type": "Brand", name: "Niv Création" },
+    sku: product.slug,
     offers: {
       "@type": "Offer",
       priceCurrency: "EUR",
       price: priceFrom(product).toFixed(2),
       availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
       url: `https://nivcreation.fr/produit/${product.slug}`,
+      shippingDetails: livraisonFr,
+      hasMerchantReturnPolicy: retour,
     },
   };
 
