@@ -15,6 +15,7 @@ import ReviewsAdmin from "@/components/admin/ReviewsAdmin";
 import PromoCodesAdmin from "@/components/admin/PromoCodesAdmin";
 import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
+import MerchantReminder from "@/components/admin/MerchantReminder";
 import BatThread from "@/components/admin/BatThread";
 import FicheAtelier from "@/components/admin/FicheAtelier";
 import FichePapier from "@/components/admin/FichePapier";
@@ -816,6 +817,7 @@ export default function GestionPage() {
 
         <div className="admin-content">
         <DeclarationReminder />
+        <MerchantReminder />
 
         {error && <div className="notice">{error}</div>}
 
