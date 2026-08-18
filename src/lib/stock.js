@@ -694,6 +694,24 @@ export async function getModelFile(id) {
 
 // --- Codes promo (gérés dans l'admin, appliqués au paiement) ---------------
 // { CODE: { type: "percent"|"fixed", value } }
+// --- Suivi des déclarations URSSAF ------------------------------------------
+// La gérante coche « Déclarée » sur un mois dans Gestion → Bénéfices : on
+// mémorise la date du clic. Sert à afficher automatiquement ce qu'il RESTE à
+// déclarer. data.urssafDeclared = { "2026-07": "2026-08-18T…" }.
+export async function getUrssafDeclared() {
+  const data = await getCatalogRaw();
+  return data.urssafDeclared || {};
+}
+export async function setUrssafDeclared(month, on) {
+  if (!/^\d{4}-\d{2}$/.test(month || "")) return null;
+  const data = await getCatalogRaw();
+  data.urssafDeclared = data.urssafDeclared || {};
+  if (on) data.urssafDeclared[month] = new Date().toISOString();
+  else delete data.urssafDeclared[month];
+  await persistCatalog(data);
+  return data.urssafDeclared;
+}
+
 export async function getPromoCodes() {
   const data = await getCatalogRaw();
   return data.promoCodes || {};

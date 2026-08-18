@@ -1,4 +1,4 @@
-import { isAdmin } from "@/lib/stock";
+import { isAdmin, getUrssafDeclared, setUrssafDeclared } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
 import { unitCostForItem } from "@/lib/productCosts";
@@ -117,12 +117,25 @@ export async function GET(req) {
     hasCost: b.hasCost,
   })).sort((a, b) => b.profit - a.profit);
 
+  // Mois cochés « Déclarée » par la gérante (pour calculer ce qu'il reste à déclarer).
+  const declared = await getUrssafDeclared().catch(() => ({}));
+
   return Response.json({
     ok: true,
     month: per.month, year: per.year, all: per.all,
-    series, products: productsList,
+    series, products: productsList, declared,
     missingCost: { count: missingUnits, names: [...missing].slice(0, 30) },
   });
+}
+
+// Cocher / décocher « Déclarée » sur un mois (Gestion → Bénéfices).
+export async function POST(req) {
+  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  let body;
+  try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
+  const declared = await setUrssafDeclared(String(body?.month || ""), Boolean(body?.declared));
+  if (!declared) return Response.json({ error: "Mois invalide." }, { status: 400 });
+  return Response.json({ ok: true, declared });
 }
 
 function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0 }; }

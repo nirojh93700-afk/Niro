@@ -70,6 +70,20 @@ export default function BeneficesPage() {
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState("");        // mois dont le CA vient d'être copié
   const [dlRecettes, setDlRecettes] = useState(false); // téléchargement du livre des recettes
+  const [decl, setDecl] = useState({});            // mois cochés « Déclarée » ({"2026-07": date})
+
+  // Coche / décoche « Déclarée » sur un mois (enregistré en base → le tableau
+  // recalcule tout seul ce qu'il reste à déclarer, à chaque visite).
+  const toggleDecl = async (month, on) => {
+    setDecl((d) => { const n = { ...d }; if (on) n[month] = new Date().toISOString(); else delete n[month]; return n; });
+    try {
+      await fetch("/api/admin/benefices", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ month, declared: on }),
+      });
+    } catch { /* re-synchronisé au prochain chargement */ }
+  };
   const [expenses, setExpenses] = useState([]);
   const [expLabel, setExpLabel] = useState("");
   const [expAmount, setExpAmount] = useState("");
@@ -81,7 +95,9 @@ export default function BeneficesPage() {
       const res = await fetch("/api/admin/benefices", { headers: { "x-admin-key": k } });
       if (res.status === 401) { setAuthed(false); setErr("Connecte-toi d'abord sur la page Gestion."); return; }
       if (!res.ok) { setErr("Erreur de chargement."); return; }
-      setData(await res.json());
+      const j = await res.json();
+      setData(j);
+      setDecl(j.declared || {});
       setAuthed(true);
     } catch { setErr("Erreur de chargement."); }
   }, []);
@@ -243,8 +259,40 @@ export default function BeneficesPage() {
           Le chiffre à déclarer chaque mois est dans la <strong>colonne dorée</strong> : ventes encaissées
           <strong> + livraison facturée aux clientes</strong> (règle URSSAF), remises déjà déduites,
           commandes test / annulées / remboursées exclues. Catégorie : <strong>vente de marchandises (BIC)</strong>.
-          Aucune charge ne se déduit en micro-entreprise.
+          Aucune charge ne se déduit en micro-entreprise. Coche <strong>« Déclarée »</strong> après chaque
+          déclaration : le tableau te dit tout seul ce qu&apos;il te reste à faire.
         </p>
+
+        {/* Calcul AUTOMATIQUE de ce qu'il reste à déclarer : mois TERMINÉS, avec
+           des ventes, pas encore cochés « Déclarée ». */}
+        {(() => {
+          const aFaire = data.series
+            .slice(0, -1) // on exclut le mois en cours (il se déclare le mois suivant)
+            .filter((s) => ((s.ca != null ? s.ca : s.revenue) > 0) && !decl[s.month]);
+          if (!aFaire.length) {
+            return (
+              <div style={{ background: "#e9f4ec", border: "1px solid #bcd9c4", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px", fontSize: "0.9rem", color: "#256b34" }}>
+                ✅ <strong>Tout est déclaré.</strong> Prochaine déclaration : le mois en cours, une fois terminé
+                (le chiffre s&apos;affichera ici automatiquement).
+              </div>
+            );
+          }
+          return (
+            <div style={{ background: "#fdf0e0", border: "1px solid #e8c48a", borderRadius: 10, padding: "10px 14px", margin: "0 0 12px", fontSize: "0.92rem", color: "#7a5a12" }}>
+              ⏰ <strong>À déclarer sur autoentrepreneur.urssaf.fr :</strong>
+              {aFaire.map((s) => {
+                const ca = s.ca != null ? s.ca : s.revenue;
+                return (
+                  <div key={s.month} style={{ marginTop: 4 }}>
+                    → <strong>{mLabel(s.month)}</strong> : <strong>{Math.round(ca)} €</strong> dans la case
+                    « BIC ventes » <span style={{ color: "#a98935" }}>(pas « BIC prestations » !)</span>
+                  </div>
+                );
+              })}
+              <div style={{ marginTop: 6, fontSize: "0.8rem" }}>Une fois fait, coche « Déclarée » sur la ligne du mois ci-dessous.</div>
+            </div>
+          );
+        })()}
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", minWidth: 430 }}>
             <thead>
@@ -255,6 +303,7 @@ export default function BeneficesPage() {
                 <th style={{ padding: "8px 6px", textAlign: "right" }}>Livraison</th>
                 <th style={{ padding: "8px 6px", textAlign: "right", color: "var(--gold-dark)" }}>CA à déclarer</th>
                 <th style={{ padding: "8px 6px" }} />
+                <th style={{ padding: "8px 6px", textAlign: "center" }}>Déclarée</th>
               </tr>
             </thead>
             <tbody>
@@ -280,6 +329,19 @@ export default function BeneficesPage() {
                           {copied === s.month ? "✓ Copié" : "Copier"}
                         </button>
                       )}
+                    </td>
+                    <td style={{ padding: "4px 6px", textAlign: "center" }}>
+                      {/* Le mois en cours ne se déclare pas encore ; les mois vides n'ont rien à cocher. */}
+                      {i === 0 ? (
+                        <span style={{ fontSize: "0.75rem", color: "var(--ink-soft)" }}>en cours</span>
+                      ) : ca > 0 ? (
+                        <label style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 5 }}>
+                          <input type="checkbox" checked={Boolean(decl[s.month])}
+                            onChange={(e) => toggleDecl(s.month, e.target.checked)}
+                            style={{ width: 17, height: 17, accentColor: "#256b34" }} />
+                          {decl[s.month] ? <span style={{ fontSize: "0.75rem", color: "#256b34", fontWeight: 700 }}>✓</span> : null}
+                        </label>
+                      ) : null}
                     </td>
                   </tr>
                 );
