@@ -15,6 +15,26 @@ export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
 
   const [orders, catalog] = await Promise.all([getSiteOrders(500), getCatalogAdmin()]);
+
+  // --- LIVRE DES RECETTES (?recettes=1) ---------------------------------------
+  // Registre chronologique OBLIGATOIRE du micro-entrepreneur. Mentions requises :
+  // date d'encaissement, référence de la pièce, client, nature de l'opération,
+  // montant, mode d'encaissement. Ici : une ligne par commande PAYÉE (les
+  // commandes test, annulées ou remboursées sont exclues), triée par date.
+  if (new URL(req.url).searchParams.get("recettes")) {
+    const rows = (orders || [])
+      .filter((o) => !o.test && !["annulee", "remboursee"].includes(o.status))
+      .map((o) => ({
+        date: o.createdAt || "",
+        reference: o.ref || (o.id || "").slice(-8).toUpperCase(),
+        client: o.customerName || "—",
+        nature: "Vente de marchandises (création personnalisée)",
+        montant: round(Number(o.total) || 0),
+        mode: "Carte bancaire (Stripe)",
+      }))
+      .sort((a, b) => (a.date < b.date ? -1 : 1));
+    return Response.json({ ok: true, rows });
+  }
   const products = Array.isArray(catalog) ? catalog : [];
   // Index produit par slug (pour retrouver la variante + son coût d'achat).
   const bySlug = {}, nameBySlug = {};
@@ -29,7 +49,7 @@ export async function GET(req) {
   // Agrégats période + par produit + série mensuelle (12 derniers mois).
   const per = { month: blank(), year: blank(), all: blank() };
   const byProduct = {};
-  const monthly = {}; // "YYYY-MM" -> {revenue,cost,profit}
+  const monthly = {}; // "YYYY-MM" -> {revenue,cost,profit,shipping,orders}
   let missing = new Set();
   let missingUnits = 0;
 
@@ -37,9 +57,13 @@ export async function GET(req) {
     const mk = monthKey(o.createdAt);
     const inMonth = mk === curMonth;
     const inYear = mk.startsWith(curYear);
-    // Livraison encaissée (pour info) — couverte par les clientes, neutre sur le bénéfice.
+    // Livraison encaissée (pour info) — couverte par les clientes, neutre sur le bénéfice,
+    // mais compte dans le CA ENCAISSÉ à déclarer (ex. URSSAF) : on la suit aussi par mois.
     const ship = Number(o.shippingPrice) || 0;
     per.all.shipping += ship; if (inYear) per.year.shipping += ship; if (inMonth) per.month.shipping += ship;
+    monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, orders: 0 };
+    monthly[mk].shipping += ship;
+    monthly[mk].orders += 1;
     for (const it of (o.items || [])) {
       const qty = Number(it.quantity) || 1;
       const rev = Number(it.total) || 0;
@@ -52,7 +76,6 @@ export async function GET(req) {
       const add = (b) => { b.revenue += rev; b.cost += cost; b.units += qty; };
       add(per.all); if (inYear) add(per.year); if (inMonth) add(per.month);
 
-      monthly[mk] = monthly[mk] || { revenue: 0, cost: 0 };
       monthly[mk].revenue += rev; monthly[mk].cost += cost;
 
       const key = slug || (it.name || "?");
@@ -73,8 +96,19 @@ export async function GET(req) {
     let m = mm - i, y = yy;
     while (m <= 0) { m += 12; y -= 1; }
     const k = `${y}-${String(m).padStart(2, "0")}`;
-    const v = monthly[k] || { revenue: 0, cost: 0 };
-    series.push({ month: k, revenue: round(v.revenue), cost: round(v.cost), profit: round(v.revenue - v.cost) });
+    const v = monthly[k] || { revenue: 0, cost: 0, shipping: 0, orders: 0 };
+    // « ca » = ce qui a été réellement ENCAISSÉ ce mois-là (produits + livraison
+    // payée par les clientes) : c'est ce chiffre-là qui sert pour une déclaration
+    // (URSSAF…), pas seulement le CA produits utilisé pour calculer la marge.
+    series.push({
+      month: k,
+      revenue: round(v.revenue),
+      shipping: round(v.shipping),
+      ca: round(v.revenue + v.shipping),
+      cost: round(v.cost),
+      profit: round(v.revenue - v.cost),
+      orders: v.orders || 0,
+    });
   }
 
   const productsList = Object.values(byProduct).map((b) => ({

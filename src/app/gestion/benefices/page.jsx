@@ -68,6 +68,8 @@ export default function BeneficesPage() {
   const [data, setData] = useState(null);
   const [period, setPeriod] = useState("month");
   const [err, setErr] = useState("");
+  const [copied, setCopied] = useState("");        // mois dont le CA vient d'être copié
+  const [dlRecettes, setDlRecettes] = useState(false); // téléchargement du livre des recettes
   const [expenses, setExpenses] = useState([]);
   const [expLabel, setExpLabel] = useState("");
   const [expAmount, setExpAmount] = useState("");
@@ -228,6 +230,98 @@ export default function BeneficesPage() {
       <div style={card}>
         <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Bénéfice par mois (6 derniers mois)</h2>
         <Chart series={data.series} />
+      </div>
+
+      {/* ---- DÉCLARATION URSSAF : CA encaissé par mois --------------------- */}
+      {/* Règles (vérifiées) : on déclare le CA ENCAISSÉ du mois, FRAIS DE PORT
+         facturés INCLUS, sans déduire aucune charge. Catégorie « vente de
+         marchandises (BIC) ». Les commandes test/annulées/remboursées sont
+         exclues. Le chiffre à recopier est la colonne dorée. */}
+      <div style={card}>
+        <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>📋 Déclaration URSSAF — CA encaissé par mois</h2>
+        <p style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+          Le chiffre à déclarer chaque mois est dans la <strong>colonne dorée</strong> : ventes encaissées
+          <strong> + livraison facturée aux clientes</strong> (règle URSSAF), remises déjà déduites,
+          commandes test / annulées / remboursées exclues. Catégorie : <strong>vente de marchandises (BIC)</strong>.
+          Aucune charge ne se déduit en micro-entreprise.
+        </p>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", minWidth: 430 }}>
+            <thead>
+              <tr style={{ textAlign: "left", color: "var(--ink-soft)", borderBottom: "2px solid #eadfc4" }}>
+                <th style={{ padding: "8px 6px" }}>Mois</th>
+                <th style={{ padding: "8px 6px", textAlign: "right" }}>Commandes</th>
+                <th style={{ padding: "8px 6px", textAlign: "right" }}>Produits</th>
+                <th style={{ padding: "8px 6px", textAlign: "right" }}>Livraison</th>
+                <th style={{ padding: "8px 6px", textAlign: "right", color: "var(--gold-dark)" }}>CA à déclarer</th>
+                <th style={{ padding: "8px 6px" }} />
+              </tr>
+            </thead>
+            <tbody>
+              {data.series.slice().reverse().map((s, i) => {
+                const ca = s.ca != null ? s.ca : s.revenue; // anciennes réponses sans livraison
+                const vide = !s.orders && !ca;
+                return (
+                  <tr key={s.month} style={{ borderBottom: "1px solid #f0eadd", background: i === 0 ? "#fdf6e8" : "transparent", opacity: vide ? 0.5 : 1 }}>
+                    <td style={{ padding: "8px 6px", fontWeight: i === 0 ? 700 : 400 }}>{mLabel(s.month)}{i === 0 ? " (en cours)" : ""}</td>
+                    <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{s.orders ?? "—"}</td>
+                    <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{euro(s.revenue)}</td>
+                    <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "var(--ink-soft)" }}>{euro(s.shipping || 0)}</td>
+                    <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 800, color: "var(--gold-dark)" }}>{euro(ca)}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "right" }}>
+                      {ca > 0 && (
+                        <button type="button" className="btn btn-outline" style={{ padding: "2px 10px", fontSize: "0.75rem" }}
+                          onClick={async () => {
+                            try {
+                              await navigator.clipboard.writeText(String(ca.toFixed(2)).replace(".", ","));
+                              setCopied(s.month); setTimeout(() => setCopied(""), 1500);
+                            } catch { /* ignore */ }
+                          }}>
+                          {copied === s.month ? "✓ Copié" : "Copier"}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ margin: "10px 0 0", fontSize: "0.78rem", color: "var(--ink-soft)" }}>
+          💡 Déclare le mois <strong>terminé</strong> (pas le mois en cours) sur autoentrepreneur.urssaf.fr,
+          dans « Chiffre d&apos;affaires — ventes de marchandises ». Un oubli = pénalité (~58 €), même à 0 € il faut déclarer.
+        </p>
+
+        {/* Livre des recettes : registre chronologique OBLIGATOIRE (date,
+           référence, client, nature, montant, mode d'encaissement). */}
+        <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #f0eadd", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <button type="button" className="btn btn-gold" style={{ padding: "7px 16px", fontSize: "0.85rem" }} disabled={dlRecettes}
+            onClick={async () => {
+              setDlRecettes(true);
+              try {
+                const res = await fetch("/api/admin/benefices?recettes=1", { headers: { "x-admin-key": key } });
+                const j = await res.json();
+                const rows = j.rows || [];
+                const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+                const dateFr = (iso) => { try { return new Date(iso).toLocaleDateString("fr-FR"); } catch { return iso; } };
+                const csv = "﻿" + [
+                  ["Date d'encaissement", "Référence", "Client", "Nature", "Montant (EUR)", "Mode d'encaissement"].map(esc).join(";"),
+                  ...rows.map((r) => [dateFr(r.date), r.reference, r.client, r.nature, String(r.montant.toFixed(2)).replace(".", ","), r.mode].map(esc).join(";")),
+                ].join("\r\n");
+                const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+                const a = document.createElement("a");
+                a.href = url; a.download = "livre-des-recettes-niv-creation.csv"; a.click();
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
+              } catch { alert("Téléchargement impossible."); }
+              setDlRecettes(false);
+            }}>
+            {dlRecettes ? "…" : "⬇️ Télécharger le livre des recettes (CSV)"}
+          </button>
+          <span style={{ fontSize: "0.78rem", color: "var(--ink-soft)", maxWidth: 420 }}>
+            Registre chronologique <strong>obligatoire</strong> (date, référence, client, nature, montant, mode d&apos;encaissement).
+            S&apos;ouvre dans Excel / Numbers — garde une copie chaque mois.
+          </span>
+        </div>
       </div>
 
       {/* Détail par produit */}
