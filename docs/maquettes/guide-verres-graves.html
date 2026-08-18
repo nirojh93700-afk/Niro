@@ -1,69 +1,81 @@
 <title>Verres et carafes gravés</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6f6552;--line:#e7dcc4;--card:#fff}
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
-  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:46px 0 38px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance}
-  header.hero p{max-width:60ch;margin:0 auto;color:var(--ink-soft);font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-  section{padding:36px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:48px 0 40px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance}
+  header.hero p{max-width:58ch;margin:0 auto;color:var(--ink-soft);font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
   .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .occ{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
-  .oc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:15px 17px}
-  .oc h3{margin:0 0 .25rem;font-size:1.02rem}
-  .oc p{margin:0;color:var(--ink-soft);font-size:.93rem}
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
+  .also a{color:var(--gold-deep);font-weight:600}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide art de la table · Niv Création</div>
     <h1 class="serif">Verres et carafes gravés personnalisés</h1>
-    <p>Un prénom, une date, un petit dessin gravés dans le verre : le cadeau qui se pose sur la table et qui dure. Verres à vin, flûtes à champagne, verres à whisky et carafes — tous personnalisables, gravés au laser dans notre atelier.</p>
+    <p>Un prénom, une date ou un motif gravé dans le verre : un cadeau qui se pose sur la table, qui sert vraiment, et qui reste des années.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
+    <h2 class="serif">Pourquoi offrir un verre gravé ?</h2>
+    <p>Parce que c'est l'un des rares cadeaux personnalisés qui trouve immédiatement sa place dans une maison. Il ne demande pas qu'on lui fasse de la place sur une étagère : il rejoint le placard, ressort à chaque occasion, et rappelle à chaque fois d'où il vient.</p>
+    <p>C'est aussi un cadeau qui se lit tout de suite. Pas besoin d'expliquer : le prénom est là, gravé dans la matière, et l'attention se comprend au premier regard. Cela en fait un choix sûr quand on connaît peu les goûts de la personne — un verre ne se trompe pas de style, contrairement à un bijou ou à un vêtement.</p>
+    <p>Enfin, il se décline selon le budget et l'occasion : un verre à l'unité pour une attention simple, un lot pour un couple, une carafe pour marquer un grand moment.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
     <h2 class="serif">Verres à vin et flûtes à champagne</h2>
-    <p class="lede">Parfaits en cadeau de couple, pour une crémaillère, un mariage ou un anniversaire. À l'unité ou en lot — la livraison est offerte dès 45 € d'achat.</p>
+    <p>Ce sont les plus polyvalents. Gravés aux deux prénoms d'un couple, ils font un cadeau de crémaillère ou d'anniversaire de mariage très apprécié. Gravés au prénom de chacun, ils deviennent des marque-places pour une grande tablée — et chacun repart avec le sien.</p>
+    <p>Le lot est presque toujours plus intéressant que l'unité : il permet d'atteindre le seuil de livraison offerte, et un cadeau à deux verres a plus d'allure qu'un verre seul.</p>
     <div class="grid">
       <a class="card" href="https://nivcreation.fr/produit/verre-a-vin-grave">
         <div class="ph"><img src="https://nivcreation.fr/produits/verre_vin_geniet.jpg" alt="Verre à vin gravé personnalisé avec prénom"></div>
-        <div class="body"><div class="name">Verre à vin gravé</div><div class="price">dès 12,90 €</div><div class="cta">Prénom, date ou message →</div></div>
+        <div class="body"><div class="name">Verre à vin gravé</div><div class="price">dès 12,90 €</div><div class="cta">À l'unité, par 2 ou par 4 →</div></div>
       </a>
       <a class="card" href="https://nivcreation.fr/produit/flute-a-champagne-gravee">
         <div class="ph"><img src="https://nivcreation.fr/produits/flute-grav-01.jpg" alt="Flûte à champagne gravée personnalisée"></div>
         <div class="body"><div class="name">Flûte à champagne gravée</div><div class="price">dès 12,90 €</div><div class="cta">Pour trinquer →</div></div>
       </a>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<div class="band">
-  <section class="wrap">
+<section>
+  <div class="wrap">
     <h2 class="serif">Verres à whisky et carafes</h2>
-    <p class="lede">Un grand classique du cadeau, très demandé pour un départ à la retraite, un grand anniversaire ou pour marquer une belle occasion.</p>
+    <p>C'est le registre du cadeau qui marque un moment important : un départ à la retraite, un anniversaire rond, un remerciement à quelqu'un qui compte. La carafe, en particulier, a ce côté un peu solennel qui convient aux grandes occasions — elle reste ensuite visible dans le salon, contrairement à un objet qu'on range.</p>
+    <p>Sur le verre à whisky, il est possible d'aller plus loin qu'un prénom : nous gravons également des portraits photo, ce qui donne un objet vraiment unique. C'est un cadeau qui surprend, parce que peu de gens savent que c'est possible.</p>
     <div class="grid">
       <a class="card" href="https://nivcreation.fr/produit/carafe-a-whisky-gravee">
         <div class="ph"><img src="https://nivcreation.fr/produits/carafe_ambiance.jpg" alt="Carafe à whisky gravée personnalisée"></div>
@@ -78,28 +90,47 @@
         <div class="body"><div class="name">Verre à whisky à personnaliser</div><div class="price">19,90 €</div><div class="cta">Modèles gravés au choix →</div></div>
       </a>
     </div>
-  </section>
-</div>
-
-<section>
-  <div class="wrap">
-    <h2 class="serif">Quoi faire graver sur un verre ?</h2>
-    <div class="occ">
-      <div class="oc"><h3>Un prénom</h3><p>Chaque invité retrouve son verre — pratique et charmant à table.</p></div>
-      <div class="oc"><h3>Une date</h3><p>Mariage, rencontre, retraite : la date qui donne du sens au cadeau.</p></div>
-      <div class="oc"><h3>Une photo</h3><p>Sur le verre à whisky, un portrait gravé fait toujours son petit effet.</p></div>
-      <div class="oc"><h3>Un modèle décoré</h3><p>Choisissez parmi nos motifs gravés, avec votre prénom intégré au dessin.</p></div>
-    </div>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Bon à savoir</h2>
-    <div class="occ">
-      <div class="oc"><h3>Résiste au lave-vaisselle</h3><p>La gravure laser est permanente : elle ne s'efface pas et ne s'écaille pas.</p></div>
-      <div class="oc"><h3>Emballage protégé</h3><p>Les verres partent dans un colis renforcé, calés un par un.</p></div>
-      <div class="oc"><h3>Livraison offerte dès 45 €</h3><p>En prenant un lot, vous atteignez souvent le seuil — le port est alors offert.</p></div>
+    <h2 class="serif">Que faire graver sur un verre ?</h2>
+    <p>Contrairement à un bijou, la surface d'un verre laisse davantage de place. Vous pouvez donc vous permettre un peu plus qu'un simple prénom — sans pour autant surcharger.</p>
+    <p><strong>Un prénom seul</strong> reste le choix le plus élégant, surtout sur un service complet où chacun a le sien. <strong>Un prénom accompagné d'une date</strong> convient aux cadeaux d'anniversaire ou de mariage : le prénom en grand, la date en dessous, plus discrète.</p>
+    <p><strong>Un rôle ou un titre</strong> fonctionne très bien en cadeau affectueux ou humoristique — « Le meilleur des papis », « Chef de la maison ». <strong>Un motif décoratif</strong>, enfin, permet d'habiller le verre autour du prénom : nous proposons une série de modèles gravés parmi lesquels choisir directement sur la fiche produit.</p>
+    <p>Un conseil : sur un lot, gardez le même motif et changez seulement les prénoms. L'ensemble reste harmonieux et se pose bien sur une table.</p>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Ce qu'il faut savoir avant de commander</h2>
+    <p><strong>La gravure est définitive.</strong> Elle est réalisée au laser dans l'épaisseur du verre, elle n'est ni peinte ni collée. Elle résiste au lave-vaisselle et ne s'effacera pas avec les lavages — c'est justement ce qui distingue un verre gravé d'un verre imprimé.</p>
+    <p><strong>Le transport est protégé.</strong> Le verre est fragile : chaque pièce part calée individuellement dans un colis renforcé. C'est aussi la raison pour laquelle les frais d'expédition sont un peu plus élevés que sur un bijou.</p>
+    <p><strong>La livraison est offerte dès 45 €.</strong> En prenant un lot de quatre verres, ou en associant une carafe à des verres assortis, vous atteignez généralement ce seuil sans effort.</p>
+    <p><strong>Prévoyez le délai.</strong> Comptez trois à cinq jours ouvrés de gravure, puis l'expédition. Pour un mariage ou un pot de départ, commandez deux à trois semaines à l'avance pour être serein.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Les verres passent-ils au lave-vaisselle ?</h3>
+      <p>Oui. La gravure étant réalisée dans le verre lui-même, elle ne craint ni la chaleur ni les produits de lavage. Vous pouvez les utiliser comme n'importe quel autre verre de votre service.</p>
+
+      <h3>Peut-on graver des prénoms différents sur un même lot ?</h3>
+      <p>Bien sûr, c'est même l'usage le plus fréquent. Vous saisissez le texte de chaque verre séparément au moment de la commande — un champ apparaît pour chacun.</p>
+
+      <h3>Peut-on vraiment graver une photo sur un verre ?</h3>
+      <p>Oui, sur le verre à whisky prévu pour. Le rendu est en nuances de gris, un peu comme un dessin gravé. Comme pour le cristal, une photo nette et bien éclairée donnera un bien meilleur résultat qu'une image sombre ou floue.</p>
+
+      <h3>Et si un verre arrive cassé ?</h3>
+      <p>Cela reste rare grâce à l'emballage renforcé, mais si cela arrive, prenez une photo du colis et du verre et écrivez-nous : nous trouvons une solution. C'est un problème de transport, pas un défaut de votre part.</p>
+
+      <h3>Peut-on assortir une carafe et des verres ?</h3>
+      <p>Oui, c'est même proposé directement sur la fiche de la carafe : vous pouvez y ajouter deux ou quatre verres gravés dans le même style, à un tarif préférentiel. L'ensemble forme alors un vrai coffret.</p>
     </div>
   </section>
 </div>
@@ -107,7 +138,8 @@
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/boutique/verres">Voir tous les verres gravés</a>
-    <p class="note">Gravure laser réalisée à la commande dans notre atelier en France. Aperçu à valider avant gravure sur demande.</p>
+    <p class="note">Gravure laser réalisée à la commande dans notre atelier, en France. Livraison offerte dès 45 € d'achat.</p>
+    <p class="also">À voir aussi : notre <a href="https://nivcreation.fr/boutique/mariage">déco de mariage en bois gravé</a>.</p>
   </div>
 </div>
 

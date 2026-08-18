@@ -1,85 +1,75 @@
 <title>Cadeaux de naissance</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6f6552;--line:#e7dcc4;--card:#fff}
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
-  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:46px 0 38px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance}
-  header.hero p{max-width:60ch;margin:0 auto;color:var(--ink-soft);font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-  section{padding:36px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:48px 0 40px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance}
+  header.hero p{max-width:58ch;margin:0 auto;color:var(--ink-soft);font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
   .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .occ{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
-  .oc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:15px 17px}
-  .oc h3{margin:0 0 .25rem;font-size:1.02rem}
-  .oc p{margin:0;color:var(--ink-soft);font-size:.93rem}
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
+  .also a{color:var(--gold-deep);font-weight:600}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide naissance · Niv Création</div>
     <h1 class="serif">Cadeaux de naissance personnalisés</h1>
-    <p>Pour une naissance, un baptême ou une baby shower, le plus beau cadeau est celui qui porte son prénom. Plaques de naissance en bois, bracelet empreinte de pied, couverts gravés : nos idées de cadeaux personnalisés que les parents gardent longtemps.</p>
+    <p>Un prénom gravé dans le bois, une date, un poids de naissance : les cadeaux que les parents gardent longtemps après que l'enfant a grandi.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Les plaques de naissance en bois</h2>
-    <p class="lede">Prénom, date, taille et poids gravés dans le bois : le souvenir qui se pose dans la chambre et qui traverse les années.</p>
-    <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/plaque-de-naissance">
-        <div class="ph"><img src="https://nivcreation.fr/produits/plaque-naissance-garcon-1.jpg" alt="Plaque de naissance personnalisée en bois"></div>
-        <div class="body"><div class="name">Plaque de naissance</div><div class="price">14,90 €</div><div class="cta">Prénom, date, poids →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/plaque-de-naissance-coeur">
-        <div class="ph"><img src="https://nivcreation.fr/produits/plaque-naissance-coeur-1.jpg" alt="Plaque de naissance mains en cœur en bois"></div>
-        <div class="body"><div class="name">Plaque mains en cœur</div><div class="price">11,90 €</div><div class="cta">Modèle tendre →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/plaque-de-porte-enfant">
-        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6324.png?v=1775091197" alt="Plaque de porte enfant personnalisée prénom et animaux"></div>
-        <div class="body"><div class="name">Plaque de porte enfant</div><div class="price">29,99 €</div><div class="cta">Prénom & animaux →</div></div>
-      </a>
-    </div>
+    <h2 class="serif">Quel cadeau offrir pour une naissance ?</h2>
+    <p>À la naissance d'un enfant, les parents reçoivent beaucoup de choses utiles — et beaucoup de choses en double. Les vêtements sont vite trop petits, les jouets s'entassent, les produits de soin se consomment. Ce qui reste, ce sont les objets qui portent son prénom.</p>
+    <p>C'est là tout l'intérêt d'un cadeau personnalisé : il ne peut être ni offert deux fois, ni revendu, ni oublié dans un placard. Une plaque gravée à la date exacte de la naissance, avec le poids et la taille, devient un repère dans la chambre — puis un souvenir qu'on retrouve des années plus tard en rangeant.</p>
+    <p>C'est aussi un cadeau qui convient quand on n'est pas très proche des parents : impossible de se tromper de taille, de couleur ou de marque.</p>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Un bijou pour les parents</h2>
-    <p class="lede">Le cadeau qu'on oublie souvent : quelque chose pour la maman ou le papa, qui porte le prénom de l'enfant.</p>
+    <h2 class="serif">Les plaques de naissance en bois</h2>
+    <p>C'est le cadeau de naissance le plus offert chez nous, et celui qui se photographie le plus. On y grave le prénom, la date, l'heure, le poids et la taille — tout ce qui figure sur le faire-part, réuni sur un seul objet qui tient debout sur une commode.</p>
+    <p>Le bois se marie avec toutes les chambres d'enfant, quelle que soit la décoration choisie par les parents. Et comme la gravure est creusée dans la matière, elle ne s'écaille pas et ne pâlit pas au soleil.</p>
     <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-empreinte-pied-bebe">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg" alt="Bracelet empreinte pied de bébé à graver"></div>
-        <div class="body"><div class="name">Bracelet empreinte de pied</div><div class="price">16,11 €</div><div class="cta">Prénom & date de naissance →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/plaque-de-naissance">
+        <div class="ph"><img src="https://nivcreation.fr/produits/plaque-naissance-garcon-1.jpg" alt="Plaque de naissance personnalisée en bois"></div>
+        <div class="body"><div class="name">Plaque de naissance</div><div class="price">14,90 €</div><div class="cta">Prénom, date, poids, taille →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-medaillon-coeur-ouvrable">
-        <div class="ph"><img src="https://nivcreation.fr/api/img/3i2xnGFlZluu7K4jcXdy" alt="Collier médaillon cœur ouvrable à graver"></div>
-        <div class="body"><div class="name">Médaillon cœur ouvrable</div><div class="price">28,71 €</div><div class="cta">Plusieurs faces à graver →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/plaque-de-naissance-coeur">
+        <div class="ph"><img src="https://nivcreation.fr/produits/plaque-naissance-coeur-1.jpg" alt="Plaque de naissance mains en cœur en bois"></div>
+        <div class="body"><div class="name">Plaque mains en cœur</div><div class="price">11,90 €</div><div class="cta">Le modèle le plus tendre →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-vertical">
-        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-v-femme.jpg" alt="Cristal photo 3D vertical gravé"></div>
-        <div class="body"><div class="name">Cristal photo 3D</div><div class="price">dès 39,90 €</div><div class="cta">La première photo gravée →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/plaque-de-porte-enfant">
+        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6324.png?v=1775091197" alt="Plaque de porte enfant personnalisée prénom et animaux"></div>
+        <div class="body"><div class="name">Plaque de porte enfant</div><div class="price">29,99 €</div><div class="cta">Prénom & animaux →</div></div>
       </a>
     </div>
   </section>
@@ -87,16 +77,21 @@
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Pour les repas de bébé</h2>
-    <p class="lede">Quand il grandit : un jeu de couverts gravé à son prénom, avec un petit animal sur chaque pièce.</p>
+    <h2 class="serif">Et un cadeau pour les parents ?</h2>
+    <p>C'est celui auquel on pense le moins, et c'est souvent celui qui touche le plus. Dans les semaines qui suivent une naissance, tout tourne autour du bébé : offrir quelque chose à la maman ou au papa, à leur nom, sort du lot.</p>
+    <p>Le bracelet empreinte de pied est notre modèle le plus demandé pour cet usage : il reprend l'empreinte d'un petit pied, avec le prénom et la date gravés. Un médaillon qui s'ouvre permet quant à lui d'ajouter plusieurs prénoms au fil des naissances suivantes.</p>
     <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/couverts-enfants-personnalises">
-        <div class="ph"><img src="https://nivcreation.fr/produits/couverts_enfants_4_face.jpg" alt="Couverts enfants personnalisés gravés prénom"></div>
-        <div class="body"><div class="name">Couverts enfants (jeu de 4)</div><div class="price">34,90 €</div><div class="cta">Prénom & animal au choix →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-empreinte-pied-bebe">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_argente.jpg" alt="Bracelet empreinte pied de bébé à graver"></div>
+        <div class="body"><div class="name">Bracelet empreinte de pied</div><div class="price">16,11 €</div><div class="cta">Prénom & date →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/veilleuse-arbre-de-vie-ronde">
-        <div class="ph"><img src="https://nivcreation.fr/produits/arbre-vie-rond-1.jpg" alt="Veilleuse Arbre de Vie ronde en bois personnalisée"></div>
-        <div class="body"><div class="name">Veilleuse Arbre de Vie</div><div class="price">29,90 €</div><div class="cta">Lumière douce pour la chambre →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/collier-medaillon-coeur-ouvrable">
+        <div class="ph"><img src="https://nivcreation.fr/api/img/3i2xnGFlZluu7K4jcXdy" alt="Collier médaillon cœur ouvrable à graver"></div>
+        <div class="body"><div class="name">Médaillon cœur ouvrable</div><div class="price">28,71 €</div><div class="cta">Plusieurs prénoms →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-vertical">
+        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-v-femme.jpg" alt="Cristal photo 3D vertical gravé"></div>
+        <div class="body"><div class="name">Cristal photo 3D</div><div class="price">dès 39,90 €</div><div class="cta">La première photo →</div></div>
       </a>
     </div>
   </div>
@@ -104,11 +99,55 @@
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Nos conseils</h2>
-    <div class="occ">
-      <div class="oc"><h3>Attendez le prénom</h3><p>Commandez une fois le prénom connu — la gravure est faite sur mesure et ne peut pas être modifiée après.</p></div>
-      <div class="oc"><h3>Les infos utiles</h3><p>Prénom, date, heure, taille et poids : plus il y a de détails, plus le souvenir est précieux.</p></div>
-      <div class="oc"><h3>Comptez quelques jours</h3><p>Chaque pièce est gravée à la commande : prévoyez un peu d'avance avant la visite à la maternité.</p></div>
+    <h2 class="serif">Quand l'enfant grandit</h2>
+    <p>Un cadeau de naissance n'est pas forcément à offrir le jour même. Pour un premier anniversaire, un baptême ou simplement pour marquer le passage à la chambre de grand, d'autres objets prennent le relais.</p>
+    <p>Les couverts gravés au prénom accompagnent les premiers vrais repas, avec un petit animal choisi sur chaque pièce. La veilleuse en bois, elle, éclaire les nuits d'une lumière douce et se garde bien après que la peur du noir soit passée.</p>
+    <div class="grid">
+      <a class="card" href="https://nivcreation.fr/produit/couverts-enfants-personnalises">
+        <div class="ph"><img src="https://nivcreation.fr/produits/couverts_enfants_4_face.jpg" alt="Couverts enfants personnalisés gravés au prénom"></div>
+        <div class="body"><div class="name">Couverts enfants (jeu de 4)</div><div class="price">34,90 €</div><div class="cta">Prénom & animal au choix →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/veilleuse-arbre-de-vie-ronde">
+        <div class="ph"><img src="https://nivcreation.fr/produits/arbre-vie-rond-1.jpg" alt="Veilleuse Arbre de Vie ronde en bois personnalisée"></div>
+        <div class="body"><div class="name">Veilleuse Arbre de Vie</div><div class="price">29,90 €</div><div class="cta">Lumière douce →</div></div>
+      </a>
+    </div>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Nos conseils avant de commander</h2>
+
+    <h3>Attendez que le prénom soit certain</h3>
+    <p>Cela paraît évident, mais c'est l'erreur la plus fréquente. Beaucoup de parents changent d'avis dans les derniers jours, ou hésitent encore à la maternité. Une gravure ne pouvant pas être reprise, mieux vaut attendre l'annonce officielle plutôt que d'anticiper.</p>
+
+    <h3>Rassemblez toutes les informations</h3>
+    <p>Prénom, date, heure de naissance, poids, taille : plus la plaque en contient, plus elle prend de valeur avec le temps. Demandez-les aux parents ou reprenez-les simplement sur le faire-part.</p>
+
+    <h3>Prévoyez le délai de fabrication</h3>
+    <p>Chaque pièce est gravée à la commande : comptez trois à cinq jours ouvrés, puis la livraison. Si vous prévoyez de l'offrir lors de la visite à la maternité, commandez dès l'annonce de la naissance.</p>
+
+    <h3>Vérifiez l'orthographe deux fois</h3>
+    <p>Les prénoms actuels s'écrivent de multiples façons — Lyna, Lina, Lyena. Recopiez exactement ce que les parents ont écrit, et n'hésitez pas à nous demander un aperçu avant que la gravure soit lancée.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Peut-on offrir ce cadeau avant la naissance ?</h3>
+      <p>Nous le déconseillons si le prénom n'est pas définitivement arrêté. En revanche, rien n'empêche de commander dès que le prénom est connu, même avant le terme, et de compléter ensuite avec la date exacte — écrivez-nous, nous nous adapterons.</p>
+
+      <h3>Que graver si l'on ne connaît pas le poids et la taille ?</h3>
+      <p>Le prénom et la date suffisent largement : ce sont eux qui donnent son sens à la plaque. Les autres informations sont un plus, pas une obligation.</p>
+
+      <h3>Le bois convient-il à une chambre de bébé ?</h3>
+      <p>Oui. Nos pièces sont en bois découpé et gravé, sans peinture ni vernis brillant. Comme tout objet décoratif, une plaque se fixe ou se pose simplement hors de portée du lit tant que l'enfant est petit.</p>
+
+      <h3>Peut-on commander plusieurs plaques identiques ?</h3>
+      <p>Bien sûr, c'est fréquent pour des jumeaux ou pour offrir la même pièce aux deux familles. Indiquez-le simplement au moment de la commande, en précisant le texte de chacune.</p>
     </div>
   </section>
 </div>
@@ -116,7 +155,8 @@
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/naissance">Voir tous les cadeaux de naissance</a>
-    <p class="note">Découpe et gravure laser réalisées à la commande dans notre atelier en France. Livraison rapide et suivie.</p>
+    <p class="note">Découpe et gravure laser réalisées à la commande dans notre atelier, en France. Livraison rapide et suivie.</p>
+    <p class="also">À découvrir aussi : <a href="https://nivcreation.fr/idees-cadeaux-femme">nos idées de cadeaux pour une femme</a>, parfaites pour une jeune maman.</p>
   </div>
 </div>
 

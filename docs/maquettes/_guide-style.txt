@@ -1,0 +1,22 @@
+STYLE PARTAGÉ DES PAGES GUIDES (Niv Création) — mémo interne
+
+Analyse de sites de référence (Rosa La Brune, Aismée, Cotton Bird,
+decorationsdemariage.fr, My Bijou Personnalisé) → ce qui fait un bon texte :
+
+1. TITRES EN QUESTIONS  → « Que graver sur un bijou personnalisable ? »,
+   « Comment bien le choisir ? ». Google et les lecteurs adorent.
+2. PARAGRAPHES QUI COULENT, pas des bouts de phrases. 2 à 4 phrases,
+   on s'adresse à « vous ».
+3. UN PARAGRAPHE SUR LE SENS du cadeau (l'émotion, pourquoi ça touche),
+   pas seulement les caractéristiques.
+4. DES CONSEILS CONCRETS : où le poser, quelle taille, quel style selon
+   la personne, combien de temps prévoir.
+5. MATIÈRES ET ENTRETIEN : acier inoxydable, bois, cristal K9 — rassurer
+   sur la qualité et la durée.
+6. POUR QUI : énumérer les liens (maman, sœur, amie, marraine…) aide
+   le lecteur à se projeter.
+7. UNE FAQ en fin de page : 3-4 vraies questions posées par les clientes.
+8. Pas de mots-clés répétés artificiellement : Google pénalise.
+
+Bloc CSS commun à toutes les pages (crème/or de la marque), à ne pas
+modifier sans raison — il assure la cohérence entre les 9 pages.

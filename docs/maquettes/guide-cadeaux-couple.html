@@ -1,90 +1,80 @@
 <title>Cadeaux de couple</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6f6552;--line:#e7dcc4;--card:#fff}
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
-  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:46px 0 38px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance}
-  header.hero p{max-width:60ch;margin:0 auto;color:var(--ink-soft);font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-  section{padding:36px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:48px 0 40px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance}
+  header.hero p{max-width:58ch;margin:0 auto;color:var(--ink-soft);font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .ex{display:inline-block;font-family:Georgia,serif;font-style:italic;color:var(--gold-deep);background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 12px;margin-top:2px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
   .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .occ{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
-  .oc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:15px 17px}
-  .oc h3{margin:0 0 .25rem;font-size:1.02rem}
-  .oc p{margin:0;color:var(--ink-soft);font-size:.93rem}
-  .oc .ex{display:block;margin-top:7px;font-family:Georgia,serif;font-style:italic;color:var(--gold-deep)}
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
+  .also a{color:var(--gold-deep);font-weight:600}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide couple · Niv Création</div>
     <h1 class="serif">Cadeaux personnalisés pour un couple</h1>
-    <p>Deux moitiés d'un même cœur, une date gravée, votre photo au cœur d'un cristal : voici nos idées de cadeaux de couple personnalisés — pour la Saint-Valentin, un anniversaire de rencontre, un mariage ou une crémaillère.</p>
+    <p>Deux bijoux qui se complètent, une date gravée, une photo à deux figée dans le cristal : nos idées pour offrir quelque chose qui vous appartient.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Les bijoux à porter à deux</h2>
-    <p class="lede">Un bijou pour chacun, qui ne prend tout son sens qu'une fois réunis. Le cadeau de couple par excellence.</p>
-    <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/collier-couple-coeur-lot2">
-        <div class="ph"><img src="https://nivcreation.fr/produits/collier_c_ur_couple_a_graver_lot_2_pieces_or_rose.jpg" alt="Collier couple cœur à graver, lot de 2"></div>
-        <div class="body"><div class="name">Collier couple cœur (lot de 2)</div><div class="price">31,41 €</div><div class="cta">Un cœur partagé →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-couple-puzzle">
-        <div class="ph"><img src="https://nivcreation.fr/produits/collier_pendentif_couple_geometric_puzzle_a_graver_argente.jpg" alt="Collier couple pendentif puzzle à graver"></div>
-        <div class="body"><div class="name">Collier couple puzzle</div><div class="price">16,11 €</div><div class="cta">Deux pièces qui s'emboîtent →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-coeur-a-graver-ot">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet-coeur-ot-trio.jpg" alt="Bracelet cœur à graver en trois couleurs"></div>
-        <div class="body"><div class="name">Bracelet cœur à graver</div><div class="price">22,41 €</div><div class="cta">Doré, argenté ou or rose →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-enveloppe-message-secret">
-        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685306_sefx.jpg?v=1780366782" alt="Collier enveloppe avec message secret"></div>
-        <div class="body"><div class="name">Collier enveloppe message secret</div><div class="price">22,41 €</div><div class="cta">Un mot caché à l'intérieur →</div></div>
-      </a>
-    </div>
+    <h2 class="serif">Pourquoi les cadeaux à deux touchent autant</h2>
+    <p>Un cadeau de couple réussi ne se contente pas d'être joli : il matérialise un lien. Deux moitiés d'un même cœur, deux pièces qui s'emboîtent, deux verres gravés côte à côte — l'objet ne prend tout son sens que parce qu'il en existe un autre, ailleurs, porté par quelqu'un d'autre.</p>
+    <p>C'est aussi une manière de dire les choses sans avoir à les formuler. Beaucoup de gens ont du mal avec les grandes déclarations ; graver une date sur un bijou revient à dire la même chose, mais discrètement, et de façon durable.</p>
+    <p>Que ce soit pour une Saint-Valentin, un anniversaire de rencontre, un mariage ou une première année de vie commune, vous trouverez ci-dessous des idées à tous les budgets.</p>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Votre photo, gravée pour toujours</h2>
-    <p class="lede">Votre plus belle photo à deux, gravée en 3D au cœur d'un cristal. C'est le cadeau devant lequel on reste sans voix.</p>
+    <h2 class="serif">Les bijoux à porter à deux</h2>
+    <p>C'est le grand classique du cadeau de couple, et il fonctionne toujours. Le principe : un lot de deux bijoux, chacun portant une moitié du motif ou le prénom de l'autre. Séparés, ils restent discrets ; réunis, ils forment un tout.</p>
+    <p>Le collier cœur se sépare en deux moitiés, tandis que le modèle puzzle propose deux pièces géométriques qui s'emboîtent parfaitement. Dans les deux cas, chacun garde le sien — et la gravure permet d'ajouter les prénoms ou une date.</p>
     <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-horizontal">
-        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-h-amis.jpg" alt="Cristal photo 3D horizontal gravé"></div>
-        <div class="body"><div class="name">Cristal photo 3D — Horizontal</div><div class="price">dès 39,90 €</div><div class="cta">Format paysage →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/collier-couple-coeur-lot2">
+        <div class="ph"><img src="https://nivcreation.fr/produits/collier_c_ur_couple_a_graver_lot_2_pieces_or_rose.jpg" alt="Collier couple cœur à graver, lot de 2"></div>
+        <div class="body"><div class="name">Collier couple cœur (lot de 2)</div><div class="price">31,41 €</div><div class="cta">Un cœur en deux moitiés →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/porte-cles-cristal-led-coeur">
-        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-pcles-coeur-creme.jpg" alt="Porte-clés cristal LED cœur avec photo 3D"></div>
-        <div class="body"><div class="name">Porte-clés cristal cœur</div><div class="price">24,90 €</div><div class="cta">À emporter partout →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/collier-couple-puzzle">
+        <div class="ph"><img src="https://nivcreation.fr/produits/collier_pendentif_couple_geometric_puzzle_a_graver_argente.jpg" alt="Collier couple pendentif puzzle à graver"></div>
+        <div class="body"><div class="name">Collier couple puzzle</div><div class="price">16,11 €</div><div class="cta">Deux pièces qui s'emboîtent →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/verre-a-vin-grave">
-        <div class="ph"><img src="https://nivcreation.fr/produits/verre_vin_geniet.jpg" alt="Verres à vin gravés personnalisés"></div>
-        <div class="body"><div class="name">Verres à vin gravés</div><div class="price">dès 12,90 €</div><div class="cta">Vos deux prénoms →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/collier-enveloppe-message-secret">
+        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685306_sefx.jpg?v=1780366782" alt="Collier enveloppe avec message secret"></div>
+        <div class="body"><div class="name">Collier enveloppe message secret</div><div class="price">22,41 €</div><div class="cta">Un mot caché à l'intérieur →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-coeur-a-graver-ot">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet-coeur-ot-trio.jpg" alt="Bracelet cœur à graver en trois couleurs"></div>
+        <div class="body"><div class="name">Bracelet cœur à graver</div><div class="price">22,41 €</div><div class="cta">Doré, argenté ou or rose →</div></div>
       </a>
     </div>
   </section>
@@ -92,23 +82,86 @@
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Que faire graver ?</h2>
-    <div class="occ">
-      <div class="oc"><h3>Vos deux prénoms</h3><p>Le plus simple et le plus fort. Un prénom sur chaque bijou du lot.<span class="ex">« Léa &amp; Tom »</span></div>
-      <div class="oc"><h3>La date qui compte</h3><p>Votre rencontre, votre mariage, le jour de l'emménagement.<span class="ex">« 14 · 02 · 2021 »</span></div>
-      <div class="oc"><h3>Les coordonnées d'un lieu</h3><p>L'endroit de la demande, du premier voyage, de la maison.<span class="ex">« 43.29 N · 5.37 E »</span></div>
-      <div class="oc"><h3>Un mot à vous</h3><p>Une phrase que vous seuls comprenez, gravée à l'intérieur.<span class="ex">« Toujours »</span></div>
+    <h2 class="serif">Votre photo, gravée dans le cristal</h2>
+    <p>Si vous cherchez le cadeau qui laisse sans voix, c'est celui-là. Votre photo préférée à deux, gravée en trois dimensions à l'intérieur d'un bloc de cristal : l'image semble flotter dans la matière, et prend une dimension particulière une fois posée sur un socle lumineux.</p>
+    <p>Choisissez une photo nette où vos deux visages sont bien visibles — un portrait rapproché rend toujours mieux qu'une photo prise de loin. C'est un cadeau qui reste dans le salon des années, et devant lequel on s'arrête encore longtemps après.</p>
+    <div class="grid">
+      <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-horizontal">
+        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-h-amis.jpg" alt="Cristal photo 3D horizontal gravé"></div>
+        <div class="body"><div class="name">Cristal photo 3D — Horizontal</div><div class="price">dès 39,90 €</div><div class="cta">Format paysage →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-vertical">
+        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-v-femme.jpg" alt="Cristal photo 3D vertical gravé"></div>
+        <div class="body"><div class="name">Cristal photo 3D — Vertical</div><div class="price">dès 39,90 €</div><div class="cta">Format portrait →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/porte-cles-cristal-led-coeur">
+        <div class="ph"><img src="https://nivcreation.fr/produits/cristal-pcles-coeur-creme.jpg" alt="Porte-clés cristal LED cœur avec photo 3D"></div>
+        <div class="body"><div class="name">Porte-clés cristal cœur</div><div class="price">24,90 €</div><div class="cta">La version à emporter →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/verre-a-vin-grave">
+        <div class="ph"><img src="https://nivcreation.fr/produits/verre_vin_geniet.jpg" alt="Verres à vin gravés personnalisés"></div>
+        <div class="body"><div class="name">Verres à vin gravés</div><div class="price">dès 12,90 €</div><div class="cta">Vos deux prénoms →</div></div>
+      </a>
     </div>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Pour quelle occasion ?</h2>
-    <div class="occ">
-      <div class="oc"><h3>Saint-Valentin</h3><p>Les colliers couple partent très vite en février — commandez avec un peu d'avance.</p></div>
-      <div class="oc"><h3>Anniversaire de rencontre</h3><p>Le cristal photo 3D avec votre première photo ensemble : effet garanti.</p></div>
-      <div class="oc"><h3>Mariage ou PACS</h3><p>Des verres gravés à vos deux prénoms et à la date, à garder après la fête.</p></div>
+    <h2 class="serif">Que faire graver ?</h2>
+    <p>Sur un cadeau de couple, la gravure compte autant que l'objet. Voici les idées qui reviennent le plus souvent — et qui fonctionnent, précisément parce qu'elles sont simples.</p>
+
+    <h3>Vos deux prénoms</h3>
+    <p>Un prénom sur chaque bijou du lot, ou les deux réunis sur la même pièce. C'est l'option la plus directe, celle qui se lit immédiatement.</p>
+    <span class="ex">Léa &amp; Tom</span>
+
+    <h3>La date qui a tout commencé</h3>
+    <p>Votre rencontre, votre mariage, le jour de l'emménagement. Écrite en chiffres, elle ne dit rien à personne d'autre — et c'est bien ce qu'on lui demande.</p>
+    <span class="ex">14 · 02 · 2021</span>
+
+    <h3>Les coordonnées d'un lieu</h3>
+    <p>L'endroit de la demande en mariage, d'un voyage marquant, de votre premier appartement. Élégant, un peu énigmatique, et très apprécié de ceux qui n'aiment pas les déclarations trop appuyées.</p>
+    <span class="ex">43.29 N · 5.37 E</span>
+
+    <h3>Un mot qui n'appartient qu'à vous</h3>
+    <p>Un surnom, une phrase récurrente, un mot d'une langue étrangère. C'est souvent le choix le plus personnel, et celui dont on se souvient le plus longtemps.</p>
+    <span class="ex">Toujours</span>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Quelle idée selon l'occasion ?</h2>
+
+    <h3>Pour la Saint-Valentin</h3>
+    <p>Les colliers couple sont de loin les plus commandés en février. Prenez de l'avance : à partir du 1er février, tout le monde s'y met en même temps et les délais de fabrication s'allongent naturellement.</p>
+
+    <h3>Pour un anniversaire de rencontre</h3>
+    <p>Le cristal photo 3D avec votre première photo ensemble fait un effet considérable. C'est un cadeau qui demande un peu de préparation — retrouver la bonne photo — et cela se sent.</p>
+
+    <h3>Pour un mariage ou un PACS</h3>
+    <p>Des verres ou des flûtes gravés à vos deux prénoms et à la date : ils servent le jour même, puis restent dans le placard et ressortent à chaque anniversaire.</p>
+
+    <h3>Pour une crémaillère à deux</h3>
+    <p>Un objet pour la maison plutôt qu'un bijou : des verres assortis, une carafe, ou une lampe en bois gravée aux deux prénoms.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Peut-on graver un prénom différent sur chaque bijou du lot ?</h3>
+      <p>Oui, et c'est même l'usage le plus courant : chacun porte le prénom de l'autre. Vous saisissez les deux textes séparément au moment de la commande.</p>
+
+      <h3>Faut-il choisir la même couleur pour les deux ?</h3>
+      <p>Pas nécessairement. Beaucoup de couples choisissent une teinte différente pour chacun — doré pour l'un, argenté pour l'autre — tout en gardant le même modèle. L'ensemble reste cohérent sans être identique.</p>
+
+      <h3>Combien de temps avant la Saint-Valentin faut-il commander ?</h3>
+      <p>Comptez au minimum une dizaine de jours pour être tranquille : trois à cinq jours ouvrés de gravure, puis la livraison. Plus tôt vous commandez, plus vous êtes serein.</p>
+
+      <h3>Peut-on offrir un seul bijou du lot ?</h3>
+      <p>Les lots sont conçus pour aller ensemble et se vendent par deux. En revanche, rien ne vous empêche d'offrir le lot complet et de laisser l'autre personne vous remettre le vôtre — c'est même souvent le plus joli moment.</p>
     </div>
   </section>
 </div>
@@ -116,7 +169,8 @@
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/boutique/bijoux">Découvrir nos cadeaux de couple</a>
-    <p class="note">Gravure laser réalisée à la commande dans notre atelier en France. Aperçu à valider avant gravure sur demande.</p>
+    <p class="note">Gravure laser réalisée à la commande dans notre atelier, en France. Aperçu à valider avant gravure sur simple demande.</p>
+    <p class="also">À lire aussi : <a href="https://nivcreation.fr/idees-gravure">que faire graver sur un bijou</a>.</p>
   </div>
 </div>
 

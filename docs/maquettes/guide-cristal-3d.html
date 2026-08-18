@@ -1,110 +1,153 @@
 <title>Cristal photo 3D</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6f6552;--line:#e7dcc4;--card:#fff;--night:#1a1206}
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff;--night:#1a1206}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:#e2c67e;font-weight:700}
-  header.hero{background:radial-gradient(120% 100% at 50% 0%,#2a1f0e,var(--night));color:#f3e8d3;padding:52px 0 44px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance;color:#fff}
-  header.hero p{max-width:60ch;margin:0 auto;color:#d9cbab;font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-  section{padding:38px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:8px}
-  .step{display:flex;gap:12px;align-items:flex-start}
-  .step .n{flex:0 0 34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-family:Georgia,serif;font-weight:700;display:flex;align-items:center;justify-content:center}
-  .step h3{margin:0 0 .2rem;font-size:1.02rem}
-  .step p{margin:0;color:var(--ink-soft);font-size:.93rem}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:#e2c67e;font-weight:700}
+  header.hero{background:radial-gradient(120% 100% at 50% 0%,#2a1f0e,var(--night));color:#f3e8d3;padding:54px 0 46px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance;color:#fff}
+  header.hero p{max-width:58ch;margin:0 auto;color:#d9cbab;font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
   .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:14px}
-  .ptile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
-  .ptile .s{font-size:.8rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
-  .ptile .p{font-family:Georgia,serif;font-size:1.5rem;color:var(--gold-deep);margin-top:4px}
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  table.prices{width:100%;border-collapse:collapse;margin-top:16px;font-size:.98rem}
+  table.prices th,table.prices td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  table.prices th{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+  table.prices td.p{color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
+  .also a{color:var(--gold-deep);font-weight:600}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide cristal 3D · Niv Création</div>
     <h1 class="serif">Cristal photo 3D : comment ça marche, prix et idées</h1>
-    <p>Votre photo préférée gravée en trois dimensions, au cœur d'un cristal d'une grande pureté. Un cadeau qui capte la lumière et l'émotion. On vous explique tout : le principe, les tailles, les prix et pour qui l'offrir.</p>
+    <p>Une photo gravée en trois dimensions, à l'intérieur même du cristal. On vous explique la technique, les tailles, les prix — et comment choisir la bonne photo.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Comment c'est fait ?</h2>
-    <div class="steps">
-      <div class="step"><div class="n">1</div><div><h3>Vous envoyez votre photo</h3><p>Un portrait, un couple, un animal, un souvenir de famille. On la prépare pour la gravure.</p></div></div>
-      <div class="step"><div class="n">2</div><div><h3>Gravure laser en 3D</h3><p>Un laser grave des milliers de points à l'intérieur du cristal optique K9 — l'image apparaît en relief, en profondeur.</p></div></div>
-      <div class="step"><div class="n">3</div><div><h3>Sublimé par la lumière</h3><p>Posé sur un socle lumineux LED (en option), l'effet 3D devient spectaculaire, surtout le soir.</p></div></div>
-    </div>
+    <h2 class="serif">Qu'est-ce qu'un cristal photo 3D ?</h2>
+    <p>Imaginez un bloc de cristal parfaitement transparent, et votre photo qui semble flotter à l'intérieur, en relief. Ce n'est ni une impression posée sur la surface, ni un autocollant : l'image est réellement gravée <em>dans</em> la matière.</p>
+    <p>La technique s'appelle la gravure sous-surface. Un laser vient créer des milliers de micro-points à différentes profondeurs à l'intérieur du bloc. Chaque point capte la lumière, et l'ensemble compose une image en volume que l'on peut regarder sous différents angles. C'est pour cela qu'un cristal ne se photographie jamais aussi bien qu'il ne se voit en vrai.</p>
+    <p>Le cristal utilisé est du K9 optique, le même type de verre que celui des instruments d'optique : très pur, sans bulle ni teinte verdâtre. C'est ce qui donne cette impression de netteté quand la lumière le traverse.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Comment se passe une commande ?</h2>
+    <h3>1. Vous choisissez le format et la taille</h3>
+    <p>Vertical pour un portrait, horizontal pour une photo de groupe ou de paysage. La taille dépend surtout de l'endroit où le cristal sera posé : un petit format se glisse sur une étagère ou un bureau, un grand format s'installe comme un objet de décoration à part entière.</p>
+
+    <h3>2. Vous envoyez votre photo</h3>
+    <p>Directement depuis la fiche produit. Nous la préparons ensuite pour la gravure : détourage si nécessaire, ajustement des contrastes, mise à l'échelle. Vous n'avez rien à faire de technique de votre côté.</p>
+
+    <h3>3. Nous gravons, puis nous expédions</h3>
+    <p>La gravure est réalisée à la commande dans notre atelier. Comptez quelques jours de fabrication, puis l'expédition en colis suivi, dans un emballage protégé — le cristal est un objet lourd et fragile, il voyage calé.</p>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Quelle photo choisir ?</h2>
+    <p>C'est le point le plus important, et celui qui fait toute la différence entre un cristal réussi et un cristal décevant. La technique de gravure travaille en nuances de lumière, pas en couleurs : votre photo sera restituée en clair-obscur, un peu comme une sculpture de lumière.</p>
+    <p><strong>Ce qui rend très bien :</strong> un visage net et bien éclairé, un portrait rapproché, une silhouette qui se détache d'un fond simple. Les photos de couple, de famille et d'animaux fonctionnent particulièrement bien.</p>
+    <p><strong>Ce qui rend moins bien :</strong> une photo floue ou très sombre, une scène avec beaucoup de personnes minuscules, ou un arrière-plan très chargé qui vient concurrencer le sujet. Dans ce cas, mieux vaut recadrer sur l'essentiel avant de nous l'envoyer.</p>
+    <p>En cas de doute, envoyez-nous simplement votre photo : nous vous dirons franchement si elle donnera un beau résultat, et nous vous proposerons une alternative si ce n'est pas le cas.</p>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
     <h2 class="serif">Les tailles et les prix</h2>
-    <p class="lede">Bloc vertical (portrait) ou horizontal (paysage), en plusieurs tailles. Vous choisissez selon la photo et le budget.</p>
-    <div class="prices">
-      <div class="ptile"><div class="s">Petit</div><div class="p">39,90 €</div></div>
-      <div class="ptile"><div class="s">Moyen</div><div class="p">59,90 €</div></div>
-      <div class="ptile"><div class="s">Grand</div><div class="p">99,90 €</div></div>
-      <div class="ptile"><div class="s">Très grand</div><div class="p">149,90 €</div></div>
-    </div>
-    <p class="note" style="text-align:left">Socle lumineux LED multicolore disponible en option (14,90 € à 19,90 € selon la taille).</p>
+    <p>Le prix dépend uniquement de la taille du bloc — la gravure de votre photo est comprise. Voici les tarifs, à titre indicatif selon le format choisi.</p>
+    <table class="prices">
+      <thead><tr><th>Taille</th><th>Idéal pour</th><th>Prix</th></tr></thead>
+      <tbody>
+        <tr><td>Petit</td><td>Un bureau, une étagère, un premier cadeau</td><td class="p">39,90 €</td></tr>
+        <tr><td>Moyen</td><td>Le format le plus choisi, bon compromis</td><td class="p">59,90 €</td></tr>
+        <tr><td>Grand</td><td>Une pièce qui se remarque dans un salon</td><td class="p">99,90 €</td></tr>
+        <tr><td>Très grand</td><td>Un cadeau d'exception, un anniversaire marquant</td><td class="p">149,90 €</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:16px">Un <strong>socle lumineux LED</strong> est proposé en option (14,90 € à 19,90 € selon la taille). Nous vous le conseillons vraiment : posé sur le socle, le cristal s'illumine de l'intérieur et change complètement d'allure une fois la nuit tombée. Les couleurs défilent au toucher, et tout est fourni — câble et adaptateur secteur compris.</p>
   </section>
 </div>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">À découvrir</h2>
+    <h2 class="serif">Nos formats</h2>
     <div class="grid">
       <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-vertical">
         <div class="ph"><img src="https://nivcreation.fr/produits/cristal-v-femme.jpg" alt="Cristal photo 3D vertical gravé"></div>
-        <div class="body"><div class="name">Cristal photo 3D — Vertical</div><div class="price">dès 39,90 €</div><div class="cta">Format portrait →</div></div>
+        <div class="body"><div class="name">Cristal photo 3D — Vertical</div><div class="price">dès 39,90 €</div><div class="cta">Pour un portrait →</div></div>
       </a>
       <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-horizontal">
         <div class="ph"><img src="https://nivcreation.fr/produits/cristal-h-amis.jpg" alt="Cristal photo 3D horizontal gravé"></div>
-        <div class="body"><div class="name">Cristal photo 3D — Horizontal</div><div class="price">dès 39,90 €</div><div class="cta">Format paysage →</div></div>
+        <div class="body"><div class="name">Cristal photo 3D — Horizontal</div><div class="price">dès 39,90 €</div><div class="cta">Pour un groupe ou un paysage →</div></div>
       </a>
       <a class="card" href="https://nivcreation.fr/produit/porte-cles-cristal-led-coeur">
         <div class="ph"><img src="https://nivcreation.fr/produits/cristal-pcles-coeur-creme.jpg" alt="Porte-clés cristal LED cœur avec photo 3D"></div>
-        <div class="body"><div class="name">Porte-clés cristal LED cœur</div><div class="price">24,90 €</div><div class="cta">Version mini à emporter →</div></div>
+        <div class="body"><div class="name">Porte-clés cristal cœur</div><div class="price">24,90 €</div><div class="cta">La version à emporter →</div></div>
       </a>
       <a class="card" href="https://nivcreation.fr/produit/cle-usb-cristal-3d">
         <div class="ph"><img src="https://nivcreation.fr/produits/cle_usb_cristal_argent_4gb.jpg" alt="Clé USB cristal avec gravure photo 3D"></div>
-        <div class="body"><div class="name">Clé USB cristal photo 3D</div><div class="price">17,90 €</div><div class="cta">Utile & souvenir →</div></div>
+        <div class="body"><div class="name">Clé USB cristal</div><div class="price">17,90 €</div><div class="cta">Utile et souvenir →</div></div>
       </a>
     </div>
   </div>
 </section>
 
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">À qui l'offrir ?</h2>
+    <p>Le cristal photo touche parce qu'il fige un moment précis, et qu'on ne peut pas l'acheter tout fait en magasin. C'est le cadeau que l'on offre quand on veut vraiment marquer le coup.</p>
+    <p>Il fonctionne particulièrement bien <strong>pour un couple</strong> — une photo à deux, offerte pour un anniversaire de rencontre ou la Saint-Valentin. <strong>Pour des grands-parents</strong>, avec les petits-enfants gravés à l'intérieur : c'est souvent le cadeau de Noël qui provoque le plus d'émotion. <strong>Pour une famille</strong>, avec la photo de tous ensemble. Et <strong>en souvenir</strong> d'un animal qui a compté, ou d'une personne qui n'est plus là — beaucoup de nos clients nous écrivent pour cette raison.</p>
+  </section>
+</div>
+
 <section>
   <div class="wrap">
-    <h2 class="serif">Pour qui l'offrir ?</h2>
-    <p class="lede">Le cristal photo 3D touche parce qu'il fige un souvenir précis. Il fait mouche pour :</p>
-    <div class="steps">
-      <div class="step"><div class="n">♥</div><div><h3>Un couple</h3><p>Votre plus belle photo à deux — anniversaire de rencontre, mariage, Saint-Valentin.</p></div></div>
-      <div class="step"><div class="n">☺</div><div><h3>La famille</h3><p>Les grands-parents, un nouveau-né, une photo de tous ensemble — un cadeau qui émeut.</p></div></div>
-      <div class="step"><div class="n">✦</div><div><h3>Un souvenir</h3><p>Un animal aimé, un lieu, une personne qui compte : le garder en lumière.</p></div></div>
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Ma photo est prise avec un téléphone, est-ce suffisant ?</h3>
+      <p>Dans l'immense majorité des cas, oui : les téléphones récents produisent des images largement assez définies. Ce qui compte davantage, c'est la netteté et la lumière — une photo prise de jour, bien cadrée, donnera toujours un meilleur résultat qu'une photo prise dans la pénombre.</p>
+
+      <h3>Peut-on graver plusieurs personnes ?</h3>
+      <p>Oui, à condition que les visages restent suffisamment grands dans l'image. Une photo de deux à quatre personnes rend très bien. Au-delà, choisissez plutôt un grand format, ou recadrez sur le groupe principal.</p>
+
+      <h3>Le socle lumineux est-il vraiment utile ?</h3>
+      <p>Il n'est pas indispensable — le cristal se suffit à lui-même en pleine lumière. Mais c'est le soir qu'il prend toute sa dimension, et c'est là que le socle fait la différence. La plupart de nos clients qui l'ont pris nous disent que c'est ce qu'ils préfèrent.</p>
+
+      <h3>Peut-on ajouter un texte à la photo ?</h3>
+      <p>C'est possible sur certains modèles, où vous pouvez faire graver un prénom ou une date sous l'image. Le champ apparaît alors sur la fiche produit. Si vous souhaitez quelque chose de particulier, écrivez-nous avant de commander.</p>
+
+      <h3>Comment entretenir un cristal gravé ?</h3>
+      <p>Un chiffon doux et sec suffit. Évitez les produits ménagers et les chiffons abrasifs, qui peuvent ternir la surface avec le temps. La gravure, elle, est à l'intérieur du bloc : elle ne s'abîme pas.</p>
     </div>
   </div>
 </section>
@@ -112,7 +155,8 @@
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/cristaux">Créer mon cristal photo 3D</a>
-    <p class="note">Gravure réalisée à la commande dans notre atelier en France. Envoi de votre photo simple et guidé sur la fiche produit.</p>
+    <p class="note">Gravure réalisée à la commande dans notre atelier en France. Envoi de votre photo simple et guidé depuis la fiche produit.</p>
+    <p class="also">À découvrir aussi : <a href="https://nivcreation.fr/idees-cadeaux-femme">nos idées de cadeaux pour une femme</a>.</p>
   </div>
 </div>
 

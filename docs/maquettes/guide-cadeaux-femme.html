@@ -1,140 +1,173 @@
 <title>Idées cadeaux femme</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{
-    --gold:#c9a24b; --gold-deep:#a5822f; --cream:#fbf7ee; --cream-2:#f4ecd9;
-    --ink:#241a0c; --ink-soft:#6f6552; --line:#e7dcc4; --card:#ffffff;
-  }
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);
-    font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  a{color:inherit}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
-
-  /* Hero */
-  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);
-    padding:46px 0 38px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance}
-  header.hero p{max-width:60ch;margin:0 auto;color:var(--ink-soft);font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-
-  /* Sections */
-  section{padding:38px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  section .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-
-  /* Product grid */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
-    display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:48px 0 40px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance}
+  header.hero p{max-width:58ch;margin:0 auto;color:var(--ink-soft);font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
-
-  /* Tips band */
-  .tips{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .tips .inner{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
-  .tip h3{font-size:1.05rem;margin:0 0 .3rem}
-  .tip p{margin:0;color:var(--ink-soft);font-size:.95rem}
-
-  /* Closing CTA */
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;
-    text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
+  .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
+  .also a{color:var(--gold-deep);font-weight:600}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide cadeaux · Niv Création</div>
     <h1 class="serif">Idées de cadeaux personnalisés pour une femme</h1>
-    <p>Un bijou gravé à son prénom, un souvenir photo dans le cristal, une attention qui lui ressemble : voici nos idées de cadeaux personnalisés pour une femme — à offrir pour un anniversaire, la fête des mères, la Saint-Valentin ou juste pour lui faire plaisir.</p>
+    <p>Un prénom gravé au dos d'un médaillon, une date qui ne s'oublie pas, un mot glissé à l'intérieur d'un pendentif : voici nos idées pour offrir un cadeau qui lui ressemble vraiment.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Les colliers gravés, la valeur sûre</h2>
-    <p class="lede">Un prénom, une date, un petit mot caché à l'intérieur : le collier personnalisé est le cadeau qui touche à coup sûr. Discret au quotidien, il porte un message rien qu'à elle.</p>
-    <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/collier-coeur-zircon">
-        <div class="ph"><img src="https://nivcreation.fr/produits/collier-coeur-zircon-1.jpg" alt="Collier cœur doré serti de zircon"></div>
-        <div class="body"><div class="name">Collier cœur & zircon doré</div><div class="price">22,41 €</div><div class="cta">Gravure prénom en option →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-medaillon-coeur-ouvrable">
-        <div class="ph"><img src="https://nivcreation.fr/api/img/3i2xnGFlZluu7K4jcXdy" alt="Collier médaillon cœur ouvrable à graver"></div>
-        <div class="body"><div class="name">Médaillon cœur ouvrable</div><div class="price">28,71 €</div><div class="cta">5 faces à graver →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-enveloppe-message-secret">
-        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685306_sefx.jpg?v=1780366782" alt="Collier enveloppe avec message secret"></div>
-        <div class="body"><div class="name">Collier enveloppe message secret</div><div class="price">22,41 €</div><div class="cta">Un mot caché à l'intérieur →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-coeur-scintillant">
-        <div class="ph"><img src="https://nivcreation.fr/produits/collier-coeur-scintillant-1.jpg" alt="Collier cœur scintillant doré à zircons"></div>
-        <div class="body"><div class="name">Collier cœur scintillant</div><div class="price">22,41 €</div><div class="cta">Pour briller au quotidien →</div></div>
-      </a>
-    </div>
+    <h2 class="serif">Pourquoi offrir un cadeau personnalisé ?</h2>
+    <p>Offrir un bijou gravé, ce n'est pas seulement offrir un objet. C'est dire à quelqu'un qu'on a pris le temps de penser à elle : choisir la forme, décider du mot qui sera gravé, se souvenir de la date exacte. Ce sont ces petits gestes-là qui se remarquent, bien plus que le prix affiché.</p>
+    <p>C'est aussi ce qui explique qu'un bijou personnalisé se garde des années, alors que tant d'autres cadeaux finissent au fond d'un tiroir. Parce qu'il ne ressemble à aucun autre, et qu'il raconte quelque chose que vous êtes seuls à comprendre.</p>
+    <p>Que ce soit pour un anniversaire, la fête des mères, la Saint-Valentin, un remerciement ou simplement pour lui faire plaisir un mardi soir, vous trouverez ci-dessous nos idées classées par style et par budget.</p>
   </div>
 </section>
 
-<div class="tips">
-  <section class="wrap tips-inner">
-    <h2 class="serif">Comment bien choisir ?</h2>
-    <div class="inner" style="margin-top:16px">
-      <div class="tip"><h3>Son style</h3><p>Doré ou argenté ? Discret ou qui se remarque ? Regardez ce qu'elle porte déjà, c'est le meilleur indice.</p></div>
-      <div class="tip"><h3>Le message</h3><p>Un prénom, une date qui compte, ou un mot doux gravé au dos : c'est la personnalisation qui rend le cadeau unique.</p></div>
-      <div class="tip"><h3>L'occasion</h3><p>Anniversaire, fête des mères, naissance… Chaque moment a son bijou. En doute ? Le cœur gravé plaît à toutes.</p></div>
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Les colliers gravés : la valeur sûre</h2>
+    <p>C'est le cadeau qui rassure quand on hésite. Un collier se porte tous les jours, se glisse sous un pull en hiver comme sur une robe l'été, et la gravure reste discrète — elle n'appartient qu'à celle qui le porte.</p>
+    <p>Certains modèles vont plus loin qu'un simple prénom : le médaillon cœur s'ouvre comme un petit livre et cache plusieurs faces à graver, tandis que le collier enveloppe dissimule un vrai message à l'intérieur, que l'on découvre en le dépliant. Ce sont ceux-là qui provoquent le plus d'émotion à l'ouverture du paquet.</p>
+    <div class="grid">
+      <a class="card" href="https://nivcreation.fr/produit/collier-medaillon-coeur-ouvrable">
+        <div class="ph"><img src="https://nivcreation.fr/api/img/3i2xnGFlZluu7K4jcXdy" alt="Collier médaillon cœur ouvrable à graver"></div>
+        <div class="body"><div class="name">Médaillon cœur ouvrable</div><div class="price">28,71 €</div><div class="cta">Plusieurs faces à graver →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/collier-enveloppe-message-secret">
+        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685306_sefx.jpg?v=1780366782" alt="Collier enveloppe avec message secret gravé"></div>
+        <div class="body"><div class="name">Collier enveloppe message secret</div><div class="price">22,41 €</div><div class="cta">Un mot caché à l'intérieur →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/collier-coeur-zircon">
+        <div class="ph"><img src="https://nivcreation.fr/produits/collier-coeur-zircon-1.jpg" alt="Collier cœur doré serti de zircon"></div>
+        <div class="body"><div class="name">Collier cœur & zircon doré</div><div class="price">22,41 €</div><div class="cta">Un éclat discret →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/collier-medaillon-livre">
+        <div class="ph"><img src="https://nivcreation.fr/api/img/VZmaP8sY7gpKDHt74szE" alt="Collier médaillon livre à graver"></div>
+        <div class="body"><div class="name">Médaillon livre à graver</div><div class="price">33,21 €</div><div class="cta">Ses dates les plus belles →</div></div>
+      </a>
     </div>
   </section>
 </div>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Les bracelets à personnaliser</h2>
-    <p class="lede">Fins et féminins, à graver d'un prénom ou d'une date. Le genre de cadeau qu'elle garde des années.</p>
-    <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-femme-coeur">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_femme_coeur_a_graver_dore.jpg" alt="Bracelet femme cœur doré à graver"></div>
-        <div class="body"><div class="name">Bracelet femme cœur</div><div class="price">22,41 €</div><div class="cta">À graver →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-femme-papillon">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_papillon_ajoure_a_graver_argente.jpg" alt="Bracelet femme papillon ajouré à graver"></div>
-        <div class="body"><div class="name">Bracelet papillon ajouré</div><div class="price">20,61 €</div><div class="cta">À graver →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-coeur-a-graver-ot">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet-coeur-ot-trio.jpg" alt="Bracelet cœur à graver, trois couleurs"></div>
-        <div class="body"><div class="name">Bracelet cœur à graver</div><div class="price">22,41 €</div><div class="cta">Doré, argenté ou or rose →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-maille-trombone">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet-maille-0.jpg" alt="Bracelet maille trombone doré"></div>
-        <div class="body"><div class="name">Bracelet maille trombone</div><div class="price">17,91 €</div><div class="cta">Tendance & doré →</div></div>
-      </a>
-    </div>
+    <h2 class="serif">Comment choisir le bon bijou ?</h2>
+    <p>Avant de vous décider, prenez trente secondes pour repenser à ce qu'elle porte déjà. C'est le meilleur indice, et il évite les erreurs les plus fréquentes.</p>
+
+    <h3>Regardez la couleur qu'elle porte le plus</h3>
+    <p>Doré ou argenté : la plupart des femmes ont une préférence nette, et un bijou dans la mauvaise teinte finit rarement porté. Si elle mélange les deux, choisissez selon la saison — le doré réchauffe l'hiver, l'argenté s'accorde à tout le reste de l'année.</p>
+
+    <h3>Discret ou qui se remarque ?</h3>
+    <p>Une chaîne fine avec un petit pendentif conviendra à celle qui porte peu de bijoux et n'aime pas qu'on les remarque. À l'inverse, si elle assume les pièces plus visibles, un médaillon ou une maille plus large lui ira mieux.</p>
+
+    <h3>Pensez à ce qu'il y aura dessus</h3>
+    <p>Un prénom court tient parfaitement sur une petite plaque. Une date complète, un message ou plusieurs prénoms demandent en revanche une surface plus généreuse : dans ce cas, orientez-vous vers un médaillon ou un modèle à plusieurs faces plutôt qu'un pendentif minuscule.</p>
   </div>
 </section>
 
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Les bracelets à personnaliser</h2>
+    <p>Plus visible qu'un collier parce qu'on l'a sous les yeux toute la journée, le bracelet gravé est le cadeau de celles qui aiment avoir un rappel à portée de regard. Il se porte seul ou s'accumule avec ceux qu'elle possède déjà.</p>
+    <p>Tous nos modèles sont en acier inoxydable : ils ne noircissent pas, supportent l'eau et les gestes du quotidien, et la gravure laser ne s'efface pas avec le temps.</p>
+    <div class="grid">
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-femme-coeur">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_femme_coeur_a_graver_dore.jpg" alt="Bracelet femme cœur doré à graver"></div>
+        <div class="body"><div class="name">Bracelet femme cœur</div><div class="price">22,41 €</div><div class="cta">Le plus offert →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-coeur-a-graver-ot">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet-coeur-ot-trio.jpg" alt="Bracelet cœur à graver en trois couleurs"></div>
+        <div class="body"><div class="name">Bracelet cœur à graver</div><div class="price">22,41 €</div><div class="cta">Doré, argenté ou or rose →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-femme-papillon">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_papillon_ajoure_a_graver_argente.jpg" alt="Bracelet femme papillon ajouré à graver"></div>
+        <div class="body"><div class="name">Bracelet papillon ajouré</div><div class="price">20,61 €</div><div class="cta">Délicat et léger →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-maille-trombone">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet-maille-0.jpg" alt="Bracelet maille trombone doré"></div>
+        <div class="body"><div class="name">Bracelet maille trombone</div><div class="price">17,91 €</div><div class="cta">Plus affirmé →</div></div>
+      </a>
+    </div>
+  </section>
+</div>
+
 <section>
   <div class="wrap">
-    <h2 class="serif">Un souvenir qui sort de l'ordinaire</h2>
-    <p class="lede">Envie de marquer les esprits ? Faites graver sa photo préférée en 3D au cœur d'un cristal. L'effet est saisissant, surtout posé sur un socle lumineux.</p>
+    <h2 class="serif">Que faire graver ?</h2>
+    <p>C'est souvent là qu'on bloque le plus longtemps. Rassurez-vous : les gravures qui touchent le plus sont presque toujours les plus simples. Quelques lettres suffisent, à condition qu'elles veuillent dire quelque chose pour elle.</p>
+    <p>Vous pouvez faire graver <strong>son prénom</strong>, celui de ses enfants alignés les uns après les autres, ou vos deux initiales entrelacées. <strong>Une date</strong> fonctionne toujours : la rencontre, le mariage, une naissance, ou le jour où quelque chose a changé. Certains choisissent <strong>des coordonnées GPS</strong> — le lieu de la demande, de la première maison, d'un voyage qui compte.</p>
+    <p>Et puis il y a <strong>les mots</strong> : trois mots au dos d'un pendentif, invisibles pour tout le monde sauf pour elle. « Je suis là », un surnom que vous êtes seuls à utiliser, ou simplement « Maman ». C'est souvent ce qui fait monter les larmes.</p>
+    <p>Sur chaque fiche produit, vous choisissez également la police d'écriture — une écriture manuscrite pour un rendu romantique, des lettres droites pour quelque chose de plus sobre.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Envie de sortir des sentiers battus ?</h2>
+    <p>Si le bijou vous semble trop attendu, il existe une autre voie : faire graver une photo en trois dimensions au cœur d'un bloc de cristal. L'image apparaît en relief, en profondeur, et prend une tout autre dimension une fois posée sur un socle lumineux.</p>
+    <p>C'est le cadeau qui fait taire une pièce entière au moment du déballage. Une photo de couple, un portrait de famille, un animal aimé : on y revient longtemps après.</p>
     <div class="grid">
       <a class="card" href="https://nivcreation.fr/produit/cristal-photo-3d-vertical">
         <div class="ph"><img src="https://nivcreation.fr/produits/cristal-v-femme.jpg" alt="Cristal photo 3D vertical gravé"></div>
-        <div class="body"><div class="name">Cristal photo 3D — Vertical</div><div class="price">dès 39,90 €</div><div class="cta">Sa photo gravée dans le cristal →</div></div>
+        <div class="body"><div class="name">Cristal photo 3D — Vertical</div><div class="price">dès 39,90 €</div><div class="cta">Sa photo gravée →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/collier-medaillon-livre">
-        <div class="ph"><img src="https://nivcreation.fr/api/img/VZmaP8sY7gpKDHt74szE" alt="Collier médaillon livre à graver"></div>
-        <div class="body"><div class="name">Médaillon livre à graver</div><div class="price">33,21 €</div><div class="cta">Ses dates les plus belles →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/collier-coeur-scintillant">
+        <div class="ph"><img src="https://nivcreation.fr/produits/collier-coeur-scintillant-1.jpg" alt="Collier cœur scintillant doré à zircons"></div>
+        <div class="body"><div class="name">Collier cœur scintillant</div><div class="price">22,41 €</div><div class="cta">Pour les grandes occasions →</div></div>
       </a>
+      <a class="card" href="https://nivcreation.fr/produit/collier-perle-solitaire">
+        <div class="ph"><img src="https://nivcreation.fr/produits/collier-perle-1.jpg" alt="Collier perle solitaire doré"></div>
+        <div class="body"><div class="name">Collier perle solitaire</div><div class="price">17,91 €</div><div class="cta">Sobre et intemporel →</div></div>
+      </a>
+    </div>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Combien de temps faut-il prévoir avant de recevoir le cadeau ?</h3>
+      <p>Chaque pièce étant gravée à la commande, comptez trois à cinq jours ouvrés de fabrication, puis le délai d'expédition. Si vous commandez pour une date précise, prenez un peu d'avance — surtout autour de la fête des mères et de Noël, où les délais s'allongent.</p>
+
+      <h3>Peut-on voir le rendu avant que ce soit gravé ?</h3>
+      <p>Oui. Un aperçu s'affiche déjà sur la fiche produit pendant que vous saisissez votre texte, et nous pouvons vous envoyer un visuel à valider par e-mail avant de lancer la gravure. Cela évite toute mauvaise surprise, en particulier sur les textes longs.</p>
+
+      <h3>La gravure s'efface-t-elle avec le temps ?</h3>
+      <p>Non. Il ne s'agit pas d'une impression mais d'une gravure au laser, réalisée dans la matière elle-même. Sur l'acier inoxydable, elle résiste à l'eau, au savon et au frottement quotidien.</p>
+
+      <h3>Et si je me trompe dans le texte ?</h3>
+      <p>Contactez-nous le plus vite possible : tant que la gravure n'est pas lancée, nous pouvons encore corriger. En revanche, une fois la pièce gravée, elle ne peut plus être modifiée ni reprise — c'est le propre du sur-mesure.</p>
     </div>
   </div>
 </section>
@@ -142,7 +175,8 @@
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/boutique">Voir tous nos cadeaux personnalisés</a>
-    <p class="note">Chaque pièce est gravée à la commande dans notre atelier en France. Livraison rapide et suivie, aperçu à valider avant gravure sur demande.</p>
+    <p class="note">Gravure laser réalisée à la commande dans notre atelier, en France. Livraison rapide et suivie, livraison offerte dès 45 € d'achat sur les bijoux.</p>
+    <p class="also">À découvrir aussi : nos <a href="https://nivcreation.fr/cristaux">cristaux photo 3D</a> et nos <a href="https://nivcreation.fr/boutique/verres">verres gravés</a>.</p>
   </div>
 </div>
 

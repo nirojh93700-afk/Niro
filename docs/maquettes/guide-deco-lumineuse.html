@@ -1,81 +1,71 @@
 <title>Déco lumineuse en bois</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6f6552;--line:#e7dcc4;--card:#fff;--night:#1a1206}
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff;--night:#1a1206}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:#e2c67e;font-weight:700}
-  header.hero{background:radial-gradient(120% 100% at 50% 0%,#2a1f0e,var(--night));color:#f3e8d3;padding:52px 0 44px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance;color:#fff}
-  header.hero p{max-width:60ch;margin:0 auto;color:#d9cbab;font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-  section{padding:36px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:#e2c67e;font-weight:700}
+  header.hero{background:radial-gradient(120% 100% at 50% 0%,#2a1f0e,var(--night));color:#f3e8d3;padding:54px 0 46px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance;color:#fff}
+  header.hero p{max-width:58ch;margin:0 auto;color:#d9cbab;font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
   .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .occ{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
-  .oc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:15px 17px}
-  .oc h3{margin:0 0 .25rem;font-size:1.02rem}
-  .oc p{margin:0;color:var(--ink-soft);font-size:.93rem}
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
+  .also a{color:var(--gold-deep);font-weight:600}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide décoration · Niv Création</div>
     <h1 class="serif">Lampes et décorations en bois personnalisées</h1>
-    <p>Une lumière douce, du bois découpé au laser et un prénom gravé : nos lampes et veilleuses personnalisées habillent un salon, une chambre d'enfant ou une table. Un cadeau de décoration qui réchauffe vraiment un intérieur.</p>
+    <p>Du bois découpé au laser, une lumière chaude et des prénoms gravés : des objets de décoration qui prennent tout leur sens une fois la nuit tombée.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Les lampes Arbre de Vie</h2>
-    <p class="lede">Notre best-seller déco : un arbre de vie découpé dans le bois, rétroéclairé, avec les prénoms de la famille gravés. L'effet est magnifique une fois la nuit tombée.</p>
-    <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/arbre-de-vie-lumineux">
-        <div class="ph"><img src="https://nivcreation.fr/produits/arbre-vie-lumineux-2.jpg" alt="Lampe Arbre de Vie en bois personnalisée"></div>
-        <div class="body"><div class="name">Lampe Arbre de Vie</div><div class="price">29,90 €</div><div class="cta">Prénoms gravés →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/veilleuse-arbre-de-vie-ronde">
-        <div class="ph"><img src="https://nivcreation.fr/produits/arbre-vie-rond-1.jpg" alt="Veilleuse Arbre de Vie ronde en bois personnalisée"></div>
-        <div class="body"><div class="name">Veilleuse Arbre de Vie ronde</div><div class="price">29,90 €</div><div class="cta">Idéale en chambre →</div></div>
-      </a>
-    </div>
+    <h2 class="serif">Un objet de décoration, pas seulement une lampe</h2>
+    <p>Une lampe personnalisée ne remplace pas l'éclairage d'une pièce : elle crée une ambiance. Éteinte, c'est un objet en bois découpé qui se regarde comme un tableau ; allumée, elle diffuse une lumière chaude qui suffit à changer l'atmosphère d'un salon en fin de journée.</p>
+    <p>Ce qui la rend particulière, ce sont les prénoms gravés dans le bois. On offre rarement un objet de décoration en cadeau, par peur de se tromper de goût — mais un objet qui porte les prénoms de la famille trouve toujours sa place.</p>
+    <p>Chaque pièce est découpée et gravée à la commande dans notre atelier. Le motif est creusé dans le bois, jamais imprimé : il ne s'effacera pas et ne jaunira pas avec le temps.</p>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Ambiance et petites attentions</h2>
-    <p class="lede">Des pièces plus discrètes, à offrir ou à garder — pour une crémaillère, un anniversaire ou juste pour se faire plaisir.</p>
+    <h2 class="serif">L'Arbre de Vie, notre pièce la plus demandée</h2>
+    <p>Le motif de l'arbre de vie plaît parce qu'il raconte quelque chose sans avoir besoin d'explication : les racines, les branches, la famille qui s'étend. Sur nos modèles, chaque prénom vient s'inscrire dans le feuillage — parents, enfants, parfois petits-enfants.</p>
+    <p>C'est le cadeau que l'on offre pour une crémaillère, un anniversaire de mariage ou un Noël en famille. La version ronde, plus compacte, convient bien à une table de chevet ou à une chambre d'enfant, tandis que le modèle classique s'installe plutôt dans un salon.</p>
     <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/bougeoir-fleur-de-lotus">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bougeoir-lotus-1.jpg" alt="Bougeoir fleur de lotus en bois personnalisé"></div>
-        <div class="body"><div class="name">Bougeoir Fleur de Lotus</div><div class="price">16,90 €</div><div class="cta">Ambiance zen →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/arbre-de-vie-lumineux">
+        <div class="ph"><img src="https://nivcreation.fr/produits/arbre-vie-lumineux-2.jpg" alt="Lampe Arbre de Vie en bois personnalisée"></div>
+        <div class="body"><div class="name">Lampe Arbre de Vie</div><div class="price">29,90 €</div><div class="cta">Prénoms de la famille →</div></div>
       </a>
-      <a class="card" href="https://nivcreation.fr/produit/lampe-led-paris-saint-germain">
-        <div class="ph"><img src="https://nivcreation.fr/produits/psg-lampe-bleu.jpg" alt="Lampe LED décorative aux couleurs du club"></div>
-        <div class="body"><div class="name">Lampe LED football</div><div class="price">29,90 €</div><div class="cta">Pour les supporters →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/porte-stylo-coq-coupe-du-monde">
-        <div class="ph"><img src="https://nivcreation.fr/produits/porte-stylo-coq-1.jpg" alt="Porte-stylo France en bois, coq gaulois"></div>
-        <div class="body"><div class="name">Porte-stylo France</div><div class="price">14,90 €</div><div class="cta">Pour le bureau →</div></div>
+      <a class="card" href="https://nivcreation.fr/produit/veilleuse-arbre-de-vie-ronde">
+        <div class="ph"><img src="https://nivcreation.fr/produits/arbre-vie-rond-1.jpg" alt="Veilleuse Arbre de Vie ronde en bois personnalisée"></div>
+        <div class="body"><div class="name">Veilleuse Arbre de Vie ronde</div><div class="price">29,90 €</div><div class="cta">Format chambre →</div></div>
       </a>
     </div>
   </section>
@@ -83,20 +73,75 @@
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Où les installer ?</h2>
-    <div class="occ">
-      <div class="oc"><h3>Dans le salon</h3><p>Sur un meuble ou une étagère, la lampe Arbre de Vie donne une lumière chaude le soir.</p></div>
-      <div class="oc"><h3>Dans la chambre d'enfant</h3><p>La veilleuse ronde rassure les petits, avec leur prénom gravé dessus.</p></div>
-      <div class="oc"><h3>Sur la table</h3><p>Le bougeoir lotus crée une ambiance douce pour un dîner à deux.</p></div>
+    <h2 class="serif">Pour créer une ambiance plus douce</h2>
+    <p>Toutes les décorations lumineuses ne sont pas électriques. Le bougeoir en bois découpé joue sur un autre registre : la flamme d'une simple bougie chauffe-plat traverse les motifs ajourés et projette des ombres mouvantes sur les murs autour.</p>
+    <p>C'est un objet à petit prix qui fait beaucoup d'effet sur une table de dîner, dans une salle de bain ou sur un rebord de fenêtre. Et comme il ne demande aucune prise, il se pose vraiment n'importe où.</p>
+    <div class="grid">
+      <a class="card" href="https://nivcreation.fr/produit/bougeoir-fleur-de-lotus">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bougeoir-lotus-1.jpg" alt="Bougeoir fleur de lotus en bois personnalisé"></div>
+        <div class="body"><div class="name">Bougeoir Fleur de Lotus</div><div class="price">16,90 €</div><div class="cta">Ambiance zen →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/lampe-led-paris-saint-germain">
+        <div class="ph"><img src="https://nivcreation.fr/produits/psg-lampe-bleu.jpg" alt="Lampe LED décorative aux couleurs d'un club de football"></div>
+        <div class="body"><div class="name">Lampe LED football</div><div class="price">29,90 €</div><div class="cta">Pour les supporters →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/porte-stylo-coq-coupe-du-monde">
+        <div class="ph"><img src="https://nivcreation.fr/produits/porte-stylo-coq-1.jpg" alt="Porte-stylo France en bois, coq gaulois"></div>
+        <div class="body"><div class="name">Porte-stylo France</div><div class="price">14,90 €</div><div class="cta">Pour le bureau →</div></div>
+      </a>
     </div>
-    <p class="note" style="text-align:left;margin-top:18px">Toutes nos pièces en bois sont découpées et gravées au laser dans notre atelier, à la commande. Les prénoms, dates et petits messages sont gravés selon vos indications.</p>
   </div>
 </section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Où l'installer chez soi ?</h2>
+
+    <h3>Dans le salon</h3>
+    <p>Posée sur un meuble bas, une console ou une étagère, la lampe Arbre de Vie fonctionne surtout en éclairage d'appoint, le soir. Évitez de la placer face à une fenêtre : c'est en contraste avec une pièce peu éclairée qu'elle est la plus belle.</p>
+
+    <h3>Dans une chambre d'enfant</h3>
+    <p>La veilleuse ronde diffuse une lumière suffisamment douce pour ne pas empêcher l'endormissement, tout en rassurant. Son prénom gravé dessus fait de la lampe « sa » lampe, ce qui aide beaucoup les plus petits.</p>
+
+    <h3>Sur une table</h3>
+    <p>Le bougeoir se place au centre, entre les assiettes, ou en série de deux ou trois le long d'une grande tablée. Utilisez des bougies chauffe-plat classiques, et laissez toujours un espace dégagé autour — le bois reste un matériau combustible.</p>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Ce qu'il faut savoir</h2>
+    <p><strong>La personnalisation.</strong> Sur les modèles prévus pour, vous saisissez les prénoms directement sur la fiche produit, avec le choix de l'écriture. Nous les répartissons ensuite dans le motif de manière équilibrée.</p>
+    <p><strong>L'alimentation.</strong> Nos lampes fonctionnent sur secteur, tout est fourni. Le bougeoir, lui, se contente d'une bougie chauffe-plat classique que vous trouverez partout.</p>
+    <p><strong>L'entretien.</strong> Un chiffon sec ou légèrement humide suffit. Évitez les produits ménagers et l'humidité prolongée, qui n'apprécient jamais le bois.</p>
+    <p><strong>La livraison.</strong> Ces pièces sont plus volumineuses que des bijoux : elles partent en colis suivi, protégées. Pour les grands formats, le retrait en main propre est possible sur rendez-vous dans le Val-d'Oise et les départements voisins.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Combien de prénoms peut-on faire graver ?</h3>
+      <p>Cela dépend du modèle et de la place disponible dans le motif. Comptez généralement jusqu'à cinq ou six prénoms pour un rendu confortable. Au-delà, écrivez-nous avant de commander : nous vous dirons ce qui reste lisible.</p>
+
+      <h3>Peut-on ajouter un prénom plus tard ?</h3>
+      <p>Non, la gravure est définitive et réalisée en une seule fois. Si une naissance est prévue, mieux vaut attendre — ou choisir un modèle sur lequel vous laisserez volontairement de la place.</p>
+
+      <h3>La lumière est-elle forte ?</h3>
+      <p>Il s'agit d'un éclairage d'ambiance, pas d'un éclairage principal. La lumière est douce et chaude : parfaite en fin de journée ou comme veilleuse, mais elle ne remplacera pas un plafonnier pour lire.</p>
+
+      <h3>Peut-on l'offrir à quelqu'un dont on ne connaît pas la décoration ?</h3>
+      <p>C'est justement l'un des rares objets de décoration où l'on prend peu de risques : le bois naturel s'accorde à presque tous les intérieurs, et ce sont les prénoms gravés qui font le cadeau, bien plus que le style.</p>
+    </div>
+  </section>
+</div>
 
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/boutique/deco">Voir toute la décoration</a>
-    <p class="note">Fabrication à la commande en France. Retrait en main propre possible dans le Val-d'Oise pour les pièces volumineuses.</p>
+    <p class="note">Découpe et gravure laser sur bois, réalisées à la commande dans notre atelier en France. Retrait en main propre possible dans le Val-d'Oise.</p>
+    <p class="also">À voir aussi : <a href="https://nivcreation.fr/naissance">nos cadeaux de naissance</a>, dont la veilleuse personnalisée.</p>
   </div>
 </div>
 

@@ -1,108 +1,150 @@
 <title>Bijoux homme à graver</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6f6552;--line:#e7dcc4;--card:#fff}
+  :root{--gold:#c9a24b;--gold-deep:#a5822f;--cream:#fbf7ee;--cream-2:#f4ecd9;--ink:#241a0c;--ink-soft:#6b6150;--line:#e7dcc4;--card:#fff}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.72 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  .eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
-  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:46px 0 38px;text-align:center}
-  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12;margin:.5rem 0 .6rem;text-wrap:balance}
-  header.hero p{max-width:60ch;margin:0 auto;color:var(--ink-soft);font-size:1.06rem}
-  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:14px auto 0}
-  section{padding:36px 0}
-  section h2{font-weight:600;font-size:1.5rem;margin:0 0 .2rem;text-wrap:balance}
-  .lede{color:var(--ink-soft);margin:.2rem 0 22px;max-width:64ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  header.hero{background:linear-gradient(180deg,#fff,var(--cream));border-bottom:1px solid var(--line);padding:48px 0 40px;text-align:center}
+  header.hero h1{font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.14;margin:.5rem 0 .7rem;text-wrap:balance}
+  header.hero p{max-width:58ch;margin:0 auto;color:var(--ink-soft);font-size:1.07rem}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:3px;margin:16px auto 0}
+  section{padding:34px 0}
+  h2{font-weight:600;font-size:1.48rem;margin:0 0 .7rem;text-wrap:balance;line-height:1.28}
+  h3{font-weight:600;font-size:1.1rem;margin:26px 0 .4rem}
+  p{margin:0 0 1rem;max-width:66ch}
+  .ex{display:inline-block;font-family:Georgia,serif;font-style:italic;color:var(--gold-deep);background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 12px;margin-top:2px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-top:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(60,45,15,.12)}
   .card .ph{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
   .card img{width:100%;height:100%;object-fit:cover;display:block}
-  .card .body{padding:12px 14px 14px}
-  .card .name{font-weight:600;font-size:.96rem;line-height:1.3}
-  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .card .cta{margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .card .body{padding:12px 14px 15px}
+  .card .name{font-weight:600;font-size:.95rem;line-height:1.32}
+  .card .price{margin-top:6px;color:var(--gold-deep);font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem}
+  .card .cta{margin-top:7px;font-size:.82rem;color:var(--ink-soft)}
   .band{background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .occ{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
-  .oc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:15px 17px}
-  .oc h3{margin:0 0 .25rem;font-size:1.02rem}
-  .oc p{margin:0;color:var(--ink-soft);font-size:.93rem}
-  .oc .ex{display:block;margin-top:7px;font-family:Georgia,serif;font-style:italic;color:var(--gold-deep)}
-  .final{text-align:center;padding:44px 0 54px}
-  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:999px;font-size:1rem}
-  .note{max-width:70ch;margin:12px auto 0;color:var(--ink-soft);font-size:.9rem}
-  .also{text-align:center;font-size:.92rem;color:var(--ink-soft)}
+  .faq{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .faq h3{margin:20px 0 .3rem;font-size:1.05rem}
+  .final{text-align:center;padding:44px 0 56px}
+  .btn{display:inline-block;background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#fff;text-decoration:none;font-weight:700;padding:14px 32px;border-radius:999px;font-size:1rem}
+  .note{max-width:62ch;margin:14px auto 0;color:var(--ink-soft);font-size:.92rem}
+  .also{margin-top:20px;font-size:.94rem;color:var(--ink-soft)}
   .also a{color:var(--gold-deep);font-weight:600}
-  footer{border-top:1px solid var(--line);padding:22px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
+  footer{border-top:1px solid var(--line);padding:24px 0;text-align:center;color:var(--ink-soft);font-size:.85rem}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Guide bijoux · Niv Création</div>
     <h1 class="serif">Bijoux homme à graver</h1>
-    <p>Un bracelet en acier, en cuir tressé ou une gourmette d'identité, gravés d'un prénom, d'une date ou d'un message caché à l'intérieur. Des bijoux sobres, solides, qui se portent tous les jours — à offrir pour un anniversaire, la fête des pères ou Noël.</p>
+    <p>Un bracelet en acier ou en cuir, une gravure discrète à l'intérieur : le bijou masculin réussi est celui qui ne se remarque pas, mais qui veut dire quelque chose.</p>
     <div class="rule"></div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Nos bracelets homme personnalisés</h2>
-    <p class="lede">Quatre styles, une même idée : un bijou discret qui porte un message rien qu'à lui. La gravure est proposée en option sur chaque modèle.</p>
-    <div class="grid">
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-identite-gourmette">
-        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8086801196_rxih.jpg?v=1780366838" alt="Bracelet homme gourmette d'identité en acier à graver"></div>
-        <div class="body"><div class="name">Gourmette d'identité acier</div><div class="price">25,11 €</div><div class="cta">Le classique à graver →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-cuir-tresse-acier">
-        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_cuir_tresse_a_graver_argente.jpg" alt="Bracelet homme cuir tressé et acier à graver"></div>
-        <div class="body"><div class="name">Cuir tressé & acier</div><div class="price">18,81 €</div><div class="cta">3 coloris au choix →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-chaine-acier">
-        <div class="ph"><img src="https://nivcreation.fr/api/img/8foQBSYU7z4xbsOaM5Zd" alt="Bracelet homme chaîne acier à graver"></div>
-        <div class="body"><div class="name">Chaîne acier à graver</div><div class="price">31,41 €</div><div class="cta">Maillons larges →</div></div>
-      </a>
-      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-acier-silicone">
-        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8132632743_pkdt.jpg?v=1780366865" alt="Bracelet homme acier et silicone"></div>
-        <div class="body"><div class="name">Acier & silicone</div><div class="price">21,51 €</div><div class="cta">Sportif & résistant →</div></div>
-      </a>
-    </div>
+    <h2 class="serif">Offrir un bijou à un homme : la bonne approche</h2>
+    <p>C'est souvent là que l'on hésite le plus. Beaucoup d'hommes disent ne pas porter de bijoux — et pourtant, un bracelet simple, sobre, avec quelque chose de personnel gravé dessus, se retrouve porté tous les jours pendant des années.</p>
+    <p>La clé tient en un mot : la discrétion. Ce qui fonctionne, ce n'est pas la pièce qui se voit de loin, mais celle dont lui seul connaît le sens. Une gravure à l'intérieur du bracelet, invisible une fois porté, qu'il redécouvre chaque soir en l'enlevant : voilà ce qui touche.</p>
+    <p>C'est ce qui explique que le bracelet gravé soit devenu le cadeau de fête des pères le plus demandé, devant les objets classiques. Les prénoms des enfants alignés sur une plaque d'acier, ça ne s'oublie pas.</p>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Quel modèle choisir ?</h2>
-    <div class="occ">
-      <div class="oc"><h3>Il est plutôt classique</h3><p>La gourmette d'identité en acier : la valeur sûre, sobre et intemporelle, avec une plaque large pour la gravure.</p></div>
-      <div class="oc"><h3>Il aime le décontracté</h3><p>Le cuir tressé avec fermoir acier : chaleureux, se porte aussi bien l'été qu'avec une chemise.</p></div>
-      <div class="oc"><h3>Il assume son style</h3><p>La chaîne en acier à gros maillons, qui se remarque — avec une gravure discrète à l'intérieur.</p></div>
-      <div class="oc"><h3>Il est sportif</h3><p>L'acier et silicone : résistant à l'eau et aux chocs, parfait pour tous les jours.</p></div>
+    <h2 class="serif">Nos quatre modèles</h2>
+    <p>Chacun correspond à un style différent. Tous sont en acier inoxydable et la gravure est proposée en option, avec le choix de l'écriture.</p>
+    <div class="grid">
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-identite-gourmette">
+        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8086801196_rxih.jpg?v=1780366838" alt="Bracelet homme gourmette d'identité en acier à graver"></div>
+        <div class="body"><div class="name">Gourmette d'identité</div><div class="price">25,11 €</div><div class="cta">Le classique →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-cuir-tresse-acier">
+        <div class="ph"><img src="https://nivcreation.fr/produits/bracelet_cuir_tresse_a_graver_argente.jpg" alt="Bracelet homme cuir tressé et acier à graver"></div>
+        <div class="body"><div class="name">Cuir tressé & acier</div><div class="price">18,81 €</div><div class="cta">3 coloris →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-chaine-acier">
+        <div class="ph"><img src="https://nivcreation.fr/api/img/8foQBSYU7z4xbsOaM5Zd" alt="Bracelet homme chaîne acier à graver"></div>
+        <div class="body"><div class="name">Chaîne acier</div><div class="price">31,41 €</div><div class="cta">Maillons larges →</div></div>
+      </a>
+      <a class="card" href="https://nivcreation.fr/produit/bracelet-homme-acier-silicone">
+        <div class="ph"><img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8132632743_pkdt.jpg?v=1780366865" alt="Bracelet homme acier et silicone"></div>
+        <div class="body"><div class="name">Acier & silicone</div><div class="price">21,51 €</div><div class="cta">Sportif →</div></div>
+      </a>
     </div>
   </section>
 </div>
 
 <section>
   <div class="wrap">
-    <h2 class="serif">Que faire graver ?</h2>
-    <p class="lede">Sur un bijou d'homme, on va à l'essentiel : quelques lettres suffisent à rendre le cadeau personnel.</p>
-    <div class="occ">
-      <div class="oc"><h3>Son prénom ou ses initiales</h3><p>Sobre et efficace, sur la plaque ou à l'intérieur du bracelet.<span class="ex">« Thomas » · « T.M. »</span></div>
-      <div class="oc"><h3>Les prénoms de ses enfants</h3><p>Le cadeau de fête des pères le plus demandé — tous les prénoms alignés.<span class="ex">« Léa · Hugo · Jade »</span></div>
-      <div class="oc"><h3>Une date importante</h3><p>Un mariage, une naissance, une date qui a compté.<span class="ex">« 09 · 06 · 2018 »</span></div>
-      <div class="oc"><h3>Un message caché</h3><p>Gravé à l'intérieur, visible de lui seul quand il l'enlève le soir.<span class="ex">« Papa d'amour »</span></div>
-    </div>
+    <h2 class="serif">Lequel choisir selon la personne ?</h2>
+
+    <h3>Il est plutôt classique et sobre</h3>
+    <p>La gourmette d'identité reste la valeur sûre : une plaque rectangulaire montée sur une chaîne, une forme qui traverse les décennies sans se démoder. C'est aussi le modèle qui offre la plus grande surface pour graver, ce qui compte si vous voulez y mettre plusieurs prénoms.</p>
+
+    <h3>Il porte des chemises ouvertes, des jeans, du décontracté</h3>
+    <p>Le cuir tressé avec fermoir acier s'accorde mieux à cet univers. Il se porte en été comme en hiver, se marie avec une montre, et son côté chaleureux passe mieux que le métal seul chez quelqu'un qui n'a pas l'habitude des bijoux.</p>
+
+    <h3>Il assume ce qu'il porte</h3>
+    <p>La chaîne en acier à maillons larges est la plus visible des quatre. Elle convient à quelqu'un qui aime les pièces qui se remarquent — avec, en contrepoint, une gravure cachée à l'intérieur du fermoir.</p>
+
+    <h3>Il est sportif ou travaille avec les mains</h3>
+    <p>L'acier et silicone supporte l'eau, la transpiration et les chocs sans broncher. C'est le modèle le plus robuste, celui qu'on ne pense pas à enlever.</p>
   </div>
 </section>
 
 <div class="band">
   <section class="wrap">
-    <h2 class="serif">Bon à savoir</h2>
-    <div class="occ">
-      <div class="oc"><h3>Acier inoxydable</h3><p>Il ne noircit pas et résiste à l'eau : il peut se porter au quotidien sans précaution.</p></div>
-      <div class="oc"><h3>La gravure est une option</h3><p>Sur chaque fiche, vous choisissez « avec » ou « sans » gravure, et la police d'écriture.</p></div>
-      <div class="oc"><h3>Un aperçu avant gravure</h3><p>Sur demande, on vous envoie un visuel à valider — pour être sûr du rendu.</p></div>
+    <h2 class="serif">Que faire graver ?</h2>
+    <p>Sur un bijou d'homme, on va à l'essentiel. Quelques caractères suffisent, et c'est justement leur sobriété qui les rend forts.</p>
+
+    <h3>Les prénoms de ses enfants</h3>
+    <p>C'est de loin la gravure la plus demandée pour la fête des pères, et celle qui provoque le plus de réactions. Les prénoms alignés sur la plaque, dans l'ordre des naissances.</p>
+    <span class="ex">Léa · Hugo · Jade</span>
+
+    <h3>Son prénom ou ses initiales</h3>
+    <p>Sobre, presque neutre. Les initiales conviennent bien à ceux qui trouvent qu'un prénom gravé fait « trop ».</p>
+    <span class="ex">Thomas — T.M.</span>
+
+    <h3>Une date</h3>
+    <p>Un mariage, la naissance d'un enfant, une date qui ne regarde que vous deux. Discrète, elle ne raconte rien à ceux qui la voient.</p>
+    <span class="ex">09 · 06 · 2018</span>
+
+    <h3>Un mot, à l'intérieur</h3>
+    <p>Gravé sur la face cachée, visible de lui seul. C'est souvent celui-là qu'on n'ose pas dire à voix haute.</p>
+    <span class="ex">Papa d'amour</span>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="serif">Bon à savoir avant de commander</h2>
+    <p><strong>La matière.</strong> Tous nos bracelets homme sont en acier inoxydable : il ne noircit pas au contact de la peau, ne craint ni l'eau ni le savon, et ne provoque pas de réaction chez la plupart des peaux sensibles. Concrètement, il peut se porter sous la douche et se garder au quotidien sans précaution particulière.</p>
+    <p><strong>La gravure est une option.</strong> Sur chaque fiche, vous choisissez « sans gravure » ou « avec gravure ». Si vous prenez l'option, un champ apparaît pour saisir votre texte, ainsi qu'un menu pour choisir la police. Un aperçu s'affiche au fur et à mesure.</p>
+    <p><strong>La taille.</strong> La plupart de nos modèles disposent d'un système de réglage qui couvre la majorité des poignets. En cas de doute, mesurez discrètement un bracelet ou une montre qu'il porte déjà — ou écrivez-nous, nous vous guiderons.</p>
+    <p><strong>Le délai.</strong> Comptez trois à cinq jours ouvrés de fabrication, puis l'expédition. Prenez de l'avance à l'approche de la fête des pères et de Noël, périodes où tout le monde commande en même temps.</p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="wrap">
+    <h2 class="serif">Questions fréquentes</h2>
+    <div class="faq">
+      <h3>Et s'il ne porte jamais de bijoux ?</h3>
+      <p>Commencez par le modèle en cuir tressé ou par l'acier et silicone : ce sont les moins « bijoux » des quatre, et donc les plus faciles à adopter. Un bracelet fin se remarque à peine une fois porté, contrairement à ce que l'on imagine.</p>
+
+      <h3>La gravure se voit-elle beaucoup ?</h3>
+      <p>Cela dépend de l'emplacement. Sur la plaque d'une gourmette, elle est visible ; à l'intérieur du bracelet, elle est totalement cachée une fois porté. Précisez-nous votre préférence si le modèle permet les deux.</p>
+
+      <h3>Peut-on graver plusieurs prénoms ?</h3>
+      <p>Oui, dans la limite de la place disponible : la gourmette d'identité est celle qui en accepte le plus. Au-delà de trois ou quatre prénoms, les lettres deviennent petites — dans ce cas, nous vous conseillons de nous demander un aperçu avant.</p>
+
+      <h3>Le bracelet peut-il être retourné s'il ne plaît pas ?</h3>
+      <p>Un bracelet commandé <strong>sans gravure</strong> bénéficie du droit de rétractation de 14 jours, s'il nous revient neuf et dans son emballage. En revanche, une pièce gravée à votre demande ne peut pas être reprise : elle n'existe que pour vous.</p>
     </div>
   </section>
 </div>
@@ -110,8 +152,8 @@
 <div class="final">
   <div class="wrap">
     <a class="btn" href="https://nivcreation.fr/boutique/bijoux">Voir tous les bijoux homme</a>
-    <p class="note">Gravure laser réalisée à la commande dans notre atelier en France. Livraison rapide et suivie.</p>
-    <p class="also" style="margin-top:18px">Vous cherchez autre chose ? Découvrez aussi nos <a href="https://nivcreation.fr/boutique/verres">verres et carafes gravés</a> et nos <a href="https://nivcreation.fr/cristaux">cristaux photo 3D</a>.</p>
+    <p class="note">Gravure laser réalisée à la commande dans notre atelier, en France. Livraison rapide et suivie, offerte dès 45 € d'achat sur les bijoux.</p>
+    <p class="also">Vous cherchez autre chose ? Découvrez nos <a href="https://nivcreation.fr/boutique/verres">verres et carafes gravés</a> et nos <a href="https://nivcreation.fr/cristaux">cristaux photo 3D</a>.</p>
   </div>
 </div>
 
