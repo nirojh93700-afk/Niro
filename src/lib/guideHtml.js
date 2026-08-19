@@ -61,12 +61,76 @@ export function grilleHtml(items) {
   return cartes ? `<div class="grid">${cartes}</div>` : "";
 }
 
-// Assemble le guide complet : texte des maquettes + grilles à jour.
-export function guideHtmlComplet(blocs, parSlug) {
+// Portrait d'un produit, pour savoir dans quelle grille il a sa place.
+// Le « type » est du texte libre (« Collier cadeau », « Collier personnalisé »,
+// « Bracelet »…) : on ne compare donc que le PREMIER MOT — la famille (collier,
+// bracelet, verre, carafe, lampe…). C'est ce qui permet de ranger un nouveau
+// collier avec les colliers et un nouveau bracelet avec les bracelets.
+function famille(p) {
+  const brut = `${p.type || ""} ${p.name || ""}`
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  const mot = brut.trim().split(/[^a-z]+/).filter(Boolean)[0] || "";
+  return mot.replace(/s$/, "");
+}
+
+function profil(p) {
+  return {
+    cat: p.category || "",
+    sub: p.subcategory || "",
+    fam: famille(p),
+  };
+}
+
+// Range chaque NOUVEAU produit dans la grille de la page qui lui ressemble le
+// plus : d'abord même catégorie + même sous-catégorie + même type (un nouveau
+// collier femme va avec les colliers femme), sinon même catégorie +
+// sous-catégorie. Ce qui ne trouve pas sa place reste pour le bas de page.
+export function repartirNouveaux(blocs, parSlug, nouveaux, maxParGrille = 2) {
+  const grilles = (blocs || [])
+    .map((b, i) => ({ i, b }))
+    .filter(({ b }) => b.t === "produits")
+    .map(({ i, b }) => {
+      const produits = b.v.map((x) => parSlug.get(x.slug)).filter(Boolean);
+      return { i, produits, profils: produits.map(profil), ajouts: [] };
+    });
+
+  const restants = [];
+  for (const p of nouveaux || []) {
+    const pr = profil(p);
+    const place =
+      grilles.find(
+        (g) =>
+          g.ajouts.length < maxParGrille &&
+          g.profils.some((q) => q.cat === pr.cat && q.sub === pr.sub && q.fam === pr.fam)
+      ) ||
+      grilles.find(
+        (g) =>
+          g.ajouts.length < maxParGrille &&
+          g.profils.some((q) => q.cat === pr.cat && q.sub === pr.sub)
+      );
+    if (place) place.ajouts.push(p);
+    else restants.push(p);
+  }
+
+  const parBloc = new Map(grilles.map((g) => [g.i, g.ajouts]));
+  return { parBloc, restants };
+}
+
+// Assemble le guide complet : texte des maquettes + grilles à jour, avec les
+// nouveaux produits rangés dans la bonne section.
+export function guideHtmlComplet(blocs, parSlug, ajoutsParBloc) {
   return (blocs || [])
-    .map((b) => {
+    .map((b, i) => {
       if (b.t !== "produits") return b.v;
       const items = b.v.map((x) => ({ produit: parSlug.get(x.slug), cta: x.cta })).filter((x) => x.produit);
+      const ajouts = (ajoutsParBloc && ajoutsParBloc.get(i)) || [];
+      // « Nouveau » seulement si le produit porte vraiment ce badge : on n'annonce
+      // pas une nouveauté qui n'en est pas une.
+      for (const p of ajouts) {
+        items.push({ produit: p, cta: p.badge === "Nouveau" ? "Nouveau dans l'atelier →" : "À découvrir →" });
+      }
       return grilleHtml(items);
     })
     .join("\n");

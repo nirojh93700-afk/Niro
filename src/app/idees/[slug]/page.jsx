@@ -10,7 +10,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getGuide, GUIDES, GUIDE_SLUGS, produitsEnPlus } from "@/lib/guides";
 import { getCatalog } from "@/lib/catalog";
-import { guideHtmlComplet, grilleHtml } from "@/lib/guideHtml";
+import { guideHtmlComplet, grilleHtml, repartirNouveaux } from "@/lib/guideHtml";
 
 export const dynamic = "force-dynamic";
 
@@ -46,19 +46,22 @@ export default async function GuidePage({ params }) {
 
   const autres = GUIDES.filter((x) => x.slug !== g.slug).slice(0, 4);
 
-  // Texte du guide + grilles à jour.
-  let contenu = guideHtmlComplet(g.blocs, parSlug);
+  // AUTOMATIQUE — un produit ajouté dans Gestion se place TOUT SEUL dans la page :
+  // on cherche d'abord la section qui lui ressemble (un nouveau collier femme va
+  // avec les colliers femme) ; ce qui ne trouve pas sa place est regroupé en bas.
+  const nouveaux = produitsEnPlus(g, catalogue, 8);
+  const { parBloc, restants } = repartirNouveaux(g.blocs, parSlug, nouveaux);
 
-  // AUTOMATIQUE : les produits de la catégorie qui ne sont pas encore cités
-  // (nouveautés ajoutées depuis) s'affichent en bas, sans rien avoir à refaire.
-  const enPlus = produitsEnPlus(g, catalogue).map((p) => ({ produit: p, cta: "" }));
-  if (enPlus.length) {
+  // Texte du guide + grilles à jour (nouveautés incluses dans les bonnes sections).
+  let contenu = guideHtmlComplet(g.blocs, parSlug, parBloc);
+
+  if (restants.length) {
     contenu +=
       '<div class="band"><section class="wrap">' +
       '<h2 class="serif">Nos autres modèles à découvrir</h2>' +
       "<p>D'autres créations de notre atelier qui correspondent à cette page — " +
       "cette sélection s'actualise à mesure que de nouvelles pièces arrivent.</p>" +
-      grilleHtml(enPlus) +
+      grilleHtml(restants.map((p) => ({ produit: p, cta: "" }))) +
       "</section></div>";
   }
   const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");

@@ -514,9 +514,17 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   (`getCatalog()`) à chaque affichage. Conséquences :
   · un prix changé dans Gestion (ou une promo) se met à jour tout seul sur les guides ;
   · un produit **masqué/supprimé disparaît** des guides → jamais de lien mort ni de vieux prix ;
-  · un **nouveau produit apparaît tout seul** dans le guide de sa famille, en bas, sous
-    « Nos autres modèles à découvrir » — piloté par la règle `auto` de chaque guide
-    (`{category, subcategory, motCle}` dans `src/lib/guides.js`, fonction `produitsEnPlus`).
+  · un **nouveau produit se range tout seul DANS LA BONNE SECTION** du guide de sa famille
+    (un nouveau collier femme rejoint « Les colliers gravés », un bracelet rejoint « Les
+    bracelets à personnaliser »). Règle `auto` par guide (`{category, subcategory, motCle}`
+    dans `src/lib/guides.js`, fonction `produitsEnPlus`), puis placement par
+    `repartirNouveaux` (`src/lib/guideHtml.js`) : même catégorie + même sous-catégorie +
+    même **famille** (1er mot du type/nom : collier, bracelet, verre, lampe…), max 2 par
+    section. Ce qui ne trouve pas sa place va en bas sous « Nos autres modèles à découvrir ».
+    L'étiquette « Nouveau dans l'atelier » n'est mise que si le produit porte vraiment le
+    badge « Nouveau » (sinon « À découvrir ») — on n'annonce pas une fausse nouveauté.
+  · ⚠️ **ne jamais écrire un NOMBRE de produits dans le texte d'un guide** (« nos quatre
+    modèles ») : la grille s'agrandit toute seule. Corrigé une fois dans `guide-cadeaux-homme.html`.
   → Pour qu'un nouveau produit tombe dans le bon guide, il suffit de lui mettre la bonne
   **catégorie/sous-catégorie** (ce qui est déjà obligatoire, cf. §10 point 4bis). Rien d'autre à faire.
 - ⚠️ **PIÈGE À NE PAS REFAIRE** : le guide doit être rendu en **UN SEUL bloc HTML**
