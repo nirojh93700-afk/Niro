@@ -46,6 +46,15 @@ export const metadata = {
   alternates: { canonical: "/" },
 };
 
+// La bande « Édition limitée » doit montrer la carafe GRAVÉE (pas la vierge) :
+// on prend la première photo dont le nom indique une gravure, sinon la photo
+// principale du produit. Ainsi, si la gérante change ses photos, ça suit tout seul.
+function photoGravee(produit) {
+  const photos = (produit?.images || []).filter(Boolean);
+  const gravee = photos.find((u) => /grav|whiskey|whisky_1892/i.test(u));
+  return gravee || photos[0] || "/produits/carafe_gravee.jpg";
+}
+
 export default async function HomePage() {
   let s = null;
   try { s = await getSettings(); } catch { /* défauts */ }
@@ -189,7 +198,7 @@ export default async function HomePage() {
               </div>
               <Link href="/produit/carafe-a-whisky-gravee" className="lm-pic" aria-label="Découvrir la carafe" style={{ display: "block" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={(carafeLim.images && carafeLim.images[0]) || "/produits/carafe_ambiance.jpg"} alt="Carafe à whisky gravée — édition limitée" />
+                <img src={photoGravee(carafeLim)} alt="Carafe à whisky gravée — édition limitée" />
               </Link>
               <div className="lm-shine"></div>
             </div>

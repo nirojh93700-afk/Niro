@@ -1,9 +1,16 @@
 // Page guide « Idées & conseils » — /idees/<slug>
-// Le contenu reproduit fidèlement les maquettes validées (docs/maquettes/guide-*.html),
+//
+// Le texte reproduit fidèlement les maquettes validées (docs/maquettes/guide-*.html),
 // habillé aux couleurs du site (classes .guide-* dans globals.css).
+//
+// Les PRODUITS, eux, sont lus dans le catalogue en direct : prix, photo et nom
+// suivent Gestion automatiquement, un produit masqué disparaît de la page, et un
+// nouveau produit de la catégorie s'ajoute tout seul en bas (règles `auto`).
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getGuide, GUIDES, GUIDE_SLUGS } from "@/lib/guides";
+import { getGuide, GUIDES, GUIDE_SLUGS, produitsEnPlus } from "@/lib/guides";
+import { getCatalog } from "@/lib/catalog";
+import { guideHtmlComplet, grilleHtml } from "@/lib/guideHtml";
 
 export const dynamic = "force-dynamic";
 
@@ -28,11 +35,32 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function GuidePage({ params }) {
+export default async function GuidePage({ params }) {
   const g = getGuide(params.slug);
   if (!g) notFound();
 
+  // Catalogue réel (produits visibles uniquement). En cas de souci de base de
+  // données, la page reste lisible : seul le texte s'affiche.
+  const catalogue = await getCatalog().catch(() => []);
+  const parSlug = new Map(catalogue.map((p) => [p.slug, p]));
+
   const autres = GUIDES.filter((x) => x.slug !== g.slug).slice(0, 4);
+
+  // Texte du guide + grilles à jour.
+  let contenu = guideHtmlComplet(g.blocs, parSlug);
+
+  // AUTOMATIQUE : les produits de la catégorie qui ne sont pas encore cités
+  // (nouveautés ajoutées depuis) s'affichent en bas, sans rien avoir à refaire.
+  const enPlus = produitsEnPlus(g, catalogue).map((p) => ({ produit: p, cta: "" }));
+  if (enPlus.length) {
+    contenu +=
+      '<div class="band"><section class="wrap">' +
+      '<h2 class="serif">Nos autres modèles à découvrir</h2>' +
+      "<p>D'autres créations de notre atelier qui correspondent à cette page — " +
+      "cette sélection s'actualise à mesure que de nouvelles pièces arrivent.</p>" +
+      grilleHtml(enPlus) +
+      "</section></div>";
+  }
   const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");
 
   // Données structurées : fil d'Ariane + questions fréquentes (rich results Google).
@@ -85,7 +113,11 @@ export default function GuidePage({ params }) {
         </div>
       </header>
 
-      <article className="guide" dangerouslySetInnerHTML={{ __html: g.html }} />
+      {/* Le guide est rendu en UN SEUL bloc : le texte des maquettes et les grilles
+          de produits (construites à partir du catalogue en direct) sont assemblés
+          côté serveur. C'est ce qui garantit un HTML cohérent, sans coupure au
+          milieu d'une section. */}
+      <article className="guide" dangerouslySetInnerHTML={{ __html: contenu }} />
 
       <section className="guide-autres">
         <div className="container">

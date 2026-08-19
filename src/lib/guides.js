@@ -1,12 +1,13 @@
 // Pages « Idées & conseils » (/idees/…) — guides de conseil pour le référencement.
 // Le contenu vient des maquettes validées (docs/maquettes/guide-*.html), converti
 // par tools/generer-guides.mjs dans src/lib/guidesContent.js.
-import { GUIDES_HTML, GUIDES_META } from "./guidesContent";
+import { GUIDES_BLOCS, GUIDES_META } from "./guidesContent";
 
 // Ordre d'affichage sur /idees + titre & description pour Google.
 export const GUIDES = [
   {
     slug: "cadeau-femme-personnalise",
+    auto: { category: "bijoux", subcategory: "femme" },
     nav: "Cadeau femme",
     title: "Idées cadeaux femme personnalisés — bijoux gravés",
     description:
@@ -14,6 +15,7 @@ export const GUIDES = [
   },
   {
     slug: "idees-gravure-bijoux",
+    auto: { category: "bijoux" },
     nav: "Que faire graver",
     title: "Que graver sur un bijou ? Idées de gravure et conseils",
     description:
@@ -21,6 +23,7 @@ export const GUIDES = [
   },
   {
     slug: "bijoux-homme-graves",
+    auto: { category: "bijoux", subcategory: "homme" },
     nav: "Bijoux homme",
     title: "Bijoux homme à graver — bracelets et colliers personnalisés",
     description:
@@ -28,6 +31,7 @@ export const GUIDES = [
   },
   {
     slug: "cadeau-couple",
+    auto: { category: "bijoux", motCle: /couple|duo|puzzle|amour|coeur|cœur/i },
     nav: "Cadeau de couple",
     title: "Cadeaux de couple personnalisés — idées à graver",
     description:
@@ -35,6 +39,7 @@ export const GUIDES = [
   },
   {
     slug: "cadeau-naissance",
+    auto: { category: "naissance" },
     nav: "Cadeau de naissance",
     title: "Cadeaux de naissance personnalisés — plaque et bijoux gravés",
     description:
@@ -42,6 +47,7 @@ export const GUIDES = [
   },
   {
     slug: "deco-mariage-personnalisee",
+    auto: { category: "mariage" },
     nav: "Mariage",
     title: "Déco de mariage personnalisée en bois gravé",
     description:
@@ -49,6 +55,7 @@ export const GUIDES = [
   },
   {
     slug: "cristal-photo-3d",
+    auto: { category: "cristal" },
     nav: "Cristal photo 3D",
     title: "Cristal photo 3D — comment ça marche, prix et idées cadeau",
     description:
@@ -56,6 +63,7 @@ export const GUIDES = [
   },
   {
     slug: "verres-carafes-graves",
+    auto: { category: "verres" },
     nav: "Verres & carafes",
     title: "Verres et carafes gravés personnalisés — prénom et date",
     description:
@@ -63,6 +71,7 @@ export const GUIDES = [
   },
   {
     slug: "deco-lumineuse-bois",
+    auto: { motCle: /lampe|veilleuse|lumineu|bougeoir|arbre de vie/i },
     nav: "Déco lumineuse",
     title: "Lampes et décorations lumineuses en bois gravé",
     description:
@@ -76,8 +85,8 @@ export function getGuide(slug) {
   const base = GUIDES.find((g) => g.slug === slug);
   if (!base) return null;
   const meta = GUIDES_META[slug] || {};
-  const html = GUIDES_HTML[slug];
-  if (!html) return null;
+  const blocs = GUIDES_BLOCS[slug];
+  if (!blocs) return null;
   return {
     ...base,
     h1: meta.h1 || base.title,
@@ -85,7 +94,8 @@ export function getGuide(slug) {
     chapo: meta.chapo || base.description,
     image: meta.image || "",
     faq: Array.isArray(meta.faq) ? meta.faq : [],
-    html,
+    cites: Array.isArray(meta.cites) ? meta.cites : [],
+    blocs,
   };
 }
 
@@ -114,4 +124,29 @@ export function guidePourProduit(product) {
   }
   if (/lampe|veilleuse|lumineu|led|bougeoir/.test(nom)) return getGuide("deco-lumineuse-bois");
   return null;
+}
+
+// ---------------------------------------------------------------------------
+// AUTOMATIQUE — un nouveau produit apparaît tout seul dans le bon guide.
+// `auto` (défini plus haut sur chaque guide) dit quels produits du catalogue
+// concernent la page : par catégorie/sous-catégorie, ou par mot-clé du nom.
+// ---------------------------------------------------------------------------
+export function produitConcerneGuide(guide, product) {
+  const regle = guide?.auto;
+  if (!regle || !product) return false;
+  if (regle.category && product.category !== regle.category) return false;
+  if (regle.subcategory && product.subcategory !== regle.subcategory) return false;
+  if (regle.motCle && !regle.motCle.test(`${product.slug || ""} ${product.name || ""}`)) return false;
+  return true;
+}
+
+// Produits du catalogue qui concernent le guide mais ne sont PAS déjà cités
+// dedans (= les nouveaux). Les « Nouveau » d'abord, puis l'ordre du catalogue.
+export function produitsEnPlus(guide, catalogue, max = 4) {
+  if (!guide?.auto || !Array.isArray(catalogue)) return [];
+  const deja = new Set(guide.cites || []);
+  return catalogue
+    .filter((p) => !deja.has(p.slug) && produitConcerneGuide(guide, p))
+    .sort((a, b) => (b.badge === "Nouveau" ? 1 : 0) - (a.badge === "Nouveau" ? 1 : 0))
+    .slice(0, max);
 }

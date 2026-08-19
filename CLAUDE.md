@@ -506,8 +506,24 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   chaque fiche produit (`guidePourProduit` choisit le guide selon la catégorie ; aucun lien si rien ne
   correspond), et `sitemap.xml`.
 - **Ajouter un guide** : créer la maquette dans `docs/maquettes/`, l'ajouter à `MAP` dans
-  `tools/generer-guides.mjs`, ajouter son entrée (slug, nav, title, description) dans `GUIDES`
-  (`src/lib/guides.js`), régénérer, `npm run build`.
+  `tools/generer-guides.mjs`, ajouter son entrée (slug, nav, title, description, `auto`) dans
+  `GUIDES` (`src/lib/guides.js`), régénérer, `npm run build`.
+- **🔄 AUTOMATIQUE — RIEN À REFAIRE QUAND LE CATALOGUE CHANGE (19/08/2026, demande de la gérante)** :
+  les guides n'ont **AUCUN produit recopié en dur**. Le générateur ne garde que les identifiants
+  (slug) + la petite phrase d'accroche ; **nom, photo et PRIX sont lus dans le catalogue en direct**
+  (`getCatalog()`) à chaque affichage. Conséquences :
+  · un prix changé dans Gestion (ou une promo) se met à jour tout seul sur les guides ;
+  · un produit **masqué/supprimé disparaît** des guides → jamais de lien mort ni de vieux prix ;
+  · un **nouveau produit apparaît tout seul** dans le guide de sa famille, en bas, sous
+    « Nos autres modèles à découvrir » — piloté par la règle `auto` de chaque guide
+    (`{category, subcategory, motCle}` dans `src/lib/guides.js`, fonction `produitsEnPlus`).
+  → Pour qu'un nouveau produit tombe dans le bon guide, il suffit de lui mettre la bonne
+  **catégorie/sous-catégorie** (ce qui est déjà obligatoire, cf. §10 point 4bis). Rien d'autre à faire.
+- ⚠️ **PIÈGE À NE PAS REFAIRE** : le guide doit être rendu en **UN SEUL bloc HTML**
+  (`guideHtmlComplet` dans `src/lib/guideHtml.js`). Une première version découpait le texte pour
+  insérer des composants React au milieu → les morceaux n'étaient plus des blocs HTML complets,
+  le navigateur les refermait tout seul → **erreurs d'hydratation React #418/#423 sur les 9 pages**.
+  Les grilles sont donc construites en HTML côté serveur (`grilleHtml`), pas en composants.
 - **Vérifié avant mise en ligne** : les 9 pages en mobile (390 px) et ordinateur (1440 px) — aucun
   débordement, aucune erreur JavaScript, un seul H1 par page ; 43 images et 52 liens internes testés
   un par un ; titres/descriptions/canoniques présents ; FAQ + fil d'Ariane en données structurées.

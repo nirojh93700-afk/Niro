@@ -3408,3 +3408,10 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 }
 .guide-lien-fiche a { color: var(--gold-dark); font-weight: 600; }
 .guide-lien-fiche a:hover { text-decoration: underline; }
+
+/* Grilles de produits des guides : rendues par le composant GuideProduits
+   (données en direct du catalogue), donc en dehors du texte HTML. */
+.guide .guide-grille { padding-bottom: 8px; }
+.guide .guide-grille .grid { margin-top: 0; }
+.guide .guide-grille-titre { margin: 0 0 4px; }
+.guide-prix-barre { color: var(--ink-soft); text-decoration: line-through; font-weight: 500; }
