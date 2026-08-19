@@ -14,8 +14,10 @@ import {
   getCustomProducts,
   getSettings,
   getStockMap,
+  getTaxonomy,
   productSoldOut,
 } from "./stock";
+import { resolveCategories } from "./taxonomy";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
@@ -107,20 +109,37 @@ export async function stripBijouxPromos(promos) {
 
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).
 export async function getCatalog() {
-  const [images, promos, overrides, custom, settings, stock] = await Promise.all([
+  const [images, promos, overrides, custom, settings, stock, taxonomy] = await Promise.all([
     getImageOverrides(),
     getPromos(),
     getProductOverrides(),
     getCustomProducts(),
     getSettings().catch(() => ({})),
     getStockMap().catch(() => ({})),
+    getTaxonomy().catch(() => ({})),
   ]);
   const refMarkup = Number(settings?.refMarkup) || 0;
   // Emballages : affichés UNIQUEMENT si l'interrupteur maître est activé.
   const pkgLive = settings?.packagingLive === true;
   const pkgLib = settings?.packaging;
   const pkgAssign = settings?.productPackaging || {};
-  const base = baseProducts.map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
+  // SÉCURITÉ — une catégorie qui n'existe pas rendrait le produit INVISIBLE dans
+  // la boutique (il tomberait dans un rayon inexistant). C'est ce qui est arrivé
+  // aux clés USB : leur catégorie avait été remplacée par leur sous-catégorie
+  // (« cles-usb »), et elles n'apparaissaient plus nulle part. On revient donc
+  // à la catégorie d'origine du produit dès qu'une catégorie inconnue est lue.
+  const categoriesConnues = new Set(resolveCategories(taxonomy).map((c) => c.slug));
+  const categorieSure = (produitAffiche, produitDuCode) => {
+    const cat = produitAffiche.category;
+    if (!cat || categoriesConnues.has(cat)) return produitAffiche;
+    const secours = produitDuCode?.category;
+    if (secours && categoriesConnues.has(secours)) {
+      return { ...produitAffiche, category: secours, subcategory: produitAffiche.subcategory || cat };
+    }
+    return produitAffiche;
+  };
+
+  const base = baseProducts.map((p) => categorieSure(applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)), p));
   const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
