@@ -26,6 +26,10 @@ const MAP = {
   "guide-cristal-3d.html": "cristal-photo-3d",
   "guide-verres-graves.html": "verres-carafes-graves",
   "guide-deco-lumineuse.html": "deco-lumineuse-bois",
+  "guide-cle-usb.html": "cle-usb-personnalisee-gravee",
+  "guide-porte-cles-piece.html": "porte-cles-piece-a-graver",
+  "guide-cadeaux-enfant.html": "cadeau-enfant-personnalise",
+  "guide-porte-stylo.html": "porte-stylo-bois-personnalise",
 };
 
 // anciens liens de maquette -> vraies adresses du site

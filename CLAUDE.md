@@ -539,6 +539,19 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   d'hydratation (#425/#418/#423). Vérifié en retirant toutes les nouvelles pages : c'était déjà le cas.
   Invisible pour la cliente, à corriger séparément si la gérante le demande.
 
+### 4 GUIDES DE PLUS + OPTION PHOTO (19/08/2026) — 13 guides au total
+- Nouveaux guides (mêmes règles que les 9 autres) : `/idees/cle-usb-personnalisee-gravee` ·
+  `/idees/porte-cles-piece-a-graver` · `/idees/cadeau-enfant-personnalise` ·
+  `/idees/porte-stylo-bois-personnalise`. Ils couvrent les 10 produits qui n'avaient aucun guide
+  → **les 55 produits ont désormais tous leur lien de conseils** (`guidePourProduit`).
+- ⚠️ **Une page par produit = NON** (page pauvre pour Google, et concurrence la fiche produit).
+  Un guide = un SUJET avec plusieurs produits dedans. C'est pour ça qu'on a fait 4 pages, pas 10.
+- **Option « graver une photo »** ajoutée sur `piece-ronde-laiton` et `porte-cles-cuir-a-graver`
+  (demande de la gérante) : un champ `select` **gravure** (Un texte / Une photo) pilote l'affichage
+  via `showIfField`/`showIfValue` (mécanisme déjà présent dans `ProductDetail.jsx`). Les champs
+  cachés ne sont pas exigés à l'ajout au panier (la validation ne regarde que `visibleFields`).
+  ⚠️ Ne PAS écrire « (facultatif) » dans un `label` : le composant l'ajoute déjà quand `optional:true`.
+
 ## 🔍 « VÉRIFIE MON SITE » — AUDIT COMPLET AUTOMATIQUE (créé le 13/08/2026)
 > **Quand la gérante dit « vérifie mon site », « est-ce que tout va bien », « fais un audit »** →
 > lancer **`node tools/audit-site.mjs`** et lui rendre le résultat en français, court et clair.

@@ -739,12 +739,21 @@ export const products = [
     subcategory: "porte-cles",
     category: "cadeaux",
     type: "Porte-clés personnalisé",
-    tagline: "Un porte-clés en cuir, gravé avec votre message.",
+    tagline: "Un porte-clés en cuir, gravé avec votre message ou votre photo.",
     personalizable: true,
-    personalizationLabel: "Texte à graver + police",
+    personalizationLabel: "Texte ou photo à graver",
+    // Comme la pièce en laiton : texte OU photo, au choix de la cliente.
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, coordonnées GPS…", maxLength: 30 },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
+        { value: "texte", label: "Un texte" },
+        { value: "photo", label: "Une photo" },
+      ] },
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, coordonnées GPS…", maxLength: 30, showIfField: "gravure", showIfValue: "texte" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "texte" },
+      { key: "photo", type: "photo", label: "Photo à graver", showIfField: "gravure", showIfValue: "photo",
+        text: "Une photo nette et bien éclairée donne le meilleur résultat. Les portraits rapprochés et les silhouettes se gravent très bien ; les scènes très détaillées rendent moins bien sur une surface aussi petite." },
+      { key: "textePhoto", label: "Texte au dos", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
+      { key: "policePhoto", type: "font", label: "Police du texte au dos", optional: true, showIfField: "gravure", showIfValue: "photo" },
     ],
     images: [
       "/produits/porte_cles_vierges_en_cuir_marron.jpg",
@@ -759,7 +768,7 @@ export const products = [
 <ul>
 <li><strong>Matière :</strong> cuir véritable</li>
 <li><strong>Coloris :</strong> marron ou noir</li>
-<li><strong>Gravure :</strong> laser, réalisée sur commande</li>
+<li><strong>Gravure :</strong> laser, réalisée sur commande — <strong>texte ou photo</strong>, au choix</li>
 </ul>
 <p>Un petit cadeau qui fait toujours plaisir, à offrir ou à s'offrir.</p>`,
   },
@@ -1478,16 +1487,27 @@ export const products = [
     title: "Pièce ronde en laiton à graver personnalisée",
     subcategory: "medaillons",
     category: "cadeaux", type: "Pièce à graver",
-    tagline: "Une médaille ronde en laiton, à graver des deux côtés.",
-    personalizable: true, personalizationLabel: "Texte à graver + police",
+    tagline: "Une médaille ronde en laiton, à graver des deux côtés — texte ou photo.",
+    personalizable: true, personalizationLabel: "Texte ou photo à graver",
+    // La cliente choisit d'abord CE qu'elle veut graver : un texte ou une photo.
+    // Les champs suivants s'affichent selon son choix (showIfField/showIfValue).
     personalizationFields: [
-      { key: "recto", label: "Texte à graver — recto", maxLength: 30 },
-      { key: "verso", label: "Texte à graver — verso", maxLength: 30, optional: true },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
+        { value: "texte", label: "Un texte" },
+        { value: "photo", label: "Une photo" },
+      ] },
+      { key: "recto", label: "Texte à graver — recto", maxLength: 30, showIfField: "gravure", showIfValue: "texte" },
+      { key: "verso", label: "Texte à graver — verso", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "texte" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "texte" },
+      { key: "photo", type: "photo", label: "Photo à graver", showIfField: "gravure", showIfValue: "photo",
+        text: "Une photo nette et bien éclairée donne le meilleur résultat. Les portraits rapprochés et les silhouettes se gravent très bien ; les scènes avec beaucoup de détails ou un arrière-plan chargé rendent moins bien sur une surface aussi petite." },
+      { key: "versoPhoto", label: "Texte au dos", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
+      { key: "policePhoto", type: "font", label: "Police du texte au dos", optional: true, showIfField: "gravure", showIfValue: "photo" },
     ],
     images: ["/produits/piece_laiton.jpg"],
     variants: [{ id: "piece-laiton", title: "Laiton", price: 14.9 }],
-    descriptionHtml: `<p>Médaille ronde en <strong>laiton</strong>, à graver (recto et verso possibles). Parfaite en porte-bonheur ou souvenir.</p>`,
+    descriptionHtml: `<p>Médaille ronde en <strong>laiton</strong>, à graver (recto et verso possibles). Parfaite en porte-bonheur ou souvenir.</p>
+<p>Vous choisissez ce que nous gravons : <strong>un texte</strong> (prénom, date, message, coordonnées GPS) ou <strong>une photo</strong> — un visage, une silhouette, un animal. Avec la photo, vous pouvez ajouter un texte au dos.</p>`,
   },
   // ----------------------------- CADEAUX -------------------------------------
   {

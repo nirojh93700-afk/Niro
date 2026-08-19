@@ -77,6 +77,38 @@ export const GUIDES = [
     description:
       "Veilleuses, arbres de vie lumineux et lampes LED en bois gravé personnalisé : nos conseils pour choisir le modèle, la lumière et le texte à graver.",
   },
+  {
+    slug: "cle-usb-personnalisee-gravee",
+    auto: { motCle: /cl(é|e) usb|usb/i },
+    nav: "Clé USB gravée",
+    title: "Clé USB personnalisée gravée — mariage, photographe, souvenirs",
+    description:
+      "Clé USB en bois gravée aux prénoms et à la date, avec ou sans coffret : le cadeau des mariés, le livrable des photographes. Nos conseils et quoi faire graver.",
+  },
+  {
+    slug: "porte-cles-piece-a-graver",
+    auto: { motCle: /porte-cl(é|e)s|pi(è|e)ce ronde|m(é|e)daille/i },
+    nav: "Porte-clés & pièce",
+    title: "Porte-clés et pièce porte-bonheur à graver personnalisés",
+    description:
+      "Porte-clés en cuir gravé, pièce porte-bonheur en laiton : les petits objets personnalisés qu'on garde sur soi, et ce qu'il vaut mieux faire graver dessus.",
+  },
+  {
+    slug: "cadeau-enfant-personnalise",
+    auto: { motCle: /couverts|plaque de porte|enfant/i },
+    nav: "Cadeau enfant",
+    title: "Cadeaux personnalisés pour un enfant — plaque, couverts gravés",
+    description:
+      "Plaque de porte au prénom, couverts gravés, souvenir de naissance : les cadeaux d'enfant personnalisés qui se gardent, et quoi faire graver dessus.",
+  },
+  {
+    slug: "porte-stylo-bois-personnalise",
+    auto: { motCle: /porte-stylo/i },
+    nav: "Porte-stylo",
+    title: "Porte-stylo en bois personnalisé — cadeau supporter et bureau",
+    description:
+      "Porte-stylo en bois découpé et gravé, aux couleurs d'une équipe et au prénom de celui qui l'utilise : à qui l'offrir et quoi faire graver.",
+  },
 ];
 
 export const GUIDE_SLUGS = GUIDES.map((g) => g.slug);
@@ -114,6 +146,10 @@ export function guidePourProduit(product) {
   const nom = `${slug} ${product.name || ""}`.toLowerCase();
 
   if (cat === "cristal" || nom.includes("cristal")) return getGuide("cristal-photo-3d");
+  if (/porte-stylo/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
+  if (/usb/.test(nom)) return getGuide("cle-usb-personnalisee-gravee");
+  if (/porte-cl(é|e)s|piece ronde|pièce ronde|laiton/.test(nom)) return getGuide("porte-cles-piece-a-graver");
+  if (/couverts|plaque de porte/.test(nom)) return getGuide("cadeau-enfant-personnalise");
   if (cat === "naissance") return getGuide("cadeau-naissance");
   if (cat === "mariage") return getGuide("deco-mariage-personnalisee");
   if (cat === "verres") return getGuide("verres-carafes-graves");
