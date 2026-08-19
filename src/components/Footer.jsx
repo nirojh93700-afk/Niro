@@ -61,6 +61,15 @@ export default function Footer() {
             <Link href="/#personnalisation">La personnalisation</Link>
           </div>
           <div>
+            <h4>Idées &amp; conseils</h4>
+            <Link href="/idees/cadeau-femme-personnalise">Cadeau femme</Link>
+            <Link href="/idees/bijoux-homme-graves">Bijoux homme</Link>
+            <Link href="/idees/idees-gravure-bijoux">Que faire graver ?</Link>
+            <Link href="/idees/deco-mariage-personnalisee">Déco de mariage</Link>
+            <Link href="/idees/cristal-photo-3d">Cristal photo 3D</Link>
+            <Link href="/idees">Tous nos guides</Link>
+          </div>
+          <div>
             <h4>Informations</h4>
             <Link href="/favoris">♥ Mes favoris</Link>
             <Link href="/retours">Politique de retour</Link>

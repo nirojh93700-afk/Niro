@@ -88,6 +88,7 @@ export default function Header({ categories }) {
         ))}
         <Link href="/cristaux" style={{ color: "#a5822f", fontWeight: 700 }}>💎 Cristal Photo 3D</Link>
         <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
+        <Link href="/idees">Idées &amp; conseils</Link>
         <Link href="/a-propos">À propos</Link>
         <Link href="/contact">Contact</Link>
         <Link href="/espace" className="nav-account">

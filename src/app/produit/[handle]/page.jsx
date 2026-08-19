@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
+import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
 import { getCatalogBySlug, getCatalog, getCatalogAdmin, priceFrom } from "@/lib/catalog";
@@ -151,6 +152,8 @@ export default async function ProductPage({ params, searchParams }) {
     }
   } catch { /* ignore */ }
 
+  const guide = guidePourProduit(product);
+
   return (
     <>
       <script
@@ -175,6 +178,14 @@ export default async function ProductPage({ params, searchParams }) {
         </div>
       )}
       <ProductDetail product={product} />
+      {guide && (
+        <div className="guide-lien-fiche">
+          <div className="container">
+            <span>Vous hésitez&nbsp;?</span>{" "}
+            <a href={`/idees/${guide.slug}`}>{guide.h1} — nos conseils</a>
+          </div>
+        </div>
+      )}
       {related.length > 0 && (
         <section className="section">
           <div className="container">

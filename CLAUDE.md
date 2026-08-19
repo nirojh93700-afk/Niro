@@ -491,6 +491,30 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   Couverts enfants personnalisés PUBLIÉS (34,90 € port offert, éditeur par couvert) · CRM enrichi
   (campagne remise, anniversaires, tags, graphique CA, relance) · Bandeau Soldes animé · Page sur-mesure (démo).
 
+## 📚 PAGES « IDÉES & CONSEILS » — EN LIGNE (19/08/2026)
+> 9 pages de conseil pour le référencement Google, validées puis mises en ligne à la demande
+> de la gérante. Adresses : `/idees` (sommaire) + `/idees/<slug>`.
+- **Source = les maquettes validées** `docs/maquettes/guide-*.html`. **NE JAMAIS réécrire le contenu
+  à la main dans le code** : on modifie la maquette, puis on relance **`node tools/generer-guides.mjs`**
+  qui régénère `src/lib/guidesContent.js` (contenu + questions fréquentes extraites). Le générateur
+  rend les liens internes, encadre le tableau des prix (défilement mobile) et refuse un lien absolu oublié.
+- **Fichiers** : `src/lib/guides.js` (liste, titres/descriptions Google, `getGuide`, `guidePourProduit`) ·
+  `src/lib/guidesContent.js` (GÉNÉRÉ) · `src/app/idees/page.jsx` (sommaire) ·
+  `src/app/idees/[slug]/page.jsx` (guide + fil d'Ariane + données structurées FAQ) ·
+  styles `.guide*` à la fin de `src/app/globals.css` (couleurs du site, aucune couleur en dur).
+- **Où on les voit** : menu du haut (« Idées & conseils »), colonne du bas de page, lien discret sous
+  chaque fiche produit (`guidePourProduit` choisit le guide selon la catégorie ; aucun lien si rien ne
+  correspond), et `sitemap.xml`.
+- **Ajouter un guide** : créer la maquette dans `docs/maquettes/`, l'ajouter à `MAP` dans
+  `tools/generer-guides.mjs`, ajouter son entrée (slug, nav, title, description) dans `GUIDES`
+  (`src/lib/guides.js`), régénérer, `npm run build`.
+- **Vérifié avant mise en ligne** : les 9 pages en mobile (390 px) et ordinateur (1440 px) — aucun
+  débordement, aucune erreur JavaScript, un seul H1 par page ; 43 images et 52 liens internes testés
+  un par un ; titres/descriptions/canoniques présents ; FAQ + fil d'Ariane en données structurées.
+- ⚠️ **Connu, ANTÉRIEUR à ces pages** : la page d'accueil produit des avertissements React
+  d'hydratation (#425/#418/#423). Vérifié en retirant toutes les nouvelles pages : c'était déjà le cas.
+  Invisible pour la cliente, à corriger séparément si la gérante le demande.
+
 ## 🔍 « VÉRIFIE MON SITE » — AUDIT COMPLET AUTOMATIQUE (créé le 13/08/2026)
 > **Quand la gérante dit « vérifie mon site », « est-ce que tout va bien », « fais un audit »** →
 > lancer **`node tools/audit-site.mjs`** et lui rendre le résultat en français, court et clair.

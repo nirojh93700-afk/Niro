@@ -1,5 +1,6 @@
 import { CATEGORIES } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
+import { GUIDE_SLUGS } from "@/lib/guides";
 
 // Le plan du site était figé à la compilation : un produit masqué depuis
 // l'admin restait annoncé à Google (qui tombait sur une erreur 404), et un
@@ -45,6 +46,14 @@ export default async function sitemap() {
       priority: 0.8,
     }));
 
+  // Pages « Idées & conseils » (/idees et /idees/<slug>) — guides de conseil.
+  const guidePages = ["/idees", ...GUIDE_SLUGS.map((s) => `/idees/${s}`)].map((path) => ({
+    url: `${base}${path}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: path === "/idees" ? 0.7 : 0.75,
+  }));
+
   const catalog = await getCatalog();
   const productPages = catalog.map((p) => ({
     url: `${base}/produit/${p.slug}`,
@@ -53,5 +62,5 @@ export default async function sitemap() {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...categoryPages, ...productPages];
+  return [...staticPages, ...categoryPages, ...guidePages, ...productPages];
 }
