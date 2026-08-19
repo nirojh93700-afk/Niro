@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { JEWEL_TYPES, getJewelType, getJewelTypeLabel } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
@@ -25,18 +24,19 @@ export const metadata = {
 };
 
 export default async function BoutiquePage({ searchParams }) {
-  // Les familles cristal et naissance ont leur page dédiée : on évite un doublon
-  // dans la boutique en y renvoyant directement.
-  if (searchParams?.cat === "cristal") redirect("/cristaux");
-  if (searchParams?.cat === "naissance") redirect("/naissance");
+  // Cristal et Naissance se comportent comme les autres rayons DANS la boutique
+  // (recherche + filtres + grille). Leurs pages dédiées /cristaux et /naissance
+  // restent en ligne, inchangées, et gardent leur entrée dans le menu du haut.
   const activeCat = searchParams?.cat;
   const activeSub = searchParams?.sub;
   const activeType = searchParams?.type; // bijoux : collier / bracelet
   const activeQ = (searchParams?.q || "").trim().toLowerCase();
   const ratings = await getRatingSummaries().catch(() => ({}));
   const allWithImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
-  // Les cristaux vivent sur /cristaux : on ne les liste pas dans la grille boutique.
-  const withImages = allWithImages.filter((p) => !p.crystal3d && p.category !== "cristal" && p.category !== "naissance");
+  // « Tout » doit vraiment montrer TOUT : cristaux et naissance compris (ils
+  // étaient exclus parce qu'ils avaient une page à part — la cliente croyait
+  // avoir vu toute la boutique alors qu'il lui manquait 7 produits).
+  const withImages = allWithImages;
 
   // Taxonomie vivante (réglée dans l'admin, repli sur le code).
   const taxonomy = await getTaxonomy().catch(() => ({}));
@@ -146,7 +146,7 @@ export default async function BoutiquePage({ searchParams }) {
           {menuCategories.map((c) => (
             <Link
               key={c.slug}
-              href={c.slug === "cristal" ? "/cristaux" : c.slug === "naissance" ? "/naissance" : `/boutique/${c.slug}`}
+              href={`/boutique/${c.slug}`}
               className={`filter-chip ${activeCat === c.slug && !activeSub ? "active" : ""}`}
             >
               {c.label}

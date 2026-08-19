@@ -4,8 +4,11 @@ import { getCategoryLabel } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
-// Catégories qui vivent DANS la boutique (cristal et naissance ont leur page dédiée).
-const VALID = ["bijoux", "verres", "mariage", "deco", "cadeaux"];
+// Catégories qui vivent DANS la boutique. Cristal et Naissance en font partie :
+// on y reste, avec la recherche et les filtres, comme pour les autres rayons.
+// Leurs pages dédiées /cristaux et /naissance restent en ligne, inchangées, et
+// gardent leur entrée dans le menu du haut du site.
+const VALID = ["bijoux", "verres", "mariage", "deco", "cadeaux", "cristal", "naissance"];
 
 // Titres/descriptions SEO par catégorie.
 const META = {
@@ -14,6 +17,8 @@ const META = {
   mariage: { t: "Décorations de mariage personnalisées", d: "Numéros de table, marque-places, menus et décorations de mariage personnalisés, gravés et découpés au laser." },
   deco: { t: "Décorations personnalisées en bois & LED", d: "Lampes, veilleuses et décorations personnalisées gravées au laser dans notre atelier français." },
   cadeaux: { t: "Cadeaux personnalisés gravés", d: "Des idées cadeaux personnalisées et gravées pour toutes les occasions, faites en France." },
+  cristal: { t: "Cristal photo 3D personnalisé — tous nos modèles", d: "Blocs, porte-clés et clé USB en cristal, votre photo gravée en 3D à l'intérieur. Réalisé dans notre atelier en France." },
+  naissance: { t: "Cadeaux de naissance personnalisés en bois gravé", d: "Plaques de naissance et souvenirs personnalisés aux informations de bébé, gravés dans notre atelier français." },
 };
 
 export async function generateMetadata({ params }) {
@@ -32,8 +37,6 @@ export async function generateMetadata({ params }) {
 // pour ne PAS dupliquer la logique de filtres/tri (zéro divergence).
 export default async function CategoryPage({ params, searchParams }) {
   const cat = params.categorie;
-  if (cat === "cristal") redirect("/cristaux");
-  if (cat === "naissance") redirect("/naissance");
   if (!VALID.includes(cat)) redirect("/boutique");
   return BoutiquePage({ searchParams: { ...(searchParams || {}), cat } });
 }
