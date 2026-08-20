@@ -1105,12 +1105,7 @@ export default function ProductDetail({ product }) {
           </div>
           {product.engrave && (
             <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
-              {/* Le rendu dépend de la matière : givré sur le verre, brun sur le bois. */}
-              {product.engraveNote ? (
-                product.engraveNote
-              ) : (
-                <>Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d&apos;exemple.</>
-              )}
+              Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d'exemple.
             </p>
           )}
           {product.crystal3d && photoSrc && (
