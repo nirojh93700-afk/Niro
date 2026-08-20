@@ -2448,32 +2448,29 @@ export const products = [
       "41": "/produits/motif-plume.png",
       "42": "/produits/motif-zachary-amanda.png",
     },
+    // La cliente choisit UNE option en haut (« Choisissez votre option ») et
+    // c'est elle qui décide des champs affichés (variantContains). Pas de
+    // deuxième question : une seule décision, un seul prix.
     personalizationFields: [
-      // 1) UN seul choix — les champs inutiles restent cachés.
-      { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
-        { value: "modele", label: "Un modèle (dessin numéroté)" },
-        { value: "photo", label: "Ma photo" },
-        { value: "lettre", label: "Une lettre fleurie" },
-      ] },
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle",
-        showIfField: "gravure", showIfValue: "modele", groups: [
+        variantContains: "Dessin", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
         { label: "Noms & cadres (14–25)", nums: ["14","15","16","17","18","19","20","21","22","23","24","25"] },
         { label: "Dessins & occasions (26–42)", nums: ["26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"] },
       ] },
-      { key: "photo", type: "photo", label: "Votre photo à graver", showIfField: "gravure", showIfValue: "photo",
-        text: "Un couple, un portrait, un enfant, un animal : la photo est gravée en brun dans le bois. Une image nette et bien éclairée donne le meilleur résultat ; une photo sombre ou avec un arrière-plan chargé rend moins bien." },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Choisissez votre initiale",
-        showIfField: "gravure", showIfValue: "lettre", image: "/produits/alphabet-fleuri.jpg",
-        text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri. Le texte ci-dessous viendra se placer dans la bande, au milieu de la lettre." },
-      // 2) Le texte s'ajoute au choix ci-dessus (jamais une option à part).
+        variantContains: "Lettre", image: "/produits/alphabet-fleuri.jpg",
+        text: "Cliquez votre initiale — elle sera gravée dans ce style fleuri. Le texte ci-dessous viendra se placer dans la bande, au milieu de la lettre." },
+      { key: "photo", type: "photo", label: "Votre photo à graver", variantContains: "Photo",
+        text: "Un couple, un portrait, un enfant, un animal : la photo est gravée en brun dans le bois. Une image nette et bien éclairée donne le meilleur résultat ; une photo sombre ou avec un arrière-plan chargé rend moins bien." },
       { key: "prenom", label: "Le texte à ajouter", placeholder: "Ex. Camille · 14.07.2019 · « Bonne journée »", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police du texte", optional: true },
       { key: "boisnote", type: "note", text: "Bois clair naturel : le veinage varie légèrement d'une pièce à l'autre — chaque support est unique." },
     ],
     variants: [
       { id: "support-tel-texte", title: "Texte seul", price: 12.90 },
-      { id: "support-tel-modele", title: "Dessin ou lettre fleurie", price: 14.90 },
+      { id: "support-tel-dessin", title: "Dessin au choix", price: 14.90 },
+      { id: "support-tel-lettre", title: "Lettre fleurie", price: 14.90 },
       { id: "support-tel-photo", title: "Photo gravée", price: 19.90 },
     ],
     descriptionHtml: `<p><strong>Un support de téléphone en bois, gravé dans notre atelier.</strong> Posé sur un bureau ou une table de nuit, il tient le téléphone incliné, écran visible — et quand le téléphone n'y est pas, c'est votre photo, votre dessin ou votre initiale que l'on voit.</p>
