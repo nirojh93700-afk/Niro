@@ -103,11 +103,11 @@ export const GUIDES = [
   },
   {
     slug: "porte-stylo-bois-personnalise",
-    auto: { motCle: /porte-stylo|support t(é|e)l(é|e)phone/i },
-    nav: "Objets de bureau",
-    title: "Objets de bureau en bois — porte-stylo et support téléphone personnalisés",
+    auto: { motCle: /porte-stylo/i },
+    nav: "Porte-stylo",
+    title: "Porte-stylo en bois personnalisé — cadeau supporter et bureau",
     description:
-      "Porte-stylo aux couleurs de son équipe, support téléphone à photo gravée ou ajouré : les objets de bureau en bois personnalisés, et comment choisir.",
+      "Porte-stylo en bois découpé et gravé, aux couleurs d'une équipe et au prénom de celui qui l'utilise : à qui l'offrir et quoi faire graver.",
   },
 ];
 
