@@ -102,6 +102,14 @@ export const GUIDES = [
       "Plaque de porte au prénom, couverts gravés, souvenir de naissance : les cadeaux d'enfant personnalisés qui se gardent, et quoi faire graver dessus.",
   },
   {
+    slug: "support-telephone-personnalise",
+    auto: { motCle: /support t(é|e)l(é|e)phone/i },
+    nav: "Support téléphone",
+    title: "Support téléphone en bois personnalisé — photo gravée ou ajouré",
+    description:
+      "Support de téléphone en bois à personnaliser : photo gravée, dessin, initiale fleurie, ou motif découpé à jour. Comment choisir entre les deux modèles.",
+  },
+  {
     slug: "porte-stylo-bois-personnalise",
     auto: { motCle: /porte-stylo/i },
     nav: "Porte-stylo",
@@ -146,7 +154,8 @@ export function guidePourProduit(product) {
   const nom = `${slug} ${product.name || ""}`.toLowerCase();
 
   if (cat === "cristal" || nom.includes("cristal")) return getGuide("cristal-photo-3d");
-  if (/porte-stylo|support t(é|e)l(é|e)phone/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
+  if (/support t(é|e)l(é|e)phone/.test(nom)) return getGuide("support-telephone-personnalise");
+  if (/porte-stylo/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
   if (/usb/.test(nom)) return getGuide("cle-usb-personnalisee-gravee");
   if (/porte-cl(é|e)s|piece ronde|pièce ronde|laiton/.test(nom)) return getGuide("porte-cles-piece-a-graver");
   if (/couverts|plaque de porte/.test(nom)) return getGuide("cadeau-enfant-personnalise");
