@@ -468,6 +468,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     }
 
     // Cashback fidélité gagné sur cette commande (crédit).
+    let cashbackEarned = 0;
     try {
       const st = await getSettings();
       const pct = Number(st.cashbackPercent) || 0;
@@ -477,6 +478,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       if (pct > 0 && customer.email && produits > 0) {
         const gain = Math.round(produits * pct) / 100; // produits × pct / 100, arrondi centime
         await creditCagnotte(customer.email, gain, "Cashback fidélité", orderRef);
+        cashbackEarned = gain; // conservé sur la commande (balise {gagne} des messages)
       }
       // 2) Cashback ambassadeur : si le code porte une adresse e-mail d'ambassadeur,
       //    sa commission est aussi versée sur SA cagnotte (en plus du suivi codeStats).
@@ -515,6 +517,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       discount: (session.total_details?.amount_discount || 0) / 100,
       promoCode: session.metadata?.promoCode || "",
       cagnotteUsed: Number(session.metadata?.cagnotteAmount || 0) || 0,
+      cashbackEarned, // cashback crédité à la cliente pour CETTE commande
       currency,
       customerName: customer.name || "",
       customerEmail: customer.email || "",

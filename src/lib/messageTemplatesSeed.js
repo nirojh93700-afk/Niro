@@ -73,6 +73,26 @@ Vous la recevrez très bientôt. Pour toute question, il vous suffit de répondr
 L'atelier Niv Création`,
   },
   {
+    id: "seed_relais_cashback",
+    name: "Colis au point relais + cashback",
+    subject: "Votre colis vous attend — et {gagne} sur votre cagnotte ✦",
+    body:
+`Bonjour {prenom},
+
+Votre commande {ref} est arrivée à votre point de retrait : elle vous y attend.
+
+Pensez à votre pièce d'identité, elle vous sera demandée au moment du retrait. Et ne tardez pas trop : passé le délai indiqué par le transporteur, le colis repart automatiquement.
+
+Une bonne nouvelle en plus : avec cette commande, vous avez cumulé {gagne} sur votre cagnotte fidélité. Votre solde disponible est aujourd'hui de {solde}.
+
+Pour l'utiliser, rien de compliqué : connectez-vous à votre espace « Mon compte » sur nivcreation.fr (un simple lien vous est envoyé par e-mail, sans mot de passe). Votre cagnotte s'affiche alors dans le panier, et vous choisissez de l'utiliser ou de la garder pour plus tard — jusqu'à 50 % du montant de votre commande.
+
+J'espère sincèrement que votre création vous plaira. La moindre question, vous pouvez répondre directement à cet e-mail.
+
+Belle journée,
+L'atelier Niv Création`,
+  },
+  {
     id: "seed_fidele",
     name: "Merci cliente fidèle",
     subject: "Merci pour votre fidélité, {prenom}",

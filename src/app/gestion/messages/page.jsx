@@ -146,7 +146,7 @@ export default function MessagesAdmin() {
       {/* 1. ENVOYER / PROGRAMMER UN MESSAGE */}
       <div style={box}>
         <h2 style={{ marginTop: 0 }}>✉️ Envoyer un message</h2>
-        <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -6 }}>Choisissez une cliente, un modèle prêt, puis <strong>Envoyer maintenant</strong> — ou programmez-le pour plus tard. Le message s&apos;adapte à la cliente ({"{prenom}"}, {"{ref}"}, {"{solde}"} de cagnotte).</p>
+        <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -6 }}>Choisissez une cliente, un modèle prêt, puis <strong>Envoyer maintenant</strong> — ou programmez-le pour plus tard. Le message s&apos;adapte à la cliente : {"{prenom}"}, {"{ref}"} (n° de commande), {"{solde}"} (total de sa cagnotte) et {"{gagne}"} (cashback gagné sur cette commande).</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <div>
             <span style={label}>Choisir une cliente (commande)</span>
