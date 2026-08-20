@@ -2372,6 +2372,117 @@ export const products = [
   },
   // --- Collection Coupe du Monde 2026 : UN produit PAR pays -----------------
   {
+    // ===== Support téléphone en bois (NOUVEAU — masqué tant que la gérante n'a
+    // pas dit « publie »). Configuré comme le verre à vin : mêmes modèles
+    // numérotés, même alphabet fleuri, aperçu en direct sur la photo du support
+    // vierge. Les photos ci-dessous sont des images d'attente : la gérante
+    // mettra les siennes dans Gestion → Produits.
+    slug: "support-telephone-bois-grave",
+    badge: "Nouveau",
+    hidden: true, // INVISIBLE pour les clientes — aperçu privé seulement
+    name: "Support téléphone en bois gravé",
+    weight: 180, // à plat, léger
+    pickup: false,
+    letter: true, // expédié à plat en lettre suivie (comme les porte-stylos)
+    cardImage: "/produits/support-tel-photo.jpg",
+    title: "Support téléphone en bois gravé — photo, monogramme fleuri ou texte",
+    category: "deco",
+    subcategory: "porte-stylos",
+    type: "Support téléphone bois",
+    tagline: "Le support de bureau qui garde votre photo gravée dans le bois.",
+    personalizable: true,
+    personalizationLabel: "Photo, lettre fleurie ou modèle — et le texte de votre choix",
+    images: [
+      "/produits/support-tel-photo.jpg",
+      "/produits/support-tel-lettre.jpg",
+      "/produits/support-tel-vierge.jpg",
+      "/produits/support-tel-ambiance.jpg",
+    ],
+    // Aperçu en direct : le motif / la lettre / le texte se pose sur la photo du
+    // support VIERGE (prise bien de face), déplaçable, taille réglable.
+    engraveImage: "/produits/support-tel-vierge.jpg",
+    // Sur le bois, la gravure est brune (pas givrée comme sur le verre).
+    engraveNote: "Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple.",
+    engrave: {
+      box: { top: 0.20, left: 0.40, width: 0.20, height: 0.34 },
+      widthMm: 60, maxWidthFrac: 0.22, minWidthFrac: 0.07,
+    },
+    // Mêmes modèles numérotés que le verre à vin : rien de nouveau à dessiner.
+    styleImages: {
+      "1": "/produits/vin-motif-01.png",
+      "2": "/produits/vin-motif-02.png",
+      "3": "/produits/vin-motif-03.png",
+      "4": "/produits/vin-motif-04.png",
+      "5": "/produits/vin-motif-05.png",
+      "6": "/produits/vin-motif-06.png",
+      "7": "/produits/vin-motif-07.png",
+      "8": "/produits/vin-motif-08.png",
+      "9": "/produits/vin-motif-09.png",
+      "10": "/produits/vin-motif-10.png",
+      "11": "/produits/vin-motif-11.png",
+      "12": "/produits/vin-motif-12.png",
+      "13": "/produits/vin-motif-13.png",
+      "14": "/produits/vin-motif-14.png",
+      "15": "/produits/vin-motif-15.png",
+      "16": "/produits/vin-motif-16.png",
+      "17": "/produits/vin-motif-17.png",
+      "18": "/produits/vin-motif-18.png",
+      "19": "/produits/vin-motif-19.png",
+      "20": "/produits/vin-motif-20.png",
+      "21": "/produits/vin-motif-21.png",
+      "22": "/produits/vin-motif-22.png",
+      "23": "/produits/vin-motif-23.png",
+      "24": "/produits/vin-motif-24.png",
+      "25": "/produits/vin-motif-25.png",
+      "26": "/produits/motif-rose-birthday.png",
+      "27": "/produits/motif-couple-fleurs.png",
+      "28": "/produits/motif-couple-coeur.png",
+      "29": "/produits/motif-mains-coeur.png",
+      "30": "/produits/motif-fee-lune.png",
+      "31": "/produits/motif-musique.png",
+      "32": "/produits/motif-cheval.png",
+      "33": "/produits/motif-colombes.png",
+      "34": "/produits/motif-lions-coeur.png",
+      "35": "/produits/motif-maries-1.png",
+      "36": "/produits/motif-maries-2.png",
+      "37": "/produits/motif-geniet.png",
+      "38": "/produits/motif-bella-jason.png",
+      "39": "/produits/motif-jesus-beatriz.png",
+      "40": "/produits/motif-sandy-pascal.png",
+      "41": "/produits/motif-plume.png",
+      "42": "/produits/motif-zachary-amanda.png",
+    },
+    personalizationFields: [
+      { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
+        { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
+        { label: "Noms & cadres (14–25)", nums: ["14","15","16","17","18","19","20","21","22","23","24","25"] },
+        { label: "Dessins & occasions (26–42)", nums: ["26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42"] },
+      ] },
+      { key: "photo", type: "photo", label: "Votre photo à graver", optional: true,
+        text: "Un couple, un portrait, un enfant, un animal : la photo est gravée en brun dans le bois. Une image nette et bien éclairée donne le meilleur résultat ; une photo sombre ou avec un arrière-plan chargé rend moins bien." },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg",
+        text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri. Le texte ci-dessous viendra se placer dans la bande, au milieu de la lettre." },
+      { key: "textenote", type: "note", text: "Choisissez UNE seule chose à graver : un modèle, votre photo, ou une lettre fleurie. Vous pouvez y ajouter le texte de votre choix." },
+      { key: "prenom", label: "Le texte à ajouter", placeholder: "Ex. Camille · 14.07.2019 · « Bonne journée »", maxLength: 40, optional: true },
+      { key: "police", type: "font", label: "Police du texte", optional: true },
+      { key: "boisnote", type: "note", text: "Bois clair naturel : le veinage varie légèrement d'une pièce à l'autre — chaque support est unique." },
+    ],
+    variants: [
+      { id: "support-tel-texte", title: "Texte seul", price: 12.90 },
+      { id: "support-tel-modele", title: "Lettre fleurie ou modèle", price: 14.90 },
+      { id: "support-tel-photo", title: "Photo gravée", price: 19.90 },
+    ],
+    descriptionHtml: `<p><strong>Un support de téléphone en bois, gravé dans notre atelier.</strong> Posé sur un bureau ou une table de nuit, il tient le téléphone incliné, écran visible — et quand le téléphone n'y est pas, c'est votre photo ou votre initiale que l'on voit.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> bois clair, découpé au laser</li>
+<li><strong>Montage :</strong> deux pièces qui s'emboîtent, sans colle ni vis</li>
+<li><strong>Passage du câble :</strong> une fente en bas laisse passer le chargeur — le téléphone peut rester branché</li>
+<li><strong>Gravure :</strong> votre photo, une lettre fleurie ou un modèle au choix, plus le texte que vous voulez</li>
+</ul>
+<p>Chaque support est gravé à la commande. Comptez 3 à 5 jours ouvrés de fabrication.</p>`,
+  },
+  {
     slug: "porte-stylo-coq-coupe-du-monde",
     worldcup: true,
     badge: "Nouveau",
