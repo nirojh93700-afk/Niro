@@ -249,6 +249,12 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Photo à graver** : `type:"photo"` (téléversement + vérification atelier)
 - **Aperçu en direct** : `engraveImage` (photo du produit VIERGE, prise de face) + `engrave.box`
 - **Choix exclusif** : `showIfField` / `showIfValue` (ex. Texte / Photo)
+- ⚠️ **RIEN N'EST AFFICHÉ EN PERMANENCE** (demande de la gérante, 20/08/2026) : la fiche commence
+  par **« Que voulez-vous faire graver ? »** (modèle n° / photo / lettre fleurie), et **seuls les
+  champs du choix retenu apparaissent**. La planche de l'alphabet fleuri, la bande de motifs et le
+  téléversement de photo NE DOIVENT PAS rester visibles tout le temps — c'est lourd et ça perd la
+  cliente. Le **texte à graver + la police** (les 8 écritures du site) restent proposés dans tous
+  les cas ; avec la lettre fleurie, ce texte se grave **dans la bande** au milieu de la lettre.
 - **Polices** : `type:"font"` (les 8 écritures) · **Couleur** : `type:"color"`
 - **Emballage** : `packagingSeed.js` + `defaultPackagingFor()` · **Livraison** : `weight` + `letter`/`pickup`
 - **Guide de conseils** : automatique via la catégorie (`guidePourProduit`)
