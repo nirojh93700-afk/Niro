@@ -296,6 +296,18 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **INTERDIT de modifier le site visible** (fiches, pages, textes clients) **sans l'accord explicite de la gérante**. Le circuit est TOUJOURS : **maquette d'abord → elle valide → « applique » → alors seulement on touche au site.**
 - En cas de doute sur ce qu'un « oui » valide exactement : **demander**, ne pas déduire.
 
+### ⛔ RÈGLE RENFORCÉE — « MASQUÉ » NE VEUT PAS DIRE « PAS SUR LE SITE » (20/08/2026, incident)
+> La gérante avait demandé une **maquette** du support téléphone. Pour lui « montrer la vraie page »,
+> j'ai créé le produit dans `products.js` avec `hidden:true` et je l'ai poussé. Invisible pour les
+> clientes, certes — **mais c'était quand même son site, sans son accord.** Elle l'a très mal pris,
+> à juste titre. Produit et images supprimés, code remis à l'identique.
+- **Ne JAMAIS modifier le code du site — même un produit masqué, même un réglage invisible, même
+  « pour montrer » — tant que la gérante n'a pas écrit « applique » / « publie ».**
+- Une maquette reste dans `docs/maquettes/` + artifact. Elle ne se construit PAS dans le site.
+- Si montrer le vrai rendu impose de construire (aperçu privé `?apercu=niv2026`), **lui demander
+  d'abord** : « pour vous montrer la vraie page, je dois la créer en mode masqué, d'accord ? »
+- Le doute se tranche TOUJOURS dans le sens : je ne touche pas, je demande.
+
 ### RÈGLE — NE PAS MODIFIER LES MAQUETTES SANS DEMANDER (23/07/2026, demande explicite)
 - **INTERDIT de modifier une maquette (artifact) sans demander d'abord l'accord de la gérante.** Même pour une « amélioration » évidente : on **propose et on attend son feu vert** avant de toucher/republier une maquette existante.
 - Vaut pour TOUTES les maquettes (gobelet, carafe, cristal, thème, etc.). Republier une maquette = une modification → demander avant.
