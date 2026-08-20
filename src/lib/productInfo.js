@@ -1072,6 +1072,14 @@ Un souci à la réception ?
 
   "porte-cles-cristal-led-coeur": CRISTAL_LED_KEYRING_INFO,
   "porte-cles-cristal-led-rectangle": CRISTAL_LED_KEYRING_INFO,
+  "porte-serviettes-bois-fleur": {
+    material:
+      "Bois clair découpé au laser dans notre atelier.\nTrois pièces : le panneau décoré devant, un panneau plein derrière, et la base à encoches.\nAucune colle, aucune vis : tout s'emboîte.\nLe veinage varie légèrement d'une pièce à l'autre — chaque porte-serviettes est unique.",
+    usage:
+      "Il reçoit des serviettes en papier pliées, qui se glissent entre les deux panneaux (serviettes non fournies).\nCe modèle n'est pas personnalisable : le motif est découpé, il n'y a ni gravure ni texte.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
+    returns:
+      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
+  },
   "support-telephone-bois-ajoure": {
     material:
       "Bois clair découpé au laser dans notre atelier.\nLe motif — feuilles d'érable, lierre et glands — est ajouré : il traverse le panneau de part en part.\nDeux pièces plates qui s'emboîtent, sans colle ni vis.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",

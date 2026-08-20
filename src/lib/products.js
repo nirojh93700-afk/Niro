@@ -47,6 +47,7 @@ export const SUBCATEGORIES = {
     { slug: "lampes", label: "Lampes" },
     { slug: "bougeoirs", label: "Bougeoir" },
     { slug: "bureau", label: "Accessoires de bureau" },
+    { slug: "table", label: "Art de la table" },
   ],
   cadeaux: [
     { slug: "cles-usb", label: "Clés USB" },
@@ -2526,6 +2527,41 @@ export const products = [
 <li><strong>Personnalisation :</strong> un prénom peut être gravé sur la base, en option</li>
 </ul>
 <p>Bois clair naturel : le veinage varie légèrement d'une pièce à l'autre — chaque support est unique.</p>`,
+  },
+  {
+    // ===== Porte-serviettes de table (mis en ligne le 21/08/2026).
+    // Objet DÉCORATIF : le motif est découpé, il n'y a aucune gravure et
+    // aucune personnalisation (demande explicite de la gérante).
+    slug: "porte-serviettes-bois-fleur",
+    badge: "Nouveau",
+    name: "Porte-serviettes en bois — fleur",
+    weight: 220,
+    pickup: false,
+    letter: true, // trois pièces plates, expédié à plat
+    cardImage: "/produits/porte-serviettes-1.jpg",
+    title: "Porte-serviettes de table en bois — fleur et arabesques découpées",
+    category: "deco",
+    subcategory: "table",
+    type: "Porte-serviettes bois",
+    tagline: "Le petit détail qui habille une table, même quand il n'y a rien d'autre dessus.",
+    personalizable: false,
+    images: [
+      "/produits/porte-serviettes-1.jpg",
+      "/produits/porte-serviettes-2.jpg",
+      "/produits/porte-serviettes-3.jpg",
+    ],
+    variants: [
+      { id: "porte-serviettes-fleur", title: "Modèle fleur", price: 11.90 },
+    ],
+    descriptionHtml: `<p><strong>Un porte-serviettes de table découpé au laser.</strong> Une grande fleur entourée d'arabesques et de feuilles, découpée à jour et posée devant : les serviettes en papier se glissent derrière, bien droites, et le motif reste visible par-dessus.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Usage :</strong> serviettes en papier pliées (les serviettes ne sont pas fournies)</li>
+<li><strong>Matière :</strong> bois clair découpé au laser</li>
+<li><strong>Montage :</strong> panneau décoré devant, panneau plein derrière, base à encoches — sans colle ni vis</li>
+<li><strong>Motif découpé :</strong> pas de gravure, pas de texte</li>
+</ul>
+<p>Il tient tout seul debout, même vide, et se range à plat.</p>`,
   },
   {
     slug: "porte-stylo-coq-coupe-du-monde",
