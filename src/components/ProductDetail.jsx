@@ -51,6 +51,10 @@ import GobeletPreview from "./GobeletPreview";
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
 const ENGRAVE_PREVIEW = "#3a2f1d";
 
+// Pièces rangées en « déco » mais ACHETÉES puis gravées (pas fabriquées à
+// l'atelier) : elles n'ont pas droit à l'argument « fait main ».
+const PIECES_ACHETEES = ["couverts-enfants-personnalises"];
+
 export default function ProductDetail({ product }) {
   const { addItem } = useCart();
   const [activeImg, setActiveImg] = useState(0);
@@ -1817,7 +1821,17 @@ export default function ProductDetail({ product }) {
           <div className="trust-cards">
             <div className="tcard fr"><span className="ti">🇫🇷</span><span><b>{originLabel}</b><small>Dans notre atelier</small></span></div>
             <div className="tcard pay"><span className="ti">🔒</span><span><b>Paiement sécurisé</b><small>Carte &amp; PayPal</small></span></div>
-            <div className="tcard hand"><span className="ti">✋</span><span><b>Fait main</b><small>Pièce unique</small></span></div>
+            {/* « Fait main » UNIQUEMENT sur ce qu'elle fabrique vraiment (bois,
+                mariage, déco). Sur les pièces qu'elle personnalise par gravure
+                (cristaux, bijoux, verres), on annonce la gravure — on ne dit pas
+                qu'on a fabriqué l'objet à la main. */}
+            <div className="tcard hand">
+              <span className="ti">{madeHere ? "✋" : "✦"}</span>
+              <span>
+                <b>{madeHere ? "Fait main" : "Gravé à la commande"}</b>
+                <small>Pièce unique</small>
+              </span>
+            </div>
             <div className="tcard ship"><span className="ti">🚚</span><span><b>Livraison suivie</b><small>Colis &amp; point relais</small></span></div>
           </div>
           <div className="pd-perso">
@@ -1834,8 +1848,12 @@ export default function ProductDetail({ product }) {
             <CrystalSizeGuide horizontal={product.slug.includes("horizontal")} />
           )}
 
-          {/* Argument « fait main » sur la déco & le mariage (vend le savoir-faire). */}
-          {(product.category === "mariage" || product.category === "deco") && (
+          {/* Argument « fait main » sur la déco & le mariage (vend le savoir-faire).
+              ATTENTION : uniquement sur ce qui est VRAIMENT découpé et monté à
+              l'atelier (le bois). Les pièces achetées puis gravées (couverts en
+              acier…) en sont exclues — on ne dit pas qu'on les a fabriquées. */}
+          {(product.category === "mariage" || product.category === "deco") &&
+            !PIECES_ACHETEES.includes(product.slug) && (
             <div style={{ background: "linear-gradient(135deg,#fbf4e6,#fffdf9)", border: "1px solid #e7d3a1", borderRadius: 14, padding: "16px 18px", margin: "18px 0 4px" }}>
               <strong style={{ color: "var(--gold-dark)", display: "block", marginBottom: 6 }}>✦ Fait main dans notre atelier français</strong>
               <p style={{ margin: 0, fontSize: "0.92rem", color: "var(--ink-soft)", lineHeight: 1.55 }}>

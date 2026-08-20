@@ -139,7 +139,7 @@ export default async function HomePage() {
         `}</style>
         <div className="cr-wrap">
           <div>
-            <span className="cr-eyebrow"><span className="cr-dot"></span> Nouveau · Fait main en France</span>
+            <span className="cr-eyebrow"><span className="cr-dot"></span> Nouveau · Gravé en France</span>
             <h1>Votre photo,<br/><span className="cr-shine">sculptée dans le cristal.</span></h1>
             <p className="cr-lede">Gravure photo 3D au cœur d&apos;un cristal K9, réalisée dans notre atelier. Un cadeau qui capte la lumière — et l&apos;émotion.</p>
             <div className="cr-cta">

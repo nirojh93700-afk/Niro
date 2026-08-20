@@ -52,7 +52,7 @@ export default function CrmPage() {
   const [subs, setSubs] = useState([]); // abonnées newsletter : [{email,date}]
   const [selSubs, setSelSubs] = useState(() => new Set()); // e-mails sélectionnés pour l'envoi
   const [nlSubject, setNlSubject] = useState("Votre −10 % vous attend chez Niv Création 💛");
-  const [nlBody, setNlBody] = useState("Bonjour,\n\nVous vous êtes inscrite récemment — merci ! Petit rappel : votre code BIENVENUE10 (−10 % sur votre première commande) est toujours valable.\n\nEn ce moment, nos clientes adorent nos cristaux photo 3D et nos bijoux gravés — fait main en France, livraison rapide et suivie.\n\nEt pour vous faire plaisir en toute sérénité, vous pouvez payer en plusieurs fois sans frais : 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).\n\nDécouvrez tout sur nivcreation.fr et profitez de vos −10 % !\n\nÀ très vite,\nNiv Création");
+  const [nlBody, setNlBody] = useState("Bonjour,\n\nVous vous êtes inscrite récemment — merci ! Petit rappel : votre code BIENVENUE10 (−10 % sur votre première commande) est toujours valable.\n\nEn ce moment, nos clientes adorent nos cristaux photo 3D et nos bijoux gravés — gravés en France, livraison rapide et suivie.\n\nEt pour vous faire plaisir en toute sérénité, vous pouvez payer en plusieurs fois sans frais : 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).\n\nDécouvrez tout sur nivcreation.fr et profitez de vos −10 % !\n\nÀ très vite,\nNiv Création");
   const [nlSending, setNlSending] = useState(false);
   const [nlMsg, setNlMsg] = useState("");
   function toggleSub(email) { setSelSubs((prev) => { const n = new Set(prev); n.has(email) ? n.delete(email) : n.add(email); return n; }); }
