@@ -216,6 +216,50 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 
 ---
 
+## 🧩 GABARIT FICHE PRODUIT — À RESPECTER SANS QU'ELLE AIT À LE REDEMANDER (20/08/2026)
+> **Demande explicite de la gérante** : « il faut que tu gardes les mêmes réglages, la même mise en
+> page pour tous les produits, tous les systèmes qu'on a déjà paramétrés — je vais pas te répéter à
+> chaque fois ». **Avant toute maquette ou tout nouveau produit : lire ce gabarit ET regarder une
+> fiche existante du même type** (`src/components/ProductDetail.jsx` + le produit voisin).
+
+**Ordre EXACT des blocs d'une fiche produit** (tel que rendu par `ProductDetail.jsx`) :
+1. Fil d'Ariane `Boutique / <Catégorie>` · bandeau jaune « Aperçu privé » si le produit est masqué
+2. **Galerie** : grande photo + `gallery-thumbs` (vignettes) · flèches ‹ › · modèle 3D si `model3d`
+3. Note d'aperçu si `engrave` (givré sur le verre / **`engraveNote`** pour une autre matière)
+4. Catégorie en sur-titre doré · **H1** (le `title`) · `tagline` · note `pd-rating` (★ + nb d'avis)
+5. **Prix** : `price-old` barré + `price-sale` + `promo-badge` (ou « Prix conseillé »)
+6. **« Choisissez votre option »** : `variant-swatches` (les variantes = options/prix)
+7. **« Personnalisation — gravure »** : les `field` dans l'ordre de `personalizationFields`
+   (stylepicker n° · photo · lettreFleurie · textes · police · notes)
+8. **« Votre emballage »** si `packaging` (sélecteur de formule)
+9. **`pd-totbox`** — encadré doré **« Total tout compris »** (prix × quantité, options incluses)
+10. **`pd-nfois`** — « Payez en plusieurs fois sans frais » (4× PayPal / 3× Klarna)
+11. `VacationNotice` (n'affiche rien si le mode vacances est éteint)
+12. **`qty-row`** — sélecteur de quantité (− 1 +) **à gauche** du bouton doré **« Ajouter au panier »**
+13. **`trust-cards`** — 4 cartes : origine · Paiement sécurisé · Fait main / Gravé à la commande · Livraison suivie
+14. **`pd-perso`** — « ✦ Pièce personnalisée » (délai 3-5 jours ouvrés + livraison)
+15. `product-desc` — la description HTML · guide de tailles si cristal
+16. **`info-accordion`** — Taille & Matériaux · Personnalisation & Entretien · Expédition & Retour
+    (+ un 2e accordéon Qualité/Entretien sur les bijoux) → vient de `productInfo.js`
+17. Lien discret vers le guide de conseils · « Vous aimerez aussi » · avis · vus récemment
+
+**Systèmes déjà en place — les RÉUTILISER, ne jamais en réinventer :**
+- **Modèles numérotés** : `type:"stylepicker"` + `styleImages` (42 modèles du verre à vin, 33 de la carafe)
+- **Lettre fleurie** : `type:"lettreFleurie"` + `image:"/produits/alphabet-fleuri.jpg"` (A→Z)
+- **Photo à graver** : `type:"photo"` (téléversement + vérification atelier)
+- **Aperçu en direct** : `engraveImage` (photo du produit VIERGE, prise de face) + `engrave.box`
+- **Choix exclusif** : `showIfField` / `showIfValue` (ex. Texte / Photo)
+- **Polices** : `type:"font"` (les 8 écritures) · **Couleur** : `type:"color"`
+- **Emballage** : `packagingSeed.js` + `defaultPackagingFor()` · **Livraison** : `weight` + `letter`/`pickup`
+- **Guide de conseils** : automatique via la catégorie (`guidePourProduit`)
+
+**Pour une MAQUETTE de fiche** : reprendre les **2 feuilles de style réelles du site**
+(`https://nivcreation.fr/_next/static/css/*.css`, récupérables avec curl) + les polices
+Playfair Display / Inter, et les **mêmes classes** que ci-dessus. Modèle de référence déjà fait :
+`docs/maquettes/support-telephone-fiche.html`. Les photos que la gérante envoie dans la conversation
+sont **récupérables** dans le transcript de session (`~/.claude/projects/…/<session>.jsonl`, blocs
+`{"type":"image","source":{"type":"base64",…}}`) — **ne jamais lui dire qu'on ne peut pas les récupérer**.
+
 ## 10. PROCÉDURE — Ajouter un produit (à suivre par l'agent)
 1. **Comprendre** le produit fourni (photo / description / lien). Si un lien
    fournisseur/Etsy est donné, en extraire matière, dimensions, options, prix.
