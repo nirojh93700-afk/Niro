@@ -2542,6 +2542,7 @@ export const products = [
     title: "Porte-serviettes de table en bois — fleur et arabesques découpées",
     category: "deco",
     subcategory: "table",
+    aussiDans: ["mariage"],
     type: "Porte-serviettes bois",
     tagline: "Le petit détail qui habille une table, même quand il n'y a rien d'autre dessus.",
     personalizable: false,
@@ -2562,6 +2563,42 @@ export const products = [
 <li><strong>Motif découpé :</strong> pas de gravure, pas de texte</li>
 </ul>
 <p>Il tient tout seul debout, même vide, et se range à plat.</p>`,
+  },
+  {
+    // ===== Porte-serviettes colombes (mis en ligne le 21/08/2026).
+    // Décor de table de mariage AVANT tout, mais il a sa place aussi en déco :
+    // `aussiDans` le fait apparaître dans les DEUX rayons (demande de la gérante).
+    slug: "porte-serviettes-colombes",
+    badge: "Nouveau",
+    name: "Porte-serviettes colombes",
+    weight: 220,
+    pickup: true, // décor de mariage : retrait en main propre possible
+    letter: true,
+    cardImage: "/produits/porte-serviettes-colombes-1.jpg",
+    title: "Porte-serviettes colombes en bois — deux oiseaux et un cœur",
+    category: "mariage",
+    subcategory: "table-deco",
+    aussiDans: ["deco"],
+    type: "Porte-serviettes bois",
+    tagline: "Deux colombes qui se font face autour d'un cœur : le décor de table des mariages.",
+    personalizable: false,
+    images: [
+      "/produits/porte-serviettes-colombes-1.jpg",
+      "/produits/porte-serviettes-colombes-2.jpg",
+      "/produits/porte-serviettes-colombes-3.jpg",
+    ],
+    variants: [
+      { id: "porte-serviettes-colombes", title: "Modèle colombes", price: 14.90 },
+    ],
+    descriptionHtml: `<p><strong>Deux colombes qui se font face, un cœur entre elles, des fleurs à leurs pieds.</strong> Le motif est découpé au laser dans le bois clair et posé devant les serviettes, sur une base contrastée qui le fait ressortir.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Usage :</strong> serviettes en papier pliées (les serviettes ne sont pas fournies)</li>
+<li><strong>Matière :</strong> bois clair découpé au laser, base contrastée</li>
+<li><strong>Montage :</strong> motif devant, panneau derrière, base à encoches — sans colle ni vis</li>
+<li><strong>Motif découpé :</strong> pas de gravure, pas de texte</li>
+</ul>
+<p>Sur une table de mariage, il en faut un par table : c'est un décor qui se pose, et qui se garde après la fête.</p>`,
   },
   {
     slug: "porte-stylo-coq-coupe-du-monde",

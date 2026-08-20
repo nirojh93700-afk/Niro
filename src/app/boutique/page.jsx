@@ -51,10 +51,17 @@ export default async function BoutiquePage({ searchParams }) {
     ? withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ))
     : null;
 
-  let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
+  // Un produit peut être rangé dans DEUX rayons : sa catégorie principale, plus
+  // celles listées dans `aussiDans` (ex. un porte-serviettes de mariage qui a
+  // aussi sa place en déco).
+  const dansLeRayon = (p, cat) => p.category === cat || (p.aussiDans || []).includes(cat);
+  let filtered = activeCat ? withImages.filter((p) => dansLeRayon(p, activeCat)) : withImages;
   if (activeCat && activeSub) {
     filtered = filtered.filter((p) => p.subcategory === activeSub);
   }
+  // Les produits « invités » dans un rayon (aussiDans) n'ont pas de
+  // sous-catégorie dans ce rayon : ils apparaissent quand aucun filtre de
+  // sous-catégorie n'est actif, ce qui est le comportement attendu.
   if (activeCat === "bijoux" && activeType) {
     filtered = filtered.filter((p) => getJewelType(p) === activeType);
   }
@@ -253,7 +260,7 @@ export default async function BoutiquePage({ searchParams }) {
           // Vue « Tout » : produits regroupés par thème (au lieu d'être mélangés).
           menuCategories.map((c) => {
             const items = withImages
-              .filter((p) => p.category === c.slug)
+              .filter((p) => dansLeRayon(p, c.slug))
               .sort(makeProductSorter(c.slug, SUBS, PRODUCT_ORDER));
             if (!items.length) return null;
             return (
