@@ -248,6 +248,13 @@ Pour une fiche complète, ajouter une entrée `"slug": { material, usage, return
 - **Lettre fleurie** : `type:"lettreFleurie"` + `image:"/produits/alphabet-fleuri.jpg"` (A→Z)
 - **Photo à graver** : `type:"photo"` (téléversement + vérification atelier)
 - **Aperçu en direct** : `engraveImage` (photo du produit VIERGE, prise de face) + `engrave.box`
+  - **Ce qui se pose sur le produit** (règle de la gérante, 20/08/2026) : un **modèle numéroté** ou
+    la **photo** de la cliente → OUI, ils apparaissent sur la photo du produit ; la **lettre
+    fleurie** → NON, on ne la pose pas ; le **texte** écrit par la cliente → OUI, toujours, y
+    compris avec la lettre fleurie.
+  - Le placement de la zone se règle **dans le code** (`engrave.box`), pas dans l'admin : le faire
+    soi-même à partir de la photo vierge, puis lui demander « plus haut / plus grand » — ne pas lui
+    faire faire le réglage.
 - **Choix exclusif** : `showIfField` / `showIfValue` (ex. Texte / Photo)
 - ⚠️ **RIEN N'EST AFFICHÉ EN PERMANENCE** (demande de la gérante, 20/08/2026) : la fiche commence
   par **« Que voulez-vous faire graver ? »** (modèle n° / photo / lettre fleurie), et **seuls les
