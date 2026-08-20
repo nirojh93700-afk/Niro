@@ -1072,6 +1072,14 @@ Un souci à la réception ?
 
   "porte-cles-cristal-led-coeur": CRISTAL_LED_KEYRING_INFO,
   "porte-cles-cristal-led-rectangle": CRISTAL_LED_KEYRING_INFO,
+  "support-telephone-bois-grave": {
+    material:
+      "Bois clair découpé et gravé au laser dans notre atelier.\nDeux pièces plates qui s'emboîtent : aucun outil, aucune colle.\nUne fente en bas du dossier laisse passer le câble de recharge.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",
+    usage:
+      "Choisissez ce que vous voulez faire graver : un dessin parmi nos 42 modèles (couples, cadres, occasions), votre photo, ou une initiale fleurie.\nVous pouvez ajouter le texte de votre choix — prénom, date, petit mot — dans la police que vous préférez. Avec la lettre fleurie, ce texte se grave dans la bande, au milieu de la lettre.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
+    returns:
+      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nFabrication 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
+  },
   "porte-stylo-coq-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-portugal-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-argentine-coupe-du-monde": WORLDCUP_PEN_INFO,
