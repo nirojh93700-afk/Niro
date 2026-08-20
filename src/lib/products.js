@@ -47,6 +47,7 @@ export const SUBCATEGORIES = {
     { slug: "lampes", label: "Lampes" },
     { slug: "bougeoirs", label: "Bougeoir" },
     { slug: "porte-stylos", label: "Porte-stylos" },
+    { slug: "bureau", label: "Bureau" },
   ],
   cadeaux: [
     { slug: "cles-usb", label: "Clés USB" },
@@ -2386,7 +2387,7 @@ export const products = [
     cardImage: "/produits/support-telephone-photo.jpg",
     title: "Support téléphone en bois gravé — photo, dessin ou monogramme fleuri",
     category: "deco",
-    subcategory: "porte-stylos",
+    subcategory: "bureau",
     type: "Support téléphone bois",
     tagline: "Le support de bureau qui garde votre photo gravée dans le bois.",
     personalizable: true,
