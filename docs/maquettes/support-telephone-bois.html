@@ -93,14 +93,32 @@
         <div class="prix">14,90 € <small>+ livraison</small></div>
 
         <div class="champ">
-          <label>1 · Que voulez-vous graver ?</label>
-          <div class="faux">Une photo ▾ &nbsp;·&nbsp; Un monogramme fleuri &nbsp;·&nbsp; Un texte</div>
+          <label>Personnalisation — gravure</label>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+            <div style="border:2px solid var(--gold);border-radius:12px;padding:10px;text-align:center;background:#fffdf9"><b style="color:var(--gold-deep)">Modèles (n°)</b><br><small style="color:var(--ink-soft)">dessins 1 à 42</small></div>
+            <div style="border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;background:#fff"><b>Votre photo</b><br><small style="color:var(--ink-soft)">gravée dans le bois</small></div>
+            <div style="border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;background:#fff"><b>Lettre fleurie</b><br><small style="color:var(--ink-soft)">une initiale</small></div>
+            <div style="border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;background:#fff"><b>Texte seul</b><br><small style="color:var(--ink-soft)">prénom, date</small></div>
+          </div>
+          <p style="font-size:.85rem;color:var(--ink-soft);margin:8px 0 0">Exactement les mêmes onglets que sur le verre à vin et la carafe — <b>mêmes modèles numérotés</b>, <b>même alphabet fleuri</b>. Rien de nouveau à dessiner.</p>
+        </div>
+
+        <div class="champ">
+          <label>Choisissez un modèle <span style="font-weight:400;color:var(--ink-soft)">(facultatif)</span></label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="tag" style="border-color:var(--gold);color:var(--gold-deep);font-weight:700">Couples (1–13)</span>
+            <span class="tag">Noms &amp; cadres (14–25)</span>
+            <span class="tag">Dessins &amp; occasions (26–42)</span>
+          </div>
+          <div class="lettres" style="margin-top:8px">
+            <span>1</span><span>2</span><span>3</span><span class="on">4</span><span>5</span><span>6</span><span>7</span><span>…</span>
+          </div>
         </div>
 
         <div class="champ" style="border-left:3px solid var(--gold);padding-left:12px">
-          <label>Si « une photo » : votre photo</label>
+          <label>Ou votre photo</label>
           <div class="faux">📷 Choisir une photo…</div>
-          <p style="font-size:.85rem;color:var(--ink-soft);margin:6px 0 0">Un portrait rapproché, un couple, un animal, un enfant : la photo est gravée en brun dans le bois. Les images nettes et bien éclairées donnent le meilleur résultat.</p>
+          <p style="font-size:.85rem;color:var(--ink-soft);margin:6px 0 0">Un couple, un portrait, un enfant, un animal : la photo est gravée en brun dans le bois, dans un cadre. Les images nettes et bien éclairées donnent le meilleur résultat.</p>
         </div>
 
         <div class="champ">
@@ -116,10 +134,15 @@
         </div>
 
         <div class="apercu">
-          <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:8px">Aperçu — option monogramme</div>
-          <div class="mono">✦ B ✦</div>
-          <div style="border-top:1px solid #cbb994;border-bottom:1px solid #cbb994;margin:8px auto;padding:6px 0;max-width:220px;font-family:Georgia,serif;font-size:1.15rem;color:#7a5a2a">Bastien</div>
-          <div style="font-size:.8rem;color:var(--ink-soft)">Rendu indicatif — la gravure réelle reprend le dessin de la planche.</div>
+          <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:8px">Aperçu en direct — sur le chevalet vierge</div>
+          <div style="border:1px dashed var(--line);border-radius:12px;padding:22px 12px;background:linear-gradient(160deg,#fffdf9,#f4ecd9)">
+            <div style="font-size:.85rem;color:var(--ink-soft);margin-bottom:10px">Photo du support <b>vierge</b></div>
+            <div style="border:2px solid var(--gold);border-radius:8px;padding:14px 10px;max-width:190px;margin:0 auto;background:#fff">
+              <div class="mono" style="font-size:2rem">✦ B ✦</div>
+              <div style="border-top:1px solid #cbb994;border-bottom:1px solid #cbb994;margin:6px auto;padding:5px 0;font-family:Georgia,serif;font-size:1rem;color:#7a5a2a">Bastien</div>
+            </div>
+            <div style="font-size:.78rem;color:var(--ink-soft);margin-top:10px">Le modèle, la lettre ou la photo se posent ici — <b>déplaçables</b>, taille réglable, comme sur le verre à vin.</div>
+          </div>
         </div>
 
         <div class="btn-add">Ajouter au panier</div>
@@ -188,7 +211,8 @@
       <tr><td>Le bois</td><td>Un seul bois clair, ou plusieurs teintes au choix ?</td></tr>
       <tr><td>La gravure photo</td><td>Combien de temps vous prend une gravure photo par rapport à un monogramme ? Si c'est nettement plus long, elle mérite un supplément.</td></tr>
       <tr><td>Le texte libre</td><td>On propose aussi « un texte simple » (prénom, date, petit mot), ou seulement photo et monogramme ?</td></tr>
-      <tr><td>Les photos</td><td>Vos 2 photos + idéalement une 3<sup>e</sup> avec un téléphone posé dessus (ça rassure sur la taille)</td></tr>
+      <tr><td>La photo du chevalet VIERGE</td><td><b>C'est ce qu'il me faut en priorité.</b> C'est sur elle que se posera l'aperçu en direct (modèle, lettre ou photo du client), comme la photo du verre vide sert d'aperçu sur le verre à vin.</td></tr>
+      <tr><td>Une photo avec un téléphone</td><td>Idéalement une 3<sup>e</sup> vue avec un téléphone posé dessus : c'est ce qui rassure le plus sur la taille réelle</td></tr>
     </table>
     <p style="margin-top:14px">Répondez-moi ce que vous savez, et je corrige la maquette. Je ne touche au site que quand vous me direz « applique ».</p>
   </div>
