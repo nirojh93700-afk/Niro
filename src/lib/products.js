@@ -2395,7 +2395,6 @@ export const products = [
       "/produits/support-telephone-photo.jpg",
       "/produits/support-telephone-lettre.jpg",
       "/produits/support-telephone-vierge.jpg",
-      "/produits/support-telephone-ambiance.jpg",
     ],
     // Aperçu en direct : ce que la cliente choisit se pose sur le support VIERGE
     // (photo prise de face). Zone calée sur le panneau, réglée avec la gérante.
