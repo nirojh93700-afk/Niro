@@ -1078,7 +1078,15 @@ Un souci à la réception ?
     usage:
       "Il reçoit des serviettes en papier pliées, qui se glissent entre les deux panneaux (serviettes non fournies).\nCe modèle n'est pas personnalisable : le motif est découpé, il n'y a ni gravure ni texte.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
     returns:
-      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
+      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
+  },
+  "porte-serviettes-colombes": {
+    material:
+      "Bois clair découpé au laser dans notre atelier, posé sur une base contrastée qui fait ressortir le motif.\nTrois pièces : les colombes découpées devant, un panneau plein derrière, et la base à encoches.\nAucune colle, aucune vis : tout s'emboîte.\nLe veinage varie légèrement d'une pièce à l'autre — chaque porte-serviettes est unique.",
+    usage:
+      "Il reçoit des serviettes en papier pliées, qui se glissent entre les deux panneaux (serviettes non fournies).\nCe modèle n'est pas personnalisable : le motif est découpé, il n'y a ni gravure ni texte.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
+    returns:
+      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
   },
   "support-telephone-bois-ajoure": {
     material:

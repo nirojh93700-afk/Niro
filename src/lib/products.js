@@ -2532,17 +2532,18 @@ export const products = [
     // ===== Porte-serviettes de table (mis en ligne le 21/08/2026).
     // Objet DÉCORATIF : le motif est découpé, il n'y a aucune gravure et
     // aucune personnalisation (demande explicite de la gérante).
+    // Rangé dans Mariage & Réception (demande de la gérante : les deux
+    // porte-serviettes vont dans le mariage, et nulle part ailleurs).
     slug: "porte-serviettes-bois-fleur",
     badge: "Nouveau",
     name: "Porte-serviettes en bois — fleur",
     weight: 220,
-    pickup: false,
+    pickup: true, // décor de table : retrait en main propre possible
     letter: true, // trois pièces plates, expédié à plat
     cardImage: "/produits/porte-serviettes-1.jpg",
     title: "Porte-serviettes de table en bois — fleur et arabesques découpées",
-    category: "deco",
-    subcategory: "table",
-    aussiDans: ["mariage"],
+    category: "mariage",
+    subcategory: "table-deco",
     type: "Porte-serviettes bois",
     tagline: "Le petit détail qui habille une table, même quand il n'y a rien d'autre dessus.",
     personalizable: false,
@@ -2566,8 +2567,8 @@ export const products = [
   },
   {
     // ===== Porte-serviettes colombes (mis en ligne le 21/08/2026).
-    // Décor de table de mariage AVANT tout, mais il a sa place aussi en déco :
-    // `aussiDans` le fait apparaître dans les DEUX rayons (demande de la gérante).
+    // Décor de table de mariage. Rangé UNIQUEMENT dans Mariage & Réception
+    // (demande de la gérante).
     slug: "porte-serviettes-colombes",
     badge: "Nouveau",
     name: "Porte-serviettes colombes",
@@ -2578,7 +2579,6 @@ export const products = [
     title: "Porte-serviettes colombes en bois — deux oiseaux et un cœur",
     category: "mariage",
     subcategory: "table-deco",
-    aussiDans: ["deco"],
     type: "Porte-serviettes bois",
     tagline: "Deux colombes qui se font face autour d'un cœur : le décor de table des mariages.",
     personalizable: false,
