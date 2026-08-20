@@ -116,7 +116,23 @@
         <select style="width:100%"><option>— Choisir —</option><option>Playfair</option><option>Great Vibes</option><option>Cinzel</option></select>
       </div>
 
-      <button class="btn btn-gold" style="width:100%;margin-top:18px">Ajouter au panier</button>
+      <!-- Comme sur les autres fiches : total tout compris, paiement en plusieurs
+           fois, puis la quantité à côté du bouton. -->
+      <div class="pd-totbox" style="margin-top:18px">
+        <span class="lab">Total tout compris</span>
+        <span class="val">12,90 €</span>
+      </div>
+      <p class="pd-nfois">
+        💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <span class="pd-nfois-link">En savoir plus</span>
+      </p>
+      <div class="qty-row">
+        <div class="qty-stepper">
+          <button type="button" aria-label="Moins">−</button>
+          <span>1</span>
+          <button type="button" aria-label="Plus">+</button>
+        </div>
+        <button class="btn btn-gold" style="flex:1">Ajouter au panier</button>
+      </div>
 
       <div class="trust-cards" style="margin-top:18px">
         <div class="tcard fr"><span class="ti">🇫🇷</span><span><b>Fabriqué en France</b><small>Dans notre atelier</small></span></div>
