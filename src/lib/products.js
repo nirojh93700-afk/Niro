@@ -15,7 +15,7 @@ export const CATEGORIES = [
   { slug: "naissance", label: "Naissance", short: "Naissance" },
   { slug: "verres", label: "Verres & Carafes", short: "Verres & Carafes" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
-  { slug: "deco", label: "Déco & Maison", short: "Déco" },
+  { slug: "deco", label: "Déco & Maison", short: "Déco & Maison" },
   { slug: "cadeaux", label: "Cadeaux & Accessoires", short: "Cadeaux" },
 ];
 
