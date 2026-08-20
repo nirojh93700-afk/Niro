@@ -2487,6 +2487,50 @@ export const products = [
 <p>Chaque support est gravé à la commande. Comptez 3 à 5 jours ouvrés de fabrication.</p>`,
   },
   {
+    // ===== Support téléphone en bois AJOURÉ (mis en ligne le 21/08/2026).
+    // Ici le motif est DÉCOUPÉ, pas gravé : pas de photo, pas de dessin, pas de
+    // lettre fleurie possibles sur le panneau. Seule personnalisation : un
+    // prénom gravé sur la base (option payante, comme sur les bijoux).
+    slug: "support-telephone-bois-ajoure",
+    badge: "Nouveau",
+    name: "Support téléphone en bois ajouré",
+    weight: 160,
+    pickup: false,
+    letter: true, // expédié à plat en lettre suivie
+    cardImage: "/produits/support-ajoure-1.jpg",
+    title: "Support téléphone en bois ajouré — feuilles et lierre découpés",
+    category: "deco",
+    subcategory: "bureau",
+    type: "Support téléphone bois",
+    tagline: "La dentelle de bois qui tient votre téléphone — et qui dessine son ombre sur le bureau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur la base (en option)",
+    images: [
+      "/produits/support-ajoure-1.jpg",
+      "/produits/support-ajoure-2.jpg",
+      "/produits/support-ajoure-3.jpg",
+    ],
+    personalizationFields: [
+      { key: "prenom", label: "Le prénom à graver", placeholder: "Ex. Camille", maxLength: 12,
+        optional: true, variantContains: "prénom" },
+      { key: "police", type: "font", label: "Police du prénom", optional: true, variantContains: "prénom" },
+      { key: "note", type: "note", text: "Le motif est découpé dans le bois : il n'est pas modifiable. Seul le prénom, en option, est gravé sur la base — la bande pleine sous le motif. Un prénom court reste net." },
+    ],
+    variants: [
+      { id: "support-ajoure-simple", title: "Sans gravure", price: 12.90 },
+      { id: "support-ajoure-prenom", title: "Avec un prénom gravé", price: 15.90 },
+    ],
+    descriptionHtml: `<p><strong>Un support de téléphone découpé à jour dans le bois.</strong> Feuilles d'érable, lierre et glands s'entrelacent sous une arche : le motif traverse le panneau de part en part. Posé près d'une fenêtre ou d'une lampe, il projette son dessin en ombre sur le bureau.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> bois clair, <strong>découpé au laser</strong> — le motif est ajouré, pas gravé</li>
+<li><strong>Montage :</strong> deux pièces qui s'emboîtent, sans colle ni vis</li>
+<li><strong>Forme :</strong> panneau en arche, base à découpe arrondie</li>
+<li><strong>Personnalisation :</strong> un prénom peut être gravé sur la base, en option</li>
+</ul>
+<p>Bois clair naturel : le veinage varie légèrement d'une pièce à l'autre — chaque support est unique.</p>`,
+  },
+  {
     slug: "porte-stylo-coq-coupe-du-monde",
     worldcup: true,
     badge: "Nouveau",

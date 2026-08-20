@@ -103,7 +103,7 @@ export const GUIDES = [
   },
   {
     slug: "porte-stylo-bois-personnalise",
-    auto: { motCle: /porte-stylo/i },
+    auto: { motCle: /porte-stylo|support t(é|e)l(é|e)phone/i },
     nav: "Porte-stylo",
     title: "Porte-stylo en bois personnalisé — cadeau supporter et bureau",
     description:
@@ -146,7 +146,7 @@ export function guidePourProduit(product) {
   const nom = `${slug} ${product.name || ""}`.toLowerCase();
 
   if (cat === "cristal" || nom.includes("cristal")) return getGuide("cristal-photo-3d");
-  if (/porte-stylo/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
+  if (/porte-stylo|support t(é|e)l(é|e)phone/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
   if (/usb/.test(nom)) return getGuide("cle-usb-personnalisee-gravee");
   if (/porte-cl(é|e)s|piece ronde|pièce ronde|laiton/.test(nom)) return getGuide("porte-cles-piece-a-graver");
   if (/couverts|plaque de porte/.test(nom)) return getGuide("cadeau-enfant-personnalise");

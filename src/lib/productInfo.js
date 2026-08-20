@@ -1072,6 +1072,14 @@ Un souci à la réception ?
 
   "porte-cles-cristal-led-coeur": CRISTAL_LED_KEYRING_INFO,
   "porte-cles-cristal-led-rectangle": CRISTAL_LED_KEYRING_INFO,
+  "support-telephone-bois-ajoure": {
+    material:
+      "Bois clair découpé au laser dans notre atelier.\nLe motif — feuilles d'érable, lierre et glands — est ajouré : il traverse le panneau de part en part.\nDeux pièces plates qui s'emboîtent, sans colle ni vis.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",
+    usage:
+      "Le motif est découpé : il n'est pas modifiable et ne peut pas recevoir de photo ni de dessin.\nEn option, un prénom est gravé sur la base, la bande pleine sous le motif. La base étant étroite, un prénom court reste le plus lisible.\nUn chiffon doux suffit pour l'entretien. Évitez les endroits humides.",
+    returns:
+      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nAvec un prénom gravé, la pièce est personnalisée : elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Sans gravure, le retour reste possible sous 14 jours, frais de retour à votre charge.",
+  },
   "support-telephone-bois-grave": {
     material:
       "Bois clair découpé et gravé au laser dans notre atelier.\nDeux pièces plates qui s'emboîtent : aucun outil, aucune colle.\nUne fente en bas du dossier laisse passer le câble de recharge.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",
