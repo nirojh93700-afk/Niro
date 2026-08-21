@@ -68,14 +68,23 @@ export function engravingExtra(product, fields = {}, variantId = null) {
   }
   const included = cfg.includedKey;
   // On compte les champs de texte non vides, hors couverture incluse.
+  // ⚠️ Une même clé peut exister en PLUSIEURS exemplaires (un champ par option,
+  // affiché selon la variante — ex. support téléphone) : on ne la compte qu'une fois.
+  const clesVues = new Set();
   const textFields = (product.personalizationFields || []).filter((f) => {
     const t = f.type;
-    return (t === undefined || t === "text" || t === "textarea") && f.key !== included;
+    if (!(t === undefined || t === "text" || t === "textarea") || f.key === included) return false;
+    if (clesVues.has(f.key)) return false;
+    clesVues.add(f.key);
+    return true;
   });
   let pages = 0;
   for (const f of textFields) {
     if ((fields[f.key] || "").toString().trim()) pages++;
   }
+  // Le compteur de « pages » ne sert qu'aux produits facturés à la page : sans
+  // tarif par page, on ne l'affiche pas (le libellé « N pages de texte » serait faux).
+  if (!cfg.perExtraPage) pages = 0;
   // Supplément photo (si une photo a été ajoutée).
   const photoVal = cfg.photoKey ? (fields[cfg.photoKey] || "").toString().trim() : "";
   const photo = Boolean(photoVal);

@@ -1146,13 +1146,15 @@ export default function ProductDetail({ product }) {
                 fontClass={previewFontClass}
                 color={previewColor}
                 cfg={editCfg}
-                {...(styleMotifSrc && !styleZone
+                {...((styleMotifSrc || editPhotoSrc) && !styleZone
                   ? (() => {
-                      // Modèle-image SANS zone d'écriture (ex. couples) : on protège le
-                      // logo — le texte se pose SOUS le motif et ne peut pas remonter.
+                      // Modèle-image ou PHOTO envoyée, sans zone d'écriture : on protège
+                      // le visuel — le texte se pose SOUS l'image par défaut et ne peut
+                      // pas remonter dessus (demande de la gérante, 21/08/2026).
                       const box = editCfg?.box || { top: 0.17, height: 0.24 };
-                      const mb = photoLayout
-                        ? (photoLayout.cy ?? 0.29) + (photoLayout.size ?? 0.28) * (photoLayout.aspect ?? 1) / 2
+                      const lay = (dualMode && side === "fond") ? photoLayoutFond : photoLayout;
+                      const mb = lay
+                        ? (lay.cy ?? 0.29) + (lay.size ?? 0.28) * (lay.aspect ?? 1) / 2
                         : box.top + box.height;
                       return { initCy: Math.max(0.3, Math.min(0.9, mb + 0.05)), yMin: Math.min(0.9, mb + 0.02), yMax: 0.95 };
                     })()
