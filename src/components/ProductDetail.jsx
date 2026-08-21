@@ -650,7 +650,11 @@ export default function ProductDetail({ product }) {
 
   function loadImg(src) {
     return new Promise((res, rej) => {
-      const im = new Image();
+      // window.Image : le VRAI constructeur du navigateur. « new Image() » nu
+      // prenait le composant next/image importé en haut du fichier (même nom)
+      // → « not a constructor » → TOUTES les compositions d'aperçu échouaient
+      // en silence (repli photo brute). Découvert le 21/08/2026.
+      const im = new window.Image();
       im.crossOrigin = "anonymous"; // évite le canvas "contaminé" sur iOS (CDN)
       im.onload = () => res(im);
       im.onerror = rej;
@@ -660,6 +664,48 @@ export default function ProductDetail({ product }) {
   // Compose le visuel EXACT : la photo du verre + l'image/photo choisie, posée
   // dans la zone gravable. 100 % fiable (canvas + fichiers même origine), contrairement
   // à une capture d'écran du DOM (qui n'arrivait pas à inclure l'image Next.js).
+  // Aperçu EXACT du montage de la cliente : la photo vierge + le motif/la photo
+  // à l'endroit et à la taille qu'elle a choisis (glisser/curseur), + son texte
+  // dans sa police. Joint à la commande (admin + e-mail) pour graver à l'identique.
+  async function composeEditorScene(glassUrl, box) {
+    const g = await loadImg(glassUrl);
+    const W = g.naturalWidth || 800, H = g.naturalHeight || 800;
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(g, 0, 0, W, H);
+    const art = photoSrc || styleMotifSrc;
+    if (art) {
+      const a = await loadImg(art);
+      const ar = (a.naturalWidth || 1) / (a.naturalHeight || 1);
+      const lay = photoLayout;
+      let dw, dh, ccx, ccy;
+      if (lay && lay.size) {
+        dw = lay.size * W; dh = dw / ar;
+        ccx = (lay.cx ?? 0.5) * W; ccy = (lay.cy ?? 0.5) * H;
+      } else {
+        dw = box.width * W * 0.75; dh = dw / ar;
+        if (dh > box.height * H) { dh = box.height * H * 0.75; dw = dh * ar; }
+        ccx = (box.left + box.width / 2) * W; ccy = (box.top + box.height / 2) * H;
+      }
+      if (!photoSrc) { ctx.filter = "grayscale(1) contrast(1.15)"; ctx.globalAlpha = 0.92; }
+      ctx.drawImage(a, ccx - dw / 2, ccy - dh / 2, dw, dh);
+      ctx.filter = "none"; ctx.globalAlpha = 1;
+    }
+    if (previewLines.length > 0) {
+      const lay = textLayout;
+      const fam = fontFamilyFor(getFontClass(fieldValues[fontField?.key] || "playfair"));
+      const fs = Math.max(10, (lay?.fitScale || lay?.scale || 0.05) * W);
+      ctx.fillStyle = ENGRAVE_PREVIEW;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.font = `${fs}px ${fam}`;
+      const tcx = (lay?.cx ?? (box.left + box.width / 2)) * W;
+      const tcy = (lay?.cy ?? (box.top + box.height * 0.85)) * H;
+      const lh = fs * 1.15;
+      const y0 = tcy - ((previewLines.length - 1) * lh) / 2;
+      previewLines.forEach((l, i) => ctx.fillText(l, tcx, y0 + i * lh));
+    }
+    return c.toDataURL("image/jpeg", 0.9);
+  }
   async function composeOnGlass(glassUrl, artUrl, box) {
     const [g, a] = await Promise.all([loadImg(glassUrl), loadImg(artUrl)]);
     const W = g.naturalWidth || 800, H = g.naturalHeight || 800;
@@ -834,7 +880,16 @@ export default function ProductDetail({ product }) {
         const fondBox = (product.engraveFond && product.engraveFond.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
         // FACE : photo envoyée, sinon design image choisi (Fête des pères) — version foncée.
         const faceArt = photoSrc || (dsg ? dsg.dark : null);
-        if (faceArt) {
+        // Montage libre (motif n° / photo + texte placés par la cliente) : aperçu
+        // composé À L'IDENTIQUE de ce qu'elle voit (position + taille + police).
+        if (!modeleField && (photoSrc || styleMotifSrc || previewLines.length > 0)) {
+          artworkImage = photoSrc || styleMotifSrc || null;
+          if (photoSrc) previewImage = photoSrc; // repli garanti si le canvas échoue
+          try {
+            const composed = await composeEditorScene(glass, faceBox);
+            if (composed) previewImage = (await uploadDataUrl(composed)) || previewImage || composed;
+          } catch { /* on garde le repli */ }
+        } else if (faceArt) {
           // GARANTI : on montre au moins l'image/design choisi (même si le canvas
           // échoue sur certains tel.). Puis on tente la jolie compo sur le verre.
           artworkImage = faceArt;

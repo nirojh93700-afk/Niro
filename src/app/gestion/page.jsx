@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { formatEuro } from "@/lib/format";
-import { getCategoryLabel } from "@/lib/products";
+import { getCategoryLabel, getProductBySlug } from "@/lib/products";
+import { TableGravure } from "@/lib/engravingSheet";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import TaxonomyAdmin from "@/components/admin/TaxonomyAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
@@ -1128,7 +1129,7 @@ export default function GestionPage() {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={apercu} alt="Aperçu de la gravure" title="Ce que la cliente a demandé" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: "2px solid var(--gold-dark, #a98935)", flexShrink: 0, background: "#fff" }} />
                         )}
-                        <span style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <strong>{it.quantity}× {it.name}</strong>
                           {couleur && (
                             <span style={{ display: "inline-block", marginLeft: 8, padding: "1px 9px", borderRadius: 999, background: "#f7ecd4", border: "1px solid #e0c88a", color: "#8a6d1f", fontSize: "0.8rem", fontWeight: 700, verticalAlign: "middle" }}>
@@ -1136,7 +1137,33 @@ export default function GestionPage() {
                             </span>
                           )}
                           {reste ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{reste}</span> : null}
-                        </span>
+                          {/* Encadré « Gravure » lisible : chaque choix sur sa ligne
+                              (n° du dessin avec sa vignette, texte, police, photo). */}
+                          {(() => {
+                            const s = Array.isArray(o.spec) ? (o.spec.find((x) => x && x.slug === it.slug) || o.spec[i]) : null;
+                            if (!s?.fields) return null;
+                            const prod = getProductBySlug(s.slug);
+                            const num = (s.fields.numstyle || "").toString().trim();
+                            const vignette = num && prod?.styleImages?.[num];
+                            return (
+                              <div style={{ marginTop: 6, padding: "7px 10px", background: "#fdfaf3", border: "1px solid #ece0c4", borderRadius: 8 }}>
+                                <TableGravure item={s} titre={false} />
+                                {vignette && (
+                                  <span style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src={vignette} alt={`Dessin n° ${num}`} style={{ width: 44, height: 44, objectFit: "contain", background: "#fff", border: "1px solid #e7d3a1", borderRadius: 6 }} />
+                                    <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Dessin n° {num}</span>
+                                  </span>
+                                )}
+                                {s.photoSrc && (
+                                  <a href={s.photoSrc} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 4, fontSize: "0.82rem", color: "var(--gold-dark, #a98935)", fontWeight: 600 }}>
+                                    📷 Ouvrir la photo envoyée par la cliente
+                                  </a>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </div>
                         <span style={{ whiteSpace: "nowrap", fontWeight: 600 }}>{formatEuro(it.total)}</span>
                       </li>
                     );

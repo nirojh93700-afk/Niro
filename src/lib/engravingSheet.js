@@ -25,6 +25,7 @@ export function lignesGravure(item) {
     let texte = brut.trim();
     if (f.type === "font") texte = getFontLabel(texte) || texte;
     else if (f.type === "select") texte = (f.options || []).find((o) => o.value === texte)?.label || texte;
+    else if (f.type === "stylepicker") texte = `n° ${texte}`; // renvoie aux dessins numérotés de la fiche
     lignes.push({ face: f.type === "font" ? "Police de gravure" : face, texte, police: f.type === "font" });
   }
   return lignes;
