@@ -2284,6 +2284,57 @@ export const products = [
 </ul>`,
   },
   {
+    // ===== Veilleuse Arbre de Vie au prénom (mise en ligne le 21/08/2026).
+    // Validé par la gérante : 34,90 € · personnage Stitch conservé sur les
+    // photos · LED à piles · couleur de la lumière au choix (6 teintes).
+    slug: "veilleuse-arbre-de-vie-prenom",
+    badge: "Nouveau",
+    name: "Veilleuse Arbre de Vie au prénom",
+    weight: 400,
+    pickup: false,
+    letter: false, // colis (comme la veilleuse ronde existante)
+    cardImage: "/produits/veilleuse-prenom-1.jpg",
+    title: "Veilleuse Arbre de Vie personnalisée au prénom — lumière LED",
+    category: "deco",
+    subcategory: "lampes",
+    type: "Lampe LED déco",
+    tagline: "L'arbre de vie s'illumine, le prénom veille juste en dessous.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé + couleur de la lumière au choix",
+    images: [
+      "/produits/veilleuse-prenom-1.jpg",
+      "/produits/veilleuse-prenom-2.jpg",
+      "/produits/veilleuse-prenom-3.jpg",
+      "/produits/veilleuse-prenom-4.jpg",
+      "/produits/veilleuse-prenom-5.jpg",
+    ],
+    personalizationFields: [
+      { key: "couleurLed", type: "select", label: "Couleur de la lumière", options: [
+        { value: "bleu", label: "Bleu" },
+        { value: "blanc-chaud", label: "Blanc chaud" },
+        { value: "blanc", label: "Blanc" },
+        { value: "vert", label: "Vert" },
+        { value: "rouge", label: "Rouge" },
+        { value: "jaune", label: "Jaune" },
+      ] },
+      { key: "prenom", label: "Le prénom à graver", placeholder: "Ex. Chloé", maxLength: 20 },
+      { key: "police", type: "font", label: "Police du prénom", optional: true },
+      { key: "note", type: "note", text: "Les prénoms sur les photos sont des exemples — le vôtre est gravé à la commande. LED à piles." },
+    ],
+    variants: [
+      { id: "veilleuse-arbre-vie-prenom", title: "Veilleuse Arbre de Vie au prénom", price: 34.90 },
+    ],
+    descriptionHtml: `<p><strong>Une veilleuse en bois découpé, gravée au prénom de votre choix.</strong> L'arbre de vie est ajouré dans le panneau de bois clair ; derrière, un fond coloré s'illumine et dessine chaque feuille, chaque racine — et le halo passe aussi par les fentes du pourtour. Le prénom est gravé juste sous l'arbre, dans l'écriture que vous choisissez.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> bois clair découpé et gravé au laser, fond acrylique coloré</li>
+<li><strong>Éclairage :</strong> LED douce à piles — couleur au choix (bleu, blanc chaud, blanc, vert, rouge, jaune)</li>
+<li><strong>Personnalisation :</strong> le prénom gravé sous l'arbre, dans l'une de nos 8 écritures</li>
+<li><strong>Socle :</strong> rond, ajouré, emboîté — la veilleuse tient debout toute seule</li>
+</ul>
+<p>Dans une chambre d'enfant ou sur une table de chevet, c'est la petite lumière qui rassure — et un cadeau de naissance ou d'anniversaire qui reste.</p>`,
+  },
+  {
     slug: "bougeoir-mandala-bois",
     badge: "Nouveau",
     name: "Bougeoir Flottant",

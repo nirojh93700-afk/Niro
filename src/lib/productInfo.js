@@ -1088,6 +1088,14 @@ Un souci à la réception ?
     returns:
       "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
   },
+  "veilleuse-arbre-de-vie-prenom": {
+    material:
+      "Bois clair découpé et gravé au laser dans notre atelier, sur un fond acrylique coloré qui diffuse la lumière.\nSocle rond ajouré, emboîté — la veilleuse tient debout toute seule.\nÉclairage LED doux, alimenté par piles.\nLe veinage du bois varie légèrement d'une pièce à l'autre — chaque veilleuse est unique.",
+    usage:
+      "Le prénom est gravé sous l'arbre, dans l'une de nos 8 écritures — les prénoms des photos sont des exemples.\nLa couleur de la lumière se choisit à la commande : bleu, blanc chaud, blanc, vert, rouge ou jaune.\nUn chiffon doux et sec suffit pour l'entretien. Ne pas mouiller.",
+    returns:
+      "Expédiée en colis suivi, à domicile ou en point relais.\nGravure et montage 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien le prénom avant de valider.",
+  },
   "support-telephone-bois-ajoure": {
     material:
       "Bois clair découpé au laser dans notre atelier.\nLe motif — feuilles d'érable, lierre et glands — est ajouré : il traverse le panneau de part en part.\nDeux pièces plates qui s'emboîtent, sans colle ni vis.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",

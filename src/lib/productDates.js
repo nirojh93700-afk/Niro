@@ -61,6 +61,7 @@ export const PRODUCT_DATES = {
   "veilleuse-arbre-de-vie-ronde": "2026-06-26",
   "bougeoir-mandala-bois": "2026-06-26",
   "bougeoir-fleur-de-lotus": "2026-06-26",
+  "veilleuse-arbre-de-vie-prenom": "2026-08-21",
   "support-telephone-bois-grave": "2026-08-20",
   "support-telephone-bois-ajoure": "2026-08-20",
   "porte-serviettes-bois-fleur": "2026-08-20",
