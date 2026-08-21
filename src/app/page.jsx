@@ -1,6 +1,9 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import NewArrivalsToast from "@/components/NewArrivalsToast";
+import BandeauAccueil, { prixBandeau } from "@/components/home/BandeauAccueil";
+import MurAtelier from "@/components/home/MurAtelier";
+import { dateAjout } from "@/lib/productDates";
 import { PaymentLogos } from "@/components/PaymentBand";
 import PayInfoModal from "@/components/PayInfo";
 import { getProductBySlug } from "@/lib/products";
@@ -90,16 +93,38 @@ export default async function HomePage() {
     text2: pick(s?.atelier?.text2, ATELIER_DEFAULTS.text2),
     image: pick(s?.atelier?.image, ATELIER_DEFAULTS.image),
   };
-  const show = { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, ...(s?.sections || {}) };
-  // Nouveautés : TOUS les produits taggés « Nouveau ». Les verres gravés en tête
-  // (ordre catalogue), puis le reste (les plus récents d'abord).
-  const allNew = catalog.filter((p) => p.badge === "Nouveau");
-  const newProducts = [
-    ...allNew.filter((p) => p.category === "verres"),
-    ...allNew.filter((p) => p.category !== "verres").reverse(),
-  ].slice(0, 8);
+  const show = { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, verresBand: true, mur: true, ...(s?.sections || {}) };
+  // Bandeau « Vient d'arriver » : les 4 produits les PLUS RÉCENTS du catalogue
+  // (dates d'ajout dans productDates.js ; à date égale, le dernier du fichier
+  // gagne). 100 % automatique : un nouveau produit passe en tête tout seul.
+  const avecImage = catalog.filter((p) => p.cardImage || p.images?.[0]);
+  const derniers = avecImage
+    .map((p, i) => ({ p, d: dateAjout(p.slug) || "", i }))
+    .filter((x) => x.d)
+    .sort((a, b) => (a.d === b.d ? b.i - a.i : b.d.localeCompare(a.d)))
+    .slice(0, 4)
+    .map((x) => x.p);
+  const derniersItems = derniers.map((p) => ({
+    slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0],
+    prix: prixBandeau(p), badge: p.badge === "Nouveau" ? "Nouveau" : "",
+  }));
+  // Bandeau « Verres & carafes gravés » : la gamme verres, carafe comprise.
+  // Lu dans le catalogue en direct (un verre masqué disparaît tout seul).
+  const VERRES_BANDEAU = [
+    "verre-a-whisky-grave", "verre-a-whisky-fete-des-peres", "verre-a-vin-grave",
+    "flute-a-champagne-gravee", "carafe-a-whisky-gravee",
+  ];
+  const verresItems = VERRES_BANDEAU
+    .map((sl) => catalog.find((p) => p.slug === sl))
+    .filter((p) => p && (p.cardImage || p.images?.[0]))
+    .map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0], prix: prixBandeau(p), badge: "" }));
+  // Mur de l'atelier : TOUTES les créations visibles du catalogue.
+  const murItems = avecImage.map((p) => {
+    const prix = prixBandeau(p);
+    return { slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0], prixTexte: prix ? `${prix.des ? "dès " : ""}${prix.texte}` : "" };
+  });
   // Pour la petite fenêtre flottante.
-  const newItems = newProducts.map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));
+  const newItems = derniers.map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));
 
   return (
     <>
@@ -206,23 +231,29 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* NOUVEAUTÉS — alimenté automatiquement par le badge « Nouveau » */}
-      {show.newArrivals && newProducts.length > 0 && (
-        <section className="section new-arrivals" style={{ background: "linear-gradient(180deg,#fbf4e6 0%,#fffdf9 65%)", borderTop: "1px solid #efe2c2" }}>
-          <div className="container">
-            <div className="section-head">
-              <span className="eyebrow" style={{ color: "var(--gold-dark)" }}>✦ Vient d'arriver</span>
-              <h2>Nos nouveautés</h2>
-              <p>Les dernières créations sorties de notre atelier — à découvrir en avant-première.</p>
-            </div>
-            <div className="product-grid">
-              {newProducts.map((p) => { const r = ratings[p.slug]; const mk = Number(s?.refMarkup) > 0; return (<ProductCard key={p.slug} product={{ ...p, ...(mk ? { refMarkup: Number(s.refMarkup) } : {}), ...(r ? { rating: r } : {}) }} />); })}
-            </div>
-            <div style={{ textAlign: "center", marginTop: 34 }}>
-              <Link href="/boutique" className="btn btn-gold">Découvrir toutes les nouveautés</Link>
-            </div>
-          </div>
-        </section>
+      {/* VIENT D'ARRIVER — les 4 derniers produits ajoutés (automatique, par date) */}
+      {show.newArrivals && (
+        <BandeauAccueil
+          eyebrow="Vient d'arriver"
+          title="Les dernières sorties de l'atelier"
+          text="Nos créations ajoutées ces derniers jours."
+          linkHref="/boutique"
+          linkLabel="Voir toutes les nouveautés"
+          items={derniersItems}
+        />
+      )}
+
+      {/* VERRES & CARAFES GRAVÉS — la gamme verres, sous son vrai nom */}
+      {show.verresBand && (
+        <BandeauAccueil
+          eyebrow="Notre spécialité"
+          title="Verres & carafes gravés"
+          text="Whisky, vin, champagne, carafe — gravés à la commande dans notre atelier."
+          linkHref="/boutique/verres"
+          linkLabel="Voir tous les verres & carafes"
+          items={verresItems}
+          cinq
+        />
       )}
 
       {/* CATÉGORIES */}
@@ -348,6 +379,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      {/* LE MUR DE L'ATELIER — toutes les créations visibles, en défilement doux */}
+      {show.mur && <MurAtelier items={murItems} />}
       <NewArrivalsToast items={newItems} />
     </>
   );

@@ -18,6 +18,7 @@ import {
   productSoldOut,
 } from "./stock";
 import { resolveCategories } from "./taxonomy";
+import { estRecent } from "./productDates";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
@@ -148,8 +149,13 @@ export async function getCatalog() {
     // par défaut selon son type (impossible d'oublier le packaging d'un bijou).
     const assign = pkgAssign[p.slug] || defaultPackagingFor(p);
     const packaging = pkgLive ? resolvePackaging(assign, pkgLib) : null;
+    // Étiquette « Nouveau » automatique : elle s'éteint toute seule 30 jours
+    // après l'ajout du produit (dates dans productDates.js). Les autres
+    // étiquettes (Promo, etc.) ne sont pas touchées.
+    const badge = p.badge === "Nouveau" && !estRecent(p.slug) ? "" : p.badge;
     return {
       ...p,
+      badge,
       ...(refMarkup > 0 ? { refMarkup } : {}),
       ...(packaging ? { packaging } : {}),
       soldOut: productSoldOut(p, stock),

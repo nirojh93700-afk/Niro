@@ -3415,3 +3415,65 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .guide .guide-grille .grid { margin-top: 0; }
 .guide .guide-grille-titre { margin: 0 0 4px; }
 .guide-prix-barre { color: var(--ink-soft); text-decoration: line-through; font-weight: 500; }
+
+/* ============================================================
+   PAGE D'ACCUEIL — bandeaux « Vient d'arriver » / « Verres & carafes »
+   et « mur de l'atelier » (maquette accueil-mur-tout-en-bas, validée 21/08/2026)
+   ============================================================ */
+.na-band { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 22px 0 24px; }
+.na-band + .na-band { border-top: 0; background: linear-gradient(180deg, #fbf4e6 0%, #fffdf9 65%); }
+.na-wrap { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 26px; align-items: center; }
+.na-head { min-width: 0; }
+.na-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); font-weight: 700; }
+.na-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: napulse 2.6s infinite; }
+@keyframes napulse { 0% { box-shadow: 0 0 0 0 rgba(194, 161, 78, 0.55); } 70% { box-shadow: 0 0 0 9px rgba(194, 161, 78, 0); } 100% { box-shadow: 0 0 0 0 rgba(194, 161, 78, 0); } }
+.na-head h2 { font-family: var(--font-display), Georgia, serif; font-weight: 600; font-size: 1.32rem; line-height: 1.25; margin: 9px 0 6px; text-wrap: balance; color: var(--ink); }
+.na-head p { margin: 0 0 10px; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5; }
+.na-all { font-size: 0.86rem; font-weight: 600; color: var(--gold-dark); text-decoration: none; border-bottom: 1px solid rgba(169, 137, 53, 0.4); padding-bottom: 2px; }
+.na-all:hover { border-bottom-color: var(--gold-dark); }
+.na-rail { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; min-width: 0; }
+.na-rail5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.na-item { display: flex; flex-direction: column; gap: 7px; text-decoration: none; color: inherit; min-width: 0; }
+.na-pic { position: relative; display: block; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: var(--cream); border: 1px solid var(--line); }
+.na-pic img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
+.na-item:hover .na-pic img { transform: scale(1.06); }
+.na-item:focus-visible { outline: 2px solid var(--gold-dark); outline-offset: 3px; border-radius: 12px; }
+.na-tag { position: absolute; top: 7px; left: 7px; background: rgba(255, 253, 249, 0.94); color: var(--gold-dark); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
+.na-name { font-size: 0.84rem; line-height: 1.35; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.na-price { font-size: 0.86rem; font-weight: 700; color: var(--gold-dark); font-variant-numeric: tabular-nums; }
+.na-price small { font-weight: 400; color: var(--ink-soft); }
+@media (max-width: 860px) {
+  .na-wrap { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .na-head h2 { font-size: 1.18rem; }
+  .na-rail, .na-rail5 { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 6px; margin: 0 -4px; padding-inline: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .na-rail::-webkit-scrollbar { display: none; }
+  .na-item { flex: 0 0 42vw; max-width: 190px; scroll-snap-align: start; }
+}
+@media (prefers-reduced-motion: reduce) { .na-dot { animation: none; } .na-pic img { transition: none; } }
+
+/* — Le mur de l'atelier — */
+.mur { background: linear-gradient(180deg, #241a0c, #2b2115 80%); padding: 46px 0 50px; overflow: hidden; }
+.mur .section-head h2 { color: #f6efe2; }
+.mur .section-head p { color: #cdbfa4; }
+.mur-rails { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
+.mur-r { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.mur-piste { display: flex; width: max-content; animation: murfile 90s linear infinite; }
+.mur-serie { display: flex; gap: 12px; padding-right: 12px; }
+.mur-inv .mur-piste { animation-direction: reverse; }
+.mur-r.mur-stop .mur-piste { animation-play-state: paused; }
+@keyframes murfile { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.mur-t { position: relative; flex: 0 0 auto; width: 118px; height: 118px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(226, 198, 126, 0.22); background: #1a1206; display: block; }
+.mur-t img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease, filter 0.3s ease; }
+.mur-t:hover img, .mur-t:focus-visible img { transform: scale(1.12); filter: brightness(0.55); }
+.mur-t:focus-visible { outline: 2px solid #e2c67e; outline-offset: 2px; }
+.mur-l { position: absolute; inset: auto 0 0 0; padding: 7px 8px; display: flex; flex-direction: column; gap: 1px; opacity: 0; transition: opacity 0.25s ease; background: linear-gradient(0deg, rgba(18, 12, 5, 0.88), transparent); }
+.mur-t:hover .mur-l, .mur-t:focus-visible .mur-l { opacity: 1; }
+.mur-l b { font-size: 0.62rem; line-height: 1.25; color: #fff; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.mur-l i { font-style: normal; font-size: 0.6rem; color: #e2c67e; font-weight: 700; }
+.mur-cta { text-align: center; margin-top: 30px; }
+.mur-compteur { display: inline-flex; align-items: center; gap: 8px; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: #e2c67e; font-weight: 700; }
+@media (max-width: 640px) { .mur-t { width: 96px; height: 96px; } .mur-piste { animation-duration: 60s; } }
+@media (prefers-reduced-motion: reduce) {
+  .mur-piste { animation: none; }
+  .mur-r { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+}

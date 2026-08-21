@@ -283,6 +283,11 @@ sont **récupérables** dans le transcript de session (`~/.claude/projects/…/<
    couleur, photo…).
 4. **Ajouter** l'objet produit dans `src/lib/products.js` (et une entrée dans
    `src/lib/productInfo.js`).
+4ter. **⚠️ DATE D'AJOUT OBLIGATOIRE** : ajouter le slug + la date du jour dans
+   `src/lib/productDates.js` (`PRODUCT_DATES`). C'est elle qui : 1) fait passer le produit
+   **en tête du bandeau « Vient d'arriver »** de l'accueil ; 2) **éteint l'étiquette
+   « Nouveau » au bout de 30 jours** (autom., `estRecent()` appliqué dans `getCatalog`).
+   Sans date : pas de bandeau, pas d'étiquette.
 4bis. **⚠️ RÈGLE OBLIGATOIRE — UN NOUVEAU PRODUIT DOIT RESSEMBLER AUX AUTRES DU MÊME TYPE.**
    Ne jamais ajouter un produit « nu ». Le configurer **exactement comme ses semblables** :
    - **Packaging / emballages** : ajouter le slug dans `src/lib/packagingSeed.js`
@@ -620,6 +625,27 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   via `showIfField`/`showIfValue` (mécanisme déjà présent dans `ProductDetail.jsx`). Les champs
   cachés ne sont pas exigés à l'ajout au panier (la validation ne regarde que `visibleFields`).
   ⚠️ Ne PAS écrire « (facultatif) » dans un `label` : le composant l'ajoute déjà quand `optional:true`.
+
+## 🏠 PAGE D'ACCUEIL — NOUVELLE ORGANISATION (appliquée le 21/08/2026, validée par la gérante)
+> Maquettes : `docs/maquettes/accueil-mur-tout-en-bas.html` (VERSION B, appliquée) et
+> `accueil-vient-d-arriver.html` (version A, gardée de côté). La gérante tient au haut de
+> page (cristal + carafe) : **ne pas y toucher**.
+- **Ordre** : cristal → carafe édition limitée → bandeau **« Vient d'arriver »** (4 derniers
+  produits par date, automatique) → bandeau **« Verres & carafes gravés »** (5 produits fixes :
+  whisky portrait, whisky perso, vin, flûte, carafe — lus dans le catalogue en direct) → page
+  inchangée (collections, phares, savoir-faire, sur-mesure) → **« mur de l'atelier »** tout en
+  bas (TOUTES les créations visibles, 3 rangées qui défilent ; arrêt au survol/toucher, reprise
+  auto après 4 s sans clic) → fenêtre flottante nouveautés.
+- **Fichiers** : `src/components/home/BandeauAccueil.jsx` (+ `prixBandeau`) ·
+  `src/components/home/MurAtelier.jsx` (client, JS pause/reprise) · CSS `.na-*` / `.mur-*` à la
+  fin de `globals.css` · branchés dans `src/app/page.jsx` (l'ancienne grande section « Nos
+  nouveautés » a été SUPPRIMÉE — elle faisait double emploi et cachait les verres).
+- **Dates produits** : `src/lib/productDates.js` (retrouvées dans git). Étiquette « Nouveau »
+  auto-éteinte à 30 jours dans `getCatalog` (catalog.js). Cf. règle §10 4ter.
+- **Interrupteurs** : `settings.sections.newArrivals` (bandeau nouveautés), `.verresBand`,
+  `.mur` — tous par défaut à vrai.
+- ⚠️ Les avertissements React #425/#418/#423 de l'accueil sont ANTÉRIEURS (déjà documentés),
+  vérifiés identiques avant/après.
 
 ## 🔍 « VÉRIFIE MON SITE » — AUDIT COMPLET AUTOMATIQUE (créé le 13/08/2026)
 > **Quand la gérante dit « vérifie mon site », « est-ce que tout va bien », « fais un audit »** →
