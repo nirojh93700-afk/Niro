@@ -221,6 +221,26 @@ export default function ProductDetail({ product }) {
     // Changement de lot : on repart d'une perso unique (évite un état par-verre incohérent).
     if (perGlass) { setPerGlass(false); setActiveGlass(0); setGlassConfigs([]); }
     const v = product.variants[i];
+    // OUBLIE les choix liés à une AUTRE option (demande de la gérante, 21/08/2026) :
+    // un dessin choisi sous « Dessin au choix » ne doit pas rester en mémoire
+    // (ni sur l'aperçu, ni dans la commande) quand on passe à « Texte seul ».
+    // On ne garde une valeur que si un champ portant la même clé reste visible
+    // avec la nouvelle option.
+    if (product.personalizationFields?.some((f) => f.variantContains)) {
+      const titre = v?.title || "";
+      const gardees = new Set(
+        product.personalizationFields
+          .filter((f) => !f.variantContains || titre.includes(f.variantContains))
+          .map((f) => f.key)
+      );
+      setFieldValues((prev) => {
+        const nv = { ...prev };
+        for (const f of product.personalizationFields) {
+          if (f.variantContains && !gardees.has(f.key)) delete nv[f.key];
+        }
+        return nv;
+      });
+    }
     // Modèle avec sa propre galerie (genderPick) : on remplace la galerie entière
     // par les photos de ce modèle → Garçon = photos garçon, Fille = photos fille.
     if (v?.gallery?.length) {
