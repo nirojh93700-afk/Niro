@@ -64,7 +64,13 @@ export default async function BoutiquePage({ searchParams }) {
     filtered = [...filtered].sort(makeProductSorter(activeCat, SUBS, PRODUCT_ORDER));
   }
 
-  const subs = activeCat ? getSubcategories(activeCat) : null;
+  // Une sous-catégorie SANS produit visible n'affiche pas sa pastille (sinon la
+  // cliente clique sur un rayon vide — ex. « Art de la table » resté après le
+  // départ des porte-serviettes vers Mariage). Automatique : la pastille
+  // réapparaît dès qu'un produit occupe à nouveau la sous-catégorie.
+  const subsTous = activeCat ? getSubcategories(activeCat) : null;
+  const presentSubs = new Set(withImages.filter((p) => p.category === activeCat).map((p) => p.subcategory));
+  const subs = subsTous ? subsTous.filter((sc) => presentSubs.has(sc.slug) || sc.slug === activeSub) : null;
   const isBijoux = activeCat === "bijoux";
 
   // Catégories à afficher en filtre : celles qui ont au moins un produit visible.
@@ -195,7 +201,7 @@ export default async function BoutiquePage({ searchParams }) {
         )}
 
         {/* Autres catégories avec sous-catégories simples */}
-        {!isBijoux && subs && (
+        {!isBijoux && subs && subs.length > 0 && (
           <div className="filters subfilters">
             <Link
               href={`/boutique/${activeCat}`}
