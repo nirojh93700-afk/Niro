@@ -521,14 +521,16 @@ export default function ProductDetail({ product }) {
   useEffect(() => {
     if (!product.engrave || !product.engraveImage) return;
     if ((product.personalizationFields || []).some((f) => f.key === "emplacement")) return;
-    const hasContent = previewLines.length > 0 || Boolean(styleMotifSrc);
+    // La PHOTO téléversée compte comme contenu : sans ça, l'aperçu restait sur
+    // la photo d'exemple et la cliente ne voyait jamais sa photo sur le produit.
+    const hasContent = previewLines.length > 0 || Boolean(styleMotifSrc) || Boolean(photoSrc);
     if (hasContent && !hadPreviewTextRef.current) {
       const idx = images.indexOf(product.engraveImage);
       if (idx >= 0) setActiveImg(idx);
     }
     hadPreviewTextRef.current = hasContent;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewLines.length, styleMotifSrc]);
+  }, [previewLines.length, styleMotifSrc, photoSrc]);
   // Mode "les deux" : la photo et le texte affichés dépendent du côté en cours (face / fond).
   const editPhotoSrc = (dualMode && side === "fond") ? photoSrcFond : photoSrc;
   let editLines;
@@ -1105,7 +1107,9 @@ export default function ProductDetail({ product }) {
           </div>
           {product.engrave && (
             <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
-              Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d'exemple.
+              {product.engraveNote
+                ? product.engraveNote
+                : <>Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>, à peu près comme la photo d&apos;exemple.</>}
             </p>
           )}
           {product.crystal3d && photoSrc && (
@@ -1117,7 +1121,7 @@ export default function ProductDetail({ product }) {
           {showEditor && (editPhotoSrc || styleMotifSrc || editLines.length > 0 || previewLines.length > 0) && (
             <div className="drag-hint">
               <span className="dh-hand" aria-hidden="true">👆</span>
-              <span>Touchez et <b>glissez</b> le dessin, le texte et les chiffres pour les placer <b>où vous voulez</b> sur le verre — le curseur règle la taille.</span>
+              <span>Touchez et <b>glissez</b> le dessin, le texte et les chiffres pour les placer <b>où vous voulez</b> sur la photo — le curseur règle la taille.</span>
             </div>
           )}
           {/* Légende sous la photo (jamais coupée) : rappelle OÙ le nom et la date
