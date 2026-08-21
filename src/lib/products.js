@@ -2844,6 +2844,43 @@ export const products = [
   // via des variantes-à-image (la photo change selon le modèle choisi). Carte
   // « moitié-moitié » via cardImage. Personnalisation : prénom + infos bébé + photo.
   {
+    // ===== Cartes étapes bébé — lot de 12 (mis en ligne le 21/08/2026).
+    // Lot COMPLET, aucune personnalisation (demande de la gérante). Prix 29,90 €
+    // fixé après étude du marché français (lots simples 23-28 €, Atelier Wagram
+    // 31,90 €, Artesama 34,90 € pour 16 disques dont 1 au prénom) : la girafe en
+    // relief rapportée justifie le haut de la fourchette des lots non personnalisés.
+    slug: "cartes-etapes-bebe-girafe",
+    badge: "Nouveau",
+    name: "Cartes étapes bébé — lot de 12",
+    weight: 400,          // 12 disques de bois + emballage plat
+    pickup: false,
+    letter: false,        // colis (le lot est épais)
+    cardImage: "/produits/cartes-etapes-bebe-1.jpg",
+    title: "Cartes étapes bébé en bois gravé — lot de 12, girafe (1 à 12 mois)",
+    category: "naissance",
+    type: "Souvenir de naissance",
+    tagline: "Chaque mois, une photo, un disque — les douze premiers mois de bébé gardés dans le bois.",
+    personalizable: false,
+    images: [
+      "/produits/cartes-etapes-bebe-1.jpg",
+      "/produits/cartes-etapes-bebe-2.jpg",
+      "/produits/cartes-etapes-bebe-3.jpg",
+      "/produits/cartes-etapes-bebe-4.jpg",
+    ],
+    variants: [
+      { id: "cartes-etapes-bebe-lot12", title: "Lot de 12 cartes (1 à 12 mois)", price: 29.90 },
+    ],
+    descriptionHtml: `<p><strong>Le lot complet des 12 premiers mois, découpé et gravé dans le bois.</strong> Chaque disque porte le mois — de « 1 mois » à « 12 mois » — entouré d'une couronne de feuillage, avec une petite girafe posée sur le côté. Posé à côté de bébé sur la photo du mois, il donne cette série de souvenirs que l'on regarde encore des années après.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Le lot :</strong> 12 disques, un par mois (1 à 12 mois)</li>
+<li><strong>Matière :</strong> bois clair, découpé et gravé au laser</li>
+<li><strong>Motif :</strong> girafe en relief et couronne de feuillage — texte en français</li>
+<li><strong>Usage :</strong> accessoire photo des premiers mois, puis décoration de la chambre</li>
+</ul>
+<p>Un cadeau de naissance qui accompagne toute la première année. Le veinage du bois varie légèrement d'une pièce à l'autre — chaque lot est unique.</p>`,
+  },
+  {
     slug: "plaque-de-naissance",
     name: "Plaque de naissance",
     heading: "Plaque de naissance personnalisée", // titre court sur la fiche (comme la maquette)

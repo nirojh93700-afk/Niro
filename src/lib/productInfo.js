@@ -1088,6 +1088,14 @@ Un souci à la réception ?
     returns:
       "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
   },
+  "cartes-etapes-bebe-girafe": {
+    material:
+      "Bois clair découpé et gravé au laser dans notre atelier.\nDouze disques, un par mois : la girafe est une pièce en relief rapportée sur le côté du disque.\nGravure sans encre ni peinture — le motif est creusé dans le bois.\nLe veinage varie légèrement d'une pièce à l'autre : chaque lot est unique.",
+    usage:
+      "Posez le disque du mois à côté de bébé pour la photo souvenir, puis rangez-le — ou accrochez-les en décoration dans la chambre.\nCe lot n'est pas personnalisable : les mois sont gravés d'avance, de 1 à 12.\nUn chiffon doux et sec suffit pour l'entretien. Évitez l'humidité et ne mettez pas les disques à la bouche de bébé sans surveillance.",
+    returns:
+      "Expédié à plat en colis suivi, à domicile ou en point relais.\nExpédition sous 2 à 3 jours ouvrés.\nCe lot n'étant pas personnalisé, il peut être retourné sous 14 jours s'il ne vous convient pas, frais de retour à votre charge.",
+  },
   "veilleuse-arbre-de-vie-prenom": {
     material:
       "Bois clair découpé et gravé au laser dans notre atelier, sur un fond acrylique coloré qui diffuse la lumière.\nSocle rond ajouré, emboîté — la veilleuse tient debout toute seule.\nÉclairage LED doux, alimenté par piles.\nLe veinage du bois varie légèrement d'une pièce à l'autre — chaque veilleuse est unique.",
