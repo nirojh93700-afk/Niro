@@ -2844,6 +2844,39 @@ export const products = [
   // via des variantes-à-image (la photo change selon le modèle choisi). Carte
   // « moitié-moitié » via cardImage. Personnalisation : prénom + infos bébé + photo.
   {
+    // ===== Cartes étapes bébé « têtes d'animaux » (mis en ligne le 21/08/2026).
+    // PRODUIT DISTINCT du lot girafe (demande explicite de la gérante : ne pas
+    // mélanger les deux). Lot complet, aucune personnalisation. Prix 15,90 €.
+    slug: "cartes-etapes-bebe-animaux",
+    badge: "Nouveau",
+    name: "Cartes étapes bébé — têtes d'animaux",
+    weight: 350,          // 12 pièces de bois + emballage plat
+    pickup: false,
+    letter: false,        // colis
+    cardImage: "/produits/cartes-etapes-animaux-1.jpg",
+    title: "Cartes étapes bébé têtes d'animaux en bois — lot de 12 (1 à 12 mois)",
+    category: "naissance",
+    type: "Souvenir de naissance",
+    tagline: "Un ours, un renard, un faon — et les douze premiers mois de bébé en photo.",
+    personalizable: false,
+    images: [
+      "/produits/cartes-etapes-animaux-1.jpg",
+      "/produits/cartes-etapes-animaux-2.jpg",
+    ],
+    variants: [
+      { id: "cartes-etapes-animaux-lot12", title: "Lot de 12 cartes (1 à 12 mois)", price: 15.90 },
+    ],
+    descriptionHtml: `<p><strong>Douze têtes d'animaux découpées dans le bois, une par mois.</strong> Un ours, un renard et un faon se relaient au fil de l'année : ours pour les mois 1, 4, 7 et 10, renard pour 2, 5, 8 et 11, faon pour 3, 6, 9 et 12. Les chiffres et le mot « mois » sont des pièces noires découpées et posées en relief sur le bois clair, avec un petit cœur.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Le lot :</strong> 12 pièces, une par mois (1 à 12 mois)</li>
+<li><strong>Trois animaux :</strong> ours, renard et faon, qui alternent tout au long de l'année</li>
+<li><strong>Matière :</strong> bois clair découpé au laser, chiffres et oreilles en relief noir</li>
+<li><strong>Usage :</strong> accessoire photo des premiers mois, puis décoration de la chambre</li>
+</ul>
+<p>On pose la tête du mois à côté de bébé pour la photo, et l'on obtient une série de souvenirs que l'on regarde encore des années après. Le veinage du bois varie légèrement d'une pièce à l'autre.</p>`,
+  },
+  {
     // ===== Cartes étapes bébé — lot de 12 (mis en ligne le 21/08/2026).
     // Lot COMPLET, aucune personnalisation (demande de la gérante). Prix 29,90 €
     // fixé après étude du marché français (lots simples 23-28 €, Atelier Wagram
