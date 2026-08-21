@@ -2369,6 +2369,44 @@ export const products = [
 <p><em>Conseil sécurité : ne jamais laisser une bougie allumée sans surveillance.</em></p>`,
   },
   {
+    // ===== Photophore fée (mis en ligne le 21/08/2026).
+    // Décor en plusieurs couches découpées, éclairé par une bougie LED FOURNIE.
+    // Aucune personnalisation (pas la place — décision de la gérante).
+    // Prix 27,90 € : au-dessus des photophores à découpe simple (~19,50 €), sous
+    // les photophores en tilleul massif (28-35 €).
+    slug: "photophore-fee-bois",
+    badge: "Nouveau",
+    name: "Photophore fée en bois",
+    weight: 350,
+    pickup: false,
+    letter: false, // colis (pièce en volume, fragile)
+    cardImage: "/produits/photophore-fee-1.jpg",
+    title: "Photophore fée en bois découpé — bougie LED incluse",
+    category: "deco",
+    subcategory: "bougeoirs",
+    type: "Photophore déco",
+    tagline: "Une fée sous un saule, et la lumière qui traverse le bois.",
+    personalizable: false,
+    images: [
+      "/produits/photophore-fee-1.jpg",
+      "/produits/photophore-fee-2.jpg",
+      "/produits/photophore-fee-3.jpg",
+    ],
+    variants: [
+      { id: "photophore-fee", title: "Photophore fée — bougie LED incluse", price: 27.90 },
+    ],
+    descriptionHtml: `<p><strong>Un petit théâtre de bois, éclairé de l'intérieur.</strong> Plusieurs couches découpées au laser se superposent pour créer la profondeur : au premier plan la fée assise, ses ailes finement ajourées ; derrière elle les longues feuilles d'un saule, et tout en haut des fleurs. La bougie LED se glisse à la base et la lumière traverse chaque découpe — le décor s'anime d'un halo chaud.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> bois découpé au laser, plusieurs épaisseurs superposées</li>
+<li><strong>Bougie LED incluse</strong> — à piles, flamme électrique : aucune flamme, aucune odeur, aucune fumée</li>
+<li><strong>Dimensions :</strong> environ 14 cm de large</li>
+<li><strong>Usage :</strong> posé sur une table de chevet, une étagère, un rebord de fenêtre</li>
+</ul>
+<p><strong>Sécurité :</strong> conçu pour la bougie LED fournie. N'utilisez pas de bougie à flamme dans ce photophore — le bois et les découpes fines ne sont pas prévus pour.</p>
+<p>Le veinage du bois varie légèrement d'une pièce à l'autre : chaque photophore est unique.</p>`,
+  },
+  {
     slug: "bougeoir-fleur-de-lotus",
     badge: "Nouveau",
     name: "Bougeoir Fleur de Lotus",
