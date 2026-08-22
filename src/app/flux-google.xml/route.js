@@ -4,6 +4,13 @@ export const dynamic = "force-dynamic";
 
 const BASE = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").trim().replace(/\/$/, "");
 
+// Google exige des URL COMPLETES pour les images : les photos hébergées sur le
+// site (« /produits/… », « /api/img/… ») doivent être préfixées par le domaine.
+function absImg(u) {
+  const v = String(u || "").trim();
+  return v.startsWith("http") ? v : v ? BASE + (v.startsWith("/") ? v : "/" + v) : v;
+}
+
 function esc(s) {
   return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
@@ -84,8 +91,8 @@ export async function GET() {
   const items = products.map((p) => {
     const price = priceFrom(p).toFixed(2);
     const desc = (p.descriptionHtml || p.tagline || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 4500);
-    const img = p.images[0];
-    const extra = (p.images || []).slice(1, 11).map((u) => `<g:additional_image_link>${esc(u)}</g:additional_image_link>`).join("");
+    const img = absImg(p.images[0]);
+    const extra = (p.images || []).slice(1, 11).map((u) => `<g:additional_image_link>${esc(absImg(u))}</g:additional_image_link>`).join("");
     const cat = p.category === "mariage" ? "Décoration de mariage" : p.category === "bijoux" ? "Bijoux personnalisés" : "Cadeaux personnalisés";
     // Catégorie officielle Google (recommandée pour bien classer le produit).
     const slug = p.slug || "";
