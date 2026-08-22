@@ -7,6 +7,11 @@
 - **Préparer / proposer / montrer une maquette = OK.** **Appliquer / mettre en ligne / déployer = SEULEMENT sur sa demande explicite.** En cas de doute : **demander d'abord**, ne jamais déduire un accord.
 - Un nouveau projet **isolé** (ex. app voyage sur un projet Firebase neuf) ne compte pas comme « toucher » à ses projets existants — mais le déploiement final reste **à sa main / sur sa demande**.
 
+### 🚫 RÈGLE FERME — L'E-MAIL ET LES RÉGLAGES DU SITE SONT TOTALEMENT À PART (enregistré 22/08/2026, demande explicite)
+- **INTERDIT** d'utiliser, lire, modifier, connecter ou toucher **l'e-mail du site / de la boutique** (`contact.nivcreation@gmail.com`) et **ses réglages** — pour QUOI QUE CE SOIT (création de compte, vérification, backend, tests, etc.). C'est **séparé, hors de portée, on n'y touche pas**.
+- Ne JAMAIS se servir de cette adresse (ni des paramètres du site / de la messagerie du site) comme moyen technique pour un autre projet. Si un service demande un e-mail, utiliser **uniquement l'e-mail perso de la gérante** (`nirojh93700@gmail.com`) **et lui laisser faire la validation elle-même**.
+- En cas de doute sur quelle adresse/quel réglage utiliser : **demander d'abord**, ne jamais déduire.
+
 ## 📦 FOURNISSEUR BOÎTES / EMBALLAGES PERSONNALISÉS — « Guardidea-Rachel » (enregistré 27/07/2026)
 > Quand la gérante parle du **fournisseur de boîtes / emballages**, c'est **Guardidea-Rachel** (contact **WhatsApp**, anglophone). C'est aussi elle qui fait déjà les **boîtes à bijoux** de la gérante.
 - **Personnalisation** : oui, à la marque Niv Création (même couleur + mêmes textes/logo que les boîtes bijoux déjà commandées).
