@@ -1080,6 +1080,38 @@ Un souci à la réception ?
     returns:
       "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
   },
+  "verre-a-vin-grave": {
+    material:
+      "Verre à vin en cristal, contenance environ 36 cl.\nGravure laser permanente : le motif est creusé dans le verre, il ne s'efface pas.\nRendu dépoli, effet givré, sans encre ni peinture.\nVendu à l'unité, par lot de 2 ou par lot de 4.",
+    usage:
+      "Trois façons de personnaliser : un modèle prêt (n° 1 à 20 — couples, monogramme, prénoms et dates, banderoles), une lettre fleurie, ou votre propre texte dans l'une de nos 8 écritures. L'aperçu se met à jour pendant que vous écrivez.\nPour les modèles avec prénoms (n° 14 à 17), le prénom et la date sont gravés dans l'écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l'évier, c'est du cristal.",
+    returns:
+      "Expédié en colis suivi, soigneusement calé (verre fragile) — à domicile ou en point relais.\nLivraison offerte dès 45 € d'achat, donc dès le lot de 4.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nUn verre cassé à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
+  },
+  "flute-a-champagne-gravee": {
+    material:
+      "Flûte à champagne, contenance environ 21 cl (Ø 6,3 × H 21,4 cm).\nGravure laser permanente : le motif est creusé dans le verre, il ne s'efface pas.\nRendu dépoli, effet givré, sans encre ni peinture.\nVendue à l'unité, par lot de 2 ou par lot de 4.",
+    usage:
+      "Trois façons de personnaliser : un modèle prêt (n° 1 à 19 — couples, prénoms et dates, banderoles), une lettre fleurie, ou votre propre texte dans l'une de nos 8 écritures. L'aperçu se met à jour pendant que vous écrivez.\nPour les modèles avec prénoms, le prénom et la date sont gravés dans l'écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Manipulez le pied avec précaution, il est fin.",
+    returns:
+      "Expédiée en colis suivi, soigneusement calée (verre fragile) — à domicile ou en point relais.\nLivraison offerte dès 45 € d'achat, donc dès le lot de 4.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nUne flûte cassée à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
+  },
+  "carafe-a-whisky-gravee": {
+    material:
+      "Carafe à whisky en verre taillé, bouchon hermétique à facettes et base étoilée.\nGravure laser permanente : le motif est creusé dans le verre, il ne s'efface pas.\nRendu dépoli, effet givré, sans encre ni peinture.\nÉdition limitée — verres assortis disponibles en option, gravés au même modèle.",
+    usage:
+      "Trois façons de personnaliser : un modèle prêt (n° 1 à 33), une lettre fleurie, ou votre propre texte — prénom, date, message, initiales.\nLavez la carafe à la main, à l'eau tiède, et laissez-la sécher retournée avant de remettre le bouchon.\nLe bouchon est hermétique : il garde l'arôme entre deux dégustations.",
+    returns:
+      "Expédiée en colis suivi, soigneusement calée (pièce lourde et fragile) — à domicile ou en point relais.\nLivraison offerte.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nCarafe cassée à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
+  },
+  "gobelet-isotherme-40oz": {
+    material:
+      "Gobelet isotherme 40 oz (1,1 L) en acier inoxydable double paroi.\nLivré avec son couvercle, sa paille réutilisable et un goupillon de nettoyage.\nAnse intégrée, base étudiée pour entrer dans un porte-gobelet de voiture.\nQuatre coloris : Crème, Blanc, Bleu marine, Rose.",
+    usage:
+      "Gravure laser personnalisée : prénom, date, message, initiales ou logo — creusée dans l'acier, elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
+    returns:
+      "Expédié en colis suivi, à domicile ou en point relais.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
+  },
   "porte-serviettes-colombes": {
     material:
       "Bois clair découpé au laser dans notre atelier, posé sur une base contrastée qui fait ressortir le motif.\nTrois pièces : les colombes découpées devant, un panneau plein derrière, et la base à encoches.\nAucune colle, aucune vis : tout s'emboîte.\nLe veinage varie légèrement d'une pièce à l'autre — chaque porte-serviettes est unique.",

@@ -348,7 +348,9 @@ async function auditCatalogue() {
   let infos = {};
   try {
     const t = await readFile(path.join(RACINE, "src/lib/productInfo.js"), "utf8");
-    for (const m of t.matchAll(/^\s{2}"([a-z0-9-]+)":\s*\{/gm)) infos[m[1]] = true;
+    // Une entrée peut être écrite « "slug": { … } » OU « "slug": CONSTANTE, »
+    // (fiche partagée entre produits jumeaux). Les deux comptent.
+    for (const m of t.matchAll(/^\s{2}"([a-z0-9-]+)":\s*(?:\{|[A-Z_][A-Z0-9_]*\s*,)/gm)) infos[m[1]] = true;
   } catch { /* ignore */ }
 
   const slugs = new Map();
