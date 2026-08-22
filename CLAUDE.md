@@ -375,6 +375,14 @@ sont **récupérables** dans le transcript de session (`~/.claude/projects/…/<
 - Vaut pour TOUTES les maquettes (gobelet, carafe, cristal, thème, etc.). Republier une maquette = une modification → demander avant.
 - Exception : si elle demande explicitement le changement, on le fait (c'est déjà son accord).
 
+### MÉTHODE DE MAQUETTE — GARDER LA MÉTHODE CLASSIQUE (22/08/2026, demande explicite)
+> Testé l'outil `/design` (canvas Claude Design éditable) pour une maquette de hero. **La gérante n'a pas aimé,
+> elle veut qu'on reste sur la méthode habituelle.**
+- **Ne plus utiliser `/design`** pour les maquettes du site. Revenir systématiquement à la méthode classique :
+  page HTML autonome avec les **vraies feuilles de style de nivcreation.fr** (récupérées avec curl), testée avec
+  Chromium headless (aucun débordement, texte lisible, pas d'erreur JS) avant d'être montrée, publiée en artifact.
+- Cette règle est permanente, ne pas reproposer `/design` sauf si elle le redemande elle-même.
+
 ### RÈGLE DE COMMUNICATION (importante)
 - **NE PLUS répéter** les rappels SIRET / médiateur / légal : l'utilisatrice est au courant et s'en occupe elle-même. Ne pas la « contrôler ».
 - Quand elle demande quelque chose : **le faire**, sans re-justifier ni multiplier les avertissements. Réponses courtes.
