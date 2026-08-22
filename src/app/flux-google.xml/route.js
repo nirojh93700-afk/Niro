@@ -48,6 +48,33 @@ function feedShipping(p) {
   return bloc("FR", portFR(p)) + bloc("BE", eu) + bloc("LU", eu);
 }
 
+// Champs OBLIGATOIRES pour les bijoux (catégorie « habillement » chez Google) :
+// couleur, sexe, tranche d'âge. Sans eux, Merchant limite la visibilité.
+//   · couleur : détectée dans le nom/les variantes (noir, doré, argenté…),
+//     repli « Argenté » (acier inoxydable) — la matière dominante des bijoux.
+//   · sexe : sous-catégorie femme → female, homme → male, sinon unisex.
+//   · âge : adulte.
+function apparel(p) {
+  if (p.category !== "bijoux") return "";
+  // La couleur = celle de la VARIANTE PAR DÉFAUT (la première, celle affichée),
+  // sinon celle trouvée dans le nom du produit. Repli : Argenté (acier inox).
+  const detecte = (t) => {
+    t = (t || "").toLowerCase();
+    if (/or rose|rose/.test(t)) return "Or rose";
+    if (/noir/.test(t)) return "Noir";
+    if (/argent/.test(t)) return "Argenté";
+    if (/dor(é|e)|plaqu(é|e) or|\bor\b/.test(t)) return "Doré";
+    if (/marron|brun|cuir/.test(t)) return "Marron";
+    return "";
+  };
+  const couleur = detecte(p.variants?.[0]?.title) || detecte(p.name) || detecte((p.variants || []).map((v) => v.title).join(" ")) || "Argenté";
+  const sexe = p.subcategory === "homme" ? "male" : p.subcategory === "femme" ? "female" : "unisex";
+  return `<g:color>${couleur}</g:color>
+  <g:gender>${sexe}</g:gender>
+  <g:age_group>adult</g:age_group>
+  `;
+}
+
 // Flux produits pour Google Merchant Center (Google Shopping, gratuit).
 // À ajouter une fois dans Merchant Center : URL = https://nivcreation.fr/flux-google.xml
 export async function GET() {
@@ -81,7 +108,7 @@ export async function GET() {
   <g:identifier_exists>no</g:identifier_exists>
   <g:product_type>${esc(cat)}</g:product_type>
   <g:google_product_category>${esc(googleCat)}</g:google_product_category>
-  ${feedShipping(p)}
+  ${apparel(p)}${feedShipping(p)}
 </item>`;
   }).join("\n");
 
