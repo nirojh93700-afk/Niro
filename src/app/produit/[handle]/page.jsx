@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
 import ProductDetail from "@/components/ProductDetail";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
@@ -109,10 +110,20 @@ export default async function ProductPage({ params, searchParams }) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
-    image: product.images,
+    // Google exige des adresses d'images complètes (les photos hébergées sur le
+    // site étaient envoyées en chemin relatif, illisible pour Merchant).
+    image: (product.images || []).map(imageAbsolue),
     description: (product.descriptionHtml || "").replace(/<[^>]+>/g, " ").trim(),
     brand: { "@type": "Brand", name: "Niv Création" },
     sku: product.slug,
+    // Bijoux : couleur / sexe / âge — mêmes valeurs que le flux Shopping
+    // (Merchant exige que la page et le flux racontent la même chose).
+    ...(product.category === "bijoux"
+      ? {
+          color: couleurProduit(product),
+          audience: { "@type": "PeopleAudience", suggestedGender: sexeProduit(product), suggestedMinAge: 13 },
+        }
+      : {}),
     offers: {
       "@type": "Offer",
       priceCurrency: "EUR",

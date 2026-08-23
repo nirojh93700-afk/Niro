@@ -1,15 +1,9 @@
 import { getCatalog, priceFrom } from "@/lib/catalog";
+import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
 
 export const dynamic = "force-dynamic";
 
 const BASE = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").trim().replace(/\/$/, "");
-
-// Google exige des URL COMPLETES pour les images : les photos hébergées sur le
-// site (« /produits/… », « /api/img/… ») doivent être préfixées par le domaine.
-function absImg(u) {
-  const v = String(u || "").trim();
-  return v.startsWith("http") ? v : v ? BASE + (v.startsWith("/") ? v : "/" + v) : v;
-}
 
 function esc(s) {
   return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -63,21 +57,8 @@ function feedShipping(p) {
 //   · âge : adulte.
 function apparel(p) {
   if (p.category !== "bijoux") return "";
-  // La couleur = celle de la VARIANTE PAR DÉFAUT (la première, celle affichée),
-  // sinon celle trouvée dans le nom du produit. Repli : Argenté (acier inox).
-  const detecte = (t) => {
-    t = (t || "").toLowerCase();
-    if (/or rose|rose/.test(t)) return "Or rose";
-    if (/noir/.test(t)) return "Noir";
-    if (/argent/.test(t)) return "Argenté";
-    if (/dor(é|e)|plaqu(é|e) or|\bor\b/.test(t)) return "Doré";
-    if (/marron|brun|cuir/.test(t)) return "Marron";
-    return "";
-  };
-  const couleur = detecte(p.variants?.[0]?.title) || detecte(p.name) || detecte((p.variants || []).map((v) => v.title).join(" ")) || "Argenté";
-  const sexe = p.subcategory === "homme" ? "male" : p.subcategory === "femme" ? "female" : "unisex";
-  return `<g:color>${couleur}</g:color>
-  <g:gender>${sexe}</g:gender>
+  return `<g:color>${couleurProduit(p)}</g:color>
+  <g:gender>${sexeProduit(p)}</g:gender>
   <g:age_group>adult</g:age_group>
   `;
 }
@@ -91,8 +72,8 @@ export async function GET() {
   const items = products.map((p) => {
     const price = priceFrom(p).toFixed(2);
     const desc = (p.descriptionHtml || p.tagline || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 4500);
-    const img = absImg(p.images[0]);
-    const extra = (p.images || []).slice(1, 11).map((u) => `<g:additional_image_link>${esc(absImg(u))}</g:additional_image_link>`).join("");
+    const img = imageAbsolue(p.images[0]);
+    const extra = (p.images || []).slice(1, 11).map((u) => `<g:additional_image_link>${esc(imageAbsolue(u))}</g:additional_image_link>`).join("");
     const cat = p.category === "mariage" ? "Décoration de mariage" : p.category === "bijoux" ? "Bijoux personnalisés" : "Cadeaux personnalisés";
     // Catégorie officielle Google (recommandée pour bien classer le produit).
     const slug = p.slug || "";
