@@ -20,6 +20,22 @@ export function brandedMessage(subject, body, extraHtml = "") {
   return html;
 }
 
+// Boutons « ★ Noter » vers la section avis de chaque produit ([{slug, name}]).
+// Partagé entre la règle d'avis automatique (jobs.js) et l'envoi admin.
+export function boutonsAvis(items) {
+  const seen = new Set();
+  const produits = (items || []).filter((it) => {
+    if (!it?.slug || seen.has(it.slug)) return false;
+    seen.add(it.slug);
+    return true;
+  });
+  if (!produits.length) return "";
+  const btns = produits.map((it) =>
+    `<a href="${BRAND.siteUrl}/produit/${encodeURIComponent(it.slug)}#avis" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-weight:bold;margin:0 8px 10px 0;">★ Noter « ${escapeHtml(String(it.name || "ce produit").slice(0, 40))} »</a>`
+  ).join("");
+  return `<p style="margin:14px 0 0;">${btns}</p>`;
+}
+
 export async function sendClientMail({ to, subject, html, bcc = BRAND.contact }) {
   const dest = String(to || "").trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dest)) return { ok: false, error: "Adresse invalide." };

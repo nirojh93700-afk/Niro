@@ -1,5 +1,6 @@
 import { isAdmin, getGmailCreds } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
+import { boutonsAvis } from "@/lib/clientMail";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 
 export const dynamic = "force-dynamic";
@@ -17,9 +18,13 @@ export async function POST(req) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return Response.json({ error: "Adresse invalide." }, { status: 400 });
   if (!subject || !message) return Response.json({ error: "Sujet et message obligatoires." }, { status: 400 });
 
+  // avisProduits (optionnel) : [{slug, name}] → boutons « ★ Noter » vers la
+  // section avis de chaque produit (même rendu que la règle d'avis automatique).
+  const boutons = Array.isArray(body?.avisProduits) ? boutonsAvis(body.avisProduits.slice(0, 6)) : "";
   const html = emailLayout({
     heading: subject,
     bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
+      ${boutons}
       <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
   });
 
