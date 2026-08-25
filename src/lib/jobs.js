@@ -12,7 +12,24 @@ import {
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { sendClientMail, brandedMessage } from "@/lib/clientMail";
-import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
+import { cashbackReminderEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
+
+// Boutons « ★ Noter » vers la section avis de chaque produit de la commande.
+// Ajoutés aux règles automatiques d'AVIS (l'e-mail disait « un clic suffit »
+// sans donner le clic — corrigé le 25/08/2026 à la demande de la gérante).
+function boutonsAvis(o) {
+  const seen = new Set();
+  const produits = (o?.items || []).filter((it) => {
+    if (!it?.slug || seen.has(it.slug)) return false;
+    seen.add(it.slug);
+    return true;
+  });
+  if (!produits.length) return "";
+  const btns = produits.map((it) =>
+    `<a href="${BRAND.siteUrl}/produit/${encodeURIComponent(it.slug)}#avis" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-weight:bold;margin:0 8px 10px 0;">★ Noter « ${escapeHtml(String(it.name || "ce produit").slice(0, 40))} »</a>`
+  ).join("");
+  return `<p style="margin:14px 0 0;">${btns}</p>`;
+}
 
 const DAY = 86400000;
 
@@ -64,7 +81,9 @@ export async function runScheduledJobs() {
         if (await hasAutoSent(rule.id, o.id)) continue;
 
         const subject = fill(rule.subject || "Un message de Niv Création", o);
-        const html = brandedMessage(subject, fill(rule.body, o));
+        // Règle d'AVIS (après livraison) → on joint les boutons « ★ Noter ».
+        const estRegleAvis = rule.trigger === "livree" && /avis/i.test(`${rule.name || ""} ${rule.subject || ""}`);
+        const html = brandedMessage(subject, fill(rule.body, o), estRegleAvis ? boutonsAvis(o) : "");
         const r = await sendClientMail({ to: o.customerEmail, subject, html });
         await markAutoSent(rule.id, o.id);
         if (r.ok) sentAuto++; else failed++;

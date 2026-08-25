@@ -8,10 +8,13 @@ import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 
 // Construit un e-mail de marque à partir d'un sujet + d'un corps en texte simple.
-export function brandedMessage(subject, body) {
+// extraHtml (optionnel) : bloc HTML déjà sûr inséré APRÈS le texte — sert aux
+// boutons d'action (ex. « ★ Noter » de la règle d'avis automatique).
+export function brandedMessage(subject, body, extraHtml = "") {
   const html = emailLayout({
     heading: escapeHtml(subject || "Un message de Niv Création"),
     bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(body || "")}</div>
+      ${extraHtml || ""}
       <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
   });
   return html;
