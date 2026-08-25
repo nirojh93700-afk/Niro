@@ -17,7 +17,9 @@
 //   3. TOUTES les photos produits (détecte une photo cassée)
 //   4. Les services : livraison, points relais, avis, stock, promotions
 //   5. La cohérence du catalogue (doublons, prix manquant, fiche incomplète)
-//   6. La compilation du code (aucune erreur avant un futur déploiement)
+//   6. Les PROMESSES aux clients (e-mail d'avis avec son bouton, cases de
+//      paiement sans fausse gratuité) — règle « toute promesse doit marcher »
+//   7. La compilation du code (aucune erreur avant un futur déploiement)
 //
 // Aucune donnée n'est modifiée : l'audit est en LECTURE SEULE.
 // =============================================================================
@@ -393,10 +395,60 @@ async function auditCatalogue() {
 }
 
 // =============================================================================
-// 6. LE CODE (compilation)
+// 6. PROMESSES AUX CLIENTS (e-mails et paiement)
+// -----------------------------------------------------------------------------
+// Vérifie que ce qu'on PROMET aux clients existe vraiment (règle du 14/08 :
+// « toute promesse faite à la cliente doit marcher pour de vrai »).
+// Ajouté le 25/08/2026 après deux ratés : un e-mail d'avis qui disait « un clic
+// suffit » SANS bouton, et une case de paiement qui laissait croire qu'une
+// gravure (date) était offerte.
+// =============================================================================
+async function auditPromesses() {
+  titre(6, "Promesses aux clients (e-mails, paiement)");
+
+  // a) Modèles de message qui invitent à NOTER : doivent donner le chemin
+  //    (lien nivcreation.fr) — jamais « un clic suffit » sans le clic.
+  try {
+    const seed = await readFile(path.join(RACINE, "src/lib/messageTemplatesSeed.js"), "utf8");
+    const corpsModeles = [...seed.matchAll(/body:\s*\n?`([^`]*)`/g)].map((m) => m[1]);
+    const fautifs = corpsModeles.filter((b) => /noter|avis/i.test(b) && !/nivcreation\.fr/i.test(b));
+    if (fautifs.length) erreur(`${fautifs.length} modèle(s) d'e-mail demandent un avis SANS donner le lien pour le laisser`);
+    else bon("Tous les modèles d'e-mail qui demandent un avis donnent le lien pour le laisser");
+  } catch { alerte("Impossible de vérifier les modèles de message (fichier introuvable)"); }
+
+  // b) La règle automatique d'avis (J+2) doit joindre les boutons « ★ Noter ».
+  try {
+    const jobs = await readFile(path.join(RACINE, "src/lib/jobs.js"), "utf8");
+    if (/boutonsAvis/.test(jobs) && /#avis/.test(jobs)) bon("L'e-mail d'avis automatique (J+2) contient les boutons « Noter » vers la fiche produit");
+    else erreur("L'e-mail d'avis automatique (J+2) n'a plus ses boutons « Noter » (régression)");
+  } catch { alerte("Impossible de vérifier la règle d'avis automatique"); }
+
+  // c) Le bouton « Noter » pointe vers l'ancre #avis : elle doit exister sur la fiche.
+  try {
+    const rev = await readFile(path.join(RACINE, "src/components/ProductReviews.jsx"), "utf8");
+    if (/id="avis"/.test(rev)) bon("L'ancre #avis existe bien sur les fiches produits (cible des boutons « Noter »)");
+    else erreur("L'ancre #avis a disparu des fiches produits — les boutons « Noter » n'amènent plus au bon endroit");
+  } catch { alerte("Impossible de vérifier l'ancre #avis"); }
+
+  // d) Page de paiement : aucune case gratuite ne doit parler de « graver »
+  //    (toute gravure en plus est payante — case retirée le 25/08/2026).
+  try {
+    const checkout = await readFile(path.join(RACINE, "src/app/api/checkout/route.js"), "utf8");
+    const bloc = checkout.match(/custom_fields:\s*\[([\s\S]*?)\n\s*\],/);
+    const labels = bloc ? [...bloc[1].matchAll(/custom:\s*"([^"]*)"/g)].map((m) => m[1]) : [];
+    const graves = labels.filter((l) => /offert|gratuit|à graver/i.test(l));
+    const douteux = labels.filter((l) => !graves.includes(l) && /grav/i.test(l));
+    if (graves.length) erreur(`Case(s) de paiement au libellé trompeur (gravure offerte) : ${graves.join(" · ")}`);
+    else bon("Aucune case de la page de paiement ne promet une gravure ou un cadeau non prévu");
+    if (douteux.length) alerte(`Case(s) de paiement mentionnant la gravure — un client peut s'en servir pour demander une gravure EN PLUS sans payer : ${douteux.join(" · ")} (à reformuler si ça arrive)`);
+  } catch { alerte("Impossible de vérifier les cases de la page de paiement"); }
+}
+
+// =============================================================================
+// 7. LE CODE (compilation)
 // =============================================================================
 async function auditBuild() {
-  titre(6, "Le code du site (compilation)");
+  titre(7, "Le code du site (compilation)");
   if (RAPIDE) { console.log(C.gris("   (passé — mode rapide)")); return; }
   console.log(C.gris("   Compilation en cours, cela prend 1 à 2 minutes…"));
   const code = await new Promise((res) => {
@@ -428,6 +480,7 @@ const htmls = await auditProduits();
 await auditPhotos(htmls);
 await auditServices();
 await auditCatalogue();
+await auditPromesses();
 await auditBuild();
 
 // --- Conclusion --------------------------------------------------------------

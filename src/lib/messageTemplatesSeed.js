@@ -25,7 +25,7 @@ L'atelier Niv Création`,
 
 Nous espérons que votre création vous plaît ! Votre avis est précieux pour notre petit atelier et aide d'autres clientes à choisir.
 
-Prendriez-vous un instant pour la noter sur notre site ? Un clic suffit, et cela nous encourage énormément.
+Prendriez-vous un instant pour la noter ? Retrouvez votre création sur nivcreation.fr, puis cliquez sur « Laisser un avis » en bas de sa fiche — cela nous encourage énormément.
 
 Merci infiniment,
 L'atelier Niv Création`,
