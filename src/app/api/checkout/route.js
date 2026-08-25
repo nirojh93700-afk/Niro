@@ -393,12 +393,10 @@ export async function POST(req) {
           },
           optional: true,
         }]),
-        {
-          key: "message_cadeau",
-          label: { type: "custom", custom: "Message ou date à graver (facultatif)" },
-          type: "text",
-          optional: true,
-        },
+        // ⚠️ Le champ « Message ou date à graver (facultatif) » a été RETIRÉ
+        // (25/08/2026, demande de la gérante) : son libellé laissait croire
+        // qu'une gravure supplémentaire (ex. une date) était offerte, alors que
+        // tout texte en plus est payant. Ne pas le remettre.
       ],
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/annule`,
