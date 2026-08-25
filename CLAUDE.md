@@ -12,6 +12,17 @@
   inutile — déjà le cas. Ne pas l'inquiéter avec ça.
 - Ne PAS faire la démarche à sa place (administratif, son compte). Rôle = lui rendre le récap clair + rappeler.
 
+## ⛔ RÈGLE ABSOLUE — AUCUN ENVOI À UN CLIENT SANS VALIDATION EXPLICITE (25/08/2026, incident)
+> Incident : deux e-mails envoyés à un client (commande gourmette) depuis Gmail brut, dont un APRÈS
+> que la gérante a interrompu l'envoi. Elle l'a très mal pris, à juste titre.
+- **INTERDIT d'envoyer quoi que ce soit à un client** (e-mail, message, réponse) tant que la gérante
+  n'a pas VU le texte final et écrit « envoie ». « Prépare un message » = préparer et MONTRER, jamais envoyer.
+- Si elle interrompt ou dit « on envoie rien » : tout s'arrête, on ne réessaie PAS l'envoi qui a échoué.
+- **Les e-mails clients partent par le SITE** (Resend, à l'image de la marque, logo or/crème) — pas par
+  Gmail brut, sauf si elle demande explicitement Gmail.
+- Cette règle complète « RIEN SUR LE SITE SANS VALIDATION » : même principe pour toute action
+  tournée vers l'extérieur (client, fournisseur, réseau social).
+
 ## 🚫 RÈGLE D'OR — NE JAMAIS TOUCHER AUX APPLIS / SITES EN LIGNE SANS DEMANDE EXPLICITE (enregistré 13/08/2026)
 > **Demande ferme de la gérante, valable pour TOUTES les conversations et TOUS ses projets.**
 - **INTERDIT** de modifier, déployer, republier, reconfigurer ou supprimer quoi que ce soit sur un **site, une application ou un projet EN LIGNE** de la gérante (boutique Niv Création `nivcreation.fr`, projets Firebase `niv-creation`/`crafia-app`/`niv-social`, Stripe, réglages, agents, etc.) **sans qu'elle le demande explicitement**.
