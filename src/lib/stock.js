@@ -400,7 +400,7 @@ export async function batAtelierMessage(orderId, info = {}) {
   if (info.customerEmail) th.customerEmail = info.customerEmail;
   if (info.customerName) th.customerName = info.customerName;
   if (info.ref) th.ref = info.ref;
-  th.messages.push({ from: "atelier", text: (info.text || "").toString(), image: (info.image || "").toString(), at: Date.now() });
+  th.messages.push({ from: "atelier", text: (info.text || "").toString(), image: (info.image || "").toString(), at: Number(info.at) || Date.now() });
   th.status = "en_attente";
   th.clientUnread = false; // on répond → plus de « non lu »
   th.updatedAt = Date.now();
@@ -423,8 +423,11 @@ export async function batImportEmails(orderId, msgs = []) {
   for (const m of msgs) {
     const gid = String(m?.gmailId || "").trim();
     if (!gid || th.importedGmailIds.includes(gid)) continue;
-    th.messages.push({ from: "cliente", text: String(m?.text || "").trim(), at: Number(m?.at) || Date.now(), viaEmail: true, gmailId: gid });
+    const msg = { from: "cliente", text: String(m?.text || "").trim(), at: Number(m?.at) || Date.now(), viaEmail: true, gmailId: gid };
+    if (m?.decision === "valide" || m?.decision === "modif") msg.decision = m.decision;
+    th.messages.push(msg);
     th.importedGmailIds.push(gid);
+    if (msg.decision === "valide") th.status = "valide";
     added++;
   }
   if (added) {

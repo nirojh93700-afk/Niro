@@ -117,6 +117,22 @@ export async function POST(req) {
   if (!orderId) return Response.json({ error: "Commande manquante." }, { status: 400 });
   if (!text && !image) return Response.json({ error: "Ajoutez un message ou un aperçu." }, { status: 400 });
 
+  // Mode « import » : range dans le fil un échange DÉJÀ eu par e-mail
+  // (message atelier + réponse cliente), SANS envoyer le moindre e-mail.
+  // Sert quand la discussion a commencé hors du fil (ex. commande 1YPJVC5R).
+  if (body?.mode === "import") {
+    const thImp = await batAtelierMessage(orderId, {
+      text, image,
+      ref: body?.ref || "",
+      customerEmail: body?.customerEmail || "",
+      customerName: body?.customerName || "",
+      at: Number(body?.atelierAt) || undefined,
+    });
+    if (!thImp) return Response.json({ error: "Échec." }, { status: 500 });
+    if (body?.clientReply?.gmailId) await batImportEmails(orderId, [body.clientReply]);
+    return Response.json({ ok: true, thread: await getBatThread(orderId), emailed: false, via: "import" });
+  }
+
   const th = await batAtelierMessage(orderId, {
     text, image,
     ref: body?.ref || "",
