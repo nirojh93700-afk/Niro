@@ -163,9 +163,13 @@ const CATALOG_KEY = "catalog";
 const FS_SECTION_PREFIX = "catalog__"; // mode Firestore : un document par section
 let catalogMemory = {};
 
-async function getCatalogRaw() {
+// fresh = true : ignore le cache (60 s) et relit la base — OBLIGATOIRE avant
+// toute écriture « lecture-modification-écriture » sensible (anti-doublon…),
+// sinon on repart d'une copie périmée et on écrase ce qu'un autre serveur a
+// écrit entre-temps (bug du 25/08/2026 : e-mail d'avis envoyé 3 fois).
+async function getCatalogRaw(fresh = false) {
   if (useFirestore()) {
-    if (fsCache.catalog && Date.now() - fsCache.catalogAt < FS_CACHE_TTL) return cacheCopy(fsCache.catalog);
+    if (!fresh && fsCache.catalog && Date.now() - fsCache.catalogAt < FS_CACHE_TTL) return cacheCopy(fsCache.catalog);
     const db = getFirestoreDb();
     if (!db) return catalogMemory;
     try {
@@ -394,7 +398,7 @@ export async function getBatThreadByToken(token) {
 export async function batAtelierMessage(orderId, info = {}) {
   const id = String(orderId || "").trim();
   if (!id) return null;
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true);
   data.bat = data.bat || {};
   const th = data.bat[id] || { token: newBatToken(), status: "en_attente", ref: info.ref || "", messages: [] };
   if (info.customerEmail) th.customerEmail = info.customerEmail;
@@ -405,7 +409,7 @@ export async function batAtelierMessage(orderId, info = {}) {
   th.clientUnread = false; // on répond → plus de « non lu »
   th.updatedAt = Date.now();
   data.bat[id] = th;
-  await persistCatalog(data);
+  await persistCatalog(data, ["bat"]);
   return th;
 }
 
@@ -415,7 +419,7 @@ export async function batAtelierMessage(orderId, info = {}) {
 export async function batImportEmails(orderId, msgs = []) {
   const id = String(orderId || "").trim();
   if (!id || !Array.isArray(msgs) || !msgs.length) return 0;
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true);
   const th = (data.bat || {})[id];
   if (!th) return 0;
   th.importedGmailIds = th.importedGmailIds || [];
@@ -435,7 +439,7 @@ export async function batImportEmails(orderId, msgs = []) {
     th.clientUnread = true; // pastille « nouvelle réponse » sur la commande
     th.updatedAt = Date.now();
     data.bat[id] = th;
-    await persistCatalog(data);
+    await persistCatalog(data, ["bat"]);
   }
   return added;
 }
@@ -472,12 +476,12 @@ export async function getBatThreadsMeta() {
 export async function markBatRead(orderId) {
   const id = String(orderId || "").trim();
   if (!id) return false;
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true);
   const th = (data.bat || {})[id];
   if (th && th.clientUnread) {
     th.clientUnread = false;
     data.bat[id] = th;
-    await persistCatalog(data);
+    await persistCatalog(data, ["bat"]);
   }
   return true;
 }
@@ -560,16 +564,16 @@ export async function markScheduledSent(id, { ok, error } = {}) {
 // Registre anti-doublon des règles automatiques (une règle ne s'envoie qu'une
 // fois par commande).
 export async function hasAutoSent(ruleId, orderId) {
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true); // lecture FRAÎCHE : un cache périmé = e-mail en double
   return Boolean(data.autoSent?.[ruleId]?.[orderId]);
 }
 
 export async function markAutoSent(ruleId, orderId) {
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true);
   data.autoSent = data.autoSent || {};
   data.autoSent[ruleId] = data.autoSent[ruleId] || {};
   data.autoSent[ruleId][orderId] = true;
-  await persistCatalog(data);
+  await persistCatalog(data, ["autoSent"]);
   return true;
 }
 
@@ -578,10 +582,10 @@ export async function markAutoSent(ruleId, orderId) {
 export async function resetBatThread(orderId) {
   const id = String(orderId || "").trim();
   if (!id) return false;
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true);
   if (data.bat && data.bat[id]) {
     delete data.bat[id];
-    await persistCatalog(data);
+    await persistCatalog(data, ["bat"]);
   }
   return true;
 }
@@ -1378,7 +1382,11 @@ export async function setGmailCreds({ clientId, clientSecret, refreshToken }) {
   });
 }
 
-async function persistCatalog(data) {
+// sections (optionnel) : n'écrire QUE ces sections en base (ex. ["bat"]).
+// Sans ça, chaque écriture réécrit TOUTES les sections depuis la copie en
+// mémoire — si elle est périmée, elle écrase le travail des autres (doublons
+// d'e-mails du 25/08/2026). Toute nouvelle écriture ciblée doit passer la liste.
+async function persistCatalog(data, sections) {
   if (useFirestore()) {
     const db = getFirestoreDb();
     if (db) {
@@ -1386,7 +1394,10 @@ async function persistCatalog(data) {
         // Écriture en lot (atomique) : un document par section du catalogue.
         const batch = db.batch();
         const at = new Date().toISOString();
-        for (const section of Object.keys(data || {})) {
+        const cles = Array.isArray(sections) && sections.length
+          ? sections.filter((s) => s in (data || {}))
+          : Object.keys(data || {});
+        for (const section of cles) {
           const ref = db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + section);
           batch.set(ref, { json: JSON.stringify(data[section]), updatedAt: at });
         }
