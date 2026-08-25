@@ -20,6 +20,11 @@
 - Si elle interrompt ou dit « on envoie rien » : tout s'arrête, on ne réessaie PAS l'envoi qui a échoué.
 - **Les e-mails clients partent par le SITE** (Resend, à l'image de la marque, logo or/crème) — pas par
   Gmail brut, sauf si elle demande explicitement Gmail.
+- **AVANT TOUTE ACTION (envoi, réponse client, nouvel outil) : VÉRIFIER CE QUI EXISTE DÉJÀ SUR LE SITE.**
+  Ex. le fil « Aperçu / BAT » (`/api/admin/bat` + page `/suivi/[token]` : e-mail de marque + boutons
+  « Je valide / Demander une modification », réponse visible dans la commande) existait déjà et devait
+  servir pour la question au client de la commande 1YPJVC5R — au lieu de ça, envoi Gmail à la main.
+  Réutiliser l'existant, ne jamais réinventer (rappel du gabarit du 20/08, valable pour TOUT).
 - Cette règle complète « RIEN SUR LE SITE SANS VALIDATION » : même principe pour toute action
   tournée vers l'extérieur (client, fournisseur, réseau social).
 
