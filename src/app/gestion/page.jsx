@@ -1211,6 +1211,12 @@ export default function GestionPage() {
                     </div>
                   );
                 })()}
+                {o.alerteInterne && (
+                  <div style={{ background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem", whiteSpace: "pre-line" }}>
+                    <strong style={{ color: "#b32b2b" }}>⚠️ Geste promis à ce client :</strong>
+                    {"\n" + o.alerteInterne}
+                  </div>
+                )}
                 {(o.demandeGravure || o.messageGraver) && (
                   <div style={{ background: "#fbf3e6", border: "1px solid #e7d3a1", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem", whiteSpace: "pre-line" }}>
                     <strong>✍️ Texte demandé par la cliente (à graver) :</strong>

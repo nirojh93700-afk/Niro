@@ -340,8 +340,27 @@ export async function POST(req) {
          </div>`
       : "";
 
+    // ⚠️ GESTE PROMIS À CE CLIENT (réglage settings.clientNotes, ex. gravure
+    // offerte à Nina B. suite au contretemps du 29/08). Détection AUTOMATIQUE
+    // par adresse e-mail : impossible d'oublier, l'alerte est dans l'e-mail de
+    // commande ET sur la fiche commande dans Gestion.
+    let alerteInterne = "";
+    try {
+      const notes = (await getSettings())?.clientNotes || [];
+      const em = (customer.email || "").trim().toLowerCase();
+      const note = notes.find((n) => n && (n.email || "").trim().toLowerCase() === em);
+      if (note?.note) alerteInterne = String(note.note);
+    } catch { /* pas bloquant */ }
+    const alerteBlock = alerteInterne
+      ? `<div style="background:#fdecec;border:2px solid #d64545;padding:14px 16px;border-radius:10px;margin:0 0 16px;">
+           <strong style="color:#b32b2b;">⚠️ GESTE PROMIS À CE CLIENT</strong>
+           <p style="margin:8px 0 0;white-space:pre-line;">${escapeHtml(alerteInterne)}</p>
+         </div>`
+      : "";
+
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
+        ${alerteBlock}
         ${demandeBlock}
         ${immediateStart ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 14px;"><strong>⚡ Fabrication immédiate demandée</strong> — la cliente a renoncé au délai de 24 h. Tu peux lancer la fabrication tout de suite (commande verrouillée).</p>` : ""}
 
@@ -527,6 +546,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       shippingMethod: shippingRateName,
       shippingPrice: (shippingAmount || 0) / 100, // frais de livraison payés (pour le détail commande)
       relaisPoint: session.metadata?.relaisPoint || "",
+      alerteInterne, // geste promis au client (affiché en rouge dans Gestion)
       immediateStart,
       items: (session.line_items?.data || []).map((li) => ({
         name: li.price?.product?.name || li.description || "",

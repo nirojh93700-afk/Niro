@@ -335,6 +335,15 @@ export async function POST(req) {
     })).filter((t) => t.name || t.body);
   }
 
+  // Gestes promis par client : [{email, note}] — détectés automatiquement à
+  // chaque nouvelle commande (alerte rouge dans l'e-mail + la fiche commande).
+  if (Array.isArray(body.clientNotes)) {
+    patch.clientNotes = body.clientNotes.slice(0, 50).map((n) => ({
+      email: str(n?.email, 120).toLowerCase(),
+      note: str(n?.note, 500),
+    })).filter((n) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(n.email) && n.note);
+  }
+
   // Règles d'envoi automatique : [{id,name,subject,body,delayDays,trigger,active}]
   if (Array.isArray(body.autoRules)) {
     patch.autoRules = body.autoRules.slice(0, 20).map((r) => ({
