@@ -1026,7 +1026,7 @@ export async function creditCagnotte(email, amount, reason = "", orderId = "") {
   const e = normEmail(email);
   const amt = Math.round((Number(amount) || 0) * 100) / 100;
   if (!validEmail(e) || amt <= 0) return null;
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true); // frais : jamais depuis un cache périmé
   data.cagnotte = data.cagnotte || {};
   const c = data.cagnotte[e] || { balance: 0, history: [] };
   // Anti-doublon : ne crédite pas deux fois la même commande pour la même raison.
@@ -1038,7 +1038,7 @@ export async function creditCagnotte(email, amount, reason = "", orderId = "") {
   c.updatedAt = Date.now(); // toute activité repousse l'expiration (12 mois d'inactivité)
   c.remindedAt = 0;         // nouvelle activité → on pourra re-rappeler plus tard
   data.cagnotte[e] = c;
-  await persistCatalog(data);
+  await persistCatalog(data, ["cagnotte"]);
   return { balance: c.balance };
 }
 
@@ -1047,7 +1047,7 @@ export async function debitCagnotte(email, amount, orderId = "") {
   const e = normEmail(email);
   const want = Math.round((Number(amount) || 0) * 100) / 100;
   if (!validEmail(e) || want <= 0) return 0;
-  const data = await getCatalogRaw();
+  const data = await getCatalogRaw(true);
   data.cagnotte = data.cagnotte || {};
   const c = data.cagnotte[e] || { balance: 0, history: [] };
   // Anti-double débit : si cette commande a déjà débité la cagnotte (événement
@@ -1062,7 +1062,7 @@ export async function debitCagnotte(email, amount, orderId = "") {
   c.updatedAt = Date.now();
   c.remindedAt = 0;
   data.cagnotte[e] = c;
-  await persistCatalog(data);
+  await persistCatalog(data, ["cagnotte"]);
   return used;
 }
 

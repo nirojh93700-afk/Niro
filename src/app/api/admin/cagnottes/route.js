@@ -1,4 +1,4 @@
-import { isAdmin, listCagnottes, getSettings, CAGNOTTE_EXPIRY_DAYS } from "@/lib/stock";
+import { isAdmin, listCagnottes, getSettings, getCagnotte, creditCagnotte, CAGNOTTE_EXPIRY_DAYS } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -24,4 +24,20 @@ export async function GET(req) {
   let cashbackPercent = 5;
   try { cashbackPercent = Number((await getSettings()).cashbackPercent) || 0; } catch { /* 5 */ }
   return Response.json({ cagnottes, total, count: cagnottes.length, cashbackPercent });
+}
+
+// Crédit MANUEL d'une cagnotte (geste commercial décidé par la gérante).
+// Ajouté le 29/08/2026 (geste pour Nina B.). Garde-fous : montant 0,01–100 €.
+export async function POST(req) {
+  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  let body;
+  try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
+  const email = String(body?.email || "").trim().toLowerCase();
+  const amount = Number(body?.amount);
+  const reason = String(body?.reason || "Geste commercial").slice(0, 120);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: "Adresse invalide." }, { status: 400 });
+  if (!Number.isFinite(amount) || amount <= 0 || amount > 100) return Response.json({ error: "Montant invalide (0,01 à 100 €)." }, { status: 400 });
+  await creditCagnotte(email, amount, reason, "");
+  const c = await getCagnotte(email);
+  return Response.json({ ok: true, email, balance: c?.balance ?? null });
 }
