@@ -1,5 +1,17 @@
 # Guide agent — Boutique Niv Création
 
+## 🥃 VERRES EN RUPTURE VOLONTAIRE — À REMETTRE PLUS TARD (29/08/2026, demande gérante)
+> Problème de réglage de la machine (gravure sur verre). **Les 5 produits verre sont volontairement
+> en rupture** (stock 0 → fiches visibles mais « Épuisé », paiement bloqué). Quand elle dit
+> « remets les verres » : remettre EXACTEMENT ces stocks via POST `/api/admin/stock`
+> (`{variantId, stock}`) ou Gestion → Catalogue → Stock. Ne PAS les remettre sans sa demande.
+- `verre-whisky-grave` = 998 · `verre-whisky-grave-2` = 100 · `verre-whisky-grave-4` = 100
+- `verre-whisky-fete-des-peres` = 999
+- `verre-vin-1` = 100 · `verre-vin-2` = 100 · `verre-vin-4` = 100
+- `flute-1` = 100 · `flute-2` = 100 · `flute-4` = 100
+- `carafe-whisky-gravee` = 6
+- NB : la clé stock d'une variante = `stockId || id` (aucun code modifié pour cette rupture).
+
 ## 📦 À FAIRE PAR LA GÉRANTE — REP EMBALLAGES / IDU (enregistré 18/08/2026, IMPORTANT — la rappeler)
 > **Démarche administrative en attente, à faire « plus tard » (demande de la gérante).** Quand elle
 > demande « où j'en suis / qu'est-ce qu'il reste » ou reparle des emballages/Etsy/REP, **le lui rappeler**.
