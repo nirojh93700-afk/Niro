@@ -1,5 +1,14 @@
 # Guide agent — Boutique Niv Création
 
+## 🎁 GESTE CLIENT EN COURS — NINA BELTRAN (29/08/2026, à surveiller)
+> Commande verre whisky 1CSPQUR9 non gravée (machine) → **remboursée intégralement par la gérante
+> (Stripe, 31,80 €)**. Gestes promis par e-mail : **gravure OFFERTE sur un bijou** si elle recommande
+> (+ 5 € de cagnotte, à créditer AVANT l'envoi du message qui l'annonce — en attente du « envoie »).
+- **⚠️ SI UNE COMMANDE DE Nina Beltran (beltran.030201@gmail.com) ARRIVE : RAPPELER À LA GÉRANTE
+  que la gravure est offerte pour elle** (ne pas facturer le supplément gravure / le rembourser).
+- Ne pas re-proposer de remboursement du verre (déjà fait). Commande 1CSPQUR9 à passer « Annulée »
+  dans Gestion si la gérante le demande.
+
 ## 🥃 VERRES EN RUPTURE VOLONTAIRE — À REMETTRE PLUS TARD (29/08/2026, demande gérante)
 > Problème de réglage de la machine (gravure sur verre). **Les 5 produits verre sont volontairement
 > en rupture** (stock 0 → fiches visibles mais « Épuisé », paiement bloqué). Quand elle dit
