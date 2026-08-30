@@ -393,6 +393,22 @@ export async function POST(req) {
           },
           optional: true,
         }]),
+        // 🎁 Pendant le mode « délai allongé » (settings.vacation) : on demande
+        // la préférence de cadeau d'attente (offert dans chaque commande).
+        // Invisible le reste du temps. (Demande gérante, 30/08/2026.)
+        ...(vacationActive(settings?.vacation) ? [{
+          key: "cadeau",
+          label: { type: "custom", custom: "Votre cadeau d'attente (offert)" },
+          type: "dropdown",
+          dropdown: {
+            options: [
+              { label: "Surprise — je vous fais confiance", value: "surprise" },
+              { label: "Plutôt femme", value: "femme" },
+              { label: "Plutôt homme", value: "homme" },
+            ],
+          },
+          optional: true,
+        }] : []),
         // ⚠️ Le champ « Message ou date à graver (facultatif) » a été RETIRÉ
         // (25/08/2026, demande de la gérante) : son libellé laissait croire
         // qu'une gravure supplémentaire (ex. une date) était offerte, alors que

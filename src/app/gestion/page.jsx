@@ -1211,6 +1211,12 @@ export default function GestionPage() {
                     </div>
                   );
                 })()}
+                {o.cadeauChoix && (
+                  <div style={{ background: "#fbf3e6", border: "2px solid #c9a24b", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem" }}>
+                    <strong>🎁 Cadeau d'attente à glisser dans le colis</strong> — préférence : {({ surprise: "Surprise", femme: "Plutôt femme", homme: "Plutôt homme" })[o.cadeauChoix] || o.cadeauChoix}
+                    {o.total >= 80 && <div style={{ color: "#b32b2b", fontWeight: 700, marginTop: 4 }}>🎁🎁 Commande ≥ 80 € → DEUX cadeaux</div>}
+                  </div>
+                )}
                 {o.alerteInterne && (
                   <div style={{ background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem", whiteSpace: "pre-line" }}>
                     <strong style={{ color: "#b32b2b" }}>⚠️ Geste promis à ce client :</strong>

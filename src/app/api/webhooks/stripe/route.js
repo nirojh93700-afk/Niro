@@ -358,9 +358,22 @@ export async function POST(req) {
          </div>`
       : "";
 
+    // 🎁 Cadeau d'attente (mode délai allongé) : préférence choisie au paiement
+    // + rappel DEUX cadeaux dès 80 € (règle gérante, 30/08/2026).
+    const choixCadeau = (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value || "";
+    const cadeauLabel = { surprise: "Surprise", femme: "Plutôt femme", homme: "Plutôt homme" }[choixCadeau] || "";
+    const deuxCadeaux = choixCadeau && (session.amount_total || 0) / 100 >= 80;
+    const cadeauBlock = choixCadeau
+      ? `<div style="background:#fbf3e6;border:2px solid #c9a24b;padding:12px 14px;border-radius:10px;margin:0 0 14px;">
+           <strong>🎁 Cadeau d'attente à glisser dans le colis</strong> — préférence : ${escapeHtml(cadeauLabel)}
+           ${deuxCadeaux ? `<div style="color:#b32b2b;font-weight:bold;margin-top:6px;">🎁🎁 Commande ≥ 80 € → DEUX cadeaux</div>` : ""}
+         </div>`
+      : "";
+
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
         ${alerteBlock}
+        ${cadeauBlock}
         ${demandeBlock}
         ${immediateStart ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 14px;"><strong>⚡ Fabrication immédiate demandée</strong> — la cliente a renoncé au délai de 24 h. Tu peux lancer la fabrication tout de suite (commande verrouillée).</p>` : ""}
 
@@ -522,6 +535,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       sessionId: session.id, // anti-doublon (si l'événement est rejoué)
       spec: orderSpec || null,
       // Textes tapés par la cliente au paiement (précisions gravure + date/message à graver).
+      // 🎁 Préférence de cadeau d'attente (mode délai allongé) — affichée dans Gestion.
+      cadeauChoix: (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value || "",
       demandeGravure: (session.custom_fields || []).find((f) => f.key === "personnalisation")?.text?.value || "",
       messageGraver: (session.custom_fields || []).find((f) => f.key === "message_cadeau")?.text?.value || "",
       // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).
