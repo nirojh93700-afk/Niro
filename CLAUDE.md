@@ -1,5 +1,21 @@
 # Guide agent — Boutique Niv Création
 
+## ⏳ MODE « DÉLAI ALLONGÉ » (vacances 2→23 SEPT) — PRÊT, EN ATTENTE DU « LANCE » (30/08/2026)
+> Tout est préparé et ÉTEINT. **Quand la gérante dit « lance » (ou « active ») : passer
+> `settings.vacation.enabled` à `true`** (POST /api/admin/settings) — rien d'autre à faire, le mode
+> s'allume tout seul le 02/09 et s'éteint le 23/09 (jour inclus). Ne JAMAIS l'activer sans son mot.
+- **Déjà réglé dans `settings.vacation`** (enabled:false) : dates 2026-09-02 → 2026-09-23 (reprise 23/09),
+  texte SANS parler de congés (« Fabriqué à la commande — forte demande — délai de confection actuel
+  3 à 4 semaines minimum — commandes traitées dans leur ordre d'arrivée »), cadeau activé
+  (« un cadeau surprise est glissé dans chaque commande »).
+- **Code déployé (dormant tant que le mode est éteint)** : case au paiement « 🎁 Votre cadeau
+  d'attente (offert) » (Surprise / Plutôt femme / Plutôt homme, clé `cadeau`) → stockée sur la
+  commande (`cadeauChoix`) → encadré doré dans Gestion + e-mail d'alerte, avec rappel rouge
+  **« 🎁🎁 Commande ≥ 80 € → DEUX cadeaux »** (règle gérante).
+- Après activation, VÉRIFIER : bandeau + encart fiche/panier affichés, `/api/shipping-config`
+  renvoie `vacation.message`, et la case cadeau apparaît au paiement.
+- La gérante part en vacances le jeudi 03/09 environ ; elle revient le 23/09.
+
 ## 🎁 GESTE CLIENT EN COURS — NINA BELTRAN (29/08/2026, à surveiller)
 > Commande verre whisky 1CSPQUR9 non gravée (machine) → **remboursée intégralement par la gérante
 > (Stripe, 31,80 €)**. Gestes promis par e-mail : **gravure OFFERTE sur un bijou** si elle recommande
