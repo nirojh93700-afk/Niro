@@ -1198,6 +1198,9 @@ export async function getSettings() {
     atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },
     sections: { categories: true, trust: true, featured: true, atelier: true, ...(s.sections || {}) },
     apropos: s.apropos || "", // contenu HTML de la page À propos (vide = défaut)
+    // Gestes promis par client [{email, note}] : détectés automatiquement à
+    // chaque commande (alerte rouge e-mail + Gestion). Réglés via l'API admin.
+    clientNotes: Array.isArray(s.clientNotes) ? s.clientNotes : [],
     // Prix conseillé : % ajouté au-dessus du prix, affiché barré avec un libellé
     // (comparaison honnête « moins cher qu'ailleurs », pas une fausse promo).
     refMarkup: Number(s.refMarkup) || 0,
