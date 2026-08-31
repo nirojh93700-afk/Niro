@@ -1198,7 +1198,7 @@ export const products = [
     descriptionHtml: `<p>Un pendentif <strong>double cœur</strong> serti de zircons, avec une <strong>pierre centrale scintillante</strong> qui capte la lumière, sur une fine chaîne dorée. Romantique et lumineux, un cadeau qui touche (Saint-Valentin, anniversaire, fête des Mères).</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, plaqué or 18 carats (PVD)</li>
+<li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD)</li>
 <li><strong>Pierres :</strong> zircons (pavé + pierre centrale)</li>
 <li><strong>Finition :</strong> résistante à l'eau, ne ternit pas</li>
 <li><strong>Fermoir :</strong> mousqueton</li>
@@ -1209,7 +1209,7 @@ export const products = [
     badge: "Nouveau",
     name: "Collier Perle solitaire",
     weight: 35, pickup: false, letter: true, subcategory: "femme",
-    title: "Collier perle solitaire doré — chaîne fine plaquée or, cadeau femme minimaliste",
+    title: "Collier perle solitaire doré — chaîne fine dorée, cadeau femme minimaliste",
     category: "bijoux", type: "Collier",
     tagline: "Une perle délicate sur une chaîne fine dorée — élégant, minimaliste, à offrir.",
     personalizable: false,
@@ -1222,10 +1222,10 @@ export const products = [
     variants: [
       { id: "collier-perle-solitaire-dore", title: "Doré", price: 21.90, stockId: "collier-perle-solitaire" },
     ],
-    descriptionHtml: `<p>Un bijou tout en délicatesse : une <strong>perle solitaire</strong> posée sur une <strong>chaîne fine plaquée or</strong>. Minimaliste et intemporel, il se porte au quotidien comme pour une occasion.</p>
+    descriptionHtml: `<p>Un bijou tout en délicatesse : une <strong>perle solitaire</strong> posée sur une <strong>chaîne fine dorée</strong>. Minimaliste et intemporel, il se porte au quotidien comme pour une occasion.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, plaqué or véritable (PVD)</li>
+<li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD)</li>
 <li><strong>Perle :</strong> perle nacrée</li>
 <li><strong>Finition :</strong> résistante à l'eau, ne ternit pas</li>
 <li><strong>Fermoir :</strong> mousqueton</li>

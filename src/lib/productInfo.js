@@ -969,7 +969,7 @@ Un souci à la réception ?
   "collier-coeur-scintillant": {
     material: `Taille & Matériaux
 - Pendentif double cœur serti de zircons + pierre centrale scintillante, sur chaîne fine.
-- Matière : acier inoxydable 304 plaqué or 18 carats (PVD). Fermoir mousqueton.
+- Matière : acier inoxydable 304 doré (finition PVD). Fermoir mousqueton.
 - Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
 - Bijou cadeau prêt à offrir (non personnalisé).
@@ -982,7 +982,7 @@ Un souci à la réception ?
 
   "collier-perle-solitaire": {
     material: `Taille & Matériaux
-- Collier à perle solitaire sur chaîne fine, acier inoxydable 304 plaqué or véritable (PVD).
+- Collier à perle solitaire sur chaîne fine, acier inoxydable 304 doré (finition PVD).
 - Perle nacrée. Poids ~8 g. Fermoir mousqueton.
 - Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
