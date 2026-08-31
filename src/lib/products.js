@@ -925,9 +925,11 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: ["/produits/bracelet_a_graver_dore.jpg",
+    images: [
+      "/produits/bracelet_a_graver_dore.jpg",
       "/produits/bracelet-femme-acier-grave.jpg", // exemple gravé (photos gérante, 31/08/2026)
-      "/produits/bracelet-femme-acier-porte.jpg", // porté au poignet],
+      "/produits/bracelet-femme-acier-porte.jpg", // porté au poignet
+    ],
     variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 27.90 }],
     descriptionHtml: `<p>Bracelet femme délicat en <strong>acier inoxydable doré</strong>, à personnaliser par gravure.</p>
 <ul><li>Acier inoxydable, ne ternit pas</li><li>Gravure fine au laser</li></ul>`,
