@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
-import { buildShippingOptions } from "@/lib/shipping";
+import { buildShippingOptions, resolveShippingConfig } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
@@ -145,6 +145,8 @@ export async function POST(req) {
   let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
   let glassQty = 0;  // nombre de verres (fragiles) — envoi croissant dédié
   let letterOnly = true;
+  let tousBijouxLettre = true; // tous les articles sont des bijoux/petits objets (avant emballage)
+  let bijouEnBoite = false;    // au moins un bijou emballé dans une boîte rigide
   let allFreeShip = true; // tous les articles ont la livraison offerte
   let allPickup = true; // retrait proposé seulement si TOUS les articles sont éligibles (mariage)
   // Livraison offerte par SEUIL sur colis (ex. verres : lot de 4 ≥ 45 € → offerte).
@@ -205,9 +207,18 @@ export async function POST(req) {
     const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0);
     totalGrams += unitGrams * quantity;
     subtotal += unitPrice * quantity;
-    if (!product.letter) {
+    // 📦 Un bijou emballé dans une BOÎTE rigide (boîte cadeau, Pack Collier /
+    // Pack Bracelet) dépasse les 3 cm de la Lettre Suivie → il part en petit
+    // colis (tarif colis), comme partout ailleurs. Sac / microfibre restent
+    // plats → lettre. (Règle gérante, 31/08/2026 — alignée sur le marché.)
+    const pkgBoite = (pkg.chosen || []).some((id) => /boite|pack/i.test(String(id)));
+    if (product.letter && pkgBoite) bijouEnBoite = true;
+    if (!product.letter) tousBijouxLettre = false;
+    if (!product.letter || pkgBoite) {
       letterOnly = false;
       parcelQty += quantity;
+    }
+    if (!product.letter) {
       // Un produit « livraison toujours offerte » ne doit PAS annuler la
       // gratuité au seuil : sinon un panier mixte (ex. couverts enfants
       // « port offert » + carafe « livraison offerte dès 45 € ») facturait le
@@ -360,7 +371,12 @@ export async function POST(req) {
       shipping_address_collection: { allowed_countries: allowedCountries },
       shipping_options: buildShippingOptions({
         totalGrams, subtotal, parcelQty, glassQty, letterOnly,
-        freeShipping: allFreeShip || (allColisThreshFree && parcelQty > 0 && subtotal >= colisThresh),
+        // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la
+        // promesse bijoux « offerte dès 45 € » — qui reste vraie même quand une
+        // boîte cadeau fait passer le bijou en petit colis (panier 100 % bijoux).
+        freeShipping: allFreeShip
+          || (allColisThreshFree && parcelQty > 0 && subtotal >= colisThresh)
+          || (tousBijouxLettre && bijouEnBoite && subtotal >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
         country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
         // Retrait proposé si un article mariage est marqué OU si le colis est
         // lourd (≥ 2 kg), et seulement dans la zone autorisée.
