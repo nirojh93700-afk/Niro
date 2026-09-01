@@ -1,5 +1,13 @@
 # Guide agent — Boutique Niv Création
 
+## 📩 ALERTES « RETOUR EN STOCK » — EN LIGNE (01/09/2026)
+> Fiche épuisée → encadré « Prévenez-moi dès son retour » (`RestockAlerte.jsx` →
+> POST `/api/restock-alert`, stockage section `restockAlerts` du blob, écritures fraîches/section).
+> **AUCUN e-mail automatique (règle ferme gérante)** : les envois partent UNIQUEMENT quand elle
+> clique « 📩 Prévenir » dans Gestion → Produits & Stock (`RestockAlertsAdmin.jsx` →
+> POST `/api/admin/restock-alerts` action send/clear ; send = e-mail de marque « Il est de retour »
+> puis liste vidée). Le compteur d'inscrits = indicateur de demande pour ses réachats.
+
 ## ⏳ MODE « DÉLAI ALLONGÉ » (vacances 2→23 SEPT) — PRÊT, EN ATTENTE DU « LANCE » (30/08/2026)
 > Tout est préparé et ÉTEINT. **Quand la gérante dit « lance » (ou « active ») : passer
 > `settings.vacation.enabled` à `true`** (POST /api/admin/settings) — rien d'autre à faire, le mode
