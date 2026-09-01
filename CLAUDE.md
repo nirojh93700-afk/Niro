@@ -15,6 +15,20 @@
 > POST `/api/admin/restock-alerts` action send/clear ; send = e-mail de marque « Il est de retour »
 > puis liste vidée). Le compteur d'inscrits = indicateur de demande pour ses réachats.
 
+## ⚠️ BUG CORRIGÉ — DOUBLE CONFIRMATION DE COMMANDE (01/09/2026)
+> Constaté sur la commande de Sophie Berardo (réf. 0C1CGL2Q, devis DEV-0003) : elle a reçu l'e-mail
+> de confirmation **2 fois** (à 1 seconde d'écart), et 2 commandes identiques existaient en base.
+> Cause réelle : Stripe a livré 2× le même événement `checkout.session.completed` quasi
+> simultanément ; l'ancien anti-doublon (« je cherche puis j'écris ») n'était PAS atomique — les deux
+> requêtes voyaient « rien trouvé » avant qu'aucune n'ait écrit.
+- **Corrigé** : `claimSiteOrder()` (`src/lib/firebase.js`) réserve la commande via un **id de document
+  déterministe** (`s_<sessionId>`) + `Firestore .create()` — appelée en TOUT PREMIER dans le webhook
+  (`src/app/api/webhooks/stripe/route.js`), AVANT tout envoi d'e-mail. Une seule requête peut réussir
+  la réservation ; l'autre s'arrête aussitôt. `recordSiteOrder()` écrit ensuite les détails sur ce
+  document déjà réservé (2e paramètre `claimedDocId`).
+- Cashback vérifié : PAS doublé (creditCagnotte a son propre anti-doublon par orderId+reason).
+- Doublon nettoyé en base (commande `EX8Eb8CF2l6q995vRyrw` supprimée, gardé `MlvykV6Aulj3nCoSzd0H`).
+
 ## ⏳ MODE « DÉLAI ALLONGÉ » (vacances 2→23 SEPT) — PRÊT, EN ATTENTE DU « LANCE » (30/08/2026)
 > Tout est préparé et ÉTEINT. **Quand la gérante dit « lance » (ou « active ») : passer
 > `settings.vacation.enabled` à `true`** (POST /api/admin/settings) — rien d'autre à faire, le mode
