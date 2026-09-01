@@ -1639,6 +1639,49 @@ export const products = [
 <p>Une initiale devant, une date derrière. Un prénom d'un côté, un mot de l'autre. C'est un bijou simple qui porte quelque chose de personnel, visible ou caché.</p>`,
   },
   {
+    slug: "collier-coeur-grave",
+    badge: "Nouveau",
+    name: "Collier Cœur à graver recto-verso",
+    weight: 45, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier cœur plat à graver recto-verso — prénom, date ou message, doré, or rose ou argenté",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Un cœur plat et lisse, à graver au recto, au verso, ou les deux.",
+    personalizable: true, personalizationLabel: "Gravure recto-verso : les deux faces du cœur (+3 € par face)",
+    // Deux faces gravables, chacune +3 €. Supplément chiffré APRÈS la remise bijoux.
+    engravingPricing: {
+      textKeys: ["recto", "verso"],
+      textExtra: 3,
+    },
+    personalizationFields: [
+      { key: "note", type: "note", text: "Le cœur se grave des deux côtés. Remplissez le recto, le verso, ou les deux — chaque face gravée ajoute 3 €. La face laissée vide reste lisse et polie." },
+      { key: "recto", label: "Gravure — recto (+3 €)", placeholder: "Ex. Sophia", maxLength: 20, optional: true },
+      { key: "verso", label: "Gravure — verso (+3 €)", placeholder: "Ex. 27.03.2019", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/collier-coeur-grave-1.jpg",
+      "/produits/collier-coeur-grave-2.jpg",
+      "/produits/collier-coeur-grave-3.jpg",
+      "/produits/collier-coeur-grave-4.jpg",
+      "/produits/collier-coeur-grave-5.jpg",
+    ],
+    variants: [
+      { id: "collier-coeur-grave-dore", title: "Doré", price: 37.90, stockId: "collier-coeur-grave-dore", image: "/produits/collier-coeur-grave-3.jpg" },
+      { id: "collier-coeur-grave-orrose", title: "Or rose", price: 37.90, stockId: "collier-coeur-grave-orrose", image: "/produits/collier-coeur-grave-4.jpg" },
+      { id: "collier-coeur-grave-argente", title: "Argenté", price: 36.90, stockId: "collier-coeur-grave-argente", image: "/produits/collier-coeur-grave-5.jpg" },
+    ],
+    descriptionHtml: `<p>Un <strong>cœur plat et lisse</strong> sur une chaîne fine — la forme la plus simple pour dire quelque chose. Sa surface polie se grave <strong>des deux côtés</strong> : un prénom devant, une date derrière, ou un petit mot qu'on garde pour soi.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier au titane, résistant à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté</li>
+<li><strong>Chaîne :</strong> maille câble, fermoir mousqueton</li>
+<li><strong>Poids :</strong> environ 18 g</li>
+<li><strong>Gravure recto-verso :</strong> <strong>3 € par face</strong>, vous ne payez que ce que vous faites graver</li>
+</ul>
+<p>Le cœur est assez large pour un prénom entier, une date complète ou une courte phrase. Un cadeau qui marche pour un anniversaire, une naissance, une date de rencontre.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",
