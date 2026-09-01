@@ -1260,7 +1260,7 @@ export const products = [
     descriptionHtml: `<p>Un <strong>cœur ouvert doré</strong> entrelacé d'un <strong>anneau serti de zircons</strong> taille princesse : un bijou lumineux et romantique, idéal à offrir (Saint-Valentin, anniversaire, « je t'aime »).</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, placage or 18 carats (PVD), zircons</li>
+<li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD), zircons</li>
 <li><strong>Finition :</strong> doré brillant, résistant à l'eau et ne ternit pas</li>
 <li><strong>Chaîne :</strong> maille fine, longueur ajustable</li>
 <li><strong>Gravure en option :</strong> prénom, initiales ou date gravés au laser sur le côté du cœur (choisir « Avec gravure »)</li>

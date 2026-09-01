@@ -997,7 +997,7 @@ Un souci à la réception ?
   "collier-coeur-zircon": {
     material: `Taille & Matériaux
 - Pendentif cœur ouvert doré entrelacé d'un anneau serti de zircons taille princesse.
-- Matière : acier inoxydable 304, placage or 18 carats véritable (procédé PVD), zircons.
+- Matière : acier inoxydable 304, doré (finition PVD), zircons.
 - Chaîne latérale aplatie (maille plate) à longueur ajustable. Poids ~10 g.
 - Doré brillant, étanche : résiste à l'eau et ne ternit pas.`,
     usage: `Personnalisation & Entretien
