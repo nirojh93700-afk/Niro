@@ -1682,6 +1682,50 @@ export const products = [
 <p>Le cœur est assez large pour un prénom entier, une date complète ou une courte phrase. Un cadeau qui marche pour un anniversaire, une naissance, une date de rencontre.</p>`,
   },
   {
+    slug: "bracelet-perles-pastille",
+    badge: "Nouveau",
+    name: "Bracelet perles à pastille gravée",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet perles acier à pastille gravée — taille réglable 16 à 23 cm, doré ou argenté",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un rang de perles d'acier, une pastille à graver, et une taille qui s'ajuste au poignet.",
+    personalizable: true, personalizationLabel: "Gravure sur la pastille en option (+3 €)",
+    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
+    engravingPricing: {
+      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
+    },
+    personalizationFields: [
+      { key: "gravure", type: "select", label: "Voulez-vous faire graver la pastille ?", options: [
+        { value: "non", label: "Sans gravure" },
+        { value: "oui", label: "Avec gravure (+3 €)" },
+      ] },
+      { key: "note", type: "note", text: "La pastille est petite (environ 1 cm) : préférez un prénom court, des initiales ou une date pour que la gravure reste bien lisible.", showIfField: "gravure", showIfValue: "oui" },
+      { key: "texte", label: "Texte à graver sur la pastille", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 12, showIfField: "gravure", showIfValue: "oui" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+    ],
+    images: [
+      "/produits/bracelet-perles-pastille-1.jpg",
+      "/produits/bracelet-perles-pastille-2.jpg",
+      "/produits/bracelet-perles-pastille-3.jpg",
+      "/produits/bracelet-perles-pastille-4.jpg",
+      "/produits/bracelet-perles-pastille-5.jpg",
+    ],
+    variants: [
+      { id: "bracelet-perles-pastille-dore", title: "Doré", price: 37.90, stockId: "bracelet-perles-pastille-dore", image: "/produits/bracelet-perles-pastille-1.jpg" },
+      { id: "bracelet-perles-pastille-argente", title: "Argenté", price: 36.90, stockId: "bracelet-perles-pastille-argente", image: "/produits/bracelet-perles-pastille-3.jpg" },
+    ],
+    descriptionHtml: `<p>Un rang de <strong>perles d'acier polies</strong>, une petite <strong>pastille ronde à graver</strong>, et une <strong>chaîne coulissante</strong> terminée par deux billes : le bracelet s'ajuste d'un geste, de <strong>16 à 23 cm</strong>.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (revêtement PVD)</li>
+<li><strong>Deux finitions :</strong> doré et argenté — étanche, résiste à l'eau et ne ternit pas</li>
+<li><strong>Taille réglable</strong> de 16 à 23 cm par chaîne coulissante</li>
+<li><strong>Poids :</strong> environ 12 g</li>
+<li><strong>Gravure en option (+3 €) :</strong> prénom court, initiales ou date au laser sur la pastille</li>
+</ul>
+<p>C'est le cadeau facile : la taille s'ajuste toute seule, plus besoin de connaître le tour de poignet de la personne à qui vous l'offrez.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",

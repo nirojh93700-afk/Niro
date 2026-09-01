@@ -19,7 +19,7 @@ export const DEFAULT_PACKAGING = [
 
 const COLLIERS = ["collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique", "collier-coeur-zircon", "collier-perle-solitaire", "collier-coeur-scintillant", "collier-double-coeur", "collier-coeur-plaques", "collier-3coeurs", "collier-medaillon-pivotant", "collier-pastille", "collier-coeur-grave"];
 const BRACELETS_LONG = ["bracelet-homme-identite-gourmette", "bracelet-homme-acier-silicone", "bracelet-homme-cuir-tresse-acier", "bracelet-homme-chaine-acier", "bracelet-empreinte-pied-bebe", "bracelet-cordon-plaque", "bracelet-homme-plaque-cuir"];
-const BRACELETS_CARRE = ["bracelet-femme-acier", "bracelet-femme-coeur", "bracelet-femme-papillon", "bracelet-coeur-acier", "bracelet-coeur-a-graver-ot", "bracelet-ange", "bracelet-maille-trombone", "bracelet-coeur-chaine"];
+const BRACELETS_CARRE = ["bracelet-femme-acier", "bracelet-femme-coeur", "bracelet-femme-papillon", "bracelet-coeur-acier", "bracelet-coeur-a-graver-ot", "bracelet-ange", "bracelet-maille-trombone", "bracelet-coeur-chaine", "bracelet-perles-pastille"];
 
 // Attribution par produit : { slug: { on, ids, free } }.
 export const DEFAULT_PRODUCT_PACKAGING = (() => {

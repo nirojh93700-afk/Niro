@@ -1169,6 +1169,24 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "bracelet-perles-pastille": {
+    material: `Taille & Matériaux
+- Rang de perles d'acier polies, petite pastille ronde à graver, chaîne coulissante à deux billes.
+- Taille réglable de 16 à 23 cm : convient à tous les poignets.
+- Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
+- Deux finitions : doré ou argenté. Poids ~12 g. Étanche, ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- La pastille (environ 1 cm) se grave au laser : prénom court, initiales ou date (12 caractères maximum).
+- La gravure est une option à 3 € ; sans elle, la pastille reste lisse et polie.
+- Choisissez votre écriture parmi nos huit polices.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.
