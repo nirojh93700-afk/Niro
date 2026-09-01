@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode } from "@/lib/stock";
 import { sendClientMail } from "@/lib/clientMail";
-import { recordSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderBySession, findSiteOrderByPaymentIntent } from "@/lib/firebase";
+import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
 import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -167,17 +167,15 @@ export async function POST(req) {
     return Response.json({ received: true });
   }
 
-  // ANTI-DOUBLON : si Stripe renvoie le même événement (ou le rejoue), on ne
-  // retraite pas la commande. On vérifie la session ET l'identifiant de paiement
-  // (ce dernier couvre aussi les anciennes commandes sans sessionId).
-  try {
-    const sid = event.data.object?.id;
-    const pi = (event.data.object?.payment_intent || "").toString();
-    if ((sid && (await findSiteOrderBySession(sid))) || (pi && (await findSiteOrderByPaymentIntent(pi)))) {
-      return Response.json({ received: true, duplicate: true });
-    }
-  } catch (e) {
-    console.error("Vérif doublon commande:", e.message);
+  // ANTI-DOUBLON RÉEL, ATOMIQUE — AVANT TOUT ENVOI D'E-MAIL (01/09/2026) :
+  // si Stripe renvoie deux fois le même événement (quasi simultanément), une
+  // seule des deux requêtes obtient la réservation ; l'autre s'arrête ici,
+  // AVANT d'assembler ou d'envoyer quoi que ce soit au client. Voir le
+  // commentaire de claimSiteOrder() dans lib/firebase.js pour le pourquoi.
+  const sid = event.data.object?.id;
+  const claimedDocId = sid ? await claimSiteOrder(sid) : null;
+  if (sid && !claimedDocId) {
+    return Response.json({ received: true, duplicate: true });
   }
 
   // Si c'est le paiement d'un devis (commande sur mesure), on le marque "payé"
@@ -582,7 +580,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         total: (li.amount_total || 0) / 100,           // ligne après remise
       })),
       stock: event.data.object?.metadata?.stock || "",
-    });
+    }, claimedDocId); // écrit sur le document déjà réservé plus haut (anti-doublon)
 
     // Journalise l'e-mail de confirmation dans le fil de la commande (suivi admin,
     // invisible au client). Uniquement si l'e-mail est bien parti et la commande créée.

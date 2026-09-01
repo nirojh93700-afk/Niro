@@ -223,16 +223,51 @@ export async function getFirebaseVariantStock(products) {
 }
 
 // Enregistre une vente du site (collection dédiée, sans risque pour l'appli).
-export async function recordSiteOrder(order) {
+// ANTI-DOUBLON RÉEL (01/09/2026) : Stripe peut livrer DEUX FOIS le même
+// événement « checkout.session.completed » (quasi simultanément). Une simple
+// vérification « la commande existe déjà ? » suivie d'une écriture séparée
+// N'EST PAS atomique : deux requêtes concurrentes peuvent toutes les deux voir
+// « rien trouvé » avant qu'aucune n'ait écrit, et TOUTES LES DEUX envoient
+// alors l'e-mail de confirmation au client (constaté sur la commande
+// 0C1CGL2Q, Sophie Berardo — reçue deux fois, à 1 seconde d'écart).
+//
+// Corrigé en deux temps :
+// 1) claimSiteOrder() — appelée en tout premier, AVANT tout envoi d'e-mail —
+//    réserve un document Firestore à IDENTIFIANT DÉTERMINISTE (dérivé du
+//    sessionId Stripe) via `.create()` : Firestore refuse tout seul la 2e
+//    réservation si le document existe déjà. C'est la garantie atomique
+//    qu'un simple test-puis-écriture ne peut pas offrir.
+// 2) recordSiteOrder() écrit ensuite les détails complets SUR ce document déjà
+//    réservé (un seul appelant possible, donc écrasement sûr).
+export async function claimSiteOrder(sessionId) {
+  const a = getApp();
+  if (!a || !sessionId) return null;
+  const docId = `s_${String(sessionId).replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  try {
+    await admin.firestore().collection("siteOrders").doc(docId).create({
+      sessionId, status: "en_cours", createdAt: new Date().toISOString(),
+    });
+    return docId;
+  } catch (e) {
+    if (e.code === 6 || /ALREADY_EXISTS/i.test(e.message || "")) return null; // vrai doublon
+    console.error("Réservation commande Firebase:", e.message);
+    return docId; // erreur Firestore autre qu'un doublon : on ne bloque pas un vrai paiement
+  }
+}
+
+export async function recordSiteOrder(order, claimedDocId = "") {
   const a = getApp();
   if (!a) return false;
+  const data = { ...order, status: "a_preparer", createdAt: new Date().toISOString() };
+  const col = admin.firestore().collection("siteOrders");
   try {
-    const ref = await admin.firestore().collection("siteOrders").add({
-      ...order,
-      status: "a_preparer",
-      createdAt: new Date().toISOString(),
-    });
-    return ref.id; // identifiant de la commande créée (chaîne = toujours "truthy")
+    const docId = claimedDocId || (order.sessionId ? `s_${String(order.sessionId).replace(/[^a-zA-Z0-9_-]/g, "")}` : "");
+    if (docId) {
+      await col.doc(docId).set(data); // écrase le document déjà réservé par claimSiteOrder
+      return docId;
+    }
+    const ref = await col.add(data); // pas de sessionId (ancien cas) : repli sur un id auto
+    return ref.id;
   } catch (e) {
     console.error("Enregistrement vente Firebase:", e.message);
     return false;
