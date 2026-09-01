@@ -1028,6 +1028,24 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "collier-coeur-plaques": {
+    material: `Taille & Matériaux
+- Trois pendentifs sur la même chaîne : un petit cœur et deux plaques verticales.
+- Matière : acier inoxydable 304, placage électrolytique. Finitions doré, or rose ou argenté.
+- Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~10 g.
+- Étanche : résiste à l'eau et ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Trois surfaces gravables : le cœur (environ 12 caractères) et les deux plaques (environ 14 caractères chacune).
+- Chaque zone gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver, les autres restent lisses.
+- Texte libre (prénoms, date, initiales, heure) dans l'une de nos huit écritures.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.

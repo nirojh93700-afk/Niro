@@ -1289,12 +1289,22 @@ export const products = [
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Deux cœurs superposés : l'un serti de zircons, l'autre à faire graver de votre message.",
     personalizable: true, personalizationLabel: "Gravure d'un message en option (au dos du second cœur)",
+    // La gravure est une OPTION PAYANTE chiffrée APRÈS la remise bijoux (+3 € pile,
+    // quel que soit le coloris) — la mettre en variante ferait dériver le supplément
+    // à +2,70 / +3,60 € à cause de la remise −10 %.
+    engravingPricing: {
+      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
+    },
     personalizationFields: [
-      { key: "note", type: "note", text: "Le second cœur pivote et découvre une surface lisse : c'est là que se grave votre message. Choisissez « Avec gravure » pour y faire graver au laser jusqu'à trois lignes (par exemple un mot tendre, un prénom et une date)." },
-      { key: "ligne1", label: "Ligne 1", placeholder: "Ex. Je t'aime", maxLength: 16, variantContains: "Avec" },
-      { key: "ligne2", label: "Ligne 2", placeholder: "Ex. Maman", maxLength: 16, optional: true, variantContains: "Avec" },
-      { key: "ligne3", label: "Ligne 3", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "gravure", type: "select", label: "Voulez-vous faire graver un message ?", options: [
+        { value: "non", label: "Sans gravure" },
+        { value: "oui", label: "Avec gravure (+3 €)" },
+      ] },
+      { key: "note", type: "note", text: "Le second cœur pivote et découvre une surface lisse : c'est là que se grave votre message, jusqu'à trois lignes (par exemple un mot tendre, un prénom et une date).", showIfField: "gravure", showIfValue: "oui" },
+      { key: "ligne1", label: "Ligne 1", placeholder: "Ex. Je t'aime", maxLength: 16, showIfField: "gravure", showIfValue: "oui" },
+      { key: "ligne2", label: "Ligne 2", placeholder: "Ex. Maman", maxLength: 16, optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "ligne3", label: "Ligne 3", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
     ],
     images: [
       "/produits/collier-double-coeur-1.jpg",
@@ -1307,12 +1317,9 @@ export const products = [
       "/produits/collier-double-coeur-8.jpg",
     ],
     variants: [
-      { id: "collier-double-coeur-dore-sans", title: "Doré — Sans gravure", price: 27.90, stockId: "collier-double-coeur-dore" },
-      { id: "collier-double-coeur-dore-avec", title: "Doré — Avec gravure", price: 30.90, stockId: "collier-double-coeur-dore" },
-      { id: "collier-double-coeur-orrose-sans", title: "Or rose — Sans gravure", price: 27.90, stockId: "collier-double-coeur-orrose" },
-      { id: "collier-double-coeur-orrose-avec", title: "Or rose — Avec gravure", price: 30.90, stockId: "collier-double-coeur-orrose" },
-      { id: "collier-double-coeur-argente-sans", title: "Argenté — Sans gravure", price: 26.90, stockId: "collier-double-coeur-argente" },
-      { id: "collier-double-coeur-argente-avec", title: "Argenté — Avec gravure", price: 29.90, stockId: "collier-double-coeur-argente" },
+      { id: "collier-double-coeur-dore", title: "Doré", price: 37.90, stockId: "collier-double-coeur-dore" },
+      { id: "collier-double-coeur-orrose", title: "Or rose", price: 37.90, stockId: "collier-double-coeur-orrose" },
+      { id: "collier-double-coeur-argente", title: "Argenté", price: 36.90, stockId: "collier-double-coeur-argente" },
     ],
     descriptionHtml: `<p>Un pendentif <strong>double cœur</strong> : le premier est orné d'un petit <strong>cœur pavé de zircons</strong>, le second pivote derrière lui et révèle une surface lisse, prête à recevoir <strong>votre message gravé</strong>. Le bijou reste discret au porter, et le mot n'appartient qu'à celle qui le reçoit.</p>
 <h3>Caractéristiques</h3>
@@ -1321,9 +1328,53 @@ export const products = [
 <li><strong>Finitions :</strong> doré, or rose et argenté (finition PVD) — résiste à l'eau et ne ternit pas</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Se porte aussi bien par une femme que par un homme</strong></li>
-<li><strong>Gravure en option :</strong> jusqu'à trois lignes gravées au laser au dos du second cœur (choisir « Avec gravure »)</li>
+<li><strong>Gravure en option (+3 €) :</strong> jusqu'à trois lignes gravées au laser au dos du second cœur</li>
 </ul>
 <p>Le texte est <strong>entièrement libre</strong> : un mot tendre, un prénom, une date d'anniversaire ou de rencontre — dans la langue et l'écriture de votre choix parmi nos polices. Les photos de la fiche montrent des exemples de rendu.</p>`,
+  },
+  {
+    slug: "collier-coeur-plaques",
+    badge: "Nouveau",
+    name: "Collier Cœur & 2 plaques à graver",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier cœur et deux plaques à graver — prénoms et date gravés, cadeau couple ou famille",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Un cœur et deux plaques verticales : trois surfaces à graver, trois choses à dire.",
+    personalizable: true, personalizationLabel: "Trois zones gravables : le cœur et les deux plaques (+3 € par zone)",
+    // Trois emplacements de gravure, chacun +3 €. Le supplément est chiffré APRÈS
+    // la remise bijoux (+3 € pile) — une variante ferait dériver le montant.
+    engravingPricing: {
+      textKeys: ["coeur", "plaque1", "plaque2"],
+      textExtra: 3,
+    },
+    personalizationFields: [
+      { key: "note", type: "note", text: "Ce collier a trois surfaces gravables : le petit cœur et les deux plaques verticales. Remplissez seulement celles que vous voulez faire graver — chaque zone gravée ajoute 3 €. Laissez vide ce que vous préférez garder lisse." },
+      { key: "coeur", label: "Gravure — le cœur (+3 €)", placeholder: "Ex. M & C", maxLength: 12, optional: true },
+      { key: "plaque1", label: "Gravure — plaque 1 (+3 €)", placeholder: "Ex. Carolyne", maxLength: 14, optional: true },
+      { key: "plaque2", label: "Gravure — plaque 2 (+3 €)", placeholder: "Ex. 20.05.2026", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/collier-coeur-plaques-1.jpg",
+      "/produits/collier-coeur-plaques-2.jpg",
+      "/produits/collier-coeur-plaques-3.jpg",
+      "/produits/collier-coeur-plaques-4.jpg",
+    ],
+    variants: [
+      { id: "collier-coeur-plaques-dore", title: "Doré", price: 37.90, stockId: "collier-coeur-plaques-dore" },
+      { id: "collier-coeur-plaques-orrose", title: "Or rose", price: 37.90, stockId: "collier-coeur-plaques-orrose" },
+      { id: "collier-coeur-plaques-argente", title: "Argenté", price: 36.90, stockId: "collier-coeur-plaques-argente" },
+    ],
+    descriptionHtml: `<p>Un petit <strong>cœur</strong> et <strong>deux plaques verticales</strong> suspendus à la même chaîne : trois surfaces lisses, prêtes à recevoir ce que vous voulez y faire graver. Deux prénoms et une date, des initiales et une heure, un mot et deux noms — la composition vous appartient.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, placage électrolytique</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté — résiste à l'eau et ne ternit pas</li>
+<li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
+<li><strong>Poids du pendentif :</strong> environ 10 g</li>
+<li><strong>Trois zones gravables :</strong> le cœur et les deux plaques — <strong>3 € par zone gravée</strong>, vous ne payez que ce que vous faites graver</li>
+</ul>
+<p>Un cadeau juste pour les <strong>couples</strong> (deux prénoms et la date de rencontre) comme pour les <strong>mamans</strong> (le prénom de chaque enfant). Chaque gravure est faite au laser dans notre atelier, dans l'écriture que vous choisissez.</p>`,
   },
   {
     slug: "collier-medaillon-livre",
