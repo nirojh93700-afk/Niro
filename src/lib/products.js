@@ -1084,8 +1084,8 @@ export const products = [
       "/produits/bracelet-ange-5.jpg",
     ],
     variants: [
-      { id: "bracelet-ange-dore", title: "Doré", price: 18.90, stockId: "bracelet-ange-dore" },
-      { id: "bracelet-ange-argente", title: "Argenté", price: 18.90, stockId: "bracelet-ange-argente" },
+      { id: "bracelet-ange-dore", title: "Doré", price: 18.90, stockId: "bracelet-ange-dore", image: "/produits/bracelet-ange-3.jpg" },
+      { id: "bracelet-ange-argente", title: "Argenté", price: 18.90, stockId: "bracelet-ange-argente", image: "/produits/bracelet-ange-2.jpg" },
     ],
     descriptionHtml: `<p>Un bijou tendre et délicat : un petit <strong>ange gardien</strong> posé sur une <strong>chaîne fine</strong> en acier inoxydable. Un joli cadeau porte-bonheur (naissance, communion, anniversaire, entre amies).</p>
 <h3>Caractéristiques</h3>
@@ -1118,12 +1118,12 @@ export const products = [
       "/produits/bracelet-coeur-ot-dore-2.jpg",
     ],
     variants: [
-      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore" },
-      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore" },
-      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose" },
-      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose" },
-      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent" },
-      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent" },
+      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong>, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
 <p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
@@ -1317,9 +1317,9 @@ export const products = [
       "/produits/collier-double-coeur-8.jpg",
     ],
     variants: [
-      { id: "collier-double-coeur-dore", title: "Doré", price: 37.90, stockId: "collier-double-coeur-dore" },
-      { id: "collier-double-coeur-orrose", title: "Or rose", price: 37.90, stockId: "collier-double-coeur-orrose" },
-      { id: "collier-double-coeur-argente", title: "Argenté", price: 36.90, stockId: "collier-double-coeur-argente" },
+      { id: "collier-double-coeur-dore", title: "Doré", price: 37.90, stockId: "collier-double-coeur-dore", image: "/produits/collier-double-coeur-1.jpg" },
+      { id: "collier-double-coeur-orrose", title: "Or rose", price: 37.90, stockId: "collier-double-coeur-orrose", image: "/produits/collier-double-coeur-5.jpg" },
+      { id: "collier-double-coeur-argente", title: "Argenté", price: 36.90, stockId: "collier-double-coeur-argente", image: "/produits/collier-double-coeur-8.jpg" },
     ],
     descriptionHtml: `<p>Un pendentif <strong>double cœur</strong> : le premier est orné d'un petit <strong>cœur pavé de zircons</strong>, le second pivote derrière lui et révèle une surface lisse, prête à recevoir <strong>votre message gravé</strong>. Le bijou reste discret au porter, et le mot n'appartient qu'à celle qui le reçoit.</p>
 <h3>Caractéristiques</h3>
@@ -1361,9 +1361,9 @@ export const products = [
       "/produits/collier-coeur-plaques-4.jpg",
     ],
     variants: [
-      { id: "collier-coeur-plaques-dore", title: "Doré", price: 37.90, stockId: "collier-coeur-plaques-dore" },
-      { id: "collier-coeur-plaques-orrose", title: "Or rose", price: 37.90, stockId: "collier-coeur-plaques-orrose" },
-      { id: "collier-coeur-plaques-argente", title: "Argenté", price: 36.90, stockId: "collier-coeur-plaques-argente" },
+      { id: "collier-coeur-plaques-dore", title: "Doré", price: 37.90, stockId: "collier-coeur-plaques-dore", image: "/produits/collier-coeur-plaques-1.jpg" },
+      { id: "collier-coeur-plaques-orrose", title: "Or rose", price: 37.90, stockId: "collier-coeur-plaques-orrose", image: "/produits/collier-coeur-plaques-3.jpg" },
+      { id: "collier-coeur-plaques-argente", title: "Argenté", price: 36.90, stockId: "collier-coeur-plaques-argente", image: "/produits/collier-coeur-plaques-4.jpg" },
     ],
     descriptionHtml: `<p>Un petit <strong>cœur</strong> et <strong>deux plaques verticales</strong> suspendus à la même chaîne : trois surfaces lisses, prêtes à recevoir ce que vous voulez y faire graver. Deux prénoms et une date, des initiales et une heure, un mot et deux noms — la composition vous appartient.</p>
 <h3>Caractéristiques</h3>
@@ -1488,9 +1488,9 @@ export const products = [
       "/produits/bracelet-cordon-plaque-4.jpg",
     ],
     variants: [
-      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-noir-noir" },
-      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 37.90, stockId: "bracelet-cordon-plaque-noir-acier" },
-      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-gris" },
+      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-noir-noir", image: "/produits/bracelet-cordon-plaque-1.jpg" },
+      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 37.90, stockId: "bracelet-cordon-plaque-noir-acier", image: "/produits/bracelet-cordon-plaque-2.jpg" },
+      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-gris", image: "/produits/bracelet-cordon-plaque-3.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet <strong>sobre et solide</strong> : un double cordon tressé et une <strong>plaque en acier</strong> qui se grave. Les <strong>nœuds coulissants</strong> le rendent réglable — il s'ajuste à tous les poignets et se met tout seul, sans fermoir à chercher.</p>
 <h3>Caractéristiques</h3>
@@ -1535,9 +1535,9 @@ export const products = [
       "/produits/collier-medaillon-pivotant-8.jpg",
     ],
     variants: [
-      { id: "collier-medaillon-pivotant-dore", title: "Doré", price: 37.90, stockId: "collier-medaillon-pivotant-dore" },
-      { id: "collier-medaillon-pivotant-orrose", title: "Or rose", price: 37.90, stockId: "collier-medaillon-pivotant-orrose" },
-      { id: "collier-medaillon-pivotant-argente", title: "Argenté", price: 36.90, stockId: "collier-medaillon-pivotant-argente" },
+      { id: "collier-medaillon-pivotant-dore", title: "Doré", price: 37.90, stockId: "collier-medaillon-pivotant-dore", image: "/produits/collier-medaillon-pivotant-1.jpg" },
+      { id: "collier-medaillon-pivotant-orrose", title: "Or rose", price: 37.90, stockId: "collier-medaillon-pivotant-orrose", image: "/produits/collier-medaillon-pivotant-5.jpg" },
+      { id: "collier-medaillon-pivotant-argente", title: "Argenté", price: 36.90, stockId: "collier-medaillon-pivotant-argente", image: "/produits/collier-medaillon-pivotant-6.jpg" },
     ],
     descriptionHtml: `<p>Un <strong>médaillon rond suspendu dans son anneau</strong>, qui <strong>pivote entre les doigts</strong>. Ce n'est pas qu'un détail de style : c'est ce qui permet de graver <strong>les deux faces</strong> et de les montrer l'une après l'autre.</p>
 <h3>Caractéristiques</h3>
