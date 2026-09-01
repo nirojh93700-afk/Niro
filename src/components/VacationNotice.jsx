@@ -22,7 +22,7 @@ export default function VacationNotice({ compact = false }) {
       padding: compact ? "8px 12px" : "10px 14px", margin: "10px 0",
       fontSize: compact ? "0.84rem" : "0.9rem", color: "#6b5516", lineHeight: 1.45,
     }}>
-      <span aria-hidden="true">🏖️</span> {vac.message}
+      {vac.message}
       {vac.gift ? (
         <span style={{ display: "block", marginTop: 4, color: "#8a6d1f", fontSize: compact ? "0.8rem" : "0.85rem" }}>
           🎁 {vac.gift}
