@@ -54,6 +54,34 @@ export async function POST(req) {
   // remise, remise, code promo, photos des articles) en le relisant chez Stripe.
   // Sert aux commandes enregistrées AVANT l'amélioration « Détail du prix » —
   // les nouvelles commandes ont déjà tout dès le paiement.
+  // Diagnostic LECTURE SEULE : vérifie chez Stripe combien de fois un paiement
+  // a réellement été prélevé (charges), pour distinguer un doublon de COMMANDE
+  // (bug d'enregistrement, argent prélevé une fois) d'un doublon de PAIEMENT
+  // (deux prélèvements réels — beaucoup plus grave). Ajouté 01/09/2026.
+  if (id && body?.action === "checkPayment") {
+    const order = await getSiteOrder(id);
+    if (!order?.paymentIntentId) return Response.json({ ok: false, error: "Commande sans identifiant de paiement." }, { status: 400 });
+    const secret = process.env.STRIPE_SECRET_KEY;
+    if (!secret) return Response.json({ ok: false, error: "Clé Stripe absente." }, { status: 500 });
+    try {
+      const { default: Stripe } = await import("stripe");
+      const stripe = new Stripe(secret);
+      const pi = await stripe.paymentIntents.retrieve(order.paymentIntentId, { expand: ["charges"] });
+      const charges = (pi.charges?.data || pi.latest_charge ? [pi.latest_charge].filter(Boolean) : []);
+      return Response.json({
+        ok: true,
+        paymentIntentId: pi.id,
+        status: pi.status,
+        amount: (pi.amount || 0) / 100,
+        amountReceived: (pi.amount_received || 0) / 100,
+        nbCharges: pi.charges?.data?.length ?? (pi.latest_charge ? 1 : 0),
+        charges: (pi.charges?.data || []).map((c) => ({ id: c.id, amount: (c.amount || 0) / 100, paid: c.paid, refunded: c.refunded, created: c.created })),
+      });
+    } catch (e) {
+      return Response.json({ ok: false, error: e.message }, { status: 500 });
+    }
+  }
+
   if (id && body?.action === "syncPricing") {
     const order = await getSiteOrder(id);
     if (!order?.sessionId) return Response.json({ ok: false, error: "Commande sans référence de paiement." }, { status: 400 });
