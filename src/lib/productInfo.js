@@ -1117,6 +1117,23 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "bracelet-homme-plaque-cuir": {
+    material: `Taille & Matériaux
+- Bracelet souple à l'aspect cuir grainé, large plaque en acier inoxydable 304 poli, fermoir à clip acier.
+- Trois coloris : noir chiné, bleu marine chiné, marron.
+- Poids : environ 20 g.`,
+    usage: `Personnalisation & Entretien
+- La plaque acier se grave au laser : prénom, date ou courte phrase (20 caractères maximum pour un rendu net).
+- La gravure est une option à 3 € ; sans elle, la plaque reste lisse et polie.
+- Choisissez votre écriture parmi nos huit polices.
+- Entretien : essuyez la plaque avec un chiffon doux ; évitez de tremper le bracelet et n'utilisez pas de produits abrasifs.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.

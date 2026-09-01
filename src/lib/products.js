@@ -1551,6 +1551,51 @@ export const products = [
 <p>Un prénom devant, une date derrière. Une initiale visible, un message qui ne se découvre qu'en retournant le médaillon. C'est un bijou qui garde quelque chose pour soi.</p>`,
   },
   {
+    slug: "bracelet-homme-plaque-cuir",
+    badge: "Nouveau",
+    name: "Bracelet homme cuir & plaque à graver",
+    weight: 50, pickup: false, letter: true, subcategory: "homme",
+    title: "Bracelet homme en cuir à plaque acier gravée — fermoir clip, noir, marine ou marron",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un bracelet de caractère : bracelet cuir et large plaque acier polie, à faire graver.",
+    personalizable: true, personalizationLabel: "Gravure sur la plaque acier en option (+3 €)",
+    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
+    engravingPricing: {
+      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
+    },
+    personalizationFields: [
+      { key: "gravure", type: "select", label: "Voulez-vous faire graver la plaque ?", options: [
+        { value: "non", label: "Sans gravure" },
+        { value: "oui", label: "Avec gravure (+3 €)" },
+      ] },
+      { key: "note", type: "note", text: "La large plaque acier polie est la surface gravée. Elle est assez grande pour un prénom complet, une date ou une courte phrase — comptez une vingtaine de caractères pour un rendu net.", showIfField: "gravure", showIfValue: "oui" },
+      { key: "texte", label: "Texte à graver sur la plaque", placeholder: "Prénom, date, petite phrase…", maxLength: 20, showIfField: "gravure", showIfValue: "oui" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+    ],
+    images: [
+      "/produits/bracelet-homme-plaque-1.jpg",
+      "/produits/bracelet-homme-plaque-2.jpg",
+      "/produits/bracelet-homme-plaque-3.jpg",
+      "/produits/bracelet-homme-plaque-4.jpg",
+      "/produits/bracelet-homme-plaque-5.jpg",
+    ],
+    variants: [
+      { id: "bracelet-homme-plaque-noir", title: "Noir chiné", price: 37.90, stockId: "bracelet-homme-plaque-noir", image: "/produits/bracelet-homme-plaque-1.jpg" },
+      { id: "bracelet-homme-plaque-marine", title: "Bleu marine chiné", price: 37.90, stockId: "bracelet-homme-plaque-marine", image: "/produits/bracelet-homme-plaque-4.jpg" },
+      { id: "bracelet-homme-plaque-marron", title: "Marron", price: 37.90, stockId: "bracelet-homme-plaque-marron", image: "/produits/bracelet-homme-plaque-3.jpg" },
+    ],
+    descriptionHtml: `<p>Un bracelet <strong>masculin et bien fini</strong> : un bracelet souple à l'aspect cuir grainé, une <strong>large plaque en acier poli</strong> maintenue par des anneaux noirs, et un <strong>fermoir à clip en acier</strong> qui se ferme d'un geste.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> plaque et fermoir en acier inoxydable 304, bracelet aspect cuir grainé</li>
+<li><strong>Trois coloris :</strong> noir chiné, bleu marine chiné, marron</li>
+<li><strong>Poids :</strong> environ 20 g — il a du corps sans être lourd</li>
+<li><strong>Fermoir :</strong> clip acier, se met et s'enlève d'une main</li>
+<li><strong>Gravure en option (+3 €) :</strong> prénom, date ou petite phrase au laser sur la plaque</li>
+</ul>
+<p>La plaque est large : elle accepte un prénom entier, une date de naissance ou quelques mots. Un cadeau qui marche pour un père, un frère, un fils.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",
