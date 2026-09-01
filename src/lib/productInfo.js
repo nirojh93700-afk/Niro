@@ -1134,6 +1134,24 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "collier-pastille": {
+    material: `Taille & Matériaux
+- Pastille ronde lisse sur chaîne fine maille câble.
+- Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
+- Finitions : doré, or rose ou argenté. Poids du bijou ~5 g.
+- Étanche : résiste à l'eau et ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Gravure recto-verso : la pastille se grave au recto, au verso, ou sur les deux faces (18 caractères maximum par face pour rester lisible).
+- Chaque face gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver.
+- Prénom, initiale, date ou petit mot, dans l'une de nos huit écritures.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.

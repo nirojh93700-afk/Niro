@@ -1596,6 +1596,49 @@ export const products = [
 <p>La plaque est large : elle accepte un prénom entier, une date de naissance ou quelques mots. Un cadeau qui marche pour un père, un frère, un fils.</p>`,
   },
   {
+    slug: "collier-pastille",
+    badge: "Nouveau",
+    name: "Collier Pastille à graver recto-verso",
+    weight: 35, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier pastille ronde à graver recto-verso — chaîne fine, plaqué or 18 carats",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Une pastille ronde sur une chaîne fine — à graver au recto, au verso, ou les deux.",
+    personalizable: true, personalizationLabel: "Gravure recto-verso : les deux faces de la pastille (+3 € par face)",
+    // Deux faces gravables, chacune +3 €. Supplément chiffré APRÈS la remise bijoux.
+    engravingPricing: {
+      textKeys: ["recto", "verso"],
+      textExtra: 3,
+    },
+    personalizationFields: [
+      { key: "note", type: "note", text: "La pastille se grave des deux côtés. Remplissez le recto, le verso, ou les deux — chaque face gravée ajoute 3 €. La face laissée vide reste lisse et polie." },
+      { key: "recto", label: "Gravure — recto (+3 €)", placeholder: "Ex. Camille", maxLength: 18, optional: true },
+      { key: "verso", label: "Gravure — verso (+3 €)", placeholder: "Ex. 14.02.2026", maxLength: 18, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/collier-pastille-1.jpg",
+      "/produits/collier-pastille-2.jpg",
+      "/produits/collier-pastille-3.jpg",
+      "/produits/collier-pastille-4.jpg",
+      "/produits/collier-pastille-5.jpg",
+    ],
+    variants: [
+      { id: "collier-pastille-dore", title: "Doré", price: 33.90, stockId: "collier-pastille-dore", image: "/produits/collier-pastille-2.jpg" },
+      { id: "collier-pastille-orrose", title: "Or rose", price: 33.90, stockId: "collier-pastille-orrose", image: "/produits/collier-pastille-3.jpg" },
+      { id: "collier-pastille-argente", title: "Argenté", price: 32.90, stockId: "collier-pastille-argente", image: "/produits/collier-pastille-4.jpg" },
+    ],
+    descriptionHtml: `<p>Une <strong>pastille ronde toute simple</strong> sur une chaîne fine : le bijou qu'on porte tous les jours sans y penser, et qu'on ne quitte plus. Sa surface lisse se grave <strong>des deux côtés</strong>.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (revêtement PVD)</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté — résiste à l'eau et ne ternit pas</li>
+<li><strong>Chaîne :</strong> maille câble fine en acier inoxydable 304</li>
+<li><strong>Poids :</strong> environ 5 g — léger, discret, se superpose bien avec d'autres chaînes</li>
+<li><strong>Gravure recto-verso :</strong> <strong>3 € par face</strong>, vous ne payez que ce que vous faites graver</li>
+</ul>
+<p>Une initiale devant, une date derrière. Un prénom d'un côté, un mot de l'autre. C'est un bijou simple qui porte quelque chose de personnel, visible ou caché.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",
