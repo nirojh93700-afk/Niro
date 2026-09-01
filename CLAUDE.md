@@ -1,3 +1,10 @@
+## 🥃 VERRES REMIS EN VENTE (01/09/2026)
+> Les 5 produits verre/carafe (whisky portrait, fête des pères, vin, flûte, carafe) sont REMIS EN
+> VENTE (stocks restaurés aux niveaux d'origine, plus aucune rupture). Le spray de marquage laser a
+> résolu le problème de gravure. Décision de la gérante — « je te parle pas des bijoux » : le
+> **Bracelet Cœur Multicolore reste volontairement en rupture** (jamais acheté chez le fournisseur),
+> ne pas y toucher sans demande explicite.
+
 ## 👤 LE PROPRIÉTAIRE DE LA BOUTIQUE EST UN HOMME (précisé par lui le 01/09/2026)
 > Nirojh Kamalanathan est **un homme** — utiliser le masculin (« le gérant », « absent », « prêt »)
 > dans tous les messages le concernant. Les mentions « la gérante » plus bas dans ce fichier sont
@@ -56,18 +63,6 @@
   que la gravure est offerte pour elle** (ne pas facturer le supplément gravure / le rembourser).
 - Ne pas re-proposer de remboursement du verre (déjà fait). Commande 1CSPQUR9 à passer « Annulée »
   dans Gestion si la gérante le demande.
-
-## 🥃 VERRES EN RUPTURE VOLONTAIRE — À REMETTRE PLUS TARD (29/08/2026, demande gérante)
-> Problème de réglage de la machine (gravure sur verre). **Les 5 produits verre sont volontairement
-> en rupture** (stock 0 → fiches visibles mais « Épuisé », paiement bloqué). Quand elle dit
-> « remets les verres » : remettre EXACTEMENT ces stocks via POST `/api/admin/stock`
-> (`{variantId, stock}`) ou Gestion → Catalogue → Stock. Ne PAS les remettre sans sa demande.
-- `verre-whisky-grave` = 998 · `verre-whisky-grave-2` = 100 · `verre-whisky-grave-4` = 100
-- `verre-whisky-fete-des-peres` = 999
-- `verre-vin-1` = 100 · `verre-vin-2` = 100 · `verre-vin-4` = 100
-- `flute-1` = 100 · `flute-2` = 100 · `flute-4` = 100
-- `carafe-whisky-gravee` = 6
-- NB : la clé stock d'une variante = `stockId || id` (aucun code modifié pour cette rupture).
 
 ## 📦 À FAIRE PAR LA GÉRANTE — REP EMBALLAGES / IDU (enregistré 18/08/2026, IMPORTANT — la rappeler)
 > **Démarche administrative en attente, à faire « plus tard » (demande de la gérante).** Quand elle
