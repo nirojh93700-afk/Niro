@@ -3,8 +3,11 @@
 ## ⏳ MODE « DÉLAI ALLONGÉ » (vacances 2→23 SEPT) — PRÊT, EN ATTENTE DU « LANCE » (30/08/2026)
 > Tout est préparé et ÉTEINT. **Quand la gérante dit « lance » (ou « active ») : passer
 > `settings.vacation.enabled` à `true`** (POST /api/admin/settings) — rien d'autre à faire, le mode
-> s'allume tout seul le 02/09 et s'éteint le 23/09 (jour inclus). Ne JAMAIS l'activer sans son mot.
-- **Déjà réglé dans `settings.vacation`** (enabled:false) : dates 2026-09-02 → 2026-09-23 (reprise 23/09),
+> s'allume tout seul le 02/09. **PAS de date de fin (choix gérante 01/09)** : il reste allumé
+> jusqu'à ce qu'ELLE le désactive (Gestion → Apparence → Mode vacances, case « Activer », ou en
+> me le demandant) — son retour est incertain (~23/09, avant ou après). Ne JAMAIS l'activer NI
+> le désactiver sans son mot.
+- **Déjà réglé dans `settings.vacation`** (enabled:false) : start 2026-09-02, end/resume VIDES,
   texte SANS parler de congés (« Fabriqué à la commande — forte demande — délai de confection actuel
   3 à 4 semaines minimum — commandes traitées dans leur ordre d'arrivée »), cadeau activé
   (« un cadeau surprise est glissé dans chaque commande »).
