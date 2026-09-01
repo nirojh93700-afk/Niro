@@ -1099,6 +1099,24 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "collier-medaillon-pivotant": {
+    material: `Taille & Matériaux
+- Médaillon rond monté sur pivot dans un anneau : il tourne pour découvrir l'une ou l'autre face.
+- Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
+- Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~12 g.
+- Finitions : doré, or rose ou argenté. Étanche : résiste à l'eau et ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Deux faces gravables au laser : la face avant et la face arrière (20 caractères maximum chacune pour rester lisible).
+- Chaque face gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver, l'autre reste lisse et polie.
+- Prénom, date, initiales ou petit message, dans l'une de nos huit écritures.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.

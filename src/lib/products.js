@@ -1505,6 +1505,52 @@ export const products = [
 <p><em>La dernière photo montre des exemples de gravure ; les coloris proposés sont ceux de la liste ci-dessus.</em></p>`,
   },
   {
+    slug: "collier-medaillon-pivotant",
+    badge: "Nouveau",
+    name: "Collier Médaillon pivotant à graver",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier médaillon pivotant à graver recto-verso — plaqué or 18 carats, doré, or rose ou argenté",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Un médaillon qui tourne dans son anneau : deux faces à graver, deux choses à dire.",
+    personalizable: true, personalizationLabel: "Deux faces gravables : avant et arrière (+3 € par face)",
+    // Deux faces gravables, chacune +3 €. Supplément chiffré APRÈS la remise bijoux.
+    engravingPricing: {
+      textKeys: ["recto", "verso"],
+      textExtra: 3,
+    },
+    personalizationFields: [
+      { key: "note", type: "note", text: "Le médaillon pivote dans son anneau : vous pouvez faire graver la face avant, la face arrière, ou les deux. Chaque face gravée ajoute 3 € — celle que vous laissez vide reste lisse et polie." },
+      { key: "recto", label: "Gravure — face avant (+3 €)", placeholder: "Ex. Camille", maxLength: 20, optional: true },
+      { key: "verso", label: "Gravure — face arrière (+3 €)", placeholder: "Ex. 14.02.2026", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/collier-medaillon-pivotant-1.jpg",
+      "/produits/collier-medaillon-pivotant-2.jpg",
+      "/produits/collier-medaillon-pivotant-3.jpg",
+      "/produits/collier-medaillon-pivotant-4.jpg",
+      "/produits/collier-medaillon-pivotant-5.jpg",
+      "/produits/collier-medaillon-pivotant-6.jpg",
+      "/produits/collier-medaillon-pivotant-7.jpg",
+      "/produits/collier-medaillon-pivotant-8.jpg",
+    ],
+    variants: [
+      { id: "collier-medaillon-pivotant-dore", title: "Doré", price: 37.90, stockId: "collier-medaillon-pivotant-dore" },
+      { id: "collier-medaillon-pivotant-orrose", title: "Or rose", price: 37.90, stockId: "collier-medaillon-pivotant-orrose" },
+      { id: "collier-medaillon-pivotant-argente", title: "Argenté", price: 36.90, stockId: "collier-medaillon-pivotant-argente" },
+    ],
+    descriptionHtml: `<p>Un <strong>médaillon rond suspendu dans son anneau</strong>, qui <strong>pivote entre les doigts</strong>. Ce n'est pas qu'un détail de style : c'est ce qui permet de graver <strong>les deux faces</strong> et de les montrer l'une après l'autre.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté — étanche, résiste à l'eau et ne ternit pas</li>
+<li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
+<li><strong>Poids du pendentif :</strong> environ 12 g</li>
+<li><strong>Deux faces gravables :</strong> <strong>3 € par face</strong>, vous ne payez que ce que vous faites graver</li>
+</ul>
+<p>Un prénom devant, une date derrière. Une initiale visible, un message qui ne se découvre qu'en retournant le médaillon. C'est un bijou qui garde quelque chose pour soi.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",
