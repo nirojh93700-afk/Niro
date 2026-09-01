@@ -14,20 +14,24 @@ const CHOIX = [
 ];
 
 export default function CadeauChoix({ value, onChange }) {
-  const [actif, setActif] = useState(false);
+  const [vac, setVac] = useState(null);
   useEffect(() => {
     fetch("/api/shipping-config")
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => { if (d?.vacation?.message) setActif(true); })
+      .then((d) => { if (d?.vacation?.message) setVac(d.vacation); })
       .catch(() => {});
   }, []);
-  if (!actif) return null;
+  if (!vac) return null;
 
   return (
     <div style={{ background: "#fdf6e8", border: "1px solid #e7d3a1", borderRadius: 12, padding: "12px 12px 14px", margin: "0 0 14px" }}>
+      {/* 1) Le message complet du délai — le MÊME texte que le bandeau, lu en
+          direct dans les réglages (le panier suit toute modification). */}
+      <div style={{ fontSize: ".84rem", color: "#6b5516", lineHeight: 1.5, marginBottom: 10 }}>{vac.message}</div>
+      {/* 2) La phrase du cadeau + 3) le choix, dans le même encadré. */}
       <div style={{ fontWeight: 700, color: "#8a6d1f", fontSize: ".92rem", marginBottom: 4 }}>🎁 Votre cadeau d&apos;attente — offert</div>
       <div style={{ fontSize: ".82rem", color: "#6b5516", lineHeight: 1.45, marginBottom: 10 }}>
-        Délai de confection actuel : 3 à 4 semaines minimum. Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :
+        Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :
       </div>
       <div style={{ display: "flex", gap: 8 }}>
         {CHOIX.map((c) => {
