@@ -1419,6 +1419,47 @@ export const products = [
 <p>Le cadeau juste pour une <strong>maman</strong> ou une <strong>grand-mère</strong> : un prénom par cœur, gravé au laser dans notre atelier, dans l'écriture que vous choisissez.</p>`,
   },
   {
+    slug: "bracelet-coeur-chaine",
+    badge: "Nouveau",
+    name: "Bracelet Cœur grosse chaîne à graver",
+    weight: 60, pickup: false, letter: true, subcategory: "femme",
+    title: "Bracelet cœur à graver, grosse chaîne dorée et fermoir T — plaqué or 18 carats",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Une grosse chaîne dorée, un cœur à graver et un petit cœur pavé de strass.",
+    personalizable: true, personalizationLabel: "Gravure sur le cœur en option (+3 €)",
+    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
+    engravingPricing: {
+      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
+    },
+    personalizationFields: [
+      { key: "gravure", type: "select", label: "Voulez-vous faire graver le cœur ?", options: [
+        { value: "non", label: "Sans gravure" },
+        { value: "oui", label: "Avec gravure (+3 €)" },
+      ] },
+      { key: "note", type: "note", text: "La grande médaille cœur est lisse : c'est elle qui se grave. Un prénom, une date ou un petit message — texte court conseillé pour rester bien lisible.", showIfField: "gravure", showIfValue: "oui" },
+      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, showIfField: "gravure", showIfValue: "oui" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+    ],
+    images: [
+      "/produits/bracelet-coeur-chaine-1.jpg",
+      "/produits/bracelet-coeur-chaine-2.jpg",
+      "/produits/bracelet-coeur-chaine-3.jpg",
+    ],
+    variants: [
+      { id: "bracelet-coeur-chaine-dore", title: "Doré", price: 37.90, stockId: "bracelet-coeur-chaine-dore" },
+    ],
+    descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
+<li><strong>Finition :</strong> étanche — résiste à l'eau et ne ternit pas</li>
+<li><strong>Poids :</strong> environ 18 g, une vraie chaîne qui se sent au poignet</li>
+<li><strong>Fermoir :</strong> T (toggle), simple à ouvrir et fermer d'une main</li>
+<li><strong>Gravure en option (+3 €) :</strong> prénom, date ou petit message au laser sur le grand cœur</li>
+</ul>
+<p>Il se porte seul pour son côté affirmé, ou superposé avec une chaîne plus fine.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",

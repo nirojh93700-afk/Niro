@@ -1064,6 +1064,23 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "bracelet-coeur-chaine": {
+    material: `Taille & Matériaux
+- Grosse chaîne à maillons avec fermoir T (toggle), grande médaille cœur lisse + petit cœur pavé de strass.
+- Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
+- Poids : environ 18 g. Étanche : résiste à l'eau et ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- La grande médaille cœur se grave au laser : prénom, date ou petit message (20 caractères maximum pour rester lisible).
+- La gravure est une option à 3 € ; sans elle, le cœur reste lisse et poli.
+- Choisissez votre écriture parmi nos huit polices.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.
