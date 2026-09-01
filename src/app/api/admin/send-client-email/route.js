@@ -21,9 +21,15 @@ export async function POST(req) {
   // avisProduits (optionnel) : [{slug, name}] → boutons « ★ Noter » vers la
   // section avis de chaque produit (même rendu que la règle d'avis automatique).
   const boutons = Array.isArray(body?.avisProduits) ? boutonsAvis(body.avisProduits.slice(0, 6)) : "";
+  // imageUrl (optionnel) : visuel/aperçu à afficher DANS l'e-mail (ex. montage
+  // gravure), URL absolue déjà hébergée (via /api/upload). Ajouté 01/09/2026.
+  const imageUrl = typeof body?.imageUrl === "string" ? body.imageUrl.trim() : "";
+  const imageHtml = imageUrl
+    ? `<img src="${escapeHtml(imageUrl)}" alt="Aperçu" style="display:block;width:100%;max-width:520px;height:auto;border-radius:10px;border:1px solid #ece3d2;margin:0 0 16px;">`
+    : "";
   const html = emailLayout({
     heading: subject,
-    bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
+    bodyHtml: `${imageHtml}<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
       ${boutons}
       <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
   });
