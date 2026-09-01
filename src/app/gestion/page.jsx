@@ -5,6 +5,7 @@ import { formatEuro } from "@/lib/format";
 import { getCategoryLabel, getProductBySlug } from "@/lib/products";
 import { TableGravure } from "@/lib/engravingSheet";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
+import RestockAlertsAdmin from "@/components/admin/RestockAlertsAdmin";
 import TaxonomyAdmin from "@/components/admin/TaxonomyAdmin";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
@@ -1529,6 +1530,9 @@ export default function GestionPage() {
         {tab === "devis" && <QuotesAdmin adminKey={key} />}
 
         {/* ---------------- PRODUITS ---------------- */}
+        {tab === "produits" && (
+          <RestockAlertsAdmin adminKey={key} />
+        )}
         {tab === "produits" && (
           <ProductsAdmin
             adminKey={key}

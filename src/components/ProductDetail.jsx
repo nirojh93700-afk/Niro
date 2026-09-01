@@ -10,6 +10,7 @@ import { getProductInfo } from "@/lib/productInfo";
 import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import VacationNotice from "@/components/VacationNotice";
 import DelaiFabrication from "@/components/DelaiFabrication";
+import RestockAlerte from "@/components/RestockAlerte";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
 import PayInfoModal from "@/components/PayInfo";
@@ -1886,9 +1887,14 @@ export default function ProductDetail({ product }) {
           {/* Stock masqué pour les clientes : on n'affiche QUE l'alerte « épuisé »
              (le compteur exact reste visible dans la gestion). */}
           {soldOut && (
-            <p style={{ marginTop: 8, fontSize: "0.85rem", color: "#b4452f" }}>
-              Cette option est momentanément épuisée.
-            </p>
+            <>
+              <p style={{ marginTop: 8, fontSize: "0.85rem", color: "#b4452f" }}>
+                Cette option est momentanément épuisée.
+              </p>
+              {/* Alerte retour en stock : inscription seulement, AUCUN envoi auto
+                  (la gérante déclenche depuis Gestion). */}
+              <RestockAlerte slug={product.slug} />
+            </>
           )}
 
           {product.pickup && (

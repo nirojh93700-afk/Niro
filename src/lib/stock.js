@@ -117,6 +117,44 @@ async function persist(map) {
   memoryFallback = map;
 }
 
+// =============================================================================
+// ALERTES « RETOUR EN STOCK » (01/09/2026, demande gérante).
+// Les clients s'inscrivent sur une fiche épuisée ; les inscriptions s'accumulent
+// par produit. AUCUN e-mail automatique : la gérante clique « Prévenir » dans
+// Gestion quand ELLE est prête (le stock peut être manipulé sans risque).
+// Stockage : section `restockAlerts` du blob catalogue = { slug: [{email, at}] }.
+// Écritures FRAÎCHES + par section (anti-écrasement, cf. correctif 26/08).
+// =============================================================================
+export async function addRestockAlert(slug, email) {
+  const s = String(slug || "").trim();
+  const e = normEmail(email);
+  if (!s || !validEmail(e)) return { ok: false };
+  const data = await getCatalogRaw(true);
+  data.restockAlerts = data.restockAlerts || {};
+  const liste = data.restockAlerts[s] || [];
+  if (liste.some((x) => x.email === e)) return { ok: true, deja: true };
+  if (liste.length >= 500) return { ok: false };
+  data.restockAlerts[s] = [...liste, { email: e, at: Date.now() }];
+  await persistCatalog(data, ["restockAlerts"]);
+  return { ok: true };
+}
+
+export async function getRestockAlerts() {
+  const data = await getCatalogRaw(true);
+  return data.restockAlerts || {};
+}
+
+export async function clearRestockAlerts(slug) {
+  const s = String(slug || "").trim();
+  if (!s) return false;
+  const data = await getCatalogRaw(true);
+  if (data.restockAlerts && data.restockAlerts[s]) {
+    delete data.restockAlerts[s];
+    await persistCatalog(data, ["restockAlerts"]);
+  }
+  return true;
+}
+
 export async function setStock(variantId, value) {
   const map = await getStockMap();
   if (value === null || value === "" || value === undefined) {
