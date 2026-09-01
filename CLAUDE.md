@@ -1,3 +1,10 @@
+## 👤 LE PROPRIÉTAIRE DE LA BOUTIQUE EST UN HOMME (précisé par lui le 01/09/2026)
+> Nirojh Kamalanathan est **un homme** — utiliser le masculin (« le gérant », « absent », « prêt »)
+> dans tous les messages le concernant. Les mentions « la gérante » plus bas dans ce fichier sont
+> un historique d'écriture : les consignes restent valables, mais la personne est un homme.
+> (Ses clientes à ELLES restent souvent des femmes — le féminin des e-mails clients type
+> « chère cliente » suit le contexte client, pas lui.)
+
 # Guide agent — Boutique Niv Création
 
 ## 📩 ALERTES « RETOUR EN STOCK » — EN LIGNE (01/09/2026)
