@@ -14,7 +14,33 @@ const CHOIX = [
   { value: "homme", label: "Plutôt homme" },
 ];
 
-export default function CadeauChoix({ value, onChange }) {
+function LignePills({ value, onChange }) {
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      {CHOIX.map((c) => {
+        const on = (value || "surprise") === c.value;
+        return (
+          <button
+            key={c.value}
+            type="button"
+            onClick={() => onChange && onChange(c.value)}
+            style={{
+              flex: 1, textAlign: "center", borderRadius: 999, padding: "8px 4px", fontSize: ".82rem", cursor: "pointer",
+              border: `1.5px solid ${on ? "#c9a24b" : "#d8bd6e"}`,
+              background: on ? "#c9a24b" : "#fff",
+              color: on ? "#fff" : "#8a6d1f",
+              fontWeight: on ? 700 : 400,
+            }}
+          >
+            {c.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function CadeauChoix({ value, onChange, value2, onChange2 }) {
   const [vac, setVac] = useState(null);
   const { total } = useCart(); // « 2 cadeaux dès 80 € » : la ligne suit le panier en direct
   useEffect(() => {
@@ -36,31 +62,20 @@ export default function CadeauChoix({ value, onChange }) {
         Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :
       </div>
       {(Number(total) || 0) >= 80 ? (
-        <div style={{ fontSize: ".82rem", color: "#256b34", fontWeight: 700, marginBottom: 10 }}>🎁🎁 Votre commande contient deux cadeaux !</div>
+        <>
+          {/* ≥ 80 € : DEUX cadeaux → un choix par cadeau (panachage possible). */}
+          <div style={{ fontSize: ".82rem", color: "#256b34", fontWeight: 700, marginBottom: 10 }}>🎁🎁 Votre commande contient deux cadeaux !</div>
+          <div style={{ fontSize: ".8rem", fontWeight: 700, color: "#8a6d1f", margin: "0 0 5px" }}>Cadeau 1 :</div>
+          <LignePills value={value} onChange={onChange} />
+          <div style={{ fontSize: ".8rem", fontWeight: 700, color: "#8a6d1f", margin: "10px 0 5px" }}>Cadeau 2 :</div>
+          <LignePills value={value2} onChange={onChange2} />
+        </>
       ) : (
-        <div style={{ fontSize: ".82rem", color: "#8a6d1f", marginBottom: 10 }}>✨ Et dès 80 € d&apos;achat, <strong>deux cadeaux</strong> vous sont offerts.</div>
+        <>
+          <div style={{ fontSize: ".82rem", color: "#8a6d1f", marginBottom: 10 }}>✨ Et dès 80 € d&apos;achat, <strong>deux cadeaux</strong> vous sont offerts.</div>
+          <LignePills value={value} onChange={onChange} />
+        </>
       )}
-      <div style={{ display: "flex", gap: 8 }}>
-        {CHOIX.map((c) => {
-          const on = (value || "surprise") === c.value;
-          return (
-            <button
-              key={c.value}
-              type="button"
-              onClick={() => onChange && onChange(c.value)}
-              style={{
-                flex: 1, textAlign: "center", borderRadius: 999, padding: "8px 4px", fontSize: ".82rem", cursor: "pointer",
-                border: `1.5px solid ${on ? "#c9a24b" : "#d8bd6e"}`,
-                background: on ? "#c9a24b" : "#fff",
-                color: on ? "#fff" : "#8a6d1f",
-                fontWeight: on ? 700 : 400,
-              }}
-            >
-              {c.label}
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }

@@ -365,8 +365,12 @@ export async function POST(req) {
     const choixCadeau = session.metadata?.cadeauChoix
       || (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value
       || "";
-    const cadeauLabel = { surprise: "Surprise", femme: "Plutôt femme", homme: "Plutôt homme" }[choixCadeau] || "";
-    const deuxCadeaux = choixCadeau && (session.amount_total || 0) / 100 >= 80;
+    const libCadeau = (v) => ({ surprise: "Surprise", femme: "Plutôt femme", homme: "Plutôt homme" }[v] || v);
+    const partsCadeau = String(choixCadeau).split("+").filter(Boolean);
+    const cadeauLabel = partsCadeau.length === 2
+      ? `Cadeau 1 : ${libCadeau(partsCadeau[0])} · Cadeau 2 : ${libCadeau(partsCadeau[1])}`
+      : libCadeau(choixCadeau);
+    const deuxCadeaux = choixCadeau && ((session.amount_total || 0) / 100 >= 80 || partsCadeau.length === 2);
     const cadeauBlock = choixCadeau
       ? `<div style="background:#fbf3e6;border:2px solid #c9a24b;padding:12px 14px;border-radius:10px;margin:0 0 14px;">
            <strong>🎁 Cadeau d'attente à glisser dans le colis</strong> — préférence : ${escapeHtml(cadeauLabel)}

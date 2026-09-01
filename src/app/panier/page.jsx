@@ -49,7 +49,9 @@ export default function CartPage() {
   const [relais, setRelais] = useState(null);
   const [country, setCountry] = useState("FR");
   // Préférence de cadeau d'attente (mode délai allongé) — « Surprise » par défaut.
+  // cadeau2 = préférence du 2e cadeau quand le panier atteint 80 € (panachage).
   const [cadeau, setCadeau] = useState("surprise");
+  const [cadeau2, setCadeau2] = useState("surprise");
   const isFrance = country === "FR" || country === "MC";
 
   // L'option point relais s'affiche uniquement si elle est activée dans l'admin.
@@ -162,7 +164,8 @@ export default function CartPage() {
       // Cagnotte et code promo sont exclusifs (un seul coupon Stripe). Si la cagnotte
       // est cochée, elle a la priorité et le code promo n'est pas envoyé.
       const wantCagnotte = Boolean(useCagnotte && cagnotteUsable > 0);
-      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase(), cadeau);
+      // ≥ 80 € = deux cadeaux → on envoie les deux préférences (« femme+homme »).
+      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase(), total >= 80 ? `${cadeau}+${cadeau2}` : cadeau);
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -233,7 +236,7 @@ export default function CartPage() {
           <FreeShippingBar />
           {/* Mode délai allongé : encadré cadeau (délai + choix de préférence).
               N'affiche RIEN quand le mode est éteint → panier comme avant. */}
-          <CadeauChoix value={cadeau} onChange={setCadeau} />
+          <CadeauChoix value={cadeau} onChange={setCadeau} value2={cadeau2} onChange2={setCadeau2} />
           <div className="summary-row">
             <span>Sous-total</span>
             <span>{formatEuro(total)}</span>

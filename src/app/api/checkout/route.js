@@ -96,7 +96,8 @@ export async function POST(req) {
   // Choix de livraison fait sur le panier (avant Stripe).
   const deliveryMethod = ["relais", "domicile", "retrait"].includes(body?.deliveryMethod) ? body.deliveryMethod : "";
   // 🎁 Préférence de cadeau d'attente choisie sur le PANIER (mode délai allongé).
-  const cadeauChoisi = ["surprise", "femme", "homme"].includes(body?.cadeau) ? body.cadeau : "";
+  // Simple (« femme ») ou double dès 80 € (« femme+homme » = cadeau 1 + cadeau 2).
+  const cadeauChoisi = /^(surprise|femme|homme)(\+(surprise|femme|homme))?$/.test(body?.cadeau || "") ? body.cadeau : "";
   const rp = body?.relaisPoint && typeof body.relaisPoint === "object" ? body.relaisPoint : null;
   // Transporteur du point relais choisi (Mondial Relay, Relais Colis, Colissimo…)
   // → sert à facturer le bon tarif au poids et à créer l'étiquette.
