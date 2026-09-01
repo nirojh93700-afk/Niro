@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCart } from "./CartContext";
 
 // Encadré « cadeau d'attente » du PANIER (mode délai allongé actif) : annonce
 // le délai + laisse choisir la préférence de cadeau AVANT le paiement
@@ -15,6 +16,7 @@ const CHOIX = [
 
 export default function CadeauChoix({ value, onChange }) {
   const [vac, setVac] = useState(null);
+  const { total } = useCart(); // « 2 cadeaux dès 80 € » : la ligne suit le panier en direct
   useEffect(() => {
     fetch("/api/shipping-config")
       .then((r) => (r.ok ? r.json() : null))
@@ -30,9 +32,14 @@ export default function CadeauChoix({ value, onChange }) {
       <div style={{ fontSize: ".84rem", color: "#6b5516", lineHeight: 1.5, marginBottom: 10 }}>{vac.message}</div>
       {/* 2) La phrase du cadeau + 3) le choix, dans le même encadré. */}
       <div style={{ fontWeight: 700, color: "#8a6d1f", fontSize: ".92rem", marginBottom: 4 }}>🎁 Votre cadeau d&apos;attente — offert</div>
-      <div style={{ fontSize: ".82rem", color: "#6b5516", lineHeight: 1.45, marginBottom: 10 }}>
+      <div style={{ fontSize: ".82rem", color: "#6b5516", lineHeight: 1.45, marginBottom: 8 }}>
         Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :
       </div>
+      {(Number(total) || 0) >= 80 ? (
+        <div style={{ fontSize: ".82rem", color: "#256b34", fontWeight: 700, marginBottom: 10 }}>🎁🎁 Votre commande contient deux cadeaux !</div>
+      ) : (
+        <div style={{ fontSize: ".82rem", color: "#8a6d1f", marginBottom: 10 }}>✨ Et dès 80 € d&apos;achat, <strong>deux cadeaux</strong> vous sont offerts.</div>
+      )}
       <div style={{ display: "flex", gap: 8 }}>
         {CHOIX.map((c) => {
           const on = (value || "surprise") === c.value;

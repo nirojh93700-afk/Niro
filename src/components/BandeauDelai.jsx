@@ -54,6 +54,9 @@ export default function BandeauDelai({ message, gift }) {
                 <span>🎁</span><span>Un <strong>cadeau surprise</strong> est glissé dans chaque commande passée pendant cette période.</span>
               </div>
               <div style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: ".86rem", color: "#584a2c", lineHeight: 1.45, marginTop: 8 }}>
+                <span>🎁🎁</span><span>Dès <strong>80 € d&apos;achat</strong>, ce sont <strong>deux cadeaux</strong> qui sont glissés dans votre commande.</span>
+              </div>
+              <div style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: ".86rem", color: "#584a2c", lineHeight: 1.45, marginTop: 8 }}>
                 <span>🛍️</span><span>Dans votre panier, dites-nous votre préférence : <strong>plutôt femme, plutôt homme, ou surprise totale</strong>.</span>
               </div>
               <div style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: ".86rem", color: "#584a2c", lineHeight: 1.45, marginTop: 8 }}>
