@@ -692,15 +692,15 @@ export const products = [
   {
     slug: "bracelet-homme-cuir-tresse-acier",
     hidden: false, // visible
-    name: "Bracelet Homme Cuir Tressé & Acier",
+    name: "Bracelet Homme Tressé & Acier",
     weight: 90,
     pickup: false,
     letter: true,
     subcategory: "homme",
-    title: "Bracelet homme cuir tressé & acier à graver",
+    title: "Bracelet homme tressé aspect cuir & acier à graver",
     category: "bijoux",
     type: "Bracelet personnalisé",
-    tagline: "Cuir tressé et plaque acier, gravée avec votre message.",
+    tagline: "Tressage aspect cuir et plaque acier, gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
     personalizationFields: [
@@ -721,26 +721,26 @@ export const products = [
       { id: "cuir-tresse-noir-sans", title: "Noir / Sans texte", price: 24.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
       { id: "cuir-tresse-noir-texte", title: "Noir / Avec texte", price: 28.90, stockId: "cuir-noire", image: "/produits/bracelet_cuir_tresse_a_graver_noir.jpg" },
     ],
-    descriptionHtml: `<p>Un bracelet masculin et intemporel : <strong>cuir véritable tressé</strong> associé à une <strong>plaque en acier inoxydable</strong> gravable.</p>
+    descriptionHtml: `<p>Un bracelet masculin et intemporel : <strong>tressage souple aspect cuir</strong> associé à une <strong>plaque en acier inoxydable</strong> gravable.</p>
 <p>Gravez un prénom, une date ou un message pour en faire un cadeau unique (Fête des Pères, anniversaire, Noël).</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matières :</strong> cuir véritable tressé + acier inoxydable</li>
+<li><strong>Matières :</strong> tressage aspect cuir + acier inoxydable</li>
 <li><strong>Finitions :</strong> plaque argentée, dorée ou noire</li>
 <li><strong>Gravure :</strong> laser, réalisée sur commande</li>
 </ul>`,
   },
   {
     slug: "porte-cles-cuir-a-graver",
-    name: "Porte-clés cuir à graver",
+    name: "Porte-clés aspect cuir à graver",
     weight: 50,
     pickup: false,
     letter: true,
-    title: "Porte-clés en cuir véritable à graver personnalisé",
+    title: "Porte-clés aspect cuir à graver personnalisé",
     subcategory: "porte-cles",
     category: "cadeaux",
     type: "Porte-clés personnalisé",
-    tagline: "Un porte-clés en cuir, gravé avec votre message ou votre photo.",
+    tagline: "Un porte-clés aspect cuir, gravé avec votre message ou votre photo.",
     personalizable: true,
     personalizationLabel: "Texte ou photo à graver",
     // Comme la pièce en laiton : texte OU photo, au choix de la cliente.
@@ -764,10 +764,10 @@ export const products = [
       { id: "porte-cles-cuir-marron", title: "Marron", price: 7.9, image: "/produits/porte_cles_vierges_en_cuir_marron.jpg" },
       { id: "porte-cles-cuir-noir", title: "Noir", price: 7.9, image: "/produits/porte_cles_vierges_en_cuir_noir.jpg" },
     ],
-    descriptionHtml: `<p>Un <strong>porte-clés en cuir véritable</strong>, gravé au laser avec le texte de votre choix : prénom, date, petit mot ou coordonnées GPS d'un lieu qui compte.</p>
+    descriptionHtml: `<p>Un <strong>porte-clés aspect cuir</strong>, gravé au laser avec le texte de votre choix : prénom, date, petit mot ou coordonnées GPS d'un lieu qui compte.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> cuir véritable</li>
+<li><strong>Matière :</strong> matière souple aspect cuir</li>
 <li><strong>Coloris :</strong> marron ou noir</li>
 <li><strong>Gravure :</strong> laser, réalisée sur commande — <strong>texte ou photo</strong>, au choix</li>
 </ul>

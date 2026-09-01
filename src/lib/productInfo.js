@@ -234,7 +234,7 @@ Personnalisation
 
 Entretien
 - Chiffon doux sec après un port prolongé.
-- Tenez le cuir éloigné de l'eau prolongée ; évitez parfums et produits chimiques.`,
+- Tenez le bracelet éloigné de l'eau prolongée ; évitez parfums et produits chimiques.`,
     returns: `Conditions adaptées
 
 Version AVEC texte (personnalisée)
@@ -776,12 +776,12 @@ Un souci à la réception ?
 
   "porte-cles-cuir-a-graver": {
     material: `Taille & Matériaux
-- Porte-clés en cuir véritable, gravé au laser.
+- Porte-clés aspect cuir, gravé au laser.
 - Coloris : marron ou noir.
 - Anneau métallique solide.`,
     usage: `Personnalisation & Entretien
 - Gravure du texte de votre choix : prénom, date, petit mot ou coordonnées GPS d'un lieu qui compte.
-- Le cuir véritable se patine joliment avec le temps.
+- La matière souple aspect cuir vieillit joliment avec le temps.
 - Entretien : chiffon doux ; évitez l'eau et l'humidité prolongée.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
@@ -796,8 +796,8 @@ Un souci à la réception ?
 - Fermoir sécurisé. Bracelet masculin et intemporel.`,
     usage: `Personnalisation & Entretien
 - Option « Avec texte » : gravez un prénom, une date ou un message sur la plaque acier.
-- L'acier 316L ne ternit pas ; le cuir se patine avec le temps.
-- Entretien : essuyez avec un chiffon doux ; évitez de mouiller le cuir (l'eau abîme le cuir véritable).`,
+- L'acier 316L ne ternit pas ; le tressage aspect cuir vieillit joliment.
+- Entretien : essuyez avec un chiffon doux ; évitez de le mouiller longtemps.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Avec gravure = non remboursable une fois la gravure lancée (article L221-28). Sans gravure : retour possible sous 14 jours, non porté, dans son emballage d'origine.
