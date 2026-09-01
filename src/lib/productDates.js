@@ -46,6 +46,7 @@ export const PRODUCT_DATES = {
   "collier-coeur-plaques": "2026-09-01",
   "collier-3coeurs": "2026-09-01",
   "bracelet-coeur-chaine": "2026-09-01",
+  "bracelet-cordon-plaque": "2026-09-01",
   "collier-medaillon-livre": "2026-06-02",
   "collier-couple-puzzle": "2026-06-02",
   "collier-femme-pendentif-geometrique": "2026-06-02",

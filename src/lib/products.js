@@ -1460,6 +1460,51 @@ export const products = [
 <p>Il se porte seul pour son côté affirmé, ou superposé avec une chaîne plus fine.</p>`,
   },
   {
+    slug: "bracelet-cordon-plaque",
+    badge: "Nouveau",
+    name: "Bracelet cordon à plaque gravée",
+    weight: 40, pickup: false, letter: true, subcategory: "homme",
+    title: "Bracelet cordon tressé à plaque acier gravée — unisexe, taille réglable, noir ou gris",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Un cordon tressé solide, une plaque en acier à faire graver — se porte tous les jours.",
+    personalizable: true, personalizationLabel: "Gravure sur la plaque acier en option (+3 €)",
+    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
+    engravingPricing: {
+      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
+    },
+    personalizationFields: [
+      { key: "gravure", type: "select", label: "Voulez-vous faire graver la plaque ?", options: [
+        { value: "non", label: "Sans gravure" },
+        { value: "oui", label: "Avec gravure (+3 €)" },
+      ] },
+      { key: "note", type: "note", text: "La plaque en acier est la surface gravée : un prénom, des initiales, une date ou de courtes coordonnées. Comptez une quinzaine de caractères pour que la gravure reste bien lisible.", showIfField: "gravure", showIfValue: "oui" },
+      { key: "texte", label: "Texte à graver sur la plaque", placeholder: "Prénom, initiales, date…", maxLength: 15, showIfField: "gravure", showIfValue: "oui" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+    ],
+    images: [
+      "/produits/bracelet-cordon-plaque-1.jpg",
+      "/produits/bracelet-cordon-plaque-2.jpg",
+      "/produits/bracelet-cordon-plaque-3.jpg",
+      "/produits/bracelet-cordon-plaque-4.jpg",
+    ],
+    variants: [
+      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-noir-noir" },
+      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 37.90, stockId: "bracelet-cordon-plaque-noir-acier" },
+      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-gris" },
+    ],
+    descriptionHtml: `<p>Un bracelet <strong>sobre et solide</strong> : un double cordon tressé et une <strong>plaque en acier</strong> qui se grave. Les <strong>nœuds coulissants</strong> le rendent réglable — il s'ajuste à tous les poignets et se met tout seul, sans fermoir à chercher.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> cordon tressé résistant, plaque en acier au titane</li>
+<li><strong>Trois finitions :</strong> noir à boucle noire, noir à boucle acier, gris foncé à boucle noire</li>
+<li><strong>Taille réglable</strong> par nœuds coulissants — unisexe</li>
+<li><strong>Poids :</strong> environ 10 g, on l'oublie au poignet</li>
+<li><strong>Gravure en option (+3 €) :</strong> prénom, initiales ou date au laser sur la plaque</li>
+</ul>
+<p>Discret et solide, il se porte au quotidien comme au sport. Un cadeau simple qui touche : les initiales d'un couple, le prénom d'un enfant, une date qui compte.</p>
+<p><em>La dernière photo montre des exemples de gravure ; les coloris proposés sont ceux de la liste ci-dessus.</em></p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",

@@ -1081,6 +1081,24 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "bracelet-cordon-plaque": {
+    material: `Taille & Matériaux
+- Double cordon tressé avec plaque rectangulaire en acier au titane.
+- Taille réglable par nœuds coulissants : convient à tous les poignets, homme comme femme.
+- Trois finitions : noir à boucle noire, noir à boucle acier, gris foncé à boucle noire.
+- Poids : environ 10 g.`,
+    usage: `Personnalisation & Entretien
+- La plaque en acier se grave au laser : prénom, initiales, date (15 caractères maximum pour rester lisible).
+- La gravure est une option à 3 € ; sans elle, la plaque reste lisse.
+- Choisissez votre écriture parmi nos huit polices.
+- Entretien : le cordon se nettoie à l'eau tiède avec un peu de savon doux, puis séchage à l'air libre. Évitez l'eau de Javel et les produits abrasifs.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.
