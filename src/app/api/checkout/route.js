@@ -95,6 +95,8 @@ export async function POST(req) {
 
   // Choix de livraison fait sur le panier (avant Stripe).
   const deliveryMethod = ["relais", "domicile", "retrait"].includes(body?.deliveryMethod) ? body.deliveryMethod : "";
+  // 🎁 Préférence de cadeau d'attente choisie sur le PANIER (mode délai allongé).
+  const cadeauChoisi = ["surprise", "femme", "homme"].includes(body?.cadeau) ? body.cadeau : "";
   const rp = body?.relaisPoint && typeof body.relaisPoint === "object" ? body.relaisPoint : null;
   // Transporteur du point relais choisi (Mondial Relay, Relais Colis, Colissimo…)
   // → sert à facturer le bon tarif au poids et à créer l'étiquette.
@@ -354,6 +356,9 @@ export async function POST(req) {
         ...(cagnotteEmail && cagnotteAmount > 0 ? { cagnotteEmail, cagnotteAmount: String(cagnotteAmount) } : {}),
         // Point relais choisi sur le panier (adresse complète pour la commande).
         ...(relaisFull ? { relaisPoint: relaisFull } : {}),
+        // Cadeau d'attente : préférence choisie sur le panier, seulement pendant
+        // le mode délai allongé (sinon on n'enregistre rien).
+        ...(cadeauChoisi && vacationActive(settings?.vacation) ? { cadeauChoix: cadeauChoisi } : {}),
       },
       locale: "fr",
       currency: "eur",
@@ -409,22 +414,9 @@ export async function POST(req) {
           },
           optional: true,
         }]),
-        // 🎁 Pendant le mode « délai allongé » (settings.vacation) : on demande
-        // la préférence de cadeau d'attente (offert dans chaque commande).
-        // Invisible le reste du temps. (Demande gérante, 30/08/2026.)
-        ...(vacationActive(settings?.vacation) ? [{
-          key: "cadeau",
-          label: { type: "custom", custom: "Votre cadeau d'attente (offert)" },
-          type: "dropdown",
-          dropdown: {
-            options: [
-              { label: "Surprise — je vous fais confiance", value: "surprise" },
-              { label: "Plutôt femme", value: "femme" },
-              { label: "Plutôt homme", value: "homme" },
-            ],
-          },
-          optional: true,
-        }] : []),
+        // 🎁 Cadeau d'attente : la préférence se choisit désormais SUR LE PANIER
+        // (encadré CadeauChoix → metadata.cadeauChoix) — plus de question ici,
+        // pour ne pas demander deux fois (demande gérante, 01/09/2026).
         // ⚠️ Le champ « Message ou date à graver (facultatif) » a été RETIRÉ
         // (25/08/2026, demande de la gérante) : son libellé laissait croire
         // qu'une gravure supplémentaire (ex. une date) était offerte, alors que

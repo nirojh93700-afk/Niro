@@ -360,7 +360,11 @@ export async function POST(req) {
 
     // 🎁 Cadeau d'attente (mode délai allongé) : préférence choisie au paiement
     // + rappel DEUX cadeaux dès 80 € (règle gérante, 30/08/2026).
-    const choixCadeau = (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value || "";
+    // Depuis le 01/09/2026 la préférence vient du PANIER (metadata) ; l'ancien
+    // champ Stripe est gardé en repli pour les sessions ouvertes avant le changement.
+    const choixCadeau = session.metadata?.cadeauChoix
+      || (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value
+      || "";
     const cadeauLabel = { surprise: "Surprise", femme: "Plutôt femme", homme: "Plutôt homme" }[choixCadeau] || "";
     const deuxCadeaux = choixCadeau && (session.amount_total || 0) / 100 >= 80;
     const cadeauBlock = choixCadeau
@@ -536,7 +540,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       spec: orderSpec || null,
       // Textes tapés par la cliente au paiement (précisions gravure + date/message à graver).
       // 🎁 Préférence de cadeau d'attente (mode délai allongé) — affichée dans Gestion.
-      cadeauChoix: (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value || "",
+      cadeauChoix: choixCadeau,
       demandeGravure: (session.custom_fields || []).find((f) => f.key === "personnalisation")?.text?.value || "",
       messageGraver: (session.custom_fields || []).find((f) => f.key === "message_cadeau")?.text?.value || "",
       // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).

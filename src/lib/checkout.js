@@ -4,7 +4,7 @@ import { track } from "@/lib/track";
 
 // Envoie le panier au serveur pour créer une session Stripe Checkout,
 // puis redirige le client vers la page de paiement sécurisée Stripe.
-export async function startCheckout(items, postalCode = "", promoCode = "", delivery = null, country = "FR", useCagnotte = false, promoEmail = "") {
+export async function startCheckout(items, postalCode = "", promoCode = "", delivery = null, country = "FR", useCagnotte = false, promoEmail = "", cadeau = "") {
   const payload = items.map((i) => ({
     variantId: i.variantId,
     quantity: i.quantity,
@@ -30,6 +30,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
       deliveryMethod: delivery?.method || "",
       relaisPoint: delivery?.relais || null,
       useCagnotte: Boolean(useCagnotte), // payer une partie avec la cagnotte fidélité
+      cadeau, // préférence de cadeau d'attente choisie sur le panier (mode délai allongé)
     }),
   });
 

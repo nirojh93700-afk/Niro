@@ -12,6 +12,7 @@ import "./globals.css";
 import { cookies, headers } from "next/headers";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
+import BandeauDelai from "@/components/BandeauDelai";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import SiteGate from "@/components/SiteGate";
@@ -240,12 +241,9 @@ export default async function RootLayout({ children }) {
                 )}
               </div>
             ) : null}
-            {vacMsg ? (
-              <div style={{ background: "#fdf6e8", borderBottom: "1px solid #e7d3a1", color: "#6b5516", textAlign: "center", padding: "9px 16px", fontSize: "0.9rem", lineHeight: 1.45 }}>
-                <span aria-hidden="true">🏖️</span> {vacMsg}
-                {vacGift ? <span style={{ display: "block", fontSize: "0.84rem", color: "#8a6d1f" }}>🎁 {vacGift}</span> : null}
-              </div>
-            ) : null}
+            {/* Bandeau « délai allongé » cliquable (fenêtre cadeau) — sans 🏖️
+                (on ne parle pas de vacances), masqué sur le panier. */}
+            {vacMsg ? <BandeauDelai message={vacMsg} gift={vacGift} /> : null}
             <CartProvider>
               <Header categories={menuCategories} />
               <main>{children}</main>

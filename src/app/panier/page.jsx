@@ -6,7 +6,7 @@ import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { startCheckout } from "@/lib/checkout";
 import FreeShippingBar from "@/components/FreeShippingBar";
-import VacationNotice from "@/components/VacationNotice";
+import CadeauChoix from "@/components/CadeauChoix";
 import RelaisPicker from "@/components/RelaisPicker";
 
 // Pays d'Europe où le point relais (Mondial Relay) est disponible.
@@ -48,6 +48,8 @@ export default function CartPage() {
   const [deliveryMethod, setDeliveryMethod] = useState("domicile");
   const [relais, setRelais] = useState(null);
   const [country, setCountry] = useState("FR");
+  // Préférence de cadeau d'attente (mode délai allongé) — « Surprise » par défaut.
+  const [cadeau, setCadeau] = useState("surprise");
   const isFrance = country === "FR" || country === "MC";
 
   // L'option point relais s'affiche uniquement si elle est activée dans l'admin.
@@ -160,7 +162,7 @@ export default function CartPage() {
       // Cagnotte et code promo sont exclusifs (un seul coupon Stripe). Si la cagnotte
       // est cochée, elle a la priorité et le code promo n'est pas envoyé.
       const wantCagnotte = Boolean(useCagnotte && cagnotteUsable > 0);
-      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase());
+      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase(), cadeau);
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -229,8 +231,9 @@ export default function CartPage() {
         <aside className="cart-summary">
           <h3>Récapitulatif</h3>
           <FreeShippingBar />
-          {/* 🏖️ Mode vacances : n'affiche rien tant qu'il n'est pas activé. */}
-          <VacationNotice compact />
+          {/* Mode délai allongé : encadré cadeau (délai + choix de préférence).
+              N'affiche RIEN quand le mode est éteint → panier comme avant. */}
+          <CadeauChoix value={cadeau} onChange={setCadeau} />
           <div className="summary-row">
             <span>Sous-total</span>
             <span>{formatEuro(total)}</span>
