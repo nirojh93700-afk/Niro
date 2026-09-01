@@ -44,6 +44,7 @@ export const PRODUCT_DATES = {
   "collier-coeur-zircon": "2026-07-31",
   "collier-double-coeur": "2026-09-01",
   "collier-coeur-plaques": "2026-09-01",
+  "collier-3coeurs": "2026-09-01",
   "collier-medaillon-livre": "2026-06-02",
   "collier-couple-puzzle": "2026-06-02",
   "collier-femme-pendentif-geometrique": "2026-06-02",

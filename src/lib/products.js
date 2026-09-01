@@ -1377,6 +1377,48 @@ export const products = [
 <p>Un cadeau juste pour les <strong>couples</strong> (deux prénoms et la date de rencontre) comme pour les <strong>mamans</strong> (le prénom de chaque enfant). Chaque gravure est faite au laser dans notre atelier, dans l'écriture que vous choisissez.</p>`,
   },
   {
+    slug: "collier-3coeurs",
+    badge: "Nouveau",
+    name: "Collier 3 Cœurs entrelacés à graver",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier trois cœurs entrelacés à graver — un prénom par cœur, cadeau maman et famille",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Trois cœurs enlacés sur une même chaîne — un prénom gravé dans chacun.",
+    personalizable: true, personalizationLabel: "Trois cœurs gravables : un prénom par cœur (+3 € par cœur)",
+    // Trois cœurs gravables, chacun +3 €. Supplément chiffré APRÈS la remise bijoux
+    // (+3 € pile) — une variante ferait dériver le montant.
+    engravingPricing: {
+      textKeys: ["coeur1", "coeur2", "coeur3"],
+      textExtra: 3,
+    },
+    personalizationFields: [
+      { key: "note", type: "note", text: "Chacun des trois cœurs peut recevoir un prénom gravé. Remplissez seulement ceux que vous voulez faire graver — chaque cœur gravé ajoute 3 €. Les cœurs laissés vides restent lisses." },
+      { key: "coeur1", label: "Prénom — 1er cœur (+3 €)", placeholder: "Ex. Naomi", maxLength: 12, optional: true },
+      { key: "coeur2", label: "Prénom — 2e cœur (+3 €)", placeholder: "Ex. Chloé", maxLength: 12, optional: true },
+      { key: "coeur3", label: "Prénom — 3e cœur (+3 €)", placeholder: "Ex. Lina", maxLength: 12, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/collier-3coeurs-1.jpg",
+      "/produits/collier-3coeurs-2.jpg",
+      "/produits/collier-3coeurs-3.jpg",
+      "/produits/collier-3coeurs-4.jpg",
+      "/produits/collier-3coeurs-5.jpg",
+    ],
+    variants: [
+      { id: "collier-3coeurs-dore", title: "Doré", price: 37.90, stockId: "collier-3coeurs-dore" },
+    ],
+    descriptionHtml: `<p><strong>Trois cœurs ouverts</strong> qui se glissent l'un dans l'autre sur une fine chaîne dorée. Chacun peut porter un <strong>prénom gravé</strong> : les trois enfants, le couple et l'enfant, trois sœurs — trois personnes réunies sur un même bijou.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, doré — résiste à l'eau et ne ternit pas</li>
+<li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
+<li><strong>Poids du pendentif :</strong> environ 10 g</li>
+<li><strong>Trois cœurs gravables :</strong> <strong>3 € par cœur gravé</strong>, vous ne payez que ce que vous faites graver</li>
+</ul>
+<p>Le cadeau juste pour une <strong>maman</strong> ou une <strong>grand-mère</strong> : un prénom par cœur, gravé au laser dans notre atelier, dans l'écriture que vous choisissez.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",
