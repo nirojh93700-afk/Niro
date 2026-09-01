@@ -1539,9 +1539,10 @@ export const products = [
     weight: 600, // verre + emballage protégé (fragile)
     pickup: false, // verres : livraison seule (pas de retrait en main propre)
     letter: false, // colis : lourd et fragile
-    // Aligné sur le marché (60-89 € chez la concurrence, 01/09/2026) : sûr ici
-    // car le variant « Lot de 4 — livraison offerte » vaut 71,90 € (> 60 €).
-    freeShipThreshold: 60, // livraison offerte dès 60 € (lot de 4 = 71,90 €)
+    // Aligné sur le marché (60-89 € chez la concurrence). Seuil commun à TOUS
+    // les verres/carafe (01/09/2026, décision gérante) — seuls les bijoux
+    // restent à 45 €.
+    freeShipThreshold: 60,
     perGlassLot: true, // lot 2/4 : chaque verre peut être gravé différemment (photo/texte)
     hidden: false, // PUBLIÉ (verre à whisky gravé — photo / texte / logo)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
@@ -1719,9 +1720,10 @@ export const products = [
     pickup: false, // verres : livraison seule
     letter: false, // colis (fragile)
     hidden: false, // PUBLIÉ
-    // ⚠️ RESTER À 45 € : le variant « Lot de 4 — livraison offerte » vaut 49,90 €
-    // (voir plus bas) — un seuil plus haut casserait cette promesse affichée.
-    freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4) — n'affecte que ce produit
+    // Seuil commun à TOUS les verres/carafe (01/09/2026, décision gérante) —
+    // le lot de 4 (49,90 €) ne suffit plus seul, corrigé dans le texte + le
+    // titre du variant plus bas (retrait de « livraison offerte »).
+    freeShipThreshold: 60,
     photoContain: true, // photos hautes (verres) : voir le verre en entier (pas de rognage)
     cardImage: "/produits/verre_vin_geniet.jpg",
     title: "Verre à vin gravé personnalisé — prénom, date, monogramme ou modèle au choix",
@@ -1829,16 +1831,16 @@ export const products = [
     variants: [
       { id: "verre-vin-1", stockId: "verre-vin-1", title: "À l'unité", price: 12.90, weight: 500 },
       { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 24.90, weight: 900 },
-      { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4 — livraison offerte", price: 49.90, weight: 1600 },
+      { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4", price: 49.90, weight: 1600 },
     ],
     descriptionHtml: `<p><strong>Un verre à vin en cristal, gravé à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
-<p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès le lot de 4.</strong></p>
+<p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Verre :</strong> verre à vin en cristal, contenance ~36 cl</li>
 <li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
 <li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
-<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte sur le lot de 4)</li>
+<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte dès 60 € d'achat)</li>
 </ul>
 <h3>Points forts</h3>
 <ul>
@@ -1856,9 +1858,8 @@ export const products = [
     pickup: false,
     letter: false,
     hidden: false,
-    // ⚠️ RESTER À 45 € : le variant « Lot de 4 — livraison offerte » vaut 49,90 €
-    // (voir plus bas) — un seuil plus haut casserait cette promesse affichée.
-    freeShipThreshold: 45,
+    // Seuil commun à TOUS les verres/carafe (01/09/2026, décision gérante).
+    freeShipThreshold: 60,
     photoContain: true, // photos hautes (flûte) : voir le verre en entier
     cardImage: "/produits/flute-grav-01.jpg",
     title: "Flûte à champagne gravée personnalisée — prénom, date, monogramme ou modèle",
@@ -1948,16 +1949,16 @@ export const products = [
     variants: [
       { id: "flute-1", stockId: "flute-1", title: "À l'unité", price: 12.90, weight: 450 },
       { id: "flute-2", stockId: "flute-2", title: "Lot de 2", price: 24.90, weight: 800 },
-      { id: "flute-4", stockId: "flute-4", title: "Lot de 4 — livraison offerte", price: 49.90, weight: 1400 },
+      { id: "flute-4", stockId: "flute-4", title: "Lot de 4", price: 49.90, weight: 1400 },
     ],
     descriptionHtml: `<p><strong>Une flûte à champagne gravée à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 19 : couples, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
-<p>Gravure laser permanente, qui résiste au lave-vaisselle. Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire. <strong>Livraison offerte dès le lot de 4.</strong></p>
+<p>Gravure laser permanente, qui résiste au lave-vaisselle. Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Verre :</strong> flûte à champagne, contenance ~21 cl (Ø 6,3 × H 21,4 cm)</li>
 <li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
 <li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
-<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte sur le lot de 4)</li>
+<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte dès 60 € d'achat)</li>
 </ul>
 <h3>Points forts</h3>
 <ul>
@@ -1976,7 +1977,9 @@ export const products = [
     pickup: false,
     letter: false, // colis lourd et fragile
     hidden: false, // PUBLIÉ
-    freeShipThreshold: 45, // livraison offerte dès 45 € (carafe 54,90 € toujours offerte, et cohérent en panier mixte verres/carafe)
+    // Seuil commun à TOUS les verres/carafe (01/09/2026, décision gérante) —
+    // la carafe seule (54,90 €) n'atteint plus le seuil à elle seule.
+    freeShipThreshold: 60,
     cardImage: "/produits/carafe_gravee.jpg",
     title: "Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception",
     category: "verres",
@@ -2088,7 +2091,7 @@ export const products = [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
     ],
     descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 33), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
-<p>Gravure laser personnalisée, réalisée à la commande dans notre atelier en France. Un cadeau d'exception (fête des pères, anniversaire, retraite, mariage…). <strong>Livraison offerte.</strong> Possibilité d'ajouter des <strong>verres assortis</strong> gravés au même style, pour un vrai coffret.</p>
+<p>Gravure laser personnalisée, réalisée à la commande dans notre atelier en France. Un cadeau d'exception (fête des pères, anniversaire, retraite, mariage…). <strong>Livraison offerte dès 60 € d'achat</strong> (par exemple avec le coffret verres assortis). Possibilité d'ajouter des <strong>verres assortis</strong> gravés au même style, pour un vrai coffret.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Carafe :</strong> verre taillé, bouchon à facettes, contenance ~750 ml</li>

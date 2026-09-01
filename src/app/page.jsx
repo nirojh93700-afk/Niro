@@ -218,7 +218,7 @@ export default async function HomePage() {
               <div className="lm-txt">
                 <span className="lm-tag"><span className="lm-dot"></span> Édition limitée</span>
                 <h2>La carafe à whisky <em>gravée</em>, un cadeau d&apos;exception</h2>
-                <p>Verre taillé, bouchon à facettes, gravée à votre prénom ou au modèle de votre choix. Livraison offerte.</p>
+                <p>Verre taillé, bouchon à facettes, gravée à votre prénom ou au modèle de votre choix. Livraison offerte dès 60 € d&apos;achat.</p>
                 <Link href="/produit/carafe-a-whisky-gravee" className="lm-cta">Découvrir la carafe →</Link>
               </div>
               <Link href="/produit/carafe-a-whisky-gravee" className="lm-pic" aria-label="Découvrir la carafe" style={{ display: "block" }}>

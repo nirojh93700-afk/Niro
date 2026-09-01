@@ -1086,7 +1086,7 @@ Un souci à la réception ?
     usage:
       "Trois façons de personnaliser : un modèle prêt (n° 1 à 20 — couples, monogramme, prénoms et dates, banderoles), une lettre fleurie, ou votre propre texte dans l'une de nos 8 écritures. L'aperçu se met à jour pendant que vous écrivez.\nPour les modèles avec prénoms (n° 14 à 17), le prénom et la date sont gravés dans l'écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l'évier, c'est du cristal.",
     returns:
-      "Expédié en colis suivi, soigneusement calé (verre fragile) — à domicile ou en point relais.\nLivraison offerte dès 45 € d'achat, donc dès le lot de 4.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nUn verre cassé à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
+      "Expédié en colis suivi, soigneusement calé (verre fragile) — à domicile ou en point relais.\nLivraison offerte dès 60 € d'achat.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nUn verre cassé à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
   },
   "flute-a-champagne-gravee": {
     material:
@@ -1094,7 +1094,7 @@ Un souci à la réception ?
     usage:
       "Trois façons de personnaliser : un modèle prêt (n° 1 à 19 — couples, prénoms et dates, banderoles), une lettre fleurie, ou votre propre texte dans l'une de nos 8 écritures. L'aperçu se met à jour pendant que vous écrivez.\nPour les modèles avec prénoms, le prénom et la date sont gravés dans l'écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Manipulez le pied avec précaution, il est fin.",
     returns:
-      "Expédiée en colis suivi, soigneusement calée (verre fragile) — à domicile ou en point relais.\nLivraison offerte dès 45 € d'achat, donc dès le lot de 4.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nUne flûte cassée à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
+      "Expédiée en colis suivi, soigneusement calée (verre fragile) — à domicile ou en point relais.\nLivraison offerte dès 60 € d'achat.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nUne flûte cassée à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
   },
   "carafe-a-whisky-gravee": {
     material:
@@ -1102,7 +1102,7 @@ Un souci à la réception ?
     usage:
       "Trois façons de personnaliser : un modèle prêt (n° 1 à 33), une lettre fleurie, ou votre propre texte — prénom, date, message, initiales.\nLavez la carafe à la main, à l'eau tiède, et laissez-la sécher retournée avant de remettre le bouchon.\nLe bouchon est hermétique : il garde l'arôme entre deux dégustations.",
     returns:
-      "Expédiée en colis suivi, soigneusement calée (pièce lourde et fragile) — à domicile ou en point relais.\nLivraison offerte.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nCarafe cassée à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
+      "Expédiée en colis suivi, soigneusement calée (pièce lourde et fragile) — à domicile ou en point relais.\nLivraison offerte dès 60 € d'achat.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.\nCarafe cassée à la réception ? Écrivez-nous avec une photo, on trouve toujours une solution.",
   },
   "gobelet-isotherme-40oz": {
     material:
