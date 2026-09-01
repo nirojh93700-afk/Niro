@@ -457,7 +457,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         const v = vacationActive((await getSettings())?.vacation);
         if (v) {
           const gift = vacationGiftMessage(v);
-          vacationBlock = `<p style="background:#fdf6e8;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;">🏖️ ${escapeHtml(vacationMessage(v))}${gift ? `<br><span style="color:#8a6d1f;">🎁 ${escapeHtml(gift)}</span>` : ""}</p>`;
+          vacationBlock = `<p style="background:#fdf6e8;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;">${escapeHtml(vacationMessage(v))}${gift ? `<br><span style="color:#8a6d1f;">🎁 ${escapeHtml(gift)}</span>` : ""}</p>`;
         }
       } catch { /* jamais bloquant */ }
       const clientBody = `
