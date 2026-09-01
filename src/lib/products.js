@@ -970,8 +970,22 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
-    images: ["/produits/bracelet_femme_coeur_a_graver_dore.jpg"],
-    variants: [{ id: "bracelet-coeur-dore", title: "Doré", price: 27.90 }],
+    images: [
+      "/produits/bracelet_femme_coeur_a_graver_dore.jpg",
+      "/produits/bracelet-femme-coeur-couleurs.jpg", // les 4 couleurs empilées
+      "/produits/bracelet-femme-coeur-main.jpg",     // cœurs dans la main
+      "/produits/bracelet-femme-coeur-fermoirs.jpg", // fermoirs coulissants
+      "/produits/bracelet-femme-coeur-aplat.jpg",    // à plat, chaînes déployées
+    ],
+    // 4 couleurs depuis le 01/09/2026 (photos fournisseur reçues). Le
+    // Multicolore n'est PAS en stock (non acheté) → rupture volontaire via le
+    // stock (clé = id de variante, mise à 0 dans Gestion → Stock).
+    variants: [
+      { id: "bracelet-coeur-dore", title: "Doré", price: 27.90 },
+      { id: "bracelet-coeur-or-rose", title: "Or rose", price: 27.90 },
+      { id: "bracelet-coeur-argente", title: "Argenté", price: 26.90 },
+      { id: "bracelet-coeur-multicolore", title: "Multicolore", price: 27.90 },
+    ],
     descriptionHtml: `<p>Bracelet femme avec breloque <strong>cœur</strong> gravable, en acier inoxydable doré. Romantique et délicat.</p>`,
   },
   {
