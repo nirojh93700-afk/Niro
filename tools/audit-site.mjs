@@ -417,9 +417,12 @@ async function auditPromesses() {
   } catch { alerte("Impossible de vérifier les modèles de message (fichier introuvable)"); }
 
   // b) La règle automatique d'avis (J+2) doit joindre les boutons « ★ Noter ».
+  // Le constructeur des boutons vit dans clientMail.js (partagé depuis le 29/08) ;
+  // jobs.js doit l'utiliser, et le lien doit viser l'ancre #avis de la fiche.
   try {
     const jobs = await readFile(path.join(RACINE, "src/lib/jobs.js"), "utf8");
-    if (/boutonsAvis/.test(jobs) && /#avis/.test(jobs)) bon("L'e-mail d'avis automatique (J+2) contient les boutons « Noter » vers la fiche produit");
+    const mail = await readFile(path.join(RACINE, "src/lib/clientMail.js"), "utf8");
+    if (/boutonsAvis/.test(jobs) && /boutonsAvis/.test(mail) && /#avis/.test(mail)) bon("L'e-mail d'avis automatique (J+2) contient les boutons « Noter » vers la fiche produit");
     else erreur("L'e-mail d'avis automatique (J+2) n'a plus ses boutons « Noter » (régression)");
   } catch { alerte("Impossible de vérifier la règle d'avis automatique"); }
 
