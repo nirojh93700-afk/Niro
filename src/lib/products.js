@@ -1539,7 +1539,9 @@ export const products = [
     weight: 600, // verre + emballage protégé (fragile)
     pickup: false, // verres : livraison seule (pas de retrait en main propre)
     letter: false, // colis : lourd et fragile
-    freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4 = 71,90 €)
+    // Aligné sur le marché (60-89 € chez la concurrence, 01/09/2026) : sûr ici
+    // car le variant « Lot de 4 — livraison offerte » vaut 71,90 € (> 60 €).
+    freeShipThreshold: 60, // livraison offerte dès 60 € (lot de 4 = 71,90 €)
     perGlassLot: true, // lot 2/4 : chaque verre peut être gravé différemment (photo/texte)
     hidden: false, // PUBLIÉ (verre à whisky gravé — photo / texte / logo)
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
@@ -1717,6 +1719,8 @@ export const products = [
     pickup: false, // verres : livraison seule
     letter: false, // colis (fragile)
     hidden: false, // PUBLIÉ
+    // ⚠️ RESTER À 45 € : le variant « Lot de 4 — livraison offerte » vaut 49,90 €
+    // (voir plus bas) — un seuil plus haut casserait cette promesse affichée.
     freeShipThreshold: 45, // livraison offerte dès 45 € (lot de 4) — n'affecte que ce produit
     photoContain: true, // photos hautes (verres) : voir le verre en entier (pas de rognage)
     cardImage: "/produits/verre_vin_geniet.jpg",
@@ -1852,6 +1856,8 @@ export const products = [
     pickup: false,
     letter: false,
     hidden: false,
+    // ⚠️ RESTER À 45 € : le variant « Lot de 4 — livraison offerte » vaut 49,90 €
+    // (voir plus bas) — un seuil plus haut casserait cette promesse affichée.
     freeShipThreshold: 45,
     photoContain: true, // photos hautes (flûte) : voir le verre en entier
     cardImage: "/produits/flute-grav-01.jpg",
