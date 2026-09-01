@@ -1281,6 +1281,51 @@ export const products = [
 </ul>`,
   },
   {
+    slug: "collier-double-coeur",
+    badge: "Nouveau",
+    name: "Collier Double Cœur à graver",
+    weight: 40, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier double cœur à graver — pendentif cœur serti de zircons, message gravé au dos",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Deux cœurs superposés : l'un serti de zircons, l'autre à faire graver de votre message.",
+    personalizable: true, personalizationLabel: "Gravure d'un message en option (au dos du second cœur)",
+    personalizationFields: [
+      { key: "note", type: "note", text: "Le second cœur pivote et découvre une surface lisse : c'est là que se grave votre message. Choisissez « Avec gravure » pour y faire graver au laser jusqu'à trois lignes (par exemple un mot tendre, un prénom et une date)." },
+      { key: "ligne1", label: "Ligne 1", placeholder: "Ex. Je t'aime", maxLength: 16, variantContains: "Avec" },
+      { key: "ligne2", label: "Ligne 2", placeholder: "Ex. Maman", maxLength: 16, optional: true, variantContains: "Avec" },
+      { key: "ligne3", label: "Ligne 3", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true, variantContains: "Avec" },
+      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+    ],
+    images: [
+      "/produits/collier-double-coeur-1.jpg",
+      "/produits/collier-double-coeur-2.jpg",
+      "/produits/collier-double-coeur-3.jpg",
+      "/produits/collier-double-coeur-4.jpg",
+      "/produits/collier-double-coeur-5.jpg",
+      "/produits/collier-double-coeur-6.jpg",
+      "/produits/collier-double-coeur-7.jpg",
+      "/produits/collier-double-coeur-8.jpg",
+    ],
+    variants: [
+      { id: "collier-double-coeur-dore-sans", title: "Doré — Sans gravure", price: 27.90, stockId: "collier-double-coeur-dore" },
+      { id: "collier-double-coeur-dore-avec", title: "Doré — Avec gravure", price: 30.90, stockId: "collier-double-coeur-dore" },
+      { id: "collier-double-coeur-orrose-sans", title: "Or rose — Sans gravure", price: 27.90, stockId: "collier-double-coeur-orrose" },
+      { id: "collier-double-coeur-orrose-avec", title: "Or rose — Avec gravure", price: 30.90, stockId: "collier-double-coeur-orrose" },
+      { id: "collier-double-coeur-argente-sans", title: "Argenté — Sans gravure", price: 26.90, stockId: "collier-double-coeur-argente" },
+      { id: "collier-double-coeur-argente-avec", title: "Argenté — Avec gravure", price: 29.90, stockId: "collier-double-coeur-argente" },
+    ],
+    descriptionHtml: `<p>Un pendentif <strong>double cœur</strong> : le premier est orné d'un petit <strong>cœur pavé de zircons</strong>, le second pivote derrière lui et révèle une surface lisse, prête à recevoir <strong>votre message gravé</strong>. Le bijou reste discret au porter, et le mot n'appartient qu'à celle qui le reçoit.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> acier inoxydable 304, zircons</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté (finition PVD) — résiste à l'eau et ne ternit pas</li>
+<li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
+<li><strong>Se porte aussi bien par une femme que par un homme</strong></li>
+<li><strong>Gravure en option :</strong> jusqu'à trois lignes gravées au laser au dos du second cœur (choisir « Avec gravure »)</li>
+</ul>
+<p>Le texte est <strong>entièrement libre</strong> : un mot tendre, un prénom, une date d'anniversaire ou de rencontre — dans la langue et l'écriture de votre choix parmi nos polices. Les photos de la fiche montrent des exemples de rendu.</p>`,
+  },
+  {
     slug: "collier-medaillon-livre",
     badge: "Nouveau",
     name: "Collier Médaillon Livre",

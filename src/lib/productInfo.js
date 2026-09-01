@@ -1010,6 +1010,24 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "collier-double-coeur": {
+    material: `Taille & Matériaux
+- Pendentif double cœur : un cœur orné d'un petit cœur pavé de zircons, un second cœur pivotant derrière lui.
+- Matière : acier inoxydable 304, zircons. Finitions doré, or rose ou argenté (PVD).
+- Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~15 g.
+- Étanche : résiste à l'eau et ne ternit pas.`,
+    usage: `Personnalisation & Entretien
+- Se porte tel quel, ou avec gravure en option : jusqu'à trois lignes gravées au laser au dos du second cœur.
+- Texte libre (mot tendre, prénom, date) dans l'une de nos huit écritures ; comptez environ 16 caractères par ligne pour rester lisible.
+- Le second cœur pivote pour découvrir la gravure : le message reste caché quand le bijou est porté.
+- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, soigneusement protégé.
+- Sans gravure : échange possible sous 14 jours, bijou non porté.
+- Avec gravure : personnalisé = non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
+  },
+
   "collier-medaillon-livre": {
     material: `Taille & Matériaux
 - Médaillon en forme de livre qui s'ouvre, en acier inoxydable.
