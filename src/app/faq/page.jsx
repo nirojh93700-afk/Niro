@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSettings } from "@/lib/stock";
 import { resolveShippingConfig } from "@/lib/shipping";
+import { vacationActive } from "@/lib/vacation";
 
 export const metadata = {
   title: "Questions fréquentes (FAQ)",
@@ -56,13 +57,22 @@ export default async function FaqPage() {
   const settings = await getSettings().catch(() => ({}));
   const cfg = resolveShippingConfig(settings?.shipping);
   const seuil = `${String(cfg.bijouxFreeThreshold).replace(".", ",")} €`;
+  // Mode « délai allongé » actif → la réponse sur les délais suit le bandeau
+  // (3 à 4 semaines) au lieu du 3-5 jours habituel (cohérence, 01/09/2026).
+  const enDelaiAllonge = Boolean(vacationActive(settings?.vacation));
+  const faqBase = enDelaiAllonge
+    ? FAQ.map((f, i) => (i === 0 ? {
+        q: f.q,
+        a: "Chaque pièce est personnalisée à la commande. En raison d'une forte demande, notre délai de confection est actuellement de 3 à 4 semaines minimum — les commandes sont traitées dans leur ordre d'arrivée. Vous avez 24 h pour modifier votre commande avant le lancement. Une fois prête, elle est expédiée en colis suivi et vous recevez le numéro de suivi par e-mail ; le délai de livraison dépend ensuite du transporteur.",
+      } : f))
+    : FAQ;
   const faq = [
-    ...FAQ.slice(0, 3),
+    ...faqBase.slice(0, 3),
     {
       q: "Quels sont les frais de livraison ?",
       a: `Les bijoux voyagent en Lettre Suivie, avec livraison offerte dès ${seuil} d'achat. Les décorations (bois, mariage) sont expédiées en colis suivi, avec un tarif selon la quantité. Le montant exact s'affiche automatiquement au moment du paiement.`,
     },
-    ...FAQ.slice(3),
+    ...faqBase.slice(3),
   ];
 
   const jsonLd = {

@@ -1,4 +1,5 @@
 import { PaymentLogos } from "@/components/PaymentBand";
+import DelaiFabrication from "@/components/DelaiFabrication";
 
 // Section « Commandez en toute confiance » — réassurance client basée UNIQUEMENT
 // sur des éléments réels (atelier France, paiement sécurisé, matériaux, Instagram).
@@ -58,7 +59,7 @@ export default function TrustSection() {
       </div>
 
       <div className="cf-footline">
-        <span>🕒 Fabrication 3 à 5 j ouvrés</span>
+        <DelaiFabrication><span>🕒 Fabrication 3 à 5 j ouvrés</span></DelaiFabrication>
         <span>🚚 Expédition suivie</span>
         <span>✦ Personnalisé en France</span>
       </div>

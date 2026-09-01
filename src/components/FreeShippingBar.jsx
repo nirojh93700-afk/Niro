@@ -5,6 +5,7 @@ import { useCart } from "./CartContext";
 import { getProductBySlug } from "@/lib/products";
 import { BIJOUX_FREE_THRESHOLD } from "@/lib/shipping";
 import { formatEuro } from "@/lib/format";
+import DelaiFabrication from "./DelaiFabrication";
 
 // Barre de progression « livraison offerte » (s'affiche pour un panier 100 %
 // bijoux) + petit bandeau de réassurance. Le seuil suit les tarifs réglés
@@ -46,7 +47,7 @@ export default function FreeShippingBar({ compact = false }) {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", fontSize: "0.74rem", color: "var(--ink-soft)" }}>
         <span>🇫🇷 Personnalisé en France</span>
         <span>🔒 Paiement sécurisé</span>
-        <span>🕒 Fabrication 3 à 5 j</span>
+        <DelaiFabrication><span>🕒 Fabrication 3 à 5 j</span></DelaiFabrication>
       </div>
     </div>
   );

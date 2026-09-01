@@ -9,6 +9,7 @@ import { getCategoryLabel } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import VacationNotice from "@/components/VacationNotice";
+import DelaiFabrication from "@/components/DelaiFabrication";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
 import PayInfoModal from "@/components/PayInfo";
@@ -1917,7 +1918,11 @@ export default function ProductDetail({ product }) {
           </div>
           <div className="pd-perso">
             <b>✦ Pièce personnalisée</b>
-            <p>🕒 Personnalisé à la commande : fabrication 3 à 5 jours ouvrés, puis expédiée en colis suivi (le délai de livraison dépend du transporteur).</p>
+            {/* Pendant le mode « délai allongé », la phrase 3-5 jours est masquée
+                (le VacationNotice au-dessus annonce le vrai délai). */}
+            <DelaiFabrication>
+              <p>🕒 Personnalisé à la commande : fabrication 3 à 5 jours ouvrés, puis expédiée en colis suivi (le délai de livraison dépend du transporteur).</p>
+            </DelaiFabrication>
           </div>
 
           <div

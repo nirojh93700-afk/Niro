@@ -47,7 +47,23 @@ const html = `
 <p>Toute commande vaut acceptation pleine et entière des présentes CGV.</p>
 `;
 
-export default function CGVPage() {
+// Lecture des réglages à chaque affichage (la ligne délais suit le mode en cours).
+export const dynamic = "force-dynamic";
+
+export default async function CGVPage() {
+  // Mode « délai allongé » actif → la ligne délais des CGV suit le bandeau
+  // (cohérence avec l'affichage du site, 01/09/2026).
+  let htmlFinal = html;
+  try {
+    const { getSettings } = await import("@/lib/stock");
+    const { vacationActive } = await import("@/lib/vacation");
+    if (vacationActive((await getSettings())?.vacation)) {
+      htmlFinal = html.replace(
+        "<li>Fabrication : 3 à 5 jours ouvrés selon le produit</li>",
+        "<li>Fabrication : en période de forte demande, le délai de confection annoncé sur le site au moment de la commande s'applique (actuellement 3 à 4 semaines minimum, commandes traitées dans leur ordre d'arrivée)</li>"
+      );
+    }
+  } catch { /* repli : texte habituel */ }
   return (
     <section className="section">
       <div className="container" style={{ maxWidth: 780 }}>
@@ -58,7 +74,7 @@ export default function CGVPage() {
         <div
           className="product-desc"
           style={{ borderTop: "none", paddingTop: 0 }}
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: htmlFinal }}
         />
       </div>
     </section>
