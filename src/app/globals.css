@@ -3584,3 +3584,9 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .file-cols { grid-template-columns: 1fr; }
   .file-kpis { grid-template-columns: repeat(2, 1fr); }
 }
+/* Cartes de la file : le bloc prix/date ne doit jamais être rogné. */
+.file-card { min-width: 0; overflow-wrap: anywhere; }
+.file-card-top > div:first-child { min-width: 0; }
+.file-card-top > div:last-child { flex-shrink: 0; }
+.file-age { white-space: normal; }
+.file-col { min-width: 0; }
