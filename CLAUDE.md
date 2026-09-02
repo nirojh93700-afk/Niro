@@ -1,3 +1,20 @@
+## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
+> Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
+> arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes
+> d'abord), 3 colonnes sur ordinateur (À préparer · En fabrication · Expédiées récentes), empilées
+> sur mobile. L'ancien onglet Commandes reste la fiche complète (lien « Fiche complète → »
+> avec `?q=<ref>` qui pré-remplit la recherche).
+- **Une carte = une commande** : n° d'ordre, réf, ancienneté, cliente, articles (nom ×qté + détail
+  gravure / demande sur mesure), montant, étiquettes (⚡ immédiate, 🎁 cadeau, 📬 nouvelle réponse,
+  🚨 alerte, 🏪 relais…), **note interne** éditable, actions rapides (Commencer la fabrication ·
+  Expédier avec n° de suivi · Livrée).
+- **API** : `POST /api/admin/orders` `{ id, action:"annotate", adminNote?, flags?, alerteInterne? }`
+  (flags autorisés : attend, cadeau, gravure_offerte, urgent, appel, attente_client). Statuts via
+  l'action existante `{ id, status, tracking, notifyCustomer }`. Réponses non lues : `GET
+  /api/admin/bat?action=unread`.
+- Commandes test exclues ; annulées/remboursées masquées par défaut (dépliable).
+- Sophie Berardo (0C1CGL2Q) annotée : **accepte d'attendre (02/09) + 🎁 cadeau promis**.
+
 ## 🧭 ASSISTANT « TOUT EN UN » — UN SEUL FIL DANS GESTION (02/09/2026)
 > Demande du gérant : « améliore les interfaces admin, plus simple pour communiquer avec les
 > agents ». **Gestion → 🧭 Assistant (tout en un)** = un seul fil de conversation, mémorisé.

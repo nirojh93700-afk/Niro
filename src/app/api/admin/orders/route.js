@@ -36,6 +36,20 @@ export async function POST(req) {
     return Response.json({ ok });
   }
 
+  // Annoter une commande depuis la file de production : note interne + étiquettes
+  // (⏳ attend, 🎁 cadeau, 🎨 gravure offerte, 🚨 urgent…) + alerte rouge facultative.
+  // Ne touche ni au statut ni au client : purement interne à Gestion.
+  if (id && body?.action === "annotate") {
+    const FLAGS = ["attend", "cadeau", "gravure_offerte", "urgent", "appel", "attente_client"];
+    const patch = {};
+    if (typeof body.adminNote === "string") patch.adminNote = body.adminNote.trim().slice(0, 1000);
+    if (Array.isArray(body.flags)) patch.flags = [...new Set(body.flags.map(String).filter((f) => FLAGS.includes(f)))];
+    if (typeof body.alerteInterne === "string") patch.alerteInterne = body.alerteInterne.trim().slice(0, 600);
+    if (!Object.keys(patch).length) return Response.json({ error: "Rien à enregistrer." }, { status: 400 });
+    const ok = await updateSiteOrder(id, patch);
+    return Response.json({ ok, patch });
+  }
+
   // Envoyer MAINTENANT la demande d'avis au client (bouton admin, à la demande).
   // Utilise le même e-mail (avec lien direct vers la fiche produit #avis) que la
   // règle automatique, mais immédiatement.

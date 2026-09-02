@@ -50,6 +50,11 @@ export default function GestionPage() {
     const applyHash = () => {
       const h = (typeof window !== "undefined" ? window.location.hash : "").replace("#", "").trim();
       if (h) setTab(h);
+      // « Fiche complète → » depuis la file de production : /gestion?q=REF#commandes
+      try {
+        const qq = new URLSearchParams(window.location.search).get("q");
+        if (qq) setOrderSearch(qq);
+      } catch { /* ignore */ }
     };
     applyHash();
     window.addEventListener("hashchange", applyHash);
@@ -742,7 +747,8 @@ export default function GestionPage() {
             {
               label: "Commandes",
               tabs: [
-                { id: "commandes", text: `🧾 Commandes${aPreparer > 0 ? ` (${aPreparer})` : ""}` },
+                { id: "file", text: `🗂️ File de production${aPreparer > 0 ? ` (${aPreparer})` : ""}`, href: "/gestion/commandes" },
+                { id: "commandes", text: "🧾 Commandes (fiches complètes)" },
                 { id: "atelier", text: "🥃 Atelier (à graver)", href: "/gestion/atelier" },
                 { id: "devis", text: "📄 Devis / Factures" },
               ],
@@ -949,11 +955,11 @@ export default function GestionPage() {
                       <span className="go">→</span>
                     </button>
                   )}
-                  <button type="button" className="dash-todo" onClick={() => setTab("commandes")}>
-                    <span className="ic">📦</span>
-                    <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir les commandes" : "Rien en attente 🎉"}</small></span>
+                  <a href="/gestion/commandes" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
+                    <span className="ic">🗂️</span>
+                    <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir la file de production (dans l'ordre)" : "Rien en attente 🎉"}</small></span>
                     <span className="go">→</span>
-                  </button>
+                  </a>
                   <a href="/gestion/atelier" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
                     <span className="ic">🥃</span>
                     <span><b>Atelier — pièces à graver</b><small>Visuels &amp; fichiers à graver{enGravure > 0 ? ` · ${enGravure} en gravure` : ""}</small></span>
@@ -1036,9 +1042,14 @@ export default function GestionPage() {
         {/* ---------------- COMMANDES ---------------- */}
         {tab === "commandes" && (
           <>
-            <a href="/gestion/atelier" className="btn btn-gold" style={{ display: "inline-block", marginBottom: 14, textDecoration: "none" }}>
-              🛠️ Atelier — tout à graver (tableaux + visuels + fichiers)
-            </a>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
+              <a href="/gestion/commandes" className="btn btn-gold" style={{ textDecoration: "none" }}>
+                🗂️ File de production — dans l&apos;ordre, une carte par commande
+              </a>
+              <a href="/gestion/atelier" className="btn btn-outline" style={{ textDecoration: "none" }}>
+                🛠️ Atelier — fichiers à graver
+              </a>
+            </div>
             {!firebase?.connected && (
               <div className="notice">Connexion à ton application non active : les commandes ne peuvent pas être affichées. (Voir l'onglet Réglages.)</div>
             )}
