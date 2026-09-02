@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
+import { exportRows } from "@/lib/exportClients";
 
 // =============================================================================
 // ACHATS & FACTURES FOURNISSEURS
@@ -35,6 +36,29 @@ export default function AchatsPage() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [openHist, setOpenHist] = useState(null);
+  const [exporting, setExporting] = useState(false);
+
+  // Export de l'historique : une ligne par article acheté (fournisseur, date, produit, qté, prix…).
+  async function exportHistory(format) {
+    setExporting(true);
+    try {
+      const cols = [
+        { key: "date", label: "Date", width: 12 }, { key: "supplier", label: "Fournisseur", width: 18 }, { key: "invoice", label: "N° facture", width: 16 },
+        { key: "product", label: "Produit", width: 28 }, { key: "variant", label: "Variante", width: 16 }, { key: "qty", label: "Qté", width: 8 },
+        { key: "unit", label: "Prix unit. (€)", width: 12 }, { key: "line", label: "Total ligne (€)", width: 13 },
+        { key: "shipping", label: "Port facture (€)", width: 13 }, { key: "total", label: "Total facture (€)", width: 14 },
+      ];
+      const num = (n) => (format === "xlsx" || format === "json" ? Math.round((Number(n) || 0) * 100) / 100 : (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ","));
+      const rows = [];
+      for (const h of history) {
+        for (const l of h.lines || []) {
+          rows.push({ date: h.date || new Date(h.at).toISOString().slice(0, 10), supplier: h.supplier || "", invoice: h.invoiceNumber || "", product: l.product || "", variant: l.variant || "", qty: l.qty, unit: num(l.unitPrice), line: num((l.qty || 0) * (l.unitPrice || 0)), shipping: num(h.shipping), total: num(h.total) });
+        }
+      }
+      await exportRows(format, rows, cols, { basename: "achats-niv-creation", title: "Achats fournisseurs", subtitle: `${history.length} facture${history.length > 1 ? "s" : ""}` });
+    } catch (e) { setErr("Export impossible : " + (e?.message || e)); }
+    finally { setExporting(false); }
+  }
   const fileRef = useRef(null);
 
   const H = useMemo(() => ({ "x-admin-key": key }), [key]);
@@ -213,7 +237,17 @@ export default function AchatsPage() {
 
         {/* ---------- Historique ---------- */}
         <div className="admin-block">
-          <h3 style={{ margin: "0 0 8px" }}>Historique des achats</h3>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: 8 }}>
+            <h3 style={{ margin: 0 }}>Historique des achats</h3>
+            {history.length > 0 && (
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                <span className="pt-muted">Exporter :</span>
+                {[["xlsx", "Excel"], ["csv", "CSV"], ["pdf", "PDF"], ["json", "JSON"]].map(([f, lab]) => (
+                  <button key={f} type="button" className="btn btn-outline" style={{ padding: "6px 12px", fontSize: "0.82rem" }} disabled={exporting} onClick={() => exportHistory(f)}>{exporting ? "…" : lab}</button>
+                ))}
+              </div>
+            )}
+          </div>
           {history.length === 0 ? <p className="pt-muted" style={{ margin: 0 }}>Aucun achat enregistré pour l&apos;instant.</p> : null}
           {history.map((h) => (
             <div key={h.id} className="ach-hist">
