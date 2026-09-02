@@ -12,7 +12,13 @@ export async function GET(req) {
   if (!email) return Response.json({ meta: await getCommsMeta() });
 
   const dossier = await getCommsFor(email);
-  const messages = [...dossier.messages];
+  // Journal, sans doublon « même côté à moins de 3 min » (un envoi fait par le
+  // site puis retrouvé dans les « envoyés » Gmail = un seul message).
+  const messages = [];
+  for (const m of [...dossier.messages].sort((a, b) => (a.at || 0) - (b.at || 0))) {
+    if (messages.some((x) => x.from === m.from && Math.abs((x.at || 0) - (m.at || 0)) < 3 * 60 * 1000 && (x.via !== "gmail" || m.via === "gmail"))) continue;
+    messages.push(m);
+  }
   const seenGmail = new Set(messages.map((m) => m.gmailId).filter(Boolean));
   const seenKey = new Set(messages.map((m) => `${m.from}|${m.at}|${String(m.text || "").slice(0, 60)}`));
 
