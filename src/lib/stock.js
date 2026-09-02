@@ -247,6 +247,89 @@ export async function reverseCagnotteForOrder(order) {
   return { ok: true, retire, rendu, balance: c.balance };
 }
 
+// =============================================================================
+// RÉPONSES À VALIDER — l'agent e-mail en mode « il prépare, le gérant décide ».
+// data.pendingReplies = { [id]: { id, token, name, email, phone, subject, message,
+//   draft, draftSubject, reason, at, exp, status: "pending"|"sent"|"dismissed",
+//   finalText, finalSubject, resolvedAt } }
+// RIEN ne part d'ici : l'envoi réel se fait dans /api/reply/[token], sur le clic
+// du gérant depuis la page /repondre/[token] (lien reçu dans son alerte).
+// =============================================================================
+const REPLY_TTL_MS = 30 * 24 * 3600 * 1000; // un lien de validation vit 30 jours
+function makeReplyToken() {
+  return (
+    Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) +
+    Math.random().toString(36).slice(2) + Date.now().toString(36)
+  ).slice(0, 40);
+}
+
+export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "" }) {
+  const e = normEmail(email);
+  if (!validEmail(e) || !String(message || "").trim()) return null;
+  const data = await getCatalogRaw(true);
+  data.pendingReplies = data.pendingReplies || {};
+  const now = Date.now();
+  for (const k of Object.keys(data.pendingReplies)) {
+    if ((data.pendingReplies[k]?.exp || 0) < now) delete data.pendingReplies[k];
+  }
+  const id = `r${now.toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+  const item = {
+    id, token: makeReplyToken(),
+    name: String(name || "").slice(0, 120), email: e, phone: String(phone || "").slice(0, 40),
+    subject: String(subject || "").slice(0, 200), message: String(message || "").slice(0, 4000),
+    draft: String(draft || "").slice(0, 6000), draftSubject: String(draftSubject || "").slice(0, 200),
+    reason: String(reason || "").slice(0, 300),
+    at: now, exp: now + REPLY_TTL_MS, status: "pending",
+  };
+  data.pendingReplies[id] = item;
+  await persistCatalog(data, ["pendingReplies"]);
+  return item;
+}
+
+export async function getPendingReplyByToken(token) {
+  const t = String(token || "").trim();
+  if (!t) return null;
+  const data = await getCatalogRaw(true);
+  const it = Object.values(data.pendingReplies || {}).find((r) => r.token === t);
+  if (!it || (it.exp || 0) < Date.now()) return null;
+  return it;
+}
+
+export async function listPendingReplies() {
+  const data = await getCatalogRaw(true);
+  const now = Date.now();
+  return Object.values(data.pendingReplies || {})
+    .filter((r) => (r.exp || 0) >= now)
+    .sort((a, b) => (b.at || 0) - (a.at || 0));
+}
+
+// Réserve la réponse (pending → sent/dismissed). `claimed` dit si C'EST CE
+// clic qui a fait la transition : un double clic ne renvoie jamais deux fois.
+export async function resolvePendingReply(token, { status, finalText = "", finalSubject = "" }) {
+  const t = String(token || "").trim();
+  const data = await getCatalogRaw(true);
+  const it = Object.values(data.pendingReplies || {}).find((r) => r.token === t);
+  if (!it) return null;
+  if (it.status !== "pending") return { item: it, claimed: false };
+  it.status = status === "sent" ? "sent" : "dismissed";
+  it.finalText = String(finalText || "").slice(0, 6000);
+  it.finalSubject = String(finalSubject || "").slice(0, 200);
+  it.resolvedAt = Date.now();
+  await persistCatalog(data, ["pendingReplies"]);
+  return { item: it, claimed: true };
+}
+
+// Si l'envoi a échoué après la réservation, on rouvre pour que le gérant puisse réessayer.
+export async function reopenPendingReply(token) {
+  const t = String(token || "").trim();
+  const data = await getCatalogRaw(true);
+  const it = Object.values(data.pendingReplies || {}).find((r) => r.token === t);
+  if (!it) return null;
+  it.status = "pending"; it.resolvedAt = 0;
+  await persistCatalog(data, ["pendingReplies"]);
+  return it;
+}
+
 export async function getEmailStats() {
   const data = await getCatalogRaw(true);
   return data.emailStats || {};
@@ -1421,6 +1504,12 @@ export async function getSettings() {
     // (les cas spéciaux sont toujours remontés à la gérante « à valider »).
     agents: {
       emailAutoReply: s.agents?.emailAutoReply === true,
+      // Mode « il prépare, je décide » (demande du gérant, 02/09/2026) : l'agent
+      // rédige la réponse, le gérant reçoit une alerte et valide avant envoi.
+      // ACTIVÉ par défaut ; il prime sur emailAutoReply. Rien ne part sans clic.
+      emailDraft: s.agents?.emailDraft !== false,
+      // Bouton flottant « Une question ? » sur le site (formulaire rapide).
+      widget: s.agents?.widget !== false,
     },
     // Réseaux sociaux : identifiants pour la publication Instagram (API Meta).
     // Vides tant que la gérante ne les a pas renseignés dans le centre des agents.

@@ -10,8 +10,8 @@
 //   - cas simple  -> il répond TOUT SEUL à la cliente (copie envoyée à la gérante) ;
 //   - cas spécial -> il ne répond pas, il remonte à la gérante « à valider ».
 
-import { getSettings } from "@/lib/stock";
-import { sendEmail, emailLayout, escapeHtml as esc } from "@/lib/email";
+import { getSettings, addPendingReply } from "@/lib/stock";
+import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 
 function escapeHtml(str) {
@@ -57,11 +57,52 @@ export async function POST(req) {
     );
   }
 
+  // --- Mode « il prépare, le gérant décide » (par défaut) ---------------------
+  // L'agent rédige une réponse, on la range « à valider », et le gérant reçoit
+  // UNE alerte avec le message de la cliente, la réponse proposée et un lien
+  // pour relire / modifier / envoyer. RIEN ne part à la cliente d'ici.
+  let settings = null;
+  try { settings = await getSettings(); } catch { settings = null; }
+  if (settings?.agents?.emailDraft !== false) {
+    let draft = null;
+    try { draft = await triageIncomingEmail({ name, email, subject, message }); } catch { draft = null; }
+    let item = null;
+    try {
+      item = await addPendingReply({
+        name, email, phone, subject, message,
+        draft: draft?.reply || "",
+        draftSubject: draft?.subject || (subject ? `Re : ${subject}` : "Votre message — Niv Création"),
+        reason: draft?.reason || "",
+      });
+    } catch { item = null; }
+    if (item) {
+      const lien = `${BRAND.siteUrl}/repondre/${item.token}`;
+      const boxCream = `white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:6px 0 14px;`;
+      const boxWhite = `white-space:pre-line;background:#fff;border:1px solid #e6d7b8;border-radius:10px;padding:12px;margin:6px 0 14px;`;
+      const bodyHtml = `
+        <p style="margin:0 0 6px;"><strong>${esc(name)}</strong> &lt;${esc(email)}&gt;${phone ? ` · ${esc(phone)}` : ""}</p>
+        <p style="margin:0 0 4px;color:#7a7268;">Sujet : ${esc(subject)}</p>
+        <div style="${boxCream}">${esc(message)}</div>
+        <p style="margin:0 0 4px;"><strong>Réponse préparée par l'agent</strong>${draft?.reason ? ` <span style="color:#9a6b00;">— ${esc(draft.reason)}</span>` : ""}</p>
+        ${item.draft
+          ? `<div style="${boxWhite}">${esc(item.draft)}</div>`
+          : `<p style="color:#9a6b00;">L'agent n'a pas pu préparer de réponse : vous l'écrirez sur la page ci-dessous.</p>`}
+        <p style="margin:18px 0 8px;text-align:center;">
+          <a href="${lien}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:13px 28px;border-radius:9px;font-weight:bold;">Relire, modifier et envoyer</a>
+        </p>
+        <p style="margin:0;color:#7a7268;font-size:13px;text-align:center;">Rien ne part à la cliente tant que vous n'avez pas cliqué « Envoyer » sur cette page. Vous pouvez y modifier le texte avant.</p>`;
+      const html = emailLayout({ heading: "À valider — réponse à une cliente", bodyHtml });
+      const r = await sendEmail({ to, subject: `[À valider] ${name} — ${subject}`, html, replyTo: email });
+      if (r?.ok) return Response.json({ ok: true, autoReplied: false, pending: true });
+      // Alerte impossible : on continue vers la notification classique ci-dessous
+      // pour que le message du client ne soit jamais perdu.
+    }
+  }
+
   // --- Agent e-mail autonome (si activé dans les réglages) -------------------
   let triage = null;
   let autoReplied = false;
   try {
-    const settings = await getSettings();
     if (settings?.agents?.emailAutoReply) {
       triage = await triageIncomingEmail({ name, email, subject, message });
       // Cas simple : l'agent répond tout seul à la cliente.

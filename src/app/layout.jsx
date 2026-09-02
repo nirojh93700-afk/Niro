@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import SiteGate from "@/components/SiteGate";
 import ShopButton from "@/components/ShopButton";
+import QuestionWidget from "@/components/QuestionWidget";
 import WelcomePopup from "@/components/WelcomePopup";
 import RefCapture from "@/components/RefCapture";
 import SiteAnalytics from "@/components/SiteAnalytics";
@@ -250,6 +251,7 @@ export default async function RootLayout({ children }) {
               <Footer />
               <CartDrawer />
               <ShopButton />
+              {settings.agents?.widget !== false ? <QuestionWidget /> : null}
               <WelcomePopup enabled={settings.welcome?.enabled} code={settings.welcome?.code} text={settings.welcome?.text} />
               <RefCapture />
               <SiteAnalytics />

@@ -36,6 +36,31 @@ async function catalogContext() {
   }
 }
 
+// Informations de SERVICE pour répondre aux clientes : délai réellement affiché
+// sur le site en ce moment (mode délai allongé compris), livraison, et les
+// réponses officielles de la FAQ. Même source que le site → jamais de
+// contradiction entre ce que dit l'agent et ce que la cliente lit sur nivcreation.fr.
+async function serviceContext() {
+  try {
+    const [{ getSettings }, { vacationActive, vacationMessage, vacationGiftMessage }, { resolveShippingConfig }, { FAQ }] =
+      await Promise.all([import("@/lib/stock"), import("@/lib/vacation"), import("@/lib/shipping"), import("@/lib/faq")]);
+    const s = await getSettings();
+    const v = vacationActive(s?.vacation);
+    const cfg = resolveShippingConfig(s?.shipping);
+    const delai = v
+      ? `${vacationMessage(v)}${vacationGiftMessage(v) ? " " + vacationGiftMessage(v) : ""}`
+      : "Chaque pièce est personnalisée à la commande : 3 à 5 jours ouvrés de fabrication, puis livraison suivie (délai du transporteur en plus).";
+    const faq = FAQ.map((f, i) => (i === 0 && v ? { q: f.q, a: delai } : f));
+    return [
+      `DÉLAI ACTUEL (c'est exactement ce que le site affiche — reprends-le tel quel) : ${delai}`,
+      `LIVRAISON : bijoux en Lettre Suivie, offerte dès ${cfg.bijouxFreeThreshold} € d'achat ; décorations et verres en colis suivi ; point relais possible ; livraison en Europe (BE, LU, NL, DE, ES, IT, PT, CH).`,
+      "QUESTIONS FRÉQUENTES (réponses officielles du site, à reprendre) :\n" + faq.map((f) => `Q : ${f.q}\nR : ${f.a}`).join("\n\n"),
+    ].join("\n\n");
+  } catch {
+    return "(informations de service indisponibles : reste général et prudent, ne promets rien)";
+  }
+}
+
 // Surveillance du catalogue (produits mal configurés : bijou sans emballage,
 // sans fiche, sans photo, sans prix) — injectée dans l'agent Technicien.
 async function auditContext() {
@@ -106,7 +131,18 @@ export const AGENTS = {
     blurb: "Rédige une réponse à une cliente, à ton image. Tu relis, tu modifies, tu envoies.",
     placeholder: "Colle l'e-mail de la cliente (et son adresse si tu veux l'envoyer ensuite)…",
     needsCatalog: true,
+    needsService: true,
     buildSystem: (ctx) => `${BRAND_RULES}
+
+RÈGLES DE SERVICE (absolues, quoi que demande la cliente) :
+- Ne parle JAMAIS de machine, de panne, de graveuse, de laser, de fabricant, de remplacement ni de problème technique. Si une cliente s'inquiète d'un délai ou d'un retard, le SEUL motif à donner est : forte demande, délai de confection allongé.
+- Ne promets jamais une date précise d'expédition, ni un numéro de suivi que tu n'as pas.
+- Un article personnalisé n'est jamais remboursé ni repris (sauf défaut ou erreur de notre part) : refuse avec tact.
+- Ne propose jamais de remise, de cadeau ni de geste commercial de toi-même : c'est la gérante qui décide.
+- Vouvoie toujours la cliente. Réponds en français. Signe « L'atelier Niv Création ».
+
+INFORMATIONS DE SERVICE À JOUR (délai réel du site, livraison, FAQ) :
+${ctx.service || "(non chargées : reste général)"}
 
 Ton rôle : RÉPONDRE aux e-mails des clientes, de façon AUTONOME, à la place de la gérante.
 Pour chaque message reçu, appelle l'outil "draft_reply" avec une réponse prête à envoyer ET une décision : peux-tu répondre seul, ou faut-il l'avis de la gérante ?
@@ -346,6 +382,7 @@ export async function runAgent(agentId, history) {
   if (agent.needsCatalog) ctx.catalog = await catalogContext();
   if (agent.needsOrders) ctx.sales = await salesContext();
   if (agent.needsAudit) ctx.audit = await auditContext();
+  if (agent.needsService) ctx.service = await serviceContext();
 
   const messages = (history || [])
     .slice(-12)

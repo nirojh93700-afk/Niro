@@ -192,7 +192,13 @@ export async function POST(req) {
     };
   }
   if (body.agents && typeof body.agents === "object") {
-    patch.agents = { emailAutoReply: Boolean(body.agents.emailAutoReply) };
+    // Fusion : on ne touche qu'aux interrupteurs envoyés, les autres restent.
+    let cur = {};
+    try { cur = (await getSettings())?.agents || {}; } catch { cur = {}; }
+    patch.agents = { ...cur };
+    for (const k of ["emailAutoReply", "emailDraft", "widget"]) {
+      if (typeof body.agents[k] === "boolean") patch.agents[k] = body.agents[k];
+    }
   }
   if (body.social && typeof body.social === "object") {
     patch.social = {

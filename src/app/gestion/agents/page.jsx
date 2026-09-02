@@ -56,6 +56,11 @@ export default function AgentsCenterPage() {
   const [authError, setAuthError] = useState("");
   const [autoReply, setAutoReply] = useState(false); // auto-réponse e-mail activée ?
   const [savingAuto, setSavingAuto] = useState(false);
+  const [draftMode, setDraftMode] = useState(true);  // « il prépare, je décide »
+  const [widgetOn, setWidgetOn] = useState(true);     // bouton « Une question ? » sur le site
+  const [savingSw, setSavingSw] = useState("");
+  const [pending, setPending] = useState([]);         // réponses à valider
+  const [recent, setRecent] = useState([]);
   const [showRecap, setShowRecap] = useState(false); // page récap "comment ça marche"
 
   const loadAgents = useCallback(async (adminKey) => {
@@ -71,7 +76,16 @@ export default function AgentsCenterPage() {
       // Charge le réglage d'autonomie.
       try {
         const sr = await fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } });
-        if (sr.ok) setAutoReply(Boolean((await sr.json())?.settings?.agents?.emailAutoReply));
+        if (sr.ok) {
+          const ag = (await sr.json())?.settings?.agents || {};
+          setAutoReply(Boolean(ag.emailAutoReply));
+          setDraftMode(ag.emailDraft !== false);
+          setWidgetOn(ag.widget !== false);
+        }
+      } catch { /* ignore */ }
+      try {
+        const pr = await fetch("/api/admin/pending-replies", { headers: { "x-admin-key": adminKey } });
+        if (pr.ok) { const d = await pr.json(); setPending(d.pending || []); setRecent(d.recent || []); }
       } catch { /* ignore */ }
       return true;
     } catch {
@@ -79,6 +93,22 @@ export default function AgentsCenterPage() {
       return false;
     }
   }, []);
+
+  // Interrupteur générique d'un réglage `agents.<name>` (n'écrase pas les autres).
+  async function toggleSwitch(name, value, setter) {
+    if (savingSw) return;
+    setSavingSw(name);
+    setter(value); // optimiste
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ agents: { [name]: value } }),
+      });
+      if (!res.ok) setter(!value);
+    } catch { setter(!value); }
+    finally { setSavingSw(""); }
+  }
 
   async function toggleAutoReply() {
     if (savingAuto) return;
@@ -176,13 +206,77 @@ export default function AgentsCenterPage() {
           </div>
         </div>
 
+        {/* « IL PRÉPARE, JE DÉCIDE » — réponses à valider */}
+        <div style={{
+          marginTop: 20, border: "1px solid var(--gold)", borderRadius: 16, padding: "16px 20px",
+          background: draftMode ? "#fffdf7" : "var(--paper)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <strong>Réponses préparées, validées par toi</strong>
+            <div style={{ color: "var(--ink-soft)", fontSize: "0.9rem", marginTop: 4 }}>
+              {draftMode
+                ? "Activé : pour chaque message reçu, l'agent rédige une réponse et tu reçois une alerte avec un lien « Relire, modifier et envoyer ». Rien ne part sans ton clic."
+                : "Désactivé : les messages arrivent dans ta boîte sans réponse préparée."}
+            </div>
+          </div>
+          <button
+            onClick={() => toggleSwitch("emailDraft", !draftMode, setDraftMode)}
+            disabled={Boolean(savingSw)}
+            className={`btn ${draftMode ? "btn-gold" : "btn-outline"}`}
+            style={{ minWidth: 130 }}
+          >
+            {savingSw === "emailDraft" ? "…" : draftMode ? "● Activé" : "Activer"}
+          </button>
+        </div>
+
+        {pending.length > 0 && (
+          <div style={{ marginTop: 12, border: "1px solid #f0d28a", background: "#fff5e0", borderRadius: 16, padding: "14px 20px" }}>
+            <strong>📬 {pending.length} réponse{pending.length > 1 ? "s" : ""} à valider</strong>
+            <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
+              {pending.map((p) => (
+                <div key={p.id} style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "10px 12px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <div><strong>{p.name}</strong> <span style={{ color: "var(--ink-soft)" }}>· {p.subject}</span></div>
+                    <div style={{ color: "var(--ink-soft)", fontSize: "0.85rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 520 }}>{p.message}</div>
+                    <div style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{p.at ? new Date(p.at).toLocaleString("fr-FR") : ""}{p.draft ? "" : " · pas de brouillon"}</div>
+                  </div>
+                  <Link href={`/repondre/${p.token}`} className="btn btn-gold">Relire et envoyer</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {pending.length === 0 && recent.length > 0 && (
+          <p style={{ marginTop: 10, color: "var(--ink-soft)", fontSize: "0.85rem" }}>Aucune réponse en attente. Dernière traitée : {recent[0].name} ({recent[0].status === "sent" ? "envoyée" : "classée"}).</p>
+        )}
+
+        <div style={{
+          marginTop: 12, border: "1px solid var(--line)", borderRadius: 16, padding: "14px 20px",
+          background: "var(--paper)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <strong>Bouton « Une question ? » sur le site</strong>
+            <div style={{ color: "var(--ink-soft)", fontSize: "0.9rem", marginTop: 4 }}>
+              Petit formulaire flottant en bas à gauche de chaque page. Les questions arrivent ici, avec une réponse préparée.
+            </div>
+          </div>
+          <button
+            onClick={() => toggleSwitch("widget", !widgetOn, setWidgetOn)}
+            disabled={Boolean(savingSw)}
+            className={`btn ${widgetOn ? "btn-gold" : "btn-outline"}`}
+            style={{ minWidth: 130 }}
+          >
+            {savingSw === "widget" ? "…" : widgetOn ? "● Visible" : "Afficher"}
+          </button>
+        </div>
+
         {/* AUTONOMIE — interrupteur de réponse automatique */}
         <div style={{
           marginTop: 20, border: "1px solid var(--line)", borderRadius: 16, padding: "16px 20px",
           background: autoReply ? "#e7f4ea" : "var(--paper)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
         }}>
           <div style={{ flex: 1, minWidth: 240 }}>
-            <strong>Réponse automatique aux messages du site</strong>
+            <strong>Réponse automatique aux messages du site</strong>{draftMode ? <span style={{ color: "var(--ink-soft)", fontWeight: "normal" }}> — sans effet tant que « Réponses préparées, validées par toi » est activé</span> : null}
             <div style={{ color: "var(--ink-soft)", fontSize: "0.9rem", marginTop: 4 }}>
               {autoReply
                 ? "Activée : l'agent répond seul aux questions simples reçues par le formulaire de contact. Les cas spéciaux te sont toujours remontés « à valider » par e-mail."
