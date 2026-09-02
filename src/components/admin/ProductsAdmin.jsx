@@ -465,7 +465,7 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
             setVars((vs) => [...vs, makeTierVariant(product.slug, qty, u)]);
           }}>+ Tarif dégressif (lot)</button>
         </div>
-        <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Le stock des nouvelles variantes se règle dans <strong>Catalogue → Stock</strong>.</p>
+        <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "4px 0 0" }}>Le stock d&apos;une nouvelle variante apparaît dans <strong>« Stock par option »</strong> (en haut de ce panneau) après enregistrement.</p>
       </div>
 
       {/* Gravure / personnalisation — éditable directement */}

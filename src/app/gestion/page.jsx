@@ -1009,7 +1009,7 @@ export default function GestionPage() {
                   <span className="co-ref">#{o.ref || o.id?.slice(-6)}<small>{fmtDate(o.createdAt)}</small></span>
                   <span className="co-who"><strong>{o.customerName || "—"}</strong><small>{resumeArticles(o)}</small></span>
                   <span className={`co-status s-${o.status || "a_preparer"}`}>{libelleStatut(o)}</span>
-                  <span className="co-total">{formatEuro(o.total)}{o.shippingPrice != null ? <small>dont livraison {formatEuro(o.shippingPrice)}</small> : null}</span>
+                  <span className="co-total">{formatEuro(o.total)}{o.shippingPrice != null ? <small>livraison {formatEuro(o.shippingPrice)}</small> : null}</span>
                   <span className="co-chev" aria-hidden>{isOpen ? "▾" : "▸"}</span>
                 </button>
                 {isOpen && (<div className="co-body">
