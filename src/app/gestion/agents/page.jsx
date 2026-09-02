@@ -206,6 +206,14 @@ export default function AgentsCenterPage() {
           </div>
         </div>
 
+        <div style={{ marginTop: 16, border: "1px solid var(--gold)", background: "#fffdf7", borderRadius: 14, padding: "12px 16px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <strong>Nouveau : tout se fait depuis un seul fil.</strong>
+            <div style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>Écris ta demande dans 🧭 Assistant, il choisit le bon agent tout seul. Cette page reste pour les réglages.</div>
+          </div>
+          <Link href="/gestion#assistant" className="btn btn-gold">Ouvrir l&apos;assistant →</Link>
+        </div>
+
         {/* « IL PRÉPARE, JE DÉCIDE » — réponses à valider */}
         <div style={{
           marginTop: 20, border: "1px solid var(--gold)", borderRadius: 16, padding: "16px 20px",

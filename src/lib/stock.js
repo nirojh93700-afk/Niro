@@ -330,6 +330,48 @@ export async function reopenPendingReply(token) {
   return it;
 }
 
+// =============================================================================
+// FIL DE L'ASSISTANT UNIFIÉ (« hub ») : la conversation du gérant est mémorisée
+// côté serveur pour reprendre là où il en était, du téléphone ou de l'ordinateur.
+// data.hubHistory = [ { role, content, at, agent?, actions?, action?, done? } ]
+// =============================================================================
+const HUB_MAX = 80;
+export async function getHubHistory() {
+  const data = await getCatalogRaw(true);
+  return Array.isArray(data.hubHistory) ? data.hubHistory : [];
+}
+export async function appendHubHistory(items) {
+  const data = await getCatalogRaw(true);
+  const cur = Array.isArray(data.hubHistory) ? data.hubHistory : [];
+  const add = (items || []).map((m) => ({
+    role: m.role === "assistant" ? "assistant" : "user",
+    content: String(m.content || "").slice(0, 8000),
+    at: Number(m.at) || Date.now(),
+    ...(m.agent ? { agent: String(m.agent).slice(0, 30) } : {}),
+    ...(m.actions ? { actions: m.actions } : {}),
+    ...(m.action ? { action: m.action } : {}),
+  }));
+  data.hubHistory = [...cur, ...add].slice(-HUB_MAX);
+  await persistCatalog(data, ["hubHistory"]);
+  return data.hubHistory;
+}
+// Marque un message (ex. « appliqué ✓ » / « envoyé ✓ ») pour ne pas reproposer l'action.
+export async function markHubMessage(at, done) {
+  const data = await getCatalogRaw(true);
+  const cur = Array.isArray(data.hubHistory) ? data.hubHistory : [];
+  const it = cur.find((m) => m.at === Number(at));
+  if (!it) return null;
+  it.done = String(done || "").slice(0, 120);
+  await persistCatalog(data, ["hubHistory"]);
+  return it;
+}
+export async function clearHubHistory() {
+  const data = await getCatalogRaw(true);
+  data.hubHistory = [];
+  await persistCatalog(data, ["hubHistory"]);
+  return true;
+}
+
 export async function getEmailStats() {
   const data = await getCatalogRaw(true);
   return data.emailStats || {};

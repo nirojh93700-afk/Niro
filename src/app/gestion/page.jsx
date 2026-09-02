@@ -7,6 +7,7 @@ import { TableGravure } from "@/lib/engravingSheet";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import RestockAlertsAdmin from "@/components/admin/RestockAlertsAdmin";
 import TaxonomyAdmin from "@/components/admin/TaxonomyAdmin";
+import HubChat from "@/components/admin/HubChat";
 import AssistantAdmin from "@/components/admin/AssistantAdmin";
 import EngravingAdmin from "@/components/admin/EngravingAdmin";
 import QuotesAdmin from "@/components/admin/QuotesAdmin";
@@ -57,6 +58,7 @@ export default function GestionPage() {
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
   const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
   const [pendingReviews, setPendingReviews] = useState(0); // nouveaux avis clients à valider
+  const [pendingReplies, setPendingReplies] = useState(0); // réponses clientes préparées, à valider
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [boxtalOpen, setBoxtalOpen] = useState(null); // id de commande dont le panneau « Envoi Boxtal » est ouvert
   const [error, setError] = useState("");
@@ -113,6 +115,11 @@ export default function GestionPage() {
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
       }
+      // Réponses aux clientes préparées par l'agent, en attente de validation.
+      try {
+        const pr = await fetch("/api/admin/pending-replies", { headers: { "x-admin-key": adminKey } });
+        if (pr.ok) setPendingReplies(((await pr.json()).pending || []).length);
+      } catch { /* ignore */ }
       // Compteur d'avis à valider (nouveaux avis clients en attente).
       const rev = await fetch("/api/admin/reviews", { headers: { "x-admin-key": adminKey } });
       if (rev.ok) {
@@ -781,7 +788,7 @@ export default function GestionPage() {
             {
               label: "Assistant & IA",
               tabs: [
-                { id: "assistant", text: "🧭 Assistant" },
+                { id: "assistant", text: "🧭 Assistant (tout en un)" },
                 { id: "agents", text: "🤖 Équipe d'agents" },
                 { id: "boite-mail", text: "📬 Boîte mail (agent)", href: "/gestion/boite-mail" },
               ],
@@ -935,6 +942,13 @@ export default function GestionPage() {
                       </a>
                     );
                   })()}
+                  {pendingReplies > 0 && (
+                    <button type="button" className="dash-todo" onClick={() => setTab("assistant")} style={{ background: "#fff5e0" }}>
+                      <span className="ic">📬</span>
+                      <span><b>{pendingReplies} réponse{pendingReplies > 1 ? "s" : ""} cliente{pendingReplies > 1 ? "s" : ""} à valider</b><small>L&apos;agent a préparé le texte — relire, puis envoyer</small></span>
+                      <span className="go">→</span>
+                    </button>
+                  )}
                   <button type="button" className="dash-todo" onClick={() => setTab("commandes")}>
                     <span className="ic">📦</span>
                     <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir les commandes" : "Rien en attente 🎉"}</small></span>
@@ -1555,7 +1569,7 @@ export default function GestionPage() {
 
         {/* ---------------- ASSISTANT ---------------- */}
         {tab === "assistant" && (
-          <AssistantAdmin adminKey={key} onReload={() => load(key)} />
+          <HubChat adminKey={key} onReload={() => load(key)} />
         )}
 
         {tab === "agents" && (
