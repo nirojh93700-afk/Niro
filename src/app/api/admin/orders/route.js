@@ -1,4 +1,4 @@
-import { isAdmin, getSettings, logOrderEmail } from "@/lib/stock";
+import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
@@ -129,6 +129,15 @@ export async function POST(req) {
   // On horodate remisAt ET deliveredAt (elle est "reçue") pour les règles auto.
   if (status === "remise_main_propre") { patch.remisAt = nowIso; patch.deliveredAt = nowIso; }
   const ok = await updateSiteOrder(id, patch);
+
+  // Commande annulée : la cagnotte suit. On retire le cashback gagné sur cette
+  // commande et on restitue celle que la cliente avait dépensée dessus.
+  if (ok && status === "annulee") {
+    try {
+      const o = await getSiteOrder(id);
+      if (o) await reverseCagnotteForOrder(o);
+    } catch { /* l'annulation reste valable même si l'ajustement échoue */ }
+  }
 
   // E-mail au client (expédition avec suivi, ou annulation), si demandé et possible.
   let emailed = false;

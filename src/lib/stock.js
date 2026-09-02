@@ -198,6 +198,55 @@ export async function recordEmailClick(campaignId, email, url) {
   return true;
 }
 
+// Annulation / remboursement d'une commande : on remet la cagnotte à l'endroit.
+// Deux mouvements, souvent oubliés, et qui vont dans les DEUX sens :
+//   1. le cashback GAGNÉ sur cette commande est retiré (sinon la cliente garde
+//      un avoir sur un achat qui n'a pas eu lieu) ;
+//   2. la cagnotte qu'elle avait DÉPENSÉE lui est rendue (sinon elle perd son
+//      argent alors que la commande est annulée — le plus grave des deux).
+// Idempotent : rejouer l'annulation ne rejoue pas les mouvements.
+export async function reverseCagnotteForOrder(order) {
+  const e = normEmail(order?.customerEmail);
+  if (!validEmail(e)) return { ok: false, raison: "commande sans e-mail" };
+  const ref = String(order?.ref || order?.id || "");
+  const gagne = Math.round((Number(order?.cashbackEarned) || 0) * 100) / 100;
+  const utilise = Math.round((Number(order?.cagnotteUsed) || 0) * 100) / 100;
+  if (gagne <= 0 && utilise <= 0) return { ok: true, retire: 0, rendu: 0 };
+
+  const cle = `${ref}:annulation`;
+  const data = await getCatalogRaw(true);
+  data.cagnotte = data.cagnotte || {};
+  const c = data.cagnotte[e] || { balance: 0, history: [] };
+  if ((c.history || []).some((h) => h.orderId === cle)) {
+    return { ok: true, deja: true, retire: 0, rendu: 0 };
+  }
+
+  const mouvements = [];
+  let retire = 0, rendu = 0;
+  if (gagne > 0) {
+    // On ne descend jamais sous zéro : si elle a déjà dépensé ce cashback,
+    // on ne lui crée pas une dette.
+    retire = Math.min(c.balance, gagne);
+    if (retire > 0) mouvements.push({ amount: -retire, reason: "Commande annulée : cashback retiré", orderId: cle, at: Date.now() });
+  }
+  if (utilise > 0) {
+    rendu = utilise;
+    mouvements.push({ amount: rendu, reason: "Commande annulée : cagnotte restituée", orderId: cle, at: Date.now() });
+  }
+  if (!mouvements.length) {
+    // Rien à bouger, mais on pose la marque pour ne pas repasser ici.
+    mouvements.push({ amount: 0, reason: "Commande annulée : rien à ajuster", orderId: cle, at: Date.now() });
+  }
+  c.balance = Math.round((c.balance - retire + rendu) * 100) / 100;
+  if (c.balance < 0) c.balance = 0;
+  c.history = [...mouvements, ...(c.history || [])].slice(0, 100);
+  c.updatedAt = Date.now();
+  c.remindedAt = 0;
+  data.cagnotte[e] = c;
+  await persistCatalog(data, ["cagnotte"]);
+  return { ok: true, retire, rendu, balance: c.balance };
+}
+
 export async function getEmailStats() {
   const data = await getCatalogRaw(true);
   return data.emailStats || {};

@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { isAdmin } from "@/lib/stock";
+import { isAdmin, reverseCagnotteForOrder } from "@/lib/stock";
 import { getSiteOrder, updateSiteOrderStatus } from "@/lib/firebase";
 
 // Remboursement TOTAL d'une commande (réservé à l'admin).
@@ -45,7 +45,11 @@ export async function POST(req) {
     const stripe = new Stripe(secret);
     await stripe.refunds.create({ payment_intent: pi });
     await updateSiteOrderStatus(id, "remboursee");
-    return Response.json({ ok: true });
+    // La cagnotte suit la commande : on retire le cashback gagné et on rend
+    // celle qui avait été dépensée. Ne bloque jamais le remboursement.
+    let cagnotte = null;
+    try { cagnotte = await reverseCagnotteForOrder(order); } catch { /* l'argent est déjà rendu */ }
+    return Response.json({ ok: true, cagnotte });
   } catch (e) {
     console.error("Remboursement Stripe:", e.message);
     return Response.json({ error: e.message || "Échec du remboursement." }, { status: 500 });
