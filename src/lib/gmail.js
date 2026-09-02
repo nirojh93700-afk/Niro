@@ -92,7 +92,7 @@ export function looksLikeRealCustomer(fromEmail, labelIds = []) {
   if (!e) return false;
   if (/no[-_.]?reply|do[-_.]?not[-_.]?reply|newsletter|mailer|notif|marketing|info@|news@|support@google|facebookmail|instagram|stripe\.com|paypal|alibaba/.test(e)) return false;
   // Nos propres expéditeurs + factures / plateformes (jamais des clientes).
-  if (/@nivcreation\.fr$|resend\.dev|@etsy\.com|@amazon\.|nihaojewelry|@metro\.|billing@|facturation|invoice|@google\.com|@apple\.com|@shopify\.|@boxtal\.|@laposte\.|@colissimo|mondialrelay|@ovh\.|hostinger|firebase|@anthropic\.com|@canva\.|@meta\.com|@fb\.com|@tiktok/.test(e)) return false;
+  if (/@nivcreation\.fr$|resend\.dev|etsy\.|@amazon\.|nihaojewelry|@metro\.|billing@|facturation|invoice|@google\.com|@apple\.com|@shopify\.|@boxtal\.|@laposte\.|@colissimo|mondialrelay|@ovh\.|hostinger|firebase|@anthropic\.com|@canva\.|@meta\.com|@fb\.com|@tiktok/.test(e)) return false;
   const bad = ["CATEGORY_PROMOTIONS", "CATEGORY_SOCIAL", "CATEGORY_FORUMS", "SPAM"];
   if (labelIds.some((l) => bad.includes(l))) return false;
   return true;

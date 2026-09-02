@@ -122,7 +122,10 @@ export async function syncInbox({ force = false } = {}) {
       if (!msg) { seen[id] = now; continue; }
       const from = String(msg.fromEmail || "").toLowerCase();
       const at = Date.parse(msg.date || "") || now;
-      if (!looksLikeRealCustomer(from, msg.labelIds) || own.has(from) || now - at > MAX_AGE_MS) {
+      // Seulement les e-mails liés au SITE : tout ce qui touche Etsy reste dans Etsy
+      // (demande du gérant, 02/09/2026).
+      const etsy = /etsy/i.test(String(msg.subject || "")) || /etsy\./i.test(from);
+      if (etsy || !looksLikeRealCustomer(from, msg.labelIds) || own.has(from) || now - at > MAX_AGE_MS) {
         seen[id] = now; result.ignored++; continue;
       }
       const body = cleanBody(msg.body || msg.snippet || "");
@@ -212,6 +215,7 @@ export async function syncInbox({ force = false } = {}) {
       // Ni nos propres adresses, ni les notifications internes (alertes, copies).
       if (!to || own.has(to) || !looksLikeRealCustomer(to, []) || now - at > MAX_AGE_MS) continue;
       if (/^(📧|🛎️|🛎|\[À valider\]|\[A valider\]|Nouvelle commande|Alerte)/i.test(subj)) continue;
+      if (/etsy/i.test(subj) || /etsy\./i.test(to)) continue; // Etsy reste dans Etsy
       const body = cleanBody(msg.body || msg.snippet || "");
       if (!body) continue;
       const order = byEmail.get(to) || null;
