@@ -29,6 +29,38 @@
 - Commandes test exclues ; annulées/remboursées masquées par défaut (dépliable).
 - Sophie Berardo (0C1CGL2Q) annotée : **accepte d'attendre (02/09) + 🎁 cadeau promis**.
 
+## 🧱 GESTION MODERNE — 5 CHANTIERS LIVRÉS (02/09/2026, « fais les 5 un par un sans bug »)
+> Suite du squelette admin (`AdminShell`). Tout est ADMIN uniquement (rien côté clientes).
+1. **En-tête commun** `src/components/admin/PageHead.jsx` (`eyebrow`, `title`, `subtitle`, `actions`,
+   `kpis:[{label,value,sub,tone:good|warn|bad|alert}]`, CSS `.ph-*`) sur les 18 sous-pages `/gestion/*`.
+   Un nouvel écran admin DOIT commencer par `<PageHead …/>` (un seul H1 par page).
+2. **Produits & stock** (`ProductsAdmin.jsx`, CSS `.pt-*`) : chiffres clés (ruptures / stock bas), recherche +
+   filtre d'état + puces catégories, **tableau** (vignette · nom+étiquettes · catégorie · prix · **stock
+   modifiable en ligne** · ›) ; clic sur une ligne → **panneau latéral** (`.pt-drawer`, Échap/fond pour
+   fermer) avec le stock + la fiche complète (`EditProduct`) ; « + Ajouter » ouvre `AddProduct` dans le même
+   panneau. Accessoires en option (socles LED) = lignes grisées à la fin de leur catégorie.
+3. **Apparence** (`AppearanceAdmin.jsx`, CSS `.ap-*`) : colonne gauche = 6 thèmes avec **résumé d'état**
+   (`subSummary`) + point orange si modifié ; **barre collée en bas « Enregistrer tout »** (compare `s` à
+   `saved`, `SUB_KEYS`/`SETTING_KEYS`, POST des seules clés modifiées) + « Annuler ». Les boutons
+   « Enregistrer » par section restent (chaque save met à jour `saved`).
+4. **Retour « Enregistré ✓ » partout** : `src/components/admin/AdminToast.jsx` (monté dans `AdminShell`,
+   CSS `.ash-toast`). Observe `window.fetch` : POST/DELETE réussi vers une route de `SAVE_ROUTES`
+   (settings, catalog, stock, images, taxonomy, promo, orders, cagnottes, scheduled, benefices, refund…)
+   → toast vert ; échec → toast rouge « rien n'a été enregistré ». Les ENVOIS (e-mail, newsletter, BAT,
+   hub, agents) sont volontairement exclus (`SKIP_ACTIONS` : checkPayment, send, list, preview).
+   Usage manuel : `import { toast } from "@/components/admin/AdminToast"; toast("…", "ok|err|info")`.
+5. **Onglet Commandes** (`/gestion/page.jsx`, CSS `.co-*`) : une **ligne compacte par commande**
+   (réf+date · cliente+résumé articles · chip statut · total · ▸) ; la fiche complète (inchangée) ne
+   s'affiche qu'au clic (`openOrders`) ou quand la recherche `?q=` vise ≤ 2 commandes (`orderOpen`).
+- **Plein écran admin** : `body:has(.ash) > *:not(main)…{display:none}` → bandeaux, en-tête boutique,
+  pied de page et tiroir panier disparaissent dans Gestion (la vitrine prenait la moitié de l'écran mobile).
+- Aussi : file de production → carte rouge « urgente » seulement si la commande est encore active ;
+  `/gestion/cristal-reglage` réutilise la clé de session (plus de re-saisie du mot de passe).
+- **Vérification live** : Chromium ne passe plus par le proxy pour nivcreation.fr (`ERR_CONNECTION_RESET`)
+  → script `scratchpad/shot-ph.mjs` qui sert chaque requête du navigateur via **curl** (`page.route`),
+  clé admin injectée en `sessionStorage` (`niv-admin-key`). Mesure : `.ph-title`, `.ash-side`, débordement,
+  nb de H1, erreurs JS, à 1440 et 500 px.
+
 ## 🧭 ASSISTANT « TOUT EN UN » — UN SEUL FIL DANS GESTION (02/09/2026)
 > Demande du gérant : « améliore les interfaces admin, plus simple pour communiquer avec les
 > agents ». **Gestion → 🧭 Assistant (tout en un)** = un seul fil de conversation, mémorisé.
