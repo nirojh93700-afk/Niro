@@ -1,3 +1,17 @@
+## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
+> Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
+- `src/app/gestion/layout.jsx` → `src/components/admin/AdminShell.jsx` : **toutes** les pages
+  `/gestion/*` partagent la barre latérale sombre (7 groupes : Pilotage, Commandes, Clients,
+  Catalogue, Marketing, Finances, Réglages), la barre du haut (fil d'Ariane, recherche globale →
+  `/gestion/commandes?q=`, pastille « N à traiter », bouton ✦ Assistant) et le tiroir mobile.
+- **Compteurs en direct** (toutes les 2 min, si la clé admin est en session) : à préparer,
+  réponses clientes non lues (`/api/admin/bat?action=unread`), réponses à valider, avis.
+- Les onglets internes de `/gestion/page.jsx` sont ciblés par `/gestion#id` (la page écoute le
+  hash). L'ancienne barre latérale de cette page a été RETIRÉE (contenu intact) ; `GestionShell` /
+  `AdminSidebar` (jamais utilisés) supprimés. Styles `.ash-*` en fin de `globals.css`.
+- **Ajouter une page admin** : créer `src/app/gestion/<slug>/page.jsx` (elle hérite du squelette)
+  et l'entrée dans `NAV` d'`AdminShell.jsx`. Ne pas remettre de barre latérale dans une page.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes
