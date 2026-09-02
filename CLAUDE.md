@@ -1,3 +1,27 @@
+## 💬 ASSISTANT CLIENT « IL PRÉPARE, LE GÉRANT DÉCIDE » — EN LIGNE (02/09/2026)
+> Demande du gérant : « il prépare le mail mais il demande mon avis avant de faire quoi que ce soit ».
+> **L'agent ne répond JAMAIS seul.** Pour chaque message reçu (page Contact ou bouton flottant
+> « Une question ? »), il rédige une réponse → rangée « à valider » → le gérant reçoit UNE alerte
+> (message + réponse proposée + bouton « Relire, modifier et envoyer ») → il valide sur la page
+> `/repondre/<jeton>` → l'e-mail part à l'image de la marque (Gmail puis Resend, copie au gérant).
+- **Interrupteurs** (Gestion → Équipe d'agents) : `agents.emailDraft` (ON par défaut, prime sur
+  `emailAutoReply`) et `agents.widget` (bouton « Une question ? », ON). Sanitizer = FUSION : un
+  interrupteur n'efface plus les autres.
+- **Fichiers** : `stock.js` (`addPendingReply`/`getPendingReplyByToken`/`listPendingReplies`/
+  `resolvePendingReply`/`reopenPendingReply`, section `pendingReplies`, jeton 40 car., 30 jours) ·
+  `/api/contact` (branche brouillon, repli notification classique si l'alerte échoue) ·
+  `/api/reply/[token]` (GET/POST, **réservation AVANT envoi** → un double clic n'envoie pas 2×,
+  409 si déjà traité, réouverture si l'envoi échoue) · `/repondre/[token]` (noindex) ·
+  `/api/admin/pending-replies` · `QuestionWidget.jsx` (masqué sur /gestion, /panier, /paiement,
+  /merci, /repondre, /suivi, /espace).
+- **L'agent connaît le vrai état du site** : `serviceContext()` dans `registry.js` injecte le délai
+  RÉELLEMENT affiché (mode délai allongé compris), la livraison (seuil admin) et la FAQ officielle
+  (`src/lib/faq.js`, source unique partagée avec la page /faq → jamais de contradiction).
+- **Règles absolues codées dans sa consigne** : jamais de mention machine/panne/graveuse/laser/
+  fabricant/remplacement (motif = forte demande) · pas de date promise · pas de remboursement
+  d'un article personnalisé · pas de geste commercial de sa propre initiative · vouvoiement.
+- Le gérant peut aussi répondre à la main : l'alerte a `reply-to` = la cliente.
+
 ## 📊 SUIVI DES E-MAILS DE CAMPAGNE — OUVERTURES + CLICS (construit le 02/09/2026)
 > Demande du gérant : « mets en place pour voir qui ouvre le mail ». Fonctionne, testé de bout en bout.
 - **Comment** : chaque destinataire reçoit SA version de l'e-mail — un pixel `/api/o/<jeton>` et les
