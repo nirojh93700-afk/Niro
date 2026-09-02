@@ -64,6 +64,10 @@
   fusionne le journal + les fils de toutes ses commandes ; sans e-mail → `meta` (compteur par cliente).
   **CRM** : pastille « 💬 N » sur chaque cliente + section « 💬 Communications » dans son dossier
   (chargée à l'ouverture, CSS `.cm-*`). Sur la commande, le bouton s'appelle « Communications & aperçu ».
+- **⛔ ETSY RESTE DANS ETSY (demande du gérant, 02/09)** : la boîte mail surveillée et les dossiers de
+  communication ne prennent QUE les e-mails liés au site. Tout ce qui touche Etsy est ignoré
+  (expéditeur/destinataire `etsy.` — y compris `convos.etsy.com` —, ou « Etsy » dans le sujet), en
+  réception comme dans les envoyés. Ne jamais l'élargir sans sa demande.
 - **Achats & factures** `/gestion/achats` (`src/app/gestion/achats/page.jsx`, API
   `/api/admin/purchases`) : PDF / photo / CSV / texte → Claude (document/image + outil
   `proposition_achat`, catalogue des `stockId` fourni) → tableau corrigeable (produit, qté, prix) →
