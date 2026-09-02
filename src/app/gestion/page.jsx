@@ -1168,7 +1168,7 @@ export default function GestionPage() {
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", position: "relative", borderColor: batUnread.includes(o.id) ? "#c9a24b" : undefined }}
                     onClick={() => { const opening = batOpen !== o.id; setBatOpen(opening ? o.id : null); if (opening) setBatUnread((u) => u.filter((x) => x !== o.id)); }}>
-                    {batOpen === o.id ? "Fermer la discussion" : "💬 Aperçu à valider / discussion"}
+                    {batOpen === o.id ? "Fermer les communications" : "💬 Communications & aperçu"}
                     {batUnread.includes(o.id) && batOpen !== o.id && (
                       <span style={{ marginLeft: 6, background: "#d64545", color: "#fff", fontSize: "0.7rem", fontWeight: 700, padding: "1px 7px", borderRadius: 20 }}>
                         Nouvelle réponse

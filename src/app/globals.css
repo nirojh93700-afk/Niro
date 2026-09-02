@@ -3849,3 +3849,17 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .ach-hist-head { grid-template-columns: minmax(0, 1fr) auto 20px; grid-template-areas: "a d e" "b c e"; }
   .ach-hist-head > span:nth-child(1) { grid-area: a; } .ach-hist-head > span:nth-child(2) { grid-area: b; } .ach-hist-head > span:nth-child(3) { grid-area: c; } .ach-hist-head > span:nth-child(4) { grid-area: d; } .ach-hist-head > span:nth-child(5) { grid-area: e; }
 }
+
+/* ---------- Dossier de communication d'une cliente (.cm-*) ---------- */
+.cm-pill { display: inline-block; margin-left: 8px; background: #fff7e3; border: 1px solid #e2c98d; border-radius: 999px; padding: 1px 8px; font-size: 0.74rem; color: #8a6414; }
+.cm-box { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fff; }
+.cm-head { display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; margin-bottom: 8px; }
+.cm-list { display: grid; gap: 8px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+.cm-msg { border-radius: 10px; padding: 8px 10px; font-size: 0.86rem; border: 1px solid var(--line); background: #fbf7ee; }
+.cm-msg.nous { background: #fff; border-left: 3px solid var(--gold); }
+.cm-msg.elle { border-left: 3px solid #b9ac93; }
+.cm-meta { font-size: 0.74rem; color: var(--ink-soft); margin-bottom: 3px; }
+.cm-meta a { color: var(--gold-dark); }
+.cm-via { margin-left: 6px; background: #f1ebdd; border-radius: 6px; padding: 0 6px; }
+.cm-subject { font-weight: 600; font-size: 0.82rem; margin-bottom: 2px; }
+.cm-text { white-space: pre-line; line-height: 1.45; }

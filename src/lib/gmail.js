@@ -136,6 +136,18 @@ export async function gmailListFromSender(token, fromEmail, max = 10) {
   return out;
 }
 
+// Identifiants des messages ENVOYÉS récemment (réponses faites à la main depuis
+// Gmail) : elles sont rangées dans le dossier de la cliente et sa commande.
+export async function gmailListSentIds(token, max = 25) {
+  const q = encodeURIComponent("in:sent newer_than:30d");
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=${max}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  return (data.messages || []).map((m) => m.id);
+}
+
 // Liste seulement les IDENTIFIANTS des messages récents de la boîte (léger).
 // Sert à la vérification globale « nouvelles réponses » sans tout télécharger.
 export async function gmailListInboxIds(token, max = 30) {
@@ -160,11 +172,14 @@ export async function gmailGetMessage(token, id, full = true) {
   const emailMatch = from.match(/<([^>]+)>/);
   const fromEmail = (emailMatch ? emailMatch[1] : from).trim();
   const fromName = from.replace(/<[^>]+>/, "").replace(/"/g, "").trim() || fromEmail;
+  const to = header(headers, "To");
+  const toMatch = to.match(/<([^>]+)>/);
   return {
     id,
     threadId: data.threadId,
     fromName,
     fromEmail,
+    toEmail: (toMatch ? toMatch[1] : to.split(",")[0] || "").trim().toLowerCase(),
     subject: header(headers, "Subject"),
     date: header(headers, "Date"),
     messageId: header(headers, "Message-ID"),

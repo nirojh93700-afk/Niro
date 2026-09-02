@@ -45,6 +45,8 @@ export default function CrmPage() {
   const [exporting, setExporting] = useState(false);
   const [crmTab, setCrmTab] = useState("clients");
   const [open, setOpen] = useState(-1);
+  const [comms, setComms] = useState({});          // dossier de communication par e-mail (chargé à l'ouverture)
+  const [commsMeta, setCommsMeta] = useState({});  // nb de messages + dernier, pour la ligne de chaque cliente
   const [noteDraft, setNoteDraft] = useState({});
   const [savedNote, setSavedNote] = useState("");
   const [mailOpen, setMailOpen] = useState("");
@@ -92,6 +94,7 @@ export default function CrmPage() {
       const od = await or.json();
       setOrders(od.orders || []);
       if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }
+      try { const cm = await fetch("/api/admin/comms", { headers: { "x-admin-key": k } }); if (cm.ok) setCommsMeta((await cm.json()).meta || {}); } catch { /* ignore */ }
       if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); setSubs(Array.isArray(n.subscribers) ? n.subscribers : []); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
@@ -324,6 +327,14 @@ export default function CrmPage() {
       <div style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>{label}</div>
     </div>
   );
+  // Dossier de communication d'une cliente (tous ses échanges, toutes commandes).
+  async function loadComms(email) {
+    if (!email || comms[email]) return;
+    try {
+      const r = await fetch(`/api/admin/comms?email=${encodeURIComponent(email)}`, { headers: { "x-admin-key": key } });
+      if (r.ok) { const d = await r.json(); setComms((c) => ({ ...c, [email]: d.messages || [] })); }
+    } catch { /* ignore */ }
+  }
   const chip = (id, txt) => (
     <button onClick={() => setSeg(id)} className="filter-chip" style={{ padding: "5px 12px", fontSize: "0.85rem", borderRadius: 20, border: "1px solid var(--line)", background: seg === id ? "var(--gold-dark)" : "#fff", color: seg === id ? "#fff" : "var(--ink)", fontWeight: 600, cursor: "pointer" }}>{txt}</button>
   );
@@ -466,7 +477,7 @@ export default function CrmPage() {
 
       {filtered.map((c, i) => (
         <div key={c.key} style={{ border: "1px solid var(--line)", borderRadius: 10, padding: 14, marginBottom: 10, background: "#fff" }}>
-          <div style={{ cursor: "pointer" }} onClick={() => setOpen(open === i ? -1 : i)}>
+          <div style={{ cursor: "pointer" }} onClick={() => { setOpen(open === i ? -1 : i); if (open !== i) loadComms(c.email); }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
               <strong>
                 {c.name}{" "}
@@ -481,6 +492,7 @@ export default function CrmPage() {
             <div style={{ fontSize: "0.88rem", color: "var(--ink-soft)" }}>
               {c.email ? <a href={`mailto:${c.email}`} onClick={(e) => e.stopPropagation()}>{c.email}</a> : "—"}
               {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
+              {commsMeta[c.email]?.count ? <span className="cm-pill" title="Messages échangés">💬 {commsMeta[c.email].count}{commsMeta[c.email].lastFrom === "cliente" ? " · dernier : elle" : ""}</span> : null}
             </div>
             <div style={{ fontSize: "0.8rem", color: "var(--ink-soft)", marginTop: 2 }}>
               {c.first ? `1ʳᵉ : ${fmtDate(c.first)}` : ""}{c.last && c.nb > 1 ? ` · dernière : ${fmtDate(c.last)}` : ""}
@@ -519,6 +531,29 @@ export default function CrmPage() {
                     placeholder="ajouter une étiquette + Entrée" style={{ padding: "5px 9px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit", fontSize: "0.8rem", minWidth: 170 }} />
                 </div>
               </div>
+
+              {c.email && (
+                <div className="cm-box">
+                  <div className="cm-head"><strong>💬 Communications</strong> <span className="pt-muted">tout ce qui a été échangé avec {c.name}, toutes commandes confondues (e-mails reçus, envoyés, formulaire)</span></div>
+                  {!comms[c.email] ? <p className="pt-muted" style={{ margin: 0 }}>Chargement…</p>
+                    : comms[c.email].length === 0 ? <p className="pt-muted" style={{ margin: 0 }}>Aucun échange enregistré pour l&apos;instant.</p>
+                    : (
+                      <div className="cm-list">
+                        {comms[c.email].map((m) => (
+                          <div key={m.id} className={`cm-msg ${m.from === "nous" ? "nous" : "elle"}`}>
+                            <div className="cm-meta">
+                              <b>{m.from === "nous" ? "Nous" : c.name}</b> · {new Date(m.at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" })}
+                              {m.orderRef ? <> · <a href={`/gestion?q=${encodeURIComponent(m.orderRef)}#commandes`}>commande #{m.orderRef}</a></> : null}
+                              {m.via ? <span className="cm-via">{m.via === "gmail" ? "e-mail" : m.via === "formulaire" ? "formulaire du site" : m.via === "commande" ? "depuis la commande" : m.via}</span> : null}
+                            </div>
+                            {m.subject ? <div className="cm-subject">{m.subject}</div> : null}
+                            <div className="cm-text">{m.text}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                </div>
+              )}
 
               <div style={{ marginTop: 10 }}>
                 <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 4 }}>📝 Note privée</label>

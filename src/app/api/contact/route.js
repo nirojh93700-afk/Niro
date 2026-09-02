@@ -10,7 +10,7 @@
 //   - cas simple  -> il répond TOUT SEUL à la cliente (copie envoyée à la gérante) ;
 //   - cas spécial -> il ne répond pas, il remonte à la gérante « à valider ».
 
-import { getSettings, addPendingReply } from "@/lib/stock";
+import { getSettings, addPendingReply, logComm } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
@@ -62,6 +62,8 @@ export async function POST(req) {
   // L'agent rédige une réponse, on la range « à valider », et le gérant reçoit
   // UNE alerte avec le message de la cliente, la réponse proposée et un lien
   // pour relire / modifier / envoyer. RIEN ne part à la cliente d'ici.
+  // Dossier de communication de la cliente : le message du formulaire y est rangé.
+  try { await logComm({ email, name, from: "cliente", text: message, subject, via: "formulaire" }); } catch { /* jamais bloquant */ }
   let settings = null;
   try { settings = await getSettings(); } catch { settings = null; }
   if (settings?.agents?.emailDraft !== false) {

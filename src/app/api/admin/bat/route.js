@@ -1,4 +1,4 @@
-import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead } from "@/lib/stock";
+import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead, logComm } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage, gmailSendHtml } from "@/lib/gmail";
 
@@ -133,6 +133,9 @@ export async function POST(req) {
     return Response.json({ ok: true, thread: await getBatThread(orderId), emailed: false, via: "import" });
   }
 
+  if (text && body?.customerEmail) {
+    try { await logComm({ email: body.customerEmail, name: body?.customerName || "", from: "nous", text, subject: `Commande #${body?.ref || ""}`, via: "commande", orderId, orderRef: body?.ref || "" }); } catch { /* ignore */ }
+  }
   const th = await batAtelierMessage(orderId, {
     text, image,
     ref: body?.ref || "",

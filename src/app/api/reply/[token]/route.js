@@ -1,4 +1,4 @@
-import { getPendingReplyByToken, resolvePendingReply, reopenPendingReply, batAtelierMessage } from "@/lib/stock";
+import { getPendingReplyByToken, resolvePendingReply, reopenPendingReply, batAtelierMessage, logComm } from "@/lib/stock";
 import { emailLayout, escapeHtml } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 
@@ -60,7 +60,8 @@ export async function POST(req, { params }) {
     await reopenPendingReply(params.token);
     return Response.json({ error: sent?.error || "L'envoi a échoué. Réessayez." }, { status: 502 });
   }
-  // 4) Traçabilité : la réponse envoyée est rangée dans le fil de la commande.
+  // 4) Traçabilité : dossier de la cliente + fil de la commande.
+  try { await logComm({ email: it.email, name: it.name, from: "nous", text, subject, via: sent.via || "site", orderId: it.orderId || "", orderRef: it.orderRef || "" }); } catch { /* ignore */ }
   if (it.orderId) {
     try { await batAtelierMessage(it.orderId, { text, ref: it.orderRef || "", customerEmail: it.email, customerName: it.name, keepStatus: true }); } catch { /* jamais bloquant */ }
   }

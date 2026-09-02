@@ -1,5 +1,5 @@
-import { getGmailCreds, getBatThreadsMeta, batImportEmails, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings } from "@/lib/stock";
-import { gmailAccessToken, gmailListInboxIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
+import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm } from "@/lib/stock";
+import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
@@ -134,8 +134,9 @@ export async function syncInbox({ force = false } = {}) {
 
     for (const { id, msg, from, at, body } of fresh) {
 
-      // 1) Traçabilité : rangé dans le fil de sa commande.
+      // 1) Traçabilité : dossier de la cliente (toujours) + fil de sa commande.
       const order = byEmail.get(from) || null;
+      try { await logComm({ email: from, name: msg.fromName, from: "cliente", text: body, subject: msg.subject || "", at, via: "gmail", orderId: order?.id || "", orderRef: order?.ref || "", gmailId: id }); } catch { /* jamais bloquant */ }
       if (order) {
         try {
           await ensureCommThread(order.id, { ref: order.ref || "", customerEmail: order.customerEmail || from, customerName: order.customerName || msg.fromName });
@@ -182,6 +183,45 @@ export async function syncInbox({ force = false } = {}) {
   } catch (e) {
     result.errors.push(e?.message || String(e));
   }
+
+  // 3) Ce que NOUS avons envoyé à la main depuis Gmail : rangé aussi dans le
+  //    dossier de la cliente et le fil de sa commande (rien ne se perd).
+  result.sent = 0;
+  try {
+    const token = await gmailAccessToken(creds);
+    const sentIds = await gmailListSentIds(token, 25);
+    const metas = await getBatThreadsMeta();
+    const alreadyImported = new Set(metas.flatMap((m) => m.importedGmailIds || []));
+    const orders = (await getSiteOrders(300).catch(() => [])).filter((o) => !o.test);
+    const byEmail = new Map();
+    for (const o of orders) {
+      const e = String(o.customerEmail || "").toLowerCase();
+      if (!e) continue;
+      const cur = byEmail.get(e);
+      if (!cur || Date.parse(o.createdAt || 0) > Date.parse(cur.createdAt || 0)) byEmail.set(e, o);
+    }
+    for (const id of sentIds) {
+      if (state.ids["s:" + id] || alreadyImported.has(id)) continue;
+      const msg = await gmailGetMessage(token, id, true);
+      seen["s:" + id] = now;
+      if (!msg) continue;
+      const to = String(msg.toEmail || "").toLowerCase();
+      const at = Date.parse(msg.date || "") || now;
+      if (!to || !looksLikeRealCustomer(to, []) || now - at > MAX_AGE_MS) continue;
+      const body = cleanBody(msg.body || msg.snippet || "");
+      if (!body) continue;
+      const order = byEmail.get(to) || null;
+      const logged = await logComm({ email: to, from: "nous", text: body, subject: msg.subject || "", at, via: "gmail", orderId: order?.id || "", orderRef: order?.ref || "", gmailId: id }).catch(() => null);
+      if (logged) result.sent++;
+      if (order) {
+        try {
+          await ensureCommThread(order.id, { ref: order.ref || "", customerEmail: order.customerEmail || to, customerName: order.customerName || "" });
+          await batImportOutgoing(order.id, [{ gmailId: id, text: body, at }]);
+        } catch { /* ignore */ }
+      }
+    }
+  } catch (e) { result.errors.push("envoyés : " + (e?.message || e)); }
+
   await saveInboxState({ ids: seen, lastRun: now, lastResult: { ...result, at: now } });
   return result;
 }

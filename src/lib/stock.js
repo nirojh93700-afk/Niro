@@ -800,6 +800,90 @@ export async function saveInboxState({ ids, lastRun, lastResult }) {
   return data.inboxSeen;
 }
 
+// Importe dans le fil d'une commande des messages ENVOYÉS par nous par e-mail
+// (Gmail « envoyés », réponses faites à la main). Dédoublonnage par id Gmail.
+export async function batImportOutgoing(orderId, msgs = []) {
+  const id = String(orderId || "").trim();
+  if (!id || !Array.isArray(msgs) || !msgs.length) return 0;
+  const data = await getCatalogRaw(true);
+  const th = (data.bat || {})[id];
+  if (!th) return 0;
+  th.importedGmailIds = th.importedGmailIds || [];
+  let added = 0;
+  for (const m of msgs) {
+    const gid = String(m?.gmailId || "").trim();
+    if (!gid || th.importedGmailIds.includes(gid)) continue;
+    th.messages.push({ from: "atelier", text: String(m?.text || "").trim(), at: Number(m?.at) || Date.now(), viaEmail: true, gmailId: gid });
+    th.importedGmailIds.push(gid);
+    added++;
+  }
+  if (added) {
+    th.messages.sort((a, b) => (Number(a.at) || 0) - (Number(b.at) || 0));
+    th.updatedAt = Date.now();
+    data.bat[id] = th;
+    await persistCatalog(data, ["bat"]);
+  }
+  return added;
+}
+
+// =============================================================================
+// DOSSIER DE COMMUNICATION PAR CLIENTE (section `comms`, clé = e-mail) :
+// TOUT ce qui est échangé (e-mails reçus, e-mails envoyés — par le site OU à la
+// main depuis Gmail —, formulaire de contact) est rangé ici, avec ou sans
+// commande. Le fil de la commande garde en plus ce qui la concerne.
+// message = { id, from: "cliente"|"nous", at, text, subject, via, orderId, orderRef, gmailId }
+// =============================================================================
+const COMMS_PER_CLIENT = 300;
+const COMMS_CLIENTS_MAX = 3000;
+export async function logComm({ email, name = "", from, text, subject = "", at = 0, via = "", orderId = "", orderRef = "", gmailId = "" }) {
+  const e = normEmail(email);
+  if (!validEmail(e) || !String(text || "").trim()) return null;
+  const data = await getCatalogRaw(true);
+  data.comms = data.comms || {};
+  const dossier = data.comms[e] || { name: "", messages: [] };
+  if (name && !dossier.name) dossier.name = String(name).slice(0, 120);
+  const gid = String(gmailId || "").trim();
+  if (gid && dossier.messages.some((m) => m.gmailId === gid)) return null; // déjà rangé
+  const msg = {
+    id: "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    from: from === "nous" ? "nous" : "cliente",
+    at: Number(at) || Date.now(),
+    text: String(text).slice(0, 6000),
+    subject: String(subject || "").slice(0, 200),
+    via: String(via || "").slice(0, 30),
+    orderId: String(orderId || "").slice(0, 80), orderRef: String(orderRef || "").slice(0, 40),
+    gmailId: gid.slice(0, 80),
+  };
+  dossier.messages.push(msg);
+  dossier.messages.sort((a, b) => (a.at || 0) - (b.at || 0));
+  if (dossier.messages.length > COMMS_PER_CLIENT) dossier.messages = dossier.messages.slice(-COMMS_PER_CLIENT);
+  dossier.updatedAt = Date.now();
+  data.comms[e] = dossier;
+  const keys = Object.keys(data.comms);
+  if (keys.length > COMMS_CLIENTS_MAX) {
+    keys.sort((a, b) => (data.comms[a].updatedAt || 0) - (data.comms[b].updatedAt || 0));
+    for (const k of keys.slice(0, keys.length - COMMS_CLIENTS_MAX)) delete data.comms[k];
+  }
+  await persistCatalog(data, ["comms"]);
+  return msg;
+}
+export async function getCommsFor(email) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw(true);
+  const d = (data.comms || {})[e];
+  return d ? { name: d.name || "", messages: d.messages || [], updatedAt: d.updatedAt || 0 } : { name: "", messages: [], updatedAt: 0 };
+}
+// Aperçu léger pour le CRM : nombre de messages + date du dernier, par e-mail.
+export async function getCommsMeta() {
+  const data = await getCatalogRaw();
+  const out = {};
+  for (const [e, d] of Object.entries(data.comms || {})) {
+    const last = (d.messages || [])[d.messages.length - 1];
+    out[e] = { count: (d.messages || []).length, lastAt: last?.at || 0, lastFrom: last?.from || "" };
+  }
+  return out;
+}
+
 // Métadonnées légères de tous les fils d'aperçu (pour la vérification globale
 // des nouvelles réponses + les pastilles côté Commandes).
 export async function getBatThreadsMeta() {
