@@ -94,7 +94,7 @@ export default function CrmPage() {
       const od = await or.json();
       setOrders(od.orders || []);
       if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }
-      try { const cm = await fetch("/api/admin/comms", { headers: { "x-admin-key": k } }); if (cm.ok) setCommsMeta((await cm.json()).meta || {}); } catch { /* ignore */ }
+      try { const cm = await fetch("/api/admin/comms", { headers: { "x-admin-key": adminKey } }); if (cm.ok) setCommsMeta((await cm.json()).meta || {}); } catch { /* ignore */ }
       if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); setSubs(Array.isArray(n.subscribers) ? n.subscribers : []); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
@@ -502,8 +502,8 @@ export default function CrmPage() {
           {open === i && (
             <div style={{ marginTop: 10, borderTop: "1px dashed var(--line)", paddingTop: 10 }}>
               {c.orders.map((ord, j) => {
-                const label = ord.status === "livree" ? "✓✓ Livrée" : ord.status === "expediee" ? "✓ Expédiée" : "● À préparer";
-                const col = ord.status === "livree" || ord.status === "expediee" ? "#256b34" : "#b4452f";
+                const label = ({ livree: "✓✓ Livrée", remise_main_propre: "🤝 Remise en main propre", expediee: "✓ Expédiée", en_gravure: "✏️ En fabrication", annulee: "✕ Annulée", remboursee: "↩ Remboursée" })[ord.status] || "● À préparer";
+                const col = ["livree", "expediee", "remise_main_propre"].includes(ord.status) ? "#256b34" : ord.status === "en_gravure" ? "#5b3f8a" : "#b4452f";
                 return (
                   <div key={j} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", fontSize: "0.88rem", marginBottom: 6 }}>
                     <strong>#{ord.ref}</strong>
