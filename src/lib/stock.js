@@ -835,7 +835,7 @@ export async function batImportOutgoing(orderId, msgs = []) {
 // =============================================================================
 const COMMS_PER_CLIENT = 300;
 const COMMS_CLIENTS_MAX = 3000;
-export async function logComm({ email, name = "", from, text, subject = "", at = 0, via = "", orderId = "", orderRef = "", gmailId = "" }) {
+export async function logComm({ email, name = "", from, text, subject = "", at = 0, via = "", orderId = "", orderRef = "", gmailId = "", dedupeWindowMs = 0 }) {
   const e = normEmail(email);
   if (!validEmail(e) || !String(text || "").trim()) return null;
   const data = await getCatalogRaw(true);
@@ -844,6 +844,10 @@ export async function logComm({ email, name = "", from, text, subject = "", at =
   if (name && !dossier.name) dossier.name = String(name).slice(0, 120);
   const gid = String(gmailId || "").trim();
   if (gid && dossier.messages.some((m) => m.gmailId === gid)) return null; // déjà rangé
+  // Même message déjà rangé par une autre voie (ex. envoyé par le site ET retrouvé
+  // dans les « envoyés » Gmail) : on garde le premier.
+  const when = Number(at) || Date.now();
+  if (dedupeWindowMs > 0 && dossier.messages.some((m) => m.from === (from === "nous" ? "nous" : "cliente") && Math.abs((m.at || 0) - when) < dedupeWindowMs)) return null;
   const msg = {
     id: "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
     from: from === "nous" ? "nous" : "cliente",

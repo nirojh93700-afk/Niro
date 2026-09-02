@@ -207,13 +207,18 @@ export async function syncInbox({ force = false } = {}) {
       if (!msg) continue;
       const to = String(msg.toEmail || "").toLowerCase();
       const at = Date.parse(msg.date || "") || now;
-      if (!to || !looksLikeRealCustomer(to, []) || now - at > MAX_AGE_MS) continue;
+      const own = ownAddresses();
+      const subj = String(msg.subject || "");
+      // Ni nos propres adresses, ni les notifications internes (alertes, copies).
+      if (!to || own.has(to) || !looksLikeRealCustomer(to, []) || now - at > MAX_AGE_MS) continue;
+      if (/^(📧|🛎️|🛎|\[À valider\]|\[A valider\]|Nouvelle commande|Alerte)/i.test(subj)) continue;
       const body = cleanBody(msg.body || msg.snippet || "");
       if (!body) continue;
       const order = byEmail.get(to) || null;
-      const logged = await logComm({ email: to, from: "nous", text: body, subject: msg.subject || "", at, via: "gmail", orderId: order?.id || "", orderRef: order?.ref || "", gmailId: id }).catch(() => null);
+      // Fenêtre de 5 min : un e-mail envoyé PAR LE SITE est déjà rangé (on ne le double pas).
+      const logged = await logComm({ email: to, from: "nous", text: body, subject: subj, at, via: "gmail", orderId: order?.id || "", orderRef: order?.ref || "", gmailId: id, dedupeWindowMs: 5 * 60 * 1000 }).catch(() => null);
       if (logged) result.sent++;
-      if (order) {
+      if (order && logged) {
         try {
           await ensureCommThread(order.id, { ref: order.ref || "", customerEmail: order.customerEmail || to, customerName: order.customerName || "" });
           await batImportOutgoing(order.id, [{ gmailId: id, text: body, at }]);

@@ -26,6 +26,8 @@ export async function GET(req) {
         if (m.gmailId && seenGmail.has(m.gmailId)) continue;
         const key = `${from}|${m.at}|${String(m.text || "").slice(0, 60)}`;
         if (seenKey.has(key)) continue;
+        // Déjà dans le journal par une autre voie (même côté, à moins de 3 min) → pas de doublon.
+        if (messages.some((x) => x.from === from && Math.abs((x.at || 0) - (Number(m.at) || 0)) < 3 * 60 * 1000)) continue;
         seenKey.add(key);
         messages.push({
           id: `b${meta.orderId}_${m.at}`, from, at: Number(m.at) || 0,
