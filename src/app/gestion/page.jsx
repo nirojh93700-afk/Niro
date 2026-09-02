@@ -740,8 +740,9 @@ export default function GestionPage() {
 
   return (
     <div className="admin-content">
-        <DeclarationReminder />
-        <MerchantReminder />
+        {/* Rappels (URSSAF, Google Shopping) : sur le tableau de bord seulement,
+            pas en tête de chaque onglet (ils repoussaient le contenu, surtout sur mobile). */}
+        {tab === "accueil" ? <><DeclarationReminder /><MerchantReminder /></> : null}
 
         {error && <div className="notice">{error}</div>}
 
