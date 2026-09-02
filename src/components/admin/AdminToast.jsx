@@ -28,9 +28,10 @@ const SAVE_ROUTES = {
   "/api/admin/benefices": "Dépenses enregistrées",
   "/api/admin/restock-alerts": "Alertes de réassort mises à jour",
   "/api/admin/refund": "Remboursement effectué",
+  "/api/admin/purchases": "Achat enregistré, stock mis à jour",
 };
 // Actions POST qui ne sont pas des enregistrements (lecture / envoi) → pas de toast.
-const SKIP_ACTIONS = new Set(["checkPayment", "send", "list", "preview"]);
+const SKIP_ACTIONS = new Set(["checkPayment", "send", "list", "preview", "analyze"]);
 
 export function toast(text, tone = "ok") {
   if (typeof window === "undefined") return;

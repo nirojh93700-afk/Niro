@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
+import { exportRows } from "@/lib/exportClients";
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "");
@@ -41,6 +42,7 @@ export default function CrmPage() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [seg, setSeg] = useState("all");
+  const [exporting, setExporting] = useState(false);
   const [crmTab, setCrmTab] = useState("clients");
   const [open, setOpen] = useState(-1);
   const [noteDraft, setNoteDraft] = useState({});
@@ -341,6 +343,31 @@ export default function CrmPage() {
       </div>
 
       {crmTab === "clients" && (<>
+      {/* Export / sauvegarde des clients — au format que tu veux */}
+      <div className="crm-export">
+        <span><strong>Sauvegarder / exporter</strong> <small>({filtered.length} client{filtered.length > 1 ? "s" : ""} affiché{filtered.length > 1 ? "s" : ""}, selon le filtre)</small></span>
+        {[["xlsx", "Excel"], ["csv", "CSV"], ["pdf", "PDF"], ["json", "JSON"]].map(([f, lab]) => (
+          <button key={f} type="button" className="btn btn-outline" disabled={exporting} onClick={async () => {
+            setExporting(true);
+            try {
+              const cols = [
+                { key: "name", label: "Nom", width: 22 }, { key: "email", label: "E-mail", width: 30 }, { key: "phone", label: "Téléphone", width: 16 },
+                { key: "nb", label: "Commandes", width: 12 }, { key: "total", label: "Total (€)", width: 12 },
+                { key: "first", label: "Première commande", width: 16 }, { key: "last", label: "Dernière commande", width: 16 },
+                { key: "segment", label: "Segment", width: 12 }, { key: "relance", label: "À relancer", width: 11 },
+              ];
+              const rows = filtered.map((c) => ({
+                name: c.name, email: c.email, phone: c.phone, nb: c.nb,
+                total: f === "xlsx" || f === "json" ? Math.round(c.total * 100) / 100 : (Math.round(c.total * 100) / 100).toFixed(2).replace(".", ","),
+                first: c.first ? new Date(c.first).toLocaleDateString("fr-FR") : "", last: c.last ? new Date(c.last).toLocaleDateString("fr-FR") : "",
+                segment: c.segment, relance: c.inactive ? "oui" : "",
+              }));
+              await exportRows(f, rows, cols, { basename: "clients-niv-creation", title: "Clients", subtitle: seg === "all" ? "Toutes les clientes" : `Filtre : ${seg}` });
+            } catch (e) { alert("Export impossible : " + (e?.message || e)); }
+            finally { setExporting(false); }
+          }}>{exporting ? "…" : lab}</button>
+        ))}
+      </div>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", margin: "12px 0" }}>
         {card("Clients", String(kpis.clients))}
         {card("CA total", euro(kpis.ca))}

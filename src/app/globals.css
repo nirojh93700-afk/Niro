@@ -3810,3 +3810,42 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .co-total small { display: none; }
   .co-body { padding: 10px 12px 14px; }
 }
+
+/* ---------- CRM : barre d'export ---------- */
+.crm-export { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin: 10px 0 4px; }
+.crm-export > span { margin-right: auto; font-size: 0.9rem; }
+.crm-export small { color: var(--ink-soft); }
+.crm-export .btn { padding: 7px 14px; font-size: 0.84rem; }
+
+/* ---------- Achats & factures fournisseurs (.ach-*) ---------- */
+.ach-file { display: block; border: 2px dashed var(--gold); border-radius: 12px; padding: 18px 14px; text-align: center; cursor: pointer; background: #fffdf7; font-weight: 600; }
+.ach-file input { display: none; }
+.ach-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 12px 0; }
+.ach-meta label { display: grid; gap: 4px; font-size: 0.78rem; color: var(--ink-soft); }
+.ach-meta input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 0.9rem; color: var(--ink); }
+.ach-lines { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.ach-line { display: grid; grid-template-columns: minmax(160px, 1.2fr) minmax(220px, 1.6fr) 80px 110px 34px; gap: 10px; align-items: start; padding: 9px 12px; border-top: 1px solid var(--line); }
+.ach-line:first-child { border-top: 0; }
+.ach-line.ach-head { background: #f7f3ea; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft); padding: 8px 12px; }
+.ach-line.ok { box-shadow: inset 3px 0 0 #4d7a3a; }
+.ach-line.warn { box-shadow: inset 3px 0 0 #d08a2a; background: #fffaf0; }
+.ach-line.low { box-shadow: inset 3px 0 0 #b4452f; background: #fff5f2; }
+.ach-line.none { box-shadow: inset 3px 0 0 #c9c1b0; background: #fafaf8; }
+.ach-line input, .ach-line select { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 0.88rem; box-sizing: border-box; background: #fff; }
+.ach-line small { display: block; font-size: 0.72rem; color: var(--ink-soft); margin-top: 3px; }
+.ach-stocknow b { color: var(--gold-dark); }
+.ach-del { border: 1px solid var(--line); background: #fff; border-radius: 8px; width: 32px; height: 34px; cursor: pointer; color: #b4452f; font-size: 1.1rem; }
+.ach-opts { display: grid; gap: 6px; margin-top: 14px; font-size: 0.88rem; }
+.ach-opts label { display: flex; gap: 8px; align-items: flex-start; }
+.ach-opts input { margin-top: 3px; }
+.ach-hist { border-top: 1px solid var(--line); }
+.ach-hist:first-of-type { border-top: 0; }
+.ach-hist-head { display: grid; grid-template-columns: minmax(0, 1.5fr) 110px 80px 100px 20px; gap: 10px; align-items: center; width: 100%; padding: 9px 4px; background: transparent; border: 0; font: inherit; text-align: left; cursor: pointer; color: var(--ink); }
+.ach-hist-head small { color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .ach-line { grid-template-columns: 1fr 1fr; grid-template-areas: "label label" "prod prod" "qty price" "del del"; }
+  .ach-line.ach-head { display: none; }
+  .ach-line > span:nth-child(1) { grid-area: label; } .ach-line > span:nth-child(2) { grid-area: prod; } .ach-line > span:nth-child(3) { grid-area: qty; } .ach-line > span:nth-child(4) { grid-area: price; } .ach-line > span:nth-child(5) { grid-area: del; justify-self: end; }
+  .ach-hist-head { grid-template-columns: minmax(0, 1fr) auto 20px; grid-template-areas: "a d e" "b c e"; }
+  .ach-hist-head > span:nth-child(1) { grid-area: a; } .ach-hist-head > span:nth-child(2) { grid-area: b; } .ach-hist-head > span:nth-child(3) { grid-area: c; } .ach-hist-head > span:nth-child(4) { grid-area: d; } .ach-hist-head > span:nth-child(5) { grid-area: e; }
+}

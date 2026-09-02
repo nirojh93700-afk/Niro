@@ -112,6 +112,9 @@ export async function syncInbox({ force = false } = {}) {
       if (!cur || Date.parse(o.createdAt || 0) > Date.parse(cur.createdAt || 0)) byEmail.set(e, o);
     }
 
+    // Lecture des nouveaux e-mails, puis on ne prépare une réponse que pour le
+    // DERNIER message de chaque expéditrice (pas pour ses messages plus anciens).
+    const fresh = [];
     for (const id of ids) {
       if (state.ids[id] || alreadyImported.has(id) || drafted.has(id)) continue;
       result.checked++;
@@ -124,6 +127,12 @@ export async function syncInbox({ force = false } = {}) {
       }
       const body = cleanBody(msg.body || msg.snippet || "");
       if (!body) { seen[id] = now; result.ignored++; continue; }
+      fresh.push({ id, msg, from, at, body });
+    }
+    const latestBySender = new Map();
+    for (const f of fresh) { const cur = latestBySender.get(f.from); if (!cur || f.at > cur.at) latestBySender.set(f.from, f); }
+
+    for (const { id, msg, from, at, body } of fresh) {
 
       // 1) Traçabilité : rangé dans le fil de sa commande.
       const order = byEmail.get(from) || null;
@@ -135,8 +144,19 @@ export async function syncInbox({ force = false } = {}) {
         } catch (e) { result.errors.push(`fil ${order.ref || order.id}: ${e?.message || e}`); }
       }
 
-      // 2) Réponse préparée, à valider par le gérant.
-      if (draftOn && !(firstRun && now - at > 24 * 3600 * 1000)) {
+      // Déjà répondu ? (un message de l'atelier plus récent existe dans le fil)
+      let dejaRepondu = false;
+      if (order) {
+        try {
+          const th = await getBatThread(order.id);
+          dejaRepondu = (th?.messages || []).some((m) => m.from === "atelier" && (Number(m.at) || 0) > at);
+        } catch { dejaRepondu = false; }
+      }
+      const isLatest = latestBySender.get(from)?.id === id;
+
+      // 2) Réponse préparée, à valider par le gérant — seulement pour le dernier
+      //    message de la cliente, pas encore répondu.
+      if (draftOn && isLatest && !dejaRepondu && !(firstRun && now - at > 24 * 3600 * 1000)) {
         let draft = null;
         try {
           const context = await buildContext(order, from);

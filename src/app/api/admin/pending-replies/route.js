@@ -8,6 +8,7 @@ export async function GET(req) {
   const all = await listPendingReplies();
   const items = all.map((it) => ({
     id: it.id, token: it.token, name: it.name, email: it.email, subject: it.subject,
+    source: it.source || "contact", orderRef: it.orderRef || "", orderId: it.orderId || "",
     message: it.message, draft: it.draft || "", reason: it.reason || "",
     at: it.at, status: it.status, resolvedAt: it.resolvedAt || 0,
   }));

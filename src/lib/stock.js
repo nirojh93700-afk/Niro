@@ -409,6 +409,40 @@ export async function setStock(variantId, value) {
   return map;
 }
 
+// Ajoute des quantités (réception d'un achat fournisseur) en UNE écriture.
+// items : [{ stockId, qty }]. Une variante « non suivie » devient suivie.
+export async function adjustStockMany(items) {
+  const map = await getStockMap();
+  const applied = [];
+  for (const it of items || []) {
+    const id = String(it?.stockId || "").trim();
+    const qty = parseInt(it?.qty, 10) || 0;
+    if (!id || !qty) continue;
+    const before = typeof map[id] === "number" ? map[id] : 0;
+    map[id] = Math.max(0, before + qty);
+    applied.push({ stockId: id, before, after: map[id], qty });
+  }
+  if (applied.length) await persist(map);
+  return applied;
+}
+
+// =============================================================================
+// ACHATS FOURNISSEURS (factures importées → stock) : historique, section `purchases`.
+// =============================================================================
+const PURCHASES_KEEP = 200;
+export async function getPurchases() {
+  const data = await getCatalogRaw(true);
+  return Array.isArray(data.purchases) ? data.purchases : [];
+}
+export async function addPurchase(rec) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.purchases) ? data.purchases : [];
+  const item = { id: "ach_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), at: Date.now(), ...rec };
+  data.purchases = [item, ...list].slice(0, PURCHASES_KEEP);
+  await persistCatalog(data, ["purchases"]);
+  return item;
+}
+
 // items : [{ variantId, qty }]
 export async function decrementMany(items) {
   const map = await getStockMap();

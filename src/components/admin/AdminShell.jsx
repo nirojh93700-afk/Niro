@@ -37,6 +37,7 @@ const NAV = [
     { id: "reglages-produits", icon: "⚙", text: "Réglages produits", href: "/gestion/reglages" },
     { id: "tailles", icon: "⌗", text: "Tailles & coûts", href: "/gestion/tailles-conseillees" },
     { id: "sante", icon: "◐", text: "Santé du catalogue", href: "/gestion/sante" },
+    { id: "achats", icon: "⇩", text: "Achats & factures", href: "/gestion/achats" },
   ] },
   { label: "Marketing", items: [
     { id: "newsletter", icon: "▷", text: "Newsletter", href: "/gestion#newsletter" },
