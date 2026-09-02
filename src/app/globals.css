@@ -3747,3 +3747,66 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
    vitrine (bandeaux, en-tête boutique, pied de page, tiroir panier) disparaît. */
 body:has(.ash) > *:not(main):not(script):not(style):not(link) { display: none !important; }
 body:has(.ash) > main { padding: 0; margin: 0; }
+
+/* ---------- Apparence : navigation latérale + barre d'enregistrement (.ap-*) ---------- */
+.ap-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: start; }
+.ap-nav { position: sticky; top: 76px; display: grid; gap: 6px; }
+.ap-nav-item { text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; font: inherit; color: var(--ink); display: grid; gap: 3px; transition: background .12s, border-color .12s; }
+.ap-nav-item:hover { background: #fcf9f1; }
+.ap-nav-item.on { border-color: var(--gold); background: #fff7e3; box-shadow: inset 3px 0 0 var(--gold); }
+.ap-nav-label { font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+.ap-nav-sum { font-size: 0.74rem; color: var(--ink-soft); line-height: 1.3; }
+.ap-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d08a2a; box-shadow: 0 0 0 2px #fff1d6; }
+.ap-content { min-width: 0; padding-bottom: 8px; }
+.ap-savebar { position: sticky; bottom: 12px; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding: 10px 14px; border-radius: 14px; background: #fff; border: 1px solid var(--line); box-shadow: 0 8px 28px rgba(26,18,6,0.10); opacity: .75; transition: opacity .15s, border-color .15s, background .15s; }
+.ap-savebar.show { opacity: 1; border-color: #e2c98d; background: #fff8e6; }
+.ap-savebar-txt { font-size: 0.88rem; color: var(--ink); }
+.ap-savebar-btns { display: flex; gap: 8px; }
+.ap-savebar .btn { padding: 8px 14px; font-size: 0.86rem; }
+.ap-savebar .btn[disabled] { opacity: .5; cursor: default; }
+@media (max-width: 900px) {
+  .ap-layout { grid-template-columns: 1fr; }
+  .ap-nav { position: static; display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .ap-nav::-webkit-scrollbar { display: none; }
+  .ap-nav-item { flex: 0 0 auto; max-width: 220px; padding: 8px 12px; }
+  .ap-nav-sum { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+  .ap-savebar { bottom: 8px; }
+}
+
+/* ---------- Retour « Enregistré ✓ » commun (.ash-toast) ---------- */
+.ash-toasts { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 120; display: grid; gap: 8px; pointer-events: none; max-width: min(92vw, 520px); }
+.ash-toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-radius: 999px; background: #1a1206; color: #fff; font-size: 0.9rem; box-shadow: 0 10px 30px rgba(0,0,0,0.25); animation: ashToastIn .22s ease; cursor: pointer; }
+.ash-toast-ico { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #3f8a4d; color: #fff; font-weight: 800; font-size: 0.8rem; flex: 0 0 22px; }
+.ash-toast.err { background: #5a1f17; }
+.ash-toast.err .ash-toast-ico { background: #d64545; }
+.ash-toast.info .ash-toast-ico { background: var(--gold); }
+@keyframes ashToastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (max-width: 720px) { .ash-toasts { bottom: 14px; } }
+@media (prefers-reduced-motion: reduce) { .ash-toast { animation: none; } }
+
+/* ---------- Onglet Commandes : lignes compactes, fiche dépliable (.co-*) ---------- */
+.co-card { padding: 0; overflow: hidden; margin-bottom: 10px; }
+.co-card.open { border-color: var(--gold); box-shadow: 0 6px 20px rgba(26,18,6,0.06); }
+.co-card.test { opacity: .7; }
+.co-head { display: grid; grid-template-columns: 120px minmax(0, 1fr) 150px 110px 22px; gap: 12px; align-items: center; width: 100%; padding: 11px 16px; background: transparent; border: 0; font: inherit; text-align: left; cursor: pointer; color: var(--ink); }
+.co-head:hover { background: #fcf9f1; }
+.co-card.open .co-head { background: #fff7e3; border-bottom: 1px solid var(--line); }
+.co-ref { font-weight: 800; font-variant-numeric: tabular-nums; }
+.co-ref small, .co-who small, .co-total small { display: block; font-weight: 400; font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.co-who { min-width: 0; }
+.co-who strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.co-status { justify-self: start; font-size: 0.76rem; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: #f1ebdd; color: var(--ink-soft); white-space: nowrap; }
+.co-status.s-a_preparer { background: #fff1d6; color: #8a6414; }
+.co-status.s-en_gravure { background: #ece4f6; color: #5b3f8a; }
+.co-status.s-expediee, .co-status.s-remise_main_propre { background: #e3f1e6; color: #2f6b3d; }
+.co-status.s-livree { background: #ebebeb; color: #555; }
+.co-status.s-annulee, .co-status.s-remboursee { background: #fdeee8; color: #b4452f; }
+.co-total { text-align: right; font-weight: 800; color: var(--gold-dark); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.co-chev { color: var(--ink-soft); text-align: right; }
+.co-body { padding: 12px 16px 16px; }
+@media (max-width: 720px) {
+  .co-head { grid-template-columns: minmax(0, 1fr) auto 18px; grid-template-areas: "ref total chev" "who who who" "status status status"; row-gap: 4px; padding: 10px 12px; }
+  .co-ref { grid-area: ref; } .co-total { grid-area: total; } .co-chev { grid-area: chev; } .co-who { grid-area: who; } .co-status { grid-area: status; }
+  .co-total small { display: none; }
+  .co-body { padding: 10px 12px 14px; }
+}

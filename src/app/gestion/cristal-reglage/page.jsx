@@ -64,11 +64,21 @@ export default function CristalReglage() {
   const z = zones[sel] || (product ? defZone(product) : null);
   const motifEntries = product?.styleImages ? Object.entries(product.styleImages) : [];
 
+  // Même clé que le reste de la gestion : si elle est déjà en session, on entre direct.
+  useEffect(() => {
+    try {
+      const k = sessionStorage.getItem("niv-admin-key");
+      if (k) { setKey(k); load(k); }
+    } catch { /* stockage indisponible */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function load(k) {
     setMsg("Chargement…");
     try {
       const res = await fetch("/api/admin/settings", { headers: { "x-admin-key": k } });
       if (!res.ok) throw new Error("Mot de passe incorrect.");
+      try { sessionStorage.setItem("niv-admin-key", k); } catch { /* ignore */ }
       const s = await res.json();
       const saved = s.crystalZones || {};
       const init = {};

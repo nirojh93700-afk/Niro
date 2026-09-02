@@ -24,11 +24,43 @@ const SUBS = [
   ["acces", "🔒 Accès & état du site"],
   ["pages", "📄 Pages"],
 ];
+// Réglages appartenant à chaque sous-page (pour le résumé et le suivi des modifs).
+const SUB_KEYS = [
+  ["visuel", ["color", "fontHeading", "fontBody"]],
+  ["accueil", ["hero", "categories", "atelier", "sections"]],
+  ["popups", ["announce", "salesBanner", "vacation", "welcome"]],
+  ["marketing", ["referral", "refMarkup", "metaPixelId", "gaId", "googleVerification"]],
+  ["acces", ["maintenance", "access", "pickupZones"]],
+  ["pages", ["apropos"]],
+];
+const SETTING_KEYS = SUB_KEYS.flatMap(([, keys]) => keys);
+const onOff = (v) => (v ? "ON" : "off");
+
+// Une ligne de résumé par sous-page : on voit l'état sans ouvrir.
+function subSummary(id, s) {
+  if (!s) return "";
+  switch (id) {
+    case "visuel": return `${s.color ? "Couleur perso" : "Couleur or"} · ${s.fontHeading || s.fontBody ? "polices perso" : "polices par défaut"}`;
+    case "accueil": {
+      const sec = s.sections || {};
+      const keys = Object.keys(sec);
+      const on = keys.filter((k) => sec[k] !== false).length;
+      return `${s.hero?.title ? "Bandeau perso" : "Bandeau par défaut"}${keys.length ? ` · ${on}/${keys.length} sections` : ""}`;
+    }
+    case "popups": return `Annonce ${onOff(s.announce?.enabled)} · Soldes ${onOff(s.salesBanner?.enabled)} · Délai ${onOff(s.vacation?.enabled)} · Bienvenue ${onOff(s.welcome?.enabled)}`;
+    case "marketing": return `Parrainage ${onOff(s.referral?.enabled)} · Prix conseillé +${Number(s.refMarkup) || 0} % · ${s.gaId ? "Analytics ✓" : "Analytics —"}`;
+    case "acces": return s.maintenance?.enabled ? "🛠️ En maintenance" : s.access?.locked ? "🔒 Privé (code)" : "🟢 En ligne (public)";
+    case "pages": return s.apropos ? "À propos : texte perso" : "À propos : texte par défaut";
+    default: return "";
+  }
+}
 
 export default function AppearanceAdmin({ adminKey }) {
   const [s, setS] = useState(null);
+  const [saved, setSaved] = useState(null); // dernier état enregistré (pour savoir ce qui a changé)
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [sub, setSub] = useState("visuel");
 
   useEffect(() => {
@@ -39,6 +71,7 @@ export default function AppearanceAdmin({ adminKey }) {
           const data = (await res.json()).settings;
           data.categories = [0, 1, 2].map((i) => data.categories?.[i] || { label: "", sub: "", image: "" });
           setS(data);
+          setSaved(JSON.parse(JSON.stringify(data)));
         }
       } finally {
         setLoading(false);
@@ -48,17 +81,52 @@ export default function AppearanceAdmin({ adminKey }) {
 
   async function save(patch, label) {
     setMsg("");
-    const res = await fetch("/api/admin/settings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-      body: JSON.stringify(patch),
-    });
-    if (res.ok) {
-      await res.json();
-      setMsg((label || "Enregistré") + " ✓ (visible sur le site dans 1-2 min)");
-    } else {
-      setMsg("Échec de l'enregistrement.");
+    setSaving(true);
+    let ok = false;
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify(patch),
+      });
+      ok = res.ok;
+      if (res.ok) {
+        await res.json();
+        setMsg((label || "Enregistré") + " ✓ (visible sur le site dans 1-2 min)");
+        // Ce qui vient d'être enregistré n'est plus « modifié ».
+        setSaved((sv) => ({ ...(sv || {}), ...JSON.parse(JSON.stringify(patch)) }));
+      } else {
+        setMsg("Échec de l'enregistrement.");
+      }
+    } catch {
+      setMsg("Échec de l'enregistrement (réseau).");
+    } finally {
+      setSaving(false);
     }
+    return ok;
+  }
+
+  // Comparaison souple : 5 et "5" = pareil ; objets comparés par contenu.
+  const same = (a, b) => {
+    const isObj = (x) => x && typeof x === "object";
+    if (isObj(a) || isObj(b)) return JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+    return String(a ?? "") === String(b ?? "");
+  };
+  const dirtyKeys = s && saved ? SETTING_KEYS.filter((k) => !same(s[k], saved[k])) : [];
+  const dirtySubs = new Set(SUB_KEYS.flatMap(([id, keys]) => (keys.some((k) => dirtyKeys.includes(k)) ? [id] : [])));
+
+  // Enregistre TOUT ce qui a changé, en une fois.
+  async function saveAll() {
+    if (!dirtyKeys.length) return;
+    const patch = {};
+    for (const k of dirtyKeys) patch[k] = k === "refMarkup" ? (Number(s.refMarkup) || 0) : (s[k] ?? "");
+    await save(patch, `${dirtyKeys.length} réglage${dirtyKeys.length > 1 ? "s" : ""} enregistré${dirtyKeys.length > 1 ? "s" : ""}`);
+  }
+  function discardAll() {
+    if (!saved) return;
+    if (!confirm("Annuler les modifications non enregistrées ?")) return;
+    setS(JSON.parse(JSON.stringify(saved)));
+    setMsg("");
   }
 
   if (loading) return <p style={{ color: "var(--ink-soft)" }}>Chargement…</p>;
@@ -71,20 +139,21 @@ export default function AppearanceAdmin({ adminKey }) {
   const setSection = (k, v) => setS({ ...s, sections: { ...s.sections, [k]: v } });
 
   return (
-    <>
+    <div className="ap-layout">
+      {/* Colonne de gauche : les thèmes, avec un résumé de l'état de chacun */}
+      <nav className="ap-nav" aria-label="Sections de l'apparence">
+        {SUBS.map(([id, label]) => (
+          <button key={id} type="button" className={`ap-nav-item${sub === id ? " on" : ""}`} onClick={() => { setSub(id); setMsg(""); }}>
+            <span className="ap-nav-label">{label}{dirtySubs.has(id) ? <i className="ap-dot" title="Modifications non enregistrées" /> : null}</span>
+            <span className="ap-nav-sum">{subSummary(id, s)}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="ap-content">
       <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
         Personnalise l'apparence de ton site, section par section. Laisse un champ vide pour garder la valeur par défaut.
       </p>
-
-      {/* Sous-menu : chaque thème dans sa propre page */}
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 14 }}>
-        {SUBS.map(([id, label]) => (
-          <button key={id} onClick={() => { setSub(id); setMsg(""); }}
-            style={{ padding: "6px 13px", fontSize: "0.85rem", borderRadius: 20, border: "1px solid var(--line)", background: sub === id ? "var(--gold-dark)" : "#fff", color: sub === id ? "#fff" : "var(--ink)", fontWeight: 600, cursor: "pointer" }}>
-            {label}
-          </button>
-        ))}
-      </div>
 
       {msg && <div className="notice">{msg}</div>}
 
@@ -425,6 +494,20 @@ export default function AppearanceAdmin({ adminKey }) {
           <button className="btn btn-gold" onClick={() => save({ apropos: s.apropos || "" }, "Page À propos enregistrée")}>Enregistrer la page À propos</button>
         </div>
       )}
-    </>
+
+      {/* Barre collée en bas : apparaît dès qu'un réglage a changé, enregistre tout d'un coup */}
+      <div className={`ap-savebar${dirtyKeys.length ? " show" : ""}`} aria-live="polite">
+        <span className="ap-savebar-txt">
+          {dirtyKeys.length
+            ? <><b>{dirtyKeys.length} réglage{dirtyKeys.length > 1 ? "s" : ""} modifié{dirtyKeys.length > 1 ? "s" : ""}</b> — non enregistré{dirtyKeys.length > 1 ? "s" : ""}</>
+            : "Tout est enregistré ✓"}
+        </span>
+        <span className="ap-savebar-btns">
+          <button type="button" className="btn btn-outline" onClick={discardAll} disabled={!dirtyKeys.length || saving}>Annuler</button>
+          <button type="button" className="btn btn-gold" onClick={saveAll} disabled={!dirtyKeys.length || saving}>{saving ? "Enregistrement…" : "Enregistrer tout"}</button>
+        </span>
+      </div>
+      </div>
+    </div>
   );
 }

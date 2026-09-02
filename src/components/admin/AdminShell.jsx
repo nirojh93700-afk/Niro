@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import AdminToast from "@/components/admin/AdminToast";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -155,6 +156,7 @@ export default function AdminShell({ children }) {
         </header>
         <main className="ash-content">{children}</main>
       </div>
+      <AdminToast />
     </div>
   );
 }

@@ -38,6 +38,7 @@ export default function GestionPage() {
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);
   const [editable, setEditable] = useState([]);
+  const [openOrders, setOpenOrders] = useState(() => new Set()); // fiches commandes dépliées (onglet Commandes)
   const [config, setConfig] = useState(null);
   const [firebase, setFirebase] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -599,6 +600,14 @@ export default function GestionPage() {
     return ids;
   })();
 
+  const toggleOrder = (id) => setOpenOrders((prev) => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  const libelleStatut = (o) => ({ livree: "✓✓ Livrée", remise_main_propre: "🤝 Remise en main propre", expediee: "✓ Expédiée", en_gravure: "✏️ En fabrication", annulee: "✕ Annulée", remboursee: "↩ Remboursée" })[o.status] || "● À préparer";
+  const resumeArticles = (o) => {
+    const its = o.items || [];
+    if (!its.length) return "";
+    const first = `${its[0].quantity}× ${its[0].name}`;
+    return its.length > 1 ? `${first} + ${its.length - 1} autre${its.length > 2 ? "s" : ""}` : first;
+  };
   const filteredOrders = orders.filter((o) => {
     const st = o.status || "a_preparer";
     if (orderFilter === "a_preparer" && !(st === "a_preparer" || st === "en_gravure")) return false;
@@ -611,6 +620,8 @@ export default function GestionPage() {
     }
     return true;
   });
+  // Fiche dépliée si on a cliqué dessus, ou si la recherche vise 1-2 commandes (lien depuis la file / le tableau de bord).
+  const orderOpen = (o) => openOrders.has(o.id) || (orderSearch.trim().length > 0 && filteredOrders.length <= 2);
 
   // Clientes (regroupées par e-mail) — hors remboursées
   const clientsMap = {};
@@ -991,22 +1002,17 @@ export default function GestionPage() {
               </>
             )}
 
-            {filteredOrders.map((o) => (
-              <div key={o.id} className="admin-block">
-                <div className="admin-row" style={{ gridTemplateColumns: "1fr auto", alignItems: "center" }}>
-                  <h3 style={{ margin: 0 }}>
-                    #{o.ref || o.id?.slice(-6)}{" "}
-                    <span className="admin-cat">{fmtDate(o.createdAt)}</span>
-                  </h3>
-                  <span style={{ textAlign: "right" }}>
-                    <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{formatEuro(o.total)}</span>
-                    {o.shippingPrice != null && (
-                      <span style={{ display: "block", fontSize: "0.72rem", color: "var(--ink-soft)", fontWeight: 400 }}>
-                        dont livraison {formatEuro(o.shippingPrice)}
-                      </span>
-                    )}
-                  </span>
-                </div>
+            {filteredOrders.map((o) => { const isOpen = orderOpen(o); return (
+              <div key={o.id} className={`admin-block co-card${isOpen ? " open" : ""}${o.test ? " test" : ""}`}>
+                {/* Ligne compacte : on voit l'essentiel, on clique pour ouvrir la fiche complète */}
+                <button type="button" className="co-head" onClick={() => toggleOrder(o.id)} aria-expanded={isOpen}>
+                  <span className="co-ref">#{o.ref || o.id?.slice(-6)}<small>{fmtDate(o.createdAt)}</small></span>
+                  <span className="co-who"><strong>{o.customerName || "—"}</strong><small>{resumeArticles(o)}</small></span>
+                  <span className={`co-status s-${o.status || "a_preparer"}`}>{libelleStatut(o)}</span>
+                  <span className="co-total">{formatEuro(o.total)}{o.shippingPrice != null ? <small>dont livraison {formatEuro(o.shippingPrice)}</small> : null}</span>
+                  <span className="co-chev" aria-hidden>{isOpen ? "▾" : "▸"}</span>
+                </button>
+                {isOpen && (<div className="co-body">
                 {dupIds.has(o.id) && (
                   <div style={{ margin: "6px 0 0", padding: "7px 10px", background: "#fdecea", border: "1px solid #f1b0a8", borderRadius: 8, color: "#b3261e", fontSize: "0.82rem", fontWeight: 600 }}>
                     ⚠️ Possible doublon — même cliente et même(s) article(s) qu'une autre commande récente. Vérifie avant de fabriquer (ne fabrique qu'une fois si c'est le même paiement).
@@ -1329,8 +1335,9 @@ export default function GestionPage() {
                     </div>
                   </>
                 )}
+                </div>)}
               </div>
-            ))}
+            ); })}
           </>
         )}
 
