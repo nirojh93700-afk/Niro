@@ -54,6 +54,16 @@
   (`batAtelierMessage(..., { keepStatus:true })`). La page `/repondre` affiche « Cliente de la commande #… ».
 - ⚠️ Premier passage réel (02/09 12:29) : 8 brouillons inutiles + 8 alertes envoyées au gérant avant le
   renforcement du filtre — tous classés « sans réponse » à la main. Ne se reproduit plus.
+- **DOSSIER DE COMMUNICATION PAR CLIENTE (02/09, demande : « chaque fois qu'un client me répond, il
+  doit être placé dans leur dossier dédié, je ne cherche plus dans le mail »)** : section `comms`
+  (clé = e-mail) via `logComm/getCommsFor/getCommsMeta` dans `stock.js`. TOUT y est rangé, avec ou
+  sans commande : e-mails reçus (inbox sync), e-mails **envoyés à la main depuis Gmail**
+  (`gmailListSentIds` + `toEmail`, importés aussi dans le fil de la commande via
+  `batImportOutgoing`), réponses validées (`/api/reply`), messages depuis la commande (`/api/admin/bat`),
+  « Écrire à ce client » (`send-client-email`), formulaire de contact. API `GET /api/admin/comms?email=`
+  fusionne le journal + les fils de toutes ses commandes ; sans e-mail → `meta` (compteur par cliente).
+  **CRM** : pastille « 💬 N » sur chaque cliente + section « 💬 Communications » dans son dossier
+  (chargée à l'ouverture, CSS `.cm-*`). Sur la commande, le bouton s'appelle « Communications & aperçu ».
 - **Achats & factures** `/gestion/achats` (`src/app/gestion/achats/page.jsx`, API
   `/api/admin/purchases`) : PDF / photo / CSV / texte → Claude (document/image + outil
   `proposition_achat`, catalogue des `stockId` fourni) → tableau corrigeable (produit, qté, prix) →
