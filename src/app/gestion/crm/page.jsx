@@ -9,6 +9,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "");
@@ -327,10 +328,7 @@ export default function CrmPage() {
 
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>CRM</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour à la gestion</Link>
-      </div>
+      <PageHead eyebrow="Clients" title="Clients (CRM)" subtitle="Toutes tes clientes, leurs commandes, leurs notes et leurs segments." />
       <p style={{ color: "var(--ink-soft)", marginTop: 4 }}>Tous tes clients et tes échanges, au même endroit — bien rangés.</p>
       {loading && <p>Chargement…</p>}
       {error && <div className="notice">{error}</div>}

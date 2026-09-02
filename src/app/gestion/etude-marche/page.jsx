@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const COLOR = (pos) => {
   const p = (pos || "").toLowerCase();
@@ -104,10 +105,7 @@ export default function EtudeMarchePage() {
 
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>📊 Étude de marché</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour à la gestion</Link>
-      </div>
+      <PageHead eyebrow="Marketing" title="Étude de marché" subtitle="Prix pratiqués par les concurrents et tendances, pour placer tes tarifs." />
       <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem", maxWidth: 720 }}>
         L'agent compare tous tes produits aux concurrents français (recherche web) et te dit si tu es bien positionnée en prix.
         L'analyse prend ~1 minute. <strong>Vert</strong> = tu peux monter le prix, <strong>rouge</strong> = tu es au-dessus du marché.

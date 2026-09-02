@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
 // CENTRE DE COMMANDE — ÉQUIPE D'AGENTS (page dédiée, professionnelle)
@@ -194,11 +195,7 @@ export default function AgentsCenterPage() {
       <div className="container" style={{ maxWidth: 980 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 10 }}>
           <div>
-            <span className="eyebrow">Espace gestion</span>
-            <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold)", margin: "4px 0 0" }}>Mon équipe d'agents</h1>
-            <p style={{ color: "var(--ink-soft)", margin: "6px 0 0" }}>
-              Tes assistants IA, chacun spécialisé. Le chef coordonne tout. Les cas simples peuvent être traités en autonomie, les cas spéciaux te sont toujours remontés.
-            </p>
+            <PageHead eyebrow="Marketing" title="Équipe d'agents" subtitle="Tes assistants IA, chacun spécialisé. Les réglages sont ici ; pour leur parler, passe par l'Assistant." />
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <button className="btn btn-outline" onClick={() => setShowRecap(true)}>Comment ça marche ?</button>

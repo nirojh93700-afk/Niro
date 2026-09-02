@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
 // Gestion → Santé du catalogue
@@ -72,7 +73,7 @@ export default function SanteCatalogue() {
   return (
     <div style={{ maxWidth: 820, margin: "0 auto", padding: "16px 16px 60px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold)", margin: "8px 0" }}>🛡️ Santé du catalogue</h1>
+        <PageHead eyebrow="Catalogue" title="Santé du catalogue" subtitle="Produits mal configurés : sans emballage, sans photo, sans prix, sans fiche détaillée." />
         <button className="btn btn-outline" onClick={() => load(key)} disabled={loading}>
           {loading ? "Vérification…" : "Revérifier"}
         </button>

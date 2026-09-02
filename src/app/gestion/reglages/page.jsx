@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 export const metadata = { title: "Réglages produits — Niv Création" };
 
@@ -22,11 +23,7 @@ const TOOLS = [
 export default function ReglagesHub() {
   return (
     <main className="container" style={{ maxWidth: 720, margin: "24px auto", padding: 16 }}>
-      <div style={{ marginBottom: 18 }}>
-        <span style={{ fontFamily: "Georgia, serif", textTransform: "uppercase", letterSpacing: ".2em", fontSize: ".72rem", color: "var(--gold-dark, #a98935)" }}>Gestion</span>
-        <h1 style={{ fontFamily: "Georgia, serif", fontWeight: 600, margin: "4px 0 6px" }}>Réglages produits</h1>
-        <p style={{ color: "var(--ink-soft)", margin: 0 }}>Les outils pour placer les gravures et les photos sur vos produits. Choisissez un outil.</p>
-      </div>
+      <PageHead eyebrow="Catalogue" title="Réglages produits" subtitle="Les outils pour placer les gravures et les photos sur vos produits. Choisissez un outil." />
 
       <div style={{ display: "grid", gap: 14 }}>
         {TOOLS.map((t) => (
@@ -41,9 +38,6 @@ export default function ReglagesHub() {
         ))}
       </div>
 
-      <p style={{ marginTop: 22 }}>
-        <Link href="/gestion" style={{ color: "var(--ink-soft)", textDecoration: "none" }}>← Retour à la gestion</Link>
-      </p>
     </main>
   );
 }

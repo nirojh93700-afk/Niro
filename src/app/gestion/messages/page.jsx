@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "@/lib/messageTemplatesSeed";
+import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
 // Gestion → Messages clients (programmés + règles automatiques)
@@ -139,8 +140,12 @@ export default function MessagesAdmin() {
 
   return (
     <div style={{ maxWidth: 780, margin: "0 auto", padding: "8px 14px 60px" }}>
-      <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold-dark)" }}>Messages clients</h1>
-      <p style={{ color: "var(--ink-soft)", marginTop: -6 }}>Écris des modèles, programme un envoi à l&apos;heure que tu veux, ou crée des règles automatiques. Les envois partent par ta boîte Gmail (copie cachée à toi).</p>
+      <PageHead eyebrow="Clients" title="Messages clients" subtitle="Des modèles, des envois programmés à l'heure que tu veux, des règles automatiques. Tout part par ta boîte Gmail, avec copie pour toi."
+        kpis={[
+          { label: "Modèles", value: templates.length },
+          { label: "Envois programmés", value: pending.length, tone: pending.length ? "warn" : "" },
+          { label: "Règles automatiques", value: rules.length },
+        ]} />
       {msg && <p style={{ background: "#f6efdd", border: "1px solid #e7d3a1", borderRadius: 8, padding: "8px 12px", color: "#7a5c17" }}>{msg}</p>}
 
       {/* 1. ENVOYER / PROGRAMMER UN MESSAGE */}

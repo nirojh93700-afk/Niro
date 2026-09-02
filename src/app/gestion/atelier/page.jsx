@@ -15,6 +15,7 @@ import Link from "next/link";
 import { getProductBySlug, CATEGORIES, getCategoryLabel } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
 import { TableGravure } from "@/lib/engravingSheet";
+import PageHead from "@/components/admin/PageHead";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -182,10 +183,8 @@ export default function AtelierPage() {
 
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>🛠️ Atelier — à graver</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour à la gestion</Link>
-      </div>
+      <PageHead eyebrow="Commandes" title="Atelier — fichiers à graver" subtitle="Pour chaque commande : le visuel exact, les réglages, et le fichier prêt à graver (PNG, SVG, PDF à l'échelle)."
+        actions={<Link href="/gestion/commandes" className="btn btn-outline">🗂️ File de production</Link>} />
       <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>
         {orders.length} commande{orders.length > 1 ? "s" : ""} à graver — tous les produits (bijoux, cristaux, verres…). Tableau « quel texte sur quelle face », visuel du client, et fichier prêt à graver pour les verres (PNG / SVG / PDF à l'échelle réelle).
       </p>

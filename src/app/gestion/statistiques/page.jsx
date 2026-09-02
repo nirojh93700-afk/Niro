@@ -8,6 +8,7 @@
 // =============================================================================
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 const fmtDay = (iso) => { const [, m, d] = (iso || "").split("-"); return d && m ? `${d}/${m}` : iso; };
@@ -95,10 +96,13 @@ export default function StatsPage() {
 
   return (
     <div className="container" style={{ padding: "28px 16px 60px" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontSize: "1.5rem", margin: 0 }}>📈 Visiteurs & trafic</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Gestion</Link>
-      </div>
+      <PageHead eyebrow="Finances" title="Visiteurs & trafic" subtitle={`Sur les ${days} derniers jours : visites, produits vus, paniers, achats.`}
+        kpis={[
+          { label: "Visites", value: t.sessions },
+          { label: "Achats", value: t.purchase, tone: t.purchase ? "good" : "" },
+          { label: "Taux de conversion", value: conv.toFixed(1).replace(".", ",") + " %" },
+          { label: "Paniers abandonnés", value: abandoned, tone: abandoned ? "warn" : "" },
+        ]} />
 
       <div style={{ display: "flex", gap: 8, margin: "14px 0", flexWrap: "wrap" }}>
         {[7, 30, 90].map((d) => (

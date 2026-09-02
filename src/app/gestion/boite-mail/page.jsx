@@ -7,6 +7,7 @@
 // =============================================================================
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const fmtDate = (d) => { try { return new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch { return d; } };
 
@@ -125,10 +126,7 @@ export default function BoiteMailPage() {
 
   return (
     <div className="container" style={{ padding: "24px 16px 60px", maxWidth: 760 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-        <h1 style={{ fontSize: "1.4rem", margin: 0 }}>✉️ Boîte mail (agent)</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Gestion</Link>
-      </div>
+      <PageHead eyebrow="Clients" title="Boîte mail" subtitle="L'agent lit tes e-mails et prépare un brouillon ; rien ne part sans ton clic." />
       {error ? <p style={{ color: "#b3261e" }}>{error}</p> : null}
       {msg ? <p style={{ color: "#256b34" }}>{msg}</p> : null}
 

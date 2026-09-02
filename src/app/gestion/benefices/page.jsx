@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
 // Gestion → Bénéfices (lecture seule)
@@ -155,8 +156,12 @@ export default function BeneficesPage() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "8px 14px 60px" }}>
-      <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold-dark)", marginBottom: 2 }}>Bénéfices</h1>
-      <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>Ce que tu gagnes réellement : ventes encaissées moins le coût d&apos;achat des produits vendus.</p>
+      <PageHead eyebrow="Finances" title="Bénéfices" subtitle="Ce que tu gagnes réellement : ventes encaissées moins le coût d'achat des produits vendus, moins tes dépenses."
+        kpis={[
+          { label: `Bénéfice net — ${periodLabel}`, value: euro(netProfit), tone: netProfit >= 0 ? "good" : "bad" },
+          { label: "Bénéfice brut (avant dépenses)", value: euro(p.profit || 0) },
+          { label: "Dépenses de la période", value: euro(periodExpenses), tone: periodExpenses > 0 ? "warn" : "" },
+        ]} />
 
       {/* Sélecteur période */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>

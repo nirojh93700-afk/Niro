@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { products, getCategoryLabel } from "@/lib/products";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "@/lib/packagingSeed";
+import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
 // Gestion → Packaging & emballages
@@ -136,7 +137,7 @@ export default function EmballagesAdmin() {
 
   return (
     <main className="container" style={{ maxWidth: 940, margin: "20px auto", padding: 16 }}>
-      <h1 style={{ fontFamily: "Georgia, serif", marginBottom: 2 }}>Packaging &amp; emballages</h1>
+      <PageHead eyebrow="Catalogue" title="Emballages" />
       <p style={{ color: "var(--ink-soft)", fontSize: ".92rem", marginTop: 0 }}>
         Créez vos emballages (photo + prix d'achat + prix de vente), puis cochez ceux qui vont avec chaque produit. Ils s'afficheront tout seuls sur la fiche.
       </p>

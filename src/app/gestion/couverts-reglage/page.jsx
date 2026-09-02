@@ -7,6 +7,7 @@
 // =============================================================================
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const SAMPLE = "/animaux/savane/lion.png";
 const HANDLES = [
@@ -104,10 +105,7 @@ export default function CouvertsReglagePage() {
 
   return (
     <div className="container" style={{ padding: "24px 16px 60px", maxWidth: 560 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-        <h1 style={{ fontSize: "1.4rem", margin: 0 }}>Réglage des couverts</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Gestion</Link>
-      </div>
+      <PageHead eyebrow="Catalogue · réglages produits" title="Réglage des couverts" subtitle="Position et taille du prénom et du motif gravés sur chaque couvert enfant." />
       <p style={{ color: "var(--ink-soft)", fontSize: "0.88rem" }}>Choisis un couvert, glisse le <strong>« Prénom »</strong> et l'<strong>animal</strong>, ajuste la taille. Tu peux régler <strong>chaque couvert</strong>, ou cliquer <strong>« Appliquer à tous »</strong>.</p>
 
       {/* Choix du couvert à régler */}

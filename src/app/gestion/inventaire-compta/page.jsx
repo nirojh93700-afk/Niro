@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useState, Fragment } from "react";
 import Link from "next/link";
 import { getCategoryLabel } from "@/lib/products";
+import PageHead from "@/components/admin/PageHead";
 
 // Ordre d'affichage des catégories (regroupées, pas mélangées).
 const CAT_ORDER = ["bijoux", "verres", "mariage", "deco", "cadeaux"];
@@ -195,10 +196,13 @@ export default function InventaireComptaPage() {
 
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}>
-        <h1 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", margin: 0 }}>📦 Inventaire & Compta</h1>
-        <Link href="/gestion" style={{ color: "var(--gold-dark)" }}>← Retour à la gestion</Link>
-      </div>
+      <PageHead eyebrow="Finances" title="Inventaire & compta" subtitle="Ventes encaissées, panier moyen, export comptable et ajustement des stocks."
+        kpis={[
+          { label: "Ce mois", value: sums.month.toFixed(2).replace(".", ",") + " €", sub: `${sums.monthN} commande${sums.monthN > 1 ? "s" : ""}` },
+          { label: "Cette année", value: sums.year.toFixed(2).replace(".", ",") + " €", sub: `${sums.yearN} commande${sums.yearN > 1 ? "s" : ""}` },
+          { label: "Panier moyen", value: avg.toFixed(2).replace(".", ",") + " €" },
+          { label: "Commandes valides", value: valid.length },
+        ]} />
       {loading && <p>Chargement…</p>}
       {error && <div className="notice">{error}</div>}
 

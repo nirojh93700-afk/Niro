@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/products";
+import PageHead from "@/components/admin/PageHead";
 
 // Réglage des zones de gravure des cristaux (comme les couverts) :
 // on place la photo du client sur la VRAIE photo du cristal, on enregistre,
@@ -162,7 +163,7 @@ export default function CristalReglage() {
 
   return (
     <main className="container" style={{ maxWidth: 720, margin: "20px auto", padding: 16 }}>
-      <h1 style={{ fontFamily: "Georgia, serif" }}>Réglage aperçu — cristaux, verres &amp; carafe</h1>
+      <PageHead eyebrow="Catalogue · réglages produits" title="Réglage de l'aperçu — cristaux, verres & carafe" />
       <p style={{ color: "var(--ink-soft)", fontSize: ".92rem" }}>Choisissez un produit, puis glissez le cadre sur la face à graver et redimensionnez-le avec la poignée dorée. Réglez l'<b>inclinaison</b> et la <b>perspective</b> pour suivre l'angle du verre/de la carafe. Pour les verres, cliquez un <b>logo témoin</b> pour viser juste. Enregistrez : la fiche posera le motif choisi exactement dans ce cadre.</p>
 
       {/* Sélecteur de produit */}

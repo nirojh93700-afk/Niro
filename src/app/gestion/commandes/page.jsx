@@ -13,6 +13,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -136,16 +137,8 @@ export default function FileProductionPage() {
 
   return (
     <div className="container file" style={{ padding: "28px 16px 60px" }}>
-      <div className="file-head">
-        <div>
-          <h1>🗂️ File de production</h1>
-          <p>Dans l&apos;ordre de traitement : les urgentes d&apos;abord, puis les plus anciennes. Une carte par commande, rien ne se mélange.</p>
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <Link href="/gestion/atelier" className="btn btn-outline">🛠️ Atelier (fichiers à graver)</Link>
-          <Link href="/gestion#commandes" className="btn btn-outline">← Gestion</Link>
-        </div>
-      </div>
+      <PageHead eyebrow="Commandes" title="File de production" subtitle="Dans l'ordre de traitement : les urgentes d'abord, puis les plus anciennes. Une carte par commande, rien ne se mélange."
+        actions={<><Link href="/gestion/atelier" className="btn btn-outline">🛠️ Atelier</Link><Link href="/gestion#commandes" className="btn btn-outline">Fiches complètes</Link></>} />
 
       <div className="file-kpis">
         <div className="file-kpi"><small>À préparer</small><b>{actives.filter((o) => !o.status || o.status === "a_preparer").length}</b></div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
 // Gestion → Fidélité & cashback
@@ -82,7 +83,11 @@ export default function FideliteAdmin() {
 
   return (
     <div style={{ maxWidth: 820, margin: "0 auto", padding: "8px 14px 60px" }}>
-      <h1 style={{ fontFamily: "Georgia, serif", color: "var(--gold-dark)" }}>🎁 Fidélité &amp; cashback</h1>
+      <PageHead eyebrow="Clients" title="Fidélité & cashback"
+        kpis={[
+          { label: "Ambassadrices", value: ambassadors.length },
+          { label: "Commissions à verser", value: totalDue.toFixed(2).replace(".", ",") + " €", tone: totalDue > 0 ? "warn" : "" },
+        ]} />
       <p style={{ color: "var(--ink-soft)", marginTop: -6 }}>
         À chaque commande payée, la cliente gagne un pourcentage en <strong>cagnotte</strong>, qu&apos;elle utilise ensuite au panier (jusqu&apos;à 50 %). Tout est <strong>automatique</strong> : crédit après paiement, rappels avant expiration (12 mois), et affichage dans son espace « Mon compte ».
       </p>

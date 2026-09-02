@@ -6,7 +6,7 @@
 // (lot de 15 à 35,99 €). Le bois ne coûte presque rien : le vrai coût, c'est le
 // TEMPS (découpe + gravure + finition). Les « prix conseillés » sont indicatifs.
 // =============================================================================
-import Link from "next/link";
+import PageHead from "@/components/admin/PageHead";
 
 const SHEET_PRICE = 2.4; // € par plaque A3 (42 × 30 cm)
 
@@ -61,12 +61,11 @@ export default function TaillesConseilleesPage() {
   return (
     <section className="section">
       <div className="container" style={{ maxWidth: 920 }}>
-        <Link href="/gestion" className="link-underline" style={{ fontSize: "0.9rem" }}>← Retour à la gestion</Link>
-        <h2 style={{ fontFamily: "Georgia, serif", color: "var(--gold-dark)", marginTop: 10 }}>📐 Tailles &amp; coûts conseillés</h2>
-        <p style={{ color: "var(--ink-soft)" }}>
-          Guide de référence pour tes produits en bois. <strong>Base :</strong> 1 plaque A3 (42 × 30 cm,
-          tilleul 3 mm) = <strong>2,40 €</strong> (lot de 15 à 35,99 €).
-        </p>
+        <PageHead
+          eyebrow="Catalogue"
+          title="Tailles & coûts conseillés"
+          subtitle="Guide de référence pour tes produits en bois. Base : 1 plaque A3 (42 × 30 cm, tilleul 3 mm) = 2,40 € (lot de 15 à 35,99 €)."
+        />
 
         <div style={{ background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 12, padding: "14px 16px", margin: "12px 0 22px" }}>
           <strong style={{ color: "var(--gold-dark)" }}>À retenir :</strong> le bois ne coûte <strong>presque rien</strong>
