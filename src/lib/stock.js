@@ -263,7 +263,7 @@ function makeReplyToken() {
   ).slice(0, 40);
 }
 
-export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "" }) {
+export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "", orderId = "", orderRef = "", gmailId = "", gmailThreadId = "", messageId = "", references = "", source = "" }) {
   const e = normEmail(email);
   if (!validEmail(e) || !String(message || "").trim()) return null;
   const data = await getCatalogRaw(true);
@@ -279,6 +279,11 @@ export async function addPendingReply({ name, email, phone = "", subject = "", m
     subject: String(subject || "").slice(0, 200), message: String(message || "").slice(0, 4000),
     draft: String(draft || "").slice(0, 6000), draftSubject: String(draftSubject || "").slice(0, 200),
     reason: String(reason || "").slice(0, 300),
+    // Lien avec la commande + le fil Gmail (réponse dans la même conversation).
+    orderId: String(orderId || "").slice(0, 80), orderRef: String(orderRef || "").slice(0, 40),
+    gmailId: String(gmailId || "").slice(0, 80), gmailThreadId: String(gmailThreadId || "").slice(0, 80),
+    messageId: String(messageId || "").slice(0, 300), references: String(references || "").slice(0, 2000),
+    source: String(source || "contact").slice(0, 20),
     at: now, exp: now + REPLY_TTL_MS, status: "pending",
   };
   data.pendingReplies[id] = item;
@@ -681,7 +686,9 @@ export async function batAtelierMessage(orderId, info = {}) {
   if (info.customerName) th.customerName = info.customerName;
   if (info.ref) th.ref = info.ref;
   th.messages.push({ from: "atelier", text: (info.text || "").toString(), image: (info.image || "").toString(), at: Number(info.at) || Date.now() });
-  th.status = "en_attente";
+  // Un simple message de suivi (réponse validée par le gérant) ne remet pas le
+  // fil « en attente de validation » : seul un aperçu/BAT le fait.
+  if (!info.keepStatus) th.status = "en_attente";
   th.clientUnread = false; // on répond → plus de « non lu »
   th.updatedAt = Date.now();
   data.bat[id] = th;
@@ -718,6 +725,45 @@ export async function batImportEmails(orderId, msgs = []) {
     await persistCatalog(data, ["bat"]);
   }
   return added;
+}
+
+// Crée le fil de communication d'une commande s'il n'existe pas encore (sans
+// message) : sert quand une cliente écrit AVANT qu'on lui ait envoyé quoi que ce
+// soit — son e-mail doit quand même être tracé dans sa commande.
+export async function ensureCommThread(orderId, info = {}) {
+  const id = String(orderId || "").trim();
+  if (!id) return null;
+  const data = await getCatalogRaw(true);
+  data.bat = data.bat || {};
+  if (data.bat[id]) return data.bat[id];
+  const th = { token: newBatToken(), status: "discussion", ref: info.ref || "", messages: [], importedGmailIds: [], updatedAt: Date.now() };
+  if (info.customerEmail) th.customerEmail = info.customerEmail;
+  if (info.customerName) th.customerName = info.customerName;
+  data.bat[id] = th;
+  await persistCatalog(data, ["bat"]);
+  return th;
+}
+
+// -----------------------------------------------------------------------------
+// BOÎTE MAIL SURVEILLÉE : mémoire des e-mails déjà traités par l'assistant
+// (section `inboxSeen`), pour ne jamais préparer deux fois la même réponse.
+// -----------------------------------------------------------------------------
+const INBOX_KEEP = 600;
+export async function getInboxState() {
+  const data = await getCatalogRaw(true);
+  const st = data.inboxSeen || {};
+  return { ids: st.ids || {}, lastRun: Number(st.lastRun) || 0, lastResult: st.lastResult || null };
+}
+export async function saveInboxState({ ids, lastRun, lastResult }) {
+  const data = await getCatalogRaw(true);
+  const cur = data.inboxSeen || {};
+  const merged = { ...(cur.ids || {}), ...(ids || {}) };
+  // On garde les plus récents seulement.
+  const keys = Object.keys(merged).sort((a, b) => (merged[b] || 0) - (merged[a] || 0)).slice(0, INBOX_KEEP);
+  const kept = {}; for (const k of keys) kept[k] = merged[k];
+  data.inboxSeen = { ids: kept, lastRun: Number(lastRun) || cur.lastRun || 0, lastResult: lastResult || cur.lastResult || null };
+  await persistCatalog(data, ["inboxSeen"]);
+  return data.inboxSeen;
 }
 
 // Métadonnées légères de tous les fils d'aperçu (pour la vérification globale
@@ -1538,6 +1584,9 @@ export async function getSettings() {
     pickupZones: (typeof s.pickupZones === "string" && s.pickupZones.trim())
       ? s.pickupZones
       : "95, 78, 92, 93, 75, 60",
+    // Jeton du planificateur « boîte mail surveillée » (/api/cron/inbox?token=…).
+    // Généré par Gestion → Équipe d'agents ; ne donne accès à AUCUNE donnée.
+    inboxToken: typeof s.inboxToken === "string" ? s.inboxToken : "",
     // Frais de livraison personnalisés (Gestion → Réglages → 🚚 Livraison).
     // Objet vide = tarifs par défaut du code (src/lib/shipping.js).
     shipping: (s.shipping && typeof s.shipping === "object") ? s.shipping : {},

@@ -197,12 +197,15 @@ function encodeHeader(s) {
 
 // Envoie un e-mail HTML (à l'image de la marque) via Gmail, à n'importe quelle
 // adresse. Contrairement à Resend, Gmail n'exige pas de domaine vérifié.
-export async function gmailSendHtml(token, { to, subject, html, bcc }) {
+export async function gmailSendHtml(token, { to, subject, html, bcc, threadId, inReplyTo, references }) {
   const lines = [
     `To: ${to}`,
     `Subject: ${encodeHeader(subject || "")}`,
   ];
   if (bcc && String(bcc).toLowerCase() !== String(to).toLowerCase()) lines.push(`Bcc: ${bcc}`);
+  // Réponse dans la MÊME conversation Gmail (la cliente voit un vrai fil).
+  if (inReplyTo) lines.push(`In-Reply-To: ${inReplyTo}`);
+  if (references || inReplyTo) lines.push(`References: ${references || inReplyTo}`);
   lines.push(
     "MIME-Version: 1.0",
     'Content-Type: text/html; charset="UTF-8"',
@@ -213,7 +216,7 @@ export async function gmailSendHtml(token, { to, subject, html, bcc }) {
   const res = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ raw: encoded }),
+    body: JSON.stringify({ raw: encoded, threadId: threadId || undefined }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error?.message || "Envoi Gmail impossible.");

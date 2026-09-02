@@ -61,6 +61,8 @@ export default function AgentsCenterPage() {
   const [widgetOn, setWidgetOn] = useState(true);     // bouton « Une question ? » sur le site
   const [savingSw, setSavingSw] = useState("");
   const [pending, setPending] = useState([]);         // réponses à valider
+  const [inbox, setInbox] = useState(null);           // boîte mail surveillée (dernier passage)
+  const [inboxBusy, setInboxBusy] = useState(false);
   const [recent, setRecent] = useState([]);
   const [showRecap, setShowRecap] = useState(false); // page récap "comment ça marche"
 
@@ -87,6 +89,8 @@ export default function AgentsCenterPage() {
       try {
         const pr = await fetch("/api/admin/pending-replies", { headers: { "x-admin-key": adminKey } });
         if (pr.ok) { const d = await pr.json(); setPending(d.pending || []); setRecent(d.recent || []); }
+        const ib = await fetch("/api/admin/inbox-sync", { headers: { "x-admin-key": adminKey } });
+        if (ib.ok) setInbox(await ib.json());
       } catch { /* ignore */ }
       return true;
     } catch {
@@ -232,6 +236,35 @@ export default function AgentsCenterPage() {
           >
             {savingSw === "emailDraft" ? "…" : draftMode ? "● Activé" : "Activer"}
           </button>
+        </div>
+
+        {/* Boîte mail surveillée : chaque e-mail client est rangé dans sa commande
+            et une réponse est préparée, à valider. */}
+        <div className="admin-block" style={{ marginTop: 14 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+            <div>
+              <strong>📥 Boîte mail surveillée</strong>
+              <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 2 }}>
+                {inbox?.lastRun ? `Dernier passage : ${new Date(inbox.lastRun).toLocaleString("fr-FR")}` : "Pas encore de passage."}
+                {inbox?.lastResult ? ` · ${inbox.lastResult.checked || 0} e-mail(s) lu(s), ${inbox.lastResult.imported || 0} rangé(s) dans une commande, ${(inbox.lastResult.drafted || []).length} réponse(s) préparée(s)` : ""}
+                {inbox?.lastResult?.errors?.length ? ` · ⚠️ ${inbox.lastResult.errors[0]}` : ""}
+              </div>
+            </div>
+            <button type="button" className="btn btn-outline" disabled={inboxBusy} onClick={async () => {
+              setInboxBusy(true);
+              try {
+                const key = sessionStorage.getItem("niv-admin-key") || "";
+                const r = await fetch("/api/admin/inbox-sync", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ force: true }) });
+                const d = await r.json().catch(() => ({}));
+                setInbox((cur) => ({ ...(cur || {}), lastRun: Date.now(), lastResult: d }));
+                const pr = await fetch("/api/admin/pending-replies", { headers: { "x-admin-key": key } });
+                if (pr.ok) { const pd = await pr.json(); setPending(pd.pending || []); setRecent(pd.recent || []); }
+              } finally { setInboxBusy(false); }
+            }}>{inboxBusy ? "Vérification…" : "Vérifier maintenant"}</button>
+          </div>
+          <p style={{ margin: "8px 0 0", fontSize: "0.8rem", color: "var(--ink-soft)" }}>
+            Se lance tout seul à chaque ouverture de la gestion (au plus toutes les 3 min) et par le planificateur. Chaque e-mail d&apos;une cliente est rangé dans le fil de sa commande, l&apos;agent prépare une réponse en connaissant la commande et vos échanges, et vous recevez une alerte « à valider ». Rien ne part sans votre clic.
+          </p>
         </div>
 
         {pending.length > 0 && (

@@ -1,4 +1,4 @@
-import { getPendingReplyByToken, resolvePendingReply, reopenPendingReply } from "@/lib/stock";
+import { getPendingReplyByToken, resolvePendingReply, reopenPendingReply, batAtelierMessage } from "@/lib/stock";
 import { emailLayout, escapeHtml } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 
@@ -14,6 +14,7 @@ function view(it) {
     subject: it.subject, message: it.message,
     draft: it.draft || "", draftSubject: it.draftSubject || "", reason: it.reason || "",
     at: it.at, status: it.status, finalText: it.finalText || "", resolvedAt: it.resolvedAt || 0,
+    orderId: it.orderId || "", orderRef: it.orderRef || "", source: it.source || "contact",
   };
 }
 
@@ -52,11 +53,16 @@ export async function POST(req, { params }) {
     heading: "Votre message — Niv Création",
     bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(text)}</div>`,
   });
-  const sent = await sendClientMail({ to: it.email, subject, html });
+  const thread = it.gmailThreadId ? { threadId: it.gmailThreadId, messageId: it.messageId || "", references: it.references || "" } : null;
+  const sent = await sendClientMail({ to: it.email, subject, html, thread });
   if (!sent?.ok) {
     // 3) Échec : on rouvre pour qu'il puisse réessayer, et on lui dit pourquoi.
     await reopenPendingReply(params.token);
     return Response.json({ error: sent?.error || "L'envoi a échoué. Réessayez." }, { status: 502 });
+  }
+  // 4) Traçabilité : la réponse envoyée est rangée dans le fil de la commande.
+  if (it.orderId) {
+    try { await batAtelierMessage(it.orderId, { text, ref: it.orderRef || "", customerEmail: it.email, customerName: it.name, keepStatus: true }); } catch { /* jamais bloquant */ }
   }
   return Response.json({ ok: true, via: sent.via || "", reply: view(claim.item) });
 }

@@ -36,7 +36,7 @@ export function boutonsAvis(items) {
   return `<p style="margin:14px 0 0;">${btns}</p>`;
 }
 
-export async function sendClientMail({ to, subject, html, bcc = BRAND.contact }) {
+export async function sendClientMail({ to, subject, html, bcc = BRAND.contact, thread = null }) {
   const dest = String(to || "").trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dest)) return { ok: false, error: "Adresse invalide." };
   // 1) Gmail
@@ -44,7 +44,7 @@ export async function sendClientMail({ to, subject, html, bcc = BRAND.contact })
     const creds = await getGmailCreds();
     if (creds?.refreshToken) {
       const token = await gmailAccessToken(creds);
-      await gmailSendHtml(token, { to: dest, subject, html, bcc });
+      await gmailSendHtml(token, { to: dest, subject, html, bcc, threadId: thread?.threadId, inReplyTo: thread?.messageId, references: thread?.references });
       return { ok: true, via: "gmail" };
     }
   } catch (e) { /* on tente Resend */ }

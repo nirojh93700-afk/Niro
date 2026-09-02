@@ -89,6 +89,9 @@ export default function AdminShell({ children }) {
     if (!key) return;
     const H = { headers: { "x-admin-key": key } };
     const j = (u) => fetch(u, H).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    // Boîte mail surveillée : l'assistant range les nouveaux e-mails clients dans
+    // leur commande et prépare une réponse (limité côté serveur à 1 fois / 3 min).
+    try { await fetch("/api/admin/inbox-sync", { method: "POST", ...H }); } catch { /* silencieux */ }
     const [o, u, p, r] = await Promise.all([j("/api/admin/orders"), j("/api/admin/bat?action=unread"), j("/api/admin/pending-replies"), j("/api/admin/reviews")]);
     setCounts({
       prep: (o?.orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length,

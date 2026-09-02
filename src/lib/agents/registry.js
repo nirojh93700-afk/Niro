@@ -447,9 +447,9 @@ export async function runAgent(agentId, history) {
 // (cas spécial). Renvoie { ok, reply, subject, needsValidation, reason }.
 // Ne lève jamais : en cas d'échec, renvoie { ok:false } et l'appelant continue.
 // =============================================================================
-export async function triageIncomingEmail({ name, email, subject, message }) {
+export async function triageIncomingEmail({ name, email, subject, message, context = "" }) {
   if (!process.env.ANTHROPIC_API_KEY) return { ok: false, reason: "Clé Claude absente." };
-  const prompt = `E-mail reçu d'une cliente via le formulaire de contact.
+  const prompt = `E-mail reçu d'une cliente${context ? " (boîte mail de la boutique)" : " via le formulaire de contact"}.
 Nom : ${name || "(non précisé)"}
 Adresse : ${email || "(non précisée)"}
 Sujet : ${subject || "(sans sujet)"}
@@ -457,6 +457,10 @@ Message :
 """
 ${message || ""}
 """
+${context ? `
+CONTEXTE (sa commande et nos échanges précédents — utilise-le pour répondre juste, sans jamais citer les notes internes) :
+${context}
+` : ""}
 Rédige la réponse et décide si tu peux répondre seul ou s'il faut la validation de la gérante.`;
   const res = await runAgent("email", [{ role: "user", content: prompt }]);
   const a = res?.action;
