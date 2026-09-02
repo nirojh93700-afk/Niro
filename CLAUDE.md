@@ -75,6 +75,7 @@
   (port réparti au prorata, `setProductOverride({cost})`), dépense ajoutée dans Bénéfices
   (`settings.expenses`, catégorie `achat`), historique section `purchases` (200). Rien n'est écrit
   avant « Valider ». Entrée NAV Catalogue → « Achats & factures ». Toast : `analyze` exclu.
+  **Export de l'historique** (Excel/CSV/PDF/JSON, une ligne par article) via `exportRows`.
 - **Export clients** : `src/lib/exportClients.js` (CSV `;` + BOM, **XLSX sans bibliothèque** (zip
   stocké + inlineStr), PDF via `jspdf` (tableau paginé, en-tête Niv Création), JSON) — barre
   « Sauvegarder / exporter » en haut de l'onglet Clients du CRM, exporte la liste **filtrée**.
