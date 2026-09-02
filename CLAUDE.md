@@ -1,3 +1,25 @@
+## 🧭 ASSISTANT « TOUT EN UN » — UN SEUL FIL DANS GESTION (02/09/2026)
+> Demande du gérant : « améliore les interfaces admin, plus simple pour communiquer avec les
+> agents ». **Gestion → 🧭 Assistant (tout en un)** = un seul fil de conversation, mémorisé.
+- **Aiguilleur** `src/lib/agents/hub.js` (`runHub`) : lit la demande en français et route vers
+  `catalogue` (assistant catalogue → propositions à confirmer), `email` (brouillon à relire/envoyer),
+  `avis` / `newsletter` / `marketing` / `rapport` / `technicien` (agents du registry), ou répond
+  directement. Il connaît les réponses clientes en attente (`listPendingReplies`).
+- **API** `/api/admin/hub` : GET historique · POST `{text}` (ajoute, fait travailler, mémorise) ·
+  POST `{markAt, done}` (marque « appliqué ✓ / envoyé ✓ ») · DELETE (efface). Historique dans la
+  section `hubHistory` du blob (80 messages, `getHubHistory`/`appendHubHistory`/`markHubMessage`/
+  `clearHubHistory` dans `stock.js`).
+- **Assistant catalogue** extrait dans `src/lib/agents/catalogAssistant.js` (`runCatalogAssistant`) ;
+  l'ancienne route `/api/admin/assistant` n'est plus qu'un passe-plat. Application des changements
+  partagée : `src/components/admin/applyCatalogActions.js` (utilisée par `HubChat` ET `AssistantAdmin`).
+- **UI** `src/components/admin/HubChat.jsx` (styles `.hub-*` en fin de `globals.css`) : cartes
+  « réponses à valider » en tête, raccourcis, propositions catalogue (Confirmer/Annuler), brouillons
+  d'e-mail (relire/modifier/envoyer via `/api/admin/send-client-email`), saisie multiligne
+  (Entrée = envoyer, Maj+Entrée = ligne), composer collé en bas sur mobile.
+- Tableau de bord : ligne « 📬 N réponses clientes à valider » dans « À faire » → ouvre l'onglet.
+- `/gestion/agents` reste (réglages + espace par agent) avec un bandeau vers le fil unifié.
+- **Toujours vrai** : rien n'est appliqué ni envoyé sans le clic du gérant.
+
 ## 💬 ASSISTANT CLIENT « IL PRÉPARE, LE GÉRANT DÉCIDE » — EN LIGNE (02/09/2026)
 > Demande du gérant : « il prépare le mail mais il demande mon avis avant de faire quoi que ce soit ».
 > **L'agent ne répond JAMAIS seul.** Pour chaque message reçu (page Contact ou bouton flottant
