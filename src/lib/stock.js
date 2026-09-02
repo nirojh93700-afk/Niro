@@ -139,6 +139,70 @@ export async function addRestockAlert(slug, email) {
   return { ok: true };
 }
 
+// =============================================================================
+// SUIVI DES E-MAILS DE CAMPAGNE : ouvertures (pixel) et clics (lien tracé).
+// Stocké dans le blob catalogue : data.emailStats = {
+//   [campaignId]: { subject, at, recipients:[email], opens:{email:{n,first,last}},
+//                   clicks:{email:[{url,at}]} } }
+// N'affecte rien d'existant : écriture ciblée sur la seule section emailStats.
+// ⚠️ Une ouverture n'est PAS une preuve de lecture : Apple Mail précharge les
+// images (faux positifs) et une cliente qui bloque les images n'est pas comptée
+// (faux négatifs). Les CLICS, eux, sont fiables.
+// =============================================================================
+export async function startEmailCampaign(id, { subject = "", recipients = [] } = {}) {
+  const cid = String(id || "").trim();
+  if (!cid) return null;
+  const data = await getCatalogRaw(true);
+  data.emailStats = data.emailStats || {};
+  data.emailStats[cid] = {
+    subject: String(subject || "").slice(0, 200),
+    at: Date.now(),
+    recipients: [...new Set((recipients || []).map(normEmail).filter(validEmail))].slice(0, 2000),
+    opens: {},
+    clicks: {},
+  };
+  // On ne garde que les 40 dernières campagnes (le blob reste léger).
+  const ids = Object.keys(data.emailStats).sort((a, b) => (data.emailStats[b].at || 0) - (data.emailStats[a].at || 0));
+  for (const old of ids.slice(40)) delete data.emailStats[old];
+  await persistCatalog(data, ["emailStats"]);
+  return cid;
+}
+
+export async function recordEmailOpen(campaignId, email) {
+  const cid = String(campaignId || "").trim();
+  const e = normEmail(email);
+  if (!cid || !validEmail(e)) return false;
+  const data = await getCatalogRaw(true);
+  const c = (data.emailStats || {})[cid];
+  if (!c) return false;
+  c.opens = c.opens || {};
+  const now = Date.now();
+  const prev = c.opens[e];
+  c.opens[e] = { n: (prev?.n || 0) + 1, first: prev?.first || now, last: now };
+  await persistCatalog(data, ["emailStats"]);
+  return true;
+}
+
+export async function recordEmailClick(campaignId, email, url) {
+  const cid = String(campaignId || "").trim();
+  const e = normEmail(email);
+  if (!cid || !validEmail(e)) return false;
+  const data = await getCatalogRaw(true);
+  const c = (data.emailStats || {})[cid];
+  if (!c) return false;
+  c.clicks = c.clicks || {};
+  const liste = c.clicks[e] || [];
+  if (liste.length < 50) liste.push({ url: String(url || "").slice(0, 300), at: Date.now() });
+  c.clicks[e] = liste;
+  await persistCatalog(data, ["emailStats"]);
+  return true;
+}
+
+export async function getEmailStats() {
+  const data = await getCatalogRaw(true);
+  return data.emailStats || {};
+}
+
 export async function getRestockAlerts() {
   const data = await getCatalogRaw(true);
   return data.restockAlerts || {};

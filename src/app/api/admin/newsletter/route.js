@@ -1,4 +1,5 @@
-import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays, getGmailCreds } from "@/lib/stock";
+import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays, getGmailCreds, startEmailCampaign } from "@/lib/stock";
+import { addTracking } from "@/lib/emailTrack";
 import { emailLayout, escapeHtml, newsletterProductsEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
@@ -74,6 +75,15 @@ export async function POST(req) {
   // Envoi de masse : on récupère le jeton Gmail UNE SEULE fois (bien plus rapide
   // et fiable que de le refaire à chaque e-mail — évite les timeouts). Repli
   // Resend par e-mail si Gmail n'est pas connecté.
+  // Suivi des ouvertures et des clics : une campagne = un identifiant, et un
+  // jeton par destinataire (pixel + liens tracés). Si l'enregistrement échoue,
+  // on envoie quand même : les statistiques ne doivent jamais bloquer un envoi.
+  let campaignId = "";
+  try {
+    campaignId = `c${Date.now().toString(36)}`;
+    await startEmailCampaign(campaignId, { subject, recipients: subs });
+  } catch { campaignId = ""; }
+
   let sent = 0, failed = 0;
   let gmailToken = null;
   try {
@@ -82,15 +92,18 @@ export async function POST(req) {
   } catch { gmailToken = null; }
 
   for (const to of subs) {
+    // Chaque destinataire reçoit sa propre version : le pixel et les liens
+    // portent son jeton, sinon on ne saurait pas QUI a ouvert ou cliqué.
+    const perso = campaignId ? addTracking(html, campaignId, to) : html;
     try {
       if (gmailToken) {
-        await gmailSendHtml(gmailToken, { to, subject, html, bcc: "" });
+        await gmailSendHtml(gmailToken, { to, subject, html: perso, bcc: "" });
         sent++;
       } else {
-        const r = await sendClientMail({ to, subject, html, bcc: "" });
+        const r = await sendClientMail({ to, subject, html: perso, bcc: "" });
         if (r?.ok) sent++; else failed++;
       }
     } catch { failed++; }
   }
-  return Response.json({ ok: true, sent, total: subs.length, failed });
+  return Response.json({ ok: true, sent, total: subs.length, failed, campaignId });
 }

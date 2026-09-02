@@ -25,13 +25,16 @@ const html = `
 <h3>5. Cookies</h3>
 <p>Notre site utilise uniquement un stockage local essentiel au fonctionnement de la boutique (mémorisation de votre panier). La page de paiement, gérée par Stripe, peut déposer des cookies nécessaires à la sécurité de la transaction. Nous n'utilisons pas de cookies publicitaires.</p>
 
-<h3>6. Partage des données</h3>
+<h3>6. Mesure d'audience de nos e-mails</h3>
+<p>Si vous êtes inscrite à notre lettre d'information, nos e-mails de nouveautés contiennent une image de mesure invisible et des liens de suivi qui nous indiquent si le message a été ouvert et quels produits ont été consultés. Cette mesure nous sert uniquement à savoir si nos envois vous intéressent et à ne pas vous écrire inutilement ; elle n'est jamais utilisée à des fins publicitaires ni transmise à un tiers. Vous pouvez la neutraliser en bloquant l'affichage des images dans votre messagerie, et vous désinscrire à tout moment en nous écrivant.</p>
+
+<h3>7. Partage des données</h3>
 <p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Netlify pour l'hébergement, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
 
-<h3>7. Sécurité</h3>
+<h3>8. Sécurité</h3>
 <p>Notre site est sécurisé en HTTPS. Les paiements sont traités par Stripe, certifié PCI DSS niveau 1 : vos numéros de carte ne transitent jamais par nos serveurs.</p>
 
-<h3>8. Réclamation</h3>
+<h3>9. Réclamation</h3>
 <p>Vous pouvez déposer une réclamation auprès de la CNIL si vous estimez que vos droits ne sont pas respectés : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>.</p>
 `;
 
