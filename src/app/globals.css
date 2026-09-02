@@ -3590,3 +3590,58 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .file-card-top > div:last-child { flex-shrink: 0; }
 .file-age { white-space: normal; }
 .file-col { min-width: 0; }
+
+/* =====================================================================
+   GESTION — squelette moderne (barre latérale + barre du haut, toutes pages)
+   ===================================================================== */
+:root { --ash-side: 244px; --ash-bg: #f4f1ea; --ash-ink: #1d1811; --ash-panel: #17120b; --ash-panel-2: #221a10; --ash-gold: #d6b25a; }
+.ash { display: grid; grid-template-columns: var(--ash-side) minmax(0, 1fr); min-height: 100vh; background: var(--ash-bg); }
+.ash-side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: linear-gradient(180deg, var(--ash-panel-2), var(--ash-panel)); color: #e6dcc6; display: flex; flex-direction: column; border-right: 1px solid rgba(214,178,90,0.14); }
+.ash-brand { display: flex; align-items: center; gap: 12px; padding: 18px 18px 14px; border-bottom: 1px solid rgba(214,178,90,0.14); }
+.ash-logo { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, #e2c67e, #a98935); color: #1d1811; font-family: Georgia, serif; font-weight: 700; letter-spacing: 1px; }
+.ash-brand-t { font-weight: 700; color: #fff; font-size: 0.95rem; }
+.ash-brand-s { font-size: 0.72rem; color: #a3957a; letter-spacing: 0.08em; text-transform: uppercase; }
+.ash-nav { padding: 10px 10px 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.ash-glabel { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #8d8064; padding: 4px 10px 6px; }
+.ash-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; color: #d9cdb2; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.15s, color 0.15s; }
+.ash-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.ash-item.on { background: rgba(214,178,90,0.16); color: #f1dfae; font-weight: 600; box-shadow: inset 2px 0 0 var(--ash-gold); }
+.ash-item.accent { color: #f1dfae; }
+.ash-ico { width: 20px; text-align: center; font-size: 0.95rem; opacity: 0.85; }
+.ash-txt { flex: 1; }
+.ash-badge { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--ash-gold); color: #1d1811; font-size: 0.72rem; font-weight: 800; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.ash-side-foot { padding: 12px 18px 18px; border-top: 1px solid rgba(214,178,90,0.14); }
+.ash-foot-link { color: #a3957a; text-decoration: none; font-size: 0.82rem; }
+.ash-foot-link:hover { color: #fff; }
+.ash-main { min-width: 0; display: flex; flex-direction: column; }
+.ash-top { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 12px; padding: 10px 22px; background: rgba(255,253,249,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.ash-burger { display: none; border: 1px solid var(--line); background: #fff; border-radius: 10px; width: 38px; height: 38px; font-size: 1.1rem; cursor: pointer; }
+.ash-crumb { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; white-space: nowrap; }
+.ash-crumb-g { color: var(--ink-soft); }
+.ash-crumb-sep { color: #c9bda3; }
+.ash-crumb-t { font-weight: 700; color: var(--ash-ink); }
+.ash-search { flex: 1; max-width: 460px; margin-left: auto; }
+.ash-search input { width: 100%; box-sizing: border-box; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 0.88rem; }
+.ash-search input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,162,75,0.16); }
+.ash-top-actions { display: flex; gap: 8px; align-items: center; }
+.ash-todo { text-decoration: none; font-size: 0.8rem; font-weight: 700; padding: 8px 12px; border-radius: 999px; background: #fff3cf; color: #8a6414; border: 1px solid #e2c98d; white-space: nowrap; }
+.ash-assist { text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 8px 14px; border-radius: 999px; background: var(--ash-ink); color: #f1dfae; white-space: nowrap; }
+.ash-assist:hover { background: #000; }
+.ash-content { padding: 22px 22px 60px; max-width: 1500px; width: 100%; box-sizing: border-box; }
+.ash-content > .section, .ash-content .admin-section { padding-top: 0; }
+.ash-content .container { max-width: none; padding-left: 0; padding-right: 0; }
+.ash-scrim { display: none; }
+/* Les anciennes pages gardent leurs blocs ; on unifie juste le fond et les cartes. */
+.ash-content .admin-block, .ash-content .dash-panel, .ash-content .dash-tile, .ash-content .file-card, .ash-content .file-kpi { background: #fff; }
+@media (max-width: 900px) {
+  .ash { grid-template-columns: 1fr; }
+  .ash-side { position: fixed; left: 0; top: 0; width: min(84vw, 300px); transform: translateX(-100%); transition: transform 0.22s ease; z-index: 50; box-shadow: 0 0 40px rgba(0,0,0,0.35); }
+  .ash.open .ash-side { transform: translateX(0); }
+  .ash-scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 40; border: none; display: none; }
+  .ash.open .ash-scrim { display: block; }
+  .ash-burger { display: grid; place-items: center; }
+  .ash-crumb-g, .ash-crumb-sep { display: none; }
+  .ash-search { display: none; }
+  .ash-todo { display: none; }
+  .ash-content { padding: 14px 12px 60px; }
+}

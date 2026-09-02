@@ -728,109 +728,7 @@ export default function GestionPage() {
   const lowStock = rows.filter((r) => typeof r.stock === "number" && r.stock > 0 && r.stock <= 5);
 
   return (
-    <section className="section admin-section">
-      <div className="container admin-shell">
-        <aside className="admin-sidebar">
-          <div className="admin-sidebar-brand">
-            <span className="eyebrow">Espace gestion</span>
-            <h2>Mon site</h2>
-          </div>
-          <button type="button" className="admin-side-toggle" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
-            <span>☰ Menu gestion</span>
-            <span aria-hidden>{menuOpen ? "▲" : "▼"}</span>
-          </button>
-          <nav className={`admin-sidebar-nav${menuOpen ? " open" : ""}`}>
-          <div className="admin-side-group">
-            <button className={`admin-side-item ${tab === "accueil" ? "active" : ""}`} onClick={() => { setTab("accueil"); setMenuOpen(false); }}>🏠 Accueil</button>
-          </div>
-          {[
-            {
-              label: "Commandes",
-              tabs: [
-                { id: "file", text: `🗂️ File de production${aPreparer > 0 ? ` (${aPreparer})` : ""}`, href: "/gestion/commandes" },
-                { id: "commandes", text: "🧾 Commandes (fiches complètes)" },
-                { id: "atelier", text: "🥃 Atelier (à graver)", href: "/gestion/atelier" },
-                { id: "devis", text: "📄 Devis / Factures" },
-              ],
-            },
-            {
-              label: "Clients & fidélité",
-              tabs: [
-                { id: "crm", text: "👥 CRM — clients", href: "/gestion/crm" },
-                { id: "fidelite", text: "🎁 Fidélité & cashback", href: "/gestion/fidelite" },
-                { id: "messages", text: "✉️ Messages (programmés + auto)", href: "/gestion/messages" },
-              ],
-            },
-            {
-              label: "Catalogue",
-              tabs: [
-                { id: "produits", text: "🏷️ Produits & Stock" },
-                { id: "categories", text: "🗂️ Catégories & ordre" },
-                { id: "packaging", text: "📦 Packaging & emballages", href: "/gestion/emballages" },
-                { id: "sante", text: "🛡️ Santé du catalogue", href: "/gestion/sante" },
-                { id: "tailles", text: "📐 Tailles & coûts conseillés", href: "/gestion/tailles-conseillees" },
-                { id: "gravure", text: "✍️ Gravure" },
-                { id: "reglages-produits", text: "⚙️ Réglages produits (cristaux, couverts)", href: "/gestion/reglages" },
-              ],
-            },
-            {
-              label: "Marketing",
-              tabs: [
-                { id: "promos", text: "🎟️ Promotions & ambassadeurs" },
-                { id: "avis", text: "⭐ Avis" },
-                { id: "newsletter", text: "📣 Newsletter" },
-                { id: "etude-marche", text: "📊 Étude de marché", href: "/gestion/etude-marche" },
-              ],
-            },
-            {
-              label: "Finances & statistiques",
-              tabs: [
-                { id: "benefices", text: "💰 Bénéfices", href: "/gestion/benefices" },
-                { id: "inventaire-compta", text: "📦 Inventaire & Compta", href: "/gestion/inventaire-compta" },
-                { id: "stats", text: "📊 Statistiques (ventes)" },
-                { id: "visiteurs", text: "📈 Visiteurs & trafic", href: "/gestion/statistiques" },
-              ],
-            },
-            {
-              label: "Assistant & IA",
-              tabs: [
-                { id: "assistant", text: "🧭 Assistant (tout en un)" },
-                { id: "agents", text: "🤖 Équipe d'agents" },
-                { id: "boite-mail", text: "📬 Boîte mail (agent)", href: "/gestion/boite-mail" },
-              ],
-            },
-            {
-              label: "Réglages",
-              tabs: [
-                { id: "apparence", text: "🎨 Apparence" },
-                { id: "livraison", text: "🚚 Livraison (tarifs)" },
-                { id: "reglages", text: "⚙️ Réglages" },
-              ],
-            },
-          ].map((group) => (
-            <div className="admin-side-group" key={group.label}>
-              <span className="admin-side-label">{group.label}</span>
-              {group.tabs.map((t) => (
-                t.href ? (
-                  <a key={t.id} href={t.href} onClick={() => setMenuOpen(false)} className="admin-side-item" style={{ textDecoration: "none" }}>
-                    {t.text}
-                  </a>
-                ) : (
-                  <button
-                    key={t.id}
-                    className={`admin-side-item ${tab === t.id ? "active" : ""}`}
-                    onClick={() => { setTab(t.id); setMenuOpen(false); }}
-                  >
-                    {t.text}
-                  </button>
-                )
-              ))}
-            </div>
-          ))}
-          </nav>
-        </aside>
-
-        <div className="admin-content">
+    <div className="admin-content">
         <DeclarationReminder />
         <MerchantReminder />
 
@@ -1824,8 +1722,6 @@ export default function GestionPage() {
             </p>
           </>
         )}
-        </div>
-      </div>
-    </section>
+    </div>
   );
 }
