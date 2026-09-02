@@ -29,6 +29,43 @@
 - Commandes test exclues ; annulées/remboursées masquées par défaut (dépliable).
 - Sophie Berardo (0C1CGL2Q) annotée : **accepte d'attendre (02/09) + 🎁 cadeau promis**.
 
+## 📥 BOÎTE MAIL SURVEILLÉE + ACHATS FOURNISSEURS + EXPORT CLIENTS (02/09/2026)
+> Demandes du gérant : « il doit me proposer automatiquement dès qu'il y a un mail, analyser tout le
+> temps les mails et toutes les conversations, tracé dans leur commande » · « importer des devis ou
+> des factures pour que les agents analysent et mettent dans les stocks, je corrige et je valide » ·
+> « exporter les clients en PDF ou toutes sortes de fichiers, il faut que j'aie le choix ».
+- **Boîte mail surveillée** `src/lib/inbox.js` (`syncInbox`) : lit les 25 derniers e-mails Gmail,
+  garde les vraies clientes (`looksLikeRealCustomer` renforcé : jamais `@nivcreation.fr`, resend.dev,
+  Etsy/Amazon/Nihao/Metro/factures/plateformes), **range chaque e-mail dans le fil de sa commande**
+  (retrouvée par l'adresse ; `ensureCommThread` crée le fil s'il n'existe pas) puis **prépare une
+  réponse** (`triageIncomingEmail` avec `context` = commande + échanges + réponses déjà envoyées)
+  → `addPendingReply` (champs `orderId/orderRef/gmailId/gmailThreadId/messageId/references/source`)
+  → **UNE alerte** (`src/lib/replyAlert.js`, partagée avec `/api/contact`). Réponse préparée
+  **seulement pour le DERNIER message d'une expéditrice, pas encore répondu** (un message atelier plus
+  récent dans le fil = déjà traité). Premier passage : pas de brouillon pour les mails > 24 h.
+  Mémoire `inboxSeen` (600 ids), limite 1 passage / 3 min, mails > 10 jours ignorés.
+- **Déclencheurs** : `AdminShell` (POST `/api/admin/inbox-sync` à chaque chargement des compteurs) ·
+  `GET /api/cron/inbox?token=` (CRON_SECRET **ou** `settings.inboxToken`, jeton sans accès aux données,
+  visible via GET `/api/admin/inbox-sync`) · **Routine Claude horaire** `trig_01YR967ZA5brMSLhsAvqfQ6a`
+  (session neuve qui fait juste le curl ; à supprimer si le gérant ne la veut plus) · bouton « Vérifier
+  maintenant » dans Gestion → Équipe d'agents (bloc « Boîte mail surveillée »).
+- **Envoi validé** (`/api/reply/[token]`) : part **dans le même fil Gmail** (`gmailSendHtml` accepte
+  `threadId/inReplyTo/references` via `sendClientMail({thread})`) et est **tracé dans la commande**
+  (`batAtelierMessage(..., { keepStatus:true })`). La page `/repondre` affiche « Cliente de la commande #… ».
+- ⚠️ Premier passage réel (02/09 12:29) : 8 brouillons inutiles + 8 alertes envoyées au gérant avant le
+  renforcement du filtre — tous classés « sans réponse » à la main. Ne se reproduit plus.
+- **Achats & factures** `/gestion/achats` (`src/app/gestion/achats/page.jsx`, API
+  `/api/admin/purchases`) : PDF / photo / CSV / texte → Claude (document/image + outil
+  `proposition_achat`, catalogue des `stockId` fourni) → tableau corrigeable (produit, qté, prix) →
+  « Valider » = `adjustStockMany` (1 écriture, s'ajoute au stock), coût d'achat produit mis à jour
+  (port réparti au prorata, `setProductOverride({cost})`), dépense ajoutée dans Bénéfices
+  (`settings.expenses`, catégorie `achat`), historique section `purchases` (200). Rien n'est écrit
+  avant « Valider ». Entrée NAV Catalogue → « Achats & factures ». Toast : `analyze` exclu.
+- **Export clients** : `src/lib/exportClients.js` (CSV `;` + BOM, **XLSX sans bibliothèque** (zip
+  stocké + inlineStr), PDF via `jspdf` (tableau paginé, en-tête Niv Création), JSON) — barre
+  « Sauvegarder / exporter » en haut de l'onglet Clients du CRM, exporte la liste **filtrée**.
+  Réutilisable pour d'autres listes (`exportRows(format, rows, columns, opts)`).
+
 ## 🧱 GESTION MODERNE — 5 CHANTIERS LIVRÉS (02/09/2026, « fais les 5 un par un sans bug »)
 > Suite du squelette admin (`AdminShell`). Tout est ADMIN uniquement (rien côté clientes).
 1. **En-tête commun** `src/components/admin/PageHead.jsx` (`eyebrow`, `title`, `subtitle`, `actions`,
