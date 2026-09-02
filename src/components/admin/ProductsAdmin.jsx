@@ -7,6 +7,7 @@ import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import Model3DUpload from "@/components/admin/Model3DUpload";
 import { MarginBox, EngravingBuilder, SeasonalFields, makeTierVariant } from "@/components/admin/ProductFormParts";
 
+
 // Regroupe les produits par catégorie, dans l'ordre des catégories (vivantes).
 function groupByCategory(products, cats) {
   const order = cats.map((c) => c.slug);
@@ -21,12 +22,55 @@ function groupByCategory(products, cats) {
   return groups;
 }
 
-// Édition / création / suppression des produits depuis l'admin.
+const fmtEuro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
+
+// État du stock d'un produit à partir de ses lignes de stock.
+function stockState(list) {
+  if (!list || !list.length) return "none";
+  const nums = list.filter((s) => typeof s.value === "number");
+  if (!nums.length) return "none";
+  if (nums.some((s) => s.value === 0)) return "out";
+  if (nums.some((s) => s.value > 0 && s.value <= 2)) return "low";
+  return "ok";
+}
+
+// Pastilles de stock (un champ par variante suivie) — identiques dans le tableau
+// et dans le panneau : même logique, même enregistrement (au blur).
+function StockPills({ list, stockSaved, onStockChange, onStockSave }) {
+  if (!list || !list.length) return <span className="pt-muted">non suivi</span>;
+  return (
+    <div className="admin-stock-line" style={{ marginTop: 0 }}>
+      {list.map((s) => {
+        const out = typeof s.value === "number" && s.value === 0;
+        const low = typeof s.value === "number" && s.value > 0 && s.value <= 2;
+        return (
+          <span key={s.key} className={`admin-stock-pill ${out ? "out" : low ? "low" : s.value == null ? "none" : "ok"}`}>
+            <span className="asp-dot" />
+            <span className="asp-lab">{s.label || "Stock"}{out ? " · RUPTURE" : ""}</span>
+            <input
+              type="number" min="0" placeholder="—"
+              value={s.value ?? ""}
+              onClick={(e) => e.stopPropagation()}
+              onChange={(e) => onStockChange && onStockChange(s.key, e.target.value === "" ? "" : Number(e.target.value))}
+              onBlur={(e) => onStockSave && onStockSave(s.key, e.target.value)}
+            />
+            <span className="asp-ok">{stockSaved === s.key ? "✓" : ""}</span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+// Produits & stock : tableau (une ligne par produit, stock modifiable en ligne)
+// + panneau latéral pour modifier une fiche ou en créer une.
 export default function ProductsAdmin({ adminKey, products, onReload, stockBySlug = {}, onStockChange, onStockSave, stockSaved, optionRows = [] }) {
   const [openSlug, setOpenSlug] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [msg, setMsg] = useState("");
   const [search, setSearch] = useState("");
+  const [catFilter, setCatFilter] = useState("all");
+  const [status, setStatus] = useState("all");
   // Catégories vivantes (réglées dans « Catégories & ordre »), repli sur le code.
   const [cats, setCats] = useState(DEF_CATS);
   const [subsMap, setSubsMap] = useState(DEF_SUBS);
@@ -40,9 +84,47 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
       } catch { /* repli défauts */ }
     })();
   }, [adminKey]);
-  const shown = search.trim()
-    ? products.filter((p) => `${p.name} ${p.slug} ${p.category}`.toLowerCase().includes(search.trim().toLowerCase()))
-    : products;
+
+  // Panneau ouvert : Échap pour fermer, page derrière figée.
+  const drawerOpen = Boolean(openSlug) || showAdd;
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e) => { if (e.key === "Escape") { setOpenSlug(null); setShowAdd(false); } };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
+  }, [drawerOpen]);
+
+  // Message d'état effacé tout seul.
+  useEffect(() => {
+    if (!msg) return;
+    const t = setTimeout(() => setMsg(""), 4000);
+    return () => clearTimeout(t);
+  }, [msg]);
+
+  const stateOf = (p) => stockState(stockBySlug[p.slug]);
+  const counts = {
+    total: products.length,
+    visibles: products.filter((p) => !p.hidden).length,
+    masques: products.filter((p) => p.hidden).length,
+    rupture: products.filter((p) => stateOf(p) === "out").length,
+    bas: products.filter((p) => stateOf(p) === "low").length,
+  };
+
+  const q = search.trim().toLowerCase();
+  const shown = products.filter((p) => {
+    if (q && !`${p.name} ${p.slug} ${p.category} ${p.tagline || ""}`.toLowerCase().includes(q)) return false;
+    if (catFilter !== "all" && p.category !== catFilter) return false;
+    if (status === "masque" && !p.hidden) return false;
+    if (status === "visible" && p.hidden) return false;
+    if (status === "rupture" && stateOf(p) !== "out") return false;
+    if (status === "bas" && stateOf(p) !== "low") return false;
+    if (status === "nouveau" && p.badge !== "Nouveau") return false;
+    return true;
+  });
+  const groups = groupByCategory(shown, cats);
+  const openProduct = openSlug ? products.find((p) => p.slug === openSlug) : null;
 
   async function post(payload) {
     const res = await fetch("/api/admin/catalog", {
@@ -53,165 +135,230 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
     return res.ok;
   }
 
-  return (
-    <>
-      <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>
-        {products.length} produits. Modifie le nom, le prix, la description, masque un produit, ou ajoute-en un nouveau.
-      </p>
-      {msg && <div className="notice">{msg}</div>}
+  const filterChip = (value, label, n) => (
+    <button type="button" key={value} className={`pt-chip${catFilter === value ? " on" : ""}`} onClick={() => setCatFilter(value)}>
+      {label}{typeof n === "number" ? <span>{n}</span> : null}
+    </button>
+  );
 
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 18 }}>
-        <button className="btn btn-gold" onClick={() => setShowAdd((s) => !s)}>
-          {showAdd ? "Fermer" : "+ Ajouter un produit"}
-        </button>
-        <button
-          className="btn btn-outline"
-          onClick={async () => {
-            if (!confirm("Remettre les prix du catalogue ? Cela efface tous les prix modifiés à la main dans l'admin et applique les prix du site.")) return;
-            const res = await fetch("/api/admin/catalog", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-              body: JSON.stringify({ action: "resetPrices" }),
-            });
-            const data = await res.json().catch(() => ({}));
-            setMsg(res.ok ? `Prix du catalogue rétablis ✓ (${data.count || 0} produit${(data.count || 0) > 1 ? "s" : ""})` : "Échec.");
-            if (res.ok) onReload();
-          }}
-        >
-          Remettre les prix du catalogue
-        </button>
+  return (
+    <div className="pt">
+      <div className="ph-kpis" style={{ marginTop: 0 }}>
+        <div className="ph-kpi"><small>Produits</small><b>{counts.total}</b><span>{counts.visibles} visibles · {counts.masques} masqué{counts.masques > 1 ? "s" : ""}</span></div>
+        <div className={`ph-kpi${counts.rupture ? " bad alert" : " good"}`}><small>En rupture</small><b>{counts.rupture}</b><span>{counts.rupture ? "à réassortir" : "aucune rupture"}</span></div>
+        <div className={`ph-kpi${counts.bas ? " warn" : ""}`}><small>Stock bas (≤ 2)</small><b>{counts.bas}</b><span>à surveiller</span></div>
+        <div className="ph-kpi"><small>Accessoires en option</small><b>{optionRows.length}</b><span>socles, options</span></div>
       </div>
 
-      {showAdd && (
-        <AddProduct
-          adminKey={adminKey}
-          cats={cats}
-          subsMap={subsMap}
-          setMsg={setMsg}
-          onDone={() => { setShowAdd(false); onReload(); }}
+      {msg && <div className="notice" style={{ marginTop: 12 }}>{msg}</div>}
+
+      <div className="pt-toolbar">
+        <input
+          className="pt-search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="🔍 Rechercher un produit…"
         />
-      )}
+        <select className="pt-select" value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Filtrer par état">
+          <option value="all">Tous les états</option>
+          <option value="visible">Visibles sur le site</option>
+          <option value="masque">Masqués</option>
+          <option value="rupture">En rupture</option>
+          <option value="bas">Stock bas</option>
+          <option value="nouveau">Étiquette « Nouveau »</option>
+        </select>
+        <div className="pt-toolbar-actions">
+          <button className="btn btn-gold" onClick={() => { setOpenSlug(null); setShowAdd(true); }}>+ Ajouter un produit</button>
+          <button
+            className="btn btn-outline"
+            title="Efface les prix modifiés à la main et remet ceux du catalogue"
+            onClick={async () => {
+              if (!confirm("Remettre les prix du catalogue ? Cela efface tous les prix modifiés à la main dans l'admin et applique les prix du site.")) return;
+              const res = await fetch("/api/admin/catalog", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+                body: JSON.stringify({ action: "resetPrices" }),
+              });
+              const data = await res.json().catch(() => ({}));
+              setMsg(res.ok ? `Prix du catalogue rétablis ✓ (${data.count || 0} produit${(data.count || 0) > 1 ? "s" : ""})` : "Échec.");
+              if (res.ok) onReload();
+            }}
+          >
+            Remettre les prix
+          </button>
+        </div>
+      </div>
+      <div className="pt-chips">
+        {filterChip("all", "Tous", products.length)}
+        {cats.map((c) => filterChip(c.slug, c.label, products.filter((p) => p.category === c.slug).length))}
+      </div>
 
-      <input
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="🔍 Rechercher un produit (nom, catégorie)…"
-        style={{ width: "100%", padding: "11px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 16 }}
-      />
-      {groupByCategory(shown, cats).map((group) => (
-        <div key={group.slug} style={{ marginBottom: 26 }}>
-          <h3 className="admin-group-title">
-            {group.label} <span className="admin-group-count">{group.items.length}</span>
-          </h3>
+      <div className="pt-table">
+        <div className="pt-row pt-head">
+          <span />
+          <span>Produit</span>
+          <span>Catégorie</span>
+          <span>Prix</span>
+          <span>Stock</span>
+          <span />
+        </div>
+        {groups.length === 0 && (
+          <div className="pt-empty">Aucun produit ne correspond à cette recherche.</div>
+        )}
+        {groups.map((group) => (
+          <div key={group.slug} className="pt-group">
+            {(catFilter === "all" || groups.length > 1) && (
+              <div className="pt-group-title">{group.label} <span>{group.items.length}</span></div>
+            )}
+            {group.items.map((p) => {
+              const st = stateOf(p);
+              const nVar = (p.variants || []).length;
+              const price = p.variants?.[0]?.price;
+              return (
+                <div
+                  key={p.slug}
+                  className={`pt-row${openSlug === p.slug ? " open" : ""}${p.hidden ? " hidden" : ""}`}
+                  onClick={() => { setShowAdd(false); setOpenSlug(p.slug); }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter") { setShowAdd(false); setOpenSlug(p.slug); } }}
+                >
+                  {p.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className="admin-thumb pt-thumb" src={p.image} alt="" />
+                  ) : (
+                    <span className="admin-thumb admin-thumb-empty pt-thumb">?</span>
+                  )}
+                  <span className="pt-name">
+                    <strong>{p.name}</strong>
+                    <span className="pt-tags">
+                      {p.hidden ? <em className="pt-tag off">masqué</em> : null}
+                      {p.badge ? <em className="pt-tag badge">{p.badge}</em> : null}
+                      {p.custom ? <em className="pt-tag">ajouté</em> : null}
+                      {st === "out" ? <em className="pt-tag out">rupture</em> : st === "low" ? <em className="pt-tag low">stock bas</em> : null}
+                      <em className="pt-tag soft">{nVar} option{nVar > 1 ? "s" : ""}</em>
+                    </span>
+                  </span>
+                  <span className="pt-cat">{(cats.find((c) => c.slug === p.category) || {}).label || p.category}</span>
+                  <span className="pt-price">{typeof price === "number" ? fmtEuro(price) : "—"}{nVar > 1 ? <small>dès</small> : null}</span>
+                  <span className="pt-stock" onClick={(e) => e.stopPropagation()}>
+                    <StockPills list={stockBySlug[p.slug]} stockSaved={stockSaved} onStockChange={onStockChange} onStockSave={onStockSave} />
+                  </span>
+                  <span className="pt-go" aria-hidden>›</span>
+                </div>
+              );
+            })}
 
-          {group.items.map((p) => (
-            <div key={p.slug} className="admin-block">
-              <div className="admin-product-row">
-                {p.image ? (
+            {/* Accessoires vendus en OPTION sur les fiches de cette catégorie
+               (ex. socle lumineux LED des cristaux) : vrais articles en stock,
+               rangés avec leur famille. */}
+            {optionRows.filter((r) => r.category === group.slug).map((r) => (
+              <div className="pt-row pt-option" key={r.stockId}>
+                {r.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img className="admin-thumb" src={p.image} alt={p.name} />
-                ) : (
-                  <span className="admin-thumb admin-thumb-empty">?</span>
-                )}
-                <span className="admin-variant" style={{ minWidth: 0 }}>
-                  <strong>{p.name}</strong>
-                  {p.hidden ? <span style={{ color: "#b4452f", marginLeft: 6 }}>· masqué</span> : null}
-                  {p.custom ? <span style={{ color: "#256b34", marginLeft: 6 }}>· ajouté</span> : null}
-                  <span className="admin-row-sub">{(p.variants || []).length} variante{(p.variants || []).length > 1 ? "s" : ""}</span>
+                  <img className="admin-thumb pt-thumb" src={r.image} alt="" />
+                ) : <span className="admin-thumb admin-thumb-empty pt-thumb">◌</span>}
+                <span className="pt-name">
+                  <strong>{r.variantTitle}</strong>
+                  <span className="pt-tags"><em className="pt-tag soft">accessoire en option</em></span>
                 </span>
-                <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", whiteSpace: "nowrap" }}
-                  onClick={() => setOpenSlug(openSlug === p.slug ? null : p.slug)}>
-                  {openSlug === p.slug ? "Fermer" : "Modifier la fiche"}
-                </button>
+                <span className="pt-cat">{group.label}</span>
+                <span className="pt-price">—</span>
+                <span className="pt-stock">
+                  <span className={`admin-stock-pill ${r.stock === 0 ? "out" : r.stock == null ? "none" : r.stock <= 2 ? "low" : "ok"}`}>
+                    <span className="asp-dot" />
+                    <span className="asp-lab">Stock{r.stock === 0 ? " · RUPTURE" : ""}</span>
+                    <input
+                      type="number" min="0" placeholder="—" value={r.stock ?? ""}
+                      onChange={(e) => onStockChange?.(r.stockId, e.target.value === "" ? "" : Number(e.target.value))}
+                      onBlur={(e) => onStockSave?.(r.stockId, e.target.value)}
+                    />
+                    <span className="asp-ok">{stockSaved === r.stockId ? "✓" : ""}</span>
+                  </span>
+                </span>
+                <span />
               </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <p className="pt-muted" style={{ marginTop: 10 }}>
+        Le stock se modifie directement dans le tableau (enregistré dès que tu quittes la case). Clique sur une ligne pour ouvrir la fiche complète.
+      </p>
 
-              {/* Stock du produit — réuni ici (plus besoin d'un onglet séparé). */}
-              {(stockBySlug[p.slug] || []).length > 0 && (
-                <div className="admin-stock-line">
-                  {stockBySlug[p.slug].map((s) => {
-                    const out = typeof s.value === "number" && s.value === 0;
-                    const low = typeof s.value === "number" && s.value > 0 && s.value <= 2;
-                    return (
-                      <span key={s.key} className={`admin-stock-pill ${out ? "out" : low ? "low" : s.value == null ? "none" : "ok"}`}>
-                        <span className="asp-dot" />
-                        <span className="asp-lab">{s.label || "Stock"}{out ? " · RUPTURE" : ""}</span>
-                        <input
-                          type="number" min="0" placeholder="—"
-                          value={s.value ?? ""}
-                          onChange={(e) => onStockChange && onStockChange(s.key, e.target.value === "" ? "" : Number(e.target.value))}
-                          onBlur={(e) => onStockSave && onStockSave(s.key, e.target.value)}
-                        />
-                        <span className="asp-ok">{stockSaved === s.key ? "✓" : ""}</span>
-                      </span>
-                    );
-                  })}
+      {/* ---------- Panneau latéral : fiche produit / nouveau produit ---------- */}
+      {drawerOpen && (
+        <>
+          <div className="pt-overlay" onClick={() => { setOpenSlug(null); setShowAdd(false); }} />
+          <aside className="pt-drawer" role="dialog" aria-modal="true" aria-label={openProduct ? openProduct.name : "Nouveau produit"}>
+            <div className="pt-drawer-head">
+              {openProduct?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="admin-thumb" src={openProduct.image} alt="" />
+              ) : null}
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div className="pt-drawer-eyebrow">{openProduct ? "Fiche produit" : "Nouveau produit"}</div>
+                <h2 className="pt-drawer-title">{openProduct ? openProduct.name : "Ajouter un produit"}</h2>
+                {openProduct ? (
+                  <div className="pt-drawer-links">
+                    <a href={`/produit/${openProduct.slug}${openProduct.hidden ? "?apercu=niv2026" : ""}`} target="_blank" rel="noreferrer">Voir la fiche sur le site ↗</a>
+                    <span className="pt-muted">· /produit/{openProduct.slug}</span>
+                  </div>
+                ) : null}
+              </div>
+              <button type="button" className="pt-close" aria-label="Fermer" onClick={() => { setOpenSlug(null); setShowAdd(false); }}>×</button>
+            </div>
+            <div className="pt-drawer-body">
+              {msg && <div className="notice">{msg}</div>}
+              {openProduct && (
+                <div className="pt-drawer-stock">
+                  <div className="pt-drawer-label">Stock par option</div>
+                  <StockPills list={stockBySlug[openProduct.slug]} stockSaved={stockSaved} onStockChange={onStockChange} onStockSave={onStockSave} />
                 </div>
               )}
-
-              {openSlug === p.slug && (
+              {openProduct && (
                 <EditProduct
-                  product={p}
+                  key={openProduct.slug}
+                  product={openProduct}
                   adminKey={adminKey}
                   cats={cats}
                   onReload={onReload}
                   onSave={async (patch) => {
-                    const ok = await post({ action: "edit", slug: p.slug, patch });
+                    const ok = await post({ action: "edit", slug: openProduct.slug, patch });
                     setMsg(ok ? "Modifications enregistrées ✓" : "Échec.");
                     if (ok) onReload();
                   }}
                   onDelete={async () => {
-                    if (p.custom) {
+                    if (openProduct.custom) {
                       if (!confirm("Supprimer définitivement ce produit ?")) return;
-                      const ok = await post({ action: "delete", slug: p.slug });
+                      const ok = await post({ action: "delete", slug: openProduct.slug });
                       setMsg(ok ? "Produit supprimé ✓" : "Échec.");
-                      if (ok) onReload();
+                      if (ok) { setOpenSlug(null); onReload(); }
                     } else {
                       // Produit du catalogue (code) : on ne peut pas l'effacer, on le
                       // retire du site (masqué). Réversible via la case « Masquer ».
                       if (!confirm("Retirer ce produit du site ? Il n'apparaîtra plus dans la boutique. (Réversible)")) return;
-                      const ok = await post({ action: "edit", slug: p.slug, patch: { hidden: true } });
+                      const ok = await post({ action: "edit", slug: openProduct.slug, patch: { hidden: true } });
                       setMsg(ok ? "Produit retiré du site ✓" : "Échec.");
                       if (ok) onReload();
                     }
                   }}
                 />
               )}
+              {showAdd && (
+                <AddProduct
+                  adminKey={adminKey}
+                  cats={cats}
+                  subsMap={subsMap}
+                  setMsg={setMsg}
+                  onDone={() => { setShowAdd(false); onReload(); }}
+                />
+              )}
             </div>
-          ))}
-
-          {/* Accessoires vendus en OPTION sur les fiches de cette catégorie
-             (ex. socle lumineux LED des cristaux) : ce sont de vrais articles en
-             stock, mais pas des produits du catalogue. On les range avec leur
-             famille, à la fin du groupe. */}
-          {optionRows.filter((r) => r.category === group.slug).length > 0 && (
-            <div className="admin-block" style={{ borderLeft: "3px solid var(--gold, #c9a24b)" }}>
-              <h4 style={{ margin: "0 0 4px", display: "flex", alignItems: "center", gap: 8 }}>
-                📦 <span>Accessoires en option — stock</span>
-              </h4>
-              <p style={{ margin: "0 0 10px", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
-                Vendus en option sur les fiches ci-dessus. Vide = « non suivi » (vente illimitée).
-              </p>
-              {optionRows.filter((r) => r.category === group.slug).map((r) => (
-                <div className="admin-row" key={r.stockId}>
-                  {r.image && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={r.image} alt="" style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 6, border: "1px solid #eee", flexShrink: 0, marginRight: 8 }} />
-                  )}
-                  <span className="admin-variant">{r.variantTitle}</span>
-                  <input
-                    className={`admin-stock ${r.stock === 0 ? "out" : ""}`}
-                    type="number" min="0" placeholder="—" value={r.stock ?? ""}
-                    onChange={(e) => onStockChange?.(r.stockId, e.target.value === "" ? "" : Number(e.target.value))}
-                    onBlur={(e) => onStockSave?.(r.stockId, e.target.value)}
-                  />
-                  <span className="admin-saved">{stockSaved === r.stockId ? "✓" : ""}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
-    </>
+          </aside>
+        </>
+      )}
+    </div>
   );
 }
 

@@ -197,7 +197,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
   const cadeau = o.cadeauChoix ? (() => { const lib = (v) => ({ surprise: "surprise", femme: "plutôt femme", homme: "plutôt homme" })[v] || v; const p = String(o.cadeauChoix).split("+").filter(Boolean); return p.length === 2 ? `🎁🎁 ${lib(p[0])} + ${lib(p[1])}` : `🎁 ${lib(o.cadeauChoix)}`; })() : "";
 
   return (
-    <div className={`file-card${estUrgent(o) ? " urgent" : flags.includes("attend") || flags.includes("attente_client") ? " attente" : ""}`}>
+    <div className={`file-card${estUrgent(o) && ACTIFS.has(o.status || "") ? " urgent" : flags.includes("attend") || flags.includes("attente_client") ? " attente" : ""}`}>
       <div className="file-card-top">
         <div>
           {o.pos ? <span className="file-pos">{o.pos}</span> : null}
