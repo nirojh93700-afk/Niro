@@ -3527,3 +3527,10 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .hub-send { padding: 13px 14px; }
   .hub-pending-btn { width: 100%; text-align: center; }
 }
+/* Mobile : rien ne doit forcer la largeur (texte long, adresse e-mail, bulle). */
+.hub, .hub-thread, .hub-msg, .hub-card { min-width: 0; max-width: 100%; }
+.hub-pending-row, .hub-pending-txt { min-width: 0; }
+.hub-pending-txt small { max-width: 100%; }
+.hub-bubble, .hub-card { overflow-wrap: anywhere; word-break: break-word; }
+.hub-composer { min-width: 0; }
+.hub-composer textarea { min-width: 0; }
