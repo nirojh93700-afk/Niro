@@ -1,3 +1,31 @@
+## 📊 SUIVI DES E-MAILS DE CAMPAGNE — OUVERTURES + CLICS (construit le 02/09/2026)
+> Demande du gérant : « mets en place pour voir qui ouvre le mail ». Fonctionne, testé de bout en bout.
+- **Comment** : chaque destinataire reçoit SA version de l'e-mail — un pixel `/api/o/<jeton>` et les
+  liens réécrits en `/api/c/<jeton>?u=<url>`. Jeton = base64url(`campagne|email`), aucun secret.
+- **Fichiers** : `src/lib/emailTrack.js` (`makeTrackToken`/`readTrackToken`/`safeRedirect`/`addTracking`) ·
+  `src/app/api/o/[token]` (GIF 1×1, no-cache, renvoie TOUJOURS l'image même en cas d'erreur) ·
+  `src/app/api/c/[token]` (enregistre puis redirige ; la redirection prime toujours) ·
+  `stock.js` (`startEmailCampaign`/`recordEmailOpen`/`recordEmailClick`/`getEmailStats`, section
+  `emailStats`, 40 campagnes gardées) · `GET /api/admin/email-stats` · écran de résultats dans
+  `NewsletterAdmin.jsx` + bouton « relancer celles qui n'ont pas ouvert ».
+- **Sécurité** : `/api/c` ne redirige QUE vers `*.nivcreation.fr` (sinon redirection ouverte
+  exploitable en hameçonnage). Vérifié en ligne : une cible externe est renvoyée sur l'accueil.
+- **⚠️ FIABILITÉ** : les **clics sont fiables**, les **ouvertures non** — Mail sur iPhone précharge
+  les images (faux positifs) et les images bloquées ne comptent pas (faux négatifs). Toujours le dire
+  au gérant plutôt que de lui vendre un chiffre exact.
+- **RGPD** : section 6 « Mesure d'audience de nos e-mails » ajoutée dans `/confidentialite`.
+- Les stats ne bloquent JAMAIS un envoi (try/catch autour de l'ouverture de campagne).
+
+## ⛔ NE JAMAIS PARLER DE LA MACHINE AUX CLIENTES (02/09/2026, demande ferme)
+> La graveuse a un problème et une nouvelle machine arrive. **Le gérant ne veut PAS que les clientes
+> le sachent.** Interdit dans tout message client : « machine », « panne », « graveuse », « laser »,
+> « fabricant », « remplacement », « problème technique ».
+- Le motif annoncé est TOUJOURS celui du site : **forte demande, délai de confection allongé**.
+- Modèle validé (message à Sophie Berardo, commande 0C1CGL2Q) : annonce du délai → **remboursement
+  intégral immédiat sans condition** proposé EN PREMIER → **ou attendre avec un cadeau dans le colis**
+  → elle reste libre de changer d'avis à tout moment. Envoyé par le fil **Aperçu/BAT** (`/api/admin/bat`),
+  pas par Gmail : sa réponse revient dans la commande.
+
 ## 🥃 VERRES REMIS EN VENTE (01/09/2026)
 > Les 5 produits verre/carafe (whisky portrait, fête des pères, vin, flûte, carafe) sont REMIS EN
 > VENTE (stocks restaurés aux niveaux d'origine, plus aucune rupture). Le spray de marquage laser a
