@@ -896,7 +896,8 @@ Un souci à la réception ?
 
   "collier-plaque-acier": {
     material: `Taille & Matériaux
-- Collier à plaque rectangulaire en acier inoxydable 304, surface lisse gravable des deux côtés.
+- Collier livré complet : plaque + chaîne.
+- Plaque rectangulaire à coins arrondis : 33,5 × 19,7 mm (environ 3,4 × 2 cm), acier inoxydable 304, surface lisse gravable des deux côtés.
 - Chaîne maille vénitienne 3 mm, longueur 60 cm : la plaque tombe au milieu de la poitrine, sous la clavicule.
 - Finitions : argenté, doré, noir, acier noir, argenté et noir.
 - Style épuré et contemporain.`,
