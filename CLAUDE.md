@@ -1,3 +1,23 @@
+# ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 02/09/2026)
+> Le gérant reprend souvent le travail depuis une AUTRE conversation : il faut continuer
+> **comme si de rien n'était**. Tout ce qu'il faut savoir est dans ce fichier.
+- **Branche de travail ET de mise en ligne : `claude/site-product-overview-1t2de`** (branche par
+  défaut du dépôt GitHub `nirojh93700-afk/Niro`). Firebase App Hosting déploie à chaque push
+  dessus (~4 min). **`main` et `master` sont des MIROIRS** de cette branche : après chaque push,
+  faire aussi `git push origin HEAD:main HEAD:master` pour qu'aucun outil ne dise « branche introuvable ».
+- Si l'environnement démarre vide ou sur une branche sans commit :
+  `git fetch origin claude/site-product-overview-1t2de && git checkout -B claude/site-product-overview-1t2de origin/claude/site-product-overview-1t2de`.
+- Outils à réinstaller si besoin : `pip install Pillow imageio imageio-ffmpeg gTTS numpy` (vidéos).
+  Le réseau de certains environnements bloque nivcreation.fr et la voix Google : les scripts vidéo
+  utilisent alors les photos de `public/produits/` et rendent sans voix (le dire au gérant).
+- Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
+  rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
+  machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
+  un fichier ; Etsy reste hors de la boîte mail surveillée.
+- En cours au 02/09 : newsletter programmée ven. 04/09 10 h + relance mar. 08/09 10 h, relance Aurore
+  lun. 07/09 ; Sophie Berardo (#0C1CGL2Q) attend, cadeau promis dans le colis ; boîte mail surveillée
+  toutes les heures (routine Claude `trig_01YR967ZA5brMSLhsAvqfQ6a`) ; 6 vidéos livrées (2 sans voix).
+
 ## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
 > Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
 - `src/app/gestion/layout.jsx` → `src/components/admin/AdminShell.jsx` : **toutes** les pages
