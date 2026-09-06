@@ -462,6 +462,7 @@ ${context ? `
 CONTEXTE (sa commande et nos échanges précédents — utilise-le pour répondre juste, sans jamais citer les notes internes) :
 ${context}
 ` : ""}
+Le message peut contenir la CITATION de nos e-mails précédents (lignes commençant par « > », « ---- Message d'origine ----», « Le … a écrit : »). La vraie demande de la cliente est le texte qui n'est PAS cité : repère-le, même s'il est au milieu ou à la fin, et réponds à celui-là.
 Rédige la réponse et décide si tu peux répondre seul ou s'il faut la validation de la gérante.`;
   const res = await runAgent("email", [{ role: "user", content: prompt }]);
   const a = res?.action;

@@ -64,10 +64,18 @@ async function buildContext(order, email) {
 }
 
 // Nettoie un corps d'e-mail : retire la citation du message précédent.
+// ⚠️ INCIDENT RÉEL (Audrey, 06/09/2026) : certaines messageries (Mailo, Orange…)
+// citent notre e-mail EN PREMIER et la cliente écrit EN DESSOUS, parfois à
+// l'intérieur même de la citation. La coupe ne laissait alors que le marqueur
+// (« ---- Message d'origine ---- ») et SA VRAIE PHRASE ÉTAIT PERDUE.
+// Règle : si la coupe ne laisse presque rien, on garde le message ENTIER —
+// l'agent et le gérant voient tout, rien ne se perd.
 function cleanBody(text) {
-  const t = String(text || "").replace(/\r/g, "");
-  const cut = t.search(/\n(Le .{3,80} a écrit ?:|On .{3,80} wrote:|-{3,} ?Original Message|De ?: .+\nEnvoyé ?:|> )/i);
-  const body = (cut > 0 ? t.slice(0, cut) : t).trim();
+  const t = String(text || "").replace(/\r/g, "").trim();
+  const cut = t.search(/\n(Le .{3,80} a écrit ?:|On .{3,80} wrote:|-{2,} ?(Message d'origine|Original Message)|De ?: .+\nEnvoyé ?:|> )/i);
+  let body = cut > 0 ? t.slice(0, cut).trim() : t;
+  const lettres = (x) => (x.match(/\p{L}/gu) || []).length;
+  if (lettres(body) < 25 && lettres(t) > lettres(body)) body = t;
   return body.slice(0, 4000);
 }
 
