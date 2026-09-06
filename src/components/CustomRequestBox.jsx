@@ -49,6 +49,7 @@ export default function CustomRequestBox({ product }) {
           email: email.trim(),
           subject: `Demande sur mesure — ${product?.name || "produit"}`,
           message: fullMessage,
+          productSlug: product?.slug || "",
         }),
       });
       const data = await res.json().catch(() => ({}));

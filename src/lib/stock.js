@@ -263,7 +263,7 @@ function makeReplyToken() {
   ).slice(0, 40);
 }
 
-export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "", orderId = "", orderRef = "", gmailId = "", gmailThreadId = "", messageId = "", references = "", source = "" }) {
+export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "", orderId = "", orderRef = "", gmailId = "", gmailThreadId = "", messageId = "", references = "", source = "", productSlug = "", productName = "" }) {
   const e = normEmail(email);
   if (!validEmail(e) || !String(message || "").trim()) return null;
   const data = await getCatalogRaw(true);
@@ -284,6 +284,8 @@ export async function addPendingReply({ name, email, phone = "", subject = "", m
     gmailId: String(gmailId || "").slice(0, 80), gmailThreadId: String(gmailThreadId || "").slice(0, 80),
     messageId: String(messageId || "").slice(0, 300), references: String(references || "").slice(0, 2000),
     source: String(source || "contact").slice(0, 20),
+    // Fiche produit depuis laquelle la cliente a écrit (widget « Une question ? »).
+    productSlug: String(productSlug || "").slice(0, 120), productName: String(productName || "").slice(0, 160),
     at: now, exp: now + REPLY_TTL_MS, status: "pending",
   };
   data.pendingReplies[id] = item;

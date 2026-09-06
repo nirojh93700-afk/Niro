@@ -67,6 +67,7 @@ export default function RepondrePage({ params }) {
         <div style={{ fontWeight: "bold" }}>{r.name} <span style={{ fontWeight: "normal", color: "#7a7268" }}>&lt;{r.email}&gt;{r.phone ? ` · ${r.phone}` : ""}</span></div>
         <div style={{ color: "#7a7268", fontSize: 13, margin: "2px 0 10px" }}>{r.subject} · {r.at ? new Date(r.at).toLocaleString("fr-FR") : ""}{r.source === "gmail" ? " · reçu dans la boîte mail" : ""}</div>
         {r.orderRef ? <div style={{ fontSize: 13, margin: "0 0 10px", color: "#8a6d1f" }}>📦 Cliente de la commande <strong>#{r.orderRef}</strong> — ce message et votre réponse sont rangés dans le fil de sa commande.</div> : null}
+        {r.productName ? <div style={{ fontSize: 13, margin: "0 0 10px", color: "#8a6d1f" }}>🛍️ Question posée depuis la fiche produit : <a href={`/produit/${r.productSlug || ""}`} target="_blank" rel="noreferrer" style={{ color: "#8a6d1f", fontWeight: "bold" }}>{r.productName}</a></div> : null}
         <div style={{ whiteSpace: "pre-line", background: "#faf6ee", border: "1px solid #ece3d2", borderRadius: 10, padding: 12 }}>{r.message}</div>
       </div>
 

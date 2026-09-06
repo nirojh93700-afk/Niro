@@ -14,6 +14,7 @@ import { getSettings, addPendingReply, logComm } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
+import { getCatalogAdmin } from "@/lib/catalog";
 
 function escapeHtml(str) {
   return String(str)
@@ -43,6 +44,38 @@ export async function POST(req) {
     return Response.json({ error: "Adresse e-mail invalide." }, { status: 400 });
   }
 
+  // --- Fiche produit d'origine (widget « Une question ? » / demande particulière) --
+  // Le client envoie le slug de la fiche depuis laquelle il écrit ; on retrouve le
+  // produit dans le catalogue pour que le gérant sache EXACTEMENT de quoi on parle
+  // (jamais bloquant : sans produit, tout marche comme avant).
+  let produit = null;
+  try {
+    const slugBrut = String(body?.productSlug || "").trim() ||
+      (String(body?.page || "").match(/^\/produit\/([^/?#]+)/)?.[1] || "");
+    const slug = decodeURIComponent(slugBrut).slice(0, 120);
+    if (slug && /^[a-z0-9-]+$/i.test(slug)) {
+      const p = (await getCatalogAdmin()).find((x) => x.slug === slug);
+      if (p) {
+        const prix = (p.variants || []).map((v) => Number(v.price)).filter((n) => Number.isFinite(n));
+        produit = {
+          slug: p.slug, name: p.name || p.title || p.slug,
+          priceMin: prix.length ? Math.min(...prix) : null,
+          priceMax: prix.length ? Math.max(...prix) : null,
+        };
+      }
+    }
+  } catch { produit = null; }
+  const produitLigne = produit ? `Écrit depuis la fiche produit : ${produit.name} (/produit/${produit.slug})` : "";
+  const produitContext = produit
+    ? `La cliente écrit DEPUIS LA FICHE PRODUIT « ${produit.name} » (${BRAND.siteUrl}/produit/${produit.slug}${
+        produit.priceMin != null
+          ? produit.priceMin === produit.priceMax
+            ? `, ${produit.priceMin.toFixed(2).replace(".", ",")} €`
+            : `, de ${produit.priceMin.toFixed(2).replace(".", ",")} € à ${produit.priceMax.toFixed(2).replace(".", ",")} €`
+          : ""
+      }). Sa question concerne très probablement CE produit précis : réponds pour ce produit, sans lui demander de préciser le modèle et sans généraliser aux autres.`
+    : "";
+
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
   const from = process.env.CONTACT_FROM || "Niv Création <onboarding@resend.dev>";
@@ -63,12 +96,15 @@ export async function POST(req) {
   // UNE alerte avec le message de la cliente, la réponse proposée et un lien
   // pour relire / modifier / envoyer. RIEN ne part à la cliente d'ici.
   // Dossier de communication de la cliente : le message du formulaire y est rangé.
-  try { await logComm({ email, name, from: "cliente", text: message, subject, via: "formulaire" }); } catch { /* jamais bloquant */ }
+  const commText = produit && !message.includes(`/produit/${produit.slug}`)
+    ? `${message}\n\n— — —\n${produitLigne}`
+    : message;
+  try { await logComm({ email, name, from: "cliente", text: commText, subject, via: "formulaire" }); } catch { /* jamais bloquant */ }
   let settings = null;
   try { settings = await getSettings(); } catch { settings = null; }
   if (settings?.agents?.emailDraft !== false) {
     let draft = null;
-    try { draft = await triageIncomingEmail({ name, email, subject, message }); } catch { draft = null; }
+    try { draft = await triageIncomingEmail({ name, email, subject, message, context: produitContext, origin: "formulaire de contact du site" }); } catch { draft = null; }
     let item = null;
     try {
       item = await addPendingReply({
@@ -76,6 +112,7 @@ export async function POST(req) {
         draft: draft?.reply || "",
         draftSubject: draft?.subject || (subject ? `Re : ${subject}` : "Votre message — Niv Création"),
         reason: draft?.reason || "",
+        productSlug: produit?.slug || "", productName: produit?.name || "",
       });
     } catch { item = null; }
     if (item) {
@@ -92,7 +129,7 @@ export async function POST(req) {
   let autoReplied = false;
   try {
     if (settings?.agents?.emailAutoReply) {
-      triage = await triageIncomingEmail({ name, email, subject, message });
+      triage = await triageIncomingEmail({ name, email, subject, message, context: produitContext, origin: "formulaire de contact du site" });
       // Cas simple : l'agent répond tout seul à la cliente.
       if (triage?.ok && !triage.needsValidation && triage.reply) {
         const clientHtml = emailLayout({
@@ -132,6 +169,7 @@ export async function POST(req) {
     <p><strong>E-mail :</strong> ${escapeHtml(email)}</p>
     ${phone ? `<p><strong>Téléphone :</strong> ${escapeHtml(phone)}</p>` : ""}
     <p><strong>Sujet :</strong> ${escapeHtml(subject)}</p>
+    ${produit ? `<p><strong>🛍️ Écrit depuis la fiche produit :</strong> <a href="${BRAND.siteUrl}/produit/${produit.slug}">${escapeHtml(produit.name)}</a></p>` : ""}
     <p><strong>Message :</strong></p>
     <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
     ${agentBlock}

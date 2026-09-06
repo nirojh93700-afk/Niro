@@ -15,6 +15,7 @@ function view(it) {
     draft: it.draft || "", draftSubject: it.draftSubject || "", reason: it.reason || "",
     at: it.at, status: it.status, finalText: it.finalText || "", resolvedAt: it.resolvedAt || 0,
     orderId: it.orderId || "", orderRef: it.orderRef || "", source: it.source || "contact",
+    productSlug: it.productSlug || "", productName: it.productName || "",
   };
 }
 

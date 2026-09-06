@@ -14,6 +14,7 @@ export function buildDraftAlertHtml(item, { orderRef = "", reason = "", source =
   const bodyHtml = `
     <p style="margin:0 0 6px;"><strong>${esc(item.name)}</strong> &lt;${esc(item.email)}&gt;${item.phone ? ` · ${esc(item.phone)}` : ""}</p>
     <p style="margin:0 0 4px;color:#7a7268;">${origine}${orderRef ? ` · commande <strong>#${esc(orderRef)}</strong> (rangé dans son fil)` : ""}</p>
+    ${item.productName ? `<p style="margin:0 0 4px;color:#8a6d1f;">🛍️ Écrit depuis la fiche produit : <a href="${BRAND.siteUrl}/produit/${esc(item.productSlug || "")}" style="color:#8a6d1f;font-weight:bold;">${esc(item.productName)}</a></p>` : ""}
     <p style="margin:0 0 4px;color:#7a7268;">Sujet : ${esc(item.subject || "(sans sujet)")}</p>
     <div style="${boxCream}">${esc(item.message)}</div>
     <p style="margin:0 0 4px;"><strong>Réponse préparée par l'agent</strong>${reason ? ` <span style="color:#9a6b00;">— ${esc(reason)}</span>` : ""}</p>

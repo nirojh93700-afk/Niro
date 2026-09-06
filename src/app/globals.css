@@ -3863,3 +3863,6 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .cm-via { margin-left: 6px; background: #f1ebdd; border-radius: 6px; padding: 0 6px; }
 .cm-subject { font-weight: 600; font-size: 0.82rem; margin-bottom: 2px; }
 .cm-text { white-space: pre-line; line-height: 1.45; }
+
+/* Fiche produit d'origine sur une réponse à valider (Assistant) */
+.hub-pending-txt .hub-pending-prod { color: #8a6d1f; font-weight: 600; }

@@ -15,6 +15,11 @@ export default function QuestionWidget() {
   const hidden = ["/gestion", "/panier", "/paiement", "/merci", "/repondre", "/suivi", "/espace"].some((p) => pathname.startsWith(p));
   if (hidden) return null;
 
+  // Fiche produit ouverte au moment de la question : on transmet son slug pour
+  // que le gérant (et l'agent) sachent DE QUEL produit la cliente parle.
+  const produitMatch = pathname.match(/^\/produit\/([^/?#]+)/);
+  const productSlug = produitMatch ? decodeURIComponent(produitMatch[1]) : "";
+
   async function submit(e) {
     e.preventDefault();
     const f = e.currentTarget;
@@ -25,6 +30,7 @@ export default function QuestionWidget() {
         body: JSON.stringify({
           name: f.name.value.trim(), email: f.email.value.trim(), phone: "",
           subject: "Question depuis le site", message: f.message.value.trim(),
+          productSlug, page: pathname,
         }),
       });
       const d = await res.json();

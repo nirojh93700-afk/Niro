@@ -98,6 +98,7 @@ export default function HubChat({ adminKey, onReload }) {
             <div key={p.id} className="hub-pending-row">
               <div className="hub-pending-txt">
                 <b>{p.name}</b> <span>· {p.subject}</span>
+                {p.productName ? <span className="hub-pending-prod"> · 🛍️ {p.productName}</span> : null}
                 <small>{p.message}</small>
               </div>
               <Link href={`/repondre/${p.token}`} className="btn btn-gold hub-pending-btn">Relire et envoyer</Link>
