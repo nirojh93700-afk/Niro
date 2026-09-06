@@ -32,7 +32,12 @@ def images_of(slug):
     if not m: raise SystemExit("produit introuvable : " + slug)
     return re.findall(r'"([^"]+)"', m.group(1))
 
+PUBLIC = os.path.join(os.path.dirname(__file__), "..", "..", "public")
 def dl(url, key):
+    # Photo locale du dépôt (public/produits/…) d'abord ; téléchargement seulement si besoin.
+    if not url.startswith("http"):
+        local = os.path.join(PUBLIC, url.lstrip("/"))
+        if os.path.exists(local): return local
     dst = f"{OUT}/src_{key}"
     if not os.path.exists(dst):
         full = url if url.startswith("http") else SITE + url
@@ -75,11 +80,18 @@ def card(big, small, big2=None):
     if big2:
         f2 = F(SANSB, 44); w2 = d.textlength(big2, font=f2); d.text(((W - w2) // 2, y + 30), big2, font=f2, fill=(120, 100, 60))
     return im
+VOICE = {"ok": True}
 def tts(text, dst):
-    mp3 = dst.replace(".wav", ".mp3"); gTTS(text, lang="fr", slow=False).save(mp3)
-    subprocess.run([FF, "-y", "-i", mp3, "-filter:a", "atempo=1.12", "-ar", str(SR), "-ac", "1", dst],
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    with wave.open(dst) as w: return w.getnframes() / SR
+    # Voix Google (gratuite). Si le réseau la bloque, on rend une version SANS voix
+    # (musique + textes) plutôt que d'échouer : durée = temps de lecture estimé.
+    try:
+        mp3 = dst.replace(".wav", ".mp3"); gTTS(text, lang="fr", slow=False).save(mp3)
+        subprocess.run([FF, "-y", "-i", mp3, "-filter:a", "atempo=1.12", "-ar", str(SR), "-ac", "1", dst],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        with wave.open(dst) as w: return w.getnframes() / SR
+    except Exception:
+        VOICE["ok"] = False
+        return silence(max(1.6, 0.062 * len(text)), dst)
 def silence(dur, dst):
     n = int(dur * SR)
     with wave.open(dst, "wb") as w:
@@ -93,9 +105,14 @@ def render(cfg):
     segs.append(("card", card("NiV CRÉATION", cfg.get("subtitle", "L'atelier français de gravure")).convert("RGB"), None, max(MIN, PRE + di + 0.3), f"{OUT}/{name}_vo_intro.wav"))
     ZW, ZH = int(W * 1.18), int(H * 1.18)
     for i, p in enumerate(cfg["products"]):
-        imgs = images_of(p["slug"])[:PHOTOS_PER_PRODUCT]
-        for j, url in enumerate(imgs):
-            src = dl(url, f"{p['slug']}_{j}{os.path.splitext(url.split('?')[0])[1] or '.jpg'}")
+        # Photos disponibles seulement (locales ou téléchargeables) : une photo qui manque n'arrête pas la vidéo.
+        avail = []
+        for j, url in enumerate(images_of(p["slug"])):
+            if len(avail) >= PHOTOS_PER_PRODUCT: break
+            try: avail.append(dl(url, f"{p['slug']}_{j}{os.path.splitext(url.split('?')[0])[1] or '.jpg'}"))
+            except Exception: continue
+        if not avail: raise SystemExit("aucune photo disponible pour " + p["slug"])
+        for j, src in enumerate(avail):
             im = Image.open(src).convert("RGB"); zi = cover(im, ZW, ZH)
             if j == 0:
                 dv = tts(p["vo"], f"{OUT}/{name}_vo{i}.wav"); vo = f"{OUT}/{name}_vo{i}.wav"
@@ -158,7 +175,7 @@ def render(cfg):
     subprocess.run([FF, "-y", "-i", silent, "-i", audio, "-vf", "scale=720:1280", "-c:v", "libx264", "-profile:v", "main", "-pix_fmt", "yuv420p",
                     "-crf", "26", "-preset", "medium", "-c:a", "aac", "-b:a", "150k", "-movflags", "+faststart", "-shortest", final],
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    print("%s : %.1f s | %d Ko" % (name, total, os.path.getsize(final) // 1024))
+    print("%s : %.1f s | %d Ko%s" % (name, total, os.path.getsize(final) // 1024, "" if VOICE["ok"] else " | SANS VOIX (service bloqué)"))
     return final
 
 if __name__ == "__main__":
