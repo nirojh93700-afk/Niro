@@ -10,6 +10,16 @@
 - Outils à réinstaller si besoin : `pip install Pillow imageio imageio-ffmpeg gTTS numpy` (vidéos).
   Le réseau de certains environnements bloque nivcreation.fr et la voix Google : les scripts vidéo
   utilisent alors les photos de `public/produits/` et rendent sans voix (le dire au gérant).
+- ⛔ **ENVOI PROGRAMMÉ À UNE CLIENTE = LE SITE LE FAIT DÉJÀ, NE PAS PASSER PAR UNE ROUTINE CLAUDE**
+  (incident du 07/09/2026). Utiliser **Gestion → Clients → Messages clients** (formulaire libre :
+  adresse, sujet, message, « Envoyer » ou « Programmer » à l'heure voulue) — API `POST /api/admin/scheduled`
+  `{to, subject, body, sendAt}`, envoyé par `runScheduledJobs` via `/api/cron/scheduled` ET le heartbeat
+  du site. Ça ne dépend d'AUCUN outil extérieur.
+  Ce jour-là, deux envois validés (Audrey 8h30, Aurore 9h00) ont été programmés par une routine Claude :
+  au déclenchement, `nivcreation.fr` ET l'adresse Firebase étaient **bloquées par la politique réseau**
+  de l'environnement (`connect_rejected`), et `list_environments` ne renvoyait plus aucun environnement.
+  Rien n'est parti, le gérant a dû envoyer à la main. Une routine Claude ne sert que si elle DOIT
+  réfléchir (vérifier une réponse, calculer une liste) — sinon, c'est le site.
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
