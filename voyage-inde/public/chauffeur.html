@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Driver route — South India</title>
+<style>
+  @font-face{ font-family:"NotoTamil"; src:url("lib/nototamil-0.woff2") format("woff2"); font-weight:400 700; font-display:swap; }
+  :root{ --bg:#fbf7ee; --card:#fff; --ink:#1a1206; --muted:#7a6a4d; --gold:#b8862f; --line:#e6dcc6; }
+  *{box-sizing:border-box}
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Segoe UI", Roboto, Helvetica, Arial, "NotoTamil", sans-serif;
+    -webkit-font-smoothing:antialiased; padding:18px; }
+  .ta{ font-family:"NotoTamil","Segoe UI",sans-serif; color:var(--gold); }
+  .wrap{ max-width:720px; margin:0 auto; }
+  .head{ text-align:center; padding:6px 0 14px; border-bottom:2px solid var(--gold); margin-bottom:16px; }
+  .brand{ font-size:12px; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); font-weight:700; }
+  h1{ font-size:26px; margin:6px 0 2px; }
+  h1 .ta{ display:block; font-size:18px; font-weight:600; margin-top:2px; }
+  .dates{ font-size:14px; color:var(--muted); margin-top:6px; }
+  .sec{ font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); font-weight:700; margin:20px 0 8px; }
+  .sec .ta{ text-transform:none; letter-spacing:0; font-size:13px; margin-left:8px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .air{ display:flex; gap:12px; padding:12px 14px; font-size:14px; }
+  .air + .air{ border-top:1px solid var(--line); }
+  .air b{ display:inline-block; min-width:96px; color:var(--gold); }
+  table{ width:100%; border-collapse:collapse; }
+  td,th{ text-align:left; padding:9px 12px; font-size:14px; border-top:1px solid var(--line); vertical-align:top; }
+  th{ background:#f3ead6; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border-top:0; }
+  tr td:first-child{ white-space:nowrap; color:var(--muted); width:74px; }
+  .route{ font-weight:600; }
+  .km{ white-space:nowrap; color:var(--gold); font-weight:700; text-align:right; }
+  .num{ width:26px; height:26px; border-radius:50%; background:var(--gold); color:#fff; font-weight:700;
+    display:inline-flex; align-items:center; justify-content:center; font-size:12px; margin-right:4px; }
+  .total{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:12px 14px;
+    background:var(--ink); color:#fff; border-radius:12px; font-size:16px; font-weight:700; }
+  .total .km{ color:var(--gold); }
+  .note{ font-size:12px; color:var(--muted); margin:12px 4px 0; text-align:center; }
+  .noprint{ text-align:center; margin:18px 0 4px; }
+  .btn{ font:inherit; font-size:14px; font-weight:700; background:var(--gold); color:#fff; border:0;
+    border-radius:999px; padding:11px 22px; cursor:pointer; }
+  @media print{ body{ background:#fff; padding:0; } .noprint{ display:none; } .card,.total{ break-inside:avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="brand">Voyage Inde du Sud</div>
+    <h1>Driver route <span class="ta">ஓட்டுநர் பாதை</span></h1>
+    <div class="dates">Chennai → Kochi · 3–21 September 2026</div>
+  </div>
+
+  <div class="sec">Airport transfers <span class="ta">விமான நிலைய பயணம்</span></div>
+  <div class="card">
+    <div class="air"><b>4 Sep <span class="ta">வருகை</span></b><span>Chennai airport (MAA) → hotel · arrival ~02:40 (night)</span></div>
+    <div class="air"><b>21 Sep <span class="ta">புறப்பாடு</span></b><span>Hotel → Kochi airport (COK) · flight 10:15 (morning)</span></div>
+  </div>
+
+  <div class="sec">Stops — nights <span class="ta">தங்குமிடங்கள் — இரவுகள்</span></div>
+  <div class="card">
+    <table>
+      <tr><th>City</th><th>Dates</th><th style="text-align:right">Nights</th></tr>
+      <tr><td style="width:auto"><span class="num">1</span>Chennai</td><td>4–7 Sep</td><td style="text-align:right">3</td></tr>
+      <tr><td style="width:auto"><span class="num">2</span>Mahabalipuram</td><td>7–8 Sep</td><td style="text-align:right">1</td></tr>
+      <tr><td style="width:auto"><span class="num">3</span>Pondicherry</td><td>8–10 Sep</td><td style="text-align:right">2</td></tr>
+      <tr><td style="width:auto"><span class="num">4</span>Velankanni</td><td>10–11 Sep</td><td style="text-align:right">1</td></tr>
+      <tr><td style="width:auto"><span class="num">5</span>Madurai</td><td>11–13 Sep</td><td style="text-align:right">2</td></tr>
+      <tr><td style="width:auto"><span class="num">6</span>Thekkady</td><td>13–15 Sep</td><td style="text-align:right">2</td></tr>
+      <tr><td style="width:auto"><span class="num">7</span>Munnar</td><td>15–17 Sep</td><td style="text-align:right">2</td></tr>
+      <tr><td style="width:auto"><span class="num">8</span>Alleppey</td><td>17–18 Sep</td><td style="text-align:right">1</td></tr>
+      <tr><td style="width:auto"><span class="num">9</span>Kochi</td><td>18–21 Sep</td><td style="text-align:right">3</td></tr>
+    </table>
+  </div>
+
+  <div class="sec">Driving days <span class="ta">பயண நாட்கள்</span></div>
+  <div class="card">
+    <table>
+      <tr><th>Date</th><th>Route</th><th style="text-align:right">km · time</th></tr>
+      <tr><td>7 Sep</td><td class="route">Chennai → Tirupati → Mahabalipuram</td><td class="km">135 + 170<br>~3h + ~4h</td></tr>
+      <tr><td>8 Sep</td><td class="route">Mahabalipuram → Melmaruvathur → Pondicherry</td><td class="km">65 + 65<br>~1h30 ×2</td></tr>
+      <tr><td>10 Sep</td><td class="route">Pondicherry → Velankanni</td><td class="km">~170<br>~4h</td></tr>
+      <tr><td>11 Sep</td><td class="route">Velankanni → Madurai</td><td class="km">~210<br>~4h30</td></tr>
+      <tr><td>13 Sep</td><td class="route">Madurai → Thekkady <span class="ta" style="color:var(--muted)">மலைப் பாதை</span></td><td class="km">~140<br>~4h</td></tr>
+      <tr><td>15 Sep</td><td class="route">Thekkady → Munnar <span class="ta" style="color:var(--muted)">மலைப் பாதை</span></td><td class="km">~90<br>~3h</td></tr>
+      <tr><td>17 Sep</td><td class="route">Munnar → Alleppey</td><td class="km">~170<br>~5h</td></tr>
+      <tr><td>18 Sep</td><td class="route">Alleppey → Kochi</td><td class="km">~55<br>~1h30</td></tr>
+    </table>
+  </div>
+
+  <div class="total"><span>Total <span class="ta" style="color:#fff">மொத்தம்</span></span><span class="km">~1 270 km</span></div>
+
+  <p class="note">Approximate distances — please use GPS. <span class="ta">தோராயமான தூரம் — GPS பயன்படுத்தவும்.</span><br>
+  Rest stop every ~1h30–2h (child of 2). <span class="ta">ஒவ்வொரு ~1½–2 மணிக்கும் ஓய்வு.</span></p>
+
+  <div class="noprint"><button class="btn" onclick="window.print()">Imprimer / Print</button></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0B2224">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Voyage Inde">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Convertisseur de devises hors ligne et carnet de dépenses partagé pour le voyage en Inde du Sud.">
+<title>Voyage — Inde du Sud</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="lib/leaflet.css">
+<script src="lib/leaflet.js"></script>
+<style>
+  :root{
+    --ink:#0B2224; --slab:#12383A; --slab2:#0F2C2E;
+    --line:rgba(233,242,238,.14); --line2:rgba(233,242,238,.07);
+    --text:#EDF5F1; --muted:#89ACA6;
+    --gold:#F0B429; --aqua:#6FD6C4; --rose:#E58C7D;
+    --safe: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html{background:var(--ink); min-height:100%}
+  body{
+    margin:0; min-height:100dvh; background:var(--ink); color:var(--text);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased; overscroll-behavior-y:none;
+  }
+  .wrap{max-width:460px; margin:0 auto; min-height:100dvh; display:flex; flex-direction:column}
+
+  /* ---- tabs ---- */
+  .tabs{flex:none; display:flex; gap:4px; padding:calc(12px + env(safe-area-inset-top, 0px)) 16px 0}
+  .tabs button{
+    flex:1; font:inherit; font-size:12px; font-weight:600; letter-spacing:0;
+    color:var(--muted); background:var(--slab2); border:1px solid var(--line);
+    padding:11px 0; border-radius:12px; cursor:pointer; transition:.18s;
+  }
+  .tabs button[aria-selected="true"]{background:var(--slab); color:var(--text); border-color:rgba(233,242,238,.3)}
+  .tabs .langbtn{flex:none; width:auto; color:var(--muted); font-size:12px; font-weight:600; padding:11px 12px}
+  .tabs .langbtn .car{font-size:9px}
+  .tabs button:focus-visible{outline:2px solid var(--aqua); outline-offset:2px}
+
+  .screen{flex:1; display:none; flex-direction:column; min-height:0}
+  .screen.on{display:flex}
+  .scroll{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px 16px 8px}
+
+  /* ---- converter slab ---- */
+  .slab{flex:none; background:var(--slab); border:1px solid var(--line); border-radius:20px; overflow:hidden}
+  .side{padding:14px 16px 15px; cursor:pointer; border:0; background:none; width:100%; text-align:left; font:inherit; color:inherit; display:block; transition:background .2s}
+  .side.active{background:rgba(255,255,255,.045)}
+  .side:focus-visible{outline:2px solid var(--aqua); outline-offset:-3px}
+  .side .top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
+  .lbl{font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted)}
+  .cur-btn{
+    font:inherit; font-size:13px; font-weight:600; color:var(--text);
+    background:var(--slab2); border:1px solid var(--line); border-radius:999px;
+    padding:6px 12px; display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+  }
+  .cur-btn .car{color:var(--muted); font-size:10px}
+  .num{
+    font-family:"Bricolage Grotesque", ui-sans-serif, sans-serif;
+    font-variation-settings:"wdth" 82,"opsz" 96; font-weight:500;
+    font-size:clamp(32px,10.5vw,44px); line-height:1.05; font-variant-numeric:tabular-nums;
+    color:#fff; overflow:hidden; white-space:nowrap; direction:ltr;
+  }
+  .side.active .num{color:var(--gold)}
+  .side:not(.active) .num{color:var(--aqua); opacity:.9}
+  .caret{display:inline-block; width:3px; height:.8em; margin-left:3px; background:currentColor; vertical-align:-2px; animation:bk 1.05s steps(1,end) infinite}
+  @keyframes bk{50%{opacity:0}}
+
+  .spine{position:relative; height:1px; background:var(--line); margin:0 16px}
+  .swap{position:absolute; right:0; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+        background:var(--slab2); border:1px solid var(--line); color:var(--text); display:grid; place-items:center; cursor:pointer; z-index:2}
+  .swap svg{width:16px; height:16px; transition:transform .4s cubic-bezier(.3,1.4,.5,1)}
+  .swap.turn svg{transform:rotate(180deg)}
+
+  .rate{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 16px 12px; background:var(--slab2); border-top:1px solid var(--line)}
+  .rate .v{font-size:12.5px; font-weight:500; font-variant-numeric:tabular-nums}
+  .rate .v small{display:block; color:var(--muted); font-size:10px; font-weight:400; margin-top:2px}
+  .chip{font:inherit; font-size:11.5px; font-weight:500; color:var(--muted); background:none; border:1px solid var(--line); border-radius:999px; padding:6px 11px; cursor:pointer}
+  .chip:active{color:var(--text)}
+  .chip.on{background:var(--gold); color:#0B2224; border-color:transparent}
+  .rate .acts{display:flex; gap:6px; flex:none}
+
+  .tip{font-size:12px; color:var(--muted); line-height:1.5; margin:12px 2px 0}
+  .tip b{color:var(--text); font-weight:600}
+
+  h2.sec{font:inherit; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin:18px 2px 8px; font-weight:600}
+  .refs{list-style:none; margin:0; padding:0}
+  .refs li{display:flex; justify-content:space-between; gap:12px; padding:7px 2px; font-size:13px; border-bottom:1px solid var(--line2)}
+  .refs li span:first-child{color:#C8DAD5}
+  .refs .p{color:var(--gold); font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:500}
+  .refs .p em{font-style:normal; color:var(--muted); font-size:11.5px; margin-left:6px}
+
+  /* ---- keypad ---- */
+  .pad{display:grid; grid-template-columns:repeat(3,1fr); gap:7px; padding:0; margin:8px 0 4px}
+  .pad button{
+    font-family:"Bricolage Grotesque", sans-serif; font-variation-settings:"wdth" 85; font-size:22px; color:var(--text);
+    background:var(--slab); border:1px solid var(--line); border-radius:14px; padding:13px 0; cursor:pointer; touch-action:manipulation;
+  }
+  .pad button:active{background:#1A4A4A; transform:scale(.97)}
+  .pad .fn{color:var(--muted); font-size:18px}
+
+  /* ---- expenses ---- */
+  .hero{background:var(--slab); border:1px solid var(--line); border-radius:20px; padding:16px}
+  .hero .lbl{margin-bottom:4px}
+  .hero .big{font-family:"Bricolage Grotesque",sans-serif; font-variation-settings:"wdth" 82; font-weight:600; font-size:40px; line-height:1; color:#fff; font-variant-numeric:tabular-nums}
+  .hero .sub{font-size:12px; color:var(--muted); margin-top:8px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+  .btn{
+    font:inherit; font-size:14px; font-weight:600; width:100%;
+    background:var(--gold); color:#0B2224; border:0; border-radius:14px; padding:14px; cursor:pointer; margin-top:12px;
+  }
+  .btn.ghost{background:none; color:var(--text); border:1px solid var(--line)}
+  .btn:active{opacity:.85}
+
+  .person{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line2)}
+  .dot{width:9px; height:9px; border-radius:50%; flex:none}
+  .person .nm{flex:1; font-size:13.5px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .person .amt{font-variant-numeric:tabular-nums; font-size:13.5px; font-weight:600}
+  .person .bal{font-size:11px; font-variant-numeric:tabular-nums; width:76px; text-align:right; flex:none}
+  .pchip{font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; border-radius:999px; padding:4px 10px; flex:none; white-space:nowrap}
+  .pchip.due{background:rgba(240,120,120,.16); color:var(--rose); border:1px solid rgba(240,120,120,.35)}
+  .pchip.ok{background:rgba(90,215,200,.14); color:var(--aqua); border:1px solid rgba(90,215,200,.3)}
+  .pchip.zero{background:var(--slab2); color:var(--muted); border:1px solid var(--line)}
+  .pos{color:var(--aqua)} .neg{color:var(--rose)}
+  .bar{height:3px; background:var(--line2); border-radius:2px; margin-top:5px; overflow:hidden}
+  .bar i{display:block; height:100%; border-radius:2px}
+
+  .exp{display:flex; align-items:center; gap:11px; padding:10px 2px; border-bottom:1px solid var(--line2)}
+  .exp .body{flex:1; min-width:0}
+  .exp .t{font-size:13.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .exp .s{font-size:11px; color:var(--muted); margin-top:2px}
+  .exp .r{text-align:right; flex:none}
+  .exp .r b{font-size:13.5px; font-weight:600; font-variant-numeric:tabular-nums; display:block}
+  .exp .r small{font-size:10.5px; color:var(--muted)}
+  .del{background:none; border:0; color:var(--muted); font-size:17px; padding:4px 2px 4px 8px; cursor:pointer}
+
+  .empty{text-align:center; color:var(--muted); font-size:13px; line-height:1.6; padding:26px 10px}
+
+  /* ---- sheet ---- */
+  .sheet-bg{position:fixed; inset:0; background:rgba(4,16,17,.6); backdrop-filter:blur(3px); z-index:40; display:none}
+  .sheet-bg.on{display:block}
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:41; max-width:460px; margin:0 auto;
+    background:#123A3C; border:1px solid var(--line); border-bottom:0; border-radius:22px 22px 0 0;
+    padding:8px 16px calc(18px + var(--safe)); max-height:88dvh; overflow-y:auto;
+    -webkit-overflow-scrolling:touch; overscroll-behavior:contain; touch-action:pan-y;
+    transform:translateY(101%); transition:transform .28s cubic-bezier(.3,1,.4,1);
+  }
+  .sheet.on{transform:none}
+  /* fenêtre ouverte : on bloque le défilement de l'écran derrière (évite le blocage iOS) */
+  body.sheetopen .scroll{overflow:hidden}
+  .grab{width:38px; height:4px; border-radius:2px; background:var(--line); margin:6px auto 14px}
+  .sheet h3{font:inherit; font-size:16px; font-weight:600; margin:0 0 14px}
+  .field{margin-bottom:12px}
+  .field label{display:block; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:6px}
+  .field input, .field select{
+    width:100%; font:inherit; font-size:16px; color:var(--text);
+    background:var(--slab2); border:1px solid var(--line); border-radius:12px; padding:12px 13px; -webkit-appearance:none; appearance:none;
+  }
+  /* iOS ne zoome que sous 16px : tous les champs saisissables forcés à 16px (empêche le zoom auto) */
+  input, select, textarea{ font-size:16px !important }
+  .field select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 17px) 20px, calc(100% - 12px) 20px; background-size:5px 5px,5px 5px; background-repeat:no-repeat}
+  .field input:focus, .field select:focus{outline:none; border-color:var(--aqua)}
+  .row2{display:grid; grid-template-columns:1.6fr 1fr; gap:10px}
+  .who{display:flex; flex-wrap:wrap; gap:7px}
+  .who button{font:inherit; font-size:13px; color:var(--text); background:var(--slab2); border:1px solid var(--line); border-radius:999px; padding:8px 13px; cursor:pointer}
+  .who button[aria-pressed="true"]{background:var(--gold); color:#0B2224; border-color:transparent; font-weight:600}
+  .curlist{list-style:none; margin:0; padding:0}
+  .curlist li button{
+    width:100%; display:flex; align-items:center; gap:12px; font:inherit; font-size:14.5px; color:var(--text);
+    background:none; border:0; border-bottom:1px solid var(--line2); padding:13px 4px; cursor:pointer; text-align:left;
+  }
+  .curlist .code{font-weight:600; width:44px; flex:none}
+  .curlist .nm{flex:1; color:var(--muted); font-size:13px}
+  .curlist .sy{font-family:"Bricolage Grotesque",sans-serif; font-size:16px; color:var(--gold)}
+  .note{font-size:11.5px; color:var(--muted); line-height:1.55; margin-top:2px}
+  .toast{position:fixed; left:50%; bottom:calc(24px + var(--safe)); transform:translateX(-50%) translateY(20px); opacity:0;
+    background:#EDF5F1; color:#0B2224; font-size:13px; font-weight:600; padding:10px 16px; border-radius:999px; z-index:60; transition:.25s; pointer-events:none}
+  .toast.on{opacity:1; transform:translateX(-50%)}
+  /* ---- planning ---- */
+  .phead{background:var(--slab); border:1px solid var(--line); border-radius:20px; padding:16px; margin-bottom:12px}
+  .phead .t{font-family:"Bricolage Grotesque",sans-serif; font-variation-settings:"wdth" 82; font-weight:600; font-size:22px; color:#fff; line-height:1.1}
+  .phead .dt{font-size:12px; color:var(--muted); margin-top:4px}
+  .ptoday{margin-top:12px; background:var(--slab2); border:1px solid rgba(240,180,41,.4); border-radius:14px; padding:11px 12px; font-size:13px; line-height:1.4}
+  .ptoday b{color:var(--gold)}
+  .pbar{height:4px; background:var(--line2); border-radius:2px; margin-top:10px; overflow:hidden}
+  .pbar i{display:block; height:100%; background:var(--gold); border-radius:2px; transition:width .3s}
+  .pday{background:var(--slab); border:1px solid var(--line); border-radius:16px; padding:12px 14px; margin-bottom:10px}
+  .pday.now{border-color:var(--gold)}
+  .pday .top{display:flex; align-items:flex-start; gap:10px}
+  .pday .num{flex:none; font-family:"Bricolage Grotesque",sans-serif; font-weight:600; color:var(--gold); font-size:12px; letter-spacing:.04em; min-width:50px; padding-top:2px}
+  .pday .dd{flex:1; min-width:0}
+  .pday .ttl{font-size:14px; font-weight:600; color:var(--text)}
+  .pday .date{font-size:11px; color:var(--muted); margin-top:1px}
+  .pday .desc{font-size:12.5px; color:#C8DAD5; line-height:1.5; margin-top:7px}
+  .pday .drive{display:inline-block; font-size:11px; color:var(--gold); background:rgba(240,180,41,.12); border-radius:999px; padding:2px 9px; margin-top:7px}
+  .pchk{flex:none; width:24px; height:24px; border-radius:7px; border:1.5px solid var(--line); background:var(--slab2); color:var(--gold); display:grid; place-items:center; cursor:pointer; font-size:14px; padding:0}
+  .pchk.on{background:var(--gold); border-color:transparent; color:#0B2224}
+  .pmap{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; color:var(--aqua); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 10px; margin:8px 6px 0 0}
+  .pover{list-style:none; margin:0; padding:0}
+  .pover li{display:flex; justify-content:space-between; gap:10px; padding:8px 2px; border-bottom:1px solid var(--line2); font-size:13px}
+  .pover .pl{color:#C8DAD5} .pover .pl small{color:var(--muted); font-size:11px; display:block; margin-top:1px}
+  .pover .nn{color:var(--gold); font-size:11.5px; white-space:nowrap; flex:none}
+  .plegs{list-style:none;margin:0;padding:0}
+  .plegs li{display:flex; justify-content:space-between; gap:10px; padding:7px 2px; border-bottom:1px solid var(--line2); font-size:12.5px}
+  .plegs .du{color:var(--gold); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .ptips{margin:0; padding-left:18px} .ptips li{font-size:12.5px; color:#C8DAD5; line-height:1.5; margin-bottom:6px}
+  #planMap{height:260px; border-radius:16px; overflow:hidden; margin-bottom:12px; background:var(--slab2)}
+  .leaflet-container{font:inherit; background:var(--slab2)}
+  .mk{width:26px; height:26px; border-radius:50%; background:var(--slab); border:2px solid var(--gold); color:var(--gold); font-family:"Bricolage Grotesque",sans-serif; font-weight:600; font-size:12px; line-height:22px; text-align:center; box-shadow:0 1px 5px rgba(0,0,0,.45)}
+  .mk.now{background:var(--gold); color:#0B2224}
+  .pphoto{width:100%; height:150px; object-fit:cover; border-radius:12px; margin:2px 0 8px; display:block}
+  .pcredit{font-size:11px; color:var(--muted); text-align:center; margin:6px 2px 24px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="tabs" role="tablist">
+    <button id="tabC" role="tab" aria-selected="true" data-i18n="conv">Convertisseur</button>
+    <button id="tabD" role="tab" aria-selected="false" data-i18n="dep">Dépenses</button>
+    <button id="tabP" role="tab" aria-selected="false" data-i18n="planTab">Planning</button>
+    <button id="langBtn" class="langbtn" aria-label="Langue">FR <span class="car">▾</span></button>
+  </div>
+
+  <!-- ===== CONVERTISSEUR ===== -->
+  <section class="screen on" id="scC">
+    <div class="scroll">
+      <div class="slab">
+        <button class="side active" id="sideA">
+          <span class="top"><span class="lbl" data-i18n="iEnter">Je saisis</span>
+            <span class="cur-btn" id="curA">INR <span class="car">▾</span></span></span>
+          <div class="num" id="numA">0</div>
+        </button>
+        <div class="spine">
+          <button class="swap" id="swap" aria-label="Inverser">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 20l-3-3M17 20V4M17 4l3 3"/></svg>
+          </button>
+        </div>
+        <button class="side" id="sideB">
+          <span class="top"><span class="lbl" data-i18n="itMakes">Ça fait</span>
+            <span class="cur-btn" id="curB">EUR <span class="car">▾</span></span></span>
+          <div class="num" id="numB">0</div>
+        </button>
+        <div class="rate">
+          <div class="v" id="rateTxt">—<small id="rateSrc"></small></div>
+          <div class="acts">
+            <button class="chip" id="editRate">Modifier</button>
+            <button class="chip" id="fetchRate" data-i18n="refresh">Actualiser</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="tip" id="tip"></p>
+
+      <div class="pad" id="pad">
+        <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+        <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+        <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+        <button data-k="," class="fn">,</button><button data-k="0">0</button>
+        <button data-k="del" class="fn" aria-label="Effacer">⌫</button>
+      </div>
+
+      <h2 class="sec" id="refTitle">Est-ce cher ?</h2>
+      <ul class="refs" id="refList"></ul>
+    </div>
+  </section>
+
+  <!-- ===== DÉPENSES ===== -->
+  <section class="screen" id="scD">
+    <div class="scroll">
+      <div class="hero">
+        <div class="top" style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px">
+          <span class="lbl" data-i18n="totalTrip">Total du voyage</span>
+          <span class="cur-btn" id="expCurBtn">EUR <span class="car">▾</span></span>
+        </div>
+        <div class="big" id="grandTotal">0,00 €</div>
+        <div class="sub">
+          <span id="expCount">0 dépense</span>
+          <span id="perHead">—</span>
+        </div>
+      </div>
+      <div id="lockBanner"></div>
+      <button class="btn" id="addExp" data-i18n="addExp">+ Ajouter une dépense</button>
+      <button class="btn ghost" id="roomsBtn" style="margin-top:8px; font-size:13px; padding:11px">🛏️ <span data-i18n="roomsBtnLbl">Assistant Chambres</span></button>
+      <button class="btn ghost" id="driverBtn" style="margin-top:8px; font-size:13px; padding:11px">🚗 <span data-i18n="driverBtnLbl">Chauffeur du circuit</span></button>
+
+      <h2 class="sec" data-i18n="whoSpent">Qui a dépensé quoi</h2>
+      <div id="byPerson"></div>
+      <button class="btn ghost" id="managePeople" style="margin-top:10px; font-size:13px; padding:11px" data-i18n="managePeople">Gérer les participants</button>
+
+      <h2 class="sec" id="catHead" data-i18n="catTitle">Par catégorie</h2>
+      <div id="byCat"></div>
+
+      <h2 class="sec" data-i18n="history">Historique</h2>
+      <div id="history"></div>
+
+      <button class="btn ghost" id="hotelsBtn" style="margin-top:16px">🏨 <span data-i18n="hotelsBtnLbl">Hôtels (privé)</span></button>
+      <button class="btn ghost" id="settleBtn" style="margin-top:8px">🔒 <span data-i18n="settleBtnLbl">Qui rembourse qui (privé)</span></button>
+      <button class="btn ghost" id="lockBtn" style="margin-top:8px">Verrouiller les comptes</button>
+      <button class="btn" id="syncBtn" style="margin-top:8px" data-i18n="sync">Synchroniser</button>
+      <div class="row2" style="margin-top:8px">
+        <button class="btn ghost" id="sendBtn" style="margin:0; font-size:13px; padding:12px" data-i18n="sendExp">Envoyer mes dépenses</button>
+        <button class="btn ghost" id="recvBtn" style="margin:0; font-size:13px; padding:12px" data-i18n="recvCode">Recevoir un code</button>
+      </div>
+      <button class="btn ghost" id="qrBtn" style="margin-top:8px; font-size:13px; padding:12px" data-i18n="installOther">Installer sur un autre téléphone (QR code)</button>
+      <p class="note" style="margin:12px 2px 24px" id="syncNote"></p>
+    </div>
+  </section>
+
+  <!-- ===== PLANNING ===== -->
+  <section class="screen" id="scP">
+    <div class="scroll">
+      <div id="planMap"></div>
+      <div id="planBody"></div>
+    </div>
+  </section>
+</div>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet"><div class="grab"></div><div id="sheetIn"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ========== devises ========== */
+var CUR = {
+  EUR:{n:"Euro", s:"€", d:2}, USD:{n:"Dollar américain", s:"$", d:2},
+  INR:{n:"Roupie indienne", s:"₹", d:0}, QAR:{n:"Riyal qatari", s:"ر.ق", d:2},
+  GBP:{n:"Livre sterling", s:"£", d:2}, CHF:{n:"Franc suisse", s:"CHF", d:2},
+  AED:{n:"Dirham (Émirats)", s:"د.إ", d:2}, LKR:{n:"Roupie srilankaise", s:"Rs", d:0},
+  THB:{n:"Baht thaï", s:"฿", d:2}, TRY:{n:"Livre turque", s:"₺", d:2},
+  CAD:{n:"Dollar canadien", s:"$CA", d:2}, JPY:{n:"Yen", s:"¥", d:0},
+  SGD:{n:"Dollar de Singapour", s:"S$", d:2}, MYR:{n:"Ringgit", s:"RM", d:2}
+};
+/* taux exprimés en unités pour 1 EUR (secours hors ligne, août 2026) */
+var RATES = {EUR:1, USD:1.16, INR:113.20, QAR:4.22, GBP:0.855, CHF:0.94, AED:4.26,
+             LKR:340, THB:37.5, TRY:47.5, CAD:1.59, JPY:171, SGD:1.49, MYR:4.9};
+var RSRC = "";
+/* TAUX FIXE demandé par la gérante : 1 € = 113,20 ₹.
+   Jamais écrasé par la mise à jour automatique ni par un ancien taux enregistré. */
+var FIXED_RATES = {INR:113.20};
+function loadFixedRates(){ var f=lget("fxFixed"); if(f && typeof f==="object"){ for(var k in f){ if(+f[k]>0) FIXED_RATES[k]=+f[k]; } } }
+function applyFixedRates(){ for(var k in FIXED_RATES){ RATES[k]=FIXED_RATES[k]; } }
+function setFixedRate(cur, val){ if(!(+val>0)) return; FIXED_RATES[cur]=+val; RATES[cur]=+val; lset("fxFixed", FIXED_RATES); }
+function isFixed(cur){ return Object.prototype.hasOwnProperty.call(FIXED_RATES, cur); }
+
+var REFS = {
+  INR:{ tkey:"reftitle_inr", l:[
+    ["r_chai",10,25],["r_auto",80,150],["r_thali",120,250],["r_water",20,30],
+    ["r_temple",100,600],["r_taxikochi",900,1400],["r_tipday",300,500],["r_houseboat",12000,25000]]},
+  QAR:{ tkey:"reftitle_qar", l:[
+    ["r_coffee",20,30],["r_meal",45,70],["r_metro",2,6],["r_taxisouq",40,60]]}
+};
+
+var PALETTE = ["#F0B429","#6FD6C4","#E58C7D","#9BC4F0","#C9A9E0","#8FD98F","#F2A0C4","#D6C46F","#7FBFB5","#E0A56F"];
+
+/* ========== langues (FR / EN / தமிழ்) ========== */
+var LANG = "fr";
+var LNAME = { fr:"FR", en:"EN", ta:"தமிழ்" };
+var LOCALE = { fr:"fr-FR", en:"en-GB", ta:"ta-IN" };
+var I18N = {
+  fr:{
+    conv:"Convertisseur", dep:"Dépenses", iEnter:"Je saisis", itMakes:"Ça fait",
+    edit:"Modifier", validate:"Valider", refresh:"Actualiser",
+    rateSaved:"taux de secours enregistrés", rateFixed:"taux fixe (1 € = 113,20 ₹)", rateManual:"taux saisi à la main", rateOffline:"hors ligne — dernier taux connu",
+    rateHint:"saisis le taux puis Valider", ratesUpdated:"taux mis à jour",
+    tipINR:"<b>Calcul de tête :</b> enlève deux zéros, puis retire {n} %. ₹1 000 ≈ {x} €.",
+    tipQAR:"<b>Calcul de tête :</b> divise par 4. 100 ر.ق ≈ {x} €.",
+    tipUSD:"<b>Repère :</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
+    tipGEN:"<b>Repère :</b> 10 {s} ≈ {m}.",
+    reftitle_inr:"Est-ce cher ? — repères Inde du Sud", reftitle_qar:"Escale Doha — repères",
+    r_chai:"Chai / café filtre", r_auto:"Auto-rickshaw, 3 km", r_thali:"Thali végétarien", r_water:"Bouteille d'eau 1 L",
+    r_temple:"Entrée temple (étranger)", r_taxikochi:"Taxi aéroport Kochi → centre", r_tipday:"Pourboire chauffeur / jour", r_houseboat:"Houseboat Alleppey, 1 nuit",
+    r_coffee:"Café à Hamad Airport", r_meal:"Repas au terminal", r_metro:"Métro de Doha, 1 trajet", r_taxisouq:"Taxi aéroport → Souq Waqif",
+    totalTrip:"Total du voyage", addExp:"+ Ajouter une dépense", whoSpent:"Qui a dépensé quoi", managePeople:"Gérer les participants",
+    history:"Historique", sync:"Synchroniser", sendExp:"Envoyer mes dépenses", recvCode:"Recevoir un code", installOther:"Installer sur un autre téléphone (QR code)",
+    lockAccounts:"Verrouiller les comptes", unlockAccounts:"Déverrouiller les comptes", lockedWord:"Verrouillé",
+    perPerson:"par personne", noParticipant:"aucun participant", expSingular:"dépense", expPlural:"dépenses",
+    emptyPeople:"Ajoute les participants pour répartir les dépenses.", emptyExp:"Aucune dépense pour l'instant.", meTag:"moi",
+    lockedTitle:"Comptes verrouillés", lockedTail:"les dépenses ne peuvent plus être ajoutées ni modifiées.",
+    syncActiveBold:"Carnet en ligne", syncActiveTail:" — la synchro est automatique entre les téléphones.",
+    syncPausedBold:"Reconnexion…", syncPausedTail:" — tes saisies sont gardées et repartiront dès le réseau revenu.",
+    syncLocalBold:"Carnet sur cet appareil", syncLocalTail:" — mets-le en ligne pour partager en direct avec la famille.",
+    syncConnecting:"Mise en ligne du carnet…",
+    shareBook:"Partager le carnet", joinBook:"Rejoindre un carnet", putOnlineBtn:"Mettre en ligne", onThisPhone:"Sur ce téléphone :",
+    shareTitle:"Partager le carnet", shareIntro:"La famille rejoint le <b style=\"color:var(--text)\">même carnet</b> en direct. Le plus simple : envoie le <b style=\"color:var(--text)\">lien</b> par WhatsApp (un appui suffit). Sinon, donne-leur le code à saisir.",
+    shareLinkLabel:"Lien à envoyer à la famille", copyLink:"Copier le lien", waSend:"Envoyer sur WhatsApp", linkCopied:"Lien copié",
+    joinTitle:"Rejoindre le carnet de la famille", joinIntro:"Colle le lien reçu par WhatsApp, ou saisis simplement le code du voyage.", joinPaste:"Lien ou code du voyage", joinBtn:"Rejoindre", joinedToast:"Carnet rejoint — synchronisation…",
+    notOnlineYet:"Ce carnet n'est pas encore en ligne. Ajoute une dépense ou appuie sur « Mettre en ligne ».", makingOnline:"Mise en ligne…",
+    codeLine:"Code du voyage :", changeWord:"changer", codeLineTail:"Toute la famille saisit le même code pour partager le même carnet.",
+    tAccountsLocked:"Comptes verrouillés", tOnlyOwn:"Tu ne peux supprimer que tes dépenses", thisExpense:"cette dépense",
+    confirmDelete:"Supprimer « {l} » ?", tDeletedOffline:"Supprimé (hors ligne)", tSynced:"Synchronisé",
+    tSavedPaused:"Enregistré (sync auto en pause)", tSavedOffline:"Enregistré hors ligne", tSavedOfflineShort:"Enregistré (hors ligne)",
+    tIndicateAmount:"Indique un montant", confirmLock:"Verrouiller les comptes ? Personne ne pourra plus ajouter ni supprimer de dépense tant que tu ne déverrouilles pas.",
+    tLockedOn:"Comptes verrouillés", tLockedOff:"Comptes déverrouillés", tLockedByToast:"Verrouillé par {name}",
+    pdWhyDetail:"Détail de ce que {name} a consommé (c'est ce qui explique la somme).", pdConsumed:"Part totale de {name}", pdAlreadyPaid:"Déjà payé de sa poche", pdAlreadyReimb:"Déjà remboursé", pdRemains:"RESTE À RÉGLER",
+    newExpense:"Nouvelle dépense", editExpense:"Modifier la dépense", rbEdit:"Modifier ce remboursement", rbNewAmount:"Nouveau montant", amount:"Montant", forWhat:"Pour quoi", forWhatPh:"Déjeuner, taxi, hôtel…", whoPaid:"Qui a payé", dateW:"Date",
+    saveExpense:"Enregistrer la dépense", atCurrentRate:"au taux actuel",
+    chooseCurrency:"Choisir une devise", viewAmountsIn:"Voir les montants en…",
+    sendTitle:"Envoyer mes dépenses", sendIntro:"{n} {w} de {name}. Envoie ce code par WhatsApp/SMS : la personne qui centralise le collera dans « Recevoir un code » et tout se regroupera. Renvoyer le même code ne crée pas de doublon.",
+    codeW:"Code", shareW:"Partager", copyCode:"Copier le code", tNoExpenseYou:"Tu n'as aucune dépense", tNoExpenseSend:"Aucune dépense à envoyer",
+    msgShare:"Mes dépenses du voyage ({n}) — colle ce code dans l'app :", everyone:"tout le monde",
+    recvTitle:"Recevoir des dépenses", recvIntro:"Colle ici le code envoyé par une autre personne. Ses dépenses viendront s'ajouter au carnet commun.",
+    codeReceived:"Code reçu", addToBook:"Ajouter au carnet", tCodeUnknown:"Code non reconnu", tCodeUnreadable:"Code illisible ou incomplet", tCodeUnreadable2:"Code illisible",
+    tAdded:"Ajouté : {n} {w}", tUpToDate:"Déjà à jour", tCodeCopied:"Code copié", tSelectCopy:"Sélectionne et copie le code", tLinkCopied:"Lien copié",
+    participantsTitle:"Participants", participantsIntro:"Ajoute d'abord les personnes du voyage. Chacune pourra saisir ses dépenses depuis son téléphone.",
+    addW:"Ajouter", firstName:"Prénom", iAm:"Je suis", notSet:"— non défini —", doneW:"Terminé", noParticipants:"Aucun participant.",
+    renameLabel:"Nouveau nom", backWord:"‹ Retour", partsWord:"Parts", partsHint:"Combien de personnes derrière ce nom (couple = 2, seul = 1). Sert à répartir les dépenses partagées.",
+    tHasExpenses:"Cette personne a des dépenses", tAlreadyList:"Déjà dans la liste",
+    tripCodeTitle:"Code du voyage", tripCodeIntro:"Ce code relie tous les téléphones au <b style=\"color:var(--text)\">même carnet</b>. Donne-le à la famille (WhatsApp) : chacun le saisit à l'identique. Choisis-en un personnel pour un carnet privé.",
+    useThisCode:"Utiliser ce code", tCodeEmpty:"Code vide",
+    installTitle:"Installer sur un autre téléphone", installIntro:"Fais scanner ce QR code par l'autre téléphone (appareil photo). Il ouvre l'app ; ensuite <b style=\"color:var(--text)\">Partager › Sur l'écran d'accueil</b>. Pense à mettre le <b style=\"color:var(--text)\">même code de voyage</b>.",
+    shareLink:"Partager le lien", langTitle:"Langue",
+    planTab:"Planning", planHeaderTitle:"Circuit Inde du Sud", planHeaderDates:"3 – 21 septembre 2026 · 19 jours",
+    planToday:"Aujourd'hui", planCountdown:"J − {n} avant le départ", planEnded:"Bon retour ! Voyage terminé.",
+    planOverview:"Vue d'ensemble", planDayByDay:"Jour par jour", planRoutes:"Trajets", planTips:"Conseils pratiques",
+    planMaps:"Maps", planProgress:"{done} / {tot} jours cochés", planDayWord:"Jour", planNights:"{n} nuits", planNight1:"1 nuit", planHotelBooked:"Hôtel réservé",
+    planCredits:"Photos : Wikimedia Commons · Carte : OpenStreetMap",
+    catTitle:"Par catégorie", catField:"Catégorie",
+    splitField:"Répartition", splitEqual:"Égal", splitExact:"Montants", splitShares:"Parts",
+    splitRemaining:"Reste : {x}", splitConcerned:"Coche qui est concerné",
+    roomsBtnLbl:"Assistant Chambres", roomsTitle:"Assistant Chambres", roomsHotelName:"Nom de l'hôtel",
+    roomsPaidBy:"Payé par", roomWord:"Chambre", roomPrice:"Prix", roomWho:"Qui dort ici",
+    addRoom:"+ Ajouter une chambre", roomsCreate:"Créer les dépenses", roomsCreatedN:"chambre(s) ajoutée(s)",
+    roomsNeed:"Ajoute au moins une chambre avec un prix et une personne.",
+    roomsDate:"Arrivée", roomsOut:"Départ", perNight:"/nuit", nightsWord:"nuits", stayFromTo:"du {a} au {b}", tapToOpen:"appuie pour gérer",
+    hdRooms:"Chambres", hdAddHotel:"+ Ajouter un hôtel", hdEdit:"Modifier", hdWho:"Qui dort / partage", hdPaidBy:"Payé par (qui a réglé)", hdDelHotel:"Supprimer cet hôtel", hdVisible:"Nom visible par la famille", hdBack:"‹ Retour aux hôtels", hdName:"Nom de l'hôtel", hdNewName:"Nouvel hôtel…",
+    hdVisBtn:"👨‍👩‍👧 Afficher le nom", hdVisHint:"Décoché = 🎁 surprise (le prix compte quand même).", roomSplit:"Répartition", roomPerPerson:"Montant par personne", roomAmounts:"Combien chaque personne paye", roomTotalLbl:"Total chambre",
+    hdPaidReal:"Prix réel payé (réservation)", hdPaidRealHint:"Ce que tu as vraiment payé pour tout l'hôtel (facultatif, pour comparer aux chambres).", hdPaidLbl:"💳 Payé (réel)", hdRoomsTotal:"🛏️ Total chambres", hdGap:"⚠️ Écart",
+    pPaid:"a payé", pOwes:"doit", pGets:"à recevoir", pSquare:"à jour",
+    pdTitle:"Détail", pdBy:"payé par", pdNone:"Rien à rembourser pour l'instant.", pdTapHint:"Appuie sur un nom pour voir le détail",
+    pdPaidTitle:"💳 Ce que j'ai payé", pdPaidTitleO:"💳 Ce qu'il/elle a payé", pdShareMine:"🧾 Ma part du voyage", pdShareOther:"🧾 Sa part du voyage",
+    pdShareHint:"Ce que tu consommes toi-même (ta chambre + ta part des dépenses communes).", pdShareHintO:"Sa consommation personnelle (sa chambre + sa part des dépenses communes).",
+    pdOwesMeLine:"{a} doit {x}", pdIOweLine:"à {a} : {x}", pdWhoOwes:"Qui doit te rembourser", pdWhoIOwe:"À qui je dois",
+    rbTitle:"{name} t'a remboursé", rbAmount:"Combien t'a-t-il donné ?", rbFull:"Tout : {x}", rbSave:"Valider le remboursement",
+    rbRemaining:"Reste à rembourser : {x}", rbHistory:"Remboursements reçus", rbTotalDue:"Total à rembourser", rbTotalRecv:"Total à recevoir",
+    rbLeft:"Reste", rbLeftRecv:"Reste à recevoir", rbAllPaid:"Tout est remboursé ✓", rbBtn:"{name} m'a remboursé", rbGot:"Déjà reçu", rbUndo:"Annuler ce remboursement ?",
+    stPerPerson:"Détail par personne", stMustPay:"TOTAL à rembourser", stToReceive:"TOTAL à recevoir", stSquare:"Rien à rembourser ✓", stPaidForOthers:"A avancé pour les autres", stAlreadyReimb:"Déjà remboursé", stTransfers:"Qui rembourse qui",
+    bfLabel:"Petit déjeuner", bfInc:"🥐 Petit déjeuner inclus", bfNone:"Sans petit déjeuner", bfAsk:"Petit déjeuner inclus ?",
+    settleBtnLbl:"Qui rembourse qui (privé)", settleTitle:"Qui rembourse qui",
+    settlePrivate:"Visible seulement sur ce téléphone, avec ton code secret.",
+    settleSetHint:"Première fois : choisis un code secret. Toi seule le connaîtras — ne le partage pas.",
+    settleEnterHint:"Entre ton code secret pour voir qui doit combien à qui.",
+    settleCode:"Code secret", settleSetBtn:"Enregistrer et ouvrir", settleOpenBtn:"Ouvrir",
+    settleWrong:"Code incorrect", settleAllSquare:"Tout est équilibré 🎉", settleChange:"Changer le code",
+    settleOwes:"{a} doit {x} à {b}",
+    hotelsBtnLbl:"Hôtels (privé)", hotelsTitle:"Hôtels", hotelSurprise:"Hôtel surprise",
+    hotelsHint:"Ces hôtels sont cachés (nom masqué) jusqu'à ce que tu les révèles. Le prix compte déjà dans les comptes.",
+    hotelsHint2:"Coche les hôtels à cacher (les autres voient « 🎁 Hôtel surprise » sans le nom ; le prix compte). Décoche pour révéler.",
+    hotelsAddHint:"Pour ajouter un hôtel : « Assistant Chambres » ou « + Ajouter une dépense » (catégorie Hôtel).", hotelNewOption:"— Nouvel hôtel —",
+    noHotels:"Aucun hôtel pour l'instant.", addHotel:"+ Ajouter un hôtel", hotelName:"Nom de l'hôtel",
+    revealWord:"Révéler", hideWord:"Masquer", revealAll:"Tout révéler", revealedBadge:"Visible", hiddenBadge:"Caché",
+    roomLabel:"Nom de la chambre (ex. Couple Maman & Papa)", saveWord:"Enregistrer",
+    driverBtnLbl:"Chauffeur du circuit", driverTitle:"Coût du chauffeur", driverTotal:"Prix total du chauffeur",
+    drvDays:"Nombre de jours", drvPerDay:"Forfait par jour", drvKmPerDay:"Forfait kilomètres par jour", drvExtra:"Supplément km en plus (facultatif)", drvTotal:"Total chauffeur", drvAdd:"Ajouter le chauffeur", drvDelete:"Supprimer le chauffeur", drvOther:"+ Autre frais (péage, essence…)", drvLabel:"Chauffeur — {n} j", drvPaidBy:"Payé par",
+    reimbursed:"Remboursé", settleReset:"Tout réinitialiser",
+    cur:{}
+  },
+  en:{
+    conv:"Converter", dep:"Expenses", iEnter:"I enter", itMakes:"That's",
+    edit:"Edit", validate:"Confirm", refresh:"Update",
+    rateSaved:"saved backup rate", rateFixed:"fixed rate (1 € = 113.20 ₹)", rateManual:"manually entered rate", rateOffline:"offline — last known rate",
+    rateHint:"enter the rate then Confirm", ratesUpdated:"rates updated",
+    tipINR:"<b>Mental math:</b> drop two zeros, then take off {n} %. ₹1 000 ≈ {x} €.",
+    tipQAR:"<b>Mental math:</b> divide by 4. 100 ر.ق ≈ {x} €.",
+    tipUSD:"<b>Rule of thumb:</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
+    tipGEN:"<b>Rule of thumb:</b> 10 {s} ≈ {m}.",
+    reftitle_inr:"Is it expensive? — South India guide", reftitle_qar:"Doha layover — guide",
+    r_chai:"Chai / filter coffee", r_auto:"Auto-rickshaw, 3 km", r_thali:"Veg thali", r_water:"Water bottle 1 L",
+    r_temple:"Temple entry (foreigner)", r_taxikochi:"Kochi airport taxi → centre", r_tipday:"Driver tip / day", r_houseboat:"Alleppey houseboat, 1 night",
+    r_coffee:"Coffee at Hamad Airport", r_meal:"Meal at terminal", r_metro:"Doha metro, 1 ride", r_taxisouq:"Airport taxi → Souq Waqif",
+    totalTrip:"Trip total", addExp:"+ Add an expense", whoSpent:"Who spent what", managePeople:"Manage people",
+    history:"History", sync:"Sync", sendExp:"Send my expenses", recvCode:"Receive a code", installOther:"Install on another phone (QR code)",
+    lockAccounts:"Lock the accounts", unlockAccounts:"Unlock the accounts", lockedWord:"Locked",
+    perPerson:"per person", noParticipant:"no participants", expSingular:"expense", expPlural:"expenses",
+    emptyPeople:"Add people to split the expenses.", emptyExp:"No expenses yet.", meTag:"me",
+    lockedTitle:"Accounts locked", lockedTail:"expenses can no longer be added or changed.",
+    syncActiveBold:"Book online", syncActiveTail:" — it syncs automatically across phones.",
+    syncPausedBold:"Reconnecting…", syncPausedTail:" — your entries are kept and will resync when the network is back.",
+    syncLocalBold:"Book on this device", syncLocalTail:" — put it online to share live with the family.",
+    syncConnecting:"Putting the book online…",
+    shareBook:"Share the book", joinBook:"Join a book", putOnlineBtn:"Put online", onThisPhone:"On this phone:",
+    shareTitle:"Share the book online", shareIntro:"The family joins the <b style=\"color:var(--text)\">same live book</b>. Send them the link (WhatsApp): one tap and everything syncs by itself.",
+    shareLinkLabel:"Link to send the family", copyLink:"Copy the link", waSend:"Send on WhatsApp", linkCopied:"Link copied",
+    joinTitle:"Join the family's book", joinIntro:"Paste the link (or code) you received on WhatsApp to see the same book.", joinPaste:"Received link or code", joinBtn:"Join", joinedToast:"Joined — syncing…",
+    notOnlineYet:"This book isn't online yet. Add an expense or tap \"Put online\".", makingOnline:"Putting online…",
+    codeLine:"Trip code:", changeWord:"change", codeLineTail:"Everyone enters the same code to share the same book.",
+    tAccountsLocked:"Accounts locked", tOnlyOwn:"You can only delete your own expenses", thisExpense:"this expense",
+    confirmDelete:"Delete “{l}”?", tDeletedOffline:"Deleted (offline)", tSynced:"Synced",
+    tSavedPaused:"Saved (auto-sync paused)", tSavedOffline:"Saved offline", tSavedOfflineShort:"Saved (offline)",
+    tIndicateAmount:"Enter an amount", confirmLock:"Lock the accounts? No one will be able to add or delete an expense until you unlock.",
+    tLockedOn:"Accounts locked", tLockedOff:"Accounts unlocked", tLockedByToast:"Locked by {name}",
+    pdWhyDetail:"What {name} consumed (this is what the amount is based on).", pdConsumed:"{name}'s total share", pdAlreadyPaid:"Already paid out of pocket", pdAlreadyReimb:"Already paid back", pdRemains:"STILL TO SETTLE",
+    newExpense:"New expense", editExpense:"Edit expense", rbEdit:"Edit this payment", rbNewAmount:"New amount", amount:"Amount", forWhat:"What for", forWhatPh:"Lunch, taxi, hotel…", whoPaid:"Who paid", dateW:"Date",
+    saveExpense:"Save the expense", atCurrentRate:"at current rate",
+    chooseCurrency:"Choose a currency", viewAmountsIn:"Show amounts in…",
+    sendTitle:"Send my expenses", sendIntro:"{n} {w} from {name}. Send this code by WhatsApp/SMS: whoever centralizes pastes it in “Receive a code” and everything merges. Resending the same code makes no duplicate.",
+    codeW:"Code", shareW:"Share", copyCode:"Copy the code", tNoExpenseYou:"You have no expenses", tNoExpenseSend:"No expense to send",
+    msgShare:"My trip expenses ({n}) — paste this code in the app:", everyone:"everyone",
+    recvTitle:"Receive expenses", recvIntro:"Paste the code sent by someone else here. Their expenses will be added to the shared book.",
+    codeReceived:"Code received", addToBook:"Add to the book", tCodeUnknown:"Code not recognized", tCodeUnreadable:"Unreadable or incomplete code", tCodeUnreadable2:"Unreadable code",
+    tAdded:"Added: {n} {w}", tUpToDate:"Already up to date", tCodeCopied:"Code copied", tSelectCopy:"Select and copy the code", tLinkCopied:"Link copied",
+    participantsTitle:"People", participantsIntro:"First add the people on the trip. Each can enter their expenses from their phone.",
+    addW:"Add", firstName:"First name", iAm:"I am", notSet:"— not set —", doneW:"Done", noParticipants:"No people yet.",
+    renameLabel:"New name", backWord:"‹ Back", partsWord:"Shares", partsHint:"How many people behind this name (couple = 2, single = 1). Used to split shared costs.",
+    tHasExpenses:"This person has expenses", tAlreadyList:"Already in the list",
+    tripCodeTitle:"Trip code", tripCodeIntro:"This code links all phones to the <b style=\"color:var(--text)\">same book</b>. Share it with the family (WhatsApp): everyone types it identically. Pick your own for a private book.",
+    useThisCode:"Use this code", tCodeEmpty:"Empty code",
+    installTitle:"Install on another phone", installIntro:"Have the other phone scan this QR code (camera). It opens the app; then <b style=\"color:var(--text)\">Share › Add to Home Screen</b>. Remember to use the <b style=\"color:var(--text)\">same trip code</b>.",
+    shareLink:"Share the link", langTitle:"Language",
+    planTab:"Planner", planHeaderTitle:"South India tour", planHeaderDates:"3 – 21 September 2026 · 19 days",
+    planToday:"Today", planCountdown:"{n} days to go", planEnded:"Welcome home! Trip finished.",
+    planOverview:"Overview", planDayByDay:"Day by day", planRoutes:"Routes", planTips:"Practical tips",
+    planMaps:"Maps", planProgress:"{done} / {tot} days ticked", planDayWord:"Day", planNights:"{n} nights", planNight1:"1 night", planHotelBooked:"Hotel booked",
+    planCredits:"Photos: Wikimedia Commons · Map: OpenStreetMap",
+    catTitle:"By category", catField:"Category",
+    splitField:"Split", splitEqual:"Equal", splitExact:"Amounts", splitShares:"Shares",
+    splitRemaining:"Left: {x}", splitConcerned:"Tick who's included",
+    roomsBtnLbl:"Rooms helper", roomsTitle:"Rooms helper", roomsHotelName:"Hotel name",
+    roomsPaidBy:"Paid by", roomWord:"Room", roomPrice:"Price", roomWho:"Who sleeps here",
+    addRoom:"+ Add a room", roomsCreate:"Create the expenses", roomsCreatedN:"room(s) added",
+    roomsNeed:"Add at least one room with a price and a person.",
+    roomsDate:"Check-in", roomsOut:"Check-out", perNight:"/night", nightsWord:"nights", stayFromTo:"{a} to {b}", tapToOpen:"tap to manage",
+    hdRooms:"Rooms", hdAddHotel:"+ Add a hotel", hdEdit:"Edit", hdWho:"Who sleeps / shares", hdPaidBy:"Paid by (who settled)", hdDelHotel:"Delete this hotel", hdVisible:"Name visible to the family", hdBack:"‹ Back to hotels", hdName:"Hotel name", hdNewName:"New hotel…",
+    hdVisBtn:"👨‍👩‍👧 Show the name", hdVisHint:"Unticked = 🎁 surprise (price still counts).", roomSplit:"Split", roomPerPerson:"Amount per person", roomAmounts:"How much each person pays", roomTotalLbl:"Room total",
+    hdPaidReal:"Actual price paid (booking)", hdPaidRealHint:"What you really paid for the whole hotel (optional, to compare with the rooms).", hdPaidLbl:"💳 Paid (actual)", hdRoomsTotal:"🛏️ Rooms total", hdGap:"⚠️ Gap",
+    pPaid:"paid", pOwes:"owes", pGets:"to receive", pSquare:"settled",
+    pdTitle:"Detail", pdBy:"paid by", pdNone:"Nothing to pay back yet.", pdTapHint:"Tap a name to see the detail",
+    pdPaidTitle:"💳 What I paid", pdPaidTitleO:"💳 What they paid", pdShareMine:"🧾 My share of the trip", pdShareOther:"🧾 Their share of the trip",
+    pdShareHint:"What you consume yourself (your room + your share of shared costs).", pdShareHintO:"Their own consumption (their room + their share of shared costs).",
+    pdOwesMeLine:"{a} owes {x}", pdIOweLine:"to {a}: {x}", pdWhoOwes:"Who owes you", pdWhoIOwe:"Who I owe",
+    rbTitle:"{name} paid you back", rbAmount:"How much did they give you?", rbFull:"All: {x}", rbSave:"Confirm payment",
+    rbRemaining:"Left to pay back: {x}", rbHistory:"Payments received", rbTotalDue:"Total to pay back", rbTotalRecv:"Total to receive",
+    rbLeft:"Left", rbLeftRecv:"Left to receive", rbAllPaid:"Fully paid back ✓", rbBtn:"{name} paid me back", rbGot:"Already received", rbUndo:"Undo this payment?",
+    stPerPerson:"Per-person detail", stMustPay:"TOTAL to pay back", stToReceive:"TOTAL to receive", stSquare:"Nothing to pay back ✓", stPaidForOthers:"Advanced for others", stAlreadyReimb:"Already reimbursed", stTransfers:"Who pays whom",
+    bfLabel:"Breakfast", bfInc:"🥐 Breakfast included", bfNone:"No breakfast", bfAsk:"Breakfast included?",
+    settleBtnLbl:"Who owes whom (private)", settleTitle:"Who owes whom",
+    settlePrivate:"Only on this phone, with your secret code.",
+    settleSetHint:"First time: choose a secret code. Only you will know it — don't share it.",
+    settleEnterHint:"Enter your secret code to see who owes whom.",
+    settleCode:"Secret code", settleSetBtn:"Save and open", settleOpenBtn:"Open",
+    settleWrong:"Wrong code", settleAllSquare:"All settled 🎉", settleChange:"Change the code",
+    settleOwes:"{a} owes {x} to {b}",
+    hotelsBtnLbl:"Hotels (private)", hotelsTitle:"Hotels", hotelSurprise:"Surprise hotel",
+    hotelsHint:"These hotels are hidden (name masked) until you reveal them. The price already counts in the accounts.",
+    hotelsHint2:"Tick the hotels to hide (others see « 🎁 Surprise hotel » without the name; the price still counts). Untick to reveal.",
+    hotelsAddHint:"To add a hotel: « Rooms helper » or « + Add an expense » (Hotel category).", hotelNewOption:"— New hotel —",
+    noHotels:"No hotels yet.", addHotel:"+ Add a hotel", hotelName:"Hotel name",
+    revealWord:"Reveal", hideWord:"Hide", revealAll:"Reveal all", revealedBadge:"Visible", hiddenBadge:"Hidden",
+    roomLabel:"Room name (e.g. Couple Mum & Dad)", saveWord:"Save",
+    driverBtnLbl:"Circuit driver", driverTitle:"Driver cost", driverTotal:"Total driver cost",
+    drvDays:"Number of days", drvPerDay:"Daily rate", drvKmPerDay:"Daily km package", drvExtra:"Extra km supplement (optional)", drvTotal:"Driver total", drvAdd:"Add the driver", drvDelete:"Delete the driver", drvOther:"+ Other cost (toll, fuel…)", drvLabel:"Driver — {n} d", drvPaidBy:"Paid by",
+    reimbursed:"Reimbursed", settleReset:"Reset all",
+    cur:{ EUR:"Euro", USD:"US dollar", INR:"Indian rupee", QAR:"Qatari riyal", GBP:"Pound sterling", CHF:"Swiss franc", AED:"Dirham (UAE)", LKR:"Sri Lankan rupee", THB:"Thai baht", TRY:"Turkish lira", CAD:"Canadian dollar", JPY:"Yen", SGD:"Singapore dollar", MYR:"Ringgit" }
+  },
+  ta:{
+    conv:"மாற்றி", dep:"செலவுகள்", iEnter:"நான் உள்ளிடுகிறேன்", itMakes:"இது ஆகும்",
+    edit:"மாற்று", validate:"உறுதி", refresh:"புதுப்பி",
+    rateSaved:"சேமித்த மாற்று விகிதம்", rateFixed:"நிலையான விகிதம் (1 € = 113,20 ₹)", rateManual:"கையால் உள்ளிட்ட விகிதம்", rateOffline:"இணைப்பில்லை — கடைசி விகிதம்",
+    rateHint:"விகிதத்தை உள்ளிட்டு உறுதி செய்", ratesUpdated:"விகிதங்கள் புதுப்பிக்கப்பட்டன",
+    tipINR:"<b>மனக்கணக்கு:</b> இரண்டு பூஜ்ஜியங்களை நீக்கு, பிறகு {n}% கழி. ₹1 000 ≈ {x} €.",
+    tipQAR:"<b>மனக்கணக்கு:</b> 4 ஆல் வகு. 100 ر.ق ≈ {x} €.",
+    tipUSD:"<b>அளவை:</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
+    tipGEN:"<b>அளவை:</b> 10 {s} ≈ {m}.",
+    reftitle_inr:"விலை அதிகமா? — தென் இந்தியா அளவை", reftitle_qar:"தோஹா இடைநிறுத்தம் — அளவை",
+    r_chai:"சாய் / பில்டர் காபி", r_auto:"ஆட்டோ, 3 கி.மீ", r_thali:"சைவ தாலி", r_water:"தண்ணீர் பாட்டில் 1 லி",
+    r_temple:"கோயில் நுழைவு (வெளிநாட்டவர்)", r_taxikochi:"கொச்சி விமான நிலைய டாக்சி → நகரம்", r_tipday:"ஓட்டுநர் டிப் / நாள்", r_houseboat:"அல்லெப்பி ஹவுஸ்போட், 1 இரவு",
+    r_coffee:"ஹமத் விமான நிலையத்தில் காபி", r_meal:"டெர்மினலில் உணவு", r_metro:"தோஹா மெட்ரோ, 1 பயணம்", r_taxisouq:"விமான நிலைய டாக்சி → சூக் வாகிஃப்",
+    totalTrip:"பயண மொத்தம்", addExp:"+ செலவு சேர்", whoSpent:"யார் எதற்கு செலவழித்தார்", managePeople:"பங்கேற்பாளர்களை நிர்வகி",
+    history:"வரலாறு", sync:"ஒத்திசை", sendExp:"எனது செலவுகளை அனுப்பு", recvCode:"குறியீட்டைப் பெறு", installOther:"மற்றொரு தொலைபேசியில் நிறுவு (QR)",
+    lockAccounts:"கணக்குகளை பூட்டு", unlockAccounts:"கணக்குகளை திற", lockedWord:"பூட்டப்பட்டது",
+    perPerson:"ஒருவருக்கு", noParticipant:"பங்கேற்பாளர் இல்லை", expSingular:"செலவு", expPlural:"செலவுகள்",
+    emptyPeople:"செலவுகளைப் பகிர பங்கேற்பாளர்களைச் சேர்.", emptyExp:"இன்னும் செலவு இல்லை.", meTag:"நான்",
+    lockedTitle:"கணக்குகள் பூட்டப்பட்டன", lockedTail:"செலவுகளை இனி சேர்க்கவோ மாற்றவோ முடியாது.",
+    syncActiveBold:"புத்தகம் ஆன்லைனில்", syncActiveTail:" — தொலைபேசிகளுக்கு இடையே தானாக ஒத்திசைகிறது.",
+    syncPausedBold:"மீண்டும் இணைக்கிறது…", syncPausedTail:" — உங்கள் பதிவுகள் பாதுகாக்கப்படும், இணையம் வந்ததும் ஒத்திசைக்கும்.",
+    syncLocalBold:"புத்தகம் இந்த சாதனத்தில்", syncLocalTail:" — குடும்பத்துடன் நேரடியாகப் பகிர ஆன்லைனில் வைக்கவும்.",
+    syncConnecting:"புத்தகத்தை ஆன்லைனில் வைக்கிறது…",
+    shareBook:"புத்தகத்தைப் பகிர்", joinBook:"புத்தகத்தில் சேர்", putOnlineBtn:"ஆன்லைனில் வை", onThisPhone:"இந்த தொலைபேசியில்:",
+    shareTitle:"புத்தகத்தை ஆன்லைனில் பகிர்", shareIntro:"குடும்பம் <b style=\"color:var(--text)\">அதே நேரடி புத்தகத்தில்</b> சேரும். இணைப்பை (WhatsApp) அனுப்பவும்: ஒரு தட்டல் போதும், அனைத்தும் தானாக ஒத்திசைக்கும்.",
+    shareLinkLabel:"குடும்பத்திற்கு அனுப்பும் இணைப்பு", copyLink:"இணைப்பை நகலெடு", waSend:"WhatsApp-இல் அனுப்பு", linkCopied:"இணைப்பு நகலெடுக்கப்பட்டது",
+    joinTitle:"குடும்பத்தின் புத்தகத்தில் சேர்", joinIntro:"அதே புத்தகத்தைப் பார்க்க WhatsApp-இல் பெற்ற இணைப்பை (அல்லது குறியீட்டை) இங்கே ஒட்டவும்.", joinPaste:"பெற்ற இணைப்பு அல்லது குறியீடு", joinBtn:"சேர்", joinedToast:"சேர்ந்தது — ஒத்திசைக்கிறது…",
+    notOnlineYet:"இந்த புத்தகம் இன்னும் ஆன்லைனில் இல்லை. ஒரு செலவைச் சேர்க்கவும் அல்லது « ஆன்லைனில் வை » அழுத்தவும்.", makingOnline:"ஆன்லைனில் வைக்கிறது…",
+    codeLine:"பயணக் குறியீடு:", changeWord:"மாற்று", codeLineTail:"அனைவரும் ஒரே குறியீட்டை உள்ளிட்டு ஒரே புத்தகத்தைப் பகிரவும்.",
+    tAccountsLocked:"கணக்குகள் பூட்டப்பட்டன", tOnlyOwn:"உங்கள் செலவுகளை மட்டுமே நீக்க முடியும்", thisExpense:"இந்த செலவு",
+    confirmDelete:"“{l}” நீக்கவா?", tDeletedOffline:"நீக்கப்பட்டது (இணைப்பில்லை)", tSynced:"ஒத்திசைக்கப்பட்டது",
+    tSavedPaused:"சேமிக்கப்பட்டது (ஒத்திசைவு இடைநிறுத்தம்)", tSavedOffline:"இணைப்பில்லாமல் சேமிக்கப்பட்டது", tSavedOfflineShort:"சேமிக்கப்பட்டது (இணைப்பில்லை)",
+    tIndicateAmount:"தொகையை உள்ளிடவும்", confirmLock:"கணக்குகளை பூட்டவா? நீங்கள் திறக்கும் வரை யாரும் செலவு சேர்க்கவோ நீக்கவோ முடியாது.",
+    tLockedOn:"கணக்குகள் பூட்டப்பட்டன", tLockedOff:"கணக்குகள் திறக்கப்பட்டன", tLockedByToast:"{name} பூட்டியுள்ளார்",
+    pdWhyDetail:"{name} பயன்படுத்தியதன் விவரம் (இதுவே தொகைக்கு காரணம்).", pdConsumed:"{name} இன் மொத்தப் பங்கு", pdAlreadyPaid:"ஏற்கனவே சொந்தமாகக் கட்டியது", pdAlreadyReimb:"ஏற்கனவே திருப்பியது", pdRemains:"இன்னும் தர வேண்டியது",
+    newExpense:"புதிய செலவு", editExpense:"செலவைத் திருத்து", rbEdit:"இந்தத் திருப்பிச் செலுத்தலைத் திருத்து", rbNewAmount:"புதிய தொகை", amount:"தொகை", forWhat:"எதற்கு", forWhatPh:"மதிய உணவு, டாக்சி, ஹோட்டல்…", whoPaid:"யார் கட்டினார்", dateW:"தேதி",
+    saveExpense:"செலவை சேமி", atCurrentRate:"தற்போதைய விகிதத்தில்",
+    chooseCurrency:"நாணயத்தைத் தேர்வு", viewAmountsIn:"தொகைகளை இதில் காட்டு…",
+    sendTitle:"எனது செலவுகளை அனுப்பு", sendIntro:"{name} இன் {n} {w}. இந்த குறியீட்டை WhatsApp/SMS மூலம் அனுப்பவும்: மையப்படுத்துபவர் “குறியீட்டைப் பெறு” இல் ஒட்டுவார், அனைத்தும் இணையும். அதே குறியீட்டை மீண்டும் அனுப்பினால் நகல் உருவாகாது.",
+    codeW:"குறியீடு", shareW:"பகிர்", copyCode:"குறியீட்டை நகலெடு", tNoExpenseYou:"உங்களிடம் செலவு இல்லை", tNoExpenseSend:"அனுப்ப செலவு இல்லை",
+    msgShare:"எனது பயண செலவுகள் ({n}) — இந்த குறியீட்டை ஆப்பில் ஒட்டவும்:", everyone:"அனைவரும்",
+    recvTitle:"செலவுகளைப் பெறு", recvIntro:"மற்றவர் அனுப்பிய குறியீட்டை இங்கே ஒட்டவும். அவர்களின் செலவுகள் பொது புத்தகத்தில் சேரும்.",
+    codeReceived:"பெறப்பட்ட குறியீடு", addToBook:"புத்தகத்தில் சேர்", tCodeUnknown:"குறியீடு அறியப்படவில்லை", tCodeUnreadable:"படிக்க முடியாத குறியீடு", tCodeUnreadable2:"படிக்க முடியாத குறியீடு",
+    tAdded:"சேர்க்கப்பட்டது: {n} {w}", tUpToDate:"ஏற்கனவே புதுப்பித்தது", tCodeCopied:"குறியீடு நகலெடுக்கப்பட்டது", tSelectCopy:"குறியீட்டைத் தேர்ந்து நகலெடுக்கவும்", tLinkCopied:"இணைப்பு நகலெடுக்கப்பட்டது",
+    participantsTitle:"பங்கேற்பாளர்கள்", participantsIntro:"முதலில் பயணத்தில் உள்ளவர்களைச் சேர். ஒவ்வொருவரும் தங்கள் தொலைபேசியில் செலவுகளை உள்ளிடலாம்.",
+    addW:"சேர்", firstName:"முதல் பெயர்", iAm:"நான்", notSet:"— தேர்வில்லை —", doneW:"முடிந்தது", noParticipants:"பங்கேற்பாளர் இல்லை.",
+    renameLabel:"புதிய பெயர்", backWord:"‹ பின்", partsWord:"பங்குகள்", partsHint:"இந்த பெயரில் எத்தனை பேர் (தம்பதி = 2, தனி = 1). பகிர்ந்த செலவுகளைப் பிரிக்க.",
+    tHasExpenses:"இவருக்கு செலவுகள் உள்ளன", tAlreadyList:"ஏற்கனவே பட்டியலில்",
+    tripCodeTitle:"பயணக் குறியீடு", tripCodeIntro:"இந்த குறியீடு அனைத்து தொலைபேசிகளையும் <b style=\"color:var(--text)\">ஒரே புத்தகத்துடன்</b> இணைக்கிறது. குடும்பத்திற்கு (WhatsApp) கொடு: அனைவரும் அதே மாதிரி உள்ளிடவும். தனிப்பட்ட புத்தகத்திற்கு உங்கள் சொந்த குறியீட்டைத் தேர்வு.",
+    useThisCode:"இந்த குறியீட்டைப் பயன்படுத்து", tCodeEmpty:"குறியீடு காலியாக உள்ளது",
+    installTitle:"மற்றொரு தொலைபேசியில் நிறுவு", installIntro:"மற்ற தொலைபேசியில் இந்த QR ஐ ஸ்கேன் செய்யவும் (கேமரா). ஆப் திறக்கும்; பிறகு <b style=\"color:var(--text)\">Share › Add to Home Screen</b>. <b style=\"color:var(--text)\">அதே பயணக் குறியீட்டை</b> பயன்படுத்த மறக்காதே.",
+    shareLink:"இணைப்பைப் பகிர்", langTitle:"மொழி",
+    planTab:"திட்டம்", planHeaderTitle:"தென் இந்தியா சுற்றுலா", planHeaderDates:"3 – 21 செப்டம்பர் 2026 · 19 நாட்கள்",
+    planToday:"இன்று", planCountdown:"புறப்பட {n} நாட்கள்", planEnded:"நல்வரவு! பயணம் முடிந்தது.",
+    planOverview:"கண்ணோட்டம்", planDayByDay:"நாள் வாரியாக", planRoutes:"பயணப் பாதைகள்", planTips:"நடைமுறை குறிப்புகள்",
+    planMaps:"வரைபடம்", planProgress:"{done} / {tot} நாட்கள் குறிக்கப்பட்டது", planDayWord:"நாள்", planNights:"{n} இரவுகள்", planNight1:"1 இரவு", planHotelBooked:"ஹோட்டல் பதிவு",
+    planCredits:"படங்கள்: Wikimedia Commons · வரைபடம்: OpenStreetMap",
+    catTitle:"வகை வாரியாக", catField:"வகை",
+    splitField:"பங்கீடு", splitEqual:"சமம்", splitExact:"தொகைகள்", splitShares:"பங்குகள்",
+    splitRemaining:"மீதம்: {x}", splitConcerned:"யாருக்கு என்று குறி",
+    roomsBtnLbl:"அறைகள் உதவி", roomsTitle:"அறைகள் உதவி", roomsHotelName:"ஹோட்டல் பெயர்",
+    roomsPaidBy:"கட்டியவர்", roomWord:"அறை", roomPrice:"விலை", roomWho:"யார் தங்குகிறார்",
+    addRoom:"+ அறை சேர்", roomsCreate:"செலவுகளை உருவாக்கு", roomsCreatedN:"அறை(கள்) சேர்க்கப்பட்டது",
+    roomsNeed:"விலை மற்றும் ஒரு நபருடன் குறைந்தது ஒரு அறையைச் சேர்.",
+    roomsDate:"வருகை", roomsOut:"புறப்பாடு", perNight:"/இரவு", nightsWord:"இரவுகள்", stayFromTo:"{a} – {b}", tapToOpen:"நிர்வகிக்க தட்டு",
+    hdRooms:"அறைகள்", hdAddHotel:"+ ஹோட்டல் சேர்", hdEdit:"திருத்து", hdWho:"யார் தங்குகிறார் / பங்கு", hdPaidBy:"கட்டியவர்", hdDelHotel:"இந்த ஹோட்டலை நீக்கு", hdVisible:"பெயர் குடும்பத்திற்கு தெரியும்", hdBack:"‹ ஹோட்டல்களுக்கு", hdName:"ஹோட்டல் பெயர்", hdNewName:"புதிய ஹோட்டல்…",
+    hdVisBtn:"👨‍👩‍👧 பெயரைக் காட்டு", hdVisHint:"தேர்வு இல்லை = 🎁 சர்ப்ரைஸ் (விலை கணக்கில் சேரும்).", roomSplit:"பங்கீடு", roomPerPerson:"நபர் ஒன்றுக்கு தொகை", roomAmounts:"ஒவ்வொருவரும் எவ்வளவு கட்டுகிறார்", roomTotalLbl:"அறை மொத்தம்",
+    hdPaidReal:"உண்மையில் கட்டிய விலை", hdPaidRealHint:"ஹோட்டலுக்கு நீ உண்மையில் கட்டியது (விருப்பம், ஒப்பிட).", hdPaidLbl:"💳 கட்டியது", hdRoomsTotal:"🛏️ அறைகள் மொத்தம்", hdGap:"⚠️ வித்தியாசம்",
+    pPaid:"கட்டியது", pOwes:"தர வேண்டும்", pGets:"பெற வேண்டும்", pSquare:"சரி",
+    pdTitle:"விவரம்", pdBy:"கட்டியவர்", pdNone:"இப்போது திருப்பித் தர எதுவும் இல்லை.", pdTapHint:"விவரம் பார்க்க பெயரைத் தட்டு",
+    pdPaidTitle:"💳 நான் கட்டியது", pdPaidTitleO:"💳 அவர் கட்டியது", pdShareMine:"🧾 எனது பங்கு", pdShareOther:"🧾 அவரது பங்கு",
+    pdShareHint:"நீ பயன்படுத்தியது (உன் அறை + பொதுச் செலவுகளில் உன் பங்கு).", pdShareHintO:"அவரது சொந்த பயன்பாடு (அறை + பொதுச் செலவுப் பங்கு).",
+    pdOwesMeLine:"{a} தர வேண்டும் {x}", pdIOweLine:"{a}-க்கு: {x}", pdWhoOwes:"யார் உனக்கு தர வேண்டும்", pdWhoIOwe:"நான் யாருக்கு தர வேண்டும்",
+    rbTitle:"{name} திருப்பிக் கொடுத்தார்", rbAmount:"எவ்வளவு கொடுத்தார்?", rbFull:"முழுவதும்: {x}", rbSave:"உறுதிசெய்",
+    rbRemaining:"இன்னும் தர வேண்டியது: {x}", rbHistory:"பெற்ற தொகைகள்", rbTotalDue:"மொத்தம் தர வேண்டியது", rbTotalRecv:"மொத்தம் பெற வேண்டியது",
+    rbLeft:"மீதம்", rbLeftRecv:"பெற மீதம்", rbAllPaid:"முழுவதும் திருப்பியது ✓", rbBtn:"{name} திருப்பிக் கொடுத்தார்", rbGot:"பெற்றது", rbUndo:"இதை ரத்து செய்யவா?",
+    stPerPerson:"நபர் வாரியாக விவரம்", stMustPay:"மொத்தம் திருப்பித் தர வேண்டியது", stToReceive:"மொத்தம் பெற வேண்டியது", stSquare:"திருப்பித் தர எதுவும் இல்லை ✓", stPaidForOthers:"மற்றவர்களுக்காக முன்பணம்", stAlreadyReimb:"ஏற்கனவே திருப்பியது", stTransfers:"யார் யாருக்கு தருவது",
+    bfLabel:"காலை உணவு", bfInc:"🥐 காலை உணவு உள்ளடங்கும்", bfNone:"காலை உணவு இல்லை", bfAsk:"காலை உணவு உள்ளதா?",
+    settleBtnLbl:"யார் யாருக்கு (தனிப்பட்டது)", settleTitle:"யார் யாருக்கு தர வேண்டும்",
+    settlePrivate:"இந்த தொலைபேசியில் மட்டும், உங்கள் ரகசிய குறியீட்டுடன்.",
+    settleSetHint:"முதல் முறை: ஒரு ரகசிய குறியீட்டைத் தேர்வு. உங்களுக்கு மட்டும் தெரியும் — பகிராதே.",
+    settleEnterHint:"யார் யாருக்கு தர வேண்டும் என்று பார்க்க உங்கள் ரகசிய குறியீட்டை உள்ளிடு.",
+    settleCode:"ரகசிய குறியீடு", settleSetBtn:"சேமித்து திற", settleOpenBtn:"திற",
+    settleWrong:"தவறான குறியீடு", settleAllSquare:"எல்லாம் சரி 🎉", settleChange:"குறியீட்டை மாற்று",
+    settleOwes:"{a} → {b}: {x}",
+    hotelsBtnLbl:"ஹோட்டல்கள் (தனிப்பட்டது)", hotelsTitle:"ஹோட்டல்கள்", hotelSurprise:"ஹோட்டல் — சர்ப்ரைஸ்",
+    hotelsHint:"நீங்கள் காட்டும் வரை இந்த ஹோட்டல்களின் பெயர் மறைக்கப்படும். விலை ஏற்கனவே கணக்கில் சேரும்.",
+    hotelsHint2:"மறைக்க வேண்டிய ஹோட்டல்களைக் குறி (மற்றவர்கள் பெயரின்றி « 🎁 சர்ப்ரைஸ் » காண்பர்; விலை கணக்கில் சேரும்). காட்ட நீக்கு.",
+    hotelsAddHint:"ஹோட்டல் சேர்க்க: « அறைகள் உதவி » அல்லது « + செலவு சேர் » (ஹோட்டல் வகை).", hotelNewOption:"— புதிய ஹோட்டல் —",
+    noHotels:"இன்னும் ஹோட்டல் இல்லை.", addHotel:"+ ஹோட்டல் சேர்", hotelName:"ஹோட்டல் பெயர்",
+    revealWord:"காட்டு", hideWord:"மறை", revealAll:"அனைத்தையும் காட்டு", revealedBadge:"தெரியும்", hiddenBadge:"மறைவு",
+    roomLabel:"அறை பெயர் (எ.கா. கணவன்-மனைவி)", saveWord:"சேமி",
+    driverBtnLbl:"சுற்றுலா ஓட்டுநர்", driverTitle:"ஓட்டுநர் கட்டணம்", driverTotal:"மொத்த ஓட்டுநர் கட்டணம்",
+    drvDays:"நாட்களின் எண்ணிக்கை", drvPerDay:"நாள் ஒன்றுக்கு கட்டணம்", drvKmPerDay:"நாள் கிமீ தொகுப்பு", drvExtra:"கூடுதல் கிமீ (விருப்பம்)", drvTotal:"ஓட்டுநர் மொத்தம்", drvAdd:"ஓட்டுநரைச் சேர்", drvDelete:"ஓட்டுநரை நீக்கு", drvOther:"+ பிற செலவு (டோல், எரிபொருள்…)", drvLabel:"ஓட்டுநர் — {n} நாள்", drvPaidBy:"கட்டியவர்",
+    reimbursed:"திருப்பியது", settleReset:"அனைத்தையும் மீட்டமை",
+    cur:{ EUR:"யூரோ", USD:"அமெரிக்க டாலர்", INR:"இந்திய ரூபாய்", QAR:"கத்தார் ரியால்", GBP:"பவுண்ட் ஸ்டெர்லிங்", CHF:"சுவிஸ் பிராங்க்", AED:"திர்ஹாம் (UAE)", LKR:"இலங்கை ரூபாய்", THB:"தாய் பாட்", TRY:"துருக்கிய லிரா", CAD:"கனடா டாலர்", JPY:"யென்", SGD:"சிங்கப்பூர் டாலர்", MYR:"ரிங்கிட்" }
+  }
+};
+function t(k){ var o=I18N[LANG]||I18N.fr; return o[k]!=null ? o[k] : (I18N.fr[k]!=null ? I18N.fr[k] : k); }
+function fmt(str, o){ return String(str).replace(/\{(\w+)\}/g, function(_,k){ return o&&o[k]!=null ? o[k] : ""; }); }
+function curName(c){ var o=I18N[LANG]; return (o&&o.cur&&o.cur[c]) ? o.cur[c] : (CUR[c]?CUR[c].n:c); }
+function expWord(n){ return n>1 ? t("expPlural") : t("expSingular"); }
+function locale(){ return LOCALE[LANG]||"fr-FR"; }
+function applyLang(l){
+  if(!I18N[l]) l="fr";
+  LANG=l; lset("lang", l);
+  document.documentElement.lang = l;
+  $("langBtn").innerHTML = LNAME[l]+' <span class="car">▾</span>';
+  [].forEach.call(document.querySelectorAll("[data-i18n]"), function(el){ el.textContent = t(el.getAttribute("data-i18n")); });
+  renderConv(); renderExp(); renderPlan();
+}
+
+/* ========== état ========== */
+var S = {a:"INR", b:"EUR", typing:"a", buf:"0", mode:"amount", rbuf:"",
+         people:[], expenses:[], deleted:[], me:"", dirty:false,
+         expCur:"EUR", locked:false, lockedBy:"", lockAt:0, hotels:[], payments:[], pinHash:"", pinAt:0, partShares:{}};
+
+var $=function(i){return document.getElementById(i)};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var nf=function(v,d){return new Intl.NumberFormat("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d}).format(v||0)};
+var money=function(v,c){var d=CUR[c]?CUR[c].d:2; return nf(v,d)+" "+(CUR[c]?CUR[c].s:c)};
+var pf=function(s){return parseFloat(String(s).replace(",","."))||0};
+var toast=function(m){var t=$("toast"); t.textContent=m; t.classList.add("on"); setTimeout(function(){t.classList.remove("on")},1900)};
+
+function conv(v, from, to){ return v / RATES[from] * RATES[to]; }
+
+/* ========== stockage ==========
+   fx (taux) + me (identité) -> localStorage (hors ligne, propre au téléphone)
+   trip (carnet)             -> carnet en ligne partagé (kvdb), rangé par code de voyage
+   Fusion sûre à plusieurs : union par id + tombstones (aucune saisie ne disparaît).
+   Repli hors ligne : cache localStorage, ré-émis tout seul au retour du réseau.        */
+/* Stockage en ligne = Firebase Realtime Database (projet « voyage-inde », plan gratuit).
+   Tous les téléphones qui saisissent le MÊME code de voyage lisent/écrivent le même carnet.
+   Synchro automatique : relecture régulière (tick) + écriture à chaque changement.
+   Repli hors ligne : cache localStorage, ré-émis tout seul au retour du réseau. */
+var FBDB = "https://voyage-inde-default-rtdb.europe-west1.firebasedatabase.app";
+var DEFAULT_CODE = "inde26-4h7k2p";                    // code de voyage par défaut (partagé)
+var SYNC = { ok:false, tried:false, pending:false };
+
+function lget(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function lset(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+
+function tripCode(){ var c=lget("voyageCode"); if(!c){ c=DEFAULT_CODE; lset("voyageCode", c); } return c; }
+function tripURL(){ return FBDB + "/carnets/" + encodeURIComponent(tripCode()) + ".json"; }
+function shareLink(){ return location.origin + location.pathname + "?c=" + encodeURIComponent(tripCode()); }
+/* extrait un code de voyage depuis un lien (?c=…) ou un code collé tel quel */
+function parseCode(s){
+  s=(s||"").trim(); if(!s) return "";
+  var m=s.match(/[?&#]c=([A-Za-z0-9_-]{3,})/);
+  if(m) return m[1].toLowerCase();
+  return s.toLowerCase().replace(/[^a-z0-9_-]/g,"");
+}
+
+function saveRates(){ lset("fx", {r:RATES, s:RSRC}); }
+
+/* fusion anti-écrasement : union par id, retire les supprimés (tombstones) */
+function mergeDoc(remote){
+  if(!remote || typeof remote!=="object") return;
+  var del={}; (S.deleted||[]).concat(remote.deleted||[]).forEach(function(id){ if(id) del[id]=1; });
+  var by={};  (S.expenses||[]).concat(remote.expenses||[]).forEach(function(x){ if(x&&x.id){ var e=by[x.id]; if(!e || (+x.mt||0)>=(+e.mt||0)) by[x.id]=x; } });
+  var exp=[]; for(var id in by){ if(!del[id]) exp.push(by[id]); }
+  S.expenses=exp; S.deleted=Object.keys(del);
+  var order=(S.people||[]).slice();
+  (remote.people||[]).forEach(function(p){ if(p && order.indexOf(p)<0) order.push(p); });
+  S.people=order;
+  var rAt=+remote.lockAt||0, lAt=+S.lockAt||0;   // verrou : dernier qui agit gagne
+  if(rAt>lAt){ S.locked=!!remote.locked; S.lockedBy=remote.lockedBy||""; S.lockAt=rAt; }
+  // hôtels : union par id, on garde le plus récent (ts) ; tombstones "H:"+id
+  var hby={};
+  (S.hotels||[]).concat(remote.hotels||[]).forEach(function(h){ if(h&&h.id){ var e=hby[h.id]; if(!e || (+h.ts||0)>=(+e.ts||0)) hby[h.id]=h; } });
+  var hout=[]; for(var hid in hby){ if(!del["H:"+hby[hid].id]) hout.push(hby[hid]); }
+  S.hotels=hout;
+  // remboursements : union par id ; tombstones "P:"+id
+  // remboursements : on garde la version la plus RÉCEMMENT modifiée (mt), sinon une correction serait écrasée
+  var pby={}; (S.payments||[]).concat(remote.payments||[]).forEach(function(p){ if(p&&p.id){ var pe=pby[p.id]; if(!pe || (+p.mt||0)>=(+pe.mt||0)) pby[p.id]=p; } });
+  var pout=[]; for(var pid in pby){ if(!del["P:"+pid]) pout.push(pby[pid]); }
+  S.payments=pout;
+  // code secret privé (partagé) : le plus récent gagne
+  if((+remote.pinAt||0) > (+S.pinAt||0)){ S.pinHash=remote.pinHash||""; S.pinAt=+remote.pinAt||0; }
+  // parts par personne (couple/individuel) : fusion (les valeurs locales priment si présentes)
+  if(remote.partShares && typeof remote.partShares==="object"){ var mps={}; Object.keys(remote.partShares).forEach(function(k){mps[k]=remote.partShares[k];}); Object.keys(S.partShares||{}).forEach(function(k){mps[k]=S.partShares[k];}); S.partShares=mps; }
+}
+function localDoc(){ return {people:S.people, expenses:S.expenses, deleted:S.deleted||[],
+  locked:!!S.locked, lockedBy:S.lockedBy||"", lockAt:+S.lockAt||0, hotels:S.hotels||[], payments:S.payments||[],
+  pinHash:S.pinHash||"", pinAt:+S.pinAt||0, partShares:S.partShares||{}, updatedAt:Date.now()}; }
+function cacheTrip(){ lset("tripCache", localDoc()); }
+
+/* y a-t-il de vraies données sur cet appareil ? */
+function hasRealData(){ return (S.expenses&&S.expenses.length) || (S.hotels&&S.hotels.length) || (S.people&&S.people.length>1); }
+
+/* lit le carnet en ligne ; replie sur le cache local si hors ligne */
+function pullTrip(){
+  return fetch(tripURL(), {headers:{Accept:"application/json"}, cache:"no-store"})
+    .then(function(r){
+      if(!r.ok) throw new Error("http "+r.status);
+      return r.json();                                  // null = carnet encore vide en ligne
+    })
+    .then(function(d){
+      SYNC.ok=true; SYNC.tried=true; if(d) mergeDoc(d); cacheTrip();
+      // carnet vide en ligne mais plein sur ce téléphone -> on l'envoie tout de suite
+      if(!d && hasRealData()) saveTrip().catch(function(){});
+    })
+    .catch(function(){
+      SYNC.tried=true; SYNC.ok=false;                   // hors ligne / réseau coupé
+      var c=lget("tripCache"); if(c && !hasRealData()) mergeDoc(c);
+    });
+}
+
+/* écrit le carnet : relit -> fusionne -> écrit.
+   SÉCURITÉ : si la RELECTURE échoue (réseau coupé), on n'écrit PAS — sinon un téléphone
+   mal connecté remplacerait le carnet complet par le sien. La saisie est gardée en local
+   et repart toute seule au retour du réseau (SYNC.pending). */
+function saveTrip(){
+  cacheTrip();
+  var url=tripURL();
+  return fetch(url, {headers:{Accept:"application/json"}, cache:"no-store"})
+    .then(function(r){ if(!r || !r.ok) throw new Error("read"); return r.json(); })
+    .then(function(remote){ if(remote) mergeDoc(remote);   // null = carnet vide en ligne (normal)
+      return fetch(url, {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(localDoc())});
+    })
+    .then(function(r){ if(!r || !r.ok) throw new Error("write"); SYNC.ok=true; SYNC.pending=false; cacheTrip(); })
+    .catch(function(){ SYNC.pending=true; SYNC.ok=false; cacheTrip(); throw new Error("offline"); });
+}
+
+/* rejoindre le carnet de la famille (lien ?c=… ou code collé) */
+function joinCarnet(raw){
+  var c=parseCode(raw);
+  if(!c){ toast(t("tCodeEmpty")); return false; }
+  if(c===tripCode()) return true;
+  lset("voyageCode", c); localStorage.removeItem("tripCache");
+  return true;
+}
+
+function loadAll(){
+  var fx=lget("fx"); if(fx&&fx.r){ for(var k in fx.r) RATES[k]=fx.r[k]; if(fx.s) RSRC=fx.s; }
+  loadFixedRates(); applyFixedRates();          // le taux fixe reprend TOUJOURS le dessus
+  var me=lget("me"); if(me&&me.name) S.me=me.name;
+  var ec=lget("expCur"); if(ec&&CUR[ec]) S.expCur=ec;
+  var c=lget("tripCache"); if(c) mergeDoc(c);   // affichage immédiat, même hors ligne
+  return pullTrip();
+}
+
+/* ========== convertisseur ========== */
+function fmtBuf(s){
+  var p=String(s).split(",");
+  var i=new Intl.NumberFormat("fr-FR").format(parseInt(p[0]||"0",10));
+  return p.length>1 ? i+","+p[1] : i;
+}
+function renderConv(){
+  $("curA").innerHTML = S.a+' <span class="car">▾</span>';
+  $("curB").innerHTML = S.b+' <span class="car">▾</span>';
+  $("sideA").classList.toggle("active", S.typing==="a");
+  $("sideB").classList.toggle("active", S.typing==="b");
+
+  var v=pf(S.buf), A, B;
+  if(S.typing==="a"){ A = S.buf==="0"?"0":fmtBuf(S.buf); B = nf(conv(v,S.a,S.b), CUR[S.b].d); }
+  else { B = S.buf==="0"?"0":fmtBuf(S.buf); A = nf(conv(v,S.b,S.a), CUR[S.a].d); }
+  if(S.mode==="amount"){ if(S.typing==="a") A+='<span class="caret"></span>'; else B+='<span class="caret"></span>'; }
+  $("numA").innerHTML = A + ' <span style="font-size:.5em;color:var(--muted)">'+CUR[S.a].s+'</span>';
+  $("numB").innerHTML = B + ' <span style="font-size:.5em;color:var(--muted)">'+CUR[S.b].s+'</span>';
+
+  var r = conv(1, S.b, S.a); // 1 B = r A
+  if(S.mode==="rate"){
+    $("rateTxt").innerHTML = "1 "+CUR[S.b].s+" = "+(S.rbuf||"")+'<span class="caret"></span> '+CUR[S.a].s+"<small>"+t("rateHint")+"</small>";
+    $("editRate").textContent=t("validate"); $("editRate").classList.add("on");
+  }else{
+    $("rateTxt").innerHTML = "1 "+CUR[S.b].s+" = "+nf(r, r<10?4:2)+" "+CUR[S.a].s+"<small>"+esc(RSRC||t("rateSaved"))+"</small>";
+    $("editRate").textContent=t("edit"); $("editRate").classList.remove("on");
+  }
+
+  // astuce
+  var tp="";
+  if(S.a==="INR"&&S.b==="EUR"){ tp=fmt(t("tipINR"),{n:Math.round((1-100/RATES.INR)*100), x:nf(1000/RATES.INR,2)}); }
+  else if(S.a==="QAR"&&S.b==="EUR"){ tp=fmt(t("tipQAR"),{x:nf(100/RATES.QAR,2)}); }
+  else if(S.a==="USD"||S.b==="USD"){ tp=fmt(t("tipUSD"),{a:nf(conv(1,"USD","EUR"),2), b:nf(conv(1,"EUR","USD"),2)}); }
+  else { tp=fmt(t("tipGEN"),{s:CUR[S.a].s, m:money(conv(10,S.a,S.b),S.b)}); }
+  $("tip").innerHTML=tp;
+
+  // repères de prix
+  var R=REFS[S.a]||REFS[S.b];
+  var rc = REFS[S.a] ? S.a : (REFS[S.b] ? S.b : null);
+  if(!R || !rc){ $("refTitle").style.display="none"; $("refList").innerHTML=""; }
+  else{
+    var oc = rc===S.a ? S.b : S.a;
+    $("refTitle").style.display=""; $("refTitle").textContent=t(R.tkey);
+    $("refList").innerHTML = R.l.map(function(x){
+      var lo=conv(x[1],rc,oc), hi=conv(x[2],rc,oc);
+      return "<li><span>"+esc(t(x[0]))+"</span><span class='p'>"+nf(x[1],0)+"–"+nf(x[2],0)+" "+CUR[rc].s+
+             "<em>"+nf(lo,lo<10?2:0)+"–"+nf(hi,hi<10?2:0)+" "+CUR[oc].s+"</em></span></li>";
+    }).join("");
+  }
+}
+
+function key(k){
+  var tgt = S.mode==="rate" ? "rbuf" : "buf";
+  var s = S[tgt];
+  var maxd = S.mode==="rate" ? 4 : CUR[S.typing==="a"?S.a:S.b].d;
+  if(k==="del"){ s = s.length>1 ? s.slice(0,-1) : (S.mode==="rate"?"":"0"); }
+  else if(k===","){ if(maxd===0) return; if(s.indexOf(",")<0) s=(s===""?"0":s)+","; }
+  else {
+    var dec=s.split(",")[1];
+    if(dec && dec.length>=maxd) return;
+    if(s.replace(/[^0-9]/g,"").length>=10) return;
+    s = (s==="0") ? k : s+k;
+  }
+  S[tgt]=s; renderConv();
+}
+$("pad").addEventListener("click", function(e){ var b=e.target.closest("button"); if(b) key(b.dataset.k); });
+(function(){ var t,b=document.querySelector('[data-k="del"]');
+  var go=function(){ t=setTimeout(function(){ if(S.mode==="rate")S.rbuf=""; else S.buf="0"; renderConv(); if(navigator.vibrate)navigator.vibrate(10); },500); };
+  var st=function(){ clearTimeout(t); };
+  ["touchstart","mousedown"].forEach(function(e){b.addEventListener(e,go,{passive:true})});
+  ["touchend","touchcancel","mouseup","mouseleave"].forEach(function(e){b.addEventListener(e,st)});
+})();
+
+function setTyping(side){
+  if(S.mode==="rate"||S.typing===side) return;
+  var v=pf(S.buf);
+  var out = S.typing==="a" ? conv(v,S.a,S.b) : conv(v,S.b,S.a);
+  var d = CUR[side==="a"?S.a:S.b].d;
+  S.buf = out ? out.toFixed(d).replace(".",",") : "0";
+  if(d===0) S.buf=S.buf.split(",")[0];
+  S.typing=side; renderConv();
+}
+$("sideA").addEventListener("click", function(e){ if(e.target.closest("#curA")) return openCur("a"); setTyping("a"); });
+$("sideB").addEventListener("click", function(e){ if(e.target.closest("#curB")) return openCur("b"); setTyping("b"); });
+$("swap").addEventListener("click", function(e){
+  e.stopPropagation(); this.classList.toggle("turn");
+  var t=S.a; S.a=S.b; S.b=t; S.buf="0"; S.typing="a"; renderConv();
+});
+$("editRate").addEventListener("click", function(e){
+  e.stopPropagation();
+  if(S.mode==="rate"){
+    var v=pf(S.rbuf);
+    if(v>0){
+      var nv = RATES[S.b]*v;
+      if(isFixed(S.a)) setFixedRate(S.a, nv);        // corriger le taux fixe à la main -> il reste fixe
+      else RATES[S.a] = nv;
+      RSRC = isFixed(S.a) ? t("rateFixed") : t("rateManual"); saveRates();
+    }
+    S.mode="amount";
+  } else { S.mode="rate"; S.rbuf=String(+conv(1,S.b,S.a).toFixed(4)).replace(".",","); }
+  renderConv();
+});
+$("fetchRate").addEventListener("click", function(e){
+  e.stopPropagation(); var b=this; b.textContent="…";
+  fetch("https://open.er-api.com/v6/latest/EUR").then(function(r){return r.json()}).then(function(d){
+    if(d && d.rates){
+      var n=0; for(var k in RATES){ if(d.rates[k] && !isFixed(k)){ RATES[k]=d.rates[k]; n++; } }   // ne touche JAMAIS aux taux fixes
+      applyFixedRates();
+      RSRC = new Date().toLocaleDateString(locale(),{day:"2-digit",month:"short",year:"2-digit"});
+      saveRates(); toast(n+" "+t("ratesUpdated"));
+    }
+    b.textContent=t("refresh"); renderConv();
+  }).catch(function(){ b.textContent=t("refresh"); RSRC=t("rateOffline"); renderConv(); });
+});
+
+/* ========== feuille ========== */
+function openSheet(html){ $("sheetIn").innerHTML=html; $("sheet").scrollTop=0; $("sheetBg").classList.add("on"); document.body.classList.add("sheetopen"); requestAnimationFrame(function(){ $("sheet").classList.add("on"); }); }
+function closeSheet(){ $("sheet").classList.remove("on"); $("sheetBg").classList.remove("on"); document.body.classList.remove("sheetopen"); }
+$("sheetBg").addEventListener("click", closeSheet);
+
+function openCur(side){
+  var cur = side==="a"?S.a:S.b;
+  openSheet('<h3>'+t("chooseCurrency")+'</h3><ul class="curlist">'+Object.keys(CUR).map(function(c){
+    return '<li><button data-c="'+c+'"><span class="code">'+c+'</span><span class="nm">'+esc(curName(c))+'</span><span class="sy">'+CUR[c].s+'</span>'+(c===cur?' ✓':'')+'</button></li>';
+  }).join("")+'</ul>');
+  $("sheetIn").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-c]"); if(!b) return;
+    var c=b.dataset.c;
+    if(side==="a"){ if(c===S.b) S.b=S.a; S.a=c; } else { if(c===S.a) S.a=S.b; S.b=c; }
+    S.buf="0"; S.typing=side; closeSheet(); renderConv();
+  });
+}
+
+/* ========== dépenses ========== */
+/* catégories (icône + libellé traduit) */
+var CATS=[
+  {k:"hotel", i:"🏨", fr:"Hôtel", en:"Hotel", ta:"ஹோட்டல்"},
+  {k:"flight", i:"✈️", fr:"Vol", en:"Flight", ta:"விமானம்"},
+  {k:"transport", i:"🚗", fr:"Transport", en:"Transport", ta:"போக்குவரத்து"},
+  {k:"food", i:"🍽️", fr:"Restaurant", en:"Food", ta:"உணவு"},
+  {k:"activity", i:"🎟️", fr:"Activités", en:"Activities", ta:"செயல்பாடுகள்"},
+  {k:"shopping", i:"🛍️", fr:"Shopping", en:"Shopping", ta:"கடைவீதி"},
+  {k:"gifts", i:"🎁", fr:"Cadeaux", en:"Gifts", ta:"பரிசுகள்"},
+  {k:"health", i:"💊", fr:"Santé", en:"Health", ta:"சுகாதாரம்"},
+  {k:"tips", i:"💰", fr:"Pourboires", en:"Tips", ta:"டிப்ஸ்"},
+  {k:"coffee", i:"☕", fr:"Café / snacks", en:"Café / snacks", ta:"காபி / சிற்றுண்டி"},
+  {k:"sim", i:"📶", fr:"SIM / Internet", en:"SIM / Internet", ta:"சிம் / இணையம்"},
+  {k:"visa", i:"🛂", fr:"Visa / Formalités", en:"Visa / Paperwork", ta:"விசா / ஆவணங்கள்"},
+  {k:"driver", i:"🛣️", fr:"Chauffeur", en:"Driver", ta:"ஓட்டுநர்"},
+  {k:"other", i:"📌", fr:"Autres", en:"Other", ta:"மற்றவை"}
+];
+var CATMAP={}; CATS.forEach(function(c){ CATMAP[c.k]=c; });
+function catOf(k){ return CATMAP[k]||CATMAP.other; }
+function catIcon(k){ return catOf(k).i; }
+function catLabel(k){ var c=catOf(k); return c[LANG]||c.fr; }
+/* nom d'un hôtel (regroupe les chambres) + libellé affiché (masqué si caché) */
+function hotelKey(x){ return (x.cat==="hotel") ? (x.hotel || x.label || "?") : null; }
+function displayLabel(x){
+  if(x._hotel) return x.label;                 // dépenses virtuelles (déjà gérées)
+  if(x.hidden) return "🎁 "+t("hotelSurprise");
+  var bf = (x.cat==="hotel" && x.bf) ? " 🥐" : "";
+  if(x.hotel) return x.hotel + (x.label ? " — "+x.label : "") + bf;
+  return (x.label || catLabel(x.cat)) + bf;
+}
+
+/* nombre de nuits entre deux dates "YYYY-MM-DD" (0 si incomplet) */
+function nightsBetween(inV,outV){ if(!inV||!outV) return 0; var n=Math.round((new Date(outV+"T12:00:00")-new Date(inV+"T12:00:00"))/86400000); return n>0?n:0; }
+function nightsLabel(n){ return n>1 ? fmt(t("planNights"),{n:n}) : (n===1 ? t("planNight1") : ""); }
+/* "du 8 au 10 sept" à partir d'un ts d'arrivée + nb de nuits */
+function stayRange(ts,nights){
+  if(!ts) return "";
+  var d1=new Date(ts), loc=locale();
+  if(!nights) return d1.toLocaleDateString(loc,{day:"2-digit",month:"short"});
+  var d2=new Date(ts+nights*86400000);
+  var sameMonth=d1.getMonth()===d2.getMonth();
+  var a=d1.toLocaleDateString(loc,sameMonth?{day:"2-digit"}:{day:"2-digit",month:"short"});
+  var b=d2.toLocaleDateString(loc,{day:"2-digit",month:"short"});
+  return fmt(t("stayFromTo"),{a:a,b:b});
+}
+
+function color(name){ var i=S.people.indexOf(name); return PALETTE[(i<0?0:i)%PALETTE.length]; }
+
+/* nombre de parts d'une personne (couple = 2, individuel = 1). Défaut 1. */
+function sharesOf(p){ var n=(S.partShares && +S.partShares[p]) || 1; return n>0?n:1; }
+
+/* part due (en €) d'une personne pour une dépense, selon la répartition choisie */
+function owedShare(x, person){
+  var sp=x.split;
+  if(!sp || sp.mode==="equal"){
+    var among=(sp && sp.among && sp.among.length) ? sp.among : S.people.slice();
+    if(!among.length) among=[x.who];
+    if(among.indexOf(person)<0) return 0;
+    // répartition PONDÉRÉE par les parts (couple = 2, individuel = 1)
+    var tot=0; among.forEach(function(p){ tot+=sharesOf(p); });
+    if(tot<=0) return 0;
+    return x.eur * sharesOf(person)/tot;
+  }
+  if(sp.mode==="exact"){ return +((sp.amounts&&sp.amounts[person])||0); }
+  if(sp.mode==="shares"){
+    var tot=0, sh=sp.shares||{}, k; for(k in sh) tot+=(+sh[k]||0);
+    if(tot<=0) return 0;
+    return (+sh[person]||0)>0 ? x.eur*(+sh[person])/tot : 0;
+  }
+  return 0;
+}
+/* chambres d'hôtel -> dépenses virtuelles (nom masqué tant que non révélé) */
+function hotelRoomExpenses(){
+  var out=[];
+  (S.hotels||[]).forEach(function(h){
+    (h.rooms||[]).forEach(function(r){
+      if(!(r.eur>0)) return;
+      out.push({ id:"H_"+h.id+"_"+r.id, ts:h.ts||0, who:r.paidBy||(S.me||S.people[0]),
+        label: h.revealed ? (h.name+(r.label?" — "+r.label:"")) : ("🎁 "+t("hotelSurprise")),
+        amount:r.price, cur:r.cur||"EUR", eur:r.eur, cat:"hotel",
+        split:{mode:"equal", among:(r.occupants&&r.occupants.length)?r.occupants:S.people.slice()},
+        _hotel:true, _hidden:!h.revealed });
+    });
+  });
+  return out;
+}
+function EXP(){ return S.expenses.concat(hotelRoomExpenses()); }
+
+/* payé + dû + noms concernés */
+function balances(){
+  var all=EXP();
+  var set={}; S.people.forEach(function(p){ set[p]=1; });
+  all.forEach(function(x){ if(x.who) set[x.who]=1;
+    var sp=x.split; if(sp){ (sp.among||[]).forEach(function(p){set[p]=1;});
+      if(sp.amounts) Object.keys(sp.amounts).forEach(function(p){set[p]=1;});
+      if(sp.shares) Object.keys(sp.shares).forEach(function(p){set[p]=1;}); } });
+  var names=Object.keys(set), paid={}, owed={};
+  names.forEach(function(p){ paid[p]=0; owed[p]=0; });
+  all.forEach(function(x){ paid[x.who]=(paid[x.who]||0)+x.eur;
+    names.forEach(function(p){ owed[p]=(owed[p]||0)+owedShare(x,p); }); });
+  return {names:names, paid:paid, owed:owed};
+}
+/* effet des remboursements déjà faits sur les soldes */
+function paymentAdj(){
+  var adj={};
+  (S.payments||[]).forEach(function(p){ if(!p) return; adj[p.from]=(adj[p.from]||0)+(+p.eur||0); adj[p.to]=(adj[p.to]||0)-(+p.eur||0); });
+  return adj;
+}
+/* qui rembourse qui : minimise le nombre de transferts (glouton) */
+function settlements(){
+  var B=balances(), adj=paymentAdj();
+  var deb=[], cre=[];
+  B.names.forEach(function(p){ var v=(B.paid[p]||0)-(B.owed[p]||0)+(adj[p]||0);
+    if(v<-0.01) deb.push({p:p, v:-v}); else if(v>0.01) cre.push({p:p, v:v}); });
+  deb.sort(function(a,b){return b.v-a.v}); cre.sort(function(a,b){return b.v-a.v});
+  var out=[], i=0, j=0;
+  while(i<deb.length && j<cre.length){
+    var m=Math.min(deb[i].v, cre[j].v);
+    out.push({from:deb[i].p, to:cre[j].p, amount:m});
+    deb[i].v-=m; cre[j].v-=m;
+    if(deb[i].v<0.01) i++; if(cre[j].v<0.01) j++;
+  }
+  return out;
+}
+
+function renderExp(){
+  var B=balances(), adj=paymentAdj();
+  var names=B.names.slice().filter(function(p){ return S.people.indexOf(p)>=0 || B.paid[p]>0 || B.owed[p]>0; });
+  var per=B.paid;
+  var all=EXP();
+  var tot=0; all.forEach(function(x){ tot+=x.eur; });
+  var share = names.length ? tot/names.length : 0;
+
+  var C=S.expCur, EU=CUR[C]||CUR.EUR;
+  var mc=function(eur){ return nf(conv(eur,"EUR",C), EU.d)+" "+EU.s; };   // affiche un montant (en €) dans la monnaie choisie
+
+  $("expCurBtn").innerHTML = C+' <span class="car">▾</span>';
+  $("grandTotal").textContent = mc(tot);
+  $("expCount").textContent = all.length+" "+expWord(all.length);
+  $("perHead").textContent = names.length ? mc(share)+" "+t("perPerson")+" ("+names.length+")" : t("noParticipant");
+
+  var max = Math.max.apply(null, names.map(function(n){return per[n]||0}).concat([1]));
+  names.sort(function(a,b){                                   // ordre choisi dans « Gérer les participants »
+    var ia=S.people.indexOf(a), ib=S.people.indexOf(b);
+    if(ia<0&&ib<0) return (per[b]||0)-(per[a]||0);
+    if(ia<0) return 1; if(ib<0) return -1; return ia-ib;
+  });
+  $("byPerson").innerHTML = names.length ? names.map(function(n){
+    var bal = (per[n]||0)-(B.owed[n]||0)+(adj[n]||0);   // >0 : on lui doit · <0 : il doit
+    var chip = Math.abs(bal)<0.005
+      ? '<span class="pchip zero">'+t("pSquare")+'</span>'
+      : (bal>0
+          ? '<span class="pchip ok">'+t("pGets")+' '+mc(bal)+'</span>'
+          : '<span class="pchip due">'+t("pOwes")+' '+mc(-bal)+'</span>');
+    return '<button type="button" class="pRow" data-p="'+esc(n)+'" style="display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line2);padding:9px 2px;font:inherit;color:inherit;cursor:pointer">'+
+      '<div style="display:flex;align-items:center;gap:9px">'+
+        '<span class="dot" style="background:'+color(n)+';flex:none"></span>'+
+        '<span style="flex:1;min-width:0;font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(n)+'</span>'+
+        chip+'<span style="color:var(--muted);flex:none;font-size:15px">›</span>'+
+      '</div>'+
+      '<div style="font-size:11.5px;color:var(--muted);margin:3px 0 0 21px">'+t("pPaid")+' <b style="color:var(--text);font-variant-numeric:tabular-nums">'+mc(per[n]||0)+'</b></div>'+
+      '<div class="bar" style="margin-left:21px"><i style="width:'+((per[n]||0)/max*100)+'%;background:'+color(n)+'"></i></div></button>';
+  }).join("")+'<p class="note" style="margin:8px 2px 0;text-align:center">'+t("pdTapHint")+'</p>' : '<p class="empty">'+t("emptyPeople")+'</p>';
+
+  // récap par catégorie
+  var byC={}; all.forEach(function(x){ var k=(x.cat&&CATMAP[x.cat])?x.cat:"other"; byC[k]=(byC[k]||0)+x.eur; });
+  var catKeys=Object.keys(byC).sort(function(a,b){return byC[b]-byC[a];});
+  if(catKeys.length){
+    $("catHead").style.display="";
+    $("byCat").innerHTML = catKeys.map(function(k){
+      return '<div class="person"><span style="font-size:16px;flex:none;width:22px;text-align:center">'+catIcon(k)+'</span>'+
+        '<span class="nm">'+esc(catLabel(k))+'</span>'+
+        '<span class="amt">'+mc(byC[k])+'</span></div>';
+    }).join("");
+  } else { $("catHead").style.display="none"; $("byCat").innerHTML=""; }
+
+  var canDel=function(x){ return !S.locked && !x._hotel; };   // la gérante peut modifier/supprimer toute dépense (pas les chambres d'hôtel virtuelles)
+  // Les hôtels sont RANGÉS À PART (bouton « Hôtels ») -> une seule ligne récap ici, le reste dans l'historique
+  var hotelsAll = all.filter(function(x){ return x.cat==="hotel"; });
+  var others = all.filter(function(x){ return x.cat!=="hotel"; }).sort(function(a,b){return b.ts-a.ts});
+  var hotelSummary = "";
+  if(hotelsAll.length){
+    var hSum=0, hNights=0, hKeys={}, hMin=8e15;
+    hotelsAll.forEach(function(x){ hSum+=x.eur; var k=hotelKey(x); if(k && !hKeys[k]){ hKeys[k]=1; hNights+=(+x.nights||0); } if((x.ts||0)&&x.ts<hMin) hMin=x.ts; });
+    var nH=Object.keys(hKeys).length;
+    hotelSummary = '<button id="hotelSummary" class="exp" style="width:100%;text-align:left;background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.28);cursor:pointer">'+
+      '<span style="font-size:20px;flex:none;width:26px;text-align:center">🏨</span>'+
+      '<div class="body"><div class="t">'+t("hotelsTitle")+'</div>'+
+      '<div class="s">'+nH+' 🏨'+(hNights?' · '+hNights+' '+t("nightsWord"):'')+' · '+t("tapToOpen")+'</div></div>'+
+      '<div class="r"><b>'+mc(hSum)+'</b></div><span style="width:18px;flex:none;color:var(--muted)">›</span></button>';
+  }
+  $("history").innerHTML = hotelSummary + (others.length ? others.map(function(x){
+    var d=new Date(x.ts);
+    var editable = (x.cat==="driver" && (x.dp || / — /.test(x.label||"")) && !S.locked);   // chauffeur forfait -> modifiable (peu importe qui a payé)
+    return '<div class="exp"><span class="dot" style="background:'+color(x.who)+'"></span>'+
+      '<div class="body"><div class="t">'+catIcon(x.cat)+' '+esc(displayLabel(x))+'</div>'+
+      '<div class="s">'+esc(x.who)+' · '+d.toLocaleDateString(locale(),{day:"2-digit",month:"short"})+'</div></div>'+
+      '<div class="r"><b>'+mc(x.eur)+'</b>'+(x.cur!==C?'<small>'+money(x.amount,x.cur)+'</small>':'')+'</div>'+
+      (editable?'<button class="edrv" data-id="'+x.id+'" aria-label="✏️" style="flex:none;background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 4px">✏️</button>'
+               :(canDel(x)?'<button class="eexp" data-id="'+x.id+'" aria-label="✏️" style="flex:none;background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 4px">✏️</button>':''))+
+      (canDel(x)?'<button class="del" data-id="'+x.id+'" aria-label="✕">✕</button>':'<span style="width:18px;flex:none"></span>')+'</div>';
+  }).join("") : (hotelsAll.length?'':'<p class="empty">'+t("emptyExp")+'</p>'));
+  var hsBtn=$("hotelSummary"); if(hsBtn) hsBtn.addEventListener("click", function(){ unlockPrivate(showHotels); });
+  $("byPerson").addEventListener("click", function(e){ var b=e.target.closest(".pRow"); if(b) openPersonDetail(b.dataset.p); });
+
+  // --- verrou des comptes ---
+  var meCanUnlock = !S.lockedBy || S.lockedBy===S.me;
+  var disable=function(id,off){ var el=$(id); if(!el) return; el.disabled=off; el.style.opacity=off?.45:1; el.style.pointerEvents=off?"none":""; };
+  if(S.locked){
+    $("lockBanner").innerHTML = '<div style="background:rgba(240,180,41,.12); border:1px solid rgba(240,180,41,.4); color:var(--gold); font-size:12.5px; line-height:1.45; border-radius:12px; padding:10px 12px; margin:2px 0 12px">🔒 '+t("lockedTitle")+(S.lockedBy?' (<b>'+esc(S.lockedBy)+'</b>)':'')+' — '+t("lockedTail")+'</div>';
+    disable("addExp",true); disable("managePeople",true);
+    $("lockBtn").textContent = meCanUnlock ? t("unlockAccounts") : t("lockedWord")+" ("+(S.lockedBy||"?")+")";
+    disable("lockBtn", !meCanUnlock);
+  } else {
+    $("lockBanner").innerHTML="";
+    disable("addExp",false); disable("managePeople",false);
+    $("lockBtn").textContent=t("lockAccounts"); disable("lockBtn",false);
+  }
+
+  var status = SYNC.ok
+    ? "<b style='color:var(--aqua)'>"+t("syncActiveBold")+"</b>"+t("syncActiveTail")
+    : (SYNC.tried
+        ? "<b style='color:var(--gold)'>"+t("syncPausedBold")+"</b>"+t("syncPausedTail")
+        : t("syncConnecting"));
+  var lnk="font:inherit;font-size:11px;color:var(--aqua);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer";
+  $("syncNote").innerHTML = status +
+    "<br>"+t("codeLine")+" <b style='color:var(--text)'>"+esc(tripCode())+"</b> · "+
+    "<button id='shareBtn' style=\""+lnk+"\">"+t("shareBook")+"</button> · "+
+    "<button id='joinBtn2' style=\""+lnk+"\">"+t("joinBook")+"</button>"+
+    (S.me?" · "+t("onThisPhone")+" <b style='color:var(--text)'>"+esc(S.me)+"</b>.":"");
+}
+
+$("history").addEventListener("click", function(e){
+  var ed=e.target.closest(".edrv"); if(ed){ var ex=S.expenses.filter(function(y){return y.id===ed.dataset.id})[0]; if(ex) openDriver(ex); return; }
+  var ee=e.target.closest(".eexp"); if(ee){ var ex2=S.expenses.filter(function(y){return y.id===ee.dataset.id})[0]; if(ex2) openAddExpense(null, ex2); return; }
+  var b=e.target.closest(".del"); if(!b) return;
+  var id=b.dataset.id;
+  var x=S.expenses.filter(function(y){return y.id===id})[0];
+  if(S.locked){ toast(t("tAccountsLocked")); return; }
+  if(!confirm(fmt(t("confirmDelete"),{l:(x&&x.label)||t("thisExpense")}))) return;
+  S.expenses=S.expenses.filter(function(y){return y.id!==id});
+  if(S.deleted.indexOf(id)<0) S.deleted.push(id);   // tombstone -> ne réapparaît pas à la sync
+  saveTrip().then(renderExp).catch(function(){ toast(t("tDeletedOffline")); });
+  renderExp();
+});
+
+function openAddExpense(preset, ex){
+  if(S.locked){ toast(t("tAccountsLocked")); return; }
+  if(!S.people.length){ return openPeople(true); }
+  var initCat = ex ? (ex.cat||"other") : ((preset&&preset.cat)||"other");
+  var who = ex ? ex.who : (S.me || S.people[0]);
+  var defCur = ex ? (ex.cur||"EUR") : (S.a!=="EUR"?S.a:"EUR");
+  var opts = Object.keys(CUR).map(function(c){ return '<option value="'+c+'"'+(c===defCur?' selected':'')+'>'+c+' '+CUR[c].s+'</option>'; }).join("");
+  openSheet('<h3>'+(ex?t("editExpense"):t("newExpense"))+'</h3>'+
+    '<div class="field"><label>'+t("amount")+'</label><div class="row2">'+
+      '<input id="fAmt" inputmode="decimal" placeholder="0,00" autocomplete="off" value="'+(ex?esc(String(ex.amount).replace(".",",")):"")+'">'+
+      '<select id="fCur">'+opts+'</select></div></div>'+
+    '<div class="field"><label>'+t("forWhat")+'</label><input id="fLbl" placeholder="'+esc(t("forWhatPh"))+'" autocomplete="off" value="'+(ex?esc(ex.label||""):"")+'"></div>'+
+    '<div class="field"><label>'+t("catField")+'</label><div class="who" id="fCat">'+
+      CATS.map(function(c){ return '<button type="button" data-cat="'+c.k+'" aria-pressed="'+(c.k===initCat)+'">'+c.i+' '+esc(c[LANG]||c.fr)+'</button>'; }).join("")+
+    '</div></div>'+
+    '<div class="field"><label>'+t("whoPaid")+'</label><div class="who" id="fWho">'+
+      S.people.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(p===who)+'">'+esc(p)+'</button>'; }).join("")+
+    '</div></div>'+
+    '<div class="field"><label>'+t("splitField")+'</label>'+
+      '<div class="who" id="fMode">'+
+        ['equal','exact','shares'].map(function(m){
+          var lbl = m==="equal"?t("splitEqual"):(m==="exact"?t("splitExact"):t("splitShares"));
+          var on = (ex && ex.split && (ex.split.mode==="exact"||ex.split.mode==="shares")) ? (ex.split.mode===m) : (m==="equal");
+          return '<button type="button" data-m="'+m+'" aria-pressed="'+on+'">'+lbl+'</button>';
+        }).join("")+
+      '</div><div id="fSplit" style="margin-top:10px"></div>'+
+    '</div>'+
+    '<div class="field"><label>'+t("dateW")+'</label><input id="fDate" type="date" value="'+(ex&&ex.ts?new Date(ex.ts- new Date(ex.ts).getTimezoneOffset()*60000).toISOString().slice(0,10):new Date().toISOString().slice(0,10))+'"></div>'+
+    '<button class="btn" id="fSave">'+t("saveExpense")+'</button>'+
+    '<p class="note" id="fPrev"></p>');
+
+  var sel=who;
+  $("fWho").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-p]"); if(!b) return;
+    sel=b.dataset.p;
+    [].forEach.call(this.querySelectorAll("button"), function(x){ x.setAttribute("aria-pressed", x===b); });
+  });
+  var selCat=initCat;
+  $("fCat").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-cat]"); if(!b) return;
+    selCat=b.dataset.cat;
+    [].forEach.call(this.querySelectorAll("button"), function(x){ x.setAttribute("aria-pressed", x===b); });
+  });
+  /* --- répartition (égal / montants / parts) --- */
+  var esp = ex && ex.split ? ex.split : null;
+  var splitMode = (esp && (esp.mode==="exact"||esp.mode==="shares")) ? esp.mode : "equal";
+  var concerned={};
+  if(esp && (!esp.mode || esp.mode==="equal") && esp.among && esp.among.length){
+    S.people.forEach(function(p){ concerned[p] = esp.among.indexOf(p)>=0; });   // on retrouve qui était concerné
+  } else {
+    S.people.forEach(function(p){ concerned[p]=true; });
+  }
+  var preAmt = (esp && esp.mode==="exact" && esp.amounts) ? esp.amounts : null;   // en EUR
+  var preSh  = (esp && esp.mode==="shares" && esp.shares) ? esp.shares : null;
+  var updRemain=function(){};
+  function drawSplit(){
+    var el=$("fSplit"); if(!el) return; updRemain=function(){};
+    if(splitMode==="equal"){
+      el.innerHTML='<div class="note" style="margin:0 0 6px">'+esc(t("splitConcerned"))+'</div><div class="who" id="fConc">'+
+        S.people.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(concerned[p]?"true":"false")+'">'+esc(p)+'</button>'; }).join("")+'</div>';
+      $("fConc").addEventListener("click", function(e){ var b=e.target.closest("button[data-p]"); if(!b) return; var p=b.dataset.p; concerned[p]=!concerned[p]; b.setAttribute("aria-pressed", concerned[p]?"true":"false"); });
+    } else if(splitMode==="exact"){
+      var c=$("fCur").value, sy=CUR[c]?CUR[c].s:c, dd=CUR[c]?CUR[c].d:2;
+      el.innerHTML=S.people.map(function(p){
+        var pv = preAmt && preAmt[p]>0 ? nf(conv(+preAmt[p],"EUR",c),dd) : "";   // montants stockés en EUR -> devise affichée
+        return '<div class="person"><span class="nm">'+esc(p)+'</span><input class="fxAmt" data-p="'+esc(p)+'" inputmode="decimal" placeholder="0" value="'+esc(pv)+'" style="width:110px;font:inherit;font-size:14px;color:var(--text);background:var(--slab2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:right"><span style="color:var(--muted);width:26px;text-align:right">'+sy+'</span></div>'; }).join("")+'<div class="note" id="fRemain" style="margin-top:6px"></div>';
+      updRemain=function(){ var sum=0; [].forEach.call(el.querySelectorAll(".fxAmt"), function(inp){ sum+=pf(inp.value); }); $("fRemain").textContent=fmt(t("splitRemaining"),{x:nf(pf($("fAmt").value)-sum,dd)+" "+sy}); };
+      el.addEventListener("input", updRemain); updRemain();
+    } else {
+      el.innerHTML=S.people.map(function(p){
+        var sv = preSh && (+preSh[p]>0) ? String(+preSh[p]) : (preSh ? "0" : "1");
+        return '<div class="person"><span class="nm">'+esc(p)+'</span><input class="fxSh" data-p="'+esc(p)+'" inputmode="numeric" value="'+esc(sv)+'" style="width:70px;font:inherit;font-size:14px;color:var(--text);background:var(--slab2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:right"></div>'; }).join("");
+    }
+  }
+  $("fMode").addEventListener("click", function(e){ var b=e.target.closest("button[data-m]"); if(!b) return; splitMode=b.dataset.m; [].forEach.call(this.querySelectorAll("button"), function(x){ x.setAttribute("aria-pressed", x===b); }); drawSplit(); });
+  drawSplit();
+
+  var prev=function(){
+    var v=pf($("fAmt").value), c=$("fCur").value;
+    $("fPrev").textContent = v ? "≈ "+nf(conv(v,c,"EUR"),2)+" € "+t("atCurrentRate") : "";
+    updRemain();
+  };
+  $("fAmt").addEventListener("input", prev);
+  $("fCur").addEventListener("change", function(){ prev(); if(splitMode==="exact") drawSplit(); });
+  setTimeout(function(){ $("fAmt").focus(); },250);
+
+  $("fSave").addEventListener("click", function(){
+    var v=pf($("fAmt").value), c=$("fCur").value;
+    if(v<=0){ toast(t("tIndicateAmount")); return; }
+    var d=$("fDate").value ? new Date($("fDate").value+"T12:00:00").getTime() : Date.now();
+    var split;
+    if(splitMode==="equal"){
+      var among=S.people.filter(function(p){return concerned[p];});
+      // « tout le monde » reste dynamique : les personnes ajoutées plus tard comptent automatiquement
+      if(!among.length || among.length===S.people.length) among=[];
+      split={mode:"equal", among:among};
+    } else if(splitMode==="exact"){
+      var amounts={}, sum=0;
+      [].forEach.call(document.querySelectorAll("#fSplit .fxAmt"), function(inp){ var a=pf(inp.value); if(a>0){ amounts[inp.dataset.p]=conv(a,c,"EUR"); sum+=a; } });
+      split = sum>0 ? {mode:"exact", amounts:amounts} : {mode:"equal", among:S.people.slice()};
+    } else {
+      var shares={}, tots=0;
+      [].forEach.call(document.querySelectorAll("#fSplit .fxSh"), function(inp){ var s=parseInt(inp.value,10)||0; if(s>0){ shares[inp.dataset.p]=s; tots+=s; } });
+      split = tots>0 ? {mode:"shares", shares:shares} : {mode:"equal", among:S.people.slice()};
+    }
+    if(ex){
+      // MODIFICATION en place : même id (rien n'est supprimé), mt à jour pour que la sync garde cette version
+      var cur=S.expenses.filter(function(y){ return y.id===ex.id; })[0] || ex;
+      // si NI le montant NI la devise n'ont changé, on garde la valeur en € d'origine
+      // (sinon un simple décochage recalculerait au taux du jour et modifierait l'historique)
+      var sameMoney = (Math.abs(v-(+ex.amount||0))<1e-9) && (c===(ex.cur||"EUR")) && (+ex.eur>0);
+      cur.ts=d; cur.who=sel; cur.label=$("fLbl").value.trim(); cur.amount=v; cur.cur=c;
+      cur.eur = sameMoney ? +ex.eur : conv(v,c,"EUR");
+      cur.cat=selCat; cur.split=split; cur.mt=Date.now();
+    } else {
+      S.expenses.push({ id:String(Date.now())+Math.random().toString(36).slice(2,6),
+        ts:d, who:sel, label:$("fLbl").value.trim(), amount:v, cur:c, eur:conv(v,c,"EUR"), cat:selCat, split:split, mt:Date.now() });
+    }
+    closeSheet(); renderExp();
+    pullThenSave();
+  });
+}
+$("addExp").addEventListener("click", function(){ openAddExpense(); });
+
+function pullThenSave(){
+  // relit -> fusionne (union par id + tombstones) -> écrit : aucune saisie ne disparaît
+  return pullTrip().then(saveTrip)
+    .then(function(){ renderExp(); toast(t("tSynced")); })
+    .catch(function(){ renderExp(); toast(SYNC.tried&&!SYNC.ok ? t("tSavedPaused") : t("tSavedOffline")); });
+}
+$("syncBtn").addEventListener("click", pullThenSave);
+
+/* ---- transmission par code (marche sans réseau partagé) ---- */
+function b64e(s){ var b=new TextEncoder().encode(s), o=""; for(var i=0;i<b.length;i++) o+=String.fromCharCode(b[i]); return btoa(o); }
+function b64d(s){ var r=atob(s), a=new Uint8Array(r.length); for(var i=0;i<r.length;i++) a[i]=r.charCodeAt(i); return new TextDecoder().decode(a); }
+
+function makeCode(){
+  var mine = S.me ? S.expenses.filter(function(x){return x.who===S.me}) : S.expenses;
+  if(!mine.length) return null;
+  var pack = mine.map(function(x){ return [x.id, x.ts, x.who, x.label||"", +x.amount.toFixed(2), x.cur, +x.eur.toFixed(2), x.cat||"other", x.split||null, x.hotel||"", x.hidden?1:0, x.bf?1:0, x.mt||0, +x.nights||0, +x.paid||0, x.paidCur||""]; });
+  return "NIV1." + b64e(JSON.stringify(pack));
+}
+
+$("sendBtn").addEventListener("click", function(){
+  var code = makeCode();
+  if(!code){ toast(S.me? t("tNoExpenseYou") : t("tNoExpenseSend")); return; }
+  var n = (S.me ? S.expenses.filter(function(x){return x.who===S.me}) : S.expenses).length;
+  var msg = fmt(t("msgShare"),{n:n})+"\n\n"+code;
+  openSheet('<h3>'+t("sendTitle")+'</h3>'+
+    '<p class="note" style="margin-bottom:12px">'+fmt(esc(t("sendIntro")),{n:n, w:esc(expWord(n)), name:'<b style="color:var(--text)">'+esc(S.me||t("everyone"))+'</b>'})+'</p>'+
+    '<div class="field"><label>'+t("codeW")+'</label><textarea id="outCode" readonly rows="4" style="width:100%;font:inherit;font-size:11px;line-height:1.5;color:var(--muted);background:var(--slab2);border:1px solid var(--line);border-radius:12px;padding:12px;resize:none;word-break:break-all">'+code+'</textarea></div>'+
+    '<button class="btn" id="shareCode">'+t("shareW")+'</button>'+
+    '<button class="btn ghost" id="copyCode" style="margin-top:8px">'+t("copyCode")+'</button>');
+  $("shareCode").addEventListener("click", function(){
+    if(navigator.share){ navigator.share({text:msg}).catch(function(){}); }
+    else { copy(code); }
+  });
+  $("copyCode").addEventListener("click", function(){ copy(code); });
+});
+
+function copy(txt){
+  if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){toast(t("tCodeCopied"))}).catch(fallback); }
+  else fallback();
+  function fallback(){ var el=$("outCode"); if(el){ el.select(); try{document.execCommand("copy"); toast(t("tCodeCopied"));}catch(e){toast(t("tSelectCopy"));} } }
+}
+
+$("recvBtn").addEventListener("click", function(){
+  openSheet('<h3>'+t("recvTitle")+'</h3>'+
+    '<p class="note" style="margin-bottom:12px">'+esc(t("recvIntro"))+'</p>'+
+    '<div class="field"><label>'+t("codeReceived")+'</label><textarea id="inCode" rows="4" placeholder="NIV1...." style="width:100%;font:inherit;font-size:12px;color:var(--text);background:var(--slab2);border:1px solid var(--line);border-radius:12px;padding:12px;resize:none"></textarea></div>'+
+    '<button class="btn" id="doImport">'+t("addToBook")+'</button>');
+  $("doImport").addEventListener("click", function(){
+    var raw = $("inCode").value.trim();
+    var i = raw.indexOf("NIV1.");
+    if(i < 0){ toast(t("tCodeUnknown")); return; }
+    raw = raw.slice(i+5).replace(/\s+/g,"");
+    var pack;
+    try{ pack = JSON.parse(b64d(raw)); }catch(e){ toast(t("tCodeUnreadable")); return; }
+    if(!Array.isArray(pack)){ toast(t("tCodeUnreadable2")); return; }
+    var have={}; S.expenses.forEach(function(x){ have[x.id]=1; });
+    var added=0;
+    pack.forEach(function(p){
+      if(have[p[0]]) return;
+      var e={id:p[0], ts:p[1], who:p[2], label:p[3], amount:p[4], cur:p[5], eur:p[6], cat:p[7]||"other", split:p[8]||null};
+      if(p.length>9){ if(p[9]) e.hotel=p[9]; if(p[10]) e.hidden=true; if(p[11]) e.bf=true; if(p[12]) e.mt=p[12]; if(p[13]) e.nights=+p[13]; if(p[14]){ e.paid=+p[14]; e.paidCur=p[15]||"EUR"; } }
+      S.expenses.push(e);
+      if(S.people.indexOf(p[2])<0) S.people.push(p[2]);
+      added++;
+    });
+    closeSheet(); renderExp();
+    toast(added ? fmt(t("tAdded"),{n:added, w:expWord(added)}) : t("tUpToDate"));
+    if(added) pullThenSave();
+  });
+});
+
+/* renommer une personne PARTOUT (dépenses, chambres, remboursements, « je suis ») */
+function renamePerson(old, nw){
+  nw=(nw||"").trim();
+  if(!nw || nw===old) return false;
+  if(S.people.indexOf(nw)>=0){ toast(t("tAlreadyList")); return false; }
+  S.people=S.people.map(function(p){ return p===old?nw:p; });
+  if(S.me===old){ S.me=nw; lset("me",{name:nw}); }
+  var now=Date.now();
+  (S.expenses||[]).forEach(function(x){ var ch=false;
+    if(x.who===old){ x.who=nw; ch=true; }
+    if(x.split){
+      if(x.split.among){ x.split.among=x.split.among.map(function(p){return p===old?nw:p;}); ch=true; }
+      if(x.split.amounts && (old in x.split.amounts)){ x.split.amounts[nw]=x.split.amounts[old]; delete x.split.amounts[old]; ch=true; }
+      if(x.split.shares && (old in x.split.shares)){ x.split.shares[nw]=x.split.shares[old]; delete x.split.shares[old]; ch=true; }
+    }
+    if(ch) x.mt=now;
+  });
+  (S.hotels||[]).forEach(function(h){ (h.rooms||[]).forEach(function(r){ if(r.paidBy===old) r.paidBy=nw; if(r.occupants) r.occupants=r.occupants.map(function(p){return p===old?nw:p;}); }); });
+  (S.payments||[]).forEach(function(p){ if(p.from===old)p.from=nw; if(p.to===old)p.to=nw; });
+  saveTrip().catch(function(){}); cacheTrip();
+  return true;
+}
+function openRename(old){
+  openSheet('<button class="btn ghost" id="rnBack" style="margin:0 0 12px;font-size:12.5px;padding:8px 12px;width:auto">'+t("backWord")+'</button>'+
+    '<h3>✏️ '+esc(old)+'</h3>'+
+    '<div class="field"><label>'+t("renameLabel")+'</label><input id="rnNew" value="'+esc(old)+'" autocomplete="off"></div>'+
+    '<button class="btn" id="rnSave">'+t("saveWord")+'</button>');
+  setTimeout(function(){ var el=$("rnNew"); if(el){ el.focus(); try{el.select();}catch(e){} } },200);
+  $("rnBack").addEventListener("click", function(){ openPeople(false); });
+  $("rnSave").addEventListener("click", function(){ if(renamePerson(old, $("rnNew").value)){ renderExp(); } openPeople(false); });
+}
+function openPeople(first){
+  openSheet('<h3>'+t("participantsTitle")+'</h3>'+
+    (first?'<p class="note" style="margin-bottom:12px">'+esc(t("participantsIntro"))+'</p>':'')+
+    '<p class="note" style="margin:0 0 10px">'+esc(t("partsHint"))+'</p>'+
+    '<div id="plist"></div>'+
+    '<div class="field" style="margin-top:12px"><label>'+t("addW")+'</label><div class="row2">'+
+      '<input id="pNew" placeholder="'+esc(t("firstName"))+'" autocomplete="off">'+
+      '<button class="btn" id="pAdd" style="margin:0">'+t("addW")+'</button></div></div>'+
+    '<div class="field"><label>'+t("iAm")+'</label><select id="pMe"></select></div>'+
+    '<button class="btn ghost" id="pDone">'+t("doneW")+'</button>');
+
+  S.partShares=S.partShares||{};
+  function draw(){
+    $("plist").innerHTML = S.people.length ? S.people.map(function(p,i){
+      var ab="flex:none;background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:2px 5px";
+      var sb="flex:none;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--slab2);color:var(--text);font-size:17px;cursor:pointer;line-height:1";
+      return '<div style="border-bottom:1px solid var(--line2);padding:4px 0">'+
+        '<div class="person" style="gap:6px;border:0;padding:6px 0"><span class="dot" style="background:'+color(p)+'"></span><span class="nm">'+esc(p)+'</span>'+
+             '<button class="pUp" data-p="'+esc(p)+'" style="'+ab+(i===0?';opacity:.25;pointer-events:none':'')+'">▲</button>'+
+             '<button class="pDown" data-p="'+esc(p)+'" style="'+ab+(i===S.people.length-1?';opacity:.25;pointer-events:none':'')+'">▼</button>'+
+             '<button class="rnBtn" data-p="'+esc(p)+'" style="'+ab+';font-size:16px">✏️</button>'+
+             '<button class="del" data-p="'+esc(p)+'">✕</button></div>'+
+        '<div style="display:flex;align-items:center;gap:8px;padding:2px 0 4px 20px;font-size:13px;color:var(--muted)">'+
+             '<span style="flex:1">'+t("partsWord")+'</span>'+
+             '<button class="pMinus" data-p="'+esc(p)+'" style="'+sb+'">−</button>'+
+             '<b style="min-width:18px;text-align:center;color:var(--text);font-size:15px">'+sharesOf(p)+'</b>'+
+             '<button class="pPlus" data-p="'+esc(p)+'" style="'+sb+'">+</button></div>'+
+        '</div>';
+    }).join("") : '<p class="note">'+t("noParticipants")+'</p>';
+    $("pMe").innerHTML = '<option value="">'+t("notSet")+'</option>'+S.people.map(function(p){
+      return '<option'+(p===S.me?' selected':'')+'>'+esc(p)+'</option>'; }).join("");
+  }
+  draw();
+  function move(p, dir){ var i=S.people.indexOf(p), j=i+dir; if(i<0||j<0||j>=S.people.length) return; var tmp=S.people[i]; S.people[i]=S.people[j]; S.people[j]=tmp; draw(); }
+  function setShares(p, n){ n=Math.max(1,Math.min(9,n)); S.partShares[p]=n; draw(); }
+  $("plist").addEventListener("click", function(e){
+    var up=e.target.closest(".pUp"); if(up){ move(up.dataset.p, -1); return; }
+    var dn=e.target.closest(".pDown"); if(dn){ move(dn.dataset.p, 1); return; }
+    var mn=e.target.closest(".pMinus"); if(mn){ setShares(mn.dataset.p, sharesOf(mn.dataset.p)-1); return; }
+    var pl=e.target.closest(".pPlus"); if(pl){ setShares(pl.dataset.p, sharesOf(pl.dataset.p)+1); return; }
+    var rn=e.target.closest(".rnBtn"); if(rn){ openRename(rn.dataset.p); return; }
+    var b=e.target.closest(".del"); if(!b) return;
+    var p=b.dataset.p;
+    if(S.expenses.some(function(x){return x.who===p})){ toast(t("tHasExpenses")); return; }
+    S.people=S.people.filter(function(x){return x!==p}); delete S.partShares[p]; draw();
+  });
+  var add=function(){
+    var v=$("pNew").value.trim();
+    if(!v) return;
+    if(S.people.indexOf(v)>=0){ toast(t("tAlreadyList")); return; }
+    S.people.push(v); $("pNew").value=""; draw();
+  };
+  $("pAdd").addEventListener("click", add);
+  $("pNew").addEventListener("keydown", function(e){ if(e.key==="Enter") add(); });
+  $("pMe").addEventListener("change", function(){ S.me=this.value; lset("me",{name:S.me}); });
+  $("pDone").addEventListener("click", function(){ closeSheet(); renderExp(); pullThenSave(); });
+}
+$("managePeople").addEventListener("click", function(){ if(S.locked){ toast("Comptes verrouillés"); return; } openPeople(false); });
+
+/* ---- monnaie d'affichage des dépenses (comme le convertisseur) ---- */
+function openExpCur(){
+  openSheet('<h3>'+t("viewAmountsIn")+'</h3><ul class="curlist">'+Object.keys(CUR).map(function(c){
+    return '<li><button data-c="'+c+'"><span class="code">'+c+'</span><span class="nm">'+esc(curName(c))+'</span><span class="sy">'+CUR[c].s+'</span>'+(c===S.expCur?' ✓':'')+'</button></li>';
+  }).join("")+'</ul>');
+  $("sheetIn").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-c]"); if(!b) return;
+    S.expCur=b.dataset.c; lset("expCur", S.expCur); closeSheet(); renderExp();
+  });
+}
+$("expCurBtn").addEventListener("click", openExpCur);
+
+/* ---- verrouiller / déverrouiller les comptes ---- */
+$("lockBtn").addEventListener("click", function(){
+  if(S.locked){
+    if(S.lockedBy && S.lockedBy!==S.me){ toast(fmt(t("tLockedByToast"),{name:S.lockedBy})); return; }
+    S.locked=false; S.lockedBy=""; S.lockAt=Date.now();
+  } else {
+    if(!confirm(t("confirmLock"))) return;
+    S.locked=true; S.lockedBy=S.me||""; S.lockAt=Date.now();
+  }
+  renderExp();
+  saveTrip().then(function(){ renderExp(); toast(S.locked?t("tLockedOn"):t("tLockedOff")); })
+            .catch(function(){ toast(t("tSavedOfflineShort")); });
+});
+
+/* ---- assistant chambres d'hôtel ---- */
+function openRooms(){
+  if(S.locked){ toast(t("tAccountsLocked")); return; }
+  if(!S.people.length){ return openPeople(true); }
+  var payer=S.me||S.people[0];
+  var curOpts=Object.keys(CUR).map(function(c){return '<option value="'+c+'"'+(c==="EUR"?' selected':'')+'>'+c+' '+CUR[c].s+'</option>';}).join("");
+  var rooms=[{price:"", who:{}}];
+  var existHotels=[]; S.expenses.forEach(function(x){ if(x.cat==="hotel"){ var k=hotelKey(x); if(k && existHotels.indexOf(k)<0) existHotels.push(k); } });
+  var hotelSel = existHotels.length ? '<select id="rHotelSel"><option value="">'+t("hotelNewOption")+'</option>'+existHotels.map(function(n){return '<option value="'+esc(n)+'">'+esc(n)+'</option>';}).join("")+'</select>' : '';
+  openSheet('<h3>'+t("roomsTitle")+'</h3>'+
+    '<div class="field"><label>'+t("roomsHotelName")+'</label>'+hotelSel+'<input id="rHotel" autocomplete="off" placeholder="'+esc(t("hotelName"))+'"'+(existHotels.length?' style="margin-top:8px"':'')+'></div>'+
+    '<div class="field"><label>'+t("roomsPaidBy")+'</label><div class="who" id="rPaid">'+
+      S.people.map(function(p){return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(p===payer)+'">'+esc(p)+'</button>';}).join("")+'</div></div>'+
+    '<div class="field"><label>'+t("chooseCurrency")+'</label><select id="rCur">'+curOpts+'</select></div>'+
+    '<div class="field"><label>'+t("roomsDate")+' · '+t("roomsOut")+'</label><div class="row2"><input id="rIn" type="date"><input id="rOut" type="date"></div><p class="note" id="rNights" style="margin:6px 2px 0"></p></div>'+
+    '<div class="field"><label>'+t("bfLabel")+'</label><label class="person" style="cursor:pointer;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px"><input type="checkbox" id="rBf" style="width:20px;height:20px;flex:none;accent-color:var(--gold)"><span class="nm">'+t("bfAsk")+'</span></label></div>'+
+    '<div id="rRooms"></div>'+
+    '<button class="btn ghost" id="rAdd" style="font-size:13px;padding:11px">'+t("addRoom")+'</button>'+
+    '<button class="btn" id="rCreate" style="margin-top:10px">'+t("roomsCreate")+'</button>');
+  $("rPaid").addEventListener("click", function(e){ var b=e.target.closest("button[data-p]"); if(!b) return; payer=b.dataset.p; [].forEach.call(this.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b);}); });
+  var hs=$("rHotelSel"); if(hs) hs.addEventListener("change", function(){ $("rHotel").style.display=this.value?"none":""; });
+  function updNights(){ var n=nightsBetween($("rIn").value,$("rOut").value); $("rNights").textContent = n? "🌙 "+nightsLabel(n) : ""; }
+  $("rIn").addEventListener("change", function(){ if($("rIn").value && !$("rOut").value){ var d=new Date($("rIn").value+"T12:00:00"); d.setDate(d.getDate()+1); $("rOut").value=d.toISOString().slice(0,10); } updNights(); });
+  $("rOut").addEventListener("change", updNights);
+  function drawRooms(){
+    $("rRooms").innerHTML=rooms.map(function(rm,idx){
+      return '<div class="field" style="border:1px solid var(--line);border-radius:12px;padding:10px 12px">'+
+        '<label>'+t("roomWord")+' '+(idx+1)+'</label>'+
+        '<input class="rPrice" data-i="'+idx+'" inputmode="decimal" placeholder="'+esc(t("roomPrice"))+'" value="'+esc(rm.price)+'" style="margin-bottom:8px">'+
+        '<div class="note" style="margin:0 0 6px">'+t("roomWho")+'</div>'+
+        '<div class="who rWho" data-i="'+idx+'">'+S.people.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(rm.who[p]?"true":"false")+'">'+esc(p)+'</button>'; }).join("")+'</div>'+
+        (rooms.length>1?'<button type="button" class="btn ghost rDel" data-i="'+idx+'" style="margin-top:8px;font-size:12px;padding:8px">✕</button>':'')+
+      '</div>';
+    }).join("");
+  }
+  drawRooms();
+  $("rRooms").addEventListener("input", function(e){ var inp=e.target.closest(".rPrice"); if(inp) rooms[+inp.dataset.i].price=inp.value; });
+  $("rRooms").addEventListener("click", function(e){
+    var w=e.target.closest(".rWho button[data-p]");
+    if(w){ var i=+w.parentNode.dataset.i, p=w.dataset.p; rooms[i].who[p]=!rooms[i].who[p]; w.setAttribute("aria-pressed", rooms[i].who[p]?"true":"false"); return; }
+    var del=e.target.closest(".rDel"); if(del){ rooms.splice(+del.dataset.i,1); drawRooms(); }
+  });
+  $("rAdd").addEventListener("click", function(){ rooms.push({price:"", who:{}}); drawRooms(); });
+  $("rCreate").addEventListener("click", function(){
+    var hs2=$("rHotelSel"); var hotel = (hs2 && hs2.value) ? hs2.value : ($("rHotel").value||"").trim();
+    var c=$("rCur").value, made=0, now=Date.now();
+    var stay = $("rIn").value ? new Date($("rIn").value+"T12:00:00").getTime() : now;
+    var nights = nightsBetween($("rIn").value, $("rOut").value);
+    var bf = $("rBf").checked;
+    rooms.forEach(function(rm,idx){
+      var price=pf(rm.price), occ=S.people.filter(function(p){return rm.who[p];});
+      if(price>0 && occ.length){
+        S.expenses.push({ id:String(Date.now())+Math.random().toString(36).slice(2,6)+idx,
+          ts:stay, mt:now, who:payer, hotel:hotel, label:t("roomWord")+" "+(idx+1), amount:price, cur:c, eur:conv(price,c,"EUR"), cat:"hotel", bf:bf, nights:nights, hidden:true, split:{mode:"equal", among:occ} });
+        made++;
+      }
+    });
+    if(!made){ toast(t("roomsNeed")); return; }
+    closeSheet(); renderExp(); pullThenSave(); toast(made+" "+t("roomsCreatedN"));
+  });
+}
+$("roomsBtn").addEventListener("click", openRooms);
+
+/* ---- récap privé « qui rembourse qui » (protégé par code) ---- */
+var settleUnlocked=false;
+function newId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+/* hachage du code (léger, non réversible) — stocké dans le carnet partagé pour verrouiller TOUS les téléphones */
+function pinHashOf(v){ var h=5381, s="niv:"+v; for(var i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))>>>0; } return h.toString(36); }
+function setSharedPin(v){ S.pinHash=pinHashOf(v); S.pinAt=Date.now(); saveTrip().catch(function(){}); cacheTrip(); }
+/* déverrouillage privé (code secret PARTAGÉ, synchronisé — même code sur tous les téléphones) */
+function unlockPrivate(onOk){
+  if(settleUnlocked){ onOk(); return; }
+  // migration : ancien code local -> code partagé
+  if(!S.pinHash){ var old=lget("settlePin"); if(old){ S.pinHash=pinHashOf(old); S.pinAt=Date.now(); localStorage.removeItem("settlePin"); saveTrip().catch(function(){}); cacheTrip(); } }
+  if(!S.pinHash){
+    openSheet('<h3>🔒</h3><p class="note" style="margin-bottom:12px">'+esc(t("settleSetHint"))+'</p>'+
+      '<div class="field"><label>'+t("settleCode")+'</label><input id="stPin" type="password" inputmode="numeric" autocomplete="off"></div>'+
+      '<button class="btn" id="stSave">'+t("settleSetBtn")+'</button>');
+    $("stSave").addEventListener("click", function(){ var v=($("stPin").value||"").trim(); if(!v){ toast(t("tCodeEmpty")); return; } setSharedPin(v); settleUnlocked=true; onOk(); });
+  } else {
+    openSheet('<h3>🔒</h3><p class="note" style="margin-bottom:12px">'+esc(t("settleEnterHint"))+'</p>'+
+      '<div class="field"><label>'+t("settleCode")+'</label><input id="stPin" type="password" inputmode="numeric" autocomplete="off"></div>'+
+      '<button class="btn" id="stOpen">'+t("settleOpenBtn")+'</button>');
+    $("stOpen").addEventListener("click", function(){ var v=($("stPin").value||"").trim(); if(pinHashOf(v)===S.pinHash){ settleUnlocked=true; onOk(); } else toast(t("settleWrong")); });
+  }
+}
+/* récap privé « qui rembourse qui » */
+function renderSettleList(){
+  var s=settlements(), C=S.expCur, EU=CUR[C]||CUR.EUR;
+  var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
+  if(!s.length) return '<p class="empty">'+t("settleAllSquare")+'</p>';
+  return '<ul class="pover">'+s.map(function(o){
+    return '<li><span class="pl">'+fmt(t("settleOwes"),{a:esc(o.from), b:esc(o.to), x:mc(o.amount)})+'</span></li>';
+  }).join("")+'</ul>';
+}
+/* FICHE D'UNE PERSONNE : chaque dépense en détail (ligne par ligne), groupée par catégorie */
+function openPersonDetail(name){
+  var all=EXP(), C=S.expCur, EU=CUR[C]||CUR.EUR, me=(name===S.me);
+  var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
+  var cc=color(name);
+  // données par catégorie pour une personne (mode "paid" = ce qu'il a réglé · "share" = sa part)
+  function catDataFor(pname, mode){
+    var G={}, O=[], tot=0;
+    all.slice().sort(function(a,b){return (a.ts||0)-(b.ts||0);}).forEach(function(x){
+      var k=(x.cat&&CATMAP[x.cat])?x.cat:"other";
+      var v = (mode==="paid") ? (x.who===pname?x.eur:0) : owedShare(x,pname);
+      if(v>0.005){ if(!G[k]){ G[k]={sum:0, items:[]}; O.push(k); } G[k].sum+=v; G[k].items.push({x:x, v:v}); tot+=v; }
+    });
+    return {order:O, groups:G, tot:tot};
+  }
+  // rendu des blocs par catégorie (chaque hôtel dans sa case), couleur = ccColor
+  function renderCatBlocks(order, groups, ccColor){
+    order.sort(function(a,b){ return groups[b].sum-groups[a].sum; });
+    return order.map(function(k){
+      var g=groups[k], body;
+      if(k==="hotel"){
+        var hg={}, ho=[];
+        g.items.forEach(function(it){ var hk=hotelKey(it.x)||"?"; if(!hg[hk]){ hg[hk]={sum:0, items:[], ts:it.x.ts||0, hidden:true, bf:false, nights:+it.x.nights||0}; ho.push(hk); } var G2=hg[hk]; G2.items.push(it); G2.sum+=it.v; if(!it.x.hidden) G2.hidden=false; if(it.x.bf) G2.bf=true; if((+it.x.nights||0)>G2.nights) G2.nights=+it.x.nights||0; if((it.x.ts||0)&&(!G2.ts||it.x.ts<G2.ts)) G2.ts=it.x.ts; });
+        ho.sort(function(a,b){ return (hg[a].ts||8e15)-(hg[b].ts||8e15); });
+        body=ho.map(function(hk){
+          var G2=hg[hk], dstr=G2.ts?new Date(G2.ts).toLocaleDateString(locale(),{day:"2-digit",month:"short"}):"";
+          var htitle=G2.hidden?("🎁 "+t("hotelSurprise")):esc(hk);
+          var sub=[dstr, G2.nights?nightsLabel(G2.nights):"", G2.bf?"🥐":""].filter(Boolean).join(" · ");
+          var head='<div style="display:flex;align-items:center;gap:8px;padding:0 0 5px"><span style="flex:1;min-width:0;font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+htitle+'</span>'+(sub?'<small style="color:var(--muted);flex:none">'+esc(sub)+'</small>':'')+'<b style="font-size:13px;font-variant-numeric:tabular-nums;flex:none">'+mc(G2.sum)+'</b></div>';
+          var rl = G2.items.length>1 ? G2.items.map(function(it){
+            var lbl=(!it.x.hidden && it.x.label)?esc(it.x.label):"🛏️";
+            return '<div style="display:flex;gap:8px;padding:3px 0 3px 6px;font-size:12px;color:var(--muted)"><span style="flex:1">'+lbl+'</span><b style="color:var(--text);font-variant-numeric:tabular-nums">'+mc(it.v)+'</b></div>';
+          }).join("") : "";
+          return '<div style="border:1px solid var(--line);border-left:3px solid '+ccColor+';border-radius:10px;padding:9px 11px;margin:0 0 8px;background:var(--slab2)">'+head+rl+'</div>';
+        }).join("");
+      } else {
+        body=g.items.map(function(it){
+          var x=it.x, d=x.ts?new Date(x.ts).toLocaleDateString(locale(),{day:"2-digit",month:"short"}):"";
+          return '<div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0 6px 30px;border-bottom:1px solid var(--line2)">'+
+            '<div style="flex:1;min-width:0"><div style="font-size:13px">'+esc(displayLabel(x))+'</div>'+
+              '<div style="font-size:11px;color:var(--muted);margin-top:1px">'+(d?d+" · ":"")+t("pdBy")+" "+esc(x.who)+'</div></div>'+
+            '<b style="font-size:13px;font-variant-numeric:tabular-nums;flex:none">'+mc(it.v)+'</b></div>';
+        }).join("");
+      }
+      return '<div style="margin-bottom:10px">'+
+        '<div style="display:flex;align-items:center;gap:8px;padding:8px 0 6px;border-bottom:2px solid '+ccColor+';margin-bottom:8px">'+
+          '<span style="font-size:16px;width:22px;text-align:center;flex:none">'+catIcon(k)+'</span>'+
+          '<span style="flex:1;font-weight:700;font-size:14px">'+esc(catLabel(k))+'</span>'+
+          '<b style="font-size:14px;font-variant-numeric:tabular-nums">'+mc(g.sum)+'</b></div>'+
+        body+'</div>';
+    }).join("");
+  }
+  function block(data, title, hint){
+    if(!data.order.length) return "";
+    return '<h2 class="sec" style="margin:14px 0 2px">'+title+'</h2>'+
+      (hint?'<p class="note" style="margin:0 0 6px">'+esc(hint)+'</p>':'')+
+      renderCatBlocks(data.order, data.groups, cc)+
+      '<div style="display:flex;align-items:center;gap:8px;padding:6px 0 2px"><span style="flex:1;font-size:12.5px;font-weight:700;color:var(--muted)">TOTAL</span><b style="font-size:16px;font-variant-numeric:tabular-nums">'+mc(data.tot)+'</b></div>';
+  }
+  var paidData=catDataFor(name,"paid"), shareData=catDataFor(name,"share");
+  var paidTot=paidData.tot, shareTot=shareData.tot;
+  var adj=(paymentAdj()[name]||0);
+  var net=paidTot-shareTot+adj;           // >0 : on lui doit · <0 : il doit
+  var secPaid  = block(paidData,  me?t("pdPaidTitle"):t("pdPaidTitleO"), "");
+  var secShare = block(shareData, me?t("pdShareMine"):t("pdShareOther"), me?t("pdShareHint"):t("pdShareHintO"));
+  // 3) qui doit à qui — AVEC le détail de chaque personne (pourquoi il doit : hôtel, chauffeur, taxi…)
+  var trans=settlements().filter(function(o){ return o.from===name || o.to===name; });
+  var transHtml="";
+  if(trans.length){
+    var incoming=trans.filter(function(o){return o.to===name;}).length>0;
+    transHtml='<h2 class="sec" style="margin:14px 0 4px">'+(incoming?t("pdWhoOwes"):t("pdWhoIOwe"))+'</h2>'+
+      trans.map(function(o){
+        var other=(o.to===name)?o.from:o.to, mine=(o.to===name), oc=color(other);
+        // Le détail montre TOUJOURS ce que le DÉBITEUR a consommé : c'est ça qui explique la somme.
+        var debtor=o.from, dc=color(debtor);
+        var od=catDataFor(debtor,"share");
+        var detail=renderCatBlocks(od.order, od.groups, dc);
+        // réconciliation : sa part totale − ce qu'il a déjà payé − ce qu'il a déjà remboursé = reste dû
+        var dPaid=0; EXP().forEach(function(x){ if(x.who===debtor) dPaid+=x.eur; });
+        var dAdj=(paymentAdj()[debtor]||0);
+        var line=function(lbl,val,col){ return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0"><span style="flex:1;font-size:12.5px;color:var(--muted)">'+esc(lbl)+'</span><b style="font-size:13px;font-variant-numeric:tabular-nums'+(col?';color:'+col:'')+'">'+val+'</b></div>'; };
+        var recap=line(fmt(t("pdConsumed"),{name:debtor}), mc(od.tot));
+        if(dPaid>0.005) recap+=line(t("pdAlreadyPaid"), "−"+mc(dPaid), "var(--aqua)");
+        if(dAdj>0.005)  recap+=line(t("pdAlreadyReimb"), "−"+mc(dAdj), "var(--aqua)");
+        recap+='<div style="display:flex;align-items:center;gap:8px;padding:8px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;color:var(--muted)">'+t("pdRemains")+'</span><b style="font-size:15px;font-variant-numeric:tabular-nums;color:'+(mine?"var(--aqua)":"var(--rose)")+'">'+mc(o.amount)+'</b></div>';
+        return '<div style="border:1px solid var(--line);border-left:4px solid '+oc+';border-radius:12px;padding:11px 13px;margin:0 0 12px;background:var(--slab2)">'+
+          '<div style="display:flex;align-items:center;gap:9px;margin-bottom:4px"><span class="dot" style="background:'+oc+';width:12px;height:12px;flex:none"></span>'+
+          '<span style="flex:1;font-weight:700;font-size:15px;color:'+oc+'">'+esc(other)+'</span>'+
+          '<b style="font-size:15px;font-variant-numeric:tabular-nums;color:'+(mine?"var(--aqua)":"var(--rose)")+'">'+mc(o.amount)+'</b></div>'+
+          // sur sa PROPRE fiche, le détail est déjà affiché plus haut -> on ne le répète pas
+          (debtor===name ? '' : '<p class="note" style="margin:0 0 8px">'+esc(fmt(t("pdWhyDetail"),{name:debtor}))+'</p>'+detail)+
+          recap+'</div>';
+      }).join("");
+  }
+  if(adj>0.005) transHtml+='<div style="display:flex;gap:8px;padding:8px 0;color:var(--aqua)"><span style="flex:1;font-size:13px">'+t("stAlreadyReimb")+'</span><b>'+mc(adj)+'</b></div>';
+  var total = Math.abs(net)<0.005
+    ? '<div style="padding:12px 0 2px;font-size:14px;font-weight:700;color:var(--aqua)">'+t("stSquare")+'</div>'
+    : (net<0
+      ? '<div style="display:flex;align-items:center;gap:8px;padding:12px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--rose)">'+t("stMustPay")+'</span><b style="font-size:19px;color:var(--rose);font-variant-numeric:tabular-nums">'+mc(-net)+'</b></div>'
+      : '<div style="display:flex;align-items:center;gap:8px;padding:12px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--aqua)">'+t("stToReceive")+'</span><b style="font-size:19px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(net)+'</b></div>');
+  // bouton « X m'a remboursé » directement ici quand la personne te doit encore de l'argent
+  var reimbBtn = (!me && net<-0.005)
+    ? '<button class="btn" id="pdReimb" style="margin-top:12px">💵 '+fmt(t("rbBtn"),{name:esc(name)})+'</button>'
+    : '';
+  openSheet('<div style="display:flex;align-items:center;gap:10px;margin-bottom:2px"><span class="dot" style="background:'+cc+';width:14px;height:14px;flex:none"></span>'+
+    '<h3 style="margin:0;color:'+cc+'">'+esc(name)+'</h3></div>'+
+    ((secPaid||secShare) ? (secPaid+secShare+transHtml+total+reimbBtn) : ('<p class="empty">'+t("pdNone")+'</p>')));
+  var rb=$("pdReimb"); if(rb) rb.addEventListener("click", function(){
+    unlockPrivate(function(){ openReimburse(name, -net, function(){ openPersonDetail(name); }); });
+  });
+}
+/* détail par personne : ce que chacun doit, par catégorie (dépenses payées par les autres) */
+function personCatDetail(){
+  var all=EXP(), adj=paymentAdj(), res={}, names={};
+  S.people.forEach(function(p){names[p]=1;});
+  all.forEach(function(x){ if(x.who) names[x.who]=1; });
+  Object.keys(names).forEach(function(p){ res[p]={cats:{}, owes:0, advanced:0, adj:adj[p]||0}; });
+  all.forEach(function(x){
+    var k=(x.cat&&CATMAP[x.cat])?x.cat:"other";
+    Object.keys(res).forEach(function(p){
+      var sh=owedShare(x,p);
+      if(x.who===p){ res[p].advanced += x.eur - sh; }
+      else if(sh>0.005){ res[p].cats[k]=(res[p].cats[k]||0)+sh; res[p].owes+=sh; }
+    });
+  });
+  return res;
+}
+/* créditeur principal (celui qui a le plus avancé) — c'est lui qu'on rembourse */
+function topCreditor(){
+  var B=balances(), adj=paymentAdj(), best=S.me||"", bv=0.005;
+  B.names.forEach(function(p){ var v=(B.paid[p]||0)-(B.owed[p]||0)+(adj[p]||0); if(v>bv){ bv=v; best=p; } });
+  return best;
+}
+/* enregistrer un remboursement (partiel ou total), montant pré-rempli, modifiable */
+function openReimburse(p, netEur, after){
+  var C=S.expCur, EU=CUR[C]||CUR.EUR;
+  var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
+  var creditor = (p===S.me) ? topCreditor() : (S.me||topCreditor());
+  // la personne peut rembourser dans N'IMPORTE QUELLE monnaie (€, ₹…) : on choisit ici
+  var curOpts=Object.keys(CUR).map(function(c){ return '<option value="'+c+'"'+(c===C?' selected':'')+'>'+c+' '+CUR[c].s+'</option>'; }).join("");
+  var valIn=function(c){ var U=CUR[c]||CUR.EUR; return nf(conv(netEur,"EUR",c), U.d); };
+  openSheet('<h3>💵 '+fmt(t("rbTitle"),{name:esc(p)})+'</h3>'+
+    '<p class="note" style="margin:0 0 12px">'+fmt(t("rbRemaining"),{x:'<b style="color:var(--text)">'+mc(netEur)+'</b>'})+'</p>'+
+    '<div class="field"><label>'+t("rbAmount")+'</label><div class="row2">'+
+      '<input id="rbAmt" inputmode="decimal" value="'+valIn(C)+'" autocomplete="off">'+
+      '<select id="rbCur">'+curOpts+'</select></div>'+
+      '<p class="note" id="rbPrev" style="margin:6px 2px 0"></p></div>'+
+    '<button class="btn ghost" id="rbFull" style="font-size:13px;padding:11px">'+fmt(t("rbFull"),{x:mc(netEur)})+'</button>'+
+    '<button class="btn" id="rbSave" style="margin-top:10px">'+t("rbSave")+'</button>');
+  function prev(){
+    var c=$("rbCur").value, v=pf($("rbAmt").value);
+    $("rbPrev").textContent = v>0 && c!=="EUR" ? "≈ "+nf(conv(v,c,"EUR"),2)+" €" : "";
+  }
+  $("rbCur").addEventListener("change", function(){ $("rbAmt").value=valIn(this.value); prev(); });
+  $("rbAmt").addEventListener("input", prev); prev();
+  $("rbFull").addEventListener("click", function(){ $("rbAmt").value=valIn($("rbCur").value); prev(); $("rbAmt").focus(); });
+  $("rbSave").addEventListener("click", function(){
+    var c=$("rbCur").value, v=pf($("rbAmt").value);
+    if(v<=0){ toast(t("tIndicateAmount")); return; }
+    var eur=conv(v,c,"EUR");
+    if(eur>netEur+0.01){ eur=netEur; v=conv(netEur,"EUR",c); }   // ne dépasse pas ce qui reste
+    S.payments=S.payments||[];
+    S.payments.push({id:newId(), from:p, to:creditor, eur:eur, amount:v, cur:c, ts:Date.now(), mt:Date.now()});
+    renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){});
+    (after||showSettle)();
+  });
+}
+/* modifier un remboursement déjà enregistré (corriger une erreur de montant) */
+function openEditPayment(pid){
+  var pay=(S.payments||[]).filter(function(p){ return p.id===pid; })[0];
+  if(!pay){ return; }
+  // on rouvre dans la monnaie où le remboursement a été saisi (sinon la monnaie d'affichage)
+  var C=pay.cur||S.expCur, EU=CUR[C]||CUR.EUR;
+  var val=(pay.cur && +pay.amount>0) ? nf(+pay.amount,EU.d) : nf(conv(pay.eur,"EUR",C),EU.d);
+  var curOpts=Object.keys(CUR).map(function(c){ return '<option value="'+c+'"'+(c===C?' selected':'')+'>'+c+' '+CUR[c].s+'</option>'; }).join("");
+  openSheet('<h3>✏️ '+t("rbEdit")+'</h3>'+
+    '<p class="note" style="margin:0 0 12px">'+esc(pay.from)+' → '+esc(pay.to)+
+      (pay.ts?' · '+new Date(pay.ts).toLocaleDateString(locale(),{day:"2-digit",month:"short"}):'')+'</p>'+
+    '<div class="field"><label>'+t("rbNewAmount")+'</label><div class="row2">'+
+      '<input id="epAmt" inputmode="decimal" value="'+esc(val)+'" autocomplete="off">'+
+      '<select id="epCur">'+curOpts+'</select></div>'+
+      '<p class="note" id="epPrev" style="margin:6px 2px 0"></p></div>'+
+    '<button class="btn" id="epSave">'+t("rbSave")+'</button>'+
+    '<button class="btn ghost" id="epDel" style="margin-top:10px;font-size:13px;padding:11px">✕ '+t("rbUndo")+'</button>');
+  function eprev(){
+    var c=$("epCur").value, v=pf($("epAmt").value);
+    $("epPrev").textContent = v>0 && c!=="EUR" ? "≈ "+nf(conv(v,c,"EUR"),2)+" €" : "";
+  }
+  $("epCur").addEventListener("change", eprev); $("epAmt").addEventListener("input", eprev); eprev();
+  $("epSave").addEventListener("click", function(){
+    var c=$("epCur").value, v=pf($("epAmt").value);
+    if(v<=0){ toast(t("tIndicateAmount")); return; }
+    pay.eur=conv(v,c,"EUR"); pay.amount=v; pay.cur=c; pay.mt=Date.now();
+    renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){});
+    showSettle();
+  });
+  $("epDel").addEventListener("click", function(){
+    S.payments=(S.payments||[]).filter(function(x){ return x.id!==pid; });
+    if(S.deleted.indexOf("P:"+pid)<0) S.deleted.push("P:"+pid);   // tombstone : ne revient pas par la sync
+    renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){});
+    showSettle();
+  });
+}
+function showSettle(){
+  var C=S.expCur, EU=CUR[C]||CUR.EUR, me=S.me||"";
+  var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
+  var det=personCatDetail(), adj=paymentAdj();
+  var payFrom={}, payTo={};
+  (S.payments||[]).forEach(function(p){ if(!p||!p.id) return; (payFrom[p.from]=payFrom[p.from]||[]).push(p); (payTo[p.to]=payTo[p.to]||[]).push(p); });
+  var pNames=Object.keys(det).filter(function(p){ var d=det[p]; return d.owes>0.005 || d.advanced>0.005 || Math.abs(d.adj)>0.005 || (payFrom[p]&&payFrom[p].length); });
+  pNames.sort(function(a,b){ return (det[b].owes-det[b].advanced-det[b].adj)-(det[a].owes-det[a].advanced-det[a].adj); });
+  var blocks = pNames.map(function(p){
+    var d=det[p], cc=color(p), isMe=(p===me);
+    var gross = d.owes - d.advanced;         // dette d'origine (>0 doit ; <0 on lui doit)
+    var net = gross - d.adj;                 // reste après remboursements
+    var debtor = gross>0.005;                // il te doit
+    var rows = Object.keys(d.cats).sort(function(a,b){return d.cats[b]-d.cats[a];}).map(function(k){
+      return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)">'+
+        '<span style="font-size:15px;width:24px;text-align:center;flex:none">'+catIcon(k)+'</span>'+
+        '<span style="flex:1;font-size:13.5px">'+esc(catLabel(k))+'</span>'+
+        '<b style="font-size:13.5px;font-variant-numeric:tabular-nums">'+mc(d.cats[k])+'</b></div>';
+    }).join("");
+    if(d.advanced>0.005) rows+='<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);color:var(--aqua)"><span style="width:24px;text-align:center;flex:none">↩︎</span><span style="flex:1;font-size:13px">'+t("stPaidForOthers")+'</span><b style="font-size:13.5px">−'+mc(d.advanced)+'</b></div>';
+    // ligne "total à rembourser / à recevoir" (montant d'origine)
+    var origAbs=Math.abs(gross);
+    var totLine = debtor
+      ? '<div style="display:flex;align-items:center;gap:8px;padding:10px 0 2px"><span style="flex:1;font-size:13px;font-weight:700;color:var(--muted)">'+t("rbTotalDue")+'</span><b style="font-size:15px;font-variant-numeric:tabular-nums">'+mc(origAbs)+'</b></div>'
+      : (gross<-0.005 ? '<div style="display:flex;align-items:center;gap:8px;padding:10px 0 2px"><span style="flex:1;font-size:13px;font-weight:700;color:var(--muted)">'+t("rbTotalRecv")+'</span><b style="font-size:15px;font-variant-numeric:tabular-nums">'+mc(origAbs)+'</b></div>' : '');
+    // remboursements de cette personne (débiteur) OU reçus (créditeur)
+    var pays = debtor ? (payFrom[p]||[]) : (payTo[p]||[]);
+    var hist="";
+    if(pays.length){
+      hist='<div style="margin-top:8px"><div class="note" style="margin:0 0 4px;color:var(--aqua)">'+(debtor?t("rbHistory"):t("rbGot"))+'</div>'+
+        pays.slice().sort(function(a,b){return a.ts-b.ts;}).map(function(pay){
+          var dt=pay.ts?new Date(pay.ts).toLocaleDateString(locale(),{day:"2-digit",month:"short"}):"";
+          return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line2)">'+
+            '<span style="flex:none;color:var(--aqua)">✓</span><span style="flex:1;font-size:12.5px;color:var(--muted)">'+dt+'</span>'+
+            '<b style="font-size:13px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(pay.eur)+'</b>'+
+            ((pay.cur && pay.cur!==C && +pay.amount>0)?'<small style="color:var(--muted);font-size:11px;white-space:nowrap">'+money(+pay.amount,pay.cur)+'</small>':'')+
+            '<button class="rbEditB" data-pid="'+pay.id+'" aria-label="✏️" style="flex:none;background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;padding:0 4px">✏️</button>'+
+            '<button class="rbUndo" data-pid="'+pay.id+'" style="flex:none;background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px">✕</button></div>';
+        }).join("")+'</div>';
+    }
+    // ligne "reste" + bouton enregistrer
+    var restLine="", btn="";
+    var restAbs=Math.abs(net);
+    if(debtor){
+      if(net>0.005){
+        restLine='<div style="display:flex;align-items:center;gap:8px;padding:10px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--rose)">'+t("rbLeft")+'</span><b style="font-size:18px;color:var(--rose);font-variant-numeric:tabular-nums">'+mc(net)+'</b></div>';
+        btn='<button class="btn rbPay" data-p="'+esc(p)+'" data-net="'+net+'" style="margin-top:10px">💵 '+fmt(t("rbBtn"),{name:esc(p)})+'</button>';
+      } else {
+        restLine='<div style="padding:10px 0 2px;border-top:2px solid var(--line);font-size:14px;font-weight:700;color:var(--aqua)">'+t("rbAllPaid")+'</div>';
+      }
+    } else if(gross<-0.005){
+      if(net<-0.005) restLine='<div style="display:flex;align-items:center;gap:8px;padding:10px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--aqua)">'+t("rbLeftRecv")+'</span><b style="font-size:18px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(restAbs)+'</b></div>';
+      else restLine='<div style="padding:10px 0 2px;border-top:2px solid var(--line);font-size:14px;font-weight:700;color:var(--aqua)">'+t("stSquare")+'</div>';
+    }
+    return '<div style="border:1px solid var(--line);border-left:4px solid '+cc+';border-radius:14px;padding:12px 14px;margin-bottom:12px;background:var(--slab2)">'+
+      '<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px"><span class="dot" style="background:'+cc+';width:12px;height:12px"></span>'+
+      '<span style="font-size:16px;font-weight:700;color:'+cc+'">'+esc(p)+'</span></div>'+
+      rows+totLine+hist+restLine+btn+'</div>';
+  }).join("");
+  var detail = blocks || ('<p class="empty">'+t("settleAllSquare")+'</p>');
+  openSheet('<h3>🔒 '+t("settleTitle")+'</h3>'+detail+
+    '<p class="note" style="margin-top:12px">'+esc(t("settlePrivate"))+'</p>'+
+    ((S.payments&&S.payments.length)?'<button class="btn ghost" id="stReset" style="margin-top:8px;font-size:13px;padding:11px">'+t("settleReset")+'</button>':'')+
+    '<button class="btn ghost" id="stChange" style="margin-top:8px;font-size:13px;padding:11px">'+t("settleChange")+'</button>');
+  $("sheetIn").addEventListener("click", function(e){
+    var pay=e.target.closest(".rbPay"); if(pay){ openReimburse(pay.dataset.p, +pay.dataset.net); return; }
+    var eb=e.target.closest(".rbEditB"); if(eb){ openEditPayment(eb.dataset.pid); return; }
+    var un=e.target.closest(".rbUndo"); if(un){
+      if(!confirm(t("rbUndo"))) return;
+      var pid=un.dataset.pid;
+      S.payments=(S.payments||[]).filter(function(x){ return x.id!==pid; });
+      if(S.deleted.indexOf("P:"+pid)<0) S.deleted.push("P:"+pid);
+      renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){}); showSettle();
+      return;
+    }
+  });
+  var rs=$("stReset"); if(rs) rs.addEventListener("click", function(){
+    (S.payments||[]).forEach(function(p){ if(p&&p.id && S.deleted.indexOf("P:"+p.id)<0) S.deleted.push("P:"+p.id); });
+    S.payments=[]; renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){}); showSettle();
+  });
+  $("stChange").addEventListener("click", function(){ localStorage.removeItem("settlePin"); S.pinHash=""; S.pinAt=Date.now(); saveTrip().catch(function(){}); cacheTrip(); settleUnlocked=false; closeSheet(); unlockPrivate(showSettle); });
+}
+$("settleBtn").addEventListener("click", function(){ unlockPrivate(showSettle); });
+
+/* ---- hôtels (privé) : cachés jusqu'à révélation ---- */
+function saveHotels(){ renderExp(); saveTrip().then(function(){ renderExp(); }).catch(function(){}); }
+/* regroupe les dépenses "hôtel" par hôtel, trié arrivée puis départ */
+function hotelGroups(){
+  var hx=S.expenses.filter(function(x){ return x.cat==="hotel"; });
+  var groups={}, order=[];
+  hx.forEach(function(x){ var k=hotelKey(x); if(!groups[k]){ groups[k]={key:k, exps:[], sum:0, hidden:true, ts:x.ts||0, bf:false, nights:0, paid:0, paidCur:"EUR"}; order.push(k); } var g=groups[k]; g.exps.push(x); g.sum+=x.eur; if(!x.hidden) g.hidden=false; if(x.bf) g.bf=true; if((+x.nights||0)>g.nights) g.nights=+x.nights||0; if((x.ts||0) && (!g.ts || x.ts<g.ts)) g.ts=x.ts; if((+x.paid||0)>0 && !(g.paid>0)){ g.paid=+x.paid; g.paidCur=x.paidCur||"EUR"; } });
+  order.sort(function(a,b){ var A=groups[a], B=groups[b];   // 1) jour d'arrivée  2) jour de départ
+    var d=(A.ts||8e15)-(B.ts||8e15); if(d) return d;
+    return ((A.ts||0)+(A.nights||0)*86400000)-((B.ts||0)+(B.nights||0)*86400000); });
+  return {groups:groups, order:order};
+}
+/* LISTE des hôtels (privé) : chaque hôtel à part, trié par date, avec ses chambres/prix modifiables */
+function showHotels(){
+  var G=hotelGroups(), groups=G.groups, order=G.order;
+  var totN=0, totSum=0; order.forEach(function(k){ totN+=groups[k].nights; totSum+=groups[k].sum; });
+  var list = order.length ? order.map(function(k){
+    var g=groups[k], range=stayRange(g.ts,g.nights), nlab=g.nights?nightsLabel(g.nights):"";
+    var sub=[range,nlab].filter(Boolean).join(" · "), nR=g.exps.length;
+    // le petit déjeuner et les chambres se voient DIRECTEMENT, sans ouvrir la fiche
+    var bfLine = g.bf
+      ? '<div style="margin:6px 0 0;font-size:12.5px;font-weight:600;color:var(--gold)">'+t("bfInc")+'</div>'
+      : '<div style="margin:6px 0 0;font-size:12.5px;color:var(--muted)">🚫 '+t("bfNone")+'</div>';
+    // comparaison : prix réel payé vs total des chambres
+    var paidLine="";
+    if(g.paid>0){
+      var paidEur=conv(g.paid,g.paidCur||"EUR","EUR"), gap=g.sum-paidEur;
+      paidLine='<div style="margin:8px 0 0;padding:8px 10px;border:1px solid var(--line2);border-radius:10px;background:var(--slab2);font-size:12.5px">'+
+        '<div style="display:flex;gap:8px;padding:2px 0"><span style="flex:1;color:var(--muted)">'+t("hdPaidLbl")+'</span><b style="color:var(--text);font-variant-numeric:tabular-nums">'+money(paidEur,"EUR")+'</b></div>'+
+        '<div style="display:flex;gap:8px;padding:2px 0"><span style="flex:1;color:var(--muted)">'+t("hdRoomsTotal")+'</span><b style="color:var(--text);font-variant-numeric:tabular-nums">'+money(g.sum,"EUR")+'</b></div>'+
+        (Math.abs(gap)>0.005?'<div style="display:flex;gap:8px;padding:2px 0;color:'+(gap>0?"var(--gold)":"var(--aqua)")+'"><span style="flex:1;font-weight:600">'+t("hdGap")+'</span><b style="font-variant-numeric:tabular-nums">'+(gap>0?"+":"−")+money(Math.abs(gap),"EUR")+'</b></div>':'')+
+      '</div>';
+    }
+    var roomLines = g.exps.map(function(x){
+      var occ=(x.split&&x.split.among&&x.split.among.length)?x.split.among:(x.split&&x.split.amounts?Object.keys(x.split.amounts):S.people);
+      return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;color:var(--muted)">'+
+        '<span style="flex:none">🛏️</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(occ.join(", "))+'</span>'+
+        '<b style="color:var(--text);font-variant-numeric:tabular-nums;flex:none">'+money(x.eur,"EUR")+'</b></div>';
+    }).join("");
+    return '<div style="border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px">'+
+      '<div style="display:flex;gap:10px;align-items:flex-start">'+
+        '<div style="flex:1;min-width:0"><div style="font-weight:600;word-break:break-word">'+esc(k)+'</div>'+
+          '<div class="note" style="margin:3px 0 0">'+(sub?sub+' · ':'')+nR+' 🛏️ · <b style="color:var(--text)">'+money(g.sum,"EUR")+'</b>'+(g.nights?' · '+money(g.sum/g.nights,"EUR")+t("perNight"):'')+'</div></div>'+
+        '<span style="font-size:11px;font-weight:600;flex:none;color:'+(g.hidden?"var(--gold)":"var(--aqua)")+'">'+(g.hidden?("🎁 "+t("hiddenBadge")):t("revealedBadge"))+'</span>'+
+      '</div>'+
+      bfLine+paidLine+
+      '<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line2)">'+roomLines+'</div>'+
+      '<div class="row2" style="margin-top:10px">'+
+        '<button class="btn ghost hReveal" data-k="'+esc(k)+'" style="margin:0;font-size:12.5px;padding:9px">'+(g.hidden?("👁 "+t("revealWord")):("🙈 "+t("hideWord")))+'</button>'+
+        '<button class="btn ghost hEdit" data-k="'+esc(k)+'" style="margin:0;font-size:12.5px;padding:9px">✏️ '+t("hdEdit")+'</button>'+
+      '</div></div>';
+  }).join("") : '<p class="note">'+t("noHotels")+'</p>';
+  var allNights = order.length>0 && order.every(function(k){ return groups[k].nights>0; });   // nb de nuits affiché SEULEMENT si tous les hôtels l'ont (sinon trompeur)
+  var totLine = order.length ? '<p class="note" style="margin:-2px 2px 12px;color:var(--gold);font-weight:600">'+order.length+' 🏨 · '+(allNights?totN+" "+t("nightsWord")+" · ":"")+money(totSum,"EUR")+'</p>' : '';
+  openSheet('<h3>🏨 '+t("hotelsTitle")+'</h3><p class="note" style="margin-bottom:12px">'+esc(t("hotelsHint2"))+'</p>'+totLine+
+    '<div id="hList">'+list+'</div>'+
+    '<button class="btn" id="hAdd" style="margin-top:6px">'+t("hdAddHotel")+'</button>');
+  $("hList").addEventListener("click", function(e){
+    var rv=e.target.closest(".hReveal"); if(rv){ var g=groups[rv.dataset.k]; var nh=!g.hidden; g.exps.forEach(function(x){ x.hidden=nh; x.mt=Date.now(); }); saveHotels(); showHotels(); return; }
+    var ed=e.target.closest(".hEdit"); if(ed){ openHotelDetail(ed.dataset.k); }
+  });
+  $("hAdd").addEventListener("click", function(){ openHotelDetail(null); });
+}
+/* ÉDITEUR d'un hôtel : dates -> nuits auto, petit-déj, visible/surprise, et les CHAMBRES (prix, payé par, qui dort) */
+function openHotelDetail(key){
+  var G=hotelGroups(), g=key?G.groups[key]:null;
+  var arrival = g&&g.ts ? new Date(g.ts).toISOString().slice(0,10) : "";
+  var nights0 = g?g.nights:0;
+  var departure = (g&&g.ts&&nights0)? new Date(g.ts+nights0*86400000).toISOString().slice(0,10) : "";
+  var bf = g?g.bf:false, hidden = g?g.hidden:true;
+  var paidVal = (g&&g.paid>0)?String(g.paid):"", paidCur0=(g&&g.paidCur)||"EUR";
+  var origIds = g? g.exps.map(function(x){return x.id;}) : [];
+  var rooms = g? g.exps.map(function(x){
+      var sp=x.split||{}, occ={};
+      (sp.mode==="exact" ? Object.keys(sp.amounts||{}) : (sp.among||S.people)).forEach(function(p){occ[p]=true;});
+      return {id:x.id, price:(x.amount!=null?String(x.amount):""), cur:x.cur||"EUR", paidBy:x.who||(S.me||S.people[0]), occ:occ};
+    })
+    : [{id:newId(), price:"", cur:"EUR", paidBy:(S.me||S.people[0]), occ:{}}];
+  var curOpts=Object.keys(CUR).map(function(c){return '<option value="'+c+'">'+c+' '+CUR[c].s+'</option>';}).join("");
+  var bfOn=bf, visOn=!hidden;
+  openSheet('<button class="btn ghost" id="hBack" style="margin:0 0 12px;font-size:12.5px;padding:8px 12px;width:auto">'+t("hdBack")+'</button>'+
+    '<h3>🏨 '+(key?esc(key):t("hdAddHotel"))+'</h3>'+
+    '<div class="field"><label>'+t("hdName")+'</label><input id="hName" autocomplete="off" value="'+esc(key||"")+'" placeholder="'+esc(t("hdNewName"))+'"></div>'+
+    '<div class="field"><label>'+t("roomsDate")+' · '+t("roomsOut")+'</label><div class="row2"><input id="hIn" type="date" value="'+arrival+'"><input id="hOut" type="date" value="'+departure+'"></div><p class="note" id="hN" style="margin:6px 2px 0"></p></div>'+
+    '<div class="field"><label>'+t("bfLabel")+'</label><div class="who"><button type="button" id="hBf" aria-pressed="'+(bfOn?"true":"false")+'">🥐 '+t("bfAsk")+'</button></div></div>'+
+    '<div class="field"><label>'+t("hdVisible")+'</label><div class="who"><button type="button" id="hVis" aria-pressed="'+(visOn?"true":"false")+'">'+t("hdVisBtn")+'</button></div><p class="note" style="margin:6px 2px 0">'+esc(t("hdVisHint"))+'</p></div>'+
+    '<div class="field"><label>'+t("hdPaidReal")+'</label><div class="row2"><input id="hPaid" inputmode="decimal" placeholder="0" value="'+esc(paidVal)+'"><select id="hPaidCur">'+curOpts+'</select></div><p class="note" style="margin:6px 2px 0">'+esc(t("hdPaidRealHint"))+'</p></div>'+
+    '<div class="note" style="margin:6px 2px 6px;font-weight:600;color:var(--text)">'+t("hdRooms")+'</div>'+
+    '<div id="hRooms"></div>'+
+    '<button class="btn ghost" id="hrAdd" style="font-size:13px;padding:11px">'+t("addRoom")+'</button>'+
+    '<button class="btn" id="hSave" style="margin-top:10px">'+t("saveWord")+'</button>'+
+    (key?'<button class="btn ghost" id="hDel" style="margin-top:8px;color:var(--rose);font-size:13px;padding:11px">'+t("hdDelHotel")+'</button>':''));
+  function updN(){ var n=nightsBetween($("hIn").value,$("hOut").value); $("hN").textContent=n?"🌙 "+nightsLabel(n):""; }
+  $("hIn").addEventListener("change", function(){ if($("hIn").value&&!$("hOut").value){ var d=new Date($("hIn").value+"T12:00:00"); d.setDate(d.getDate()+1); $("hOut").value=d.toISOString().slice(0,10);} updN(); });
+  $("hOut").addEventListener("change", updN); updN();
+  $("hPaidCur").value=paidCur0;
+  $("hBf").addEventListener("click", function(){ bfOn=!bfOn; this.setAttribute("aria-pressed", bfOn?"true":"false"); });
+  $("hVis").addEventListener("click", function(){ visOn=!visOn; this.setAttribute("aria-pressed", visOn?"true":"false"); });
+  /* sous chaque chambre : la part de chaque occupant (prix ÷ occupants) */
+  function shareText(rm){
+    var c=rm.cur, sy=CUR[c]?CUR[c].s:c, dd=CUR[c]?CUR[c].d:2;
+    var price=pf(rm.price), occ=S.people.filter(function(p){return rm.occ[p];});
+    if(!(price>0)||!occ.length) return "";
+    return occ.map(function(p){ return esc(p)+" <b style=\"color:var(--text)\">"+nf(price/occ.length,dd)+" "+sy+"</b>"; }).join(" · ");
+  }
+  function upShare(i){ var el=$("hRooms").querySelector('.hrShare[data-i="'+i+'"]'); if(el) el.innerHTML=shareText(rooms[i]); }
+  function drawR(){
+    $("hRooms").innerHTML=rooms.map(function(rm,i){
+      return '<div class="field" style="border:1px solid var(--line);border-radius:12px;padding:10px 12px">'+
+        '<div class="note" style="margin:0 0 6px;font-weight:600;color:var(--text)">'+t("roomWord")+' '+(i+1)+'</div>'+
+        '<div class="row2" style="margin:0 0 8px"><input class="hrPrice" data-i="'+i+'" inputmode="decimal" placeholder="'+esc(t("roomPrice"))+'" value="'+esc(rm.price)+'"><select class="hrCur" data-i="'+i+'">'+curOpts+'</select></div>'+
+        '<div class="note" style="margin:0 0 4px">'+t("hdWho")+'</div><div class="who hrWho" data-i="'+i+'">'+S.people.map(function(p){return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(rm.occ[p]?"true":"false")+'">'+esc(p)+'</button>';}).join("")+'</div>'+
+        '<div class="note" style="margin:8px 0 4px">'+t("hdPaidBy")+'</div><div class="who hrPaid" data-i="'+i+'">'+S.people.map(function(p){return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(p===rm.paidBy)+'">'+esc(p)+'</button>';}).join("")+'</div>'+
+        '<div class="note hrShare" data-i="'+i+'" style="margin:10px 0 0;color:var(--aqua)"></div>'+
+        (rooms.length>1?'<button type="button" class="btn ghost hrDel" data-i="'+i+'" style="margin-top:8px;font-size:12px;padding:8px">✕ '+t("roomWord")+'</button>':'')+
+      '</div>';
+    }).join("");
+    [].forEach.call($("hRooms").querySelectorAll(".hrCur"), function(sel){ sel.value=rooms[+sel.dataset.i].cur; });
+    rooms.forEach(function(_,i){ upShare(i); });
+  }
+  drawR();
+  $("hRooms").addEventListener("input", function(e){
+    var pr=e.target.closest(".hrPrice"); if(pr){ rooms[+pr.dataset.i].price=pr.value; upShare(+pr.dataset.i); }
+  });
+  $("hRooms").addEventListener("change", function(e){ if(e.target.classList.contains("hrCur")){ var i=+e.target.dataset.i; rooms[i].cur=e.target.value; drawR(); } });
+  $("hRooms").addEventListener("click", function(e){
+    var pd=e.target.closest(".hrPaid button[data-p]"); if(pd){ var i=+pd.parentNode.dataset.i; rooms[i].paidBy=pd.dataset.p; [].forEach.call(pd.parentNode.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===pd);}); return; }
+    var wh=e.target.closest(".hrWho button[data-p]"); if(wh){ var j=+wh.parentNode.dataset.i,p=wh.dataset.p; rooms[j].occ[p]=!rooms[j].occ[p]; wh.setAttribute("aria-pressed",rooms[j].occ[p]?"true":"false"); upShare(j); return; }
+    var dl=e.target.closest(".hrDel"); if(dl){ rooms.splice(+dl.dataset.i,1); drawR(); }
+  });
+  $("hrAdd").addEventListener("click", function(){ rooms.push({id:newId(), price:"", cur:"EUR", paidBy:(S.me||S.people[0]), occ:{}}); drawR(); });
+  $("hBack").addEventListener("click", showHotels);
+  var del=$("hDel"); if(del) del.addEventListener("click", function(){
+    if(!confirm(t("hdDelHotel")+" ?")) return;
+    origIds.forEach(function(id){ S.expenses=S.expenses.filter(function(x){return x.id!==id;}); if(S.deleted.indexOf(id)<0) S.deleted.push(id); });
+    saveHotels(); showHotels();
+  });
+  $("hSave").addEventListener("click", function(){
+    var nm=($("hName").value||"").trim(); if(!nm){ toast(t("hotelName")); return; }
+    var stay=$("hIn").value? new Date($("hIn").value+"T12:00:00").getTime() : (g&&g.ts?g.ts:Date.now());
+    var nn=nightsBetween($("hIn").value,$("hOut").value);
+    var bfv=bfOn, hid=!visOn, now=Date.now();
+    var paidAmt=pf($("hPaid").value), paidCur=$("hPaidCur").value;   // prix réel payé (facultatif)
+    var multi=rooms.filter(function(rm){return pf(rm.price)>0;}).length>1;
+    var kept={}, made=0;
+    rooms.forEach(function(rm){
+      var price=pf(rm.price); if(price<=0) return;
+      var occ=S.people.filter(function(p){return rm.occ[p];}); if(!occ.length) occ=S.people.slice();
+      kept[rm.id]=1; made++;
+      var data={ hotel:nm, label:(multi?(t("roomWord")+" "+made):""), amount:price, cur:rm.cur, eur:conv(price,rm.cur,"EUR"), cat:"hotel", who:rm.paidBy, split:{mode:"equal", among:occ}, ts:stay, nights:nn, bf:bfv, hidden:hid, paid:(paidAmt>0?paidAmt:0), paidCur:(paidAmt>0?paidCur:""), mt:now };
+      var ex=S.expenses.filter(function(x){return x.id===rm.id;})[0];
+      if(ex){ for(var kk in data) ex[kk]=data[kk]; } else { data.id=rm.id; S.expenses.push(data); }
+    });
+    origIds.forEach(function(id){ if(!kept[id]){ S.expenses=S.expenses.filter(function(x){return x.id!==id;}); if(S.deleted.indexOf(id)<0) S.deleted.push(id); } });
+    if(!made){ toast(t("roomsNeed")); return; }
+    saveHotels(); showHotels();
+  });
+}
+$("hotelsBtn").addEventListener("click", function(){ if(S.locked){ toast(t("tAccountsLocked")); return; } unlockPrivate(showHotels); });
+
+/* ---- chauffeur : ajoute une dépense (course, péages, essence…) dans la catégorie Chauffeur ---- */
+/* ---- chauffeur : calculateur forfait jour + forfait km/jour (+ supplément), × nb de jours ---- */
+function openDriver(exp){
+  if(S.locked){ toast(t("tAccountsLocked")); return; }
+  if(!S.people.length){ return openPeople(true); }
+  // ancien chauffeur sans détail : on remet le total dans « supplément » pour ne rien perdre, et tu peux le restructurer
+  var dp=(exp&&exp.dp) || (exp?{d:0,a:0,b:0,s:+exp.amount||0}:{}), payer=(exp&&exp.who)||S.me||S.people[0];
+  var curSel=(exp&&exp.cur)||(S.a!=="EUR"?S.a:"EUR");
+  var curOpts=Object.keys(CUR).map(function(c){return '<option value="'+c+'"'+(c===curSel?' selected':'')+'>'+c+' '+CUR[c].s+'</option>';}).join("");
+  var vd=dp.d?String(dp.d):"", va=dp.a?String(dp.a):"", vb=dp.b?String(dp.b):"", vs=dp.s?String(dp.s):"";
+  openSheet('<h3>🚗 '+t("driverBtnLbl")+'</h3>'+
+    '<div class="field"><label>'+t("chooseCurrency")+'</label><select id="dCur">'+curOpts+'</select></div>'+
+    '<div class="field"><label>'+t("drvDays")+'</label><input id="dDays" inputmode="numeric" placeholder="0" value="'+esc(vd)+'" autocomplete="off"></div>'+
+    '<div class="field"><label>'+t("drvPerDay")+'</label><input id="dDay" inputmode="decimal" placeholder="0" value="'+esc(va)+'" autocomplete="off"></div>'+
+    '<div class="field"><label>'+t("drvKmPerDay")+'</label><input id="dKm" inputmode="decimal" placeholder="0" value="'+esc(vb)+'" autocomplete="off"></div>'+
+    '<div class="field"><label>'+t("drvExtra")+'</label><input id="dExtra" inputmode="decimal" placeholder="0" value="'+esc(vs)+'" autocomplete="off"></div>'+
+    '<div class="field"><label>'+t("drvPaidBy")+'</label><div class="who" id="dPaid">'+S.people.map(function(p){return '<button type="button" data-p="'+esc(p)+'" aria-pressed="'+(p===payer)+'">'+esc(p)+'</button>';}).join("")+'</div></div>'+
+    '<p class="note" id="dTot" style="margin:2px 2px 10px;font-weight:700;color:var(--gold)"></p>'+
+    '<button class="btn" id="dAdd">'+(exp?t("saveWord"):t("drvAdd"))+'</button>'+
+    (exp?'<button class="btn ghost" id="dDel" style="margin-top:8px;color:var(--rose);font-size:13px;padding:11px">✕ '+t("drvDelete")+'</button>':'')+
+    '<button class="btn ghost" id="dOther" style="margin-top:8px;font-size:13px;padding:11px">'+t("drvOther")+'</button>');
+  $("dPaid").addEventListener("click", function(e){ var b=e.target.closest("button[data-p]"); if(!b) return; payer=b.dataset.p; [].forEach.call(this.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b);}); });
+  function calc(){ var d=parseInt($("dDays").value,10)||0, a=pf($("dDay").value), b=pf($("dKm").value), s=pf($("dExtra").value); return d*(a+b)+s; }
+  function upd(){ var c=$("dCur").value, sy=CUR[c]?CUR[c].s:c, dd=CUR[c]?CUR[c].d:2, tot=calc();
+    $("dTot").textContent = tot>0 ? (t("drvTotal")+" : "+nf(tot,dd)+" "+sy+(c!=="EUR"?" (≈ "+nf(conv(tot,c,"EUR"),2)+" €)":"")) : ""; }
+  ["dDays","dDay","dKm","dExtra"].forEach(function(id){ $(id).addEventListener("input", upd); });
+  $("dCur").addEventListener("change", upd); upd();
+  $("dAdd").addEventListener("click", function(){
+    var c=$("dCur").value, tot=calc(), d=parseInt($("dDays").value,10)||0, a=pf($("dDay").value), b=pf($("dKm").value), s=pf($("dExtra").value);
+    if(tot<=0){ toast(t("tIndicateAmount")); return; }
+    // si NI le total NI la devise n'ont changé, on garde la valeur en € d'origine
+    // (sinon un simple réenregistrement la recalculerait au taux fixe actuel)
+    var sameMoney = exp && Math.abs(tot-(+exp.amount||0))<1e-9 && c===(exp.cur||"EUR") && (+exp.eur>0);
+    var data={ who:payer, label:fmt(t("drvLabel"),{n:d}), amount:tot, cur:c,
+               eur: sameMoney ? +exp.eur : conv(tot,c,"EUR"), cat:"driver", dp:{d:d,a:a,b:b,s:s}, mt:Date.now() };
+    if(exp){ for(var k in data) exp[k]=data[k]; }
+    else { data.id=String(Date.now())+Math.random().toString(36).slice(2,6); data.ts=Date.now(); data.split={mode:"equal", among:[]}; S.expenses.push(data); }
+    closeSheet(); renderExp(); pullThenSave();
+  });
+  var od=$("dOther"); if(od) od.addEventListener("click", function(){ openAddExpense({cat:"driver"}); });
+  var dd2=$("dDel"); if(dd2) dd2.addEventListener("click", function(){
+    if(!confirm(t("confirmDelete").replace("{l}",exp.label||""))) return;
+    S.expenses=S.expenses.filter(function(y){return y.id!==exp.id;});
+    if(S.deleted.indexOf(exp.id)<0) S.deleted.push(exp.id);
+    closeSheet(); renderExp(); pullThenSave();
+  });
+}
+/* Le bouton « Chauffeur du circuit » ouvre DIRECTEMENT le chauffeur déjà enregistré
+   (pour le modifier ou le supprimer, sans avoir à le chercher dans l'historique).
+   S'il n'y en a pas encore, il ouvre la création. */
+$("driverBtn").addEventListener("click", function(){
+  var drv=(S.expenses||[]).filter(function(x){ return x.cat==="driver"; })
+                          .sort(function(a,b){ return (b.ts||0)-(a.ts||0); });
+  openDriver(drv.length ? drv[0] : null);
+});
+
+/* ---- QR code : installer l'app sur un autre téléphone ---- */
+function openQR(){
+  openSheet('<h3>'+t("installTitle")+'</h3>'+
+    '<p class="note" style="margin-bottom:12px">'+t("installIntro")+'</p>'+
+    '<div style="background:#fff; border-radius:16px; padding:16px; display:flex; justify-content:center"><img src="qr.png" alt="QR code" style="width:230px; height:230px; image-rendering:pixelated"></div>'+
+    '<p class="note" style="text-align:center; margin-top:10px"><b style="color:var(--text)">'+esc(location.host)+'</b></p>'+
+    '<button class="btn" id="qrShare" style="margin-top:12px">'+t("shareLink")+'</button>');
+  $("qrShare").addEventListener("click", function(){
+    var link = location.origin + "/";
+    if(navigator.share){ navigator.share({title:"Voyage Inde", url:link}).catch(function(){}); }
+    else { copy(link); toast("Lien copié"); }
+  });
+}
+$("qrBtn").addEventListener("click", openQR);
+
+/* ---- choix de la langue ---- */
+function openLang(){
+  var names={fr:"Français", en:"English", ta:"தமிழ்"};
+  openSheet('<h3>'+t("langTitle")+'</h3><ul class="curlist">'+
+    ["fr","en","ta"].map(function(l){
+      return '<li><button data-l="'+l+'"><span class="code" style="width:auto;min-width:44px">'+LNAME[l]+'</span><span class="nm">'+names[l]+'</span>'+(l===LANG?' ✓':'')+'</button></li>';
+    }).join("")+'</ul>');
+  $("sheetIn").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-l]"); if(!b) return;
+    closeSheet(); applyLang(b.dataset.l);
+  });
+}
+$("langBtn").addEventListener("click", openLang);
+
+/* ========== planning / itinéraire (hors ligne, traduit) ========== */
+var PLAN = {
+  stages:[
+    {place:"Chennai", nights:3, d:"2026-09-04", dates:{fr:"4–7 sept",en:"4–7 Sep",ta:"செப் 4–7"}},
+    {place:"Mahabalipuram", nights:1, d:"2026-09-07", dates:{fr:"7–8 sept",en:"7–8 Sep",ta:"செப் 7–8"}},
+    {place:"Pondichéry", nights:2, d:"2026-09-08", dates:{fr:"8–10 sept",en:"8–10 Sep",ta:"செப் 8–10"}},
+    {place:"Velankanni", nights:1, d:"2026-09-10", dates:{fr:"10–11 sept",en:"10–11 Sep",ta:"செப் 10–11"}},
+    {place:"Madurai", nights:2, d:"2026-09-11", dates:{fr:"11–13 sept",en:"11–13 Sep",ta:"செப் 11–13"}},
+    {place:"Thekkady", nights:2, d:"2026-09-13", dates:{fr:"13–15 sept",en:"13–15 Sep",ta:"செப் 13–15"}},
+    {place:"Munnar", nights:2, d:"2026-09-15", dates:{fr:"15–17 sept",en:"15–17 Sep",ta:"செப் 15–17"}},
+    {place:"Alleppey", nights:1, d:"2026-09-17", dates:{fr:"17–18 sept",en:"17–18 Sep",ta:"செப் 17–18"}},
+    {place:"Kochi", nights:3, d:"2026-09-18", dates:{fr:"18–21 sept",en:"18–21 Sep",ta:"செப் 18–21"}}
+  ],
+  legs:[
+    {from:"Chennai", to:"Tirupati", km:"~135 km", dur:"~3h"},
+    {from:"Tirupati", to:"Mahabalipuram", km:"~170 km", dur:"~4h"},
+    {from:"Mahabalipuram", to:"Melmaruvathur", km:"~65 km", dur:"~1h30"},
+    {from:"Melmaruvathur", to:"Pondichéry", km:"~65 km", dur:"~1h30"},
+    {from:"Pondichéry", to:"Velankanni", km:"", dur:"~4h"},
+    {from:"Velankanni", to:"Madurai", km:"", dur:"~4h"},
+    {from:"Madurai", to:"Thekkady", km:"", dur:"~4h"},
+    {from:"Thekkady", to:"Munnar", km:"", dur:"~3h"},
+    {from:"Munnar", to:"Alleppey", km:"", dur:"~5h"},
+    {from:"Alleppey", to:"Kochi", km:"", dur:"~1h30"}
+  ],
+  tips:[
+    {fr:"Aucune journée de route ne dépasse 4h, avec une pause toutes les 1h30–2h.", en:"No driving day exceeds 4h, with a break every 1h30–2h.", ta:"எந்த பயண நாளும் 4 மணிக்கு மேல் இல்லை; ஒவ்வொரு 1½–2 மணிக்கும் ஓய்வு."},
+    {fr:"Voiture privée avec chauffeur recommandée sur tout le circuit (souple pour les siestes et les arrêts).", en:"Private car with driver recommended for the whole tour (flexible for naps and stops).", ta:"முழு சுற்றுலாவிற்கும் ஓட்டுநருடன் தனியார் கார் நல்லது (தூக்கம்/நிறுத்தங்களுக்கு வசதி)."},
+    {fr:"Tirupati : tenue traditionnelle exigée dans le temple — à prévoir.", en:"Tirupati: traditional dress required in the temple — plan ahead.", ta:"திருப்பதி: கோயிலில் பாரம்பரிய உடை அவசியம் — முன்கூட்டியே தயார்."},
+    {fr:"Climat mi-septembre : chaud et humide sur la côte, plus frais à Tirupati et Thekkady (altitude).", en:"Mid-September climate: hot and humid on the coast, cooler in Tirupati and Thekkady (altitude).", ta:"செப்டம்பர் நடு: கடற்கரையில் வெப்பம்/ஈரப்பதம், திருப்பதி & தேக்கடியில் குளிர் (உயரம்)."},
+    {fr:"Rythme souple : la plupart des étapes ont 1 à 2 jours complets sans transfert ; seule Munnar → Alleppey (~5h) dépasse 4h.", en:"Relaxed pace: most stops have 1–2 full days without transfers; only Munnar → Alleppey (~5h) exceeds 4h.", ta:"நிதானமான வேகம்: பெரும்பாலான இடங்களில் 1–2 முழு நாட்கள் பயணமில்லை; முன்னார் → அலெப்பி (~5ம) மட்டும் 4 மணிக்கு மேல்."},
+    {fr:"Circuit indicatif — distances, durées et tarifs à confirmer localement au moment de la réservation.", en:"Indicative itinerary — distances, times and fares to confirm locally when booking.", ta:"இது ஒரு வழிகாட்டி — தூரம், நேரம், கட்டணங்கள் முன்பதிவின்போது உறுதி செய்யவும்."}
+  ],
+  map:[
+    {name:"Chennai", lat:13.0827, lng:80.2707, days:[2,3,4]},
+    {name:"Tirupati", lat:13.6833, lng:79.3474, days:[5]},
+    {name:"Mahabalipuram", lat:12.6169, lng:80.1927, days:[6]},
+    {name:"Pondichéry", lat:11.9139, lng:79.8145, days:[7,8]},
+    {name:"Velankanni", lat:10.6797, lng:79.8503, days:[9]},
+    {name:"Madurai", lat:9.9195, lng:78.1195, days:[10,11]},
+    {name:"Thekkady", lat:9.6000, lng:77.1667, days:[12,13]},
+    {name:"Munnar", lat:10.0889, lng:77.0595, days:[14,15]},
+    {name:"Alleppey", lat:9.4981, lng:76.3388, days:[16]},
+    {name:"Kochi", lat:9.9667, lng:76.2417, days:[17,18,19]}
+  ],
+  dayPhoto:{3:"chennai",5:"tirupati",6:"mahabalipuram",7:"pondicherry",8:"velankanni",10:"madurai",12:"thekkady",14:"munnar",15:"alleppey",17:"kochi"},
+  days:[
+    {n:1, date:"2026-09-03", L:{fr:{ttl:"Paris → vol (Qatar Airways, via Doha)", desc:"Décollage de Paris CDG à 9h15. Escale à Doha, puis correspondance vers Chennai."}, en:{ttl:"Paris → flight (Qatar Airways, via Doha)", desc:"Departure from Paris CDG at 9:15. Layover in Doha, then connection to Chennai."}, ta:{ttl:"பாரிஸ் → விமானம் (கத்தார், தோஹா வழியாக)", desc:"பாரிஸ் CDG இல் காலை 9:15 புறப்பாடு. தோஹாவில் இடைநிறுத்தம், பிறகு சென்னைக்கு இணைப்பு விமானம்."}}},
+    {n:2, date:"2026-09-04", maps:[{label:"Marina Beach", q:"Marina Beach Chennai"}], L:{fr:{ttl:"Arrivée Chennai", desc:"Atterrissage à 2h40. Transfert à l'hôtel vers 4h–4h30. Grasse matinée obligatoire : pas de programme avant midi. En fin de journée, si l'enfant tient : petite balade sur Marina Beach."}, en:{ttl:"Arrival in Chennai", desc:"Landing at 2:40 am. Transfer to the hotel around 4–4:30. Compulsory sleep-in: no plans before midday. Late afternoon, if the child is up for it: a short walk on Marina Beach."}, ta:{ttl:"சென்னை வருகை", desc:"அதிகாலை 2:40 தரையிறக்கம். ஹோட்டலுக்கு சுமார் 4–4:30. கட்டாய ஓய்வு: மதியம் வரை திட்டமில்லை. மாலையில் குழந்தை தயாராக இருந்தால்: மெரினா கடற்கரையில் சிறு நடை."}}},
+    {n:3, date:"2026-09-05", maps:[{label:"Fort St. George", q:"Fort St George Chennai"},{label:"Mylapore", q:"Kapaleeshwarar Temple Mylapore Chennai"}], L:{fr:{ttl:"Chennai", desc:"Fort St. George (fort colonial, musée) et le quartier de Mylapore (ruelles, ambiance de marché). Visite tranquille, beaucoup à pied."}, en:{ttl:"Chennai", desc:"Fort St. George (colonial fort, museum) and Mylapore (lanes, market atmosphere). Relaxed visit, mostly on foot."}, ta:{ttl:"சென்னை", desc:"ஃபோர்ட் செயின்ட் ஜார்ஜ் (காலனி கோட்டை, அருங்காட்சியகம்) மற்றும் மயிலாப்பூர் (சந்துகள், சந்தை சூழல்). நிதானமான நடைப் பயணம்."}}},
+    {n:4, date:"2026-09-06", maps:[{label:"Government Museum", q:"Government Museum Egmore Chennai"},{label:"Elliot's Beach", q:"Elliot's Beach Besant Nagar Chennai"}], L:{fr:{ttl:"Chennai", desc:"Journée détente : Government Museum (Egmore) le matin si envie de culture, puis après-midi tranquille à Besant Nagar / Elliot's Beach — plage familiale, moins fréquentée."}, en:{ttl:"Chennai", desc:"Relaxed day: Government Museum (Egmore) in the morning if you fancy some culture, then a quiet afternoon at Besant Nagar / Elliot's Beach — a family beach, less crowded."}, ta:{ttl:"சென்னை", desc:"ஓய்வு நாள்: காலை விருப்பமிருந்தால் Government Museum (எக்மோர்), பிறகு மதியம் பெசன்ட் நகர் / எலியட் கடற்கரை — குடும்ப கடற்கரை, கூட்டம் குறைவு."}}},
+    {n:5, date:"2026-09-07", drive:{fr:"~3h puis ~4h de route", en:"~3h then ~4h drive", ta:"~3ம பிறகு ~4ம பயணம்"}, maps:[{label:"Tirumala", q:"Tirumala Venkateswara Temple Tirupati"},{label:"Shore Temple", q:"Shore Temple Mahabalipuram"}], L:{fr:{ttl:"Chennai → Tirupati → Mahabalipuram", desc:"Départ tôt. Darshan de Tirumala (Special Entry ~300 ₹ pour éviter la file) terminé vers 13h — pas de nuit sur place. Route vers Mahabalipuram, installation en soirée. Journée longue (~7h cumulées) mais on gagne une nuit d'hôtel."}, en:{ttl:"Chennai → Tirupati → Mahabalipuram", desc:"Early start. Tirumala darshan (Special Entry ~₹300 to skip the queue) done around 1 pm — no overnight there. Drive to Mahabalipuram, check in for the evening. Long day (~7h total) but you save a hotel night."}, ta:{ttl:"சென்னை → திருப்பதி → மகாபலிபுரம்", desc:"அதிகாலை புறப்பாடு. திருமலை தரிசனம் (Special Entry ~₹300, வரிசையைத் தவிர்க்க) மதியம் ~1 மணிக்கு முடிவு — அங்கு தங்கல் இல்லை. மகாபலிபுரம் நோக்கி பயணம், மாலையில் தங்கல். நீண்ட நாள் (~7ம) ஆனால் ஒரு இரவு மிச்சம்."}}},
+    {n:6, date:"2026-09-08", drive:{fr:"~1h30 puis ~1h30 de route", en:"~1h30 then ~1h30 drive", ta:"~1½ம பிறகு ~1½ம பயணம்"}, maps:[{label:"Five Rathas", q:"Pancha Rathas Mahabalipuram"},{label:"Melmaruvathur", q:"Adhiparasakthi Temple Melmaruvathur"},{label:"Pondichéry", q:"White Town Pondicherry"}], L:{fr:{ttl:"Mahabalipuram → Melmaruvathur → Pondichéry", desc:"Le matin : monuments en pierre sculptée de Mahabalipuram (Shore Temple, Five Rathas — UNESCO), plage. Arrêt au temple d'Adhiparasakthi à Melmaruvathur, puis route jusqu'à Pondichéry, nuit sur place."}, en:{ttl:"Mahabalipuram → Melmaruvathur → Pondicherry", desc:"Morning: Mahabalipuram's carved stone monuments (Shore Temple, Five Rathas — UNESCO), beach. Stop at the Adhiparasakthi temple in Melmaruvathur, then drive to Pondicherry, overnight."}, ta:{ttl:"மகாபலிபுரம் → மேல்மருவத்தூர் → புதுச்சேரி", desc:"காலை: மகாபலிபுரத்தின் கல் சிற்பங்கள் (Shore Temple, Five Rathas — யுனெஸ்கோ), கடற்கரை. மேல்மருவத்தூர் ஆதிபராசக்தி கோயில் நிறுத்தம், பிறகு புதுச்சேரிக்கு பயணம், இரவு தங்கல்."}}},
+    {n:7, date:"2026-09-09", maps:[{label:"Auroville", q:"Matrimandir Auroville"},{label:"White Town", q:"White Town Pondicherry"}], L:{fr:{ttl:"Pondichéry", desc:"Journée complète : quartier français (Quartier Blanc), promenade en bord de mer, pause café. Si l'énergie le permet : Auroville (~10 km) — extérieur et jardins autour du Matrimandir (intérieur sur réservation, non prévu)."}, en:{ttl:"Pondicherry", desc:"Full day: French quarter (White Town), seaside promenade, café break. If energy allows: Auroville (~10 km) — grounds and gardens around the Matrimandir (inside needs a booking, not planned)."}, ta:{ttl:"புதுச்சேரி", desc:"முழு நாள்: பிரெஞ்சு பகுதி (White Town), கடற்கரை நடை, காபி இடைவேளை. சக்தி இருந்தால்: ஆரோவில் (~10கிமீ) — மாத்ரிமந்திர் வெளிப்புறம்/தோட்டங்கள் (உட்புறம் முன்பதிவு தேவை, திட்டமில்லை)."}}},
+    {n:8, date:"2026-09-10", drive:{fr:"~4h de route", en:"~4h drive", ta:"~4ம பயணம்"}, maps:[{label:"Basilique Velankanni", q:"Velankanni Basilica"}], L:{fr:{ttl:"Pondichéry → Velankanni", desc:"Matinée tranquille à Pondichéry, puis route vers Velankanni. Visite de la basilique Notre-Dame-de-Bon-Secours en fin de journée."}, en:{ttl:"Pondicherry → Velankanni", desc:"Quiet morning in Pondicherry, then drive to Velankanni. Visit the Basilica of Our Lady of Good Health in the late afternoon."}, ta:{ttl:"புதுச்சேரி → வேளாங்கண்ணி", desc:"புதுச்சேரியில் அமைதியான காலை, பிறகு வேளாங்கண்ணிக்கு பயணம். மாலையில் வேளாங்கண்ணி பசிலிக்கா தரிசனம்."}}},
+    {n:9, date:"2026-09-11", drive:{fr:"~4h de route", en:"~4h drive", ta:"~4ம பயணம்"}, maps:[{label:"Madurai", q:"Madurai"}], L:{fr:{ttl:"Velankanni → Madurai", desc:"Matinée libre à Velankanni (plage) si vous voulez prolonger, puis route vers Madurai. Installation, soirée dans la vieille ville."}, en:{ttl:"Velankanni → Madurai", desc:"Free morning in Velankanni (beach) if you want to linger, then drive to Madurai. Check in, evening in the old town."}, ta:{ttl:"வேளாங்கண்ணி → மதுரை", desc:"விருப்பமிருந்தால் வேளாங்கண்ணியில் சுதந்திர காலை (கடற்கரை), பிறகு மதுரைக்கு பயணம். தங்கல், பழைய நகரில் மாலை."}}},
+    {n:10, date:"2026-09-12", maps:[{label:"Palais Thirumalai Nayak", q:"Thirumalai Nayakkar Mahal Madurai"},{label:"Temple Meenakshi", q:"Meenakshi Amman Temple Madurai"}], L:{fr:{ttl:"Madurai", desc:"Journée complète : palais Thirumalai Nayak (architecture indo-sarrasine), bazars animés autour — ambiance et couleurs, facile avec un enfant."}, en:{ttl:"Madurai", desc:"Full day: Thirumalai Nayak Palace (Indo-Saracenic architecture), lively bazaars around — colour and atmosphere, easy with a child."}, ta:{ttl:"மதுரை", desc:"முழு நாள்: திருமலை நாயக்கர் மஹால் (இந்தோ-சரசெனிக் கட்டிடக்கலை), சுற்றி கலகலப்பான சந்தைகள் — வண்ணமும் சூழலும், குழந்தையுடன் எளிது."}}},
+    {n:11, date:"2026-09-13", drive:{fr:"~4h de route de montagne", en:"~4h mountain drive", ta:"~4ம மலைப் பயணம்"}, maps:[{label:"Thekkady", q:"Thekkady Kerala"}], L:{fr:{ttl:"Madurai → Thekkady (Kerala)", desc:"Ascension dans les Ghats occidentaux. Installation en fin d'après-midi, puis balade tranquille dans une plantation d'épices."}, en:{ttl:"Madurai → Thekkady (Kerala)", desc:"Climb into the Western Ghats. Check in late afternoon, then a gentle walk through a spice plantation."}, ta:{ttl:"மதுரை → தேக்கடி (கேரளா)", desc:"மேற்குத் தொடர்ச்சி மலைகளில் ஏற்றம். மாலையில் தங்கல், பிறகு மசாலா தோட்டத்தில் நிதான நடை."}}},
+    {n:12, date:"2026-09-14", maps:[{label:"Lac Periyar", q:"Periyar Lake Thekkady"},{label:"Elephant Junction", q:"Elephant Junction Murikkady"}], L:{fr:{ttl:"Thekkady", desc:"Journée complète : le matin, balade en bateau sur le lac du Periyar Tiger Reserve (calme, facile avec un enfant) ; l'après-midi, Elephant Junction (balade à dos d'éléphant) ; en soirée, massage ayurvéda pour ceux qui le souhaitent."}, en:{ttl:"Thekkady", desc:"Full day: morning boat ride on Periyar Tiger Reserve lake (calm, easy with a child); afternoon at Elephant Junction (elephant ride); evening Ayurvedic massage for those who wish."}, ta:{ttl:"தேக்கடி", desc:"முழு நாள்: காலை பெரியார் ஏரியில் படகுப் பயணம் (அமைதி, குழந்தையுடன் எளிது); மதியம் Elephant Junction (யானை சவாரி); மாலை விருப்பமுள்ளவர்களுக்கு ஆயுர்வேத மசாஜ்."}}},
+    {n:13, date:"2026-09-15", drive:{fr:"~3h de route de montagne", en:"~3h mountain drive", ta:"~3ம மலைப் பயணம்"}, maps:[{label:"Munnar", q:"Munnar"},{label:"Cascade Cheeyappara", q:"Cheeyappara Waterfalls"}], L:{fr:{ttl:"Thekkady → Munnar", desc:"Tôt le matin : jeep safari (1–3h, réserve de Periyar près de la ville). Puis route vers Munnar à travers les Ghats : plantations de thé, points de vue, arrêt à une cascade (Cheeyappara ou Attukad). Installation en fin d'après-midi."}, en:{ttl:"Thekkady → Munnar", desc:"Early: jeep safari (1–3h, Periyar reserve near town). Then drive to Munnar through the Ghats: tea plantations, viewpoints, a waterfall stop (Cheeyappara or Attukad). Check in late afternoon."}, ta:{ttl:"தேக்கடி → முன்னார்", desc:"அதிகாலை: ஜீப் சஃபாரி (1–3ம, நகரருகே பெரியார் காடு). பிறகு முன்னார் நோக்கி மலைப் பயணம்: தேயிலைத் தோட்டங்கள், காட்சிப் புள்ளிகள், அருவி நிறுத்தம் (சீயப்பாறா/அட்டுகாட்). மாலையில் தங்கல்."}}},
+    {n:14, date:"2026-09-16", maps:[{label:"Eravikulam N.P.", q:"Eravikulam National Park Munnar"}], L:{fr:{ttl:"Munnar", desc:"Le matin (tôt, pour maximiser les chances d'observation) : Eravikulam National Park, connu pour le tahr des Nilgiris. Reste de la journée libre : plantations de thé, points de vue, détente."}, en:{ttl:"Munnar", desc:"Morning (early, for the best chance of sightings): Eravikulam National Park, known for the Nilgiri tahr. Rest of the day free: tea plantations, viewpoints, relaxing."}, ta:{ttl:"முன்னார்", desc:"காலை (சீக்கிரம், பார்க்க வாய்ப்பு அதிகம்): எராவிகுளம் தேசியப் பூங்கா, நீலகிரி வரையாடு புகழ். மீதி நாள் சுதந்திரம்: தேயிலைத் தோட்டங்கள், காட்சிகள், ஓய்வு."}}},
+    {n:15, date:"2026-09-17", drive:{fr:"~5h de route — la plus longue", en:"~5h drive — the longest", ta:"~5ம பயணம் — நீளமானது"}, maps:[{label:"Backwaters Alleppey", q:"Alleppey Backwaters"}], L:{fr:{ttl:"Munnar → Alleppey", desc:"Descente des collines vers les backwaters. Embarquement sur une houseboat privée en fin d'après-midi : repas cuisiné à bord, nuit à l'ancre sur un bras d'eau calme. Option : excursion backwaters à la journée, sans nuit à bord."}, en:{ttl:"Munnar → Alleppey", desc:"Down from the hills to the backwaters. Board a private houseboat in the late afternoon: meals cooked on board, night at anchor on a calm channel. Option: day backwaters trip, without sleeping aboard."}, ta:{ttl:"முன்னார் → அலெப்பி", desc:"மலைகளில் இருந்து பேக்வாட்டர்ஸ் நோக்கி. மாலையில் தனியார் ஹவுஸ்போட்: கப்பலில் சமையல் உணவு, அமைதியான கால்வாயில் இரவு. விருப்பம்: பகல் பயணம் மட்டும், கப்பலில் தங்காமல்."}}},
+    {n:16, date:"2026-09-18", drive:{fr:"~1h30 de route", en:"~1h30 drive", ta:"~1½ம பயணம்"}, maps:[{label:"Fort Kochi", q:"Fort Kochi"}], L:{fr:{ttl:"Alleppey → Kochi", desc:"Débarquement de la houseboat en matinée. Installation à Fort Kochi (quartier colonial, carrelets de pêche chinois, ruelles), balade en fin de journée."}, en:{ttl:"Alleppey → Kochi", desc:"Disembark the houseboat in the morning. Check in at Fort Kochi (colonial quarter, Chinese fishing nets, lanes), a walk at the end of the day."}, ta:{ttl:"அலெப்பி → கொச்சி", desc:"காலையில் ஹவுஸ்போட்டிலிருந்து இறங்கல். ஃபோர்ட் கொச்சியில் தங்கல் (காலனி பகுதி, சீன மீன்பிடி வலைகள், சந்துகள்), மாலையில் நடை."}}},
+    {n:17, date:"2026-09-19", maps:[{label:"Palais de Mattancherry", q:"Mattancherry Palace Kochi"}], L:{fr:{ttl:"Kochi", desc:"Mattancherry et Jew Town : palais hollandais, marché aux épices, ruelles colorées — facile à pied, très photogénique."}, en:{ttl:"Kochi", desc:"Mattancherry and Jew Town: Dutch Palace, spice market, colourful lanes — easy on foot, very photogenic."}, ta:{ttl:"கொச்சி", desc:"மட்டாஞ்சேரி & ஜியூ டவுன்: டச்சு அரண்மனை, மசாலா சந்தை, வண்ண சந்துகள் — நடைக்கு எளிது, படமெடுக்க அழகு."}}},
+    {n:18, date:"2026-09-20", maps:[{label:"Fort Kochi", q:"Fort Kochi"}], L:{fr:{ttl:"Kochi", desc:"Dernière journée complète : derniers achats (épices, textiles), café en bord d'eau, rythme complètement relâché avant le retour."}, en:{ttl:"Kochi", desc:"Last full day: final shopping (spices, textiles), waterfront café, a fully relaxed pace before the trip home."}, ta:{ttl:"கொச்சி", desc:"கடைசி முழு நாள்: இறுதி கொள்முதல் (மசாலா, துணிகள்), நீர்க்கரை காபி, திரும்பும் முன் முழு ஓய்வு."}}},
+    {n:19, date:"2026-09-21", maps:[{label:"Aéroport Kochi", q:"Cochin International Airport"}], L:{fr:{ttl:"Kochi → vol retour → Paris", desc:"Transfert matinal à l'aéroport de Kochi (COK). Vol retour à 10h15. Arrivée à Paris CDG le jour même."}, en:{ttl:"Kochi → return flight → Paris", desc:"Morning transfer to Kochi airport (COK). Return flight at 10:15. Arrive at Paris CDG the same day."}, ta:{ttl:"கொச்சி → திரும்பும் விமானம் → பாரிஸ்", desc:"காலை கொச்சி விமான நிலையத்திற்கு (COK). திரும்பும் விமானம் 10:15. அதே நாளில் பாரிஸ் CDG வருகை."}}}
+  ]
+};
+function planDone(){ return lget("planDone")||{}; }
+function pad2(x){ x=String(x); return x.length<2 ? "0"+x : x; }
+function renderPlan(){
+  var el=$("planBody"); if(!el) return;
+  var done=planDone();
+  var doneCount=PLAN.days.filter(function(d){return done[d.n];}).length;
+  var now=new Date(), t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var iso=t0.getFullYear()+"-"+pad2(t0.getMonth()+1)+"-"+pad2(t0.getDate());
+  var d1=new Date(2026,8,3), d19=new Date(2026,8,21);
+  var todayBox="";
+  if(t0<d1){ todayBox='<div class="ptoday">'+fmt(t("planCountdown"),{n:Math.round((d1-t0)/86400000)})+'</div>'; }
+  else if(t0>d19){ todayBox='<div class="ptoday">'+t("planEnded")+'</div>'; }
+  else { var cur=PLAN.days.filter(function(d){return d.date===iso;})[0];
+    if(cur){ var CL=cur.L[LANG]||cur.L.fr; todayBox='<div class="ptoday"><b>'+t("planToday")+' · '+t("planDayWord")+' '+cur.n+'</b> — '+esc(CL.ttl)+'</div>'; } }
+  var head='<div class="phead"><div class="t">'+t("planHeaderTitle")+'</div><div class="dt">'+t("planHeaderDates")+'</div>'+todayBox+
+    '<div class="pbar"><i style="width:'+(doneCount/PLAN.days.length*100)+'%"></i></div>'+
+    '<div class="dt" style="margin-top:6px">'+fmt(t("planProgress"),{done:doneCount, tot:PLAN.days.length})+'</div></div>';
+  var HG=hotelGroups();
+  /* l'hôtel d'une étape = celui dont le séjour CHEVAUCHE le plus les nuits de l'étape
+     (marche même si l'hôtel est pris la veille, ex. arrivée de nuit : 3→7 pour une étape 4→7) */
+  function hotelForStage(s){
+    if(!s.d) return null;
+    var start=new Date(s.d+"T12:00:00").getTime(), end=start+(s.nights||1)*86400000;
+    var best=null, bestOv=0;
+    HG.order.forEach(function(k){
+      var g=HG.groups[k]; if(!g.ts) return;
+      var hEnd=g.ts+((+g.nights||1)*86400000);
+      var ov=Math.min(end,hEnd)-Math.max(start,g.ts);
+      if(ov>bestOv){ bestOv=ov; best=g; }
+    });
+    return bestOv>0 ? best : null;
+  }
+  var ov='<h2 class="sec">'+t("planOverview")+'</h2><ul class="pover">'+PLAN.stages.map(function(s){
+    var nn=s.nights>1 ? fmt(t("planNights"),{n:s.nights}) : t("planNight1");
+    var g=hotelForStage(s);
+    var hb=g ? '<small style="color:var(--gold);display:block;margin-top:2px">🏨 '+(g.hidden?('🎁 '+t("planHotelBooked")):esc(g.key))+(g.bf?' · 🥐':'')+'</small>' : '';
+    return '<li><span class="pl">'+esc(s.place)+'<small>'+esc(s.dates[LANG]||s.dates.fr)+'</small>'+hb+'</span><span class="nn">'+nn+'</span></li>';
+  }).join("")+'</ul>';
+  var days='<h2 class="sec">'+t("planDayByDay")+'</h2>'+PLAN.days.map(function(d){
+    var L=d.L[LANG]||d.L.fr;
+    var dt=new Date(d.date+"T12:00:00").toLocaleDateString(locale(),{weekday:"short",day:"2-digit",month:"short"});
+    var maps=(d.maps||[]).map(function(m){ return '<a class="pmap" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(m.q)+'">📍 '+esc(m.label)+'</a>'; }).join("");
+    var drive=d.drive?('<span class="drive">🚗 '+esc(d.drive[LANG]||d.drive.fr)+'</span>'):"";
+    var photo=PLAN.dayPhoto[d.n]?('<img class="pphoto" src="photos/'+PLAN.dayPhoto[d.n]+'.jpg" alt="" loading="lazy">'):"";
+    return '<div class="pday'+(d.date===iso?' now':'')+'"><div class="top">'+
+      '<button class="pchk'+(done[d.n]?' on':'')+'" data-day="'+d.n+'" aria-label="ok">'+(done[d.n]?'✓':'')+'</button>'+
+      '<div class="dd"><div class="ttl">'+esc(L.ttl)+'</div>'+
+      '<div class="date">'+t("planDayWord")+' '+d.n+' · '+dt+'</div>'+
+      (drive?('<div>'+drive+'</div>'):'')+
+      photo+
+      '<div class="desc">'+esc(L.desc)+'</div>'+
+      (maps?('<div>'+maps+'</div>'):'')+
+      '</div></div></div>';
+  }).join("");
+  var legs='<h2 class="sec">'+t("planRoutes")+'</h2><ul class="plegs">'+PLAN.legs.map(function(g){
+    return '<li><span>'+esc(g.from)+' → '+esc(g.to)+(g.km?' <span style="color:var(--muted)">'+esc(g.km)+'</span>':'')+'</span><span class="du">'+esc(g.dur)+'</span></li>';
+  }).join("")+'</ul>';
+  var tips='<h2 class="sec">'+t("planTips")+'</h2><ul class="ptips">'+PLAN.tips.map(function(x){ return '<li>'+esc(x[LANG]||x.fr)+'</li>'; }).join("")+'</ul>';
+  el.innerHTML = head+ov+days+legs+tips+'<p class="pcredit">'+t("planCredits")+'</p>';
+}
+$("planBody").addEventListener("click", function(e){
+  var b=e.target.closest(".pchk"); if(!b) return;
+  var n=b.dataset.day, done=planDone();
+  if(done[n]) delete done[n]; else done[n]=1;
+  lset("planDone", done); renderPlan();
+});
+
+/* ---- carte réelle (Leaflet + OpenStreetMap) — hors ligne : marqueurs + trajet ---- */
+var _map=null;
+function currentDayN(){
+  var now=new Date(), t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var diff=Math.round((t0-new Date(2026,8,3))/86400000);
+  return (diff>=0 && diff<=18) ? diff+1 : 0;
+}
+function initMap(){
+  if(_map || !window.L || !$("planMap")) return;
+  try{
+    _map=L.map("planMap", {scrollWheelZoom:false});
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:17, attribution:"© OpenStreetMap"}).addTo(_map);
+    var cd=currentDayN(), latlngs=[];
+    PLAN.map.forEach(function(p,i){
+      latlngs.push([p.lat,p.lng]);
+      var here=cd && p.days && p.days.indexOf(cd)>=0;
+      var m=L.marker([p.lat,p.lng], {icon:L.divIcon({className:"", html:'<div class="mk'+(here?" now":"")+'">'+(i+1)+'</div>', iconSize:[26,26], iconAnchor:[13,13]})}).addTo(_map);
+      m.bindPopup('<b>'+p.name+'</b><br><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.name+" India")+'" target="_blank" rel="noopener">Google Maps</a>');
+    });
+    L.polyline(latlngs, {color:"#F0B429", weight:3, opacity:.9}).addTo(_map);
+    _map.fitBounds(latlngs, {padding:[26,26]});
+  }catch(e){ _map=null; }
+}
+
+/* ========== onglets ========== */
+function tab(which){
+  $("scC").classList.toggle("on", which==="c");
+  $("scD").classList.toggle("on", which==="d");
+  $("scP").classList.toggle("on", which==="p");
+  $("tabC").setAttribute("aria-selected", which==="c");
+  $("tabD").setAttribute("aria-selected", which==="d");
+  $("tabP").setAttribute("aria-selected", which==="p");
+  if(which==="d") pullTrip().then(renderExp).catch(function(){});
+  if(which==="p"){ renderPlan(); setTimeout(function(){ initMap(); if(_map) _map.invalidateSize(); }, 80); }
+}
+$("tabC").addEventListener("click", function(){ tab("c") });
+$("tabD").addEventListener("click", function(){ tab("d") });
+$("tabP").addEventListener("click", function(){ tab("p") });
+
+document.addEventListener("keydown", function(e){
+  if($("sheet").classList.contains("on")) return;
+  if($("scC").classList.contains("on")){
+    if(/^[0-9]$/.test(e.key)) key(e.key);
+    else if(e.key===","||e.key===".") key(",");
+    else if(e.key==="Backspace") key("del");
+  }
+});
+
+/* ---- partager le carnet en ligne (la famille rejoint le même carnet en direct) ---- */
+function openShare(){
+  var link=shareLink(), code=tripCode();
+  openSheet('<h3>🔗 '+t("shareTitle")+'</h3>'+
+    '<p class="note" style="margin-bottom:12px">'+t("shareIntro")+'</p>'+
+    '<div class="field"><label>'+t("codeW")+'</label><div style="font-size:22px;font-weight:700;letter-spacing:1px;text-align:center;color:var(--gold);background:var(--slab2);border:1px solid var(--line);border-radius:12px;padding:14px">'+esc(code)+'</div></div>'+
+    '<div class="field"><label>'+t("shareLinkLabel")+'</label><textarea id="shLink" readonly rows="3" style="width:100%;font:inherit;font-size:12px;line-height:1.5;color:var(--text);background:var(--slab2);border:1px solid var(--line);border-radius:12px;padding:12px;resize:none;word-break:break-all">'+esc(link)+'</textarea></div>'+
+    '<button class="btn" id="shWa">📲 '+t("waSend")+'</button>'+
+    '<button class="btn ghost" id="shCopy" style="margin-top:10px">'+t("copyLink")+'</button>');
+  $("shWa").addEventListener("click", function(){
+    var msg=(LANG==="ta"?"பயண இந்தியா — கணக்குப் புத்தகம்: ":(LANG==="en"?"Voyage India — expense book: ":"Voyage Inde — carnet des dépenses : "))+link;
+    window.open("https://wa.me/?text="+encodeURIComponent(msg), "_blank");
+  });
+  $("shCopy").addEventListener("click", function(){
+    var ta=$("shLink"); ta.select(); ta.setSelectionRange(0,99999);
+    var done=function(){ toast(t("linkCopied")); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(link).then(done, function(){ try{document.execCommand("copy");}catch(e){} done(); }); }
+    else { try{document.execCommand("copy");}catch(e){} done(); }
+  });
+}
+/* ---- rejoindre le carnet de la famille (lien ou code reçu) ---- */
+function openJoin(){
+  openSheet('<h3>👨‍👩‍👧 '+t("joinTitle")+'</h3>'+
+    '<p class="note" style="margin-bottom:12px">'+t("joinIntro")+'</p>'+
+    '<div class="field"><label>'+t("joinPaste")+'</label><textarea id="jIn" rows="3" autocomplete="off" spellcheck="false" autocapitalize="none" style="width:100%;font:inherit;font-size:12px;line-height:1.5;background:var(--slab2);border:1px solid var(--line);border-radius:12px;padding:12px;resize:none;word-break:break-all"></textarea></div>'+
+    '<button class="btn" id="jGo">'+t("joinBtn")+'</button>');
+  $("jGo").addEventListener("click", function(){
+    if(!joinCarnet($("jIn").value)) return;
+    closeSheet(); toast(t("joinedToast")); renderExp();
+    pullTrip().then(renderExp).catch(function(){});
+  });
+}
+document.addEventListener("click", function(e){
+  if(!e.target) return;
+  if(e.target.id==="shareBtn"){ openShare(); return; }
+  if(e.target.id==="joinBtn2"){ openJoin(); return; }
+  if(e.target.id==="codeBtn"){ openShare(); return; }   // compat ancien libellé
+});
+
+/* ---- sync live : relit régulièrement quand l'onglet Dépenses est ouvert ---- */
+function tick(){
+  if(document.hidden) return;
+  if(!$("scD").classList.contains("on")) return;
+  if($("sheet").classList.contains("on")) return;      // pas pendant une saisie
+  // une saisie n'a pas pu partir (réseau coupé) ? on la renvoie d'abord, sinon on relit
+  (SYNC.pending ? saveTrip() : pullTrip()).then(renderExp).catch(function(){});
+}
+setInterval(tick, 7000);
+document.addEventListener("visibilitychange", function(){ if(!document.hidden) tick(); });
+window.addEventListener("online", function(){
+  (SYNC.pending ? saveTrip() : pullTrip()).then(renderExp).catch(function(){});
+});
+
+/* ---- service worker (hors ligne + installation) ----
+   MISE À JOUR AUTOMATIQUE : dès qu'une nouvelle version est en ligne, l'app se recharge
+   toute seule (plus besoin de fermer/rouvrir plusieurs fois sur iPhone). */
+if("serviceWorker" in navigator){
+  var _reloading=false, _hadCtrl=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", function(){
+    if(!_hadCtrl){ _hadCtrl=true; return; }           // 1re installation : pas de rechargement inutile
+    if(_reloading) return; _reloading=true;           // nouvelle version installée -> on recharge une fois
+    location.reload();
+  });
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").then(function(reg){
+      reg.update().catch(function(){});
+      setInterval(function(){ reg.update().catch(function(){}); }, 60000);        // vérifie toutes les minutes
+      document.addEventListener("visibilitychange", function(){                  // et à chaque retour dans l'app
+        if(!document.hidden) reg.update().catch(function(){});
+      });
+    }).catch(function(){});
+  });
+}
+
+/* récupère les hôtels saisis dans l'ancien gestionnaire (S.hotels) vers les dépenses normales */
+function migrateHotels(){
+  if(!S.hotels || !S.hotels.length) return false;
+  var changed=false;
+  S.hotels.forEach(function(h){
+    (h.rooms||[]).forEach(function(r){
+      if(!(r.eur>0)) return;
+      var id="H_"+h.id+"_"+r.id;
+      if(S.expenses.some(function(x){return x.id===id;})) return;
+      S.expenses.push({ id:id, ts:h.ts||Date.now(), who:r.paidBy||(S.me||S.people[0]),
+        hotel:h.name||"", label:r.label||"", amount:r.price, cur:r.cur||"EUR", eur:r.eur, cat:"hotel",
+        split:{mode:"equal", among:(r.occupants&&r.occupants.length)?r.occupants:S.people.slice()},
+        hidden:!h.revealed, mt:Date.now() });
+      changed=true;
+    });
+    if(h.id && S.deleted.indexOf("H:"+h.id)<0) S.deleted.push("H:"+h.id);
+  });
+  S.hotels=[];
+  return changed;
+}
+
+/* ========== démarrage ========== */
+/* lien de partage ?c=<code> : la famille rejoint direct le même carnet (un seul appui) */
+try{
+  var _q=(location.search||"")+(location.hash||"");
+  var _cm=_q.match(/[?&#]c=([A-Za-z0-9_-]{3,})/);
+  if(_cm && _cm[1]){
+    var _c=_cm[1].toLowerCase();
+    if(_c!==lget("voyageCode")){ lset("voyageCode", _c); localStorage.removeItem("tripCache"); }
+    if(history.replaceState) history.replaceState(null,"",location.pathname);   // nettoie l'URL
+  }
+}catch(_e){}
+var savedLang = lget("lang"); if(savedLang && I18N[savedLang]) LANG=savedLang;
+applyLang(LANG);                                   // pose les libellés traduits + premier rendu
+loadAll().then(function(){ if(migrateHotels()){ cacheTrip(); saveTrip().catch(function(){}); } applyLang(LANG); });
+})();
+</script>
+</body>
+</html>
