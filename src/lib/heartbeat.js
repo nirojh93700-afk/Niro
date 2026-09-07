@@ -4,6 +4,7 @@
 // seule fois (verrou). Tout est isolé : ne peut jamais casser une page.
 import { claimJob } from "@/lib/stock";
 import { runScheduledJobs, runCashbackJobs, runBirthdayJobs } from "@/lib/jobs";
+import { syncInbox } from "@/lib/inbox";
 
 const MIN = 60000;
 
@@ -13,6 +14,14 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("scheduled", 15 * MIN)) out.scheduled = await runScheduledJobs();
   } catch (e) { out.scheduledError = e.message; }
+  // Boîte mail surveillée : au plus une fois toutes les 15 min. Range les e-mails
+  // des clientes dans leur dossier + leur commande, et prépare une réponse à
+  // valider. AUCUN e-mail ne part à une cliente ici : seule une alerte part au
+  // gérant. Branché ici pour ne dépendre d'AUCUN outil extérieur (incident
+  // 07/09/2026 : la routine Claude horaire s'est arrêtée sans prévenir).
+  try {
+    if (await claimJob("inbox", 15 * MIN)) out.inbox = await syncInbox({ force: true });
+  } catch (e) { out.inboxError = e.message; }
   // Cagnotte (rappels/expiration) : au plus une fois par jour.
   try {
     if (await claimJob("cashback", 24 * 60 * MIN)) out.cashback = await runCashbackJobs();
