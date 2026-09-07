@@ -687,7 +687,8 @@ var $=function(i){return document.getElementById(i)};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
 var nf=function(v,d){return new Intl.NumberFormat("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d}).format(v||0)};
 var money=function(v,c){var d=CUR[c]?CUR[c].d:2; return nf(v,d)+" "+(CUR[c]?CUR[c].s:c)};
-var pf=function(s){return parseFloat(String(s).replace(",","."))||0};
+/* lit un nombre saisi/affiché : enlève les espaces de milliers (y compris insécables « 95 654 ») avant de lire */
+var pf=function(s){return parseFloat(String(s).replace(/[\s  ]/g,"").replace(",","."))||0};
 var toast=function(m){var t=$("toast"); t.textContent=m; t.classList.add("on"); setTimeout(function(){t.classList.remove("on")},1900)};
 
 function conv(v, from, to){ return v / RATES[from] * RATES[to]; }
