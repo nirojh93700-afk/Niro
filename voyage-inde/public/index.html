@@ -307,6 +307,7 @@
       <button class="btn ghost" id="hotelsBtn" style="margin-top:16px">🏨 <span data-i18n="hotelsBtnLbl">Hôtels (privé)</span></button>
       <button class="btn ghost" id="settleBtn" style="margin-top:8px">🔒 <span data-i18n="settleBtnLbl">Qui rembourse qui (privé)</span></button>
       <button class="btn ghost" id="lockBtn" style="margin-top:8px">Verrouiller les comptes</button>
+      <button class="btn ghost" id="trashBtn" style="margin-top:8px;font-size:13px;padding:11px">🗑️ Corbeille</button>
       <button class="btn" id="syncBtn" style="margin-top:8px" data-i18n="sync">Synchroniser</button>
       <div class="row2" style="margin-top:8px">
         <button class="btn ghost" id="sendBtn" style="margin:0; font-size:13px; padding:12px" data-i18n="sendExp">Envoyer mes dépenses</button>
@@ -446,7 +447,7 @@ var I18N = {
     pdOwesMeLine:"{a} doit {x}", pdIOweLine:"à {a} : {x}", pdWhoOwes:"Qui doit te rembourser", pdWhoIOwe:"À qui je dois",
     rbTitle:"{name} t'a remboursé", rbAmount:"Combien t'a-t-il donné ?", rbFull:"Tout : {x}", rbSave:"Valider le remboursement",
     rbRemaining:"Reste à rembourser : {x}", rbHistory:"Remboursements reçus", rbTotalDue:"Total à rembourser", rbTotalRecv:"Total à recevoir",
-    rbLeft:"Reste", rbLeftRecv:"Reste à recevoir", rbAllPaid:"Tout est remboursé ✓", rbBtn:"{name} m'a remboursé", rbGot:"Déjà reçu", rbUndo:"Annuler ce remboursement ?",
+    trashBtn:"Corbeille", trashTitle:"Corbeille", trashHint:"Tout ce qui a été supprimé est gardé ici avec son détail. Un appui sur « Restaurer » le remet dans le carnet, sur tous les téléphones.", trashEmpty:"La corbeille est vide.", trashDeletedOn:"Supprimé le {d}", trashBy:"par {n}", trashRestore:"Restaurer", trashRestored:"Restauré ✓", trashPayment:"Remboursement", rbLeft:"Reste", rbLeftRecv:"Reste à recevoir", rbAllPaid:"Tout est remboursé ✓", rbBtn:"{name} m'a remboursé", rbGot:"Déjà reçu", rbUndo:"Annuler ce remboursement ?",
     stPerPerson:"Détail par personne", stMustPay:"TOTAL à rembourser", stToReceive:"TOTAL à recevoir", stSquare:"Rien à rembourser ✓", stPaidForOthers:"A avancé pour les autres", stAlreadyReimb:"Déjà remboursé", stTransfers:"Qui rembourse qui",
     bfLabel:"Petit déjeuner", bfInc:"🥐 Petit déjeuner inclus", bfNone:"Sans petit déjeuner", bfAsk:"Petit déjeuner inclus ?",
     settleBtnLbl:"Qui rembourse qui (privé)", settleTitle:"Qui rembourse qui",
@@ -543,7 +544,7 @@ var I18N = {
     pdOwesMeLine:"{a} owes {x}", pdIOweLine:"to {a}: {x}", pdWhoOwes:"Who owes you", pdWhoIOwe:"Who I owe",
     rbTitle:"{name} paid you back", rbAmount:"How much did they give you?", rbFull:"All: {x}", rbSave:"Confirm payment",
     rbRemaining:"Left to pay back: {x}", rbHistory:"Payments received", rbTotalDue:"Total to pay back", rbTotalRecv:"Total to receive",
-    rbLeft:"Left", rbLeftRecv:"Left to receive", rbAllPaid:"Fully paid back ✓", rbBtn:"{name} paid me back", rbGot:"Already received", rbUndo:"Undo this payment?",
+    trashBtn:"Trash", trashTitle:"Trash", trashHint:"Everything deleted is kept here with its details. Tap “Restore” to put it back in the book, on every phone.", trashEmpty:"The trash is empty.", trashDeletedOn:"Deleted on {d}", trashBy:"by {n}", trashRestore:"Restore", trashRestored:"Restored ✓", trashPayment:"Payment", rbLeft:"Left", rbLeftRecv:"Left to receive", rbAllPaid:"Fully paid back ✓", rbBtn:"{name} paid me back", rbGot:"Already received", rbUndo:"Undo this payment?",
     stPerPerson:"Per-person detail", stMustPay:"TOTAL to pay back", stToReceive:"TOTAL to receive", stSquare:"Nothing to pay back ✓", stPaidForOthers:"Advanced for others", stAlreadyReimb:"Already reimbursed", stTransfers:"Who pays whom",
     bfLabel:"Breakfast", bfInc:"🥐 Breakfast included", bfNone:"No breakfast", bfAsk:"Breakfast included?",
     settleBtnLbl:"Who owes whom (private)", settleTitle:"Who owes whom",
@@ -640,7 +641,7 @@ var I18N = {
     pdOwesMeLine:"{a} தர வேண்டும் {x}", pdIOweLine:"{a}-க்கு: {x}", pdWhoOwes:"யார் உனக்கு தர வேண்டும்", pdWhoIOwe:"நான் யாருக்கு தர வேண்டும்",
     rbTitle:"{name} திருப்பிக் கொடுத்தார்", rbAmount:"எவ்வளவு கொடுத்தார்?", rbFull:"முழுவதும்: {x}", rbSave:"உறுதிசெய்",
     rbRemaining:"இன்னும் தர வேண்டியது: {x}", rbHistory:"பெற்ற தொகைகள்", rbTotalDue:"மொத்தம் தர வேண்டியது", rbTotalRecv:"மொத்தம் பெற வேண்டியது",
-    rbLeft:"மீதம்", rbLeftRecv:"பெற மீதம்", rbAllPaid:"முழுவதும் திருப்பியது ✓", rbBtn:"{name} திருப்பிக் கொடுத்தார்", rbGot:"பெற்றது", rbUndo:"இதை ரத்து செய்யவா?",
+    trashBtn:"குப்பைத் தொட்டி", trashTitle:"குப்பைத் தொட்டி", trashHint:"நீக்கப்பட்ட அனைத்தும் விவரங்களுடன் இங்கே வைக்கப்படும். « மீட்டெடு » அழுத்தினால் எல்லா தொலைபேசிகளிலும் புத்தகத்திற்குத் திரும்பும்.", trashEmpty:"குப்பைத் தொட்டி காலியாக உள்ளது.", trashDeletedOn:"{d} அன்று நீக்கப்பட்டது", trashBy:"{n} ஆல்", trashRestore:"மீட்டெடு", trashRestored:"மீட்டெடுக்கப்பட்டது ✓", trashPayment:"திருப்பிச் செலுத்தல்", rbLeft:"மீதம்", rbLeftRecv:"பெற மீதம்", rbAllPaid:"முழுவதும் திருப்பியது ✓", rbBtn:"{name} திருப்பிக் கொடுத்தார்", rbGot:"பெற்றது", rbUndo:"இதை ரத்து செய்யவா?",
     stPerPerson:"நபர் வாரியாக விவரம்", stMustPay:"மொத்தம் திருப்பித் தர வேண்டியது", stToReceive:"மொத்தம் பெற வேண்டியது", stSquare:"திருப்பித் தர எதுவும் இல்லை ✓", stPaidForOthers:"மற்றவர்களுக்காக முன்பணம்", stAlreadyReimb:"ஏற்கனவே திருப்பியது", stTransfers:"யார் யாருக்கு தருவது",
     bfLabel:"காலை உணவு", bfInc:"🥐 காலை உணவு உள்ளடங்கும்", bfNone:"காலை உணவு இல்லை", bfAsk:"காலை உணவு உள்ளதா?",
     settleBtnLbl:"யார் யாருக்கு (தனிப்பட்டது)", settleTitle:"யார் யாருக்கு தர வேண்டும்",
@@ -678,7 +679,7 @@ function applyLang(l){
 }
 
 /* ========== état ========== */
-var S = {a:"INR", b:"EUR", typing:"a", buf:"0", mode:"amount", rbuf:"",
+var S = {trash:{}, delAt:{}, undelAt:{}, a:"INR", b:"EUR", typing:"a", buf:"0", mode:"amount", rbuf:"",
          people:[], expenses:[], deleted:[], me:"", dirty:false,
          expCur:"EUR", locked:false, lockedBy:"", lockAt:0, hotels:[], payments:[], pinHash:"", pinAt:0, partShares:{}};
 
@@ -723,7 +724,16 @@ function saveRates(){ lset("fx", {r:RATES, s:RSRC}); }
 /* fusion anti-écrasement : union par id, retire les supprimés (tombstones) */
 function mergeDoc(remote){
   if(!remote || typeof remote!=="object") return;
-  var del={}; (S.deleted||[]).concat(remote.deleted||[]).forEach(function(id){ if(id) del[id]=1; });
+  // suppressions : « dernier qui agit gagne » (delAt vs undelAt) ; anciens tombstones sans date = 1
+  var delAt={}, undelAt={};
+  var mx=function(dst,src){ if(src&&typeof src==="object"){ Object.keys(src).forEach(function(k){ var v=+src[k]||0; if(v>(dst[k]||0)) dst[k]=v; }); } };
+  mx(delAt,S.delAt); mx(delAt,remote.delAt); mx(undelAt,S.undelAt); mx(undelAt,remote.undelAt);
+  (S.deleted||[]).concat(remote.deleted||[]).forEach(function(id){ if(id && !delAt[id]) delAt[id]=1; });
+  S.delAt=delAt; S.undelAt=undelAt;
+  var del={}; Object.keys(delAt).forEach(function(id){ if(delAt[id]>(undelAt[id]||0)) del[id]=1; });
+  // corbeille : union, l'entrée la plus récente gagne
+  var tr={}; [S.trash, remote.trash].forEach(function(src){ if(src&&typeof src==="object"){ Object.keys(src).forEach(function(k){ var tt=src[k]; if(tt&&tt.item){ var e=tr[k]; if(!e||(+tt.tAt||0)>=(+e.tAt||0)) tr[k]=tt; } }); } });
+  S.trash=tr;
   var by={};  (S.expenses||[]).concat(remote.expenses||[]).forEach(function(x){ if(x&&x.id){ var e=by[x.id]; if(!e || (+x.mt||0)>=(+e.mt||0)) by[x.id]=x; } });
   var exp=[]; for(var id in by){ if(!del[id]) exp.push(by[id]); }
   S.expenses=exp; S.deleted=Object.keys(del);
@@ -749,8 +759,53 @@ function mergeDoc(remote){
 }
 function localDoc(){ return {people:S.people, expenses:S.expenses, deleted:S.deleted||[],
   locked:!!S.locked, lockedBy:S.lockedBy||"", lockAt:+S.lockAt||0, hotels:S.hotels||[], payments:S.payments||[],
-  pinHash:S.pinHash||"", pinAt:+S.pinAt||0, partShares:S.partShares||{}, updatedAt:Date.now()}; }
+  pinHash:S.pinHash||"", pinAt:+S.pinAt||0, partShares:S.partShares||{},
+  trash:S.trash||{}, delAt:S.delAt||{}, undelAt:S.undelAt||{}, updatedAt:Date.now()}; }
 function cacheTrip(){ lset("tripCache", localDoc()); }
+
+/* ===== CORBEILLE : une suppression garde son détail et peut être restaurée =====
+   Règle de fusion « dernier qui agit gagne » : un id est supprimé si delAt[id] > undelAt[id].
+   Les anciens tombstones (liste `deleted` sans date) valent delAt=1 -> restaurables. */
+function isDeletedId(id){
+  var d=(S.delAt&&+S.delAt[id])||((S.deleted||[]).indexOf(id)>=0?1:0);
+  var u=(S.undelAt&&+S.undelAt[id])||0;
+  return d>u;
+}
+function trashExpense(x){
+  if(!x||!x.id) return;
+  var now=Date.now();
+  S.trash=S.trash||{}; S.delAt=S.delAt||{};
+  S.trash[x.id]={kind:"exp", item:JSON.parse(JSON.stringify(x)), tAt:now, tBy:S.me||""};
+  S.delAt[x.id]=now;
+  if(S.deleted.indexOf(x.id)<0) S.deleted.push(x.id);
+  S.expenses=S.expenses.filter(function(y){ return y.id!==x.id; });
+}
+function trashPayment(p){
+  if(!p||!p.id) return;
+  var now=Date.now(), key="P:"+p.id;
+  S.trash=S.trash||{}; S.delAt=S.delAt||{};
+  S.trash[key]={kind:"pay", item:JSON.parse(JSON.stringify(p)), tAt:now, tBy:S.me||""};
+  S.delAt[key]=now;
+  if(S.deleted.indexOf(key)<0) S.deleted.push(key);
+  S.payments=(S.payments||[]).filter(function(q){ return q.id!==p.id; });
+}
+/* ce qui est ACTUELLEMENT supprimé et dont on a le détail, du plus récent au plus ancien */
+function trashItems(){
+  var out=[], tr=S.trash||{};
+  Object.keys(tr).forEach(function(k){ var tt=tr[k]; if(tt&&tt.item&&isDeletedId(k)) out.push({key:k, kind:tt.kind, item:tt.item, tAt:+tt.tAt||0, tBy:tt.tBy||""}); });
+  out.sort(function(a,b){ return b.tAt-a.tAt; });
+  return out;
+}
+function restoreFromTrash(key){
+  var tt=(S.trash||{})[key]; if(!tt||!tt.item) return false;
+  var now=Date.now();
+  S.undelAt=S.undelAt||{}; S.undelAt[key]=now;
+  S.deleted=(S.deleted||[]).filter(function(id){ return id!==key; });
+  var it=JSON.parse(JSON.stringify(tt.item)); it.mt=now;
+  if(tt.kind==="pay"){ S.payments=(S.payments||[]).filter(function(q){return q.id!==it.id;}); S.payments.push(it); }
+  else { S.expenses=S.expenses.filter(function(y){return y.id!==it.id;}); S.expenses.push(it); }
+  return true;
+}
 
 /* y a-t-il de vraies données sur cet appareil ? */
 function hasRealData(){ return (S.expenses&&S.expenses.length) || (S.hotels&&S.hotels.length) || (S.people&&S.people.length>1); }
@@ -1171,6 +1226,8 @@ function renderExp(){
     "<button id='shareBtn' style=\""+lnk+"\">"+t("shareBook")+"</button> · "+
     "<button id='joinBtn2' style=\""+lnk+"\">"+t("joinBook")+"</button>"+
     (S.me?" · "+t("onThisPhone")+" <b style='color:var(--text)'>"+esc(S.me)+"</b>.":"");
+  var nTr=trashItems().length;                    // bouton corbeille : affiche combien d'éléments sont restaurables
+  var tb=$("trashBtn"); if(tb) tb.textContent="🗑️ "+t("trashBtn")+(nTr?" ("+nTr+")":"");
 }
 
 $("history").addEventListener("click", function(e){
@@ -1181,8 +1238,8 @@ $("history").addEventListener("click", function(e){
   var x=S.expenses.filter(function(y){return y.id===id})[0];
   if(S.locked){ toast(t("tAccountsLocked")); return; }
   if(!confirm(fmt(t("confirmDelete"),{l:(x&&x.label)||t("thisExpense")}))) return;
-  S.expenses=S.expenses.filter(function(y){return y.id!==id});
-  if(S.deleted.indexOf(id)<0) S.deleted.push(id);   // tombstone -> ne réapparaît pas à la sync
+  if(x) trashExpense(x);                                          // -> corbeille (détail conservé, restaurable)
+  else { S.expenses=S.expenses.filter(function(y){return y.id!==id}); if(S.deleted.indexOf(id)<0) S.deleted.push(id); }
   saveTrip().then(renderExp).catch(function(){ toast(t("tDeletedOffline")); });
   renderExp();
 });
@@ -1790,8 +1847,7 @@ function openEditPayment(pid){
     showSettle();
   });
   $("epDel").addEventListener("click", function(){
-    S.payments=(S.payments||[]).filter(function(x){ return x.id!==pid; });
-    if(S.deleted.indexOf("P:"+pid)<0) S.deleted.push("P:"+pid);   // tombstone : ne revient pas par la sync
+    trashPayment(pay);                                              // -> corbeille (restaurable)
     renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){});
     showSettle();
   });
@@ -1866,14 +1922,14 @@ function showSettle(){
     var un=e.target.closest(".rbUndo"); if(un){
       if(!confirm(t("rbUndo"))) return;
       var pid=un.dataset.pid;
-      S.payments=(S.payments||[]).filter(function(x){ return x.id!==pid; });
-      if(S.deleted.indexOf("P:"+pid)<0) S.deleted.push("P:"+pid);
+      var pp=(S.payments||[]).filter(function(x){ return x.id===pid; })[0];
+      if(pp) trashPayment(pp); else if(S.deleted.indexOf("P:"+pid)<0) S.deleted.push("P:"+pid);   // -> corbeille
       renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){}); showSettle();
       return;
     }
   });
   var rs=$("stReset"); if(rs) rs.addEventListener("click", function(){
-    (S.payments||[]).forEach(function(p){ if(p&&p.id && S.deleted.indexOf("P:"+p.id)<0) S.deleted.push("P:"+p.id); });
+    (S.payments||[]).slice().forEach(function(p){ if(p&&p.id) trashPayment(p); });   // -> corbeille (restaurables un par un)
     S.payments=[]; renderExp(); saveTrip().then(function(){renderExp();}).catch(function(){}); showSettle();
   });
   $("stChange").addEventListener("click", function(){ localStorage.removeItem("settlePin"); S.pinHash=""; S.pinAt=Date.now(); saveTrip().catch(function(){}); cacheTrip(); settleUnlocked=false; closeSheet(); unlockPrivate(showSettle); });
@@ -2014,7 +2070,7 @@ function openHotelDetail(key){
   $("hBack").addEventListener("click", showHotels);
   var del=$("hDel"); if(del) del.addEventListener("click", function(){
     if(!confirm(t("hdDelHotel")+" ?")) return;
-    origIds.forEach(function(id){ S.expenses=S.expenses.filter(function(x){return x.id!==id;}); if(S.deleted.indexOf(id)<0) S.deleted.push(id); });
+    origIds.forEach(function(id){ var ex=S.expenses.filter(function(x){return x.id===id;})[0]; if(ex) trashExpense(ex); else if(S.deleted.indexOf(id)<0) S.deleted.push(id); });   // -> corbeille
     saveHotels(); showHotels();
   });
   $("hSave").addEventListener("click", function(){
@@ -2033,7 +2089,7 @@ function openHotelDetail(key){
       var ex=S.expenses.filter(function(x){return x.id===rm.id;})[0];
       if(ex){ for(var kk in data) ex[kk]=data[kk]; } else { data.id=rm.id; S.expenses.push(data); }
     });
-    origIds.forEach(function(id){ if(!kept[id]){ S.expenses=S.expenses.filter(function(x){return x.id!==id;}); if(S.deleted.indexOf(id)<0) S.deleted.push(id); } });
+    origIds.forEach(function(id){ if(!kept[id]){ var ex=S.expenses.filter(function(x){return x.id===id;})[0]; if(ex) trashExpense(ex); else if(S.deleted.indexOf(id)<0) S.deleted.push(id); } });   // -> corbeille
     if(!made){ toast(t("roomsNeed")); return; }
     saveHotels(); showHotels();
   });
@@ -2082,8 +2138,8 @@ function openDriver(exp){
   var od=$("dOther"); if(od) od.addEventListener("click", function(){ openAddExpense({cat:"driver"}); });
   var dd2=$("dDel"); if(dd2) dd2.addEventListener("click", function(){
     if(!confirm(t("confirmDelete").replace("{l}",exp.label||""))) return;
-    S.expenses=S.expenses.filter(function(y){return y.id!==exp.id;});
-    if(S.deleted.indexOf(exp.id)<0) S.deleted.push(exp.id);
+    var curX=S.expenses.filter(function(y){return y.id===exp.id;})[0]||exp;
+    trashExpense(curX);                                             // -> corbeille (restaurable)
     closeSheet(); renderExp(); pullThenSave();
   });
 }
@@ -2346,6 +2402,40 @@ document.addEventListener("click", function(e){
   if(e.target.id==="joinBtn2"){ openJoin(); return; }
   if(e.target.id==="codeBtn"){ openShare(); return; }   // compat ancien libellé
 });
+
+/* ---- corbeille : suppressions conservées avec leur détail, restaurables d'un appui ---- */
+function openTrash(){
+  var items=trashItems(), C=S.expCur, EU=CUR[C]||CUR.EUR;
+  var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
+  var body = items.length ? items.map(function(it){
+    var x=it.item, isPay=(it.kind==="pay");
+    var title = isPay
+      ? ("💵 "+t("trashPayment")+" : "+esc(x.from)+" → "+esc(x.to))
+      : (catIcon(x.cat)+" "+esc(x.hotel ? (x.hotel+(x.label?" — "+x.label:"")) : (x.label||t("thisExpense"))));
+    var when = x.ts ? new Date(x.ts).toLocaleDateString(locale(),{day:"2-digit",month:"short"}) : "";
+    var sub = isPay ? "" : (esc(x.who)+(when?" · "+when:""));
+    var delInfo = fmt(t("trashDeletedOn"),{d:new Date(it.tAt).toLocaleString(locale(),{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})})
+                + (it.tBy ? " · "+fmt(t("trashBy"),{n:esc(it.tBy)}) : "");
+    return '<div style="border:1px solid var(--line);border-left:3px solid var(--rose);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--slab2)">'+
+      '<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;min-width:0">'+
+        '<div style="font-weight:600;font-size:14px">'+title+'</div>'+
+        (sub?'<div style="font-size:11.5px;color:var(--muted)">'+sub+'</div>':'')+
+        '<div style="font-size:11px;color:var(--muted);margin-top:2px">'+delInfo+'</div></div>'+
+        '<b style="font-variant-numeric:tabular-nums;flex:none">'+mc(+x.eur||0)+'</b></div>'+
+      '<button class="btn ghost trRestore" data-key="'+esc(it.key)+'" style="margin-top:8px;font-size:13px;padding:10px">↩︎ '+t("trashRestore")+'</button></div>';
+  }).join("") : '<p class="empty">'+t("trashEmpty")+'</p>';
+  openSheet('<h3>🗑️ '+t("trashTitle")+'</h3><p class="note" style="margin:0 0 12px">'+esc(t("trashHint"))+'</p>'+body);
+  $("sheetIn").addEventListener("click", function(e){
+    var b=e.target.closest(".trRestore"); if(!b) return;
+    if(S.locked){ toast(t("tAccountsLocked")); return; }
+    if(restoreFromTrash(b.dataset.key)){
+      toast(t("trashRestored")); renderExp();
+      saveTrip().then(function(){renderExp();}).catch(function(){});
+      openTrash();
+    }
+  });
+}
+$("trashBtn").addEventListener("click", openTrash);
 
 /* ---- sync live : relit régulièrement quand l'onglet Dépenses est ouvert ---- */
 function tick(){
