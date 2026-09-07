@@ -6,7 +6,7 @@
 ## 1. Récupérer le code à publier
     git fetch origin claude/new-session-bl1z33
     git checkout claude/new-session-bl1z33
-    # le dossier à publier est : voyage-inde/public  (sw.js doit indiquer "voyage-inde-v48" ou plus)
+    # le dossier à publier est : voyage-inde/public  (sw.js doit indiquer "voyage-inde-v49" ou plus)
     grep -m1 "var CACHE" voyage-inde/public/sw.js
 
 ## 2. Publier sur surge (le compte surge est déjà connecté via ~/.netrc)
@@ -19,7 +19,7 @@ dire à la gérante que le réseau est bloqué et réessayer dans une autre sess
 
 ## 3. Vérifier — OBLIGATOIRE avant de dire « c'est en ligne »
     curl -s https://voyage-inde-sud.surge.sh/sw.js | grep "var CACHE"
-Doit afficher `voyage-inde-v48` (ou plus). Donner ce numéro à la gérante.
+Doit afficher `voyage-inde-v49` (ou plus). Donner ce numéro à la gérante.
 
 ## Ce que contient la v48 (déjà testé, ne pas re-modifier)
 - menu de monnaie (€, ₹, …) pour enregistrer / modifier un remboursement

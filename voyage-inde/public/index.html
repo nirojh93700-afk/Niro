@@ -308,6 +308,7 @@
       <button class="btn ghost" id="settleBtn" style="margin-top:8px">🔒 <span data-i18n="settleBtnLbl">Qui rembourse qui (privé)</span></button>
       <button class="btn ghost" id="lockBtn" style="margin-top:8px">Verrouiller les comptes</button>
       <button class="btn ghost" id="trashBtn" style="margin-top:8px;font-size:13px;padding:11px">🗑️ Corbeille</button>
+      <button class="btn" id="exportBtn" style="margin-top:8px">📄 Exporter tout en PDF</button>
       <button class="btn" id="syncBtn" style="margin-top:8px" data-i18n="sync">Synchroniser</button>
       <div class="row2" style="margin-top:8px">
         <button class="btn ghost" id="sendBtn" style="margin:0; font-size:13px; padding:12px" data-i18n="sendExp">Envoyer mes dépenses</button>
@@ -327,6 +328,7 @@
   </section>
 </div>
 
+<div id="reportView" hidden></div>
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet" id="sheet"><div class="grab"></div><div id="sheetIn"></div></div>
 <div class="toast" id="toast"></div>
@@ -447,7 +449,7 @@ var I18N = {
     pdOwesMeLine:"{a} doit {x}", pdIOweLine:"à {a} : {x}", pdWhoOwes:"Qui doit te rembourser", pdWhoIOwe:"À qui je dois",
     rbTitle:"{name} t'a remboursé", rbAmount:"Combien t'a-t-il donné ?", rbFull:"Tout : {x}", rbSave:"Valider le remboursement",
     rbRemaining:"Reste à rembourser : {x}", rbHistory:"Remboursements reçus", rbTotalDue:"Total à rembourser", rbTotalRecv:"Total à recevoir",
-    trashBtn:"Corbeille", trashTitle:"Corbeille", trashHint:"Tout ce qui a été supprimé est gardé ici avec son détail. Un appui sur « Restaurer » le remet dans le carnet, sur tous les téléphones.", trashEmpty:"La corbeille est vide.", trashDeletedOn:"Supprimé le {d}", trashBy:"par {n}", trashRestore:"Restaurer", trashRestored:"Restauré ✓", trashPayment:"Remboursement", rbLeft:"Reste", rbLeftRecv:"Reste à recevoir", rbAllPaid:"Tout est remboursé ✓", rbBtn:"{name} m'a remboursé", rbGot:"Déjà reçu", rbUndo:"Annuler ce remboursement ?",
+    exportBtn:"Exporter tout en PDF", exportTitle:"Carnet complet — Voyage Inde du Sud", exportSub:"Arrêté au", exportIST:"heures de l'Inde (IST)", exportTotal:"Total dépensé", exportCount:"Dépenses", exportReimb:"Déjà remboursé", exportRate:"Taux", exportS1:"Participants et soldes", exportS2:"Historique des remboursements — qui a donné combien", exportS3:"Les saisies, dans l'ordre où elles ont été entrées", exportS4:"Résumé par catégorie", exportS5:"Les hôtels, établissement par établissement", exportS6:"Détail par personne", exportS7:"Ce qui a été supprimé (corbeille)", exportS8:"Qui doit combien à qui — à ce jour", exportName:"Nom", partsWord:"Parts", exportPaid:"A payé", exportShare:"Sa part", exportReimbShort:"Remboursé", exportBalance:"Solde", exportOwes:"doit", exportToGet:"à recevoir", exportEven:"à jour", exportWhen:"Saisi le", exportFrom:"De", exportTo:"Vers", exportState:"État", exportCounted:"compté", exportDeleted:"supprimé", exportNone:"Aucun remboursement enregistré.", exportCashed:"TOTAL RÉELLEMENT ENCAISSÉ", exportEntered:"Saisi le", exportConcerned:"Concernés", exportTyped:"Saisi", exportNoName:"sans nom", exportArrival:"Arrivée le", exportBf:"petit déjeuner inclus", exportFor:"Pour", exportRoomsTotal:"Total des chambres", exportRealPaid:"Prix réel payé à l'hôtel", exportGap:"Écart", exportHotelsTotal:"TOTAL HÔTELS", exportNoDriver:"Aucun chauffeur dans le carnet : rien n'est compté pour lui.", exportShareTotal:"Sa part totale", exportReceived:"Remboursements reçus", exportToGetUp:"À RECEVOIR", exportEvenUp:"À JOUR", exportDeletedWhen:"Supprimé le", exportLeft:"Reste à régler", exportFooter:"Document généré depuis l'application le", exportClose:"Fermer", exportOpen:"Ouvrir dans Safari", exportSavePdf:"Enregistrer en PDF", exportHint:"Appuie sur « Enregistrer en PDF » : dans l'aperçu d'impression, utilise le bouton Partager pour enregistrer le PDF ou l'envoyer. Si rien ne s'ouvre, appuie sur « Ouvrir dans Safari » puis Partager → Imprimer / PDF.", exportOpenFail:"Impossible d'ouvrir — utilise « Enregistrer en PDF ».", trashBtn:"Corbeille", trashTitle:"Corbeille", trashHint:"Tout ce qui a été supprimé est gardé ici avec son détail. Un appui sur « Restaurer » le remet dans le carnet, sur tous les téléphones.", trashEmpty:"La corbeille est vide.", trashDeletedOn:"Supprimé le {d}", trashBy:"par {n}", trashRestore:"Restaurer", trashRestored:"Restauré ✓", trashPayment:"Remboursement", rbLeft:"Reste", rbLeftRecv:"Reste à recevoir", rbAllPaid:"Tout est remboursé ✓", rbBtn:"{name} m'a remboursé", rbGot:"Déjà reçu", rbUndo:"Annuler ce remboursement ?",
     stPerPerson:"Détail par personne", stMustPay:"TOTAL à rembourser", stToReceive:"TOTAL à recevoir", stSquare:"Rien à rembourser ✓", stPaidForOthers:"A avancé pour les autres", stAlreadyReimb:"Déjà remboursé", stTransfers:"Qui rembourse qui",
     bfLabel:"Petit déjeuner", bfInc:"🥐 Petit déjeuner inclus", bfNone:"Sans petit déjeuner", bfAsk:"Petit déjeuner inclus ?",
     settleBtnLbl:"Qui rembourse qui (privé)", settleTitle:"Qui rembourse qui",
@@ -544,7 +546,7 @@ var I18N = {
     pdOwesMeLine:"{a} owes {x}", pdIOweLine:"to {a}: {x}", pdWhoOwes:"Who owes you", pdWhoIOwe:"Who I owe",
     rbTitle:"{name} paid you back", rbAmount:"How much did they give you?", rbFull:"All: {x}", rbSave:"Confirm payment",
     rbRemaining:"Left to pay back: {x}", rbHistory:"Payments received", rbTotalDue:"Total to pay back", rbTotalRecv:"Total to receive",
-    trashBtn:"Trash", trashTitle:"Trash", trashHint:"Everything deleted is kept here with its details. Tap “Restore” to put it back in the book, on every phone.", trashEmpty:"The trash is empty.", trashDeletedOn:"Deleted on {d}", trashBy:"by {n}", trashRestore:"Restore", trashRestored:"Restored ✓", trashPayment:"Payment", rbLeft:"Left", rbLeftRecv:"Left to receive", rbAllPaid:"Fully paid back ✓", rbBtn:"{name} paid me back", rbGot:"Already received", rbUndo:"Undo this payment?",
+    exportBtn:"Export everything to PDF", exportTitle:"Full book — South India trip", exportSub:"As of", exportIST:"India time (IST)", exportTotal:"Total spent", exportCount:"Expenses", exportReimb:"Already paid back", exportRate:"Rate", exportS1:"Participants and balances", exportS2:"Payment history — who gave how much", exportS3:"Entries, in the order they were typed", exportS4:"Summary by category", exportS5:"Hotels, one by one", exportS6:"Detail per person", exportS7:"Deleted items (trash)", exportS8:"Who owes whom — today", exportName:"Name", partsWord:"Shares", exportPaid:"Paid", exportShare:"Their share", exportReimbShort:"Paid back", exportBalance:"Balance", exportOwes:"owes", exportToGet:"to receive", exportEven:"even", exportWhen:"Entered on", exportFrom:"From", exportTo:"To", exportState:"State", exportCounted:"counted", exportDeleted:"deleted", exportNone:"No payment recorded.", exportCashed:"TOTAL ACTUALLY RECEIVED", exportEntered:"Entered on", exportConcerned:"Concerned", exportTyped:"Typed", exportNoName:"no name", exportArrival:"Arrival", exportBf:"breakfast included", exportFor:"For", exportRoomsTotal:"Rooms total", exportRealPaid:"Real price paid to the hotel", exportGap:"Gap", exportHotelsTotal:"HOTELS TOTAL", exportNoDriver:"No driver in the book: nothing is counted for it.", exportShareTotal:"Total share", exportReceived:"Payments received", exportToGetUp:"TO RECEIVE", exportEvenUp:"EVEN", exportDeletedWhen:"Deleted on", exportLeft:"Left to settle", exportFooter:"Generated from the app on", exportClose:"Close", exportOpen:"Open in Safari", exportSavePdf:"Save as PDF", exportHint:"Tap “Save as PDF”: in the print preview use Share to save or send the PDF. If nothing opens, tap “Open in Safari” then Share → Print / PDF.", exportOpenFail:"Could not open — use “Save as PDF”.", trashBtn:"Trash", trashTitle:"Trash", trashHint:"Everything deleted is kept here with its details. Tap “Restore” to put it back in the book, on every phone.", trashEmpty:"The trash is empty.", trashDeletedOn:"Deleted on {d}", trashBy:"by {n}", trashRestore:"Restore", trashRestored:"Restored ✓", trashPayment:"Payment", rbLeft:"Left", rbLeftRecv:"Left to receive", rbAllPaid:"Fully paid back ✓", rbBtn:"{name} paid me back", rbGot:"Already received", rbUndo:"Undo this payment?",
     stPerPerson:"Per-person detail", stMustPay:"TOTAL to pay back", stToReceive:"TOTAL to receive", stSquare:"Nothing to pay back ✓", stPaidForOthers:"Advanced for others", stAlreadyReimb:"Already reimbursed", stTransfers:"Who pays whom",
     bfLabel:"Breakfast", bfInc:"🥐 Breakfast included", bfNone:"No breakfast", bfAsk:"Breakfast included?",
     settleBtnLbl:"Who owes whom (private)", settleTitle:"Who owes whom",
@@ -641,7 +643,7 @@ var I18N = {
     pdOwesMeLine:"{a} தர வேண்டும் {x}", pdIOweLine:"{a}-க்கு: {x}", pdWhoOwes:"யார் உனக்கு தர வேண்டும்", pdWhoIOwe:"நான் யாருக்கு தர வேண்டும்",
     rbTitle:"{name} திருப்பிக் கொடுத்தார்", rbAmount:"எவ்வளவு கொடுத்தார்?", rbFull:"முழுவதும்: {x}", rbSave:"உறுதிசெய்",
     rbRemaining:"இன்னும் தர வேண்டியது: {x}", rbHistory:"பெற்ற தொகைகள்", rbTotalDue:"மொத்தம் தர வேண்டியது", rbTotalRecv:"மொத்தம் பெற வேண்டியது",
-    trashBtn:"குப்பைத் தொட்டி", trashTitle:"குப்பைத் தொட்டி", trashHint:"நீக்கப்பட்ட அனைத்தும் விவரங்களுடன் இங்கே வைக்கப்படும். « மீட்டெடு » அழுத்தினால் எல்லா தொலைபேசிகளிலும் புத்தகத்திற்குத் திரும்பும்.", trashEmpty:"குப்பைத் தொட்டி காலியாக உள்ளது.", trashDeletedOn:"{d} அன்று நீக்கப்பட்டது", trashBy:"{n} ஆல்", trashRestore:"மீட்டெடு", trashRestored:"மீட்டெடுக்கப்பட்டது ✓", trashPayment:"திருப்பிச் செலுத்தல்", rbLeft:"மீதம்", rbLeftRecv:"பெற மீதம்", rbAllPaid:"முழுவதும் திருப்பியது ✓", rbBtn:"{name} திருப்பிக் கொடுத்தார்", rbGot:"பெற்றது", rbUndo:"இதை ரத்து செய்யவா?",
+    exportBtn:"அனைத்தையும் PDF ஆக ஏற்றுமதி", exportTitle:"முழுப் புத்தகம் — தென்னிந்தியப் பயணம்", exportSub:"நிலவரம்", exportIST:"இந்திய நேரம் (IST)", exportTotal:"மொத்தச் செலவு", exportCount:"செலவுகள்", exportReimb:"ஏற்கனவே திருப்பியது", exportRate:"விகிதம்", exportS1:"பங்கேற்பாளர்கள் மற்றும் இருப்பு", exportS2:"திருப்பிச் செலுத்தல் வரலாறு — யார் எவ்வளவு கொடுத்தார்", exportS3:"உள்ளிட்ட வரிசையில் பதிவுகள்", exportS4:"வகை வாரியான சுருக்கம்", exportS5:"ஹோட்டல்கள், ஒவ்வொன்றாக", exportS6:"நபர் வாரியான விவரம்", exportS7:"நீக்கப்பட்டவை (குப்பைத் தொட்டி)", exportS8:"யார் யாருக்கு எவ்வளவு — இன்று", exportName:"பெயர்", partsWord:"பங்குகள்", exportPaid:"கட்டியது", exportShare:"அவரது பங்கு", exportReimbShort:"திருப்பியது", exportBalance:"இருப்பு", exportOwes:"தர வேண்டும்", exportToGet:"பெற வேண்டும்", exportEven:"சரி", exportWhen:"உள்ளிட்டது", exportFrom:"இருந்து", exportTo:"க்கு", exportState:"நிலை", exportCounted:"கணக்கிடப்பட்டது", exportDeleted:"நீக்கப்பட்டது", exportNone:"திருப்பிச் செலுத்தல் இல்லை.", exportCashed:"உண்மையில் பெற்ற மொத்தம்", exportEntered:"உள்ளிட்டது", exportConcerned:"சம்பந்தப்பட்டவர்கள்", exportTyped:"உள்ளிட்ட தொகை", exportNoName:"பெயர் இல்லை", exportArrival:"வருகை", exportBf:"காலை உணவு உட்பட", exportFor:"யாருக்கு", exportRoomsTotal:"அறைகள் மொத்தம்", exportRealPaid:"ஹோட்டலுக்கு உண்மையில் கட்டியது", exportGap:"வித்தியாசம்", exportHotelsTotal:"ஹோட்டல்கள் மொத்தம்", exportNoDriver:"புத்தகத்தில் ஓட்டுநர் இல்லை: அவருக்கு எதுவும் கணக்கிடப்படவில்லை.", exportShareTotal:"மொத்தப் பங்கு", exportReceived:"பெற்ற திருப்பிச் செலுத்தல்கள்", exportToGetUp:"பெற வேண்டியது", exportEvenUp:"சரி", exportDeletedWhen:"நீக்கப்பட்டது", exportLeft:"தர மீதம்", exportFooter:"செயலியிலிருந்து உருவாக்கப்பட்டது", exportClose:"மூடு", exportOpen:"Safari-இல் திற", exportSavePdf:"PDF ஆகச் சேமி", exportHint:"« PDF ஆகச் சேமி » அழுத்தவும்: அச்சு முன்னோட்டத்தில் பகிர் மூலம் PDF ஐச் சேமிக்கவும் அல்லது அனுப்பவும். எதுவும் திறக்கவில்லை என்றால் « Safari-இல் திற » பின் பகிர் → அச்சு / PDF.", exportOpenFail:"திறக்க முடியவில்லை — « PDF ஆகச் சேமி » பயன்படுத்தவும்.", trashBtn:"குப்பைத் தொட்டி", trashTitle:"குப்பைத் தொட்டி", trashHint:"நீக்கப்பட்ட அனைத்தும் விவரங்களுடன் இங்கே வைக்கப்படும். « மீட்டெடு » அழுத்தினால் எல்லா தொலைபேசிகளிலும் புத்தகத்திற்குத் திரும்பும்.", trashEmpty:"குப்பைத் தொட்டி காலியாக உள்ளது.", trashDeletedOn:"{d} அன்று நீக்கப்பட்டது", trashBy:"{n} ஆல்", trashRestore:"மீட்டெடு", trashRestored:"மீட்டெடுக்கப்பட்டது ✓", trashPayment:"திருப்பிச் செலுத்தல்", rbLeft:"மீதம்", rbLeftRecv:"பெற மீதம்", rbAllPaid:"முழுவதும் திருப்பியது ✓", rbBtn:"{name} திருப்பிக் கொடுத்தார்", rbGot:"பெற்றது", rbUndo:"இதை ரத்து செய்யவா?",
     stPerPerson:"நபர் வாரியாக விவரம்", stMustPay:"மொத்தம் திருப்பித் தர வேண்டியது", stToReceive:"மொத்தம் பெற வேண்டியது", stSquare:"திருப்பித் தர எதுவும் இல்லை ✓", stPaidForOthers:"மற்றவர்களுக்காக முன்பணம்", stAlreadyReimb:"ஏற்கனவே திருப்பியது", stTransfers:"யார் யாருக்கு தருவது",
     bfLabel:"காலை உணவு", bfInc:"🥐 காலை உணவு உள்ளடங்கும்", bfNone:"காலை உணவு இல்லை", bfAsk:"காலை உணவு உள்ளதா?",
     settleBtnLbl:"யார் யாருக்கு (தனிப்பட்டது)", settleTitle:"யார் யாருக்கு தர வேண்டும்",
@@ -2437,6 +2439,136 @@ function openTrash(){
   });
 }
 $("trashBtn").addEventListener("click", openTrash);
+
+/* ---- EXPORT PDF : à l'instant où on appuie, TOUT le carnet (dépenses, hôtels, historique des
+   remboursements, par personne, corbeille, qui doit à qui). Heures = INDE (IST). ---- */
+var RV_IST="Asia/Kolkata";
+function rvE(v){ return nf(+v||0,2)+" €"; }
+function rvR(v){ v=+v||0; return Math.abs(v-Math.round(v))<.005 ? nf(v,0) : nf(v,2); }
+function rvD(ts){ return ts? new Date(ts).toLocaleDateString(locale(),{timeZone:RV_IST,day:"2-digit",month:"2-digit",year:"numeric"}) : ""; }
+function rvDH(ts){ return ts? new Date(ts).toLocaleString(locale(),{timeZone:RV_IST,day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : ""; }
+function rvDHL(ts){ return ts? new Date(ts).toLocaleString(locale(),{timeZone:RV_IST,day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}) : ""; }
+function rvConc(x){
+  var sp=x.split||{}, m=sp.mode||"equal";
+  if(m==="exact"){ var a=sp.amounts||{}; return S.people.filter(function(p){return +a[p]>0;}); }
+  if(m==="shares"){ var s=sp.shares||{}; return S.people.filter(function(p){return +s[p]>0;}); }
+  return (sp.among&&sp.among.length)? sp.among : S.people.slice();
+}
+var RV_CSS='<style>'+
+ '#reportView{position:fixed;inset:0;z-index:9999;background:#fff;color:#16241f;overflow:auto;-webkit-overflow-scrolling:touch;font:12px/1.5 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}'+
+ '.rv-bar{position:sticky;top:0;z-index:2;display:flex;gap:8px;padding:10px 12px;background:#0e3b3a;color:#fff;align-items:center}'+
+ '.rv-bar button{font:inherit;font-size:13px;font-weight:600;border:0;border-radius:10px;padding:9px 12px;cursor:pointer;background:rgba(255,255,255,.14);color:#fff}'+
+ '.rv-bar button.pri{background:#f0b429;color:#16241f}'+
+ '.rv-doc{padding:14px 14px 40px;max-width:820px;margin:0 auto}'+
+ '.rv-doc h1{font-size:21px;margin:0 0 3px;color:#0e3b3a}.rv-doc h2{font-size:15px;margin:20px 0 8px;color:#0e3b3a;border-bottom:2.5px solid #f0b429;padding-bottom:4px;page-break-after:avoid}.rv-doc h3{font-size:12.5px;margin:12px 0 5px;color:#0e3b3a;page-break-after:avoid}'+
+ '.rv-doc .sub{color:#5d6b66;font-size:11px}.rv-doc table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px}'+
+ '.rv-doc th{text-align:left;font-weight:600;color:#5d6b66;border-bottom:1px solid #cfd8d4;padding:5px 6px;font-size:10px;text-transform:uppercase}'+
+ '.rv-doc td{padding:5px 6px;border-bottom:1px solid #eceff0;vertical-align:top}.rv-doc td.n,.rv-doc th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}'+
+ '.rv-doc tr.tot td{border-top:2px solid #0e3b3a;border-bottom:none;font-weight:700;padding-top:7px}.rv-doc tr.del td{color:#9aa5a0;text-decoration:line-through}.rv-doc tr.del td.tag{text-decoration:none}'+
+ '.rv-doc .tag{font-size:9.5px;padding:1px 7px;border-radius:20px;white-space:nowrap}.rv-doc .ok{background:#e6f5f1;color:#0f8b7e}.rv-doc .no{background:#fdecea;color:#c0392b}'+
+ '.rv-doc .card{border:1px solid #d7dedb;border-radius:9px;padding:10px 12px;margin:9px 0;page-break-inside:avoid}.rv-doc .card.h{border-left:4px solid #f0b429}'+
+ '.rv-doc .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}.rv-doc .pos{color:#c0392b;font-weight:700}.rv-doc .neg{color:#0f8b7e;font-weight:700}.rv-doc .muted{color:#7b8781}'+
+ '.rv-doc .head{border-bottom:3px solid #0e3b3a;padding-bottom:10px;margin-bottom:6px}.rv-doc .kpi{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}.rv-doc .kpi div{flex:1 1 120px;border:1px solid #d7dedb;border-radius:9px;padding:8px 10px}.rv-doc .kpi b{display:block;font-size:16px;color:#0e3b3a}.rv-doc .kpi span{font-size:9.5px;color:#5d6b66;text-transform:uppercase}'+
+ '.rv-doc .note{background:#fbf7ec;border-left:3px solid #f0b429;padding:7px 10px;border-radius:0 7px 7px 0;font-size:10.5px;margin:8px 0}.rv-doc .pg{page-break-before:always}'+
+ '@media print{body>*:not(#reportView){display:none!important}#reportView{position:static!important;overflow:visible!important;height:auto!important}.noprint{display:none!important}@page{size:A4;margin:14mm 12mm}}'+
+ '</style>';
+function buildReport(){
+  var P=S.people, all=EXP(), pays=S.payments||[], A=[];
+  var col=function(p){ return color(p); };
+  var TOTAL=0; all.forEach(function(x){ TOTAL+=(+x.eur||0); });
+  var adj=paymentAdj();
+  var bil={}; P.forEach(function(p){
+    var paid=0, part=0; all.forEach(function(x){ if(x.who===p) paid+=(+x.eur||0); part+=owedShare(x,p); });
+    var rb=0, rc=0; pays.forEach(function(q){ if(q.from===p) rb+=(+q.eur||0); if(q.to===p) rc+=(+q.eur||0); });
+    bil[p]={paid:paid, part:part, rb:rb, rc:rc, solde:part-paid-rb+rc};
+  });
+  var totRemb=0; pays.forEach(function(q){ totRemb+=(+q.eur||0); });
+  var nowTxt=rvDHL(Date.now());
+  A.push('<div class="head"><h1>'+esc(t("exportTitle"))+'</h1><div class="sub">'+esc(t("exportSub"))+' <b>'+nowTxt+'</b> · '+esc(t("exportIST"))+'</div></div>');
+  A.push('<div class="kpi"><div><span>'+esc(t("exportTotal"))+'</span><b>'+rvE(TOTAL)+'</b></div><div><span>'+esc(t("exportCount"))+'</span><b>'+all.length+'</b></div><div><span>'+esc(t("exportReimb"))+'</span><b>'+rvE(totRemb)+'</b></div><div><span>'+esc(t("exportRate"))+'</span><b>1 € = '+rvR(RATES.INR)+' ₹</b></div></div>');
+  // 1 participants
+  A.push('<h2>1. '+esc(t("exportS1"))+'</h2><table><tr><th>'+esc(t("exportName"))+'</th><th class="n">'+esc(t("partsWord"))+'</th><th class="n">'+esc(t("exportPaid"))+'</th><th class="n">'+esc(t("exportShare"))+'</th><th class="n">'+esc(t("exportReimbShort"))+'</th><th class="n">'+esc(t("exportBalance"))+'</th></tr>');
+  var sPaid=0,sPart=0;
+  P.forEach(function(p){ var b=bil[p], s=b.solde; sPaid+=b.paid; sPart+=b.part;
+    var cls=s>0.005?"pos":(s<-0.005?"neg":"muted"), txt=s>0.005?(t("exportOwes")+" "+rvE(s)):(s<-0.005?(t("exportToGet")+" "+rvE(-s)):t("exportEven"));
+    A.push('<tr><td><span class="dot" style="background:'+col(p)+'"></span><b>'+esc(p)+'</b></td><td class="n">'+sharesOf(p)+'</td><td class="n">'+rvE(b.paid)+'</td><td class="n">'+rvE(b.part)+'</td><td class="n">'+(b.rb>0.005?rvE(b.rb):"—")+'</td><td class="n '+cls+'">'+txt+'</td></tr>'); });
+  A.push('<tr class="tot"><td>TOTAL</td><td></td><td class="n">'+rvE(sPaid)+'</td><td class="n">'+rvE(sPart)+'</td><td class="n">'+rvE(totRemb)+'</td><td></td></tr></table>');
+  // 2 historique remboursements (actifs + supprimés)
+  var histo=pays.map(function(q){ return {q:q, ok:true}; }).concat(trashItems().filter(function(it){return it.kind==="pay";}).map(function(it){ return {q:it.item, ok:false}; }));
+  histo.sort(function(a,b){ return (a.q.ts||0)-(b.q.ts||0); });
+  A.push('<h2>2. '+esc(t("exportS2"))+'</h2><table><tr><th>'+esc(t("exportWhen"))+'</th><th>'+esc(t("exportFrom"))+'</th><th>'+esc(t("exportTo"))+'</th><th class="n">'+esc(t("amount"))+'</th><th>'+esc(t("exportState"))+'</th></tr>');
+  histo.forEach(function(h){ var q=h.q;
+    A.push('<tr class="'+(h.ok?"":"del")+'"><td>'+rvDHL(q.ts)+'</td><td><span class="dot" style="background:'+col(q.from)+'"></span>'+esc(q.from)+'</td><td>'+esc(q.to)+'</td><td class="n">'+rvE(q.eur)+((q.cur&&q.cur!=="EUR"&&+q.amount>0)?' <span class="muted">('+rvR(q.amount)+' '+esc(q.cur)+')</span>':'')+'</td><td class="tag"><span class="tag '+(h.ok?"ok":"no")+'">'+esc(h.ok?t("exportCounted"):t("exportDeleted"))+'</span></td></tr>'); });
+  if(!histo.length) A.push('<tr><td colspan="5" class="muted">'+esc(t("exportNone"))+'</td></tr>');
+  A.push('<tr class="tot"><td colspan="3">'+esc(t("exportCashed"))+'</td><td class="n">'+rvE(totRemb)+'</td><td></td></tr></table>');
+  // 3 saisies manuelles chronologiques
+  var man=S.expenses.filter(function(x){return x.cat!=="hotel";}).sort(function(a,b){return (a.mt||a.ts||0)-(b.mt||b.ts||0);});
+  A.push('<div class="pg"></div><h2>3. '+esc(t("exportS3"))+'</h2><table><tr><th>'+esc(t("exportEntered"))+'</th><th>'+esc(t("forWhat"))+'</th><th>'+esc(t("catField"))+'</th><th>'+esc(t("whoPaid"))+'</th><th>'+esc(t("exportConcerned"))+'</th><th class="n">'+esc(t("exportTyped"))+'</th><th class="n">€</th></tr>');
+  var manTot=0;
+  man.forEach(function(x){ var cc=rvConc(x); manTot+=(+x.eur||0);
+    A.push('<tr><td>'+rvDH(x.mt||x.ts)+'</td><td>'+(x.label?esc(x.label):'<i class="muted">'+esc(t("exportNoName"))+'</i>')+'</td><td>'+catIcon(x.cat)+' '+esc(catLabel(x.cat))+'</td><td>'+esc(x.who)+'</td><td class="muted" style="font-size:10px">'+esc(cc.length===P.length?t("everyone"):cc.join(", "))+'</td><td class="n muted">'+rvR(x.amount)+' '+esc(x.cur)+'</td><td class="n">'+rvE(x.eur)+'</td></tr>'); });
+  A.push('<tr class="tot"><td colspan="6">TOTAL</td><td class="n">'+rvE(manTot)+'</td></tr></table>');
+  // 4 par catégorie
+  var bc={}, bo=[]; all.forEach(function(x){ var c=x.cat||"other"; if(!bc[c]){bc[c]=[0,0];bo.push(c);} bc[c][0]++; bc[c][1]+=(+x.eur||0); });
+  bo.sort(function(a,b){return bc[b][1]-bc[a][1];});
+  A.push('<h2>4. '+esc(t("exportS4"))+'</h2><table><tr><th>'+esc(t("catField"))+'</th><th class="n">Nb</th><th class="n">'+esc(t("amount"))+'</th><th class="n">%</th></tr>');
+  bo.forEach(function(c){ A.push('<tr><td>'+catIcon(c)+' '+esc(catLabel(c))+'</td><td class="n">'+bc[c][0]+'</td><td class="n">'+rvE(bc[c][1])+'</td><td class="n muted">'+(TOTAL?Math.round(100*bc[c][1]/TOTAL):0)+' %</td></tr>'); });
+  A.push('<tr class="tot"><td>TOTAL</td><td class="n">'+all.length+'</td><td class="n">'+rvE(TOTAL)+'</td><td class="n">100 %</td></tr></table>');
+  // 5 hôtels
+  var hg={}, ho=[]; all.forEach(function(x){ if(x.cat!=="hotel") return; var k=hotelKey(x)||"?"; if(!hg[k]){hg[k]=[];ho.push(k);} hg[k].push(x); });
+  ho.sort(function(a,b){ var ta=Math.min.apply(null,hg[a].map(function(y){return y.ts||8e15;})), tb=Math.min.apply(null,hg[b].map(function(y){return y.ts||8e15;})); return ta-tb; });
+  var thot=0, tn=0;
+  A.push('<div class="pg"></div><h2>5. '+esc(t("exportS5"))+'</h2>');
+  ho.forEach(function(k){ var rooms=hg[k], ts=Math.min.apply(null,rooms.map(function(y){return y.ts||8e15;})), nights=Math.max.apply(null,rooms.map(function(y){return +y.nights||0;})), bf=rooms.some(function(y){return y.bf;}), tot=0; rooms.forEach(function(y){tot+=(+y.eur||0);}); thot+=tot; tn+=nights;
+    var paidRoom=rooms.filter(function(y){return +y.paid>0;})[0], paid=paidRoom?+paidRoom.paid:0, pc=paidRoom?(paidRoom.paidCur||"EUR"):"EUR";
+    A.push('<div class="card h"><h3>'+esc(k)+'</h3><div class="sub">'+esc(t("exportArrival"))+' '+rvD(ts)+(nights?' · '+esc(nightsLabel(nights)):'')+(bf?' · 🥐 '+esc(t("exportBf")):'')+'</div><table><tr><th>'+esc(t("roomWord"))+'</th><th>'+esc(t("exportFor"))+'</th><th class="n">'+esc(t("amount"))+'</th></tr>');
+    rooms.slice().sort(function(a,b){return (a.label||"").localeCompare(b.label||"");}).forEach(function(y){ var occ=(y.split&&y.split.among&&y.split.among.length)?y.split.among.join(", "):t("everyone");
+      A.push('<tr><td>'+esc(y.label||t("roomWord"))+'</td><td class="muted">'+esc(occ)+'</td><td class="n">'+rvE(y.eur)+((y.cur&&y.cur!=="EUR")?' <span class="muted">('+rvR(y.amount)+' '+esc(y.cur)+')</span>':'')+'</td></tr>'); });
+    A.push('<tr class="tot"><td colspan="2">'+esc(t("exportRoomsTotal"))+'</td><td class="n">'+rvE(tot)+'</td></tr>');
+    if(paid>0){ var aS=0,eS=0; rooms.forEach(function(y){ if((y.cur||"EUR")===pc){ aS+=(+y.amount||0); eS+=(+y.eur||0); } }); var tx=eS>0?aS/eS:(pc==="INR"?RATES.INR:1), pe=paid/tx, ec=pe-tot;
+      A.push('<tr><td colspan="2" class="muted">'+esc(t("exportRealPaid"))+'</td><td class="n">'+rvE(pe)+(pc!=="EUR"?' <span class="muted">('+rvR(paid)+' '+esc(pc)+')</span>':'')+'</td></tr><tr><td colspan="2" class="muted">'+esc(t("exportGap"))+'</td><td class="n '+(ec>0.005?"pos":"neg")+'">'+(ec>0?"+":"")+rvE(ec)+'</td></tr>'); }
+    A.push('</table></div>'); });
+  A.push('<table><tr class="tot"><td>'+esc(t("exportHotelsTotal"))+' — '+ho.length+' · '+tn+' '+esc(t("nightsWord"))+'</td><td class="n">'+rvE(thot)+'</td></tr></table>');
+  if(!all.some(function(x){return x.cat==="driver";})) A.push('<div class="note">'+esc(t("exportNoDriver"))+'</div>');
+  // 6 par personne
+  A.push('<div class="pg"></div><h2>6. '+esc(t("exportS6"))+'</h2>');
+  P.forEach(function(p){ var b=bil[p], g={}, go=[]; all.forEach(function(x){ var v=owedShare(x,p); if(v>0.005){ var c=x.cat||"other"; if(!g[c]){g[c]=0;go.push(c);} g[c]+=v; } }); go.sort(function(a,b){return g[b]-g[a];});
+    A.push('<div class="card" style="border-left:4px solid '+col(p)+'"><h3 style="color:'+col(p)+'">'+esc(p)+' — '+sharesOf(p)+' '+esc(t("partsWord")).toLowerCase()+'</h3><table><tr><th>'+esc(t("catField"))+'</th><th class="n">'+esc(t("exportShare"))+'</th></tr>');
+    go.forEach(function(c){ A.push('<tr><td>'+catIcon(c)+' '+esc(catLabel(c))+'</td><td class="n">'+rvE(g[c])+'</td></tr>'); });
+    A.push('<tr class="tot"><td>'+esc(t("exportShareTotal"))+'</td><td class="n">'+rvE(b.part)+'</td></tr>');
+    if(b.paid>0.005) A.push('<tr><td class="muted">'+esc(t("pdAlreadyPaid"))+'</td><td class="n neg">− '+rvE(b.paid)+'</td></tr>');
+    if(b.rb>0.005) A.push('<tr><td class="muted">'+esc(t("pdAlreadyReimb"))+'</td><td class="n neg">− '+rvE(b.rb)+'</td></tr>');
+    if(b.rc>0.005) A.push('<tr><td class="muted">'+esc(t("exportReceived"))+'</td><td class="n">+ '+rvE(b.rc)+'</td></tr>');
+    var s=b.solde; A.push('<tr class="tot"><td>'+esc(s>0.005?t("pdRemains"):(s<-0.005?t("exportToGetUp"):t("exportEvenUp")))+'</td><td class="n '+(s>0.005?"pos":"neg")+'">'+(Math.abs(s)>0.005?rvE(Math.abs(s)):"—")+'</td></tr></table></div>'); });
+  // 7 corbeille (dépenses)
+  var trash=trashItems().filter(function(it){return it.kind!=="pay";});
+  A.push('<h2>7. '+esc(t("exportS7"))+'</h2><table><tr><th>'+esc(t("dateW"))+'</th><th>'+esc(t("forWhat"))+'</th><th>'+esc(t("whoPaid"))+'</th><th class="n">'+esc(t("amount"))+'</th><th>'+esc(t("exportDeletedWhen"))+'</th></tr>');
+  trash.forEach(function(it){ var x=it.item; A.push('<tr class="del"><td>'+rvD(x.ts)+'</td><td>'+esc(x.hotel?(x.hotel+(x.label?" — "+x.label:"")):(x.label||t("exportNoName")))+'</td><td>'+esc(x.who)+'</td><td class="n">'+rvE(x.eur)+'</td><td class="tag muted">'+rvDH(it.tAt)+(it.tBy?' · '+esc(it.tBy):'')+'</td></tr>'); });
+  if(!trash.length) A.push('<tr><td colspan="5" class="muted">'+esc(t("trashEmpty"))+'</td></tr>');
+  A.push('</table>');
+  // 8 qui doit à qui
+  var tr=settlements();
+  A.push('<h2>8. '+esc(t("exportS8"))+'</h2>');
+  if(tr.length){ A.push('<table><tr><th>'+esc(t("exportFrom"))+'</th><th>'+esc(t("exportTo"))+'</th><th class="n">'+esc(t("exportLeft"))+'</th></tr>'); var tt=0;
+    tr.forEach(function(o){ tt+=o.amount; A.push('<tr><td><span class="dot" style="background:'+col(o.from)+'"></span><b>'+esc(o.from)+'</b></td><td><span class="dot" style="background:'+col(o.to)+'"></span><b>'+esc(o.to)+'</b></td><td class="n pos">'+rvE(o.amount)+'</td></tr>'); });
+    A.push('<tr class="tot"><td colspan="2">TOTAL</td><td class="n">'+rvE(tt)+'</td></tr></table>'); }
+  else A.push('<p class="neg">'+esc(t("settleAllSquare"))+'</p>');
+  A.push('<div class="note">'+esc(t("exportFooter"))+' '+nowTxt+' — '+esc(t("exportIST"))+'</div>');
+  return A.join("");
+}
+function openExport(){
+  var doc=buildReport(), rv=$("reportView");
+  rv.innerHTML=RV_CSS+'<div class="rv-bar noprint"><button id="rvClose">✕ '+esc(t("exportClose"))+'</button><span style="flex:1"></span><button id="rvOpen">↗️ '+esc(t("exportOpen"))+'</button><button class="pri" id="rvPrint">🖨️ '+esc(t("exportSavePdf"))+'</button></div>'+
+    '<div class="note noprint" style="margin:10px 14px 0">'+esc(t("exportHint"))+'</div><div class="rv-doc">'+doc+'</div>';
+  rv.hidden=false; document.body.style.overflow="hidden"; rv.scrollTop=0;
+  $("rvClose").addEventListener("click", function(){ rv.hidden=true; rv.innerHTML=""; document.body.style.overflow=""; });
+  $("rvPrint").addEventListener("click", function(){ window.print(); });
+  $("rvOpen").addEventListener("click", function(){
+    var html='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(t("exportTitle"))+'</title>'+RV_CSS.replace('#reportView{position:fixed;inset:0;z-index:9999;','#reportView{')+'</head><body><div id="reportView"><div class="rv-doc">'+doc+'</div></div></body></html>';
+    try{ var b=new Blob([html],{type:"text/html"}), u=URL.createObjectURL(b); var w=window.open(u,"_blank"); if(!w) location.href=u; }catch(e){ toast(t("exportOpenFail")); }
+  });
+}
+$("exportBtn").addEventListener("click", openExport);
 
 /* ---- sync live : relit régulièrement quand l'onglet Dépenses est ouvert ---- */
 function tick(){
