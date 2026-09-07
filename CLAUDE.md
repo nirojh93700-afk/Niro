@@ -12,6 +12,13 @@
 - Ne JAMAIS se servir de cette adresse (ni des paramètres du site / de la messagerie du site) comme moyen technique pour un autre projet. Si un service demande un e-mail, utiliser **uniquement l'e-mail perso de la gérante** (`nirojh93700@gmail.com`) **et lui laisser faire la validation elle-même**.
 - En cas de doute sur quelle adresse/quel réglage utiliser : **demander d'abord**, ne jamais déduire.
 
+## 🧳 APPLI VOYAGE INDE — « publie les modifications en attente » (enregistré 07/09/2026)
+> Quand la gérante dit **« publie »**, **« publie les modifications en attente »** ou parle de **synchro / remboursement / chauffeur / corbeille / roupies**, il s'agit de **l'appli de voyage** `voyage-inde-sud.surge.sh` — **PAS de la boutique**. Ne JAMAIS proposer de publier gobelet / cristal / thème / page sur mesure dans ce contexte.
+- **Procédure exacte** : `voyage-inde/PUBLIER.md` (branche `claude/new-session-bl1z33`, dossier `voyage-inde/public`, commande surge, vérification de version). La suivre telle quelle.
+- **Interdit** : changer l'adresse de l'appli, l'hébergeur, le dépôt, ou quoi que ce soit qui casserait la synchro Firebase entre les téléphones. Juste publier le dossier tel quel.
+- **Ne dire « c'est en ligne » qu'après avoir lu la version** dans `https://voyage-inde-sud.surge.sh/sw.js` (attendu : `voyage-inde-v48` ou plus).
+- Si surge.sh est injoignable depuis la session (HTTP 000) : le dire, ne rien contourner, réessayer dans une autre session.
+
 ## 📦 FOURNISSEUR BOÎTES / EMBALLAGES PERSONNALISÉS — « Guardidea-Rachel » (enregistré 27/07/2026)
 > Quand la gérante parle du **fournisseur de boîtes / emballages**, c'est **Guardidea-Rachel** (contact **WhatsApp**, anglophone). C'est aussi elle qui fait déjà les **boîtes à bijoux** de la gérante.
 - **Personnalisation** : oui, à la marque Niv Création (même couleur + mêmes textes/logo que les boîtes bijoux déjà commandées).
