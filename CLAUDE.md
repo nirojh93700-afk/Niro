@@ -20,6 +20,14 @@
   de l'environnement (`connect_rejected`), et `list_environments` ne renvoyait plus aucun environnement.
   Rien n'est parti, le gérant a dû envoyer à la main. Une routine Claude ne sert que si elle DOIT
   réfléchir (vérifier une réponse, calculer une liste) — sinon, c'est le site.
+- ⛔⛔ **INTERDICTION DÉFINITIVE D'ENVOYER UN MAIL CLIENT PAR GMAIL (09/09/2026, ordre formel après
+  récidive).** Aucun outil Gmail (`reply`, `send_message`, brouillon envoyé) ne doit servir à écrire
+  à un client, **même en reconstruisant le gabarit de marque, même si le gérant a dit « envoie »**,
+  **même si le site est injoignable**. Un « envoie » autorise le CONTENU, jamais le canal Gmail.
+  Le SEUL canal = le site : **Gestion → Clients → Messages clients** (ou `/api/admin/send-client-email`,
+  `/api/admin/scheduled`, `/api/admin/bat`, `/api/reply/<jeton>`). Si le site est injoignable depuis
+  l'environnement : **je ne l'envoie PAS**, je donne le texte au gérant et c'est LUI qui clique.
+  Gmail reste autorisé UNIQUEMENT en LECTURE (boîte surveillée). Ne jamais rediscuter cette règle.
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
