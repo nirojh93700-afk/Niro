@@ -57,14 +57,28 @@ plus un avertissement mineur « Couleur manquante ».
 d'exploration automatique** de Google (source automatique / onglet « Automatisation »), qui crée des
 fiches sans frais de port.
 
-À faire dans la nouvelle session (avec l'accès au site) :
-1. Lire `https://nivcreation.fr/flux-google.xml` et vérifier qu'un `<g:shipping>` FR est bien présent
-   sur chaque produit, et que le flux se charge sans erreur.
-2. Demander au gérant ce qu'affiche **Produits → Sources** (flux vs source automatique, date de la
-   dernière récupération) et **Paramètres → Livraison et retours** (service de livraison France
-   existant ou non).
-3. Selon le cas : lui faire créer un service de livraison France au niveau du compte (couvre les
-   fiches créées par Google), ou désactiver la source automatique pour ne garder que le flux.
+**Vérifications FAITES le 09/09 au soir (session reprise, accès au site OK)** :
+1. ✅ **Le flux est complet et correct** : 72 produits, chacun avec `<g:shipping>` pour **FR + BE +
+   LU** (FR : 46× 4,90 · 21× 6,90 · 5× 11,90), XML valide, `g:price`/`g:availability`/`g:brand`/
+   `g:identifier_exists` présents, couleur+sexe+âge sur les bijoux. ⚠️ Piège de vérif : le flux est
+   mis en cache 1 h — le lire avec `?nocache=<timestamp>` sinon on voit une vieille copie.
+2. ✅ **Les pages produit portent aussi la livraison en données structurées** (JSON-LD `Offer` →
+   `OfferShippingDetails` FR 3,90 € + délais + politique de retour) — vérifié sur `collier-pastille`.
+→ **Côté site, RIEN ne manque.** Le problème est donc côté compte Merchant Center : les 27 fiches
+   refusées ne sont pas alimentées par le flux (compte tout neuf : flux pas encore traité, et/ou
+   fiches créées par la source automatique de Google), et **aucun service de livraison n'existe au
+   niveau du compte**.
+
+Reste à faire PAR LE GÉRANT dans Merchant Center (rien à changer sur le site) :
+1. **Paramètres → Livraison et retours → Ajouter un service de livraison** pour la **France** :
+   tarif 6,90 € (ou 4,90 € si le compte ne diffuse que les bijoux), **livraison offerte dès 45 €**
+   — c'est prévu ainsi (le flux compte sur ce réglage pour le seuil). Ça couvre TOUTES les fiches,
+   quelle que soit leur source, et lève « Informations de livraison manquantes ».
+2. **Produits → Sources** : vérifier que le flux `https://nivcreation.fr/flux-google.xml` est bien
+   listé, dernière récupération réussie ; cliquer « Récupérer maintenant » si disponible.
+3. S'il y a une **source automatique** (« fiches créées à partir de votre site web ») : la laisser,
+   le service de livraison du compte suffit — ou la désactiver pour ne garder que le flux.
+4. « Couleur manquante » (mineur) : se résorbera quand les fiches viendront du flux (couleur incluse).
 
 ---
 
