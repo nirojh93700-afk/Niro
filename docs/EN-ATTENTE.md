@@ -38,6 +38,29 @@
 
 ---
 
+## 2 bis. 🔴 GOOGLE MERCHANT CENTER — 27 PRODUITS REFUSÉS (constaté le 09/09/2026)
+
+Le gérant a créé le compte Merchant Center et ajouté le flux. **27 produits en « Attention requise »**,
+motif bloquant : **« Informations de livraison manquantes — empêche la diffusion (France) »**,
+plus un avertissement mineur « Couleur manquante ».
+
+⚠️ **Le flux du site envoie pourtant déjà tout ça** : frais de port FR/BE/LU par produit depuis le
+18/08 (`src/app/flux-google.xml`, `portFR`/`portEU1`), couleur + sexe + âge des bijoux depuis le
+22/08. **Hypothèse à vérifier en priorité** : ces fiches ne viennent pas du flux mais du **robot
+d'exploration automatique** de Google (source automatique / onglet « Automatisation »), qui crée des
+fiches sans frais de port.
+
+À faire dans la nouvelle session (avec l'accès au site) :
+1. Lire `https://nivcreation.fr/flux-google.xml` et vérifier qu'un `<g:shipping>` FR est bien présent
+   sur chaque produit, et que le flux se charge sans erreur.
+2. Demander au gérant ce qu'affiche **Produits → Sources** (flux vs source automatique, date de la
+   dernière récupération) et **Paramètres → Livraison et retours** (service de livraison France
+   existant ou non).
+3. Selon le cas : lui faire créer un service de livraison France au niveau du compte (couvre les
+   fiches créées par Google), ou désactiver la source automatique pour ne garder que le flux.
+
+---
+
 ## 3. Projets en pause / interrupteurs éteints
 
 - **Packaging & emballages** : tout est construit, l'interrupteur maître `settings.packagingLive` est
