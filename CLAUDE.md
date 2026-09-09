@@ -40,6 +40,31 @@
   lun. 07/09 ; Sophie Berardo (#0C1CGL2Q) attend, cadeau promis dans le colis ; boîte mail surveillée
   toutes les heures (routine Claude `trig_01YR967ZA5brMSLhsAvqfQ6a`) ; 6 vidéos livrées (2 sans voix).
 
+### 📌 ÉTAT AU 09/09/2026 — REPRENDRE ICI
+- **Accès au site RÉTABLI** : le gérant a mis l'environnement cloud « Default » en *Accès réseau →
+  Personnalisé* avec `nivcreation.fr`, `*.nivcreation.fr`,
+  `niv-creation--niv-creation.europe-west4.hosted.app`. **VÉRIFIER au démarrage**
+  (`curl -s -o /dev/null -w '%{http_code}' https://nivcreation.fr/api/shipping-config` → 200).
+  Si 000/403, l'accès est retombé : le dire tout de suite, ne rien envoyer par un autre chemin.
+- **À FAIRE EN PRIORITÉ — Gregory Perez** (`cseidm@pm.me`, secrétaire du C.S.E. IDM, ceidm.fr).
+  Mail reçu le 08/09 : il veut faire reproduire **à l'identique** un cœur en verre bombé bleu/vert
+  avec monogramme **G et M entrelacés en RELIEF doré** + petit cœur (photo jointe = objet moulé,
+  donc travail de verrier, PAS de la gravure ; notre cristal/verre se grave en creux, blanc satiné).
+  **Texte validé par le gérant, prêt, dans `docs/messages/perez-coeur-verre.md`** → l'envoyer par
+  **Gestion → Clients → Messages clients** (`/api/admin/send-client-email`) dès que l'accès marche.
+  ⚠️ Il a DÉJÀ reçu une 1re version le 09/09 au matin (envoi Gmail = erreur, cf. règle ci-dessus) :
+  le texte prêt commence donc par « Pour compléter notre message précédent ». Ne pas dire « Monsieur »
+  (genre non confirmé), ne pas signer d'un nom de personne.
+- **En attente de validation du gérant** : réponse préparée à **Simon Zuccarelli**
+  (`zucsim58@gmail.com`, Éternel Compagnon — partenariat revendeur/dropshipping sur les cristaux 3D
+  pour animaux), alerte « [À valider] » du 07/09 dans la boîte mail.
+- **Relance newsletter du 08/09 NON ENVOYÉE** (site injoignable ce jour-là). À refaire par
+  Gestion → Marketing → Newsletter → résultats de la campagne du 04/09 → « relancer celles qui n'ont
+  pas ouvert », objet : « ✦ Un prénom, une date — et le bijou devient le sien ». Vérifier d'abord que
+  l'envoi du 04/09 est bien parti ; sinon, ne rien relancer et prévenir.
+- Audrey Duquennec (`dreyduquennec@mailo.com`) : répondu le 07/09 (dimensions du Collier Plaque
+  Acier ajoutées sur la fiche : plaque 33,5 × 19,7 mm, chaîne 60 cm, livré complet). Rien en attente.
+
 ## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
 > Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
 - `src/app/gestion/layout.jsx` → `src/components/admin/AdminShell.jsx` : **toutes** les pages
