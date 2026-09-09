@@ -14,10 +14,17 @@
 | **Gregory Perez** (`cseidm@pm.me`, C.S.E. IDM) — cœur en verre + monogramme GM | **Il a répondu le 09/09 à 8h56** (il veut bien l'objet moulé → verrier, pas nous). L'ancien texte validé est OBSOLÈTE (déjà envoyé à 8h06). **Nouveau brouillon prêt, attend le « envoie » du gérant** | `docs/messages/perez-coeur-verre.md` |
 | **Aurore Corcy** (`aurorecorcy@gmail.com`) — relance carafe + 2 verres de mariage | Texte prêt du 07/09, **jamais envoyé** ; revérifier + redemander l'accord | `docs/messages/aurore-relance.md` |
 | **Simon Zuccarelli** (`zucsim58@gmail.com`, Éternel Compagnon) — partenariat revendeur / dropshipping cristaux 3D pour animaux | Réponse préparée par l'agent, **attend la validation du gérant** | Alerte « [À valider] » du 07/09 dans la boîte mail |
-| **Relance newsletter** (non-ouvreuses du 04/09), objet « ✦ Un prénom, une date — et le bijou devient le sien » | **Non envoyée** le 08/09 (site injoignable) — vérifier d'abord que l'envoi du 04/09 est parti | Gestion → Marketing → Newsletter |
+| **Newsletter du 04/09** | ⚠️ **VÉRIFIÉ le 09/09 : JAMAIS PARTIE** (aucune campagne dans les stats à part le [TEST] du 01/09, file programmée vide, rien dans Gmail autour du 04/09). **Ne PAS envoyer la relance** ; c'est l'envoi INITIAL qu'il faut refaire, sur décision du gérant (maquette → à lui seul → liste) | Gestion → Marketing → Newsletter |
 | **Ticket xTool #1222642** (F Series) | Message anglais proposé ; **c'est le gérant qui envoie depuis Outlook** (fil absent du Gmail surveillé) | `CLAUDE.md` § État au 09/09 |
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
+
+État des « réponses à valider » sur le site (vu le 09/09 via `/api/admin/pending-replies`) :
+2 entrées Perez (celle du 08/09 est périmée — déjà répondu le 09/09 au matin — à classer « sans
+réponse » ; celle du 09/09 a un brouillon d'agent MOINS bon que le nôtre : il laisse entendre
+qu'on pourrait fabriquer l'objet), 1 entrée Simon Zuccarelli (en attente), 1 entrée Audrey
+Duquennec périmée (déjà répondu le 07/09, elle n'a pas réécrit — à classer), 1 entrée
+`contact@tricolores.app` (pas une cliente, à classer).
 
 ---
 
