@@ -1,4 +1,7 @@
-# ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 02/09/2026)
+# ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 09/09/2026)
+> 📋 **`docs/EN-ATTENTE.md` = l'inventaire de tout ce qui est en attente** (messages à envoyer,
+> maquettes validées non appliquées, projets en pause, actions du gérant, questions sans réponse).
+> **Le lire au démarrage** en même temps que ce fichier, et le tenir à jour à chaque avancée.
 > Le gérant reprend souvent le travail depuis une AUTRE conversation : il faut continuer
 > **comme si de rien n'était**. Tout ce qu'il faut savoir est dans ce fichier.
 - **Branche de travail ET de mise en ligne : `claude/site-product-overview-1t2de`** (branche par
