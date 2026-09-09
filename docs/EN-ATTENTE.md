@@ -87,7 +87,9 @@ Duquennec périmée (déjà répondu le 07/09, elle n'a pas réécrit — à cla
 
 ## 6. Règles à ne jamais oublier (détail en tête de `CLAUDE.md`)
 
-1. Aucun envoi à un client sans « envoie » explicite, et **uniquement par le site**.
+1. Aucun envoi à un client sans « envoie » explicite, et **uniquement par le site** (règle
+   re-confirmée + testée le 09/09 : e-mail test parti par `/api/admin/send-client-email`, validé
+   par le gérant ; jamais d'envoi rédigé par les outils Gmail).
 2. Signature **Niv Création**, jamais le nom du gérant, jamais un « je » personnel.
 3. Rien de visible sur le site sans « applique » — même masqué, même invisible.
 4. Ne jamais parler de la machine, de panne, de laser ou de fabricant à une cliente.

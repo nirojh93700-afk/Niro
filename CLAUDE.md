@@ -31,6 +31,11 @@
   `/api/admin/scheduled`, `/api/admin/bat`, `/api/reply/<jeton>`). Si le site est injoignable depuis
   l'environnement : **je ne l'envoie PAS**, je donne le texte au gérant et c'est LUI qui clique.
   Gmail reste autorisé UNIQUEMENT en LECTURE (boîte surveillée). Ne jamais rediscuter cette règle.
+  **Confirmé et testé le 09/09/2026 après-midi** (demande du gérant « je veux que ça parte du
+  site », test envoyé par `/api/admin/send-client-email` → reçu, validé, gabarit de marque).
+  Nuance à connaître : le site envoie par la boîte Gmail qui lui est CONNECTÉE (`via:"gmail"`
+  dans la réponse de l'API) — c'est NORMAL et autorisé (gabarit + traçage) ; ce qui est interdit,
+  c'est un envoi Gmail rédigé EN DEHORS du site (outils `mcp__Gmail__reply`/`send_message`…).
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
