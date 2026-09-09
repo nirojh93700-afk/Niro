@@ -11,7 +11,7 @@
 
 | Qui | État | Où |
 |---|---|---|
-| **Gregory Perez** (`cseidm@pm.me`, C.S.E. IDM) — cœur en verre + monogramme GM | Texte validé, **à envoyer** par Gestion → Clients → Messages clients | `docs/messages/perez-coeur-verre.md` |
+| **Gregory Perez** (`cseidm@pm.me`, C.S.E. IDM) — cœur en verre + monogramme GM | **Il a répondu le 09/09 à 8h56** (il veut bien l'objet moulé → verrier, pas nous). L'ancien texte validé est OBSOLÈTE (déjà envoyé à 8h06). **Nouveau brouillon prêt, attend le « envoie » du gérant** | `docs/messages/perez-coeur-verre.md` |
 | **Aurore Corcy** (`aurorecorcy@gmail.com`) — relance carafe + 2 verres de mariage | Texte prêt du 07/09, **jamais envoyé** ; revérifier + redemander l'accord | `docs/messages/aurore-relance.md` |
 | **Simon Zuccarelli** (`zucsim58@gmail.com`, Éternel Compagnon) — partenariat revendeur / dropshipping cristaux 3D pour animaux | Réponse préparée par l'agent, **attend la validation du gérant** | Alerte « [À valider] » du 07/09 dans la boîte mail |
 | **Relance newsletter** (non-ouvreuses du 04/09), objet « ✦ Un prénom, une date — et le bijou devient le sien » | **Non envoyée** le 08/09 (site injoignable) — vérifier d'abord que l'envoi du 04/09 est parti | Gestion → Marketing → Newsletter |

@@ -49,15 +49,15 @@
   `niv-creation--niv-creation.europe-west4.hosted.app`. **VÉRIFIER au démarrage**
   (`curl -s -o /dev/null -w '%{http_code}' https://nivcreation.fr/api/shipping-config` → 200).
   Si 000/403, l'accès est retombé : le dire tout de suite, ne rien envoyer par un autre chemin.
-- **À FAIRE EN PRIORITÉ — Gregory Perez** (`cseidm@pm.me`, secrétaire du C.S.E. IDM, ceidm.fr).
-  Mail reçu le 08/09 : il veut faire reproduire **à l'identique** un cœur en verre bombé bleu/vert
-  avec monogramme **G et M entrelacés en RELIEF doré** + petit cœur (photo jointe = objet moulé,
-  donc travail de verrier, PAS de la gravure ; notre cristal/verre se grave en creux, blanc satiné).
-  **Texte validé par le gérant, prêt, dans `docs/messages/perez-coeur-verre.md`** → l'envoyer par
-  **Gestion → Clients → Messages clients** (`/api/admin/send-client-email`) dès que l'accès marche.
-  ⚠️ Il a DÉJÀ reçu une 1re version le 09/09 au matin (envoi Gmail = erreur, cf. règle ci-dessus) :
-  le texte prêt commence donc par « Pour compléter notre message précédent ». Ne pas dire « Monsieur »
-  (genre non confirmé), ne pas signer d'un nom de personne.
+- **Gregory Perez** (`cseidm@pm.me`, secrétaire du C.S.E. IDM, ceidm.fr) — **SITUATION CHANGÉE
+  le 09/09 après-midi** : l'envoi Gmail du matin (8h06) contenait déjà tout le texte validé
+  (les 2 options + questions quantité/taille/date), et **il a RÉPONDU à 8h56** : c'est bien
+  **l'objet moulé** qu'il veut reproduire à l'identique → travail de verrier, pas de la gravure,
+  l'atelier ne sait pas le faire. **L'ancien texte validé est OBSOLÈTE — ne pas l'envoyer.**
+  Un **nouveau brouillon** (décliner honnêtement + proposer la gravure du monogramme en
+  alternative) est prêt dans `docs/messages/perez-coeur-verre.md`, **en attente du « envoie »
+  du gérant**. Canal = Gestion → Clients → Messages clients uniquement. Pas de « Monsieur »,
+  signer Niv Création.
 - **En attente de validation du gérant** : réponse préparée à **Simon Zuccarelli**
   (`zucsim58@gmail.com`, Éternel Compagnon — partenariat revendeur/dropshipping sur les cristaux 3D
   pour animaux), alerte « [À valider] » du 07/09 dans la boîte mail.

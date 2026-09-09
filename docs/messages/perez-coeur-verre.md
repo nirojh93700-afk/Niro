@@ -1,40 +1,44 @@
-# Message prêt — Gregory Perez (C.S.E. IDM) — cœur en verre gravé
+# Gregory Perez (C.S.E. IDM) — cœur en verre gravé
 
-**Validé par le gérant le 09/09/2026. À envoyer par Gestion → Clients → Messages clients
-(`/api/admin/send-client-email`), JAMAIS par un autre canal.**
+## ⚠️ SITUATION AU 09/09/2026 (après-midi) — L'ANCIEN TEXTE EST OBSOLÈTE, NE PAS L'ENVOYER
+
+- L'envoi Gmail du 09/09 à 8h06 (l'erreur de canal) contenait **déjà tout le contenu du texte
+  validé** : les deux lectures possibles de la photo ET les questions quantité / taille / date.
+- **Il a répondu le 09/09 à 8h56** (fil Gmail `1a0803356dc55192`, message non lu) :
+  « C'est bien l'objet lui-même que je cherche à faire faire. Le cœur en verre bombé bleu-vert
+  avec le monogramme en relief doré. »
+- Conclusion : il veut **l'objet reproduit à l'identique** = pièce de verrerie moulée avec relief
+  doré → **travail de verrier, pas de la gravure**. L'atelier ne sait pas le fabriquer.
+  Il n'a PAS répondu aux questions quantité / taille / date (plus forcément utiles si on décline).
+
+## NOUVEAU BROUILLON PROPOSÉ — EN ATTENTE DU « ENVOIE » DU GÉRANT
 
 - **Destinataire** : `cseidm@pm.me`
-- **Sujet** : `Réalisation cœur en verre et gravure`
-- Le site ajoute lui-même le logo, le fond crème et le pied de page : ne coller que le texte.
+- **Sujet** : `Re: Réalisation cœur en verre et gravure`
+- **Canal** : Gestion → Clients → Messages clients (`/api/admin/send-client-email`) UNIQUEMENT.
+- Ne pas écrire « Monsieur » (genre non confirmé) ; signer Niv Création.
 
 ```
 Bonjour,
 
-Pour compléter notre message précédent :
+Merci pour votre retour et pour cette précision.
 
-Merci pour votre message et pour la photo.
+Nous préférons être honnêtes avec vous : le cœur de votre photo est une
+pièce de verrerie moulée, avec un décor en relief doré. Ce type de
+fabrication n'est pas notre métier. Notre atelier réalise de la gravure
+sur verre et sur cristal, c'est-à-dire un travail en creux, au rendu
+blanc satiné — et non des pièces moulées en couleur avec un motif en
+relief. Nous ne pourrions donc pas reproduire cet objet à l'identique,
+et nous ne voulons pas vous promettre un résultat que nous ne saurions
+pas tenir. Pour cette pièce précise, un atelier de verrerie serait
+l'interlocuteur adapté.
 
-Avant de vous répondre précisément, nous préférons être sûrs de bien
-comprendre votre projet, car la photo peut se lire de deux façons.
-
-Soit c'est l'objet lui-même que vous recherchez : un cœur en verre bombé,
-bleu et vert, avec le monogramme en relief doré. Dans ce cas il s'agit
-d'une pièce à faire fabriquer par un verrier, le motif de la photo étant
-en saillie et non creusé.
-
-Soit c'est avant tout le monogramme G et M entrelacés avec le petit cœur
-qui compte, et nous le gravons alors sur une pièce de notre atelier, en
-cristal ou en verre, selon le rendu que vous préférez.
-
-Pouvez-vous nous dire laquelle des deux correspond à votre besoin ?
-
-Combien de pièces souhaitez-vous ? Le prix unitaire dépend beaucoup de la
-quantité, il nous faut donc ce chiffre pour vous faire une proposition
-juste, qu'il s'agisse d'une pièce unique ou d'une commande pour vos
-salariés.
-
-Deux dernières précisions nous seraient utiles : la taille souhaitée et
-la date à laquelle vous en auriez besoin.
+Si le monogramme G et M entrelacés avec le petit cœur vous tient à cœur,
+nous pouvons en revanche le graver sur une pièce en verre ou en cristal
+de notre atelier. Le rendu serait différent de votre photo : gravé en
+creux, blanc satiné. Si cette piste vous intéresse, indiquez-nous la
+quantité envisagée, la taille souhaitée et la date à laquelle vous en
+auriez besoin : nous vous ferons une proposition précise.
 
 Bien cordialement,
 Niv Création
@@ -42,10 +46,9 @@ nivcreation.fr
 ```
 
 ## Contexte à connaître
-- Sa demande porte sur un **objet** (« forme bombée », « couleurs bleu et vert »), pas sur un décor
-  posé sur un verre à boire. Le monogramme de sa photo est **en relief**, donc moulé/métallisé :
-  ce n'est pas de la gravure, et l'atelier ne sait pas le reproduire à l'identique.
+- Sa demande initiale (08/09) portait sur la reproduction à l'identique de l'objet ; sa réponse du
+  09/09 le **confirme** : c'est l'objet qu'il veut, pas seulement le monogramme.
 - Le seul cœur du catalogue est le **porte-clés cristal LED cœur** (transparent, gravé blanc, petit).
-- C'est le **secrétaire d'un C.S.E.** : une commande groupée pour les salariés est plausible, d'où la
-  question sur la quantité.
-- Ne pas écrire « Monsieur » : son genre n'est pas confirmé, seul le nom figure dans la signature.
+- C'est le **secrétaire d'un C.S.E.** (ceidm.fr) : une commande groupée reste possible s'il bascule
+  sur la piste gravure — d'où la question quantité conservée dans le brouillon.
+- L'ancien texte validé (les deux options) a été envoyé le 09/09 à 8h06 — ne pas le renvoyer.
