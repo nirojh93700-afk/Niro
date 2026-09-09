@@ -64,6 +64,24 @@
   l'envoi du 04/09 est bien parti ; sinon, ne rien relancer et prévenir.
 - Audrey Duquennec (`dreyduquennec@mailo.com`) : répondu le 07/09 (dimensions du Collier Plaque
   Acier ajoutées sur la fiche : plaque 33,5 × 19,7 mm, chaîne 60 cm, livré complet). Rien en attente.
+- **Aurore Corcy** (`aurorecorcy@gmail.com`) : relance mariage (carafe + 2 verres assortis) préparée
+  le 07/09 et **jamais envoyée** — texte dans `docs/messages/aurore-relance.md`. Vérifier d'abord
+  qu'elle n'a pas répondu, puis **redemander l'accord** du gérant avant tout envoi.
+- **Ticket xTool #1222642** (France / Technical support / F Series) : xTool relance et **ferme le
+  dossier sans réponse sous 24 h**. Le gérant veut le garder ouvert en annonçant qu'il versera
+  « l'acompte / dépôt 40 » la semaine prochaine. ⚠️ Ce fil est dans sa messagerie **Outlook**, pas
+  dans le Gmail surveillé : impossible de lire ce que xTool demande exactement. Message anglais
+  proposé le 09/09 (garder le dossier ouvert + acompte la semaine prochaine + confirmation de
+  paiement à suivre) — **c'est LUI qui l'envoie depuis Outlook**, et il doit remplacer « the deposit
+  (40) » par la formulation exacte de xTool.
+- **Boîte mail surveillée : plus aucun outil extérieur** (commit `991e7e0`) — `syncInbox` est lancée
+  par le **heartbeat du site** (`src/lib/heartbeat.js`, verrou `claimJob("inbox", 15 min)`), en plus
+  du chargement de l'admin et du cron. La routine Claude horaire n'est plus nécessaire.
+- **Diagnostic réseau à connaître** : quand le site est injoignable, la cause est la politique réseau
+  de l'environnement cloud, pas le site. `curl -sS "$HTTPS_PROXY/__agentproxy/status"` le confirme
+  (`connect_rejected`, « gateway answered 403 to CONNECT »). La seule correction est le réglage
+  *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
+  ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
 ## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
 > Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
