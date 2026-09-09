@@ -83,6 +83,34 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 💍 11 BIJOUX AJOUTÉS LE 01/09/2026 — RÈGLES À RÉUTILISER
+> Produits Nihaojewelry ajoutés depuis ses photos : `collier-double-coeur`, `collier-coeur-plaques`,
+> `collier-3coeurs`, `bracelet-coeur-chaine`, `bracelet-cordon-plaque`, `collier-medaillon-pivotant`,
+> `bracelet-homme-plaque-cuir`, `collier-pastille`, `collier-coeur-grave`, `bracelet-perles-pastille`.
+- **LA PHOTO DOIT CHANGER QUAND ON CHOISIT UNE COULEUR** (demande ferme : « si t'as pas de photo tu
+  fais rien »). Mettre `image:` sur CHAQUE variante de couleur, et **cette URL doit aussi figurer dans
+  `product.images`**, sinon la bascule ne se fait pas. À vérifier sur tout nouveau produit à couleurs.
+- **Prix bijou** : le prix affiché se calcule `roundTo90(prixCode × 0,9) × 0,9` (remise bijoux −10 %
+  dans `catalog.js`), avec `roundTo90(n) = Math.round(n − 0,9) + 0,9`. Ex. 37,90 → 30,51 · 33,90 → 27,81.
+  Toujours **chercher les prix du marché** avant de fixer un prix (« regarde sur Internet »).
+- **Gravure = supplément payant**, jamais incluse (cf. §10 4bis) : `engravingPricing` avec
+  `textKeys`+`textExtra` par zone, ou `flatExtras:[{key:"gravure",value:"oui",amount:3}]` + champ
+  `select` piloté par `showIfField`/`showIfValue`.
+
+### 💰 CAGNOTTE — ANNULATION ET REMBOURSEMENT (corrigé le 01/09/2026)
+`reverseCagnotteForOrder(order)` dans `stock.js` : quand une commande passe en **annulée** ou est
+**remboursée**, le cashback gagné est retiré ET la cagnotte dépensée est rendue. Appelé par
+`/api/admin/refund` et `/api/admin/orders` (statut `annulee`). Idempotent (clé `${ref}:annulation`),
+ne descend jamais sous zéro.
+
+### 📣 NEWSLETTER — RÈGLES DU GÉRANT
+- **NE JAMAIS écrire le nombre de nouveautés** dans le texte (« nos 8 nouveautés ») : règle ferme.
+- Toujours **montrer la maquette d'abord**, puis lui envoyer **à lui seul** pour contrôle, et
+  n'envoyer à la liste qu'après son accord explicite.
+- Relance = **uniquement les non-ouvreuses qui n'ont pas commandé**, avec un **objet différent**,
+  via l'écran de résultats de campagne (`NewsletterAdmin`). Rappeler que les **clics sont fiables**
+  mais que les **ouvertures ne sont qu'un ordre de grandeur**.
+
 ## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
 > Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
 - `src/app/gestion/layout.jsx` → `src/components/admin/AdminShell.jsx` : **toutes** les pages
