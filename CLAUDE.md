@@ -24,6 +24,10 @@
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
   un fichier ; Etsy reste hors de la boîte mail surveillée.
+- ⛔ **SIGNATURE DES MESSAGES CLIENTS = « Niv Création », JAMAIS LE NOM DU GÉRANT** (rappel ferme du
+  08/09/2026 : « il faut jamais mettre mon nom, c'est le nom du site »). Aucun nom de personne dans
+  un e-mail, un devis ou un message client : on écrit « nous » (l'atelier), on signe **Niv Création**
+  + `nivcreation.fr`. Vaut aussi pour les messages que je lui propose de copier-coller ailleurs.
 - En cours au 02/09 : newsletter programmée ven. 04/09 10 h + relance mar. 08/09 10 h, relance Aurore
   lun. 07/09 ; Sophie Berardo (#0C1CGL2Q) attend, cadeau promis dans le colis ; boîte mail surveillée
   toutes les heures (routine Claude `trig_01YR967ZA5brMSLhsAvqfQ6a`) ; 6 vidéos livrées (2 sans voix).
