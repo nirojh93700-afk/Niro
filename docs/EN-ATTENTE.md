@@ -80,6 +80,14 @@ Reste à faire PAR LE GÉRANT dans Merchant Center (rien à changer sur le site)
    le service de livraison du compte suffit — ou la désactiver pour ne garder que le flux.
 4. « Couleur manquante » (mineur) : se résorbera quand les fiches viendront du flux (couleur incluse).
 
+**Amélioration du flux PRÉPARÉE, PAS APPLIQUÉE (09/09 soir, le gérant a dit « tu changes rien
+sur le site »)** : ajout de `<g:free_shipping_threshold>` par produit (seuil bijoux lu dans le
+réglage admin, seuils 60 €/45 € des verres/couverts lus sur chaque produit) → la livraison offerte
+au seuil serait déclarée DANS le flux, plus besoin du réglage de compte Merchant. Compilation
+vérifiée OK. Le correctif complet est dans **`docs/patches/flux-google-seuil-offert.patch`** —
+l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code du site n'a pas
+été touché ni déployé.
+
 ---
 
 ## 3. Projets en pause / interrupteurs éteints

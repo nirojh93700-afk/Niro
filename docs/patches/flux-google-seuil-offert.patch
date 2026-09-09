@@ -1,0 +1,65 @@
+diff --git a/src/app/flux-google.xml/route.js b/src/app/flux-google.xml/route.js
+index f9158e0..b5f7bcf 100644
+--- a/src/app/flux-google.xml/route.js
++++ b/src/app/flux-google.xml/route.js
+@@ -1,5 +1,7 @@
+ import { getCatalog, priceFrom } from "@/lib/catalog";
+ import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
++import { getSettings } from "@/lib/stock";
++import { resolveShippingConfig } from "@/lib/shipping";
+ 
+ export const dynamic = "force-dynamic";
+ 
+@@ -17,12 +19,12 @@ function esc(s) {
+ //   · bijou (lettre suivie) → 4,90 € (max entre domicile 3,90 et relais 4,90)
+ //   · verre (fragile) → 11,90 €
+ //   · déco / mariage / cristal (colis) → 6,90 € mini, plus selon le poids réel
+-// La livraison offerte dès 45 € est gérée par le réglage du compte Merchant.
++// La livraison offerte au seuil est déclarée par produit (feedFreeThreshold).
+ function poidsProduit(p) {
+   return Number(p.variants?.[0]?.weight) || Number(p.weight) || 500;
+ }
+ 
+-// FRANCE (1 exemplaire). Livraison offerte dès 45 € gérée par le compte Merchant.
++// FRANCE (1 exemplaire). Le seuil « offert dès X € » est déclaré à part (feedFreeThreshold).
+ function portFR(p) {
+   if (p.freeShipping) return 0;
+   if (p.letter) return 4.9;
+@@ -49,6 +51,18 @@ function feedShipping(p) {
+   return bloc("FR", portFR(p)) + bloc("BE", eu) + bloc("LU", eu);
+ }
+ 
++// Seuil « livraison offerte » FRANCE, PAR PRODUIT — lu sur les VRAIS réglages
++// du site (aucun réglage à faire côté compte Merchant) :
++//   · bijou / petit objet en lettre suivie → seuil bijoux de l'admin (45 € par défaut)
++//   · produit à `freeShipThreshold` (verres 60 €, couverts 45 €) → son propre seuil
++//   · le reste (cristaux, déco lourde) → pas de seuil, port toujours facturé.
++// L'Europe (BE/LU) n'a AUCUNE livraison offerte au seuil : rien à déclarer.
++function feedFreeThreshold(p, bijouxSeuil) {
++  const seuil = Number(p.freeShipThreshold) || (p.letter ? bijouxSeuil : 0);
++  if (!seuil || p.freeShipping) return "";
++  return `<g:free_shipping_threshold><g:country>FR</g:country><g:price_threshold>${seuil.toFixed(2)} EUR</g:price_threshold></g:free_shipping_threshold>`;
++}
++
+ // Champs OBLIGATOIRES pour les bijoux (catégorie « habillement » chez Google) :
+ // couleur, sexe, tranche d'âge. Sans eux, Merchant limite la visibilité.
+ //   · couleur : détectée dans le nom/les variantes (noir, doré, argenté…),
+@@ -68,6 +82,9 @@ function apparel(p) {
+ export async function GET() {
+   let products = [];
+   try { products = (await getCatalog()).filter((p) => !p.hidden && (p.images || []).length); } catch { products = []; }
++  // Seuil bijoux réel (réglé dans Gestion → Livraison), repli 45 € du code.
++  let bijouxSeuil = 45;
++  try { bijouxSeuil = resolveShippingConfig((await getSettings())?.shipping).bijouxFreeThreshold; } catch { /* repli */ }
+ 
+   const items = products.map((p) => {
+     const price = priceFrom(p).toFixed(2);
+@@ -96,7 +113,7 @@ export async function GET() {
+   <g:identifier_exists>no</g:identifier_exists>
+   <g:product_type>${esc(cat)}</g:product_type>
+   <g:google_product_category>${esc(googleCat)}</g:google_product_category>
+-  ${apparel(p)}${feedShipping(p)}
++  ${apparel(p)}${feedShipping(p)}${feedFreeThreshold(p, bijouxSeuil)}
+ </item>`;
+   }).join("\n");
+ 
