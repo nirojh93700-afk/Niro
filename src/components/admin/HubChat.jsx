@@ -76,6 +76,30 @@ export default function HubChat({ adminKey, onReload }) {
     setHistory([]);
   }
 
+  // Retirer une réponse préparée dont le gérant n'a pas besoin. AUCUN e-mail
+  // n'est envoyé : on marque juste la fiche « sans réponse » (action dismiss,
+  // la même que le bouton de la page /repondre).
+  async function jeter(token) {
+    await fetch(`/api/reply/${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "dismiss" }),
+    });
+  }
+
+  async function dismiss(p) {
+    if (!window.confirm(`Supprimer la réponse préparée pour ${p.name} ?\n\nAucun e-mail ne sera envoyé.`)) return;
+    setPending((l) => l.filter((x) => x.id !== p.id));
+    try { await jeter(p.token); } catch { load(); }
+  }
+
+  async function dismissAll() {
+    if (!window.confirm(`Supprimer les ${pending.length} réponses préparées ?\n\nAucun e-mail ne sera envoyé.`)) return;
+    const tous = pending;
+    setPending([]);
+    try { await Promise.all(tous.map((p) => jeter(p.token))); } catch { load(); }
+  }
+
   function chip(c) {
     if (c.fill) { setInput(c.q); taRef.current?.focus(); return; }
     send(c.q);
@@ -93,7 +117,12 @@ export default function HubChat({ adminKey, onReload }) {
 
       {pending.length > 0 && (
         <div className="hub-pending">
-          <div className="hub-pending-title">📬 {pending.length} réponse{pending.length > 1 ? "s" : ""} à valider</div>
+          <div className="hub-pending-head">
+            <div className="hub-pending-title">📬 {pending.length} réponse{pending.length > 1 ? "s" : ""} à valider</div>
+            {pending.length > 1 && (
+              <button className="hub-pending-del" onClick={dismissAll} disabled={busy}>Tout supprimer</button>
+            )}
+          </div>
           {pending.map((p) => (
             <div key={p.id} className="hub-pending-row">
               <div className="hub-pending-txt">
@@ -102,6 +131,7 @@ export default function HubChat({ adminKey, onReload }) {
                 <small>{p.message}</small>
               </div>
               <Link href={`/repondre/${p.token}`} className="btn btn-gold hub-pending-btn">Relire et envoyer</Link>
+              <button className="hub-pending-del" onClick={() => dismiss(p)} disabled={busy} title="Retirer de la liste — aucun e-mail n'est envoyé">Supprimer</button>
             </div>
           ))}
         </div>

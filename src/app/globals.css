@@ -3866,3 +3866,16 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 
 /* Fiche produit d'origine sur une réponse à valider (Assistant) */
 .hub-pending-txt .hub-pending-prod { color: #8a6d1f; font-weight: 600; }
+
+/* Assistant — bouton « Supprimer » sur une réponse préparée (aucun envoi). */
+.hub-pending-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.hub-pending-head .hub-pending-title { margin-bottom: 0; }
+.hub-pending-del {
+  background: #fff; color: #a24336; border: 1px solid #e7c4bd; border-radius: 9px;
+  padding: 8px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.hub-pending-del:hover { background: #fdf1ef; border-color: #d9a79e; }
+.hub-pending-del:disabled { opacity: 0.5; cursor: default; }
+@media (max-width: 640px) {
+  .hub-pending-del { width: 100%; text-align: center; }
+}
