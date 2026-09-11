@@ -461,7 +461,8 @@ var I18N = {
     settleOwes:"{a} doit {x} à {b}",
     hotelsBtnLbl:"Hôtels (privé)", hotelsTitle:"Hôtels", hotelSurprise:"Hôtel surprise",
     hotelsHint:"Ces hôtels sont cachés (nom masqué) jusqu'à ce que tu les révèles. Le prix compte déjà dans les comptes.",
-    hotelsHint2:"Coche les hôtels à cacher (les autres voient « 🎁 Hôtel surprise » sans le nom ; le prix compte). Décoche pour révéler.",
+    hotelsHint2:"Un hôtel masqué n'apparaît nulle part et ne compte pas dans les comptes (comme s'il n'existait pas encore), sur tous les téléphones et dans le PDF. Ses prix et parts restent enregistrés ici : appuie sur « Révéler » pour tout faire apparaître.",
+    hiddenNotCounted:"masqué · pas encore compté", hotelsHiddenSum:"dont {n} masqué(s) : {v}, pas encore comptés",
     hotelsAddHint:"Pour ajouter un hôtel : « Assistant Chambres » ou « + Ajouter une dépense » (catégorie Hôtel).", hotelNewOption:"— Nouvel hôtel —",
     noHotels:"Aucun hôtel pour l'instant.", addHotel:"+ Ajouter un hôtel", hotelName:"Nom de l'hôtel",
     revealWord:"Révéler", hideWord:"Masquer", revealAll:"Tout révéler", revealedBadge:"Visible", hiddenBadge:"Caché",
@@ -558,7 +559,8 @@ var I18N = {
     settleOwes:"{a} owes {x} to {b}",
     hotelsBtnLbl:"Hotels (private)", hotelsTitle:"Hotels", hotelSurprise:"Surprise hotel",
     hotelsHint:"These hotels are hidden (name masked) until you reveal them. The price already counts in the accounts.",
-    hotelsHint2:"Tick the hotels to hide (others see « 🎁 Surprise hotel » without the name; the price still counts). Untick to reveal.",
+    hotelsHint2:"A hidden hotel appears nowhere and is not counted (as if it didn't exist yet), on every phone and in the PDF. Its prices and shares stay saved here: tap « Reveal » to make it all appear.",
+    hiddenNotCounted:"hidden · not counted yet", hotelsHiddenSum:"incl. {n} hidden: {v}, not counted yet",
     hotelsAddHint:"To add a hotel: « Rooms helper » or « + Add an expense » (Hotel category).", hotelNewOption:"— New hotel —",
     noHotels:"No hotels yet.", addHotel:"+ Add a hotel", hotelName:"Hotel name",
     revealWord:"Reveal", hideWord:"Hide", revealAll:"Reveal all", revealedBadge:"Visible", hiddenBadge:"Hidden",
@@ -655,7 +657,8 @@ var I18N = {
     settleOwes:"{a} → {b}: {x}",
     hotelsBtnLbl:"ஹோட்டல்கள் (தனிப்பட்டது)", hotelsTitle:"ஹோட்டல்கள்", hotelSurprise:"ஹோட்டல் — சர்ப்ரைஸ்",
     hotelsHint:"நீங்கள் காட்டும் வரை இந்த ஹோட்டல்களின் பெயர் மறைக்கப்படும். விலை ஏற்கனவே கணக்கில் சேரும்.",
-    hotelsHint2:"மறைக்க வேண்டிய ஹோட்டல்களைக் குறி (மற்றவர்கள் பெயரின்றி « 🎁 சர்ப்ரைஸ் » காண்பர்; விலை கணக்கில் சேரும்). காட்ட நீக்கு.",
+    hotelsHint2:"மறைக்கப்பட்ட ஹோட்டல் எங்கும் தோன்றாது, கணக்கிலும் சேராது (இன்னும் இல்லாதது போல) — எல்லா தொலைபேசிகளிலும் PDF-இலும். விலைகளும் பங்குகளும் இங்கே சேமிக்கப்பட்டிருக்கும்: « காட்டு » அழுத்தினால் எல்லாம் தோன்றும்.",
+    hiddenNotCounted:"மறைவு · இன்னும் கணக்கில் இல்லை", hotelsHiddenSum:"அதில் {n} மறைவு: {v}, இன்னும் கணக்கில் இல்லை",
     hotelsAddHint:"ஹோட்டல் சேர்க்க: « அறைகள் உதவி » அல்லது « + செலவு சேர் » (ஹோட்டல் வகை).", hotelNewOption:"— புதிய ஹோட்டல் —",
     noHotels:"இன்னும் ஹோட்டல் இல்லை.", addHotel:"+ ஹோட்டல் சேர்", hotelName:"ஹோட்டல் பெயர்",
     revealWord:"காட்டு", hideWord:"மறை", revealAll:"அனைத்தையும் காட்டு", revealedBadge:"தெரியும்", hiddenBadge:"மறைவு",
@@ -1087,7 +1090,11 @@ function hotelRoomExpenses(){
   });
   return out;
 }
-function EXP(){ return S.expenses.concat(hotelRoomExpenses()); }
+/* Dépenses COMPTÉES. Un hôtel MASQUÉ n'existe pas encore pour les comptes : ses chambres sont
+   exclues partout (totaux, parts, qui doit quoi, fiches, export) tant qu'il n'est pas révélé.
+   Rien n'est supprimé : tout reste dans S.expenses et dans l'écran privé Hôtels. */
+function isHiddenHotel(x){ return !!(x && ((x.cat==="hotel" && x.hidden) || (x._hotel && x._hidden))); }
+function EXP(){ return S.expenses.concat(hotelRoomExpenses()).filter(function(x){ return !isHiddenHotel(x); }); }
 
 /* payé + dû + noms concernés */
 function balances(){
@@ -2013,7 +2020,7 @@ function showHotels(){
       '<div style="display:flex;gap:10px;align-items:flex-start">'+
         '<div style="flex:1;min-width:0"><div style="font-weight:600;word-break:break-word">'+esc(k)+'</div>'+
           '<div class="note" style="margin:3px 0 0">'+(sub?sub+' · ':'')+nR+' 🛏️ · <b style="color:var(--text)">'+money(g.sum,"EUR")+'</b>'+(g.nights?' · '+money(g.sum/g.nights,"EUR")+t("perNight"):'')+'</div></div>'+
-        '<span style="font-size:11px;font-weight:600;flex:none;color:'+(g.hidden?"var(--gold)":"var(--aqua)")+'">'+(g.hidden?("🎁 "+t("hiddenBadge")):t("revealedBadge"))+'</span>'+
+        '<span style="font-size:11px;font-weight:600;flex:none;color:'+(g.hidden?"var(--gold)":"var(--aqua)")+'">'+(g.hidden?("🎁 "+t("hiddenNotCounted")):t("revealedBadge"))+'</span>'+
       '</div>'+
       bfLine+paidLine+
       '<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line2)">'+roomLines+'</div>'+
@@ -2023,12 +2030,17 @@ function showHotels(){
       '</div></div>';
   }).join("") : '<p class="note">'+t("noHotels")+'</p>';
   var allNights = order.length>0 && order.every(function(k){ return groups[k].nights>0; });   // nb de nuits affiché SEULEMENT si tous les hôtels l'ont (sinon trompeur)
-  var totLine = order.length ? '<p class="note" style="margin:-2px 2px 12px;color:var(--gold);font-weight:600">'+order.length+' 🏨 · '+(allNights?totN+" "+t("nightsWord")+" · ":"")+money(totSum,"EUR")+'</p>' : '';
+  var nHid=0, hidSum=0; order.forEach(function(k){ if(groups[k].hidden){ nHid++; hidSum+=groups[k].sum; } });
+  var totLine = order.length ? '<p class="note" style="margin:-2px 2px 12px;color:var(--gold);font-weight:600">'+order.length+' 🏨 · '+(allNights?totN+" "+t("nightsWord")+" · ":"")+money(totSum,"EUR")+
+    (nHid?'<br><span style="font-weight:400;color:var(--muted)">'+esc(fmt(t("hotelsHiddenSum"),{n:nHid, v:money(hidSum,"EUR")}))+'</span>':'')+'</p>' : '';
   openSheet('<h3>🏨 '+t("hotelsTitle")+'</h3><p class="note" style="margin-bottom:12px">'+esc(t("hotelsHint2"))+'</p>'+totLine+
     '<div id="hList">'+list+'</div>'+
     '<button class="btn" id="hAdd" style="margin-top:6px">'+t("hdAddHotel")+'</button>');
   $("hList").addEventListener("click", function(e){
-    var rv=e.target.closest(".hReveal"); if(rv){ var g=groups[rv.dataset.k]; var nh=!g.hidden; g.exps.forEach(function(x){ x.hidden=nh; x.mt=Date.now(); }); saveHotels(); showHotels(); return; }
+    var rv=e.target.closest(".hReveal"); if(rv){ var g=groups[rv.dataset.k]; var nh=!g.hidden, now=Date.now();
+      // on modifie les objets ACTUELS de S.expenses (une synchro a pu les remplacer depuis l'ouverture de la feuille)
+      g.exps.forEach(function(x){ var cur=S.expenses.filter(function(y){ return y.id===x.id; })[0]||x; cur.hidden=nh; cur.mt=now; });
+      saveHotels(); showHotels(); return; }
     var ed=e.target.closest(".hEdit"); if(ed){ openHotelDetail(ed.dataset.k); }
   });
   $("hAdd").addEventListener("click", function(){ openHotelDetail(null); });
@@ -2347,7 +2359,7 @@ function renderPlan(){
   var ov='<h2 class="sec">'+t("planOverview")+'</h2><ul class="pover">'+PLAN.stages.map(function(s){
     var nn=s.nights>1 ? fmt(t("planNights"),{n:s.nights}) : t("planNight1");
     var g=hotelForStage(s);
-    var hb=g ? '<small style="color:var(--gold);display:block;margin-top:2px">🏨 '+(g.hidden?('🎁 '+t("planHotelBooked")):esc(g.key))+(g.bf?' · 🥐':'')+'</small>' : '';
+    var hb=(g && !g.hidden) ? '<small style="color:var(--gold);display:block;margin-top:2px">🏨 '+esc(g.key)+(g.bf?' · 🥐':'')+'</small>' : '';   // hôtel masqué : rien n'apparaît
     return '<li><span class="pl">'+esc(s.place)+'<small>'+esc(s.dates[LANG]||s.dates.fr)+'</small>'+hb+'</span><span class="nn">'+nn+'</span></li>';
   }).join("")+'</ul>';
   var days='<h2 class="sec">'+t("planDayByDay")+'</h2>'+PLAN.days.map(function(d){
