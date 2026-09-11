@@ -1,0 +1,18 @@
+depenses comptees: 46 | total: 2296.01
+hotels masques: 21
+parts: {'Amma Appa': 2, 'Niv': 2, 'Selvan Viji sitta sitti': 2}
+
+--- PAIEMENTS ENREGISTRES ---
+  Amma Appa -> Niv | eur: 45.45 | saisi: None None | ts: 1788479906353 | id: mtm6rbqptyvb
+  Mama -> Niv | eur: 455 | saisi: None None | ts: 1788585135182 | id: mtnxeqtql8up
+  Amma Appa -> Niv | eur: 47.17 | saisi: None None | ts: 1788791812091 | id: mtrcgjqzh4th
+  Amma Appa -> Niv | eur: 400 | saisi: None None | ts: 1788925977446 | id: mttkc6ee2ljo
+  Selvan Viji sitta sitti -> Niv | eur: 441.7 | saisi: None None | ts: 1788926137713 | id: mttkfm290bva
+  Amma Appa -> Niv | eur: 65.838862481781 | saisi: 65.838862481781 EUR | ts: 1789117483791 | id: mtwqctn3om87
+
+--- SOLDES ---
+ Niv                        paye   2276.35  part    607.25  rembourse  -1455.16  => solde    213.93
+ Amma Appa                  paye     16.76  part    575.22  rembourse    558.46  => solde      0.00
+ Mama                       paye      1.77  part    288.40  rembourse    455.00  => solde    168.37
+ Selvan Viji sitta sitti    paye      1.14  part    575.22  rembourse    441.70  => solde   -132.39
+ Paramu sitta               paye      0.00  part    249.92  rembourse      0.00  => solde   -249.92
