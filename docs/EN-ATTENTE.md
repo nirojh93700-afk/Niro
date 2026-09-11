@@ -91,6 +91,20 @@ fiches sans frais de port.
 
 ---
 
+## 4 bis. ✦ Offre gravure offerte — décisions en attente (11/09/2026)
+
+L'interrupteur est construit et **éteint** (Gestion → Marketing → Offre gravure offerte). Maquettes :
+`docs/maquettes/emails-relance-inscrites.html` (les 3 e-mails) et `docs/maquettes/regle-gravure-offerte.html`
+(la règle, artifact https://claude.ai/code/artifact/f97064b3-4f31-4e45-850c-e3644b0b1590).
+
+- [ ] **Le plafond** : 5 € (une gravure toujours entièrement offerte) ou 3 € ?
+- [ ] **La photo gravée (+8 €)** entre-t-elle dans l'offre ? (proposé : non, comme le socle LED)
+- [ ] **Un minimum d'achat** ? Courant chez les concurrents (Nomination : £39). Non prévu pour l'instant.
+- [ ] **Coder la règle dans `/api/checkout`** : une seule zone offerte, plafonnée, un cadeau par
+      commande. À faire sur son « applique » — sans ça, le code reste une remise fixe de 3 €.
+
+---
+
 ## 5. Questions en attente de SA réponse
 
 - **Remboursement, palier du milieu** : après 24 h, retenue de **10 €** (valeur actuelle) ou **−10 %** ?

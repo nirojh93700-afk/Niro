@@ -140,6 +140,24 @@ ne descend jamais sous zéro.
 - **Le code promo est créé pour de vrai** au premier envoi (`setPromoCode`, type `fixed`,
   montant = le supplément gravure, réutilisable) et **jamais écrasé s'il existe déjà** → le gérant
   peut le créer à la main dans Promotions pour le limiter aux bijoux/cristaux/cadeaux.
+- **⚠️ LE SUPPLÉMENT DE GRAVURE N'EST PAS TOUJOURS DE 3 € (remarque du gérant, 11/09/2026)** —
+  relevé dans `products.js` : `collier-plaque-acier` recto **inclus** + verso **+5 €** + photo
+  **+8 €** (`perExtraPage`/`photoSurcharge`) · `collier-medaillon-livre` **3 pages × 5 €** (15 €) ·
+  `collier-coeur-plaques` **3 zones × 3 €** · recto-verso divers **2 × 3 €** · cristaux **texte
+  +5 €** (la photo 3D est incluse, le socle LED 19,90 € n'est PAS de la gravure) · verre à whisky
+  face+fond **+7 €**. Un code à −3 € n'offre donc PAS « la gravure » partout.
+  **Il ne veut PAS offrir toutes les pages.** Règle retenue (maquette
+  `docs/maquettes/regle-gravure-offerte.html`, artifact
+  https://claude.ai/code/artifact/f97064b3-4f31-4e45-850c-e3644b0b1590) : le code annule **UNE
+  seule** option de gravure payante, la première, **plafond 5 €**, **un seul cadeau par commande**,
+  **jamais** le socle LED ni la photo gravée. En attente de son « applique » (à coder dans
+  `/api/checkout`) — tant que ce n'est pas fait, le code reste un `fixed` de 3 €.
+- **Ce que font les autres (recherche 11/09/2026)** : le modèle du marché FR est **la 1re gravure
+  incluse, les faces suivantes payantes** (Atelier Aismée : recto offert, verso payant — c'est déjà
+  le modèle du collier plaque acier). Nomination : gravure offerte **1 par client**, avec **minimum
+  d'achat** (£39 / $59), hors articles soldés, non cumulable. Plusieurs boutiques (Emotion Gravure,
+  Atelier de Famille) annoncent « gravure offerte » comme argument permanent, pas comme promo.
+  → Une gravure par commande est la norme ; un minimum d'achat est courant et reste à trancher.
 - **Maquette des 3 e-mails de la séquence** : `docs/maquettes/emails-relance-inscrites.html`
   (artifact https://claude.ai/code/artifact/1bb3b4e1-13b5-440f-9c55-9d92d0bcfe70). Les e-mails 2 et 3
   ne parlent QUE des bijoux, du cristal et des cadeaux gravés — **jamais des verres ni de la carafe**
