@@ -824,6 +824,8 @@ function pullTrip(){
       SYNC.ok=true; SYNC.tried=true; if(d) mergeDoc(d); cacheTrip();
       // carnet vide en ligne mais plein sur ce téléphone -> on l'envoie tout de suite
       if(!d && hasRealData()) saveTrip().catch(function(){});
+      // chambres remises en proportion du prix réel payé -> on enregistre si ça a bougé
+      else if(alignHotelsToPaid()){ cacheTrip(); saveTrip().catch(function(){}); }
     })
     .catch(function(){
       SYNC.tried=true; SYNC.ok=false;                   // hors ligne / réseau coupé
@@ -861,7 +863,7 @@ function loadAll(){
   loadFixedRates(); applyFixedRates();          // le taux fixe reprend TOUJOURS le dessus
   var me=lget("me"); if(me&&me.name) S.me=me.name;
   var ec=lget("expCur"); if(ec&&CUR[ec]) S.expCur=ec;
-  var c=lget("tripCache"); if(c) mergeDoc(c);   // affichage immédiat, même hors ligne
+  var c=lget("tripCache"); if(c){ mergeDoc(c); alignHotelsToPaid(); }   // affichage immédiat, même hors ligne
   return pullTrip();
 }
 
@@ -1950,6 +1952,35 @@ function hotelGroups(){
     var d=(A.ts||8e15)-(B.ts||8e15); if(d) return d;
     return ((A.ts||0)+(A.nights||0)*86400000)-((B.ts||0)+(B.nights||0)*86400000); });
   return {groups:groups, order:order};
+}
+/* ALIGNEMENT AUTOMATIQUE : pour chaque hôtel qui a un « prix réel payé », les chambres déjà
+   enregistrées sont remises en proportion pour que leur total = ce prix (aucune retape à faire).
+   Tourne à chaque chargement / synchro ; ne touche à rien si le total colle déjà (< 0,5 ct).
+   Si les chambres sont dans la devise du paiement (ex. tout en ₹) : montants natifs conservés
+   en proportion, seul l'équivalent € est recalé. Renvoie true si quelque chose a changé. */
+function alignHotelsToPaid(){
+  var G=hotelGroups(), changed=false, now=Date.now();
+  G.order.forEach(function(k){
+    var g=G.groups[k]; if(!(g.paid>0)) return;
+    var pc=g.paidCur||"EUR", target=conv(g.paid,pc,"EUR");
+    var rooms=g.exps.filter(function(x){ return (+x.amount||0)>0; }); if(!rooms.length || !(target>0)) return;
+    var sumEur=0; rooms.forEach(function(x){ sumEur+=(+x.eur||0); });
+    if(Math.abs(sumEur-target)<0.005) return;
+    var native=rooms.every(function(x){ return (x.cur||"EUR")===pc; });
+    var tot=0; rooms.forEach(function(x){ tot+= native? +x.amount : +x.eur; });
+    if(!(tot>0)) return;
+    var whole = native? g.paid : target, acc=0;
+    rooms.forEach(function(x,i){
+      var c=x.cur||"EUR", d=CUR[c]?CUR[c].d:2, m=Math.pow(10,d);
+      var share=(native? +x.amount : +x.eur)*whole/tot, amt, eur;
+      if(native){ amt=Math.round(share*m)/m; eur=Math.round(conv(amt,pc,"EUR")*100)/100; }
+      else { eur=Math.round(share*100)/100; amt=Math.round(conv(eur,"EUR",c)*m)/m; }
+      if(i===rooms.length-1){ eur=Math.round((target-acc)*100)/100; if(!native) amt=Math.round(conv(eur,"EUR",c)*m)/m; }
+      acc+=eur;
+      if(Math.abs(amt-(+x.amount))>1e-9 || Math.abs(eur-(+x.eur))>1e-9){ x.amount=amt; x.eur=eur; x.mt=now; changed=true; }
+    });
+  });
+  return changed;
 }
 /* LISTE des hôtels (privé) : chaque hôtel à part, trié par date, avec ses chambres/prix modifiables */
 function showHotels(){
