@@ -114,6 +114,38 @@ ne descend jamais sous zéro.
   via l'écran de résultats de campagne (`NewsletterAdmin`). Rappeler que les **clics sont fiables**
   mais que les **ouvertures ne sont qu'un ordre de grandeur**.
 
+### ✦ OFFRE « GRAVURE OFFERTE » — CONSTRUITE ET ÉTEINTE (11/09/2026)
+> Demande du gérant : « dans admin tu mets cette option, comme pour le mode vacances, quand j'ai
+> besoin j'active ; pour un mois ; que pour les gens qui ont pas commandé et qui sont inscrits ;
+> adapte les mails par rapport à la date d'inscription ».
+- **Écran** : Gestion → Marketing → ✦ Offre gravure offerte (`/gestion/offre-gravure`) — case
+  Activer, début, fin, code, montant, « inscrites depuis au moins X jours » (3 par défaut), rappel
+  du cadeau, bouton **« Ouvrir pour un mois »** et bouton **« Envoyer maintenant »**. Chiffres clés :
+  à servir / en attente / déjà reçu.
+- **Réglage** `settings.gravureOfferte` (enabled:false par défaut, sanitizé dans `/api/admin/settings`).
+  **ÉTEINTE = rien ne part jamais.** Ne JAMAIS l'activer sans sa demande.
+- **⛔ RIEN SUR LE SITE** (sa demande) : ni bandeau, ni encart de fiche. **L'offre n'existe que dans
+  l'e-mail**, donc un client qui a déjà acheté ne peut pas tomber dessus.
+- **Qui la reçoit** : inscrites à la newsletter **sans AUCUNE commande** (toute adresse présente
+  dans les commandes est exclue), **inscrites depuis plus de 3 jours** (les nouvelles viennent de
+  recevoir BIENVENUE10). Celles qui atteignent les 3 jours **pendant** l'offre sont servies au fil
+  de l'eau. **Une seule fois par personne** (section `offreGravure` = {email: ts}).
+- **Le texte s'adapte à l'ancienneté** (`ouverturePhrase` dans `src/lib/offreGravure.js`) :
+  < 14 j « il y a quelques jours » · < 30 j « quelques semaines » · < 90 j « depuis un moment » ·
+  ≥ 90 j « cela fait un moment que vous nous suivez de loin » · date inconnue « nos abonnées ».
+- **Fichiers** : `src/lib/offreGravure.js` (offreActive / ouverturePhrase / joursDepuis /
+  offreGravureEmail) · `runOffreGravureJob({dryRun})` dans `src/lib/jobs.js` · appelée par le
+  **heartbeat du site** (1×/jour, verrou `claimJob("offreGravure")`) · API `/api/admin/offre-gravure`
+  (GET état + comptes, POST `{action:"send"}`) · page `/gestion/offre-gravure` · CSS `.og-*`.
+- **Le code promo est créé pour de vrai** au premier envoi (`setPromoCode`, type `fixed`,
+  montant = le supplément gravure, réutilisable) et **jamais écrasé s'il existe déjà** → le gérant
+  peut le créer à la main dans Promotions pour le limiter aux bijoux/cristaux/cadeaux.
+- **Maquette des 3 e-mails de la séquence** : `docs/maquettes/emails-relance-inscrites.html`
+  (artifact https://claude.ai/code/artifact/1bb3b4e1-13b5-440f-9c55-9d92d0bcfe70). Les e-mails 2 et 3
+  ne parlent QUE des bijoux, du cristal et des cadeaux gravés — **jamais des verres ni de la carafe**
+  (leur port coûte trop cher pour être offert). Le cadeau surprise du colis est annoncé, avec le
+  choix au paiement (surprise / plutôt femme / plutôt homme).
+
 ## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
 > Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
 - `src/app/gestion/layout.jsx` → `src/components/admin/AdminShell.jsx` : **toutes** les pages

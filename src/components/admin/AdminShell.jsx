@@ -42,6 +42,7 @@ const NAV = [
   { label: "Marketing", items: [
     { id: "newsletter", icon: "▷", text: "Newsletter", href: "/gestion#newsletter" },
     { id: "promos", icon: "%", text: "Promotions", href: "/gestion#promos" },
+    { id: "offre-gravure", icon: "✦", text: "Offre gravure offerte", href: "/gestion/offre-gravure" },
     { id: "agents", icon: "⬡", text: "Équipe d'agents", href: "/gestion/agents" },
     { id: "etude-marche", icon: "◎", text: "Étude de marché", href: "/gestion/etude-marche" },
   ] },

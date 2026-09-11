@@ -1639,6 +1639,13 @@ export async function getSettings() {
     // et s'éteint tout seul à la date de fin. `gift` = cadeau offert pendant
     // les congés (message en plus). Voir src/lib/vacation.js.
     vacation: { enabled: false, start: "", end: "", resume: "", text: "", gift: false, giftText: "", ...(s.vacation || {}) },
+    // Offre « gravure offerte » : e-mail ciblé aux inscrites SANS commande,
+    // inscrites depuis plus de `minJours` jours. Rien sur le site (cf.
+    // src/lib/offreGravure.js). Éteinte par défaut.
+    gravureOfferte: {
+      enabled: false, start: "", end: "", code: "GRAVUREOFFERTE",
+      montant: 3, minJours: 3, cadeau: true, ...(s.gravureOfferte || {}),
+    },
     hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },
     categories: Array.isArray(s.categories) ? s.categories : [], // 3 cartes [{label,sub,image}]
     atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },
@@ -1788,6 +1795,27 @@ export async function claimJob(key, minIntervalMs) {
   data.cronState[k] = now;
   await persistCatalog(data);
   return true;
+}
+
+// --- Offre « gravure offerte » : mémoire des envois ------------------------
+// Section `offreGravure` = { "email": timestamp }. Sert à n'envoyer qu'UNE
+// SEULE fois l'offre à chaque inscrite, même si le site relance la tâche.
+export async function getOffreGravureSent() {
+  const data = await getCatalogRaw();
+  return data.offreGravure || {};
+}
+
+export async function markOffreGravureSent(emails) {
+  const list = (Array.isArray(emails) ? emails : [emails])
+    .map((e) => String(e || "").trim().toLowerCase())
+    .filter(Boolean);
+  if (!list.length) return 0;
+  const data = await getCatalogRaw(true);
+  data.offreGravure = data.offreGravure || {};
+  const now = Date.now();
+  for (const e of list) data.offreGravure[e] = now;
+  await persistCatalog(data, ["offreGravure"]);
+  return list.length;
 }
 
 // Identifiants Gmail (agent e-mail) — lecture côté serveur uniquement,

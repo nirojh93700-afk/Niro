@@ -3879,3 +3879,14 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 @media (max-width: 640px) {
   .hub-pending-del { width: 100%; text-align: center; }
 }
+
+/* Offre gravure offerte (Gestion → Marketing) */
+.og-card { display: grid; gap: 16px; }
+.og-switch { display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+.og-switch input { margin-top: 3px; }
+.og-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.og-grid label { display: grid; gap: 5px; font-size: 0.9rem; color: var(--ink-soft); }
+.og-grid input { padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; font-size: 0.95rem; background: #fff; }
+.og-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.og-note { background: var(--cream, #faf6ee); border: 1px solid #ece3d2; border-radius: 12px; padding: 14px 16px; line-height: 1.6; font-size: 0.92rem; }
+.og-note.warn { background: #fff8e6; border-color: #f0d28a; }
