@@ -2560,7 +2560,11 @@ var RV_CSS='<style>'+
  '.rv-doc .note{background:#fbf7ec;border-left:3px solid #f0b429;padding:7px 10px;border-radius:0 7px 7px 0;font-size:10.5px;margin:8px 0}.rv-doc .pg{page-break-before:always}'+
  /* petit écran : colonne « parts » repliée sous le nom, catégorie = icône seule, cellules plus serrées, retour à la ligne autorisé */
  '@media (max-width:520px){.rv-doc{padding-left:10px;padding-right:10px}.rv-doc table{font-size:10.5px}.rv-doc th,.rv-doc td{padding:4px 2px}.rv-doc th{font-size:9px}.rv-doc td.n,.rv-doc th.n{white-space:normal;word-break:keep-all}.rv-doc .cp,.rv-doc .cl{display:none}.rv-doc .np{display:block}.rv-doc .cs{display:inline}.rv-doc h1{font-size:18px}.rv-bar button{font-size:12px;padding:9px 9px}}'+
- '@media print{body>*:not(#reportView){display:none!important}#reportView{position:static!important;overflow:visible!important;height:auto!important}.noprint{display:none!important}@page{size:A4;margin:14mm 12mm}}'+
+ /* impression / PDF : tout tient dans la largeur de la page (plus de colonnes coupées à droite) */
+ '@media print{body>*:not(#reportView){display:none!important}#reportView{position:static!important;overflow:visible!important;height:auto!important;width:auto!important}.noprint{display:none!important}'+
+   '.rv-doc{max-width:100%!important;width:100%!important;padding:0!important;margin:0!important;overflow:visible!important}.rv-doc .tw{overflow:visible!important}'+
+   '.rv-doc table{width:100%!important;font-size:10px;table-layout:auto}.rv-doc th,.rv-doc td{padding:4px 4px;word-break:break-word}.rv-doc td.n,.rv-doc th.n{white-space:normal}'+
+   '.rv-doc .kpi{flex-wrap:wrap}.rv-doc .card{page-break-inside:avoid}@page{size:A4;margin:12mm 10mm}}'+
  '</style>';
 function buildReport(){
   var P=S.people, all=EXP(), pays=S.payments||[], A=[];
@@ -2623,7 +2627,7 @@ function buildReport(){
   // 6 par personne
   A.push('<div class="pg"></div><h2>6. '+esc(t("exportS6"))+'</h2>');
   P.forEach(function(p){ var b=bil[p], g={}, go=[]; all.forEach(function(x){ var v=owedShare(x,p); if(v>0.005){ var c=x.cat||"other"; if(!g[c]){g[c]=0;go.push(c);} g[c]+=v; } }); go.sort(function(a,b){return g[b]-g[a];});
-    A.push('<div class="card" style="border-left:4px solid '+col(p)+'"><h3 style="color:'+col(p)+'">'+esc(p)+' — '+sharesOf(p)+' '+esc(t("partsWord")).toLowerCase()+'</h3><table><tr><th>'+esc(t("catField"))+'</th><th class="n">'+esc(t("exportShare"))+'</th></tr>');
+    A.push('<div class="card" style="border-left:4px solid '+col(p)+'"><h3 style="color:'+col(p)+'">'+esc(p)+' — '+sharesOf(p)+' '+esc(sharesOf(p)===1?t("partsWord").toLowerCase().replace(/s$/,""):t("partsWord").toLowerCase())+'</h3><table><tr><th>'+esc(t("catField"))+'</th><th class="n">'+esc(t("exportShare"))+'</th></tr>');
     go.forEach(function(c){ A.push('<tr><td>'+catIcon(c)+' '+esc(catLabel(c))+'</td><td class="n">'+rvE(g[c])+'</td></tr>'); });
     A.push('<tr class="tot"><td>'+esc(t("exportShareTotal"))+'</td><td class="n">'+rvE(b.part)+'</td></tr>');
     if(b.paid>0.005) A.push('<tr><td class="muted">'+esc(t("pdAlreadyPaid"))+'</td><td class="n neg">− '+rvE(b.paid)+'</td></tr>');
