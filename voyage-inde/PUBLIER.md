@@ -3,6 +3,15 @@
 > ⚠️ Ceci concerne UNIQUEMENT l'appli de voyage `voyage-inde-sud.surge.sh`.
 > NE RIEN TOUCHER au site Niv Création (boutique), ni à Netlify/Firebase App Hosting, ni à Stripe.
 
+## 0. Où publier (IMPORTANT, depuis le 11/09/2026)
+L'environnement cloud « Default » bloque surge.sh (HTTP 000). La gérante a créé un
+environnement séparé **« Voyage Inde »** (`env_016DzNeQaSu92FyRFeLHC8ss`, réseau Complet).
+Depuis n'importe quelle session : `create_session` (MCP claude-code-remote) dans cet
+environnement, dépôt `nirojh93700-afk/Niro`, révision `claude/new-session-bl1z33`, prompt =
+les étapes 1 à 3 ci-dessous + écrire `~/.netrc` (login surge recopié depuis la session mère) +
+consigner le résultat dans `voyage-inde/PUBLICATION.log` (seul commit autorisé).
+Dernière publication : voir `PUBLICATION.log`.
+
 ## 1. Récupérer le code à publier
     git fetch origin claude/new-session-bl1z33
     git checkout claude/new-session-bl1z33
