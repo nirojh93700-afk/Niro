@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Une gravure offerte, pas toutes</title>
+<title>Une gravure offerte à son vrai prix</title>
 <style>
   :root { --gold:#a98935; --gold-l:#dcc88f; --cream:#faf6ee; --ink:#2b2620; --soft:#6f675c; --line:#ece3d2; --bad:#a24336; --good:#2f6b45; }
   * { box-sizing:border-box; }
@@ -22,7 +22,8 @@
   .reste { color:var(--bad); font-weight:700; }
   .hors { color:var(--soft); font-style:italic; }
   tr:last-child td { border-bottom:0; }
-  .panier { background:var(--cream); border:1px solid var(--line); border-radius:14px; padding:16px; max-width:420px; }
+  .deux { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+  .panier { background:var(--cream); border:1px solid var(--line); border-radius:14px; padding:16px; min-width:0; }
   .panier-l { display:flex; justify-content:space-between; gap:12px; padding:7px 0; font-size:0.95rem; }
   .panier-l.tot { border-top:1px solid var(--gold-l); margin-top:8px; padding-top:11px; font-weight:700; font-size:1.05rem; }
   .panier-code { display:flex; gap:8px; margin:12px 0 6px; }
@@ -37,13 +38,16 @@
 <body><div class="wrap">
 
 <section class="card">
-  <h1>Une gravure offerte, jamais toutes les pages</h1>
+  <h1>Une gravure offerte, à son vrai prix</h1>
   <p>Maquette à valider. Rien n&apos;est en ligne, aucun code n&apos;est créé.</p>
   <div class="lead">
-    <b>La règle proposée :</b> le code annule <b>une seule option de gravure payante</b> du panier,
-    la première, avec un <b>plafond de 5 €</b>. Les autres pages, le socle lumineux et la photo gravée
-    restent payants. Vous ne pouvez donc jamais offrir plus de 5 € par commande.
+    <b>Décidé le 11/09 :</b> le code offre <b>une gravure, une seule</b>, au <b>prix réel de la pièce</b> —
+    3 € ou 5 € selon le produit. Sur les <b>bijoux</b>, les <b>cristaux</b> et les <b>cadeaux gravés</b>.
+    Les autres pages, la photo gravée et le socle lumineux restent payants. Les verres et la carafe
+    sont hors offre.
   </div>
+  <p style="margin:14px 0 0;color:var(--soft);">Ce que la cliente lit :
+    <b style="color:var(--ink);">« Gravure offerte sur les bijoux et le cristal. »</b></p>
 </section>
 
 <section class="card">
@@ -83,7 +87,7 @@
           <td class="num">0 €<br><small>socle jamais offert</small></td>
         </tr>
         <tr>
-          <td>Porte-clés, pièce laiton</td>
+          <td>Porte-clés, pièce laiton<br><small>cadeaux gravés — inclus dans l'offre</small></td>
           <td>Gravure +3 €</td>
           <td class="num">3 €</td>
           <td class="num off">− 3 €</td>
@@ -100,27 +104,41 @@
 
 <section class="card">
   <h2>Ce que la cliente voit dans son panier</h2>
-  <p>Elle saisit le code, le site lui confirme ce qui est offert, et la remise s&apos;applique au paiement.</p>
-  <div class="panier">
-    <div class="panier-l"><span>Collier médaillon livre</span><span class="num">34,11 €</span></div>
-    <div class="panier-l"><span>Gravure — 3 pages</span><span class="num">15,00 €</span></div>
-    <div class="panier-code"><input id="mq-code" type="text" value="GRAVUREOFFERTE" readonly><span>Appliquer</span></div>
-    <div class="ok">✓ Code valide (une gravure offerte) — appliqué au paiement.</div>
-    <div class="panier-l" style="margin-top:8px;"><span>Une gravure offerte</span><span class="num off">− 5,00 €</span></div>
-    <div class="panier-l tot"><span>Total</span><span class="num">44,11 €</span></div>
+  <p>Elle saisit le code, le site lui confirme ce qui est offert, et la remise s&apos;applique au paiement.
+    Le montant s&apos;adapte tout seul à la pièce : pas de règle à expliquer.</p>
+  <div class="deux">
+    <div class="panier">
+      <div class="panier-l"><span>Collier médaillon livre</span><span class="num">34,11 €</span></div>
+      <div class="panier-l"><span>Gravure — 3 pages</span><span class="num">15,00 €</span></div>
+      <div class="panier-code"><input id="mq-code1" type="text" value="GRAVUREOFFERTE" readonly><span>Appliquer</span></div>
+      <div class="ok">✓ Code valide (une gravure offerte) — appliqué au paiement.</div>
+      <div class="panier-l" style="margin-top:8px;"><span>Une gravure offerte</span><span class="num off">− 5,00 €</span></div>
+      <div class="panier-l tot"><span>Total</span><span class="num">44,11 €</span></div>
+    </div>
+    <div class="panier">
+      <div class="panier-l"><span>Porte-clés aspect cuir</span><span class="num">7,90 €</span></div>
+      <div class="panier-l"><span>Gravure</span><span class="num">3,00 €</span></div>
+      <div class="panier-code"><input id="mq-code2" type="text" value="GRAVUREOFFERTE" readonly><span>Appliquer</span></div>
+      <div class="ok">✓ Code valide (une gravure offerte) — appliqué au paiement.</div>
+      <div class="panier-l" style="margin-top:8px;"><span>Une gravure offerte</span><span class="num off">− 3,00 €</span></div>
+      <div class="panier-l tot"><span>Total</span><span class="num">7,90 €</span></div>
+    </div>
   </div>
 </section>
 
 <section class="q">
-  <h2>Trois choses à trancher</h2>
+  <h2>Ce qui est décidé</h2>
   <ul>
-    <li><b>Le plafond à 5 €.</b> C&apos;est le prix de votre zone la plus chère, donc une gravure est toujours
-      entièrement offerte. Vous pouvez le baisser à 3 € : dans ce cas, sur le médaillon livre, il resterait
-      2 € à payer sur la première page.</li>
-    <li><b>La photo gravée à 8 € et le socle lumineux à 19,90 €</b> ne sont jamais offerts, même s&apos;ils
-      sont plus chers. Dites-moi si vous voulez que la photo entre dans l&apos;offre.</li>
-    <li><b>Un seul cadeau par commande</b>, même si le panier contient trois bijoux. Sinon une commande de
-      trois pièces vous coûterait 15 €.</li>
+    <li><b>Une gravure, à son prix réel</b> — 3 € ou 5 € selon la pièce. Aucun plafond : la promesse est
+      toujours tenue, quelle que soit la pièce choisie.</li>
+    <li><b>Bijoux, cristaux et cadeaux gravés</b> (porte-clés, pièce en laiton). <b>Verres, flûte et
+      carafe hors offre</b> : leur port coûte déjà cher.</li>
+    <li><b>Un seul cadeau par commande</b>, même avec trois bijoux dans le panier. Vous ne pouvez donc
+      jamais offrir plus de 5 € sur une commande.</li>
+    <li><b>Restent payants</b> : les pages supplémentaires, la photo gravée (8 €) et le socle lumineux
+      (19,90 €).</li>
+    <li><b>Pas de minimum d&apos;achat.</b> Sur un porte-clés à 7,90 €, le cadeau représente donc 3 €.
+      Un seuil à 25 € reste possible si vous changez d&apos;avis.</li>
   </ul>
 </section>
 
