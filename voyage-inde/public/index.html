@@ -1728,35 +1728,47 @@ function openPersonDetail(name){
   var secPaid  = block(paidData,  me?t("pdPaidTitle"):t("pdPaidTitleO"), "");
   var secShare = block(shareData, me?t("pdShareMine"):t("pdShareOther"), me?t("pdShareHint"):t("pdShareHintO"));
   // 3) qui doit à qui — AVEC le détail de chaque personne (pourquoi il doit : hôtel, chauffeur, taxi…)
+  // RÈGLE (demande de la gérante) : une fiche ne montre QUE la personne ouverte — jamais le détail
+  // ni les montants des autres. SEULE EXCEPTION : la fiche de la gérante (1er participant, sur SON
+  // téléphone) garde le détail de chaque personne qui lui doit de l'argent (pourquoi elle doit).
+  var full = me && S.people.indexOf(name)===0;
   var trans=settlements().filter(function(o){ return o.from===name || o.to===name; });
   var transHtml="";
   if(trans.length){
     var incoming=trans.filter(function(o){return o.to===name;}).length>0;
     transHtml='<h2 class="sec" style="margin:14px 0 4px">'+(incoming?t("pdWhoOwes"):t("pdWhoIOwe"))+'</h2>'+
       trans.map(function(o){
-        var other=(o.to===name)?o.from:o.to, mine=(o.to===name), oc=color(other);
-        // Le détail montre TOUJOURS ce que le DÉBITEUR a consommé : c'est ça qui explique la somme.
+        var mine=(o.to===name);
+        if(!full){   // fiche d'une autre personne : une ligne simple, rien sur les autres
+          return '<div style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--line2)">'+
+            '<span style="flex:1;font-size:13.5px">'+fmt(t("settleOwes"),{a:esc(o.from), b:esc(o.to), x:'<b style="color:'+(mine?"var(--aqua)":"var(--rose)")+';font-variant-numeric:tabular-nums">'+mc(o.amount)+'</b>'})+'</span></div>';
+        }
+        // fiche de la gérante : détail complet du DÉBITEUR (ce qu'il a consommé explique la somme)
+        var other=(o.to===name)?o.from:o.to, oc=color(other);
         var debtor=o.from, dc=color(debtor);
         var od=catDataFor(debtor,"share");
         var detail=renderCatBlocks(od.order, od.groups, dc);
-        // réconciliation : sa part totale − ce qu'il a déjà payé − ce qu'il a déjà remboursé = reste dû
         var dPaid=0; EXP().forEach(function(x){ if(x.who===debtor) dPaid+=x.eur; });
         var dAdj=(paymentAdj()[debtor]||0);
-        var line=function(lbl,val,col){ return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0"><span style="flex:1;font-size:12.5px;color:var(--muted)">'+esc(lbl)+'</span><b style="font-size:13px;font-variant-numeric:tabular-nums'+(col?';color:'+col:'')+'">'+val+'</b></div>'; };
-        var recap=line(fmt(t("pdConsumed"),{name:debtor}), mc(od.tot));
-        if(dPaid>0.005) recap+=line(t("pdAlreadyPaid"), "−"+mc(dPaid), "var(--aqua)");
-        if(dAdj>0.005)  recap+=line(t("pdAlreadyReimb"), "−"+mc(dAdj), "var(--aqua)");
+        var l2=function(lbl,val,col){ return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0"><span style="flex:1;font-size:12.5px;color:var(--muted)">'+esc(lbl)+'</span><b style="font-size:13px;font-variant-numeric:tabular-nums'+(col?';color:'+col:'')+'">'+val+'</b></div>'; };
+        var recap=l2(fmt(t("pdConsumed"),{name:debtor}), mc(od.tot));
+        if(dPaid>0.005) recap+=l2(t("pdAlreadyPaid"), "−"+mc(dPaid), "var(--aqua)");
+        if(dAdj>0.005)  recap+=l2(t("pdAlreadyReimb"), "−"+mc(dAdj), "var(--aqua)");
         recap+='<div style="display:flex;align-items:center;gap:8px;padding:8px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;color:var(--muted)">'+t("pdRemains")+'</span><b style="font-size:15px;font-variant-numeric:tabular-nums;color:'+(mine?"var(--aqua)":"var(--rose)")+'">'+mc(o.amount)+'</b></div>';
         return '<div style="border:1px solid var(--line);border-left:4px solid '+oc+';border-radius:12px;padding:11px 13px;margin:0 0 12px;background:var(--slab2)">'+
           '<div style="display:flex;align-items:center;gap:9px;margin-bottom:4px"><span class="dot" style="background:'+oc+';width:12px;height:12px;flex:none"></span>'+
           '<span style="flex:1;font-weight:700;font-size:15px;color:'+oc+'">'+esc(other)+'</span>'+
           '<b style="font-size:15px;font-variant-numeric:tabular-nums;color:'+(mine?"var(--aqua)":"var(--rose)")+'">'+mc(o.amount)+'</b></div>'+
-          // sur sa PROPRE fiche, le détail est déjà affiché plus haut -> on ne le répète pas
           (debtor===name ? '' : '<p class="note" style="margin:0 0 8px">'+esc(fmt(t("pdWhyDetail"),{name:debtor}))+'</p>'+detail)+
           recap+'</div>';
       }).join("");
   }
-  if(adj>0.005) transHtml+='<div style="display:flex;gap:8px;padding:8px 0;color:var(--aqua)"><span style="flex:1;font-size:13px">'+t("stAlreadyReimb")+'</span><b>'+mc(adj)+'</b></div>';
+  // réconciliation de LA PERSONNE : sa part totale − ce qu'elle a payé − ce qu'elle a déjà remboursé = solde
+  var line=function(lbl,val,col){ return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0"><span style="flex:1;font-size:12.5px;color:var(--muted)">'+esc(lbl)+'</span><b style="font-size:13px;font-variant-numeric:tabular-nums'+(col?';color:'+col:'')+'">'+val+'</b></div>'; };
+  transHtml+='<div style="margin-top:10px">'+line(fmt(t("pdConsumed"),{name:name}), mc(shareTot));
+  if(paidTot>0.005) transHtml+=line(t("pdAlreadyPaid"), "−"+mc(paidTot), "var(--aqua)");
+  if(adj>0.005)     transHtml+=line(t("pdAlreadyReimb"), "−"+mc(adj), "var(--aqua)");
+  transHtml+='</div>';
   var total = Math.abs(net)<0.005
     ? '<div style="padding:12px 0 2px;font-size:14px;font-weight:700;color:var(--aqua)">'+t("stSquare")+'</div>'
     : (net<0
