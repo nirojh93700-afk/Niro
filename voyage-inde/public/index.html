@@ -441,6 +441,7 @@ var I18N = {
     roomsDate:"Arrivée", roomsOut:"Départ", perNight:"/nuit", nightsWord:"nuits", stayFromTo:"du {a} au {b}", tapToOpen:"appuie pour gérer",
     hdRooms:"Chambres", hdAddHotel:"+ Ajouter un hôtel", hdEdit:"Modifier", hdWho:"Qui dort / partage", hdPaidBy:"Payé par (qui a réglé)", hdDelHotel:"Supprimer cet hôtel", hdVisible:"Nom visible par la famille", hdBack:"‹ Retour aux hôtels", hdName:"Nom de l'hôtel", hdNewName:"Nouvel hôtel…",
     hdVisBtn:"👨‍👩‍👧 Afficher le nom", hdVisHint:"Décoché = 🎁 surprise (le prix compte quand même).", roomSplit:"Répartition", roomPerPerson:"Montant par personne", roomAmounts:"Combien chaque personne paye", roomTotalLbl:"Total chambre",
+    hdLink:"Lien de l'hôtel (site, Booking…)", hdLinkHint:"Colle ici l'adresse de la page de l'hôtel. Tout le monde la verra dans Planning et pourra regarder les photos.", hdSeeHotel:"Voir l'hôtel", hdBadLink:"Le lien doit commencer par http",
     hdPaidReal:"Prix réel payé (réservation)", hdPaidRealHint:"Ce que tu as vraiment payé pour tout l'hôtel (facultatif, pour comparer aux chambres).", hdPaidLbl:"💳 Payé (réel)", hdRoomsTotal:"🛏️ Total chambres", hdGap:"⚠️ Écart",
     pPaid:"a payé", pOwes:"doit", pGets:"à recevoir", pSquare:"à jour", pYouOwe:"tu lui dois", stYouOwe:"TU LUI DOIS",
     pdTitle:"Détail", pdBy:"payé par", pdNone:"Rien à rembourser pour l'instant.", pdTapHint:"Appuie sur un nom pour voir le détail",
@@ -539,6 +540,7 @@ var I18N = {
     roomsDate:"Check-in", roomsOut:"Check-out", perNight:"/night", nightsWord:"nights", stayFromTo:"{a} to {b}", tapToOpen:"tap to manage",
     hdRooms:"Rooms", hdAddHotel:"+ Add a hotel", hdEdit:"Edit", hdWho:"Who sleeps / shares", hdPaidBy:"Paid by (who settled)", hdDelHotel:"Delete this hotel", hdVisible:"Name visible to the family", hdBack:"‹ Back to hotels", hdName:"Hotel name", hdNewName:"New hotel…",
     hdVisBtn:"👨‍👩‍👧 Show the name", hdVisHint:"Unticked = 🎁 surprise (price still counts).", roomSplit:"Split", roomPerPerson:"Amount per person", roomAmounts:"How much each person pays", roomTotalLbl:"Room total",
+    hdLink:"Hotel link (website, Booking…)", hdLinkHint:"Paste the hotel page address. Everyone will see it in Planning and can look at the photos.", hdSeeHotel:"See the hotel", hdBadLink:"The link must start with http",
     hdPaidReal:"Actual price paid (booking)", hdPaidRealHint:"What you really paid for the whole hotel (optional, to compare with the rooms).", hdPaidLbl:"💳 Paid (actual)", hdRoomsTotal:"🛏️ Rooms total", hdGap:"⚠️ Gap",
     pPaid:"paid", pOwes:"owes", pGets:"to receive", pSquare:"settled", pYouOwe:"you owe them", stYouOwe:"YOU OWE THEM",
     pdTitle:"Detail", pdBy:"paid by", pdNone:"Nothing to pay back yet.", pdTapHint:"Tap a name to see the detail",
@@ -637,6 +639,7 @@ var I18N = {
     roomsDate:"வருகை", roomsOut:"புறப்பாடு", perNight:"/இரவு", nightsWord:"இரவுகள்", stayFromTo:"{a} – {b}", tapToOpen:"நிர்வகிக்க தட்டு",
     hdRooms:"அறைகள்", hdAddHotel:"+ ஹோட்டல் சேர்", hdEdit:"திருத்து", hdWho:"யார் தங்குகிறார் / பங்கு", hdPaidBy:"கட்டியவர்", hdDelHotel:"இந்த ஹோட்டலை நீக்கு", hdVisible:"பெயர் குடும்பத்திற்கு தெரியும்", hdBack:"‹ ஹோட்டல்களுக்கு", hdName:"ஹோட்டல் பெயர்", hdNewName:"புதிய ஹோட்டல்…",
     hdVisBtn:"👨‍👩‍👧 பெயரைக் காட்டு", hdVisHint:"தேர்வு இல்லை = 🎁 சர்ப்ரைஸ் (விலை கணக்கில் சேரும்).", roomSplit:"பங்கீடு", roomPerPerson:"நபர் ஒன்றுக்கு தொகை", roomAmounts:"ஒவ்வொருவரும் எவ்வளவு கட்டுகிறார்", roomTotalLbl:"அறை மொத்தம்",
+    hdLink:"ஹோட்டல் இணைப்பு (வலைத்தளம், Booking…)", hdLinkHint:"ஹோட்டல் பக்கத்தின் முகவரியை இங்கே ஒட்டு. அனைவரும் Planning-இல் பார்த்து புகைப்படங்களைக் காணலாம்.", hdSeeHotel:"ஹோட்டலைப் பார்", hdBadLink:"இணைப்பு http என்று தொடங்க வேண்டும்",
     hdPaidReal:"உண்மையில் கட்டிய விலை", hdPaidRealHint:"ஹோட்டலுக்கு நீ உண்மையில் கட்டியது (விருப்பம், ஒப்பிட).", hdPaidLbl:"💳 கட்டியது", hdRoomsTotal:"🛏️ அறைகள் மொத்தம்", hdGap:"⚠️ வித்தியாசம்",
     pPaid:"கட்டியது", pOwes:"தர வேண்டும்", pGets:"பெற வேண்டும்", pSquare:"சரி", pYouOwe:"நீ தர வேண்டும்", stYouOwe:"நீ தர வேண்டும்",
     pdTitle:"விவரம்", pdBy:"கட்டியவர்", pdNone:"இப்போது திருப்பித் தர எதுவும் இல்லை.", pdTapHint:"விவரம் பார்க்க பெயரைத் தட்டு",
@@ -1398,7 +1401,7 @@ function b64d(s){ var r=atob(s), a=new Uint8Array(r.length); for(var i=0;i<r.len
 function makeCode(){
   var mine = S.me ? S.expenses.filter(function(x){return x.who===S.me}) : S.expenses;
   if(!mine.length) return null;
-  var pack = mine.map(function(x){ return [x.id, x.ts, x.who, x.label||"", +x.amount.toFixed(2), x.cur, +x.eur.toFixed(2), x.cat||"other", x.split||null, x.hotel||"", x.hidden?1:0, x.bf?1:0, x.mt||0, +x.nights||0, +x.paid||0, x.paidCur||""]; });
+  var pack = mine.map(function(x){ return [x.id, x.ts, x.who, x.label||"", +x.amount.toFixed(2), x.cur, +x.eur.toFixed(2), x.cat||"other", x.split||null, x.hotel||"", x.hidden?1:0, x.bf?1:0, x.mt||0, +x.nights||0, +x.paid||0, x.paidCur||"", x.url||""]; });
   return "NIV1." + b64e(JSON.stringify(pack));
 }
 
@@ -1443,7 +1446,7 @@ $("recvBtn").addEventListener("click", function(){
     pack.forEach(function(p){
       if(have[p[0]]) return;
       var e={id:p[0], ts:p[1], who:p[2], label:p[3], amount:p[4], cur:p[5], eur:p[6], cat:p[7]||"other", split:p[8]||null};
-      if(p.length>9){ if(p[9]) e.hotel=p[9]; if(p[10]) e.hidden=true; if(p[11]) e.bf=true; if(p[12]) e.mt=p[12]; if(p[13]) e.nights=+p[13]; if(p[14]){ e.paid=+p[14]; e.paidCur=p[15]||"EUR"; } }
+      if(p.length>9){ if(p[9]) e.hotel=p[9]; if(p[10]) e.hidden=true; if(p[11]) e.bf=true; if(p[12]) e.mt=p[12]; if(p[13]) e.nights=+p[13]; if(p[14]){ e.paid=+p[14]; e.paidCur=p[15]||"EUR"; } if(p[16]) e.url=p[16]; }
       S.expenses.push(e);
       if(S.people.indexOf(p[2])<0) S.people.push(p[2]);
       added++;
@@ -1976,7 +1979,7 @@ function saveHotels(){ renderExp(); saveTrip().then(function(){ renderExp(); }).
 function hotelGroups(){
   var hx=S.expenses.filter(function(x){ return x.cat==="hotel"; });
   var groups={}, order=[];
-  hx.forEach(function(x){ var k=hotelKey(x); if(!groups[k]){ groups[k]={key:k, exps:[], sum:0, hidden:true, ts:x.ts||0, bf:false, nights:0, paid:0, paidCur:"EUR"}; order.push(k); } var g=groups[k]; g.exps.push(x); g.sum+=x.eur; if(!x.hidden) g.hidden=false; if(x.bf) g.bf=true; if((+x.nights||0)>g.nights) g.nights=+x.nights||0; if((x.ts||0) && (!g.ts || x.ts<g.ts)) g.ts=x.ts; if((+x.paid||0)>0 && !(g.paid>0)){ g.paid=+x.paid; g.paidCur=x.paidCur||"EUR"; } });
+  hx.forEach(function(x){ var k=hotelKey(x); if(!groups[k]){ groups[k]={key:k, exps:[], sum:0, hidden:true, ts:x.ts||0, bf:false, nights:0, paid:0, paidCur:"EUR", url:""}; order.push(k); } var g=groups[k]; g.exps.push(x); g.sum+=x.eur; if(!x.hidden) g.hidden=false; if(x.bf) g.bf=true; if((+x.nights||0)>g.nights) g.nights=+x.nights||0; if((x.ts||0) && (!g.ts || x.ts<g.ts)) g.ts=x.ts; if((+x.paid||0)>0 && !(g.paid>0)){ g.paid=+x.paid; g.paidCur=x.paidCur||"EUR"; } if(x.url && !g.url) g.url=x.url; });
   order.sort(function(a,b){ var A=groups[a], B=groups[b];   // 1) jour d'arrivée  2) jour de départ
     var d=(A.ts||8e15)-(B.ts||8e15); if(d) return d;
     return ((A.ts||0)+(A.nights||0)*86400000)-((B.ts||0)+(B.nights||0)*86400000); });
@@ -2044,7 +2047,9 @@ function showHotels(){
           '<div class="note" style="margin:3px 0 0">'+(sub?sub+' · ':'')+nR+' 🛏️ · <b style="color:var(--text)">'+money(g.sum,"EUR")+'</b>'+(g.nights?' · '+money(g.sum/g.nights,"EUR")+t("perNight"):'')+'</div></div>'+
         '<span style="font-size:11px;font-weight:600;flex:none;color:'+(g.hidden?"var(--gold)":"var(--aqua)")+'">'+(g.hidden?("🎁 "+t("hiddenNotCounted")):t("revealedBadge"))+'</span>'+
       '</div>'+
-      bfLine+paidLine+
+      bfLine+
+      (g.url?'<div style="margin:6px 0 0"><a href="'+esc(g.url)+'" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--aqua);text-decoration:underline">🔗 '+esc(t("hdSeeHotel"))+' ↗</a></div>':'')+
+      paidLine+
       '<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line2)">'+roomLines+'</div>'+
       '<div class="row2" style="margin-top:10px">'+
         '<button class="btn ghost hReveal" data-k="'+esc(k)+'" style="margin:0;font-size:12.5px;padding:9px">'+(g.hidden?("👁 "+t("revealWord")):("🙈 "+t("hideWord")))+'</button>'+
@@ -2075,6 +2080,7 @@ function openHotelDetail(key){
   var departure = (g&&g.ts&&nights0)? new Date(g.ts+nights0*86400000).toISOString().slice(0,10) : "";
   var bf = g?g.bf:false, hidden = g?g.hidden:true;
   var paidVal = (g&&g.paid>0)?String(g.paid):"", paidCur0=(g&&g.paidCur)||"EUR";
+  var urlVal = (g&&g.url)||"";
   var origIds = g? g.exps.map(function(x){return x.id;}) : [];
   var rooms = g? g.exps.map(function(x){
       var sp=x.split||{}, occ={};
@@ -2090,6 +2096,7 @@ function openHotelDetail(key){
     '<div class="field"><label>'+t("roomsDate")+' · '+t("roomsOut")+'</label><div class="row2"><input id="hIn" type="date" value="'+arrival+'"><input id="hOut" type="date" value="'+departure+'"></div><p class="note" id="hN" style="margin:6px 2px 0"></p></div>'+
     '<div class="field"><label>'+t("bfLabel")+'</label><div class="who"><button type="button" id="hBf" aria-pressed="'+(bfOn?"true":"false")+'">🥐 '+t("bfAsk")+'</button></div></div>'+
     '<div class="field"><label>'+t("hdVisible")+'</label><div class="who"><button type="button" id="hVis" aria-pressed="'+(visOn?"true":"false")+'">'+t("hdVisBtn")+'</button></div><p class="note" style="margin:6px 2px 0">'+esc(t("hdVisHint"))+'</p></div>'+
+    '<div class="field"><label>'+t("hdLink")+'</label><input id="hUrl" type="url" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="https://…" value="'+esc(urlVal)+'"><p class="note" style="margin:6px 2px 0">'+esc(t("hdLinkHint"))+'</p></div>'+
     '<div class="field"><label>'+t("hdPaidReal")+'</label><div class="row2"><input id="hPaid" inputmode="decimal" placeholder="0" value="'+esc(paidVal)+'"><select id="hPaidCur">'+curOpts+'</select></div><p class="note" style="margin:6px 2px 0">'+esc(t("hdPaidRealHint"))+' <b style="color:var(--text)">'+esc(t("hdPaidAuto"))+'</b></p></div>'+
     '<div class="note" style="margin:6px 2px 6px;font-weight:600;color:var(--text)">'+t("hdRooms")+'</div>'+
     '<div id="hRooms"></div>'+
@@ -2176,13 +2183,14 @@ function openHotelDetail(key){
     var nn=nightsBetween($("hIn").value,$("hOut").value);
     var bfv=bfOn, hid=!visOn, now=Date.now();
     var paidAmt=pf($("hPaid").value), paidCur=$("hPaidCur").value;   // prix réel payé (facultatif)
+    var hurl=($("hUrl").value||"").trim(); if(hurl && !/^https?:\/\//i.test(hurl)) hurl="https://"+hurl;   // lien de l'hôtel (visible par tout le monde)
     var multi=rooms.filter(function(rm){return pf(rm.price)>0;}).length>1;
     var kept={}, made=0;
     rooms.forEach(function(rm){
       var price=pf(rm.price); if(price<=0) return;
       var occ=S.people.filter(function(p){return rm.occ[p];}); if(!occ.length) occ=S.people.slice();
       kept[rm.id]=1; made++;
-      var data={ hotel:nm, label:(multi?(t("roomWord")+" "+made):""), amount:price, cur:rm.cur, eur:conv(price,rm.cur,"EUR"), cat:"hotel", who:rm.paidBy, split:{mode:"equal", among:occ}, ts:stay, nights:nn, bf:bfv, hidden:hid, paid:(paidAmt>0?paidAmt:0), paidCur:(paidAmt>0?paidCur:""), mt:now };
+      var data={ hotel:nm, label:(multi?(t("roomWord")+" "+made):""), amount:price, cur:rm.cur, eur:conv(price,rm.cur,"EUR"), cat:"hotel", who:rm.paidBy, split:{mode:"equal", among:occ}, ts:stay, nights:nn, bf:bfv, hidden:hid, paid:(paidAmt>0?paidAmt:0), paidCur:(paidAmt>0?paidCur:""), url:hurl, mt:now };
       var ex=S.expenses.filter(function(x){return x.id===rm.id;})[0];
       if(ex){ for(var kk in data) ex[kk]=data[kk]; } else { data.id=rm.id; S.expenses.push(data); }
     });
@@ -2381,7 +2389,9 @@ function renderPlan(){
   var ov='<h2 class="sec">'+t("planOverview")+'</h2><ul class="pover">'+PLAN.stages.map(function(s){
     var nn=s.nights>1 ? fmt(t("planNights"),{n:s.nights}) : t("planNight1");
     var g=hotelForStage(s);
-    var hb=(g && !g.hidden) ? '<small style="color:var(--gold);display:block;margin-top:2px">🏨 '+esc(g.key)+(g.bf?' · 🥐':'')+'</small>' : '';   // hôtel masqué : rien n'apparaît
+    // hôtel masqué : rien n'apparaît. Sinon : nom + lien cliquable (tout le monde peut voir l'hôtel)
+    var hb=(g && !g.hidden) ? '<small style="color:var(--gold);display:block;margin-top:2px">🏨 '+esc(g.key)+(g.bf?' · 🥐':'')+
+        (g.url?' · <a href="'+esc(g.url)+'" target="_blank" rel="noopener" style="color:var(--aqua);text-decoration:underline">'+esc(t("hdSeeHotel"))+' ↗</a>':'')+'</small>' : '';
     return '<li><span class="pl">'+esc(s.place)+'<small>'+esc(s.dates[LANG]||s.dates.fr)+'</small>'+hb+'</span><span class="nn">'+nn+'</span></li>';
   }).join("")+'</ul>';
   var days='<h2 class="sec">'+t("planDayByDay")+'</h2>'+PLAN.days.map(function(d){
