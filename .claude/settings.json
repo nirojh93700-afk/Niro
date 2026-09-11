@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(node:*)",
+      "Bash(npx:*)",
+      "Bash(npm:*)",
+      "Bash(python3:*)",
+      "Bash(pip:*)",
+      "Bash(pip3:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(cp:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(sed:*)",
+      "Bash(echo:*)",
+      "Bash(which:*)",
+      "Bash(cd:*)",
+      "Bash(for:*)",
+      "WebFetch",
+      "mcp__Claude_Code_Remote__create_session",
+      "mcp__Claude_Code_Remote__get_session",
+      "mcp__Claude_Code_Remote__list_environments",
+      "mcp__Claude_Code_Remote__send_later",
+      "mcp__Claude_Code_Remote__create_trigger",
+      "mcp__Claude_Code_Remote__delete_trigger",
+      "mcp__Claude_Code_Remote__list_triggers"
+    ]
+  }
+}
