@@ -2503,7 +2503,7 @@ $("trashBtn").addEventListener("click", openTrash);
 /* ---- EXPORT PDF : à l'instant où on appuie, TOUT le carnet (dépenses, hôtels, historique des
    remboursements, par personne, corbeille, qui doit à qui). Heures = INDE (IST). ---- */
 var RV_IST="Asia/Kolkata";
-function rvE(v){ return nf(+v||0,2)+" €"; }
+function rvE(v){ return nf(+v||0,2)+" €"; }   // espace insécable : le montant et le € restent sur la même ligne
 function rvR(v){ v=+v||0; return Math.abs(v-Math.round(v))<.005 ? nf(v,0) : nf(v,2); }
 function rvD(ts){ return ts? new Date(ts).toLocaleDateString(locale(),{timeZone:RV_IST,day:"2-digit",month:"2-digit",year:"numeric"}) : ""; }
 function rvDH(ts){ return ts? new Date(ts).toLocaleString(locale(),{timeZone:RV_IST,day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : ""; }
@@ -2516,10 +2516,14 @@ function rvConc(x){
 }
 var RV_CSS='<style>'+
  '#reportView{position:fixed;inset:0;z-index:9999;background:#fff;color:#16241f;overflow:auto;-webkit-overflow-scrolling:touch;font:12px/1.5 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}'+
- '.rv-bar{position:sticky;top:0;z-index:2;display:flex;gap:8px;padding:10px 12px;background:#0e3b3a;color:#fff;align-items:center}'+
- '.rv-bar button{font:inherit;font-size:13px;font-weight:600;border:0;border-radius:10px;padding:9px 12px;cursor:pointer;background:rgba(255,255,255,.14);color:#fff}'+
- '.rv-bar button.pri{background:#f0b429;color:#16241f}'+
- '.rv-doc{padding:14px 14px 40px;max-width:820px;margin:0 auto}'+
+ /* barre : sous l\'encoche iPhone (safe-area), boutons qui passent à la ligne sur petit écran */
+ '.rv-bar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:#0e3b3a;color:#fff;align-items:center}'+
+ '.rv-bar button{font:inherit;font-size:13px;font-weight:600;border:0;border-radius:10px;padding:9px 12px;cursor:pointer;background:rgba(255,255,255,.14);color:#fff;white-space:nowrap;flex:1 1 auto;text-align:center}'+
+ '.rv-bar button#rvClose{flex:0 0 auto}.rv-bar button.pri{background:#f0b429;color:#16241f}'+
+ '.rv-doc{padding:14px 14px calc(40px + env(safe-area-inset-bottom,0px));max-width:820px;margin:0 auto;overflow-x:hidden}'+
+ /* tableaux : jamais de débordement de la page -> défilement propre du tableau seul si besoin */
+ '.rv-doc .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px 0}.rv-doc .tw table{margin:0}'+
+ '.rv-doc .np{display:none;font-size:9.5px;color:#7b8781;font-weight:400;margin-top:1px}.rv-doc .cs{display:none}'+
  '.rv-doc h1{font-size:21px;margin:0 0 3px;color:#0e3b3a}.rv-doc h2{font-size:15px;margin:20px 0 8px;color:#0e3b3a;border-bottom:2.5px solid #f0b429;padding-bottom:4px;page-break-after:avoid}.rv-doc h3{font-size:12.5px;margin:12px 0 5px;color:#0e3b3a;page-break-after:avoid}'+
  '.rv-doc .sub{color:#5d6b66;font-size:11px}.rv-doc table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px}'+
  '.rv-doc th{text-align:left;font-weight:600;color:#5d6b66;border-bottom:1px solid #cfd8d4;padding:5px 6px;font-size:10px;text-transform:uppercase}'+
@@ -2530,6 +2534,8 @@ var RV_CSS='<style>'+
  '.rv-doc .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}.rv-doc .pos{color:#c0392b;font-weight:700}.rv-doc .neg{color:#0f8b7e;font-weight:700}.rv-doc .muted{color:#7b8781}'+
  '.rv-doc .head{border-bottom:3px solid #0e3b3a;padding-bottom:10px;margin-bottom:6px}.rv-doc .kpi{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}.rv-doc .kpi div{flex:1 1 120px;border:1px solid #d7dedb;border-radius:9px;padding:8px 10px}.rv-doc .kpi b{display:block;font-size:16px;color:#0e3b3a}.rv-doc .kpi span{font-size:9.5px;color:#5d6b66;text-transform:uppercase}'+
  '.rv-doc .note{background:#fbf7ec;border-left:3px solid #f0b429;padding:7px 10px;border-radius:0 7px 7px 0;font-size:10.5px;margin:8px 0}.rv-doc .pg{page-break-before:always}'+
+ /* petit écran : colonne « parts » repliée sous le nom, catégorie = icône seule, cellules plus serrées, retour à la ligne autorisé */
+ '@media (max-width:520px){.rv-doc{padding-left:10px;padding-right:10px}.rv-doc table{font-size:10.5px}.rv-doc th,.rv-doc td{padding:4px 2px}.rv-doc th{font-size:9px}.rv-doc td.n,.rv-doc th.n{white-space:normal;word-break:keep-all}.rv-doc .cp,.rv-doc .cl{display:none}.rv-doc .np{display:block}.rv-doc .cs{display:inline}.rv-doc h1{font-size:18px}.rv-bar button{font-size:12px;padding:9px 9px}}'+
  '@media print{body>*:not(#reportView){display:none!important}#reportView{position:static!important;overflow:visible!important;height:auto!important}.noprint{display:none!important}@page{size:A4;margin:14mm 12mm}}'+
  '</style>';
 function buildReport(){
@@ -2547,12 +2553,12 @@ function buildReport(){
   A.push('<div class="head"><h1>'+esc(t("exportTitle"))+'</h1><div class="sub">'+esc(t("exportSub"))+' <b>'+nowTxt+'</b> · '+esc(t("exportIST"))+'</div></div>');
   A.push('<div class="kpi"><div><span>'+esc(t("exportTotal"))+'</span><b>'+rvE(TOTAL)+'</b></div><div><span>'+esc(t("exportCount"))+'</span><b>'+all.length+'</b></div><div><span>'+esc(t("exportReimb"))+'</span><b>'+rvE(totRemb)+'</b></div><div><span>'+esc(t("exportRate"))+'</span><b>1 € = '+rvR(RATES.INR)+' ₹</b></div></div>');
   // 1 participants
-  A.push('<h2>1. '+esc(t("exportS1"))+'</h2><table><tr><th>'+esc(t("exportName"))+'</th><th class="n">'+esc(t("partsWord"))+'</th><th class="n">'+esc(t("exportPaid"))+'</th><th class="n">'+esc(t("exportShare"))+'</th><th class="n">'+esc(t("exportReimbShort"))+'</th><th class="n">'+esc(t("exportBalance"))+'</th></tr>');
+  A.push('<h2>1. '+esc(t("exportS1"))+'</h2><table><tr><th>'+esc(t("exportName"))+'</th><th class="n cp">'+esc(t("partsWord"))+'</th><th class="n">'+esc(t("exportPaid"))+'</th><th class="n">'+esc(t("exportShare"))+'</th><th class="n">'+esc(t("exportReimbShort"))+'</th><th class="n">'+esc(t("exportBalance"))+'</th></tr>');
   var sPaid=0,sPart=0;
   P.forEach(function(p){ var b=bil[p], s=b.solde; sPaid+=b.paid; sPart+=b.part;
     var cls=s>0.005?"pos":(s<-0.005?"neg":"muted"), txt=s>0.005?(t("exportOwes")+" "+rvE(s)):(s<-0.005?(t("exportToGet")+" "+rvE(-s)):t("exportEven"));
-    A.push('<tr><td><span class="dot" style="background:'+col(p)+'"></span><b>'+esc(p)+'</b></td><td class="n">'+sharesOf(p)+'</td><td class="n">'+rvE(b.paid)+'</td><td class="n">'+rvE(b.part)+'</td><td class="n">'+(b.rb>0.005?rvE(b.rb):"—")+'</td><td class="n '+cls+'">'+txt+'</td></tr>'); });
-  A.push('<tr class="tot"><td>TOTAL</td><td></td><td class="n">'+rvE(sPaid)+'</td><td class="n">'+rvE(sPart)+'</td><td class="n">'+rvE(totRemb)+'</td><td></td></tr></table>');
+    A.push('<tr><td><span class="dot" style="background:'+col(p)+'"></span><b>'+esc(p)+'</b><div class="np">'+sharesOf(p)+' '+esc(sharesOf(p)===1?t("partsWord").toLowerCase().replace(/s$/,""):t("partsWord").toLowerCase())+'</div></td><td class="n cp">'+sharesOf(p)+'</td><td class="n">'+rvE(b.paid)+'</td><td class="n">'+rvE(b.part)+'</td><td class="n">'+(b.rb>0.005?rvE(b.rb):"—")+'</td><td class="n '+cls+'">'+txt+'</td></tr>'); });
+  A.push('<tr class="tot"><td>TOTAL</td><td class="cp"></td><td class="n">'+rvE(sPaid)+'</td><td class="n">'+rvE(sPart)+'</td><td class="n">'+rvE(totRemb)+'</td><td></td></tr></table>');
   // 2 historique remboursements (actifs + supprimés)
   var histo=pays.map(function(q){ return {q:q, ok:true}; }).concat(trashItems().filter(function(it){return it.kind==="pay";}).map(function(it){ return {q:it.item, ok:false}; }));
   histo.sort(function(a,b){ return (a.q.ts||0)-(b.q.ts||0); });
@@ -2563,10 +2569,10 @@ function buildReport(){
   A.push('<tr class="tot"><td colspan="3">'+esc(t("exportCashed"))+'</td><td class="n">'+rvE(totRemb)+'</td><td></td></tr></table>');
   // 3 saisies manuelles chronologiques
   var man=S.expenses.filter(function(x){return x.cat!=="hotel";}).sort(function(a,b){return (a.mt||a.ts||0)-(b.mt||b.ts||0);});
-  A.push('<div class="pg"></div><h2>3. '+esc(t("exportS3"))+'</h2><table><tr><th>'+esc(t("exportEntered"))+'</th><th>'+esc(t("forWhat"))+'</th><th>'+esc(t("catField"))+'</th><th>'+esc(t("whoPaid"))+'</th><th>'+esc(t("exportConcerned"))+'</th><th class="n">'+esc(t("exportTyped"))+'</th><th class="n">€</th></tr>');
+  A.push('<div class="pg"></div><h2>3. '+esc(t("exportS3"))+'</h2><table><tr><th>'+esc(t("exportEntered"))+'</th><th>'+esc(t("forWhat"))+'</th><th><span class="cl">'+esc(t("catField"))+'</span><span class="cs">Cat.</span></th><th>'+esc(t("whoPaid"))+'</th><th>'+esc(t("exportConcerned"))+'</th><th class="n">'+esc(t("exportTyped"))+'</th><th class="n">€</th></tr>');
   var manTot=0;
   man.forEach(function(x){ var cc=rvConc(x); manTot+=(+x.eur||0);
-    A.push('<tr><td>'+rvDH(x.mt||x.ts)+'</td><td>'+(x.label?esc(x.label):'<i class="muted">'+esc(t("exportNoName"))+'</i>')+'</td><td>'+catIcon(x.cat)+' '+esc(catLabel(x.cat))+'</td><td>'+esc(x.who)+'</td><td class="muted" style="font-size:10px">'+esc(cc.length===P.length?t("everyone"):cc.join(", "))+'</td><td class="n muted">'+rvR(x.amount)+' '+esc(x.cur)+'</td><td class="n">'+rvE(x.eur)+'</td></tr>'); });
+    A.push('<tr><td>'+rvDH(x.mt||x.ts)+'</td><td>'+(x.label?esc(x.label):'<i class="muted">'+esc(t("exportNoName"))+'</i>')+'</td><td title="'+esc(catLabel(x.cat))+'">'+catIcon(x.cat)+' <span class="cl">'+esc(catLabel(x.cat))+'</span></td><td>'+esc(x.who)+'</td><td class="muted" style="font-size:10px">'+esc(cc.length===P.length?t("everyone"):cc.join(", "))+'</td><td class="n muted">'+rvR(x.amount)+' '+esc(x.cur)+'</td><td class="n">'+rvE(x.eur)+'</td></tr>'); });
   A.push('<tr class="tot"><td colspan="6">TOTAL</td><td class="n">'+rvE(manTot)+'</td></tr></table>');
   // 4 par catégorie
   var bc={}, bo=[]; all.forEach(function(x){ var c=x.cat||"other"; if(!bc[c]){bc[c]=[0,0];bo.push(c);} bc[c][0]++; bc[c][1]+=(+x.eur||0); });
@@ -2614,11 +2620,12 @@ function buildReport(){
     A.push('<tr class="tot"><td colspan="2">TOTAL</td><td class="n">'+rvE(tt)+'</td></tr></table>'); }
   else A.push('<p class="neg">'+esc(t("settleAllSquare"))+'</p>');
   A.push('<div class="note">'+esc(t("exportFooter"))+' '+nowTxt+' — '+esc(t("exportIST"))+'</div>');
-  return A.join("");
+  // chaque tableau dans un cadre défilant : la page ne déborde jamais de l'écran du téléphone
+  return A.join("").replace(/<table/g,'<div class="tw"><table').replace(/<\/table>/g,'</table></div>');
 }
 function openExport(){
   var doc=buildReport(), rv=$("reportView");
-  rv.innerHTML=RV_CSS+'<div class="rv-bar noprint"><button id="rvClose">✕ '+esc(t("exportClose"))+'</button><span style="flex:1"></span><button id="rvOpen">↗️ '+esc(t("exportOpen"))+'</button><button class="pri" id="rvPrint">🖨️ '+esc(t("exportSavePdf"))+'</button></div>'+
+  rv.innerHTML=RV_CSS+'<div class="rv-bar noprint"><button id="rvClose">✕ '+esc(t("exportClose"))+'</button><button id="rvOpen">↗️ '+esc(t("exportOpen"))+'</button><button class="pri" id="rvPrint">🖨️ '+esc(t("exportSavePdf"))+'</button></div>'+
     '<div class="note noprint" style="margin:10px 14px 0">'+esc(t("exportHint"))+'</div><div class="rv-doc">'+doc+'</div>';
   rv.hidden=false; document.body.style.overflow="hidden"; rv.scrollTop=0;
   $("rvClose").addEventListener("click", function(){ rv.hidden=true; rv.innerHTML=""; document.body.style.overflow=""; });
