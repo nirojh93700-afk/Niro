@@ -15,3 +15,37 @@ NB PAIEMENTS = 6 | NB DEPENSES = 67
  Selvan Viji sitta sitti    solde   -132.39
  Paramu sitta               solde   -249.92
 2026-09-11 10:12 UTC — EN LIGNE : var CACHE = "voyage-inde-v58";
+--- liens hotels 2026-09-11 10:22 UTC ---
+--- ETAT DES LIENS (202 = anti-robot Booking, normal) ---
+ the park chennai       202  https://www.booking.com/hotel/in/the-park-chennai.html
+ mamallaa heritage      202  https://www.booking.com/hotel/in/mamallaa-heritage.html
+ atithi                 202  https://www.booking.com/hotel/in/atithi.html
+ mgm vailankanni        202  https://www.booking.com/hotel/in/mgm-vailankanni.html
+ gopuram grand          202  https://www.booking.com/hotel/in/gopuram-grand.html
+ crown valley           202  https://www.booking.com/hotel/in/crown-valley-thekkady.html
+ abad copper castle     202  https://www.booking.com/hotel/in/abad-copper-castle.html
+ novotel kochi          202  https://www.booking.com/hotel/in/novotel-kochi-infopark.html
+
+--- HOTELS DU CARNET ---
+ OK   The Park Chennai               https://www.booking.com/hotel/in/the-park-chennai.html  (5 chambres)
+ OK   Atithi Hotel Pondichéry        https://www.booking.com/hotel/in/atithi.html  (5 chambres)
+ OK   MGM Vailankanni                https://www.booking.com/hotel/in/mgm-vailankanni.html  (5 chambres)
+ OK   Gopuram Grand                  https://www.booking.com/hotel/in/gopuram-grand.html  (5 chambres)
+ OK   Crown Valley Thekkady          https://www.booking.com/hotel/in/crown-valley-thekkady.html  (5 chambres)
+ OK   Abad Copper Castle Resort      https://www.booking.com/hotel/in/abad-copper-castle.html  (5 chambres)
+ OK   Novotel Kochi Infopark         https://www.booking.com/hotel/in/novotel-kochi-infopark.html  (5 chambres)
+ OK   Hotel Mamallaa Heritage        https://www.booking.com/hotel/in/mamallaa-heritage.html  (5 chambres)
+
+hotels avec lien : 8 | sans lien : []
+depenses: 67 | paiements: 6
+PUT http 200
+--- VERIF APRES ECRITURE ---
+ The Park Chennai               https://www.booking.com/hotel/in/the-park-chennai.html
+ Atithi Hotel Pondichéry        https://www.booking.com/hotel/in/atithi.html
+ MGM Vailankanni                https://www.booking.com/hotel/in/mgm-vailankanni.html
+ Gopuram Grand                  https://www.booking.com/hotel/in/gopuram-grand.html
+ Crown Valley Thekkady          https://www.booking.com/hotel/in/crown-valley-thekkady.html
+ Abad Copper Castle Resort      https://www.booking.com/hotel/in/abad-copper-castle.html
+ Novotel Kochi Infopark         https://www.booking.com/hotel/in/novotel-kochi-infopark.html
+ Hotel Mamallaa Heritage        https://www.booking.com/hotel/in/mamallaa-heritage.html
+depenses: 67 | paiements: 6
