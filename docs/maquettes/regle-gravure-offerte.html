@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Une gravure offerte, pas toutes</title>
+<style>
+  :root { --gold:#a98935; --gold-l:#dcc88f; --cream:#faf6ee; --ink:#2b2620; --soft:#6f675c; --line:#ece3d2; --bad:#a24336; --good:#2f6b45; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#f6f2ea; color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; line-height:1.55; }
+  .wrap { max-width:900px; margin:0 auto; padding:26px 16px 60px; display:grid; gap:22px; }
+  .card, .lead, .q { min-width:0; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px; }
+  h1 { font-family:Georgia,serif; font-weight:normal; font-size:27px; color:var(--gold); margin:0 0 10px; text-wrap:balance; }
+  h2 { font-family:Georgia,serif; font-weight:normal; font-size:20px; margin:0 0 12px; }
+  p { margin:0 0 12px; }
+  .lead { background:var(--cream); border:1px solid var(--gold-l); border-radius:14px; padding:18px 20px; }
+  .lead b { color:var(--gold); }
+  .tablebox { overflow-x:auto; min-width:0; }
+  table { border-collapse:collapse; width:100%; min-width:620px; font-size:0.93rem; }
+  th, td { text-align:left; padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--soft); font-weight:600; }
+  td.num { font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .off { color:var(--good); font-weight:700; }
+  .reste { color:var(--bad); font-weight:700; }
+  .hors { color:var(--soft); font-style:italic; }
+  tr:last-child td { border-bottom:0; }
+  .panier { background:var(--cream); border:1px solid var(--line); border-radius:14px; padding:16px; max-width:420px; }
+  .panier-l { display:flex; justify-content:space-between; gap:12px; padding:7px 0; font-size:0.95rem; }
+  .panier-l.tot { border-top:1px solid var(--gold-l); margin-top:8px; padding-top:11px; font-weight:700; font-size:1.05rem; }
+  .panier-code { display:flex; gap:8px; margin:12px 0 6px; }
+  .panier-code input { flex:1; padding:9px 11px; border:1px solid var(--line); border-radius:9px; font-size:0.9rem; background:#fff; }
+  .panier-code span { background:var(--gold); color:#fff; padding:9px 16px; border-radius:9px; font-weight:700; font-size:0.9rem; }
+  .ok { color:var(--good); font-weight:600; font-size:0.9rem; }
+  ul { margin:0; padding-left:20px; }
+  li { margin-bottom:8px; }
+  .q { background:#fff8e6; border:1px solid #f0d28a; border-radius:14px; padding:18px 20px; }
+  .q h2 { color:#8a6d1f; }
+</style></head>
+<body><div class="wrap">
+
+<section class="card">
+  <h1>Une gravure offerte, jamais toutes les pages</h1>
+  <p>Maquette à valider. Rien n&apos;est en ligne, aucun code n&apos;est créé.</p>
+  <div class="lead">
+    <b>La règle proposée :</b> le code annule <b>une seule option de gravure payante</b> du panier,
+    la première, avec un <b>plafond de 5 €</b>. Les autres pages, le socle lumineux et la photo gravée
+    restent payants. Vous ne pouvez donc jamais offrir plus de 5 € par commande.
+  </div>
+</section>
+
+<section class="card">
+  <h2>Ce que ça donne sur vos vraies pièces</h2>
+  <div class="tablebox">
+    <table>
+      <thead>
+        <tr><th>Pièce</th><th>Options de gravure payantes</th><th>Sans le code</th><th>Le code offre</th><th>Elle paie encore</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Collier plaque acier</td>
+          <td>Recto inclus · verso +5 € · photo +8 €</td>
+          <td class="num">5 €</td>
+          <td class="num off">− 5 €<br><small>le verso</small></td>
+          <td class="num">0 €<br><small>photo toujours 8 € si elle la prend</small></td>
+        </tr>
+        <tr>
+          <td>Collier médaillon livre</td>
+          <td>3 pages à 5 € chacune</td>
+          <td class="num">15 €</td>
+          <td class="num off">− 5 €<br><small>la 1<sup>re</sup> page</small></td>
+          <td class="num reste">10 €</td>
+        </tr>
+        <tr>
+          <td>Collier cœur et plaques</td>
+          <td>3 zones à 3 € chacune</td>
+          <td class="num">9 €</td>
+          <td class="num off">− 3 €<br><small>la 1<sup>re</sup> zone</small></td>
+          <td class="num reste">6 €</td>
+        </tr>
+        <tr>
+          <td>Cristal photo 3D</td>
+          <td>Photo 3D incluse · texte +5 € · socle +19,90 €</td>
+          <td class="num">5 €</td>
+          <td class="num off">− 5 €<br><small>le texte</small></td>
+          <td class="num">0 €<br><small>socle jamais offert</small></td>
+        </tr>
+        <tr>
+          <td>Porte-clés, pièce laiton</td>
+          <td>Gravure +3 €</td>
+          <td class="num">3 €</td>
+          <td class="num off">− 3 €</td>
+          <td class="num">0 €</td>
+        </tr>
+        <tr>
+          <td>Verres, flûte, carafe</td>
+          <td colspan="4" class="hors">Hors offre — le port de ces pièces coûte déjà cher, le code ne s&apos;y applique pas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Ce que la cliente voit dans son panier</h2>
+  <p>Elle saisit le code, le site lui confirme ce qui est offert, et la remise s&apos;applique au paiement.</p>
+  <div class="panier">
+    <div class="panier-l"><span>Collier médaillon livre</span><span class="num">34,11 €</span></div>
+    <div class="panier-l"><span>Gravure — 3 pages</span><span class="num">15,00 €</span></div>
+    <div class="panier-code"><input id="mq-code" type="text" value="GRAVUREOFFERTE" readonly><span>Appliquer</span></div>
+    <div class="ok">✓ Code valide (une gravure offerte) — appliqué au paiement.</div>
+    <div class="panier-l" style="margin-top:8px;"><span>Une gravure offerte</span><span class="num off">− 5,00 €</span></div>
+    <div class="panier-l tot"><span>Total</span><span class="num">44,11 €</span></div>
+  </div>
+</section>
+
+<section class="q">
+  <h2>Trois choses à trancher</h2>
+  <ul>
+    <li><b>Le plafond à 5 €.</b> C&apos;est le prix de votre zone la plus chère, donc une gravure est toujours
+      entièrement offerte. Vous pouvez le baisser à 3 € : dans ce cas, sur le médaillon livre, il resterait
+      2 € à payer sur la première page.</li>
+    <li><b>La photo gravée à 8 € et le socle lumineux à 19,90 €</b> ne sont jamais offerts, même s&apos;ils
+      sont plus chers. Dites-moi si vous voulez que la photo entre dans l&apos;offre.</li>
+    <li><b>Un seul cadeau par commande</b>, même si le panier contient trois bijoux. Sinon une commande de
+      trois pièces vous coûterait 15 €.</li>
+  </ul>
+</section>
+
+</div></body></html>
