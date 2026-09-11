@@ -442,7 +442,7 @@ var I18N = {
     hdRooms:"Chambres", hdAddHotel:"+ Ajouter un hôtel", hdEdit:"Modifier", hdWho:"Qui dort / partage", hdPaidBy:"Payé par (qui a réglé)", hdDelHotel:"Supprimer cet hôtel", hdVisible:"Nom visible par la famille", hdBack:"‹ Retour aux hôtels", hdName:"Nom de l'hôtel", hdNewName:"Nouvel hôtel…",
     hdVisBtn:"👨‍👩‍👧 Afficher le nom", hdVisHint:"Décoché = 🎁 surprise (le prix compte quand même).", roomSplit:"Répartition", roomPerPerson:"Montant par personne", roomAmounts:"Combien chaque personne paye", roomTotalLbl:"Total chambre",
     hdPaidReal:"Prix réel payé (réservation)", hdPaidRealHint:"Ce que tu as vraiment payé pour tout l'hôtel (facultatif, pour comparer aux chambres).", hdPaidLbl:"💳 Payé (réel)", hdRoomsTotal:"🛏️ Total chambres", hdGap:"⚠️ Écart",
-    pPaid:"a payé", pOwes:"doit", pGets:"à recevoir", pSquare:"à jour",
+    pPaid:"a payé", pOwes:"doit", pGets:"à recevoir", pSquare:"à jour", pYouOwe:"tu lui dois", stYouOwe:"TU LUI DOIS",
     pdTitle:"Détail", pdBy:"payé par", pdNone:"Rien à rembourser pour l'instant.", pdTapHint:"Appuie sur un nom pour voir le détail",
     pdPaidTitle:"💳 Ce que j'ai payé", pdPaidTitleO:"💳 Ce qu'il/elle a payé", pdShareMine:"🧾 Ma part du voyage", pdShareOther:"🧾 Sa part du voyage",
     pdShareHint:"Ce que tu consommes toi-même (ta chambre + ta part des dépenses communes).", pdShareHintO:"Sa consommation personnelle (sa chambre + sa part des dépenses communes).",
@@ -540,7 +540,7 @@ var I18N = {
     hdRooms:"Rooms", hdAddHotel:"+ Add a hotel", hdEdit:"Edit", hdWho:"Who sleeps / shares", hdPaidBy:"Paid by (who settled)", hdDelHotel:"Delete this hotel", hdVisible:"Name visible to the family", hdBack:"‹ Back to hotels", hdName:"Hotel name", hdNewName:"New hotel…",
     hdVisBtn:"👨‍👩‍👧 Show the name", hdVisHint:"Unticked = 🎁 surprise (price still counts).", roomSplit:"Split", roomPerPerson:"Amount per person", roomAmounts:"How much each person pays", roomTotalLbl:"Room total",
     hdPaidReal:"Actual price paid (booking)", hdPaidRealHint:"What you really paid for the whole hotel (optional, to compare with the rooms).", hdPaidLbl:"💳 Paid (actual)", hdRoomsTotal:"🛏️ Rooms total", hdGap:"⚠️ Gap",
-    pPaid:"paid", pOwes:"owes", pGets:"to receive", pSquare:"settled",
+    pPaid:"paid", pOwes:"owes", pGets:"to receive", pSquare:"settled", pYouOwe:"you owe them", stYouOwe:"YOU OWE THEM",
     pdTitle:"Detail", pdBy:"paid by", pdNone:"Nothing to pay back yet.", pdTapHint:"Tap a name to see the detail",
     pdPaidTitle:"💳 What I paid", pdPaidTitleO:"💳 What they paid", pdShareMine:"🧾 My share of the trip", pdShareOther:"🧾 Their share of the trip",
     pdShareHint:"What you consume yourself (your room + your share of shared costs).", pdShareHintO:"Their own consumption (their room + their share of shared costs).",
@@ -638,7 +638,7 @@ var I18N = {
     hdRooms:"அறைகள்", hdAddHotel:"+ ஹோட்டல் சேர்", hdEdit:"திருத்து", hdWho:"யார் தங்குகிறார் / பங்கு", hdPaidBy:"கட்டியவர்", hdDelHotel:"இந்த ஹோட்டலை நீக்கு", hdVisible:"பெயர் குடும்பத்திற்கு தெரியும்", hdBack:"‹ ஹோட்டல்களுக்கு", hdName:"ஹோட்டல் பெயர்", hdNewName:"புதிய ஹோட்டல்…",
     hdVisBtn:"👨‍👩‍👧 பெயரைக் காட்டு", hdVisHint:"தேர்வு இல்லை = 🎁 சர்ப்ரைஸ் (விலை கணக்கில் சேரும்).", roomSplit:"பங்கீடு", roomPerPerson:"நபர் ஒன்றுக்கு தொகை", roomAmounts:"ஒவ்வொருவரும் எவ்வளவு கட்டுகிறார்", roomTotalLbl:"அறை மொத்தம்",
     hdPaidReal:"உண்மையில் கட்டிய விலை", hdPaidRealHint:"ஹோட்டலுக்கு நீ உண்மையில் கட்டியது (விருப்பம், ஒப்பிட).", hdPaidLbl:"💳 கட்டியது", hdRoomsTotal:"🛏️ அறைகள் மொத்தம்", hdGap:"⚠️ வித்தியாசம்",
-    pPaid:"கட்டியது", pOwes:"தர வேண்டும்", pGets:"பெற வேண்டும்", pSquare:"சரி",
+    pPaid:"கட்டியது", pOwes:"தர வேண்டும்", pGets:"பெற வேண்டும்", pSquare:"சரி", pYouOwe:"நீ தர வேண்டும்", stYouOwe:"நீ தர வேண்டும்",
     pdTitle:"விவரம்", pdBy:"கட்டியவர்", pdNone:"இப்போது திருப்பித் தர எதுவும் இல்லை.", pdTapHint:"விவரம் பார்க்க பெயரைத் தட்டு",
     pdPaidTitle:"💳 நான் கட்டியது", pdPaidTitleO:"💳 அவர் கட்டியது", pdShareMine:"🧾 எனது பங்கு", pdShareOther:"🧾 அவரது பங்கு",
     pdShareHint:"நீ பயன்படுத்தியது (உன் அறை + பொதுச் செலவுகளில் உன் பங்கு).", pdShareHintO:"அவரது சொந்த பயன்பாடு (அறை + பொதுச் செலவுப் பங்கு).",
@@ -1158,10 +1158,12 @@ function renderExp(){
   });
   $("byPerson").innerHTML = names.length ? names.map(function(n){
     var bal = (per[n]||0)-(B.owed[n]||0)+(adj[n]||0);   // >0 : on lui doit · <0 : il doit
+    // Sur la ligne d'une AUTRE personne, on dit clairement ce que TOI tu lui dois
+    // (elle a donné plus que sa part) — pas « à recevoir », qui parle de son point de vue à elle.
     var chip = Math.abs(bal)<0.005
       ? '<span class="pchip zero">'+t("pSquare")+'</span>'
       : (bal>0
-          ? '<span class="pchip ok">'+t("pGets")+' '+mc(bal)+'</span>'
+          ? '<span class="pchip ok">'+(n===S.me?t("pGets"):t("pYouOwe"))+' '+mc(bal)+'</span>'
           : '<span class="pchip due">'+t("pOwes")+' '+mc(-bal)+'</span>');
     return '<button type="button" class="pRow" data-p="'+esc(n)+'" style="display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line2);padding:9px 2px;font:inherit;color:inherit;cursor:pointer">'+
       '<div style="display:flex;align-items:center;gap:9px">'+
@@ -1774,7 +1776,7 @@ function openPersonDetail(name){
     ? '<div style="padding:12px 0 2px;font-size:14px;font-weight:700;color:var(--aqua)">'+t("stSquare")+'</div>'
     : (net<0
       ? '<div style="display:flex;align-items:center;gap:8px;padding:12px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--rose)">'+t("stMustPay")+'</span><b style="font-size:19px;color:var(--rose);font-variant-numeric:tabular-nums">'+mc(-net)+'</b></div>'
-      : '<div style="display:flex;align-items:center;gap:8px;padding:12px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--aqua)">'+t("stToReceive")+'</span><b style="font-size:19px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(net)+'</b></div>');
+      : '<div style="display:flex;align-items:center;gap:8px;padding:12px 0 2px;border-top:2px solid var(--line)"><span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--aqua)">'+(me?t("stToReceive"):t("stYouOwe"))+'</span><b style="font-size:19px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(net)+'</b></div>');
   // bouton « X m'a remboursé » directement ici quand la personne te doit encore de l'argent
   // bouton toujours disponible sur la fiche d'un autre : on peut enregistrer un don même s'il a déjà tout remboursé
   var reimbBtn = !me

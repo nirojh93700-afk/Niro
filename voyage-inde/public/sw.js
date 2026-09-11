@@ -1,7 +1,7 @@
 /* Service worker — Voyage Inde
    Cache-first pour toute l'app (page, manifest, icônes, polices) -> s'ouvre même en avion.
    Ne touche PAS au réseau du carnet (kvdb, autre origine) : la sync passe toujours en direct. */
-var CACHE = "voyage-inde-v56";
+var CACHE = "voyage-inde-v57";
 var ASSETS = [
   "./", "./index.html", "./manifest.json", "./fonts.css", "./qr.png",
   "./lib/leaflet.js", "./lib/leaflet.css",
