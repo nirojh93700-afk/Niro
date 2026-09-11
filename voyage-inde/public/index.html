@@ -1117,19 +1117,20 @@ function paymentAdj(){
   return adj;
 }
 /* qui rembourse qui : minimise le nombre de transferts (glouton) */
+/* QUI REMBOURSE QUI — RÈGLE DE LA GÉRANTE (11/09/2026) : TOUT PASSE PAR ELLE.
+   C'est elle (1er participant) qui avance tout : chacun lui rembourse ce qu'il doit ; si quelqu'un
+   a donné plus que sa part, c'est elle qui lui rendra la différence. Jamais de virement entre deux
+   autres personnes (plus de « Amma Appa doit à Mama »). */
 function settlements(){
   var B=balances(), adj=paymentAdj();
-  var deb=[], cre=[];
-  B.names.forEach(function(p){ var v=(B.paid[p]||0)-(B.owed[p]||0)+(adj[p]||0);
-    if(v<-0.01) deb.push({p:p, v:-v}); else if(v>0.01) cre.push({p:p, v:v}); });
-  deb.sort(function(a,b){return b.v-a.v}); cre.sort(function(a,b){return b.v-a.v});
-  var out=[], i=0, j=0;
-  while(i<deb.length && j<cre.length){
-    var m=Math.min(deb[i].v, cre[j].v);
-    out.push({from:deb[i].p, to:cre[j].p, amount:m});
-    deb[i].v-=m; cre[j].v-=m;
-    if(deb[i].v<0.01) i++; if(cre[j].v<0.01) j++;
-  }
+  var hub=S.people[0]; if(!hub) return [];
+  var out=[];
+  B.names.forEach(function(p){ if(p===hub) return;
+    var v=(B.paid[p]||0)-(B.owed[p]||0)+(adj[p]||0);       // >0 : on lui doit · <0 : il doit
+    if(v<-0.01) out.push({from:p, to:hub, amount:-v});
+    else if(v>0.01) out.push({from:hub, to:p, amount:v});
+  });
+  out.sort(function(a,b){ return b.amount-a.amount; });
   return out;
 }
 
