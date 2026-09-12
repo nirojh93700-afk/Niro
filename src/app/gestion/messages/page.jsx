@@ -32,6 +32,31 @@ export default function MessagesAdmin() {
   // Formulaire « programmer / envoyer »
   const [f, setF] = useState({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" });
   const [sending, setSending] = useState(false);
+  const [prep, setPrep] = useState("");
+
+  // « Préparer pour validation » : range les messages déjà rédigés dans les
+  // réponses à valider et envoie l'alerte habituelle (bouton « Relire, modifier
+  // et envoyer »). RIEN ne part à la cliente tant que le gérant n'a pas validé.
+  async function preparerPourValidation(id) {
+    setPrep("envoi");
+    try {
+      const r = await fetch("/api/admin/messages-prets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify(id ? { action: "queue", id } : { action: "queue" }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "Préparation impossible.");
+      const n = (d.prepares || []).length;
+      const dejaLa = (d.ignores || []).length;
+      setPrep("");
+      setMsg(
+        n
+          ? `${n} message${n > 1 ? "s" : ""} en attente de validation — vous recevez ${n > 1 ? "les alertes" : "l'alerte"} par e-mail, avec le bouton « Relire, modifier et envoyer ».${dejaLa ? ` (${dejaLa} attendai${dejaLa > 1 ? "ent" : "t"} déjà.)` : ""}`
+          : "Ces messages attendent déjà votre validation — regardez vos e-mails ou l'Assistant."
+      );
+    } catch (e) { setPrep(""); setMsg(e.message); }
+  }
 
   const load = useCallback(async (k) => {
     try {
@@ -158,6 +183,15 @@ export default function MessagesAdmin() {
             texte se recopient dans le formulaire juste en dessous. Vous relisez, puis
             <strong> Envoyer maintenant</strong>. Rien ne part tout seul.
           </p>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", margin: "0 0 12px" }}>
+            <button type="button" className="btn btn-gold" style={{ padding: "10px 18px", fontWeight: 700 }} onClick={() => preparerPourValidation()} disabled={prep === "envoi"}>
+              {prep === "envoi" ? "Préparation…" : `📬 Préparer les ${MESSAGES_PRETS.length} pour validation`}
+            </button>
+            <span style={{ color: "var(--ink-soft)", fontSize: "0.82rem", flex: 1, minWidth: 180 }}>
+              Vous recevez une alerte par e-mail pour chacun, avec le bouton « Relire, modifier et envoyer » —
+              comme d&apos;habitude. Une fois validé, le message est rangé dans le dossier de la cliente et dans sa commande.
+            </span>
+          </div>
           {MESSAGES_PRETS.map((m) => (
             <div key={m.id} style={{ display: "flex", gap: 12, alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", padding: "10px 0", borderTop: "1px solid var(--line)" }}>
               <div style={{ minWidth: 200, flex: 1 }}>
@@ -176,6 +210,15 @@ export default function MessagesAdmin() {
                 }}
               >
                 Remplir
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline"
+                style={{ padding: "8px 14px", fontSize: "0.85rem" }}
+                onClick={() => preparerPourValidation(m.id)}
+                disabled={prep === "envoi"}
+              >
+                Préparer
               </button>
             </div>
           ))}
