@@ -97,11 +97,19 @@ L'interrupteur est construit et **éteint** (Gestion → Marketing → Offre gra
 `docs/maquettes/emails-relance-inscrites.html` (les 3 e-mails) et `docs/maquettes/regle-gravure-offerte.html`
 (la règle, artifact https://claude.ai/code/artifact/f97064b3-4f31-4e45-850c-e3644b0b1590).
 
-- [ ] **Le plafond** : 5 € (une gravure toujours entièrement offerte) ou 3 € ?
-- [ ] **La photo gravée (+8 €)** entre-t-elle dans l'offre ? (proposé : non, comme le socle LED)
-- [ ] **Un minimum d'achat** ? Courant chez les concurrents (Nomination : £39). Non prévu pour l'instant.
-- [ ] **Coder la règle dans `/api/checkout`** : une seule zone offerte, plafonnée, un cadeau par
-      commande. À faire sur son « applique » — sans ça, le code reste une remise fixe de 3 €.
+**⏸️ REPORTÉ le 11/09 : « on fera plus tard, j'ai d'autres trucs urgents ». Ne pas le relancer
+là-dessus ; reprendre quand IL en reparle.**
+
+Décisions déjà prises (ne plus les redemander) :
+- [x] **Une gravure offerte à son PRIX RÉEL** (3 € ou 5 € selon la pièce), sans plafond.
+- [x] **Bijoux + cristaux + cadeaux gravés** (porte-clés, laiton). Verres/flûte/carafe exclus.
+- [x] **Un seul cadeau par commande.** Photo gravée (8 €) et socle LED (19,90 €) restent payants.
+- [x] **Pas de minimum d'achat** (seuil 25 € possible plus tard).
+
+Reste à faire quand il le redemande :
+- [ ] **Coder la règle dans `/api/checkout`** (repérer la 1re option de gravure payante du panier,
+      la déduire à son prix réel, une seule par commande, catégories retenues).
+- [ ] Mettre les 3 e-mails au même texte, puis activer l'offre dans Gestion → Marketing.
 
 ---
 
