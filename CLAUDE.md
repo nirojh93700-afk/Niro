@@ -119,6 +119,65 @@ ne descend jamais sous zéro.
   via l'écran de résultats de campagne (`NewsletterAdmin`). Rappeler que les **clics sont fiables**
   mais que les **ouvertures ne sont qu'un ordre de grandeur**.
 
+### ✦ OFFRE « GRAVURE OFFERTE » — CONSTRUITE ET ÉTEINTE (11/09/2026)
+> Demande du gérant : « dans admin tu mets cette option, comme pour le mode vacances, quand j'ai
+> besoin j'active ; pour un mois ; que pour les gens qui ont pas commandé et qui sont inscrits ;
+> adapte les mails par rapport à la date d'inscription ».
+- **Écran** : Gestion → Marketing → ✦ Offre gravure offerte (`/gestion/offre-gravure`) — case
+  Activer, début, fin, code, montant, « inscrites depuis au moins X jours » (3 par défaut), rappel
+  du cadeau, bouton **« Ouvrir pour un mois »** et bouton **« Envoyer maintenant »**. Chiffres clés :
+  à servir / en attente / déjà reçu.
+- **Réglage** `settings.gravureOfferte` (enabled:false par défaut, sanitizé dans `/api/admin/settings`).
+  **ÉTEINTE = rien ne part jamais.** Ne JAMAIS l'activer sans sa demande.
+- **⛔ RIEN SUR LE SITE** (sa demande) : ni bandeau, ni encart de fiche. **L'offre n'existe que dans
+  l'e-mail**, donc un client qui a déjà acheté ne peut pas tomber dessus.
+- **Qui la reçoit** : inscrites à la newsletter **sans AUCUNE commande** (toute adresse présente
+  dans les commandes est exclue), **inscrites depuis plus de 3 jours** (les nouvelles viennent de
+  recevoir BIENVENUE10). Celles qui atteignent les 3 jours **pendant** l'offre sont servies au fil
+  de l'eau. **Une seule fois par personne** (section `offreGravure` = {email: ts}).
+- **Le texte s'adapte à l'ancienneté** (`ouverturePhrase` dans `src/lib/offreGravure.js`) :
+  < 14 j « il y a quelques jours » · < 30 j « quelques semaines » · < 90 j « depuis un moment » ·
+  ≥ 90 j « cela fait un moment que vous nous suivez de loin » · date inconnue « nos abonnées ».
+- **Fichiers** : `src/lib/offreGravure.js` (offreActive / ouverturePhrase / joursDepuis /
+  offreGravureEmail) · `runOffreGravureJob({dryRun})` dans `src/lib/jobs.js` · appelée par le
+  **heartbeat du site** (1×/jour, verrou `claimJob("offreGravure")`) · API `/api/admin/offre-gravure`
+  (GET état + comptes, POST `{action:"send"}`) · page `/gestion/offre-gravure` · CSS `.og-*`.
+- **Le code promo est créé pour de vrai** au premier envoi (`setPromoCode`, type `fixed`,
+  montant = le supplément gravure, réutilisable) et **jamais écrasé s'il existe déjà** → le gérant
+  peut le créer à la main dans Promotions pour le limiter aux bijoux/cristaux/cadeaux.
+- **⚠️ LE SUPPLÉMENT DE GRAVURE N'EST PAS TOUJOURS DE 3 € (remarque du gérant, 11/09/2026)** —
+  relevé dans `products.js` : `collier-plaque-acier` recto **inclus** + verso **+5 €** + photo
+  **+8 €** (`perExtraPage`/`photoSurcharge`) · `collier-medaillon-livre` **3 pages × 5 €** (15 €) ·
+  `collier-coeur-plaques` **3 zones × 3 €** · recto-verso divers **2 × 3 €** · cristaux **texte
+  +5 €** (la photo 3D est incluse, le socle LED 19,90 € n'est PAS de la gravure) · verre à whisky
+  face+fond **+7 €**. Un code à −3 € n'offre donc PAS « la gravure » partout.
+  **Il ne veut PAS offrir toutes les pages.**
+- ✅ **RÈGLE TRANCHÉE PAR LE GÉRANT LE 11/09/2026** (maquette `docs/maquettes/regle-gravure-offerte.html`,
+  artifact https://claude.ai/code/artifact/f97064b3-4f31-4e45-850c-e3644b0b1590, version 2) :
+  · le code offre **UNE gravure, une seule, à son PRIX RÉEL** (3 € ou 5 € selon la pièce) —
+    **AUCUN plafond fixe** : « ça dépend des produits de toute façon » ;
+  · sur les **bijoux, les cristaux ET les cadeaux gravés** (porte-clés, pièce laiton — il a dit oui) ;
+  · **verres, flûte, carafe HORS OFFRE** (leur port coûte déjà cher) ;
+  · **un seul cadeau par commande**, même avec plusieurs bijoux au panier ;
+  · **restent payants** : les pages/zones suivantes, la photo gravée (+8 €), le socle LED (19,90 €) ;
+  · **pas de minimum d'achat** (un seuil à 25 € reste possible s'il change d'avis) ;
+  · phrase cliente : **« Gravure offerte sur les bijoux et le cristal. »**
+- ⏸️ **REPORTÉ — « on fera plus tard » (11/09/2026).** Le code de la règle **n'est PAS écrit** : à
+  faire dans `/api/checkout` quand il le redemandera (repérer la 1re option de gravure payante du
+  panier, la déduire à son prix, une par commande, catégories ci-dessus). Tant que ce n'est pas fait,
+  le code promo reste un `fixed` de 3 € et **l'offre est éteinte** — donc rien ne part, aucun risque.
+- **Ce que font les autres (recherche 11/09/2026)** : le modèle du marché FR est **la 1re gravure
+  incluse, les faces suivantes payantes** (Atelier Aismée : recto offert, verso payant — c'est déjà
+  le modèle du collier plaque acier). Nomination : gravure offerte **1 par client**, avec **minimum
+  d'achat** (£39 / $59), hors articles soldés, non cumulable. Plusieurs boutiques (Emotion Gravure,
+  Atelier de Famille) annoncent « gravure offerte » comme argument permanent, pas comme promo.
+  → Une gravure par commande est la norme ; un minimum d'achat est courant et reste à trancher.
+- **Maquette des 3 e-mails de la séquence** : `docs/maquettes/emails-relance-inscrites.html`
+  (artifact https://claude.ai/code/artifact/1bb3b4e1-13b5-440f-9c55-9d92d0bcfe70). Les e-mails 2 et 3
+  ne parlent QUE des bijoux, du cristal et des cadeaux gravés — **jamais des verres ni de la carafe**
+  (leur port coûte trop cher pour être offert). Le cadeau surprise du colis est annoncé, avec le
+  choix au paiement (surprise / plutôt femme / plutôt homme).
+
 ## 🧱 GESTION — SQUELETTE MODERNE PARTAGÉ (02/09/2026, « un truc moderne »)
 > Le gérant a autorisé un nouveau design admin, sans contrainte de l'ancienne maquette « L'Écrin ».
 - `src/app/gestion/layout.jsx` → `src/components/admin/AdminShell.jsx` : **toutes** les pages

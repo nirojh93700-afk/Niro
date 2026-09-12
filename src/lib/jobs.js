@@ -7,12 +7,13 @@
 import {
   getScheduledEmails, markScheduledSent, getSettings, hasAutoSent, markAutoSent,
   listCagnottes, markCagnotteReminded, expireCagnotte, getBirthdays, setPromoCode,
-  getSubscribersDetailed,
+  getSubscribersDetailed, getPromoCodes, getOffreGravureSent, markOffreGravureSent,
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { sendClientMail, brandedMessage, boutonsAvis } from "@/lib/clientMail";
 import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
+import { offreActive, offreGravureEmail, joursDepuis } from "@/lib/offreGravure";
 
 const DAY = 86400000;
 
@@ -165,4 +166,63 @@ export async function runBirthdayJobs() {
     } catch { /* ignore */ }
   }
   return { sent };
+}
+
+// --- 4) Offre « gravure offerte » : e-mail ciblé aux inscrites sans commande -
+// Ne part QUE si le gérant a activé l'offre (Gestion → Marketing → Offre
+// gravure offerte) et que la période est ouverte. Chaque inscrite ne la reçoit
+// qu'une fois. Les inscriptions de moins de `minJours` jours attendent : elles
+// seront servies au fil de l'eau, tant que l'offre est ouverte.
+// `dryRun` : compte seulement, n'envoie rien (sert à l'écran d'admin).
+export async function runOffreGravureJob({ dryRun = false } = {}) {
+  const s = await getSettings();
+  const o = offreActive(s?.gravureOfferte);
+  if (!o) return { actif: false, eligibles: 0, envoyes: 0, attente: 0, deja: 0 };
+
+  const minJours = Number(o.minJours) || 0;
+  const [abonnes, commandes, dejaEnvoye] = await Promise.all([
+    getSubscribersDetailed(),
+    getSiteOrders(500),
+    getOffreGravureSent(),
+  ]);
+
+  // Adresses ayant déjà commandé (toute commande, même annulée : la personne
+  // connaît déjà la boutique, l'offre « première pièce » ne la concerne plus).
+  const acheteuses = new Set(
+    commandes.map((c) => String(c.customerEmail || "").trim().toLowerCase()).filter(Boolean)
+  );
+
+  let attente = 0, deja = 0;
+  const cibles = [];
+  for (const ab of abonnes) {
+    const email = String(ab.email || "").trim().toLowerCase();
+    if (!email || acheteuses.has(email)) continue;
+    if (dejaEnvoye[email]) { deja++; continue; }
+    const j = joursDepuis(ab.date);
+    if (j != null && j < minJours) { attente++; continue; } // trop récente → plus tard
+    cibles.push({ email, date: ab.date || "" });
+  }
+
+  if (dryRun) return { actif: true, eligibles: cibles.length, envoyes: 0, attente, deja };
+  if (!cibles.length) return { actif: true, eligibles: 0, envoyes: 0, attente, deja };
+
+  // Le code doit EXISTER pour de vrai (règle : aucune promesse qui ne marche
+  // pas au paiement). On ne touche pas à un code déjà réglé à la main.
+  const code = String(o.code || "GRAVUREOFFERTE").toUpperCase();
+  try {
+    const codes = await getPromoCodes();
+    if (!codes[code]) await setPromoCode(code, { type: "fixed", value: Number(o.montant) || 3, reusable: true });
+  } catch { /* ne doit jamais bloquer l'envoi */ }
+
+  let envoyes = 0;
+  const faits = [];
+  for (const c of cibles) {
+    try {
+      const { subject, html } = offreGravureEmail({ date: c.date, code, fin: o.end, cadeau: o.cadeau !== false });
+      const r = await sendClientMail({ to: c.email, subject, html });
+      if (r?.ok) { envoyes++; faits.push(c.email); }
+    } catch { /* on continue avec les suivantes */ }
+  }
+  try { if (faits.length) await markOffreGravureSent(faits); } catch { /* ignore */ }
+  return { actif: true, eligibles: cibles.length, envoyes, attente, deja };
 }

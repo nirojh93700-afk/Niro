@@ -16,6 +16,9 @@
 | **Simon Zuccarelli** (`zucsim58@gmail.com`, Éternel Compagnon) — partenariat revendeur / dropshipping cristaux 3D pour animaux | Réponse préparée par l'agent, **attend la validation du gérant** | Alerte « [À valider] » du 07/09 dans la boîte mail |
 | **Newsletter du 04/09** | ⚠️ **VÉRIFIÉ le 09/09 : JAMAIS PARTIE** (aucune campagne dans les stats à part le [TEST] du 01/09, file programmée vide, rien dans Gmail autour du 04/09). **Ne PAS envoyer la relance** ; c'est l'envoi INITIAL qu'il faut refaire, sur décision du gérant (maquette → à lui seul → liste) | Gestion → Marketing → Newsletter |
 | **Ticket xTool #1222642** (F Series) | Message anglais proposé ; **c'est le gérant qui envoie depuis Outlook** (fil absent du Gmail surveillé) | `CLAUDE.md` § État au 09/09 |
+| **Sonia** (`soniagailhac1307@gmail.com`) — commande 16GFEMQP, bracelet empreinte « Ayden » | Message de réassurance **validé, à envoyer** par le fil Communications & aperçu | `docs/messages/rassurance-3-commandes.md` |
+| **Ophélie Terraz** (`ophelie.terraz@gmail.com`) — commande 0KVSBXKR, 4 verres à vin | Message validé, **à envoyer** ; lui demande ce qu'elle veut pour le cadeau (colis envoyé au destinataire) | `docs/messages/rassurance-3-commandes.md` |
+| **Sophie Berardo** (#0C1CGL2Q) — verre whisky sur mesure | Message « on ne vous a pas oubliée » validé, **à envoyer** | `docs/messages/rassurance-3-commandes.md` |
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
 
@@ -117,6 +120,28 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 - **Cron anniversaires** : `CRON_SECRET` + Google Cloud Scheduler sur `/api/cron/birthdays`.
 - **Clés optionnelles** : `TAVILY_API_KEY` (étude de marché), `OPENAI_API_KEY` (générateur pro).
 - **Ouvrir le site au public** : décocher le code d'accès (Apparence → Accès & état), si encore privé.
+
+---
+
+## 4 bis. ✦ Offre gravure offerte — décisions en attente (11/09/2026)
+
+L'interrupteur est construit et **éteint** (Gestion → Marketing → Offre gravure offerte). Maquettes :
+`docs/maquettes/emails-relance-inscrites.html` (les 3 e-mails) et `docs/maquettes/regle-gravure-offerte.html`
+(la règle, artifact https://claude.ai/code/artifact/f97064b3-4f31-4e45-850c-e3644b0b1590).
+
+**⏸️ REPORTÉ le 11/09 : « on fera plus tard, j'ai d'autres trucs urgents ». Ne pas le relancer
+là-dessus ; reprendre quand IL en reparle.**
+
+Décisions déjà prises (ne plus les redemander) :
+- [x] **Une gravure offerte à son PRIX RÉEL** (3 € ou 5 € selon la pièce), sans plafond.
+- [x] **Bijoux + cristaux + cadeaux gravés** (porte-clés, laiton). Verres/flûte/carafe exclus.
+- [x] **Un seul cadeau par commande.** Photo gravée (8 €) et socle LED (19,90 €) restent payants.
+- [x] **Pas de minimum d'achat** (seuil 25 € possible plus tard).
+
+Reste à faire quand il le redemande :
+- [ ] **Coder la règle dans `/api/checkout`** (repérer la 1re option de gravure payante du panier,
+      la déduire à son prix réel, une seule par commande, catégories retenues).
+- [ ] Mettre les 3 e-mails au même texte, puis activer l'offre dans Gestion → Marketing.
 
 ---
 

@@ -54,6 +54,24 @@ export async function POST(req) {
       giftText: str(body.vacation.giftText, 300),
     };
   }
+  // ✦ Offre « gravure offerte » (e-mail ciblé aux inscrites sans commande).
+  // Rien sur le site : seuls les e-mails sont concernés. Éteinte par défaut.
+  if (body.gravureOfferte && typeof body.gravureOfferte === "object") {
+    const g = body.gravureOfferte;
+    const num = (v, def, min, max) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : def;
+    };
+    patch.gravureOfferte = {
+      enabled: Boolean(g.enabled),
+      start: str(g.start, 30),
+      end: str(g.end, 30),
+      code: str(g.code, 30).toUpperCase().replace(/[^A-Z0-9]/g, "") || "GRAVUREOFFERTE",
+      montant: num(g.montant, 3, 0, 50),
+      minJours: num(g.minJours, 3, 0, 365),
+      cadeau: g.cadeau !== false,
+    };
+  }
   if (body.hero && typeof body.hero === "object") {
     const h = body.hero;
     patch.hero = {

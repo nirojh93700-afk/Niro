@@ -3,7 +3,7 @@
 // Throttle via claimJob() → chaque tâche ne part qu'à l'intervalle voulu, une
 // seule fois (verrou). Tout est isolé : ne peut jamais casser une page.
 import { claimJob } from "@/lib/stock";
-import { runScheduledJobs, runCashbackJobs, runBirthdayJobs } from "@/lib/jobs";
+import { runScheduledJobs, runCashbackJobs, runBirthdayJobs, runOffreGravureJob } from "@/lib/jobs";
 import { syncInbox } from "@/lib/inbox";
 
 const MIN = 60000;
@@ -30,5 +30,11 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("birthdays", 24 * 60 * MIN)) out.birthdays = await runBirthdayJobs();
   } catch (e) { out.birthdaysError = e.message; }
+  // Offre « gravure offerte » : au plus une fois par jour. Ne fait RIEN tant
+  // que le gérant n'a pas activé l'offre ; sert aussi à servir au fil de l'eau
+  // les inscrites qui atteignent les 3 jours pendant la période.
+  try {
+    if (await claimJob("offreGravure", 24 * 60 * MIN)) out.offreGravure = await runOffreGravureJob();
+  } catch (e) { out.offreGravureError = e.message; }
   return out;
 }
