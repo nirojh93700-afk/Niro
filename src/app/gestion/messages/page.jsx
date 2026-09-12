@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "@/lib/messageTemplatesSeed";
+import { MESSAGES_PRETS } from "@/lib/messagesPrets";
 import PageHead from "@/components/admin/PageHead";
 
 // =============================================================================
@@ -147,6 +148,39 @@ export default function MessagesAdmin() {
           { label: "Règles automatiques", value: rules.length },
         ]} />
       {msg && <p style={{ background: "#f6efdd", border: "1px solid #e7d3a1", borderRadius: 8, padding: "8px 12px", color: "#7a5c17" }}>{msg}</p>}
+
+      {/* 0. MESSAGES DÉJÀ RÉDIGÉS, PRÊTS À ENVOYER (un clic remplit le formulaire) */}
+      {MESSAGES_PRETS.length > 0 && (
+        <div style={{ ...box, background: "#fffdf6", borderColor: "#dcc88f" }}>
+          <h2 style={{ marginTop: 0 }}>📌 Messages prêts à envoyer</h2>
+          <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -6 }}>
+            Déjà rédigés et relus. Cliquez sur <strong>Remplir</strong> : l&apos;adresse, le sujet et le
+            texte se recopient dans le formulaire juste en dessous. Vous relisez, puis
+            <strong> Envoyer maintenant</strong>. Rien ne part tout seul.
+          </p>
+          {MESSAGES_PRETS.map((m) => (
+            <div key={m.id} style={{ display: "flex", gap: 12, alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", padding: "10px 0", borderTop: "1px solid var(--line)" }}>
+              <div style={{ minWidth: 200, flex: 1 }}>
+                <strong>{m.client}</strong>{m.ref ? <span style={{ color: "var(--ink-soft)" }}> · commande #{m.ref}</span> : null}
+                <div style={{ fontSize: "0.84rem", color: "var(--ink-soft)" }}>{m.piece}</div>
+                {m.note ? <div style={{ fontSize: "0.8rem", color: "#8a6d1f", marginTop: 3 }}>{m.note}</div> : null}
+              </div>
+              <button
+                type="button"
+                className="btn btn-gold"
+                style={{ padding: "8px 16px", fontSize: "0.85rem" }}
+                onClick={() => {
+                  setF((prev) => ({ ...prev, to: m.to, name: m.client, ref: m.ref || "", subject: m.subject, body: m.body }));
+                  setMsg(`Message pour ${m.client} chargé — relisez puis cliquez « Envoyer maintenant ».`);
+                  if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              >
+                Remplir
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 1. ENVOYER / PROGRAMMER UN MESSAGE */}
       <div style={box}>
