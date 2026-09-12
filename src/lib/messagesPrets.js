@@ -11,7 +11,11 @@
 // Quand un message est envoyé, retirer son entrée d'ici.
 // =============================================================================
 
-export const MESSAGES_PRETS = [
+// ✅ Les trois messages ci-dessous ont été ENVOYÉS le 12/09/2026 à 07 h 13.
+// Liste vidée pour que l'encadré n'affiche plus rien dans Gestion.
+export const MESSAGES_PRETS = [];
+
+const DEJA_ENVOYES = [
   {
     id: "16GFEMQP-rassurance",
     client: "Sonia",
