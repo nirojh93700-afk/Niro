@@ -744,6 +744,8 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte ou photo à graver",
     // Comme la pièce en laiton : texte OU photo, au choix de la cliente.
+    // 1re gravure incluse (texte ou photo) ; le texte au dos en plus est payant (+3 €).
+    engravingPricing: { textKeys: ["textePhoto"], textExtra: 3 },
     personalizationFields: [
       { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
         { value: "texte", label: "Un texte" },
@@ -753,7 +755,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "texte" },
       { key: "photo", type: "photo", label: "Photo à graver", showIfField: "gravure", showIfValue: "photo",
         text: "Une photo nette et bien éclairée donne le meilleur résultat. Les portraits rapprochés et les silhouettes se gravent très bien ; les scènes très détaillées rendent moins bien sur une surface aussi petite." },
-      { key: "textePhoto", label: "Texte au dos", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
+      { key: "textePhoto", label: "Texte au dos (+3 €)", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
       { key: "policePhoto", type: "font", label: "Police du texte au dos", optional: true, showIfField: "gravure", showIfValue: "photo" },
     ],
     images: [
@@ -1809,18 +1811,20 @@ export const products = [
     engravingPricing: { motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
+    // La face avant est incluse ; chaque face gravée en plus est payante (+3 €).
+    engravingPricing: { textKeys: ["face2", "face3", "face4"], textExtra: 3 },
     personalizationFields: [
       { key: "note", type: "note", text: "Gravure des 4 faces (texte) incluse. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
       { key: "face1", label: "Face avant — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
       { key: "motif1", type: "motif", label: "Face avant — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Face avant — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
-      { key: "face2", label: "Face arrière — texte", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
+      { key: "face2", label: "Face arrière — texte (+3 €)", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
       { key: "motif2", type: "motif", label: "Face arrière — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos2", type: "select", label: "Face arrière — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
-      { key: "face3", label: "Face droite — texte", placeholder: "Ex. un mot, un message", maxLength: 23, optional: true },
+      { key: "face3", label: "Face droite — texte (+3 €)", placeholder: "Ex. un mot, un message", maxLength: 23, optional: true },
       { key: "motif3", type: "motif", label: "Face droite — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos3", type: "select", label: "Face droite — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
-      { key: "face4", label: "Face gauche — texte", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
+      { key: "face4", label: "Face gauche — texte (+3 €)", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
       { key: "motif4", type: "motif", label: "Face gauche — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos4", type: "select", label: "Face gauche — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "sens", type: "select", label: "Sens du nom", optional: true, options: [
@@ -1858,9 +1862,11 @@ export const products = [
     category: "cristal", type: "Clé USB cristal 3D",
     tagline: "Une clé USB en cristal, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
+    // La gravure 3D de la photo est incluse ; le texte en plus est payant (+5 €).
+    engravingPricing: { textKeys: ["texte"], textExtra: 5 },
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", optional: true, text: "Photo nette et contrastée pour un beau rendu." },
-      { key: "texte", label: "Texte à graver (optionnel)", maxLength: 30, optional: true },
+      { key: "texte", label: "Texte à graver (+5 €)", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
@@ -1955,17 +1961,19 @@ export const products = [
     personalizable: true, personalizationLabel: "Texte ou photo à graver",
     // La cliente choisit d'abord CE qu'elle veut graver : un texte ou une photo.
     // Les champs suivants s'affichent selon son choix (showIfField/showIfValue).
+    // 1re gravure incluse (recto ou photo) ; le dos gravé en plus est payant (+3 €).
+    engravingPricing: { textKeys: ["verso", "versoPhoto"], textExtra: 3 },
     personalizationFields: [
       { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
         { value: "texte", label: "Un texte" },
         { value: "photo", label: "Une photo" },
       ] },
       { key: "recto", label: "Texte à graver — recto", maxLength: 30, showIfField: "gravure", showIfValue: "texte" },
-      { key: "verso", label: "Texte à graver — verso", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "texte" },
+      { key: "verso", label: "Texte à graver — verso (+3 €)", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "texte" },
       { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "texte" },
       { key: "photo", type: "photo", label: "Photo à graver", showIfField: "gravure", showIfValue: "photo",
         text: "Une photo nette et bien éclairée donne le meilleur résultat. Les portraits rapprochés et les silhouettes se gravent très bien ; les scènes avec beaucoup de détails ou un arrière-plan chargé rendent moins bien sur une surface aussi petite." },
-      { key: "versoPhoto", label: "Texte au dos", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
+      { key: "versoPhoto", label: "Texte au dos (+3 €)", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
       { key: "policePhoto", type: "font", label: "Police du texte au dos", optional: true, showIfField: "gravure", showIfValue: "photo" },
     ],
     images: ["/produits/piece_laiton.jpg"],
@@ -2258,6 +2266,8 @@ export const products = [
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
+    // 1re gravure (prénom) incluse ; chaque gravure en plus est payante (+3 €).
+    engravingPricing: { textKeys: ["date", "initiale"], textExtra: 3 },
     personalizationFields: [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
@@ -2267,8 +2277,8 @@ export const products = [
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
-      { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
-      { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17) et le monogramme (n°20 : initiale, nom, date), le texte est gravé dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
@@ -2368,6 +2378,8 @@ export const products = [
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
+    // 1re gravure (prénom) incluse ; chaque gravure en plus est payante (+3 €).
+    engravingPricing: { textKeys: ["date", "initiale"], textExtra: 3 },
     personalizationFields: [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
@@ -2385,8 +2397,8 @@ export const products = [
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
-      { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
-      { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Cadres et banderoles (n°18-19, 21-24) : écrivez votre prénom, il apparaît dans l'espace au milieu du cadre (déplaçable). Modèles avec un prénom déjà dessiné (n°14-17, 25) : votre prénom sera gravé dans ce style par l'atelier (il ne s'affiche pas en plus sur l'aperçu). La police ci-dessus sert au texte simple (couples n°1 à 13)." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
@@ -3438,14 +3450,16 @@ export const products = [
     cardImage: "/produits/plaque-naissance-duo.jpg", // carte « moitié-moitié » Fille/Garçon
     personalizable: true,
     personalizationLabel: "Prénom + date, poids, heure, taille (+ photo en option)",
+    // Prénom et date inclus (obligatoires) ; chaque mesure en plus +3 €, la photo +8 €.
+    engravingPricing: { textKeys: ["poids", "heure", "taille"], textExtra: 3, photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
       { key: "prenom", label: "Prénom du bébé", placeholder: "Ex : Marius", maxLength: 14 },
       { key: "date", label: "Date de naissance", placeholder: "Ex : 12 mars 2026", maxLength: 22 },
-      { key: "poids", label: "Poids", placeholder: "Ex : 3 kg 400", maxLength: 12, optional: true },
-      { key: "heure", label: "Heure de naissance", placeholder: "Ex : 8 h 43", maxLength: 10, optional: true },
-      { key: "taille", label: "Taille", placeholder: "Ex : 52 cm", maxLength: 10, optional: true },
+      { key: "poids", label: "Poids (+3 €)", placeholder: "Ex : 3 kg 400", maxLength: 12, optional: true },
+      { key: "heure", label: "Heure de naissance (+3 €)", placeholder: "Ex : 8 h 43", maxLength: 10, optional: true },
+      { key: "taille", label: "Taille (+3 €)", placeholder: "Ex : 52 cm", maxLength: 10, optional: true },
       { key: "police", type: "font", label: "Style d'écriture du prénom", optional: true },
-      { key: "photo", type: "photo", label: "Photo du bébé à graver", optional: true, text: "Facultatif : la photo est gravée discrètement sur le bois, à côté du prénom. Photo nette et bien éclairée." },
+      { key: "photo", type: "photo", label: "Photo du bébé à graver (+8 €)", optional: true, text: "Facultatif : la photo est gravée discrètement sur le bois, à côté du prénom. Photo nette et bien éclairée." },
       { key: "note-grav", type: "note", text: "La plaque est fabriquée à la commande et gravée au laser en France. Livrée avec son chevalet." },
     ],
     title: "Plaque de naissance personnalisée en bois — prénom, date, poids, taille",
