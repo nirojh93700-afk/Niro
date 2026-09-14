@@ -1495,9 +1495,9 @@ export const products = [
       "/produits/bracelet-cordon-plaque-4.jpg",
     ],
     variants: [
-      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-noir-noir", image: "/produits/bracelet-cordon-plaque-1.jpg" },
-      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 37.90, stockId: "bracelet-cordon-plaque-noir-acier", image: "/produits/bracelet-cordon-plaque-2.jpg" },
-      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-gris", image: "/produits/bracelet-cordon-plaque-3.jpg" },
+      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 21.90, stockId: "bracelet-cordon-plaque-noir-noir", image: "/produits/bracelet-cordon-plaque-1.jpg" },
+      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 21.90, stockId: "bracelet-cordon-plaque-noir-acier", image: "/produits/bracelet-cordon-plaque-2.jpg" },
+      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 21.90, stockId: "bracelet-cordon-plaque-gris", image: "/produits/bracelet-cordon-plaque-3.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet <strong>sobre et solide</strong> : un double cordon tressé et une <strong>plaque en acier</strong> qui se grave. Les <strong>nœuds coulissants</strong> le rendent réglable — il s'ajuste à tous les poignets et se met tout seul, sans fermoir à chercher.</p>
 <h3>Caractéristiques</h3>
