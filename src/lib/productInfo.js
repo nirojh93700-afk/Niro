@@ -917,7 +917,7 @@ Un souci à la réception ?
 - Matière : acier inoxydable, disponible en doré, or rose et argenté.
 - Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
-- Gravure en option sur la médaille cœur : prénom, date ou petit message (texte court conseillé).
+- Gravure en option sur la médaille cœur, au recto et/ou au verso (3 € par face) : prénom, date ou petit message (texte court conseillé).
 - Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.

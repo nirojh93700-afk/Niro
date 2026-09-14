@@ -1110,11 +1110,21 @@ export const products = [
     title: "Bracelet cœur à graver, fermoir T-bar — médaille cœur personnalisée, doré / or rose / argenté",
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Une médaille cœur à graver sur une chaîne à fermoir T-bar — doré, or rose ou argenté.",
-    personalizable: true, personalizationLabel: "Gravure sur le cœur (prénom, date, message) + police",
+    personalizable: true, personalizationLabel: "Gravure sur le cœur : recto et/ou verso (+3 € par face)",
+    // La médaille cœur se grave sur ses DEUX faces : recto et verso. Chaque face
+    // gravée est payante (+3 €), chiffrée APRÈS la remise bijoux (+3 € pile, quel
+    // que soit le coloris) : le mettre en variante ferait dériver le supplément à
+    // +2,70 € à cause de la remise −10 %.
+    // Les deux champs sont FACULTATIFS et toujours visibles : laisser vide = bijou
+    // sans gravure. Plus de variantes « Sans / Avec gravure » qui cachaient les
+    // champs — renommer une option dans l'admin suffisait à faire disparaître
+    // toute la gravure de la fiche.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "La médaille cœur peut être gravée (en option). Choisissez une finition « Avec gravure » pour ajouter un prénom, une date ou un petit message sur le cœur (texte court conseillé)." },
-      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "note", type: "note", text: "Ce bracelet se porte tel quel, ou gravé. La médaille cœur se grave sur ses deux faces : le recto (côté visible) et le verso. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure. Texte court conseillé pour rester bien lisible." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Prénom, date, petit message…", maxLength: 20, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Ex. 21.05.2026", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-coeur-ot-trio.jpg",
@@ -1124,22 +1134,23 @@ export const products = [
       "/produits/bracelet-coeur-ot-dore-porte.jpg",
       "/produits/bracelet-coeur-ot-dore-2.jpg",
     ],
+    // Une option par finition : la gravure n'est plus une variante, elle est
+    // chiffrée par face (voir engravingPricing). Les identifiants gardent leur
+    // suffixe « -sans » d'origine EXPRÈS : les changer casserait les paniers en
+    // cours et l'historique des commandes.
     variants: [
-      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
-      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+      { id: "bracelet-coeur-ot-dore-sans", title: "Doré", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong>, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
-<p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
+<p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur — au recto, au verso, ou sur les deux faces — pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
 <li><strong>Finitions :</strong> doré, or rose, argenté</li>
 <li><strong>Fermoir :</strong> T-bar (OT), facile à mettre</li>
-<li><strong>Gravure :</strong> laser, sur la médaille cœur — en option (+3 €)</li>
+<li><strong>Gravure :</strong> laser, sur la médaille cœur — recto et/ou verso, 3 € par face gravée</li>
 </ul>`,
   },
   // ===== Colliers =====
