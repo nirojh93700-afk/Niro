@@ -19,6 +19,7 @@
 | **Sonia** (`soniagailhac1307@gmail.com`) — commande 16GFEMQP | ✅ **ENVOYÉ le 12/09 à 07 h 13** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
 | **Ophélie Terraz** (`ophelie.terraz@gmail.com`) — commande 0KVSBXKR | ✅ **ENVOYÉ le 12/09 à 07 h 13** — **attendre sa réponse sur le choix du cadeau** (colis part chez la destinataire) | `docs/messages/rassurance-3-commandes.md` |
 | **Sophie Berardo** (#0C1CGL2Q) — verre whisky sur mesure | ✅ **ENVOYÉ le 12/09 à 07 h 13** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
+| **Rose** (`rose75013@icloud.com`) — verre à whisky, gravure en portugais | ✅ **ENVOYÉ le 14/09** par Messages clients (`send-client-email`), texte exact de `messagesPrets.js`. **Attendre ses réponses** (répartition des lignes, nb de verres, écriture, majuscules). 📌 Housekeeping : retirer l'entrée `rose-verre-whisky-portugais` de `src/lib/messagesPrets.js` au prochain déploiement (règle du fichier) | `src/lib/messagesPrets.js` |
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
 
