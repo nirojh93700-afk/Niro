@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperçu 3D — __TITRE__ (maquette)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@400;700&family=Montserrat:wght@400;600&family=Inter:wght@400;600&family=Great+Vibes&family=Allura&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{ --or:#c9a24b; --or-f:#a98935; --or-c:#e2c67e; --creme:#fbf7ee; --creme2:#f3e8d3;
+         --encre:#1a1206; --encre2:#241a0c; --gris:#6f675c; --ligne:#ece3d2; --vert:#2f6b45; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--creme); color:var(--encre2); line-height:1.55;
+        font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; }
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 16px 60px; }
+  .bandeau{ background:var(--encre); color:var(--creme2); font-size:.82rem; letter-spacing:.04em;
+            text-align:center; padding:9px 16px; }
+  .bandeau b{ color:var(--or-c); }
+  .fil{ font-size:.82rem; color:var(--gris); padding:16px 0 10px; }
+  .deux{ display:grid; gap:26px; grid-template-columns:1fr; }
+  @media(min-width:900px){ .deux{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; } }
+  .col{ min-width:0; }
+  .photo{ background:#fff; border:1px solid var(--ligne); border-radius:14px; overflow:hidden; }
+  .photo img{ display:block; width:100%; height:auto; }
+  .vign{ display:flex; gap:8px; margin-top:10px; overflow-x:auto; padding-bottom:4px; }
+  .vign img{ width:64px; height:64px; object-fit:cover; border-radius:9px; border:1px solid var(--ligne);
+             background:#fff; cursor:pointer; flex:0 0 auto; }
+  .vign img.on{ border-color:var(--or); box-shadow:0 0 0 2px rgba(201,162,75,.25); }
+
+  .box3d{ position:relative; background:linear-gradient(170deg,#fffdf8,#f4ecdd);
+          border:1px solid var(--or-c); border-radius:14px; overflow:hidden; }
+  .box3d canvas{ display:block; width:100%; height:auto; touch-action:none; }
+  .box3d .eti{ position:absolute; top:10px; left:12px; font-size:.7rem; letter-spacing:.09em;
+               text-transform:uppercase; color:var(--or-f); }
+  .faces{ display:flex; gap:8px; justify-content:center; padding:0 0 12px; }
+  .faces button{ font:inherit; font-size:.85rem; padding:7px 14px; border-radius:999px; cursor:pointer;
+                 border:1px solid var(--ligne); background:#fff; color:var(--encre2); }
+  .faces button.on{ border-color:var(--or); background:var(--creme2); font-weight:600; }
+  .aide{ text-align:center; font-size:.78rem; color:var(--gris); padding:0 12px 12px; }
+
+  .surtitre{ font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--or-f); }
+  h1{ font-family:'Playfair Display',Georgia,serif; font-weight:600; font-size:1.6rem; line-height:1.25;
+      margin:6px 0 8px; text-wrap:balance; }
+  .tag{ color:var(--gris); margin:0 0 14px; }
+  .prix{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 18px; }
+  .prix .old{ color:var(--gris); text-decoration:line-through; }
+  .prix .now{ font-size:1.5rem; font-weight:700; color:#a2352a; }
+  .prix .rem{ background:#a2352a; color:#fff; border-radius:999px; font-size:.75rem; padding:3px 9px; font-weight:700; }
+
+  h2{ font-family:'Playfair Display',Georgia,serif; font-weight:600; font-size:1.05rem; margin:22px 0 10px; }
+  .opts{ display:flex; gap:9px; flex-wrap:wrap; }
+  .opts button{ font:inherit; font-size:.9rem; padding:10px 14px; border-radius:11px; cursor:pointer;
+                border:1px solid var(--ligne); background:#fff; color:var(--encre2); min-width:96px; }
+  .opts button.on{ border-color:var(--or); box-shadow:0 0 0 2px rgba(201,162,75,.22); font-weight:600; }
+  .opts small{ display:block; color:var(--gris); font-weight:400; }
+
+  .note{ background:var(--creme2); border:1px solid var(--ligne); border-radius:12px; padding:13px 15px;
+         font-size:.9rem; color:#4a4238; margin:0 0 16px; }
+  .champ{ margin:0 0 16px; }
+  .champ label{ display:block; font-weight:600; font-size:.93rem; margin-bottom:6px; }
+  .champ label span{ font-weight:400; color:var(--gris); }
+  .champ input,.champ select{ width:100%; font:inherit; padding:11px 13px; border:1px solid var(--ligne);
+         border-radius:11px; background:#fff; color:var(--encre2); }
+  .champ .cpt{ text-align:right; font-size:.76rem; color:var(--gris); margin-top:4px; }
+
+  .tot{ background:var(--creme2); border:1px solid var(--or-c); border-radius:14px; padding:15px 17px; margin:22px 0 0; }
+  .tot .l{ display:flex; justify-content:space-between; gap:12px; font-size:.93rem; padding:4px 0; }
+  .tot .l.g{ border-top:1px solid var(--or-c); margin-top:9px; padding-top:11px; font-weight:700; font-size:1.12rem; }
+  .num{ font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ajouter{ display:block; width:100%; margin-top:16px; font:inherit; font-weight:700; font-size:1rem;
+            padding:15px; border-radius:12px; border:0; cursor:not-allowed;
+            background:linear-gradient(180deg,var(--or-c),var(--or)); color:#2a1f0a; }
+  .pied{ margin-top:26px; font-size:.82rem; color:var(--gris); border-top:1px solid var(--ligne); padding-top:14px; }
+</style></head>
+<body>
+<div class="bandeau">✦ <b>Maquette</b> — rien n'est en ligne, rien n'est modifié sur le site. Aperçu 3D proposé pour cette fiche.</div>
+<div class="wrap">
+  <div class="fil">Boutique / Bijoux</div>
+  <div class="deux">
+    <div class="col">
+      <div class="photo"><img id="grande" alt=""></div>
+      <div class="vign" id="vign"></div>
+
+      <h2>Aperçu 3D de la gravure</h2>
+      <div class="box3d"><span class="eti">Aperçu 3D</span><canvas id="cv"></canvas></div>
+      <div class="faces" id="faces"></div>
+      <div class="aide">Faites tourner le bijou avec le doigt. L'aperçu montre la forme, la finition et votre texte gravé — ce n'est pas une photo de la pièce.</div>
+    </div>
+
+    <div class="col">
+      <div class="surtitre">Bijoux</div>
+      <h1 id="h1"></h1>
+      <p class="tag" id="tag"></p>
+      <div class="prix"><span class="old num" id="pOld"></span><span class="now num" id="pNow"></span><span class="rem">−10 %</span></div>
+
+      <h2>Choisissez votre option</h2>
+      <div class="opts" id="opts"></div>
+
+      <h2>Personnalisation — gravure</h2>
+      <div class="note" id="note"></div>
+      <div id="champs"></div>
+      <div class="champ">
+        <label for="police">Police de gravure <span>(facultatif)</span></label>
+        <select id="police"></select>
+      </div>
+
+      <div class="tot">
+        <div class="l"><span id="tBase">Bijou</span><span class="num" id="vBase"></span></div>
+        <div id="tSup"></div>
+        <div class="l g"><span>Total tout compris</span><span class="num" id="vTot"></span></div>
+      </div>
+      <button class="ajouter" disabled>Ajouter au panier</button>
+      <div class="pied">Maquette d'aperçu — les prix, les options et les champs viennent de la fiche réelle.</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+/*__THREE__*/
+const T = __THREE_NS__;
+const CFG = /*__CONFIG__*/;
+
+// ---------------------------------------------------------------------------
+// Forme de cœur (courbe paramétrique classique), puis extrusion + biseau.
+// ---------------------------------------------------------------------------
+function formeCoeur() {
+  const pts = [];
+  for (let i = 0; i <= 120; i++) {
+    const t = (i / 120) * Math.PI * 2;
+    const s = Math.sin(t);
+    pts.push(new T.Vector2(
+      (16 * s * s * s) / 16,
+      (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 16
+    ));
+  }
+  return new T.Shape(pts);
+}
+function formePlaque(l, h, r) {
+  const s = new T.Shape();
+  s.moveTo(-l / 2 + r, -h / 2);
+  s.lineTo(l / 2 - r, -h / 2); s.quadraticCurveTo(l / 2, -h / 2, l / 2, -h / 2 + r);
+  s.lineTo(l / 2, h / 2 - r);  s.quadraticCurveTo(l / 2, h / 2, l / 2 - r, h / 2);
+  s.lineTo(-l / 2 + r, h / 2); s.quadraticCurveTo(-l / 2, h / 2, -l / 2, h / 2 - r);
+  s.lineTo(-l / 2, -h / 2 + r); s.quadraticCurveTo(-l / 2, -h / 2, -l / 2 + r, -h / 2);
+  return s;
+}
+const METAL = { gold:0xd6b25c, rose:0xdfa68f, silver:0xc6cbd1 };
+function matiere(finition) {
+  return new T.MeshStandardMaterial({ color: METAL[finition] || METAL.gold, metalness: .97, roughness: .24 });
+}
+
+// ---------------------------------------------------------------------------
+// Texte gravé : dessiné sur un calque transparent posé sur la face du bijou.
+// Creux sombre + fine lumière au-dessus = l'effet « gravé au laser ».
+// ---------------------------------------------------------------------------
+function textureTexte(texte, police, largeurRatio, proportion) {
+  const c = document.createElement("canvas");
+  c.width = 1024;
+  c.height = Math.round(Math.min(2048, Math.max(256, 1024 / (proportion || 1))));
+  const x = c.getContext("2d");
+  if (texte) {
+    const dispo = c.width * (largeurRatio || .62);
+    let taille = 150;
+    x.font = `${taille}px ${police}`;
+    while (x.measureText(texte).width > dispo && taille > 26) { taille -= 4; x.font = `${taille}px ${police}`; }
+    x.textAlign = "center"; x.textBaseline = "middle";
+    // Un seul passage sombre : la fine lumière au-dessus du texte "mangeait" des
+    // lettres là où le métal renvoie un reflet clair.
+    x.fillStyle = "rgba(28,21,8,.88)";
+    x.fillText(texte, c.width / 2, c.height / 2);
+  }
+  const tex = new T.CanvasTexture(c);
+  tex.colorSpace = T.SRGBColorSpace;
+  tex.anisotropy = 8;
+  // Sans ça, les traits fins des lettres (le « a », la barre du « J ») partent
+  // dans les niveaux de détail réduits et des morceaux de texte disparaissent.
+  tex.generateMipmaps = false;
+  tex.minFilter = T.LinearFilter;
+  tex.magFilter = T.LinearFilter;
+  return tex;
+}
+
+// ---------------------------------------------------------------------------
+// Scène
+// ---------------------------------------------------------------------------
+const cv = document.getElementById("cv");
+let renderer = null;
+try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+} catch (e) { renderer = null; }
+if (!renderer) {
+  // Pas de 3D sur cet appareil : on retire l'aperçu, la fiche continue de marcher.
+  document.querySelector(".box3d")?.remove();
+  document.querySelector(".faces")?.remove();
+  const a = document.querySelector(".aide");
+  if (a) a.textContent = "L'aperçu 3D n'est pas disponible sur cet appareil.";
+}
+if (renderer) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.toneMapping = T.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+}
+const scene = new T.Scene();
+const cam = new T.PerspectiveCamera(38, 1, .1, 100);
+cam.position.set(0, 0, { coeur: 7.9, coeurPlaques: 9.6, troisCoeurs: 8.8, paire: 9 }[CFG.layout] || 7.2);
+
+// Petit studio : dégradé crème → l'or accroche la lumière au lieu d'être plat.
+if (renderer) (function studio() {
+  const c = document.createElement("canvas"); c.width = 64; c.height = 32;
+  const x = c.getContext("2d");
+  const g = x.createLinearGradient(0, 0, 0, 32);
+  g.addColorStop(0, "#ffffff"); g.addColorStop(.45, "#f3ead9"); g.addColorStop(1, "#8b8578");
+  x.fillStyle = g; x.fillRect(0, 0, 64, 32);
+  const tex = new T.CanvasTexture(c);
+  tex.mapping = T.EquirectangularReflectionMapping;
+  const pmrem = new T.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromEquirectangular(tex).texture;
+  pmrem.dispose(); tex.dispose();
+})();
+scene.add(new T.AmbientLight(0xffffff, .5));
+const key = new T.DirectionalLight(0xfff3dd, 2.1); key.position.set(2.5, 3.5, 4); scene.add(key);
+const rim = new T.DirectionalLight(0xffe9bd, 1.1); rim.position.set(-3, -1.5, -3); scene.add(rim);
+
+const pivot = new T.Group(); scene.add(pivot);
+const decals = {};   // clé de surface -> { mesh, ratio }
+const metaux = [];   // tous les matériaux métal (pour changer la finition)
+
+function ajouteDecal(parent, cle, l, h, z, dos, ratio) {
+  const m = new T.Mesh(new T.PlaneGeometry(l, h),
+    new T.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: .95 }));
+  m.userData.proportion = l / h;
+  m.position.z = dos ? -z : z;
+  if (dos) m.rotation.y = Math.PI;
+  parent.add(m);
+  decals[cle] = { mesh: m, ratio: ratio || .62, proportion: l / h };
+}
+
+function coeur(taille, ep) {
+  const g = new T.ExtrudeGeometry(formeCoeur(), {
+    depth: ep, bevelEnabled: true, bevelSize: .055, bevelThickness: .05, bevelSegments: 4, curveSegments: 48,
+  });
+  g.center();
+  const mat = matiere(CFG.variants[0].finition); metaux.push(mat);
+  const m = new T.Mesh(g, mat);
+  m.scale.setScalar(taille);
+  return m;
+}
+function bail(rayon, y) {
+  const mat = matiere(CFG.variants[0].finition); metaux.push(mat);
+  const m = new T.Mesh(new T.TorusGeometry(rayon, rayon * .32, 12, 28), mat);
+  m.position.y = y;
+  return m;
+}
+// La chaîne n'est PAS dessinée : l'aperçu montre le pendentif et sa gravure,
+// comme les aperçus 3D déjà en ligne sur les autres fiches.
+
+// --- montage selon le type de bijou ------------------------------------------
+if (CFG.layout === "coeur") {
+  const c = coeur(1.55, .18); pivot.add(c);
+  ajouteDecal(c, "recto", 1.25, 1.25, .14, false, .58);
+  if (decalAttendu("verso")) ajouteDecal(c, "verso", 1.25, 1.25, .14, true, .58);
+  pivot.add(bail(.16, 1.45));
+  if (CFG.zircon) {
+    // Anneau serti : décalé en haut à droite, DERRIÈRE le cœur, pour ne jamais
+    // passer au milieu de la gravure.
+    const z = new T.Mesh(new T.TorusGeometry(.5, .06, 14, 40),
+      new T.MeshStandardMaterial({ color: 0xf2f4f8, metalness: .35, roughness: .06 }));
+    z.position.set(.78, .62, -.06); z.rotation.set(.2, .18, .25); pivot.add(z);
+  }
+} else if (CFG.layout === "coeurPlaques") {
+  const c = coeur(1.15, .15); c.position.set(0, 1.15, .05); pivot.add(c);
+  ajouteDecal(c, "coeur", 1.0, 1.0, .13, false, .5);
+  [["plaque1", -.62], ["plaque2", .62]].forEach(([cle, x]) => {
+    const mat = matiere(CFG.variants[0].finition); metaux.push(mat);
+    const g = new T.ExtrudeGeometry(formePlaque(.7, 2.1, .3),
+      { depth: .12, bevelEnabled: true, bevelSize: .03, bevelThickness: .03, bevelSegments: 3, curveSegments: 24 });
+    g.center();
+    const m = new T.Mesh(g, mat); m.position.set(x, -.9, 0); pivot.add(m);
+    ajouteDecal(m, cle, .58, 1.85, .1, false, .78);
+  });
+  pivot.add(bail(.16, 2.1));
+} else if (CFG.layout === "troisCoeurs") {
+  [["c1", -1.18, .16, -.02, .16], ["c2", 0, -.12, .03, 0], ["c3", 1.18, .16, -.02, -.16]].forEach(([cle, x, y, z, rot]) => {
+    const c = coeur(1.0, .13); c.position.set(x, y, z); c.rotation.z = rot;
+    pivot.add(c);
+    ajouteDecal(c, cle, .95, .95, .12, false, .56);
+  });
+  pivot.add(bail(.15, 1.28));
+} else if (CFG.layout === "paire") {
+  [["p1", -1.05], ["p2", 1.05]].forEach(([cle, x]) => {
+    const c = coeur(1.2, .15); c.position.x = x; pivot.add(c);
+    ajouteDecal(c, cle, 1.1, 1.1, .13, false, .6);
+    const b = bail(.13, 1.12); b.position.x = x; pivot.add(b);
+  });
+}
+
+function decalAttendu(cle) { return CFG.champs.some((c) => c.surface === cle); }
+
+// ---------------------------------------------------------------------------
+// Interface : options, champs, total
+// ---------------------------------------------------------------------------
+const $ = (id) => document.getElementById(id);
+$("h1").textContent = CFG.titre;
+$("tag").textContent = CFG.tagline || "";
+$("note").textContent = CFG.note || "Ce bijou se porte tel quel, ou gravé.";
+document.title = "Aperçu 3D — " + CFG.nom + " (maquette)";
+
+let iVar = 0;
+let police = CFG.polices[0];
+const valeurs = {};
+
+const selP = $("police");
+CFG.polices.forEach((p, i) => {
+  const o = document.createElement("option"); o.value = i; o.textContent = p.label;
+  o.style.fontFamily = p.css; selP.appendChild(o);
+});
+selP.onchange = () => { police = CFG.polices[+selP.value]; selP.style.fontFamily = police.css; redessine(); };
+selP.style.fontFamily = police.css;
+
+const boxC = $("champs");
+CFG.champs.forEach((c) => {
+  valeurs[c.key] = "";
+  const d = document.createElement("div"); d.className = "champ";
+  const sup = c.sup ? ` <span>(+${c.sup} €)</span>` : "";
+  d.innerHTML = `<label for="f_${c.key}">${c.label.replace(/\s*\(\+\d+ €\)/, "")}${sup}</label>
+    <input id="f_${c.key}" maxlength="${c.max}" placeholder="Votre texte…">
+    <div class="cpt"><span id="n_${c.key}">0</span>/${c.max}</div>`;
+  boxC.appendChild(d);
+  const inp = d.querySelector("input");
+  inp.oninput = () => {
+    valeurs[c.key] = inp.value;
+    document.getElementById("n_" + c.key).textContent = inp.value.length;
+    redessine(); total();
+  };
+});
+
+const boxO = $("opts");
+CFG.variants.forEach((v, i) => {
+  const b = document.createElement("button");
+  b.innerHTML = `${v.titre}<small>${v.paye.toFixed(2).replace(".", ",")} €</small>`;
+  b.onclick = () => { iVar = i; majVariante(); };
+  boxO.appendChild(b);
+});
+
+const boxF = $("faces");
+const faces = [{ k: "face", l: "Voir le recto", a: 0 }];
+if (Object.keys(decals).includes("verso")) faces.push({ k: "dos", l: "Voir le verso", a: Math.PI });
+faces.forEach((f, i) => {
+  const b = document.createElement("button"); b.textContent = f.l;
+  b.onclick = () => { cible = f.a; auto = false; majFaces(i); };
+  boxF.appendChild(b);
+});
+function majFaces(i) { [...boxF.children].forEach((b, j) => b.classList.toggle("on", i === j)); }
+majFaces(0);
+
+const vign = $("vign");
+CFG.photos.forEach((src, i) => {
+  const im = document.createElement("img"); im.src = src; im.alt = "";
+  im.onclick = () => { $("grande").src = src; [...vign.children].forEach((x, j) => x.classList.toggle("on", i === j)); };
+  vign.appendChild(im);
+});
+
+function majVariante() {
+  const v = CFG.variants[iVar];
+  [...boxO.children].forEach((b, i) => b.classList.toggle("on", i === iVar));
+  $("pOld").textContent = v.barre.toFixed(2).replace(".", ",") + " €";
+  $("pNow").textContent = v.paye.toFixed(2).replace(".", ",") + " €";
+  if (v.photo) { $("grande").src = v.photo; }
+  const coul = new T.Color(METAL[v.finition] || METAL.gold);
+  metaux.forEach((m) => m.color.copy(coul));
+  total();
+}
+function total() {
+  const v = CFG.variants[iVar];
+  let sup = 0;
+  const lignes = [];
+  CFG.champs.forEach((c) => {
+    if (c.sup && (valeurs[c.key] || "").trim()) {
+      sup += c.sup;
+      lignes.push(`<div class="l"><span>${c.label.replace(/\s*\(\+\d+ €\)/, "")}</span><span class="num">+ ${c.sup.toFixed(2).replace(".", ",")} €</span></div>`);
+    }
+  });
+  $("tBase").textContent = CFG.nom + " — " + v.titre;
+  $("vBase").textContent = v.paye.toFixed(2).replace(".", ",") + " €";
+  $("tSup").innerHTML = lignes.join("");
+  $("vTot").textContent = (v.paye + sup).toFixed(2).replace(".", ",") + " €";
+}
+function redessine() {
+  CFG.champs.forEach((c) => {
+    const d = decals[c.surface];
+    if (!d) return;
+    if (d.mesh.material.map) d.mesh.material.map.dispose();
+    d.mesh.material.map = textureTexte((valeurs[c.key] || "").trim(), police.css, d.ratio, d.proportion);
+    d.mesh.material.needsUpdate = true;
+  });
+}
+
+// --- rotation : automatique, puis au doigt -----------------------------------
+// Balancement doux plutôt qu'un tour complet : la gravure est posée à plat sur
+// la face, elle ne reste bien dans la silhouette que si la pièce reste de face.
+// Le doigt, lui, permet de tourner complètement (et de voir le verso).
+let auto = true, angle = 0, cible = null, vit = 0, bal = 0;
+cv.addEventListener("pointerdown", (e) => { auto = false; cible = null; vit = 0; cv.setPointerCapture(e.pointerId); cv.dataset.x = e.clientX; });
+cv.addEventListener("pointermove", (e) => {
+  if (!cv.hasPointerCapture?.(e.pointerId)) return;
+  const dx = e.clientX - (+cv.dataset.x || 0);
+  cv.dataset.x = e.clientX; angle += dx * .011;
+});
+cv.addEventListener("pointerup", (e) => { try { cv.releasePointerCapture(e.pointerId); } catch {} });
+
+function taille() {
+  if (!renderer) return;
+  const l = cv.parentElement.clientWidth || 360;
+  const h = Math.round(Math.min(Math.max(l * .82, 280), 420));
+  renderer.setSize(l, h, false);
+  cv.style.width = "100%"; cv.style.height = h + "px";
+  cam.aspect = l / h; cam.updateProjectionMatrix();
+}
+addEventListener("resize", taille); taille();
+
+if (renderer) renderer.setAnimationLoop(() => {
+  if (auto) { bal += .011; angle = Math.sin(bal) * .42; }
+  else if (cible !== null) {
+    let d = cible - angle;
+    while (d > Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    angle += d * .12;
+    if (Math.abs(d) < .004) { angle = cible; cible = null; }
+  }
+  pivot.rotation.y = angle;
+  pivot.rotation.x = Math.sin(angle * .5) * .05;
+  renderer.render(scene, cam);
+});
+
+// Les polices Google arrivent après : on redessine le texte quand elles sont prêtes.
+if (document.fonts?.ready) document.fonts.ready.then(redessine);
+$("grande").src = CFG.photos[0] || CFG.variants[0].photo || "";
+if (vign.children[0]) vign.children[0].classList.add("on");
+majVariante(); redessine(); total();
+</script>
+</body></html>
