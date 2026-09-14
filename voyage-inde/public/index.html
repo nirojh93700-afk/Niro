@@ -307,6 +307,7 @@
       <button class="btn ghost" id="hotelsBtn" style="margin-top:16px">🏨 <span data-i18n="hotelsBtnLbl">Hôtels (privé)</span></button>
       <button class="btn ghost" id="settleBtn" style="margin-top:8px">🔒 <span data-i18n="settleBtnLbl">Qui rembourse qui (privé)</span></button>
       <button class="btn ghost" id="lockBtn" style="margin-top:8px">Verrouiller les comptes</button>
+      <button class="btn ghost" id="ratesBtn" style="margin-top:8px;font-size:13px;padding:11px">💱 <span data-i18n="fxBtn">Taux de change</span></button>
       <button class="btn ghost" id="trashBtn" style="margin-top:8px;font-size:13px;padding:11px">🗑️ Corbeille</button>
       <button class="btn" id="exportBtn" style="margin-top:8px">📄 Exporter tout en PDF</button>
       <button class="btn" id="syncBtn" style="margin-top:8px" data-i18n="sync">Synchroniser</button>
@@ -379,6 +380,8 @@ var I18N = {
     edit:"Modifier", validate:"Valider", refresh:"Actualiser",
     rateSaved:"taux de secours enregistrés", rateFixed:"taux fixe (1 € = 113,20 ₹)", rateManual:"taux saisi à la main", rateOffline:"hors ligne — dernier taux connu",
     rateHint:"saisis le taux puis Valider", ratesUpdated:"taux mis à jour",
+    fxBtn:"Taux de change", fxTitle:"Taux de change", fxHint:"Change ici le taux d'une monnaie. Un taux BLOQUÉ ne bouge jamais tout seul, même quand tu actualises depuis Internet. Les dépenses déjà enregistrées gardent le montant en euros calculé au moment de la saisie.",
+    fxLocked:"Bloqué", fxAuto:"Automatique", fxRefresh:"Actualiser depuis Internet", fxSave:"Enregistrer les taux", fxSaved:"Taux enregistrés", fxReset:"Rétablir 113,20 ₹", fxPerEur:"pour 1 €",
     tipINR:"<b>Calcul de tête :</b> enlève deux zéros, puis retire {n} %. ₹1 000 ≈ {x} €.",
     tipQAR:"<b>Calcul de tête :</b> divise par 4. 100 ر.ق ≈ {x} €.",
     tipUSD:"<b>Repère :</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
@@ -479,6 +482,8 @@ var I18N = {
     edit:"Edit", validate:"Confirm", refresh:"Update",
     rateSaved:"saved backup rate", rateFixed:"fixed rate (1 € = 113.20 ₹)", rateManual:"manually entered rate", rateOffline:"offline — last known rate",
     rateHint:"enter the rate then Confirm", ratesUpdated:"rates updated",
+    fxBtn:"Exchange rates", fxTitle:"Exchange rates", fxHint:"Change a currency rate here. A LOCKED rate never moves on its own, even when you refresh from the internet. Expenses already saved keep the euro amount computed when they were entered.",
+    fxLocked:"Locked", fxAuto:"Automatic", fxRefresh:"Refresh from the internet", fxSave:"Save the rates", fxSaved:"Rates saved", fxReset:"Restore 113.20 ₹", fxPerEur:"per 1 €",
     tipINR:"<b>Mental math:</b> drop two zeros, then take off {n} %. ₹1 000 ≈ {x} €.",
     tipQAR:"<b>Mental math:</b> divide by 4. 100 ر.ق ≈ {x} €.",
     tipUSD:"<b>Rule of thumb:</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
@@ -579,6 +584,8 @@ var I18N = {
     edit:"மாற்று", validate:"உறுதி", refresh:"புதுப்பி",
     rateSaved:"சேமித்த மாற்று விகிதம்", rateFixed:"நிலையான விகிதம் (1 € = 113,20 ₹)", rateManual:"கையால் உள்ளிட்ட விகிதம்", rateOffline:"இணைப்பில்லை — கடைசி விகிதம்",
     rateHint:"விகிதத்தை உள்ளிட்டு உறுதி செய்", ratesUpdated:"விகிதங்கள் புதுப்பிக்கப்பட்டன",
+    fxBtn:"மாற்று விகிதம்", fxTitle:"மாற்று விகிதங்கள்", fxHint:"ஒரு நாணயத்தின் விகிதத்தை இங்கே மாற்று. பூட்டப்பட்ட விகிதம் இணையத்திலிருந்து புதுப்பிக்கும்போதும் தானாக மாறாது. ஏற்கனவே பதிவான செலவுகள், பதிவு செய்த நேரத்தின் யூரோ தொகையை வைத்திருக்கும்.",
+    fxLocked:"பூட்டப்பட்டது", fxAuto:"தானியங்கி", fxRefresh:"இணையத்திலிருந்து புதுப்பி", fxSave:"விகிதங்களைச் சேமி", fxSaved:"விகிதங்கள் சேமிக்கப்பட்டன", fxReset:"113,20 ₹ மீட்டமை", fxPerEur:"1 €-க்கு",
     tipINR:"<b>மனக்கணக்கு:</b> இரண்டு பூஜ்ஜியங்களை நீக்கு, பிறகு {n}% கழி. ₹1 000 ≈ {x} €.",
     tipQAR:"<b>மனக்கணக்கு:</b> 4 ஆல் வகு. 100 ر.ق ≈ {x} €.",
     tipUSD:"<b>அளவை:</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
@@ -2587,6 +2594,57 @@ function openTrash(){
   });
 }
 $("trashBtn").addEventListener("click", openTrash);
+
+/* TAUX DE CHANGE — écran de réglage : un taux par monnaie, « bloqué » = jamais modifié tout seul.
+   Les dépenses déjà enregistrées gardent leur montant en euros : changer un taux ne les touche pas. */
+function openRates(){
+  var curs=Object.keys(CUR).filter(function(c){ return c!=="EUR"; });
+  var row=function(c){
+    var U=CUR[c], val=+RATES[c]||0, lock=isFixed(c);
+    return '<div class="field" style="border:1px solid var(--line);border-radius:12px;padding:10px 12px">'+
+      '<div style="display:flex;align-items:center;gap:8px;margin:0 0 8px">'+
+        '<span style="flex:1;font-weight:600">'+esc(c)+' '+esc(U.s)+'</span>'+
+        '<button type="button" class="fxLock" data-c="'+c+'" aria-pressed="'+(lock?"true":"false")+'" style="flex:none;font:inherit;font-size:12px;font-weight:600;border:1px solid var(--line2);border-radius:20px;padding:5px 11px;cursor:pointer;background:'+(lock?"var(--gold)":"transparent")+';color:'+(lock?"var(--ink,#16241f)":"var(--muted)")+'">'+(lock?("🔒 "+t("fxLocked")):("↻ "+t("fxAuto")))+'</button>'+
+      '</div>'+
+      '<div class="row2" style="margin:0"><input class="fxVal" data-c="'+c+'" inputmode="decimal" value="'+esc(nf(val, val<10?4:2))+'">'+
+      '<div class="note" style="align-self:center;margin:0">'+esc(t("fxPerEur"))+'</div></div>'+
+    '</div>';
+  };
+  openSheet('<h3>💱 '+esc(t("fxTitle"))+'</h3>'+
+    '<p class="note" style="margin:0 0 12px">'+esc(t("fxHint"))+'</p>'+
+    '<div id="fxList">'+curs.map(row).join("")+'</div>'+
+    '<button class="btn" id="fxSave" style="margin-top:6px">'+esc(t("fxSave"))+'</button>'+
+    '<button class="btn ghost" id="fxNet" style="margin-top:8px;font-size:13px;padding:11px">🌐 '+esc(t("fxRefresh"))+'</button>'+
+    '<button class="btn ghost" id="fxReset" style="margin-top:8px;font-size:12.5px;padding:10px;color:var(--muted)">'+esc(t("fxReset"))+'</button>');
+  $("fxList").addEventListener("click", function(e){
+    var b=e.target.closest(".fxLock"); if(!b) return;
+    var c=b.dataset.c, lock=b.getAttribute("aria-pressed")!=="true";
+    if(lock){ setFixedRate(c, pf($("fxList").querySelector('.fxVal[data-c="'+c+'"]').value)); }
+    else { delete FIXED_RATES[c]; lset("fxFixed", FIXED_RATES); }
+    saveRates(); openRates();
+  });
+  $("fxSave").addEventListener("click", function(){
+    [].forEach.call($("fxList").querySelectorAll(".fxVal"), function(inp){
+      var c=inp.dataset.c, v=pf(inp.value); if(!(v>0)) return;
+      if(isFixed(c)) setFixedRate(c, v); else RATES[c]=v;
+    });
+    RSRC=t("rateManual"); saveRates(); renderConv(); renderExp(); toast(t("fxSaved")); closeSheet();
+  });
+  $("fxNet").addEventListener("click", function(){
+    var b=this; b.textContent="…";
+    fetch("https://open.er-api.com/v6/latest/EUR").then(function(r){return r.json()}).then(function(d){
+      if(d && d.rates){
+        var n=0; for(var k in RATES){ if(d.rates[k] && !isFixed(k)){ RATES[k]=d.rates[k]; n++; } }   // ne touche JAMAIS aux taux bloqués
+        applyFixedRates();
+        RSRC=new Date().toLocaleDateString(locale(),{day:"2-digit",month:"short",year:"2-digit"});
+        saveRates(); renderConv(); toast(n+" "+t("ratesUpdated"));
+      }
+      openRates();
+    }).catch(function(){ toast(t("rateOffline")); openRates(); });
+  });
+  $("fxReset").addEventListener("click", function(){ setFixedRate("INR", 113.20); saveRates(); renderConv(); renderExp(); openRates(); });
+}
+$("ratesBtn").addEventListener("click", openRates);
 
 /* ---- EXPORT PDF : à l'instant où on appuie, TOUT le carnet (dépenses, hôtels, historique des
    remboursements, par personne, corbeille, qui doit à qui). Heures = INDE (IST). ---- */
