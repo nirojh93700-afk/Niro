@@ -703,9 +703,14 @@ export const products = [
     tagline: "Tressage aspect cuir et plaque acier, gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
+    // Les champs de gravure s'affichent TOUJOURS (plus de condition sur le nom de
+    // l'option). Avant, ils n'apparaissaient que si l'option choisie contenait le
+    // mot « Avec » : les options ayant été renommées en simples couleurs depuis
+    // l'admin, la fiche se retrouvait sans aucun champ à remplir alors qu'elle
+    // promet une gravure. Ne pas remettre de variantContains ici.
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet_cuir_tresse_a_graver_argente.jpg",
