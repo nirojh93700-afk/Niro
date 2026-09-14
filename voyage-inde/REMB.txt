@@ -1,0 +1,56 @@
+ARRETE AU 14/09/2026 11:30 heure de l Inde (IST)
+depenses comptees: 61 | hotels masques: 17
+total remboursements comptes: 2885,00 EUR | nb: 10
+
+==================================================================
+Niv  (2 part(s))
+  sa part totale : 633,81 EUR   a paye de sa poche : 2356,00 EUR
+  REMBOURSEMENTS DONNES : aucun
+  REMBOURSEMENTS RECUS (10) :
+    04/09/2026 05:28  <- Amma Appa                 45,45 EUR
+    05/09/2026 10:42  <- Mama                     455,00 EUR
+    07/09/2026 20:06  <- Amma Appa                 47,17 EUR
+    09/09/2026 09:22  <- Amma Appa                400,00 EUR
+    09/09/2026 09:25  <- Selvan Viji sitta sitti   441,70 EUR
+    11/09/2026 14:34  <- Amma Appa                600,00 EUR
+    12/09/2026 10:00  <- Mama                      88,34 EUR
+    12/09/2026 14:51  <- Selvan Viji sitta sitti   500,00 EUR
+    12/09/2026 16:14  <- Paramu sitta             245,50 EUR
+    13/09/2026 15:02  <- Amma Appa                 61,84 EUR
+    TOTAL RECU : 2885,00 EUR
+  => SOLDE : IL/ELLE DOIT 1162,81 EUR
+==================================================================
+Amma Appa  (2 part(s))
+  sa part totale : 601,74 EUR   a paye de sa poche : 16,76 EUR
+  REMBOURSEMENTS DONNES (5) :
+    04/09/2026 05:28  -> Niv                       45,45 EUR
+    07/09/2026 20:06  -> Niv                       47,17 EUR
+    09/09/2026 09:22  -> Niv                      400,00 EUR
+    11/09/2026 14:34  -> Niv                      600,00 EUR
+    13/09/2026 15:02  -> Niv                       61,84 EUR (saisi 7000 INR)
+    TOTAL DONNE : 1154,46 EUR
+  => SOLDE : ON LUI DOIT 569,48 EUR
+==================================================================
+Mama  (1 part(s))
+  sa part totale : 313,31 EUR   a paye de sa poche : 1,77 EUR
+  REMBOURSEMENTS DONNES (2) :
+    05/09/2026 10:42  -> Niv                      455,00 EUR
+    12/09/2026 10:00  -> Niv                       88,34 EUR (saisi 10000 INR)
+    TOTAL DONNE : 543,34 EUR
+  => SOLDE : ON LUI DOIT 231,80 EUR
+==================================================================
+Selvan Viji sitta sitti  (2 part(s))
+  sa part totale : 601,74 EUR   a paye de sa poche : 1,14 EUR
+  REMBOURSEMENTS DONNES (2) :
+    09/09/2026 09:25  -> Niv                      441,70 EUR
+    12/09/2026 14:51  -> Niv                      500,00 EUR
+    TOTAL DONNE : 941,70 EUR
+  => SOLDE : ON LUI DOIT 341,10 EUR
+==================================================================
+Paramu sitta  (1 part(s))
+  sa part totale : 237,16 EUR   a paye de sa poche : 12,10 EUR
+  REMBOURSEMENTS DONNES (1) :
+    12/09/2026 16:14  -> Niv                      245,50 EUR
+    TOTAL DONNE : 245,50 EUR
+  => SOLDE : ON LUI DOIT 20,44 EUR
+==================================================================
