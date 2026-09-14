@@ -1295,23 +1295,22 @@ export const products = [
     title: "Collier double cœur à graver — pendentif cœur serti de zircons, message gravé au dos",
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Deux cœurs superposés : l'un serti de zircons, l'autre à faire graver de votre message.",
-    personalizable: true, personalizationLabel: "Gravure d'un message en option (au dos du second cœur)",
-    // La gravure est une OPTION PAYANTE chiffrée APRÈS la remise bijoux (+3 € pile,
-    // quel que soit le coloris) — la mettre en variante ferait dériver le supplément
-    // à +2,70 / +3,60 € à cause de la remise −10 %.
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    personalizable: true, personalizationLabel: "Gravure en option : recto et/ou verso (+3 € par face)",
+    // Le cœur lisse n'a que DEUX faces gravables : le RECTO et le VERSO. Pas de
+    // découpage en « lignes » — ces champs (Ligne 1/2/3) étaient faux, ne pas les
+    // remettre. Chaque face gravée est payante (+3 €), comme sur le collier plaque
+    // acier. Le montant est chiffré APRÈS la remise bijoux (+3 € pile, quel que
+    // soit le coloris) : le mettre en variante ferait dériver le supplément à
+    // +2,70 / +3,60 € à cause de la remise −10 %.
+    // Les deux champs sont FACULTATIFS et toujours visibles : laisser vide = bijou
+    // sans gravure. Plus de case « Sans / Avec gravure » qui cachait les champs —
+    // un texte saisi puis caché restait facturé sans rien afficher à la cliente.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver un message ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "Le second cœur pivote et découvre une surface lisse : c'est là que se grave votre message, jusqu'à trois lignes (par exemple un mot tendre, un prénom et une date).", showIfField: "gravure", showIfValue: "oui" },
-      { key: "ligne1", label: "Ligne 1", placeholder: "Ex. Je t'aime", maxLength: 16, showIfField: "gravure", showIfValue: "oui" },
-      { key: "ligne2", label: "Ligne 2", placeholder: "Ex. Maman", maxLength: 16, optional: true, showIfField: "gravure", showIfValue: "oui" },
-      { key: "ligne3", label: "Ligne 3", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "Ce collier se porte tel quel, ou gravé. Le cœur lisse se grave sur ses deux faces : le recto (côté visible) et le verso, qui reste caché quand le bijou est porté. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure. Comptez une quinzaine de caractères par face pour que la gravure reste bien lisible." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Ex. Je t'aime", maxLength: 16, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/collier-double-coeur-1.jpg",
@@ -1335,7 +1334,7 @@ export const products = [
 <li><strong>Finitions :</strong> doré, or rose et argenté (finition PVD) — résiste à l'eau et ne ternit pas</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Se porte aussi bien par une femme que par un homme</strong></li>
-<li><strong>Gravure en option (+3 €) :</strong> jusqu'à trois lignes gravées au laser au dos du second cœur</li>
+<li><strong>Gravure en option :</strong> au laser sur le cœur lisse, au recto et/ou au verso — 3 € par face gravée</li>
 </ul>
 <p>Le texte est <strong>entièrement libre</strong> : un mot tendre, un prénom, une date d'anniversaire ou de rencontre — dans la langue et l'écriture de votre choix parmi nos polices. Les photos de la fiche montrent des exemples de rendu.</p>`,
   },

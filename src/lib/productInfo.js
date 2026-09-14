@@ -1019,8 +1019,8 @@ Un souci à la réception ?
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~15 g.
 - Étanche : résiste à l'eau et ne ternit pas.`,
     usage: `Personnalisation & Entretien
-- Se porte tel quel, ou avec gravure en option : jusqu'à trois lignes gravées au laser au dos du second cœur.
-- Texte libre (mot tendre, prénom, date) dans l'une de nos huit écritures ; comptez environ 16 caractères par ligne pour rester lisible.
+- Se porte tel quel, ou gravé : le cœur lisse se grave au recto et/ou au verso, 3 € par face gravée.
+- Texte libre (mot tendre, prénom, date) dans l'une de nos huit écritures ; comptez environ 16 caractères par face pour rester lisible.
 - Le second cœur pivote pour découvrir la gravure : le message reste caché quand le bijou est porté.
 - Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
     returns: `Expédition & Retour
