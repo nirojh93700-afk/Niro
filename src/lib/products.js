@@ -1443,19 +1443,19 @@ export const products = [
     title: "Bracelet cœur à graver, grosse chaîne dorée et fermoir T — plaqué or 18 carats",
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Une grosse chaîne dorée, un cœur à graver et un petit cœur pavé de strass.",
-    personalizable: true, personalizationLabel: "Gravure sur le cœur en option (+3 €)",
-    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    personalizable: true, personalizationLabel: "Gravure sur le cœur : recto et/ou verso (+3 € par face)",
+    // Le grand cœur lisse se grave sur ses DEUX faces : recto et verso. Chaque
+    // face gravée est payante (+3 €), chiffrée APRÈS la remise bijoux (+3 € pile)
+    // — le mettre en variante ferait dériver le supplément à cause du −10 %.
+    // Les deux champs sont FACULTATIFS et toujours visibles : laisser vide = bijou
+    // sans gravure. Plus de case « Sans / Avec gravure » qui cachait les champs —
+    // un texte saisi puis caché restait facturé sans rien afficher à la cliente.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver le cœur ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "La grande médaille cœur est lisse : c'est elle qui se grave. Un prénom, une date ou un petit message — texte court conseillé pour rester bien lisible.", showIfField: "gravure", showIfValue: "oui" },
-      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "Ce bracelet se porte tel quel, ou gravé. La grande médaille cœur est lisse : elle se grave sur ses deux faces, le recto (côté visible) et le verso. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure. Texte court conseillé pour rester bien lisible." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Prénom, date, petit message…", maxLength: 20, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Ex. 21.05.2026", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-coeur-chaine-1.jpg",
@@ -1465,14 +1465,14 @@ export const products = [
     variants: [
       { id: "bracelet-coeur-chaine-dore", title: "Doré", price: 37.90, stockId: "bracelet-coeur-chaine-dore" },
     ],
-    descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
+    descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver au recto comme au verso</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
 <li><strong>Finition :</strong> étanche — résiste à l'eau et ne ternit pas</li>
 <li><strong>Poids :</strong> environ 18 g, une vraie chaîne qui se sent au poignet</li>
 <li><strong>Fermoir :</strong> T (toggle), simple à ouvrir et fermer d'une main</li>
-<li><strong>Gravure en option (+3 €) :</strong> prénom, date ou petit message au laser sur le grand cœur</li>
+<li><strong>Gravure en option :</strong> prénom, date ou petit message au laser sur le grand cœur — recto et/ou verso, 3 € par face gravée</li>
 </ul>
 <p>Il se porte seul pour son côté affirmé, ou superposé avec une chaîne plus fine.</p>`,
   },

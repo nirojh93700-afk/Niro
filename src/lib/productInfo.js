@@ -1072,8 +1072,8 @@ Un souci à la réception ?
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
 - Poids : environ 18 g. Étanche : résiste à l'eau et ne ternit pas.`,
     usage: `Personnalisation & Entretien
-- La grande médaille cœur se grave au laser : prénom, date ou petit message (20 caractères maximum pour rester lisible).
-- La gravure est une option à 3 € ; sans elle, le cœur reste lisse et poli.
+- La grande médaille cœur se grave au laser sur ses deux faces : prénom, date ou petit message (20 caractères maximum par face pour rester lisible).
+- Chaque face gravée est une option à 3 € (recto, verso, ou les deux) ; sans gravure, le cœur reste lisse et poli.
 - Choisissez votre écriture parmi nos huit polices.
 - Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
     returns: `Expédition & Retour
