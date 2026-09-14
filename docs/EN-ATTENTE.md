@@ -36,6 +36,7 @@
 | **Verre à vin gravé** | `docs/maquettes/verre-vin-fiche.html` | 12,90 / 24,90 / 49,90 € ; styles 1-19 + lettre fleurie |
 | **Flûte à champagne** | `docs/maquettes/flute-champagne-fiche.html` | Clone du verre à vin, mêmes prix |
 | **Thème « L'Écrin »** (site + admin) | `docs/maquettes/theme-ecrin.html` | À appliquer seulement s'il dit « applique le nouveau thème » |
+| **Aperçu 3D des 9 bijoux à cœur** (14/09/2026) | `docs/maquettes/apercu3d-<slug>.html` — 9 pages autonomes, générées par `node --import ./tools/alias-register.mjs tools/maquettes/coeur3d.mjs` | **En attente de son retour.** Cœur recto/verso gravé en direct, couleur = métal, rotation au doigt, total avec +3 €/face. Deux fiches restent à l'ancien système (Cœur & Zircon, Femme Cœur). Quand il dit « applique » : reproduire dans le site (forme cœur à ajouter à `EngravePlate3D` ou nouveau composant), puis ces maquettes peuvent être supprimées. Ensuite prévus : pastille ronde (2 fiches), plaques de bracelet (6), puzzle (1). |
 | **Cristal 3D sur mesure** — section + configurateur | `docs/maquettes/cristal-surmesure-section.html`, `cristal-configurateur.html` | Proposer modèles prêts **et** photo perso, prix des blocs par taille |
 | Autres maquettes archivées (paiement, filtres boutique, emballages, supports téléphone, photophore, plaque naissance, porte-serviettes…) | `docs/maquettes/` | Non demandées pour l'instant |
 

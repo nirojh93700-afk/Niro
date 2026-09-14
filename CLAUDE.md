@@ -133,6 +133,15 @@
   demande : Bracelet Homme Identité (Gourmette) · Bracelet Homme Acier & Silicone · Collier Cœur &
   Zircon doré · Bracelet cordon à plaque · Bracelet homme cuir & plaque · Bracelet perles à pastille
   (+ hors bijoux : Bougeoir Fleur de Lotus, Support téléphone ajouré).
+- 🧊 **APERÇU 3D DES BIJOUX (chantier ouvert le 14/09/2026)** : le site dessine déjà lui-même des
+  aperçus 3D (`Engrave3D`, `EngraveHeart3D`, `EngravePlate3D`, `EngraveGourmette3D`, `EngraveBook3D`,
+  `EngraveEnvelope3D` — 9 bijoux les ont). 18 bijoux gravables n'en ont pas. Il a demandé **une
+  maquette par produit**, en commençant par le cœur : **9 maquettes livrées**
+  (`docs/maquettes/apercu3d-<slug>.html`, générateur `tools/maquettes/coeur3d.mjs` + gabarit),
+  **en attente de son retour — RIEN d'appliqué au site**. Le gabarit du fichier : three.js intégré
+  (bundle construit depuis `node_modules`, sans import), photos intégrées, prix/champs lus dans
+  `products.js`. Suite prévue quand il le dira : pastille ronde, plaques de bracelet, puzzle.
+  Consigne du 14/09 : « tu publies rien » → maquettes seulement, pas d'artifact, pas de fiche modifiée.
 
 
 ### 💍 11 BIJOUX AJOUTÉS LE 01/09/2026 — RÈGLES À RÉUTILISER
