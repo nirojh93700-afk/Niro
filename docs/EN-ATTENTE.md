@@ -116,6 +116,31 @@ Reste à faire quand il le redemande :
 
 ---
 
+## 4 ter. 💍 Bijoux — gravure (chantier du 14/09/2026)
+
+**État complet et à jour des 32 bijoux : `docs/etat-bijoux.md`** (fichier GÉNÉRÉ — régénérer avec
+`npm run etat-bijoux`). Il donne pour chaque bijou : prix du code, prix barré, prix payé, chaque
+champ de gravure avec son supplément, les emballages, le poids/la livraison, et les points à
+surveiller. Les règles et l'historique sont dans `CLAUDE.md` § « Gravure des bijoux ».
+
+Fait le 14/09 (à sa demande, fiche par fiche) :
+- [x] **Bracelet Homme Tressé** : la gravure ne dépend plus du nom de l'option (elle avait disparu
+      de la fiche après un renommage dans l'admin).
+- [x] **Bracelet cordon à plaque** : prix baissé à **17,91 €** (barré 19,90 €).
+- [x] **Collier Double Cœur** : les faux « Ligne 1/2/3 » remplacés par recto/verso, 3 € la face.
+- [x] **Bracelet Cœur T-bar** et **Bracelet Cœur grosse chaîne** : même gabarit recto/verso.
+
+En attente de SA décision :
+- [ ] **Quelle règle pour la 1re gravure ?** 13 bijoux la font payer, 19 l'incluent. Il a dit
+      « y a que le premier gravure gratuit après c'est payant », mais la règle plus ancienne du
+      `CLAUDE.md` §10 4bis dit « gravure TOUJOURS payante ». Les deux se contredisent → lui demander.
+- [ ] **6 bijoux + 2 objets déco** gardent le vieux système « Sans / Avec gravure » ou la case +3 € :
+      Gourmette, Bracelet Homme Acier & Silicone, Collier Cœur & Zircon, Bracelet cordon à plaque,
+      Bracelet homme cuir & plaque, Bracelet perles à pastille, Bougeoir Lotus, Support téléphone
+      ajouré. **Ne les corriger que s'il les désigne** (consigne du 14/09 : « les autres tu touches pas »).
+
+---
+
 ## 5. Questions en attente de SA réponse
 
 - **Remboursement, palier du milieu** : après 24 h, retenue de **10 €** (valeur actuelle) ou **−10 %** ?

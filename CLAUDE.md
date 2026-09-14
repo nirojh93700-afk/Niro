@@ -86,6 +86,55 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 💍 GRAVURE DES BIJOUX — TRANCHÉ ET APPLIQUÉ LE 14/09/2026 (À LIRE AVANT DE TOUCHER UN BIJOU)
+> 📄 **`docs/etat-bijoux.md` = l'état exact des 32 bijoux** : prix du code, prix barré, prix payé,
+> chaque champ de gravure avec son supplément, emballages, poids/livraison, et les points à
+> surveiller. **FICHIER GÉNÉRÉ** : le régénérer avec **`npm run etat-bijoux`** après toute
+> modification de `src/lib/products.js`. Ne jamais l'éditer à la main.
+- ⛔ **L'ADMIN PRIME TOUJOURS SUR LE CODE** (`applyOverride` dans `catalog.js`) : prix, options
+  (`variants`), champs de gravure (`personalizationFields`), photos, masquage. **Donc le code ne dit
+  pas ce que la cliente voit.** Avant d'affirmer quoi que ce soit sur une fiche : regarder la fiche
+  en ligne (ou demander une capture), pas seulement `products.js`. Si une correction de code ne se
+  voit pas en ligne, c'est qu'un réglage admin la recouvre → le corriger dans Gestion.
+- 🔴 **INCIDENT À NE PAS REPRODUIRE (Bracelet Homme Tressé)** : ses champs de gravure n'apparaissaient
+  que si le nom de l'option contenait « Avec » (`variantContains`). Les options ayant été renommées
+  en simples couleurs depuis l'admin, **la fiche « à graver » n'avait plus AUCUN champ** — titre
+  « Personnalisation — gravure » vide, bracelet achetable sans texte. **Ne plus jamais faire dépendre
+  une gravure du NOM d'une option.**
+- ⛔ **AUCUN CHAMP PAYANT MASQUABLE** : un champ facturé derrière `showIfField` (case « Sans / Avec
+  gravure ») garde sa valeur quand il se cache → un texte saisi puis caché restait **facturé 3 € sans
+  rien afficher**. Les champs de gravure payants doivent être **facultatifs et toujours visibles**.
+- ✅ **LE GABARIT À COPIER** (appliqué aux 3 bijoux à cœur le 14/09) : pas de variante « Sans / Avec
+  gravure », une option par finition (couleur), puis
+  `engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 }` + deux champs `optional: true`
+  toujours visibles, libellés **« Texte au recto (+3 €) » / « Texte au verso (+3 €) »**, une `note`
+  qui dit « laissez vide pour un bijou sans gravure », et le champ `police`.
+  Le supplément est chiffré **APRÈS** la remise bijoux (+3 € pile) : le passer en variante le ferait
+  dériver à +2,70 / +3,60 € à cause du −10 %.
+  ⚠️ En retirant des variantes, **GARDER LES IDENTIFIANTS EXISTANTS** (même s'ils finissent par
+  `-sans`) : les changer casse les paniers en cours et l'historique des commandes.
+- **Corrigé le 14/09** : Collier Double Cœur (les faux « Ligne 1/2/3 » → recto/verso) · Bracelet Cœur
+  T-bar · Bracelet Cœur grosse chaîne → tous en recto/verso à 3 € la face. Bracelet Homme Tressé :
+  gravure toujours affichée. Bracelet cordon à plaque : **prix baissé à 17,91 €** (code 21,90 →
+  barré 19,90). Prix des 3 bijoux à cœur : nu 22,41 / 30,51 € · 1 face +3 € · 2 faces +6 €.
+- **Ce que font les autres (recherche 14/09)** : chez les boutiques de personnalisation en ligne
+  (Petits Trésors, Aismée, Mon Espiègle Tribu, CadeauGravure, Merci Maman), la **1re gravure est
+  comprise dans le prix** et seule la 2e face est payante (Petite Gravure : verso +7 €). Idem verres
+  (Zephyr Paris « aucun coût supplémentaire »), cristaux (photo incluse, socle payant), porte-clés.
+  Seules les **bijouteries classiques** (Histoire d'Or, Cleor, Marc Orian, Carador) facturent la
+  gravure 8-16 € la face — ce n'est pas notre modèle.
+- ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : le catalogue n'est pas uniforme — **13 bijoux font
+  payer la 1re gravure, 19 l'incluent** (liste exacte dans `docs/etat-bijoux.md`, colonne
+  « 1re gravure »). Le gérant a dit le 13/09 « y a que le premier gravure gratuit après c'est
+  payant », mais la règle plus ancienne du §10 4bis dit « GRAVURE = TOUJOURS PAYANTE, JAMAIS
+  INCLUSE ». **Les deux ne peuvent pas être vraies : lui demander laquelle est la bonne** avant
+  d'aligner quoi que ce soit. Il a demandé le 14/09 de ne corriger **que** les fiches qu'il désigne.
+- **Restent au vieux système** (« Sans / Avec gravure » ou case +3 €), à ne toucher que sur sa
+  demande : Bracelet Homme Identité (Gourmette) · Bracelet Homme Acier & Silicone · Collier Cœur &
+  Zircon doré · Bracelet cordon à plaque · Bracelet homme cuir & plaque · Bracelet perles à pastille
+  (+ hors bijoux : Bougeoir Fleur de Lotus, Support téléphone ajouré).
+
+
 ### 💍 11 BIJOUX AJOUTÉS LE 01/09/2026 — RÈGLES À RÉUTILISER
 > Produits Nihaojewelry ajoutés depuis ses photos : `collier-double-coeur`, `collier-coeur-plaques`,
 > `collier-3coeurs`, `bracelet-coeur-chaine`, `bracelet-cordon-plaque`, `collier-medaillon-pivotant`,
