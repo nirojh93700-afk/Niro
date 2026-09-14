@@ -16,9 +16,9 @@
 | **Simon Zuccarelli** (`zucsim58@gmail.com`, Éternel Compagnon) — partenariat revendeur / dropshipping cristaux 3D pour animaux | Réponse préparée par l'agent, **attend la validation du gérant** | Alerte « [À valider] » du 07/09 dans la boîte mail |
 | **Newsletter du 04/09** | ⚠️ **VÉRIFIÉ le 09/09 : JAMAIS PARTIE** (aucune campagne dans les stats à part le [TEST] du 01/09, file programmée vide, rien dans Gmail autour du 04/09). **Ne PAS envoyer la relance** ; c'est l'envoi INITIAL qu'il faut refaire, sur décision du gérant (maquette → à lui seul → liste) | Gestion → Marketing → Newsletter |
 | **Ticket xTool #1222642** (F Series) | Message anglais proposé ; **c'est le gérant qui envoie depuis Outlook** (fil absent du Gmail surveillé) | `CLAUDE.md` § État au 09/09 |
-| **Sonia** — commande 16GFEMQP | ✅ **ENVOYÉ le 12/09** par le fil Communications & aperçu | `docs/messages/rassurance-3-commandes.md` |
-| **Ophélie Terraz** — commande 0KVSBXKR | ✅ **ENVOYÉ le 12/09** (fil Communications & aperçu) — **attendre sa réponse sur le choix du cadeau** (colis part chez la destinataire) | `docs/messages/rassurance-3-commandes.md` |
-| **Sophie Berardo** (#0C1CGL2Q) — verre whisky sur mesure | ✅ **ENVOYÉ le 12/09** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
+| **Sonia** (`soniagailhac1307@gmail.com`) — commande 16GFEMQP | ✅ **ENVOYÉ le 12/09 à 07 h 13** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
+| **Ophélie Terraz** (`ophelie.terraz@gmail.com`) — commande 0KVSBXKR | ✅ **ENVOYÉ le 12/09 à 07 h 13** — **attendre sa réponse sur le choix du cadeau** (colis part chez la destinataire) | `docs/messages/rassurance-3-commandes.md` |
+| **Sophie Berardo** (#0C1CGL2Q) — verre whisky sur mesure | ✅ **ENVOYÉ le 12/09 à 07 h 13** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
 

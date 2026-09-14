@@ -11,7 +11,49 @@
 // Quand un message est envoyé, retirer son entrée d'ici.
 // =============================================================================
 
+// ✅ Les trois messages de réassurance (DEJA_ENVOYES) sont partis le 12/09 à 07 h 13.
+// En attente ci-dessous : la réponse à Rose, validée par le gérant le 14/09.
 export const MESSAGES_PRETS = [
+  {
+    id: "rose-verre-whisky-portugais",
+    client: "Rose",
+    ref: "",
+    piece: "Verre à whisky à personnaliser — gravure en portugais (demande du 12/09, acceptée par le gérant)",
+    note: "Elle n'a envoyé AUCUNE image, seulement le texte. Le message confirme que c'est réalisable, demande les précisions manquantes, annonce le délai AVANT le paiement, et l'oriente vers la fiche produit.",
+    to: "rose75013@icloud.com",
+    subject: "Votre verre à whisky gravé — ce qu'il nous faut pour lancer",
+    body: `Bonjour Rose,
+
+Bonne nouvelle : votre gravure est réalisable. Nous graverons votre texte tel que vous l'avez écrit, en portugais, accents compris.
+
+Une précision utile avant de commencer : votre message fait une soixantaine de caractères, et le verre mesure moins de huit centimètres de diamètre. Pour qu'il reste parfaitement lisible, nous le répartirons sur plusieurs lignes, par exemple ainsi :
+
+  JOSÉ LUIS
+  OBRIGADA POR TODOS OS ORGASMOS
+  CONTINUA ASSIM!
+  A TUA MULHER
+
+Dites-nous si cette répartition vous convient, ou indiquez-nous celle que vous préférez.
+
+Trois petites choses à nous confirmer :
+- combien de verres souhaitez-vous ?
+- quelle écriture parmi celles proposées sur la fiche ?
+- gardons-nous les majuscules, comme dans votre message ?
+
+Pour lancer la fabrication, la commande se passe directement sur la fiche du produit, où vous choisirez votre écriture et votre texte :
+https://nivcreation.fr/produit/verre-a-whisky-fete-des-peres
+
+Un point d'honnêteté sur le délai : en raison d'une forte demande, notre délai de confection est actuellement de trois à quatre semaines minimum. Les commandes sont traitées dans leur ordre d'arrivée. Nous préférons vous le dire avant que vous commandiez.
+
+Et comme promis, nous vous enverrons un aperçu de la gravure à valider avant de graver quoi que ce soit.
+
+Bien cordialement,
+Niv Création
+nivcreation.fr`,
+  },
+];
+
+const DEJA_ENVOYES = [
   {
     id: "16GFEMQP-rassurance",
     client: "Sonia",
