@@ -128,9 +128,15 @@
   (Zephyr Paris « aucun coût supplémentaire »), cristaux (photo incluse, socle payant), porte-clés.
   Seules les **bijouteries classiques** (Histoire d'Or, Cleor, Marc Orian, Carador) facturent la
   gravure 8-16 € la face — ce n'est pas notre modèle.
-- ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : le catalogue n'est pas uniforme — **13 bijoux font
-  payer la 1re gravure, 19 l'incluent** (liste exacte dans `docs/etat-bijoux.md`, colonne
-  « 1re gravure »). Le gérant a dit le 13/09 « y a que le premier gravure gratuit après c'est
+- ⛔ **5 BIJOUX NE SE GRAVENT PAS DU TOUT** (rappel ferme du gérant, 15/09/2026, captures à
+  l'appui) : Bracelet Cœur argenté · Bracelet Maille Trombone doré · Bracelet Ange · Collier Cœur
+  scintillant doré · Collier Perle solitaire. Aucun champ de personnalisation, ils se vendent tels
+  quels. **Ne JAMAIS leur ajouter de gravure** et ne jamais les compter comme « gravure incluse » —
+  c'était une erreur de mon inventaire, corrigée : la colonne « Gravure » de `docs/etat-bijoux.md`
+  distingue maintenant **payante / comprise dans le prix / pas de gravure**.
+- ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : sur les 32 bijoux — **19 font payer la gravure,
+  8 la comprennent dans le prix, 5 ne se gravent pas** (liste exacte dans `docs/etat-bijoux.md`,
+  colonne « Gravure »). Le gérant a dit le 13/09 « y a que le premier gravure gratuit après c'est
   payant », mais la règle plus ancienne du §10 4bis dit « GRAVURE = TOUJOURS PAYANTE, JAMAIS
   INCLUSE ». **Les deux ne peuvent pas être vraies : lui demander laquelle est la bonne** avant
   d'aligner quoi que ce soit. Il a demandé le 14/09 de ne corriger **que** les fiches qu'il désigne.
