@@ -136,7 +136,12 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
     ✅ **L'atelier n'a commis aucune erreur** : la livraison à domicile payée a bien été tentée.
     Demander les frais de réexpédition est donc défendable, et ce suivi est le dossier à produire
     en cas de litige PayPal.
-  - ⚠️ **Décision en attente du gérant** : le bracelet est gravé « Hend », donc invendable à
+  - ⏳ **Le message cliente est PRÊT mais PAS ENVOYÉ** : il a décidé le 15/09 d'attendre et
+    d'envoyer **en fin de semaine**. Texte dans `src/lib/messagesPrets.js` (il dit « revenue cette
+    semaine », donc il reste juste n'importe quel jour). Ne pas l'envoyer à sa place.
+  - 📅 **Le retrait du colis, lui, n'attend pas** : limite au **20/09, qui est un DIMANCHE** →
+    le relais sera probablement fermé, donc **samedi 19/09 au plus tard**.
+  - ⚠️ **Décision prise** : le bracelet est gravé « Hend », donc invendable à
     quelqu'un d'autre, et la règle du site est « personnalisé = jamais remboursé ». Options
     proposées le 15/09 : **renvoi offert** · **renvoi avec port à sa charge (~4,90 €)** ·
     elle vient le chercher. **Aucun message ne lui a été écrit** — le texte sera préparé dans
