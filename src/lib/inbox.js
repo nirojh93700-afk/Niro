@@ -1,4 +1,4 @@
-import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm } from "@/lib/stock";
+import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor } from "@/lib/stock";
 import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
 import { triageIncomingEmail } from "@/lib/agents/registry";
@@ -53,6 +53,18 @@ async function buildContext(order, email) {
   } else {
     parts.push("Aucune commande trouvée à cette adresse e-mail : c'est peut-être une future cliente (question avant achat).");
   }
+  // DOSSIER DE COMMUNICATION COMPLET, tous canaux (e-mails, Messages clients,
+  // bouton Répondre, formulaire) — ajouté le 15/09/2026 après l'incident Rose :
+  // sans lui, l'agent ne voyait pas nos envois « Messages clients » et reposait
+  // des questions auxquelles la cliente avait déjà répondu.
+  try {
+    const dossier = await getCommsFor(email);
+    const msgs = (dossier.messages || []).slice(-10);
+    if (msgs.length) {
+      parts.push("HISTORIQUE COMPLET avec cette cliente, tous canaux (du plus ancien au plus récent) — à relire AVANT d'écrire :");
+      for (const m of msgs) parts.push(`- [${m.from === "nous" ? "Nous" : "Cliente"} · ${fmtDate(m.at)}${m.subject ? ` · ${String(m.subject).slice(0, 60)}` : ""}] ${String(m.text || "").replace(/\s+/g, " ").slice(0, 400)}`);
+    }
+  } catch { /* sans dossier */ }
   try {
     const prev = (await listPendingReplies()).filter((r) => r.email === email && r.status === "sent" && r.finalText).slice(0, 3);
     if (prev.length) {

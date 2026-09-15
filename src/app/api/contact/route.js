@@ -10,7 +10,7 @@
 //   - cas simple  -> il répond TOUT SEUL à la cliente (copie envoyée à la gérante) ;
 //   - cas spécial -> il ne répond pas, il remonte à la gérante « à valider ».
 
-import { getSettings, addPendingReply, logComm } from "@/lib/stock";
+import { getSettings, addPendingReply, logComm, getCommsFor } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
@@ -104,7 +104,19 @@ export async function POST(req) {
   try { settings = await getSettings(); } catch { settings = null; }
   if (settings?.agents?.emailDraft !== false) {
     let draft = null;
-    try { draft = await triageIncomingEmail({ name, email, subject, message, context: produitContext, origin: "formulaire de contact du site" }); } catch { draft = null; }
+    // Historique complet de la cliente (tous canaux) — même règle que la boîte
+    // surveillée (15/09/2026) : l'agent relit tout avant d'écrire, pour ne
+    // jamais reposer une question déjà répondue.
+    let histo = "";
+    try {
+      const dossier = await getCommsFor(email);
+      const msgs = (dossier.messages || []).slice(-10);
+      if (msgs.length) {
+        histo = "\nHISTORIQUE COMPLET avec cette cliente, tous canaux (du plus ancien au plus récent) — à relire AVANT d'écrire :\n" +
+          msgs.map((m) => `- [${m.from === "nous" ? "Nous" : "Cliente"} · ${new Date(m.at || 0).toLocaleDateString("fr-FR")}] ${String(m.text || "").replace(/\s+/g, " ").slice(0, 400)}`).join("\n");
+      }
+    } catch { /* sans dossier */ }
+    try { draft = await triageIncomingEmail({ name, email, subject, message, context: `${produitContext || ""}${histo}`, origin: "formulaire de contact du site" }); } catch { draft = null; }
     let item = null;
     try {
       item = await addPendingReply({

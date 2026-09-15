@@ -463,6 +463,7 @@ CONTEXTE (sa commande et nos échanges précédents — utilise-le pour répondr
 ${context}
 ` : ""}
 Le message peut contenir la CITATION de nos e-mails précédents (lignes commençant par « > », « ---- Message d'origine ----», « Le … a écrit : »). La vraie demande de la cliente est le texte qui n'est PAS cité : repère-le, même s'il est au milieu ou à la fin, et réponds à celui-là.
+RÈGLE ABSOLUE (15/09/2026, demande du gérant) : relis TOUT l'historique du contexte AVANT d'écrire. Ne repose JAMAIS une question déjà posée dans un de nos messages précédents ; ce que la cliente a déjà répondu est ACQUIS — appuie-toi dessus au lieu de redemander. Si sa réponse clôt le sujet, propose une confirmation courte de ce qui est acquis, sans re-questionner ; et si aucune réponse n'est vraiment utile, dis-le dans le champ « reason ».
 Rédige la réponse et décide si tu peux répondre seul ou s'il faut la validation de la gérante.`;
   const res = await runAgent("email", [{ role: "user", content: prompt }]);
   const a = res?.action;
