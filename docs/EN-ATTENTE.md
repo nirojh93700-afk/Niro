@@ -119,10 +119,24 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ## 4. À faire par le gérant (rappeler s'il demande « où on en est »)
 
-- 📦 **COLIS À RETIRER AVANT LE 20/09/2026** (notification Mondial Relay du 15/09 à 15 h 32) :
-  colis **n° 98362971**, code de retrait **536287**, au point relais **RETOUCHERIE JO**,
-  1 place de la Libération, **95200 Sarcelles** (9 h-13 h et 14 h-19 h). Passé le 20/09, le colis
-  repart chez l'expéditeur. **Le lui rappeler s'il demande ce qui reste à faire.**
+- 📦 **RETOUR CLIENT À RETIRER AVANT LE 20/09/2026 — commande #1S9IOON5**
+  (notification Mondial Relay du 15/09 à 15 h 32). Colis **n° 98362971**, code de retrait
+  **536287**, au relais **RETOUCHERIE JO**, 1 place de la Libération, **95200 Sarcelles**
+  (9 h-13 h / 14 h-19 h). **Passé le 20/09 le colis repart** → à retirer en priorité.
+  - **Ce n'est pas un colis fournisseur** : c'est le **retour de la commande #1S9IOON5**, envoi
+    Boxtal `#2609011116MONRXTX0FR`, suivi `71133346` (5,10 € HT de port).
+  - Cliente : **Hend Musallam**, 31 rue d'Etrembières, 74100 Annemasse ·
+    `e.varol2012@icloud.com` · 07 49 37 63 26 (payé par PayPal sous *Enes Varol*).
+  - Contenu : **1× Bracelet Femme Cœur doré gravé « Hend »** (police Allura) + boîte cadeau.
+    Payé **30,21 €** (26,31 € + 3,90 € de livraison). Commande du 31/08, fabrication immédiate.
+  - Historique du colis : disponible au relais le **04/09 à 9 h 26**, avisage e-mail à 9 h 29,
+    **jamais retiré**, retour déclenché le **11/09**.
+  - ⚠️ **Décision en attente du gérant** : le bracelet est gravé « Hend », donc invendable à
+    quelqu'un d'autre, et la règle du site est « personnalisé = jamais remboursé ». Options
+    proposées le 15/09 : **renvoi offert** · **renvoi avec port à sa charge (~4,90 €)** ·
+    elle vient le chercher. **Aucun message ne lui a été écrit** — le texte sera préparé dans
+    Gestion → Clients → Messages clients dès qu'il aura choisi.
+  - À noter : la fiche a facturé 3,90 € de port alors que l'envoi a coûté 5,10 € HT.
 
 - **REP emballages / IDU** : adhérer à Léko ou Citeo, obtenir l'IDU, le coller dans Etsy.
   Risque : sans IDU, Etsy peut bloquer le compte vendeur. Récap : `docs/rep-emballages-idu.md`.
