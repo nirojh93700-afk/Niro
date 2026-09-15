@@ -94,7 +94,7 @@ export default function ReponsePage({ params }) {
               </div>
             ) : null}
             <textarea
-              style={S.ta} maxLength={4000} value={text}
+              style={S.ta} value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Écrivez votre réponse ici…"
             />

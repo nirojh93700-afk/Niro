@@ -26,7 +26,9 @@ export async function POST(req, { params }) {
   }
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
-  const text = String(body?.text || "").trim().slice(0, 4000);
+  // Pas de limite de longueur pour la cliente (demande du gérant, 15/09) —
+  // seul un plafond technique très haut protège la base contre un abus.
+  const text = String(body?.text || "").trim().slice(0, 100000);
   if (text.length < 2) return Response.json({ error: "Écrivez votre message avant d'envoyer." }, { status: 400 });
 
   // 1) Dossier de communication de la cliente (toujours).
