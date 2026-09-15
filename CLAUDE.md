@@ -144,6 +144,17 @@
   demande : Bracelet Homme Identité (Gourmette) · Bracelet Homme Acier & Silicone · Collier Cœur &
   Zircon doré · Bracelet cordon à plaque · Bracelet homme cuir & plaque · Bracelet perles à pastille
   (+ hors bijoux : Bougeoir Fleur de Lotus, Support téléphone ajouré).
+- 🏷️ **NOUVEAUX NOMS DES 32 BIJOUX — PRÊTS, PAS APPLIQUÉS (15/09/2026)** : il a demandé des noms
+  « amour romantique » inspirés des grandes boutiques, puis **« enregistre ces noms, quand je te
+  dirai tu les changeras »**. Les 32 noms sont dans **`docs/noms-bijoux-proposition.md`** (tableau
+  + liste slug → nouveau nom, prête à appliquer). Ex. Collier Double Cœur → **Collier Cœur à Cœur**,
+  Collier Couple Cœur → **Collier Toi & Moi**, Bracelet Papillon → **Bracelet Envolée**, gourmette
+  homme → **Bracelet Le Serment**.
+  ⛔ **À l'application : changer UNIQUEMENT le champ `name`.** Ne toucher ni au `slug` (l'adresse
+  de la fiche : la changer casse les liens partagés, le référencement acquis et le flux Google
+  Merchant Center), ni au `title` (le titre Google porte les mots-clés). Garder le mot
+  « Collier »/« Bracelet » devant le nom poétique : le `name` s'affiche aussi dans le panier, les
+  e-mails de commande et Gestion. Puis `npm run build` + `npm run etat-bijoux`.
 - 🧊 **APERÇU 3D DES BIJOUX (chantier ouvert le 14/09/2026)** : le site dessine déjà lui-même des
   aperçus 3D (`Engrave3D`, `EngraveHeart3D`, `EngravePlate3D`, `EngraveGourmette3D`, `EngraveBook3D`,
   `EngraveEnvelope3D` — 9 bijoux les ont). 18 bijoux gravables n'en ont pas. Il a demandé **une
