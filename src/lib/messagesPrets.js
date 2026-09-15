@@ -16,7 +16,32 @@
 // et Cécilia Herrera (#00CUYR2U, date gravée 24/09) ont reçu le 15/09 un
 // message « nous ferons notre maximum, ce sera juste » + promesse de suivi.
 // Si la date ne peut pas être tenue, leur écrire un mot AVANT le 24 et le 26.
-export const MESSAGES_PRETS = [];
+export const MESSAGES_PRETS = [
+  {
+    id: "1S9IOON5-colis-revenu",
+    client: "Hend Musallam",
+    ref: "1S9IOON5",
+    piece: "Bracelet Femme Cœur doré gravé « Hend » (police Allura) + boîte cadeau — payé 30,21 € le 31/08",
+    note: "LE COLIS EST REVENU. Mis à disposition en point relais le 04/09 (avisage e-mail le même jour), jamais retiré, retour déclenché le 11/09, arrivé au relais de Sarcelles le 15/09 — code 536287, À RETIRER AVANT LE 20/09. Décision du gérant le 15/09 : renvoi possible mais AVEC LES FRAIS À SA CHARGE (il ne peut pas offrir le port). Le message annonce le retour sans reproche, demande l'adresse à utiliser, et annonce 4,90 € en point relais ou 6,90 € à domicile. ⚠️ ELLE AVAIT PAYÉ UNE LIVRAISON À DOMICILE (3,90 €) et le colis a fini en point relais : si elle le fait remarquer, son argument est valable — prévoir la réponse. Pour encaisser les frais : Gestion → Devis & factures, devis de 4,90 € ou 6,90 € payable en ligne.",
+    to: "e.varol2012@icloud.com",
+    subject: "Votre bracelet nous est revenu — comment on le remet en route",
+    body: `Bonjour,
+
+Votre commande nous est revenue aujourd'hui. Le colis avait été mis à disposition dans un point relais le 4 septembre ; il n'a pas pu être retiré dans le délai de conservation, et le transporteur nous l'a automatiquement renvoyé.
+
+Votre bracelet est donc bien là, intact dans son écrin, avec la gravure « Hend ».
+
+Nous pouvons vous le renvoyer dès que vous le souhaitez. Le premier envoi ayant été consommé, il reste les frais de réexpédition à prévoir : 4,90 € en point relais, ou 6,90 € en livraison à domicile.
+
+Dites-nous simplement ce que vous préférez, et confirmez-nous l'adresse — ou le point relais — à utiliser : nous voulons être sûrs qu'il arrive entre vos mains cette fois. Nous vous enverrons ensuite un lien de paiement sécurisé pour ces frais, et le bracelet repart dès le règlement reçu.
+
+Désolés pour ce contretemps, et merci de votre compréhension.
+
+Bien cordialement,
+Niv Création
+nivcreation.fr`,
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Historique — déjà partis, gardés pour mémoire (ne s'affichent PAS dans l'admin).
