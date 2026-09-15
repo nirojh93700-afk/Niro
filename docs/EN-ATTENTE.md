@@ -136,9 +136,11 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
     ✅ **L'atelier n'a commis aucune erreur** : la livraison à domicile payée a bien été tentée.
     Demander les frais de réexpédition est donc défendable, et ce suivi est le dossier à produire
     en cas de litige PayPal.
-  - ⏳ **Le message cliente est PRÊT mais PAS ENVOYÉ** : il a décidé le 15/09 d'attendre et
-    d'envoyer **en fin de semaine**. Texte dans `src/lib/messagesPrets.js` (il dit « revenue cette
-    semaine », donc il reste juste n'importe quel jour). Ne pas l'envoyer à sa place.
+  - ⏳ **Le message cliente est PRÊT mais PAS ENVOYÉ**, et il a été **RETIRÉ de Gestion à sa
+    demande** (« pour pas qu'on se trompe et qu'on l'envoie ») : il n'apparaît plus dans
+    Messages clients. Texte + contexte + entrée à recopier :
+    **`docs/messages/1S9IOON5-colis-revenu.md`**. Envoi prévu **en fin de semaine, par lui
+    seul**. Le remettre dans `MESSAGES_PRETS` seulement s'il le demande.
   - 📅 **Le retrait du colis, lui, n'attend pas** : limite au **20/09, qui est un DIMANCHE** →
     le relais sera probablement fermé, donc **samedi 19/09 au plus tard**.
   - ⚠️ **Décision prise** : le bracelet est gravé « Hend », donc invendable à
