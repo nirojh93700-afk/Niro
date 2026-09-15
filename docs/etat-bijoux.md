@@ -22,8 +22,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 |---|---|---|---|---|
 | **Collier Enveloppe Message Secret** | femme | 22,41 € – 24,21 € | incluse | — |
 | **Collier Médaillon Cœur ouvrable** | femme | 31,41 € – 36,81 € | incluse | photo +8 € · chaque page en plus +5 € |
-| **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € – 29,61 € | **payante** | par l'option choisie |
-| **Bracelet Homme Acier & Silicone** | homme | 21,51 € – 26,91 € | **payante** | par l'option choisie |
+| **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € | **payante** | texte +4.5 € |
+| **Bracelet Homme Acier & Silicone** | homme | 21,51 € | **payante** | texte +5.4 € |
 | **Bracelet Homme Tressé & Acier** | homme | 20,61 € – 23,31 € | **payante** | texte +3 € |
 | **Bracelet Homme Chaîne Acier** | homme | 31,41 € | incluse | — |
 | **Bracelet Femme Acier** | femme | 22,41 € | incluse | — |
@@ -38,17 +38,17 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Collier Plaque Acier** | homme | 24,21 € – 27,81 € | incluse | photo +8 € · chaque page en plus +5 € |
 | **Collier Cœur scintillant doré** | femme | 22,41 € | incluse | — |
 | **Collier Perle solitaire** | femme | 17,91 € | incluse | — |
-| **Collier Cœur & Zircon doré** | femme | 22,41 € – 25,11 € | **payante** | par l'option choisie |
+| **Collier Cœur & Zircon doré** | femme | 22,41 € | **payante** | texte +2.7 € |
 | **Collier Double Cœur à graver** | femme | 29,61 € – 30,51 € | **payante** | recto +3 € · verso +3 € |
 | **Collier Cœur & 2 plaques à graver** | femme | 29,61 € – 30,51 € | **payante** | coeur +3 € · plaque1 +3 € · plaque2 +3 € |
 | **Collier 3 Cœurs entrelacés à graver** | femme | 30,51 € | **payante** | coeur1 +3 € · coeur2 +3 € · coeur3 +3 € |
 | **Bracelet Cœur grosse chaîne à graver** | femme | 30,51 € | **payante** | recto +3 € · verso +3 € |
-| **Bracelet cordon à plaque gravée** | homme | 17,91 € | **payante** | gravure +3 € |
+| **Bracelet cordon à plaque gravée** | homme | 17,91 € | **payante** | texte +3 € |
 | **Collier Médaillon pivotant à graver** | femme | 29,61 € – 30,51 € | **payante** | recto +3 € · verso +3 € |
-| **Bracelet homme cuir & plaque à graver** | homme | 30,51 € | **payante** | gravure +3 € |
+| **Bracelet homme cuir & plaque à graver** | homme | 30,51 € | **payante** | texte +3 € |
 | **Collier Pastille à graver recto-verso** | femme | 26,91 € – 27,81 € | **payante** | recto +3 € · verso +3 € |
 | **Collier Cœur à graver recto-verso** | femme | 29,61 € – 30,51 € | **payante** | recto +3 € · verso +3 € |
-| **Bracelet perles à pastille gravée** | femme | 29,61 € – 30,51 € | **payante** | gravure +3 € |
+| **Bracelet perles à pastille gravée** | femme | 29,61 € – 30,51 € | **payante** | texte +3 € |
 | **Collier Médaillon Livre** | femme | 33,21 € – 34,11 € | incluse | page1 +5 € · page2 +5 € · page3 +5 € |
 | **Collier Couple Puzzle géométrique** | couple | 16,11 € – 18,81 € | incluse | — |
 | **Collier Femme Pendentif géométrique** | femme | 21,51 € – 25,11 € | incluse | face2 +3 € · face3 +3 € · face4 +3 € |
@@ -141,17 +141,19 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Avec gravure | 36,90 € | 32,90 € | **29,61 €** | gourm |
-| Sans gravure | 30,90 € | 27,90 € | **25,11 €** | gourm |
+| Acier inoxydable | 30,90 € | 27,90 € | **25,11 €** | gourm |
 
 **Personnalisation**
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (30 car.) | oui | — | si l'option contient « Avec » |
-| Police de gravure | font | non | — | si l'option contient « Avec » |
+| Texte à graver (+4,50 €) | texte (30 car.) | non | +4.5 € | toujours |
+| Police de gravure | font | non | — | toujours |
 
-**⚠️ À surveiller** : TOUS les champs de gravure sont conditionnés : si les options sont renommées dans l'admin, la gravure disparaît de la fiche
+**Ce que paie la cliente** (option « Acier inoxydable »)
+
+- sans rien graver : **25,11 €**
+- + texte : **29,61 €**
 
 ---
 
@@ -169,19 +171,20 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Plaque argentée / Sans texte | 26,90 € | 23,90 € | **21,51 €** | sil-argent |
-| Plaque argentée / Avec texte | 32,90 € | 29,90 € | **26,91 €** | sil-argent |
-| Plaque noire / Sans texte | 26,90 € | 23,90 € | **21,51 €** | sil-noire |
-| Plaque noire / Avec texte | 32,90 € | 29,90 € | **26,91 €** | sil-noire |
+| Plaque argentée | 26,90 € | 23,90 € | **21,51 €** | sil-argent |
+| Plaque noire | 26,90 € | 23,90 € | **21,51 €** | sil-noire |
 
 **Personnalisation**
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (30 car.) | oui | — | si l'option contient « Avec » |
-| Police de gravure | font | non | — | si l'option contient « Avec » |
+| Texte à graver (+5,40 €) | texte (30 car.) | non | +5.4 € | toujours |
+| Police de gravure | font | non | — | toujours |
 
-**⚠️ À surveiller** : TOUS les champs de gravure sont conditionnés : si les options sont renommées dans l'admin, la gravure disparaît de la fiche
+**Ce que paie la cliente** (option « Plaque argentée »)
+
+- sans rien graver : **21,51 €**
+- + texte : **26,91 €**
 
 ---
 
@@ -556,17 +559,19 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Sans gravure | 27,90 € | 24,90 € | **22,41 €** | collier-coeur-zircon |
-| Avec gravure | 30,90 € | 27,90 € | **25,11 €** | collier-coeur-zircon |
+| Doré | 27,90 € | 24,90 € | **22,41 €** | collier-coeur-zircon |
 
 **Personnalisation**
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver (prénom, initiales, date) | texte (15 car.) | oui | — | si l'option contient « Avec » |
-| Police de gravure | font | non | — | si l'option contient « Avec » |
+| Texte à graver (+2,70 €) | texte (15 car.) | non | +2.7 € | toujours |
+| Police de gravure | font | non | — | toujours |
 
-**⚠️ À surveiller** : TOUS les champs de gravure sont conditionnés : si les options sont renommées dans l'admin, la gravure disparaît de la fiche
+**Ce que paie la cliente** (option « Doré »)
+
+- sans rien graver : **22,41 €**
+- + texte : **25,11 €**
 
 ---
 
@@ -728,14 +733,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Voulez-vous faire graver la plaque ? | select | oui | +3 € | toujours |
-| Texte à graver sur la plaque | texte (15 car.) | oui | — | si « gravure » = oui |
-| Police de gravure | font | non | — | si « gravure » = oui |
+| Texte à graver sur la plaque (+3 €) | texte (15 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
 
 **Ce que paie la cliente** (option « Noir / boucle noire »)
 
 - sans rien graver : **17,91 €**
-- + gravure : **20,91 €**
+- + texte : **20,91 €**
 
 ---
 
@@ -795,14 +799,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Voulez-vous faire graver la plaque ? | select | oui | +3 € | toujours |
-| Texte à graver sur la plaque | texte (20 car.) | oui | — | si « gravure » = oui |
-| Police de gravure | font | non | — | si « gravure » = oui |
+| Texte à graver sur la plaque (+3 €) | texte (20 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
 
 **Ce que paie la cliente** (option « Noir chiné »)
 
 - sans rien graver : **30,51 €**
-- + gravure : **33,51 €**
+- + texte : **33,51 €**
 
 ---
 
@@ -895,14 +898,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Voulez-vous faire graver la pastille ? | select | oui | +3 € | toujours |
-| Texte à graver sur la pastille | texte (12 car.) | oui | — | si « gravure » = oui |
-| Police de gravure | font | non | — | si « gravure » = oui |
+| Texte à graver sur la pastille (+3 €) | texte (12 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
 
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **30,51 €**
-- + gravure : **33,51 €**
+- + texte : **33,51 €**
 
 ---
 
@@ -1028,9 +1030,4 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 ## Récapitulatif des points à surveiller
 
-- **Bracelet Homme Identité (Gourmette)** (`bracelet-homme-identite-gourmette`)
-  - TOUS les champs de gravure sont conditionnés : si les options sont renommées dans l'admin, la gravure disparaît de la fiche
-- **Bracelet Homme Acier & Silicone** (`bracelet-homme-acier-silicone`)
-  - TOUS les champs de gravure sont conditionnés : si les options sont renommées dans l'admin, la gravure disparaît de la fiche
-- **Collier Cœur & Zircon doré** (`collier-coeur-zircon`)
-  - TOUS les champs de gravure sont conditionnés : si les options sont renommées dans l'admin, la gravure disparaît de la fiche
+Aucun. Tous les bijoux sont configurés de la même façon.

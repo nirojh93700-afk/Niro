@@ -204,9 +204,18 @@ export const products = [
     letter: true,
     subcategory: "homme",
     preview: { top: "45%", bottom: "40%", left: "6%", right: "48%" },
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 4.5 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "note", type: "note", text: "La plaque de la gourmette se grave : un prénom, une date, un message. La gravure coûte 4,50 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+4,50 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
     category: "bijoux",
@@ -220,9 +229,11 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8086800434_d5ag.jpg?v=1780366839",
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8134708393_5e02.jpg?v=1780366838",
     ],
+    // Une seule ligne par finition : la gravure n'est plus une variante (voir
+    // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
+    // « -sans » compris) pour ne casser ni les paniers en cours ni l'historique.
     variants: [
-      { id: "gourm-gravure", title: "Avec gravure", price: 36.90, stockId: "gourm" },
-      { id: "gourm-sans", title: "Sans gravure", price: 30.90, stockId: "gourm" },
+      { id: "gourm-sans", title: "Acier inoxydable", price: 30.90, stockId: "gourm" },
     ],
     descriptionHtml: `<p>Offrez un bijou d'élégance avec ce <strong>bracelet identité homme</strong> personnalisable par gravure laser. La plaque rectangulaire lisse offre un espace idéal pour graver un prénom, une date, un message ou des initiales.</p>
 <p>Monté sur une belle chaîne gourmette à gros maillons cubains en acier inoxydable, il allie solidité, élégance et style contemporain.</p>
@@ -242,9 +253,18 @@ export const products = [
     pickup: false,
     letter: true,
     subcategory: "homme",
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 5.4 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "note", type: "note", text: "La plaque acier se grave : un prénom, une date, un message. La gravure coûte 5,40 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+5,40 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
     category: "bijoux",
@@ -259,11 +279,12 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8132632747_knt0.jpg?v=1780366864",
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8084724218_jxik.jpg?v=1780366864",
     ],
+    // Une seule ligne par finition : la gravure n'est plus une variante (voir
+    // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
+    // « -sans » compris) pour ne casser ni les paniers en cours ni l'historique.
     variants: [
-      { id: "sil-argent-sans", title: "Plaque argentée / Sans texte", price: 26.90, stockId: "sil-argent" },
-      { id: "sil-argent-texte", title: "Plaque argentée / Avec texte", price: 32.90, stockId: "sil-argent" },
-      { id: "sil-noire-sans", title: "Plaque noire / Sans texte", price: 26.90, stockId: "sil-noire" },
-      { id: "sil-noire-texte", title: "Plaque noire / Avec texte", price: 32.90, stockId: "sil-noire" },
+      { id: "sil-argent-sans", title: "Plaque argentée", price: 26.90, stockId: "sil-argent" },
+      { id: "sil-noire-sans", title: "Plaque noire", price: 26.90, stockId: "sil-noire" },
     ],
     descriptionHtml: `<p>Offrez un bijou unique grâce à notre <strong>bracelet homme personnalisé par gravure laser</strong>. Chaque pièce est gravée à la demande : prénom, date, message ou initiales.</p>
 <p>Fabriqué en acier inoxydable de qualité associé à un gel de silicone souple, il allie solidité et confort pour un port quotidien agréable.</p>
@@ -1277,10 +1298,18 @@ export const products = [
     category: "bijoux", type: "Collier cadeau",
     tagline: "Un cœur ouvert entrelacé d'un anneau serti de zircons — doré, brillant, à offrir.",
     personalizable: true, personalizationLabel: "Gravure prénom / initiales en option (côté du cœur)",
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 2.7 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Ce collier peut se porter tel quel ou être personnalisé. Choisissez « Avec gravure » pour faire graver au laser un prénom, des initiales ou une date sur le côté du cœur (surface fine : texte court conseillé)." },
-      { key: "texte", label: "Texte à graver (prénom, initiales, date)", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 15, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "note", type: "note", text: "Ce collier se porte tel quel ou gravé : un prénom, des initiales ou une date sur le côté du cœur (surface fine, texte court conseillé). La gravure coûte 2,70 € ; laissez le champ vide pour un bijou sans gravure." },
+      { key: "texte", label: "Texte à graver (+2,70 €)", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 15, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/collier-coeur-zircon-1.jpg",
@@ -1290,9 +1319,11 @@ export const products = [
       "/produits/collier-coeur-zircon-3.jpg",
       "/produits/collier-coeur-zircon-4.jpg",
     ],
+    // Une seule ligne par finition : la gravure n'est plus une variante (voir
+    // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
+    // « -sans » compris) pour ne casser ni les paniers en cours ni l'historique.
     variants: [
-      { id: "collier-coeur-zircon-sans", title: "Sans gravure", price: 27.90, stockId: "collier-coeur-zircon" },
-      { id: "collier-coeur-zircon-avec", title: "Avec gravure", price: 30.90, stockId: "collier-coeur-zircon" },
+      { id: "collier-coeur-zircon-sans", title: "Doré", price: 27.90, stockId: "collier-coeur-zircon" },
     ],
     descriptionHtml: `<p>Un <strong>cœur ouvert doré</strong> entrelacé d'un <strong>anneau serti de zircons</strong> taille princesse : un bijou lumineux et romantique, idéal à offrir (Saint-Valentin, anniversaire, « je t'aime »).</p>
 <h3>Caractéristiques</h3>
@@ -1490,18 +1521,18 @@ export const products = [
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Un cordon tressé solide, une plaque en acier à faire graver — se porte tous les jours.",
     personalizable: true, personalizationLabel: "Gravure sur la plaque acier en option (+3 €)",
-    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver la plaque ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "La plaque en acier est la surface gravée : un prénom, des initiales, une date ou de courtes coordonnées. Comptez une quinzaine de caractères pour que la gravure reste bien lisible.", showIfField: "gravure", showIfValue: "oui" },
-      { key: "texte", label: "Texte à graver sur la plaque", placeholder: "Prénom, initiales, date…", maxLength: 15, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "La plaque en acier est la surface gravée : un prénom, des initiales, une date ou de courtes coordonnées. Comptez une quinzaine de caractères pour que la gravure reste bien lisible. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver sur la plaque (+3 €)", placeholder: "Prénom, initiales, date…", maxLength: 15, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-cordon-plaque-1.jpg",
@@ -1581,18 +1612,18 @@ export const products = [
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Un bracelet de caractère : bracelet cuir et large plaque acier polie, à faire graver.",
     personalizable: true, personalizationLabel: "Gravure sur la plaque acier en option (+3 €)",
-    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver la plaque ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "La large plaque acier polie est la surface gravée. Elle est assez grande pour un prénom complet, une date ou une courte phrase — comptez une vingtaine de caractères pour un rendu net.", showIfField: "gravure", showIfValue: "oui" },
-      { key: "texte", label: "Texte à graver sur la plaque", placeholder: "Prénom, date, petite phrase…", maxLength: 20, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "La large plaque acier polie est la surface gravée. Elle est assez grande pour un prénom complet, une date ou une courte phrase — comptez une vingtaine de caractères pour un rendu net. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver sur la plaque (+3 €)", placeholder: "Prénom, date, petite phrase…", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-homme-plaque-1.jpg",
@@ -1712,18 +1743,18 @@ export const products = [
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Un rang de perles d'acier, une pastille à graver, et une taille qui s'ajuste au poignet.",
     personalizable: true, personalizationLabel: "Gravure sur la pastille en option (+3 €)",
-    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver la pastille ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "La pastille est petite (environ 1 cm) : préférez un prénom court, des initiales ou une date pour que la gravure reste bien lisible.", showIfField: "gravure", showIfValue: "oui" },
-      { key: "texte", label: "Texte à graver sur la pastille", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 12, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "La pastille est petite (environ 1 cm) : préférez un prénom court, des initiales ou une date pour que la gravure reste bien lisible. La gravure coûte 3 € ; laissez le champ vide pour un bijou sans gravure." },
+      { key: "texte", label: "Texte à graver sur la pastille (+3 €)", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 12, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-perles-pastille-1.jpg",
@@ -2925,10 +2956,18 @@ export const products = [
     tagline: "Un porte-bougie fleur de lotus en bois, découpé à la main dans notre atelier — à personnaliser d'un prénom ou d'une date.",
     personalizable: true,
     personalizationLabel: "Gravure (option)",
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["texte"], textExtra: 5 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver (prénom, nom ou date)", placeholder: "Ex : Marie & Paul — 2026", maxLength: 30, variantContains: "gravure" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "gravure" },
-      { key: "note", type: "note", text: "Choisissez « Avec gravure » pour personnaliser (prénom, nom ou date). La gravure est discrète (pourtour ou pétale)." },
+      { key: "note", type: "note", text: "Ce bougeoir se pose tel quel, ou gravé d'un prénom, d'un nom ou d'une date — gravure discrète, sur le pourtour ou un pétale. La gravure coûte 5 € ; laissez le champ vide pour un bougeoir sans gravure." },
+      { key: "texte", label: "Texte à graver (+5 €)", placeholder: "Ex : Marie & Paul — 2026", maxLength: 30, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Bougeoir Fleur de Lotus en bois personnalisé — porte-bougie chauffe-plat déco",
     images: [
@@ -2936,9 +2975,11 @@ export const products = [
       "/produits/bougeoir-lotus-2.jpg",
       "/produits/bougeoir-lotus-3.jpg",
     ],
+    // Une seule ligne par finition : la gravure n'est plus une variante (voir
+    // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
+    // « -sans » compris) pour ne casser ni les paniers en cours ni l'historique.
     variants: [
-      { id: "bougeoir-lotus-simple", title: "Sans personnalisation", price: 16.90 },
-      { id: "bougeoir-lotus-grave", title: "Avec gravure (prénom, nom ou date)", price: 21.90 },
+      { id: "bougeoir-lotus-simple", title: "Bois naturel", price: 16.90 },
     ],
     descriptionHtml: `<p><strong>Une fleur de lotus découpée au laser dans notre atelier — pas en usine.</strong> Chaque bougeoir est découpé et fini à la main chez nous, en France. Une pièce singulière, pas un objet de production de masse.</p>
 <p>Le bois naturel et la finesse de la découpe laser offrent des détails impossibles à obtenir en grande série. Symbole de pureté et de sérénité, le lotus diffuse une lumière douce et apaisante sur une table, un buffet ou un coin détente.</p>
@@ -3098,15 +3139,24 @@ export const products = [
       "/produits/support-ajoure-2.jpg",
       "/produits/support-ajoure-3.jpg",
     ],
+    // Gravure PAYANTE, chiffrée ICI et pas dans l'admin : `engravingPricing` ne
+    // fait pas partie des champs surchargeables de catalog.js, donc le supplément
+    // tient même si les prix ou les noms d'options sont réécrits dans Gestion.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // il suffisait de renommer une option pour que toute la gravure disparaisse.
+    // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
+    // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
+    engravingPricing: { textKeys: ["prenom"], textExtra: 3 },
     personalizationFields: [
-      { key: "prenom", label: "Le prénom à graver", placeholder: "Ex. Camille", maxLength: 12,
-        optional: true, variantContains: "prénom" },
-      { key: "police", type: "font", label: "Police du prénom", optional: true, variantContains: "prénom" },
-      { key: "note", type: "note", text: "Le motif est découpé dans le bois : il n'est pas modifiable. Seul le prénom, en option, est gravé sur la base — la bande pleine sous le motif. Un prénom court reste net." },
+      { key: "note", type: "note", text: "Le motif est découpé dans le bois : il n'est pas modifiable. Seul le prénom, en option, est gravé sur la base — la bande pleine sous le motif. Un prénom court reste net. La gravure coûte 3 € ; laissez le champ vide pour un support sans gravure." },
+      { key: "prenom", label: "Le prénom à graver (+3 €)", placeholder: "Ex. Camille", maxLength: 12, optional: true },
+      { key: "police", type: "font", label: "Police du prénom", optional: true },
     ],
+    // Une seule ligne par finition : la gravure n'est plus une variante (voir
+    // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
+    // « -sans » compris) pour ne casser ni les paniers en cours ni l'historique.
     variants: [
-      { id: "support-ajoure-simple", title: "Sans gravure", price: 12.90 },
-      { id: "support-ajoure-prenom", title: "Avec un prénom gravé", price: 15.90 },
+      { id: "support-ajoure-simple", title: "Bois naturel", price: 12.90 },
     ],
     descriptionHtml: `<p><strong>Un support de téléphone découpé à jour dans le bois.</strong> Feuilles d'érable, lierre et glands s'entrelacent sous une arche : le motif traverse le panneau de part en part. Posé près d'une fenêtre ou d'une lampe, il projette son dessin en ombre sur le bureau.</p>
 <h3>Caractéristiques</h3>
