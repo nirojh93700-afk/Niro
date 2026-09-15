@@ -5,67 +5,107 @@
 // formulaire d'envoi : il relit, puis clique « Envoyer maintenant ».
 // RIEN NE PART TOUT SEUL. Ce fichier ne contient que du texte.
 //
-// Rédigés le 12/09/2026 (réassurance des commandes en attente). Règles
-// respectées : jamais de machine/panne/laser (motif = forte demande), aucune
-// date promise, signature « Niv Création » sans nom de personne.
+// Règles respectées dans chaque texte : jamais de machine / panne / laser (le
+// motif est TOUJOURS la forte demande) · AUCUNE date promise · AUCUNE mention
+// de remboursement (consigne du 15/09) · signature « Niv Création », jamais un
+// nom de personne.
 // Quand un message est envoyé, retirer son entrée d'ici.
 // =============================================================================
 
-// ✅ Les trois messages de réassurance (DEJA_ENVOYES) sont partis le 12/09 à 07 h 13.
-// En attente ci-dessous : la réponse à Rose, validée par le gérant le 14/09.
+// Rédigés le 15/09/2026, validés par le gérant : les 4 commandes arrivées
+// depuis les envois du 12/09 n'avaient reçu que la confirmation automatique.
+//
+// ⚠️ DEUX COMMANDES PORTENT UNE DATE GRAVÉE TRÈS PROCHE (26/09 et 24/09).
+// Formulation validée par le gérant : on NOMME la date, on annonce qu'on fera
+// « notre maximum », et on dit franchement que « ce sera juste » — sans jamais
+// promettre la date. Ces deux textes promettent aussi un suivi (« nous vous
+// tiendrons au courant ») : s'il apparaît que la date ne peut pas être tenue,
+// il faut leur écrire un mot AVANT le 24 et le 26, sinon la phrase se retourne
+// contre nous.
 export const MESSAGES_PRETS = [
   {
-    id: "rose-verre-whisky-portugais",
-    client: "Rose",
-    ref: "",
-    piece: "Verre à whisky à personnaliser — gravure en portugais (demande du 12/09, acceptée par le gérant)",
-    note: "Elle n'a envoyé AUCUNE image, seulement le texte. Le message confirme que c'est réalisable, demande les précisions manquantes, annonce le délai AVANT le paiement, et l'oriente vers la fiche produit.",
-    to: "rose75013@icloud.com",
-    subject: "Votre verre à whisky gravé — ce qu'il nous faut pour lancer",
-    body: `Bonjour Rose,
+    id: "0URL2JQA-50ans",
+    client: "Valérine Zaghini",
+    ref: "0URL2JQA",
+    piece: "Flûtes à champagne, lot de 2 — « 50 ans d'amour » · « 26 septembre 1976 », police Allura",
+    note: "Commande du 12/09, point relais Mondial Relay Châtillon-sur-Seine, cadeau « Surprise ». DATE PROCHE : noces d'or le 26/09. Le texte ne promet pas la date, il annonce « ce sera juste ».",
+    to: "valerinezaghini@gmail.com",
+    subject: "Votre commande est bien prise en compte",
+    body: `Bonjour,
 
-Bonne nouvelle : votre gravure est réalisable. Nous graverons votre texte tel que vous l'avez écrit, en portugais, accents compris.
+Votre commande est bien prise en compte, et tout est noté : les deux flûtes, gravées « 50 ans d'amour » et « 26 septembre 1976 », dans l'écriture Allura.
 
-Une précision utile avant de commencer : votre message fait une soixantaine de caractères, et le verre mesure moins de huit centimètres de diamètre. Pour qu'il reste parfaitement lisible, nous le répartirons sur plusieurs lignes, par exemple ainsi :
+Nous avons bien vu la date du 26 septembre. Nous ferons notre maximum pour que les flûtes soient prêtes à temps — mais nous préférons être honnêtes avec vous : ce sera juste. La demande est forte en ce moment, et les commandes sont traitées dans leur ordre d'arrivée. Nous vous tiendrons au courant de l'avancée de la vôtre.
 
-  JOSÉ LUIS
-  OBRIGADA POR TODOS OS ORGASMOS
-  CONTINUA ASSIM!
-  A TUA MULHER
+Chaque verre est gravé un par un dans notre atelier. Vous recevrez un e-mail avec le numéro de suivi dès que le colis partira vers votre point relais de Châtillon-sur-Seine, et un petit cadeau surprise sera glissé dedans.
 
-Dites-nous si cette répartition vous convient, ou indiquez-nous celle que vous préférez.
+Si vous avez la moindre question, répondez simplement à ce message.
 
-Trois petites choses à nous confirmer :
-- combien de verres souhaitez-vous ?
-- quelle écriture parmi celles proposées sur la fiche ?
-- gardons-nous les majuscules, comme dans votre message ?
-
-Pour lancer la fabrication, la commande se passe directement sur la fiche du produit, où vous choisirez votre écriture et votre texte :
-https://nivcreation.fr/produit/verre-a-whisky-fete-des-peres
-
-Un point d'honnêteté sur le délai : en raison d'une forte demande, notre délai de confection est actuellement de trois à quatre semaines minimum. Les commandes sont traitées dans leur ordre d'arrivée. Nous préférons vous le dire avant que vous commandiez.
-
-Et comme promis, nous vous enverrons un aperçu de la gravure à valider avant de graver quoi que ce soit.
+Merci pour votre confiance.
 
 Bien cordialement,
 Niv Création
 nivcreation.fr`,
   },
-];
-
-const DEJA_ENVOYES = [
   {
-    id: "16GFEMQP-rassurance",
-    client: "Sonia",
-    ref: "16GFEMQP",
-    piece: "Bracelet empreinte pied de bébé — gravure « Ayden 19/07/2026 »",
-    to: "soniagailhac1307@gmail.com",
+    id: "00CUYR2U-deux-lots",
+    client: "Cécilia Herrera",
+    ref: "00CUYR2U",
+    piece: "2 lots de 2 flûtes — « Chloé & Nico » et « Salomé & Bernard · 24.09.2026 » (modèle 15), police Cinzel Decorative",
+    note: "Commande du 14/09 au soir, livraison à domicile à Nice, cadeau « Surprise ». DATE PROCHE : 24/09 gravée sur les flûtes. Le texte ne promet pas la date, il annonce « ce sera juste ».",
+    to: "cecilia.herrera@hotmail.fr",
+    subject: "Votre commande est bien prise en compte",
+    body: `Bonjour Cécilia,
+
+Votre commande est bien prise en compte, et tout est noté : deux lots de flûtes, « Chloé & Nico » pour l'un, « Salomé & Bernard » avec la date du 24.09.2026 pour l'autre, dans l'écriture Cinzel Decorative, sur le modèle 15.
+
+Nous avons bien vu la date du 24 septembre. Nous ferons notre maximum pour que les flûtes soient prêtes à temps — mais nous préférons être honnêtes avec vous : ce sera juste. La demande est forte en ce moment, et les commandes sont traitées dans leur ordre d'arrivée. Nous vous tiendrons au courant de l'avancée de la vôtre.
+
+Chaque flûte est gravée une par une dans notre atelier. Vous recevrez un e-mail avec le numéro de suivi dès que le colis partira, et un petit cadeau surprise sera glissé dedans.
+
+Si vous avez la moindre question, répondez simplement à ce message.
+
+Merci pour votre confiance.
+
+Bien cordialement,
+Niv Création
+nivcreation.fr`,
+  },
+  {
+    id: "1Z17IKQ8-rose-portugais",
+    client: "Rose Catarino",
+    ref: "1Z17IKQ8",
+    piece: "Verre à whisky portrait — photo gravée au fond, texte et décor saisis sur la fiche",
+    note: "Elle avait demandé une gravure EN PORTUGAIS (réponse envoyée le 14/09 au matin), puis a commandé 7 h plus tard avec un texte EN FRANÇAIS. Le message pose UNE seule question : est-ce bien le texte français qu'elle veut ? On ne récapitule pas ce qu'elle a saisi (demande du gérant) et on ne recopie pas le texte portugais (très personnel).",
+    to: "rose75013@icloud.com",
+    subject: "Votre verre gravé — une question avant de lancer",
+    body: `Bonjour Rose,
+
+Merci pour votre commande, elle est bien prise en compte.
+
+Une seule question avant de lancer la gravure : vous nous aviez demandé une gravure en portugais, et le texte indiqué sur votre commande est en français. Est-ce bien celui-ci que vous souhaitez faire graver ?
+
+Répondez simplement à ce message, même en une ligne, et nous nous occupons du reste.
+
+Comme promis, vous recevrez un aperçu de la gravure à valider avant que nous ne gravions quoi que ce soit. Le délai reste celui que nous vous avions indiqué : trois à quatre semaines minimum, les commandes étant traitées dans leur ordre d'arrivée.
+
+Bien cordialement,
+Niv Création
+nivcreation.fr`,
+  },
+  {
+    id: "1GIP8RR1-maelys",
+    client: "Maëlys Georges",
+    ref: "1GIP8RR1",
+    piece: "Verre à vin gravé, à l'unité — lettre fleurie J + « Jean Michel », police Allura",
+    note: "Commande du 13/09, livraison à domicile à Merville, cadeau « Plutôt homme ». Aucune date à surveiller : réassurance simple + annonce du délai de trois à quatre semaines.",
+    to: "mae31340@gmail.com",
     subject: "Des nouvelles de votre commande",
-    body: `Bonjour,
+    body: `Bonjour Maëlys,
 
-Un petit mot pour vous rassurer : votre commande est bien prise en compte, tout est noté de notre côté. Le bracelet empreinte, gravé « Ayden 19/07/2026 ».
+Un petit mot pour vous rassurer : votre commande est bien prise en compte, tout est noté de notre côté. Le verre à vin, avec la lettre fleurie J et « Jean Michel » dans l'écriture Allura.
 
-Ne vous inquiétez pas si cela prend quelques jours : chaque pièce est gravée une par une, dans l'ordre d'arrivée des commandes, et la demande est forte en ce moment. Nous préférons prendre le temps de bien faire.
+Un mot sur le délai, pour que vous sachiez à quoi vous attendre : en raison d'une forte demande, notre délai de confection est actuellement de trois à quatre semaines minimum, et les commandes sont traitées dans leur ordre d'arrivée. Chaque verre est gravé un par un, et nous préférons prendre le temps de bien faire.
 
 Vous recevrez un e-mail avec le numéro de suivi dès que votre colis partira. Un petit cadeau surprise sera glissé dedans.
 
@@ -75,50 +115,13 @@ Bien cordialement,
 Niv Création
 nivcreation.fr`,
   },
-  {
-    id: "0KVSBXKR-cadeau",
-    client: "Ophélie Terraz",
-    ref: "0KVSBXKR",
-    piece: "Verre à vin gravé, lot de 4 — modèle 28, « Éléonore · 27 Août 2026 »",
-    note: "Colis envoyé directement au destinataire : on lui demande ce qu'elle veut faire du cadeau, SANS proposer d'envoi séparé (un second port serait à notre charge).",
-    to: "ophelie.terraz@gmail.com",
-    subject: "Votre commande est bien prise en compte",
-    body: `Bonjour,
-
-Un petit mot pour vous confirmer que votre commande est bien prise en compte, et que tout ce que vous avez indiqué est noté : le lot de quatre verres, le modèle 28, le prénom Éléonore et la date du 27 août 2026.
-
-Vous avez bien fait de le préciser : le prénom et la date seront gravés dans l'écriture du modèle 28, exactement comme sur l'exemple que vous avez choisi.
-
-Une question, puisque le colis part directement chez la personne à qui vous l'offrez. Nous glissons un petit cadeau surprise dans chaque commande, et vous avez choisi « plutôt femme ». Dites-nous ce que vous préférez pour ce cadeau, nous ferons selon votre souhait.
-
-Chaque verre est gravé un par un dans notre atelier, alors laissez-nous quelques jours. Vous recevrez un e-mail avec le numéro de suivi dès que le colis partira vers le point relais de Montbéliard.
-
-Merci pour votre confiance.
-
-Bien cordialement,
-Niv Création
-nivcreation.fr`,
-  },
-  {
-    id: "0C1CGL2Q-pas-oubliee",
-    client: "Sophie Berardo",
-    ref: "0C1CGL2Q",
-    piece: "Verre à whisky gravé sur mesure (devis DEV-0003)",
-    note: "Elle a accepté d'attendre le 02/09 et un cadeau lui est promis dans le colis. Ne pas réexpliquer le délai : juste montrer qu'elle n'est pas oubliée.",
-    to: "miegesophie@gmail.com",
-    subject: "Nous ne vous avons pas oubliée",
-    body: `Bonjour Sophie,
-
-Un petit mot, simplement pour que vous ne restiez pas sans nouvelles : votre commande est toujours bien là, nous ne vous avons pas oubliée.
-
-Merci encore d'avoir accepté de patienter, c'est une vraie marque de confiance et nous y sommes sensibles.
-
-Vous serez prévenue par e-mail avec le numéro de suivi dès que votre colis partira. Et le petit cadeau que nous vous avions promis y sera bien, comme convenu.
-
-Si vous avez la moindre question d'ici là, répondez simplement à ce message.
-
-Bien cordialement,
-Niv Création
-nivcreation.fr`,
-  },
 ];
+
+// ---------------------------------------------------------------------------
+// Historique — déjà partis, gardés pour mémoire (ne s'affichent PAS dans l'admin).
+// 12/09 07 h 13 : Sonia (#16GFEMQP), Ophélie Terraz (#0KVSBXKR), Sophie Berardo
+//                 (#0C1CGL2Q) — messages de réassurance.
+// 14/09 11 h 03 : Rose Catarino — « Votre verre à whisky gravé — ce qu'il nous
+//                 faut pour lancer » (réponse à sa demande de gravure en portugais).
+// Textes complets : docs/messages/rassurance-3-commandes.md et l'historique git.
+// ---------------------------------------------------------------------------

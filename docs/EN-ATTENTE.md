@@ -20,6 +20,10 @@
 | **Ophélie Terraz** (`ophelie.terraz@gmail.com`) — commande 0KVSBXKR, 4 verres à vin | ✅ **ENVOYÉ le 12/09 à 07 h 13** | `docs/messages/rassurance-3-commandes.md` |
 | **Sophie Berardo** (#0C1CGL2Q) — verre whisky sur mesure | ✅ **ENVOYÉ le 12/09 à 07 h 13** | `docs/messages/rassurance-3-commandes.md` |
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
+| **Valérine Zaghini** (`valerinezaghini@gmail.com`) — #0URL2JQA, flûtes « 50 ans d'amour · 26/09/1976 » | **Texte validé, PRÊT** dans Gestion → Clients → Messages clients. ⏰ **Date gravée 26/09** : on a dit « on fera notre maximum, ce sera juste » + suivi promis → **lui écrire avant le 26 si c'est intenable** | `src/lib/messagesPrets.js` |
+| **Cécilia Herrera** (`cecilia.herrera@hotmail.fr`) — #00CUYR2U, 2 lots de flûtes « 24.09.2026 » | **Texte validé, PRÊT** au même endroit. ⏰ **Date gravée 24/09**, même promesse de suivi → **lui écrire avant le 24 si c'est intenable** | `src/lib/messagesPrets.js` |
+| **Rose Catarino** (`rose75013@icloud.com`) — #1Z17IKQ8, verre à whisky portrait | **Texte validé, PRÊT** : une seule question — elle avait demandé le portugais, sa commande est en français. **Aperçu promis avant gravure** | `src/lib/messagesPrets.js` |
+| **Maëlys Georges** (`mae31340@gmail.com`) — #1GIP8RR1, verre à vin « Jean Michel » | **Texte validé, PRÊT** : réassurance + délai 3-4 semaines | `src/lib/messagesPrets.js` |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
 
 ---
