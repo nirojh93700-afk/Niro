@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "etat-bijoux": "node --import ./tools/alias-register.mjs tools/etat-bijoux.mjs"
+    "etat-bijoux": "node --import ./tools/alias-register.mjs tools/etat-bijoux.mjs",
+    "maquette-favoris": "node --import ./tools/alias-register.mjs tools/maquettes/favoris.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
