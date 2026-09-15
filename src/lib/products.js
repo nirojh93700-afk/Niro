@@ -933,15 +933,24 @@ export const products = [
     engraveGourmette3d: true, // aperçu 3D : plaque gravée sur chaîne acier
     tagline: "Chaîne en acier inoxydable, plaque gravée avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
+    // Gravure PAYANTE (+3 €) — « option B » choisie par le gérant le 15/09/2026 :
+    // le prix du bijou NU reste celui d'avant, la gravure s'ajoute par-dessus.
+    // Chiffré ici car `engravingPricing` n'est pas surchargeable depuis l'admin :
+    // le supplément tient même si les prix ou les options changent dans Gestion.
+    // Le champ est facultatif et toujours visible → vide = bijou sans gravure.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "note", type: "note", text: "La plaque de la chaîne se grave : un prénom, une date, un message. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet_homme_chaine_a_graver_argente.jpg",
     ],
+    // PRIX BAISSÉ le 15/09/2026 à la demande du gérant (38,90 → 27,90 dans le code,
+    // soit 24,90 € barré et 22,41 € payés au lieu de 31,41 €).
     variants: [
-      { id: "chaine-acier-argente", title: "Argenté", price: 38.90 },
+      { id: "chaine-acier-argente", title: "Argenté", price: 27.90 },
     ],
     descriptionHtml: `<p>Bracelet homme en <strong>acier inoxydable</strong>, plaque gravable au laser. Solide, élégant, intemporel.</p>
 <ul><li>Acier inoxydable hypoallergénique</li><li>Fermoir sécurisé</li><li>Gravure prénom, date ou message</li></ul>`,
@@ -954,8 +963,15 @@ export const products = [
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Un bracelet fin en acier doré, gravé avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
+    // Gravure PAYANTE (+3 €) — « option B » choisie par le gérant le 15/09/2026 :
+    // le prix du bijou NU reste celui d'avant, la gravure s'ajoute par-dessus.
+    // Chiffré ici car `engravingPricing` n'est pas surchargeable depuis l'admin :
+    // le supplément tient même si les prix ou les options changent dans Gestion.
+    // Le champ est facultatif et toujours visible → vide = bijou sans gravure.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "note", type: "note", text: "La plaque du bracelet se grave : un prénom, une date, un message. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -999,8 +1015,15 @@ export const products = [
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Un cœur en acier doré, gravé avec votre message.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
+    // Gravure PAYANTE (+3 €) — « option B » choisie par le gérant le 15/09/2026 :
+    // le prix du bijou NU reste celui d'avant, la gravure s'ajoute par-dessus.
+    // Chiffré ici car `engravingPricing` n'est pas surchargeable depuis l'admin :
+    // le supplément tient même si les prix ou les options changent dans Gestion.
+    // Le champ est facultatif et toujours visible → vide = bijou sans gravure.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
+      { key: "note", type: "note", text: "Le cœur se grave : un prénom, une date, un petit message. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 25, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -1031,8 +1054,15 @@ export const products = [
     decor3d: "butterfly", // petit papillon sur la barre
     tagline: "Un papillon ajouré tout en finesse, à graver.",
     personalizable: true, personalizationLabel: "Texte à graver + police",
+    // Gravure PAYANTE (+3 €) — « option B » choisie par le gérant le 15/09/2026 :
+    // le prix du bijou NU reste celui d'avant, la gravure s'ajoute par-dessus.
+    // Chiffré ici car `engravingPricing` n'est pas surchargeable depuis l'admin :
+    // le supplément tient même si les prix ou les options changent dans Gestion.
+    // Le champ est facultatif et toujours visible → vide = bijou sans gravure.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 25 },
+      { key: "note", type: "note", text: "Le papillon ajouré se grave sur sa surface pleine : un prénom, une date, un message court. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 25, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -1194,7 +1224,11 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: ["/produits/collier_c_ur_couple_a_graver_lot_2_pieces_or_rose.jpg"],
-    variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 38.90 }],
+    // PRIX BAISSÉ le 15/09/2026 à la demande du gérant (38,90 → 27,90 dans le code,
+    // soit 24,90 € barré et 22,41 € payés au lieu de 31,41 €).
+    // La gravure reste COMPRISE dans le prix : les deux moitiés de cœur n'existent
+    // que gravées (c'est le concept du bijou), les deux champs sont obligatoires.
+    variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 27.90 }],
     descriptionHtml: `<p>Un <strong>lot de 2 colliers</strong> formant un cœur, à graver chacun. Le cadeau parfait pour les amoureux.</p>`,
   },
   {

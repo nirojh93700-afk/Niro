@@ -25,16 +25,16 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € | **payante** | texte +4,50 € |
 | **Bracelet Homme Acier & Silicone** | homme | 21,51 € | **payante** | texte +5,40 € |
 | **Bracelet Homme Tressé & Acier** | homme | 20,61 € – 23,31 € | **payante** | texte +3 € |
-| **Bracelet Homme Chaîne Acier** | homme | 31,41 € | comprise dans le prix | — |
-| **Bracelet Femme Acier** | femme | 22,41 € | comprise dans le prix | — |
+| **Bracelet Homme Chaîne Acier** | homme | 22,41 € | **payante** | texte +3 € |
+| **Bracelet Femme Acier** | femme | 22,41 € | **payante** | texte +3 € |
 | **Bracelet Empreinte Pied de Bébé** | bebe | 16,11 € | comprise dans le prix | — |
-| **Bracelet Femme Cœur** | femme | 21,51 € – 22,41 € | comprise dans le prix | — |
-| **Bracelet Femme Papillon ajouré** | femme | 20,61 € – 24,21 € | comprise dans le prix | — |
+| **Bracelet Femme Cœur** | femme | 21,51 € – 22,41 € | **payante** | texte +3 € |
+| **Bracelet Femme Papillon ajouré** | femme | 20,61 € – 24,21 € | **payante** | texte +3 € |
 | **Bracelet Cœur argenté** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Maille Trombone doré** | femme | 17,91 € | _pas de gravure_ | — |
 | **Bracelet Ange** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Cœur à graver** | femme | 22,41 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Couple Cœur (lot de 2)** | couple | 31,41 € | comprise dans le prix | — |
+| **Collier Couple Cœur (lot de 2)** | couple | 22,41 € | comprise dans le prix | — |
 | **Collier Plaque Acier** | homme | 24,21 € – 27,81 € | comprise dans le prix | photo +8 € · chaque page en plus +5 € |
 | **Collier Cœur scintillant doré** | femme | 22,41 € | _pas de gravure_ | — |
 | **Collier Perle solitaire** | femme | 17,91 € | _pas de gravure_ | — |
@@ -237,14 +237,19 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Argenté | 38,90 € | 34,90 € | **31,41 €** | — |
+| Argenté | 27,90 € | 24,90 € | **22,41 €** | — |
 
 **Personnalisation**
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (30 car.) | oui | — | toujours |
+| Texte à graver (+3 €) | texte (30 car.) | non | +3 € | toujours |
 | Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Argenté »)
+
+- sans rien graver : **22,41 €**
+- + texte : **25,41 €**
 
 ---
 
@@ -268,8 +273,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (30 car.) | oui | — | toujours |
+| Texte à graver (+3 €) | texte (30 car.) | non | +3 € | toujours |
 | Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Doré »)
+
+- sans rien graver : **22,41 €**
+- + texte : **25,41 €**
 
 ---
 
@@ -322,8 +332,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (25 car.) | oui | — | toujours |
+| Texte à graver (+3 €) | texte (25 car.) | non | +3 € | toujours |
 | Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Doré »)
+
+- sans rien graver : **22,41 €**
+- + texte : **25,41 €**
 
 ---
 
@@ -350,8 +365,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (25 car.) | oui | — | toujours |
+| Texte à graver (+3 €) | texte (25 car.) | non | +3 € | toujours |
 | Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Argenté »)
+
+- sans rien graver : **22,41 €**
+- + texte : **25,41 €**
 
 ---
 
@@ -461,7 +481,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Or Rose | 38,90 € | 34,90 € | **31,41 €** | — |
+| Or Rose | 27,90 € | 24,90 € | **22,41 €** | — |
 
 **Personnalisation**
 
