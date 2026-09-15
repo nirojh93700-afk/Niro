@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette — Bouton « Répondre » dans les e-mails clients</title>
+<style>
+  :root { --gold:#c9a24b; --gold2:#a98935; --cream:#fbf7ee; --sand:#f1e9da; --ink:#1a1206; }
+  body { margin:0; overflow-x:hidden; background:#efe7d8; font-family:Arial,Helvetica,sans-serif; color:var(--ink); }
+  .intro { width:min(640px, calc(100% - 48px)); box-sizing:border-box; margin:26px auto 8px; background:#fff; border:1px solid #ece3d2; border-radius:14px; padding:18px 22px; font-size:14px; line-height:1.6; }
+  .intro h2 { font-family:Georgia,serif; font-weight:normal; color:var(--gold2); margin:0 0 8px; font-size:19px; }
+  .intro .tag { display:inline-block; background:#f3e8d3; border:1px solid #dcc88f; border-radius:999px; padding:2px 10px; font-size:12px; margin-right:6px; }
+  .panel-title { width:min(640px, calc(100% - 32px)); box-sizing:border-box; margin:26px auto 10px; font-family:Georgia,serif; color:var(--gold2); font-size:17px; padding:0 8px; }
+  /* ------- Vue 1 : l'e-mail ------- */
+  .mail-wrap { background:var(--sand); padding:24px 12px; }
+  .mail { max-width:600px; width:100%; box-sizing:border-box; margin:0 auto; background:#fff; border-radius:16px; overflow:hidden; border:1px solid #ece3d2; }
+  .mail .head { background:var(--cream); padding:26px 24px; border-bottom:3px solid #dcc88f; text-align:center; }
+  .mail .head .logo { font-family:Georgia,serif; letter-spacing:4px; font-size:22px; color:var(--gold2); }
+  .mail .head .sub { font-size:11px; letter-spacing:2px; color:#8a7a56; margin-top:6px; }
+  .mail h1 { margin:0; padding:28px 30px 14px; font-family:Georgia,serif; font-weight:normal; font-size:23px; color:var(--gold); }
+  .mail .body { padding:0 30px 10px; font-size:15px; line-height:1.55; white-space:pre-line; }
+  .btn-row { padding:8px 30px 26px; text-align:center; }
+  .btn { display:inline-block; background:var(--gold); color:#fff; text-decoration:none; font-size:15px; padding:13px 30px; border-radius:999px; font-weight:bold; letter-spacing:.3px; box-shadow:0 2px 6px rgba(169,137,53,.35); }
+  .btn-note { margin-top:10px; font-size:12px; color:#8a7a56; }
+  .mail .foot { background:var(--ink); padding:22px; text-align:center; color:#e9dfca; font-size:12px; line-height:1.7; }
+  .mail .foot .brand { font-family:Georgia,serif; color:#dcc88f; font-size:16px; letter-spacing:3px; margin-bottom:8px; }
+  /* ------- Vue 2 : la page de réponse ------- */
+  .page-wrap { background:var(--cream); padding:28px 12px 42px; }
+  .rpage { max-width:560px; width:100%; box-sizing:border-box; margin:0 auto; background:#fff; border:1px solid #ece3d2; border-radius:16px; padding:26px 26px 30px; }
+  .rpage .eyebrow { font-size:11px; letter-spacing:2px; color:var(--gold2); text-transform:uppercase; }
+  .rpage h1 { font-family:Georgia,serif; font-weight:normal; font-size:22px; color:var(--ink); margin:6px 0 4px; }
+  .rpage .who { font-size:13px; color:#8a7a56; margin-bottom:16px; }
+  .quote { background:var(--cream); border:1px solid #ece3d2; border-left:3px solid #dcc88f; border-radius:10px; padding:12px 14px; font-size:13.5px; line-height:1.55; color:#5c5140; margin-bottom:16px; }
+  .quote .q-title { font-size:11px; letter-spacing:1.5px; color:var(--gold2); text-transform:uppercase; margin-bottom:6px; }
+  textarea { width:100%; box-sizing:border-box; min-height:120px; border:1px solid #dcc88f; border-radius:10px; padding:12px; font:inherit; font-size:15px; background:#fffdf8; }
+  .send { margin-top:14px; width:100%; background:var(--gold); border:none; color:#fff; font-size:16px; font-weight:bold; padding:14px; border-radius:999px; cursor:pointer; }
+  .safe { margin-top:12px; font-size:12px; color:#8a7a56; text-align:center; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h2>Maquette — bouton « Répondre » dans chaque e-mail client</h2>
+  <span class="tag">Rien n'est appliqué au site</span><span class="tag">À valider</span>
+  <p><strong>Le principe :</strong> chaque e-mail envoyé à une cliente (Messages clients, fil
+  Communications &amp; aperçu) porte un bouton doré. La cliente clique, arrive sur une page à
+  l'image de la marque, écrit sa réponse, envoie — et sa réponse tombe <strong>directement dans son
+  dossier</strong> (et dans le fil de sa commande s'il y en a une), avec une alerte pour vous.
+  Plus besoin de passer par sa messagerie, ni d'attendre le passage de la boîte surveillée.</p>
+  <p style="margin-bottom:0"><strong>Ce qui existe déjà et est réutilisé :</strong> les dossiers de
+  communication, le fil des commandes, les alertes, et le système de jetons des pages
+  /repondre et /suivi (jeton valable 30 jours, propre à chaque message).</p>
+</div>
+
+<div class="panel-title">1 · L'e-mail que la cliente reçoit (avec le nouveau bouton)</div>
+<div class="mail-wrap">
+  <div class="mail">
+    <div class="head"><div class="logo">NiV CRÉATION</div><div class="sub">ATELIER DE PERSONNALISATION</div></div>
+    <h1>Des nouvelles de votre commande</h1>
+    <div class="body">Bonjour,
+
+Un petit mot pour vous rassurer : votre commande est bien prise en compte, tout est noté de notre côté.
+
+Vous recevrez un e-mail avec le numéro de suivi dès que votre colis partira. Un petit cadeau surprise sera glissé dedans.
+
+Bien cordialement,
+Niv Création
+nivcreation.fr</div>
+    <div class="btn-row">
+      <a class="btn" href="#page-reponse">✉️ Répondre à ce message</a>
+      <div class="btn-note">Votre réponse arrive directement dans votre dossier — pas besoin d'écrire un e-mail.</div>
+    </div>
+    <div class="foot"><div class="brand">NiV CRÉATION</div>nivcreation.fr · contact.nivcreation@gmail.com<br>✦ Personnalisé en France · Gravure &amp; découpe laser ✦</div>
+  </div>
+</div>
+
+<div class="panel-title" id="page-reponse">2 · La page qui s'ouvre au clic (nivcreation.fr)</div>
+<div class="page-wrap">
+  <div class="rpage">
+    <div class="eyebrow">Niv Création — votre réponse</div>
+    <h1>Répondre à l'atelier</h1>
+    <div class="who">Commande #1GIP8RR1 · Maëlys</div>
+    <div class="quote">
+      <div class="q-title">Notre message du 15/09</div>
+      Un petit mot pour vous rassurer : votre commande est bien prise en compte, tout est noté de notre côté…
+    </div>
+    <textarea placeholder="Écrivez votre réponse ici…"></textarea>
+    <button class="send">Envoyer ma réponse</button>
+    <div class="safe">Votre message est transmis directement à l'atelier et rangé dans votre dossier.<br>Nous vous répondons par e-mail.</div>
+  </div>
+</div>
+
+</body>
+</html>
