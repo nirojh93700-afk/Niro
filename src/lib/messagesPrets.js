@@ -22,12 +22,14 @@ export const MESSAGES_PRETS = [
     client: "Hend Musallam",
     ref: "1S9IOON5",
     piece: "Bracelet Femme Cœur doré gravé « Hend » (police Allura) + boîte cadeau — payé 30,21 € le 31/08",
-    note: "LE COLIS EST REVENU. Mis à disposition en point relais le 04/09 (avisage e-mail le même jour), jamais retiré, retour déclenché le 11/09, arrivé au relais de Sarcelles le 15/09 — code 536287, À RETIRER AVANT LE 20/09. Décision du gérant le 15/09 : renvoi possible mais AVEC LES FRAIS À SA CHARGE (il ne peut pas offrir le port). Le message annonce le retour sans reproche, demande l'adresse à utiliser, et annonce 4,90 € en point relais ou 6,90 € à domicile. ⚠️ ELLE AVAIT PAYÉ UNE LIVRAISON À DOMICILE (3,90 €) et le colis a fini en point relais : si elle le fait remarquer, son argument est valable — prévoir la réponse. Pour encaisser les frais : Gestion → Devis & factures, devis de 4,90 € ou 6,90 € payable en ligne.",
+    note: "LE COLIS EST REVENU. Mis à disposition en point relais le 04/09 (avisage e-mail le même jour), jamais retiré, retour déclenché le 11/09, arrivé au relais de Sarcelles le 15/09 — code 536287, À RETIRER AVANT LE 20/09. Décision du gérant le 15/09 : renvoi possible mais AVEC LES FRAIS À SA CHARGE (il ne peut pas offrir le port). Le message annonce le retour sans reproche, demande l'adresse à utiliser, et annonce 4,90 € en point relais ou 6,90 € à domicile. ✅ VÉRIFIÉ SUR BOXTAL (captures du 15/09) : l'envoi était bien une offre « Domicile France », le livreur s'est présenté à son adresse le 03/09 à 14 h 14 (« destinataire absent »), le colis a été dérouté vers un relais (forçage du relais de substitution), elle a été avisée par e-mail DEUX FOIS (03/09 14 h 14 et 04/09 9 h 29) et le colis est resté 7 jours à sa disposition. L'atelier n'a donc commis aucune erreur et demander les frais de réexpédition est défendable. Ce suivi est aussi le dossier à produire en cas de litige PayPal. Pour encaisser les frais : Gestion → Devis & factures, devis de 4,90 € ou 6,90 € payable en ligne.",
     to: "e.varol2012@icloud.com",
     subject: "Votre bracelet nous est revenu — comment on le remet en route",
     body: `Bonjour,
 
-Votre commande nous est revenue aujourd'hui. Le colis avait été mis à disposition dans un point relais le 4 septembre ; il n'a pas pu être retiré dans le délai de conservation, et le transporteur nous l'a automatiquement renvoyé.
+Votre commande nous est revenue aujourd'hui, et nous voulions vous expliquer ce qui s'est passé.
+
+Le transporteur s'est présenté à votre adresse le 3 septembre ; personne n'étant là, il a déposé le colis dans un point relais et vous a prévenue par e-mail. Le colis y est resté à votre disposition jusqu'au 11 septembre, puis il nous a été automatiquement renvoyé.
 
 Votre bracelet est donc bien là, intact dans son écrin, avec la gravure « Hend ».
 

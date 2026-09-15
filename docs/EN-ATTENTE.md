@@ -129,8 +129,13 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
     `e.varol2012@icloud.com` · 07 49 37 63 26 (payé par PayPal sous *Enes Varol*).
   - Contenu : **1× Bracelet Femme Cœur doré gravé « Hend »** (police Allura) + boîte cadeau.
     Payé **30,21 €** (26,31 € + 3,90 € de livraison). Commande du 31/08, fabrication immédiate.
-  - Historique du colis : disponible au relais le **04/09 à 9 h 26**, avisage e-mail à 9 h 29,
-    **jamais retiré**, retour déclenché le **11/09**.
+  - Historique du colis (vérifié sur Boxtal le 15/09) : envoi **« Domicile France »** →
+    **03/09 14 h 14 « destinataire absent »** (le livreur s'est présenté à son adresse) + avisage
+    e-mail → colis dérouté vers un relais → **disponible le 04/09 à 9 h 26**, 2e avisage e-mail à
+    9 h 29 → **jamais retiré en 7 jours** → retour à l'expéditeur le 11/09.
+    ✅ **L'atelier n'a commis aucune erreur** : la livraison à domicile payée a bien été tentée.
+    Demander les frais de réexpédition est donc défendable, et ce suivi est le dossier à produire
+    en cas de litige PayPal.
   - ⚠️ **Décision en attente du gérant** : le bracelet est gravé « Hend », donc invendable à
     quelqu'un d'autre, et la règle du site est « personnalisé = jamais remboursé ». Options
     proposées le 15/09 : **renvoi offert** · **renvoi avec port à sa charge (~4,90 €)** ·
