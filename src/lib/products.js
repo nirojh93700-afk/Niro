@@ -703,13 +703,18 @@ export const products = [
     tagline: "Tressage aspect cuir et plaque acier, gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
-    // Les champs de gravure s'affichent TOUJOURS (plus de condition sur le nom de
-    // l'option). Avant, ils n'apparaissaient que si l'option choisie contenait le
-    // mot « Avec » : les options ayant été renommées en simples couleurs depuis
-    // l'admin, la fiche se retrouvait sans aucun champ à remplir alors qu'elle
-    // promet une gravure. Ne pas remettre de variantContains ici.
+    // La gravure est PAYANTE (+3 €) et chiffrée ici, dans le code : le prix et les
+    // options peuvent être réécrits depuis l'admin, mais PAS `engravingPricing`
+    // (il n'est pas dans les champs surchargeables de catalog.js) — le supplément
+    // tient donc quoi qu'il arrive. Le champ est facultatif et TOUJOURS visible :
+    // vide = bracelet sans gravure, rempli = +3 €.
+    // ⛔ Ne pas revenir aux variantes « Sans / Avec gravure » ni à variantContains :
+    // les options ayant été renommées en simples couleurs depuis l'admin, la fiche
+    // « à graver » s'était retrouvée sans AUCUN champ à remplir.
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "note", type: "note", text: "Ce bracelet se porte tel quel, ou gravé sur sa plaque acier. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [

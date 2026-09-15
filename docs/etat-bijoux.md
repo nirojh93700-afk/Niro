@@ -4,7 +4,7 @@
 > après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé
 > d'un bijou depuis n'importe quelle conversation, sans relire le code.
 
-> Généré le 2026-09-14 · 32 bijoux dans le code.
+> Généré le 2026-09-15 · 32 bijoux dans le code.
 
 ⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être
 réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code
@@ -24,7 +24,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Collier Médaillon Cœur ouvrable** | femme | 31,41 € – 36,81 € | incluse | photo +8 € · chaque page en plus +5 € |
 | **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € – 29,61 € | **payante** | par l'option choisie |
 | **Bracelet Homme Acier & Silicone** | homme | 21,51 € – 26,91 € | **payante** | par l'option choisie |
-| **Bracelet Homme Tressé & Acier** | homme | 20,61 € – 23,31 € | **payante** | par l'option choisie |
+| **Bracelet Homme Tressé & Acier** | homme | 20,61 € – 23,31 € | **payante** | texte +3 € |
 | **Bracelet Homme Chaîne Acier** | homme | 31,41 € | incluse | — |
 | **Bracelet Femme Acier** | femme | 22,41 € | incluse | — |
 | **Bracelet Empreinte Pied de Bébé** | bebe | 16,11 € | incluse | — |
@@ -210,8 +210,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Champ | Type | Obligatoire | Supplément | Affiché |
 |---|---|---|---|---|
-| Texte à graver | texte (30 car.) | oui | — | toujours |
+| Texte à graver (+3 €) | texte (30 car.) | non | +3 € | toujours |
 | Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Argenté / Sans texte »)
+
+- sans rien graver : **20,61 €**
+- + texte : **23,61 €**
 
 ---
 
