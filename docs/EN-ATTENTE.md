@@ -23,7 +23,7 @@
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
 | **Valérine Zaghini** (`valerinezaghini@gmail.com`) — #0URL2JQA | Elle a écrit le 15/09 (« Commande a annulé ») : en fait une **CORRECTION DE DATE — graver « 25 septembre 1976 », PAS 26** (alerte interne posée sur la commande, rien à annuler). ✅ **Réponse ENVOYÉE le 15/09** (Messages clients). ⏰ **Date à surveiller AVANCÉE AU 25/09** (« ce sera juste » + suivi promis → lui écrire AVANT le 25 si intenable) | `docs/messages/valerine-correction-date.md` |
 | **Cécilia Herrera** (`cecilia.herrera@hotmail.fr`) — #00CUYR2U | ✅ **ENVOYÉ le 15/09** (Messages clients). ⏰ **À SURVEILLER : date gravée 24/09**, même promesse → **lui écrire AVANT le 24 si intenable** | `src/lib/messagesPrets.js` (historique) |
-| **Rose Catarino** (`rose75013@icloud.com`) — #1Z17IKQ8 | Elle a répondu le 15/09 : **gravure EN PORTUGAIS**, texte exact « Obrigado por todos estes orgasmos. Continua assim! ». Le brouillon d'agent qui reposait la question a été **supprimé** (ordre du gérant). ✅ **Confirmation ENVOYÉE le 15/09** (Messages clients). Reste : **aperçu promis avant gravure** (côté atelier) | `docs/messages/rose-confirmation-portugais.md` |
+| **Rose Catarino** (`rose75013@icloud.com`) — #1Z17IKQ8 | Elle a répondu le 15/09 : **gravure EN PORTUGAIS**, texte exact « Obrigado por todos estes orgasmos. Continua assim! ». Le brouillon d'agent qui reposait la question a été **supprimé** (ordre du gérant). ✅ **Confirmation ENVOYÉE le 15/09** (Messages clients). ⚠️ Un aperçu avant gravure lui a été PROMIS (14 et 15/09) — **nouvelle règle du 15/09 : on ne promet plus d'aperçu** ; pour Rose, le gérant tranche (tenir la promesse ou graver directement) | `docs/messages/rose-confirmation-portugais.md` |
 | **Maëlys Georges** (`mae31340@gmail.com`) — #1GIP8RR1 | ✅ **ENVOYÉ le 15/09** (réassurance + délai) — rien d'autre en attente | `src/lib/messagesPrets.js` (historique) |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
 
@@ -193,6 +193,7 @@ En attente de SA décision :
    re-confirmée + testée le 09/09 : e-mail test parti par `/api/admin/send-client-email`, validé
    par le gérant ; jamais d'envoi rédigé par les outils Gmail).
 2. Signature **Niv Création**, jamais le nom du gérant, jamais un « je » personnel.
+3 bis. **Ne plus promettre d'« aperçu avant gravure »** dans les messages clients (règle du 15/09).
 3. Rien de visible sur le site sans « applique » — même masqué, même invisible.
 4. Ne jamais parler de la machine, de panne, de laser ou de fabricant à une cliente.
 5. Produit personnalisé = jamais remboursé.

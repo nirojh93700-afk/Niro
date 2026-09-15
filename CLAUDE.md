@@ -40,6 +40,12 @@
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
   un fichier ; Etsy reste hors de la boîte mail surveillée.
+- ⛔ **NE PLUS PROMETTRE D'« APERÇU AVANT GRAVURE » DANS LES MESSAGES CLIENTS** (demande ferme
+  du gérant, 15/09/2026 : « pas d'aperçu avant le gravure »). Dans tout futur e-mail client, ne pas
+  proposer ni promettre d'aperçu/BAT avant de graver — l'atelier grave directement à partir de la
+  commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
+  mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
+  Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
 - ⛔ **SIGNATURE DES MESSAGES CLIENTS = « Niv Création », JAMAIS LE NOM DU GÉRANT** (rappel ferme du
   08/09/2026 : « il faut jamais mettre mon nom, c'est le nom du site »). Aucun nom de personne dans
   un e-mail, un devis ou un message client : on écrit « nous » (l'atelier), on signe **Niv Création**
