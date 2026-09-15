@@ -6,18 +6,86 @@ import { formatEuro } from "@/lib/format";
 
 const KEY = "niv-wishlist";
 
+// =============================================================================
+// MES FAVORIS
+// -----------------------------------------------------------------------------
+// Connectée : la liste vient de son COMPTE (GET /api/favoris) → elle la retrouve
+// sur tous ses appareils, et les prix sont relus dans le catalogue en direct.
+// Pas connectée : la liste vient du NAVIGATEUR, exactement comme avant.
+//
+// LE POINT IMPORTANT — la fusion. Une visiteuse met des ♡ sans être connectée
+// (personne ne se connecte AVANT de mettre un cœur). Le jour où elle se
+// connecte, ses favoris du navigateur remontent dans son compte au lieu d'être
+// perdus : c'est le POST { action:"merge" } ci-dessous. Rien n'est supprimé, on
+// n'ajoute que ce qui manque.
+// =============================================================================
 export default function FavorisPage() {
   const [items, setItems] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [ajoutes, setAjoutes] = useState(0);
 
   useEffect(() => {
-    try { setItems(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch { setItems([]); }
+    let annule = false;
+
+    function lireLocal() {
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
+    }
+    function ecrireLocal(liste) {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(liste));
+        window.dispatchEvent(new Event("niv-wishlist-change"));
+      } catch { /* ignore */ }
+    }
+
+    (async () => {
+      const local = lireLocal();
+      if (!annule) setItems(local); // affichage immédiat, sans attendre le serveur
+
+      let rep = null;
+      try {
+        rep = await (await fetch("/api/favoris", { cache: "no-store" })).json();
+      } catch { /* hors ligne : on garde le navigateur */ }
+      if (annule || !rep) return;
+
+      if (!rep.loggedIn) { setLoggedIn(false); return; }
+      setLoggedIn(true);
+
+      // Des favoris du navigateur manquent dans le compte ? On les y range.
+      const manquants = local.map((x) => x.slug).filter((s) => !(rep.slugs || []).includes(s));
+      if (manquants.length) {
+        try {
+          const f = await (await fetch("/api/favoris", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "merge", slugs: local.map((x) => x.slug) }),
+          })).json();
+          if (!annule && f?.items) { rep = f; setAjoutes(f.ajoutes || 0); }
+        } catch { /* on garde ce que le serveur avait déjà renvoyé */ }
+      }
+
+      if (annule) return;
+      setItems(rep.items || []);
+      // Le navigateur reflète le compte → le ♡ reste allumé partout sur le site.
+      ecrireLocal((rep.items || []).map((p) => ({ slug: p.slug, name: p.name, image: p.image, price: p.price })));
+    })();
+
+    return () => { annule = true; };
   }, []);
 
   function remove(slug) {
     const next = (items || []).filter((x) => x.slug !== slug);
     setItems(next);
-    localStorage.setItem(KEY, JSON.stringify(next));
-    window.dispatchEvent(new Event("niv-wishlist-change"));
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next.map((p) => ({ slug: p.slug, name: p.name, image: p.image, price: p.price }))));
+      window.dispatchEvent(new Event("niv-wishlist-change"));
+    } catch { /* ignore */ }
+    if (loggedIn) {
+      fetch("/api/favoris", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "toggle", slug }),
+      }).catch(() => {});
+    }
   }
 
   if (items === null) return <div className="container" style={{ padding: 40 }}><p>Chargement…</p></div>;
@@ -29,6 +97,28 @@ export default function FavorisPage() {
           <span className="eyebrow">Mes favoris</span>
           <h2>Vos coups de cœur ♥</h2>
         </div>
+
+        {ajoutes > 0 && (
+          <p className="fav-note fav-note-ok">
+            ✓ <strong>{ajoutes === 1 ? "1 favori a été ajouté" : `${ajoutes} favoris ont été ajoutés`} à votre compte.</strong>{" "}
+            {ajoutes === 1 ? "Il était enregistré" : "Ils étaient enregistrés"} sur cet appareil.
+          </p>
+        )}
+
+        {loggedIn ? (
+          <p className="fav-note fav-note-ok">
+            ☁️ <strong>Vos favoris sont enregistrés dans votre compte.</strong> Vous les retrouverez sur
+            votre téléphone comme sur votre ordinateur, même après avoir changé d'appareil.
+          </p>
+        ) : items.length > 0 ? (
+          <div className="fav-note">
+            <strong>Vos favoris ne sont enregistrés que sur cet appareil.</strong><br />
+            Connectez-vous et nous les rangeons dans votre compte : vous les retrouverez partout.
+            <div className="fav-actions">
+              <Link href="/espace" className="btn btn-gold">Me connecter</Link>
+            </div>
+          </div>
+        ) : null}
 
         {items.length === 0 ? (
           <div style={{ textAlign: "center", padding: "20px 0" }}>

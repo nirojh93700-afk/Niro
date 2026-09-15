@@ -91,6 +91,42 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 💗 FAVORIS RANGÉS DANS LE COMPTE CLIENT — APPLIQUÉ LE 15/09/2026
+> Demande du gérant : « sur les autres sites les clients mettent en favoris et ça va directement
+> dans leur compte, est-ce qu'on peut faire la même chose ? » → maquette
+> `docs/maquettes/favoris-compte.html` validée (« applique »), puis construit.
+- **Deux endroits, volontairement.** Le ♡ écrit dans le **navigateur** (`localStorage`, clé
+  `niv-wishlist`) — ça marche sans compte et l'affichage est instantané — **et**, si la cliente est
+  connectée, dans son **compte** (`POST /api/favoris {action:"toggle"}`, « tiré et oublié » : si
+  l'appel échoue, le cœur fonctionne quand même).
+- **LA FUSION EST LE CŒUR DU SYSTÈME** : personne ne se connecte AVANT de mettre un cœur. Quand la
+  page `/favoris` détecte une session, elle envoie les favoris du navigateur
+  (`POST {action:"merge"}`) → `mergeFavoris` **n'ajoute que ce qui manque, ne supprime jamais rien**
+  → message vert « N favoris ont été ajoutés à votre compte ». Puis le navigateur est réaligné sur
+  le compte pour que le ♡ reste allumé partout. **Ne jamais retirer cette fusion** : sans elle, une
+  visiteuse qui met 3 cœurs puis se connecte perd tout.
+- **Stockage** : section `favoris` du blob catalogue = `{ [email]: { slugs:[...], at } }`, plafond
+  **200 par cliente**. Fonctions dans `stock.js` : `getFavoris` / `toggleFavori` / `mergeFavoris` /
+  `getFavorisAll`. Écriture ciblée (`persistCatalog(data, ["favoris"])`).
+- **L'e-mail vient TOUJOURS de la session signée** (`readSession`, cookie `niv_espace`), jamais du
+  corps de la requête → impossible de lire ou modifier les favoris de quelqu'un d'autre. Pas
+  connectée = `{ loggedIn:false }` **sans erreur** (le site continue de marcher).
+- **Prix et noms relus dans le catalogue en direct** (`getCatalog`) à chaque affichage : un prix
+  changé dans Gestion se met à jour tout seul, un produit masqué/supprimé disparaît des favoris.
+  Jamais de vieux prix ni de lien mort (même principe que les guides « Idées & conseils »).
+- **Gestion → Clients → ♥ Favoris des clientes** (`/gestion/favoris`, API `/api/admin/favoris`) :
+  chiffres clés, classement des créations les plus mises de côté, clientes par création (dépliable),
+  export Excel/CSV/PDF via `exportRows`. **LECTURE SEULE — aucun e-mail ne part d'ici**, même règle
+  que les alertes « retour en stock » : les envois passent par Clients → Messages clients.
+- ⚠️ Un favori n'apparaît dans Gestion que si la cliente était **connectée** : ceux gardés dans un
+  navigateur anonyme restent invisibles jusqu'à sa connexion. C'est dit sur l'écran.
+- **Fichiers** : `src/lib/stock.js` (section favoris) · `src/app/api/favoris/route.js` ·
+  `src/app/api/admin/favoris/route.js` · `src/app/favoris/page.jsx` ·
+  `src/components/WishlistButton.jsx` · `src/app/gestion/favoris/page.jsx` · NAV d'`AdminShell` ·
+  CSS `.fav-*` et `.fv-*` en fin de `globals.css`.
+- **Pas encore fait, à proposer plus tard** : « prévenez-moi si le prix baisse » sur un favori
+  (c'est là qu'est l'argent, mais il faut son accord — aucun e-mail automatique aujourd'hui).
+
 ### 💍 GRAVURE DES BIJOUX — TRANCHÉ ET APPLIQUÉ LE 14/09/2026 (À LIRE AVANT DE TOUCHER UN BIJOU)
 > 📄 **`docs/etat-bijoux.md` = l'état exact des 32 bijoux** : prix du code, prix barré, prix payé,
 > chaque champ de gravure avec son supplément, emballages, poids/livraison, et les points à
