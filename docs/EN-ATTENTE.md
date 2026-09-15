@@ -141,6 +141,12 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
     proposées le 15/09 : **renvoi offert** · **renvoi avec port à sa charge (~4,90 €)** ·
     elle vient le chercher. **Aucun message ne lui a été écrit** — le texte sera préparé dans
     Gestion → Clients → Messages clients dès qu'il aura choisi.
+  - 🛡️ **DOSSIER PAYPAL PRÊT, À NE SORTIR QUE SI ELLE RÉCLAME** :
+    `docs/messages/paypal-litige-1S9IOON5.md` — texte à coller dans le Centre de résolution
+    (français + anglais), chronologie datée, liste des 5 preuves à joindre, et ce qu'il ne faut
+    PAS écrire. Préparé le 15/09 à sa demande (« on sait jamais »). **Tant qu'elle ne réclame
+    rien, on n'écrit pas à PayPal.** S'il demande, ou si une réclamation arrive : lui donner ce
+    texte (délai de réponse PayPal souvent 10 jours → répondre tout de suite).
   - À noter : la fiche a facturé 3,90 € de port alors que l'envoi a coûté 5,10 € HT.
 
 - **REP emballages / IDU** : adhérer à Léko ou Citeo, obtenir l'IDU, le coller dans Etsy.
