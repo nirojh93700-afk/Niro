@@ -26,6 +26,7 @@ const NAV = [
     { id: "crm", icon: "◉", text: "Clients (CRM)", href: "/gestion/crm" },
     { id: "avis", icon: "★", text: "Avis", href: "/gestion#avis", badge: "reviews" },
     { id: "fidelite", icon: "◇", text: "Fidélité & cashback", href: "/gestion/fidelite" },
+    { id: "favoris", icon: "♥", text: "Favoris des clientes", href: "/gestion/favoris" },
     { id: "messages", icon: "✉", text: "Messages", href: "/gestion/messages" },
     { id: "boite-mail", icon: "▨", text: "Boîte mail", href: "/gestion/boite-mail" },
   ] },

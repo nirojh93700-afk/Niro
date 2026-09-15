@@ -97,6 +97,42 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 💗 FAVORIS RANGÉS DANS LE COMPTE CLIENT — APPLIQUÉ LE 15/09/2026
+> Demande du gérant : « sur les autres sites les clients mettent en favoris et ça va directement
+> dans leur compte, est-ce qu'on peut faire la même chose ? » → maquette
+> `docs/maquettes/favoris-compte.html` validée (« applique »), puis construit.
+- **Deux endroits, volontairement.** Le ♡ écrit dans le **navigateur** (`localStorage`, clé
+  `niv-wishlist`) — ça marche sans compte et l'affichage est instantané — **et**, si la cliente est
+  connectée, dans son **compte** (`POST /api/favoris {action:"toggle"}`, « tiré et oublié » : si
+  l'appel échoue, le cœur fonctionne quand même).
+- **LA FUSION EST LE CŒUR DU SYSTÈME** : personne ne se connecte AVANT de mettre un cœur. Quand la
+  page `/favoris` détecte une session, elle envoie les favoris du navigateur
+  (`POST {action:"merge"}`) → `mergeFavoris` **n'ajoute que ce qui manque, ne supprime jamais rien**
+  → message vert « N favoris ont été ajoutés à votre compte ». Puis le navigateur est réaligné sur
+  le compte pour que le ♡ reste allumé partout. **Ne jamais retirer cette fusion** : sans elle, une
+  visiteuse qui met 3 cœurs puis se connecte perd tout.
+- **Stockage** : section `favoris` du blob catalogue = `{ [email]: { slugs:[...], at } }`, plafond
+  **200 par cliente**. Fonctions dans `stock.js` : `getFavoris` / `toggleFavori` / `mergeFavoris` /
+  `getFavorisAll`. Écriture ciblée (`persistCatalog(data, ["favoris"])`).
+- **L'e-mail vient TOUJOURS de la session signée** (`readSession`, cookie `niv_espace`), jamais du
+  corps de la requête → impossible de lire ou modifier les favoris de quelqu'un d'autre. Pas
+  connectée = `{ loggedIn:false }` **sans erreur** (le site continue de marcher).
+- **Prix et noms relus dans le catalogue en direct** (`getCatalog`) à chaque affichage : un prix
+  changé dans Gestion se met à jour tout seul, un produit masqué/supprimé disparaît des favoris.
+  Jamais de vieux prix ni de lien mort (même principe que les guides « Idées & conseils »).
+- **Gestion → Clients → ♥ Favoris des clientes** (`/gestion/favoris`, API `/api/admin/favoris`) :
+  chiffres clés, classement des créations les plus mises de côté, clientes par création (dépliable),
+  export Excel/CSV/PDF via `exportRows`. **LECTURE SEULE — aucun e-mail ne part d'ici**, même règle
+  que les alertes « retour en stock » : les envois passent par Clients → Messages clients.
+- ⚠️ Un favori n'apparaît dans Gestion que si la cliente était **connectée** : ceux gardés dans un
+  navigateur anonyme restent invisibles jusqu'à sa connexion. C'est dit sur l'écran.
+- **Fichiers** : `src/lib/stock.js` (section favoris) · `src/app/api/favoris/route.js` ·
+  `src/app/api/admin/favoris/route.js` · `src/app/favoris/page.jsx` ·
+  `src/components/WishlistButton.jsx` · `src/app/gestion/favoris/page.jsx` · NAV d'`AdminShell` ·
+  CSS `.fav-*` et `.fv-*` en fin de `globals.css`.
+- **Pas encore fait, à proposer plus tard** : « prévenez-moi si le prix baisse » sur un favori
+  (c'est là qu'est l'argent, mais il faut son accord — aucun e-mail automatique aujourd'hui).
+
 ### 💍 GRAVURE DES BIJOUX — TRANCHÉ ET APPLIQUÉ LE 14/09/2026 (À LIRE AVANT DE TOUCHER UN BIJOU)
 > 📄 **`docs/etat-bijoux.md` = l'état exact des 32 bijoux** : prix du code, prix barré, prix payé,
 > chaque champ de gravure avec son supplément, emballages, poids/livraison, et les points à
@@ -134,9 +170,15 @@
   (Zephyr Paris « aucun coût supplémentaire »), cristaux (photo incluse, socle payant), porte-clés.
   Seules les **bijouteries classiques** (Histoire d'Or, Cleor, Marc Orian, Carador) facturent la
   gravure 8-16 € la face — ce n'est pas notre modèle.
-- ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : le catalogue n'est pas uniforme — **13 bijoux font
-  payer la 1re gravure, 19 l'incluent** (liste exacte dans `docs/etat-bijoux.md`, colonne
-  « 1re gravure »). Le gérant a dit le 13/09 « y a que le premier gravure gratuit après c'est
+- ⛔ **5 BIJOUX NE SE GRAVENT PAS DU TOUT** (rappel ferme du gérant, 15/09/2026, captures à
+  l'appui) : Bracelet Cœur argenté · Bracelet Maille Trombone doré · Bracelet Ange · Collier Cœur
+  scintillant doré · Collier Perle solitaire. Aucun champ de personnalisation, ils se vendent tels
+  quels. **Ne JAMAIS leur ajouter de gravure** et ne jamais les compter comme « gravure incluse » —
+  c'était une erreur de mon inventaire, corrigée : la colonne « Gravure » de `docs/etat-bijoux.md`
+  distingue maintenant **payante / comprise dans le prix / pas de gravure**.
+- ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : sur les 32 bijoux — **19 font payer la gravure,
+  8 la comprennent dans le prix, 5 ne se gravent pas** (liste exacte dans `docs/etat-bijoux.md`,
+  colonne « Gravure »). Le gérant a dit le 13/09 « y a que le premier gravure gratuit après c'est
   payant », mais la règle plus ancienne du §10 4bis dit « GRAVURE = TOUJOURS PAYANTE, JAMAIS
   INCLUSE ». **Les deux ne peuvent pas être vraies : lui demander laquelle est la bonne** avant
   d'aligner quoi que ce soit. Il a demandé le 14/09 de ne corriger **que** les fiches qu'il désigne.
@@ -144,6 +186,17 @@
   demande : Bracelet Homme Identité (Gourmette) · Bracelet Homme Acier & Silicone · Collier Cœur &
   Zircon doré · Bracelet cordon à plaque · Bracelet homme cuir & plaque · Bracelet perles à pastille
   (+ hors bijoux : Bougeoir Fleur de Lotus, Support téléphone ajouré).
+- 🏷️ **NOUVEAUX NOMS DES 32 BIJOUX — PRÊTS, PAS APPLIQUÉS (15/09/2026)** : il a demandé des noms
+  « amour romantique » inspirés des grandes boutiques, puis **« enregistre ces noms, quand je te
+  dirai tu les changeras »**. Les 32 noms sont dans **`docs/noms-bijoux-proposition.md`** (tableau
+  + liste slug → nouveau nom, prête à appliquer). Ex. Collier Double Cœur → **Collier Cœur à Cœur**,
+  Collier Couple Cœur → **Collier Toi & Moi**, Bracelet Papillon → **Bracelet Envolée**, gourmette
+  homme → **Bracelet Le Serment**.
+  ⛔ **À l'application : changer UNIQUEMENT le champ `name`.** Ne toucher ni au `slug` (l'adresse
+  de la fiche : la changer casse les liens partagés, le référencement acquis et le flux Google
+  Merchant Center), ni au `title` (le titre Google porte les mots-clés). Garder le mot
+  « Collier »/« Bracelet » devant le nom poétique : le `name` s'affiche aussi dans le panier, les
+  e-mails de commande et Gestion. Puis `npm run build` + `npm run etat-bijoux`.
 - 🧊 **APERÇU 3D DES BIJOUX (chantier ouvert le 14/09/2026)** : le site dessine déjà lui-même des
   aperçus 3D (`Engrave3D`, `EngraveHeart3D`, `EngravePlate3D`, `EngraveGourmette3D`, `EngraveBook3D`,
   `EngraveEnvelope3D` — 9 bijoux les ont). 18 bijoux gravables n'en ont pas. Il a demandé **une

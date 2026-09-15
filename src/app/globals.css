@@ -3890,3 +3890,41 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .og-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .og-note { background: var(--cream, #faf6ee); border: 1px solid #ece3d2; border-radius: 12px; padding: 14px 16px; line-height: 1.6; font-size: 0.92rem; }
 .og-note.warn { background: #fff8e6; border-color: #f0d28a; }
+
+/* ── Favoris : les deux encadrés de la page /favoris (compte / navigateur) ──
+   Ajoutés le 15/09/2026 avec les favoris rangés dans le compte client.
+   Couleurs de la marque uniquement, aucune couleur en dur inventée. */
+.fav-note {
+  background: var(--cream-2, #f3e8d3);
+  border: 1px solid var(--gold-soft, #e2c67e);
+  border-radius: 12px;
+  padding: 12px 15px;
+  font-size: 0.93rem;
+  margin: 0 0 18px;
+}
+.fav-note-ok {
+  background: #eaf3ec;
+  border-color: #cfe3d4;
+  color: #25563a;
+}
+.fav-note-ok strong { color: #1d4530; }
+.fav-actions { margin-top: 10px; }
+
+/* ── Gestion → Favoris des clientes (écran lecture seule, 15/09/2026) ────── */
+.fv-exp { display: flex; gap: 8px; flex-wrap: wrap; }
+.fv-err { color: #a24336; background: #f6e7e4; border: 1px solid #e3c4bd; border-radius: 10px; padding: 10px 13px; }
+.fv-vide { background: #fff; border: 1px dashed var(--line, #ece3d2); border-radius: 12px; padding: 18px; color: var(--ink-soft, #6f675c); }
+.fv-box { background: #fff; border: 1px solid var(--line, #ece3d2); border-radius: 14px; overflow-x: auto; min-width: 0; }
+.fv-t { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.92rem; }
+.fv-t th, .fv-t td { text-align: left; padding: 11px 13px; border-bottom: 1px solid var(--line, #ece3d2); vertical-align: middle; }
+.fv-t th { font-size: 0.74rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-soft, #6f675c); font-weight: 600; }
+.fv-t tr:last-child td { border-bottom: 0; }
+.fv-t .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fv-prod { display: flex; gap: 10px; align-items: center; }
+.fv-vign { width: 42px; height: 42px; border-radius: 8px; overflow: hidden; background: #f7f3ea; flex: 0 0 auto; }
+.fv-vign img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fv-prod small { display: block; font-size: 0.76rem; color: var(--ink-soft, #6f675c); }
+.fv-pill { display: inline-block; background: var(--cream-2, #f3e8d3); border: 1px solid var(--gold-soft, #e2c67e); border-radius: 999px; padding: 2px 10px; font-weight: 700; }
+.fv-cli { font-size: 0.84rem; color: var(--ink-soft, #6f675c); }
+.fv-plus { display: inline-block; margin-left: 6px; font: inherit; font-size: 0.8rem; background: none; border: 0; padding: 0; color: var(--gold-deep, #a98935); cursor: pointer; text-decoration: underline; }
+.fv-note { background: #fff8e6; border: 1px solid #f0d28a; border-radius: 12px; padding: 13px 15px; font-size: 0.9rem; color: #6b5312; margin-top: 16px; }

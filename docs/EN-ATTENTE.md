@@ -48,6 +48,8 @@ Duquennec périmée (déjà répondu le 07/09, elle n'a pas réécrit — à cla
 | **Verre à vin gravé** | `docs/maquettes/verre-vin-fiche.html` | 12,90 / 24,90 / 49,90 € ; styles 1-19 + lettre fleurie |
 | **Flûte à champagne** | `docs/maquettes/flute-champagne-fiche.html` | Clone du verre à vin, mêmes prix |
 | **Thème « L'Écrin »** (site + admin) | `docs/maquettes/theme-ecrin.html` | À appliquer seulement s'il dit « applique le nouveau thème » |
+| ~~**Favoris enregistrés dans le compte client**~~ ✅ **APPLIQUÉ le 15/09/2026** | `docs/maquettes/favoris-compte.html` | Validé (« applique ») puis construit — voir `CLAUDE.md` § Favoris. Maquette gardée pour mémoire. Ancienne fiche : Chantier demandé : « les clients mettent en favoris et ça va directement dans leur compte ». Existe déjà : le ♡ (`WishlistButton.jsx`) + `/favoris` mais en **localStorage** (par navigateur), et l'espace client `/espace` (connexion par lien magique, cookie signé 30 j). À construire : favoris rangés côté serveur par e-mail, **fusion des favoris du navigateur à la connexion**, et écran Gestion → Favoris (top produits + clientes + export). Aucun e-mail automatique. |
+| **Nouveaux noms des 32 bijoux** (15/09/2026) | `docs/noms-bijoux-proposition.md` | **Enregistrés à sa demande, NON appliqués** — il dira quand. À l'application : changer **uniquement** le champ `name`, jamais le `slug` ni le `title` (référencement + Merchant Center). |
 | **Aperçu 3D des 9 bijoux à cœur** (14/09/2026) | `docs/maquettes/apercu3d-<slug>.html` — 9 pages autonomes, générées par `node --import ./tools/alias-register.mjs tools/maquettes/coeur3d.mjs` | **En attente de son retour.** Cœur recto/verso gravé en direct, couleur = métal, rotation au doigt, total avec +3 €/face. Deux fiches restent à l'ancien système (Cœur & Zircon, Femme Cœur). Quand il dit « applique » : reproduire dans le site (forme cœur à ajouter à `EngravePlate3D` ou nouveau composant), puis ces maquettes peuvent être supprimées. Ensuite prévus : pastille ronde (2 fiches), plaques de bracelet (6), puzzle (1). |
 | **Cristal 3D sur mesure** — section + configurateur | `docs/maquettes/cristal-surmesure-section.html`, `cristal-configurateur.html` | Proposer modèles prêts **et** photo perso, prix des blocs par taille |
 | **Bouton « Répondre » dans les e-mails clients** | ✅ **APPLIQUÉ le 15/09** (« applique » du gérant, commit `efffd9f`) : bouton dans chaque envoi Messages clients → page `/reponse/<jeton>` (jeton 30 j) → réponse rangée dans le dossier + fil de commande (pastille 📬) + alerte. Le fil Aperçu/BAT avait DÉJÀ son bouton (/suivi). Maquette : `docs/maquettes/bouton-repondre-email.html` |
@@ -117,6 +119,43 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 ---
 
 ## 4. À faire par le gérant (rappeler s'il demande « où on en est »)
+
+- 📦 **RETOUR CLIENT À RETIRER AVANT LE 20/09/2026 — commande #1S9IOON5**
+  (notification Mondial Relay du 15/09 à 15 h 32). Colis **n° 98362971**, code de retrait
+  **536287**, au relais **RETOUCHERIE JO**, 1 place de la Libération, **95200 Sarcelles**
+  (9 h-13 h / 14 h-19 h). **Passé le 20/09 le colis repart** → à retirer en priorité.
+  - **Ce n'est pas un colis fournisseur** : c'est le **retour de la commande #1S9IOON5**, envoi
+    Boxtal `#2609011116MONRXTX0FR`, suivi `71133346` (5,10 € HT de port).
+  - Cliente : **Hend Musallam**, 31 rue d'Etrembières, 74100 Annemasse ·
+    `e.varol2012@icloud.com` · 07 49 37 63 26 (payé par PayPal sous *Enes Varol*).
+  - Contenu : **1× Bracelet Femme Cœur doré gravé « Hend »** (police Allura) + boîte cadeau.
+    Payé **30,21 €** (26,31 € + 3,90 € de livraison). Commande du 31/08, fabrication immédiate.
+  - Historique du colis (vérifié sur Boxtal le 15/09) : envoi **« Domicile France »** →
+    **03/09 14 h 14 « destinataire absent »** (le livreur s'est présenté à son adresse) + avisage
+    e-mail → colis dérouté vers un relais → **disponible le 04/09 à 9 h 26**, 2e avisage e-mail à
+    9 h 29 → **jamais retiré en 7 jours** → retour à l'expéditeur le 11/09.
+    ✅ **L'atelier n'a commis aucune erreur** : la livraison à domicile payée a bien été tentée.
+    Demander les frais de réexpédition est donc défendable, et ce suivi est le dossier à produire
+    en cas de litige PayPal.
+  - ⏳ **Le message cliente est PRÊT mais PAS ENVOYÉ**, et il a été **RETIRÉ de Gestion à sa
+    demande** (« pour pas qu'on se trompe et qu'on l'envoie ») : il n'apparaît plus dans
+    Messages clients. Texte + contexte + entrée à recopier :
+    **`docs/messages/1S9IOON5-colis-revenu.md`**. Envoi prévu **en fin de semaine, par lui
+    seul**. Le remettre dans `MESSAGES_PRETS` seulement s'il le demande.
+  - 📅 **Le retrait du colis, lui, n'attend pas** : limite au **20/09, qui est un DIMANCHE** →
+    le relais sera probablement fermé, donc **samedi 19/09 au plus tard**.
+  - ⚠️ **Décision prise** : le bracelet est gravé « Hend », donc invendable à
+    quelqu'un d'autre, et la règle du site est « personnalisé = jamais remboursé ». Options
+    proposées le 15/09 : **renvoi offert** · **renvoi avec port à sa charge (~4,90 €)** ·
+    elle vient le chercher. **Aucun message ne lui a été écrit** — le texte sera préparé dans
+    Gestion → Clients → Messages clients dès qu'il aura choisi.
+  - 🛡️ **DOSSIER PAYPAL PRÊT, À NE SORTIR QUE SI ELLE RÉCLAME** :
+    `docs/messages/paypal-litige-1S9IOON5.md` — texte à coller dans le Centre de résolution
+    (français + anglais), chronologie datée, liste des 5 preuves à joindre, et ce qu'il ne faut
+    PAS écrire. Préparé le 15/09 à sa demande (« on sait jamais »). **Tant qu'elle ne réclame
+    rien, on n'écrit pas à PayPal.** S'il demande, ou si une réclamation arrive : lui donner ce
+    texte (délai de réponse PayPal souvent 10 jours → répondre tout de suite).
+  - À noter : la fiche a facturé 3,90 € de port alors que l'envoi a coûté 5,10 € HT.
 
 - **REP emballages / IDU** : adhérer à Léko ou Citeo, obtenir l'IDU, le coller dans Etsy.
   Risque : sans IDU, Etsy peut bloquer le compte vendeur. Récap : `docs/rep-emballages-idu.md`.

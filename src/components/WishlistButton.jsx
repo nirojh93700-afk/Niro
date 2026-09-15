@@ -4,6 +4,17 @@ import { useState, useEffect } from "react";
 
 const KEY = "niv-wishlist";
 
+// =============================================================================
+// LE ♡ DES VIGNETTES ET DES FICHES
+// -----------------------------------------------------------------------------
+// Deux endroits, volontairement :
+//  · le NAVIGATEUR (localStorage) — marche toujours, même sans compte, et
+//    l'affichage reste instantané ;
+//  · le COMPTE (POST /api/favoris) — en plus, si la cliente est connectée, pour
+//    qu'elle retrouve ses favoris sur tous ses appareils.
+// L'appel au serveur est « tiré et oublié » : s'il échoue ou si elle n'est pas
+// connectée, le cœur fonctionne quand même. Rien ne bloque l'interface.
+// =============================================================================
 export default function WishlistButton({ slug, name, image, price }) {
   const [fav, setFav] = useState(false);
 
@@ -24,6 +35,14 @@ export default function WishlistButton({ slug, name, image, price }) {
       localStorage.setItem(KEY, JSON.stringify(l));
       setFav(l.some((x) => x.slug === slug));
       window.dispatchEvent(new Event("niv-wishlist-change"));
+    } catch { /* ignore */ }
+    // Et dans son compte, si elle est connectée (sans bloquer le clic).
+    try {
+      fetch("/api/favoris", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "toggle", slug }),
+      }).catch(() => {});
     } catch { /* ignore */ }
   }
 

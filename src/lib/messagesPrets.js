@@ -16,6 +16,16 @@
 // et Cécilia Herrera (#00CUYR2U, date gravée 24/09) ont reçu le 15/09 un
 // message « nous ferons notre maximum, ce sera juste » + promesse de suivi.
 // Si la date ne peut pas être tenue, leur écrire un mot AVANT le 24 et le 26.
+// ⛔ AUCUN MESSAGE ICI, ET C'EST VOULU (demande du gérant, 15/09/2026) :
+// « tu enlèves ce mail de la gestion, tu le mets en attente, pour pas qu'on se
+// trompe et qu'on l'envoie ». Un message prêt affiché dans Gestion peut partir
+// d'un clic de trop — donc quand un texte doit ATTENDRE, il reste dans
+// docs/messages/ et PAS dans cette liste.
+//
+// En attente aujourd'hui : le retour du colis de la commande #1S9IOON5
+// (Hend Musallam) → texte complet + contexte dans
+// docs/messages/1S9IOON5-colis-revenu.md, avec l'entrée à recopier ici quand il
+// dira de le remettre. Envoi prévu en fin de semaine, par lui seul.
 export const MESSAGES_PRETS = [];
 
 // ---------------------------------------------------------------------------

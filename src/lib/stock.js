@@ -400,6 +400,72 @@ export async function clearRestockAlerts(slug) {
   return true;
 }
 
+// =============================================================================
+// FAVORIS DES CLIENTES — rangés dans le COMPTE, pas seulement dans le navigateur.
+// Section `favoris` du blob catalogue : { [email]: { slugs: [...], at } }.
+//
+// Pourquoi côté serveur : le ♡ existait déjà mais en `localStorage`, donc par
+// navigateur — une cliente qui change de téléphone perdait tout, et l'atelier ne
+// voyait rien. Le navigateur reste utilisé quand elle n'est PAS connectée, et
+// `mergeFavoris` remonte cette liste dans son compte au moment où elle se
+// connecte (sinon personne ne se connecte AVANT de mettre un cœur).
+//
+// L'e-mail vient TOUJOURS de la session signée (`readSession`), jamais du client.
+// Écriture ciblée sur la seule section `favoris` : rien d'autre ne peut casser.
+// =============================================================================
+const FAVORIS_MAX = 200; // par cliente — largement au-delà d'un usage normal
+
+function nettoieSlugs(liste) {
+  return [...new Set((Array.isArray(liste) ? liste : [])
+    .map((x) => String(x || "").trim())
+    .filter((x) => x && x.length <= 120))].slice(0, FAVORIS_MAX);
+}
+
+export async function getFavoris(email) {
+  const e = normEmail(email);
+  if (!validEmail(e)) return [];
+  const data = await getCatalogRaw(true);
+  return nettoieSlugs(data.favoris?.[e]?.slugs);
+}
+
+// Ajoute ou retire un favori. Renvoie la liste à jour + l'état du cœur.
+export async function toggleFavori(email, slug) {
+  const e = normEmail(email);
+  const s = String(slug || "").trim();
+  if (!validEmail(e) || !s) return { ok: false, slugs: [] };
+  const data = await getCatalogRaw(true);
+  data.favoris = data.favoris || {};
+  const avant = nettoieSlugs(data.favoris[e]?.slugs);
+  const dedans = avant.includes(s);
+  const slugs = dedans ? avant.filter((x) => x !== s) : nettoieSlugs([...avant, s]);
+  data.favoris[e] = { slugs, at: Date.now() };
+  await persistCatalog(data, ["favoris"]);
+  return { ok: true, slugs, fav: !dedans };
+}
+
+// Fusion à la connexion : les favoris du navigateur rejoignent le compte.
+// Rien n'est jamais supprimé ici — on ne fait qu'ajouter ce qui manque.
+export async function mergeFavoris(email, slugs) {
+  const e = normEmail(email);
+  if (!validEmail(e)) return { ok: false, slugs: [], ajoutes: 0 };
+  const entrants = nettoieSlugs(slugs);
+  const data = await getCatalogRaw(true);
+  data.favoris = data.favoris || {};
+  const avant = nettoieSlugs(data.favoris[e]?.slugs);
+  const manquants = entrants.filter((x) => !avant.includes(x));
+  if (!manquants.length) return { ok: true, slugs: avant, ajoutes: 0 };
+  const apres = nettoieSlugs([...avant, ...manquants]);
+  data.favoris[e] = { slugs: apres, at: Date.now() };
+  await persistCatalog(data, ["favoris"]);
+  return { ok: true, slugs: apres, ajoutes: manquants.length };
+}
+
+// Tout le tableau, pour l'écran Gestion → Favoris (lecture seule).
+export async function getFavorisAll() {
+  const data = await getCatalogRaw(true);
+  return data.favoris || {};
+}
+
 export async function setStock(variantId, value) {
   const map = await getStockMap();
   if (value === null || value === "" || value === undefined) {

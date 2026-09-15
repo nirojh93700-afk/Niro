@@ -45,6 +45,17 @@ function optionsGravure(p) {
   return out;
 }
 
+// Le bijou est-il gravable DU TOUT ? Beaucoup de bijoux sont vendus tels quels
+// (Bracelet Ange, Collier Perle solitaire…) : aucun champ de personnalisation,
+// rien à graver. Il ne faut JAMAIS leur ajouter de gravure, et surtout ne pas
+// les compter comme « gravure incluse » — c'était une erreur de ce tableau.
+function gravable(p) {
+  return (p.personalizationFields || []).some(
+    (f) => f.type === undefined || f.type === "text" || f.type === "textarea"
+      || f.type === "photo" || f.type === "stylepicker" || f.type === "modele"
+  );
+}
+
 // La PREMIÈRE gravure est-elle payante ? On remplit le premier champ de texte
 // de la fiche (celui que la cliente voit en haut) et on regarde si le moteur
 // facture quelque chose. Une case « Avec gravure (+3 €) » compte aussi.
@@ -84,7 +95,8 @@ L.push("> **FICHIER GÉNÉRÉ — ne pas le modifier à la main.** Régénérer 
 L.push("> après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé");
 L.push("> d'un bijou depuis n'importe quelle conversation, sans relire le code.");
 L.push("");
-L.push(`> Généré le ${new Date().toISOString().slice(0, 10)} · ${bijoux.length} bijoux dans le code.`);
+const nbGravables = bijoux.filter(gravable).length;
+L.push(`> Généré le ${new Date().toISOString().slice(0, 10)} · ${bijoux.length} bijoux dans le code, dont ${nbGravables} gravables et ${bijoux.length - nbGravables} vendus tels quels (aucune gravure — ne rien leur ajouter).`);
 L.push("");
 L.push("⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être");
 L.push("réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code");
@@ -100,16 +112,20 @@ L.push("");
 // ---- Tableau de synthèse
 L.push("## Vue d'ensemble");
 L.push("");
-L.push("| Bijou | Rayon | Prix payé | 1re gravure | Gravures payantes |");
+L.push("| Bijou | Rayon | Prix payé | Gravure | Ce qui est facturé |");
 L.push("|---|---|---|---|---|");
 for (const p of bijoux) {
   const prix = [...new Set(p.variants.map((v) => prixAffiche(v.price).paye))].sort((a, b) => a - b);
   const prixTxt = prix.length === 1 ? eur(prix[0]) : `${eur(prix[0])} – ${eur(prix[prix.length - 1])}`;
   const opts = optionsGravure(p).filter((o) => o.montant > 0);
   const varAvec = p.variants.some((v) => /avec/i.test(v.title));
-  const premierePayante = varAvec || premiereGravurePayante(p);
-  const detail = opts.length ? opts.map((o) => `${o.cle} +${o.montant} €`).join(" · ") : (varAvec ? "par l'option choisie" : "—");
-  L.push(`| **${p.name}** | ${p.subcategory || "—"} | ${prixTxt} | ${premierePayante ? "**payante**" : "incluse"} | ${detail} |`);
+  const etat = !gravable(p)
+    ? "_pas de gravure_"
+    : (varAvec || premiereGravurePayante(p)) ? "**payante**" : "comprise dans le prix";
+  const detail = !gravable(p) ? "—"
+    : opts.length ? opts.map((o) => `${o.cle} +${o.montant.toFixed(2).replace(".", ",").replace(",00", "")} €`).join(" · ")
+    : (varAvec ? "par l'option choisie" : "—");
+  L.push(`| **${p.name}** | ${p.subcategory || "—"} | ${prixTxt} | ${etat} | ${detail} |`);
 }
 L.push("");
 L.push("---");
@@ -131,6 +147,7 @@ for (const p of bijoux) {
   const noms = (pk?.ids || []).map((id) => DEFAULT_PACKAGING.find((x) => x.id === id)?.name || id);
   L.push(`- **Emballages proposés** : ${noms.length ? noms.join(", ") : "⚠️ aucun"}${pk && !DEFAULT_PRODUCT_PACKAGING[p.slug] ? " _(attribution automatique par type)_" : ""}`);
   L.push(`- **Fiche détaillée** (Taille & Matériaux…) : ${productInfo[p.slug] ? "oui" : "⚠️ manquante"}`);
+  if (!gravable(p)) L.push("- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.");
   L.push("");
 
   L.push("**Options / prix**");
