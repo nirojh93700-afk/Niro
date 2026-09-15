@@ -1056,6 +1056,53 @@ export async function batCustomerMessage(token, { text, decision } = {}) {
   return { orderId: id, ...th };
 }
 
+// --- Bouton « Répondre » des e-mails clients (appliqué le 15/09/2026) -------
+// Chaque e-mail « Messages clients » porte un bouton vers /reponse/<jeton> :
+// la cliente écrit là, sa réponse est rangée dans son dossier (logComm) et
+// dans le fil de sa commande. Jeton valable 30 jours, propre à chaque message.
+// data.replyLinks = { [token]: { email, name, subject, excerpt, orderId, orderRef, at, replies } }
+const REPLY_LINK_TTL = 30 * 24 * 3600 * 1000;
+
+export async function addReplyLink({ email, name = "", subject = "", excerpt = "", orderId = "", orderRef = "" }) {
+  const e = String(email || "").trim().toLowerCase();
+  if (!e) return null;
+  const data = await getCatalogRaw(true);
+  data.replyLinks = data.replyLinks || {};
+  const token = makeReplyToken();
+  data.replyLinks[token] = {
+    email: e, name: String(name || ""), subject: String(subject || "").slice(0, 200),
+    excerpt: String(excerpt || "").slice(0, 240), orderId: orderId || "", orderRef: orderRef || "",
+    at: Date.now(), replies: 0,
+  };
+  // Petit ménage : on garde les 300 jetons les plus récents.
+  const keys = Object.keys(data.replyLinks);
+  if (keys.length > 300) {
+    keys.sort((a, b) => (data.replyLinks[a].at || 0) - (data.replyLinks[b].at || 0));
+    for (const k of keys.slice(0, keys.length - 300)) delete data.replyLinks[k];
+  }
+  await persistCatalog(data);
+  return token;
+}
+
+export async function getReplyLink(token) {
+  const t = String(token || "").trim();
+  if (!t) return null;
+  const data = await getCatalogRaw();
+  const it = (data.replyLinks || {})[t];
+  if (!it || Date.now() - (it.at || 0) > REPLY_LINK_TTL) return null;
+  return { token: t, ...it };
+}
+
+export async function recordReplyLinkUse(token) {
+  const t = String(token || "").trim();
+  const data = await getCatalogRaw(true);
+  const it = (data.replyLinks || {})[t];
+  if (!it) return null;
+  it.replies = (it.replies || 0) + 1;
+  await persistCatalog(data);
+  return it;
+}
+
 // --- Produits créés depuis l'admin (nouveaux produits) ---------------------
 export async function getCustomProducts() {
   const data = await getCatalogRaw();

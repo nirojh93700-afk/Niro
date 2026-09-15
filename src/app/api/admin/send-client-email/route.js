@@ -1,7 +1,8 @@
-import { isAdmin, getGmailCreds , logComm } from "@/lib/stock";
+import { isAdmin, getGmailCreds , logComm, addReplyLink } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { boutonsAvis } from "@/lib/clientMail";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
+import { getSiteOrders } from "@/lib/firebase";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -27,10 +28,36 @@ export async function POST(req) {
   const imageHtml = imageUrl
     ? `<img src="${escapeHtml(imageUrl)}" alt="Aperçu" style="display:block;width:100%;max-width:520px;height:auto;border-radius:10px;border:1px solid #ece3d2;margin:0 0 16px;">`
     : "";
+  // Bouton « Répondre » (appliqué le 15/09/2026, maquette validée) : jeton de
+  // 30 jours → page /reponse/<jeton> → la réponse revient dans le DOSSIER de la
+  // cliente et le fil de sa commande. Jamais bloquant : sans jeton, l'e-mail
+  // part quand même (et la boîte surveillée rattrape les réponses classiques).
+  let replyBtn = "";
+  try {
+    let order = null;
+    try {
+      const orders = (await getSiteOrders(300)).filter((o) => !o.test);
+      for (const o of orders) {
+        if (String(o.customerEmail || "").toLowerCase() !== to.toLowerCase()) continue;
+        if (!order || Date.parse(o.createdAt || 0) > Date.parse(order.createdAt || 0)) order = o;
+      }
+    } catch { /* sans commande : le bouton marche quand même */ }
+    const token = await addReplyLink({
+      email: to, name: order?.customerName || "", subject,
+      excerpt: message.slice(0, 240), orderId: order?.id || "", orderRef: order?.ref || "",
+    });
+    if (token) {
+      replyBtn = `<p style="margin:22px 0 6px;text-align:center;">
+        <a href="${BRAND.siteUrl}/reponse/${token}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:13px 30px;border-radius:999px;font-weight:bold;">✉️ Répondre à ce message</a></p>
+      <p style="margin:0;text-align:center;color:#8a7a56;font-size:12px;">Votre réponse arrive directement dans votre dossier — pas besoin d'écrire un e-mail.</p>`;
+    }
+  } catch { /* jamais bloquant */ }
+
   const html = emailLayout({
     heading: subject,
     bodyHtml: `${imageHtml}<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
       ${boutons}
+      ${replyBtn}
       <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
   });
 
