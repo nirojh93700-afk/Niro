@@ -917,7 +917,7 @@ Un souci à la réception ?
 - Matière : acier inoxydable, disponible en doré, or rose et argenté.
 - Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
-- Gravure en option sur la médaille cœur : prénom, date ou petit message (texte court conseillé).
+- Gravure en option sur la médaille cœur, au recto et/ou au verso (3 € par face) : prénom, date ou petit message (texte court conseillé).
 - Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
@@ -1019,8 +1019,8 @@ Un souci à la réception ?
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~15 g.
 - Étanche : résiste à l'eau et ne ternit pas.`,
     usage: `Personnalisation & Entretien
-- Se porte tel quel, ou avec gravure en option : jusqu'à trois lignes gravées au laser au dos du second cœur.
-- Texte libre (mot tendre, prénom, date) dans l'une de nos huit écritures ; comptez environ 16 caractères par ligne pour rester lisible.
+- Se porte tel quel, ou gravé : le cœur lisse se grave au recto et/ou au verso, 3 € par face gravée.
+- Texte libre (mot tendre, prénom, date) dans l'une de nos huit écritures ; comptez environ 16 caractères par face pour rester lisible.
 - Le second cœur pivote pour découvrir la gravure : le message reste caché quand le bijou est porté.
 - Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
     returns: `Expédition & Retour
@@ -1072,8 +1072,8 @@ Un souci à la réception ?
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
 - Poids : environ 18 g. Étanche : résiste à l'eau et ne ternit pas.`,
     usage: `Personnalisation & Entretien
-- La grande médaille cœur se grave au laser : prénom, date ou petit message (20 caractères maximum pour rester lisible).
-- La gravure est une option à 3 € ; sans elle, le cœur reste lisse et poli.
+- La grande médaille cœur se grave au laser sur ses deux faces : prénom, date ou petit message (20 caractères maximum par face pour rester lisible).
+- Chaque face gravée est une option à 3 € (recto, verso, ou les deux) ; sans gravure, le cœur reste lisse et poli.
 - Choisissez votre écriture parmi nos huit polices.
 - Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
     returns: `Expédition & Retour

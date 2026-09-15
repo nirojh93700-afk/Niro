@@ -703,9 +703,14 @@ export const products = [
     tagline: "Tressage aspect cuir et plaque acier, gravée avec votre message.",
     personalizable: true,
     personalizationLabel: "Texte à graver + police",
+    // Les champs de gravure s'affichent TOUJOURS (plus de condition sur le nom de
+    // l'option). Avant, ils n'apparaissaient que si l'option choisie contenait le
+    // mot « Avec » : les options ayant été renommées en simples couleurs depuis
+    // l'admin, la fiche se retrouvait sans aucun champ à remplir alors qu'elle
+    // promet une gravure. Ne pas remettre de variantContains ici.
     personalizationFields: [
-      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "texte", label: "Texte à graver", placeholder: "Prénom, date, message…", maxLength: 30 },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet_cuir_tresse_a_graver_argente.jpg",
@@ -744,6 +749,8 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte ou photo à graver",
     // Comme la pièce en laiton : texte OU photo, au choix de la cliente.
+    // 1re gravure incluse (texte ou photo) ; le texte au dos en plus est payant (+3 €).
+    engravingPricing: { textKeys: ["textePhoto"], textExtra: 3 },
     personalizationFields: [
       { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
         { value: "texte", label: "Un texte" },
@@ -753,7 +760,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "texte" },
       { key: "photo", type: "photo", label: "Photo à graver", showIfField: "gravure", showIfValue: "photo",
         text: "Une photo nette et bien éclairée donne le meilleur résultat. Les portraits rapprochés et les silhouettes se gravent très bien ; les scènes très détaillées rendent moins bien sur une surface aussi petite." },
-      { key: "textePhoto", label: "Texte au dos", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
+      { key: "textePhoto", label: "Texte au dos (+3 €)", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
       { key: "policePhoto", type: "font", label: "Police du texte au dos", optional: true, showIfField: "gravure", showIfValue: "photo" },
     ],
     images: [
@@ -1103,11 +1110,21 @@ export const products = [
     title: "Bracelet cœur à graver, fermoir T-bar — médaille cœur personnalisée, doré / or rose / argenté",
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Une médaille cœur à graver sur une chaîne à fermoir T-bar — doré, or rose ou argenté.",
-    personalizable: true, personalizationLabel: "Gravure sur le cœur (prénom, date, message) + police",
+    personalizable: true, personalizationLabel: "Gravure sur le cœur : recto et/ou verso (+3 € par face)",
+    // La médaille cœur se grave sur ses DEUX faces : recto et verso. Chaque face
+    // gravée est payante (+3 €), chiffrée APRÈS la remise bijoux (+3 € pile, quel
+    // que soit le coloris) : le mettre en variante ferait dériver le supplément à
+    // +2,70 € à cause de la remise −10 %.
+    // Les deux champs sont FACULTATIFS et toujours visibles : laisser vide = bijou
+    // sans gravure. Plus de variantes « Sans / Avec gravure » qui cachaient les
+    // champs — renommer une option dans l'admin suffisait à faire disparaître
+    // toute la gravure de la fiche.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "La médaille cœur peut être gravée (en option). Choisissez une finition « Avec gravure » pour ajouter un prénom, une date ou un petit message sur le cœur (texte court conseillé)." },
-      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, variantContains: "Avec" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, variantContains: "Avec" },
+      { key: "note", type: "note", text: "Ce bracelet se porte tel quel, ou gravé. La médaille cœur se grave sur ses deux faces : le recto (côté visible) et le verso. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure. Texte court conseillé pour rester bien lisible." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Prénom, date, petit message…", maxLength: 20, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Ex. 21.05.2026", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-coeur-ot-trio.jpg",
@@ -1117,22 +1134,23 @@ export const products = [
       "/produits/bracelet-coeur-ot-dore-porte.jpg",
       "/produits/bracelet-coeur-ot-dore-2.jpg",
     ],
+    // Une option par finition : la gravure n'est plus une variante, elle est
+    // chiffrée par face (voir engravingPricing). Les identifiants gardent leur
+    // suffixe « -sans » d'origine EXPRÈS : les changer casserait les paniers en
+    // cours et l'historique des commandes.
     variants: [
-      { id: "bracelet-coeur-ot-dore-sans", title: "Doré / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-dore-avec", title: "Doré / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
-      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-rose-avec", title: "Or Rose / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
-      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté / Sans gravure", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
-      { id: "bracelet-coeur-ot-argent-avec", title: "Argenté / Avec gravure", price: 30.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
+      { id: "bracelet-coeur-ot-dore-sans", title: "Doré", price: 27.90, stockId: "bracelet-coeur-ot-dore", image: "/produits/bracelet-coeur-ot-dore.jpg" },
+      { id: "bracelet-coeur-ot-rose-sans", title: "Or Rose", price: 27.90, stockId: "bracelet-coeur-ot-rose", image: "/produits/bracelet-coeur-ot-rose.jpg" },
+      { id: "bracelet-coeur-ot-argent-sans", title: "Argenté", price: 27.90, stockId: "bracelet-coeur-ot-argent", image: "/produits/bracelet-coeur-ot-argent.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet chic et intemporel : une <strong>médaille en forme de cœur</strong>, suspendue à une chaîne à maillons avec <strong>fermoir T-bar (OT)</strong>. Disponible en <strong>doré, or rose et argenté</strong>.</p>
-<p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
+<p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur — au recto, au verso, ou sur les deux faces — pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
 <li><strong>Finitions :</strong> doré, or rose, argenté</li>
 <li><strong>Fermoir :</strong> T-bar (OT), facile à mettre</li>
-<li><strong>Gravure :</strong> laser, sur la médaille cœur — en option (+3 €)</li>
+<li><strong>Gravure :</strong> laser, sur la médaille cœur — recto et/ou verso, 3 € par face gravée</li>
 </ul>`,
   },
   // ===== Colliers =====
@@ -1288,23 +1306,22 @@ export const products = [
     title: "Collier double cœur à graver — pendentif cœur serti de zircons, message gravé au dos",
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Deux cœurs superposés : l'un serti de zircons, l'autre à faire graver de votre message.",
-    personalizable: true, personalizationLabel: "Gravure d'un message en option (au dos du second cœur)",
-    // La gravure est une OPTION PAYANTE chiffrée APRÈS la remise bijoux (+3 € pile,
-    // quel que soit le coloris) — la mettre en variante ferait dériver le supplément
-    // à +2,70 / +3,60 € à cause de la remise −10 %.
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    personalizable: true, personalizationLabel: "Gravure en option : recto et/ou verso (+3 € par face)",
+    // Le cœur lisse n'a que DEUX faces gravables : le RECTO et le VERSO. Pas de
+    // découpage en « lignes » — ces champs (Ligne 1/2/3) étaient faux, ne pas les
+    // remettre. Chaque face gravée est payante (+3 €), comme sur le collier plaque
+    // acier. Le montant est chiffré APRÈS la remise bijoux (+3 € pile, quel que
+    // soit le coloris) : le mettre en variante ferait dériver le supplément à
+    // +2,70 / +3,60 € à cause de la remise −10 %.
+    // Les deux champs sont FACULTATIFS et toujours visibles : laisser vide = bijou
+    // sans gravure. Plus de case « Sans / Avec gravure » qui cachait les champs —
+    // un texte saisi puis caché restait facturé sans rien afficher à la cliente.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver un message ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "Le second cœur pivote et découvre une surface lisse : c'est là que se grave votre message, jusqu'à trois lignes (par exemple un mot tendre, un prénom et une date).", showIfField: "gravure", showIfValue: "oui" },
-      { key: "ligne1", label: "Ligne 1", placeholder: "Ex. Je t'aime", maxLength: 16, showIfField: "gravure", showIfValue: "oui" },
-      { key: "ligne2", label: "Ligne 2", placeholder: "Ex. Maman", maxLength: 16, optional: true, showIfField: "gravure", showIfValue: "oui" },
-      { key: "ligne3", label: "Ligne 3", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "Ce collier se porte tel quel, ou gravé. Le cœur lisse se grave sur ses deux faces : le recto (côté visible) et le verso, qui reste caché quand le bijou est porté. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure. Comptez une quinzaine de caractères par face pour que la gravure reste bien lisible." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Ex. Je t'aime", maxLength: 16, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Ex. 21.05.2026", maxLength: 16, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/collier-double-coeur-1.jpg",
@@ -1328,7 +1345,7 @@ export const products = [
 <li><strong>Finitions :</strong> doré, or rose et argenté (finition PVD) — résiste à l'eau et ne ternit pas</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Se porte aussi bien par une femme que par un homme</strong></li>
-<li><strong>Gravure en option (+3 €) :</strong> jusqu'à trois lignes gravées au laser au dos du second cœur</li>
+<li><strong>Gravure en option :</strong> au laser sur le cœur lisse, au recto et/ou au verso — 3 € par face gravée</li>
 </ul>
 <p>Le texte est <strong>entièrement libre</strong> : un mot tendre, un prénom, une date d'anniversaire ou de rencontre — dans la langue et l'écriture de votre choix parmi nos polices. Les photos de la fiche montrent des exemples de rendu.</p>`,
   },
@@ -1426,19 +1443,19 @@ export const products = [
     title: "Bracelet cœur à graver, grosse chaîne dorée et fermoir T — plaqué or 18 carats",
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Une grosse chaîne dorée, un cœur à graver et un petit cœur pavé de strass.",
-    personalizable: true, personalizationLabel: "Gravure sur le cœur en option (+3 €)",
-    // Gravure = option payante chiffrée APRÈS la remise bijoux (+3 € pile).
-    engravingPricing: {
-      flatExtras: [{ key: "gravure", value: "oui", amount: 3 }],
-    },
+    personalizable: true, personalizationLabel: "Gravure sur le cœur : recto et/ou verso (+3 € par face)",
+    // Le grand cœur lisse se grave sur ses DEUX faces : recto et verso. Chaque
+    // face gravée est payante (+3 €), chiffrée APRÈS la remise bijoux (+3 € pile)
+    // — le mettre en variante ferait dériver le supplément à cause du −10 %.
+    // Les deux champs sont FACULTATIFS et toujours visibles : laisser vide = bijou
+    // sans gravure. Plus de case « Sans / Avec gravure » qui cachait les champs —
+    // un texte saisi puis caché restait facturé sans rien afficher à la cliente.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "gravure", type: "select", label: "Voulez-vous faire graver le cœur ?", options: [
-        { value: "non", label: "Sans gravure" },
-        { value: "oui", label: "Avec gravure (+3 €)" },
-      ] },
-      { key: "note", type: "note", text: "La grande médaille cœur est lisse : c'est elle qui se grave. Un prénom, une date ou un petit message — texte court conseillé pour rester bien lisible.", showIfField: "gravure", showIfValue: "oui" },
-      { key: "texte", label: "Texte à graver sur le cœur", placeholder: "Prénom, date, petit message…", maxLength: 20, showIfField: "gravure", showIfValue: "oui" },
-      { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "oui" },
+      { key: "note", type: "note", text: "Ce bracelet se porte tel quel, ou gravé. La grande médaille cœur est lisse : elle se grave sur ses deux faces, le recto (côté visible) et le verso. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure. Texte court conseillé pour rester bien lisible." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Prénom, date, petit message…", maxLength: 20, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Ex. 21.05.2026", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
       "/produits/bracelet-coeur-chaine-1.jpg",
@@ -1448,14 +1465,14 @@ export const products = [
     variants: [
       { id: "bracelet-coeur-chaine-dore", title: "Doré", price: 37.90, stockId: "bracelet-coeur-chaine-dore" },
     ],
-    descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
+    descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver au recto comme au verso</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
 <li><strong>Finition :</strong> étanche — résiste à l'eau et ne ternit pas</li>
 <li><strong>Poids :</strong> environ 18 g, une vraie chaîne qui se sent au poignet</li>
 <li><strong>Fermoir :</strong> T (toggle), simple à ouvrir et fermer d'une main</li>
-<li><strong>Gravure en option (+3 €) :</strong> prénom, date ou petit message au laser sur le grand cœur</li>
+<li><strong>Gravure en option :</strong> prénom, date ou petit message au laser sur le grand cœur — recto et/ou verso, 3 € par face gravée</li>
 </ul>
 <p>Il se porte seul pour son côté affirmé, ou superposé avec une chaîne plus fine.</p>`,
   },
@@ -1488,9 +1505,9 @@ export const products = [
       "/produits/bracelet-cordon-plaque-4.jpg",
     ],
     variants: [
-      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-noir-noir", image: "/produits/bracelet-cordon-plaque-1.jpg" },
-      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 37.90, stockId: "bracelet-cordon-plaque-noir-acier", image: "/produits/bracelet-cordon-plaque-2.jpg" },
-      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 37.90, stockId: "bracelet-cordon-plaque-gris", image: "/produits/bracelet-cordon-plaque-3.jpg" },
+      { id: "bracelet-cordon-plaque-noir-noir", title: "Noir / boucle noire", price: 21.90, stockId: "bracelet-cordon-plaque-noir-noir", image: "/produits/bracelet-cordon-plaque-1.jpg" },
+      { id: "bracelet-cordon-plaque-noir-acier", title: "Noir / boucle acier", price: 21.90, stockId: "bracelet-cordon-plaque-noir-acier", image: "/produits/bracelet-cordon-plaque-2.jpg" },
+      { id: "bracelet-cordon-plaque-gris", title: "Gris foncé / boucle noire", price: 21.90, stockId: "bracelet-cordon-plaque-gris", image: "/produits/bracelet-cordon-plaque-3.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet <strong>sobre et solide</strong> : un double cordon tressé et une <strong>plaque en acier</strong> qui se grave. Les <strong>nœuds coulissants</strong> le rendent réglable — il s'ajuste à tous les poignets et se met tout seul, sans fermoir à chercher.</p>
 <h3>Caractéristiques</h3>
@@ -1809,18 +1826,20 @@ export const products = [
     engravingPricing: { motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
+    // La face avant est incluse ; chaque face gravée en plus est payante (+3 €).
+    engravingPricing: { textKeys: ["face2", "face3", "face4"], textExtra: 3 },
     personalizationFields: [
       { key: "note", type: "note", text: "Gravure des 4 faces (texte) incluse. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
       { key: "face1", label: "Face avant — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
       { key: "motif1", type: "motif", label: "Face avant — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Face avant — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
-      { key: "face2", label: "Face arrière — texte", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
+      { key: "face2", label: "Face arrière — texte (+3 €)", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },
       { key: "motif2", type: "motif", label: "Face arrière — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos2", type: "select", label: "Face arrière — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
-      { key: "face3", label: "Face droite — texte", placeholder: "Ex. un mot, un message", maxLength: 23, optional: true },
+      { key: "face3", label: "Face droite — texte (+3 €)", placeholder: "Ex. un mot, un message", maxLength: 23, optional: true },
       { key: "motif3", type: "motif", label: "Face droite — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos3", type: "select", label: "Face droite — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
-      { key: "face4", label: "Face gauche — texte", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
+      { key: "face4", label: "Face gauche — texte (+3 €)", placeholder: "Ex. coordonnées GPS", maxLength: 23, optional: true },
       { key: "motif4", type: "motif", label: "Face gauche — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos4", type: "select", label: "Face gauche — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "sens", type: "select", label: "Sens du nom", optional: true, options: [
@@ -1858,9 +1877,11 @@ export const products = [
     category: "cristal", type: "Clé USB cristal 3D",
     tagline: "Une clé USB en cristal, votre photo gravée en 3D.",
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
+    // La gravure 3D de la photo est incluse ; le texte en plus est payant (+5 €).
+    engravingPricing: { textKeys: ["texte"], textExtra: 5 },
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", optional: true, text: "Photo nette et contrastée pour un beau rendu." },
-      { key: "texte", label: "Texte à graver (optionnel)", maxLength: 30, optional: true },
+      { key: "texte", label: "Texte à graver (+5 €)", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
     ],
     images: [
@@ -1955,17 +1976,19 @@ export const products = [
     personalizable: true, personalizationLabel: "Texte ou photo à graver",
     // La cliente choisit d'abord CE qu'elle veut graver : un texte ou une photo.
     // Les champs suivants s'affichent selon son choix (showIfField/showIfValue).
+    // 1re gravure incluse (recto ou photo) ; le dos gravé en plus est payant (+3 €).
+    engravingPricing: { textKeys: ["verso", "versoPhoto"], textExtra: 3 },
     personalizationFields: [
       { key: "gravure", type: "select", label: "Que voulez-vous faire graver ?", options: [
         { value: "texte", label: "Un texte" },
         { value: "photo", label: "Une photo" },
       ] },
       { key: "recto", label: "Texte à graver — recto", maxLength: 30, showIfField: "gravure", showIfValue: "texte" },
-      { key: "verso", label: "Texte à graver — verso", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "texte" },
+      { key: "verso", label: "Texte à graver — verso (+3 €)", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "texte" },
       { key: "police", type: "font", label: "Police de gravure", optional: true, showIfField: "gravure", showIfValue: "texte" },
       { key: "photo", type: "photo", label: "Photo à graver", showIfField: "gravure", showIfValue: "photo",
         text: "Une photo nette et bien éclairée donne le meilleur résultat. Les portraits rapprochés et les silhouettes se gravent très bien ; les scènes avec beaucoup de détails ou un arrière-plan chargé rendent moins bien sur une surface aussi petite." },
-      { key: "versoPhoto", label: "Texte au dos", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
+      { key: "versoPhoto", label: "Texte au dos (+3 €)", maxLength: 30, optional: true, showIfField: "gravure", showIfValue: "photo" },
       { key: "policePhoto", type: "font", label: "Police du texte au dos", optional: true, showIfField: "gravure", showIfValue: "photo" },
     ],
     images: ["/produits/piece_laiton.jpg"],
@@ -2258,6 +2281,8 @@ export const products = [
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
+    // 1re gravure (prénom) incluse ; chaque gravure en plus est payante (+3 €).
+    engravingPricing: { textKeys: ["date", "initiale"], textExtra: 3 },
     personalizationFields: [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
@@ -2267,8 +2292,8 @@ export const products = [
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
-      { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
-      { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17) et le monogramme (n°20 : initiale, nom, date), le texte est gravé dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
@@ -2368,6 +2393,8 @@ export const products = [
       { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
       { key: "texte", label: "Texte seul", sub: "prénom, date", fields: ["textenote"] },
     ],
+    // 1re gravure (prénom) incluse ; chaque gravure en plus est payante (+3 €).
+    engravingPricing: { textKeys: ["date", "initiale"], textExtra: 3 },
     personalizationFields: [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
         { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
@@ -2385,8 +2412,8 @@ export const products = [
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
       { key: "textenote", type: "note", text: "Écrivez simplement votre prénom / texte / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
       { key: "prenom", label: "Prénoms / nom / texte", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
-      { key: "date", label: "Date (option)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
-      { key: "initiale", label: "Initiale (monogramme)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Cadres et banderoles (n°18-19, 21-24) : écrivez votre prénom, il apparaît dans l'espace au milieu du cadre (déplaçable). Modèles avec un prénom déjà dessiné (n°14-17, 25) : votre prénom sera gravé dans ce style par l'atelier (il ne s'affiche pas en plus sur l'aperçu). La police ci-dessus sert au texte simple (couples n°1 à 13)." },
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
@@ -3438,14 +3465,16 @@ export const products = [
     cardImage: "/produits/plaque-naissance-duo.jpg", // carte « moitié-moitié » Fille/Garçon
     personalizable: true,
     personalizationLabel: "Prénom + date, poids, heure, taille (+ photo en option)",
+    // Prénom et date inclus (obligatoires) ; chaque mesure en plus +3 €, la photo +8 €.
+    engravingPricing: { textKeys: ["poids", "heure", "taille"], textExtra: 3, photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
       { key: "prenom", label: "Prénom du bébé", placeholder: "Ex : Marius", maxLength: 14 },
       { key: "date", label: "Date de naissance", placeholder: "Ex : 12 mars 2026", maxLength: 22 },
-      { key: "poids", label: "Poids", placeholder: "Ex : 3 kg 400", maxLength: 12, optional: true },
-      { key: "heure", label: "Heure de naissance", placeholder: "Ex : 8 h 43", maxLength: 10, optional: true },
-      { key: "taille", label: "Taille", placeholder: "Ex : 52 cm", maxLength: 10, optional: true },
+      { key: "poids", label: "Poids (+3 €)", placeholder: "Ex : 3 kg 400", maxLength: 12, optional: true },
+      { key: "heure", label: "Heure de naissance (+3 €)", placeholder: "Ex : 8 h 43", maxLength: 10, optional: true },
+      { key: "taille", label: "Taille (+3 €)", placeholder: "Ex : 52 cm", maxLength: 10, optional: true },
       { key: "police", type: "font", label: "Style d'écriture du prénom", optional: true },
-      { key: "photo", type: "photo", label: "Photo du bébé à graver", optional: true, text: "Facultatif : la photo est gravée discrètement sur le bois, à côté du prénom. Photo nette et bien éclairée." },
+      { key: "photo", type: "photo", label: "Photo du bébé à graver (+8 €)", optional: true, text: "Facultatif : la photo est gravée discrètement sur le bois, à côté du prénom. Photo nette et bien éclairée." },
       { key: "note-grav", type: "note", text: "La plaque est fabriquée à la commande et gravée au laser en France. Livrée avec son chevalet." },
     ],
     title: "Plaque de naissance personnalisée en bois — prénom, date, poids, taille",

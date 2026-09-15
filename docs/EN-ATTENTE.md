@@ -21,6 +21,10 @@
 | **Sophie Berardo** (#0C1CGL2Q) — verre whisky sur mesure | ✅ **ENVOYÉ le 12/09 à 07 h 13** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
 | **Rose** (`rose75013@icloud.com`) — verre à whisky, gravure en portugais | ✅ **ENVOYÉ le 14/09** par Messages clients (`send-client-email`), texte exact de `messagesPrets.js`. **Attendre ses réponses** (répartition des lignes, nb de verres, écriture, majuscules). 📌 Housekeeping : retirer l'entrée `rose-verre-whisky-portugais` de `src/lib/messagesPrets.js` au prochain déploiement (règle du fichier) | `src/lib/messagesPrets.js` |
 | **Sophie Berardo** (#0C1CGL2Q) | Accepte d'attendre — **cadeau promis dans le colis**, à ne pas oublier à l'expédition | Commande annotée |
+| **Valérine Zaghini** (`valerinezaghini@gmail.com`) — #0URL2JQA, flûtes « 50 ans d'amour · 26/09/1976 » | **Texte validé, PRÊT** dans Gestion → Clients → Messages clients. ⏰ **Date gravée 26/09** : on a dit « on fera notre maximum, ce sera juste » + suivi promis → **lui écrire avant le 26 si c'est intenable** | `src/lib/messagesPrets.js` |
+| **Cécilia Herrera** (`cecilia.herrera@hotmail.fr`) — #00CUYR2U, 2 lots de flûtes « 24.09.2026 » | **Texte validé, PRÊT** au même endroit. ⏰ **Date gravée 24/09**, même promesse de suivi → **lui écrire avant le 24 si c'est intenable** | `src/lib/messagesPrets.js` |
+| **Rose Catarino** (`rose75013@icloud.com`) — #1Z17IKQ8, verre à whisky portrait | **Texte validé, PRÊT** : une seule question — elle avait demandé le portugais, sa commande est en français. **Aperçu promis avant gravure** | `src/lib/messagesPrets.js` |
+| **Maëlys Georges** (`mae31340@gmail.com`) — #1GIP8RR1, verre à vin « Jean Michel » | **Texte validé, PRÊT** : réassurance + délai 3-4 semaines | `src/lib/messagesPrets.js` |
 | **Nina Beltran** (`beltran.030201@gmail.com`) | **Gravure offerte** promise sur un bijou + 5 € de cagnotte à créditer avant tout message | `CLAUDE.md` § Geste client |
 
 État des « réponses à valider » sur le site (vu le 09/09 via `/api/admin/pending-replies`) :
@@ -44,6 +48,7 @@ Duquennec périmée (déjà répondu le 07/09, elle n'a pas réécrit — à cla
 | **Verre à vin gravé** | `docs/maquettes/verre-vin-fiche.html` | 12,90 / 24,90 / 49,90 € ; styles 1-19 + lettre fleurie |
 | **Flûte à champagne** | `docs/maquettes/flute-champagne-fiche.html` | Clone du verre à vin, mêmes prix |
 | **Thème « L'Écrin »** (site + admin) | `docs/maquettes/theme-ecrin.html` | À appliquer seulement s'il dit « applique le nouveau thème » |
+| **Aperçu 3D des 9 bijoux à cœur** (14/09/2026) | `docs/maquettes/apercu3d-<slug>.html` — 9 pages autonomes, générées par `node --import ./tools/alias-register.mjs tools/maquettes/coeur3d.mjs` | **En attente de son retour.** Cœur recto/verso gravé en direct, couleur = métal, rotation au doigt, total avec +3 €/face. Deux fiches restent à l'ancien système (Cœur & Zircon, Femme Cœur). Quand il dit « applique » : reproduire dans le site (forme cœur à ajouter à `EngravePlate3D` ou nouveau composant), puis ces maquettes peuvent être supprimées. Ensuite prévus : pastille ronde (2 fiches), plaques de bracelet (6), puzzle (1). |
 | **Cristal 3D sur mesure** — section + configurateur | `docs/maquettes/cristal-surmesure-section.html`, `cristal-configurateur.html` | Proposer modèles prêts **et** photo perso, prix des blocs par taille |
 | Autres maquettes archivées (paiement, filtres boutique, emballages, supports téléphone, photophore, plaque naissance, porte-serviettes…) | `docs/maquettes/` | Non demandées pour l'instant |
 
@@ -143,6 +148,31 @@ Reste à faire quand il le redemande :
 - [ ] **Coder la règle dans `/api/checkout`** (repérer la 1re option de gravure payante du panier,
       la déduire à son prix réel, une seule par commande, catégories retenues).
 - [ ] Mettre les 3 e-mails au même texte, puis activer l'offre dans Gestion → Marketing.
+
+---
+
+## 4 ter. 💍 Bijoux — gravure (chantier du 14/09/2026)
+
+**État complet et à jour des 32 bijoux : `docs/etat-bijoux.md`** (fichier GÉNÉRÉ — régénérer avec
+`npm run etat-bijoux`). Il donne pour chaque bijou : prix du code, prix barré, prix payé, chaque
+champ de gravure avec son supplément, les emballages, le poids/la livraison, et les points à
+surveiller. Les règles et l'historique sont dans `CLAUDE.md` § « Gravure des bijoux ».
+
+Fait le 14/09 (à sa demande, fiche par fiche) :
+- [x] **Bracelet Homme Tressé** : la gravure ne dépend plus du nom de l'option (elle avait disparu
+      de la fiche après un renommage dans l'admin).
+- [x] **Bracelet cordon à plaque** : prix baissé à **17,91 €** (barré 19,90 €).
+- [x] **Collier Double Cœur** : les faux « Ligne 1/2/3 » remplacés par recto/verso, 3 € la face.
+- [x] **Bracelet Cœur T-bar** et **Bracelet Cœur grosse chaîne** : même gabarit recto/verso.
+
+En attente de SA décision :
+- [ ] **Quelle règle pour la 1re gravure ?** 13 bijoux la font payer, 19 l'incluent. Il a dit
+      « y a que le premier gravure gratuit après c'est payant », mais la règle plus ancienne du
+      `CLAUDE.md` §10 4bis dit « gravure TOUJOURS payante ». Les deux se contredisent → lui demander.
+- [ ] **6 bijoux + 2 objets déco** gardent le vieux système « Sans / Avec gravure » ou la case +3 € :
+      Gourmette, Bracelet Homme Acier & Silicone, Collier Cœur & Zircon, Bracelet cordon à plaque,
+      Bracelet homme cuir & plaque, Bracelet perles à pastille, Bougeoir Lotus, Support téléphone
+      ajouré. **Ne les corriger que s'il les désigne** (consigne du 14/09 : « les autres tu touches pas »).
 
 ---
 
