@@ -126,10 +126,33 @@
   que les alertes « retour en stock » : les envois passent par Clients → Messages clients.
 - ⚠️ Un favori n'apparaît dans Gestion que si la cliente était **connectée** : ceux gardés dans un
   navigateur anonyme restent invisibles jusqu'à sa connexion. C'est dit sur l'écran.
+- **♡ PARTOUT — APPLIQUÉ LE 15/09/2026** (« je clique à l'intérieur, la cliente elle peut pas
+  mettre j'aime… faut que ça soit partout ») : le cœur n'était QUE sur les vignettes
+  (`ProductCard`), donc absent de l'endroit qui décide — **la fiche produit**. Un seul composant,
+  **quatre formes** (prop `variant`) :
+  · `vignette` — pastille sur la photo (boutique, accueil, /offres, style-1/2/3, « Vous aimerez
+    aussi », **les 2 bandeaux de l'accueil**) ;
+  · `titre` — pastille à droite du **H1 de la fiche** (`.pd-titrerow`) ;
+  · `ligne` — lien discret **« ♡ Garder pour plus tard »** sous « Ajouter au panier » ;
+  · `mur` — petite pastille sur les tuiles du **mur de l'atelier**, visible quand la rangée s'arrête.
+  ⚠️ **PAS sur la grande photo de la fiche** : la barre de l'aperçu de gravure (`.ee-toolbar`,
+  verres/cristaux/modèles) occupe déjà les coins haut ET bas de `.gallery-main` — le cœur aurait été
+  recouvert. D'où la place à côté du titre.
+  **Tous les cœurs de la page s'allument ensemble** : chaque bouton écoute l'événement
+  `niv-wishlist-change` (avant, il ne lisait `localStorage` qu'au montage).
+- **GRILLES DES GUIDES « Idées & conseils »** : elles sont rendues en **un seul bloc HTML côté
+  serveur** (piège documenté : y mettre un composant React cassait l'hydratation des 9 pages).
+  Donc `grilleHtml` écrit un `<button data-fav-slug/-name/-image/-price>` et
+  **`src/components/FavorisHydrate.jsx`** (n'affiche rien) le branche sur la même mécanique.
+  **Ne pas y remettre de composant React.**
 - **Fichiers** : `src/lib/stock.js` (section favoris) · `src/app/api/favoris/route.js` ·
   `src/app/api/admin/favoris/route.js` · `src/app/favoris/page.jsx` ·
-  `src/components/WishlistButton.jsx` · `src/app/gestion/favoris/page.jsx` · NAV d'`AdminShell` ·
-  CSS `.fav-*` et `.fv-*` en fin de `globals.css`.
+  `src/components/WishlistButton.jsx` (4 formes) · `src/components/FavorisHydrate.jsx` ·
+  `src/components/ProductCard.jsx` · `src/components/ProductDetail.jsx` (titre + ligne) ·
+  `src/components/home/BandeauAccueil.jsx` (+ `prixBandeau().valeur`) ·
+  `src/components/home/MurAtelier.jsx` (+ `prixValeur` dans `src/app/page.jsx`) ·
+  `src/lib/guideHtml.js` · `src/app/idees/[slug]/page.jsx` · `src/app/gestion/favoris/page.jsx` ·
+  NAV d'`AdminShell` · CSS `.fav-*` et `.fv-*` en fin de `globals.css`.
 - **Pas encore fait, à proposer plus tard** : « prévenez-moi si le prix baisse » sur un favori
   (c'est là qu'est l'argent, mais il faut son accord — aucun e-mail automatique aujourd'hui).
 

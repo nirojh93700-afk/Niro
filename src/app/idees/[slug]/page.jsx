@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 import { getGuide, GUIDES, GUIDE_SLUGS, produitsEnPlus } from "@/lib/guides";
 import { getCatalog } from "@/lib/catalog";
 import { guideHtmlComplet, grilleHtml, repartirNouveaux } from "@/lib/guideHtml";
+import FavorisHydrate from "@/components/FavorisHydrate";
 
 export const dynamic = "force-dynamic";
 
@@ -121,6 +122,8 @@ export default async function GuidePage({ params }) {
           côté serveur. C'est ce qui garantit un HTML cohérent, sans coupure au
           milieu d'une section. */}
       <article className="guide" dangerouslySetInnerHTML={{ __html: contenu }} />
+      {/* ♡ branche les boutons favoris écrits dans le HTML des grilles. */}
+      <FavorisHydrate />
 
       <section className="guide-autres">
         <div className="container">

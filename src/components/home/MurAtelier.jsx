@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import WishlistButton from "@/components/WishlistButton";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
@@ -80,6 +81,8 @@ export default function MurAtelier({ items }) {
                         <b>{it.name}</b>
                         {it.prixTexte ? <i>{it.prixTexte}</i> : null}
                       </span>
+                      {/* ♡ favoris : apparaît quand la rangée s'arrête (survol/toucher). */}
+                      <WishlistButton slug={it.slug} name={it.name} image={it.image} price={it.prixValeur} variant="mur" />
                     </Link>
                   ))}
                 </div>

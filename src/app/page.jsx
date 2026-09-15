@@ -121,7 +121,7 @@ export default async function HomePage() {
   // Mur de l'atelier : TOUTES les créations visibles du catalogue.
   const murItems = avecImage.map((p) => {
     const prix = prixBandeau(p);
-    return { slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0], prixTexte: prix ? `${prix.des ? "dès " : ""}${prix.texte}` : "" };
+    return { slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0], prixTexte: prix ? `${prix.des ? "dès " : ""}${prix.texte}` : "", prixValeur: prix?.valeur };
   });
   // Pour la petite fenêtre flottante.
   const newItems = derniers.map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "" }));

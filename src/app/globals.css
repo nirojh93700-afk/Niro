@@ -3928,3 +3928,90 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .fv-cli { font-size: 0.84rem; color: var(--ink-soft, #6f675c); }
 .fv-plus { display: inline-block; margin-left: 6px; font: inherit; font-size: 0.8rem; background: none; border: 0; padding: 0; color: var(--gold-deep, #a98935); cursor: pointer; text-decoration: underline; }
 .fv-note { background: #fff8e6; border: 1px solid #f0d28a; border-radius: 12px; padding: 13px 15px; font-size: 0.9rem; color: #6b5312; margin-top: 16px; }
+
+/* ---------------------------------------------------------------------------
+   ♡ LE BOUTON FAVORIS — LE MÊME PARTOUT (15/09/2026)
+   Trois formes du même bouton (WishlistButton) : pastille sur une vignette,
+   pastille à côté du titre d'une fiche, lien discret sous « Ajouter au panier ».
+   --------------------------------------------------------------------------- */
+.fav-pastille {
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #b6b0a6;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.fav-pastille:hover { color: #d4506a; transform: scale(1.08); }
+.fav-pastille-on { color: #d4506a; }
+.fav-pastille-vignette {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+}
+.fav-pastille-titre {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  font-size: 1.35rem;
+  background: var(--cream, #fbf7ee);
+  border: 1px solid var(--line, #e7ded0);
+  box-shadow: none;
+}
+/* Titre de fiche + cœur sur la même ligne */
+.pd-titrerow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.pd-titrerow h1 { flex: 1 1 auto; margin-right: 0; }
+/* Lien discret sous le bouton d'ajout au panier */
+.fav-ligne {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--ink-soft, #6b5f4d);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line, #e7ded0);
+}
+.fav-ligne span { font-size: 1.05rem; color: #b6b0a6; line-height: 1; }
+.fav-ligne:hover { color: var(--ink, #1a1206); }
+.fav-ligne:hover span { color: #d4506a; }
+.fav-ligne-on { color: #a8425a; }
+.fav-ligne-on span { color: #d4506a; }
+/* Pastille sur une tuile du mur de l'atelier : apparaît avec le nom/prix,
+   quand la rangée s'arrête (survol ou toucher). */
+.fav-pastille-mur {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 3;
+  width: 28px;
+  height: 28px;
+  font-size: 0.95rem;
+  opacity: 0;
+  background: rgba(255, 253, 249, 0.92);
+  transition: opacity 0.25s ease, color 0.15s ease, transform 0.15s ease;
+}
+.mur-t:hover .fav-pastille-mur,
+.mur-t:focus-visible .fav-pastille-mur,
+.fav-pastille-mur.fav-pastille-on { opacity: 1; }
+/* Grilles des guides « Idées & conseils » : la photo porte la pastille. */
+.guide .card .ph { position: relative; }

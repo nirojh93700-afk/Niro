@@ -36,7 +36,7 @@ export default function ProductCard({ product }) {
         {product.soldOut && (
           <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, background: "#b23b3b", color: "#fff", fontSize: "0.7rem", fontWeight: 700, letterSpacing: ".3px", padding: "5px 11px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,.2)" }}>Rupture de stock</span>
         )}
-        <WishlistButton slug={product.slug} name={product.name} image={image} price={hasPromo ? sale : basePrice} />
+        <WishlistButton slug={product.slug} name={product.name} image={image} price={hasPromo ? sale : basePrice} variant="vignette" />
         {image ? (
           <Image
             src={image}

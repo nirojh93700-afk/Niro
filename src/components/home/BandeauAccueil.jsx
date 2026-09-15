@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatEuro } from "@/lib/format";
+import WishlistButton from "@/components/WishlistButton";
 
 // Bandeau horizontal de la page d'accueil (maquette « accueil-mur-tout-en-bas »
 // validée le 21/08/2026) : un en-tête à gauche, des vignettes carrées à droite.
@@ -18,7 +19,7 @@ export function prixBandeau(p) {
   const hasPromo = Number.isFinite(sale) && sale > 0 && sale < base;
   const distinct = new Set(prices).size > 1;
   const des = !hasPromo && distinct && base === Math.min(...prices);
-  return { texte: formatEuro(hasPromo ? sale : base), des };
+  return { texte: formatEuro(hasPromo ? sale : base), des, valeur: hasPromo ? sale : base };
 }
 
 export default function BandeauAccueil({ eyebrow, title, text, linkHref, linkLabel, items, cinq = false }) {
@@ -38,6 +39,8 @@ export default function BandeauAccueil({ eyebrow, title, text, linkHref, linkLab
               <span className="na-pic">
                 <Image src={it.image} alt={it.name} width={300} height={300} sizes="(max-width: 860px) 42vw, 260px" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 {it.badge ? <span className="na-tag">{it.badge}</span> : null}
+                {/* ♡ favoris — le même bouton que sur les vignettes de la boutique. */}
+                <WishlistButton slug={it.slug} name={it.name} image={it.image} price={it.prix?.valeur} variant="vignette" />
               </span>
               <span className="na-name">{it.name}</span>
               {it.prix ? (

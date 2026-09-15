@@ -46,6 +46,7 @@ import TextEngraveLayer from "./TextEngraveLayer";
 import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
 import TrustSection from "./TrustSection";
+import WishlistButton from "@/components/WishlistButton";
 import GobeletComposer from "./GobeletComposer";
 import GobeletPreview from "./GobeletPreview";
 
@@ -1352,7 +1353,18 @@ export default function ProductDetail({ product }) {
               {getCategoryLabel(product.category)}
             </Link>
           </div>
-          <h1>{product.heading || product.title}</h1>
+          <div className="pd-titrerow">
+            <h1>{product.heading || product.title}</h1>
+            {/* ♡ favoris : le même bouton que sur les vignettes, pour qu'on
+                puisse garder la création SANS quitter la fiche. */}
+            <WishlistButton
+              slug={product.slug}
+              name={product.name}
+              image={images[0]}
+              price={hasPromo ? salePrice : variant.price}
+              variant="titre"
+            />
+          </div>
           <p style={{ color: "var(--ink-soft)", marginTop: 0 }}>{product.tagline}</p>
           {product.rating?.count > 0 && (
             <button
@@ -1884,6 +1896,14 @@ export default function ProductDetail({ product }) {
               {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : "Ajouter au panier"}
             </button>
           </div>
+          {/* Pour celle qui hésite : garder la création sans l'acheter tout de suite. */}
+          <WishlistButton
+            slug={product.slug}
+            name={product.name}
+            image={images[0]}
+            price={hasPromo ? salePrice : variant.price}
+            variant="ligne"
+          />
           {/* Stock masqué pour les clientes : on n'affiche QUE l'alerte « épuisé »
              (le compteur exact reste visible dans la gestion). */}
           {soldOut && (

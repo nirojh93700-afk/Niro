@@ -36,6 +36,14 @@ function prixHtml(p) {
   return `${des ? "dès " : ""}${formatEuro(base)}`;
 }
 
+// Valeur numérique du prix affiché (promo comprise) — pour la liste des favoris.
+function prixValeur(p) {
+  const base = (p.variants || []).map((v) => v.price).filter((x) => Number.isFinite(x))[0];
+  if (!Number.isFinite(base)) return null;
+  const promo = p.salePrice;
+  return Number.isFinite(promo) && promo > 0 && promo < base ? promo : base;
+}
+
 // items = [{ produit, cta }] ; un produit absent du catalogue est déjà filtré en amont.
 export function grilleHtml(items) {
   const cartes = (items || [])
@@ -47,9 +55,19 @@ export function grilleHtml(items) {
         ? `<div class="ph"><img src="${echapper(image)}" alt="${alt}" loading="lazy"></div>`
         : `<div class="ph"></div>`;
       const prix = prixHtml(p);
+      // ♡ favoris : bouton écrit en HTML (la grille est rendue côté serveur en un
+      // seul bloc) puis branché par <FavorisHydrate/> sur la même mécanique que
+      // WishlistButton. Les data-… servent à remplir la liste du navigateur.
+      const coeur =
+        `<button type="button" class="fav-pastille fav-pastille-vignette"` +
+        ` data-fav-slug="${echapper(p.slug)}"` +
+        ` data-fav-name="${echapper(p.name || "")}"` +
+        ` data-fav-image="${echapper(image)}"` +
+        ` data-fav-price="${prixValeur(p) ?? ""}"` +
+        ` aria-label="Ajouter aux favoris" title="Ajouter aux favoris">\u2661</button>`;
       return (
         `<a class="card" href="/produit/${echapper(p.slug)}">` +
-        photo +
+        photo.replace("</div>", `${coeur}</div>`) +
         `<div class="body">` +
         `<div class="name">${echapper(p.name)}</div>` +
         (prix ? `<div class="price">${prix}</div>` : "") +

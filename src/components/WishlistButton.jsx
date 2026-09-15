@@ -14,15 +14,28 @@ const KEY = "niv-wishlist";
 //    qu'elle retrouve ses favoris sur tous ses appareils.
 // L'appel au serveur est « tiré et oublié » : s'il échoue ou si elle n'est pas
 // connectée, le cœur fonctionne quand même. Rien ne bloque l'interface.
+//
+// TROIS FORMES, LE MÊME BOUTON (15/09/2026 — « faut que ça soit partout ») :
+//  · variant="vignette" (défaut) : pastille posée sur la photo d'une vignette ;
+//  · variant="titre"    : pastille à côté du titre d'une fiche produit ;
+//  · variant="ligne"    : lien discret « ♡ Garder pour plus tard » sous le
+//    bouton d'ajout au panier.
+// Le cœur s'allume/s'éteint PARTOUT en même temps (événement
+// « niv-wishlist-change » écouté par tous les boutons de la page).
 // =============================================================================
-export default function WishlistButton({ slug, name, image, price }) {
+export default function WishlistButton({ slug, name, image, price, variant = "vignette" }) {
   const [fav, setFav] = useState(false);
 
   useEffect(() => {
-    try {
-      const l = JSON.parse(localStorage.getItem(KEY) || "[]");
-      setFav(l.some((x) => x.slug === slug));
-    } catch { /* ignore */ }
+    function relire() {
+      try {
+        const l = JSON.parse(localStorage.getItem(KEY) || "[]");
+        setFav(l.some((x) => x.slug === slug));
+      } catch { /* ignore */ }
+    }
+    relire();
+    window.addEventListener("niv-wishlist-change", relire);
+    return () => window.removeEventListener("niv-wishlist-change", relire);
   }, [slug]);
 
   function toggle(e) {
@@ -46,17 +59,26 @@ export default function WishlistButton({ slug, name, image, price }) {
     } catch { /* ignore */ }
   }
 
+  const label = fav ? "Retirer des favoris" : "Ajouter aux favoris";
+
+  // Lien discret sous le bouton « Ajouter au panier ».
+  if (variant === "ligne") {
+    return (
+      <button type="button" onClick={toggle} className={fav ? "fav-ligne fav-ligne-on" : "fav-ligne"} aria-label={label}>
+        <span aria-hidden="true">{fav ? "♥" : "♡"}</span>
+        {fav ? "Gardé dans mes favoris" : "Garder pour plus tard"}
+      </button>
+    );
+  }
+
+  // Pastille : sur la photo d'une vignette, ou à côté du titre d'une fiche.
   return (
     <button
+      type="button"
       onClick={toggle}
-      aria-label={fav ? "Retirer des favoris" : "Ajouter aux favoris"}
-      title={fav ? "Retirer des favoris" : "Ajouter aux favoris"}
-      style={{
-        position: "absolute", bottom: 10, right: 10, zIndex: 2,
-        background: "rgba(255,255,255,0.92)", border: 0, borderRadius: "50%",
-        width: 36, height: 36, cursor: "pointer", fontSize: "1.2rem", lineHeight: 1,
-        color: fav ? "#d4506a" : "#b6b0a6", boxShadow: "0 1px 5px rgba(0,0,0,0.12)",
-      }}
+      aria-label={label}
+      title={label}
+      className={`fav-pastille fav-pastille-${variant}${fav ? " fav-pastille-on" : ""}`}
     >
       {fav ? "♥" : "♡"}
     </button>
