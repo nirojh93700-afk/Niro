@@ -9,7 +9,7 @@ t'envoie rien, tu le mets à l'heure d'ouverture demain ». La programmation par
 
 - Contexte : Ludovic a répondu OUI le 16/09 à 13 h 43 (bouton « Répondre ») : 47 cl ok,
   prix ok, ornement laissé à notre choix (fin, contemporain, pas rustique), demande si
-  les verres arrivent **en coffret** (réponse du gérant : NON), et veut « le plus vite
+  les verres arrivent **en coffret** (réponse du gérant : pas de coffret par défaut, il peut ESSAYER d'en fournir un en SUPPLÉMENT payant — tarif à fixer par lui si Ludovic le demande), et veut « le plus vite
   possible » (aucune date à promettre — délai 3-4 semaines déjà annoncé et accepté).
 - Après ce mail : **le devis 43,80 €** (voir `noel-verre-vin-45cl.md`) reste à créer
   et envoyer sur ordre du gérant.
@@ -39,7 +39,7 @@ Pour l'ornement, nous vous avons préparé cinq propositions, dessinées sur le 
 Vous pouvez voir les propositions ici :
 https://nivcreation.fr/api/img/5KbYKEL8WHoKPvvmT9qW
 
-Pour répondre à votre question : les deux verres ne sont pas présentés en coffret. Ils vous arrivent soigneusement emballés et bien protégés pour le transport, chacun calé individuellement.
+Pour répondre à votre question : les deux verres ne sont pas présentés en coffret — ils vous arrivent soigneusement emballés et bien protégés pour le transport, chacun calé individuellement. Si vous tenez à un coffret cadeau, nous pouvons essayer de vous en proposer un, avec un supplément : dites-le nous dans votre réponse et nous l'ajouterons au devis avec son tarif.
 
 Côté délai, c'est bien noté : votre commande sera traitée dans son ordre d'arrivée dès le règlement, et nous ferons au plus court.
 
