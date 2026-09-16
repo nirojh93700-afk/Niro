@@ -299,9 +299,13 @@ export async function POST(req) {
       // Code ambassadeur (reusable) : utilisable plusieurs fois. Sinon : 1 fois
       // PAR PERSONNE — on contrôle sur l'e-mail saisi au panier (fiable), et à
       // défaut sur l'adresse internet (ancien comportement, garde-fou).
-      const blocked = pc && !pc.reusable && (promoEmail
+      // Code NOMINATIF : il n'est valable que pour l'adresse à laquelle il a été
+      // envoyé. C'est le garde-fou final — même si quelqu'un contourne le
+      // panier, la remise ne s'applique pas ici.
+      const mauvaiseAdresse = pc && pc.email && pc.email !== String(promoEmail || "").trim().toLowerCase();
+      const blocked = mauvaiseAdresse || (pc && !pc.reusable && (promoEmail
         ? await hasUsedCode(promoCode, { email: promoEmail })
-        : await hasUsedCode(promoCode, { ip: clientIp }));
+        : await hasUsedCode(promoCode, { ip: clientIp })));
       const expired = pc && pc.expiresAt && Date.now() > pc.expiresAt;
       if (pc && pc.value > 0 && !blocked && !expired) {
         appliedCode = promoCode;

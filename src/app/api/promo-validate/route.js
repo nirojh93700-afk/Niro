@@ -31,6 +31,14 @@ export async function POST(req) {
   // vérification par adresse internet bloquait à tort deux personnes d'un même
   // foyer, et laissait passer un simple changement de réseau (wifi → 4G).
   // L'adresse internet ne sert plus que de garde-fou si aucun e-mail n'est donné.
+  // CODE NOMINATIF : réservé à UNE adresse (offre gravure offerte). Une autre
+  // adresse est refusée → partager son code ne sert à rien.
+  if (pc.email) {
+    const email = String(body?.email || "").trim().toLowerCase();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) return Response.json({ valid: false, needEmail: true });
+    if (email !== pc.email) return Response.json({ valid: false, wrongEmail: true });
+  }
   if (!pc.reusable) {
     const email = String(body?.email || "").trim().toLowerCase();
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

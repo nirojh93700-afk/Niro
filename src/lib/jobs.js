@@ -206,21 +206,61 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   if (dryRun) return { actif: true, eligibles: cibles.length, envoyes: 0, attente, deja };
   if (!cibles.length) return { actif: true, eligibles: 0, envoyes: 0, attente, deja };
 
-  // Le code doit EXISTER pour de vrai (règle : aucune promesse qui ne marche
-  // pas au paiement). On ne touche pas à un code déjà réglé à la main.
-  const code = String(o.code || "GRAVUREOFFERTE").toUpperCase();
-  try {
-    const codes = await getPromoCodes();
-    if (!codes[code]) await setPromoCode(code, { type: "fixed", value: Number(o.montant) || 3, reusable: true });
-  } catch { /* ne doit jamais bloquer l'envoi */ }
+  // ⛔ UN CODE PAR CLIENTE, UTILISABLE UNE SEULE FOIS (demande du gérant,
+  // 17/09/2026 : « il faut que les clients utilisent qu'une fois le code », puis
+  // « on fait un code par client »).
+  //
+  // Avant : UN code commun (GRAVUREOFFERTE) créé en `reusable: true` → illimité
+  // et PARTAGEABLE. Une inscrite pouvait le donner à qui elle voulait, autant de
+  // fois qu'elle voulait. Maintenant, chaque cliente reçoit SON code —
+  // GRAVURE-A7K2, GRAVURE-M4P9… — avec trois verrous :
+  //   1. `email` : le code n'est valable QUE pour l'adresse à laquelle il est
+  //      envoyé → le partager ne sert à rien (refusé au panier ET au paiement) ;
+  //   2. `reusable: false` : une seule utilisation, contrôlée sur l'e-mail ;
+  //   3. `days` : le code MEURT à la date de fin de l'offre.
+  // Les trois sont vérifiés CÔTÉ SERVEUR (`/api/promo-validate` et
+  // `/api/checkout`), donc incontournables depuis le navigateur.
+  //
+  // Le préfixe reste réglable dans l'écran de l'offre (`o.code`). Le code est
+  // gardé à côté de l'adresse (`markOffreGravureSent`) pour pouvoir le
+  // retrouver si une cliente écrit « mon code ne marche pas ».
+  const prefixe = String(o.code || "GRAVUREOFFERTE").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 20) || "GRAVURE";
+  const finTs = o.end ? Date.parse(`${o.end}T23:59:59`) : 0;
+  const jours = finTs ? Math.max(1, Math.ceil((finTs - Date.now()) / 86400000)) : 0;
+  // Alphabet sans 0/O ni 1/I/L : une cliente doit pouvoir recopier son code sans
+  // se tromper si elle le lit au lieu de cliquer.
+  const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  let dejaPris = {};
+  try { dejaPris = await getPromoCodes(); } catch { dejaPris = {}; }
+
+  function nouveauCode() {
+    for (let essai = 0; essai < 40; essai++) {
+      let suffixe = "";
+      for (let i = 0; i < 5; i++) suffixe += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+      const c = `${prefixe}-${suffixe}`;
+      if (!dejaPris[c]) { dejaPris[c] = true; return c; }
+    }
+    return "";
+  }
 
   let envoyes = 0;
   const faits = [];
   for (const c of cibles) {
     try {
+      const code = nouveauCode();
+      if (!code) continue; // on ne promet JAMAIS un code qui n'existe pas
+      // Le code doit EXISTER pour de vrai AVANT l'envoi (règle : aucune promesse
+      // qui ne marche pas au paiement).
+      await setPromoCode(code, {
+        type: "fixed",
+        value: Number(o.montant) || 3,
+        reusable: false,  // une seule utilisation
+        email: c.email,   // réservé à cette adresse
+        days: jours,      // 0 = pas d'expiration
+      });
       const { subject, html } = offreGravureEmail({ date: c.date, code, fin: o.end, cadeau: o.cadeau !== false });
       const r = await sendClientMail({ to: c.email, subject, html });
-      if (r?.ok) { envoyes++; faits.push(c.email); }
+      if (r?.ok) { envoyes++; faits.push({ email: c.email, code }); }
     } catch { /* on continue avec les suivantes */ }
   }
   try { if (faits.length) await markOffreGravureSent(faits); } catch { /* ignore */ }

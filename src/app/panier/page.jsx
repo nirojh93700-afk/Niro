@@ -136,6 +136,7 @@ export default function CartPage() {
       const d = await res.json();
       if (d.valid) { setPromoOk(true); setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`); }
       else if (d.needEmail) setPromoMsg("Entrez votre e-mail pour utiliser ce code.");
+      else if (d.wrongEmail) setPromoMsg("Ce code est réservé à l'adresse e-mail à laquelle il a été envoyé.");
       else if (d.used) setPromoMsg("Ce code a déjà été utilisé avec cette adresse e-mail.");
       else if (d.expired) setPromoMsg("Ce code a expiré.");
       else setPromoMsg("Code invalide.");

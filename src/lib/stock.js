@@ -1296,6 +1296,13 @@ export async function setPromoCode(code, def) {
   data.promoCodes[c] = {
     type: def?.type === "fixed" ? "fixed" : "percent",
     value: Math.max(0, Number(def?.value) || 0),
+    // CODE NOMINATIF (17/09/2026, demande du gérant « un code par client ») :
+    // si `email` est renseigné, le code ne fonctionne QUE pour cette adresse.
+    // Le partager ne sert à rien : une autre adresse est refusée au panier ET
+    // au paiement. Vide = code ouvert (comportement d'avant, inchangé).
+    email: def?.email != null
+      ? String(def.email).trim().toLowerCase().slice(0, 120)
+      : (prev.email || ""),
     // Affiliation / ambassadeur (optionnel) :
     ambassador: def?.ambassador != null ? String(def.ambassador).slice(0, 60) : (prev.ambassador || ""),
     commission: def?.commission != null ? Math.max(0, Math.min(100, Number(def.commission) || 0)) : (prev.commission || 0),
@@ -1918,15 +1925,20 @@ export async function getOffreGravureSent() {
   return data.offreGravure || {};
 }
 
+// Accepte une liste d'adresses, OU une liste d'objets {email, code} depuis que
+// chaque cliente reçoit SON code nominatif (17/09/2026) — on garde le code à
+// côté de son adresse pour pouvoir le retrouver si elle écrit « mon code ne
+// marche pas ». Ancien format (email -> horodatage) toujours lu sans souci.
 export async function markOffreGravureSent(emails) {
   const list = (Array.isArray(emails) ? emails : [emails])
-    .map((e) => String(e || "").trim().toLowerCase())
-    .filter(Boolean);
+    .map((x) => (typeof x === "string" ? { email: x, code: "" } : x || {}))
+    .map((x) => ({ email: String(x.email || "").trim().toLowerCase(), code: String(x.code || "").trim().toUpperCase() }))
+    .filter((x) => x.email);
   if (!list.length) return 0;
   const data = await getCatalogRaw(true);
   data.offreGravure = data.offreGravure || {};
   const now = Date.now();
-  for (const e of list) data.offreGravure[e] = now;
+  for (const x of list) data.offreGravure[x.email] = x.code ? { at: now, code: x.code } : now;
   await persistCatalog(data, ["offreGravure"]);
   return list.length;
 }

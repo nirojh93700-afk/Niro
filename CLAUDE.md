@@ -282,9 +282,34 @@ ne descend jamais sous zéro.
   offreGravureEmail) · `runOffreGravureJob({dryRun})` dans `src/lib/jobs.js` · appelée par le
   **heartbeat du site** (1×/jour, verrou `claimJob("offreGravure")`) · API `/api/admin/offre-gravure`
   (GET état + comptes, POST `{action:"send"}`) · page `/gestion/offre-gravure` · CSS `.og-*`.
-- **Le code promo est créé pour de vrai** au premier envoi (`setPromoCode`, type `fixed`,
-  montant = le supplément gravure, réutilisable) et **jamais écrasé s'il existe déjà** → le gérant
-  peut le créer à la main dans Promotions pour le limiter aux bijoux/cristaux/cadeaux.
+- ✅ **UN CODE PAR CLIENTE, UNE SEULE UTILISATION — APPLIQUÉ LE 17/09/2026** (demande du gérant :
+  « il faut que les clients utilisent qu'une fois le code », puis « on fait un code par client »).
+  **Avant, c'était un trou** : un seul code commun créé en `reusable: true` → illimité et
+  **partageable** (une inscrite pouvait le donner à qui elle voulait). Maintenant chaque cliente
+  reçoit **SON** code (`GRAVURE-A7K2`, `GRAVURE-M4P9`…) avec **trois verrous**, tous vérifiés
+  **côté serveur** (`/api/promo-validate` ET `/api/checkout`) donc incontournables :
+  1. **`email`** (nouveau champ de `setPromoCode`) — le code ne marche QUE pour l'adresse à
+     laquelle il a été envoyé. Autre adresse → `wrongEmail`, message cliente « Ce code est réservé
+     à l'adresse e-mail à laquelle il a été envoyé ». **Adresse vide = bloqué** (pas de remise par
+     défaut). Un code sans `email` reste OUVERT (ambassadeurs inchangés).
+  2. **`reusable: false`** — une seule utilisation, mémorisée sur l'e-mail (`recordCodeUsage` au
+     webhook Stripe, + l'e-mail saisi au panier, pour qu'en changer au paiement ne serve à rien).
+  3. **`days`** calculé sur la **date de fin de l'offre** → le code MEURT avec l'offre, même s'il fuite.
+  · Codes générés dans `runOffreGravureJob` (`src/lib/jobs.js`) : préfixe réglable (`o.code`) +
+    5 caractères tirés d'un alphabet **sans 0/O/1/I/L** (recopiable à la main), unicité vérifiée
+    contre les codes existants, et **le code est créé AVANT l'envoi** (jamais de promesse creuse ;
+    si la génération échoue, la cliente est simplement sautée).
+  · Le code est gardé **à côté de l'adresse** (`markOffreGravureSent` accepte `{email, code}`,
+    section `offreGravure` = `{email: {at, code}}`, ancien format `{email: ts}` toujours lu) → on
+    retrouve son code si elle écrit « mon code ne marche pas ».
+  · L'écran Promotions ne passe PAS `email` à `setPromoCode` → ré-enregistrer un code nominatif à
+    la main **conserve** son verrou (pas de déverrouillage accidentel).
+  · ⚠️ **Conséquence à connaître** : la liste de Promotions va se remplir d'un code par cliente
+    servie. C'est normal. Un nettoyage des codes expirés reste à faire si ça gêne.
+  · 17 vérifications de logique passées au vert (unicité sur 500 codes, majuscules/espaces
+    normalisés, mauvaise adresse refusée au panier ET au paiement, expiration calée sur la fin).
+- **Le code promo est créé pour de vrai** avant l'envoi (règle : aucune promesse qui ne marche pas
+  au paiement) et **un code déjà réglé à la main n'est jamais écrasé**.
 - **⚠️ LE SUPPLÉMENT DE GRAVURE N'EST PAS TOUJOURS DE 3 € (remarque du gérant, 11/09/2026)** —
   relevé dans `products.js` : `collier-plaque-acier` recto **inclus** + verso **+5 €** + photo
   **+8 €** (`perExtraPage`/`photoSurcharge`) · `collier-medaillon-livre` **3 pages × 5 €** (15 €) ·
