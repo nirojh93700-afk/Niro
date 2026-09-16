@@ -693,6 +693,8 @@ et surtout **comment ajouter un produit correctement et le publier**.
 | `src/app/boutique/page.jsx` | Catalogue + filtres catégories/sous-catégories |
 | `docs/PERSONNALISATION-GRAVURE-3D.md` | **Guide gravure + aperçu 3D** (motifs, 3D, recette nouveau produit) |
 | `docs/couts-cristal-alibaba.md` | **Coûts d'achat gamme CRISTAL 3D** (reçu Alibaba avr. 2026 : coût rendu par taille, transport compris) |
+| `docs/prix-marche.md` | **Relevé du marché produit par produit** (ce que font les autres sites) + ce qui a été relevé ou laissé tel quel |
+| `docs/prix-historique.md` | **Les prix d'AVANT chaque hausse**, pour pouvoir revenir en arrière. À COMPLÉTER à chaque changement de prix |
 | `docs/cristal-3d-plan.md` | **DOSSIER Cristal 3D** (plan de vente : achats, prix concurrents, prix conseillés, mise en page fiche, marketing, plan d'action — en cours, gravure à trancher) |
 
 ## 3. Schéma d'un produit (`src/lib/products.js`)

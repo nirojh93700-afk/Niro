@@ -1,5 +1,8 @@
 # 💶 PRIX — RELEVÉ DU MARCHÉ, PRODUIT PAR PRODUIT (16/09/2026)
 
+> 🗂️ **Les prix d'AVANT chaque hausse sont conservés dans `docs/prix-historique.md`**
+> (avec la façon exacte de les remettre). À tenir à jour à chaque changement de prix.
+
 > Fait à la demande du gérant : « regarde partout sur Internet, les autres sites, ils
 > font combien les mêmes verres ? », puis « pour l'autre qui a déjà en ligne, on part
 > aussi par rapport aux autres sites ».
