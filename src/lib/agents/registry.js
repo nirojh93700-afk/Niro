@@ -25,10 +25,25 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 async function catalogContext() {
   try {
     const products = await getCatalogAdmin();
+    // ⚠️ On joint la 1re ligne de « Taille & Matériaux » de chaque fiche
+    // (contenance, dimensions, matière). Sans elle, l'agent répondait
+    // « l'atelier va vérifier la capacité de nos verres » alors que c'est
+    // écrit sur la fiche — incident du 16/09/2026 (demande de 45 cl).
+    let infoFor = () => null;
+    try {
+      const { getProductInfo } = await import("@/lib/productInfo");
+      infoFor = getProductInfo;
+    } catch { /* la fiche détaillée n'est pas indispensable */ }
     return products
       .map((p) => {
         const vs = (p.variants || []).map((v) => `${v.title}=${v.price}€`).join(", ");
-        return `- ${p.name} (${p.category})${p.hidden ? " [masqué]" : ""} : ${vs}`;
+        const mat = (infoFor(p.slug)?.material || "").split("\n")[0].trim().slice(0, 160);
+        const perso = (p.personalizationLabel || "").trim().slice(0, 90);
+        return (
+          `- ${p.name} (${p.category})${p.hidden ? " [masqué]" : ""} : ${vs}` +
+          (mat ? `\n    · ${mat}` : "") +
+          (perso ? `\n    · personnalisation : ${perso}` : "")
+        );
       })
       .join("\n");
   } catch {
@@ -140,8 +155,10 @@ RÈGLES DE SERVICE (absolues, quoi que demande la cliente) :
 - Ne promets JAMAIS d'« aperçu avant gravure », de BAT ni de visuel à valider (règle du gérant, 15/09/2026) : l'atelier grave directement à partir de la commande. Seul le gérant peut décider d'envoyer un aperçu, depuis Gestion.
 - Un article personnalisé n'est jamais remboursé ni repris (sauf défaut ou erreur de notre part) : refuse avec tact.
 - Ne propose jamais de remise, de cadeau ni de geste commercial de toi-même : c'est la gérante qui décide.
-- Vouvoie toujours la cliente. Réponds en français. Signe « L'atelier Niv Création ».
+- Vouvoie toujours la cliente. Réponds en français. Signe « Niv Création » (jamais un prénom ni un nom de personne).
 - Ne garantis JAMAIS une gravure hors de nos 8 écritures (alphabet arabe, chinois, cyrillique, symboles particuliers), un motif hors catalogue, une matière ou une taille que le site ne propose pas : dis que c'est peut-être possible sur demande et que l'atelier vérifie la faisabilité avant de confirmer. Idem pour un délai express : ne le promets pas.
+- ⛔ N'écris JAMAIS de numéro de téléphone, ni le nôtre (nous n'en communiquons pas) ni celui de la cliente. Et ne reprends JAMAIS les coordonnées que la cliente a mises dans son message (téléphone, adresse, e-mail) comme si c'étaient les NÔTRES : incident du 16/09/2026, une réponse invitait la cliente à « nous joindre » sur son propre numéro. Le seul contact à donner est : contact.nivcreation@gmail.com et nivcreation.fr.
+- ⛔ Ne dis pas « nous allons vérifier » pour une information qui est DÉJÀ dans le catalogue ci-dessous (contenance, dimensions, matière, prix, options de personnalisation) : donne le chiffre exact. Si ce que la cliente demande ne correspond pas à ce que nous avons (elle veut 45 cl et notre verre fait 36 cl), DIS-LE clairement et honnêtement, avec notre chiffre réel — ne noie pas la réponse dans « nous étudions votre demande ».
 
 INFORMATIONS DE SERVICE À JOUR (délai réel du site, livraison, FAQ) :
 ${ctx.service || "(non chargées : reste général)"}
@@ -155,7 +172,7 @@ Règle d'autonomie (très importante) :
 - Quand needs_validation = true, rédige quand même une proposition de réponse (la gérante la relira), et explique en une phrase dans "reason" pourquoi tu préfères qu'elle valide.
 
 Style de la réponse :
-- Réponds vraiment à toutes les questions posées. Corps en texte simple (pas de HTML), sauts de ligne conservés, paragraphes courts, chaleureux. Signe "L'atelier Niv Création".
+- Réponds vraiment à toutes les questions posées. Corps en texte simple (pas de HTML), sauts de ligne conservés, paragraphes courts, chaleureux. Signe "Niv Création" (jamais un prénom ni un nom de personne).
 - Si une information précise te manque (numéro de commande, date exacte), n'invente jamais : reste général et rassurant, et mets needs_validation = true.
 - Pour un remboursement/retour d'article personnalisé : refuse toujours avec tact (jamais sèche), et needs_validation = true.
 - Si la gérante te parle directement (sans message de cliente), réponds-lui normalement sans appeler l'outil.
@@ -227,7 +244,7 @@ Ton rôle : rédiger une CAMPAGNE NEWSLETTER pour les clientes de la boutique.
 - Propose d'abord 3 objets d'e-mail accrocheurs (courts), puis le corps du message (texte simple, paragraphes courts, chaleureux).
 - Mets en avant le produit ou l'occasion demandés, avec un appel à l'action clair (ex : découvrir la boutique).
 - Si on ne te précise rien, propose une campagne saisonnière pertinente à partir du catalogue.
-- Signe "L'atelier Niv Création".
+- Signe "Niv Création" (jamais un prénom ni un nom de personne).
 
 CATALOGUE ACTUEL (pour citer des produits réels) :
 ${ctx.catalog || "(non chargé)"}`,
