@@ -7,7 +7,7 @@ import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
 import { saveOrderSpec } from "@/lib/firebase";
 import { vacationActive } from "@/lib/vacation";
-import { engravingExtra } from "@/lib/engravingPrice";
+import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
 
 // Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
@@ -157,6 +157,9 @@ export async function POST(req) {
   let allColisThreshFree = true;
   let colisThresh = Infinity;
   const boughtVariants = []; // pour décrémenter le stock après paiement
+  // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
+  // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
+  let gravureOfferte = 0;
 
   for (const item of items) {
     const match = variantIndex.get(item.variantId);
@@ -186,6 +189,12 @@ export async function POST(req) {
       }, { amount: 0, weight: 0, stockIds: [] });
     } else {
       extra = engravingExtra(product, item.fields || {}, variant.id);
+    }
+    // Offre « gravure offerte » : on retient la première pièce du panier qui
+    // porte une gravure payante, et le prix d'UNE gravure sur cette pièce.
+    if (!gravureOfferte) {
+      const champs = (Array.isArray(item.perGlass) && item.perGlass.length > 0) ? (item.perGlass[0] || {}) : (item.fields || {});
+      gravureOfferte = prixPremiereGravure(product, champs, variant.id) || 0;
     }
     // Recalcul de confiance de l'emballage choisi (prix depuis le catalogue serveur).
     const pkg = packagingExtra(product, item.packaging || []);
@@ -307,7 +316,22 @@ export async function POST(req) {
         ? await hasUsedCode(promoCode, { email: promoEmail })
         : await hasUsedCode(promoCode, { ip: clientIp })));
       const expired = pc && pc.expiresAt && Date.now() > pc.expiresAt;
-      if (pc && pc.value > 0 && !blocked && !expired) {
+      if (pc && pc.kind === "gravure") {
+        // OFFRE « GRAVURE OFFERTE » (règle du gérant, 11/09 puis 17/09/2026) :
+        // la remise n'est pas un montant fixe mais le PRIX RÉEL de la première
+        // gravure payante du panier — 3 € sur un bijou, 5 € sur un cristal…,
+        // une seule par commande, sur n'importe quel produit. Sans gravure
+        // payante dans le panier, le code ne déduit rien (et le panier l'a
+        // déjà dit à la cliente).
+        if (!blocked && !expired && gravureOfferte > 0) {
+          appliedCode = promoCode;
+          const coupon = await stripe.coupons.create({
+            amount_off: Math.round(gravureOfferte * 100), currency: "eur", duration: "once",
+            name: `Gravure offerte (${promoCode})`,
+          });
+          discounts = [{ coupon: coupon.id }];
+        }
+      } else if (pc && pc.value > 0 && !blocked && !expired) {
         appliedCode = promoCode;
         const coupon = await stripe.coupons.create(
           pc.type === "fixed"

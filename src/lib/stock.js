@@ -1303,6 +1303,11 @@ export async function setPromoCode(code, def) {
     email: def?.email != null
       ? String(def.email).trim().toLowerCase().slice(0, 120)
       : (prev.email || ""),
+    // NATURE du code : "gravure" = offre « gravure offerte » (17/09/2026). Au
+    // paiement, la remise n'est PAS `value` mais le PRIX RÉEL de la première
+    // gravure du panier (3 €, 5 €, 7 €… selon la pièce). `value` ne sert qu'à
+    // l'affichage de secours. Vide = code classique (montant fixe ou %).
+    kind: def?.kind != null ? String(def.kind).slice(0, 20) : (prev.kind || ""),
     // Affiliation / ambassadeur (optionnel) :
     ambassador: def?.ambassador != null ? String(def.ambassador).slice(0, 60) : (prev.ambassador || ""),
     commission: def?.commission != null ? Math.max(0, Math.min(100, Number(def.commission) || 0)) : (prev.commission || 0),
@@ -1424,6 +1429,29 @@ export async function recordCodeUsage(code, { ip, email } = {}) {
   if (email) { const e = String(email).toLowerCase(); if (!u.emails.includes(e)) u.emails.push(e); }
   data.codeUsage[c] = u;
   await persistCatalog(data);
+}
+
+// NETTOYAGE DES CODES NOMINATIFS MORTS (demande du gérant, 17/09/2026 : « fais le
+// nettoyage des codes expirés »). Ne touche QU'AUX codes qui portent une adresse
+// (un code par cliente) et qui sont soit EXPIRÉS, soit DÉJÀ UTILISÉS par cette
+// adresse. Les codes ouverts (BIENVENUE10, ambassadeurs, codes créés à la main)
+// ne sont jamais touchés — ils portent des statistiques et des commissions.
+// Lancé par le battement quotidien de l'offre et par le bouton de l'écran.
+export async function purgeExpiredPromoCodes({ now = Date.now() } = {}) {
+  const data = await getCatalogRaw();
+  const codes = data.promoCodes || {};
+  const usage = data.codeUsage || {};
+  const morts = [];
+  for (const [c, def] of Object.entries(codes)) {
+    if (!def || !def.email) continue; // pas nominatif → on ne touche pas
+    const expire = Boolean(def.expiresAt && now > def.expiresAt);
+    const utilise = (usage[c]?.emails || []).includes(def.email);
+    if (expire || utilise) morts.push(c);
+  }
+  if (!morts.length) return { supprimes: 0, codes: [] };
+  for (const c of morts) delete data.promoCodes[c];
+  await persistCatalog(data);
+  return { supprimes: morts.length, codes: morts };
 }
 
 export async function deletePromoCode(code) {

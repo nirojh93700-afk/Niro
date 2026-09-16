@@ -8,6 +8,7 @@ import {
   getScheduledEmails, markScheduledSent, getSettings, hasAutoSent, markAutoSent,
   listCagnottes, markCagnotteReminded, expireCagnotte, getBirthdays, setPromoCode,
   getSubscribersDetailed, getPromoCodes, getOffreGravureSent, markOffreGravureSent,
+  purgeExpiredPromoCodes, getFavoris,
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
@@ -204,7 +205,30 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   }
 
   if (dryRun) return { actif: true, eligibles: cibles.length, envoyes: 0, attente, deja };
-  if (!cibles.length) return { actif: true, eligibles: 0, envoyes: 0, attente, deja };
+
+  // Nettoyage des codes nominatifs morts (expirés ou déjà utilisés) — à chaque
+  // passage réel, pour que la liste de Promotions ne s'encombre pas.
+  let purges = 0;
+  try { purges = (await purgeExpiredPromoCodes()).supprimes || 0; } catch { /* jamais bloquant */ }
+
+  if (!cibles.length) return { actif: true, eligibles: 0, envoyes: 0, attente, deja, purges };
+
+  // Ses pièces : les FAVORIS de la cliente si elle en a (nom, photo, prix lus
+  // dans le catalogue en direct → jamais un vieux prix ni un lien mort), sinon
+  // trois idées gravables du catalogue. C'est ce qui rend l'e-mail vraiment
+  // adapté à chacune (demande du gérant, 17/09/2026).
+  let catalogue = [];
+  try { catalogue = await (await import("@/lib/catalog")).getCatalog(); } catch { catalogue = []; }
+  const parSlug = new Map(catalogue.map((p) => [p.slug, p]));
+  const { formatEuro } = await import("@/lib/format").catch(() => ({ formatEuro: (n) => `${n} €` }));
+  const versPiece = (p) => {
+    if (!p || p.hidden || !p.variants?.length) return null;
+    const v = p.variants[0];
+    const prix = typeof p.salePrice === "number" && p.salePrice < v.price ? p.salePrice : v.price;
+    return { slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "", prix: prix ? formatEuro(prix) : "" };
+  };
+  const IDEES = ["collier-plaque-acier", "cristal-photo-3d-vertical", "porte-cles-cuir-a-graver", "verre-a-vin-grave"];
+  const idees = IDEES.map((sl) => versPiece(parSlug.get(sl))).filter(Boolean).slice(0, 3);
 
   // ⛔ UN CODE PAR CLIENTE, UTILISABLE UNE SEULE FOIS (demande du gérant,
   // 17/09/2026 : « il faut que les clients utilisent qu'une fois le code », puis
@@ -253,16 +277,25 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
       // qui ne marche pas au paiement).
       await setPromoCode(code, {
         type: "fixed",
-        value: Number(o.montant) || 3,
+        value: Number(o.montant) || 3, // affichage de secours seulement
+        kind: "gravure",  // au paiement : prix RÉEL de la 1re gravure du panier
         reusable: false,  // une seule utilisation
         email: c.email,   // réservé à cette adresse
         days: jours,      // 0 = pas d'expiration
       });
-      const { subject, html } = offreGravureEmail({ date: c.date, code, fin: o.end, cadeau: o.cadeau !== false });
+      // Ses favoris (si elle s'est connectée un jour), sinon les idées.
+      let pieces = [], favoris = false;
+      try {
+        const slugs = await getFavoris(c.email);
+        pieces = slugs.map((sl) => versPiece(parSlug.get(sl))).filter(Boolean).slice(0, 3);
+        favoris = pieces.length > 0;
+      } catch { pieces = []; }
+      if (!pieces.length) pieces = idees;
+      const { subject, html } = offreGravureEmail({ date: c.date, code, fin: o.end, cadeau: o.cadeau !== false, pieces, favoris });
       const r = await sendClientMail({ to: c.email, subject, html });
       if (r?.ok) { envoyes++; faits.push({ email: c.email, code }); }
     } catch { /* on continue avec les suivantes */ }
   }
   try { if (faits.length) await markOffreGravureSent(faits); } catch { /* ignore */ }
-  return { actif: true, eligibles: cibles.length, envoyes, attente, deja };
+  return { actif: true, eligibles: cibles.length, envoyes, attente, deja, purges };
 }

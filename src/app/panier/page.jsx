@@ -128,13 +128,20 @@ export default function CartPage() {
     if (!code) return;
     const email = promoEmail.trim().toLowerCase();
     try {
+      // Les articles sont envoyés pour l'offre « gravure offerte » : la remise
+      // annoncée est le prix réel de la première gravure du panier.
+      const articles = items.map((i) => ({
+        variantId: i.variantId, quantity: i.quantity, fields: i.fields,
+        perGlass: Array.isArray(i.perGlass) ? i.perGlass : undefined,
+      }));
       const res = await fetch("/api/promo-validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, email }),
+        body: JSON.stringify({ code, email, items: articles }),
       });
       const d = await res.json();
       if (d.valid) { setPromoOk(true); setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`); }
+      else if (d.noEngraving) setPromoMsg("Ce code offre une gravure : ajoutez un texte à graver sur une pièce de votre panier pour en profiter.");
       else if (d.needEmail) setPromoMsg("Entrez votre e-mail pour utiliser ce code.");
       else if (d.wrongEmail) setPromoMsg("Ce code est réservé à l'adresse e-mail à laquelle il a été envoyé.");
       else if (d.used) setPromoMsg("Ce code a déjà été utilisé avec cette adresse e-mail.");

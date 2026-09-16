@@ -170,25 +170,22 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ---
 
-## 4 bis. ✦ Offre gravure offerte — décisions en attente (11/09/2026)
+## 4 bis. ✦ Offre gravure offerte — PRÊTE, ÉTEINTE, À LANCER SEULEMENT SUR SA DEMANDE (17/09/2026)
 
-L'interrupteur est construit et **éteint** (Gestion → Marketing → Offre gravure offerte). Maquettes :
-`docs/maquettes/emails-relance-inscrites.html` (les 3 e-mails) et `docs/maquettes/regle-gravure-offerte.html`
-(la règle, artifact https://claude.ai/code/artifact/f97064b3-4f31-4e45-850c-e3644b0b1590).
+**Tout est construit et testé. RIEN ne part tant que le gérant ne dit pas « lance l'offre ».**
+Procédure complète pour l'autre conversation : **`docs/messages/offre-gravure-lancement.md`**.
 
-**⏸️ REPORTÉ le 11/09 : « on fera plus tard, j'ai d'autres trucs urgents ». Ne pas le relancer
-là-dessus ; reprendre quand IL en reparle.**
+Ce qui a été tranché et fait le 17/09 :
+- [x] **Un code par cliente**, réservé à son adresse, une seule utilisation, expire à la fin de l'offre.
+- [x] **La vraie gravure est offerte** (prix réel de la 1re gravure du panier, une par commande),
+      **sur n'importe quel produit** — le gérant a levé l'exclusion des verres du 11/09.
+      Restent payants : gravures suivantes, photo gravée, socle LED, coffret.
+- [x] **E-mail adapté à chaque cliente** : ancienneté + son code + ses favoris (sinon 3 idées).
+- [x] **Nettoyage des codes expirés/utilisés** : automatique à chaque passage + bouton dans l'écran.
+- [x] Un seul cadeau par commande · pas de minimum d'achat · rien sur le site (e-mail uniquement).
 
-Décisions déjà prises (ne plus les redemander) :
-- [x] **Une gravure offerte à son PRIX RÉEL** (3 € ou 5 € selon la pièce), sans plafond.
-- [x] **Bijoux + cristaux + cadeaux gravés** (porte-clés, laiton). Verres/flûte/carafe exclus.
-- [x] **Un seul cadeau par commande.** Photo gravée (8 €) et socle LED (19,90 €) restent payants.
-- [x] **Pas de minimum d'achat** (seuil 25 € possible plus tard).
-
-Reste à faire quand il le redemande :
-- [ ] **Coder la règle dans `/api/checkout`** (repérer la 1re option de gravure payante du panier,
-      la déduire à son prix réel, une seule par commande, catégories retenues).
-- [ ] Mettre les 3 e-mails au même texte, puis activer l'offre dans Gestion → Marketing.
+⚠️ Avant de lancer : si le mode délai allongé est éteint, **décocher « cadeau surprise »** dans
+l'écran (le choix du cadeau au paiement n'existe qu'avec ce mode).
 
 ---
 

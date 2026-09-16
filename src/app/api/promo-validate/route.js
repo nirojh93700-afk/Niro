@@ -1,4 +1,24 @@
 import { getPromoCodes, hasUsedCode, ensureWelcomeCode, ensureReferralCode } from "@/lib/stock";
+import { getCatalog } from "@/lib/catalog";
+import { prixPremiereGravure } from "@/lib/engravingPrice";
+
+// Offre « gravure offerte » : le panier envoie ses articles (même forme qu'au
+// paiement) pour qu'on annonce la VRAIE remise — le prix de la première gravure
+// payante trouvée — et non un montant fixe. Même calcul que /api/checkout.
+async function remiseGravure(items) {
+  if (!Array.isArray(items) || !items.length) return 0;
+  const products = await getCatalog();
+  const index = new Map();
+  for (const p of products) for (const v of p.variants || []) index.set(v.id, { product: p, variant: v });
+  for (const it of items.slice(0, 40)) {
+    const m = index.get(it?.variantId);
+    if (!m) continue;
+    const champs = (Array.isArray(it.perGlass) && it.perGlass.length > 0) ? (it.perGlass[0] || {}) : (it.fields || {});
+    const prix = prixPremiereGravure(m.product, champs, m.variant.id) || 0;
+    if (prix > 0) return prix;
+  }
+  return 0;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +64,16 @@ export async function POST(req) {
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!emailOk) return Response.json({ valid: false, needEmail: true });
     if (await hasUsedCode(code, { email })) return Response.json({ valid: false, used: true });
+  }
+  // Code « gravure offerte » : la remise dépend du panier. Sans gravure payante
+  // dedans, on le dit tout de suite (plutôt qu'un code accepté qui ne déduit rien).
+  if (pc.kind === "gravure") {
+    const remise = await remiseGravure(body?.items);
+    if (!(remise > 0)) return Response.json({ valid: false, noEngraving: true, kind: "gravure" });
+    return Response.json({
+      valid: true, code, kind: "gravure", type: "fixed", value: remise,
+      label: `gravure offerte, −${remise.toFixed(2).replace(".", ",")} €`,
+    });
   }
   return Response.json({
     valid: true,
