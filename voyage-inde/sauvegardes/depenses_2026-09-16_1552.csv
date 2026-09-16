@@ -1,0 +1,87 @@
+﻿Date;Libellé;Catégorie;Montant;Devise;Montant EUR;Payé par;Partage;Participants;Hôtel;Nuits;Supprimé;id
+2026-09-03 06:30;Chambre 1;hotel;292.32;EUR;292.32;Niv;equal;Niv;The Park Chennai;4;;nivhotel-park
+2026-09-03 06:30;Chambre 2;hotel;261.23;EUR;261.23;Niv;equal;Amma Appa;The Park Chennai;4;;1786794484045u93h1
+2026-09-03 06:30;Chambre 3;hotel;261.23;EUR;261.23;Niv;equal;Selvan Viji sitta sitti;The Park Chennai;4;;1786794484045zu8u2
+2026-09-03 06:30;Chambre 4;hotel;130.61;EUR;130.61;Niv;equal;Mama;The Park Chennai;4;;17867944840453bnn3
+2026-09-03 06:30;Chambre 5;hotel;130.61;EUR;130.61;Niv;equal;Paramu sitta;The Park Chennai;4;;1786794484045e7ks4
+2026-09-04 06:30;Le 4;transport;155.9;INR;1.42;Niv;shares;;;;;17885025127143upl
+2026-09-04 06:30;Le 4;transport;146;INR;1.33;Niv;shares;;;;;1788502547909b6r9
+2026-09-04 06:30;;transport;242;INR;2.2;Niv;equal;;;;;1788541366808pl2k
+2026-09-04 06:30;;transport;307;INR;2.79;Niv;equal;;;;;17885413980937t39
+2026-09-05 06:30;;food;1219;INR;11.08;Amma Appa;equal;;;;;1788578131162cn3i
+2026-09-05 06:30;;food;45.91;INR;0.42;Niv;equal;;;;;1788578151222xfw8
+2026-09-05 06:30;;transport;125;INR;1.14;Amma Appa;equal;;;;;1788585710848xdtz
+2026-09-05 06:30;;transport;125;INR;1.14;Selvan Viji sitta sitti;equal;;;;;1788585721967yl72
+2026-09-05 06:30;;transport;500;INR;4.55;Amma Appa;equal;;;;;1788585759914e3ir
+2026-09-05 06:30;Petit déjeuner à l’hôtel le 5;food;10154;INR;92.31;Niv;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti;;;;1788589039168q1kv
+2026-09-05 06:30;Taxi pour Saint-Georges plus Museum;transport;700;INR;6.18;Niv;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti;;;;1788597282977yw63
+2026-09-06 06:30;Restaurant amman;food;4000;INR;35.34;Niv;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti;;;;1788705332387fmne
+2026-09-07 06:30;petit déjeuner avant Tirupati;food;2575;INR;22.75;Niv;equal;;;;;1788750666496b9lo
+2026-09-07 06:30;Hôtel pour les Bagage;other;2000;INR;17.67;Niv;equal;;;;;17887833446246881
+2026-09-07 06:30;Restaurant, après Tirupati;food;3475;INR;30.7;Niv;equal;;;;;1788787614610uyp3
+2026-09-07 06:30;;tips;500;INR;4.42;Niv;equal;;;;;178879324419182sg
+2026-09-07 06:30;;tips;200;INR;1.77;Mama;equal;;;;;1788793270338casu
+2026-09-07 06:30;;tips;500;INR;4.42;Niv;equal;;;;;1788793311315r36e
+2026-09-07 06:30;Chambre 1;hotel;26.69;EUR;26.69;Niv;equal;Niv;Hotel Mamallaa Heritage;1;;mamallaa-2026-09-07
+2026-09-07 06:30;Chambre 2;hotel;26.69;EUR;26.69;Niv;equal;Amma Appa;Hotel Mamallaa Heritage;1;;mtrdlcye73ep
+2026-09-07 06:30;Chambre 3;hotel;26.69;EUR;26.69;Niv;equal;Selvan Viji sitta sitti;Hotel Mamallaa Heritage;1;;mtrdlqkv2sm9
+2026-09-07 06:30;Chambre 4;hotel;13.34;EUR;13.34;Niv;equal;Mama;Hotel Mamallaa Heritage;1;;mtrdm2q4e7jl
+2026-09-07 06:30;Chambre 5;hotel;13.34;EUR;13.34;Niv;equal;Paramu sitta;Hotel Mamallaa Heritage;1;;mtrdmlku8qia
+2026-09-08 06:30;Visite à Mahabalipuram;activity;4200;INR;37.1;Niv;equal;;;;;1788852609898xheh
+2026-09-08 06:30;;tips;1000;INR;8.83;Niv;equal;;;;;1788870577872f232
+2026-09-08 10:00;Chambre 1;hotel;10500;INR;92.76;Niv;equal;Niv;Atithi Hotel Pondichéry;2;;nivhotel-atithi
+2026-09-08 10:00;Chambre 2;hotel;10500;INR;92.76;Niv;equal;Amma Appa;Atithi Hotel Pondichéry;2;;mt1hjggh778y
+2026-09-08 10:00;Chambre 3;hotel;5250;INR;46.38;Niv;equal;Mama;Atithi Hotel Pondichéry;2;;mt1hkjjqbypc
+2026-09-08 10:00;Chambre 4;hotel;10500;INR;92.76;Niv;equal;Selvan Viji sitta sitti;Atithi Hotel Pondichéry;2;;mt1hkvo6kzz8
+2026-09-08 10:00;Chambre 5;hotel;5250;INR;46.36;Niv;equal;Paramu sitta;Atithi Hotel Pondichéry;2;;mt1hnumbbog9
+2026-09-09 06:30;Restaurant à pondicherry;food;8491;INR;75.01;Niv;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti;;;;17889262353557f4y
+2026-09-09 06:30;Boisson à Matamandir;coffee;460;INR;4.06;Niv;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti;;;;1788973529385j72f
+2026-09-09 06:30;Boisson au Mall à Pondichéry;coffee;990;INR;8.75;Niv;equal;Amma Appa / Mama / Selvan Viji sitta sitti;;;;1788973621936m2ih
+2026-09-10 06:30;Chambre 1;hotel;54.68;EUR;54.68;Niv;equal;Niv;MGM Vailankanni;1;;nivhotel-mgm
+2026-09-10 06:30;Chambre 2;hotel;50.2;EUR;50.2;Niv;equal;Amma Appa;MGM Vailankanni;1;;mt1hzsc8tlm2
+2026-09-10 06:30;Chambre 3;hotel;25.62;EUR;25.62;Niv;equal;Mama;MGM Vailankanni;1;;mt1i034lusyx
+2026-09-10 06:30;Chambre 4;hotel;50.2;EUR;50.2;Niv;equal;Selvan Viji sitta sitti;MGM Vailankanni;1;;mt1i0ows3e7d
+2026-09-10 06:30;Dîner à l’hôtel;food;4979;INR;43.98;Niv;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti;;;;17890189351646w98
+2026-09-10 10:00;Chambre 5;hotel;23.89;EUR;23.89;Niv;equal;Paramu sitta;MGM Vailankanni;1;;mt1i0zuuzje9
+2026-09-11 06:30;Chambre 1;hotel;2640;INR;23.32;Niv;equal;Niv;North Gate;1;;nivhotel-gopuram
+2026-09-11 06:30;Chambre 2;hotel;2640;INR;23.32;Niv;equal;Amma Appa;North Gate;1;;mt1i90yh8jv8
+2026-09-11 06:30;Chambre 3;hotel;2640;INR;23.32;Niv;equal;Mama;North Gate;1;;mt1i9ab3wpj6
+2026-09-11 06:30;Chambre 4;hotel;2640;INR;23.32;Niv;equal;Selvan Viji sitta sitti;North Gate;1;;mt1i9gkpqr5k
+2026-09-11 06:30;Chambre 5;hotel;2640;INR;23.33;Niv;equal;Paramu sitta;North Gate;1;;mt1ia92gccm5
+2026-09-11 06:30;Restaurant à l’hôtel MGM;food;9394;INR;82.99;Niv;equal;;;;;1789104815919p0j3
+2026-09-11 06:30;Restaurant Après Trichy;food;4000;INR;35.34;Niv;equal;;;;;1789117204852boa6
+2026-09-11 06:30;À l’hôtel de Madurai;tips;440;INR;3.89;Niv;equal;;;;;1789143219004ta1d
+2026-09-12 06:30;Chambre 1;hotel;24.19;EUR;24.19;Niv;equal;Niv;Crown Valley Thekkady;1;;mty29arv1ss3
+2026-09-12 06:30;Chambre 2;hotel;24.19;EUR;24.19;Niv;equal;Amma Appa;Crown Valley Thekkady;1;;mty2af195zb2
+2026-09-12 06:30;Chambre 3;hotel;24.19;EUR;24.19;Niv;equal;Selvan Viji sitta sitti;Crown Valley Thekkady;1;;mty2aqqgdxe3
+2026-09-12 06:30;Chambre 4;hotel;12.09;EUR;12.09;Niv;equal;Mama;Crown Valley Thekkady;1;;mty2bby6vgev
+2026-09-12 06:30;Chambre 5;hotel;12.09;EUR;12.1;Paramu sitta;equal;Niv / Amma Appa / Mama / Selvan Viji sitta sitti / Paramu sitta;Crown Valley Thekkady;1;;mty2bj7ewv8i
+2026-09-12 06:30;Restaurant à Madurai;food;2900;INR;25.62;Niv;equal;;;;;1789205068318o88j
+2026-09-12 06:30;À l’hôtel;tips;600;INR;5.3;Niv;equal;;;;;1789224882854nkrh
+2026-09-13 06:30;Dîner à l’hôtel de Thekkady;food;4185;INR;36.97;Niv;equal;;;;;1789292030484w45z
+2026-09-13 06:30;Déjeuner à midi à Thekkady;food;4397;INR;38.84;Niv;equal;;;;;1789292070095gbt7
+2026-09-13 06:30;Pour les Bagage;tips;1000;INR;8.83;Niv;equal;;;;;1789303780346c0g0
+2026-09-13 10:00;Chambre 1;hotel;38.46;EUR;38.46;Niv;equal;Niv;Crown Valley Thekkady;2;;nivhotel-crown
+2026-09-13 10:00;Chambre 2;hotel;38.46;EUR;38.46;Niv;equal;Amma Appa;Crown Valley Thekkady;2;;mt1iklwbb14z
+2026-09-13 10:00;Chambre 3;hotel;19.23;EUR;19.23;Niv;equal;Mama;Crown Valley Thekkady;2;;mt1ikuhth0ab
+2026-09-13 10:00;Chambre 4;hotel;38.46;EUR;38.46;Niv;equal;Selvan Viji sitta sitti;Crown Valley Thekkady;2;;mt1imql10z53
+2026-09-13 10:00;Chambre 5;hotel;19.23;EUR;19.23;Niv;equal;Paramu sitta;Crown Valley Thekkady;2;;mt1in47jfhyl
+2026-09-14 06:30;Déjeuner;food;5300;INR;46.82;Niv;equal;;;;;1789380278716im7f
+2026-09-15 06:30;Bagage;tips;1000;INR;8.83;Niv;equal;;;;;1789444254281s9q0
+2026-09-15 06:30;Hôtel à munnar;tips;500;INR;4.42;Niv;equal;;;;;17894697429431qxj
+2026-09-15 10:00;Chambre 1;hotel;91.38;EUR;91.38;Niv;equal;Niv;Abad Copper Castle Resort;2;;nivhotel-munnar
+2026-09-15 10:00;Chambre 2;hotel;91.38;EUR;91.38;Niv;equal;Amma Appa;Abad Copper Castle Resort;2;;mt1ipzx30whx
+2026-09-15 10:00;Chambre 3;hotel;45.69;EUR;45.69;Niv;equal;Mama;Abad Copper Castle Resort;2;;mt1iqko4ev6u
+2026-09-15 10:00;Chambre 4;hotel;91.38;EUR;91.38;Niv;equal;Selvan Viji sitta sitti;Abad Copper Castle Resort;2;;mt1ir392jifg
+2026-09-15 10:00;Chambre 5;hotel;45.69;EUR;45.7;Niv;equal;Paramu sitta;Abad Copper Castle Resort;2;;mt1irdyz1hf9
+2026-09-16 06:30;Bagage, à l’hôtel Munnar;tips;1900;INR;16.78;Niv;equal;;;;;1789572774146629l
+2026-09-17 06:30;Chambre 1;hotel;4250;INR;37.54;Niv;equal;Niv / Mama;Houseboat Alleppey (croisière);0;;nivhotel-houseboat
+2026-09-17 06:30;Chambre 2;hotel;4250;INR;37.54;Niv;equal;Paramu sitta;Houseboat Alleppey (croisière);0;;mu0u9sbbt4mo
+2026-09-17 06:30;Chambre 3;hotel;8500;INR;75.09;Niv;equal;Amma Appa;Houseboat Alleppey (croisière);0;;mu0ue5bmsk82
+2026-09-17 06:30;Chambre 4;hotel;8500;INR;75.09;Niv;equal;Selvan Viji sitta sitti;Houseboat Alleppey (croisière);0;;mu0ueyrk19fb
+2026-09-17 06:30;Chambre 5;hotel;8500;INR;75.09;Niv;equal;Niv;Houseboat Alleppey (croisière);0;;mu0ufcwjd5y4
+2026-09-18 10:00;Chambre 1;hotel;128.63;EUR;128.63;Niv;equal;Niv;Novotel Kochi Infopark;3;;nivhotel-kochi
+2026-09-18 10:00;Chambre 2;hotel;128.63;EUR;128.63;Niv;equal;Amma Appa;Novotel Kochi Infopark;3;;mt1itjm95lsp
+2026-09-18 10:00;Chambre 3;hotel;64.31;EUR;64.31;Niv;equal;Mama;Novotel Kochi Infopark;3;;mt1itthq1smb
+2026-09-18 10:00;Chambre 4;hotel;128.63;EUR;128.63;Niv;equal;Selvan Viji sitta sitti;Novotel Kochi Infopark;3;;mt1iueeyokyp
+2026-09-18 10:00;Chambre 5;hotel;64.31;EUR;64.32;Niv;equal;Paramu sitta;Novotel Kochi Infopark;3;;mt1iuowsfdhx
