@@ -9,15 +9,32 @@
   · verre 2 : « Ami de Claude Millésimé », même police, même thème d'ornement
 - Notre verre du catalogue fait **36 cl** → ne correspond pas. Le gérant achète un
   **47 cl** ; le message dit qu'on peut le faire, **sans dire qu'on va l'acheter**.
-- **Prix : 16,90 € l'unité / 31,90 € les deux** — un cran au-dessus du 36 cl du
-  catalogue (12,90 / 24,90 €), parce que le verre coûte plus cher à l'achat (3,85 €
-  contre 3,05 €) et qu'il est d'une catégorie supérieure. Remarque du gérant du
-  16/09 : « si le verre est plus cher à l'achat et une catégorie plus cher, ça devrait
-  logiquement être plus cher ». Marge 12,10 €/verre (contre 9,40 € sur le 36 cl).
-  Livraison en plus (le seuil « offerte » de ce produit est à 60 €).
-- **Marché relevé le 16/09** : Kdoparticulier vend le **lot de 2 verres à vin cristal
-  gravés à 47,88 €** ; Wanapix fait du cristal de Bohême sans plomb 45 cl. À 31,90 €
-  les deux, on reste 16 € sous le marché.
+
+## 💰 PRIX ENREGISTRÉ POUR LE DEVIS (validé par le gérant le 16/09/2026)
+
+| | Unité | Lot de 2 |
+|---|---|---|
+| **Verre à vin grand format ~47 cl gravé** | **18,90 €** | **34,90 €** |
+
+- Livraison suivie **en plus** (le seuil « offerte » des verres est à **60 €**).
+- Devis pour Ludovic NOEL = **2 verres gravés = 34,90 €** + livraison.
+- Coût d'achat du verre : **3,85 €** (Chef & Sommelier 47 cl) contre 3,05 € pour le
+  36 cl → **marge 13,60 €/verre** en lot de 2, contre 9,40 € sur le 36 cl.
+- Raison du prix (remarque du gérant) : « si le verre est plus cher à l'achat et une
+  catégorie plus cher, ça devrait logiquement être plus cher ».
+
+### Marché relevé le 16/09/2026 (verre à vin 43-47 cl, cristal, gravé à la pièce)
+| Boutique | Produit | Prix | Par verre |
+|---|---|---|---|
+| Kdoparticulier | coffret 2 verres cristallin gravés | 47,88 € les 2 | 23,94 € |
+| Verre Créations (La Rochelle) | MUSE Guy Degrenne 45 cl | 23,90 – 25,90 € | idem |
+| Verre Créations | Spiegelau STYLE | 21,90 € | 21,90 € |
+| **Verre Créations** | **Salute 46 cl cristal** ← le plus proche | **19,90 €** | **19,90 €** |
+| Made in Gift | pack 2 verres + 1 bouteille | 38,27 € | < 19,14 € (vin compris) |
+| Zephyr Paris | 6 verres cristal Bohemia | 79,00 € les 6 | 13,17 € (prix de volume) |
+
+→ À 18,90 € on reste **sous** l'artisan le plus proche et **13 € sous**
+Kdoparticulier sur le lot de 2.
 - **Circuit** : il valide → devis envoyé (Gestion → Devis & factures) → il paie →
   la gravure part.
 - **Délai annoncé = celui du site** : mode délai allongé ACTIF au 16/09 →
@@ -62,7 +79,7 @@ fin ou deux petites feuilles de vigne stylisées de part et d'autre du texte, ri
 chargé. Si vous avez une préférence, ou une image qui vous plaît, envoyez-la nous et
 nous nous en inspirons. Sinon, nous choisissons pour vous dans cet esprit.
 
-Ce grand format en cristal est à 16,90 € le verre à l'unité, ou 31,90 € les deux,
+Ce grand format en cristal est à 18,90 € le verre à l'unité, ou 34,90 € les deux,
 livraison suivie en plus.
 
 Comment nous procédons : si cela vous convient, vous nous répondez simplement et nous
