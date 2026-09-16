@@ -1,6 +1,8 @@
 # Ludovic NOEL — réponse « pas de coffret » (préparée le 16/09/2026)
 
-**Statut : PRÊT — à PROGRAMMER pour demain 17/09 à 9 h 00 (heure de Paris).**
+**Statut : ✅ PROGRAMMÉ le 16/09 au soir pour le 17/09 à 9 h 30 (heure de Paris) par le site**
+(`/api/admin/scheduled`, id `sch_yq034h6fmu4eiveq` — visible/annulable dans Gestion → Clients →
+Messages clients). Objet en « Re : » pour rester dans le même fil que le mail du 16/09.
 Ordre du gérant du 16/09 au soir : « prépare le mail, tu dis qu'il y a pas de coffret,
 t'envoie rien, tu le mets à l'heure d'ouverture demain ». La programmation par l'API
 (`POST /api/admin/scheduled`) a été **bloquée par les permissions de l'environnement** —
@@ -26,7 +28,7 @@ afficher que du texte → y mettre l'adresse en lien dans le corps (Gmail la ren
 
 ## Objet
 
-Vos deux verres gravés — la suite
+Re : Vos deux verres gravés — c'est faisable
 
 ## Message
 
@@ -34,7 +36,7 @@ Bonjour Ludovic,
 
 Merci pour votre retour rapide.
 
-Pour l'ornement, nous vous avons préparé cinq propositions, dessinées sur le verre avec vos deux textes. Toutes restent dans l'esprit convenu : fin, harmonieux, contemporain. Répondez-nous simplement avec le numéro qui vous plaît (1 à 9). Si aucune ne vous convient tout à fait, dites-le nous : nous vous préparerons volontiers d'autres propositions. Et si vous préférez nous laisser la main, nous choisirons pour vous dans cet esprit.
+Pour l'ornement, nous vous avons préparé neuf propositions, dessinées sur le verre avec vos deux textes. Toutes restent dans l'esprit convenu : fin, harmonieux, contemporain. Répondez-nous simplement avec le numéro qui vous plaît (1 à 9). Si aucune ne vous convient tout à fait, dites-le nous : nous vous préparerons volontiers d'autres propositions. Et si vous préférez nous laisser la main, nous choisirons pour vous dans cet esprit.
 
 Vous pouvez voir les propositions ici :
 https://nivcreation.fr/api/img/5KbYKEL8WHoKPvvmT9qW
