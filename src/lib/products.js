@@ -514,7 +514,7 @@ export const products = [
       ] },
       { key: "prenoms", type: "textarea", label: "Prénoms / initiales à graver (un par ligne)", placeholder: "Marie\nPaul\nSophie…", maxLength: 600 },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "note", type: "note", text: "Tarif dégressif : 4,50 € à l'unité, 3,50 €/pièce dès 20, 2,90 €/pièce dès 50. Indiquez un prénom par ligne (autant que de pièces commandées)." },
+      { key: "note", type: "note", text: "Tarif dégressif : 5,90 € à l'unité, 3,50 €/pièce dès 20, 2,90 €/pièce dès 50. Indiquez un prénom par ligne (autant que de pièces commandées)." },
     ],
     images: [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/610876bb-4b83-4b09-a722-356af9af8088.webp?v=1776298326",
@@ -522,7 +522,10 @@ export const products = [
       "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/Gemini_Generated_Image_nzbs5vnzbs5vnzbs.png?v=1776298347",
     ],
     variants: [
-      { id: "rond-unite", title: "À l'unité", price: 4.50 },
+      // 4,50 € → 5,90 € le 16/09/2026 (accord du gérant) : Poupe Poupi vend le même
+      // rond de serviette en hêtre français à 7,90 €. Les LOTS restent inchangés —
+      // c'est le prix dégressif à la pièce qui fait signer un mariage.
+      { id: "rond-unite", title: "À l'unité", price: 5.90 },
       { id: "rond-lot20", title: "Lot de 20 (3,50 €/pièce)", price: 70.00 },
       { id: "rond-lot50", title: "Lot de 50 (2,90 €/pièce)", price: 145.00 },
     ],
@@ -2494,9 +2497,18 @@ export const products = [
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
     ],
     variants: [
-      { id: "flute-1", stockId: "flute-1", title: "À l'unité", price: 12.90, weight: 450 },
-      { id: "flute-2", stockId: "flute-2", title: "Lot de 2", price: 24.90, weight: 800 },
-      { id: "flute-4", stockId: "flute-4", title: "Lot de 4", price: 49.90, weight: 1400 },
+      // PRIX RELEVÉS LE 16/09/2026 (accord du gérant) — 12,90 / 24,90 / 49,90 €
+      // nous mettaient 8 € SOUS le marché : chez Verre Créations, nos deux
+      // équivalents exacts en 21 cl (Salute, Sublym) sont à 20,90 et 21,90 €, et
+      // AUCUN comparable artisan n'est sous 18,90 €. Coût d'achat : 2,34 €
+      // (Pinomaro, Metro). Relevé complet et sources : docs/prix-marche.md.
+      // Le lot de 4 est volontairement posé À 64,90 € pour franchir le seuil des
+      // 60 € et pouvoir annoncer « livraison offerte » (même levier que le lot de 4
+      // du verre à whisky). 59,90 € rapporterait 3,90 € de plus mais perdrait
+      // l'argument.
+      { id: "flute-1", stockId: "flute-1", title: "À l'unité", price: 17.90, weight: 450 },
+      { id: "flute-2", stockId: "flute-2", title: "Lot de 2", price: 33.90, weight: 800 },
+      { id: "flute-4", stockId: "flute-4", title: "Lot de 4 — livraison offerte", price: 64.90, weight: 1400 },
     ],
     descriptionHtml: `<p><strong>Une flûte à champagne gravée à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 19 : couples, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
 <p>Gravure laser permanente, qui résiste au lave-vaisselle. Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire. <strong>Livraison offerte dès 60 € d'achat.</strong></p>

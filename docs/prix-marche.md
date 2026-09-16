@@ -3,8 +3,10 @@
 > Fait à la demande du gérant : « regarde partout sur Internet, les autres sites, ils
 > font combien les mêmes verres ? », puis « pour l'autre qui a déjà en ligne, on part
 > aussi par rapport aux autres sites ».
-> ⛔ **RIEN N'EST APPLIQUÉ AU SITE.** Les prix « proposé » de ce fichier attendent son
-> accord (règle : rien sur le site sans validation).
+> ✅ **APPLIQUÉ LE 16/09/2026** (« OK applique les prix augmentent ») pour le **verre à
+> vin 36 cl**, la **flûte à champagne** et les **ronds de serviette**. Tout le reste de
+> ce document est un CONSTAT, pas une décision : ne rien changer sans son accord
+> (règle : rien sur le site sans validation).
 
 ## 1. Verre à vin 36 cl — DÉJÀ EN LIGNE
 
@@ -22,7 +24,7 @@ Coût d'achat : **3,05 €** (Montese, Metro). Livraison offerte dès 60 €.
 
 → **Nous sommes 6 € sous l'artisan le plus proche, sur un verre identique.**
 
-**Proposition (à valider)** : **15,90 €** l'unité · **29,90 €** le lot de 2 ·
+**✅ APPLIQUÉ le 16/09/2026** : **15,90 €** l'unité · **29,90 €** le lot de 2 ·
 **57,90 €** le lot de 4.
 · reste **3 € sous** Verre Créations, on garde la position « moins cher qu'ailleurs » ;
 · marge par verre en lot de 2 : 9,40 € → **11,90 €** ;
@@ -55,8 +57,8 @@ Verre Créations (artisan, La Rochelle), gamme flûtes/coupes gravées, prix à 
 → **Aucun comparable artisan sous 18,90 €.** Nos deux équivalents exacts (21 cl) sont
 à 20,90 et 21,90 €.
 
-**Proposition (à valider)** : **17,90 €** l'unité · **33,90 €** le lot de 2 ·
-**64,90 €** le lot de 4.
+**✅ APPLIQUÉ le 16/09/2026** : **17,90 €** l'unité · **33,90 €** le lot de 2 ·
+**64,90 €** le lot de 4, titre du variant « Lot de 4 — livraison offerte ».
 · reste **3 € sous** le comparable le plus bas (20,90 €) ;
 · marge par flûte en lot de 2 : 10,11 € → **14,61 €** ;
 · le lot de 4 à 64,90 € passe **au-dessus du seuil de 60 €** → livraison offerte,
@@ -104,8 +106,14 @@ Porte-clés cristal LED (22,90 / 24,90 €) : Joyeria Diamant facture le porte-c
 | Sophie Deré (hêtre, pyrogravure, France) | gamme équivalente |
 | **Niv Création** | **4,50 €** (lot de 20 à 3,50 · lot de 50 à 2,90) |
 
-→ **3,40 € sous** l'artisan français. Marge possible en montant à **5,90 €** l'unité
-(lots inchangés : c'est le prix de lot qui fait vendre le mariage). **À valider.**
+→ **3,40 € sous** l'artisan français. **✅ APPLIQUÉ le 16/09/2026 : 5,90 € l'unité**,
+lots inchangés (c'est le prix de lot qui fait vendre le mariage). Le texte de la fiche
+qui annonçait « 4,50 € à l'unité » a été corrigé en même temps.
+
+⚠️ **RESTE À TRANCHER** : le **lot de 4 du verre à vin est à 57,90 €**, soit 2,10 € sous
+le seuil des 60 € — il n'a donc PAS l'argument « livraison offerte » que porte
+maintenant le lot de 4 de la flûte. Le passer à **61,90 €** l'alignerait (le gérant
+n'a pas encore tranché).
 
 ## 8. Numéros de table bois 14,90 – 18,90 € — PLUTÔT HAUT, mais tenable
 
