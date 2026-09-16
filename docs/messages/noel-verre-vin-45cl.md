@@ -1,6 +1,9 @@
 # Ludovic NOEL — 2 verres à vin grand format gravés (demande du 16/09/2026)
 
-**Statut : PRÊT, EN ATTENTE DU « ENVOIE » DU GÉRANT. Rien n'a été envoyé.**
+**Statut : ✅ MAIL ENVOYÉ le 16/09/2026** (ordre du gérant, canal `send-client-email`,
+`ok:true, via:"gmail"` = boîte connectée du site, tracé dans le dossier de `ludsolo@gmail.com`).
+**Le DEVIS ci-dessous reste À CRÉER uniquement s'il répond oui.** ⚠️ Le brouillon écarté de
+l'agent est encore « à valider » dans Gestion : le classer sans réponse, ne pas le valider.
 
 - Cliente : **Ludovic NOEL** — `ludsolo@gmail.com`
 - Reçu le 16/09/2026 à 8h44, formulaire de la fiche `/produit/verre-a-vin-grave`
