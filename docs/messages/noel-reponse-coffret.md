@@ -15,6 +15,15 @@ t'envoie rien, tu le mets à l'heure d'ouverture demain ». La programmation par
   et envoyer sur ordre du gérant.
 - Destinataire : `ludsolo@gmail.com`
 
+## Image des propositions (hébergée sur le site, invisible ailleurs)
+
+`https://nivcreation.fr/api/img/YeRWwFUbgQMcukDlvNVK` — la planche des 5 ornements
+dessinés sur le verre avec les 2 textes (version cliente, régénérable depuis
+`scratchpad/planche-client.html`). Pour un envoi immédiat par Messages clients, passer
+cette adresse dans le champ `imageUrl` de `/api/admin/send-client-email` (l'image
+s'affiche alors EN HAUT du mail). L'envoi PROGRAMMÉ (`/api/admin/scheduled`) ne sait
+afficher que du texte → y mettre l'adresse en lien dans le corps (Gmail la rend cliquable).
+
 ## Objet
 
 Vos deux verres gravés — la suite
@@ -25,11 +34,14 @@ Bonjour Ludovic,
 
 Merci pour votre retour rapide.
 
-Pour l'ornement, c'est noté : nous choisissons pour vous quelque chose de fin, harmonieux et contemporain, en accord avec l'écriture — rien de rustique, comme convenu.
+Pour l'ornement, nous vous avons préparé cinq propositions, dessinées sur le verre avec vos deux textes. Toutes restent dans l'esprit convenu : fin, harmonieux, contemporain. Répondez-nous simplement avec le numéro qui vous plaît (1 à 5) — et si vous préférez nous laisser la main, nous choisirons pour vous dans cet esprit.
+
+Vous pouvez voir les propositions ici :
+https://nivcreation.fr/api/img/YeRWwFUbgQMcukDlvNVK
 
 Pour répondre à votre question : les deux verres ne sont pas présentés en coffret. Ils vous arrivent soigneusement emballés et bien protégés pour le transport, chacun calé individuellement.
 
-Côté délai, c'est bien noté également : votre commande sera traitée dans son ordre d'arrivée dès le règlement, et nous ferons au plus court.
+Côté délai, c'est bien noté : votre commande sera traitée dans son ordre d'arrivée dès le règlement, et nous ferons au plus court.
 
 Nous vous envoyons le devis très rapidement : vous pourrez le valider et le régler en ligne, en toute sécurité. Dès le règlement reçu, la gravure est mise en route.
 
