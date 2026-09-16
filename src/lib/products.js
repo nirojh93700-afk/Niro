@@ -2373,7 +2373,7 @@ export const products = [
       // nous mettaient 6 € SOUS l'artisan le plus proche sur un verre identique :
       // Verre Créations vend le « Soirée 36 cl » (cristallin Spiegelau, gravé) à
       // 18,90 €, et sa gamme entière est entre 17,90 et 25,90 €. Relevé complet et
-      // sources dans docs/prix-verres-marche.md. On reste 3 € sous lui.
+      // sources dans docs/prix-marche.md. On reste 3 € sous lui.
       { id: "verre-vin-1", stockId: "verre-vin-1", title: "À l'unité", price: 15.90, weight: 500 },
       { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 29.90, weight: 900 },
       { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4", price: 57.90, weight: 1600 },
