@@ -9,9 +9,15 @@
   · verre 2 : « Ami de Claude Millésimé », même police, même thème d'ornement
 - Notre verre du catalogue fait **36 cl** → ne correspond pas. Le gérant achète un
   **47 cl** ; le message dit qu'on peut le faire, **sans dire qu'on va l'acheter**.
-- **Prix : les MÊMES que le verre du catalogue** (choix du gérant, 16/09) —
-  12,90 € à l'unité, **24,90 € les deux**. Livraison en plus (le seuil « offerte »
-  de ce produit est à 60 €).
+- **Prix : 16,90 € l'unité / 31,90 € les deux** — un cran au-dessus du 36 cl du
+  catalogue (12,90 / 24,90 €), parce que le verre coûte plus cher à l'achat (3,85 €
+  contre 3,05 €) et qu'il est d'une catégorie supérieure. Remarque du gérant du
+  16/09 : « si le verre est plus cher à l'achat et une catégorie plus cher, ça devrait
+  logiquement être plus cher ». Marge 12,10 €/verre (contre 9,40 € sur le 36 cl).
+  Livraison en plus (le seuil « offerte » de ce produit est à 60 €).
+- **Marché relevé le 16/09** : Kdoparticulier vend le **lot de 2 verres à vin cristal
+  gravés à 47,88 €** ; Wanapix fait du cristal de Bohême sans plomb 45 cl. À 31,90 €
+  les deux, on reste 16 € sous le marché.
 - **Circuit** : il valide → devis envoyé (Gestion → Devis & factures) → il paie →
   la gravure part.
 - **Délai annoncé = celui du site** : mode délai allongé ACTIF au 16/09 →
@@ -56,8 +62,8 @@ fin ou deux petites feuilles de vigne stylisées de part et d'autre du texte, ri
 chargé. Si vous avez une préférence, ou une image qui vous plaît, envoyez-la nous et
 nous nous en inspirons. Sinon, nous choisissons pour vous dans cet esprit.
 
-Le prix reste celui de notre verre à vin gravé : 12,90 € le verre, soit 24,90 € les
-deux, livraison suivie en plus.
+Ce grand format en cristal est à 16,90 € le verre à l'unité, ou 31,90 € les deux,
+livraison suivie en plus.
 
 Comment nous procédons : si cela vous convient, vous nous répondez simplement et nous
 vous envoyons un devis récapitulant les deux gravures, que vous validez et réglez en
