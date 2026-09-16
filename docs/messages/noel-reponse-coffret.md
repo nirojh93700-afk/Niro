@@ -17,8 +17,8 @@ t'envoie rien, tu le mets à l'heure d'ouverture demain ». La programmation par
 
 ## Image des propositions (hébergée sur le site, invisible ailleurs)
 
-`https://nivcreation.fr/api/img/sGtSgJlQKy1f38oBsI7l` — la planche des 9 ornements
-avec LES DEUX VERRES côte à côte dans chaque style (version cliente, régénérable depuis
+`https://nivcreation.fr/api/img/UMj4XwZLPqFUVrk21krP` — la planche des 9 ornements
+avec LES DEUX VERRES côte à côte dans chaque style (version cliente FILIGRANÉE « NIV CRÉATION · APERÇU » contre la copie — basse définition volontaire, les fichiers de gravure HD restent chez nous ; régénérable depuis
 `scratchpad/planche-client3.html`). Pour un envoi immédiat par Messages clients, passer
 cette adresse dans le champ `imageUrl` de `/api/admin/send-client-email` (l'image
 s'affiche alors EN HAUT du mail). L'envoi PROGRAMMÉ (`/api/admin/scheduled`) ne sait
@@ -37,7 +37,7 @@ Merci pour votre retour rapide.
 Pour l'ornement, nous vous avons préparé cinq propositions, dessinées sur le verre avec vos deux textes. Toutes restent dans l'esprit convenu : fin, harmonieux, contemporain. Répondez-nous simplement avec le numéro qui vous plaît (1 à 9) — et si vous préférez nous laisser la main, nous choisirons pour vous dans cet esprit.
 
 Vous pouvez voir les propositions ici :
-https://nivcreation.fr/api/img/sGtSgJlQKy1f38oBsI7l
+https://nivcreation.fr/api/img/UMj4XwZLPqFUVrk21krP
 
 Pour répondre à votre question : les deux verres ne sont pas présentés en coffret. Ils vous arrivent soigneusement emballés et bien protégés pour le transport, chacun calé individuellement.
 
