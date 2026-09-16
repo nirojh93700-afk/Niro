@@ -2259,7 +2259,7 @@ export const products = [
     letter: false, // colis (fragile)
     hidden: false, // PUBLIÉ
     // Seuil commun à TOUS les verres/carafe (01/09/2026, décision gérante) —
-    // le lot de 4 (49,90 €) ne suffit plus seul, corrigé dans le texte + le
+    // le lot de 4 ne suffit plus seul, corrigé dans le texte + le
     // titre du variant plus bas (retrait de « livraison offerte »).
     freeShipThreshold: 60,
     photoContain: true, // photos hautes (verres) : voir le verre en entier (pas de rognage)
@@ -2369,9 +2369,14 @@ export const products = [
       { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
     ],
     variants: [
-      { id: "verre-vin-1", stockId: "verre-vin-1", title: "À l'unité", price: 12.90, weight: 500 },
-      { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 24.90, weight: 900 },
-      { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4", price: 49.90, weight: 1600 },
+      // PRIX RELEVÉS LE 16/09/2026 (accord du gérant) — 12,90 / 24,90 / 49,90 €
+      // nous mettaient 6 € SOUS l'artisan le plus proche sur un verre identique :
+      // Verre Créations vend le « Soirée 36 cl » (cristallin Spiegelau, gravé) à
+      // 18,90 €, et sa gamme entière est entre 17,90 et 25,90 €. Relevé complet et
+      // sources dans docs/prix-verres-marche.md. On reste 3 € sous lui.
+      { id: "verre-vin-1", stockId: "verre-vin-1", title: "À l'unité", price: 15.90, weight: 500 },
+      { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 29.90, weight: 900 },
+      { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4", price: 57.90, weight: 1600 },
     ],
     descriptionHtml: `<p><strong>Un verre à vin en cristal, gravé à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
 <p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès 60 € d'achat.</strong></p>

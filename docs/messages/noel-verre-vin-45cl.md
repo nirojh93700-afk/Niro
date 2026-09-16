@@ -96,3 +96,55 @@ nous dans votre réponse : nous en tiendrons compte.
 
 Niv Création
 nivcreation.fr
+
+---
+
+# 📄 LE DEVIS — PRÊT À CRÉER (dès que Ludovic répond « oui »)
+
+**Où** : Gestion → Finances → **Devis & factures** → « + Nouveau document ».
+Rien à créer avant sa réponse : un devis se crée en 30 secondes.
+
+| Champ de l'écran | Ce qu'on met |
+|---|---|
+| Type | **Devis** (gratuit, à faire payer ensuite) |
+| Nom de la cliente | `Ludovic NOEL` |
+| E-mail de la cliente | `ludsolo@gmail.com` |
+| Adresse | *(laisser vide — Stripe la demande au paiement)* |
+
+**Lignes** (Désignation · Qté · Prix unitaire)
+
+| Désignation | Qté | Prix |
+|---|---|---|
+| `Verre à vin gravé grand format 47 cl — « Claude Millésime 1976 »` | 1 | `18.90` |
+| `Verre à vin gravé grand format 47 cl — « Ami de Claude Millésimé »` | 1 | `16.00` |
+| `Livraison suivie à domicile` | 1 | `8.90` |
+
+→ **Total : 43,80 €** (34,90 € les deux verres + 8,90 € de livraison).
+
+⚠️ La 2e ligne est à **16,00 €** pour que les deux verres tombent pile sur le tarif
+lot de 2 (34,90 €) au lieu de 2 × 18,90 = 37,80 €. C'est la remise du lot,
+appliquée sur la 2e pièce.
+· Livraison : colis d'environ 1,1 kg → **8,90 €** à domicile. En point relais ce
+serait 6,50 € ; si Ludovic le demande, baisser la ligne.
+· Le seuil « livraison offerte » des verres est à **60 €** : on n'y est pas.
+
+**Champ « Demande du client / à fabriquer »** — à recopier tel quel (il ressort
+automatiquement dans la commande une fois payée, encadré bleu « Sur mesure ») :
+
+```
+2 verres à vin grand format 47 cl, gravés.
+Verre 1 : « Claude Millésime 1976 » — centré.
+Verre 2 : « Ami de Claude Millésimé » — centré.
+Même écriture sur les deux, même ornement : filet fin OU deux petites feuilles
+de vigne stylisées de part et d'autre du texte, léger et moderne.
+Demande d'origine du 16/09/2026 (formulaire de la fiche verre à vin) :
+« Bonjour je souhaiterai 2 verres de vin de qualité au moins 45 cl. Sur le
+premier, je souhaiterai l'inscription "Claude Millésime 1976" centré avec une
+police et un ornement leger et moderne si possible Et un 2 eme verre de meme
+calibre ecrit "Ami de Claude Millésimé" avec la même police et meme thème
+d'ornement si il y a. »
+```
+
+Puis **« Créer le document »** → **« ✉️ Envoyer par e-mail »**. Il paie en ligne,
+le devis passe en « Payé », la commande se crée toute seule dans Gestion, et la
+gravure peut partir.
