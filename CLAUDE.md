@@ -36,6 +36,15 @@
   Nuance à connaître : le site envoie par la boîte Gmail qui lui est CONNECTÉE (`via:"gmail"`
   dans la réponse de l'API) — c'est NORMAL et autorisé (gabarit + traçage) ; ce qui est interdit,
   c'est un envoi Gmail rédigé EN DEHORS du site (outils `mcp__Gmail__reply`/`send_message`…).
+- ⛔ **TOUT E-MAIL CLIENT ENVOYÉ PAR LE SITE DOIT PORTER LE BOUTON « ✉️ Répondre à ce message »**
+  (rappel ferme du gérant, 17/09/2026, après un envoi validé parti sans bouton : « il faut que tu
+  mettes pour que les clients répondent directement dans le mail, faut pas que tu recommences »).
+  Le bouton est maintenant STRUCTUREL : `boutonRepondre(...)` dans `src/lib/clientMail.js`
+  (jeton `addReplyLink`, page `/reponse/<jeton>`, réponse rangée dans le dossier + la commande),
+  branché sur les 3 canaux — `send-client-email`, `/api/reply/[token]` (réponses validées) et
+  les envois programmés (`runScheduledJobs`). **Tout NOUVEAU canal d'e-mail client devra l'appeler
+  aussi.** Jamais bloquant : si le jeton échoue, l'e-mail part sans bouton et la boîte surveillée
+  rattrape les réponses classiques.
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
@@ -282,9 +291,34 @@ ne descend jamais sous zéro.
   offreGravureEmail) · `runOffreGravureJob({dryRun})` dans `src/lib/jobs.js` · appelée par le
   **heartbeat du site** (1×/jour, verrou `claimJob("offreGravure")`) · API `/api/admin/offre-gravure`
   (GET état + comptes, POST `{action:"send"}`) · page `/gestion/offre-gravure` · CSS `.og-*`.
-- **Le code promo est créé pour de vrai** au premier envoi (`setPromoCode`, type `fixed`,
-  montant = le supplément gravure, réutilisable) et **jamais écrasé s'il existe déjà** → le gérant
-  peut le créer à la main dans Promotions pour le limiter aux bijoux/cristaux/cadeaux.
+- ✅ **UN CODE PAR CLIENTE, UNE SEULE UTILISATION — APPLIQUÉ LE 17/09/2026** (demande du gérant :
+  « il faut que les clients utilisent qu'une fois le code », puis « on fait un code par client »).
+  **Avant, c'était un trou** : un seul code commun créé en `reusable: true` → illimité et
+  **partageable** (une inscrite pouvait le donner à qui elle voulait). Maintenant chaque cliente
+  reçoit **SON** code (`GRAVURE-A7K2`, `GRAVURE-M4P9`…) avec **trois verrous**, tous vérifiés
+  **côté serveur** (`/api/promo-validate` ET `/api/checkout`) donc incontournables :
+  1. **`email`** (nouveau champ de `setPromoCode`) — le code ne marche QUE pour l'adresse à
+     laquelle il a été envoyé. Autre adresse → `wrongEmail`, message cliente « Ce code est réservé
+     à l'adresse e-mail à laquelle il a été envoyé ». **Adresse vide = bloqué** (pas de remise par
+     défaut). Un code sans `email` reste OUVERT (ambassadeurs inchangés).
+  2. **`reusable: false`** — une seule utilisation, mémorisée sur l'e-mail (`recordCodeUsage` au
+     webhook Stripe, + l'e-mail saisi au panier, pour qu'en changer au paiement ne serve à rien).
+  3. **`days`** calculé sur la **date de fin de l'offre** → le code MEURT avec l'offre, même s'il fuite.
+  · Codes générés dans `runOffreGravureJob` (`src/lib/jobs.js`) : préfixe réglable (`o.code`) +
+    5 caractères tirés d'un alphabet **sans 0/O/1/I/L** (recopiable à la main), unicité vérifiée
+    contre les codes existants, et **le code est créé AVANT l'envoi** (jamais de promesse creuse ;
+    si la génération échoue, la cliente est simplement sautée).
+  · Le code est gardé **à côté de l'adresse** (`markOffreGravureSent` accepte `{email, code}`,
+    section `offreGravure` = `{email: {at, code}}`, ancien format `{email: ts}` toujours lu) → on
+    retrouve son code si elle écrit « mon code ne marche pas ».
+  · L'écran Promotions ne passe PAS `email` à `setPromoCode` → ré-enregistrer un code nominatif à
+    la main **conserve** son verrou (pas de déverrouillage accidentel).
+  · ⚠️ **Conséquence à connaître** : la liste de Promotions va se remplir d'un code par cliente
+    servie. C'est normal. Un nettoyage des codes expirés reste à faire si ça gêne.
+  · 17 vérifications de logique passées au vert (unicité sur 500 codes, majuscules/espaces
+    normalisés, mauvaise adresse refusée au panier ET au paiement, expiration calée sur la fin).
+- **Le code promo est créé pour de vrai** avant l'envoi (règle : aucune promesse qui ne marche pas
+  au paiement) et **un code déjà réglé à la main n'est jamais écrasé**.
 - **⚠️ LE SUPPLÉMENT DE GRAVURE N'EST PAS TOUJOURS DE 3 € (remarque du gérant, 11/09/2026)** —
   relevé dans `products.js` : `collier-plaque-acier` recto **inclus** + verso **+5 €** + photo
   **+8 €** (`perExtraPage`/`photoSurcharge`) · `collier-medaillon-livre` **3 pages × 5 €** (15 €) ·
@@ -302,10 +336,33 @@ ne descend jamais sous zéro.
   · **restent payants** : les pages/zones suivantes, la photo gravée (+8 €), le socle LED (19,90 €) ;
   · **pas de minimum d'achat** (un seuil à 25 € reste possible s'il change d'avis) ;
   · phrase cliente : **« Gravure offerte sur les bijoux et le cristal. »**
-- ⏸️ **REPORTÉ — « on fera plus tard » (11/09/2026).** Le code de la règle **n'est PAS écrit** : à
-  faire dans `/api/checkout` quand il le redemandera (repérer la 1re option de gravure payante du
-  panier, la déduire à son prix, une par commande, catégories ci-dessus). Tant que ce n'est pas fait,
-  le code promo reste un `fixed` de 3 € et **l'offre est éteinte** — donc rien ne part, aucun risque.
+- ✅ **LA RÈGLE EST CODÉE — 17/09/2026** (le gérant a repris le sujet : « en fait c'est une gravure
+  offerte pour n'importe quel produit »). **Changement par rapport au 11/09 : les VERRES ne sont plus
+  exclus** — n'importe quel produit. Mécanique :
+  · `prixPremiereGravure(product, fields, variantId)` dans `src/lib/engravingPrice.js` = le prix
+    d'UNE gravure sur cette pièce (textExtra / pageText / perExtraPage / modeleSubExtra / flatExtra
+    de gravure), **0 si rien de payant**. Exclus : la **photo** (`photoSurcharge`), les **motifs
+    suivants**, et tout flatExtra **physique** (avec `stockId` ou `weight` : socle LED, coffret).
+    Vérifié sur les 38 produits gravables : **jamais plus que le supplément réellement facturé**.
+  · Un code porte `kind: "gravure"` (nouveau champ de `setPromoCode`). Au paiement
+    (`/api/checkout`), la remise n'est PAS `value` mais **le prix de la première gravure payante
+    trouvée dans le panier** (ordre du panier), coupon Stripe « Gravure offerte (CODE) ». Sans
+    gravure payante → aucune remise. Au panier (`/api/promo-validate` reçoit maintenant `items`),
+    on annonce la vraie remise ; sans gravure → `noEngraving`, message « ajoutez un texte à graver ».
+  · `o.montant` de l'écran n'est plus qu'un **montant de secours** (libellé changé).
+- ✅ **E-MAIL ADAPTÉ À CHAQUE CLIENTE (17/09/2026)** : ancienneté (5 phrases) + **son code** + **ses
+  favoris** (`getFavoris(email)`, nom/photo/prix lus dans `getCatalog()` à l'envoi ; photos rendues
+  absolues) — sinon 3 idées (`IDEES` dans `jobs.js` : plaque acier, cristal vertical, porte-clés cuir,
+  verre à vin). Formulation « sur votre première pièce gravée — quelle qu'elle soit » + phrase
+  « votre code est personnel ». Pas de prénom : les inscrites n'ont qu'un e-mail et une date.
+- ✅ **NETTOYAGE DES CODES (17/09/2026)** : `purgeExpiredPromoCodes()` supprime les codes
+  **nominatifs** (avec `email`) **expirés ou déjà utilisés** — jamais un code ouvert (BIENVENUE10,
+  ambassadeurs, codes à la main : ils portent stats et commissions). Lancé à chaque passage réel de
+  `runOffreGravureJob` + bouton « Nettoyer les codes expirés » + KPI « Codes personnels actifs »
+  (`POST /api/admin/offre-gravure {action:"purge"}`).
+- ⛔ **LANCEMENT = UNIQUEMENT SUR DEMANDE EXPLICITE DU GÉRANT**, par l'autre conversation, en suivant
+  **`docs/messages/offre-gravure-lancement.md`** (5 étapes ; décocher « cadeau » si le mode délai
+  allongé est éteint ; annoncer le nombre d'envois AVANT de cliquer). L'offre est **éteinte**.
 - **Ce que font les autres (recherche 11/09/2026)** : le modèle du marché FR est **la 1re gravure
   incluse, les faces suivantes payantes** (Atelier Aismée : recto offert, verso payant — c'est déjà
   le modèle du collier plaque acier). Nomination : gravure offerte **1 par client**, avec **minimum

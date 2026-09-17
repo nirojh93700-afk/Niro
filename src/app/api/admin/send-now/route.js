@@ -1,6 +1,6 @@
 import { isAdmin, getCagnotte, getSettings, logOrderEmail } from "@/lib/stock";
 import { getSiteOrder } from "@/lib/firebase";
-import { sendClientMail, brandedMessage } from "@/lib/clientMail";
+import { sendClientMail, brandedMessage, boutonRepondre, imageEnTete } from "@/lib/clientMail";
 import { BRAND } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
@@ -62,7 +62,12 @@ export async function POST(req) {
 
   const ctx = { name, ref, solde, gagne };
   const subject = fill(subjectRaw, ctx);
-  const html = brandedMessage(subject, fill(bodyRaw, ctx));
+  const texte = fill(bodyRaw, ctx);
+  // Image jointe (hébergée via /api/upload → /api/img/<ref>) + bouton « Répondre »
+  // (règle du 17/09/2026 : tout e-mail client du site porte le bouton).
+  const imageUrl = typeof body?.imageUrl === "string" ? body.imageUrl.trim() : "";
+  const btn = await boutonRepondre({ email: to, name, subject, excerpt: texte.slice(0, 240), orderId, orderRef: ref });
+  const html = brandedMessage(subject, texte, btn, imageEnTete(imageUrl));
   const r = await sendClientMail({ to, subject, html, bcc: BRAND.contact });
   if (r?.ok) {
     // Journalise dans le fil de la commande si une commande est liée.

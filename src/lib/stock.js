@@ -1031,7 +1031,7 @@ export async function getScheduledEmails() {
   return data.scheduled || [];
 }
 
-export async function addScheduledEmail({ to, name, subject, body, sendAt, source, orderId }) {
+export async function addScheduledEmail({ to, name, subject, body, sendAt, source, orderId, imageUrl }) {
   const data = await getCatalogRaw();
   data.scheduled = data.scheduled || [];
   const item = {
@@ -1045,6 +1045,8 @@ export async function addScheduledEmail({ to, name, subject, body, sendAt, sourc
     sent: false, sentAt: 0, error: "",
     source: source || "manuel",
     orderId: orderId || "",
+    // Image affichée en haut du mail (adresse hébergée, ex. /api/img/<ref>).
+    imageUrl: String(imageUrl || "").trim().slice(0, 500),
   };
   data.scheduled.push(item);
   // On garde la file raisonnable (200 derniers).
@@ -1296,6 +1298,18 @@ export async function setPromoCode(code, def) {
   data.promoCodes[c] = {
     type: def?.type === "fixed" ? "fixed" : "percent",
     value: Math.max(0, Number(def?.value) || 0),
+    // CODE NOMINATIF (17/09/2026, demande du gérant « un code par client ») :
+    // si `email` est renseigné, le code ne fonctionne QUE pour cette adresse.
+    // Le partager ne sert à rien : une autre adresse est refusée au panier ET
+    // au paiement. Vide = code ouvert (comportement d'avant, inchangé).
+    email: def?.email != null
+      ? String(def.email).trim().toLowerCase().slice(0, 120)
+      : (prev.email || ""),
+    // NATURE du code : "gravure" = offre « gravure offerte » (17/09/2026). Au
+    // paiement, la remise n'est PAS `value` mais le PRIX RÉEL de la première
+    // gravure du panier (3 €, 5 €, 7 €… selon la pièce). `value` ne sert qu'à
+    // l'affichage de secours. Vide = code classique (montant fixe ou %).
+    kind: def?.kind != null ? String(def.kind).slice(0, 20) : (prev.kind || ""),
     // Affiliation / ambassadeur (optionnel) :
     ambassador: def?.ambassador != null ? String(def.ambassador).slice(0, 60) : (prev.ambassador || ""),
     commission: def?.commission != null ? Math.max(0, Math.min(100, Number(def.commission) || 0)) : (prev.commission || 0),
@@ -1417,6 +1431,29 @@ export async function recordCodeUsage(code, { ip, email } = {}) {
   if (email) { const e = String(email).toLowerCase(); if (!u.emails.includes(e)) u.emails.push(e); }
   data.codeUsage[c] = u;
   await persistCatalog(data);
+}
+
+// NETTOYAGE DES CODES NOMINATIFS MORTS (demande du gérant, 17/09/2026 : « fais le
+// nettoyage des codes expirés »). Ne touche QU'AUX codes qui portent une adresse
+// (un code par cliente) et qui sont soit EXPIRÉS, soit DÉJÀ UTILISÉS par cette
+// adresse. Les codes ouverts (BIENVENUE10, ambassadeurs, codes créés à la main)
+// ne sont jamais touchés — ils portent des statistiques et des commissions.
+// Lancé par le battement quotidien de l'offre et par le bouton de l'écran.
+export async function purgeExpiredPromoCodes({ now = Date.now() } = {}) {
+  const data = await getCatalogRaw();
+  const codes = data.promoCodes || {};
+  const usage = data.codeUsage || {};
+  const morts = [];
+  for (const [c, def] of Object.entries(codes)) {
+    if (!def || !def.email) continue; // pas nominatif → on ne touche pas
+    const expire = Boolean(def.expiresAt && now > def.expiresAt);
+    const utilise = (usage[c]?.emails || []).includes(def.email);
+    if (expire || utilise) morts.push(c);
+  }
+  if (!morts.length) return { supprimes: 0, codes: [] };
+  for (const c of morts) delete data.promoCodes[c];
+  await persistCatalog(data);
+  return { supprimes: morts.length, codes: morts };
 }
 
 export async function deletePromoCode(code) {
@@ -1918,15 +1955,20 @@ export async function getOffreGravureSent() {
   return data.offreGravure || {};
 }
 
+// Accepte une liste d'adresses, OU une liste d'objets {email, code} depuis que
+// chaque cliente reçoit SON code nominatif (17/09/2026) — on garde le code à
+// côté de son adresse pour pouvoir le retrouver si elle écrit « mon code ne
+// marche pas ». Ancien format (email -> horodatage) toujours lu sans souci.
 export async function markOffreGravureSent(emails) {
   const list = (Array.isArray(emails) ? emails : [emails])
-    .map((e) => String(e || "").trim().toLowerCase())
-    .filter(Boolean);
+    .map((x) => (typeof x === "string" ? { email: x, code: "" } : x || {}))
+    .map((x) => ({ email: String(x.email || "").trim().toLowerCase(), code: String(x.code || "").trim().toUpperCase() }))
+    .filter((x) => x.email);
   if (!list.length) return 0;
   const data = await getCatalogRaw(true);
   data.offreGravure = data.offreGravure || {};
   const now = Date.now();
-  for (const e of list) data.offreGravure[e] = now;
+  for (const x of list) data.offreGravure[x.email] = x.code ? { at: now, code: x.code } : now;
   await persistCatalog(data, ["offreGravure"]);
   return list.length;
 }

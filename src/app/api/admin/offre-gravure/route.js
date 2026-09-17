@@ -1,4 +1,4 @@
-import { isAdmin, getSettings, getPromoCodes } from "@/lib/stock";
+import { isAdmin, getSettings, getPromoCodes, purgeExpiredPromoCodes } from "@/lib/stock";
 import { runOffreGravureJob } from "@/lib/jobs";
 import { offreActive } from "@/lib/offreGravure";
 
@@ -17,18 +17,32 @@ export async function GET(req) {
   const s = await getSettings();
   const offre = s.gravureOfferte || {};
   const compte = await runOffreGravureJob({ dryRun: true });
-  let codeExiste = false;
+  // Depuis le 17/09/2026, chaque cliente reçoit SON code (préfixe + 5 caractères,
+  // réservé à son adresse, une seule fois, qui meurt à la fin de l'offre). On
+  // compte ici les codes nominatifs encore vivants et ceux à nettoyer.
+  let codesNominatifs = 0, codesANettoyer = 0;
   try {
     const codes = await getPromoCodes();
-    codeExiste = Boolean(codes[String(offre.code || "").toUpperCase()]);
+    const now = Date.now();
+    for (const def of Object.values(codes)) {
+      if (!def?.email) continue;
+      codesNominatifs++;
+      if (def.expiresAt && now > def.expiresAt) codesANettoyer++;
+    }
   } catch { /* ignore */ }
-  return Response.json({ offre, ouverte: Boolean(offreActive(offre)), codeExiste, ...compte });
+  return Response.json({ offre, ouverte: Boolean(offreActive(offre)), codesNominatifs, codesANettoyer, ...compte });
 }
 
 export async function POST(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body = {};
   try { body = await req.json(); } catch { /* corps vide accepté */ }
+  // Nettoyage des codes nominatifs morts (expirés ou déjà utilisés). Les codes
+  // ouverts (BIENVENUE10, ambassadeurs, codes à la main) ne sont jamais touchés.
+  if (body?.action === "purge") {
+    const r = await purgeExpiredPromoCodes();
+    return Response.json({ ok: true, ...r });
+  }
   if (body?.action !== "send") return Response.json({ error: "Action inconnue." }, { status: 400 });
   const s = await getSettings();
   if (!offreActive(s.gravureOfferte)) {

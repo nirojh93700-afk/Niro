@@ -30,9 +30,45 @@ export default function MessagesAdmin() {
   const [scheduled, setScheduled] = useState([]);
   const [orders, setOrders] = useState([]);
   // Formulaire « programmer / envoyer »
-  const [f, setF] = useState({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" });
+  const [f, setF] = useState({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "", imageUrl: "" });
   const [sending, setSending] = useState(false);
   const [prep, setPrep] = useState("");
+  const [imgBusy, setImgBusy] = useState(false);
+
+  // « Joindre une image » (demande du gérant, 17/09/2026) : la photo est réduite
+  // dans le navigateur, hébergée par le site (/api/upload → /api/img/<ref>) et
+  // affichée EN HAUT de l'e-mail. Marche pour « Envoyer maintenant » ET « Programmer ».
+  async function onPickImage(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    setImgBusy(true); setMsg("");
+    try {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const rd = new FileReader();
+        rd.onload = () => {
+          const im = new Image();
+          im.onload = () => {
+            const max = 1200;
+            const k = Math.min(1, max / Math.max(im.width, im.height));
+            const c = document.createElement("canvas");
+            c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+            c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+            resolve(c.toDataURL("image/jpeg", 0.85));
+          };
+          im.onerror = () => reject(new Error("Image illisible."));
+          im.src = rd.result;
+        };
+        rd.onerror = () => reject(new Error("Lecture impossible."));
+        rd.readAsDataURL(file);
+      });
+      const r = await fetch("/api/upload", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dataUrl }) });
+      const d = await r.json();
+      if (!r.ok || !d.ref) throw new Error(d.error || "Hébergement de l'image impossible.");
+      setF((p) => ({ ...p, imageUrl: "/api/img/" + d.ref }));
+      setMsg("Image jointe ✓ — elle s'affichera en haut du message.");
+    } catch (err) { setMsg(err.message || "Échec de l'image."); }
+    finally { setImgBusy(false); e.target.value = ""; }
+  }
 
   // « Préparer pour validation » : range les messages déjà rédigés dans les
   // réponses à valider et envoie l'alerte habituelle (bouton « Relire, modifier
@@ -134,10 +170,10 @@ export default function MessagesAdmin() {
     try {
       const r = await fetch("/api/admin/send-now", {
         method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ to: f.to, name: f.name, ref: f.ref, orderId: f.orderId, subject: f.subject, body: f.body }),
+        body: JSON.stringify({ to: f.to, name: f.name, ref: f.ref, orderId: f.orderId, subject: f.subject, body: f.body, imageUrl: f.imageUrl }),
       });
       const d = await r.json();
-      if (r.ok) { setMsg(`Message envoyé à ${f.to} ✓`); setF({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" }); }
+      if (r.ok) { setMsg(`Message envoyé à ${f.to} ✓`); setF({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "", imageUrl: "" }); }
       else setMsg(d.error || "Échec de l'envoi.");
     } catch { setMsg("Échec de l'envoi."); }
     finally { setSending(false); }
@@ -148,9 +184,9 @@ export default function MessagesAdmin() {
     if (!f.date || !f.time) { setMsg("Choisis une date et une heure d'envoi."); return; }
     const sendAt = new Date(`${f.date}T${f.time}`).getTime();
     if (!sendAt || sendAt < Date.now()) { setMsg("La date/heure doit être dans le futur."); return; }
-    const r = await fetch("/api/admin/scheduled", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ to: f.to, name: f.name, subject: f.subject, body: f.body, sendAt }) });
+    const r = await fetch("/api/admin/scheduled", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ to: f.to, name: f.name, subject: f.subject, body: f.body, sendAt, imageUrl: f.imageUrl }) });
     const d = await r.json();
-    if (r.ok) { setMsg("Message programmé pour le " + fmtWhen(sendAt) + " ✓"); setF({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "" }); load(key); }
+    if (r.ok) { setMsg("Message programmé pour le " + fmtWhen(sendAt) + " ✓"); setF({ to: "", name: "", ref: "", orderId: "", subject: "", body: "", date: "", time: "", imageUrl: "" }); load(key); }
     else setMsg(d.error || "Échec.");
   }
   async function cancelScheduled(id) {
@@ -264,6 +300,22 @@ export default function MessagesAdmin() {
           <span style={label}>Message</span>
           <textarea style={{ ...input, minHeight: 120 }} value={f.body} onChange={(e) => setF({ ...f, body: e.target.value })} placeholder="Bonjour {prenom}, ..." />
           <div style={{ fontSize: "0.75rem", color: "var(--ink-soft)" }}>Astuce : {"{prenom}"}, {"{nom}"} et {"{ref}"} sont remplacés automatiquement (surtout utile pour les règles auto).</div>
+        </div>
+        <div style={{ marginTop: 10 }}>
+          <span style={label}>📷 Image dans l&apos;e-mail (facultatif)</span>
+          {f.imageUrl ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={f.imageUrl} alt="Image jointe" style={{ width: 90, height: 90, objectFit: "cover", borderRadius: 8, border: "1px solid var(--line)" }} />
+              <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)", flex: 1, minWidth: 140 }}>Jointe ✓ — elle s&apos;affichera en grand, en haut du message.</span>
+              <button type="button" className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem", color: "#b4452f", borderColor: "#e7b7ad" }} onClick={() => setF((p) => ({ ...p, imageUrl: "" }))}>Retirer</button>
+            </div>
+          ) : (
+            <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8 }}>
+              <input type="file" accept="image/*" disabled={imgBusy} onChange={onPickImage} />
+              {imgBusy && <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Envoi de l&apos;image…</span>}
+            </div>
+          )}
         </div>
         <div style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
           <button className="btn btn-gold" style={{ padding: "11px 22px", fontWeight: 700 }} onClick={sendNow} disabled={sending}>

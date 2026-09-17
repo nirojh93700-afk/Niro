@@ -26,6 +26,7 @@ export async function POST(req) {
   const item = await addScheduledEmail({
     to, name: body?.name, subject, body: text, sendAt,
     source: "manuel", orderId: body?.orderId || "",
+    imageUrl: typeof body?.imageUrl === "string" ? body.imageUrl : "",
   });
   return Response.json({ ok: true, item });
 }

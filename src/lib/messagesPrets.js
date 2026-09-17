@@ -26,7 +26,29 @@
 // (Hend Musallam) → texte complet + contexte dans
 // docs/messages/1S9IOON5-colis-revenu.md, avec l'entrée à recopier ici quand il
 // dira de le remettre. Envoi prévu en fin de semaine, par lui seul.
-export const MESSAGES_PRETS = [];
+export const MESSAGES_PRETS = [
+  {
+    id: "tran-carafe-mariage",
+    client: "TRAN",
+    to: "vnhantran@gmail.com",
+    ref: "",
+    piece: "Carafe à whisky — cadeau de mariage Linh & Michael (demande du 17/09)",
+    note: "⚠️ AVANT d'envoyer : joignez votre image avec « 📷 Image dans l'e-mail » — le texte dit « l'image en haut de ce message ».",
+    subject: "Re : Demande sur mesure — Carafe à whisky gravée",
+    body: `Bonjour,
+
+Merci pour votre message — et quelle belle idée de cadeau pour Linh & Michael !
+
+Vous trouverez en haut de ce message la composition prévue pour la carafe, avec leurs prénoms et la date du 6 septembre 2025. Dites-nous simplement si c'est bien cette image que vous souhaitez voir gravée, ou ce que vous aimeriez ajuster.
+
+Dès votre accord, nous vous envoyons un devis que vous pourrez valider et régler en ligne, en toute sécurité. Nos pièces sont fabriquées à la commande et la demande est forte en ce moment : il faut compter 3 à 4 semaines minimum de confection, puis la livraison suivie.
+
+À très vite,
+
+Niv Création
+nivcreation.fr`,
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Historique — déjà partis, gardés pour mémoire (ne s'affichent PAS dans l'admin).

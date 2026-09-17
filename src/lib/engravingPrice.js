@@ -91,3 +91,58 @@ export function engravingExtra(product, fields = {}, variantId = null) {
   const amount = pages * (cfg.perExtraPage || 0) + (photo ? (cfg.photoSurcharge || 0) : 0) + flat;
   return { pages, photo, amount, weight: flatWeight, stockIds };
 }
+
+// =============================================================================
+// PRIX D'UNE SEULE GRAVURE — pour l'offre « gravure offerte » (17/09/2026)
+// -----------------------------------------------------------------------------
+// Règle tranchée par le gérant : le code offre UNE gravure, une seule, à son
+// PRIX RÉEL (3 € sur un bijou, 5 € sur un cristal ou une page de médaillon…),
+// sur N'IMPORTE QUEL produit. Restent payants : les zones/pages suivantes, la
+// PHOTO gravée (photoSurcharge), et toute option PHYSIQUE (socle LED, coffret de
+// verres : un flatExtra qui porte un article de stock ou un poids).
+// Renvoie 0 si aucune gravure payante n'est présente dans les champs.
+// Utilisé au panier (affichage) ET au paiement (recalcul de confiance).
+// =============================================================================
+export function prixPremiereGravure(product, fields = {}, variantId = null) {
+  const cfg = product?.engravingPricing;
+  if (!cfg) return 0;
+  const filled = (k) => k && (fields[k] || "").toString().trim();
+
+  // 1) Zones de texte (recto/verso, cœur/plaques…) : une zone remplie = textExtra.
+  if (Array.isArray(cfg.textKeys) && cfg.textKeys.some(filled) && (cfg.textExtra || 0) > 0) {
+    return cfg.textExtra;
+  }
+  // 2) Pages : la première page gravée (texte → pageText, motif → pageMotif).
+  if (Array.isArray(cfg.pages)) {
+    for (const pg of cfg.pages) {
+      if (pg.textKey && filled(pg.textKey) && (cfg.pageText || 0) > 0) return cfg.pageText;
+      if (pg.motifKey && filled(pg.motifKey) && (cfg.pageMotif || 0) > 0) return cfg.pageMotif;
+    }
+  }
+  // 3) Page au-delà de la couverture incluse (perExtraPage).
+  if ((cfg.perExtraPage || 0) > 0 && !cfg.textKeys && !Array.isArray(cfg.pages)) {
+    const e = engravingExtra(product, fields, variantId);
+    if (e.pages > 0) return cfg.perExtraPage;
+  }
+  // 4) Texte ajouté sous un modèle numéroté.
+  if (cfg.modeleSubExtra) {
+    const mv = fields[cfg.modeleSubExtra.key];
+    if (mv && typeof mv === "object" && mv.addText !== false && (cfg.modeleSubExtra.amount || 0) > 0) {
+      return cfg.modeleSubExtra.amount;
+    }
+  }
+  // 5) Suppléments « à plat » qui sont de la GRAVURE (texte +3 €, gravure : oui,
+  //    prénom sur le support…). Une option qui consomme un article de stock ou
+  //    ajoute du poids est un OBJET (socle, coffret), pas une gravure : ignorée.
+  for (const e of cfg.flatExtras || []) {
+    if (e.stockId || e.stockIdByVariant || e.weight || e.weightByVariant) continue;
+    const v = (fields[e.key] || "").toString().trim();
+    const hit = e.value ? v === e.value : Boolean(v);
+    if (!hit) continue;
+    const amount = (e.amountByVariant && variantId && e.amountByVariant[variantId] != null)
+      ? e.amountByVariant[variantId]
+      : (e.amount || 0);
+    if (amount > 0) return amount;
+  }
+  return 0;
+}

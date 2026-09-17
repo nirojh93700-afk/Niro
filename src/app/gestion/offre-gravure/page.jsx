@@ -81,6 +81,22 @@ export default function OffreGravurePage() {
     finally { setBusy(""); }
   }
 
+  async function nettoyer() {
+    setBusy("purge"); setErr("");
+    try {
+      const r = await fetch("/api/admin/offre-gravure", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": key },
+        body: JSON.stringify({ action: "purge" }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "Nettoyage impossible.");
+      toast(d.supprimes ? `${d.supprimes} code${d.supprimes > 1 ? "s" : ""} nettoyé${d.supprimes > 1 ? "s" : ""} ✓` : "Rien à nettoyer", d.supprimes ? "ok" : "info");
+      await load(key);
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(""); }
+  }
+
   if (!key) {
     return (
       <>
@@ -103,6 +119,7 @@ export default function OffreGravurePage() {
     { label: "À servir maintenant", value: etat?.eligibles ?? 0, sub: "inscrites sans commande", tone: (etat?.eligibles || 0) > 0 ? "warn" : undefined },
     { label: `En attente (moins de ${o.minJours} j)`, value: etat?.attente ?? 0, sub: "servies plus tard, automatiquement" },
     { label: "Déjà reçu l'offre", value: etat?.deja ?? 0 },
+    { label: "Codes personnels actifs", value: etat?.codesNominatifs ?? 0, sub: (etat?.codesANettoyer || 0) > 0 ? `${etat.codesANettoyer} expiré${etat.codesANettoyer > 1 ? "s" : ""} à nettoyer` : "un code par cliente, une seule fois", tone: (etat?.codesANettoyer || 0) > 0 ? "warn" : undefined },
   ];
 
   return (
@@ -134,10 +151,10 @@ export default function OffreGravurePage() {
           <label htmlFor="og-end">Fin (annoncée dans l&apos;e-mail)
             <input type="date" id="og-end" value={o.end} onChange={(e) => set({ end: e.target.value })} />
           </label>
-          <label htmlFor="og-code">Code promo
+          <label htmlFor="og-code">Préfixe des codes (chaque cliente reçoit le sien : PRÉFIXE-XXXXX)
             <input type="text" id="og-code" value={o.code} onChange={(e) => set({ code: e.target.value.toUpperCase() })} />
           </label>
-          <label htmlFor="og-montant">Remise du code (€)
+          <label htmlFor="og-montant">Montant de secours (€) — la vraie remise = le prix de sa 1re gravure
             <input type="number" id="og-montant" min="0" max="50" step="0.5" value={o.montant} onChange={(e) => set({ montant: e.target.value })} />
           </label>
           <label htmlFor="og-minjours">Inscrites depuis au moins (jours)
@@ -161,15 +178,19 @@ export default function OffreGravurePage() {
           >
             Ouvrir pour un mois
           </button>
+          <button className="btn btn-outline" onClick={nettoyer} disabled={busy === "purge"} type="button">
+            {busy === "purge" ? "Nettoyage…" : "Nettoyer les codes expirés"}
+          </button>
         </div>
 
-        {o.code && etat && !etat.codeExiste ? (
-          <p className="og-note warn">
-            Le code <b>{o.code}</b> n&apos;existe pas encore dans Promotions. Il sera créé automatiquement
-            au premier envoi, en remise de <b>{o.montant} €</b>. Si vous voulez le limiter à certaines
-            pièces, créez-le vous-même dans Promotions avant d&apos;envoyer.
-          </p>
-        ) : null}
+        <p className="og-note">
+          <b>Un code par cliente.</b> Chacune reçoit son propre code (<b>{o.code || "GRAVURE"}-XXXXX</b>),
+          réservé à son adresse e-mail, utilisable <b>une seule fois</b>, et qui expire à la date de fin.
+          Au paiement, la remise est <b>le prix réel de la première gravure</b> de son panier
+          (3 € sur un bijou, 5 € sur un cristal…), sur n&apos;importe quel produit — pas un montant fixe.
+          Les codes sont créés dans Promotions au moment de l&apos;envoi ; le bouton « Nettoyer » retire
+          ceux qui sont expirés ou déjà utilisés.
+        </p>
 
         <div className="og-note">
           <b>Comment ça marche.</b> Quand l&apos;offre est ouverte, le site envoie l&apos;e-mail aux inscrites
