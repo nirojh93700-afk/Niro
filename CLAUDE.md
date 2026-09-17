@@ -74,13 +74,12 @@
   (les 2 options + questions quantité/taille/date), et **il a RÉPONDU à 8h56** : c'est bien
   **l'objet moulé** qu'il veut reproduire à l'identique → travail de verrier, pas de la gravure,
   l'atelier ne sait pas le faire. **L'ancien texte validé est OBSOLÈTE — ne pas l'envoyer.**
-  Un **nouveau brouillon** (décliner honnêtement + proposer la gravure du monogramme en
-  alternative) est prêt dans `docs/messages/perez-coeur-verre.md`, **en attente du « envoie »
-  du gérant**. Canal = Gestion → Clients → Messages clients uniquement. Pas de « Monsieur »,
-  signer Niv Création.
-- **En attente de validation du gérant** : réponse préparée à **Simon Zuccarelli**
-  (`zucsim58@gmail.com`, Éternel Compagnon — partenariat revendeur/dropshipping sur les cristaux 3D
-  pour animaux), alerte « [À valider] » du 07/09 dans la boîte mail.
+  ✅ **CLASSÉ SANS SUITE le 17/09/2026** (décision du gérant : « tu peux oublier ») — le
+  brouillon `docs/messages/perez-coeur-verre.md` est abandonné, aucune réponse à envoyer,
+  ne plus le rappeler.
+- ~~Simon Zuccarelli~~ (`zucsim58@gmail.com`, partenariat dropshipping) : ✅ **CLASSÉ SANS SUITE
+  le 17/09/2026** (décision du gérant : « tu peux oublier ») — pas de réponse, classer son
+  brouillon « à valider » sans réponse s'il traîne encore, ne plus le rappeler.
 - **Relance newsletter du 08/09 NON ENVOYÉE** (site injoignable ce jour-là). À refaire par
   Gestion → Marketing → Newsletter → résultats de la campagne du 04/09 → « relancer celles qui n'ont
   pas ouvert », objet : « ✦ Un prénom, une date — et le bijou devient le sien ». Vérifier d'abord que
