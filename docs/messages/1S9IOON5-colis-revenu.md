@@ -1,7 +1,11 @@
 # 📦 Message prêt — retour du colis, commande #1S9IOON5 (Hend Musallam)
 
-> **Texte validé par le gérant le 15/09/2026, NON ENVOYÉ.** Envoi prévu **en fin de semaine**,
-> par lui seul.
+> ✅ **ENVOYÉ le 17/09/2026** sur « envoie » du gérant, par le site (`send-client-email`,
+> bouton Répondre inclus, tracé dans le dossier). **Version RACCOURCIE à sa demande** : le mail
+> demande seulement « souhaitez-vous que nous vous le renvoyions ? » — AUCUNE mention de mode de
+> livraison ni de frais. **Quand elle répond oui : lui demander relais/domicile + adresse, et LÀ
+> parler des frais** (4,90 € relais / 6,90 € domicile, décision du 15/09 — sauf s'il change d'avis).
+> Le colis a été récupéré au relais par le gérant (17/09).
 >
 > ⛔ **RETIRÉ DE GESTION À SA DEMANDE** (15/09) : « tu enlèves ce mail de la gestion, tu le mets
 > en attente, pour pas qu'on se trompe et qu'on l'envoie ». Il n'apparaît donc **plus** dans
