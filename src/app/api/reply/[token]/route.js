@@ -1,6 +1,6 @@
 import { getPendingReplyByToken, resolvePendingReply, reopenPendingReply, batAtelierMessage, logComm } from "@/lib/stock";
 import { emailLayout, escapeHtml } from "@/lib/email";
-import { sendClientMail } from "@/lib/clientMail";
+import { sendClientMail, boutonRepondre } from "@/lib/clientMail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -50,9 +50,13 @@ export async function POST(req, { params }) {
 
   // 2) Envoi à la cliente, à l'image de la marque (Gmail d'abord, Resend en secours),
   //    copie au gérant. Le texte est celui qu'il a relu et éventuellement modifié.
+  const replyBtn = await boutonRepondre({
+    email: it.email, name: it.name || "", subject,
+    excerpt: text.slice(0, 240), orderId: it.orderId || "", orderRef: it.orderRef || "",
+  });
   const html = emailLayout({
     heading: "Votre message — Niv Création",
-    bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(text)}</div>`,
+    bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(text)}</div>${replyBtn}`,
   });
   const thread = it.gmailThreadId ? { threadId: it.gmailThreadId, messageId: it.messageId || "", references: it.references || "" } : null;
   const sent = await sendClientMail({ to: it.email, subject, html, thread });

@@ -12,7 +12,7 @@ import {
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
-import { sendClientMail, brandedMessage, boutonsAvis } from "@/lib/clientMail";
+import { sendClientMail, brandedMessage, boutonsAvis, boutonRepondre } from "@/lib/clientMail";
 import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
 import { offreActive, offreGravureEmail, joursDepuis } from "@/lib/offreGravure";
 
@@ -34,7 +34,11 @@ export async function runScheduledJobs() {
   const queue = await getScheduledEmails();
   for (const s of queue) {
     if (s.sent || (s.sendAt || 0) > now) continue;
-    const html = brandedMessage(s.subject, s.body);
+    const btn = await boutonRepondre({
+      email: s.to, name: s.name || "", subject: s.subject,
+      excerpt: String(s.body || "").slice(0, 240), orderId: s.orderId || "",
+    });
+    const html = brandedMessage(s.subject, s.body, btn);
     const r = await sendClientMail({ to: s.to, subject: s.subject, html });
     await markScheduledSent(s.id, { ok: r.ok, error: r.error });
     if (r.ok) sentManual++; else failed++;
