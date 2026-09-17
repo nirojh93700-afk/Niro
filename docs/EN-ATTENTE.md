@@ -11,9 +11,9 @@
 
 | Qui | État | Où |
 |---|---|---|
-| **Gregory Perez** (`cseidm@pm.me`, C.S.E. IDM) — cœur en verre + monogramme GM | **Il a répondu le 09/09 à 8h56** (il veut bien l'objet moulé → verrier, pas nous). L'ancien texte validé est OBSOLÈTE (déjà envoyé à 8h06). **Nouveau brouillon prêt, attend le « envoie » du gérant** | `docs/messages/perez-coeur-verre.md` |
+| ~~**Gregory Perez**~~ (`cseidm@pm.me`) — cœur en verre | ✅ **CLASSÉ SANS SUITE (décision du gérant, 17/09/2026 : « tu peux oublier »)** — aucune réponse à envoyer, le brouillon `docs/messages/perez-coeur-verre.md` est abandonné. Ne plus le rappeler. | — |
 | **Aurore Corcy** (`aurorecorcy@gmail.com`) — relance carafe + 2 verres de mariage | Texte prêt du 07/09, **jamais envoyé** ; revérifier + redemander l'accord | `docs/messages/aurore-relance.md` |
-| **Simon Zuccarelli** (`zucsim58@gmail.com`, Éternel Compagnon) — partenariat revendeur / dropshipping cristaux 3D pour animaux | Réponse préparée par l'agent, **attend la validation du gérant** | Alerte « [À valider] » du 07/09 dans la boîte mail |
+| ~~**Simon Zuccarelli**~~ (`zucsim58@gmail.com`) — partenariat dropshipping | ✅ **CLASSÉ SANS SUITE (décision du gérant, 17/09/2026 : « tu peux oublier »)** — pas de réponse au partenariat. Si son brouillon « à valider » réapparaît : le classer sans réponse. Ne plus le rappeler. | — |
 | **Newsletter du 04/09** | ⚠️ **VÉRIFIÉ le 09/09 : JAMAIS PARTIE** (aucune campagne dans les stats à part le [TEST] du 01/09, file programmée vide, rien dans Gmail autour du 04/09). **Ne PAS envoyer la relance** ; c'est l'envoi INITIAL qu'il faut refaire, sur décision du gérant (maquette → à lui seul → liste) | Gestion → Marketing → Newsletter |
 | **Ticket xTool #1222642** (F Series) | Message anglais proposé ; **c'est le gérant qui envoie depuis Outlook** (fil absent du Gmail surveillé) | `CLAUDE.md` § État au 09/09 |
 | **Sonia** (`soniagailhac1307@gmail.com`) — commande 16GFEMQP | ✅ **ENVOYÉ le 12/09 à 07 h 13** (fil Communications & aperçu) | `docs/messages/rassurance-3-commandes.md` |
