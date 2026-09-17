@@ -1031,7 +1031,7 @@ export async function getScheduledEmails() {
   return data.scheduled || [];
 }
 
-export async function addScheduledEmail({ to, name, subject, body, sendAt, source, orderId }) {
+export async function addScheduledEmail({ to, name, subject, body, sendAt, source, orderId, imageUrl }) {
   const data = await getCatalogRaw();
   data.scheduled = data.scheduled || [];
   const item = {
@@ -1045,6 +1045,8 @@ export async function addScheduledEmail({ to, name, subject, body, sendAt, sourc
     sent: false, sentAt: 0, error: "",
     source: source || "manuel",
     orderId: orderId || "",
+    // Image affichée en haut du mail (adresse hébergée, ex. /api/img/<ref>).
+    imageUrl: String(imageUrl || "").trim().slice(0, 500),
   };
   data.scheduled.push(item);
   // On garde la file raisonnable (200 derniers).

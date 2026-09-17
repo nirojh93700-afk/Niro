@@ -25,14 +25,23 @@ export async function boutonRepondre({ email, name = "", subject = "", excerpt =
 // Construit un e-mail de marque à partir d'un sujet + d'un corps en texte simple.
 // extraHtml (optionnel) : bloc HTML déjà sûr inséré APRÈS le texte — sert aux
 // boutons d'action (ex. « ★ Noter » de la règle d'avis automatique).
-export function brandedMessage(subject, body, extraHtml = "") {
+// topHtml (optionnel) : bloc HTML déjà sûr inséré AVANT le texte (ex. image).
+export function brandedMessage(subject, body, extraHtml = "", topHtml = "") {
   const html = emailLayout({
     heading: escapeHtml(subject || "Un message de Niv Création"),
-    bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(body || "")}</div>
+    bodyHtml: `${topHtml || ""}<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(body || "")}</div>
       ${extraHtml || ""}
       <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
   });
   return html;
+}
+
+// Image affichée en haut d'un e-mail de marque (adresse déjà hébergée).
+export function imageEnTete(imageUrl) {
+  let u = String(imageUrl || "").trim();
+  if (!u) return "";
+  if (u.startsWith("/")) u = BRAND.siteUrl + u; // adresse relative → absolue (obligatoire dans un e-mail)
+  return `<img src="${escapeHtml(u)}" alt="Aperçu" style="display:block;width:100%;max-width:520px;height:auto;border-radius:10px;border:1px solid #ece3d2;margin:0 0 16px;">`;
 }
 
 // Boutons « ★ Noter » vers la section avis de chaque produit ([{slug, name}]).
