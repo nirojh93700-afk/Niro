@@ -36,6 +36,15 @@
   Nuance à connaître : le site envoie par la boîte Gmail qui lui est CONNECTÉE (`via:"gmail"`
   dans la réponse de l'API) — c'est NORMAL et autorisé (gabarit + traçage) ; ce qui est interdit,
   c'est un envoi Gmail rédigé EN DEHORS du site (outils `mcp__Gmail__reply`/`send_message`…).
+- ⛔ **TOUT E-MAIL CLIENT ENVOYÉ PAR LE SITE DOIT PORTER LE BOUTON « ✉️ Répondre à ce message »**
+  (rappel ferme du gérant, 17/09/2026, après un envoi validé parti sans bouton : « il faut que tu
+  mettes pour que les clients répondent directement dans le mail, faut pas que tu recommences »).
+  Le bouton est maintenant STRUCTUREL : `boutonRepondre(...)` dans `src/lib/clientMail.js`
+  (jeton `addReplyLink`, page `/reponse/<jeton>`, réponse rangée dans le dossier + la commande),
+  branché sur les 3 canaux — `send-client-email`, `/api/reply/[token]` (réponses validées) et
+  les envois programmés (`runScheduledJobs`). **Tout NOUVEAU canal d'e-mail client devra l'appeler
+  aussi.** Jamais bloquant : si le jeton échoue, l'e-mail part sans bouton et la boîte surveillée
+  rattrape les réponses classiques.
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
