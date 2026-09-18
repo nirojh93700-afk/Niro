@@ -88,3 +88,17 @@ nivcreation.fr
   body: `… le texte ci-dessus …`,
 },
 ```
+
+
+## Suite — 18/09/2026
+- Elle a répondu le 17/09 au soir (bouton Répondre) : était en vacances · renvoi en **point
+  relais Mondial Relay d'Ambilly, « vers la Panière »** (PAS à domicile) · veut **changer le
+  prénom gravé → « Melyna »**.
+- ✅ **Réponse PROGRAMMÉE le 18/09 à 10 h 00 (Paris) par le site** (id `sch_cgg8ikilmu6j3ohy`,
+  objet « Re : » = même fil) : gravure ineffaçable, le bracelet « Hend » reste à elle ; nouveau
+  bracelet « Melyna » **22,41 €** + livraison **4,90 relais / 3,90 lettre / 6,90 colis-boîte** ;
+  règlement par **devis** OU **commande sur la fiche** ; **les deux bracelets dans le même colis**.
+- **Suite selon sa réponse** : « d'accord pour le devis » → créer le devis (bracelet 22,41 +
+  livraison choisie) sur ordre du gérant ; si elle commande sur la fiche → glisser le bracelet
+  « Hend » dans le colis. Note : les frais de réexpédition du bracelet « Hend » seul ne sont plus
+  facturés à part — la livraison de la nouvelle commande couvre le colis commun.
