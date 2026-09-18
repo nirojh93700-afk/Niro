@@ -170,6 +170,29 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ---
 
+## 4 a. 🧭 Tableau de bord Gestion — 3 améliorations RETENUES par le gérant (18/09/2026)
+
+> « Garde en mémoire les trois » — proposées le 18/09, retenues, **PAS ENCORE MAQUETTÉES, PAS
+> APPLIQUÉES**. Circuit habituel : maquette → validation → « applique ». Une recherche sur ce que
+> font les grands logiciels (Shopify, WooCommerce, Etsy…) est en cours pour nourrir la maquette.
+
+1. **Messages clientes en tête** — grande tuile « 📬 Messages à traiter » tout en haut du tableau
+   de bord : qui, quel produit, depuis combien de temps (rouge passé 24 h), bouton « Relire et
+   envoyer » directement dessus. Remplace l'alerte e-mail qui n'arrive pas (expéditeur
+   `onboarding@resend.dev`, voir §… alertes). Aujourd'hui ce n'est qu'une ligne dans « À faire ».
+2. **Bandeau « ⏳ Mode délai allongé ACTIF »** avec bouton « Éteindre » — allumé depuis le 02/09,
+   rien ne le rappelle sur l'accueil de Gestion ; risque d'oubli au retour.
+3. **Des chiffres qui servent** — remplacer les tuiles « Commandes (total) » et « Clientes (total) »
+   par : CA ce mois vs mois dernier (flèche) + barre vers l'objectif (`salesGoal`, aujourd'hui
+   visible seulement dans Statistiques) · devis envoyés non payés · commandes « à préparer » depuis
+   plus de 14 jours. Corriger au passage la grille : **5 tuiles sur 4 colonnes** → la 5e est seule.
+
+Non retenues pour l'instant (proposées le même jour) : liste des ruptures sur l'accueil, top 3 des
+favoris de la semaine, raccourcis « Écrire à une cliente / File de production », ancienneté sur les
+dernières commandes, repli du panneau « Ventes hors site ».
+
+---
+
 ## 4 bis. ✦ Offre gravure offerte — PRÊTE, ÉTEINTE, À LANCER SEULEMENT SUR SA DEMANDE (17/09/2026)
 
 **Tout est construit et testé. RIEN ne part tant que le gérant ne dit pas « lance l'offre ».**
