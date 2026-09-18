@@ -172,9 +172,14 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ## 4 a. 🧭 Tableau de bord Gestion — 3 améliorations RETENUES par le gérant (18/09/2026)
 
-> « Garde en mémoire les trois » — proposées le 18/09, retenues, **PAS ENCORE MAQUETTÉES, PAS
-> APPLIQUÉES**. Circuit habituel : maquette → validation → « applique ». Une recherche sur ce que
-> font les grands logiciels (Shopify, WooCommerce, Etsy…) est en cours pour nourrir la maquette.
+> « Garde en mémoire les trois » — proposées le 18/09, retenues. **MAQUETTE FAITE le 18/09 :
+> `docs/maquettes/tableau-de-bord-v2.html`** (3 retenues + ④ sélecteur de période Aujourd'hui /
+> 7 jours / Ce mois / 30 jours, demandé après la recherche Shopify/WooCommerce/Etsy). **EN ATTENTE
+> DE SA VALIDATION — RIEN D'APPLIQUÉ.** Vérifiée en Chromium 1440 px et 390 px : aucun débordement,
+> aucune erreur JS, le sélecteur change bien les chiffres. Le vrai CSS du site est intégré
+> (`.next/static/css`), donc le rendu est celui de Gestion. ⚠️ Piège rencontré : le CSS du site
+> masque tout enfant de `<body>` qui n'est pas `<main>` dès que `.ash` existe → toute maquette
+> admin doit être enveloppée dans `<main>`.
 
 1. **Messages clientes en tête** — grande tuile « 📬 Messages à traiter » tout en haut du tableau
    de bord : qui, quel produit, depuis combien de temps (rouge passé 24 h), bouton « Relire et
