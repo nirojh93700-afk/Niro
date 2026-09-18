@@ -1,5 +1,23 @@
 # Ludovic NOEL — réponse « pas de coffret » (préparée le 16/09/2026)
 
+> ## ✅ SUITE — 18/09/2026 : gravure n°2 choisie + coffret OK + DEVIS DEV-0004 CRÉÉ
+> - Ludovic a répondu le 18/09 à 15 h 56 (bouton Répondre) : « Je choisi la gravure n°2.
+>   Ok pour le coffret en bois. Dans l'attente de votre devis. »
+> - **Devis créé le 18/09 (NON envoyé)** : **DEV-0004** (id `ORe7LDA5iiNg0TPlkTUn`),
+>   Gestion → Devis & factures. Lignes : verre « Claude · Millésime 1976 » 18,90 · verre
+>   « Ami de Claude · Millésimé » 16,00 (= lot 34,90) · coffret bois couvercle gravé 39,90 ·
+>   **livraison domicile 12,90** (reco ; la grille du site dirait 14,90 pour ~2,7 kg — le gérant
+>   n'a pas encore tranché, modifiable avant envoi). **Total 87,70 €.**
+> - Champ « Demande du client » rempli : style n°2 (étiquette grand cru — filets fins,
+>   capitales espacées, losange), textes exacts des 2 verres, coffret 40×30×14 couvercle
+>   gravé (motif du couvercle à confirmer), demande d'origine du 16/09, fichiers HD après
+>   règlement.
+> - **Mail d'accompagnement PRÉPARÉ, montré au gérant, PAS ENVOYÉ** (« Ne envoie rien ») :
+>   confirme n°2 + coffret, annonce le devis, et demande s'il veut le MÊME style n°2 sur le
+>   couvercle ou autre chose. Texte dans la conversation du 18/09 — attendre son « envoie ».
+> - Après paiement : produire les fichiers HD (2 verres + couvercle) ; côté gérant : acheter
+>   coffret Creative Deco 40×30×14 + verres 47 cl.
+
 **Statut : ✅ PROGRAMMÉ le 16/09 au soir pour le 17/09 à 9 h 30 (heure de Paris) par le site**
 (`/api/admin/scheduled`, id `sch_yq034h6fmu4eiveq` — visible/annulable dans Gestion → Clients →
 Messages clients). Objet en « Re : » pour rester dans le même fil que le mail du 16/09.
