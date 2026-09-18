@@ -3,11 +3,15 @@
 > ## ✅ SUITE — 18/09/2026 : gravure n°2 choisie + coffret OK + DEVIS DEV-0004 CRÉÉ
 > - Ludovic a répondu le 18/09 à 15 h 56 (bouton Répondre) : « Je choisi la gravure n°2.
 >   Ok pour le coffret en bois. Dans l'attente de votre devis. »
-> - **Devis créé le 18/09 (NON envoyé)** : **DEV-0004** (id `ORe7LDA5iiNg0TPlkTUn`),
+> - **Devis créé le 18/09 (NON envoyé)** : **DEV-0005** (id `mzH21RaljmlFpwU3GOc4`) —
+>   le DEV-0004 initial (livraison 12,90) a été supprimé et recréé sur choix du gérant,
 >   Gestion → Devis & factures. Lignes : verre « Claude · Millésime 1976 » 18,90 · verre
 >   « Ami de Claude · Millésimé » 16,00 (= lot 34,90) · coffret bois couvercle gravé 39,90 ·
->   **livraison domicile 12,90** (reco ; la grille du site dirait 14,90 pour ~2,7 kg — le gérant
->   n'a pas encore tranché, modifiable avant envoi). **Total 87,70 €.**
+>   **livraison domicile 14,90** (grille du site, palier 2-5 kg — choix du gérant 18/09).
+>   **Total 89,70 €.**
+> - **Verre à acheter (dit au gérant le 18/09)** : 2× **Chef & Sommelier Cabernet Tulipe 47 cl**
+>   (Ø 9,0 × H 22,0 — rentre dans le coffret 40×30×14) ; l'alternative Grands Cépages 47 cl
+>   (Ø 9,5 × H 22,7) rentre aussi mais plus juste. + coffret Creative Deco 40×30×14 (~29,95 €).
 > - Champ « Demande du client » rempli : style n°2 (étiquette grand cru — filets fins,
 >   capitales espacées, losange), textes exacts des 2 verres, coffret 40×30×14 couvercle
 >   gravé (motif du couvercle à confirmer), demande d'origine du 16/09, fichiers HD après
