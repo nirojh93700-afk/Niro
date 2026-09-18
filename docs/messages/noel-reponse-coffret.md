@@ -1,5 +1,18 @@
 # Ludovic NOEL — réponse « pas de coffret » (préparée le 16/09/2026)
 
+> ## ✅✅ ENVOYÉ LE 18/09/2026 AU SOIR — DEVIS DEV-1506 + MAIL (ordre du gérant « tu peux tout envoyer »)
+> - **Numérotation remontée à sa demande** (« le client verra pas que c'est le 5e ») : nouvelle
+>   action admin `POST /api/admin/quotes {action:"counter",type:"devis",value:1505}` (commit
+>   `490968b`, jamais vers le bas), compteur mis à 1505 → DEV-0005 supprimé, devis recréé
+>   **DEV-1506** (id `1A7Rj7Kb8j0swpsavtYJ`), total **89,70 €**. Prochains devis : 1507, 1508…
+> - **Devis DEV-1506 ENVOYÉ** à ludsolo@gmail.com (lien de validation/paiement en ligne).
+> - **Mail d'accompagnement ENVOYÉ** (via le site, `via:"gmail"` = boîte connectée, bouton
+>   Répondre structurel) : confirme n°2 + coffret, annonce le devis en e-mail séparé, et
+>   demande ce qu'il veut sur le COUVERCLE (même style n°2 ou autre texte/dédicace/motif).
+> - **En attente de Ludovic** : sa réponse couvercle + le règlement du devis. Après paiement :
+>   fichiers HD (2 verres + couvercle) ; côté gérant : acheter 2× Cabernet Tulipe 47 cl +
+>   coffret Creative Deco 40×30×14.
+
 > ## ✅ SUITE — 18/09/2026 : gravure n°2 choisie + coffret OK + DEVIS DEV-0004 CRÉÉ
 > - Ludovic a répondu le 18/09 à 15 h 56 (bouton Répondre) : « Je choisi la gravure n°2.
 >   Ok pour le coffret en bois. Dans l'attente de votre devis. »
