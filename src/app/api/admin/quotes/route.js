@@ -1,5 +1,5 @@
 import { isAdmin } from "@/lib/stock";
-import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote } from "@/lib/firebase";
+import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter } from "@/lib/firebase";
 import { quoteEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 
@@ -27,6 +27,15 @@ export async function POST(req) {
   if (body.action === "status") {
     const ok = await updateQuoteStatus(body.id, String(body.status || "").slice(0, 20));
     return Response.json({ ok });
+  }
+
+  // Monter le compteur de numérotation (le prochain devis/facture portera value+1).
+  // Jamais vers le bas : impossible de créer deux documents au même numéro.
+  if (body.action === "counter") {
+    const r = await setQuoteCounter(body.type === "facture" ? "facture" : "devis", body.value);
+    if (!r) return Response.json({ error: "Valeur invalide ou connexion à la base requise." }, { status: 400 });
+    if (!r.ok) return Response.json({ error: `Le compteur est déjà à ${r.current} : on ne redescend jamais.` }, { status: 400 });
+    return Response.json({ ok: true, current: r.current });
   }
 
   if (body.action === "delete") {

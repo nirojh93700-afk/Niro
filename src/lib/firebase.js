@@ -452,6 +452,30 @@ export async function getQuote(id) {
   }
 }
 
+// Règle le compteur de numérotation (devis ou facture). Uniquement vers le haut :
+// on ne redescend jamais, pour ne pas produire deux documents au même numéro.
+export async function setQuoteCounter(type, value) {
+  const a = getApp();
+  if (!a) return null;
+  const field = type === "facture" ? "facture" : "devis";
+  const v = Math.floor(Number(value));
+  if (!Number.isFinite(v) || v < 1) return null;
+  try {
+    const db = admin.firestore();
+    return await db.runTransaction(async (t) => {
+      const ref = db.collection("counters").doc("quotes");
+      const snap = await t.get(ref);
+      const cur = (snap.exists && snap.data()[field]) || 0;
+      if (v <= cur) return { ok: false, current: cur };
+      t.set(ref, { [field]: v }, { merge: true });
+      return { ok: true, current: v };
+    });
+  } catch (e) {
+    console.error("setQuoteCounter:", e.message);
+    return null;
+  }
+}
+
 export async function listQuotes(max = 100) {
   const a = getApp();
   if (!a) return null;
