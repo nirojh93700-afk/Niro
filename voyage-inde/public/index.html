@@ -306,6 +306,7 @@
 
       <button class="btn ghost" id="hotelsBtn" style="margin-top:16px">🏨 <span data-i18n="hotelsBtnLbl">Hôtels (privé)</span></button>
       <button class="btn ghost" id="settleBtn" style="margin-top:8px">🔒 <span data-i18n="settleBtnLbl">Qui rembourse qui (privé)</span></button>
+      <button class="btn ghost" id="reimbBtn" style="margin-top:8px">💵 <span data-i18n="reimbBtnLbl">Qui a remboursé combien</span></button>
       <button class="btn ghost" id="lockBtn" style="margin-top:8px">Verrouiller les comptes</button>
       <button class="btn ghost" id="ratesBtn" style="margin-top:8px;font-size:13px;padding:11px">💱 <span data-i18n="fxBtn">Taux de change</span></button>
       <button class="btn ghost" id="trashBtn" style="margin-top:8px;font-size:13px;padding:11px">🗑️ Corbeille</button>
@@ -458,6 +459,12 @@ var I18N = {
     stPerPerson:"Détail par personne", stMustPay:"TOTAL à rembourser", stToReceive:"TOTAL à recevoir", stSquare:"Rien à rembourser ✓", stPaidForOthers:"A avancé pour les autres", stAlreadyReimb:"Déjà remboursé", stTransfers:"Qui rembourse qui",
     bfLabel:"Petit déjeuner", bfInc:"🥐 Petit déjeuner inclus", bfNone:"Sans petit déjeuner", bfAsk:"Petit déjeuner inclus ?",
     settleBtnLbl:"Qui rembourse qui (privé)", settleTitle:"Qui rembourse qui",
+    reimbBtnLbl:"Qui a remboursé combien", reimbTitle:"Qui a remboursé combien",
+    reimbTotalAll:"Total déjà remboursé", reimbExpected:"sur {x} attendu au total", reimbGave:"a remboursé",
+    reimbOf:"sur {x} à rembourser", reimbLeftShort:"Reste {x}", reimbAllPaid:"Tout est remboursé ✓",
+    reimbOverShort:"A donné {x} de trop", reimbNothing:"N'a encore rien remboursé",
+    reimbOnce:"1 versement", reimbTimes:"{n} versements", reimbEmpty:"Aucun remboursement enregistré pour l'instant.",
+    reimbNote:"Ces montants viennent des remboursements enregistrés dans « Qui rembourse qui ». Pour en ajouter ou en corriger un, passe par ce bouton.",
     settlePrivate:"Visible seulement sur ce téléphone, avec ton code secret.",
     settleSetHint:"Première fois : choisis un code secret. Toi seule le connaîtras — ne le partage pas.",
     settleEnterHint:"Entre ton code secret pour voir qui doit combien à qui.",
@@ -560,6 +567,12 @@ var I18N = {
     stPerPerson:"Per-person detail", stMustPay:"TOTAL to pay back", stToReceive:"TOTAL to receive", stSquare:"Nothing to pay back ✓", stPaidForOthers:"Advanced for others", stAlreadyReimb:"Already reimbursed", stTransfers:"Who pays whom",
     bfLabel:"Breakfast", bfInc:"🥐 Breakfast included", bfNone:"No breakfast", bfAsk:"Breakfast included?",
     settleBtnLbl:"Who owes whom (private)", settleTitle:"Who owes whom",
+    reimbBtnLbl:"Who paid back how much", reimbTitle:"Who paid back how much",
+    reimbTotalAll:"Already paid back", reimbExpected:"out of {x} expected in total", reimbGave:"paid back",
+    reimbOf:"out of {x} to pay back", reimbLeftShort:"{x} left", reimbAllPaid:"Fully paid back ✓",
+    reimbOverShort:"Gave {x} too much", reimbNothing:"Has not paid anything back yet",
+    reimbOnce:"1 payment", reimbTimes:"{n} payments", reimbEmpty:"No payment recorded yet.",
+    reimbNote:"These amounts come from the payments recorded in “Who owes whom”. To add or fix one, use that button.",
     settlePrivate:"Only on this phone, with your secret code.",
     settleSetHint:"First time: choose a secret code. Only you will know it — don't share it.",
     settleEnterHint:"Enter your secret code to see who owes whom.",
@@ -662,6 +675,12 @@ var I18N = {
     stPerPerson:"நபர் வாரியாக விவரம்", stMustPay:"மொத்தம் திருப்பித் தர வேண்டியது", stToReceive:"மொத்தம் பெற வேண்டியது", stSquare:"திருப்பித் தர எதுவும் இல்லை ✓", stPaidForOthers:"மற்றவர்களுக்காக முன்பணம்", stAlreadyReimb:"ஏற்கனவே திருப்பியது", stTransfers:"யார் யாருக்கு தருவது",
     bfLabel:"காலை உணவு", bfInc:"🥐 காலை உணவு உள்ளடங்கும்", bfNone:"காலை உணவு இல்லை", bfAsk:"காலை உணவு உள்ளதா?",
     settleBtnLbl:"யார் யாருக்கு (தனிப்பட்டது)", settleTitle:"யார் யாருக்கு தர வேண்டும்",
+    reimbBtnLbl:"யார் எவ்வளவு திருப்பிக் கொடுத்தார்", reimbTitle:"யார் எவ்வளவு திருப்பிக் கொடுத்தார்",
+    reimbTotalAll:"ஏற்கனவே திருப்பியது", reimbExpected:"மொத்தம் {x} இல்", reimbGave:"திருப்பிக் கொடுத்தார்",
+    reimbOf:"தர வேண்டியது {x} இல்", reimbLeftShort:"மீதம் {x}", reimbAllPaid:"முழுவதும் திருப்பியது ✓",
+    reimbOverShort:"{x} கூடுதலாகக் கொடுத்தார்", reimbNothing:"இன்னும் எதுவும் திருப்பிக் கொடுக்கவில்லை",
+    reimbOnce:"1 தவணை", reimbTimes:"{n} தவணைகள்", reimbEmpty:"இதுவரை திருப்பிச் செலுத்தல் எதுவும் இல்லை.",
+    reimbNote:"இந்தத் தொகைகள் « யார் யாருக்கு » இல் பதிவு செய்யப்பட்டவை. சேர்க்கவோ திருத்தவோ அந்தப் பொத்தானைப் பயன்படுத்தவும்.",
     settlePrivate:"இந்த தொலைபேசியில் மட்டும், உங்கள் ரகசிய குறியீட்டுடன்.",
     settleSetHint:"முதல் முறை: ஒரு ரகசிய குறியீட்டைத் தேர்வு. உங்களுக்கு மட்டும் தெரியும் — பகிராதே.",
     settleEnterHint:"யார் யாருக்கு தர வேண்டும் என்று பார்க்க உங்கள் ரகசிய குறியீட்டை உள்ளிடு.",
@@ -1894,6 +1913,71 @@ function openEditPayment(pid){
     showSettle();
   });
 }
+/* ===== QUI A REMBOURSÉ COMBIEN =====
+   Vue simple, tout le monde d'un coup : pour chaque personne, ce qu'elle a déjà rendu,
+   sur combien elle devait, et ce qu'il reste. Les montants viennent des remboursements
+   enregistrés dans « Qui rembourse qui » — rien n'est calculé en double. */
+function showReimbursed(){
+  var C=S.expCur, EU=CUR[C]||CUR.EUR;
+  var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
+  var det=personCatDetail();
+  var pays=(S.payments||[]).filter(function(p){ return p && p.id; });
+  // ce que chacun a donné
+  var by={};
+  pays.forEach(function(p){ var k=p.from||"?"; if(!by[k]) by[k]={list:[], sum:0}; by[k].list.push(p); by[k].sum+=(+p.eur||0); });
+  // qui afficher : ceux qui ont remboursé + ceux qui doivent encore quelque chose
+  var names={};
+  Object.keys(by).forEach(function(n){ names[n]=1; });
+  Object.keys(det).forEach(function(n){ if((det[n].owes-det[n].advanced)>0.005) names[n]=1; });
+  var list=Object.keys(names).sort(function(a,b){ return ((by[b]&&by[b].sum)||0)-((by[a]&&by[a].sum)||0); });
+  var totGiven=pays.reduce(function(s,p){ return s+(+p.eur||0); },0);
+  var totDue=list.reduce(function(s,n){ var d=det[n]; return s+Math.max(d?d.owes-d.advanced:0,0); },0);
+
+  var cards=list.map(function(p){
+    var cc=color(p), g=by[p]||{list:[],sum:0};
+    var d=det[p]||{owes:0,advanced:0};
+    var due=Math.max(d.owes-d.advanced,0), given=g.sum, left=due-given;
+    // détail des versements, du plus ancien au plus récent
+    var lines=g.list.slice().sort(function(a,b){ return (a.ts||0)-(b.ts||0); }).map(function(x){
+      var dt=x.ts?new Date(x.ts).toLocaleDateString(locale(),{day:"2-digit",month:"short"}):"";
+      return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line2)">'+
+        '<span style="flex:none;color:var(--aqua)">✓</span>'+
+        '<span style="flex:1;font-size:12.5px;color:var(--muted)">'+esc(dt)+'</span>'+
+        '<b style="font-size:13px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(+x.eur||0)+'</b>'+
+        ((x.cur && x.cur!==C && +x.amount>0)?'<small style="color:var(--muted);font-size:11px;white-space:nowrap">'+money(+x.amount,x.cur)+'</small>':'')+
+        '</div>';
+    }).join("");
+    var count=g.list.length ? '<div class="note" style="margin:6px 0 0">'+(g.list.length===1?t("reimbOnce"):fmt(t("reimbTimes"),{n:g.list.length}))+'</div>' : "";
+    // état : reste à rendre / tout est bon / a donné trop / rien donné
+    var state;
+    if(given<=0.005) state='<div style="padding:8px 0 0;font-size:13.5px;font-weight:700;color:var(--rose)">'+t("reimbNothing")+(due>0.005?' — '+fmt(t("reimbLeftShort"),{x:mc(due)}):'')+'</div>';
+    else if(left>0.005) state='<div style="padding:8px 0 0;font-size:14px;font-weight:700;color:var(--rose)">'+fmt(t("reimbLeftShort"),{x:mc(left)})+'</div>';
+    else if(left<-0.005) state='<div style="padding:8px 0 0;font-size:13.5px;font-weight:700;color:var(--gold)">'+fmt(t("reimbOverShort"),{x:mc(-left)})+'</div>';
+    else state='<div style="padding:8px 0 0;font-size:13.5px;font-weight:700;color:var(--aqua)">'+t("reimbAllPaid")+'</div>';
+
+    return '<div style="border:1px solid var(--line);border-left:4px solid '+cc+';border-radius:14px;padding:12px 14px;margin-bottom:12px;background:var(--slab2)">'+
+      '<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px"><span class="dot" style="background:'+cc+';width:12px;height:12px"></span>'+
+      '<span style="flex:1;font-size:16px;font-weight:700;color:'+cc+'">'+esc(p)+'</span></div>'+
+      '<div style="display:flex;align-items:baseline;gap:8px">'+
+        '<span style="flex:1;font-size:13px;color:var(--muted)">'+t("reimbGave")+'</span>'+
+        '<b style="font-size:20px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(given)+'</b></div>'+
+      (due>0.005?'<div style="font-size:12.5px;color:var(--muted);text-align:right">'+fmt(t("reimbOf"),{x:mc(due)})+'</div>':'')+
+      (lines?'<div style="margin-top:8px">'+lines+'</div>':'')+count+state+'</div>';
+  }).join("");
+
+  var head='<div style="border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;background:var(--slab2)">'+
+    '<div style="display:flex;align-items:baseline;gap:8px">'+
+      '<span style="flex:1;font-size:13px;font-weight:700;color:var(--muted)">'+t("reimbTotalAll")+'</span>'+
+      '<b style="font-size:22px;color:var(--aqua);font-variant-numeric:tabular-nums">'+mc(totGiven)+'</b></div>'+
+    (totDue>0.005?'<div style="font-size:12.5px;color:var(--muted);text-align:right">'+fmt(t("reimbExpected"),{x:mc(totDue)})+'</div>':'')+
+    '</div>';
+
+  openSheet('<h3>💵 '+t("reimbTitle")+'</h3>'+
+    (list.length ? head+cards : '<p class="empty">'+t("reimbEmpty")+'</p>')+
+    '<p class="note" style="margin-top:12px">'+esc(t("reimbNote"))+'</p>');
+}
+$("reimbBtn").addEventListener("click", function(){ unlockPrivate(showReimbursed); });
+
 function showSettle(){
   var C=S.expCur, EU=CUR[C]||CUR.EUR, me=S.me||"";
   var mc=function(eur){ return nf(conv(eur,"EUR",C),EU.d)+" "+EU.s; };
