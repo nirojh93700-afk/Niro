@@ -404,6 +404,16 @@ ne descend jamais sous zéro.
   → `/repondre/<jeton>` ; « Ouvrir la commande » → onglet Commandes, fiche dépliée, fil ouvert,
   pastille effacée). **Rouge passé 24 h.** Les plus anciennes en premier. Vide → « tout est traité ».
   La ligne « réponses à valider » du panneau « À faire » a été retirée (doublon).
+  · ⚠️ **TROU CORRIGÉ LE 19/09 (remarque du gérant : « on a traité tous les messages, non ? »)** :
+    une réponse préparée par l'agent ne se classait QUE par la page `/repondre/<jeton>`. Répondre à
+    la cliente par **Messages clients** (ce que fait l'autre conversation) la laissait « à valider »
+    pour toujours → TRAN et Alicia (répondues le 17/09) apparaissaient encore. Maintenant **un
+    message de l'atelier, par n'importe quel canal, classe la réponse préparée** : `logComm`
+    (`from:"nous"`) appelle `classerPendingPourEmail` (envois programmés rangent aussi dans le
+    dossier désormais), et `GET /api/admin/pending-replies` commence par
+    `purgeAnsweredPendingReplies()` (auto-réparation : pending + message atelier plus récent dans
+    le dossier → classé `deja-repondu`). Une demande **plus récente** que le dernier message atelier
+    reste bien en attente.
 - **② Bandeau délai allongé** : lu dans `settings.vacation` (`vacationActive`), « Régler » → onglet
   Apparence, « Éteindre » → confirmation puis `POST /api/admin/settings {vacation:{…, enabled:false}}`.
   Invisible quand le mode est éteint.

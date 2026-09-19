@@ -1,10 +1,12 @@
-import { isAdmin, listPendingReplies } from "@/lib/stock";
+import { isAdmin, listPendingReplies, purgeAnsweredPendingReplies } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
 // Liste des réponses à valider (et des récentes déjà traitées), pour Gestion.
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  // Une demande déjà répondue par un autre canal n'est plus « à valider ».
+  try { await purgeAnsweredPendingReplies(); } catch { /* jamais bloquant */ }
   const all = await listPendingReplies();
   const items = all.map((it) => ({
     id: it.id, token: it.token, name: it.name, email: it.email, subject: it.subject,

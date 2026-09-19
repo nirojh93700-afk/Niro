@@ -936,8 +936,51 @@ export async function logComm({ email, name = "", from, text, subject = "", at =
     keys.sort((a, b) => (data.comms[a].updatedAt || 0) - (data.comms[b].updatedAt || 0));
     for (const k of keys.slice(0, keys.length - COMMS_CLIENTS_MAX)) delete data.comms[k];
   }
-  await persistCatalog(data, ["comms"]);
+  // UN MESSAGE DE L'ATELIER = LA DEMANDE EST TRAITÉE (19/09/2026). Quand on écrit à
+  // une cliente par N'IMPORTE QUEL canal (Messages clients, commande, envoi programmé),
+  // la réponse que l'agent avait préparée pour elle n'a plus lieu d'être : on la
+  // classe. Sinon elle restait « à valider » dans le tableau de bord, la pastille
+  // « à traiter » et l'Assistant, alors que la cliente avait déjà sa réponse
+  // (constaté avec TRAN et Alicia, répondues le 17/09 par Messages clients).
+  const sections = ["comms"];
+  if (msg.from === "nous" && classerPendingPourEmail(data, e, msg.at, via)) sections.push("pendingReplies");
+  await persistCatalog(data, sections);
   return msg;
+}
+
+// Classe (dismissed) les réponses préparées encore « pending » pour cette adresse,
+// antérieures au message de l'atelier. Renvoie true si quelque chose a changé.
+function classerPendingPourEmail(data, email, atelierAt, via = "") {
+  let change = false;
+  for (const it of Object.values(data.pendingReplies || {})) {
+    if (it.status !== "pending") continue;
+    if (normEmail(it.email) !== email) continue;
+    if ((Number(it.at) || 0) > (Number(atelierAt) || 0) + 60000) continue; // demande plus récente : on la garde
+    it.status = "dismissed";
+    it.resolvedAt = Date.now();
+    it.resolvedVia = String(via || "autre canal").slice(0, 30);
+    change = true;
+  }
+  return change;
+}
+
+// Auto-réparation à la lecture : une réponse « à valider » dont l'adresse a reçu un
+// message de l'atelier PLUS RÉCENT (dossier de communication) est classée. Rattrape
+// tout ce qui a été répondu avant le 19/09 par un autre canal.
+export async function purgeAnsweredPendingReplies() {
+  const data = await getCatalogRaw(true);
+  let change = false;
+  for (const it of Object.values(data.pendingReplies || {})) {
+    if (it.status !== "pending") continue;
+    const dossier = (data.comms || {})[normEmail(it.email)];
+    if (!dossier) continue;
+    const repondu = (dossier.messages || []).some((m) => m.from === "nous" && (Number(m.at) || 0) > (Number(it.at) || 0) + 60000);
+    if (!repondu) continue;
+    it.status = "dismissed"; it.resolvedAt = Date.now(); it.resolvedVia = "deja-repondu";
+    change = true;
+  }
+  if (change) await persistCatalog(data, ["pendingReplies"]);
+  return change;
 }
 export async function getCommsFor(email) {
   const e = normEmail(email);
