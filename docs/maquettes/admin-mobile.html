@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestion sur téléphone — maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#faf6ef; --cream-2:#f3ece0; --paper:#fffdf9;
+  --ink:#2b2620; --ink-soft:#5a5247; --gold:#c2a14e; --gold-dark:#a98935;
+  --line:#e7ddcd;
+  --ash-panel:#17120b; --ash-panel-2:#221a10; --ash-gold:#d6b25a; --ash-ink:#1d1811;
+  --bg:#efe9de;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+main{display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 18px 70px}
+h1{font:400 2rem/1.15 "Playfair Display",Georgia,serif;margin:0 0 6px}
+h2{font:400 1.35rem/1.2 "Playfair Display",Georgia,serif;margin:44px 0 6px}
+h3{font:700 .95rem/1.3 Inter,sans-serif;margin:0 0 6px}
+.lead{color:var(--ink-soft);margin:0 0 4px;max-width:760px}
+.eyebrow{font:700 .7rem/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px}
+.sub{color:var(--ink-soft);font-size:.92rem;margin:0 0 18px;max-width:820px}
+
+/* ---- cartes d'explication ---- */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:18px 0 8px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+.card.bad{border-color:#e6c0b6;background:#fdf6f4}
+.card.good{border-color:#c4dcc8;background:#f5fbf6}
+.card p{margin:0;font-size:.88rem;color:var(--ink-soft)}
+.card .tag{display:inline-block;font:800 .64rem/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;border-radius:999px;padding:5px 9px;margin-bottom:9px}
+.bad .tag{background:#f4ddd7;color:#a2402f}
+.good .tag{background:#dcecdf;color:#2f6b3d}
+.ref{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:13px 16px;margin:16px 0;font-size:.88rem;color:var(--ink-soft)}
+.ref b{color:var(--ink)}
+.ref ul{margin:8px 0 0;padding-left:18px}
+.ref li{margin:4px 0}
+
+/* ---- rangée de téléphones ---- */
+.phones{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px}
+.phonebox{flex:0 0 auto;width:330px;max-width:100%}
+.caption{font:700 .82rem/1.35 Inter,sans-serif;margin:0 0 3px}
+.caption span{display:block;font-weight:400;font-size:.8rem;color:var(--ink-soft)}
+.phone{margin-top:11px;width:330px;max-width:100%;height:660px;border-radius:38px;background:#12100d;padding:9px;box-shadow:0 18px 44px rgba(30,24,14,.28)}
+.screen{position:relative;height:100%;border-radius:30px;overflow:hidden;background:#f4f1ea;display:flex;flex-direction:column}
+.statusbar{flex:0 0 auto;height:26px;background:#17120b;color:#efe4c9;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font:600 .64rem/1 Inter,sans-serif}
+
+/* ================= NOUVELLE BARRE DU HAUT (mobile) ================= */
+.mtop{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:9px 11px;background:rgba(255,253,249,.97);border-bottom:1px solid var(--line);min-height:52px}
+.mtop .ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:1.05rem;color:var(--ink)}
+.mtop .ic.plain{border-color:transparent;background:transparent;font-size:1.5rem;color:var(--gold-dark);width:32px}
+.mtop .ttl{flex:1;min-width:0}
+.mtop .ttl b{display:block;font:700 .97rem/1.2 Inter,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mtop .ttl small{display:block;font-size:.71rem;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mtop .dot{position:absolute;top:5px;right:5px;min-width:16px;height:16px;border-radius:999px;background:#b4452f;color:#fff;font:800 .6rem/16px Inter,sans-serif;text-align:center;padding:0 4px}
+.icwrap{position:relative;flex:0 0 auto}
+
+.body{flex:1;overflow:hidden;padding:13px 13px 8px}
+.body.flush{padding:0}
+.scrollhint{position:absolute;left:0;right:0;bottom:60px;height:34px;background:linear-gradient(transparent,#f4f1ea);pointer-events:none}
+
+/* ================= BARRE DU BAS (onglets) ================= */
+.tabbar{flex:0 0 auto;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,253,249,.98);border-top:1px solid var(--line);padding:5px 2px 7px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:2px;font:600 .63rem/1.1 Inter,sans-serif;color:#8b8172;position:relative;padding:3px 0}
+.tab i{font-style:normal;font-size:1.16rem;line-height:1.1}
+.tab.on{color:var(--ash-ink)}
+.tab.on i{color:var(--gold-dark)}
+.tab.on::before{content:"";position:absolute;top:-5px;width:26px;height:3px;border-radius:0 0 4px 4px;background:var(--gold)}
+.tab b{position:absolute;top:0;right:calc(50% - 20px);min-width:16px;height:16px;border-radius:999px;background:#b4452f;color:#fff;font:800 .6rem/16px Inter,sans-serif;text-align:center;padding:0 4px}
+
+/* ================= CONTENU : tableau de bord ================= */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 12px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(#e2c67e,#a98935)}
+.kpi small{display:block;font:600 .64rem/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+.kpi b{font:800 1.22rem/1 Inter,sans-serif;font-variant-numeric:tabular-nums}
+.kpi em{font-style:normal;display:block;font-size:.7rem;color:#2f6b3d;margin-top:3px}
+.blocktitle{display:flex;align-items:baseline;justify-content:space-between;margin:15px 0 7px}
+.blocktitle h4{margin:0;font:700 .86rem/1 Inter,sans-serif}
+.blocktitle a{font:700 .74rem/1 Inter,sans-serif;color:var(--gold-dark);text-decoration:none}
+.msgrow{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 11px;margin-bottom:7px}
+.msgrow.late{border-color:#e6c0b6;background:#fdf7f5}
+.av{flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--cream-2);color:var(--gold-dark);font:800 .82rem/1 Inter,sans-serif}
+.msgrow .t{flex:1;min-width:0}
+.msgrow .t b{display:block;font:700 .84rem/1.25 Inter,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msgrow .t small{display:block;font-size:.73rem;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msgrow .go{flex:0 0 auto;color:var(--gold-dark);font-size:1.1rem}
+.chip{display:inline-block;font:700 .64rem/1 Inter,sans-serif;border-radius:999px;padding:4px 8px;background:#f7ead0;color:#8a6414;border:1px solid #e2c98d}
+.chip.red{background:#f7e0db;color:#a2402f;border-color:#e4bcb2}
+
+/* ================= CONTENU : le menu ================= */
+.drawer{position:absolute;inset:0;background:linear-gradient(180deg,var(--ash-panel-2),var(--ash-panel));color:#e6dcc6;display:flex;flex-direction:column;z-index:5}
+.dhead{display:flex;align-items:center;gap:11px;padding:13px 14px;border-bottom:1px solid rgba(214,178,90,.16)}
+.dlogo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#e2c67e,#a98935);color:#1d1811;font:700 .9rem/1 Georgia,serif;letter-spacing:1px}
+.dhead .t{flex:1;min-width:0}
+.dhead .t b{display:block;color:#fff;font:700 .92rem/1.2 Inter,sans-serif}
+.dhead .t small{display:block;font-size:.67rem;color:#a3957a;letter-spacing:.09em;text-transform:uppercase}
+.dclose{flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.09);border:1px solid rgba(214,178,90,.22);color:#f1dfae;display:grid;place-items:center;font-size:1.22rem}
+.dsearch{margin:11px 13px 4px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(214,178,90,.18);border-radius:11px;padding:9px 12px;color:#a3957a;font-size:.84rem}
+.dnav{flex:1;overflow:hidden;padding:8px 9px 12px}
+.dgl{font:700 .63rem/1 Inter,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:#8d8064;padding:11px 10px 5px}
+.ditem{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:10px;color:#d9cdb2;font:500 .87rem/1.2 Inter,sans-serif}
+.ditem i{font-style:normal;width:20px;text-align:center;opacity:.85}
+.ditem span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ditem.on{background:rgba(214,178,90,.17);color:#f1dfae;font-weight:700;box-shadow:inset 2px 0 0 var(--ash-gold)}
+.dbadge{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--ash-gold);color:#1d1811;font:800 .69rem/20px Inter,sans-serif;text-align:center}
+
+/* ================= CONTENU : un e-mail lu ================= */
+.mailhead{padding:13px 14px 11px;background:#fff;border-bottom:1px solid var(--line)}
+.mailhead h5{margin:0 0 9px;font:600 1.02rem/1.34 "Playfair Display",Georgia,serif;overflow-wrap:anywhere}
+.who{display:flex;gap:10px;align-items:center}
+.who .av{width:38px;height:38px;font-size:.88rem}
+.who .n{flex:1;min-width:0}
+.who .n b{display:block;font:700 .85rem/1.25 Inter,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .n small{display:block;font-size:.74rem;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .d{flex:0 0 auto;font-size:.72rem;color:var(--ink-soft)}
+.mailbody{padding:15px 14px 12px;background:#fff;font-size:.93rem;line-height:1.62;overflow-wrap:anywhere;word-break:normal}
+.mailbody p{margin:0 0 12px}
+.mailbody p:last-child{margin-bottom:0}
+.quotebtn{display:inline-flex;align-items:center;gap:7px;margin:4px 0 0;background:var(--cream-2);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font:600 .78rem/1 Inter,sans-serif;color:var(--ink-soft)}
+.quotebtn i{font-style:normal;letter-spacing:2px;line-height:.6}
+.quoted{margin:11px 0 0;padding:10px 12px;border-left:3px solid var(--line);background:#fbf8f2;border-radius:0 10px 10px 0;font-size:.85rem;line-height:1.55;color:var(--ink-soft);overflow-wrap:anywhere}
+.quoted p{margin:0 0 8px}
+.actionbar{position:absolute;left:0;right:0;bottom:0;display:flex;gap:9px;padding:10px 13px 13px;background:rgba(255,253,249,.98);border-top:1px solid var(--line)}
+.btn{flex:1;text-align:center;border-radius:12px;padding:12px 10px;font:700 .86rem/1 Inter,sans-serif;min-height:46px;display:grid;place-items:center}
+.btn.gold{background:linear-gradient(135deg,#e2c67e,#c9a24b 60%,#a98935);color:#241a0c}
+.btn.ghost{flex:0 0 auto;width:52px;background:#fff;border:1px solid var(--line);color:var(--ink);font-size:1.12rem}
+
+/* ================= CONTENU : fil BAT ================= */
+.thread{padding:12px 13px;display:flex;flex-direction:column;gap:11px}
+.bub{border-radius:14px;padding:11px 13px;font-size:.9rem;line-height:1.58;overflow-wrap:anywhere;border:1px solid var(--line)}
+.bub .m{display:flex;align-items:center;gap:7px;font:700 .7rem/1 Inter,sans-serif;color:var(--gold-dark);margin-bottom:7px;flex-wrap:wrap}
+.bub .m em{font-style:normal;font-weight:500;color:var(--ink-soft)}
+.bub p{margin:0 0 9px}
+.bub p:last-child{margin-bottom:0}
+.bub.nous{background:#fff;border-left:3px solid var(--gold);margin-left:20px}
+.bub.elle{background:#f6f1e7;border-left:3px solid #b9ac93;margin-right:20px}
+.bub.elle .m{color:#7a6f59}
+.daysep{text-align:center;font:700 .68rem/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#9a9082;margin:3px 0}
+
+/* ---- avant / après ---- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:700px){.ba{grid-template-columns:1fr}}
+.bacol h3{display:flex;align-items:center;gap:8px}
+.badge{font:800 .62rem/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;border-radius:999px;padding:5px 9px}
+.badge.no{background:#f4ddd7;color:#a2402f}
+.badge.yes{background:#dcecdf;color:#2f6b3d}
+.demo{margin-top:9px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;width:100%;overflow:hidden}
+.demo .inner{width:312px;max-width:100%}
+.oldmsg{border:1px solid var(--line);border-radius:10px;padding:10px;margin-left:24px;margin-right:0;background:#f3ece0;font-size:14px;white-space:pre-line;overflow-x:auto}
+.oldmsg .m{font-size:11px;color:var(--gold-dark);font-weight:700;margin-bottom:4px}
+.note{font-size:.8rem;color:var(--ink-soft);margin:8px 0 0}
+.foot{margin-top:46px;border-top:1px solid var(--line);padding-top:18px;font-size:.86rem;color:var(--ink-soft)}
+.foot b{color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+<div class="wrap">
+
+  <div class="eyebrow">Maquette · à valider avant toute mise en ligne</div>
+  <h1>La Gestion, vraiment utilisable sur téléphone</h1>
+  <p class="lead">L'ordinateur ne change pas d'un pixel. Tout ce qui suit ne s'applique qu'en dessous de 900&nbsp;px de large, c'est-à-dire sur votre téléphone.</p>
+
+  <h2>Ce qui ne va pas aujourd'hui</h2>
+  <p class="sub">Relevé directement dans le code, et visible sur vos captures du 19/09.</p>
+  <div class="grid">
+    <div class="card bad"><span class="tag">Navigation</span><h3>Aucun bouton pour revenir</h3><p>Le menu noir s'ouvre en plein écran et n'a <strong>pas de croix</strong>&nbsp;: il faut deviner qu'on doit toucher le voile gris à droite. Et la barre du haut n'affiche qu'un titre — rien sur quoi appuyer pour reculer d'un écran.</p></div>
+    <div class="card bad"><span class="tag">Navigation</span><h3>Tout est caché derrière ☰</h3><p>29&nbsp;entrées dans un seul tiroir. Les 4&nbsp;écrans que vous ouvrez vingt fois par jour (commandes, messages) demandent deux gestes à chaque fois.</p></div>
+    <div class="card bad"><span class="tag">E-mails</span><h3>Le texte déborde à droite</h3><p>Les blocs de message n'ont <strong>aucune règle de coupure de mot</strong>. Une adresse e-mail, un lien, ou une ligne citée «&nbsp;&gt;&nbsp;» partent hors de l'écran&nbsp;: «&nbsp;NivCreatio…&nbsp;», «&nbsp;Verre à w…&nbsp;».</p></div>
+    <div class="card bad"><span class="tag">E-mails</span><h3>Un mur de texte</h3><p>Pas d'interligne, pas de marge, la réponse citée est recopiée telle quelle. Et les bulles sont décalées de 24&nbsp;px de chaque côté&nbsp;: sur un écran de 390&nbsp;px, c'est 48&nbsp;px de lecture perdus.</p></div>
+  </div>
+
+  <h2>Ce que font les grandes applications</h2>
+  <div class="ref">
+    <b>Shopify</b> — sa propre règle de conception&nbsp;: «&nbsp;le marchand doit pouvoir revenir à la page précédente sans utiliser le bouton du navigateur&nbsp;; votre application doit fournir un fil d'Ariane ou un bouton Retour&nbsp;». Sur Shopify mobile, le menu latéral du bureau devient un déroulé depuis la barre de titre, et le retour web est fusionné avec le retour natif — ce qui leur a rendu <b>40&nbsp;% de hauteur d'écran en plus</b>.
+    <ul>
+      <li><b>Barre d'onglets en bas</b> (Shopify, Etsy Seller, toutes les applis de gestion) — 3 à 5 destinations principales toujours visibles, atteignables au pouce d'une seule main. Les tests d'usage donnent des tâches <b>40&nbsp;% plus rapides</b> qu'avec un menu hamburger, et un menu caché divise presque par deux la découverte des fonctions.</li>
+      <li><b>Le hamburger ne disparaît pas</b> — il devient le 5<sup>e</sup> onglet «&nbsp;Plus&nbsp;», réservé aux écrans rares (réglages, études, inventaire).</li>
+      <li><b>Gmail / Apple Mail</b> — la réponse citée est <b>repliée</b> derrière un bouton «&nbsp;···&nbsp;», jamais déversée dans la page&nbsp;; et le corps du message coupe les mots trop longs (<code>overflow-wrap</code>) au lieu de déborder.</li>
+      <li><b>Pas de cadre qui défile dans un cadre qui défile</b> — aujourd'hui le corps d'un e-mail est enfermé dans une boîte de 260&nbsp;px avec sa propre barre de défilement. Sur un téléphone c'est le pire cas&nbsp;: le doigt ne sait plus quoi il fait bouger.</li>
+    </ul>
+  </div>
+
+  <h2>La proposition, écran par écran</h2>
+  <p class="sub">Quatre écrans à la taille réelle d'un iPhone (390&nbsp;px). Rien de tout ceci n'existe encore sur le site.</p>
+
+  <div class="phones">
+
+    <!-- ============ 1. TABLEAU DE BORD ============ -->
+    <div class="phonebox">
+      <p class="caption">1 · Le tableau de bord<span>Barre d'onglets en bas, toujours là. Le pouce atteint tout.</span></p>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>◗ ▮▮▮</span></div>
+        <div class="mtop">
+          <div class="icwrap"><div class="ic">☰</div></div>
+          <div class="ttl"><b>Tableau de bord</b><small>Pilotage · Ce mois</small></div>
+          <div class="icwrap"><div class="ic">⌕</div></div>
+        </div>
+        <div class="body">
+          <div class="kpis">
+            <div class="kpi"><small>Chiffre d'affaires</small><b>1 284 €</b><em>▲ 18 % vs août</em></div>
+            <div class="kpi"><small>Commandes</small><b>17</b><em>▲ 3 vs août</em></div>
+            <div class="kpi"><small>Panier moyen</small><b>75,50 €</b><em>▲ 4 %</em></div>
+            <div class="kpi"><small>Devis en attente</small><b>2</b><em style="color:#8a6414">à relancer</em></div>
+          </div>
+          <div class="blocktitle"><h4>Messages à traiter</h4><a>Tout voir ›</a></div>
+          <div class="msgrow late">
+            <div class="av">R</div>
+            <div class="t"><b>Rose Catarino</b><small>#1Z17IKQ8 · il y a 31 h</small></div>
+            <div class="go">›</div>
+          </div>
+          <div class="msgrow">
+            <div class="av">L</div>
+            <div class="t"><b>Ludovic Noel</b><small>Verre 47 cl · il y a 4 h</small></div>
+            <div class="go">›</div>
+          </div>
+          <div class="msgrow">
+            <div class="av">C</div>
+            <div class="t"><b>Cécilia Herrera</b><small>#00CUYR2U · il y a 2 h</small></div>
+            <div class="go">›</div>
+          </div>
+        </div>
+        <div class="scrollhint"></div>
+        <div class="tabbar">
+          <div class="tab on"><i>◫</i>Accueil</div>
+          <div class="tab"><i>▤</i>Commandes<b>7</b></div>
+          <div class="tab"><i>✉</i>Messages<b>3</b></div>
+          <div class="tab"><i>◧</i>Produits</div>
+          <div class="tab"><i>☰</i>Plus</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ============ 2. LE MENU ============ -->
+    <div class="phonebox">
+      <p class="caption">2 · Le menu complet<span>Une vraie croix en haut à droite, et une recherche.</span></p>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>◗ ▮▮▮</span></div>
+        <div class="drawer">
+          <div class="dhead">
+            <div class="dlogo">NiV</div>
+            <div class="t"><b>Niv Création</b><small>Espace gestion</small></div>
+            <div class="dclose">✕</div>
+          </div>
+          <div class="dsearch">⌕ &nbsp;Rechercher un écran…</div>
+          <div class="dnav">
+            <div class="dgl">Pilotage</div>
+            <div class="ditem on"><i>◫</i><span>Tableau de bord</span></div>
+            <div class="ditem"><i>✦</i><span>Assistant</span><span class="dbadge" style="flex:0 0 auto">3</span></div>
+            <div class="dgl">Commandes</div>
+            <div class="ditem"><i>▤</i><span>File de production</span><span class="dbadge" style="flex:0 0 auto">7</span></div>
+            <div class="ditem"><i>▣</i><span>Fiches complètes</span><span class="dbadge" style="flex:0 0 auto">3</span></div>
+            <div class="ditem"><i>◈</i><span>Atelier · fichiers</span></div>
+            <div class="ditem"><i>▥</i><span>Devis &amp; factures</span></div>
+            <div class="dgl">Clients</div>
+            <div class="ditem"><i>◉</i><span>Clients (CRM)</span></div>
+            <div class="ditem"><i>★</i><span>Avis</span></div>
+            <div class="ditem"><i>♥</i><span>Favoris des clientes</span></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ============ 3. UN E-MAIL LU ============ -->
+    <div class="phonebox">
+      <p class="caption">3 · Lire un e-mail<span>Flèche de retour, texte aéré, citation repliée, boutons collés en bas.</span></p>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>◗ ▮▮▮</span></div>
+        <div class="mtop">
+          <div class="ic plain">‹</div>
+          <div class="ttl"><b>Ludovic Noel</b><small>Boîte mail · 3 sur 12</small></div>
+          <div class="icwrap"><div class="ic">⋯</div></div>
+        </div>
+        <div class="body flush" style="overflow:hidden">
+          <div class="mailhead">
+            <h5>Re : Votre demande de verres gravés 47 cl</h5>
+            <div class="who">
+              <div class="av">L</div>
+              <div class="n"><b>Ludovic Noel</b><small>ludovic.noel@…fr</small></div>
+              <div class="d">17 sept.<br>14:08</div>
+            </div>
+          </div>
+          <div class="mailbody">
+            <p>Bonjour,</p>
+            <p>Merci pour votre retour rapide. Le verre de 47 cl me convient tout à fait, ainsi que le tarif que vous m'avez indiqué.</p>
+            <p>Je n'ai pas de date impérative. En revanche je me demandais s'il était possible d'ajouter un coffret pour l'offrir.</p>
+            <button class="quotebtn"><i>···</i> Afficher le texte cité</button>
+          </div>
+        </div>
+        <div class="actionbar">
+          <div class="btn gold">Répondre</div>
+          <div class="btn ghost">⌂</div>
+          <div class="btn ghost">✦</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ============ 4. FIL BAT ============ -->
+    <div class="phonebox">
+      <p class="caption">4 · Le fil d'une commande<span>Les mêmes règles de lecture appliquées aux échanges BAT.</span></p>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>◗ ▮▮▮</span></div>
+        <div class="mtop">
+          <div class="ic plain">‹</div>
+          <div class="ttl"><b>#1Z17IKQ8 · Rose Catarino</b><small>⏳ En attente de réponse</small></div>
+          <div class="icwrap"><div class="ic">⋯</div></div>
+        </div>
+        <div class="body flush" style="overflow:hidden">
+          <div class="thread">
+            <div class="daysep">17 septembre</div>
+            <div class="bub nous">
+              <div class="m">Nous <em>· 📧 par e-mail · 22:42</em></div>
+              <p>Bonjour Rose,</p>
+              <p>Votre collier est prêt à passer en gravure. Nous confirmons le prénom&nbsp;: <strong>Éline</strong>, en écriture Great&nbsp;Vibes.</p>
+              <p>Belle soirée,<br>Niv Création</p>
+            </div>
+            <div class="bub elle">
+              <div class="m">Rose Catarino <em>· 23:10</em></div>
+              <p>Parfait, c'est bien ça&nbsp;! Merci beaucoup.</p>
+            </div>
+            <div class="daysep">Aujourd'hui</div>
+            <div class="bub elle">
+              <div class="m">Rose Catarino <em>· ✅ Validé · 08:26</em></div>
+              <p>Bonjour, est-ce que je peux encore ajouter la date au dos&nbsp;?</p>
+            </div>
+          </div>
+        </div>
+        <div class="actionbar">
+          <div class="btn gold">Écrire à Rose</div>
+          <div class="btn ghost">🖼</div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <h2>Le détail qui change tout : la lecture d'un message</h2>
+  <p class="sub">Même message, même largeur d'écran. À gauche le code d'aujourd'hui, à droite la proposition.</p>
+  <div class="ba">
+    <div class="bacol">
+      <h3><span class="badge no">Aujourd'hui</span></h3>
+      <div class="demo"><div class="inner">
+        <div class="oldmsg"><div class="m">Toi · 📧 par e-mail · 17/09 22:42</div>Bonjour, voici le récapitulatif : verre 47cl, gravure comprise — le fond du verre reste lisse. Suivi : https://nivcreation.fr/suivi/8f3ad91c7e4b20556ca1
+&gt; Le 17/09/2026 à 21:14, Rose Catarino a écrit : bonjour je voulais savoir</div>
+      </div></div>
+      <p class="note">Bulle décalée de 24&nbsp;px, interligne serré, et surtout&nbsp;: <strong>aucun mot long n'est coupé</strong>. Le lien de suivi sort de la bulle et le texte est tranché net à droite — exactement ce que montrent vos captures. La réponse citée «&nbsp;&gt;&nbsp;» est déversée à la suite.</p>
+    </div>
+    <div class="bacol">
+      <h3><span class="badge yes">Proposé</span></h3>
+      <div class="demo"><div class="inner">
+        <div class="bub nous" style="margin-left:0">
+          <div class="m">Nous <em>· 📧 par e-mail · 22:42</em></div>
+          <p>Bonjour, voici le récapitulatif&nbsp;: verre 47&nbsp;cl, gravure comprise — le fond du verre reste lisse.</p>
+          <p>Suivi&nbsp;: <span style="color:var(--gold-dark)">https://nivcreation.fr/suivi/8f3ad91c7e4b20556ca1</span></p>
+          <button class="quotebtn"><i>···</i> Afficher le texte cité</button>
+        </div>
+      </div></div>
+      <p class="note">Marge rendue au texte, interligne 1,58, coupure des mots longs, et la réponse citée repliée. Plus rien ne sort de l'écran, quelle que soit la longueur d'un lien.</p>
+    </div>
+  </div>
+
+  <h2>Ce que je changerais, concrètement</h2>
+  <div class="grid">
+    <div class="card good"><span class="tag">1</span><h3>Barre d'onglets en bas</h3><p>Accueil · Commandes · Messages · Produits · Plus. Visible sur tous les écrans de Gestion, en dessous de 900&nbsp;px seulement. Les pastilles rouges reprennent les compteurs déjà calculés.</p></div>
+    <div class="card good"><span class="tag">2</span><h3>Flèche de retour ‹</h3><p>Dans la barre du haut, à la place du ☰, dès qu'on est descendu d'un niveau (un e-mail ouvert, une commande, un fil). Elle remonte d'un écran — jamais hors de la Gestion.</p></div>
+    <div class="card good"><span class="tag">3</span><h3>Croix dans le menu</h3><p>Un vrai bouton ✕ de 40&nbsp;px en haut à droite du tiroir noir, plus une recherche d'écran pour ne plus faire défiler 29&nbsp;entrées.</p></div>
+    <div class="card good"><span class="tag">4</span><h3>Messages lisibles</h3><p>Coupure des mots longs partout où un message s'affiche (fil BAT, boîte mail, dossier client), interligne 1,55, marges rendues, plus aucun cadre qui défile dans la page.</p></div>
+    <div class="card good"><span class="tag">5</span><h3>Citation repliée</h3><p>Les lignes «&nbsp;&gt;&nbsp;» d'une réponse sont détectées et rangées derrière «&nbsp;··· Afficher le texte cité&nbsp;», comme dans Gmail.</p></div>
+    <div class="card good"><span class="tag">6</span><h3>Boutons collés en bas</h3><p>Répondre / Envoyer restent accessibles au pouce au lieu d'être perdus après le message. Hauteur minimum 46&nbsp;px, la cible recommandée pour le tactile.</p></div>
+  </div>
+
+  <div class="foot">
+    <p><b>L'ordinateur n'est pas touché.</b> Tout passe par <code>@media (max-width: 900px)</code> et par des règles de lecture (coupure de mot, interligne) qui n'ont aucun effet visible sur grand écran.</p>
+    <p>Rien n'est appliqué au site. Dites-moi «&nbsp;applique&nbsp;» et je le construis à l'identique, écran par écran, avec la vérification du rendu réel à 390&nbsp;px avant de pousser.</p>
+  </div>
+
+</div>
+</main>
+</body>
+</html>
