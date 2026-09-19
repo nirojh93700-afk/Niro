@@ -23,6 +23,7 @@ export default function FavorisPage() {
   const [items, setItems] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [ajoutes, setAjoutes] = useState(0);
+  const [watch, setWatch] = useState({}); // { slug: true } — « prévenez-moi si le prix baisse »
 
   useEffect(() => {
     let annule = false;
@@ -49,6 +50,7 @@ export default function FavorisPage() {
 
       if (!rep.loggedIn) { setLoggedIn(false); return; }
       setLoggedIn(true);
+      setWatch(rep.watch || {});
 
       // Des favoris du navigateur manquent dans le compte ? On les y range.
       const manquants = local.map((x) => x.slug).filter((s) => !(rep.slugs || []).includes(s));
@@ -86,6 +88,20 @@ export default function FavorisPage() {
         body: JSON.stringify({ action: "toggle", slug }),
       }).catch(() => {});
     }
+  }
+
+  // La cloche « prévenez-moi si le prix baisse » — compte connecté uniquement
+  // (l'e-mail vient de la session signée, le prix de référence est relevé côté
+  // serveur). L'affichage bascule tout de suite, l'appel part derrière.
+  function toggleWatch(slug) {
+    const on = !watch[slug];
+    setWatch((w) => ({ ...w, [slug]: on }));
+    fetch("/api/favoris", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "watch", slug, on }),
+    }).then((r) => { if (!r.ok) setWatch((w) => ({ ...w, [slug]: !on })); })
+      .catch(() => setWatch((w) => ({ ...w, [slug]: !on })));
   }
 
   if (items === null) return <div className="container" style={{ padding: 40 }}><p>Chargement…</p></div>;
@@ -136,6 +152,12 @@ export default function FavorisPage() {
                 <div className="product-body">
                   <h3><Link href={`/produit/${p.slug}`} style={{ color: "inherit", textDecoration: "none" }}>{p.name}</Link></h3>
                   <div className="product-price">{typeof p.price === "number" ? formatEuro(p.price) : ""}</div>
+                  {loggedIn ? (
+                    <label className="fav-cloche">
+                      <input type="checkbox" checked={!!watch[p.slug]} onChange={() => toggleWatch(p.slug)} />
+                      <span>Prévenez-moi si le prix baisse</span>
+                    </label>
+                  ) : null}
                   <button className="btn btn-outline" style={{ marginTop: 8, padding: "5px 12px", fontSize: "0.85rem" }} onClick={() => remove(p.slug)}>Retirer ♥</button>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import { CATEGORIES } from "@/lib/products";
 import { getCatalog } from "@/lib/catalog";
 import { GUIDE_SLUGS } from "@/lib/guides";
+import { OCCASIONS } from "@/lib/occasions";
 
 // Le plan du site était figé à la compilation : un produit masqué depuis
 // l'admin restait annoncé à Google (qui tombait sur une erreur 404), et un
@@ -46,6 +47,14 @@ export default async function sitemap() {
       priority: 0.8,
     }));
 
+  // Pages « Offrir » par occasion (catalogue en direct, comme les guides).
+  const occasionPages = ["/offrir", ...OCCASIONS.map((o) => `/offrir/${o.slug}`)].map((path) => ({
+    url: `${base}${path}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: path === "/offrir" ? 0.7 : 0.72,
+  }));
+
   // Pages « Idées & conseils » (/idees et /idees/<slug>) — guides de conseil.
   const guidePages = ["/idees", ...GUIDE_SLUGS.map((s) => `/idees/${s}`)].map((path) => ({
     url: `${base}${path}`,
@@ -62,5 +71,5 @@ export default async function sitemap() {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...categoryPages, ...guidePages, ...productPages];
+  return [...staticPages, ...categoryPages, ...occasionPages, ...guidePages, ...productPages];
 }

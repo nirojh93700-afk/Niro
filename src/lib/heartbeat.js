@@ -3,7 +3,7 @@
 // Throttle via claimJob() → chaque tâche ne part qu'à l'intervalle voulu, une
 // seule fois (verrou). Tout est isolé : ne peut jamais casser une page.
 import { claimJob } from "@/lib/stock";
-import { runScheduledJobs, runCashbackJobs, runBirthdayJobs, runOffreGravureJob } from "@/lib/jobs";
+import { runScheduledJobs, runCashbackJobs, runBirthdayJobs, runOffreGravureJob, runPriceWatchJob } from "@/lib/jobs";
 import { syncInbox } from "@/lib/inbox";
 
 const MIN = 60000;
@@ -36,5 +36,10 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("offreGravure", 24 * 60 * MIN)) out.offreGravure = await runOffreGravureJob();
   } catch (e) { out.offreGravureError = e.message; }
+  // Baisse de prix sur un favori : au plus une fois par jour. N'écrit à une
+  // cliente QUE si elle a coché la cloche ET que le prix a réellement baissé.
+  try {
+    if (await claimJob("priceWatch", 24 * 60 * MIN)) out.priceWatch = await runPriceWatchJob();
+  } catch (e) { out.priceWatchError = e.message; }
   return out;
 }

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
-import { getFavoris, toggleFavori, mergeFavoris } from "@/lib/stock";
+import { getFavoris, toggleFavori, mergeFavoris, togglePriceWatch, getPriceWatch } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -52,7 +52,9 @@ export async function GET() {
   if (!email) return Response.json({ loggedIn: false, items: [] });
   let slugs = [];
   try { slugs = await getFavoris(email); } catch { slugs = []; }
-  return Response.json({ loggedIn: true, email, slugs, items: await enrichir(slugs) });
+  let watch = {};
+  try { const w = await getPriceWatch(email); watch = Object.fromEntries(Object.keys(w).map((s) => [s, true])); } catch { /* {} */ }
+  return Response.json({ loggedIn: true, email, slugs, watch, items: await enrichir(slugs) });
 }
 
 export async function POST(req) {
@@ -75,6 +77,24 @@ export async function POST(req) {
     const r = await mergeFavoris(email, body?.slugs);
     if (!r.ok) return Response.json({ error: "Liste invalide." }, { status: 400 });
     return Response.json({ loggedIn: true, ajoutes: r.ajoutes, slugs: r.slugs, items: await enrichir(r.slugs) });
+  }
+
+  // « Prévenez-moi si le prix baisse » : le prix de référence est relevé ICI,
+  // dans le catalogue en direct — jamais fourni par le navigateur.
+  if (action === "watch") {
+    const slug = String(body?.slug || "").trim();
+    const on = !!body?.on;
+    let base = 0;
+    if (on) {
+      try {
+        const p = (await getCatalog()).find((x) => x.slug === slug);
+        base = Number(p?.variants?.[0]?.price) || 0;
+      } catch { base = 0; }
+      if (!base) return Response.json({ error: "Produit inconnu." }, { status: 400 });
+    }
+    const r = await togglePriceWatch(email, slug, on, base);
+    if (!r.ok) return Response.json({ error: "Impossible d'enregistrer." }, { status: 400 });
+    return Response.json({ loggedIn: true, on: r.on });
   }
 
   return Response.json({ error: "Action inconnue." }, { status: 400 });

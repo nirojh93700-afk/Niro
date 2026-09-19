@@ -4221,3 +4221,21 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .cx-row>.cx-go{grid-area:go}
   .cx-head{display:none}
 }
+
+/* ===== Boutique : tri + budget (.tri-*) — 19/09/2026 ===== */
+.tri-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:-6px 0 20px}
+.tri-item{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--ink-soft)}
+.tri-item select{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:inherit;font-size:.86rem;background:#fff;color:var(--ink);max-width:180px}
+
+/* ===== Page « Offrir » par occasion (.occ-*) — 19/09/2026 ===== */
+.occ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.occ-card{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1/1.06;text-decoration:none;display:block}
+.occ-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.occ-card:hover img{transform:scale(1.05)}
+.occ-card span{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(transparent,rgba(26,18,6,.82));color:#fbf7ee;font-family:Georgia,serif;font-size:1.08rem;letter-spacing:.02em}
+.occ-autres{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:34px;font-size:.88rem;color:var(--ink-soft)}
+@media (max-width:560px){.occ-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== Favoris : cloche « prix qui baisse » — 19/09/2026 ===== */
+.fav-cloche{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:.8rem;color:var(--ink-soft);cursor:pointer}
+.fav-cloche input{accent-color:var(--gold-dark);width:15px;height:15px;cursor:pointer}

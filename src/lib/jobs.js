@@ -8,7 +8,7 @@ import {
   getScheduledEmails, markScheduledSent, getSettings, hasAutoSent, markAutoSent,
   listCagnottes, markCagnotteReminded, expireCagnotte, getBirthdays, setPromoCode,
   getSubscribersDetailed, getPromoCodes, getOffreGravureSent, markOffreGravureSent,
-  purgeExpiredPromoCodes, getFavoris, logComm,
+  purgeExpiredPromoCodes, getFavoris, logComm, getPriceWatchAll, rebasePriceWatch,
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
@@ -304,4 +304,66 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   }
   try { if (faits.length) await markOffreGravureSent(faits); } catch { /* ignore */ }
   return { actif: true, eligibles: cibles.length, envoyes, attente, deja, purges };
+}
+
+// --- 6) « Prévenez-moi si le prix baisse » (favoris) ------------------------
+// Lancé 1×/jour par le heartbeat. Pour chaque cliente qui a coché la cloche sur
+// un favori : si le prix du catalogue EN DIRECT est passé SOUS le prix relevé au
+// moment où elle a coché, UN e-mail part (tous ses favoris baissés regroupés),
+// puis la référence est ramenée au nouveau prix — jamais deux e-mails pour la
+// même baisse. Prix remonté ? La référence suit vers le haut : une future promo
+// depuis ce nouveau prix la préviendra. Produit masqué/supprimé : on saute.
+export async function runPriceWatchJob() {
+  const tous = await getPriceWatchAll();
+  const emails = Object.keys(tous);
+  if (!emails.length) return { surveilles: 0, envoyes: 0 };
+
+  let catalogue = [];
+  try { catalogue = await (await import("@/lib/catalog")).getCatalog(); } catch { return { surveilles: 0, envoyes: 0, erreur: "catalogue" }; }
+  const parSlug = new Map(catalogue.map((p) => [p.slug, p]));
+  const prixDe = (p) => Number(p?.variants?.[0]?.price) || 0;
+
+  let envoyes = 0, surveilles = 0;
+  const rebase = {}; // { email: { slug: nouvelleBase } } — une seule écriture à la fin
+
+  for (const email of emails) {
+    const mien = tous[email] || {};
+    const baisses = [];
+    for (const [slug, w] of Object.entries(mien)) {
+      surveilles++;
+      const p = parSlug.get(slug);
+      if (!p) continue; // masqué ou supprimé : on garde la surveillance telle quelle
+      const prix = prixDe(p);
+      const base = Number(w?.base) || 0;
+      if (!prix || !base) continue;
+      if (prix < base - 0.009) baisses.push({ slug, name: p.name, avant: base, apres: prix });
+      else if (prix > base + 0.009) { (rebase[email] = rebase[email] || {})[slug] = prix; }
+    }
+    if (!baisses.length) continue;
+
+    try {
+      const subject = baisses.length === 1
+        ? "Le prix de votre favori vient de baisser"
+        : "Le prix de vos favoris vient de baisser";
+      const lignes = baisses.map((b) =>
+        `${b.name} : ${b.avant.toFixed(2).replace(".", ",")} € → ${b.apres.toFixed(2).replace(".", ",")} €\n${BRAND.siteUrl}/produit/${b.slug}`
+      ).join("\n\n");
+      const body =
+        `Bonne nouvelle : ${baisses.length === 1 ? "une création que vous gardiez de côté vient de baisser de prix" : "des créations que vous gardiez de côté viennent de baisser de prix"}.\n\n` +
+        `${lignes}\n\n` +
+        `${baisses.length === 1 ? "Elle vous attend" : "Elles vous attendent"} dans vos favoris :\n${BRAND.siteUrl}/favoris\n\n` +
+        `Vous recevez ce message parce que vous avez demandé à être prévenue en cas de baisse de prix sur ce favori. Pour ne plus l'être, décochez la cloche sur votre page Favoris.`;
+      const btn = await boutonRepondre({ email, name: "", subject, excerpt: body.slice(0, 240) });
+      const html = brandedMessage(subject, body, btn);
+      const r = await sendClientMail({ to: email, subject, html, bcc: "" });
+      if (r?.ok) {
+        envoyes++;
+        for (const b of baisses) { (rebase[email] = rebase[email] || {})[b.slug] = b.apres; }
+        try { await logComm({ email, from: "nous", text: body, subject, via: r.via || "site" }); } catch { /* ignore */ }
+      }
+    } catch { /* on continue avec les clientes suivantes */ }
+  }
+
+  try { if (Object.keys(rebase).length) await rebasePriceWatch(rebase); } catch { /* ignore */ }
+  return { surveilles, envoyes };
 }

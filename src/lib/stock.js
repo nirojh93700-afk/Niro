@@ -519,6 +519,70 @@ export async function getFavorisAll() {
   return data.favoris || {};
 }
 
+// =============================================================================
+// « PRÉVENEZ-MOI SI LE PRIX BAISSE » sur un favori (19/09/2026, « applique »).
+// Section `priceWatch` = { [email]: { [slug]: { base, at } } } — `base` = le
+// prix au moment où la cliente coche (relevé CÔTÉ SERVEUR, jamais envoyé par le
+// navigateur). Le job quotidien compare au prix du catalogue en direct : plus
+// bas → UN e-mail, puis la base est ramenée au nouveau prix (pas de doublon).
+// Comme les favoris : e-mail de session signée uniquement, écriture ciblée.
+// =============================================================================
+const PRICE_WATCH_MAX = 100; // par cliente
+
+export async function togglePriceWatch(email, slug, on, basePrice) {
+  const e = normEmail(email);
+  const s = String(slug || "").trim();
+  if (!validEmail(e) || !s) return { ok: false };
+  const data = await getCatalogRaw(true);
+  data.priceWatch = data.priceWatch || {};
+  const mien = { ...(data.priceWatch[e] || {}) };
+  if (on) {
+    const base = Number(basePrice);
+    if (!Number.isFinite(base) || base <= 0) return { ok: false };
+    if (!mien[s] && Object.keys(mien).length >= PRICE_WATCH_MAX) return { ok: false };
+    mien[s] = { base: Math.round(base * 100) / 100, at: Date.now() };
+  } else {
+    delete mien[s];
+  }
+  if (Object.keys(mien).length) data.priceWatch[e] = mien;
+  else delete data.priceWatch[e];
+  await persistCatalog(data, ["priceWatch"]);
+  return { ok: true, on: !!on };
+}
+
+export async function getPriceWatch(email) {
+  const e = normEmail(email);
+  if (!validEmail(e)) return {};
+  const data = await getCatalogRaw(true);
+  return (data.priceWatch || {})[e] || {};
+}
+
+export async function getPriceWatchAll() {
+  const data = await getCatalogRaw(true);
+  return data.priceWatch || {};
+}
+
+// Recale la base après un e-mail envoyé (ou une hausse de prix), en une seule
+// écriture pour tout un lot : { [email]: { [slug]: nouvelleBase } }.
+export async function rebasePriceWatch(lot) {
+  const entrees = Object.entries(lot || {});
+  if (!entrees.length) return true;
+  const data = await getCatalogRaw(true);
+  data.priceWatch = data.priceWatch || {};
+  for (const [email, slugs] of entrees) {
+    const e = normEmail(email);
+    const mien = data.priceWatch[e];
+    if (!mien) continue;
+    for (const [slug, base] of Object.entries(slugs || {})) {
+      if (mien[slug] && Number.isFinite(Number(base))) {
+        mien[slug] = { ...mien[slug], base: Math.round(Number(base) * 100) / 100 };
+      }
+    }
+  }
+  await persistCatalog(data, ["priceWatch"]);
+  return true;
+}
+
 export async function setStock(variantId, value) {
   const map = await getStockMap();
   if (value === null || value === "" || value === undefined) {

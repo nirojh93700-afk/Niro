@@ -1,7 +1,9 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import TriBoutique from "@/components/TriBoutique";
 import { JEWEL_TYPES, getJewelType, getJewelTypeLabel } from "@/lib/products";
-import { getCatalog } from "@/lib/catalog";
+import { getCatalog, priceFrom } from "@/lib/catalog";
+import { PRODUCT_DATES } from "@/lib/productDates";
 import { getRatingSummaries, getTaxonomy } from "@/lib/stock";
 import {
   resolveCategories,
@@ -31,6 +33,26 @@ export default async function BoutiquePage({ searchParams }) {
   const activeSub = searchParams?.sub;
   const activeType = searchParams?.type; // bijoux : collier / bracelet
   const activeQ = (searchParams?.q || "").trim().toLowerCase();
+  const activeTri = searchParams?.tri || "";
+  const activeBudget = searchParams?.budget || "";
+
+  // Tri + budget (audit 19/09) : s'appliquent partout — recherche, catégorie,
+  // vue « Tout ». Le prix retenu = le prix d'appel du produit (priceFrom).
+  const dansBudget = (p) => {
+    const v = priceFrom(p);
+    if (activeBudget === "moins20") return v < 20;
+    if (activeBudget === "20-40") return v >= 20 && v < 40;
+    if (activeBudget === "plus40") return v >= 40;
+    return true;
+  };
+  const dateDe = (p) => Date.parse(PRODUCT_DATES[p.slug] || "") || 0;
+  const appliquerTri = (liste) => {
+    let l = activeBudget ? liste.filter(dansBudget) : liste;
+    if (activeTri === "prix-croissant") l = [...l].sort((a, b) => priceFrom(a) - priceFrom(b));
+    else if (activeTri === "prix-decroissant") l = [...l].sort((a, b) => priceFrom(b) - priceFrom(a));
+    else if (activeTri === "nouveautes") l = [...l].sort((a, b) => dateDe(b) - dateDe(a));
+    return l;
+  };
   const ratings = await getRatingSummaries().catch(() => ({}));
   const allWithImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
   // « Tout » doit vraiment montrer TOUT : cristaux et naissance compris (ils
@@ -48,7 +70,7 @@ export default async function BoutiquePage({ searchParams }) {
   const getSubcategories = (cat) => SUBS[cat] || null;
 
   const searchResults = activeQ
-    ? withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ))
+    ? appliquerTri(withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ)))
     : null;
 
   let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
@@ -63,6 +85,7 @@ export default async function BoutiquePage({ searchParams }) {
   if (activeCat) {
     filtered = [...filtered].sort(makeProductSorter(activeCat, SUBS, PRODUCT_ORDER));
   }
+  filtered = appliquerTri(filtered);
 
   // Une sous-catégorie SANS produit visible n'affiche pas sa pastille (sinon la
   // cliente clique sur un rayon vide — ex. « Art de la table » resté après le
@@ -130,6 +153,8 @@ export default async function BoutiquePage({ searchParams }) {
           />
           <button type="submit" className="btn btn-gold">Rechercher</button>
         </form>
+
+        <TriBoutique />
 
         {activeQ ? (
           searchResults.length > 0 ? (
@@ -258,9 +283,9 @@ export default async function BoutiquePage({ searchParams }) {
         ) : (
           // Vue « Tout » : produits regroupés par thème (au lieu d'être mélangés).
           menuCategories.map((c) => {
-            const items = withImages
+            const items = appliquerTri(withImages
               .filter((p) => p.category === c.slug)
-              .sort(makeProductSorter(c.slug, SUBS, PRODUCT_ORDER));
+              .sort(makeProductSorter(c.slug, SUBS, PRODUCT_ORDER)));
             if (!items.length) return null;
             return (
               <div key={c.slug} style={{ marginBottom: 44 }}>
