@@ -4195,3 +4195,29 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .bt-thread > div:first-child .bt-daysep { margin-top: 0; }
 /* Liste de la boîte mail : deux lignes d'aperçu, pas une ligne coupée net. */
 .bm-snippet { color: var(--ink-soft); font-size: 0.82rem; line-height: 1.45; overflow: hidden; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: 2px; }
+/* ===== Gestion → Connexions clientes (.cx-*) — 19/09/2026 ===== */
+.cx-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:18px}
+.cx-row{display:grid;grid-template-columns:minmax(170px,1.3fr) minmax(150px,1fr) 150px 120px 90px;gap:12px;align-items:center;padding:11px 16px;border-top:1px solid #f0e9d8;font-size:.9rem}
+.cx-row:first-of-type{border-top:0}
+.cx-row:hover{background:#fcf9f1}
+.cx-head{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);background:#fdfbf5;border-top:0}
+.cx-head:hover{background:#fdfbf5}
+.cx-name strong{display:block;font-weight:600}
+.cx-name small{color:var(--ink-soft)}
+.cx-mail{color:var(--ink-soft);font-size:.84rem;word-break:break-all}
+.cx-when{font-variant-numeric:tabular-nums}
+.cx-when small{display:block;color:var(--ink-soft)}
+.cx-badge{display:inline-block;border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:600;white-space:nowrap}
+.cx-ok{background:#e8f3ea;color:#2f6b3d;border:1px solid #cfe4d4}
+.cx-wait{background:#fff4d8;color:#8a6414;border:1px solid #ecd9a4}
+.cx-go{justify-self:end;color:var(--gold-dark);font-weight:600;font-size:.82rem;text-decoration:none;white-space:nowrap}
+.cx-note{padding:12px 16px;font-size:.83rem;color:var(--ink-soft);border-top:1px solid #f0e9d8;background:#fdfbf5}
+@media (max-width:640px){
+  .cx-row{grid-template-columns:1fr auto;grid-template-areas:"name badge" "mail mail" "when go";row-gap:4px}
+  .cx-row>.cx-name{grid-area:name}
+  .cx-row>.cx-mail{grid-area:mail}
+  .cx-row>.cx-when{grid-area:when}
+  .cx-row>div:nth-child(4){grid-area:badge;justify-self:end}
+  .cx-row>.cx-go{grid-area:go}
+  .cx-head{display:none}
+}

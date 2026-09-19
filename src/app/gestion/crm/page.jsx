@@ -47,6 +47,7 @@ export default function CrmPage() {
   const [open, setOpen] = useState(-1);
   const [comms, setComms] = useState({});          // dossier de communication par e-mail (chargé à l'ouverture)
   const [commsMeta, setCommsMeta] = useState({});  // nb de messages + dernier, pour la ligne de chaque cliente
+  const [loginsMeta, setLoginsMeta] = useState({}); // dernière connexion à l'espace client, par e-mail
   const [noteDraft, setNoteDraft] = useState({});
   const [savedNote, setSavedNote] = useState("");
   const [mailOpen, setMailOpen] = useState("");
@@ -95,6 +96,14 @@ export default function CrmPage() {
       setOrders(od.orders || []);
       if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }
       try { const cm = await fetch("/api/admin/comms", { headers: { "x-admin-key": adminKey } }); if (cm.ok) setCommsMeta((await cm.json()).meta || {}); } catch { /* ignore */ }
+      try {
+        const lg = await fetch("/api/admin/logins", { headers: { "x-admin-key": adminKey } });
+        if (lg.ok) {
+          const map = {};
+          for (const r of (await lg.json()).rows || []) map[r.email] = r;
+          setLoginsMeta(map);
+        }
+      } catch { /* ignore */ }
       if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); setSubs(Array.isArray(n.subscribers) ? n.subscribers : []); }
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
@@ -103,6 +112,11 @@ export default function CrmPage() {
   useEffect(() => {
     const saved = sessionStorage.getItem("niv-admin-key");
     if (saved) { setKey(saved); load(saved); }
+    // ?q=… dans l'adresse pré-remplit la recherche (liens « Dossier → » des Connexions).
+    try {
+      const q = new URLSearchParams(window.location.search).get("q") || "";
+      if (q) setSearch(q);
+    } catch { /* ignore */ }
   }, [load]);
 
   // --- Construction des clients ---
@@ -493,6 +507,7 @@ export default function CrmPage() {
               {c.email ? <a href={`mailto:${c.email}`} onClick={(e) => e.stopPropagation()}>{c.email}</a> : "—"}
               {c.phone ? ` · ${c.phone}` : ""} · {c.nb} commande{c.nb > 1 ? "s" : ""}
               {commsMeta[c.email]?.count ? <span className="cm-pill" title="Messages échangés">💬 {commsMeta[c.email].count}{commsMeta[c.email].lastFrom === "cliente" ? " · dernier : elle" : ""}</span> : null}
+              {loginsMeta[c.email]?.at ? <span className="cm-pill" title="Dernière connexion à son espace client">🔑 {new Date(loginsMeta[c.email].at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" })}</span> : null}
             </div>
             <div style={{ fontSize: "0.8rem", color: "var(--ink-soft)", marginTop: 2 }}>
               {c.first ? `1ʳᵉ : ${fmtDate(c.first)}` : ""}{c.last && c.nb > 1 ? ` · dernière : ${fmtDate(c.last)}` : ""}

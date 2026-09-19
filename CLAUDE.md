@@ -105,6 +105,26 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 🔑 CONNEXIONS CLIENTES — APPLIQUÉ LE 19/09/2026
+> Demande du gérant (« tu peux savoir les gens qui se connectent ? » → maquette
+> `docs/maquettes/connexions-clientes.html` validée « applique »). Journal des connexions à
+> l'espace client, LECTURE SEULE (aucun envoi possible, même règle que les Favoris).
+- **Stockage** : section `logins` du blob = `{ [email]: { lien, at, n, hist } }` — `lien` =
+  dernière demande de lien magique, `at` = dernière ouverture réelle, `hist` = 12 dernières
+  ouvertures. **Conservation 90 jours** (purge au fil de l'eau), garde anti-rafale 6 h
+  (mémoire + blob) car `/api/espace/me` est appelée souvent. Fonctions `recordEspaceLogin` /
+  `getLoginsAll` dans `stock.js`. **Jamais bloquant** : un échec d'écriture ne gêne pas la connexion.
+- **Branché sur 3 routes** : `/api/espace/login` (kind "lien"), `/api/espace/verify` (kind
+  "ouvert"), `/api/espace/me` (retours, garde 6 h intégrée).
+- **Écran** : Gestion → Clients → ⚿ Connexions (`/gestion/connexions`, API `/api/admin/logins`,
+  CSS `.cx-*` fin de `globals.css`). KPI : aujourd'hui / 7 jours / distinctes 30 j / « lien
+  demandé sans suite » (lien plus récent que la dernière ouverture = cliente qui hésite).
+  Lignes enrichies avec les commandes (`getSiteOrders`) : nom + nombre + dernière réf.
+  « Dossier → » ouvre `/gestion/crm?q=<email>` (le CRM lit maintenant `?q=` au chargement).
+- **CRM** : pastille `🔑 <date>` à côté de `💬 N` sur chaque cliente (fetch `/api/admin/logins`).
+- **RGPD** : section « 6 bis. Espace client » ajoutée dans `/confidentialite` (e-mail + horaires,
+  90 jours, jamais publicitaire). Le journal démarre vide : il se remplit à partir du déploiement.
+
 ### 💗 FAVORIS RANGÉS DANS LE COMPTE CLIENT — APPLIQUÉ LE 15/09/2026
 > Demande du gérant : « sur les autres sites les clients mettent en favoris et ça va directement
 > dans leur compte, est-ce qu'on peut faire la même chose ? » → maquette

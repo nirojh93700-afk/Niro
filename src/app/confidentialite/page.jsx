@@ -28,6 +28,9 @@ const html = `
 <h3>6. Mesure d'audience de nos e-mails</h3>
 <p>Si vous êtes inscrite à notre lettre d'information, nos e-mails de nouveautés contiennent une image de mesure invisible et des liens de suivi qui nous indiquent si le message a été ouvert et quels produits ont été consultés. Cette mesure nous sert uniquement à savoir si nos envois vous intéressent et à ne pas vous écrire inutilement ; elle n'est jamais utilisée à des fins publicitaires ni transmise à un tiers. Vous pouvez la neutraliser en bloquant l'affichage des images dans votre messagerie, et vous désinscrire à tout moment en nous écrivant.</p>
 
+<h3>6 bis. Espace client</h3>
+<p>Si vous utilisez votre espace client (connexion par lien reçu par e-mail), nous conservons la date et l'heure de vos connexions pendant 90 jours, associées à votre adresse e-mail. Cette information nous sert uniquement à mieux vous accompagner (par exemple retrouver votre demande plus vite) ; elle n'est jamais utilisée à des fins publicitaires ni transmise à un tiers.</p>
+
 <h3>7. Partage des données</h3>
 <p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Netlify pour l'hébergement, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
 

@@ -1,4 +1,4 @@
-import { createMagicToken } from "@/lib/stock";
+import { createMagicToken, recordEspaceLogin } from "@/lib/stock";
 import { sendClientMail, brandedMessage } from "@/lib/clientMail";
 import { BRAND } from "@/lib/email";
 
@@ -22,5 +22,6 @@ export async function POST(req) {
   );
   // On répond toujours OK (on ne révèle pas si l'e-mail existe) — bonne pratique.
   await sendClientMail({ to: email, subject: "Votre lien de connexion — Niv Création", html, bcc: "" });
+  try { await recordEspaceLogin(email, "lien"); } catch { /* jamais bloquant */ }
   return Response.json({ ok: true });
 }

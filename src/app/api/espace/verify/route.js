@@ -1,4 +1,4 @@
-import { consumeMagicToken } from "@/lib/stock";
+import { consumeMagicToken, recordEspaceLogin } from "@/lib/stock";
 import { makeSession, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/customerAuth";
 import { BRAND } from "@/lib/email";
 
@@ -13,6 +13,7 @@ export async function GET(req) {
   if (!email) {
     return new Response(null, { status: 302, headers: { Location: `${base}/espace?erreur=lien` } });
   }
+  try { await recordEspaceLogin(email, "ouvert"); } catch { /* jamais bloquant */ }
   return new Response(null, {
     status: 302,
     headers: {

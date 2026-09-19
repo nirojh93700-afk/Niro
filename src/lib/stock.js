@@ -140,6 +140,59 @@ export async function addRestockAlert(slug, email) {
 }
 
 // =============================================================================
+// CONNEXIONS À L'ESPACE CLIENT (19/09/2026, maquette validée puis « applique »).
+// Section `logins` du blob = { [email]: { lien, at, n, hist } } :
+//   · lien = dernière DEMANDE de lien de connexion (l'e-mail est parti)
+//   · at   = dernière OUVERTURE réelle de l'espace · n = total d'ouvertures
+//   · hist = dernières ouvertures (12 max), pour compter « ce mois »
+// Données minimales (e-mail + horaires), conservées 90 jours (purge au fil de
+// l'eau), mentionnées sur la page Confidentialité. LECTURE SEULE côté Gestion :
+// l'écran /gestion/connexions n'envoie jamais rien.
+// =============================================================================
+const LOGINS_RETENTION = 90 * 24 * 3600 * 1000;
+const loginsMemo = new Map(); // anti-rafale en mémoire : 1 écriture / 6 h / cliente
+
+export async function recordEspaceLogin(email, kind = "ouvert") {
+  const e = normEmail(email);
+  if (!validEmail(e)) return false;
+  const now = Date.now();
+  // Garde mémoire AVANT toute lecture : /api/espace/me est appelée souvent,
+  // on ne relit pas le blob pour une cliente déjà vue il y a moins de 6 h.
+  if (kind === "ouvert") {
+    const seen = loginsMemo.get(e) || 0;
+    if (now - seen < 6 * 3600 * 1000) return true;
+  }
+  try {
+    const data = await getCatalogRaw(true);
+    const all = data.logins || {};
+    const it = all[e] || { n: 0, hist: [] };
+    if (kind === "lien") {
+      it.lien = now;
+    } else {
+      if (it.at && now - it.at < 6 * 3600 * 1000) { loginsMemo.set(e, now); return true; }
+      it.at = now;
+      it.n = (it.n || 0) + 1;
+      it.hist = [...(it.hist || []), now].slice(-12);
+      loginsMemo.set(e, now);
+    }
+    all[e] = it;
+    for (const [k, v] of Object.entries(all)) {
+      if (Math.max(v.at || 0, v.lien || 0) < now - LOGINS_RETENTION) delete all[k];
+    }
+    data.logins = all;
+    await persistCatalog(data, ["logins"]);
+    return true;
+  } catch {
+    return false; // jamais bloquant : la connexion de la cliente prime
+  }
+}
+
+export async function getLoginsAll() {
+  const data = await getCatalogRaw(true);
+  return data.logins || {};
+}
+
+// =============================================================================
 // SUIVI DES E-MAILS DE CAMPAGNE : ouvertures (pixel) et clics (lien tracé).
 // Stocké dans le blob catalogue : data.emailStats = {
 //   [campaignId]: { subject, at, recipients:[email], opens:{email:{n,first,last}},

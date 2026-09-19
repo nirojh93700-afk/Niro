@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
-import { getCagnotte, getSettings } from "@/lib/stock";
+import { getCagnotte, getSettings, recordEspaceLogin } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -11,6 +11,8 @@ export const runtime = "nodejs";
 export async function GET() {
   const email = readSession(cookies().get(SESSION_COOKIE)?.value);
   if (!email) return Response.json({ loggedIn: false });
+  // « Chaque retour dans son espace » compte comme une connexion (garde 6 h intégrée).
+  try { await recordEspaceLogin(email, "ouvert"); } catch { /* jamais bloquant */ }
   let balance = 0, cashbackPercent = 5;
   try { balance = (await getCagnotte(email)).balance; } catch { /* 0 */ }
   try { cashbackPercent = Number((await getSettings()).cashbackPercent) || 0; } catch { /* 5 */ }
