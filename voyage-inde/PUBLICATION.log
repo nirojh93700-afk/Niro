@@ -53,3 +53,4 @@ depenses: 67 | paiements: 6
 2026-09-14 09:03 UTC — EN LIGNE : var CACHE = "voyage-inde-v60";
 2026-09-18 03:28 UTC — EN LIGNE : var CACHE = "voyage-inde-v61";  (bouton « Qui a remboursé combien »)
 2026-09-19 05:40 UTC — EN LIGNE : var CACHE = "voyage-inde-v62";  (taux 1 € = 108 ₹ ; saisies en roupies du 16/09 recalculées ; 2 remboursements du 16/09 à 108,50)
+2026-09-19 05:47 UTC — EN LIGNE : var CACHE = "voyage-inde-v63";  (taux figé à la saisie : changer le taux ne réécrit plus les hôtels d'avant)
