@@ -2081,7 +2081,7 @@ function saveHotels(){ renderExp(); saveTrip().then(function(){ renderExp(); }).
 function hotelGroups(){
   var hx=S.expenses.filter(function(x){ return x.cat==="hotel"; });
   var groups={}, order=[];
-  hx.forEach(function(x){ var k=hotelKey(x); if(!groups[k]){ groups[k]={key:k, exps:[], sum:0, hidden:true, ts:x.ts||0, bf:false, nights:0, paid:0, paidCur:"EUR", url:""}; order.push(k); } var g=groups[k]; g.exps.push(x); g.sum+=x.eur; if(!x.hidden) g.hidden=false; if(x.bf) g.bf=true; if((+x.nights||0)>g.nights) g.nights=+x.nights||0; if((x.ts||0) && (!g.ts || x.ts<g.ts)) g.ts=x.ts; if((+x.paid||0)>0 && !(g.paid>0)){ g.paid=+x.paid; g.paidCur=x.paidCur||"EUR"; } if(x.url && !g.url) g.url=x.url; });
+  hx.forEach(function(x){ var k=hotelKey(x); if(!groups[k]){ groups[k]={key:k, exps:[], sum:0, hidden:true, ts:x.ts||0, bf:false, nights:0, paid:0, paidCur:"EUR", fxr:0, url:""}; order.push(k); } var g=groups[k]; g.exps.push(x); g.sum+=x.eur; if(!x.hidden) g.hidden=false; if(x.bf) g.bf=true; if((+x.nights||0)>g.nights) g.nights=+x.nights||0; if((x.ts||0) && (!g.ts || x.ts<g.ts)) g.ts=x.ts; if((+x.paid||0)>0 && !(g.paid>0)){ g.paid=+x.paid; g.paidCur=x.paidCur||"EUR"; } if((+x.fxr||0)>0 && !(g.fxr>0)) g.fxr=+x.fxr; if(x.url && !g.url) g.url=x.url; });
   order.sort(function(a,b){ var A=groups[a], B=groups[b];   // 1) jour d'arrivée  2) jour de départ
     var d=(A.ts||8e15)-(B.ts||8e15); if(d) return d;
     return ((A.ts||0)+(A.nights||0)*86400000)-((B.ts||0)+(B.nights||0)*86400000); });
@@ -2096,9 +2096,19 @@ function alignHotelsToPaid(){
   var G=hotelGroups(), changed=false, now=Date.now();
   G.order.forEach(function(k){
     var g=G.groups[k]; if(!(g.paid>0)) return;
-    var pc=g.paidCur||"EUR", target=conv(g.paid,pc,"EUR");
-    var rooms=g.exps.filter(function(x){ return (+x.amount||0)>0; }); if(!rooms.length || !(target>0)) return;
+    var pc=g.paidCur||"EUR";
+    var rooms=g.exps.filter(function(x){ return (+x.amount||0)>0; }); if(!rooms.length) return;
     var sumEur=0; rooms.forEach(function(x){ sumEur+=(+x.eur||0); });
+    /* TAUX FIGÉ (demande de la gérante, 19/09/2026) : un hôtel payé en devise garde le taux
+       qu'il avait quand son prix a été saisi. Changer le taux aujourd'hui ne doit PLUS
+       recalculer les hôtels d'avant — seules les nouvelles saisies suivent le nouveau taux.
+       Hôtel déjà enregistré sans taux figé : on fige celui qu'il a déjà (rien ne bouge). */
+    if(pc!=="EUR" && !(g.fxr>0) && sumEur>0){
+      g.fxr=g.paid/sumEur;
+      rooms.forEach(function(x){ if(!(+x.fxr>0)){ x.fxr=g.fxr; x.mt=now; changed=true; } });
+    }
+    var target = (pc!=="EUR" && g.fxr>0) ? g.paid/g.fxr : conv(g.paid,pc,"EUR");
+    if(!(target>0)) return;
     if(Math.abs(sumEur-target)<0.005) return;
     var native=rooms.every(function(x){ return (x.cur||"EUR")===pc; });
     var tot=0; rooms.forEach(function(x){ tot+= native? +x.amount : +x.eur; });
@@ -2107,9 +2117,12 @@ function alignHotelsToPaid(){
     rooms.forEach(function(x,i){
       var c=x.cur||"EUR", d=CUR[c]?CUR[c].d:2, m=Math.pow(10,d);
       var share=(native? +x.amount : +x.eur)*whole/tot, amt, eur;
-      if(native){ amt=Math.round(share*m)/m; eur=Math.round(conv(amt,pc,"EUR")*100)/100; }
-      else { eur=Math.round(share*100)/100; amt=Math.round(conv(eur,"EUR",c)*m)/m; }
-      if(i===rooms.length-1){ eur=Math.round((target-acc)*100)/100; if(!native) amt=Math.round(conv(eur,"EUR",c)*m)/m; }
+      /* conversions faites au taux FIGÉ de l'hôtel (jamais au taux du jour) */
+      var enEur=function(v,cc){ return (cc===pc && pc!=="EUR" && g.fxr>0) ? v/g.fxr : conv(v,cc,"EUR"); };
+      var depuisEur=function(v,cc){ return (cc===pc && pc!=="EUR" && g.fxr>0) ? v*g.fxr : conv(v,"EUR",cc); };
+      if(native){ amt=Math.round(share*m)/m; eur=Math.round(enEur(amt,pc)*100)/100; }
+      else { eur=Math.round(share*100)/100; amt=Math.round(depuisEur(eur,c)*m)/m; }
+      if(i===rooms.length-1){ eur=Math.round((target-acc)*100)/100; if(!native) amt=Math.round(depuisEur(eur,c)*m)/m; }
       acc+=eur;
       if(Math.abs(amt-(+x.amount))>1e-9 || Math.abs(eur-(+x.eur))>1e-9){ x.amount=amt; x.eur=eur; x.mt=now; changed=true; }
     });
@@ -2333,7 +2346,9 @@ function openHotelDetail(key){
       var price=pf(rm.price); if(price<=0) return;
       var occ=S.people.filter(function(p){return rm.occ[p];}); if(!occ.length) occ=S.people.slice();
       kept[rm.id]=1; made++;
-      var data={ hotel:nm, label:(multi?(t("roomWord")+" "+made):""), amount:price, cur:rm.cur, eur:conv(price,rm.cur,"EUR"), cat:"hotel", who:rm.paidBy, split:{mode:"equal", among:occ}, ts:stay, nights:nn, bf:bfv, hidden:hid, paid:(paidAmt>0?paidAmt:0), paidCur:(paidAmt>0?paidCur:""), url:hurl, mt:now };
+      /* on grave le taux du moment : cet hôtel gardera CE taux, même si tu le changes plus tard */
+      var fxNow=(paidAmt>0 && paidCur!=="EUR" && RATES[paidCur]>0) ? RATES[paidCur] : 0;
+      var data={ hotel:nm, label:(multi?(t("roomWord")+" "+made):""), amount:price, cur:rm.cur, eur:conv(price,rm.cur,"EUR"), cat:"hotel", who:rm.paidBy, split:{mode:"equal", among:occ}, ts:stay, nights:nn, bf:bfv, hidden:hid, paid:(paidAmt>0?paidAmt:0), paidCur:(paidAmt>0?paidCur:""), fxr:fxNow, url:hurl, mt:now };
       var ex=S.expenses.filter(function(x){return x.id===rm.id;})[0];
       if(ex){ for(var kk in data) ex[kk]=data[kk]; } else { data.id=rm.id; S.expenses.push(data); }
     });
