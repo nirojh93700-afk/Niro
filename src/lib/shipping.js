@@ -148,6 +148,31 @@ function homePriceByWeight(grams) {
 }
 
 // -----------------------------------------------------------------------------
+// LIVRAISON EXPRESS Chronopost (audit 19/09/2026, demande du gérant : « à
+// partir de mercredi prochain »).
+//   · Active automatiquement à partir du 24/09/2026 (EXPRESS_START) — rien à
+//     faire le jour J, et coupée tant que le mode « délai allongé » est allumé
+//     (l'express n'accélère que le transport, pas la gravure : on ne vend pas
+//     du 24/48 h avec 3-4 semaines de confection). Vérifié dans /api/checkout.
+//   · France (+ Monaco) uniquement, à domicile. Prix au poids, calé sur le
+//     coût réel Chronopost via Boxtal + une petite marge — jamais perdant.
+//   · L'étiquette Chronopost se crée sur boxtal.com, comme le point relais.
+export const EXPRESS_START = Date.parse("2026-09-24T00:00:00+02:00");
+const EXPRESS_TIERS = [
+  { maxGrams: 2000, price: 14.9 },
+  { maxGrams: 5000, price: 19.9 },
+  { maxGrams: Infinity, price: 29.9 },
+];
+export function expressPriceByWeight(grams) {
+  const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
+  const t = EXPRESS_TIERS.find((x) => g <= x.maxGrams) || EXPRESS_TIERS[EXPRESS_TIERS.length - 1];
+  return t.price;
+}
+function expressRate(grams) {
+  return rate(expressPriceByWeight(grams), "Express Chronopost — 24/48 h après confection", [1, 2]);
+}
+
+// -----------------------------------------------------------------------------
 // LIVRAISON EUROPE (hors France) — par ZONE et par POIDS réel.
 // Tarifs relevés le 06/07/2026 sur les grilles Colissimo International (Zone A/B)
 // + Lettre suivie internationale pour les petits objets, avec marge → la cliente
@@ -272,7 +297,7 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
 
 const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vous";
 
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "" }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "", express = false }) {
   const cfg = resolveShippingConfig(config);
   const boxtalOn = Boolean(boxtal && boxtal.enabled);
   // Hors France (+ Monaco) : tarif Europe par zone/poids.
@@ -313,13 +338,17 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
   if (deliveryMethod === "retrait") {
     return pickupEligible ? [rate(cfg.pickupFee, PICKUP_LABEL, [1, 7])] : home();
   }
-  // Domicile : livraison à domicile seule.
+  // Domicile : livraison à domicile, plus l'express quand il est ouvert
+  // (la cliente choisit entre les deux sur la page Stripe).
   if (deliveryMethod === "domicile") {
-    return home();
+    const opts = home();
+    if (express) opts.push(expressRate(totalGrams));
+    return opts;
   }
 
   // --- Aucun choix explicite (ancien cache JS) : on propose tout le dispo ---
   const options = home();
+  if (express) options.push(expressRate(totalGrams));
   if (boxtalOn && !portOffert) {
     options.push(rate(pointRelaisPrice(totalGrams, boxtal, false), "Livraison en point relais", [3, 6]));
   }

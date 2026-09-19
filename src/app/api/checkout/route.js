@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
-import { buildShippingOptions, resolveShippingConfig } from "@/lib/shipping";
+import { buildShippingOptions, resolveShippingConfig, EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
@@ -431,6 +431,12 @@ export async function POST(req) {
         // Retrait proposé si un article mariage est marqué OU si le colis est
         // lourd (≥ 2 kg), et seulement dans la zone autorisée.
         pickupEligible: allPickup && pickupAllowed(postalCode, settings?.pickupZones),
+        // Express Chronopost : ouvert à partir du 24/09/2026, jamais pendant le
+        // mode « délai allongé » (on ne vend pas du 24/48 h avec des semaines de
+        // confection), et coupable via settings.shipping.expressOff.
+        express: Date.now() >= EXPRESS_START
+          && !vacationActive(settings?.vacation)
+          && settings?.shipping?.expressOff !== true,
         config: settings?.shipping, // tarifs personnalisés (admin)
         boxtal: settings?.boxtal, // option point relais (admin)
         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)

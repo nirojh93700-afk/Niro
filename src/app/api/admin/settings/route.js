@@ -140,6 +140,9 @@ export async function POST(req) {
     if (glassTiers) sh.glassTiers = glassTiers;
     const pickupFee = price(body.shipping.pickupFee);
     if (pickupFee !== undefined) sh.pickupFee = pickupFee;
+    // Interrupteur de l'express Chronopost (true = express coupé). L'express
+    // est de toute façon coupé pendant le mode « délai allongé ».
+    if (body.shipping.expressOff === true) sh.expressOff = true;
     patch.shipping = sh; // objet vide = retour aux tarifs d'origine
   }
   if (body.boxtal && typeof body.boxtal === "object") {

@@ -110,7 +110,8 @@
 > artifact https://claude.ai/artifact/Kscni7tb6QUEAatAHLj9Ji). Le gérant a validé « pour les autres
 > je valide, tu peux appliquer » : blocs 1, 5, 6, 8 appliqués (+ 7 déjà existant). **Blocs 2 (date
 > de livraison estimée), 3 (message cadeau) et 4 (stock bas) : SAUVEGARDÉS, à faire quand il dira.**
-> Bloc 9 (express) : expliqué, en attente de sa décision.
+> Bloc 9 (express) : ✅ **APPLIQUÉ le 19/09** (« mets en place pour que ça fonctionne à partir
+> de mercredi prochain ») — voir ⑨ ci-dessous.
 - **① CARTE CADEAU** (`/carte-cadeau`) : montants 20/30/50/75/100 €, petit mot (180 car.),
   destinataire, envoi immédiat ou à une date (matin ~9 h Paris). Paiement = session Stripe DÉDIÉE
   (`/api/carte-cadeau`, metadata `giftcard:"1"`) — PAS une commande (le webhook la traite AVANT
@@ -123,6 +124,16 @@
   (`setPromoCode` value=reste). En plusieurs fois jusqu'à épuisement. Fichiers :
   `src/lib/carteCadeau.js` · `/api/carte-cadeau` · `/carte-cadeau` (+ `/merci`) ·
   `CarteCadeauForm.jsx` · webhook Stripe · CSS `.gc-*`. Lien : pied de page + tuile sur /offrir.
+- **⑨ LIVRAISON EXPRESS Chronopost — s'allume TOUTE SEULE le mercredi 24/09/2026** (minuit,
+  Paris ; `EXPRESS_START` dans `src/lib/shipping.js`). Option « Express Chronopost — 24/48 h
+  après confection » ajoutée à côté du domicile (page Stripe), France + Monaco seulement.
+  Prix au poids (`EXPRESS_TIERS`) : ≤2 kg 14,90 · ≤5 kg 19,90 · au-delà 29,90 € (coût réel
+  Chronopost/Boxtal + marge). **Trois coupe-circuits** dans `/api/checkout` : la date, le mode
+  « délai allongé » ALLUMÉ = express coupé (on ne vend pas du 24/48 h avec des semaines de
+  confection), et `settings.shipping.expressOff: true` (sanitizé) pour l'éteindre à la main.
+  Pas d'express en point relais / retrait / Europe. L'étiquette Chronopost se crée sur
+  boxtal.com comme aujourd'hui. ⚠️ Une commande express = à graver EN PRIORITÉ (engagement
+  client). 10 vérifications de logique au vert le 19/09.
 - **⑤ PAGE « OFFRIR » PAR OCCASION** (`/offrir` + `/offrir/<occasion>`) : 6 occasions (mariage,
   naissance, amour, pour-lui, pour-elle, famille) définies dans `src/lib/occasions.js` (règles de
   correspondance sur le CATALOGUE EN DIRECT, comme les guides — jamais de produit en dur, 12 max).
