@@ -1,5 +1,19 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
 
+## 🛍️ Audit comparatif du 19/09 — reste à faire
+- **Appliqué le 19/09** (validé « tu peux appliquer ») : carte cadeau (`/carte-cadeau`),
+  page Offrir par occasion (`/offrir`), tri par prix + budget boutique, alerte baisse de
+  prix sur les favoris. Avis avec photo existait déjà.
+- **SAUVEGARDÉS, à faire quand le gérant le dira** (maquette
+  `docs/maquettes/audit-9-ameliorations.html`, blocs 2-3-4) :
+  · **② Date de livraison estimée** sur la fiche (« Chez vous entre le … et le … »,
+    s'adapte au mode délai allongé) ;
+  · **③ Message cadeau dans le colis** (petit mot offert au paiement, affiché dans Gestion) ;
+  · **④ « Plus que X en stock »** sur la fiche (vrai stock, sous le seuil d'alerte).
+- **⑨ Livraison express** : expliquée au gérant le 19/09, EN ATTENTE DE SA DÉCISION
+  (faisable techniquement ; la vraie question est le délai de gravure atelier).
+
+
 > **Mis à jour le 09/09/2026.** Ce fichier est l'index unique pour reprendre le travail depuis
 > n'importe quelle conversation : messages à envoyer, maquettes validées non appliquées, projets en
 > pause, actions côté gérant, questions sans réponse. Le détail de chaque sujet reste dans
