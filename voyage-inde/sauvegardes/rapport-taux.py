@@ -69,6 +69,74 @@ def ligne_recap(cle, g):
 ordre = sorted([k for k in paliers if k != "eur"]) + (["eur"] if "eur" in paliers else [])
 recap = "".join(ligne_recap(k, paliers[k]) for k in ordre)
 
+# ---- section HÔTELS : chaque hôtel, chaque chambre, qui dort dedans ----
+hotels, ordre_h = {}, []
+for x in exp:
+    if x.get("cat") != "hotel":
+        continue
+    k = x.get("hotel") or "(hôtel sans nom)"
+    if k not in hotels:
+        hotels[k] = {"ch": [], "eur": 0.0, "paid": 0.0, "pc": "EUR", "ts": None,
+                     "nuits": 0, "bf": False, "url": ""}
+        ordre_h.append(k)
+    g = hotels[k]
+    g["ch"].append(x); g["eur"] += float(x.get("eur") or 0)
+    if float(x.get("paid") or 0) > 0 and not g["paid"]:
+        g["paid"] = float(x["paid"]); g["pc"] = x.get("paidCur") or "EUR"
+    j = jour(x)
+    if g["ts"] is None or j < g["ts"]:
+        g["ts"] = j
+    g["nuits"] = max(g["nuits"], int(x.get("nights") or 0))
+    if x.get("bf"):
+        g["bf"] = True
+    if x.get("url") and not g["url"]:
+        g["url"] = x["url"]
+ordre_h.sort(key=lambda k: hotels[k]["ts"])
+
+blocs = []
+for k in ordre_h:
+    g = hotels[k]
+    arr = g["ts"]
+    dep = arr + datetime.timedelta(days=g["nuits"]) if g["nuits"] else None
+    sejour = f"{arr:%d/%m}" + (f" → {dep:%d/%m}" if dep else "")
+    nuits = f"{g['nuits']} nuit{'s' if g['nuits'] > 1 else ''}" if g["nuits"] else "—"
+    if g["paid"] > 0:
+        pc = g["pc"]
+        paye = f"{nb(g['paid'], 0 if pc == 'INR' else 2)} {SYM.get(pc, pc)}"
+        if pc != "EUR":
+            paye += f" <span class='eu'>(taux {nb(g['paid'] / g['eur'])})</span>" if g["eur"] else ""
+    else:
+        paye = "—"
+    rows = []
+    for x in sorted(g["ch"], key=lambda r: r.get("label") or ""):
+        t = taux_de(x)
+        cur = x.get("cur") or "EUR"
+        qui = ", ".join((x.get("split") or {}).get("among") or []) or "—"
+        rows.append(
+            f"<tr><td class='r'><b>{html.escape(x.get('label') or 'Chambre')}</b></td>"
+            f"<td>{html.escape(qui)}</td>"
+            f"<td class='n'>{nb(float(x.get('amount') or 0), 0 if cur == 'INR' else 2)}"
+            f" {SYM.get(cur, cur)}</td>"
+            f"<td class='c'>{f'<span class=tx>{nb(t)}</span>' if t else '<span class=eu>en €</span>'}</td>"
+            f"<td class='n'><b>{nb(float(x.get('eur') or 0))} €</b></td>"
+            f"<td class='qui'>{html.escape(x.get('who') or '')}</td></tr>")
+    blocs.append(
+        f"<div class='hot'><div class='hnom'>{html.escape(k)}"
+        f"<span class='hmeta'>{sejour} · {nuits}"
+        f"{' · petit déjeuner inclus' if g['bf'] else ''}</span></div>"
+        f"<table class='hcham'><thead><tr><th>Chambre</th><th>Qui dort dedans</th>"
+        f"<th class='n'>Prix saisi</th><th class='c'>Taux</th><th class='n'>En euros</th>"
+        f"<th>Payé par</th></tr></thead><tbody>{''.join(rows)}"
+        f"<tr class='sous'><td colspan='4'>Total des chambres · "
+        f"{len(g['ch'])} chambre{'s' if len(g['ch']) > 1 else ''}</td>"
+        f"<td class='n'><b>{nb(g['eur'])} €</b></td><td></td></tr>"
+        f"<tr class='sous2'><td colspan='4'>Prix réel payé à l'hôtel</td>"
+        f"<td class='n'>{paye}</td><td></td></tr>"
+        f"</tbody></table></div>")
+
+tot_hot = sum(hotels[k]["eur"] for k in ordre_h)
+nb_ch = sum(len(hotels[k]["ch"]) for k in ordre_h)
+
 # ---- tableau des dépenses ----
 lignes, jour_prec = [], None
 for x in exp:
@@ -79,9 +147,12 @@ for x in exp:
     jour_prec = j.date()
     montant = f"{nb(float(x.get('amount') or 0), 0 if cur == 'INR' else 2)} {SYM.get(cur, cur)}"
     cell_taux = (f"<span class='tx'>{nb(t)}</span>" if t else "<span class='eu'>en €</span>")
+    nom = x.get("label") or "—"
+    if x.get("cat") == "hotel" and x.get("hotel"):
+        nom = f"{x['hotel']} — {x.get('label') or 'Chambre'}"
     lignes.append(
         f"<tr class='{sep.strip()}'><td class='c'>{j:%d/%m}</td>"
-        f"<td>{html.escape(x.get('label') or x.get('hotel') or '—')}</td>"
+        f"<td>{html.escape(nom)}</td>"
         f"<td class='cat'>{CAT.get(x.get('cat'), x.get('cat') or '')}</td>"
         f"<td class='n'>{montant}</td><td class='c'>{cell_taux}</td>"
         f"<td class='n'><b>{nb(float(x.get('eur') or 0))} €</b></td>"
@@ -132,6 +203,16 @@ doc = f"""<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Dép
   .note {{ color:#6b7a77; font-size:9.5px; margin-top:8px; font-style:italic; }}
   .tot td {{ border-top:2px solid #0d3b39; border-bottom:none; padding-top:6px;
              font-size:12px; color:#0d3b39; }}
+  .hot {{ border:1px solid #dfe6e3; border-left:3px solid #0d3b39; border-radius:6px;
+          padding:8px 10px 4px; margin-bottom:10px; page-break-inside:avoid; }}
+  .hnom {{ font-size:12.5px; font-weight:700; color:#0d3b39; margin-bottom:6px; }}
+  .hmeta {{ display:block; font-weight:400; font-size:9.5px; color:#6b7a77;
+            letter-spacing:.2px; margin-top:1px; }}
+  .hcham th {{ padding-bottom:3px; }}
+  .hcham td {{ border-bottom:1px solid #f2f6f5; }}
+  .sous td {{ border-top:1px solid #c9d4d0; border-bottom:none; padding-top:5px;
+              color:#0d3b39; font-size:10.5px; }}
+  .sous2 td {{ border:none; color:#6b7a77; font-size:10px; padding-top:1px; }}
 </style></head><body>
 
 <h1>Dépenses et taux de change</h1>
@@ -153,6 +234,13 @@ doc = f"""<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Dép
 </tbody></table>
 <div class="note">Chaque dépense garde le taux qui avait cours au moment où elle a été
   enregistrée : c'est normal d'en voir plusieurs.</div>
+
+<h2>Les hôtels, chambre par chambre ({len(ordre_h)} hôtels · {nb_ch} chambres)</h2>
+{''.join(blocs)}
+<table><tbody><tr class="tot"><td><b>Total des hôtels</b></td>
+  <td class="n"><b>{nb(tot_hot)} €</b></td></tr></tbody></table>
+<div class="note">« Prix réel payé » = ce que tu as réglé à l'hôtel pour le tout ; les chambres
+  en sont la répartition. Le taux indiqué est celui appliqué à cette chambre.</div>
 
 <h2>Toutes les dépenses ({len(exp)})</h2>
 <table><thead><tr><th class="c">Date</th><th>Libellé</th><th>Catégorie</th>
