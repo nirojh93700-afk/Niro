@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
+import MailBody from "@/components/admin/MailBody";
 
 // Discussion / BAT (bon à tirer) d'une commande, côté admin.
 export default function BatThread({ order, adminKey }) {
@@ -74,62 +75,70 @@ export default function BatThread({ order, adminKey }) {
     modif_demandee: "✏️ Modification demandée",
   }[thread?.status] || ((thread?.messages || []).length ? "📧 Historique des messages" : "Aucun échange pour l'instant");
 
+  // Un séparateur de jour entre les messages : on se repère sans lire les dates.
+  const messages = thread?.messages || [];
+  const jour = (ts) => { try { return new Date(ts).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); } catch { return ""; } };
+  const heure = (ts) => { try { return new Date(ts).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch { return ""; } };
+
   return (
-    <div style={{ marginTop: 12, background: "#fbf7ef", border: "1px solid #e7d3a1", borderRadius: 12, padding: 14 }}>
-      <div style={{ fontWeight: 700, marginBottom: 4 }}>💬 Aperçu à valider (BAT) — {statusLabel}</div>
-      <p style={{ margin: "0 0 10px", fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+    <div className="bt">
+      <div className="bt-title">💬 Aperçu à valider (BAT) — {statusLabel}</div>
+      <p className="bt-intro">
         Envoie un aperçu (photo + message) à la cliente. Elle reçoit un e-mail avec un lien pour <strong>valider</strong> ou <strong>demander une modification</strong>. Tout reste ici.
       </p>
 
-      {(thread?.messages || []).length > 0 && (
-        <div style={{ display: "grid", gap: 8, marginBottom: 12 }}>
-          {thread.messages.map((m, i) => (
-            <div key={i} style={{ background: m.from === "atelier" ? "#fff" : "#f3ece0", border: "1px solid var(--line)", borderRadius: 10, padding: 10, marginLeft: m.from === "cliente" ? 24 : 0, marginRight: m.from === "atelier" ? 24 : 0 }}>
-              <div style={{ fontSize: 11, color: "var(--gold-dark)", fontWeight: 700, marginBottom: 4 }}>
-                {m.from === "atelier" ? "Toi" : "Cliente"}
-                {m.viaEmail ? " · 📧 par e-mail" : ""}
-                {m.decision === "valide" ? " · ✅ Validé" : m.decision === "modif" ? " · ✏️ Modif demandée" : ""}
-                {" · "}{new Date(m.at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
+      {messages.length > 0 && (
+        <div className="bt-thread">
+          {messages.map((m, i) => {
+            const nouveauJour = i === 0 || jour(m.at) !== jour(messages[i - 1].at);
+            return (
+              <div key={i}>
+                {nouveauJour ? <div className="bt-daysep">{jour(m.at)}</div> : null}
+                <div className={`bt-msg ${m.from === "atelier" ? "nous" : "elle"}`}>
+                  <div className="bt-meta">
+                    {m.from === "atelier" ? "Nous" : (order.customerName || "Cliente")}
+                    <em>
+                      {m.viaEmail ? " · 📧 par e-mail" : ""}
+                      {m.decision === "valide" ? " · ✅ Validé" : m.decision === "modif" ? " · ✏️ Modif demandée" : ""}
+                      {" · "}{heure(m.at)}
+                    </em>
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {m.image ? <img className="bt-img" src={m.image} alt="Aperçu envoyé" /> : null}
+                  {m.text ? <MailBody text={m.text} /> : null}
+                </div>
               </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              {m.image ? <img src={m.image} alt="" style={{ maxWidth: 200, borderRadius: 6, marginBottom: m.text ? 6 : 0, display: "block" }} /> : null}
-              {m.text ? <div style={{ whiteSpace: "pre-line", fontSize: 14 }}>{m.text}</div> : null}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 700, color: "var(--gold-dark)", marginBottom: 4 }}>
-        E-mail de la cliente (le mail part à cette adresse)
-      </label>
-      <input type="email" value={to} onChange={(e) => setTo(e.target.value)} placeholder="ex. cliente@email.com"
-        style={{ width: "100%", padding: 10, border: `1px solid ${to && !emailValid ? "#d99" : "var(--line)"}`, borderRadius: 10, font: "inherit", marginBottom: to && !emailValid ? 4 : 10 }} />
-      {to && !emailValid ? <div style={{ fontSize: "0.78rem", color: "#b4452f", marginBottom: 10 }}>Adresse e-mail incomplète.</div> : null}
-      {!to ? <div style={{ fontSize: "0.78rem", color: "#b4452f", marginBottom: 10 }}>Cette commande n'a pas d'adresse enregistrée : saisis l'e-mail de la cliente pour pouvoir envoyer.</div> : null}
+      <label className="bt-label" htmlFor={`bt-to-${order.id}`}>E-mail de la cliente (le mail part à cette adresse)</label>
+      <input id={`bt-to-${order.id}`} type="email" inputMode="email" autoComplete="email" value={to} onChange={(e) => setTo(e.target.value)} placeholder="ex. cliente@email.com"
+        className="bt-input" style={{ borderColor: to && !emailValid ? "#d99" : undefined, marginBottom: to && !emailValid ? 0 : 10 }} />
+      {to && !emailValid ? <p className="bt-err" style={{ marginBottom: 10 }}>Adresse e-mail incomplète.</p> : null}
+      {!to ? <p className="bt-err" style={{ marginBottom: 10 }}>Cette commande n'a pas d'adresse enregistrée : saisis l'e-mail de la cliente pour pouvoir envoyer.</p> : null}
 
       <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Message à la cliente (ex. « Voici l'aperçu de votre gravure, dites-moi si ça vous convient »)"
-        style={{ width: "100%", minHeight: 70, padding: 10, border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 8 }} />
+        className="bt-area" style={{ marginBottom: 8 }} />
 
       {UPLOAD_AVAILABLE ? (
         <PhotoUpload value={image} onChange={(url) => setImage(url)} productSlug={`bat-${order.id}`} />
       ) : (
-        <input value={image} onChange={(e) => setImage(e.target.value)} placeholder="URL de l'image d'aperçu (https://…)"
-          style={{ width: "100%", padding: 10, border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }} />
+        <input value={image} onChange={(e) => setImage(e.target.value)} placeholder="URL de l'image d'aperçu (https://…)" className="bt-input" />
       )}
-      {image ? <div style={{ fontSize: "0.78rem", color: "#256b34", marginTop: 4 }}>Aperçu prêt à envoyer ✓</div> : null}
+      {image ? <p className="bt-ok">Aperçu prêt à envoyer ✓</p> : null}
 
-      <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 10 }}>
-        <button className="btn btn-gold" style={{ padding: "8px 16px", opacity: emailValid ? 1 : 0.55 }} disabled={sending || !emailValid} onClick={send}>
+      <div className="bt-actions">
+        <button className="btn btn-gold" style={{ opacity: emailValid ? 1 : 0.55 }} disabled={sending || !emailValid} onClick={send}>
           {sending ? "Envoi…" : "Envoyer l'aperçu à la cliente"}
         </button>
-        <button className="btn btn-outline" style={{ padding: "8px 12px" }} onClick={load}>Rafraîchir</button>
-        {(thread?.messages || []).length > 0 && (
-          <button className="btn btn-outline" style={{ padding: "8px 12px", marginLeft: "auto", color: "#b4452f", borderColor: "#e0b4a8" }} disabled={sending} onClick={resetThread}>
-            🗑 Effacer la conversation
-          </button>
+        <button className="btn btn-outline" onClick={load}>Rafraîchir</button>
+        {messages.length > 0 && (
+          <button className="btn btn-outline bt-reset" disabled={sending} onClick={resetThread}>🗑 Effacer la conversation</button>
         )}
       </div>
-      {msg && <p style={{ margin: "8px 0 0", fontSize: "0.85rem", color: msg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{msg}</p>}
+      {msg && <p style={{ margin: "10px 0 0", fontSize: "0.85rem", color: msg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{msg}</p>}
     </div>
   );
 }

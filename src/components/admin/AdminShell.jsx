@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import AdminToast from "@/components/admin/AdminToast";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { lireAdminBack, sAbonnerAdminBack } from "@/components/admin/adminBack";
 
 // =============================================================================
 // SQUELETTE MODERNE DE GESTION — barre latérale + barre du haut, sur TOUTES les
@@ -60,6 +61,17 @@ const NAV = [
   ] },
 ];
 
+// Barre d'onglets du bas (TÉLÉPHONE UNIQUEMENT). Les grandes applications de
+// gestion (Shopify, Etsy Seller) gardent 4-5 destinations toujours visibles et
+// rangent le reste derrière « Plus » : on atteint l'essentiel au pouce, en un
+// seul geste, au lieu de deux avec un menu caché.
+const TABS = [
+  { id: "accueil", icon: "\u25eb", text: "Accueil", href: "/gestion#accueil" },
+  { id: "file", icon: "\u25a4", text: "Commandes", href: "/gestion/commandes", badge: "prep" },
+  { id: "boite-mail", icon: "\u2709", text: "Messages", href: "/gestion/boite-mail", badge: "messages" },
+  { id: "produits", icon: "\u25e7", text: "Produits", href: "/gestion#produits" },
+];
+
 const TITRES = Object.fromEntries(NAV.flatMap((g) => g.items.map((i) => [i.id, { text: i.text, group: g.label }])));
 
 function currentId(path, hash) {
@@ -76,6 +88,7 @@ export default function AdminShell({ children }) {
   const [hash, setHash] = useState("");
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [filtre, setFiltre] = useState(""); // recherche d'écran dans le menu (téléphone)
   const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0 });
 
   useEffect(() => {
@@ -84,7 +97,10 @@ export default function AdminShell({ children }) {
     window.addEventListener("hashchange", apply);
     return () => window.removeEventListener("hashchange", apply);
   }, [path]);
-  useEffect(() => { setOpen(false); }, [path, hash]);
+  useEffect(() => { setOpen(false); setFiltre(""); }, [path, hash]);
+
+  // Retour « dans la page » déclaré par l'écran courant (un e-mail ouvert…).
+  const back = useSyncExternalStore(sAbonnerAdminBack, lireAdminBack, () => null);
 
   // Compteurs en direct (uniquement si le mot de passe est déjà en session).
   const loadCounts = useCallback(async () => {
@@ -108,6 +124,16 @@ export default function AdminShell({ children }) {
   const cur = currentId(path, hash);
   const meta = TITRES[cur] || { text: "Gestion", group: "" };
   const totalTodo = counts.prep + counts.unread + counts.replies + counts.reviews;
+  // Pastilles de la barre du bas ("messages" = tout ce qui attend une réponse).
+  const tabCount = { prep: counts.prep, messages: counts.unread + counts.replies };
+
+  // Sur téléphone, la flèche ‹ remplace le ☰ dès qu'on est descendu d'un cran :
+  // soit la page a ouvert quelque chose par-dessus elle (back), soit on n'est
+  // pas sur une des destinations de la barre du bas.
+  const estRacine = TABS.some((t) => t.id === cur);
+  const retour = back
+    ? { label: back.label, go: back.fn }
+    : (!estRacine ? { label: meta.group || "Gestion", go: () => router.push("/gestion") } : null);
 
   function search(e) {
     e.preventDefault();
@@ -115,28 +141,43 @@ export default function AdminShell({ children }) {
     router.push(`/gestion/commandes?q=${encodeURIComponent(s)}`);
   }
 
-  const nav = useMemo(() => NAV.map((g) => (
-    <div className="ash-group" key={g.label}>
-      <div className="ash-glabel">{g.label}</div>
-      {g.items.map((i) => {
-        const n = i.badge ? counts[i.badge] : 0;
-        return (
-          <Link key={i.id} href={i.href} className={`ash-item${cur === i.id ? " on" : ""}${i.accent ? " accent" : ""}`}>
-            <span className="ash-ico" aria-hidden>{i.icon}</span>
-            <span className="ash-txt">{i.text}</span>
-            {n > 0 ? <span className="ash-badge">{n}</span> : null}
-          </Link>
-        );
-      })}
-    </div>
-  )), [cur, counts]);
+  // Recherche d'écran : 29 entrées, c'est trop long à faire défiler au pouce.
+  const nav = useMemo(() => {
+    const f = filtre.trim().toLowerCase();
+    const sansAccent = (t) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const groupes = NAV
+      .map((g) => ({ ...g, items: g.items.filter((i) => !f || sansAccent(i.text.toLowerCase()).includes(sansAccent(f))) }))
+      .filter((g) => g.items.length);
+    if (!groupes.length) return <div className="ash-vide">Aucun écran à ce nom.</div>;
+    return groupes.map((g) => (
+      <div className="ash-group" key={g.label}>
+        <div className="ash-glabel">{g.label}</div>
+        {g.items.map((i) => {
+          const n = i.badge ? counts[i.badge] : 0;
+          return (
+            <Link key={i.id} href={i.href} className={`ash-item${cur === i.id ? " on" : ""}${i.accent ? " accent" : ""}`}>
+              <span className="ash-ico" aria-hidden>{i.icon}</span>
+              <span className="ash-txt">{i.text}</span>
+              {n > 0 ? <span className="ash-badge">{n}</span> : null}
+            </Link>
+          );
+        })}
+      </div>
+    ));
+  }, [cur, counts, filtre]);
 
   return (
     <div className={`ash${open ? " open" : ""}`}>
       <aside className="ash-side">
         <div className="ash-brand">
           <div className="ash-logo">NiV</div>
-          <div><div className="ash-brand-t">Niv Création</div><div className="ash-brand-s">Espace gestion</div></div>
+          <div className="ash-brand-txt"><div className="ash-brand-t">Niv Création</div><div className="ash-brand-s">Espace gestion</div></div>
+          <button type="button" className="ash-close" aria-label="Fermer le menu" onClick={() => setOpen(false)}>✕</button>
+        </div>
+        <div className="ash-find">
+          <span aria-hidden>⌕</span>
+          <input value={filtre} onChange={(e) => setFiltre(e.target.value)} placeholder="Rechercher un écran…" aria-label="Rechercher un écran" />
+          {filtre ? <button type="button" onClick={() => setFiltre("")} aria-label="Effacer">✕</button> : null}
         </div>
         <nav className="ash-nav">{nav}</nav>
         <div className="ash-side-foot">
@@ -147,10 +188,13 @@ export default function AdminShell({ children }) {
 
       <div className="ash-main">
         <header className="ash-top">
-          <button type="button" className="ash-burger" aria-label="Menu" onClick={() => setOpen((o) => !o)}>☰</button>
+          {retour
+            ? <button type="button" className="ash-back" aria-label="Revenir" onClick={retour.go}>‹</button>
+            : <button type="button" className="ash-burger" aria-label="Menu" onClick={() => setOpen((o) => !o)}>☰</button>}
           <div className="ash-crumb">
             {meta.group ? <><span className="ash-crumb-g">{meta.group}</span><span className="ash-crumb-sep">›</span></> : null}
             <span className="ash-crumb-t">{meta.text}</span>
+            {retour?.label ? <span className="ash-crumb-back">‹ {retour.label}</span> : null}
           </div>
           <form className="ash-search" onSubmit={search}>
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher une commande, une cliente…" aria-label="Rechercher" />
@@ -161,6 +205,22 @@ export default function AdminShell({ children }) {
           </div>
         </header>
         <main className="ash-content">{children}</main>
+        <nav className="ash-tabs" aria-label="Navigation principale">
+          {TABS.map((t) => {
+            const n = t.badge ? tabCount[t.badge] : 0;
+            return (
+              <Link key={t.id} href={t.href} className={`ash-tab${cur === t.id ? " on" : ""}`}>
+                <i aria-hidden>{t.icon}</i>
+                <span>{t.text}</span>
+                {n > 0 ? <b>{n > 99 ? "99+" : n}</b> : null}
+              </Link>
+            );
+          })}
+          <button type="button" className={`ash-tab${open ? " on" : ""}`} onClick={() => setOpen((o) => !o)}>
+            <i aria-hidden>☰</i>
+            <span>Plus</span>
+          </button>
+        </nav>
       </div>
       <AdminToast />
     </div>

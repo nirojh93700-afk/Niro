@@ -430,6 +430,58 @@ ne descend jamais sous zéro.
 - ⚠️ Vérifié : build OK + calculs testés. **Le rendu réel de `/gestion` n'a pas pu être capturé**
   (Firestore + clé admin nécessaires, site injoignable depuis la session) → à regarder en ligne.
 
+## 📱 GESTION SUR TÉLÉPHONE — APPLIQUÉ LE 19/09/2026 (« Applique »)
+> Demande du gérant : « quand je lis les mails je peux pas retourner en arrière, j'ai pas de bouton
+> retour… adapte l'admin pour les portables, pour le PC tu peux laisser comme ça… les mails c'est
+> moche, j'arrive pas à lire, y a pas d'espace, c'est amateur… cherche comment font les grands
+> sites ». Maquette `docs/maquettes/admin-mobile.html` (artifact
+> https://claude.ai/artifact/H2PcXbdviEadpRrdVo1UPf) validée, puis construite.
+- ⛔ **L'ORDINATEUR N'EST PAS TOUCHÉ.** Tout est dans `@media (max-width: 900px)` (ou 720 px pour
+  les messages). Vérifié à 1440 px : barre d'onglets masquée, croix masquée, recherche d'écran
+  masquée, barre latérale toujours à 244 px, bouton Assistant toujours à 106 px. **Ne jamais
+  déplacer ces règles hors de leur media query.**
+- **① Barre d'onglets en bas** (`.ash-tabs`, constante `TABS` d'`AdminShell`) : Accueil · Commandes ·
+  Messages · Produits · **Plus** (ouvre le tiroir). Le modèle des applis de gestion (Shopify mobile,
+  Etsy Seller) : 4-5 destinations au pouce plutôt que tout derrière un ☰. Pastilles rouges =
+  `prep` et `unread + replies`, les compteurs déjà calculés. `.ash-content` réserve
+  `calc(78px + env(safe-area-inset-bottom))` en bas — **si on grossit la barre, augmenter ce padding**.
+- **② Flèche ‹ de retour** : remplace le ☰ dès qu'on est descendu d'un cran. Deux sources —
+  · la page a ouvert un écran par-dessus elle → **`useAdminBack(actif, label, fn)`**
+    (`src/components/admin/adminBack.js`, petit registre + `useSyncExternalStore` dans `AdminShell`) ;
+  · sinon, si l'écran n'est pas une des destinations de `TABS` → retour à `/gestion`.
+  Le `label` dit **où la flèche ramène** (« Tous les messages »), il s'affiche en petit SOUS le titre
+  (`.ash-crumb-back`) ; le titre reste le nom de l'écran. **Toute page qui ouvre quelque chose
+  par-dessus elle (e-mail, fiche, fil) doit appeler `useAdminBack`** — sinon pas de retour.
+  Branché sur `/gestion/boite-mail` (e-mail ouvert). Testé : la flèche referme l'e-mail SANS changer
+  de page, un 2ᵉ appui quitte vers `/gestion`.
+- **③ Tiroir** : vraie croix `.ash-close` (40 × 40) + **recherche d'écran** `.ash-find` (sans accents,
+  29 entrées devenaient illisibles au pouce). Le ✦ Assistant devient une pastille de 38 px.
+- **④ LECTURE DES MESSAGES — la règle à réutiliser PARTOUT** : `.mb-text` / `.mb-quoted` portent
+  **`overflow-wrap: anywhere`** + interligne 1,6. **C'était LE défaut** : les bulles étaient en
+  `white-space: pre-line` SANS règle de coupure → un lien de suivi ou une adresse sortait de l'écran
+  et le texte était tranché à droite (exactement ses captures). **Tout nouvel endroit qui affiche
+  un message client doit passer par `<MailBody text={…} />`**, jamais par un `<div>` brut.
+- **⑤ Texte cité replié** : `separerCitation()` dans **`src/lib/mailQuote.js`** coupe le message en
+  `{main, quoted}` (lignes « > », « Le … a écrit : », « On … wrote: », « -----Message d'origine----- »,
+  trait Outlook, « De : »). Replié derrière « ··· Afficher le texte cité (N lignes) » comme Gmail.
+  ⚠️ **`main + quoted` contient TOUJOURS l'intégralité du texte** — en cas de doute la fonction ne
+  coupe pas (citation seule, réponse vide au-dessus, moins de 40 caractères). 12 vérifications au vert.
+- **⑥ Boutons au pouce** : `.bm-actions` collé en bas au-dessus de la barre d'onglets (≤ 720 px),
+  cibles de 46 px. Le corps d'un e-mail **ne défile plus dans une boîte de 260 px** (`maxHeight` +
+  `overflow:auto` retirés) : un cadre qui défile dans une page qui défile est le pire cas tactile.
+- **Fichiers** : `src/lib/mailQuote.js` (+ test) · `src/components/admin/MailBody.jsx` ·
+  `src/components/admin/adminBack.js` · `AdminShell.jsx` (TABS, retour, croix, recherche) ·
+  `BatThread.jsx` (réécrit en classes `.bt-*`, séparateurs de jour, « Nous » / nom de la cliente) ·
+  `src/app/gestion/boite-mail/page.jsx` (en-tête `.bm-*`, `MailBody`, `useAdminBack`) ·
+  CSS `.ash-tabs/.ash-back/.ash-close/.ash-find`, `.mb-*`, `.bt-*`, `.bm-*` en fin de `globals.css`.
+- 🔴 **PIÈGE CSS À NE PAS REFAIRE** : `font: 600 0.63rem/1.1 inherit` est **invalide** (`inherit`
+  n'est pas une famille dans le raccourci `font`) → **toute la déclaration est ignorée** et les
+  libellés des onglets se collaient les uns aux autres. Dans ce fichier, écrire `font-weight` /
+  `font-size` / `line-height` séparément, ou mettre une vraie famille (`system-ui`).
+- **Vérifié au navigateur** (390 px et 1440 px, `/gestion`, `/gestion/commandes`, `/gestion/boite-mail`,
+  `/gestion/crm`) : aucun défilement horizontal, aucun élément qui déborde, 0 erreur JavaScript,
+  tiroir qui s'ouvre et se ferme par la croix, filtre d'écran, flèche de retour dans les deux modes.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes

@@ -8,6 +8,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
+import MailBody from "@/components/admin/MailBody";
+import { useAdminBack } from "@/components/admin/adminBack";
 
 const fmtDate = (d) => { try { return new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch { return d; } };
 
@@ -30,6 +32,11 @@ export default function BoiteMailPage() {
   const [busy, setBusy] = useState("");
 
   const hdr = (k) => ({ "x-admin-key": k });
+
+  // La flèche ‹ de la barre du haut referme l'e-mail ouvert (demande du gérant,
+  // 19/09/2026 : « je peux pas retourner en arrière, j'ai pas de bouton retour »).
+  const fermer = useCallback(() => { setOpen(null); setDraft(""); }, []);
+  useAdminBack(!!open, "Tous les messages", fermer);
 
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
@@ -145,24 +152,29 @@ export default function BoiteMailPage() {
           <button className="btn btn-gold" onClick={connectGoogle} disabled={busy === "save"}>{busy === "save" ? "Redirection…" : "Connecter avec Google"}</button>
         </div>
       ) : open ? (
-        <div className="admin-block">
-          <button className="filter-chip" style={{ padding: "4px 12px", marginBottom: 12 }} onClick={() => { setOpen(null); setDraft(""); }}>← Retour à la boîte</button>
-          <p style={{ margin: "0 0 2px" }}><strong>{open.fromName}</strong> <span style={{ color: "var(--ink-soft)" }}>&lt;{open.fromEmail}&gt;</span></p>
-          <p style={{ margin: "0 0 2px", fontWeight: 600 }}>{open.subject}</p>
-          <p style={{ margin: "0 0 10px", color: "var(--ink-soft)", fontSize: "0.8rem" }}>{fmtDate(open.date)}</p>
-          <div style={{ background: "#faf7f0", border: "1px solid var(--line)", borderRadius: 8, padding: 12, whiteSpace: "pre-wrap", fontSize: "0.9rem", maxHeight: 260, overflow: "auto" }}>
-            {busy === "open" ? "Chargement…" : (open.body || open.snippet)}
+        <div>
+          <button className="filter-chip" style={{ padding: "6px 14px", marginBottom: 12 }} onClick={fermer}>← Retour à la boîte</button>
+          <div className="bm-head">
+            <h2 className="bm-subject">{open.subject || "(sans objet)"}</h2>
+            <div className="bm-who">
+              <span className="bm-av" aria-hidden>{(open.fromName || open.fromEmail || "?").trim().charAt(0).toUpperCase()}</span>
+              <span className="n"><b>{open.fromName}</b><small>{open.fromEmail}</small></span>
+              <span className="d">{fmtDate(open.date)}</span>
+            </div>
           </div>
-          <div style={{ marginTop: 14 }}>
+          <div className="bm-body">
+            {busy === "open" ? "Chargement…" : <MailBody text={open.body || open.snippet} />}
+          </div>
+          <div className="bm-actions">
             <button className="btn btn-gold" onClick={prepareDraft} disabled={busy === "draft"}>{busy === "draft" ? "L'agent rédige…" : "🤖 Préparer une réponse"}</button>
           </div>
           {draft ? (
             <div style={{ marginTop: 14 }}>
               <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Brouillon (modifie librement avant d'envoyer)</label>
-              <textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={10} style={{ width: "100%", padding: 12, border: "1px solid var(--line)", borderRadius: 8, font: "inherit", marginTop: 6 }} />
-              <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+              <textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={10} style={{ width: "100%", boxSizing: "border-box", padding: 12, border: "1px solid var(--line)", borderRadius: 10, font: "inherit", lineHeight: 1.55, marginTop: 6 }} />
+              <div className="bm-actions">
                 <button className="btn btn-gold" onClick={sendReply} disabled={busy === "send"}>{busy === "send" ? "Envoi…" : "Envoyer la réponse"}</button>
-                <button className="btn" style={{ border: "1px solid var(--line)" }} onClick={() => setDraft("")}>Effacer</button>
+                <button className="btn btn-outline" onClick={() => setDraft("")}>Effacer</button>
               </div>
             </div>
           ) : null}
@@ -190,7 +202,7 @@ export default function BoiteMailPage() {
                     </span>
                   </div>
                   <div style={{ fontSize: "0.88rem", fontWeight: m.unread ? 700 : 500 }}>{m.subject || "(sans objet)"}</div>
-                  <div style={{ color: "var(--ink-soft)", fontSize: "0.82rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.snippet}</div>
+                  <div className="bm-snippet">{m.snippet}</div>
                 </button>
               ))}
             </div>
