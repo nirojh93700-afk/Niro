@@ -87,8 +87,9 @@ export default function Header({ categories }) {
           <Link key={c.slug} href={c.slug === "naissance" ? "/naissance" : c.slug === "cristal" ? "/cristaux" : `/boutique/${c.slug}`}>{c.short}</Link>
         ))}
         <Link href="/cristaux" style={{ color: "#a5822f", fontWeight: 700 }}>💎 Cristal Photo 3D</Link>
-        <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Offres</Link>
-        <Link href="/offrir">Offrir</Link>
+        <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Promotions</Link>
+        <Link href="/offrir">Trouver un cadeau</Link>
+        <Link href="/carte-cadeau">Carte cadeau</Link>
         <Link href="/idees">Idées &amp; conseils</Link>
         <Link href="/a-propos">À propos</Link>
         <Link href="/contact">Contact</Link>
