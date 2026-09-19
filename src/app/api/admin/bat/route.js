@@ -88,12 +88,24 @@ async function syncAllAndListUnread() {
   return fresh.filter((m) => m.clientUnread).map((m) => m.orderId);
 }
 
+// Détail des réponses non lues (tableau de bord v2 : qui, quelle commande,
+// depuis quand). Même source que la liste d'identifiants ci-dessus.
+async function listUnreadMeta() {
+  const metas = await getBatThreadsMeta();
+  return metas
+    .filter((m) => m.clientUnread)
+    .map((m) => ({ orderId: m.orderId, ref: m.ref, customerName: m.customerName, customerEmail: m.customerEmail, lastClientAt: m.lastClientAt, lastClientText: String(m.lastClientText || "").slice(0, 140) }));
+}
+
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const url = new URL(req.url);
   // Vérification globale des nouvelles réponses (pastilles).
   if (url.searchParams.get("action") === "unread") {
-    return Response.json({ unread: await syncAllAndListUnread() });
+    const unread = await syncAllAndListUnread();
+    let unreadMeta = [];
+    try { unreadMeta = await listUnreadMeta(); } catch { unreadMeta = []; }
+    return Response.json({ unread, unreadMeta });
   }
   const orderId = url.searchParams.get("orderId") || "";
   let th = await getBatThread(orderId);

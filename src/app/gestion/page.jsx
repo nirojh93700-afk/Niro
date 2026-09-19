@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { formatEuro } from "@/lib/format";
+import { BandeauDelai, MessagesATraiter, ChiffresPeriode } from "@/components/admin/DashBlocks";
+import { commandesEnRetard } from "@/lib/dashPeriodes";
 import { getCategoryLabel, getProductBySlug } from "@/lib/products";
 import { TableGravure } from "@/lib/engravingSheet";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
@@ -65,6 +67,13 @@ export default function GestionPage() {
   const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
   const [pendingReviews, setPendingReviews] = useState(0); // nouveaux avis clients à valider
   const [pendingReplies, setPendingReplies] = useState(0); // réponses clientes préparées, à valider
+  // Tableau de bord v2 (19/09/2026) : la liste des réponses préparées (pas
+  // seulement le compte), le détail des réponses non lues, les devis, et le
+  // réglage du mode délai allongé.
+  const [pendingList, setPendingList] = useState([]);
+  const [unreadMeta, setUnreadMeta] = useState([]);
+  const [quotes, setQuotes] = useState([]);
+  const [vacationCfg, setVacationCfg] = useState(null);
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [boxtalOpen, setBoxtalOpen] = useState(null); // id de commande dont le panneau « Envoi Boxtal » est ouvert
   const [error, setError] = useState("");
@@ -120,11 +129,17 @@ export default function GestionPage() {
         const s = (await stg.json()).settings || {};
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
+        setVacationCfg(s.vacation || null);
       }
       // Réponses aux clientes préparées par l'agent, en attente de validation.
       try {
         const pr = await fetch("/api/admin/pending-replies", { headers: { "x-admin-key": adminKey } });
-        if (pr.ok) setPendingReplies(((await pr.json()).pending || []).length);
+        if (pr.ok) { const liste = (await pr.json()).pending || []; setPendingReplies(liste.length); setPendingList(liste); }
+      } catch { /* ignore */ }
+      // Devis (tuile « devis en attente » du tableau de bord).
+      try {
+        const qr = await fetch("/api/admin/quotes", { headers: { "x-admin-key": adminKey } });
+        if (qr.ok) setQuotes((await qr.json()).quotes || []);
       } catch { /* ignore */ }
       // Compteur d'avis à valider (nouveaux avis clients en attente).
       const rev = await fetch("/api/admin/reviews", { headers: { "x-admin-key": adminKey } });
@@ -145,7 +160,7 @@ export default function GestionPage() {
   const loadBatUnread = useCallback(async (adminKey) => {
     try {
       const res = await fetch("/api/admin/bat?action=unread", { headers: { "x-admin-key": adminKey } });
-      if (res.ok) setBatUnread((await res.json()).unread || []);
+      if (res.ok) { const d = await res.json(); setBatUnread(d.unread || []); setUnreadMeta(Array.isArray(d.unreadMeta) ? d.unreadMeta : []); }
     } catch { /* ignore */ }
   }, []);
 
@@ -712,6 +727,8 @@ export default function GestionPage() {
 
   // ---- Tableau de bord (accueil) : données réelles ----
   const enGravure = orders.filter((o) => !o.test && (o.status || "a_preparer") === "en_gravure").length;
+  // Commandes « à préparer » depuis plus de 14 jours (la plus ancienne en tête).
+  const retards = commandesEnRetard(orders, 14).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   const recentOrders = [...orders]
     .filter((o) => !o.test)
     .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
@@ -755,6 +772,14 @@ export default function GestionPage() {
                 <button className="btn btn-gold" style={{ padding: "6px 16px" }} onClick={() => setTab("avis")}>Voir les avis →</button>
               </div>
             )}
+            {/* ② Mode délai allongé : visible tant qu'il est allumé, avec Éteindre. */}
+            <BandeauDelai
+              vacation={vacationCfg}
+              adminKey={key}
+              onRegler={() => setTab("apparence")}
+              onEteint={() => setVacationCfg((v) => (v ? { ...v, enabled: false } : v))}
+            />
+
             <div className="dash-top">
               <div className="dash-hi">
                 <h1>Bonjour 👋</h1>
@@ -767,13 +792,37 @@ export default function GestionPage() {
               </div>
             </div>
 
-            <div className="dash-tiles">
-              <div className="dash-tile"><small>À préparer</small><b>{aPreparer}</b></div>
-              <div className="dash-tile" style={pendingReviews > 0 ? { cursor: "pointer", outline: "2px solid #e2c67e" } : undefined} onClick={() => pendingReviews > 0 && setTab("avis")}><small>Avis à valider</small><b>{pendingReviews}</b></div>
-              <div className="dash-tile"><small>CA — ce mois</small><b>{formatEuro(caThisMonth)}</b></div>
-              <div className="dash-tile"><small>Commandes</small><b>{validOrders.length}</b></div>
-              <div className="dash-tile"><small>Clientes</small><b>{clients.length}</b></div>
-            </div>
+            {/* ① Les messages qui attendent — en tête, c'est ce qui presse. */}
+            <MessagesATraiter
+              pending={pendingList}
+              unread={unreadMeta}
+              onOpenOrder={(orderId) => {
+                setTab("commandes");
+                setOpenOrders((prev) => new Set([...prev, orderId]));
+                setBatOpen(orderId);
+                setBatUnread((u) => u.filter((x) => x !== orderId));
+                setUnreadMeta((u) => u.filter((x) => x.orderId !== orderId));
+              }}
+            />
+
+            {/* ③ + ④ Les chiffres, sur la période choisie, comparés à la précédente. */}
+            <ChiffresPeriode
+              orders={validOrders}
+              quotes={quotes}
+              salesGoal={siteSettings.salesGoal}
+              strip={{
+                aPreparer,
+                enRetard: retards.length,
+                retardRef: retards[0]?.ref || "",
+                enGravure,
+                avis: pendingReviews,
+              }}
+              onTab={(t) => {
+                if (t === "file") window.location.href = "/gestion/commandes";
+                else if (t === "atelier") window.location.href = "/gestion/atelier";
+                else setTab(t);
+              }}
+            />
 
             <div className="dash-two">
               <div className="dash-col">
@@ -858,13 +907,6 @@ export default function GestionPage() {
                       </a>
                     );
                   })()}
-                  {pendingReplies > 0 && (
-                    <button type="button" className="dash-todo" onClick={() => setTab("assistant")} style={{ background: "#fff5e0" }}>
-                      <span className="ic">📬</span>
-                      <span><b>{pendingReplies} réponse{pendingReplies > 1 ? "s" : ""} cliente{pendingReplies > 1 ? "s" : ""} à valider</b><small>L&apos;agent a préparé le texte — relire, puis envoyer</small></span>
-                      <span className="go">→</span>
-                    </button>
-                  )}
                   <a href="/gestion/commandes" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
                     <span className="ic">🗂️</span>
                     <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir la file de production (dans l'ordre)" : "Rien en attente 🎉"}</small></span>

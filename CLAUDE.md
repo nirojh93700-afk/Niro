@@ -388,6 +388,38 @@ ne descend jamais sous zéro.
 - **Ajouter une page admin** : créer `src/app/gestion/<slug>/page.jsx` (elle hérite du squelette)
   et l'entrée dans `NAV` d'`AdminShell.jsx`. Ne pas remettre de barre latérale dans une page.
 
+## 🧭 TABLEAU DE BORD v2 — APPLIQUÉ LE 19/09/2026 (« Appliquer »)
+> Le gérant a demandé « qu'est-ce que tu peux améliorer sur mon dashboard », a retenu 3 points, a
+> demandé de regarder ce que font Shopify / WooCommerce / Etsy, puis la maquette
+> (`docs/maquettes/tableau-de-bord-v2.html`, validée) avec le sélecteur de période en plus.
+- **Composants** : `src/components/admin/DashBlocks.jsx` — `BandeauDelai` (②), `MessagesATraiter`
+  (①), `ChiffresPeriode` (③+④). **Calculs purs et testés** (23 vérifications) dans
+  `src/lib/dashPeriodes.js` : `chiffresPeriode` (CA / commandes / panier sur jour · 7 j · mois ·
+  30 j, comparés à la période PRÉCÉDENTE de même longueur), `tendance`, `devisEnAttente`,
+  `commandesEnRetard(orders, 14)`, `depuis`. Branché dans l'onglet accueil de `src/app/gestion/page.jsx`.
+- **① Messages à traiter** = réponses préparées par l'agent (`/api/admin/pending-replies` → liste
+  complète, plus seulement le compte) + réponses de clientes non lues dans leur commande
+  (`/api/admin/bat?action=unread` renvoie maintenant AUSSI `unreadMeta` : orderId, ref, nom, date).
+  Une ligne = initiale, nom, pièce/commande, chip, « il y a N h », bouton direct (« Relire et envoyer »
+  → `/repondre/<jeton>` ; « Ouvrir la commande » → onglet Commandes, fiche dépliée, fil ouvert,
+  pastille effacée). **Rouge passé 24 h.** Les plus anciennes en premier. Vide → « tout est traité ».
+  La ligne « réponses à valider » du panneau « À faire » a été retirée (doublon).
+- **② Bandeau délai allongé** : lu dans `settings.vacation` (`vacationActive`), « Régler » → onglet
+  Apparence, « Éteindre » → confirmation puis `POST /api/admin/settings {vacation:{…, enabled:false}}`.
+  Invisible quand le mode est éteint.
+- **③ Chiffres** : 4 tuiles (plus jamais 5 sur une grille de 4) — CA avec tendance et **barre vers
+  `salesGoal`** (sur « Ce mois » seulement) · commandes · panier moyen · devis en attente
+  (`/api/admin/quotes`, type devis, ni payé ni annulé ; clic → onglet Devis). Puis une ligne de
+  pastilles : à préparer · **en retard (+14 j) avec la réf la plus ancienne** · en gravure · avis.
+  Les anciennes tuiles « Commandes (total) » et « Clientes (total) » ont disparu de l'accueil (les
+  totaux restent dans Statistiques / CRM).
+- **④ Sélecteur** Aujourd'hui / 7 jours / Ce mois / 30 jours (`PERIODES`), défaut « Ce mois ».
+  « vs août » est calculé sur le vrai mois précédent ; sans historique → « nouveau », sans rien → « = ».
+- **CSS** `.dq-*` en fin de `globals.css` (mêmes classes que la maquette). Le reste du tableau de
+  bord (dernières commandes, stock cristal, À faire, URSSAF, Assistant) est **inchangé**.
+- ⚠️ Vérifié : build OK + calculs testés. **Le rendu réel de `/gestion` n'a pas pu être capturé**
+  (Firestore + clé admin nécessaires, site injoignable depuis la session) → à regarder en ligne.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes

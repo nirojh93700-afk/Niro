@@ -170,31 +170,14 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ---
 
-## 4 a. 🧭 Tableau de bord Gestion — 3 améliorations RETENUES par le gérant (18/09/2026)
+## 4 a. 🧭 Tableau de bord Gestion v2 — ✅ APPLIQUÉ le 19/09/2026
 
-> « Garde en mémoire les trois » — proposées le 18/09, retenues. **MAQUETTE FAITE le 18/09 :
-> `docs/maquettes/tableau-de-bord-v2.html`** (3 retenues + ④ sélecteur de période Aujourd'hui /
-> 7 jours / Ce mois / 30 jours, demandé après la recherche Shopify/WooCommerce/Etsy). **EN ATTENTE
-> DE SA VALIDATION — RIEN D'APPLIQUÉ.** Vérifiée en Chromium 1440 px et 390 px : aucun débordement,
-> aucune erreur JS, le sélecteur change bien les chiffres. Le vrai CSS du site est intégré
-> (`.next/static/css`), donc le rendu est celui de Gestion. ⚠️ Piège rencontré : le CSS du site
-> masque tout enfant de `<body>` qui n'est pas `<main>` dès que `.ash` existe → toute maquette
-> admin doit être enveloppée dans `<main>`.
-
-1. **Messages clientes en tête** — grande tuile « 📬 Messages à traiter » tout en haut du tableau
-   de bord : qui, quel produit, depuis combien de temps (rouge passé 24 h), bouton « Relire et
-   envoyer » directement dessus. Remplace l'alerte e-mail qui n'arrive pas (expéditeur
-   `onboarding@resend.dev`, voir §… alertes). Aujourd'hui ce n'est qu'une ligne dans « À faire ».
-2. **Bandeau « ⏳ Mode délai allongé ACTIF »** avec bouton « Éteindre » — allumé depuis le 02/09,
-   rien ne le rappelle sur l'accueil de Gestion ; risque d'oubli au retour.
-3. **Des chiffres qui servent** — remplacer les tuiles « Commandes (total) » et « Clientes (total) »
-   par : CA ce mois vs mois dernier (flèche) + barre vers l'objectif (`salesGoal`, aujourd'hui
-   visible seulement dans Statistiques) · devis envoyés non payés · commandes « à préparer » depuis
-   plus de 14 jours. Corriger au passage la grille : **5 tuiles sur 4 colonnes** → la 5e est seule.
-
-Non retenues pour l'instant (proposées le même jour) : liste des ruptures sur l'accueil, top 3 des
-favoris de la semaine, raccourcis « Écrire à une cliente / File de production », ancienneté sur les
-dernières commandes, repli du panneau « Ventes hors site ».
+Maquette `docs/maquettes/tableau-de-bord-v2.html` validée (« Appliquer ») et reproduite sur le site :
+① messages à traiter en tête · ② bandeau « mode délai allongé ACTIF » avec Éteindre · ③ chiffres
+utiles (CA / commandes / panier / devis en attente, objectif, retards) · ④ sélecteur de période.
+Détail dans `CLAUDE.md` § « Tableau de bord v2 ». **À vérifier par le gérant dans Gestion** après
+déploiement (le site n'est pas joignable depuis cette session) : le bandeau apparaît bien, les
+messages listent TRAN / Ludovic / Rose, le sélecteur change les chiffres.
 
 ---
 
