@@ -1,6 +1,7 @@
 import Stripe from "stripe";
-import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode } from "@/lib/stock";
-import { sendClientMail } from "@/lib/clientMail";
+import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode, setPromoCode, addScheduledEmail, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
+import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
+import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
 import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
 import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 
@@ -167,6 +168,80 @@ export async function POST(req) {
     return Response.json({ received: true });
   }
 
+  // ==========================================================================
+  // CARTE CADEAU (19/09/2026) : une session `metadata.giftcard` n'est PAS une
+  // commande de la boutique — pas de colis, pas de stock, pas de fiche dans
+  // Gestion → Commandes. On crée le code POUR DE VRAI (kind:"cadeau", solde =
+  // montant, verrouillé sur l'adresse du destinataire, 1 an), puis l'e-mail
+  // part — tout de suite, ou par les envois programmés du site à la date
+  // choisie. Anti-doublon : marqueur par session (Stripe peut livrer 2×).
+  // ==========================================================================
+  if (event.data.object?.metadata?.giftcard === "1") {
+    const session = event.data.object;
+    try {
+      if (await hasAutoSent("carteCadeau", session.id)) {
+        return Response.json({ received: true, duplicate: true });
+      }
+      await markAutoSent("carteCadeau", session.id);
+
+      const md = session.metadata || {};
+      const montant = Math.max(0, Number(md.giftMontant) || 0);
+      const destEmail = String(md.giftDestEmail || "").trim().toLowerCase();
+      const destName = String(md.giftDestName || "").trim();
+      const message = String(md.giftMessage || "").trim();
+      const sendAt = Number(md.giftSendAt) || 0;
+      if (!montant || !destEmail) return Response.json({ received: true, giftcard: "incomplet" });
+
+      // 1) Le code, créé AVANT toute promesse envoyée (règle de la boutique).
+      const codes = await getPromoCodes();
+      const code = genCodeCadeau(codes);
+      await setPromoCode(code, {
+        type: "fixed", value: montant, kind: "cadeau",
+        email: destEmail,      // réservé à l'adresse du destinataire
+        reusable: true,        // en plusieurs fois, jusqu'à épuisement du solde
+        days: CARTE_VALIDITE_JOURS,
+      });
+
+      // 2) L'e-mail au destinataire — maintenant, ou programmé à la date choisie.
+      const sujetDest = destName ? `${destName}, un cadeau vous attend` : "Un cadeau vous attend";
+      const corpsDest = texteEmailDestinataire({ destName, montant, message, code, siteUrl: BRAND.siteUrl });
+      let livraison = "envoyee";
+      if (sendAt > Date.now() + 60000) {
+        await addScheduledEmail({ to: destEmail, name: destName, subject: sujetDest, body: corpsDest, sendAt, source: "carte-cadeau" });
+        livraison = "programmee";
+      } else {
+        const btn = await boutonRepondre({ email: destEmail, name: destName, subject: sujetDest, excerpt: corpsDest.slice(0, 240) });
+        const r = await sendClientMail({ to: destEmail, subject: sujetDest, html: brandedMessage(sujetDest, corpsDest, btn), bcc: "" });
+        if (r?.ok) { try { await logComm({ email: destEmail, name: destName, from: "nous", text: corpsDest, subject: sujetDest, via: r.via || "site" }); } catch { /* ignore */ } }
+      }
+
+      // 3) Confirmation à l'acheteuse + info au gérant (jamais bloquant).
+      const buyerEmail = (session.customer_details?.email || "").trim();
+      const dateEnvoi = sendAt ? new Date(sendAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", timeZone: "Europe/Paris" }) : "";
+      if (buyerEmail) {
+        try {
+          const sujetA = "Votre carte cadeau Niv Création est prête";
+          const corpsA = texteEmailAcheteur({ destName, destEmail, montant, envoyeeMaintenant: livraison === "envoyee", dateEnvoi });
+          await sendClientMail({ to: buyerEmail, subject: sujetA, html: brandedMessage(sujetA, corpsA), bcc: "" });
+        } catch { /* ignore */ }
+      }
+      try {
+        await sendClientMail({
+          to: BRAND.contact,
+          subject: `Carte cadeau vendue — ${montant} €`,
+          html: brandedMessage(`Carte cadeau vendue — ${montant} €`,
+            `Acheteuse : ${buyerEmail || "?"}\nDestinataire : ${destName ? `${destName} · ` : ""}${destEmail}\nCode : ${code} (solde ${montant} €, valable 1 an)\nEnvoi : ${livraison === "programmee" ? `programmé le ${dateEnvoi}` : "parti tout de suite"}`),
+          bcc: "",
+        });
+      } catch { /* ignore */ }
+
+      return Response.json({ received: true, giftcard: livraison });
+    } catch (e) {
+      console.error("Carte cadeau — webhook:", e.message);
+      return Response.json({ received: true, giftcardError: e.message });
+    }
+  }
+
   // ANTI-DOUBLON RÉEL, ATOMIQUE — AVANT TOUT ENVOI D'E-MAIL (01/09/2026) :
   // si Stripe renvoie deux fois le même événement (quasi simultanément), une
   // seule des deux requêtes obtient la réservation ; l'autre s'arrête ici,
@@ -221,6 +296,16 @@ export async function POST(req) {
       const shipping = obj.shipping_cost?.amount_total ?? 0;
       const sales = Math.max(0, ((obj.amount_total ?? 0) - shipping) / 100);
       await recordCommission(md.promoCode, sales);
+      // CARTE CADEAU : on débite le solde du montant réellement déduit. À 0,
+      // le code ne vaut plus rien (promo-validate et checkout le refusent).
+      if (md.giftUsed) {
+        const codesG = await getPromoCodes();
+        const cg = codesG[String(md.promoCode).trim().toUpperCase()];
+        if (cg && cg.kind === "cadeau") {
+          const reste = Math.max(0, Math.round((Number(cg.value) - Number(md.giftUsed)) * 100) / 100);
+          await setPromoCode(md.promoCode, { type: "fixed", value: reste, kind: "cadeau", email: cg.email, reusable: reste > 0 });
+        }
+      }
     }
   } catch (e) {
     console.error("Enregistrement code promo:", e.message);

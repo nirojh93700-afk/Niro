@@ -18,6 +18,7 @@ export default async function sitemap() {
   const staticPages = [
     "",
     "/boutique",
+    "/carte-cadeau",
     "/cristaux",
     "/naissance",
     "/offres",

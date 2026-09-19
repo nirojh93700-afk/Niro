@@ -301,6 +301,7 @@ export async function POST(req) {
   // Code promo géré dans l'admin → coupon Stripe créé à la volée (pas besoin du dashboard).
   let discounts;
   let appliedCode = "";
+  let giftUsed = 0; // carte cadeau : montant réellement déduit (débité au webhook)
   if (promoCode) {
     try {
       const codes = await getPromoCodes();
@@ -328,6 +329,20 @@ export async function POST(req) {
           const coupon = await stripe.coupons.create({
             amount_off: Math.round(gravureOfferte * 100), currency: "eur", duration: "once",
             name: `Gravure offerte (${promoCode})`,
+          });
+          discounts = [{ coupon: coupon.id }];
+        }
+      } else if (pc && pc.kind === "cadeau" && pc.value > 0 && !blocked && !expired) {
+        // CARTE CADEAU : on déduit au plus le SOLDE, plafonné au sous-total
+        // (jamais de total négatif). Le solde est débité au webhook, une fois
+        // le paiement réellement encaissé.
+        const useAmt = Math.min(pc.value, subtotal);
+        if (useAmt > 0.009) {
+          appliedCode = promoCode;
+          giftUsed = Math.round(useAmt * 100) / 100;
+          const coupon = await stripe.coupons.create({
+            amount_off: Math.round(useAmt * 100), currency: "eur", duration: "once",
+            name: `Carte cadeau (${promoCode})`,
           });
           discounts = [{ coupon: coupon.id }];
         }
@@ -377,6 +392,7 @@ export async function POST(req) {
         // sert à décrémenter le stock après paiement (variantId:quantité)
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
         promoCode: appliedCode,
+        ...(giftUsed ? { giftUsed: String(giftUsed) } : {}),
         clientIp,
         // E-mail saisi au panier : enregistré comme « ayant utilisé le code »,
         // même si la cliente en saisit un autre sur la page de paiement.

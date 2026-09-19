@@ -105,6 +105,41 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 🛍️ AUDIT COMPARATIF — 5 AMÉLIORATIONS APPLIQUÉES LE 19/09/2026
+> Audit contre Amikado/Merci Maman/CadeauGravure (maquette `docs/maquettes/audit-9-ameliorations.html`,
+> artifact https://claude.ai/artifact/Kscni7tb6QUEAatAHLj9Ji). Le gérant a validé « pour les autres
+> je valide, tu peux appliquer » : blocs 1, 5, 6, 8 appliqués (+ 7 déjà existant). **Blocs 2 (date
+> de livraison estimée), 3 (message cadeau) et 4 (stock bas) : SAUVEGARDÉS, à faire quand il dira.**
+> Bloc 9 (express) : expliqué, en attente de sa décision.
+- **① CARTE CADEAU** (`/carte-cadeau`) : montants 20/30/50/75/100 €, petit mot (180 car.),
+  destinataire, envoi immédiat ou à une date (matin ~9 h Paris). Paiement = session Stripe DÉDIÉE
+  (`/api/carte-cadeau`, metadata `giftcard:"1"`) — PAS une commande (le webhook la traite AVANT
+  `claimSiteOrder`, anti-doublon `hasAutoSent("carteCadeau", sessionId)`). Au webhook : code
+  `CADEAU-XXXXX` créé AVANT tout envoi (`setPromoCode` kind:"cadeau", `value` = SOLDE restant,
+  `email` = verrou destinataire, `reusable:true`, 365 j) → e-mail destinataire (bouton Répondre,
+  ou envoi programmé du site si date choisie) + confirmation acheteuse + info gérant.
+  **Utilisation** : `/api/promo-validate` (solde affiché, 0 = refusé) et `/api/checkout`
+  (déduction = min(solde, sous-total), metadata `giftUsed`) ; le webhook DÉBITE le solde
+  (`setPromoCode` value=reste). En plusieurs fois jusqu'à épuisement. Fichiers :
+  `src/lib/carteCadeau.js` · `/api/carte-cadeau` · `/carte-cadeau` (+ `/merci`) ·
+  `CarteCadeauForm.jsx` · webhook Stripe · CSS `.gc-*`. Lien : pied de page + tuile sur /offrir.
+- **⑤ PAGE « OFFRIR » PAR OCCASION** (`/offrir` + `/offrir/<occasion>`) : 6 occasions (mariage,
+  naissance, amour, pour-lui, pour-elle, famille) définies dans `src/lib/occasions.js` (règles de
+  correspondance sur le CATALOGUE EN DIRECT, comme les guides — jamais de produit en dur, 12 max).
+  Menu du haut « Offrir », pied de page, sitemap. CSS `.occ-*`.
+- **⑥ TRI + BUDGET boutique** : `?tri=` (prix-croissant/décroissant/nouveautés via PRODUCT_DATES)
+  et `?budget=` (moins20 / 20-40 / plus40 sur `priceFrom`), combinés aux filtres/recherche.
+  `TriBoutique.jsx` (client) + `appliquerTri` dans `src/app/boutique/page.jsx`. CSS `.tri-*`.
+- **⑦ AVIS AVEC PHOTO : EXISTAIT DÉJÀ** (formulaire + affichage + stockage) — compté manquant à
+  tort dans l'audit, rien touché.
+- **⑧ ALERTE BAISSE DE PRIX sur un favori** : cloche sur `/favoris` (connectée seulement).
+  Section `priceWatch` = `{email: {slug: {base, at}}}` — `base` relevé CÔTÉ SERVEUR à l'activation
+  (`/api/favoris` action "watch"). Job quotidien `runPriceWatchJob` (heartbeat,
+  `claimJob("priceWatch")`) : prix du catalogue < base → UN e-mail groupé (bouton Répondre, tracé
+  logComm) puis base recalée au nouveau prix (jamais 2 e-mails pour la même baisse) ; prix monté →
+  base suit vers le haut. Fonctions stock.js : `togglePriceWatch/getPriceWatch/getPriceWatchAll/
+  rebasePriceWatch`. C'est le SEUL envoi automatique — validé explicitement par le gérant le 19/09.
+
 ### 🔑 CONNEXIONS CLIENTES — APPLIQUÉ LE 19/09/2026
 > Demande du gérant (« tu peux savoir les gens qui se connectent ? » → maquette
 > `docs/maquettes/connexions-clientes.html` validée « applique »). Journal des connexions à

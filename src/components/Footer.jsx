@@ -68,6 +68,8 @@ export default function Footer() {
             <Link href="/idees/deco-mariage-personnalisee">Déco de mariage</Link>
             <Link href="/idees/cristal-photo-3d">Cristal photo 3D</Link>
             <Link href="/idees">Tous nos guides</Link>
+            <Link href="/offrir">Trouver un cadeau par occasion</Link>
+            <Link href="/carte-cadeau">Carte cadeau</Link>
           </div>
           <div>
             <h4>Informations</h4>

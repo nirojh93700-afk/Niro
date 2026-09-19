@@ -75,6 +75,15 @@ export async function POST(req) {
       label: `gravure offerte, −${remise.toFixed(2).replace(".", ",")} €`,
     });
   }
+  // CARTE CADEAU : `value` = le solde restant (débité au webhook à chaque
+  // utilisation). Solde épuisé → le code ne vaut plus rien.
+  if (pc.kind === "cadeau") {
+    if (!(pc.value > 0)) return Response.json({ valid: false, used: true });
+    return Response.json({
+      valid: true, code, kind: "cadeau", type: "fixed", value: pc.value,
+      label: `carte cadeau — solde ${pc.value.toFixed(2).replace(".", ",")} €`,
+    });
+  }
   return Response.json({
     valid: true,
     code,

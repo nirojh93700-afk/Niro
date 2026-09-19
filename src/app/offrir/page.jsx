@@ -31,6 +31,16 @@ export default function OffrirPage() {
               <span>{o.label}</span>
             </Link>
           ))}
+          <Link href="/carte-cadeau" className="occ-card occ-carte">
+            <div className="occ-carte-int">
+              <div>
+                <div className="gc-marque">NiV CRÉATION</div>
+                <div className="gc-lib">Carte cadeau</div>
+              </div>
+              <div className="occ-carte-txt">Laissez-lui le choix — de 20 à 100 €</div>
+            </div>
+            <span>Carte cadeau</span>
+          </Link>
         </div>
       </div>
     </section>
