@@ -350,13 +350,21 @@ var CUR = {
   SGD:{n:"Dollar de Singapour", s:"S$", d:2}, MYR:{n:"Ringgit", s:"RM", d:2}
 };
 /* taux exprimés en unités pour 1 EUR (secours hors ligne, août 2026) */
-var RATES = {EUR:1, USD:1.16, INR:113.20, QAR:4.22, GBP:0.855, CHF:0.94, AED:4.26,
+var RATES = {EUR:1, USD:1.16, INR:108.00, QAR:4.22, GBP:0.855, CHF:0.94, AED:4.26,
              LKR:340, THB:37.5, TRY:47.5, CAD:1.59, JPY:171, SGD:1.49, MYR:4.9};
 var RSRC = "";
-/* TAUX FIXE demandé par la gérante : 1 € = 113,20 ₹.
+/* TAUX FIXE demandé par la gérante : 1 € = 108,00 ₹ (depuis le 19/09/2026 ; avant : 113,20).
    Jamais écrasé par la mise à jour automatique ni par un ancien taux enregistré. */
-var FIXED_RATES = {INR:113.20};
-function loadFixedRates(){ var f=lget("fxFixed"); if(f && typeof f==="object"){ for(var k in f){ if(+f[k]>0) FIXED_RATES[k]=+f[k]; } } }
+var FIXED_RATES = {INR:108.00};
+/* Quand la gérante change le taux fixe, on monte ce numéro : chaque téléphone remplace alors
+   UNE FOIS le taux qu'il avait gardé en mémoire. Sans ça, l'ancien 113,20 resterait sur son
+   téléphone et le nouveau taux ne s'appliquerait jamais. Elle peut toujours le modifier à la main
+   ensuite (Taux de change) : sa saisie est conservée. */
+var FX_FIXED_VER = 2;
+function loadFixedRates(){
+  if((+lget("fxFixedVer")||0) < FX_FIXED_VER){ lset("fxFixed", FIXED_RATES); lset("fxFixedVer", FX_FIXED_VER); return; }
+  var f=lget("fxFixed"); if(f && typeof f==="object"){ for(var k in f){ if(+f[k]>0) FIXED_RATES[k]=+f[k]; } }
+}
 function applyFixedRates(){ for(var k in FIXED_RATES){ RATES[k]=FIXED_RATES[k]; } }
 function setFixedRate(cur, val){ if(!(+val>0)) return; FIXED_RATES[cur]=+val; RATES[cur]=+val; lset("fxFixed", FIXED_RATES); }
 function isFixed(cur){ return Object.prototype.hasOwnProperty.call(FIXED_RATES, cur); }
@@ -379,10 +387,10 @@ var I18N = {
   fr:{
     conv:"Convertisseur", dep:"Dépenses", iEnter:"Je saisis", itMakes:"Ça fait",
     edit:"Modifier", validate:"Valider", refresh:"Actualiser",
-    rateSaved:"taux de secours enregistrés", rateFixed:"taux fixe (1 € = 113,20 ₹)", rateManual:"taux saisi à la main", rateOffline:"hors ligne — dernier taux connu",
+    rateSaved:"taux de secours enregistrés", rateFixed:"taux fixe (1 € = 108,00 ₹)", rateManual:"taux saisi à la main", rateOffline:"hors ligne — dernier taux connu",
     rateHint:"saisis le taux puis Valider", ratesUpdated:"taux mis à jour",
     fxBtn:"Taux de change", fxTitle:"Taux de change", fxHint:"Change ici le taux d'une monnaie. Un taux BLOQUÉ ne bouge jamais tout seul, même quand tu actualises depuis Internet. Les dépenses déjà enregistrées gardent le montant en euros calculé au moment de la saisie.",
-    fxLocked:"Bloqué", fxAuto:"Automatique", fxRefresh:"Actualiser depuis Internet", fxSave:"Enregistrer les taux", fxSaved:"Taux enregistrés", fxReset:"Rétablir 113,20 ₹", fxPerEur:"pour 1 €",
+    fxLocked:"Bloqué", fxAuto:"Automatique", fxRefresh:"Actualiser depuis Internet", fxSave:"Enregistrer les taux", fxSaved:"Taux enregistrés", fxReset:"Rétablir 108,00 ₹", fxPerEur:"pour 1 €",
     tipINR:"<b>Calcul de tête :</b> enlève deux zéros, puis retire {n} %. ₹1 000 ≈ {x} €.",
     tipQAR:"<b>Calcul de tête :</b> divise par 4. 100 ر.ق ≈ {x} €.",
     tipUSD:"<b>Repère :</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
@@ -487,10 +495,10 @@ var I18N = {
   en:{
     conv:"Converter", dep:"Expenses", iEnter:"I enter", itMakes:"That's",
     edit:"Edit", validate:"Confirm", refresh:"Update",
-    rateSaved:"saved backup rate", rateFixed:"fixed rate (1 € = 113.20 ₹)", rateManual:"manually entered rate", rateOffline:"offline — last known rate",
+    rateSaved:"saved backup rate", rateFixed:"fixed rate (1 € = 108.00 ₹)", rateManual:"manually entered rate", rateOffline:"offline — last known rate",
     rateHint:"enter the rate then Confirm", ratesUpdated:"rates updated",
     fxBtn:"Exchange rates", fxTitle:"Exchange rates", fxHint:"Change a currency rate here. A LOCKED rate never moves on its own, even when you refresh from the internet. Expenses already saved keep the euro amount computed when they were entered.",
-    fxLocked:"Locked", fxAuto:"Automatic", fxRefresh:"Refresh from the internet", fxSave:"Save the rates", fxSaved:"Rates saved", fxReset:"Restore 113.20 ₹", fxPerEur:"per 1 €",
+    fxLocked:"Locked", fxAuto:"Automatic", fxRefresh:"Refresh from the internet", fxSave:"Save the rates", fxSaved:"Rates saved", fxReset:"Restore 108.00 ₹", fxPerEur:"per 1 €",
     tipINR:"<b>Mental math:</b> drop two zeros, then take off {n} %. ₹1 000 ≈ {x} €.",
     tipQAR:"<b>Mental math:</b> divide by 4. 100 ر.ق ≈ {x} €.",
     tipUSD:"<b>Rule of thumb:</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
@@ -595,10 +603,10 @@ var I18N = {
   ta:{
     conv:"மாற்றி", dep:"செலவுகள்", iEnter:"நான் உள்ளிடுகிறேன்", itMakes:"இது ஆகும்",
     edit:"மாற்று", validate:"உறுதி", refresh:"புதுப்பி",
-    rateSaved:"சேமித்த மாற்று விகிதம்", rateFixed:"நிலையான விகிதம் (1 € = 113,20 ₹)", rateManual:"கையால் உள்ளிட்ட விகிதம்", rateOffline:"இணைப்பில்லை — கடைசி விகிதம்",
+    rateSaved:"சேமித்த மாற்று விகிதம்", rateFixed:"நிலையான விகிதம் (1 € = 108,00 ₹)", rateManual:"கையால் உள்ளிட்ட விகிதம்", rateOffline:"இணைப்பில்லை — கடைசி விகிதம்",
     rateHint:"விகிதத்தை உள்ளிட்டு உறுதி செய்", ratesUpdated:"விகிதங்கள் புதுப்பிக்கப்பட்டன",
     fxBtn:"மாற்று விகிதம்", fxTitle:"மாற்று விகிதங்கள்", fxHint:"ஒரு நாணயத்தின் விகிதத்தை இங்கே மாற்று. பூட்டப்பட்ட விகிதம் இணையத்திலிருந்து புதுப்பிக்கும்போதும் தானாக மாறாது. ஏற்கனவே பதிவான செலவுகள், பதிவு செய்த நேரத்தின் யூரோ தொகையை வைத்திருக்கும்.",
-    fxLocked:"பூட்டப்பட்டது", fxAuto:"தானியங்கி", fxRefresh:"இணையத்திலிருந்து புதுப்பி", fxSave:"விகிதங்களைச் சேமி", fxSaved:"விகிதங்கள் சேமிக்கப்பட்டன", fxReset:"113,20 ₹ மீட்டமை", fxPerEur:"1 €-க்கு",
+    fxLocked:"பூட்டப்பட்டது", fxAuto:"தானியங்கி", fxRefresh:"இணையத்திலிருந்து புதுப்பி", fxSave:"விகிதங்களைச் சேமி", fxSaved:"விகிதங்கள் சேமிக்கப்பட்டன", fxReset:"108,00 ₹ மீட்டமை", fxPerEur:"1 €-க்கு",
     tipINR:"<b>மனக்கணக்கு:</b> இரண்டு பூஜ்ஜியங்களை நீக்கு, பிறகு {n}% கழி. ₹1 000 ≈ {x} €.",
     tipQAR:"<b>மனக்கணக்கு:</b> 4 ஆல் வகு. 100 ر.ق ≈ {x} €.",
     tipUSD:"<b>அளவை:</b> 1 $ ≈ {a} € · 1 € ≈ {b} $.",
@@ -2726,7 +2734,7 @@ function openRates(){
       openRates();
     }).catch(function(){ toast(t("rateOffline")); openRates(); });
   });
-  $("fxReset").addEventListener("click", function(){ setFixedRate("INR", 113.20); saveRates(); renderConv(); renderExp(); openRates(); });
+  $("fxReset").addEventListener("click", function(){ setFixedRate("INR", 108.00); saveRates(); renderConv(); renderExp(); openRates(); });
 }
 $("ratesBtn").addEventListener("click", openRates);
 

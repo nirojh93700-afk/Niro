@@ -1,0 +1,2083 @@
+{
+ "delAt": {
+  "1786750353188c5ft0": 1,
+  "1786750353189i1bg1": 1,
+  "1786794484045xd0o0": 1,
+  "1787231562175isyl": 1,
+  "1787242660919ri7t": 1,
+  "1788502424090dy0s": 1,
+  "17885390275028z4x": 1,
+  "17885862252875hw3": 1,
+  "1788587734437ctx5": 1,
+  "1789795534919d4of": 1789795578339,
+  "P:mtm6q5y7442h": 1,
+  "P:mtzm7t6zcbau": 1789533159854,
+  "nivhotel-mamallaa": 1
+ },
+ "deleted": [
+  "1786750353189i1bg1",
+  "1786750353188c5ft0",
+  "1786794484045xd0o0",
+  "nivhotel-mamallaa",
+  "1787231562175isyl",
+  "1788502424090dy0s",
+  "17885390275028z4x",
+  "17885862252875hw3",
+  "1788587734437ctx5",
+  "P:mtm6q5y7442h",
+  "1787242660919ri7t",
+  "P:mtzm7t6zcbau",
+  "1789795534919d4of"
+ ],
+ "expenses": [
+  {
+   "amount": 292.32,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 292.32,
+   "hidden": false,
+   "hotel": "The Park Chennai",
+   "id": "nivhotel-park",
+   "label": "Chambre 1",
+   "mt": 1789122156754,
+   "nights": 4,
+   "paid": 1076,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788417000000,
+   "url": "https://www.booking.com/hotel/in/the-park-chennai.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 10500,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 97.22,
+   "hidden": true,
+   "hotel": "Atithi Hotel Pondichéry",
+   "id": "nivhotel-atithi",
+   "label": "Chambre 1",
+   "mt": 1789795604791,
+   "nights": 2,
+   "paid": 42000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788861600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 54.68,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 54.68,
+   "hidden": false,
+   "hotel": "MGM Vailankanni",
+   "id": "nivhotel-mgm",
+   "label": "Chambre 1",
+   "mt": 1789178863597,
+   "nights": 1,
+   "paid": 204.59,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789021800000,
+   "url": "https://www.booking.com/hotel/in/mgm-vailankanni.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 2640,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 24.44,
+   "hidden": false,
+   "hotel": "North Gate",
+   "id": "nivhotel-gopuram",
+   "label": "Chambre 1",
+   "mt": 1789795604791,
+   "nights": 1,
+   "paid": 13200,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "url": "https://www.booking.com/hotel/in/gopuram-grand.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 38.46,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 38.46,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "nivhotel-crown",
+   "label": "Chambre 1",
+   "mt": 1789198893925,
+   "nights": 2,
+   "paid": 250.6,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789293600000,
+   "url": "https://www.booking.com/hotel/in/crown-valley-thekkady.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 4250,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 39.35,
+   "hidden": false,
+   "hotel": "Houseboat Alleppey (croisière)",
+   "id": "nivhotel-houseboat",
+   "label": "Chambre 1",
+   "mt": 1789795604791,
+   "nights": 0,
+   "paid": 34000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Niv",
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789626600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 261.23,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 261.23,
+   "hidden": false,
+   "hotel": "The Park Chennai",
+   "id": "1786794484045u93h1",
+   "label": "Chambre 2",
+   "mt": 1789122156754,
+   "nights": 4,
+   "paid": 1076,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788417000000,
+   "url": "https://www.booking.com/hotel/in/the-park-chennai.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 261.23,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 261.23,
+   "hidden": false,
+   "hotel": "The Park Chennai",
+   "id": "1786794484045zu8u2",
+   "label": "Chambre 3",
+   "mt": 1789122156754,
+   "nights": 4,
+   "paid": 1076,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788417000000,
+   "url": "https://www.booking.com/hotel/in/the-park-chennai.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 130.61,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 130.61,
+   "hidden": false,
+   "hotel": "The Park Chennai",
+   "id": "17867944840453bnn3",
+   "label": "Chambre 4",
+   "mt": 1789122156754,
+   "nights": 4,
+   "paid": 1076,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788417000000,
+   "url": "https://www.booking.com/hotel/in/the-park-chennai.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 130.61,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 130.61,
+   "hidden": false,
+   "hotel": "The Park Chennai",
+   "id": "1786794484045e7ks4",
+   "label": "Chambre 5",
+   "mt": 1789122156754,
+   "nights": 4,
+   "paid": 1076,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788417000000,
+   "url": "https://www.booking.com/hotel/in/the-park-chennai.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 91.38,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 91.38,
+   "hidden": false,
+   "hotel": "Abad Copper Castle Resort",
+   "id": "nivhotel-munnar",
+   "label": "Chambre 1",
+   "mt": 1789365822100,
+   "nights": 2,
+   "paid": 365.53,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789466400000,
+   "url": "https://www.booking.com/hotel/in/abad-copper-castle.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 157.06,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 157.06,
+   "hidden": false,
+   "hotel": "Novotel Kochi Infopark",
+   "id": "nivhotel-kochi",
+   "label": "Chambre 1",
+   "mt": 1789795604791,
+   "nights": 3,
+   "paid": 67848,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "url": "https://www.booking.com/hotel/in/novotel-kochi-infopark.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 10500,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 97.22,
+   "hidden": true,
+   "hotel": "Atithi Hotel Pondichéry",
+   "id": "mt1hjggh778y",
+   "label": "Chambre 2",
+   "mt": 1789795604791,
+   "nights": 2,
+   "paid": 42000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788861600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 5250,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 48.61,
+   "hidden": true,
+   "hotel": "Atithi Hotel Pondichéry",
+   "id": "mt1hkjjqbypc",
+   "label": "Chambre 3",
+   "mt": 1789795604791,
+   "nights": 2,
+   "paid": 42000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788861600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 10500,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 97.22,
+   "hidden": true,
+   "hotel": "Atithi Hotel Pondichéry",
+   "id": "mt1hkvo6kzz8",
+   "label": "Chambre 4",
+   "mt": 1789795604791,
+   "nights": 2,
+   "paid": 42000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788861600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 5250,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 48.62,
+   "hidden": true,
+   "hotel": "Atithi Hotel Pondichéry",
+   "id": "mt1hnumbbog9",
+   "label": "Chambre 5",
+   "mt": 1789795604791,
+   "nights": 2,
+   "paid": 42000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788861600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 50.2,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 50.2,
+   "hidden": false,
+   "hotel": "MGM Vailankanni",
+   "id": "mt1hzsc8tlm2",
+   "label": "Chambre 2",
+   "mt": 1789178863597,
+   "nights": 1,
+   "paid": 204.59,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789021800000,
+   "url": "https://www.booking.com/hotel/in/mgm-vailankanni.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 25.62,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 25.62,
+   "hidden": false,
+   "hotel": "MGM Vailankanni",
+   "id": "mt1i034lusyx",
+   "label": "Chambre 3",
+   "mt": 1789178863597,
+   "nights": 1,
+   "paid": 204.59,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789021800000,
+   "url": "https://www.booking.com/hotel/in/mgm-vailankanni.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 50.2,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 50.2,
+   "hidden": false,
+   "hotel": "MGM Vailankanni",
+   "id": "mt1i0ows3e7d",
+   "label": "Chambre 4",
+   "mt": 1789178863597,
+   "nights": 1,
+   "paid": 204.59,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789021800000,
+   "url": "https://www.booking.com/hotel/in/mgm-vailankanni.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 23.89,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 23.89,
+   "hidden": true,
+   "hotel": "MGM Vailankanni",
+   "id": "mt1i0zuuzje9",
+   "label": "Chambre 5",
+   "mt": 1789178863597,
+   "nights": 1,
+   "paid": 193.84,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789034400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 2640,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 24.44,
+   "hidden": false,
+   "hotel": "North Gate",
+   "id": "mt1i90yh8jv8",
+   "label": "Chambre 2",
+   "mt": 1789795604791,
+   "nights": 1,
+   "paid": 13200,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "url": "https://www.booking.com/hotel/in/gopuram-grand.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 2640,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 24.44,
+   "hidden": false,
+   "hotel": "North Gate",
+   "id": "mt1i9ab3wpj6",
+   "label": "Chambre 3",
+   "mt": 1789795604791,
+   "nights": 1,
+   "paid": 13200,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "url": "https://www.booking.com/hotel/in/gopuram-grand.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 2640,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 24.44,
+   "hidden": false,
+   "hotel": "North Gate",
+   "id": "mt1i9gkpqr5k",
+   "label": "Chambre 4",
+   "mt": 1789795604791,
+   "nights": 1,
+   "paid": 13200,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "url": "https://www.booking.com/hotel/in/gopuram-grand.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 2640,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 24.46,
+   "hidden": false,
+   "hotel": "North Gate",
+   "id": "mt1ia92gccm5",
+   "label": "Chambre 5",
+   "mt": 1789795604791,
+   "nights": 1,
+   "paid": 13200,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "url": "https://www.booking.com/hotel/in/gopuram-grand.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 38.46,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 38.46,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mt1iklwbb14z",
+   "label": "Chambre 2",
+   "mt": 1789198893925,
+   "nights": 2,
+   "paid": 250.6,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789293600000,
+   "url": "https://www.booking.com/hotel/in/crown-valley-thekkady.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 19.23,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 19.23,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mt1ikuhth0ab",
+   "label": "Chambre 3",
+   "mt": 1789198893925,
+   "nights": 2,
+   "paid": 250.6,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789293600000,
+   "url": "https://www.booking.com/hotel/in/crown-valley-thekkady.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 38.46,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 38.46,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mt1imql10z53",
+   "label": "Chambre 4",
+   "mt": 1789198893925,
+   "nights": 2,
+   "paid": 250.6,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789293600000,
+   "url": "https://www.booking.com/hotel/in/crown-valley-thekkady.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 19.23,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 19.23,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mt1in47jfhyl",
+   "label": "Chambre 5",
+   "mt": 1789198893925,
+   "nights": 2,
+   "paid": 250.6,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789293600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 91.38,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 91.38,
+   "hidden": false,
+   "hotel": "Abad Copper Castle Resort",
+   "id": "mt1ipzx30whx",
+   "label": "Chambre 2",
+   "mt": 1789365822100,
+   "nights": 2,
+   "paid": 365.53,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789466400000,
+   "url": "https://www.booking.com/hotel/in/abad-copper-castle.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 45.69,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 45.69,
+   "hidden": false,
+   "hotel": "Abad Copper Castle Resort",
+   "id": "mt1iqko4ev6u",
+   "label": "Chambre 3",
+   "mt": 1789365822100,
+   "nights": 2,
+   "paid": 365.53,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789466400000,
+   "url": "https://www.booking.com/hotel/in/abad-copper-castle.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 91.38,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 91.38,
+   "hidden": false,
+   "hotel": "Abad Copper Castle Resort",
+   "id": "mt1ir392jifg",
+   "label": "Chambre 4",
+   "mt": 1789365822100,
+   "nights": 2,
+   "paid": 365.53,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789466400000,
+   "url": "https://www.booking.com/hotel/in/abad-copper-castle.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 45.69,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 45.7,
+   "hidden": false,
+   "hotel": "Abad Copper Castle Resort",
+   "id": "mt1irdyz1hf9",
+   "label": "Chambre 5",
+   "mt": 1789365822100,
+   "nights": 2,
+   "paid": 365.53,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789466400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 157.06,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 157.06,
+   "hidden": false,
+   "hotel": "Novotel Kochi Infopark",
+   "id": "mt1itjm95lsp",
+   "label": "Chambre 2",
+   "mt": 1789795604791,
+   "nights": 3,
+   "paid": 67848,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "url": "https://www.booking.com/hotel/in/novotel-kochi-infopark.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 78.53,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 78.53,
+   "hidden": false,
+   "hotel": "Novotel Kochi Infopark",
+   "id": "mt1itthq1smb",
+   "label": "Chambre 3",
+   "mt": 1789795604791,
+   "nights": 3,
+   "paid": 67848,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "url": "https://www.booking.com/hotel/in/novotel-kochi-infopark.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 157.06,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 157.06,
+   "hidden": false,
+   "hotel": "Novotel Kochi Infopark",
+   "id": "mt1iueeyokyp",
+   "label": "Chambre 4",
+   "mt": 1789795604791,
+   "nights": 3,
+   "paid": 67848,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "url": "https://www.booking.com/hotel/in/novotel-kochi-infopark.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 78.51,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 78.51,
+   "hidden": false,
+   "hotel": "Novotel Kochi Infopark",
+   "id": "mt1iuowsfdhx",
+   "label": "Chambre 5",
+   "mt": 1789795604791,
+   "nights": 3,
+   "paid": 67848,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "url": "https://www.booking.com/hotel/in/novotel-kochi-infopark.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 155.9,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 1.4172393319604686,
+   "id": "17885025127143upl",
+   "label": "Le 4",
+   "split": {
+    "mode": "shares",
+    "shares": {
+     "Amma Appa": 1,
+     "Mama": 1,
+     "Niv": 1,
+     "Paramu sitta": 1,
+     "Selvan Viji sitta sitti": 1
+    }
+   },
+   "ts": 1788503400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 146,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 1.3272414526377705,
+   "id": "1788502547909b6r9",
+   "label": "Le 4",
+   "split": {
+    "mode": "shares",
+    "shares": {
+     "Amma Appa": 1,
+     "Mama": 1,
+     "Niv": 1,
+     "Paramu sitta": 1,
+     "Selvan Viji sitta sitti": 1
+    }
+   },
+   "ts": 1788503400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 242,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 2.19994816122151,
+   "id": "1788541366808pl2k",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788503400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 307,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 2.7908433284917504,
+   "id": "17885413980937t39",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788503400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 1219,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 11.081557060037275,
+   "id": "1788578131162cn3i",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Amma Appa"
+  },
+  {
+   "amount": 45.91,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 0.4173538019904112,
+   "id": "1788578151222xfw8",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Niv"
+  },
+  {
+   "amount": 125,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 1.1363368601350774,
+   "id": "1788585710848xdtz",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Amma Appa"
+  },
+  {
+   "amount": 125,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 1.1363368601350774,
+   "id": "1788585721967yl72",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Selvan Viji sitta sitti"
+  },
+  {
+   "amount": 500,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 4.54534744054031,
+   "id": "1788585759914e3ir",
+   "label": "",
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Amma Appa"
+  },
+  {
+   "amount": 10154,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 92.30691582249261,
+   "id": "1788589039168q1kv",
+   "label": "Petit déjeuner à l’hôtel le 5",
+   "mt": 1788589039168,
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Niv"
+  },
+  {
+   "amount": 700,
+   "cat": "transport",
+   "cur": "INR",
+   "eur": 6.183745583038869,
+   "id": "1788597282977yw63",
+   "label": "Taxi pour Saint-Georges plus Museum",
+   "mt": 1788597282977,
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788589800000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4000,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 35.3356890459364,
+   "id": "1788705332387fmne",
+   "label": "Restaurant amman",
+   "mt": 1788705409680,
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788676200000,
+   "who": "Niv"
+  },
+  {
+   "amount": 2575,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 22.747349823321553,
+   "id": "1788750666496b9lo",
+   "label": "petit déjeuner avant Tirupati",
+   "mt": 1788750666496,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 2000,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 17.6678445229682,
+   "id": "17887833446246881",
+   "label": "Hôtel pour les Bagage",
+   "mt": 1789623151081,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 3475,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 30.69787985865724,
+   "id": "1788787614610uyp3",
+   "label": "Restaurant, après Tirupati",
+   "mt": 1788787614611,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 500,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 4.41696113074205,
+   "id": "178879324419182sg",
+   "label": "",
+   "mt": 1788793244191,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 200,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 1.7667844522968197,
+   "id": "1788793270338casu",
+   "label": "",
+   "mt": 1788793270338,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "who": "Mama"
+  },
+  {
+   "amount": 500,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 4.41696113074205,
+   "id": "1788793311315r36e",
+   "label": "",
+   "mt": 1788793311315,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 26.69,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 26.69,
+   "hidden": false,
+   "hotel": "Hotel Mamallaa Heritage",
+   "id": "mamallaa-2026-09-07",
+   "label": "Chambre 1",
+   "mt": 1789122156754,
+   "nights": 1,
+   "paid": 106.75,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "url": "https://www.booking.com/hotel/in/mamallaa-heritage.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 26.69,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 26.69,
+   "hidden": false,
+   "hotel": "Hotel Mamallaa Heritage",
+   "id": "mtrdlcye73ep",
+   "label": "Chambre 2",
+   "mt": 1789122156754,
+   "nights": 1,
+   "paid": 106.75,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "url": "https://www.booking.com/hotel/in/mamallaa-heritage.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 26.69,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 26.69,
+   "hidden": false,
+   "hotel": "Hotel Mamallaa Heritage",
+   "id": "mtrdlqkv2sm9",
+   "label": "Chambre 3",
+   "mt": 1789122156754,
+   "nights": 1,
+   "paid": 106.75,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "url": "https://www.booking.com/hotel/in/mamallaa-heritage.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 13.34,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 13.34,
+   "hidden": false,
+   "hotel": "Hotel Mamallaa Heritage",
+   "id": "mtrdm2q4e7jl",
+   "label": "Chambre 4",
+   "mt": 1789122156754,
+   "nights": 1,
+   "paid": 106.75,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "url": "https://www.booking.com/hotel/in/mamallaa-heritage.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 13.34,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 13.34,
+   "hidden": false,
+   "hotel": "Hotel Mamallaa Heritage",
+   "id": "mtrdmlku8qia",
+   "label": "Chambre 5",
+   "mt": 1789122156754,
+   "nights": 1,
+   "paid": 106.75,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788762600000,
+   "url": "https://www.booking.com/hotel/in/mamallaa-heritage.html",
+   "who": "Niv"
+  },
+  {
+   "amount": 4200,
+   "cat": "activity",
+   "cur": "INR",
+   "eur": 37.102473498233216,
+   "id": "1788852609898xheh",
+   "label": "Visite à Mahabalipuram",
+   "mt": 1788852609898,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788849000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 1000,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 8.8339222614841,
+   "id": "1788870577872f232",
+   "label": "",
+   "mt": 1788870577872,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1788849000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 8491,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 75.00883392226149,
+   "id": "17889262353557f4y",
+   "label": "Restaurant à pondicherry",
+   "mt": 1788926235355,
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788935400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 460,
+   "cat": "coffee",
+   "cur": "INR",
+   "eur": 4.063604240282685,
+   "id": "1788973529385j72f",
+   "label": "Boisson à Matamandir",
+   "mt": 1788973529385,
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788935400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 990,
+   "cat": "coffee",
+   "cur": "INR",
+   "eur": 8.745583038869258,
+   "id": "1788973621936m2ih",
+   "label": "Boisson au Mall à Pondichéry",
+   "mt": 1788973621936,
+   "split": {
+    "among": [
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1788935400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4979,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 43.984098939929325,
+   "id": "17890189351646w98",
+   "label": "Dîner à l’hôtel",
+   "mt": 1789018935165,
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789021800000,
+   "who": "Niv"
+  },
+  {
+   "amount": 9394,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 82.98586572438163,
+   "id": "1789104815919p0j3",
+   "label": "Restaurant à l’hôtel MGM",
+   "mt": 1789104815919,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4000,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 35.3356890459364,
+   "id": "1789117204852boa6",
+   "label": "Restaurant Après Trichy",
+   "mt": 1789117204852,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "who": "Niv"
+  },
+  {
+   "amount": 440,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 3.8869257950530036,
+   "id": "1789143219004ta1d",
+   "label": "À l’hôtel de Madurai",
+   "mt": 1789143219004,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789108200000,
+   "who": "Niv"
+  },
+  {
+   "amount": 24.19,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 24.19,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mty29arv1ss3",
+   "label": "Chambre 1",
+   "mt": 1789198893925,
+   "nights": 1,
+   "paid": 157.63,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 24.19,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 24.19,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mty2af195zb2",
+   "label": "Chambre 2",
+   "mt": 1789198893925,
+   "nights": 1,
+   "paid": 157.63,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 24.19,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 24.19,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mty2aqqgdxe3",
+   "label": "Chambre 3",
+   "mt": 1789198893925,
+   "nights": 1,
+   "paid": 157.63,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 12.09,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 12.09,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mty2bby6vgev",
+   "label": "Chambre 4",
+   "mt": 1789198893925,
+   "nights": 1,
+   "paid": 157.63,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Mama"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 12.09,
+   "bf": true,
+   "cat": "hotel",
+   "cur": "EUR",
+   "eur": 12.1,
+   "hidden": false,
+   "hotel": "Crown Valley Thekkady",
+   "id": "mty2bj7ewv8i",
+   "label": "Chambre 5",
+   "mt": 1789198893925,
+   "nights": 1,
+   "paid": 157.63,
+   "paidCur": "EUR",
+   "split": {
+    "among": [
+     "Niv",
+     "Amma Appa",
+     "Mama",
+     "Selvan Viji sitta sitti",
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "url": "",
+   "who": "Paramu sitta"
+  },
+  {
+   "amount": 2900,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 25.618374558303888,
+   "id": "1789205068318o88j",
+   "label": "Restaurant à Madurai",
+   "mt": 1789205068318,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 600,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 5.300353356890459,
+   "id": "1789224882854nkrh",
+   "label": "À l’hôtel",
+   "mt": 1789224882854,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789194600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4185,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 36.96996466431095,
+   "id": "1789292030484w45z",
+   "label": "Dîner à l’hôtel de Thekkady",
+   "mt": 1789305087242,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789281000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4397,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 38.842756183745585,
+   "id": "1789292070095gbt7",
+   "label": "Déjeuner à midi à Thekkady",
+   "mt": 1789292070095,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789281000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 1000,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 8.8339222614841,
+   "id": "1789303780346c0g0",
+   "label": "Pour les Bagage",
+   "mt": 1789303780346,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789281000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4250,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 39.35,
+   "hidden": false,
+   "hotel": "Houseboat Alleppey (croisière)",
+   "id": "mu0u9sbbt4mo",
+   "label": "Chambre 2",
+   "mt": 1789795604791,
+   "nights": 0,
+   "paid": 34000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789626600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 8500,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 78.7,
+   "hidden": false,
+   "hotel": "Houseboat Alleppey (croisière)",
+   "id": "mu0ue5bmsk82",
+   "label": "Chambre 3",
+   "mt": 1789795604791,
+   "nights": 0,
+   "paid": 34000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789626600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 8500,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 78.7,
+   "hidden": false,
+   "hotel": "Houseboat Alleppey (croisière)",
+   "id": "mu0ueyrk19fb",
+   "label": "Chambre 4",
+   "mt": 1789795604791,
+   "nights": 0,
+   "paid": 34000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Selvan Viji sitta sitti"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789626600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 8500,
+   "bf": false,
+   "cat": "hotel",
+   "cur": "INR",
+   "eur": 78.71,
+   "hidden": false,
+   "hotel": "Houseboat Alleppey (croisière)",
+   "id": "mu0ufcwjd5y4",
+   "label": "Chambre 5",
+   "mt": 1789795604791,
+   "nights": 0,
+   "paid": 34000,
+   "paidCur": "INR",
+   "split": {
+    "among": [
+     "Niv"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789626600000,
+   "url": "",
+   "who": "Niv"
+  },
+  {
+   "amount": 5300,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 46.81978798586572,
+   "id": "1789380278716im7f",
+   "label": "Déjeuner",
+   "mt": 1789380278716,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789367400000,
+   "who": "Niv"
+  },
+  {
+   "amount": 1000,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 8.8339222614841,
+   "id": "1789444254281s9q0",
+   "label": "Bagage",
+   "mt": 1789573632125,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789453800000,
+   "who": "Niv"
+  },
+  {
+   "amount": 500,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 4.41696113074205,
+   "id": "17894697429431qxj",
+   "label": "Hôtel à munnar",
+   "mt": 1789469742943,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789453800000,
+   "who": "Niv"
+  },
+  {
+   "amount": 1900,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 16.784452296819786,
+   "id": "1789572774146629l",
+   "label": "Bagage, à l’hôtel Munnar",
+   "mt": 1789573614835,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789540200000,
+   "who": "Niv"
+  },
+  {
+   "amount": 400,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 3.5335689045936394,
+   "id": "1789623128910u4iu",
+   "label": "À l’hôtel Pour les Bagage",
+   "mt": 1789623128910,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789626600000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4000,
+   "cat": "tips",
+   "cur": "INR",
+   "eur": 35.3356890459364,
+   "id": "1789700638203dfyu",
+   "label": "Bateau",
+   "mt": 1789700638203,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 5084,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 44.91166077738516,
+   "id": "17897007992453m3j",
+   "label": "Restaurant à SAMRUDHI MUNNAR",
+   "mt": 1789700799245,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4965,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 43.86042402826855,
+   "id": "1789700839445j27w",
+   "label": "Restaurant à l’hôtel ABAD",
+   "mt": 1789700839445,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 630,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 5.565371024734982,
+   "id": "1789701125069dz4u",
+   "label": "Service aux chambres",
+   "mt": 1789701125069,
+   "split": {
+    "among": [
+     "Mama",
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 1463,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 12.924028268551236,
+   "id": "1789701171149sp3a",
+   "label": "Service chambre",
+   "mt": 1789701171149,
+   "split": {
+    "among": [
+     "Mama",
+     "Paramu sitta"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 394,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 3.480565371024735,
+   "id": "1789701212006j21e",
+   "label": "Dîner",
+   "mt": 1789701212006,
+   "split": {
+    "among": [
+     "Amma Appa"
+    ],
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 4237,
+   "cat": "food",
+   "cur": "INR",
+   "eur": 37.42932862190813,
+   "id": "1789701270610wrud",
+   "label": "Restaurant à l’hôtel CROWN",
+   "mt": 1789701270611,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 2800,
+   "cat": "shopping",
+   "cur": "INR",
+   "eur": 24.734982332155475,
+   "id": "1789701344752qg3o",
+   "label": "Poisson et calamar",
+   "mt": 1789701344752,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  },
+  {
+   "amount": 300,
+   "cat": "coffee",
+   "cur": "INR",
+   "eur": 2.6501766784452294,
+   "id": "1789701396386z614",
+   "label": "Thé",
+   "mt": 1789701396386,
+   "split": {
+    "mode": "equal"
+   },
+   "ts": 1789713000000,
+   "who": "Niv"
+  }
+ ],
+ "lockAt": 0,
+ "locked": false,
+ "lockedBy": "",
+ "partShares": {
+  "Amma Appa": 2,
+  "Niv": 2,
+  "Selvan Viji sitta sitti": 2
+ },
+ "payments": [
+  {
+   "eur": 45.45,
+   "from": "Amma Appa",
+   "id": "mtm6rbqptyvb",
+   "to": "Niv",
+   "ts": 1788479906353
+  },
+  {
+   "eur": 455,
+   "from": "Mama",
+   "id": "mtnxeqtql8up",
+   "to": "Niv",
+   "ts": 1788585135182
+  },
+  {
+   "eur": 47.17,
+   "from": "Amma Appa",
+   "id": "mtrcgjqzh4th",
+   "to": "Niv",
+   "ts": 1788791812091
+  },
+  {
+   "eur": 400,
+   "from": "Amma Appa",
+   "id": "mttkc6ee2ljo",
+   "to": "Niv",
+   "ts": 1788925977446
+  },
+  {
+   "eur": 441.7,
+   "from": "Selvan Viji sitta sitti",
+   "id": "mttkfm290bva",
+   "to": "Niv",
+   "ts": 1788926137713
+  },
+  {
+   "amount": 600,
+   "cur": "EUR",
+   "eur": 600,
+   "from": "Amma Appa",
+   "id": "mtwqctn3om87",
+   "mt": 1789120922212,
+   "to": "Niv",
+   "ts": 1789117483791
+  },
+  {
+   "amount": 10000,
+   "cur": "INR",
+   "eur": 88.33922261484099,
+   "from": "Mama",
+   "id": "mtxvzjz1glwi",
+   "mt": 1789187408606,
+   "to": "Niv",
+   "ts": 1789187408606
+  },
+  {
+   "amount": 500,
+   "cur": "EUR",
+   "eur": 500,
+   "from": "Selvan Viji sitta sitti",
+   "id": "mty6eebd0mdm",
+   "mt": 1789204897273,
+   "to": "Niv",
+   "ts": 1789204897273
+  },
+  {
+   "amount": 245.5,
+   "cur": "EUR",
+   "eur": 245.5,
+   "from": "Paramu sitta",
+   "id": "mty9dgcfwm44",
+   "mt": 1789209892095,
+   "to": "Niv",
+   "ts": 1789209892095
+  },
+  {
+   "amount": 8500,
+   "cur": "INR",
+   "eur": 75.08833922261483,
+   "from": "Selvan Viji sitta sitti",
+   "id": "mu3lyigft4le",
+   "mt": 1789533360879,
+   "to": "Niv",
+   "ts": 1789533360879
+  },
+  {
+   "amount": 4250,
+   "cur": "INR",
+   "eur": 37.54416961130742,
+   "from": "Paramu sitta",
+   "id": "mu3m002t1170",
+   "mt": 1789533430373,
+   "to": "Niv",
+   "ts": 1789533430373
+  }
+ ],
+ "people": [
+  "Niv",
+  "Amma Appa",
+  "Mama",
+  "Selvan Viji sitta sitti",
+  "Paramu sitta"
+ ],
+ "pinAt": 1786793698715,
+ "pinHash": "15s5dze",
+ "trash": {
+  "1789795534919d4of": {
+   "item": {
+    "amount": 750,
+    "cat": "food",
+    "cur": "INR",
+    "eur": 6.625441696113074,
+    "id": "1789795534919d4of",
+    "label": "Dîner le soir à l’hôtel",
+    "mt": 1789795534919,
+    "split": {
+     "mode": "equal"
+    },
+    "ts": 1789799400000,
+    "who": "Niv"
+   },
+   "kind": "exp",
+   "tAt": 1789795578339,
+   "tBy": "Niv"
+  },
+  "P:mtzm7t6zcbau": {
+   "item": {
+    "amount": 7000,
+    "cur": "INR",
+    "eur": 61.83745583038869,
+    "from": "Amma Appa",
+    "id": "mtzm7t6zcbau",
+    "mt": 1789291929995,
+    "to": "Niv",
+    "ts": 1789291929995
+   },
+   "kind": "pay",
+   "tAt": 1789533159854,
+   "tBy": "Niv"
+  }
+ },
+ "updatedAt": 1789795605001
+}
