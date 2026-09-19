@@ -10,8 +10,11 @@
     s'adapte au mode délai allongé) ;
   · **③ Message cadeau dans le colis** (petit mot offert au paiement, affiché dans Gestion) ;
   · **④ « Plus que X en stock »** sur la fiche (vrai stock, sous le seuil d'alerte).
-- **⑨ Livraison express** : expliquée au gérant le 19/09, EN ATTENTE DE SA DÉCISION
-  (faisable techniquement ; la vraie question est le délai de gravure atelier).
+- **⑨ Livraison express** : ✅ APPLIQUÉE le 19/09 (« mets en place pour mercredi prochain ») —
+  s'allume TOUTE SEULE le mercredi 24/09/2026, coupée tant que le mode délai allongé est allumé.
+  14,90 € ≤2 kg · 19,90 € ≤5 kg · 29,90 € au-delà. ⚠️ Une commande express = graver en priorité,
+  étiquette Chronopost à créer sur boxtal.com. Rappel au gérant : penser à ÉTEINDRE le mode
+  délai allongé à son retour (~23/09), sinon l'express ne s'affiche pas.
 
 
 > **Mis à jour le 09/09/2026.** Ce fichier est l'index unique pour reprendre le travail depuis
