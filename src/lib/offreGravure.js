@@ -107,7 +107,9 @@ function esc(str) {
 // la personne (pour adapter l'ouverture), `fin` = dernier jour de l'offre,
 // `pieces`/`favoris` = ses pièces (voir blocPieces). ADAPTÉ À CHAQUE CLIENTE :
 // son ancienneté, son code à elle, ses favoris.
-export function offreGravureEmail({ date = "", code = "GRAVUREOFFERTE", fin = "", cadeau = true, pieces = [], favoris = false } = {}) {
+// `bouton` = le bouton « ✉️ Répondre à ce message » (boutonRepondre), fourni
+// par l'expéditeur — règle du 17/09/2026 : tout e-mail client porte ce bouton.
+export function offreGravureEmail({ date = "", code = "GRAVUREOFFERTE", fin = "", cadeau = true, pieces = [], favoris = false, bouton = "" } = {}) {
   const gold = BRAND.gold;
   const finTxt = fin ? dateLongueFr(fin) : "";
   const echeance = finTxt
@@ -133,7 +135,8 @@ export function offreGravureEmail({ date = "", code = "GRAVUREOFFERTE", fin = ""
       <a href="${BRAND.siteUrl}/boutique" style="display:inline-block;background:${gold};color:#fff;text-decoration:none;padding:13px 28px;border-radius:9px;font-weight:bold;">J'en profite</a>
     </p>
     <p style="margin:0 0 10px;color:#7a7268;">Et si ce n'est pas le moment, gardez-nous simplement en tête : nous serons là au prochain anniversaire, au prochain Noël, à la prochaine naissance.</p>
-    <p style="margin:0;color:#7a7268;"><strong>Niv Création</strong></p>`;
+    <p style="margin:0;color:#7a7268;"><strong>Niv Création</strong></p>
+    ${bouton || ""}`;
   return {
     subject: finTxt ? `Votre gravure offerte, jusqu'au ${finTxt}` : "Votre gravure offerte",
     html: emailLayout({ heading: "Votre gravure offerte", bodyHtml }),

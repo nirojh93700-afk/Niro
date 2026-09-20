@@ -321,8 +321,15 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
         favoris = pieces.length > 0;
       } catch { pieces = []; }
       if (!pieces.length) pieces = idees;
-      const { subject, html } = offreGravureEmail({ date: c.date, code, fin: o.end, cadeau: o.cadeau !== false, pieces, favoris });
-      const r = await sendClientMail({ to: c.email, subject, html });
+      const args = { date: c.date, code, fin: o.end, cadeau: o.cadeau !== false, pieces, favoris };
+      let mail = offreGravureEmail(args);
+      // Bouton « ✉️ Répondre à ce message » (règle du 17/09) — jamais bloquant :
+      // si le jeton échoue, l'e-mail part sans bouton.
+      try {
+        const btn = await boutonRepondre({ email: c.email, name: "", subject: mail.subject, excerpt: `Offre gravure offerte — code ${code}` });
+        if (btn) mail = offreGravureEmail({ ...args, bouton: btn });
+      } catch { /* ignore */ }
+      const r = await sendClientMail({ to: c.email, subject: mail.subject, html: mail.html });
       if (r?.ok) { envoyes++; faits.push({ email: c.email, code }); }
     } catch { /* on continue avec les suivantes */ }
   }
