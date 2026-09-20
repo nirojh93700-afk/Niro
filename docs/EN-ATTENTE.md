@@ -55,6 +55,17 @@ Duquennec périmée (déjà répondu le 07/09, elle n'a pas réécrit — à cla
 
 ## 2. Maquettes validées, **pas encore appliquées** au site
 
+> 🟡 **EN ATTENTE DE SON RETOUR (20/09/2026)** — **Cadeau dans chaque colis, indépendant du mode
+> vacances** : `docs/maquettes/cadeau-colis.html` (artifact https://claude.ai/artifact/DfjUmv4hQt9SXAiaLFcNb2).
+> Demande : « garder les messages pour les cadeaux quand j'aurai arrêté le mode vacances dans
+> quelques jours — plus de délai 3 à 4 semaines non plus ». Maquette = interrupteur Gestion →
+> Apparence « 🎁 Cadeau dans chaque colis » (case + phrase + date de fin facultative), encadré
+> panier SANS paragraphe de délai (titre « Un cadeau dans votre colis — offert »), règle 80 € →
+> 2 cadeaux gardée, commande/e-mail d'alerte inchangés. Cadeau allumé = case OU mode vacances.
+> ⛔ **Tant que ce n'est pas construit, NE PAS éteindre le mode vacances** : les 38 inscrites de
+> l'offre gravure (lancée le 20/09, 9 h) lisent « un cadeau vous attend, à choisir au paiement ».
+> Question posée sans réponse : cadeau **jusqu'au 20/10** (fin de l'offre) ou **en permanence** ?
+
 > Règle : quand le gérant dit « applique / mets en ligne », **reproduire fidèlement** la maquette,
 > sans réinventer. Ne jamais modifier ni republier une maquette sans son accord.
 
@@ -190,7 +201,18 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ---
 
-## 4 bis. ✦ Offre gravure offerte — PRÊTE, ÉTEINTE, À LANCER SEULEMENT SUR SA DEMANDE (17/09/2026)
+## 4 bis. ✦ Offre gravure offerte — 🚀 LANCÉE LE 20/09/2026 À 9 H (heure française)
+
+> **Ordre du gérant le 20/09 à 5 h 30 Paris** : « C'est bon tu peux lancer… tu envoies à 9 h heure
+> française ». Réglée `enabled:true`, `start: 2026-09-20T07:00:00Z` (= 9 h Paris), `end: 2026-10-20`,
+> préfixe `GRAVURE`, cadeau coché. Le battement du site envoie au premier passage après 9 h (verrou
+> pris seulement offre ouverte, clé `offreGravureJob`, commit `05a35b6`). Nudge prévu à 9 h 00 par la
+> session `013Nt78VnTBT8S9aqZe85f4z` (`trig_01J5rqo6mAPNYyrPqrg8EPs5`) pour déclencher + vérifier.
+> ~38 inscrites attendues, puis au fil de l'eau jusqu'au 20/10. E-mail avec bouton Répondre (commit
+> `29186db`). Maquette validée : `docs/maquettes/offre-gravure-emails.html`. Pour arrêter : décocher.
+> ⚠️ Après l'envoi, remettre `start` en date simple `2026-09-20` (l'écran affiche un champ date).
+
+### (historique du 17/09 — état AVANT le lancement)
 
 **Tout est construit et testé. RIEN ne part tant que le gérant ne dit pas « lance l'offre ».**
 Procédure complète pour l'autre conversation : **`docs/messages/offre-gravure-lancement.md`**.
