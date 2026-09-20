@@ -55,6 +55,11 @@
   commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
   mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
   Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
+- ⛔ **COLIS REVENU (non retiré au relais, adresse erronée…) = RÉEXPÉDITION PAYÉE PAR LE CLIENT**
+  (règle ferme du gérant, 21/09/2026, dossier Enes Varol / bracelet « Hend » #1S9IOON5 : « c'est le
+  client qui doit payer »). On ne renvoie JAMAIS gratuitement un produit revenu : devis « nouvelle
+  expédition » (relais 4,90 € / lettre 3,90 € / colis 6,90 €) à régler en ligne, envoi après règlement.
+  Idem si le client veut une pièce en plus : prix de la fiche + port. Aucun geste de notre initiative.
 - ⛔ **SIGNATURE DES MESSAGES CLIENTS = « Niv Création », JAMAIS LE NOM DU GÉRANT** (rappel ferme du
   08/09/2026 : « il faut jamais mettre mon nom, c'est le nom du site »). Aucun nom de personne dans
   un e-mail, un devis ou un message client : on écrit « nous » (l'atelier), on signe **Niv Création**
