@@ -2143,7 +2143,11 @@ function showHotels(){
     // comparaison : prix réel payé vs total des chambres
     var paidLine="";
     if(g.paid>0){
-      var paidEur=conv(g.paid,g.paidCur||"EUR","EUR"), gap=g.sum-paidEur;
+      /* le prix payé est converti au taux FIGÉ de l'hôtel, comme ses chambres : sinon
+         changer le taux ferait apparaître un faux « écart » sur un séjour déjà réglé. */
+      var pcH=g.paidCur||"EUR";
+      var paidEur=(pcH!=="EUR" && g.fxr>0) ? g.paid/g.fxr : conv(g.paid,pcH,"EUR");
+      var gap=g.sum-paidEur;
       paidLine='<div style="margin:8px 0 0;padding:8px 10px;border:1px solid var(--line2);border-radius:10px;background:var(--slab2);font-size:12.5px">'+
         '<div style="display:flex;gap:8px;padding:2px 0"><span style="flex:1;color:var(--muted)">'+t("hdPaidLbl")+'</span><b style="color:var(--text);font-variant-numeric:tabular-nums">'+money(paidEur,"EUR")+'</b></div>'+
         '<div style="display:flex;gap:8px;padding:2px 0"><span style="flex:1;color:var(--muted)">'+t("hdRoomsTotal")+'</span><b style="color:var(--text);font-variant-numeric:tabular-nums">'+money(g.sum,"EUR")+'</b></div>'+
@@ -2346,8 +2350,14 @@ function openHotelDetail(key){
       var price=pf(rm.price); if(price<=0) return;
       var occ=S.people.filter(function(p){return rm.occ[p];}); if(!occ.length) occ=S.people.slice();
       kept[rm.id]=1; made++;
-      /* on grave le taux du moment : cet hôtel gardera CE taux, même si tu le changes plus tard */
-      var fxNow=(paidAmt>0 && paidCur!=="EUR" && RATES[paidCur]>0) ? RATES[paidCur] : 0;
+      /* Taux gravé sur l'hôtel. On ne le regrave QUE si le prix payé (montant ou devise) a
+         vraiment changé : rouvrir une fiche et ré-enregistrer sans y toucher ne doit pas
+         recaler un séjour déjà réglé sur le taux du jour. */
+      var memeP=(g && Math.abs((+g.paid||0)-paidAmt)<1e-9 && (g.paidCur||"EUR")===paidCur);
+      var fxNow=0;
+      if(paidAmt>0 && paidCur!=="EUR"){
+        fxNow = (memeP && g.fxr>0) ? g.fxr : (RATES[paidCur]>0 ? RATES[paidCur] : 0);
+      }
       var data={ hotel:nm, label:(multi?(t("roomWord")+" "+made):""), amount:price, cur:rm.cur, eur:conv(price,rm.cur,"EUR"), cat:"hotel", who:rm.paidBy, split:{mode:"equal", among:occ}, ts:stay, nights:nn, bf:bfv, hidden:hid, paid:(paidAmt>0?paidAmt:0), paidCur:(paidAmt>0?paidCur:""), fxr:fxNow, url:hurl, mt:now };
       var ex=S.expenses.filter(function(x){return x.id===rm.id;})[0];
       if(ex){ for(var kk in data) ex[kk]=data[kk]; } else { data.id=rm.id; S.expenses.push(data); }
