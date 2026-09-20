@@ -55,6 +55,10 @@
   commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
   mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
   Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
+- ⛔ **AUCUNE PROMESSE DE TEMPO DANS UN MESSAGE CLIENT** (rappel ferme du gérant, 21/09/2026 :
+  « je t'ai déjà dit de pas avancer aussitôt »). Interdits : « aussitôt », « au plus vite », « dès le
+  règlement », « part dans la journée », « très rapidement », toute date. On décrit ce qui sera fait,
+  jamais quand. (Complète « pas de date promise » et le délai allongé du mode vacances.)
 - ⛔ **COLIS REVENU (non retiré au relais, adresse erronée…) = RÉEXPÉDITION PAYÉE PAR LE CLIENT**
   (règle ferme du gérant, 21/09/2026, dossier Enes Varol / bracelet « Hend » #1S9IOON5 : « c'est le
   client qui doit payer »). On ne renvoie JAMAIS gratuitement un produit revenu : devis « nouvelle
