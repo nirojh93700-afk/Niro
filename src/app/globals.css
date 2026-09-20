@@ -4255,11 +4255,11 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .gc-montants{display:flex;gap:8px;flex-wrap:wrap}
 .gc-montants button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 18px;font-weight:700;font-size:.98rem;cursor:pointer;color:var(--ink)}
 .gc-montants button.on{border-color:var(--gold-dark);background:#fff7e3;color:var(--gold-dark)}
-.gc-form input,.gc-form textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:inherit;font-size:.92rem;background:#fff}
+.gc-form input:not([type="radio"]),.gc-form textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:inherit;font-size:.92rem;background:#fff}
 .gc-cnt{font-size:.75rem;color:var(--ink-soft);text-align:right;margin-top:3px}
 .gc-quand{display:flex;flex-direction:column;gap:8px;font-size:.9rem}
 .gc-quand label{display:flex;align-items:center;gap:8px;cursor:pointer}
-.gc-quand input[type="radio"]{accent-color:var(--gold-dark)}
+.gc-quand input[type="radio"]{accent-color:var(--gold-dark);width:18px;height:18px;flex:0 0 auto;margin:0}
 .gc-quand input[type="date"]{max-width:220px;margin-left:26px}
 .gc-err{color:#a24336;font-size:.88rem;margin:12px 0 0}
 .gc-payer{margin-top:18px;width:100%}
