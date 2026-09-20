@@ -8,7 +8,7 @@ import {
   getScheduledEmails, markScheduledSent, getSettings, hasAutoSent, markAutoSent,
   listCagnottes, markCagnotteReminded, expireCagnotte, getBirthdays, setPromoCode,
   getSubscribersDetailed, getPromoCodes, getOffreGravureSent, markOffreGravureSent,
-  purgeExpiredPromoCodes, getFavoris, logComm, getPriceWatchAll, rebasePriceWatch,
+  purgeExpiredPromoCodes, getFavoris, logComm, getPriceWatchAll, rebasePriceWatch, setJobNote,
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
@@ -182,7 +182,9 @@ export async function runBirthdayJobs() {
 // qu'une fois. Les inscriptions de moins de `minJours` jours attendent : elles
 // seront servies au fil de l'eau, tant que l'offre est ouverte.
 // `dryRun` : compte seulement, n'envoie rien (sert à l'écran d'admin).
-export async function runOffreGravureJob({ dryRun = false } = {}) {
+// `testTo` : mode test de l'admin — UN seul envoi à cette adresse, rien n'est
+// mémorisé (sert à voir l'e-mail réel et l'erreur exacte s'il y en a une).
+export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
   const s = await getSettings();
   const o = offreActive(s?.gravureOfferte);
   if (!o) return { actif: false, eligibles: 0, envoyes: 0, attente: 0, deja: 0 };
@@ -237,6 +239,9 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
 
   if (dryRun) return { actif: true, eligibles: cibles.length, envoyes: 0, attente, deja };
 
+  const test = String(testTo || "").trim().toLowerCase();
+  if (test) { cibles.length = 0; cibles.push({ email: test, date: "" }); }
+
   // Nettoyage des codes nominatifs morts (expirés ou déjà utilisés) — à chaque
   // passage réel, pour que la liste de Promotions ne s'encombre pas.
   let purges = 0;
@@ -288,6 +293,17 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   let dejaPris = {};
   try { dejaPris = await getPromoCodes(); } catch { dejaPris = {}; }
 
+  // Un code nominatif encore valide existe déjà pour cette adresse (passage
+  // précédent dont l'envoi a échoué) → on le RÉUTILISE : jamais deux codes pour
+  // la même inscrite, pas de codes orphelins dans Promotions.
+  function codeExistant(email) {
+    for (const [c, d] of Object.entries(dejaPris)) {
+      if (d && typeof d === "object" && d.email === email && d.kind === "gravure" && c.startsWith(`${prefixe}-`)
+        && (!d.expiresAt || d.expiresAt > Date.now())) return c;
+    }
+    return "";
+  }
+
   function nouveauCode() {
     for (let essai = 0; essai < 40; essai++) {
       let suffixe = "";
@@ -298,11 +314,12 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
     return "";
   }
 
-  let envoyes = 0;
-  const faits = [];
+  let envoyes = 0, echecs = 0;
+  const faits = [], erreurs = [];
+  const noter = (email, msg) => { echecs++; if (erreurs.length < 5) erreurs.push(`${email} : ${String(msg || "envoi refusé").slice(0, 200)}`); };
   for (const c of cibles) {
     try {
-      const code = nouveauCode();
+      const code = codeExistant(c.email) || nouveauCode();
       if (!code) continue; // on ne promet JAMAIS un code qui n'existe pas
       // Le code doit EXISTER pour de vrai AVANT l'envoi (règle : aucune promesse
       // qui ne marche pas au paiement).
@@ -335,10 +352,13 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
       } catch { /* ignore */ }
       const r = await sendClientMail({ to: c.email, subject: mail.subject, html: mail.html });
       if (r?.ok) { envoyes++; faits.push({ email: c.email, code }); }
-    } catch { /* on continue avec les suivantes */ }
+      else noter(c.email, r?.error);
+    } catch (e) { noter(c.email, e?.message || e); /* on continue avec les suivantes */ }
   }
-  try { if (faits.length) await markOffreGravureSent(faits); } catch { /* ignore */ }
-  return { actif: true, eligibles: cibles.length, envoyes, attente, deja, purges };
+  try { if (!test && faits.length) await markOffreGravureSent(faits); } catch (e) { noter("mémoire des envois", e?.message || e); }
+  // Compte rendu visible dans l'écran de l'offre (GET /api/admin/offre-gravure).
+  try { await setJobNote("offreGravure", { at: Date.now(), test, eligibles: cibles.length, envoyes, echecs, erreurs }); } catch { /* ignore */ }
+  return { actif: true, eligibles: cibles.length, envoyes, echecs, erreurs, attente, deja, purges };
 }
 
 // --- 6) « Prévenez-moi si le prix baisse » (favoris) ------------------------

@@ -2118,6 +2118,21 @@ export async function claimJob(key, minIntervalMs) {
   return true;
 }
 
+// --- Compte rendu du dernier passage d'une tâche (diagnostic admin) ---------
+// Section `jobNotes` = { [clé]: { at, … } }. Sert à voir POURQUOI un passage
+// n'a rien envoyé (incident du 20/09/2026 : 49 codes créés, 0 e-mail parti,
+// aucune trace). Jamais bloquant.
+export async function setJobNote(key, note) {
+  const data = await getCatalogRaw(true);
+  data.jobNotes = data.jobNotes || {};
+  data.jobNotes[String(key || "")] = note || null;
+  await persistCatalog(data, ["jobNotes"]);
+}
+export async function getJobNote(key) {
+  const data = await getCatalogRaw();
+  return (data.jobNotes || {})[String(key || "")] || null;
+}
+
 // --- Offre « gravure offerte » : mémoire des envois ------------------------
 // Section `offreGravure` = { "email": timestamp }. Sert à n'envoyer qu'UNE
 // SEULE fois l'offre à chaque inscrite, même si le site relance la tâche.

@@ -63,7 +63,9 @@ export function boutonsAvis(items) {
 export async function sendClientMail({ to, subject, html, bcc = BRAND.contact, thread = null }) {
   const dest = String(to || "").trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dest)) return { ok: false, error: "Adresse invalide." };
-  // 1) Gmail
+  // 1) Gmail — l'erreur est GARDÉE pour le diagnostic (avant, elle était avalée :
+  // impossible de savoir pourquoi un envoi n'était pas parti).
+  let gmailErr = "";
   try {
     const creds = await getGmailCreds();
     if (creds?.refreshToken) {
@@ -71,12 +73,14 @@ export async function sendClientMail({ to, subject, html, bcc = BRAND.contact, t
       await gmailSendHtml(token, { to: dest, subject, html, bcc, threadId: thread?.threadId, inReplyTo: thread?.messageId, references: thread?.references });
       return { ok: true, via: "gmail" };
     }
-  } catch (e) { /* on tente Resend */ }
+  } catch (e) { gmailErr = String(e?.message || e || "erreur Gmail").slice(0, 300); }
+  const suffixe = gmailErr ? ` (Gmail : ${gmailErr})` : "";
   // 2) Resend
   if (process.env.RESEND_API_KEY) {
-    const r = await sendEmail({ to: dest, subject, html, replyTo: BRAND.contact, bcc });
+    let r = null;
+    try { r = await sendEmail({ to: dest, subject, html, replyTo: BRAND.contact, bcc }); } catch (e) { r = { ok: false, error: String(e?.message || e) }; }
     if (r?.ok) return { ok: true, via: "resend" };
-    return { ok: false, error: r?.error || "Envoi refusé." };
+    return { ok: false, error: (r?.error || "Envoi refusé.") + suffixe };
   }
-  return { ok: false, error: "Aucun service e-mail disponible (Gmail non connecté, Resend absent)." };
+  return { ok: false, error: "Aucun service e-mail disponible (Gmail non connecté, Resend absent)." + suffixe };
 }
