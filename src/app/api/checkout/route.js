@@ -6,7 +6,7 @@ import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getSto
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
 import { saveOrderSpec } from "@/lib/firebase";
-import { vacationActive } from "@/lib/vacation";
+import { vacationActive, cadeauColisActif } from "@/lib/vacation";
 import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
 
@@ -401,9 +401,10 @@ export async function POST(req) {
         ...(cagnotteEmail && cagnotteAmount > 0 ? { cagnotteEmail, cagnotteAmount: String(cagnotteAmount) } : {}),
         // Point relais choisi sur le panier (adresse complète pour la commande).
         ...(relaisFull ? { relaisPoint: relaisFull } : {}),
-        // Cadeau d'attente : préférence choisie sur le panier, seulement pendant
-        // le mode délai allongé (sinon on n'enregistre rien).
-        ...(cadeauChoisi && vacationActive(settings?.vacation) ? { cadeauChoix: cadeauChoisi } : {}),
+        // Cadeau : préférence choisie sur le panier, seulement si un cadeau est
+        // offert aujourd'hui (mode délai allongé OU interrupteur « cadeau dans
+        // chaque colis ») — sinon on n'enregistre rien.
+        ...(cadeauChoisi && cadeauColisActif(settings) ? { cadeauChoix: cadeauChoisi } : {}),
       },
       locale: "fr",
       currency: "eur",

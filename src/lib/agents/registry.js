@@ -57,14 +57,15 @@ async function catalogContext() {
 // contradiction entre ce que dit l'agent et ce que la cliente lit sur nivcreation.fr.
 async function serviceContext() {
   try {
-    const [{ getSettings }, { vacationActive, vacationMessage, vacationGiftMessage }, { resolveShippingConfig }, { FAQ }] =
+    const [{ getSettings }, { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif }, { resolveShippingConfig }, { FAQ }] =
       await Promise.all([import("@/lib/stock"), import("@/lib/vacation"), import("@/lib/shipping"), import("@/lib/faq")]);
     const s = await getSettings();
     const v = vacationActive(s?.vacation);
     const cfg = resolveShippingConfig(s?.shipping);
+    const cadeau = !v ? cadeauColisActif(s) : null;
     const delai = v
       ? `${vacationMessage(v)}${vacationGiftMessage(v) ? " " + vacationGiftMessage(v) : ""}`
-      : "Chaque pièce est personnalisée à la commande : 3 à 5 jours ouvrés de fabrication, puis livraison suivie (délai du transporteur en plus).";
+      : `Chaque pièce est personnalisée à la commande : 3 à 5 jours ouvrés de fabrication, puis livraison suivie (délai du transporteur en plus).${cadeau ? " " + cadeau.text : ""}`;
     const faq = FAQ.map((f, i) => (i === 0 && v ? { q: f.q, a: delai } : f));
     return [
       `DÉLAI ACTUEL (c'est exactement ce que le site affiche — reprends-le tel quel) : ${delai}`,

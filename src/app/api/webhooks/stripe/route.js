@@ -3,7 +3,7 @@ import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCa
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
 import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
 import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
-import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
+import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -537,10 +537,16 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       // (elle ne peut pas dire qu'elle ne savait pas). Rien si le mode est éteint.
       let vacationBlock = "";
       try {
-        const v = vacationActive((await getSettings())?.vacation);
+        const st = await getSettings();
+        const v = vacationActive(st?.vacation);
         if (v) {
           const gift = vacationGiftMessage(v);
           vacationBlock = `<p style="background:#fdf6e8;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;">${escapeHtml(vacationMessage(v))}${gift ? `<br><span style="color:#8a6d1f;">🎁 ${escapeHtml(gift)}</span>` : ""}</p>`;
+        } else {
+          // 🎁 Cadeau dans chaque colis (hors mode vacances) : seule la ligne cadeau,
+          // plus aucun paragraphe de délai.
+          const c = cadeauColisActif(st);
+          if (c) vacationBlock = `<p style="background:#fdf6e8;padding:14px;border-radius:10px;border:1px solid #e7d3a1;margin-top:18px;color:#8a6d1f;">🎁 ${escapeHtml(c.text)}</p>`;
         }
       } catch { /* jamais bloquant */ }
       const clientBody = `

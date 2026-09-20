@@ -1,6 +1,6 @@
 import { getSettings } from "@/lib/stock";
 import { resolveShippingConfig } from "@/lib/shipping";
-import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
+import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +21,9 @@ export async function GET() {
         const v = vacationActive(settings?.vacation);
         return v ? { message: vacationMessage(v), gift: vacationGiftMessage(v) } : null;
       })(),
+      // 🎁 Cadeau dans chaque colis ? { text, viaVacances } ou null (le panier
+      // affiche alors le choix Surprise / femme / homme — voir CadeauChoix).
+      cadeau: cadeauColisActif(settings),
     },
     { headers: { "Cache-Control": "public, max-age=60" } }
   );

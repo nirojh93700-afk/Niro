@@ -40,26 +40,40 @@ function LignePills({ value, onChange }) {
   );
 }
 
+// Depuis le 20/09/2026 (maquette `docs/maquettes/cadeau-colis.html`), l'encadré
+// vit aussi SANS le mode vacances : l'interrupteur « 🎁 Cadeau dans chaque colis »
+// (Gestion → Apparence) l'allume seul — alors plus aucun paragraphe de délai,
+// et « cadeau d'attente » devient « cadeau dans votre colis ».
 export default function CadeauChoix({ value, onChange, value2, onChange2 }) {
-  const [vac, setVac] = useState(null);
+  const [cfg, setCfg] = useState(null); // { vac: {message} | null, cadeau: {text, viaVacances} }
   const { total } = useCart(); // « 2 cadeaux dès 80 € » : la ligne suit le panier en direct
   useEffect(() => {
     fetch("/api/shipping-config")
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => { if (d?.vacation?.message) setVac(d.vacation); })
+      .then((d) => {
+        if (d?.cadeau) setCfg({ vac: d.vacation?.message ? d.vacation : null, cadeau: d.cadeau });
+        else if (d?.vacation?.message) setCfg({ vac: d.vacation, cadeau: { text: "", viaVacances: true } }); // repli : ancien serveur
+      })
       .catch(() => {});
   }, []);
-  if (!vac) return null;
+  if (!cfg) return null;
+  const { vac, cadeau } = cfg;
+  const viaVacances = Boolean(vac);
 
   return (
     <div style={{ background: "#fdf6e8", border: "1px solid #e7d3a1", borderRadius: 12, padding: "12px 12px 14px", margin: "0 0 14px" }}>
       {/* 1) Le message complet du délai — le MÊME texte que le bandeau, lu en
-          direct dans les réglages (le panier suit toute modification). */}
-      <div style={{ fontSize: ".84rem", color: "#6b5516", lineHeight: 1.5, marginBottom: 10 }}>{vac.message}</div>
+          direct dans les réglages (le panier suit toute modification). Absent
+          hors mode vacances. */}
+      {viaVacances ? <div style={{ fontSize: ".84rem", color: "#6b5516", lineHeight: 1.5, marginBottom: 10 }}>{vac.message}</div> : null}
       {/* 2) La phrase du cadeau + 3) le choix, dans le même encadré. */}
-      <div style={{ fontWeight: 700, color: "#8a6d1f", fontSize: ".92rem", marginBottom: 4 }}>🎁 Votre cadeau d&apos;attente — offert</div>
+      <div style={{ fontWeight: 700, color: "#8a6d1f", fontSize: ".92rem", marginBottom: 4 }}>
+        {viaVacances ? <>🎁 Votre cadeau d&apos;attente — offert</> : <>🎁 Un cadeau dans votre colis — offert</>}
+      </div>
       <div style={{ fontSize: ".82rem", color: "#6b5516", lineHeight: 1.45, marginBottom: 8 }}>
-        Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :
+        {viaVacances
+          ? "Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :"
+          : `${cadeau.text || "Un cadeau surprise est glissé dans chaque commande."} Dites-nous votre préférence :`}
       </div>
       {(Number(total) || 0) >= 80 ? (
         <>

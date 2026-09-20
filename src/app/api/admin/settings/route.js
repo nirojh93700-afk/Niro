@@ -54,6 +54,14 @@ export async function POST(req) {
       giftText: str(body.vacation.giftText, 300),
     };
   }
+  // 🎁 Cadeau dans chaque colis (indépendant du mode vacances).
+  if (body.cadeauColis && typeof body.cadeauColis === "object") {
+    patch.cadeauColis = {
+      enabled: Boolean(body.cadeauColis.enabled),
+      text: str(body.cadeauColis.text, 200),
+      until: str(body.cadeauColis.until, 30),
+    };
+  }
   // ✦ Offre « gravure offerte » (e-mail ciblé aux inscrites sans commande).
   // Rien sur le site : seuls les e-mails sont concernés. Éteinte par défaut.
   if (body.gravureOfferte && typeof body.gravureOfferte === "object") {

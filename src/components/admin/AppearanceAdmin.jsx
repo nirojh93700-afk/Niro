@@ -28,7 +28,7 @@ const SUBS = [
 const SUB_KEYS = [
   ["visuel", ["color", "fontHeading", "fontBody"]],
   ["accueil", ["hero", "categories", "atelier", "sections"]],
-  ["popups", ["announce", "salesBanner", "vacation", "welcome"]],
+  ["popups", ["announce", "salesBanner", "vacation", "cadeauColis", "welcome"]],
   ["marketing", ["referral", "refMarkup", "metaPixelId", "gaId", "googleVerification"]],
   ["acces", ["maintenance", "access", "pickupZones"]],
   ["pages", ["apropos"]],
@@ -47,7 +47,7 @@ function subSummary(id, s) {
       const on = keys.filter((k) => sec[k] !== false).length;
       return `${s.hero?.title ? "Bandeau perso" : "Bandeau par défaut"}${keys.length ? ` · ${on}/${keys.length} sections` : ""}`;
     }
-    case "popups": return `Annonce ${onOff(s.announce?.enabled)} · Soldes ${onOff(s.salesBanner?.enabled)} · Délai ${onOff(s.vacation?.enabled)} · Bienvenue ${onOff(s.welcome?.enabled)}`;
+    case "popups": return `Annonce ${onOff(s.announce?.enabled)} · Soldes ${onOff(s.salesBanner?.enabled)} · Délai ${onOff(s.vacation?.enabled)} · Cadeau ${onOff(s.cadeauColis?.enabled)} · Bienvenue ${onOff(s.welcome?.enabled)}`;
     case "marketing": return `Parrainage ${onOff(s.referral?.enabled)} · Prix conseillé +${Number(s.refMarkup) || 0} % · ${s.gaId ? "Analytics ✓" : "Analytics —"}`;
     case "acces": return s.maintenance?.enabled ? "🛠️ En maintenance" : s.access?.locked ? "🔒 Privé (code)" : "🟢 En ligne (public)";
     case "pages": return s.apropos ? "À propos : texte perso" : "À propos : texte par défaut";
@@ -332,6 +332,30 @@ export default function AppearanceAdmin({ adminKey }) {
               </label>
             ) : null}
             <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ vacation: s.vacation }, "Mode vacances enregistré")}>Enregistrer le mode vacances</button>
+          </div>
+
+          <div className="admin-block" style={{ display: "grid", gap: 10 }}>
+            <h3 style={{ margin: 0 }}>🎁 Cadeau dans chaque colis</h3>
+            <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
+              <strong>Indépendant du mode vacances.</strong> Allumé : le panier propose le choix du cadeau (Surprise / Plutôt femme /
+              Plutôt homme), la commande le garde, Gestion et l&apos;e-mail d&apos;alerte vous le montrent — sans aucune mention de délai.
+              Éteint : plus rien, nulle part. Le cadeau est aussi allumé automatiquement tant que le mode vacances l&apos;est.
+              Règle gardée : commande ≥ 80 € → <strong>deux cadeaux</strong>.
+            </p>
+            <div style={{ fontSize: "0.8rem", fontWeight: 700, color: (s.cadeauColis?.enabled || s.vacation?.enabled) ? "#256b34" : "#777" }}>
+              {s.cadeauColis?.enabled ? "● Allumé — le panier propose le cadeau" : s.vacation?.enabled ? "● Allumé par le mode vacances (s'éteindra avec lui si cette case reste décochée)" : "○ Éteint"}
+            </div>
+            <label className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <input type="checkbox" style={{ width: "auto" }} checked={s.cadeauColis?.enabled || false} onChange={(e) => set({ cadeauColis: { ...s.cadeauColis, enabled: e.target.checked } })} />
+              Activer le cadeau dans chaque colis
+            </label>
+            <label className="admin-field">Phrase affichée au panier (facultatif — sinon « Un cadeau surprise est glissé dans chaque commande. »)
+              <input value={s.cadeauColis?.text || ""} placeholder="Un cadeau surprise est glissé dans chaque commande." onChange={(e) => set({ cadeauColis: { ...s.cadeauColis, text: e.target.value } })} />
+            </label>
+            <label className="admin-field" style={{ maxWidth: 260 }}>Jusqu&apos;au (facultatif — vide = en permanence)
+              <input type="date" value={s.cadeauColis?.until || ""} onChange={(e) => set({ cadeauColis: { ...s.cadeauColis, until: e.target.value } })} />
+            </label>
+            <button className="btn btn-gold" style={{ justifySelf: "start" }} onClick={() => save({ cadeauColis: s.cadeauColis }, "Cadeau dans chaque colis enregistré")}>Enregistrer</button>
           </div>
 
           <div className="admin-block" style={{ display: "grid", gap: 10 }}>

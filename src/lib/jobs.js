@@ -15,6 +15,7 @@ import { getSiteOrders } from "@/lib/firebase";
 import { sendClientMail, brandedMessage, boutonsAvis, boutonRepondre, imageEnTete } from "@/lib/clientMail";
 import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
 import { offreActive, offreGravureEmail, joursDepuis } from "@/lib/offreGravure";
+import { cadeauColisActif } from "@/lib/vacation";
 
 const DAY = 86400000;
 
@@ -321,7 +322,10 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
         favoris = pieces.length > 0;
       } catch { pieces = []; }
       if (!pieces.length) pieces = idees;
-      const args = { date: c.date, code, fin: o.end, cadeau: o.cadeau !== false, pieces, favoris };
+      // La ligne « un cadeau vous attend » n'est écrite que si un cadeau est
+      // vraiment offert aujourd'hui (mode délai allongé OU interrupteur cadeau) :
+      // jamais de promesse que le panier ne tiendrait pas.
+      const args = { date: c.date, code, fin: o.end, cadeau: o.cadeau !== false && Boolean(cadeauColisActif(s)), pieces, favoris };
       let mail = offreGravureEmail(args);
       // Bouton « ✉️ Répondre à ce message » (règle du 17/09) — jamais bloquant :
       // si le jeton échoue, l'e-mail part sans bouton.

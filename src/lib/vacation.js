@@ -41,3 +41,27 @@ export function vacationGiftMessage(v) {
   if (v.giftText && v.giftText.trim()) return v.giftText.trim();
   return "Pour vous remercier de votre patience, un petit cadeau sera glissé dans chaque commande passée pendant nos congés.";
 }
+
+// =============================================================================
+// 🎁 CADEAU DANS CHAQUE COLIS — indépendant du mode vacances (maquette validée
+// le 20/09/2026, `docs/maquettes/cadeau-colis.html`). Réglé dans Gestion →
+// Apparence → « 🎁 Cadeau dans chaque colis » (`settings.cadeauColis` : case,
+// phrase, date de fin facultative). ÉTEINT par défaut.
+// Le cadeau est offert aujourd'hui si le mode vacances est allumé (comme avant :
+// choix du cadeau au panier pendant le délai allongé) OU si cet interrupteur
+// l'est. Renvoie { text, viaVacances } — ou null : alors plus rien nulle part
+// (panier, commande, e-mails).
+// =============================================================================
+export const CADEAU_COLIS_TEXTE = "Un cadeau surprise est glissé dans chaque commande.";
+
+export function cadeauColisActif(settings, now = Date.now()) {
+  const v = vacationActive(settings?.vacation, now);
+  if (v) return { text: vacationGiftMessage(v) || CADEAU_COLIS_TEXTE, viaVacances: true };
+  const c = settings?.cadeauColis;
+  if (!c || c.enabled !== true) return null;
+  if (c.until) {
+    const fin = new Date(c.until).getTime();
+    if (!Number.isNaN(fin) && now > fin + 86400000) return null; // jour de fin inclus
+  }
+  return { text: (c.text && c.text.trim()) || CADEAU_COLIS_TEXTE, viaVacances: false };
+}

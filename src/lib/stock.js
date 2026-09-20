@@ -1957,6 +1957,9 @@ export async function getSettings() {
     // et s'éteint tout seul à la date de fin. `gift` = cadeau offert pendant
     // les congés (message en plus). Voir src/lib/vacation.js.
     vacation: { enabled: false, start: "", end: "", resume: "", text: "", gift: false, giftText: "", ...(s.vacation || {}) },
+    // 🎁 Cadeau dans chaque colis, indépendant du mode vacances (voir
+    // cadeauColisActif dans src/lib/vacation.js). Éteint tant qu'il n'est pas coché.
+    cadeauColis: { enabled: false, text: "", until: "", ...(s.cadeauColis || {}) },
     // Offre « gravure offerte » : e-mail ciblé aux inscrites SANS commande,
     // inscrites depuis plus de `minJours` jours. Rien sur le site (cf.
     // src/lib/offreGravure.js). Éteinte par défaut.
