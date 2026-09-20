@@ -197,16 +197,16 @@ l'appliquer (`git apply`) SEULEMENT quand le gérant dit « applique ». Le code
 
 ---
 
-## 4 bis. ✦ Offre gravure offerte — 🚀 LANCÉE LE 20/09/2026 À 9 H (heure française)
+## 4 bis. ✦ Offre gravure offerte — ✅ ENVOYÉE LE 20/09/2026 (49 e-mails, 9 h 25-9 h 27 Paris, 0 échec)
 
-> **Ordre du gérant le 20/09 à 5 h 30 Paris** : « C'est bon tu peux lancer… tu envoies à 9 h heure
-> française ». Réglée `enabled:true`, `start: 2026-09-20T07:00:00Z` (= 9 h Paris), `end: 2026-10-20`,
-> préfixe `GRAVURE`, cadeau coché. Le battement du site envoie au premier passage après 9 h (verrou
-> pris seulement offre ouverte, clé `offreGravureJob`, commit `05a35b6`). Nudge prévu à 9 h 00 par la
-> session `013Nt78VnTBT8S9aqZe85f4z` (`trig_01J5rqo6mAPNYyrPqrg8EPs5`) pour déclencher + vérifier.
-> ~38 inscrites attendues, puis au fil de l'eau jusqu'au 20/10. E-mail avec bouton Répondre (commit
-> `29186db`). Maquette validée : `docs/maquettes/offre-gravure-emails.html`. Pour arrêter : décocher.
-> ⚠️ Après l'envoi, remettre `start` en date simple `2026-09-20` (l'écran affiche un champ date).
+> Ordre du gérant à 5 h 30 : « lance… à 9 h heure française ». Le passage automatique de 9 h 00 a
+> **échoué en silence** (49 codes créés, 0 e-mail — voir CLAUDE.md, incident + correctifs) ; envoi
+> refait à 9 h 25 après correction et après remplacement du porte-clés par le **Bracelet Femme Cœur**
+> dans les idées (demande du gérant). Réglage : ouverte du 20/09 au 20/10, préfixe `GRAVURE`,
+> cadeau coché. **1 inscrite en attente** (< 3 jours) + les nouvelles → servies seules chaque jour.
+> À surveiller : réponses via le bouton « Répondre » (dossiers clients + Messages à traiter),
+> commandes avec code `GRAVURE-…` (la remise = prix réel de la 1re gravure). Écran :
+> Gestion → Marketing → Offre gravure offerte → « dernier passage » (envoyés / échecs / erreurs).
 
 ### (historique du 17/09 — état AVANT le lancement)
 
