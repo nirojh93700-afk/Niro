@@ -192,7 +192,7 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
     getSiteOrders(500),
     getOffreGravureSent(),
     (await import("@/lib/firebase")).listQuotes(300).catch(() => null),
-    (await import("@/lib/stock")).getCommsMeta().catch(() => ({})),
+    (await import("@/lib/stock")).getCommsAll().catch(() => ({})),
   ]);
 
   // Adresses ayant déjà commandé (toute commande, même annulée : la personne
@@ -207,13 +207,20 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
     const e = String(q?.client?.email || "").trim().toLowerCase();
     if (e) acheteuses.add(e);
   }
-  // Et toute adresse qui a un DOSSIER DE CONVERSATION avec l'atelier (devis
-  // envoyés par e-mail — carafe, bracelets… —, demandes sur mesure, questions) :
-  // « vérifie bien, il y a d'autres personnes à qui on a envoyé un devis »
-  // (gérant, 20/09/2026). On ne relance pas au rabais quelqu'un avec qui on parle.
-  for (const e of Object.keys(dossiers || {})) {
+  // Et toute adresse avec une VRAIE conversation en cours (devis envoyés par
+  // e-mail — carafe, bracelets… —, demandes sur mesure, échanges) : « vérifie
+  // bien, il y a d'autres personnes à qui on a envoyé un devis » (gérant,
+  // 20/09/2026). ⚠️ Un dossier qui ne contient QUE nos e-mails automatiques
+  // (code de bienvenue, relance −10 %) n'est PAS une conversation : ces
+  // inscrites restent servies (vérifié dossier par dossier le 20/09).
+  const DEVIS_RE = /devis|sur[ -]?mesure/i;
+  for (const [e, d] of Object.entries(dossiers || {})) {
     const em = String(e || "").trim().toLowerCase();
-    if (em) acheteuses.add(em);
+    if (!em) continue;
+    const msgs = Array.isArray(d?.messages) ? d.messages : [];
+    const vraiEchange = msgs.some((m) => m && m.from === "cliente")
+      || msgs.some((m) => DEVIS_RE.test(`${m?.subject || ""} ${m?.text || ""}`));
+    if (vraiEchange) acheteuses.add(em);
   }
 
   let attente = 0, deja = 0;

@@ -1106,6 +1106,14 @@ export async function getCommsFor(email) {
   return d ? { name: d.name || "", messages: d.messages || [], updatedAt: d.updatedAt || 0 } : { name: "", messages: [], updatedAt: 0 };
 }
 // Aperçu léger pour le CRM : nombre de messages + date du dernier, par e-mail.
+// Section `comms` brute (dossiers complets, clé = e-mail). Sert au ciblage de
+// l'offre gravure offerte : distinguer une VRAIE conversation (la cliente nous
+// a écrit, devis par e-mail) d'un simple e-mail automatique de bienvenue.
+export async function getCommsAll() {
+  const data = await getCatalogRaw();
+  return data.comms || {};
+}
+
 export async function getCommsMeta() {
   const data = await getCatalogRaw();
   const out = {};
