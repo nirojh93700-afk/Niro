@@ -2,9 +2,10 @@
 // visites, SANS aucun planificateur externe (Google Cloud Scheduler inutile).
 // Throttle via claimJob() → chaque tâche ne part qu'à l'intervalle voulu, une
 // seule fois (verrou). Tout est isolé : ne peut jamais casser une page.
-import { claimJob } from "@/lib/stock";
+import { claimJob, getSettings } from "@/lib/stock";
 import { runScheduledJobs, runCashbackJobs, runBirthdayJobs, runOffreGravureJob, runPriceWatchJob } from "@/lib/jobs";
 import { syncInbox } from "@/lib/inbox";
+import { offreActive } from "@/lib/offreGravure";
 
 const MIN = 60000;
 
@@ -33,8 +34,15 @@ export async function maybeRunJobs() {
   // Offre « gravure offerte » : au plus une fois par jour. Ne fait RIEN tant
   // que le gérant n'a pas activé l'offre ; sert aussi à servir au fil de l'eau
   // les inscrites qui atteignent les 3 jours pendant la période.
+  // Le verrou n'est pris QUE si l'offre est ouverte : sinon un passage à 6 h
+  // sur une offre qui s'ouvre à 9 h consommerait la journée et rien ne partirait
+  // avant le lendemain. Clé neuve (`offreGravureJob`) pour ne pas hériter d'un
+  // verrou posé par l'ancienne version alors que l'offre était fermée.
   try {
-    if (await claimJob("offreGravure", 24 * 60 * MIN)) out.offreGravure = await runOffreGravureJob();
+    const s = await getSettings();
+    if (offreActive(s?.gravureOfferte) && await claimJob("offreGravureJob", 24 * 60 * MIN)) {
+      out.offreGravure = await runOffreGravureJob();
+    }
   } catch (e) { out.offreGravureError = e.message; }
   // Baisse de prix sur un favori : au plus une fois par jour. N'écrit à une
   // cliente QUE si elle a coché la cloche ET que le prix a réellement baissé.
