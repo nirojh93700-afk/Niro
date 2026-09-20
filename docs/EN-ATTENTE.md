@@ -55,16 +55,12 @@ Duquennec périmée (déjà répondu le 07/09, elle n'a pas réécrit — à cla
 
 ## 2. Maquettes validées, **pas encore appliquées** au site
 
-> 🟡 **EN ATTENTE DE SON RETOUR (20/09/2026)** — **Cadeau dans chaque colis, indépendant du mode
-> vacances** : `docs/maquettes/cadeau-colis.html` (artifact https://claude.ai/artifact/DfjUmv4hQt9SXAiaLFcNb2).
-> Demande : « garder les messages pour les cadeaux quand j'aurai arrêté le mode vacances dans
-> quelques jours — plus de délai 3 à 4 semaines non plus ». Maquette = interrupteur Gestion →
-> Apparence « 🎁 Cadeau dans chaque colis » (case + phrase + date de fin facultative), encadré
-> panier SANS paragraphe de délai (titre « Un cadeau dans votre colis — offert »), règle 80 € →
-> 2 cadeaux gardée, commande/e-mail d'alerte inchangés. Cadeau allumé = case OU mode vacances.
-> ⛔ **Tant que ce n'est pas construit, NE PAS éteindre le mode vacances** : les 38 inscrites de
-> l'offre gravure (lancée le 20/09, 9 h) lisent « un cadeau vous attend, à choisir au paiement ».
-> Question posée sans réponse : cadeau **jusqu'au 20/10** (fin de l'offre) ou **en permanence** ?
+> ✅ **CONSTRUIT LE 20/09/2026, ÉTEINT — À ALLUMER PAR LE GÉRANT** : **Cadeau dans chaque colis,
+> indépendant du mode vacances** (maquette `docs/maquettes/cadeau-colis.html`, « prépare, j'activerai
+> plus tard », commit `1cb6b02`). Écran **Gestion → Apparence → « 🎁 Cadeau dans chaque colis »**
+> (case + phrase + « Jusqu'au » facultatif). ⛔ **Ordre** : cocher cette case **AVANT** de décocher le
+> mode vacances (~23/09), sinon les inscrites de l'offre gravure perdent le choix du cadeau au panier.
+> Question ouverte : jusqu'au 20/10 (fin de l'offre) ou en permanence — se règle dans « Jusqu'au ».
 
 > Règle : quand le gérant dit « applique / mets en ligne », **reproduire fidèlement** la maquette,
 > sans réinventer. Ne jamais modifier ni republier une maquette sans son accord.
