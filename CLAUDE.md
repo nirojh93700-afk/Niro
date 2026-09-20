@@ -427,6 +427,13 @@ ne descend jamais sous zéro.
   ambassadeurs, codes à la main : ils portent stats et commissions). Lancé à chaque passage réel de
   `runOffreGravureJob` + bouton « Nettoyer les codes expirés » + KPI « Codes personnels actifs »
   (`POST /api/admin/offre-gravure {action:"purge"}`).
+- 🚀 **LANCÉE PAR LE GÉRANT LE 20/09/2026** (« C'est bon tu peux lancer… tu envoies à 9h heure
+  française ») : réglée `enabled:true`, `start: 2026-09-20T07:00:00Z` (= 9 h Paris, l'offre est
+  FERMÉE avant), `end: 2026-10-20`, préfixe `GRAVURE`, cadeau coché (mode délai allongé allumé).
+  Le battement du site envoie au premier passage après 9 h (verrou pris seulement offre ouverte,
+  clé `offreGravureJob`, commit `05a35b6`) ; ~38 inscrites attendues, puis au fil de l'eau
+  jusqu'au 20/10. L'e-mail porte désormais le bouton Répondre (commit `29186db`). Maquette
+  validée : `docs/maquettes/offre-gravure-emails.html`. **Pour arrêter** : décocher Activer.
 - ⛔ **LANCEMENT = UNIQUEMENT SUR DEMANDE EXPLICITE DU GÉRANT**, par l'autre conversation, en suivant
   **`docs/messages/offre-gravure-lancement.md`** (5 étapes ; décocher « cadeau » si le mode délai
   allongé est éteint ; annoncer le nombre d'envois AVANT de cliquer). L'offre est **éteinte**.
