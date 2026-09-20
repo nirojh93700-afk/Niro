@@ -187,11 +187,12 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   if (!o) return { actif: false, eligibles: 0, envoyes: 0, attente: 0, deja: 0 };
 
   const minJours = Number(o.minJours) || 0;
-  const [abonnes, commandes, dejaEnvoye, devisListe] = await Promise.all([
+  const [abonnes, commandes, dejaEnvoye, devisListe, dossiers] = await Promise.all([
     getSubscribersDetailed(),
     getSiteOrders(500),
     getOffreGravureSent(),
     (await import("@/lib/firebase")).listQuotes(300).catch(() => null),
+    (await import("@/lib/stock")).getCommsMeta().catch(() => ({})),
   ]);
 
   // Adresses ayant déjà commandé (toute commande, même annulée : la personne
@@ -205,6 +206,14 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   for (const q of devisListe || []) {
     const e = String(q?.client?.email || "").trim().toLowerCase();
     if (e) acheteuses.add(e);
+  }
+  // Et toute adresse qui a un DOSSIER DE CONVERSATION avec l'atelier (devis
+  // envoyés par e-mail — carafe, bracelets… —, demandes sur mesure, questions) :
+  // « vérifie bien, il y a d'autres personnes à qui on a envoyé un devis »
+  // (gérant, 20/09/2026). On ne relance pas au rabais quelqu'un avec qui on parle.
+  for (const e of Object.keys(dossiers || {})) {
+    const em = String(e || "").trim().toLowerCase();
+    if (em) acheteuses.add(em);
   }
 
   let attente = 0, deja = 0;
