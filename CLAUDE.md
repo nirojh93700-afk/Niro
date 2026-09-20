@@ -346,7 +346,9 @@ ne descend jamais sous zéro.
 - **⛔ RIEN SUR LE SITE** (sa demande) : ni bandeau, ni encart de fiche. **L'offre n'existe que dans
   l'e-mail**, donc un client qui a déjà acheté ne peut pas tomber dessus.
 - **Qui la reçoit** : inscrites à la newsletter **sans AUCUNE commande** (toute adresse présente
-  dans les commandes est exclue), **inscrites depuis plus de 3 jours** (les nouvelles viennent de
+  dans les commandes est exclue), **sans DEVIS ni facture reçus** (règle du gérant 20/09/2026 :
+  « il faut pas envoyer aux gens à qui on a envoyé un devis » — exclusion via `listQuotes` dans
+  `runOffreGravureJob`), **inscrites depuis plus de 3 jours** (les nouvelles viennent de
   recevoir BIENVENUE10). Celles qui atteignent les 3 jours **pendant** l'offre sont servies au fil
   de l'eau. **Une seule fois par personne** (section `offreGravure` = {email: ts}).
 - **Le texte s'adapte à l'ancienneté** (`ouverturePhrase` dans `src/lib/offreGravure.js`) :
