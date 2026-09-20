@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadeau colis</title>
+<style>
+  :root {
+    --gold: #c9a24b; --gold-dark: #a98935; --cream: #fbf7ee; --cream-deep: #f3e8d3;
+    --ink: #241a0c; --ink-soft: #7a7268; --line: #e6dcc8;
+    --vac-bg: #fdf6e8; --vac-border: #e7d3a1; --vac-ink: #6b5516; --vac-soft: #8a6d1f;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--cream); color: var(--ink);
+    font: 16px/1.55 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    padding: 28px 16px 60px;
+  }
+  .page { max-width: 760px; margin: 0 auto; display: grid; gap: 26px; }
+  .page > *, .scene > *, .frame > *, .duo > *, .admin > *, .field > *, .mock > * { min-width: 0; }
+  h1, h2, .serif { font-family: Georgia, "Times New Roman", serif; font-weight: normal; }
+  h1 { font-size: 1.9rem; text-wrap: balance; }
+  .lead { color: var(--ink-soft); max-width: 62ch; }
+
+  .off-note {
+    background: #fff; border: 2px dashed var(--gold); border-radius: 14px;
+    padding: 14px 18px; font-size: 0.95rem;
+  }
+  .off-note strong { color: var(--gold-dark); }
+
+  .scene { display: grid; gap: 10px; }
+  .scene-label {
+    display: inline-flex; align-items: center; gap: 8px; justify-self: start;
+    background: var(--ink); color: #e2c67e; border-radius: 999px;
+    padding: 4px 14px; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .frame {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 10px 24px rgba(36, 26, 12, 0.07);
+  }
+  .frame .note { padding: 10px 16px; font-size: 0.82rem; color: var(--ink-soft); border-top: 1px solid var(--line); background: var(--cream); }
+
+  .mock { padding: 18px 22px; }
+  .sumrow { display: flex; justify-content: space-between; padding: 7px 0; font-size: 0.95rem; }
+  .sumrow.total { border-top: 1px solid var(--line); font-weight: 700; margin-top: 4px; padding-top: 12px; }
+  .btn-gold {
+    display: block; width: 100%; text-align: center; background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+    color: #fff; border-radius: 999px; padding: 11px 18px; font-weight: 700; border: 0; font-size: 1rem; margin-top: 12px;
+  }
+
+  /* — Encadré cadeau du panier (styles EXACTS du composant CadeauChoix) — */
+  .cad { background: #fdf6e8; border: 1px solid #e7d3a1; border-radius: 12px; padding: 12px 12px 14px; margin: 0 0 14px; }
+  .cad .delai { font-size: .84rem; color: #6b5516; line-height: 1.5; margin-bottom: 10px; }
+  .cad .titre { font-weight: 700; color: #8a6d1f; font-size: .92rem; margin-bottom: 4px; }
+  .cad .txt { font-size: .82rem; color: #6b5516; line-height: 1.45; margin-bottom: 8px; }
+  .cad .deux { font-size: .82rem; color: #8a6d1f; margin-bottom: 10px; }
+  .pills { display: flex; gap: 8px; }
+  .pill { flex: 1; text-align: center; border-radius: 999px; padding: 8px 4px; font-size: .82rem; border: 1.5px solid #d8bd6e; background: #fff; color: #8a6d1f; }
+  .pill.on { border-color: #c9a24b; background: #c9a24b; color: #fff; font-weight: 700; }
+  .barre { position: relative; }
+  .barre .delai { text-decoration: line-through; text-decoration-color: #b32b2b; text-decoration-thickness: 2px; opacity: .55; }
+  .tag { display: inline-block; font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 10px; margin-bottom: 8px; }
+  .tag.avant { background: #f3e3e3; color: #8a2b2b; }
+  .tag.apres { background: #e4f1e6; color: #256b34; }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .duo > div { padding: 18px 18px 6px; }
+  .duo > div + div { border-left: 1px solid var(--line); }
+  @media (max-width: 640px) { .duo { grid-template-columns: 1fr; } .duo > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+  /* — Réglage admin — */
+  .admin { padding: 18px 22px; display: grid; gap: 12px; }
+  .admin h3 { font-size: 1.05rem; }
+  .admin p { font-size: 0.85rem; color: var(--ink-soft); max-width: 60ch; }
+  .check { display: flex; align-items: center; gap: 9px; font-size: 0.95rem; }
+  .box { width: 19px; height: 19px; border: 2px solid var(--gold-dark); border-radius: 4px; display: inline-block; position: relative; flex-shrink: 0; }
+  .box.on { background: var(--gold-dark); }
+  .box.on::after { content: "✓"; color: #fff; position: absolute; inset: 0; text-align: center; line-height: 17px; font-size: 13px; }
+  .box.off { border-color: #bbb; }
+  .dates { display: flex; gap: 10px; flex-wrap: wrap; }
+  .field { flex: 1; min-width: 150px; display: grid; gap: 4px; font-size: 0.8rem; color: var(--ink-soft); }
+  .field .input { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; background: #fff; color: var(--ink); font-size: 0.9rem; }
+  .btn-save { justify-self: start; background: linear-gradient(180deg, var(--gold), var(--gold-dark)); color: #fff; border-radius: 999px; padding: 9px 22px; font-weight: 700; font-size: 0.9rem; }
+  .etat { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; border-radius: 999px; padding: 3px 10px; background: #e4f1e6; color: #256b34; font-weight: 700; justify-self: start; }
+  .etat.off { background: #eee; color: #666; }
+  .admin .muted { opacity: .55; }
+  .regle { background: var(--cream); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .84rem; }
+  .regle b { color: var(--gold-dark); }
+
+  /* — Gestion : commande — */
+  .cmd-box { background: #fdf6e8; border: 1px solid #e7d3a1; border-radius: 10px; padding: 10px 12px; font-size: .88rem; color: #6b5516; }
+  .cmd-box .rouge { color: #b32b2b; font-weight: 700; margin-top: 6px; }
+
+  /* — E-mail — */
+  .mail { background: var(--cream); padding: 22px; }
+  .mail-card { background: #fff; border-radius: 14px; max-width: 480px; margin: 0 auto; overflow: hidden; border: 1px solid var(--line); }
+  .mail-head { background: var(--ink); color: #e2c67e; text-align: center; padding: 16px; font-family: Georgia, serif; letter-spacing: 0.05em; }
+  .mail-body { padding: 18px 20px; font-size: 0.9rem; }
+  .mail-vac { background: var(--vac-bg); border: 1px solid var(--vac-border); border-radius: 10px; padding: 12px 14px; margin-top: 14px; color: var(--vac-soft); }
+
+  .footer-note { font-size: 0.9rem; color: var(--ink-soft); max-width: 62ch; }
+  .footer-note strong { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>🎁 Le cadeau dans chaque colis — sans le mode vacances</h1>
+    <p class="lead">Aujourd'hui, le cadeau est accroché au mode « délai allongé » : en l'éteignant, le choix du cadeau disparaît du panier. Voici comment le garder tout seul — sans plus aucune mention de délai.</p>
+  </header>
+
+  <div class="off-note">
+    <strong>Maquette — rien n'est appliqué.</strong> Le site ne change pas tant que tu n'as pas dit « applique ».
+    Et tant que ce n'est pas construit : <strong>ne pas décocher le mode vacances</strong>, sinon les 38 inscrites de l'offre gravure (« un cadeau vous attend, à choisir au paiement ») ne verraient plus le choix.
+  </div>
+
+  <!-- Scène 1 : le panier, avant / après -->
+  <section class="scene">
+    <span class="scene-label">1 · Sur la page panier — avant / après</span>
+    <div class="frame">
+      <div class="duo">
+        <div class="barre">
+          <span class="tag avant">Aujourd'hui (mode vacances)</span>
+          <div class="cad">
+            <div class="delai">✦ Fabriqué à la commande — en raison d'une forte demande, notre délai de confection est actuellement de 3 à 4 semaines minimum. Votre commande est enregistrée dès aujourd'hui et traitée dans son ordre d'arrivée.</div>
+            <div class="titre">🎁 Votre cadeau d'attente — offert</div>
+            <div class="txt">Pour vous remercier de votre patience, un cadeau surprise est glissé dans votre commande. Dites-nous votre préférence :</div>
+            <div class="deux">✨ Et dès 80 € d'achat, <strong>deux cadeaux</strong> vous sont offerts.</div>
+            <div class="pills"><span class="pill on">✨ Surprise</span><span class="pill">Plutôt femme</span><span class="pill">Plutôt homme</span></div>
+          </div>
+        </div>
+        <div>
+          <span class="tag apres">Après l'arrêt du mode vacances</span>
+          <div class="cad">
+            <div class="titre">🎁 Un cadeau dans votre colis — offert</div>
+            <div class="txt">Un cadeau surprise est glissé dans chaque commande. Dites-nous votre préférence :</div>
+            <div class="deux">✨ Et dès 80 € d'achat, <strong>deux cadeaux</strong> vous sont offerts.</div>
+            <div class="pills"><span class="pill on">✨ Surprise</span><span class="pill">Plutôt femme</span><span class="pill">Plutôt homme</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mock" style="padding-top:0;">
+        <div class="sumrow"><span>Sous-total</span><span>24,90 €</span></div>
+        <div class="sumrow"><span>Livraison</span><span>Calculée au paiement</span></div>
+        <div class="sumrow total"><span>Total</span><span>24,90 €</span></div>
+        <span class="btn-gold">Procéder au paiement</span>
+      </div>
+      <div class="note">Le même encadré, les mêmes trois pastilles, la même règle « deux cadeaux dès 80 € » — seul le paragraphe du délai a disparu, et « cadeau d'attente » devient « cadeau dans votre colis » (il n'y a plus d'attente à excuser).</div>
+    </div>
+  </section>
+
+  <!-- Scène 2 : réglage admin -->
+  <section class="scene">
+    <span class="scene-label">2 · Ton réglage — Gestion → Apparence</span>
+    <div class="frame">
+      <div class="admin">
+        <h3>🎁 Cadeau dans chaque colis</h3>
+        <p>Indépendant du mode vacances. Allumé : le panier propose le choix du cadeau, la commande le garde, Gestion et l'e-mail d'alerte te le montrent. Éteint : plus rien, nulle part.</p>
+        <span class="etat">● Allumé — le panier propose le cadeau</span>
+        <label class="check"><span class="box on"></span> Activer le cadeau dans chaque colis</label>
+        <div class="field">Phrase affichée au panier (facultatif — sinon celle-ci)
+          <span class="input">Un cadeau surprise est glissé dans chaque commande.</span>
+        </div>
+        <div class="dates">
+          <div class="field">Jusqu'au (facultatif — vide = en permanence) <span class="input" style="color:var(--ink-soft);">jj/mm/aaaa</span></div>
+        </div>
+        <div class="regle"><b>Règle gardée :</b> commande ≥ 80 € → <b>deux cadeaux</b> (un choix pour chacun). Le rappel rouge « 🎁🎁 DEUX cadeaux » reste dans Gestion et dans ton e-mail d'alerte.</div>
+        <span class="btn-save">Enregistrer</span>
+      </div>
+      <div class="note">Une case, une phrase, une date facultative. Le cadeau est allumé si <strong>cette case</strong> est cochée <strong>ou</strong> si le mode vacances est allumé avec sa case cadeau — l'un ou l'autre suffit.</div>
+    </div>
+  </section>
+
+  <!-- Scène 3 : mode vacances éteint -->
+  <section class="scene">
+    <span class="scene-label">3 · Le mode vacances, lui, s'éteint normalement</span>
+    <div class="frame">
+      <div class="admin">
+        <h3>🏖️ Mode vacances (annonce du délai)</h3>
+        <span class="etat off">○ Éteint</span>
+        <label class="check"><span class="box off"></span> Activer le mode vacances</label>
+        <div class="muted">
+          <div class="dates">
+            <div class="field">Début <span class="input">02/09/2026</span></div>
+            <div class="field">Fin <span class="input">—</span></div>
+          </div>
+          <label class="check" style="margin-top:10px;"><span class="box on"></span> 🎁 Cadeau offert pendant les congés</label>
+        </div>
+      </div>
+      <div class="note">En décochant : le bandeau du haut, l'encart « 3 à 4 semaines » des fiches et le paragraphe de délai de l'e-mail de confirmation disparaissent. <strong>Le cadeau, lui, reste</strong> grâce à l'interrupteur de la scène 2. Et la livraison express s'allume le mercredi 24/09 comme prévu (elle était coupée par le délai allongé).</div>
+    </div>
+  </section>
+
+  <!-- Scène 4 : commande + e-mail -->
+  <section class="scene">
+    <span class="scene-label">4 · Sur la commande et dans l'e-mail de confirmation — inchangé</span>
+    <div class="frame">
+      <div class="mock">
+        <div class="serif" style="font-size:1.1rem;margin-bottom:8px;">Gestion → Commandes → #0IR8QKHS</div>
+        <div class="cmd-box">🎁 Cadeau choisi : <strong>Plutôt femme</strong><div class="rouge">🎁🎁 Commande ≥ 80 € → DEUX cadeaux (femme + surprise)</div></div>
+      </div>
+      <div class="mail">
+        <div class="mail-card">
+          <div class="mail-head">NiV CRÉATION</div>
+          <div class="mail-body">
+            <p><strong>Merci pour votre commande</strong></p>
+            <p style="color:var(--ink-soft);margin-top:6px;">Référence : <strong>0IR8QKHS</strong> · Total payé : <strong style="color:var(--gold-dark);">49,69 €</strong></p>
+            <div class="mail-vac">🎁 Un cadeau surprise est glissé dans votre colis.</div>
+          </div>
+        </div>
+      </div>
+      <div class="note">L'encadré doré de Gestion et le rappel dans ton e-mail d'alerte lisent déjà le choix enregistré : rien à changer. Dans l'e-mail de confirmation, seule la ligne cadeau reste — plus de paragraphe sur le délai.</div>
+    </div>
+  </section>
+
+  <p class="footer-note">
+    <strong>Ce qui est fait automatiquement au « applique » :</strong> j'allume l'interrupteur cadeau <strong>avant</strong> que tu ne coupes le mode vacances, pour qu'il n'y ait aucun trou. L'e-mail de l'offre gravure (« un cadeau vous attend ») lira aussi ce nouvel interrupteur.
+    Reste à trancher : <strong>jusqu'au 20/10</strong> (fin de l'offre gravure) ou <strong>en permanence</strong> — la date se règle dans la case « Jusqu'au ».
+  </p>
+</div>
+</body>
+</html>
