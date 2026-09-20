@@ -360,7 +360,7 @@ var FIXED_RATES = {INR:108.00};
    UNE FOIS le taux qu'il avait gardé en mémoire. Sans ça, l'ancien 113,20 resterait sur son
    téléphone et le nouveau taux ne s'appliquerait jamais. Elle peut toujours le modifier à la main
    ensuite (Taux de change) : sa saisie est conservée. */
-var FX_FIXED_VER = 2;
+var FX_FIXED_VER = 3;   /* 20/09/2026 : des téléphones étaient restés à 113,20 -> on reforce 108 */
 function loadFixedRates(){
   if((+lget("fxFixedVer")||0) < FX_FIXED_VER){ lset("fxFixed", FIXED_RATES); lset("fxFixedVer", FX_FIXED_VER); return; }
   var f=lget("fxFixed"); if(f && typeof f==="object"){ for(var k in f){ if(+f[k]>0) FIXED_RATES[k]=+f[k]; } }
