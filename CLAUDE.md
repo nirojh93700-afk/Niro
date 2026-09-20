@@ -105,6 +105,26 @@
   *Accès réseau → Personnalisé* décrit plus haut, et il ne s'applique qu'aux **nouvelles sessions**.
   ⛔ Ne JAMAIS bricoler un relais (workflow GitHub, service tiers) pour contourner ce blocage.
 
+### 🎁 CADEAU DANS CHAQUE COLIS — CONSTRUIT LE 20/09/2026, ÉTEINT (« prépare, j'activerai plus tard »)
+> Demande : « garder les messages pour les cadeaux quand j'aurai arrêté le mode vacances — plus de
+> délai 3 à 4 semaines non plus ». Maquette validée `docs/maquettes/cadeau-colis.html`
+> (artifact https://claude.ai/artifact/DfjUmv4hQt9SXAiaLFcNb2).
+- **Réglage** `settings.cadeauColis = { enabled:false, text, until }` (sanitizé), écran **Gestion →
+  Apparence → « 🎁 Cadeau dans chaque colis »** (case + phrase + « Jusqu'au » facultatif, vide = en
+  permanence). **C'est LUI qui coche**, au moment d'éteindre le mode vacances (~23/09).
+- **Une seule fonction décide** : `cadeauColisActif(settings)` dans `src/lib/vacation.js` →
+  `{ text, viaVacances }` si le mode vacances est allumé (comportement d'avant, inchangé) OU si la
+  case est cochée ; `null` sinon = plus rien nulle part.
+- **Branché sur** : `/api/shipping-config` (champ `cadeau`) · `CadeauChoix.jsx` (hors vacances : pas
+  de paragraphe de délai, titre « Un cadeau dans votre colis — offert ») · `/api/checkout`
+  (`cadeauChoix` enregistré si cadeau actif) · webhook Stripe (confirmation cliente : ligne cadeau
+  seule hors vacances) · `runOffreGravureJob` (la ligne « un cadeau vous attend » n'est écrite que si
+  `cadeauColisActif`) · `serviceContext` des agents. Gestion / e-mail d'alerte / règle « ≥ 80 € →
+  deux cadeaux » inchangés. 11 vérifications de logique au vert.
+- ⛔ **ORDRE À RESPECTER** : cocher « Cadeau dans chaque colis » **AVANT** de décocher le mode
+  vacances — sinon les inscrites de l'offre gravure (« un cadeau vous attend, à choisir au paiement »)
+  n'ont plus le choix au panier. Question ouverte : jusqu'au 20/10 ou en permanence (case « Jusqu'au »).
+
 ### 🛍️ AUDIT COMPARATIF — 5 AMÉLIORATIONS APPLIQUÉES LE 19/09/2026
 > Audit contre Amikado/Merci Maman/CadeauGravure (maquette `docs/maquettes/audit-9-ameliorations.html`,
 > artifact https://claude.ai/artifact/Kscni7tb6QUEAatAHLj9Ji). Le gérant a validé « pour les autres
