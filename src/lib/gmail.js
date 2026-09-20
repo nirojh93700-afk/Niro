@@ -7,8 +7,15 @@
 // =============================================================================
 
 // Échange le refresh token contre un access token temporaire.
+// Jeton d'accès gardé en mémoire (par refresh token) jusqu'à 1 min avant son
+// expiration : un envoi en série (offre à 49 inscrites) ne redemande plus un
+// jeton à Google à chaque e-mail (incident du 20/09/2026 : 0 envoi sur 49).
+const tokenCache = new Map();
+
 export async function gmailAccessToken({ clientId, clientSecret, refreshToken }) {
   if (!clientId || !clientSecret || !refreshToken) throw new Error("Identifiants Gmail manquants.");
+  const memo = tokenCache.get(refreshToken);
+  if (memo && memo.exp > Date.now()) return memo.token;
   const res = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -24,6 +31,8 @@ export async function gmailAccessToken({ clientId, clientSecret, refreshToken })
     const detail = [data.error, data.error_description].filter(Boolean).join(" — ");
     throw new Error(detail || "Connexion Gmail refusée.");
   }
+  const ttl = Math.max(60, Number(data.expires_in) || 3600) - 60;
+  tokenCache.set(refreshToken, { token: data.access_token, exp: Date.now() + ttl * 1000 });
   return data.access_token;
 }
 

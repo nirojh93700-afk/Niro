@@ -351,11 +351,14 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
         if (btn) mail = offreGravureEmail({ ...args, bouton: btn });
       } catch { /* ignore */ }
       const r = await sendClientMail({ to: c.email, subject: mail.subject, html: mail.html });
-      if (r?.ok) { envoyes++; faits.push({ email: c.email, code }); }
-      else noter(c.email, r?.error);
+      if (r?.ok) {
+        envoyes++; faits.push({ email: c.email, code });
+        // Mémorisé TOUT DE SUITE : si le passage est coupé en route, les
+        // personnes déjà servies ne recevront jamais un second e-mail.
+        if (!test) { try { await markOffreGravureSent([{ email: c.email, code }]); } catch (e) { noter("mémoire des envois", e?.message || e); } }
+      } else noter(c.email, r?.error);
     } catch (e) { noter(c.email, e?.message || e); /* on continue avec les suivantes */ }
   }
-  try { if (!test && faits.length) await markOffreGravureSent(faits); } catch (e) { noter("mémoire des envois", e?.message || e); }
   // Compte rendu visible dans l'écran de l'offre (GET /api/admin/offre-gravure).
   try { await setJobNote("offreGravure", { at: Date.now(), test, eligibles: cibles.length, envoyes, echecs, erreurs }); } catch { /* ignore */ }
   return { actif: true, eligibles: cibles.length, envoyes, echecs, erreurs, attente, deja, purges };
