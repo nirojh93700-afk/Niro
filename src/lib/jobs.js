@@ -263,7 +263,7 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
     const prix = typeof p.salePrice === "number" && p.salePrice < v.price ? p.salePrice : v.price;
     return { slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0] || "", prix: prix ? formatEuro(prix) : "" };
   };
-  const IDEES = ["collier-plaque-acier", "cristal-photo-3d-vertical", "porte-cles-cuir-a-graver", "verre-a-vin-grave"];
+  const IDEES = ["collier-plaque-acier", "cristal-photo-3d-vertical", "bracelet-femme-coeur", "verre-a-vin-grave"]; // bijou femme à la place du porte-clés (demande du gérant, 20/09)
   const idees = IDEES.map((sl) => versPiece(parSlug.get(sl))).filter(Boolean).slice(0, 3);
 
   // ⛔ UN CODE PAR CLIENTE, UTILISABLE UNE SEULE FOIS (demande du gérant,
