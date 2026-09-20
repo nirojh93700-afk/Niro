@@ -187,10 +187,11 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   if (!o) return { actif: false, eligibles: 0, envoyes: 0, attente: 0, deja: 0 };
 
   const minJours = Number(o.minJours) || 0;
-  const [abonnes, commandes, dejaEnvoye] = await Promise.all([
+  const [abonnes, commandes, dejaEnvoye, devisListe] = await Promise.all([
     getSubscribersDetailed(),
     getSiteOrders(500),
     getOffreGravureSent(),
+    (await import("@/lib/firebase")).listQuotes(300).catch(() => null),
   ]);
 
   // Adresses ayant déjà commandé (toute commande, même annulée : la personne
@@ -198,6 +199,13 @@ export async function runOffreGravureJob({ dryRun = false } = {}) {
   const acheteuses = new Set(
     commandes.map((c) => String(c.customerEmail || "").trim().toLowerCase()).filter(Boolean)
   );
+  // Adresses à qui un DEVIS (ou une facture) a été envoyé (règle du gérant,
+  // 20/09/2026 : « il faut pas envoyer aux gens à qui on a envoyé un devis ») :
+  // une négociation est en cours ou l'a été — pas d'offre promotionnelle dessus.
+  for (const q of devisListe || []) {
+    const e = String(q?.client?.email || "").trim().toLowerCase();
+    if (e) acheteuses.add(e);
+  }
 
   let attente = 0, deja = 0;
   const cibles = [];
