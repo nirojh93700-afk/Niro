@@ -447,13 +447,28 @@ ne descend jamais sous zéro.
   ambassadeurs, codes à la main : ils portent stats et commissions). Lancé à chaque passage réel de
   `runOffreGravureJob` + bouton « Nettoyer les codes expirés » + KPI « Codes personnels actifs »
   (`POST /api/admin/offre-gravure {action:"purge"}`).
-- 🚀 **LANCÉE PAR LE GÉRANT LE 20/09/2026** (« C'est bon tu peux lancer… tu envoies à 9h heure
-  française ») : réglée `enabled:true`, `start: 2026-09-20T07:00:00Z` (= 9 h Paris, l'offre est
-  FERMÉE avant), `end: 2026-10-20`, préfixe `GRAVURE`, cadeau coché (mode délai allongé allumé).
-  Le battement du site envoie au premier passage après 9 h (verrou pris seulement offre ouverte,
-  clé `offreGravureJob`, commit `05a35b6`) ; ~38 inscrites attendues, puis au fil de l'eau
-  jusqu'au 20/10. L'e-mail porte désormais le bouton Répondre (commit `29186db`). Maquette
-  validée : `docs/maquettes/offre-gravure-emails.html`. **Pour arrêter** : décocher Activer.
+- 🚀 **LANCÉE LE 20/09/2026 — 49 E-MAILS PARTIS ENTRE 9 H 25 ET 9 H 27 (heure française), 0 échec.**
+  Réglage : `enabled:true`, `start: 2026-09-20`, `end: 2026-10-20`, préfixe `GRAVURE`, cadeau coché.
+  Ciblage vérifié : buyers + devis + vrais échanges exclus (Ludovic, Aurore, Audrey absents).
+  1 inscrite « en attente » (< 3 jours) et les prochaines partent seules via le battement, jusqu'au 20/10.
+  **Idées de l'e-mail** (sans favoris) : plaque acier · cristal vertical · **Bracelet Femme Cœur**
+  (le porte-clés a été retiré à la demande du gérant le 20/09, « un bijou femme à graver »).
+  · 🔴 **INCIDENT DU PASSAGE DE 9 H 00** : le battement a créé les 49 codes puis **aucun e-mail n'est
+    parti** (0 trace, erreur Gmail avalée par `sendClientMail`). Constaté via la boîte d'envoi de
+    l'atelier (vide) et le compteur « déjà servies » à 0. Corrigé dans la foulée (commits `b4cfc42`,
+    `10ae652`) : `sendClientMail` garde l'erreur Gmail · `gmailAccessToken` **met le jeton en cache**
+    (avant : une demande de jeton à Google PAR e-mail — cause la plus probable en série) ·
+    `runOffreGravureJob` note échecs + erreurs (section `jobNotes`, visible dans
+    `GET /api/admin/offre-gravure → dernierPassage`), **réutilise un code nominatif encore valide**
+    (pas de doublon), **mémorise chaque envoi réussi aussitôt** (un passage coupé ne ressert jamais
+    personne), et accepte `POST {action:"test", to}` (un seul envoi, rien mémorisé — le gérant
+    reçoit les tests dans la boîte de l'atelier, ne pas en abuser).
+  · Battement : verrou pris **seulement si l'offre est ouverte** (clé `offreGravureJob`, commit
+    `05a35b6`) → une ouverture à heure fixe marche. Pour détecter un déploiement sans envoyer de
+    test : `curl -s https://nivcreation.fr/ | grep -o 'buildId\\":\\"[A-Za-z0-9_-]*'`
+    (les déploiements poussés à la suite sortent l'un après l'autre, ~4 min chacun).
+  · Maquette validée des 2 e-mails : `docs/maquettes/offre-gravure-emails.html`. **Pour arrêter** :
+    décocher Activer.
 - ⛔ **LANCEMENT = UNIQUEMENT SUR DEMANDE EXPLICITE DU GÉRANT**, par l'autre conversation, en suivant
   **`docs/messages/offre-gravure-lancement.md`** (5 étapes ; décocher « cadeau » si le mode délai
   allongé est éteint ; annoncer le nombre d'envois AVANT de cliquer). L'offre est **éteinte**.
