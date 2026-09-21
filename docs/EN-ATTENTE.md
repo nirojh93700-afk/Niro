@@ -26,6 +26,17 @@
 
 ## 1. Messages / clients en attente
 
+> 🕘 **ENES VAROL (`e.varol2012@icloud.com`, bracelet « Hend » #1S9IOON5 revenu) — RÉPONSE VALIDÉE ET
+> PROGRAMMÉE PAR LE SITE pour le 21/09 à 9 h 00 Paris** (`/api/admin/scheduled`, id `sch_vxodd0sbmuajgord`,
+> vérif à 9 h 02 par `trig_01VwZnv4ubgs62R2uotRB28r`). Contenu : réexpédition PAYANTE (4,90 € relais
+> Ambilly / 6,90 € domicile en colis, boîte cadeau) ou bracelet « Melyna » 22,41 € + port ; on lui
+> demande option + mode, puis **devis à créer** selon sa réponse (4,90 · 6,90 · 27,31 · 29,31 €).
+> ⛔ Jamais de réexpédition gratuite (règle du 21/09), jamais de promesse de tempo.
+> **Céline (`celinecosta88@yahoo.com`)** attend le diamètre de la pastille + longueur de chaîne du
+> Collier Pastille (le gérant doit les donner) → répondre par la page /repondre, puis ajouter les
+> dimensions sur la fiche. **Ludovic NOEL** a payé #16HGINEA (89,70 €) le 20/09 : fichiers HD de
+> gravure (2 verres + couvercle, style n°2) à produire quand le gérant le dit ; il achète verres + boîte.
+
 | Qui | État | Où |
 |---|---|---|
 | ~~**Gregory Perez**~~ (`cseidm@pm.me`) — cœur en verre | ✅ **CLASSÉ SANS SUITE (décision du gérant, 17/09/2026 : « tu peux oublier »)** — aucune réponse à envoyer, le brouillon `docs/messages/perez-coeur-verre.md` est abandonné. Ne plus le rappeler. | — |
