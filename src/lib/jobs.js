@@ -42,6 +42,7 @@ export async function runScheduledJobs() {
     const html = brandedMessage(s.subject, s.body, btn, imageEnTete(s.imageUrl));
     const r = await sendClientMail({ to: s.to, subject: s.subject, html });
     await markScheduledSent(s.id, { ok: r.ok, error: r.error });
+    if (!r.ok) { try { await setJobNote("scheduled", { at: Date.now(), id: s.id, to: s.to, subject: s.subject, error: String(r.error || "").slice(0, 600) }); } catch { /* ignore */ } }
     // Rangé dans le dossier de la cliente (et ça classe la réponse préparée, s'il y en avait une).
     if (r.ok) { try { await logComm({ email: s.to, from: "nous", text: String(s.body || s.text || s.subject || ""), subject: s.subject, via: "programme" }); } catch { /* ignore */ } }
     if (r.ok) sentManual++; else failed++;

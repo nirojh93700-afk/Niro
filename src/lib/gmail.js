@@ -12,9 +12,18 @@
 // jeton à Google à chaque e-mail (incident du 20/09/2026 : 0 envoi sur 49).
 const tokenCache = new Map();
 
-export async function gmailAccessToken({ clientId, clientSecret, refreshToken }) {
+// Un appel Gmail refusé en 401 (« invalid authentication credentials ») = le jeton
+// gardé en mémoire n'est plus bon (incident du 21/09/2026, 9 h) : on l'oublie pour
+// que l'appel suivant en redemande un à Google.
+function fail(res, data, fallback) {
+  if (res && res.status === 401) tokenCache.clear();
+  throw new Error(data?.error?.message || fallback);
+}
+export function gmailForgetToken() { tokenCache.clear(); }
+
+export async function gmailAccessToken({ clientId, clientSecret, refreshToken }, { fresh = false } = {}) {
   if (!clientId || !clientSecret || !refreshToken) throw new Error("Identifiants Gmail manquants.");
-  const memo = tokenCache.get(refreshToken);
+  const memo = fresh ? null : tokenCache.get(refreshToken);
   if (memo && memo.exp > Date.now()) return memo.token;
   const res = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
@@ -31,7 +40,8 @@ export async function gmailAccessToken({ clientId, clientSecret, refreshToken })
     const detail = [data.error, data.error_description].filter(Boolean).join(" — ");
     throw new Error(detail || "Connexion Gmail refusée.");
   }
-  const ttl = Math.max(60, Number(data.expires_in) || 3600) - 60;
+  // 10 min au plus : assez pour un envoi en série, pas assez pour traîner un jeton mort.
+  const ttl = Math.min(600, Math.max(60, Number(data.expires_in) || 3600) - 60);
   tokenCache.set(refreshToken, { token: data.access_token, exp: Date.now() + ttl * 1000 });
   return data.access_token;
 }
@@ -114,7 +124,7 @@ export async function gmailListClientMessages(token, max = 20) {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
   const ids = (data.messages || []).map((m) => m.id);
   const out = [];
   for (const id of ids) {
@@ -135,7 +145,7 @@ export async function gmailListFromSender(token, fromEmail, max = 10) {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
   const ids = (data.messages || []).map((m) => m.id);
   const out = [];
   for (const id of ids) {
@@ -153,7 +163,7 @@ export async function gmailListSentIds(token, max = 25) {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
   return (data.messages || []).map((m) => m.id);
 }
 
@@ -165,7 +175,7 @@ export async function gmailListInboxIds(token, max = 30) {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "Lecture Gmail impossible.");
+  if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
   return (data.messages || []).map((m) => m.id);
 }
 
@@ -245,7 +255,7 @@ export async function gmailSendHtml(token, { to, subject, html, bcc, threadId, i
     body: JSON.stringify({ raw: encoded, threadId: threadId || undefined }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "Envoi Gmail impossible.");
+  if (!res.ok) fail(res, data, "Envoi Gmail impossible.");
   return data;
 }
 
@@ -269,6 +279,6 @@ export async function gmailSendReply(token, { to, subject, body, threadId, inRep
     body: JSON.stringify({ raw: encoded, threadId: threadId || undefined }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || "Envoi impossible.");
+  if (!res.ok) fail(res, data, "Envoi impossible.");
   return data;
 }

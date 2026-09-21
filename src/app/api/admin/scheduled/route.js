@@ -1,4 +1,4 @@
-import { isAdmin, getScheduledEmails, addScheduledEmail, cancelScheduledEmail } from "@/lib/stock";
+import { isAdmin, getScheduledEmails, addScheduledEmail, cancelScheduledEmail, getJobNote } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -7,7 +7,9 @@ export const runtime = "nodejs";
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const list = (await getScheduledEmails()).slice().sort((a, b) => (a.sendAt || 0) - (b.sendAt || 0));
-  return Response.json({ scheduled: list });
+  let dernierEchec = null;
+  try { dernierEchec = await getJobNote("scheduled"); } catch { /* ignore */ }
+  return Response.json({ scheduled: list, dernierEchec });
 }
 
 // Programmer un message pour une cliente à une date/heure précise.

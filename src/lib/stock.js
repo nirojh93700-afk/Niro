@@ -1237,7 +1237,7 @@ export async function markScheduledSent(id, { ok, error } = {}) {
   if (s) {
     s.sent = Boolean(ok);
     s.sentAt = Date.now();
-    s.error = ok ? "" : String(error || "").slice(0, 200);
+    s.error = ok ? "" : String(error || "").slice(0, 600);
     await persistCatalog(data);
   }
   return s || null;
