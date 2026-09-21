@@ -64,6 +64,12 @@
   client qui doit payer »). On ne renvoie JAMAIS gratuitement un produit revenu : devis « nouvelle
   expédition » (relais 4,90 € / lettre 3,90 € / colis 6,90 €) à régler en ligne, envoi après règlement.
   Idem si le client veut une pièce en plus : prix de la fiche + port. Aucun geste de notre initiative.
+- ⛔ **PRIX DE PORT CITÉ À UN CLIENT = LE PRIX DU SITE, VÉRIFIÉ AVANT D'ÉCRIRE** (erreur du 21/09/2026,
+  dossier Enes Varol : j'ai cité 3,90 € pour un bracelet EN BOÎTE → colis 6,90 €, le gérant paie
+  6,12 € à Boxtal ; « à cause de toi je vais perdre de l'argent »). Grille bijou : sac/microfibre =
+  lettre suivie 3,90 € · **boîte cadeau = colis 6,90 €** · Mondial Relay 4,90 € (jusqu'à 1 kg).
+  Toujours regarder l'emballage de la commande (`items[].packaging` / « Boîte cadeau ») avant de
+  citer un montant, et **ne jamais annoncer un prix inférieur à ce qu'un e-mail précédent a déjà dit**.
 - ⛔ **SIGNATURE DES MESSAGES CLIENTS = « Niv Création », JAMAIS LE NOM DU GÉRANT** (rappel ferme du
   08/09/2026 : « il faut jamais mettre mon nom, c'est le nom du site »). Aucun nom de personne dans
   un e-mail, un devis ou un message client : on écrit « nous » (l'atelier), on signe **Niv Création**
