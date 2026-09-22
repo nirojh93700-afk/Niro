@@ -1027,6 +1027,34 @@ ne descend jamais sous zéro.
   - **Prix auto par poids (v1)** = OPTIONNEL (la gérante est OK avec le prix fixe). L'app v1 existe (clés sur son compte Boxtal) mais l'endpoint cotation v1 reste à trouver ; non nécessaire pour l'Option A.
 
 
+### ⛔ VIDÉO — UNIQUEMENT DES PRODUITS DÉJÀ GRAVÉS (règle ferme du gérant, 22/09/2026)
+> « Refais la vidéo avec des produits déjà gravés, je t'ai déjà dit mais mets en mémoire,
+> avant de faire un truc fais-le correctement. » Il l'avait déjà dit en conversation et
+> ça n'avait JAMAIS été écrit ici — d'où la répétition. C'est écrit maintenant.
+- **Toute photo d'une vidéo doit montrer la GRAVURE.** Jamais un produit vierge : on vend la
+  personnalisation, un verre nu ne montre rien et ne donne envie de rien.
+- 🔴 **LE NOM DE FICHIER MENT — TOUJOURS OUVRIR L'IMAGE.** Pièges avérés dans
+  `public/produits/` : **`verre_vin_grave.jpg`** et **`verre_a_whisky_grave_ambiance.jpg`**
+  portent « grave » dans leur nom mais sont des **verres VIERGES**. Idem
+  `collier-double-coeur-1.jpg` (cœur lisse). Les trois étaient dans la 1re vidéo du 22/09.
+- **Méthode obligatoire avant de monter** : fabriquer une **planche contact** des candidates
+  (vignettes + nom de fichier, script jetable avec Pillow) et **la regarder**. 5 minutes, et
+  c'est la seule façon de ne pas se tromper.
+- **Photos GRAVÉES repérées le 22/09 (réutilisables telles quelles)** :
+  · carafe — `carafe_gravee.jpg`, `carafe_whiskey_1892.jpg`
+  · verre à whisky — `verre_a_whisky_exemple_face.jpg` (photo gravée + MEILLEUR PAPA),
+    `verre_a_whisky_exemple_fond.jpg` (gravé au fond), `verre_whisky_papa_monde_moustache.jpg`,
+    `verre_whisky_papa_monde_banniere.jpg`, `verre_a_whisky_logo_bourbon.webp`, `verre_a_whisky_card.jpg`
+  · verre à vin — `verre_vin_exemple_dale.jpg` (monogramme D DALE), `verre_vin_geniet.jpg`
+  · bijoux — `collier-coeur-grave-1.jpg`, `collier-3coeurs-1.jpg`, `collier-coeur-plaques-1à 4.jpg`,
+    `collier-double-coeur-3/4/6.jpg`, `bracelet-cordon-plaque-4.jpg`, `bracelet-homme-plaque-1à 5.jpg`
+- ⚠️ **AUCUNE photo de flûte à champagne gravée n'existe** (`flute_ambiance/set/vierge` sont
+  toutes vierges). Tant qu'il n'en fournit pas une, **la flûte ne peut pas figurer dans une vidéo**.
+- **Scripts** : `tools/video/pub_graves_silencieuse.py` (10 produits gravés, sans son) et
+  `pub_verres_bijoux_silencieuse.py`. Le titre s'ajuste tout seul à la largeur (4 noms sur 9
+  débordaient à 74 px). Photos lues en **local** dans `public/produits/` quand le site est
+  injoignable.
+
 ## 🎬 RECETTE VIDÉO PUB (à refaire pareil à chaque demande de vidéo)
 > Quand l'utilisatrice demande une vidéo/pub, produire CE style par défaut. Si elle dit « améliore », améliorer sur cette base.
 Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) et **`tools/video/pub_ia_higgsfield.py`** (clips animés par l'IA Higgsfield, payant).
