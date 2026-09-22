@@ -139,7 +139,6 @@
 - ~~ORDRE À RESPECTER : cocher « Cadeau dans chaque colis » AVANT de décocher le mode vacances~~
   **ANNULÉ le 22/09** : le mode vacances a été éteint SANS cocher le cadeau, décision du gérant
   (voir « FIN DU MODE VACANCES »). La question « jusqu'au 20/10 ou en permanence » est sans objet.
-  n'ont plus le choix au panier. Question ouverte : jusqu'au 20/10 ou en permanence (case « Jusqu'au »).
 
 ### 🔚 FIN DU MODE VACANCES — DÉCISION DU GÉRANT, 22/09/2026
 > « Tu peux annuler le mode vacances… quand tu désactives le mode vacances y a plus de cadeaux, tu
