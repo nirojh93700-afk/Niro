@@ -140,6 +140,37 @@
   vacances — sinon les inscrites de l'offre gravure (« un cadeau vous attend, à choisir au paiement »)
   n'ont plus le choix au panier. Question ouverte : jusqu'au 20/10 ou en permanence (case « Jusqu'au »).
 
+### 🔚 FIN DU MODE VACANCES — DÉCISION DU GÉRANT, 22/09/2026
+> « Tu peux annuler le mode vacances… quand tu désactives le mode vacances y a plus de cadeaux, tu
+> parles plus de cadeaux, mais tout ce qu'il y a eu comme commande je mettrai un cadeau… tu peux
+> activer livraison express. »
+- **UN SEUL CLIC** : Gestion → Apparence → Bandeau & pop-ups → **décocher « 🏖️ Mode vacances »**,
+  Enregistrer. **Ne PAS cocher « 🎁 Cadeau dans chaque colis »** — il la veut décochée.
+  ⚠️ Ceci ANNULE la consigne d'ordre écrite le 20/09 (« cocher le cadeau AVANT d'éteindre les
+  vacances ») : il a tranché, il n'y a plus de cadeau sur les nouvelles commandes.
+- **CE QUI DISPARAÎT** (tout seul, rien d'autre à faire) : bandeau « 3 à 4 semaines » en haut du
+  site · encart des fiches et du panier · paragraphe de délai dans l'e-mail de confirmation ·
+  **case « Votre cadeau » au paiement** · ligne cadeau de l'e-mail de confirmation · **ligne
+  « un cadeau vous attend » des e-mails de l'offre gravure encore à partir** (`cadeauColisActif(s)`
+  dans `runOffreGravureJob` → faux ⇒ la phrase n'est plus écrite). Rien à corriger à la main.
+- **LES CADEAUX DÉJÀ PROMIS** : les 49 e-mails de l'offre gravure partis le 20/09 annoncent un
+  cadeau. Le gérant les couvre **physiquement** : il glisse un cadeau dans les commandes déjà
+  reçues. **Les NOUVELLES commandes n'ont plus de cadeau** — ne plus jamais en parler à une cliente.
+- ⛔ **CONSÉQUENCES POUR TOUT MESSAGE CLIENT** (l'autre conversation aussi) : ne plus annoncer
+  « délai de confection 3 à 4 semaines », ne plus annoncer de cadeau dans le colis. Le délai
+  redevient celui des fiches (pièce personnalisée). La règle « aucune promesse de tempo » du
+  21/09 reste entière.
+- ✅ **LIVRAISON EXPRESS CHRONOPOST : AUTORISÉE par le gérant le 22/09** et **s'allume toute seule**
+  avec l'extinction des vacances — `EXPRESS_START` (24/09/2026) est passé et `settings.shipping
+  .expressOff` n'a jamais été mis. Rien à activer. Option au paiement, France + Monaco, domicile
+  seulement : ≤ 2 kg 14,90 € · ≤ 5 kg 19,90 € · au-delà 29,90 €.
+  ⚠️ **Une commande express est à graver EN PRIORITÉ** (engagement 24/48 h après confection).
+  Pour l'éteindre sans toucher au reste : `settings.shipping.expressOff = true`.
+- ⚠️ **PAS VÉRIFIÉ EN LIGNE** : le site était injoignable depuis la session du 22/09
+  (`connect_rejected`) et je n'avais pas la clé admin → c'est LUI qui clique. À contrôler ensuite :
+  `/api/shipping-config` doit renvoyer `vacation: null` ET `cadeau: null`, et l'option Express
+  doit apparaître au paiement.
+
 ### 🛍️ AUDIT COMPARATIF — 5 AMÉLIORATIONS APPLIQUÉES LE 19/09/2026
 > Audit contre Amikado/Merci Maman/CadeauGravure (maquette `docs/maquettes/audit-9-ameliorations.html`,
 > artifact https://claude.ai/artifact/Kscni7tb6QUEAatAHLj9Ji). Le gérant a validé « pour les autres
