@@ -197,7 +197,10 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
         <div className="pt-row pt-head">
           <span />
           <span>Produit</span>
-          <span>Catégorie</span>
+          {/* La classe pt-cat est OBLIGATOIRE : sous 1100 px elle est masquée
+              comme la colonne des lignes. Sans elle, l'en-tête gardait 6 cases
+              pour 5 colonnes et tous les libellés étaient décalés d'un cran. */}
+          <span className="pt-cat">Catégorie</span>
           <span>Prix</span>
           <span>Stock</span>
           <span />

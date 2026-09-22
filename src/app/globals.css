@@ -2406,7 +2406,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .dash-ph { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; border-bottom: 1px solid var(--line); }
 .dash-ph h3 { font-size: 1rem; margin: 0; }
 .dash-ph button { background: none; border: none; cursor: pointer; font: 600 0.8rem system-ui; color: var(--gold-dark); }
-.dash-orow { display: grid; grid-template-columns: 68px 1fr auto auto; gap: 12px; align-items: center; padding: 11px 18px; border-bottom: 1px solid var(--cream); font-size: 0.88rem; }
+.dash-orow { display: grid; grid-template-columns: minmax(78px, auto) minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 11px 18px; border-bottom: 1px solid var(--cream); font-size: 0.88rem; }
 .dash-orow:last-child { border-bottom: none; }
 .dash-orow .id { font-variant-numeric: tabular-nums; color: var(--ink-soft); }
 .dash-orow .pr { font-variant-numeric: tabular-nums; font-weight: 600; }
@@ -2437,7 +2437,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .dash-assist b { color: var(--ink); }
 .dash-two { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; }
 @media (max-width: 900px) { .dash-two { grid-template-columns: 1fr; } }
-@media (max-width: 720px) { .dash-tiles { grid-template-columns: repeat(2, 1fr); } .dash-orow { grid-template-columns: 52px 1fr auto; } .dash-orow .dash-chip { grid-column: 2 / 4; justify-self: start; } }
+@media (max-width: 720px) { .dash-tiles { grid-template-columns: repeat(2, 1fr); } .dash-orow { grid-template-columns: minmax(72px, auto) minmax(0, 1fr) auto; } .dash-orow .dash-chip { grid-column: 2 / 4; justify-self: start; } }
 
 /* Mobile : la barre latérale devient un MENU DÉROULANT (bouton + liste verticale).
    Fini la barre horizontale qui défile : plus rien ne « disparaît ». */
@@ -2744,7 +2744,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .admin-stock-pill.out .asp-dot{background:#b4452f}
 .admin-stock-pill.out .asp-lab{color:#b4452f;font-weight:700}
 .admin-stock-pill .asp-lab{color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
-.admin-stock-pill input{width:44px;text-align:center;border:1px solid var(--line);border-radius:8px;
+.admin-stock-pill input{width:44px;box-sizing:border-box;text-align:center;border:1px solid var(--line);border-radius:8px;
   padding:4px 2px;font:inherit;background:#fff;-moz-appearance:textfield}
 .admin-stock-pill input::-webkit-outer-spin-button,.admin-stock-pill input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .admin-stock-pill .asp-ok{color:#4d7a3a;font-weight:700;width:10px}
@@ -3627,7 +3627,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .ash-todo { text-decoration: none; font-size: 0.8rem; font-weight: 700; padding: 8px 12px; border-radius: 999px; background: #fff3cf; color: #8a6414; border: 1px solid #e2c98d; white-space: nowrap; }
 .ash-assist { text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 8px 14px; border-radius: 999px; background: var(--ash-ink); color: #f1dfae; white-space: nowrap; }
 .ash-assist:hover { background: #000; }
-.ash-content { padding: 22px 22px 60px; max-width: 1500px; width: 100%; box-sizing: border-box; }
+.ash-content { padding: 22px 22px 60px; max-width: 1500px; width: 100%; box-sizing: border-box; margin: 0 auto; }
 .ash-content > .section, .ash-content .admin-section { padding-top: 0; }
 .ash-content .container { max-width: none; padding-left: 0; padding-right: 0; }
 .ash-scrim { display: none; }
@@ -3682,6 +3682,24 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
   .ash-tab.on i { color: var(--gold-dark); }
   .ash-tab.on::before { content: ""; position: absolute; top: -5px; width: 26px; height: 3px; border-radius: 0 0 4px 4px; background: var(--gold); }
   .ash-tab b { position: absolute; top: 0; right: calc(50% - 20px); min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: #b4452f; color: #fff; font-weight: 800; font-size: 0.6rem; line-height: 16px; text-align: center; font-variant-numeric: tabular-nums; }
+}
+
+/* =============================================================================
+   GESTION — BANDE « PETIT PORTABLE / TABLETTE / NAVIGATEUR ZOOMÉ » (901–1200 px)
+   Mesuré le 22/09/2026 : l'admin ne connaissait que le palier 900 px (tiroir).
+   Juste au-dessus, la barre latérale fixe de 244 px ne laissait que ~613 px de
+   contenu → le tableau des achats était rogné de 45 px et les 3 colonnes de la
+   file de production tombaient à ~190 px. Ce palier récupère de la place.
+   Concerne : iPad paysage, vieux PC 1024, MacBook 1440 affiché à 125 %.
+   ============================================================================= */
+@media (min-width: 901px) and (max-width: 1200px) {
+  :root { --ash-side: 208px; }           /* 36 px rendus au contenu */
+  .ash-content { padding-left: 16px; padding-right: 16px; }
+  .ash-top { padding-left: 16px; padding-right: 16px; }
+  /* Achats : colonnes resserrées pour que la ligne entre sans être rognée. */
+  .ach-line { grid-template-columns: minmax(120px, 1.2fr) minmax(150px, 1.6fr) 68px 92px 30px; gap: 8px; }
+  /* File de production : 2 colonnes plutôt que 3 bandes trop étroites. */
+  .file-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ===== En-tête commun des pages de gestion ===== */
@@ -3859,11 +3877,13 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .ach-file { display: block; border: 2px dashed var(--gold); border-radius: 12px; padding: 18px 14px; text-align: center; cursor: pointer; background: #fffdf7; font-weight: 600; }
 .ach-file input { display: none; }
 .ach-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 12px 0; }
+.ach-meta > * { min-width: 0; }
 .ach-meta label { display: grid; gap: 4px; font-size: 0.78rem; color: var(--ink-soft); }
-.ach-meta input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 0.9rem; color: var(--ink); }
+.ach-meta input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 0.9rem; color: var(--ink); box-sizing: border-box; min-width: 0; width: 100%; }
 .ach-lines { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
 .ach-line { display: grid; grid-template-columns: minmax(160px, 1.2fr) minmax(220px, 1.6fr) 80px 110px 34px; gap: 10px; align-items: start; padding: 9px 12px; border-top: 1px solid var(--line); }
 .ach-line:first-child { border-top: 0; }
+.ach-line > span { min-width: 0; }
 .ach-line.ach-head { background: #f7f3ea; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft); padding: 8px 12px; }
 .ach-line.ok { box-shadow: inset 3px 0 0 #4d7a3a; }
 .ach-line.warn { box-shadow: inset 3px 0 0 #d08a2a; background: #fffaf0; }

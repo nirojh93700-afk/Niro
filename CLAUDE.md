@@ -607,6 +607,50 @@ ne descend jamais sous zéro.
   `/gestion/crm`) : aucun défilement horizontal, aucun élément qui déborde, 0 erreur JavaScript,
   tiroir qui s'ouvre et se ferme par la croix, filtre d'écran, flèche de retour dans les deux modes.
 
+## 🖥️ GESTION — TOUTES LES TAILLES D'ÉCRAN (PC / Mac) — APPLIQUÉ LE 22/09/2026
+> Demande du gérant : « il faut que t'adaptes l'application admin pour tous les écrans de PC au Mac,
+> pour tous les écrans, toutes les tailles ». Mesuré au navigateur sur **21 largeurs** de 390 à
+> 3840 px (téléphones, iPad, vieux PC 1024, Mac zoomé, MacBook Air/Pro, iMac 21/27, Full HD, 4K,
+> ultra-large) — avant : 5 largeurs en défaut ; après : **21/21 sans défaut**.
+- ⛔ **LE CONSTAT DE DÉPART** : l'admin ne connaissait qu'**UN palier (900 px)** plus deux paliers
+  ad hoc. Toute la bande « petit portable » était orpheline. Ne plus ajouter un écran admin sans
+  vérifier cette bande.
+- **① Contenu centré sur grand écran** : `.ash-content` avait `max-width: 1500px` **sans
+  `margin: 0 auto`** → le contenu était collé à gauche avec **816 px de vide à droite sur un
+  iMac 27"** (1696 px en ultra-large). Ajout de `margin: 0 auto` → vide symétrique (408 px de
+  chaque côté à 2560). Le plafond de 1500 px est **volontaire** (largeur de lecture, comme les
+  grands back-offices) ; il est réglable s'il veut des tableaux plus larges.
+- **② La page défilait horizontalement de 800 à 1152 px** (donc iPad, vieux PC, **et un Mac 1440
+  affiché à 125 %**). Cause unique et bête : les champs de `.ach-meta` (Achats & factures)
+  n'avaient **ni `box-sizing: border-box` ni `min-width: 0`** → leur largeur intrinsèque forçait
+  la grille `auto-fit` et poussait la page entière. Corrigé + `.ach-meta > * { min-width: 0 }`.
+  ⚠️ **Règle à retenir : tout `input`/`select` dans une grille admin doit porter
+  `box-sizing: border-box` + `min-width: 0`**, sinon il élargit la page.
+- **③ NOUVEAU PALIER `901–1200 px`** (bande petit portable / tablette / navigateur zoomé) :
+  `--ash-side` passe de 244 à **208 px** et les marges de contenu de 22 à 16 px (**+36 px rendus
+  au contenu**) · `.ach-line` resserrée pour ne plus être rognée (elle l'était de 45 px à 901 px) ·
+  `.file-cols` passe à **2 colonnes** au lieu de 3 bandes de ~190 px illisibles.
+- **④ Référence de commande rognée À TOUTES LES LARGEURS** : `.dash-orow` avait une colonne fixe de
+  `68px` alors qu'une réf de 8 caractères en `tabular-nums` demande ~78 px → « 00CUYR2U » coupée
+  partout, y compris sur un iMac. Passée en `minmax(78px, auto)`. Même défaut sur téléphone
+  (palier 720 px, colonne de 52 px) → `minmax(72px, auto)`.
+- **⑤ EN-TÊTE DU TABLEAU PRODUITS DÉCALÉ sous 1100 px** : le palier 1100 masque `.pt-cat` dans les
+  lignes, mais l'en-tête écrivait `<span>Catégorie</span>` **sans la classe** → 6 cases pour
+  5 colonnes, tous les libellés décalés d'un cran (« Prix » au-dessus du Stock…). Corrigé dans
+  `ProductsAdmin.jsx`. ⚠️ **Toute colonne masquée par media query doit porter la même classe dans
+  l'en-tête que dans les lignes.**
+- **⑥ Champ de stock** : `.admin-stock-pill input` faisait 44 + 4 + 2 = **50 px** faute de
+  `box-sizing` → débordait sa pastille. Corrigé.
+- **Méthode réutilisable** : page de mesure temporaire sous `/gestion` reproduisant les blocs les
+  plus larges (tuiles, `.dq-row`, `.file-cols`, `.co-head`, `.pt-row`, `.ach-line`), puis sonde
+  Chromium sur la grille de largeurs. ⚠️ **Exclure `input`/`select` de la détection de contenu
+  rogné** : un champ dont la valeur dépasse défile à l'intérieur, c'est normal (faux positif).
+  La page de mesure a été **supprimée** après vérification.
+- **Vérifié aussi** : `/gestion`, `/gestion/commandes`, `/gestion/achats`, `/gestion/crm` à 901,
+  1024, 1280 et 2560 px — aucun défilement horizontal, un seul H1, 0 erreur JavaScript. Le travail
+  téléphone du 19/09 (barre d'onglets, flèche de retour) fonctionne toujours : onglets visibles
+  jusqu'à 900 px, absents au-dessus.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes
