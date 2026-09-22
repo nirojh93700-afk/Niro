@@ -1063,7 +1063,25 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
 - **Photos** : télécharger depuis `https://nivcreation.fr/produits/<fichier>` (marche même si le dépôt local est vide).
 - **Sortie** : ré-encoder LÉGER + faststart (`scale=720:1280`, crf 26, `-movflags +faststart`) → ~3-6 Mo, facile à ouvrir sur téléphone. Toujours l'envoyer via SendUserFile.
 - **Varier les produits** à chaque fois (ne pas reprendre toujours les mêmes) ; possibilité d'ajouter d'autres produits sur demande.
-- **À CHAQUE vidéo** : joindre une **description** + des **tags** (format Insta, ~10 hashtags).
+- **À CHAQUE vidéo** : joindre une **description** + des **tags**. ⚠️ **LE FORMAT EST FIXE**
+  (établi sur les vidéos 1 à 6, rappelé par le gérant le 22/09 : « on refait les descriptions
+  correctement et les tags comme pour les autres »). Le recopier exactement :
+  ```
+  **Vidéo N — <Thème>** (Produit 1, Produit 2, Produit 3…)
+  > <2 à 3 phrases courtes, chaleureuses, AVEC des emojis ✨ 💛 🎁 🆕>
+  > 👉 nivcreation.fr
+
+  #nivcreation #<thème> #<produit> #<produit> #cadeaupersonnalise #faitmainenfrance #gravure #<…> #<…> #ideecadeau
+  ```
+  · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-8 le 22/09).
+  · Le titre liste **les produits de la vidéo entre parenthèses**.
+  · **10 hashtags**, sur UNE ligne, qui **commencent par `#nivcreation`** et **finissent par
+    `#ideecadeau`**, avec **`#faitmainenfrance`** dedans. Jamais `#faitenfrance`.
+  · ⚠️ **Les emojis sont OBLIGATOIRES ici** — la règle « pas d'emojis » du §9 ne vaut que pour
+    le CONTENU DU SITE, pas pour les légendes Instagram.
+  · Pas de prix, jamais de nombre de produits, ne pas nommer le département de l'atelier.
+  · **Où retrouver les anciennes** : elles ne sont que dans le transcript de session
+    (`~/.claude/projects/-home-user-Niro/<session>.jsonl`) — chercher `#nivcreation`.
 - **CRÉDITS Higgsfield = payant** : ne JAMAIS lancer sans confirmer, annoncer le coût (`get_cost:true` preflight, ~7,5 crédits/clip 5 s), et attendre l'accord. Le montage gratuit (`pub_gratuite.py`) est la version par défaut.
 
 ---
