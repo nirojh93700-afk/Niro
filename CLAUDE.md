@@ -70,6 +70,15 @@
   lettre suivie 3,90 € · **boîte cadeau = colis 6,90 €** · Mondial Relay 4,90 € (jusqu'à 1 kg).
   Toujours regarder l'emballage de la commande (`items[].packaging` / « Boîte cadeau ») avant de
   citer un montant, et **ne jamais annoncer un prix inférieur à ce qu'un e-mail précédent a déjà dit**.
+- ⛔ **AVANT D'ÉCRIRE UN MAIL CLIENT : LIRE TOUT LE FIL, NE RIEN INVENTER** (règle ferme du gérant,
+  22/09/2026, après un brouillon pour TRAN qui disait « comme vous étiez pressée » alors que son
+  message demandait « un modèle avec des suggestions » : « je t'ai déjà dit que tu regardes le mail
+  des clients avant d'en écrire… tu dois suivre les mails, tu dois pas inventer »). Avant CHAQUE
+  brouillon : 1) `GET /api/admin/comms?email=` (dossier du site) ET la recherche Gmail
+  `from:<adresse>` / le fil envoyé ; 2) relire ce que LA CLIENTE a écrit, mot pour mot, et ce que
+  NOUS lui avons déjà répondu (dates, promesses, prix, images envoyées) ; 3) le brouillon reprend
+  ces faits-là, jamais une supposition sur son motif ou son urgence. Un dossier vide sur le site
+  ne veut pas dire « pas d'échange » : vérifier aussi Gmail.
 - ⛔ **SIGNATURE DES MESSAGES CLIENTS = « Niv Création », JAMAIS LE NOM DU GÉRANT** (rappel ferme du
   08/09/2026 : « il faut jamais mettre mon nom, c'est le nom du site »). Aucun nom de personne dans
   un e-mail, un devis ou un message client : on écrit « nous » (l'atelier), on signe **Niv Création**
