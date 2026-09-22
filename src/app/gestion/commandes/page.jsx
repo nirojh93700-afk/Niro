@@ -237,7 +237,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
       <div className="file-chips">
         {o.immediateStart ? <span className="file-chip red">⚡ Fabrication immédiate</span> : null}
         {unread ? <span className="file-chip red">📬 Nouvelle réponse</span> : null}
-        {cadeau ? <span className="file-chip on">{cadeau}</span> : null}
+        {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
         {o.tracking ? <span className="file-chip green">📦 {o.tracking}</span> : null}
         {FLAGS.map((f) => (
           <button key={f.id} type="button" className={`file-chip btn${flags.includes(f.id) ? " on" : ""}`} title="Cliquer pour activer/retirer"

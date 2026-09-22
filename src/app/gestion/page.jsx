@@ -1189,7 +1189,8 @@ export default function GestionPage() {
                   const parts = String(o.cadeauChoix).split("+").filter(Boolean);
                   return (
                     <div style={{ background: "#fbf3e6", border: "2px solid #c9a24b", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem" }}>
-                      <strong>🎁 Cadeau d'attente à glisser dans le colis</strong> — {parts.length === 2 ? `Cadeau 1 : ${lib(parts[0])} · Cadeau 2 : ${lib(parts[1])}` : `préférence : ${lib(o.cadeauChoix)}`}
+                      <strong>{o.cadeauPromis ? "🎁 Cadeau PROMIS à cette cliente — à glisser dans le colis" : "🎁 Cadeau d'attente à glisser dans le colis"}</strong> — {parts.length === 2 ? `Cadeau 1 : ${lib(parts[0])} · Cadeau 2 : ${lib(parts[1])}` : `préférence : ${lib(o.cadeauChoix)}`}
+                      {o.cadeauPromis && <div style={{ marginTop: 4 }}>{o.cadeauPromis}</div>}
                       {(o.total >= 80 || parts.length === 2) && <div style={{ color: "#b32b2b", fontWeight: 700, marginTop: 4 }}>🎁🎁 Commande ≥ 80 € → DEUX cadeaux</div>}
                     </div>
                   );

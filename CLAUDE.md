@@ -173,8 +173,20 @@
   toujours active. L'option Express au paiement n'a pas été testée (pas de session Stripe créée).
 - 🎁 **CADEAU ENCORE DÛ** : toute commande arrivant avec un code `GRAVURE-…` (les 49 e-mails du 20/09)
   = **un cadeau surprise à glisser** (le site ne demande plus le choix). Les commandes d'avant le
-  22/09 gardent le choix noté (`cadeauChoix`). Proposé au gérant, pas fait : un rappel « cadeau
-  promis » dans l'alerte de commande et Gestion quand un code GRAVURE est utilisé.
+  22/09 gardent le choix noté (`cadeauChoix`).
+- ✅ **DÉTECTION AUTOMATIQUE — CONSTRUITE LE 22/09/2026** (« tu dois identifier les gens à qui j'ai dit
+  je donnerai un cadeau, il faut que tu me l'indiques quand il commande, automatiquement ») :
+  `cadeauPromisPour({email, promoCode})` dans **`src/lib/cadeauPromis.js`** lit la section
+  `offreGravure` (adresse servie, ou adresse du code nominatif `kind:"gravure"` utilisé) et ne
+  retient que les e-mails envoyés **avant `OFFRE_CADEAU_JUSQUAU` (22/09 9 h Paris)** — après, la
+  phrase du cadeau n'est plus dans l'e-mail (`cadeauColisActif` faux), donc rien n'est dû.
+  Au webhook Stripe, si la commande n'a pas de `cadeauChoix` et que la promesse existe :
+  `cadeauChoix = "surprise"` + `cadeauPromis = <motif>` + `flags:["cadeau"]` sur la commande →
+  encadré doré **« 🎁 CADEAU PROMIS à cette cliente »** avec le motif dans l'e-mail d'alerte
+  🛎️ ET dans Gestion → Commandes, pastille « 🎁 surprise · promis » dans la file de production,
+  contexte de l'assistant (`inbox.js`). Règle « ≥ 80 € → deux cadeaux » inchangée. Jamais
+  bloquant (erreur de lecture → pas de marque). Rien n'est écrit à la cliente. 12 vérifications
+  au vert. Le passage du 22/09 à 9 h 12 (1 e-mail) est bien APRÈS la coupure : pas de cadeau dû.
 
 ### 🛍️ AUDIT COMPARATIF — 5 AMÉLIORATIONS APPLIQUÉES LE 19/09/2026
 > Audit contre Amikado/Merci Maman/CadeauGravure (maquette `docs/maquettes/audit-9-ameliorations.html`,

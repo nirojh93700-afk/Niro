@@ -40,7 +40,7 @@ async function buildContext(order, email) {
     if (items) parts.push(`Articles : ${items}.`);
     if (order.total != null) parts.push(`Montant : ${Number(order.total).toFixed(2).replace(".", ",")} €${order.shippingMethod ? ` — livraison : ${order.shippingMethod}` : ""}.`);
     if (order.tracking) parts.push(`Numéro de suivi : ${order.tracking}.`);
-    if (order.cadeauChoix) parts.push(`Cadeau d'attente choisi : ${order.cadeauChoix}.`);
+    if (order.cadeauChoix) parts.push(`Cadeau d'attente choisi : ${order.cadeauChoix}.${order.cadeauPromis ? ` (cadeau promis par e-mail : ${order.cadeauPromis})` : ""}`);
     if (order.alerteInterne || order.adminNote) parts.push(`NOTES INTERNES DU GÉRANT (à connaître, NE JAMAIS les citer ni parler de leur contenu technique) : ${[order.alerteInterne, order.adminNote].filter(Boolean).join(" / ").slice(0, 500)}`);
     try {
       const th = await getBatThread(order.id);

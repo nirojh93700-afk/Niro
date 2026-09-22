@@ -4,6 +4,7 @@ import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail
 import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
 import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
 import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
+import { cadeauPromisPour } from "@/lib/cadeauPromis";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -445,9 +446,19 @@ export async function POST(req) {
     // + rappel DEUX cadeaux dès 80 € (règle gérante, 30/08/2026).
     // Depuis le 01/09/2026 la préférence vient du PANIER (metadata) ; l'ancien
     // champ Stripe est gardé en repli pour les sessions ouvertes avant le changement.
-    const choixCadeau = session.metadata?.cadeauChoix
+    let choixCadeau = session.metadata?.cadeauChoix
       || (session.custom_fields || []).find((f) => f.key === "cadeau")?.dropdown?.value
       || "";
+    // 🎁 CADEAU PROMIS PAR E-MAIL (22/09/2026) : le site ne propose plus de
+    // cadeau, mais une cliente à qui l'offre « gravure offerte » a annoncé un
+    // cadeau doit le recevoir → commande marquée « surprise » + motif affiché.
+    let cadeauPromis = "";
+    if (!choixCadeau) {
+      try {
+        const p = await cadeauPromisPour({ email: customer.email, promoCode: session.metadata?.promoCode });
+        if (p) { cadeauPromis = p.motif; choixCadeau = "surprise"; }
+      } catch { /* jamais bloquant */ }
+    }
     const libCadeau = (v) => ({ surprise: "Surprise", femme: "Plutôt femme", homme: "Plutôt homme" }[v] || v);
     const partsCadeau = String(choixCadeau).split("+").filter(Boolean);
     const cadeauLabel = partsCadeau.length === 2
@@ -456,7 +467,8 @@ export async function POST(req) {
     const deuxCadeaux = choixCadeau && ((session.amount_total || 0) / 100 >= 80 || partsCadeau.length === 2);
     const cadeauBlock = choixCadeau
       ? `<div style="background:#fbf3e6;border:2px solid #c9a24b;padding:12px 14px;border-radius:10px;margin:0 0 14px;">
-           <strong>🎁 Cadeau d'attente à glisser dans le colis</strong> — préférence : ${escapeHtml(cadeauLabel)}
+           <strong>${cadeauPromis ? "🎁 CADEAU PROMIS à cette cliente — à glisser dans le colis" : "🎁 Cadeau d'attente à glisser dans le colis"}</strong> — préférence : ${escapeHtml(cadeauLabel)}
+           ${cadeauPromis ? `<div style="margin-top:6px;">${escapeHtml(cadeauPromis)}</div>` : ""}
            ${deuxCadeaux ? `<div style="color:#b32b2b;font-weight:bold;margin-top:6px;">🎁🎁 Commande ≥ 80 € → DEUX cadeaux</div>` : ""}
          </div>`
       : "";
@@ -634,6 +646,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       // Textes tapés par la cliente au paiement (précisions gravure + date/message à graver).
       // 🎁 Préférence de cadeau d'attente (mode délai allongé) — affichée dans Gestion.
       cadeauChoix: choixCadeau,
+      // Motif de la promesse (offre gravure) + drapeau « cadeau » de la file de production.
+      ...(cadeauPromis ? { cadeauPromis, flags: ["cadeau"] } : {}),
       demandeGravure: (session.custom_fields || []).find((f) => f.key === "personnalisation")?.text?.value || "",
       messageGraver: (session.custom_fields || []).find((f) => f.key === "message_cadeau")?.text?.value || "",
       // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).
