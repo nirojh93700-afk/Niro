@@ -1139,6 +1139,8 @@ Un souci à la réception ?
   "collier-pastille": {
     material: `Taille & Matériaux
 - Pastille ronde lisse sur chaîne fine maille câble.
+- Pastille : 2,4 cm de diamètre, 1,3 mm d'épaisseur.
+- Chaîne : 24 cm de hauteur portée, soit un tour de cou d'environ 48 cm (la pastille tombe juste sous la base du cou).
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
 - Finitions : doré, or rose ou argenté. Poids du bijou ~5 g.
 - Étanche : résiste à l'eau et ne ternit pas.`,
