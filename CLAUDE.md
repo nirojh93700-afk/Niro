@@ -136,8 +136,9 @@
   seule hors vacances) · `runOffreGravureJob` (la ligne « un cadeau vous attend » n'est écrite que si
   `cadeauColisActif`) · `serviceContext` des agents. Gestion / e-mail d'alerte / règle « ≥ 80 € →
   deux cadeaux » inchangés. 11 vérifications de logique au vert.
-- ⛔ **ORDRE À RESPECTER** : cocher « Cadeau dans chaque colis » **AVANT** de décocher le mode
-  vacances — sinon les inscrites de l'offre gravure (« un cadeau vous attend, à choisir au paiement »)
+- ~~ORDRE À RESPECTER : cocher « Cadeau dans chaque colis » AVANT de décocher le mode vacances~~
+  **ANNULÉ le 22/09** : le mode vacances a été éteint SANS cocher le cadeau, décision du gérant
+  (voir « FIN DU MODE VACANCES »). La question « jusqu'au 20/10 ou en permanence » est sans objet.
   n'ont plus le choix au panier. Question ouverte : jusqu'au 20/10 ou en permanence (case « Jusqu'au »).
 
 ### 🔚 FIN DU MODE VACANCES — DÉCISION DU GÉRANT, 22/09/2026
@@ -166,10 +167,15 @@
   seulement : ≤ 2 kg 14,90 € · ≤ 5 kg 19,90 € · au-delà 29,90 €.
   ⚠️ **Une commande express est à graver EN PRIORITÉ** (engagement 24/48 h après confection).
   Pour l'éteindre sans toucher au reste : `settings.shipping.expressOff = true`.
-- ⚠️ **PAS VÉRIFIÉ EN LIGNE** : le site était injoignable depuis la session du 22/09
-  (`connect_rejected`) et je n'avais pas la clé admin → c'est LUI qui clique. À contrôler ensuite :
-  `/api/shipping-config` doit renvoyer `vacation: null` ET `cadeau: null`, et l'option Express
-  doit apparaître au paiement.
+- ✅ **ÉTEINT LE 22/09/2026 à 8 h 50 (heure française)** sur ordre du gérant (« il faut que ça vienne
+  comme avant »), par `POST /api/admin/settings` avec l'objet `vacation` COMPLET (texte, dates, cadeau
+  conservés, seul `enabled:false`). Vérifié : `/api/shipping-config` → `vacation: null` et
+  `cadeau: null`, bandeau absent de l'accueil et des fiches, `cadeauColis` décoché, offre gravure
+  toujours active. L'option Express au paiement n'a pas été testée (pas de session Stripe créée).
+- 🎁 **CADEAU ENCORE DÛ** : toute commande arrivant avec un code `GRAVURE-…` (les 49 e-mails du 20/09)
+  = **un cadeau surprise à glisser** (le site ne demande plus le choix). Les commandes d'avant le
+  22/09 gardent le choix noté (`cadeauChoix`). Proposé au gérant, pas fait : un rappel « cadeau
+  promis » dans l'alerte de commande et Gestion quand un code GRAVURE est utilisé.
 
 ### 🛍️ AUDIT COMPARATIF — 5 AMÉLIORATIONS APPLIQUÉES LE 19/09/2026
 > Audit contre Amikado/Merci Maman/CadeauGravure (maquette `docs/maquettes/audit-9-ameliorations.html`,
