@@ -1,6 +1,6 @@
 # Message prêt — Aurore Corcy — relance carafe + verres de mariage
 
-**Préparé le 07/09/2026, jamais envoyé** (site injoignable ce jour-là ; interdiction d'utiliser un
+**Préparé le 07/09/2026 — ✅ ENVOYÉ le 22/09/2026 à 10 h 40 (heure française) par Messages clients, sur « Envoie le mail » du gérant.** Historique : (site injoignable ce jour-là ; interdiction d'utiliser un
 autre canal). À envoyer par **Gestion → Clients → Messages clients** après accord du gérant.
 
 - **Destinataire** : `aurorecorcy@gmail.com`
