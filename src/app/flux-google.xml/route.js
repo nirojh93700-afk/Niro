@@ -1,5 +1,6 @@
 import { getCatalog, priceFrom } from "@/lib/catalog";
 import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
+import { letterPriceByWeight } from "@/lib/shipping";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,8 @@ function esc(s) {
 // ne jamais annoncer MOINS que le prix réel → on prend le tarif le plus élevé
 // possible pour un article (domicile OU point relais), aligné sur shipping.js.
 //   · produit toujours offert (couverts…) → 0 €
-//   · bijou (lettre suivie) → 4,90 € (max entre domicile 3,90 et relais 4,90)
+//   · lettre suivie (bijou, petit objet) → prix au poids (4,90 € jusqu'à 100 g,
+//     6,50 € jusqu'à 250 g…), jamais moins que le relais (4,90 €)
 //   · verre (fragile) → 11,90 €
 //   · déco / mariage / cristal (colis) → 6,90 € mini, plus selon le poids réel
 // La livraison offerte dès 45 € est gérée par le réglage du compte Merchant.
@@ -25,7 +27,7 @@ function poidsProduit(p) {
 // FRANCE (1 exemplaire). Livraison offerte dès 45 € gérée par le compte Merchant.
 function portFR(p) {
   if (p.freeShipping) return 0;
-  if (p.letter) return 4.9;
+  if (p.letter) return Math.max(4.9, letterPriceByWeight(poidsProduit(p), 4.9));
   if (p.category === "verres") return 11.9;
   const w = poidsProduit(p);
   const byWeight = w <= 1000 ? 6.9 : w <= 2000 ? 8.9 : w <= 5000 ? 14.9 : w <= 10000 ? 22.9 : w <= 15000 ? 28.9 : 34.9;

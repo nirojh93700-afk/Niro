@@ -62,7 +62,7 @@
 - ⛔ **COLIS REVENU (non retiré au relais, adresse erronée…) = RÉEXPÉDITION PAYÉE PAR LE CLIENT**
   (règle ferme du gérant, 21/09/2026, dossier Enes Varol / bracelet « Hend » #1S9IOON5 : « c'est le
   client qui doit payer »). On ne renvoie JAMAIS gratuitement un produit revenu : devis « nouvelle
-  expédition » (relais 4,90 € / lettre 3,90 € / colis 6,90 €) à régler en ligne, envoi après règlement.
+  expédition » (relais 4,90 € / lettre au poids, 4,90 € jusqu'à 100 g / colis 6,90 €) à régler en ligne, envoi après règlement.
   Idem si le client veut une pièce en plus : prix de la fiche + port. Aucun geste de notre initiative.
 - 📦 **PORT BIJOUX = AU POIDS RÉEL, GRILLE LA POSTE (23/09/2026, demande du gérant : « il faut que ça
   augmente par rapport à ce que les clients mettent »)**. `letterPriceByWeight` dans `src/lib/shipping.js` :
@@ -78,12 +78,15 @@
   les bijoux `letter:true`, sans exception. 72 + sac 28 = **100 g pile → 4,90 €** (prix de la
   tranche 100 g). 2 bijoux + sac = 200 g → 6,50 € · 3 à 5 bijoux + sac → 8,90 €. Un nouveau bijou
   prend aussi `weight: 72`. (Remplace le réglage à 50 g du même jour.)
-  ⚠️ 4 fiches (découpes à plat, `productInfo.js` l. ~1262-1350) écrivent encore « 3,90 € à domicile » :
-  texte visible, corrigé seulement sur « applique » du gérant.
+  ✅ **« Appliquer, corrige tout » (23/09)** : plus aucun « 3,90 € » sur le site — 4 fiches bois à plat
+  (porte-serviettes ×2, supports téléphone ×2, 160-220 g) → « 6,50 € à domicile, 4,90 € en point
+  relais » · e-mail d'exemple → 4,90 € · `BIJOUX_HOME` du code = 4,9 (« Rétablir » ne ramène plus
+  3,90) · flux Google + données structurées des fiches = prix au poids (jamais moins que le réel) ·
+  Gestion → Livraison affiche la grille complète par poids.
 - ⛔ **PRIX DE PORT CITÉ À UN CLIENT = LE PRIX DU SITE, VÉRIFIÉ AVANT D'ÉCRIRE** (erreur du 21/09/2026,
   dossier Enes Varol : j'ai cité 3,90 € pour un bracelet EN BOÎTE → colis 6,90 €, le gérant paie
   6,12 € à Boxtal ; « à cause de toi je vais perdre de l'argent »). Grille bijou : sac/microfibre =
-  lettre suivie 3,90 € · **boîte cadeau = colis 6,90 €** · Mondial Relay 4,90 € (jusqu'à 1 kg).
+  lettre suivie au poids (4,90 € jusqu'à 100 g, 6,50 € jusqu'à 250 g) · **boîte cadeau = colis 6,90 €** · Mondial Relay 4,90 € (jusqu'à 1 kg).
   Toujours regarder l'emballage de la commande (`items[].packaging` / « Boîte cadeau ») avant de
   citer un montant, et **ne jamais annoncer un prix inférieur à ce qu'un e-mail précédent a déjà dit**.
 - ⛔ **AVANT D'ÉCRIRE UN MAIL CLIENT : LIRE TOUT LE FIL, NE RIEN INVENTER** (règle ferme du gérant,

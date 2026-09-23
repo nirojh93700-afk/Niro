@@ -1259,7 +1259,7 @@ Un souci à la réception ?
     usage:
       "Il reçoit des serviettes en papier pliées, qui se glissent entre les deux panneaux (serviettes non fournies).\nCe modèle n'est pas personnalisable : le motif est découpé, il n'y a ni gravure ni texte.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
     returns:
-      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
+      "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
   },
   "verre-a-vin-grave": {
     material:
@@ -1299,7 +1299,7 @@ Un souci à la réception ?
     usage:
       "Il reçoit des serviettes en papier pliées, qui se glissent entre les deux panneaux (serviettes non fournies).\nCe modèle n'est pas personnalisable : le motif est découpé, il n'y a ni gravure ni texte.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
     returns:
-      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
+      "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nRetrait en main propre possible sur rendez-vous (Val-d'Oise et communes voisines).\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nCe modèle n'étant pas personnalisé, il peut être retourné sous 14 jours, frais de retour à votre charge.",
   },
   "photophore-fee-bois": {
     material:
@@ -1339,7 +1339,7 @@ Un souci à la réception ?
     usage:
       "Le motif est découpé : il n'est pas modifiable et ne peut pas recevoir de photo ni de dessin.\nEn option, un prénom est gravé sur la base, la bande pleine sous le motif. La base étant étroite, un prénom court reste le plus lisible.\nUn chiffon doux suffit pour l'entretien. Évitez les endroits humides.",
     returns:
-      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nAvec un prénom gravé, la pièce est personnalisée : elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Sans gravure, le retour reste possible sous 14 jours, frais de retour à votre charge.",
+      "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nAvec un prénom gravé, la pièce est personnalisée : elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Sans gravure, le retour reste possible sous 14 jours, frais de retour à votre charge.",
   },
   "support-telephone-bois-grave": {
     material:
@@ -1347,7 +1347,7 @@ Un souci à la réception ?
     usage:
       "Choisissez ce que vous voulez faire graver : un dessin parmi nos 30 modèles (couples, occasions), votre photo, ou une initiale fleurie.\nVous pouvez ajouter un texte — prénom, date, petit mot — dans la police que vous préférez (+3 € avec un dessin ou une photo). Avec la lettre fleurie, ce texte se grave dans la bande, au milieu de la lettre.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
     returns:
-      "Expédié à plat en lettre suivie : 3,90 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nFabrication 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
+      "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nFabrication 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },
   "porte-stylo-coq-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-portugal-coupe-du-monde": WORLDCUP_PEN_INFO,

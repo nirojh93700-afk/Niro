@@ -7,6 +7,7 @@ import {
   DECO_TIERS,
   GLASS_TIERS,
   PICKUP_FEE,
+  LETTER_TIERS,
   resolveShippingConfig,
 } from "@/lib/shipping";
 
@@ -228,10 +229,11 @@ export default function ShippingAdmin({ adminKey }) {
         <h3 style={{ margin: 0 }}>💍 Bijoux & petits objets — Lettre suivie (≤ 2 kg)</h3>
         <p style={{ margin: 0, color: "var(--ink-soft)", fontSize: "0.88rem" }}>
           S'applique quand le panier ne contient QUE des articles légers (bijoux, petits objets).
+          Le prix suit le POIDS du panier, emballages compris (un bijou compte 72 g, 100 g avec son sac).
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
           <label className="admin-field" style={{ maxWidth: 220 }}>
-            Prix de la livraison (€)
+            Prix jusqu'à 100 g (€)
             <input type="number" min="0" step="0.1" value={form.bijouxHome}
               onChange={(e) => set({ bijouxHome: e.target.value })} />
           </label>
@@ -335,10 +337,17 @@ export default function ShippingAdmin({ adminKey }) {
             </thead>
             <tbody>
               <tr>
-                <td style={td}>Bijoux / petits objets</td>
+                <td style={td}>Bijoux / petits objets — jusqu'à 100 g</td>
                 <td style={td}>Lettre suivie (2-4 j ouvrés)</td>
                 <td style={tdPrice}>{euro(preview.bijouxHome)}</td>
               </tr>
+              {LETTER_TIERS.slice(1).map((t, i) => (
+                <tr key={`l${i}`}>
+                  <td style={td}>Bijoux / petits objets — {LETTER_TIERS[i].maxGrams + 1} g à {t.maxGrams >= 1000 ? `${t.maxGrams / 1000} kg` : `${t.maxGrams} g`}</td>
+                  <td style={td}>Lettre suivie (2-4 j ouvrés)</td>
+                  <td style={tdPrice}>{euro(Math.max(Number(preview.bijouxHome) || 0, t.price))}</td>
+                </tr>
+              ))}
               <tr>
                 <td style={td}>Bijoux — panier ≥ {euro(preview.bijouxFreeThreshold)}</td>
                 <td style={td}>Lettre suivie (2-4 j ouvrés)</td>

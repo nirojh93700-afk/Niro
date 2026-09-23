@@ -11,7 +11,7 @@ import { getCategoryLabel } from "@/lib/products";
 // (non publié) via ?apercu=<JETON>, sans qu'il soit visible des clients.
 const PREVIEW_TOKEN = "niv2026";
 import { getReviews, getRatingSummaries, getSettings } from "@/lib/stock";
-import { resolveShippingConfig } from "@/lib/shipping";
+import { resolveShippingConfig, letterPriceByWeight } from "@/lib/shipping";
 import RecentlyViewed from "@/components/RecentlyViewed";
 
 export const dynamic = "force-dynamic";
@@ -79,7 +79,9 @@ export default async function ProductPage({ params, searchParams }) {
     "@type": "OfferShippingDetails",
     shippingRate: {
       "@type": "MonetaryAmount",
-      value: product.letter ? shipCfg.bijouxHome : 0,
+      value: product.letter
+        ? letterPriceByWeight(Number(product.variants?.[0]?.weight) || Number(product.weight) || 0, shipCfg.bijouxHome)
+        : 0,
       currency: "EUR",
     },
     shippingDestination: { "@type": "DefinedRegion", addressCountry: "FR" },

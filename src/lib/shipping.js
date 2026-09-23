@@ -9,7 +9,7 @@
 // =============================================================================
 
 // --- Bijoux / petits objets (lettre suivie, ≤ 2 kg) ------------------------
-export const BIJOUX_HOME = 3.9;          // livraison à domicile
+export const BIJOUX_HOME = 4.9;          // lettre suivie ≤ 100 g (tranches suivantes : LETTER_TIERS)
 export const BIJOUX_FREE_THRESHOLD = 45; // livraison offerte dès ce montant
 
 // --- Décoration / colis (tarif selon le nombre d'articles déco) -------------
@@ -49,7 +49,7 @@ const LETTER_MAX_GRAMS = 2000;
 // Prix cliente = coût La Poste + petite marge, fini en ,90. La 1re tranche reste
 // réglable dans Gestion → Livraison (« bijoux à domicile », 4,90 € depuis le 23/09).
 // -----------------------------------------------------------------------------
-const LETTER_TIERS = [
+export const LETTER_TIERS = [
   { maxGrams: 100, price: null }, // = cfg.bijouxHome (réglage admin)
   { maxGrams: 250, price: 6.5 },
   { maxGrams: 500, price: 8.9 },

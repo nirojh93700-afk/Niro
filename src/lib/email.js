@@ -314,7 +314,7 @@ export function sampleClientEmailHtml() {
       </tbody>
     </table>
     <p style="text-align:right;font-size:15px;margin-top:12px;">
-      Livraison : Lettre suivie (3,90 €)<br>
+      Livraison : Lettre suivie (4,90 €)<br>
       <strong style="color:${BRAND.gold};font-size:17px;">Total : 22,80 €</strong>
     </p>
     <p style="background:${BRAND.cream};padding:14px;border-radius:10px;border:1px solid #ece3d2;margin-top:18px;">Nous vous tiendrons au courant de l'expédition. Pour toute question, répondez simplement à cet e-mail.</p>
