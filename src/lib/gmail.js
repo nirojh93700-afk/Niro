@@ -207,7 +207,56 @@ export async function gmailGetMessage(token, id, full = true) {
     labelIds: data.labelIds || [],
     unread: (data.labelIds || []).includes("UNREAD"),
     body: full ? extractBody(data.payload) : "",
+    attachments: listAttachments(data.payload),
   };
+}
+
+// Pièces jointes d'un message (nom, type, identifiant Gmail, taille).
+function listAttachments(payload) {
+  const out = [];
+  (function walk(part) {
+    if (!part) return;
+    const attId = part.body?.attachmentId;
+    if (attId && part.filename) {
+      out.push({ filename: part.filename, mimeType: part.mimeType || "", attachmentId: attId, size: part.body?.size || 0 });
+    }
+    for (const p of part.parts || []) walk(p);
+  })(payload);
+  return out;
+}
+
+// Photos envoyées PAR une cliente (pièces jointes image de ses e-mails).
+// Sert aux commandes sur devis : la photo à graver arrive par e-mail et doit
+// apparaître dans la fiche atelier (demande du gérant, 23/09/2026).
+export async function gmailListPhotosFrom(token, fromEmail, max = 15) {
+  const email = (fromEmail || "").trim();
+  if (!email) return [];
+  const q = encodeURIComponent(`from:${email} has:attachment newer_than:365d`);
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=${max}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
+  const out = [];
+  for (const { id } of data.messages || []) {
+    const m = await gmailGetMessage(token, id, false);
+    if (!m) continue;
+    for (const a of m.attachments || []) {
+      if (!/^image\//i.test(a.mimeType) && !/\.(jpe?g|png|webp|heic|heif|gif)$/i.test(a.filename)) continue;
+      out.push({ messageId: id, date: m.date, subject: m.subject, filename: a.filename, mimeType: a.mimeType, attachmentId: a.attachmentId, size: a.size });
+    }
+  }
+  return out;
+}
+
+// Contenu binaire d'une pièce jointe (Buffer).
+export async function gmailGetAttachment(token, messageId, attachmentId) {
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}/attachments/${encodeURIComponent(attachmentId)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) fail(res, data, "Pièce jointe introuvable.");
+  return Buffer.from(String(data.data || "").replace(/-/g, "+").replace(/_/g, "/"), "base64");
 }
 
 // Marque un message comme lu (retire le label UNREAD) — synchronisé avec Gmail.

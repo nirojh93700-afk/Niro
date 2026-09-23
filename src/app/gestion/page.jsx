@@ -1227,11 +1227,19 @@ export default function GestionPage() {
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
                     onClick={() => {
                       setFicheOpen(o.id);
-                      setTimeout(() => {
+                      // Attend que la photo reçue par e-mail (commande sur devis)
+                      // soit chargée avant d'imprimer — 8 s au plus.
+                      const debut = Date.now();
+                      const imprimer = () => {
+                        if (document.querySelector(".zone-impression [data-photos-chargement]") && Date.now() - debut < 8000) {
+                          setTimeout(imprimer, 200);
+                          return;
+                        }
                         document.body.classList.add("impression-fiche");
                         window.print();
                         setTimeout(() => document.body.classList.remove("impression-fiche"), 300);
-                      }, 250);
+                      };
+                      setTimeout(imprimer, 250);
                     }}>
                     🖨️ Imprimer la fiche
                   </button>
@@ -1246,11 +1254,11 @@ export default function GestionPage() {
                 {batOpen === o.id && <BatThread order={o} adminKey={key} />}
                 {ficheOpen === o.id && (
                   <>
-                    <FicheAtelier spec={o.spec} />
+                    <FicheAtelier spec={o.spec} order={o} adminKey={key} />
                     {/* Copie destinée UNIQUEMENT au papier, placée à la racine de
                        la page (portail) : ainsi l'impression ne sort que cette
                        feuille, sans les pages blanches du reste de l'écran. */}
-                    <FichePapier order={o} fmtDate={fmtDate} />
+                    <FichePapier order={o} fmtDate={fmtDate} adminKey={key} />
                   </>
                 )}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>

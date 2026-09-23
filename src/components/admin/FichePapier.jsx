@@ -15,7 +15,7 @@ import { createPortal } from "react-dom";
 import FicheAtelier from "@/components/admin/FicheAtelier";
 import { TableGravure } from "@/lib/engravingSheet";
 
-export default function FichePapier({ order, fmtDate }) {
+export default function FichePapier({ order, fmtDate, adminKey }) {
   const [pret, setPret] = useState(false);
   useEffect(() => setPret(true), []); // portail seulement côté navigateur
   if (!pret || typeof document === "undefined") return null;
@@ -69,6 +69,11 @@ export default function FichePapier({ order, fmtDate }) {
           </tbody>
         </table>
 
+        {order.demande ? (
+          <p style={{ marginTop: 8, padding: "6px 10px", border: "1px solid #c9a24b", fontSize: "0.9rem" }}>
+            <strong>{order.quoteNumber ? `Devis ${order.quoteNumber} — ` : ""}demandé par la cliente :</strong> {order.demande}
+          </p>
+        ) : null}
         {order.demandeGravure || order.messageGraver ? (
           <p style={{ marginTop: 8, padding: "6px 10px", border: "1px solid #c9a24b", fontSize: "0.9rem" }}>
             <strong>Demandé par la cliente :</strong>{" "}
@@ -81,7 +86,7 @@ export default function FichePapier({ order, fmtDate }) {
          page Atelier). C'est ce qu'on lit devant la machine. */}
       {(order.spec || []).map((item, i) => <TableGravure key={i} item={item} />)}
 
-      <FicheAtelier spec={order.spec} />
+      <FicheAtelier spec={order.spec} order={order} adminKey={adminKey} print />
 
       <p style={{ marginTop: 14, fontSize: "0.78rem", color: "#777" }}>
         Niv Création — fiche interne, à graver à l&apos;identique.

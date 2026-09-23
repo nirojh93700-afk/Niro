@@ -16,6 +16,7 @@ import { getProductBySlug, CATEGORIES, getCategoryLabel } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
 import { TableGravure } from "@/lib/engravingSheet";
 import PageHead from "@/components/admin/PageHead";
+import PhotosEmail from "@/components/admin/PhotosEmail";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -106,6 +107,7 @@ export default function AtelierPage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [devis, setDevis] = useState([]); // commandes sur devis encore à graver
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState("");
@@ -121,6 +123,10 @@ export default function AtelierPage() {
       // TOUTES les commandes à graver (bijoux, cristaux, verres…), les plus récentes
       // d'abord — plus seulement les verres.
       setOrders((data.orders || []).filter((o) => Array.isArray(o.spec) && o.spec.length));
+      // Commandes sur devis : pas de réglages enregistrés, la photo arrive par
+      // e-mail → section à part, avec la demande du devis et la photo reçue.
+      setDevis((data.orders || []).filter((o) => (!Array.isArray(o.spec) || !o.spec.length)
+        && o.surMesure && !o.test && ["a_preparer", "en_gravure"].includes(o.status)));
     } catch {
       setError("Erreur de chargement.");
     }
@@ -190,6 +196,31 @@ export default function AtelierPage() {
       </p>
 
       {loading && <p>Chargement…</p>}
+      {devis.length > 0 && (
+        <section style={{ marginBottom: 34 }}>
+          <h2 style={{ fontFamily: "Georgia,serif", color: "var(--gold-dark)", borderBottom: "2px solid #e7d9bd", paddingBottom: 6, margin: "26px 0 4px" }}>
+            Sur mesure (devis) <span style={{ fontSize: "0.85rem", color: "var(--ink-soft)", fontWeight: 400 }}>· {devis.length} commande{devis.length > 1 ? "s" : ""}</span>
+          </h2>
+          {devis.map((o) => (
+            <div key={o.id} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "14px 0", background: "#fff" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                <strong style={{ fontSize: "1.02rem" }}>{(o.items || []).filter((it) => !/^livraison/i.test(it.name || "")).map((it) => `${it.quantity}× ${it.name}`).join(" · ")}</strong>
+                <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+                  Commande <strong>#{o.ref}</strong> · {o.customerName || "—"}{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}
+                </span>
+              </div>
+              {o.demande ? (
+                <p style={{ margin: "0 0 8px", padding: "8px 10px", background: "#eef4fb", border: "1px solid #c9dcef", borderRadius: 8, fontSize: "0.88rem" }}>
+                  <strong>📋 Ce que la cliente a demandé :</strong><br />{o.demande}
+                </p>
+              ) : null}
+              {o.adminNote ? <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "#6b5a2e" }}>📝 {o.adminNote}</p> : null}
+              <PhotosEmail email={o.customerEmail} adminKey={key} />
+            </div>
+          ))}
+        </section>
+      )}
+
       {!loading && !orders.length && <p style={{ color: "var(--ink-soft)" }}>Aucune commande à graver pour l'instant.</p>}
 
       {(() => {

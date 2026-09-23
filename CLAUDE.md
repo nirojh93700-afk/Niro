@@ -727,6 +727,18 @@ ne descend jamais sous zéro.
   téléphone du 19/09 (barre d'onglets, flèche de retour) fonctionne toujours : onglets visibles
   jusqu'à 900 px, absents au-dessus.
 
+## 📎 PHOTO D'UNE COMMANDE SUR DEVIS DANS LA FICHE ATELIER — 23/09/2026
+> Remarque du gérant (commande Sophie Berardo #0C1CGL2Q, devis DEV-0003) : « pourquoi dans la fiche
+> de travail y a pas la photo qu'elle demande ». Une commande sur devis n'a PAS de `spec` : la photo
+> arrive en **pièce jointe d'un e-mail** → la fiche disait « aucun réglage détaillé ».
+- **Maintenant** : `FicheAtelier` (écran + papier) et `/gestion/atelier` (section « Sur mesure
+  (devis) », commandes à préparer / en gravure) montrent **la demande du devis** + **les photos
+  envoyées par la cliente**, lues dans la boîte Gmail connectée au site (LECTURE SEULE) :
+  `gmailListPhotosFrom` / `gmailGetAttachment` (`src/lib/gmail.js`), API admin
+  `GET /api/admin/gmail?action=photos&email=` puis `?action=attachment&msg=&att=&mime=`,
+  composant `src/components/admin/PhotosEmail.jsx` (vignette + « Télécharger »).
+- « Imprimer la fiche » attend que la photo soit chargée (8 s max) avant d'imprimer.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes

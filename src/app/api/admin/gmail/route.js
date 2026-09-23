@@ -1,5 +1,5 @@
 import { isAdmin, getGmailCreds, setGmailCreds, updateGmail } from "@/lib/stock";
-import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply, gmailMarkRead } from "@/lib/gmail";
+import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply, gmailMarkRead, gmailListPhotosFrom, gmailGetAttachment } from "@/lib/gmail";
 import Anthropic from "@anthropic-ai/sdk";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +41,22 @@ export async function GET(req) {
     if (action === "inbox") {
       const messages = await gmailListClientMessages(token, 20);
       return Response.json({ connected: true, messages });
+    }
+    // Photos envoyées par une cliente (commandes sur devis : la photo à graver
+    // arrive en pièce jointe). Lecture seule.
+    if (action === "photos") {
+      const email = (url.searchParams.get("email") || "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ photos: [] });
+      const photos = await gmailListPhotosFrom(token, email);
+      return Response.json({ photos });
+    }
+    if (action === "attachment") {
+      const msg = url.searchParams.get("msg") || "";
+      const att = url.searchParams.get("att") || "";
+      const mime = url.searchParams.get("mime") || "";
+      const buf = await gmailGetAttachment(token, msg, att);
+      const type = /^image\/(jpeg|png|webp|gif|heic|heif)$/i.test(mime) ? mime : "application/octet-stream";
+      return new Response(buf, { headers: { "Content-Type": type, "Cache-Control": "private, no-store" } });
     }
     if (action === "message") {
       const id = url.searchParams.get("id");

@@ -9,6 +9,7 @@ import { MODELES, layoutLabel } from "@/lib/modeles";
 import { getFontLabel, getFontClass } from "@/lib/fonts";
 import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
+import PhotosEmail from "@/components/admin/PhotosEmail";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -122,8 +123,23 @@ function ItemSheet({ item }) {
   );
 }
 
-export default function FicheAtelier({ spec }) {
+export default function FicheAtelier({ spec, order, adminKey, print = false }) {
   const items = Array.isArray(spec) ? spec.filter(Boolean) : spec ? [spec] : [];
+  // Commande sur devis (ou sans réglages enregistrés) : la demande écrite du
+  // devis + la photo que la cliente a envoyée par e-mail (lue dans Gmail).
+  if (!items.length && order) {
+    return (
+      <div style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "8px 14px", marginTop: 8 }}>
+        <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: 4 }}>🛠️ Fiche atelier — à graver à l&apos;identique</div>
+        {order.demande && !print ? (
+          <p style={{ margin: "4px 0 8px", padding: "8px 10px", background: "#eef4fb", border: "1px solid #c9dcef", borderRadius: 8, fontSize: "0.88rem" }}>
+            <strong>📋 {order.quoteNumber ? `Devis ${order.quoteNumber} — ` : ""}ce que la cliente a demandé :</strong><br />{order.demande}
+          </p>
+        ) : null}
+        <PhotosEmail email={order.customerEmail} adminKey={adminKey} print={print} />
+      </div>
+    );
+  }
   if (!items.length) {
     return <p style={{ fontSize: "0.85rem", color: "#999", padding: "8px 0" }}>Aucun réglage détaillé enregistré pour cette commande (commande passée avant la mise en place de la fiche atelier).</p>;
   }
