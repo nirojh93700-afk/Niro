@@ -1027,6 +1027,34 @@ ne descend jamais sous zéro.
   - **Prix auto par poids (v1)** = OPTIONNEL (la gérante est OK avec le prix fixe). L'app v1 existe (clés sur son compte Boxtal) mais l'endpoint cotation v1 reste à trouver ; non nécessaire pour l'Option A.
 
 
+### ⛔ VIDÉO — UNIQUEMENT DES PRODUITS DÉJÀ GRAVÉS (règle ferme du gérant, 22/09/2026)
+> « Refais la vidéo avec des produits déjà gravés, je t'ai déjà dit mais mets en mémoire,
+> avant de faire un truc fais-le correctement. » Il l'avait déjà dit en conversation et
+> ça n'avait JAMAIS été écrit ici — d'où la répétition. C'est écrit maintenant.
+- **Toute photo d'une vidéo doit montrer la GRAVURE.** Jamais un produit vierge : on vend la
+  personnalisation, un verre nu ne montre rien et ne donne envie de rien.
+- 🔴 **LE NOM DE FICHIER MENT — TOUJOURS OUVRIR L'IMAGE.** Pièges avérés dans
+  `public/produits/` : **`verre_vin_grave.jpg`** et **`verre_a_whisky_grave_ambiance.jpg`**
+  portent « grave » dans leur nom mais sont des **verres VIERGES**. Idem
+  `collier-double-coeur-1.jpg` (cœur lisse). Les trois étaient dans la 1re vidéo du 22/09.
+- **Méthode obligatoire avant de monter** : fabriquer une **planche contact** des candidates
+  (vignettes + nom de fichier, script jetable avec Pillow) et **la regarder**. 5 minutes, et
+  c'est la seule façon de ne pas se tromper.
+- **Photos GRAVÉES repérées le 22/09 (réutilisables telles quelles)** :
+  · carafe — `carafe_gravee.jpg`, `carafe_whiskey_1892.jpg`
+  · verre à whisky — `verre_a_whisky_exemple_face.jpg` (photo gravée + MEILLEUR PAPA),
+    `verre_a_whisky_exemple_fond.jpg` (gravé au fond), `verre_whisky_papa_monde_moustache.jpg`,
+    `verre_whisky_papa_monde_banniere.jpg`, `verre_a_whisky_logo_bourbon.webp`, `verre_a_whisky_card.jpg`
+  · verre à vin — `verre_vin_exemple_dale.jpg` (monogramme D DALE), `verre_vin_geniet.jpg`
+  · bijoux — `collier-coeur-grave-1.jpg`, `collier-3coeurs-1.jpg`, `collier-coeur-plaques-1à 4.jpg`,
+    `collier-double-coeur-3/4/6.jpg`, `bracelet-cordon-plaque-4.jpg`, `bracelet-homme-plaque-1à 5.jpg`
+- ⚠️ **AUCUNE photo de flûte à champagne gravée n'existe** (`flute_ambiance/set/vierge` sont
+  toutes vierges). Tant qu'il n'en fournit pas une, **la flûte ne peut pas figurer dans une vidéo**.
+- **Scripts** : `tools/video/pub_graves_silencieuse.py` (10 produits gravés, sans son) et
+  `pub_verres_bijoux_silencieuse.py`. Le titre s'ajuste tout seul à la largeur (4 noms sur 9
+  débordaient à 74 px). Photos lues en **local** dans `public/produits/` quand le site est
+  injoignable.
+
 ## 🎬 RECETTE VIDÉO PUB (à refaire pareil à chaque demande de vidéo)
 > Quand l'utilisatrice demande une vidéo/pub, produire CE style par défaut. Si elle dit « améliore », améliorer sur cette base.
 Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) et **`tools/video/pub_ia_higgsfield.py`** (clips animés par l'IA Higgsfield, payant).
@@ -1035,7 +1063,25 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
 - **Photos** : télécharger depuis `https://nivcreation.fr/produits/<fichier>` (marche même si le dépôt local est vide).
 - **Sortie** : ré-encoder LÉGER + faststart (`scale=720:1280`, crf 26, `-movflags +faststart`) → ~3-6 Mo, facile à ouvrir sur téléphone. Toujours l'envoyer via SendUserFile.
 - **Varier les produits** à chaque fois (ne pas reprendre toujours les mêmes) ; possibilité d'ajouter d'autres produits sur demande.
-- **À CHAQUE vidéo** : joindre une **description** + des **tags** (format Insta, ~10 hashtags).
+- **À CHAQUE vidéo** : joindre une **description** + des **tags**. ⚠️ **LE FORMAT EST FIXE**
+  (établi sur les vidéos 1 à 6, rappelé par le gérant le 22/09 : « on refait les descriptions
+  correctement et les tags comme pour les autres »). Le recopier exactement :
+  ```
+  **Vidéo N — <Thème>** (Produit 1, Produit 2, Produit 3…)
+  > <2 à 3 phrases courtes, chaleureuses, AVEC des emojis ✨ 💛 🎁 🆕>
+  > 👉 nivcreation.fr
+
+  #nivcreation #<thème> #<produit> #<produit> #cadeaupersonnalise #faitmainenfrance #gravure #<…> #<…> #ideecadeau
+  ```
+  · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-8 le 22/09).
+  · Le titre liste **les produits de la vidéo entre parenthèses**.
+  · **10 hashtags**, sur UNE ligne, qui **commencent par `#nivcreation`** et **finissent par
+    `#ideecadeau`**, avec **`#faitmainenfrance`** dedans. Jamais `#faitenfrance`.
+  · ⚠️ **Les emojis sont OBLIGATOIRES ici** — la règle « pas d'emojis » du §9 ne vaut que pour
+    le CONTENU DU SITE, pas pour les légendes Instagram.
+  · Pas de prix, jamais de nombre de produits, ne pas nommer le département de l'atelier.
+  · **Où retrouver les anciennes** : elles ne sont que dans le transcript de session
+    (`~/.claude/projects/-home-user-Niro/<session>.jsonl`) — chercher `#nivcreation`.
 - **CRÉDITS Higgsfield = payant** : ne JAMAIS lancer sans confirmer, annoncer le coût (`get_cost:true` preflight, ~7,5 crédits/clip 5 s), et attendre l'accord. Le montage gratuit (`pub_gratuite.py`) est la version par défaut.
 
 ---
