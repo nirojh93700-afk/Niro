@@ -4,7 +4,7 @@
 > après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé
 > d'un bijou depuis n'importe quelle conversation, sans relire le code.
 
-> Généré le 2026-09-15 · 32 bijoux dans le code, dont 27 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
+> Généré le 2026-09-23 · 32 bijoux dans le code, dont 27 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
 
 ⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être
 réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code
@@ -63,7 +63,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 120 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -94,7 +94,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 150 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -133,7 +133,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / homme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 160 g emballé · lettre suivie possible
+- **Livraison** : 70 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -163,7 +163,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / homme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 100 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -194,7 +194,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / homme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 90 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -229,7 +229,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / homme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 120 g emballé · lettre suivie possible
+- **Livraison** : 70 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -259,7 +259,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 80 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -289,7 +289,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / bebe · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 70 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -315,7 +315,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 80 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -348,7 +348,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 80 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -381,7 +381,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet »
 - **Ajouté le** : 2026-07-31
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 - **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
@@ -400,7 +400,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet »
 - **Ajouté le** : 2026-08-01
-- **Livraison** : 35 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 - **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
@@ -419,7 +419,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet »
 - **Ajouté le** : 2026-08-01
-- **Livraison** : 35 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 - **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
@@ -439,7 +439,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-07-31
-- **Livraison** : 55 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -473,7 +473,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / couple · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 90 g emballé · lettre suivie possible
+- **Livraison** : 60 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -499,7 +499,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / homme · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 90 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -538,7 +538,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier »
 - **Ajouté le** : 2026-08-01
-- **Livraison** : 35 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 - **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
@@ -557,7 +557,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier »
 - **Ajouté le** : 2026-08-01
-- **Livraison** : 35 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 - **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
@@ -576,7 +576,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier cadeau »
 - **Ajouté le** : 2026-07-31
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -606,7 +606,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -640,7 +640,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -676,7 +676,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -710,7 +710,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 60 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -742,7 +742,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / homme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -774,7 +774,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -840,7 +840,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 35 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -874,7 +874,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 45 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -908,7 +908,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Bracelet personnalisé »
 - **Ajouté le** : 2026-09-01
-- **Livraison** : 40 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -939,7 +939,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 120 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -984,7 +984,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / couple · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 80 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
@@ -1011,7 +1011,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 - **Rayon** : bijoux / femme · type « Collier personnalisé »
 - **Ajouté le** : 2026-06-02
-- **Livraison** : 70 g emballé · lettre suivie possible
+- **Livraison** : 50 g emballé · lettre suivie possible
 - **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
 - **Fiche détaillée** (Taille & Matériaux…) : oui
 
