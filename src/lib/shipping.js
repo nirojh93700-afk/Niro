@@ -40,6 +40,30 @@ export const PICKUP_MIN_GRAMS = 2000; // 2 kg
 const LETTER_MAX_GRAMS = 2000;
 
 // -----------------------------------------------------------------------------
+// LETTRE SUIVIE AU POIDS (demande du gérant, 23/09/2026 : « il faut que ça
+// augmente par rapport à ce que les clients mettent »). Avant : 3,90 € fixe
+// jusqu'à 2 kg → perte dès 2 bijoux ou un emballage. Maintenant le prix suit le
+// POIDS RÉEL du panier (bijoux + sac / microfibre / boîte / pack), sur la grille
+// La Poste « Lettre Services Plus » relevée le 23/09/2026 (prix nets, sans TVA) :
+//   ≤ 100 g 4,45 · ≤ 250 g 5,77 · ≤ 500 g 8,04 · ≤ 1 kg 10,23 · ≤ 2 kg 11,95
+// Prix cliente = coût La Poste + petite marge, fini en ,90. La 1re tranche reste
+// réglable dans Gestion → Livraison (« bijoux à domicile », 4,90 € depuis le 23/09).
+// -----------------------------------------------------------------------------
+const LETTER_TIERS = [
+  { maxGrams: 100, price: null }, // = cfg.bijouxHome (réglage admin)
+  { maxGrams: 250, price: 6.5 },
+  { maxGrams: 500, price: 8.9 },
+  { maxGrams: 1000, price: 10.9 },
+  { maxGrams: 2000, price: 12.9 },
+];
+export function letterPriceByWeight(grams, base = BIJOUX_HOME) {
+  const g = Number.isFinite(Number(grams)) && Number(grams) > 0 ? Number(grams) : 0;
+  const b = Number(base) >= 0 ? Number(base) : BIJOUX_HOME;
+  const t = LETTER_TIERS.find((x) => g <= x.maxGrams) || LETTER_TIERS[LETTER_TIERS.length - 1];
+  return t.price == null ? b : Math.max(b, t.price);
+}
+
+// -----------------------------------------------------------------------------
 // Tarifs personnalisés (admin) : les montants ci-dessus sont les tarifs par
 // défaut ; l'admin peut les remplacer via Gestion → Réglages → 🚚 Livraison
 // (stockés dans les réglages, clé `shipping`). Un champ absent/invalide
@@ -273,13 +297,13 @@ function pointRelaisPrice(totalGrams, boxtal, freeShipping, carrierCode) {
 }
 
 // Construit les options « livraison à domicile » (+ verres/déco selon le panier).
-function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping }) {
+function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping, bijouxOnly = false }) {
   const options = [];
   if (freeShipping) {
     options.push(rate(0, "Livraison à domicile — Offerte", [2, 5]));
   } else if (letterOnly && totalGrams <= LETTER_MAX_GRAMS) {
     const free = subtotal >= cfg.bijouxFreeThreshold;
-    options.push(rate(free ? 0 : cfg.bijouxHome, free ? "Livraison à domicile — Offerte" : "Livraison à domicile", [2, 4]));
+    options.push(rate(free ? 0 : letterPriceByWeight(totalGrams, cfg.bijouxHome), free ? "Livraison à domicile — Offerte" : "Livraison à domicile", [2, 4]));
   } else {
     const decoQty = Math.max(0, parcelQty - glassQty);
     const prices = [];
@@ -289,7 +313,10 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
     // Prix final = le plus élevé entre le tarif « par quantité » (déco/verres) et
     // le tarif « par poids réel » : les colis lourds passent au bon tarif, les
     // petits produits ne changent pas.
-    const price = Math.max(qtyPrice, homePriceByWeight(totalGrams));
+    // Panier 100 % bijoux dont un en BOÎTE (colis) : jamais moins cher que le
+    // même panier en lettre suivie → ajouter une boîte fait toujours monter le port.
+    const lettre = bijouxOnly ? letterPriceByWeight(totalGrams, cfg.bijouxHome) : 0;
+    const price = Math.max(qtyPrice, homePriceByWeight(totalGrams), lettre);
     options.push(rate(price, "Livraison à domicile", [2, 5]));
   }
   return options;
@@ -297,7 +324,7 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
 
 const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vous";
 
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "", express = false }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "", express = false, bijouxOnly = false }) {
   const cfg = resolveShippingConfig(config);
   const boxtalOn = Boolean(boxtal && boxtal.enabled);
   // Hors France (+ Monaco) : tarif Europe par zone/poids.
@@ -313,7 +340,7 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
     }
     return europeOptions(zone, { letterOnly, totalGrams });
   }
-  const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping });
+  const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping, bijouxOnly });
 
   // Bijoux (lettre suivie) : la livraison est offerte dès le seuil (45 €). Ce
   // seuil ne s'appliquait qu'à la livraison à DOMICILE — la cliente qui

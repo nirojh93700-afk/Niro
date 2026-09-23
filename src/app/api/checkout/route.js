@@ -422,6 +422,7 @@ export async function POST(req) {
       shipping_address_collection: { allowed_countries: allowedCountries },
       shipping_options: buildShippingOptions({
         totalGrams, subtotal, parcelQty, glassQty, letterOnly,
+        bijouxOnly: tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
         // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la
         // promesse bijoux « offerte dès 45 € » — qui reste vraie même quand une
         // boîte cadeau fait passer le bijou en petit colis (panier 100 % bijoux).
