@@ -68,8 +68,9 @@
   augmente par rapport à ce que les clients mettent »)**. `letterPriceByWeight` dans `src/lib/shipping.js` :
   lettre suivie ≤ 100 g **4,90 €** (réglage admin `bijouxHome`, passé de 3,90 à 4,90 le 23/09) · ≤ 250 g
   6,50 · ≤ 500 g 8,90 · ≤ 1 kg 10,90 · ≤ 2 kg 12,90. Coût La Poste « Lettre Services Plus » relevé le
-  23/09 : 4,45 · 5,77 · 8,04 · 10,23 · 11,95. Le poids inclut l'emballage (sac 10 g, microfibre 15 g,
-  boîte 60-70 g, pack 85-95 g). Bijou en **boîte** = colis, jamais moins cher que le même panier en
+  23/09 : 4,45 · 5,77 · 8,04 · 10,23 · 11,95. Le poids inclut l'emballage, **pesé par le gérant le 23/09** :
+  sac 28 g · boîte carrée 59 g · boîte allongée 80 g · microfibre 15 g (non pesée) · pack collier 102 g ·
+  pack bracelet 123 g (réglages en ligne `settings.packaging` + `packagingSeed.js`). Bijou en **boîte** = colis, jamais moins cher que le même panier en
   lettre (`bijouxOnly`). Offert dès 45 € inchangé. Relais inchangé (4,90 €). Envoi conseillé :
   lettre = La Poste (moins cher que Boxtal) ; boîte = colis Boxtal (Mondial Domicile ≈ 5,10 € HT).
   ⚠️ 4 fiches (découpes à plat, `productInfo.js` l. ~1262-1350) écrivent encore « 3,90 € à domicile » :

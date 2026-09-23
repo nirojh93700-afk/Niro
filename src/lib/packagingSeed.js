@@ -9,12 +9,12 @@
 // Hausse INTERMÉDIAIRE à l'unité (entre-deux : ni trop, ni trop peu → le pack
 // affiche ~2,80 € d'économie). Coûts inchangés. Packs inchangés (5,50 / 7,50).
 export const DEFAULT_PACKAGING = [
-  { id: "sac", name: "Sac cadeau", desc: "Sac carton beige", buy: 1.0, sell: 1.7, weight: 10, photo: "" },
-  { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 3.9, weight: 60, photo: "" },
-  { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 5.9, weight: 70, photo: "" },
+  { id: "sac", name: "Sac cadeau", desc: "Sac carton beige", buy: 1.0, sell: 1.7, weight: 28, photo: "" },
+  { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", buy: 0.97, sell: 3.9, weight: 59, photo: "" },
+  { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", buy: 0.95, sell: 5.9, weight: 80, photo: "" },
   { id: "microfibre", name: "Pochette microfibre", desc: "Protection / voyage", buy: 1.0, sell: 2.7, weight: 15, photo: "" },
-  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte cadeau + microfibre", buy: 2.97, sell: 6.5, weight: 85, photo: "" },
-  { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte cadeau + microfibre", buy: 2.95, sell: 7.5, weight: 95, photo: "" },
+  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte cadeau + microfibre", buy: 2.97, sell: 6.5, weight: 102, photo: "" },
+  { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte cadeau + microfibre", buy: 2.95, sell: 7.5, weight: 123, photo: "" },
 ];
 
 const COLLIERS = ["collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique", "collier-coeur-zircon", "collier-perle-solitaire", "collier-coeur-scintillant", "collier-double-coeur", "collier-coeur-plaques", "collier-3coeurs", "collier-medaillon-pivotant", "collier-pastille", "collier-coeur-grave"];
