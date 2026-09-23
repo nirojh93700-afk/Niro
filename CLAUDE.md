@@ -738,6 +738,10 @@ ne descend jamais sous zéro.
   `GET /api/admin/gmail?action=photos&email=` puis `?action=attachment&msg=&att=&mime=`,
   composant `src/components/admin/PhotosEmail.jsx` (vignette + « Télécharger »).
 - « Imprimer la fiche » attend que la photo soit chargée (8 s max) avant d'imprimer.
+- ⚠️ **Déploiement** : le 23/09, 4 envois poussés en 10 minutes → le 4ᵉ a échoué côté Firebase
+  (« Build failed » en 2 min 30 alors que le build local passait), les 3 autres ont réussi. Vérifier
+  un déploiement : `curl -s https://api.github.com/repos/nirojh93700-afk/Niro/commits/<sha>/check-runs`
+  (`conclusion` success/failure). En cas d'échec, relancer avec le commit suivant.
 
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
