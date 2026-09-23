@@ -73,11 +73,11 @@
   pack bracelet 123 g (réglages en ligne `settings.packaging` + `packagingSeed.js`). Bijou en **boîte** = colis, jamais moins cher que le même panier en
   lettre (`bijouxOnly`). Offert dès 45 € inchangé. Relais inchangé (4,90 €). Envoi conseillé :
   lettre = La Poste (moins cher que Boxtal) ; boîte = colis Boxtal (Mondial Domicile ≈ 5,10 € HT).
-  **Poids déclaré d'un bijou (23/09, pesée du gérant : 1 bijou + sac + cadeau + enveloppe à bulles
-  = 73 g, « tu mets 80 à peu près »)** : `weight: 50` sur TOUS les bijoux `letter:true` (bijou +
-  enveloppe), **70 g** pour la gourmette et le bracelet chaîne acier homme, **60 g** pour le lot
-  couple (2 colliers). Donc 1 bijou + sac = 78 g → 4,90 € · 2 bijoux + sac = 156 g → 6,50 € ·
-  6 bijoux + sac → 8,90 €. Un nouveau bijou prend aussi `weight: 50`.
+  **Poids déclaré d'un bijou (23/09, consigne du gérant : « minimum 100 g, prends le prix pour
+  100 g » — il met souvent le bijou dans une boîte même sans la demande)** : `weight: 72` sur TOUS
+  les bijoux `letter:true`, sans exception. 72 + sac 28 = **100 g pile → 4,90 €** (prix de la
+  tranche 100 g). 2 bijoux + sac = 200 g → 6,50 € · 3 à 5 bijoux + sac → 8,90 €. Un nouveau bijou
+  prend aussi `weight: 72`. (Remplace le réglage à 50 g du même jour.)
   ⚠️ 4 fiches (découpes à plat, `productInfo.js` l. ~1262-1350) écrivent encore « 3,90 € à domicile » :
   texte visible, corrigé seulement sur « applique » du gérant.
 - ⛔ **PRIX DE PORT CITÉ À UN CLIENT = LE PRIX DU SITE, VÉRIFIÉ AVANT D'ÉCRIRE** (erreur du 21/09/2026,
