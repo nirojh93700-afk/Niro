@@ -64,6 +64,16 @@
   client qui doit payer »). On ne renvoie JAMAIS gratuitement un produit revenu : devis « nouvelle
   expédition » (relais 4,90 € / lettre 3,90 € / colis 6,90 €) à régler en ligne, envoi après règlement.
   Idem si le client veut une pièce en plus : prix de la fiche + port. Aucun geste de notre initiative.
+- 📦 **PORT BIJOUX = AU POIDS RÉEL, GRILLE LA POSTE (23/09/2026, demande du gérant : « il faut que ça
+  augmente par rapport à ce que les clients mettent »)**. `letterPriceByWeight` dans `src/lib/shipping.js` :
+  lettre suivie ≤ 100 g **4,90 €** (réglage admin `bijouxHome`, passé de 3,90 à 4,90 le 23/09) · ≤ 250 g
+  6,50 · ≤ 500 g 8,90 · ≤ 1 kg 10,90 · ≤ 2 kg 12,90. Coût La Poste « Lettre Services Plus » relevé le
+  23/09 : 4,45 · 5,77 · 8,04 · 10,23 · 11,95. Le poids inclut l'emballage (sac 10 g, microfibre 15 g,
+  boîte 60-70 g, pack 85-95 g). Bijou en **boîte** = colis, jamais moins cher que le même panier en
+  lettre (`bijouxOnly`). Offert dès 45 € inchangé. Relais inchangé (4,90 €). Envoi conseillé :
+  lettre = La Poste (moins cher que Boxtal) ; boîte = colis Boxtal (Mondial Domicile ≈ 5,10 € HT).
+  ⚠️ 4 fiches (découpes à plat, `productInfo.js` l. ~1262-1350) écrivent encore « 3,90 € à domicile » :
+  texte visible, corrigé seulement sur « applique » du gérant.
 - ⛔ **PRIX DE PORT CITÉ À UN CLIENT = LE PRIX DU SITE, VÉRIFIÉ AVANT D'ÉCRIRE** (erreur du 21/09/2026,
   dossier Enes Varol : j'ai cité 3,90 € pour un bracelet EN BOÎTE → colis 6,90 €, le gérant paie
   6,12 € à Boxtal ; « à cause de toi je vais perdre de l'argent »). Grille bijou : sac/microfibre =
