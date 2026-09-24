@@ -783,6 +783,37 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
+## 🔴 DEUX LIGNES DU MÊME PRODUIT — GRAVURES MÉLANGÉES (corrigé le 24/09/2026)
+> Remarque du gérant sur la commande **#00CUYR2U** (Cécilia Herrera, 2 lots de flûtes gravés
+> différemment) : « je comprends pas là, c'est mal écrit ». Le tableau « À graver » de la 2ᵉ ligne
+> **recopiait celui de la 1ʳᵉ** → risque réel de graver deux fois la même chose.
+- **Cause** : `o.spec.find((x) => x.slug === it.slug)` dans `/gestion/page.jsx`. Deux lignes du
+  MÊME produit → `find` renvoie toujours le PREMIER réglage. (Le visuel et le « Résumé » de la
+  fiche atelier étaient justes, eux : ils parcourent `o.spec` directement.)
+- **Corrigé** : `apparierSpec(items, spec)` dans **`src/lib/orderSpec.js`** apparie DANS L'ORDRE en
+  consommant chaque réglage une seule fois (identifiant produit d'abord ; jamais les réglages d'un
+  AUTRE produit — mieux vaut « aucun réglage » qu'une gravure fausse). 9 vérifications :
+  `npm run test-orderspec`.
+- ⚠️ **Pourquoi l'ordre suffit** : `/api/checkout` enregistre `items.map(...).filter(Boolean)` et
+  Stripe rend les lignes dans le même ordre. Le `filter(Boolean)` retire les articles **non gravés**,
+  d'où le décalage des rangs → apparier par rang seul serait faux aussi.
+- ⛔ **À REFAIRE PARTOUT** : tout nouvel écran qui relie une ligne de commande à ses réglages doit
+  passer par `apparierSpec`, **jamais** par un `find` sur le slug. (`/gestion/atelier` et la fiche
+  papier parcourent `order.spec` directement : ils sont corrects.)
+
+## ❓ LA FICHE LAISSE CHOISIR DEUX FAÇONS DE GRAVER À LA FOIS — À TRANCHER AVEC LE GÉRANT
+> Trouvé en analysant #00CUYR2U : le 2ᵉ lot porte **à la fois** `numstyle: "15"` (onglet
+> « Modèles (n°) ») **et** `gravureExemple: "plume"` (onglet « Gravures (photos) »).
+- **Ce n'est pas un bug d'affichage : la cliente a bien enregistré les deux.** Les onglets de
+  personnalisation (`product.personaTabs`, `setPersonaTab` dans `ProductDetail.jsx`) changent
+  seulement ce qui est AFFICHÉ — **ils ne vident pas les champs de l'onglet quitté**. C'est le même
+  piège que `showIfField` (règle « aucun champ payant masquable », 14/09).
+- Concerne les 4 onglets de la flûte / du verre à vin / de la carafe : Modèles (n°) · Gravures
+  (photos) · Lettre fleurie · Texte seul — ce sont des choix **alternatifs**, pas cumulables.
+- **Correction proposée, PAS appliquée** (elle touche le site visible → attendre « applique ») :
+  au changement d'onglet, vider les champs des autres onglets, ou afficher « vous avez choisi
+  deux styles, gardez-en un ». À lui de trancher.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes

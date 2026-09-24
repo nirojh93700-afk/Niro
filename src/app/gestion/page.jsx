@@ -25,6 +25,7 @@ import BatThread from "@/components/admin/BatThread";
 import FicheAtelier from "@/components/admin/FicheAtelier";
 import FichePapier from "@/components/admin/FichePapier";
 import { imprimerFiche } from "@/lib/impression";
+import { apparierSpec } from "@/lib/orderSpec";
 import BoxtalCopie from "@/components/admin/BoxtalCopie";
 
 const CONFIG_LABELS = {
@@ -527,9 +528,9 @@ export default function GestionPage() {
 
   // Aperçu de ce que la cliente a demandé (photo qu'elle a envoyée ou rendu de
   // la gravure), quand il existe — cristaux, gobelet, gravure photo…
-  const apercuAtelier = (spec, slug, index) => {
-    if (!Array.isArray(spec) || !spec.length) return "";
-    const s = spec.find((x) => x && x.slug === slug) || spec[index] || null;
+  // ⚠️ Le réglage est APPARIÉ EN AMONT (apparierSpec) : le retrouver ici par
+  // identifiant produit renvoyait le même sur deux lignes du même produit.
+  const apercuAtelier = (s) => {
     if (!s) return "";
     return s.previewImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
   };
@@ -537,8 +538,7 @@ export default function GestionPage() {
   // Couleur / modèle commandé (Argent, Doré, Moyen…). Il était noyé au début de
   // la ligne de détails : on le sort en évidence pour ne pas graver la mauvaise
   // version. Repli sur le 1er élément des détails (toujours le nom de l'option).
-  const couleurArticle = (spec, it, index) => {
-    const s = Array.isArray(spec) ? (spec.find((x) => x && x.slug === it.slug) || spec[index]) : null;
+  const couleurArticle = (s, it) => {
     if (s?.variantTitle) return s.variantTitle;
     const premier = String(it.details || "").split(" — ")[0].trim();
     return premier && !premier.startsWith("Personnalisation") && !premier.startsWith("Emballage") ? premier : "";
@@ -1086,10 +1086,11 @@ export default function GestionPage() {
                     commande, sinon retrouvée dans le catalogue par son identifiant)
                     et, si la cliente a envoyé une photo/un aperçu, la vignette atelier. */}
                 <ul style={{ margin: "0 0 8px", padding: 0, listStyle: "none", fontSize: "0.9rem" }}>
-                  {(o.items || []).map((it, i) => {
+                  {(() => { const specParLigne = apparierSpec(o.items, o.spec); return (o.items || []).map((it, i) => {
+                    const s = specParLigne[i];
                     const photo = it.image || photoProduit(it.slug);
-                    const apercu = apercuAtelier(o.spec, it.slug, i);
-                    const couleur = couleurArticle(o.spec, it, i);
+                    const apercu = apercuAtelier(s);
+                    const couleur = couleurArticle(s, it);
                     const reste = detailsSansCouleur(it, couleur);
                     return (
                       <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderBottom: i < (o.items.length - 1) ? "1px solid #f2ece0" : "none" }}>
@@ -1114,7 +1115,6 @@ export default function GestionPage() {
                           {/* Encadré « Gravure » lisible : chaque choix sur sa ligne
                               (n° du dessin avec sa vignette, texte, police, photo). */}
                           {(() => {
-                            const s = Array.isArray(o.spec) ? (o.spec.find((x) => x && x.slug === it.slug) || o.spec[i]) : null;
                             if (!s?.fields) return null;
                             const prod = getProductBySlug(s.slug);
                             const num = (s.fields.numstyle || "").toString().trim();
@@ -1141,7 +1141,7 @@ export default function GestionPage() {
                         <span style={{ whiteSpace: "nowrap", fontWeight: 600 }}>{formatEuro(it.total)}</span>
                       </li>
                     );
-                  })}
+                  }); })()}
                 </ul>
                 {(() => {
                   const total = Number(o.total) || 0;

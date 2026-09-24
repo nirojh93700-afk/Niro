@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "etat-bijoux": "node --import ./tools/alias-register.mjs tools/etat-bijoux.mjs",
-    "maquette-favoris": "node --import ./tools/alias-register.mjs tools/maquettes/favoris.mjs"
+    "maquette-favoris": "node --import ./tools/alias-register.mjs tools/maquettes/favoris.mjs",
+    "test-orderspec": "node tools/tests/orderSpec.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
