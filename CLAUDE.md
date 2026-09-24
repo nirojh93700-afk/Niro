@@ -743,6 +743,46 @@ ne descend jamais sous zéro.
   un déploiement : `curl -s https://api.github.com/repos/nirojh93700-afk/Niro/commits/<sha>/check-runs`
   (`conclusion` success/failure). En cas d'échec, relancer avec le commit suivant.
 
+## 🖨️ FICHE ATELIER IMPRIMÉE — UNE SEULE FEUILLE A4 (24/09/2026)
+> Demande du gérant : « dans les commandes, imprimer la fiche… il faut que ça soit concentré pour
+> une feuille A4 et correctement, comme un truc professionnel — corrige pour TOUTES les commandes,
+> là j'ai imprimé je suis en train de gratter » + « il faut que ça soit bien détaillé avec tous les
+> détails de la commande, image comprise ». Avant : 2 à 3 pages, mise en page d'écran, bouton
+> « Télécharger » et JSON brut imprimés pour rien.
+- **Mise en page papier dédiée** `src/components/admin/FichePapier.jsx` (classes `.fp-*`) : en-tête
+  (titre · date/devis · réf + statut + total), puis **deux colonnes** —
+  · gauche = ce qu'on LIT : encadrés d'alerte (geste promis, **cadeau à glisser**, demande du devis,
+    texte demandé), **tableau « À graver »** (le plus gros de la feuille, une face par ligne, +
+    vignette du dessin numéroté), articles, client & livraison, détail du prix, note interne ;
+  · droite = ce qu'on REGARDE : visuel reconstruit de chaque article (`GlassPreview`), ses réglages
+    (`ReglagesItem`), et la **photo envoyée par la cliente** (`PhotosEmail`).
+  Les deux blocs de droite sont **exportés de `FicheAtelier.jsx`** pour ne pas dupliquer l'écran.
+- **Tient sur une page quoi qu'il arrive** — `src/lib/impression.js` (`imprimerFiche()`, branché sur
+  le bouton « 🖨️ Imprimer la fiche ») : attend les photos, mesure la feuille, puis joue sur DEUX
+  leviers dans cet ordre — **la taille des photos** (`--fp-vis` : 1 → 0,85 → 0,72 → 0,6, on s'arrête
+  dès que le texte tient à ≥ 80 %), **puis** la taille générale (`--impr-echelle`, plancher 0,62).
+  Mesuré : 1 article = 100 % · 2 articles + 4 encadrés + photo = 81 % · 3 articles gravés différents
+  = photos à 60 % et texte à 75 %. **4 cas testés, 1 page chacun, 0 erreur JS.**
+- 🔴 **TROIS PIÈGES À NE PAS REFAIRE** (chacun a coûté un aller-retour) :
+  1. **La mise en page `.fp-*` est HORS `@media print`.** Les styles d'impression ne s'appliquent
+     QUE pendant l'impression : en les y laissant, la mesure (faite avant, en média écran) portait
+     sur un bloc sans styles et la réduction calculée était fausse. La feuille reste `display:none`
+     à l'écran, sauf pendant la mesure (`body.impression-mesure`, hors champ à −10000 px).
+  2. **`zoom`, jamais `transform: scale()`.** Une transformation ne réduit pas la hauteur de MISE EN
+     PAGE : le navigateur comptait toujours deux pages et sortait une feuille blanche.
+  3. **Avec `zoom`, PAS de compensation de largeur** (`width: 100%`, pas `calc(100% / échelle)`) :
+     `100%` est déjà exprimé dans les unités réduites — diviser en plus faisait déborder la fiche
+     de la feuille par la droite.
+- ⚠️ **Ne jamais redimensionner `GlassPreview` par une largeur CSS** : la gravure posée dessus est
+  dimensionnée en pixels à partir de ses 300 px, elle se décalerait de la photo. On le réduit
+  **en bloc avec `zoom`**, et seulement l'image (les réglages en dessous gardent leur taille).
+- Sur papier, `PhotosEmail` n'imprime plus « aucune photo trouvée » (inutile à l'atelier), et si la
+  colonne de droite est vide la feuille repasse sur **une seule colonne** (règle `:has()`).
+- **Méthode de vérification réutilisable** : 4 fiches HTML de test (légère / moyenne / lourde /
+  devis) portant le vrai bloc CSS, mesurées par Chromium avec l'algorithme exact d'`impression.js`
+  **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
+  le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes

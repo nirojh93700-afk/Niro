@@ -24,6 +24,7 @@ import MerchantReminder from "@/components/admin/MerchantReminder";
 import BatThread from "@/components/admin/BatThread";
 import FicheAtelier from "@/components/admin/FicheAtelier";
 import FichePapier from "@/components/admin/FichePapier";
+import { imprimerFiche } from "@/lib/impression";
 import BoxtalCopie from "@/components/admin/BoxtalCopie";
 
 const CONFIG_LABELS = {
@@ -1222,25 +1223,11 @@ export default function GestionPage() {
                     onClick={() => setFicheOpen(ficheOpen === o.id ? null : o.id)}>
                     {ficheOpen === o.id ? "Fermer la fiche" : "🛠️ Fiche atelier (à graver)"}
                   </button>
-                  {/* Fiche papier à emporter à la machine : ouvre la fiche puis
-                     lance l'impression (seule la fiche s'imprime, voir globals.css). */}
+                  {/* Fiche papier à emporter à la machine. `imprimerFiche()`
+                     attend les photos, calcule la réduction et lance l'impression :
+                     UNE seule feuille A4, quelle que soit la commande. */}
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
-                    onClick={() => {
-                      setFicheOpen(o.id);
-                      // Attend que la photo reçue par e-mail (commande sur devis)
-                      // soit chargée avant d'imprimer — 8 s au plus.
-                      const debut = Date.now();
-                      const imprimer = () => {
-                        if (document.querySelector(".zone-impression [data-photos-chargement]") && Date.now() - debut < 8000) {
-                          setTimeout(imprimer, 200);
-                          return;
-                        }
-                        document.body.classList.add("impression-fiche");
-                        window.print();
-                        setTimeout(() => document.body.classList.remove("impression-fiche"), 300);
-                      };
-                      setTimeout(imprimer, 250);
-                    }}>
+                    onClick={() => { setFicheOpen(o.id); imprimerFiche(); }}>
                     🖨️ Imprimer la fiche
                   </button>
                   {/* Formulaire boxtal.com prêt à copier-coller (en attendant

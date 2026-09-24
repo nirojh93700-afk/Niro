@@ -26,7 +26,7 @@ function textLinesOf(item, product) {
 
 const motifLabel = (id) => (MOTIF_LIST.find((m) => m.id === id) || {}).label || id;
 
-function GlassPreview({ item }) {
+export function GlassPreview({ item }) {
   const p = getProductBySlug(item.slug);
   const isFond = item.emplacement === "fond";
   // Cristaux : on grave dans un cristal VIERGE (image « bloc »), jamais sur la
@@ -72,38 +72,51 @@ function Row({ k, v }) {
   );
 }
 
-function ItemSheet({ item }) {
+/** Les réglages d'un article, SANS le visuel ni les boutons.
+ *  Exporté pour que la fiche papier (FichePapier) puisse les placer dans sa
+ *  propre mise en page A4, au lieu de réimprimer la version écran. */
+export function ReglagesItem({ item, titre = true }) {
   if (!item) return null;
   const mv = item.modele;
   const tpl = item.modeleTemplate ? MODELES[item.modeleTemplate] : null;
   const layout = mv?.layout || tpl?.layout || tpl?.style || "stack";
   const lay = item.layout?.modele || item.layout?.photo || item.layout?.text;
+  return (
+    <>
+      {titre && (
+        <div style={{ fontWeight: 700, marginBottom: 6 }}>
+          {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+        </div>
+      )}
+      <Row k="Emplacement" v={item.emplacement === "fond" ? "Au fond du verre" : "Face avant"} />
+      {item.deuxEmplacement && <Row k="2e gravure" v="OUI (+7 €) — graver aussi au 2e endroit" />}
+      {mv && tpl && (
+        <>
+          <Row k="Modèle" v={`${tpl.label} — style ${layoutLabel(tpl, layout)}`} />
+          {tpl.lines.map((l) => {
+            if (l.below && mv.addText === false) return null;
+            const t = (mv.text?.[l.key] || "").trim();
+            if (!t) return null;
+            return <Row key={l.key} k={l.below ? "Texte ajouté" : l.label} v={`« ${t} »  ·  ${getFontLabel((mv.fonts || {})[l.key] || l.font)}`} />;
+          })}
+          {layout === "badge" && <Row k="Fond du badge" v={mv.bg === "plein" ? "Plein" : "Sans fond (au trait)"} />}
+          {(layout === "classic" || layout === "stack") && mv.motif && mv.motif !== "aucun" && <Row k="Motif" v={motifLabel(mv.motif)} />}
+        </>
+      )}
+      {item.photoSrc && !mv && <Row k="Logo / photo" v="fournie par la cliente (voir visuel)" />}
+      {lay?.label && <Row k="Taille / position" v={lay.label} />}
+      {item.personalization && <Row k="Résumé" v={item.personalization} />}
+    </>
+  );
+}
 
+function ItemSheet({ item }) {
+  if (!item) return null;
   return (
     <div style={{ display: "flex", gap: 16, flexWrap: "wrap", padding: "12px 0", borderTop: "1px dashed #ddd" }}>
       <GlassPreview item={item} />
       <div style={{ flex: 1, minWidth: 220 }}>
-        <div style={{ fontWeight: 700, marginBottom: 6 }}>{item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}</div>
-        <Row k="Emplacement" v={item.emplacement === "fond" ? "Au fond du verre" : "Face avant"} />
-        {item.deuxEmplacement && <Row k="2e gravure" v="OUI (+7 €) — graver aussi au 2e endroit" />}
-
-        {mv && tpl && (
-          <>
-            <Row k="Modèle" v={`${tpl.label} — style ${layoutLabel(tpl, layout)}`} />
-            {tpl.lines.map((l) => {
-              if (l.below && mv.addText === false) return null;
-              const t = (mv.text?.[l.key] || "").trim();
-              if (!t) return null;
-              return <Row key={l.key} k={l.below ? "Texte ajouté" : l.label} v={`« ${t} »  ·  ${getFontLabel((mv.fonts || {})[l.key] || l.font)}`} />;
-            })}
-            {layout === "badge" && <Row k="Fond du badge" v={mv.bg === "plein" ? "Plein" : "Sans fond (au trait)"} />}
-            {(layout === "classic" || layout === "stack") && mv.motif && mv.motif !== "aucun" && <Row k="Motif" v={motifLabel(mv.motif)} />}
-          </>
-        )}
-
-        {item.photoSrc && !mv && <Row k="Logo / photo" v="fournie par la cliente (voir visuel)" />}
-        {lay?.label && <Row k="Taille / position" v={lay.label} />}
-        {item.personalization && <Row k="Résumé" v={item.personalization} />}
+        <ReglagesItem item={item} />
         {item.photoSrc && (
           <div style={{ margin: "8px 0" }}>
             <a href={item.photoSrc} download target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "7px 14px", fontSize: "0.82rem", display: "inline-block", textDecoration: "none" }}>
@@ -111,7 +124,6 @@ function ItemSheet({ item }) {
             </a>
           </div>
         )}
-
         <details style={{ marginTop: 8 }}>
           <summary style={{ cursor: "pointer", fontSize: "0.8rem", color: "#888" }}>Tous les réglages (brut)</summary>
           <pre style={{ fontSize: "0.72rem", whiteSpace: "pre-wrap", wordBreak: "break-word", background: "#faf7f1", padding: 8, borderRadius: 6, marginTop: 6 }}>

@@ -3096,28 +3096,177 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .mtz-meas { position: absolute; left: -99999px; top: 0; visibility: hidden; white-space: nowrap; font-size: 100px; }
 
 /* ===========================================================================
-   IMPRESSION DE LA FICHE ATELIER (admin)
+   IMPRESSION DE LA FICHE ATELIER (admin) — UNE SEULE FEUILLE A4
    ---------------------------------------------------------------------------
-   Le bouton « 🖨️ Imprimer la fiche » ajoute la classe `impression-fiche` sur le
-   body puis lance l'impression. La feuille (composant FichePapier) est rendue
-   dans un PORTAIL, donc en enfant DIRECT du body : on masque tous les autres
-   enfants du body, ce qui évite les pages blanches du reste de l'écran.
+   Demande du gérant (24/09/2026) : « concentré sur une feuille A4, correctement,
+   comme un truc professionnel — et bien détaillé avec TOUS les détails, image
+   comprise ». Avant : 2 à 3 pages, mise en page d'écran, bouton et JSON brut
+   imprimés pour rien.
+   Deux mécanismes complémentaires :
+     · une mise en page PAPIER dédiée (2 colonnes, typo compacte, .fp-*) ;
+     · une MISE À L'ÉCHELLE automatique (--impr-echelle / --fp-vis, calculées
+       dans src/lib/impression.js) qui rentre la fiche dans la page quoi qu'il
+       arrive.
+   La feuille est rendue dans un PORTAIL (enfant direct du body) : on masque les
+   autres enfants, ce qui évite les pages blanches du reste de l'écran.
+
+   ⚠️ PIÈGE À NE PAS REFAIRE : la mise en page ci-dessous est HORS `@media print`.
+   Les styles d'impression ne s'appliquent QUE pendant l'impression ; en les y
+   laissant, la mesure faite par impression.js (qui a lieu avant, en média
+   écran) portait sur un bloc sans styles et la réduction calculée était fausse.
+   Ici la feuille reste `display:none` à l'écran — sauf pendant la mesure, où
+   `body.impression-mesure` la sort hors champ avec sa vraie géométrie.
    =========================================================================== */
 .zone-impression { display: none; }
+/* Le temps de la mesure : visible pour le navigateur, invisible pour l'œil. */
+body.impression-mesure .zone-impression {
+  display: block; position: absolute; left: -10000px; top: 0; z-index: -1;
+}
+
+.zone-impression {
+  background: #fff; color: #000; margin: 0; padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9.2pt; line-height: 1.32;
+  /* Reduction calculee (src/lib/impression.js) pour tenir sur UNE page.
+  ON UTILISE `zoom`, PAS `transform: scale()` : `transform` ne change pas la
+  hauteur de MISE EN PAGE, donc le navigateur continuait de compter deux
+  pages et sortait une 2e feuille blanche. `zoom` reduit vraiment la boite.
+  ⚠️ PAS de compensation de largeur ici : avec `zoom`, `100%` est DEJA exprime
+  dans les unites reduites (la fiche se met en page sur 190 mm / echelle et
+  revient a 190 mm une fois reduite). Diviser en plus la faisait deborder de
+  la feuille par la droite. */
+  zoom: var(--impr-echelle, 1);
+  width: 100%;
+  --fp-vis: 1;
+}
+
+/* --- ce qui n'a AUCUN sens sur du papier --- */
+.zone-impression button,
+.zone-impression .btn,
+.zone-impression details { display: none !important; }
+
+/* --- en-tête --- */
+.zone-impression .fp-tete {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10mm;
+  border-bottom: 1.6pt solid #c9a24b; padding-bottom: 5pt; margin-bottom: 7pt;
+}
+.zone-impression .fp-tete h2 { margin: 0; font-family: Georgia, serif; font-size: 15pt; }
+.zone-impression .fp-tete .fp-sous { margin: 2pt 0 0; font-size: 9pt; color: #333; }
+.zone-impression .fp-ref { text-align: right; font-size: 8.4pt; color: #444; white-space: nowrap; }
+.zone-impression .fp-ref b { display: block; font-size: 13pt; color: #000; letter-spacing: .5pt; }
+
+/* --- deux colonnes : c'est ce qui fait tenir la fiche sur une page ---
+Colonne de droite figee a 300px : c'est la largeur EXACTE du visuel
+reconstruit (GlassPreview, `const W = 300`), dont le texte grave est
+dimensionne en pixels a partir de cette largeur. La redimensionner en CSS
+decalerait la gravure par rapport a la photo. --- */
+.zone-impression .fp-corps {
+  display: grid; grid-template-columns: 1fr 300px; gap: 6mm; align-items: start;
+}
+.zone-impression .fp-corps.seul { grid-template-columns: 1fr; }
+/* Commande sur devis dont aucune photo n'a ete retrouvee dans la boite mail :
+la colonne de droite existe mais reste vide. On lui rend sa place au lieu de
+garder une bande blanche de 300 px a cote du texte. */
+.zone-impression .fp-corps:has(> .fp-col + .fp-col > .fp-photos:only-child:empty) {
+  grid-template-columns: 1fr;
+}
+.zone-impression .fp-corps:has(> .fp-col + .fp-col > .fp-photos:only-child:empty) > .fp-col + .fp-col {
+  display: none;
+}
+.zone-impression .fp-col { min-width: 0; }
+
+/* --- blocs --- */
+.zone-impression .fp-bloc { margin: 0 0 6pt; break-inside: avoid; }
+.zone-impression .fp-bloc > h3 {
+  margin: 0 0 3pt; font-family: Georgia, serif; font-size: 10pt;
+  border-bottom: .5pt solid #bbb; padding-bottom: 1.5pt;
+}
+.zone-impression .fp-cle { color: #555; padding-right: 6pt; vertical-align: top; white-space: nowrap; }
+.zone-impression .fp-table { width: 100%; border-collapse: collapse; }
+.zone-impression .fp-table td { padding: 1.6pt 0; vertical-align: top; }
+/* Texte libre de la cliente : on garde ses retours a la ligne. */
+.zone-impression .fp-pre { white-space: pre-line; margin-top: 1.5pt; }
+
+/* --- articles --- */
+.zone-impression .fp-articles td { border-bottom: .4pt solid #e2e2e2; padding: 2.4pt 0; }
+.zone-impression .fp-articles tr:last-child td { border-bottom: 0; }
+.zone-impression .fp-detail { color: #555; font-size: 8pt; }
+.zone-impression .fp-prix { text-align: right; white-space: nowrap; font-weight: 700; padding-left: 6pt; }
+
+/* --- prix --- */
+.zone-impression .fp-argent td:last-child { text-align: right; white-space: nowrap; }
+.zone-impression .fp-argent .fp-total td {
+  border-top: .6pt solid #999; padding-top: 2.5pt; font-weight: 700; font-size: 10pt;
+}
+
+/* --- le tableau « A GRAVER » : le plus lisible de la feuille --- */
+.zone-impression .fp-graver table { width: 100%; border-collapse: collapse; }
+.zone-impression .fp-graver td {
+  border: .7pt solid #666; padding: 3.5pt 5pt; vertical-align: middle;
+}
+.zone-impression .fp-graver td:first-child { width: 34%; font-weight: 700; background: #f2ede1; }
+.zone-impression .fp-graver h3 {
+  margin: 0 0 3pt; font-family: Georgia, serif; font-size: 10.5pt;
+  border-bottom: .5pt solid #bbb; padding-bottom: 1.5pt;
+}
+.zone-impression .fp-graver-item { break-inside: avoid; }
+/* Renvoi vers les planches numerotees : le n° seul ne suffit pas a la machine. */
+.zone-impression .fp-dessin { display: flex; align-items: center; gap: 5pt; margin: 0 0 6pt; }
+.zone-impression .fp-dessin img {
+  width: 16mm; height: 16mm; object-fit: contain; border: .5pt solid #ccc; background: #fff;
+}
+.zone-impression .fp-dessin span { font-size: 8pt; color: #555; }
+
+/* --- encadres (demande cliente, gravure, alerte) --- */
+.zone-impression .fp-encadre {
+  border: .8pt solid #c9a24b; background: #fdfaf3;
+  padding: 4pt 6pt; margin: 0 0 5pt; break-inside: avoid;
+}
+.zone-impression .fp-encadre.alerte { border-width: 1.2pt; border-color: #b32b2b; background: #fdf3f3; }
+
+/* --- colonne de droite : le visuel + les reglages de chaque article --- */
+.zone-impression .fp-visuel { break-inside: avoid; margin: 0 0 7pt; }
+/* La PHOTO est reduite en bloc par `zoom` (jamais par une largeur CSS) : la
+gravure posee dessus est dimensionnee en pixels a partir des 300px de
+GlassPreview, un redimensionnement CSS la decalerait. C'est le premier levier
+pour tenir sur une page quand la commande porte plusieurs articles graves.
+Le zoom ne porte QUE sur l'image : les reglages en dessous gardent leur taille,
+sinon ils devenaient illisibles au moment ou on en a le plus besoin. */
+.zone-impression .fp-visuel > div:first-child {
+  border: .5pt solid #bbb; zoom: var(--fp-vis);
+}
+.zone-impression .fp-legende {
+  font-size: 8.4pt; font-weight: 700; margin: 2pt 0 2pt; line-height: 1.25;
+}
+/* Les reglages viennent de FicheAtelier, stylés en ligne pour l'ecran :
+on les resserre pour le papier (!important, sinon le style en ligne gagne). */
+.zone-impression .fp-reglages > div {
+  font-size: 7.9pt !important; padding: 1pt 0 !important; gap: 4pt !important;
+}
+.zone-impression .fp-reglages > div > span:first-child {
+  min-width: 58pt !important; color: #666 !important;
+}
+
+/* --- photo envoyee par la cliente : GARDEE (demande du gerant), bornee --- */
+.zone-impression .fp-photos figure { width: 100% !important; margin: 0 0 4pt !important; }
+.zone-impression .fp-photos img { max-height: 55mm; object-fit: contain; }
+.zone-impression .fp-photos figcaption { font-size: 7.4pt; color: #666; }
+.zone-impression .fp-photos > p { font-size: 7.8pt; margin: 2pt 0; }
+
+/* --- pied --- */
+.zone-impression .fp-pied {
+  margin-top: 6pt; padding-top: 3pt; border-top: .5pt solid #ccc;
+  font-size: 7.6pt; color: #666; display: flex; justify-content: space-between;
+}
+
+.zone-impression * { break-inside: avoid; }
 
 @media print {
+  @page { size: A4 portrait; margin: 10mm; }
+  body.impression-fiche { background: #fff !important; }
   body.impression-fiche > *:not(.zone-impression) { display: none !important; }
-  body.impression-fiche .zone-impression {
-    display: block !important;
-    background: #fff; color: #000; padding: 0; margin: 0;
-  }
-  body.impression-fiche .entete-impression {
-    border-bottom: 2px solid #c9a24b;
-    padding-bottom: 10px;
-    margin-bottom: 14px;
-  }
-  /* Évite de couper un article en deux pages. */
-  body.impression-fiche .zone-impression > * { break-inside: avoid; }
+  /* La feuille elle-même : c'est la seule chose qui part à l'imprimante. */
+  body.impression-fiche .zone-impression { display: block; }
 }
 
 /* ===========================================================================
