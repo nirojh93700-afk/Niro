@@ -838,6 +838,16 @@ ne descend jamais sous zéro.
   au changement d'onglet, vider les champs des autres onglets, ou afficher « vous avez choisi
   deux styles, gardez-en un ». À lui de trancher.
 
+## ⛔ AUCUNE CASE LIBRE DE GRAVURE À LA PAGE DE PAIEMENT (24/09/2026, rappel du gérant)
+> « Je t'ai déjà dit d'enlever cette case. » Demandé le 25/08 (« Message ou date à graver »),
+> la case était revenue sous le libellé **« Précisions de personnalisation (gravure) »**
+> (`custom_fields` de `/api/checkout`). Rose Catarino #1Z17IKQ8 y a tapé « Belle rencontre » :
+> un texte hors fiche, non payé, affiché dans Gestion comme « Texte demandé (à graver) ».
+- **Retirée le 24/09.** Tout texte à graver se saisit sur la FICHE (champs payants). Ne jamais
+  remettre de case libre de gravure au paiement, **sous aucun libellé**. Seul reste le choix
+  « Lancement de la fabrication » (omis en mode vacances → `custom_fields: undefined`).
+- Les anciennes commandes gardent leur texte (le webhook lit encore `personnalisation`).
+
 ## 📬 HISTORIQUE COMPLET DES E-MAILS DANS CHAQUE COMMANDE — 24/09/2026
 > Remarque du gérant : « j'ai des mails, ils sont pas complets dans mon dossier dans la commande…
 > relis tous les mails que j'ai reçus par rapport aux commandes ». Le fil « Communications » d'une

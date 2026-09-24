@@ -445,17 +445,22 @@ export async function POST(req) {
         relaisLabel,    // nom du point relais choisi (affiché dans Stripe)
         relaisCarrier,  // transporteur du point relais → tarif au poids correct
       }),
-      custom_fields: [
-        {
-          key: "personnalisation",
-          label: { type: "custom", custom: "Précisions de personnalisation (gravure)" },
-          type: "text",
-          optional: true,
-        },
+      // Mode vacances : plus aucun champ → on omet custom_fields (Stripe
+      // refuse une liste vide).
+      custom_fields: vacationActive(settings?.vacation) ? undefined : [
+        // ⛔ Case libre « Précisions de personnalisation (gravure) » RETIRÉE le
+        // 24/09/2026 (rappel du gérant : « je t'ai déjà dit d'enlever cette
+        // case »). C'était la même case que « Message ou date à graver »,
+        // retirée le 25/08, revenue sous un autre libellé. Une cliente y a tapé
+        // « Belle rencontre » (#1Z17IKQ8) : un texte hors fiche, jamais payé,
+        // qui brouille ce qu'il faut graver. TOUT texte à graver se saisit sur
+        // la fiche produit (champs payants). Ne JAMAIS remettre de case libre
+        // de gravure au paiement, sous aucun libellé. Le webhook lit encore
+        // `personnalisation` pour les anciennes commandes (vide sinon).
         // 🏖️ Mode vacances : on RETIRE le choix « Lancement de la fabrication »
         // (impossible de promettre « tout de suite » pendant les congés). Il
         // revient automatiquement dès que le mode vacances s'éteint.
-        ...(vacationActive(settings?.vacation) ? [] : [{
+        {
           key: "fabrication",
           label: { type: "custom", custom: "Lancement de la fabrication" },
           type: "dropdown",
@@ -466,14 +471,15 @@ export async function POST(req) {
             ],
           },
           optional: true,
-        }]),
+        },
         // 🎁 Cadeau d'attente : la préférence se choisit désormais SUR LE PANIER
         // (encadré CadeauChoix → metadata.cadeauChoix) — plus de question ici,
         // pour ne pas demander deux fois (demande gérante, 01/09/2026).
         // ⚠️ Le champ « Message ou date à graver (facultatif) » a été RETIRÉ
         // (25/08/2026, demande de la gérante) : son libellé laissait croire
         // qu'une gravure supplémentaire (ex. une date) était offerte, alors que
-        // tout texte en plus est payant. Ne pas le remettre.
+        // tout texte en plus est payant. Ne pas le remettre (ni sous un autre
+        // libellé : voir la note en tête de custom_fields).
       ],
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/annule`,
