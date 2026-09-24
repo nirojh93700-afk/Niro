@@ -1,6 +1,8 @@
 import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead, logComm } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage, gmailSendHtml } from "@/lib/gmail";
+import { getSiteOrder } from "@/lib/firebase";
+import { syncHistoriqueCommande } from "@/lib/historiqueMails";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -108,6 +110,26 @@ export async function GET(req) {
     return Response.json({ unread, unreadMeta });
   }
   const orderId = url.searchParams.get("orderId") || "";
+  // HISTORIQUE COMPLET (24/09/2026) : à l'ouverture des communications d'une
+  // commande, on range dans son fil TOUS les e-mails échangés avec la cliente
+  // (reçus + envoyés, anciens et archivés compris) et son dossier du site.
+  // Refait au plus toutes les 10 min ; « &historique=1 » force (rattrapage).
+  if (orderId) {
+    const forcer = url.searchParams.get("historique") === "1";
+    const avant = await getBatThread(orderId);
+    if (forcer || !avant?.historiqueAt || Date.now() - avant.historiqueAt > 10 * 60 * 1000) {
+      try {
+        const order = await getSiteOrder(orderId);
+        if (order) {
+          const r = await syncHistoriqueCommande(order);
+          if (forcer) {
+            const t = await getBatThread(orderId);
+            return Response.json({ ok: true, ref: order.ref, ...r, total: (t?.messages || []).length });
+          }
+        }
+      } catch { /* jamais bloquant : le fil s'affiche quand même */ }
+    }
+  }
   let th = await getBatThread(orderId);
   // Remonte les réponses reçues par e-mail (Gmail) dans le fil, puis relit.
   if (th) {

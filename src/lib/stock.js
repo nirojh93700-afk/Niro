@@ -1011,6 +1011,47 @@ export async function batImportOutgoing(orderId, msgs = []) {
   return added;
 }
 
+// Importe l'HISTORIQUE complet d'une cliente dans le fil d'une commande
+// (e-mails reçus ET envoyés, anciens compris, + messages du dossier : formulaire
+// de contact, page « Répondre »…). Contrairement à batImportEmails, c'est un
+// RATTRAPAGE : ne change ni le statut du fil ni la pastille « non lu ».
+// msgs = [{ key, from: "cliente"|"atelier", text, at, subject }]. Doublons évités
+// par clé, et par proximité (même sens, ±10 min) avec un message déjà présent —
+// un e-mail envoyé par le site est aussi dans les « envoyés » Gmail.
+export async function batImportHistorique(orderId, msgs = [], info = {}) {
+  const id = String(orderId || "").trim();
+  if (!id || !Array.isArray(msgs) || !msgs.length) return 0;
+  const data = await getCatalogRaw(true);
+  data.bat = data.bat || {};
+  let th = data.bat[id];
+  if (!th) {
+    th = { token: newBatToken(), status: "discussion", ref: info.ref || "", messages: [], importedGmailIds: [], updatedAt: Date.now() };
+    if (info.customerEmail) th.customerEmail = info.customerEmail;
+    if (info.customerName) th.customerName = info.customerName;
+  }
+  th.importedGmailIds = th.importedGmailIds || [];
+  const debut = (t) => String(t || "").replace(/\s+/g, " ").trim().slice(0, 60).toLowerCase();
+  let added = 0;
+  for (const m of msgs) {
+    const key = String(m?.key || "").trim();
+    const text = String(m?.text || "").trim();
+    if (!key || !text || th.importedGmailIds.includes(key)) continue;
+    const from = m.from === "cliente" ? "cliente" : "atelier";
+    const at = Number(m.at) || Date.now();
+    const doublon = th.messages.some((x) => x.from === from && Math.abs((Number(x.at) || 0) - at) < 10 * 60 * 1000
+      && (from === "atelier" || debut(x.text) === debut(text)));
+    th.importedGmailIds.push(key);
+    if (doublon) continue;
+    th.messages.push({ from, text: text.slice(0, 3000), at, viaEmail: true, gmailId: key, historique: true, ...(m.subject ? { subject: String(m.subject).slice(0, 200) } : {}) });
+    added++;
+  }
+  th.messages.sort((a, b) => (Number(a.at) || 0) - (Number(b.at) || 0));
+  th.historiqueAt = Date.now();
+  data.bat[id] = th;
+  await persistCatalog(data, ["bat"]);
+  return added;
+}
+
 // =============================================================================
 // DOSSIER DE COMMUNICATION PAR CLIENTE (section `comms`, clé = e-mail) :
 // TOUT ce qui est échangé (e-mails reçus, e-mails envoyés — par le site OU à la

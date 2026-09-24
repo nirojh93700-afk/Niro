@@ -155,6 +155,23 @@ export async function gmailListFromSender(token, fromEmail, max = 10) {
   return out;
 }
 
+// Identifiants des messages correspondant à une recherche Gmail libre (avec
+// pagination). Sert à reconstituer TOUT l'historique d'une cliente.
+export async function gmailSearchIds(token, q, max = 100) {
+  const out = [];
+  let pageToken = "";
+  while (out.length < max) {
+    const u = `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(q)}&maxResults=${Math.min(100, max - out.length)}${pageToken ? `&pageToken=${pageToken}` : ""}`;
+    const res = await fetch(u, { headers: { Authorization: `Bearer ${token}` } });
+    const data = await res.json();
+    if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
+    for (const m of data.messages || []) out.push(m.id);
+    if (!data.nextPageToken) break;
+    pageToken = data.nextPageToken;
+  }
+  return out;
+}
+
 // Identifiants des messages ENVOYÉS récemment (réponses faites à la main depuis
 // Gmail) : elles sont rangées dans le dossier de la cliente et sa commande.
 export async function gmailListSentIds(token, max = 25) {

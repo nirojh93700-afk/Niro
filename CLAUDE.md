@@ -838,6 +838,24 @@ ne descend jamais sous zéro.
   au changement d'onglet, vider les champs des autres onglets, ou afficher « vous avez choisi
   deux styles, gardez-en un ». À lui de trancher.
 
+## 📬 HISTORIQUE COMPLET DES E-MAILS DANS CHAQUE COMMANDE — 24/09/2026
+> Remarque du gérant : « j'ai des mails, ils sont pas complets dans mon dossier dans la commande…
+> relis tous les mails que j'ai reçus par rapport aux commandes ». Le fil « Communications » d'une
+> commande ne recevait que les réponses APRÈS notre dernier message (10 derniers mails) et ce que la
+> boîte surveillée voyait passer (25 derniers, < 10 jours, boîte de réception seulement) → tout ce
+> qui précédait la commande, était ancien ou archivé n'apparaissait jamais.
+- **`syncHistoriqueCommande(order)`** (`src/lib/historiqueMails.js`) : Gmail
+  `(from:X OR to:X) newer_than:365d` (archivés compris, 80 max, `gmailSearchIds` paginé) + le dossier
+  du site (`getCommsFor`) → rangés dans le fil par **`batImportHistorique`** (`stock.js`) : clé =
+  id Gmail ou `c:<id dossier>`, doublons évités (même sens ±10 min), **sans toucher au statut ni à
+  la pastille « non lu »**, messages marqués `historique:true`. Le dossier de la cliente se complète
+  au passage (`logComm`). Etsy exclu. Envois automatiques exclus (bienvenue, connexion, newsletter,
+  offre gravure, favoris). Texte cité retiré (`separerCitation`), 3000 caractères max : **toute la
+  section `bat` tient dans UN document Firestore (1 Mo max)** — ne jamais y ranger de corps entiers.
+- **Déclenché à l'ouverture** des communications d'une commande (`GET /api/admin/bat?orderId=`, au
+  plus toutes les 10 min) ; **`&historique=1`** force et renvoie `{ajoutes, lus, total}` (rattrapage).
+- Rattrapage de toutes les commandes fait le 24/09 (boucle shell sur `/api/admin/orders`).
+
 ## 🗂️ FILE DE PRODUCTION — `/gestion/commandes` (02/09/2026)
 > Demande du gérant : « un truc propre, dans l'ordre, pour pas que je mélange les commandes en
 > arrivant ». Page dédiée, compacte, **ordre de traitement numéroté** (FIFO par date, urgentes
