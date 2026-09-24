@@ -1,4 +1,13 @@
-# ✉️ À ENVOYER — Cécilia Herrera, commande #00CUYR2U
+# ✅ ENVOYÉ — Cécilia Herrera, commande #00CUYR2U
+
+> ✅ **PARTI LE 24/09/2026 À 9 H 32 (heure française)** par le site (`POST /api/admin/send-client-email`,
+> réponse `{"ok":true,"via":"gmail"}` = boîte connectée au site, avec le bouton « ✉️ Répondre »),
+> texte définitif inchangé. Vérifié avant : site en 200, aucune réponse de la cliente depuis le
+> 15/09. Rangé dans son dossier (`/api/admin/comms`).
+> **Suite** : elle répond « modèle 15 » ou ne répond pas → lot 2 sur le modèle 15 ; « plume » →
+> lot 2 en style Plume, mêmes textes. Puis expédition à domicile + 🎁 cadeau surprise dans le colis
+> (promis le 15/09). Aucun remboursement (produit personnalisé).
+
 
 > **Validé « Envoie » par le gérant le 24/09/2026.** Non envoyé depuis la session qui l'a préparé :
 > `nivcreation.fr` ET l'adresse Firebase étaient bloquées par la politique réseau de
