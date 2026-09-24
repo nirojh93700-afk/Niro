@@ -40,11 +40,8 @@ nivcreation.fr
 
 ---
 
-## Phrase en plus, SEULEMENT si le gérant la veut
+## ⛔ Pas de remboursement
 
-> Si vous préférez ne plus attendre, dites-le-nous et nous verrons ensemble ce qu'il est
-> possible de faire.
-
-(La fiche de la commande indique « remboursement partiel, retenue de 10 € — tant que la
-fabrication n'est pas lancée ». Rien n'est gravé à ce jour, donc c'est encore possible.
-**Décision du gérant, pas la mienne.**)
+Tranché par le gérant le 24/09 : « quel remboursement, y a pas de remboursement ».
+Produit personnalisé = jamais remboursé (règle ferme du §11). Aucune phrase de ce
+genre dans le message, ni maintenant ni plus tard.
