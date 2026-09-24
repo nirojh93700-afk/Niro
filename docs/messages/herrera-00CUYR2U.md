@@ -12,20 +12,19 @@
 
 ---
 
-**Objet : Votre commande 00CUYR2U — une précision avant de graver**
+**Objet : Votre commande 00CUYR2U — une précision avant de graver le second lot**
 
 Bonjour Cécilia,
 
-Nous revenons vers vous avant de lancer la gravure de vos deux lots de flûtes.
+Le premier lot de flûtes — « Chloé & Nico », dans l'écriture Cinzel Decorative — est gravé.
 
-Sur le second lot — « Salomé & Bernard », avec la date du 24.09.2026 — **deux styles ont été
-enregistrés en même temps** : le modèle 15 et le style « Plume ». Sur des pièces gravées, on
-ne reprend pas : nous préférions en avoir le cœur net plutôt que de graver l'un pour l'autre.
+Pour le second — « Salomé & Bernard », avec la date du 24.09.2026 — nous avons besoin d'un mot
+de vous avant de le lancer : **deux styles ont été enregistrés en même temps**, le modèle 15 et
+le style « Plume ». Sur une pièce gravée on ne revient pas en arrière, et nous ne voulions pas
+graver l'un pour l'autre.
 
-Nous partons sur le **modèle 15**, dans l'écriture Cinzel Decorative, comme nous vous l'avions
-indiqué. Si vous préférez la plume, répondez simplement à ce message et nous graverons celle-là.
-
-Le premier lot — « Chloé & Nico », même écriture — ne pose aucune question.
+Nous partons sur le **modèle 15**, comme nous vous l'avions indiqué. Répondez-nous simplement
+« modèle 15 » ou « plume », et nous lançons la gravure.
 
 Vous recevrez le numéro de suivi par e-mail au moment de l'expédition.
 
@@ -35,13 +34,23 @@ nivcreation.fr
 
 ---
 
-## Une ligne à garder ou à couper (à placer juste avant « Bien cordialement »)
+## Une ligne à garder ou à couper (juste avant « Bien cordialement »)
 
 > Nous avons bien à l'esprit la date du 24 septembre, et nous sommes désolés de revenir
 > vers vous aussi tard.
 
-Sans elle, le message ne dit pas un mot du 24 alors qu'on lui en a parlé le 15/09 — elle le
-remarquera. Avec elle, on reste court, sans s'excuser en long.
+Sans elle, le message ne dit pas un mot du 24 alors qu'on lui en a parlé le 15/09.
+
+---
+
+## ⚠️ À vérifier avant d'envoyer
+
+Le message annonce que **le premier lot est gravé**. Sur l'écran, la commande est encore
+« À préparer ». Si les deux flûtes « Chloé & Nico » ne sont pas gravées au moment de
+l'envoi, remplacer la première phrase par :
+
+> Le premier lot de flûtes — « Chloé & Nico », dans l'écriture Cinzel Decorative — ne pose
+> aucune question : il part en gravure.
 
 ---
 
@@ -60,6 +69,5 @@ Le message **met les deux styles en avant** et ne dit jamais que c'est la faute 
 
 En revanche je n'écris pas noir sur blanc **« c'est ce qui a retardé votre commande »** : les
 deux styles n'ont été repérés que le 24/09, et l'e-mail du 15/09 lui annonçait déjà le modèle
-15 sans hésiter — personne n'attendait sa réponse pendant ces dix jours. Écrire l'inverse
-serait facile à démonter si elle relit le fil, et le mensonge coûterait plus cher que le
-retard. Le brouillon ci-dessus laisse le lien se faire tout seul sans rien affirmer de faux.
+15 sans hésiter. Écrire l'inverse serait facile à démonter si elle relit le fil. Le brouillon
+laisse le lien se faire tout seul sans rien affirmer de faux.
