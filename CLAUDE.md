@@ -759,10 +759,29 @@ ne descend jamais sous zéro.
   Les deux blocs de droite sont **exportés de `FicheAtelier.jsx`** pour ne pas dupliquer l'écran.
 - **Tient sur une page quoi qu'il arrive** — `src/lib/impression.js` (`imprimerFiche()`, branché sur
   le bouton « 🖨️ Imprimer la fiche ») : attend les photos, mesure la feuille, puis joue sur DEUX
-  leviers dans cet ordre — **la taille des photos** (`--fp-vis` : 1 → 0,85 → 0,72 → 0,6, on s'arrête
-  dès que le texte tient à ≥ 80 %), **puis** la taille générale (`--impr-echelle`, plancher 0,62).
-  Mesuré : 1 article = 100 % · 2 articles + 4 encadrés + photo = 81 % · 3 articles gravés différents
-  = photos à 60 % et texte à 75 %. **4 cas testés, 1 page chacun, 0 erreur JS.**
+  leviers dans cet ordre — **la taille des photos** (`--fp-vis` : 1 → 0,85 → 0,72 → 0,6 → 0,45, on
+  s'arrête dès que le texte tient à ≥ 75 %), **puis** la taille générale (`--impr-echelle`, plancher
+  0,58). Mesuré : 1 article = 100 % · 2 articles + 4 encadrés + photo = 81 % · 3 articles gravés
+  différents = 60 %, tables « À graver » toujours lisibles.
+- ✅ **TEST AUTOMATIQUE : `npm run test-impression`** (`tools/tests/impression-fiche.mjs`). Il
+  reconstruit 4 feuilles avec le VRAI bloc CSS de `globals.css` **et la règle de plein écran de
+  l'admin**, joue l'algorithme de `impression.js` en média écran, puis vérifie : feuille mesurable ·
+  visible à l'impression · **pourcentage d'encre > 2 %** (c'est ça qui attrape la feuille blanche) ·
+  **exactement 1 page** dans le PDF. `IMPR_GARDER=<dossier>` garde les images pour les regarder.
+  Playwright n'est pas une dépendance du site (déploiement) : le test se saute tout seul s'il manque
+  (`npm i --no-save playwright-core`).
+- 🔴🔴 **LA FEUILLE BLANCHE (24/09/2026) — LE PIÈGE LE PLUS COÛTEUX.** Le gérant a imprimé : une
+  page **entièrement vide**. La fiche est rendue dans un **portail**, c'est donc un **enfant direct
+  du `<body>`** — et le plein écran de l'admin masque tous les enfants du body sauf `<main>` :
+  `body:has(.ash) > *:not(main):not(script):not(style):not(link) { display: none !important; }`
+  (fin de `globals.css`). Cette règle porte `!important`, donc **elle gagne contre n'importe quelle
+  spécificité**. Les deux règles qui ré-affichent la feuille DOIVENT donc porter `!important` :
+  `body.impression-fiche .zone-impression` (impression) et `body.impression-mesure .zone-impression`
+  (mesure — sans lui, `scrollHeight` vaut 0 et la réduction est calculée n'importe comment).
+  **Ne jamais retirer ces deux `!important`.** C'est `npm run test-impression` qui le surveille.
+  ⚠️ Et quand on écrit un test pour ça : **mettre la règle de plein écran dans la feuille de style
+  du test**. Un premier harnais y avait recopié des lignes de COMMENTAIRE citant le sélecteur →
+  CSS invalide, règle avalée, la panne ne se reproduisait pas et le test passait au vert à tort.
 - 🔴 **TROIS PIÈGES À NE PAS REFAIRE** (chacun a coûté un aller-retour) :
   1. **La mise en page `.fp-*` est HORS `@media print`.** Les styles d'impression ne s'appliquent
      QUE pendant l'impression : en les y laissant, la mesure (faite avant, en média écran) portait

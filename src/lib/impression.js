@@ -26,9 +26,11 @@
 const PX_PAR_MM = 96 / 25.4;      // 1 mm en pixels CSS
 const A4_L = 210, A4_H = 297;     // A4 en mm
 const MARGE = 10;                 // marge d'impression (doit égaler @page)
-const PLANCHER = 0.62;            // en dessous, ce n'est plus lisible
-const CONFORT = 0.8;              // en dessous, on préfère rapetisser les photos
-const VISUELS = [1, 0.85, 0.72, 0.6]; // tailles d'essai des visuels
+const PLANCHER = 0.58;            // en dessous, ce n'est plus lisible
+const CONFORT = 0.75;             // en dessous, on préfère rapetisser les photos
+// Tailles d'essai des visuels. Le dernier cran (0,45) ne sert qu'aux commandes
+// à trois articles gravés différents : sans lui elles passaient sur 2 ou 3 pages.
+const VISUELS = [1, 0.85, 0.72, 0.6, 0.45];
 
 export const LARGEUR_UTILE_PX = Math.round((A4_L - 2 * MARGE) * PX_PAR_MM); // ~718
 export const HAUTEUR_UTILE_PX = Math.round((A4_H - 2 * MARGE) * PX_PAR_MM); // ~1047

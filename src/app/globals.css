@@ -3118,9 +3118,10 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
    `body.impression-mesure` la sort hors champ avec sa vraie géométrie.
    =========================================================================== */
 .zone-impression { display: none; }
-/* Le temps de la mesure : visible pour le navigateur, invisible pour l'œil. */
+/* Le temps de la mesure : visible pour le navigateur, invisible pour l'œil.
+   🔴 `!important` OBLIGATOIRE — voir la note sur le plein écran admin plus bas. */
 body.impression-mesure .zone-impression {
-  display: block; position: absolute; left: -10000px; top: 0; z-index: -1;
+  display: block !important; position: absolute; left: -10000px; top: 0; z-index: -1;
 }
 
 .zone-impression {
@@ -3265,8 +3266,13 @@ on les resserre pour le papier (!important, sinon le style en ligne gagne). */
   @page { size: A4 portrait; margin: 10mm; }
   body.impression-fiche { background: #fff !important; }
   body.impression-fiche > *:not(.zone-impression) { display: none !important; }
-  /* La feuille elle-même : c'est la seule chose qui part à l'imprimante. */
-  body.impression-fiche .zone-impression { display: block; }
+  /* La feuille elle-même : c'est la seule chose qui part à l'imprimante.
+     🔴 `!important` OBLIGATOIRE, NE JAMAIS LE RETIRER (page blanche le 24/09/2026) :
+     la feuille est rendue dans un PORTAIL, donc c'est un enfant direct du <body>, et
+     le plein écran de l'admin masque tous les enfants du body sauf <main> —
+     `body:has(.ash) > *:not(main)… { display: none !important }` (fin de ce fichier).
+     Sans `!important` ici, ce masquage gagne et l'imprimante sort une feuille vide. */
+  body.impression-fiche .zone-impression { display: block !important; }
 }
 
 /* ===========================================================================
