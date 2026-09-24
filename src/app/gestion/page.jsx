@@ -1202,13 +1202,6 @@ export default function GestionPage() {
                     {"\n" + o.alerteInterne}
                   </div>
                 )}
-                {(o.demandeGravure || o.messageGraver) && (
-                  <div style={{ background: "#fbf3e6", border: "1px solid #e7d3a1", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem", whiteSpace: "pre-line" }}>
-                    <strong>✍️ Texte demandé par la cliente (à graver) :</strong>
-                    {o.demandeGravure ? `\nPrécisions gravure : ${o.demandeGravure}` : ""}
-                    {o.messageGraver ? `\nMessage / date à graver : ${o.messageGraver}` : ""}
-                  </div>
-                )}
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", position: "relative", borderColor: batUnread.includes(o.id) ? "#c9a24b" : undefined }}
                     onClick={() => { const opening = batOpen !== o.id; setBatOpen(opening ? o.id : null); if (opening) setBatUnread((u) => u.filter((x) => x !== o.id)); }}>

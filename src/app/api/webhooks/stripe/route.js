@@ -357,7 +357,10 @@ export async function POST(req) {
       (session.custom_fields || []).find((f) => f.key === "fabrication")?.dropdown?.value === "immediate";
 
     const customFields = (session.custom_fields || [])
-      .filter((f) => f.key !== "fabrication")
+      // Cases libres de gravure (« Précisions de personnalisation »,
+      // « Message ou date à graver ») : RETIRÉES partout le 24/09/2026, même si
+      // une ancienne session Stripe en contient encore.
+      .filter((f) => !["fabrication", "personnalisation", "message_cadeau"].includes(f.key))
       .map((f) => {
         const val = f.text?.value || f.dropdown?.value || f.numeric?.value || "";
         if (!val) return "";
@@ -648,8 +651,6 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       cadeauChoix: choixCadeau,
       // Motif de la promesse (offre gravure) + drapeau « cadeau » de la file de production.
       ...(cadeauPromis ? { cadeauPromis, flags: ["cadeau"] } : {}),
-      demandeGravure: (session.custom_fields || []).find((f) => f.key === "personnalisation")?.text?.value || "",
-      messageGraver: (session.custom_fields || []).find((f) => f.key === "message_cadeau")?.text?.value || "",
       // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).
       demande: quote ? (quote.note || "").trim() : "",
       quoteNumber: quote?.number || "",

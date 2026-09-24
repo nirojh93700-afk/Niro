@@ -225,11 +225,9 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
         ))}
       </ul>
 
-      {!compact && (o.demande || o.messageGraver || o.demandeGravure) ? (
+      {!compact && o.demande ? (
         <div className="file-note-box">
           {o.demande ? <div>📋 <strong>Sur mesure :</strong> {o.demande}</div> : null}
-          {o.messageGraver ? <div>✍️ <strong>À graver :</strong> {o.messageGraver}</div> : null}
-          {o.demandeGravure ? <div>✍️ <strong>Précisions :</strong> {o.demandeGravure}</div> : null}
         </div>
       ) : null}
       {o.alerteInterne ? <div className="file-note-box red">🚨 {o.alerteInterne}</div> : null}

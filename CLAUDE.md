@@ -846,7 +846,11 @@ ne descend jamais sous zéro.
 - **Retirée le 24/09.** Tout texte à graver se saisit sur la FICHE (champs payants). Ne jamais
   remettre de case libre de gravure au paiement, **sous aucun libellé**. Seul reste le choix
   « Lancement de la fabrication » (omis en mode vacances → `custom_fields: undefined`).
-- Les anciennes commandes gardent leur texte (le webhook lit encore `personnalisation`).
+- **« Tu supprimes partout » (même jour)** : plus rien n'est lu ni affiché nulle part — le webhook
+  n'enregistre plus `demandeGravure`/`messageGraver` et ignore ces clés dans les e-mails (alerte +
+  confirmation), et l'encadré « ✍️ Texte demandé par la cliente (à graver) » est retiré de la fiche
+  commande (`/gestion`), de la file de production (`/gestion/commandes`) et de la fiche papier
+  (`FichePapier`). Les anciennes valeurs restent en base mais ne s'affichent plus.
 
 ## 📬 HISTORIQUE COMPLET DES E-MAILS DANS CHAQUE COMMANDE — 24/09/2026
 > Remarque du gérant : « j'ai des mails, ils sont pas complets dans mon dossier dans la commande…

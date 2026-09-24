@@ -77,7 +77,6 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
   const port = order.shippingPrice != null ? Number(order.shippingPrice) : Math.max(0, total - lignes);
 
   const cadeaux = String(order.cadeauChoix || "").split("+").filter(Boolean);
-  const demandeGravure = [order.demandeGravure, order.messageGraver].filter(Boolean).join(" · ");
 
   // La colonne de droite n'existe que s'il y a quelque chose à regarder :
   // sinon la feuille garderait une bande blanche de 300 px pour rien.
@@ -133,12 +132,6 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
             </div>
           ) : null}
 
-          {demandeGravure ? (
-            <div className="fp-encadre">
-              <strong>✍️ Texte demandé par la cliente (à graver)</strong>
-              <div className="fp-pre">{demandeGravure}</div>
-            </div>
-          ) : null}
 
           {/* ------------------------- À GRAVER ---------------------------- */}
           {spec.length ? (
