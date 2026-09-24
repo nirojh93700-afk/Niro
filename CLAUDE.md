@@ -738,6 +738,11 @@ ne descend jamais sous zéro.
   `GET /api/admin/gmail?action=photos&email=` puis `?action=attachment&msg=&att=&mime=`,
   composant `src/components/admin/PhotosEmail.jsx` (vignette + « Télécharger »).
 - « Imprimer la fiche » attend que la photo soit chargée (8 s max) avant d'imprimer.
+- **Photo RENVOYÉE par e-mail après une commande normale (24/09/2026)** : Rose Catarino #1Z17IKQ8 a
+  commandé avec une photo en français puis renvoyé la version PORTUGAISE par e-mail le 15/09 ; la
+  fiche à l'écran ne montrait que la photo du site. `FicheAtelier` affiche maintenant, sous les
+  réglages de TOUTE commande, les photos reçues par e-mail (« à comparer avec celle de la commande :
+  la plus récente est la bonne »), rien si aucune (`masquerSiVide`). La fiche papier le faisait déjà.
 - ⚠️ **Déploiement** : le 23/09, 4 envois poussés en 10 minutes → le 4ᵉ a échoué côté Firebase
   (« Build failed » en 2 min 30 alors que le build local passait), les 3 autres ont réussi. Vérifier
   un déploiement : `curl -s https://api.github.com/repos/nirojh93700-afk/Niro/commits/<sha>/check-runs`

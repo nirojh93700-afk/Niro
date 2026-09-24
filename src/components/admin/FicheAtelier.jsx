@@ -159,6 +159,14 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
     <div style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "8px 14px", marginTop: 8 }}>
       <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: 4 }}>🛠️ Fiche atelier — à graver à l'identique</div>
       {items.map((it, i) => <ItemSheet key={i} item={it} />)}
+      {/* Une cliente peut renvoyer sa photo PAR E-MAIL après la commande (autre
+         version, autre langue…) : on la montre ici aussi, sinon l'atelier
+         grave la version du site sans le savoir (Rose Catarino #1Z17IKQ8,
+         version portugaise reçue le 15/09 — remarque du gérant, 24/09/2026). */}
+      {order?.customerEmail ? (
+        <PhotosEmail email={order.customerEmail} adminKey={adminKey} print={print} masquerSiVide
+          titre="📎 Photo(s) renvoyée(s) par e-mail — à comparer avec celle de la commande : la plus récente est la bonne" />
+      ) : null}
     </div>
   );
 }

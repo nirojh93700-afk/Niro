@@ -17,7 +17,7 @@ function adminKeyFrom(k) {
   try { return sessionStorage.getItem("niv-admin-key") || ""; } catch { return ""; }
 }
 
-export default function PhotosEmail({ email, adminKey, print = false }) {
+export default function PhotosEmail({ email, adminKey, print = false, titre: titreProp, masquerSiVide = false }) {
   const [etat, setEtat] = useState("chargement"); // chargement | ok | vide | erreur
   const [photos, setPhotos] = useState([]);
 
@@ -52,13 +52,13 @@ export default function PhotosEmail({ email, adminKey, print = false }) {
     return () => { annule = true; urls.forEach((u) => URL.revokeObjectURL(u)); };
   }, [email, adminKey]);
 
-  const titre = "📎 Photo envoyée par la cliente (pièce jointe de son e-mail)";
+  const titre = titreProp || "📎 Photo envoyée par la cliente (pièce jointe de son e-mail)";
   if (etat === "chargement") return <p data-photos-chargement="1" style={{ fontSize: "0.85rem", color: "#888", margin: "8px 0" }}>{titre} — recherche dans la boîte mail…</p>;
   // Sur PAPIER, « aucune photo » n'apprend rien à l'atelier : on ne l'imprime
   // pas (une ligne de moins à caser sur la feuille A4). À l'écran, en revanche,
   // le gérant doit savoir pourquoi il ne voit rien.
   if (etat === "erreur") return print ? null : <p style={{ fontSize: "0.85rem", color: "#b4452f", margin: "8px 0" }}>{titre} — boîte mail injoignable, ouvrez l&apos;e-mail de la cliente dans Gmail.</p>;
-  if (etat === "vide") return print ? null : <p style={{ fontSize: "0.85rem", color: "#888", margin: "8px 0" }}>{titre} — aucune photo trouvée dans ses e-mails.</p>;
+  if (etat === "vide") return print || masquerSiVide ? null : <p style={{ fontSize: "0.85rem", color: "#888", margin: "8px 0" }}>{titre} — aucune photo trouvée dans ses e-mails.</p>;
 
   const fmt = (d) => { const t = Date.parse(d); return Number.isFinite(t) ? new Date(t).toLocaleDateString("fr-FR") : ""; };
   return (
