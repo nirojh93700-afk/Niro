@@ -2011,7 +2011,7 @@ export async function getSettings() {
     hero: { eyebrow: "", title: "", text: "", cta1: "", cta2: "", image: "", ...(s.hero || {}) },
     categories: Array.isArray(s.categories) ? s.categories : [], // 3 cartes [{label,sub,image}]
     atelier: { eyebrow: "", title: "", text1: "", text2: "", image: "", ...(s.atelier || {}) },
-    sections: { categories: true, trust: true, featured: true, atelier: true, ...(s.sections || {}) },
+    sections: { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, verresBand: true, mur: true, noel: true, ...(s.sections || {}) },
     apropos: s.apropos || "", // contenu HTML de la page À propos (vide = défaut)
     // Gestes promis par client [{email, note}] : détectés automatiquement à
     // chaque commande (alerte rouge e-mail + Gestion). Réglés via l'API admin.

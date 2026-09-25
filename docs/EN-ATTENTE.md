@@ -12,15 +12,11 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
-- **🎄 Noël 2026** (25/09) : maquette **boule de Noël** (`docs/maquettes/boule-noel-fiche.html`) =
-  **enregistrée seulement, PAS à mettre sur le site** (ordre du gérant). Maquette **accueil + page Noël
-  v2** (`docs/maquettes/noel-accueil-et-page.html`, artifact RonyZq6a22CTEnGgyW5UGT : titre « Ce Noël,
-  offrez un cadeau unique », vert sapin & or / crème & or au choix, sans boule, emplacement exact =
-  entre la carafe édition limitée et « Vient d'arriver ») + **`noel-sur-accueil-actuel.html` = la vraie
-  page d'accueil avec le bandeau AJOUTÉ sous le logo, rouge de Noël & or / bordeaux & or** (v3, 25/09 soir) — **en attente du retour du gérant** :
-  (1) couleur (sapin ou crème) et titre ; (2) « applique » pour la page/bandeau ; (3) date limite de
-  commande Noël ; (4) gobelet : le montrer tel quel ou finir la version validée, et combien en stock.
-  Détail : `CLAUDE.md` § NOËL 2026.
+- **🎄 Noël 2026** : ✅ **bandeau + sélection + page `/offrir/noel` EN LIGNE le 25/09** (interrupteur
+  Apparence → « Bandeau Noël », à décocher après les fêtes). Reste en attente : (1) **date limite de
+  commande** à me donner ; (2) boule de Noël = enregistrée, PAS en ligne ; (3) gobelet : maquette
+  redonnée le 25/09 (`docs/maquettes/gobelet-configurateur-final.html`), attend « mets en ligne » +
+  quantité en stock. Détail : `CLAUDE.md` § NOËL 2026.
 
 ## 1. Messages / clients en attente
 

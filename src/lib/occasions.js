@@ -66,14 +66,43 @@ export const OCCASIONS = [
   },
 ];
 
+// 🎄 NOËL — 7ᵉ occasion (maquette validée « tu peux mettre en ligne », 25/09/2026).
+// Liste FERMÉE de produits (pas de règle par mots-clés : c'est une sélection
+// choisie), mais toujours lue dans le catalogue EN DIRECT : un produit masqué
+// dans Gestion disparaît tout seul, un prix changé suit. 17 produits, d'où
+// `max: 20` (les autres occasions gardent 12).
+export const NOEL_SLUGS = [
+  "cristal-photo-3d-vertical", "cristal-photo-3d-horizontal",
+  "verre-a-whisky-grave", "carafe-a-whisky-gravee", "verre-a-vin-grave", "flute-a-champagne-gravee",
+  "collier-plaque-acier", "collier-coeur-grave", "bracelet-homme-cuir-tresse-acier", "collier-couple-puzzle",
+  "porte-cles-cuir-a-graver", "cle-usb-bois-coffret", "veilleuse-arbre-de-vie-prenom",
+  "couverts-enfants-personnalises", "plaque-de-porte-enfant", "photophore-fee-bois",
+  "porte-cles-cristal-led-coeur", "piece-ronde-laiton",
+];
+OCCASIONS.push({
+  slug: "noel",
+  label: "Noël",
+  titre: "Des cadeaux de Noël uniques, gravés dans notre atelier",
+  description: "Cristal photo 3D, verres et carafe gravés, bijoux personnalisés, souvenirs en bois : des cadeaux de Noël uniques, gravés à la commande dans notre atelier français.",
+  intro: "Un prénom, une date, une photo : ce qui fait de l'objet un cadeau unique. Toutes ces pièces sont gravées à la commande et partent en colis suivi.",
+  image: "/produits/collier-coeur-grave-1.jpg",
+  max: 20,
+  ordre: NOEL_SLUGS,
+  match: (p) => NOEL_SLUGS.includes(p.slug),
+});
+
 export function getOccasion(slug) {
   return OCCASIONS.find((o) => o.slug === slug) || null;
 }
 
 // Produits du catalogue vivant qui correspondent à l'occasion (12 max par
 // défaut : une page riche mais qui reste un CHOIX, pas tout le magasin).
-export function produitsPourOccasion(catalog, occasion, max = 12) {
+export function produitsPourOccasion(catalog, occasion, max) {
   const o = typeof occasion === "string" ? getOccasion(occasion) : occasion;
   if (!o) return [];
-  return catalog.filter((p) => { try { return o.match(p); } catch { return false; } }).slice(0, max);
+  const lim = Number.isFinite(max) ? max : (o.max || 12);
+  const found = catalog.filter((p) => { try { return o.match(p); } catch { return false; } });
+  // Liste fermée (Noël) : on garde l'ordre voulu de la sélection, pas celui du catalogue.
+  if (Array.isArray(o.ordre)) found.sort((a, b) => o.ordre.indexOf(a.slug) - o.ordre.indexOf(b.slug));
+  return found.slice(0, lim);
 }

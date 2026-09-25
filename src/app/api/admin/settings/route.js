@@ -105,6 +105,10 @@ export async function POST(req) {
       trust: body.sections.trust !== false,
       featured: body.sections.featured !== false,
       atelier: body.sections.atelier !== false,
+      newArrivals: body.sections.newArrivals !== false,
+      verresBand: body.sections.verresBand !== false,
+      mur: body.sections.mur !== false,
+      noel: body.sections.noel !== false, // 🎄 bandeau + sélection de Noël (accueil)
     };
   }
   if (typeof body.apropos === "string") patch.apropos = body.apropos.slice(0, 4000);

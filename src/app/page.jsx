@@ -3,6 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import NewArrivalsToast from "@/components/NewArrivalsToast";
 import BandeauAccueil, { prixBandeau } from "@/components/home/BandeauAccueil";
 import MurAtelier from "@/components/home/MurAtelier";
+import BandeauNoel from "@/components/home/BandeauNoel";
 import { dateAjout } from "@/lib/productDates";
 import { PaymentLogos } from "@/components/PaymentBand";
 import PayInfoModal from "@/components/PayInfo";
@@ -93,7 +94,7 @@ export default async function HomePage() {
     text2: pick(s?.atelier?.text2, ATELIER_DEFAULTS.text2),
     image: pick(s?.atelier?.image, ATELIER_DEFAULTS.image),
   };
-  const show = { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, verresBand: true, mur: true, ...(s?.sections || {}) };
+  const show = { categories: true, trust: true, featured: true, atelier: true, newArrivals: true, verresBand: true, mur: true, noel: true, ...(s?.sections || {}) };
   // Bandeau « Vient d'arriver » : les 4 produits les PLUS RÉCENTS du catalogue
   // (dates d'ajout dans productDates.js ; à date égale, le dernier du fichier
   // gagne). 100 % automatique : un nouveau produit passe en tête tout seul.
@@ -118,6 +119,16 @@ export default async function HomePage() {
     .map((sl) => catalog.find((p) => p.slug === sl))
     .filter((p) => p && (p.cardImage || p.images?.[0]))
     .map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0], prix: prixBandeau(p), badge: "" }));
+  // 🎄 « Sélection de Noël » : 5 produits fixes, lus dans le catalogue en direct
+  // (un produit masqué disparaît tout seul). Même bandeau que « Vient d'arriver ».
+  const NOEL_BANDEAU = [
+    "cristal-photo-3d-vertical", "verre-a-whisky-grave", "carafe-a-whisky-gravee",
+    "collier-plaque-acier", "veilleuse-arbre-de-vie-prenom",
+  ];
+  const noelItems = NOEL_BANDEAU
+    .map((sl) => catalog.find((p) => p.slug === sl))
+    .filter((p) => p && (p.cardImage || p.images?.[0]))
+    .map((p) => ({ slug: p.slug, name: p.name, image: p.cardImage || p.images?.[0], prix: prixBandeau(p), badge: "" }));
   // Mur de l'atelier : TOUTES les créations visibles du catalogue.
   const murItems = avecImage.map((p) => {
     const prix = prixBandeau(p);
@@ -128,6 +139,10 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* 🎄 BANDEAU NOËL — juste sous le logo et le menu, avant l'entrée cristal
+          (maquette v4 validée le 25/09/2026). Interrupteur : Apparence → « Bandeau Noël ». */}
+      {show.noel && <BandeauNoel />}
+
       {/* HERO — Cristal Photo 3D (produit phare) */}
       <section className="cr-hero">
         <style>{`
@@ -229,6 +244,19 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* 🎄 SÉLECTION DE NOËL — 5 produits, avant « Vient d'arriver » (maquette v4). */}
+      {show.noel && (
+        <BandeauAccueil
+          eyebrow="Sélection de Noël"
+          title="Les cadeaux qu'on grave le plus en décembre"
+          text="Cinq idées, gravées à la commande."
+          linkHref="/offrir/noel"
+          linkLabel="Toute la sélection"
+          items={noelItems}
+          cinq
+        />
       )}
 
       {/* VIENT D'ARRIVER — les 4 derniers produits ajoutés (automatique, par date) */}

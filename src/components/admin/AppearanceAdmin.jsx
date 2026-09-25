@@ -242,7 +242,7 @@ export default function AppearanceAdmin({ adminKey }) {
 
           <div className="admin-block" style={{ display: "grid", gap: 8 }}>
             <h3 style={{ margin: 0 }}>👁️ Sections de l'accueil (afficher / masquer)</h3>
-            {[["categories", "Cartes catégories"], ["trust", "Bandeau confiance (4 atouts)"], ["featured", "Produits phares"], ["atelier", "Section atelier"]].map(([k, lbl]) => (
+            {[["noel", "🎄 Bandeau Noël + sélection de Noël (à décocher après les fêtes)"], ["newArrivals", "Bandeau « Vient d'arriver »"], ["verresBand", "Bandeau « Verres & carafes gravés »"], ["mur", "Mur de l'atelier (tout en bas)"], ["categories", "Cartes catégories"], ["trust", "Bandeau confiance (4 atouts)"], ["featured", "Produits phares"], ["atelier", "Section atelier"]].map(([k, lbl]) => (
               <label key={k} className="admin-field" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                 <input type="checkbox" checked={s.sections?.[k] !== false} style={{ width: "auto" }} onChange={(e) => setSection(k, e.target.checked)} />
                 {lbl}

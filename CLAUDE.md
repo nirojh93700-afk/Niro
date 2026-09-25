@@ -819,7 +819,26 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
-## 🎄 NOËL 2026 — PLAN ENREGISTRÉ LE 25/09/2026 (« garde ça en mémoire »), RIEN EN LIGNE
+## 🎄 NOËL 2026 — ✅ BANDEAU + PAGE EN LIGNE LE 25/09/2026 (« pour Noël tu peux mettre en ligne »)
+> **CE QUI EST EN LIGNE** (maquette v4 `docs/maquettes/noel-sur-accueil-actuel.html` reproduite) :
+> · `src/components/home/BandeauNoel.jsx` — bandeau rouge de Noël & or « Ce Noël, offrez un cadeau
+>   unique », mosaïque 3×3 (cristal, verres, 5 bijoux GRAVÉS), **premier bloc de `page.jsx`**, donc
+>   juste sous le logo + menu, AVANT l'entrée cristal (inchangée) ; lien → `/offrir/noel`.
+> · « Sélection de Noël » = `<BandeauAccueil cinq>` (5 produits du catalogue en direct) juste AVANT
+>   « Vient d'arriver » dans `page.jsx`.
+> · **7ᵉ occasion `noel`** dans `src/lib/occasions.js` (`NOEL_SLUGS`, liste fermée de 18 produits,
+>   `max: 20`, `ordre` gardé ; `produitsPourOccasion` lit `o.max`) → `/offrir/noel`, tuile sur
+>   `/offrir`, sitemap automatique. Un produit masqué dans Gestion disparaît tout seul.
+> · **Interrupteur** `settings.sections.noel` (défaut vrai) — Gestion → Apparence → Sections de
+>   l'accueil → « 🎄 Bandeau Noël + sélection de Noël » : **à décocher après les fêtes**. Au passage,
+>   le sanitizer de `/api/admin/settings` garde maintenant aussi `newArrivals/verresBand/mur` (avant,
+>   il les jetait) et ces 3 cases sont ajoutées à l'écran Apparence.
+> · CSS `.noel-*` en fin de `globals.css`. Vérifié en local : accueil 1280/390 px sans débordement,
+>   `/offrir/noel` 18 cartes, sitemap OK, build OK (les erreurs React #425 de l'accueil sont ANTÉRIEURES).
+> **Toujours en attente** : la DATE LIMITE de commande pour Noël (à ajouter dans le bandeau et la page
+> dès qu'il la donne) · la boule de Noël (enregistrée, PAS en ligne) · le gobelet (maquette redonnée
+> le 25/09, il doit dire « mets en ligne »).
+### (historique) NOËL 2026 — PLAN ENREGISTRÉ LE 25/09/2026 (« garde ça en mémoire »), RIEN EN LIGNE
 > Recherche marché du 25/09 : le catalogue n'a AUCUN produit de Noël alors que c'est la période
 > n° 1 des cadeaux personnalisés. Le gérant a demandé : maquette boules de Noël, puis maquette
 > d'un bloc Noël sur l'accueil + page Noël avec les produits existants qui correspondent.
