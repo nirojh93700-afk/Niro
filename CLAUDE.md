@@ -842,6 +842,12 @@ ne descend jamais sous zéro.
   `layout.jsx` après l'en-tête), la « Sélection de Noël » reste avant « Vient d'arriver »
   (`page.jsx`). Couleur **rouge de Noël & or** (`#c0392b→#7a1512`) par défaut, bascule
   **bordeaux & or** dans la maquette. ⛔ Vert refusé. Rien en ligne, attendre « applique ».
+  **v4 (« pas que des verres, aussi les bijoux qui vendent le plus »)** : mosaïque 3×3 = cristal V ·
+  whisky · carafe · verre à vin + 5 bijoux GRAVÉS (`collier-coeur-grave-1`, `collier-double-coeur-3`,
+  `bracelet-cordon-plaque-4`, `bracelet-femme-acier-grave`, `collier-coeur-plaques-1`). Pas de
+  chiffres de vente accessibles d'ici (Firestore) : choix = bijoux les plus cités dans les commandes
+  connues ; à confirmer par le gérant. ⚠️ Correctif de la liste vidéo : `bracelet-homme-plaque-1 à 5`
+  sont VIERGES (planche regardée le 25/09), ne pas les compter comme gravées.
   Recette : capturer `curl localhost:3140/`, inliner `.next/static/css/*.css`, remplacer les
   `src` par des data URI (Pillow 640 px q72), insérer après `</header>`. La maquette
   `noel-accueil-et-page.html` (v2) garde la vue « page Noël ».
