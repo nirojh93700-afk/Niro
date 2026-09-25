@@ -876,7 +876,7 @@ ne descend jamais sous zéro.
   avec un délai et couvre les options) ; **tuer le serveur `next start` avant chaque rebuild**
   (un serveur qui survit à un rebuild sert un mélange de deux compilations → clics sans effet) ;
   `pkill -f "next-serve[r]"` avec les crochets, sinon pkill tue le shell qui le lance (exit 144).
-- ⛔ **PAS ENCORE EN LIGNE** : commit local, en attente du « applique » du gérant.
+- ✅ **EN LIGNE le 25/09/2026** (« Applique »), commit `ecc373c`. Reste au gérant : stock 100 sur les 3 choix 47 cl dans Gestion → Produits & stock, et vérifier que les deux tailles s'affichent bien en ligne.
 
 ## 🔴 DEUX LIGNES DU MÊME PRODUIT — GRAVURES MÉLANGÉES (corrigé le 24/09/2026)
 > Remarque du gérant sur la commande **#00CUYR2U** (Cécilia Herrera, 2 lots de flûtes gravés
