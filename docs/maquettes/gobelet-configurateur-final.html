@@ -207,7 +207,7 @@
         <p class="empty" id="empty">Rien encore. Le premier élément est le motif principal (centre).</p>
         <div class="cfg-foot">
           <span class="cnt ok" id="cnt">0 / 1 inclus</span>
-          <span class="note">Le premier élément est inclus dans le prix — chaque élément en plus&nbsp;: +2,90&nbsp;€.</span>
+          <span class="note">Le premier élément est inclus dans le prix — chaque élément en plus&nbsp;: +3&nbsp;€.</span>
         </div>
 
         <div class="field" style="margin-top:16px">
@@ -434,7 +434,7 @@ function renderList(){listEl.innerHTML="";
     li.appendChild(rm);listEl.appendChild(li);});
   emptyEl.style.display=motifs.length?"none":"";
   var extra=Math.max(0,motifs.length-1);
-  if(extra>0){cntEl.className="cnt";cntEl.textContent=motifs.length+" éléments · "+extra+" en plus : +"+(extra*2.9).toFixed(2).replace(".",",")+" €";}
+  if(extra>0){cntEl.className="cnt";cntEl.textContent=motifs.length+" éléments · "+extra+" en plus : +"+(extra*3).toFixed(2).replace(".00","")+" €";}
   else{cntEl.className="cnt ok";cntEl.textContent=motifs.length+" / 1 inclus";}}
 document.getElementById("addbtn").onclick=function(){msgEl.textContent="";var zone=zoneEl.value;
   if(!zone){msgEl.textContent="Toutes les zones de ce côté sont prises.";return;}
