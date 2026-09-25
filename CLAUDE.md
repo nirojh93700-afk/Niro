@@ -830,6 +830,11 @@ ne descend jamais sous zéro.
   https://claude.ai/artifact/XRYqfH6rdExwQUqGehB17Q. Construite à partir du VRAI rendu de la fiche
   `/produit/verre-a-whisky-grave` (HTML servi par `next start`, vraies feuilles de style, polices
   Google Fonts, logo en texte), texte/prix/accordéon adaptés au cocktail.
+  ⛔ **PAS de gravure au fond du verre pour celui-ci** (demande du gérant, 25/09) — retiré le
+  choix « face / fond / les deux (+7 €) » : ce verre haut et fin n'a qu'une seule zone de
+  gravure, sur la face. À construire pour de vrai SANS le champ `emplacement` (garder juste
+  `photo` + `texte` + `texte2`/date + `decor` + `police`, comme le whisky mais sans `engraveFond`,
+  `fondImage`, `photoFond`, `texteFond`, `note-deux`, et sans le flatExtra `emplacement:deux +7€`).
 - **Source** : METRO Professional Verre à cocktail Lario, 17 cl, carton de 12 — commande passée par
   le gérant, livraison prévue 29 sept.–1 oct. Coût 15,84 €/carton + 1,01 € de port ≈ **1,40 €/verre
   rendu**. Dimensions (web) : hauteur ≈ 12,5 cm, diamètre ≈ 5,2 cm, forme haute.
