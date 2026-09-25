@@ -831,6 +831,13 @@ ne descend jamais sous zéro.
   comme les bijoux. **Questions ouvertes** : découpe maison (bois 3 mm) ou boule achetée ? diamètre ?
   ruban ? et **une vraie photo gravée** (les visuels de la maquette sont dessinés). Construire = comme
   un bijou (packaging, productInfo, productDates, `letter:true`, `weight: 72`).
+- ⛔ **« Il faut pas que tu modifies la page actuelle, tu dois juste ajouter » (gérant, 25/09 soir)** :
+  la maquette à montrer est **`docs/maquettes/noel-sur-accueil-actuel.html`** = le VRAI rendu de
+  l'accueil (HTML servi par `next start`, vraies feuilles de style, scripts retirés, images pointées
+  sur nivcreation.fr) avec les deux blocs Noël **simplement insérés** avant « Vient d'arriver »,
+  encadrés en pointillé vert « NOUVEAU — bloc ajouté ». Rien d'autre ne change. Recette : capturer
+  `curl localhost:3140/`, inliner `.next/static/css/*.css`, insérer avant la `<section class="na-band">`
+  qui contient « Vient d'arriver ». La maquette `noel-accueil-et-page.html` (v2) garde la vue « page Noël ».
 - **Bloc Noël sur l'accueil + page Noël — MAQUETTE v2 du 25/09** (`docs/maquettes/noel-accueil-et-page.html`,
   artifact https://claude.ai/artifact/RonyZq6a22CTEnGgyW5UGT, deux vues Accueil / Page). Corrections
   demandées par le gérant sur la v1 : ⛔ **PAS la boule de Noël** (« je t'ai dit d'enregistrer mais
