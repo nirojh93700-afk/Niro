@@ -40,9 +40,11 @@ VIDEOS = {
     ("cristal-video-vertical-poster.jpg", "Cristal 3D vertical", "Un souvenir qui prend la lumière"),
   ]),
   # DECO : tous les objets en bois graves / decoupes (planche contact du 25/09).
-  # Ecartes : support-telephone-vierge (rien de grave), couverts et USB (pas de la deco).
+  # Ecartes : support-telephone-vierge (rien de grave), couverts et USB (pas de la deco),
+  # bougeoir Mandala (MASQUE depuis Gestion, cf. CLAUDE.md 13/08) et lampe PSG (logo de club,
+  # pas en vente) — remarque du gerant 25/09 : « des produits qui sont pas en vente ».
+  # REGLE : verifier qu'un produit est EN VENTE (sitemap en ligne) avant de le mettre en video.
   11: ("Déco — bois gravé", "Du bois, une gravure, votre idée", "deco-bois-grave", [
-    ('bougeoir-mandala-2.jpg', 'Bougeoir Mandala', 'Bois gravé, découpé au laser'),
     ('support-telephone-photo.jpg', 'Support téléphone', 'Votre photo gravée dans le bois'),
     ('porte-serviettes-colombes-1.jpg', 'Porte-serviettes Colombes', 'Gravé pour la table de fête'),
     ('numero_table_arche_geometrique_relief_bois.jpeg', 'Numéro de table', 'Mariage : arche gravée, votre date'),
@@ -52,7 +54,6 @@ VIDEOS = {
     ('porte-stylo-coq-2.jpg', 'Porte-stylo Coupe du monde', 'Gravé, découpé, personnalisé'),
     ('numero_table_rectangulaire_feuillage_bois.png', 'Numéro de table', 'Feuillage gravé, une par table'),
     ('porte-serviettes-2.jpg', 'Porte-serviettes fleuri', 'Découpe fine, bois naturel'),
-    ('psg-lampe-couleur.jpg', 'Lampe gravée', 'Le logo gravé, éclairé la nuit'),
     ('support-telephone-lettre.jpg', 'Support téléphone', 'Votre lettre fleurie gravée'),
   ]),
   # VERRES : toutes les photos ou la gravure est visible (planche du 22/09, CLAUDE.md).
