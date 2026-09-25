@@ -832,12 +832,19 @@ ne descend jamais sous zéro.
   ruban ? et **une vraie photo gravée** (les visuels de la maquette sont dessinés). Construire = comme
   un bijou (packaging, productInfo, productDates, `letter:true`, `weight: 72`).
 - ⛔ **« Il faut pas que tu modifies la page actuelle, tu dois juste ajouter » (gérant, 25/09 soir)** :
-  la maquette à montrer est **`docs/maquettes/noel-sur-accueil-actuel.html`** = le VRAI rendu de
-  l'accueil (HTML servi par `next start`, vraies feuilles de style, scripts retirés, images pointées
-  sur nivcreation.fr) avec les deux blocs Noël **simplement insérés** avant « Vient d'arriver »,
-  encadrés en pointillé vert « NOUVEAU — bloc ajouté ». Rien d'autre ne change. Recette : capturer
-  `curl localhost:3140/`, inliner `.next/static/css/*.css`, insérer avant la `<section class="na-band">`
-  qui contient « Vient d'arriver ». La maquette `noel-accueil-et-page.html` (v2) garde la vue « page Noël ».
+  la maquette à montrer est **`docs/maquettes/noel-sur-accueil-actuel.html`** (artifact
+  https://claude.ai/artifact/QTkgDBFVsvAmKo2aEFgKNP) = le VRAI rendu de l'accueil (HTML servi par
+  `next start`, vraies feuilles de style, scripts retirés, photos réduites en data URI, polices
+  Google, logo en texte car le CDN Shopify est injoignable d'ici) avec les blocs Noël **simplement
+  insérés**, encadrés en pointillé « NOUVEAU — bloc ajouté ». Rien d'autre ne change.
+  **v3 (25/09 soir, « mets-le juste après le logo, pas vert mais une couleur de Noël, tu mets pas en
+  ligne »)** : le bandeau est **juste sous le logo + menu, avant l'entrée cristal** (dans le code :
+  `layout.jsx` après l'en-tête), la « Sélection de Noël » reste avant « Vient d'arriver »
+  (`page.jsx`). Couleur **rouge de Noël & or** (`#c0392b→#7a1512`) par défaut, bascule
+  **bordeaux & or** dans la maquette. ⛔ Vert refusé. Rien en ligne, attendre « applique ».
+  Recette : capturer `curl localhost:3140/`, inliner `.next/static/css/*.css`, remplacer les
+  `src` par des data URI (Pillow 640 px q72), insérer après `</header>`. La maquette
+  `noel-accueil-et-page.html` (v2) garde la vue « page Noël ».
 - **Bloc Noël sur l'accueil + page Noël — MAQUETTE v2 du 25/09** (`docs/maquettes/noel-accueil-et-page.html`,
   artifact https://claude.ai/artifact/RonyZq6a22CTEnGgyW5UGT, deux vues Accueil / Page). Corrections
   demandées par le gérant sur la v1 : ⛔ **PAS la boule de Noël** (« je t'ai dit d'enregistrer mais

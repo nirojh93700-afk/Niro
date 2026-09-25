@@ -17,7 +17,7 @@
   v2** (`docs/maquettes/noel-accueil-et-page.html`, artifact RonyZq6a22CTEnGgyW5UGT : titre « Ce Noël,
   offrez un cadeau unique », vert sapin & or / crème & or au choix, sans boule, emplacement exact =
   entre la carafe édition limitée et « Vient d'arriver ») + **`noel-sur-accueil-actuel.html` = la vraie
-  page d'accueil avec les blocs juste AJOUTÉS** (demande du 25/09 soir) — **en attente du retour du gérant** :
+  page d'accueil avec le bandeau AJOUTÉ sous le logo, rouge de Noël & or / bordeaux & or** (v3, 25/09 soir) — **en attente du retour du gérant** :
   (1) couleur (sapin ou crème) et titre ; (2) « applique » pour la page/bandeau ; (3) date limite de
   commande Noël ; (4) gobelet : le montrer tel quel ou finir la version validée, et combien en stock.
   Détail : `CLAUDE.md` § NOËL 2026.
