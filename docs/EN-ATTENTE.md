@@ -12,6 +12,12 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
+- **🎄 Noël 2026** (25/09) : maquettes **boule de Noël** (`docs/maquettes/boule-noel-fiche.html`) et
+  **accueil + page Noël** (`docs/maquettes/noel-accueil-et-page.html`) faites, **en attente du retour du
+  gérant** : (1) boule découpée maison ou achetée, diamètre, ruban, photo réelle ; (2) « applique » pour
+  la page/bandeau ; (3) date limite de commande Noël ; (4) gobelet : le montrer tel quel ou finir la
+  version validée, et combien en stock. Détail : `CLAUDE.md` § NOËL 2026.
+
 ## 1. Messages / clients en attente
 
 | Qui | État | Où |

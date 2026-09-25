@@ -819,6 +819,37 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
+## 🎄 NOËL 2026 — PLAN ENREGISTRÉ LE 25/09/2026 (« garde ça en mémoire »), RIEN EN LIGNE
+> Recherche marché du 25/09 : le catalogue n'a AUCUN produit de Noël alors que c'est la période
+> n° 1 des cadeaux personnalisés. Le gérant a demandé : maquette boules de Noël, puis maquette
+> d'un bloc Noël sur l'accueil + page Noël avec les produits existants qui correspondent.
+- **Boule de Noël en bois gravée** — maquette validée à montrer : `docs/maquettes/boule-noel-fiche.html`
+  (artifact https://claude.ai/artifact/1pDPGZqAzLgssMW7KmLb3d). Fiche interactive : 4 modèles
+  (Prénom & flocons · Mon premier Noël + année · Famille jusqu'à 4 prénoms · Joyeux Noël & sapin),
+  8 écritures, aperçu qui se met à jour. **Prix proposés : 11,90 € l'unité · 29,90 € les 3 ·
+  54,90 € les 6** (marché : à partir de 11,90 €, Ø 7-7,5 cm). Lettre suivie (~20 g), offerte dès 45 €
+  comme les bijoux. **Questions ouvertes** : découpe maison (bois 3 mm) ou boule achetée ? diamètre ?
+  ruban ? et **une vraie photo gravée** (les visuels de la maquette sont dessinés). Construire = comme
+  un bijou (packaging, productInfo, productDates, `letter:true`, `weight: 72`).
+- **Bloc Noël sur l'accueil + page Noël** — maquette `docs/maquettes/noel-accueil-et-page.html`
+  (deux vues : Accueil / Page). Sur le site ça deviendrait : **une 7ᵉ occasion `noel` dans
+  `src/lib/occasions.js`** (`/offrir/noel`, catalogue en direct comme les 6 autres) + **un bandeau
+  rouge sombre sur l'accueil** après cristal/carafe, avant « Vient d'arriver », piloté par un
+  interrupteur `settings.sections.noel` (à ajouter dans Apparence). 17 produits retenus (tous « en
+  vente » dans le code — vérifier les masquages Gestion) : cristal V/H, verre whisky, carafe, verre à
+  vin, flûte, collier plaque acier, collier cœur gravé, bracelet homme tressé, collier puzzle,
+  porte-clés cuir, clé USB coffret, veilleuse prénom, couverts enfants, plaque de porte enfant,
+  photophore fée, porte-clés cristal LED cœur, pièce laiton. + carte « Bientôt » pour la boule.
+  Filtres : Cristal photo · Verres & carafe · Bijoux · Enfants · Petits cadeaux & maison.
+  **Argument à ajouter dès qu'il la donne : la DATE LIMITE de commande pour Noël.**
+- **Gobelet isotherme 40 oz** (question « il y en a combien ? ») : dans le code **39,90 €**, 4 couleurs
+  (crème, blanc, bleu marine, rose), 4 dessins compris puis +2,90 €/dessin, **`hidden: true`**, pas de
+  stock saisi (le gérant n'a pas dit combien il en a). ⚠️ La version en ligne n'est PAS la maquette
+  finale validée en juillet (dessins renumérotés 1-74, cadres 75-103, « Écrire un nom », image
+  principale obligatoire). Deux options proposées : le montrer tel quel (5 min) ou finir la version
+  validée (quelques heures). **Pas de réponse encore.**
+- ⛔ Rien de tout ça n'est en ligne : maquettes uniquement, attendre « applique ».
+
 ## 🍷 VERRE À VIN — DEUX TAILLES, 36 cl ET 47 cl (construit le 25/09/2026, en attente du « applique »)
 > Demande du gérant : « dans le verre de vin, tu peux mettre ça comme option, le client choisit
 > entre les 2 cl » (grand verre 47 cl acheté chez Metro, coupe ronde). Puis, les photos côte à
