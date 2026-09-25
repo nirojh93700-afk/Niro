@@ -831,17 +831,27 @@ ne descend jamais sous zéro.
   comme les bijoux. **Questions ouvertes** : découpe maison (bois 3 mm) ou boule achetée ? diamètre ?
   ruban ? et **une vraie photo gravée** (les visuels de la maquette sont dessinés). Construire = comme
   un bijou (packaging, productInfo, productDates, `letter:true`, `weight: 72`).
-- **Bloc Noël sur l'accueil + page Noël** — maquette `docs/maquettes/noel-accueil-et-page.html`
-  (deux vues : Accueil / Page). Sur le site ça deviendrait : **une 7ᵉ occasion `noel` dans
-  `src/lib/occasions.js`** (`/offrir/noel`, catalogue en direct comme les 6 autres) + **un bandeau
-  rouge sombre sur l'accueil** après cristal/carafe, avant « Vient d'arriver », piloté par un
-  interrupteur `settings.sections.noel` (à ajouter dans Apparence). 17 produits retenus (tous « en
-  vente » dans le code — vérifier les masquages Gestion) : cristal V/H, verre whisky, carafe, verre à
-  vin, flûte, collier plaque acier, collier cœur gravé, bracelet homme tressé, collier puzzle,
-  porte-clés cuir, clé USB coffret, veilleuse prénom, couverts enfants, plaque de porte enfant,
-  photophore fée, porte-clés cristal LED cœur, pièce laiton. + carte « Bientôt » pour la boule.
+- **Bloc Noël sur l'accueil + page Noël — MAQUETTE v2 du 25/09** (`docs/maquettes/noel-accueil-et-page.html`,
+  artifact https://claude.ai/artifact/RonyZq6a22CTEnGgyW5UGT, deux vues Accueil / Page). Corrections
+  demandées par le gérant sur la v1 : ⛔ **PAS la boule de Noël** (« je t'ai dit d'enregistrer mais
+  je t'ai pas dit de mettre ») · titre « offrez un cadeau qui porte leur prénom » refusé (« envoie
+  pas trop ») → **« Ce Noël, offrez un cadeau unique »** (mot mis en avant par les boutiques de
+  personnalisation ; 2 variantes proposées dans les notes) · couleur rouge sombre refusée →
+  **vert sapin & or** par défaut (`#1d4a34→#0c2820`), bouton de bascule vers une version
+  **crème & or** dans la maquette. Page : h1 « Des cadeaux de Noël uniques, gravés dans notre atelier ».
+  **EMPLACEMENT EXACT (demandé par le gérant)** : `src/app/page.jsx`, juste après le `</section>` de
+  la carafe « Édition limitée » et juste avant `{show.newArrivals && <BandeauAccueil eyebrow="Vient
+  d'arriver" …>}` — 1 entrée cristal (inchangé) · 2 carafe (inchangé) · **3 bandeau Noël (nouveau)** ·
+  **4 « Sélection de Noël » = un `<BandeauAccueil … cinq />` (nouveau, 5 produits)** · 5 Vient
+  d'arriver · 6 Verres & carafes · 7 collections… Interrupteur `settings.sections.noel` (Apparence).
+  La page = 7ᵉ occasion `noel` dans `src/lib/occasions.js` (`/offrir/noel`, catalogue en direct).
+  17 produits retenus (tous « en vente » dans le code — vérifier les masquages Gestion) : cristal V/H,
+  verre whisky, carafe, verre à vin, flûte, collier plaque acier, collier cœur gravé, bracelet homme
+  tressé, collier puzzle, porte-clés cuir, clé USB coffret, veilleuse prénom, couverts enfants,
+  plaque de porte enfant, photophore fée, porte-clés cristal LED cœur, pièce laiton.
   Filtres : Cristal photo · Verres & carafe · Bijoux · Enfants · Petits cadeaux & maison.
-  **Argument à ajouter dès qu'il la donne : la DATE LIMITE de commande pour Noël.**
+  **Argument à ajouter dès qu'il la donne : la DATE LIMITE de commande pour Noël.** En attente de
+  son retour (couleur sapin ou crème, titre) puis « applique ».
 - **Gobelet isotherme 40 oz** (question « il y en a combien ? ») : dans le code **39,90 €**, 4 couleurs
   (crème, blanc, bleu marine, rose), 4 dessins compris puis +2,90 €/dessin, **`hidden: true`**, pas de
   stock saisi (le gérant n'a pas dit combien il en a). ⚠️ La version en ligne n'est PAS la maquette
