@@ -196,6 +196,14 @@ export default function ProductDetail({ product }) {
   }, [product.slug]);
 
   const variant = product.variants[variantIndex];
+  // APERÇU DE GRAVURE PAR TAILLE (verre à vin 36 / 47 cl, 25/09/2026) : une
+  // variante peut porter SA photo vierge et SA zone de gravure (`engraveImage`,
+  // `engrave`) ; sinon on garde celles du produit. Deux verres de formes
+  // différentes ne peuvent pas partager le même aperçu — la gravure se poserait
+  // sur la mauvaise silhouette. ⚠️ Dans ce composant, toujours passer par ces
+  // deux constantes, jamais par product.engraveImage / product.engrave.
+  const engraveImage = variant?.engraveImage || product.engraveImage;
+  const engraveCfg = variant?.engrave || product.engrave;
   // Lot de N verres (vin/flûte) : on lit le nombre dans le titre de la variante.
   const glassQty = (() => { const m = /lot de\s*(\d+)/i.exec(variant?.title || ""); return m ? parseInt(m[1], 10) : 1; })();
   const supportsPerGlass = (Boolean(product.styleImages) || Boolean(product.perGlassLot)) && glassQty > 1;
@@ -209,12 +217,12 @@ export default function ProductDetail({ product }) {
   // Sélectionne une variante et, si elle a une photo, l'affiche dans la galerie.
   // Quand le client choisit l'emplacement, on bascule sur la bonne photo repère.
   useEffect(() => {
-    if (!product.engrave) return;
+    if (!engraveCfg) return;
     const emp = fieldValues["emplacement"];
     const eff = emp === "deux" ? activeSide : emp; // mode "les deux" : on suit le côté en cours
     let target = -1;
     if (eff === "fond" && product.fondImage) target = images.indexOf(product.fondImage);
-    else if (eff === "face" && product.engraveImage) target = images.indexOf(product.engraveImage);
+    else if (eff === "face" && engraveImage) target = images.indexOf(engraveImage);
     if (target >= 0) setActiveImg(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValues["emplacement"], activeSide]);
@@ -401,10 +409,10 @@ export default function ProductDetail({ product }) {
         return parts.join(" · ");
       }
       // Taille + position du logo / texte gravé (éditeur interactif), pour l'atelier.
-      if (product.engrave && photoSrc && photoLayout?.label) {
+      if (engraveCfg && photoSrc && photoLayout?.label) {
         parts.push(`Gravure FACE — logo/photo : ${photoLayout.label}`);
       }
-      if (product.engrave && previewLines.length > 0 && textLayout?.label) {
+      if (engraveCfg && previewLines.length > 0 && textLayout?.label) {
         parts.push(`Gravure FACE — ${textLayout.label}`);
       }
       // Mode "les deux" : placement du fond.
@@ -494,16 +502,16 @@ export default function ProductDetail({ product }) {
   const dualMode = emplacement === "deux"; // graver les DEUX côtés (face + fond)
   const side = dualMode ? activeSide : (emplacement === "fond" ? "fond" : "face"); // côté affiché
   const isFond = side === "fond";
-  const editCfg = isFond && product.engraveFond ? product.engraveFond : product.engrave;
+  const editCfg = isFond && product.engraveFond ? product.engraveFond : engraveCfg;
   const mainSrc = images[activeImg];
   // Vidéo produit (mp4) : ajoutée EN PREMIER dans la galerie si le produit en a une.
   // Pour les produits sans vidéo, galleryMedia === images (aucun changement).
   const galleryMedia = product.video ? [product.video, ...images] : images;
   const activeMedia = galleryMedia[activeImg] ?? mainSrc;
   const activeIsVideo = /\.(mp4|webm|ogv|mov)$/i.test(String(activeMedia || ""));
-  const onFaceImg = images[activeImg] === product.engraveImage;
+  const onFaceImg = images[activeImg] === engraveImage;
   const onFondImg = images[activeImg] === product.fondImage;
-  const showEditor = Boolean(product.engrave) && ((side === "face" && onFaceImg) || (side === "fond" && onFondImg));
+  const showEditor = Boolean(engraveCfg) && ((side === "face" && onFaceImg) || (side === "fond" && onFondImg));
   // Photo dédiée au fond (mode "les deux")
   const photoUrlFond = fieldValues["photoFond"] || "";
   const photoSrcFond = photoUrlFond && (photoUrlFond.startsWith("http") || photoUrlFond.startsWith("data:") || photoUrlFond.startsWith("/")) ? photoUrlFond : "";
@@ -541,19 +549,23 @@ export default function ProductDetail({ product }) {
   // Points Nom/Date : priorité aux réglages admin (même page que le cadre), repli sur le code.
   const styleZone = (adminTextZones && adminTextZones[styleNum]) || (product.styleTextZone && product.styleTextZone[styleNum]) || null;
   const hadPreviewTextRef = useRef(false);
+  const lastEngraveImageRef = useRef(null);
   useEffect(() => {
-    if (!product.engrave || !product.engraveImage) return;
+    if (!engraveCfg || !engraveImage) return;
     if ((product.personalizationFields || []).some((f) => f.key === "emplacement")) return;
     // La PHOTO téléversée compte comme contenu : sans ça, l'aperçu restait sur
     // la photo d'exemple et la cliente ne voyait jamais sa photo sur le produit.
     const hasContent = previewLines.length > 0 || Boolean(styleMotifSrc) || Boolean(photoSrc);
-    if (hasContent && !hadPreviewTextRef.current) {
-      const idx = images.indexOf(product.engraveImage);
+    // Nouveau contenu, OU changement de taille (engraveImage change) pendant
+    // qu'un contenu est affiché : on saute sur la photo vierge de la taille choisie.
+    if (hasContent && (!hadPreviewTextRef.current || engraveImage !== lastEngraveImageRef.current)) {
+      const idx = images.indexOf(engraveImage);
       if (idx >= 0) setActiveImg(idx);
     }
     hadPreviewTextRef.current = hasContent;
+    lastEngraveImageRef.current = engraveImage;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewLines.length, styleMotifSrc, photoSrc]);
+  }, [previewLines.length, styleMotifSrc, photoSrc, engraveImage]);
   // Mode "les deux" : la photo et le texte affichés dépendent du côté en cours (face / fond).
   const editPhotoSrc = (dualMode && side === "fond") ? photoSrcFond : photoSrc;
   let editLines;
@@ -873,13 +885,13 @@ export default function ProductDetail({ product }) {
     // fichier à graver, composés de façon fiable (canvas). Pour l'aperçu panier,
     // l'e-mail et la page atelier.
     let previewImage = null, previewImageFond = null, artworkImage = null, artworkImageFond = null;
-    if (product.engrave && hasImages) {
+    if (engraveCfg && hasImages) {
       setPreparing(true);
       try {
         const dsg = (modeleField && modeleVal && modeleVal.layout) ? imageDesign(modeleTemplate, modeleVal.layout) : null;
         // Base stable pour composer : le verre gravable propre (jamais une photo d'exemple).
-        const glass = product.engraveImage || images[0];
-        const faceBox = (product.engrave && product.engrave.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
+        const glass = engraveImage || images[0];
+        const faceBox = (engraveCfg && engraveCfg.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
         const fondBox = (product.engraveFond && product.engraveFond.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
         // FACE : photo envoyée, sinon design image choisi (Fête des pères) — version foncée.
         const faceArt = photoSrc || (dsg ? dsg.dark : null);
@@ -983,10 +995,10 @@ export default function ProductDetail({ product }) {
     <div className="container">
       {/* Mini-aperçu flottant (bas à droite) : le verre + la gravure en petit,
           reste visible quand le client descend composer. */}
-      {product.engrave && product.engraveImage && showEditor && showGlassMini &&
+      {engraveCfg && engraveImage && showEditor && showGlassMini &&
         (editPhotoSrc || styleMotifSrc || previewLines.length > 0) && (
         <MiniGlassPreview
-          glassSrc={product.engraveImage}
+          glassSrc={engraveImage}
           contain={Boolean(product.photoContain)}
           artSrc={editPhotoSrc || styleMotifSrc}
           artLayout={motifZone && styleMotifSrc && !editPhotoSrc ? { cx: (motifZone.left + motifZone.width / 2) / 100, cy: (motifZone.top + motifZone.height / 2) / 100, size: motifZone.width / 100 } : photoLayout}
@@ -1132,7 +1144,7 @@ export default function ProductDetail({ product }) {
               <MotifEngraveLayer key="motif-fond" motifId={fieldValues["motifFond"]} color={ENGRAVE_PREVIEW} cfg={editCfg} onChange={setMotifLayoutFond} />
             )}
             {/* Sinon : simple superposition du logo (zone fixe) */}
-            {hasImages && !product.engrave && !product.crystal3d && (product.previewPhoto || product.preview) && photoSrc && (
+            {hasImages && !engraveCfg && !product.crystal3d && (product.previewPhoto || product.preview) && photoSrc && (
               <div className="engrave-overlay engrave-overlay-photo" style={product.previewPhoto || product.preview}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="eo-photo" src={photoSrc} alt="Aperçu du logo / de la photo gravé" />
@@ -1166,7 +1178,7 @@ export default function ProductDetail({ product }) {
               />
             )}
             {/* Sinon : texte centré sur la zone fixe */}
-            {hasImages && !product.engrave && previewLines.length > 0 && product.preview && (
+            {hasImages && !engraveCfg && previewLines.length > 0 && product.preview && (
               <div className="engrave-overlay" style={product.preview}>
                 {previewLines.map((line, i) => (
                   <span key={i} className={`eo-line ${previewFontClass}`} style={{ color: previewColor }}>
@@ -1185,7 +1197,7 @@ export default function ProductDetail({ product }) {
               </>
             )}
           </div>
-          {product.engrave && (
+          {engraveCfg && (
             <p style={{ fontSize: "0.8rem", color: "var(--ink-soft)", fontStyle: "italic", margin: "10px 2px 0", lineHeight: 1.4 }}>
               {product.engraveNote
                 ? product.engraveNote
@@ -1285,7 +1297,7 @@ export default function ProductDetail({ product }) {
           )}
 
           {/* Aperçu 3D rotatif (verre) — prototype (côté avant uniquement) */}
-          {product.engrave && (emplacement === "face" || emplacement === "deux") && !modeleField && (
+          {engraveCfg && (emplacement === "face" || emplacement === "deux") && !modeleField && (
             <div style={{ marginTop: 12 }}>
               <button
                 type="button"
@@ -1297,7 +1309,7 @@ export default function ProductDetail({ product }) {
               </button>
               {show3d && (
                 <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 14, overflow: "hidden", background: "#f3efe7" }}>
-                  <Glass3D photoSrc={photoSrc} lines={previewLines} fontKey={fieldValues[fontField?.key] || "playfair"} photoLayout={photoLayout} textLayout={textLayout} cfg={product.engrave} />
+                  <Glass3D photoSrc={photoSrc} lines={previewLines} fontKey={fieldValues[fontField?.key] || "playfair"} photoLayout={photoLayout} textLayout={textLayout} cfg={engraveCfg} />
                 </div>
               )}
             </div>

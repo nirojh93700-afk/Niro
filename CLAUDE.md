@@ -819,6 +819,49 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
+## 🍷 VERRE À VIN — DEUX TAILLES, 36 cl ET 47 cl (construit le 25/09/2026, en attente du « applique »)
+> Demande du gérant : « dans le verre de vin, tu peux mettre ça comme option, le client choisit
+> entre les 2 cl » (grand verre 47 cl acheté chez Metro, coupe ronde). Puis, les photos côte à
+> côte montrant deux formes différentes : « Ah c'est pas le même verre, tu peux construire alors ? »
+> → version B : **l'aperçu de gravure suit la taille choisie.**
+- **6 choix** sur `verre-a-vin-grave` : 36 cl et 47 cl × À l'unité / Lot de 2 / Lot de 4.
+  Identifiants **gardés** pour le 36 cl (`verre-vin-1/2/4`), nouveaux `verre-vin-47-1/2/4`.
+  Les titres portent « Lot de N » : c'est là que la fiche lit le nombre de verres (`glassQty`).
+- **Prix 47 cl : 19,90 / 36,90 / 71,90 €** — même marge en € que le 36 cl, coût **6,54 €/verre
+  port compris** (carton de 6 à 29,23 € + 10 € de port, chiffres du gérant, `productCosts.js`).
+  Poids 550 / 1000 / 1800 g. Détail dans `docs/prix-historique.md`.
+- **Aperçu par variante** : une variante peut porter `engraveImage` + `engrave` (photo vierge +
+  zone). `ProductDetail.jsx` passe par `engraveImage` / `engraveCfg` (résolus depuis la variante,
+  repli produit) — **ne plus jamais lire `product.engraveImage` / `product.engrave` directement**
+  dans ce composant. Changer de taille avec un texte déjà saisi bascule l'aperçu (effet sur
+  `engraveImage`). `FicheAtelier` (visuel de l'atelier) suit aussi la variante commandée.
+  Zone du 47 cl : constante `VIN_47_APERCU` avant le tableau `products` (box, widthMm 84 —
+  voir le commentaire : le calcul des cm suppose une photo carrée, on compense comme le 36 cl).
+- **Photos** (fournies par le gérant, 482–800 px) : `verre_vin_47_vierge.jpg` (aperçu + vignette
+  d'option), `_rose.jpg`, `_ambiance.jpg`, ajoutées à `images` (la vierge DOIT y être :
+  l'aperçu la retrouve par `indexOf`). Vignettes d'option : `object-position: top center` sur
+  `.variant-swatch img` pour montrer la coupe et non le pied (sans effet sur les photos carrées).
+- **Descriptions** (les deux tailles) : « verrerie professionnelle, qualité restauration » —
+  ⛔ **aucune marque** (ni Metro ni le fabricant : « les clients peuvent chercher sur Internet »),
+  et **pas « cristal » pour le 47 cl** (matière non vérifiée sur l'emballage).
+- 🔴 **CORRIGÉ AU PASSAGE dans `catalog.js`** : un réglage d'options enregistré dans Gestion
+  (`ov.variants`) **remplaçait** les variantes du code par `{id, title, price, stockId}` seulement
+  → photo, **poids** (port d'un lot de 4 retombé sur 500 g), galerie, aperçu par taille : tout
+  perdu. Maintenant fusion par identifiant : l'admin garde la liste, les titres et les prix ; le
+  code fournit le reste. ⚠️ Si Gestion a déjà un réglage d'options pour ce verre avec seulement
+  les 3 anciens choix, **les 47 cl n'apparaîtront pas en ligne** tant qu'il n'est pas complété
+  ou remis à zéro (Gestion → Produits → Verre à vin → options).
+- **Stock** : les 3 nouveaux choix n'ont pas d'entrée de stock → **non suivis = illimités**
+  (`productSoldOut`). Le gérant veut **100** : à saisir dans Gestion → Produits & stock.
+- **Vérifié au navigateur** (serveur local, `scratchpad/verre47.mjs`) : 6 choix aux bons prix ·
+  clic 47 cl → photo 47 · texte → aperçu sur le 47 (« ≈ 1,1 cm » ; 36 cl : 1,5 cm) · retour 36 →
+  tulipe · téléphone 390 px sans débordement · 0 erreur JS · `test-orderspec` et
+  `test-impression` au vert. ⚠️ Pièges de ce test : fermer le pop-up « Bienvenue » (il arrive
+  avec un délai et couvre les options) ; **tuer le serveur `next start` avant chaque rebuild**
+  (un serveur qui survit à un rebuild sert un mélange de deux compilations → clics sans effet) ;
+  `pkill -f "next-serve[r]"` avec les crochets, sinon pkill tue le shell qui le lance (exit 144).
+- ⛔ **PAS ENCORE EN LIGNE** : commit local, en attente du « applique » du gérant.
+
 ## 🔴 DEUX LIGNES DU MÊME PRODUIT — GRAVURES MÉLANGÉES (corrigé le 24/09/2026)
 > Remarque du gérant sur la commande **#00CUYR2U** (Cécilia Herrera, 2 lots de flûtes gravés
 > différemment) : « je comprends pas là, c'est mal écrit ». Le tableau « À graver » de la 2ᵉ ligne

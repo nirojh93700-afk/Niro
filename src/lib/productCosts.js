@@ -18,6 +18,11 @@ export const VARIANT_COSTS = {
   "verre-vin-1": 3.05,
   "verre-vin-2": 6.10,
   "verre-vin-4": 12.20,
+  // Verre 47 cl (25/09/2026) : carton de 6 à 29,23 € TTC + 10 € de port
+  // annoncés par le gérant → 6,54 € le verre, port compris.
+  "verre-vin-47-1": 6.54,
+  "verre-vin-47-2": 13.08,
+  "verre-vin-47-4": 26.16,
   // Flûte à champagne (Metro ~2,34 € / flûte)
   "flute-1": 2.34,
   "flute-2": 4.68,

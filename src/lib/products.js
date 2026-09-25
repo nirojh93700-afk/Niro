@@ -75,6 +75,24 @@ export function getJewelTypeLabel(slug) {
   return JEWEL_TYPES.find((t) => t.slug === slug)?.label || slug;
 }
 
+// Aperçu de gravure du GRAND VERRE À VIN 47 cl (photo verre_vin_47_vierge.jpg,
+// 482 × 1071). La coupe occupe le haut de l'image : zone posée sur sa partie la
+// plus plate, sous le point le plus large.
+// ⚠️ widthMm n'est PAS la largeur physique : l'éditeur (Glass3D) convertit les
+// hauteurs avec le même facteur que les largeurs, comme si la photo était
+// carrée — alors qu'elle est 2 fois plus haute que large. Le 36 cl compense en
+// déclarant ~1,7× la vraie largeur (70 mm pour 28 % d'une coupe de ~80 mm) ;
+// on fait PAREIL ici pour que « Texte ≈ X cm » soit cohérent d'une taille à
+// l'autre (mesuré le 25/09 : 45 mm donnait 0,6 cm là où le 36 cl dit 1,5 cm).
+// Une vraie correction du calcul concernerait tous les verres — pas ici.
+const VIN_47_APERCU = {
+  engraveImage: "/produits/verre_vin_47_vierge.jpg",
+  engrave: {
+    box: { top: 0.19, left: 0.30, width: 0.40, height: 0.22 },
+    widthMm: 84, maxWidthFrac: 0.45, minWidthFrac: 0.10,
+  },
+};
+
 export const products = [
   // ----------------------------- BIJOUX --------------------------------------
   {
@@ -2271,7 +2289,7 @@ export const products = [
     category: "verres",
     subcategory: "vin",
     type: "Verre gravé personnalisé",
-    tagline: "Un verre à vin en cristal, gravé à votre façon : choisissez un modèle (n°1 à 20), une lettre fleurie ou votre texte.",
+    tagline: "Un verre à vin professionnel, en 36 cl ou en 47 cl, gravé à votre façon : choisissez un modèle (n°1 à 20), une lettre fleurie ou votre texte.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
@@ -2281,10 +2299,16 @@ export const products = [
       "/produits/verre_vin_grave.jpg",
       "/produits/verre_vin_vierge.jpg",
       "/produits/verre_vin_set.jpg",
+      // Grand verre 47 cl (ajouté le 25/09/2026, photos fournies par le gérant).
+      "/produits/verre_vin_47_ambiance.jpg",
+      "/produits/verre_vin_47_rose.jpg",
+      "/produits/verre_vin_47_vierge.jpg",
     ],
     // Aperçu en direct sur le verre : quand le client écrit, on bascule sur la
     // photo du verre VIDE (verre_vin_vierge) et le texte se pose sur la coupe,
     // déplaçable + taille en cm (même système que les verres à whisky).
+    // ⚠️ Ceci est l'aperçu du 36 cl. Le 47 cl a une coupe ronde, pas une tulipe :
+    // ses variantes portent LEUR photo vierge + LEUR zone (voir `variants`).
     engraveImage: "/produits/verre_vin_vierge.jpg",
     engrave: {
       box: { top: 0.17, left: 0.36, width: 0.28, height: 0.24 },
@@ -2377,18 +2401,30 @@ export const products = [
       // Verre Créations vend le « Soirée 36 cl » (cristallin Spiegelau, gravé) à
       // 18,90 €, et sa gamme entière est entre 17,90 et 25,90 €. Relevé complet et
       // sources dans docs/prix-marche.md. On reste 3 € sous lui.
-      { id: "verre-vin-1", stockId: "verre-vin-1", title: "À l'unité", price: 15.90, weight: 500 },
-      { id: "verre-vin-2", stockId: "verre-vin-2", title: "Lot de 2", price: 29.90, weight: 900 },
-      { id: "verre-vin-4", stockId: "verre-vin-4", title: "Lot de 4", price: 57.90, weight: 1600 },
+      // ⚠️ Les identifiants verre-vin-1/2/4 sont GARDÉS tels quels (paniers en
+      // cours + historique des commandes). Le titre porte « Lot de N » : c'est
+      // là que la fiche lit le nombre de verres (glassQty).
+      { id: "verre-vin-1", stockId: "verre-vin-1", title: "36 cl · À l'unité", price: 15.90, weight: 500, image: "/produits/verre_vin_vierge.jpg" },
+      { id: "verre-vin-2", stockId: "verre-vin-2", title: "36 cl · Lot de 2", price: 29.90, weight: 900, image: "/produits/verre_vin_vierge.jpg" },
+      { id: "verre-vin-4", stockId: "verre-vin-4", title: "36 cl · Lot de 4", price: 57.90, weight: 1600, image: "/produits/verre_vin_vierge.jpg" },
+      // GRAND VERRE 47 cl — ajouté le 25/09/2026 à la demande du gérant (« le client
+      // choisit entre les 2 cl »). Coupe ronde (bourgogne), verrerie de restauration.
+      // Prix = même marge en € que le 36 cl, coût 6,54 €/verre port compris
+      // (carton de 6 à 29,23 € + 10 € de port). Voir docs/prix-historique.md.
+      // Chaque variante porte SA photo vierge + SA zone de gravure : la coupe n'a
+      // pas la forme du 36 cl, l'aperçu ne peut pas être partagé.
+      { id: "verre-vin-47-1", stockId: "verre-vin-47-1", title: "47 cl · À l'unité", price: 19.90, weight: 550, image: "/produits/verre_vin_47_vierge.jpg", ...VIN_47_APERCU },
+      { id: "verre-vin-47-2", stockId: "verre-vin-47-2", title: "47 cl · Lot de 2", price: 36.90, weight: 1000, image: "/produits/verre_vin_47_vierge.jpg", ...VIN_47_APERCU },
+      { id: "verre-vin-47-4", stockId: "verre-vin-47-4", title: "47 cl · Lot de 4", price: 71.90, weight: 1800, image: "/produits/verre_vin_47_vierge.jpg", ...VIN_47_APERCU },
     ],
-    descriptionHtml: `<p><strong>Un verre à vin en cristal, gravé à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
+    descriptionHtml: `<p><strong>Un verre à vin professionnel — de la verrerie de restauration — gravé à votre façon.</strong> Deux tailles au choix : le <strong>36 cl</strong>, coupe tulipe en cristal, et le <strong>47 cl</strong>, grand verre à coupe ronde pour les vins rouges. Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct, sur le verre que vous avez choisi.</p>
 <p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Verre :</strong> verre à vin en cristal, contenance ~36 cl</li>
+<li><strong>Verre :</strong> verrerie professionnelle, qualité restauration — <strong>36 cl</strong> (cristal, coupe tulipe) ou <strong>47 cl</strong> (coupe ronde, vins rouges)</li>
 <li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
 <li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
-<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte dès 60 € d'achat)</li>
+<li><strong>À l'unité, lot de 2 ou lot de 4</strong>, dans chaque taille (livraison offerte dès 60 € d'achat)</li>
 </ul>
 <h3>Points forts</h3>
 <ul>
@@ -2517,7 +2553,7 @@ export const products = [
 <li><strong>Verre :</strong> flûte à champagne, contenance ~21 cl (Ø 6,3 × H 21,4 cm)</li>
 <li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
 <li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
-<li><strong>À l'unité, lot de 2 ou lot de 4</strong> (livraison offerte dès 60 € d'achat)</li>
+<li><strong>À l'unité, lot de 2 ou lot de 4</strong>, dans chaque taille (livraison offerte dès 60 € d'achat)</li>
 </ul>
 <h3>Points forts</h3>
 <ul>

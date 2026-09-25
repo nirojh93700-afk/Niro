@@ -1263,7 +1263,7 @@ Un souci à la réception ?
   },
   "verre-a-vin-grave": {
     material:
-      "Verre à vin en cristal, contenance environ 36 cl.\nGravure laser permanente : le motif est creusé dans le verre, il ne s'efface pas.\nRendu dépoli, effet givré, sans encre ni peinture.\nVendu à l'unité, par lot de 2 ou par lot de 4.",
+      "Verre à vin professionnel, qualité restauration. Deux tailles : 36 cl (cristal, coupe tulipe) ou 47 cl (grand verre à coupe ronde, pour les vins rouges).\nGravure laser permanente : le motif est creusé dans le verre, il ne s'efface pas.\nRendu dépoli, effet givré, sans encre ni peinture.\nVendu à l'unité, par lot de 2 ou par lot de 4, dans chaque taille.",
     usage:
       "Trois façons de personnaliser : un modèle prêt (n° 1 à 20 — couples, monogramme, prénoms et dates, banderoles), une lettre fleurie, ou votre propre texte dans l'une de nos 8 écritures. L'aperçu se met à jour pendant que vous écrivez.\nPour les modèles avec prénoms (n° 14 à 17), le prénom et la date sont gravés dans l'écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l'évier, c'est du cristal.",
     returns:

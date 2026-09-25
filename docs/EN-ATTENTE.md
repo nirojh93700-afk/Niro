@@ -7,6 +7,13 @@
 
 ---
 
+## 0. À mettre en ligne sur le mot du gérant
+- **Verre à vin 47 cl** (2 tailles sur la fiche, aperçu par taille, prix 19,90 / 36,90 / 71,90 €) :
+  **construit et vérifié le 25/09, commit local, PAS poussé** — attend « applique ». Ensuite :
+  saisir **stock 100** sur les 3 choix 47 cl dans Gestion → Produits & stock, et vérifier que les
+  6 choix s'affichent en ligne (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
+  Détail : `CLAUDE.md` § « VERRE À VIN — DEUX TAILLES ».
+
 ## 1. Messages / clients en attente
 
 | Qui | État | Où |

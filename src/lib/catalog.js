@@ -41,10 +41,22 @@ function applyOverride(product, ov, images, promos) {
     if (ov.seasonal && typeof ov.seasonal === "object") p.seasonal = ov.seasonal; // édition saisonnière
     if (ov.preview) p.preview = ov.preview; // zone de gravure réglée dans l'admin
     // Liste de variantes modifiée dans l'admin (ajout/suppression d'options).
+    // L'admin décide de la LISTE, des titres et des prix. Mais il ne connaît pas
+    // les réglages techniques d'une option écrits dans le code — photo (`image`),
+    // poids (`weight`, sinon le port d'un lot de 4 retombe sur le poids d'un seul
+    // verre), galerie, et l'aperçu de gravure par taille (`engraveImage` /
+    // `engrave`, verre à vin 36/47 cl). On les REPREND du code, option par option,
+    // par identifiant : sans ça, une simple retouche de prix dans Gestion
+    // effaçait tout (constaté le 25/09/2026).
     if (Array.isArray(ov.variants) && ov.variants.length) {
+      const duCode = new Map((p.variants || []).map((v) => [v.id, v]));
       p.variants = ov.variants
         .filter((v) => v && v.id && v.title && typeof v.price === "number")
-        .map((v) => ({ id: v.id, title: v.title, price: v.price, ...(v.stockId ? { stockId: v.stockId } : {}) }));
+        .map((v) => ({
+          ...(duCode.get(v.id) || {}),
+          id: v.id, title: v.title, price: v.price,
+          ...(v.stockId ? { stockId: v.stockId } : {}),
+        }));
     }
     if (ov.prices) {
       p.variants = p.variants.map((v) =>

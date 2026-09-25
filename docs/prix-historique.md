@@ -211,3 +211,14 @@ le code ne changera **rien** sur la fiche. Dans ce cas, le remettre **dans Gesti
 | Plaque de naissance | `plaque-de-naissance` | naissance | Modèle Garçon (rond) | **14,90 €** |
 |  |  |  | Modèle Fille (ovale) | **14,90 €** |
 | Plaque de naissance cœur — porte-bracelet | `plaque-de-naissance-coeur` | naissance | Plaque ronde — mains en cœur | **11,90 €** |
+
+
+## 25/09/2026 — Verre à vin : ajout du GRAND VERRE 47 cl (nouvelles variantes, rien de changé sur le 36 cl)
+- 36 cl (inchangé) : 15,90 / 29,90 / 57,90 € — coût 3,05 €/verre.
+- **47 cl (nouveau)** : **19,90 / 36,90 / 71,90 €** — coût **6,54 €/verre port compris**
+  (carton de 6 à 29,23 € TTC + 10 € de port, chiffres du gérant). Même marge en € que le 36 cl
+  (12,85 € l'unité · 23,80 € le lot de 2 · 45,70 € le lot de 4), arrondi à ,90.
+- Repères : prix validé le 16/09 pour le devis Ludovic Noël = 18,90 / 34,90 € (calculé avec un
+  port de 3,20 €) ; artisan le plus proche (Verre Créations, 46 cl cristal) = 19,90 €.
+- Identifiants : `verre-vin-47-1 / -2 / -4` (stock à part ; non suivi = illimité tant que le
+  gérant n'a pas saisi 100 dans Gestion → Produits & stock).

@@ -32,7 +32,9 @@ export function GlassPreview({ item }) {
   // Cristaux : on grave dans un cristal VIERGE (image « bloc »), jamais sur la
   // photo d'exemple déjà gravée (sinon la photo cliente se pose sur une gravure).
   const blockImg = p?.crystal3d ? (p?.images || []).find((i) => /bloc/.test(i)) : null;
-  const img = blockImg || (isFond ? p?.fondImage : p?.engraveImage) || p?.images?.[0];
+  // Verre à vin 36 / 47 cl : la variante commandée porte sa propre photo vierge.
+  const v = (p?.variants || []).find((x) => x.id === item.variantId);
+  const img = blockImg || (isFond ? p?.fondImage : (v?.engraveImage || p?.engraveImage)) || p?.images?.[0];
   if (!img) return null;
   const W = 300;
   const lay = item.layout?.modele || item.layout?.photo || item.layout?.text;

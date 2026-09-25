@@ -664,7 +664,7 @@ img {
 .variant-swatch img {
   width: 76px;
   height: 76px;
-  object-fit: cover;
+  object-fit: cover; object-position: top center; /* photos hautes (verres) : montrer la coupe, pas le pied — sans effet sur les photos carrées (bijoux) */
   border-radius: 8px;
   margin-bottom: 4px;
 }
