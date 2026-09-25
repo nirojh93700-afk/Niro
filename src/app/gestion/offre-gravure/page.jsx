@@ -47,15 +47,33 @@ export default function OffreGravurePage() {
 
   const set = (patch) => setO((prev) => ({ ...prev, ...patch }));
 
+  // « Activer » coché puis Enregistrer = les envois REPRENNENT TOUT DE SUITE
+  // (demande du gérant, 25/09/2026 : « quand j'active, ça reprend direct »).
+  // Une date de fin déjà passée est effacée (sinon la case cochée ne ferait
+  // rien), puis les inscrites en attente sont servies dans la foulée — chacune
+  // avec 30 jours à compter de son e-mail.
   async function save() {
     setBusy("save"); setErr("");
     try {
+      const etaitActive = Boolean(etat?.offre?.enabled);
+      const payload = { ...o };
+      if (payload.enabled && payload.end && payload.end < AUJ()) payload.end = "";
       const r = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ gravureOfferte: o }),
+        body: JSON.stringify({ gravureOfferte: payload }),
       });
       if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Enregistrement impossible.");
+      if (payload.enabled && !etaitActive && (!payload.start || payload.start <= AUJ())) {
+        const rs = await fetch("/api/admin/offre-gravure", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-admin-key": key },
+          body: JSON.stringify({ action: "send" }),
+        });
+        const d = await rs.json().catch(() => ({}));
+        if (rs.ok) toast(d.envoyes ? `Offre relancée — ${d.envoyes} e-mail${d.envoyes > 1 ? "s" : ""} envoyé${d.envoyes > 1 ? "s" : ""} ✓` : "Offre relancée — personne à servir pour l'instant", d.envoyes ? "ok" : "info");
+        else setErr(d.error || "Offre activée, mais l'envoi immédiat a échoué : il repartira tout seul.");
+      }
       await load(key);
     } catch (e) { setErr(e.message); }
     finally { setBusy(""); }
@@ -141,14 +159,14 @@ export default function OffreGravurePage() {
       <div className="card og-card">
         <label className="og-switch">
           <input type="checkbox" id="og-enabled" checked={o.enabled} onChange={(e) => set({ enabled: e.target.checked })} />
-          <span><b>Activer l&apos;offre</b> — éteinte, aucun e-mail ne part jamais.</span>
+          <span><b>Activer l&apos;offre</b> — cochez puis Enregistrez : les envois reprennent tout de suite. Décochée, aucun e-mail ne part (les codes déjà donnés restent valables).</span>
         </label>
 
         <div className="og-grid">
           <label htmlFor="og-start">Début
             <input type="date" id="og-start" value={o.start} onChange={(e) => set({ start: e.target.value })} />
           </label>
-          <label htmlFor="og-end">Fin (annoncée dans l&apos;e-mail)
+          <label htmlFor="og-end">Arrêter les envois le (facultatif, vide = tant que c&apos;est coché)
             <input type="date" id="og-end" value={o.end} onChange={(e) => set({ end: e.target.value })} />
           </label>
           <label htmlFor="og-code">Préfixe des codes (chaque cliente reçoit le sien : PRÉFIXE-XXXXX)
@@ -176,7 +194,7 @@ export default function OffreGravurePage() {
             onClick={() => set({ enabled: true, start: AUJ(), end: DANS_UN_MOIS() })}
             type="button"
           >
-            Ouvrir pour un mois
+            Envoyer pendant un mois
           </button>
           <button className="btn btn-outline" onClick={nettoyer} disabled={busy === "purge"} type="button">
             {busy === "purge" ? "Nettoyage…" : "Nettoyer les codes expirés"}
@@ -185,7 +203,7 @@ export default function OffreGravurePage() {
 
         <p className="og-note">
           <b>Un code par cliente.</b> Chacune reçoit son propre code (<b>{o.code || "GRAVURE"}-XXXXX</b>),
-          réservé à son adresse e-mail, utilisable <b>une seule fois</b>, et qui expire à la date de fin.
+          réservé à son adresse e-mail, utilisable <b>une seule fois</b>, valable <b>30 jours à compter de son e-mail</b> (c&apos;est cette date qui est écrite dans l&apos;e-mail).
           Au paiement, la remise est <b>le prix réel de la première gravure</b> de son panier
           (3 € sur un bijou, 5 € sur un cristal…), sur n&apos;importe quel produit — pas un montant fixe.
           Les codes sont créés dans Promotions au moment de l&apos;envoi ; le bouton « Nettoyer » retire

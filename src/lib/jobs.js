@@ -14,7 +14,7 @@ import {
 import { getSiteOrders } from "@/lib/firebase";
 import { sendClientMail, brandedMessage, boutonsAvis, boutonRepondre, imageEnTete } from "@/lib/clientMail";
 import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
-import { offreActive, offreGravureEmail, joursDepuis } from "@/lib/offreGravure";
+import { offreActive, offreGravureEmail, joursDepuis, OFFRE_GRAVURE_JOURS } from "@/lib/offreGravure";
 import { cadeauColisActif } from "@/lib/vacation";
 
 const DAY = 86400000;
@@ -286,8 +286,14 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
   // gardé à côté de l'adresse (`markOffreGravureSent`) pour pouvoir le
   // retrouver si une cliente écrit « mon code ne marche pas ».
   const prefixe = String(o.code || "GRAVUREOFFERTE").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 20) || "GRAVURE";
-  const finTs = o.end ? Date.parse(`${o.end}T23:59:59`) : 0;
-  const jours = finTs ? Math.max(1, Math.ceil((finTs - Date.now()) / 86400000)) : 0;
+  // UN MOIS PAR PERSONNE (demande du gérant, 25/09/2026 : « tu adaptes comme
+  // pour les autres la date de fin »). Avant, tout le monde avait la même fin
+  // (o.end) : une inscrite servie en fin de campagne n'avait plus que quelques
+  // jours. Maintenant chacune a 30 jours à compter de SON e-mail — son code
+  // expire ce jour-là et c'est cette date qui est écrite dans l'e-mail.
+  const jours = OFFRE_GRAVURE_JOURS;
+  const finPerso = new Date(Date.now() + jours * 86400000)
+    .toLocaleDateString("fr-CA", { timeZone: "Europe/Paris" }); // AAAA-MM-JJ
   // Alphabet sans 0/O ni 1/I/L : une cliente doit pouvoir recopier son code sans
   // se tromper si elle le lit au lieu de cliquer.
   const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
@@ -330,7 +336,7 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
         kind: "gravure",  // au paiement : prix RÉEL de la 1re gravure du panier
         reusable: false,  // une seule utilisation
         email: c.email,   // réservé à cette adresse
-        days: jours,      // 0 = pas d'expiration
+        days: jours + 1,  // +1 : le code vit toute la journée écrite dans l'e-mail
       });
       // Ses favoris (si elle s'est connectée un jour), sinon les idées.
       let pieces = [], favoris = false;
@@ -343,7 +349,7 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
       // La ligne « un cadeau vous attend » n'est écrite que si un cadeau est
       // vraiment offert aujourd'hui (mode délai allongé OU interrupteur cadeau) :
       // jamais de promesse que le panier ne tiendrait pas.
-      const args = { date: c.date, code, fin: o.end, cadeau: o.cadeau !== false && Boolean(cadeauColisActif(s)), pieces, favoris };
+      const args = { date: c.date, code, fin: finPerso, cadeau: o.cadeau !== false && Boolean(cadeauColisActif(s)), pieces, favoris };
       let mail = offreGravureEmail(args);
       // Bouton « ✉️ Répondre à ce message » (règle du 17/09) — jamais bloquant :
       // si le jeton échoue, l'e-mail part sans bouton.

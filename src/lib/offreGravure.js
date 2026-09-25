@@ -19,8 +19,14 @@
 // =============================================================================
 import { emailLayout, BRAND } from "@/lib/email";
 
-// Renvoie la config si l'offre est ouverte AUJOURD'HUI, sinon null.
-// Même logique de dates que le mode vacances (jour de fin inclus).
+// Durée de l'offre POUR CHAQUE CLIENTE, comptée depuis son e-mail (25/09/2026).
+export const OFFRE_GRAVURE_JOURS = 30;
+
+// Renvoie la config si les ENVOIS sont ouverts aujourd'hui, sinon null.
+// « Activer » décoché = plus aucun e-mail ; les codes déjà donnés restent
+// valables jusqu'à leur propre date (ils ne dépendent pas de ce réglage).
+// Début / fin sont FACULTATIFS : vides = les envois tournent tant que la case
+// est cochée (demande du gérant : « quand j'active, ça reprend direct »).
 export function offreActive(o, now = Date.now()) {
   if (!o || o.enabled !== true) return null;
   const startOk = !o.start || now >= new Date(o.start).getTime();

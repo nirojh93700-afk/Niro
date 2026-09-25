@@ -560,6 +560,18 @@ ne descend jamais sous zéro.
     (les déploiements poussés à la suite sortent l'un après l'autre, ~4 min chacun).
   · Maquette validée des 2 e-mails : `docs/maquettes/offre-gravure-emails.html`. **Pour arrêter** :
     décocher Activer.
+- ⏸️ **MISE EN PAUSE LE 25/09/2026** (« tu peux arrêter là, on va attendre, je te relancerai ») :
+  `enabled:false` posé par `POST /api/admin/settings` (dates 20/09→20/10 conservées). Les 53 codes
+  déjà donnés RESTENT valables (ils ne dépendent pas de ce réglage). Dernier envoi : 25/09 9 h 15.
+  **REPRISE = LUI** : Gestion → Marketing → Offre gravure → cocher « Activer » → Enregistrer →
+  les inscrites en attente sont servies **dans la foulée** (appel `send` automatique à l'activation),
+  puis le battement continue chaque jour. Une date de fin déjà passée est effacée à l'activation
+  (fin vide = envois tant que c'est coché). Ne jamais réactiver sans sa demande.
+- ✅ **UN MOIS PAR CLIENTE (25/09/2026)** : avant, tout le monde avait la fin commune `o.end` → une
+  inscrite servie le 25/09 n'avait que 25 jours. Maintenant **30 jours à compter de SON e-mail**
+  (`OFFRE_GRAVURE_JOURS` dans `offreGravure.js`) : date écrite dans l'e-mail (`finPerso`) et code
+  (`days: 31`, pour couvrir toute la journée annoncée). Les 3 servies les 22, 24 et 25/09 gardent
+  le 20/10 (question « les allonger ? » posée, pas tranchée).
 - ⛔ **LANCEMENT = UNIQUEMENT SUR DEMANDE EXPLICITE DU GÉRANT**, par l'autre conversation, en suivant
   **`docs/messages/offre-gravure-lancement.md`** (5 étapes ; décocher « cadeau » si le mode délai
   allongé est éteint ; annoncer le nombre d'envois AVANT de cliquer). L'offre est **éteinte**.
