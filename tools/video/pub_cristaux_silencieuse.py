@@ -55,6 +55,20 @@ VIDEOS = {
     ('psg-lampe-couleur.jpg', 'Lampe gravée', 'Le logo gravé, éclairé la nuit'),
     ('support-telephone-lettre.jpg', 'Support téléphone', 'Votre lettre fleurie gravée'),
   ]),
+  # VERRES : toutes les photos ou la gravure est visible (planche du 22/09, CLAUDE.md).
+  # Pas de flute : aucune photo gravee n'existe. Tous en vente (remis en vente le 01/09).
+  12: ("Verres & carafes gravés", "Votre photo, votre texte, gravés dans le verre", "verres-graves", [
+    ('carafe_gravee.jpg', 'Carafe à whisky gravée', 'Le motif, le prénom, l’année'),
+    ('verre_a_whisky_exemple_face.jpg', 'Verre à whisky', 'Votre photo gravée dans le verre'),
+    ('verre_vin_exemple_dale.jpg', 'Verre à vin gravé', 'Monogramme et année'),
+    ('verre_whisky_papa_monde_moustache.jpg', 'Verre à whisky', 'Votre texte, votre motif'),
+    ('carafe_whiskey_1892.jpg', 'Carafe à whisky gravée', 'Une pièce unique pour la table'),
+    ('verre_a_whisky_exemple_fond.jpg', 'Verre à whisky', 'Ou gravé au fond du verre'),
+    ('verre_vin_geniet.jpg', 'Verre à vin gravé', 'Un mot, un cœur, en duo'),
+    ('verre_whisky_papa_monde_banniere.jpg', 'Verre à whisky', 'Banderole et prénom'),
+    ('verre_a_whisky_logo_bourbon.webp', 'Verre à whisky', 'Un logo, gravé net'),
+    ('verre_a_whisky_card.jpg', 'Verre à whisky', 'Le cadeau qui fait mouche'),
+  ]),
 }
 SEG_DUR, INTRO_DUR, OUTRO_DUR = 2.2, 1.9, 2.3
 
@@ -143,4 +157,4 @@ def rendre(num):
     mi.resize((360, 640)).save(f"{OUT}/apercu-{nom}.jpg", quality=80)
     print(f"Vidéo {num} — {theme} : {sum(s[3] for s in segs):.1f} s, {os.path.getsize(final)//1024} Ko → {final}")
 
-for n in (int(a) for a in (sys.argv[1:] or ["10", "11"])): rendre(n)
+for n in (int(a) for a in (sys.argv[1:] or ["10", "11", "12"])): rendre(n)
