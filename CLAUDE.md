@@ -819,6 +819,34 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
+## 🍹 NOUVEAU PRODUIT — VERRE À COCKTAIL GRAVÉ (25/09/2026, MAQUETTE — RIEN EN LIGNE)
+> Demande du gérant : « j'aimerais ajouter un produit » puis captures Metro (commande passée) +
+> « c'est pas ces photos que tu dois mettre... fais une maquette, je te donnerai les vraies photos,
+> on va le faire comme pour le verre à whisky ». Fiche construite en reprenant le gabarit EXACT du
+> Verre à whisky portrait personnalisé (photo optionnelle + texte + décor + police + gravure
+> face/fond +7 €) — même famille de fournisseur (Metro Professional Lario, comme le verre à whisky
+> Lario 30 cl déjà en vente).
+- **Maquette** : `docs/maquettes/verre-a-cocktail-fiche.html`, artifact
+  https://claude.ai/artifact/XRYqfH6rdExwQUqGehB17Q. Construite à partir du VRAI rendu de la fiche
+  `/produit/verre-a-whisky-grave` (HTML servi par `next start`, vraies feuilles de style, polices
+  Google Fonts, logo en texte), texte/prix/accordéon adaptés au cocktail.
+- **Source** : METRO Professional Verre à cocktail Lario, 17 cl, carton de 12 — commande passée par
+  le gérant, livraison prévue 29 sept.–1 oct. Coût 15,84 €/carton + 1,01 € de port ≈ **1,40 €/verre
+  rendu**. Dimensions (web) : hauteur ≈ 12,5 cm, diamètre ≈ 5,2 cm, forme haute.
+- **Photos (25/09, 3 photos envoyées par le gérant)** : verre vierge (studio, fond blanc), verre
+  garni (cocktail jaune, anis étoilé), photo d'ambiance (3 cocktails sur table bois) — intégrées
+  dans la galerie. ⚠️ **Aucune n'est une photo GRAVÉE** — le verre n'a pas encore été reçu ni gravé.
+  **Il faudra une vraie photo gravée avant de publier pour de vrai**, comme sur toutes les autres
+  fiches (règle du 22/09 : jamais un produit vierge en avant sur le site).
+- **Prix proposés (à valider par le gérant)** : 17,90 € à l'unité · 33,90 € les 2 · 64,90 € les 4
+  (livraison offerte dès 60 €, comme les autres verres). Marché relevé (25/09) : 12,90 € à 25,90 €
+  pour un verre à cocktail gravé (sources : Verre Créations, Val Création, poupepoupi, ocadeau…).
+- ⛔ **Aucune marque fournisseur sur le site** (ni Metro, ni Lario) — même règle que les autres verres.
+- **Reste à faire** : recevoir le verre (29 sept.–1 oct.), le graver, prendre une vraie photo gravée,
+  faire valider le prix par le gérant, PUIS seulement ajouter le produit dans `products.js` +
+  `productInfo.js` (suivre §10 de ce fichier — packaging, `productDates.js`, etc.) et publier.
+  **Rien n'est en ligne, rien n'a été touché dans `products.js`.**
+
 ## 🎄 NOËL 2026 — ✅ BANDEAU + PAGE EN LIGNE LE 25/09/2026 (« pour Noël tu peux mettre en ligne »)
 > **CE QUI EST EN LIGNE** (maquette v4 `docs/maquettes/noel-sur-accueil-actuel.html` reproduite) :
 > · `src/components/home/BandeauNoel.jsx` — bandeau rouge de Noël & or « Ce Noël, offrez un cadeau
