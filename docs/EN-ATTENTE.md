@@ -14,8 +14,9 @@
 
 - **🎄 Noël 2026** : ✅ **bandeau + sélection + page `/offrir/noel` EN LIGNE le 25/09** (interrupteur
   Apparence → « Bandeau Noël », à décocher après les fêtes). Reste en attente : (1) **date limite de
-  commande** à me donner ; (2) boule de Noël = enregistrée, PAS en ligne ; (3) gobelet : maquette
-  redonnée le 25/09 (`docs/maquettes/gobelet-configurateur-final.html`), attend « mets en ligne » +
+  commande** à me donner ; (2) boule de Noël = enregistrée, PAS en ligne ; (3) gobelet : maquette CORRIGÉE le 25/09 soir
+  (`docs/maquettes/gobelet-configurateur-final.html`, artifact https://claude.ai/artifact/JzxuttEeyZSDymLM17BVas —
+  quota 4→1 élément inclus, onglet « Texte seul », vrai sélecteur de police), attend « mets en ligne » +
   quantité en stock. Détail : `CLAUDE.md` § NOËL 2026.
 
 ## 1. Messages / clients en attente
