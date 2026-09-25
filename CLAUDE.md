@@ -824,9 +824,20 @@ ne descend jamais sous zéro.
 > entre les 2 cl » (grand verre 47 cl acheté chez Metro, coupe ronde). Puis, les photos côte à
 > côte montrant deux formes différentes : « Ah c'est pas le même verre, tu peux construire alors ? »
 > → version B : **l'aperçu de gravure suit la taille choisie.**
-- **6 choix** sur `verre-a-vin-grave` : 36 cl et 47 cl × À l'unité / Lot de 2 / Lot de 4.
-  Identifiants **gardés** pour le 36 cl (`verre-vin-1/2/4`), nouveaux `verre-vin-47-1/2/4`.
-  Les titres portent « Lot de N » : c'est là que la fiche lit le nombre de verres (`glassQty`).
+- ⛔ **CE QUE LE GÉRANT A REFUSÉ (1re version, 25/09)** : 6 tuiles « 36 cl · Lot de 2 » à droite
+  et une galerie qui mélangeait les 9 photos. « Fais pas comme t'as fait, tu laisses comme
+  actuel pour le sélecteur des quantités, il faut que ce soit pareil que les autres verres. »
+- **La bonne mise en page** : la TAILLE se choisit **sous la photo** (pastilles, même habillage
+  que les couleurs du gobelet, `.color-swatches`) et **remplace toute la galerie** par les photos
+  de cette taille — **36 cl par défaut** (6 photos), 47 cl → ses 3 photos, jamais mélangées. Le
+  sélecteur de droite reste **À l'unité / Lot de 2 / Lot de 4**, identique aux autres verres,
+  filtré sur la taille choisie. Changer de taille garde le format déjà choisi (Lot de 2 → Lot de 2).
+- **Données** : `product.tailles = { label, options: [{ id, title, sub, image, gallery,
+  engraveImage?, engrave? }] }` + `taille: "36" | "47"` sur chaque variante. Identifiants
+  **gardés** pour le 36 cl (`verre-vin-1/2/4`), nouveaux `verre-vin-47-1/2/4`. Les titres portent
+  « Lot de N » : c'est là que la fiche lit le nombre de verres (`glassQty`). Dans `ProductDetail` :
+  état `tailleId`, `selectTaille()`, `variantsVisibles` (index GLOBAL gardé pour `selectVariant`).
+  Réutilisable pour tout produit à deux dimensions (taille × format).
 - **Prix 47 cl : 19,90 / 36,90 / 71,90 €** — même marge en € que le 36 cl, coût **6,54 €/verre
   port compris** (carton de 6 à 29,23 € + 10 € de port, chiffres du gérant, `productCosts.js`).
   Poids 550 / 1000 / 1800 g. Détail dans `docs/prix-historique.md`.
@@ -837,10 +848,13 @@ ne descend jamais sous zéro.
   `engraveImage`). `FicheAtelier` (visuel de l'atelier) suit aussi la variante commandée.
   Zone du 47 cl : constante `VIN_47_APERCU` avant le tableau `products` (box, widthMm 84 —
   voir le commentaire : le calcul des cm suppose une photo carrée, on compense comme le 36 cl).
-- **Photos** (fournies par le gérant, 482–800 px) : `verre_vin_47_vierge.jpg` (aperçu + vignette
-  d'option), `_rose.jpg`, `_ambiance.jpg`, ajoutées à `images` (la vierge DOIT y être :
-  l'aperçu la retrouve par `indexOf`). Vignettes d'option : `object-position: top center` sur
-  `.variant-swatch img` pour montrer la coupe et non le pied (sans effet sur les photos carrées).
+- **Photos** (fournies par le gérant, 482–800 px) : `verre_vin_47_vierge.jpg` (aperçu + pastille),
+  `_rose.jpg`, `_ambiance.jpg` — dans `tailles.options[1].gallery`, PAS dans `images` (la galerie
+  par défaut reste le 36 cl seul). La vierge DOIT être dans la galerie de sa taille : l'aperçu la
+  retrouve par `indexOf`. Pastilles : `object-position: top center` sur `.cs-btn img` (et
+  `.variant-swatch img`) pour montrer la coupe et non le pied — sans effet sur les photos carrées.
+  ⚠️ Si Gestion a téléversé des photos pour ce produit (`images[slug]`), elles remplacent la
+  galerie au chargement ; un clic sur une taille remet la galerie du code.
 - **Descriptions** (les deux tailles) : « verrerie professionnelle, qualité restauration » —
   ⛔ **aucune marque** (ni Metro ni le fabricant : « les clients peuvent chercher sur Internet »),
   et **pas « cristal » pour le 47 cl** (matière non vérifiée sur l'emballage).
@@ -853,10 +867,11 @@ ne descend jamais sous zéro.
   ou remis à zéro (Gestion → Produits → Verre à vin → options).
 - **Stock** : les 3 nouveaux choix n'ont pas d'entrée de stock → **non suivis = illimités**
   (`productSoldOut`). Le gérant veut **100** : à saisir dans Gestion → Produits & stock.
-- **Vérifié au navigateur** (serveur local, `scratchpad/verre47.mjs`) : 6 choix aux bons prix ·
-  clic 47 cl → photo 47 · texte → aperçu sur le 47 (« ≈ 1,1 cm » ; 36 cl : 1,5 cm) · retour 36 →
-  tulipe · téléphone 390 px sans débordement · 0 erreur JS · `test-orderspec` et
-  `test-impression` au vert. ⚠️ Pièges de ce test : fermer le pop-up « Bienvenue » (il arrive
+- **Vérifié au navigateur** (serveur local, `scratchpad/verre47.mjs`, captures données au gérant
+  comme maquette) : défaut = 36 cl, 6 photos, 3 options 15,90/29,90/57,90 · clic 47 cl → 3 photos,
+  options 19,90/36,90/71,90, texte → aperçu sur le 47 (« ≈ 1,1 cm » ; 36 cl : 1,5 cm) · Lot de 2
+  conservé en changeant de taille · retour 36 → tulipe · téléphone 390 px sans débordement ·
+  0 erreur JS · `test-orderspec` et `test-impression` au vert. ⚠️ Pièges de ce test : fermer le pop-up « Bienvenue » (il arrive
   avec un délai et couvre les options) ; **tuer le serveur `next start` avant chaque rebuild**
   (un serveur qui survit à un rebuild sert un mélange de deux compilations → clics sans effet) ;
   `pkill -f "next-serve[r]"` avec les crochets, sinon pkill tue le shell qui le lance (exit 144).

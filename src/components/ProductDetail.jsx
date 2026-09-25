@@ -95,10 +95,15 @@ export default function ProductDetail({ product }) {
   // Galerie initiale : si le produit a des galeries par modèle (genderPick),
   // on part de celle du 1er modèle (sinon toutes les photos mélangées).
   const [images, setImages] = useState(
-    product.genderPick && product.variants?.[0]?.gallery?.length
-      ? product.variants[0].gallery
-      : product.images
+    product.tailles?.options?.[0]?.gallery?.length
+      ? product.tailles.options[0].gallery
+      : product.genderPick && product.variants?.[0]?.gallery?.length
+        ? product.variants[0].gallery
+        : product.images
   );
+  // TAILLE (verre à vin 36 / 47 cl) : choix SOUS la photo, qui remplace toute la
+  // galerie et filtre les options de droite (À l'unité / Lot de 2 / Lot de 4).
+  const [tailleId, setTailleId] = useState(product.tailles?.options?.[0]?.id || null);
   const [promos, setPromos] = useState({});
   const [isWide, setIsWide] = useState(true); // ordinateur vs mobile (pour la place du 3D)
   const [showMini, setShowMini] = useState(false); // mini 3D flottant (mobile)
@@ -196,14 +201,33 @@ export default function ProductDetail({ product }) {
   }, [product.slug]);
 
   const variant = product.variants[variantIndex];
-  // APERÇU DE GRAVURE PAR TAILLE (verre à vin 36 / 47 cl, 25/09/2026) : une
-  // variante peut porter SA photo vierge et SA zone de gravure (`engraveImage`,
-  // `engrave`) ; sinon on garde celles du produit. Deux verres de formes
-  // différentes ne peuvent pas partager le même aperçu — la gravure se poserait
-  // sur la mauvaise silhouette. ⚠️ Dans ce composant, toujours passer par ces
-  // deux constantes, jamais par product.engraveImage / product.engrave.
-  const engraveImage = variant?.engraveImage || product.engraveImage;
-  const engraveCfg = variant?.engrave || product.engrave;
+  const taille = product.tailles?.options?.find((o) => o.id === tailleId) || null;
+  // Options visibles à droite : celles de la taille choisie (index GLOBAL gardé
+  // pour selectVariant). Sans tailles : toutes, comme avant.
+  const variantsVisibles = product.variants
+    .map((v, i) => ({ v, i }))
+    .filter(({ v }) => !product.tailles || v.taille === tailleId);
+  // APERÇU DE GRAVURE PAR TAILLE (verre à vin 36 / 47 cl, 25/09/2026) : la
+  // variante, sinon la taille, sinon le produit, peuvent porter SA photo vierge
+  // et SA zone (`engraveImage`, `engrave`). Deux verres de formes différentes ne
+  // peuvent pas partager le même aperçu — la gravure se poserait sur la mauvaise
+  // silhouette. ⚠️ Dans ce composant, toujours passer par ces deux constantes,
+  // jamais par product.engraveImage / product.engrave.
+  const engraveImage = variant?.engraveImage || taille?.engraveImage || product.engraveImage;
+  const engraveCfg = variant?.engrave || taille?.engrave || product.engrave;
+
+  // Changer de taille : mêmes photos que cette taille, même format (unité / lot)
+  // que celui déjà choisi, et l'aperçu re-saute sur la bonne photo vierge.
+  function selectTaille(id) {
+    const opt = product.tailles?.options?.find((o) => o.id === id);
+    if (!opt) return;
+    setTailleId(id);
+    if (opt.gallery?.length) { setImages(opt.gallery); setActiveImg(0); }
+    const memeFormat = product.variants.findIndex((v) => v.taille === id && v.title === variant?.title);
+    const premier = product.variants.findIndex((v) => v.taille === id);
+    const idx = memeFormat >= 0 ? memeFormat : premier;
+    if (idx >= 0) setVariantIndex(idx);
+  }
   // Lot de N verres (vin/flûte) : on lit le nombre dans le titre de la variante.
   const glassQty = (() => { const m = /lot de\s*(\d+)/i.exec(variant?.title || ""); return m ? parseInt(m[1], 10) : 1; })();
   const supportsPerGlass = (Boolean(product.styleImages) || Boolean(product.perGlassLot)) && glassQty > 1;
@@ -1272,6 +1296,27 @@ export default function ProductDetail({ product }) {
           )}
 
 
+          {/* Pastilles de TAILLE sous la photo (verre à vin 36 / 47 cl) : même
+              habillage que les couleurs du gobelet. Cliquer change toute la galerie. */}
+          {product.tailles && (
+            <div className="color-swatches">
+              <div className="cs-label">{product.tailles.label || "Taille"} : <strong>{taille?.title}</strong>{taille?.sub ? ` — ${taille.sub}` : ""}</div>
+              <div className="cs-row">
+                {product.tailles.options.map((o) => (
+                  <button key={o.id} type="button"
+                    className={`cs-btn${o.id === tailleId ? " active" : ""}`}
+                    onClick={() => selectTaille(o.id)} aria-pressed={o.id === tailleId} title={`${o.title}${o.sub ? " — " + o.sub : ""}`}>
+                    {o.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={o.image} alt={o.title} />
+                    )}
+                    <span className="cs-name">{o.title}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Pastilles couleur APRÈS les vignettes (produits à galerie par coloris). */}
           {colorGallery && (
             <div className="color-swatches">
@@ -1452,7 +1497,7 @@ export default function ProductDetail({ product }) {
             <div className="field">
               <label>{hasVariantImages ? "Choisissez votre modèle" : "Choisissez votre option"}</label>
               <div className={`variant-swatches${product.crystal3d ? " crystal-sizes" : ""}`}>
-                {product.variants.map((v, i) => {
+                {variantsVisibles.map(({ v, i }) => {
                   // Cristal : on scinde « Nom — dimensions (personnes) » comme la maquette.
                   const cm = product.crystal3d ? v.title.split(/\s+—\s+/) : null;
                   const vName = cm ? cm[0] : v.title;

@@ -2299,11 +2299,37 @@ export const products = [
       "/produits/verre_vin_grave.jpg",
       "/produits/verre_vin_vierge.jpg",
       "/produits/verre_vin_set.jpg",
-      // Grand verre 47 cl (ajouté le 25/09/2026, photos fournies par le gérant).
-      "/produits/verre_vin_47_ambiance.jpg",
-      "/produits/verre_vin_47_rose.jpg",
-      "/produits/verre_vin_47_vierge.jpg",
     ],
+    // DEUX TAILLES (25/09/2026, demande du gérant : « le client choisit quels
+    // centilitres, et là les photos du verre choisi apparaissent »). La taille se
+    // choisit SOUS la photo (pastilles, comme les couleurs du gobelet) et remplace
+    // TOUTE la galerie par les photos de cette taille — 36 cl par défaut. Le
+    // sélecteur de droite reste « À l'unité / Lot de 2 / Lot de 4 », identique
+    // aux autres verres. Chaque taille porte SA photo vierge + SA zone de gravure
+    // (les deux coupes n'ont pas la même forme).
+    tailles: {
+      label: "Taille du verre",
+      options: [
+        { id: "36", title: "36 cl", sub: "coupe tulipe, cristal",
+          image: "/produits/verre_vin_vierge.jpg",
+          gallery: [
+            "/produits/verre_vin_geniet.jpg",
+            "/produits/verre_vin_ambiance.jpg",
+            "/produits/verre_vin_exemple_dale.jpg",
+            "/produits/verre_vin_grave.jpg",
+            "/produits/verre_vin_vierge.jpg",
+            "/produits/verre_vin_set.jpg",
+          ] },
+        { id: "47", title: "47 cl", sub: "coupe ronde, vins rouges",
+          image: "/produits/verre_vin_47_vierge.jpg",
+          gallery: [
+            "/produits/verre_vin_47_ambiance.jpg",
+            "/produits/verre_vin_47_rose.jpg",
+            "/produits/verre_vin_47_vierge.jpg",
+          ],
+          ...VIN_47_APERCU },
+      ],
+    },
     // Aperçu en direct sur le verre : quand le client écrit, on bascule sur la
     // photo du verre VIDE (verre_vin_vierge) et le texte se pose sur la coupe,
     // déplaçable + taille en cm (même système que les verres à whisky).
@@ -2404,18 +2430,19 @@ export const products = [
       // ⚠️ Les identifiants verre-vin-1/2/4 sont GARDÉS tels quels (paniers en
       // cours + historique des commandes). Le titre porte « Lot de N » : c'est
       // là que la fiche lit le nombre de verres (glassQty).
-      { id: "verre-vin-1", stockId: "verre-vin-1", title: "36 cl · À l'unité", price: 15.90, weight: 500, image: "/produits/verre_vin_vierge.jpg" },
-      { id: "verre-vin-2", stockId: "verre-vin-2", title: "36 cl · Lot de 2", price: 29.90, weight: 900, image: "/produits/verre_vin_vierge.jpg" },
-      { id: "verre-vin-4", stockId: "verre-vin-4", title: "36 cl · Lot de 4", price: 57.90, weight: 1600, image: "/produits/verre_vin_vierge.jpg" },
+      { id: "verre-vin-1", stockId: "verre-vin-1", taille: "36", title: "À l'unité", price: 15.90, weight: 500 },
+      { id: "verre-vin-2", stockId: "verre-vin-2", taille: "36", title: "Lot de 2", price: 29.90, weight: 900 },
+      { id: "verre-vin-4", stockId: "verre-vin-4", taille: "36", title: "Lot de 4", price: 57.90, weight: 1600 },
       // GRAND VERRE 47 cl — ajouté le 25/09/2026 à la demande du gérant (« le client
       // choisit entre les 2 cl »). Coupe ronde (bourgogne), verrerie de restauration.
       // Prix = même marge en € que le 36 cl, coût 6,54 €/verre port compris
       // (carton de 6 à 29,23 € + 10 € de port). Voir docs/prix-historique.md.
-      // Chaque variante porte SA photo vierge + SA zone de gravure : la coupe n'a
-      // pas la forme du 36 cl, l'aperçu ne peut pas être partagé.
-      { id: "verre-vin-47-1", stockId: "verre-vin-47-1", title: "47 cl · À l'unité", price: 19.90, weight: 550, image: "/produits/verre_vin_47_vierge.jpg", ...VIN_47_APERCU },
-      { id: "verre-vin-47-2", stockId: "verre-vin-47-2", title: "47 cl · Lot de 2", price: 36.90, weight: 1000, image: "/produits/verre_vin_47_vierge.jpg", ...VIN_47_APERCU },
-      { id: "verre-vin-47-4", stockId: "verre-vin-47-4", title: "47 cl · Lot de 4", price: 71.90, weight: 1800, image: "/produits/verre_vin_47_vierge.jpg", ...VIN_47_APERCU },
+      // `taille` relie la variante à sa pastille. La photo vierge + la zone de
+      // gravure sont AUSSI portées ici (`...VIN_47_APERCU`) : la fiche atelier
+      // retrouve la variante commandée par son id, pas la taille.
+      { id: "verre-vin-47-1", stockId: "verre-vin-47-1", taille: "47", title: "À l'unité", price: 19.90, weight: 550, ...VIN_47_APERCU },
+      { id: "verre-vin-47-2", stockId: "verre-vin-47-2", taille: "47", title: "Lot de 2", price: 36.90, weight: 1000, ...VIN_47_APERCU },
+      { id: "verre-vin-47-4", stockId: "verre-vin-47-4", taille: "47", title: "Lot de 4", price: 71.90, weight: 1800, ...VIN_47_APERCU },
     ],
     descriptionHtml: `<p><strong>Un verre à vin professionnel — de la verrerie de restauration — gravé à votre façon.</strong> Deux tailles au choix : le <strong>36 cl</strong>, coupe tulipe en cristal, et le <strong>47 cl</strong>, grand verre à coupe ronde pour les vins rouges. Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct, sur le verre que vous avez choisi.</p>
 <p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
