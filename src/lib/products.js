@@ -89,7 +89,11 @@ const VIN_47_APERCU = {
   engraveImage: "/produits/verre_vin_47_vierge.jpg",
   engrave: {
     box: { top: 0.19, left: 0.30, width: 0.40, height: 0.22 },
-    widthMm: 84, maxWidthFrac: 0.45, minWidthFrac: 0.10,
+    // maxWidthFrac = largeur MAX du texte (le texte de départ y est plafonné) :
+    // à 0,45 le texte couvrait toute la coupe (« c'est trop grand », gérant,
+    // 25/09) → 0,30 ≈ 60 % de la coupe. widthMm suit pour garder la même
+    // lecture en cm (widthMm / maxWidthFrac = 187 mm par cadre, inchangé).
+    widthMm: 56, maxWidthFrac: 0.30, minWidthFrac: 0.08,
   },
 };
 

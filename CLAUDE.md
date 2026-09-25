@@ -846,8 +846,9 @@ ne descend jamais sous zéro.
   repli produit) — **ne plus jamais lire `product.engraveImage` / `product.engrave` directement**
   dans ce composant. Changer de taille avec un texte déjà saisi bascule l'aperçu (effet sur
   `engraveImage`). `FicheAtelier` (visuel de l'atelier) suit aussi la variante commandée.
-  Zone du 47 cl : constante `VIN_47_APERCU` avant le tableau `products` (box, widthMm 84 —
-  voir le commentaire : le calcul des cm suppose une photo carrée, on compense comme le 36 cl).
+  Zone du 47 cl : constante `VIN_47_APERCU` avant le tableau `products` (box, **maxWidthFrac 0,30**
+  — à 0,45 le texte couvrait toute la coupe, « c'est trop grand » ; widthMm 56 pour garder la
+  même lecture en cm — voir le commentaire : le calcul des cm suppose une photo carrée).
 - **Photos** (fournies par le gérant, 482–800 px) : `verre_vin_47_vierge.jpg` (aperçu + pastille),
   `_rose.jpg`, `_ambiance.jpg` — dans `tailles.options[1].gallery`, PAS dans `images` (la galerie
   par défaut reste le 36 cl seul). La vierge DOIT être dans la galerie de sa taille : l'aperçu la
