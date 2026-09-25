@@ -12,6 +12,11 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
+- **🍹 Verre à cocktail gravé** (25/09) : maquette ENREGISTRÉE (`docs/maquettes/verre-a-cocktail-fiche.html`,
+  artifact https://claude.ai/artifact/XRYqfH6rdExwQUqGehB17Q — gabarit du verre à whisky, SANS gravure au
+  fond, 3 photos du gérant, prix proposés 17,90 / 33,90 / 64,90 € à valider). Verre commandé chez Metro
+  (livraison 29 sept.–1 oct.). **Le gérant reprendra** : il manque une photo GRAVÉE + son accord sur le prix
+  avant d'ajouter le produit pour de vrai. Détail : `CLAUDE.md` § VERRE À COCKTAIL.
 - **🎄 Noël 2026** : ✅ **bandeau + sélection + page `/offrir/noel` EN LIGNE le 25/09** (interrupteur
   Apparence → « Bandeau Noël », à décocher après les fêtes). Reste en attente : (1) **date limite de
   commande** à me donner ; (2) boule de Noël = enregistrée, PAS en ligne ; (3) gobelet : maquette **✅ VALIDÉE

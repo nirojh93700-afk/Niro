@@ -819,7 +819,7 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
-## 🍹 NOUVEAU PRODUIT — VERRE À COCKTAIL GRAVÉ (25/09/2026, MAQUETTE — RIEN EN LIGNE)
+## 🍹 NOUVEAU PRODUIT — VERRE À COCKTAIL GRAVÉ (25/09/2026, MAQUETTE ENREGISTRÉE « on reprendra après » — RIEN EN LIGNE)
 > Demande du gérant : « j'aimerais ajouter un produit » puis captures Metro (commande passée) +
 > « c'est pas ces photos que tu dois mettre... fais une maquette, je te donnerai les vraies photos,
 > on va le faire comme pour le verre à whisky ». Fiche construite en reprenant le gabarit EXACT du
@@ -847,6 +847,8 @@ ne descend jamais sous zéro.
   (livraison offerte dès 60 €, comme les autres verres). Marché relevé (25/09) : 12,90 € à 25,90 €
   pour un verre à cocktail gravé (sources : Verre Créations, Val Création, poupepoupi, ocadeau…).
 - ⛔ **Aucune marque fournisseur sur le site** (ni Metro, ni Lario) — même règle que les autres verres.
+- ✅ **Maquette ENREGISTRÉE telle quelle le 25/09 soir** (gérant : « enregistrer cette maquette, on
+  reprendra après ») — c'est LUI qui relance. Ne rien construire dans le site d'ici là.
 - **Reste à faire** : recevoir le verre (29 sept.–1 oct.), le graver, prendre une vraie photo gravée,
   faire valider le prix par le gérant, PUIS seulement ajouter le produit dans `products.js` +
   `productInfo.js` (suivre §10 de ce fichier — packaging, `productDates.js`, etc.) et publier.
