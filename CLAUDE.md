@@ -1306,10 +1306,20 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
 
   #nivcreation #<thème> #<produit> #<produit> #cadeaupersonnalise #faitmainenfrance #gravure #<…> #<…> #ideecadeau
   ```
-  · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-8 le 22/09).
+  · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-9 le 22/09,
+    10-11 le 25/09).
   · Le titre liste **les produits de la vidéo entre parenthèses**.
-  · **10 hashtags**, sur UNE ligne, qui **commencent par `#nivcreation`** et **finissent par
-    `#ideecadeau`**, avec **`#faitmainenfrance`** dedans. Jamais `#faitenfrance`.
+  · ⚠️ **DEPUIS LE 25/09/2026 : 5 HASHTAGS, PAS 10** (gérant : « les tags les plus importants
+    qui fonctionnent bien sur les réseaux sociaux, et n'en mets que cinq »). Sur UNE ligne,
+    `#nivcreation` en premier, `#ideecadeau` en dernier, entre les deux les 3 tags à plus forte
+    portée pour la vidéo (`#cadeaupersonnalise` quasi toujours, + le produit, + l'occasion).
+    Jamais `#faitenfrance`. (Les vidéos 1 à 9 ont 10 tags : ne pas les refaire.)
+  · ⚠️ **UNE VIDÉO PAR FAMILLE, AVEC TOUS LES PRODUITS GRAVÉS DE LA FAMILLE** (25/09 : « une
+    vidéo où il y a tous les blocs, comme une pub pour les réseaux sociaux » — il a REFUSÉ
+    3 vidéos par thème). Vidéo 10 = tous les blocs de cristal 3D (uniquement les BLOCS : ni
+    porte-clés, ni pyramide, ni socle, ni USB) · vidéo 11 = toute la déco bois gravée.
+    Script : `tools/video/pub_cristaux_silencieuse.py` (10 et 11 ; photos paysage posées ENTIÈRES
+    sur fond flou, jamais recadrées ; `cristal-v-bebe.jpg` écarté : 512 px, flou).
   · ⚠️ **Les emojis sont OBLIGATOIRES ici** — la règle « pas d'emojis » du §9 ne vaut que pour
     le CONTENU DU SITE, pas pour les légendes Instagram.
   · Pas de prix, jamais de nombre de produits, ne pas nommer le département de l'atelier.
