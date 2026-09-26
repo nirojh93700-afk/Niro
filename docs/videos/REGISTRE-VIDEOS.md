@@ -44,3 +44,34 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #cadeaunoel #gravure #ideecadeau
+
+---
+
+## Vidéo 15 — Noël, 13 pièces gravées (26/09/2026) — HyperFrames
+
+| Fichier | Format | Durée | Poids | Usage |
+|---|---|---|---|---|
+| `docs/videos/15-noel-13pieces-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 35 s | 29,2 Mo | **Version pleine qualité** — à publier (Reels / TikTok / Stories) |
+| `docs/videos/15-noel-13pieces-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 35 s | 2,5 Mo | Version légère pour relire sur le téléphone / WhatsApp |
+
+- **Source** : projet HyperFrames `tools/video/hyperframes-noel-13pieces/` (HTML + GSAP, rendu local,
+  recette dans son README). Sans musique (à ajouter au montage sur le réseau social si souhaité).
+- **Contexte** : même demande que la vidéo 14 (« une vidéo pour préparation de Noël »), faite le même
+  jour dans une AUTRE conversation — deux habillages différents, le gérant choisit.
+- **Produits (13, tous GRAVÉS, planche contact vérifiée)** : cristal photo 3D famille · collier cœur gravé ·
+  verre à whisky photo (« Meilleur papa ») · veilleuse prénom · collier double cœur · carafe à whisky gravée ·
+  bracelet cordon à plaque · cristal photo 3D enfant & chien · collier cœur & plaques · verre à vin monogramme
+  (D DALE) · porte-clés cristal LED · bracelet femme acier gravé · couverts enfant gravés.
+- **Habillage** : carte rouge & or « ✦ NOËL 2026 ✦ — Cadeaux de Noël — Gravés dans notre atelier, pour ceux
+  que vous aimez — NiV CRÉATION » ; sur CHAQUE plan : ruban doré « ✦ IDÉE CADEAU DE NOËL ✦ » en haut,
+  photo entière sur fond flou, pastille « NOËL 2026 », nom en or + légende ; carte finale « ✦ VOS CADEAUX DE
+  NOËL ✦ — Commandez tôt pour Noël — Chaque pièce est gravée une par une, à la commande — nivcreation.fr ·
+  Gravé en France ». Aucun prix, aucun délai, aucun nombre de produits.
+
+### Description à copier-coller (livrée le 26/09/2026)
+
+**Vidéo 15 — Noël, cadeaux gravés** (Cristal photo 3D, Collier Cœur gravé, Verre à whisky, Veilleuse prénom, Collier Double Cœur, Carafe à whisky, Bracelet cordon à plaque, Collier Cœur & plaques, Verre à vin, Porte-clés cristal LED, Bracelet Femme Acier, Couverts enfant)
+> Ce Noël, offrez un cadeau qui n'existe qu'une fois ✨ Une photo dans le cristal, un prénom sur un bijou, une date sur un verre : chaque pièce est gravée à la commande dans notre atelier 🎁 Pensez-y tôt, on grave une par une 💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #noel #cadeaudenoel #ideecadeau
