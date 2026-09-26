@@ -2164,7 +2164,7 @@ export const products = [
     category: "verres",
     subcategory: "whisky",
     type: "Verre photo personnalisé",
-    tagline: "Votre photo gravée sur un verre à whisky : un portrait, un souvenir — cadeau unique et durable.",
+    tagline: "Votre photo, un texte ou le logo de votre entreprise gravés sur un verre à whisky : un portrait, un souvenir — cadeau unique, personnel ou professionnel.",
     personalizable: true,
     personalizationLabel: "Votre photo à graver (+ texte, date ou logo en option)",
     images: [
@@ -2293,7 +2293,7 @@ export const products = [
     category: "verres",
     subcategory: "vin",
     type: "Verre gravé personnalisé",
-    tagline: "Un verre à vin professionnel, en 36 cl ou en 47 cl, gravé à votre façon : choisissez un modèle (n°1 à 20), une lettre fleurie ou votre texte.",
+    tagline: "Un verre à vin professionnel, en 36 cl ou en 47 cl, gravé à votre façon : un modèle (n°1 à 20), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
@@ -2423,7 +2423,7 @@ export const products = [
       { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Pour les modèles avec prénoms (n°14 à 17) et le monogramme (n°20 : initiale, nom, date), le texte est gravé dans l'écriture du modèle (celle de l'image), par défaut — pas dans la police. La police sert au texte simple." },
-      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
+      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo, votre dessin ou le logo de votre bar / entreprise — envoyez-le par message, on s'occupe du reste." },
     ],
     variants: [
       // PRIX RELEVÉS LE 16/09/2026 (accord du gérant) — 12,90 / 24,90 / 49,90 €
@@ -2481,7 +2481,7 @@ export const products = [
     category: "verres",
     subcategory: "champagne",
     type: "Verre gravé personnalisé",
-    tagline: "Une flûte à champagne gravée à votre façon : choisissez un modèle (n°1 à 19), une lettre fleurie ou votre texte.",
+    tagline: "Une flûte à champagne gravée à votre façon : un modèle (n°1 à 19), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
@@ -2561,7 +2561,7 @@ export const products = [
       { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Cadres et banderoles (n°18-19, 21-24) : écrivez votre prénom, il apparaît dans l'espace au milieu du cadre (déplaçable). Modèles avec un prénom déjà dessiné (n°14-17, 25) : votre prénom sera gravé dans ce style par l'atelier (il ne s'affiche pas en plus sur l'aperçu). La police ci-dessus sert au texte simple (couples n°1 à 13)." },
-      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre dessin — envoyez-la par message, on s'occupe du reste." },
+      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo, votre dessin ou le logo de votre bar / entreprise — envoyez-le par message, on s'occupe du reste." },
     ],
     variants: [
       // PRIX RELEVÉS LE 16/09/2026 (accord du gérant) — 12,90 / 24,90 / 49,90 €
@@ -2610,7 +2610,7 @@ export const products = [
     title: "Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception",
     category: "verres",
     subcategory: "carafes",
-    tagline: "Carafe en verre taillé avec bouchon, gravée selon vos envies : prénom, date, message, initiales ou modèle. Un cadeau d'exception — édition limitée.",
+    tagline: "Carafe en verre taillé avec bouchon, gravée selon vos envies : prénom, date, message, initiales, modèle — ou le logo de votre entreprise. Un cadeau d'exception — édition limitée.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
@@ -2716,7 +2716,7 @@ export const products = [
     variants: [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
     ],
-    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 33), une <strong>lettre fleurie</strong> ou votre <strong>propre texte</strong> : prénom, date, message, initiales.</p>
+    descriptionHtml: `<p><strong>Une carafe à whisky en verre taillé, gravée à votre façon — édition limitée.</strong> Bouchon hermétique à facettes, base étoilée. Choisissez un <strong>modèle</strong> (n°1 à 33), une <strong>lettre fleurie</strong>, votre <strong>propre texte</strong> (prénom, date, message, initiales) — ou faites graver <strong>le logo de votre entreprise</strong>.</p>
 <p>Gravure laser personnalisée, réalisée à la commande dans notre atelier en France. Un cadeau d'exception (fête des pères, anniversaire, retraite, mariage…). <strong>Livraison offerte dès 60 € d'achat</strong> (par exemple avec le coffret verres assortis). Possibilité d'ajouter des <strong>verres assortis</strong> gravés au même style, pour un vrai coffret.</p>
 <h3>Caractéristiques</h3>
 <ul>
