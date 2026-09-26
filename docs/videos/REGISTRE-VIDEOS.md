@@ -113,3 +113,17 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cadeauxentreprise #verregrave #gravurelogo #ideecadeau
+
+### ⚠️ CORRIGÉE LE 26/09/2026 — textes mangés par l'interface TikTok/Insta
+> Le gérant a posté la vidéo sur TikTok et envoyé une capture : le ruban du haut collait
+> à la barre de l'appli, et le nom/la légende en bas étaient recouverts par la légende
+> TikTok et les icônes ♥ 💬 🔖. Corrigé dans `pub_verres_entreprise.py` :
+> - Ruban décalé sous une marge de sécurité en haut (`TOP_SAFE`), plus rien collé au bord.
+> - Photo légèrement réduite et recentrée plus haut, pour laisser la place en bas.
+> - Bloc pastille/nom/légende ancré PAR LE BAS sur une ligne de sécurité (`BOTTOM_SAFE`,
+>   ~460 px du bord) et qui grandit vers le haut — jamais dans la zone mangée, quel que
+>   soit le nombre de lignes. Légendes raccourcies pour tenir sur une seule ligne.
+> - Le fichier `docs/videos/16-entreprise-720x1280.mp4` a été REMPLACÉ par cette version
+>   corrigée. **La vidéo déjà postée sur TikTok reste avec l'ancien cadrage** (impossible
+>   de remplacer le fichier d'un post déjà publié) — il faut la supprimer et la reposter
+>   avec ce nouveau fichier.
