@@ -28,7 +28,7 @@ SANSB_U = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # glyphe ✦
 def F(p, s): return ImageFont.truetype(p, s)
 SRC = os.path.join(os.path.dirname(__file__), "..", "..", "public", "produits")
 
-RUBAN = "✦  IDÉE CADEAU D'ENTREPRISE  ✦"
+RUBAN = "✦  VOTRE LOGO SUR NOS VERRES  ✦"
 PASTILLE = "GRAVURE LOGO"
 
 # Mêmes 10 photos que la vidéo 12 (toutes vérifiées gravées), légendes réécrites côté
@@ -47,7 +47,7 @@ PRODUITS = [
     ('verre_a_whisky_exemple_face.jpg', 'Verre à whisky', 'Votre logo, gravé sur le verre'),
     ('verre_whisky_papa_monde_banniere.jpg', 'Verre à whisky', 'Banderole et nom d’établissement'),
     ('verre_a_whisky_exemple_fond.jpg', 'Verre à whisky', 'Gravé au fond, plus discret'),
-    ('verre_vin_geniet.jpg', 'Verre à vin gravé', 'Un cadeau d’affaires original'),
+    ('verre_vin_geniet.jpg', 'Verre à vin gravé', 'Pour votre bar ou votre société'),
 ]
 
 SEG_DUR, INTRO_DUR, OUTRO_DUR = 2.2, 1.9, 2.4
@@ -147,7 +147,7 @@ def rendre():
         ZW, ZH = int(W * 1.12), int(H * 1.12)
         segs.append(("prod", base.resize((ZW, ZH), Image.LANCZOS), overlay(name, sub), SEG_DUR))
     segs.append(("card", card("Votre logo, gravé chez nous", "Bars, restaurants, sociétés — écrivez-nous pour un devis",
-                               "nivcreation.fr  ·  Gravé en France", haut="✦  CADEAUX D'ENTREPRISE  ✦", ink_bg=True), None, OUTRO_DUR))
+                               "nivcreation.fr  ·  Gravé en France", haut="✦  POUR LES ENTREPRENEURS  ✦", ink_bg=True), None, OUTRO_DUR))
     brut = f"{OUT}/{NOM}-brut.mp4"; final = f"{OUT}/niv-{NOM}.mp4"
     wri = imageio.get_writer(brut, fps=FPS, codec="libx264", quality=8, macro_block_size=1,
                              ffmpeg_params=["-pix_fmt", "yuv420p"], ffmpeg_log_level="error")

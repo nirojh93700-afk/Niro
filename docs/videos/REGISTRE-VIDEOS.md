@@ -127,3 +127,24 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 >   corrigée. **La vidéo déjà postée sur TikTok reste avec l'ancien cadrage** (impossible
 >   de remplacer le fichier d'un post déjà publié) — il faut la supprimer et la reposter
 >   avec ce nouveau fichier.
+
+### ⚠️ RECADRÉE LE 26/09/2026 (2ᵉ correction) — ce n'est pas un cadeau d'entreprise
+> Remarque du gérant : « Est-ce que je t'ai dit que c'est pour un cadeau d'entreprise ou
+> c'est pour les entrepreneurs pour leur bar pour graver leur logo ? » — le ruban « IDÉE
+> CADEAU D'ENTREPRISE » et la carte finale « CADEAUX D'ENTREPRISE » laissaient croire à un
+> cadeau qu'on achète POUR une société, alors que le sujet est : un entrepreneur (bar,
+> restaurant, société) fait graver SON PROPRE logo, pour SON établissement — pas un cadeau.
+- Ruban sur chaque plan → **« ✦ VOTRE LOGO SUR NOS VERRES ✦ »** (plus aucune mention de
+  « cadeau »). Carte finale → **« ✦ POUR LES ENTREPRENEURS ✦ »** (comme la carte d'intro,
+  cohérent). Dernière légende produit → « Pour votre bar ou votre société » (au lieu de
+  « Un cadeau d'affaires original »).
+- `docs/videos/16-entreprise-720x1280.mp4` REMPLACÉ à nouveau par cette version. La
+  description/les tags ci-dessous remplacent ceux livrés plus haut dans ce document.
+
+### Description à copier-coller (version définitive, livrée le 26/09/2026)
+
+**Vidéo 16 — Le logo de votre bar, gravé sur nos verres** (Verre à whisky, Carafe à whisky gravée, Verre à vin gravé)
+> Vous avez un bar, un restaurant, une société ? Faites graver votre logo sur nos verres ✨ Un badge, un monogramme, une banderole : chaque pièce est gravée à la commande, dans notre atelier 🥃 Pour votre établissement, pas juste un cadeau 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #entrepreneur #logogravé #barrestaurant #ideecadeau
