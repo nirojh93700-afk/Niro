@@ -819,6 +819,24 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
+## 📊 ÉTUDE DE MARCHÉ DU CATALOGUE — 26/09/2026 (constat, RIEN appliqué)
+> Demande du gérant : « fais une étude de marché par rapport à ses produits ». Dossier
+> **`docs/etude-marche-2026-09.md`** + page **`docs/etude-marche-2026-09.html`** (artifact
+> https://claude.ai/artifact/VWntbMV3t7VNiadodvW7f2). Complète `docs/prix-marche.md` (verres, 16/09).
+> ⚠️ Les fiches concurrentes sont bloquées par le proxy (`EGRESS_BLOCKED`) : prix tirés des extraits
+> de recherche, à vérifier avant décision.
+- **Au niveau** : verres, carafe, cristal (Zephyr 39→169 €, Rayjan 29,90→119 €), clés USB, plaques
+  de naissance, pièce laiton, numéros de table, ronds de serviette, collier puzzle.
+- **Sous le marché (pistes, à valider par LUI)** : porte-clés cuir 7,90 € (marché 12,95–13,90) →
+  9,90 · veilleuse/lampe arbre de vie 29,90 € (marché 37–49) → 34,90 · bracelets homme cuir/gourmette
+  25–30 € (Petits Trésors 35–39) → 34,90.
+- **Vigilance** : plaque de porte enfant 29,99 € (marché 19,50–28,50) · menu mariage 34,90 € (pas de
+  comparable) · gobelet 40 oz 39,90 € (Etsy 30–45).
+- **Bijoux acier** : TOUT le marché inclut la 1re gravure (CadeauGravure 10,90–26,90 € gravure
+  incluse ; Petits Trésors/Aismée/Merci Maman gravure offerte). Chez nous +3 € → c'est la question
+  ouverte du 14/09, à trancher par le gérant.
+- Saisonnalité : recherches « cadeau personnalisé » +145 % déc., +138 % mai, +129 % fév.
+
 ## 🍹 NOUVEAU PRODUIT — VERRE À COCKTAIL GRAVÉ (25/09/2026, MAQUETTE ENREGISTRÉE « on reprendra après » — RIEN EN LIGNE)
 > Demande du gérant : « j'aimerais ajouter un produit » puis captures Metro (commande passée) +
 > « c'est pas ces photos que tu dois mettre... fais une maquette, je te donnerai les vraies photos,

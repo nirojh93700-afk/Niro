@@ -12,6 +12,10 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
+- **📊 Étude de marché** (26/09) : `docs/etude-marche-2026-09.md`, artifact
+  https://claude.ai/artifact/VWntbMV3t7VNiadodvW7f2 — 6 pistes à valider (porte-clés 9,90, veilleuse 34,90,
+  bracelets homme 34,90, afficher la livraison offerte, trancher la 1re gravure bijoux, préparer
+  Saint-Valentin / fête des mères). **Rien appliqué.**
 - **🍹 Verre à cocktail gravé** (25/09) : maquette ENREGISTRÉE (`docs/maquettes/verre-a-cocktail-fiche.html`,
   artifact https://claude.ai/artifact/XRYqfH6rdExwQUqGehB17Q — gabarit du verre à whisky, SANS gravure au
   fond, 3 photos du gérant, prix proposés 17,90 / 33,90 / 64,90 € à valider). Verre commandé chez Metro
