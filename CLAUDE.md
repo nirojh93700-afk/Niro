@@ -861,7 +861,9 @@ ne descend jamais sous zéro.
 > côté face (« rien ne se passe »). Corrigé (commit `dc883e6`). Le gérant trouvait ensuite la photo
 > encore mal placée / trop grande → **il veut régler les cadres LUI-MÊME dans l'admin** (« tu me mets
 > dans l'admin comme pour les autres, je vais le paramétrer, je te dis, tu valides ») :
-> - `zoneAdmin: true` sur le produit → il apparaît DEUX fois dans **Gestion → Réglages produits →
+> - `zoneAdmin: true` sur le produit (cocktail **ET verre à whisky portrait** `verre-a-whisky-grave`,
+>   ajouté à sa demande le 26/09 soir « corrige aussi pour le fond du verre de whisky » ; Fête des
+>   pères non concerné) → il apparaît DEUX fois dans **Gestion → Réglages produits →
 >   « Réglage cristaux, verres & carafe »** (`/gestion/cristal-reglage`) : « — face avant » (clé
 >   `verre-a-cocktail-grave`) et « — fond du verre » (clé `verre-a-cocktail-grave#fond`, photo
 >   `fondImage`). Il glisse/redimensionne le cadre, coche **« Utiliser ce cadre sur la fiche »**,

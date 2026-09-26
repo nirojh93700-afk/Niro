@@ -27,6 +27,9 @@ const START = {
   // Verre à cocktail : cadre PHOTO (logo / photo du client), face avant et fond.
   "verre-a-cocktail-grave": { left: 36, top: 36, width: 28, height: 38, rotation: 0, ry: 0 },
   "verre-a-cocktail-grave#fond": { left: 30, top: 30, width: 40, height: 40, rotation: 0, ry: 0 },
+  // Verre à whisky portrait : mêmes cadres photo (face + fond), départ = réglage du code.
+  "verre-a-whisky-grave": { left: 20, top: 15, width: 60, height: 62, rotation: 0, ry: 0 },
+  "verre-a-whisky-grave#fond": { left: 30, top: 30, width: 40, height: 40, rotation: 0, ry: 0 },
 };
 // Verres/carafe réglables ici : modèles numérotés (styleImages) OU cadre photo (zoneAdmin).
 function isGlass(p) { return Boolean(p.engrave && (p.styleImages || p.zoneAdmin)); }

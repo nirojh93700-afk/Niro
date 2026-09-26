@@ -2114,6 +2114,9 @@ export const products = [
     // Éditeur interactif logo (glisser + redimensionner + mesure cm).
     // box = zone de placement en fraction du cadre carré ; widthMm = largeur réelle
     // gravable correspondant à maxWidthFrac. À RECALIBRER avec le vrai verre + photo.
+    // Cadres (face + fond) réglables par le gérant dans Gestion → Réglages →
+    // « Réglage cristaux, verres & carafe » (26/09/2026, comme le verre à cocktail).
+    zoneAdmin: true,
     engrave: {
       box: { top: 0.15, left: 0.20, width: 0.60, height: 0.62 },
       widthMm: 65,
