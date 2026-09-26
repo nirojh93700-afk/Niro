@@ -875,15 +875,10 @@ ne descend jamais sous zéro.
 ## 🎄 NOËL 2026 — ✅ BANDEAU + PAGE EN LIGNE LE 25/09/2026 (« pour Noël tu peux mettre en ligne »)
 > **CE QUI EST EN LIGNE** (maquette v4 `docs/maquettes/noel-sur-accueil-actuel.html` reproduite) :
 > · `src/components/home/BandeauNoel.jsx` — bandeau rouge de Noël & or « Ce Noël, offrez un cadeau
->   unique », mosaïque 3×3 (cristal, verres, 5 bijoux GRAVÉS) ; lien → `/offrir/noel`.
->   ✅ **DÉPLACÉ LE 26/09/2026** (gérant, capture mobile à l'appui : « tu mets des cadeaux pour Noël
->   juste avant explorer nos collections au lieu de mettre tout en haut ») : le bandeau ET la
->   « Sélection de Noël » sont maintenant **juste après « Verres & carafes gravés » et juste AVANT
->   « Explorez nos collections »** (`id="collections"`) dans `page.jsx`. Le haut de page (cristal +
->   carafe) est redevenu comme avant. Ordre vérifié en local : cristal → carafe → Vient d'arriver →
->   Verres & carafes → bandeau Noël → Sélection de Noël → Explorez nos collections.
-> · « Sélection de Noël » = `<BandeauAccueil cinq>` (5 produits du catalogue en direct), collée sous
->   le bandeau Noël.
+>   unique », mosaïque 3×3 (cristal, verres, 5 bijoux GRAVÉS), **premier bloc de `page.jsx`**, donc
+>   juste sous le logo + menu, AVANT l'entrée cristal (inchangée) ; lien → `/offrir/noel`.
+> · « Sélection de Noël » = `<BandeauAccueil cinq>` (5 produits du catalogue en direct) juste AVANT
+>   « Vient d'arriver » dans `page.jsx`.
 > · **7ᵉ occasion `noel`** dans `src/lib/occasions.js` (`NOEL_SLUGS`, liste fermée de 18 produits,
 >   `max: 20`, `ordre` gardé ; `produitsPourOccasion` lit `o.max`) → `/offrir/noel`, tuile sur
 >   `/offrir`, sitemap automatique. Un produit masqué dans Gestion disparaît tout seul.
