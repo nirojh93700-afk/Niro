@@ -1457,6 +1457,18 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-9 le 22/09,
     10-11 le 25/09, **12 verres et 13 Noël le 26/09** — la 13 = toutes familles, 13 pièces
     gravées, script `pub_cristaux_silencieuse.py` entrée 13 ; prochaine = 14).
+  · ⚠️ **UNE VIDÉO D'OCCASION DOIT LE DIRE SUR CHAQUE PLAN** (gérant, 26/09, sur la 1re version de
+    la 13 : « dans la vidéo on sait pas, c'est pour des cadeaux pour Noël »). Refaite avec un
+    habillage Noël : ruban doré « ✦ IDÉE CADEAU DE NOËL ✦ » en haut de CHAQUE plan produit,
+    pastille « NOËL 2026 » près du nom, cartes d'intro/fin rouge & or (« Cadeaux de Noël » /
+    « Commandez tôt pour Noël »). Mécanique = 5ᵉ élément `True` dans `VIDEOS[n]` → `noel=True`
+    dans `overlay`/`card`. Piège : Liberation Sans n'a pas le glyphe ✦ (carrés vides) → `SANSB_U`
+    (DejaVu Sans Bold) pour ces textes.
+  · 🔌 **HYPERFRAMES BY HEYGEN** (connecteur branché par le gérant le 26/09 : « utilise les
+    connecteurs que je viens de te connecter ») : connecté sur son compte mais **ses outils ne se
+    chargent que dans une conversation ouverte APRÈS la connexion**. Dans toute NOUVELLE session :
+    chercher les outils HyperFrames (ToolSearch) et **faire la prochaine vidéo avec** (animations
+    HTML / motion graphics) plutôt qu'avec le montage Pillow, si le gérant le redemande.
   · Le titre liste **les produits de la vidéo entre parenthèses**.
   · ⚠️ **DEPUIS LE 25/09/2026 : 5 HASHTAGS, PAS 10** (gérant : « les tags les plus importants
     qui fonctionnent bien sur les réseaux sociaux, et n'en mets que cinq »). Sur UNE ligne,

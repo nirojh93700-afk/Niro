@@ -20,6 +20,8 @@ GOLD = (201, 162, 75); CREAM = (250, 246, 238); INK = (30, 26, 22); WHITE = (255
 SERIFB = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
 SANS = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
 SANSB = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
+# DejaVu pour les textes avec ✦ (Liberation n'a pas le glyphe → carrés vides, vu le 26/09)
+SANSB_U = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 def F(p, s): return ImageFont.truetype(p, s)
 SRC = os.path.join(os.path.dirname(__file__), "..", "..", "public", "produits")
 
@@ -74,7 +76,7 @@ VIDEOS = {
   # toutes familles, UNIQUEMENT des pièces gravées (planche contact scratchpad/planche-noel.jpg
   # regardée le 26/09). Ecartes : bracelet-homme-plaque-1 (VIERGE), cle USB (boite vierge),
   # arbres de vie (pas de prenom visible). Tous dans NOEL_SLUGS (en vente, /offrir/noel).
-  13: ("Noël 2026 — cadeaux gravés", "Ce Noël, offrez un cadeau unique", "noel-cadeaux-graves", [
+  13: ("Cadeaux de Noël", "Gravés dans notre atelier, pour ceux que vous aimez", "noel-cadeaux-graves", [
     ('cristal-h-famille.jpg', 'Cristal photo 3D', 'Toute la famille, gravée dans le cristal'),
     ('collier-coeur-grave-1.jpg', 'Collier Cœur gravé', 'Deux initiales, une date'),
     ('verre_a_whisky_exemple_face.jpg', 'Verre à whisky gravé', 'Sa photo, gravée dans le verre'),
@@ -88,8 +90,13 @@ VIDEOS = {
     ('porte-cles-rect-demo-chien.jpg', 'Porte-clés cristal LED', 'Sa photo, dans la lumière'),
     ('bracelet-femme-acier-grave.jpg', 'Bracelet Femme Acier', 'Un prénom, gravé fin'),
     ('couverts_enfants_ex_prenom.jpg', 'Couverts enfant gravés', 'Son premier Noël, son prénom'),
-  ]),
+  ], True),
 }
+# Habillage Noël (vidéo 13, remarque du gérant 26/09 : « dans la vidéo on sait pas que c'est pour
+# des cadeaux pour Noël ») : ruban doré « IDÉE CADEAU DE NOËL » sur CHAQUE plan, cartes rouge & or.
+ROUGE = (122, 21, 18); ROUGE2 = (156, 31, 26)
+RUBAN = "✦  IDÉE CADEAU DE NOËL  ✦"
+
 SEG_DUR, INTRO_DUR, OUTRO_DUR = 2.2, 1.9, 2.3
 
 def fond_flou(im):
@@ -112,7 +119,7 @@ def wrap(d, t, f, mw):
     if c: o.append(c)
     return o
 
-def overlay(name, sub):
+def overlay(name, sub, noel=False):
     im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     band = Image.new("L", (1, H), 0); p = band.load()
     for y in range(H): p[0, y] = int(215 * max(0, (y - 1120) / (H - 1120)) ** 1.15)
@@ -126,29 +133,45 @@ def overlay(name, sub):
     y = H - 258
     for ln in wrap(d, sub, F(SANS, 44), W - 120): d.text((60, y), ln, font=F(SANS, 44), fill=WHITE); y += 54
     d.text((60, H - 90), "nivcreation.fr", font=F(SANSB, 34), fill=(235, 220, 180))
+    if noel:
+        fr = F(SANSB_U, 38); wr = d.textlength(RUBAN, font=fr); ph = 96
+        d.rectangle([0, 0, W, ph], fill=ROUGE + (255,)); d.rectangle([0, ph, W, ph + 6], fill=GOLD + (255,))
+        d.text(((W - wr) // 2, (ph - 40) // 2 - 4), RUBAN, font=fr, fill=GOLD)
+        # pastille « Noël 2026 » près du nom
+        fp = F(SANSB, 30); t = "NOËL 2026"; wp = d.textlength(t, font=fp)
+        d.rounded_rectangle([60, H - 420, 60 + wp + 40, H - 372], radius=24, fill=ROUGE2 + (255,))
+        d.text((80, H - 414), t, font=fp, fill=GOLD)
     return im
 
-def card(big, small, big2=None):
-    im = Image.new("RGB", (W, H), CREAM); d = ImageDraw.Draw(im)
+def card(big, small, big2=None, noel=False, haut=None):
+    im = Image.new("RGB", (W, H), ROUGE if noel else CREAM); d = ImageDraw.Draw(im)
     d.rectangle([0, 0, W, 14], fill=GOLD); d.rectangle([0, H - 14, W, H], fill=GOLD)
-    fB = F(SERIFB, 100); wb = d.textlength(big, font=fB); d.text(((W - wb) // 2, H // 2 - 160), big, font=fB, fill=GOLD)
+    if haut:
+        fh = F(SANSB_U, 38); wh = d.textlength(haut, font=fh); d.text(((W - wh) // 2, H // 2 - 300), haut, font=fh, fill=GOLD if noel else (120, 100, 60))
+    fB = F(SERIFB, 100)
+    for taille in range(100, 60, -4):
+        fB = F(SERIFB, taille)
+        if d.textlength(big, font=fB) <= W - 100: break
+    wb = d.textlength(big, font=fB); d.text(((W - wb) // 2, H // 2 - 160), big, font=fB, fill=GOLD)
     fS = F(SANS, 50)
     y = H // 2 - 20
     for ln in wrap(d, small, fS, W - 140):
-        ws = d.textlength(ln, font=fS); d.text(((W - ws) // 2, y), ln, font=fS, fill=INK); y += 62
+        ws = d.textlength(ln, font=fS); d.text(((W - ws) // 2, y), ln, font=fS, fill=(250, 240, 220) if noel else INK); y += 62
     if big2:
-        f2 = F(SANSB, 44); w2 = d.textlength(big2, font=f2); d.text(((W - w2) // 2, y + 20), big2, font=f2, fill=(120, 100, 60))
+        f2 = F(SANSB, 44); w2 = d.textlength(big2, font=f2); d.text(((W - w2) // 2, y + 20), big2, font=f2, fill=GOLD if noel else (120, 100, 60))
     return im
 
 def rendre(num):
-    theme, accroche, nom, P = VIDEOS[num]
-    segs = [("card", card("NiV CRÉATION", accroche), None, INTRO_DUR)]
+    theme, accroche, nom, P = VIDEOS[num][:4]; noel = len(VIDEOS[num]) > 4 and VIDEOS[num][4]
+    if noel: segs = [("card", card(theme, accroche, "NiV CRÉATION", noel=True, haut="✦  NOËL 2026  ✦"), None, INTRO_DUR + 0.4)]
+    else: segs = [("card", card("NiV CRÉATION", accroche), None, INTRO_DUR)]
     for f, name, sub in P:
         im = Image.open(os.path.join(SRC, f)).convert("RGB")
         base = fond_flou(im)
         ZW, ZH = int(W * 1.12), int(H * 1.12)
-        segs.append(("prod", base.resize((ZW, ZH), Image.LANCZOS), overlay(name, sub), SEG_DUR))
-    segs.append(("card", card("nivcreation.fr", "Personnalisez le vôtre", "Gravé en France"), None, OUTRO_DUR))
+        segs.append(("prod", base.resize((ZW, ZH), Image.LANCZOS), overlay(name, sub, noel), SEG_DUR))
+    if noel: segs.append(("card", card("Commandez tôt pour Noël", "Chaque pièce est gravée une par une, à la commande", "nivcreation.fr  ·  Gravé en France", noel=True, haut="✦  VOS CADEAUX DE NOËL  ✦"), None, OUTRO_DUR + 0.5))
+    else: segs.append(("card", card("nivcreation.fr", "Personnalisez le vôtre", "Gravé en France"), None, OUTRO_DUR))
     brut = f"{OUT}/{nom}-brut.mp4"; final = f"{OUT}/niv-{nom}.mp4"
     wri = imageio.get_writer(brut, fps=FPS, codec="libx264", quality=8, macro_block_size=1,
                              ffmpeg_params=["-pix_fmt", "yuv420p"], ffmpeg_log_level="error")
