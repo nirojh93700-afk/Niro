@@ -1465,7 +1465,8 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-9 le 22/09,
     10-11 le 25/09, **12 verres et 13 Noël le 26/09** — la 13 = toutes familles, 13 pièces
     gravées, script `pub_cristaux_silencieuse.py` entrée 13 ; **14 Noël HyperFrames le 26/09** ;
-    prochaine = 15).
+    **15 Noël HyperFrames « 13 pièces » le 26/09** (2ᵉ conversation, même jour, même demande —
+    projet `tools/video/hyperframes-noel-13pieces/`, registre `docs/videos/`) ; prochaine = 16).
   · 🎬 **HYPERFRAMES EN LOCAL — ÇA MARCHE (26/09/2026, vidéo 14)** : le MCP hébergé (`compose`/
     `render_video`) **refuse les agents Claude Code** (« disabled for local CLI/IDE agents »). La
     voie qui marche = les skills locaux (`npx skills add heygen-com/hyperframes`) + le CLI
@@ -1474,6 +1475,14 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
     (jsdelivr, Google Fonts côté navigateur) sont bloqués au rendu → GSAP et polices EN LOCAL ;
     `ffprobe` manque (imageio-ffmpeg n'a que ffmpeg) → `npm i @ffprobe-installer/linux-x64` ;
     Chrome via `npx hyperframes browser ensure` (téléchargement OK). Rendu 32 s ≈ 2 min 30.
+    Compléments (autre session, même jour) : GSAP local aussi dans `videos/niv-produits/vendor/`
+    ou `npm pack gsap@3.14.2` (registre npm autorisé) ; polices TTF via
+    `raw.githubusercontent.com/google/fonts/main/ofl/…` (autorisé) + `@font-face` obligatoire ;
+    ffmpeg/ffprobe = liens `~/bin/ffmpeg` → binaire d'imageio-ffmpeg suffit aussi ; contrat de
+    composition dans `.agents/skills/hyperframes-core/SKILL.md` (un `gsap.timeline({paused:true})`
+    dans `window.__timelines["main"]`, `fromTo` partout, jamais de `transform` CSS sur un nœud
+    tweené) ; `check --json` doit donner 0 finding, `snapshot --at …` fait une planche contact
+    à REGARDER avant `render`. Skills installés dans `.agents/skills/` (`skills-lock.json` versionné).
     Photos posées ENTIÈRES dans un cadre doré sur fond flou (hauteur du cadre = ratio de la photo),
     jamais recadrées ; musique = Jingle Bells synthétisée (domaine public).
   · ⚠️ **UNE VIDÉO D'OCCASION DOIT LE DIRE SUR CHAQUE PLAN** (gérant, 26/09, sur la 1re version de
@@ -1483,22 +1492,6 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
     « Commandez tôt pour Noël »). Mécanique = 5ᵉ élément `True` dans `VIDEOS[n]` → `noel=True`
     dans `overlay`/`card`. Piège : Liberation Sans n'a pas le glyphe ✦ (carrés vides) → `SANSB_U`
     (DejaVu Sans Bold) pour ces textes.
-  · 🔌 **HYPERFRAMES (HeyGen) — LA MÉTHODE QUI MARCHE D'ICI (26/09/2026)** : le gérant a branché
-    le connecteur (« utilise les connecteurs que je viens de te connecter ») mais **son outil
-    `compose` hébergé REFUSE Claude Code** (« disabled for local CLI/IDE agents »). La voie qui
-    marche = les **compétences locales** : `npx -y skills add heygen-com/hyperframes` (installées
-    dans `.agents/skills/` + liens `.claude/skills/`, `skills-lock.json` versionné), puis
-    `npx -y hyperframes@latest init <dossier> --non-interactive`, écrire `index.html` (contrat dans
-    `.agents/skills/hyperframes-core/SKILL.md` : un `gsap.timeline({paused:true})` enregistré dans
-    `window.__timelines["main"]`, clips `data-start`/`data-duration`, jamais de `transform` CSS sur
-    un nœud tweené, `fromTo` partout), `npx hyperframes check --json` (0 finding), `snapshot --at …`
-    (planche contact à REGARDER), `render --quality looks --output out.mp4`.
-    Pièges réglés : `browser ensure` télécharge son Chrome (marche) ; `cdn.jsdelivr.net` est
-    BLOQUÉ → GSAP local (`videos/niv-produits/vendor/gsap.min.js`, ou `npm pack gsap@3.14.2`) ;
-    polices via `raw.githubusercontent.com/google/fonts` (marche) + `@font-face` obligatoire ;
-    ffmpeg = lien symbolique `~/bin/ffmpeg` vers le binaire d'imageio-ffmpeg ; Node 22 OK.
-    **Vidéo 13 Noël refaite avec** : projet versionné dans `videos/noel-2026/` (13 photos gravées,
-    ruban « Idée cadeau de Noël », cartes rouge & or, 35,2 s). Modèle à copier pour la 14.
   · Le titre liste **les produits de la vidéo entre parenthèses**.
   · ⚠️ **DEPUIS LE 25/09/2026 : 5 HASHTAGS, PAS 10** (gérant : « les tags les plus importants
     qui fonctionnent bien sur les réseaux sociaux, et n'en mets que cinq »). Sur UNE ligne,
