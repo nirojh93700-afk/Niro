@@ -2151,7 +2151,7 @@ export const products = [
       ] },
       { key: "photo", type: "photo", label: "Envoyez votre logo / photo (facultatif)", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
       { key: "texte", label: "Ajouter un texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true },
-      { key: "texte2", label: "Date (sous la photo)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },
+      { key: "texte2", label: "Date (sous la photo) (+3 €)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },
       { key: "decor", type: "select", label: "Décor autour du texte ?", optional: true, options: [
         { value: "", label: "Aucun" },
         { value: "★", label: "Étoiles  ★ texte ★" },
@@ -2166,7 +2166,7 @@ export const products = [
       { key: "texteFond", label: "Texte pour le fond (facultatif)", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux" },
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
-    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · gravure face+fond +7 €
+    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "texte2", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · date +3 € · gravure face+fond +7 €
     title: "Verre à whisky portrait personnalisé — photo gravée, cadeau papa, couple ou souvenir",
     category: "verres",
     subcategory: "whisky",
@@ -2332,7 +2332,7 @@ export const products = [
       ] },
       { key: "photo", type: "photo", label: "Envoyez votre logo / photo (facultatif)", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
       { key: "texte", label: "Ajouter un texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true },
-      { key: "texte2", label: "Date (sous la photo)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },
+      { key: "texte2", label: "Date (sous la photo) (+3 €)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },
       { key: "decor", type: "select", label: "Décor autour du texte ?", optional: true, options: [
         { value: "", label: "Aucun" },
         { value: "★", label: "Étoiles  ★ texte ★" },
@@ -2347,7 +2347,7 @@ export const products = [
       { key: "texteFond", label: "Texte pour le fond (facultatif)", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux" },
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
-    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · gravure face+fond +7 €
+    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "texte2", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · date +3 € · gravure face+fond +7 €
     title: "Verre à cocktail personnalisé — photo ou texte gravé, cadeau original",
     category: "verres",
     subcategory: "cocktail",
@@ -2811,7 +2811,7 @@ export const products = [
       { key: "prenom", label: "Prénom / nom", placeholder: "Ex. Stephan", maxLength: 40, optional: true },
       { key: "initiale", label: "Initiale(s) — monogramme", placeholder: "Ex. K · JR", maxLength: 4, optional: true },
       { key: "role", label: "Rôle (si le style le prévoit)", placeholder: "Ex. Groom · Best Man", maxLength: 20, optional: true },
-      { key: "date", label: "Date / année (option)", placeholder: "Ex. 1989 · 09.09.25", maxLength: 20, optional: true },
+      { key: "date", label: "Date / année (+3 €)", placeholder: "Ex. 1989 · 09.09.25", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "noteinfo", type: "note", text: "Pour un modèle décoré (monogramme, banderole, lettre fleurie…), le nom est gravé dans l'écriture d'origine du modèle, par défaut. La police sert au texte simple." },
       { key: "coffret", type: "select", label: "Ajouter des verres assortis ? (coffret)", optional: true, options: [
@@ -2825,6 +2825,7 @@ export const products = [
     engravingPricing: { flatExtras: [
       { key: "coffret", value: "2verres", amount: 35.80, weight: 900 },
       { key: "coffret", value: "4verres", amount: 71.60, weight: 1800 },
+      { key: "date", amount: 3 },
     ] },
     variants: [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },
