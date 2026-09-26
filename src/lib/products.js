@@ -2280,6 +2280,7 @@ export const products = [
     slug: "verre-a-cocktail-grave",
     badge: "Nouveau",
     hidden: false, // PUBLIÉ (26/09/2026, demande explicite du gérant)
+    photoContain: true, // photos hautes (verre haut et fin) : voir le verre en entier, pas de rognage (comme le vin/la flûte)
     cardImage: "/produits/verre_a_cocktail_garni.jpg",
     name: "Verre à cocktail personnalisé",
     weight: 550, // verre + emballage protégé (fragile)
