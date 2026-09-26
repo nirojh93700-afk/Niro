@@ -17,7 +17,7 @@ import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
 import { REVIEWS_SEED } from "./reviewsSeed";
-import { trouverProspect, demandeStop } from "./prospects";
+import { trouverProspect, demandeStop, estAvisNonDistribution } from "./prospects";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
@@ -1272,15 +1272,26 @@ export async function recordProspectReply({ email, threadId = "", text = "", at 
   const gid = String(gmailId || "").trim();
   p.reponses = Array.isArray(p.reponses) ? p.reponses : [];
   if (gid && p.reponses.some((r) => r.gmailId === gid)) return { key, stop: p.statut === "stop", deja: true };
-  const stop = demandeStop(text);
+  // Avis de non-distribution (adresse morte) : Gmail le renvoie dans le MÊME
+  // fil que notre envoi → `trouverProspect` le rapproche à tort d'une vraie
+  // réponse. Incident du 26/09/2026 : 3 adresses mortes comptées « a répondu ».
+  const bounce = estAvisNonDistribution(email);
+  const stop = !bounce && demandeStop(text);
   const quand = Number(at) || Date.now();
-  p.reponses.push({ at: quand, from: normEmail(email), extrait: String(text || "").slice(0, 600), via: String(via || "").slice(0, 20), gmailId: gid.slice(0, 80) });
+  p.reponses.push({ at: quand, from: normEmail(email), extrait: String(text || "").slice(0, 600), via: String(via || "").slice(0, 20), gmailId: gid.slice(0, 80), bounce });
   p.reponses = p.reponses.slice(-20);
-  p.reponduAt = Math.max(Number(p.reponduAt) || 0, quand);
-  p.statut = stop || p.statut === "stop" ? "stop" : "repondu";
-  p.nonLu = true;
+  if (bounce) {
+    // Jamais « a répondu », jamais de pastille « nouvelle réponse » : c'est
+    // un échec technique, pas un signe d'intérêt. Le statut STOP est gardé
+    // s'il l'était déjà (une adresse morte ne peut évidemment plus écrire STOP).
+    if (p.statut !== "stop") p.statut = "invalide";
+  } else {
+    p.reponduAt = Math.max(Number(p.reponduAt) || 0, quand);
+    p.statut = stop || p.statut === "stop" ? "stop" : "repondu";
+    p.nonLu = true;
+  }
   await persistCatalog(data, ["prospects"]);
-  return { key, stop, deja: false };
+  return { key, stop, bounce, deja: false };
 }
 
 // Métadonnées légères de tous les fils d'aperçu (pour la vérification globale

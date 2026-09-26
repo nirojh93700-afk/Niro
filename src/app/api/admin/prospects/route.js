@@ -44,6 +44,7 @@ export async function GET(req) {
       aVerifier: n((r) => !r.verifie && r.statut === "a_contacter"),
       envoyes: n((r) => r.nbEnvois > 0),
       repondu: n((r) => r.statut === "repondu"),
+      invalides: n((r) => r.statut === "invalide"),
       nonLus: n((r) => r.nonLu),
       stop: n((r) => r.statut === "stop"),
     },

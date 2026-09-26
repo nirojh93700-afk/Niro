@@ -15,8 +15,20 @@ export const PROSPECT_STATUTS = {
   a_contacter: "À contacter",
   envoye: "E-mail envoyé",
   repondu: "A répondu",
+  invalide: "Adresse invalide (a rebondi)",
   stop: "Ne plus contacter",
 };
+
+// L'e-mail arrivé dans le même fil est-il un AVIS DE NON-DISTRIBUTION (bounce),
+// pas une vraie réponse de l'établissement ? (incident du 26/09/2026 : 3
+// adresses mortes — 2 déjà signalées fragiles, 1 nouvelle — comptées à tort
+// comme « a répondu », avec une pastille « nouvelle réponse » trompeuse).
+// Gmail/Google renvoie ces avis dans le MÊME fil que l'envoi, d'où la
+// confusion avec `trouverProspect` (qui matche par threadId).
+export function estAvisNonDistribution(fromEmail) {
+  const e = normEmail(fromEmail);
+  return /^(mailer-daemon|postmaster|mail-daemon|delivery-status|bounce)[@.]/.test(e);
+}
 
 // Messageries grand public : deux établissements différents peuvent y avoir
 // une adresse → on ne rapproche JAMAIS par le domaine pour celles-là.

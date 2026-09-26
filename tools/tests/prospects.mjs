@@ -61,4 +61,13 @@ ok(new Set(PROSPECTS_LOT2.map((p) => p.email)).size === PROSPECTS_LOT2.length, "
 const emails1 = new Set(PROSPECTS_LOT1.map((p) => p.email));
 ok(!PROSPECTS_LOT2.some((p) => emails1.has(p.email)), "lot 1 et lot 2 : aucune adresse en commun");
 ok(PROSPECTS_LOT2.every((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email) && p.ville && p.name), "lot 2 : e-mail, ville, nom présents partout");
+
+// Détection des avis de non-distribution (bounces) — incident du 26/09/2026 :
+// 3 adresses mortes comptées à tort comme « a répondu ».
+const { estAvisNonDistribution } = await import("../../src/lib/prospects.js");
+ok(estAvisNonDistribution("mailer-daemon@googlemail.com"), "bounce Google reconnu");
+ok(estAvisNonDistribution("Mailer-Daemon@Google.com"), "bounce, casse et espaces");
+ok(estAvisNonDistribution("postmaster@free.fr"), "postmaster reconnu");
+ok(!estAvisNonDistribution("contact@cactusbar.fr"), "une vraie adresse n'est jamais un bounce");
+ok(!estAvisNonDistribution("mailerdaemonpro@gmail.com"), "faux positif évité (pas d'arobase juste après)");
 console.log(`✔ ${n} vérifications au vert`);

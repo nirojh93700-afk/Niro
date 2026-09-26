@@ -18,6 +18,7 @@ const FILTRES = [
   { id: "repondu", label: "Ont répondu" },
   { id: "a_contacter", label: "À contacter" },
   { id: "envoye", label: "Sans réponse" },
+  { id: "invalide", label: "Adresses mortes" },
   { id: "stop", label: "STOP" },
 ];
 
@@ -103,7 +104,7 @@ export default function RestaurantsAdminPage() {
     const t = q.trim().toLowerCase();
     return (d?.rows || []).filter((r) => {
       if (filtre === "nonlu" && !r.nonLu) return false;
-      if (["repondu", "a_contacter", "envoye", "stop"].includes(filtre) && r.statut !== filtre) return false;
+      if (["repondu", "a_contacter", "envoye", "invalide", "stop"].includes(filtre) && r.statut !== filtre) return false;
       if (t && !`${r.name} ${r.ville} ${r.email} ${r.type}`.toLowerCase().includes(t)) return false;
       return true;
     });
@@ -126,6 +127,7 @@ export default function RestaurantsAdminPage() {
           { label: "Établissements", value: k.total ?? "—", sub: `${k.aVerifier ?? 0} adresse(s) à vérifier`, tone: k.aVerifier ? "warn" : undefined },
           { label: "E-mail envoyé", value: k.envoyes ?? "—", sub: "au moins une fois" },
           { label: "Ont répondu", value: k.repondu ?? "—", sub: `${k.nonLus ?? 0} non lue(s)`, tone: k.nonLus ? "alert" : (k.repondu ? "good" : undefined) },
+          { label: "Adresses mortes", value: k.invalides ?? "—", sub: "e-mail rebondi", tone: k.invalides ? "warn" : undefined },
           { label: "STOP", value: k.stop ?? "—", sub: "ne plus jamais écrire", tone: k.stop ? "bad" : undefined },
         ]}
       />
@@ -209,7 +211,7 @@ export default function RestaurantsAdminPage() {
               </div>
               {derniere ? (
                 <div className="pr-reply">
-                  <span>Dernière réponse{derniere.from && derniere.from !== r.email ? ` (de ${derniere.from})` : ""} :</span>
+                  <span>{derniere.bounce ? "⚠️ E-mail rebondi — adresse invalide :" : `Dernière réponse${derniere.from && derniere.from !== r.email ? ` (de ${derniere.from})` : ""} :`}</span>
                   <MailBody text={derniere.extrait} />
                 </div>
               ) : null}

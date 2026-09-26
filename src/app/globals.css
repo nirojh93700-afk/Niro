@@ -4511,3 +4511,4 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .pr-actions .pr-btn{flex:1 1 100%;text-align:center;padding:11px 16px}
 }
 .pr-envoi{background:#fdfbf5;border-color:var(--gold);font-size:.92rem}
+.pr-t-invalide{background:#f0eee9;color:#6a6055;border-color:#ddd6c8}

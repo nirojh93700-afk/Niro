@@ -905,7 +905,21 @@ ne descend jamais sous zéro.
   boucle rapide (rappelée plusieurs fois de suite) doit lire en FRAIS (`getCatalogRaw(true)` ou
   équivalent), jamais via le cache 60 s — le cache n'est sûr que pour un affichage isolé, pas pour
   une sélection de candidats à traiter. 10 établissements n'avaient reçu AUCUN e-mail (jamais
-  sélectionnés) : rattrapés après le correctif, une seule fois chacun.
+  sélectionnés) : rattrapés après le correctif, une seule fois chacun (par un clic depuis l'admin,
+  pas par moi — aucun nouveau doublon créé).
+- 🔴 **DEUXIÈME DÉCOUVERTE LE MÊME SOIR — des e-mails REBONDIS comptés comme « a répondu ».**
+  3 adresses mortes (`contact@barallel.com`, `contact@rituelgroup.fr`, `bistroregent14@gmail.fr` —
+  2 des 2 adresses déjà signalées fragiles au moment du lot 2, plus une nouvelle) ont reçu un avis
+  Google « Adresse introuvable » (mailer-daemon), et `trouverProspect` les a rapprochées à tort
+  d'une VRAIE réponse (Gmail range l'avis de rebond dans le MÊME fil que l'envoi → matché par
+  `threadId`). Ces 3 fiches affichaient « A répondu » + pastille « nouvelle réponse », trompeur.
+  **Corrigé** : `estAvisNonDistribution(email)` dans `src/lib/prospects.js` (détecte
+  `mailer-daemon@`/`postmaster@`/…) → `recordProspectReply` (stock.js) met alors le statut
+  **`invalide`** (nouveau, « Adresse invalide (a rebondi) »), jamais `repondu`, jamais de pastille
+  « nouvelle réponse ». Écran : filtre + tuile « Adresses mortes », bandeau ⚠️ dédié sur la fiche.
+  `npm run test-prospects` (40 vérifications). ⛔ **Les 3 fiches déjà mal classées ont été corrigées
+  à la main** (`action:"update", statut:"invalide", nonLu:false`) après le déploiement du correctif —
+  si de nouvelles apparaissent avant un déploiement, faire pareil.
 - ⛔ **Gmail reste en LECTURE SEULE pour moi (règle absolue du fichier)** : je ne crée ni libellé ni
   filtre Gmail moi-même. Le gérant a créé son propre dossier Gmail pour les accusés de prospection ;
   pour que Gmail y range tout seul les copies envoyées ET les réponses, lui donner la recette d'un
