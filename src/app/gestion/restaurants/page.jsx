@@ -92,7 +92,7 @@ export default function RestaurantsAdminPage() {
   }
 
   const k = d?.kpis || {};
-  const ecrire = (r) => `/gestion/messages?${new URLSearchParams({ to: r.email, name: r.name, subject: PROSPECT_SUJET, body: messageProspect(r.name) }).toString()}#envoyer`;
+  const ecrire = (r) => `/gestion/messages?${new URLSearchParams({ to: r.email, name: r.name, subject: PROSPECT_SUJET, body: messageProspect(r.name, { type: r.type, ville: r.ville }) }).toString()}#envoyer`;
 
   return (
     <>

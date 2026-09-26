@@ -2,6 +2,8 @@
 
 > ⚠️ Version 3 (26/09) : adresse de Paris remise, SIRET retiré, PRIX RETIRÉS du message (sauvegardés
 > plus bas), phrase « pas de limite, demande spéciale » + bois ajoutés.
+> ⚠️ Version 4 (26/09) : le paragraphe de présentation est maintenant **personnalisé par établissement**,
+> à partir de son type et de sa ville (`type`/`ville` de sa fiche) — voir « Personnalisation » plus bas.
 > **Statut : BROUILLON, RIEN N'EST ENVOYÉ.** Le gérant écrira « envoie » quand il valide.
 > Canal unique : **Gestion → Clients → Messages clients** (un envoi par établissement,
 > `POST /api/admin/send-client-email`). Jamais par Gmail en dehors du site.
@@ -17,16 +19,35 @@
 ## Sujet
 Le logo de votre établissement, gravé sur vos verres
 
-## Message — version 3 (26/09/2026), SANS PRIX
+## Personnalisation par type et par ville (version 4, 26/09/2026)
 
-> Texte identique à `messageProspect()` dans `src/lib/prospects.js` (c'est lui que le bouton
-> « Écrire » de Gestion → Restaurants & bars pré-remplit). Modifier les deux ensemble.
+> Un seul texte de base, mais **le paragraphe de présentation change selon le type d'établissement
+> et sa ville** (fonction `pitchPersonnalise()` dans `src/lib/prospects.js`). Classement automatique
+> du champ `type` de chaque fiche, priorité au plus vendeur si plusieurs mots correspondent
+> (cocktail > vin/caviste > restaurant/bistrot > générique).
+
+| Famille détectée | Paragraphe |
+|---|---|
+| Bar à cocktails | « Nous proposons aux bars à cocktails comme le vôtre à {ville} de graver leur logo sur les verres à cocktail servis au comptoir… » |
+| Bar à vins / caviste | « Nous proposons aux bars à vins et aux cavistes comme le vôtre à {ville} de graver leur logo sur leurs verres à vin… » |
+| Restaurant / bistrot | « Nous proposons aux restaurants comme le vôtre à {ville} de graver leur logo sur les verres servis à table… » |
+| Type inconnu / autre | Texte générique (verres, sans mention de type), avec la ville si connue. |
+
+Sans ville connue, la phrase reste correcte (« comme le vôtre de graver… », sans trou). Testé :
+`npm run test-prospects` (31 vérifications).
+
+## Message — version 4 (26/09/2026), SANS PRIX, personnalisé
+
+> Texte identique à `messageProspect(nom, {type, ville})` dans `src/lib/prospects.js` (c'est lui que
+> le bouton « Écrire » de Gestion → Restaurants & bars pré-remplit, avec le type et la ville de la
+> fiche). Modifier les deux ensemble. Le paragraphe en gras ci-dessous varie (voir tableau plus haut).
 
 Bonjour à l'équipe de {Établissement},
 
 Niv Création est un atelier français de gravure personnalisée. Nous gravons à la commande des verres à cocktail, des verres à whisky, des verres à vin et des flûtes à champagne, ainsi que des pièces en bois.
 
-Nous proposons aux bars et aux restaurants de graver le logo de leur établissement sur leurs verres. C'est un détail que vos clients remarquent, qui signe chacune de vos photos de cocktails sur les réseaux, et qui donne à votre service une vraie identité.
+**[paragraphe personnalisé selon le type et la ville — voir tableau ci-dessus ; ici, exemple type inconnu :]**
+Nous proposons aux bars et aux restaurants comme le vôtre de graver leur logo sur leurs verres. C'est un détail que vos clients remarquent, qui signe chacune de leurs photos sur les réseaux, et qui donne à votre service une vraie identité.
 
 Au-delà des verres, nous gravons et découpons aussi le bois pour votre salle : cartes menu en bois gravées, numéros de table, découpes à votre logo.
 

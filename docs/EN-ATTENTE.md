@@ -31,10 +31,11 @@
   qu'un « mets en ligne »** + la quantité en stock. Détail : `CLAUDE.md` § CONFIGURATEUR GOBELET.
 
 ## 1. Messages / clients en attente
-- **🍸 Prospection bars & restaurants (26/09)** : e-mail v3 SANS prix (tarifs pro sauvegardés, sur demande) +
-  lot 1 de 30 adresses NON vérifiées (`docs/prospection/`) + écran **Restaurants & bars** construit sur la branche
-  `claude/bars-restaurants-outreach-an8wal` — **PAS EN LIGNE, attend « applique »**. Puis RIEN ENVOYÉ avant son
-  « envoie » ; envoi par Gestion → Restaurants & bars → « Écrire » (Messages clients).
+- **🍸 Prospection bars & restaurants (26/09)** : e-mail v4 SANS prix, personnalisé par type + ville
+  (tarifs pro sauvegardés, sur demande) + lot 1 de 30 adresses NON vérifiées (`docs/prospection/`) +
+  écran **Restaurants & bars** ✅ **EN LIGNE**. Reste à faire par le gérant : ouvrir chaque source et
+  cocher « adresse vérifiée » avant d'écrire. **RIEN ENVOYÉ** avant son « envoie » ; envoi par
+  Gestion → Restaurants & bars → « Écrire » (Messages clients).
 - **Packaging & emballages** : tout est construit, l'interrupteur maître `settings.packagingLive` est
   **à false** → rien n'apparaît côté clientes. Reste à trancher : Pack Bracelet (oui/non).
 - **Mode « délai allongé » / vacances** : construit, s'active par `settings.vacation.enabled`.

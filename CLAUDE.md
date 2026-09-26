@@ -858,14 +858,21 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
-## 🍸 RESTAURANTS & BARS — PROSPECTION B2B (26/09/2026, branche `claude/bars-restaurants-outreach-an8wal`)
+## 🍸 RESTAURANTS & BARS — PROSPECTION B2B (26/09/2026, EN LIGNE le 26/09 soir)
 > Demande du gérant : démarcher bars/restaurants (logo gravé sur nos verres + bois), puis « tous les mails
 > qu'on envoie aux restaurants, s'ils répondent, il faut que ça aille automatiquement dans une catégorie
-> Restaurants & bars, séparée des clients normaux ». **Construit, PAS en ligne** (attend « applique »).
-- **Texte de l'e-mail** : `messageProspect(nom)` dans **`src/lib/prospects.js`** = copie dans
-  `docs/prospection/email-bars-restaurants.md` (v3). **Sans prix** (« s'ils demandent, on enverra »), sans
-  SIRET, avec l'adresse de Paris, phrase « pas de limite, si nous pouvons la réaliser nous la réaliserons »,
-  bois (cartes menu, numéros de table, découpes), mention « répondez STOP ». Aucun envoi sans « envoie ».
+> Restaurants & bars, séparée des clients normaux ». **✅ Poussé sur `claude/site-product-overview-1t2de`
+> (+ `main`/`master`) le 26/09 soir, sur demande explicite du gérant.**
+- **Texte de l'e-mail** : `messageProspect(nom, {type, ville})` dans **`src/lib/prospects.js`** = copie
+  dans `docs/prospection/email-bars-restaurants.md` (v4). **Sans prix** (« s'ils demandent, on enverra »),
+  sans SIRET, avec l'adresse de Paris, phrase « pas de limite, si nous pouvons la réaliser nous la
+  réaliserons », bois (cartes menu, numéros de table, découpes), mention « répondez STOP ». Aucun envoi
+  sans « envoie ».
+- **✅ Personnalisé par type + ville (26/09 soir, demande du gérant)** : `pitchPersonnalise(type, ville)`
+  classe le champ `type` de la fiche en 4 familles (cocktail > vin/caviste > restaurant/bistrot >
+  générique, priorité à la plus vendeuse si plusieurs mots correspondent) et reprend la ville dans la
+  phrase (« comme le vôtre à Lyon… », sans trou si la ville manque). Branché sur le bouton « Écrire » de
+  `/gestion/restaurants`. `npm run test-prospects` (31 vérifications).
 - **Tarifs pro SAUVEGARDÉS** (`TARIFS_PRO`, livraison comprise, dès 12 / dès 24 verres) — envoyés
   seulement sur demande. Analyse port/marge dans le doc (grille « port offert dès 60 € » abandonnée : trop coûteuse).
 - **Stockage** : section `prospects` (clé = e-mail) — `upsertProspects` / `updateProspect` / `deleteProspect` /

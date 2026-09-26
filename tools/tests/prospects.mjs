@@ -39,4 +39,18 @@ ok(messageProspect("Le Bistro du Sommelier").includes("l'équipe du Bistro du So
 ok(!/SIRET|€|\d+,\d0/.test(m), "message : ni SIRET ni prix");
 ok(!/aussit[oô]t|au plus vite|rapidement|laser|machine|aper[çc]u/i.test(m), "message : aucune promesse de délai ni d'aperçu, pas de machine");
 ok(TARIFS_PRO.every((t) => t.des24 < t.des12), "tarifs : dégressifs");
+
+// Personnalisation par type + ville (26/09/2026, demande du gérant).
+const mCocktail = messageProspect("Cactus Bar", { type: "Bar à cocktails", ville: "Lyon" });
+ok(mCocktail.includes("verres à cocktail") && mCocktail.includes("à Lyon"), "type cocktail + ville reprises");
+const mVin = messageProspect("Cave des Arceaux", { type: "Caviste / bar à vins", ville: "Montpellier" });
+ok(mVin.includes("verres à vin") && mVin.includes("à Montpellier"), "type vin/caviste + ville reprises");
+const mResto = messageProspect("Le Bistro du Sommelier", { type: "Bistrot", ville: "Bordeaux" });
+ok(mResto.includes("servis à table") && mResto.includes("à Bordeaux"), "type restaurant/bistrot + ville reprises");
+const mMixte = messageProspect("Neta", { type: "Restaurant et bar à cocktails", ville: "Bordeaux" });
+ok(mMixte.includes("verres à cocktail"), "type mixte → priorité cocktail");
+const mSansVille = messageProspect("X", { type: "Bar à cocktails" });
+ok(!/\bà\s*,|\bà\s*\./.test(mSansVille) && !mSansVille.includes(" à de graver"), "sans ville : pas de trou dans la phrase");
+const mSansType = messageProspect("X", { ville: "Nice" });
+ok(mSansType.includes("à Nice") && mSansType.includes("bars et aux restaurants"), "sans type : texte générique + ville");
 console.log(`✔ ${n} vérifications au vert`);

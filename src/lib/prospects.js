@@ -109,7 +109,36 @@ export function lireListe(texte) {
 // pré-rempli dans Messages clients par le bouton « Écrire » de l'écran.
 // Le site ajoute tout seul : le titre, le bouton « Répondre » et « Niv Création ».
 export const PROSPECT_SUJET = "Le logo de votre établissement, gravé sur vos verres";
-export function messageProspect(nom) {
+
+// Classe le type saisi (texte libre : « Bar à cocktails », « Bar à vins / caviste »,
+// « Bouchon / restaurant »…) dans une des 4 familles qui changent le texte. Un
+// établissement qui coche plusieurs mots (« Restaurant et bar à cocktails ») est
+// rangé dans la famille la plus vendeuse pour nous : cocktail d'abord.
+function familleType(type) {
+  const t = String(type || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  if (/cocktail/.test(t)) return "cocktail";
+  if (/vin|caviste|oenolog/.test(t)) return "vin";
+  if (/restaurant|bistrot|bouchon|estaminet|brasserie/.test(t)) return "restaurant";
+  return "autre";
+}
+
+// Paragraphe de présentation, adapté au type ET à la ville de l'établissement.
+function pitchPersonnalise(type, ville) {
+  const v = String(ville || "").trim();
+  const laBas = v ? ` à ${v}` : "";
+  switch (familleType(type)) {
+    case "cocktail":
+      return `Nous proposons aux bars à cocktails comme le vôtre${laBas} de graver leur logo sur les verres à cocktail servis au comptoir. C'est un détail que vos clients remarquent, qui signe chacune de leurs photos sur les réseaux, et qui donne à votre carte une vraie identité.`;
+    case "vin":
+      return `Nous proposons aux bars à vins et aux cavistes comme le vôtre${laBas} de graver leur logo sur leurs verres à vin. C'est un détail que vos clients remarquent à chaque dégustation, et qui donne à votre service une vraie identité.`;
+    case "restaurant":
+      return `Nous proposons aux restaurants comme le vôtre${laBas} de graver leur logo sur les verres servis à table. C'est un détail que vos clients remarquent, et qui donne à votre salle une vraie identité.`;
+    default:
+      return `Nous proposons aux bars et aux restaurants comme le vôtre${laBas} de graver leur logo sur leurs verres. C'est un détail que vos clients remarquent, qui signe chacune de leurs photos sur les réseaux, et qui donne à votre service une vraie identité.`;
+  }
+}
+
+export function messageProspect(nom, { type = "", ville = "" } = {}) {
   const n = String(nom || "").trim();
   // « l'équipe du Bistro… », « des Luschtig », « de L'Agence » — jamais « de Le ».
   const qui = !n ? "toute l'équipe"
@@ -120,7 +149,7 @@ export function messageProspect(nom) {
 
 Niv Création est un atelier français de gravure personnalisée. Nous gravons à la commande des verres à cocktail, des verres à whisky, des verres à vin et des flûtes à champagne, ainsi que des pièces en bois.
 
-Nous proposons aux bars et aux restaurants de graver le logo de leur établissement sur leurs verres. C'est un détail que vos clients remarquent, qui signe chacune de vos photos de cocktails sur les réseaux, et qui donne à votre service une vraie identité.
+${pitchPersonnalise(type, ville)}
 
 Au-delà des verres, nous gravons et découpons aussi le bois pour votre salle : cartes menu en bois gravées, numéros de table, découpes à votre logo.
 
