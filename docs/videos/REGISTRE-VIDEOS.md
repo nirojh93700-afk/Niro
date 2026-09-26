@@ -75,3 +75,41 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #noel #cadeaudenoel #ideecadeau
+
+---
+
+## Vidéo 16 — Verres & carafes, pour les entrepreneurs (26/09/2026)
+
+| Fichier | Format | Durée | Poids | Usage |
+|---|---|---|---|---|
+| `docs/videos/16-entreprise-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 26,7 s | 1,7 Mo | Version publiable (Reels / TikTok / Stories) et légère pour le téléphone |
+
+- **Source** : `tools/video/pub_verres_entreprise.py` (montage Pillow/ffmpeg, gratuit, sans son — même
+  famille que les vidéos 10-13).
+- **Demande du gérant** : « fais-moi des vidéos pour les entrepreneurs avec les verres pour TikTok
+  Insta ». Reprend les 10 mêmes photos que la vidéo 12 (« Verres & carafes gravés »), toutes
+  VRAIMENT gravées (planche contact revérifiée le 26/09) — whisky, vin, carafe ; pas de flûte
+  (aucune photo gravée n'existe pour elle).
+- ⛔ **Aucun faux logo, aucune photo d'un autre bar/enseigne** : ce sont de vraies gravures Niv
+  Création (monogrammes, banderoles, portraits, badges) recadrées par le TEXTE vers l'usage
+  professionnel (logo de bar/société/restaurant) — jamais par une photo inventée ou empruntée.
+  Deux photos s'y prêtaient déjà naturellement : `verre_a_whisky_logo_bourbon.webp` (badge « OLD
+  STYLE BOURBON EST. 2024 ») et `verre_vin_exemple_dale.jpg` (monogramme « D DALE Est. 2004 »).
+- **Habillage** : carte encre & or (pas rouge — pas une fête, un usage pro) « ✦ POUR LES
+  ENTREPRENEURS ✦ / Vos verres, votre logo » ; sur CHAQUE plan, ruban encre & or « ✦ IDÉE CADEAU
+  D'ENTREPRISE ✦ » + pastille « GRAVURE LOGO » près du nom ; carte finale « ✦ CADEAUX D'ENTREPRISE
+  ✦ — Votre logo, gravé chez nous — Bars, restaurants, sociétés — écrivez-nous pour un devis —
+  nivcreation.fr · Gravé en France ». Aucun prix, aucun délai, aucun nombre de produits.
+- **Produits (10, tous GRAVÉS)** : verre à whisky (badge Bourbon) · carafe à whisky gravée (Vintage
+  Western Saloon) · verre à whisky (Le Meilleur du Monde, moustache) · verre à vin (monogramme D
+  Dale) · verre à whisky (écusson coq) · carafe à whisky gravée (1892) · verre à whisky (portrait,
+  Meilleur Papa) · verre à whisky (banderole Papa du Monde) · verre à whisky (gravé au fond) ·
+  verre à vin (Geniet — Meer Niet).
+
+### Description à copier-coller (livrée le 26/09/2026)
+
+**Vidéo 16 — Cadeaux d'entreprise** (Verre à whisky, Carafe à whisky gravée, Verre à vin gravé)
+> Le logo de votre bar, votre restaurant ou votre société, gravé sur nos verres ✨ Un badge, un monogramme, une banderole : chaque pièce est gravée à la commande, dans notre atelier 🥃 Un cadeau d'affaires qui change de l'ordinaire 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeauxentreprise #verregrave #gravurelogo #ideecadeau
