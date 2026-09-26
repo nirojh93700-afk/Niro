@@ -1478,7 +1478,7 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
     Compléments (autre session, même jour) : GSAP local aussi dans `videos/niv-produits/vendor/`
     ou `npm pack gsap@3.14.2` (registre npm autorisé) ; polices TTF via
     `raw.githubusercontent.com/google/fonts/main/ofl/…` (autorisé) + `@font-face` obligatoire ;
-    ffmpeg/ffprobe = liens `~/bin/ffmpeg` → binaire d'imageio-ffmpeg suffit aussi ; contrat de
+    ffmpeg = lien `~/bin/ffmpeg` → binaire d'imageio-ffmpeg, mais **ffprobe DOIT être le vrai** (`@ffprobe-installer/linux-x64`) : un lien ffprobe→ffmpeg fait échouer le rendu à 100 % (« Unrecognized option print_format ») ; contrat de
     composition dans `.agents/skills/hyperframes-core/SKILL.md` (un `gsap.timeline({paused:true})`
     dans `window.__timelines["main"]`, `fromTo` partout, jamais de `transform` CSS sur un nœud
     tweené) ; `check --json` doit donner 0 finding, `snapshot --at …` fait une planche contact
