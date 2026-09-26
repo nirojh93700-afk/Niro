@@ -2279,7 +2279,7 @@ export const products = [
   {
     slug: "verre-a-cocktail-grave",
     badge: "Nouveau",
-    hidden: true, // MASQUÉ : verre pas encore reçu, aucune vraie photo gravée (règle du 22/09 — jamais un produit vierge en avant)
+    hidden: false, // PUBLIÉ (26/09/2026, demande explicite du gérant)
     cardImage: "/produits/verre_a_cocktail_garni.jpg",
     name: "Verre à cocktail personnalisé",
     weight: 550, // verre + emballage protégé (fragile)
