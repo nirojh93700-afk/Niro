@@ -127,6 +127,7 @@ export default function RestaurantsAdminPage() {
           ouvrez le lien « source » de chacune et cochez « vérifiée » avant d'écrire.
         </p>
         <button className="pr-btn" disabled={busy} onClick={() => post({ action: "lot1" }, (j) => `${j.ajoutes} établissement(s) ajouté(s)${j.deja ? `, ${j.deja} déjà présent(s)` : ""}.`)}>Importer le lot 1 (30 adresses)</button>
+        <button className="pr-btn" style={{ marginLeft: 10 }} disabled={busy} onClick={() => post({ action: "lot2" }, (j) => `${j.ajoutes} établissement(s) ajouté(s)${j.deja ? `, ${j.deja} déjà présent(s)` : ""}.`)}>Importer le lot 2 (92 adresses)</button>
         <p className="pr-small" style={{ marginTop: 14 }}>Ou collez une liste depuis un tableur (une ligne par établissement : ville ; établissement ; type ; e-mail ; source).</p>
         <textarea className="pr-ta" rows={4} value={texte} onChange={(e) => setTexte(e.target.value)} placeholder={"ville;etablissement;type;email;source\nLyon;Mon Bar;Bar à cocktails;contact@monbar.fr;https://monbar.fr/contact"} />
         <button className="pr-btn" disabled={busy || !texte.trim()} onClick={async () => { const j = await post({ action: "import", texte }, (j) => `${j.lus} ligne(s) lue(s) : ${j.ajoutes} ajouté(s)${j.deja ? `, ${j.deja} déjà présent(s)` : ""}.`); if (j) setTexte(""); }}>Ajouter la liste</button>

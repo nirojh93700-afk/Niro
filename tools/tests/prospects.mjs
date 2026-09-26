@@ -53,4 +53,12 @@ const mSansVille = messageProspect("X", { type: "Bar à cocktails" });
 ok(!/\bà\s*,|\bà\s*\./.test(mSansVille) && !mSansVille.includes(" à de graver"), "sans ville : pas de trou dans la phrase");
 const mSansType = messageProspect("X", { ville: "Nice" });
 ok(mSansType.includes("à Nice") && mSansType.includes("bars et aux restaurants"), "sans type : texte générique + ville");
+
+// Lot 2 (26/09/2026, demande « trouve encore plus d'établissements »).
+const { PROSPECTS_LOT2 } = await import("../../src/lib/prospects.js");
+ok(PROSPECTS_LOT2.length >= 80, `lot 2 : au moins 80 adresses (${PROSPECTS_LOT2.length})`);
+ok(new Set(PROSPECTS_LOT2.map((p) => p.email)).size === PROSPECTS_LOT2.length, "lot 2 : aucun doublon interne");
+const emails1 = new Set(PROSPECTS_LOT1.map((p) => p.email));
+ok(!PROSPECTS_LOT2.some((p) => emails1.has(p.email)), "lot 1 et lot 2 : aucune adresse en commun");
+ok(PROSPECTS_LOT2.every((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email) && p.ville && p.name), "lot 2 : e-mail, ville, nom présents partout");
 console.log(`✔ ${n} vérifications au vert`);

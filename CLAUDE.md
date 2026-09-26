@@ -873,6 +873,15 @@ ne descend jamais sous zéro.
   générique, priorité à la plus vendeuse si plusieurs mots correspondent) et reprend la ville dans la
   phrase (« comme le vôtre à Lyon… », sans trou si la ville manque). Branché sur le bouton « Écrire » de
   `/gestion/restaurants`. `npm run test-prospects` (31 vérifications).
+- **✅ LOT 2 AJOUTÉ (26/09 soir, « 30 c'est pas assez, cherche partout »)** : `PROSPECTS_LOT2` dans
+  `src/lib/prospects.js` = **92 adresses de plus** (20 villes nouvelles : Rennes, Grenoble, Dijon,
+  Toulon, Aix-en-Provence, Tours, Clermont-Ferrand, Rouen, Nancy, Metz, Besançon, Biarritz, Avignon,
+  La Rochelle, Caen, Perpignan + un 2ᵉ passage sur les 10 villes du lot 1, établissements différents).
+  Bouton « Importer le lot 2 (92 adresses) » à côté du lot 1 dans `/gestion/restaurants`. **MÊME
+  RÈGLE : NON VÉRIFIÉES** (recherches web, sites bloqués depuis l'environnement) — à vérifier avant
+  d'écrire. Deux adresses fragiles gardées avec un avertissement dans leur `type` : Bistro Régent
+  Caen (domaine `@gmail.fr` inhabituel) et Rituel Lille (petit groupe multi-sites, indépendance à
+  confirmer). `npm run test-prospects` (35 vérifications : dont aucun doublon entre les 2 lots).
 - **Tarifs pro SAUVEGARDÉS** (`TARIFS_PRO`, livraison comprise, dès 12 / dès 24 verres) — envoyés
   seulement sur demande. Analyse port/marge dans le doc (grille « port offert dès 60 € » abandonnée : trop coûteuse).
 - **Stockage** : section `prospects` (clé = e-mail) — `upsertProspects` / `updateProspect` / `deleteProspect` /
