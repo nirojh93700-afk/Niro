@@ -17,7 +17,7 @@ import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
 import { REVIEWS_SEED } from "./reviewsSeed";
-import { trouverProspect, demandeStop, estAvisNonDistribution } from "./prospects";
+import { trouverProspect, demandeStop, estAvisNonDistribution, PROSPECT_STATUTS } from "./prospects";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
@@ -1177,7 +1177,10 @@ export async function getCommsMeta() {
 // en bloc — règle de l'incident du 26/09/2026).
 // =============================================================================
 const PROSPECTS_MAX = 3000;
-const PROSPECT_STATUTS_OK = ["a_contacter", "envoye", "repondu", "stop"];
+// Dérivé de PROSPECT_STATUTS (prospects.js) — UNE SEULE SOURCE. Incident du
+// 26/09/2026 : cette liste avait sa propre copie, oubliée lors de l'ajout du
+// statut « invalide » → `updateProspect` répondait {ok:true} sans rien changer.
+const PROSPECT_STATUTS_OK = Object.keys(PROSPECT_STATUTS);
 
 export async function getProspectsAll(fresh = false) {
   const data = await getCatalogRaw(fresh);
@@ -1218,7 +1221,12 @@ export async function updateProspect(email, patch = {}) {
   if (!p) return null;
   if (patch.verifie !== undefined) p.verifie = Boolean(patch.verifie);
   if (patch.nonLu !== undefined) p.nonLu = Boolean(patch.nonLu);
-  if (patch.statut !== undefined && PROSPECT_STATUTS_OK.includes(patch.statut)) p.statut = patch.statut;
+  // Un statut inconnu est un VRAI échec (avant : ignoré en silence, {ok:true}
+  // trompeur — incident du 26/09/2026).
+  if (patch.statut !== undefined) {
+    if (!PROSPECT_STATUTS_OK.includes(patch.statut)) return { error: "statut inconnu" };
+    p.statut = patch.statut;
+  }
   for (const k of ["note", "name", "ville", "type"]) {
     if (patch[k] !== undefined) p[k] = String(patch[k] || "").slice(0, k === "note" ? 1000 : 120);
   }

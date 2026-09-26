@@ -927,6 +927,16 @@ ne descend jamais sous zéro.
   `npm run test-prospects` (40 vérifications). ⛔ **Les 3 fiches déjà mal classées ont été corrigées
   à la main** (`action:"update", statut:"invalide", nonLu:false`) après le déploiement du correctif —
   si de nouvelles apparaissent avant un déploiement, faire pareil.
+- 🔴 **TROISIÈME DÉCOUVERTE LE MÊME SOIR — la correction à la main n'avait RIEN fait.** En repassant
+  les 3 fiches en `statut:"invalide"` une fois le déploiement fini, l'API répondait `{ok:true}` mais
+  le statut ne changeait pas. Cause : `PROSPECT_STATUTS_OK` dans `stock.js` avait **sa propre copie**
+  de la liste des statuts valides (`["a_contacter","envoye","repondu","stop"]`), jamais mise à jour
+  quand `invalide` a été ajouté dans `prospects.js` → `updateProspect` ignorait le changement EN
+  SILENCE et renvoyait quand même succès. **Corrigé** : `PROSPECT_STATUTS_OK = Object.keys(PROSPECT_STATUTS)`
+  (une seule source, plus jamais désynchronisée) + un statut inconnu renvoie maintenant une vraie
+  erreur (400) au lieu d'un faux `{ok:true}`. ⛔ **Leçon à généraliser** : une liste de valeurs valides
+  ne doit JAMAIS être recopiée à la main à deux endroits — la dériver d'une seule source, et un rejet
+  de validation doit toujours être visible (jamais un succès silencieux qui ne fait rien).
 - ⛔ **Gmail reste en LECTURE SEULE pour moi (règle absolue du fichier)** : je ne crée ni libellé ni
   filtre Gmail moi-même. Le gérant a créé son propre dossier Gmail pour les accusés de prospection ;
   pour que Gmail y range tout seul les copies envoyées ET les réponses, lui donner la recette d'un

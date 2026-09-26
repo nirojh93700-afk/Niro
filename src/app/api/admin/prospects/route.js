@@ -66,7 +66,9 @@ export async function POST(req) {
   }
   if (action === "update") {
     const p = await updateProspect(body?.email, body || {});
-    return p ? Response.json({ ok: true }) : Response.json({ error: "Établissement introuvable." }, { status: 404 });
+    if (!p) return Response.json({ error: "Établissement introuvable." }, { status: 404 });
+    if (p.error) return Response.json({ error: p.error }, { status: 400 });
+    return Response.json({ ok: true });
   }
   if (action === "delete") {
     return (await deleteProspect(body?.email)) ? Response.json({ ok: true }) : Response.json({ error: "Établissement introuvable." }, { status: 404 });
