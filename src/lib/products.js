@@ -2280,7 +2280,6 @@ export const products = [
     slug: "verre-a-cocktail-grave",
     badge: "Nouveau",
     hidden: false, // PUBLIÉ (26/09/2026, demande explicite du gérant)
-    photoContain: true, // photos hautes (verre haut et fin) : voir le verre en entier, pas de rognage (comme le vin/la flûte)
     cardImage: "/produits/verre_a_cocktail_garni.jpg",
     name: "Verre à cocktail personnalisé",
     weight: 550, // verre + emballage protégé (fragile)
@@ -2291,13 +2290,13 @@ export const products = [
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
     previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
     engrave: {
-      box: { top: 0.16, left: 0.24, width: 0.52, height: 0.58 },
-      widthMm: 45,
-      heightMm: 45,
-      maxWidthFrac: 0.46,
-      minWidthFrac: 0.10,
-      maxHeightFrac: 0.46,
-      minHeightFrac: 0.10,
+      box: { top: 0.36, left: 0.36, width: 0.28, height: 0.38 },
+      widthMm: 42,
+      heightMm: 42,
+      maxWidthFrac: 0.30,
+      minWidthFrac: 0.08,
+      maxHeightFrac: 0.30,
+      minHeightFrac: 0.08,
       diameterMm: 52,
       glassHeightMm: 125,
     },
@@ -2345,10 +2344,14 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Votre photo à graver (+ texte, date ou logo en option)",
     images: [
-      "/produits/verre_a_cocktail_garni.jpg",
+      "/produits/verre_a_cocktail_exemple_logo.jpg",
       "/produits/verre_a_cocktail_ambiance.jpg",
       "/produits/verre_a_cocktail_vierge.jpg",
+      "/produits/verre_a_cocktail_garni.jpg",
+      "/produits/verre_a_cocktail_exemple_couleur.jpg",
+      "/produits/verre_a_cocktail_exemple_nom.jpg",
       "/produits/verre_a_cocktail_fond_vierge.jpg",
+      "/produits/verre_a_cocktail_fond_exemple.jpg",
     ],
     variants: [
       { id: "verre-cocktail-grave", title: "À l'unité", price: 17.90, weight: 550 },
