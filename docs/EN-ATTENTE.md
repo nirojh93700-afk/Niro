@@ -31,6 +31,9 @@
   qu'un « mets en ligne »** + la quantité en stock. Détail : `CLAUDE.md` § CONFIGURATEUR GOBELET.
 
 ## 1. Messages / clients en attente
+- **🍸 Prospection bars & restaurants (26/09)** : e-mail B2B « logo gravé sur vos verres » + lot 1 de 30 adresses
+  (`docs/prospection/`). **RIEN ENVOYÉ** — attend son « envoie » ; adresses à vérifier par lui (sites bloqués
+  d'ici) ; envoi uniquement par Gestion → Clients → Messages clients ; tenir la liste d'opposition (« STOP »).
 
 | Qui | État | Où |
 |---|---|---|
