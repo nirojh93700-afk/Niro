@@ -285,12 +285,16 @@ export async function POST(req) {
   }
   // Zones de gravure des cristaux (réglées dans /gestion/cristal-reglage) :
   // pour chaque produit, où placer la photo du client sur la vraie photo du cristal.
+  // ⚠️ FUSIONNÉ avec l'existant (incident du 26/09/2026 : l'ancien code REMPLAÇAIT
+  // tout `crystalZones` par ce que la page envoyait — un produit absent de l'écran
+  // au moment de l'enregistrement (page pas à jour, onglet resté ouvert…) perdait
+  // son réglage). Un produit qu'on n'a pas touché ne peut plus jamais disparaître.
   if (body.crystalZones && typeof body.crystalZones === "object") {
     const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
-    const out = {};
+    const existing = { ...((await getSettings())?.crystalZones || {}) };
     for (const [slug, z] of Object.entries(body.crystalZones)) {
       if (!z || typeof z !== "object") continue;
-      out[String(slug).slice(0, 80)] = {
+      existing[String(slug).slice(0, 80)] = {
         img: typeof z.img === "string" ? z.img.slice(0, 300) : "",
         left: num(z.left, 20), top: num(z.top, 40),
         width: num(z.width, 30), height: num(z.height, 30),
@@ -303,15 +307,16 @@ export async function POST(req) {
         on: z.on ? 1 : 0,
       };
     }
-    patch.crystalZones = out;
+    patch.crystalZones = existing;
   }
 
   // Points de gravure Nom/Date par modèle (verres/carafe) — réglés dans /gestion/cristal-reglage.
   // Forme : { slug: { "10": { t:{x,y}, d:{x,y} }, ... } }. Fraction 0..1 du dessin.
+  // ⚠️ FUSIONNÉ avec l'existant, même raison que crystalZones ci-dessus.
   if (body.motifTextZones && typeof body.motifTextZones === "object") {
     const fr = (v) => { const n = Number(v); return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : null; };
     const pt = (p) => (p && typeof p === "object" && fr(p.x) != null && fr(p.y) != null) ? { x: fr(p.x), y: fr(p.y) } : null;
-    const out = {};
+    const existing = { ...((await getSettings())?.motifTextZones || {}) };
     for (const [slug, byNum] of Object.entries(body.motifTextZones)) {
       if (!byNum || typeof byNum !== "object") continue;
       const zones = {};
@@ -322,9 +327,9 @@ export async function POST(req) {
         if (pt(z.d)) e.d = pt(z.d);
         if (e.t || e.d) zones[String(n).slice(0, 6)] = e;
       }
-      if (Object.keys(zones).length) out[String(slug).slice(0, 80)] = zones;
+      if (Object.keys(zones).length) existing[String(slug).slice(0, 80)] = zones;
     }
-    patch.motifTextZones = out;
+    patch.motifTextZones = existing;
   }
 
   // Emballages — interrupteur maître « visible sur le site ».
