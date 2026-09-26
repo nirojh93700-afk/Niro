@@ -227,7 +227,7 @@ export async function POST(req) {
   if (body.agents && typeof body.agents === "object") {
     // Fusion : on ne touche qu'aux interrupteurs envoyés, les autres restent.
     let cur = {};
-    try { cur = (await getSettings())?.agents || {}; } catch { cur = {}; }
+    try { cur = (await getSettings(true))?.agents || {}; } catch { cur = {}; }
     patch.agents = { ...cur };
     for (const k of ["emailAutoReply", "emailDraft", "widget"]) {
       if (typeof body.agents[k] === "boolean") patch.agents[k] = body.agents[k];
@@ -291,7 +291,7 @@ export async function POST(req) {
   // son réglage). Un produit qu'on n'a pas touché ne peut plus jamais disparaître.
   if (body.crystalZones && typeof body.crystalZones === "object") {
     const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
-    const existing = { ...((await getSettings())?.crystalZones || {}) };
+    const existing = { ...((await getSettings(true))?.crystalZones || {}) };
     for (const [slug, z] of Object.entries(body.crystalZones)) {
       if (!z || typeof z !== "object") continue;
       existing[String(slug).slice(0, 80)] = {
@@ -316,7 +316,7 @@ export async function POST(req) {
   if (body.motifTextZones && typeof body.motifTextZones === "object") {
     const fr = (v) => { const n = Number(v); return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : null; };
     const pt = (p) => (p && typeof p === "object" && fr(p.x) != null && fr(p.y) != null) ? { x: fr(p.x), y: fr(p.y) } : null;
-    const existing = { ...((await getSettings())?.motifTextZones || {}) };
+    const existing = { ...((await getSettings(true))?.motifTextZones || {}) };
     for (const [slug, byNum] of Object.entries(body.motifTextZones)) {
       if (!byNum || typeof byNum !== "object") continue;
       const zones = {};

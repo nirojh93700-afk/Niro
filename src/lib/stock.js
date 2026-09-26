@@ -1976,8 +1976,12 @@ export async function addSubscriber(email) {
 
 // --- Réglages d'apparence (thème) ------------------------------------------
 // Tout est optionnel : un champ vide = on garde la valeur par défaut du site.
-export async function getSettings() {
-  const data = await getCatalogRaw();
+// fresh = true : relit la base sans passer par le cache 60 s (voir getCatalogRaw)
+// — OBLIGATOIRE avant une écriture qui fusionne avec l'existant (setSettings),
+// sinon plusieurs serveurs peuvent repartir d'une copie périmée et s'écraser
+// l'un l'autre (incident du 26/09/2026 : réglages de gravure qui s'effaçaient).
+export async function getSettings(fresh = false) {
+  const data = await getCatalogRaw(fresh);
   const s = data.settings || {};
   const acc = s.access || {};
   return {
@@ -2135,7 +2139,10 @@ export async function getSettings() {
 }
 
 export async function setSettings(patch) {
-  const data = await getCatalogRaw();
+  // Lecture-modification-écriture : TOUJOURS repartir d'une copie fraîche
+  // (jamais du cache 60 s), sinon un serveur peut écraser ce qu'un autre
+  // vient d'écrire (même incident que getSettings ci-dessus).
+  const data = await getCatalogRaw(true);
   data.settings = { ...(data.settings || {}), ...patch };
   await persistCatalog(data);
   return data.settings;
