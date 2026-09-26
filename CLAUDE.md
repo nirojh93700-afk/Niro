@@ -885,12 +885,13 @@ ne descend jamais sous zéro.
 > · `src/components/home/BandeauNoel.jsx` — bandeau rouge de Noël & or « Ce Noël, offrez un cadeau
 >   unique », mosaïque 3×3 (cristal, verres, 5 bijoux GRAVÉS), **premier bloc de `page.jsx`**, donc
 >   juste sous le logo + menu, AVANT l'entrée cristal (inchangée) ; lien → `/offrir/noel`.
->   🔜 **DÉPLACEMENT DEMANDÉ LE 26/09 — MAQUETTE SEULEMENT, PAS EN LIGNE** : le gérant veut le
->   bandeau + la sélection **juste avant « Explorez nos collections »** (après « Verres & carafes »)
->   au lieu de tout en haut. Maquette `docs/maquettes/noel-avant-collections.html` (artifact
->   https://claude.ai/artifact/2nEdfPc1PAs5XeeGu2RowH). Attendre son
->   « applique » : dans `page.jsx`, déplacer `{show.noel && <BandeauNoel />}` et le
->   `<BandeauAccueil eyebrow="Sélection de Noël" …/>` juste avant `{/* CATÉGORIES */}`.
+>   ✅ **DÉPLACÉ LE 26/09/2026 (« OK vas-y tu peux pousser », après maquette
+>   `docs/maquettes/noel-avant-collections.html`, artifact
+>   https://claude.ai/artifact/2nEdfPc1PAs5XeeGu2RowH)** : le bandeau ET la « Sélection de Noël »
+>   sont maintenant **juste après « Verres & carafes gravés » et juste AVANT « Explorez nos
+>   collections »** (`id="collections"`) dans `page.jsx`. Le haut de page (cristal + carafe) est
+>   redevenu comme avant. Ordre : cristal → carafe → Vient d'arriver → Verres & carafes →
+>   bandeau Noël → Sélection de Noël → Explorez nos collections.
 > · « Sélection de Noël » = `<BandeauAccueil cinq>` (5 produits du catalogue en direct) juste AVANT
 >   « Vient d'arriver » dans `page.jsx`.
 > · **7ᵉ occasion `noel`** dans `src/lib/occasions.js` (`NOEL_SLUGS`, liste fermée de 18 produits,
