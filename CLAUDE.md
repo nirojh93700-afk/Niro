@@ -1456,7 +1456,18 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   ```
   · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-9 le 22/09,
     10-11 le 25/09, **12 verres et 13 Noël le 26/09** — la 13 = toutes familles, 13 pièces
-    gravées, script `pub_cristaux_silencieuse.py` entrée 13 ; prochaine = 14).
+    gravées, script `pub_cristaux_silencieuse.py` entrée 13 ; **14 Noël HyperFrames le 26/09** ;
+    prochaine = 15).
+  · 🎬 **HYPERFRAMES EN LOCAL — ÇA MARCHE (26/09/2026, vidéo 14)** : le MCP hébergé (`compose`/
+    `render_video`) **refuse les agents Claude Code** (« disabled for local CLI/IDE agents »). La
+    voie qui marche = les skills locaux (`npx skills add heygen-com/hyperframes`) + le CLI
+    `npx hyperframes` (init / check / snapshot / render). Projet modèle commité :
+    **`tools/video/hyperframes-noel/`** (README avec la recette complète). Pièges réglés : les CDN
+    (jsdelivr, Google Fonts côté navigateur) sont bloqués au rendu → GSAP et polices EN LOCAL ;
+    `ffprobe` manque (imageio-ffmpeg n'a que ffmpeg) → `npm i @ffprobe-installer/linux-x64` ;
+    Chrome via `npx hyperframes browser ensure` (téléchargement OK). Rendu 32 s ≈ 2 min 30.
+    Photos posées ENTIÈRES dans un cadre doré sur fond flou (hauteur du cadre = ratio de la photo),
+    jamais recadrées ; musique = Jingle Bells synthétisée (domaine public).
   · ⚠️ **UNE VIDÉO D'OCCASION DOIT LE DIRE SUR CHAQUE PLAN** (gérant, 26/09, sur la 1re version de
     la 13 : « dans la vidéo on sait pas, c'est pour des cadeaux pour Noël »). Refaite avec un
     habillage Noël : ruban doré « ✦ IDÉE CADEAU DE NOËL ✦ » en haut de CHAQUE plan produit,

@@ -44,7 +44,11 @@
       .cadre { position: absolute; left: 70px; top: 200px; width: 940px; height: 1150px; border: 3px solid #c9a24b; border-radius: 22px; overflow: hidden; background: #1a1206; box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
       .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; background: #fbf7ee; }
       .voile { position: absolute; left: 0; right: 0; bottom: 0; height: 32%; background: linear-gradient(180deg, rgba(26,18,6,0) 0%, rgba(26,18,6,0.7) 100%); }
-      .ruban { position: absolute; top: 80px; left: 0; right: 0; text-align: center; font-size: 26px; letter-spacing: 0.42em; color: #e2c67e; font-weight: 600; text-transform: uppercase; text-shadow: 0 2px 14px rgba(0,0,0,0.6); }
+      .ruban { position: absolute; top: 84px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 26px; letter-spacing: 0.3em; color: #e2c67e; font-weight: 600; text-transform: uppercase; text-shadow: 0 2px 14px rgba(0,0,0,0.6); }
+      .ruban i { display: block; width: 12px; height: 12px; background: #c9a24b; transform: rotate(45deg); }
+      .ruban b { font-weight: 600; color: #fbf7ee; }
+      .pastille { display: inline-block; margin-left: 22px; vertical-align: middle; font-family: Inter, sans-serif; font-size: 24px; letter-spacing: 0.22em; font-weight: 700; color: #1a1206; background: #c9a24b; border-radius: 999px; padding: 8px 20px 7px; text-transform: uppercase; }
+      .noel-red { color: #e8b4a2; }
       .legende { position: absolute; left: 80px; right: 80px; bottom: 210px; }
       .nom { font-size: 74px; line-height: 1.08; color: #fbf7ee; text-shadow: 0 3px 20px rgba(0,0,0,0.5); }
       .trait { width: 120px; height: 3px; background: #c9a24b; margin: 26px 0 22px; }
@@ -66,7 +70,7 @@
         <div class="card">
           <div id="ouv-brand" class="brand serif">NiV CRÉATION<small>Atelier de gravure</small></div>
           <div id="ouv-filet" class="filet"></div>
-          <div id="ouv-accroche" class="accroche serif">Ce Noël, offrez<br>une gravure</div>
+          <div id="ouv-accroche" class="accroche serif">Cadeaux de Noël<br><span class="noel-red">gravés pour eux</span></div>
         </div>
       </section>
 
@@ -74,80 +78,80 @@
       <section id="scene-01" class="clip scene" data-start="3.2" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/carafe_gravee.jpg" alt="" /><div class="cadre" style="height: 940px; top: 305px"><img class="photo" src="assets/carafe_gravee.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour lui</div>
-        <div class="legende"><div class="nom serif">Carafe à whisky gravée</div><div class="trait"></div><div class="phrase">Un nom, une date, un cadeau unique</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour lui</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Carafe à whisky gravée<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Un nom, une date, un cadeau unique</div></div>
         <div class="num">01</div>
       </section>
 
       <section id="scene-02" class="clip scene" data-start="5.7" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/verre_a_whisky_exemple_face.jpg" alt="" /><div class="cadre" style="height: 910px; top: 320px"><img class="photo" src="assets/verre_a_whisky_exemple_face.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour papa</div>
-        <div class="legende"><div class="nom serif">Verre à whisky photo</div><div class="trait"></div><div class="phrase">Sa photo gravée dans le verre</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour papa</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Verre à whisky photo<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Sa photo gravée dans le verre</div></div>
         <div class="num">02</div>
       </section>
 
       <section id="scene-03" class="clip scene" data-start="8.2" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/verre_vin_exemple_dale.jpg" alt="" /><div class="cadre" style="height: 705px; top: 422px"><img class="photo" src="assets/verre_vin_exemple_dale.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour elle</div>
-        <div class="legende"><div class="nom serif">Verre à vin monogramme</div><div class="trait"></div><div class="phrase">Son initiale, son prénom</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour elle</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Verre à vin monogramme<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Son initiale, son prénom</div></div>
         <div class="num">03</div>
       </section>
 
       <section id="scene-04" class="clip scene" data-start="10.7" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/cristal-h-couple.jpg" alt="" /><div class="cadre" style="height: 652px; top: 449px"><img class="photo" src="assets/cristal-h-couple.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour les amoureux</div>
-        <div class="legende"><div class="nom serif">Cristal photo 3D</div><div class="trait"></div><div class="phrase">Un souvenir gravé pour toujours</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour les amoureux</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Cristal photo 3D<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Un souvenir gravé pour toujours</div></div>
         <div class="num">04</div>
       </section>
 
       <section id="scene-05" class="clip scene" data-start="13.2" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/cristal-v-enfant-chat.jpg" alt="" /><div class="cadre" style="height: 596px; top: 477px"><img class="photo" src="assets/cristal-v-enfant-chat.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour les grands-parents</div>
-        <div class="legende"><div class="nom serif">Cristal photo 3D</div><div class="trait"></div><div class="phrase">Le plus beau cadeau des grands-parents</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour les grands-parents</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Cristal photo 3D<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Le plus beau cadeau des grands-parents</div></div>
         <div class="num">05</div>
       </section>
 
       <section id="scene-06" class="clip scene" data-start="15.7" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/porte-cles-coeur-demo.jpg" alt="" /><div class="cadre" style="height: 972px; top: 289px"><img class="photo" src="assets/porte-cles-coeur-demo.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour la famille</div>
-        <div class="legende"><div class="nom serif">Porte-clés cristal lumineux</div><div class="trait"></div><div class="phrase">Sa photo, toujours avec lui</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour la famille</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Porte-clés cristal lumineux<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Sa photo, toujours avec lui</div></div>
         <div class="num">06</div>
       </section>
 
       <section id="scene-07" class="clip scene" data-start="18.2" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/collier-coeur-grave-2.jpg" alt="" /><div class="cadre" style="height: 940px; top: 305px"><img class="photo" src="assets/collier-coeur-grave-2.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour elle</div>
-        <div class="legende"><div class="nom serif">Collier cœur gravé</div><div class="trait"></div><div class="phrase">Un prénom près du cœur</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour elle</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Collier cœur gravé<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Un prénom près du cœur</div></div>
         <div class="num">07</div>
       </section>
 
       <section id="scene-08" class="clip scene" data-start="20.7" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/collier-coeur-plaques-2.jpg" alt="" /><div class="cadre" style="height: 940px; top: 305px"><img class="photo" src="assets/collier-coeur-plaques-2.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour maman</div>
-        <div class="legende"><div class="nom serif">Collier plaques gravées</div><div class="trait"></div><div class="phrase">Toute la famille réunie</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour maman</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Collier plaques gravées<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Toute la famille réunie</div></div>
         <div class="num">08</div>
       </section>
 
       <section id="scene-09" class="clip scene" data-start="23.2" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/bracelet-cordon-plaque-4.jpg" alt="" /><div class="cadre" style="height: 940px; top: 305px"><img class="photo" src="assets/bracelet-cordon-plaque-4.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour elle</div>
-        <div class="legende"><div class="nom serif">Bracelet cordon à plaque</div><div class="trait"></div><div class="phrase">Un message discret au poignet</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour elle</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Bracelet cordon à plaque<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Un message discret au poignet</div></div>
         <div class="num">09</div>
       </section>
 
       <section id="scene-10" class="clip scene" data-start="25.7" data-duration="2.5" data-track-index="1">
         <div class="photo-wrap"><img class="fond" src="assets/bracelet-homme-plaque-1.jpg" alt="" /><div class="cadre" style="height: 940px; top: 305px"><img class="photo" src="assets/bracelet-homme-plaque-1.jpg" alt="" /></div></div>
         <div class="voile"></div>
-        <div class="ruban">Pour lui</div>
-        <div class="legende"><div class="nom serif">Bracelet homme gravé</div><div class="trait"></div><div class="phrase">Pour lui, gravé à la main</div></div>
+        <div class="ruban"><i></i><span>Idée cadeau de Noël · <b>Pour lui</b></span><i></i></div>
+        <div class="legende"><div class="nom serif">Bracelet homme gravé<span class="pastille">Noël 2026</span></div><div class="trait"></div><div class="phrase">Pour lui, gravé à la main</div></div>
         <div class="num">10</div>
       </section>
 
