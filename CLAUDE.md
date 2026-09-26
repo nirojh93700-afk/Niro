@@ -882,6 +882,13 @@ ne descend jamais sous zéro.
   d'écrire. Deux adresses fragiles gardées avec un avertissement dans leur `type` : Bistro Régent
   Caen (domaine `@gmail.fr` inhabituel) et Rituel Lille (petit groupe multi-sites, indépendance à
   confirmer). `npm run test-prospects` (35 vérifications : dont aucun doublon entre les 2 lots).
+- **✅ LOT 3 AJOUTÉ (26/09 soir)** : `PROSPECTS_LOT3` = **85 adresses de plus**, 24 villes nouvelles
+  (Angers, Reims, Le Mans, Orléans, Poitiers, Saint-Étienne, Limoges, Villeurbanne, Nîmes, Béziers,
+  Annecy, Chambéry, Colmar, Mulhouse, Amiens, Cannes, Antibes, Deauville, Bayonne). Bouton « Importer
+  le lot 3 (85 adresses) ». **Toujours NON VÉRIFIÉES.** Deux fiches marquées à vérifier de près dans
+  leur `type` : Le Bistrot des Jacobins (Le Mans, adresse iCloud) et Merci (Orléans, vu seulement sur
+  Facebook). Total des 3 lots : **237 établissements.** `npm run test-prospects` (43 vérifications).
+  Versailles n'a pas pu être cherchée (quota de recherche épuisé) — à refaire si besoin d'un lot 4.
 - **Tarifs pro SAUVEGARDÉS** (`TARIFS_PRO`, livraison comprise, dès 12 / dès 24 verres) — envoyés
   seulement sur demande. Analyse port/marge dans le doc (grille « port offert dès 60 € » abandonnée : trop coûteuse).
 - **✅ ENVOI GROUPÉ (26/09 soir, demande du gérant : « dès que les mails sont prêts, on envoie pour

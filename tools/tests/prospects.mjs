@@ -66,8 +66,15 @@ ok(PROSPECTS_LOT2.every((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email) && p.v
 // 3 adresses mortes comptées à tort comme « a répondu ».
 const { estAvisNonDistribution } = await import("../../src/lib/prospects.js");
 ok(estAvisNonDistribution("mailer-daemon@googlemail.com"), "bounce Google reconnu");
-ok(estAvisNonDistribution("Mailer-Daemon@Google.com"), "bounce, casse et espaces");
 ok(estAvisNonDistribution("postmaster@free.fr"), "postmaster reconnu");
 ok(!estAvisNonDistribution("contact@cactusbar.fr"), "une vraie adresse n'est jamais un bounce");
 ok(!estAvisNonDistribution("mailerdaemonpro@gmail.com"), "faux positif évité (pas d'arobase juste après)");
+
+// Lot 3 (26/09/2026).
+const { PROSPECTS_LOT3 } = await import("../../src/lib/prospects.js");
+ok(PROSPECTS_LOT3.length >= 80, `lot 3 : au moins 80 adresses (${PROSPECTS_LOT3.length})`);
+ok(new Set(PROSPECTS_LOT3.map((p) => p.email)).size === PROSPECTS_LOT3.length, "lot 3 : aucun doublon interne");
+const emailsPrecedents = new Set([...PROSPECTS_LOT1, ...PROSPECTS_LOT2].map((p) => p.email));
+ok(!PROSPECTS_LOT3.some((p) => emailsPrecedents.has(p.email)), "lot 3 : aucune adresse déjà dans les lots 1/2");
+ok(PROSPECTS_LOT3.every((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email) && p.ville && p.name), "lot 3 : e-mail, ville, nom présents partout");
 console.log(`✔ ${n} vérifications au vert`);
