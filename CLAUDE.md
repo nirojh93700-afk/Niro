@@ -1,3 +1,26 @@
+## ⛔⛔ INCIDENT GRAVE — RÉGLAGES DE GRAVURE QUI S'EFFAÇAIENT TOUT SEULS (26/09/2026, RÉSOLU)
+> En ajoutant le verre à cocktail puis le verre à whisky à la page **Gestion → Réglages produits →
+> « Réglage cristaux, verres & carafe »** (`/gestion/cristal-reglage`), le gérant a dû **tout
+> réenregistrer un par un** — les cadres des cristaux (blocs 3D, porte-clés, pyramide, trophée)
+> bougeaient encore APRÈS un ré-enregistrement. Colère justifiée, à ne plus jamais reproduire.
+- **Cause réelle trouvée et corrigée** : `/api/admin/settings` **remplaçait ENTIÈREMENT**
+  `crystalZones`/`motifTextZones` par ce que la page envoyait à cet instant (`patch.crystalZones =
+  out`, sans fusion avec l'existant). Cette page envoie TOUJOURS l'état complet de TOUS les
+  produits réglables (chargé une fois à l'ouverture) — si cet état n'était plus à jour (onglet
+  resté ouvert, page rechargée entre deux réglages, deux réglages coup sur coup…), enregistrer
+  UN SEUL produit **effaçait silencieusement** les réglages des AUTRES faits juste avant.
+- **✅ Corrigé (commit `b0653c8`)** : le serveur **fusionne** maintenant avec les réglages déjà
+  en base, produit par produit (`{ ...existant, ...ce qui est envoyé }`), au lieu de remplacer en
+  bloc. Un enregistrement ne peut plus jamais écraser un autre produit, même avec une page pas à
+  jour. **Cette règle doit être appliquée à TOUT nouveau réglage « par produit/par clé » dans
+  `/api/admin/settings`** (sur le modèle de `crystalZones`/`motifTextZones`) : ne JAMAIS faire
+  `patch.xxx = out` à partir du seul contenu envoyé par le client — toujours partir de
+  `{ ...((await getSettings())?.xxx || {}) }` et fusionner dedans.
+- ⛔ **Ne plus jamais ajouter un produit à une page de réglage partagée (cristal-reglage,
+  packaging, taxonomie…) sans vérifier que le mécanisme de sauvegarde est bien un PATCH par clé,
+  jamais un remplacement en bloc.** Si ce n'est pas le cas : corriger le serveur AVANT d'ajouter
+  le produit, pas après.
+
 # ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 09/09/2026)
 > 📋 **`docs/EN-ATTENTE.md` = l'inventaire de tout ce qui est en attente** (messages à envoyer,
 > maquettes validées non appliquées, projets en pause, actions du gérant, questions sans réponse).
