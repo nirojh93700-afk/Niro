@@ -82,6 +82,7 @@ export default function ProductDetail({ product }) {
   const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
   const [motifZone, setMotifZone] = useState(product.motifZone || null); // zone de gravure verres/carafe (repli code, sinon réglage admin)
   const [motifAspect, setMotifAspect] = useState(1); // hauteur/largeur du motif posé (cadre fixe)
+  const [adminZones, setAdminZones] = useState({ face: null, fond: null }); // cadres photo (face/fond) réglés dans l'admin (produits zoneAdmin)
   const [adminTextZones, setAdminTextZones] = useState(null); // points Nom/Date réglés dans l'admin
   const [crystalPreviewActive, setCrystalPreviewActive] = useState(true); // affiche l'aperçu OU les photos produit // placement du texte sur l'aperçu cristal
   const [photoLayoutFond, setPhotoLayoutFond] = useState(null); // idem côté fond (mode "les deux")
@@ -190,6 +191,39 @@ export default function ProductDetail({ product }) {
       .catch(() => {});
   }, [product.slug, product.styleImages]);
 
+  // Cadres PHOTO (face + fond) réglés dans l'admin pour les produits `zoneAdmin`
+  // (verre à cocktail) : un cadre activé remplace `engrave` / `engraveFond` du
+  // code, et la photo du client est bornée en largeur ET en hauteur au cadre.
+  useEffect(() => {
+    if (!product.zoneAdmin) return;
+    const toCfg = (z, base) => {
+      if (!z || !z.on) return null;
+      const w = Math.max(0.04, Math.min(1, Number(z.width) / 100));
+      const h = Math.max(0.04, Math.min(1, Number(z.height) / 100));
+      const mmPerFrac = base && base.widthMm && base.maxWidthFrac ? base.widthMm / base.maxWidthFrac : 0;
+      return {
+        ...(base || {}),
+        box: { left: Number(z.left) / 100, top: Number(z.top) / 100, width: w, height: h },
+        maxWidthFrac: w,
+        minWidthFrac: Math.max(0.03, w * 0.3),
+        maxHeightFrac: h,
+        minHeightFrac: Math.max(0.03, h * 0.3),
+        widthMm: mmPerFrac ? Math.round(mmPerFrac * w * 10) / 10 : (base?.widthMm || 0),
+        fromAdmin: true,
+      };
+    };
+    fetch("/api/crystal-zones")
+      .then((r) => r.json())
+      .then((d) => {
+        const zs = d.zones || {};
+        setAdminZones({
+          face: toCfg(zs[product.slug], product.engrave),
+          fond: toCfg(zs[`${product.slug}#fond`], product.engraveFond || product.engrave),
+        });
+      })
+      .catch(() => {});
+  }, [product.slug, product.zoneAdmin, product.engrave, product.engraveFond]);
+
   // Valeurs par défaut des champs (ex. texte + date pré-remplis et actifs).
   useEffect(() => {
     const defaults = {};
@@ -214,7 +248,7 @@ export default function ProductDetail({ product }) {
   // silhouette. ⚠️ Dans ce composant, toujours passer par ces deux constantes,
   // jamais par product.engraveImage / product.engrave.
   const engraveImage = variant?.engraveImage || taille?.engraveImage || product.engraveImage;
-  const engraveCfg = variant?.engrave || taille?.engrave || product.engrave;
+  const engraveCfg = adminZones.face || variant?.engrave || taille?.engrave || product.engrave;
 
   // Changer de taille : mêmes photos que cette taille, même format (unité / lot)
   // que celui déjà choisi, et l'aperçu re-saute sur la bonne photo vierge.
@@ -526,7 +560,8 @@ export default function ProductDetail({ product }) {
   const dualMode = emplacement === "deux"; // graver les DEUX côtés (face + fond)
   const side = dualMode ? activeSide : (emplacement === "fond" ? "fond" : "face"); // côté affiché
   const isFond = side === "fond";
-  const editCfg = isFond && product.engraveFond ? product.engraveFond : engraveCfg;
+  const fondCfg = adminZones.fond || product.engraveFond || null;
+  const editCfg = isFond && fondCfg ? fondCfg : engraveCfg;
   const mainSrc = images[activeImg];
   // Vidéo produit (mp4) : ajoutée EN PREMIER dans la galerie si le produit en a une.
   // Pour les produits sans vidéo, galleryMedia === images (aucun changement).
@@ -916,7 +951,7 @@ export default function ProductDetail({ product }) {
         // Base stable pour composer : le verre gravable propre (jamais une photo d'exemple).
         const glass = engraveImage || images[0];
         const faceBox = (engraveCfg && engraveCfg.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
-        const fondBox = (product.engraveFond && product.engraveFond.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
+        const fondBox = (fondCfg && fondCfg.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
         // FACE : photo envoyée, sinon design image choisi (Fête des pères) — version foncée.
         const faceArt = photoSrc || (dsg ? dsg.dark : null);
         // Montage libre (motif n° / photo + texte placés par la cliente) : aperçu

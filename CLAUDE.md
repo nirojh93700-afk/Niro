@@ -853,7 +853,30 @@ ne descend jamais sous zéro.
   ouverte du 14/09, à trancher par le gérant.
 - Saisonnalité : recherches « cadeau personnalisé » +145 % déc., +138 % mai, +129 % fév.
 
-## 🍹 NOUVEAU PRODUIT — VERRE À COCKTAIL GRAVÉ (25/09/2026, MAQUETTE ENREGISTRÉE « on reprendra après » — RIEN EN LIGNE)
+## 🍹 VERRE À COCKTAIL GRAVÉ — ✅ EN LIGNE LE 26/09/2026 (`verre-a-cocktail-grave`, ordre « vas-y tu publies »)
+> **État au 26/09 soir** : fiche publiée, reproduction EXACTE de la maquette (8 photos dans l'ordre
+> de la maquette, recadrées en carré 900×900 ; `photoContain` retiré — le whisky ne l'a pas).
+> Gabarit = verre à whisky portrait (face / fond / les deux +7 €, photo + texte +3 € + date + décor + police).
+> Incident du jour : la fiche n'avait PAS de `engraveImage` → l'éditeur photo ne s'affichait jamais
+> côté face (« rien ne se passe »). Corrigé (commit `dc883e6`). Le gérant trouvait ensuite la photo
+> encore mal placée / trop grande → **il veut régler les cadres LUI-MÊME dans l'admin** (« tu me mets
+> dans l'admin comme pour les autres, je vais le paramétrer, je te dis, tu valides ») :
+> - `zoneAdmin: true` sur le produit → il apparaît DEUX fois dans **Gestion → Réglages produits →
+>   « Réglage cristaux, verres & carafe »** (`/gestion/cristal-reglage`) : « — face avant » (clé
+>   `verre-a-cocktail-grave`) et « — fond du verre » (clé `verre-a-cocktail-grave#fond`, photo
+>   `fondImage`). Il glisse/redimensionne le cadre, coche **« Utiliser ce cadre sur la fiche »**,
+>   Enregistre. Tant que la case est décochée, la fiche garde `engrave` / `engraveFond` du code.
+> - Côté fiche (`ProductDetail.jsx`, état `adminZones`, lecture `/api/crystal-zones`) : un cadre
+>   actif remplace la config du code (`box`, `maxWidthFrac` = largeur du cadre, mm recalés) et
+>   porte `fromAdmin:true` → `PhotoEngraveLayer` borne alors la photo **en largeur ET en hauteur**
+>   (`maxHeightFrac` enfin utilisé, uniquement pour ces cadres) : une photo verticale ne déborde plus.
+>   Les autres verres (whisky, vin, flûte, carafe) ne changent pas.
+> - Photo très verticale sans cadre admin = déborde en hauteur sur TOUS les verres (le site ne borne
+>   que la largeur) — vérifié identique sur le whisky. Whisky portrait : `maxWidthFrac` 0,50 → 0,30
+>   le 26/09 à sa demande (Fête des pères NON touché : pas d'upload libre).
+> - **Toujours pas de vraie photo GRAVÉE** de ce verre (verre reçu 29/09–1/10) : la fiche montre des
+>   photos d'exemple de la maquette. Vidéo impossible tant qu'il n'y a pas de photo gravée (règle).
+### (historique) NOUVEAU PRODUIT — VERRE À COCKTAIL GRAVÉ (25/09/2026, maquette enregistrée)
 > Demande du gérant : « j'aimerais ajouter un produit » puis captures Metro (commande passée) +
 > « c'est pas ces photos que tu dois mettre... fais une maquette, je te donnerai les vraies photos,
 > on va le faire comme pour le verre à whisky ». Fiche construite en reprenant le gabarit EXACT du

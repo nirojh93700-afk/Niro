@@ -24,8 +24,24 @@ const START = {
   "carafe-a-whisky-gravee": { left: 37, top: 48, width: 26, height: 22, rotation: 0, ry: 0 },
   "verre-a-vin-grave": { left: 36, top: 17, width: 28, height: 24, rotation: 0, ry: 0 },
   "flute-a-champagne-gravee": { left: 40, top: 30, width: 20, height: 22, rotation: 0, ry: 0 },
+  // Verre à cocktail : cadre PHOTO (logo / photo du client), face avant et fond.
+  "verre-a-cocktail-grave": { left: 36, top: 36, width: 28, height: 38, rotation: 0, ry: 0 },
+  "verre-a-cocktail-grave#fond": { left: 30, top: 30, width: 40, height: 40, rotation: 0, ry: 0 },
 };
-function isGlass(p) { return Boolean(p.styleImages && p.engrave); }
+// Verres/carafe réglables ici : modèles numérotés (styleImages) OU cadre photo (zoneAdmin).
+function isGlass(p) { return Boolean(p.engrave && (p.styleImages || p.zoneAdmin)); }
+// Un produit `zoneAdmin` avec une photo du fond donne DEUX entrées : face + fond
+// (le fond est enregistré sous la clé « <slug>#fond »).
+function expandZoneProducts(list) {
+  const out = [];
+  for (const p of list) {
+    if (p.zoneAdmin && p.fondImage) {
+      out.push({ ...p, name: `${p.name} — face avant` });
+      out.push({ ...p, slug: `${p.slug}#fond`, name: `${p.name} — fond du verre`, engraveImage: p.fondImage, styleImages: undefined });
+    } else out.push(p);
+  }
+  return out;
+}
 // Cristal : le fond de l'aperçu doit être le BLOC VIERGE (pas une image déjà gravée).
 function blockImg(p) { return (p.images || []).find((i) => /bloc/.test(i)) || ""; }
 function defZone(p) {
@@ -44,7 +60,7 @@ function zoneTransform(z) {
 }
 
 export default function CristalReglage() {
-  const cristaux = useMemo(() => products.filter((p) => p.crystal3d || (p.styleImages && p.engrave)), []);
+  const cristaux = useMemo(() => expandZoneProducts(products.filter((p) => p.crystal3d || isGlass(p))), []);
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [msg, setMsg] = useState("");
@@ -192,7 +208,11 @@ export default function CristalReglage() {
           ))}
         </div>
       )}
-      {isGlass(product) && (
+      {isGlass(product) && product.zoneAdmin ? (
+        <p style={{ fontSize: ".82rem", color: "#8a6d1f", background: "#fff7e6", border: "1px solid var(--gold-l, #e2c67e)", borderRadius: 8, padding: "8px 10px", margin: "0 0 12px" }}>
+          Cadre de la <b>photo / du logo du client</b> sur {/#fond$/.test(sel) ? <>la <b>photo du fond</b> du verre</> : <>le <b>verre vide</b> (face avant)</>}. Une fois le cadre <b>activé</b> ci-dessous, la photo du client se place et se règle <b>dans ce cadre</b>, en largeur ET en hauteur — elle ne peut plus en sortir. Charge une photo témoin pour viser juste.
+        </p>
+      ) : isGlass(product) && (
         <p style={{ fontSize: ".82rem", color: "#8a6d1f", background: "#fff7e6", border: "1px solid var(--gold-l, #e2c67e)", borderRadius: 8, padding: "8px 10px", margin: "0 0 12px" }}>
           Placement sur le <b>verre vide</b> — c'est la seule photo où le client verra son motif. Les autres photos (ambiance, déjà gravées) restent des photos de présentation, on n'y touche pas.
         </p>
@@ -280,7 +300,9 @@ export default function CristalReglage() {
         {isGlass(product) && (
           <label style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: "1.5px solid " + (z?.on ? "#b0852f" : "var(--line)"), borderRadius: 10, background: z?.on ? "rgba(201,162,75,.12)" : "var(--card)", cursor: "pointer", fontSize: ".9rem" }}>
             <input type="checkbox" checked={Boolean(z?.on)} onChange={(e) => setZ({ on: e.target.checked ? 1 : 0 })} />
-            <span>Afficher ce cadre sur la fiche produit (le motif choisi s'y posera). Décoché = placement libre par le client.</span>
+            <span>{product.zoneAdmin
+              ? "Utiliser ce cadre sur la fiche produit : la photo / le logo du client se place et se règle dedans (largeur et hauteur). Décoché = réglage par défaut du code."
+              : "Afficher ce cadre sur la fiche produit (le motif choisi s'y posera). Décoché = placement libre par le client."}</span>
           </label>
         )}
         {/* Points de gravure Nom / Date par modèle (verres/carafe) */}

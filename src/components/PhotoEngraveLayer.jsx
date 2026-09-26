@@ -61,16 +61,25 @@ function whiteFrost(img) {
 export default function PhotoEngraveLayer({ photoSrc, cfg, onChange, light = false }) {
   const box = cfg?.box || { top: 0.3, left: 0.2, width: 0.6, height: 0.45 };
   const widthMm = cfg?.widthMm || 65;
-  const maxW = cfg?.maxWidthFrac || box.width;
-  const minW = cfg?.minWidthFrac || 0.10;
+  const maxWCfg = cfg?.maxWidthFrac || box.width;
+  const minWCfg = cfg?.minWidthFrac || 0.10;
 
   const ref = useRef(null);
   const drag = useRef(null);
   const [aspect, setAspect] = useState(1); // hauteur / largeur de l'image
   const [displaySrc, setDisplaySrc] = useState(photoSrc); // image affichée (frostée si fond)
+  // Cadre réglé dans l'admin (fromAdmin) : la photo doit tenir dans le cadre en
+  // largeur ET en hauteur — une photo verticale est donc bornée par la hauteur.
+  const maxHCfg = cfg?.fromAdmin && cfg?.maxHeightFrac ? cfg.maxHeightFrac : 0;
+  const maxW = maxHCfg ? Math.max(0.02, Math.min(maxWCfg, maxHCfg / (aspect || 1))) : maxWCfg;
+  const minW = Math.min(minWCfg, maxW);
   const [size, setSize] = useState(minW + (maxW - minW) * 0.75); // grande par défaut (bien visible)
   const [cx, setCx] = useState(box.left + box.width / 2);
   const [cy, setCy] = useState(box.top + box.height / 2);
+  useEffect(() => {
+    if (size > maxW) setSize(maxW);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxW]);
 
   // Fond du verre désormais CLAIR : on grave en foncé comme sur la face
   // (photo telle quelle, style de gravure via le CSS .ee-logo). Simple et net.

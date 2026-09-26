@@ -2293,10 +2293,15 @@ export const products = [
     preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
     previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
     engraveImage: "/produits/verre_a_cocktail_vierge.jpg",
+    // Zones (face + fond) réglables par le gérant dans Gestion → Réglages →
+    // « Réglage cristaux, verres & carafe » : un cadre activé là-bas remplace
+    // `engrave` / `engraveFond` ci-dessous (largeur ET hauteur respectées).
+    zoneAdmin: true,
     engrave: {
       box: { top: 0.36, left: 0.36, width: 0.28, height: 0.38 },
-      widthMm: 42,
-      heightMm: 42,
+      // Étalonnage : le verre (Ø 52 mm) occupe 44 % de la photo carrée → 26 % ≈ 31 mm.
+      widthMm: 31,
+      heightMm: 31,
       maxWidthFrac: 0.26,
       minWidthFrac: 0.10,
       maxHeightFrac: 0.26,
