@@ -1455,7 +1455,8 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   #nivcreation #<thème> #<produit> #<produit> #cadeaupersonnalise #faitmainenfrance #gravure #<…> #<…> #ideecadeau
   ```
   · **La numérotation CONTINUE** d'une livraison à l'autre (1-6 le 02-06/09, 7-9 le 22/09,
-    10-11 le 25/09).
+    10-11 le 25/09, **12 verres et 13 Noël le 26/09** — la 13 = toutes familles, 13 pièces
+    gravées, script `pub_cristaux_silencieuse.py` entrée 13 ; prochaine = 14).
   · Le titre liste **les produits de la vidéo entre parenthèses**.
   · ⚠️ **DEPUIS LE 25/09/2026 : 5 HASHTAGS, PAS 10** (gérant : « les tags les plus importants
     qui fonctionnent bien sur les réseaux sociaux, et n'en mets que cinq »). Sur UNE ligne,

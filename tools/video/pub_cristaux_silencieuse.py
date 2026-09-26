@@ -70,6 +70,25 @@ VIDEOS = {
     ('verre_a_whisky_logo_bourbon.webp', 'Verre à whisky', 'Un logo, gravé net'),
     ('verre_a_whisky_card.jpg', 'Verre à whisky', 'Le cadeau qui fait mouche'),
   ]),
+  # NOEL (26/09/2026, « une vidéo pour préparation de Noël et des cadeaux pour Noël ») :
+  # toutes familles, UNIQUEMENT des pièces gravées (planche contact scratchpad/planche-noel.jpg
+  # regardée le 26/09). Ecartes : bracelet-homme-plaque-1 (VIERGE), cle USB (boite vierge),
+  # arbres de vie (pas de prenom visible). Tous dans NOEL_SLUGS (en vente, /offrir/noel).
+  13: ("Noël 2026 — cadeaux gravés", "Ce Noël, offrez un cadeau unique", "noel-cadeaux-graves", [
+    ('cristal-h-famille.jpg', 'Cristal photo 3D', 'Toute la famille, gravée dans le cristal'),
+    ('collier-coeur-grave-1.jpg', 'Collier Cœur gravé', 'Deux initiales, une date'),
+    ('verre_a_whisky_exemple_face.jpg', 'Verre à whisky gravé', 'Sa photo, gravée dans le verre'),
+    ('veilleuse-prenom-1.jpg', 'Veilleuse prénom', 'Son prénom, allumé chaque soir'),
+    ('collier-double-coeur-3.jpg', 'Collier Double Cœur', 'Un mot gravé, rien que pour elle'),
+    ('carafe_gravee.jpg', 'Carafe à whisky gravée', 'Le cadeau de Noël pour lui'),
+    ('bracelet-cordon-plaque-4.jpg', 'Bracelet cordon à plaque', 'Ses initiales, à porter tous les jours'),
+    ('cristal-v-enfant-chien.jpg', 'Cristal photo 3D', 'Le meilleur ami, en relief'),
+    ('collier-coeur-plaques-1.jpg', 'Collier Cœur & plaques', 'Les prénoms de ses enfants'),
+    ('verre_vin_exemple_dale.jpg', 'Verre à vin gravé', 'Monogramme et année'),
+    ('porte-cles-rect-demo-chien.jpg', 'Porte-clés cristal LED', 'Sa photo, dans la lumière'),
+    ('bracelet-femme-acier-grave.jpg', 'Bracelet Femme Acier', 'Un prénom, gravé fin'),
+    ('couverts_enfants_ex_prenom.jpg', 'Couverts enfant gravés', 'Son premier Noël, son prénom'),
+  ]),
 }
 SEG_DUR, INTRO_DUR, OUTRO_DUR = 2.2, 1.9, 2.3
 
@@ -158,4 +177,4 @@ def rendre(num):
     mi.resize((360, 640)).save(f"{OUT}/apercu-{nom}.jpg", quality=80)
     print(f"Vidéo {num} — {theme} : {sum(s[3] for s in segs):.1f} s, {os.path.getsize(final)//1024} Ko → {final}")
 
-for n in (int(a) for a in (sys.argv[1:] or ["10", "11", "12"])): rendre(n)
+for n in (int(a) for a in (sys.argv[1:] or ["10", "11", "12", "13"])): rendre(n)
