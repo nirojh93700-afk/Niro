@@ -1,5 +1,5 @@
 import { isAdmin, getProspectsAll, upsertProspects, updateProspect, deleteProspect, getCommsFor, prospectPourEnvoi, markProspectSent, logComm } from "@/lib/stock";
-import { lireListe, PROSPECTS_LOT1, PROSPECTS_LOT2, PROSPECTS_LOT3, PROSPECT_STATUTS, PROSPECT_SUJET, messageProspect } from "@/lib/prospects";
+import { lireListe, PROSPECTS_LOT1, PROSPECTS_LOT2, PROSPECTS_LOT3, PROSPECTS_LOT4, PROSPECTS_LOT5, PROSPECTS_LOT6, PROSPECT_STATUTS, PROSPECT_SUJET, messageProspect } from "@/lib/prospects";
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
 import { BRAND } from "@/lib/email";
 
@@ -59,6 +59,9 @@ export async function POST(req) {
   if (action === "lot1") return Response.json({ ok: true, ...(await upsertProspects(PROSPECTS_LOT1)) });
   if (action === "lot2") return Response.json({ ok: true, ...(await upsertProspects(PROSPECTS_LOT2)) });
   if (action === "lot3") return Response.json({ ok: true, ...(await upsertProspects(PROSPECTS_LOT3)) });
+  if (action === "lot4") return Response.json({ ok: true, ...(await upsertProspects(PROSPECTS_LOT4)) });
+  if (action === "lot5") return Response.json({ ok: true, ...(await upsertProspects(PROSPECTS_LOT5)) });
+  if (action === "lot6") return Response.json({ ok: true, ...(await upsertProspects(PROSPECTS_LOT6)) });
   if (action === "import") {
     const list = lireListe(body?.texte);
     if (!list.length) return Response.json({ error: "Aucune adresse e-mail trouvée dans le texte collé." }, { status: 400 });

@@ -77,4 +77,16 @@ ok(new Set(PROSPECTS_LOT3.map((p) => p.email)).size === PROSPECTS_LOT3.length, "
 const emailsPrecedents = new Set([...PROSPECTS_LOT1, ...PROSPECTS_LOT2].map((p) => p.email));
 ok(!PROSPECTS_LOT3.some((p) => emailsPrecedents.has(p.email)), "lot 3 : aucune adresse déjà dans les lots 1/2");
 ok(PROSPECTS_LOT3.every((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email) && p.ville && p.name), "lot 3 : e-mail, ville, nom présents partout");
+
+// Lots 4, 5, 6 (26/09/2026, « et aussi dans des petites villes »).
+const { PROSPECTS_LOT4, PROSPECTS_LOT5, PROSPECTS_LOT6 } = await import("../../src/lib/prospects.js");
+for (const [nom, lot] of [["4", PROSPECTS_LOT4], ["5", PROSPECTS_LOT5], ["6", PROSPECTS_LOT6]]) {
+  ok(lot.length > 0, `lot ${nom} : non vide (${lot.length})`);
+  ok(new Set(lot.map((p) => p.email)).size === lot.length, `lot ${nom} : aucun doublon interne`);
+  ok(lot.every((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email) && p.ville && p.name), `lot ${nom} : e-mail, ville, nom présents partout`);
+}
+const emailsAvant = new Set([...PROSPECTS_LOT1, ...PROSPECTS_LOT2, ...PROSPECTS_LOT3].map((p) => p.email));
+const emails456 = [...PROSPECTS_LOT4, ...PROSPECTS_LOT5, ...PROSPECTS_LOT6].map((p) => p.email);
+ok(!emails456.some((e) => emailsAvant.has(e)), "lots 4/5/6 : aucune adresse déjà dans les lots 1/2/3");
+ok(new Set(emails456).size === emails456.length, "lots 4/5/6 : aucun doublon entre eux");
 console.log(`✔ ${n} vérifications au vert`);

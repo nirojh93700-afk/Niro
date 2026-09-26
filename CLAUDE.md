@@ -889,6 +889,17 @@ ne descend jamais sous zéro.
   leur `type` : Le Bistrot des Jacobins (Le Mans, adresse iCloud) et Merci (Orléans, vu seulement sur
   Facebook). Total des 3 lots : **237 établissements.** `npm run test-prospects` (43 vérifications).
   Versailles n'a pas pu être cherchée (quota de recherche épuisé) — à refaire si besoin d'un lot 4.
+- **✅ LOTS 4, 5 ET 6 AJOUTÉS (26/09/2026, « importe le lot 3 et lot 4 et 5 » puis « et aussi dans des
+  petites villes »)** : `PROSPECTS_LOT4` (38, villes moyennes), `PROSPECTS_LOT5` (52, villes moyennes),
+  `PROSPECTS_LOT6` (39, **petites villes touristiques/viticoles** : Honfleur, Saint-Tropez, Sarlat,
+  Beaune, Collioure, Gordes, Uzès, Saint-Émilion, Riquewihr, Arcachon). Boutons dans
+  `/gestion/restaurants`. **Total des 6 lots : 366 établissements.** `npm run test-prospects`
+  (54 vérifications, dont : aucun doublon entre les 6 lots). Toujours NON VÉRIFIÉES.
+  Recherches très limitées par le quota de recherche web (souvent coupées à 10-20 adresses sur 25
+  visées par groupe) — plusieurs villes prévues n'ont donné aucun résultat (Dunkerque, Saint-Nazaire,
+  Valence, Vannes, Saint-Malo, Angoulême, Mérignac) : à reprendre dans une nouvelle session si besoin.
+  Quelques fiches gardées avec un avertissement dans leur `type` (domaine tiers, adresse peu
+  explicite, localisation à confirmer) — le gérant les retire d'un clic s'il préfère ne pas les garder.
 - **Tarifs pro SAUVEGARDÉS** (`TARIFS_PRO`, livraison comprise, dès 12 / dès 24 verres) — envoyés
   seulement sur demande. Analyse port/marge dans le doc (grille « port offert dès 60 € » abandonnée : trop coûteuse).
 - **✅ ENVOI GROUPÉ (26/09 soir, demande du gérant : « dès que les mails sont prêts, on envoie pour
