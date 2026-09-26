@@ -583,6 +583,29 @@ Défaut technique ou de gravure
 - Échange standard sans frais (renvoi du produit défectueux requis).`,
   },
 
+  "verre-a-cocktail-grave": {
+    material: `Verre à cocktail, forme haute
+
+- Verrerie professionnelle, contenance 17 cl, hauteur environ 12,5 cm, diamètre environ 5,2 cm.
+- Surface lisse idéale pour une gravure laser nette et précise, sur la face ou au fond du verre.
+- Va au lave-vaisselle (la gravure ne s'efface pas).`,
+    usage: `Personnalisation
+- Photo, dessin, logo ou texte au choix, dans la police de votre choix.
+- Gravure sur la face avant, au fond du verre (vu à travers le verre), ou les deux (+7 €).
+- Option dessin / logo : décrivez votre idée pour générer un aperçu, ou envoyez votre propre image.
+
+Entretien
+- Lavage à la main recommandé pour préserver la brillance, lave-vaisselle possible.
+- Évitez les chocs thermiques (ne pas passer du congélateur à l'eau chaude).`,
+    returns: `Produit personnalisé après gravure — non remboursable
+
+Annulation
+- Dans les 24 h suivant la commande, avant le démarrage de la gravure : annulation possible.
+- Après gravure : non remboursable (personnalisation unique, article L221-28).
+
+Un souci à la réception ?
+- Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
+  },
   "verre-a-whisky-grave": {
     material: `Verre à whisky à base épaisse
 

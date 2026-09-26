@@ -9,6 +9,7 @@
 export const NOUVEAU_JOURS = 30;
 
 export const PRODUCT_DATES = {
+  "verre-a-cocktail-grave": "2026-09-26",
   "collier-enveloppe-message-secret": "2026-06-02",
   "collier-medaillon-coeur-ouvrable": "2026-06-02",
   "bracelet-homme-identite-gourmette": "2026-06-02",

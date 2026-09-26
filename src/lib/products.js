@@ -32,6 +32,7 @@ export const SUBCATEGORIES = {
   // Verres gravés : par type de verre (on ajoute champagne/bière/vin quand les produits arrivent).
   verres: [
     { slug: "whisky", label: "Verre à whisky" },
+    { slug: "cocktail", label: "Verre à cocktail" },
     { slug: "vin", label: "Verre à vin" },
     { slug: "champagne", label: "Flûte à champagne" },
     { slug: "carafes", label: "Carafe" },
@@ -2273,6 +2274,102 @@ export const products = [
 <li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre</li>
 <li><strong>Personnalisation :</strong> un modèle au choix (ou vos propres textes) + prénom / date, ou une lettre fleurie</li>
 <li><strong>Hauteur :</strong> environ 9 cm</li>
+</ul>`,
+  },
+  {
+    slug: "verre-a-cocktail-grave",
+    badge: "Nouveau",
+    hidden: true, // MASQUÉ : verre pas encore reçu, aucune vraie photo gravée (règle du 22/09 — jamais un produit vierge en avant)
+    cardImage: "/produits/verre_a_cocktail_garni.jpg",
+    name: "Verre à cocktail personnalisé",
+    weight: 550, // verre + emballage protégé (fragile)
+    pickup: false,
+    letter: false, // colis : lourd et fragile
+    freeShipThreshold: 60, // seuil commun à tous les verres/carafe (01/09/2026)
+    perGlassLot: true, // lot 2/4 : chaque verre peut être gravé différemment (photo/texte)
+    preview: { top: "44%", bottom: "30%", left: "26%", right: "26%" },
+    previewPhoto: { top: "30%", bottom: "20%", left: "15%", right: "15%" },
+    engrave: {
+      box: { top: 0.16, left: 0.24, width: 0.52, height: 0.58 },
+      widthMm: 45,
+      heightMm: 45,
+      maxWidthFrac: 0.46,
+      minWidthFrac: 0.10,
+      maxHeightFrac: 0.46,
+      minHeightFrac: 0.10,
+      diameterMm: 52,
+      glassHeightMm: 125,
+    },
+    // Gravure au fond du verre : vue de dessus/dessous, zone ronde (la base).
+    fondImage: "/produits/verre_a_cocktail_fond_vierge.jpg",
+    engraveFond: {
+      box: { top: 0.28, left: 0.28, width: 0.44, height: 0.44 },
+      widthMm: 38,
+      heightMm: 38,
+      maxWidthFrac: 0.44,
+      minWidthFrac: 0.08,
+      maxHeightFrac: 0.44,
+      minHeightFrac: 0.08,
+      round: true,
+    },
+    personalizationFields: [
+      { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", default: "face", options: [
+        { value: "face", label: "Sur la face avant" },
+        { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
+        { value: "deux", label: "Les deux : face + fond (+7 €)" },
+      ] },
+      { key: "photo", type: "photo", label: "Envoyez votre logo / photo (facultatif)", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
+      { key: "texte", label: "Ajouter un texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true },
+      { key: "texte2", label: "Date (sous la photo)", placeholder: "Ex : 12.06.2024", maxLength: 30, optional: true },
+      { key: "decor", type: "select", label: "Décor autour du texte ?", optional: true, options: [
+        { value: "", label: "Aucun" },
+        { value: "★", label: "Étoiles  ★ texte ★" },
+        { value: "♥", label: "Cœurs  ♥ texte ♥" },
+        { value: "✿", label: "Fleurs  ✿ texte ✿" },
+        { value: "◆", label: "Losanges  ◆ texte ◆" },
+        { value: "•", label: "Points  • texte •" },
+      ] },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+      { key: "note-deux", type: "note", showIfEmplacement: "deux", text: "Vous avez choisi de graver les DEUX côtés. Ci-dessus, réglez la gravure de la FACE. Ci-dessous, ajoutez la photo/le texte pour le FOND du verre (gravé centré au fond)." },
+      { key: "photoFond", type: "photo", label: "Photo pour le FOND du verre", optional: true, showIfEmplacement: "deux", text: "2e gravure : cette photo sera gravée au fond du verre (centrée)." },
+      { key: "texteFond", label: "Texte pour le fond (facultatif)", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux" },
+      { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
+    ],
+    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · gravure face+fond +7 €
+    title: "Verre à cocktail personnalisé — photo ou texte gravé, cadeau original",
+    category: "verres",
+    subcategory: "cocktail",
+    type: "Verre photo personnalisé",
+    tagline: "Votre photo, un prénom, une phrase — ou le logo de votre bar, restaurant ou entreprise — gravés sur un verre à cocktail.",
+    personalizable: true,
+    personalizationLabel: "Votre photo à graver (+ texte, date ou logo en option)",
+    images: [
+      "/produits/verre_a_cocktail_garni.jpg",
+      "/produits/verre_a_cocktail_ambiance.jpg",
+      "/produits/verre_a_cocktail_vierge.jpg",
+      "/produits/verre_a_cocktail_fond_vierge.jpg",
+    ],
+    variants: [
+      { id: "verre-cocktail-grave", title: "À l'unité", price: 17.90, weight: 550 },
+      { id: "verre-cocktail-grave-2", stockId: "verre-cocktail-grave-2", title: "Lot de 2", price: 33.90, weight: 1000 },
+      { id: "verre-cocktail-grave-4", stockId: "verre-cocktail-grave-4", title: "Lot de 4 — livraison offerte", price: 64.90, weight: 1800 },
+    ],
+    descriptionHtml: `<p><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong> Un prénom, une date, une phrase qui fait sourire, votre propre photo — ou le logo de votre bar, restaurant ou entreprise : votre idée est gravée au laser sur le verre — un cadeau qui change du whisky, personnel ou professionnel.</p>
+<p>Gravure réalisée au laser sur un verre haut et fin, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour un apéritif entre amis, un EVJF, un anniversaire, une pendaison de crémaillère ou un cadeau d'entreprise.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Verre :</strong> verrerie professionnelle, forme haute, contenance 17 cl</li>
+<li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre (vu à travers le verre) — les deux possibles (+7 €) — votre photo, et/ou texte, dessin ou logo</li>
+<li><strong>Personnalisation :</strong> votre photo ou texte au choix (8 polices), dessin via l'assistant</li>
+<li><strong>Hauteur :</strong> environ 12,5 cm — diamètre environ 5,2 cm</li>
+</ul>
+<h3>Points forts</h3>
+<ul>
+<li>Une idée qui change des verres à whisky habituels</li>
+<li>Gravure permanente, qui résiste au lave-vaisselle</li>
+<li>Aperçu en direct sur le verre avant de commander</li>
+<li>Emballage protégé pour un transport en toute sécurité</li>
+<li>Une idée cadeau originale, pour homme comme pour femme</li>
 </ul>`,
   },
   {
