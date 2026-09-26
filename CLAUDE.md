@@ -1495,8 +1495,15 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   · ⚠️ **Les emojis sont OBLIGATOIRES ici** — la règle « pas d'emojis » du §9 ne vaut que pour
     le CONTENU DU SITE, pas pour les légendes Instagram.
   · Pas de prix, jamais de nombre de produits, ne pas nommer le département de l'atelier.
-  · **Où retrouver les anciennes** : elles ne sont que dans le transcript de session
-    (`~/.claude/projects/-home-user-Niro/<session>.jsonl`) — chercher `#nivcreation`.
+  · 📁 **REGISTRE DES VIDÉOS = `docs/videos/REGISTRE-VIDEOS.md` (créé le 26/09/2026, demande du
+    gérant : « enregistrer ces vidéos et les tailles que tu me donneras avec les descriptions, je te
+    demanderai »)**. Chaque vidéo livrée y est consignée le jour même : fichiers dans `docs/videos/`
+    (`<n°>-<thème>-<L>x<H>.mp4`, version pleine qualité + version légère), durée, poids, produits,
+    description et hashtags **tels que livrés**. Quand il redemande une vidéo ou sa description :
+    lire le registre, renvoyer le fichier (`SendUserFile`) et la description à l'identique.
+  · **Les vidéos 1 à 13** ne sont PAS dans le dépôt (livrées avant le registre) : elles ne sont que
+    dans les transcripts des sessions (`~/.claude/projects/-home-user-Niro/<session>.jsonl`, chercher
+    `#nivcreation`) — le dire s'il les redemande, et proposer de les régénérer avec les scripts.
 - **CRÉDITS Higgsfield = payant** : ne JAMAIS lancer sans confirmer, annoncer le coût (`get_cost:true` preflight, ~7,5 crédits/clip 5 s), et attendre l'accord. Le montage gratuit (`pub_gratuite.py`) est la version par défaut.
 
 ---
