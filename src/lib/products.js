@@ -2118,9 +2118,12 @@ export const products = [
       box: { top: 0.15, left: 0.20, width: 0.60, height: 0.62 },
       widthMm: 65,
       heightMm: 65,
-      maxWidthFrac: 0.50,
+      // Resserré le 26/09/2026 (photo verticale qui débordait largement du
+      // verre par défaut, sur toute photo au format portrait — comportement
+      // qui n'existe pas sur les modèles "Fête des pères" (pas d'upload libre)).
+      maxWidthFrac: 0.30,
       minWidthFrac: 0.10,
-      maxHeightFrac: 0.50,
+      maxHeightFrac: 0.30,
       minHeightFrac: 0.10,
       diameterMm: 79,
       glassHeightMm: 95,
