@@ -139,10 +139,6 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* 🎄 BANDEAU NOËL — juste sous le logo et le menu, avant l'entrée cristal
-          (maquette v4 validée le 25/09/2026). Interrupteur : Apparence → « Bandeau Noël ». */}
-      {show.noel && <BandeauNoel />}
-
       {/* HERO — Cristal Photo 3D (produit phare) */}
       <section className="cr-hero">
         <style>{`
@@ -246,19 +242,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 🎄 SÉLECTION DE NOËL — 5 produits, avant « Vient d'arriver » (maquette v4). */}
-      {show.noel && (
-        <BandeauAccueil
-          eyebrow="Sélection de Noël"
-          title="Les cadeaux qu'on grave le plus en décembre"
-          text="Cinq idées, gravées à la commande."
-          linkHref="/offrir/noel"
-          linkLabel="Toute la sélection"
-          items={noelItems}
-          cinq
-        />
-      )}
-
       {/* VIENT D'ARRIVER — les 4 derniers produits ajoutés (automatique, par date) */}
       {show.newArrivals && (
         <BandeauAccueil
@@ -280,6 +263,22 @@ export default async function HomePage() {
           linkHref="/boutique/verres"
           linkLabel="Voir tous les verres & carafes"
           items={verresItems}
+          cinq
+        />
+      )}
+
+      {/* 🎄 NOËL — bandeau + sélection, JUSTE AVANT « Explorez nos collections »
+          (demande du gérant, 26/09/2026 : « au lieu de mettre tout en haut »).
+          Interrupteur : Apparence → « Bandeau Noël ». */}
+      {show.noel && <BandeauNoel />}
+      {show.noel && (
+        <BandeauAccueil
+          eyebrow="Sélection de Noël"
+          title="Les cadeaux qu'on grave le plus en décembre"
+          text="Cinq idées, gravées à la commande."
+          linkHref="/offrir/noel"
+          linkLabel="Toute la sélection"
+          items={noelItems}
           cinq
         />
       )}
