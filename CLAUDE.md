@@ -45,6 +45,14 @@
   les envois programmés (`runScheduledJobs`). **Tout NOUVEAU canal d'e-mail client devra l'appeler
   aussi.** Jamais bloquant : si le jeton échoue, l'e-mail part sans bouton et la boîte surveillée
   rattrape les réponses classiques.
+- ⛔⛔ **RIEN N'EST POUSSÉ SUR LE SITE SANS SON « APPLIQUE » / « POUSSE » (rappel très ferme du
+  gérant, 26/09/2026, après incident)** : il a demandé « tu mets les cadeaux de Noël juste avant
+  Explorez nos collections » avec une capture → j'ai modifié `page.jsx` et POUSSÉ directement.
+  C'était une demande de MAQUETTE, comme toujours (« je t'ai pas dit de pousser, je t'ai dit de
+  faire une maquette… tu pousses rien sur le site sans me dire »). Annulé dans la minute (commit
+  `b54c164`, code identique à avant). **Une phrase qui décrit un changement du site = une maquette
+  à faire, JAMAIS un push.** Le push n'arrive QUE sur un mot explicite : « applique », « pousse »,
+  « mets en ligne ». Même quand le changement paraît minuscule ou déjà validé dans son principe.
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
@@ -877,6 +885,12 @@ ne descend jamais sous zéro.
 > · `src/components/home/BandeauNoel.jsx` — bandeau rouge de Noël & or « Ce Noël, offrez un cadeau
 >   unique », mosaïque 3×3 (cristal, verres, 5 bijoux GRAVÉS), **premier bloc de `page.jsx`**, donc
 >   juste sous le logo + menu, AVANT l'entrée cristal (inchangée) ; lien → `/offrir/noel`.
+>   🔜 **DÉPLACEMENT DEMANDÉ LE 26/09 — MAQUETTE SEULEMENT, PAS EN LIGNE** : le gérant veut le
+>   bandeau + la sélection **juste avant « Explorez nos collections »** (après « Verres & carafes »)
+>   au lieu de tout en haut. Maquette `docs/maquettes/noel-avant-collections.html` (artifact
+>   https://claude.ai/artifact/2nEdfPc1PAs5XeeGu2RowH). Attendre son
+>   « applique » : dans `page.jsx`, déplacer `{show.noel && <BandeauNoel />}` et le
+>   `<BandeauAccueil eyebrow="Sélection de Noël" …/>` juste avant `{/* CATÉGORIES */}`.
 > · « Sélection de Noël » = `<BandeauAccueil cinq>` (5 produits du catalogue en direct) juste AVANT
 >   « Vient d'arriver » dans `page.jsx`.
 > · **7ᵉ occasion `noel`** dans `src/lib/occasions.js` (`NOEL_SLUGS`, liste fermée de 18 produits,
