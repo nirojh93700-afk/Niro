@@ -884,6 +884,21 @@ ne descend jamais sous zéro.
   confirmer). `npm run test-prospects` (35 vérifications : dont aucun doublon entre les 2 lots).
 - **Tarifs pro SAUVEGARDÉS** (`TARIFS_PRO`, livraison comprise, dès 12 / dès 24 verres) — envoyés
   seulement sur demande. Analyse port/marge dans le doc (grille « port offert dès 60 € » abandonnée : trop coûteuse).
+- **✅ ENVOI GROUPÉ (26/09 soir, demande du gérant : « dès que les mails sont prêts, on envoie pour
+  tout ce qu'on a préparé »)** : bouton **« Envoyer à tous les établissements prêts »** en haut de
+  `/gestion/restaurants` (compte les établissements `statut:"a_contacter"` ET `verifie:true`). Un
+  clic = confirmation puis boucle `POST /api/admin/prospects {action:"envoyer-tous"}` (12 par appel,
+  `ENVOI_LOT`, revérifie STOP juste avant chaque envoi) jusqu'à épuisement, avec un décompte affiché.
+  **C'est le SEUL geste qui envoie réellement** — importer un lot ou cocher « vérifiée » n'envoie
+  jamais rien. Reprend exactement le texte personnalisé (`messageProspect`) + le bouton Répondre +
+  la signature, comme un envoi individuel. Testé en local : échec propre si aucun service e-mail
+  connecté (rien marqué envoyé), STOP jamais dans le lot à envoyer.
+- ⛔ **Gmail reste en LECTURE SEULE pour moi (règle absolue du fichier)** : je ne crée ni libellé ni
+  filtre Gmail moi-même. Le gérant a créé son propre dossier Gmail pour les accusés de prospection ;
+  pour que Gmail y range tout seul les copies envoyées ET les réponses, lui donner la recette d'un
+  **filtre Gmail** (Rechercher → icône filtre → `subject:"Le logo de votre établissement, gravé sur
+  vos verres"` → Créer un filtre → Appliquer le libellé → choisir son dossier). Le sujet est FIXE
+  (`PROSPECT_SUJET`), donc un seul filtre attrape tout, sans toucher au code.
 - **Stockage** : section `prospects` (clé = e-mail) — `upsertProspects` / `updateProspect` / `deleteProspect` /
   `prospectPourEnvoi` / `markProspectSent` / `recordProspectReply` dans `stock.js` (écritures fraîches, clé par clé).
 - **Détection d'une réponse** (`trouverProspect`) : même adresse · même fil Gmail (`threadId` gardé à l'envoi,

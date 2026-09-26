@@ -38,6 +38,7 @@ export default function RestaurantsAdminPage() {
   const [texte, setTexte] = useState("");
   const [fil, setFil] = useState({}); // email → messages du dossier (ouvert)
   const [busy, setBusy] = useState(false);
+  const [envoi, setEnvoi] = useState(null); // { fait, echecs } pendant l'envoi groupé
 
   const load = useCallback(async (k) => {
     try {
@@ -77,6 +78,27 @@ export default function RestaurantsAdminPage() {
     if (row?.nonLu) post({ action: "update", email, nonLu: false });
   }
 
+  // Envoi groupé : n'envoie qu'aux établissements « à contacter » ET « vérifiée ».
+  // Boucle l'action tant qu'il en reste (ENVOI_LOT par appel côté serveur),
+  // avec un décompte affiché — c'est le SEUL geste qui envoie réellement.
+  async function envoyerTous() {
+    const prets = (d?.rows || []).filter((r) => r.statut === "a_contacter" && r.verifie);
+    if (!prets.length) { setInfo("Aucun établissement prêt (vérifié et à contacter)."); return; }
+    if (!confirm(`Envoyer le message à ${prets.length} établissement(s) vérifié(s) ? Impossible à annuler une fois parti.`)) return;
+    setEnvoi({ fait: 0, echecs: 0 });
+    let fait = 0, echecsTotal = 0, tours = 0;
+    while (tours++ < 40) { // garde-fou : jamais une boucle infinie
+      const j = await post({ action: "envoyer-tous" });
+      if (!j) break; // erreur réseau déjà affichée par post()
+      fait += (j.envoyes || []).length;
+      echecsTotal += (j.echecs || []).length;
+      setEnvoi({ fait, echecs: echecsTotal });
+      if (!j.restantes || ((j.envoyes || []).length === 0 && (j.echecs || []).length === 0)) break;
+    }
+    setInfo(`Envoi terminé : ${fait} e-mail(s) parti(s)${echecsTotal ? `, ${echecsTotal} échec(s)` : ""}.`);
+    setEnvoi(null);
+  }
+
   const lignes = useMemo(() => {
     const t = q.trim().toLowerCase();
     return (d?.rows || []).filter((r) => {
@@ -110,6 +132,22 @@ export default function RestaurantsAdminPage() {
 
       {err ? <p className="fv-err">{err}</p> : null}
       {info ? <p className="pr-info">{info}</p> : null}
+
+      {d ? (() => {
+        const prets = d.rows.filter((r) => r.statut === "a_contacter" && r.verifie).length;
+        return (
+          <div className="pr-box pr-envoi">
+            <strong>{prets}</strong> établissement(s) vérifié(s), prêt(s) à recevoir le message.
+            {envoi ? (
+              <p className="pr-small" style={{ margin: "8px 0 0" }}>Envoi en cours… {envoi.fait} parti(s){envoi.echecs ? `, ${envoi.echecs} échec(s)` : ""}.</p>
+            ) : (
+              <button className="pr-btn" style={{ marginLeft: 14 }} disabled={busy || !prets} onClick={envoyerTous}>
+                ✉ Envoyer à tous les établissements prêts ({prets})
+              </button>
+            )}
+          </div>
+        );
+      })() : null}
 
       <details className="pr-box">
         <summary>💶 Tarifs professionnels — à envoyer seulement s'ils les demandent</summary>
