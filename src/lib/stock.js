@@ -1179,8 +1179,8 @@ export async function getCommsMeta() {
 const PROSPECTS_MAX = 3000;
 const PROSPECT_STATUTS_OK = ["a_contacter", "envoye", "repondu", "stop"];
 
-export async function getProspectsAll() {
-  const data = await getCatalogRaw();
+export async function getProspectsAll(fresh = false) {
+  const data = await getCatalogRaw(fresh);
   return data.prospects || {};
 }
 

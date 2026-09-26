@@ -77,7 +77,11 @@ export async function POST(req) {
   // rappelle cette action tant qu'il reste des adresses (ENVOI_LOT à la fois).
   // ---------------------------------------------------------------------
   if (action === "envoyer-tous") {
-    const all = await getProspectsAll();
+    // Lecture FRAÎCHE obligatoire (incident du 26/09 : deux appels rapprochés
+    // arrivant sur deux instances serveur différentes voyaient chacun le cache
+    // local de 60 s, pas encore averti de l'envoi fait par l'autre — 20
+    // établissements ont reçu le message deux fois avant ce correctif).
+    const all = await getProspectsAll(true);
     const aFaire = Object.entries(all)
       .filter(([, p]) => p.statut === "a_contacter" && p.verifie)
       .slice(0, ENVOI_LOT);
@@ -100,7 +104,7 @@ export async function POST(req) {
         echecs.push({ email, error: r?.error || "échec" });
       }
     }
-    const restantes = Object.values(await getProspectsAll()).filter((p) => p.statut === "a_contacter" && p.verifie).length;
+    const restantes = Object.values(await getProspectsAll(true)).filter((p) => p.statut === "a_contacter" && p.verifie).length;
     return Response.json({ ok: true, envoyes, echecs, restantes });
   }
   return Response.json({ error: "Action inconnue." }, { status: 400 });

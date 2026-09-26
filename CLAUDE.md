@@ -893,6 +893,19 @@ ne descend jamais sous zéro.
   jamais rien. Reprend exactement le texte personnalisé (`messageProspect`) + le bouton Répondre +
   la signature, comme un envoi individuel. Testé en local : échec propre si aucun service e-mail
   connecté (rien marqué envoyé), STOP jamais dans le lot à envoyer.
+- 🔴 **INCIDENT DU PREMIER ENVOI RÉEL (26/09/2026, soir) — 20 établissements ont reçu le mail DEUX
+  FOIS.** Cause : `getProspectsAll()` lisait le catalogue avec le **cache 60 s** (même piège que
+  l'incident crystalZones en tête de fichier) — deux appels rapprochés de « envoyer-tous » arrivant
+  sur deux **instances serveur différentes** (Firebase App Hosting, plusieurs instances derrière un
+  load balancer) voyaient chacun leur cache LOCAL, pas encore averti de l'envoi fait par l'autre
+  instance quelques secondes avant → les mêmes 12 candidats resélectionnés. **Corrigé (même soir)** :
+  `getProspectsAll(fresh)` accepte maintenant un paramètre, et `envoyer-tous` l'appelle avec
+  `fresh:true` (lecture Firestore directe, jamais le cache) pour la sélection des candidats ET le
+  recomptage des restantes. ⛔ **Règle à réutiliser PARTOUT** : toute action qui LIT puis ÉCRIT en
+  boucle rapide (rappelée plusieurs fois de suite) doit lire en FRAIS (`getCatalogRaw(true)` ou
+  équivalent), jamais via le cache 60 s — le cache n'est sûr que pour un affichage isolé, pas pour
+  une sélection de candidats à traiter. 10 établissements n'avaient reçu AUCUN e-mail (jamais
+  sélectionnés) : rattrapés après le correctif, une seule fois chacun.
 - ⛔ **Gmail reste en LECTURE SEULE pour moi (règle absolue du fichier)** : je ne crée ni libellé ni
   filtre Gmail moi-même. Le gérant a créé son propre dossier Gmail pour les accusés de prospection ;
   pour que Gmail y range tout seul les copies envoyées ET les réponses, lui donner la recette d'un
