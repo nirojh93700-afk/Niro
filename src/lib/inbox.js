@@ -1,9 +1,10 @@
-import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor } from "@/lib/stock";
+import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply } from "@/lib/stock";
 import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
 import { BRAND } from "@/lib/email";
+import { trouverProspect } from "@/lib/prospects";
 
 // =============================================================================
 // BOÎTE MAIL SURVEILLÉE — « il prépare, le gérant décide », pour TOUS les e-mails
@@ -121,6 +122,10 @@ export async function syncInbox({ force = false } = {}) {
     const pendings = await listPendingReplies();
     const drafted = new Set(pendings.map((r) => r.gmailId).filter(Boolean));
     const own = ownAddresses();
+    // Restaurants & bars démarchés (prospection B2B, 26/09/2026) : leurs réponses
+    // sont rangées à part, jamais traitées comme une demande de cliente.
+    const prospects = await getProspectsAll().catch(() => ({}));
+    result.prospects = 0;
 
     // Commandes par adresse (la plus récente d'abord), hors tests.
     const orders = (await getSiteOrders(300).catch(() => [])).filter((o) => !o.test);
@@ -145,6 +150,17 @@ export async function syncInbox({ force = false } = {}) {
       // Seulement les e-mails liés au SITE : tout ce qui touche Etsy reste dans Etsy
       // (demande du gérant, 02/09/2026).
       const etsy = /etsy/i.test(String(msg.subject || "")) || /etsy\./i.test(from);
+      // Réponse d'un restaurant / bar démarché ? Vérifié AVANT le filtre « vraie
+      // cliente » (qui écarte les adresses info@…, courantes chez les pros).
+      if (!etsy && !own.has(from) && now - at <= MAX_AGE_MS && trouverProspect(prospects, { email: from, threadId: msg.threadId })) {
+        const texte = cleanBody(msg.body || msg.snippet || "");
+        if (texte) {
+          try { await logComm({ email: from, name: msg.fromName, from: "cliente", text: texte, subject: msg.subject || "", at, via: "prospection", gmailId: id }); } catch { /* jamais bloquant */ }
+          try { const r = await recordProspectReply({ email: from, threadId: msg.threadId, text: texte, at, via: "gmail", gmailId: id }); if (r && !r.deja) result.prospects++; } catch (e) { result.errors.push(`prospect ${from}: ${e?.message || e}`); }
+        }
+        seen[id] = now;
+        continue;
+      }
       if (etsy || !looksLikeRealCustomer(from, msg.labelIds) || own.has(from) || now - at > MAX_AGE_MS) {
         seen[id] = now; result.ignored++; continue;
       }

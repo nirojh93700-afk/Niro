@@ -1,7 +1,7 @@
 # Prospection bars & restaurants — logo gravé sur nos verres (26/09/2026)
 
-> ⚠️ Version 2 (26/09) : grille « livraison comprise dès 12 verres », SIRET retiré à la demande du
-> gérant, paragraphe bois (cartes menu, découpes, pièces uniques) ajouté.
+> ⚠️ Version 3 (26/09) : adresse de Paris remise, SIRET retiré, PRIX RETIRÉS du message (sauvegardés
+> plus bas), phrase « pas de limite, demande spéciale » + bois ajoutés.
 > **Statut : BROUILLON, RIEN N'EST ENVOYÉ.** Le gérant écrira « envoie » quand il valide.
 > Canal unique : **Gestion → Clients → Messages clients** (un envoi par établissement,
 > `POST /api/admin/send-client-email`). Jamais par Gmail en dehors du site.
@@ -17,7 +17,10 @@
 ## Sujet
 Le logo de votre établissement, gravé sur vos verres
 
-## Message (remplacer {Établissement}) — version 2, 26/09/2026
+## Message — version 3 (26/09/2026), SANS PRIX
+
+> Texte identique à `messageProspect()` dans `src/lib/prospects.js` (c'est lui que le bouton
+> « Écrire » de Gestion → Restaurants & bars pré-remplit). Modifier les deux ensemble.
 
 Bonjour à l'équipe de {Établissement},
 
@@ -25,34 +28,29 @@ Niv Création est un atelier français de gravure personnalisée. Nous gravons �
 
 Nous proposons aux bars et aux restaurants de graver le logo de leur établissement sur leurs verres. C'est un détail que vos clients remarquent, qui signe chacune de vos photos de cocktails sur les réseaux, et qui donne à votre service une vraie identité.
 
+Au-delà des verres, nous gravons et découpons aussi le bois pour votre salle : cartes menu en bois gravées, numéros de table, découpes à votre logo.
+
+Et il n'y a pas de limite : si vous avez une idée particulière, une pièce unique pour votre établissement, demandez-nous. Si nous pouvons la réaliser, nous la réaliserons.
+
 Comment cela se passe :
-- vous nous envoyez votre logo (fichier vectoriel de préférence : PDF, SVG ou AI ; une image nette convient aussi) ;
-- vous choisissez le modèle de verre et la quantité ;
-- nous vous adressons un devis, et la gravure est réalisée dans notre atelier après votre accord.
+- vous nous envoyez votre logo ou votre idée (fichier vectoriel de préférence : PDF, SVG ou AI ; une image nette convient aussi) ;
+- vous nous indiquez ce qui vous intéresse et la quantité ;
+- nous vous adressons nos tarifs professionnels et un devis, et la réalisation se fait dans notre atelier après votre accord.
 
-La gravure est permanente et résiste au lave-vaisselle.
+La gravure est permanente et les verres gravés passent au lave-vaisselle.
 
-Tarifs professionnels, prix par verre, logo gravé sur une face, livraison comprise en France métropolitaine :
-
-Verre à cocktail 17 cl : 15,90 € dès 12 verres · 14,90 € dès 24
-Flûte à champagne 21 cl : 15,90 € dès 12 verres · 14,90 € dès 24
-Verre à vin 36 cl : 13,90 € dès 12 verres · 12,90 € dès 24
-Verre à vin 47 cl : 17,90 € dès 12 verres · 16,90 € dès 24
-Verre à whisky 30 cl : 17,90 € dès 12 verres · 16,90 € dès 24
-
-Au-delà de 48 verres : tarif sur devis.
-
-Au-delà des verres, nous gravons et découpons aussi le bois pour votre salle : cartes menu en bois gravées, numéros de table, découpes à votre logo, et toute pièce unique que vous imaginez pour votre établissement. Ces créations sont réalisées sur devis, selon votre demande.
-
-Vous pouvez voir nos créations et des exemples de gravure sur nivcreation.fr. Pour recevoir un devis, il vous suffit de répondre à ce message en indiquant ce qui vous intéresse, la quantité, et en joignant votre logo.
+Vous pouvez voir nos créations et des exemples de gravure sur nivcreation.fr. Il vous suffit de répondre à ce message pour recevoir nos tarifs ou un devis.
 
 Bien cordialement,
 
 —
 Niv Création · nivcreation.fr
+6 rue d'Armaillé, 75017 Paris
 Vous recevez ce message à l'adresse professionnelle publiée par votre établissement. Si vous ne souhaitez plus recevoir de message de notre part, répondez simplement « STOP » : votre adresse sera retirée de notre liste.
 
-## Grille — comment elle est construite (pour le gérant)
+## Tarifs professionnels — SAUVEGARDÉS, envoyés seulement s'ils les demandent
+> Décision du gérant (26/09) : « enlève les prix, tu les sauvegardes, s'ils demandent on enverra ».
+> Aussi visibles dans Gestion → Restaurants & bars (encadré « Tarifs professionnels »), `TARIFS_PRO`.
 Prix **livraison comprise**, à partir de 12 verres (en dessous : les lots du site). Le port réel
 (Colissimo guichet 2026 : 17,39 € jusqu'à 5 kg, 25,29 € jusqu'à 10 kg) est intégré dans le prix.
 | Verre | Lot de 4 du site (/verre) | dès 12 | dès 24 | Reste/verre estimé* |

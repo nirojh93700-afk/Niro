@@ -1,4 +1,4 @@
-import { getReplyLink, recordReplyLinkUse, logComm, ensureCommThread, batImportEmails, getGmailCreds } from "@/lib/stock";
+import { getReplyLink, recordReplyLinkUse, logComm, ensureCommThread, batImportEmails, getGmailCreds, recordProspectReply } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 
@@ -40,6 +40,11 @@ export async function POST(req, { params }) {
     });
   } catch { /* jamais bloquant */ }
 
+  // 1 bis) Restaurant / bar démarché ? → rangé dans « Restaurants & bars »
+  // (statut « A répondu », ou « Ne plus contacter » s'il écrit STOP).
+  let prospect = null;
+  try { prospect = await recordProspectReply({ email: it.email, text, via: "bouton" }); } catch { prospect = null; }
+
   // 2) Fil de sa commande → pastille « 📬 nouvelle réponse » dans Gestion.
   if (it.orderId) {
     try {
@@ -51,13 +56,13 @@ export async function POST(req, { params }) {
 
   // 3) UNE alerte au gérant (reply-to = la cliente). Gmail d'abord, Resend en secours.
   const alertHtml = emailLayout({
-    heading: "Réponse d'une cliente (bouton Répondre)",
+    heading: prospect ? (prospect.stop ? "Un restaurant / bar demande à ne plus être contacté (STOP)" : "Réponse d'un restaurant / bar (prospection)") : "Réponse d'une cliente (bouton Répondre)",
     bodyHtml: `<p style="margin:0 0 10px;"><strong>${escapeHtml(it.name || it.email)}</strong> &lt;${escapeHtml(it.email)}&gt;${it.orderRef ? ` · commande #${escapeHtml(it.orderRef)}` : ""}</p>
       <p style="margin:0 0 12px;color:#7a7268;">En réponse à : ${escapeHtml(it.subject || "votre message")}</p>
       <div style="white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;">${escapeHtml(text)}</div>
-      <p style="margin:14px 0 0;color:#7a7268;">Rangée dans son dossier${it.orderRef ? " et dans le fil de sa commande" : ""}. Répondez depuis Gestion → Clients (« Écrire à ce client ») ou depuis la commande.</p>`,
+      ${prospect ? `<p style="margin:14px 0 0;color:#7a7268;">Rangée dans Gestion → Clients → Restaurants &amp; bars.${prospect.stop ? " Statut passé à « Ne plus contacter » : aucun e-mail ne pourra plus lui être envoyé." : ""}</p>` : ""}<p style="margin:14px 0 0;color:#7a7268;">Rangée dans son dossier${it.orderRef ? " et dans le fil de sa commande" : ""}. Répondez depuis Gestion → Clients (« Écrire à ce client ») ou depuis la commande.</p>`,
   });
-  const subject = `📬 Réponse de ${it.name || it.email}${it.orderRef ? ` — #${it.orderRef}` : ""}`;
+  const subject = `${prospect ? "🍸 Restaurant / bar — réponse" : "📬 Réponse"} de ${it.name || it.email}${it.orderRef ? ` — #${it.orderRef}` : ""}`;
   let alerted = false;
   try {
     const creds = await getGmailCreds();

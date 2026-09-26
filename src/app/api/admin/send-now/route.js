@@ -1,4 +1,4 @@
-import { isAdmin, getCagnotte, getSettings, logOrderEmail } from "@/lib/stock";
+import { isAdmin, getCagnotte, getSettings, logOrderEmail, prospectPourEnvoi, markProspectSent, logComm } from "@/lib/stock";
 import { getSiteOrder } from "@/lib/firebase";
 import { sendClientMail, brandedMessage, boutonRepondre, imageEnTete } from "@/lib/clientMail";
 import { BRAND } from "@/lib/email";
@@ -36,6 +36,12 @@ export async function POST(req) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return Response.json({ error: "Adresse e-mail invalide." }, { status: 400 });
   if (!subjectRaw || !bodyRaw) return Response.json({ error: "Sujet et message obligatoires." }, { status: 400 });
 
+  // Restaurant / bar démarché qui a répondu « STOP » : on ne lui écrit plus jamais
+  // (mention de désinscription de l'e-mail de prospection, 26/09/2026).
+  let prospect = null;
+  try { prospect = await prospectPourEnvoi(to); } catch { prospect = null; }
+  if (prospect?.stop) return Response.json({ error: "Cet établissement a demandé à ne plus être contacté (STOP) — rien n'est parti." }, { status: 409 });
+
   // Solde de cagnotte de la cliente (pour la balise {solde}).
   let solde = 0;
   try { solde = (await getCagnotte(to)).balance; } catch { /* 0 */ }
@@ -70,6 +76,11 @@ export async function POST(req) {
   const html = brandedMessage(subject, texte, btn, imageEnTete(imageUrl));
   const r = await sendClientMail({ to, subject, html, bcc: BRAND.contact });
   if (r?.ok) {
+    // Restaurant / bar démarché : envoi noté dans sa fiche (Restaurants & bars) + son dossier.
+    if (prospect) {
+      try { await markProspectSent(to, { threadId: r.threadId }); } catch { /* jamais bloquant */ }
+      try { await logComm({ email: to, name, from: "nous", text: texte, subject, via: "prospection" }); } catch { /* ignore */ }
+    }
     // Journalise dans le fil de la commande si une commande est liée.
     if (orderId) {
       try {

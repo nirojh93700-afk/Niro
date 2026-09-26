@@ -858,6 +858,31 @@ ne descend jamais sous zéro.
   **en média écran**, puis `page.pdf({format:"A4"})` → **compter les pages dans le PDF** et regarder
   le rendu. C'est le seul moyen de prouver « une feuille », le site étant injoignable d'ici.
 
+## 🍸 RESTAURANTS & BARS — PROSPECTION B2B (26/09/2026, branche `claude/bars-restaurants-outreach-an8wal`)
+> Demande du gérant : démarcher bars/restaurants (logo gravé sur nos verres + bois), puis « tous les mails
+> qu'on envoie aux restaurants, s'ils répondent, il faut que ça aille automatiquement dans une catégorie
+> Restaurants & bars, séparée des clients normaux ». **Construit, PAS en ligne** (attend « applique »).
+- **Texte de l'e-mail** : `messageProspect(nom)` dans **`src/lib/prospects.js`** = copie dans
+  `docs/prospection/email-bars-restaurants.md` (v3). **Sans prix** (« s'ils demandent, on enverra »), sans
+  SIRET, avec l'adresse de Paris, phrase « pas de limite, si nous pouvons la réaliser nous la réaliserons »,
+  bois (cartes menu, numéros de table, découpes), mention « répondez STOP ». Aucun envoi sans « envoie ».
+- **Tarifs pro SAUVEGARDÉS** (`TARIFS_PRO`, livraison comprise, dès 12 / dès 24 verres) — envoyés
+  seulement sur demande. Analyse port/marge dans le doc (grille « port offert dès 60 € » abandonnée : trop coûteuse).
+- **Stockage** : section `prospects` (clé = e-mail) — `upsertProspects` / `updateProspect` / `deleteProspect` /
+  `prospectPourEnvoi` / `markProspectSent` / `recordProspectReply` dans `stock.js` (écritures fraîches, clé par clé).
+- **Détection d'une réponse** (`trouverProspect`) : même adresse · même fil Gmail (`threadId` gardé à l'envoi,
+  `sendClientMail` renvoie maintenant `threadId`) · même domaine PRO (jamais Gmail/Orange…). Branché sur la
+  boîte surveillée (`inbox.js`, AVANT le filtre `looksLikeRealCustomer` qui jette les `info@`) et sur le bouton
+  « Répondre » (`/api/reponse/[token]`, alerte « 🍸 Restaurant / bar »). **Pas de brouillon de l'agent B2C**
+  pour eux. « STOP » / « désinscrire » (`demandeStop`, notre mention citée ignorée) → statut `stop` →
+  **`send-now`, `send-client-email` et les envois programmés REFUSENT** (409 / envoi annulé).
+- **Écran** Gestion → Clients → **Restaurants & bars** (`/gestion/restaurants`, API `/api/admin/prospects`,
+  pastille = réponses non lues, CSS `.pr-*`) : import du lot 1 (30 adresses « à vérifier ») ou liste collée,
+  « Écrire » → Messages clients pré-rempli (`?to=&name=&subject=&body=`), échanges, statut, vérifiée.
+- `npm run test-prospects` (25 vérifications). Build OK, écran testé 1440/390 px, 0 erreur JS.
+- ⚠️ Les 30 adresses du lot 1 sont **NON VÉRIFIÉES** (sites bloqués depuis l'environnement) : le gérant coche
+  « adresse vérifiée » après avoir ouvert la source.
+
 ## 📊 ÉTUDE DE MARCHÉ DU CATALOGUE — 26/09/2026 (constat, RIEN appliqué)
 > Demande du gérant : « fais une étude de marché par rapport à ses produits ». Dossier
 > **`docs/etude-marche-2026-09.md`** + page **`docs/etude-marche-2026-09.html`** (artifact

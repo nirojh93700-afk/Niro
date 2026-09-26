@@ -70,14 +70,16 @@ export async function sendClientMail({ to, subject, html, bcc = BRAND.contact, t
     const creds = await getGmailCreds();
     if (creds?.refreshToken) {
       const envoi = (token) => gmailSendHtml(token, { to: dest, subject, html, bcc, threadId: thread?.threadId, inReplyTo: thread?.messageId, references: thread?.references });
+      let sent = null;
       try {
-        await envoi(await gmailAccessToken(creds));
+        sent = await envoi(await gmailAccessToken(creds));
       } catch (e1) {
         // Jeton refusé par Google → on en redemande un et on réessaie UNE fois.
         if (!/authentication credentials|invalid credentials|401/i.test(String(e1?.message || ""))) throw e1;
-        await envoi(await gmailAccessToken(creds, { fresh: true }));
+        sent = await envoi(await gmailAccessToken(creds, { fresh: true }));
       }
-      return { ok: true, via: "gmail" };
+      // threadId : sert à reconnaître une réponse venue d'une autre boîte (prospection).
+      return { ok: true, via: "gmail", threadId: sent?.threadId || "" };
     }
   } catch (e) { gmailErr = String(e?.message || e || "erreur Gmail").slice(0, 300); }
   const suffixe = gmailErr ? ` (Gmail : ${gmailErr})` : "";

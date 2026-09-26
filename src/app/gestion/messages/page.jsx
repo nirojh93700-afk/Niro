@@ -114,6 +114,18 @@ export default function MessagesAdmin() {
     if (k) { setKey(k); load(k); }
   }, [load]);
 
+  // Pré-remplissage depuis un autre écran (ex. Restaurants & bars → « Écrire ») :
+  // ?to=&name=&subject=&body= — le message reste à RELIRE, rien ne part tout seul.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search);
+    const to = p.get("to");
+    if (!to) return;
+    setF((cur) => ({ ...cur, to, name: p.get("name") || "", ref: "", orderId: "", subject: p.get("subject") || "", body: p.get("body") || "" }));
+    setMsg(`Message pour ${p.get("name") || to} chargé — relisez-le, puis cliquez « Envoyer maintenant ».`);
+    setTimeout(() => { try { document.getElementById("envoyer")?.scrollIntoView({ behavior: "smooth" }); } catch { /* ignore */ } }, 400);
+  }, []);
+
   async function saveSettings(patch, okMsg) {
     setMsg("");
     const r = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify(patch) });
@@ -262,7 +274,7 @@ export default function MessagesAdmin() {
       )}
 
       {/* 1. ENVOYER / PROGRAMMER UN MESSAGE */}
-      <div style={box}>
+      <div style={box} id="envoyer">
         <h2 style={{ marginTop: 0 }}>✉️ Envoyer un message</h2>
         <p style={{ color: "var(--ink-soft)", fontSize: "0.85rem", marginTop: -6 }}>Choisissez une cliente, un modèle prêt, puis <strong>Envoyer maintenant</strong> — ou programmez-le pour plus tard. Le message s&apos;adapte à la cliente : {"{prenom}"}, {"{ref}"} (n° de commande), {"{solde}"} (total de sa cagnotte) et {"{gagne}"} (cashback gagné sur cette commande).</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>

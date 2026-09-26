@@ -8,7 +8,7 @@ import {
   getScheduledEmails, markScheduledSent, getSettings, hasAutoSent, markAutoSent,
   listCagnottes, markCagnotteReminded, expireCagnotte, getBirthdays, setPromoCode,
   getSubscribersDetailed, getPromoCodes, getOffreGravureSent, markOffreGravureSent,
-  purgeExpiredPromoCodes, getFavoris, logComm, getPriceWatchAll, rebasePriceWatch, setJobNote,
+  purgeExpiredPromoCodes, getFavoris, logComm, getPriceWatchAll, rebasePriceWatch, setJobNote, prospectPourEnvoi, cancelScheduledEmail, markProspectSent,
   CAGNOTTE_EXPIRY_DAYS, CAGNOTTE_REMIND_BEFORE,
 } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
@@ -35,6 +35,14 @@ export async function runScheduledJobs() {
   const queue = await getScheduledEmails();
   for (const s of queue) {
     if (s.sent || (s.sendAt || 0) > now) continue;
+    // Restaurant / bar démarché qui a demandé « STOP » depuis la programmation : on n'envoie pas.
+    let prospect = null;
+    try { prospect = await prospectPourEnvoi(s.to); } catch { prospect = null; }
+    if (prospect?.stop) {
+      try { await cancelScheduledEmail(s.id); } catch { /* ignore */ }
+      try { await setJobNote("scheduled", { at: Date.now(), id: s.id, to: s.to, subject: s.subject, error: "Établissement désinscrit (STOP) — envoi annulé." }); } catch { /* ignore */ }
+      continue;
+    }
     const btn = await boutonRepondre({
       email: s.to, name: s.name || "", subject: s.subject,
       excerpt: String(s.body || "").slice(0, 240), orderId: s.orderId || "",
@@ -45,6 +53,7 @@ export async function runScheduledJobs() {
     if (!r.ok) { try { await setJobNote("scheduled", { at: Date.now(), id: s.id, to: s.to, subject: s.subject, error: String(r.error || "").slice(0, 600) }); } catch { /* ignore */ } }
     // Rangé dans le dossier de la cliente (et ça classe la réponse préparée, s'il y en avait une).
     if (r.ok) { try { await logComm({ email: s.to, from: "nous", text: String(s.body || s.text || s.subject || ""), subject: s.subject, via: "programme" }); } catch { /* ignore */ } }
+    if (r.ok && prospect) { try { await markProspectSent(s.to, { threadId: r.threadId }); } catch { /* ignore */ } }
     if (r.ok) sentManual++; else failed++;
   }
 

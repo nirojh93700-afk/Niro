@@ -4458,3 +4458,55 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .noel-mosaic { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; max-width: 420px; justify-self: end; }
 .noel-mosaic img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 10px; border: 1px solid rgba(226,198,126,.35); display: block; }
 @media (max-width: 700px) { .noel-in { grid-template-columns: 1fr; } .noel-mosaic { max-width: none; justify-self: stretch; } .noel-band { padding: 22px 0; } }
+
+/* ===== Gestion → Restaurants & bars (.pr-*) — prospection B2B, 26/09/2026 ===== */
+.pr-info{background:#fff8e6;border:1px solid #ecd9a4;border-radius:10px;padding:9px 13px;font-size:.88rem;margin:12px 0}
+.pr-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:14px}
+.pr-box summary{cursor:pointer;font-weight:600;color:var(--gold-dark)}
+.pr-box[open] summary{margin-bottom:10px}
+.pr-small{font-size:.83rem;color:var(--ink-soft);line-height:1.5}
+.pr-tarifs{border-collapse:collapse;width:100%;max-width:560px;font-size:.88rem;font-variant-numeric:tabular-nums}
+.pr-tarifs th,.pr-tarifs td{text-align:left;padding:6px 10px;border-bottom:1px solid #f0e9d8}
+.pr-tarifs th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.pr-ta,.pr-q,.pr-sel{box-sizing:border-box;min-width:0;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:inherit;font-size:.88rem;background:#fff}
+.pr-ta{width:100%;margin:6px 0 8px;resize:vertical}
+.pr-btn{display:inline-block;background:var(--gold);color:#fff;border:0;border-radius:999px;padding:8px 16px;font-weight:600;font-size:.85rem;text-decoration:none;cursor:pointer;white-space:nowrap}
+.pr-btn:disabled{opacity:.5;cursor:default}
+.pr-btn-soft{background:#fff;color:var(--gold-dark);border:1px solid var(--gold)}
+.pr-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:18px 0 10px}
+.pr-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pr-chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:.8rem;cursor:pointer;color:var(--ink)}
+.pr-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pr-q{width:260px;max-width:100%}
+.pr-list{display:grid;gap:10px}
+.pr-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;min-width:0}
+.pr-new{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,162,75,.18)}
+.pr-stop{opacity:.7}
+.pr-top{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:flex-start}
+.pr-name strong{display:block;font-weight:600}
+.pr-name small{color:var(--ink-soft)}
+.pr-tags{display:flex;flex-wrap:wrap;gap:5px}
+.pr-tag{display:inline-block;border-radius:999px;padding:3px 10px;font-size:.72rem;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.pr-t-a_contacter{background:#f3f0e8;color:#6b604b;border-color:#e4dccb}
+.pr-t-envoye{background:#eef3fb;color:#34537f;border-color:#d5e1f2}
+.pr-t-repondu{background:#e8f3ea;color:#2f6b3d;border-color:#cfe4d4}
+.pr-t-stop{background:#fbeaea;color:#963232;border-color:#efcdcd}
+.pr-t-verif{background:#fff4d8;color:#8a6414;border-color:#ecd9a4}
+.pr-t-new{background:var(--gold);color:#fff}
+.pr-mail{font-size:.83rem;color:var(--ink-soft);margin-top:6px;overflow-wrap:anywhere}
+.pr-mail a{color:var(--gold-dark)}
+.pr-reply{margin-top:10px;background:#fdfbf5;border:1px solid #f0e9d8;border-radius:10px;padding:8px 12px;font-size:.88rem}
+.pr-reply>span{display:block;font-size:.75rem;color:var(--ink-soft);margin-bottom:4px}
+.pr-fil{margin-top:10px;display:grid;gap:8px}
+.pr-msg{border-left:3px solid #e4dccb;padding:4px 0 4px 10px;font-size:.88rem;min-width:0}
+.pr-msg small{color:var(--ink-soft)}
+.pr-nous{border-left-color:var(--gold)}
+.pr-actions{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:10px}
+.pr-link{background:none;border:0;padding:0;color:var(--gold-dark);font-weight:600;font-size:.82rem;cursor:pointer;font-family:inherit}
+.pr-del{color:#963232}
+.pr-check{font-size:.82rem;display:inline-flex;gap:5px;align-items:center}
+.pr-sel{padding:5px 8px;font-size:.8rem}
+@media (max-width:720px){
+  .pr-q{width:100%}
+  .pr-actions .pr-btn{flex:1 1 100%;text-align:center;padding:11px 16px}
+}

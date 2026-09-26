@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 
 const SAVE_ROUTES = {
   "/api/admin/settings": "Réglages enregistrés",
+  "/api/admin/prospects": "Restaurants & bars enregistrés",
   "/api/admin/catalog": "Catalogue enregistré",
   "/api/admin/stock": "Stock enregistré",
   "/api/admin/images": "Photos enregistrées",

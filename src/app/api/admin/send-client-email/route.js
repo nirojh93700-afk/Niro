@@ -1,4 +1,4 @@
-import { isAdmin, getGmailCreds , logComm, addReplyLink } from "@/lib/stock";
+import { isAdmin, getGmailCreds , logComm, addReplyLink, prospectPourEnvoi, markProspectSent } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { boutonsAvis } from "@/lib/clientMail";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
@@ -18,6 +18,10 @@ export async function POST(req) {
   const message = String(body?.message || "").trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return Response.json({ error: "Adresse invalide." }, { status: 400 });
   if (!subject || !message) return Response.json({ error: "Sujet et message obligatoires." }, { status: 400 });
+  // Restaurant / bar démarché qui a répondu « STOP » : plus jamais d'e-mail.
+  let prospect = null;
+  try { prospect = await prospectPourEnvoi(to); } catch { prospect = null; }
+  if (prospect?.stop) return Response.json({ error: "Cet établissement a demandé à ne plus être contacté (STOP) — rien n'est parti." }, { status: 409 });
 
   // avisProduits (optionnel) : [{slug, name}] → boutons « ★ Noter » vers la
   // section avis de chaque produit (même rendu que la règle d'avis automatique).
@@ -66,8 +70,9 @@ export async function POST(req) {
     const creds = await getGmailCreds();
     if (creds?.refreshToken) {
       const token = await gmailAccessToken(creds);
-      await gmailSendHtml(token, { to, subject, html, bcc: BRAND.contact });
+      const sent = await gmailSendHtml(token, { to, subject, html, bcc: BRAND.contact });
       try { await logComm({ email: to, from: "nous", text: message, subject, via: "gmail" }); } catch { /* ignore */ }
+      if (prospect) { try { await markProspectSent(to, { threadId: sent?.threadId }); } catch { /* ignore */ } }
       return Response.json({ ok: true, via: "gmail" });
     }
   } catch { /* on tente Resend */ }
@@ -75,7 +80,7 @@ export async function POST(req) {
   // 2) Secours Resend.
   if (process.env.RESEND_API_KEY) {
     const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
-    if (r.ok) { try { await logComm({ email: to, from: "nous", text: message, subject, via: "resend" }); } catch { /* ignore */ } return Response.json({ ok: true, via: "resend" }); }
+    if (r.ok) { try { await logComm({ email: to, from: "nous", text: message, subject, via: "resend" }); } catch { /* ignore */ } if (prospect) { try { await markProspectSent(to); } catch { /* ignore */ } } return Response.json({ ok: true, via: "resend" }); }
   }
   return Response.json({ error: "Échec de l'envoi (Gmail non connecté et Resend indisponible)." }, { status: 500 });
 }

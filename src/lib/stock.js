@@ -17,6 +17,7 @@ import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
 import { REVIEWS_SEED } from "./reviewsSeed";
+import { trouverProspect, demandeStop } from "./prospects";
 
 const STORE_NAME = "niv-stock";
 const KEY = "stock";
@@ -1163,6 +1164,123 @@ export async function getCommsMeta() {
     out[e] = { count: (d.messages || []).length, lastAt: last?.at || 0, lastFrom: last?.from || "" };
   }
   return out;
+}
+
+// =============================================================================
+// RESTAURANTS & BARS — PROSPECTION B2B (section `prospects`, clé = e-mail de
+// l'établissement). Séparés des clientes : une réponse d'un établissement démarché
+// est reconnue (adresse, fil Gmail ou domaine pro — trouverProspect) et rangée ICI,
+// pas comme une demande de cliente (pas de brouillon de l'agent B2C).
+// p = { name, ville, type, source, verifie, statut, note, ajouteAt, envoyeAt,
+//       nbEnvois, threadIds[], reponduAt, nonLu, reponses[{at, from, extrait, via, gmailId}] }
+// Écritures FRAÎCHES et limitées à la section, clé par clé (jamais de remplacement
+// en bloc — règle de l'incident du 26/09/2026).
+// =============================================================================
+const PROSPECTS_MAX = 3000;
+const PROSPECT_STATUTS_OK = ["a_contacter", "envoye", "repondu", "stop"];
+
+export async function getProspectsAll() {
+  const data = await getCatalogRaw();
+  return data.prospects || {};
+}
+
+export async function upsertProspects(list) {
+  const data = await getCatalogRaw(true);
+  data.prospects = data.prospects || {};
+  let ajoutes = 0, deja = 0;
+  for (const it of Array.isArray(list) ? list : []) {
+    const e = normEmail(it?.email);
+    if (!validEmail(e)) continue;
+    const cur = data.prospects[e];
+    if (cur) {
+      // Déjà connu : on complète seulement ce qui manque (jamais d'écrasement).
+      for (const k of ["name", "ville", "type", "source"]) if (!cur[k] && it[k]) cur[k] = String(it[k]).slice(0, k === "source" ? 300 : 120);
+      deja++;
+      continue;
+    }
+    if (Object.keys(data.prospects).length >= PROSPECTS_MAX) break;
+    data.prospects[e] = {
+      name: String(it.name || "").slice(0, 120), ville: String(it.ville || "").slice(0, 60),
+      type: String(it.type || "").slice(0, 80), source: String(it.source || "").slice(0, 300),
+      verifie: Boolean(it.verifie), statut: "a_contacter", note: "", ajouteAt: Date.now(),
+      envoyeAt: 0, nbEnvois: 0, threadIds: [], reponduAt: 0, nonLu: false, reponses: [],
+    };
+    ajoutes++;
+  }
+  await persistCatalog(data, ["prospects"]);
+  return { ajoutes, deja };
+}
+
+export async function updateProspect(email, patch = {}) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw(true);
+  const p = (data.prospects || {})[e];
+  if (!p) return null;
+  if (patch.verifie !== undefined) p.verifie = Boolean(patch.verifie);
+  if (patch.nonLu !== undefined) p.nonLu = Boolean(patch.nonLu);
+  if (patch.statut !== undefined && PROSPECT_STATUTS_OK.includes(patch.statut)) p.statut = patch.statut;
+  for (const k of ["note", "name", "ville", "type"]) {
+    if (patch[k] !== undefined) p[k] = String(patch[k] || "").slice(0, k === "note" ? 1000 : 120);
+  }
+  await persistCatalog(data, ["prospects"]);
+  return p;
+}
+
+export async function deleteProspect(email) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw(true);
+  if (!(data.prospects || {})[e]) return false;
+  delete data.prospects[e];
+  await persistCatalog(data, ["prospects"]);
+  return true;
+}
+
+// Avant un envoi : l'adresse est-elle un établissement démarché, et a-t-il
+// demandé à ne plus être contacté ? (lecture seule)
+export async function prospectPourEnvoi(email) {
+  const e = normEmail(email);
+  const p = ((await getCatalogRaw(true)).prospects || {})[e];
+  return p ? { key: e, stop: p.statut === "stop" } : null;
+}
+
+// Après un envoi réussi à un établissement démarché : date, compteur, fil Gmail
+// (pour reconnaître une réponse venue d'une autre boîte). Ne fait rien pour une cliente.
+export async function markProspectSent(email, { threadId = "", at = 0 } = {}) {
+  const e = normEmail(email);
+  const data = await getCatalogRaw(true);
+  const p = (data.prospects || {})[e];
+  if (!p) return false;
+  p.envoyeAt = Number(at) || Date.now();
+  p.nbEnvois = (Number(p.nbEnvois) || 0) + 1;
+  if (p.statut === "a_contacter") p.statut = "envoye";
+  p.nonLu = false; // nous venons de lui écrire : sa dernière réponse est traitée
+  const tid = String(threadId || "").trim();
+  if (tid && !(p.threadIds || []).includes(tid)) p.threadIds = [...(p.threadIds || []), tid].slice(-10);
+  await persistCatalog(data, ["prospects"]);
+  return true;
+}
+
+// Un e-mail reçu (boîte surveillée ou bouton « Répondre ») vient-il d'un
+// établissement démarché ? Si oui : rangé dans sa fiche, statut « A répondu »
+// (ou « Ne plus contacter » s'il demande STOP), pastille « non lu ».
+// Renvoie { key, stop, deja } ou null (ce n'est pas un établissement démarché).
+export async function recordProspectReply({ email, threadId = "", text = "", at = 0, via = "", gmailId = "" }) {
+  const data = await getCatalogRaw(true);
+  const key = trouverProspect(data.prospects || {}, { email, threadId });
+  if (!key) return null;
+  const p = data.prospects[key];
+  const gid = String(gmailId || "").trim();
+  p.reponses = Array.isArray(p.reponses) ? p.reponses : [];
+  if (gid && p.reponses.some((r) => r.gmailId === gid)) return { key, stop: p.statut === "stop", deja: true };
+  const stop = demandeStop(text);
+  const quand = Number(at) || Date.now();
+  p.reponses.push({ at: quand, from: normEmail(email), extrait: String(text || "").slice(0, 600), via: String(via || "").slice(0, 20), gmailId: gid.slice(0, 80) });
+  p.reponses = p.reponses.slice(-20);
+  p.reponduAt = Math.max(Number(p.reponduAt) || 0, quand);
+  p.statut = stop || p.statut === "stop" ? "stop" : "repondu";
+  p.nonLu = true;
+  await persistCatalog(data, ["prospects"]);
+  return { key, stop, deja: false };
 }
 
 // Métadonnées légères de tous les fils d'aperçu (pour la vérification globale

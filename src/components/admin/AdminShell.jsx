@@ -25,6 +25,7 @@ const NAV = [
   ] },
   { label: "Clients", items: [
     { id: "crm", icon: "◉", text: "Clients (CRM)", href: "/gestion/crm" },
+    { id: "restaurants", icon: "◆", text: "Restaurants & bars", href: "/gestion/restaurants", badge: "pros" },
     { id: "avis", icon: "★", text: "Avis", href: "/gestion#avis", badge: "reviews" },
     { id: "fidelite", icon: "◇", text: "Fidélité & cashback", href: "/gestion/fidelite" },
     { id: "favoris", icon: "♥", text: "Favoris des clientes", href: "/gestion/favoris" },
@@ -90,7 +91,7 @@ export default function AdminShell({ children }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [filtre, setFiltre] = useState(""); // recherche d'écran dans le menu (téléphone)
-  const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0 });
+  const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0, pros: 0 });
 
   useEffect(() => {
     const apply = () => setHash(typeof window !== "undefined" ? window.location.hash : "");
@@ -112,19 +113,20 @@ export default function AdminShell({ children }) {
     // Boîte mail surveillée : l'assistant range les nouveaux e-mails clients dans
     // leur commande et prépare une réponse (limité côté serveur à 1 fois / 3 min).
     try { await fetch("/api/admin/inbox-sync", { method: "POST", ...H }); } catch { /* silencieux */ }
-    const [o, u, p, r] = await Promise.all([j("/api/admin/orders"), j("/api/admin/bat?action=unread"), j("/api/admin/pending-replies"), j("/api/admin/reviews")]);
+    const [o, u, p, r, pr] = await Promise.all([j("/api/admin/orders"), j("/api/admin/bat?action=unread"), j("/api/admin/pending-replies"), j("/api/admin/reviews"), j("/api/admin/prospects")]);
     setCounts({
       prep: (o?.orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length,
       unread: (u?.unread || []).length,
       replies: (p?.pending || []).length,
       reviews: (r?.reviews || []).filter((x) => !x.approved).length,
+      pros: pr?.kpis?.nonLus || 0, // réponses non lues des restaurants & bars démarchés
     });
   }, []);
   useEffect(() => { loadCounts(); const t = setInterval(loadCounts, 120000); return () => clearInterval(t); }, [loadCounts, path]);
 
   const cur = currentId(path, hash);
   const meta = TITRES[cur] || { text: "Gestion", group: "" };
-  const totalTodo = counts.prep + counts.unread + counts.replies + counts.reviews;
+  const totalTodo = counts.prep + counts.unread + counts.replies + counts.reviews + (counts.pros || 0);
   // Pastilles de la barre du bas ("messages" = tout ce qui attend une réponse).
   const tabCount = { prep: counts.prep, messages: counts.unread + counts.replies };
 
