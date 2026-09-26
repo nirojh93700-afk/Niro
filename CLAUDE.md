@@ -53,6 +53,14 @@
   `b54c164`, code identique à avant). **Une phrase qui décrit un changement du site = une maquette
   à faire, JAMAIS un push.** Le push n'arrive QUE sur un mot explicite : « applique », « pousse »,
   « mets en ligne ». Même quand le changement paraît minuscule ou déjà validé dans son principe.
+- 🗂️ **CRAFIA = UNE AUTRE APPLI, INJOIGNABLE D'ICI (constat du 26/09/2026)**. Le gérant : « regarde
+  l'application Crafia, t'as accès, on l'a créée, t'as toutes les gravures qu'elle a faite ». Vérifié :
+  Crafia (app.crafia.fr, projet Firebase `crafia-app`, gros fichier `crafia_app.html` sur SON Mac
+  dans `~/Desktop/Crafia-Deploy/`) n'est PAS dans ce dépôt — seule la branche
+  `claude/crafia-email-whitelabel-JBr6R` contient `crafia-email/` (gabarits d'e-mails, rien d'autre).
+  Pas de dépôt GitHub accessible (`nirojh93700-afk/crafia*` → introuvable), pas d'identifiants
+  Firebase ici, et le réseau bloque app.crafia.fr. **Pour utiliser ses données/photos : il doit les
+  exporter et les envoyer ici, ou lancer Claude Code sur son Mac dans le dossier Crafia.**
 - Règles absolues (détaillées plus bas) : rien n'est envoyé à une cliente sans « envoie » explicite ;
   rien de visible sur le site sans validation (l'admin peut être modifié) ; ne JAMAIS parler de la
   machine / panne / laser aux clientes ; clé admin uniquement dans les commandes shell, jamais dans
@@ -1475,11 +1483,22 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
     « Commandez tôt pour Noël »). Mécanique = 5ᵉ élément `True` dans `VIDEOS[n]` → `noel=True`
     dans `overlay`/`card`. Piège : Liberation Sans n'a pas le glyphe ✦ (carrés vides) → `SANSB_U`
     (DejaVu Sans Bold) pour ces textes.
-  · 🔌 **HYPERFRAMES BY HEYGEN** (connecteur branché par le gérant le 26/09 : « utilise les
-    connecteurs que je viens de te connecter ») : connecté sur son compte mais **ses outils ne se
-    chargent que dans une conversation ouverte APRÈS la connexion**. Dans toute NOUVELLE session :
-    chercher les outils HyperFrames (ToolSearch) et **faire la prochaine vidéo avec** (animations
-    HTML / motion graphics) plutôt qu'avec le montage Pillow, si le gérant le redemande.
+  · 🔌 **HYPERFRAMES (HeyGen) — LA MÉTHODE QUI MARCHE D'ICI (26/09/2026)** : le gérant a branché
+    le connecteur (« utilise les connecteurs que je viens de te connecter ») mais **son outil
+    `compose` hébergé REFUSE Claude Code** (« disabled for local CLI/IDE agents »). La voie qui
+    marche = les **compétences locales** : `npx -y skills add heygen-com/hyperframes` (installées
+    dans `.agents/skills/` + liens `.claude/skills/`, `skills-lock.json` versionné), puis
+    `npx -y hyperframes@latest init <dossier> --non-interactive`, écrire `index.html` (contrat dans
+    `.agents/skills/hyperframes-core/SKILL.md` : un `gsap.timeline({paused:true})` enregistré dans
+    `window.__timelines["main"]`, clips `data-start`/`data-duration`, jamais de `transform` CSS sur
+    un nœud tweené, `fromTo` partout), `npx hyperframes check --json` (0 finding), `snapshot --at …`
+    (planche contact à REGARDER), `render --quality looks --output out.mp4`.
+    Pièges réglés : `browser ensure` télécharge son Chrome (marche) ; `cdn.jsdelivr.net` est
+    BLOQUÉ → GSAP local (`videos/niv-produits/vendor/gsap.min.js`, ou `npm pack gsap@3.14.2`) ;
+    polices via `raw.githubusercontent.com/google/fonts` (marche) + `@font-face` obligatoire ;
+    ffmpeg = lien symbolique `~/bin/ffmpeg` vers le binaire d'imageio-ffmpeg ; Node 22 OK.
+    **Vidéo 13 Noël refaite avec** : projet versionné dans `videos/noel-2026/` (13 photos gravées,
+    ruban « Idée cadeau de Noël », cartes rouge & or, 35,2 s). Modèle à copier pour la 14.
   · Le titre liste **les produits de la vidéo entre parenthèses**.
   · ⚠️ **DEPUIS LE 25/09/2026 : 5 HASHTAGS, PAS 10** (gérant : « les tags les plus importants
     qui fonctionnent bien sur les réseaux sociaux, et n'en mets que cinq »). Sur UNE ligne,
