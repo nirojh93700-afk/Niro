@@ -1,3 +1,21 @@
+## ⭐ AVIS CLIENTS RÉSERVÉS AUX VRAIES ACHETEUSES (27/09/2026)
+> Un avis « bof » sans nom déposé sur le Collier Couple Cœur a révélé que **n'importe qui pouvait
+> laisser un avis sur n'importe quelle fiche sans jamais avoir acheté** (formulaire anonyme,
+> aucune vérification). Le gérant a choisi « comme Amazon/Etsy » (option proposée : e-mail
+> obligatoire mais avis toujours libre, VS réservé aux vraies acheteuses — il a pris la 2e).
+- **Le dépôt d'avis (`/api/reviews` POST) exige maintenant l'e-mail de la commande**, vérifié
+  côté serveur par `emailOrderedProduct(email, slug)` (`src/lib/firebase.js`) : l'e-mail doit
+  correspondre à une commande RÉELLE (`siteOrders`, hors annulée/remboursée/test) contenant CE
+  produit précis (comparaison insensible à la casse). Sinon refus explicite, rien n'est enregistré.
+- **L'e-mail n'est JAMAIS renvoyé publiquement** (`GET /api/reviews` ne l'inclut pas) — seul
+  **Gestion → Avis** l'affiche sous le nom (pour savoir qui a écrit et la recontacter si besoin).
+- L'ajout manuel d'un avis par le gérant (`/gestion` → Avis → « Ajouter un avis », avis reçu sur
+  Instagram/WhatsApp…) **n'est PAS concerné** : ce chemin (`/api/admin/reviews` action `add`)
+  reste publié directement sans vérification, comme avant.
+- Le balayage de vérification (`emailOrderedProduct`) lit jusqu'à 5000 commandes triées par date
+  (pas d'index e-mail dédié) — largement suffisant pour le volume actuel ; à revoir avec un
+  champ e-mail normalisé si le volume de commandes explose un jour.
+
 ## ⛔⛔ INCIDENT GRAVE — RÉGLAGES DE GRAVURE QUI S'EFFAÇAIENT TOUT SEULS (26/09/2026, RÉSOLU)
 > En ajoutant le verre à cocktail puis le verre à whisky à la page **Gestion → Réglages produits →
 > « Réglage cristaux, verres & carafe »** (`/gestion/cristal-reglage`), le gérant a dû **tout
