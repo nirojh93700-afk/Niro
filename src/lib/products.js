@@ -634,6 +634,7 @@ export const products = [
         { value: "Élégant", label: "Élégant", image: "/lettering/elegant.jpeg" },
         { value: "Arrondi", label: "Arrondi", image: "/lettering/arrondi.jpeg" },
       ] },
+      { key: "animaux-liste", type: "note", text: "Animaux disponibles : Lion, Éléphant, Girafe, Zèbre, Singe, Hippopotame, Ours, Renard, Cerf, Hérisson." },
       { key: "animaux", type: "textarea", label: "Animaux au choix (4 max)", placeholder: "Ex : Lion, Éléphant, Girafe, Ours", maxLength: 120 },
       { key: "finition", type: "select", label: "Finition", optional: true, options: [
         { value: "Bois brut", label: "Bois brut (naturel)" },
