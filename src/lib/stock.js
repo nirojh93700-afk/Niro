@@ -1883,6 +1883,10 @@ export async function addReview(slug, review, { approved = false } = {}) {
   const entry = {
     id: "r_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
     name: String(review.name || "").slice(0, 60) || "Cliente",
+    // E-mail de la cliente (vérifié comme acheteuse avant l'écriture de l'avis,
+    // 27/09/2026) — jamais renvoyé par l'API publique, visible seulement dans
+    // Gestion → Avis pour savoir qui a écrit et pouvoir la recontacter.
+    email: String(review.email || "").trim().toLowerCase().slice(0, 200),
     rating: Math.min(5, Math.max(1, parseInt(review.rating, 10) || 5)),
     text: String(review.text || "").slice(0, 1000),
     photo: String(review.photo || "").slice(0, 600),

@@ -216,6 +216,7 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
         <strong>{r.name} <span style={{ color: "#d8a93a" }}>{"★".repeat(r.rating)}</span></strong>
         <ProductTag slug={r.slug} />
       </div>
+      {r.email && <p style={{ margin: "2px 0 0", fontSize: "0.8rem", color: "var(--ink-soft)" }}>{r.email}</p>}
       {editId === r.id ? (
         <EditReviewForm adminKey={adminKey} review={r}
           onDone={() => { setEditId(""); load(); }} onCancel={() => setEditId("")} />

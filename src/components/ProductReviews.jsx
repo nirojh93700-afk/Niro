@@ -14,6 +14,7 @@ function Stars({ value }) {
 export default function ProductReviews({ slug }) {
   const [data, setData] = useState({ reviews: [], average: 0, count: 0 });
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [rating, setRating] = useState(5);
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState("");
@@ -33,15 +34,17 @@ export default function ProductReviews({ slug }) {
     e.preventDefault();
     if (sending) return; // évite le double envoi (avis en double)
     setErr("");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setErr("Indiquez l'e-mail utilisé pour votre commande."); return; }
     if (text.trim().length < 2) { setErr("Écris quelques mots."); return; }
     setSending(true);
     try {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, name, rating, text, photo }),
+        body: JSON.stringify({ slug, name, email, rating, text, photo }),
       });
-      if (!res.ok) throw new Error("Envoi impossible.");
+      const data2 = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data2.error || "Envoi impossible.");
       setSent(true);
     } catch (e2) { setErr(e2.message); } finally { setSending(false); }
   }
@@ -86,6 +89,8 @@ export default function ProductReviews({ slug }) {
             ))}
           </div>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Votre prénom" style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, marginBottom: 10, font: "inherit" }} />
+          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Votre e-mail (celui de votre commande)" style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, marginBottom: 4, font: "inherit" }} />
+          <p style={{ margin: "0 0 10px", fontSize: "0.78rem", color: "var(--ink-soft)" }}>Réservé aux clientes ayant acheté ce produit. Votre e-mail n'est jamais affiché publiquement.</p>
           <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Votre expérience, la qualité, la gravure…" style={{ width: "100%", minHeight: 90, padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }} />
           {UPLOAD_AVAILABLE && (
             <div style={{ marginTop: 10 }}>

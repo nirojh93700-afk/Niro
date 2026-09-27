@@ -305,6 +305,36 @@ export async function findSiteOrderBySession(sessionId) {
   }
 }
 
+// Avis clients réservés aux vraies acheteuses (27/09/2026, demande du gérant :
+// « comme Amazon/Etsy »). Vrai si l'e-mail donné a déjà commandé CE produit
+// (comparaison insensible à la casse — Stripe ne garantit pas la casse de
+// customer_details.email). Commande non annulée/remboursée uniquement.
+// Balayage borné (pas d'index dédié) : largement suffisant pour ce volume de
+// commandes ; à revoir avec un champ e-mail normalisé si le volume explose.
+export async function emailOrderedProduct(email, slug) {
+  const a = getApp();
+  const e = String(email || "").trim().toLowerCase();
+  const s = String(slug || "").trim();
+  if (!a || !e || !s) return false;
+  try {
+    const snap = await admin
+      .firestore()
+      .collection("siteOrders")
+      .orderBy("createdAt", "desc")
+      .limit(5000)
+      .get();
+    return snap.docs.some((d) => {
+      const o = d.data();
+      if (o.status === "annulee" || o.status === "remboursee" || o.test) return false;
+      if (String(o.customerEmail || "").trim().toLowerCase() !== e) return false;
+      return (o.items || []).some((it) => it.slug === s);
+    });
+  } catch (err) {
+    console.error("emailOrderedProduct:", err.message);
+    return false;
+  }
+}
+
 // Cherche une commande par identifiant de paiement Stripe (couvre aussi les
 // anciennes commandes qui n'ont pas de sessionId enregistré).
 export async function findSiteOrderByPaymentIntent(paymentIntentId) {
