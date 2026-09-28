@@ -57,12 +57,15 @@ export async function POST(req) {
     }
   } catch { /* jamais bloquant */ }
 
+  // Signature TOUJOURS ajoutée par le serveur (28/09/2026, demande du gérant après un
+  // envoi parti sans "Cordialement" : ne plus dépendre de l'agent pour la retaper à
+  // chaque message — structurel, comme le bouton Répondre).
   const html = emailLayout({
     heading: subject,
     bodyHtml: `${imageHtml}<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
       ${boutons}
       ${replyBtn}
-      <p style="margin-top:18px;color:#7a7268;">Niv Création</p>`,
+      <p style="margin-top:18px;color:#7a7268;">Cordialement,<br><strong>Niv Création</strong><br>${BRAND.siteUrl.replace(/^https?:\/\//, "")}</p>`,
   });
 
   // 1) Gmail en priorité.
