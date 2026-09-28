@@ -148,3 +148,41 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #entrepreneur #logogravé #barrestaurant #ideecadeau
+
+---
+
+## Vidéo 17 — Bijoux gravés, colliers & bracelets (28/09/2026)
+
+| Fichier | Format | Durée | Poids | Usage |
+|---|---|---|---|---|
+| `docs/videos/17-bijoux-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 26,7 s | 1,5 Mo | Version publiable (Reels / TikTok / Stories) et légère pour le téléphone |
+
+- **Source** : `tools/video/pub_bijoux_graves_17.py` (montage Pillow/ffmpeg, gratuit, sans son —
+  même famille que les vidéos 10-13, 16).
+- **Demande du gérant** : « fais-moi une vidéo avec des produits que t'as pas fait encore, les
+  bijoux plus ».
+- 🔴 **Constat avant de monter** : sur les ~140 photos de bijoux de `public/produits/`, planche
+  contact complète regardée une par une (3 planches, aucune confiance au nom de fichier) —
+  **seules 10 montrent une vraie gravure lisible**. Toutes les autres (médaillons, plaques,
+  pendentifs géométriques, bracelets chaîne/maille/perles, bracelets homme…) sont des photos de
+  produit VIERGE, malgré des noms de fichier trompeurs (ex. `bracelet_a_graver_dore.jpg`,
+  `collier-coeur-zircon-*.jpg` : aucune n'a de texte gravé visible).
+- **Produits (10, tous GRAVÉS, planche contact vérifiée)** : Collier Cœur à graver (2 photos,
+  « T+S 07.13.2018 » et « Always with you · Sophia ») · Collier Cœur & 2 plaques (2 photos) ·
+  Collier 3 Cœurs entrelacés (« Naomi ») · Collier Double Cœur (3 photos) · Bracelet cordon à
+  plaque (« A & P ») · Bracelet Femme Acier (« Hello Angie »).
+- ⚠️ **Jamais réunies dans une vidéo 100 % bijoux avant** : les vidéos 14/15 n'en montraient que
+  2-3 au milieu d'un thème Noël ; une ancienne vidéo bijoux (avant la règle du 22/09 « uniquement
+  des produits déjà gravés ») montrait des produits VIERGES — non reprise ici.
+- **Habillage** : même recette que la vidéo 16 (ruban en haut hors zone TikTok/Insta, pastille +
+  nom + légende ancrés par le bas, photo entière sur fond flou). Ruban « ✦ BIJOUX GRAVÉS ✦ »,
+  pastille « GRAVÉ ». Cartes intro/fin encre & or. Aucun prix, aucun délai, aucun nombre de
+  produits.
+
+### Description à copier-coller (livrée le 28/09/2026)
+
+**Vidéo 17 — Bijoux gravés** (Collier Cœur à graver, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Double Cœur, Bracelet cordon à plaque, Bracelet Femme Acier)
+> Un prénom, une date, un mot — gravé pour toujours dans votre bijou ✨ Chaque pièce est personnalisée et gravée à la commande, dans notre atelier 💛 Le cadeau qui porte un peu de vous 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijouxgraves #cadeaupersonnalise #collier #ideecadeau
