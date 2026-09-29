@@ -502,6 +502,7 @@ export default function ProductDetail({ product }) {
   function glassSummary(fv, forClient = false) {
     const p = [];
     if ((fv.numstyle || "").trim()) p.push(`modèle n°${fv.numstyle.trim()}`);
+    if ((fv.gravureExemple || "").trim()) p.push(`style « ${fv.gravureExemple.trim()} »`);
     if ((fv.lettreFleurie || "").trim()) p.push(`lettre fleurie « ${fv.lettreFleurie.trim()} »`);
     if (fv.photo) p.push("photo/logo fourni");
     if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
@@ -1576,12 +1577,33 @@ export default function ProductDetail({ product }) {
 
           {/* Parcours guidé en 4 étapes (carafe) : remplace onglets + champs + aperçu témoin. */}
           {product.parcoursGuide ? (
+            <>
+            {/* Lot de N verres : chaque verre identique ou personnalisé différemment (inchangé) */}
+            {supportsPerGlass && (
+              <div className="perglass">
+                <div className="pg-choice">
+                  <button type="button" className={`pg-opt${!perGlass ? " on" : ""}`} onClick={() => enablePerGlass(false)}>Les {glassQty} identiques</button>
+                  <button type="button" className={`pg-opt${perGlass ? " on" : ""}`} onClick={() => enablePerGlass(true)}>Chacun différent</button>
+                </div>
+                {perGlass && (
+                  <>
+                    <div className="pg-tabs">
+                      {Array.from({ length: glassQty }, (_, i) => (
+                        <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
+                      ))}
+                    </div>
+                    <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>
+                  </>
+                )}
+              </div>
+            )}
             <ParcoursGuide
               product={product}
               fieldValues={fieldValues}
               setFieldValues={setFieldValues}
               unitPrice={unitPrice * quantity}
             />
+            </>
           ) : product.personalizationFields ? (
             <div style={{ marginBottom: 6 }}>
               {product.genderPick ? (

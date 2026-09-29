@@ -2,16 +2,33 @@
 // - PARCOURS_CHAMPS : les champs qu'un modèle peut demander (clé de champ → libellé).
 //   Les 3 sortes d'initiales écrivent toutes dans la clé « initiale » (comme avant).
 // - parcoursEtat(product, fieldValues) : la gravure est-elle complète ? + résumé.
+// ⛔ AUCUN champ obligatoire (règle du gérant, 29/09/2026) : la gravure est validée par le CHOIX
+// (modèle cliqué, lettre, texte, photo). `extra` = supplément affiché (le prix réel vient de
+// engravingPricing du produit).
+const v = (fv, k) => String(fv?.[k] ?? "").trim();
 export const PARCOURS_CHAMPS = {
-  ini1: { key: "initiale", label: "Votre initiale", ph: "Ex. K", max: 1, req: true },
-  ini2: { key: "initiale", label: "Vos 2 initiales", ph: "Ex. JR", max: 2, req: true },
-  ini3: { key: "initiale", label: "Vos 3 initiales", ph: "Ex. ABC", max: 3, req: true },
-  prenom: { key: "prenom", label: "Prénom ou nom", ph: "Ex. Stephan", max: 40, req: true },
-  role: { key: "role", label: "Rôle", ph: "Ex. Papa · Témoin · Best Man", max: 20, req: true },
-  date: { key: "date", label: "Date ou année", ph: "Ex. 1989 · 09.09.25", max: 20, req: false, extra: 3 },
+  ini1: { key: "initiale", label: "Votre initiale", ph: "Ex. K", max: 1 },
+  ini2: { key: "initiale", label: "Vos 2 initiales", ph: "Ex. JR", max: 2 },
+  ini3: { key: "initiale", label: "Vos 3 initiales", ph: "Ex. ABC", max: 3 },
+  prenom: { key: "prenom", label: "Prénom ou nom", ph: "Ex. Stephan", max: 40 },
+  prenoms: { key: "prenom", label: "Prénoms / nom / texte", ph: "Ex. Camille · Elli & Ben · « Santé »", max: 40 },
+  role: { key: "role", label: "Rôle", ph: "Ex. Papa · Témoin · Best Man", max: 20 },
+  date: { key: "date", label: "Date ou année", ph: "Ex. 1989 · 09.09.25", max: 20, extra: 3 },
+  initiale: { key: "initiale", label: "Initiale (monogramme)", ph: "Ex. C · CL", max: 3, extra: 3 },
 };
 
-const v = (fv, k) => String(fv?.[k] ?? "").trim();
+/** Le modèle choisi dans la grille : numéroté (numstyle) OU « gravure en photo » (gravureExemple). */
+export function modeleChoisi(product, fv) {
+  const cfg = product?.parcoursGuide || {};
+  const n = v(fv, "numstyle");
+  if (n && (cfg.modeles || {})[n]) return { n, ...cfg.modeles[n] };
+  const g = v(fv, "gravureExemple");
+  const ph = g ? (cfg.modelesPhoto || []).find((m) => m.value === g) : null;
+  if (ph) return { n: String(ph.n), ...ph };
+  return null;
+}
+
+
 const policeNom = (k) => {
   const noms = { playfair: "Playfair", cinzel: "Cinzel", "cinzel-deco": "Cinzel Decorative", montserrat: "Montserrat", inter: "Inter", "great-vibes": "Great Vibes", allura: "Allura", pacifico: "Pacifico" };
   return noms[k] || k || "Playfair";
@@ -23,19 +40,15 @@ export function parcoursEtat(product, fv) {
   const mode = v(fv, "mode");
   if (!mode) return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
   if (mode === "modele") {
-    const n = v(fv, "numstyle");
-    const M = n ? (cfg.modeles || {})[n] : null;
-    if (!n || !M) return { ok: false, grav: "Un modèle décoré", detail: "", manque: "Cliquez le modèle voulu (étape 2)." };
-    const parts = [], miss = [];
+    const M = modeleChoisi(product, fv);
+    if (!M) return { ok: false, grav: "Un modèle décoré", detail: "", manque: "Cliquez le modèle voulu (étape 2)." };
+    const parts = [];
     (M.champs || []).forEach((k) => {
       const F = PARCOURS_CHAMPS[k]; if (!F) return;
       const val = v(fv, F.key);
-      if (F.req && !val) miss.push(F.label.toLowerCase());
       if (val) parts.push(`${F.label} : ${val}`);
     });
-    const grav = `Modèle n° ${n} — ${M.legende}`;
-    if (miss.length) return { ok: false, grav, detail: parts.join(" · "), manque: `Il manque : ${miss.join(", ")} (étape 2).` };
-    return { ok: true, grav, detail: parts.length ? parts.join(" · ") : "gravé tel quel", manque: "" };
+    return { ok: true, grav: `Modèle n° ${M.n} — ${M.legende}`, detail: parts.length ? parts.join(" · ") : "gravé tel quel", manque: "" };
   }
   if (mode === "lettre") {
     const L = v(fv, "lettreFleurie");

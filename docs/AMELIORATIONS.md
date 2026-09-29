@@ -6,13 +6,11 @@
 > puis « applique ». Rien n'est construit sans son mot. Quand une ligne est faite : la barrer.
 
 ## Proposées le 29/09/2026
-1. **Parcours guidé (comme la carafe) sur les autres fiches à choix** — verre à vin et flûte
-   (maquettes faites, attendent « applique »), puis verre à whisky perso + cocktail + fête des
-   pères (face / fond), puis support téléphone bois (42 modèles + lettre fleurie + photo).
-2. **Verre à vin : petites incohérences à corriger** — l'onglet dit « styles 1 à 19 » alors qu'il y a
-   30 modèles ; le groupe « Dessins & occasions (26–42) » annonce des numéros 31 à 42 qui n'existent
-   pas. Se règle tout seul avec le parcours guidé (groupes 1–13 / 14–19 / 20–30).
-3. **Carafe : champs facultatifs** — retirer les pastilles « obligatoire » (règle du 29/09). Prêt.
+1. **Parcours guidé (comme la carafe) sur les autres fiches à choix** — ~~verre à vin et flûte~~
+   ✅ en ligne le 29/09 ; reste : verre à whisky perso + cocktail + fête des pères (face / fond),
+   puis support téléphone bois (42 modèles + lettre fleurie + photo).
+2. ~~Verre à vin : incohérences « styles 1 à 19 » / « 26–42 »~~ ✅ corrigées par le parcours (29/09).
+3. ~~Carafe : champs facultatifs~~ ✅ fait le 29/09.
 4. **Modèles 20 (Johnnie Walker) et 32 (Jack Daniel's) de la carafe** = marques déposées ; à retirer
    ou remplacer par un motif « whisky » neutre (comme le n° 33).
 5. **Date +3 € sur les modèles qui l'incluent** (carafe 18–28, vin 26–30, flûte 14–16 / 31–35) :

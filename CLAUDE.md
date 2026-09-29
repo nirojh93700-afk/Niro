@@ -29,8 +29,18 @@
   non vide, une photo envoyée) ; les champs d'un modèle (initiale, prénom, rôle, date) sont FACULTATIFS,
   sans pastille « obligatoire ». ⚠️ **La carafe EN LIGNE porte encore les pastilles « obligatoire » sur
   initiale/prénom/rôle** (`PARCOURS_CHAMPS[k].req` + `parcoursEtat`) — à passer en facultatif dès son
-  « applique » (changer `req:true → false` dans `src/lib/parcoursGuide.js`, retirer le `prc-req`, mettre
-  à jour `tools/tests/parcours-guide.mjs`).
+  « applique » → ✅ FAIT le 29/09 soir (plus de `req`, plus de `prc-req`).
+- ✅ **VIN + FLÛTE EN LIGNE LE 29/09 SOIR (« Tu peux appliquer »)** + carafe passée en champs FACULTATIFS
+  (plus aucune pastille « obligatoire », `PARCOURS_CHAMPS` sans `req`). `parcoursGuide` sur
+  `verre-a-vin-grave` (30 modèles, groupes 1–13 / 14–19 / 20–30, `titre`/`objet`/`objetArticle`) et
+  `flute-a-champagne-gravee` (35 modèles + **`modelesPhoto` n° 36–40** = les 5 anciens « Gravures
+  (photos) », qui écrivent toujours `gravureExemple` ; grille 40, groupe « Gravures en photo »). Champs
+  ajoutés `mode`/`texte`/`photo`, `personaTabs` et notes retirés, `engravingPricing` inchangé (date et
+  initiale +3 €). **Le bloc « Les N identiques / Chacun différent » est rendu AUSSI pour les produits à
+  parcours** (dans `ProductDetail.jsx`, avant `<ParcoursGuide>`) — vérifié : lot de 2, verre 1 modèle
+  n° 10 + verre 2 texte → `perGlass` correct au panier. `modeleChoisi()` (lib) = numéroté OU photo.
+  La clé `coffret` n'est écrite que sur les produits qui ont l'étape coffret. 32 vérifications
+  (`npm run test-parcours`) + test navigateur 1280/390 sur les 3 fiches, paniers réels contrôlés.
 - **Maquettes VIN + FLÛTE faites le 29/09 soir** (« Fais-moi la maquette ») : `docs/maquettes/
   verre-vin-parcours-guide.html` (https://claude.ai/artifact/79y5nzvqvPMzp9VvTEs1c2) et
   `flute-parcours-guide.html` (https://claude.ai/artifact/GfwRCqS9CEukTrmuSwmsRB), générateur

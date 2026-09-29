@@ -15,24 +15,28 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
-import { parcoursEtat, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
+import { parcoursEtat, modeleChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
 import PhotoUpload from "./PhotoUpload";
 
 const LETTRES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const MODES = [
-  { key: "modele", titre: "Un modèle décoré", sous: "33 modèles numérotés : monogramme, blason, mariage, whisky… Vous indiquez juste le prénom ou l'initiale." },
+const MODES = (cfg, nbModeles) => [
+  { key: "modele", titre: "Un modèle décoré", sous: cfg.sousModele || `${nbModeles} modèles numérotés, avec vos prénoms si vous voulez.` },
   { key: "lettre", titre: "Une lettre fleurie", sous: "Votre initiale dans un style fleuri, avec un prénom au milieu si vous le souhaitez." },
   { key: "texte", titre: "Mon propre texte", sous: "Un prénom, une date, un petit message — dans l'écriture de votre choix. Sans dessin, juste le texte." },
-  { key: "photo", titre: "Ma photo ou mon logo", sous: "Envoyez votre photo, un dessin ou le logo de votre entreprise : nous le gravons sur la carafe." },
+  { key: "photo", titre: "Ma photo ou mon logo", sous: `Envoyez votre photo, un dessin ou le logo de votre entreprise : nous le gravons sur ${cfg.objetArticle || "la carafe"}.` },
 ];
 
 export default function ParcoursGuide({ product, fieldValues, setFieldValues, unitPrice, onValidity }) {
   const cfg = product.parcoursGuide;
   const modeles = cfg.modeles || {};
+  const modelesPhoto = cfg.modelesPhoto || []; // gravures en photo = des modèles comme les autres (n° à la suite)
   const groupes = cfg.groupes || [];
+  const objet = cfg.objet || "carafe";
   const mode = fieldValues.mode || "";
-  const styleNum = (fieldValues.numstyle || "").trim();
-  const modele = styleNum ? modeles[styleNum] : null;
+  const modele = modeleChoisi(product, fieldValues); // { n, legende, champs, exemple, value? } ou null
+  const styleNum = modele ? modele.n : "";
+  const nbModeles = Object.keys(modeles).length + modelesPhoto.length;
+  const coffrets = cfg.coffrets || [];
   const police = fieldValues.police || "playfair";
   const s2Ref = useRef(null);
   // État d'écran seulement (jamais dans les champs, donc jamais dans le panier).
@@ -50,28 +54,29 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
     if (m === mode) return;
     // La police ne sert qu'au texte libre (lettre / texte / photo) : pour un modèle, le
     // nom est gravé dans l'écriture du modèle, on n'écrit donc pas de police (atelier clair).
-    setFieldValues((prev) => ({ mode: m, coffret: prev.coffret || "", ...(m === "modele" ? {} : { police: "playfair" }) }));
+    setFieldValues((prev) => ({ mode: m, ...(coffrets.length ? { coffret: prev.coffret || "" } : {}), ...(m === "modele" ? {} : { police: "playfair" }) }));
     setTimeout(() => s2Ref.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }
-  function choisirModele(n) {
+  function choisirModele(n, photoValue) {
     // Les champs de l'ancien modèle sont vidés : seuls ceux du nouveau comptent.
-    setFieldValues((prev) => ({ mode: "modele", coffret: prev.coffret || "", numstyle: String(n) }));
+    // Un modèle « en photo » écrit gravureExemple (comme avant), un numéroté écrit numstyle.
+    setFieldValues((prev) => ({ mode: "modele", ...(coffrets.length ? { coffret: prev.coffret || "" } : {}), ...(photoValue ? { gravureExemple: photoValue } : { numstyle: String(n) }) }));
     setGrilleOuverte(false);
   }
 
-  const coffrets = cfg.coffrets || [];
   const grille = Object.keys(modeles).map(Number).sort((a, b) => a - b);
+  const numSteps = coffrets.length ? 4 : 3;
   const replie = Boolean(styleNum) && !grilleOuverte;
 
   return (
     <div className="prc" id="prc">
-      <div className="prc-head"><p className="prc-title">Personnalisez votre carafe</p><p className="prc-sub">4 petites étapes : dites-nous quoi graver, nous faisons le reste.</p></div>
+      <div className="prc-head"><p className="prc-title">{cfg.titre || "Personnalisez votre carafe"}</p><p className="prc-sub">{numSteps} petites étapes : dites-nous quoi graver, nous faisons le reste.</p></div>
 
       {/* ① */}
       <section className="prc-step">
         <div className="prc-sh"><span className={`prc-num${mode ? " done" : ""}`}>1</span><h3>Que voulez-vous graver ?</h3></div>
         <div className="prc-cards">
-          {MODES.map((m) => (
+          {MODES(cfg, nbModeles).map((m) => (
             <button type="button" key={m.key} className={`prc-card${mode === m.key ? " on" : ""}`} onClick={() => choisirMode(m.key)}>
               <span className={`prc-cimg${m.key === "lettre" ? " prc-cimg-alpha" : ""}${m.key === "texte" ? " prc-cimg-aa" : ""}`}>
                 {m.key === "modele" && cfg.vignetteModele && (
@@ -89,7 +94,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
             </button>
           ))}
         </div>
-        <p className="prc-hint">Un seul choix par carafe. Vous pouvez changer d&apos;avis à tout moment.</p>
+        <p className="prc-hint">Un seul choix par {objet}. Vous pouvez changer d&apos;avis à tout moment.</p>
       </section>
 
       {/* ② */}
@@ -101,12 +106,12 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
           {mode === "modele" && (
             <div className="prc-mode">
               <div className="prc-chips">
-                <button type="button" className={`prc-chip${filtre === "all" ? " on" : ""}`} onClick={() => setFiltre("all")}>Tous (1–{grille.length})</button>
+                <button type="button" className={`prc-chip${filtre === "all" ? " on" : ""}`} onClick={() => setFiltre("all")}>Tous (1–{nbModeles})</button>
                 {groupes.map((g) => (
                   <button type="button" key={g.key} className={`prc-chip${filtre === g.key ? " on" : ""}`} onClick={() => setFiltre(g.key)}>{g.label}</button>
                 ))}
               </div>
-              <p className="prc-legend">Sous chaque modèle : ce que vous nous indiquez. Le prénom de l&apos;exemple sera remplacé par le vôtre, dans la même écriture.</p>
+              <p className="prc-legend">Sous chaque modèle : ce que vous pouvez nous indiquer (rien n&apos;est obligatoire). Les prénoms et dates que vous voyez sont des exemples : vous mettez les vôtres, dans la même écriture.</p>
               <div className="prc-one">
                 <div>
                   <div className={`prc-grid${replie ? " picked" : ""}`}>
@@ -125,14 +130,29 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                         </button>
                       );
                     })}
+                    {modelesPhoto.map((M) => {
+                      const g = groupes.find((x) => x.nums.includes(M.n))?.key;
+                      const cache = filtre !== "all" && g !== filtre;
+                      const on = fieldValues.gravureExemple === M.value;
+                      return (
+                        <button type="button" key={"p" + M.n} className={`prc-model${on ? " on" : ""}${cache ? " hide" : ""}`} onClick={() => choisirModele(M.n, M.value)} aria-label={`Modèle n° ${M.n} — ${M.legende}`}>
+                          <span className="prc-mn">n° {M.n}</span>
+                          <span className="prc-mimg prc-mimg-photo">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={M.image} alt="" loading="lazy" />
+                          </span>
+                          <span className="prc-ml">{M.legende}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                   {replie && (
-                    <button type="button" className="prc-change" onClick={() => setGrilleOuverte(true)}>← Changer de modèle (voir les {grille.length})</button>
+                    <button type="button" className="prc-change" onClick={() => setGrilleOuverte(true)}>← Changer de modèle (voir les {nbModeles})</button>
                   )}
                 </div>
               </div>
               {styleNum && (
-                <p className="prc-choisi">Modèle n° {styleNum} choisi ✓ — {modele?.champs?.length ? <>l&apos;exemple montre « {modele.exemple} » : vos indications prendront leur place, dans la même écriture. Regardez la grande photo en haut : il s&apos;y pose.</> : <>ce modèle se grave tel quel, sans texte.</>}</p>
+                <p className="prc-choisi">Modèle n° {styleNum} choisi ✓ — {modele?.champs?.length ? <>{modele.exemple ? <>l&apos;exemple montre « {modele.exemple} » : </> : null}indiquez ce que vous voulez y faire graver (facultatif), dans la même écriture.{modele.value ? null : <> Regardez la grande photo en haut : il s&apos;y pose.</>}</> : <>ce modèle se grave tel quel, sans texte.</>}</p>
               )}
               {modele && modele.champs?.length > 0 && (
                 <div className="prc-fields">
@@ -141,7 +161,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     const F = PARCOURS_CHAMPS[k];
                     return (
                       <div className="field" key={k}>
-                        <label>{F.label}{F.req ? <span className="prc-req">obligatoire</span> : <span className="prc-opt"> (facultatif{F.extra ? `, +${F.extra} €` : ""})</span>}</label>
+                        <label>{F.label}<span className="prc-opt"> (facultatif{F.extra ? `, +${F.extra} €` : ""})</span></label>
                         <input type="text" maxLength={F.max} placeholder={F.ph} value={fieldValues[F.key] || ""} onChange={(e) => set({ [F.key]: e.target.value })} />
                       </div>
                     );
@@ -177,7 +197,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
             <div className="prc-mode">
               <div className="prc-one">
                 <div className="prc-fields">
-                  <div className="field"><label>Votre texte à graver<span className="prc-req">obligatoire</span></label>
+                  <div className="field"><label>Votre texte à graver</label>
                     <input type="text" maxLength={40} placeholder="Ex. Stephan · Pour Papa · Merci" value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} />
                     <span className="prc-count">{(fieldValues.texte || "").length}/40</span></div>
                   <div className="field"><label>Date ou année <span className="prc-opt">(facultatif, +3 €)</span></label>
@@ -193,7 +213,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
               <p className="prc-legend">Une photo, un dessin, un logo : téléversez le fichier (JPG, PNG). Photo seule, ou photo + texte, comme vous voulez. Elle se pose sur la grande photo en haut, où vous pouvez la déplacer. L&apos;atelier vérifie la qualité avant de graver.</p>
               <div className="prc-one">
                 <div className="prc-fields">
-                  <div className="field"><label>Votre photo ou logo<span className="prc-req">obligatoire</span></label>
+                  <div className="field"><label>Votre photo ou logo</label>
                     <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} /></div>
                   <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif)</span></label>
                     <input type="text" maxLength={40} placeholder="Ex. Stephan · 1989" value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} /></div>
@@ -208,7 +228,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       {/* ③ */}
       {coffrets.length > 0 && (
         <section className="prc-step">
-          <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>3</span><h3>Carafe seule ou coffret ?</h3></div>
+          <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>3</span><h3>{cfg.coffretTitre || "Carafe seule ou coffret ?"}</h3></div>
           <div className="prc-cofs">
             {coffrets.map((c) => (
               <button type="button" key={c.value || "seule"} className={`prc-cof${(fieldValues.coffret || "") === c.value ? " on" : ""}`} onClick={() => set({ coffret: c.value })}>

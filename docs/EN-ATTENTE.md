@@ -14,9 +14,8 @@
 
 - **🍷🥂 Verre à vin + flûte — même parcours que la carafe** (29/09 soir) : maquettes FAITES
   (https://claude.ai/artifact/79y5nzvqvPMzp9VvTEs1c2 et https://claude.ai/artifact/GfwRCqS9CEukTrmuSwmsRB),
-  **attend son « applique »**. Puis whisky perso + cocktail + fête des pères, puis support téléphone bois.
-- **🫙 Carafe : passer les champs en FACULTATIF** (demande du 29/09 soir, « il faut pas que ça soit
-  obligatoire ») : prêt à faire en 5 min, **attend son « applique »**.
+  ✅ **EN LIGNE le 29/09 soir** (« Tu peux appliquer »), carafe passée en facultatif en même temps.
+  Suite à proposer : whisky perso + cocktail + fête des pères, puis support téléphone bois.
 - **🫙 Fiche carafe — parcours guidé** (29/09) : ✅ **EN LIGNE le 29/09 soir** (« Applique »), + 4ᵉ choix « Ma photo ou mon logo ». Reste : ses réponses aux 2 questions (date +3 € sur les modèles qui l'incluent ; modèles 20/32 marques déposées) et « reproduire sur vin / flûte / whisky perso » quand il le dira. Maquette d'origine :
   `docs/maquettes/carafe-parcours-guide.html`, artifact https://claude.ai/artifact/9SKYiYbYMJDuVd77ESUj5E
   (4 étapes : quoi graver → modèle/lettre/texte avec SEULS les champs utiles → coffret → résumé, bouton
