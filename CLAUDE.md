@@ -144,6 +144,16 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   jamais un remplacement en bloc.** Si ce n'est pas le cas : corriger le serveur AVANT d'ajouter
   le produit, pas après.
 
+## 💡 ALERTER LE GÉRANT DE TOUTE NOUVEAUTÉ POSSIBLE (règle du 29/09/2026)
+> « C'est des nouveautés que tu peux faire, tu me le dis pour qu'on fasse pour tout le site… il faut que
+> tu me mettes une alerte si t'as des nouveaux trucs, nouveau système pour améliorer le site. »
+- Dès qu'un travail fait apparaître un nouveau système, une incohérence ou une amélioration possible
+  (sur la fiche touchée OU ailleurs sur le site), **l'écrire dans `docs/AMELIORATIONS.md`** et
+  **l'annoncer en fin de message** sous la forme « 💡 Nouveauté possible : … » (1-2 lignes chacune).
+- Un système validé sur UNE fiche (ex. parcours guidé carafe) doit être **proposé pour tout le site**
+  (les fiches du même genre), jamais laissé sur une seule fiche sans le lui dire.
+- Toujours proposer, jamais construire : il choisit → maquette → « applique ».
+
 # ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 09/09/2026)
 > 📋 **`docs/EN-ATTENTE.md` = l'inventaire de tout ce qui est en attente** (messages à envoyer,
 > maquettes validées non appliquées, projets en pause, actions du gérant, questions sans réponse).
