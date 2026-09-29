@@ -12,7 +12,7 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
-- **🫙 Fiche carafe — parcours guidé** (29/09) : maquette FAITE sur sa demande,
+- **🫙 Fiche carafe — parcours guidé** (29/09) : ✅ **EN LIGNE le 29/09 soir** (« Applique »), + 4ᵉ choix « Ma photo ou mon logo ». Reste : ses réponses aux 2 questions (date +3 € sur les modèles qui l'incluent ; modèles 20/32 marques déposées) et « reproduire sur vin / flûte / whisky perso » quand il le dira. Maquette d'origine :
   `docs/maquettes/carafe-parcours-guide.html`, artifact https://claude.ai/artifact/9SKYiYbYMJDuVd77ESUj5E
   (4 étapes : quoi graver → modèle/lettre/texte avec SEULS les champs utiles → coffret → résumé, bouton
   grisé sans gravure). **Attend son retour puis « applique »** ; ensuite reproduire sur verre à vin /

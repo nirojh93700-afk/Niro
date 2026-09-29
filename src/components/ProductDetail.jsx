@@ -40,6 +40,8 @@ import { MODELES, defaultModele, layoutLabel, imageDesign } from "@/lib/modeles"
 import { MOTIF_LIST } from "./Motif";
 import PhotoEngraveLayer from "./PhotoEngraveLayer";
 import MiniGlassPreview from "./MiniGlassPreview";
+import ParcoursGuide from "./ParcoursGuide";
+import { parcoursEtat } from "@/lib/parcoursGuide";
 import MotifTextZone from "./MotifTextZone";
 import StyleScroller from "./StyleScroller";
 import TextEngraveLayer from "./TextEngraveLayer";
@@ -383,6 +385,9 @@ export default function ProductDetail({ product }) {
   function setField(key, value) {
     setFieldValues((prev) => ({ ...prev, [key]: value }));
   }
+  // Parcours guidé (carafe…) : la gravure doit être COMPLÈTE pour ajouter au panier.
+  const parcours = product.parcoursGuide ? parcoursEtat(product, fieldValues) : null;
+  const parcoursBloque = Boolean(parcours) && !parcours.ok;
 
   // Libellé lisible d'une valeur (police, couleur, liste déroulante).
   function valueLabel(field, value) {
@@ -919,6 +924,7 @@ export default function ProductDetail({ product }) {
 
   async function handleAdd() {
     if (soldOut || preparing) return;
+    if (parcoursBloque) { setError(parcours.manque || "Merci de choisir votre gravure."); return; }
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
     if (product.personalizationFields) {
       const missing = visibleFields.find(
@@ -1568,8 +1574,15 @@ export default function ProductDetail({ product }) {
             </div>
           )}
 
-          {/* Champs de gravure dynamiques (selon l'option choisie) */}
-          {product.personalizationFields ? (
+          {/* Parcours guidé en 4 étapes (carafe) : remplace onglets + champs + aperçu témoin. */}
+          {product.parcoursGuide ? (
+            <ParcoursGuide
+              product={product}
+              fieldValues={fieldValues}
+              setFieldValues={setFieldValues}
+              unitPrice={unitPrice * quantity}
+            />
+          ) : product.personalizationFields ? (
             <div style={{ marginBottom: 6 }}>
               {product.genderPick ? (
                 <div className="step-label">2. Personnalisez la gravure</div>
@@ -1984,10 +1997,13 @@ export default function ProductDetail({ product }) {
                 +
               </button>
             </div>
-            <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing}>
+            <button className={`btn btn-gold${parcoursBloque ? " prc-off" : ""}`} style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing || parcoursBloque}>
               {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : "Ajouter au panier"}
             </button>
           </div>
+          {parcoursBloque && !soldOut && (
+            <p className="prc-addhint">{parcours.manque}</p>
+          )}
           {/* Pour celle qui hésite : garder la création sans l'acheter tout de suite. */}
           <WishlistButton
             slug={product.slug}

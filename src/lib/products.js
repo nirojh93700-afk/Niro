@@ -2796,32 +2796,89 @@ export const products = [
       "27": { t: { x: 0.5025, y: 0.1745 }, d: { x: 0.5, y: 0.7359 } },
       "28": { t: { x: 0.4893, y: 0.3841 }, d: { x: 0.5025, y: 0.6557 } },
     },
-    personaTabs: [
-      { key: "motifs", label: "Modèles (n°)", sub: "styles 1 à 32", fields: ["numstyle"] },
-      { key: "lettre", label: "Lettre fleurie", sub: "une initiale", fields: ["lettreFleurie"] },
-      { key: "texte", label: "Texte seul", sub: "prénom, message", fields: ["textenote"] },
-    ],
+    // ⚠️ PARCOURS GUIDÉ (appliqué le 29/09/2026, maquette validée
+    // docs/maquettes/carafe-parcours-guide.html) : la fiche n'affiche PLUS d'onglets ni
+    // la liste de champs ci-dessous telle quelle — c'est `ParcoursGuide.jsx` qui rend les
+    // 4 étapes (quoi graver → modèle/lettre/texte avec SEULS les champs utiles → coffret
+    // → résumé) et qui écrit dans ces mêmes clés. La liste `personalizationFields` reste
+    // la source des libellés pour le panier, la commande et la fiche atelier.
+    parcoursGuide: {
+      vignetteModele: "/produits/carafe-motif-05.png",
+      alphabet: "/produits/alphabet-fleuri.jpg",
+      groupes: [
+        { key: "mono", label: "Monogrammes & noms (1–17)", nums: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17] },
+        { key: "mariage", label: "Mariage & rôles (18–28)", nums: [18,19,20,21,22,23,24,25,26,27,28] },
+        { key: "whisky", label: "Whisky & déco (29–33)", nums: [29,30,31,32,33] },
+      ],
+      // Légende de chaque modèle = ce que la cliente indique (lu sur la planche des 33
+      // motifs) ; `champs` = les SEULS champs affichés (clés de PARCOURS_CHAMPS).
+      modeles: {
+        "1": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "R · ROBIN" },
+        "2": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "T · TONY" },
+        "3": { legende: "3 initiales (monogramme)", champs: ["ini3"], exemple: "ABC" },
+        "4": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "A · ANDREW" },
+        "5": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "B · BRADEN" },
+        "6": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "K · Kevin" },
+        "7": { legende: "Initiale + prénom et nom", champs: ["ini1","prenom"], exemple: "A · Adam Palumbo" },
+        "8": { legende: "2 initiales", champs: ["ini2"], exemple: "JT" },
+        "9": { legende: "2 initiales", champs: ["ini2"], exemple: "S | R" },
+        "10": { legende: "2 initiales", champs: ["ini2"], exemple: "RJ" },
+        "11": { legende: "2 initiales", champs: ["ini2"], exemple: "JR" },
+        "12": { legende: "Une initiale", champs: ["ini1"], exemple: "B" },
+        "13": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "D · Duarte" },
+        "14": { legende: "Prénom ou nom", champs: ["prenom"], exemple: "ROBINSON" },
+        "15": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "E · EDWARDS" },
+        "16": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "W · WATSON" },
+        "17": { legende: "Prénom ou nom", champs: ["prenom"], exemple: "SMITH" },
+        "18": { legende: "Prénom + rôle + date", champs: ["prenom","role","date"], exemple: "Connor · Best Man · 09/09/17" },
+        "19": { legende: "Initiale + rôle", champs: ["ini1","role"], exemple: "E · Best Man" },
+        "20": { legende: "Sans texte (motif seul)", champs: [], exemple: "silhouette" },
+        "21": { legende: "Initiale + prénom", champs: ["ini1","prenom"], exemple: "M · MILLER" },
+        "22": { legende: "Prénom + rôle + date", champs: ["prenom","role","date"], exemple: "RUSSELL · Groom · 29.10.2015" },
+        "23": { legende: "Prénom seul", champs: ["prenom"], exemple: "ANTHONY" },
+        "24": { legende: "Prénom + rôle + date", champs: ["prenom","role","date"], exemple: "DANIEL · BEST MAN · 5.11.18" },
+        "25": { legende: "Initiale + prénom + année", champs: ["ini1","prenom","date"], exemple: "B · Bob · Est. 2016" },
+        "26": { legende: "Initiale + prénom + rôle + date", champs: ["ini1","prenom","role","date"], exemple: "R · ROBERT · GROOM · 8.18.17" },
+        "27": { legende: "Prénom + rôle + date", champs: ["prenom","role","date"], exemple: "GRAYSON · GROOM · 10.30.2018" },
+        "28": { legende: "Prénom + rôle + date", champs: ["prenom","role","date"], exemple: "Justin · Groomsman · 05/05/15" },
+        "29": { legende: "Sans texte (motif seul)", champs: [], exemple: "The Bourbon Room" },
+        "30": { legende: "Sans texte (motif seul)", champs: [], exemple: "Route 66" },
+        "31": { legende: "Prénom + année", champs: ["prenom","date"], exemple: "WHISKY DE STEPHAN · depuis 1989" },
+        "32": { legende: "Sans texte (motif seul)", champs: [], exemple: "étiquette whisky" },
+        "33": { legende: "Sans texte (motif seul)", champs: [], exemple: "Original Whiskey" },
+      },
+      coffrets: [
+        { value: "", titre: "Carafe seule", prix: 0, sous: "La carafe gravée, dans son emballage protégé.", resume: "Carafe seule" },
+        { value: "2verres", titre: "+ 2 verres assortis", prix: 35.80, sous: "Gravés au même style que la carafe · 17,90 € le verre au lieu de 19,90 €.", resume: "+ 2 verres assortis (+35,80 €)" },
+        { value: "4verres", titre: "+ 4 verres assortis", prix: 71.60, sous: "Le coffret complet · 17,90 € le verre au lieu de 19,90 €.", resume: "+ 4 verres assortis (+71,60 €)" },
+      ],
+      coffretNote: "Livraison offerte dès 60 € — c'est le cas avec un coffret.",
+    },
     personalizationFields: [
-      { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle", groups: [
+      { key: "mode", type: "select", label: "Gravure", optional: true, options: [
+        { value: "modele", label: "Un modèle décoré (n°)" },
+        { value: "lettre", label: "Une lettre fleurie" },
+        { value: "texte", label: "Mon propre texte" },
+        { value: "photo", label: "Ma photo ou mon logo" },
+      ] },
+      { key: "photo", type: "photo", optional: true, label: "Votre photo ou logo" },
+      { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Modèle n°", groups: [
         { label: "Monogrammes & noms (1–17)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17"] },
         { label: "Mariage & rôles (18–28)", nums: ["18","19","20","21","22","23","24","25","26","27","28"] },
         { label: "Whisky & déco (29–33)", nums: ["29","30","31","32","33"] },
       ] },
       { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
-      { key: "textenote", type: "note", text: "Écrivez votre prénom / message / date dans les champs ci-dessous. Il sera gravé dans la police choisie." },
+      { key: "initiale", label: "Initiale(s)", placeholder: "Ex. K · JR", maxLength: 4, optional: true },
       { key: "prenom", label: "Prénom / nom", placeholder: "Ex. Stephan", maxLength: 40, optional: true },
-      { key: "initiale", label: "Initiale(s) — monogramme", placeholder: "Ex. K · JR", maxLength: 4, optional: true },
-      { key: "role", label: "Rôle (si le style le prévoit)", placeholder: "Ex. Groom · Best Man", maxLength: 20, optional: true },
+      { key: "role", label: "Rôle", placeholder: "Ex. Papa · Témoin · Best Man", maxLength: 20, optional: true },
+      { key: "texte", label: "Texte à graver", placeholder: "Ex. Pour Papa", maxLength: 40, optional: true },
       { key: "date", label: "Date / année (+3 €)", placeholder: "Ex. 1989 · 09.09.25", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "noteinfo", type: "note", text: "Pour un modèle décoré (monogramme, banderole, lettre fleurie…), le nom est gravé dans l'écriture d'origine du modèle, par défaut. La police sert au texte simple." },
-      { key: "coffret", type: "select", label: "Ajouter des verres assortis ? (coffret)", optional: true, options: [
+      { key: "coffret", type: "select", label: "Coffret", optional: true, options: [
         { value: "", label: "Carafe seule" },
-        { value: "2verres", label: "+ 2 verres gravés assortis (+35,80 € — verre à 17,90 € au lieu de 19,90 €)" },
-        { value: "4verres", label: "+ 4 verres gravés assortis (+71,60 € — verre à 17,90 € au lieu de 19,90 €)" },
+        { value: "2verres", label: "+ 2 verres gravés assortis (+35,80 €)" },
+        { value: "4verres", label: "+ 4 verres gravés assortis (+71,60 €)" },
       ] },
-      { key: "coffretnote", type: "note", text: "Bon à savoir : les verres assortis du coffret sont gravés dans le MÊME style que votre carafe (même modèle / gravure choisie ci-dessus), pour un ensemble coordonné." },
-      { key: "photonote", type: "note", text: "Vous pouvez aussi faire graver VOTRE photo ou votre logo — envoyez-la par message." },
     ],
     engravingPricing: { flatExtras: [
       { key: "coffret", value: "2verres", amount: 35.80, weight: 900 },

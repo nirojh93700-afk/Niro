@@ -1,4 +1,40 @@
-## 🫙 FICHE CARAFE — AUDIT DE CLARTÉ DU 29/09/2026 (constat, RIEN appliqué, maquette à faire)
+## 🫙 FICHE CARAFE — PARCOURS GUIDÉ ✅ EN LIGNE LE 29/09/2026 (« Applique »)
+> **Ce qui est en ligne** (commit du 29/09 soir) : la fiche `carafe-a-whisky-gravee` n'a plus d'onglets ni
+> de liste de champs : `src/components/ParcoursGuide.jsx` rend **4 étapes** — ① « Que voulez-vous
+> graver ? » 4 cartes EXCLUSIVES (modèle décoré / lettre fleurie / mon propre texte / **ma photo ou mon
+> logo**, ajoutée à sa demande le 29/09 : « photo seule ou photo + texte ») ; ② grille des 33 modèles
+> (3 par ligne, 2 sur téléphone, filtres par famille, légende sous chaque = ce que la cliente indique,
+> grille repliée sur le modèle choisi + « Changer de modèle ») puis **SEULS les champs du modèle**
+> (`parcoursGuide.modeles[n].champs`, table lue sur la planche des motifs) ; lettre fleurie = planche +
+> A–Z + prénom facultatif + écriture ; texte = texte obligatoire + date (+3 €) + écriture ; photo =
+> `PhotoUpload` obligatoire + texte facultatif ; ③ coffret 3 cartes, « Carafe seule » cochée d'office ;
+> ④ « Résumé de votre gravure » + total. **Bouton « Ajouter au panier » grisé + phrase « il manque… »
+> tant que la gravure n'est pas complète** (`parcoursEtat` dans `src/lib/parcoursGuide.js`, vérifié
+> AUSSI dans `handleAdd`). Choisir une autre façon de graver VIDE les champs de l'ancienne (seul le
+> coffret est gardé) → plus jamais modèle + lettre + texte enregistrés ensemble.
+- ⛔ **L'APERÇU EST CELUI DU SITE, COMME LES AUTRES VERRES** (rappel ferme du gérant le 29/09 : « il faut
+  que ça ressemble aux autres produits, pourquoi tu fais un nouvel aperçu ? … je veux pas perdre le
+  réglage que j'ai fait pour les photos ») : la gravure se pose sur la GRANDE photo en haut (`mz-fixed`,
+  `PhotoEngraveLayer`, `MiniGlassPreview` « Votre aperçu ») avec les cadres admin de
+  `/gestion/cristal-reglage` (`adminZones`, `motifZone`, `adminTextZones`) — RIEN de tout ça n'a été
+  touché. Un aperçu « à côté de la grille » avait été construit puis RETIRÉ le même jour. Ne pas le remettre.
+- **Clés de champs INCHANGÉES** (panier, commande, fiche atelier, `apparierSpec`) : `mode` (nouveau,
+  select : modele/lettre/texte/photo), `numstyle`, `lettreFleurie`, `initiale`, `prenom`, `role`,
+  `texte` (nouveau), `date`, `police`, `photo` (nouveau), `coffret`. Résumé atelier ex. : « Gravure :
+  Un modèle décoré (n°) · Modèle n° : 5 · Initiale(s) : S · Prénom / nom : Stephan · Coffret : … ».
+  Pour un MODÈLE, aucune police n'est écrite (le nom est gravé dans l'écriture du modèle).
+- **Config** : `product.parcoursGuide` dans `products.js` (`groupes`, `modeles`, `coffrets`,
+  `coffretNote`, `vignetteModele`, `alphabet`). Pour l'appliquer à un autre verre : ajouter
+  `parcoursGuide` + les champs `mode`/`texte`/`photo` à ses `personalizationFields` (tous `optional`),
+  retirer ses `personaTabs`. Le composant est générique (titres « carafe » à paramétrer si besoin).
+- **Tests** : `npm run test-parcours` (23 vérifications de logique) · test navigateur du 29/09 (local,
+  1280 et 390 px) : 0 débordement, 0 erreur JS, panier réel vérifié (fields/spec/visuel composé),
+  exclusivité vérifiée, photo → bouton bloqué sans fichier. ⚠️ CSS préfixe **`.prc-`** (« .gp » existe
+  déjà pour l'aperçu gobelet → conflit `display:flex` rencontré et corrigé).
+- Questions restées ouvertes (à lui) : date +3 € sur les modèles 18-28 qui l'incluent ? modèles n° 20
+  (Johnnie Walker) et n° 32 (Jack Daniel's) = marques déposées, à retirer ? Reproduire sur vin / flûte /
+  whisky perso quand il le dira.
+### (historique) AUDIT DE CLARTÉ DU 29/09/2026 — constat qui a mené au parcours
 > Gérant : « les clients arrivent pas à analyser cette page… c'est où qu'ils choisissent les numéros,
 > tout est mal expliqué, dis-moi comment tu vas corriger tout ça ». Audit fait sur le vrai rendu
 > (build local, 390 px, captures dans le transcript). **Constats vérifiés** :

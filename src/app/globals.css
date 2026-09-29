@@ -4512,3 +4512,81 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 }
 .pr-envoi{background:#fdfbf5;border-color:var(--gold);font-size:.92rem}
 .pr-t-invalide{background:#f0eee9;color:#6a6055;border-color:#ddd6c8}
+
+/* ============================================================
+   PARCOURS GUIDÉ de personnalisation (carafe) — 29/09/2026
+   Maquette validée : docs/maquettes/carafe-parcours-guide.html
+   Composant : src/components/ParcoursGuide.jsx (classes .prc-*)
+   ============================================================ */
+.prc{position:relative;border:1px solid var(--line);border-radius:16px;padding:16px 14px 10px;margin:4px 0 14px;background:var(--paper)}
+.prc [hidden],.prc-addhint[hidden]{display:none!important}
+.prc-head{margin:0 0 12px}.prc-title{font-family:var(--font-display),serif;font-size:1.25rem;font-weight:700;margin:0}.prc-sub{font-size:.85rem;color:var(--ink-soft);margin:3px 0 0}
+.prc-step{border-top:1px solid var(--line);padding:14px 0 12px}
+.prc-sh{display:flex;align-items:center;gap:10px;margin-bottom:10px}.prc-sh h3{font-size:1rem;font-weight:700;margin:0;font-family:var(--font-body),sans-serif}
+.prc-num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--cream-2);color:var(--ink);font-weight:800;font-size:.85rem;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--line)}
+.prc-num.done{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;border-color:transparent;font-size:0}
+.prc-num.done::after{content:"✓";font-size:.85rem}
+.prc-hint{font-size:.78rem;color:var(--ink-soft);margin:8px 0 0}
+.prc-legend{font-size:.8rem;color:var(--ink-soft);margin:0 0 10px;line-height:1.45}
+.prc-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.prc-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 10px;border:1.5px solid var(--line);border-radius:14px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);text-align:center;transition:border-color .15s,box-shadow .15s}
+.prc-card:hover{border-color:var(--gold)}.prc-card.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.prc-card.on .prc-ctxt b::after{content:" ✓";color:var(--gold-dark)}
+.prc-cimg{width:78px;height:78px;border-radius:10px;background:#efe6d6;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.prc-cimg img{width:86%;height:86%;object-fit:contain;mix-blend-mode:multiply}.prc-cimg-alpha img{width:100%;height:100%;object-fit:cover;object-position:left top}
+.prc-cimg-aa span{font-size:2.6rem;color:var(--ink);line-height:1}
+.prc-cimg-ph{font-size:2rem;line-height:1}
+.prc-ctxt{display:flex;flex-direction:column;gap:3px}.prc-ctxt b{font-size:.92rem}.prc-ctxt small{font-size:.74rem;color:var(--ink-soft);line-height:1.35}
+.prc-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.prc-chip{font-family:var(--font-body),sans-serif;font-weight:600;font-size:.76rem;line-height:1;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.prc-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.prc-one{display:block}
+.prc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:520px;overflow:auto;padding:3px;scrollbar-width:thin}
+.prc-choisi{font-size:.82rem;color:var(--ink);background:#fffaf0;border:1px solid #e7d3a1;border-radius:10px;padding:9px 12px;margin:10px 0 0;line-height:1.45}
+.prc-grid.picked{max-height:none;overflow:visible}
+.prc-grid.picked .prc-model:not(.on){display:none}
+.prc-model{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 6px 8px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink)}
+.prc-model:hover{border-color:var(--gold)}.prc-model.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.prc-model.hide{display:none}
+.prc-mn{position:absolute;top:6px;left:6px;font-size:.7rem;font-weight:800;background:var(--ink);color:#fff;border-radius:999px;padding:2px 7px}
+.prc-model.on .prc-mn{background:var(--gold-dark)}
+.prc-mimg{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#efe6d6;border-radius:8px;overflow:hidden}
+.prc-mimg img{width:80%;height:80%;object-fit:contain;mix-blend-mode:multiply}
+.prc-ml{font-size:.72rem;font-weight:600;color:var(--ink-soft);text-align:center;line-height:1.25}
+.prc-model.on .prc-ml{color:var(--gold-dark)}
+.prc-change{display:inline-block;margin:8px 0 0;font-family:var(--font-body),sans-serif;font-weight:600;font-size:.78rem;line-height:1;color:var(--gold-dark);background:none;border:1px solid var(--gold);border-radius:999px;padding:8px 12px;cursor:pointer}
+.prc-fields{margin-top:12px;padding:12px 12px 2px;border:1px solid #e7d3a1;border-radius:12px;background:#fffaf0}
+.prc-fields .field{margin-bottom:12px;position:relative}
+.prc-fields .field label{font-size:.82rem}.prc-req{font-size:.68rem;font-weight:700;color:#fff;background:var(--gold-dark);border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.prc-opt{font-weight:400;color:var(--ink-soft)}
+.prc-fields .field input{padding:10px 12px;box-sizing:border-box;min-width:0}.prc-count{position:absolute;right:10px;top:34px;font-size:.68rem;color:var(--ink-soft)}
+.prc-ftitle{font-size:.82rem;font-weight:700;margin:0 0 8px}.prc-ftitle em{font-style:normal;color:var(--gold-dark)}
+.prc-alpha{width:100%;border-radius:10px;border:1px solid var(--line);display:block;margin-bottom:8px;background:#fff}
+.prc-letters{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;margin-bottom:6px}
+.prc-let{font-family:var(--font-display),serif;font-weight:700;font-size:.9rem;line-height:1;padding:8px 0;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer}
+.prc-let:hover{border-color:var(--gold)}.prc-let.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0;color:var(--gold-dark)}
+.prc-pols{display:flex;flex-wrap:wrap;gap:6px}
+.prc-pol{font-size:1rem;line-height:1;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);cursor:pointer}
+.prc-pol.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.prc-cofs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.prc-cof{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;padding:12px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);position:relative}
+.prc-cof::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid #cfc4b2;position:absolute;top:12px;right:12px;background:#fff}
+.prc-cof.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.prc-cof.on::before{border-color:var(--gold-dark);background:radial-gradient(circle,var(--gold-dark) 45%,#fff 50%)}
+.prc-cof b{font-size:.9rem;padding-right:26px}.prc-cp{font-size:.82rem;font-weight:700;color:var(--gold-dark)}.prc-cof small{font-size:.72rem;color:var(--ink-soft);line-height:1.35}
+.prc-sum{border:1px solid #e7d3a1;border-radius:12px;background:linear-gradient(135deg,#fbf4e6,#fffdf9);padding:6px 14px}
+.prc-sumrow{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #e7d3a1;font-size:.86rem}.prc-sumrow:last-child{border-bottom:0}
+.prc-sumrow span{color:var(--ink-soft);flex:none}.prc-sumrow b{text-align:right}
+.prc-sumtot b{font-size:1.1rem;color:var(--gold-dark)}
+.prc-miss{color:#b4552f;font-weight:600}
+.prc-photo{font-size:.8rem;color:var(--ink-soft);margin:10px 0 0;line-height:1.45}.prc-photo a{color:var(--gold-dark);text-decoration:underline;font-weight:600}
+.prc-off{opacity:.45;cursor:not-allowed;box-shadow:none!important;filter:grayscale(.6)}
+.prc-addhint{font-size:.78rem;color:#b4552f;background:#fff5ee;border:1px solid #f2cdb6;border-radius:10px;padding:8px 12px;margin:-4px 0 12px}
+@media (max-width:720px){
+  .prc{padding:14px 10px 8px}
+  .prc-cards{grid-template-columns:1fr;gap:8px}
+  .prc-card{flex-direction:row;text-align:left;padding:10px}.prc-cimg{flex:none;width:64px;height:64px}
+  .prc-grid{max-height:none;overflow:visible;grid-template-columns:repeat(2,1fr)}
+  .prc-letters{grid-template-columns:repeat(7,1fr)}
+  .prc-cofs{grid-template-columns:1fr}
+}
