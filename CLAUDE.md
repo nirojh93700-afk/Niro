@@ -1,3 +1,35 @@
+## 🫙 FICHE CARAFE — AUDIT DE CLARTÉ DU 29/09/2026 (constat, RIEN appliqué, maquette à faire)
+> Gérant : « les clients arrivent pas à analyser cette page… c'est où qu'ils choisissent les numéros,
+> tout est mal expliqué, dis-moi comment tu vas corriger tout ça ». Audit fait sur le vrai rendu
+> (build local, 390 px, captures dans le transcript). **Constats vérifiés** :
+- 🔴 **On peut ajouter la carafe au panier SANS RIEN choisir** : tous les champs sont `optional:true`
+  → panier `personalization:""`, `fields:{}`, « Ajouté au panier ✓ ». Une carafe à 54,90 € peut être
+  commandée sans aucune indication de gravure. (Même mécanique probable sur verre à vin / flûte /
+  whisky perso : à vérifier avant de généraliser.)
+- 🔴 **Les 5 champs texte (Prénom, Initiale, Rôle, Date, Police) s'affichent TOUJOURS**, sous les
+  3 onglets, quel que soit le modèle choisi (`tabOf` → "*" pour les champs hors onglet). La cliente
+  ne sait pas lesquels remplir : le n°9-12 n'a qu'une date, le n°23 qu'un nom, les n°29-33 rien
+  (`styleTextZone`). Idem sous « Lettre fleurie » et « Texte seul » (« Rôle », « Initiale » n'ont
+  aucun sens là).
+- 🟠 Onglets peu lisibles (« styles 1 à 32 » alors qu'il y en a 33), libellé « Choisissez un modèle
+  (facultatif) », vignettes minuscules (3 visibles sur téléphone), aucune légende par modèle
+  (prénom + date ? date seule ? sans texte ?). Le clic sur un n° fait SAUTER la page, l'aperçu
+  se met sur la grande photo tout en haut (hors écran) + une mini-fenêtre « Votre aperçu » qui
+  chevauche la bulle « Une question ? ». L'exemple « B BRADEN » ne dit pas que BRADEN = son prénom.
+- 🟠 4 encadrés d'explication empilés (note police, coffret, photo/logo, onglet) = mur de texte ;
+  « Aperçu témoin de la gravure » gris = faux placeholder ; coffret « — Choisir — » alors que
+  « Carafe seule » devrait être présélectionné ; libellés d'options du coffret trop longs.
+- 🟠 Choix non exclusifs entre onglets (déjà noté §« deux façons de graver ») : modèle + lettre + texte
+  peuvent être enregistrés ensemble.
+**Plan proposé au gérant (en attente de son retour → maquette → « applique »)** : parcours guidé
+en 4 étapes — ① « Que voulez-vous graver ? » 3 grandes cartes exclusives (choisir l'une vide les
+autres) · ② selon le choix : grille de modèles 2 par ligne avec légende « prénom + date / date
+seule / sans texte » + aperçu de la carafe JUSTE À CÔTÉ (pas en haut de page) + SEULS les champs
+que ce modèle utilise (lus dans `styleTextZone`) ; lettre fleurie = lettre (+ nom facultatif) ;
+texte seul = texte obligatoire + police + date · ③ coffret en 3 cartes, « Carafe seule » coché
+d'office · ④ « Résumé de votre gravure » avant le bouton, et **bouton grisé tant qu'aucune gravure
+n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même composant).
+
 ## ⭐ AVIS CLIENTS RÉSERVÉS AUX VRAIES ACHETEUSES (27/09/2026)
 > Un avis « bof » sans nom déposé sur le Collier Couple Cœur a révélé que **n'importe qui pouvait
 > laisser un avis sur n'importe quelle fiche sans jamais avoir acheté** (formulaire anonyme,
