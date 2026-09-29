@@ -18,6 +18,31 @@
   `PhotoEngraveLayer`, `MiniGlassPreview` « Votre aperçu ») avec les cadres admin de
   `/gestion/cristal-reglage` (`adminZones`, `motifZone`, `adminTextZones`) — RIEN de tout ça n'a été
   touché. Un aperçu « à côté de la grille » avait été construit puis RETIRÉ le même jour. Ne pas le remettre.
+- ⛔⛔ **LA MISE EN PAGE DU PARCOURS CARAFE EST LA RÉFÉRENCE DU SITE — NE PLUS LA CHANGER (ordre du
+  gérant, 29/09/2026 soir : « la prochaine fois tu dois pas changer… il faut pas que tu fasses n'importe
+  quoi… il faut que tout le site ressemble »)**. Chaque fiche garde SES modèles, SES photos, SES logos
+  et SES textes ; seule la FAÇON DE CHOISIR (les étapes numérotées, les cartes exclusives, la grille avec
+  légende, la grille repliée + « Changer de modèle », le résumé, le bouton grisé) est la même partout,
+  reproduite à l'identique depuis `ParcoursGuide.jsx`. Pas de nouvel aperçu, pas de variante « améliorée ».
+- ⛔ **AUCUN CHAMP OBLIGATOIRE DANS LE PARCOURS (gérant, 29/09 soir : « il faut pas que ça soit
+  obligatoire non plus »)** : la gravure est validée par le CHOIX (un modèle cliqué, une lettre, un texte
+  non vide, une photo envoyée) ; les champs d'un modèle (initiale, prénom, rôle, date) sont FACULTATIFS,
+  sans pastille « obligatoire ». ⚠️ **La carafe EN LIGNE porte encore les pastilles « obligatoire » sur
+  initiale/prénom/rôle** (`PARCOURS_CHAMPS[k].req` + `parcoursEtat`) — à passer en facultatif dès son
+  « applique » (changer `req:true → false` dans `src/lib/parcoursGuide.js`, retirer le `prc-req`, mettre
+  à jour `tools/tests/parcours-guide.mjs`).
+- **Maquettes VIN + FLÛTE faites le 29/09 soir** (« Fais-moi la maquette ») : `docs/maquettes/
+  verre-vin-parcours-guide.html` (https://claude.ai/artifact/79y5nzvqvPMzp9VvTEs1c2) et
+  `flute-parcours-guide.html` (https://claude.ai/artifact/GfwRCqS9CEukTrmuSwmsRB), générateur
+  `tools/maquettes/parcours-verres.py` (part de `vin-src.html`/`flute-src.html` capturés par `next start`,
+  reprend le VRAI bloc CSS `.prc-*` de `globals.css`). Contenu gardé tel quel : 30 modèles vin / 35 flûte
+  (légendes lues sur les planches, table `modeles` du générateur), lettre fleurie, texte seul, + carte
+  « Ma photo ou mon logo » ; la flûte garde sa 4ᵉ façon « Gravures (photos) » = carte « Une gravure
+  réelle » (5 photos). Pas d'étape coffret (les lots restent à droite, « chacun différent » inchangé).
+  3 étapes. **En attente de son « applique »** → alors : `parcoursGuide` sur les 2 produits (+ champs
+  `mode`/`texte`/`photo`, retirer `personaTabs`), le composant doit accepter un titre (« votre verre » /
+  « votre flûte »), un mode `gravure` (lettering `gravureExemple`) et l'absence de coffret. Suite prévue :
+  whisky perso + cocktail + fête des pères (face/fond), puis support téléphone bois.
 - **Clés de champs INCHANGÉES** (panier, commande, fiche atelier, `apparierSpec`) : `mode` (nouveau,
   select : modele/lettre/texte/photo), `numstyle`, `lettreFleurie`, `initiale`, `prenom`, `role`,
   `texte` (nouveau), `date`, `police`, `photo` (nouveau), `coffret`. Résumé atelier ex. : « Gravure :
