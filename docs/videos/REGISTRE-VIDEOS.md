@@ -223,3 +223,36 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaunaissance #cadeaupersonnalise #gravure #ideecadeau
+
+---
+
+## Vidéo 19 — Bijoux gravés & Cristal Photo 3D (29/09/2026)
+
+| Fichier | Format | Durée | Poids | Usage |
+|---|---|---|---|---|
+| `docs/videos/19-bijoux-cristal-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 35,5 s | 2,1 Mo | Version publiable (Reels / TikTok / Stories) et légère pour le téléphone |
+
+- **Source** : `tools/video/pub_bijoux_cristal_19.py` (montage Pillow/ffmpeg, gratuit, sans
+  son — même famille que les vidéos 10-13, 16-18).
+- **Demande du gérant** : « une autre vidéo des bijoux et des cristal, bloc de cristal ».
+- 🔴 **Constat avant de monter (planche contact du 29/09)** : sur 14 photos de blocs
+  cristal, `cristal-bloc-h-creme.jpg`/`cristal-bloc-v-creme.jpg` sont des blocs VIERGES
+  (aucune photo gravée) et `cristal-v-bebe.jpg` reste écartée (photo floue, déjà constaté
+  précédemment) ; les 2 « poster » de vidéo sont des doublons d'autres photos. **7 photos de
+  cristal retenues** parmi les 9 restantes, alternées avec 7 bijoux déjà vérifiés gravés
+  (vidéo 17) pour le rythme.
+- **Produits (14, tous vérifiés gravés)** : Collier Cœur à graver · Collier Cœur & 2 plaques ·
+  Collier 3 Cœurs entrelacés · Collier Double Cœur (2 photos) · Bracelet cordon à plaque ·
+  Bracelet Femme Acier · Cristal Photo 3D Horizontal (amis, couple, famille) · Cristal Photo
+  3D Vertical (femme, enfant & chat, enfant & chien, groupe).
+- **Habillage** : même recette que les vidéos 16-18. Ruban « ✦ BIJOUX & CRISTAL GRAVÉS ✦ »,
+  pastille « GRAVÉ ». Cartes intro/fin encre & or. Aucun prix, aucun délai, aucun nombre de
+  produits.
+
+### Description à copier-coller (livrée le 29/09/2026)
+
+**Vidéo 19 — Bijoux & Cristal gravés** (Collier Cœur à graver, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Double Cœur, Bracelet cordon à plaque, Bracelet Femme Acier, Cristal Photo 3D)
+> Un prénom sur un bijou, une photo dans le cristal — gravés pour toujours ✨ Chaque pièce est personnalisée et réalisée à la commande, dans notre atelier 💛 Un cadeau qui leur ressemble 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijouxgraves #cristal3d #cadeaupersonnalise #ideecadeau
