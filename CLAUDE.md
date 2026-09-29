@@ -21,7 +21,19 @@
   « Carafe seule » devrait être présélectionné ; libellés d'options du coffret trop longs.
 - 🟠 Choix non exclusifs entre onglets (déjà noté §« deux façons de graver ») : modèle + lettre + texte
   peuvent être enregistrés ensemble.
-**Plan proposé au gérant (en attente de son retour → maquette → « applique »)** : parcours guidé
+✅ **MAQUETTE FAITE LE 29/09/2026 (« Vas-y fais la maquette »)** : `docs/maquettes/carafe-parcours-guide.html`
+(artifact https://claude.ai/artifact/9SKYiYbYMJDuVd77ESUj5E), interactive, construite depuis le VRAI rendu de
+la fiche (générateur `tools/maquettes/carafe-parcours-guide.py`, à relancer après une nouvelle capture
+`carafe-src.html` via `next start`). Testée Chromium 1280/390 px : 0 débordement, 0 erreur JS, parcours
+complet joué (modèle 18 → champs → coffret → total 93,70 € ; n°29 sans texte → bouton actif ; passage à
+« lettre » vide le modèle). **Légende par modèle lue sur la planche des 33 motifs** (`MODELES` dans le
+générateur : initiale / 2-3 initiales / prénom / rôle / date / sans texte) — c'est CETTE table qui dit quels
+champs afficher, `styleTextZone` (t/d) n'est pas assez précis. Après un modèle choisi, la grille se replie
+sur lui (bouton « Changer de modèle »). Date = +3 € gardé partout (à trancher : sur les modèles 18-28 où
+la date fait partie du dessin, faut-il la facturer ?). ⚠️ Modèles 20 (Johnnie Walker) et 32 (Jack
+Daniel's) = marques déposées encore dans la planche en ligne. **En attente de son « applique »** — rien
+n'est touché dans `products.js` / `ProductDetail.jsx`.
+**Plan proposé au gérant (→ maquette faite, en attente du « applique »)** : parcours guidé
 en 4 étapes — ① « Que voulez-vous graver ? » 3 grandes cartes exclusives (choisir l'une vide les
 autres) · ② selon le choix : grille de modèles 2 par ligne avec légende « prénom + date / date
 seule / sans texte » + aperçu de la carafe JUSTE À CÔTÉ (pas en haut de page) + SEULS les champs

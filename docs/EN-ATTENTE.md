@@ -1,6 +1,6 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
 
-> **Mis à jour le 24/09/2026.** Ce fichier est l'index unique pour reprendre le travail depuis
+> **Mis à jour le 29/09/2026.** Ce fichier est l'index unique pour reprendre le travail depuis
 > n'importe quelle conversation : messages à envoyer, maquettes validées non appliquées, projets en
 > pause, actions côté gérant, questions sans réponse. Le détail de chaque sujet reste dans
 > `CLAUDE.md`. **À tenir à jour** : quand une ligne est faite, la barrer ou la retirer.
@@ -12,6 +12,12 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
+- **🫙 Fiche carafe — parcours guidé** (29/09) : maquette FAITE sur sa demande,
+  `docs/maquettes/carafe-parcours-guide.html`, artifact https://claude.ai/artifact/9SKYiYbYMJDuVd77ESUj5E
+  (4 étapes : quoi graver → modèle/lettre/texte avec SEULS les champs utiles → coffret → résumé, bouton
+  grisé sans gravure). **Attend son retour puis « applique »** ; ensuite reproduire sur verre à vin /
+  flûte / whisky perso. Questions ouvertes : date +3 € sur les modèles qui l'incluent ? modèles 20 et 32
+  (marques déposées) à retirer ? Détail : `CLAUDE.md` § FICHE CARAFE.
 - **📊 Étude de marché** (26/09) : `docs/etude-marche-2026-09.md`, artifact
   https://claude.ai/artifact/VWntbMV3t7VNiadodvW7f2 — 6 pistes à valider (porte-clés 9,90, veilleuse 34,90,
   bracelets homme 34,90, afficher la livraison offerte, trancher la 1re gravure bijoux, préparer
