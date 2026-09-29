@@ -38,15 +38,18 @@ VIN = {
 FLUTE = {
   "src": f"{S}/flute-src.html", "out": f"{ROOT}/docs/maquettes/flute-parcours-guide.html",
   "titre": "Personnalisez votre flûte", "objet": "flûte", "prix": 17.90,
-  "groupes": [("couples", "Couples (1–13)", range(1, 14)), ("noms", "Noms & banderoles (14–19)", range(14, 20)), ("dessins", "Dessins & occasions (20–35)", range(20, 36))],
+  "groupes": [("couples", "Couples (1–13)", range(1, 14)), ("noms", "Noms & banderoles (14–19)", range(14, 20)), ("dessins", "Dessins & occasions (20–35)", range(20, 36)), ("photos", "Gravures en photo (36–40)", range(36, 41))],
   "modeles": {
     **{n: DESSIN for n in range(1, 10)}, 10: BANDEROLE, 11: BANDEROLE, 12: BANDEROLE, 13: BANDEROLE,
     14: NOMS_DATE, 15: NOMS_DATE, 16: NOMS_DATE, 17: ("Prénoms dans les cœurs", ["prenom"]), 18: ("Prénoms dans la banderole (+ date)", ["prenom", "date"]), 19: ("Prénoms dans la banderole (+ date)", ["prenom", "date"]),
     20: ("Dessin seul (ou + prénom)", ["prenom"]), 21: DESSIN, 22: DESSIN, 23: ("Prénoms dans le cœur (+ date)", ["prenom", "date"]), 24: DESSIN, 25: DESSIN, 26: DESSIN, 27: DESSIN, 28: DESSIN, 29: DESSIN, 30: DESSIN,
     31: NOMS_DATE, 32: NOMS_DATE, 33: NOMS_DATE, 34: ("Dessin seul (ou + prénom)", ["prenom"]), 35: ("Prénoms + nom + date", ["prenom", "date"]),
+    # gravures réelles en photo = des modèles comme les autres (les prénoms des photos sont des EXEMPLES)
+    36: ("Prénoms + date ou initiale, dans ce style", ["prenom", "date", "initiale"]), 37: ("Prénoms + date ou initiale, dans ce style", ["prenom", "date", "initiale"]),
+    38: ("Initiales ou prénoms + date, dans ce style", ["prenom", "date", "initiale"]), 39: ("Prénoms + date, dans ce style", ["prenom", "date"]), 40: ("Dessin seul (ou + prénom)", ["prenom"]),
   },
-  # 4e façon propre à la flûte, gardée telle quelle : les vraies gravures en photo
-  "gravures": [("prenoms-coeur", "Prénoms & cœur", "/produits/flute-grav-06.webp"), ("couronne", "Couronne feuillage", "/produits/flute-grav-05.webp"),
+  # les 5 vraies gravures en photo de la fiche → modèles n° 36 à 40
+  "photos": [("prenoms-coeur", "Prénoms & cœur", "/produits/flute-grav-06.webp"), ("couronne", "Couronne feuillage", "/produits/flute-grav-05.webp"),
                ("monogramme", "Monogramme & banderole", "/produits/flute-grav-01.jpg"), ("prenoms-script", "Prénoms script", "/produits/flute-grav-04.webp"), ("plume", "Plume", "/produits/flute-grav-02.webp")],
 }
 
@@ -65,6 +68,7 @@ def datauri(rel, maxpx=640, q=72):
 
 def size_for(rel):
     if "motif" in rel: return (340, 80)
+    if "flute-grav" in rel: return (420, 74)
     if "alphabet" in rel: return (760, 78)
     if "vierge" in rel: return (900, 78)
     return (640, 72)
@@ -110,18 +114,22 @@ def build(P, slug):
     assert len(re.findall(r"<div\b", old)) == old.count("</div>"), "segment non équilibré"
 
     imgs = style_images(slug)
+    photos_n = set()
+    if P.get("photos"):
+        base = max(imgs)
+        for k, (v, lab, img) in enumerate(P["photos"]): imgs[base + 1 + k] = img; photos_n.add(base + 1 + k)
     motifs = {n: datauri(p, *size_for(p)) for n, p in imgs.items()}
     alphabet = datauri("/produits/alphabet-fleuri.jpg", 760, 78)
     grp_of = {n: g for g, _, r in P["groupes"] for n in r}
     grid = "".join(
       f'<button type="button" class="prc-model" data-n="{n}" data-g="{grp_of[n]}"><span class="prc-mn">n° {n}</span>'
-      f'<span class="prc-mimg"><img src="{motifs[n]}" alt=""></span><span class="prc-ml">{P["modeles"][n][0]}</span></button>'
+      f'<span class="prc-mimg{" prc-mimg-photo" if n in photos_n else ""}"><img src="{motifs[n]}" alt=""></span><span class="prc-ml">{P["modeles"][n][0]}</span></button>'
       for n in sorted(imgs))
     chips = '<button type="button" class="prc-chip on" data-g="all">Tous (1–%d)</button>' % len(imgs) + "".join(f'<button type="button" class="prc-chip" data-g="{g}">{lab}</button>' for g, lab, _ in P["groupes"])
     lettres = "".join(f'<button type="button" class="prc-let" data-l="{c}">{c}</button>' for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     pols = "".join(f'<button type="button" class="prc-pol {cls}" data-p="{k}">{lab}</button>' for k, lab, cls in POLICES)
     grav_cards = ""
-    if P["gravures"]:
+    if False:
         grav_cards = '<button type="button" class="prc-card" data-mode="gravure"><span class="prc-cimg prc-cimg-photo"><img src="%s" alt=""></span><span class="prc-ctxt"><b>Une gravure réelle</b><small>5 styles déjà gravés, en photo : prénoms & cœur, couronne, monogramme, script, plume.</small></span></button>' % datauri(P["gravures"][0][2], 400, 72)
         grav_grid = "".join(f'<button type="button" class="prc-grav" data-v="{v}"><img src="{datauri(img, 480, 74)}" alt=""><span>{lab}</span></button>' for v, lab, img in P["gravures"])
     obj = P["objet"]
@@ -143,13 +151,13 @@ def build(P, slug):
   <div class="prc-sh"><span class="prc-num" data-step="2">2</span><h3 id="prc-s2-title">Choisissez votre modèle</h3></div>
   <div class="prc-mode" data-mode="modele" hidden>
     <div class="prc-chips">{chips}</div>
-    <p class="prc-legend">Sous chaque modèle : ce que vous pouvez nous indiquer (rien n'est obligatoire). Le modèle se pose sur la grande photo en haut.</p>
+    <p class="prc-legend">Sous chaque modèle : ce que vous pouvez nous indiquer (rien n'est obligatoire). Les prénoms et dates que vous voyez sont des exemples : vous mettez les vôtres.</p>
     <div class="prc-grid" id="prc-grid">{grid}</div>
     <button type="button" class="prc-change" id="prc-change" hidden>← Changer de modèle (voir les {len(imgs)})</button>
     <p class="prc-choisi" id="prc-choisi" hidden></p>
     <div class="prc-fields" id="prc-mfields" hidden></div>
   </div>
-  {'<div class="prc-mode" data-mode="gravure" hidden><p class="prc-legend">Ces styles sont de vraies gravures faites dans l&apos;atelier : choisissez celui que vous aimez, nous y mettons vos prénoms.</p><div class="prc-gravs">' + grav_grid + '</div><div class="prc-fields"><div class="field"><label>Prénoms / nom / texte <span class="prc-opt">(facultatif)</span></label><input type="text" id="prc-gnom" maxlength="40" placeholder="Ex. Camille · Elli &amp; Ben"></div><div class="field"><label>Date <span class="prc-opt">(facultatif, +3 €)</span></label><input type="text" id="prc-gdate" maxlength="20" placeholder="Ex. 23.07.2024"></div></div></div>' if P["gravures"] else ''}
+  {'' if True else '<div class="prc-mode" data-mode="gravure" hidden><p class="prc-legend">Ces styles sont de vraies gravures faites dans l&apos;atelier : choisissez celui que vous aimez, nous y mettons vos prénoms.</p><div class="prc-gravs">' + grav_grid + '</div><div class="prc-fields"><div class="field"><label>Prénoms / nom / texte <span class="prc-opt">(facultatif)</span></label><input type="text" id="prc-gnom" maxlength="40" placeholder="Ex. Camille · Elli &amp; Ben"></div><div class="field"><label>Date <span class="prc-opt">(facultatif, +3 €)</span></label><input type="text" id="prc-gdate" maxlength="20" placeholder="Ex. 23.07.2024"></div></div></div>' if P["gravures"] else ''}
   <div class="prc-mode" data-mode="lettre" hidden>
     <p class="prc-legend">Cliquez la lettre voulue : elle sera gravée dans ce style fleuri. Le prénom (facultatif) se grave dans la bande, au milieu de la lettre.</p>
     <img class="prc-alpha" src="{alphabet}" alt="Alphabet fleuri A à Z">
@@ -203,6 +211,7 @@ html{--font-display:"Playfair Display",serif;--font-body:"Inter",sans-serif;--fo
 .prc{border:2px dashed #d6b25a}
 .prc-tag{position:absolute;top:-11px;left:12px;background:#d6b25a;color:#1d1811;font-size:.66rem;font-weight:800;letter-spacing:.06em;padding:3px 9px;border-radius:999px;text-transform:uppercase}
 .prc-cimg-photo img{width:100%;height:100%;object-fit:cover}
+.prc-mimg-photo img{width:100%;height:100%;object-fit:cover;mix-blend-mode:normal}
 .prc-gravs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
 .prc-grav{display:flex;flex-direction:column;gap:6px;padding:6px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink)}
 .prc-grav img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px}.prc-grav span{font-size:.74rem;font-weight:600;text-align:center}
@@ -292,7 +301,7 @@ html{--font-display:"Playfair Display",serif;--font-body:"Inter",sans-serif;--fo
   $("#prc-add").addEventListener("click", function(){ if ($("#prc-add").disabled) return; var t = $("#prc-toast") || (function(){ var d = document.createElement("div"); d.id = "prc-toast"; d.className = "prc-toast"; document.body.appendChild(d); return d; })(); t.textContent = "Ajouté au panier ✓ (maquette : rien n'est réellement ajouté)"; t.classList.add("on"); setTimeout(function(){ t.classList.remove("on"); }, 2600); });
   refresh();
 })();
-</script>''' % (json.dumps(modeles_js, ensure_ascii=False), json.dumps(CHAMPS, ensure_ascii=False), json.dumps(POLICES, ensure_ascii=False), P["prix"], json.dumps(P["gravures"] or [], ensure_ascii=False))
+</script>''' % (json.dumps(modeles_js, ensure_ascii=False), json.dumps(CHAMPS, ensure_ascii=False), json.dumps(POLICES, ensure_ascii=False), P["prix"], json.dumps([], ensure_ascii=False))
     html = html.replace("</body>", SCRIPT + "</body>", 1)
     html = re.sub(r"<title>.*?</title>", f"<title>Maquette — {P['titre'].replace('Personnalisez votre ', '').capitalize()} parcours guidé</title>", html, count=1, flags=re.S)
     open(P["out"], "w", encoding="utf8").write(html)

@@ -37,8 +37,10 @@
   `tools/maquettes/parcours-verres.py` (part de `vin-src.html`/`flute-src.html` capturés par `next start`,
   reprend le VRAI bloc CSS `.prc-*` de `globals.css`). Contenu gardé tel quel : 30 modèles vin / 35 flûte
   (légendes lues sur les planches, table `modeles` du générateur), lettre fleurie, texte seul, + carte
-  « Ma photo ou mon logo » ; la flûte garde sa 4ᵉ façon « Gravures (photos) » = carte « Une gravure
-  réelle » (5 photos). Pas d'étape coffret (les lots restent à droite, « chacun différent » inchangé).
+  « Ma photo ou mon logo » ; ⚠️ **les 5 « Gravures (photos) » de la flûte SONT DES MODÈLES comme les autres** (gérant, 29/09 soir :
+  « ça c'est des modèles, ils peuvent choisir le nom et la date… c'est juste des exemples déjà gravés ») →
+  dans la grille, n° 36 à 40, groupe « Gravures en photo », champs prénom / date / initiale ; PAS de
+  carte à part. Pas d'étape coffret (les lots restent à droite, « chacun différent » inchangé).
   3 étapes. **En attente de son « applique »** → alors : `parcoursGuide` sur les 2 produits (+ champs
   `mode`/`texte`/`photo`, retirer `personaTabs`), le composant doit accepter un titre (« votre verre » /
   « votre flûte »), un mode `gravure` (lettering `gravureExemple`) et l'absence de coffret. Suite prévue :
