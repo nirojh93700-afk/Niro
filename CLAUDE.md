@@ -165,6 +165,10 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
 - Un système validé sur UNE fiche (ex. parcours guidé carafe) doit être **proposé pour tout le site**
   (les fiches du même genre), jamais laissé sur une seule fiche sans le lui dire.
 - Toujours proposer, jamais construire : il choisit → maquette → « applique ».
+- **Quand il demande « il reste quoi à faire ? »** (29/09 : « tu gardes la mémoire, tu me diras après
+  quand je te demanderai ») : répondre par UNE liste numérotée, courte, tirée de `docs/EN-ATTENTE.md`
+  (en attente / à valider / côté gérant) + `docs/AMELIORATIONS.md` (nouveautés possibles), sans rien
+  omettre ni inventer. Tenir ces deux fichiers à jour à chaque avancée, dans TOUTES les conversations.
 
 # ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 09/09/2026)
 > 📋 **`docs/EN-ATTENTE.md` = l'inventaire de tout ce qui est en attente** (messages à envoyer,
