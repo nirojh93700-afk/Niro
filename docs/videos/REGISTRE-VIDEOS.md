@@ -186,3 +186,40 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #bijouxgraves #cadeaupersonnalise #collier #ideecadeau
+
+---
+
+## Vidéo 18 — Petits cadeaux gravés, naissance & souvenir (29/09/2026)
+
+| Fichier | Format | Durée | Poids | Usage |
+|---|---|---|---|---|
+| `docs/videos/18-petits-cadeaux-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 28,9 s | 1,7 Mo | Version publiable (Reels / TikTok / Stories) et légère pour le téléphone |
+
+- **Source** : `tools/video/pub_petits_cadeaux_18.py` (montage Pillow/ffmpeg, gratuit, sans
+  son — même famille que les vidéos 10-13, 16, 17).
+- **Demande du gérant** : « fais-moi une vidéo » — famille jamais montrée en vidéo à part
+  (plaques de naissance, veilleuse, couverts enfant, porte-clés cristal photo).
+- 🔴 **Constat avant de monter** : sur ~40 photos candidates de cette famille (3 planches
+  contact regardées une par une), la grande majorité sont des produits VIERGES malgré des
+  noms de fichier trompeurs — plaque de naissance « fille » sans nom, porte-clés cristal
+  LED sans photo, pièce en laiton vierge, clés USB vierges, photophore décoratif sans texte
+  perso. **Seules 11 photos montrent une vraie personnalisation lisible.**
+  ⚠️ `plaque-naissance-duo.jpg` écartée malgré un texte lisible (« Éthan ») : la moitié droite
+  de la même photo montre le modèle fille SANS nom — jamais montrer une photo à moitié vierge.
+- **Produits (11, tous personnalisés, planche contact vérifiée)** : Plaque de naissance
+  (« Éthan », « Lucas ») · Plaque de naissance cœur (« Juline », « Emma ») · Veilleuse Arbre
+  de Vie au prénom (« Ishaan », « Chloé », « Laura ») · Couverts enfants personnalisés
+  (prénom gravé, motifs animaux gravés) · Porte-clés Cristal LED Cœur (photo couple) ·
+  Porte-clés Cristal LED Rectangle (photo chien).
+- **Habillage** : même recette que les vidéos 16-17 (ruban en haut hors zone TikTok/Insta,
+  pastille + nom + légende ancrés par le bas, photo entière sur fond flou). Ruban
+  « ✦ CADEAUX PERSONNALISÉS ✦ », pastille « GRAVÉ ». Cartes intro/fin encre & or. Aucun prix,
+  aucun délai, aucun nombre de produits.
+
+### Description à copier-coller (livrée le 29/09/2026)
+
+**Vidéo 18 — Petits cadeaux gravés** (Plaque de naissance, Plaque de naissance cœur, Veilleuse Arbre de Vie au prénom, Couverts enfants personnalisés, Porte-clés Cristal LED)
+> Un prénom, une date, un souvenir — gravé pour toujours ✨ Chaque pièce est personnalisée et gravée à la commande, dans notre atelier 💛 Le petit cadeau qui marque un grand moment 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaunaissance #cadeaupersonnalise #gravure #ideecadeau
