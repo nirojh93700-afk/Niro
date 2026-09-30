@@ -12,6 +12,7 @@ import ModeleArt from "@/components/ModeleArt";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { TableGravure } from "@/lib/engravingSheet";
+import FicheDevis from "@/components/admin/FicheDevis";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -186,6 +187,8 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
             <strong>📋 {order.quoteNumber ? `Devis ${order.quoteNumber} — ` : ""}ce que la cliente a demandé :</strong><br />{order.demande}
           </p>
         ) : null}
+        {/* Une carte par pièce du devis : quantité, texte, style, fichier à graver. */}
+        <FicheDevis order={order} />
         <PhotosEmail email={order.customerEmail} adminKey={adminKey} print={print} />
       </div>
     );

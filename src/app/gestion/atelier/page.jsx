@@ -18,6 +18,7 @@ import { TableGravure } from "@/lib/engravingSheet";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import PageHead from "@/components/admin/PageHead";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import FicheDevis from "@/components/admin/FicheDevis";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -216,6 +217,7 @@ export default function AtelierPage() {
                 </p>
               ) : null}
               {o.adminNote ? <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "#6b5a2e" }}>📝 {o.adminNote}</p> : null}
+              <FicheDevis order={o} />
               <PhotosEmail email={o.customerEmail} adminKey={key} />
             </div>
           ))}

@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import FicheDevis from "@/components/admin/FicheDevis";
 import { TableGravure } from "@/lib/engravingSheet";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { getProductBySlug } from "@/lib/products";
@@ -153,6 +154,11 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
                   </div>
                 );
               })}
+            </section>
+          ) : order.surMesure ? (
+            <section className="fp-bloc fp-graver">
+              <h3>À graver — commande sur devis</h3>
+              <FicheDevis order={order} />
             </section>
           ) : null}
 
