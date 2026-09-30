@@ -27,7 +27,8 @@ export const FICHIERS_DEVIS = {
   ],
 };
 
-const LIVRAISON = /livraison|point relais|retrait|expédition|frais de port/i;
+// Lignes d'envoi (pas des pièces à fabriquer) : « Livraison… », « Lettre suivie La Poste », « Colis suivi ».
+const LIVRAISON = /livraison|point relais|retrait|expédition|frais de port|^\s*(lettre|colis)\s+suivi/i;
 
 /** Les pièces à fabriquer d'une commande sur devis, une par ligne du devis. */
 export function lignesDevis(order) {

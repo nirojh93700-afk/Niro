@@ -19,6 +19,7 @@ import { eclaterParVerre } from "@/lib/orderSpec";
 import PageHead from "@/components/admin/PageHead";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
+import { lignesDevis } from "@/lib/devisGravure";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -104,6 +105,15 @@ function downloadDataUrl(dataUrl, filename) {
   const a = document.createElement("a");
   a.href = dataUrl; a.download = filename; a.click();
 }
+
+// Pastille de statut, identique sur toutes les cartes de la page.
+const STATUTS = {
+  a_preparer: ["À préparer", "#fbf3e6", "#8a6d1f"],
+  en_gravure: ["En gravure", "#efe6f7", "#5b4b8a"],
+  expediee: ["Expédiée", "#e6f2e8", "#256b34"],
+  livree: ["Livrée", "#ececec", "#666"],
+  remise_main_propre: ["Remise en main propre", "#e6f2e8", "#256b34"],
+};
 
 export default function AtelierPage() {
   const [key, setKey] = useState("");
@@ -205,10 +215,11 @@ export default function AtelierPage() {
           </h2>
           {devis.map((o) => (
             <div key={o.id} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "14px 0", background: "#fff" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-                <strong style={{ fontSize: "1.02rem" }}>{(o.items || []).filter((it) => !/^livraison/i.test(it.name || "")).map((it) => `${it.quantity}× ${it.name}`).join(" · ")}</strong>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                <strong style={{ fontSize: "1.02rem" }}>{lignesDevis(o).map((l) => l.court).join(" + ") || "Commande sur mesure"}</strong>
                 <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
-                  Commande <strong>#{o.ref}</strong> · {o.customerName || "—"}{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}
+                  Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {o.customerName || "—"}{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}{o.createdAt ? ` · ${new Date(o.createdAt).toLocaleDateString("fr-FR")}` : ""}
+                  {STATUTS[o.status] ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: STATUTS[o.status][1], color: STATUTS[o.status][2], fontWeight: 600 }}>{STATUTS[o.status][0]}</span> : null}
                 </span>
               </div>
               {o.demande ? (
@@ -248,14 +259,6 @@ export default function AtelierPage() {
             travaux: travaux.filter((t) => t.cat === slug),
           }))
           .filter((g) => g.travaux.length);
-
-        const STATUTS = {
-          a_preparer: ["À préparer", "#fbf3e6", "#8a6d1f"],
-          en_gravure: ["En gravure", "#efe6f7", "#5b4b8a"],
-          expediee: ["Expédiée", "#e6f2e8", "#256b34"],
-          livree: ["Livrée", "#ececec", "#666"],
-          remise_main_propre: ["Remise en main propre", "#e6f2e8", "#256b34"],
-        };
 
         return groupes.map((g) => (
           <section key={g.slug} style={{ marginBottom: 34 }}>
