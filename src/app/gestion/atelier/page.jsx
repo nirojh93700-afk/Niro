@@ -15,6 +15,7 @@ import Link from "next/link";
 import { getProductBySlug, CATEGORIES, getCategoryLabel } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
 import { TableGravure } from "@/lib/engravingSheet";
+import { eclaterParVerre } from "@/lib/orderSpec";
 import PageHead from "@/components/admin/PageHead";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 
@@ -141,8 +142,8 @@ export default function AtelierPage() {
   async function makeFile(item, side, kind) {
     const cfg = sideConfig(item, side);
     if (!cfg || !cfg.src) { alert("Fichier à graver indisponible pour cette commande (gravure non capturée)."); return; }
-    const tag = `gravure-${item.slug}-${side}`;
-    setBusy(`${item.slug}-${side}-${kind}`);
+    const tag = `gravure-${item.slug}${item.verre ? `-verre${item.verre}` : ""}-${side}`;
+    setBusy(`${item.slug}-${item.verre || 0}-${side}-${kind}`);
     try {
       const art = await toDataUrl(cfg.src);
       const W = cfg.widthMm, H = cfg.heightMm;
@@ -230,9 +231,11 @@ export default function AtelierPage() {
         // Chaque article garde sa commande d'origine (réf, cliente, date, statut).
         const travaux = [];
         for (const o of orders) {
-          for (const item of (o.spec || []).filter(Boolean)) {
-            const cat = getProductBySlug(item.slug)?.category || "autres";
-            travaux.push({ o, item, cat });
+          for (const spec of (o.spec || []).filter(Boolean)) {
+            const cat = getProductBySlug(spec.slug)?.category || "autres";
+            // Lot « chacun différent » : UNE carte PAR VERRE (sa photo, ses textes,
+            // son fichier à graver) — incident #1LTYHZ6D, 4 gravures pour 1 carte.
+            for (const item of eclaterParVerre(spec)) travaux.push({ o, item, cat });
           }
         }
         const ordre = [...CATEGORIES.map((c) => c.slug), "autres"];
@@ -264,7 +267,10 @@ export default function AtelierPage() {
               return (
                 <div key={`${o.id}-${idx}`} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "14px 0", background: "#fff" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-                    <strong style={{ fontSize: "1.02rem" }}>{item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}</strong>
+                    <strong style={{ fontSize: "1.02rem" }}>
+                      {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+                      {item.verre ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: "#fbf3e6", border: "1px solid #c9a24b", color: "#8a6d1f", fontSize: "0.85rem" }}>Verre {item.verre} / {item.verres}</span> : null}
+                    </strong>
                     <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
                       Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {o.customerName || "—"}{date ? ` · ${date}` : ""}
                       {stLbl ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: stBg, color: stFg, fontWeight: 600 }}>{stLbl}</span> : null}
@@ -279,7 +285,7 @@ export default function AtelierPage() {
                       const cfg = sideConfig(item, side);
                       const preview = cfg?.preview;
                       const canFile = Boolean(cfg?.src);
-                      const k = (kind) => busy === `${item.slug}-${side}-${kind}`;
+                      const k = (kind) => busy === `${item.slug}-${item.verre || 0}-${side}-${kind}`;
                       return (
                         <div key={side} style={{ width: 240, maxWidth: "100%" }}>
                           <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>
@@ -304,7 +310,7 @@ export default function AtelierPage() {
                     })}
                     {item.photoSrc && (
                       <div style={{ width: 160 }}>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>Photo envoyée</div>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>Photo envoyée{item.verre ? ` — verre ${item.verre}` : ""}</div>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={item.photoSrc} alt="Photo du client" style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd" }} />
                         <a href={item.photoSrc} download style={{ fontSize: "0.78rem", color: "var(--gold-dark)" }}>Télécharger</a>

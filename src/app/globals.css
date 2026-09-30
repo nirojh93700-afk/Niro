@@ -4591,3 +4591,13 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .prc-letters{grid-template-columns:repeat(7,1fr)}
   .prc-cofs{grid-template-columns:1fr}
 }
+
+/* ---- Fiche complète d'une commande, ligne article (30/09/2026) ----
+   Sur téléphone, le détail de l'article (tableau « un verre par ligne » d'un lot
+   « chacun différent ») passe SOUS les vignettes au lieu d'être écrasé à côté
+   dans une colonne de 120 px. Ordinateur inchangé (media query seulement). */
+.co-art-body { flex: 1; min-width: 0; }
+@media (max-width: 720px) {
+  .co-art { flex-wrap: wrap; }
+  .co-art > .co-art-body { flex: 1 1 100%; }
+}

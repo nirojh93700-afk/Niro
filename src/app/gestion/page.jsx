@@ -1091,9 +1091,15 @@ export default function GestionPage() {
                     const photo = it.image || photoProduit(it.slug);
                     const apercu = apercuAtelier(s);
                     const couleur = couleurArticle(s, it);
-                    const reste = detailsSansCouleur(it, couleur);
+                    // Lot « chacun différent » : le détail Stripe recopie (et tronque) les
+                    // 4 personnalisations sur une ligne illisible → on la coupe, le tableau
+                    // « un verre par ligne » ci-dessous les montre proprement.
+                    const enLot = Array.isArray(s?.perGlass) && s.perGlass.length > 1;
+                    const reste = enLot
+                      ? detailsSansCouleur(it, couleur).replace(/\s*—\s*Personnalisation\s*:[\s\S]*$/, "")
+                      : detailsSansCouleur(it, couleur);
                     return (
-                      <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderBottom: i < (o.items.length - 1) ? "1px solid #f2ece0" : "none" }}>
+                      <li key={i} className="co-art" style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderBottom: i < (o.items.length - 1) ? "1px solid #f2ece0" : "none" }}>
                         {photo ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={photo} alt="" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: "1px solid #e7d3a1", flexShrink: 0 }} />
@@ -1104,7 +1110,7 @@ export default function GestionPage() {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={apercu} alt="Aperçu de la gravure" title="Ce que la cliente a demandé" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: "2px solid var(--gold-dark, #a98935)", flexShrink: 0, background: "#fff" }} />
                         )}
-                        <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="co-art-body">
                           <strong>{it.quantity}× {it.name}</strong>
                           {couleur && (
                             <span style={{ display: "inline-block", marginLeft: 8, padding: "1px 9px", borderRadius: 999, background: "#f7ecd4", border: "1px solid #e0c88a", color: "#8a6d1f", fontSize: "0.8rem", fontWeight: 700, verticalAlign: "middle" }}>
@@ -1129,7 +1135,7 @@ export default function GestionPage() {
                                     <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Dessin n° {num}</span>
                                   </span>
                                 )}
-                                {s.photoSrc && (
+                                {s.photoSrc && !enLot && (
                                   <a href={s.photoSrc} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 4, fontSize: "0.82rem", color: "var(--gold-dark, #a98935)", fontWeight: 600 }}>
                                     📷 Ouvrir la photo envoyée par la cliente
                                   </a>

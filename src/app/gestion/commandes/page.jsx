@@ -14,6 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
+import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -213,16 +214,35 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
       <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}{o.relaisPoint?.name ? ` — ${o.relaisPoint.name}` : ""}</span></div>
 
       <ul className="file-items">
-        {(o.items || []).filter((it) => !/livraison|point relais|retrait/i.test(it.name || "")).map((it, i) => (
-          <li key={i}>
-            <span className="q">{it.quantity}×</span>
-            <span>
-              {it.name}
-              {!compact && it.details ? <span className="d">{it.details}</span> : null}
-              {!compact && it.personalization ? <span className="d">✍️ {it.personalization}</span> : null}
-            </span>
-          </li>
-        ))}
+        {(() => {
+          // Réglages appariés AVANT le filtre des lignes de livraison (les rangs doivent correspondre).
+          const specParLigne = apparierSpec(o.items, o.spec);
+          return (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
+            .filter(({ it }) => !/livraison|point relais|retrait/i.test(it.name || ""))
+            .map(({ it, s }, i) => {
+              // Lot « chacun différent » : le détail Stripe est TRONQUÉ (« date 1 ») et
+              // illisible → une ligne par verre, lue dans les réglages complets.
+              const verres = s ? eclaterParVerre(s) : [];
+              const enLot = verres.length > 1;
+              const details = enLot ? String(it.details || "").replace(/\s*—\s*Personnalisation\s*:[\s\S]*$/, "") : it.details;
+              return (
+                <li key={i}>
+                  <span className="q">{it.quantity}×</span>
+                  <span>
+                    {it.name}
+                    {!compact && details ? <span className="d">{details}</span> : null}
+                    {!compact && enLot ? (
+                      <>
+                        <span className="d" style={{ color: "#b32b2b", fontWeight: 700 }}>⚠️ {verres.length} verres, chacun différent :</span>
+                        {verres.map((v) => <span key={v.verre} className="d">✍️ {v.personalization}</span>)}
+                      </>
+                    ) : null}
+                    {!compact && !enLot && it.personalization ? <span className="d">✍️ {it.personalization}</span> : null}
+                  </span>
+                </li>
+              );
+            });
+        })()}
       </ul>
 
       {!compact && o.demande ? (

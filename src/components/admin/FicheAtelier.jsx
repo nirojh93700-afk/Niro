@@ -10,6 +10,8 @@ import { getFontLabel, getFontClass } from "@/lib/fonts";
 import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import { eclaterParVerre } from "@/lib/orderSpec";
+import { TableGravure } from "@/lib/engravingSheet";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -112,17 +114,21 @@ export function ReglagesItem({ item, titre = true }) {
   );
 }
 
-function ItemSheet({ item }) {
-  if (!item) return null;
+// Visuel + réglages + photo d'UN article (ou d'UN verre d'un lot « chacun différent »).
+function SheetCorps({ item, titre = true }) {
+  const enLot = Boolean(item.verre);
   return (
-    <div style={{ display: "flex", gap: 16, flexWrap: "wrap", padding: "12px 0", borderTop: "1px dashed #ddd" }}>
+    <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
       <GlassPreview item={item} />
       <div style={{ flex: 1, minWidth: 220 }}>
-        <ReglagesItem item={item} />
+        <ReglagesItem item={item} titre={titre} />
+        {/* Dans un lot, chaque verre a ses propres textes : on les met en clair
+            (le « Résumé » seul ne suffit pas à lire quatre gravures différentes). */}
+        {enLot ? <div style={{ margin: "6px 0" }}><TableGravure item={item} titre={false} /></div> : null}
         {item.photoSrc && (
           <div style={{ margin: "8px 0" }}>
             <a href={item.photoSrc} download target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "7px 14px", fontSize: "0.82rem", display: "inline-block", textDecoration: "none" }}>
-              ⬇ Télécharger la photo du client
+              ⬇ Télécharger la photo{enLot ? ` du verre ${item.verre}` : " du client"}
             </a>
           </div>
         )}
@@ -133,6 +139,36 @@ function ItemSheet({ item }) {
           </pre>
         </details>
       </div>
+    </div>
+  );
+}
+
+function ItemSheet({ item }) {
+  if (!item) return null;
+  // Lot « chacun différent » : un encart PAR VERRE, avec SA photo et SES textes
+  // (incident #1LTYHZ6D : 4 photos différentes, une seule affichée).
+  const verres = eclaterParVerre(item);
+  if (verres.length > 1) {
+    return (
+      <div style={{ padding: "12px 0", borderTop: "1px dashed #ddd" }}>
+        <div style={{ fontWeight: 700, marginBottom: 6 }}>
+          {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+        </div>
+        <div style={{ margin: "0 0 8px", padding: "8px 12px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.9rem" }}>
+          ⚠️ Lot de {verres.length} verres, CHACUN DIFFÉRENT : {verres.length} photos et {verres.length} textes à graver — un verre = une gravure. Ne pas graver la même chose sur les {verres.length}.
+        </div>
+        {verres.map((v) => (
+          <div key={v.verre} style={{ border: "1px solid #e7d3a1", borderRadius: 10, padding: 10, margin: "8px 0", background: "#fffdf8" }}>
+            <div style={{ fontWeight: 800, color: "var(--gold-dark, #a98935)", marginBottom: 6, fontSize: "1rem" }}>Verre {v.verre} / {v.verres}</div>
+            <SheetCorps item={v} titre={false} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return (
+    <div style={{ padding: "12px 0", borderTop: "1px dashed #ddd" }}>
+      <SheetCorps item={item} />
     </div>
   );
 }

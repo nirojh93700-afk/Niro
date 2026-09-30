@@ -5,6 +5,8 @@ import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDI
 import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
 import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
+import { eclaterParVerre } from "@/lib/orderSpec";
+import { lignesGravure } from "@/lib/engravingSheet";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -396,9 +398,36 @@ export async function POST(req) {
       const a = absUrl(u);
       return a.startsWith("http") ? `<img src="${a}" alt="${alt}" style="display:inline-block;max-width:230px;width:100%;border-radius:8px;border:1px solid #ddd;margin:0 8px 10px 0;vertical-align:top;">` : "";
     };
+    const emplacementDe = (it) => (it.emplacement === "fond" ? "Au fond du verre"
+      : it.deuxEmplacement ? "Face avant + fond du verre" : "Face avant");
+    // Lot « chacun différent » : un encart PAR VERRE (sa photo, ses textes) —
+    // jamais une seule photo pour quatre gravures (incident #1LTYHZ6D, 30/09/2026).
+    const blocVerre = (v) => {
+      let lignes = [];
+      try { lignes = lignesGravure(v); } catch { lignes = []; }
+      const rows = lignes.map((l) =>
+        `<tr><td style="border:1px solid #d9cdb4;padding:4px 8px;font-weight:bold;width:40%;">${escapeHtml(l.face)}</td><td style="border:1px solid #d9cdb4;padding:4px 8px;${l.police ? "" : "font-size:16px;"}">${escapeHtml(l.texte)}</td></tr>`).join("");
+      return `
+        <div style="border:1px solid #c9a24b;border-radius:8px;margin:0 0 10px;background:#fff;overflow:hidden;">
+          <p style="margin:0;padding:5px 10px;background:#fbf3e6;border-bottom:1px solid #e7d3a1;font-weight:bold;color:#8a6d1f;">Verre ${v.verre} / ${v.verres}</p>
+          <div style="padding:8px 10px;">
+            ${imgTag(v.photoSrc, `Photo du verre ${v.verre}`)}
+            <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(emplacementDe(v))}</p>
+            ${rows ? `<table style="border-collapse:collapse;width:100%;font-size:14px;">${rows}</table>` : `<p style="margin:0;color:#7a7268;">${v.photoSrc ? "Photo / logo seul, sans texte" : "Sans gravure"}</p>`}
+          </div>
+        </div>`;
+    };
     const persoBlocks = specItems.map((it) => {
-      const empl = it.emplacement === "fond" ? "Au fond du verre"
-        : it.deuxEmplacement ? "Face avant + fond du verre" : "Face avant";
+      const titre = `<p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${it.variantTitle ? ` — ${escapeHtml(it.variantTitle)}` : ""}</p>`;
+      const verres = eclaterParVerre(it);
+      if (verres.length > 1) {
+        return `
+        <div style="border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:0 0 12px;background:${BRAND.cream};">
+          ${titre}
+          <p style="margin:0 0 10px;padding:8px 10px;background:#fdecec;border:2px solid #d64545;border-radius:8px;color:#b32b2b;font-weight:bold;">⚠️ Lot de ${verres.length} verres, CHACUN DIFFÉRENT — ${verres.length} photos et ${verres.length} textes à graver, un par verre.</p>
+          ${verres.map(blocVerre).join("")}
+        </div>`;
+      }
       const recap = (it.personalization || "").trim();
       // Visuel exact préparé par le client (capture) ; sinon la photo brute envoyée.
       const visuals = [it.previewImage, it.previewImageFond].filter(Boolean);
@@ -407,9 +436,9 @@ export async function POST(req) {
         : imgTag(it.photoSrc, "Photo / logo envoyé par le client");
       return `
         <div style="border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:0 0 12px;background:${BRAND.cream};">
-          <p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${it.variantTitle ? ` — ${escapeHtml(it.variantTitle)}` : ""}</p>
+          ${titre}
           ${imagesHtml}
-          <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(empl)}</p>
+          <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(emplacementDe(it))}</p>
           ${recap ? `<p style="margin:0;white-space:pre-line;">${escapeHtml(recap)}</p>` : ""}
         </div>`;
     }).join("");

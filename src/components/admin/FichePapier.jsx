@@ -28,6 +28,7 @@ import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import { TableGravure } from "@/lib/engravingSheet";
+import { eclaterParVerre } from "@/lib/orderSpec";
 import { getProductBySlug } from "@/lib/products";
 import { formatEuro } from "@/lib/format";
 
@@ -216,11 +217,14 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
         {/* ============================ COLONNE DROITE ==================== */}
         {colonneDroite ? (
           <div className="fp-col">
-            {spec.map((item, i) => (
+            {/* Lot « chacun différent » : un visuel PAR VERRE, avec sa photo
+                (jamais une seule image pour quatre gravures différentes). */}
+            {spec.flatMap((item) => eclaterParVerre(item)).map((item, i) => (
               <div key={i} className="fp-visuel">
                 <GlassPreview item={item} />
                 <div className="fp-legende">
                   {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+                  {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
                 </div>
                 <div className="fp-reglages">
                   <ReglagesItem item={item} titre={false} />
