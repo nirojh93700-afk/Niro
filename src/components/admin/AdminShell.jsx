@@ -105,24 +105,31 @@ export default function AdminShell({ children }) {
   const back = useSyncExternalStore(sAbonnerAdminBack, lireAdminBack, () => null);
 
   // Compteurs en direct (uniquement si le mot de passe est déjà en session).
+  // 02/10/2026 : UN petit appel (chiffres seulement, mis en cache 30 s côté serveur)
+  // au lieu de 6 routes complètes + une lecture Gmail à chaque clic de menu — c'est ce
+  // qui rendait les changements d'écran lents (« il a du mal, je dois fermer et rouvrir »).
   const loadCounts = useCallback(async () => {
     const key = typeof window !== "undefined" ? sessionStorage.getItem("niv-admin-key") : "";
     if (!key) return;
     const H = { headers: { "x-admin-key": key } };
-    const j = (u) => fetch(u, H).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    // Boîte mail surveillée : l'assistant range les nouveaux e-mails clients dans
-    // leur commande et prépare une réponse (limité côté serveur à 1 fois / 3 min).
-    try { await fetch("/api/admin/inbox-sync", { method: "POST", ...H }); } catch { /* silencieux */ }
-    const [o, u, p, r, pr] = await Promise.all([j("/api/admin/orders"), j("/api/admin/bat?action=unread"), j("/api/admin/pending-replies"), j("/api/admin/reviews"), j("/api/admin/prospects")]);
-    setCounts({
-      prep: (o?.orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length,
-      unread: (u?.unread || []).length,
-      replies: (p?.pending || []).length,
-      reviews: (r?.reviews || []).filter((x) => !x.approved).length,
-      pros: pr?.kpis?.nonLus || 0, // réponses non lues des restaurants & bars démarchés
-    });
+    // Boîte mail surveillée : lancée en arrière-plan, au plus une fois toutes les
+    // 5 minutes depuis ce navigateur, et JAMAIS attendue (le serveur se limite aussi).
+    try {
+      const last = Number(sessionStorage.getItem("niv-inbox-sync") || 0);
+      if (Date.now() - last > 5 * 60 * 1000) {
+        sessionStorage.setItem("niv-inbox-sync", String(Date.now()));
+        fetch("/api/admin/inbox-sync", { method: "POST", ...H }).catch(() => {});
+      }
+    } catch { /* stockage indisponible : on saute la synchro */ }
+    try {
+      const r = await fetch("/api/admin/counts", H);
+      if (!r.ok) return;
+      const c = await r.json();
+      setCounts({ prep: c.prep || 0, unread: c.unread || 0, replies: c.replies || 0, reviews: c.reviews || 0, pros: c.pros || 0 });
+    } catch { /* réseau : on garde les derniers chiffres */ }
   }, []);
-  useEffect(() => { loadCounts(); const t = setInterval(loadCounts, 120000); return () => clearInterval(t); }, [loadCounts, path]);
+  // Une fois au chargement puis toutes les 2 min — plus à chaque changement d'écran.
+  useEffect(() => { loadCounts(); const t = setInterval(loadCounts, 120000); return () => clearInterval(t); }, [loadCounts]);
 
   const cur = currentId(path, hash);
   const meta = TITRES[cur] || { text: "Gestion", group: "" };
@@ -137,6 +144,22 @@ export default function AdminShell({ children }) {
   const retour = back
     ? { label: back.label, go: back.fn }
     : (!estRacine ? { label: meta.group || "Gestion", go: () => router.push("/gestion") } : null);
+
+  // 🔴 Corrigé le 02/10/2026 (« je clique pour changer de catégorie, ça marche pas, je dois
+  // fermer et rouvrir ») : sur /gestion, un lien vers un autre onglet (/gestion#avis…)
+  // changeait l'adresse SANS prévenir la page — le routeur de Next ne déclenche pas
+  // l'événement « hashchange ». On change donc l'ancre à la main : l'onglet s'ouvre
+  // aussitôt, et la flèche « retour » du téléphone revient à l'onglet d'avant.
+  function allerAncre(e, href) {
+    const i = String(href || "").indexOf("#");
+    if (i < 0 || href.slice(0, i) !== path) return; // autre page : navigation normale
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // ouverture dans un nouvel onglet
+    e.preventDefault();
+    const ancre = href.slice(i);
+    if (window.location.hash === ancre) window.dispatchEvent(new HashChangeEvent("hashchange"));
+    else window.location.hash = ancre; // déclenche « hashchange » (page + menu se mettent à jour)
+    setOpen(false);
+  }
 
   function search(e) {
     e.preventDefault();
@@ -158,7 +181,7 @@ export default function AdminShell({ children }) {
         {g.items.map((i) => {
           const n = i.badge ? counts[i.badge] : 0;
           return (
-            <Link key={i.id} href={i.href} className={`ash-item${cur === i.id ? " on" : ""}${i.accent ? " accent" : ""}`}>
+            <Link key={i.id} href={i.href} onClick={(e) => allerAncre(e, i.href)} className={`ash-item${cur === i.id ? " on" : ""}${i.accent ? " accent" : ""}`}>
               <span className="ash-ico" aria-hidden>{i.icon}</span>
               <span className="ash-txt">{i.text}</span>
               {n > 0 ? <span className="ash-badge">{n}</span> : null}
@@ -167,7 +190,7 @@ export default function AdminShell({ children }) {
         })}
       </div>
     ));
-  }, [cur, counts, filtre]);
+  }, [cur, counts, filtre, path]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={`ash${open ? " open" : ""}`}>
@@ -204,7 +227,7 @@ export default function AdminShell({ children }) {
           </form>
           <div className="ash-top-actions">
             {totalTodo > 0 ? <Link href="/gestion/commandes" className="ash-todo" title="À traiter">{totalTodo} à traiter</Link> : null}
-            <Link href="/gestion#assistant" className="ash-assist">✦ Assistant</Link>
+            <Link href="/gestion#assistant" onClick={(e) => allerAncre(e, "/gestion#assistant")} className="ash-assist">✦ Assistant</Link>
           </div>
         </header>
         <main className="ash-content">{children}</main>
@@ -212,7 +235,7 @@ export default function AdminShell({ children }) {
           {TABS.map((t) => {
             const n = t.badge ? tabCount[t.badge] : 0;
             return (
-              <Link key={t.id} href={t.href} className={`ash-tab${cur === t.id ? " on" : ""}`}>
+              <Link key={t.id} href={t.href} onClick={(e) => allerAncre(e, t.href)} className={`ash-tab${cur === t.id ? " on" : ""}`}>
                 <i aria-hidden>{t.icon}</i>
                 <span>{t.text}</span>
                 {n > 0 ? <b>{n > 99 ? "99+" : n}</b> : null}

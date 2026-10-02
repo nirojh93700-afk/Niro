@@ -1,32 +1,37 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
 import { BandeauDelai, MessagesATraiter, ChiffresPeriode } from "@/components/admin/DashBlocks";
 import { commandesEnRetard } from "@/lib/dashPeriodes";
 import { getCategoryLabel, getProductBySlug } from "@/lib/products";
 import { TableGravure } from "@/lib/engravingSheet";
-import ProductsAdmin from "@/components/admin/ProductsAdmin";
-import RestockAlertsAdmin from "@/components/admin/RestockAlertsAdmin";
-import TaxonomyAdmin from "@/components/admin/TaxonomyAdmin";
-import HubChat from "@/components/admin/HubChat";
-import AssistantAdmin from "@/components/admin/AssistantAdmin";
-import EngravingAdmin from "@/components/admin/EngravingAdmin";
-import QuotesAdmin from "@/components/admin/QuotesAdmin";
-import AppearanceAdmin from "@/components/admin/AppearanceAdmin";
-import ShippingAdmin from "@/components/admin/ShippingAdmin";
-import BoxtalKeys from "@/components/admin/BoxtalKeys";
-import ReviewsAdmin from "@/components/admin/ReviewsAdmin";
-import PromoCodesAdmin from "@/components/admin/PromoCodesAdmin";
-import NewsletterAdmin from "@/components/admin/NewsletterAdmin";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
 import MerchantReminder from "@/components/admin/MerchantReminder";
-import BatThread from "@/components/admin/BatThread";
-import FicheAtelier from "@/components/admin/FicheAtelier";
 import FichePapier from "@/components/admin/FichePapier";
+import dynamic from "next/dynamic";
 import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
-import BoxtalCopie from "@/components/admin/BoxtalCopie";
+
+// Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
+// télécharge plus d'un coup le code des 15 onglets.
+const attente = () => <p style={{ padding: 16, color: "var(--ink-soft)" }}>Chargement…</p>;
+const ProductsAdmin = dynamic(() => import("@/components/admin/ProductsAdmin"), { loading: attente });
+const RestockAlertsAdmin = dynamic(() => import("@/components/admin/RestockAlertsAdmin"), { loading: attente });
+const TaxonomyAdmin = dynamic(() => import("@/components/admin/TaxonomyAdmin"), { loading: attente });
+const HubChat = dynamic(() => import("@/components/admin/HubChat"), { loading: attente });
+const EngravingAdmin = dynamic(() => import("@/components/admin/EngravingAdmin"), { loading: attente });
+const QuotesAdmin = dynamic(() => import("@/components/admin/QuotesAdmin"), { loading: attente });
+const AppearanceAdmin = dynamic(() => import("@/components/admin/AppearanceAdmin"), { loading: attente });
+const ShippingAdmin = dynamic(() => import("@/components/admin/ShippingAdmin"), { loading: attente });
+const BoxtalKeys = dynamic(() => import("@/components/admin/BoxtalKeys"), { loading: attente });
+const ReviewsAdmin = dynamic(() => import("@/components/admin/ReviewsAdmin"), { loading: attente });
+const PromoCodesAdmin = dynamic(() => import("@/components/admin/PromoCodesAdmin"), { loading: attente });
+const NewsletterAdmin = dynamic(() => import("@/components/admin/NewsletterAdmin"), { loading: attente });
+const BatThread = dynamic(() => import("@/components/admin/BatThread"), { loading: attente });
+const FicheAtelier = dynamic(() => import("@/components/admin/FicheAtelier"), { loading: attente });
+const BoxtalCopie = dynamic(() => import("@/components/admin/BoxtalCopie"), { loading: attente });
+
 
 const CONFIG_LABELS = {
   stripe: "Paiement Stripe (clé secrète)",
@@ -65,6 +70,18 @@ export default function GestionPage() {
     window.addEventListener("hashchange", applyHash);
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
+  // L'onglet ouvert depuis la page (tuile, bouton « Voir les avis »…) est recopié dans
+  // l'adresse, pour que le menu de gauche et le titre du haut suivent (02/10/2026).
+  const premierTab = useRef(true);
+  useEffect(() => {
+    // Au montage, c'est l'adresse qui commande (lien /gestion#avis depuis une autre page).
+    if (premierTab.current) { premierTab.current = false; return; }
+    if (typeof window === "undefined" || !tab) return;
+    if (window.location.hash.replace("#", "") === tab) return;
+    if (!window.location.hash && tab === "accueil") return;
+    window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}#${tab}`);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  }, [tab]);
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
   const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
   const [pendingReviews, setPendingReviews] = useState(0); // nouveaux avis clients à valider
@@ -102,58 +119,58 @@ export default function GestionPage() {
   const [testMsg, setTestMsg] = useState("");
   const [testSending, setTestSending] = useState(false);
 
-  const load = useCallback(async (adminKey) => {
+  // Chargement de l'accueil Gestion (02/10/2026) : avant, 7 appels l'un APRÈS l'autre
+  // (≈ 5 s) et le moindre raté réseau renvoyait sur « Entrez votre mot de passe » — d'où
+  // « je dois fermer et rouvrir ». Maintenant : le mot de passe est vérifié par le 1er
+  // appel, le reste part EN MÊME TEMPS, et un appel qui rate n'efface rien d'autre.
+  const load = useCallback(async (adminKey, deja = false) => {
     setLoading(true);
     setError("");
+    let nouvelEssai = false;
+    const H = { headers: { "x-admin-key": adminKey } };
+    const json = (u) => fetch(u, H).then((r) => (r.ok ? r.json() : null)).catch(() => null);
     try {
-      const res = await fetch("/api/admin/products", { headers: { "x-admin-key": adminKey } });
+      let res;
+      try {
+        res = await fetch("/api/admin/products", H);
+      } catch {
+        // Réseau coupé : on ne déconnecte pas, on propose de réessayer.
+        throw Object.assign(new Error("Connexion au site impossible pour le moment. Vérifiez le réseau puis touchez « Réessayer »."), { reseau: true });
+      }
       if (res.status === 401) throw new Error("Mot de passe incorrect.");
-      if (!res.ok) throw new Error("Erreur de chargement.");
+      if (!res.ok) throw Object.assign(new Error("Le site met du temps à répondre. Touchez « Réessayer »."), { reseau: true });
       const data = await res.json();
       setRows(data.rows);
       setEditable(data.editable || []);
       setAuthed(true);
       sessionStorage.setItem("niv-admin-key", adminKey);
-      const cfg = await fetch("/api/admin/config", { headers: { "x-admin-key": adminKey } });
-      if (cfg.ok) {
-        const cfgData = await cfg.json();
-        setConfig(cfgData.config);
-        setFirebase(cfgData.firebase || null);
-      }
-      const ord = await fetch("/api/admin/orders", { headers: { "x-admin-key": adminKey } });
-      if (ord.ok) {
-        const ordData = await ord.json();
-        setOrders(ordData.orders || []);
-        setOrdersReady(true);
-      }
-      const stg = await fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } });
-      if (stg.ok) {
-        const s = (await stg.json()).settings || {};
+      const [cfgData, ordData, stgData, prData, qData, revData] = await Promise.all([
+        json("/api/admin/config"), json("/api/admin/orders"), json("/api/admin/settings"),
+        json("/api/admin/pending-replies"), json("/api/admin/quotes"), json("/api/admin/reviews"),
+      ]);
+      if (cfgData) { setConfig(cfgData.config); setFirebase(cfgData.firebase || null); }
+      if (ordData) { setOrders(ordData.orders || []); setOrdersReady(true); }
+      if (stgData) {
+        const s = stgData.settings || {};
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
         setVacationCfg(s.vacation || null);
       }
       // Réponses aux clientes préparées par l'agent, en attente de validation.
-      try {
-        const pr = await fetch("/api/admin/pending-replies", { headers: { "x-admin-key": adminKey } });
-        if (pr.ok) { const liste = (await pr.json()).pending || []; setPendingReplies(liste.length); setPendingList(liste); }
-      } catch { /* ignore */ }
+      if (prData) { const liste = prData.pending || []; setPendingReplies(liste.length); setPendingList(liste); }
       // Devis (tuile « devis en attente » du tableau de bord).
-      try {
-        const qr = await fetch("/api/admin/quotes", { headers: { "x-admin-key": adminKey } });
-        if (qr.ok) setQuotes((await qr.json()).quotes || []);
-      } catch { /* ignore */ }
+      if (qData) setQuotes(qData.quotes || []);
       // Compteur d'avis à valider (nouveaux avis clients en attente).
-      const rev = await fetch("/api/admin/reviews", { headers: { "x-admin-key": adminKey } });
-      if (rev.ok) {
-        const rd = await rev.json();
-        setPendingReviews((rd.reviews || []).filter((r) => !r.approved).length);
-      }
+      if (revData) setPendingReviews((revData.reviews || []).filter((r) => !r.approved).length);
+      if (!ordData) setError("Les commandes n'ont pas pu être chargées. Touchez « Réessayer ».");
     } catch (e) {
+      // Seul un VRAI mauvais mot de passe déconnecte ; un raté réseau garde la session
+      // et réessaie une fois tout seul (micro-coupure du téléphone).
+      if (e.reseau && !deja) { nouvelEssai = true; setTimeout(() => load(adminKey, true), 2000); return; }
       setError(e.message);
-      setAuthed(false);
+      if (!e.reseau) setAuthed(false);
     } finally {
-      setLoading(false);
+      if (!nouvelEssai) setLoading(false);
     }
   }, []);
 
@@ -491,6 +508,16 @@ export default function GestionPage() {
     setRows((prev) => prev.map((r) => (r.variantId === variantId ? { ...r, salePrice: value } : r)));
   }
   if (!authed) {
+    // Session déjà ouverte : on affiche « chargement », pas le mot de passe (qui faisait
+    // croire à une déconnexion pendant les quelques secondes de chargement).
+    if (loading && key && !error) {
+      return (
+        <div className="center-card">
+          <h1>Espace gestion</h1>
+          <p style={{ color: "var(--ink-soft)" }}>Chargement de votre boutique…</p>
+        </div>
+      );
+    }
     return (
       <div className="center-card">
         <h1>Espace gestion</h1>
@@ -501,7 +528,7 @@ export default function GestionPage() {
         </div>
         {error && <div className="notice">{error}</div>}
         <button className="btn btn-gold" onClick={() => load(key)} disabled={loading}>
-          {loading ? "Connexion…" : "Entrer"}
+          {loading ? "Connexion…" : (error && key && !/incorrect/i.test(error) ? "Réessayer" : "Entrer")}
         </button>
       </div>
     );
@@ -762,7 +789,7 @@ export default function GestionPage() {
             pas en tête de chaque onglet (ils repoussaient le contenu, surtout sur mobile). */}
         {tab === "accueil" ? <><DeclarationReminder /><MerchantReminder /></> : null}
 
-        {error && <div className="notice">{error}</div>}
+        {error && <div className="notice" style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}><span>{error}</span><button type="button" className="btn btn-gold" style={{ padding: "6px 14px" }} onClick={() => load(key)} disabled={loading}>{loading ? "…" : "Réessayer"}</button></div>}
 
         {/* ---------------- ACCUEIL (tableau de bord) ---------------- */}
         {tab === "accueil" && (

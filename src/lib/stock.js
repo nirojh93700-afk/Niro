@@ -380,6 +380,43 @@ export async function classerPendingSi(quand, via = "auto") {
   return n;
 }
 
+// Compteurs des pastilles de Gestion (02/10/2026) : UNE lecture (cache 60 s) au lieu de
+// 4 routes complètes téléchargées juste pour compter. Ni Gmail, ni écriture.
+export async function getAdminCountsData() {
+  const data = await getCatalogRaw();
+  const now = Date.now();
+  const replies = Object.values(data.pendingReplies || {}).filter((r) => r.status === "pending" && (r.exp || 0) >= now).length;
+  const unread = Object.values(data.bat || {}).filter((th) => th && th.clientUnread).length;
+  let reviews = 0;
+  for (const list of Object.values(data.reviews || {})) reviews += (list || []).filter((r) => !r.approved).length;
+  const pros = Object.values(data.prospects || {}).filter((p) => p && p.nonLu).length;
+  return { replies, unread, reviews, pros };
+}
+
+// Nettoyage + liste en UNE SEULE lecture (02/10/2026). `quand(it, data)` renvoie la raison
+// de classement (« pub », « sans-suite »…) ou rien ; une demande déjà répondue par un autre
+// canal (message atelier plus récent dans le dossier) est classée « deja-repondu ».
+// Avant : 5 lectures complètes de la base à chaque ouverture du tableau de bord.
+export async function classerEtListerPending(quand) {
+  const data = await getCatalogRaw(true);
+  const now = Date.now();
+  let change = false;
+  for (const it of Object.values(data.pendingReplies || {})) {
+    if (it.status !== "pending") continue;
+    let via = "";
+    const dossier = (data.comms || {})[normEmail(it.email)];
+    if (dossier && (dossier.messages || []).some((m) => m.from === "nous" && (Number(m.at) || 0) > (Number(it.at) || 0) + 60000)) via = "deja-repondu";
+    if (!via) { try { via = (quand && quand(it, data)) || ""; } catch { via = ""; } }
+    if (!via) continue;
+    it.status = "dismissed"; it.resolvedAt = now; it.resolvedVia = String(via).slice(0, 30);
+    change = true;
+  }
+  if (change) await persistCatalog(data, ["pendingReplies"]);
+  return Object.values(data.pendingReplies || {})
+    .filter((r) => (r.exp || 0) >= now)
+    .sort((a, b) => (b.at || 0) - (a.at || 0));
+}
+
 export async function getPendingReplyByToken(token) {
   const t = String(token || "").trim();
   if (!t) return null;

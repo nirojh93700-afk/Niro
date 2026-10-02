@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
 // les expéditeurs marqués « Pub », les dossiers sans suite et ce qui a déjà reçu réponse.
 export async function GET(req) {
   if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
-  const nettoyage = await nettoyerMessagesATraiter();
-  const all = await listPendingReplies();
+  // Nettoyage + lecture en un seul passage (repli : simple lecture si le nettoyage échoue).
+  const all = (await nettoyerMessagesATraiter()) || (await listPendingReplies());
   const items = all.map((it) => ({
     id: it.id, token: it.token, name: it.name, email: it.email, subject: it.subject,
     source: it.source || "contact", orderRef: it.orderRef || "", orderId: it.orderId || "",
@@ -21,7 +21,6 @@ export async function GET(req) {
   return Response.json({
     pending: items.filter((i) => i.status === "pending"),
     recent: items.filter((i) => i.status !== "pending").slice(0, 20),
-    nettoyage,
   });
 }
 

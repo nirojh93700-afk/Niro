@@ -1,4 +1,4 @@
-import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply, getInboxBlock, classerPendingSi, purgeAnsweredPendingReplies } from "@/lib/stock";
+import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply, classerEtListerPending, getInboxBlock } from "@/lib/stock";
 import { aEcarter } from "@/lib/inboxFilter";
 import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
@@ -227,7 +227,7 @@ export async function syncInbox({ force = false } = {}) {
   }
 
   // 2 bis) L'agent remet « Messages à traiter » à jour à chaque passage.
-  result.nettoyes = await nettoyerMessagesATraiter();
+  await nettoyerMessagesATraiter();
 
   // 3) Ce que NOUS avons envoyé à la main depuis Gmail : rangé aussi dans le
   //    dossier de la cliente et le fil de sa commande (rien ne se perd).
@@ -284,15 +284,16 @@ const SANS_SUITE = new Set(["cseidm@pm.me", "zucsim58@gmail.com"]);
  * L'agent tient « Messages à traiter » à jour (02/10/2026) : classe tout seul ce qui
  * n'a plus rien à y faire — pubs / notifications, expéditeurs marqués « Pub »,
  * dossiers classés sans suite, demandes déjà répondues par un autre canal.
- * Ne supprime rien (statut « dismissed » + raison), n'envoie rien. Jamais bloquant.
+ * Ne supprime rien (statut « dismissed » + raison), n'envoie rien. UNE seule lecture.
+ * Renvoie la liste à jour (pour l'écran), ou [] en cas d'erreur.
  */
 export async function nettoyerMessagesATraiter() {
-  const out = { pubs: 0, sansSuite: 0, repondus: false };
   try {
-    const blocage = await getInboxBlock().catch(() => ({}));
-    out.pubs = await classerPendingSi((it) => aEcarter(it.email, blocage), "pub");
-    out.sansSuite = await classerPendingSi((it) => SANS_SUITE.has(String(it.email || "").toLowerCase()), "sans-suite");
-    out.repondus = await purgeAnsweredPendingReplies();
-  } catch { /* jamais bloquant */ }
-  return out;
+    return await classerEtListerPending((it, data) => {
+      const e = String(it.email || "").toLowerCase();
+      if (aEcarter(e, data.inboxBlock || {})) return "pub";
+      if (SANS_SUITE.has(e)) return "sans-suite";
+      return "";
+    });
+  } catch { return null; }
 }
