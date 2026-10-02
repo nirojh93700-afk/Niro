@@ -64,6 +64,8 @@ export async function POST(req) {
       desc: String(it.desc || "").slice(0, 200),
       qty: Math.max(1, parseInt(it.qty, 10) || 1),
       price: Math.max(0, Math.round((parseFloat(it.price) || 0) * 100) / 100),
+      // Article du stock à décompter au paiement (facultatif, 02/10/2026).
+      ...(String(it.stockId || "").trim() ? { stockId: String(it.stockId).trim().slice(0, 80) } : {}),
     }))
     .filter((it) => it.desc);
   if (!items.length) return Response.json({ error: "Ajoute au moins une ligne." }, { status: 400 });

@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { formatEuro } from "@/lib/format";
+import { products } from "@/lib/products";
+
+// Tous les articles du stock (un par variante) pour la liste « Retirer du stock ».
+const ARTICLES_STOCK = products.flatMap((p) => (p.variants || []).map((v) => ({ id: v.stockId || v.id, label: `${p.name} — ${v.title}` })));
 
 const STATUS_LABEL = { envoye: "Envoyé", paye: "Payé ✓", facture: "Facture", annule: "Annulé" };
 
@@ -120,6 +124,12 @@ export default function QuotesAdmin({ adminKey }) {
                 style={{ padding: "8px", border: "1px solid var(--line)", borderRadius: 8 }} />
               <button className="btn btn-outline" style={{ padding: "4px 8px" }} title="Supprimer la ligne"
                 onClick={() => setItems(items.length > 1 ? items.filter((_, j) => j !== i) : items)}>×</button>
+              <select value={it.stockId || ""} title="Article du stock à décompter quand le devis est payé"
+                onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, stockId: e.target.value } : x))}
+                style={{ gridColumn: "1 / -1", padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8, fontSize: "0.82rem", color: it.stockId ? "inherit" : "var(--ink-soft)" }}>
+                <option value="">📦 Retirer du stock : rien (ligne libre)</option>
+                {ARTICLES_STOCK.map((a) => <option key={a.id} value={a.id}>📦 Retirer du stock : {a.label}</option>)}
+              </select>
             </div>
           ))}
           <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}

@@ -25,6 +25,7 @@ export async function POST(req) {
     return new URL(req.url).origin;
   }
   const siteUrl = resolveSiteUrl();
+  const stockPairs = q.items.filter((it) => it.stockId).map((it) => [it.stockId, it.qty]);
   const stripe = new Stripe(secret);
   // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
   const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
@@ -47,7 +48,13 @@ export async function POST(req) {
           product_data: { name: it.desc },
         },
       })),
-      metadata: { quoteId: id, quoteNumber: q.number || "" },
+      // `stock` : les articles du stock vendus par ce devis → le webhook les décompte
+      // (même mécanisme que la boutique). Les lignes sans stockId ne touchent à rien.
+      metadata: {
+        quoteId: id,
+        quoteNumber: q.number || "",
+        ...(stockPairs.length ? { stock: JSON.stringify(stockPairs).slice(0, 480) } : {}),
+      },
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/document/${id}`,
     });

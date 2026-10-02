@@ -10,6 +10,7 @@
 // Visible uniquement dans la gestion (jamais côté client).
 // =============================================================================
 
+import { nomLivraison } from "@/lib/nomLivraison";
 import { useMemo, useState } from "react";
 import { getProductBySlug } from "@/lib/products";
 
@@ -76,9 +77,9 @@ export default function BoxtalCopie({ order }) {
   const dims = useMemo(() => dimsParDefaut(order.items), [order.items]);
   const poids = useMemo(() => poidsEstime(order.items), [order.items]);
   // Prénom / Nom : Boxtal les demande séparés — on coupe au premier espace.
-  const nomComplet = (order.shippingName || order.customerName || "").trim();
-  const [prenom, ...reste] = nomComplet.split(/\s+/);
-  const nom = reste.join(" ") || prenom;
+  // Si le client a tapé son ADRESSE dans le champ « nom » (incident 0GTB1LZ5), on
+  // prend le nom du devis / du client et on prévient.
+  const { prenom, nom, suspect } = nomLivraison(order);
   const description = (order.items || []).map((it) => it.name).join(", ").slice(0, 80) || "Cadeau personnalisé";
 
   return (
@@ -96,6 +97,11 @@ export default function BoxtalCopie({ order }) {
       {DEPART.map(([l, v]) => <Ligne key={l} label={l} valeur={v} />)}
 
       <Titre>Arrivée (cliente)</Titre>
+      {suspect ? (
+        <p style={{ margin: "4px 0 6px", padding: "6px 10px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.85rem" }}>
+          ⚠️ Le client a écrit une ADRESSE dans le champ « nom » du paiement : vérifie le prénom / nom ci-dessous (« {order.shippingName || order.customerName} »).
+        </p>
+      ) : null}
       <Ligne label="Prénom" valeur={prenom} />
       <Ligne label="Nom" valeur={nom} gras />
       <Ligne label="Adresse" valeur={[a.line1, a.line2].filter(Boolean).join(", ")} />

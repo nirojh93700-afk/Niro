@@ -1,4 +1,5 @@
 // Vérifications « vendu en plus » (npm run test-options) — pures, sans navigateur.
+import { nomLivraison, ressembleAUneAdresse } from "../../src/lib/nomLivraison.js";
 import { optionsArticle, optionsCommande, livraisonCommande } from "../../src/lib/optionsVendues.js";
 let n = 0, ko = 0;
 const check = (nom, cond) => { n++; if (!cond) { ko++; console.log("❌", nom); } else console.log("✅", nom); };
@@ -36,6 +37,14 @@ check("commande : ligne sans réglages → emballage relu dans la description St
 check("livraison express détectée", oc.livraison.express === true && livraisonCommande({ shippingMethod: "Livraison à domicile" }).express === false);
 check("point relais prioritaire dans le texte", livraisonCommande({ shippingMethod: "Point relais", relaisPoint: "Mondial Relay — Tabac du centre" }).texte.includes("Tabac"));
 check("commande vide : rien ne casse", optionsCommande({}).articles.length === 0 && optionsCommande(null).nbOptions === 0);
+
+// Nom de livraison (incident 0GTB1LZ5 : adresse tapée dans le champ « nom »)
+check("adresse reconnue comme adresse", ressembleAUneAdresse("23quater avenue du president coty les manoirs de la cote app D15"));
+check("vrais noms jamais pris pour une adresse", !ressembleAUneAdresse("Lorenzo Franchi") && !ressembleAUneAdresse("Marie-Claire Dupont") && !ressembleAUneAdresse("Jean de la Rue"));
+check("0GTB1LZ5 : prénom Lorenzo / nom Franchi (correction connue)", (() => { const r = nomLivraison({ ref: "0GTB1LZ5", shippingName: "23quater avenue du president coty les manoirs de la cote app D15" }); return r.prenom === "Lorenzo" && r.nom === "Franchi" && !r.suspect; })());
+check("devis : on prend le nom du devis si le champ nom est une adresse", (() => { const r = nomLivraison({ ref: "ZZZ", shippingName: "12 rue des Lilas", quoteClientName: "Anne Martin" }); return r.complet === "Anne Martin" && r.source === "nom du devis"; })());
+check("adresse sans aucun nom de repli : gardée mais signalée", nomLivraison({ ref: "ZZZ", shippingName: "12 rue des Lilas" }).suspect === true);
+check("commande normale inchangée", (() => { const r = nomLivraison({ shippingName: "Sophie Berardo" }); return r.prenom === "Sophie" && r.nom === "Berardo" && !r.suspect; })());
 
 console.log(`\n${n - ko}/${n} vérifications au vert`);
 process.exit(ko ? 1 : 0);

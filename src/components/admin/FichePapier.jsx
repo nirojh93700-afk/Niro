@@ -33,6 +33,7 @@ import { TableGravure } from "@/lib/engravingSheet";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { getProductBySlug } from "@/lib/products";
 import { formatEuro } from "@/lib/format";
+import { nomLivraison } from "@/lib/nomLivraison";
 
 const STATUTS = {
   a_preparer: "À préparer",
@@ -189,10 +190,10 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
             <h3>Client &amp; livraison</h3>
             <table className="fp-table">
               <tbody>
-                <L k="Cliente" v={order.customerName || "—"} />
+                <L k="Cliente" v={nomLivraison({ ...order, shippingName: "" }).complet || "—"} />
                 <L k="Téléphone" v={order.customerPhone} />
                 <L k="E-mail" v={order.customerEmail} />
-                <L k="Livrer à" v={[order.shippingName || order.customerName, adresse].filter(Boolean).join(" — ")} />
+                <L k="Livrer à" v={[nomLivraison(order).complet, adresse].filter(Boolean).join(" — ")} />
                 <L k="Mode" v={livraison} />
                 <L k="Suivi" v={order.tracking} />
               </tbody>

@@ -9,6 +9,23 @@
 > **Pour tout futur devis de remplacement : relire l'alerte « 🛎️ Commande <réf d'origine> » dans Gmail
 > (lecture seule) et déclarer ses réglages dans `FICHIERS_DEVIS`.**
 
+## 📦 DEVIS : NOM DE LIVRAISON + STOCK — 02/10/2026
+> Gérant, commande 0GTB1LZ5 : « regarde comme t'as rempli le nom, l'adresse… même quand c'est un devis,
+> tu enlèves la quantité du stock — c'est automatique ou pas ? »
+- **Nom** : le client avait tapé son ADRESSE dans le champ « nom » de Stripe → Boxtal : prénom
+  « 23quater », nom « avenue du president coty… ». `src/lib/nomLivraison.js` (`nomLivraison(order)`,
+  `ressembleAUneAdresse`, table `NOMS_CORRIGES` : 0GTB1LZ5 → Lorenzo Franchi) : si le « nom » est une
+  adresse → nom du devis (`order.quoteClientName`, enregistré par le webhook désormais) → correction
+  connue → nom du client ; sinon gardé + **encadré rouge d'alerte** dans `BoxtalCopie`. Aussi branché
+  sur `FichePapier` (Cliente / Livrer à). ⚠️ Adresse de cette commande : le nom tapé disait « app D15 »,
+  la ligne d'adresse « app D16 » → **à confirmer avec le client**.
+- **Stock** : AVANT, un devis ne touchait JAMAIS au stock (lignes sans identifiant, `quote-pay` sans
+  `metadata.stock`). **MAINTENANT** : chaque ligne de devis a une liste « 📦 Retirer du stock » (facultative,
+  `QuotesAdmin`, `items[].stockId`), `quote-pay` met `metadata.stock = [[stockId, qté]]` et le webhook
+  décompte comme pour la boutique (`decrementMany`, ignore les articles non suivis). Une ligne laissée
+  sur « rien » ne bouge rien. ⚠️ **Les devis DÉJÀ créés (dont DEV-1509) n'ont pas de stockId : leur stock
+  se corrige à la main** dans Gestion → Produits & stock (bracelet gourmette −1, sac cadeau).
+
 ## 🧾 « VENDU EN PLUS » SUR LES FICHES DE TRAVAIL — 02/10/2026
 > Gérant : « dans les fiches de travail de gravure, il faut que ça soit bien détaillé tout ce qui est
 > vendu en plus, par exemple les emballages… faut pas que je me trompe » (PAS dans les e-mails).
