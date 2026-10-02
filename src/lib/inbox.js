@@ -1,4 +1,5 @@
-import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply } from "@/lib/stock";
+import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply, getInboxBlock, classerPendingSi, purgeAnsweredPendingReplies } from "@/lib/stock";
+import { aEcarter } from "@/lib/inboxFilter";
 import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
 import { triageIncomingEmail } from "@/lib/agents/registry";
@@ -126,6 +127,8 @@ export async function syncInbox({ force = false } = {}) {
     // sont rangées à part, jamais traitées comme une demande de cliente.
     const prospects = await getProspectsAll().catch(() => ({}));
     result.prospects = 0;
+    // Expéditeurs marqués « Pub » par le gérant : ignorés (02/10/2026).
+    const blocage = await getInboxBlock().catch(() => ({}));
 
     // Commandes par adresse (la plus récente d'abord), hors tests.
     const orders = (await getSiteOrders(300).catch(() => [])).filter((o) => !o.test);
@@ -161,7 +164,7 @@ export async function syncInbox({ force = false } = {}) {
         seen[id] = now;
         continue;
       }
-      if (etsy || !looksLikeRealCustomer(from, msg.labelIds) || own.has(from) || now - at > MAX_AGE_MS) {
+      if (etsy || !looksLikeRealCustomer(from, msg.labelIds, blocage) || own.has(from) || now - at > MAX_AGE_MS) {
         seen[id] = now; result.ignored++; continue;
       }
       const body = cleanBody(msg.body || msg.snippet || "");
@@ -223,6 +226,9 @@ export async function syncInbox({ force = false } = {}) {
     result.errors.push(e?.message || String(e));
   }
 
+  // 2 bis) L'agent remet « Messages à traiter » à jour à chaque passage.
+  result.nettoyes = await nettoyerMessagesATraiter();
+
   // 3) Ce que NOUS avons envoyé à la main depuis Gmail : rangé aussi dans le
   //    dossier de la cliente et le fil de sa commande (rien ne se perd).
   result.sent = 0;
@@ -269,4 +275,24 @@ export async function syncInbox({ force = false } = {}) {
 
   await saveInboxState({ ids: seen, lastRun: now, lastResult: { ...result, at: now } });
   return result;
+}
+
+// Dossiers classés « sans suite » par le gérant (17/09/2026) : plus jamais à traiter.
+const SANS_SUITE = new Set(["cseidm@pm.me", "zucsim58@gmail.com"]);
+
+/**
+ * L'agent tient « Messages à traiter » à jour (02/10/2026) : classe tout seul ce qui
+ * n'a plus rien à y faire — pubs / notifications, expéditeurs marqués « Pub »,
+ * dossiers classés sans suite, demandes déjà répondues par un autre canal.
+ * Ne supprime rien (statut « dismissed » + raison), n'envoie rien. Jamais bloquant.
+ */
+export async function nettoyerMessagesATraiter() {
+  const out = { pubs: 0, sansSuite: 0, repondus: false };
+  try {
+    const blocage = await getInboxBlock().catch(() => ({}));
+    out.pubs = await classerPendingSi((it) => aEcarter(it.email, blocage), "pub");
+    out.sansSuite = await classerPendingSi((it) => SANS_SUITE.has(String(it.email || "").toLowerCase()), "sans-suite");
+    out.repondus = await purgeAnsweredPendingReplies();
+  } catch { /* jamais bloquant */ }
+  return out;
 }

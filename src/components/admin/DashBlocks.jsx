@@ -53,13 +53,21 @@ export function BandeauDelai({ vacation, adminKey, onRegler, onEteint }) {
 
 // ① Les messages qui attendent une action : réponses préparées par l'agent
 // (à relire et envoyer) + réponses de clientes non lues dans leur commande.
-export function MessagesATraiter({ pending = [], unread = [], onOpenOrder }) {
+// Remanié le 02/10/2026 (« trop de messages, ça fait moche ») : lignes compactes,
+// 5 visibles puis « Voir les N autres », et deux gestes à côté de chaque message
+// préparé — « Pub » (l'expéditeur est ignoré pour toujours) et « Traité ».
+// L'agent classe aussi tout seul ce qui n'a plus rien à faire ici (côté serveur).
+const VISIBLES = 5;
+export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, adminKey = "", onClasse }) {
   const now = Date.now();
+  const [tout, setTout] = useState(false);
+  const [busy, setBusy] = useState("");
   const lignes = useMemo(() => {
     const l = [];
     for (const p of pending) {
       l.push({
         key: `p-${p.id || p.token}`,
+        id: p.id,
         initiale: (p.name || p.email || "?").trim().charAt(0).toUpperCase(),
         nom: p.name || p.email || "Cliente",
         detail: p.productName
@@ -68,6 +76,7 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder }) {
         chip: ["réponse préparée", ""],
         at: Number(p.at) || 0,
         action: { label: "Relire et envoyer", href: `/repondre/${p.token}`, gold: true },
+        classable: true,
       });
     }
     for (const u of unread) {
@@ -85,6 +94,23 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder }) {
     return l.sort((a, b) => (a.at || 0) - (b.at || 0));
   }, [pending, unread, onOpenOrder]);
 
+  async function classer(r, action) {
+    if (action === "pub" && !confirm(`Marquer « ${r.nom} » comme pub ?\n\nSes messages ne seront plus jamais proposés ici.`)) return;
+    setBusy(r.key);
+    try {
+      const res = await fetch("/api/admin/pending-replies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+        body: JSON.stringify({ action, id: r.id }),
+      });
+      if (res.ok) onClasse?.(r.id, action);
+    } catch { /* le toast global signale l'échec */ }
+    finally { setBusy(""); }
+  }
+
+  const visibles = tout ? lignes : lignes.slice(0, VISIBLES);
+  const reste = lignes.length - visibles.length;
+
   return (
     <div className="dash-panel dq-msgs">
       <div className="dash-ph">
@@ -93,15 +119,20 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder }) {
       </div>
       {lignes.length === 0 ? (
         <p className="dq-vide">Aucun message en attente — tout est traité.</p>
-      ) : lignes.map((r) => {
+      ) : visibles.map((r) => {
         const tard = r.at && now - r.at > 24 * 3600000;
         return (
           <div className={`dq-row${tard ? " late" : ""}`} key={r.key}>
             <div className="dq-av" aria-hidden>{r.initiale}</div>
             <div className="who"><b>{r.nom}</b><small>{r.detail}</small></div>
-            <span className={`dq-kind ${r.chip[1]}`}>{r.chip[0]}</span>
+            <span className="dq-age">{depuis(r.at, now)}</span>
             <div className="dq-right">
-              <span className="dq-age">{depuis(r.at, now)}</span>
+              {r.classable ? (
+                <>
+                  <button type="button" className="dq-mini pub" disabled={busy === r.key} onClick={() => classer(r, "pub")} title="Pub ou notification : ne plus jamais afficher cet expéditeur">🚫 Pub</button>
+                  <button type="button" className="dq-mini" disabled={busy === r.key} onClick={() => classer(r, "traite")} title="Déjà réglé : retirer de la liste">✓ Traité</button>
+                </>
+              ) : null}
               {r.action.href
                 ? <a className={`dq-go${r.action.gold ? "" : " l"}`} href={r.action.href}>{r.action.label}</a>
                 : <button type="button" className="dq-go l" onClick={r.action.onClick}>{r.action.label}</button>}
@@ -109,6 +140,11 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder }) {
           </div>
         );
       })}
+      {lignes.length > VISIBLES ? (
+        <button type="button" className="dq-more" onClick={() => setTout((v) => !v)}>
+          {tout ? "Replier la liste" : `Voir les ${reste} autres`}
+        </button>
+      ) : null}
     </div>
   );
 }

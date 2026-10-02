@@ -6,6 +6,8 @@
 // déclenché manuellement depuis l'admin.
 // =============================================================================
 
+import { aEcarter } from "@/lib/inboxFilter";
+
 // Échange le refresh token contre un access token temporaire.
 // Jeton d'accès gardé en mémoire (par refresh token) jusqu'à 1 min avant son
 // expiration : un envoi en série (offre à 49 inscrites) ne redemande plus un
@@ -106,9 +108,10 @@ function extractBody(payload) {
 }
 
 // Vrai mail de cliente ? (on écarte pubs, newsletters, no-reply, notifications)
-export function looksLikeRealCustomer(fromEmail, labelIds = []) {
+export function looksLikeRealCustomer(fromEmail, labelIds = [], blocage = {}) {
   const e = (fromEmail || "").toLowerCase();
   if (!e) return false;
+  if (aEcarter(e, blocage)) return false; // pubs évidentes + expéditeurs marqués « Pub »
   if (/no[-_.]?reply|do[-_.]?not[-_.]?reply|newsletter|mailer|notif|marketing|info@|news@|support@google|facebookmail|instagram|stripe\.com|paypal|alibaba/.test(e)) return false;
   // Nos propres expéditeurs + factures / plateformes (jamais des clientes).
   if (/@nivcreation\.fr$|resend\.dev|etsy\.|@amazon\.|nihaojewelry|@metro\.|billing@|facturation|invoice|@google\.com|@apple\.com|@shopify\.|@boxtal\.|@laposte\.|@colissimo|mondialrelay|@ovh\.|hostinger|firebase|@anthropic\.com|@canva\.|@meta\.com|@fb\.com|@tiktok/.test(e)) return false;

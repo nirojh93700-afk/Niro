@@ -4260,6 +4260,15 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .dq-go { font: 600 0.8rem system-ui; padding: 8px 13px; border-radius: 999px; border: none; cursor: pointer; background: linear-gradient(135deg, #e2c67e, #c9a24b 60%, #a98935); color: #241a0c; white-space: nowrap; text-decoration: none; display: inline-block; }
 .dq-go.l { background: #fff; border: 1px solid var(--line); color: var(--ink); }
 .dq-right { display: flex; gap: 8px; align-items: center; }
+/* Messages à traiter, version compacte (02/10/2026) */
+.dq-msgs .dq-row { grid-template-columns: 34px minmax(0, 1fr) auto auto; padding: 9px 16px; gap: 10px; }
+.dq-msgs .dq-av { width: 34px; height: 34px; font-size: 0.85rem; }
+.dq-msgs .dq-row .who b, .dq-msgs .dq-row .who small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dq-mini { font: 600 0.74rem system-ui; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
+.dq-mini:hover { color: var(--ink); border-color: #c9a24b; }
+.dq-mini.pub:hover { color: #a24336; border-color: #d9a79f; background: #fdf1ee; }
+.dq-mini:disabled { opacity: 0.5; cursor: default; }
+.dq-more { display: block; width: 100%; padding: 10px; border: none; border-top: 1px solid var(--cream); background: #fffdf7; font: 600 0.82rem system-ui; color: var(--gold-dark); cursor: pointer; }
 .dq-kpihead { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 22px 0 10px; }
 .dq-kpihead h3 { margin: 0; font-size: 1rem; }
 .dq-seg { display: inline-flex; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
@@ -4284,6 +4293,9 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .dq-row { grid-template-columns: 38px 1fr; }
   .dq-row .dq-kind, .dq-row .dq-age { grid-column: 2; justify-self: start; }
   .dq-right { grid-column: 1 / -1; justify-content: flex-end; }
+  .dq-msgs .dq-row { grid-template-columns: 34px minmax(0, 1fr) auto; }
+  .dq-msgs .dq-row .dq-age { grid-column: 3; grid-row: 1; }
+  .dq-msgs .dq-right { grid-column: 1 / -1; flex-wrap: wrap; }
   .dq-vac .acts { margin-left: 0; width: 100%; }
 }
 

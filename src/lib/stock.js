@@ -347,6 +347,39 @@ export async function addPendingReply({ name, email, phone = "", subject = "", m
   return item;
 }
 
+// Expéditeurs marqués « Pub » par le gérant (section `inboxBlock` = { clé: {at, nom} },
+// clé = adresse ou « @domaine » pro, voir `cleBlocage`). La boîte surveillée les ignore.
+export async function getInboxBlock() {
+  const data = await getCatalogRaw(true);
+  return data.inboxBlock || {};
+}
+export async function addInboxBlock(cle, nom = "") {
+  const k = String(cle || "").toLowerCase().trim();
+  if (!k) return null;
+  const data = await getCatalogRaw(true);
+  data.inboxBlock = data.inboxBlock || {};
+  data.inboxBlock[k] = { at: Date.now(), nom: String(nom || "").slice(0, 80) };
+  await persistCatalog(data, ["inboxBlock"]);
+  return data.inboxBlock;
+}
+
+// Classe (sans envoi) les réponses « à valider » dont `quand(it)` est vrai.
+// Retourne le nombre classé. `via` garde la raison (pub, sans-suite, traite…).
+export async function classerPendingSi(quand, via = "auto") {
+  const data = await getCatalogRaw(true);
+  let n = 0;
+  for (const it of Object.values(data.pendingReplies || {})) {
+    if (it.status !== "pending") continue;
+    let oui = false;
+    try { oui = !!quand(it); } catch { oui = false; }
+    if (!oui) continue;
+    it.status = "dismissed"; it.resolvedAt = Date.now(); it.resolvedVia = String(via).slice(0, 30);
+    n++;
+  }
+  if (n) await persistCatalog(data, ["pendingReplies"]);
+  return n;
+}
+
 export async function getPendingReplyByToken(token) {
   const t = String(token || "").trim();
   if (!t) return null;

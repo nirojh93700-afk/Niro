@@ -797,6 +797,8 @@ export default function GestionPage() {
             <MessagesATraiter
               pending={pendingList}
               unread={unreadMeta}
+              adminKey={key}
+              onClasse={(id) => { setPendingList((l) => l.filter((x) => x.id !== id)); setPendingReplies((n) => Math.max(0, n - 1)); }}
               onOpenOrder={(orderId) => {
                 setTab("commandes");
                 setOpenOrders((prev) => new Set([...prev, orderId]));
