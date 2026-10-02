@@ -45,5 +45,21 @@ check("flûte : gravure en photo choisie (gravureExemple) → modèle n° 38 OK"
 check("flûte : valeurs de gravureExemple = celles du champ lettering (clé inchangée)", flute.parcoursGuide.modelesPhoto.every((m) => flute.personalizationFields.find((f) => f.key === "gravureExemple").options.some((o) => o.value === m.value)));
 check("flûte : mode modèle sans rien → bloqué", !parcoursEtat(flute, { mode: "modele" }).ok);
 
+// --- Verre à whisky perso : photo OU texte, face / fond / les deux (02/10/2026) ---
+const wh = products.find((p) => p.slug === "verre-a-whisky-grave");
+const ew = (fv) => parcoursEtat(wh, fv);
+check("whisky : parcoursGuide présent (2 modes, 3 emplacements)", wh.parcoursGuide && wh.parcoursGuide.modes.join() === "photo,texte" && wh.parcoursGuide.emplacement.options.length === 3);
+check("whisky : clés écrites par le parcours = clés de personalizationFields", ["mode","emplacement","photo","texte","texte2","decor","police","photoFond","texteFond"].every((k) => wh.personalizationFields.some((f) => f.key === k)));
+check("whisky : prix inchangés (texte +3, date +3, face+fond +7)", (() => { const f = wh.engravingPricing.flatExtras; return f.find((x) => x.key === "texte").amount === 3 && f.find((x) => x.key === "texte2").amount === 3 && f.find((x) => x.key === "emplacement" && x.value === "deux").amount === 7; })());
+check("whisky : rien choisi → bloqué (étape 1)", !ew({}).ok && /étape 1/.test(ew({}).manque));
+check("whisky : photo sans fichier → bloqué", !ew({ mode: "photo" }).ok);
+check("whisky : photo seule (face par défaut) → OK", (() => { const r = ew({ mode: "photo", photo: "/api/img/x" }); return r.ok && /photo seule/.test(r.detail); })());
+check("whisky : texte vide → bloqué ; texte → OK (+3 €)", !ew({ mode: "texte" }).ok && /\+3 €/.test(ew({ mode: "texte", texte: "Papa" }).grav));
+check("whisky : date (texte2) + décor + écriture dans le détail", (() => { const r = ew({ mode: "texte", texte: "Papa", decor: "★", texte2: "12.06.2024", police: "cinzel" }); return r.ok && /★ Papa ★/.test(r.grav) && /12\.06\.2024/.test(r.detail) && /Cinzel/.test(r.detail); })());
+check("whisky : face + fond sans rien au fond → bloqué (on ne facture pas une gravure vide)", !ew({ mode: "texte", texte: "Papa", emplacement: "deux" }).ok);
+check("whisky : face + fond avec texte du fond → OK, résumé du fond", (() => { const r = ew({ mode: "texte", texte: "Papa", emplacement: "deux", texteFond: "Merci" }); return r.ok && /Merci/.test(r.fond); })());
+check("whisky : fond seul → OK sans rien d'autre à préciser", ew({ mode: "photo", photo: "/api/img/x", emplacement: "fond" }).ok);
+check("carafe / vin / flûte inchangés : pas d'emplacement dans leur config", !carafe.parcoursGuide.emplacement && !vin.parcoursGuide.emplacement && !flute.parcoursGuide.emplacement);
+
 console.log(`\n${n - ko}/${n} vérifications au vert`);
 process.exit(ko ? 1 : 0);

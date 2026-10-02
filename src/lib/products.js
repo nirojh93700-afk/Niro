@@ -2144,7 +2144,45 @@ export const products = [
       minHeightFrac: 0.08,
       round: true,
     },
+    // Parcours guidé (02/10/2026) : photo OU texte → où sur le verre → détail → résumé.
+    // Même mise en page que la carafe / le vin / la flûte ; les clés de champs ci-dessous
+    // (emplacement, photo, texte, texte2, decor, police, photoFond, texteFond) NE CHANGENT PAS.
+    parcoursGuide: {
+      titre: "Personnalisez votre verre à whisky",
+      objet: "verre", objetArticle: "le verre",
+      modes: ["photo", "texte"],
+      modesTextes: {
+        photo: { sous: "Un portrait, une photo de famille, le logo de votre bar ou de votre entreprise : transformé en gravure façon dessin. Avec un texte dessous si vous voulez." },
+        texte: { sous: "Un prénom, une date, un petit message — dans l'écriture de votre choix, avec un décor autour si vous voulez. Sans photo." },
+      },
+      imagePhoto: "/produits/verre_a_whisky_exemple_face.jpg",
+      emplacement: {
+        titre: "Où sur le verre ?",
+        options: [
+          { value: "face", titre: "Sur la face avant", sous: "La gravure classique, visible de face.", image: "/produits/verre_a_whisky_grave_vide.jpg", resume: "Face avant" },
+          { value: "fond", titre: "Au fond du verre", sous: "Vue de dessus, à travers le verre : se découvre en buvant.", image: "/produits/verre_a_whisky_fond_clair.jpg", resume: "Au fond du verre" },
+          { value: "deux", titre: "Les deux : face + fond", sous: "Une gravure sur la face, une autre au fond.", image: "/produits/verre_a_whisky_exemple_fond.jpg", prix: 7, resume: "Face avant + fond du verre (+7 €)" },
+        ],
+      },
+      dateKey: "texte2", dateMax: 30, texteMax: 30,
+      decors: [
+        { value: "", label: "Aucun" },
+        { value: "★", label: "★ Étoiles" },
+        { value: "♥", label: "♥ Cœurs" },
+        { value: "✿", label: "✿ Fleurs" },
+        { value: "◆", label: "◆ Losanges" },
+        { value: "•", label: "• Points" },
+      ],
+      guidePhoto: {
+        image: "/produits/guide-photo-gravure.png",
+        texte: "Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d'espace autour. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier. L'aperçu en ligne est indicatif.",
+      },
+    },
     personalizationFields: [
+      { key: "mode", type: "select", label: "Gravure", optional: true, options: [
+        { value: "photo", label: "Ma photo ou mon logo" },
+        { value: "texte", label: "Mon propre texte" },
+      ] },
       { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", default: "face", options: [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },

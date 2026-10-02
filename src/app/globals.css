@@ -4636,3 +4636,25 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .ov-livr.express{color:#b32b2b;font-weight:800}
 /* Sur la feuille papier, on reprend l'encadré d'alerte existant (.fp-encadre.alerte) */
 .fp-encadre.ov{font-size:.78rem}.fp-encadre.ov .ov-liste li{padding:1px 0}
+
+/* =============================================================================
+   PARCOURS GUIDÉ — verre à whisky perso (02/10/2026) : « Où sur le verre ? »,
+   décor, 2ᵉ gravure au fond. Mêmes classes .prc-* que la carafe (mise en page de référence).
+   ============================================================================= */
+.prc-cimg-photo img { width: 100%; height: 100%; object-fit: cover; }
+.prc-empl .prc-cof { align-items: center; text-align: center; padding-top: 12px; }
+.prc-empl .prc-cof img { width: 100%; max-width: 120px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; background: #efe6d6; margin-bottom: 4px; }
+.prc-empl .prc-cof b { padding-right: 0; font-size: 0.88rem; }
+.prc-empl .prc-cof::before { top: 10px; right: 10px; }
+.prc-decors .prc-chip { font-size: 0.86rem; }
+.prc-fond { margin-top: 12px; padding: 12px 12px 2px; border: 1.5px dashed var(--gold); border-radius: 12px; background: #fffdf7; }
+.prc-fond .prc-fields { margin-top: 0; padding: 0; border: 0; background: none; }
+.prc-guide { margin: 10px 0 0; font-size: 0.82rem; color: var(--ink-soft); }
+.prc-guide summary { cursor: pointer; font-weight: 600; color: var(--gold-dark); }
+.prc-guide img { width: 100%; border-radius: 10px; margin: 8px 0 6px; border: 1px solid var(--line); }
+.prc-guide p { margin: 0; line-height: 1.45; }
+@media (max-width: 720px) {
+  .prc-empl .prc-cof { flex-direction: row; text-align: left; align-items: flex-start; gap: 4px 10px; flex-wrap: wrap; }
+  .prc-empl .prc-cof img { width: 64px; max-width: 64px; margin: 0; }
+  .prc-empl .prc-cof b, .prc-empl .prc-cof small, .prc-empl .prc-cof .prc-cp { flex: 1 1 calc(100% - 74px); }
+}

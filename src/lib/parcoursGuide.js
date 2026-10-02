@@ -34,9 +34,49 @@ const policeNom = (k) => {
   return noms[k] || k || "Playfair";
 };
 
+// Verre à whisky perso (`cfg.emplacement`) : photo OU texte, face / fond / les deux, date,
+// décor, écriture, et — si « les deux » — une 2ᵉ gravure au fond. Mêmes clés de champs que
+// l'ancienne fiche (emplacement, photo, texte, texte2, decor, police, photoFond, texteFond).
+// Validé par le CHOIX ; seule exception : « face + fond » (+7 €) demande ce qui sera gravé au
+// fond, sinon on facturerait une gravure vide.
+function etatVerre(product, fv) {
+  const cfg = product.parcoursGuide;
+  const dateKey = cfg.dateKey || "date";
+  const mode = v(fv, "mode");
+  const empl = v(fv, "emplacement") || "face";
+  if (!mode) return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
+  const fp = v(fv, "photoFond");
+  const ft = v(fv, "texteFond");
+  const fondTxt = empl === "deux" ? [fp ? "photo" : null, ft ? `« ${ft} »` : null].filter(Boolean).join(" + ") : "";
+  const decor = v(fv, "decor");
+  const texte = v(fv, "texte");
+  const enDecor = (t) => (decor ? `${decor} ${t} ${decor}` : t);
+  const parts = [];
+  let grav;
+  if (mode === "photo") {
+    if (!v(fv, "photo")) return { ok: false, grav: "Ma photo ou mon logo", detail: "", fond: fondTxt, manque: "Ajoutez votre photo ou votre logo (étape 3)." };
+    grav = "Votre photo / logo";
+    if (texte) parts.push(`Texte sous la photo : ${enDecor(texte)} (+3 €)`);
+  } else if (mode === "texte") {
+    if (!texte) return { ok: false, grav: "Mon propre texte", detail: "", fond: fondTxt, manque: "Écrivez votre texte (étape 3)." };
+    grav = `Texte : « ${enDecor(texte)} » (+3 €)`;
+  } else {
+    return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
+  }
+  const d = v(fv, dateKey);
+  if (d) parts.push(`Date : ${d} (+3 €)`);
+  if (texte || d) parts.push(`Écriture ${policeNom(v(fv, "police"))}`);
+  if (empl === "deux" && !fondTxt) {
+    return { ok: false, grav, detail: parts.join(" · "), fond: "", manque: "Indiquez ce qui sera gravé au fond du verre : une photo ou un texte (étape 3)." };
+  }
+  const fond = fondTxt;
+  return { ok: true, grav, detail: parts.length ? parts.join(" · ") : (mode === "photo" ? "photo seule, vérifiée par l'atelier" : ""), fond, manque: "" };
+}
+
 /** @returns {{ok:boolean, grav:string|null, detail:string, manque:string}} */
 export function parcoursEtat(product, fv) {
   const cfg = product?.parcoursGuide || {};
+  if (cfg.emplacement) return etatVerre(product, fv);
   const mode = v(fv, "mode");
   if (!mode) return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
   if (mode === "modele") {
