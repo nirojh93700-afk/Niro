@@ -1,3 +1,14 @@
+## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
+> Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
+> informations… j'ai pas la date, qu'est-ce que je grave ? ». Une commande sur devis n'a pas de `spec` :
+> la fiche ne montrait que le texte du nom de ligne. **Corrigé** : `FICHIERS_DEVIS["0GTB1LZ5"]` dans
+> `src/lib/devisGravure.js` porte maintenant texte, **date 15.07.2026**, **police Great Vibes**,
+> emplacement face avant, sac cadeau (relus dans l'alerte e-mail d'origine du 25/08) ; `FicheDevis`
+> affiche Date / Police / Emplacement / Emballage, et un encadré rouge « date non précisée » quand un
+> devis dit « + date » sans la donner. ⚠️ Cœur : l'original = 💞, le nom du devis affiche 💜.
+> **Pour tout futur devis de remplacement : relire l'alerte « 🛎️ Commande <réf d'origine> » dans Gmail
+> (lecture seule) et déclarer ses réglages dans `FICHIERS_DEVIS`.**
+
 ## 🫙 FICHE CARAFE — PARCOURS GUIDÉ ✅ EN LIGNE LE 29/09/2026 (« Applique »)
 > **Ce qui est en ligne** (commit du 29/09 soir) : la fiche `carafe-a-whisky-gravee` n'a plus d'onglets ni
 > de liste de champs : `src/components/ParcoursGuide.jsx` rend **4 étapes** — ① « Que voulez-vous

@@ -41,6 +41,11 @@ export default function FicheDevis({ order }) {
                   <tr><td style={cellCle}>Pièce</td><td style={cellVal}>{l.nom}</td></tr>
                   <tr><td style={cellCle}>Quantité</td><td style={{ ...cellVal, fontWeight: 800 }}>{l.quantite}</td></tr>
                   {l.texte ? <tr><td style={cellCle}>Texte à graver</td><td style={{ ...cellVal, fontSize: "1.2rem" }}>{l.texte}</td></tr> : null}
+                  {l.date ? <tr><td style={cellCle}>Date à graver</td><td style={{ ...cellVal, fontSize: "1.2rem" }}>{l.date}</td></tr> : null}
+                  {l.dateManquante ? <tr style={{ background: "#fdecec" }}><td style={{ ...cellCle, color: "#b32b2b" }}>Date</td><td style={{ ...cellVal, color: "#b32b2b", fontWeight: 700 }}>⚠️ Le devis dit « + date » sans la préciser — à demander au client avant de graver</td></tr> : null}
+                  {l.police ? <tr><td style={cellCle}>Police</td><td style={cellVal}>{l.police}</td></tr> : null}
+                  {l.emplacement ? <tr><td style={cellCle}>Emplacement</td><td style={cellVal}>{l.emplacement}</td></tr> : null}
+                  {l.emballage ? <tr><td style={cellCle}>Emballage</td><td style={cellVal}>{l.emballage}</td></tr> : null}
                   {l.style ? <tr style={{ background: "#f7f2e6" }}><td style={cellCle}>Style</td><td style={cellVal}>n° {l.style}</td></tr> : null}
                 </tbody>
               </table>

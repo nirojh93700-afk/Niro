@@ -25,6 +25,18 @@ export const FICHIERS_DEVIS = {
       note: "Couvercle du coffret — même texte que le verre 1, confirmé par le client le 28/09.",
     },
   ],
+  // Remplacement à l'identique de 1YPJVC5R (colis perdu). Réglages relus dans l'alerte de la
+  // commande d'origine du 25/08/2026 : le devis, lui, ne portait ni la date ni la police.
+  "0GTB1LZ5": [
+    {
+      texte: "Stéphanie 💞 Lorenzo",
+      date: "15.07.2026",
+      police: "Great Vibes",
+      emplacement: "Face avant",
+      emballage: "Sac cadeau",
+      note: "À l'identique de la commande d'origine 1YPJVC5R (25/08). Le cœur de l'original est 💞 (deux cœurs) — le nom de la ligne du devis affiche 💜 : en cas de doute, demander au client.",
+    },
+  ],
 };
 
 // Lignes d'envoi (pas des pièces à fabriquer) : « Livraison… », « Lettre suivie La Poste », « Colis suivi ».
@@ -47,6 +59,11 @@ export function lignesDevis(order) {
         court: nom.split(/\s+[—–-]\s+/)[0],
         texte: f.texte || texteNom,
         style: f.style || styleNom,
+        date: f.date || "",
+        police: f.police || "",
+        emplacement: f.emplacement || "",
+        emballage: f.emballage || "",
+        dateManquante: !f.date && /\+\s*date|date\b/i.test(nom),
         fichier: f.fichier || "",
         note: f.note || "",
       };
