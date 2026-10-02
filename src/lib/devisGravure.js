@@ -29,12 +29,12 @@ export const FICHIERS_DEVIS = {
   // commande d'origine du 25/08/2026 : le devis, lui, ne portait ni la date ni la police.
   "0GTB1LZ5": [
     {
-      texte: "Stéphanie 💞 Lorenzo",
+      texte: "Stéphanie 💜 Lorenzo",
       date: "15.07.2026",
       police: "Great Vibes",
       emplacement: "Face avant",
       emballage: "Sac cadeau",
-      note: "À l'identique de la commande d'origine 1YPJVC5R (25/08). Le cœur de l'original est 💞 (deux cœurs) — le nom de la ligne du devis affiche 💜 : en cas de doute, demander au client.",
+      note: "Commande d'origine 1YPJVC5R (25/08) : même texte, date et police. Cœur : 💜 (décision du gérant, 02/10 — remplace le 💞 de l'original).",
     },
   ],
 };

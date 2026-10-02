@@ -5,7 +5,7 @@
 > `src/lib/devisGravure.js` porte maintenant texte, **date 15.07.2026**, **police Great Vibes**,
 > emplacement face avant, sac cadeau (relus dans l'alerte e-mail d'origine du 25/08) ; `FicheDevis`
 > affiche Date / Police / Emplacement / Emballage, et un encadré rouge « date non précisée » quand un
-> devis dit « + date » sans la donner. ⚠️ Cœur : l'original = 💞, le nom du devis affiche 💜.
+> devis dit « + date » sans la donner. Cœur : **💜** (tranché par le gérant le 02/10, remplace le 💞 de l'original).
 > **Pour tout futur devis de remplacement : relire l'alerte « 🛎️ Commande <réf d'origine> » dans Gmail
 > (lecture seule) et déclarer ses réglages dans `FICHIERS_DEVIS`.**
 
