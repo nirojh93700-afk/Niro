@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { exportRows } from "@/lib/exportClients";
+import { chargerAvecCache } from "@/components/admin/adminCache";
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "");
@@ -84,27 +85,24 @@ export default function CrmPage() {
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
     try {
-      const [or, st, nl] = await Promise.all([
-        fetch("/api/admin/orders", { headers: { "x-admin-key": adminKey } }),
-        fetch("/api/admin/settings", { headers: { "x-admin-key": adminKey } }),
-        fetch("/api/admin/newsletter", { headers: { "x-admin-key": adminKey } }),
-      ]);
-      if (!or.ok) { setError("Mot de passe incorrect."); setLoading(false); return; }
-      sessionStorage.setItem("niv-admin-key", adminKey);
-      setAuthed(true);
-      const od = await or.json();
-      setOrders(od.orders || []);
-      if (st.ok) { const s = (await st.json()).settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }
-      try { const cm = await fetch("/api/admin/comms", { headers: { "x-admin-key": adminKey } }); if (cm.ok) setCommsMeta((await cm.json()).meta || {}); } catch { /* ignore */ }
-      try {
-        const lg = await fetch("/api/admin/logins", { headers: { "x-admin-key": adminKey } });
-        if (lg.ok) {
+      // Mémoire partagée (02/10/2026) : la liste déjà vue s'affiche aussitôt, chaque
+      // morceau se met à jour dès qu'il arrive (en parallèle, plus l'un après l'autre).
+      const H = { headers: { "x-admin-key": adminKey } };
+      const [or] = await Promise.all([
+        chargerAvecCache("/api/admin/orders", adminKey, (od) => { setAuthed(true); setOrders(od.orders || []); }),
+        chargerAvecCache("/api/admin/settings", adminKey, (d) => { const s = d.settings || {}; setNotes(s.crmNotes || {}); setTags(s.crmTags || {}); }),
+        chargerAvecCache("/api/admin/newsletter", adminKey, (n) => { setBirthdays(n.birthdays || {}); setSubs(Array.isArray(n.subscribers) ? n.subscribers : []); }),
+        chargerAvecCache("/api/admin/comms", adminKey, (d) => setCommsMeta(d.meta || {})),
+        fetch("/api/admin/logins", H).then((r) => (r.ok ? r.json() : null)).then((d) => {
+          if (!d) return;
           const map = {};
-          for (const r of (await lg.json()).rows || []) map[r.email] = r;
+          for (const r of d.rows || []) map[r.email] = r;
           setLoginsMeta(map);
-        }
-      } catch { /* ignore */ }
-      if (nl.ok) { const n = await nl.json(); setBirthdays(n.birthdays || {}); setSubs(Array.isArray(n.subscribers) ? n.subscribers : []); }
+        }).catch(() => {}),
+      ]);
+      if (or.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); setLoading(false); return; }
+      if (!or.ok && !or.data) { setError("Erreur de chargement."); setLoading(false); return; }
+      sessionStorage.setItem("niv-admin-key", adminKey);
     } catch { setError("Erreur de chargement."); }
     setLoading(false);
   }, []);
@@ -690,7 +688,7 @@ export default function CrmPage() {
             <HubTab emoji="📣" title="Campagnes & relances"
               desc="Envoie une remise à un groupe de clients (le bouton « Campagne » est dans l'onglet Clients), ou une newsletter à toutes tes abonnées."
               href="/gestion/messages" cta="Envois programmés"
-              secondaryHref="/gestion#newsletter" secondaryCta="Newsletter"
+              secondaryHref="/gestion/newsletter" secondaryCta="Newsletter"
               extra={<div style={{ marginBottom: 14 }}><button className="btn btn-outline" style={{ padding: "8px 18px" }} onClick={() => setCrmTab("clients")}>← Faire une campagne (onglet Clients)</button></div>} />
           </div>
         );
@@ -703,7 +701,7 @@ export default function CrmPage() {
       {crmTab === "avis" && (
         <HubTab emoji="⭐" title="Avis"
           desc="Les avis clients à valider avant qu'ils s'affichent sur le site (tu gardes le contrôle : rien ne s'affiche sans ta validation)."
-          href="/gestion#avis" cta="Gérer les avis" />
+          href="/gestion/avis" cta="Gérer les avis" />
       )}
     </div>
   );

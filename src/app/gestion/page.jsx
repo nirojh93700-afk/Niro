@@ -12,6 +12,8 @@ import FichePapier from "@/components/admin/FichePapier";
 import dynamic from "next/dynamic";
 import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
+import { chargerAvecCache, viderCache } from "@/components/admin/adminCache";
+import { ongletDuChemin, cheminDeLOnglet } from "@/components/admin/ongletsGestion";
 
 // Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
 // télécharge plus d'un coup le code des 15 onglets.
@@ -30,6 +32,7 @@ const PromoCodesAdmin = dynamic(() => import("@/components/admin/PromoCodesAdmin
 const NewsletterAdmin = dynamic(() => import("@/components/admin/NewsletterAdmin"), { loading: attente });
 const BatThread = dynamic(() => import("@/components/admin/BatThread"), { loading: attente });
 const FicheAtelier = dynamic(() => import("@/components/admin/FicheAtelier"), { loading: attente });
+const AlertesTelephone = dynamic(() => import("@/components/admin/AlertesTelephone"), { ssr: false });
 const BoxtalCopie = dynamic(() => import("@/components/admin/BoxtalCopie"), { loading: attente });
 
 
@@ -42,7 +45,7 @@ const CONFIG_LABELS = {
   siteUrl: "Adresse du site",
 };
 
-export default function GestionPage() {
+export default function GestionPage({ onglet = "" } = {}) {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [rows, setRows] = useState([]);
@@ -52,35 +55,52 @@ export default function GestionPage() {
   const [firebase, setFirebase] = useState(null);
   const [orders, setOrders] = useState([]);
   const [ordersReady, setOrdersReady] = useState(false);
-  const [tab, setTab] = useState("accueil");
+  const [tab, setTab] = useState(onglet || "accueil");
   const [menuOpen, setMenuOpen] = useState(false); // menu déroulant mobile
-  // Ouvre le bon onglet quand on arrive depuis la barre latérale d'une sous-page
-  // (lien /gestion#produits, #commandes…). Se met à jour aussi si le hash change.
+  // Ouvre le bon onglet : l'adresse (/gestion/avis…), une ancienne ancre (/gestion#avis),
+  // le menu de gauche (événement « niv-onglet », sans recharger l'écran) ou le bouton
+  // « retour » du navigateur (02/10/2026 : une adresse par écran).
   useEffect(() => {
-    const applyHash = () => {
+    const depuisAdresse = () => {
       const h = (typeof window !== "undefined" ? window.location.hash : "").replace("#", "").trim();
-      if (h) setTab(h);
+      const t = h || ongletDuChemin(window.location.pathname);
+      if (t) setTab(t);
       // « Fiche complète → » depuis la file de production : /gestion?q=REF#commandes
       try {
         const qq = new URLSearchParams(window.location.search).get("q");
         if (qq) setOrderSearch(qq);
       } catch { /* ignore */ }
     };
-    applyHash();
-    window.addEventListener("hashchange", applyHash);
-    return () => window.removeEventListener("hashchange", applyHash);
+    const depuisMenu = (e) => { if (e?.detail) setTab(e.detail); };
+    depuisAdresse();
+    window.__nivGestion = true;
+    window.addEventListener("hashchange", depuisAdresse);
+    window.addEventListener("popstate", depuisAdresse);
+    window.addEventListener("niv-onglet", depuisMenu);
+    return () => {
+      window.__nivGestion = false;
+      window.removeEventListener("hashchange", depuisAdresse);
+      window.removeEventListener("popstate", depuisAdresse);
+      window.removeEventListener("niv-onglet", depuisMenu);
+    };
   }, []);
-  // L'onglet ouvert depuis la page (tuile, bouton « Voir les avis »…) est recopié dans
-  // l'adresse, pour que le menu de gauche et le titre du haut suivent (02/10/2026).
+  // L'onglet ouvert (menu, tuile, bouton « Voir les avis »…) est recopié dans l'adresse :
+  // /gestion/avis, /gestion/devis… — le menu, le titre du haut et le bouton « retour »
+  // suivent, et chaque écran a un lien direct.
   const premierTab = useRef(true);
   useEffect(() => {
-    // Au montage, c'est l'adresse qui commande (lien /gestion#avis depuis une autre page).
-    if (premierTab.current) { premierTab.current = false; return; }
     if (typeof window === "undefined" || !tab) return;
-    if (window.location.hash.replace("#", "") === tab) return;
-    if (!window.location.hash && tab === "accueil") return;
-    window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}#${tab}`);
-    window.dispatchEvent(new HashChangeEvent("hashchange"));
+    const cible = cheminDeLOnglet(tab);
+    const actuel = window.location.pathname + window.location.hash;
+    // Au montage, on ne remplace l'adresse que si elle venait d'une ancienne ancre.
+    if (premierTab.current) {
+      premierTab.current = false;
+      if (window.location.hash && actuel !== cible) window.history.replaceState(null, "", cible + window.location.search);
+      return;
+    }
+    if (actuel === cible) return;
+    window.history.pushState(null, "", cible + (tab === "commandes" ? window.location.search : ""));
+    if (cible.includes("#")) window.dispatchEvent(new HashChangeEvent("hashchange"));
   }, [tab]);
   const [batOpen, setBatOpen] = useState(null); // id de commande dont la discussion/BAT est ouverte
   const [batUnread, setBatUnread] = useState([]); // ids de commandes avec une réponse cliente non lue
@@ -127,45 +147,44 @@ export default function GestionPage() {
     setLoading(true);
     setError("");
     let nouvelEssai = false;
-    const H = { headers: { "x-admin-key": adminKey } };
-    const json = (u) => fetch(u, H).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    try {
-      let res;
-      try {
-        res = await fetch("/api/admin/products", H);
-      } catch {
-        // Réseau coupé : on ne déconnecte pas, on propose de réessayer.
-        throw Object.assign(new Error("Connexion au site impossible pour le moment. Vérifiez le réseau puis touchez « Réessayer »."), { reseau: true });
-      }
-      if (res.status === 401) throw new Error("Mot de passe incorrect.");
-      if (!res.ok) throw Object.assign(new Error("Le site met du temps à répondre. Touchez « Réessayer »."), { reseau: true });
-      const data = await res.json();
-      setRows(data.rows);
-      setEditable(data.editable || []);
-      setAuthed(true);
-      sessionStorage.setItem("niv-admin-key", adminKey);
-      const [cfgData, ordData, stgData, prData, qData, revData] = await Promise.all([
-        json("/api/admin/config"), json("/api/admin/orders"), json("/api/admin/settings"),
-        json("/api/admin/pending-replies"), json("/api/admin/quotes"), json("/api/admin/reviews"),
-      ]);
-      if (cfgData) { setConfig(cfgData.config); setFirebase(cfgData.firebase || null); }
-      if (ordData) { setOrders(ordData.orders || []); setOrdersReady(true); }
-      if (stgData) {
-        const s = stgData.settings || {};
+    // Mémoire partagée (02/10/2026) : ce qui a déjà été vu s'affiche AUSSITÔT, la
+    // version fraîche remplace derrière. Chaque appel a son propre « appliqueur ».
+    const appliquer = {
+      "/api/admin/config": (d) => { setConfig(d.config); setFirebase(d.firebase || null); },
+      "/api/admin/orders": (d) => { setOrders(d.orders || []); setOrdersReady(true); },
+      "/api/admin/settings": (d) => {
+        const s = d.settings || {};
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
         setVacationCfg(s.vacation || null);
-      }
+      },
       // Réponses aux clientes préparées par l'agent, en attente de validation.
-      if (prData) { const liste = prData.pending || []; setPendingReplies(liste.length); setPendingList(liste); }
+      "/api/admin/pending-replies": (d) => { const liste = d.pending || []; setPendingReplies(liste.length); setPendingList(liste); },
       // Devis (tuile « devis en attente » du tableau de bord).
-      if (qData) setQuotes(qData.quotes || []);
+      "/api/admin/quotes": (d) => setQuotes(d.quotes || []),
       // Compteur d'avis à valider (nouveaux avis clients en attente).
-      if (revData) setPendingReviews((revData.reviews || []).filter((r) => !r.approved).length);
-      if (!ordData) setError("Les commandes n'ont pas pu être chargées. Touchez « Réessayer ».");
+      "/api/admin/reviews": (d) => setPendingReviews((d.reviews || []).filter((r) => !r.approved).length),
+    };
+    try {
+      // 1) Le mot de passe est vérifié par la liste des produits.
+      const prod = await chargerAvecCache("/api/admin/products", adminKey, (d) => {
+        setRows(d.rows || []);
+        setEditable(d.editable || []);
+        setAuthed(true);
+      });
+      if (prod.status === 401) { viderCache(); throw new Error("Mot de passe incorrect."); }
+      if (!prod.ok) {
+        throw Object.assign(new Error(prod.reseau
+          ? "Connexion au site impossible pour le moment. Vérifiez le réseau puis touchez « Réessayer »."
+          : "Le site met du temps à répondre. Touchez « Réessayer »."), { reseau: true, garde: prod.data != null });
+      }
+      sessionStorage.setItem("niv-admin-key", adminKey);
+      // 2) Tout le reste EN MÊME TEMPS ; un appel qui rate n'efface rien d'autre.
+      const res = await Promise.all(Object.entries(appliquer).map(([u, f]) => chargerAvecCache(u, adminKey, f)));
+      if (!res[1].ok && !res[1].data) setError("Les commandes n'ont pas pu être chargées. Touchez « Réessayer ».");
     } catch (e) {
       // Seul un VRAI mauvais mot de passe déconnecte ; un raté réseau garde la session
-      // et réessaie une fois tout seul (micro-coupure du téléphone).
+      // (et ce qui est déjà affiché) et réessaie une fois tout seul.
       if (e.reseau && !deja) { nouvelEssai = true; setTimeout(() => load(adminKey, true), 2000); return; }
       setError(e.message);
       if (!e.reseau) setAuthed(false);
@@ -807,6 +826,9 @@ export default function GestionPage() {
               onRegler={() => setTab("apparence")}
               onEteint={() => setVacationCfg((v) => (v ? { ...v, enabled: false } : v))}
             />
+
+            {/* 🔔 Alertes sur le téléphone (nouvelle commande, réponse de cliente). */}
+            <AlertesTelephone adminKey={key} />
 
             <div className="dash-top">
               <div className="dash-hi">
@@ -1731,6 +1753,7 @@ export default function GestionPage() {
         {/* ---------------- RÉGLAGES ---------------- */}
         {tab === "reglages" && config && (
           <>
+            <AlertesTelephone adminKey={key} toujours />
             <div className="admin-block" style={{ display: "grid", gap: 10, border: "1px solid #e7d3a1", background: "#fbf4e6" }}>
               <h3 style={{ margin: 0 }}>📧 Tester l'e-mail de confirmation client</h3>
               <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>

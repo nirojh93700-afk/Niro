@@ -1,6 +1,7 @@
 import { getReplyLink, recordReplyLinkUse, logComm, ensureCommThread, batImportEmails, getGmailCreds, recordProspectReply } from "@/lib/stock";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
+import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -75,6 +76,16 @@ export async function POST(req, { params }) {
   if (!alerted) {
     try { await sendEmail({ to: BRAND.contact, subject, html: alertHtml, replyTo: it.email }); } catch { /* la réponse est déjà rangée */ }
   }
+
+  // 🔔 Alerte sur le téléphone du gérant (02/10/2026).
+  try {
+    await envoyerAlerteAdmin({
+      title: `${prospect ? "🍸 Réponse d'un restaurant" : "📬 Réponse"} de ${it.name || it.email}`,
+      body: `${it.orderRef ? `#${it.orderRef} · ` : ""}${text.slice(0, 160)}`,
+      url: it.orderRef ? `/gestion/commandes?q=${encodeURIComponent(it.orderRef)}` : (prospect ? "/gestion/restaurants" : "/gestion/messages"),
+      tag: `reponse-${it.email}`,
+    });
+  } catch { /* jamais bloquant */ }
 
   return Response.json({ ok: true });
 }

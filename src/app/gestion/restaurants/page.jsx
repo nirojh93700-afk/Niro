@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
 import MailBody from "@/components/admin/MailBody";
 import { PROSPECT_SUJET, messageProspect, TARIFS_PRO, TARIFS_PRO_NOTE } from "@/lib/prospects";
+import { chargerAvecCache } from "@/components/admin/adminCache";
 
 // =============================================================================
 // GESTION → CLIENTS → RESTAURANTS & BARS (prospection B2B, 26/09/2026)
@@ -43,10 +44,9 @@ export default function RestaurantsAdminPage() {
 
   const load = useCallback(async (k) => {
     try {
-      const r = await fetch("/api/admin/prospects", { headers: { "x-admin-key": k }, cache: "no-store" });
-      const j = await r.json();
-      if (!r.ok) throw new Error(j.error || "Chargement impossible.");
-      setD(j); setErr("");
+      // Mémoire partagée (02/10/2026) : la liste déjà vue s'affiche aussitôt.
+      const r = await chargerAvecCache("/api/admin/prospects", k, (j) => { setD(j); setErr(""); }, { cache: "no-store" });
+      if (!r.ok && !r.data) throw new Error(r.status === 401 ? "Accès refusé." : "Chargement impossible.");
     } catch (e) { setErr(e.message); }
   }, []);
 

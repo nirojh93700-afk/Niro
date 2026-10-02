@@ -7,6 +7,7 @@ import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif 
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { lignesGravure } from "@/lib/engravingSheet";
+import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -717,6 +718,16 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       })),
       stock: event.data.object?.metadata?.stock || "",
     }, claimedDocId); // écrit sur le document déjà réservé plus haut (anti-doublon)
+    // 🔔 Alerte sur le téléphone du gérant (02/10/2026) — jamais bloquant.
+    try {
+      const express = /express|chronopost/i.test(shippingRateName || "");
+      await envoyerAlerteAdmin({
+        title: `${express ? "⚡ Commande EXPRESS" : "🛎️ Nouvelle commande"} #${orderRef}`,
+        body: `${customer.name || customer.email || "Cliente"} · ${((session.amount_total || 0) / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}${quote ? ` · devis ${quote.number || ""}` : ""}`,
+        url: `/gestion/commandes?q=${encodeURIComponent(orderRef)}`,
+        tag: `commande-${orderRef}`,
+      });
+    } catch { /* l'alerte ne doit jamais gêner la commande */ }
 
     // Journalise l'e-mail de confirmation dans le fil de la commande (suivi admin,
     // invisible au client). Uniquement si l'e-mail est bien parti et la commande créée.

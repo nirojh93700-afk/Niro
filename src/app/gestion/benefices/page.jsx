@@ -241,7 +241,7 @@ export default function BeneficesPage() {
         <div style={{ ...card, background: "#fbf3e6", borderColor: "#e7d3a1" }}>
           <strong>⚠️ {data.missingCost.count} article(s) vendu(s) sans coût d&apos;achat renseigné.</strong>
           <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 4 }}>
-            Le bénéfice est donc <strong>sous-estimé en coût</strong> (ces articles comptent comme coût 0). Renseigne le « coût » sur ces produits dans <a href="/gestion#produits">Produits &amp; Stock</a> pour un calcul exact.
+            Le bénéfice est donc <strong>sous-estimé en coût</strong> (ces articles comptent comme coût 0). Renseigne le « coût » sur ces produits dans <a href="/gestion/produits">Produits &amp; Stock</a> pour un calcul exact.
             {data.missingCost.names.length ? <div style={{ marginTop: 4 }}>Concernés : {data.missingCost.names.join(", ")}.</div> : null}
           </div>
         </div>

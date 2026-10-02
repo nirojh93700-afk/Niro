@@ -1,4 +1,5 @@
 import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
+import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 
 // =============================================================================
 // ALERTE « À VALIDER » ENVOYÉE AU GÉRANT : le message de la cliente, la réponse
@@ -31,6 +32,15 @@ export function buildDraftAlertHtml(item, { orderRef = "", reason = "", source =
 export async function sendDraftAlert(item, opts = {}) {
   const html = buildDraftAlertHtml(item, opts);
   const ref = opts.orderRef ? ` #${opts.orderRef}` : "";
+  // 🔔 Alerte sur le téléphone du gérant (02/10/2026) — jamais bloquant.
+  try {
+    await envoyerAlerteAdmin({
+      title: `💬 ${item.name || item.email}${ref}`,
+      body: String(item.message || item.subject || "Nouveau message").replace(/\s+/g, " ").slice(0, 160),
+      url: item.token ? `/repondre/${item.token}` : "/gestion",
+      tag: `message-${item.email}`,
+    });
+  } catch { /* ignore */ }
   return sendEmail({
     to: BRAND.contact,
     subject: `[À valider] ${item.name}${ref} — ${item.subject || "message"}`,

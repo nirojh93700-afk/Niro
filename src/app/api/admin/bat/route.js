@@ -2,6 +2,7 @@ import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmai
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage, gmailSendHtml } from "@/lib/gmail";
 import { getSiteOrder } from "@/lib/firebase";
+import { syncAllAndListUnread } from "@/lib/batSync";
 import { syncHistoriqueCommande } from "@/lib/historiqueMails";
 
 export const dynamic = "force-dynamic";
@@ -58,38 +59,6 @@ export async function DELETE(req) {
 // Vérification GLOBALE : une seule lecture Gmail, on importe les réponses dans
 // tous les fils concernés, et on renvoie la liste des commandes « non lues »
 // (pour les pastilles côté page Commandes).
-async function syncAllAndListUnread() {
-  const metas = await getBatThreadsMeta();
-  try {
-    const creds = await getGmailCreds();
-    if (creds?.refreshToken) {
-      // Adresses des fils en attente d'une réponse (on a déjà écrit à la cliente).
-      const byEmail = new Map();
-      for (const m of metas) {
-        if (m.customerEmail && m.lastAtelierAt) byEmail.set(m.customerEmail.toLowerCase(), m);
-      }
-      if (byEmail.size) {
-        const token = await gmailAccessToken(creds);
-        const ids = await gmailListInboxIds(token, 30);
-        // On ignore les mails déjà importés (dans n'importe quel fil).
-        const alreadyImported = new Set(metas.flatMap((m) => m.importedGmailIds));
-        for (const id of ids) {
-          if (alreadyImported.has(id)) continue;
-          const msg = await gmailGetMessage(token, id, true);
-          if (!msg) continue;
-          const meta = byEmail.get((msg.fromEmail || "").toLowerCase());
-          if (!meta) continue;
-          const at = Date.parse(msg.date || "") || 0;
-          if (at && at < meta.lastAtelierAt - 60000) continue;
-          await batImportEmails(meta.orderId, [{ gmailId: id, text: msg.body || msg.snippet || "", at: at || Date.now() }]);
-        }
-      }
-    }
-  } catch { /* Gmail indisponible : on renvoie les non-lus déjà connus. */ }
-  const fresh = await getBatThreadsMeta();
-  return fresh.filter((m) => m.clientUnread).map((m) => m.orderId);
-}
-
 // Détail des réponses non lues (tableau de bord v2 : qui, quelle commande,
 // depuis quand). Même source que la liste d'identifiants ci-dessus.
 async function listUnreadMeta() {
@@ -104,7 +73,11 @@ export async function GET(req) {
   const url = new URL(req.url);
   // Vérification globale des nouvelles réponses (pastilles).
   if (url.searchParams.get("action") === "unread") {
-    const unread = await syncAllAndListUnread();
+    // 02/10/2026 : la lecture Gmail (≈ 5 s) est faite par le battement du site toutes les
+    // 5 min (src/lib/batSync.js) ; ici on lit seulement le résultat. « &sync=1 » force.
+    const unread = url.searchParams.get("sync") === "1"
+      ? await syncAllAndListUnread()
+      : (await getBatThreadsMeta()).filter((m) => m.clientUnread).map((m) => m.orderId);
     let unreadMeta = [];
     try { unreadMeta = await listUnreadMeta(); } catch { unreadMeta = []; }
     return Response.json({ unread, unreadMeta });

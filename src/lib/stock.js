@@ -417,6 +417,44 @@ export async function classerEtListerPending(quand) {
     .sort((a, b) => (b.at || 0) - (a.at || 0));
 }
 
+// =============================================================================
+// ALERTES SUR LE TÉLÉPHONE DU GÉRANT (notifications « push », 02/10/2026).
+// data.pushConfig = { publicKey, privateKey } (clés VAPID créées une fois, JAMAIS envoyées
+// au navigateur sauf la publique) · data.pushSubs = { [endpoint]: { sub, at, appareil } }.
+// =============================================================================
+export async function getPushKeys(creer = true) {
+  const data = await getCatalogRaw(true);
+  if (data.pushConfig?.publicKey && data.pushConfig?.privateKey) return data.pushConfig;
+  if (!creer) return null;
+  const { default: webpush } = await import("web-push");
+  const k = webpush.generateVAPIDKeys();
+  data.pushConfig = { publicKey: k.publicKey, privateKey: k.privateKey, at: Date.now() };
+  await persistCatalog(data, ["pushConfig"]);
+  return data.pushConfig;
+}
+export async function addPushSub(sub, appareil = "") {
+  if (!sub?.endpoint || !sub?.keys?.p256dh || !sub?.keys?.auth) return false;
+  const data = await getCatalogRaw(true);
+  data.pushSubs = data.pushSubs || {};
+  data.pushSubs[String(sub.endpoint).slice(0, 1000)] = {
+    sub: { endpoint: String(sub.endpoint).slice(0, 1000), keys: { p256dh: String(sub.keys.p256dh).slice(0, 200), auth: String(sub.keys.auth).slice(0, 100) } },
+    at: Date.now(), appareil: String(appareil || "").slice(0, 120),
+  };
+  await persistCatalog(data, ["pushSubs"]);
+  return true;
+}
+export async function removePushSub(endpoint) {
+  const data = await getCatalogRaw(true);
+  if (!data.pushSubs || !data.pushSubs[endpoint]) return false;
+  delete data.pushSubs[endpoint];
+  await persistCatalog(data, ["pushSubs"]);
+  return true;
+}
+export async function listPushSubs() {
+  const data = await getCatalogRaw(true);
+  return Object.values(data.pushSubs || {});
+}
+
 export async function getPendingReplyByToken(token) {
   const t = String(token || "").trim();
   if (!t) return null;
@@ -2367,13 +2405,17 @@ export async function setSettings(patch) {
 export async function claimJob(key, minIntervalMs) {
   const k = String(key || "");
   if (!k) return false;
-  const data = await getCatalogRaw();
+  // 1er tri sur le cache (le battement passe à chaque visite : pas de lecture complète
+  // de la base pour rien), puis vérification FRAÎCHE avant de prendre le verrou.
+  const vu = await getCatalogRaw();
+  if (Date.now() - (Number((vu.cronState || {})[k]) || 0) < minIntervalMs) return false;
+  const data = await getCatalogRaw(true);
   data.cronState = data.cronState || {};
   const last = Number(data.cronState[k]) || 0;
   const now = Date.now();
   if (now - last < minIntervalMs) return false; // trop tôt → on ne relance pas
   data.cronState[k] = now;
-  await persistCatalog(data);
+  await persistCatalog(data, ["cronState"]);
   return true;
 }
 
@@ -2480,15 +2522,25 @@ async function persistCatalog(data, sections) {
         // Écriture en lot (atomique) : un document par section du catalogue.
         const batch = db.batch();
         const at = new Date().toISOString();
+        // 🔴 02/10/2026 : sans liste de sections, on réécrivait TOUTES les sections avec la
+        // copie lue (souvent le cache de 60 s) → une écriture faite entre-temps par une autre
+        // instance du site (nouvelle réponse cliente, statut de prospect…) pouvait être
+        // EFFACÉE en silence (même famille que l'incident crystalZones du 26/09). Désormais,
+        // seules les sections réellement MODIFIÉES par l'appelant sont écrites.
+        const avant = fsCache.catalog;
         const cles = Array.isArray(sections) && sections.length
           ? sections.filter((s) => s in (data || {}))
-          : Object.keys(data || {});
+          : Object.keys(data || {}).filter((k) => !avant || JSON.stringify(data[k]) !== JSON.stringify(avant[k]));
+        if (!cles.length) return;
         for (const section of cles) {
           const ref = db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + section);
           batch.set(ref, { json: JSON.stringify(data[section]), updatedAt: at });
         }
         await batch.commit();
-        fsCache.catalog = cacheCopy(data); // cache à jour immédiatement
+        // Cache : on n'y recopie QUE les sections écrites (les autres gardent leur valeur à jour).
+        const maj = avant ? cacheCopy(avant) : {};
+        for (const section of cles) maj[section] = cacheCopy(data[section]);
+        fsCache.catalog = avant ? maj : cacheCopy(data);
         fsCache.catalogAt = Date.now();
         return;
       } catch (e) {

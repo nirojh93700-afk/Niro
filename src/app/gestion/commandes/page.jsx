@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
+import { chargerAvecCache } from "@/components/admin/adminCache";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -60,12 +61,14 @@ export default function FileProductionPage() {
   const load = useCallback(async (adminKey) => {
     setError("");
     try {
-      const res = await fetch("/api/admin/orders", { headers: { "x-admin-key": adminKey } });
-      if (!res.ok) { setError("Mot de passe incorrect."); setAuthed(false); return; }
-      const d = await res.json();
+      // Mémoire partagée (02/10/2026) : la file déjà vue s'affiche aussitôt.
+      const r = await chargerAvecCache("/api/admin/orders", adminKey, (d) => {
+        setKey(adminKey); setAuthed(true);
+        setOrders((d.orders || []).filter((o) => !o.test));
+      });
+      if (r.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); return; }
+      if (!r.ok) { if (!r.data) setError("Erreur de chargement."); return; }
       sessionStorage.setItem("niv-admin-key", adminKey);
-      setKey(adminKey); setAuthed(true);
-      setOrders((d.orders || []).filter((o) => !o.test));
       try {
         const u = await fetch("/api/admin/bat?action=unread", { headers: { "x-admin-key": adminKey } });
         if (u.ok) setUnread((await u.json()).unread || []);
@@ -76,6 +79,9 @@ export default function FileProductionPage() {
   useEffect(() => {
     const saved = sessionStorage.getItem("niv-admin-key");
     if (saved) load(saved);
+    // ?q=REF (recherche du haut / recherche universelle) pré-remplit le filtre (02/10/2026 :
+    // avant, ce paramètre était envoyé mais jamais lu).
+    try { const qq = new URLSearchParams(window.location.search).get("q"); if (qq) setQ(qq); } catch { /* ignore */ }
   }, [load]);
 
   // Ordre de traitement : urgentes d'abord, puis les plus anciennes en premier (FIFO).
@@ -139,7 +145,7 @@ export default function FileProductionPage() {
   return (
     <div className="container file" style={{ padding: "28px 16px 60px" }}>
       <PageHead eyebrow="Commandes" title="File de production" subtitle="Dans l'ordre de traitement : les urgentes d'abord, puis les plus anciennes. Une carte par commande, rien ne se mélange."
-        actions={<><Link href="/gestion/atelier" className="btn btn-outline">🛠️ Atelier</Link><Link href="/gestion#commandes" className="btn btn-outline">Fiches complètes</Link></>} />
+        actions={<><Link href="/gestion/atelier" className="btn btn-outline">🛠️ Atelier</Link><Link href="/gestion/fiches" className="btn btn-outline">Fiches complètes</Link></>} />
 
       <div className="file-kpis">
         <div className="file-kpi"><small>À préparer</small><b>{actives.filter((o) => !o.status || o.status === "a_preparer").length}</b></div>
@@ -285,7 +291,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
         {statut === "a_preparer" ? <button className="btn btn-gold" disabled={busy} onClick={() => onStatus(o, "en_gravure")}>✏️ Commencer la fabrication</button> : null}
         {(statut === "a_preparer" || statut === "en_gravure") ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "expediee")}>📦 Expédiée (n° de suivi)</button> : null}
         {statut === "expediee" ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "livree")}>✓✓ Livrée</button> : null}
-        <Link href={`/gestion?q=${encodeURIComponent(ref)}#commandes`} className="btn btn-outline">Fiche complète →</Link>
+        <Link href={`/gestion/fiches?q=${encodeURIComponent(ref)}`} className="btn btn-outline">Fiche complète →</Link>
       </div>
     </div>
   );

@@ -16,22 +16,22 @@
 5. **Date +3 € sur les modèles qui l'incluent** (carafe 18–28, vin 26–30, flûte 14–16 / 31–35) :
    la date fait partie du dessin, faut-il la facturer ? À trancher.
 
-## Proposées le 02/10/2026 — moderniser la Gestion (après la correction de fluidité)
+## Proposées le 02/10/2026 — moderniser la Gestion → TOUTES FAITES le 02/10 (« Fais tout »)
 6. ~~Menu qui ne changeait pas d'onglet + chargement lent~~ ✅ corrigé le 02/10 (compteurs légers,
    chargement en parallèle, plus de déconnexion sur un raté réseau, onglets chargés à la demande).
-7. **Une vraie page par écran** : Avis, Devis, Produits, Apparence… vivent encore DANS l'accueil
+7. ✅ (02/10) **Une vraie page par écran** : Avis, Devis, Produits, Apparence… vivent encore DANS l'accueil
    (fichier de 1 800 lignes, 18 onglets). Chacun sa page `/gestion/avis`… → plus rapide, le retour
    du téléphone marche partout, un lien direct par écran.
-8. **Mémoire partagée entre les écrans** : revenir sur un écran déjà vu = affichage instantané
+8. ✅ (02/10) **Mémoire partagée entre les écrans** : revenir sur un écran déjà vu = affichage instantané
    (les données se rafraîchissent derrière), au lieu de tout recharger à chaque clic.
-9. **Recherche universelle (Ctrl+K / loupe)** : une seule case qui trouve commande, cliente,
+9. ✅ (02/10) **Recherche universelle (Ctrl+K / loupe)** : une seule case qui trouve commande, cliente,
    produit, devis ou écran (comme Shopify).
-10. **Icône « Niv Admin » sur le téléphone** : le réglage de l'appli admin (icône, plein écran,
+10. ✅ (02/10) **Icône « Niv Admin » sur le téléphone** : le réglage de l'appli admin (icône, plein écran,
     nom) est dans un fichier ignoré (`gestion/layout.js` en double de `layout.jsx`) → il ne
     s'applique pas. À fusionner.
-11. **Notifications sur le téléphone** (nouvelle commande, réponse de cliente) via l'appli admin,
+11. ✅ (02/10) **Notifications sur le téléphone** (nouvelle commande, réponse de cliente) via l'appli admin,
     avec son accord une fois.
-12. **Contrôle Gmail des réponses non lues (≈ 5 s) déplacé côté serveur** (battement du site) :
+12. ✅ (02/10) **Contrôle Gmail des réponses non lues (≈ 5 s) déplacé côté serveur** (battement du site) :
     l'admin lirait le résultat déjà prêt.
 
 ## Déjà notées avant (rappel, détail dans CLAUDE.md / EN-ATTENTE.md)

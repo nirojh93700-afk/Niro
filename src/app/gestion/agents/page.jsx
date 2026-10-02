@@ -212,7 +212,7 @@ export default function AgentsCenterPage() {
             <strong>Nouveau : tout se fait depuis un seul fil.</strong>
             <div style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>Écris ta demande dans 🧭 Assistant, il choisit le bon agent tout seul. Cette page reste pour les réglages.</div>
           </div>
-          <Link href="/gestion#assistant" className="btn btn-gold">Ouvrir l&apos;assistant →</Link>
+          <Link href="/gestion/assistant" className="btn btn-gold">Ouvrir l&apos;assistant →</Link>
         </div>
 
         {/* « IL PRÉPARE, JE DÉCIDE » — réponses à valider */}

@@ -5,6 +5,7 @@
 import { claimJob, getSettings } from "@/lib/stock";
 import { runScheduledJobs, runCashbackJobs, runBirthdayJobs, runOffreGravureJob, runPriceWatchJob } from "@/lib/jobs";
 import { syncInbox } from "@/lib/inbox";
+import { syncAllAndListUnread } from "@/lib/batSync";
 import { offreActive } from "@/lib/offreGravure";
 
 const MIN = 60000;
@@ -23,6 +24,11 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("inbox", 15 * MIN)) out.inbox = await syncInbox({ force: true });
   } catch (e) { out.inboxError = e.message; }
+  // Réponses des clientes dans les fils des commandes (pastilles « non lu ») :
+  // au plus toutes les 5 min, pour que l'admin n'attende plus Gmail (02/10/2026).
+  try {
+    if (await claimJob("batUnread", 5 * MIN)) out.batUnread = (await syncAllAndListUnread()).length;
+  } catch (e) { out.batUnreadError = e.message; }
   // Cagnotte (rappels/expiration) : au plus une fois par jour.
   try {
     if (await claimJob("cashback", 24 * 60 * MIN)) out.cashback = await runCashbackJobs();

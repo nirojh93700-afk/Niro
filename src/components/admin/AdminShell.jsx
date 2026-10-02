@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import RechercheUniverselle from "./RechercheUniverselle";
+import { ongletDuChemin } from "./ongletsGestion";
 import AdminToast from "@/components/admin/AdminToast";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -10,23 +12,24 @@ import { lireAdminBack, sAbonnerAdminBack } from "@/components/admin/adminBack";
 // SQUELETTE MODERNE DE GESTION — barre latérale + barre du haut, sur TOUTES les
 // pages /gestion/*. Un seul menu, des compteurs en direct, une recherche
 // globale, l'assistant à un clic, un tiroir sur téléphone.
-// Les onglets de /gestion sont des liens /gestion#id (la page écoute le hash).
+// Les onglets de l'accueil Gestion ont chacun leur adresse (/gestion/avis… — ongletsGestion.js) ;
+// les anciens liens /gestion#id marchent toujours.
 // =============================================================================
 const NAV = [
   { label: "Pilotage", items: [
-    { id: "accueil", icon: "◫", text: "Tableau de bord", href: "/gestion#accueil" },
-    { id: "assistant", icon: "✦", text: "Assistant", href: "/gestion#assistant", badge: "replies", accent: true },
+    { id: "accueil", icon: "◫", text: "Tableau de bord", href: "/gestion" },
+    { id: "assistant", icon: "✦", text: "Assistant", href: "/gestion/assistant", badge: "replies", accent: true },
   ] },
   { label: "Commandes", items: [
     { id: "file", icon: "▤", text: "File de production", href: "/gestion/commandes", badge: "prep" },
-    { id: "commandes", icon: "▣", text: "Fiches complètes", href: "/gestion#commandes", badge: "unread" },
+    { id: "commandes", icon: "▣", text: "Fiches complètes", href: "/gestion/fiches", badge: "unread" },
     { id: "atelier", icon: "◈", text: "Atelier · fichiers", href: "/gestion/atelier" },
-    { id: "devis", icon: "▥", text: "Devis & factures", href: "/gestion#devis" },
+    { id: "devis", icon: "▥", text: "Devis & factures", href: "/gestion/devis" },
   ] },
   { label: "Clients", items: [
     { id: "crm", icon: "◉", text: "Clients (CRM)", href: "/gestion/crm" },
     { id: "restaurants", icon: "◆", text: "Restaurants & bars", href: "/gestion/restaurants", badge: "pros" },
-    { id: "avis", icon: "★", text: "Avis", href: "/gestion#avis", badge: "reviews" },
+    { id: "avis", icon: "★", text: "Avis", href: "/gestion/avis", badge: "reviews" },
     { id: "fidelite", icon: "◇", text: "Fidélité & cashback", href: "/gestion/fidelite" },
     { id: "favoris", icon: "♥", text: "Favoris des clientes", href: "/gestion/favoris" },
     { id: "connexions", icon: "⚿", text: "Connexions", href: "/gestion/connexions" },
@@ -34,32 +37,32 @@ const NAV = [
     { id: "boite-mail", icon: "▨", text: "Boîte mail", href: "/gestion/boite-mail" },
   ] },
   { label: "Catalogue", items: [
-    { id: "produits", icon: "◧", text: "Produits & stock", href: "/gestion#produits" },
-    { id: "categories", icon: "≣", text: "Catégories & ordre", href: "/gestion#categories" },
+    { id: "produits", icon: "◧", text: "Produits & stock", href: "/gestion/produits" },
+    { id: "categories", icon: "≣", text: "Catégories & ordre", href: "/gestion/categories" },
     { id: "packaging", icon: "▢", text: "Emballages", href: "/gestion/emballages" },
-    { id: "gravure", icon: "✎", text: "Gravure", href: "/gestion#gravure" },
+    { id: "gravure", icon: "✎", text: "Gravure", href: "/gestion/gravure" },
     { id: "reglages-produits", icon: "⚙", text: "Réglages produits", href: "/gestion/reglages" },
     { id: "tailles", icon: "⌗", text: "Tailles & coûts", href: "/gestion/tailles-conseillees" },
     { id: "sante", icon: "◐", text: "Santé du catalogue", href: "/gestion/sante" },
     { id: "achats", icon: "⇩", text: "Achats & factures", href: "/gestion/achats" },
   ] },
   { label: "Marketing", items: [
-    { id: "newsletter", icon: "▷", text: "Newsletter", href: "/gestion#newsletter" },
-    { id: "promos", icon: "%", text: "Promotions", href: "/gestion#promos" },
+    { id: "newsletter", icon: "▷", text: "Newsletter", href: "/gestion/newsletter" },
+    { id: "promos", icon: "%", text: "Promotions", href: "/gestion/promotions" },
     { id: "offre-gravure", icon: "✦", text: "Offre gravure offerte", href: "/gestion/offre-gravure" },
     { id: "agents", icon: "⬡", text: "Équipe d'agents", href: "/gestion/agents" },
     { id: "etude-marche", icon: "◎", text: "Étude de marché", href: "/gestion/etude-marche" },
   ] },
   { label: "Finances", items: [
     { id: "benefices", icon: "€", text: "Bénéfices", href: "/gestion/benefices" },
-    { id: "stats", icon: "▮", text: "Ventes", href: "/gestion#stats" },
+    { id: "stats", icon: "▮", text: "Ventes", href: "/gestion/ventes" },
     { id: "visiteurs", icon: "↗", text: "Visiteurs", href: "/gestion/statistiques" },
     { id: "inventaire-compta", icon: "▦", text: "Inventaire & compta", href: "/gestion/inventaire-compta" },
   ] },
   { label: "Réglages", items: [
-    { id: "apparence", icon: "◑", text: "Apparence", href: "/gestion#apparence" },
-    { id: "livraison", icon: "⇢", text: "Livraison", href: "/gestion#livraison" },
-    { id: "reglages", icon: "⚙", text: "Réglages", href: "/gestion#reglages" },
+    { id: "apparence", icon: "◑", text: "Apparence", href: "/gestion/apparence" },
+    { id: "livraison", icon: "⇢", text: "Livraison", href: "/gestion/livraison" },
+    { id: "reglages", icon: "⚙", text: "Réglages", href: "/gestion/parametres" },
   ] },
 ];
 
@@ -68,20 +71,22 @@ const NAV = [
 // rangent le reste derrière « Plus » : on atteint l'essentiel au pouce, en un
 // seul geste, au lieu de deux avec un menu caché.
 const TABS = [
-  { id: "accueil", icon: "\u25eb", text: "Accueil", href: "/gestion#accueil" },
+  { id: "accueil", icon: "\u25eb", text: "Accueil", href: "/gestion" },
   { id: "file", icon: "\u25a4", text: "Commandes", href: "/gestion/commandes", badge: "prep" },
   { id: "boite-mail", icon: "\u2709", text: "Messages", href: "/gestion/boite-mail", badge: "messages" },
-  { id: "produits", icon: "\u25e7", text: "Produits", href: "/gestion#produits" },
+  { id: "produits", icon: "\u25e7", text: "Produits", href: "/gestion/produits" },
 ];
 
 const TITRES = Object.fromEntries(NAV.flatMap((g) => g.items.map((i) => [i.id, { text: i.text, group: g.label }])));
 
 function currentId(path, hash) {
-  if (path !== "/gestion") {
-    const hit = NAV.flatMap((g) => g.items).find((i) => i.href === path);
-    return hit ? hit.id : "";
-  }
-  return (hash || "").replace("#", "") || "accueil";
+  // Ancienne ancre (/gestion#avis) encore présente : elle prime.
+  const h = (hash || "").replace("#", "");
+  if (path === "/gestion" && h) return h;
+  const onglet = ongletDuChemin(path);
+  if (onglet) return onglet;
+  const hit = NAV.flatMap((g) => g.items).find((i) => i.href === path);
+  return hit ? hit.id : "";
 }
 
 export default function AdminShell({ children }) {
@@ -89,8 +94,8 @@ export default function AdminShell({ children }) {
   const router = useRouter();
   const [hash, setHash] = useState("");
   const [open, setOpen] = useState(false);
-  const [q, setQ] = useState("");
   const [filtre, setFiltre] = useState(""); // recherche d'écran dans le menu (téléphone)
+  const [recherche, setRecherche] = useState(false); // recherche universelle (Ctrl+K)
   const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0, pros: 0 });
 
   useEffect(() => {
@@ -119,6 +124,8 @@ export default function AdminShell({ children }) {
       if (Date.now() - last > 5 * 60 * 1000) {
         sessionStorage.setItem("niv-inbox-sync", String(Date.now()));
         fetch("/api/admin/inbox-sync", { method: "POST", ...H }).catch(() => {});
+        // Battement : tâches de fond (réponses des clientes dans les commandes…).
+        fetch("/api/heartbeat", { cache: "no-store" }).catch(() => {});
       }
     } catch { /* stockage indisponible : on saute la synchro */ }
     try {
@@ -151,20 +158,43 @@ export default function AdminShell({ children }) {
   // l'événement « hashchange ». On change donc l'ancre à la main : l'onglet s'ouvre
   // aussitôt, et la flèche « retour » du téléphone revient à l'onglet d'avant.
   function allerAncre(e, href) {
-    const i = String(href || "").indexOf("#");
-    if (i < 0 || href.slice(0, i) !== path) return; // autre page : navigation normale
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // ouverture dans un nouvel onglet
+    const h = String(href || "");
+    // Écran de l'accueil Gestion déjà ouvert : on change d'onglet SANS recharger la page.
+    const onglet = !h.includes("#") && !h.includes("?") ? ongletDuChemin(h) : "";
+    if (onglet && typeof window !== "undefined" && window.__nivGestion) {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent("niv-onglet", { detail: onglet }));
+      setOpen(false);
+      return;
+    }
+    const i = h.indexOf("#");
+    if (i < 0 || h.slice(0, i) !== path) return; // autre page : navigation normale
     e.preventDefault();
-    const ancre = href.slice(i);
+    const ancre = h.slice(i);
     if (window.location.hash === ancre) window.dispatchEvent(new HashChangeEvent("hashchange"));
     else window.location.hash = ancre; // déclenche « hashchange » (page + menu se mettent à jour)
     setOpen(false);
   }
 
-  function search(e) {
-    e.preventDefault();
-    const s = q.trim(); if (!s) return;
-    router.push(`/gestion/commandes?q=${encodeURIComponent(s)}`);
+  // Recherche universelle : Ctrl+K / ⌘K, ou « / » hors d'un champ de saisie.
+  useEffect(() => {
+    const k = (e) => {
+      const champ = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName || "") || e.target?.isContentEditable;
+      if ((e.key === "k" || e.key === "K") && (e.ctrlKey || e.metaKey)) { e.preventDefault(); setRecherche(true); }
+      else if (e.key === "/" && !champ) { e.preventDefault(); setRecherche(true); }
+    };
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, []);
+  const ecrans = useMemo(() => NAV.flatMap((g) => g.items.map((i) => ({ ...i, group: g.label }))), []);
+  function allerA(href) {
+    setRecherche(false);
+    const onglet = !href.includes("#") && !href.includes("?") ? ongletDuChemin(href) : "";
+    if (onglet && window.__nivGestion) { window.dispatchEvent(new CustomEvent("niv-onglet", { detail: onglet })); return; }
+    const i = href.indexOf("#");
+    if (i >= 0 && href.slice(0, i) === path) { window.location.hash = href.slice(i); return; }
+    router.push(href);
   }
 
   // Recherche d'écran : 29 entrées, c'est trop long à faire défiler au pouce.
@@ -222,12 +252,13 @@ export default function AdminShell({ children }) {
             <span className="ash-crumb-t">{meta.text}</span>
             {retour?.label ? <span className="ash-crumb-back">‹ {retour.label}</span> : null}
           </div>
-          <form className="ash-search" onSubmit={search}>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher une commande, une cliente…" aria-label="Rechercher" />
-          </form>
+          <button type="button" className="ash-search ash-search-btn" onClick={() => setRecherche(true)} aria-label="Rechercher (Ctrl K)">
+            <span>⌕ Rechercher une commande, une cliente, un produit…</span><kbd>Ctrl K</kbd>
+          </button>
           <div className="ash-top-actions">
+            <button type="button" className="ash-loupe" onClick={() => setRecherche(true)} aria-label="Rechercher">⌕</button>
             {totalTodo > 0 ? <Link href="/gestion/commandes" className="ash-todo" title="À traiter">{totalTodo} à traiter</Link> : null}
-            <Link href="/gestion#assistant" onClick={(e) => allerAncre(e, "/gestion#assistant")} className="ash-assist">✦ Assistant</Link>
+            <Link href="/gestion/assistant" onClick={(e) => allerAncre(e, "/gestion/assistant")} className="ash-assist">✦ Assistant</Link>
           </div>
         </header>
         <main className="ash-content">{children}</main>
@@ -248,6 +279,7 @@ export default function AdminShell({ children }) {
           </button>
         </nav>
       </div>
+      <RechercheUniverselle ouvert={recherche} onFermer={() => setRecherche(false)} ecrans={ecrans} onAller={allerA} />
       <AdminToast />
     </div>
   );

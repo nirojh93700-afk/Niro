@@ -22,6 +22,7 @@ import FicheDevis from "@/components/admin/FicheDevis";
 import { lignesDevis } from "@/lib/devisGravure";
 import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
+import { chargerAvecCache } from "@/components/admin/adminCache";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -129,18 +130,20 @@ export default function AtelierPage() {
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
     try {
-      const res = await fetch("/api/admin/orders", { headers: { "x-admin-key": adminKey } });
-      if (!res.ok) { setError("Mot de passe incorrect."); setAuthed(false); setLoading(false); return; }
-      const data = await res.json();
+      // Mémoire partagée (02/10/2026) : les commandes déjà vues s'affichent aussitôt.
+      const r = await chargerAvecCache("/api/admin/orders", adminKey, (data) => {
+        setAuthed(true);
+        // TOUTES les commandes à graver (bijoux, cristaux, verres…), les plus récentes
+        // d'abord — plus seulement les verres.
+        setOrders((data.orders || []).filter((o) => Array.isArray(o.spec) && o.spec.length));
+        // Commandes sur devis : pas de réglages enregistrés, la photo arrive par
+        // e-mail → section à part, avec la demande du devis et la photo reçue.
+        setDevis((data.orders || []).filter((o) => (!Array.isArray(o.spec) || !o.spec.length)
+          && o.surMesure && !o.test && ["a_preparer", "en_gravure"].includes(o.status)));
+      });
+      if (r.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); setLoading(false); return; }
+      if (!r.ok && !r.data) { setError("Erreur de chargement."); setLoading(false); return; }
       sessionStorage.setItem("niv-admin-key", adminKey);
-      setAuthed(true);
-      // TOUTES les commandes à graver (bijoux, cristaux, verres…), les plus récentes
-      // d'abord — plus seulement les verres.
-      setOrders((data.orders || []).filter((o) => Array.isArray(o.spec) && o.spec.length));
-      // Commandes sur devis : pas de réglages enregistrés, la photo arrive par
-      // e-mail → section à part, avec la demande du devis et la photo reçue.
-      setDevis((data.orders || []).filter((o) => (!Array.isArray(o.spec) || !o.spec.length)
-        && o.surMesure && !o.test && ["a_preparer", "en_gravure"].includes(o.status)));
     } catch {
       setError("Erreur de chargement.");
     }
