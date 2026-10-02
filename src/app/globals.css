@@ -4601,3 +4601,26 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .co-art { flex-wrap: wrap; }
   .co-art > .co-art-body { flex: 1 1 100%; }
 }
+
+
+/* ============================================================
+   « VENDU EN PLUS » sur les fiches de travail (02/10/2026)
+   src/components/admin/OptionsVendues.jsx · src/lib/optionsVendues.js
+   ============================================================ */
+.ov{border:2px solid #d64545;border-radius:10px;background:#fff7f7;padding:8px 12px;margin:6px 0 10px;font-size:.88rem}
+.ov-compact{margin:8px 0 12px;padding:6px 10px;font-size:.84rem}
+.ov-titre{font-weight:800;color:#b32b2b;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.ov-sous{font-weight:600;font-size:.78rem;color:#7a1d1d}
+.ov-art{padding:5px 0;border-top:1px dashed #e9b4b4}.ov-art:first-of-type{border-top:0}
+.ov-nom{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ov-var{color:#555}.ov-prix{margin-left:auto;font-weight:700;color:#333}
+.ov-qte{background:#b32b2b;color:#fff;border-radius:999px;padding:1px 8px;font-size:.74rem;font-weight:800}
+.ov-liste{list-style:none;margin:4px 0 0;padding:0}
+.ov-liste li{display:flex;gap:6px;align-items:baseline;padding:2px 0;line-height:1.35}
+.ov-liste li.ov-phys b{color:#8a3c00}
+.ov-puce{flex:none}.ov-montant{margin-left:auto;font-weight:700;color:#8a6d1f;white-space:nowrap}
+.ov-rien{color:#555;font-size:.82rem;padding:2px 0}
+.ov-livr{margin-top:6px;padding-top:5px;border-top:1px dashed #e9b4b4;font-size:.84rem}
+.ov-livr.express{color:#b32b2b;font-weight:800}
+/* Sur la feuille papier, on reprend l'encadré d'alerte existant (.fp-encadre.alerte) */
+.fp-encadre.ov{font-size:.78rem}.fp-encadre.ov .ov-liste li{padding:1px 0}

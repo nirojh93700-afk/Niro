@@ -28,6 +28,7 @@ import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
+import OptionsVendues from "@/components/admin/OptionsVendues";
 import { TableGravure } from "@/lib/engravingSheet";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { getProductBySlug } from "@/lib/products";
@@ -126,6 +127,9 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
               {total >= 80 || cadeaux.length === 2 ? <div><strong>Commande ≥ 80 € → DEUX cadeaux</strong></div> : null}
             </div>
           ) : null}
+
+          {/* Emballage, coffret, socle, date, lot… : ce qui est vendu EN PLUS, en clair. */}
+          <OptionsVendues order={order} papier />
 
           {order.demande ? (
             <div className="fp-encadre">

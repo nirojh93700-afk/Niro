@@ -20,6 +20,8 @@ import PageHead from "@/components/admin/PageHead";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
 import { lignesDevis } from "@/lib/devisGravure";
+import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
+import { formatEuro } from "@/lib/format";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -284,6 +286,29 @@ export default function AtelierPage() {
 
                   {/* Tableau professionnel « quel texte sur quelle face ». */}
                   <TableGravure item={item} titre={false} />
+                  {/* Vendu en plus avec cet article (emballage, coffret, socle, date…) + livraison. */}
+                  {(() => {
+                    const opts = optionsArticle(item);
+                    const liv = livraisonCommande(o);
+                    const qte = Number((o.items || []).find((x) => x.slug === item.slug)?.quantity) || 1;
+                    return (
+                      <div className="ov ov-compact">
+                        <div className="ov-titre">🧾 Vendu en plus{qte > 1 ? <span className="ov-qte">⚠️ {qte} exemplaires</span> : null}</div>
+                        {opts.length ? (
+                          <ul className="ov-liste">
+                            {opts.map((op, j) => (
+                              <li key={j} className={op.physique ? "ov-phys" : ""}>
+                                <span className="ov-puce">{op.physique ? "📦" : "✒️"}</span>
+                                <b>{op.libelle}</b>{op.detail ? ` : ${op.detail}` : ""}
+                                {op.montant > 0 ? <span className="ov-montant">+{formatEuro(op.montant)}</span> : null}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : <div className="ov-rien">Rien en plus — pièce seule.</div>}
+                        {liv.texte ? <div className={`ov-livr${liv.express ? " express" : ""}`}>🚚 {liv.texte}{liv.express ? " — ⚡ EXPRESS : en priorité" : ""}</div> : null}
+                      </div>
+                    );
+                  })()}
 
                   <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
                     {isGlass(item.slug) && sidesOf(item).map((side) => {

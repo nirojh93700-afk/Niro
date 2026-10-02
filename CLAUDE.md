@@ -9,6 +9,24 @@
 > **Pour tout futur devis de remplacement : relire l'alerte « 🛎️ Commande <réf d'origine> » dans Gmail
 > (lecture seule) et déclarer ses réglages dans `FICHIERS_DEVIS`.**
 
+## 🧾 « VENDU EN PLUS » SUR LES FICHES DE TRAVAIL — 02/10/2026
+> Gérant : « dans les fiches de travail de gravure, il faut que ça soit bien détaillé tout ce qui est
+> vendu en plus, par exemple les emballages… faut pas que je me trompe » (PAS dans les e-mails).
+- `src/lib/optionsVendues.js` (pur, `npm run test-options`, 13 vérifs) : `optionsArticle(specItem)`
+  recalcule depuis `fields` + `engravingPricing`/`personalizationFields` du produit : emballage
+  (`packaging`), `flatExtras` touchés (coffret, socle LED, date, face+fond…, montant `amountByVariant`),
+  `modeleSubExtra`, `textKeys` (recto/verso), pages, `perExtraPage`, `photoSurcharge`, composition
+  gobelet, lot « chacun différent ». `physique:true` = un OBJET à mettre dans le colis (📦) vs une
+  gravure en plus (✒️). `optionsCommande(order)` apparie `items` ↔ `spec` via `apparierSpec` ; une
+  ligne sans réglages relit la description Stripe (`details`). `livraisonCommande` → express (⚡ en
+  rouge, « à graver EN PRIORITÉ »), relais, retrait.
+- Encadré rouge **« 🧾 Vendu en plus — à ne pas oublier »** (`OptionsVendues.jsx`, CSS `.ov-*`) en TÊTE
+  de : `FicheAtelier` (écran, les 2 branches : réglages et devis), `FichePapier` (colonne gauche, après
+  geste/cadeau, `papier` → `.fp-encadre.alerte`), et la page `/gestion/atelier` (version compacte par
+  article, sous le tableau de gravure). Quantité > 1 = pastille rouge « N exemplaires ».
+- Vérifié : build OK · `test-impression` 4 feuilles sur 1 page · `test-orderspec` OK. Rendu réel non
+  capturé (Firestore + clé admin requis).
+
 ## 🫙 FICHE CARAFE — PARCOURS GUIDÉ ✅ EN LIGNE LE 29/09/2026 (« Applique »)
 > **Ce qui est en ligne** (commit du 29/09 soir) : la fiche `carafe-a-whisky-gravee` n'a plus d'onglets ni
 > de liste de champs : `src/components/ParcoursGuide.jsx` rend **4 étapes** — ① « Que voulez-vous

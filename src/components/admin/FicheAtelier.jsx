@@ -13,6 +13,7 @@ import PhotosEmail from "@/components/admin/PhotosEmail";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { TableGravure } from "@/lib/engravingSheet";
 import FicheDevis from "@/components/admin/FicheDevis";
+import OptionsVendues from "@/components/admin/OptionsVendues";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -182,6 +183,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
     return (
       <div style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "8px 14px", marginTop: 8 }}>
         <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: 4 }}>🛠️ Fiche atelier — à graver à l&apos;identique</div>
+        <OptionsVendues order={order} />
         {order.demande && !print ? (
           <p style={{ margin: "4px 0 8px", padding: "8px 10px", background: "#eef4fb", border: "1px solid #c9dcef", borderRadius: 8, fontSize: "0.88rem" }}>
             <strong>📋 {order.quoteNumber ? `Devis ${order.quoteNumber} — ` : ""}ce que la cliente a demandé :</strong><br />{order.demande}
@@ -199,6 +201,9 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
   return (
     <div style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "8px 14px", marginTop: 8 }}>
       <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: 4 }}>🛠️ Fiche atelier — à graver à l'identique</div>
+      {/* Tout ce qui est vendu AVEC les pièces (emballage, coffret, socle, date, lot…),
+          en clair et en tête — demande du gérant du 02/10/2026. */}
+      {order ? <OptionsVendues order={order} /> : null}
       {items.map((it, i) => <ItemSheet key={i} item={it} />)}
       {/* Une cliente peut renvoyer sa photo PAR E-MAIL après la commande (autre
          version, autre langue…) : on la montre ici aussi, sinon l'atelier

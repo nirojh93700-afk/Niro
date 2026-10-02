@@ -13,7 +13,8 @@
     "test-prospects": "node tools/tests/prospects.mjs",
     "test-orderspec": "node tools/tests/orderSpec.test.mjs",
     "test-impression": "node tools/tests/impression-fiche.mjs",
-    "test-parcours": "node --import ./tools/alias-register.mjs tools/tests/parcours-guide.mjs"
+    "test-parcours": "node --import ./tools/alias-register.mjs tools/tests/parcours-guide.mjs",
+    "test-options": "node --import ./tools/alias-register.mjs tools/tests/options-vendues.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
