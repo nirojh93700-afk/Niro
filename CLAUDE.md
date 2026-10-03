@@ -2574,7 +2574,33 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > - **Flûte à champagne gravée** : `docs/maquettes/flute-champagne-fiche.html` · artifact https://claude.ai/code/artifact/9948bdc8-7ab5-44ec-9c50-2eda30dc2c72
 >   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix unité 12,90 €+port / lot2 24,90 €+port / lot4 49,90 € livr. offerte). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
 
-### CONFIGURATEUR GOBELET — MAQUETTE FINALE ✅ RE-VALIDÉE LE 25/09/2026, À METTRE EN LIGNE SUR DEMANDE
+### 🥤 GOBELET — MAQUETTE « PARCOURS GUIDÉ » ✅ ENREGISTRÉE LE 03/10/2026 (remplace celle du 25/09)
+> Gérant, 03/10 : « Retravailler la maquette comme t'as fait pour les verres de vin » → puis « il faut que ça soit
+> une édition limitée, comme carafe » → « on va le mettre à 47 euros 90 et livraison c'est pas gratuit » →
+> **« Enregistre la maquette, je te donnerai les quantités après »**. Rien n'est en ligne (gobelet `hidden:true`).
+- **Fichier** : `docs/maquettes/gobelet-parcours-guide.html` (artifact https://claude.ai/artifact/KNBxJ9BAsss7oshCo2RJfC),
+  générateur `tools/maquettes/parcours-gobelet.py` (part de `gobelet-configurateur-final.html` : fiche, 4 couleurs
+  avec leurs 3 photos, aperçu 3D flottant avec les NUMÉROS, planches, 8 polices — et remplace la carte « Composez
+  votre gravure » par le parcours `.prc-*` du site).
+- **Parcours** : ① « Que voulez-vous graver au centre ? » 3 cartes exclusives (un dessin 1–74 / mon propre texte /
+  ma photo ou mon logo) = l'IMAGE PRINCIPALE, comprise · ② le détail : grille des 10 planches avec légende + n° de
+  dessin (grille repliée + « Changer de dessin »), ou texte + 8 écritures avec aperçu, ou photo (+ texte dessous) ·
+  ③ « Autour de votre gravure » facultatif, **+3 € par élément** : cadre/banderole + nom (75–103), lettre fleurie +
+  nom, autre dessin, texte — écriture, côté (face / gauche / droite / tout autour) et place · ④ résumé (couleur,
+  centre, éléments en plus, **total hors livraison**) + bouton grisé tant que le centre n'est pas choisi.
+- **Règle de prix confirmée par lui le 03/10** : « le premier gravure c'est gratuit, après c'est payant, même un
+  prénom » → 1 élément inclus (dessin, texte OU photo), chaque élément en plus +3 €.
+- **Prix : 47,90 € NET, pas de prix barré, livraison EN PLUS** (colis, calculée au panier — jamais « offerte »).
+- **Édition limitée comme la carafe** : badge `Édition limitée` (étiquette dorée à point qui clignote à la place de
+  « Nouveau »), accroche « — édition limitée », encadré sous le prix (« série gravée à la main, en quantité
+  limitée — une fois épuisée, elle n'est pas reconduite »), puce dans la description, **et le même bandeau sombre
+  & or que la carafe sur l'accueil** (`.limed`, gobelet ENTIER sur fond flou — pas de recadrage).
+- **Reste avant le « mets en ligne »** : les **quantités par couleur** (il les donne), puis construire dans
+  `products.js` (parcoursGuide gobelet + éléments autour comptés au checkout 1 inclus puis +3 €, `badge:"Édition
+  limitée"`, packaging, `productDates.js`, stock par couleur) + bandeau d'accueil comme la carafe, fidèlement à
+  CETTE maquette. Commande = récap écrit + image d'aperçu (règle du 22/07 inchangée).
+
+### (historique) CONFIGURATEUR GOBELET — MAQUETTE DU 25/09/2026 (remplacée le 03/10 par le parcours guidé)
 > Maquette finale enregistrée : **`docs/maquettes/gobelet-configurateur-final.html`** (autonome, images + planches intégrées ; artifact : https://claude.ai/artifact/JzxuttEeyZSDymLM17BVas (corrigée le 25/09 : quota 1 élément inclus, onglet « Texte seul », vrai sélecteur de police)). **NE PAS mettre en ligne tant que la gérante n'a pas dit « mets en ligne ».** Le gobelet reste en produit **caché**. **Prévu comme OFFRE LIMITÉE / OFFRE SPÉCIALE** (à décider plus tard).
 - **Fiche d'origine intacte** (grande photo + 3 vignettes vierge/gravé/accessoires + 4 couleurs) — ne pas y toucher. Configurateur intégré dans la carte « Composez votre gravure ». **Aperçu 3D flottant en bas à droite** qui apparaît **seulement quand le client arrive sur la personnalisation** (pas en haut de page).
 - **Étape 1 obligatoire = IMAGE PRINCIPALE** (le motif du CENTRE de la FACE) : le client doit la choisir d'abord (guide orange → vert). Puis il ajoute d'autres éléments par zone (haut/bas/gauche/droite) et par côté (Face/Gauche/Droite/Tour).
