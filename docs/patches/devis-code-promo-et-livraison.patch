@@ -1,46 +1,808 @@
+diff --git a/docs/patches/devis-code-promo-et-livraison.patch b/docs/patches/devis-code-promo-et-livraison.patch
+index 0bba452..e69de29 100644
+--- a/docs/patches/devis-code-promo-et-livraison.patch
++++ b/docs/patches/devis-code-promo-et-livraison.patch
+@@ -1,620 +0,0 @@
+-diff --git a/package.json b/package.json
+-index 76ff609..27bcc1e 100644
+---- a/package.json
+-+++ b/package.json
+-@@ -15,7 +15,9 @@
+-     "test-inbox-filter": "node tools/tests/inbox-filter.test.mjs",
+-     "test-impression": "node tools/tests/impression-fiche.mjs",
+-     "test-parcours": "node --import ./tools/alias-register.mjs tools/tests/parcours-guide.mjs",
+--    "test-options": "node --import ./tools/alias-register.mjs tools/tests/options-vendues.mjs"
+-+    "test-options": "node --import ./tools/alias-register.mjs tools/tests/options-vendues.mjs",
+-+    "test-remise-devis": "node tools/tests/remise-devis.test.mjs",
+-+    "test-port-devis": "node --import ./tools/alias-register.mjs tools/tests/port-devis.mjs"
+-   },
+-   "dependencies": {
+-     "@anthropic-ai/sdk": "^0.100.1",
+-diff --git a/src/app/api/admin/quotes/route.js b/src/app/api/admin/quotes/route.js
+-index 80ca473..8acf009 100644
+---- a/src/app/api/admin/quotes/route.js
+-+++ b/src/app/api/admin/quotes/route.js
+-@@ -66,6 +66,8 @@ export async function POST(req) {
+-       price: Math.max(0, Math.round((parseFloat(it.price) || 0) * 100) / 100),
+-       // Article du stock à décompter au paiement (facultatif, 02/10/2026).
+-       ...(String(it.stockId || "").trim() ? { stockId: String(it.stockId).trim().slice(0, 80) } : {}),
+-+      // Poids d'UNE pièce en grammes (03/10/2026) : sert au calcul de la livraison choisie par le client.
+-+      ...(parseInt(it.weight, 10) > 0 ? { weight: Math.min(30000, parseInt(it.weight, 10)) } : {}),
+-     }))
+-     .filter((it) => it.desc);
+-   if (!items.length) return Response.json({ error: "Ajoute au moins une ligne." }, { status: 400 });
+-diff --git a/src/app/api/quote-pay/route.js b/src/app/api/quote-pay/route.js
+-index 5a47cb7..4a53a45 100644
+---- a/src/app/api/quote-pay/route.js
+-+++ b/src/app/api/quote-pay/route.js
+-@@ -1,6 +1,9 @@
+- import Stripe from "stripe";
+- import { getQuote } from "@/lib/firebase";
+- import { toCents } from "@/lib/format";
+-+import { verifierCodeDevis } from "@/lib/promoDevis";
+-+import { getSettings } from "@/lib/stock";
+-+import { livraisonActive, portDevis } from "@/lib/portDevis";
+- 
+- export const dynamic = "force-dynamic";
+- 
+-@@ -29,6 +32,35 @@ export async function POST(req) {
+-   const stripe = new Stripe(secret);
+-   // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
+-   const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
+-+  // Code promo saisi sur le lien du devis (03/10/2026) : revérifié ICI côté serveur (jamais
+-+  // confiance au navigateur), puis coupon Stripe d'un montant fixe sur les lignes d'articles.
+-+  // Livraison choisie par le client sur le lien du devis (03/10/2026) : prix recalculé ICI,
+-+  // côté serveur, d'après le poids des lignes. Devis sans poids = comportement d'avant.
+-+  let shippingOpts, relaisMeta = {}, countries = SHIPPING_COUNTRIES;
+-+  if (livraisonActive(q.items)) {
+-+    const method = body?.deliveryMethod === "relais" ? "relais" : "domicile";
+-+    const r = portDevis(q, await getSettings(), method, body?.relaisPoint);
+-+    if (!r.ok) return Response.json({ error: r.error || "Livraison indisponible." }, { status: 400 });
+-+    if (method === "relais" && !r.relaisFull) return Response.json({ error: "Choisissez votre point relais." }, { status: 400 });
+-+    shippingOpts = [r.option];
+-+    countries = ["FR", "MC"];
+-+    if (r.relaisFull) relaisMeta = { relaisPoint: r.relaisFull };
+-+  }
+-+  let discounts, promoMeta = {};
+-+  const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+-+  if (promoCode && q.type !== "facture") {
+-+    const promoEmail = String(body?.promoEmail || q.client?.email || "").trim().toLowerCase();
+-+    const r = await verifierCodeDevis(promoCode, promoEmail, q.items);
+-+    if (!r.valid) return Response.json({ error: "Ce code promo n'est pas valable pour ce devis." }, { status: 400 });
+-+    try {
+-+      const coupon = await stripe.coupons.create({ amount_off: toCents(r.remise), currency: "eur", duration: "once", name: `Code ${r.code}` });
+-+      discounts = [{ coupon: coupon.id }];
+-+      promoMeta = { promoCode: r.code, ...(r.email ? { promoEmail: r.email } : {}) };
+-+    } catch (err) {
+-+      console.error("quote-pay coupon:", err);
+-+      return Response.json({ error: "Erreur de paiement. Réessayez." }, { status: 500 });
+-+    }
+-+  }
+- 
+-   try {
+-     const session = await stripe.checkout.sessions.create({
+-@@ -39,7 +71,9 @@ export async function POST(req) {
+-       // Commande sur mesure : on récupère l'adresse + le téléphone du client pour
+-       // que la commande créée soit directement expédiable.
+-       phone_number_collection: { enabled: true },
+--      shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
+-+      shipping_address_collection: { allowed_countries: countries },
+-+      ...(shippingOpts ? { shipping_options: shippingOpts } : {}),
+-+      ...(discounts ? { discounts } : {}),
+-       line_items: q.items.map((it) => ({
+-         quantity: it.qty,
+-         price_data: {
+-@@ -53,6 +87,8 @@ export async function POST(req) {
+-       metadata: {
+-         quoteId: id,
+-         quoteNumber: q.number || "",
+-+        ...promoMeta,
+-+        ...relaisMeta,
+-         ...(stockPairs.length ? { stock: JSON.stringify(stockPairs).slice(0, 480) } : {}),
+-       },
+-       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
+-diff --git a/src/app/api/quote-promo/route.js b/src/app/api/quote-promo/route.js
+-new file mode 100644
+-index 0000000..e8d79b5
+---- /dev/null
+-+++ b/src/app/api/quote-promo/route.js
+-@@ -0,0 +1,18 @@
+-+import { getQuote } from "@/lib/firebase";
+-+import { verifierCodeDevis } from "@/lib/promoDevis";
+-+
+-+export const dynamic = "force-dynamic";
+-+
+-+// Vérifie un code promo sur un devis (public, comme /api/promo-validate) et renvoie la
+-+// remise réelle + le nouveau total. Rien n'est enregistré ici : le code n'est consommé
+-+// qu'au paiement (webhook Stripe).
+-+export async function POST(req) {
+-+  let body;
+-+  try { body = await req.json(); } catch { return Response.json({ valid: false }); }
+-+  const q = body?.id ? await getQuote(body.id) : null;
+-+  if (!q || q.type === "facture" || q.status === "paye") return Response.json({ valid: false });
+-+  const email = String(body?.email || q.client?.email || "");
+-+  const r = await verifierCodeDevis(body?.code, email, q.items);
+-+  if (!r.valid) return Response.json(r);
+-+  return Response.json({ ...r, total: Math.round((q.total - r.remise) * 100) / 100 });
+-+}
+-diff --git a/src/app/api/quote-shipping/route.js b/src/app/api/quote-shipping/route.js
+-new file mode 100644
+-index 0000000..6ecb69f
+---- /dev/null
+-+++ b/src/app/api/quote-shipping/route.js
+-@@ -0,0 +1,25 @@
+-+import { getQuote } from "@/lib/firebase";
+-+import { getSettings } from "@/lib/stock";
+-+import { livraisonActive, poidsDevis, portDevis } from "@/lib/portDevis";
+-+
+-+export const dynamic = "force-dynamic";
+-+
+-+// Prix de livraison d'un devis (public, comme le panier). Sans « method » : état de départ
+-+// { actif, poids, domicile, relaisDes, relaisOk }. Avec method + point relais : prix exact.
+-+export async function POST(req) {
+-+  let body;
+-+  try { body = await req.json(); } catch { return Response.json({ actif: false }); }
+-+  const q = body?.id ? await getQuote(body.id) : null;
+-+  if (!q || q.type === "facture" || q.status === "paye" || !livraisonActive(q.items)) return Response.json({ actif: false });
+-+  const settings = await getSettings();
+-+  if (body?.method === "relais" || body?.method === "domicile") {
+-+    const r = portDevis(q, settings, body.method, body.relaisPoint);
+-+    return Response.json(r.ok ? { actif: true, price: r.price } : { actif: true, error: r.error });
+-+  }
+-+  const dom = portDevis(q, settings, "domicile");
+-+  const rel = portDevis(q, settings, "relais");
+-+  return Response.json({
+-+    actif: true, poids: poidsDevis(q.items), domicile: dom.price,
+-+    relaisOk: rel.ok, relaisDes: rel.ok ? rel.price : null,
+-+  });
+-+}
+-diff --git a/src/app/document/[id]/page.jsx b/src/app/document/[id]/page.jsx
+-index 607457c..df4d9ff 100644
+---- a/src/app/document/[id]/page.jsx
+-+++ b/src/app/document/[id]/page.jsx
+-@@ -1,6 +1,7 @@
+- import { notFound } from "next/navigation";
+- import { getQuote } from "@/lib/firebase";
+- import DocumentActions from "@/components/DocumentActions";
+-+import { livraisonActive } from "@/lib/portDevis";
+- 
+- export const dynamic = "force-dynamic";
+- 
+-@@ -19,6 +20,8 @@ export default async function DocumentPage({ params }) {
+-   if (!q) notFound();
+-   const isFacture = q.type === "facture";
+-   const titre = isFacture ? "Facture" : "Devis";
+-+  // Devis dont chaque ligne a un poids : le client choisit sa livraison sur cette page.
+-+  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items);
+- 
+-   return (
+-     <section className="section">
+-@@ -73,7 +76,7 @@ export default async function DocumentPage({ params }) {
+-           </table>
+- 
+-           <div style={{ textAlign: "right", marginTop: 16, fontSize: "1.2rem" }}>
+--            <strong>Total : {euro(q.total)}</strong>
+-+            <strong>{avecChoix ? "Total des articles" : "Total"} : {euro(q.total)}</strong>
+-           </div>
+-           <div style={{ textAlign: "right", fontSize: "0.78rem", color: "var(--ink-soft)" }}>
+-             TVA non applicable, art. 293 B du CGI
+-@@ -90,7 +93,7 @@ export default async function DocumentPage({ params }) {
+-           )}
+-         </div>
+- 
+--        <DocumentActions id={q.id} type={q.type} status={q.status} />
+-+        <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} />
+-       </div>
+-     </section>
+-   );
+-diff --git a/src/components/DocumentActions.jsx b/src/components/DocumentActions.jsx
+-index 4e4249d..4c8a119 100644
+---- a/src/components/DocumentActions.jsx
+-+++ b/src/components/DocumentActions.jsx
+-@@ -1,10 +1,74 @@
+- "use client";
+- 
+--import { useState } from "react";
+-+import { useEffect, useState } from "react";
+-+import RelaisPicker from "@/components/RelaisPicker";
+- 
+--export default function DocumentActions({ id, type, status }) {
+-+const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
+-+
+-+export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles = 0, livraison = false }) {
+-   const [loading, setLoading] = useState(false);
+-   const [err, setErr] = useState("");
+-+  // Code promo (devis seulement) : le client s'inscrit, reçoit son code, le saisit ici.
+-+  const [ouvert, setOuvert] = useState(false);
+-+  const [code, setCode] = useState("");
+-+  const [email, setEmail] = useState("");
+-+  const [verif, setVerif] = useState(false);
+-+  const [promo, setPromo] = useState(null); // { code, remise, label, total, email }
+-+  const [promoMsg, setPromoMsg] = useState("");
+-+  const peutCode = type !== "facture" && status !== "paye";
+-+  // Livraison choisie par le client (devis dont chaque ligne a un poids) — maquette validée 03/10/2026.
+-+  const peutLivrer = livraison && type !== "facture" && status !== "paye";
+-+  const [method, setMethod] = useState("domicile");
+-+  const [relais, setRelais] = useState(null);
+-+  const [tarifs, setTarifs] = useState(null); // { poids, domicile, relaisOk, relaisDes }
+-+  const [portRelais, setPortRelais] = useState(null);
+-+
+-+  useEffect(() => {
+-+    if (!peutLivrer) return;
+-+    let vivant = true;
+-+    fetch("/api/quote-shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) })
+-+      .then((r) => r.json()).then((d) => { if (vivant && d.actif) setTarifs(d); }).catch(() => {});
+-+    return () => { vivant = false; };
+-+  }, [id, peutLivrer]);
+-+
+-+  async function choisirRelais(p) {
+-+    setRelais(p); setPortRelais(null); setErr("");
+-+    try {
+-+      const res = await fetch("/api/quote-shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, method: "relais", relaisPoint: p }) });
+-+      const d = await res.json();
+-+      if (typeof d.price === "number") setPortRelais(d.price);
+-+    } catch { /* le prix exact est de toute façon recalculé au paiement */ }
+-+  }
+-+
+-+  const port = !peutLivrer ? null : method === "relais" ? (relais ? portRelais : null) : (tarifs ? tarifs.domicile : null);
+-+  const remise = promo ? promo.remise : 0;
+-+  const total = peutLivrer && port != null ? Math.round((totalArticles - remise + port) * 100) / 100 : null;
+-+  const bloque = peutLivrer && (!tarifs || (method === "relais" && !relais) || port == null);
+-+
+-+  async function appliquer() {
+-+    setPromoMsg(""); setPromo(null);
+-+    if (!code.trim()) { setPromoMsg("Saisissez votre code promo."); return; }
+-+    setVerif(true);
+-+    try {
+-+      const res = await fetch("/api/quote-promo", {
+-+        method: "POST",
+-+        headers: { "Content-Type": "application/json" },
+-+        body: JSON.stringify({ id, code, email: clientEmail || email }),
+-+      });
+-+      const d = await res.json();
+-+      if (d.valid) setPromo({ code: d.code, remise: d.remise, label: d.label, total: d.total, email: d.email || (clientEmail || email) });
+-+      else if (d.needEmail) setPromoMsg("Indiquez l'adresse e-mail avec laquelle vous vous êtes inscrit(e).");
+-+      else if (d.wrongEmail) setPromoMsg("Ce code est réservé à l'adresse e-mail à laquelle il a été envoyé.");
+-+      else if (d.used) setPromoMsg("Ce code a déjà été utilisé.");
+-+      else if (d.expired) setPromoMsg("Ce code a expiré.");
+-+      else if (d.boutiqueSeulement) setPromoMsg("Ce code s'utilise sur la boutique, pas sur un devis.");
+-+      else setPromoMsg("Ce code n'est pas valable pour ce devis.");
+-+    } catch {
+-+      setPromoMsg("Erreur réseau. Réessayez.");
+-+    } finally {
+-+      setVerif(false);
+-+    }
+-+  }
+- 
+-   async function pay() {
+-     setLoading(true); setErr("");
+-@@ -12,7 +76,11 @@ export default function DocumentActions({ id, type, status }) {
+-       const res = await fetch("/api/quote-pay", {
+-         method: "POST",
+-         headers: { "Content-Type": "application/json" },
+--        body: JSON.stringify({ id }),
+-+        body: JSON.stringify({
+-+          id,
+-+          ...(promo ? { promoCode: promo.code, promoEmail: promo.email } : {}),
+-+          ...(peutLivrer ? { deliveryMethod: method, ...(method === "relais" ? { relaisPoint: relais } : {}) } : {}),
+-+        }),
+-       });
+-       const data = await res.json();
+-       if (data.url) window.location.href = data.url;
+-@@ -25,17 +93,104 @@ export default function DocumentActions({ id, type, status }) {
+-   }
+- 
+-   return (
+--    <div className="doc-actions" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 24 }}>
+--      {status !== "paye" && (
+--        <button className="btn btn-gold" onClick={pay} disabled={loading}>
+--          {loading ? "Redirection…" : (type === "facture" ? "Payer en ligne" : "Accepter et payer en ligne")}
+--        </button>
+-+    <div className="doc-actions" style={{ marginTop: 24 }}>
+-+      {peutLivrer && (
+-+        <div style={{ marginBottom: 16 }}>
+-+          <label style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>Mode de livraison</label>
+-+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+-+            {[
+-+              { key: "domicile", label: "🏠 À domicile", sub: tarifs ? euro(tarifs.domicile) : "", show: true },
+-+              { key: "relais", label: "📍 Point relais", sub: tarifs && tarifs.relaisOk ? `à partir de ${euro(tarifs.relaisDes)}` : "", show: !tarifs || tarifs.relaisOk },
+-+            ].filter((o) => o.show).map((o) => (
+-+              <button key={o.key} type="button" onClick={() => { setMethod(o.key); setErr(""); }}
+-+                style={{ flex: "1 1 45%", padding: "12px 10px", border: `1.5px solid ${method === o.key ? "var(--gold-dark, #b8860b)" : "var(--line)"}`, background: method === o.key ? "rgba(184,134,11,.08)" : "#fff", borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: method === o.key ? 600 : 400 }}>
+-+                {o.label}
+-+                {o.sub ? <small style={{ display: "block", fontWeight: 400, color: "var(--ink-soft)", fontSize: "0.78rem", marginTop: 2 }}>{o.sub}</small> : null}
+-+              </button>
+-+            ))}
+-+          </div>
+-+          {method === "domicile" ? (
+-+            <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "10px 0 0", lineHeight: 1.5 }}>
+-+              Votre adresse de livraison et votre téléphone vous seront demandés à l&apos;étape suivante (paiement sécurisé).
+-+            </p>
+-+          ) : (
+-+            <>
+-+              <RelaisPicker selected={relais} onSelect={choisirRelais} weightGrams={tarifs ? tarifs.poids : 0} country="FR" />
+-+              <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "10px 0 0", lineHeight: 1.5 }}>
+-+                Votre colis sera livré au point relais choisi ; à l&apos;étape suivante, vous indiquerez seulement vos coordonnées (nom, téléphone).
+-+              </p>
+-+            </>
+-+          )}
+-+        </div>
+-+      )}
+-+      {peutCode && (
+-+        <div className="doc-promo no-print" style={{ marginBottom: 16 }}>
+-+          {!ouvert && !promo ? (
+-+            <button type="button" onClick={() => setOuvert(true)}
+-+              style={{ background: "none", border: 0, padding: 0, color: "var(--gold-dark)", textDecoration: "underline", cursor: "pointer", font: "inherit", fontWeight: 600 }}>
+-+              J&apos;ai un code promo
+-+            </button>
+-+          ) : promo ? (
+-+            <div style={{ background: "#eef7ee", border: "1px solid #bcd9bc", borderRadius: 10, padding: "12px 14px", fontSize: "0.92rem" }}>
+-+              <strong>Code {promo.code} appliqué ({promo.label})</strong> : −{euro(promo.remise)} sur vos articles.
+-+              <div style={{ marginTop: 4 }}>Total à payer : <strong>{euro(promo.total)}</strong></div>
+-+              <button type="button" onClick={() => { setPromo(null); setCode(""); setOuvert(true); }}
+-+                style={{ background: "none", border: 0, padding: 0, marginTop: 6, color: "var(--ink-soft)", textDecoration: "underline", cursor: "pointer", font: "inherit", fontSize: "0.82rem" }}>
+-+                Retirer le code
+-+              </button>
+-+            </div>
+-+          ) : (
+-+            <div style={{ border: "1px solid var(--line)", borderRadius: 10, padding: "14px", background: "var(--paper)" }}>
+-+              <label htmlFor="doc-code" style={{ display: "block", fontWeight: 600, fontSize: "0.88rem", marginBottom: 6 }}>Code promo</label>
+-+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+-+                <input id="doc-code" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())}
+-+                  onKeyDown={(e) => { if (e.key === "Enter") appliquer(); }}
+-+                  placeholder="Ex : BIENVENUE10" autoCapitalize="characters" autoComplete="off"
+-+                  style={{ flex: "1 1 180px", minWidth: 0, padding: "11px 12px", borderRadius: 10, border: "1px solid var(--line)", font: "inherit" }} />
+-+                <button type="button" className="btn btn-outline" onClick={appliquer} disabled={verif}>{verif ? "Vérification…" : "Appliquer"}</button>
+-+              </div>
+-+              {!clientEmail && (
+-+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Votre adresse e-mail (celle de l'inscription)" autoComplete="email"
+-+                  style={{ width: "100%", boxSizing: "border-box", marginTop: 8, padding: "11px 12px", borderRadius: 10, border: "1px solid var(--line)", font: "inherit" }} />
+-+              )}
+-+              {promoMsg && <div role="alert" style={{ marginTop: 8, fontSize: "0.85rem", color: "#b4552f" }}>{promoMsg}</div>}
+-+            </div>
+-+          )}
+-+        </div>
+-+      )}
+-+      {peutLivrer && (
+-+        <div style={{ margin: "0 0 18px", border: "1px solid #e7d3a1", borderRadius: 12, background: "linear-gradient(135deg,#fbf4e6,#fffdf9)", padding: "6px 14px" }}>
+-+          {[
+-+            ["Articles", euro(totalArticles)],
+-+            ...(remise ? [[`Remise ${promo.code} (${promo.label})`, `−${euro(remise)}`]] : []),
+-+            [method === "relais" ? "Livraison en point relais" : "Livraison à domicile", port == null ? "à choisir" : euro(port)],
+-+          ].map(([l, v], i) => (
+-+            <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "8px 0", borderBottom: "1px dashed #e7d3a1", fontSize: "0.9rem" }}>
+-+              <span style={{ color: "var(--ink-soft)" }}>{l}</span><b style={{ whiteSpace: "nowrap" }}>{v}</b>
+-+            </div>
+-+          ))}
+-+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "8px 0", fontSize: "0.9rem" }}>
+-+            <span style={{ color: "var(--ink-soft)" }}>Total à payer</span><b style={{ fontSize: "1.15rem", color: "var(--gold-dark)" }}>{total == null ? "—" : euro(total)}</b>
+-+          </div>
+-+        </div>
+-       )}
+--      {status === "paye" && (
+--        <span className="btn btn-outline" style={{ color: "#256b34", cursor: "default" }}>✓ Payé</span>
+-+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+-+        {status !== "paye" && (
+-+          <button className="btn btn-gold" onClick={pay} disabled={loading || bloque}>
+-+            {loading ? "Redirection…" : (type === "facture" ? "Payer en ligne" : "Accepter et payer en ligne")}
+-+          </button>
+-+        )}
+-+        {status === "paye" && (
+-+          <span className="btn btn-outline" style={{ color: "#256b34", cursor: "default" }}>✓ Payé</span>
+-+        )}
+-+        <button className="btn btn-outline" onClick={() => window.print()}>Imprimer / Enregistrer en PDF</button>
+-+        {err && <div className="notice" style={{ width: "100%" }}>{err}</div>}
+-+      </div>
+-+      {peutLivrer && method === "relais" && !relais && (
+-+        <p style={{ fontSize: "0.78rem", color: "#b4552f", background: "#fff5ee", border: "1px solid #f2cdb6", borderRadius: 10, padding: "8px 12px", margin: "10px 0 0" }}>
+-+          Choisissez votre point relais pour continuer.
+-+        </p>
+-       )}
+--      <button className="btn btn-outline" onClick={() => window.print()}>Imprimer / Enregistrer en PDF</button>
+--      {err && <div className="notice" style={{ width: "100%" }}>{err}</div>}
+-     </div>
+-   );
+- }
+-diff --git a/src/components/admin/QuotesAdmin.jsx b/src/components/admin/QuotesAdmin.jsx
+-index 34999df..651568e 100644
+---- a/src/components/admin/QuotesAdmin.jsx
+-+++ b/src/components/admin/QuotesAdmin.jsx
+-@@ -130,6 +130,14 @@ export default function QuotesAdmin({ adminKey }) {
+-                 <option value="">📦 Retirer du stock : rien (ligne libre)</option>
+-                 {ARTICLES_STOCK.map((a) => <option key={a.id} value={a.id}>📦 Retirer du stock : {a.label}</option>)}
+-               </select>
+-+              <label style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: "var(--ink-soft)" }}
+-+                title="Poids d'UNE pièce, emballage compris. Il sert à calculer la livraison que le client choisit sur le lien du devis.">
+-+                ⚖️ Poids d'une pièce (g)
+-+                <input type="number" min="0" step="1" inputMode="numeric" placeholder="Ex : 150" value={it.weight || ""}
+-+                  onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, weight: e.target.value } : x))}
+-+                  style={{ width: 92, padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8 }} />
+-+                <span>{Number(it.weight) > 0 ? "" : "vide = pas de choix de livraison pour le client"}</span>
+-+              </label>
+-             </div>
+-           ))}
+-           <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}
+-diff --git a/src/lib/portDevis.js b/src/lib/portDevis.js
+-new file mode 100644
+-index 0000000..8631825
+---- /dev/null
+-+++ b/src/lib/portDevis.js
+-@@ -0,0 +1,65 @@
+-+// LIVRAISON D'UN DEVIS — choisie par le client sur le lien du devis (03/10/2026, maquette validée
+-+// `docs/maquettes/devis-livraison-promo.html`). Même grille que le panier (`buildShippingOptions`),
+-+// calculée côté SERVEUR à partir du poids saisi sur chaque ligne du devis : le navigateur envoie
+-+// seulement « domicile / relais » + le point choisi, jamais un prix.
+-+//
+-+// Règles :
+-+//  · le choix n'existe que si CHAQUE ligne d'article porte un poids (g) et qu'aucune ligne « Livraison »
+-+//    n'a déjà été ajoutée à la main → les anciens devis restent exactement comme avant ;
+-+//  · colis (jamais lettre), France + Monaco ;
+-+//  · point relais seulement si l'option est activée dans Gestion → Livraison (Boxtal).
+-+import { buildShippingOptions } from "@/lib/shipping";
+-+import { estLignePort } from "@/lib/remiseDevis";
+-+
+-+export function poidsDevis(items) {
+-+  return (Array.isArray(items) ? items : [])
+-+    .filter((it) => !estLignePort(it?.desc))
+-+    .reduce((s, it) => s + (Number(it?.weight) || 0) * (Number(it?.qty) || 0), 0);
+-+}
+-+
+-+export function livraisonActive(items) {
+-+  const arts = (Array.isArray(items) ? items : []).filter((it) => it && !estLignePort(it.desc));
+-+  if (!arts.length) return false;
+-+  if (arts.length !== (Array.isArray(items) ? items : []).length) return false; // une ligne livraison existe déjà
+-+  return arts.every((it) => Number(it.weight) > 0);
+-+}
+-+
+-+// Nettoie le point relais reçu du navigateur (mêmes champs que /api/checkout).
+-+export function nettoyerRelais(rp) {
+-+  if (!rp || typeof rp !== "object") return null;
+-+  const carrier = String(rp.carrier || "").toUpperCase().slice(0, 8);
+-+  const carrierName = String(rp.carrierName || "").slice(0, 40);
+-+  const name = String(rp.name || "").slice(0, 80);
+-+  if (!name) return null;
+-+  return {
+-+    carrier, carrierName, name,
+-+    city: String(rp.city || "").slice(0, 40), street: String(rp.street || "").slice(0, 80), zipCode: String(rp.zipCode || "").slice(0, 10),
+-+  };
+-+}
+-+
+-+// Renvoie { ok, price, option, relaisOk, relaisFull, error } — `option` = entrée `shipping_options` Stripe.
+-+export function portDevis(q, settings, method = "domicile", rp = null) {
+-+  const relaisOk = Boolean(settings?.boxtal?.enabled);
+-+  if (!livraisonActive(q?.items)) return { ok: false, relaisOk, error: "Ce devis n'a pas de choix de livraison." };
+-+  const items = q.items;
+-+  const base = {
+-+    subtotal: q.total, letterOnly: false, totalGrams: poidsDevis(items),
+-+    parcelQty: items.reduce((s, it) => s + (Number(it.qty) || 0), 0), glassQty: 0,
+-+    config: settings?.shipping, boxtal: settings?.boxtal, country: "FR", express: false,
+-+  };
+-+  if (method === "relais") {
+-+    if (!relaisOk) return { ok: false, relaisOk, error: "Le point relais n'est pas disponible." };
+-+    const p = nettoyerRelais(rp);
+-+    const opts = buildShippingOptions({
+-+      ...base, deliveryMethod: "relais", relaisCarrier: p?.carrier || "",
+-+      relaisLabel: p ? [p.name.slice(0, 45), p.city.slice(0, 25)].filter(Boolean).join(", ") : "",
+-+    });
+-+    const sr = opts[0].shipping_rate_data;
+-+    return {
+-+      ok: true, relaisOk, price: sr.fixed_amount.amount / 100, option: opts[0],
+-+      relaisFull: p ? [p.carrierName, p.name, p.street, [p.zipCode, p.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240) : "",
+-+    };
+-+  }
+-+  const opts = buildShippingOptions({ ...base, deliveryMethod: "domicile" });
+-+  return { ok: true, relaisOk, price: opts[0].shipping_rate_data.fixed_amount.amount / 100, option: opts[0], relaisFull: "" };
+-+}
+-diff --git a/src/lib/promoDevis.js b/src/lib/promoDevis.js
+-new file mode 100644
+-index 0000000..8ae536b
+---- /dev/null
+-+++ b/src/lib/promoDevis.js
+-@@ -0,0 +1,34 @@
+-+// Vérification SERVEUR d'un code promo pour un devis (03/10/2026). Mêmes verrous que
+-+// /api/promo-validate (expiration, code nominatif lié à une adresse, usage unique par
+-+// e-mail) — le calcul de la remise est dans remiseDevis.js. Les codes « gravure offerte »
+-+// et « carte cadeau » dépendent d'un panier de la boutique : refusés ici, avec un message clair.
+-+import { getPromoCodes, hasUsedCode, ensureWelcomeCode, ensureReferralCode } from "@/lib/stock";
+-+import { calculRemiseDevis } from "@/lib/remiseDevis";
+-+
+-+export async function verifierCodeDevis(codeRaw, emailRaw, items) {
+-+  const code = String(codeRaw || "").trim().toUpperCase();
+-+  if (!code) return { valid: false };
+-+  let codes = await getPromoCodes();
+-+  let pc = codes[code];
+-+  if (!pc) {
+-+    const [bienvenue, parrainage] = await Promise.all([ensureWelcomeCode(), ensureReferralCode()]);
+-+    if (bienvenue === code || parrainage === code) { codes = await getPromoCodes(); pc = codes[code]; }
+-+  }
+-+  if (!pc) return { valid: false };
+-+  if (pc.expiresAt && Date.now() > pc.expiresAt) return { valid: false, expired: true };
+-+  const email = String(emailRaw || "").trim().toLowerCase();
+-+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+-+  if (pc.kind === "gravure" || pc.kind === "cadeau") return { valid: false, boutiqueSeulement: true };
+-+  if (pc.email) {
+-+    if (!emailOk) return { valid: false, needEmail: true };
+-+    if (email !== pc.email) return { valid: false, wrongEmail: true };
+-+  }
+-+  if (!pc.reusable) {
+-+    if (!emailOk) return { valid: false, needEmail: true };
+-+    if (await hasUsedCode(code, { email })) return { valid: false, used: true };
+-+  }
+-+  const remise = calculRemiseDevis(pc, items);
+-+  if (!(remise > 0)) return { valid: false };
+-+  const label = pc.type === "fixed" ? `−${pc.value} €` : `−${pc.value} %`;
+-+  return { valid: true, code, remise, label, email: emailOk ? email : "" };
+-+}
+-diff --git a/src/lib/remiseDevis.js b/src/lib/remiseDevis.js
+-new file mode 100644
+-index 0000000..e2a3425
+---- /dev/null
+-+++ b/src/lib/remiseDevis.js
+-@@ -0,0 +1,26 @@
+-+// Remise d'un code promo sur un DEVIS (03/10/2026) — calcul pur, sans accès base.
+-+// Demande du gérant : le client s'inscrit, reçoit son code (ex. BIENVENUE10) puis le saisit
+-+// sur le lien du devis. La remise porte sur les lignes d'articles, JAMAIS sur la livraison
+-+// (même règle qu'au panier, où le coupon ne touche pas au port).
+-+
+-+const LIGNE_PORT = /^\s*(livraison|port\b|frais de (port|livraison)|expédition|expedition)/i;
+-+
+-+export function estLignePort(desc) {
+-+  return LIGNE_PORT.test(String(desc || ""));
+-+}
+-+
+-+export function totalRemisable(items) {
+-+  const t = (Array.isArray(items) ? items : [])
+-+    .filter((it) => !estLignePort(it?.desc))
+-+    .reduce((s, it) => s + (Number(it?.qty) || 0) * (Number(it?.price) || 0), 0);
+-+  return Math.round(t * 100) / 100;
+-+}
+-+
+-+// pc = { type: "percent" | "fixed", value }. Renvoie le montant déduit en euros (0 = rien).
+-+export function calculRemiseDevis(pc, items) {
+-+  const base = totalRemisable(items);
+-+  const v = Number(pc?.value) || 0;
+-+  if (!(base > 0) || !(v > 0)) return 0;
+-+  const brut = pc.type === "fixed" ? v : (base * Math.min(100, v)) / 100;
+-+  return Math.round(Math.min(brut, base) * 100) / 100;
+-+}
+-diff --git a/tools/tests/port-devis.mjs b/tools/tests/port-devis.mjs
+-new file mode 100644
+-index 0000000..052a4bc
+---- /dev/null
+-+++ b/tools/tests/port-devis.mjs
+-@@ -0,0 +1,29 @@
+-+// Livraison choisie par le client sur un devis (03/10/2026) : `npm run test-port-devis`
+-+import { poidsDevis, livraisonActive, portDevis, nettoyerRelais } from "../../src/lib/portDevis.js";
+-+let ok = 0, ko = 0;
+-+const t = (nom, cond, extra = "") => { if (cond) ok++; else { ko++; console.log("✗", nom, extra); } };
+-+const cle = { desc: "Clé USB 64 Go gravée", qty: 1, price: 44.9, weight: 150 };
+-+const q = { items: [cle], total: 44.9 };
+-+const settings = { boxtal: { enabled: true }, shipping: undefined };
+-+t("poids d'une ligne", poidsDevis([cle]) === 150);
+-+t("poids × quantité", poidsDevis([{ ...cle, qty: 3 }]) === 450);
+-+t("la ligne livraison n'ajoute pas de poids", poidsDevis([cle, { desc: "Livraison", qty: 1, price: 6.9, weight: 999 }]) === 150);
+-+t("choix actif quand chaque ligne a un poids", livraisonActive([cle]));
+-+t("pas de choix si un poids manque", !livraisonActive([cle, { desc: "Boîte", qty: 1, price: 5 }]));
+-+t("pas de choix si une ligne livraison existe déjà", !livraisonActive([cle, { desc: "Livraison", qty: 1, price: 6.9 }]));
+-+t("pas de choix sur un ancien devis (aucun poids)", !livraisonActive([{ desc: "Carafe", qty: 1, price: 54.9 }]));
+-+t("devis vide", !livraisonActive([]));
+-+const dom = portDevis(q, settings, "domicile");
+-+t("domicile 1 clé coffret = 6,90 €", dom.ok && dom.price === 6.9, JSON.stringify(dom.price));
+-+const rp = { carrier: "MONR", carrierName: "Mondial Relay", name: "Tabac Le Balto", street: "12 rue de la Gare", zipCode: "95350", city: "Saint-Brice" };
+-+const rel = portDevis(q, settings, "relais", rp);
+-+t("relais Mondial Relay = 4,90 €", rel.ok && rel.price === 4.9, JSON.stringify(rel.price));
+-+t("adresse du point relais complète pour la commande", rel.relaisFull === "Mondial Relay — Tabac Le Balto — 12 rue de la Gare — 95350 Saint-Brice", rel.relaisFull);
+-+t("relais sans point choisi = pas d'adresse", portDevis(q, settings, "relais", null).relaisFull === "");
+-+t("relais refusé si l'option est coupée dans Gestion", !portDevis(q, { boxtal: { enabled: false } }, "relais", rp).ok);
+-+t("devis sans poids = pas de livraison calculée", !portDevis({ items: [{ desc: "x", qty: 1, price: 5 }], total: 5 }, settings, "domicile").ok);
+-+t("le prix vient du poids : colis lourd plus cher", portDevis({ items: [{ ...cle, weight: 4000 }], total: 44.9 }, settings, "domicile").price > 6.9);
+-+t("le point relais est nettoyé", nettoyerRelais({ ...rp, name: "x".repeat(200) }).name.length === 80 && nettoyerRelais({ carrier: "MONR" }) === null);
+-+t("l'option Stripe est un tarif fixe en centimes", dom.option.shipping_rate_data.fixed_amount.amount === 690 && dom.option.shipping_rate_data.fixed_amount.currency === "eur");
+-+console.log(ko ? `${ko} échec(s)` : `OK — ${ok} vérifications`);
+-+process.exit(ko ? 1 : 0);
+-diff --git a/tools/tests/remise-devis.test.mjs b/tools/tests/remise-devis.test.mjs
+-new file mode 100644
+-index 0000000..17876c5
+---- /dev/null
+-+++ b/tools/tests/remise-devis.test.mjs
+-@@ -0,0 +1,17 @@
+-+// Remise d'un code promo sur un devis (03/10/2026) : `npm run test-remise-devis`
+-+import { calculRemiseDevis, estLignePort, totalRemisable } from "../../src/lib/remiseDevis.js";
+-+let ok = 0, ko = 0;
+-+const t = (nom, cond) => { if (cond) ok++; else { ko++; console.log("✗", nom); } };
+-+const devis = [{ desc: "Clé USB 64 Go gravée", qty: 1, price: 44.9 }, { desc: "Livraison en colis suivi", qty: 1, price: 6.9 }];
+-+t("la ligne livraison est reconnue", estLignePort("Livraison en colis suivi") && estLignePort("Frais de port") && estLignePort("Port 6,90"));
+-+t("un article n'est pas pris pour du port", !estLignePort("Portrait gravé") && !estLignePort("Clé USB"));
+-+t("base = articles seuls", totalRemisable(devis) === 44.9);
+-+t("−10 % sur la clé = 4,49 €", calculRemiseDevis({ type: "percent", value: 10 }, devis) === 4.49);
+-+t("la livraison n'est jamais remisée", calculRemiseDevis({ type: "percent", value: 100 }, devis) === 44.9);
+-+t("montant fixe plafonné aux articles", calculRemiseDevis({ type: "fixed", value: 80 }, devis) === 44.9);
+-+t("montant fixe", calculRemiseDevis({ type: "fixed", value: 5 }, devis) === 5);
+-+t("devis sans article remisable = 0", calculRemiseDevis({ type: "percent", value: 10 }, [{ desc: "Livraison", qty: 1, price: 6.9 }]) === 0);
+-+t("valeur nulle = 0", calculRemiseDevis({ type: "percent", value: 0 }, devis) === 0);
+-+t("quantités multipliées", calculRemiseDevis({ type: "percent", value: 10 }, [{ desc: "Clé", qty: 3, price: 40 }]) === 12);
+-+console.log(ko ? `${ko} échec(s)` : `OK — ${ok} vérifications`);
+-+process.exit(ko ? 1 : 0);
 diff --git a/package.json b/package.json
-index 76ff609..27bcc1e 100644
+index 76ff609..d7475f3 100644
 --- a/package.json
 +++ b/package.json
-@@ -15,7 +15,9 @@
+@@ -15,7 +15,10 @@
      "test-inbox-filter": "node tools/tests/inbox-filter.test.mjs",
      "test-impression": "node tools/tests/impression-fiche.mjs",
      "test-parcours": "node --import ./tools/alias-register.mjs tools/tests/parcours-guide.mjs",
 -    "test-options": "node --import ./tools/alias-register.mjs tools/tests/options-vendues.mjs"
 +    "test-options": "node --import ./tools/alias-register.mjs tools/tests/options-vendues.mjs",
 +    "test-remise-devis": "node tools/tests/remise-devis.test.mjs",
++    "test-port-parite": "node --import ./tools/alias-register.mjs tools/tests/port-parite.mjs",
 +    "test-port-devis": "node --import ./tools/alias-register.mjs tools/tests/port-devis.mjs"
    },
    "dependencies": {
      "@anthropic-ai/sdk": "^0.100.1",
 diff --git a/src/app/api/admin/quotes/route.js b/src/app/api/admin/quotes/route.js
-index 80ca473..8acf009 100644
+index 80ca473..c7e0930 100644
 --- a/src/app/api/admin/quotes/route.js
 +++ b/src/app/api/admin/quotes/route.js
-@@ -66,6 +66,8 @@ export async function POST(req) {
+@@ -66,6 +66,11 @@ export async function POST(req) {
        price: Math.max(0, Math.round((parseFloat(it.price) || 0) * 100) / 100),
        // Article du stock à décompter au paiement (facultatif, 02/10/2026).
        ...(String(it.stockId || "").trim() ? { stockId: String(it.stockId).trim().slice(0, 80) } : {}),
 +      // Poids d'UNE pièce en grammes (03/10/2026) : sert au calcul de la livraison choisie par le client.
 +      ...(parseInt(it.weight, 10) > 0 ? { weight: Math.min(30000, parseInt(it.weight, 10)) } : {}),
++      // Produit du site auquel la ligne est rattachée (règles de livraison du site) + emballage en boîte rigide.
++      ...(String(it.variantId || "").trim() ? { variantId: String(it.variantId).trim().slice(0, 80) } : {}),
++      ...(it.boite === true ? { boite: true } : {}),
      }))
      .filter((it) => it.desc);
    if (!items.length) return Response.json({ error: "Ajoute au moins une ligne." }, { status: 400 });
+diff --git a/src/app/api/checkout/route.js b/src/app/api/checkout/route.js
+index d4a1b32..9b248b9 100644
+--- a/src/app/api/checkout/route.js
++++ b/src/app/api/checkout/route.js
+@@ -1,7 +1,7 @@
+ import Stripe from "stripe";
+ import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
+ import { toCents } from "@/lib/format";
+-import { buildShippingOptions, resolveShippingConfig, EXPRESS_START } from "@/lib/shipping";
++import { EXPRESS_START } from "@/lib/shipping";
+ import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
+ import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
+ import { cookies } from "next/headers";
+@@ -9,6 +9,7 @@ import { saveOrderSpec } from "@/lib/firebase";
+ import { vacationActive, cadeauColisActif } from "@/lib/vacation";
+ import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
+ import { packagingExtra } from "@/lib/packaging";
++import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
+ 
+ // Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
+ // on tronque les textes trop longs et on retire les images "data:" (jamais stockées).
+@@ -143,19 +144,9 @@ export async function POST(req) {
+   }
+ 
+   const lineItems = [];
+-  let totalGrams = 0;
+-  let subtotal = 0;
+-  let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
+-  let glassQty = 0;  // nombre de verres (fragiles) — envoi croissant dédié
+-  let letterOnly = true;
+-  let tousBijouxLettre = true; // tous les articles sont des bijoux/petits objets (avant emballage)
+-  let bijouEnBoite = false;    // au moins un bijou emballé dans une boîte rigide
+-  let allFreeShip = true; // tous les articles ont la livraison offerte
+-  let allPickup = true; // retrait proposé seulement si TOUS les articles sont éligibles (mariage)
+-  // Livraison offerte par SEUIL sur colis (ex. verres : lot de 4 ≥ 45 € → offerte).
+-  // Sûr : ne s'applique que si TOUS les colis du panier portent freeShipThreshold.
+-  let allColisThreshFree = true;
+-  let colisThresh = Infinity;
++  // Calcul du port PARTAGÉ avec les devis (src/lib/panierPort.js) : poids, sous-total, colis / lettre,
++  // verres, seuils de livraison offerte… (sorti tel quel le 03/10/2026, parité testée).
++  const etatPort = nouvelEtatPort();
+   const boughtVariants = []; // pour décrémenter le stock après paiement
+   // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
+   // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
+@@ -217,31 +208,10 @@ export async function POST(req) {
+     // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle, emballage),
+     // multiplié par la quantité → frais de port corrects pour n'importe quel panier.
+     const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0);
+-    totalGrams += unitGrams * quantity;
+-    subtotal += unitPrice * quantity;
+-    // 📦 Un bijou emballé dans une BOÎTE rigide (boîte cadeau, Pack Collier /
+-    // Pack Bracelet) dépasse les 3 cm de la Lettre Suivie → il part en petit
+-    // colis (tarif colis), comme partout ailleurs. Sac / microfibre restent
+-    // plats → lettre. (Règle gérante, 31/08/2026 — alignée sur le marché.)
++    // 📦 Un bijou emballé dans une BOÎTE rigide (boîte cadeau, Pack Collier / Pack Bracelet) dépasse
++    // les 3 cm de la Lettre Suivie → il part en petit colis (règle gérante, 31/08/2026).
+     const pkgBoite = (pkg.chosen || []).some((id) => /boite|pack/i.test(String(id)));
+-    if (product.letter && pkgBoite) bijouEnBoite = true;
+-    if (!product.letter) tousBijouxLettre = false;
+-    if (!product.letter || pkgBoite) {
+-      letterOnly = false;
+-      parcelQty += quantity;
+-    }
+-    if (!product.letter) {
+-      // Un produit « livraison toujours offerte » ne doit PAS annuler la
+-      // gratuité au seuil : sinon un panier mixte (ex. couverts enfants
+-      // « port offert » + carafe « livraison offerte dès 45 € ») facturait le
+-      // port alors que les DEUX fiches promettent la livraison offerte.
+-      if (product.freeShipping) { /* toujours offert → ne bloque rien */ }
+-      else if (product.freeShipThreshold) colisThresh = Math.min(colisThresh, Number(product.freeShipThreshold));
+-      else allColisThreshFree = false;
+-    }
+-    if (product.category === "verres") glassQty += quantity;
+-    if (!product.freeShipping) allFreeShip = false;
+-    if (!product.pickup) allPickup = false;
++    ajouterLignePort(etatPort, { product, unitGrams, unitPrice, quantity, pkgBoite });
+ 
+     const descriptionParts = [variant.title];
+     if (extra.amount > 0) {
+@@ -336,7 +306,7 @@ export async function POST(req) {
+         // CARTE CADEAU : on déduit au plus le SOLDE, plafonné au sous-total
+         // (jamais de total négatif). Le solde est débité au webhook, une fois
+         // le paiement réellement encaissé.
+-        const useAmt = Math.min(pc.value, subtotal);
++        const useAmt = Math.min(pc.value, etatPort.subtotal);
+         if (useAmt > 0.009) {
+           appliedCode = promoCode;
+           giftUsed = Math.round(useAmt * 100) / 100;
+@@ -369,7 +339,7 @@ export async function POST(req) {
+       const sessEmail = readSession(cookies().get(SESSION_COOKIE)?.value);
+       if (sessEmail) {
+         const { balance } = await getCagnotte(sessEmail);
+-        const subtotalCents = toCents(subtotal);
++        const subtotalCents = toCents(etatPort.subtotal);
+         const maxCents = Math.floor(subtotalCents * 0.5);      // plafond : 50 % du panier
+         const useCents = Math.min(toCents(balance), maxCents); // jamais plus que le solde
+         if (useCents > 0) {
+@@ -420,27 +390,17 @@ export async function POST(req) {
+       // Pour un point relais, cette adresse sert de contact (le colis part au
+       // relais choisi sur le panier, enregistré à part sur la commande).
+       shipping_address_collection: { allowed_countries: allowedCountries },
+-      shipping_options: buildShippingOptions({
+-        totalGrams, subtotal, parcelQty, glassQty, letterOnly,
+-        bijouxOnly: tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
+-        // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la
+-        // promesse bijoux « offerte dès 45 € » — qui reste vraie même quand une
+-        // boîte cadeau fait passer le bijou en petit colis (panier 100 % bijoux).
+-        freeShipping: allFreeShip
+-          || (allColisThreshFree && parcelQty > 0 && subtotal >= colisThresh)
+-          || (tousBijouxLettre && bijouEnBoite && subtotal >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
++      shipping_options: optionsPort(etatPort, {
++        settings,
+         country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
+-        // Retrait proposé si un article mariage est marqué OU si le colis est
+-        // lourd (≥ 2 kg), et seulement dans la zone autorisée.
+-        pickupEligible: allPickup && pickupAllowed(postalCode, settings?.pickupZones),
+-        // Express Chronopost : ouvert à partir du 24/09/2026, jamais pendant le
+-        // mode « délai allongé » (on ne vend pas du 24/48 h avec des semaines de
+-        // confection), et coupable via settings.shipping.expressOff.
++        // Retrait proposé si un article mariage est marqué OU si le colis est lourd (≥ 2 kg),
++        // et seulement dans la zone autorisée.
++        retraitOk: pickupAllowed(postalCode, settings?.pickupZones),
++        // Express Chronopost : ouvert à partir du 24/09/2026, jamais pendant le mode « délai allongé »
++        // (on ne vend pas du 24/48 h avec des semaines de confection), et coupable via settings.shipping.expressOff.
+         express: Date.now() >= EXPRESS_START
+           && !vacationActive(settings?.vacation)
+           && settings?.shipping?.expressOff !== true,
+-        config: settings?.shipping, // tarifs personnalisés (admin)
+-        boxtal: settings?.boxtal, // option point relais (admin)
+         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)
+         relaisLabel,    // nom du point relais choisi (affiché dans Stripe)
+         relaisCarrier,  // transporteur du point relais → tarif au poids correct
 diff --git a/src/app/api/quote-pay/route.js b/src/app/api/quote-pay/route.js
-index 5a47cb7..4a53a45 100644
+index 5a47cb7..12393d4 100644
 --- a/src/app/api/quote-pay/route.js
 +++ b/src/app/api/quote-pay/route.js
-@@ -1,6 +1,9 @@
+@@ -1,6 +1,10 @@
  import Stripe from "stripe";
  import { getQuote } from "@/lib/firebase";
  import { toCents } from "@/lib/format";
 +import { verifierCodeDevis } from "@/lib/promoDevis";
 +import { getSettings } from "@/lib/stock";
 +import { livraisonActive, portDevis } from "@/lib/portDevis";
++import { indexVariantes } from "@/lib/indexVariantes";
  
  export const dynamic = "force-dynamic";
  
-@@ -29,6 +32,35 @@ export async function POST(req) {
+@@ -29,6 +33,36 @@ export async function POST(req) {
    const stripe = new Stripe(secret);
    // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
    const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
@@ -49,9 +811,10 @@ index 5a47cb7..4a53a45 100644
 +  // Livraison choisie par le client sur le lien du devis (03/10/2026) : prix recalculé ICI,
 +  // côté serveur, d'après le poids des lignes. Devis sans poids = comportement d'avant.
 +  let shippingOpts, relaisMeta = {}, countries = SHIPPING_COUNTRIES;
-+  if (livraisonActive(q.items)) {
++  const index = await indexVariantes();
++  if (livraisonActive(q.items, index)) {
 +    const method = body?.deliveryMethod === "relais" ? "relais" : "domicile";
-+    const r = portDevis(q, await getSettings(), method, body?.relaisPoint);
++    const r = portDevis(q, await getSettings(), index, method, body?.relaisPoint);
 +    if (!r.ok) return Response.json({ error: r.error || "Livraison indisponible." }, { status: 400 });
 +    if (method === "relais" && !r.relaisFull) return Response.json({ error: "Choisissez votre point relais." }, { status: 400 });
 +    shippingOpts = [r.option];
@@ -76,7 +839,7 @@ index 5a47cb7..4a53a45 100644
  
    try {
      const session = await stripe.checkout.sessions.create({
-@@ -39,7 +71,9 @@ export async function POST(req) {
+@@ -39,7 +73,9 @@ export async function POST(req) {
        // Commande sur mesure : on récupère l'adresse + le téléphone du client pour
        // que la commande créée soit directement expédiable.
        phone_number_collection: { enabled: true },
@@ -87,7 +850,7 @@ index 5a47cb7..4a53a45 100644
        line_items: q.items.map((it) => ({
          quantity: it.qty,
          price_data: {
-@@ -53,6 +87,8 @@ export async function POST(req) {
+@@ -53,6 +89,8 @@ export async function POST(req) {
        metadata: {
          quoteId: id,
          quoteNumber: q.number || "",
@@ -122,13 +885,14 @@ index 0000000..e8d79b5
 +}
 diff --git a/src/app/api/quote-shipping/route.js b/src/app/api/quote-shipping/route.js
 new file mode 100644
-index 0000000..6ecb69f
+index 0000000..6c1cc36
 --- /dev/null
 +++ b/src/app/api/quote-shipping/route.js
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,28 @@
 +import { getQuote } from "@/lib/firebase";
 +import { getSettings } from "@/lib/stock";
 +import { livraisonActive, poidsDevis, portDevis } from "@/lib/portDevis";
++import { indexVariantes } from "@/lib/indexVariantes";
 +
 +export const dynamic = "force-dynamic";
 +
@@ -138,41 +902,44 @@ index 0000000..6ecb69f
 +  let body;
 +  try { body = await req.json(); } catch { return Response.json({ actif: false }); }
 +  const q = body?.id ? await getQuote(body.id) : null;
-+  if (!q || q.type === "facture" || q.status === "paye" || !livraisonActive(q.items)) return Response.json({ actif: false });
++  if (!q || q.type === "facture" || q.status === "paye") return Response.json({ actif: false });
++  const index = await indexVariantes();
++  if (!livraisonActive(q.items, index)) return Response.json({ actif: false });
 +  const settings = await getSettings();
 +  if (body?.method === "relais" || body?.method === "domicile") {
-+    const r = portDevis(q, settings, body.method, body.relaisPoint);
++    const r = portDevis(q, settings, index, body.method, body.relaisPoint);
 +    return Response.json(r.ok ? { actif: true, price: r.price } : { actif: true, error: r.error });
 +  }
-+  const dom = portDevis(q, settings, "domicile");
-+  const rel = portDevis(q, settings, "relais");
++  const dom = portDevis(q, settings, index, "domicile");
++  const rel = portDevis(q, settings, index, "relais");
 +  return Response.json({
-+    actif: true, poids: poidsDevis(q.items), domicile: dom.price,
++    actif: true, poids: poidsDevis(q.items, index), domicile: dom.price,
 +    relaisOk: rel.ok, relaisDes: rel.ok ? rel.price : null,
 +  });
 +}
 diff --git a/src/app/document/[id]/page.jsx b/src/app/document/[id]/page.jsx
-index 607457c..df4d9ff 100644
+index 607457c..4375491 100644
 --- a/src/app/document/[id]/page.jsx
 +++ b/src/app/document/[id]/page.jsx
-@@ -1,6 +1,7 @@
+@@ -1,6 +1,8 @@
  import { notFound } from "next/navigation";
  import { getQuote } from "@/lib/firebase";
  import DocumentActions from "@/components/DocumentActions";
 +import { livraisonActive } from "@/lib/portDevis";
++import { indexVariantes } from "@/lib/indexVariantes";
  
  export const dynamic = "force-dynamic";
  
-@@ -19,6 +20,8 @@ export default async function DocumentPage({ params }) {
+@@ -19,6 +21,8 @@ export default async function DocumentPage({ params }) {
    if (!q) notFound();
    const isFacture = q.type === "facture";
    const titre = isFacture ? "Facture" : "Devis";
 +  // Devis dont chaque ligne a un poids : le client choisit sa livraison sur cette page.
-+  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items);
++  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items, await indexVariantes());
  
    return (
      <section className="section">
-@@ -73,7 +76,7 @@ export default async function DocumentPage({ params }) {
+@@ -73,7 +77,7 @@ export default async function DocumentPage({ params }) {
            </table>
  
            <div style={{ textAlign: "right", marginTop: 16, fontSize: "1.2rem" }}>
@@ -181,7 +948,7 @@ index 607457c..df4d9ff 100644
            </div>
            <div style={{ textAlign: "right", fontSize: "0.78rem", color: "var(--ink-soft)" }}>
              TVA non applicable, art. 293 B du CGI
-@@ -90,7 +93,7 @@ export default async function DocumentPage({ params }) {
+@@ -90,7 +94,7 @@ export default async function DocumentPage({ params }) {
            )}
          </div>
  
@@ -191,10 +958,10 @@ index 607457c..df4d9ff 100644
      </section>
    );
 diff --git a/src/components/DocumentActions.jsx b/src/components/DocumentActions.jsx
-index 4e4249d..4c8a119 100644
+index 4e4249d..73cb1e2 100644
 --- a/src/components/DocumentActions.jsx
 +++ b/src/components/DocumentActions.jsx
-@@ -1,10 +1,74 @@
+@@ -1,10 +1,75 @@
  "use client";
  
 -import { useState } from "react";
@@ -203,6 +970,7 @@ index 4e4249d..4c8a119 100644
  
 -export default function DocumentActions({ id, type, status }) {
 +const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
++const prixPort = (n) => (n === 0 ? "Offerte" : euro(n));
 +
 +export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles = 0, livraison = false }) {
    const [loading, setLoading] = useState(false);
@@ -271,7 +1039,7 @@ index 4e4249d..4c8a119 100644
  
    async function pay() {
      setLoading(true); setErr("");
-@@ -12,7 +76,11 @@ export default function DocumentActions({ id, type, status }) {
+@@ -12,7 +77,11 @@ export default function DocumentActions({ id, type, status }) {
        const res = await fetch("/api/quote-pay", {
          method: "POST",
          headers: { "Content-Type": "application/json" },
@@ -284,7 +1052,7 @@ index 4e4249d..4c8a119 100644
        });
        const data = await res.json();
        if (data.url) window.location.href = data.url;
-@@ -25,17 +93,104 @@ export default function DocumentActions({ id, type, status }) {
+@@ -25,17 +94,104 @@ export default function DocumentActions({ id, type, status }) {
    }
  
    return (
@@ -299,8 +1067,8 @@ index 4e4249d..4c8a119 100644
 +          <label style={{ display: "block", fontSize: "0.92rem", fontWeight: 600, marginBottom: 8 }}>Mode de livraison</label>
 +          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
 +            {[
-+              { key: "domicile", label: "🏠 À domicile", sub: tarifs ? euro(tarifs.domicile) : "", show: true },
-+              { key: "relais", label: "📍 Point relais", sub: tarifs && tarifs.relaisOk ? `à partir de ${euro(tarifs.relaisDes)}` : "", show: !tarifs || tarifs.relaisOk },
++              { key: "domicile", label: "🏠 À domicile", sub: tarifs ? prixPort(tarifs.domicile) : "", show: true },
++              { key: "relais", label: "📍 Point relais", sub: tarifs && tarifs.relaisOk ? (tarifs.relaisDes === 0 ? "Offerte" : `à partir de ${euro(tarifs.relaisDes)}`) : "", show: !tarifs || tarifs.relaisOk },
 +            ].filter((o) => o.show).map((o) => (
 +              <button key={o.key} type="button" onClick={() => { setMethod(o.key); setErr(""); }}
 +                style={{ flex: "1 1 45%", padding: "12px 10px", border: `1.5px solid ${method === o.key ? "var(--gold-dark, #b8860b)" : "var(--line)"}`, background: method === o.key ? "rgba(184,134,11,.08)" : "#fff", borderRadius: 10, cursor: "pointer", font: "inherit", fontWeight: method === o.key ? 600 : 400 }}>
@@ -363,7 +1131,7 @@ index 4e4249d..4c8a119 100644
 +          {[
 +            ["Articles", euro(totalArticles)],
 +            ...(remise ? [[`Remise ${promo.code} (${promo.label})`, `−${euro(remise)}`]] : []),
-+            [method === "relais" ? "Livraison en point relais" : "Livraison à domicile", port == null ? "à choisir" : euro(port)],
++            [method === "relais" ? "Livraison en point relais" : "Livraison à domicile", port == null ? "à choisir" : prixPort(port)],
 +          ].map(([l, v], i) => (
 +            <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "8px 0", borderBottom: "1px dashed #e7d3a1", fontSize: "0.9rem" }}>
 +              <span style={{ color: "var(--ink-soft)" }}>{l}</span><b style={{ whiteSpace: "nowrap" }}>{v}</b>
@@ -399,93 +1167,239 @@ index 4e4249d..4c8a119 100644
    );
  }
 diff --git a/src/components/admin/QuotesAdmin.jsx b/src/components/admin/QuotesAdmin.jsx
-index 34999df..651568e 100644
+index 34999df..f2d9015 100644
 --- a/src/components/admin/QuotesAdmin.jsx
 +++ b/src/components/admin/QuotesAdmin.jsx
-@@ -130,6 +130,14 @@ export default function QuotesAdmin({ adminKey }) {
-                 <option value="">📦 Retirer du stock : rien (ligne libre)</option>
-                 {ARTICLES_STOCK.map((a) => <option key={a.id} value={a.id}>📦 Retirer du stock : {a.label}</option>)}
+@@ -5,7 +5,11 @@ import { formatEuro } from "@/lib/format";
+ import { products } from "@/lib/products";
+ 
+ // Tous les articles du stock (un par variante) pour la liste « Retirer du stock ».
+-const ARTICLES_STOCK = products.flatMap((p) => (p.variants || []).map((v) => ({ id: v.stockId || v.id, label: `${p.name} — ${v.title}` })));
++// Articles du site : sert à retirer le stock ET à calculer la livraison comme sur le site (poids, lettre/colis, seuils offerts…).
++const ARTICLES_SITE = products.flatMap((p) => (p.variants || []).map((v) => ({
++  id: v.id, stockId: v.stockId || v.id, label: `${p.name} — ${v.title}`,
++  poids: Number(v.weight) || Number(p.weight) || 200, lettre: Boolean(p.letter),
++})));
+ 
+ const STATUS_LABEL = { envoye: "Envoyé", paye: "Payé ✓", facture: "Facture", annule: "Annulé" };
+ 
+@@ -124,12 +128,30 @@ export default function QuotesAdmin({ adminKey }) {
+                 style={{ padding: "8px", border: "1px solid var(--line)", borderRadius: 8 }} />
+               <button className="btn btn-outline" style={{ padding: "4px 8px" }} title="Supprimer la ligne"
+                 onClick={() => setItems(items.length > 1 ? items.filter((_, j) => j !== i) : items)}>×</button>
+-              <select value={it.stockId || ""} title="Article du stock à décompter quand le devis est payé"
+-                onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, stockId: e.target.value } : x))}
+-                style={{ gridColumn: "1 / -1", padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8, fontSize: "0.82rem", color: it.stockId ? "inherit" : "var(--ink-soft)" }}>
+-                <option value="">📦 Retirer du stock : rien (ligne libre)</option>
+-                {ARTICLES_STOCK.map((a) => <option key={a.id} value={a.id}>📦 Retirer du stock : {a.label}</option>)}
++              <select value={it.variantId || ""} title="Produit du site : retire le stock quand le devis est payé ET sert à calculer la livraison comme sur le site"
++                onChange={(e) => { const a = ARTICLES_SITE.find((x) => x.id === e.target.value); setItems(items.map((x, j) => j === i ? { ...x, variantId: a ? a.id : "", stockId: a ? a.stockId : "", boite: a && a.lettre ? x.boite : false } : x)); }}
++                style={{ gridColumn: "1 / -1", padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8, fontSize: "0.82rem", color: it.variantId ? "inherit" : "var(--ink-soft)" }}>
++                <option value="">📦 Article du site : aucun (ligne libre — indiquez le poids)</option>
++                {ARTICLES_SITE.map((a) => <option key={a.id} value={a.id}>📦 Article du site : {a.label}</option>)}
                </select>
-+              <label style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: "var(--ink-soft)" }}
-+                title="Poids d'UNE pièce, emballage compris. Il sert à calculer la livraison que le client choisit sur le lien du devis.">
-+                ⚖️ Poids d'une pièce (g)
-+                <input type="number" min="0" step="1" inputMode="numeric" placeholder="Ex : 150" value={it.weight || ""}
-+                  onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, weight: e.target.value } : x))}
-+                  style={{ width: 92, padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8 }} />
-+                <span>{Number(it.weight) > 0 ? "" : "vide = pas de choix de livraison pour le client"}</span>
-+              </label>
++              {(() => {
++                const a = ARTICLES_SITE.find((x) => x.id === it.variantId);
++                return (
++                  <label style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", fontSize: "0.82rem", color: "var(--ink-soft)" }}
++                    title="Poids d'UNE pièce, emballage compris. À corriger pour une grosse commande ou une demande spéciale : la livraison que le client choisit sur le devis suit ce poids.">
++                    ⚖️ Poids d'une pièce (g)
++                    <input type="number" min="0" step="1" inputMode="numeric" placeholder={a ? `auto : ${a.poids}` : "Ex : 150"} value={it.weight || ""}
++                      onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, weight: e.target.value } : x))}
++                      style={{ width: 104, padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8 }} />
++                    {a && a.lettre ? (
++                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
++                        <input type="checkbox" checked={Boolean(it.boite)} onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, boite: e.target.checked } : x))} /> en boîte rigide (colis)
++                      </span>
++                    ) : null}
++                    <span>{a || Number(it.weight) > 0 ? "" : "sans article ni poids : pas de choix de livraison pour le client"}</span>
++                  </label>
++                );
++              })()}
              </div>
            ))}
            <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}
-diff --git a/src/lib/portDevis.js b/src/lib/portDevis.js
+diff --git a/src/lib/indexVariantes.js b/src/lib/indexVariantes.js
 new file mode 100644
-index 0000000..8631825
+index 0000000..7e9fb7f
 --- /dev/null
-+++ b/src/lib/portDevis.js
-@@ -0,0 +1,65 @@
-+// LIVRAISON D'UN DEVIS — choisie par le client sur le lien du devis (03/10/2026, maquette validée
-+// `docs/maquettes/devis-livraison-promo.html`). Même grille que le panier (`buildShippingOptions`),
-+// calculée côté SERVEUR à partir du poids saisi sur chaque ligne du devis : le navigateur envoie
-+// seulement « domicile / relais » + le point choisi, jamais un prix.
-+//
-+// Règles :
-+//  · le choix n'existe que si CHAQUE ligne d'article porte un poids (g) et qu'aucune ligne « Livraison »
-+//    n'a déjà été ajoutée à la main → les anciens devis restent exactement comme avant ;
-+//  · colis (jamais lettre), France + Monaco ;
-+//  · point relais seulement si l'option est activée dans Gestion → Livraison (Boxtal).
-+import { buildShippingOptions } from "@/lib/shipping";
-+import { estLignePort } from "@/lib/remiseDevis";
++++ b/src/lib/indexVariantes.js
+@@ -0,0 +1,11 @@
++// Table « identifiant de variante → { product, variant } » lue dans le catalogue EN DIRECT
++// (réglages de l'admin compris : prix, poids, options…). Sert au calcul du port des devis.
++import { getCatalog } from "@/lib/catalog";
 +
-+export function poidsDevis(items) {
-+  return (Array.isArray(items) ? items : [])
-+    .filter((it) => !estLignePort(it?.desc))
-+    .reduce((s, it) => s + (Number(it?.weight) || 0) * (Number(it?.qty) || 0), 0);
++export async function indexVariantes() {
++  const index = new Map();
++  for (const product of await getCatalog()) {
++    for (const variant of product.variants || []) index.set(variant.id, { product, variant });
++  }
++  return index;
++}
+diff --git a/src/lib/panierPort.js b/src/lib/panierPort.js
+new file mode 100644
+index 0000000..56e7de7
+--- /dev/null
++++ b/src/lib/panierPort.js
+@@ -0,0 +1,65 @@
++// CALCUL DU PORT PARTAGÉ entre le PANIER et les DEVIS (03/10/2026, « option 1 » choisie par le gérant :
++// le devis doit calculer la livraison EXACTEMENT comme le site, et les deux ne doivent jamais se
++// contredire). Ces fonctions sont l'ancien calcul de `/api/checkout`, sorti tel quel — toute règle de
++// port (seuils offerts, lettre / colis, verres, bijou en boîte) vit donc ICI, à un seul endroit.
++// Parité prouvée par `npm run test-port-parite` (milliers de paniers aléatoires : ancien code ≡ nouveau).
++import { buildShippingOptions, resolveShippingConfig } from "@/lib/shipping";
++
++export function nouvelEtatPort() {
++  return {
++    totalGrams: 0,
++    subtotal: 0,
++    parcelQty: 0,           // nombre d'articles "déco" (colis) dans le panier
++    glassQty: 0,            // nombre de verres (fragiles) — envoi croissant dédié
++    letterOnly: true,
++    tousBijouxLettre: true, // tous les articles sont des bijoux/petits objets (avant emballage)
++    bijouEnBoite: false,    // au moins un bijou emballé dans une boîte rigide
++    allFreeShip: true,      // tous les articles ont la livraison offerte
++    allPickup: true,        // retrait proposé seulement si TOUS les articles sont éligibles
++    // Livraison offerte par SEUIL sur colis (ex. verres : lot de 4 ≥ 45 € → offerte).
++    // Sûr : ne s'applique que si TOUS les colis du panier portent freeShipThreshold.
++    allColisThreshFree: true,
++    colisThresh: Infinity,
++  };
 +}
 +
-+export function livraisonActive(items) {
-+  const arts = (Array.isArray(items) ? items : []).filter((it) => it && !estLignePort(it.desc));
-+  if (!arts.length) return false;
-+  if (arts.length !== (Array.isArray(items) ? items : []).length) return false; // une ligne livraison existe déjà
-+  return arts.every((it) => Number(it.weight) > 0);
++// Ajoute UNE ligne (produit × quantité). `pkgBoite` = emballage en boîte rigide (→ colis).
++export function ajouterLignePort(e, { product, unitGrams, unitPrice, quantity, pkgBoite = false }) {
++  e.totalGrams += unitGrams * quantity;
++  e.subtotal += unitPrice * quantity;
++  // 📦 Un bijou emballé dans une BOÎTE rigide dépasse les 3 cm de la Lettre Suivie → petit colis.
++  if (product.letter && pkgBoite) e.bijouEnBoite = true;
++  if (!product.letter) e.tousBijouxLettre = false;
++  if (!product.letter || pkgBoite) {
++    e.letterOnly = false;
++    e.parcelQty += quantity;
++  }
++  if (!product.letter) {
++    // Un produit « livraison toujours offerte » ne doit PAS annuler la gratuité au seuil.
++    if (product.freeShipping) { /* toujours offert → ne bloque rien */ }
++    else if (product.freeShipThreshold) e.colisThresh = Math.min(e.colisThresh, Number(product.freeShipThreshold));
++    else e.allColisThreshFree = false;
++  }
++  if (product.category === "verres") e.glassQty += quantity;
++  if (!product.freeShipping) e.allFreeShip = false;
++  if (!product.pickup) e.allPickup = false;
++}
++
++// Options de livraison (format Stripe `shipping_options`) pour l'état accumulé.
++export function optionsPort(e, { settings, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "FR", express = false, retraitOk = false }) {
++  return buildShippingOptions({
++    totalGrams: e.totalGrams, subtotal: e.subtotal, parcelQty: e.parcelQty, glassQty: e.glassQty, letterOnly: e.letterOnly,
++    bijouxOnly: e.tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
++    // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la promesse bijoux
++    // « offerte dès 45 € » — qui reste vraie même quand une boîte cadeau fait passer le bijou en petit colis.
++    freeShipping: e.allFreeShip
++      || (e.allColisThreshFree && e.parcelQty > 0 && e.subtotal >= e.colisThresh)
++      || (e.tousBijouxLettre && e.bijouEnBoite && e.subtotal >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
++    country,
++    pickupEligible: e.allPickup && retraitOk,
++    express,
++    config: settings?.shipping, // tarifs personnalisés (admin)
++    boxtal: settings?.boxtal,   // option point relais (admin)
++    deliveryMethod, relaisLabel, relaisCarrier,
++  });
++}
+diff --git a/src/lib/portDevis.js b/src/lib/portDevis.js
+new file mode 100644
+index 0000000..282b031
+--- /dev/null
++++ b/src/lib/portDevis.js
+@@ -0,0 +1,89 @@
++// LIVRAISON D'UN DEVIS — choisie par le client sur le lien du devis (03/10/2026, maquette validée
++// `docs/maquettes/devis-livraison-promo.html`). Le calcul est CELUI DU PANIER (`panierPort.js`, partagé :
++// seuils de livraison offerte, lettre / colis, verres, bijou en boîte, grille au poids) — jamais un
++// prix envoyé par le navigateur.
++//
++// Chaque ligne d'article du devis est :
++//  · rattachée à un produit du site (`variantId`) → ses règles (lettre/colis, seuil offert, verres…) ;
++//    poids = celui saisi par le gérant (`weight`, g, une pièce — il peut le corriger pour une grosse
++//    commande) sinon celui de la fiche ;
++//  · ou « libre » (ex. clé USB 64 Go) → il faut un poids ; calculée comme un colis, sans gratuité.
++// Le choix n'existe que si TOUTES les lignes sont calculables et qu'aucune ligne « Livraison » n'a été
++// ajoutée à la main → les anciens devis restent exactement comme avant. France + Monaco, sans express
++// ni retrait ; point relais seulement si l'option est activée dans Gestion → Livraison.
++import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
++import { estLignePort } from "@/lib/remiseDevis";
++
++const PRODUIT_LIBRE = { letter: false, freeShipping: false, freeShipThreshold: 0, category: "", pickup: false };
++
++// Lignes au format du calcul partagé, ou null si le port ne peut pas être calculé.
++export function lignesPort(items, index) {
++  const tout = Array.isArray(items) ? items : [];
++  if (!tout.length || tout.some((it) => estLignePort(it?.desc))) return null; // ligne livraison déjà saisie à la main
++  const lignes = [];
++  for (const it of tout) {
++    const m = it?.variantId && index ? index.get(it.variantId) : null;
++    const poidsSaisi = Number(it?.weight) > 0 ? Number(it.weight) : 0;
++    let product, unitGrams;
++    if (m) {
++      product = m.product;
++      unitGrams = poidsSaisi || Number(m.variant.weight) || Number(m.product.weight) || 200; // même repli que le panier
++    } else if (poidsSaisi) {
++      product = PRODUIT_LIBRE; unitGrams = poidsSaisi;
++    } else return null;
++    lignes.push({
++      product, unitGrams, unitPrice: Number(it.price) || 0, quantity: Math.max(1, Number(it.qty) || 1),
++      pkgBoite: Boolean(it.boite) && Boolean(product.letter),
++    });
++  }
++  return lignes;
++}
++
++export function livraisonActive(items, index) {
++  return lignesPort(items, index) !== null;
++}
++
++function etat(items, index) {
++  const lignes = lignesPort(items, index);
++  if (!lignes) return null;
++  const e = nouvelEtatPort();
++  for (const l of lignes) ajouterLignePort(e, l);
++  return e;
++}
++
++export function poidsDevis(items, index) {
++  return etat(items, index)?.totalGrams || 0;
 +}
 +
 +// Nettoie le point relais reçu du navigateur (mêmes champs que /api/checkout).
 +export function nettoyerRelais(rp) {
 +  if (!rp || typeof rp !== "object") return null;
-+  const carrier = String(rp.carrier || "").toUpperCase().slice(0, 8);
-+  const carrierName = String(rp.carrierName || "").slice(0, 40);
 +  const name = String(rp.name || "").slice(0, 80);
 +  if (!name) return null;
 +  return {
-+    carrier, carrierName, name,
++    carrier: String(rp.carrier || "").toUpperCase().slice(0, 8), carrierName: String(rp.carrierName || "").slice(0, 40), name,
 +    city: String(rp.city || "").slice(0, 40), street: String(rp.street || "").slice(0, 80), zipCode: String(rp.zipCode || "").slice(0, 10),
 +  };
 +}
 +
 +// Renvoie { ok, price, option, relaisOk, relaisFull, error } — `option` = entrée `shipping_options` Stripe.
-+export function portDevis(q, settings, method = "domicile", rp = null) {
++export function portDevis(q, settings, index, method = "domicile", rp = null) {
 +  const relaisOk = Boolean(settings?.boxtal?.enabled);
-+  if (!livraisonActive(q?.items)) return { ok: false, relaisOk, error: "Ce devis n'a pas de choix de livraison." };
-+  const items = q.items;
-+  const base = {
-+    subtotal: q.total, letterOnly: false, totalGrams: poidsDevis(items),
-+    parcelQty: items.reduce((s, it) => s + (Number(it.qty) || 0), 0), glassQty: 0,
-+    config: settings?.shipping, boxtal: settings?.boxtal, country: "FR", express: false,
-+  };
++  const e = etat(q?.items, index);
++  if (!e) return { ok: false, relaisOk, error: "Ce devis n'a pas de choix de livraison." };
++  const base = { settings, country: "FR", express: false, retraitOk: false };
 +  if (method === "relais") {
 +    if (!relaisOk) return { ok: false, relaisOk, error: "Le point relais n'est pas disponible." };
 +    const p = nettoyerRelais(rp);
-+    const opts = buildShippingOptions({
++    const opts = optionsPort(e, {
 +      ...base, deliveryMethod: "relais", relaisCarrier: p?.carrier || "",
 +      relaisLabel: p ? [p.name.slice(0, 45), p.city.slice(0, 25)].filter(Boolean).join(", ") : "",
 +    });
-+    const sr = opts[0].shipping_rate_data;
 +    return {
-+      ok: true, relaisOk, price: sr.fixed_amount.amount / 100, option: opts[0],
++      ok: true, relaisOk, price: opts[0].shipping_rate_data.fixed_amount.amount / 100, option: opts[0],
 +      relaisFull: p ? [p.carrierName, p.name, p.street, [p.zipCode, p.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240) : "",
 +    };
 +  }
-+  const opts = buildShippingOptions({ ...base, deliveryMethod: "domicile" });
++  const opts = optionsPort(e, { ...base, deliveryMethod: "domicile" });
 +  return { ok: true, relaisOk, price: opts[0].shipping_rate_data.fixed_amount.amount / 100, option: opts[0], relaisFull: "" };
 +}
 diff --git a/src/lib/promoDevis.js b/src/lib/promoDevis.js
@@ -562,38 +1476,151 @@ index 0000000..e2a3425
 +}
 diff --git a/tools/tests/port-devis.mjs b/tools/tests/port-devis.mjs
 new file mode 100644
-index 0000000..052a4bc
+index 0000000..734b767
 --- /dev/null
 +++ b/tools/tests/port-devis.mjs
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,63 @@
 +// Livraison choisie par le client sur un devis (03/10/2026) : `npm run test-port-devis`
-+import { poidsDevis, livraisonActive, portDevis, nettoyerRelais } from "../../src/lib/portDevis.js";
++// Le devis calcule le port avec le MÊME code que le panier (src/lib/panierPort.js).
++import { lignesPort, livraisonActive, poidsDevis, portDevis, nettoyerRelais } from "../../src/lib/portDevis.js";
++import { nouvelEtatPort, ajouterLignePort, optionsPort } from "../../src/lib/panierPort.js";
 +let ok = 0, ko = 0;
 +const t = (nom, cond, extra = "") => { if (cond) ok++; else { ko++; console.log("✗", nom, extra); } };
++
++// Faux catalogue : un bijou (lettre), la carafe (offerte dès 45 €), un verre.
++const index = new Map([
++  ["bijou-1", { product: { letter: true, weight: 72, category: "bijoux", pickup: false }, variant: { id: "bijou-1", weight: 72 } }],
++  ["carafe-1", { product: { letter: false, weight: 1500, category: "verres", pickup: false, freeShipThreshold: 45 }, variant: { id: "carafe-1" } }],
++  ["verre-1", { product: { letter: false, weight: 400, category: "verres", pickup: false, freeShipThreshold: 45 }, variant: { id: "verre-1", weight: 400 } }],
++  ["deco-1", { product: { letter: false, weight: 300, category: "mariage", pickup: true }, variant: { id: "deco-1" } }],
++]);
++const settings = { boxtal: { enabled: true } };
++const prix = (items, method = "domicile", rp = null, total) => portDevis({ items, total: total ?? items.reduce((s, i) => s + i.qty * i.price, 0) }, settings, index, method, rp);
++
++// --- ligne libre (ex. clé USB 64 Go avec coffret)
 +const cle = { desc: "Clé USB 64 Go gravée", qty: 1, price: 44.9, weight: 150 };
-+const q = { items: [cle], total: 44.9 };
-+const settings = { boxtal: { enabled: true }, shipping: undefined };
-+t("poids d'une ligne", poidsDevis([cle]) === 150);
-+t("poids × quantité", poidsDevis([{ ...cle, qty: 3 }]) === 450);
-+t("la ligne livraison n'ajoute pas de poids", poidsDevis([cle, { desc: "Livraison", qty: 1, price: 6.9, weight: 999 }]) === 150);
-+t("choix actif quand chaque ligne a un poids", livraisonActive([cle]));
-+t("pas de choix si un poids manque", !livraisonActive([cle, { desc: "Boîte", qty: 1, price: 5 }]));
-+t("pas de choix si une ligne livraison existe déjà", !livraisonActive([cle, { desc: "Livraison", qty: 1, price: 6.9 }]));
-+t("pas de choix sur un ancien devis (aucun poids)", !livraisonActive([{ desc: "Carafe", qty: 1, price: 54.9 }]));
-+t("devis vide", !livraisonActive([]));
-+const dom = portDevis(q, settings, "domicile");
-+t("domicile 1 clé coffret = 6,90 €", dom.ok && dom.price === 6.9, JSON.stringify(dom.price));
++t("ligne libre : poids saisi", poidsDevis([cle], index) === 150);
++t("ligne libre : choix actif", livraisonActive([cle], index));
++t("clé libre à domicile = 6,90 €", prix([cle]).price === 6.9, String(prix([cle]).price));
 +const rp = { carrier: "MONR", carrierName: "Mondial Relay", name: "Tabac Le Balto", street: "12 rue de la Gare", zipCode: "95350", city: "Saint-Brice" };
-+const rel = portDevis(q, settings, "relais", rp);
-+t("relais Mondial Relay = 4,90 €", rel.ok && rel.price === 4.9, JSON.stringify(rel.price));
-+t("adresse du point relais complète pour la commande", rel.relaisFull === "Mondial Relay — Tabac Le Balto — 12 rue de la Gare — 95350 Saint-Brice", rel.relaisFull);
-+t("relais sans point choisi = pas d'adresse", portDevis(q, settings, "relais", null).relaisFull === "");
-+t("relais refusé si l'option est coupée dans Gestion", !portDevis(q, { boxtal: { enabled: false } }, "relais", rp).ok);
-+t("devis sans poids = pas de livraison calculée", !portDevis({ items: [{ desc: "x", qty: 1, price: 5 }], total: 5 }, settings, "domicile").ok);
-+t("le prix vient du poids : colis lourd plus cher", portDevis({ items: [{ ...cle, weight: 4000 }], total: 44.9 }, settings, "domicile").price > 6.9);
++const rel = prix([cle], "relais", rp);
++t("clé libre en relais Mondial Relay = 4,90 €", rel.ok && rel.price === 4.9, String(rel.price));
++t("adresse du point relais complète", rel.relaisFull === "Mondial Relay — Tabac Le Balto — 12 rue de la Gare — 95350 Saint-Brice", rel.relaisFull);
++t("relais sans point = pas d'adresse", prix([cle], "relais", null).relaisFull === "");
++t("relais refusé si coupé dans Gestion", !portDevis({ items: [cle], total: 44.9 }, { boxtal: { enabled: false } }, index, "relais", rp).ok);
++t("l'option Stripe est en centimes", prix([cle]).option.shipping_rate_data.fixed_amount.amount === 690);
++
++// --- cas où il NE FAUT PAS de choix (anciens devis, ligne livraison manuelle…)
++t("ancien devis (rien de rattaché, pas de poids)", !livraisonActive([{ desc: "Carafe", qty: 1, price: 54.9 }], index));
++t("une ligne sans poids ni article bloque tout", !livraisonActive([cle, { desc: "Boîte", qty: 1, price: 5 }], index));
++t("ligne « Livraison » ajoutée à la main = pas de choix", !livraisonActive([cle, { desc: "Livraison", qty: 1, price: 6.9 }], index));
++t("article inconnu du catalogue sans poids", !livraisonActive([{ desc: "x", qty: 1, price: 5, variantId: "n-existe-pas" }], index));
++t("devis vide", !livraisonActive([], index));
++
++// --- règles du SITE reprises pour les lignes rattachées à un produit
++const carafe = { desc: "Carafe", qty: 1, price: 54.9, variantId: "carafe-1" };
++t("carafe ≥ 45 € : livraison offerte (comme le site)", prix([carafe]).price === 0, String(prix([carafe]).price));
++t("carafe ≥ 45 € : relais offert aussi", prix([carafe], "relais", rp).price === 0);
++t("poids de la fiche utilisé quand rien n'est saisi", poidsDevis([carafe], index) === 1500);
++t("poids saisi prime sur la fiche (grosse commande)", poidsDevis([{ ...carafe, weight: 8000 }], index) === 8000);
++t("colis plus lourd = port plus cher", prix([{ ...carafe, price: 20, weight: 8000 }]).price > prix([{ ...carafe, price: 20 }]).price);
++const bijou = { desc: "Collier", qty: 1, price: 30, variantId: "bijou-1" };
++t("bijou léger = lettre suivie (4,90 €)", prix([bijou]).price === 4.9, String(prix([bijou]).price));
++t("bijou dès 45 € = offert", prix([{ ...bijou, price: 50 }]).price === 0);
++t("bijou en boîte rigide = colis, plus cher que la lettre", prix([{ ...bijou, boite: true }]).price > 4.9, String(prix([{ ...bijou, boite: true }]).price));
++t("la case boîte est ignorée sur un produit non-lettre", prix([{ ...carafe, price: 20, boite: true }]).price === prix([{ ...carafe, price: 20 }]).price);
++const verres3 = { desc: "Verres", qty: 3, price: 10, variantId: "verre-1" };
++t("3 verres = tarif verres du site (plus que le tarif déco)", prix([verres3]).price > prix([{ ...verres3, variantId: "deco-1" }]).price, `${prix([verres3]).price} vs ${prix([{ ...verres3, variantId: "deco-1" }]).price}`);
++
++// --- identique au panier, par construction : on recalcule à la main avec le code partagé
++{
++  const items = [bijou, { ...verres3, price: 12 }];
++  const e = nouvelEtatPort();
++  for (const l of lignesPort(items, index)) ajouterLignePort(e, l);
++  const direct = optionsPort(e, { settings, country: "FR", express: false, retraitOk: false, deliveryMethod: "domicile" });
++  t("devis ≡ calcul partagé du panier (panier mixte)", JSON.stringify(direct[0]) === JSON.stringify(prix(items).option));
++}
 +t("le point relais est nettoyé", nettoyerRelais({ ...rp, name: "x".repeat(200) }).name.length === 80 && nettoyerRelais({ carrier: "MONR" }) === null);
-+t("l'option Stripe est un tarif fixe en centimes", dom.option.shipping_rate_data.fixed_amount.amount === 690 && dom.option.shipping_rate_data.fixed_amount.currency === "eur");
 +console.log(ko ? `${ko} échec(s)` : `OK — ${ok} vérifications`);
++process.exit(ko ? 1 : 0);
+diff --git a/tools/tests/port-parite.mjs b/tools/tests/port-parite.mjs
+new file mode 100644
+index 0000000..d549b9a
+--- /dev/null
++++ b/tools/tests/port-parite.mjs
+@@ -0,0 +1,73 @@
++// PARITÉ du calcul du port : l'ANCIEN code de /api/checkout (copié tel quel ci-dessous, figé) contre
++// le calcul partagé src/lib/panierPort.js, sur des milliers de paniers aléatoires. `npm run test-port-parite`
++import { buildShippingOptions, resolveShippingConfig } from "../../src/lib/shipping.js";
++import { nouvelEtatPort, ajouterLignePort, optionsPort } from "../../src/lib/panierPort.js";
++
++// ===== ANCIEN CODE (copie figée de /api/checkout avant le 03/10/2026) =====
++function ancien(lignes, ctx) {
++  let totalGrams = 0, subtotal = 0, parcelQty = 0, glassQty = 0, letterOnly = true, tousBijouxLettre = true, bijouEnBoite = false, allFreeShip = true, allPickup = true, allColisThreshFree = true, colisThresh = Infinity;
++  for (const { product, unitGrams, unitPrice, quantity, pkgBoite } of lignes) {
++    totalGrams += unitGrams * quantity;
++    subtotal += unitPrice * quantity;
++    if (product.letter && pkgBoite) bijouEnBoite = true;
++    if (!product.letter) tousBijouxLettre = false;
++    if (!product.letter || pkgBoite) { letterOnly = false; parcelQty += quantity; }
++    if (!product.letter) {
++      if (product.freeShipping) { }
++      else if (product.freeShipThreshold) colisThresh = Math.min(colisThresh, Number(product.freeShipThreshold));
++      else allColisThreshFree = false;
++    }
++    if (product.category === "verres") glassQty += quantity;
++    if (!product.freeShipping) allFreeShip = false;
++    if (!product.pickup) allPickup = false;
++  }
++  const settings = ctx.settings;
++  return buildShippingOptions({
++    totalGrams, subtotal, parcelQty, glassQty, letterOnly,
++    bijouxOnly: tousBijouxLettre,
++    freeShipping: allFreeShip
++      || (allColisThreshFree && parcelQty > 0 && subtotal >= colisThresh)
++      || (tousBijouxLettre && bijouEnBoite && subtotal >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
++    country: ctx.country,
++    pickupEligible: allPickup && ctx.retraitOk,
++    express: ctx.express,
++    config: settings?.shipping, boxtal: settings?.boxtal,
++    deliveryMethod: ctx.deliveryMethod, relaisLabel: ctx.relaisLabel, relaisCarrier: ctx.relaisCarrier,
++  });
++}
++// ===== FIN ANCIEN CODE =====
++
++function nouveau(lignes, ctx) {
++  const e = nouvelEtatPort();
++  for (const l of lignes) ajouterLignePort(e, l);
++  return optionsPort(e, ctx);
++}
++
++let graine = 12345;
++const rnd = () => (graine = (graine * 1664525 + 1013904223) % 4294967296) / 4294967296;
++const pick = (a) => a[Math.floor(rnd() * a.length)];
++const produit = () => ({
++  letter: rnd() < 0.45, freeShipping: rnd() < 0.15, freeShipThreshold: pick([0, 0, 45, 60]),
++  category: pick(["verres", "bijoux", "cadeaux", "mariage", "cristal"]), pickup: rnd() < 0.35,
++});
++const settingsPossibles = [
++  undefined, {}, { boxtal: { enabled: true } }, { boxtal: { enabled: true, pointRelaisPrice: 5.5 } },
++  { boxtal: { enabled: false } }, { shipping: { bijouxHome: 5.9, bijouxFreeThreshold: 60 }, boxtal: { enabled: true } },
++];
++let ok = 0, ko = 0;
++for (let i = 0; i < 6000; i++) {
++  const n = 1 + Math.floor(rnd() * 4);
++  const lignes = Array.from({ length: n }, () => ({
++    product: produit(), unitGrams: pick([20, 72, 100, 150, 320, 550, 1100, 2800]), unitPrice: Math.round(rnd() * 12000) / 100,
++    quantity: 1 + Math.floor(rnd() * 6), pkgBoite: rnd() < 0.25,
++  }));
++  const ctx = {
++    settings: pick(settingsPossibles), country: pick(["FR", "FR", "FR", "MC", "BE", "DE", "ES", "CH"]),
++    retraitOk: rnd() < 0.5, express: rnd() < 0.3, deliveryMethod: pick(["", "domicile", "relais", "retrait"]),
++    relaisLabel: pick(["", "Tabac, Paris"]), relaisCarrier: pick(["", "MONR", "SOGP", "CHRP", "UPSE"]),
++  };
++  const a = JSON.stringify(ancien(lignes, ctx)), b = JSON.stringify(nouveau(lignes, ctx));
++  if (a === b) ok++; else { ko++; if (ko < 4) console.log("✗ divergence", JSON.stringify(lignes), JSON.stringify(ctx), "\n ancien:", a, "\n nouveau:", b); }
++}
++console.log(ko ? `${ko} divergence(s) sur ${ok + ko}` : `OK — ${ok} paniers : ancien code ≡ calcul partagé`);
 +process.exit(ko ? 1 : 0);
 diff --git a/tools/tests/remise-devis.test.mjs b/tools/tests/remise-devis.test.mjs
 new file mode 100644

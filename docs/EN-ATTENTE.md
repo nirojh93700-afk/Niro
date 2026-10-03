@@ -8,18 +8,23 @@
 ---
 
 ## 0. Côté gérant, après mise en ligne
-- **Devis : code promo + livraison (domicile / point relais) choisis par le client (03/10)** — MAQUETTE VALIDÉE par le gérant
-  (« c'est bon, tu peux valider »), code ÉCRIT, COMPILÉ (`npm run build` OK) et TESTÉ (27 vérifications + test navigateur
-  1280/390 px) mais **PAS en ligne : attend « applique »**. Patch : `docs/patches/devis-code-promo-et-livraison.patch`
-  (`git apply` → `npm run build` → `npm run test-remise-devis && npm run test-port-devis`). Maquette :
-  `docs/maquettes/devis-livraison-promo.html` (artifact https://claude.ai/artifact/BxD8j2R9pfhEtex6B5Kvxi).
-  · Règles : le client choisit domicile / relais sur `/document/<id>` (même carte `RelaisPicker`), port recalculé CÔTÉ SERVEUR
-  (`src/lib/portDevis.js`, grille du panier, colis, France + Monaco) d'après le **poids (g) saisi par ligne** dans Gestion →
-  Devis ; code promo saisi par le client (`/api/quote-promo`, remise sur les articles seulement, jamais sur le port).
-  · Anciens devis (sans poids) ou devis avec une ligne « Livraison » : fonctionnement d'AVANT, rien ne casse.
+- **Devis : code promo + livraison (domicile / point relais) choisis par le client (03/10)** — MAQUETTE VALIDÉE, **« option 1 »
+  choisie par le gérant** (calcul du port PARTAGÉ avec le panier). Code ÉCRIT, COMPILÉ (`npm run build` OK) et TESTÉ mais
+  **PAS en ligne : attend « applique »**. Patch : `docs/patches/devis-code-promo-et-livraison.patch` (18 fichiers ;
+  `git apply` → `npm run build` → `npm run test-remise-devis && npm run test-port-devis && npm run test-port-parite`).
+  Maquette : `docs/maquettes/devis-livraison-promo.html` (artifact https://claude.ai/artifact/BxD8j2R9pfhEtex6B5Kvxi).
+  · ⚠️ **TOUCHE `/api/checkout` (le paiement de la boutique)** : le calcul du port en est sorti tel quel dans
+  `src/lib/panierPort.js` ; parité prouvée par `test-port-parite` (6000 paniers aléatoires, ancien code figé ≡ nouveau).
+  Après mise en ligne : faire UN paiement test boutique (bijou, verre, carafe) pour revérifier les frais de port.
+  · Devis : chaque ligne = « Article du site » (poids, lettre/colis, seuil offert, verres… comme le site) OU ligne libre
+  avec poids saisi ; **poids toujours modifiable par le gérant** (grosses commandes) ; case « en boîte rigide » (colis) sur
+  les bijoux. Client : choix domicile / relais (même `RelaisPicker`), port recalculé CÔTÉ SERVEUR, code promo saisi par lui
+  (`/api/quote-promo`, remise sur les articles seulement). France + Monaco, pas d'express ni de retrait.
+  · Anciens devis (rien de rattaché / pas de poids) ou avec une ligne « Livraison » manuelle : fonctionnement d'AVANT.
+  · PAS construit (non demandé) : champ « prix de livraison imposé » pour une demande spéciale.
   · Dossier Simon Pascal (clé USB 64 Go gravée « Suzanne & Louis 60 ans de mariage », 44,90 €, 1 clé, besoin le 13/10) :
-  devis à créer avec poids 150 g APRÈS la mise en ligne, puis le mail « inscris-toi sur le site, saisis ton code sur le devis »
-  (texte validé dans la conversation, signature Niv Création, sans « comme sur notre site »).
+  devis à créer (ligne libre, poids 150 g) APRÈS la mise en ligne, puis le mail « inscris-toi sur le site, saisis ton code
+  sur le devis » (texte validé, signature Niv Création, sans « comme sur notre site »).
 - **Verre à vin 47 cl** : ✅ **EN LIGNE le 25/09** (« Applique », commit `ecc373c`). À faire :
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
