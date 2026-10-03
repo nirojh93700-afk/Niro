@@ -2630,6 +2630,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
 
 ## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)
+> ⛔ **LE LOGO ET L'EN-TÊTE NE SE TOUCHENT PAS** (gérant, 04/10, très ferme : « de quel droit tu touches à mon logo… tu
+> modifies pas les réglages qu'on a déjà faits, tu fais juste une maquette moderne »). Dans toute maquette, l'en-tête
+> est la COPIE exacte du site (`Header.jsx` + `.header-centered` : logo `IMG_6758.jpg` centré 92 px / 64 px mobile,
+> compte + panier + menu à droite, menu complet dessous) et le pied de page garde `footer-logo` 190 px. Jamais de
+> logo redessiné, recadré, redimensionné ou « de remplacement », jamais la capture d'écran qu'il envoie pour montrer.
+> On modernise UNIQUEMENT le contenu de la page. v3 de la maquette corrigée dans ce sens.
 > Gérant : « utilise ce qu'on a installé aujourd'hui pour faire une maquette de la page d'accueil, plus
 > moderne, plus fluide, unique, même thème, mêmes couleurs ». Faite avec les skills Impeccable + UI UX Pro Max.
 - **Fichier** : `docs/maquettes/accueil-moderne.html` (+ `.fragment.html` pour l'artifact), générateur

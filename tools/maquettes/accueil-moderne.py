@@ -122,18 +122,21 @@ def mq(keys):
 WALLROWS = wall_rows()
 BODY = f'''
 <a class="skip" href="#contenu">Aller au contenu</a>
-<header class="top" id="top">
-  <nav class="top-l" aria-label="Principal"><a href="#">Boutique</a><a href="#" class="strong">Bijoux</a><a href="#">Verres &amp; Carafes</a><a href="#">Mariage</a></nav>
-  <button type="button" class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-  <a class="logo-card" href="#" aria-label="Niv Création — accueil"><img src="{LOGO}" alt="Niv Création — Atelier de personnalisation" onerror="this.parentNode.classList.add('noimg')"><span class="logo-fb" aria-hidden="true"><b>NiV</b><i>CRÉATION</i><small>Atelier de personnalisation</small></span></a>
-  <div class="top-r"><nav class="top-links" aria-label="Rubriques"><a href="#">Cristal 3D</a><a href="#" class="hot">Noël</a><a href="#">Offrir</a></nav>
-    <div class="tools"><button type="button" aria-label="Rechercher" class="hide-s">{ic("search")}</button><button type="button" aria-label="Mon compte">{ic("user")}</button><button type="button" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button></div></div>
+<header class="header header-centered" id="top">
+  <div class="container header-top">
+    <a href="#" class="logo" aria-label="Niv Création — accueil"><img class="logo-img" src="{LOGO}" alt="Niv Création — Atelier de personnalisation"></a>
+    <div class="header-actions">
+      <a href="#" class="cart-btn" aria-label="Mon espace">{ic("user","ic ic-h")}</a>
+      <button class="cart-btn" type="button" aria-label="Ouvrir le panier">{ic("bag","ic ic-h")}<span class="cart-badge">2</span></button>
+      <button class="menu-toggle" type="button" aria-label="Menu"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    </div>
+  </div>
+  <nav class="hnav" aria-label="Principal">
+    <a href="#">Boutique</a><a href="#">Bijoux</a><a href="#">Naissance</a><a href="#">Verres &amp; Carafes</a><a href="#">Mariage</a><a href="#">Déco &amp; Maison</a><a href="#">Cadeaux</a>
+    <a href="#" style="color:#a5822f;font-weight:700">💎 Cristal Photo 3D</a><a href="#" style="color:#b4452f;font-weight:600">Promotions</a>
+    <a href="#">Trouver un cadeau</a><a href="#">Carte cadeau</a><a href="#">Idées &amp; conseils</a><a href="#">À propos</a><a href="#">Contact</a><a href="#">Mon compte</a>
+  </nav>
 </header>
-<div class="nav" id="nav" aria-hidden="true">
-  <a class="nav-logo" href="#" tabindex="-1"><img src="{LOGO}" alt="" onerror="this.parentNode.classList.add('noimg')"><span class="logo-fb" aria-hidden="true"><b>NiV</b><i>CRÉATION</i><small>Atelier de personnalisation</small></span></a>
-  <nav class="nav-links"><a href="#" tabindex="-1">Boutique</a><a href="#" tabindex="-1">Bijoux</a><a href="#" tabindex="-1">Verres &amp; Carafes</a><a href="#" tabindex="-1">Mariage</a><a href="#" tabindex="-1">Cristal 3D</a><a href="#" class="hot" tabindex="-1">Noël</a></nav>
-  <div class="nav-tools"><button type="button" tabindex="-1" aria-label="Rechercher">{ic("search")}</button><button type="button" tabindex="-1" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button></div>
-</div>
 
 <main id="contenu">
 <section class="hero" id="hero">
@@ -276,7 +279,7 @@ BODY = f'''
 </main>
 
 <footer class="foot">
-  <div class="foot-top"><span class="foot-logo-w"><img class="foot-logo" src="{LOGO}" alt="Niv Création — Atelier de personnalisation" onerror="this.parentNode.classList.add('noimg')"><span class="logo-fb" aria-hidden="true"><b>NiV</b><i>CRÉATION</i><small>Atelier de personnalisation</small></span></span>
+  <div class="foot-top"><img class="footer-logo" src="{LOGO}" alt="Niv Création — Atelier de personnalisation">
     <p>Atelier français · gravure laser · Paiement sécurisé par carte via Stripe</p></div>
   <p class="foot-pay">Payez en plusieurs fois sans frais — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).</p>
 </footer>
@@ -292,7 +295,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--cream);color:var(--ink);font:400 16px/1.6 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 ::selection{background:var(--gold);color:var(--ink)}
 :focus-visible{outline:2px solid var(--gold-d);outline-offset:3px;border-radius:6px}
-.hero :focus-visible,.limited :focus-visible,.atelier :focus-visible,.custom :focus-visible,.foot :focus-visible,.nav :focus-visible,.noel :focus-visible{outline-color:var(--gold-l)}
+.hero :focus-visible,.limited :focus-visible,.atelier :focus-visible,.custom :focus-visible,.foot :focus-visible,.noel :focus-visible{outline-color:var(--gold-l)}
 *{scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
 ::-webkit-scrollbar{height:8px;width:10px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:8px}
 a{color:inherit;text-decoration:none}
@@ -304,42 +307,22 @@ em{font-style:italic;color:var(--gold-t)}
 .ic{width:20px;height:20px;flex:none}
 .ph{background-size:cover;background-position:center;background-color:var(--sand)}
 
-/* ── En-tête avec le logo (carte or & crème) ── */
-.top{position:relative;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;padding:14px clamp(20px,5vw,72px);background:var(--cream);border-bottom:1px solid var(--line)}
-.top-l,.top-links{display:flex;gap:2px;flex-wrap:wrap}
-.top-l a,.top-links a{padding:9px 12px;border-radius:999px;font-size:.88rem;font-weight:500;color:var(--ink);transition:background .25s}
-.top-l a:hover,.top-links a:hover{background:var(--sand)}
-.top-l a.strong{font-weight:700}.top-links a.hot{color:var(--red)}
-.top-r{display:flex;align-items:center;justify-content:flex-end;gap:10px}
-.tools{display:flex;gap:2px}.tools button{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;transition:background .25s}.tools button:hover{background:var(--sand)}
-.logo-card{display:block;line-height:0;border-radius:14px;box-shadow:0 10px 24px -14px rgba(26,18,6,.45);transition:transform .4s var(--ease)}
-.logo-card:hover{transform:translateY(-2px)}
-.logo-card img{display:block;height:clamp(70px,8vw,96px);width:auto;max-width:44vw;border-radius:14px;object-fit:contain;background:#efe9da}
-.burger{display:none;width:42px;height:42px;place-items:center;align-content:center;gap:5px;border-radius:50%}
-.burger span{display:block;width:20px;height:1.6px;background:var(--ink);border-radius:2px}
-.logo-fb{display:none}
-.noimg img{display:none}
-.noimg .logo-fb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 26px;border-radius:14px;background:linear-gradient(145deg,#f1ead9,#e3d8bf);color:#9a7a2c;line-height:1;text-align:center}
-.logo-fb b{font:500 2rem/1 var(--serif);letter-spacing:.08em}
-.logo-fb i{font-style:normal;font:600 .8rem/1 var(--sans);letter-spacing:.18em;border-top:1px solid #b8964a;padding-top:5px;color:#7c6224}
-.logo-fb small{white-space:nowrap;font:500 .5rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;color:#6a5a40}
-.nav-logo.noimg .logo-fb{padding:5px 12px;border-radius:7px}.nav-logo .logo-fb b{font-size:1rem}.nav-logo .logo-fb i{font-size:.45rem;padding-top:2px}.nav-logo .logo-fb small{display:none}
-.foot-logo-w{display:inline-flex}
-.nav-logo img{display:block;height:34px;width:auto;border-radius:6px;background:#efe9da}
-
-/* ── En-tête flottant (apparaît au défilement) ── */
-.nav{position:fixed;z-index:50;top:14px;left:50%;translate:-50% -140%;opacity:0;pointer-events:none;width:min(1180px,calc(100% - 32px));display:flex;align-items:center;gap:20px;padding:10px 14px 10px 22px;border-radius:999px;background:rgba(26,18,6,.82);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);color:var(--cream);box-shadow:0 10px 30px -12px rgba(26,18,6,.55),0 0 0 1px rgba(226,198,126,.18);transition:translate .5s var(--ease),opacity .4s}
-.nav.show{translate:-50% 0;opacity:1;pointer-events:auto}
-.logo{display:inline-flex;align-items:center;gap:9px;font:600 1.18rem/1 var(--serif);letter-spacing:.01em;white-space:nowrap}
-.logo-mark{color:var(--gold);font-size:.95rem}
-.nav-links{display:flex;gap:4px;margin-inline:auto}
-.nav-links a{padding:8px 13px;border-radius:999px;font-size:.86rem;font-weight:500;color:var(--on-ink);transition:background .25s,color .25s}
-.nav-links a:hover{background:rgba(251,247,238,.1);color:var(--cream)}
-.nav-links a.hot{color:var(--gold-l)}
-.nav-tools{display:flex;align-items:center;gap:2px}
-.nav-tools button{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;transition:background .25s}
-.nav-tools button:hover{background:rgba(251,247,238,.12)}
-.bag{position:relative}.bag-n{position:absolute;top:3px;right:2px;min-width:17px;height:17px;border-radius:9px;background:var(--gold);color:var(--ink);font:700 .66rem/17px var(--sans);text-align:center;padding-inline:4px}
+/* ── En-tête : identique au site (globals.css, .header / .header-centered) ── */
+.header{position:sticky;top:0;z-index:50;background:rgba(250,246,239,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.container{max-width:1200px;margin:0 auto;padding-inline:20px}
+.header-centered .header-top{position:relative;display:flex;align-items:center;justify-content:center;padding:14px 20px}
+.header-centered .header-top .header-actions{position:absolute;right:20px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px}
+.logo{display:flex;align-items:center;line-height:1}
+.header-centered .logo-img{height:92px;width:auto;display:block;border-radius:10px}
+.cart-btn,.menu-toggle{position:relative;width:42px;height:42px;display:grid;place-items:center;color:var(--ink)}
+.ic-h{width:23px;height:23px}
+.cart-badge{position:absolute;top:2px;right:0;min-width:18px;height:18px;border-radius:9px;background:var(--gold);color:var(--ink);font:700 .68rem/18px var(--sans);text-align:center;padding-inline:4px}
+.menu-toggle{display:none}
+.hnav{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 16px;border-top:1px solid var(--line);padding:10px 20px;max-width:1200px;margin:0 auto}
+.hnav a{font-size:.86rem;font-weight:500;color:var(--ink);padding:2px 0}
+.hnav a:hover{color:var(--gold-t)}
+@media (max-width:900px){.hnav{display:none}.menu-toggle{display:grid}}
+@media (max-width:640px){.header-centered .logo-img{height:64px}}
 
 /* ── Boutons ── */
 .btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font:600 .95rem/1 var(--sans);transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s;white-space:nowrap}
@@ -352,7 +335,7 @@ em{font-style:italic;color:var(--gold-t)}
 .link .ic{width:16px;height:16px}.link:hover{border-color:var(--gold-t);gap:12px}
 
 /* ── Hero ── */
-.hero{position:relative;background:radial-gradient(120% 90% at 78% 10%,#3a2a10 0,var(--ink2) 38%,var(--ink) 100%);color:var(--cream);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:center;gap:clamp(24px,5vw,80px);padding:clamp(48px,7vh,80px) clamp(20px,6vw,96px) 76px;min-height:min(calc(100svh - 124px),760px);overflow:hidden}
+.hero{position:relative;background:radial-gradient(120% 90% at 78% 10%,#3a2a10 0,var(--ink2) 38%,var(--ink) 100%);color:var(--cream);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:center;gap:clamp(24px,5vw,80px);padding:clamp(48px,7vh,80px) clamp(20px,6vw,96px) 76px;min-height:min(calc(100svh - 165px),760px);overflow:hidden}
 .hero-glow{position:absolute;inset:auto -10% -30% 30%;height:70%;background:radial-gradient(closest-side,rgba(201,162,75,.22),transparent);pointer-events:none}
 .hero-copy{position:relative;z-index:2;padding-bottom:8px}
 .hero h1{font-size:clamp(2.7rem,6.6vw,5.6rem);line-height:1.02;letter-spacing:-.025em;color:var(--cream)}
@@ -513,17 +496,15 @@ em{font-style:italic;color:var(--gold-t)}
 .custom h2{font-size:clamp(1.9rem,4.2vw,3.3rem);line-height:1.1}.custom p{margin:0;color:var(--muted)}
 .foot{background:var(--ink);color:var(--on-ink);padding:44px clamp(20px,6vw,96px) 100px;font-size:.9rem}
 .foot-top{display:flex;flex-wrap:wrap;gap:12px 36px;align-items:center;justify-content:space-between}
-.foot-top p{margin:0}.foot-logo{display:block;height:64px;width:auto;border-radius:10px;background:#efe9da}
+.foot-top p{margin:0}.footer-logo{width:190px;max-width:70%;height:auto;display:block;border-radius:10px}
 .foot-pay{margin:22px 0 0;padding-top:20px;border-top:1px solid rgba(226,198,126,.16)}
 .ask{position:fixed;left:16px;bottom:16px;z-index:40;display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;background:var(--cream);color:var(--ink);font:600 .85rem/1 var(--sans);box-shadow:0 14px 30px -14px rgba(26,18,6,.55),0 0 0 1px var(--line);transition:transform .3s var(--ease)}
 .ask:hover{transform:translateY(-3px)}.ask .ic{width:17px;height:17px;color:var(--gold-d)}
 
 /* ── Adaptation ── */
 @media (max-width:1020px){
-  .nav-links{display:none}.nav{padding-left:14px}.nav-tools{margin-left:auto}
-  .top{grid-template-columns:auto 1fr auto;padding-block:10px}.top-l,.top-links{display:none}.burger{display:grid}.logo-card{justify-self:center}
   .bijoux{grid-template-columns:1fr}.bij-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero{grid-template-columns:1fr;padding-top:112px}
+  .hero{grid-template-columns:1fr;padding-top:44px}
   .hero-copy{padding-bottom:12px}
   .hero-visual{width:min(80%,380px)}
   .chip-a{left:-10px}.chip-b{right:-10px}
@@ -536,7 +517,7 @@ em{font-style:italic;color:var(--gold-t)}
   .rail-ctrl .rbtn{display:none}
 }
 @media (max-width:560px){
-  .hide-s{display:none}.logo{font-size:1.05rem}.btn{padding:14px 22px}
+  .btn{padding:14px 22px}
   .hero-trust{font-size:.75rem}.hero-trust li{padding-inline:10px}
   .fan .ph{width:34vw}.statement{max-width:none}
   .bento-c{grid-template-columns:1fr;grid-auto-rows:clamp(170px,48vw,230px)}
@@ -556,9 +537,7 @@ JS = r'''
 (function(){
   var d=document,root=d.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
   root.classList.add('js');
-  var nav=d.getElementById('nav');
-  var top=d.getElementById('top');
-  function onScroll(){nav.classList.toggle('show',scrollY>top.offsetHeight+120);nav.setAttribute('aria-hidden',scrollY>top.offsetHeight+120?'false':'true');words();par()}
+  function onScroll(){words();par()}
   /* un seul moment d'écriture : le laser dévoile la photo du héros */
   var hv=d.getElementById('heroVisual'),hero=d.getElementById('hero');
   if(!rm){requestAnimationFrame(function(){hero.classList.add('laser')})}
