@@ -24,6 +24,9 @@
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
 
+- **🧾 Devis Arnold — 10 verres à whisky (03/10)** : préparé et ENREGISTRÉ pour le gérant seul, **rien dans le site**.
+  4 + 6 verres = 181,70 € − 10 % = **163,53 €**, livraison offerte. Fichier `docs/devis/arnold-verres-whisky.md`.
+  **À lui redonner quand il le demande** ; créer le vrai devis dans Gestion seulement sur son ordre.
 - **🍷🥂 Verre à vin + flûte — même parcours que la carafe** (29/09 soir) : maquettes FAITES
   (https://claude.ai/artifact/79y5nzvqvPMzp9VvTEs1c2 et https://claude.ai/artifact/GfwRCqS9CEukTrmuSwmsRB),
   ✅ **EN LIGNE le 29/09 soir** (« Tu peux appliquer »), carafe passée en facultatif en même temps.
