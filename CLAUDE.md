@@ -2636,6 +2636,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > compte + panier + menu à droite, menu complet dessous) et le pied de page garde `footer-logo` 190 px. Jamais de
 > logo redessiné, recadré, redimensionné ou « de remplacement », jamais la capture d'écran qu'il envoie pour montrer.
 > On modernise UNIQUEMENT le contenu de la page. v3 de la maquette corrigée dans ce sens.
+> ⛔ **JAMAIS une copie basse qualité du logo** (capture d'écran, recadrage d'un e-mail, icône `/icon` 256 px) — refusé
+> deux fois le 04/10. SEUL le fichier original (`IMG_6758.jpg` à sa source) est accepté. Tant qu'il n'est pas
+> téléchargeable depuis l'environnement (`cdn.shopify.com` absent de l'accès réseau personnalisé), la maquette garde
+> l'adresse source telle quelle et on n'y touche pas.
 > Gérant : « utilise ce qu'on a installé aujourd'hui pour faire une maquette de la page d'accueil, plus
 > moderne, plus fluide, unique, même thème, mêmes couleurs ». Faite avec les skills Impeccable + UI UX Pro Max.
 - **Fichier** : `docs/maquettes/accueil-moderne.html` (+ `.fragment.html` pour l'artifact), générateur
