@@ -256,3 +256,37 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #bijouxgraves #cristal3d #cadeaupersonnalise #ideecadeau
+
+---
+
+## Vidéos 20 et 21 — « Gros plans » : bijoux & blocs de cristal (03/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/20-bijoux-gros-plans-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 29,6 s | 8,1 Mo |
+| `docs/videos/20-bijoux-gros-plans-720x1280.mp4` | 720 × 1280 (légère) | 29,6 s | 2,1 Mo |
+| `docs/videos/21-cristal-gros-plans-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 32,7 s | 6,2 Mo |
+| `docs/videos/21-cristal-gros-plans-720x1280.mp4` | 720 × 1280 (légère) | 32,7 s | 1,7 Mo |
+
+- **Source** : `tools/video/pub_gros_plans_20_21.py` (`python3 … 20 21`). Zones de sécurité TikTok/Instagram respectées.
+- **Demande du gérant** : « deux vidéos, pas les mêmes produits » → « bijoux » + « bloc de cristal ».
+- ⚠️ **Aucune photo gravée nouvelle n'existe** : ce sont les MÊMES pièces que les vidéos 10/17/19, avec un
+  traitement nouveau « gros plan sur la gravure → recul sur la pièce entière » (+ légende de ce qui est gravé).
+- 🔴 `collier-double-coeur-5.jpg` est une photo **vierge** (aucune gravure) : écartée ici, mais elle figurait par
+  erreur dans les vidéos 17 et 19.
+- **Produits 20** : Collier Cœur à graver (3 photos) · Collier Cœur & 2 plaques (2) · Collier 3 Cœurs entrelacés · Bracelet Femme Acier · Collier Double Cœur · Bracelet cordon à plaque.
+- **Produits 21** : Cristal Photo 3D Horizontal (famille, couple, amis, couple 2) · Vertical (enfant & chat, femme, enfant & chien, jeunes, couple).
+
+### Descriptions à copier-coller (livrées le 03/10/2026)
+
+**Vidéo 20 — Bijoux, la gravure de près** (Collier Cœur à graver, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Double Cœur, Bracelet cordon à plaque, Bracelet Femme Acier)
+> Un prénom, une date, un mot : regardez la gravure de près ✨ Chaque bijou est personnalisé et gravé à la commande, dans notre atelier 💛 Le détail qui rend un cadeau unique 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijouxpersonnalises #gravure #cadeaupersonnalise #ideecadeau
+
+**Vidéo 21 — Cristal Photo 3D, le souvenir de près** (Cristal Photo 3D horizontal et vertical)
+> Votre plus belle photo, gravée en 3D dans le cristal ✨ Chaque bloc est réalisé à la commande, dans notre atelier 💛 Un souvenir qui ne s'efface pas 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cristal3d #cadeaupersonnalise #souvenir #ideecadeau
