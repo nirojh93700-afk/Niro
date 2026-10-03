@@ -1,3 +1,14 @@
+## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
+> Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
+> à la suite : sa capture, un e-mail, l'icône du site) : « quand je te dis de pas faire, tu le fais pas,
+> recommence pas pour la prochaine fois sur un autre truc ».
+- Dès qu'il dit de NE PAS faire quelque chose, c'est interdit sur-le-champ, pour toute la suite et pour TOUS les sujets.
+- Il est interdit de chercher une **autre façon** d'obtenir le même résultat (autre fichier, autre copie, autre
+  chemin, autre outil). Si la seule façon autorisée est impossible : on s'arrête, on le dit en une phrase, on
+  attend sa décision.
+- En cas de doute sur ce qui est permis : demander AVANT d'agir, jamais après.
+- Écrire chaque interdiction dans ce fichier le jour même, pour que toutes les conversations la respectent.
+
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
 > informations… j'ai pas la date, qu'est-ce que je grave ? ». Une commande sur devis n'a pas de `spec` :
