@@ -142,6 +142,29 @@ def build():
 </div>
 '''
     h = cut(h, '<div class="perso">', '<div class="qty-row">', NEW)
+    # ÉDITION LIMITÉE, comme la carafe (demande du 03/10) : étiquette sur la fiche, accroche,
+    # description, et le même bandeau sombre & or que la carafe sur l'accueil.
+    h = h.replace('<div class="stars">★★★★★ <span>Nouveau</span></div>',
+                  '<div class="stars">★★★★★ <span class="lim-badge"><span class="lim-dot"></span>Édition limitée</span></div>', 1)
+    h = h.replace("Grand gobelet isotherme avec anse et paille, gardé chaud ou froid des heures. Gravé selon vos envies.",
+                  "Grand gobelet isotherme avec anse et paille, gardé chaud ou froid des heures. Gravé selon vos envies — édition limitée.", 1)
+    h = h.replace('<div class="npay">ou en plusieurs fois avec PayPal / Klarna</div>',
+                  '<div class="npay">ou en plusieurs fois avec PayPal / Klarna</div>\n      <p class="lim-note">✦ Édition limitée : série gravée à la main, en quantité limitée — une fois épuisée, elle n\'est pas reconduite.</p>', 1)
+    h = h.replace("<li><strong>Coloris :</strong> Crème, Blanc, Bleu marine, Rose</li>",
+                  "<li><strong>Édition limitée</strong> — série gravée à la main, en quantité limitée</li>\n        <li><strong>Coloris :</strong> Crème, Blanc, Bleu marine, Rose</li>", 1)
+    h = h.replace("<p><strong>Un grand gobelet isotherme 40 oz (1,1 L)</strong>", "<p><strong>Un grand gobelet isotherme 40 oz (1,1 L), gravé à votre façon — édition limitée.</strong>", 1)
+    BAND = f'''<div class="lim-wrap"><div class="lim-flag">NOUVEAU — bandeau d'accueil</div>
+<div class="limed">
+  <div class="lm-txt">
+    <span class="lm-tag"><span class="lm-dot"></span> Édition limitée</span>
+    <h2>Le gobelet isotherme <em>gravé</em>, pour les boissons comme pour les souvenirs</h2>
+    <p>Grand gobelet 40 oz avec anse et paille, gravé à votre prénom, à votre dessin ou à votre photo. Quatre coloris, en quantité limitée.</p>
+    <a class="lm-cta" href="#prc">Découvrir le gobelet →</a>
+  </div>
+  <a class="lm-pic" href="#prc" aria-label="Découvrir le gobelet"><img src="{GC["rose"]["g"]}" alt="Gobelet isotherme gravé — édition limitée"></a>
+  <div class="lm-shine"></div>
+</div></div>'''
+    h = h.replace('<div class="wrap">', BAND + '\n  <div class="wrap">', 1)
     OLDADD = '<div class="add">Ajouter au panier</div>\n      </div>'
     assert OLDADD in h
     h = h.replace(OLDADD, '<button type="button" class="add prc-off" id="prc-add" disabled>Ajouter au panier</button>\n      </div>\n      <p class="prc-addhint" id="prc-addhint">Choisissez votre gravure principale (étape 1).</p>', 1)
@@ -191,7 +214,32 @@ def build():
 button.add{border:0;font:inherit;cursor:pointer;width:100%}
 .prc-addhint{margin:10px 0 0}
 .prc-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1811;color:#fff;padding:12px 18px;border-radius:12px;font-size:.88rem;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}.prc-toast.on{opacity:1}
-@media (max-width:720px){.prc-trois{grid-template-columns:1fr}.prc-grid-c{grid-template-columns:repeat(2,1fr)}}
+/* Édition limitée, comme la carafe */
+.lim-badge{display:inline-flex;align-items:center;gap:6px;color:#fff!important;background:linear-gradient(135deg,#c9a24b,#a98935);font-size:.72rem!important;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border-radius:999px;vertical-align:middle}
+.lim-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:lmpulse 1.8s infinite}
+.lim-note{margin:8px 0 0;font-size:13px;color:#7c5f1f;background:#fff7e6;border:1px solid var(--gold-l);border-radius:10px;padding:9px 12px}
+.lim-wrap{position:relative;margin:26px 40px 0;border:2px dashed #d6b25a;border-radius:20px;padding:14px}
+.lim-flag{position:absolute;top:-11px;left:14px;background:#d6b25a;color:#1d1811;font-size:.66rem;font-weight:800;letter-spacing:.06em;padding:3px 9px;border-radius:999px;text-transform:uppercase}
+.limed{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(150deg,#241a0c,#120c05 75%);color:#f5efe2;display:grid;grid-template-columns:1.15fr .85fr;min-height:230px;box-shadow:0 14px 40px rgba(36,26,12,.28);animation:lmglow 3.6s ease-in-out infinite}
+@keyframes lmglow{0%,100%{box-shadow:0 14px 40px rgba(36,26,12,.28)}50%{box-shadow:0 16px 52px rgba(201,162,75,.4)}}
+.limed .lm-txt{padding:26px 24px;display:flex;flex-direction:column;justify-content:center;gap:12px;z-index:2}
+.limed .lm-tag{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:#e2c67e;border:1px solid rgba(226,198,126,.5);border-radius:999px;padding:7px 14px;font-weight:700;align-self:flex-start}
+.limed .lm-dot{width:7px;height:7px;border-radius:50%;background:#e2c67e;animation:lmpulse 1.8s infinite}
+@keyframes lmpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.limed h2{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:clamp(21px,4.4vw,30px);line-height:1.15;color:#fff;font-weight:600}
+.limed h2 em{font-style:normal;background:linear-gradient(90deg,#e2c67e,#f6e7bd,#e2c67e,#f6e7bd,#e2c67e);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:lmshimmer 3s linear infinite}
+@keyframes lmshimmer{to{background-position:-200% center}}
+.limed p{margin:0;font-size:13.5px;color:#cdbfa4;max-width:34ch}
+.limed .lm-cta{align-self:flex-start;background:linear-gradient(135deg,#c9a24b,#a98935);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(201,162,75,.4);animation:lmbtn 2.4s ease-in-out infinite}
+@keyframes lmbtn{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.limed .lm-pic{position:relative;min-height:200px;display:block}
+.limed .lm-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:lmzoom 9s ease-in-out infinite}
+@keyframes lmzoom{0%,100%{transform:scale(1.03)}50%{transform:scale(1.11)}}
+.limed .lm-pic::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#120c05,rgba(18,12,5,0) 44%);z-index:1}
+.limed .lm-shine{position:absolute;top:-40%;left:-30%;width:36%;height:180%;background:linear-gradient(100deg,transparent,rgba(255,244,214,.13),transparent);transform:rotate(12deg);animation:lmsweep 4.5s ease-in-out infinite;z-index:2;pointer-events:none}
+@keyframes lmsweep{0%{left:-36%}55%{left:110%}100%{left:110%}}
+@media(max-width:560px){.limed{grid-template-columns:1fr}.limed .lm-pic{order:-1;min-height:160px}.limed .lm-pic::before{background:linear-gradient(0deg,#120c05 6%,rgba(18,12,5,0) 55%)}}
+@media (max-width:720px){.lim-wrap{margin:22px 16px 0}.prc-trois{grid-template-columns:1fr}.prc-grid-c{grid-template-columns:repeat(2,1fr)}}
 </style>
 '''
     SCRIPT = r'''<script>

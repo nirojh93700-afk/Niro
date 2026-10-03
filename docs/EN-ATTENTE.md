@@ -41,7 +41,8 @@
   qu'un « mets en ligne »** + la quantité en stock. Détail : `CLAUDE.md` § CONFIGURATEUR GOBELET.
   **03/10 : version « parcours guidé » demandée** (« retravailler la maquette comme pour les verres de vin ») →
   `docs/maquettes/gobelet-parcours-guide.html` (artifact https://claude.ai/artifact/KNBxJ9BAsss7oshCo2RJfC, générateur
-  `tools/maquettes/parcours-gobelet.py`) — **à valider par lui** : laquelle des deux versions mettre en ligne.
+  `tools/maquettes/parcours-gobelet.py`) — **à valider par lui** : laquelle des deux versions mettre en ligne. **03/10 : « il faut que ça soit une édition
+  limitée, comme la carafe »** → ajouté dans la maquette (étiquette, accroche, description, bandeau d'accueil sombre & or).
 
 ## 1. Messages / clients en attente
 - **🍸 Prospection bars & restaurants (26/09)** : e-mail v4 SANS prix, personnalisé par type + ville
