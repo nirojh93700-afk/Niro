@@ -174,7 +174,7 @@ En attente de SA décision :
 ## 5. Questions en attente de SA réponse
 
 - **Remboursement, palier du milieu** : après 24 h, retenue de **10 €** (valeur actuelle) ou **−10 %** ?
-- **Prix du gobelet 40 oz** : 34,90 € conseillé, prix barré 39,90 € — à confirmer.
+- **Prix du gobelet 40 oz** : ✅ **47,90 € net, livraison en plus** (fixé par le gérant le 03/10/2026, maquette à jour).
 - **Pack Bracelet** : à créer ou non dans les emballages.
 - **Fournisseur de boîtes (Guardidea-Rachel)** : en attente de ses tailles standard et prix pour les
   boîtes cristaux (≈25×20×15 cm) et verres 2 pièces (≈28×20×12 cm).

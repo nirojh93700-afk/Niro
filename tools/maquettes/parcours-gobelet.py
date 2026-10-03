@@ -18,7 +18,7 @@ import re, json
 ROOT = "/home/user/Niro"
 SRC = f"{ROOT}/docs/maquettes/gobelet-configurateur-final.html"
 OUT = f"{ROOT}/docs/maquettes/gobelet-parcours-guide.html"
-PRIX = 39.90
+PRIX = 47.90  # fixé par le gérant le 03/10/2026 (prix net, livraison en plus)
 EXTRA = 3
 
 # Légendes lues sur les planches (numérotation validée : dessins 1–74, cadres 75–103)
@@ -146,6 +146,8 @@ def build():
     # description, et le même bandeau sombre & or que la carafe sur l'accueil.
     h = h.replace('<div class="stars">★★★★★ <span>Nouveau</span></div>',
                   '<div class="stars">★★★★★ <span class="lim-badge"><span class="lim-dot"></span>Édition limitée</span></div>', 1)
+    h = re.sub(r'<div class="price">.*?</div>', '<div class="price"><span class="now">47,90 €</span><span class="lim-port">+ livraison (colis), calculée au panier</span></div>', h, count=1, flags=re.S)
+    h = h.replace('<span>Total</span><b id="prc-sum-tot">', '<span>Total (hors livraison)</span><b id="prc-sum-tot">', 1)
     h = h.replace("Grand gobelet isotherme avec anse et paille, gardé chaud ou froid des heures. Gravé selon vos envies.",
                   "Grand gobelet isotherme avec anse et paille, gardé chaud ou froid des heures. Gravé selon vos envies — édition limitée.", 1)
     h = h.replace('<div class="npay">ou en plusieurs fois avec PayPal / Klarna</div>',
@@ -161,7 +163,7 @@ def build():
     <p>Grand gobelet 40 oz avec anse et paille, gravé à votre prénom, à votre dessin ou à votre photo. Quatre coloris, en quantité limitée.</p>
     <a class="lm-cta" href="#prc">Découvrir le gobelet →</a>
   </div>
-  <a class="lm-pic" href="#prc" aria-label="Découvrir le gobelet"><img src="{GC["rose"]["g"]}" alt="Gobelet isotherme gravé — édition limitée"></a>
+  <a class="lm-pic" href="#prc" aria-label="Découvrir le gobelet"><img class="lm-bg" src="{GC["creme"]["g"]}" alt=""><img class="lm-main" src="{GC["creme"]["g"]}" alt="Gobelet isotherme gravé — édition limitée"></a>
   <div class="lm-shine"></div>
 </div></div>'''
     h = h.replace('<div class="wrap">', BAND + '\n  <div class="wrap">', 1)
@@ -217,6 +219,7 @@ button.add{border:0;font:inherit;cursor:pointer;width:100%}
 /* Édition limitée, comme la carafe */
 .lim-badge{display:inline-flex;align-items:center;gap:6px;color:#fff!important;background:linear-gradient(135deg,#c9a24b,#a98935);font-size:.72rem!important;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border-radius:999px;vertical-align:middle}
 .lim-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:lmpulse 1.8s infinite}
+.lim-port{font-size:13px;color:var(--ink-soft);font-weight:400;margin-left:10px}
 .lim-note{margin:8px 0 0;font-size:13px;color:#7c5f1f;background:#fff7e6;border:1px solid var(--gold-l);border-radius:10px;padding:9px 12px}
 .lim-wrap{position:relative;margin:26px 40px 0;border:2px dashed #d6b25a;border-radius:20px;padding:14px}
 .lim-flag{position:absolute;top:-11px;left:14px;background:#d6b25a;color:#1d1811;font-size:.66rem;font-weight:800;letter-spacing:.06em;padding:3px 9px;border-radius:999px;text-transform:uppercase}
@@ -232,13 +235,15 @@ button.add{border:0;font:inherit;cursor:pointer;width:100%}
 .limed p{margin:0;font-size:13.5px;color:#cdbfa4;max-width:34ch}
 .limed .lm-cta{align-self:flex-start;background:linear-gradient(135deg,#c9a24b,#a98935);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(201,162,75,.4);animation:lmbtn 2.4s ease-in-out infinite}
 @keyframes lmbtn{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.limed .lm-pic{position:relative;min-height:200px;display:block}
-.limed .lm-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:lmzoom 9s ease-in-out infinite}
+.limed .lm-pic{position:relative;min-height:300px;display:block;overflow:hidden}
+.limed .lm-pic img{position:absolute;inset:0;width:100%;height:100%}
+.limed .lm-pic .lm-bg{object-fit:cover;filter:blur(16px) brightness(.55);transform:scale(1.2)}
+.limed .lm-pic .lm-main{object-fit:contain;padding:14px 10px;box-sizing:border-box;z-index:1;animation:lmzoom 9s ease-in-out infinite}
 @keyframes lmzoom{0%,100%{transform:scale(1.03)}50%{transform:scale(1.11)}}
 .limed .lm-pic::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#120c05,rgba(18,12,5,0) 44%);z-index:1}
 .limed .lm-shine{position:absolute;top:-40%;left:-30%;width:36%;height:180%;background:linear-gradient(100deg,transparent,rgba(255,244,214,.13),transparent);transform:rotate(12deg);animation:lmsweep 4.5s ease-in-out infinite;z-index:2;pointer-events:none}
 @keyframes lmsweep{0%{left:-36%}55%{left:110%}100%{left:110%}}
-@media(max-width:560px){.limed{grid-template-columns:1fr}.limed .lm-pic{order:-1;min-height:160px}.limed .lm-pic::before{background:linear-gradient(0deg,#120c05 6%,rgba(18,12,5,0) 55%)}}
+@media(max-width:560px){.limed{grid-template-columns:1fr}.limed .lm-pic{order:-1;min-height:320px}.limed .lm-pic::before{background:linear-gradient(0deg,#120c05 6%,rgba(18,12,5,0) 55%)}}
 @media (max-width:720px){.lim-wrap{margin:22px 16px 0}.prc-trois{grid-template-columns:1fr}.prc-grid-c{grid-template-columns:repeat(2,1fr)}}
 </style>
 '''
