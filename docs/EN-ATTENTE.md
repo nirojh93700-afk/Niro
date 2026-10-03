@@ -8,6 +8,12 @@
 ---
 
 ## 0. Côté gérant, après mise en ligne
+- **Devis : code promo saisi par le client (03/10)** — code ÉCRIT ET TESTÉ mais **PAS en ligne** (attend « applique ») :
+  `docs/patches/devis-code-promo.patch` (`git apply` puis `npm run build` et `npm run test-remise-devis`). Maquette :
+  `docs/maquettes/devis-livraison-promo.html` (artifact https://claude.ai/artifact/BxD8j2R9pfhEtex6B5Kvxi) — montre aussi le
+  choix domicile / point relais, **pas encore construit** (poids à saisir par ligne de devis). Dossier Simon Pascal
+  (clé USB 64 Go, besoin le 13/10) : le mail « inscris-toi sur le site, puis saisis ton code sur le devis » ne part
+  qu'une fois le code promo en ligne.
 - **Verre à vin 47 cl** : ✅ **EN LIGNE le 25/09** (« Applique », commit `ecc373c`). À faire :
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).
