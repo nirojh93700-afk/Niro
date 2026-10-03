@@ -32,14 +32,37 @@ IMGS = {  # clé CSS -> (fichier, largeur max)
  "c-deco": ("arbre-vie-rond-1.jpg", 900),
  "at1": ("cristal-v-couple.jpg", 700),
  "at2": ("verre_vin_exemple_dale.jpg", 640),
- "m1": ("collier-coeur-grave-2.jpg", 420), "m2": ("collier-double-coeur-3.jpg", 420),
- "m3": ("bracelet-cordon-plaque-4.jpg", 420), "m4": ("collier-coeur-plaques-2.jpg", 420),
- "m5": ("bracelet-femme-acier-grave.jpg", 420), "m6": ("cristal-h-amis.jpg", 420),
- "m7": ("cristal-v-enfant-chien.jpg", 420), "m8": ("cristal-v-jeunes.jpg", 420),
- "m9": ("cristal-h-demo-couple.jpg", 420), "m10": ("verre_a_whisky_exemple_fond.jpg", 420),
- "m11": ("couverts_enfants_ex_prenom.jpg", 420), "m12": ("veilleuse-prenom-1.jpg", 420),
- "m13": ("plaque-naissance-fille-1.jpg", 420), "m14": ("porte-cles-coeur-demo.jpg", 420),
+ "b1": ("collier-3coeurs-3.jpg", 560), "b2": ("collier-coeur-plaques-1.jpg", 560),
+ "b3": ("collier-coeur-grave-2.jpg", 560), "b4": ("collier-double-coeur-6.jpg", 560),
+ "b5": ("bracelet-femme-acier-grave.jpg", 560), "b6": ("bracelet-cordon-plaque-4.jpg", 560),
+ "bhero": ("collier-coeur-plaques-2.jpg", 900),
+ "w00": ("cristal-v-femme.jpg", 400),
+ "w01": ("collier-3coeurs-3.jpg", 400),
+ "w02": ("carafe_gravee.jpg", 400),
+ "w03": ("bracelet-cordon-plaque-4.jpg", 400),
+ "w04": ("arbre-vie-rond-1.jpg", 400),
+ "w05": ("collier-coeur-plaques-1.jpg", 400),
+ "w06": ("verre_vin_exemple_dale.jpg", 400),
+ "w07": ("plaque-naissance-coeur-1.jpg", 400),
+ "w10": ("bracelet-femme-acier-grave.jpg", 400),
+ "w11": ("cristal-h-amis.jpg", 400),
+ "w12": ("collier-coeur-grave-2.jpg", 400),
+ "w13": ("bougeoir-lotus-1.jpg", 400),
+ "w14": ("verre_a_whisky_exemple_face.jpg", 400),
+ "w15": ("collier-double-coeur-6.jpg", 400),
+ "w16": ("cle_usb_en_bois_4gb_avec_boite_en_bois.jpg", 400),
+ "w17": ("porte-serviettes-1.jpg", 400),
+ "w20": ("collier_plaque_a_graver_acier_noir.jpg", 400),
+ "w21": ("flute_ambiance.jpg", 400),
+ "w22": ("veilleuse-prenom-1.jpg", 400),
+ "w23": ("bracelet-perles-pastille-1.jpg", 400),
+ "w24": ("cristal-v-enfant-chien.jpg", 400),
+ "w25": ("piece_laiton.jpg", 400),
+ "w26": ("couverts_enfants_ex_prenom.jpg", 400),
+ "w27": ("collier-pastille-1.jpg", 400),
 }
+
+WALL = [[('cristal-v-femme.jpg', 'Cristal Photo 3D — Vertical', 'dès 39,90 €'), ('collier-3coeurs-3.jpg', 'Collier 3 Cœurs entrelacés à graver', '30,51 €'), ('carafe_gravee.jpg', 'Carafe à whisky gravée', '54,90 €'), ('bracelet-cordon-plaque-4.jpg', 'Bracelet cordon à plaque gravée', '17,91 €'), ('arbre-vie-rond-1.jpg', 'Veilleuse Arbre de Vie Ronde', '29,90 €'), ('collier-coeur-plaques-1.jpg', 'Collier Cœur & 2 plaques à graver', 'dès 29,61 €'), ('verre_vin_exemple_dale.jpg', 'Verre à vin gravé', 'dès 15,90 €'), ('plaque-naissance-coeur-1.jpg', 'Plaque de naissance cœur', '11,90 €')], [('bracelet-femme-acier-grave.jpg', 'Bracelet Femme Acier', '22,41 €'), ('cristal-h-amis.jpg', 'Cristal Photo 3D — Horizontal', 'dès 39,90 €'), ('collier-coeur-grave-2.jpg', 'Collier Cœur à graver recto-verso', '30,51 €'), ('bougeoir-lotus-1.jpg', 'Bougeoir Fleur de Lotus', '16,90 €'), ('verre_a_whisky_exemple_face.jpg', 'Verre à whisky portrait personnalisé', 'dès 19,90 €'), ('collier-double-coeur-6.jpg', 'Collier Double Cœur à graver', 'dès 29,61 €'), ('cle_usb_en_bois_4gb_avec_boite_en_bois.jpg', 'Clé USB Bois — Coffret', '24,90 €'), ('porte-serviettes-1.jpg', 'Porte-serviettes en bois — fleur', '11,90 €')], [('collier_plaque_a_graver_acier_noir.jpg', 'Collier Plaque Acier', '26,91 €'), ('flute_ambiance.jpg', 'Flûte à champagne gravée', 'dès 17,90 €'), ('veilleuse-prenom-1.jpg', 'Veilleuse Arbre de Vie au prénom', '34,90 €'), ('bracelet-perles-pastille-1.jpg', 'Bracelet perles à pastille gravée', '30,51 €'), ('cristal-v-enfant-chien.jpg', 'Cristal Photo 3D — Vertical', 'dès 39,90 €'), ('piece_laiton.jpg', 'Pièce ronde laiton à graver', '14,90 €'), ('couverts_enfants_ex_prenom.jpg', 'Couverts enfants personnalisés', '34,90 €'), ('collier-pastille-1.jpg', 'Collier Pastille à graver recto-verso', '27,81 €')]]
 
 def data_uri(fn, w):
     im = Image.open(os.path.join(PROD, fn)).convert("RGB")
@@ -47,6 +70,18 @@ def data_uri(fn, w):
         im = im.resize((w, int(im.height * w / im.width)), Image.LANCZOS)
     b = io.BytesIO(); im.save(b, "JPEG", quality=70, optimize=True, progressive=True)
     return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
+
+LOGO_SOURCE = "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111"  # le logo du site (Header.jsx)
+def logo_uri():
+    # Le fichier ORIGINAL du logo, en pleine qualité, s'il est posé dans docs/maquettes/assets/ ;
+    # sinon l'adresse source du site (jamais une capture d'écran).
+    for n in ("logo-source.png", "logo-source.jpg", "logo-source.jpeg", "logo-source.webp"):
+        f = os.path.join(OUT, "assets", n)
+        if os.path.exists(f):
+            mime = "image/png" if n.endswith("png") else "image/webp" if n.endswith("webp") else "image/jpeg"
+            return f"data:{mime};base64," + base64.b64encode(open(f, "rb").read()).decode()
+    return LOGO_SOURCE
+LOGO = logo_uri()
 
 IMG_CSS = "\n".join(f".i-{k}{{background-image:url({data_uri(f, w)})}}" for k, (f, w) in IMGS.items())
 
@@ -74,23 +109,31 @@ def tile(k, name, price, badge=""):
       <div class="pt-img">{ph(k, name)}{b}<button class="fav" type="button" aria-label="Garder pour plus tard">{ic("heart")}</button><span class="pt-cta">Personnaliser {ic("arrow")}</span></div>
       <div class="pt-meta"><span class="pt-name">{name}</span><span class="pt-price">{price}</span></div></a>'''
 
+def wall_rows():
+    out = []
+    for r, row in enumerate(WALL):
+        tiles = "".join(f'<a class="wt" href="#">{ph(f"w{r}{i}", n, "wt-img")}<span class="wt-l"><span>{n}</span><b>{pr}</b></span></a>' for i, (f, n, pr) in enumerate(row))
+        out.append(f'<div class="mq mq-{r}"><div class="mq-track">{tiles}<span class="mq-copy" aria-hidden="true">{tiles}</span></div></div>')
+    return "\n".join(out)
+
 def mq(keys):
     return "".join(ph(k, "Création gravée", "mq-i") for k in keys)
 
+WALLROWS = wall_rows()
 BODY = f'''
 <a class="skip" href="#contenu">Aller au contenu</a>
-<header class="nav" id="nav">
-  <a class="logo" href="#" aria-label="Niv Création — accueil"><span class="logo-mark">✦</span>Niv Création</a>
-  <nav class="nav-links" aria-label="Principal">
-    <a href="#">Boutique</a><a href="#">Bijoux</a><a href="#">Verres &amp; Carafes</a><a href="#">Mariage</a><a href="#">Cristal 3D</a><a href="#" class="hot">Noël</a><a href="#">Offrir</a>
-  </nav>
-  <div class="nav-tools">
-    <button type="button" aria-label="Rechercher">{ic("search")}</button>
-    <button type="button" aria-label="Favoris" class="hide-s">{ic("heart")}</button>
-    <button type="button" aria-label="Mon compte" class="hide-s">{ic("user")}</button>
-    <button type="button" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button>
-  </div>
+<header class="top" id="top">
+  <nav class="top-l" aria-label="Principal"><a href="#">Boutique</a><a href="#" class="strong">Bijoux</a><a href="#">Verres &amp; Carafes</a><a href="#">Mariage</a></nav>
+  <button type="button" class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <a class="logo-card" href="#" aria-label="Niv Création — accueil"><img src="{LOGO}" alt="Niv Création — Atelier de personnalisation" ></a>
+  <div class="top-r"><nav class="top-links" aria-label="Rubriques"><a href="#">Cristal 3D</a><a href="#" class="hot">Noël</a><a href="#">Offrir</a></nav>
+    <div class="tools"><button type="button" aria-label="Rechercher" class="hide-s">{ic("search")}</button><button type="button" aria-label="Mon compte">{ic("user")}</button><button type="button" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button></div></div>
 </header>
+<div class="nav" id="nav" aria-hidden="true">
+  <a class="nav-logo" href="#" tabindex="-1"><img src="{LOGO}" alt="" ></a>
+  <nav class="nav-links"><a href="#" tabindex="-1">Boutique</a><a href="#" tabindex="-1">Bijoux</a><a href="#" tabindex="-1">Verres &amp; Carafes</a><a href="#" tabindex="-1">Mariage</a><a href="#" tabindex="-1">Cristal 3D</a><a href="#" class="hot" tabindex="-1">Noël</a></nav>
+  <div class="nav-tools"><button type="button" tabindex="-1" aria-label="Rechercher">{ic("search")}</button><button type="button" tabindex="-1" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button></div>
+</div>
 
 <main id="contenu">
 <section class="hero" id="hero">
@@ -115,7 +158,26 @@ BODY = f'''
   </ul>
 </section>
 
-<section class="sec sec-rail" id="nouveautes" aria-labelledby="t-new">
+
+<section class="sec bijoux" aria-labelledby="t-bij">
+  <div class="bij-copy">
+    <h2 id="t-bij">Des bijoux gravés, <em>à leur prénom</em></h2>
+    <p>Colliers et bracelets en acier, gravés à la commande dans notre atelier : un prénom, une date, un mot qui compte.</p>
+    <div class="bij-cats"><a href="#">Femme</a><a href="#">Homme</a><a href="#">Couple</a><a href="#">Bébé</a></div>
+    <a class="btn btn-ink" href="#">Voir tous les bijoux {ic("arrow")}</a>
+    <p class="bij-note">Livraison offerte dès 45 € sur les bijoux.</p>
+  </div>
+  <div class="bij-grid">
+    {tile("b1","Collier 3 Cœurs entrelacés à graver","30,51 €","Best-seller")}
+    {tile("b2","Collier Cœur &amp; 2 plaques à graver","dès 29,61 €")}
+    {tile("b3","Collier Cœur à graver recto-verso","30,51 €")}
+    {tile("b4","Collier Double Cœur à graver","dès 29,61 €")}
+    {tile("b5","Bracelet Femme Acier","22,41 €")}
+    {tile("b6","Bracelet cordon à plaque gravée","17,91 €")}
+  </div>
+</section>
+
+<section class="sec sec-rail sec-sand" id="nouveautes" aria-labelledby="t-new">
   <div class="sec-head">
     <div><h2 id="t-new">Les dernières sorties de l’atelier</h2><p class="sub">Nos créations ajoutées ces derniers jours.</p></div>
     <div class="rail-ctrl"><a class="link" href="#">Voir toutes les nouveautés {ic("arrow")}</a>
@@ -192,10 +254,11 @@ BODY = f'''
   </div>
 </section>
 
-<section class="wall" aria-label="Toutes nos créations, d’un seul regard">
-  <div class="mq"><div class="mq-track mq-a">{mq(["m1","m6","m3","m10","m12","m4","m8","m14"])}{mq(["m1","m6","m3","m10","m12","m4","m8","m14"])}</div></div>
-  <div class="mq"><div class="mq-track mq-b">{mq(["m5","m9","m2","m11","m7","m13","m1","m6"])}{mq(["m5","m9","m2","m11","m7","m13","m1","m6"])}</div></div>
-  <div class="wall-foot"><a class="btn btn-ink" href="#">Parcourir toute la boutique {ic("arrow")}</a></div>
+<section class="wall" id="wall" aria-labelledby="t-wall">
+  <div class="wall-head"><h2 id="t-wall">Toutes nos créations, d’un seul regard</h2>
+  <p>Le mur défile tout seul — touchez une pièce pour l’arrêter et voir son nom et son prix ; sans clic, il repart au bout de quelques secondes.</p></div>
+  {WALLROWS}
+  <div class="wall-foot"><a class="btn btn-gold" href="#">Parcourir toute la boutique {ic("arrow")}</a></div>
 </section>
 
 <section class="proof" aria-label="Avis clients">
@@ -213,7 +276,7 @@ BODY = f'''
 </main>
 
 <footer class="foot">
-  <div class="foot-top"><span class="logo logo-f"><span class="logo-mark">✦</span>Niv Création</span>
+  <div class="foot-top"><img class="foot-logo" src="{LOGO}" alt="Niv Création — Atelier de personnalisation">
     <p>Atelier français · gravure laser · Paiement sécurisé par carte via Stripe</p></div>
   <p class="foot-pay">Payez en plusieurs fois sans frais — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).</p>
 </footer>
@@ -241,9 +304,24 @@ em{font-style:italic;color:var(--gold-t)}
 .ic{width:20px;height:20px;flex:none}
 .ph{background-size:cover;background-position:center;background-color:var(--sand)}
 
-/* ── En-tête flottant ── */
-.nav{position:fixed;z-index:50;top:14px;left:50%;translate:-50% 0;width:min(1180px,calc(100% - 32px));display:flex;align-items:center;gap:20px;padding:10px 14px 10px 22px;border-radius:999px;background:rgba(26,18,6,.82);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);color:var(--cream);box-shadow:0 10px 30px -12px rgba(26,18,6,.55),0 0 0 1px rgba(226,198,126,.18);transition:background .4s var(--ease)}
-.nav.scrolled{background:rgba(26,18,6,.94)}
+/* ── En-tête avec le logo (carte or & crème) ── */
+.top{position:relative;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;padding:14px clamp(20px,5vw,72px);background:var(--cream);border-bottom:1px solid var(--line)}
+.top-l,.top-links{display:flex;gap:2px;flex-wrap:wrap}
+.top-l a,.top-links a{padding:9px 12px;border-radius:999px;font-size:.88rem;font-weight:500;color:var(--ink);transition:background .25s}
+.top-l a:hover,.top-links a:hover{background:var(--sand)}
+.top-l a.strong{font-weight:700}.top-links a.hot{color:var(--red)}
+.top-r{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.tools{display:flex;gap:2px}.tools button{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;transition:background .25s}.tools button:hover{background:var(--sand)}
+.logo-card{display:block;line-height:0;border-radius:14px;box-shadow:0 10px 24px -14px rgba(26,18,6,.45);transition:transform .4s var(--ease)}
+.logo-card:hover{transform:translateY(-2px)}
+.logo-card img{display:block;height:clamp(70px,8vw,96px);width:auto;max-width:44vw;border-radius:14px;object-fit:contain;background:#efe9da}
+.burger{display:none;width:42px;height:42px;place-items:center;align-content:center;gap:5px;border-radius:50%}
+.burger span{display:block;width:20px;height:1.6px;background:var(--ink);border-radius:2px}
+.nav-logo img{display:block;height:34px;width:auto;border-radius:6px;background:#efe9da}
+
+/* ── En-tête flottant (apparaît au défilement) ── */
+.nav{position:fixed;z-index:50;top:14px;left:50%;translate:-50% -140%;opacity:0;pointer-events:none;width:min(1180px,calc(100% - 32px));display:flex;align-items:center;gap:20px;padding:10px 14px 10px 22px;border-radius:999px;background:rgba(26,18,6,.82);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);color:var(--cream);box-shadow:0 10px 30px -12px rgba(26,18,6,.55),0 0 0 1px rgba(226,198,126,.18);transition:translate .5s var(--ease),opacity .4s}
+.nav.show{translate:-50% 0;opacity:1;pointer-events:auto}
 .logo{display:inline-flex;align-items:center;gap:9px;font:600 1.18rem/1 var(--serif);letter-spacing:.01em;white-space:nowrap}
 .logo-mark{color:var(--gold);font-size:.95rem}
 .nav-links{display:flex;gap:4px;margin-inline:auto}
@@ -266,7 +344,7 @@ em{font-style:italic;color:var(--gold-t)}
 .link .ic{width:16px;height:16px}.link:hover{border-color:var(--gold-t);gap:12px}
 
 /* ── Hero ── */
-.hero{position:relative;background:radial-gradient(120% 90% at 78% 10%,#3a2a10 0,var(--ink2) 38%,var(--ink) 100%);color:var(--cream);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:center;gap:clamp(24px,5vw,80px);padding:clamp(120px,15vh,160px) clamp(20px,6vw,96px) 76px;min-height:min(100svh,860px);overflow:hidden}
+.hero{position:relative;background:radial-gradient(120% 90% at 78% 10%,#3a2a10 0,var(--ink2) 38%,var(--ink) 100%);color:var(--cream);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:center;gap:clamp(24px,5vw,80px);padding:clamp(48px,7vh,80px) clamp(20px,6vw,96px) 76px;min-height:min(calc(100svh - 124px),760px);overflow:hidden}
 .hero-glow{position:absolute;inset:auto -10% -30% 30%;height:70%;background:radial-gradient(closest-side,rgba(201,162,75,.22),transparent);pointer-events:none}
 .hero-copy{position:relative;z-index:2;padding-bottom:8px}
 .hero h1{font-size:clamp(2.7rem,6.6vw,5.6rem);line-height:1.02;letter-spacing:-.025em;color:var(--cream)}
@@ -328,6 +406,18 @@ em{font-style:italic;color:var(--gold-t)}
 .pt-more:hover{background:var(--ink3)}.pt-more:hover .ic{transform:translateX(8px)}
 @media (hover:none){.pt-cta{display:none}}
 
+/* bijoux au premier plan */
+.bijoux{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px);align-items:center}
+.bij-copy{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+.bij-copy h2{font-size:clamp(2rem,4vw,3.3rem);line-height:1.06}
+.bij-copy p{margin:0;color:var(--muted);max-width:42ch}
+.bij-cats{display:flex;flex-wrap:wrap;gap:8px}
+.bij-cats a{padding:9px 16px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:.88rem;transition:background .25s,color .25s,box-shadow .25s}
+.bij-cats a:hover{background:var(--ink);color:var(--cream);box-shadow:none}
+.bij-copy .bij-note{font-size:.85rem;color:var(--gold-t);font-weight:600}
+.bij-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.bij-grid .pt{flex:none}
+
 /* édition limitée */
 .limited{padding:0 clamp(20px,6vw,96px) clamp(56px,8vw,104px)}
 .limited-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);border-radius:32px;overflow:hidden;background:linear-gradient(115deg,var(--ink) 0,var(--ink2) 55%,#33260f 100%);color:var(--cream);min-height:440px}
@@ -386,14 +476,23 @@ em{font-style:italic;color:var(--gold-t)}
 .at-1{left:0;top:0;width:58%;height:88%}.at-2{right:0;bottom:0;width:46%;height:68%}
 .at-copy{display:flex;flex-direction:column;align-items:flex-start;gap:24px}.at-copy p{margin:0;color:var(--on-ink);max-width:42ch;font-size:1.05rem}
 
-/* mur */
-.wall{padding:clamp(48px,7vw,88px) 0 clamp(40px,6vw,72px);overflow:hidden}
-.mq{overflow:hidden;margin-bottom:14px;-webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
-.mq-track{display:flex;gap:14px;width:max-content}
-.mq-a{animation:mq 70s linear infinite}.mq-b{animation:mq 80s linear infinite reverse}
-.mq:hover .mq-track{animation-play-state:paused}
+/* mur : 3 rangées, comme sur le site */
+.wall{background:var(--ink);color:var(--cream);padding:clamp(56px,8vw,96px) 0 clamp(48px,7vw,80px);overflow:hidden}
+.wall-head{text-align:center;max-width:720px;margin:0 auto clamp(30px,4vw,44px);padding-inline:20px}
+.wall-head h2{font-size:clamp(1.9rem,4vw,3rem);line-height:1.1}
+.wall-head p{margin:14px auto 0;color:var(--on-ink);max-width:56ch}
+.mq{overflow:hidden;margin-bottom:14px;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.mq-track{display:flex;gap:14px;width:max-content;animation:mq 75s linear infinite}
+.mq-copy{display:contents}
+.mq-1 .mq-track{animation-direction:reverse;animation-duration:85s}.mq-2 .mq-track{animation-duration:95s}
+.mq:hover .mq-track,.mq.stop .mq-track{animation-play-state:paused}
 @keyframes mq{to{transform:translateX(calc(-50% - 7px))}}
-.mq-i{flex:none;width:clamp(130px,15vw,200px);aspect-ratio:1;border-radius:16px}
+.wt{position:relative;flex:none;width:clamp(130px,15vw,200px);aspect-ratio:1;border-radius:16px;overflow:hidden;outline:1px solid rgba(226,198,126,.18);outline-offset:-1px}
+.wt-img{position:absolute;inset:0;transition:transform .8s var(--ease)}
+.wt-l{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:3px;padding:24px 12px 11px;background:linear-gradient(0deg,rgba(26,18,6,.92),transparent);font-size:.78rem;font-weight:600;line-height:1.25;opacity:0;translate:0 10px;transition:opacity .35s,translate .45s var(--ease)}
+.wt-l b{font:600 .85rem/1 var(--serif);color:var(--gold-l)}
+.wt:hover .wt-img,.wt.show .wt-img{transform:scale(1.06)}
+.wt:hover .wt-l,.wt.show .wt-l,.wt:focus-visible .wt-l{opacity:1;translate:0 0}
 .wall-foot{display:flex;justify-content:center;margin-top:34px}
 
 /* avis + sur mesure + pied */
@@ -406,14 +505,16 @@ em{font-style:italic;color:var(--gold-t)}
 .custom h2{font-size:clamp(1.9rem,4.2vw,3.3rem);line-height:1.1}.custom p{margin:0;color:var(--muted)}
 .foot{background:var(--ink);color:var(--on-ink);padding:44px clamp(20px,6vw,96px) 100px;font-size:.9rem}
 .foot-top{display:flex;flex-wrap:wrap;gap:12px 36px;align-items:center;justify-content:space-between}
-.foot-top p{margin:0}.logo-f{color:var(--cream)}
+.foot-top p{margin:0}.foot-logo{display:block;height:64px;width:auto;border-radius:10px;background:#efe9da}
 .foot-pay{margin:22px 0 0;padding-top:20px;border-top:1px solid rgba(226,198,126,.16)}
 .ask{position:fixed;left:16px;bottom:16px;z-index:40;display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;background:var(--cream);color:var(--ink);font:600 .85rem/1 var(--sans);box-shadow:0 14px 30px -14px rgba(26,18,6,.55),0 0 0 1px var(--line);transition:transform .3s var(--ease)}
 .ask:hover{transform:translateY(-3px)}.ask .ic{width:17px;height:17px;color:var(--gold-d)}
 
 /* ── Adaptation ── */
 @media (max-width:1020px){
-  .nav-links{display:none}.nav{padding-left:18px}.nav-tools{margin-left:auto}
+  .nav-links{display:none}.nav{padding-left:14px}.nav-tools{margin-left:auto}
+  .top{grid-template-columns:auto 1fr auto;padding-block:10px}.top-l,.top-links{display:none}.burger{display:grid}.logo-card{justify-self:center}
+  .bijoux{grid-template-columns:1fr}.bij-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .hero{grid-template-columns:1fr;padding-top:112px}
   .hero-copy{padding-bottom:12px}
   .hero-visual{width:min(80%,380px)}
@@ -436,8 +537,8 @@ em{font-style:italic;color:var(--gold-t)}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .laser .arch,.laser .scan,.laser .laser-line,.mq-track{animation:none!important}
-  .mq{overflow-x:auto;-webkit-mask:none;mask:none}.mq-track{width:max-content}
+  .laser .arch,.laser .scan,.laser .laser-line,.mq-track{animation:none!important}.wt-l{opacity:1;translate:0 0}
+  .mq{overflow-x:auto;-webkit-mask:none;mask:none}
   .js .statement .w{opacity:1}
   *{transition-duration:.01ms!important}
 }
@@ -448,7 +549,8 @@ JS = r'''
   var d=document,root=d.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
   root.classList.add('js');
   var nav=d.getElementById('nav');
-  function onScroll(){nav.classList.toggle('scrolled',scrollY>40);words();par()}
+  var top=d.getElementById('top');
+  function onScroll(){nav.classList.toggle('show',scrollY>top.offsetHeight+120);nav.setAttribute('aria-hidden',scrollY>top.offsetHeight+120?'false':'true');words();par()}
   /* un seul moment d'écriture : le laser dévoile la photo du héros */
   var hv=d.getElementById('heroVisual'),hero=d.getElementById('hero');
   if(!rm){requestAnimationFrame(function(){hero.classList.add('laser')})}
@@ -468,6 +570,11 @@ JS = r'''
     for(var i=0;i<ws.length;i++)ws[i].classList.toggle('on',i<n)}
   /* léger décalage du visuel du héros */
   function par(){if(rm||!hv)return;var y=Math.min(scrollY,700);hv.style.translate='0 '+(y*-.06)+'px'}
+  /* mur : toucher une pièce l'arrête et montre nom + prix, il repart après 4 s */
+  d.querySelectorAll('.mq').forEach(function(row){var tm;
+    row.addEventListener('click',function(e){var t=e.target.closest('.wt');if(!t)return;
+      if(!t.classList.contains('show')){e.preventDefault();row.querySelectorAll('.wt.show').forEach(function(x){x.classList.remove('show')});t.classList.add('show');row.classList.add('stop');
+        clearTimeout(tm);tm=setTimeout(function(){row.classList.remove('stop');t.classList.remove('show')},4000)}})});
   addEventListener('scroll',onScroll,{passive:true});onScroll();
 })();
 '''
