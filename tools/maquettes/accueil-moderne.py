@@ -125,12 +125,12 @@ BODY = f'''
 <header class="top" id="top">
   <nav class="top-l" aria-label="Principal"><a href="#">Boutique</a><a href="#" class="strong">Bijoux</a><a href="#">Verres &amp; Carafes</a><a href="#">Mariage</a></nav>
   <button type="button" class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-  <a class="logo-card" href="#" aria-label="Niv Création — accueil"><img src="{LOGO}" alt="Niv Création — Atelier de personnalisation" ></a>
+  <a class="logo-card" href="#" aria-label="Niv Création — accueil"><img src="{LOGO}" alt="Niv Création — Atelier de personnalisation" onerror="this.parentNode.classList.add('noimg')"><span class="logo-fb" aria-hidden="true"><b>NiV</b><i>CRÉATION</i><small>Atelier de personnalisation</small></span></a>
   <div class="top-r"><nav class="top-links" aria-label="Rubriques"><a href="#">Cristal 3D</a><a href="#" class="hot">Noël</a><a href="#">Offrir</a></nav>
     <div class="tools"><button type="button" aria-label="Rechercher" class="hide-s">{ic("search")}</button><button type="button" aria-label="Mon compte">{ic("user")}</button><button type="button" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button></div></div>
 </header>
 <div class="nav" id="nav" aria-hidden="true">
-  <a class="nav-logo" href="#" tabindex="-1"><img src="{LOGO}" alt="" ></a>
+  <a class="nav-logo" href="#" tabindex="-1"><img src="{LOGO}" alt="" onerror="this.parentNode.classList.add('noimg')"><span class="logo-fb" aria-hidden="true"><b>NiV</b><i>CRÉATION</i><small>Atelier de personnalisation</small></span></a>
   <nav class="nav-links"><a href="#" tabindex="-1">Boutique</a><a href="#" tabindex="-1">Bijoux</a><a href="#" tabindex="-1">Verres &amp; Carafes</a><a href="#" tabindex="-1">Mariage</a><a href="#" tabindex="-1">Cristal 3D</a><a href="#" class="hot" tabindex="-1">Noël</a></nav>
   <div class="nav-tools"><button type="button" tabindex="-1" aria-label="Rechercher">{ic("search")}</button><button type="button" tabindex="-1" aria-label="Panier" class="bag">{ic("bag")}<span class="bag-n">2</span></button></div>
 </div>
@@ -276,7 +276,7 @@ BODY = f'''
 </main>
 
 <footer class="foot">
-  <div class="foot-top"><img class="foot-logo" src="{LOGO}" alt="Niv Création — Atelier de personnalisation">
+  <div class="foot-top"><span class="foot-logo-w"><img class="foot-logo" src="{LOGO}" alt="Niv Création — Atelier de personnalisation" onerror="this.parentNode.classList.add('noimg')"><span class="logo-fb" aria-hidden="true"><b>NiV</b><i>CRÉATION</i><small>Atelier de personnalisation</small></span></span>
     <p>Atelier français · gravure laser · Paiement sécurisé par carte via Stripe</p></div>
   <p class="foot-pay">Payez en plusieurs fois sans frais — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).</p>
 </footer>
@@ -317,6 +317,14 @@ em{font-style:italic;color:var(--gold-t)}
 .logo-card img{display:block;height:clamp(70px,8vw,96px);width:auto;max-width:44vw;border-radius:14px;object-fit:contain;background:#efe9da}
 .burger{display:none;width:42px;height:42px;place-items:center;align-content:center;gap:5px;border-radius:50%}
 .burger span{display:block;width:20px;height:1.6px;background:var(--ink);border-radius:2px}
+.logo-fb{display:none}
+.noimg img{display:none}
+.noimg .logo-fb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 26px;border-radius:14px;background:linear-gradient(145deg,#f1ead9,#e3d8bf);color:#9a7a2c;line-height:1;text-align:center}
+.logo-fb b{font:500 2rem/1 var(--serif);letter-spacing:.08em}
+.logo-fb i{font-style:normal;font:600 .8rem/1 var(--sans);letter-spacing:.18em;border-top:1px solid #b8964a;padding-top:5px;color:#7c6224}
+.logo-fb small{white-space:nowrap;font:500 .5rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;color:#6a5a40}
+.nav-logo.noimg .logo-fb{padding:5px 12px;border-radius:7px}.nav-logo .logo-fb b{font-size:1rem}.nav-logo .logo-fb i{font-size:.45rem;padding-top:2px}.nav-logo .logo-fb small{display:none}
+.foot-logo-w{display:inline-flex}
 .nav-logo img{display:block;height:34px;width:auto;border-radius:6px;background:#efe9da}
 
 /* ── En-tête flottant (apparaît au défilement) ── */
