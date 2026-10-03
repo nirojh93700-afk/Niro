@@ -2616,3 +2616,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   aux 4 éléments inclus, ne pas retirer l'onglet Texte seul ni le sélecteur de police.
 - **Reste à faire quand il dira « mets en ligne »** : intégrer tout ça dans la vraie fiche (`products.js` : rubrique « Écrire un nom » + planches cadres + onglet « Texte seul » + le champ police branché sur `src/lib/fonts.js` ; `GobeletComposer.jsx`/`GobeletPreview.jsx` : familles + champ nom + image principale obligatoire ; checkout : cadres/textes = éléments comptés comme les motifs, 1 inclus puis +3 €/élément). Reproduire FIDÈLEMENT la maquette finale.
 - **COMMANDE = récap écrit + IMAGE d'aperçu (demandé par la gérante 22/07)** : chaque commande doit fournir à la gérante (1) un **récap écrit** de la composition (par élément : côté + zone + n° de motif OU texte/nom + couleur + police) dans Gestion → Commandes ET dans l'e-mail d'alerte, ET (2) une **image d'aperçu générée** (le gobelet avec les numéros/noms placés, comme la fenêtre 3D) **jointe à la commande / à l'e-mail**. Le n° renvoie aux planches numérotées pour savoir quel dessin graver.
+
+## 🎨 SKILLS DE DESIGN INSTALLÉS DANS LE DÉPÔT — 03/10/2026
+> Demande du gérant : « installe pour que ça fonctionne dans toutes les conversations ». Copiés dans
+> **`.claude/skills/`** (chargés automatiquement à chaque conversation, rien à réinstaller) :
+> **`impeccable`** (pbakaus/impeccable 4.5.0, Apache 2.0 — design/critique/audit/finition d'interfaces) et
+> **`ui-ux-pro-max`** (nextlevelbuilder/ui-ux-pro-max-skill — base locale de styles/palettes/polices/règles UX,
+> `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<sujet>" --design-system -p "<projet>"`).
+- ⛔ **Ils n'autorisent PAS à toucher au site** : la règle « maquette d'abord, rien en ligne sans “applique” »
+  reste entière. Ils servent à CONCEVOIR (maquettes, audits). Leurs recommandations génériques (palette bleue,
+  style « Swiss ») ne remplacent JAMAIS la charte de la boutique (or #c9a24b / crème / encre) ni le gabarit
+  des fiches : en cas de conflit, CLAUDE.md gagne.
+- Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
