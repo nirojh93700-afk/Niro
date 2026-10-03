@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { toCents } from "@/lib/format";
-import { buildShippingOptions, resolveShippingConfig, EXPRESS_START } from "@/lib/shipping";
+import { EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
@@ -9,6 +9,7 @@ import { saveOrderSpec } from "@/lib/firebase";
 import { vacationActive, cadeauColisActif } from "@/lib/vacation";
 import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
 import { packagingExtra } from "@/lib/packaging";
+import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
 
 // Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
 // on tronque les textes trop longs et on retire les images "data:" (jamais stockées).
@@ -143,19 +144,9 @@ export async function POST(req) {
   }
 
   const lineItems = [];
-  let totalGrams = 0;
-  let subtotal = 0;
-  let parcelQty = 0; // nombre d'articles "déco" (colis) dans le panier
-  let glassQty = 0;  // nombre de verres (fragiles) — envoi croissant dédié
-  let letterOnly = true;
-  let tousBijouxLettre = true; // tous les articles sont des bijoux/petits objets (avant emballage)
-  let bijouEnBoite = false;    // au moins un bijou emballé dans une boîte rigide
-  let allFreeShip = true; // tous les articles ont la livraison offerte
-  let allPickup = true; // retrait proposé seulement si TOUS les articles sont éligibles (mariage)
-  // Livraison offerte par SEUIL sur colis (ex. verres : lot de 4 ≥ 45 € → offerte).
-  // Sûr : ne s'applique que si TOUS les colis du panier portent freeShipThreshold.
-  let allColisThreshFree = true;
-  let colisThresh = Infinity;
+  // Calcul du port PARTAGÉ avec les devis (src/lib/panierPort.js) : poids, sous-total, colis / lettre,
+  // verres, seuils de livraison offerte… (sorti tel quel le 03/10/2026, parité testée).
+  const etatPort = nouvelEtatPort();
   const boughtVariants = []; // pour décrémenter le stock après paiement
   // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
   // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
@@ -217,31 +208,10 @@ export async function POST(req) {
     // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle, emballage),
     // multiplié par la quantité → frais de port corrects pour n'importe quel panier.
     const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0);
-    totalGrams += unitGrams * quantity;
-    subtotal += unitPrice * quantity;
-    // 📦 Un bijou emballé dans une BOÎTE rigide (boîte cadeau, Pack Collier /
-    // Pack Bracelet) dépasse les 3 cm de la Lettre Suivie → il part en petit
-    // colis (tarif colis), comme partout ailleurs. Sac / microfibre restent
-    // plats → lettre. (Règle gérante, 31/08/2026 — alignée sur le marché.)
+    // 📦 Un bijou emballé dans une BOÎTE rigide (boîte cadeau, Pack Collier / Pack Bracelet) dépasse
+    // les 3 cm de la Lettre Suivie → il part en petit colis (règle gérante, 31/08/2026).
     const pkgBoite = (pkg.chosen || []).some((id) => /boite|pack/i.test(String(id)));
-    if (product.letter && pkgBoite) bijouEnBoite = true;
-    if (!product.letter) tousBijouxLettre = false;
-    if (!product.letter || pkgBoite) {
-      letterOnly = false;
-      parcelQty += quantity;
-    }
-    if (!product.letter) {
-      // Un produit « livraison toujours offerte » ne doit PAS annuler la
-      // gratuité au seuil : sinon un panier mixte (ex. couverts enfants
-      // « port offert » + carafe « livraison offerte dès 45 € ») facturait le
-      // port alors que les DEUX fiches promettent la livraison offerte.
-      if (product.freeShipping) { /* toujours offert → ne bloque rien */ }
-      else if (product.freeShipThreshold) colisThresh = Math.min(colisThresh, Number(product.freeShipThreshold));
-      else allColisThreshFree = false;
-    }
-    if (product.category === "verres") glassQty += quantity;
-    if (!product.freeShipping) allFreeShip = false;
-    if (!product.pickup) allPickup = false;
+    ajouterLignePort(etatPort, { product, unitGrams, unitPrice, quantity, pkgBoite });
 
     const descriptionParts = [variant.title];
     if (extra.amount > 0) {
@@ -336,7 +306,7 @@ export async function POST(req) {
         // CARTE CADEAU : on déduit au plus le SOLDE, plafonné au sous-total
         // (jamais de total négatif). Le solde est débité au webhook, une fois
         // le paiement réellement encaissé.
-        const useAmt = Math.min(pc.value, subtotal);
+        const useAmt = Math.min(pc.value, etatPort.subtotal);
         if (useAmt > 0.009) {
           appliedCode = promoCode;
           giftUsed = Math.round(useAmt * 100) / 100;
@@ -369,7 +339,7 @@ export async function POST(req) {
       const sessEmail = readSession(cookies().get(SESSION_COOKIE)?.value);
       if (sessEmail) {
         const { balance } = await getCagnotte(sessEmail);
-        const subtotalCents = toCents(subtotal);
+        const subtotalCents = toCents(etatPort.subtotal);
         const maxCents = Math.floor(subtotalCents * 0.5);      // plafond : 50 % du panier
         const useCents = Math.min(toCents(balance), maxCents); // jamais plus que le solde
         if (useCents > 0) {
@@ -420,27 +390,17 @@ export async function POST(req) {
       // Pour un point relais, cette adresse sert de contact (le colis part au
       // relais choisi sur le panier, enregistré à part sur la commande).
       shipping_address_collection: { allowed_countries: allowedCountries },
-      shipping_options: buildShippingOptions({
-        totalGrams, subtotal, parcelQty, glassQty, letterOnly,
-        bijouxOnly: tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
-        // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la
-        // promesse bijoux « offerte dès 45 € » — qui reste vraie même quand une
-        // boîte cadeau fait passer le bijou en petit colis (panier 100 % bijoux).
-        freeShipping: allFreeShip
-          || (allColisThreshFree && parcelQty > 0 && subtotal >= colisThresh)
-          || (tousBijouxLettre && bijouEnBoite && subtotal >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
+      shipping_options: optionsPort(etatPort, {
+        settings,
         country, // France (+ Monaco) = tarifs habituels ; sinon grille Europe par zone/poids
-        // Retrait proposé si un article mariage est marqué OU si le colis est
-        // lourd (≥ 2 kg), et seulement dans la zone autorisée.
-        pickupEligible: allPickup && pickupAllowed(postalCode, settings?.pickupZones),
-        // Express Chronopost : ouvert à partir du 24/09/2026, jamais pendant le
-        // mode « délai allongé » (on ne vend pas du 24/48 h avec des semaines de
-        // confection), et coupable via settings.shipping.expressOff.
+        // Retrait proposé si un article mariage est marqué OU si le colis est lourd (≥ 2 kg),
+        // et seulement dans la zone autorisée.
+        retraitOk: pickupAllowed(postalCode, settings?.pickupZones),
+        // Express Chronopost : ouvert à partir du 24/09/2026, jamais pendant le mode « délai allongé »
+        // (on ne vend pas du 24/48 h avec des semaines de confection), et coupable via settings.shipping.expressOff.
         express: Date.now() >= EXPRESS_START
           && !vacationActive(settings?.vacation)
           && settings?.shipping?.expressOff !== true,
-        config: settings?.shipping, // tarifs personnalisés (admin)
-        boxtal: settings?.boxtal, // option point relais (admin)
         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)
         relaisLabel,    // nom du point relais choisi (affiché dans Stripe)
         relaisCarrier,  // transporteur du point relais → tarif au poids correct

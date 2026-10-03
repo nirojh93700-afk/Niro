@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getQuote } from "@/lib/firebase";
 import DocumentActions from "@/components/DocumentActions";
+import { livraisonActive } from "@/lib/portDevis";
+import { indexVariantes } from "@/lib/indexVariantes";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +21,8 @@ export default async function DocumentPage({ params }) {
   if (!q) notFound();
   const isFacture = q.type === "facture";
   const titre = isFacture ? "Facture" : "Devis";
+  // Devis dont chaque ligne a un poids : le client choisit sa livraison sur cette page.
+  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items, await indexVariantes());
 
   return (
     <section className="section">
@@ -73,7 +77,7 @@ export default async function DocumentPage({ params }) {
           </table>
 
           <div style={{ textAlign: "right", marginTop: 16, fontSize: "1.2rem" }}>
-            <strong>Total : {euro(q.total)}</strong>
+            <strong>{avecChoix ? "Total des articles" : "Total"} : {euro(q.total)}</strong>
           </div>
           <div style={{ textAlign: "right", fontSize: "0.78rem", color: "var(--ink-soft)" }}>
             TVA non applicable, art. 293 B du CGI
@@ -90,7 +94,7 @@ export default async function DocumentPage({ params }) {
           )}
         </div>
 
-        <DocumentActions id={q.id} type={q.type} status={q.status} />
+        <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} />
       </div>
     </section>
   );

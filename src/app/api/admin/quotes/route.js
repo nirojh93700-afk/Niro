@@ -66,6 +66,11 @@ export async function POST(req) {
       price: Math.max(0, Math.round((parseFloat(it.price) || 0) * 100) / 100),
       // Article du stock à décompter au paiement (facultatif, 02/10/2026).
       ...(String(it.stockId || "").trim() ? { stockId: String(it.stockId).trim().slice(0, 80) } : {}),
+      // Poids d'UNE pièce en grammes (03/10/2026) : sert au calcul de la livraison choisie par le client.
+      ...(parseInt(it.weight, 10) > 0 ? { weight: Math.min(30000, parseInt(it.weight, 10)) } : {}),
+      // Produit du site auquel la ligne est rattachée (règles de livraison du site) + emballage en boîte rigide.
+      ...(String(it.variantId || "").trim() ? { variantId: String(it.variantId).trim().slice(0, 80) } : {}),
+      ...(it.boite === true ? { boite: true } : {}),
     }))
     .filter((it) => it.desc);
   if (!items.length) return Response.json({ error: "Ajoute au moins une ligne." }, { status: 400 });

@@ -8,23 +8,12 @@
 ---
 
 ## 0. Côté gérant, après mise en ligne
-- **Devis : code promo + livraison (domicile / point relais) choisis par le client (03/10)** — MAQUETTE VALIDÉE, **« option 1 »
-  choisie par le gérant** (calcul du port PARTAGÉ avec le panier). Code ÉCRIT, COMPILÉ (`npm run build` OK) et TESTÉ mais
-  **PAS en ligne : attend « applique »**. Patch : `docs/patches/devis-code-promo-et-livraison.patch` (18 fichiers ;
-  `git apply` → `npm run build` → `npm run test-remise-devis && npm run test-port-devis && npm run test-port-parite`).
-  Maquette : `docs/maquettes/devis-livraison-promo.html` (artifact https://claude.ai/artifact/BxD8j2R9pfhEtex6B5Kvxi).
-  · ⚠️ **TOUCHE `/api/checkout` (le paiement de la boutique)** : le calcul du port en est sorti tel quel dans
-  `src/lib/panierPort.js` ; parité prouvée par `test-port-parite` (6000 paniers aléatoires, ancien code figé ≡ nouveau).
-  Après mise en ligne : faire UN paiement test boutique (bijou, verre, carafe) pour revérifier les frais de port.
-  · Devis : chaque ligne = « Article du site » (poids, lettre/colis, seuil offert, verres… comme le site) OU ligne libre
-  avec poids saisi ; **poids toujours modifiable par le gérant** (grosses commandes) ; case « en boîte rigide » (colis) sur
-  les bijoux. Client : choix domicile / relais (même `RelaisPicker`), port recalculé CÔTÉ SERVEUR, code promo saisi par lui
-  (`/api/quote-promo`, remise sur les articles seulement). France + Monaco, pas d'express ni de retrait.
-  · Anciens devis (rien de rattaché / pas de poids) ou avec une ligne « Livraison » manuelle : fonctionnement d'AVANT.
-  · PAS construit (non demandé) : champ « prix de livraison imposé » pour une demande spéciale.
-  · Dossier Simon Pascal (clé USB 64 Go gravée « Suzanne & Louis 60 ans de mariage », 44,90 €, 1 clé, besoin le 13/10) :
-  devis à créer (ligne libre, poids 150 g) APRÈS la mise en ligne, puis le mail « inscris-toi sur le site, saisis ton code
-  sur le devis » (texte validé, signature Niv Création, sans « comme sur notre site »).
+- ✅ **Devis : code promo + livraison choisis par le client — EN LIGNE le 03/10/2026** (« tu peux le mettre en ligne à la place de
+  l'ancien », maquette validée, option 1 = calcul du port PARTAGÉ avec le panier : `src/lib/panierPort.js`, utilisé par
+  `/api/checkout` ET les devis ; parité prouvée par `npm run test-port-parite`, 6000 paniers). Reste : **UN paiement test boutique**
+  (bijou, verre, carafe) pour revérifier les frais de port, et le devis de Simon Pascal (clé USB 64 Go, 44,90 €, 1 clé, besoin le 13/10).
+  Règles : devis avec « Article du site » ou poids par ligne (poids toujours modifiable) ; anciens devis sans poids ou avec ligne
+  « Livraison » manuelle = comme avant. PAS construit : champ « prix de livraison imposé ».
 - **Verre à vin 47 cl** : ✅ **EN LIGNE le 25/09** (« Applique », commit `ecc373c`). À faire :
   saisir **stock 100** sur les 3 choix 47 cl (Gestion → Produits & stock) et vérifier sur la fiche
   que les deux tailles apparaissent (si Gestion a un vieux réglage d'options, les 47 cl manqueront).

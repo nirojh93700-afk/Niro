@@ -5,7 +5,11 @@ import { formatEuro } from "@/lib/format";
 import { products } from "@/lib/products";
 
 // Tous les articles du stock (un par variante) pour la liste « Retirer du stock ».
-const ARTICLES_STOCK = products.flatMap((p) => (p.variants || []).map((v) => ({ id: v.stockId || v.id, label: `${p.name} — ${v.title}` })));
+// Articles du site : sert à retirer le stock ET à calculer la livraison comme sur le site (poids, lettre/colis, seuils offerts…).
+const ARTICLES_SITE = products.flatMap((p) => (p.variants || []).map((v) => ({
+  id: v.id, stockId: v.stockId || v.id, label: `${p.name} — ${v.title}`,
+  poids: Number(v.weight) || Number(p.weight) || 200, lettre: Boolean(p.letter),
+})));
 
 const STATUS_LABEL = { envoye: "Envoyé", paye: "Payé ✓", facture: "Facture", annule: "Annulé" };
 
@@ -124,12 +128,30 @@ export default function QuotesAdmin({ adminKey }) {
                 style={{ padding: "8px", border: "1px solid var(--line)", borderRadius: 8 }} />
               <button className="btn btn-outline" style={{ padding: "4px 8px" }} title="Supprimer la ligne"
                 onClick={() => setItems(items.length > 1 ? items.filter((_, j) => j !== i) : items)}>×</button>
-              <select value={it.stockId || ""} title="Article du stock à décompter quand le devis est payé"
-                onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, stockId: e.target.value } : x))}
-                style={{ gridColumn: "1 / -1", padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8, fontSize: "0.82rem", color: it.stockId ? "inherit" : "var(--ink-soft)" }}>
-                <option value="">📦 Retirer du stock : rien (ligne libre)</option>
-                {ARTICLES_STOCK.map((a) => <option key={a.id} value={a.id}>📦 Retirer du stock : {a.label}</option>)}
+              <select value={it.variantId || ""} title="Produit du site : retire le stock quand le devis est payé ET sert à calculer la livraison comme sur le site"
+                onChange={(e) => { const a = ARTICLES_SITE.find((x) => x.id === e.target.value); setItems(items.map((x, j) => j === i ? { ...x, variantId: a ? a.id : "", stockId: a ? a.stockId : "", boite: a && a.lettre ? x.boite : false } : x)); }}
+                style={{ gridColumn: "1 / -1", padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8, fontSize: "0.82rem", color: it.variantId ? "inherit" : "var(--ink-soft)" }}>
+                <option value="">📦 Article du site : aucun (ligne libre — indiquez le poids)</option>
+                {ARTICLES_SITE.map((a) => <option key={a.id} value={a.id}>📦 Article du site : {a.label}</option>)}
               </select>
+              {(() => {
+                const a = ARTICLES_SITE.find((x) => x.id === it.variantId);
+                return (
+                  <label style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", fontSize: "0.82rem", color: "var(--ink-soft)" }}
+                    title="Poids d'UNE pièce, emballage compris. À corriger pour une grosse commande ou une demande spéciale : la livraison que le client choisit sur le devis suit ce poids.">
+                    ⚖️ Poids d'une pièce (g)
+                    <input type="number" min="0" step="1" inputMode="numeric" placeholder={a ? `auto : ${a.poids}` : "Ex : 150"} value={it.weight || ""}
+                      onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, weight: e.target.value } : x))}
+                      style={{ width: 104, padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8 }} />
+                    {a && a.lettre ? (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                        <input type="checkbox" checked={Boolean(it.boite)} onChange={(e) => setItems(items.map((x, j) => j === i ? { ...x, boite: e.target.checked } : x))} /> en boîte rigide (colis)
+                      </span>
+                    ) : null}
+                    <span>{a || Number(it.weight) > 0 ? "" : "sans article ni poids : pas de choix de livraison pour le client"}</span>
+                  </label>
+                );
+              })()}
             </div>
           ))}
           <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}

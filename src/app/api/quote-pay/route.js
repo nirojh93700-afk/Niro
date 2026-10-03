@@ -1,6 +1,10 @@
 import Stripe from "stripe";
 import { getQuote } from "@/lib/firebase";
 import { toCents } from "@/lib/format";
+import { verifierCodeDevis } from "@/lib/promoDevis";
+import { getSettings } from "@/lib/stock";
+import { livraisonActive, portDevis } from "@/lib/portDevis";
+import { indexVariantes } from "@/lib/indexVariantes";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +33,36 @@ export async function POST(req) {
   const stripe = new Stripe(secret);
   // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
   const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
+  // Code promo saisi sur le lien du devis (03/10/2026) : revérifié ICI côté serveur (jamais
+  // confiance au navigateur), puis coupon Stripe d'un montant fixe sur les lignes d'articles.
+  // Livraison choisie par le client sur le lien du devis (03/10/2026) : prix recalculé ICI,
+  // côté serveur, d'après le poids des lignes. Devis sans poids = comportement d'avant.
+  let shippingOpts, relaisMeta = {}, countries = SHIPPING_COUNTRIES;
+  const index = await indexVariantes();
+  if (livraisonActive(q.items, index)) {
+    const method = body?.deliveryMethod === "relais" ? "relais" : "domicile";
+    const r = portDevis(q, await getSettings(), index, method, body?.relaisPoint);
+    if (!r.ok) return Response.json({ error: r.error || "Livraison indisponible." }, { status: 400 });
+    if (method === "relais" && !r.relaisFull) return Response.json({ error: "Choisissez votre point relais." }, { status: 400 });
+    shippingOpts = [r.option];
+    countries = ["FR", "MC"];
+    if (r.relaisFull) relaisMeta = { relaisPoint: r.relaisFull };
+  }
+  let discounts, promoMeta = {};
+  const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+  if (promoCode && q.type !== "facture") {
+    const promoEmail = String(body?.promoEmail || q.client?.email || "").trim().toLowerCase();
+    const r = await verifierCodeDevis(promoCode, promoEmail, q.items);
+    if (!r.valid) return Response.json({ error: "Ce code promo n'est pas valable pour ce devis." }, { status: 400 });
+    try {
+      const coupon = await stripe.coupons.create({ amount_off: toCents(r.remise), currency: "eur", duration: "once", name: `Code ${r.code}` });
+      discounts = [{ coupon: coupon.id }];
+      promoMeta = { promoCode: r.code, ...(r.email ? { promoEmail: r.email } : {}) };
+    } catch (err) {
+      console.error("quote-pay coupon:", err);
+      return Response.json({ error: "Erreur de paiement. Réessayez." }, { status: 500 });
+    }
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -39,7 +73,9 @@ export async function POST(req) {
       // Commande sur mesure : on récupère l'adresse + le téléphone du client pour
       // que la commande créée soit directement expédiable.
       phone_number_collection: { enabled: true },
-      shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
+      shipping_address_collection: { allowed_countries: countries },
+      ...(shippingOpts ? { shipping_options: shippingOpts } : {}),
+      ...(discounts ? { discounts } : {}),
       line_items: q.items.map((it) => ({
         quantity: it.qty,
         price_data: {
@@ -53,6 +89,8 @@ export async function POST(req) {
       metadata: {
         quoteId: id,
         quoteNumber: q.number || "",
+        ...promoMeta,
+        ...relaisMeta,
         ...(stockPairs.length ? { stock: JSON.stringify(stockPairs).slice(0, 480) } : {}),
       },
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
