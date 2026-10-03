@@ -171,7 +171,7 @@ BODY = f'''
     <p class="bij-note">Livraison offerte dès 45 € sur les bijoux.</p>
   </div>
   <div class="bij-grid">
-    {tile("b1","Collier 3 Cœurs entrelacés à graver","30,51 €")}
+    {tile("b1","Collier 3 Cœurs entrelacés à graver","30,51 €","Best-seller")}
     {tile("b2","Collier Cœur &amp; 2 plaques à graver","dès 29,61 €")}
     {tile("b3","Collier Cœur à graver recto-verso","30,51 €")}
     {tile("b4","Collier Double Cœur à graver","dès 29,61 €")}
