@@ -263,8 +263,8 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 
 | Fichier | Format | Durée | Poids |
 |---|---|---|---|
-| `docs/videos/20-bijoux-gros-plans-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 29,6 s | 8,1 Mo |
-| `docs/videos/20-bijoux-gros-plans-720x1280.mp4` | 720 × 1280 (légère) | 29,6 s | 2,1 Mo |
+| `docs/videos/20-bijoux-gros-plans-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 32,7 s | 8,6 Mo |
+| `docs/videos/20-bijoux-gros-plans-720x1280.mp4` | 720 × 1280 (légère) | 32,7 s | 2,2 Mo |
 | `docs/videos/21-cristal-gros-plans-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 32,7 s | 6,2 Mo |
 | `docs/videos/21-cristal-gros-plans-720x1280.mp4` | 720 × 1280 (légère) | 32,7 s | 1,7 Mo |
 
@@ -274,12 +274,12 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
   traitement nouveau « gros plan sur la gravure → recul sur la pièce entière » (+ légende de ce qui est gravé).
 - 🔴 `collier-double-coeur-5.jpg` est une photo **vierge** (aucune gravure) : écartée ici, mais elle figurait par
   erreur dans les vidéos 17 et 19.
-- **Produits 20** : Collier Cœur à graver (3 photos) · Collier Cœur & 2 plaques (2) · Collier 3 Cœurs entrelacés · Bracelet Femme Acier · Collier Double Cœur · Bracelet cordon à plaque.
+- **Produits 20 (ordre revu le 03/10 : le gérant ne voulait pas les mêmes bijoux en 1er et 2e que les vidéos précédentes)** : Collier 3 Cœurs entrelacés · Bracelet cordon à plaque · Collier Double Cœur (rose, « love you mom 2023.05.21 », nouvelle photo `collier-double-coeur-6`) · Bracelet Femme Acier · Collier Cœur & 2 plaques · Collier Double Cœur · Collier Cœur à graver · Collier Cœur & 2 plaques · Collier Cœur à graver. Les 2 premiers bijoux des vidéos 17/19 passent en fin de vidéo. Seules ~9 photos de bijoux sont réellement gravées sur le site, toutes les autres sont vierges.
 - **Produits 21** : Cristal Photo 3D Horizontal (famille, couple, amis, couple 2) · Vertical (enfant & chat, femme, enfant & chien, jeunes, couple).
 
 ### Descriptions à copier-coller (livrées le 03/10/2026)
 
-**Vidéo 20 — Bijoux, la gravure de près** (Collier Cœur à graver, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Double Cœur, Bracelet cordon à plaque, Bracelet Femme Acier)
+**Vidéo 20 — Bijoux, la gravure de près** (Collier 3 Cœurs entrelacés, Bracelet cordon à plaque, Collier Double Cœur, Bracelet Femme Acier, Collier Cœur & 2 plaques, Collier Cœur à graver)
 > Un prénom, une date, un mot : regardez la gravure de près ✨ Chaque bijou est personnalisé et gravé à la commande, dans notre atelier 💛 Le détail qui rend un cadeau unique 🎁
 > 👉 nivcreation.fr
 
