@@ -2628,3 +2628,17 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   style « Swiss ») ne remplacent JAMAIS la charte de la boutique (or #c9a24b / crème / encre) ni le gabarit
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
+
+## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)
+> Gérant : « utilise ce qu'on a installé aujourd'hui pour faire une maquette de la page d'accueil, plus
+> moderne, plus fluide, unique, même thème, mêmes couleurs ». Faite avec les skills Impeccable + UI UX Pro Max.
+- **Fichier** : `docs/maquettes/accueil-moderne.html` (+ `.fragment.html` pour l'artifact), générateur
+  `tools/maquettes/accueil-moderne.py` (photos réelles de `public/produits/`, textes et prix RÉELS de l'accueil actuel).
+  Artifact : https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J. Testée Chromium 1440/390 px : 0 débordement, 0 erreur JS.
+- **Ce qui change** : en-tête flottant en pastille · héros sombre avec photo du cristal dans une arche dorée, le laser
+  dévoile la photo (seul moment animé) · rail horizontal des nouveautés (flèches, halo doré au curseur) · carafe
+  édition limitée en grand panneau · verres en mosaïque · bandeau Noël rouge avec photos en éventail · collections en
+  mosaïque asymétrique · phrase de l'atelier dont les mots s'allument au défilement · mur de créations en 2 rangées.
+- **Inchangé** : couleurs (or #c9a24b, crème, encre, rouge Noël), polices (Playfair Display + Inter), tous les textes et prix.
+- ⚠️ Pas de vrais compteurs/avis détaillés ajoutés (4,8/5 · 286 avis repris tels quels). Reste à faire s'il dit « applique » :
+  reproduire dans `page.jsx` + composants `home/` + CSS, en gardant les interrupteurs Apparence (sections) et le catalogue en direct.

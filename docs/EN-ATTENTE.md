@@ -204,3 +204,5 @@ En attente de SA décision :
 5. Produit personnalisé = jamais remboursé.
 6. Clé admin uniquement dans les commandes shell, jamais dans un fichier.
 7. Etsy reste dans Etsy : hors boîte mail surveillée et hors dossiers de communication.
+
+- **Accueil moderne (maquette 03/10)** : https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J — en attente de son avis puis « applique » (`docs/maquettes/accueil-moderne.html`).
