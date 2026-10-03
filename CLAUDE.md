@@ -2656,10 +2656,17 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Fichier** : `docs/maquettes/accueil-moderne.html` (+ `.fragment.html` pour l'artifact), générateur
   `tools/maquettes/accueil-moderne.py` (photos réelles de `public/produits/`, textes et prix RÉELS de l'accueil actuel).
   Artifact : https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J. Testée Chromium 1440/390 px : 0 débordement, 0 erreur JS.
-- **Ce qui change** : en-tête flottant en pastille · héros sombre avec photo du cristal dans une arche dorée, le laser
-  dévoile la photo (seul moment animé) · rail horizontal des nouveautés (flèches, halo doré au curseur) · carafe
-  édition limitée en grand panneau · verres en mosaïque · bandeau Noël rouge avec photos en éventail · collections en
-  mosaïque asymétrique · phrase de l'atelier dont les mots s'allument au défilement · mur de créations en 2 rangées.
-- **Inchangé** : couleurs (or #c9a24b, crème, encre, rouge Noël), polices (Playfair Display + Inter), tous les textes et prix.
-- ⚠️ Pas de vrais compteurs/avis détaillés ajoutés (4,8/5 · 286 avis repris tels quels). Reste à faire s'il dit « applique » :
-  reproduire dans `page.jsx` + composants `home/` + CSS, en gardant les interrupteurs Apparence (sections) et le catalogue en direct.
+- ✅ **ENREGISTRÉE TELLE QUELLE LE 04/10/2026 (« Enregistre la maquette », version 5 de l'artifact)**. C'est CETTE version
+  à reproduire à l'identique le jour où il dit « applique ». Ordre de la page :
+  en-tête du site INCHANGÉ (logo, compte, panier, menu complet) → héros cristal sombre (photo dans une arche dorée,
+  le laser la dévoile, puces « Gravé en France » / « dès 39,90 € », ligne d'engagements) → **bijoux au premier plan**
+  (« Des bijoux gravés au prénom de votre choix », 6 bijoux gravés avec prix, étiquette « Best-seller » sur le Collier
+  3 Cœurs — voulue par le gérant, raccourcis Femme/Homme/Couple/Bébé, « Livraison offerte dès 45 € sur les bijoux »)
+  → nouveautés (rail avec flèches) → carafe édition limitée → verres & carafes en mosaïque → Noël (photos en éventail)
+  → collections en mosaïque → phrase de l'atelier (mots qui s'allument) → **mur en 3 rangées** comme sur le site
+  (titre + phrase d'origine, toucher = arrêt + nom + prix, reprise après 4 s) → avis 4,8/5 → sur mesure →
+  **pied de page du site INCHANGÉ** (inscription, coordonnées, QR Instagram, 4 colonnes, ligne du bas).
+- Inchangé : couleurs, polices (Playfair Display + Inter), textes et prix réels, logo (adresse source, jamais copié ;
+  si l'aperçu ne peut pas l'afficher, la case vide est masquée — sur le site il s'affiche comme aujourd'hui).
+- Au « applique » : reproduire dans `page.jsx` + composants `home/` + CSS, garder `Header.jsx` et le pied de page tels
+  quels, garder les interrupteurs Apparence (sections) et le catalogue en direct (prix/noms lus en direct, pas en dur).
