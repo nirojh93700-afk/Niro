@@ -82,6 +82,7 @@ def logo_uri():
             return f"data:{mime};base64," + base64.b64encode(open(f, "rb").read()).decode()
     return LOGO_SOURCE
 LOGO = logo_uri()
+QR = "data:image/png;base64," + base64.b64encode(open(os.path.join(ROOT, "public", "instagram-qr.png"), "rb").read()).decode()
 
 IMG_CSS = "\n".join(f".i-{k}{{background-image:url({data_uri(f, w)})}}" for k, (f, w) in IMGS.items())
 
@@ -124,7 +125,7 @@ BODY = f'''
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="header header-centered" id="top">
   <div class="container header-top">
-    <a href="#" class="logo" aria-label="Niv Création — accueil"><img class="logo-img" src="{LOGO}" alt="Niv Création — Atelier de personnalisation"></a>
+    <a href="#" class="logo" aria-label="Niv Création — accueil"><img class="logo-img" src="{LOGO}" alt="Niv Création — Atelier de personnalisation" onerror="this.style.display='none'"></a>
     <div class="header-actions">
       <a href="#" class="cart-btn" aria-label="Mon espace">{ic("user","ic ic-h")}</a>
       <button class="cart-btn" type="button" aria-label="Ouvrir le panier">{ic("bag","ic ic-h")}<span class="cart-badge">2</span></button>
@@ -278,11 +279,7 @@ BODY = f'''
 </section>
 </main>
 
-<footer class="foot">
-  <div class="foot-top"><img class="footer-logo" src="{LOGO}" alt="Niv Création — Atelier de personnalisation">
-    <p>Atelier français · gravure laser · Paiement sécurisé par carte via Stripe</p></div>
-  <p class="foot-pay">Payez en plusieurs fois sans frais — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €).</p>
-</footer>
+<footer class="footer"><div class="container"><div style="text-align:center;padding:8px 0 26px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:26px"><h4 style="margin:0 0 6px">Restez informé ✦</h4><p style="margin:0 0 12px;opacity:0.85;font-size:0.9rem">Nouveautés, offres et inspirations — directement par e-mail.</p><form style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center"><input type="email" required="" placeholder="Votre e-mail" style="padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);color:#fff;min-width:220px" value=""/><label style="display:inline-flex;flex-direction:column;align-items:flex-start;font-size:0.72rem;opacity:0.8"><span style="margin-bottom:2px">Anniversaire (facultatif) — pour une surprise</span><input type="date" style="padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);color:#fff" value=""/></label><button type="submit" class="btn btn-gold" style="padding:10px 20px">S&#x27;inscrire</button></form></div><div class="footer-grid"><div><img class="footer-logo" src="{LOGO}" onerror="this.style.display='none'" alt="Niv Création — Atelier de personnalisation"/><p style="margin-top:14px;max-width:320px">Atelier français de gravure et découpe laser. Bijoux, décorations de mariage et cadeaux personnalisés, gravés avec soin dans notre atelier.</p><a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><a href="tel:+33766153102" style="display:block;margin-top:4px">07 66 15 31 02</a><span style="display:block;margin-top:8px">6 rue d&#x27;Armaillé, 75017 Paris</span><span style="display:block;margin-top:8px">Personnalisé en France</span><div class="footer-insta"><a href="https://www.instagram.com/nivcreation.fr" target="_blank" rel="noopener noreferrer" aria-label="Suivez Niv Création sur Instagram"><img class="footer-insta-qr" src="{QR}" alt="QR code Instagram Niv Création"/></a><div class="footer-insta-txt"><span class="fi-title">Suivez-nous sur Instagram</span><a href="https://www.instagram.com/nivcreation.fr" target="_blank" rel="noopener noreferrer" class="fi-handle">@nivcreation.fr</a><span class="fi-sub">Scannez le code ou touchez le lien</span></div></div></div><div><h4>Boutique</h4><a href="#">Bijoux femme</a><a href="#">Bijoux homme</a><a href="#">Mariage &amp; Réception</a><a href="#">Cadeaux &amp; Déco</a><a href="#">Tout voir</a></div><div><h4>Aide</h4><a href="#">Questions fréquentes (FAQ)</a><a href="#">Avis clients</a><a href="#">À propos</a><a href="#">Nous contacter</a><a href="#">Retours &amp; Remboursements</a><a href="#">La personnalisation</a></div><div><h4>Idées &amp; conseils</h4><a href="#">Cadeau femme</a><a href="#">Bijoux homme</a><a href="#">Que faire graver ?</a><a href="#">Déco de mariage</a><a href="#">Cristal photo 3D</a><a href="#">Tous nos guides</a><a href="#">Trouver un cadeau par occasion</a><a href="#">Carte cadeau</a></div><div><h4>Informations</h4><a href="#">♥ Mes favoris</a><a href="#">Politique de retour</a><a href="#">CGV</a><a href="#">Mentions légales</a><a href="#">Confidentialité</a></div></div><div class="footer-bottom"><span>© 2026 Niv Création — Tous droits réservés.</span><span>Paiement sécurisé par Stripe · <a style="color:inherit;text-decoration:underline" href="#">Espace gestion</a></span></div></div></footer>
 <button type="button" class="ask">{ic("chat")} Une question ?</button>
 '''
 
@@ -486,7 +483,25 @@ em{font-style:italic;color:var(--gold-t)}
 .wt:hover .wt-l,.wt.show .wt-l,.wt:focus-visible .wt-l{opacity:1;translate:0 0}
 .wall-foot{display:flex;justify-content:center;margin-top:34px}
 
-/* avis + sur mesure + pied */
+/* pied de page : identique au site (globals.css .footer) */
+.footer{background:#211d18;color:rgba(250,246,239,.8);padding:56px 0 28px;font-size:.9rem}
+.footer .container{max-width:1200px;margin:0 auto;padding-inline:20px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:30px;margin-bottom:36px}
+.footer h4{color:#fff;font-family:var(--sans);font-size:.85rem;letter-spacing:1px;text-transform:uppercase;margin:0 0 14px}
+.footer a{display:block;color:rgba(250,246,239,.72);margin-bottom:9px;transition:color .2s}
+.footer a:hover{color:#fff}
+.footer .footer-logo{width:190px;max-width:70%;height:auto;display:block;border-radius:10px}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem;color:rgba(250,246,239,.55)}
+.footer-bottom a{display:inline;margin:0}
+.footer-insta{display:flex;align-items:center;gap:14px;margin-top:18px}
+.footer-insta-qr{width:88px;height:88px;border-radius:12px;background:#fff;padding:6px;box-shadow:0 4px 14px rgba(0,0,0,.18);display:block}
+.footer-insta-txt{display:flex;flex-direction:column;gap:2px}
+.footer-insta-txt .fi-title{font-weight:700}.footer-insta-txt .fi-handle{color:#e2c67e;font-weight:700}.footer-insta-txt .fi-sub{font-size:.78rem;opacity:.75}
+.footer h4{font-weight:700}
+@media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:540px){.footer-grid{grid-template-columns:1fr}}
+
+/* avis + sur mesure */
 .proof{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 20px clamp(48px,6vw,80px);text-align:center}
 .stars{display:flex;gap:4px;color:var(--gold)}.star{width:22px;height:22px}
 .proof p{margin:0;font-size:1.02rem;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;align-items:center}.proof b{font-family:var(--serif);font-size:1.3rem}
@@ -494,10 +509,6 @@ em{font-style:italic;color:var(--gold-t)}
 .custom::before{content:"✦";position:absolute;left:50%;top:22px;translate:-50% 0;color:var(--gold);font-size:1.1rem}
 .custom-in{display:flex;flex-direction:column;align-items:center;gap:20px;max-width:760px;margin-inline:auto}
 .custom h2{font-size:clamp(1.9rem,4.2vw,3.3rem);line-height:1.1}.custom p{margin:0;color:var(--muted)}
-.foot{background:var(--ink);color:var(--on-ink);padding:44px clamp(20px,6vw,96px) 100px;font-size:.9rem}
-.foot-top{display:flex;flex-wrap:wrap;gap:12px 36px;align-items:center;justify-content:space-between}
-.foot-top p{margin:0}.footer-logo{width:190px;max-width:70%;height:auto;display:block;border-radius:10px}
-.foot-pay{margin:22px 0 0;padding-top:20px;border-top:1px solid rgba(226,198,126,.16)}
 .ask{position:fixed;left:16px;bottom:16px;z-index:40;display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;background:var(--cream);color:var(--ink);font:600 .85rem/1 var(--sans);box-shadow:0 14px 30px -14px rgba(26,18,6,.55),0 0 0 1px var(--line);transition:transform .3s var(--ease)}
 .ask:hover{transform:translateY(-3px)}.ask .ic{width:17px;height:17px;color:var(--gold-d)}
 
