@@ -161,14 +161,14 @@ BODY = f'''
 
 <section class="sec bijoux" aria-labelledby="t-bij">
   <div class="bij-copy">
-    <h2 id="t-bij">Des bijoux gravés, <em>à leur prénom</em></h2>
+    <h2 id="t-bij">Des bijoux gravés <em>au prénom de votre choix</em></h2>
     <p>Colliers et bracelets en acier, gravés à la commande dans notre atelier : un prénom, une date, un mot qui compte.</p>
     <div class="bij-cats"><a href="#">Femme</a><a href="#">Homme</a><a href="#">Couple</a><a href="#">Bébé</a></div>
     <a class="btn btn-ink" href="#">Voir tous les bijoux {ic("arrow")}</a>
     <p class="bij-note">Livraison offerte dès 45 € sur les bijoux.</p>
   </div>
   <div class="bij-grid">
-    {tile("b1","Collier 3 Cœurs entrelacés à graver","30,51 €","Best-seller")}
+    {tile("b1","Collier 3 Cœurs entrelacés à graver","30,51 €")}
     {tile("b2","Collier Cœur &amp; 2 plaques à graver","dès 29,61 €")}
     {tile("b3","Collier Cœur à graver recto-verso","30,51 €")}
     {tile("b4","Collier Double Cœur à graver","dès 29,61 €")}
