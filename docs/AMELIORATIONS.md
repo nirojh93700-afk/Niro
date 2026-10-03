@@ -33,6 +33,12 @@
     avec son accord une fois.
 12. ✅ (02/10) **Contrôle Gmail des réponses non lues (≈ 5 s) déplacé côté serveur** (battement du site) :
     l'admin lirait le résultat déjà prêt.
+13. 💡 (03/10) **Devis : point relais + livraison choisis par le client sur le lien du devis** (question du gérant,
+    dossier Simon Pascal, clé USB 64 Go). AUJOURD'HUI `/api/quote-pay` ne collecte que l'adresse à domicile
+    (Stripe) : pas de carte de points relais, pas de choix de livraison, pas de port ajouté tout seul.
+    À construire : sur `/document/<id>`, choix domicile / relais (`RelaisPicker`), port calculé comme au
+    panier (poids à saisir par ligne de devis), transmis à `quote-pay` (`relaisPoint` en metadata — le webhook
+    Stripe l'affiche déjà « 📍 Point relais choisi »). Toujours : maquette → « applique ».
 
 ## Déjà notées avant (rappel, détail dans CLAUDE.md / EN-ATTENTE.md)
 - Audit comparatif du 19/09 : **date de livraison estimée** sur la fiche, **message cadeau** au
