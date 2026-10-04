@@ -2670,3 +2670,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   si l'aperçu ne peut pas l'afficher, la case vide est masquée — sur le site il s'affiche comme aujourd'hui).
 - Au « applique » : reproduire dans `page.jsx` + composants `home/` + CSS, garder `Header.jsx` et le pied de page tels
   quels, garder les interrupteurs Apparence (sections) et le catalogue en direct (prix/noms lus en direct, pas en dur).
+
+## 📬 RÉPONSE PAR LE BOUTON « RÉPONDRE » → L'AGENT PRÉPARE UNE RÉPONSE (04/10/2026, EN LIGNE)
+> Gérant : « pourquoi l'agent il a pas préparé de réponse… je veux qu'il m'envoie des alertes comme avant ».
+- **Cause** : `/api/reponse/[token]` (bouton des e-mails clients) rangeait le message + alerte « 📬 Réponse de… »
+  mais n'appelait JAMAIS l'agent ; la boîte mail surveillée ignore nos propres alertes (expéditeur = l'atelier).
+  Simon Pascal et Lorenzo Franchi avaient répondu par le bouton → aucun brouillon.
+- **Corrigé** (commit `9f46eaf`) : après le rangement, l'agent prépare une réponse (`triageIncomingEmail` avec
+  `buildContext`, désormais exportée de `inbox.js`) → `addPendingReply` (source `bouton`) → alerte **« [À valider] »**
+  (`sendDraftAlert`, + notification téléphone) avec « Relire, modifier et envoyer ». L'alerte simple « 📬 » ne part
+  plus que si le brouillon échoue (repli). Restaurants/bars démarchés : inchangé. Rien ne part au client.
+- Testé en ligne le 04/10 avec un lien envoyé à l'atelier lui-même : brouillon créé (`source:"bouton"`), alerte partie.
