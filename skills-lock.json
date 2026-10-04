@@ -1,11 +1,23 @@
 {
   "version": 1,
   "skills": {
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/accessibility/SKILL.md",
+      "computedHash": "612f913bcb03f0787b103c848cd7664b676a9aaf31f25d3270cc69cf5caaab95"
+    },
     "banner-design": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
       "skillPath": ".claude/skills/banner-design/SKILL.md",
       "computedHash": "1bb85d0bfec06e23578739a476c181b17c4db694c341da4e603e43183a4b42d3"
+    },
+    "best-practices": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/best-practices/SKILL.md",
+      "computedHash": "ca00ef2671d65a7442bc796e8744cd3d759f92c01640f2fbcab638889c494424"
     },
     "brand": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -13,17 +25,11 @@
       "skillPath": ".claude/skills/brand/SKILL.md",
       "computedHash": "c5629242f72a17425456f684467a6fb7fb4a03f1fcfe1474e87aabad78ddae65"
     },
-    "brandkit": {
-      "source": "Leonxlnx/taste-skill",
+    "core-web-vitals": {
+      "source": "addyosmani/web-quality-skills",
       "sourceType": "github",
-      "skillPath": "skills/brandkit/SKILL.md",
-      "computedHash": "b63012f3c3d21197e0185d3e9cc7ec40c589fb10e0b5a32a561739de31aa3f20"
-    },
-    "deploy-to-vercel": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/deploy-to-vercel/SKILL.md",
-      "computedHash": "d2b5bcc7c09fdb649129ffc7dd7b647ec1b155736974b974292675afd588cb39"
+      "skillPath": "skills/core-web-vitals/SKILL.md",
+      "computedHash": "601b2cbb920fb0ea9814a3f11232d7883e1eb0923865218502ab1d73e9fc5172"
     },
     "design": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -43,29 +49,41 @@
       "skillPath": "skills/taste-skill/SKILL.md",
       "computedHash": "6d838b246d0e35d0b53f4f23f98ba7a1dd561937e64f7d0c7553b0928e376c3e"
     },
-    "design-taste-frontend-v1": {
-      "source": "Leonxlnx/taste-skill",
-      "sourceType": "github",
-      "skillPath": "skills/taste-skill-v1/SKILL.md",
-      "computedHash": "d704ab912c4d0ca954ffa858983da755ae4cd5cad9ba22554db5557382f5bd34"
-    },
-    "embedded-captions": {
-      "source": "heygen-com/hyperframes",
-      "sourceType": "github",
-      "skillPath": "skills/embedded-captions/SKILL.md",
-      "computedHash": "5ed5797df5c90fd16fc0e2b086554548416c3d9db74c6ebff80c1b7be09d67fe"
-    },
     "faceless-explainer": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/faceless-explainer/SKILL.md",
       "computedHash": "ad1512378415ec2a30110a31eaccb1ae588252b3a2ff3137e38c6ce2082a3b7b"
     },
-    "figma": {
-      "source": "heygen-com/hyperframes",
+    "firebase-app-hosting-basics": {
+      "source": "firebase/agent-skills",
       "sourceType": "github",
-      "skillPath": "skills/figma/SKILL.md",
-      "computedHash": "d85d47eaf5a416c7befaf958d58737cd310a6d04af34e513f801c3574b81712c"
+      "skillPath": "skills/firebase-app-hosting-basics/SKILL.md",
+      "computedHash": "e32ac489690e6c04bf6a71ce965918fe65a192e9992e6ed887c572d7733621c2"
+    },
+    "firebase-basics": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/firebase-basics/SKILL.md",
+      "computedHash": "ea22b6b8d5f3f113fd85e3b1ab1af864dbcc08366e3cd7a738d5ea8c3e1f2be6"
+    },
+    "firebase-firestore": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/firebase-firestore/SKILL.md",
+      "computedHash": "ceb185eeadfd5b7a0411ec93314cc13980bbc943ae26fe0103de0b7aae69d0f4"
+    },
+    "firebase-security-rules-auditor": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
+      "computedHash": "f7c7565c93d0faf7c1d8e692a805d06c2794f39a0d9945634f3cd46860593517"
+    },
+    "firestore-rules-creation": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/firestore-rules-creation/SKILL.md",
+      "computedHash": "93f2a2f1a507eccd6dd4f060b3278fdeb902992d16eb8a6c3beaf68bf5fffae0"
     },
     "full-output-enforcement": {
       "source": "Leonxlnx/taste-skill",
@@ -78,12 +96,6 @@
       "sourceType": "github",
       "skillPath": "skills/general-video/SKILL.md",
       "computedHash": "47edd2b546127717624a64ae507300a8a48ba56e17eace59afc3d43e63ba5ef0"
-    },
-    "gpt-taste": {
-      "source": "Leonxlnx/taste-skill",
-      "sourceType": "github",
-      "skillPath": "skills/gpt-tasteskill/SKILL.md",
-      "computedHash": "cc8f0c601d8240a124e1d11634351a2be7b8a72fd807c75e5b6bf7afcd5ddee0"
     },
     "high-end-visual-design": {
       "source": "Leonxlnx/taste-skill",
@@ -145,35 +157,23 @@
       "skillPath": "skills/hyperframes-studio/SKILL.md",
       "computedHash": "973043665d27ebcde01459f622eebda8264cf513e4a4a362773b8bc8b5c34145"
     },
-    "image-to-code": {
-      "source": "Leonxlnx/taste-skill",
-      "sourceType": "github",
-      "skillPath": "skills/image-to-code-skill/SKILL.md",
-      "computedHash": "58517b03b2a01f4c9ba65861559d03df931400871bbc200978c975b24bb92c73"
-    },
-    "imagegen-frontend-mobile": {
-      "source": "Leonxlnx/taste-skill",
-      "sourceType": "github",
-      "skillPath": "skills/imagegen-frontend-mobile/SKILL.md",
-      "computedHash": "9ab7f4f6ce66a3cff02bbf5894e5bd5af50bf5d6ef0adffdc88e8fab772fe44f"
-    },
-    "imagegen-frontend-web": {
-      "source": "Leonxlnx/taste-skill",
-      "sourceType": "github",
-      "skillPath": "skills/imagegen-frontend-web/SKILL.md",
-      "computedHash": "65f5ae59fa317567809438310b1c54f78cd133426deb43e4d3d4ca4c8f541628"
-    },
     "impeccable": {
       "source": "pbakaus/impeccable",
       "sourceType": "github",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
       "computedHash": "6b5ebc0ee592c7d4620827b20f1554706607e3363835a951c78ee37ac63a7df0"
     },
-    "industrial-brutalist-ui": {
-      "source": "Leonxlnx/taste-skill",
+    "launch": {
+      "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
-      "skillPath": "skills/brutalist-skill/SKILL.md",
-      "computedHash": "8fc355c4aadb7d29c53ca28bc41be3cd6eea765d121e3737c4dc2d0f90a8effa"
+      "skillPath": "skills/launch/SKILL.md",
+      "computedHash": "a57ac5df920bf07abd52b95958ab5e5431edceb7f2a3f314b446757dcc15251a"
+    },
+    "lead-magnets": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/lead-magnets/SKILL.md",
+      "computedHash": "268c83c38cc49d3e437042f5d4e3c31b822deb6012b9d5d7a1370ae500058018"
     },
     "media-use": {
       "source": "heygen-com/hyperframes",
@@ -199,17 +199,35 @@
       "skillPath": "skills/music-to-video/SKILL.md",
       "computedHash": "2219fec95a3b5d6ba99964f9146481a67688cdd39582f8375c442dc9d174304c"
     },
+    "offers": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/offers/SKILL.md",
+      "computedHash": "9f8781bc04889a6f2f23a7167384976bfaf2709da31a2b92d17cc3cbfca84cd4"
+    },
+    "performance": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/performance/SKILL.md",
+      "computedHash": "ce9d36f139a1b2a6a8ac2cb222698963b8076d2dd8b41685e8e8ae589cdcf1e4"
+    },
     "playwright-cli": {
       "source": "microsoft/playwright-cli",
       "sourceType": "github",
       "skillPath": "skills/playwright-cli/SKILL.md",
       "computedHash": "ffbd59a973d4e2c19c6ecc31254a14497069c362f1d1820b6a6cfbe62de34a73"
     },
-    "pr-to-video": {
-      "source": "heygen-com/hyperframes",
+    "popups": {
+      "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
-      "skillPath": "skills/pr-to-video/SKILL.md",
-      "computedHash": "7629ce5e57879e8d2efeb92a5accb2ea62a90cb69f8895721b84ccf75f26df3c"
+      "skillPath": "skills/popups/SKILL.md",
+      "computedHash": "95c5cb45dcbb05362168255d97ee68d53a5916d8de779bd08f5f70c9b0cabd36"
+    },
+    "pricing": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/pricing/SKILL.md",
+      "computedHash": "7972093f0b6caa1b477a29b4c584a0595f11b296dd5bfedec25ade5dcf9c33cf"
     },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
@@ -217,17 +235,47 @@
       "skillPath": "skills/product-launch-video/SKILL.md",
       "computedHash": "64fc090be5cc2d6d5131caa1d3b70d50d999ca2e14fec53492d0183eb4eaa235"
     },
+    "product-marketing": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/product-marketing/SKILL.md",
+      "computedHash": "b8a9cd747705923a7a29cda12e478594e3a5062d8f7c7bfbf19d7fc0b24cee76"
+    },
     "redesign-existing-projects": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/redesign-skill/SKILL.md",
       "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
     },
-    "remotion-to-hyperframes": {
-      "source": "heygen-com/hyperframes",
+    "referrals": {
+      "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
-      "skillPath": "skills/remotion-to-hyperframes/SKILL.md",
-      "computedHash": "5895903849731d93bb7fffcd399ef26011ce1926dc7072ac40d7500820eb9f4e"
+      "skillPath": "skills/referrals/SKILL.md",
+      "computedHash": "bf52bd62b10209d1af191253f8914a043ff3a5559e0aa223ad97eb1235916b61"
+    },
+    "schema": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/schema/SKILL.md",
+      "computedHash": "2f4807070c77b5c52af3a7e56d2ca5ee12ae2fd8b749d76ab68d3de40f323e78"
+    },
+    "seo": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/seo/SKILL.md",
+      "computedHash": "01a735ac18ceb15536ac40b11a5712b3ab8f78ebe94748b3ebc3afc7f58a6f2f"
+    },
+    "seo-audit": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-audit/SKILL.md",
+      "computedHash": "01f9f8a3feb3ea69c6c212d61189c610f96ef2cc363adc27fd314d78254bf6ae"
+    },
+    "site-architecture": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/site-architecture/SKILL.md",
+      "computedHash": "48a38c5e2b000d134c3db282364b1014bad362fa91d4618ad8c2eb7cee991208"
     },
     "slides": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -241,23 +289,23 @@
       "skillPath": "skills/slideshow/SKILL.md",
       "computedHash": "627a8b17cab976bbc9d2779532ac15ac0c4f8e5b1b886bd885a210c4c072f580"
     },
-    "stitch-design-taste": {
-      "source": "Leonxlnx/taste-skill",
+    "social": {
+      "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
-      "skillPath": "skills/stitch-skill/SKILL.md",
-      "computedHash": "13322f38406cd3abf16ba45e35bdc9b18002d0153a79b4612b97aefc65d5a335"
+      "skillPath": "skills/social/SKILL.md",
+      "computedHash": "7eeedd17a4d59d75281ecd7ff6cb6e2992b1095459550e8d97ef1cae522ea389"
     },
-    "talking-head-recut": {
-      "source": "heygen-com/hyperframes",
+    "stripe-best-practices": {
+      "source": "stripe/ai",
       "sourceType": "github",
-      "skillPath": "skills/talking-head-recut/SKILL.md",
-      "computedHash": "9845310afddfb8fb6b6e66bfd5662cbb258c2ac73d0396788f106df3f941a2de"
+      "skillPath": "skills/stripe-best-practices/SKILL.md",
+      "computedHash": "e995c60c0fdc2903b85d0f0bd5580c7b9cefe90592aa60a7364f33c212971271"
     },
-    "ui-styling": {
-      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+    "stripe-docs": {
+      "source": "stripe/ai",
       "sourceType": "github",
-      "skillPath": ".claude/skills/ui-styling/SKILL.md",
-      "computedHash": "39ad392c96adab936d8d057b66d1d632dd9c3d2b2397ec11bfe0e2a7c1fc975a"
+      "skillPath": "skills/stripe-docs/SKILL.md",
+      "computedHash": "ee4a51d34f11386fe6c9f991d5b2d32da69c851124a78a01403412bcf87e73d7"
     },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -265,35 +313,17 @@
       "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
       "computedHash": "27b1e8c953e26f962e3314281601959b04787edf3fd7fccadce176ff844c688d"
     },
-    "vercel-cli-with-tokens": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/vercel-cli-with-tokens/SKILL.md",
-      "computedHash": "a2f596ac516fe8986386f9562f4c94604af9fb6a0fc417d263cbe6dc05117b72"
-    },
     "vercel-composition-patterns": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/composition-patterns/SKILL.md",
       "computedHash": "f98931159fa9c7fed043bcd18a891a46dcf89ababa38df13a4c5b7b30dc0ce07"
     },
-    "vercel-optimize": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/vercel-optimize/SKILL.md",
-      "computedHash": "9d4ace02972b9b1c462f097c7322eb32c9f04bba6f2fb5cf482086d402eeec33"
-    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/react-best-practices/SKILL.md",
       "computedHash": "3219a1944e404ffc14d1d9d6aef6dd2e3855b81387ee0a044ccbfe14d34c2357"
-    },
-    "vercel-react-native-skills": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/react-native-skills/SKILL.md",
-      "computedHash": "2e9088a7333666d8c2833b8ff58bd51b955501c42b4c7244f72b4cbf22dafcc4"
     },
     "vercel-react-view-transitions": {
       "source": "vercel-labs/agent-skills",
@@ -306,6 +336,12 @@
       "sourceType": "github",
       "skillPath": "skills/web-design-guidelines/SKILL.md",
       "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+    },
+    "web-quality-audit": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-quality-audit/SKILL.md",
+      "computedHash": "9be796fc70ff05cf9842327d234b019376dc1abad8d7e3c4e3ea2dab8d8d3deb"
     },
     "writing-guidelines": {
       "source": "vercel-labs/agent-skills",
