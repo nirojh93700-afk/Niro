@@ -46,3 +46,4 @@ motifs-gravure.zip
 /.claude/skills/
 # Sorties de rendu vidéo (regénérables)
 /videos/niv-produits/renders/
+/.playwright-cli/
