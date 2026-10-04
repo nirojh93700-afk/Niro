@@ -18,10 +18,13 @@ if [ "$presents" -lt "$attendus" ]; then
   timeout 600 npx -y skills experimental_install -y < /dev/null > /tmp/skills-install.log 2>&1 || echo "skills : installation incomplète (voir /tmp/skills-install.log)" >&2
 fi
 
-# 1 bis. Marketing Skills (non listés dans skills-lock.json) : seulement ceux utiles à la boutique
-for n in seo-audit schema product-marketing ai-seo copywriting copy-editing cro emails content-strategy analytics popups pricing offers social launch referrals lead-magnets site-architecture cold-email ads ad-creative ab-testing competitors competitor-profiling customer-research community-marketing influencer-marketing free-tools events attribution image; do
-  [ -d ".agents/skills/$n" ] || { timeout 300 npx -y skills add coreyhaines31/marketingskills -y --skill $n < /dev/null > /tmp/skills-mkt.log 2>&1 || true; }
-done
+# 1 bis. Skills hors skills-lock.json : on installe les dépôts entiers (tout peut servir à améliorer le site)
+if [ "$(ls .agents/skills 2>/dev/null | wc -l)" -lt 120 ]; then
+  for r in coreyhaines31/marketingskills Leonxlnx/taste-skill vercel-labs/agent-skills firebase/agent-skills stripe/ai nextlevelbuilder/ui-ux-pro-max-skill addyosmani/web-quality-skills pbakaus/impeccable microsoft/playwright-cli; do
+    timeout 300 npx -y skills add $r -y < /dev/null >> /tmp/skills-extra.log 2>&1 || true
+  done
+  rm -rf .agents/skills/dev   # skill de maintenance du dépôt playwright-cli, inutile
+fi
 
 # 2. Chaque skill visible par Claude Code (lien dans .claude/skills)
 mkdir -p .claude/skills
