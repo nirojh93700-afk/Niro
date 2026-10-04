@@ -49,3 +49,15 @@
 - Gobelet isotherme (maquette validée, attend « mets en ligne ») · boule de Noël (enregistrée) ·
   date limite de commande pour Noël à afficher dès qu'il la donne.
 - Avertissements React #425/#418/#423 sur l'accueil (invisibles pour la cliente, à nettoyer un jour).
+
+## 14. Inscrire AUTOMATIQUEMENT chaque client à la newsletter, devis compris (proposé le 04/10/2026, RIEN fait)
+> Gérant : « il doit transmettre automatiquement, même tous les clients qui commencent par un devis ».
+- Aujourd'hui : un client qui paie (boutique OU devis) devient bien un **client** (commande + dossier), mais
+  **n'est PAS ajouté** à la newsletter — `addSubscriber` n'est appelé que par `/api/newsletter` (fenêtre de
+  bienvenue / pied de page). Constat du 04/10 : 21 clients distincts, 17 déjà inscrits, **4 non inscrits**.
+- Proposition : au webhook Stripe (commande payée, devis payé compris) → `addSubscriber(customerEmail)`, sans e-mail
+  de bienvenue ni code ; + rattrapage unique des 4 clients non inscrits.
+- ⚠️ À trancher avant (RGPD/CNIL) : inscrire sans demander n'est permis que pour des produits ANALOGUES et si le
+  client a pu refuser à la collecte + chaque envoi porte un lien de désinscription. **Aucun lien de désinscription
+  trouvé dans les e-mails de newsletter du code** → à ajouter avant toute inscription automatique (et une case
+  « je souhaite recevoir… » au paiement serait plus sûre). Rien n'est appliqué sans son « applique ».
