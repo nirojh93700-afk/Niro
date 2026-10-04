@@ -11,7 +11,7 @@ export function buildDraftAlertHtml(item, { orderRef = "", reason = "", source =
   const lien = `${BRAND.siteUrl}/repondre/${item.token}`;
   const boxCream = `white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:6px 0 14px;`;
   const boxWhite = `white-space:pre-line;background:#fff;border:1px solid #e6d7b8;border-radius:10px;padding:12px;margin:6px 0 14px;`;
-  const origine = source === "gmail" ? "Reçu dans la boîte mail" : "Reçu via le formulaire du site";
+  const origine = source === "gmail" ? "Reçu dans la boîte mail" : source === "bouton" ? "Réponse par le bouton « Répondre » d'un de nos e-mails" : "Reçu via le formulaire du site";
   const bodyHtml = `
     <p style="margin:0 0 6px;"><strong>${esc(item.name)}</strong> &lt;${esc(item.email)}&gt;${item.phone ? ` · ${esc(item.phone)}` : ""}</p>
     <p style="margin:0 0 4px;color:#7a7268;">${origine}${orderRef ? ` · commande <strong>#${esc(orderRef)}</strong> (rangé dans son fil)` : ""}</p>

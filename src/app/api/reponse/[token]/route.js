@@ -1,4 +1,8 @@
-import { getReplyLink, recordReplyLinkUse, logComm, ensureCommThread, batImportEmails, getGmailCreds, recordProspectReply } from "@/lib/stock";
+import { getReplyLink, recordReplyLinkUse, logComm, ensureCommThread, batImportEmails, getGmailCreds, recordProspectReply, addPendingReply, getSettings } from "@/lib/stock";
+import { triageIncomingEmail } from "@/lib/agents/registry";
+import { sendDraftAlert } from "@/lib/replyAlert";
+import { buildContext } from "@/lib/inbox";
+import { getSiteOrders } from "@/lib/firebase";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
@@ -54,6 +58,40 @@ export async function POST(req, { params }) {
     } catch { /* jamais bloquant */ }
   }
   try { await recordReplyLinkUse(params.token); } catch { /* ignore */ }
+
+  // 2 bis) « Il prépare, le gérant décide » (04/10/2026) : une réponse par le bouton passait
+  // SEULEMENT par l'alerte « 📬 Réponse de… » — l'agent n'était jamais appelé (la boîte mail
+  // surveillée ignore nos propres alertes). Maintenant l'agent prépare une réponse à valider
+  // + l'alerte « [À valider] » avec le bouton « Relire, modifier et envoyer ». Rien ne part
+  // à la cliente. Pas pour les restaurants / bars démarchés (leur écran dédié les gère).
+  let drafted = false;
+  if (!prospect) {
+    try {
+      const settings = await getSettings().catch(() => ({}));
+      if (settings?.agents?.emailDraft !== false) {
+        let order = null;
+        try {
+          if (it.orderId) order = (await getSiteOrders(300)).find((o) => o.id === it.orderId) || null;
+        } catch { order = null; }
+        let draft = null;
+        try {
+          const context = await buildContext(order, String(it.email || "").toLowerCase());
+          draft = await triageIncomingEmail({ name: it.name || it.email, email: it.email, subject: it.subject || "", message: text, context });
+        } catch { draft = null; }
+        const item = await addPendingReply({
+          name: it.name || it.email, email: it.email, subject: it.subject || "", message: text,
+          draft: draft?.reply || "", draftSubject: draft?.subject || (it.subject ? `Re : ${String(it.subject).replace(/^re\s*:\s*/i, "")}` : "Votre message — Niv Création"),
+          reason: draft?.reason || "",
+          orderId: it.orderId || "", orderRef: it.orderRef || "", source: "bouton",
+        });
+        if (item) {
+          await sendDraftAlert(item, { orderRef: it.orderRef || "", reason: draft?.reason || "", source: "bouton" });
+          drafted = true;
+        }
+      }
+    } catch { drafted = false; /* repli : l'alerte « 📬 » ci-dessous part quand même */ }
+  }
+  if (drafted) return Response.json({ ok: true });
 
   // 3) UNE alerte au gérant (reply-to = la cliente). Gmail d'abord, Resend en secours.
   const alertHtml = emailLayout({

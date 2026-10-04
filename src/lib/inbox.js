@@ -34,7 +34,7 @@ function fmtDate(ts) {
 }
 
 // Résumé lisible de la commande + des échanges, donné à l'agent pour répondre juste.
-async function buildContext(order, email) {
+export async function buildContext(order, email) {
   const parts = [];
   if (order) {
     const items = (order.items || []).map((it) => `${it.quantity || 1}× ${it.name}${it.details ? ` (${String(it.details).slice(0, 120)})` : ""}`).join(" ; ");
