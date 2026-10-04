@@ -19,7 +19,7 @@ if [ "$presents" -lt "$attendus" ]; then
 fi
 
 # 1 bis. Marketing Skills (non listés dans skills-lock.json) : seulement ceux utiles à la boutique
-for n in seo-audit schema product-marketing ai-seo copywriting copy-editing cro emails content-strategy analytics popups pricing offers social launch referrals lead-magnets site-architecture; do
+for n in seo-audit schema product-marketing ai-seo copywriting copy-editing cro emails content-strategy analytics popups pricing offers social launch referrals lead-magnets site-architecture cold-email ads ad-creative ab-testing competitors competitor-profiling customer-research community-marketing influencer-marketing free-tools events attribution image; do
   [ -d ".agents/skills/$n" ] || { timeout 300 npx -y skills add coreyhaines31/marketingskills -y --skill $n < /dev/null > /tmp/skills-mkt.log 2>&1 || true; }
 done
 
