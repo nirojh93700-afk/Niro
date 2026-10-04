@@ -8,6 +8,10 @@
   attend sa décision.
 - En cas de doute sur ce qui est permis : demander AVANT d'agir, jamais après.
 - Écrire chaque interdiction dans ce fichier le jour même, pour que toutes les conversations la respectent.
+- ⛔ **« MONTRE-MOI LE MAIL » = MONTRER, PUIS ATTENDRE UN « ENVOIE » SEUL (04/10/2026, incident Simon Pascal)** : une phrase qui
+  mêle « envoie » et « montre-moi » a été lue comme un ordre d'envoi → le mail est parti avant d'être montré. Si le gérant
+  demande de montrer un mail, **RIEN NE PART** tant qu'il n'a pas écrit « envoie » dans un message qui ne demande pas
+  aussi de le montrer. En cas de doute : montrer, ne pas envoyer.
 
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
