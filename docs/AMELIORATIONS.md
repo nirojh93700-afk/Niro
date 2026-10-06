@@ -61,3 +61,14 @@
   client a pu refuser à la collecte + chaque envoi porte un lien de désinscription. **Aucun lien de désinscription
   trouvé dans les e-mails de newsletter du code** → à ajouter avant toute inscription automatique (et une case
   « je souhaite recevoir… » au paiement serait plus sûre). Rien n'est appliqué sans son « applique ».
+
+## 15. « EXPÉDIÉE » ENVOYÉ AVANT LE VRAI DÉPART DU COLIS + LIVRAISON À DOMICILE LENTE (constaté le 06/10/2026, RIEN fait)
+> Gérant, captures Boxtal / Mondial Relay / Paack : colis de Madame Monhardt (étiquette 02/10, remis au transporteur
+> le 06/10), de Cécilia Herrera (« expédiée » 30/09, premier scan 06/10, puis confié par Mondial Relay à **Paack** —
+> sous-traitant de livraison à domicile), de Rose Catarino (aucun scan depuis le 30/09). Les clientes ont reçu
+> « votre commande est expédiée » plusieurs jours avant le départ réel.
+- Proposition 1 : n'envoyer le mail « expédiée » (et ne marquer « Expédiée ») qu'**après le premier scan du
+  transporteur** (suivi Boxtal), ou garder le statut « Étiquette créée » tant qu'il n'y en a pas.
+- Proposition 2 : la livraison à domicile Mondial Relay passe par des sous-traitants (Paack) et traîne ; comparer avec
+  Colissimo / Chronopost à domicile pour les colis fragiles (verres) — coût Boxtal à relever avant de proposer.
+- Rien n'est appliqué sans son « applique ».
