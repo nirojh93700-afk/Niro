@@ -13,6 +13,17 @@
   demande de montrer un mail, **RIEN NE PART** tant qu'il n'a pas écrit « envoie » dans un message qui ne demande pas
   aussi de le montrer. En cas de doute : montrer, ne pas envoyer.
 
+- ⛔ **TOUT MAIL CLIENT EST PERSONNALISÉ PAR RAPPORT À SA COMMANDE — OBLIGATOIRE (gérant, 07/10/2026 : « tu gardes en
+  mémoire, je dois toujours personnaliser les mails par rapport à la commande »)**. Jamais de mail type collé à tout le monde :
+  avant d'écrire, relire la commande (produits, gravure, livraison), le suivi du colis et le fil d'échanges ; le mail reprend
+  ce qui concerne CETTE cliente (produit commandé, occasion qu'elle a donnée, ce qu'elle a déjà dit). Ne pas citer une gravure
+  intime ou sensible. Vaut aussi pour les demandes d'avis et les mails de contrôle de réception.
+- ⛔ **DEMANDE D'AVIS / « AVEZ-VOUS REÇU ? » : VÉRIFIER LA LIVRAISON AVANT (07/10/2026)** : ne demander un avis qu'à une cliente dont
+  le colis est arrivé. Les mails « expédiée » partent parfois AVANT la remise au transporteur (étiquette imprimée plusieurs
+  jours avant le dépôt) : ne pas déduire une livraison de la date « Expédiée ». Dans un mail « avez-vous reçu ? », ne pas écrire
+  « dites-le-nous s'il y a un problème », ne pas parler du transporteur ni de nous contacter pour la livraison, ne donner aucune
+  date de passage du transporteur qu'on ne lit pas dans le suivi (la date où NOUS avons prévenu l'est toujours).
+
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
 > informations… j'ai pas la date, qu'est-ce que je grave ? ». Une commande sur devis n'a pas de `spec` :
