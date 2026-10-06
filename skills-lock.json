@@ -209,79 +209,79 @@
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/extension-to-functions-codebase/SKILL.md",
-      "computedHash": "4597667cb7548b9906708ff0e5fdc1043a59119d2cb32cba1142c03e8a85f315"
+      "computedHash": "c64b38c4eb77c3f58c01d29475bd194c4d158e7db8fe50f6c9aee401ce4248db"
     },
     "faceless-explainer": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/faceless-explainer/SKILL.md",
-      "computedHash": "22d7457d7797154fa0259560f81174757f6849b6259f5c24c216340248c2546a"
+      "computedHash": "11ccb757db1c440856b71a1cdc0c9a00dba6a4a858da266965666ac9216ceeb6"
     },
     "firebase-ai-logic-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-ai-logic-basics/SKILL.md",
-      "computedHash": "9fb678d0c441ab8b2b5820816b726b5a40a26c6f81f7f46e5570ca31e6c84052"
+      "computedHash": "5aa0c73be69ffe53e022f9b9fc1bd0e8233048b05fb15b288be8ee34e878b4d9"
     },
     "firebase-app-hosting-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-app-hosting-basics/SKILL.md",
-      "computedHash": "e32ac489690e6c04bf6a71ce965918fe65a192e9992e6ed887c572d7733621c2"
+      "computedHash": "017ad6e71769b3d7fe58bd54cf208ee91c82b2e32a2fc5f1c55719f22a8ef15b"
     },
     "firebase-auth-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-auth-basics/SKILL.md",
-      "computedHash": "8de012b4064910dfecb4c553ab8582d2aab0778b52fdbb86a020a407aba2349b"
+      "computedHash": "8343927347db469da64b3452810f6b2db05328760dd5448bcce80960829e2dfc"
     },
     "firebase-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-basics/SKILL.md",
-      "computedHash": "ea22b6b8d5f3f113fd85e3b1ab1af864dbcc08366e3cd7a738d5ea8c3e1f2be6"
+      "computedHash": "4ad816ea0a837a622920e411b7745dc74b74a8aa429089145e00f94a51a18abf"
     },
     "firebase-crashlytics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-crashlytics/SKILL.md",
-      "computedHash": "624c7d4b4a31aec138cb6a1dcce98258b9aced66ac81dbbada31a78b09802f79"
+      "computedHash": "7cb04adf4cfaacf94b7bd2f6001e395a1827d15dd29c834ec4efc84c174db2d6"
     },
     "firebase-data-connect": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-data-connect-basics/SKILL.md",
-      "computedHash": "ca3de978a8fd7ef2ae7048e155f6c5285baa7c0abb5156a3b06dccae8b36f689"
+      "computedHash": "b0659a164de50bedfa1514095fc42b67494a35d6b917269604c938c06c8e22c0"
     },
     "firebase-firestore": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-firestore/SKILL.md",
-      "computedHash": "ceb185eeadfd5b7a0411ec93314cc13980bbc943ae26fe0103de0b7aae69d0f4"
+      "computedHash": "0532fd1754ecb5b61020615b6b4f9bcd902146ea8127b9a872d6659071bd146a"
     },
     "firebase-hosting-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-hosting-basics/SKILL.md",
-      "computedHash": "381c7bb4200644d4a09f7f505bc5ba44b499cc74d0365d69bd3e313ea0865297"
+      "computedHash": "8a0a1b7b626ff9cccfd34e08d452e703ad35509992f5e12d3c2b5d2c8486e589"
     },
     "firebase-remote-config-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-remote-config-basics/SKILL.md",
-      "computedHash": "cccf0ae250cb08a9226b956e3ee90c9838e250dee3cf8736560a453e7831bb26"
+      "computedHash": "eeac96d95c4637ed15ab60a54bbc36cf0d29d425c3e843d645420ce9bfd1fbc7"
     },
     "firebase-security-rules-auditor": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
-      "computedHash": "f7c7565c93d0faf7c1d8e692a805d06c2794f39a0d9945634f3cd46860593517"
+      "computedHash": "561c8f8ebbb9c2984cfa08cc4ea29ebfe4b2cb9cf524e5fc7d092af0ad208be8"
     },
     "firestore-rules-creation": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firestore-rules-creation/SKILL.md",
-      "computedHash": "93f2a2f1a507eccd6dd4f060b3278fdeb902992d16eb8a6c3beaf68bf5fffae0"
+      "computedHash": "f71ddb7db4502f0ab3a8a510226594e85a26b695f935ba1baef331a90e8f0553"
     },
     "free-tools": {
       "source": "coreyhaines31/marketingskills",
@@ -317,25 +317,25 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes/SKILL.md",
-      "computedHash": "cbe09e37acad5644d2ca7e5135e685af5ebdaa17ead340d47005db0b51b02f75"
+      "computedHash": "967ece0f09efd542d5d6e4d158a583ec577a07b894fa4282d2191d2a7599ab6a"
     },
     "hyperframes-animation": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-animation/SKILL.md",
-      "computedHash": "ce23b952077dfd144b9bbc55317517aa6f3cac06aefa2bff05e71e905d0fcf27"
+      "computedHash": "f822d975ea4eb3af060bc2a3221abd95976f4fbef2b42855c33608cb62b44889"
     },
     "hyperframes-audio": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-audio/SKILL.md",
-      "computedHash": "a296cf05a722c7001b024848357cb389c8fa68f2d3cc7bc80f2a851d79eb0695"
+      "computedHash": "d6da35d6e64b830df3a5705b6d41402f5df9b2e526594973f304c31a16c3d59d"
     },
     "hyperframes-cli": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-cli/SKILL.md",
-      "computedHash": "746c38c1eb289b4017c638ddec2ae433fa492046d85beeb23f09d1e9187f8c5b"
+      "computedHash": "a0aeda8c1abe4d2d871cac53f1d3083bf001ba9dd78134d3847eb4e184681664"
     },
     "hyperframes-core": {
       "source": "heygen-com/hyperframes",
@@ -347,25 +347,25 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-creative/SKILL.md",
-      "computedHash": "f9051cbe8df7de26f03c0be594325b6a7ebdd8d505951f82023653cfdff3fd06"
+      "computedHash": "58d5b2aba7ff2cb90c78c0863a17f139a95b8f27e643d79bd32c385e3fbfabf5"
     },
     "hyperframes-keyframes": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-keyframes/SKILL.md",
-      "computedHash": "d633ed0e7cc2fbfa01668f577cabacfe9cb46187bbdad7acd8043a620a66dd00"
+      "computedHash": "99f3b420941f6f91d49c36865fb21e46a562cd43a3b88a1f2297f79d55542c35"
     },
     "hyperframes-registry": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-registry/SKILL.md",
-      "computedHash": "2b9f20d3ecce13836153afe1e15edd0e7a2e4610e99827a6087460a0d40ee0f5"
+      "computedHash": "54b17fdebee3ac56d279f0e2c1cfdab78839c05344bb4c0874c6f3941621e2ff"
     },
     "hyperframes-studio": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-studio/SKILL.md",
-      "computedHash": "973043665d27ebcde01459f622eebda8264cf513e4a4a362773b8bc8b5c34145"
+      "computedHash": "3ac6b0019626b0cfa0d067c52ae3e46b5d98722784b1ef103ac301a1815dfd7a"
     },
     "image": {
       "source": "coreyhaines31/marketingskills",
@@ -395,7 +395,7 @@
       "source": "pbakaus/impeccable",
       "sourceType": "github",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "computedHash": "e028c1c4dfa01f150119e3c361489c52001afa2e09ac4b5b18147013a462042e"
+      "computedHash": "0ec7c50507fd8c0380628e4245095104dc0623427dd5ea489dbf55742f84ffad"
     },
     "industrial-brutalist-ui": {
       "source": "Leonxlnx/taste-skill",
@@ -473,13 +473,13 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/motion-graphics/SKILL.md",
-      "computedHash": "623e1ae8b82b955c7555e2e160b8b8ffb17412fbbf6c02549a1eb5b5cb3afbfc"
+      "computedHash": "73420963bea97e1008257c32f89b172486e87b87132ee4ebc83d21e1805ffd25"
     },
     "music-to-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/music-to-video/SKILL.md",
-      "computedHash": "6d3fd79fde913889d2f5eb338ab4296a6fc90538664082f8945085e39b9f234c"
+      "computedHash": "414148d019f0c0f76077465c0684208a2470136dc4d184af04a12dc692b00088"
     },
     "offers": {
       "source": "coreyhaines31/marketingskills",
@@ -527,7 +527,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/product-launch-video/SKILL.md",
-      "computedHash": "c4ffb726b8c379ffa6f7ef3b75f621fec514a1b93d78fc55628e211ce6ce06c4"
+      "computedHash": "3f4312f9803b69e23f80cbfeccbdef27136c6f2d2186124704f5d993af87b47d"
     },
     "product-marketing": {
       "source": "coreyhaines31/marketingskills",
@@ -617,7 +617,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/slideshow/SKILL.md",
-      "computedHash": "627a8b17cab976bbc9d2779532ac15ac0c4f8e5b1b886bd885a210c4c072f580"
+      "computedHash": "fa178947b4cfe834d416c4d826d50cdd1f92dfb22395569032a40aa5d26819cc"
     },
     "sms": {
       "source": "coreyhaines31/marketingskills",
@@ -647,7 +647,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-best-practices/SKILL.md",
-      "computedHash": "e995c60c0fdc2903b85d0f0bd5580c7b9cefe90592aa60a7364f33c212971271"
+      "computedHash": "cf989539415bb2d0ca144d3e7d6a82af56bc68bf1634974fa1154cbed17d36a6"
     },
     "stripe-directory": {
       "source": "stripe/ai",
@@ -689,7 +689,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/upgrade-stripe/SKILL.md",
-      "computedHash": "eb3343b5bf07119a3d6cb98191af7e1997030ce00c53994462bfd26e0f45c6bf"
+      "computedHash": "f42e7b586d3a0eb8fa508f09ca72927fed8020533774cbfb9080f1807c5572e0"
     },
     "vercel-cli-with-tokens": {
       "source": "vercel-labs/agent-skills",
@@ -755,7 +755,7 @@
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/xcode-project-setup/SKILL.md",
-      "computedHash": "013d7ac834eac9b6dc761ed92b9b21f3513feb897acf021c8fea71da1cccd9f0"
+      "computedHash": "499dfa579550f5a00bab88d8acf9ad8e0ce336371bb4b2a19dfca13f97fb1fcd"
     }
   }
 }
