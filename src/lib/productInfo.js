@@ -814,7 +814,7 @@ Un souci à la réception ?
 
   "bracelet-homme-cuir-tresse-acier": {
     material: `Taille & Matériaux
-- Cuir véritable tressé + plaque en acier inoxydable gravable.
+- Tressage souple aspect cuir (pas du cuir véritable) + plaque en acier inoxydable gravable.
 - Finitions de la plaque : argentée, dorée ou noire.
 - Fermoir sécurisé. Bracelet masculin et intemporel.`,
     usage: `Personnalisation & Entretien
