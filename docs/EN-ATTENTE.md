@@ -184,6 +184,10 @@ En attente de SA décision :
 
 ## 5. Questions en attente de SA réponse
 
+- **Maquette « Jeux pour enfants » (07/10/2026)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
+  prix (proposé 24,90 €) · prénom +3 € ou compris · dimensions / bois · âge conseillé · marquage CE (EN 71) · poids ·
+  nom de la catégorie · son « applique ».
+
 - **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
   « I Love You » de l'ourson · noms des 16 modèles · 15 dessins ajoutés (licence pngtree des 2 mariés, fée qui

@@ -2693,6 +2693,25 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
+## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE (07/10/2026, en attente de son avis, RIEN en ligne)
+> Gérant : « on va faire une autre maquette, c'est une nouvelle catégorie, c'est des jeux pour les enfants, je te
+> donne les photos » — 9 puzzles à encastrer en bois (découpés + gravés au laser, encoches pour les doigts).
+- **Fichier** : `docs/maquettes/jeux-enfants.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x.
+  Générateur `tools/maquettes/jeux-enfants.py <capture du site>` ; la coquille du site (en-tête, pied de page,
+  2 feuilles de style, polices, logo à son adresse source) est maintenant partagée dans
+  **`tools/maquettes/coquille_site.py`** (`coquille(capture)`, `uri`, `raw_uri`, `LOGO_JS`) — à réutiliser pour
+  toute nouvelle maquette « qui ressemble au site ». Photos : `docs/maquettes/assets/jeux-enfants/`.
+- **Page** : intro « Des puzzles en bois, gravés au prénom de votre enfant » → filtres Animaux / Aventure / Jardin &
+  nature → 9 thèmes (forêt, savane, Australie, Grand Nord, dinosaures, véhicules de secours (7 pièces), camping,
+  jardin enchanté, fruits & légumes) avec la liste des pièces → panneau « Votre puzzle » (même schéma que les
+  cristaux gravés) : grande photo, pièces en pastilles, **prénom gravé en option** (14 car., 8 écritures, aperçu
+  posé en bas du plateau), total, quantité, bouton grisé tant qu'aucun thème → bandeau « cadeau qui grandit avec lui ».
+- **PRIX = PROPOSITIONS À VALIDER** : 24,90 € le puzzle · prénom +3 € (règle des gravures payantes). Vérifié
+  Chromium 1280/390 : 0 débordement, 0 erreur JS, total (24,90 + 3) × 2 = 55,80 €.
+- **Questions posées au gérant** : prix · prénom payant ou compris · dimensions/épaisseur/essence du bois · âge
+  conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
+  nom de la catégorie dans le menu.
+
 ## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)
 > ⛔ **LE LOGO ET L'EN-TÊTE NE SE TOUCHENT PAS** (gérant, 04/10, très ferme : « de quel droit tu touches à mon logo… tu
 > modifies pas les réglages qu'on a déjà faits, tu fais juste une maquette moderne »). Dans toute maquette, l'en-tête
