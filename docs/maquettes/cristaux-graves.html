@@ -85,6 +85,27 @@
 .cg-box .cg-ic{width:15px;height:15px;stroke-width:2.6}
 .cg-socle.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
 .cg-socle.on .cg-box{background:var(--gold-dark);border-color:var(--gold-dark);color:#fff}
+.cg-txt-ic{width:54px;height:54px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--cream-2);color:var(--gold-dark)}
+.cg-txt{margin-top:10px;padding:12px;border-radius:12px;background:#fbf4e6;border:1px solid #e7d3a1;display:grid;gap:8px}
+.cg-txt[hidden]{display:none}
+.cg-sub{font-size:.8rem;font-weight:600;color:var(--ink-soft)}
+.cg-inp{display:flex;align-items:center;gap:8px;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:0 12px}
+.cg-inp:focus-within{border-color:var(--gold-dark)}
+.cg-inp input{flex:1;min-width:0;box-sizing:border-box;border:0;background:none;font:inherit;font-size:16px;color:var(--ink);padding:11px 0;outline:none}
+.cg-inp span{font-size:.75rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.cg-fonts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.cg-font{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 6px;font-size:1.02rem;cursor:pointer;line-height:1.2;transition:border-color .15s,box-shadow .15s}
+.cg-font:hover{border-color:var(--gold)}
+.cg-font.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
+.cg-font.fnt-great-vibes,.cg-font.fnt-allura{font-size:1.35rem;padding-block:4px}
+.cg-pos{display:flex;flex-wrap:wrap;gap:6px}
+.cg-pos .cg-chip{padding:7px 12px;font-size:.84rem}
+.cg-txtpv{position:absolute;z-index:2;max-width:78%;color:#fff;font-size:clamp(1rem,2.4vw,1.4rem);line-height:1.15;text-align:center;text-shadow:0 0 10px rgba(255,255,255,.55),0 1px 2px rgba(0,0,0,.6);overflow-wrap:anywhere;pointer-events:none}
+.cg-txtpv[hidden]{display:none}
+.cg-txtpv.pos-bas{left:50%;bottom:9%;transform:translateX(-50%)}
+.cg-txtpv.pos-haut{left:50%;top:9%;transform:translateX(-50%)}
+.cg-txtpv.pos-gauche{left:7%;top:50%;transform:translateY(-50%);max-width:34%;text-align:left}
+.cg-txtpv.pos-droite{right:7%;top:50%;transform:translateY(-50%);max-width:34%;text-align:right}
 .cg-panel .pd-totbox .val{font-variant-numeric:tabular-nums}
 .cg-panel .qty-row{margin-bottom:8px}
 .cg-panel .btn-gold[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none}
@@ -272,7 +293,7 @@
     <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
       <div class="cg-stage" id="stage">
         <div class="cg-empty" id="vide"><svg class="cg-ic cg-ic-xl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20M9 3l3 6 3-6M12 9v12"/></svg><p><b>Votre cristal apparaîtra ici</b>Choisissez un modèle dans la galerie.</p></div>
-        <img id="grand" alt="" hidden>
+        <img id="grand" alt="" hidden><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
       </div>
       <h3 id="t-pan" class="cg-pname">Votre cristal</h3>
       <p class="cg-pdesc" id="pdesc">Aucun modèle choisi pour l'instant.</p>
@@ -297,6 +318,24 @@
         <span class="vs-price"><span class="vs-now">99,90 €</span></span></button><button type="button" class="variant-swatch" data-taille="xl" aria-pressed="false">
         <span class="vs-title">XL</span><span class="vs-sub" data-v="6×10×15 cm" data-h="15×10×6 cm">6×10×15 cm</span>
         <span class="vs-price"><span class="vs-now">149,90 €</span></span></button></div>
+      </div>
+
+      <div class="field">
+        <label>Texte gravé en plus (en option)</label>
+        <button type="button" class="cg-socle" id="txton" aria-pressed="false" aria-controls="txtzone">
+          <span class="cg-txt-ic"><svg class="cg-ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4.2-1 10.6-10.6a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="m14.5 6.5 3 3"/></svg></span>
+          <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
+          <span class="cg-socle-p">+5,00 €</span>
+          <span class="cg-box" aria-hidden="true"><svg class="cg-ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+        </button>
+        <div class="cg-txt" id="txtzone" hidden>
+          <label class="cg-sub" for="txt">Votre texte</label>
+          <div class="cg-inp"><input id="txt" type="text" maxlength="40" placeholder="Prénom, date, petit mot…" autocomplete="off"><span id="txtn">0/40</span></div>
+          <span class="cg-sub">Écriture</span>
+          <div class="cg-fonts" role="group" aria-label="Écriture du texte"><button type="button" class="cg-font fnt-playfair on" data-font="playfair" aria-pressed="true">Playfair</button><button type="button" class="cg-font fnt-cinzel" data-font="cinzel" aria-pressed="false">Cinzel</button><button type="button" class="cg-font fnt-cinzel-deco" data-font="cinzel-deco" aria-pressed="false">Cinzel Deco</button><button type="button" class="cg-font fnt-montserrat" data-font="montserrat" aria-pressed="false">Montserrat</button><button type="button" class="cg-font fnt-inter" data-font="inter" aria-pressed="false">Inter</button><button type="button" class="cg-font fnt-great-vibes" data-font="great-vibes" aria-pressed="false">Great Vibes</button><button type="button" class="cg-font fnt-allura" data-font="allura" aria-pressed="false">Allura</button><button type="button" class="cg-font fnt-pacifico" data-font="pacifico" aria-pressed="false">Pacifico</button></div>
+          <span class="cg-sub">Où placer le texte ?</span>
+          <div class="cg-pos" role="group" aria-label="Place du texte"><button type="button" class="cg-chip on" data-pos="bas" aria-pressed="true">En bas</button><button type="button" class="cg-chip" data-pos="haut" aria-pressed="false">En haut</button><button type="button" class="cg-chip" data-pos="gauche" aria-pressed="false">À gauche</button><button type="button" class="cg-chip" data-pos="droite" aria-pressed="false">À droite</button></div>
+        </div>
       </div>
 
       <div class="field">
@@ -360,7 +399,7 @@
 (function(){
   var M=[{"k": "ourson", "nom": "Ourson à la rose", "fmt": "v", "phrase": "Un ourson qui offre sa rose, avec « I Love You » gravé dessous."}, {"k": "rose", "nom": "Rose éternelle", "fmt": "v", "phrase": "Une rose qui ne fanera jamais."}, {"k": "coeur", "nom": "Cœur dans le cœur", "fmt": "c", "phrase": "Deux cœurs l'un dans l'autre, en relief."}, {"k": "fillette-ballon", "nom": "Fillette au ballon cœur", "fmt": "v", "phrase": "Une petite fille qui tend la main vers son ballon."}, {"k": "colibri", "nom": "Colibri et sa fleur", "fmt": "h", "phrase": "Le colibri en plein vol, butinant sa fleur."}, {"k": "perroquets", "nom": "Envol de perroquets", "fmt": "h", "phrase": "Trois perroquets en vol, plume par plume."}, {"k": "cheval", "nom": "Cheval de feu", "fmt": "v", "phrase": "Un cheval cabré, la crinière en flammes."}, {"k": "ours-mandala", "nom": "Ours mandala", "fmt": "c", "phrase": "Une tête d'ours ciselée de motifs mandala."}, {"k": "panda", "nom": "Panda et bambou", "fmt": "c", "phrase": "Un panda assis, son bambou dans les pattes."}, {"k": "chat-sapin", "nom": "Chaton au pied du sapin", "fmt": "c", "phrase": "Un chaton qui joue avec une boule de Noël."}, {"k": "sapin", "nom": "Sapin étoilé", "fmt": "h", "phrase": "Un sapin de Noël coiffé de son étoile."}, {"k": "bouddha", "nom": "Bouddha au lotus", "fmt": "v", "phrase": "Un visage apaisé posé sur une fleur de lotus."}, {"k": "ange", "nom": "Ange aux ailes déployées", "fmt": "c", "phrase": "Un ange gardien, ailes grandes ouvertes."}, {"k": "genie", "nom": "Génie de la lampe", "fmt": "v", "phrase": "Le génie qui sort de sa lampe."}, {"k": "lys-dragon", "nom": "Dragon et lys", "fmt": "c", "phrase": "Un petit dragon lové au pied d'un lys."}, {"k": "tour-eiffel", "nom": "Tour Eiffel", "fmt": "v", "phrase": "La Dame de fer, dans tous ses détails."}], T={"petit": {"nom": "Petit", "prix": 39.9, "socle": 14.9}, "moyen": {"nom": "Moyen", "prix": 59.9, "socle": 19.9}, "grand": {"nom": "Grand", "prix": 99.9, "socle": 19.9}, "xl": {"nom": "XL", "prix": 149.9, "socle": 19.9}};
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={i:-1,fmt:null,taille:'moyen',socle:false,q:1};
+  var st={txt:false,texte:'',font:'playfair',pos:'bas',i:-1,fmt:null,taille:'moyen',socle:false,q:1};
   var $=function(id){return document.getElementById(id)};
   var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
   var chips=[].slice.call(document.querySelectorAll('.cg-chip'));
@@ -385,15 +424,21 @@
   [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
     st.taille=b.dataset.taille;[].forEach.call(document.querySelectorAll('[data-taille]'),function(x){var on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('socle').addEventListener('click',function(){st.socle=!st.socle;this.classList.toggle('on',st.socle);this.setAttribute('aria-pressed',st.socle);maj()});
+  $('txton').addEventListener('click',function(){st.txt=!st.txt;this.classList.toggle('on',st.txt);this.setAttribute('aria-pressed',st.txt);$('txtzone').hidden=!st.txt;if(st.txt)$('txt').focus();maj()});
+  $('txt').addEventListener('input',function(){st.texte=this.value.trim();$('txtn').textContent=this.value.length+'/40';maj()});
+  [].forEach.call(document.querySelectorAll('[data-font]'),function(b){b.addEventListener('click',function(){st.font=b.dataset.font;[].forEach.call(document.querySelectorAll('[data-font]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
+  [].forEach.call(document.querySelectorAll('[data-pos]'),function(b){b.addEventListener('click',function(){st.pos=b.dataset.pos;[].forEach.call(document.querySelectorAll('[data-pos]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('moins').addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});
   $('plus').addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   $('ajout').addEventListener('click',function(){if(st.i<0)return;var b=this;b.textContent='Ajouté au panier ✓';setTimeout(function(){b.textContent='Ajouter au panier'},2200)});
   function maj(){
     var t=T[st.taille];$('soclep').textContent='+'+eur(t.socle);$('qte').textContent=st.q;
-    var unit=t.prix+(st.socle?t.socle:0);
-    var ok=st.i>=0&&!!st.fmt;
+    var avecTxt=st.txt&&!!st.texte;
+    var unit=t.prix+(st.socle?t.socle:0)+(avecTxt?5.0:0);
+    var ok=st.i>=0&&!!st.fmt&&(!st.txt||avecTxt);
+    var pv=$('txtpv');pv.hidden=!(avecTxt&&st.i>=0);pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
     $('total').textContent=ok?eur(unit*st.q):'—';
-    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle dans la galerie.':'Il manque le format : vertical ou horizontal.';
+    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle dans la galerie.':!st.fmt?'Il manque le format : vertical ou horizontal.':'Écrivez le texte à graver, ou retirez l\'option texte.';
     var bar=$('barre');bar.hidden=st.i<0;if(st.i>=0){$('barprix').textContent=t.nom+' · '+eur(unit)}
   }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});

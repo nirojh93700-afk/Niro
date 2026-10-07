@@ -2671,7 +2671,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   panneau « Votre cristal » à droite (collé à l'écran ; sous la grille au téléphone + barre en bas) : grande photo,
   format vertical/horizontal RIEN de présélectionné, c'est le client qui choisit (gérant 07/10 : « laisse le client
   choisir »), bouton grisé « il manque le format » tant qu'il n'a pas choisi, tailles = celles des blocs (classes `crystal-sizes` du site,
-  39,90 / 59,90 / 99,90 / 149,90 €), socle LED (+14,90 petit / +19,90), total, quantité, bouton grisé tant qu'aucun
+  39,90 / 59,90 / 99,90 / 149,90 €), **texte gravé en option +5 € comme les cristaux photo** (ajouté le 07/10 à sa
+  demande : « fais comme pour le cristal, le texte c'est payant » — texte 40 car., 8 écritures du site, place
+  bas/haut/gauche/droite, aperçu posé sur la grande photo ; option cochée sans texte = bouton grisé), socle LED
+  (+14,90 petit / +19,90), total, quantité, bouton grisé tant qu'aucun
   modèle → section sur-mesure améliorée (icônes dessinées au lieu des emojis, mosaïque d'exemples, 3 étapes en ligne
   de temps, cartes vertical/horizontal, note). Testée Chromium 1280/390 : 0 débordement, 0 erreur JS, total vérifié
   (Grand + socle × 2 = 239,60 €).

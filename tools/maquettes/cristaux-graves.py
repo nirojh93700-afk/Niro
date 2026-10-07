@@ -88,17 +88,19 @@ HEADER = src[body_start:i_main]
 FOOTER = src[j_main:src.rfind("</body>")]
 HTML_CLASS = re.search(r'<html[^>]*class="([^"]*)"', src).group(1)
 
-# Feuilles de style du site, intégrées ; seules les polices latines (préchargées) sont intégrées.
+# Feuilles de style du site, intégrées ; seules les polices latines (unicode-range u+00??) sont intégrées.
 css = ""
 for href in re.findall(r'<link rel="stylesheet" href="([^"]+)"', src):
     css += open(os.path.join(ROOT, ".next", href.replace("/_next/", "", 1)), encoding="utf-8").read() + "\n"
-latin = set(re.findall(r'/_next/static/media/([\w-]+\.p\.woff2)', open(SRC, encoding="utf-8").read()))
-def font_url(m):
-    f = m.group(1)
-    if f in latin:
-        return f"url({raw_uri(os.path.join(ROOT, '.next', 'static', 'media', f))})"
-    return "url(data:font/woff2;base64,)"
-css = re.sub(r"url\(/_next/static/media/([\w.-]+)\)", font_url, css)
+def font_face(m):
+    bloc = m.group(0)
+    garder = "unicode-range:u+00??" in bloc.lower() or not re.search(r"unicode-range", bloc)
+    def url(u):
+        if garder:
+            return f"url({raw_uri(os.path.join(ROOT, '.next', 'static', 'media', u.group(1)))})"
+        return "url(data:font/woff2;base64,)"
+    return re.sub(r"url\(/_next/static/media/([\w.-]+)\)", url, bloc)
+css = re.sub(r"@font-face\{[^}]*\}", font_face, css)
 
 root_vars = ";".join(re.findall(r"\.__variable_[0-9a-f]+\{([^}]*)\}", css))
 css += ":root{" + root_vars + "}\n"
@@ -172,6 +174,12 @@ SIZES = "".join(
         <span class="vs-price"><span class="vs-now">{euro(t[4])}</span></span></button>'''
     for t in TAILLES)
 
+FONTS = [("playfair", "Playfair"), ("cinzel", "Cinzel"), ("cinzel-deco", "Cinzel Deco"), ("montserrat", "Montserrat"),
+         ("inter", "Inter"), ("great-vibes", "Great Vibes"), ("allura", "Allura"), ("pacifico", "Pacifico")]
+TEXTE_PRIX = 5.00  # comme les cristaux photo : { key: "texte", amount: 5 }
+POLICES = "".join(f'<button type="button" class="cg-font fnt-{k}{" on" if k == "playfair" else ""}" data-font="{k}" aria-pressed="{"true" if k == "playfair" else "false"}">{lab}</button>' for k, lab in FONTS)
+PLACES = "".join(f'<button type="button" class="cg-chip{" on" if k == "bas" else ""}" data-pos="{k}" aria-pressed="{"true" if k == "bas" else "false"}">{lab}</button>' for k, lab in (("bas", "En bas"), ("haut", "En haut"), ("gauche", "À gauche"), ("droite", "À droite")))
+
 MAIN = f'''<main class="cg">
 <section class="cg-intro">
   <div class="container">
@@ -202,7 +210,7 @@ MAIN = f'''<main class="cg">
     <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
       <div class="cg-stage" id="stage">
         <div class="cg-empty" id="vide">{ic("gem","cg-ic cg-ic-xl")}<p><b>Votre cristal apparaîtra ici</b>Choisissez un modèle dans la galerie.</p></div>
-        <img id="grand" alt="" hidden>
+        <img id="grand" alt="" hidden><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
       </div>
       <h3 id="t-pan" class="cg-pname">Votre cristal</h3>
       <p class="cg-pdesc" id="pdesc">Aucun modèle choisi pour l'instant.</p>
@@ -219,6 +227,24 @@ MAIN = f'''<main class="cg">
       <div class="field">
         <label>Choisissez la taille</label>
         <div class="variant-swatches crystal-sizes" id="tailles">{SIZES}</div>
+      </div>
+
+      <div class="field">
+        <label>Texte gravé en plus (en option)</label>
+        <button type="button" class="cg-socle" id="txton" aria-pressed="false" aria-controls="txtzone">
+          <span class="cg-txt-ic">{ic("pen")}</span>
+          <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
+          <span class="cg-socle-p">+5,00 €</span>
+          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
+        </button>
+        <div class="cg-txt" id="txtzone" hidden>
+          <label class="cg-sub" for="txt">Votre texte</label>
+          <div class="cg-inp"><input id="txt" type="text" maxlength="40" placeholder="Prénom, date, petit mot…" autocomplete="off"><span id="txtn">0/40</span></div>
+          <span class="cg-sub">Écriture</span>
+          <div class="cg-fonts" role="group" aria-label="Écriture du texte">{POLICES}</div>
+          <span class="cg-sub">Où placer le texte ?</span>
+          <div class="cg-pos" role="group" aria-label="Place du texte">{PLACES}</div>
+        </div>
       </div>
 
       <div class="field">
@@ -363,6 +389,27 @@ CSS = r'''
 .cg-box .cg-ic{width:15px;height:15px;stroke-width:2.6}
 .cg-socle.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
 .cg-socle.on .cg-box{background:var(--gold-dark);border-color:var(--gold-dark);color:#fff}
+.cg-txt-ic{width:54px;height:54px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--cream-2);color:var(--gold-dark)}
+.cg-txt{margin-top:10px;padding:12px;border-radius:12px;background:#fbf4e6;border:1px solid #e7d3a1;display:grid;gap:8px}
+.cg-txt[hidden]{display:none}
+.cg-sub{font-size:.8rem;font-weight:600;color:var(--ink-soft)}
+.cg-inp{display:flex;align-items:center;gap:8px;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:0 12px}
+.cg-inp:focus-within{border-color:var(--gold-dark)}
+.cg-inp input{flex:1;min-width:0;box-sizing:border-box;border:0;background:none;font:inherit;font-size:16px;color:var(--ink);padding:11px 0;outline:none}
+.cg-inp span{font-size:.75rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.cg-fonts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.cg-font{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 6px;font-size:1.02rem;cursor:pointer;line-height:1.2;transition:border-color .15s,box-shadow .15s}
+.cg-font:hover{border-color:var(--gold)}
+.cg-font.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
+.cg-font.fnt-great-vibes,.cg-font.fnt-allura{font-size:1.35rem;padding-block:4px}
+.cg-pos{display:flex;flex-wrap:wrap;gap:6px}
+.cg-pos .cg-chip{padding:7px 12px;font-size:.84rem}
+.cg-txtpv{position:absolute;z-index:2;max-width:78%;color:#fff;font-size:clamp(1rem,2.4vw,1.4rem);line-height:1.15;text-align:center;text-shadow:0 0 10px rgba(255,255,255,.55),0 1px 2px rgba(0,0,0,.6);overflow-wrap:anywhere;pointer-events:none}
+.cg-txtpv[hidden]{display:none}
+.cg-txtpv.pos-bas{left:50%;bottom:9%;transform:translateX(-50%)}
+.cg-txtpv.pos-haut{left:50%;top:9%;transform:translateX(-50%)}
+.cg-txtpv.pos-gauche{left:7%;top:50%;transform:translateY(-50%);max-width:34%;text-align:left}
+.cg-txtpv.pos-droite{right:7%;top:50%;transform:translateY(-50%);max-width:34%;text-align:right}
 .cg-panel .pd-totbox .val{font-variant-numeric:tabular-nums}
 .cg-panel .qty-row{margin-bottom:8px}
 .cg-panel .btn-gold[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none}
@@ -429,7 +476,7 @@ JS = r'''
 (function(){
   var M=__DATA__, T=__TAILLES__;
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={i:-1,fmt:null,taille:'moyen',socle:false,q:1};
+  var st={txt:false,texte:'',font:'playfair',pos:'bas',i:-1,fmt:null,taille:'moyen',socle:false,q:1};
   var $=function(id){return document.getElementById(id)};
   var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
   var chips=[].slice.call(document.querySelectorAll('.cg-chip'));
@@ -454,22 +501,28 @@ JS = r'''
   [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
     st.taille=b.dataset.taille;[].forEach.call(document.querySelectorAll('[data-taille]'),function(x){var on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('socle').addEventListener('click',function(){st.socle=!st.socle;this.classList.toggle('on',st.socle);this.setAttribute('aria-pressed',st.socle);maj()});
+  $('txton').addEventListener('click',function(){st.txt=!st.txt;this.classList.toggle('on',st.txt);this.setAttribute('aria-pressed',st.txt);$('txtzone').hidden=!st.txt;if(st.txt)$('txt').focus();maj()});
+  $('txt').addEventListener('input',function(){st.texte=this.value.trim();$('txtn').textContent=this.value.length+'/40';maj()});
+  [].forEach.call(document.querySelectorAll('[data-font]'),function(b){b.addEventListener('click',function(){st.font=b.dataset.font;[].forEach.call(document.querySelectorAll('[data-font]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
+  [].forEach.call(document.querySelectorAll('[data-pos]'),function(b){b.addEventListener('click',function(){st.pos=b.dataset.pos;[].forEach.call(document.querySelectorAll('[data-pos]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('moins').addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});
   $('plus').addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   $('ajout').addEventListener('click',function(){if(st.i<0)return;var b=this;b.textContent='Ajouté au panier ✓';setTimeout(function(){b.textContent='Ajouter au panier'},2200)});
   function maj(){
     var t=T[st.taille];$('soclep').textContent='+'+eur(t.socle);$('qte').textContent=st.q;
-    var unit=t.prix+(st.socle?t.socle:0);
-    var ok=st.i>=0&&!!st.fmt;
+    var avecTxt=st.txt&&!!st.texte;
+    var unit=t.prix+(st.socle?t.socle:0)+(avecTxt?__TXT__:0);
+    var ok=st.i>=0&&!!st.fmt&&(!st.txt||avecTxt);
+    var pv=$('txtpv');pv.hidden=!(avecTxt&&st.i>=0);pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
     $('total').textContent=ok?eur(unit*st.q):'—';
-    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle dans la galerie.':'Il manque le format : vertical ou horizontal.';
+    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle dans la galerie.':!st.fmt?'Il manque le format : vertical ou horizontal.':'Écrivez le texte à graver, ou retirez l\'option texte.';
     var bar=$('barre');bar.hidden=st.i<0;if(st.i>=0){$('barprix').textContent=t.nom+' · '+eur(unit)}
   }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   var vu=false;if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
   maj();
 })();
-'''.replace("__DATA__", DATA).replace("__TAILLES__", TAILLES_JS)
+'''.replace("__DATA__", DATA).replace("__TXT__", str(TEXTE_PRIX)).replace("__TAILLES__", TAILLES_JS)
 
 BANNER = '<div class="mq-banner">MAQUETTE — page « Cristaux déjà gravés » · <b>rien n\'est encore sur le site</b></div>'
 TITLE = "<title>Cristaux déjà gravés — Niv Création (maquette)</title>"
