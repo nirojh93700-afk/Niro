@@ -2693,7 +2693,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
-## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE (07/10/2026, en attente de son avis, RIEN en ligne)
+## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
+> C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « on va faire une autre maquette, c'est une nouvelle catégorie, c'est des jeux pour les enfants, je te
 > donne les photos » — 9 puzzles à encastrer en bois (découpés + gravés au laser, encoches pour les doigts).
 - **Fichier** : `docs/maquettes/jeux-enfants.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x.

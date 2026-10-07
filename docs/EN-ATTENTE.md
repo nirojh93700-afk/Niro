@@ -184,7 +184,7 @@ En attente de SA décision :
 
 ## 5. Questions en attente de SA réponse
 
-- **Maquette « Jeux pour enfants » (07/10/2026)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
+- **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 1)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
   prix (proposé 24,90 €) · prénom +3 € ou compris · dimensions / bois · âge conseillé · marquage CE (EN 71) · poids ·
   nom de la catégorie · son « applique ».
 
