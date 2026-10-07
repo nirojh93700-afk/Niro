@@ -72,3 +72,13 @@
 - Proposition 2 : la livraison à domicile Mondial Relay passe par des sous-traitants (Paack) et traîne ; comparer avec
   Colissimo / Chronopost à domicile pour les colis fragiles (verres) — coût Boxtal à relever avant de proposer.
 - Rien n'est appliqué sans son « applique ».
+
+## 🍪 Conformité « cookies » du site (07/10/2026, vérifié dans le code après une vidéo TikTok envoyée par le gérant)
+- Google Analytics (`settings.gaId`, renseigné G-RMBERKLVN9) et le pixel Meta (`settings.metaPixelId`, s'il est
+  rempli) se chargent dans `layout.jsx` **dès l'arrivée, sans demander l'accord** → non conforme CNIL. Et
+  `/confidentialite` §5 dit « pas de cookies publicitaires / seulement le panier » → page à corriger.
+- Proposition : bandeau cookies « Tout accepter / Tout refuser / Personnaliser » (refuser aussi visible qu'accepter),
+  GA et Meta chargés SEULEMENT après « accepter », choix gardé 6 mois, lien « Gérer mes cookies » en pied de page,
+  § cookies de la politique de confidentialité réécrit. Compteur de visites interne (sans cookie) inchangé.
+- Le reste de la liste de la vidéo existe déjà : confidentialité, CGV, retours, mentions légales (SIRET), médiation (§9 CGV).
+- Rien n'est appliqué sans son « applique ».
