@@ -2223,7 +2223,7 @@ sont **récupérables** dans le transcript de session (`~/.claude/projects/…/<
 ### MAQUETTES CRISTAL 3D SUR MESURE — ENREGISTRÉES (08/07/2026, à appliquer quand la gérante le dira)
 > Deux maquettes validées en test, **sauvegardées telles quelles** dans `docs/maquettes/`. Quand la gérante dit « mets-le / applique », reproduire **EXACTEMENT** (règle maquettes). Décision : proposer **LES DEUX** (modèles prêts + photo perso), **même prix que les blocs par taille** (Petit 39,90 · Moyen 59,90 · Grand 99,90 · XL 149,90).
 - **`docs/maquettes/cristal-surmesure-section.html`** : section à ajouter en haut de `/cristaux` — titre « Gravez ce que vous voulez dans le cristal », tags (Photo/Animal/Dessin/Logo/Objet — **PAS** Couple&famille, déjà couvert par les blocs photo), 3 étapes, **galerie de 8 exemples** (cœur, sirène, dessin enfant, baleines, oiseaux, colibri, portrait, objet/échecs — images fournies par la gérante, IMG_9083..9089 + 8958), 2 cartes format (vertical/horizontal) → boutons vers les blocs.
-- **`docs/maquettes/cristal-configurateur.html`** : configurateur d'achat — le client choisit un **modèle prêt** (les 8) OU **« Ma propre photo »**, puis **format** (vertical/horizontal) + **taille** (prix des blocs), aperçu à gauche, total + « Ajouter au panier ». À brancher au panier/paiement existant (modèle prêt = achat direct ; photo perso = upload comme les blocs actuels).
+- ~~`docs/maquettes/cristal-configurateur.html`~~ **SUPPRIMÉE le 07/10/2026** à la demande du gérant (« utilise cette maquette, l'autre tu peux la supprimer ») : remplacée par `cristaux-graves.html` (voir section « CRISTAUX DÉJÀ GRAVÉS »).
 - **À vérifier côté gérante** : que le fournisseur peut produire ces modèles (cœur, sirène, échecs… = modèles standards, normalement oui).
 
 ### MAQUETTE EN ATTENTE — NOUVEAU THÈME « L'ÉCRIN » (enregistrée le 06/07/2026, à appliquer PLUS TARD)
@@ -2654,6 +2654,28 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   style « Swiss ») ne remplacent JAMAIS la charte de la boutique (or #c9a24b / crème / encre) ni le gabarit
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
+
+## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — 07/10/2026 (en attente de son avis, RIEN en ligne)
+> Gérant : « une page pour les blocs de cristal déjà gravés… le client peut sélectionner… améliore le sur-mesure
+> après » + 16 photos de cristaux gravés, puis « améliore celui-là [cristal-surmesure-section] avec tout ce que t'as
+> installé, il faut que ça ressemble au site ». L'ancienne maquette `cristal-configurateur.html` est supprimée.
+- **Fichier** : `docs/maquettes/cristaux-graves.html` (+ `.fragment.html`), artifact
+  https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz. Générateur `tools/maquettes/cristaux-graves.py <capture /cristaux>`
+  (capture = `curl localhost:3140/cristaux` après `npm run build` + `next start`) : en-tête et pied de page RÉELS du
+  site (logo à son adresse source, jamais copié), ses 2 feuilles de style + polices Inter/Playfair intégrées, seul
+  `<main>` est neuf. Photos : `docs/maquettes/assets/cristaux-graves/` (16 modèles + 4 exemples sur-mesure repris de
+  l'ancienne section).
+- **Page** : intro « Des cristaux déjà gravés, prêts à offrir » → filtres (Amour, Animaux, Noël, Zen & spirituel,
+  Légendes, Voyage) → grille des 16 modèles (pastille format + « dès 39,90 € ») + carte « Votre propre image ? » →
+  panneau « Votre cristal » à droite (collé à l'écran ; sous la grille au téléphone + barre en bas) : grande photo,
+  format vertical/horizontal (conseillé présélectionné), tailles = celles des blocs (classes `crystal-sizes` du site,
+  39,90 / 59,90 / 99,90 / 149,90 €), socle LED (+14,90 petit / +19,90), total, quantité, bouton grisé tant qu'aucun
+  modèle → section sur-mesure améliorée (icônes dessinées au lieu des emojis, mosaïque d'exemples, 3 étapes en ligne
+  de temps, cartes vertical/horizontal, note). Testée Chromium 1280/390 : 0 débordement, 0 erreur JS, total vérifié
+  (Grand + socle × 2 = 239,60 €).
+- **Questions posées au gérant** : prix (mêmes que les blocs ?) · les 6 modèles photographiés en CUBE (pas de cube
+  au catalogue → proposés en vertical/horizontal) · « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
+  « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
 ## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)
 > ⛔ **LE LOGO ET L'EN-TÊTE NE SE TOUCHENT PAS** (gérant, 04/10, très ferme : « de quel droit tu touches à mon logo… tu
