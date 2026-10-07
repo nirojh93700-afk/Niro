@@ -185,7 +185,7 @@ En attente de SA décision :
 ## 5. Questions en attente de SA réponse
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
-  prix = ceux des blocs ? · 6 modèles en cube → vertical/horizontal ? · « Fillette au ballon » (Banksy, droits) à garder ? ·
+  (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
   « I Love You » de l'ourson · noms des 16 modèles · son « applique ».
 
 - **Remboursement, palier du milieu** : après 24 h, retenue de **10 €** (valeur actuelle) ou **−10 %** ?

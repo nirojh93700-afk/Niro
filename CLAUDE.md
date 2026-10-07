@@ -2666,15 +2666,18 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `<main>` est neuf. Photos : `docs/maquettes/assets/cristaux-graves/` (16 modèles + 4 exemples sur-mesure repris de
   l'ancienne section).
 - **Page** : intro « Des cristaux déjà gravés, prêts à offrir » → filtres (Amour, Animaux, Noël, Zen & spirituel,
-  Légendes, Voyage) → grille des 16 modèles (pastille format + « dès 39,90 € ») + carte « Votre propre image ? » →
+  Légendes, Voyage) → grille des 16 modèles (« dès 39,90 € » seulement — ⛔ PAS d'étiquette Vertical/Horizontal/Cube sur
+  les photos, retirée le 07/10 à sa demande) + carte « Votre propre image ? » →
   panneau « Votre cristal » à droite (collé à l'écran ; sous la grille au téléphone + barre en bas) : grande photo,
-  format vertical/horizontal (conseillé présélectionné), tailles = celles des blocs (classes `crystal-sizes` du site,
+  format vertical/horizontal RIEN de présélectionné, c'est le client qui choisit (gérant 07/10 : « laisse le client
+  choisir »), bouton grisé « il manque le format » tant qu'il n'a pas choisi, tailles = celles des blocs (classes `crystal-sizes` du site,
   39,90 / 59,90 / 99,90 / 149,90 €), socle LED (+14,90 petit / +19,90), total, quantité, bouton grisé tant qu'aucun
   modèle → section sur-mesure améliorée (icônes dessinées au lieu des emojis, mosaïque d'exemples, 3 étapes en ligne
   de temps, cartes vertical/horizontal, note). Testée Chromium 1280/390 : 0 débordement, 0 erreur JS, total vérifié
   (Grand + socle × 2 = 239,60 €).
-- **Questions posées au gérant** : prix (mêmes que les blocs ?) · les 6 modèles photographiés en CUBE (pas de cube
-  au catalogue → proposés en vertical/horizontal) · « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
+- ✅ **Prix = ceux des cristaux photo** (gérant 07/10 : « il faut que ça soit comme pour les photos ») ; tout modèle
+  se grave en vertical OU horizontal, au choix du client.
+- **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
 ## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)

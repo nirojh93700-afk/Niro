@@ -149,7 +149,6 @@ def tuile(idx, m):
     k, nom, fam, fmt, phrase = m
     return f'''<button type="button" class="cg-tile" data-i="{idx}" data-fam="{fam}" aria-pressed="false">
       <span class="cg-img"><img src="{IMG[k]}" alt="Cristal gravé : {nom}" loading="lazy"></span>
-      <span class="cg-fmt">{FMT_LABEL[fmt]}</span>
       <span class="cg-price">dès 39,90 €</span>
       <span class="cg-ok" aria-hidden="true">{ic("check")}</span>
       <span class="cg-lab"><b>{nom}</b><span class="cg-ph">{phrase}</span></span>
@@ -211,10 +210,10 @@ MAIN = f'''<main class="cg">
       <div class="field">
         <label>Format du cristal</label>
         <div class="variant-swatches cg-fmts">
-          <button type="button" class="variant-swatch has-img active" data-fmt="v" aria-pressed="true"><img src="{FMT_V}" alt=""><span class="vs-title">Vertical</span></button>
+          <button type="button" class="variant-swatch has-img" data-fmt="v" aria-pressed="false"><img src="{FMT_V}" alt=""><span class="vs-title">Vertical</span></button>
           <button type="button" class="variant-swatch has-img" data-fmt="h" aria-pressed="false"><img src="{FMT_H}" alt=""><span class="vs-title">Horizontal</span></button>
         </div>
-        <p class="cg-hint" id="fmthint">Le format conseillé pour ce modèle est présélectionné.</p>
+        <p class="cg-hint" id="fmthint">Vertical ou horizontal : c'est vous qui choisissez, chaque modèle se grave dans les deux formats.</p>
       </div>
 
       <div class="field">
@@ -324,7 +323,6 @@ CSS = r'''
 .cg-lab{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:30px 10px 10px;color:rgba(255,255,255,.86);background:linear-gradient(transparent,rgba(23,15,6,.86) 55%);font-size:.76rem;line-height:1.35}
 .cg-lab b{display:block;font-size:.92rem;color:#e2c67e;margin-bottom:2px}
 .cg-price{position:absolute;top:8px;right:8px;z-index:2;background:rgba(255,253,249,.95);color:var(--ink);font-weight:700;font-size:.72rem;padding:4px 9px;border-radius:20px;border:1px solid #e7ddcd}
-.cg-fmt{position:absolute;top:8px;left:8px;z-index:2;background:rgba(43,38,32,.82);color:#e2c67e;font-weight:700;font-size:.72rem;padding:4px 8px;border-radius:20px;letter-spacing:.02em}
 .cg-ok{position:absolute;top:50%;left:50%;z-index:3;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.35);opacity:0;transform:scale(.6);transition:opacity .2s,transform .35s cubic-bezier(.22,1,.36,1)}
 .cg-ok .cg-ic{width:24px;height:24px;stroke-width:2.4}
 .cg-tile.on{box-shadow:0 0 0 3px var(--gold),0 14px 30px rgba(169,137,53,.35)}
@@ -431,7 +429,7 @@ JS = r'''
 (function(){
   var M=__DATA__, T=__TAILLES__;
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={i:-1,fmt:'v',taille:'moyen',socle:false,q:1};
+  var st={i:-1,fmt:null,taille:'moyen',socle:false,q:1};
   var $=function(id){return document.getElementById(id)};
   var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
   var chips=[].slice.call(document.querySelectorAll('.cg-chip'));
@@ -446,13 +444,11 @@ JS = r'''
     g.style.animation='none';void g.offsetWidth;g.style.animation='';
     $('vide').hidden=true;
     $('t-pan').textContent=m.nom;$('pdesc').textContent=m.phrase;
-    setFmt(m.fmt==='h'?'h':'v');
-    $('fmthint').textContent=m.fmt==='c'?'Ce modèle se grave aussi bien en vertical qu\'en horizontal.':'Format conseillé pour ce modèle : '+(m.fmt==='h'?'horizontal':'vertical')+'.';
     $('barimg').src=g.src;$('barnom').textContent=m.nom;
     if(window.innerWidth<=860){$('panneau').scrollIntoView({behavior:'smooth',block:'start'})}
     maj();
   })});
-  function setFmt(f){st.fmt=f;[].forEach.call(document.querySelectorAll('[data-fmt]'),function(b){var on=b.dataset.fmt===f;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
+  function setFmt(f){st.fmt=f;if(!f)return;[].forEach.call(document.querySelectorAll('[data-fmt]'),function(b){var on=b.dataset.fmt===f;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
     [].forEach.call(document.querySelectorAll('#tailles .vs-sub'),function(s){s.textContent=s.dataset[f]})}
   [].forEach.call(document.querySelectorAll('[data-fmt]'),function(b){b.addEventListener('click',function(){setFmt(b.dataset.fmt);maj()})});
   [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
@@ -464,14 +460,14 @@ JS = r'''
   function maj(){
     var t=T[st.taille];$('soclep').textContent='+'+eur(t.socle);$('qte').textContent=st.q;
     var unit=t.prix+(st.socle?t.socle:0);
-    var ok=st.i>=0;
+    var ok=st.i>=0&&!!st.fmt;
     $('total').textContent=ok?eur(unit*st.q):'—';
-    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;
-    var bar=$('barre');bar.hidden=!ok;if(ok){$('barprix').textContent=t.nom+' · '+eur(unit)}
+    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle dans la galerie.':'Il manque le format : vertical ou horizontal.';
+    var bar=$('barre');bar.hidden=st.i<0;if(st.i>=0){$('barprix').textContent=t.nom+' · '+eur(unit)}
   }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   var vu=false;if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
-  setFmt('v');maj();
+  maj();
 })();
 '''.replace("__DATA__", DATA).replace("__TAILLES__", TAILLES_JS)
 
