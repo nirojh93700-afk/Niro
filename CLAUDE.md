@@ -2655,7 +2655,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
 
-## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — 07/10/2026 (en attente de son avis, RIEN en ligne)
+## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (« Enregistre cette maquette », version 4 de l'artifact) — RIEN en ligne
+> C'est CETTE version (16 modèles + 15 dessins + texte +5 € + format au choix + sur-mesure) à reproduire à l'identique
+> le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « une page pour les blocs de cristal déjà gravés… le client peut sélectionner… améliore le sur-mesure
 > après » + 16 photos de cristaux gravés, puis « améliore celui-là [cristal-surmesure-section] avec tout ce que t'as
 > installé, il faut que ça ressemble au site ». L'ancienne maquette `cristal-configurateur.html` est supprimée.

@@ -184,7 +184,7 @@ En attente de SA décision :
 
 ## 5. Questions en attente de SA réponse
 
-- **Maquette « Cristaux déjà gravés » (07/10/2026)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
+- **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
   « I Love You » de l'ourson · noms des 16 modèles · 15 dessins ajoutés (licence pngtree des 2 mariés, fée qui
   ressemble à la Fée Clochette, colibri couleur en double) · son « applique ».
