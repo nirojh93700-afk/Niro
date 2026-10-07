@@ -2707,9 +2707,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   jardin enchanté, fruits & légumes) avec la liste des pièces → panneau « Votre puzzle » (même schéma que les
   cristaux gravés) : grande photo, pièces en pastilles, **prénom gravé en option** (14 car., 8 écritures, aperçu
   posé en bas du plateau), total, quantité, bouton grisé tant qu'aucun thème → bandeau « cadeau qui grandit avec lui ».
-- **PRIX = PROPOSITIONS À VALIDER** : 24,90 € le puzzle · prénom +3 € (règle des gravures payantes). Vérifié
-  Chromium 1280/390 : 0 débordement, 0 erreur JS, total (24,90 + 3) × 2 = 55,80 €.
-- **Questions posées au gérant** : prix · prénom payant ou compris · dimensions/épaisseur/essence du bois · âge
+- **PRIX VALIDÉ LE 07/10 (« 1 », après relevé du marché : 20–55 €, surtout 30–40 €, prénom presque toujours
+  compris)** : **29,90 € le puzzle, prénom gravé COMPRIS** (facultatif, « Compris » affiché sur l'option) — version 2
+  de l'artifact. Vérifié Chromium 1280/390 : 0 débordement, 0 erreur JS.
+- **Questions posées au gérant** : dimensions/épaisseur/essence du bois · âge
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 

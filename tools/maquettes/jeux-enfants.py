@@ -17,8 +17,8 @@ OUT = os.path.join(ROOT, "docs", "maquettes")
 ASSETS = os.path.join(OUT, "assets", "jeux-enfants")
 SHELL = coquille(sys.argv[1])
 
-PRIX = 24.90        # proposition : puzzle à encastrer, à valider par le gérant
-PRIX_PRENOM = 3.00  # proposition : prénom gravé sur le plateau (supplément de gravure, comme les autres gravures)
+PRIX = 29.90        # validé par le gérant le 07/10/2026 : prénom compris
+PRIX_PRENOM = 0     # prénom compris dans le prix (choix du gérant, 07/10/2026)
 
 # (fichier, nom, famille, pièces)
 THEMES = [
@@ -114,11 +114,11 @@ MAIN = f'''<main class="jx">
       <ul class="jx-pieces" id="pieces"></ul>
 
       <div class="field">
-        <label>Prénom gravé sur le plateau (en option)</label>
+        <label>Prénom gravé sur le plateau (compris, facultatif)</label>
         <button type="button" class="jx-opt" id="prenomon" aria-pressed="false" aria-controls="prenomzone">
           <span class="jx-opt-ic">{ic("pen")}</span>
           <span><b>Ajouter le prénom</b><small>Gravé en bas du plateau, dans l'écriture de votre choix</small></span>
-          <span class="jx-opt-p">+{euro(PRIX_PRENOM)}</span>
+          <span class="jx-opt-p">Compris</span>
           <span class="jx-box" aria-hidden="true">{ic("check")}</span>
         </button>
         <div class="jx-txt" id="prenomzone" hidden>

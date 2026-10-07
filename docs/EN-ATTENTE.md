@@ -184,8 +184,8 @@ En attente de SA décision :
 
 ## 5. Questions en attente de SA réponse
 
-- **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 1)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
-  prix (proposé 24,90 €) · prénom +3 € ou compris · dimensions / bois · âge conseillé · marquage CE (EN 71) · poids ·
+- **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 2)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
+  (prix 29,90 € prénom compris ✅ 07/10) · dimensions / bois · âge conseillé · marquage CE (EN 71) · poids ·
   nom de la catégorie · son « applique ».
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
