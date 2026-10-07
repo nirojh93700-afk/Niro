@@ -47,3 +47,4 @@ motifs-gravure.zip
 # Sorties de rendu vidéo (regénérables)
 /videos/niv-produits/renders/
 /.playwright-cli/
+__pycache__/
