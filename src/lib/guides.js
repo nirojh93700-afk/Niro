@@ -167,7 +167,7 @@ export function guidePourProduit(product) {
     if (sub === "femme") return getGuide("cadeau-femme-personnalise");
     return getGuide("idees-gravure-bijoux");
   }
-  if (/lampe|veilleuse|lumineu|led|bougeoir/.test(nom)) return getGuide("deco-lumineuse-bois");
+  if (/lampe|veilleuse|lumineu|led|bougeoir|photophore/.test(nom)) return getGuide("deco-lumineuse-bois");
   return null;
 }
 
