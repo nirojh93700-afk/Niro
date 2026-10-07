@@ -24,6 +24,12 @@
   « dites-le-nous s'il y a un problème », ne pas parler du transporteur ni de nous contacter pour la livraison, ne donner aucune
   date de passage du transporteur qu'on ne lit pas dans le suivi (la date où NOUS avons prévenu l'est toujours).
 
+- ⛔ **« ÉCHEC DE L'ENVOI » NE VEUT PAS DIRE « RIEN N'EST PARTI » (07/10/2026, incident Faustine Dominguez)** : `/api/admin/send-client-email`
+  a répondu « Gmail non connecté et Resend indisponible » alors que le mail était **bien parti** (boîte d'envoi : 21 h 33). J'avais dit au gérant
+  « pas parti » et programmé un doublon. **Après toute erreur d'envoi : chercher le mail dans la boîte d'envoi de l'atelier (Gmail, lecture seule :
+  `to:<adresse> newer_than:1d in:anywhere`) AVANT de dire qu'il n'est pas parti, de réessayer ou de programmer.** Même vérification avant tout nouvel
+  envoi à la même cliente.
+
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
 > informations… j'ai pas la date, qu'est-ce que je grave ? ». Une commande sur devis n'a pas de `spec` :
