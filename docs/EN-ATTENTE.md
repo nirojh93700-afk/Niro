@@ -186,7 +186,8 @@ En attente de SA décision :
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
-  « I Love You » de l'ourson · noms des 16 modèles · son « applique ».
+  « I Love You » de l'ourson · noms des 16 modèles · 15 dessins ajoutés (licence pngtree des 2 mariés, fée qui
+  ressemble à la Fée Clochette, colibri couleur en double) · son « applique ».
 
 - **Remboursement, palier du milieu** : après 24 h, retenue de **10 €** (valeur actuelle) ou **−10 %** ?
 - **Prix du gobelet 40 oz** : ✅ **47,90 € net, livraison en plus** (fixé par le gérant le 03/10/2026, maquette à jour).

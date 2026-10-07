@@ -59,6 +59,26 @@ MODELES = [
     ("lys-dragon", "Dragon et lys", "legendes", "c", "Un petit dragon lové au pied d'un lys."),
     ("tour-eiffel", "Tour Eiffel", "voyage", "v", "La Dame de fer, dans tous ses détails."),
 ]
+# Dessins à graver (15 images fournies par le gérant le 07/10) : le CLIENT choisit s'il en veut un,
+# rien n'est sélectionné d'avance. Préparés par le script (fond clair retiré, trait passé en blanc,
+# bandeau Pinterest et filigranes effacés, WebP blanc sur fond transparent) → docs/maquettes/assets/cristaux-graves/dessins/.
+DESSINS = [
+    ("maries-couronne", "Mariés en couronne fleurie", "amour"),
+    ("maries-coeur", "Mariés dans un cœur", "amour"),
+    ("maries-bouquet", "Mariés au bouquet", "amour"),
+    ("couple-roses", "Couple et roses", "amour"),
+    ("ange-ciel", "Ange vers la lumière", "zen"),
+    ("bouddha-lotus", "Bouddha sur le lotus", "zen"),
+    ("bouddha-mandala", "Bouddha au mandala", "zen"),
+    ("fee-rose", "Fée sur la rose", "legendes"),
+    ("fee-lune", "Fée de lune", "legendes"),
+    ("fee-silhouette", "Fée aux ailes ciselées", "legendes"),
+    ("archere", "L'archère", "legendes"),
+    ("colibri-rose", "Colibri à la rose", "animaux"),
+    ("colibri-couleur", "Colibri à la rose (version pleine)", "animaux"),
+    ("cheval-tete", "Cheval à la crinière", "animaux"),
+    ("cle-de-sol", "Clé de sol et papillon", "musique"),
+]
 FAMILLES = [("tous", "Tous les modèles"), ("amour", "Amour"), ("animaux", "Animaux"), ("noel", "Noël"),
             ("zen", "Zen & spirituel"), ("legendes", "Légendes"), ("voyage", "Voyage")]
 FMT_LABEL = {"v": "Vertical", "h": "Horizontal", "c": "Cube"}
@@ -118,6 +138,7 @@ HEADER = re.sub(r'href="/[^"]*"', 'href="#"', HEADER)
 FOOTER = re.sub(r'href="/[^"]*"', 'href="#"', FOOTER)
 
 # ---------------------------------------------------------------- images
+DIMG = {k: raw_uri(os.path.join(ASSETS, "dessins", f"{k}.webp")) for k, *_ in DESSINS}  # blanc + transparence
 IMG = {k: uri(os.path.join(ASSETS, f"{k}.jpg"), 640, 76) for k, *_ in MODELES}
 SM = {k: uri(os.path.join(ASSETS, f"sm-{k}.jpg"), 520, 74) for k in ("sirene", "animal", "portrait", "objet")}
 SOCLE = uri(os.path.join(PUB, "produits", "socle-led-rectangle.jpg"), 300, 74)
@@ -163,6 +184,17 @@ TILES = "\n".join(tuile(i, m) for i, m in enumerate(MODELES)) + f'''
   <span><b>Votre propre image ?</b>Une photo, votre animal, un dessin, un logo : on la grave en 3D, rien que pour vous.</span>
   <em>Voir le sur-mesure {ic("arrow")}</em>
 </a>'''
+def tuile_dessin(idx, d):
+    k, nom, fam = d
+    return f'''<button type="button" class="cg-tile cg-dtile" data-i="{idx}" data-fam="{fam}" aria-pressed="false">
+      <span class="cg-img cg-xtal"><span class="cg-bloc"><img src="{DIMG[k]}" alt="Dessin à graver : {nom}" loading="lazy"></span></span>
+      <span class="cg-price">dès 39,90 €</span>
+      <span class="cg-ok" aria-hidden="true">{ic("check")}</span>
+      <span class="cg-lab"><b>{nom}</b><span class="cg-ph">Dessin gravé en 3D</span></span>
+    </button>'''
+
+
+DTILES = "\n".join(tuile_dessin(len(MODELES) + i, d) for i, d in enumerate(DESSINS))
 CHIPS = "".join(
     f'<button type="button" class="cg-chip{" on" if k == "tous" else ""}" data-fam="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{lab}'
     f'<span class="cg-n">{len(MODELES) if k == "tous" else sum(1 for m in MODELES if m[2] == k)}</span></button>'
@@ -205,12 +237,19 @@ MAIN = f'''<main class="cg">
       <div class="cg-chips" role="group" aria-label="Filtrer les modèles">{CHIPS}</div>
       <div class="cg-grid" id="grille">{TILES}</div>
 
+      <div class="cg-head cg-dhead" id="dessins">
+        <h2>Ou choisissez l'un de nos dessins</h2>
+        <p>Si vous le souhaitez : un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix.
+          Rien n'est choisi d'avance, touchez celui qui vous plaît.</p>
+      </div>
+      <div class="cg-grid cg-dgrid">{DTILES}</div>
+
     </div>
 
     <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
       <div class="cg-stage" id="stage">
         <div class="cg-empty" id="vide">{ic("gem","cg-ic cg-ic-xl")}<p><b>Votre cristal apparaîtra ici</b>Choisissez un modèle dans la galerie.</p></div>
-        <img id="grand" alt="" hidden><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
+        <img id="grand" alt="" hidden><span class="cg-bloc cg-bloc-xl" id="bloc" hidden><img id="dimg" alt=""></span><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
       </div>
       <h3 id="t-pan" class="cg-pname">Votre cristal</h3>
       <p class="cg-pdesc" id="pdesc">Aucun modèle choisi pour l'instant.</p>
@@ -354,6 +393,19 @@ CSS = r'''
 .cg-tile.on{box-shadow:0 0 0 3px var(--gold),0 14px 30px rgba(169,137,53,.35)}
 .cg-tile.on .cg-ok{opacity:1;transform:scale(1)}
 .cg-tile.on .cg-img img{filter:brightness(.82)}
+.cg-dhead{margin-top:clamp(34px,5vw,52px)}
+.cg-empty[hidden]{display:none}
+.cg-xtal,.cg-stage.is-d{background:radial-gradient(120% 90% at 50% 30%,#2a2f38,#0d0f13 70%)}
+.cg-bloc{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58%;aspect-ratio:3/4;border-radius:4px;
+  background:linear-gradient(125deg,rgba(255,255,255,.16),rgba(190,215,235,.05) 40%,rgba(255,255,255,.1));
+  box-shadow:inset 0 0 0 1.5px rgba(225,240,255,.55),inset 0 0 22px rgba(170,205,240,.18),0 18px 30px rgba(0,0,0,.45);overflow:hidden;transition:width .45s cubic-bezier(.22,1,.36,1),aspect-ratio .45s}
+.cg-bloc::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.18) 45%,transparent 60%);pointer-events:none}
+.cg-bloc img{position:absolute!important;inset:9%!important;width:82%!important;height:82%!important;object-fit:contain!important;filter:drop-shadow(0 0 4px rgba(200,225,255,.5));opacity:.95;animation:none}
+.cg-tile:hover .cg-bloc img{transform:none}
+.cg-bloc-xl{width:46%}
+.cg-bloc-xl.fmt-h{width:72%;aspect-ratio:4/3}
+.cg-bloc-xl[hidden]{display:none}
+.cg-stage.is-d #grand{display:none}
 .cg-own{grid-column:span 2;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:22px;border-radius:16px;background:linear-gradient(135deg,#fbf4e6,#fffdf9);box-shadow:inset 0 0 0 1.5px #e7d3a1;color:var(--ink-soft);font-size:.92rem;line-height:1.5;text-decoration:none;transition:box-shadow .2s}
 .cg-own:hover{box-shadow:inset 0 0 0 1.5px var(--gold)}
 .cg-own b{display:block;color:var(--ink);font-family:var(--font-display),Georgia,serif;font-size:1.2rem;margin-bottom:2px}
@@ -458,6 +510,9 @@ CSS = r'''
   .cg-panel{position:static}
   .cg-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .cg-bar:not([hidden]){display:flex}
+  .cg-dgrid .cg-tile:last-child:nth-child(odd){grid-column:span 2}
+  .cg-dgrid .cg-tile:last-child:nth-child(odd) .cg-img{aspect-ratio:2/1}
+  .cg-dgrid .cg-tile:last-child:nth-child(odd) .cg-bloc{width:30%}
   .cg-sur-top{grid-template-columns:1fr}
   .cg-mosaic{max-width:420px;transform:none}
   .cg-steps{grid-template-columns:1fr;gap:18px}
@@ -469,7 +524,8 @@ CSS = r'''
 @media (prefers-reduced-motion:reduce){.cg *,.cg *::before{animation:none!important;transition:none!important}}
 '''
 
-DATA = json.dumps([{"k": k, "nom": n, "fmt": f, "phrase": p} for k, n, _, f, p in MODELES], ensure_ascii=False)
+DATA = json.dumps([{"k": k, "nom": n, "fmt": f, "phrase": p} for k, n, _, f, p in MODELES]
+                  + [{"k": k, "nom": n, "d": True, "phrase": "Dessin gravé en 3D au cœur du cristal, au format de votre choix."} for k, n, _ in DESSINS], ensure_ascii=False)
 TAILLES_JS = json.dumps({t[0]: {"nom": t[1], "prix": t[4], "socle": t[5]} for t in TAILLES})
 
 JS = r'''
@@ -482,20 +538,22 @@ JS = r'''
   var chips=[].slice.call(document.querySelectorAll('.cg-chip'));
   chips.forEach(function(c){c.addEventListener('click',function(){
     chips.forEach(function(x){x.classList.toggle('on',x===c);x.setAttribute('aria-pressed',x===c)});
-    var f=c.dataset.fam;tiles.forEach(function(t){t.hidden=!(f==='tous'||t.dataset.fam===f)});var o=document.querySelector('.cg-own');if(o)o.hidden=false;
+    var f=c.dataset.fam;tiles.forEach(function(t){if(t.classList.contains('cg-dtile'))return;t.hidden=!(f==='tous'||t.dataset.fam===f)});var o=document.querySelector('.cg-own');if(o)o.hidden=false;
   })});
   tiles.forEach(function(t){t.addEventListener('click',function(){
     st.i=+t.dataset.i;var m=M[st.i];
     tiles.forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
-    var g=$('grand');g.hidden=false;g.src=t.querySelector('img').src;g.alt='Cristal gravé : '+m.nom;
-    g.style.animation='none';void g.offsetWidth;g.style.animation='';
+    var src=t.querySelector('img').src,g=$('grand'),b=$('bloc');
+    $('stage').classList.toggle('is-d',!!m.d);
+    if(m.d){g.hidden=true;b.hidden=false;$('dimg').src=src;$('dimg').alt='Dessin gravé : '+m.nom;b.classList.toggle('fmt-h',st.fmt==='h');}
+    else{b.hidden=true;g.hidden=false;g.src=src;g.alt='Cristal gravé : '+m.nom;g.style.animation='none';void g.offsetWidth;g.style.animation='';}
     $('vide').hidden=true;
     $('t-pan').textContent=m.nom;$('pdesc').textContent=m.phrase;
-    $('barimg').src=g.src;$('barnom').textContent=m.nom;
+    $('barimg').src=src;$('barnom').textContent=m.nom;
     if(window.innerWidth<=860){$('panneau').scrollIntoView({behavior:'smooth',block:'start'})}
     maj();
   })});
-  function setFmt(f){st.fmt=f;if(!f)return;[].forEach.call(document.querySelectorAll('[data-fmt]'),function(b){var on=b.dataset.fmt===f;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
+  function setFmt(f){st.fmt=f;if(!f)return;$('bloc').classList.toggle('fmt-h',f==='h');[].forEach.call(document.querySelectorAll('[data-fmt]'),function(b){var on=b.dataset.fmt===f;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
     [].forEach.call(document.querySelectorAll('#tailles .vs-sub'),function(s){s.textContent=s.dataset[f]})}
   [].forEach.call(document.querySelectorAll('[data-fmt]'),function(b){b.addEventListener('click',function(){setFmt(b.dataset.fmt);maj()})});
   [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){

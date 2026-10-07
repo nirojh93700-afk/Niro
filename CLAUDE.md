@@ -2678,6 +2678,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   modèle → section sur-mesure améliorée (icônes dessinées au lieu des emojis, mosaïque d'exemples, 3 étapes en ligne
   de temps, cartes vertical/horizontal, note). Testée Chromium 1280/390 : 0 débordement, 0 erreur JS, total vérifié
   (Grand + socle × 2 = 239,60 €).
+- **15 DESSINS À GRAVER ajoutés le 07/10** (gérant : « je te donne ces images pour que les clients, s'ils ont envie,
+  c'est pas sélectionné, intègre correctement ») : section « Ou choisissez l'un de nos dessins » sous la grille des
+  modèles, RIEN de présélectionné. Images préparées par le générateur (`DESSINS` + assets `dessins/*.webp` : fond clair
+  retiré, trait passé en BLANC sur fond transparent, bandeau Pinterest et filigranes pngtree effacés) et montrées
+  « gravées » dans un bloc de cristal dessiné en CSS (`.cg-bloc`, fond sombre) ; le bloc passe en paysage quand le
+  client choisit « horizontal ». Mêmes tailles, prix, texte +5 € et socle que les modèles. Filtres = modèles seulement.
+  ⚠️ Points signalés au gérant : 2 images de mariés viennent de pngtree (filigrane = licence à vérifier) · « Fée aux
+  ailes ciselées » ressemble à la Fée Clochette (Disney) · le colibri en couleur est le même dessin que le noir.
 - ✅ **Prix = ceux des cristaux photo** (gérant 07/10 : « il faut que ça soit comme pour les photos ») ; tout modèle
   se grave en vertical OU horizontal, au choix du client.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
