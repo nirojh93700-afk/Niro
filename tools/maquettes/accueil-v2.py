@@ -198,7 +198,7 @@ def mega(u):
             f'<span>Tout l’univers {esc(u["nom"])} · {compte(u)} créations {ic("arrow")}</span></a></div>')
 OFFRIR_PANEL = ('<div class="mg-panel"><div class="mg-cols">'
   '<div><b>Pour qui ?</b>' + "".join(f'<a href="#" data-find="qui:{k}">{v}</a>' for k, v in POURQUI.items()) + '</div>'
-  '<div><b>Pour quelle occasion ?</b><a href="#" data-find="occ:noel">Noël</a><a href="#" data-find="occ:naissance">Naissance &amp; baptême</a><a href="#" data-find="occ:mariage">Mariage</a><a href="#" data-find="occ:amour">Anniversaire, Saint-Valentin</a><a href="#" data-find="occ:pour-lui">Fête des pères</a><a href="#" data-find="occ:pour-elle">Fête des mères</a></div>'
+  '<div><b>Pour quelle occasion ?</b><span class="fetes" data-max="3" data-as="a"></span><a href="#" data-find="occ:naissance">Naissance &amp; baptême</a><a href="#" data-find="occ:mariage">Mariage</a><a href="#" data-find="occ:amour">Anniversaire</a></div>'
   '<div><b>Quel budget ?</b><a href="#" data-find="budget:0-20">Moins de 20 €</a><a href="#" data-find="budget:20-40">De 20 à 40 €</a><a href="#" data-find="budget:40-999">Plus de 40 €</a><a href="#">Carte cadeau</a><a href="#" style="color:#b4452f;font-weight:600">Promotions</a></div>'
   '</div></div>')
 NAV = ('<nav class="hnav hnav2" aria-label="Principal">'
@@ -214,7 +214,7 @@ DRAWER = ('<div class="drw" id="drw" hidden><div class="drw-in" role="dialog" ar
 FINDER = '''<section class="fd" id="trouver" aria-labelledby="t-fd"><span class="tag-new">Nouveau bloc</span>
   <h2 id="t-fd">Trouver le cadeau <em>en 3 clics</em></h2>
   <div class="fd-grp" role="group" aria-label="Pour qui"><span>Pour qui ?</span>''' + "".join(f'<button type="button" data-k="qui" data-v="{k}">{v.replace("Pour ", "")[:1].upper() + v.replace("Pour ", "")[1:]}</button>' for k, v in POURQUI.items()) + '''</div>
-  <div class="fd-grp" role="group" aria-label="Occasion"><span>L’occasion ?</span><button type="button" data-k="occ" data-v="noel">Noël</button><button type="button" data-k="occ" data-v="naissance">Naissance</button><button type="button" data-k="occ" data-v="mariage">Mariage</button><button type="button" data-k="occ" data-v="amour">Anniversaire</button><button type="button" data-k="occ" data-v="pour-lui">Fête des pères</button></div>
+  <div class="fd-grp" role="group" aria-label="Occasion"><span>L’occasion ?</span><span class="fetes" data-max="3" data-as="button"></span><button type="button" data-k="occ" data-v="naissance">Naissance</button><button type="button" data-k="occ" data-v="mariage">Mariage</button><button type="button" data-k="occ" data-v="amour">Anniversaire</button></div>
   <div class="fd-grp" role="group" aria-label="Budget"><span>Budget ?</span><button type="button" data-k="budget" data-v="0-20">Moins de 20 €</button><button type="button" data-k="budget" data-v="20-40">20 à 40 €</button><button type="button" data-k="budget" data-v="40-999">Plus de 40 €</button></div>
   <p class="fd-count" id="fdCount" aria-live="polite">Choisissez un ou plusieurs critères.</p>
   <div class="ug fd-res" id="fdRes"></div>
@@ -272,6 +272,7 @@ NOTES = '''<div class="mbar" role="region" aria-label="Maquette">
     <li><b>Nouvel univers « Bébé &amp; Enfant »</b> : les couverts, la veilleuse et la plaque de porte quittent « Déco », avec les plaques de naissance, les cartes étapes et les futurs puzzles.</li>
     <li><b>« Trouver le cadeau en 3 clics »</b> sous le héros (pour qui, occasion, budget) : les acheteurs de cadeaux pensent « pour qui » avant « quel produit ».</li>
     <li><b>Coffret « univers assortis »</b> : le même thème sur plusieurs pièces, le prénom écrit une seule fois, −10 % dès 2 pièces (proposition).</li>
+    <li><b>Les fêtes se mettent à jour toutes seules</b> : Noël, Saint-Valentin, fête des grands-mères, fête des mères, fête des pères sont calculées sur la date du jour ; seules les 3 prochaines sont proposées, avec le nombre de jours restants. Une fête passée disparaît d’elle-même.</li>
     <li><b>« Nos univers »</b> remplace « Explorez nos collections », avec le nombre de créations. Une page par univers, rangée par rayon, avec filtres et tri.</li>
     <li>En-tête, logo, héros, bijoux, carafe, Noël, mur, avis et pied de page : <b>inchangés</b>. Prix lus dans le code (Gestion peut les avoir changés).</li>
   </ul>
@@ -326,6 +327,8 @@ CSS2 = r'''
 .fd-grp{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:10px 0}
 .fd-grp>span,.uf-grp>span{font-weight:700;font-size:.84rem;color:var(--muted);margin-right:4px}
 .fd-grp button,.uf-grp button{padding:10px 16px;border-radius:999px;background:var(--cream);box-shadow:inset 0 0 0 1px var(--line);font-size:.9rem;font-weight:500;min-height:44px}
+.fd-grp button small,.mg-cols a small{display:block;font-size:.68rem;color:var(--muted);font-weight:500;margin-top:1px}
+.fd-grp button.on small{color:var(--gold-l)}
 .fd-grp button.on,.uf-grp button.on{background:var(--ink);color:var(--cream);box-shadow:none}
 .fd-count{margin:18px 0 14px;color:var(--muted)}
 .fd-res{max-width:1200px;margin:0 auto;text-align:left}
@@ -440,6 +443,21 @@ function wireFinder(fd){var res=fd.querySelector('.fd-res'),cnt=fd.querySelector
     ok.slice(0,fd.closest('#offrirSlot')?99:8).forEach(function(c){res.appendChild(c.cloneNode(true))})};
   fd.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){var on=b.classList.contains('on');
     fd.querySelectorAll('button[data-k="'+b.dataset.k+'"]').forEach(function(x){x.classList.remove('on')});if(!on)b.classList.add('on');fd._run()})})}
+/* fêtes à venir, calculées sur la date du jour (jamais une fête passée) */
+function nthSunday(y,m,n){var d=new Date(y,m,1);var off=(7-d.getDay())%7;return new Date(y,m,1+off+7*(n-1))}
+function lastSunday(y,m){var d=new Date(y,m+1,0);return new Date(y,m,d.getDate()-d.getDay())}
+function paques(y){var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31)-1,da=((h+l-7*m+114)%31)+1;return new Date(y,mo,da)}
+function fetesDe(y){var fm=lastSunday(y,4);var pent=new Date(paques(y));pent.setDate(pent.getDate()+49);if(fm.getTime()===pent.getTime())fm=nthSunday(y,5,1);
+  return [{n:'Noël',o:'noel',d:new Date(y,11,25)},{n:'Saint-Valentin',o:'amour',d:new Date(y,1,14)},{n:'Fête des grands-mères',o:'pour-elle',d:nthSunday(y,2,1)},
+          {n:'Fête des mères',o:'pour-elle',d:fm},{n:'Fête des pères',o:'pour-lui',d:nthSunday(y,5,3)}]}
+function prochainesFetes(max){var now=new Date();now.setHours(0,0,0,0);var y=now.getFullYear(),all=fetesDe(y).concat(fetesDe(y+1));
+  var out=all.filter(function(f){return f.d>=now}).sort(function(a,b){return a.d-b.d});var seen={},res=[];
+  out.forEach(function(f){if(!seen[f.n]&&res.length<max){seen[f.n]=1;var j=Math.round((f.d-now)/864e5);f.j=j;f.q=j===0?'aujourd’hui':j===1?'demain':'dans '+j+' jours';
+    f.date=f.d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'});res.push(f)}});return res}
+d.querySelectorAll('.fetes').forEach(function(sl){prochainesFetes(+sl.dataset.max||3).forEach(function(f){var el;
+  if(sl.dataset.as==='a'){el=d.createElement('a');el.href='#';el.dataset.find='occ:'+f.o;el.innerHTML=f.n+' <small>'+f.date+'</small>'}
+  else{el=d.createElement('button');el.type='button';el.dataset.k='occ';el.dataset.v=f.o;el.innerHTML=f.n+' <small>'+f.q+'</small>'}
+  sl.parentNode.insertBefore(el,sl)});sl.remove()});
 wireFinder(d.getElementById('trouver'));
 /* filtres des pages univers */
 d.querySelectorAll('.up').forEach(function(up){var sel={};

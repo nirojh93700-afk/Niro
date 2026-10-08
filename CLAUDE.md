@@ -2742,6 +2742,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « Veilleuse Arbre de Vie au prénom » vient du catalogue : le renommer = toucher au site → à lui de dire.
   Rangement : Bijoux 32 (colliers / bracelets) · Cristal 5 (+ « déjà gravés » bientôt) · Verres 6 · Bébé & Enfants 8 ·
   Mariage 9 · Maison & Déco 6 (lumières, bougeoirs) · Petits cadeaux 10 (clés USB, porte-clés & médaille, bureau).
+- **Fêtes automatiques (08/10, « Fête des pères c'est fini… il faut que ça se mette automatiquement »)** : les occasions datées
+  (Noël 25/12 · Saint-Valentin 14/02 · fête des grands-mères 1er dim. de mars · fête des mères dernier dim. de mai, reportée
+  au 1er dim. de juin si Pentecôte · fête des pères 3e dim. de juin) sont CALCULÉES sur la date du jour dans la maquette
+  (`prochainesFetes` dans le JS) : seules les 3 prochaines s'affichent (« Trouver le cadeau » avec « dans N jours », panneau
+  « Offrir » avec la date), une fête passée disparaît seule. Naissance / Mariage / Anniversaire restent fixes. À reproduire
+  dans `occasions.js` au « applique » (et à proposer pour le bandeau Noël / les pages /offrir).
 - En-tête/logo, héros, bijoux, carafe, Noël, mur, avis, pied de page : inchangés (logo à son adresse source).
   Prix = ceux du code (remise bijoux −10 % appliquée) ; Gestion peut les avoir changés. 9 produits n'ont pas de photo
   locale (photos sur le CDN Shopify, injoignable d'ici) → vignette « photo sur le site ».

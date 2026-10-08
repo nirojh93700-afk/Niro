@@ -94,3 +94,10 @@
 - Idée phare : « Les univers assortis » — un même thème animal (savane, océan, forêt, dinosaures) sur les couverts,
   le puzzle, la veilleuse, la plaque de porte ; le prénom tapé UNE fois ; coffret de 2 ou 3 pièces avec petite remise.
 - Rien n'est appliqué sans son « applique ».
+
+## 📅 Fêtes calculées automatiquement sur tout le site (08/10/2026, demandé par le gérant sur la maquette — RIEN construit)
+- Aujourd'hui `occasions.js` n'a aucune date : « Fête des pères » peut rester affichée en octobre, le bandeau Noël
+  s'éteint à la main (`settings.sections.noel`).
+- Proposition : un calendrier (`src/lib/fetes.js`) avec les mêmes règles que la maquette → menu « Offrir », page /offrir,
+  bloc « Trouver un cadeau », et le bandeau de l'accueil (Noël → Saint-Valentin → fête des mères → fête des pères) qui
+  change tout seul, X jours avant chaque fête. Rien n'est appliqué sans son « applique ».
