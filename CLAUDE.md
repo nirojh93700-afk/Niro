@@ -2772,6 +2772,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > compte + panier + menu à droite, menu complet dessous) et le pied de page garde `footer-logo` 190 px. Jamais de
 > logo redessiné, recadré, redimensionné ou « de remplacement », jamais la capture d'écran qu'il envoie pour montrer.
 > On modernise UNIQUEMENT le contenu de la page. v3 de la maquette corrigée dans ce sens.
+> ⛔ **08/10/2026 : le gérant a envoyé une image du logo (1152 × 925, or sur papier crème) puis a dit « ne prends pas en
+> compte ce logo » → NE PAS L'UTILISER, nulle part (ni maquette, ni assets, ni site). Elle n'a été copiée nulle part dans le
+> dépôt. La maquette garde l'adresse source du site. Si un logo doit un jour servir, c'est LUI qui le dira explicitement.**
 > ⛔ **JAMAIS une copie basse qualité du logo** (capture d'écran, recadrage d'un e-mail, icône `/icon` 256 px) — refusé
 > deux fois le 04/10. SEUL le fichier original (`IMG_6758.jpg` à sa source) est accepté. Tant qu'il n'est pas
 > téléchargeable depuis l'environnement (`cdn.shopify.com` absent de l'accès réseau personnalisé), la maquette garde
