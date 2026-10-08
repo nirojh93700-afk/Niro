@@ -216,6 +216,7 @@ En attente de SA décision :
 
 - **Accueil moderne** : maquette ENREGISTRÉE le 04/10 (version 5) — https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J — `docs/maquettes/accueil-moderne.html`, générateur `tools/maquettes/accueil-moderne.py`. Attend son « applique ». Rien en ligne.
 
-- **Maquette « Accueil + univers » (08/10/2026) — ENREGISTRÉE (version 5, sans les puzzles)** — https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6, rien en ligne :
+- **Maquette « Accueil + univers » (08/10/2026) — ENREGISTRÉE EN 2 VERSIONS** — sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 · avec puzzles
+  https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM, rien en ligne : il choisit la version ;
   textes corrigés + fêtes des 3 prochains mois calculées seules ; reste à trancher : l'univers « Bébé & Enfants », le coffret « univers assortis » (prix et remise à valider ; même
   thème d'animaux sur couverts et puzzle à vérifier), « Trouver un cadeau » · puis son « applique ».
