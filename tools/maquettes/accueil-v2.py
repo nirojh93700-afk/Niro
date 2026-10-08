@@ -77,38 +77,38 @@ PUZZLES = [("foret", "Forêt"), ("savane", "Savane"), ("dinosaures", "Dinosaures
            ("australie", "Australie"), ("vehicules-secours", "Véhicules de secours"), ("camping", "Camping"),
            ("jardin-enchante", "Jardin enchanté"), ("fruits-legumes", "Fruits & légumes")]
 UNIVERS = [
- {"id": "bijoux", "nom": "Bijoux", "accroche": "Colliers et bracelets en acier, gravés au prénom, à la date ou au mot qui compte.",
+ {"id": "bijoux", "nom": "Bijoux", "accroche": "Colliers et bracelets en acier, gravés avec un prénom, une date ou un mot qui vous est cher.",
   "img": "/produits/collier-3coeurs-3.jpg", "pourqui": True,
   "rayons": [("Colliers", bij("Collier")), ("Bracelets", bij("Bracelet"))]},
- {"id": "cristal", "nom": "Cristal photo 3D", "accroche": "Votre photo sculptée au laser dans un bloc de cristal K9.",
+ {"id": "cristal", "nom": "Cristal photo 3D", "accroche": "Votre photo gravée au laser à l’intérieur d’un bloc de cristal.",
   "img": "/produits/cristal-v-femme.jpg",
   "rayons": [("Blocs photo 3D", ["cristal-photo-3d-vertical", "cristal-photo-3d-horizontal"]),
              ("Cristaux déjà gravés", "bientot-cristaux"),
              ("Porte-clés & clé USB", ["porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle", "cle-usb-cristal-3d"])]},
- {"id": "verres", "nom": "Verres & Carafes", "accroche": "Whisky, cocktail, vin, champagne et carafe — gravés à la commande.",
+ {"id": "verres", "nom": "Verres & Carafes", "accroche": "Verres à whisky, à cocktail, à vin, flûtes et carafe, gravés à la commande.",
   "img": "/produits/verre_a_whisky_exemple_face.jpg",
   "rayons": [("Verres à whisky", ["verre-a-whisky-grave", "verre-a-whisky-fete-des-peres"]),
              ("Vin, champagne & cocktail", ["verre-a-vin-grave", "flute-a-champagne-gravee", "verre-a-cocktail-grave"]),
              ("Carafe", ["carafe-a-whisky-gravee"])]},
- {"id": "enfants", "nom": "Bébé & Enfants", "neuf": True, "accroche": "De la naissance aux premiers repas : des souvenirs gravés à son prénom.",
+ {"id": "enfants", "nom": "Bébé & Enfant", "neuf": True, "accroche": "De la naissance aux premiers repas, des cadeaux personnalisés avec son prénom.",
   "img": "/produits/couverts_enfants_ex_enfant.jpg",
   "rayons": [("Naissance & baptême", ["plaque-de-naissance", "plaque-de-naissance-coeur", "cartes-etapes-bebe-animaux", "cartes-etapes-bebe-girafe", "bracelet-empreinte-pied-bebe"]),
              ("Repas", ["couverts-enfants-personnalises"]),
              ("Chambre", ["veilleuse-arbre-de-vie-prenom", "plaque-de-porte-enfant"]),
              ("Jeux en bois", "bientot-puzzles")]},
- {"id": "mariage", "nom": "Mariage & Réception", "accroche": "Numéros de table, menus et décor de table en bois gravé.",
+ {"id": "mariage", "nom": "Mariage & Réception", "accroche": "Numéros de table, menus et décorations de table en bois gravé.",
   "img": "/produits/numero_table_arche_geometrique_relief_bois.jpeg",
   "rayons": [("Numéros de table", [s for s, p in P.items() if p["subcategory"] == "tables"]),
              ("Décor de table", ["etiquette-serviette-initiales", "ronds-de-serviette-bois", "porte-serviettes-bois-fleur", "porte-serviettes-colombes"]),
              ("Menus", ["menu-de-mariage-bois-grave"])]},
- {"id": "maison", "nom": "Maison & Déco", "accroche": "Lumières et bougeoirs en bois gravé pour la maison.",
+ {"id": "maison", "nom": "Maison & Déco", "accroche": "Lampes, veilleuses et bougeoirs en bois gravé pour la maison.",
   "img": "/produits/arbre-vie-rond-1.jpg",
-  "rayons": [("Lumières", ["arbre-de-vie-lumineux", "veilleuse-arbre-de-vie-ronde", "lampe-led-paris-saint-germain"]),
+  "rayons": [("Lampes & veilleuses", ["arbre-de-vie-lumineux", "veilleuse-arbre-de-vie-ronde", "lampe-led-paris-saint-germain"]),
              ("Bougeoirs", ["bougeoir-mandala-bois", "photophore-fee-bois", "bougeoir-fleur-de-lotus"])]},
- {"id": "cadeaux", "nom": "Petits cadeaux", "accroche": "Clés USB, porte-clés, médaille, bureau : la petite attention gravée.",
+ {"id": "cadeaux", "nom": "Petits cadeaux", "accroche": "Clés USB, porte-clés, médailles et accessoires de bureau personnalisés.",
   "img": "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
   "rayons": [("Clés USB", ["cle-usb-personnalisee", "cle-usb-bois-coffret"]),
-             ("Porte-clés & médaille", ["porte-cles-cuir-a-graver", "piece-ronde-laiton"]),
+             ("Porte-clés & médailles", ["porte-cles-cuir-a-graver", "piece-ronde-laiton"]),
              ("Bureau", ["support-telephone-bois-grave", "support-telephone-bois-ajoure", "porte-stylo-coq-coupe-du-monde",
                          "porte-stylo-portugal-coupe-du-monde", "porte-stylo-argentine-coupe-du-monde", "porte-stylo-espagne-coupe-du-monde"])]},
 ]
@@ -144,9 +144,9 @@ def carte(s, univ):
 
 def bientot(kind):
     if kind == "bientot-puzzles":
-        tiles = "".join(f'<a class="uc uc-soon" href="#" data-prix="29.9" data-qui="enfant" data-occ="naissance noel"><span class="uc-img"><span class="uc-ph {tcls(os.path.join(OUT, "assets", "jeux-enfants", f + ".jpg"))}" role="img" aria-label="Puzzle {n}"></span><span class="uc-b uc-b-soon">Bientôt</span></span><span class="uc-name">Puzzle à encastrer — {n}</span><span class="uc-price">29,90 € · prénom compris</span></a>' for f, n in PUZZLES)
+        tiles = "".join(f'<a class="uc uc-soon" href="#" data-prix="29.9" data-qui="enfant" data-occ="naissance noel"><span class="uc-img"><span class="uc-ph {tcls(os.path.join(OUT, "assets", "jeux-enfants", f + ".jpg"))}" role="img" aria-label="Puzzle {n}"></span><span class="uc-b uc-b-soon">Bientôt</span></span><span class="uc-name">Puzzle en bois — {n}</span><span class="uc-price">29,90 € · prénom inclus</span></a>' for f, n in PUZZLES)
         return tiles
-    return ('<a class="uc-soonbox" href="#"><b>16 modèles + 15 dessins déjà gravés</b><span>Sirène, colibri, cœur, Noël… le client choisit le format et la taille '
+    return ('<a class="uc-soonbox" href="#"><b>Cristaux déjà gravés : 16 modèles et 15 dessins</b><span>Sirène, colibri, cœur, Noël… vous choisissez le format et la taille '
             '(maquette « Cristaux déjà gravés » enregistrée le 07/10).</span><span class="uc-b uc-b-soon">Bientôt</span></a>')
 
 def page_univers(u):
@@ -162,7 +162,7 @@ def page_univers(u):
     for i, (n, l) in enumerate(u["rayons"]):
         cards = "".join(carte(s, u) for s in l) if isinstance(l, list) else bientot(l)
         nb = f'{len(l)} création{"s" if len(l) > 1 else ""}' if isinstance(l, list) else "bientôt"
-        blocs += f'<section class="ur" id="r-{u["id"]}-{i}"><h3>{esc(n)} <small>{nb}</small></h3><div class="ug">{cards}</div><p class="ur-empty" hidden>Aucune création dans ce rayon pour ce choix.</p></section>'
+        blocs += f'<section class="ur" id="r-{u["id"]}-{i}"><h3>{esc(n)} <small>{nb}</small></h3><div class="ug">{cards}</div><p class="ur-empty" hidden>Aucune création de ce rayon ne correspond à votre choix.</p></section>'
     extra = COFFRET if u["id"] == "enfants" else ""
     return (f'<article class="up" id="u-{u["id"]}" data-u="{u["id"]}" hidden>'
             f'<header class="up-head"><div class="up-txt"><p class="up-crumb">Boutique / {esc(u["nom"])}</p><h2>{esc(u["nom"])}</h2><p>{esc(u["accroche"])}</p>'
@@ -172,18 +172,18 @@ def page_univers(u):
 # 4) Coffret « univers assortis » (Bébé & Enfants)
 pc, pp, pv = 34.90, 29.90, 34.90
 COFFRET = f'''<div class="cof" id="coffret">
-  <div class="cof-txt"><span class="tag-new">Idée — univers assortis</span>
+  <div class="cof-txt"><span class="tag-new">Nouveau — coffret assorti</span>
     <h3>Un prénom, un univers&nbsp;: <em>le coffret Savane</em></h3>
-    <p>Les couverts, le puzzle et la veilleuse dans le même thème. Le parent écrit le prénom une seule fois, tout est gravé assorti.</p>
+    <p>Les couverts, le puzzle et la veilleuse dans le même thème. Vous écrivez le prénom une seule fois : les trois pièces sont personnalisées ensemble.</p>
     <div class="cof-pick" role="group" aria-label="Pièces du coffret">
-      <label><input type="checkbox" checked data-p="{pc}"> Couverts enfants Savane <b>34,90 €</b></label>
-      <label><input type="checkbox" checked data-p="{pp}"> Puzzle Savane <b>29,90 €</b></label>
-      <label><input type="checkbox" data-p="{pv}"> Veilleuse au prénom <b>34,90 €</b></label>
+      <label><input type="checkbox" checked data-p="{pc}"> Couverts enfant personnalisés <b>34,90 €</b></label>
+      <label><input type="checkbox" checked data-p="{pp}"> Puzzle en bois personnalisé <b>29,90 €</b></label>
+      <label><input type="checkbox" data-p="{pv}"> Veilleuse personnalisée <b>34,90 €</b></label>
     </div>
-    <div class="cof-name"><label for="cofPrenom">Prénom (gravé sur chaque pièce)</label><input id="cofPrenom" maxlength="14" placeholder="Ex. Léa" autocomplete="off"></div>
+    <div class="cof-name"><label for="cofPrenom">Prénom de l’enfant (gravé sur chaque pièce)</label><input id="cofPrenom" maxlength="14" placeholder="Ex. Léa" autocomplete="off"></div>
     <p class="cof-tot"><s id="cofAvant">64,80 €</s> <b id="cofApres">58,32 €</b> <span id="cofRem">−10 % dès 2 pièces</span></p>
     <a class="btn btn-gold" href="#">Composer mon coffret {ic("arrow")}</a>
-    <p class="cof-note">Autres univers possibles : Forêt, Dinosaures, Océan — à condition d'avoir le même thème sur les couverts et le puzzle.</p>
+    <p class="cof-note">D’autres univers sont possibles (Forêt, Dinosaures, Océan) dès que le même thème existe sur les couverts et sur le puzzle.</p>
   </div>
   <div class="cof-pics" aria-hidden="true">
     <img src="{thumb("/produits/couverts_enfants_ex_animaux.jpg", 520)}" alt=""><img src="{thumb(os.path.join(OUT, "assets", "jeux-enfants", "savane.jpg"), 520)}" alt="">
@@ -216,17 +216,17 @@ FINDER = '''<section class="fd" id="trouver" aria-labelledby="t-fd"><span class=
   <div class="fd-grp" role="group" aria-label="Pour qui"><span>Pour qui ?</span>''' + "".join(f'<button type="button" data-k="qui" data-v="{k}">{v.replace("Pour ", "")[:1].upper() + v.replace("Pour ", "")[1:]}</button>' for k, v in POURQUI.items()) + '''</div>
   <div class="fd-grp" role="group" aria-label="Occasion"><span>L’occasion ?</span><button type="button" data-k="occ" data-v="noel">Noël</button><button type="button" data-k="occ" data-v="naissance">Naissance</button><button type="button" data-k="occ" data-v="mariage">Mariage</button><button type="button" data-k="occ" data-v="amour">Anniversaire</button><button type="button" data-k="occ" data-v="pour-lui">Fête des pères</button></div>
   <div class="fd-grp" role="group" aria-label="Budget"><span>Budget ?</span><button type="button" data-k="budget" data-v="0-20">Moins de 20 €</button><button type="button" data-k="budget" data-v="20-40">20 à 40 €</button><button type="button" data-k="budget" data-v="40-999">Plus de 40 €</button></div>
-  <p class="fd-count" id="fdCount" aria-live="polite">Choisissez une ou plusieurs réponses.</p>
+  <p class="fd-count" id="fdCount" aria-live="polite">Choisissez un ou plusieurs critères.</p>
   <div class="ug fd-res" id="fdRes"></div>
 </section>'''
 enf = next(u for u in UNIVERS if u["id"] == "enfants")
 ENFANTS = f'''<section class="sec enf" aria-labelledby="t-enf"><span class="tag-new">Nouveau bloc</span>
   <div class="enf-grid">
-    <a class="enf-big" href="#" data-go="enfants"><img src="{thumb("/produits/couverts_enfants_ex_enfant.jpg", 900)}" alt="Enfant qui mange avec sa cuillère gravée à son prénom">
-      <span class="enf-lab"><b>Couverts enfants gravés au prénom</b><span>34,90 € · un animal par couvert</span></span></a>
+    <a class="enf-big" href="#" data-go="enfants"><img src="{thumb("/produits/couverts_enfants_ex_enfant.jpg", 900)}" alt="Enfant qui mange avec sa cuillère personnalisée">
+      <span class="enf-lab"><b>Couverts enfant personnalisés</b><span>34,90 €</span></span></a>
     <div class="enf-copy">
-      <h2 id="t-enf">Bébé &amp; Enfants&nbsp;: <em>des souvenirs à son prénom</em></h2>
-      <p>Naissance, premiers repas, chambre, jeux : tout ce qui se grave pour les petits, enfin réuni au même endroit.</p>
+      <h2 id="t-enf">Bébé &amp; Enfant&nbsp;: <em>des cadeaux personnalisés avec son prénom</em></h2>
+      <p>Naissance, premiers repas, chambre, jeux : tous nos cadeaux personnalisés pour les petits, réunis au même endroit.</p>
       <div class="enf-cats">{"".join(f'<a href="#r-enfants-{i}" data-go="enfants">{esc(n)}</a>' for i, (n, _) in enumerate(enf["rayons"]))}</div>
       <div class="ug ug-4">{"".join(carte(s, enf) for s in ["plaque-de-naissance-coeur", "veilleuse-arbre-de-vie-prenom", "cartes-etapes-bebe-animaux", "bracelet-empreinte-pied-bebe"])}</div>
       <a class="btn btn-ink" href="#" data-go="enfants">Voir tout l’univers {ic("arrow")}</a>
@@ -239,7 +239,7 @@ UNIV_TILES = "".join(
     for u in UNIVERS) + (f'<a class="ut ut-offrir" href="#" data-go="offrir"><span class="ut-o"><b>Offrir</b><span>Pour qui, quelle occasion, quel budget : '
     f'trouvez le cadeau en 3 clics.</span><span class="link">Trouver un cadeau {ic("arrow")}</span></span></a>')
 UNIVERS_HOME = f'''<section class="sec" id="univers" aria-labelledby="t-univ"><span class="tag-new tag-mod">Bloc retravaillé</span>
-  <div class="sec-head"><div><h2 id="t-univ">Nos univers</h2><p class="sub">Toutes nos créations, rangées par univers. Chaque pièce est gravée à la commande dans notre atelier.</p></div></div>
+  <div class="sec-head"><div><h2 id="t-univ">Nos univers</h2><p class="sub">Toutes nos créations, classées par univers. Chaque pièce est gravée à la commande dans notre atelier.</p></div></div>
   <div class="ut-grid">{UNIV_TILES}</div>
 </section>'''
 
@@ -261,7 +261,7 @@ UNIV_VIEW = ('<main class="uv" id="vueUnivers" hidden><nav class="uv-tabs" aria-
              + '<button type="button" data-go="offrir">Offrir</button></nav>'
              + "".join(page_univers(u) for u in UNIVERS)
              + '<article class="up" id="u-offrir" data-u="offrir" hidden><header class="up-head"><div class="up-txt"><p class="up-crumb">Offrir</p><h2>Trouver un cadeau</h2>'
-               '<p>Toutes les créations, filtrées par destinataire, occasion et budget.</p></div></header><div id="offrirSlot"></div></article>'
+               '<p>Toutes nos créations, selon la personne, l’occasion et le budget.</p></div></header><div id="offrirSlot"></div></article>'
              + '</main>')
 NOTES = '''<div class="mbar" role="region" aria-label="Maquette">
   <div class="mbar-in"><b>Maquette — rien n’est en ligne</b>
@@ -269,9 +269,9 @@ NOTES = '''<div class="mbar" role="region" aria-label="Maquette">
   <button type="button" class="mbar-more" id="mbarMore" aria-expanded="false">Ce qui change</button></div>
   <ul class="mbar-notes" id="mbarNotes" hidden>
     <li><b>Menu rangé en 8 entrées</b> (au lieu de 15) : 7 univers + « Offrir ». Survol = panneau avec les rayons et une photo. Sur téléphone, le ☰ ouvre enfin un vrai menu.</li>
-    <li><b>Nouvel univers « Bébé &amp; Enfants »</b> : les couverts, la veilleuse au prénom et la plaque de porte quittent « Déco », avec les plaques de naissance, les cartes étapes et les futurs puzzles.</li>
+    <li><b>Nouvel univers « Bébé &amp; Enfant »</b> : les couverts, la veilleuse et la plaque de porte quittent « Déco », avec les plaques de naissance, les cartes étapes et les futurs puzzles.</li>
     <li><b>« Trouver le cadeau en 3 clics »</b> sous le héros (pour qui, occasion, budget) : les acheteurs de cadeaux pensent « pour qui » avant « quel produit ».</li>
-    <li><b>Coffret « univers assortis »</b> : même thème sur plusieurs pièces, prénom écrit une fois, −10 % dès 2 pièces (proposition).</li>
+    <li><b>Coffret « univers assortis »</b> : le même thème sur plusieurs pièces, le prénom écrit une seule fois, −10 % dès 2 pièces (proposition).</li>
     <li><b>« Nos univers »</b> remplace « Explorez nos collections », avec le nombre de créations. Une page par univers, rangée par rayon, avec filtres et tri.</li>
     <li>En-tête, logo, héros, bijoux, carafe, Noël, mur, avis et pied de page : <b>inchangés</b>. Prix lus dans le code (Gestion peut les avoir changés).</li>
   </ul>
@@ -434,9 +434,9 @@ function match(c,sel){var p=parseFloat(c.dataset.prix);
   if(sel.budget){var r=sel.budget.split('-');if(p<+r[0]||p>=+r[1])return false}return true}
 function wireFinder(fd){var res=fd.querySelector('.fd-res'),cnt=fd.querySelector('.fd-count');
   fd._run=function(){var sel={};fd.querySelectorAll('button.on').forEach(function(b){sel[b.dataset.k]=b.dataset.v});res.innerHTML='';
-    if(!Object.keys(sel).length){cnt.textContent='Choisissez une ou plusieurs réponses.';return}
+    if(!Object.keys(sel).length){cnt.textContent='Choisissez un ou plusieurs critères.';return}
     var ok=[].filter.call(cards.children,function(c){return match(c,sel)});
-    cnt.textContent=ok.length?ok.length+' idée'+(ok.length>1?'s':'')+' de cadeau':'Aucune création pour ce choix — retirez un critère.';
+    cnt.textContent=ok.length?ok.length+' idée'+(ok.length>1?'s':'')+' de cadeau':'Aucune création ne correspond : retirez un critère.';
     ok.slice(0,fd.closest('#offrirSlot')?99:8).forEach(function(c){res.appendChild(c.cloneNode(true))})};
   fd.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){var on=b.classList.contains('on');
     fd.querySelectorAll('button[data-k="'+b.dataset.k+'"]').forEach(function(x){x.classList.remove('on')});if(!on)b.classList.add('on');fd._run()})})}

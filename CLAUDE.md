@@ -2736,6 +2736,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   assortis » Savane** (couverts + puzzle + veilleuse, prénom écrit une fois, −10 % dès 2 pièces = proposition) ·
   « Nos univers » (8 tuiles avec nombre de créations) remplace « Explorez nos collections » · 2ᵉ vue : **une page
   par univers avec TOUS les produits rangés par rayon**, filtres Pour qui (bijoux) / Budget, tri par prix.
+  **Textes corrigés le 08/10 sur sa remarque (« y a plein de fautes… veilleuse au prénom, ça se dit pas »)** : l'univers s'appelle
+  « Bébé & Enfant » (singulier, comme les boutiques du marché), on écrit « personnalisé(e) » ou « avec son prénom » et plus jamais
+  « au prénom » / « gravé au prénom » dans MES textes ; plus de « un animal par couvert ». ⚠️ Le NOM du produit en ligne
+  « Veilleuse Arbre de Vie au prénom » vient du catalogue : le renommer = toucher au site → à lui de dire.
   Rangement : Bijoux 32 (colliers / bracelets) · Cristal 5 (+ « déjà gravés » bientôt) · Verres 6 · Bébé & Enfants 8 ·
   Mariage 9 · Maison & Déco 6 (lumières, bougeoirs) · Petits cadeaux 10 (clés USB, porte-clés & médaille, bureau).
 - En-tête/logo, héros, bijoux, carafe, Noël, mur, avis, pied de page : inchangés (logo à son adresse source).
