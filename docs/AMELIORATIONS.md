@@ -82,3 +82,15 @@
   § cookies de la politique de confidentialité réécrit. Compteur de visites interne (sans cookie) inchangé.
 - Le reste de la liste de la vidéo existe déjà : confidentialité, CGV, retours, mentions légales (SIRET), médiation (§9 CGV).
 - Rien n'est appliqué sans son « applique ».
+
+## 🧸 Univers « Bébé & Enfants » + coffret au prénom (08/10/2026, idée après recherche — RIEN construit)
+- Constat : les couverts enfants sont rangés dans « Déco & Maison » (`category: "deco"`, sous-cat. couverts) ;
+  la veilleuse au prénom et la plaque de porte enfant aussi ; « Naissance » n'a que plaques + cartes étapes.
+- Recherche (Amikado : rubrique « enfance » ; My 1st Years : par âge + par occasion + coffret « Best of » ;
+  Baby'Sphère : coffret naissance qui regroupe plusieurs pièces ; Etsy : le puzzle prénom en bois = best-seller enfant).
+- Idée : renommer « Naissance » en « Bébé & Enfants » avec 4 rayons (Naissance & baptême · Repas · Chambre · Jeux),
+  y ranger couverts, veilleuse prénom, plaque de porte, plaques/cartes, puzzles (quand ils sortent) ; entrées par âge
+  (0-1 an, 1-3 ans, 3 ans et +) et par occasion (naissance, baptême, 1er anniversaire, Noël).
+- Idée phare : « Les univers assortis » — un même thème animal (savane, océan, forêt, dinosaures) sur les couverts,
+  le puzzle, la veilleuse, la plaque de porte ; le prénom tapé UNE fois ; coffret de 2 ou 3 pièces avec petite remise.
+- Rien n'est appliqué sans son « applique ».
