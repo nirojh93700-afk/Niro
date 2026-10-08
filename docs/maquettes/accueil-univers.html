@@ -523,7 +523,7 @@ em{font-style:italic;color:var(--gold-t)}
     <li><b>Nouvel univers « Bébé &amp; Enfant »</b> : les couverts, la veilleuse et la plaque de porte quittent « Déco », avec les plaques de naissance, les cartes étapes et les futurs puzzles.</li>
     <li><b>« Trouver le cadeau en 3 clics »</b> sous le héros (pour qui, occasion, budget) : les acheteurs de cadeaux pensent « pour qui » avant « quel produit ».</li>
     <li><b>Coffret « univers assortis »</b> : le même thème sur plusieurs pièces, le prénom écrit une seule fois, −10 % dès 2 pièces (proposition).</li>
-    <li><b>Les fêtes se mettent à jour toutes seules</b> : Noël, Saint-Valentin, fête des grands-mères, fête des mères, fête des pères sont calculées sur la date du jour ; seules les 3 prochaines sont proposées, avec le nombre de jours restants. Une fête passée disparaît d’elle-même.</li>
+    <li><b>Les fêtes se mettent à jour toutes seules</b> : Noël, Saint-Valentin, fête des grands-mères, fête des mères, fête des pères sont calculées sur la date du jour ; seules celles des 3 prochains mois sont proposées. Une fête passée disparaît d’elle-même.</li>
     <li><b>« Nos univers »</b> remplace « Explorez nos collections », avec le nombre de créations. Une page par univers, rangée par rayon, avec filtres et tri.</li>
     <li>En-tête, logo, héros, bijoux, carafe, Noël, mur, avis et pied de page : <b>inchangés</b>. Prix lus dans le code (Gestion peut les avoir changés).</li>
   </ul>
@@ -824,13 +824,13 @@ function paques(y){var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%
 function fetesDe(y){var fm=lastSunday(y,4);var pent=new Date(paques(y));pent.setDate(pent.getDate()+49);if(fm.getTime()===pent.getTime())fm=nthSunday(y,5,1);
   return [{n:'Noël',o:'noel',d:new Date(y,11,25)},{n:'Saint-Valentin',o:'amour',d:new Date(y,1,14)},{n:'Fête des grands-mères',o:'pour-elle',d:nthSunday(y,2,1)},
           {n:'Fête des mères',o:'pour-elle',d:fm},{n:'Fête des pères',o:'pour-lui',d:nthSunday(y,5,3)}]}
-function prochainesFetes(max){var now=new Date();now.setHours(0,0,0,0);var y=now.getFullYear(),all=fetesDe(y).concat(fetesDe(y+1));
+function prochainesFetes(){var now=new Date();now.setHours(0,0,0,0);var y=now.getFullYear(),all=fetesDe(y).concat(fetesDe(y+1));
   var out=all.filter(function(f){return f.d>=now}).sort(function(a,b){return a.d-b.d});var seen={},res=[];
-  out.forEach(function(f){if(!seen[f.n]&&res.length<max){seen[f.n]=1;var j=Math.round((f.d-now)/864e5);f.j=j;f.q=j===0?'aujourd’hui':j===1?'demain':'dans '+j+' jours';
+  out.forEach(function(f){if(!seen[f.n]&&(f.d-now)/864e5<=92){seen[f.n]=1;var j=Math.round((f.d-now)/864e5);f.j=j;f.q=j===0?'aujourd’hui':j===1?'demain':'dans '+j+' jours';
     f.date=f.d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'});res.push(f)}});return res}
-d.querySelectorAll('.fetes').forEach(function(sl){prochainesFetes(+sl.dataset.max||3).forEach(function(f){var el;
-  if(sl.dataset.as==='a'){el=d.createElement('a');el.href='#';el.dataset.find='occ:'+f.o;el.innerHTML=f.n+' <small>'+f.date+'</small>'}
-  else{el=d.createElement('button');el.type='button';el.dataset.k='occ';el.dataset.v=f.o;el.innerHTML=f.n+' <small>'+f.q+'</small>'}
+d.querySelectorAll('.fetes').forEach(function(sl){prochainesFetes().forEach(function(f){var el;
+  if(sl.dataset.as==='a'){el=d.createElement('a');el.href='#';el.dataset.find='occ:'+f.o;el.textContent=f.n}
+  else{el=d.createElement('button');el.type='button';el.dataset.k='occ';el.dataset.v=f.o;el.textContent=f.n}
   sl.parentNode.insertBefore(el,sl)});sl.remove()});
 wireFinder(d.getElementById('trouver'));
 /* filtres des pages univers */

@@ -2720,7 +2720,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 
-## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — 08/10/2026 (en attente de son avis, RIEN en ligne)
+## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ ENREGISTRÉE TELLE QUELLE LE 08/10/2026 (« Enregistre cette maquette », version 4 de l'artifact) — RIEN en ligne
+> C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « reprends la maquette qu'il a déjà, retravaille, et pour tous les univers avec tous les produits…
 > cherche sur Internet plusieurs sites… que mon site soit bien optimisé, bien rangé » (+ « les couverts enfants c'est
 > pas dans la Déco »). La maquette ENREGISTRÉE `accueil-moderne.html` n'est PAS modifiée : `tools/maquettes/accueil-v2.py`
@@ -2745,8 +2746,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Fêtes automatiques (08/10, « Fête des pères c'est fini… il faut que ça se mette automatiquement »)** : les occasions datées
   (Noël 25/12 · Saint-Valentin 14/02 · fête des grands-mères 1er dim. de mars · fête des mères dernier dim. de mai, reportée
   au 1er dim. de juin si Pentecôte · fête des pères 3e dim. de juin) sont CALCULÉES sur la date du jour dans la maquette
-  (`prochainesFetes` dans le JS) : seules les 3 prochaines s'affichent (« Trouver le cadeau » avec « dans N jours », panneau
-  « Offrir » avec la date), une fête passée disparaît seule. Naissance / Mariage / Anniversaire restent fixes. À reproduire
+  (`prochainesFetes` dans le JS) : seules celles des **3 prochains mois** (≤ 92 jours) s'affichent, **par leur nom seul** (gérant 08/10 : « mets pas dans
+  combien de jours »), une fête passée disparaît seule. Naissance / Mariage / Anniversaire restent fixes. À reproduire
   dans `occasions.js` au « applique » (et à proposer pour le bandeau Noël / les pages /offrir).
 - En-tête/logo, héros, bijoux, carafe, Noël, mur, avis, pied de page : inchangés (logo à son adresse source).
   Prix = ceux du code (remise bijoux −10 % appliquée) ; Gestion peut les avoir changés. 9 produits n'ont pas de photo
