@@ -2778,6 +2778,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > OCTET POUR OCTET depuis son envoi, jamais retouché/recadré/redimensionné. Les générateurs de maquettes (`accueil-moderne.py`
 > → `logo_uri()`, `accueil-v2.py`) le prennent automatiquement à cet emplacement à la place de l'adresse Shopify (bloquée d'ici).
 > `coquille_site.py` (autres maquettes) garde l'adresse source : le brancher sur ce fichier seulement s'il le demande.
+> **Priorité dite par le gérant (08/10) : « si tu peux réutiliser le logo du site, tu l'utilises »** → ce fichier n'est qu'une
+> COPIE du logo du site, à n'employer que parce que l'adresse Shopify est injoignable d'ici (et bloquée dans l'aperçu des
+> artifacts, qui n'affiche que les images intégrées). Jamais un autre logo, jamais une variante ; dès que le site est
+> joignable, c'est son adresse qui prime.
 > ⛔ Une PREMIÈRE image (1152 × 925, même dessin, cadrage plus haut) envoyée juste avant a été refusée par lui (« ne prends pas
 > en compte ce logo ») : ne jamais l'utiliser, elle n'est copiée nulle part. ⛔ Le site, lui, n'est pas touché (il garde IMG_6758.jpg).
 > ⛔ **JAMAIS une copie basse qualité du logo** (capture d'écran, recadrage d'un e-mail, icône `/icon` 256 px) — refusé
