@@ -2772,9 +2772,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > compte + panier + menu à droite, menu complet dessous) et le pied de page garde `footer-logo` 190 px. Jamais de
 > logo redessiné, recadré, redimensionné ou « de remplacement », jamais la capture d'écran qu'il envoie pour montrer.
 > On modernise UNIQUEMENT le contenu de la page. v3 de la maquette corrigée dans ce sens.
-> ⛔ **08/10/2026 : le gérant a envoyé une image du logo (1152 × 925, or sur papier crème) puis a dit « ne prends pas en
-> compte ce logo » → NE PAS L'UTILISER, nulle part (ni maquette, ni assets, ni site). Elle n'a été copiée nulle part dans le
-> dépôt. La maquette garde l'adresse source du site. Si un logo doit un jour servir, c'est LUI qui le dira explicitement.**
+> ✅ **LE LOGO DU SITE = `docs/maquettes/assets/logo-source.jpg` (08/10/2026, donné par le gérant : « tu gardes ce logo en
+> mémoire, c'est le logo de mon site, je te le donne parce que tu n'arrives pas à y accéder »)** — 1376 × 768 px, JPEG 240 Ko,
+> « NiV » doré en relief + point sur le i + trait + « CRÉATION » + « ATELIER DE PERSONNALISATION » sur papier crème. Copié
+> OCTET POUR OCTET depuis son envoi, jamais retouché/recadré/redimensionné. Les générateurs de maquettes (`accueil-moderne.py`
+> → `logo_uri()`, `accueil-v2.py`) le prennent automatiquement à cet emplacement à la place de l'adresse Shopify (bloquée d'ici).
+> `coquille_site.py` (autres maquettes) garde l'adresse source : le brancher sur ce fichier seulement s'il le demande.
+> ⛔ Une PREMIÈRE image (1152 × 925, même dessin, cadrage plus haut) envoyée juste avant a été refusée par lui (« ne prends pas
+> en compte ce logo ») : ne jamais l'utiliser, elle n'est copiée nulle part. ⛔ Le site, lui, n'est pas touché (il garde IMG_6758.jpg).
 > ⛔ **JAMAIS une copie basse qualité du logo** (capture d'écran, recadrage d'un e-mail, icône `/icon` 256 px) — refusé
 > deux fois le 04/10. SEUL le fichier original (`IMG_6758.jpg` à sa source) est accepté. Tant qu'il n'est pas
 > téléchargeable depuis l'environnement (`cdn.shopify.com` absent de l'accès réseau personnalisé), la maquette garde
