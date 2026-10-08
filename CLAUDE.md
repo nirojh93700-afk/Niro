@@ -2661,7 +2661,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
 
-## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (« Enregistre cette maquette », version 4 de l'artifact) — RIEN en ligne
+## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (« Enregistre cette maquette », version 5 de l'artifact) — RIEN en ligne
 > C'est CETTE version (16 modèles + 15 dessins + texte +5 € + format au choix + sur-mesure) à reproduire à l'identique
 > le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « une page pour les blocs de cristal déjà gravés… le client peut sélectionner… améliore le sur-mesure
@@ -2733,15 +2733,17 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Changements** : menu de 15 liens → **8 entrées** (7 univers + « Offrir » avec Pour qui / Occasion / Budget /
   Carte cadeau / Promotions), panneau déroulant avec rayons + photo ; ☰ du téléphone = vrai tiroir en accordéon ·
   **« Trouver le cadeau en 3 clics »** sous le héros · **nouvel univers « Bébé & Enfants »** (naissance & baptême,
-  repas = couverts, chambre = veilleuse prénom + plaque de porte, jeux = 9 puzzles « bientôt ») + **coffret « univers
-  assortis » Savane** (couverts + puzzle + veilleuse, prénom écrit une fois, −10 % dès 2 pièces = proposition) ·
+  repas = couverts, chambre = veilleuse prénom + plaque de porte) + **coffret assorti « Chambre d'enfant »** (couverts +
+  veilleuse + plaque de porte, prénom écrit une fois, −10 % dès 2 pièces = proposition). ⛔ **Aucun produit qui n'est pas
+  en ligne** (gérant 08/10 : « le puzzle je l'ai pas mis en ligne ») : puzzles et « cristaux déjà gravés » RETIRÉS de la
+  maquette (version 5) — à remettre seulement quand ces produits seront sur le site ·
   « Nos univers » (8 tuiles avec nombre de créations) remplace « Explorez nos collections » · 2ᵉ vue : **une page
   par univers avec TOUS les produits rangés par rayon**, filtres Pour qui (bijoux) / Budget, tri par prix.
   **Textes corrigés le 08/10 sur sa remarque (« y a plein de fautes… veilleuse au prénom, ça se dit pas »)** : l'univers s'appelle
   « Bébé & Enfant » (singulier, comme les boutiques du marché), on écrit « personnalisé(e) » ou « avec son prénom » et plus jamais
   « au prénom » / « gravé au prénom » dans MES textes ; plus de « un animal par couvert ». ⚠️ Le NOM du produit en ligne
   « Veilleuse Arbre de Vie au prénom » vient du catalogue : le renommer = toucher au site → à lui de dire.
-  Rangement : Bijoux 32 (colliers / bracelets) · Cristal 5 (+ « déjà gravés » bientôt) · Verres 6 · Bébé & Enfants 8 ·
+  Rangement : Bijoux 32 (colliers / bracelets) · Cristal 5 · Verres 6 · Bébé & Enfants 8 ·
   Mariage 9 · Maison & Déco 6 (lumières, bougeoirs) · Petits cadeaux 10 (clés USB, porte-clés & médaille, bureau).
 - **Fêtes automatiques (08/10, « Fête des pères c'est fini… il faut que ça se mette automatiquement »)** : les occasions datées
   (Noël 25/12 · Saint-Valentin 14/02 · fête des grands-mères 1er dim. de mars · fête des mères dernier dim. de mai, reportée

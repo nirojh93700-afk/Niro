@@ -83,7 +83,6 @@ UNIVERS = [
  {"id": "cristal", "nom": "Cristal photo 3D", "accroche": "Votre photo gravée au laser à l’intérieur d’un bloc de cristal.",
   "img": "/produits/cristal-v-femme.jpg",
   "rayons": [("Blocs photo 3D", ["cristal-photo-3d-vertical", "cristal-photo-3d-horizontal"]),
-             ("Cristaux déjà gravés", "bientot-cristaux"),
              ("Porte-clés & clé USB", ["porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle", "cle-usb-cristal-3d"])]},
  {"id": "verres", "nom": "Verres & Carafes", "accroche": "Verres à whisky, à cocktail, à vin, flûtes et carafe, gravés à la commande.",
   "img": "/produits/verre_a_whisky_exemple_face.jpg",
@@ -94,8 +93,7 @@ UNIVERS = [
   "img": "/produits/couverts_enfants_ex_enfant.jpg",
   "rayons": [("Naissance & baptême", ["plaque-de-naissance", "plaque-de-naissance-coeur", "cartes-etapes-bebe-animaux", "cartes-etapes-bebe-girafe", "bracelet-empreinte-pied-bebe"]),
              ("Repas", ["couverts-enfants-personnalises"]),
-             ("Chambre", ["veilleuse-arbre-de-vie-prenom", "plaque-de-porte-enfant"]),
-             ("Jeux en bois", "bientot-puzzles")]},
+             ("Chambre", ["veilleuse-arbre-de-vie-prenom", "plaque-de-porte-enfant"])]},
  {"id": "mariage", "nom": "Mariage & Réception", "accroche": "Numéros de table, menus et décorations de table en bois gravé.",
   "img": "/produits/numero_table_arche_geometrique_relief_bois.jpeg",
   "rayons": [("Numéros de table", [s for s, p in P.items() if p["subcategory"] == "tables"]),
@@ -170,23 +168,23 @@ def page_univers(u):
             f'<nav class="up-rayons" aria-label="Rayons">{chips}</nav><div class="uf">{filt}</div>{extra}{blocs}</article>')
 
 # 4) Coffret « univers assortis » (Bébé & Enfants)
-pc, pp, pv = 34.90, 29.90, 34.90
+pc, pv, pq = 34.90, 34.90, 29.99
 COFFRET = f'''<div class="cof" id="coffret">
   <div class="cof-txt"><span class="tag-new">Nouveau — coffret assorti</span>
-    <h3>Un prénom, un univers&nbsp;: <em>le coffret Savane</em></h3>
-    <p>Les couverts, le puzzle et la veilleuse dans le même thème. Vous écrivez le prénom une seule fois : les trois pièces sont personnalisées ensemble.</p>
+    <h3>Un prénom, un univers&nbsp;: <em>le coffret Chambre d’enfant</em></h3>
+    <p>Les couverts, la veilleuse et la plaque de porte, personnalisés ensemble. Vous écrivez le prénom une seule fois.</p>
     <div class="cof-pick" role="group" aria-label="Pièces du coffret">
       <label><input type="checkbox" checked data-p="{pc}"> Couverts enfant personnalisés <b>34,90 €</b></label>
-      <label><input type="checkbox" checked data-p="{pp}"> Puzzle en bois personnalisé <b>29,90 €</b></label>
-      <label><input type="checkbox" data-p="{pv}"> Veilleuse personnalisée <b>34,90 €</b></label>
+      <label><input type="checkbox" checked data-p="{pv}"> Veilleuse personnalisée <b>34,90 €</b></label>
+      <label><input type="checkbox" data-p="{pq}"> Plaque de porte enfant <b>29,99 €</b></label>
     </div>
     <div class="cof-name"><label for="cofPrenom">Prénom de l’enfant (gravé sur chaque pièce)</label><input id="cofPrenom" maxlength="14" placeholder="Ex. Léa" autocomplete="off"></div>
-    <p class="cof-tot"><s id="cofAvant">64,80 €</s> <b id="cofApres">58,32 €</b> <span id="cofRem">−10 % dès 2 pièces</span></p>
+    <p class="cof-tot"><s id="cofAvant">69,80 €</s> <b id="cofApres">62,82 €</b> <span id="cofRem">−10 % dès 2 pièces</span></p>
     <a class="btn btn-gold" href="#">Composer mon coffret {ic("arrow")}</a>
-    <p class="cof-note">D’autres univers sont possibles (Forêt, Dinosaures, Océan) dès que le même thème existe sur les couverts et sur le puzzle.</p>
+    <p class="cof-note">Les trois pièces existent déjà sur le site : le coffret ne fait que les réunir, avec le même prénom.</p>
   </div>
   <div class="cof-pics" aria-hidden="true">
-    <img src="{thumb("/produits/couverts_enfants_ex_animaux.jpg", 520)}" alt=""><img src="{thumb(os.path.join(OUT, "assets", "jeux-enfants", "savane.jpg"), 520)}" alt="">
+    <img src="{thumb("/produits/couverts_enfants_ex_animaux.jpg", 520)}" alt=""><img src="{thumb("/produits/couverts_enfants_ex_prenom.jpg", 520)}" alt="">
     <img src="{thumb("/produits/veilleuse-prenom-1.jpg", 520)}" alt=""><span class="cof-nom" id="cofNom">Léa</span>
   </div>
 </div>'''
@@ -226,7 +224,7 @@ ENFANTS = f'''<section class="sec enf" aria-labelledby="t-enf"><span class="tag-
       <span class="enf-lab"><b>Couverts enfant personnalisés</b><span>34,90 €</span></span></a>
     <div class="enf-copy">
       <h2 id="t-enf">Bébé &amp; Enfant&nbsp;: <em>des cadeaux personnalisés avec son prénom</em></h2>
-      <p>Naissance, premiers repas, chambre, jeux : tous nos cadeaux personnalisés pour les petits, réunis au même endroit.</p>
+      <p>Naissance, premiers repas, chambre : tous nos cadeaux personnalisés pour les petits, réunis au même endroit.</p>
       <div class="enf-cats">{"".join(f'<a href="#r-enfants-{i}" data-go="enfants">{esc(n)}</a>' for i, (n, _) in enumerate(enf["rayons"]))}</div>
       <div class="ug ug-4">{"".join(carte(s, enf) for s in ["plaque-de-naissance-coeur", "veilleuse-arbre-de-vie-prenom", "cartes-etapes-bebe-animaux", "bracelet-empreinte-pied-bebe"])}</div>
       <a class="btn btn-ink" href="#" data-go="enfants">Voir tout l’univers {ic("arrow")}</a>
@@ -269,7 +267,7 @@ NOTES = '''<div class="mbar" role="region" aria-label="Maquette">
   <button type="button" class="mbar-more" id="mbarMore" aria-expanded="false">Ce qui change</button></div>
   <ul class="mbar-notes" id="mbarNotes" hidden>
     <li><b>Menu rangé en 8 entrées</b> (au lieu de 15) : 7 univers + « Offrir ». Survol = panneau avec les rayons et une photo. Sur téléphone, le ☰ ouvre enfin un vrai menu.</li>
-    <li><b>Nouvel univers « Bébé &amp; Enfant »</b> : les couverts, la veilleuse et la plaque de porte quittent « Déco », avec les plaques de naissance, les cartes étapes et les futurs puzzles.</li>
+    <li><b>Nouvel univers « Bébé &amp; Enfant »</b> : les couverts, la veilleuse et la plaque de porte quittent « Déco », avec les plaques de naissance et les cartes étapes.</li>
     <li><b>« Trouver le cadeau en 3 clics »</b> sous le héros (pour qui, occasion, budget) : les acheteurs de cadeaux pensent « pour qui » avant « quel produit ».</li>
     <li><b>Coffret « univers assortis »</b> : le même thème sur plusieurs pièces, le prénom écrit une seule fois, −10 % dès 2 pièces (proposition).</li>
     <li><b>Les fêtes se mettent à jour toutes seules</b> : Noël, Saint-Valentin, fête des grands-mères, fête des mères, fête des pères sont calculées sur la date du jour ; seules celles des 3 prochains mois sont proposées. Une fête passée disparaît d’elle-même.</li>
