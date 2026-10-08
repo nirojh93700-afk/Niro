@@ -215,3 +215,7 @@ En attente de SA décision :
 7. Etsy reste dans Etsy : hors boîte mail surveillée et hors dossiers de communication.
 
 - **Accueil moderne** : maquette ENREGISTRÉE le 04/10 (version 5) — https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J — `docs/maquettes/accueil-moderne.html`, générateur `tools/maquettes/accueil-moderne.py`. Attend son « applique ». Rien en ligne.
+
+- **Maquette « Accueil + univers » (08/10/2026)** — https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6, rien en ligne : son avis
+  sur le menu en 8 univers, l'univers « Bébé & Enfants », le coffret « univers assortis » (prix et remise à valider ; même
+  thème d'animaux sur couverts et puzzle à vérifier), « Trouver un cadeau » · puis son « applique ».

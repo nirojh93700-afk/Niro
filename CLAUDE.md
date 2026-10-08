@@ -2720,6 +2720,29 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 
+## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — 08/10/2026 (en attente de son avis, RIEN en ligne)
+> Gérant : « reprends la maquette qu'il a déjà, retravaille, et pour tous les univers avec tous les produits…
+> cherche sur Internet plusieurs sites… que mon site soit bien optimisé, bien rangé » (+ « les couverts enfants c'est
+> pas dans la Déco »). La maquette ENREGISTRÉE `accueil-moderne.html` n'est PAS modifiée : `tools/maquettes/accueil-v2.py`
+> lit et exécute son générateur sans écrire ses fichiers, puis retravaille le résultat.
+- **Fichier** : `docs/maquettes/accueil-univers.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6.
+  Catalogue lu dans le code par `tools/maquettes/catalogue-export.mjs` (`node --import ./tools/alias-register.mjs …`,
+  75 produits visibles, occasions de `occasions.js`) → `python3 tools/maquettes/accueil-v2.py <json>`. Le générateur
+  REFUSE de tourner si un produit n'est rangé dans aucun univers (assert) → aucun produit oublié.
+- **Changements** : menu de 15 liens → **8 entrées** (7 univers + « Offrir » avec Pour qui / Occasion / Budget /
+  Carte cadeau / Promotions), panneau déroulant avec rayons + photo ; ☰ du téléphone = vrai tiroir en accordéon ·
+  **« Trouver le cadeau en 3 clics »** sous le héros · **nouvel univers « Bébé & Enfants »** (naissance & baptême,
+  repas = couverts, chambre = veilleuse prénom + plaque de porte, jeux = 9 puzzles « bientôt ») + **coffret « univers
+  assortis » Savane** (couverts + puzzle + veilleuse, prénom écrit une fois, −10 % dès 2 pièces = proposition) ·
+  « Nos univers » (8 tuiles avec nombre de créations) remplace « Explorez nos collections » · 2ᵉ vue : **une page
+  par univers avec TOUS les produits rangés par rayon**, filtres Pour qui (bijoux) / Budget, tri par prix.
+  Rangement : Bijoux 32 (colliers / bracelets) · Cristal 5 (+ « déjà gravés » bientôt) · Verres 6 · Bébé & Enfants 8 ·
+  Mariage 9 · Maison & Déco 6 (lumières, bougeoirs) · Petits cadeaux 10 (clés USB, porte-clés & médaille, bureau).
+- En-tête/logo, héros, bijoux, carafe, Noël, mur, avis, pied de page : inchangés (logo à son adresse source).
+  Prix = ceux du code (remise bijoux −10 % appliquée) ; Gestion peut les avoir changés. 9 produits n'ont pas de photo
+  locale (photos sur le CDN Shopify, injoignable d'ici) → vignette « photo sur le site ».
+- Testée Chromium 1280/390 : 0 débordement, 0 erreur JS, filtres / tiroir / coffret / trouver un cadeau joués.
+
 ## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)
 > ⛔ **LE LOGO ET L'EN-TÊTE NE SE TOUCHENT PAS** (gérant, 04/10, très ferme : « de quel droit tu touches à mon logo… tu
 > modifies pas les réglages qu'on a déjà faits, tu fais juste une maquette moderne »). Dans toute maquette, l'en-tête
