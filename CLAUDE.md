@@ -2752,6 +2752,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     l'option cochée sans rien d'écrit laisse le bouton grisé. Le texte libre des modèles / dessins reste à +5 €. Vérifié
     Chromium 390/1280 : 0 erreur JS, 0 débordement, Verseau + vertical + Moyen 59,90 → prénom 61,90 → + ville 63,90 →
     + date 65,90 → + socle 85,80 €. Rien en ligne.
+  · **v12 (09/10 soir, gérant : « dans le titre, est-ce que tu peux mettre les 2, tu prends que les blocs… pour montrer qu'il
+    y a ça aussi pour graver »)** : ses 2 photos (bloc « Gemini » gravé + bloc Bouddha sur lotus) RECADRÉES SUR LE BLOC SEUL
+    (`assets/cristaux-graves/hero-gemeaux.webp` / `hero-bouddha.webp`, 600 × 800) posées dans l'écrin du titre, à droite du
+    texte sur ordinateur, sous le texte côte à côte sur téléphone, cadre doré à double filet (piste A), légende SOUS la photo
+    (« Votre signe du zodiaque » / « Un modèle déjà gravé » — en bandeau par-dessus, elle cachait le nom et la date gravés).
+    Vérifié 390/1280 : 0 débordement, 0 erreur JS.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

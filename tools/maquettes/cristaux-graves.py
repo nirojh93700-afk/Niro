@@ -103,6 +103,8 @@ ZODIAQUE = [
     ("verseau", "Verseau", "20 janvier – 18 février", [(20,30),(32,38),(44,30),(56,38),(50,18),(50,56),(60,70),(48,84),(16,50)], [(0,1),(1,2),(2,3),(2,4),(3,5),(5,6),(6,7),(0,8)]),
     ("poissons", "Poissons", "19 février – 20 mars", [(70,80),(56,66),(44,52),(34,40),(24,28),(18,16),(78,62),(82,46),(84,30),(90,24),(86,16),(78,18),(76,26)], [(0,1),(1,2),(2,3),(3,4),(4,5),(0,6),(6,7),(7,8),(8,9),(9,10),(10,11),(11,12),(12,8)]),
 ]
+HERO_GEM = raw_uri(os.path.join(ASSETS, "hero-gemeaux.webp"))
+HERO_BOU = raw_uri(os.path.join(ASSETS, "hero-bouddha.webp"))
 ZFIG = {z[0]: raw_uri(os.path.join(ASSETS, "zodiaque", f"fig-{z[0]}.webp")) for z in ZODIAQUE if os.path.exists(os.path.join(ASSETS, "zodiaque", f"fig-{z[0]}.webp"))}
 
 def constellation(pts, segs):
@@ -259,7 +261,8 @@ PLACES = "".join(f'<button type="button" class="cg-chip{" on" if k == "bas" else
 
 MAIN = f'''<main class="cg">
 <section class="cg-intro cg-ecrin">
-  <div class="container">
+  <div class="container cg-ecrin-grid">
+    <div class="cg-ecrin-txt">
     <h1>Des cristaux déjà gravés, <em>prêts à offrir</em></h1>
     <p class="cg-lede">Choisissez un modèle parmi nos créations : il est gravé en 3D au cœur d'un cristal optique K9,
       dans notre atelier en France. Vous choisissez simplement la taille, et le socle lumineux si vous le souhaitez.</p>
@@ -268,6 +271,11 @@ MAIN = f'''<main class="cg">
       <li>{ic("pin")}<span><b>Gravé en France</b>dans notre atelier</span></li>
       <li>{ic("truck")}<span><b>Livraison suivie</b>colis &amp; point relais</span></li>
     </ul>
+    </div>
+    <div class="cg-ecrin-pics" aria-hidden="true">
+      <figure class="cg-epic"><img src="{HERO_GEM}" alt="" loading="eager"><figcaption>Votre signe du zodiaque</figcaption></figure>
+      <figure class="cg-epic"><img src="{HERO_BOU}" alt="" loading="eager"><figcaption>Un modèle déjà gravé</figcaption></figure>
+    </div>
   </div>
 </section>
 
@@ -675,6 +683,13 @@ CSS += r'''
 .cg-note b{color:#fff}.cg-note .cg-ic{color:var(--gold-l)}
 @media (max-width:860px){.cg-steps::before{background:linear-gradient(180deg,var(--gold-l),rgba(226,198,126,.12))}}
 @media (max-width:480px){.cg-ecrin .cg-trust{max-width:none}}
+.cg-ecrin-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(22px,4vw,56px);align-items:center}
+.cg-ecrin-pics{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,2vw,18px);align-items:end}
+.cg-epic{margin:0;position:relative;border-radius:14px;overflow:hidden;background:#0d0f13;box-shadow:0 0 0 1px rgba(226,198,126,.55),0 0 0 4px #1a1206,0 0 0 5px rgba(226,198,126,.35),0 24px 48px -24px rgba(0,0,0,.8)}
+.cg-epic img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}
+.cg-epic figcaption{padding:8px 8px 9px;text-align:center;font-size:.72rem;letter-spacing:.02em;color:var(--gold-l);background:#0d0f13}
+.cg-epic:first-child{transform:translateY(-14px)}
+@media (max-width:860px){.cg-ecrin-grid{grid-template-columns:1fr;gap:26px}.cg-ecrin-pics{max-width:420px}.cg-epic:first-child{transform:none}.cg-epic figcaption{font-size:.7rem}}
 '''
 
 DATA = json.dumps([{"k": k, "nom": n, "fmt": f, "phrase": p} for k, n, _, f, p in MODELES]
