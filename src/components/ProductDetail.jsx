@@ -28,6 +28,7 @@ import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
 import LettreFleuriePicker from "./LettreFleuriePicker";
 import CrystalTextDrag from "./CrystalTextDrag";
+import { lienCategorie } from "@/lib/lienCategorie";
 import { POSITIONS_TEXTE, regionTexte } from "@/lib/cristalTexte";
 import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
@@ -1465,7 +1466,7 @@ export default function ProductDetail({ product }) {
           <div className="breadcrumb">
             <Link href="/boutique">Boutique</Link>
             {" / "}
-            <Link href={product.category === "cristal" ? "/cristaux" : product.category === "naissance" ? "/naissance" : `/boutique/${product.category}`}>
+            <Link href={lienCategorie(product.category)}>
               {getCategoryLabel(product.category)}
             </Link>
           </div>

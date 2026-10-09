@@ -1,3 +1,4 @@
+import { lienCategorie } from "@/lib/lienCategorie";
 import { notFound } from "next/navigation";
 import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
 import ProductDetail from "@/components/ProductDetail";
@@ -32,12 +33,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// URL de la catégorie du produit (cristal et naissance ont leur page dédiée).
-function categoryUrl(cat) {
-  if (cat === "cristal") return "/cristaux";
-  if (cat === "naissance") return "/naissance";
-  return `/boutique/${cat}`;
-}
+// URL de la catégorie du produit (cristal et naissance ont leur page dédiée,
+// les jeux en bois arrivent directement sur leur rayon).
+const categoryUrl = lienCategorie;
 
 export default async function ProductPage({ params, searchParams }) {
   let product = await getCatalogBySlug(params.handle);
@@ -148,7 +146,7 @@ export default async function ProductPage({ params, searchParams }) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Accueil", item: "https://nivcreation.fr" },
       { "@type": "ListItem", position: 2, name: "Boutique", item: "https://nivcreation.fr/boutique" },
-      { "@type": "ListItem", position: 3, name: catLabel, item: `https://nivcreation.fr${catUrl}` },
+      { "@type": "ListItem", position: 3, name: catLabel, item: `https://nivcreation.fr${catUrl.split("#")[0]}` },
       { "@type": "ListItem", position: 4, name: product.title },
     ],
   };

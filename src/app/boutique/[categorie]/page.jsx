@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import UniversPage from "@/components/univers/UniversPage";
+import { RAYON_JEUX } from "@/lib/lienCategorie";
 import { UNIVERS_IDS, ANCIENNES_CATEGORIES, getUnivers } from "@/lib/univers";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }) {
 // /boutique/<univers>. Les anciennes catégories (deco, naissance) renvoient vers leur univers.
 export default async function CategoryPage({ params }) {
   const id = params.categorie;
+  if (id === "jeux") redirect(RAYON_JEUX);
   if (ANCIENNES_CATEGORIES[id]) redirect(`/boutique/${ANCIENNES_CATEGORIES[id]}`);
   if (!UNIVERS_IDS.includes(id)) redirect("/boutique");
   return <UniversPage uid={id} />;

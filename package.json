@@ -19,7 +19,8 @@
     "test-remise-devis": "node tools/tests/remise-devis.test.mjs",
     "test-port-parite": "node --import ./tools/alias-register.mjs tools/tests/port-parite.mjs",
     "test-port-devis": "node --import ./tools/alias-register.mjs tools/tests/port-devis.mjs",
-    "test-cristal-texte": "node tools/tests/cristal-texte.mjs"
+    "test-cristal-texte": "node tools/tests/cristal-texte.mjs",
+    "test-lien-categorie": "node tools/tests/lien-categorie.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
