@@ -29,6 +29,7 @@ const nextConfig = {
     return [
       { source: "/boutique", has: [{ type: "query", key: "cat", value: "deco" }], destination: "/boutique/maison", permanent: true },
       { source: "/boutique", has: [{ type: "query", key: "cat", value: "naissance" }], destination: "/boutique/enfants", permanent: true },
+      { source: "/boutique", has: [{ type: "query", key: "cat", value: "jeux" }], destination: "/boutique/enfants#r-enfants-2", permanent: true },
       { source: "/boutique/deco", destination: "/boutique/maison", permanent: true },
       { source: "/boutique/naissance", destination: "/boutique/enfants", permanent: true },
       ...cats.map((c) => ({

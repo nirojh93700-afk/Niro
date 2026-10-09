@@ -48,7 +48,8 @@ export default function Footer() {
             <Link href="/boutique/bijoux?sub=femme">Bijoux femme</Link>
             <Link href="/boutique/bijoux?sub=homme">Bijoux homme</Link>
             <Link href="/boutique/mariage">Mariage & Réception</Link>
-            <Link href="/boutique/cadeaux">Cadeaux & Déco</Link>
+            <Link href="/boutique/cadeaux">Petits cadeaux</Link>
+            <Link href="/boutique/maison">Maison & Déco</Link>
             <Link href="/boutique">Tout voir</Link>
           </div>
           <div>
@@ -58,7 +59,7 @@ export default function Footer() {
             <Link href="/a-propos">À propos</Link>
             <Link href="/contact">Nous contacter</Link>
             <Link href="/retours">Retours & Remboursements</Link>
-            <Link href="/#personnalisation">La personnalisation</Link>
+            <Link href="/#atelier">La personnalisation</Link>
           </div>
           <div>
             <h4>Idées &amp; conseils</h4>

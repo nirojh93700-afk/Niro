@@ -8,7 +8,7 @@ import { rangerCatalogue, cartesPuzzles, POURQUI } from "@/lib/univers";
 // Une page univers complète (maquette « Mélange ») : onglets, en-tête (fil
 // d'Ariane, titre, accroche, nombre, photo), puis la barre des rayons et les
 // rayons. `uid` = un univers ou « boutique » (toute la boutique).
-export default async function UniversPage({ uid }) {
+export default async function UniversPage({ uid, quiInitial = "" }) {
   const catalog = await getCatalog().catch(() => []);
   const R = rangerCatalogue(catalog);
   const u = R.getUnivers(uid);
@@ -36,7 +36,7 @@ export default async function UniversPage({ uid }) {
               <img src={u.img} alt="" />
             </figure>
           </header>
-          <PageUnivers uid={uid} rayons={rayons} pourqui={!!u.pourqui} pourquiLabels={POURQUI}
+          <PageUnivers uid={uid} rayons={rayons} pourqui={!!u.pourqui} pourquiLabels={POURQUI} quiInitial={quiInitial}
             coffret={uid === "enfants" ? <CoffretSavane id="enfants" carteDe={R.carteDe} /> : null} />
         </article>
       </div>

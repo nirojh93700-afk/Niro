@@ -24,10 +24,12 @@ export async function generateMetadata({ params }) {
 }
 
 // /boutique/<univers>. Les anciennes catégories (deco, naissance) renvoient vers leur univers.
-export default async function CategoryPage({ params }) {
+export default async function CategoryPage({ params, searchParams }) {
   const id = params.categorie;
   if (id === "jeux") redirect(RAYON_JEUX);
   if (ANCIENNES_CATEGORIES[id]) redirect(`/boutique/${ANCIENNES_CATEGORIES[id]}`);
   if (!UNIVERS_IDS.includes(id)) redirect("/boutique");
-  return <UniversPage uid={id} />;
+  // Anciennes adresses / liens du pied de page : ?sub=femme|homme pré-coche « Pour elle » / « Pour lui ».
+  const quiInitial = id === "bijoux" ? ({ femme: "elle", homme: "lui" }[searchParams?.sub] || "") : "";
+  return <UniversPage uid={id} quiInitial={quiInitial} />;
 }

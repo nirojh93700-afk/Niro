@@ -9,5 +9,6 @@ export function lienCategorie(category) {
   if (category === "cristal") return "/cristaux";
   if (category === "naissance") return "/naissance";
   if (category === "jeux") return RAYON_JEUX;
+  if (category === "deco") return "/boutique/maison"; // l'ancienne catégorie « déco » est devenue l'univers Maison & Déco
   return `/boutique/${category}`;
 }

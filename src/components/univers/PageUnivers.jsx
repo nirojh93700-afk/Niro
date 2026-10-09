@@ -10,8 +10,8 @@ import { matchCarte } from "./Finder";
 // rayons avec les mêmes cartes partout. Les choix sans résultat sont grisés.
 const BUD = [["0-20", "Moins de 20 €"], ["20-40", "20 à 40 €"], ["40-999", "Plus de 40 €"]];
 
-export default function PageUnivers({ uid, rayons, pourqui, pourquiLabels, coffret = null }) {
-  const [sel, setSel] = useState({ qui: "", budget: "" });
+export default function PageUnivers({ uid, rayons, pourqui, pourquiLabels, coffret = null, quiInitial = "" }) {
+  const [sel, setSel] = useState({ qui: quiInitial, budget: "" });
   const [tri, setTri] = useState("");
   const [cur, setCur] = useState("");
   const root = useRef(null);
