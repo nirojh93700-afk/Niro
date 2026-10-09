@@ -30,6 +30,13 @@
   `to:<adresse> newer_than:1d in:anywhere`) AVANT de dire qu'il n'est pas parti, de réessayer ou de programmer.** Même vérification avant tout nouvel
   envoi à la même cliente.
 
+- ⛔ **ENTRETIEN : JAMAIS DE « LAVE-VAISSELLE » SUR LES BIJOUX NI SUR LE BOIS (gérant, 09/10/2026 soir : « depuis quand les gens
+  mettent du bois dans le lave-vaisselle… pour les bijoux et les bois y a pas de lave-vaisselle »)**. Le lave-vaisselle ne se
+  mentionne QUE pour ce qui peut y aller (verres gravés, couverts inox). Bois = « un coup de chiffon sec suffit ». Avant
+  d'écrire un texte d'entretien, se demander si la phrase a un sens pour CETTE matière. Audit du 09/10 : seuls les 9 puzzles
+  avaient la phrase (écrite par moi le jour même) ; « étanche » sur 8 bijoux et « plongée / baignade » sur le collier Enveloppe
+  sont aussi à corriger (sur son mot).
+
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
 > informations… j'ai pas la date, qu'est-ce que je grave ? ». Une commande sur devis n'a pas de `spec` :
