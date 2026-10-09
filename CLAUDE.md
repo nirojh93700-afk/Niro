@@ -13,6 +13,11 @@
   demande de montrer un mail, **RIEN NE PART** tant qu'il n'a pas écrit « envoie » dans un message qui ne demande pas
   aussi de le montrer. En cas de doute : montrer, ne pas envoyer.
 
+- ⛔ **DANS UN MAIL CLIENT, NE PAS PROPOSER D'ALTERNATIVES NON DEMANDÉES (gérant, 10/10/2026, dossier Jankowski 1P5XZKRP : « enlève cette phrase,
+  ne propose pas des trucs comme ça »)** : pas de « si vous préférez, envoyez une autre photo », pas de « rien à faire de votre côté », pas de choix
+  ni de porte de sortie ajoutés de ma propre initiative. Le mail dit ce qui sera fait et ce qui est impossible ; la seule proposition permise est
+  celle que le gérant demande lui-même (ex. le socle LED).
+
 - ⛔ **TOUT MAIL CLIENT EST PERSONNALISÉ PAR RAPPORT À SA COMMANDE — OBLIGATOIRE (gérant, 07/10/2026 : « tu gardes en
   mémoire, je dois toujours personnaliser les mails par rapport à la commande »)**. Jamais de mail type collé à tout le monde :
   avant d'écrire, relire la commande (produits, gravure, livraison), le suivi du colis et le fil d'échanges ; le mail reprend
