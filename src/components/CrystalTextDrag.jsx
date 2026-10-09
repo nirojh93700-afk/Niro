@@ -13,7 +13,7 @@ function labelFor(x, y, scale) {
   return `${v} ${h}${t}`;
 }
 
-export default function CrystalTextDrag({ lines, fontClass, onChange }) {
+export default function CrystalTextDrag({ lines, fontClass, onChange, forcePos, onUserMove }) {
   const zoneRef = useRef(null);
   const [pos, setPos] = useState({ x: 50, y: 78 });
   const [scale, setScale] = useState(1);
@@ -24,6 +24,12 @@ export default function CrystalTextDrag({ lines, fontClass, onChange }) {
     onChange && onChange({ x: Math.round(pos.x), y: Math.round(pos.y), scale: Math.round(scale * 100) / 100, label: labelFor(pos.x, pos.y, scale) });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pos.x, pos.y, scale]);
+
+  // Le menu « Où placer le texte ? » déplace le texte (haut / bas / gauche / droite).
+  useEffect(() => {
+    if (forcePos) setPos({ x: forcePos.x, y: forcePos.y });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forcePos?.n]);
 
   function moveTo(clientX, clientY) {
     const r = zoneRef.current && zoneRef.current.getBoundingClientRect();
@@ -45,7 +51,9 @@ export default function CrystalTextDrag({ lines, fontClass, onChange }) {
     }
   }
   function endPointer(e) {
+    const fini = mode.current;
     mode.current = null;
+    if (fini === "move" && onUserMove) onUserMove(pos);
     try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
   }
   function startMove(e) {

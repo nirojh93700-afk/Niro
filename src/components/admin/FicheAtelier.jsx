@@ -14,6 +14,7 @@ import { eclaterParVerre } from "@/lib/orderSpec";
 import { TableGravure } from "@/lib/engravingSheet";
 import FicheDevis from "@/components/admin/FicheDevis";
 import OptionsVendues from "@/components/admin/OptionsVendues";
+import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -30,8 +31,38 @@ function textLinesOf(item, product) {
 
 const motifLabel = (id) => (MOTIF_LIST.find((m) => m.id === id) || {}).label || id;
 
+// Cristal photo : le même aperçu que celui vu par la cliente (bloc de verre, photo,
+// texte à la place choisie), pour graver à l'identique. Mêmes classes que la fiche
+// produit (.crystal-hero), posées dans un cadre carré de 300 px comme GlassPreview.
+function CristalPreview({ item, p }) {
+  const W = 300;
+  const txt = textLinesOf(item, p);
+  const pos = positionTexteCristal(item);
+  return (
+    <div className="gallery-main" style={{ width: W, maxWidth: "100%", borderRadius: 10, boxShadow: "none" }}>
+      <div className="crystal-hero">
+        <div className="ch-wrap">
+          <div className={`ch-block${p?.crystalShape ? " ch-" + p.crystalShape : ""}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {item.photoSrc && <img className="ch-photo" src={item.photoSrc} alt="" />}
+            {txt.lines.length > 0 && (
+              <div className="ch-text" style={{ left: pos.x + "%", top: pos.y + "%", fontSize: `calc(1.1rem * ${pos.scale})` }}>
+                {txt.lines.map((l, i) => (
+                  <span key={i} className={txt.fontClass}>{l}</span>
+                ))}
+              </div>
+            )}
+            <span className="ch-shine" aria-hidden="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function GlassPreview({ item }) {
   const p = getProductBySlug(item.slug);
+  if (p?.crystal3d && (item.photoSrc || textLinesOf(item, p).lines.length)) return <CristalPreview item={item} p={p} />;
   const isFond = item.emplacement === "fond";
   // Cristaux : on grave dans un cristal VIERGE (image « bloc »), jamais sur la
   // photo d'exemple déjà gravée (sinon la photo cliente se pose sur une gravure).
@@ -87,6 +118,8 @@ export function ReglagesItem({ item, titre = true }) {
   const tpl = item.modeleTemplate ? MODELES[item.modeleTemplate] : null;
   const layout = mv?.layout || tpl?.layout || tpl?.style || "stack";
   const lay = item.layout?.modele || item.layout?.photo || item.layout?.text;
+  const pCrist = getProductBySlug(item.slug);
+  const crist = pCrist?.crystal3d && String(item.fields?.texte || "").trim() ? positionTexteCristal(item) : null;
   return (
     <>
       {titre && (
@@ -111,6 +144,16 @@ export function ReglagesItem({ item, titre = true }) {
       )}
       {item.photoSrc && !mv && <Row k="Logo / photo" v="fournie par la cliente (voir visuel)" />}
       {lay?.label && <Row k="Taille / position" v={lay.label} />}
+      {crist && (
+        <>
+          <Row k="Place du texte" v={`${LIBELLE_POSITION[crist.region] || "au milieu"}${item.layout?.crystalText?.label && !crist.conflit ? ` (${item.layout.crystalText.label})` : ""}`} />
+          {crist.conflit && (
+            <div style={{ margin: "4px 0", padding: "6px 9px", borderRadius: 7, background: "#fff3e0", border: "1px solid #f0c27a", color: "#7a4a00", fontSize: "0.82rem", fontWeight: 600 }}>
+              ⚠️ Elle a choisi « {LIBELLE_POSITION[crist.conflit.menu]} » dans le menu, mais son aperçu montrait le texte {LIBELLE_POSITION[crist.conflit.apercu] || "au milieu"}. L'aperçu ci-contre suit son choix du menu ({LIBELLE_POSITION[crist.conflit.menu]}).
+            </div>
+          )}
+        </>
+      )}
       {item.personalization && <Row k="Résumé" v={item.personalization} />}
     </>
   );

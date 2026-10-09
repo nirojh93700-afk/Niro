@@ -28,6 +28,7 @@ import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
 import LettreFleuriePicker from "./LettreFleuriePicker";
 import CrystalTextDrag from "./CrystalTextDrag";
+import { POSITIONS_TEXTE, regionTexte } from "@/lib/cristalTexte";
 import DesignAssistant from "./DesignAssistant";
 import BadgeDesigner from "./BadgeDesigner";
 import ModeleDesigner from "./ModeleDesigner";
@@ -81,6 +82,8 @@ export default function ProductDetail({ product }) {
   const [photoLayout, setPhotoLayout] = useState(null); // taille/position du logo gravé (face)
   const [textLayout, setTextLayout] = useState(null); // taille/position du texte gravé (face)
   const [crystalTextPos, setCrystalTextPos] = useState(null);
+  // Menu « Où placer le texte ? » → déplace le texte dans l'aperçu cristal (n = déclencheur).
+  const [textePosCmd, setTextePosCmd] = useState(null);
   const [crystalZone, setCrystalZone] = useState(null); // zone de gravure réglée dans l'admin
   const [motifZone, setMotifZone] = useState(product.motifZone || null); // zone de gravure verres/carafe (repli code, sinon réglage admin)
   const [motifAspect, setMotifAspect] = useState(1); // hauteur/largeur du motif posé (cadre fixe)
@@ -384,6 +387,20 @@ export default function ProductDetail({ product }) {
 
   function setField(key, value) {
     setFieldValues((prev) => ({ ...prev, [key]: value }));
+  }
+  // Menu ↔ aperçu cristal : un choix du menu déplace le texte, sauf s'il est déjà de ce côté.
+  const textePosMenu = fieldValues["textePos"];
+  useEffect(() => {
+    const cible = POSITIONS_TEXTE[textePosMenu];
+    if (!cible) return;
+    if (crystalTextPos && regionTexte(crystalTextPos.x, crystalTextPos.y) === textePosMenu) return;
+    setTextePosCmd({ ...cible, n: Date.now() });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textePosMenu]);
+  // Texte glissé à la main → le menu suit (le côté le plus proche ; au milieu, on le laisse).
+  function menuSuitLeTexte(p) {
+    const r = regionTexte(p.x, p.y);
+    if (r && r !== fieldValues["textePos"]) setField("textePos", r);
   }
   // Parcours guidé (carafe…) : la gravure doit être COMPLÈTE pour ajouter au panier.
   const parcours = product.parcoursGuide ? parcoursEtat(product, fieldValues) : null;
@@ -1883,7 +1900,7 @@ export default function ProductDetail({ product }) {
                     {material === "crystal" && <span className="ep-shine" aria-hidden="true" />}
                     {previewLines.length ? (
                       material === "crystal" ? (
-                        <CrystalTextDrag lines={previewLines} fontClass={previewFontClass} onChange={setCrystalTextPos} />
+                        <CrystalTextDrag lines={previewLines} fontClass={previewFontClass} onChange={setCrystalTextPos} forcePos={textePosCmd} onUserMove={menuSuitLeTexte} />
                       ) : (
                         previewLines.map((line, i) => (
                           <span key={i} className={`ep-line ${previewFontClass}`} style={{ color: previewColor }}>
