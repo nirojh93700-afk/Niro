@@ -2501,6 +2501,17 @@ fiche ; le vrai code est fait par Claude Code) · 📊 Rapport (sur les vraies c
   d'hydratation (#425/#418/#423). Vérifié en retirant toutes les nouvelles pages : c'était déjà le cas.
   Invisible pour la cliente, à corriger séparément si la gérante le demande.
 
+### GUIDE « PUZZLES EN BOIS » + ALERTE AUTOMATIQUE (10/10/2026, gérant : « fais les idées et conseils pour les
+### nouveaux produits, il faut que ce soit automatique »)
+- Nouveau guide `/idees/puzzles-bois-personnalises` (maquette `docs/maquettes/guide-puzzles-bois.html`, artifact
+  https://claude.ai/artifact/FRP8v7Pd4XUwEfNG5mkFB1) : puzzles à encastrer (prénom compris, dès 2 ans sous surveillance) +
+  puzzle photo gravé (24 à 120 pièces, 36 mois). `auto: { category: "jeux" }` → tout nouveau jeu en bois y entre seul ;
+  `guidePourProduit` : catégorie `jeux` → ce guide. Le cristal déjà gravé entre seul dans le guide cristal (catégorie cristal).
+- **Alerte automatique** : `catalogAudit` signale maintenant tout produit en vente qu'AUCUN guide ne couvre (type `guide`,
+  priorité moyenne → e-mail hebdomadaire de surveillance du catalogue). Vérifié le 10/10 : 0 produit sans guide.
+- ⚠️ Préparé et vérifié en local (build OK, guide 200, 10 puzzles liés, lien sur les fiches puzzle, sommaire et sitemap) ;
+  mise en ligne sur son « pousse ».
+
 ### 4 GUIDES DE PLUS + OPTION PHOTO (19/08/2026) — 13 guides au total
 - Nouveaux guides (mêmes règles que les 9 autres) : `/idees/cle-usb-personnalisee-gravee` ·
   `/idees/porte-cles-piece-a-graver` · `/idees/cadeau-enfant-personnalise` ·

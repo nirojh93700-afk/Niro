@@ -110,6 +110,15 @@ export const GUIDES = [
       "Support de téléphone en bois à personnaliser : photo gravée, dessin, initiale fleurie, ou motif découpé à jour. Comment choisir entre les deux modèles.",
   },
   {
+    // Puzzles en bois (catégorie « jeux », 10/10/2026) : tout produit de la catégorie y entre tout seul.
+    slug: "puzzles-bois-personnalises",
+    auto: { category: "jeux" },
+    nav: "Puzzles en bois",
+    title: "Puzzles en bois personnalisés — au prénom ou à votre photo",
+    description:
+      "Puzzle à encastrer gravé au prénom pour les tout-petits, ou votre photo gravée sur un puzzle en bois de 24 à 120 pièces : comment choisir, et quoi savoir avant de commander.",
+  },
+  {
     slug: "porte-stylo-bois-personnalise",
     auto: { motCle: /porte-stylo/i },
     nav: "Porte-stylo",
@@ -154,6 +163,7 @@ export function guidePourProduit(product) {
   const nom = `${slug} ${product.name || ""}`.toLowerCase();
 
   if (cat === "cristal" || nom.includes("cristal")) return getGuide("cristal-photo-3d");
+  if (cat === "jeux") return getGuide("puzzles-bois-personnalises");
   if (/support t(é|e)l(é|e)phone/.test(nom)) return getGuide("support-telephone-personnalise");
   if (/porte-stylo/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
   if (/usb/.test(nom)) return getGuide("cle-usb-personnalisee-gravee");

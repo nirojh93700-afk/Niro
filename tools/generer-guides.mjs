@@ -31,6 +31,7 @@ const MAP = {
   "guide-cadeaux-enfant.html": "cadeau-enfant-personnalise",
   "guide-porte-stylo.html": "porte-stylo-bois-personnalise",
   "guide-support-telephone.html": "support-telephone-personnalise",
+  "guide-puzzles-bois.html": "puzzles-bois-personnalises",
 };
 
 // anciens liens de maquette -> vraies adresses du site

@@ -15,6 +15,7 @@ import { getCatalogAdmin } from "./catalog";
 import { getSettings } from "./stock";
 import { productInfo } from "./productInfo";
 import { defaultPackagingFor } from "./packaging";
+import { guidePourProduit } from "./guides";
 
 const RANK = { haute: 0, moyenne: 1, basse: 2 };
 
@@ -52,6 +53,11 @@ export async function auditCatalog() {
       const ok = a && a.on === true && Array.isArray(a.ids) && a.ids.length > 0;
       if (!ok) add(p, "emballage", "moyenne", "Bijou sans emballage configurable (vérifier la bibliothèque d'emballages)");
     }
+
+    // 5. Guide « Idées & conseils » (gérant, 10/10/2026 : « il faut que ce soit automatique ») : un produit
+    // en vente qu'aucun guide ne couvre (nouvelle catégorie, nouveau type) est signalé, pour qu'on lui crée
+    // ou lui choisisse un guide. Les produits d'une catégorie déjà couverte entrent seuls dans leur guide.
+    if (!p.hidden && !guidePourProduit(p)) add(p, "guide", "moyenne", "Aucun guide « Idées & conseils » ne couvre ce produit");
   }
 
   issues.sort((a, b) => (RANK[a.severity] ?? 9) - (RANK[b.severity] ?? 9));
