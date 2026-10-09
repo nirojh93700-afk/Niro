@@ -2788,6 +2788,24 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 7 cartes, animation jouée. **Le site n'est pas touché.** Au
   « applique » : `src/app/cristaux/page.jsx` + `CristalVivant.jsx` à refaire dans ce rendu (contenu lu du catalogue, inchangé).
 
+## 💎 MAQUETTE DE LA FICHE « CRISTAL PHOTO 3D — VERTICAL » DANS L'HABILLAGE DU NOUVEAU SITE — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
+> Gérant : « fais-moi une maquette pour le vertical quand je vais l'ouvrir » (après : « si c'est bon tu feras [l'application]
+> pour les autres »). Même règle : MÊME CONTENU, MÊMES RÉGLAGES, seule la mise en page change.
+- **Fichier** : `docs/maquettes/fiche-cristal-vertical.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/VHbbRM7EnQkk26AmmsdKuR.
+  Générateur `tools/maquettes/fiche-cristal-vertical.py <capture>` ; capture = `curl localhost:3140/produit/cristal-photo-3d-vertical`
+  après `npx next start -p 3140` (build `.next` présent) — gardée dans le scratchpad (`fiche-vertical-src.html`). Le `<main>` de la
+  VRAIE fiche est gardé tel quel (galerie 8 visuels, 4 tailles 39,90/59,90/99,90/149,90, photo, texte +5 €, police, place du
+  texte, guide photo, socle +14,90/+19,90, aperçu témoin, total, 4× / 3×, quantité, panier, favoris, 4 réassurances, pièce
+  personnalisée, description, guide des tailles, 3 accordéons, « Commandez en toute confiance », « Vous aimerez aussi ») ; seule
+  la vidéo est remplacée par son image d'attente (pas de vidéo dans une maquette) ; les `/_next/image?url=` sont ramenés au fichier.
+- **Habillage** (surcouche CSS `.mxf`, classes du site inchangées) : galerie arrondie 20 px sur fond sable, vignettes 12 px
+  cadre or, **fiche = panneau blanc arrondi 28 px** (titre Playfair, prix en or Playfair, tailles en PAVÉS SABLE / encre quand
+  choisie, champs arrondis 14 px, zone photo sable à pointillés or, total en pavé sable, bouton or en pilule, réassurances en
+  pavés sable, guide des tailles en pavé sable, accordéons en cartes), bloc confiance en ÉCRIN encre & or. Petit JS de maquette :
+  tailles, socle, texte, quantité → total (Grand + socle + texte × 2 = 249,60 €), vignettes et flèches de galerie.
+- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, images chargées. **Le site n'est pas touché.** Au « applique » :
+  cette surcouche devient le style des fiches (ProductDetail), à étendre aux autres fiches s'il le dit (« pour les autres »).
+
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « on va faire une autre maquette, c'est une nouvelle catégorie, c'est des jeux pour les enfants, je te
