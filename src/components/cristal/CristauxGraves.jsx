@@ -2,7 +2,7 @@
 // Page « Cristaux déjà gravés » (/cristaux-graves) — reproduction de la maquette validée
 // docs/maquettes/cristaux-graves.html (version 14), mise en ligne le 10/10/2026 (« les trois » du gérant).
 // Trois pavés (modèles gravés / dessins / zodiaque), 8 cartes puis « Afficher les N autres », panneau
-// « Votre cristal » : format (rien de présélectionné), taille, texte +5 € (zodiaque : prénom, date, ville
+// « Votre cristal » : format (rien de présélectionné), taille, texte compris (zodiaque : prénom, date, ville
 // +2 € chacun), socle LED, total, quantité, bouton grisé tant qu'il manque quelque chose. Le panier reçoit le
 // produit « cristal-deja-grave » : les prix sont recalculés côté serveur au paiement (products.js).
 // Styles : src/app/cristaux-graves.css (généré depuis la maquette, racine .cgg).
@@ -23,7 +23,7 @@ const PLACES = [["bas", "En bas"], ["haut", "En haut"], ["gauche", "À gauche"],
 const FAM_LABEL = Object.fromEntries(CG_FAMILLES.map((f) => [f.k, f.nom]));
 const INTRO = {
   dessins: "Un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix. Rien n'est choisi d'avance.",
-  zodiaque: "Votre signe, sa constellation et sa figure gravés dans le cristal. En option : un prénom, la date et l'heure de naissance, la ville.",
+  zodiaque: "Votre signe, sa constellation et sa figure gravés dans le cristal. En option : un prénom, la date et l'heure de naissance, la ville où la personne habite.",
 };
 
 // Toutes les gravures dans l'ordre de la maquette : modèles, dessins, zodiaque.
@@ -32,7 +32,7 @@ const ITEMS = [
   ...CG_DESSINS.map((d) => ({ ...d, grp: "dessins", d: true, img: `${CG_DOSSIER}/dessin-${d.k}.webp`,
     phrase: "Dessin gravé en 3D au cœur du cristal, au format de votre choix." })),
   ...CG_ZODIAQUE.map((z) => ({ ...z, grp: "zodiaque", d: true, z: true, img: `${CG_DOSSIER}/zodiaque-${z.k}.webp`,
-    phrase: `Signe du ${z.nom} (${z.dates}) : la constellation et sa figure, gravées en 3D. Ajoutez un prénom, la date de naissance et la ville.` })),
+    phrase: `Signe du ${z.nom} (${z.dates}) : la constellation et sa figure, gravées en 3D. Ajoutez un prénom, la date de naissance et la ville où la personne habite.` })),
 ];
 const GROUPES = [["modeles", "Modèles gravés", CG_MODELES.length], ["dessins", "Dessins", CG_DESSINS.length], ["zodiaque", "Zodiaque", CG_ZODIAQUE.length]];
 
@@ -137,7 +137,7 @@ export default function CristauxGraves({ prix = {} }) {
     const resume = [
       `${genre} : ${m.nom}`, format,
       avecTxt && !zod ? `Texte : « ${texte.trim()} » (${police}, ${place.toLowerCase()})` : "",
-      avecTxt && zod ? [zp && `Prénom : ${zp}`, zDate && `Né(e) le : ${zDate}`, zv && `Ville : ${zv}`].filter(Boolean).join(" · ") + ` (${police})` : "",
+      avecTxt && zod ? [zp && `Prénom : ${zp}`, zDate && `Né(e) le : ${zDate}`, zv && `Habite à : ${zv}`].filter(Boolean).join(" · ") + ` (${police})` : "",
       socle ? "Socle lumineux LED" : "",
     ].filter(Boolean).join(" · ");
     const variantTitle = `${format} · ${t.nom} — ${fmt === "h" ? t.h : t.v}`;
@@ -298,7 +298,7 @@ export default function CristauxGraves({ prix = {} }) {
                   <b>{zod ? "Ajouter prénom, date de naissance et ville" : "Ajouter un texte"}</b>
                   <small>{zod ? "Gravés sous la constellation : +2 € par mention (prénom, date, ville)" : "Un prénom, une date, un petit mot, gravé avec le modèle"}</small>
                 </span>
-                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(CG_ZOD_PRIX * nz) : "+2 € chacun") : "+" + eur(CG_TEXTE_PRIX)}</span>
+                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(CG_ZOD_PRIX * nz) : "+2 € chacun") : CG_TEXTE_PRIX > 0 ? "+" + eur(CG_TEXTE_PRIX) : "Compris"}</span>
                 <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
               </button>
               <div className="cg-txt" id="txtzone" hidden={!txt}>
@@ -313,7 +313,7 @@ export default function CristauxGraves({ prix = {} }) {
                     <div><label className="cg-sub" htmlFor="cg-zd">Date de naissance</label><div className="cg-inp"><input id="cg-zd" type="text" maxLength={16} placeholder="24 nov. 2022" autoComplete="off" value={zd} onChange={(e) => setZd(e.target.value.trim() ? e.target.value : "")} /></div></div>
                     <div><label className="cg-sub" htmlFor="cg-zh">Heure</label><div className="cg-inp"><input id="cg-zh" type="text" maxLength={5} placeholder="19:27" autoComplete="off" value={zh} onChange={(e) => setZh(e.target.value.trim() ? e.target.value : "")} /></div></div>
                   </div>
-                  <label className="cg-sub" htmlFor="cg-zv">Ville</label>
+                  <label className="cg-sub" htmlFor="cg-zv">Ville où la personne habite</label>
                   <div className="cg-inp"><input id="cg-zv" type="text" maxLength={24} placeholder="Paris" autoComplete="off" value={zv} onChange={(e) => setZv(e.target.value.trim() ? e.target.value : "")} /></div>
                 </div>
                 <span className="cg-sub">Écriture</span>

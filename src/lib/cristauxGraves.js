@@ -1,6 +1,6 @@
 // « Cristaux déjà gravés » — données de la page /cristaux-graves (maquette validée v14, en ligne le 10/10/2026).
 // Recopiées du générateur tools/maquettes/cristaux-graves.py (MODELES, DESSINS, ZODIAQUE, FAMILLES) : une
-// modification se fait des DEUX côtés. Prix des tailles = ceux des blocs photo ; texte +5 € ; zodiaque :
+// modification se fait des DEUX côtés. Prix des tailles = ceux des blocs photo ; texte compris (10/10) ; zodiaque :
 // prénom, date (avec l'heure) et ville +2 € chacun (gérant, 09/10/2026). Prix de confiance : products.js
 // (produit « cristal-deja-grave », engravingPricing) ; ce fichier ne sert qu'à l'affichage.
 export const CG_DOSSIER = "/produits/cristaux-graves";
@@ -74,7 +74,9 @@ export const CG_TAILLES = [
   { id: "xl", nom: "XL", v: "6×10×15 cm", h: "15×10×6 cm", prix: 149.9, socle: 19.9 },
 ];
 
-export const CG_TEXTE_PRIX = 5;
+// Gérant, 10/10/2026 : « le premier texte c'est gratuit » (modèles et dessins) ; le nom du signe est compris ;
+// zodiaque : prénom, date et ville +2 € chacun.
+export const CG_TEXTE_PRIX = 0;
 export const CG_ZOD_PRIX = 2;
 export const CG_SLUG = "cristal-deja-grave";
 // Identifiant de variante : cristal-grave-<v|h>-<taille>
