@@ -2718,6 +2718,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   en-tête = capture du site avec le NOUVEAU menu (univers). Générateur `cristaux-graves.py` (bloc `CSS += …` « Mélange »
   en fin de CSS, `FAM_LABEL`), artifact republié (même adresse). Testée Chromium 390/1280 : 0 débordement, 0 erreur JS,
   parcours joué (filtre, modèle, format, Grand + socle = 119,80 €, dessin). **En attente de son avis ; rien en ligne.**
+- 🔴 **Correctif 09/10 soir (capture du gérant : « on voit pas trop »)** : dans l'habillage Mélange, la règle `.cg-tile .cg-img{background:sand}`
+  recouvrait le fond sombre `.cg-xtal` → dessins blancs sur crème, invisibles. Remis (`.cg-tile .cg-img.cg-xtal{fond sombre}`), artifact v6.
+- ♈ **SIGNES DU ZODIAQUE — DEMANDE DU 09/10 SOIR** : « j'aimerais bien faire tous les signes d'astrologie… donner comme exemple pour
+  graver ça aussi ; si on met tout ça, ça fait trop pour les gens quand ils descendent, tu peux pas travailler différemment ».
+  Ses 3 exemples (Lion, Sagittaire, Gémeaux : figure + constellation, nom du signe, prénom en écriture anglaise, date · heure,
+  ville ; 2 rendus « lampe » en plus) sont copiés dans `docs/maquettes/assets/cristaux-graves/zodiaque/`. Les 9 autres signes
+  manquent (à lui demander, probablement dans Crafia). **Réorganisation PROPOSÉE, pas faite (règle « dis-moi avant »)** : une
+  seule grille avec trois puces en tête (Modèles · Dessins · Zodiaque) au lieu de trois sections empilées, 8 cartes puis
+  « Afficher plus » ; zodiaque = 12 cartes, personnalisation prénom + date/heure + ville.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

@@ -545,6 +545,7 @@ CSS += r'''
 .cg-tile{display:flex;flex-direction:column;gap:10px;background:none;box-shadow:none;border-radius:0;overflow:visible;text-align:left}
 .cg-tile:hover{transform:none;box-shadow:none}
 .cg-tile .cg-img{border-radius:var(--r);overflow:hidden;background:var(--sand);transition:box-shadow .2s}
+.cg-tile .cg-img.cg-xtal{background:radial-gradient(120% 90% at 50% 30%,#2a2f38,#0d0f13 70%)}
 .cg-tile:hover .cg-img img{transform:scale(1.04)}
 .cg-meta{display:flex;flex-direction:column;gap:2px;padding:0 2px}
 .cg-tag{font-size:.76rem;font-weight:600;color:var(--gold-t)}
