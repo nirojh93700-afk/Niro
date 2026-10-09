@@ -213,7 +213,7 @@ def tuile(idx, m):
 
 TILES = "\n".join(tuile(i, m) for i, m in enumerate(MODELES))
 # (la carte « Votre propre image ? » a été retirée de la grille le 09/10/2026 à la demande du gérant :
-#  cette partie ne sert qu'aux modèles déjà gravés ; le sur-mesure garde sa section plus bas)
+#  cette partie ne sert qu'aux modèles déjà gravés ; la section sur-mesure du bas est retirée aussi, même soir)
 def tuile_dessin(idx, d):
     k, nom, fam = d
     return f'''<button type="button" class="cg-tile cg-dtile" data-i="{idx}" data-grp="dessins" data-fam="{fam}" aria-pressed="false">
@@ -372,35 +372,7 @@ MAIN = f'''<main class="cg">
   <a class="btn btn-gold" href="#panneau">Choisir la taille</a>
 </div>
 
-<section class="cg-sur" id="sur-mesure" aria-labelledby="t-sur">
-  <div class="container">
-    <div class="cg-sur-top">
-      <div>
-        <h2 id="t-sur">Gravez <em>ce que vous voulez</em> dans le cristal</h2>
-        <p class="cg-lede">Une photo, votre animal, un dessin, un logo, un objet qui compte… Envoyez l'image de votre choix :
-          on la sculpte en 3D au cœur du cristal, pour une pièce unique.</p>
-        <ul class="cg-tags">
-          <li>{ic("photo")}Photo</li><li>{ic("paw")}Animal</li><li>{ic("pen")}Dessin</li><li>{ic("logo")}Logo</li><li>{ic("spark")}Objet</li>
-        </ul>
-      </div>
-      <div class="cg-mosaic" aria-hidden="true">
-        <img src="{SM["sirene"]}" alt=""><img src="{SM["animal"]}" alt=""><img src="{SM["portrait"]}" alt=""><img src="{SM["objet"]}" alt="">
-      </div>
-    </div>
-
-    <ol class="cg-steps">
-      <li><span class="cg-sn">1</span><div><h3>Choisissez votre cristal</h3><p>Format vertical ou horizontal, et la taille selon le nombre de personnes ou de détails.</p></div></li>
-      <li><span class="cg-sn">2</span><div><h3>Envoyez votre image</h3><p>Une photo nette et bien éclairée. On s'occupe de la transformer en 3D.</p></div></li>
-      <li><span class="cg-sn">3</span><div><h3>On la grave en 3D</h3><p>Gravure laser au cœur du cristal, dans notre atelier en France. Un cadeau unique.</p></div></li>
-    </ol>
-
-    <div class="cg-fcards">
-      <a class="cg-fcard" href="#"><img src="{FMT_V}" alt=""><span><b>Cristal vertical</b><small>Format portrait — idéal pour un visage, un couple.</small><em>Choisir ma taille &amp; envoyer mon image {ic("arrow")}</em></span></a>
-      <a class="cg-fcard" href="#"><img src="{FMT_H}" alt=""><span><b>Cristal horizontal</b><small>Format paysage — idéal pour un groupe, un animal, une photo large.</small><em>Choisir ma taille &amp; envoyer mon image {ic("arrow")}</em></span></a>
-    </div>
-    <p class="cg-note">{ic("light")}<span><b>Une image spéciale ?</b> (objet, logo, dessin…) Envoyez-la nous quand même : si besoin, on vous conseille avant la gravure. Chaque cristal est gravé dans notre atelier en France.</span></p>
-  </div>
-</section>
+<!-- section sur-mesure retirée le 09/10/2026 à la demande du gérant : cette page ne sert qu'aux modèles déjà gravés -->
 </main>'''
 
 CSS = r'''

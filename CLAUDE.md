@@ -2760,7 +2760,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     Vérifié 390/1280 : 0 débordement, 0 erreur JS.
   · **v13 (09/10 soir, gérant : « enlève cette caisse, c'est plus simple, il peut pas me donner de photos dans cette partie,
     c'est juste pour les modèles déjà gravés »)** : la carte « Votre propre image ? » (`.cg-own`) est RETIRÉE de la grille des
-    modèles. La section sur-mesure plus bas reste. Ne pas la remettre.
+    modèles. Ne pas la remettre.
+  · **v14 (09/10 soir, capture de la section « Gravez ce que vous voulez dans le cristal » : « pas changé là »)** : la SECTION
+    SUR-MESURE du bas de page est retirée aussi (`.cg-sur`, `#sur-mesure`) — cette page ne sert QU'aux modèles déjà gravés,
+    dessins et zodiaque ; aucune photo du client n'y est demandée. La page se termine sur le panneau « Votre cristal » puis
+    le pied de page. Le sur-mesure reste sur `/cristaux` (blocs photo), inchangé. Ne pas remettre la section ici.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
