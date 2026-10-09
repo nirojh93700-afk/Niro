@@ -203,11 +203,7 @@ En attente de SA décision :
   + remplacer l'encadré « Bientôt » de l'univers Cristal et de l'accueil) — **le prévenir juste avant la mise en ligne**.
   v11 (09/10 soir) : trois pavés Modèles / Dessins / Zodiaque, 8 cartes + « Afficher plus », 12 signes avec leurs 12 figures,
   option prénom / date / ville = **+2 € chacun** (tranché par lui le 09/10) ; v12 : ses 2 blocs (Gémeaux, Bouddha) dans le titre ; v13 : carte « Votre propre image ? » retirée de la grille ; v14 : section sur-mesure du bas retirée (page = modèles déjà gravés seulement).
-- 🟠 **« Les dernières sorties » sur DEUX LIGNES QUI GLISSENT — MAQUETTE FAITE le 09/10 soir, EN ATTENTE DE SON CHOIX** :
-  https://claude.ai/artifact/5Mcz1AKiC8VqxcsKsLe3xD (`docs/maquettes/rail-deux-lignes.html`, générateur
-  `tools/maquettes/rail-deux-lignes.py`). A = les deux lignes glissent ensemble · B = chaque ligne glisse à part. Il dit A ou B
-  puis « applique » → remplacer la grille 2 × 3 en ligne (commit `87640a7`, qu'il n'a pas voulue) par ce rail à deux lignes
-  (10 produits : puzzle « Bientôt » + 9 dernières sorties par date).
+- ✅ **« Les dernières sorties » sur deux lignes qui glissent (version B) — APPLIQUÉE le 09/10 soir** (commit `374bb1b`).
 - ✅ **Maquette « Accueil + univers », 09/10 soir, « OK fais-le »** : parcours « Trouver le bon cadeau » descendu juste avant le
   coffret enfants + phrase « Fait main en France : chaque pièce est gravée et découpée dans notre atelier » sous son titre
   (v11 / v7), puis parcours ramené à DEUX étapes sans budget (v12 / v8). Barre rayons + filtres compacte sur téléphone (v10 / v6).

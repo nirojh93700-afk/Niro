@@ -2945,8 +2945,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (un seul `.rail` en `grid-auto-flow:column` + `grid-template-rows:auto auto`) ou **B · chaque ligne glisse séparément**
   (deux `.rail`) ; téléphone = 2 produits par ligne à l'écran, flèches gardées ; 10 produits (puzzle « Bientôt » en tête,
   puis les dernières sorties par date — `dernieresSorties(R.cartes, 9)` le jour du « applique »). Testée Chromium 390/1280 :
-  0 débordement, 0 erreur JS, glissement vérifié. **En attente de son choix (A ou B) puis de son « applique »** ; d'ici là
-  l'accueil garde la grille 2 × 3 (commit `87640a7`).
+  0 débordement, 0 erreur JS, glissement vérifié. Il a choisi **B**. ✅ **APPLIQUÉE LE 09/10 SOIR (« Applique juste la
+  dernière sortie de l'atelier »), commit `374bb1b`** : `Rail.jsx` prend une prop `lignes` (deux rails qui glissent chacun
+  de son côté, flèches communes), `page.jsx` coupe les 10 nouveautés en deux lignes (puzzle « Bientôt » en tête),
+  `univers-site.css` remplace la grille 2 × 3 par 2 cartes par écran et par ligne sur téléphone. Build OK avant le push.
+  ⚠️ Le push a attendu 2 heures parce que j'attendais le mot « applique » alors qu'il avait déjà choisi B : la prochaine fois,
+  dès qu'il tranche, lui REDEMANDER aussitôt « je mets en ligne ? » au lieu de laisser la page refusée en ligne.
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
   photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
