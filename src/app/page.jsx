@@ -11,7 +11,7 @@ import { PaymentLogos } from "@/components/PaymentBand";
 import PayInfoModal from "@/components/PayInfo";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
-import { rangerCatalogue, dernieresSorties } from "@/lib/univers";
+import { rangerCatalogue, dernieresSorties, cartesPuzzles } from "@/lib/univers";
 import { QUI_TILES, OCC_TILES, FETE_PHOTO, carteLegere } from "@/lib/universFinder";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +53,11 @@ export default async function HomePage() {
   const carafe = C("carafe-a-whisky-gravee");
   const couverts = C("couverts-enfants-personnalises");
   const enfants = R.univers.find((u) => u.id === "enfants");
-  const nouveaux = dernieresSorties(R.cartes, 6);
+  // Les dernières sorties : le puzzle en bois (nouveau, « Bientôt », pas encore en vente)
+  // en tête, puis les 5 dernières créations par date d'ajout. Sur téléphone : 2 par ligne, 3 lignes.
+  const puzzle = cartesPuzzles().find((c) => c.slug === "puzzle-savane");
+  const nouveaux = [...(puzzle ? [puzzle] : []), ...dernieresSorties(R.cartes, puzzle ? 5 : 6)];
+  const nouveautesToast = nouveaux.filter((c) => !c.soon).map((c) => ({ slug: c.slug, name: c.name, image: c.image }));
   const verres = VERRES5.map(C).filter(Boolean);
   const bijoux = BIJOUX3.map(C).filter(Boolean);
   const mur = R.cartes.filter((c) => c.image);
@@ -285,7 +289,7 @@ export default async function HomePage() {
         </section>
       </div></div>
       {/* Petite fenêtre flottante « Nouveauté ✦ » : UNE fenêtre, comme avant (gérant, 09/10 soir). */}
-      <NewArrivalsToast items={nouveaux.map((c) => ({ slug: c.slug, name: c.name, image: c.image }))} />
+      <NewArrivalsToast items={nouveautesToast} />
     </>
   );
 }

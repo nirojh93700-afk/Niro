@@ -2826,6 +2826,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   voulait dire LE RAIL « Les dernières sorties » sur téléphone : il montrait UNE carte à 68 % de l'écran → maintenant DEUX cartes
   par écran (`univers-site.css`, `.mx .rail{grid-auto-columns:calc(50% - 9px)}` ≤ 640 px). La maquette A/B reste dans
   `docs/maquettes/` à titre d'archive, sans suite.**
+  ✅ **PUIS (09/10 soir, « deux produits de ligne un au-dessus de l'autre » + « t'as pas mis le nouveau produit le puzzle »)** :
+  sur téléphone (≤ 640 px) « Les dernières sorties » n'est plus un rail à glisser mais une **GRILLE 2 par ligne sur 3 lignes**
+  (les 6 visibles d'un coup, flèches masquées ; `univers-site.css`) — sur ordinateur le rail à flèches reste. Et le **puzzle
+  en bois (Savane) est en TÊTE des dernières sorties, étiquette « Bientôt », sans lien ni cœur** (`cartesPuzzles()` dans
+  `page.jsx`, puis les 5 dernières créations par date) ; la fenêtre flottante, elle, ne montre que les produits achetables
+  (`nouveautesToast`, jamais une carte « Bientôt »).
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
   photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
