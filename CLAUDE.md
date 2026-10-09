@@ -2762,7 +2762,48 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   conseillé~~ (2 ans sous surveillance, 09/10) · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre ·
   ~~poids pour le port~~ (75 g, reçu le 09/10) · nom de la catégorie dans le menu.
 
-## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
+## 🗂️ ACCUEIL + UNIVERS « MÉLANGE » — ✅ APPLIQUÉE AU SITE LE 09/10/2026 SOIR (« Bah applique la maquette avec le puzzle » → « OK, vas-y »)
+> **Version appliquée = la maquette AVEC puzzles (v8), puzzles « Bientôt », non achetables** (pas de marquage CE encore ; il n'a
+> pas répondu à « Bientôt ou en vente ? », le « vas-y » a été pris au sens de la maquette telle quelle).
+> ⏪ **POINT DE RETOUR = commit `44f2f64`** (le site tel qu'il était avant, promis au gérant : « si tu veux revenir en arrière,
+> une commande »). Pour revenir : `git revert <commit de l'application>` (ou `git checkout 44f2f64 -- src/app/page.jsx
+> src/app/boutique src/app/offrir/page.jsx src/app/layout.jsx src/app/sitemap.js next.config.js` + supprimer `src/lib/univers*.js`,
+> `src/components/univers/`, `src/app/univers*.css`), build, push. Les réglages de Gestion, commandes, stock ne sont pas dans le code.
+- **Ce qui a changé** : `src/app/page.jsx` (accueil : écrin cristal → ruban → bijoux sur photo → dernières sorties → Bébé & Enfant →
+  parcours 2 étapes → coffret Savane → carafe → verres → Noël → univers → atelier → mur → avis → sur mesure) ·
+  `src/app/boutique/page.jsx` (« Toute la boutique », un rayon par univers ; `?q=` garde une recherche) ·
+  `src/app/boutique/[categorie]/page.jsx` (pages univers `bijoux / cristal / verres / enfants / mariage / maison / cadeaux` ;
+  `deco` → `maison`, `naissance` → `enfants` redirigés, aussi dans `next.config.js`) · `src/app/offrir/page.jsx` (= le parcours
+  avec toutes les idées, `?qui=&occ=` pré-cochent ; `/offrir/<occasion>` inchangées) · `src/app/layout.jsx` (menu du haut = les
+  univers, feuilles `univers.css` + `univers-site.css`) · `src/app/sitemap.js` (adresses des univers).
+- **Ce qui n'a PAS changé** : `Header.jsx`, `Footer.jsx`, le logo, les fiches produit, le panier/paiement, Gestion, les e-mails,
+  `/cristaux`, `/naissance`, les guides, les catégories des produits dans `products.js` (le rangement est une couche
+  d'affichage : `src/lib/univers.js`, `UNIVERS` + `rangerCatalogue(catalog)`). ⚠️ **Gestion → Catégories & ordre ne pilote plus
+  le menu ni la boutique** (noms/ordre des univers = `src/lib/univers.js`) ; les produits masqués dans Gestion disparaissent bien.
+- **Moteur** : `src/lib/univers.js` (rangement identique au générateur ; une création non rangée tombe dans l'univers de sa
+  catégorie, rayon « Autres créations » : rien ne disparaît) · `src/lib/universFinder.js` (tuiles photo du parcours, fêtes) ·
+  `src/components/univers/` : `Carte` (carte produit + cœur favoris), `Finder` (client : 2 étapes, fêtes ≤ 92 j calculées au
+  montage, grisage, « Voir les N idées » → `/offrir?…`), `PageUnivers` (client : rayons, filtres pour qui / budget / tri, menus
+  déroulants ≤ 640 px), `UniversPage` (serveur), `Rail`, `MurUnivers`, `Coffret` + `CoffretSavane`, `Reveal` (apparition
+  IntersectionObserver + `--hdr` = hauteur de l'en-tête), `UvTabs`/`Crumb`, `icones`.
+- **CSS** : `src/app/univers.css` est GÉNÉRÉ par `tools/maquettes/css-univers.py` à partir du CSS du générateur de la maquette :
+  tout est préfixé `.mx` (le conteneur des pages refaites), les classes en collision avec globals.css sont renommées `mx…`
+  (`btn→mxbtn`, `hero→mxhero`, `frame→mxframe`, `band→mxband`, `noel→mxnoel`, `ic→mxic`, `up→mxup`, `bt→mxbt`,
+  `statement→mxstatement`), en-tête/tiroir/menu/pied de page/barre de maquette non repris. `univers-site.css` = adaptations
+  (vraies `<img>`, **`.mx{overflow-x:clip}`** : sans lui, sur téléphone, le ruban et le mur élargissaient la fenêtre à 1518 px ;
+  `overflow:hidden` casserait les barres collantes). Polices = celles du site (`--font-display` / `--font-body`).
+- **Écarts assumés par rapport à la maquette** (dits au gérant) : le **coffret n'annonce PAS « moins 10 % dès 2 pièces »** (la
+  remise n'existe pas au paiement — règle « aucune promesse qui ne marche pas » ; total simple des pièces cochées, puzzle grisé
+  « bientôt », bouton → rayon Repas & chambre) ; l'avis « 4,8/5 sur 286 » est remplacé par la VRAIE note du site (bloc masqué
+  s'il n'y a aucun avis) ; les panneaux déroulants du menu de la maquette n'existent pas (Header.jsx intact) ; « Cristaux déjà
+  gravés » = encadré « Bientôt » non cliquable.
+- **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
+  photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = avis · `mur`.
+- **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
+  `/boutique/enfants`, `/boutique/cristal`, `/boutique/mariage`, `/offrir`, `/offrir?qui=elle&occ=noel`, `/cristaux`, 2 fiches
+  produit, `/panier`) : 0 débordement, 0 erreur JS, 1 h1 par page (sauf `/panier`, antérieur), parcours joué, filtre budget,
+  9 puzzles « Bientôt », redirection `deco → maison`, images du mur et des puzzles chargées.
+### (historique) MAQUETTE « ACCUEIL + UNIVERS » — DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026
 > **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
 > versions (sans / avec puzzles) ont été refaites dans un monde qui réunit les trois pistes, en gardant toutes les corrections
 > du 09/10 ; les deux artifacts sont republiés (sans puzzles v12, avec puzzles v8). Détail du monde dans `DESIGN.md` (réécrit).

@@ -1,0 +1,12 @@
+/* Adaptations du site pour la maquette « accueil + univers » (en plus d'univers.css, généré) :
+   les photos sont de vraies balises <img> (chargement différé, texte alternatif) là où la maquette
+   posait des fonds en CSS. */
+.mx img.uc-ph,.mx img.ft-ph,.mx img.mxbt-img{width:100%;height:100%;object-fit:cover}
+.mx img.wt-img{width:100%;aspect-ratio:1;object-fit:cover}
+.mx .uc-img .fav-pastille-vignette{z-index:3}
+.mx .mxup-head .crumb{margin-bottom:18px}
+.mx .uv-tabs{top:var(--hdr)}
+/* Sur téléphone, le ruban et le mur (plus larges que l'écran, clipés par leur bloc) élargissaient
+   quand même la fenêtre de mise en page : `clip` coupe sans créer de zone de défilement, donc les
+   barres collantes continuent de marcher (overflow:hidden les casserait). */
+.mx{overflow-x:clip}

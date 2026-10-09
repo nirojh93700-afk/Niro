@@ -188,6 +188,10 @@ En attente de SA décision :
   (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10 et âge « dès 2 ans, sous la surveillance d'un adulte » ✅ 09/10 soir — formulation proposée, à reporter dans la maquette sur son accord ·
   poids 75 g ✅ 09/10) · épaisseur / bois · marquage CE (EN 71) · nom de la catégorie · son « applique ».
   Il envisage de mettre LE PUZZLE SEUL en ligne (sans la refonte accueil) : possible, répondu le 09/10 soir, il dit avant.
+- ✅✅ **ACCUEIL + UNIVERS « MÉLANGE » APPLIQUÉE AU SITE le 09/10 soir** (« applique la maquette avec le puzzle » → « OK, vas-y ») :
+  version avec puzzles « Bientôt » (non achetables, CE à faire). Point de retour = commit `44f2f64` (une commande pour revenir).
+  Reste à lui : vérifier sur son téléphone ; dire si le coffret doit avoir une remise (non annoncée car inexistante au
+  paiement) ; les puzzles passeront en vente sur son « applique le puzzle » (CE + cylindre 3,2 cm avant).
 - ✅ **Maquette « Accueil + univers », 09/10 soir, « OK fais-le »** : parcours « Trouver le bon cadeau » descendu juste avant le
   coffret enfants + phrase « Fait main en France : chaque pièce est gravée et découpée dans notre atelier » sous son titre
   (v11 / v7), puis parcours ramené à DEUX étapes sans budget (v12 / v8). Barre rayons + filtres compacte sur téléphone (v10 / v6).

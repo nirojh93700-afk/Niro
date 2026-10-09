@@ -1,48 +1,44 @@
-import Link from "next/link";
-import { OCCASIONS } from "@/lib/occasions";
+import Reveal from "@/components/univers/Reveal";
+import Finder from "@/components/univers/Finder";
+import { UvTabs, Crumb } from "@/components/univers/UvTabs";
+import { getCatalog } from "@/lib/catalog";
+import { rangerCatalogue } from "@/lib/univers";
+import { QUI_TILES, OCC_TILES, FETE_PHOTO, carteLegere } from "@/lib/universFinder";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Offrir — trouver un cadeau par occasion",
+  title: "Offrir — trouver un cadeau en deux étapes",
   description:
-    "Mariage, naissance, amour, pour lui, pour elle, famille : trouvez le cadeau personnalisé qui correspond à l'occasion, gravé dans notre atelier français.",
+    "Pour qui ? Pour quelle occasion ? Trouvez le cadeau personnalisé qui correspond, gravé dans notre atelier français : bijoux, cristal photo, verres, cadeaux de naissance.",
   alternates: { canonical: "/offrir" },
 };
 
 // =============================================================================
-// PAGE « OFFRIR » — navigation par occasion (audit 19/09/2026, « applique »).
-// Six portes d'entrée ; chaque occasion pioche dans le catalogue en direct.
+// PAGE « OFFRIR » = le parcours « Trouver le bon cadeau » en deux étapes (maquette
+// « Mélange », appliquée le 09/10/2026), avec TOUTES les idées. ?qui= et ?occ=
+// pré-cochent les tuiles (liens de l'accueil et des bandeaux).
 // =============================================================================
-export default function OffrirPage() {
+export default async function OffrirPage({ searchParams }) {
+  const catalog = await getCatalog().catch(() => []);
+  const R = rangerCatalogue(catalog);
+  const initial = { qui: String(searchParams?.qui || ""), occ: String(searchParams?.occ || "") };
   return (
-    <section className="section">
-      <div className="container">
-        <div className="section-head">
-          <span className="eyebrow">Offrir</span>
-          <h2>Pour quelle occasion ?</h2>
-          <p>Dites-nous ce que vous célébrez : nous vous montrons les créations qui vont avec.</p>
-        </div>
-        <div className="occ-grid">
-          {OCCASIONS.map((o) => (
-            <Link key={o.slug} href={`/offrir/${o.slug}`} className="occ-card">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={o.image} alt={o.titre} loading="lazy" />
-              <span>{o.label}</span>
-            </Link>
-          ))}
-          <Link href="/carte-cadeau" className="occ-card occ-carte">
-            <div className="occ-carte-int">
-              <div>
-                <div className="gc-marque">NiV CRÉATION</div>
-                <div className="gc-lib">Carte cadeau</div>
-              </div>
-              <div className="occ-carte-txt">Laissez-lui le choix — de 20 à 100 €</div>
+    <div className="mx">
+      <Reveal />
+      <div className="uv">
+        <UvTabs univers={R.univers} courant="offrir" total={R.boutique.count} />
+        <article className="mxup" id="u-offrir">
+          <header className="mxup-head mxup-head-solo">
+            <div className="mxup-txt">
+              <Crumb items={[{ label: "Offrir" }]} />
+              <h1 style={{ fontSize: "clamp(2.2rem,5vw,4rem)" }}>Trouver un cadeau</h1>
+              <p>Toutes nos créations, selon la personne et l’occasion.</p>
             </div>
-            <span>Carte cadeau</span>
-          </Link>
-        </div>
+          </header>
+          <Finder qui={QUI_TILES} occ={OCC_TILES} fetePhotos={FETE_PHOTO} cards={R.cartes.map(carteLegere)} limit={999} initial={initial} page />
+        </article>
       </div>
-    </section>
+    </div>
   );
 }

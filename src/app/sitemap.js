@@ -1,4 +1,4 @@
-import { CATEGORIES } from "@/lib/products";
+import { UNIVERS } from "@/lib/univers";
 import { getCatalog } from "@/lib/catalog";
 import { GUIDE_SLUGS } from "@/lib/guides";
 import { OCCASIONS } from "@/lib/occasions";
@@ -39,10 +39,10 @@ export default async function sitemap() {
 
   // Vraies adresses de catégories (/boutique/X). Cristal et naissance ont déjà
   // leur page dédiée (/cristaux, /naissance) dans staticPages.
-  const categoryPages = CATEGORIES
-    .filter((c) => c.slug !== "cristal" && c.slug !== "naissance")
+  // Univers de la boutique (maquette « accueil + univers », 09/10/2026).
+  const categoryPages = UNIVERS
     .map((c) => ({
-      url: `${base}/boutique/${c.slug}`,
+      url: `${base}/boutique/${c.id}`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,

@@ -1,324 +1,52 @@
 import Link from "next/link";
-import ProductCard from "@/components/ProductCard";
-import TriBoutique from "@/components/TriBoutique";
-import { JEWEL_TYPES, getJewelType, getJewelTypeLabel } from "@/lib/products";
-import { getCatalog, priceFrom } from "@/lib/catalog";
-import { PRODUCT_DATES } from "@/lib/productDates";
-import { getRatingSummaries, getTaxonomy } from "@/lib/stock";
-import {
-  resolveCategories,
-  resolveSubcategories,
-  resolveProductOrder,
-  categoryLabelFrom,
-  subcategoryLabelFrom,
-  makeProductSorter,
-} from "@/lib/taxonomy";
+import UniversPage from "@/components/univers/UniversPage";
+import Reveal from "@/components/univers/Reveal";
+import Carte from "@/components/univers/Carte";
+import { UvTabs, Crumb } from "@/components/univers/UvTabs";
+import { getCatalog } from "@/lib/catalog";
+import { rangerCatalogue } from "@/lib/univers";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Boutique — toutes nos créations personnalisées",
   description:
-    "Découvrez tous les bijoux (femme & homme), décorations de mariage et cadeaux personnalisés Niv Création, gravés au laser dans notre atelier français.",
-  // Canonical fixe sur /boutique : les variantes à filtres (?cat=, ?sub=) ne sont
-  // pas indexées comme des doublons.
+    "Découvrez tous les bijoux (femme & homme), cristaux photo 3D, verres gravés, cadeaux de naissance, décorations de mariage et cadeaux personnalisés Niv Création, gravés au laser dans notre atelier français.",
   alternates: { canonical: "/boutique" },
 };
 
+// « Toute la boutique » (maquette « accueil + univers », appliquée le 09/10/2026) :
+// un rayon par univers, chaque création une seule fois. La recherche (?q=)
+// reste disponible : elle montre les créations dont le nom correspond.
 export default async function BoutiquePage({ searchParams }) {
-  // Cristal et Naissance se comportent comme les autres rayons DANS la boutique
-  // (recherche + filtres + grille). Leurs pages dédiées /cristaux et /naissance
-  // restent en ligne, inchangées, et gardent leur entrée dans le menu du haut.
-  const activeCat = searchParams?.cat;
-  const activeSub = searchParams?.sub;
-  const activeType = searchParams?.type; // bijoux : collier / bracelet
-  const activeQ = (searchParams?.q || "").trim().toLowerCase();
-  const activeTri = searchParams?.tri || "";
-  const activeBudget = searchParams?.budget || "";
-
-  // Tri + budget (audit 19/09) : s'appliquent partout — recherche, catégorie,
-  // vue « Tout ». Le prix retenu = le prix d'appel du produit (priceFrom).
-  const dansBudget = (p) => {
-    const v = priceFrom(p);
-    if (activeBudget === "moins20") return v < 20;
-    if (activeBudget === "20-40") return v >= 20 && v < 40;
-    if (activeBudget === "plus40") return v >= 40;
-    return true;
-  };
-  const dateDe = (p) => Date.parse(PRODUCT_DATES[p.slug] || "") || 0;
-  const appliquerTri = (liste) => {
-    let l = activeBudget ? liste.filter(dansBudget) : liste;
-    if (activeTri === "prix-croissant") l = [...l].sort((a, b) => priceFrom(a) - priceFrom(b));
-    else if (activeTri === "prix-decroissant") l = [...l].sort((a, b) => priceFrom(b) - priceFrom(a));
-    else if (activeTri === "nouveautes") l = [...l].sort((a, b) => dateDe(b) - dateDe(a));
-    return l;
-  };
-  const ratings = await getRatingSummaries().catch(() => ({}));
-  const allWithImages = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
-  // « Tout » doit vraiment montrer TOUT : cristaux et naissance compris (ils
-  // étaient exclus parce qu'ils avaient une page à part — la cliente croyait
-  // avoir vu toute la boutique alors qu'il lui manquait 7 produits).
-  const withImages = allWithImages;
-
-  // Taxonomie vivante (réglée dans l'admin, repli sur le code).
-  const taxonomy = await getTaxonomy().catch(() => ({}));
-  const CATS = resolveCategories(taxonomy);
-  const SUBS = resolveSubcategories(taxonomy);
-  const PRODUCT_ORDER = resolveProductOrder(taxonomy);
-  const getCategoryLabel = (slug) => categoryLabelFrom(CATS, slug);
-  const getSubcategoryLabel = (cat, sub) => subcategoryLabelFrom(SUBS, cat, sub);
-  const getSubcategories = (cat) => SUBS[cat] || null;
-
-  const searchResults = activeQ
-    ? appliquerTri(withImages.filter((p) => `${p.name} ${p.title} ${p.tagline} ${p.type}`.toLowerCase().includes(activeQ)))
-    : null;
-
-  let filtered = activeCat ? withImages.filter((p) => p.category === activeCat) : withImages;
-  if (activeCat && activeSub) {
-    filtered = filtered.filter((p) => p.subcategory === activeSub);
-  }
-  if (activeCat === "bijoux" && activeType) {
-    filtered = filtered.filter((p) => getJewelType(p) === activeType);
-  }
-
-  // Ordre des produits : réglage admin (productOrder) puis ordre des sous-catégories.
-  if (activeCat) {
-    filtered = [...filtered].sort(makeProductSorter(activeCat, SUBS, PRODUCT_ORDER));
-  }
-  filtered = appliquerTri(filtered);
-
-  // Une sous-catégorie SANS produit visible n'affiche pas sa pastille (sinon la
-  // cliente clique sur un rayon vide — ex. « Art de la table » resté après le
-  // départ des porte-serviettes vers Mariage). Automatique : la pastille
-  // réapparaît dès qu'un produit occupe à nouveau la sous-catégorie.
-  const subsTous = activeCat ? getSubcategories(activeCat) : null;
-  const presentSubs = new Set(withImages.filter((p) => p.category === activeCat).map((p) => p.subcategory));
-  const subs = subsTous ? subsTous.filter((sc) => presentSubs.has(sc.slug) || sc.slug === activeSub) : null;
-  const isBijoux = activeCat === "bijoux";
-
-  // Catégories à afficher en filtre : celles qui ont au moins un produit visible.
-  // On garde « Cristal Photo 3D » comme raccourci (il renvoie vers /cristaux).
-  const presentCats = new Set(withImages.map((p) => p.category));
-  const menuCategories = CATS.filter((c) => presentCats.has(c.slug) || c.slug === activeCat || c.slug === "cristal" || c.slug === "naissance");
-
-  // Conserve l'autre facette dans les liens (femme + collier combinables).
-  const baseQs = `cat=${activeCat}`;
-  const subHref = (sub) =>
-    `/boutique?${baseQs}${sub ? `&sub=${sub}` : ""}${activeType ? `&type=${activeType}` : ""}`;
-  const typeHref = (type) =>
-    `/boutique?${baseQs}${activeSub ? `&sub=${activeSub}` : ""}${type ? `&type=${type}` : ""}`;
-
-  // Catégories pour lesquelles on propose le contact direct (sur mesure).
-  const showCustomContact = activeCat === "mariage" || activeCat === "cadeaux" || activeCat === "deco";
-  const customContactHeading =
-    activeCat === "mariage"
-      ? "Un projet pour votre grand jour ?"
-      : "Une création rien que pour vous ?";
-  const customContactText =
-    activeCat === "mariage"
-      ? "Numéros de table, menus, décoration… Dites-nous votre idée, nous la réalisons sur mesure :"
-      : "Une décoration ou un cadeau personnalisé sur bois, une idée unique ? Parlons-en directement :";
-
-  // Titre : combine le type et le « pour qui » pour les bijoux.
-  let title;
-  if (isBijoux && (activeType || activeSub)) {
-    const typePart = activeType ? getJewelTypeLabel(activeType) : "Bijoux";
-    const subPart = activeSub ? getSubcategoryLabel(activeCat, activeSub).toLowerCase() : "";
-    title = subPart ? `${typePart} ${subPart}` : typePart;
-  } else if (activeSub) {
-    title = getSubcategoryLabel(activeCat, activeSub);
-  } else if (activeCat) {
-    title = getCategoryLabel(activeCat);
-  } else {
-    title = "Toutes nos créations";
-  }
-
+  const q = (searchParams?.q || "").trim();
+  if (!q) return <UniversPage uid="boutique" />;
+  const catalog = await getCatalog().catch(() => []);
+  const R = rangerCatalogue(catalog);
+  const ql = q.toLowerCase();
+  const trouves = catalog
+    .filter((p) => `${p.name} ${p.title || ""} ${p.tagline || ""} ${p.type || ""}`.toLowerCase().includes(ql))
+    .map((p) => R.carteDe(p.slug)).filter(Boolean);
   return (
-    <section className="section">
-      <div className="container">
-        <div className="section-head">
-          <span className="eyebrow">Boutique</span>
-          <h2>{activeQ ? `Recherche : « ${searchParams.q} »` : title}</h2>
-          <p>Chaque création est personnalisable et réalisée avec soin en France.</p>
-        </div>
-
-        {/* Recherche */}
-        <form method="get" action="/boutique" style={{ display: "flex", gap: 8, maxWidth: 480, margin: "0 auto 22px" }}>
-          <input
-            type="search"
-            name="q"
-            defaultValue={searchParams?.q || ""}
-            placeholder="Rechercher une création…"
-            style={{ flex: 1, minWidth: 0, padding: "10px 14px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit" }}
-          />
-          <button type="submit" className="btn btn-gold">Rechercher</button>
-        </form>
-
-        <TriBoutique />
-
-        {activeQ ? (
-          searchResults.length > 0 ? (
-            <div className="product-grid">
-              {searchResults.map((p) => (<ProductCard key={p.slug} product={p} />))}
+    <div className="mx">
+      <Reveal />
+      <div className="uv">
+        <UvTabs univers={R.univers} courant="boutique" total={R.boutique.count} />
+        <article className="mxup">
+          <header className="mxup-head mxup-head-solo">
+            <div className="mxup-txt">
+              <Crumb items={[{ label: "Boutique", href: "/boutique" }, { label: "Recherche" }]} />
+              <h1 style={{ fontSize: "clamp(2rem,5vw,3.4rem)" }}>Recherche : « {q} »</h1>
+              <p className="mxup-count">{trouves.length} création{trouves.length > 1 ? "s" : ""}</p>
             </div>
+          </header>
+          {trouves.length ? (
+            <div className="ug">{trouves.map((c) => <Carte key={c.slug} c={c} />)}</div>
           ) : (
-            <div style={{ textAlign: "center", padding: "20px 0" }}>
-              <p style={{ color: "var(--ink-soft)" }}>Aucun résultat pour « {searchParams.q} ».</p>
-              <Link href="/boutique" className="btn btn-outline">Voir toute la boutique</Link>
-            </div>
-          )
-        ) : (
-        <>
-        {/* Catégories principales */}
-        <div className="filters">
-          <Link href="/boutique" className={`filter-chip ${!activeCat ? "active" : ""}`}>
-            Tout
-          </Link>
-          {menuCategories.map((c) => (
-            <Link
-              key={c.slug}
-              href={`/boutique/${c.slug}`}
-              className={`filter-chip ${activeCat === c.slug && !activeSub ? "active" : ""}`}
-            >
-              {c.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Bijoux : deux axes combinables — Pour qui (femme/homme…) puis Type */}
-        {isBijoux && (
-          <div className="facet-bar">
-            <div className="facet-row">
-              <span className="facet-label">Pour qui</span>
-              <div className="facet-chips">
-                <Link href={subHref(null)} className={`filter-chip ${!activeSub ? "active" : ""}`}>
-                  Tous
-                </Link>
-                {subs.map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={subHref(s.slug)}
-                    className={`filter-chip ${activeSub === s.slug ? "active" : ""}`}
-                  >
-                    {s.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div className="facet-row">
-              <span className="facet-label">Type</span>
-              <div className="facet-chips">
-                <Link href={typeHref(null)} className={`filter-chip ${!activeType ? "active" : ""}`}>
-                  Tous
-                </Link>
-                {JEWEL_TYPES.map((t) => (
-                  <Link
-                    key={t.slug}
-                    href={typeHref(t.slug)}
-                    className={`filter-chip ${activeType === t.slug ? "active" : ""}`}
-                  >
-                    {t.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Autres catégories avec sous-catégories simples */}
-        {!isBijoux && subs && subs.length > 0 && (
-          <div className="filters subfilters">
-            <Link
-              href={`/boutique/${activeCat}`}
-              className={`filter-chip ${!activeSub ? "active" : ""}`}
-            >
-              Tous les {getCategoryLabel(activeCat).toLowerCase()}
-            </Link>
-            {subs.map((s) => (
-              <Link
-                key={s.slug}
-                href={`/boutique/${activeCat}?sub=${s.slug}`}
-                className={`filter-chip ${activeSub === s.slug ? "active" : ""}`}
-              >
-                {s.label}
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {showCustomContact && (
-          <div
-            style={{
-              background: "#fbf4e6",
-              border: "1px solid #e7d3a1",
-              borderRadius: 14,
-              padding: "18px 20px",
-              margin: "0 0 26px",
-              textAlign: "center",
-            }}
-          >
-            <strong style={{ color: "var(--gold-dark)" }}>
-              {customContactHeading}
-            </strong>
-            <p style={{ margin: "6px 0 12px", color: "var(--ink-soft)", fontSize: "0.95rem" }}>
-              {customContactText}
-            </p>
-            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <a className="btn btn-gold" href="mailto:contact.nivcreation@gmail.com">
-                ✉️ contact.nivcreation@gmail.com
-              </a>
-              <a className="btn btn-outline" href="tel:+33766153102">
-                📞 07 66 15 31 02
-              </a>
-            </div>
-          </div>
-        )}
-
-        {activeCat ? (
-          <div className="product-grid">
-            {filtered.map((p) => (
-              <ProductCard key={p.slug} product={p} />
-            ))}
-          </div>
-        ) : (
-          // Vue « Tout » : produits regroupés par thème (au lieu d'être mélangés).
-          menuCategories.map((c) => {
-            const items = appliquerTri(withImages
-              .filter((p) => p.category === c.slug)
-              .sort(makeProductSorter(c.slug, SUBS, PRODUCT_ORDER)));
-            if (!items.length) return null;
-            return (
-              <div key={c.slug} style={{ marginBottom: 44 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    borderBottom: "1px solid var(--line)",
-                    paddingBottom: 8,
-                    marginBottom: 18,
-                  }}
-                >
-                  <h3 style={{ margin: 0, fontFamily: "Georgia, serif", fontWeight: "normal", color: "var(--gold-dark)" }}>
-                    {c.label}
-                  </h3>
-                  <Link href={`/boutique/${c.slug}`} className="link-underline" style={{ fontSize: "0.9rem", whiteSpace: "nowrap" }}>
-                    Tout voir →
-                  </Link>
-                </div>
-                <div className="product-grid">
-                  {items.map((p) => (
-                    <ProductCard key={p.slug} product={p} />
-                  ))}
-                </div>
-              </div>
-            );
-          })
-        )}
-        </>
-        )}
+            <p className="ur-empty">Aucun résultat pour « {q} ». <Link className="link" href="/boutique">Voir toute la boutique</Link></p>
+          )}
+        </article>
       </div>
-    </section>
+    </div>
   );
 }

@@ -9,6 +9,8 @@ import {
   Pacifico,
 } from "next/font/google";
 import "./globals.css";
+import "./univers.css";
+import "./univers-site.css";
 import { cookies, headers } from "next/headers";
 import { CartProvider } from "@/components/CartContext";
 import Header from "@/components/Header";
@@ -27,6 +29,7 @@ import { getSettings } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 import { CATEGORIES } from "@/lib/products";
+import { UNIVERS } from "@/lib/univers";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -166,16 +169,12 @@ export default async function RootLayout({ children }) {
   const vacMsg = vac ? vacationMessage(vac) : "";
   const vacGift = vac ? vacationGiftMessage(vac) : "";
 
-  // Catégories du menu : seulement celles qui ont au moins un produit visible
-  // (les produits masqués sont déjà exclus par getCatalog).
-  let menuCategories = CATEGORIES;
-  try {
-    const catalog = await getCatalog();
-    const present = new Set(catalog.map((p) => p.category));
-    menuCategories = CATEGORIES.filter((c) => present.has(c.slug));
-  } catch {
-    // en secours, on garde toutes les catégories
-  }
+  // Menu du haut : les UNIVERS de la boutique (maquette « accueil + univers »,
+  // appliquée le 09/10/2026) — Bijoux, Verres & Carafes, Bébé & Enfant, Mariage,
+  // Maison & Déco, Petits cadeaux ; le cristal garde son entrée « 💎 » à part.
+  // Les catégories des produits (products.js) ne changent pas : voir src/lib/univers.js.
+  let menuCategories = UNIVERS.map((u) => ({ slug: u.id, label: u.nom, short: u.short }));
+  void CATEGORIES; void getCatalog;
 
   // Accès admin : un cookie correspondant au code d'accès débloque tout
   // (mode privé ET maintenance) — c'est ce qui te permet d'accéder à /gestion.

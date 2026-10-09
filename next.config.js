@@ -23,10 +23,14 @@ const nextConfig = {
   // les vraies adresses /boutique/X (cristal et naissance vers leurs pages dédiées).
   // Les autres paramètres (sub, type) sont conservés automatiquement.
   async redirects() {
-    const cats = ["bijoux", "verres", "mariage", "deco", "cadeaux"];
+    // Univers (09/10/2026) : les anciennes catégories « deco » et « naissance »
+    // renvoient vers « maison » et « enfants ».
+    const cats = ["bijoux", "verres", "mariage", "cadeaux", "cristal"];
     return [
-      { source: "/boutique", has: [{ type: "query", key: "cat", value: "cristal" }], destination: "/cristaux", permanent: true },
-      { source: "/boutique", has: [{ type: "query", key: "cat", value: "naissance" }], destination: "/naissance", permanent: true },
+      { source: "/boutique", has: [{ type: "query", key: "cat", value: "deco" }], destination: "/boutique/maison", permanent: true },
+      { source: "/boutique", has: [{ type: "query", key: "cat", value: "naissance" }], destination: "/boutique/enfants", permanent: true },
+      { source: "/boutique/deco", destination: "/boutique/maison", permanent: true },
+      { source: "/boutique/naissance", destination: "/boutique/enfants", permanent: true },
       ...cats.map((c) => ({
         source: "/boutique",
         has: [{ type: "query", key: "cat", value: c }],
