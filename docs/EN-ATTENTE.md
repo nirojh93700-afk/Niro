@@ -193,8 +193,9 @@ En attente de SA décision :
   Reste à lui : vérifier sur son téléphone ; dire si le coffret doit avoir une remise (non annoncée car inexistante au
   paiement) ; les puzzles passeront en vente sur son « applique le puzzle » (CE + cylindre 3,2 cm avant).
 - 🟠 **Maquette « Cristaux déjà gravés » réhabillée dans le style du nouveau site (09/10 soir, sa demande)** :
-  https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz (`docs/maquettes/cristaux-graves.html`). En attente de son avis puis
-  « applique » (= construire la vraie page + remplacer l'encadré « Bientôt » de l'univers Cristal et de l'accueil).
+  https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz (`docs/maquettes/cristaux-graves.html`). ✅ **Enregistrée telle quelle le
+  09/10 soir (version 14).** En attente de son « applique » (= construire une NOUVELLE page à part, `/cristaux` du site inchangée,
+  + remplacer l'encadré « Bientôt » de l'univers Cristal et de l'accueil) — **le prévenir juste avant la mise en ligne**.
   v11 (09/10 soir) : trois pavés Modèles / Dessins / Zodiaque, 8 cartes + « Afficher plus », 12 signes avec leurs 12 figures,
   option prénom / date / ville = **+2 € chacun** (tranché par lui le 09/10) ; v12 : ses 2 blocs (Gémeaux, Bouddha) dans le titre ; v13 : carte « Votre propre image ? » retirée de la grille ; v14 : section sur-mesure du bas retirée (page = modèles déjà gravés seulement).
 - 🟠 **« Les dernières sorties » sur DEUX LIGNES QUI GLISSENT — MAQUETTE FAITE le 09/10 soir, EN ATTENTE DE SON CHOIX** :

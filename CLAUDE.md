@@ -2675,9 +2675,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
 
-## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (« Enregistre cette maquette », version 5 de l'artifact) — RIEN en ligne
-> C'est CETTE version (16 modèles + 15 dessins + texte +5 € + format au choix + sur-mesure) à reproduire à l'identique
-> le jour où il dit « applique ». Ne pas la modifier sans sa demande.
+## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — ✅ RÉ-ENREGISTRÉE TELLE QUELLE LE 09/10/2026 SOIR (« Enregistre cette maquette », VERSION 14 de l'artifact) — RIEN en ligne
+> C'est CETTE version (habillage Mélange, 2 blocs dans le titre, 16 modèles + 15 dessins + 12 signes du zodiaque avec leurs
+> figures, texte +5 €, prénom / date / ville +2 € chacun, format au choix, socle, SANS carte « votre propre image » et SANS
+> section sur-mesure) à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
+> ⛔ **C'EST UNE NOUVELLE PAGE, PAS LA PAGE `/cristaux` DU SITE (gérant, 09/10 soir : « c'est pas pareil que pour le cristal qui
+> est sur le site, c'est pas les mêmes pages »)** : `/cristaux` (blocs photo, sur-mesure) reste telle quelle. Le jour du
+> « applique » = créer une page À PART (ex. `/cristaux-graves`) et y faire pointer l'encadré « Bientôt » de l'accueil et de
+> l'univers Cristal. **Et juste AVANT de mettre en ligne, lui répondre / le prévenir** (sa demande explicite) — ne rien pousser
+> sans ce dernier échange. (Enregistrement du 07/10 = version 5 ; versions 6 à 14 = ses demandes du 09/10, listées plus bas.)
 > Gérant : « une page pour les blocs de cristal déjà gravés… le client peut sélectionner… améliore le sur-mesure
 > après » + 16 photos de cristaux gravés, puis « améliore celui-là [cristal-surmesure-section] avec tout ce que t'as
 > installé, il faut que ça ressemble au site ». L'ancienne maquette `cristal-configurateur.html` est supprimée.
