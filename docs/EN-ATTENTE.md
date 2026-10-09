@@ -216,7 +216,10 @@ En attente de SA décision :
 
 - **Accueil moderne** : maquette ENREGISTRÉE le 04/10 (version 5) — https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J — `docs/maquettes/accueil-moderne.html`, générateur `tools/maquettes/accueil-moderne.py`. Attend son « applique ». Rien en ligne.
 
-- **Maquette « Accueil + univers » — VERSION LUXE du 09/10/2026** (feu vert du gérant : « tu peux tout changer sauf le logo ») :
+- **Maquette « Accueil + univers » — ⛔ version luxe du 09/10 REFUSÉE (« j'aime pas… trouve une autre idée ») → 3 PISTES à choisir :
+  `docs/maquettes/pistes-accueil.html` (artifact https://claude.ai/artifact/8nwU5hA2o4AphYUm941zTC), A L'Écrin / B Plein cadre / C Atelier ; dès qu'il nomme
+  une piste (ou un mélange), refaire les deux versions dans ce monde.**
+- (historique) **Maquette « Accueil + univers » — VERSION LUXE du 09/10/2026** (feu vert du gérant : « tu peux tout changer sauf le logo ») :
   toutes les pages refaites (accueil, 7 univers, Toute la boutique, Offrir) dans un monde visuel crème / encre / or, Playfair +
   Jost, grandes photos gravées, mouvements sobres ; TOUTES les corrections du 09/10 gardées ; générateur unique
   `tools/maquettes/accueil-univers.py [--puzzles]` ; `DESIGN.md` + `PRODUCT.md` écrits pour que les prochaines maquettes

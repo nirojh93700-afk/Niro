@@ -2720,7 +2720,26 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 
-## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ VERSION LUXE DU 09/10/2026 (feu vert du gérant : « tu peux tout changer sauf le logo ») — RIEN en ligne
+## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ⛔ VERSION LUXE DU 09/10/2026 REFUSÉE PAR LE GÉRANT → 3 PISTES À CHOISIR — RIEN en ligne
+> ⛔⛔ **REFUSÉE LE 09/10/2026 (capture de son téléphone, bloc « Trouver un cadeau en trois clics » avec ses puces) :
+> « j'aime pas, recommence… là ça fait mal, trouve une autre idée… j'aime pas la maquette que t'as fait ».** Ne PAS retoucher
+> cette version luxe : elle reste dans les deux artifacts (sans puzzles v7, avec puzzles v3) et dans git tant qu'il n'a pas
+> choisi la suite. Ce qu'il a visiblement rejeté : le style « éditorial calme » (beaucoup de crème vide, petites
+> capitales espacées, listes de puces-formulaire sur téléphone, Jost). Il regarde SUR TÉLÉPHONE : toute maquette se juge
+> d'abord à 390 px.
+> ✅ **RÉPONSE : 3 PISTES VISUELLES à choisir AVANT de refaire toutes les pages** — `docs/maquettes/pistes-accueil.html`
+> (générateur `tools/maquettes/pistes-accueil.py <cat.json>`, artifact https://claude.ai/artifact/8nwU5hA2o4AphYUm941zTC), une page avec un sélecteur
+> A / B / C, chaque piste = héros · « Trouver un cadeau » · bijoux · carafe, mêmes couleurs, logo intouché :
+> · **A · L'Écrin** : encre et or, cadres dorés à double filet, ruban or qui défile, laser sur la photo, tuiles-photos « Pour
+>   qui » (reprend le thème « L'Écrin » qu'il avait validé le 06/07) ;
+> · **B · Plein cadre** : photo plein écran avec le texte posé dessus, panneaux de verre, grandes cartes arrondies,
+>   chercheur en phrase « Je cherche un cadeau pour … pour … avec un budget de … » ;
+> · **C · Atelier** : chaleureux et clair comme le site aujourd'hui (cartes arrondies 20 px, sable, bouton or), collage de
+>   photos, et « Trouver le bon cadeau en trois étapes » en PARCOURS GUIDÉ numéroté ①②③ avec cartes à coche (la référence
+>   des fiches du site). Vérifié Chromium 1280 / 390 : 0 débordement, 0 erreur, chercheur joué.
+> **Suite = la piste qu'il nomme (ou un mélange)** → refaire les DEUX versions (sans / avec puzzles) dans ce monde, en
+> gardant tout ce qui a été corrigé le 09/10 (rangement, navigation, fêtes, textes), puis republier les deux artifacts.
+
 > ⛔ **INCIDENT 08/10** : sur sa remarque « le puzzle je l'ai pas mis en ligne », j'ai RETIRÉ les puzzles de la maquette
 > enregistrée → « je t'ai pas dit de changer la maquette, enregistre celle-là et celle d'avant ». Une remarque n'est PAS
 > une demande de modification : sur une maquette enregistrée, on DEMANDE avant de toucher (règle du 23/07).
