@@ -54,9 +54,12 @@ export default async function HomePage() {
   const couverts = C("couverts-enfants-personnalises");
   const enfants = R.univers.find((u) => u.id === "enfants");
   // Les dernières sorties : le puzzle en bois (nouveau, « Bientôt », pas encore en vente)
-  // en tête, puis les 5 dernières créations par date d'ajout. Sur téléphone : 2 par ligne, 3 lignes.
+  // en tête, puis les dernières créations par date d'ajout — 10 en tout, sur DEUX lignes
+  // qui glissent chacune de gauche à droite (maquette B validée par le gérant le 09/10/2026).
   const puzzle = cartesPuzzles().find((c) => c.slug === "puzzle-savane");
-  const nouveaux = [...(puzzle ? [puzzle] : []), ...dernieresSorties(R.cartes, puzzle ? 5 : 6)];
+  const nouveaux = [...(puzzle ? [puzzle] : []), ...dernieresSorties(R.cartes, puzzle ? 9 : 10)];
+  const moitie = Math.ceil(nouveaux.length / 2);
+  const lignesNouveautes = [nouveaux.slice(0, moitie), nouveaux.slice(moitie)].filter((l) => l.length);
   const nouveautesToast = nouveaux.filter((c) => !c.soon).map((c) => ({ slug: c.slug, name: c.name, image: c.image }));
   const verres = VERRES5.map(C).filter(Boolean);
   const bijoux = BIJOUX3.map(C).filter(Boolean);
@@ -107,9 +110,8 @@ export default async function HomePage() {
 
         {/* LES DERNIÈRES SORTIES — rail */}
         {show.newArrivals && nouveaux.length ? (
-          <Rail titre={<>Les dernières sorties <em>de l’atelier</em></>} sous="Nos créations ajoutées ces derniers jours.">
-            {nouveaux.map((c) => <Carte key={c.slug} c={c} />)}
-          </Rail>
+          <Rail titre={<>Les dernières sorties <em>de l’atelier</em></>} sous="Nos créations ajoutées ces derniers jours."
+            lignes={lignesNouveautes.map((l) => l.map((c) => <Carte key={c.slug} c={c} />))} />
         ) : null}
 
         {/* VERRES — mosaïque */}
