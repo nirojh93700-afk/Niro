@@ -2723,10 +2723,17 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - ♈ **SIGNES DU ZODIAQUE — DEMANDE DU 09/10 SOIR** : « j'aimerais bien faire tous les signes d'astrologie… donner comme exemple pour
   graver ça aussi ; si on met tout ça, ça fait trop pour les gens quand ils descendent, tu peux pas travailler différemment ».
   Ses 3 exemples (Lion, Sagittaire, Gémeaux : figure + constellation, nom du signe, prénom en écriture anglaise, date · heure,
-  ville ; 2 rendus « lampe » en plus) sont copiés dans `docs/maquettes/assets/cristaux-graves/zodiaque/`. Les 9 autres signes
-  manquent (à lui demander, probablement dans Crafia). **Réorganisation PROPOSÉE, pas faite (règle « dis-moi avant »)** : une
-  seule grille avec trois puces en tête (Modèles · Dessins · Zodiaque) au lieu de trois sections empilées, 8 cartes puis
-  « Afficher plus » ; zodiaque = 12 cartes, personnalisation prénom + date/heure + ville.
+  ville ; 2 rendus « lampe » en plus) sont copiés dans `docs/maquettes/assets/cristaux-graves/zodiaque/`.
+  ✅ **FAIT le 09/10 soir (« Fais la maquette pour voir… sinon va chercher sur Internet »), artifact v7** : UNE grille avec trois
+  pavés en tête (Modèles gravés 16 · Dessins 15 · Zodiaque 12) au lieu de trois sections empilées ; les familles (Amour, Animaux…)
+  ne s'affichent que sous « Modèles » ; **8 cartes puis « Afficher les N autres »** ; 12 cartes zodiaque = bloc sombre avec le
+  nom du signe, la **constellation tracée en SVG par le générateur** (`ZODIAQUE` : étoiles + segments schématiques, pas d'image
+  trouvée : Wikimedia / Openclipart / svgrepo bloqués par le réseau, sites de vente seulement en recherche) et la **figure pour
+  Lion, Sagittaire, Gémeaux** (ses images, découpées en blanc sur transparent par `fig-*.webp`, alpha = transparence d'origine ×
+  luminance). Option « Ajouter prénom, date de naissance et ville » (+5 € comme le texte, **prix à confirmer par lui**) → aperçu
+  sous la constellation (prénom en écriture anglaise, date · heure, ville, comme ses exemples). ⚠️ Les 9 figures manquantes
+  (Bélier, Taureau, Cancer, Vierge, Balance, Scorpion, Capricorne, Verseau, Poissons) : constellation seule en attendant ses
+  images. Testé 390/1280 : 0 débordement, 0 erreur JS, 20 vérifications (groupes, « plus », filtre, Lion → bloc, perso, total).
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

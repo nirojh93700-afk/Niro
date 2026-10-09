@@ -86,6 +86,34 @@ FAMILLES = [("tous", "Tous les modèles"), ("amour", "Amour"), ("animaux", "Anim
             ("zen", "Zen & spirituel"), ("legendes", "Légendes"), ("voyage", "Voyage")]
 FMT_LABEL = {"v": "Vertical", "h": "Horizontal", "c": "Cube"}
 FAM_LABEL = dict(FAMILLES)
+# Les 12 signes (demande du gérant, 09/10 soir). Constellations tracées d'après les étoiles principales
+# (schématiques, un dessin d'étoiles n'est pas protégé) ; figures = les 3 images du gérant (Lion, Sagittaire,
+# Gémeaux, découpées en blanc sur transparent) ; les 9 autres n'ont pas encore de figure.
+ZODIAQUE = [
+    ("belier", "Bélier", "21 mars – 19 avril", [(14,58),(40,44),(64,40),(80,50)], [(0,1),(1,2),(2,3)]),
+    ("taureau", "Taureau", "20 avril – 20 mai", [(64,64),(53,57),(45,51),(30,40),(14,30),(47,64),(40,74),(26,86)], [(0,1),(1,2),(2,3),(3,4),(1,5),(5,6),(6,7)]),
+    ("gemeaux", "Gémeaux", "21 mai – 20 juin", [(30,16),(34,38),(28,60),(36,86),(62,20),(66,42),(60,64),(68,88),(50,30)], [(0,1),(1,2),(2,3),(4,5),(5,6),(6,7),(0,8),(8,4),(1,5)]),
+    ("cancer", "Cancer", "21 juin – 22 juillet", [(50,46),(34,20),(68,24),(52,68),(42,88),(64,86)], [(0,1),(0,2),(0,3),(3,4),(3,5)]),
+    ("lion", "Lion", "23 juillet – 22 août", [(30,72),(27,55),(34,40),(46,30),(58,34),(54,46),(72,52),(85,62),(62,70)], [(0,1),(1,2),(2,3),(3,4),(4,5),(5,0),(5,6),(6,7),(7,8),(8,0)]),
+    ("vierge", "Vierge", "23 août – 22 septembre", [(60,88),(52,66),(40,52),(28,40),(16,30),(48,38),(56,26),(68,18),(72,60),(86,54)], [(0,1),(1,2),(2,3),(3,4),(2,5),(5,6),(6,7),(1,8),(8,9)]),
+    ("balance", "Balance", "23 septembre – 22 octobre", [(50,20),(30,46),(64,48),(34,80),(66,82)], [(0,1),(0,2),(1,2),(1,3),(2,4)]),
+    ("scorpion", "Scorpion", "23 octobre – 21 novembre", [(72,14),(62,20),(56,30),(50,40),(42,52),(36,64),(34,78),(42,88),(54,92),(66,88),(74,80)], [(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,8),(8,9),(9,10)]),
+    ("sagittaire", "Sagittaire", "22 novembre – 21 décembre", [(22,36),(32,30),(44,30),(54,38),(60,52),(50,62),(36,62),(28,52),(38,20),(30,10)], [(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,0),(1,8),(8,9),(2,4)]),
+    ("capricorne", "Capricorne", "22 décembre – 19 janvier", [(20,30),(38,38),(58,46),(80,34),(72,60),(56,76),(38,70)], [(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0)]),
+    ("verseau", "Verseau", "20 janvier – 18 février", [(20,30),(32,38),(44,30),(56,38),(50,18),(50,56),(60,70),(48,84),(16,50)], [(0,1),(1,2),(2,3),(2,4),(3,5),(5,6),(6,7),(0,8)]),
+    ("poissons", "Poissons", "19 février – 20 mars", [(70,80),(56,66),(44,52),(34,40),(24,28),(18,16),(78,62),(82,46),(84,30),(90,24),(86,16),(78,18),(76,26)], [(0,1),(1,2),(2,3),(3,4),(4,5),(0,6),(6,7),(7,8),(8,9),(9,10),(10,11),(11,12),(12,8)]),
+]
+ZFIG = {k: raw_uri(os.path.join(ASSETS, "zodiaque", f"fig-{k}.webp")) for k in ("lion", "sagittaire", "gemeaux")}
+
+def constellation(pts, segs):
+    import random
+    rnd = random.Random(len(pts) * 7 + len(segs))
+    dots = "".join(f'<circle cx="{rnd.uniform(6,94):.1f}" cy="{rnd.uniform(6,94):.1f}" r="{rnd.uniform(.5,1.1):.1f}" opacity=".55"/>' for _ in range(22))
+    lines = "".join(f'<line x1="{pts[a][0]}" y1="{pts[a][1]}" x2="{pts[b][0]}" y2="{pts[b][1]}"/>' for a, b in segs)
+    stars = "".join(f'<circle cx="{x}" cy="{y}" r="2.6"/>' for x, y in pts)
+    return (f'<svg class="cg-const" viewBox="0 0 100 100" aria-hidden="true"><g fill="#fff">{dots}</g>'
+            f'<g stroke="#fff" stroke-width="1.6" stroke-linecap="round">{lines}</g><g fill="#fff">{stars}</g></svg>')
+
 
 # Tailles = celles des blocs du site (products.js : cristal-photo-3d-vertical / -horizontal).
 TAILLES = [
@@ -150,6 +178,7 @@ FMT_V = uri(os.path.join(PUB, "produits", "cristal-bloc-v-creme.jpg"), 260, 74)
 FMT_H = uri(os.path.join(PUB, "produits", "cristal-bloc-h-creme.jpg"), 260, 74)
 
 ICON = {
+    "down": '<path d="m6 9 6 6 6-6"/>',
     "check": '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
     "photo": '<rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6 10 3.8h4L15.5 6"/>',
     "paw": '<circle cx="7" cy="10" r="1.7"/><circle cx="17" cy="10" r="1.7"/><circle cx="9.6" cy="6" r="1.6"/><circle cx="14.4" cy="6" r="1.6"/><path d="M12 12.2c-2.8 0-5 3-5 5.1 0 1.6 1.4 2.2 2.6 2 1-.2 1.6-.6 2.4-.6s1.4.4 2.4.6c1.2.2 2.6-.4 2.6-2 0-2.1-2.2-5.1-5-5.1z"/>',
@@ -174,27 +203,41 @@ def ic(n, cls="cg-ic"):
 # ---------------------------------------------------------------- contenu
 def tuile(idx, m):
     k, nom, fam, fmt, phrase = m
-    return f'''<button type="button" class="cg-tile" data-i="{idx}" data-fam="{fam}" aria-pressed="false">
+    return f'''<button type="button" class="cg-tile" data-i="{idx}" data-grp="modeles" data-fam="{fam}" aria-pressed="false">
       <span class="cg-img"><img src="{IMG[k]}" alt="Cristal gravé : {nom}" loading="lazy"><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
       <span class="cg-meta"><span class="cg-tag">{FAM_LABEL.get(fam, "Modèle gravé")}</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span><span class="cg-ph">{phrase}</span></span>
     </button>'''
 
 
 TILES = "\n".join(tuile(i, m) for i, m in enumerate(MODELES)) + f'''
-<a class="cg-own" href="#sur-mesure" data-fam="tous">
+<a class="cg-own" href="#sur-mesure" data-grp="modeles" data-fam="tous">
   <span class="cg-own-ic">{ic("photo")}</span>
   <span><b>Votre propre image ?</b>Une photo, votre animal, un dessin, un logo : on la grave en 3D, rien que pour vous.</span>
   <em>Voir le sur-mesure {ic("arrow")}</em>
 </a>'''
 def tuile_dessin(idx, d):
     k, nom, fam = d
-    return f'''<button type="button" class="cg-tile cg-dtile" data-i="{idx}" data-fam="{fam}" aria-pressed="false">
+    return f'''<button type="button" class="cg-tile cg-dtile" data-i="{idx}" data-grp="dessins" data-fam="{fam}" aria-pressed="false">
       <span class="cg-img cg-xtal"><span class="cg-bloc"><img src="{DIMG[k]}" alt="Dessin à graver : {nom}" loading="lazy"></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
       <span class="cg-meta"><span class="cg-tag">Dessin gravé en 3D</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span></span>
     </button>'''
 
 
 DTILES = "\n".join(tuile_dessin(len(MODELES) + i, d) for i, d in enumerate(DESSINS))
+def tuile_zodiaque(idx, z):
+    k, nom, dates, pts, segs = z
+    fig = f'<img class="cg-zfig" src="{ZFIG[k]}" alt="">' if k in ZFIG else ""
+    return f'''<button type="button" class="cg-tile cg-dtile cg-ztile" data-i="{idx}" data-grp="zodiaque" aria-pressed="false">
+      <span class="cg-img cg-xtal"><span class="cg-bloc">{fig}{constellation(pts, segs)}<span class="cg-zname">{nom}</span></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
+      <span class="cg-meta"><span class="cg-tag">Signe du zodiaque</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span><span class="cg-ph">{dates}</span></span>
+    </button>'''
+
+
+ZTILES = "\n".join(tuile_zodiaque(len(MODELES) + len(DESSINS) + i, z) for i, z in enumerate(ZODIAQUE))
+GROUPES = "".join(
+    f'<button type="button" class="cg-grp{" on" if g == "modeles" else ""}" data-grp="{g}" aria-pressed="{"true" if g == "modeles" else "false"}">{lab}<span class="cg-n">{n}</span></button>'
+    for g, lab, n in (("modeles", "Modèles gravés", len(MODELES)), ("dessins", "Dessins", len(DESSINS)), ("zodiaque", "Zodiaque", len(ZODIAQUE))))
+
 CHIPS = "".join(
     f'<button type="button" class="cg-chip{" on" if k == "tous" else ""}" data-fam="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{lab}'
     f'<span class="cg-n">{len(MODELES) if k == "tous" else sum(1 for m in MODELES if m[2] == k)}</span></button>'
@@ -230,25 +273,23 @@ MAIN = f'''<main class="cg">
   <div class="container cg-layout">
     <div class="cg-col">
       <div class="cg-head">
-        <h2 id="t-mod">Choisissez votre modèle</h2>
-        <p>Touchez un cristal pour le voir en grand et choisir sa taille.</p>
+        <h2 id="t-mod">Choisissez votre gravure</h2>
+        <p>Un modèle déjà gravé, un dessin, ou votre signe du zodiaque. Touchez-le pour le voir en grand et choisir sa taille.</p>
       </div>
-      <div class="cg-chips" role="group" aria-label="Filtrer les modèles">{CHIPS}</div>
-      <div class="cg-grid" id="grille">{TILES}</div>
-
-      <div class="cg-head cg-dhead" id="dessins">
-        <h2>Ou choisissez l'un de nos dessins</h2>
-        <p>Si vous le souhaitez : un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix.
-          Rien n'est choisi d'avance, touchez celui qui vous plaît.</p>
-      </div>
-      <div class="cg-grid cg-dgrid">{DTILES}</div>
+      <div class="cg-grps" role="tablist" aria-label="Type de gravure">{GROUPES}</div>
+      <div class="cg-chips" role="group" aria-label="Filtrer les modèles" id="familles">{CHIPS}</div>
+      <p class="cg-gintro" id="gintro" hidden></p>
+      <div class="cg-grid" id="grille">{TILES}
+{DTILES}
+{ZTILES}</div>
+      <button type="button" class="cg-more" id="plusbtn" hidden>Afficher les <span id="plusn"></span> autres {ic("down")}</button>
 
     </div>
 
     <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
       <div class="cg-stage" id="stage">
         <div class="cg-empty" id="vide">{ic("gem","cg-ic cg-ic-xl")}<p><b>Votre cristal apparaîtra ici</b>Choisissez un modèle dans la galerie.</p></div>
-        <img id="grand" alt="" hidden><span class="cg-bloc cg-bloc-xl" id="bloc" hidden><img id="dimg" alt=""></span><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
+        <img id="grand" alt="" hidden><span class="cg-bloc cg-bloc-xl" id="bloc" hidden><span class="cg-bloc-in" id="blocin"><img id="dimg" alt=""></span><span class="cg-zperso" id="zperso" hidden><b id="zpn"></b><small id="zpd"></small><small id="zpv"></small></span></span><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
       </div>
       <h3 id="t-pan" class="cg-pname">Votre cristal</h3>
       <p class="cg-pdesc" id="pdesc">Aucun modèle choisi pour l'instant.</p>
@@ -271,13 +312,25 @@ MAIN = f'''<main class="cg">
         <label>Texte gravé en plus (en option)</label>
         <button type="button" class="cg-socle" id="txton" aria-pressed="false" aria-controls="txtzone">
           <span class="cg-txt-ic">{ic("pen")}</span>
-          <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
+          <span><b id="txtlab">Ajouter un texte</b><small id="txtsub">Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
           <span class="cg-socle-p">+5,00 €</span>
           <span class="cg-box" aria-hidden="true">{ic("check")}</span>
         </button>
         <div class="cg-txt" id="txtzone" hidden>
+          <div id="txtlibre">
           <label class="cg-sub" for="txt">Votre texte</label>
           <div class="cg-inp"><input id="txt" type="text" maxlength="40" placeholder="Prénom, date, petit mot…" autocomplete="off"><span id="txtn">0/40</span></div>
+          </div>
+          <div id="txtzod" hidden>
+          <label class="cg-sub" for="zp">Prénom ou nom</label>
+          <div class="cg-inp"><input id="zp" type="text" maxlength="24" placeholder="Luna Vance" autocomplete="off"></div>
+          <div class="cg-2col">
+            <div><label class="cg-sub" for="zd">Date de naissance</label><div class="cg-inp"><input id="zd" type="text" maxlength="16" placeholder="24 nov. 2022" autocomplete="off"></div></div>
+            <div><label class="cg-sub" for="zh">Heure</label><div class="cg-inp"><input id="zh" type="text" maxlength="5" placeholder="19:27" autocomplete="off"></div></div>
+          </div>
+          <label class="cg-sub" for="zv">Ville</label>
+          <div class="cg-inp"><input id="zv" type="text" maxlength="24" placeholder="Paris" autocomplete="off"></div>
+          </div>
           <span class="cg-sub">Écriture</span>
           <div class="cg-fonts" role="group" aria-label="Écriture du texte">{POLICES}</div>
           <span class="cg-sub">Où placer le texte ?</span>
@@ -523,6 +576,33 @@ CSS = r'''
 '''
 
 CSS += r'''
+/* ---- 09/10 soir : trois pavés, une grille, « Afficher plus », zodiaque */
+.cg-grps{display:flex;gap:8px;margin-top:16px}
+.cg-grp{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;background:var(--sand);color:var(--ink);border-radius:var(--r2);padding:12px 10px;min-height:48px;font:inherit;font-size:.92rem;font-weight:600;cursor:pointer}
+.cg-grp:hover{background:var(--sand2)}
+.cg-grp.on{background:var(--ink);color:var(--cream)}
+.cg-grp .cg-n{background:rgba(26,18,6,.08);color:var(--muted)}
+.cg-grp.on .cg-n{background:rgba(255,255,255,.14);color:var(--gold-l)}
+.cg-chips[hidden]{display:none}
+.cg-chips{padding-top:10px}
+.cg-gintro{color:var(--muted);margin:14px 0 0;font-size:.92rem}
+.cg-gintro[hidden]{display:none}
+.cg-more{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:18px;padding:14px;border:1.5px solid var(--sand2);border-radius:999px;background:#fff;color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.cg-more:hover{border-color:var(--gold)}
+.cg-more[hidden]{display:none}
+.cg-const{position:absolute;inset:0;width:100%;height:100%}
+.cg-zfig{position:absolute!important;inset:12% 8%!important;width:84%!important;height:76%!important;object-fit:contain!important;opacity:.9}
+.cg-zname{position:absolute;left:0;right:0;top:5%;text-align:center;color:#fff;font-family:var(--font-display),Georgia,serif;font-size:.78rem;letter-spacing:.02em;text-shadow:0 0 8px rgba(255,255,255,.5)}
+.cg-bloc-xl .cg-zname{font-size:1.1rem;top:6%}
+.cg-bloc-in{position:absolute;inset:0}
+.cg-zperso{position:absolute;left:6%;right:6%;bottom:5%;text-align:center;color:#fff;line-height:1.25;text-shadow:0 0 8px rgba(255,255,255,.5)}
+.cg-zperso[hidden]{display:none}
+.cg-zperso b{display:block;font-family:"Great Vibes","Allura",cursive;font-weight:400;font-size:clamp(1.1rem,3vw,1.7rem)}
+.cg-zperso small{display:block;font-size:.68rem;letter-spacing:.04em;opacity:.9}
+.cg-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#txtzod[hidden],#txtlibre[hidden]{display:none}
+@media (max-width:480px){.cg-grp{font-size:.8rem;padding:10px 6px;gap:5px}.cg-grp .cg-n{min-width:16px;padding:0 4px}}
+
 /* ---- habillage « Mélange » (nouveau site, 09/10/2026) : jetons de DESIGN.md */
 .cg{--cream:#fbf7ee;--paper:#fdfaf3;--sand:#f3e8d3;--sand2:#eadbbf;--ink:#1a1206;--ink2:#241a0c;--muted:#6b5f4b;--gold:#c9a24b;--gold-d:#a98935;--gold-l:#e2c67e;--gold-t:#7c6120;--r:20px;--r2:14px;--r3:28px;--sh:0 14px 36px rgba(26,18,6,.10);--cg-gold-t:var(--gold-t);--cg-ring:0 0 0 0 transparent;--cg-shadow:var(--sh);--ink-soft:var(--muted);--line:var(--sand2)}
 .cg-k{display:none}
@@ -585,31 +665,43 @@ CSS += r'''
 '''
 
 DATA = json.dumps([{"k": k, "nom": n, "fmt": f, "phrase": p} for k, n, _, f, p in MODELES]
-                  + [{"k": k, "nom": n, "d": True, "phrase": "Dessin gravé en 3D au cœur du cristal, au format de votre choix."} for k, n, _ in DESSINS], ensure_ascii=False)
+                  + [{"k": k, "nom": n, "d": True, "phrase": "Dessin gravé en 3D au cœur du cristal, au format de votre choix."} for k, n, _ in DESSINS]
+                  + [{"k": k, "nom": n, "d": True, "z": True, "phrase": f"Signe du {n} ({dates}) : la constellation et sa figure, gravées en 3D. Ajoutez un prénom, la date de naissance et la ville."} for k, n, dates, _, _ in ZODIAQUE], ensure_ascii=False)
 TAILLES_JS = json.dumps({t[0]: {"nom": t[1], "prix": t[4], "socle": t[5]} for t in TAILLES})
 
 JS = r'''
 (function(){
-  var M=__DATA__, T=__TAILLES__;
+  var M=__DATA__, T=__TAILLES__, PAGE=8;
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={txt:false,texte:'',font:'playfair',pos:'bas',i:-1,fmt:null,taille:'moyen',socle:false,q:1};
+  var st={txt:false,texte:'',font:'playfair',pos:'bas',i:-1,fmt:null,taille:'moyen',socle:false,q:1,grp:'modeles',fam:'tous',plus:false,zp:'',zd:'',zh:'',zv:''};
   var $=function(id){return document.getElementById(id)};
   var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
-  var chips=[].slice.call(document.querySelectorAll('.cg-chip'));
-  chips.forEach(function(c){c.addEventListener('click',function(){
-    chips.forEach(function(x){x.classList.toggle('on',x===c);x.setAttribute('aria-pressed',x===c)});
-    var f=c.dataset.fam;tiles.forEach(function(t){if(t.classList.contains('cg-dtile'))return;t.hidden=!(f==='tous'||t.dataset.fam===f)});var o=document.querySelector('.cg-own');if(o)o.hidden=false;
-  })});
+  var chips=[].slice.call(document.querySelectorAll('#familles .cg-chip'));
+  var grps=[].slice.call(document.querySelectorAll('.cg-grp'));
+  var own=document.querySelector('.cg-own');
+  var INTRO={dessins:"Un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix. Rien n'est choisi d'avance.",zodiaque:"Votre signe, sa constellation et sa figure gravés dans le cristal. En option : un prénom, la date et l'heure de naissance, la ville."};
+  function visibles(){var n=0,shown=0;
+    tiles.forEach(function(t){var ok=t.dataset.grp===st.grp&&(st.grp!=='modeles'||st.fam==='tous'||t.dataset.fam===st.fam);
+      if(ok){n++;var show=st.plus||n<=PAGE;t.hidden=!show;if(show)shown++}else t.hidden=true});
+    if(own)own.hidden=st.grp!=='modeles';
+    var reste=n-shown;$('plusbtn').hidden=reste<=0;$('plusn').textContent=reste;
+    $('familles').hidden=st.grp!=='modeles';$('gintro').hidden=st.grp==='modeles';$('gintro').textContent=INTRO[st.grp]||'';}
+  grps.forEach(function(g){g.addEventListener('click',function(){st.grp=g.dataset.grp;st.plus=false;grps.forEach(function(x){x.classList.toggle('on',x===g);x.setAttribute('aria-pressed',x===g)});visibles()})});
+  chips.forEach(function(c){c.addEventListener('click',function(){st.fam=c.dataset.fam;st.plus=false;chips.forEach(function(x){x.classList.toggle('on',x===c);x.setAttribute('aria-pressed',x===c)});visibles()})});
+  $('plusbtn').addEventListener('click',function(){st.plus=true;visibles()});
   tiles.forEach(function(t){t.addEventListener('click',function(){
     st.i=+t.dataset.i;var m=M[st.i];
     tiles.forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
-    var src=t.querySelector('img').src,g=$('grand'),b=$('bloc');
+    var img=t.querySelector('img'),src=img?img.src:'',g=$('grand'),b=$('bloc');
     $('stage').classList.toggle('is-d',!!m.d);
-    if(m.d){g.hidden=true;b.hidden=false;$('dimg').src=src;$('dimg').alt='Dessin gravé : '+m.nom;b.classList.toggle('fmt-h',st.fmt==='h');}
+    if(m.d){g.hidden=true;b.hidden=false;var bl=t.querySelector('.cg-bloc');$('blocin').innerHTML=bl?bl.innerHTML:'';b.classList.toggle('fmt-h',st.fmt==='h');}
     else{b.hidden=true;g.hidden=false;g.src=src;g.alt='Cristal gravé : '+m.nom;g.style.animation='none';void g.offsetWidth;g.style.animation='';}
     $('vide').hidden=true;
-    $('t-pan').textContent=m.nom;$('pdesc').textContent=m.phrase;
-    $('barimg').src=src;$('barnom').textContent=m.nom;
+    $('t-pan').textContent=m.z?'Signe du '+m.nom:m.nom;$('pdesc').textContent=m.phrase;
+    $('barimg').src=src;$('barimg').hidden=!src;$('barnom').textContent=m.nom;
+    $('txtlab').textContent=m.z?'Ajouter prénom, date de naissance et ville':'Ajouter un texte';
+    $('txtsub').textContent=m.z?'Comme sur une carte du ciel : gravés sous la constellation':'Un prénom, une date, un petit mot, gravé avec le modèle';
+    $('txtzod').hidden=!m.z;$('txtlibre').hidden=!!m.z;
     if(window.innerWidth<=860){$('panneau').scrollIntoView({behavior:'smooth',block:'start'})}
     maj();
   })});
@@ -619,8 +711,9 @@ JS = r'''
   [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
     st.taille=b.dataset.taille;[].forEach.call(document.querySelectorAll('[data-taille]'),function(x){var on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('socle').addEventListener('click',function(){st.socle=!st.socle;this.classList.toggle('on',st.socle);this.setAttribute('aria-pressed',st.socle);maj()});
-  $('txton').addEventListener('click',function(){st.txt=!st.txt;this.classList.toggle('on',st.txt);this.setAttribute('aria-pressed',st.txt);$('txtzone').hidden=!st.txt;if(st.txt)$('txt').focus();maj()});
+  $('txton').addEventListener('click',function(){st.txt=!st.txt;this.classList.toggle('on',st.txt);this.setAttribute('aria-pressed',st.txt);$('txtzone').hidden=!st.txt;if(st.txt){var m=M[st.i];(m&&m.z?$('zp'):$('txt')).focus()}maj()});
   $('txt').addEventListener('input',function(){st.texte=this.value.trim();$('txtn').textContent=this.value.length+'/40';maj()});
+  ['zp','zd','zh','zv'].forEach(function(k){$(k).addEventListener('input',function(){st[k]=this.value.trim();maj()})});
   [].forEach.call(document.querySelectorAll('[data-font]'),function(b){b.addEventListener('click',function(){st.font=b.dataset.font;[].forEach.call(document.querySelectorAll('[data-font]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
   [].forEach.call(document.querySelectorAll('[data-pos]'),function(b){b.addEventListener('click',function(){st.pos=b.dataset.pos;[].forEach.call(document.querySelectorAll('[data-pos]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('moins').addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});
@@ -628,17 +721,19 @@ JS = r'''
   $('ajout').addEventListener('click',function(){if(st.i<0)return;var b=this;b.textContent='Ajouté au panier ✓';setTimeout(function(){b.textContent='Ajouter au panier'},2200)});
   function maj(){
     var t=T[st.taille];$('soclep').textContent='+'+eur(t.socle);$('qte').textContent=st.q;
-    var avecTxt=st.txt&&!!st.texte;
+    var m=st.i>=0?M[st.i]:null,zod=!!(m&&m.z);
+    var avecTxt=st.txt&&(zod?!!(st.zp||st.zd||st.zv):!!st.texte);
     var unit=t.prix+(st.socle?t.socle:0)+(avecTxt?__TXT__:0);
     var ok=st.i>=0&&!!st.fmt&&(!st.txt||avecTxt);
-    var pv=$('txtpv');pv.hidden=!(avecTxt&&st.i>=0);pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
+    var pv=$('txtpv');pv.hidden=!(avecTxt&&st.i>=0&&!zod);pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
+    var zp=$('zperso');zp.hidden=!(zod&&st.txt);$('zpn').textContent=st.zp;$('zpd').textContent=[st.zd,st.zh].filter(Boolean).join(' · ');$('zpv').textContent=st.zv;
     $('total').textContent=ok?eur(unit*st.q):'—';
-    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle dans la galerie.':!st.fmt?'Il manque le format : vertical ou horizontal.':'Écrivez le texte à graver, ou retirez l\'option texte.';
+    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle, un dessin ou votre signe.':!st.fmt?'Il manque le format : vertical ou horizontal.':zod?'Écrivez au moins le prénom, la date ou la ville, ou retirez l\'option.':'Écrivez le texte à graver, ou retirez l\'option texte.';
     var bar=$('barre');bar.hidden=st.i<0;if(st.i>=0){$('barprix').textContent=t.nom+' · '+eur(unit)}
   }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   var vu=false;if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
-  maj();
+  visibles();maj();
 })();
 '''.replace("__DATA__", DATA).replace("__TXT__", str(TEXTE_PRIX)).replace("__TAILLES__", TAILLES_JS)
 
