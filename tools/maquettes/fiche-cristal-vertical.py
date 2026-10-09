@@ -109,6 +109,10 @@ CONF = re.search(r'<section class="confiance">.*?</section>', FICHE, re.S).group
 AUSSI = re.search(r'<section class="section"><div class="container"><div class="section-head"><span class="eyebrow">À découvrir</span><h2>Vous aimerez aussi</h2>.*?</section>', FICHE, re.S)
 AUSSI = AUSSI.group(0) if AUSSI else ""
 SOCLE = uri(os.path.join(PUB, "produits", "socle-led-rectangle.jpg"), 300, 74)
+FICHE_ACTUELLE = FICHE[FICHE.find("<div class=\"container\"><div class=\"product-layout\">"):FICHE.rfind("</main>")]
+FICHE_ACTUELLE = re.sub(r'<video class="gallery-bg gallery-video"[^>]*></video>', f'<img src="{POSTER}" alt="Cristal photo 3D vertical" id="galmain">', FICHE_ACTUELLE, 1)
+FICHE_ACTUELLE = re.sub(r'<button class=" thumb-video" aria-label="Voir la vidéo"><video[^>]*></video></button>',
+                        f'<button class="active" aria-label="Voir la vidéo"><img src="{POSTER}" alt=""></button>', FICHE_ACTUELLE, 1)
 
 def tuile(i, src, nom):
     return f'''<button type="button" class="cg-tile{' on' if i == 0 else ''}" data-i="{i}" aria-pressed="{'true' if i == 0 else 'false'}">
@@ -129,7 +133,7 @@ MAIN = f'''<main class="cg">
 <section class="cg-intro cg-ecrin">
   <div class="container">
     <div class="cg-ecrin-txt">
-    <h1>{TITRE.replace(" — gravure personnalisée en France", " — <em>gravure personnalisée en France</em>")}</h1>
+    <p class="cg-h1">{TITRE.replace(" — gravure personnalisée en France", " — <em>gravure personnalisée en France</em>")}</p>
     <p class="cg-lede">{TAGLINE}</p>
     <ul class="cg-trust">
       <li>{ic("gem")}<span><b>Cristal optique K9</b>pureté et éclat</span></li>
@@ -140,160 +144,42 @@ MAIN = f'''<main class="cg">
   </div>
 </section>
 
-<section class="cg-shop" id="modeles" aria-labelledby="t-mod">
-  <div class="container cg-layout">
-    <div class="cg-col">
-      <div class="gallery-main gallery-contain" id="galerie"><img id="grand" src="{GRAND0}" alt="Cristal photo 3D vertical"><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
-        <button type="button" class="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente">‹</button>
-        <button type="button" class="gallery-arrow gallery-arrow-next" aria-label="Photo suivante">›</button>
-      </div>
-      <div class="gallery-thumbs">{THUMBS}</div>
-    </div>
-
-    <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
-      <h3 class="cg-pname cg-pname-top" id="t-pan">Cristal Photo 3D — Vertical</h3>
-      <p class="cg-pdesc" id="pdesc">{TAGLINE}</p>
-
-      <div class="field">
-        <label>Choisissez la taille</label>
-        <div class="variant-swatches crystal-sizes" id="tailles">{SIZES}</div>
-      </div>
-
-      <div class="field">
-        <label>Votre photo à graver en 3D</label>
-        <button type="button" class="cg-socle" id="photo" aria-pressed="false">
-          <span class="cg-txt-ic">{ic("photo")}</span>
-          <span><b id="photolab">Choisir une photo</b><small>Nette, bien éclairée, les visages bien visibles</small></span>
-          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
-        </button>
-        <p class="cg-hint">{HINT_PHOTO}</p>
-        <p class="cg-hint">{NOTE_PHOTO}</p>
-      </div>
-
-      <div class="field">
-        <label>Texte gravé en plus (en option)</label>
-        <button type="button" class="cg-socle" id="txton" aria-pressed="false" aria-controls="txtzone">
-          <span class="cg-txt-ic">{ic("pen")}</span>
-          <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec la photo</small></span>
-          <span class="cg-socle-p">+5,00 €</span>
-          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
-        </button>
-        <div class="cg-txt" id="txtzone" hidden>
-          <label class="cg-sub" for="txt">Votre texte</label>
-          <div class="cg-inp"><input id="txt" type="text" maxlength="40" placeholder="Prénom, date, petit mot…" autocomplete="off"><span id="txtn">0/40</span></div>
-          <span class="cg-sub">Écriture</span>
-          <div class="cg-fonts" role="group" aria-label="Écriture du texte">{POLICES}</div>
-          <span class="cg-sub">Où placer le texte ?</span>
-          <div class="cg-pos" role="group" aria-label="Place du texte">{PLACES}</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Socle lumineux LED (en option)</label>
-        <button type="button" class="cg-socle" id="socle" aria-pressed="false">
-          <img src="{SOCLE}" alt="">
-          <span><b>Ajouter le socle lumineux</b><small>LED multicolores, couleurs au toucher, sur prise secteur</small></span>
-          <span class="cg-socle-p" id="soclep">+14,90 €</span>
-          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
-        </button>
-      </div>
-
-      <div class="pd-totbox"><span class="lab">Total tout compris</span><span class="val" id="total">—</span></div>
-      <div class="qty-row">
-        <div class="qty-stepper"><button type="button" id="moins" aria-label="Moins">−</button><span id="qte">1</span><button type="button" id="plus" aria-label="Plus">+</button></div>
-        <button type="button" class="btn btn-gold prc-off" id="ajout" style="flex:1" disabled>Ajouter au panier</button>
-      </div>
-      <p class="prc-addhint" id="manque">Envoyez d'abord la photo à graver.</p>
-      <div class="pd-perso"><b>✦ Gravé à la commande</b><p>Chaque cristal est gravé pour vous dans notre atelier, puis emballé avec soin.</p></div>
-    </aside>
-  </div>
-</section>
-
-<section class="cg-fiche">
-  <div class="container cg-fiche-in">
-    {PRODUCT_DESC}
-    {GUIDE}
-    {ACCORD}
-  </div>
-</section>
-{CONF}
-{AUSSI}
-
-<div class="cg-bar" id="barre" hidden>
-  <img id="barimg" src="{GRAND0}" alt="">
-  <span class="cg-bar-t"><b>Cristal Photo 3D — Vertical</b><small id="barprix"></small></span>
-  <a class="btn btn-gold" href="#panneau">Choisir la taille</a>
-</div>
+<!-- EN DESSOUS : la fiche ACTUELLE du site, telle quelle (gérant, 09/10 soir : « tu laisses comme c'est actuellement sur le site ») -->
+{FICHE_ACTUELLE}
 </main>'''
 MAIN = nettoie(MAIN)
 
 # Les blocs de la fiche repris SOUS le panneau : même habillage que le reste (rien d'autre n'est ajouté)
 CSS += r'''
-.cg .gallery-main{border-radius:var(--r);box-shadow:var(--sh);position:relative}
-.cg .gallery-main.gallery-contain{background:radial-gradient(120% 90% at 50% 18%,#fffdf8,#f0e8d8 70%,#e7dcc5)}
-.cg .gallery-main img{width:100%;height:100%;object-fit:contain}
-.cg .gallery-thumbs button{border-radius:12px}.cg .gallery-thumbs button.active{border-color:var(--gold)}
-.cg .cg-pname-top{margin-top:0!important}
-.cg-fiche{padding:0 0 clamp(40px,6vw,64px)}
-.cg-fiche-in{max-width:860px}
-.cg-fiche .product-desc h3{font-family:var(--font-display),Georgia,serif;font-weight:600}
-.cg-fiche .crystal-guide-section{background:var(--sand);border-radius:var(--r);padding:18px 16px 22px;margin:24px 0}
-.cg-fiche .crystal-guide-section h3{font-family:var(--font-display),Georgia,serif;text-align:center}
-.cg-fiche .crystal-guide-section .cg-hint{text-align:center;margin-bottom:18px}
-.cg-fiche .crystal-guide .cg-item b{color:var(--gold-t)}
-.cg-fiche .info-accordion details{border:1.5px solid var(--sand2);border-radius:var(--r2);background:#fff;margin-bottom:8px;padding:0 14px}
-.cg-fiche .info-accordion summary{padding:13px 0;font-weight:600}
-.cg-fiche .info-accordion .info-body{color:var(--muted);padding-bottom:14px}
-.cg .confiance{background:radial-gradient(60% 90% at 85% 0%,rgba(201,162,75,.30),transparent 60%),var(--ink2);color:#fff;padding:clamp(40px,6vw,64px) 0;border:0}
-.cg .confiance .cf-eyebrow{display:none}
-.cg .confiance .cf-title{color:#fff;font-family:var(--font-display),Georgia,serif;font-weight:600}
-.cg .confiance .cf-sub{color:#d9ccb0}
-.cg .cf-card{background:rgba(255,255,255,.06);border:1px solid rgba(226,198,126,.35);border-radius:var(--r);box-shadow:none}
-.cg .cf-card .cf-t{color:#fff}.cg .cf-card .cf-d{color:#b8a98a}
-.cg .cf-real-h{color:var(--gold-l)}
-.cg .cf-shot{border-radius:var(--r2);overflow:hidden;box-shadow:0 0 0 1px rgba(226,198,126,.5)}
-.cg .cg-stage #grand{animation:none}
+.cg .product-layout{padding-top:28px}
+.cg-ecrin .cg-h1{font-family:var(--font-display),Georgia,serif;font-weight:600;letter-spacing:-.01em;text-wrap:balance;margin:0;color:#fff;font-size:clamp(2.1rem,5.4vw,3.6rem);line-height:1.06}
+.cg-ecrin .cg-h1 em{font-style:italic;font-weight:500;color:var(--gold-l)}
 '''
 
 JS = r'''
 (function(){
-  var P=__PRIX__, S=__SOCLE__, TX=__TXT__;
+  var P={Petit:39.9,Moyen:59.9,Grand:99.9,XL:149.9},S={Petit:14.9,Moyen:19.9,Grand:19.9,XL:19.9};
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={taille:'Petit',photo:false,txt:false,texte:'',font:'playfair',pos:'bas',socle:false,q:1};
-  var $=function(id){return document.getElementById(id)};
-  var BIGS=__BIGS__,th=[].slice.call(document.querySelectorAll('.gallery-thumbs button')),cur=0;
-  function montre(i){cur=(i+th.length)%th.length;th.forEach(function(x,k){x.classList.toggle('active',k===cur)});$('grand').src=BIGS[cur];$('barimg').src=BIGS[cur]}
-  th.forEach(function(b,i){b.addEventListener('click',function(){montre(i)})});
-  document.querySelector('.gallery-arrow-prev').addEventListener('click',function(){montre(cur-1)});
-  document.querySelector('.gallery-arrow-next').addEventListener('click',function(){montre(cur+1)});
-  [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
-    st.taille=b.dataset.taille;[].forEach.call(document.querySelectorAll('[data-taille]'),function(x){var on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on)});maj()})});
-  $('photo').addEventListener('click',function(){st.photo=!st.photo;this.classList.toggle('on',st.photo);this.setAttribute('aria-pressed',st.photo);$('photolab').textContent=st.photo?'Photo envoyée':'Choisir une photo';maj()});
-  $('socle').addEventListener('click',function(){st.socle=!st.socle;this.classList.toggle('on',st.socle);this.setAttribute('aria-pressed',st.socle);maj()});
-  $('txton').addEventListener('click',function(){st.txt=!st.txt;this.classList.toggle('on',st.txt);this.setAttribute('aria-pressed',st.txt);$('txtzone').hidden=!st.txt;if(st.txt)$('txt').focus();maj()});
-  $('txt').addEventListener('input',function(){st.texte=this.value.trim();$('txtn').textContent=this.value.length+'/40';maj()});
-  [].forEach.call(document.querySelectorAll('[data-font]'),function(b){b.addEventListener('click',function(){st.font=b.dataset.font;[].forEach.call(document.querySelectorAll('[data-font]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
-  [].forEach.call(document.querySelectorAll('[data-pos]'),function(b){b.addEventListener('click',function(){st.pos=b.dataset.pos;[].forEach.call(document.querySelectorAll('[data-pos]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
-  $('moins').addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});
-  $('plus').addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
-  $('ajout').addEventListener('click',function(){var b=this;b.textContent='Ajouté au panier ✓';setTimeout(function(){b.textContent='Ajouter au panier'},2200)});
-  function maj(){
-    $('soclep').textContent='+'+eur(S[st.taille]);$('qte').textContent=st.q;
-    var avecTxt=st.txt&&!!st.texte;
-    var unit=P[st.taille]+(st.socle?S[st.taille]:0)+(avecTxt?TX:0);
-    var ok=st.photo&&(!st.txt||avecTxt);
-    var pv=$('txtpv');pv.hidden=!avecTxt;pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
-    $('total').textContent=eur(unit*st.q);
-    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=!st.photo?'Envoyez d\'abord la photo à graver.':'Écrivez le texte à graver, ou retirez l\'option texte.';
-    $('barprix').textContent=st.taille+' · '+eur(unit);
-  }
+  var st={t:'Petit',q:1};
+  var sw=[].slice.call(document.querySelectorAll('.crystal-sizes .variant-swatch'));
+  var socle=document.getElementById('pf-socle'),txt=document.getElementById('pf-texte'),cnt=document.querySelector('.char-count');
+  var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
+  var qb=document.querySelectorAll('.qty-stepper button');
+  function maj(){var u=P[st.t]+(socle.value==='oui'?S[st.t]:0)+(txt.value.trim()?5:0);tot.textContent=eur(u*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;
+    var o=socle.options[socle.options.length-1];o.textContent='Avec socle LED — +'+eur(S[st.t])}
+  sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();maj()})});
+  socle.addEventListener('change',maj);txt.addEventListener('input',function(){cnt.textContent=txt.value.length+'/40';maj()});
+  qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
+  var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
+  th.forEach(function(b){b.addEventListener('click',function(){th.forEach(function(x){x.classList.remove('active')});b.classList.add('active');main.src=b.querySelector('img').src})});
+  document.querySelector('.gallery-arrow-next').addEventListener('click',function(){var i=(th.indexOf(document.querySelector('.gallery-thumbs button.active'))+1)%th.length;th[i].click()});
+  document.querySelector('.gallery-arrow-prev').addEventListener('click',function(){var i=(th.indexOf(document.querySelector('.gallery-thumbs button.active'))-1+th.length)%th.length;th[i].click()});
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
-  if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
-  $('barre').hidden=false;maj();
+  maj();
 })();
-'''.replace("__PRIX__", json.dumps(PRIX)).replace("__BIGS__", json.dumps(BIGS)).replace("__SOCLE__", json.dumps(SOCLE_PRIX)).replace("__TXT__", str(TEXTE_PRIX))
+'''
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Cristal photo 3D — Vertical », présentée comme la page des cristaux déjà gravés · <b>rien n\'est encore sur le site</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Cristal photo 3D — Vertical » : l\'écrin en haut, la fiche actuelle du site en dessous · <b>rien n\'est encore sur le site</b></div>'
 TITLE = "<title>Fiche Cristal photo 3D vertical — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"

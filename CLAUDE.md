@@ -2813,7 +2813,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   accroche, réassurances SEULS (plus de photos à droite) ; colonne de gauche = la GALERIE ACTUELLE du site (grande photo arrondie
   + 8 vignettes + flèches, image d'attente à la place de la vidéo), plus de grille d'exemples ni de titre « Votre photo, gravée
   en 3D » ; le panneau commence par le nom (plus de grande photo dedans : elle est dans la galerie) ; l'aperçu du texte se pose
-  sur la grande photo de la galerie. **C'est CETTE version (v4) qui est à juger.**
+  sur la grande photo de la galerie.
+- ✅ **v5 (09/10 soir, capture de v4 : « je t'ai dit ne touche pas à ça, tu laisses comme c'est actuellement sur le site »)** :
+  en haut l'écrin (titre, accroche, réassurances — la partie qu'il trouve « bien »), en dessous la FICHE ACTUELLE DU SITE
+  TELLE QUELLE (le `<main>` de la capture, sans surcouche de style ; seule la vidéo est remplacée par son image fixe). Plus de
+  panneau `cg-panel`. Le titre de l'écrin est un `<p class="cg-h1">` pour garder un seul h1 (celui de la fiche).
+  **C'est CETTE version (v5) qui est à juger.**
 - Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, 8 vignettes, Grand + socle + texte × 2 = 249,60 €, bouton grisé
   sans photo. **Le site n'est pas touché.** Au « applique » : la fiche cristal (ProductDetail pour `crystal3d`) à refaire dans ce rendu,
   puis « pour les autres » s'il le dit.
