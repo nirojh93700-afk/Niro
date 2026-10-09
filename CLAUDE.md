@@ -2713,6 +2713,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
 
+## ⭐ MAQUETTE « BEST-SELLERS » — ✅ ENREGISTRÉE TELLE QUELLE LE 10/10/2026 (version 1) — RIEN en ligne
+- `docs/maquettes/best-sellers.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/N2eUzA3BCz3T9MG5ARJBLn, générateur
+  `tools/maquettes/best-sellers.py <capture de l'accueil>`. Étiquette « Best-seller » calculée sur les VRAIES commandes des
+  90 derniers jours (hors annulées / remboursées / tests, en pièces), sur les 5 produits les plus vendus, posée partout où leur
+  carte apparaît, + rangée « Nos meilleures ventes » juste après « Les dernières sorties ». L'étiquette posée à la main sur le
+  Collier 3 Cœurs disparaît sauf s'il est vraiment dans le classement. Classement de la maquette = EXEMPLE (ventes illisibles
+  d'ici). Au « applique » : réutiliser le calcul « Produits les plus vendus » de Gestion → Statistiques, côté serveur.
+- Même soir : le verre à whisky RESTE en tête des « dernières sorties » (« non c'est bon », après avoir demandé son retrait) ;
+  le retrait préparé en local a été annulé sans être poussé.
+
 ## 💎 LES TROIS MAQUETTES CRISTAL — ✅ EN LIGNE LE 10/10/2026 (gérant : « les trois »)
 - **/cristaux-graves** (`src/app/cristaux-graves/page.jsx` + `src/components/cristal/CristauxGraves.jsx`, données
   `src/lib/cristauxGraves.js` recopiées du générateur, photos `public/produits/cristaux-graves/`) = maquette v14 à l'identique.

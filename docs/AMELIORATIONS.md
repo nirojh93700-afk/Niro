@@ -131,4 +131,7 @@
   posée sur les 3 à 5 produits les plus vendus (cartes, fiches) et, en option, un rail « Nos meilleures ventes » sur l'accueil.
   Remplacerait l'étiquette « Best-seller » écrite à la main sur le Collier 3 Cœurs (accueil, bloc bijoux), dont la vérité n'est
   pas vérifiée. Les chiffres existent déjà (Gestion → Statistiques, « Produits les plus vendus »). ✅ Maquette faite le 10/10 (« oui ») : `docs/maquettes/best-sellers.html`, artifact https://claude.ai/artifact/N2eUzA3BCz3T9MG5ARJBLn,
-  générateur `tools/maquettes/best-sellers.py` (classement d'EXEMPLE). En attente de son avis puis « applique ».
+  générateur `tools/maquettes/best-sellers.py` (classement d'EXEMPLE). ✅ **ENREGISTRÉE TELLE QUELLE le 10/10/2026
+  (« Enregistre la maquette Best Seller », version 1)** : c'est CETTE version à reproduire le jour où il dit « applique »
+  (classement réel sur 90 jours, 5 produits, rangée après « Les dernières sorties », étiquette posée partout, celle du
+  Collier 3 Cœurs retirée s'il n'est pas dans le vrai classement). Ne pas la modifier sans sa demande.
