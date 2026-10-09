@@ -185,8 +185,11 @@ En attente de SA décision :
 ## 5. Questions en attente de SA réponse
 
 - **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 2)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
-  (prix 29,90 € prénom compris ✅ 07/10) · dimensions / bois · âge conseillé · marquage CE (EN 71) · poids ·
-  nom de la catégorie · son « applique ».
+  (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10, à reporter dans la maquette sur son accord) ·
+  épaisseur / bois · âge conseillé · marquage CE (EN 71) · poids · nom de la catégorie · son « applique ».
+- **Maquette « Accueil + univers » : place du bloc « Trouver le bon cadeau »** — le gérant (09/10) le trouve mieux PLUS BAS
+  que sous le héros et veut qu'on lui dise avant de bouger. Proposé : après les bijoux et les dernières sorties, juste avant
+  Bébé & Enfant. En attente de son « ok » (ou d'un autre emplacement).
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·

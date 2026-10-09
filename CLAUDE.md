@@ -2716,7 +2716,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **PRIX VALIDÉ LE 07/10 (« 1 », après relevé du marché : 20–55 €, surtout 30–40 €, prénom presque toujours
   compris)** : **29,90 € le puzzle, prénom gravé COMPRIS** (facultatif, « Compris » affiché sur l'option) — version 2
   de l'artifact. Vérifié Chromium 1280/390 : 0 débordement, 0 erreur JS.
-- **Questions posées au gérant** : dimensions/épaisseur/essence du bois · âge
+- **Réponse du gérant le 09/10/2026 : un puzzle mesure 18,5 cm de long × 13,5 cm de large** (épaisseur et essence du bois toujours
+  inconnues). Pas encore reporté dans la maquette (règle : une maquette enregistrée ne se modifie pas sans son accord) : lui
+  demander s'il veut la ligne « 18,5 × 13,5 cm » dans « Votre puzzle ».
+- **Questions posées au gérant** : ~~dimensions~~ (18,5 × 13,5 cm, reçues le 09/10) / épaisseur / essence du bois · âge
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 
