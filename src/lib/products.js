@@ -17,6 +17,7 @@ export const CATEGORIES = [
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "deco", label: "Déco & Maison", short: "Déco & Maison" },
   { slug: "cadeaux", label: "Cadeaux & Accessoires", short: "Cadeaux" },
+  { slug: "jeux", label: "Jeux en bois", short: "Jeux en bois" },
 ];
 
 // (Les motifs gravables sont définis dans src/lib/motifs.js.)
@@ -611,6 +612,249 @@ export const products = [
   },
 
   // ----------------------------- CADEAUX & DÉCO ------------------------------
+  {
+    slug: "puzzle-foret",
+    name: "Puzzle en bois, Forêt",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les animaux de la forêt », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les animaux de la forêt : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-foret.jpg"],
+    variants: [{ id: "puzzle-foret-unite", title: "Puzzle Forêt", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les animaux de la forêt : 8 pièces à encastrer (renard, lapin, faon, hibou, hérisson, écureuil, ourson, raton laveur), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-savane",
+    name: "Puzzle en bois, Savane",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les animaux de la savane », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les animaux de la savane : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-savane.jpg"],
+    variants: [{ id: "puzzle-savane-unite", title: "Puzzle Savane", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les animaux de la savane : 8 pièces à encastrer (lion, éléphant, girafe, zèbre, rhinocéros, hippopotame, singe, crocodile), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-australie",
+    name: "Puzzle en bois, Australie",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les animaux d'Australie », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les animaux d'Australie : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-australie.jpg"],
+    variants: [{ id: "puzzle-australie-unite", title: "Puzzle Australie", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les animaux d'Australie : 8 pièces à encastrer (kangourou, koala, émeu, échidné, ornithorynque, cacatoès, phalanger, dingo), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-animaux-amerique",
+    name: "Puzzle en bois, Grand Nord",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les animaux du Grand Nord », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les animaux du Grand Nord : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-animaux-amerique.jpg"],
+    variants: [{ id: "puzzle-animaux-amerique-unite", title: "Puzzle Grand Nord", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les animaux du Grand Nord : 8 pièces à encastrer (bison, aigle, ours, castor, renard, lynx, faon, tamia), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-dinosaures",
+    name: "Puzzle en bois, Dinosaures",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les dinosaures », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les dinosaures : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-dinosaures.jpg"],
+    variants: [{ id: "puzzle-dinosaures-unite", title: "Puzzle Dinosaures", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les dinosaures : 8 pièces à encastrer (tyrannosaure, tricératops, stégosaure, spinosaure, ptérodactyle, ankylosaure, diplodocus, parasaurolophus), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-vehicules-secours",
+    name: "Puzzle en bois, Véhicules de secours",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les véhicules de secours », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les véhicules de secours : 7 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-vehicules-secours.jpg"],
+    variants: [{ id: "puzzle-vehicules-secours-unite", title: "Puzzle Véhicules de secours", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les véhicules de secours : 7 pièces à encastrer (camion de pompiers, hélicoptère, ambulance, voiture de police, dépanneuse, bateau de sauvetage, 4×4 de secours), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-camping",
+    name: "Puzzle en bois, Camping",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « L'aventure en camping », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "L'aventure en camping : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-camping.jpg"],
+    variants: [{ id: "puzzle-camping-unite", title: "Puzzle Camping", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>L'aventure en camping : 8 pièces à encastrer (tente, feu de camp, lanterne, sac à dos, boussole, sapin, guimauve, chaussures de marche), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-jardin-enchante",
+    name: "Puzzle en bois, Jardin enchanté",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Le jardin enchanté », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Le jardin enchanté : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-jardin-enchante.jpg"],
+    variants: [{ id: "puzzle-jardin-enchante-unite", title: "Puzzle Jardin enchanté", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Le jardin enchanté : 8 pièces à encastrer (fée, papillon, lapin, maison champignon, arrosoir, escargot, fleur, coccinelle), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
+  {
+    slug: "puzzle-fruits-legumes",
+    name: "Puzzle en bois, Fruits & légumes",
+    badge: "Nouveau",
+    weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
+    pickup: false,
+    letter: true,
+    title: "Puzzle à encastrer en bois « Les fruits et légumes », gravé au prénom de l'enfant",
+    category: "jeux",
+    type: "Puzzle en bois personnalisé",
+    tagline: "Les fruits et légumes : 8 pièces à encastrer, avec le prénom de votre enfant gravé sur le plateau.",
+    personalizable: true,
+    personalizationLabel: "Prénom gravé sur le plateau (compris dans le prix)",
+    personalizationFields: [
+      { key: "prenom", label: "Prénom à graver (compris dans le prix)", placeholder: "Ex : Lina", maxLength: 14, optional: true },
+      { key: "police", type: "font", label: "Écriture du prénom", optional: true },
+      { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
+    ],
+    images: ["/produits/puzzle-fruits-legumes.jpg"],
+    variants: [{ id: "puzzle-fruits-legumes-unite", title: "Puzzle Fruits & légumes", price: 29.9 }],
+    descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
+<p>Les fruits et légumes : 8 pièces à encastrer (pomme, banane, poire, fraise, brocoli, carotte, citrouille, maïs), chacune avec son encoche pour les petits doigts.</p>
+<h3>Le prénom de votre enfant</h3>
+<p>Le prénom est gravé sur le plateau, compris dans le prix. Vous choisissez l'écriture parmi les huit du site. Laissez le champ vide pour un puzzle sans prénom.</p>
+<h3>Dimensions et âge</h3>
+<ul><li>Plateau : 18,5 × 13,5 cm.</li><li>Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.</li></ul>`,
+  },
   {
     slug: "plaque-de-porte-enfant",
     name: "Plaque de porte enfant",

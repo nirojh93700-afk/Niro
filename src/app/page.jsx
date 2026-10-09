@@ -11,7 +11,7 @@ import { PaymentLogos } from "@/components/PaymentBand";
 import PayInfoModal from "@/components/PayInfo";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
-import { rangerCatalogue, dernieresSorties, cartesPuzzles } from "@/lib/univers";
+import { rangerCatalogue, dernieresSorties } from "@/lib/univers";
 import { QUI_TILES, OCC_TILES, FETE_PHOTO, carteLegere } from "@/lib/universFinder";
 
 export const dynamic = "force-dynamic";
@@ -53,11 +53,12 @@ export default async function HomePage() {
   const carafe = C("carafe-a-whisky-gravee");
   const couverts = C("couverts-enfants-personnalises");
   const enfants = R.univers.find((u) => u.id === "enfants");
-  // Les dernières sorties : le puzzle en bois (nouveau, « Bientôt », pas encore en vente)
-  // en tête, puis les dernières créations par date d'ajout — 10 en tout, sur DEUX lignes
-  // qui glissent chacune de gauche à droite (maquette B validée par le gérant le 09/10/2026).
-  const puzzle = cartesPuzzles().find((c) => c.slug === "puzzle-savane");
-  const nouveaux = [...(puzzle ? [puzzle] : []), ...dernieresSorties(R.cartes, puzzle ? 9 : 10)];
+  // Les dernières sorties : le puzzle Savane en tête (en vente depuis le 09/10/2026 ; un seul
+  // puzzle ici, les 9 ensemble rempliraient la rangée), puis les dernières créations par date
+  // d'ajout — 10 en tout, sur DEUX lignes qui glissent (maquette B validée le 09/10/2026).
+  const puzzle = C("puzzle-savane");
+  const nouveaux = [...(puzzle ? [puzzle] : []),
+    ...dernieresSorties(R.cartes.filter((c) => !String(c.slug).startsWith("puzzle-")), puzzle ? 9 : 10)];
   const moitie = Math.ceil(nouveaux.length / 2);
   const lignesNouveautes = [nouveaux.slice(0, moitie), nouveaux.slice(moitie)].filter((l) => l.length);
   const nouveautesToast = nouveaux.filter((c) => !c.soon).map((c) => ({ slug: c.slug, name: c.name, image: c.image }));

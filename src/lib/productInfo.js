@@ -504,6 +504,132 @@ Un souci à la réception ?
 - Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "puzzle-foret": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-savane": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-australie": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-animaux-amerique": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-dinosaures": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-vehicules-secours": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 7 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-camping": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-jardin-enchante": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "puzzle-fruits-legumes": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 18,5 × 13,5 cm.
+- 8 pièces à encastrer, découpées au laser, avec encoche pour les doigts.
+- Dessins et prénom gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
+- Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
+- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
   "plaque-de-porte-enfant": {
     material: `Bois clair sélectionné, découpé au laser
 

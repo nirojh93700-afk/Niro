@@ -2888,6 +2888,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `public/produits/`, entrée de menu + boutique + sitemap/flux Google automatiques. L'accueil et les univers du site ne
   bougent PAS (la maquette « accueil + univers » reste à part). ⚠️ Préalable : marquage CE fait, aucune pièce qui passe
   dans le cylindre 3,2 cm. Rien ne part sans son « applique ».
+- ✅✅ **LES 9 PUZZLES SONT EN VENTE DEPUIS LE 09/10/2026 SOIR (ordre du gérant : « mets-le en vente disponible, c'est pas toi
+  qui décides »)**. Le marquage CE (EN 71) et le test du cylindre 3,2 cm ne sont PAS faits : il le sait (dit le 09/10), c'est
+  sa décision, ne plus le lui opposer. Fiches `puzzle-<thème>` dans `products.js` (catégorie NOUVELLE `jeux` « Jeux en bois »,
+  29,90 € prénom compris, `letter:true`, `weight: 75`, champs prénom 14 car. facultatif + écriture + note d'âge),
+  `productInfo.js`, `productDates.js` (09/10). Rayon « Jeux en bois » de l'univers Bébé & Enfant = les 9 slugs ; `/boutique/jeux`
+  → `/boutique/enfants` ; accueil : le puzzle Savane en tête des dernières sorties (les autres puzzles exclus de la rangée pour
+  ne pas la remplir) ; coffret Savane : le puzzle se coche. Pas de page `/naissance`. Stock non suivi = illimité. Testé en local :
+  fiche, ajout au panier avec prénom, panier 29,90 €, univers 9 cartes cliquables, 0 erreur JS.
 - **Questions posées au gérant** : ~~dimensions~~ (18,5 × 13,5 cm, reçues le 09/10) / épaisseur / essence du bois · ~~âge
   conseillé~~ (2 ans sous surveillance, 09/10) · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre ·
   ~~poids pour le port~~ (75 g, reçu le 09/10) · nom de la catégorie dans le menu.

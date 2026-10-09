@@ -9,6 +9,15 @@
 export const NOUVEAU_JOURS = 30;
 
 export const PRODUCT_DATES = {
+  "puzzle-foret": "2026-10-09",
+  "puzzle-savane": "2026-10-09",
+  "puzzle-australie": "2026-10-09",
+  "puzzle-animaux-amerique": "2026-10-09",
+  "puzzle-dinosaures": "2026-10-09",
+  "puzzle-vehicules-secours": "2026-10-09",
+  "puzzle-camping": "2026-10-09",
+  "puzzle-jardin-enchante": "2026-10-09",
+  "puzzle-fruits-legumes": "2026-10-09",
   "verre-a-cocktail-grave": "2026-09-26",
   "collier-enveloppe-message-secret": "2026-06-02",
   "collier-medaillon-coeur-ouvrable": "2026-06-02",

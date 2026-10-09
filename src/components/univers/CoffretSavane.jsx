@@ -1,14 +1,15 @@
 import Coffret from "./Coffret";
 import { PUZZLE_PRIX } from "@/lib/univers";
 
-// Le coffret Savane (maquette avec puzzles) : couverts + puzzle (bientôt) + veilleuse.
+// Le coffret Savane (maquette avec puzzles) : couverts + puzzle Savane (en vente depuis le 09/10/2026) + veilleuse.
 export default function CoffretSavane({ id, carteDe }) {
   const couverts = carteDe("couverts-enfants-personnalises");
   const veilleuse = carteDe("veilleuse-arbre-de-vie-prenom");
+  const puzzle = carteDe("puzzle-savane");
   if (!couverts) return null;
   const pieces = [
     { name: couverts.name, prix: couverts.prix?.valeur || 0, checked: true },
-    { name: "Puzzle en bois personnalisé", prix: PUZZLE_PRIX, checked: false, bientot: true },
+    { name: puzzle ? puzzle.name : "Puzzle en bois personnalisé", prix: puzzle?.prix?.valeur || PUZZLE_PRIX, checked: false, bientot: !puzzle },
     ...(veilleuse ? [{ name: veilleuse.name, prix: veilleuse.prix?.valeur || 0, checked: false }] : []),
   ];
   return (
