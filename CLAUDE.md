@@ -2866,6 +2866,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   convient pas aux enfants de moins de 36 mois. Petits éléments, risque d'étouffement. » (sous 500 pièces un puzzle reste un
   jouet → mention obligatoire) ; accroche « un cadeau pour les grands » ; `noEngravePreview: true`. Taille gardée 21 × 15 cm
   (sa demande « un peu plus grand »), alors que le marché fait plutôt 25 × 18 (30 p.) à 36 × 25 cm (96 p.).
+  · **v3 (09/10 soir)** : 4ᵉ photo envoyée sans commentaire (famille de 3 générations, ambiance bureau) → `assets/puzzle-photo/
+    bureau.jpg`, mise EN PREMIER (grande image + 1ʳᵉ vignette) : c'est la plus « cadeau pour adultes ». 4 photos au total.
   ⛔ **Leçon (gérant) : quand une décision se tranche en regardant le marché, CHERCHER ET DÉCIDER soi-même, puis lui dire ce
   qui a été choisi et pourquoi — ne pas lui renvoyer la question.**
 

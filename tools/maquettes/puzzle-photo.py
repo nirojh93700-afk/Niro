@@ -89,6 +89,11 @@ HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)  # (déjà absent avec noEngravePreview)
+# 4e photo du gérant (09/10 soir, ambiance bureau, famille de 3 générations) : mise EN PREMIER, c'est la plus « cadeau pour
+# adultes ». Ajoutée ici (grande image + 1re vignette) sans refaire la capture : même rendu que le site pour une galerie.
+BUREAU = uri(os.path.join(ASSETS, "bureau.jpg"))
+MAIN = re.sub(r'(<img[^>]*id="galmain"[^>]*?\ssrc=")[^"]*(")', lambda m: m.group(1) + BUREAU + m.group(2), MAIN, count=1)
+MAIN = MAIN.replace('<div class="gallery-thumbs">', '<div class="gallery-thumbs"><button class="" aria-label="Voir le visuel 0"><img src="' + BUREAU + '" alt=""/></button>', 1)
 PRIX = {t: float(re.sub(r"[^0-9,]", "", p).replace(",", ".")) for t, p in
         re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', MAIN)}
 assert len(PRIX) == 4, PRIX
