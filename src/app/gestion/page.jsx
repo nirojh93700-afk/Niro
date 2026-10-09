@@ -1,5 +1,6 @@
 "use client";
 
+import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
 import { BandeauDelai, MessagesATraiter, ChiffresPeriode } from "@/components/admin/DashBlocks";
@@ -1124,6 +1125,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     <div style={{ whiteSpace: "pre-line", marginTop: 4 }}>
                       📦 {[o.shippingName, o.shippingAddress.line1, o.shippingAddress.line2, `${o.shippingAddress.postal_code || ""} ${o.shippingAddress.city || ""}`.trim(), o.shippingAddress.country].filter(Boolean).join(", ")}
                       {o.shippingMethod ? ` — ${o.shippingMethod}` : ""}
+                      {nomLivraisonDifferent(o).different ? <span style={{ display: "block", marginTop: 3, color: "#8a5a00", fontWeight: 700 }}>⚠️ Livré au nom de « {o.shippingName} » (la cliente est « {o.customerName} ») — à mettre sur l&apos;étiquette.</span> : null}
                     </div>
                   ) : null}
                 </div>

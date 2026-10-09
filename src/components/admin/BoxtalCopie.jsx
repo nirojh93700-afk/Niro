@@ -10,7 +10,7 @@
 // Visible uniquement dans la gestion (jamais côté client).
 // =============================================================================
 
-import { nomLivraison } from "@/lib/nomLivraison";
+import { nomLivraison, nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useMemo, useState } from "react";
 import { getProductBySlug } from "@/lib/products";
 
@@ -80,6 +80,7 @@ export default function BoxtalCopie({ order }) {
   // Si le client a tapé son ADRESSE dans le champ « nom » (incident 0GTB1LZ5), on
   // prend le nom du devis / du client et on prévient.
   const { prenom, nom, suspect } = nomLivraison(order);
+  const autreNom = nomLivraisonDifferent(order);
   const description = (order.items || []).map((it) => it.name).join(", ").slice(0, 80) || "Cadeau personnalisé";
 
   return (
@@ -100,6 +101,11 @@ export default function BoxtalCopie({ order }) {
       {suspect ? (
         <p style={{ margin: "4px 0 6px", padding: "6px 10px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.85rem" }}>
           ⚠️ Le client a écrit une ADRESSE dans le champ « nom » du paiement : vérifie le prénom / nom ci-dessous (« {order.shippingName || order.customerName} »).
+        </p>
+      ) : null}
+      {autreNom.different ? (
+        <p style={{ margin: "4px 0 6px", padding: "6px 10px", background: "#fff4e0", border: "2px solid #e0a030", borderRadius: 8, color: "#8a5a00", fontWeight: 700, fontSize: "0.85rem" }}>
+          ⚠️ Le colis est au nom de « {autreNom.livraison} », pas de la cliente (« {autreNom.cliente} ») : c&apos;est le nom saisi pour la livraison (un cadeau ?). Garde-le sur l&apos;étiquette, ou confirme avec elle en cas de doute.
         </p>
       ) : null}
       <Ligne label="Prénom" valeur={prenom} />

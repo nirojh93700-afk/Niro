@@ -41,3 +41,36 @@ export function nomLivraison(order) {
   const [prenom, ...reste] = complet.split(/\s+/);
   return { complet, prenom: prenom || "", nom: reste.join(" ") || prenom || "", suspect: suspect && !corrige && source === "paiement", source };
 }
+
+// -----------------------------------------------------------------------------
+// NOM DE LIVRAISON ≠ NOM DE LA CLIENTE (09/10/2026, commande 1PUMYQBL : « Nollez Jessica » a tapé
+// « cipresso fybie » dans le nom de l'adresse de livraison). Ce n'est pas une erreur du site : c'est
+// ce que Stripe a reçu. Mais c'est LE nom à mettre sur l'étiquette (sinon colis refusé) et il faut
+// que l'atelier le voie. On ne signale que si les deux noms n'ont AUCUN mot en commun (accents,
+// majuscules, ordre prénom/nom sans importance) — un simple « M. Dupont » vs « Dupont Marie » ne sonne pas.
+const motsDuNom = (v) => String(v || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  .split(/[^a-z0-9]+/).filter((w) => w.length > 1 && !["mme", "madame", "monsieur", "mr", "mlle", "m"].includes(w));
+
+// Vrai si les deux mots ne diffèrent que d'une lettre (ajoutée, retirée ou remplacée).
+function distance1(x, y) {
+  if (Math.abs(x.length - y.length) > 1) return false;
+  let i = 0, j = 0, diff = 0;
+  while (i < x.length && j < y.length) {
+    if (x[i] === y[j]) { i++; j++; continue; }
+    if (++diff > 1) return false;
+    if (x.length > y.length) i++; else if (x.length < y.length) j++; else { i++; j++; }
+  }
+  return diff + (x.length - i) + (y.length - j) <= 1;
+}
+
+/** @returns {{ different:boolean, livraison:string, cliente:string }} */
+export function nomLivraisonDifferent(order) {
+  const livraison = String(order?.shippingName || "").trim();
+  const cliente = String(order?.customerName || "").trim();
+  if (!livraison || !cliente) return { different: false, livraison, cliente };
+  if (ressembleAUneAdresse(livraison) || ressembleAUneAdresse(cliente)) return { different: false, livraison, cliente }; // déjà signalé à part
+  const a = new Set(motsDuNom(livraison));
+  // Un mot en commun, ou presque (faute de frappe : « Vimalanathan » / « Vimalanthan » = même personne).
+  const commun = motsDuNom(cliente).some((w) => a.has(w) || [...a].some((x) => w.length >= 5 && x.length >= 5 && distance1(w, x)));
+  return { different: a.size > 0 && !commun, livraison, cliente };
+}

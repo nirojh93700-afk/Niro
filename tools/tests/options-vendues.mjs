@@ -1,5 +1,5 @@
 // Vérifications « vendu en plus » (npm run test-options) — pures, sans navigateur.
-import { nomLivraison, ressembleAUneAdresse } from "../../src/lib/nomLivraison.js";
+import { nomLivraison, ressembleAUneAdresse, nomLivraisonDifferent } from "../../src/lib/nomLivraison.js";
 import { optionsArticle, optionsCommande, livraisonCommande, emballagesDuDetail } from "../../src/lib/optionsVendues.js";
 let n = 0, ko = 0;
 const check = (nom, cond) => { n++; if (!cond) { ko++; console.log("❌", nom); } else console.log("✅", nom); };
@@ -62,6 +62,16 @@ check("emballage : deux emballages dans une même ligne", (() => { const r = un(
 check("emballage : sans parenthèse (ancien texte) = trouvé par le nom", un("Sac cadeau")[0].emballage?.id === "sac");
 check("emballage : inconnu ou bibliothèque vide = rien, sans erreur", !un("Coffret bambou (+9.00 €)")[0].emballage && emballagesDuDetail("Sac cadeau", [])[0].emballage === null && emballagesDuDetail("", LIB).length === 0);
 check("emballage : accents et majuscules sans importance", un("boite cadeau (+5.90 €)")[0].emballage?.id === "boite-allongee");
+
+// --- Nom de livraison ≠ nom de la cliente (09/10/2026, 1PUMYQBL)
+check("nom de livraison : « cipresso fybie » ≠ « Nollez Jessica » = signalé", nomLivraisonDifferent({ customerName: "Nollez Jessica", shippingName: "cipresso fybie" }).different === true);
+check("nom de livraison : même personne, ordre inversé = pas signalé", nomLivraisonDifferent({ customerName: "Nollez Jessica", shippingName: "Jessica Nollez" }).different === false);
+check("nom de livraison : accents et majuscules sans importance", nomLivraisonDifferent({ customerName: "Hélène Marié", shippingName: "helene MARIE" }).different === false);
+check("nom de livraison : un mot en commun suffit (nom de jeune fille, civilité)", nomLivraisonDifferent({ customerName: "Marie Dupont", shippingName: "Mme Dupont Martin" }).different === false);
+check("nom de livraison : nom manquant = pas de fausse alerte", nomLivraisonDifferent({ customerName: "", shippingName: "Jean Martin" }).different === false && nomLivraisonDifferent({ customerName: "Jean Martin", shippingName: "" }).different === false);
+check("nom de livraison : une adresse dans le nom reste gérée à part (pas de doublon d'alerte)", nomLivraisonDifferent({ customerName: "Paul Durand", shippingName: "23quater avenue du president coty" }).different === false);
+check("nom de livraison : faute de frappe sur le nom = même personne, pas d'alerte", nomLivraisonDifferent({ customerName: "Vinthusan Vimalanathan", shippingName: "Vimalanthan" }).different === false);
+check("nom de livraison : deux noms vraiment différents restent signalés", nomLivraisonDifferent({ customerName: "Olivier Chesta", shippingName: "Archis Alexandre" }).different === true);
 
 console.log(`\n${n - ko}/${n} vérifications au vert`);
 process.exit(ko ? 1 : 0);
