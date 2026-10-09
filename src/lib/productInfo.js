@@ -503,6 +503,20 @@ Un souci à la réception ?
 - Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "puzzle-photo-grave": {
+    material: `Taille & Matériaux
+- Plateau en bois clair : 21 × 15 cm.
+- 24, 48, 80 ou 120 pièces, découpées au laser.
+- Votre photo gravée au laser en noir et blanc, dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Envoyez une photo nette et bien éclairée, les visages bien visibles. Votre photo est vérifiée par notre atelier avant la gravure.
+- Attention : ne convient pas aux enfants de moins de 36 mois. Petits éléments, risque d'étouffement.
+- Entretien : un coup de chiffon sec suffit.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé (gravé à votre photo) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
   "puzzle-foret": {
     material: `Taille & Matériaux
 - Plateau en bois clair : 18,5 × 13,5 cm.

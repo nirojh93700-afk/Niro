@@ -58,7 +58,7 @@ export const UNIVERS = [
     accroche: "De la naissance aux premiers repas, des cadeaux personnalisés avec le prénom de votre enfant.",
     rayons: [{ nom: "Naissance & baptême", slugs: ["plaque-de-naissance", "plaque-de-naissance-coeur", "cartes-etapes-bebe-animaux", "cartes-etapes-bebe-girafe", "bracelet-empreinte-pied-bebe"] },
              { nom: "Repas & chambre", slugs: ["couverts-enfants-personnalises", "veilleuse-arbre-de-vie-prenom", "plaque-de-porte-enfant"] },
-             { nom: "Jeux en bois", slugs: PUZZLES.map(([f]) => `puzzle-${f}`) }] },
+             { nom: "Jeux en bois", slugs: ["puzzle-photo-grave", ...PUZZLES.map(([f]) => `puzzle-${f}`)] }] },
   { id: "mariage", nom: "Mariage & Réception", short: "Mariage", img: "/produits/numero_table_arche_geometrique_relief_bois.jpeg",
     accroche: "Numéros de table, menus, décorations de table et verres de réception, gravés pour votre jour.",
     rayons: [{ nom: "Numéros de table", regle: (p) => p.subcategory === "tables" },

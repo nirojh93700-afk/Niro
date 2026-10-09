@@ -613,6 +613,38 @@ export const products = [
 
   // ----------------------------- CADEAUX & DÉCO ------------------------------
   {
+    slug: "puzzle-photo-grave",
+    name: "Puzzle photo gravé",
+    badge: "Nouveau",
+    noEngravePreview: true,
+    weight: 95,
+    pickup: false,
+    letter: true,
+    title: "Puzzle photo gravé sur bois — votre photo, de 24 à 120 pièces",
+    category: "jeux",
+    type: "Puzzle photo personnalisé",
+    tagline: "Votre photo gravée sur un puzzle en bois, de 24 à 120 pièces. Un cadeau pour les grands.",
+    personalizable: true,
+    personalizationLabel: "Photo gravée + nombre de pièces",
+    personalizationFields: [
+      { key: "photo", type: "photo", label: "Votre photo à graver", text: "Choisissez une photo nette et bien éclairée, avec les visages bien visibles. Elle est gravée en noir et blanc sur le bois, puis le puzzle est découpé au laser." },
+      { key: "note-age", type: "note", text: "Attention : ne convient pas aux enfants de moins de 36 mois. Petits éléments, risque d'étouffement." },
+    ],
+    images: ["/produits/puzzle-photo-bureau.jpg", "/produits/puzzle-photo-enfants.jpg", "/produits/puzzle-photo-famille.jpg", "/produits/puzzle-photo-amis.jpg"],
+    variants: [
+      { id: "puzzle-photo-24", title: "24 pièces", price: 29.9 },
+      { id: "puzzle-photo-48", title: "48 pièces", price: 32.9 },
+      { id: "puzzle-photo-80", title: "80 pièces", price: 34.9 },
+      { id: "puzzle-photo-120", title: "120 pièces", price: 37.9 },
+    ],
+    descriptionHtml: `<p><strong>Votre photo gravée sur un puzzle en bois, découpé au laser dans notre atelier en France.</strong></p>
+<p>Une photo de famille, de vos enfants, de vos amis ou d'un animal : nous la gravons en noir et blanc sur un plateau en bois, puis nous découpons le puzzle. Un cadeau à assembler, puis à garder.</p>
+<h3>Le nombre de pièces</h3>
+<p>24, 48, 80 ou 120 pièces : plus il y a de pièces, plus le défi est grand. Un puzzle pensé pour les grands et les adultes.</p>
+<h3>Dimensions</h3>
+<ul><li>Plateau : 21 × 15 cm, un peu plus grand que nos puzzles à encastrer.</li><li>Attention : ne convient pas aux enfants de moins de 36 mois. Petits éléments, risque d'étouffement.</li></ul>`,
+  },
+  {
     slug: "puzzle-foret",
     name: "Puzzle en bois, Forêt",
     badge: "Nouveau",

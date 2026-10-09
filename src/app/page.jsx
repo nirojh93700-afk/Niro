@@ -58,7 +58,7 @@ export default async function HomePage() {
   // d'ajout — 10 en tout, sur DEUX lignes qui glissent (maquette B validée le 09/10/2026).
   const puzzle = C("puzzle-savane");
   const nouveaux = [...(puzzle ? [puzzle] : []),
-    ...dernieresSorties(R.cartes.filter((c) => !String(c.slug).startsWith("puzzle-")), puzzle ? 9 : 10)];
+    ...dernieresSorties(R.cartes.filter((c) => c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-")), puzzle ? 9 : 10)];
   const moitie = Math.ceil(nouveaux.length / 2);
   const lignesNouveautes = [nouveaux.slice(0, moitie), nouveaux.slice(moitie)].filter((l) => l.length);
   const nouveautesToast = nouveaux.filter((c) => !c.soon).map((c) => ({ slug: c.slug, name: c.name, image: c.image }));

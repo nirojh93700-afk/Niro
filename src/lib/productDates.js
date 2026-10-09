@@ -9,6 +9,7 @@
 export const NOUVEAU_JOURS = 30;
 
 export const PRODUCT_DATES = {
+  "puzzle-photo-grave": "2026-10-09",
   "puzzle-foret": "2026-10-09",
   "puzzle-savane": "2026-10-09",
   "puzzle-australie": "2026-10-09",

@@ -2870,7 +2870,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « verre optique K9 », « bloc photo 3D ». **Il a tranché : on garde « cristal » partout.** Ne pas le reproposer sauf s'il en
   reparle ; le risque lui a été dit une fois, avec les sources.
 
-## 🧩 MAQUETTE « PUZZLE PHOTO GRAVÉ » — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
+## 🧩 PUZZLE PHOTO GRAVÉ — ✅ EN VENTE DEPUIS LE 09/10/2026 SOIR (« tu pousses aussi le puzzle »)
+> Mis en ligne tel que la maquette v5 : `puzzle-photo-grave` (catégorie `jeux`, rayon « Jeux en bois » en tête, aussi dans
+> « Les dernières sorties »), 24 / 48 / 80 / 120 pièces à 29,90 / 32,90 / 34,90 / 37,90 €, 21 × 15 cm, 95 g lettre suivie,
+> photo obligatoire, mention 36 mois, 4 photos `public/produits/puzzle-photo-{bureau,enfants,famille,amis}.jpg` (bureau en
+> premier), entrée `productInfo.js` (entretien « un coup de chiffon sec suffit »), date dans `productDates.js`. Stock non
+> suivi = illimité. Vérifié en local 390 / 1280 : 0 débordement, 0 erreur JS, 120 pièces = 37,90 €.
+### (historique) MAQUETTE « PUZZLE PHOTO GRAVÉ » — 09/10/2026 SOIR
 > Gérant : « on laisse 29,90 € [puzzles à encastrer]… j'aimerais mettre puzzle gravé avec les photos que les clients donnent…
 > un petit peu plus grand que le puzzle… de 4 jusqu'à 120 morceaux, gravé n'importe quelle photo » + 3 photos d'exemple.
 - **Artifact** https://claude.ai/artifact/UEkvNMNmgoPTkvsLsZKZzG (`docs/maquettes/puzzle-photo.html`, générateur
