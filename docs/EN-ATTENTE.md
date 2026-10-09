@@ -184,6 +184,7 @@ En attente de SA décision :
 
 ## 5. Questions en attente de SA réponse
 
+- 🟠 **Maquette « Puzzle photo gravé » (09/10 soir)** : https://claude.ai/artifact/UEkvNMNmgoPTkvsLsZKZzG — 4 à 120 pièces, 21 × 15 cm, prix proposés 29,90 → 39,90 €. En attente de son avis puis « applique ».
 - ✅ **PUZZLES EN VENTE depuis le 09/10/2026 soir** (ordre du gérant), 9 fiches à 29,90 € prénom compris. Marquage CE pas fait (sa décision).
 - **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 2)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
   (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10 et âge « dès 2 ans, sous la surveillance d'un adulte » ✅ 09/10 soir — formulation proposée, à reporter dans la maquette sur son accord ·

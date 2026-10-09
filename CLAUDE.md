@@ -2843,6 +2843,23 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « verre optique K9 », « bloc photo 3D ». **Il a tranché : on garde « cristal » partout.** Ne pas le reproposer sauf s'il en
   reparle ; le risque lui a été dit une fois, avec les sources.
 
+## 🧩 MAQUETTE « PUZZLE PHOTO GRAVÉ » — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
+> Gérant : « on laisse 29,90 € [puzzles à encastrer]… j'aimerais mettre puzzle gravé avec les photos que les clients donnent…
+> un petit peu plus grand que le puzzle… de 4 jusqu'à 120 morceaux, gravé n'importe quelle photo » + 3 photos d'exemple.
+- **Artifact** https://claude.ai/artifact/UEkvNMNmgoPTkvsLsZKZzG (`docs/maquettes/puzzle-photo.html`, générateur
+  `tools/maquettes/puzzle-photo.py <capture>`, photos `docs/maquettes/assets/puzzle-photo/` recadrées 900 × 675).
+- **Méthode** (réutilisable) : fiche ajoutée à `products.js` SUR LA MACHINE SEULEMENT, `npm run build` + `next start`, capture de
+  `/produit/puzzle-photo-grave`, puis `git checkout -- src/lib/products.js` + photos temporaires `public/produits/zz-maquette-*`
+  supprimées → le site n'a JAMAIS été modifié ni poussé. La maquette = la fiche du site telle quelle (catégorie `jeux`), sans
+  l'« aperçu témoin » texte (inutile ici : au vrai ajout, `noEngravePreview: true`).
+- **Contenu proposé (à valider)** : plateau **21 × 15 cm** (un peu plus grand que 18,5 × 13,5), 6 choix de pièces **4 · 12 ·
+  24 · 48 · 80 · 120**, prix proposés **29,90 · 29,90 · 32,90 · 34,90 · 37,90 · 39,90 €** (marché : puzzles photo en CARTON
+  15–27 €, rien de fiable en bois gravé), poids proposé 95 g (lettre suivie). Champ photo obligatoire + vérification atelier.
+  Âge proposé : 4 et 12 pièces « dès 2 ans, sous surveillance d'un adulte » ; 24 pièces et plus « ne convient pas aux enfants
+  de moins de 36 mois (petits éléments) ». ⚠️ 120 pièces sur 21 × 15 cm = pièces d'environ 1,7 cm : à confirmer à la découpe.
+- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 120 pièces × 2 = 79,80 €, « Choisir une photo » pose la photo en
+  noir et blanc sur la grande image.
+
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « on va faire une autre maquette, c'est une nouvelle catégorie, c'est des jeux pour les enfants, je te
