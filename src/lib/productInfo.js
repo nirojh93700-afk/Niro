@@ -93,8 +93,8 @@ export const productInfo = {
 
 Pourquoi le 316L
 - Sans nickel : ne provoque pas d'allergies, validé pour peaux sensibles.
-- Composition enrichie en molybdène : résistance exceptionnelle à la corrosion (eau, chlore, sueur, eau salée).
-- Référence des bijoux haut de gamme : conserve son éclat des décennies sans ternir ni se déformer.
+- Composition enrichie en molybdène : très bonne résistance à la corrosion et à la transpiration.
+- Matière de référence des bijoux en acier : garde son éclat avec un entretien simple.
 
 Caractéristiques techniques
 - Pendentif : 23 mm × 14 mm, épaisseur 4 mm — léger et discret.
@@ -104,9 +104,8 @@ Caractéristiques techniques
     usage: `Comment porter et entretenir votre collier locket
 
 Au quotidien
-- Compatible douche, baignade, sport et transpiration : l'acier 316L ne craint ni l'eau ni le chlore.
-- Évitez le contact direct avec parfums, crèmes et lotions — vaporisez avant de mettre le collier.
-- Plongée ou eau de mer prolongée : rincez à l'eau claire en sortant.
+- Mettez parfum, crème et laque avant votre collier.
+- Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout la finition or rose.
 
 Ouvrir la pochette
 - L'enveloppe s'ouvre via une charnière fluide — soulevez délicatement le rabat.
@@ -114,8 +113,8 @@ Ouvrir la pochette
 - Refermez en clipsant doucement — fermeture sécurisée.
 
 Entretien
-- Essuyez avec un chiffon doux après chaque port prolongé.
-- Nettoyage hebdomadaire : trempage 10-15 min dans eau tiède savonneuse, brosse souple, rinçage, séchage.`,
+- Essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien.
+- Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Conditions adaptées au produit personnalisé
 
 Si vous avez fait graver votre message
@@ -133,7 +132,7 @@ Un souci à la réception ?
   "collier-medaillon-coeur-ouvrable": {
     material: `Acier inoxydable 316L hypoallergénique
 
-- Sans nickel : adapté aux peaux sensibles, ne ternit pas en usage normal.
+- Sans nickel : adapté aux peaux sensibles.
 - Médaillon cœur ouvrable, 4 faces gravables.
 - Chaîne 50 cm.
 - Finitions : Argent ou Bicolore (Or & Argent).
@@ -146,8 +145,8 @@ Personnalisation (4 faces)
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
 
 Entretien
-- Essuyez avec un chiffon doux après un port prolongé.
-- Évitez le contact avec parfums et crèmes (vaporisez avant de mettre le bijou).`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Conditions adaptées au produit personnalisé
 
 Si vous avez fait graver un texte ou une photo
@@ -177,8 +176,8 @@ Personnalisation
 - Réalisé sur commande dans notre atelier français.
 
 Entretien
-- Chiffon doux sec après un port prolongé.
-- Évitez parfums, crème solaire et gel hydroalcoolique (oxydation).`,
+- Mettez parfum, crème solaire et gel hydroalcoolique avant votre bracelet. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Conditions adaptées
 
 Version AVEC gravure (personnalisée)
@@ -205,8 +204,8 @@ Personnalisation
 - Réalisé sur commande dans notre atelier français.
 
 Entretien
-- Chiffon doux sec après un port prolongé.
-- Évitez parfums et produits chimiques agressifs.`,
+- Le silicone ne craint pas l'eau : après la piscine ou la mer, rincez-le à l'eau claire et séchez-le, plaque comprise.
+- Essuyez la plaque avec un chiffon doux et sec ; évitez parfums et produits chimiques agressifs.`,
     returns: `Conditions adaptées
 
 Version AVEC texte (personnalisée)
@@ -233,8 +232,8 @@ Personnalisation
 - Réalisé sur commande dans notre atelier français.
 
 Entretien
-- Chiffon doux sec après un port prolongé.
-- Tenez le bracelet éloigné de l'eau prolongée ; évitez parfums et produits chimiques.`,
+- Évitez l'eau : retirez-le pour la douche, la baignade et le sport, et mettez votre parfum avant de le porter.
+- Essuyez la plaque avec un chiffon doux et sec. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.`,
     returns: `Conditions adaptées
 
 Version AVEC texte (personnalisée)
@@ -512,7 +511,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -526,7 +525,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -540,7 +539,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -554,7 +553,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -568,7 +567,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -582,7 +581,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -596,7 +595,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -610,7 +609,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -624,7 +623,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Le prénom est gravé sur le plateau, compris dans le prix (14 caractères maximum).
 - Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte.
-- Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.`,
+- Entretien : un coup de chiffon sec suffit.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé.
 - Produit personnalisé (gravé au prénom) : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
@@ -945,8 +944,8 @@ Un souci à la réception ?
 - Fermoir sécurisé. Bracelet masculin et intemporel.`,
     usage: `Personnalisation & Entretien
 - Option « Avec texte » : gravez un prénom, une date ou un message sur la plaque acier.
-- L'acier 316L ne ternit pas ; le tressage aspect cuir vieillit joliment.
-- Entretien : essuyez avec un chiffon doux ; évitez de le mouiller longtemps.`,
+- Évitez l'eau : retirez-le pour la douche, la baignade et le sport, et mettez votre parfum avant de le porter.
+- Entretien : essuyez la plaque avec un chiffon doux et sec. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Avec gravure = non remboursable une fois la gravure lancée (article L221-28). Sans gravure : retour possible sous 14 jours, non porté, dans son emballage d'origine.
@@ -960,8 +959,8 @@ Un souci à la réception ?
 - Fermoir sécurisé. Style élégant et intemporel.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un message sur la plaque.
-- L'acier 316L résiste à l'eau, au chlore et à la transpiration ; il ne ternit pas.
-- Entretien : chiffon doux après un port prolongé ; nettoyage à l'eau tiède savonneuse si besoin.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -972,11 +971,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet femme fin en acier inoxydable doré.
 - Surface gravable au laser (gravure fine).
-- Acier 316L : ne ternit pas, adapté aux peaux sensibles.`,
+- Acier 316L hypoallergénique, adapté aux peaux sensibles.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un petit mot.
-- Compatible douche et transpiration ; évitez le contact direct avec parfums et crèmes.
-- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -990,8 +989,8 @@ Un souci à la réception ?
 - Le souvenir d'une naissance, à porter sur soi.`,
     usage: `Personnalisation & Entretien
 - Personnalisez avec le prénom et la date de naissance.
-- L'acier 316L résiste à l'eau et ne ternit pas ; idéal au quotidien.
-- Entretien : chiffon doux ; évitez le contact direct avec parfums et crèmes.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1001,12 +1000,12 @@ Un souci à la réception ?
   "bracelet-femme-coeur": {
     material: `Taille & Matériaux
 - Bracelet femme en acier inoxydable doré, breloque cœur gravable.
-- Acier 316L : ne ternit pas, adapté aux peaux sensibles.
+- Acier 316L hypoallergénique, adapté aux peaux sensibles.
 - Romantique et délicat.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un message sur le cœur.
-- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
-- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1017,11 +1016,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet femme orné d'un papillon ajouré en acier inoxydable.
 - Finitions : argenté, doré, noir ou or rose.
-- Acier 316L : ne ternit pas, adapté aux peaux sensibles.`,
+- Acier 316L hypoallergénique, adapté aux peaux sensibles.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un petit mot.
-- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
-- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1032,11 +1031,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Lot de 2 colliers en acier inoxydable, finition or rose.
 - Les deux pendentifs forment un cœur une fois réunis, à graver chacun.
-- Acier 316L : ne ternit pas, adapté aux peaux sensibles.`,
+- Acier 316L hypoallergénique, adapté aux peaux sensibles.`,
     usage: `Personnalisation & Entretien
 - Gravez chaque moitié (prénoms, date, petit mot) — le cadeau parfait pour les amoureux.
-- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
-- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1053,7 +1052,8 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Recto inclus ; gravure au verso (+5 €) et photo gravée (+8 €) en option.
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
-- Entretien : chiffon doux ; l'acier 316L résiste à l'eau et ne ternit pas.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1064,10 +1064,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet à médaille en forme de cœur (gravable) sur chaîne à maillons, fermoir T-bar (OT).
 - Matière : acier inoxydable, disponible en doré, or rose et argenté.
-- Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
+- Acier inoxydable : supporte la transpiration au quotidien. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
 - Gravure en option sur la médaille cœur, au recto et/ou au verso (3 € par face) : prénom, date ou petit message (texte court conseillé).
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1079,10 +1080,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet à gros maillons ovales texturés (maille trombone), acier inoxydable 304 doré.
 - Poids ~15 g. Fermoir mousqueton avec chaîne d'extension réglable.
-- Résistant à l'eau, ne ternit pas.`,
+- Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
 - Bijou tendance prêt à porter (non personnalisé), à porter seul ou en accumulation.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Bijou non personnalisé : échange possible sous 14 jours, article non porté.
@@ -1093,10 +1095,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet à breloque « ange » sur chaîne fine en acier inoxydable, doré ou argenté.
 - Fermoir mousqueton avec chaîne d'extension réglable.
-- Résistant à l'eau, ne ternit pas.`,
+- Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
 - Bijou cadeau prêt à offrir (non personnalisé) — un joli porte-bonheur.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Bijou non personnalisé : échange possible sous 14 jours, article non porté.
@@ -1107,10 +1110,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet à cœur ouvert délicat sur chaîne fine en acier inoxydable 304, couleur argent.
 - Poids ~15 g. Fermoir mousqueton avec chaîne d'extension réglable.
-- Finition brillante, résistante à l'eau et qui ne ternit pas.`,
+- Finition brillante.`,
     usage: `Personnalisation & Entretien
 - Bijou cadeau prêt à offrir (non personnalisé).
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Bijou non personnalisé : échange possible sous 14 jours, article non porté.
@@ -1121,10 +1125,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Pendentif double cœur serti de zircons + pierre centrale scintillante, sur chaîne fine.
 - Matière : acier inoxydable 304 doré (finition PVD). Fermoir mousqueton.
-- Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
+- Acier inoxydable : supporte la transpiration au quotidien. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
 - Bijou cadeau prêt à offrir (non personnalisé).
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur les pierres.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Bijou non personnalisé : échange possible sous 14 jours, article non porté.
@@ -1135,10 +1140,11 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Collier à perle solitaire sur chaîne fine, acier inoxydable 304 doré (finition PVD).
 - Perle nacrée. Poids ~8 g. Fermoir mousqueton.
-- Résistant à l'eau, ne ternit pas. Longueur ajustable.`,
+- Acier inoxydable : supporte la transpiration au quotidien. Longueur ajustable.`,
     usage: `Personnalisation & Entretien
 - Bijou cadeau prêt à offrir (non personnalisé).
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur la perle.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Bijou non personnalisé : échange possible sous 14 jours, article non porté.
@@ -1150,10 +1156,11 @@ Un souci à la réception ?
 - Pendentif cœur ouvert doré entrelacé d'un anneau serti de zircons taille princesse.
 - Matière : acier inoxydable 304, doré (finition PVD), zircons.
 - Chaîne latérale aplatie (maille plate) à longueur ajustable. Poids ~10 g.
-- Doré brillant, étanche : résiste à l'eau et ne ternit pas.`,
+- Finition dorée brillante.`,
     usage: `Personnalisation & Entretien
 - Se porte tel quel, ou avec gravure en option : prénom, initiales ou date au laser sur le côté du cœur (texte court conseillé, la surface est fine).
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1166,12 +1173,13 @@ Un souci à la réception ?
 - Pendentif double cœur : un cœur orné d'un petit cœur pavé de zircons, un second cœur pivotant derrière lui.
 - Matière : acier inoxydable 304, zircons. Finitions doré, or rose ou argenté (PVD).
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~15 g.
-- Étanche : résiste à l'eau et ne ternit pas.`,
+- Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
 - Se porte tel quel, ou gravé : le cœur lisse se grave au recto et/ou au verso, 3 € par face gravée.
 - Texte libre (mot tendre, prénom, date) dans l'une de nos huit écritures ; comptez environ 16 caractères par face pour rester lisible.
 - Le second cœur pivote pour découvrir la gravure : le message reste caché quand le bijou est porté.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1184,12 +1192,13 @@ Un souci à la réception ?
 - Trois pendentifs sur la même chaîne : un petit cœur et deux plaques verticales.
 - Matière : acier inoxydable 304, placage électrolytique. Finitions doré, or rose ou argenté.
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~10 g.
-- Étanche : résiste à l'eau et ne ternit pas.`,
+- Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
 - Trois surfaces gravables : le cœur (environ 12 caractères) et les deux plaques (environ 14 caractères chacune).
 - Chaque zone gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver, les autres restent lisses.
 - Texte libre (prénoms, date, initiales, heure) dans l'une de nos huit écritures.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1202,12 +1211,13 @@ Un souci à la réception ?
 - Trois cœurs ouverts entrelacés sur la même chaîne.
 - Matière : acier inoxydable 304, finition dorée.
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~10 g.
-- Étanche : résiste à l'eau et ne ternit pas.`,
+- Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
 - Chaque cœur peut recevoir un prénom gravé (environ 12 caractères pour rester lisible).
 - Chaque cœur gravé ajoute 3 € : vous ne payez que ce que vous faites réellement graver, les autres restent lisses.
 - Prénom, initiale ou date, dans l'une de nos huit écritures.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1219,12 +1229,13 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Grosse chaîne à maillons avec fermoir T (toggle), grande médaille cœur lisse + petit cœur pavé de strass.
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
-- Poids : environ 18 g. Étanche : résiste à l'eau et ne ternit pas.`,
+- Poids : environ 18 g.`,
     usage: `Personnalisation & Entretien
 - La grande médaille cœur se grave au laser sur ses deux faces : prénom, date ou petit message (20 caractères maximum par face pour rester lisible).
 - Chaque face gravée est une option à 3 € (recto, verso, ou les deux) ; sans gravure, le cœur reste lisse et poli.
 - Choisissez votre écriture parmi nos huit polices.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1242,7 +1253,8 @@ Un souci à la réception ?
 - La plaque en acier se grave au laser : prénom, initiales, date (15 caractères maximum pour rester lisible).
 - La gravure est une option à 3 € ; sans elle, la plaque reste lisse.
 - Choisissez votre écriture parmi nos huit polices.
-- Entretien : le cordon se nettoie à l'eau tiède avec un peu de savon doux, puis séchage à l'air libre. Évitez l'eau de Javel et les produits abrasifs.`,
+- Retirez-le pour la piscine, la mer et le sport, et mettez votre parfum avant de le porter.
+- Entretien : essuyez la plaque avec un chiffon doux et sec. Si le cordon est sale, lavez-le à la main à l'eau tiède avec un peu de savon doux, puis laissez-le sécher à l'air libre.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1255,12 +1267,13 @@ Un souci à la réception ?
 - Médaillon rond monté sur pivot dans un anneau : il tourne pour découvrir l'une ou l'autre face.
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~12 g.
-- Finitions : doré, or rose ou argenté. Étanche : résiste à l'eau et ne ternit pas.`,
+- Finitions : doré, or rose ou argenté.`,
     usage: `Personnalisation & Entretien
 - Deux faces gravables au laser : la face avant et la face arrière (20 caractères maximum chacune pour rester lisible).
 - Chaque face gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver, l'autre reste lisse et polie.
 - Prénom, date, initiales ou petit message, dans l'une de nos huit écritures.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1277,7 +1290,8 @@ Un souci à la réception ?
 - La plaque acier se grave au laser : prénom, date ou courte phrase (20 caractères maximum pour un rendu net).
 - La gravure est une option à 3 € ; sans elle, la plaque reste lisse et polie.
 - Choisissez votre écriture parmi nos huit polices.
-- Entretien : essuyez la plaque avec un chiffon doux ; évitez de tremper le bracelet et n'utilisez pas de produits abrasifs.`,
+- Évitez l'eau : retirez-le pour la douche, la baignade et le sport, et mettez votre parfum avant de le porter.
+- Entretien : essuyez la plaque avec un chiffon doux et sec. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1292,12 +1306,13 @@ Un souci à la réception ?
 - Chaîne : 24 cm de hauteur portée, soit un tour de cou d'environ 48 cm (la pastille tombe juste sous la base du cou).
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
 - Finitions : doré, or rose ou argenté. Poids du bijou ~5 g.
-- Étanche : résiste à l'eau et ne ternit pas.`,
+- Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
 - Gravure recto-verso : la pastille se grave au recto, au verso, ou sur les deux faces (18 caractères maximum par face pour rester lisible).
 - Chaque face gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver.
 - Prénom, initiale, date ou petit mot, dans l'une de nos huit écritures.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1309,12 +1324,13 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Pendentif cœur plat et lisse sur chaîne fine maille câble, fermoir mousqueton.
 - Matière : acier au titane. Finitions doré, or rose ou argenté.
-- Poids : environ 18 g. Résiste à l'eau et ne ternit pas.`,
+- Poids : environ 18 g.`,
     usage: `Personnalisation & Entretien
 - Gravure recto-verso : le cœur se grave au recto, au verso, ou sur les deux faces (20 caractères maximum par face pour rester lisible).
 - Chaque face gravée ajoute 3 € : vous ne payez que ce que vous faites réellement graver.
 - Prénom, date, initiales ou courte phrase, dans l'une de nos huit écritures.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1327,12 +1343,13 @@ Un souci à la réception ?
 - Rang de perles d'acier polies, petite pastille ronde à graver, chaîne coulissante à deux billes.
 - Taille réglable de 16 à 23 cm : convient à tous les poignets.
 - Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
-- Deux finitions : doré ou argenté. Poids ~12 g. Étanche, ne ternit pas.`,
+- Deux finitions : doré ou argenté. Poids ~12 g.`,
     usage: `Personnalisation & Entretien
 - La pastille (environ 1 cm) se grave au laser : prénom court, initiales ou date (12 caractères maximum).
 - La gravure est une option à 3 € ; sans elle, la pastille reste lisse et polie.
 - Choisissez votre écriture parmi nos huit polices.
-- Entretien : essuyez avec un chiffon doux ; évitez parfums et produits abrasifs directement sur le bijou.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Sans gravure : échange possible sous 14 jours, bijou non porté.
@@ -1348,7 +1365,8 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Sur chaque face : un texte, une photo gravée, ou rien — vous combinez librement.
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
-- Entretien : chiffon doux ; l'acier 316L ne ternit pas en usage normal.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1362,8 +1380,8 @@ Un souci à la réception ?
 - Symbole d'un lien unique, à partager à deux.`,
     usage: `Personnalisation & Entretien
 - Gravez chaque pièce (prénoms, date, petit mot).
-- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
-- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).
@@ -1377,8 +1395,8 @@ Un souci à la réception ?
 - Finitions : argenté, doré, noir, or rose, arc-en-ciel.`,
     usage: `Personnalisation & Entretien
 - Répartissez vos textes sur les 4 faces de la barre.
-- Compatible douche et transpiration ; évitez parfums et crèmes en contact direct.
-- Entretien : essuyez avec un chiffon doux après un port prolongé.`,
+- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
+- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, soigneusement protégé.
 - Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).

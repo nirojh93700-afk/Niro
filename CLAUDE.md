@@ -41,6 +41,21 @@
   d'écrire un texte d'entretien, se demander si la phrase a un sens pour CETTE matière. Audit du 09/10 : seuls les 9 puzzles
   avaient la phrase (écrite par moi le jour même) ; « étanche » sur 8 bijoux et « plongée / baignade » sur le collier Enveloppe
   sont aussi à corriger (sur son mot).
+  ✅ **CORRIGÉ ET EN LIGNE LE 09/10/2026 SOIR (« Corrige », après recherche sur les grands sites : Swatch, Hermès, Chanel,
+  Fossil, Olivia Burton pour l'acier ; guides plaqué or ; Longines / Suunto pour le cuir et le silicone ; guides bois)**.
+  Textes TYPES à réutiliser pour tout nouveau produit :
+  · **bijou acier / doré / plaqué** : « Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine,
+    la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées. » + « Entretien : essuyez-le avec un
+    chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il
+    ne se raye pas. » ⛔ Jamais « étanche », jamais « ne ternit pas » sur un bijou doré ou plaqué, jamais « douche / baignade
+    compatibles » ;
+  · **cuir / aspect cuir** : « Évitez l'eau : retirez-le pour la douche, la baignade et le sport… s'il a été mouillé, laissez-le
+    sécher à l'air libre, loin d'un radiateur » ; **cordon textile** : lavable à la main, eau tiède + savon doux ; **silicone** :
+    ne craint pas l'eau, rincer après piscine / mer ;
+  · **bois** (puzzles, déco) : « un coup de chiffon sec suffit » / « ne pas immerger » ; **verres** et **couverts inox** : seuls
+    à pouvoir citer le lave-vaisselle.
+  Corrigé partout : fiches (`productInfo.js`), descriptions (`products.js`), encadré « Conseils d'entretien » des bijoux
+  (`ProductDetail.jsx`), FAQ, guide « cadeaux homme » (régénéré).
 
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des

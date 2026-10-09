@@ -2153,7 +2153,7 @@ export default function ProductDetail({ product }) {
               </details>
               <details>
                 <summary>🧼 Conseils d'entretien</summary>
-                <div className="info-body">Évitez l'eau de Javel, le parfum et les produits ménagers. Rangez votre bijou à l'abri de l'humidité pour qu'il garde son éclat.</div>
+                <div className="info-body">Mettez parfum et crème avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport. Essuyez-le avec un chiffon doux et sec, et rangez-le à part dans sa pochette, à l'abri de l'humidité.</div>
               </details>
             </div>
           )}

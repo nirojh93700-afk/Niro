@@ -32,11 +32,11 @@ export const FAQ = [
   },
   {
     q: "Les bijoux sont-ils hypoallergéniques ?",
-    a: "Oui : nos bijoux sont en acier inoxydable 316L (qualité chirurgicale), sans nickel, adapté aux peaux sensibles. Ils ne noircissent pas et résistent à l'eau du quotidien.",
+    a: "Oui : nos bijoux sont en acier inoxydable 316L (qualité chirurgicale), sans nickel, adapté aux peaux sensibles. Ils ne noircissent pas la peau et supportent la transpiration du quotidien.",
   },
   {
     q: "Comment entretenir ma gravure ?",
-    a: "Essuyez votre bijou avec un chiffon doux après un port prolongé, et évitez le contact direct avec parfums et crèmes. La gravure laser est définitive : elle ne s'efface pas.",
+    a: "Mettez parfum et crème avant votre bijou, et retirez-le pour la douche, la piscine, la mer et le sport. Essuyez-le avec un chiffon doux et sec, puis rangez-le à part dans sa pochette pour qu'il ne se raye pas. La gravure laser est définitive : elle ne s'efface pas.",
   },
   {
     q: "Puis-je commander pour un mariage avec une date proche ?",

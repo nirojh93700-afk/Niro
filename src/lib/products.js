@@ -1252,7 +1252,7 @@ export const products = [
     ],
     variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 27.90 }],
     descriptionHtml: `<p>Bracelet femme délicat en <strong>acier inoxydable doré</strong>, à personnaliser par gravure.</p>
-<ul><li>Acier inoxydable, ne ternit pas</li><li>Gravure fine au laser</li></ul>`,
+<ul><li>Acier inoxydable hypoallergénique</li><li>Gravure fine au laser</li></ul>`,
   },
   {
     slug: "bracelet-empreinte-pied-bebe",
@@ -1371,7 +1371,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, couleur argent</li>
-<li><strong>Finition :</strong> brillante, résistante à l'eau et ne ternit pas</li>
+<li><strong>Finition :</strong> brillante</li>
 <li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
 </ul>`,
   },
@@ -1396,7 +1396,7 @@ export const products = [
     descriptionHtml: `<p>Un bracelet <strong>à gros maillons</strong> (maille trombone) en acier inoxydable doré : une pièce tendance et lumineuse, qui habille le poignet aussi bien seule qu'accumulée.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, doré, résistant à l'eau et ne ternit pas</li>
+<li><strong>Matière :</strong> acier inoxydable 304, doré</li>
 <li><strong>Maille :</strong> gros maillons ovales texturés (trombone)</li>
 <li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
 </ul>`,
@@ -1424,7 +1424,7 @@ export const products = [
     descriptionHtml: `<p>Un bijou tendre et délicat : un petit <strong>ange gardien</strong> posé sur une <strong>chaîne fine</strong> en acier inoxydable. Un joli cadeau porte-bonheur (naissance, communion, anniversaire, entre amies).</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
+<li><strong>Matière :</strong> acier inoxydable</li>
 <li><strong>Finitions :</strong> doré ou argenté</li>
 <li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
 </ul>`,
@@ -1474,7 +1474,7 @@ export const products = [
 <p>En option, faites <strong>graver un prénom, une date ou un petit message</strong> sur le cœur — au recto, au verso, ou sur les deux faces — pour un cadeau unique (Saint-Valentin, anniversaire, fête des Mères).</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable, résistant à l'eau et ne ternit pas</li>
+<li><strong>Matière :</strong> acier inoxydable</li>
 <li><strong>Finitions :</strong> doré, or rose, argenté</li>
 <li><strong>Fermoir :</strong> T-bar (OT), facile à mettre</li>
 <li><strong>Gravure :</strong> laser, sur la médaille cœur — recto et/ou verso, 3 € par face gravée</li>
@@ -1563,7 +1563,7 @@ export const products = [
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD)</li>
 <li><strong>Pierres :</strong> zircons (pavé + pierre centrale)</li>
-<li><strong>Finition :</strong> résistante à l'eau, ne ternit pas</li>
+<li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
 <li><strong>Fermoir :</strong> mousqueton</li>
 </ul>`,
   },
@@ -1590,7 +1590,7 @@ export const products = [
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD)</li>
 <li><strong>Perle :</strong> perle nacrée</li>
-<li><strong>Finition :</strong> résistante à l'eau, ne ternit pas</li>
+<li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
 <li><strong>Fermoir :</strong> mousqueton</li>
 </ul>`,
   },
@@ -1634,7 +1634,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD), zircons</li>
-<li><strong>Finition :</strong> doré brillant, résistant à l'eau et ne ternit pas</li>
+<li><strong>Finition :</strong> doré brillant</li>
 <li><strong>Chaîne :</strong> maille fine, longueur ajustable</li>
 <li><strong>Gravure en option :</strong> prénom, initiales ou date gravés au laser sur le côté du cœur (choisir « Avec gravure »)</li>
 </ul>`,
@@ -1683,7 +1683,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, zircons</li>
-<li><strong>Finitions :</strong> doré, or rose et argenté (finition PVD) — résiste à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté (finition PVD)</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Se porte aussi bien par une femme que par un homme</strong></li>
 <li><strong>Gravure en option :</strong> au laser sur le cœur lisse, au recto et/ou au verso — 3 € par face gravée</li>
@@ -1727,7 +1727,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, placage électrolytique</li>
-<li><strong>Finitions :</strong> doré, or rose et argenté — résiste à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Poids du pendentif :</strong> environ 10 g</li>
 <li><strong>Trois zones gravables :</strong> le cœur et les deux plaques — <strong>3 € par zone gravée</strong>, vous ne payez que ce que vous faites graver</li>
@@ -1769,7 +1769,7 @@ export const products = [
     descriptionHtml: `<p><strong>Trois cœurs ouverts</strong> qui se glissent l'un dans l'autre sur une fine chaîne dorée. Chacun peut porter un <strong>prénom gravé</strong> : les trois enfants, le couple et l'enfant, trois sœurs — trois personnes réunies sur un même bijou.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, doré — résiste à l'eau et ne ternit pas</li>
+<li><strong>Matière :</strong> acier inoxydable 304, doré</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Poids du pendentif :</strong> environ 10 g</li>
 <li><strong>Trois cœurs gravables :</strong> <strong>3 € par cœur gravé</strong>, vous ne payez que ce que vous faites graver</li>
@@ -1810,7 +1810,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
-<li><strong>Finition :</strong> étanche — résiste à l'eau et ne ternit pas</li>
+<li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
 <li><strong>Poids :</strong> environ 18 g, une vraie chaîne qui se sent au poignet</li>
 <li><strong>Fermoir :</strong> T (toggle), simple à ouvrir et fermer d'une main</li>
 <li><strong>Gravure en option :</strong> prénom, date ou petit message au laser sur le grand cœur — recto et/ou verso, 3 € par face gravée</li>
@@ -1901,7 +1901,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
-<li><strong>Finitions :</strong> doré, or rose et argenté — étanche, résiste à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Poids du pendentif :</strong> environ 12 g</li>
 <li><strong>Deux faces gravables :</strong> <strong>3 € par face</strong>, vous ne payez que ce que vous faites graver</li>
@@ -1989,7 +1989,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (revêtement PVD)</li>
-<li><strong>Finitions :</strong> doré, or rose et argenté — résiste à l'eau et ne ternit pas</li>
+<li><strong>Finitions :</strong> doré, or rose et argenté</li>
 <li><strong>Chaîne :</strong> maille câble fine en acier inoxydable 304</li>
 <li><strong>Poids :</strong> environ 5 g — léger, discret, se superpose bien avec d'autres chaînes</li>
 <li><strong>Gravure recto-verso :</strong> <strong>3 € par face</strong>, vous ne payez que ce que vous faites graver</li>
@@ -2031,7 +2031,7 @@ export const products = [
     descriptionHtml: `<p>Un <strong>cœur plat et lisse</strong> sur une chaîne fine — la forme la plus simple pour dire quelque chose. Sa surface polie se grave <strong>des deux côtés</strong> : un prénom devant, une date derrière, ou un petit mot qu'on garde pour soi.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier au titane, résistant à l'eau et ne ternit pas</li>
+<li><strong>Matière :</strong> acier au titane</li>
 <li><strong>Finitions :</strong> doré, or rose et argenté</li>
 <li><strong>Chaîne :</strong> maille câble, fermoir mousqueton</li>
 <li><strong>Poids :</strong> environ 18 g</li>
@@ -2076,7 +2076,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (revêtement PVD)</li>
-<li><strong>Deux finitions :</strong> doré et argenté — étanche, résiste à l'eau et ne ternit pas</li>
+<li><strong>Deux finitions :</strong> doré et argenté</li>
 <li><strong>Taille réglable</strong> de 16 à 23 cm par chaîne coulissante</li>
 <li><strong>Poids :</strong> environ 12 g</li>
 <li><strong>Gravure en option (+3 €) :</strong> prénom court, initiales ou date au laser sur la pastille</li>
