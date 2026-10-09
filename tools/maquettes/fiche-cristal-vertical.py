@@ -111,34 +111,22 @@ CSS = r'''
 .mxf .field{margin-bottom:16px}
 .mxf .field label{font-size:.92rem;color:var(--ink)}
 .mxf .field label span[style]{color:var(--muted)!important}
-.mxf .variant-swatches{gap:8px}
-.mxf .variant-swatch{border:0;background:var(--sand);border-radius:var(--r2);padding:11px 12px;box-shadow:none;min-width:0;flex:1 1 44%}
-.mxf .variant-swatch:hover{background:var(--sand2)}
-.mxf .variant-swatch.active{background:var(--ink);color:var(--cream);box-shadow:none}
-.mxf .variant-swatch .vs-sub{font-size:.74rem;color:var(--muted);text-align:center}
-.mxf .variant-swatch.active .vs-sub{color:#cbbf9e}
-.mxf .variant-swatch .vs-now{color:var(--gold-t)}
-.mxf .variant-swatch.active .vs-now{color:var(--gold-l)}
+.mxf .crystal-sizes{grid-template-columns:1fr 1fr}
+.mxf .crystal-sizes .variant-swatch{padding:11px 12px}
+.mxf .crystal-sizes .vs-price{position:static;display:block;margin-top:4px}
 .mxf .field select,.mxf .field input{border:1.5px solid var(--sand2);border-radius:var(--r2);background:#fff;padding:12px 14px}
 .mxf .field select:focus,.mxf .field input:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.18)}
-.mxf .photo-dropzone{border:1.5px dashed var(--gold);background:var(--sand);border-radius:var(--r2);color:var(--ink);font-weight:600;padding:16px;text-align:center;display:block;cursor:pointer}
-.mxf .photo-dropzone:hover{background:var(--sand2)}
-.mxf .perso-hint,.mxf .photo-check-note{color:var(--muted);font-size:.82rem;line-height:1.5}
+.mxf .photo-dropzone{border:1.5px dashed var(--sand2);background:#fff;border-radius:var(--r2);color:var(--ink);font-weight:600;padding:16px;text-align:center;display:block;cursor:pointer}
+.mxf .photo-dropzone:hover{border-color:var(--gold)}
+.mxf .perso-hint,.mxf .photo-check-note{background:none;border:0;padding:0;margin:8px 0 14px;color:var(--muted);font-size:.78rem;line-height:1.5}
 .mxf .perso-hint-img{border-radius:var(--r2)}
 .mxf .engrave-preview .ep-label{color:var(--muted);font-size:.8rem}
 .mxf .engrave-preview .ep-plate{border-radius:var(--r2)}
-.mxf .pd-totbox{background:var(--sand);border:0;border-radius:var(--r2);padding:13px 16px}
-.mxf .pd-totbox .val{font-family:var(--font-display),Georgia,serif;font-size:1.35rem;color:var(--gold-t)}
 .mxf .pd-nfois{color:var(--muted);font-size:.84rem}
-.mxf .qty-stepper{border:1.5px solid var(--sand2);border-radius:999px;overflow:hidden;background:#fff}
-.mxf .qty-stepper button{border:0;background:none;width:40px;height:44px;font-size:1.1rem;cursor:pointer}
-.mxf .btn-gold{border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:0;box-shadow:0 10px 24px rgba(169,137,53,.35);min-height:48px;font-weight:700}
 .mxf .fav-ligne{color:var(--muted)}
 .mxf .trust-cards{gap:8px}
 .mxf .tcard{border:0;background:var(--sand);border-radius:var(--r2)}
 .mxf .tcard b{color:var(--ink)}.mxf .tcard small{color:var(--muted)}
-.mxf .pd-perso{background:#fff;border:1.5px solid var(--sand2);border-radius:var(--r2)}
-.mxf .pd-perso b{color:var(--gold-t)}
 .mxf .product-desc{color:var(--ink)}
 .mxf .product-desc h3{font-family:var(--font-display),Georgia,serif;font-weight:600}
 .mxf .crystal-guide-section{background:var(--sand);border-radius:var(--r);padding:18px 16px 22px;margin:22px 0 10px}

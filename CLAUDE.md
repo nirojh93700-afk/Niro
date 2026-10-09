@@ -2799,9 +2799,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   personnalisée, description, guide des tailles, 3 accordéons, « Commandez en toute confiance », « Vous aimerez aussi ») ; seule
   la vidéo est remplacée par son image d'attente (pas de vidéo dans une maquette) ; les `/_next/image?url=` sont ramenés au fichier.
 - **Habillage** (surcouche CSS `.mxf`, classes du site inchangées) : galerie arrondie 20 px sur fond sable, vignettes 12 px
-  cadre or, **fiche = panneau blanc arrondi 28 px** (titre Playfair, prix en or Playfair, tailles en PAVÉS SABLE / encre quand
-  choisie, champs arrondis 14 px, zone photo sable à pointillés or, total en pavé sable, bouton or en pilule, réassurances en
-  pavés sable, guide des tailles en pavé sable, accordéons en cartes), bloc confiance en ÉCRIN encre & or. Petit JS de maquette :
+  cadre or, **fiche = panneau blanc arrondi 28 px** (titre Playfair, prix en or Playfair, champs arrondis 14 px, réassurances en
+  pavés sable, guide des tailles en pavé sable, accordéons en cartes), bloc confiance en ÉCRIN encre & or.
+  🔴 **v2 (09/10 soir, colère du gérant : « pourquoi t'as changé encore la maquette ? … tout doit être identique »)** : la v1 avait
+  des tailles en pavés sable/encre, un total sable, un bouton pilule, des encadrés d'aide colorés — RIEN de tout ça n'est sur
+  `cristaux-graves`. Corrigé en reprenant EXACTEMENT les règles du panneau de cristaux-graves : tailles = style du site
+  (`.crystal-sizes`, nom en bleu du site, prix EN OR SOUS le nom, `position:static`, cadre or quand choisie, 2 par ligne) ;
+  total, quantité, bouton, « Gravé à la commande » = style du site (pas de surcouche) ; textes d'aide = texte simple sans cadre
+  (`.cg-hint`). ⛔ **Règle : une maquette de fiche reprend les règles de `cristaux-graves.py` telles quelles, jamais une
+  variante « améliorée » — tout le site doit être en harmonie.** Petit JS de maquette :
   tailles, socle, texte, quantité → total (Grand + socle + texte × 2 = 249,60 €), vignettes et flèches de galerie.
 - Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, images chargées. **Le site n'est pas touché.** Au « applique » :
   cette surcouche devient le style des fiches (ProductDetail), à étendre aux autres fiches s'il le dit (« pour les autres »).
