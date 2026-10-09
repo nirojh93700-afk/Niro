@@ -2734,6 +2734,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   sous la constellation (prénom en écriture anglaise, date · heure, ville, comme ses exemples). ⚠️ Les 9 figures manquantes
   (Bélier, Taureau, Cancer, Vierge, Balance, Scorpion, Capricorne, Verseau, Poissons) : constellation seule en attendant ses
   images. Testé 390/1280 : 0 débordement, 0 erreur JS, 20 vérifications (groupes, « plus », filtre, Lion → bloc, perso, total).
+  · **v9 (gérant : « il y avait les textes aussi en bas, faut que tu le montres »)** : chaque carte zodiaque porte, sous la
+    constellation, les textes d'EXEMPLE de ses photos (« Luna Vance » en écriture anglaise · « 24 nov. 2022 · 19:27 » · « Paris »,
+    `.cg-zex`) ; dans le panneau, l'exemple reste affiché jusqu'à ce que le client coche l'option et tape les siens (alors
+    `#zperso` le remplace). ⚠️ Dans l'aperçu de la maquette, Great Vibes n'est pas chargée par la capture de /cristaux → le prénom
+    sort en Playfair ; sur le site, la classe `fnt-great-vibes` donne l'écriture anglaise. Il a dit qu'il enverra les autres
+    figures (« je te donne les autres trucs aussi »).
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

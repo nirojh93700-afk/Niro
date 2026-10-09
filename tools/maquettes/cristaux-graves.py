@@ -228,7 +228,7 @@ def tuile_zodiaque(idx, z):
     k, nom, dates, pts, segs = z
     fig = f'<img class="cg-zfig" src="{ZFIG[k]}" alt="">' if k in ZFIG else ""
     return f'''<button type="button" class="cg-tile cg-dtile cg-ztile" data-i="{idx}" data-grp="zodiaque" aria-pressed="false">
-      <span class="cg-img cg-xtal"><span class="cg-bloc">{fig}{constellation(pts, segs)}<span class="cg-zname">{nom}</span></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
+      <span class="cg-img cg-xtal"><span class="cg-bloc cg-zbloc">{fig}{constellation(pts, segs)}<span class="cg-zname">{nom}</span><span class="cg-zperso cg-zex" aria-hidden="true"><b class="fnt-great-vibes">Luna Vance</b><small>24 nov. 2022 · 19:27</small><small>Paris</small></span></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
       <span class="cg-meta"><span class="cg-tag">Signe du zodiaque</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span><span class="cg-ph">{dates}</span></span>
     </button>'''
 
@@ -576,6 +576,17 @@ CSS = r'''
 '''
 
 CSS += r'''
+/* zodiaque : place pour le nom en haut et les textes d'exemple en bas (comme les photos du gérant) */
+.cg-zbloc .cg-const{inset:12% 3% 27% 3%;width:94%;height:61%}
+.cg-zbloc .cg-zfig{inset:13% 8% 28% 8%!important;width:84%!important;height:59%!important}
+.cg-zbloc .cg-zname{top:4%}
+.cg-zex{bottom:4%}
+.cg-zex[hidden]{display:none}
+.cg-tile .cg-zex b{font-size:.78rem;line-height:1.1}
+.cg-tile .cg-zex small{font-size:.42rem;letter-spacing:.02em}
+.cg-bloc-xl .cg-zex b,.cg-bloc-xl #zpn{font-size:clamp(1.1rem,3vw,1.7rem)}
+.cg-bloc-xl .cg-zex small{font-size:.68rem}
+
 /* ---- 09/10 soir : trois pavés, une grille, « Afficher plus », zodiaque */
 .cg-grps{display:flex;gap:8px;margin-top:16px}
 .cg-grp{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;background:var(--sand);color:var(--ink);border-radius:var(--r2);padding:12px 10px;min-height:48px;font:inherit;font-size:.92rem;font-weight:600;cursor:pointer}
@@ -694,7 +705,7 @@ JS = r'''
     tiles.forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
     var img=t.querySelector('img'),src=img?img.src:'',g=$('grand'),b=$('bloc');
     $('stage').classList.toggle('is-d',!!m.d);
-    if(m.d){g.hidden=true;b.hidden=false;var bl=t.querySelector('.cg-bloc');$('blocin').innerHTML=bl?bl.innerHTML:'';b.classList.toggle('fmt-h',st.fmt==='h');}
+    if(m.d){g.hidden=true;b.hidden=false;var bl=t.querySelector('.cg-bloc');$('blocin').innerHTML=bl?bl.innerHTML:'';b.classList.toggle('cg-zbloc',!!m.z);b.classList.toggle('fmt-h',st.fmt==='h');}
     else{b.hidden=true;g.hidden=false;g.src=src;g.alt='Cristal gravé : '+m.nom;g.style.animation='none';void g.offsetWidth;g.style.animation='';}
     $('vide').hidden=true;
     $('t-pan').textContent=m.z?'Signe du '+m.nom:m.nom;$('pdesc').textContent=m.phrase;
@@ -726,7 +737,7 @@ JS = r'''
     var unit=t.prix+(st.socle?t.socle:0)+(avecTxt?__TXT__:0);
     var ok=st.i>=0&&!!st.fmt&&(!st.txt||avecTxt);
     var pv=$('txtpv');pv.hidden=!(avecTxt&&st.i>=0&&!zod);pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
-    var zp=$('zperso');zp.hidden=!(zod&&st.txt);$('zpn').textContent=st.zp;$('zpd').textContent=[st.zd,st.zh].filter(Boolean).join(' · ');$('zpv').textContent=st.zv;
+    var zp=$('zperso');zp.hidden=!(zod&&st.txt);var ex=document.querySelector('#blocin .cg-zex');if(ex)ex.hidden=!!(zod&&st.txt);$('zpn').textContent=st.zp;$('zpd').textContent=[st.zd,st.zh].filter(Boolean).join(' · ');$('zpv').textContent=st.zv;
     $('total').textContent=ok?eur(unit*st.q):'—';
     var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle, un dessin ou votre signe.':!st.fmt?'Il manque le format : vertical ou horizontal.':zod?'Écrivez au moins le prénom, la date ou la ville, ou retirez l\'option.':'Écrivez le texte à graver, ou retirez l\'option texte.';
     var bar=$('barre');bar.hidden=st.i<0;if(st.i>=0){$('barprix').textContent=t.nom+' · '+eur(unit)}
