@@ -2710,6 +2710,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   ailes ciselées » ressemble à la Fée Clochette (Disney) · le colibri en couleur est le même dessin que le noir.
 - ✅ **Prix = ceux des cristaux photo** (gérant 07/10 : « il faut que ça soit comme pour les photos ») ; tout modèle
   se grave en vertical OU horizontal, au choix du client.
+- ✅ **HABILLAGE « NOUVEAU SITE » LE 09/10/2026 SOIR** (gérant : « est-ce qu'elle est adaptée par rapport au nouveau site ? » →
+  « Adapte par rapport au nouveau site et tu me montres la maquette ») : même contenu (16 modèles, 15 dessins, texte +5 €,
+  format au choix, socle, sur mesure), habillage repris de `DESIGN.md` (Mélange) — écrin encre & or en ouverture et pour le
+  sur mesure (plus de halo crème ni de ligne en capitales), filtres en pavés sable (encre quand choisi), cartes claires
+  arrondies à 20 px avec famille + nom + prix SOUS la photo (coche or en haut à droite), panneau blanc arrondi à 28 px ;
+  en-tête = capture du site avec le NOUVEAU menu (univers). Générateur `cristaux-graves.py` (bloc `CSS += …` « Mélange »
+  en fin de CSS, `FAM_LABEL`), artifact republié (même adresse). Testée Chromium 390/1280 : 0 débordement, 0 erreur JS,
+  parcours joué (filtre, modèle, format, Grand + socle = 119,80 €, dessin). **En attente de son avis ; rien en ligne.**
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

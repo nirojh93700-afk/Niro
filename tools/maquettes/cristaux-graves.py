@@ -11,6 +11,9 @@ copié), on intègre ses 2 feuilles de style et ses polices, et on remplace seul
 Les blocs de la fiche (tailles cristal, total, quantité, bouton) reprennent les classes du site.
 
 Usage : python3 tools/maquettes/cristaux-graves.py <capture /cristaux.html>
+Habillage « Mélange » depuis le 09/10/2026 soir (gérant : « adapte par rapport au nouveau site ») : écrin encre et or en
+ouverture et pour le sur mesure, pavés sable pour les filtres, cartes claires arrondies à 20 px avec l'étiquette et le
+nom SOUS la photo, panneau arrondi à 28 px, plus de ligne en capitales au-dessus des titres. Contenu inchangé.
 Sortie : docs/maquettes/cristaux-graves.html (+ .fragment.html pour l'artifact).
 Rien n'est touché dans le site.
 """
@@ -82,6 +85,7 @@ DESSINS = [
 FAMILLES = [("tous", "Tous les modèles"), ("amour", "Amour"), ("animaux", "Animaux"), ("noel", "Noël"),
             ("zen", "Zen & spirituel"), ("legendes", "Légendes"), ("voyage", "Voyage")]
 FMT_LABEL = {"v": "Vertical", "h": "Horizontal", "c": "Cube"}
+FAM_LABEL = dict(FAMILLES)
 
 # Tailles = celles des blocs du site (products.js : cristal-photo-3d-vertical / -horizontal).
 TAILLES = [
@@ -171,10 +175,8 @@ def ic(n, cls="cg-ic"):
 def tuile(idx, m):
     k, nom, fam, fmt, phrase = m
     return f'''<button type="button" class="cg-tile" data-i="{idx}" data-fam="{fam}" aria-pressed="false">
-      <span class="cg-img"><img src="{IMG[k]}" alt="Cristal gravé : {nom}" loading="lazy"></span>
-      <span class="cg-price">dès 39,90 €</span>
-      <span class="cg-ok" aria-hidden="true">{ic("check")}</span>
-      <span class="cg-lab"><b>{nom}</b><span class="cg-ph">{phrase}</span></span>
+      <span class="cg-img"><img src="{IMG[k]}" alt="Cristal gravé : {nom}" loading="lazy"><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
+      <span class="cg-meta"><span class="cg-tag">{FAM_LABEL.get(fam, "Modèle gravé")}</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span><span class="cg-ph">{phrase}</span></span>
     </button>'''
 
 
@@ -187,10 +189,8 @@ TILES = "\n".join(tuile(i, m) for i, m in enumerate(MODELES)) + f'''
 def tuile_dessin(idx, d):
     k, nom, fam = d
     return f'''<button type="button" class="cg-tile cg-dtile" data-i="{idx}" data-fam="{fam}" aria-pressed="false">
-      <span class="cg-img cg-xtal"><span class="cg-bloc"><img src="{DIMG[k]}" alt="Dessin à graver : {nom}" loading="lazy"></span></span>
-      <span class="cg-price">dès 39,90 €</span>
-      <span class="cg-ok" aria-hidden="true">{ic("check")}</span>
-      <span class="cg-lab"><b>{nom}</b><span class="cg-ph">Dessin gravé en 3D</span></span>
+      <span class="cg-img cg-xtal"><span class="cg-bloc"><img src="{DIMG[k]}" alt="Dessin à graver : {nom}" loading="lazy"></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
+      <span class="cg-meta"><span class="cg-tag">Dessin gravé en 3D</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span></span>
     </button>'''
 
 
@@ -213,9 +213,8 @@ POLICES = "".join(f'<button type="button" class="cg-font fnt-{k}{" on" if k == "
 PLACES = "".join(f'<button type="button" class="cg-chip{" on" if k == "bas" else ""}" data-pos="{k}" aria-pressed="{"true" if k == "bas" else "false"}">{lab}</button>' for k, lab in (("bas", "En bas"), ("haut", "En haut"), ("gauche", "À gauche"), ("droite", "À droite")))
 
 MAIN = f'''<main class="cg">
-<section class="cg-intro">
+<section class="cg-intro cg-ecrin">
   <div class="container">
-    <p class="cg-k">Niv Création · Cristal gravé au laser</p>
     <h1>Des cristaux déjà gravés, <em>prêts à offrir</em></h1>
     <p class="cg-lede">Choisissez un modèle parmi nos créations : il est gravé en 3D au cœur d'un cristal optique K9,
       dans notre atelier en France. Vous choisissez simplement la taille, et le socle lumineux si vous le souhaitez.</p>
@@ -317,7 +316,6 @@ MAIN = f'''<main class="cg">
   <div class="container">
     <div class="cg-sur-top">
       <div>
-        <p class="cg-k">Cristal 3D sur mesure</p>
         <h2 id="t-sur">Gravez <em>ce que vous voulez</em> dans le cristal</h2>
         <p class="cg-lede">Une photo, votre animal, un dessin, un logo, un objet qui compte… Envoyez l'image de votre choix :
           on la sculpte en 3D au cœur du cristal, pour une pièce unique.</p>
@@ -522,6 +520,67 @@ CSS = r'''
 }
 @media (max-width:480px){.cg-lab{padding:26px 8px 9px}.cg-lab b{font-size:.86rem;margin:0}.cg-ph{display:none}.cg-trust{justify-content:flex-start;max-width:280px}}
 @media (prefers-reduced-motion:reduce){.cg *,.cg *::before{animation:none!important;transition:none!important}}
+'''
+
+CSS += r'''
+/* ---- habillage « Mélange » (nouveau site, 09/10/2026) : jetons de DESIGN.md */
+.cg{--cream:#fbf7ee;--paper:#fdfaf3;--sand:#f3e8d3;--sand2:#eadbbf;--ink:#1a1206;--ink2:#241a0c;--muted:#6b5f4b;--gold:#c9a24b;--gold-d:#a98935;--gold-l:#e2c67e;--gold-t:#7c6120;--r:20px;--r2:14px;--r3:28px;--sh:0 14px 36px rgba(26,18,6,.10);--cg-gold-t:var(--gold-t);--cg-ring:0 0 0 0 transparent;--cg-shadow:var(--sh);--ink-soft:var(--muted);--line:var(--sand2)}
+.cg-k{display:none}
+.cg h1 em,.cg h2 em{font-style:italic;font-weight:500;color:var(--gold-t)}
+.cg-intro.cg-ecrin{text-align:left;background:radial-gradient(60% 90% at 85% 0%,rgba(201,162,75,.30),transparent 60%),var(--ink2);color:#fff;padding:clamp(40px,7vw,80px) 0 clamp(34px,5vw,56px)}
+.cg-ecrin h1{color:#fff;font-size:clamp(2.1rem,5.4vw,3.6rem);line-height:1.06}
+.cg-ecrin h1 em{color:var(--gold-l)}
+.cg-ecrin .cg-lede{color:#d9ccb0;margin:16px 0 0}
+.cg-ecrin .cg-trust{justify-content:flex-start;margin-top:26px;gap:10px 26px}
+.cg-ecrin .cg-trust li{color:var(--gold-l)}.cg-ecrin .cg-trust b{color:#fff}.cg-ecrin .cg-trust span{color:#b8a98a}
+.cg-shop{padding-top:clamp(26px,4vw,40px)}
+.cg-head p{color:var(--muted)}
+.cg-chips{gap:8px;padding-top:14px}
+.cg-chip{border:0;background:var(--sand);color:var(--ink);border-radius:var(--r2);padding:11px 14px;min-height:44px;font-weight:600}
+.cg-chip:hover{background:var(--sand2)}
+.cg-chip.on{background:var(--ink);color:var(--cream)}
+.cg-n{background:rgba(26,18,6,.08);color:var(--muted)}
+.cg-chip.on .cg-n{background:rgba(255,255,255,.14);color:var(--gold-l)}
+.cg-grid{gap:20px 14px;margin-top:16px}
+.cg-tile{display:flex;flex-direction:column;gap:10px;background:none;box-shadow:none;border-radius:0;overflow:visible;text-align:left}
+.cg-tile:hover{transform:none;box-shadow:none}
+.cg-tile .cg-img{border-radius:var(--r);overflow:hidden;background:var(--sand);transition:box-shadow .2s}
+.cg-tile:hover .cg-img img{transform:scale(1.04)}
+.cg-meta{display:flex;flex-direction:column;gap:2px;padding:0 2px}
+.cg-tag{font-size:.76rem;font-weight:600;color:var(--gold-t)}
+.cg-nom{font-weight:600;font-size:.92rem;line-height:1.3;color:var(--ink)}
+.cg-price{position:static;background:none;border:0;padding:0;font-family:var(--font-display),Georgia,serif;font-weight:400;font-size:1rem;color:var(--gold-t)}
+.cg-ph{font-size:.78rem;color:var(--muted);line-height:1.35}
+.cg-tile.on{box-shadow:none}
+.cg-tile.on .cg-img{box-shadow:0 0 0 3px var(--gold)}
+.cg-tile.on .cg-img img{filter:none}
+.cg-ok{top:10px;right:10px;left:auto;bottom:auto;margin:0;width:36px;height:36px;transform:scale(.6);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.cg-tile.on .cg-ok{transform:scale(1)}
+.cg-own{border-radius:var(--r);background:#fff;box-shadow:var(--sh)}
+.cg-own:hover{box-shadow:var(--sh),0 0 0 2px var(--gold)}
+.cg-own-ic{background:var(--sand);box-shadow:none;color:var(--gold-d)}
+.cg-panel{border-radius:var(--r3);background:#fff;box-shadow:var(--sh);padding:18px 20px 20px}
+.cg-stage{border-radius:var(--r)}
+.cg-socle,.cg-inp,.cg-font{border-color:var(--sand2);border-radius:var(--r2)}
+.cg-socle img,.cg-txt-ic{border-radius:10px}
+.cg-txt{background:var(--sand);border-color:var(--sand2);border-radius:var(--r2)}
+.cg-bar{border-radius:var(--r);background:rgba(36,26,12,.96)}
+.cg-sur{background:radial-gradient(70% 90% at 12% 8%,rgba(201,162,75,.26),transparent 60%),var(--ink2);border-top:0;color:#fff}
+.cg-sur h2,.cg-sur h3{color:#fff}.cg-sur h2 em{color:var(--gold-l)}
+.cg-sur .cg-lede,.cg-steps p{color:#d9ccb0}
+.cg-tags li{background:rgba(255,255,255,.06);border:1px solid rgba(226,198,126,.45);color:#fff}
+.cg-tags .cg-ic{color:var(--gold-l)}
+.cg-mosaic{transform:none}
+.cg-mosaic img{border-radius:var(--r);box-shadow:0 0 0 1px rgba(226,198,126,.55),0 18px 40px rgba(0,0,0,.4)}
+.cg-sn{box-shadow:0 0 0 5px var(--ink2)}
+.cg-steps::before{background:linear-gradient(90deg,var(--gold-l),rgba(226,198,126,.12))}
+.cg-fcard{border-radius:var(--r);background:#fff;box-shadow:none}
+.cg-fcard:hover{box-shadow:0 0 0 2px var(--gold)}
+.cg-fcard b,.cg-fcard small{color:var(--ink)}.cg-fcard small{color:var(--muted)}
+.cg-note{background:rgba(255,255,255,.06);border-color:rgba(226,198,126,.4);color:#d9ccb0}
+.cg-note b{color:#fff}.cg-note .cg-ic{color:var(--gold-l)}
+@media (max-width:860px){.cg-steps::before{background:linear-gradient(180deg,var(--gold-l),rgba(226,198,126,.12))}}
+@media (max-width:480px){.cg-ecrin .cg-trust{max-width:none}}
 '''
 
 DATA = json.dumps([{"k": k, "nom": n, "fmt": f, "phrase": p} for k, n, _, f, p in MODELES]
