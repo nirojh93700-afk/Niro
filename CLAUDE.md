@@ -2740,6 +2740,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     `#zperso` le remplace). ⚠️ Dans l'aperçu de la maquette, Great Vibes n'est pas chargée par la capture de /cristaux → le prénom
     sort en Playfair ; sur le site, la classe `fnt-great-vibes` donne l'écriture anglaise. Il a dit qu'il enverra les autres
     figures (« je te donne les autres trucs aussi »).
+  · **v10 (09/10 soir, il a envoyé 8 figures de plus : Cancer, Scorpion, Balance, Capricorne, Vierge, Bélier, Taureau, Poissons
+    + 8 rendus « lampe » d'exemple)** : tout est dans `assets/cristaux-graves/zodiaque/` (`<signe>.png` original, `fig-<signe>.webp`
+    découpe blanche, `<signe>-lampe-exemple.png`). **11 figures sur 12 — il manque le VERSEAU** (constellation schématique en
+    attendant). Cadrage des découpes = (560,230,1460,1045) pour ne pas attraper les textes du bas de ses images. Ses figures
+    portent DÉJÀ leur constellation → le générateur ne trace sa constellation SVG que pour un signe SANS figure (sinon
+    double tracé). `ZFIG` lit automatiquement tout `fig-*.webp` présent.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

@@ -103,7 +103,7 @@ ZODIAQUE = [
     ("verseau", "Verseau", "20 janvier – 18 février", [(20,30),(32,38),(44,30),(56,38),(50,18),(50,56),(60,70),(48,84),(16,50)], [(0,1),(1,2),(2,3),(2,4),(3,5),(5,6),(6,7),(0,8)]),
     ("poissons", "Poissons", "19 février – 20 mars", [(70,80),(56,66),(44,52),(34,40),(24,28),(18,16),(78,62),(82,46),(84,30),(90,24),(86,16),(78,18),(76,26)], [(0,1),(1,2),(2,3),(3,4),(4,5),(0,6),(6,7),(7,8),(8,9),(9,10),(10,11),(11,12),(12,8)]),
 ]
-ZFIG = {k: raw_uri(os.path.join(ASSETS, "zodiaque", f"fig-{k}.webp")) for k in ("lion", "sagittaire", "gemeaux")}
+ZFIG = {z[0]: raw_uri(os.path.join(ASSETS, "zodiaque", f"fig-{z[0]}.webp")) for z in ZODIAQUE if os.path.exists(os.path.join(ASSETS, "zodiaque", f"fig-{z[0]}.webp"))}
 
 def constellation(pts, segs):
     import random
@@ -226,9 +226,10 @@ def tuile_dessin(idx, d):
 DTILES = "\n".join(tuile_dessin(len(MODELES) + i, d) for i, d in enumerate(DESSINS))
 def tuile_zodiaque(idx, z):
     k, nom, dates, pts, segs = z
-    fig = f'<img class="cg-zfig" src="{ZFIG[k]}" alt="">' if k in ZFIG else ""
+    # La figure du gérant porte DÉJÀ sa constellation : on ne trace la nôtre (schématique) que pour les signes sans figure.
+    fig = f'<img class="cg-zfig" src="{ZFIG[k]}" alt="">' if k in ZFIG else constellation(pts, segs)
     return f'''<button type="button" class="cg-tile cg-dtile cg-ztile" data-i="{idx}" data-grp="zodiaque" aria-pressed="false">
-      <span class="cg-img cg-xtal"><span class="cg-bloc cg-zbloc">{fig}{constellation(pts, segs)}<span class="cg-zname">{nom}</span><span class="cg-zperso cg-zex" aria-hidden="true"><b class="fnt-great-vibes">Luna Vance</b><small>24 nov. 2022 · 19:27</small><small>Paris</small></span></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
+      <span class="cg-img cg-xtal"><span class="cg-bloc cg-zbloc">{fig}<span class="cg-zname">{nom}</span><span class="cg-zperso cg-zex" aria-hidden="true"><b class="fnt-great-vibes">Luna Vance</b><small>24 nov. 2022 · 19:27</small><small>Paris</small></span></span><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
       <span class="cg-meta"><span class="cg-tag">Signe du zodiaque</span><b class="cg-nom">{nom}</b><span class="cg-price">dès 39,90 €</span><span class="cg-ph">{dates}</span></span>
     </button>'''
 
