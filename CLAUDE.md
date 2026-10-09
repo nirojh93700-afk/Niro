@@ -1026,7 +1026,21 @@ ne descend jamais sous zéro.
   un déploiement : `curl -s https://api.github.com/repos/nirojh93700-afk/Niro/commits/<sha>/check-runs`
   (`conclusion` success/failure). En cas d'échec, relancer avec le commit suivant.
 
-## 🖨️ FICHE ATELIER IMPRIMÉE — UNE SEULE FEUILLE A4 (24/09/2026)
+## 🖨️ FICHE ATELIER IMPRIMÉE — UNE SEULE FEUILLE A4 (24/09/2026) — ✅ RÉGLÉE POUR REMPLIR LA PAGE LE 09/10/2026
+> **09/10/2026, gérant : « pour imprimer les fiches, il faut que tu adaptes [au] A4 sur l'imprimante, ça fait trop petit là,
+> c'est pas adapté ».** Constat sur le test : une commande simple n'occupait que 73 % de la feuille en 9,2 pt, et une commande
+> à 3 visuels sortait réduite à 60 % (5,5 pt). Corrigé (`impression.js`, `FichePapier.jsx`, CSS `.fp-*`) :
+> · **le texte grandit quand la page a de la place** : facteur `--fp-k` (1,35 → 1,06 essayés, le plus grand qui tient) ;
+>   TOUTES les tailles en pt de la feuille sont écrites `calc(X pt * var(--fp-k, 1))` — ne jamais remettre un `pt` nu ;
+> · **3 visuels et plus** (lots « chacun différent », plusieurs articles gravés) : les visuels passent SOUS le texte, côte à
+>   côte (`.fp-visuels`, grille `auto-fill` dont la cellule suit `--fp-vis`), au lieu d'une colonne de droite qui s'allongeait ;
+> · **plancher relevé de 0,58 à 0,75** : en dessous, la fiche prend une deuxième feuille plutôt qu'un texte illisible
+>   (c'est dit au gérant ; s'il préfère une seule feuille coûte que coûte, remettre `PLANCHER = 0.58`) ;
+> · la recherche d'échelle est un **balayage monotone** (échelles 1 → 0,75 par crans de 0,03, à chaque cran la plus grande
+>   taille de photo qui tient) : l'ancienne itération « point fixe » oscillait dès que la hauteur faisait des sauts (une
+>   rangée de visuels en plus ou en moins). `tient()` mesure à la vraie largeur de mise en page `L / échelle`.
+> · `npm run test-impression` : 5 feuilles (1 article → texte ×1,35 · 2 articles → 0,79 · 3 articles et 4 verres en grille →
+>   0,75 sur 2 pages · devis → ×1,35), les cas au plancher ont droit à 2 pages. Rendu réel non capturé (Firestore).
 > Demande du gérant : « dans les commandes, imprimer la fiche… il faut que ça soit concentré pour
 > une feuille A4 et correctement, comme un truc professionnel — corrige pour TOUTES les commandes,
 > là j'ai imprimé je suis en train de gratter » + « il faut que ça soit bien détaillé avec tous les

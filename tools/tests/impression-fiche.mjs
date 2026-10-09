@@ -58,55 +58,53 @@ const GRAVER = (n) => `<div class="fp-graver-item"><h3>À graver — Article ${n
     `<tr><td>${f}</td><td>Une valeur à graver</td></tr>`).join("")}</tbody></table></div>`;
 const VISUEL = (n) => `<div class="fp-visuel"><div style="width:300px;height:400px;background:#ddd"></div><div class="fp-legende">Article ${n}</div><div class="fp-reglages">${REGLAGES}</div></div>`;
 
-function feuille(nbArticles, lourd) {
+function feuille(nbArticles, lourd, grille = false) {
   const enc = lourd ? Array.from({ length: 4 }, (_, i) =>
     `<div class="fp-encadre${i < 2 ? " alerte" : ""}"><strong>Encadré ${i + 1}</strong><div class="fp-pre">Deux lignes de texte libre écrites par la cliente, assez longues pour occuper la largeur de la colonne de gauche.</div></div>`).join("") : "";
   const arts = Array.from({ length: nbArticles }, (_, i) =>
     `<tr><td><strong>2× Article ${i + 1}</strong><div class="fp-detail">Lot de 2 — Personnalisation — Emballage</div></td><td class="fp-prix">49,90 €</td></tr>`).join("");
   return `<div class="zone-impression">
 <header class="fp-tete"><div><h2>Fiche atelier — à graver à l'identique</h2><p class="fp-sous">24/09/2026 · Niv Création</p></div><div class="fp-ref"><b>#TEST1234</b>À préparer · 129,80 €</div></header>
-<div class="fp-corps"><div class="fp-col">${enc}
+<div class="fp-corps${grille ? " seul" : ""}"><div class="fp-col">${enc}
 <section class="fp-bloc fp-graver">${Array.from({ length: nbArticles }, (_, i) => GRAVER(i + 1)).join("")}</section>
 <section class="fp-bloc"><h3>Articles</h3><table class="fp-table fp-articles"><tbody>${arts}</tbody></table></section>
 <section class="fp-bloc"><h3>Client &amp; livraison</h3><table class="fp-table"><tbody>${
   [["Cliente", "Prénom NOM"], ["Téléphone", "06 12 34 56 78"], ["E-mail", "cliente@example.com"], ["Livrer à", "14 rue des Acacias, 95100 Argenteuil, FR"], ["Mode", "Mondial Relay — TABAC LE BALTO, Argenteuil"]]
     .map(([k, v]) => `<tr><td class="fp-cle">${k}</td><td>${v}</td></tr>`).join("")}</tbody></table></section>
 <section class="fp-bloc"><h3>Détail du prix</h3><table class="fp-table fp-argent"><tbody><tr><td class="fp-cle">Sous-total</td><td>114,90 €</td></tr><tr class="fp-total"><td class="fp-cle">Total payé</td><td>129,80 €</td></tr></tbody></table></section>
-</div><div class="fp-col">${Array.from({ length: nbArticles }, (_, i) => VISUEL(i + 1)).join("")}${
-  lourd ? '<div class="fp-photos"><figure style="width:320px"><div style="width:100%;height:260px;background:#ccc"></div><figcaption>photo.jpg</figcaption></figure></div>' : '<div class="fp-photos"></div>'}</div></div>
+</div>${grille ? "" : `<div class="fp-col">${Array.from({ length: nbArticles }, (_, i) => VISUEL(i + 1)).join("")}${
+  lourd ? '<div class="fp-photos"><figure style="width:320px"><div style="width:100%;height:260px;background:#ccc"></div><figcaption>photo.jpg</figcaption></figure></div>' : '<div class="fp-photos"></div>'}</div>`}</div>
+${grille ? `<div class="fp-visuels">${Array.from({ length: nbArticles }, (_, i) => VISUEL(i + 1)).join("")}</div><div class="fp-photos"><figure style="width:320px"><div style="width:100%;height:260px;background:#ccc"></div><figcaption>photo.jpg</figcaption></figure></div>` : ""}
 <footer class="fp-pied"><span>Niv Création — fiche interne.</span><span>#TEST1234</span></footer></div>`;
 }
 
 // Copie fidèle de l'algorithme de src/lib/impression.js, joué dans la page.
 const ALGO = `(() => {
-  const L = ${L}, H = ${H}, PLANCHER = 0.58, CONFORT = 0.75, VISUELS = [1, 0.85, 0.72, 0.6, 0.45];
+  const L = ${L}, H = ${H}, PLANCHER = 0.75, ECHELLES = [1, 0.97, 0.94, 0.91, 0.88, 0.85, 0.82, 0.79, 0.76, 0.75],
+    VISUELS = [1, 0.85, 0.72, 0.6, 0.45], TEXTES = [1.35, 1.28, 1.2, 1.12, 1.06];
   const el = document.querySelector(".zone-impression");
   const hauteurA = (w) => { const a = el.getAttribute("style") || "";
     el.setAttribute("style", a + ";width:" + Math.round(w) + "px;max-width:none;zoom:1;");
     const h = el.scrollHeight; el.setAttribute("style", a); return h; };
-  const essai = (v) => { el.style.setProperty("--fp-vis", String(v));
-    const h1 = hauteurA(L); if (!h1 || h1 <= H) return 1;
-    let e = H / h1;
-    for (let i = 0; i < 3; i++) { const h = hauteurA(L / e); if (!h) break;
-      const s = H / h; if (Math.abs(s - e) < 0.004) { e = s; break; } e = s; }
-    return Math.min(1, Math.round(e * 0.99 * 1000) / 1000); };
+  const tient = ({ vis = 1, echelle = 1, texte = 1 }) => { el.style.setProperty("--fp-vis", String(vis)); el.style.setProperty("--fp-k", String(texte));
+    const h = hauteurA(L / echelle); return Boolean(h) && h * echelle <= H * 0.99; };
+  const poser = (r) => { el.style.setProperty("--fp-vis", String(r.visuels)); el.style.setProperty("--fp-k", String(r.texte)); el.style.setProperty("--impr-echelle", String(r.echelle)); return r; };
   document.body.classList.add("impression-mesure");
-  let best = { echelle: 0, visuels: 1 };
-  for (const v of VISUELS) { const e = essai(v);
-    if (e > best.echelle) best = { echelle: e, visuels: v };
-    if (e >= CONFORT) { best = { echelle: e, visuels: v }; break; } }
   const mesurable = el.scrollHeight;
+  let r = null;
+  for (const texte of TEXTES) { if (tient({ texte })) { r = poser({ echelle: 1, visuels: 1, texte }); break; } }
+  if (!r) for (const echelle of ECHELLES) { for (const vis of VISUELS) { if (tient({ vis, echelle })) { r = poser({ echelle, visuels: vis, texte: 1 }); break; } } if (r) break; }
+  if (!r) r = poser({ echelle: PLANCHER, visuels: 0.45, texte: 1 });
   document.body.classList.remove("impression-mesure");
-  el.style.setProperty("--fp-vis", String(best.visuels));
-  el.style.setProperty("--impr-echelle", String(Math.max(PLANCHER, best.echelle || 1)));
-  return { echelle: Math.max(PLANCHER, best.echelle || 1), visuels: best.visuels, mesurable };
+  return { ...r, mesurable };
 })()`;
 
 const CAS = [
-  { nom: "1 article", n: 1, lourd: false },
+  { nom: "1 article", n: 1, lourd: false, attendu: { texte: 1.2 } },          // page courte : le texte grandit
   { nom: "2 articles", n: 2, lourd: true },
-  { nom: "3 articles", n: 3, lourd: true },
-  { nom: "devis", n: 0, lourd: false },
+  { nom: "3 articles", n: 3, lourd: true, grille: true, attendu: { echelle: 0.75 } },   // visuels sous le texte (FichePapier dès 3)
+  { nom: "4 verres", n: 4, lourd: true, grille: true, attendu: { echelle: 0.75 } },     // lot « chacun différent » × 2
+  { nom: "devis", n: 0, lourd: false, attendu: { texte: 1.35 } },
 ];
 
 const css = cssDuSite();
@@ -119,7 +117,7 @@ for (const cas of CAS) {
   fs.writeFileSync(f, `<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <style>body{margin:0;font-family:Arial,Helvetica,sans-serif}</style><style>${css}</style></head>
 <body class="impression-fiche"><main><div class="ash">écran admin</div></main>
-${feuille(cas.n, cas.lourd)}</body></html>`);
+${feuille(cas.n, cas.lourd, cas.grille)}</body></html>`);
 
   const page = await nav.newPage({ viewport: { width: L, height: H } });
   const erreurs = [];
@@ -156,15 +154,18 @@ ${feuille(cas.n, cas.lourd)}</body></html>`);
   if (!r.mesurable) soucis.push("feuille NON MESURABLE (mise à l'échelle faussée)");
   if (vu.display === "none") soucis.push("MASQUÉE à l'impression");
   if (encre < 2) soucis.push(`FEUILLE BLANCHE (${encre} % d'encre)`);
-  if (pages !== 1) soucis.push(`${pages} pages au lieu d'une`);
+  if (pages !== 1 && !(r.echelle <= 0.75 && pages === 2)) soucis.push(`${pages} pages au lieu d'une`);
   if (erreurs.length) soucis.push("erreur JS : " + erreurs[0]);
+  // « trop petit » (09/10/2026) : une fiche courte doit grandir, une fiche à 3-4 visuels rester lisible.
+  if (cas.attendu?.texte && r.texte < cas.attendu.texte) soucis.push(`texte ${r.texte} < ${cas.attendu.texte} attendu`);
+  if (cas.attendu?.echelle && r.echelle < cas.attendu.echelle) soucis.push(`échelle ${r.echelle} < ${cas.attendu.echelle} attendu (trop petit)`);
   if (soucis.length) ko++;
 
-  console.log(`${soucis.length ? "✗ ÉCHEC" : "✓ OK   "} ${cas.nom.padEnd(11)} visuels ${r.visuels} · échelle ${r.echelle} · ${vu.hauteur}px · encre ${encre} % · ${pages} page${pages > 1 ? "s" : ""}${soucis.length ? "  → " + soucis.join(" · ") : ""}`);
+  console.log(`${soucis.length ? "✗ ÉCHEC" : "✓ OK   "} ${cas.nom.padEnd(11)} texte ×${r.texte} · visuels ${r.visuels} · échelle ${r.echelle} · ${vu.hauteur}px · encre ${encre} % · ${pages} page${pages > 1 ? "s" : ""}${soucis.length ? "  → " + soucis.join(" · ") : ""}`);
   await page.close();
 }
 
 await nav.close();
 fs.rmSync(dossier, { recursive: true, force: true });
-console.log(ko ? `\n${ko} cas en défaut.` : "\nLes 4 fiches s'impriment sur UNE page, avec de l'encre dessus.");
+console.log(ko ? `\n${ko} cas en défaut.` : "\nLes 5 fiches s'impriment sur UNE page, lisibles, avec de l'encre dessus.");
 process.exit(ko ? 1 : 0);

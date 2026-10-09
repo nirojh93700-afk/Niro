@@ -3127,7 +3127,12 @@ body.impression-mesure .zone-impression {
 .zone-impression {
   background: #fff; color: #000; margin: 0; padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 9.2pt; line-height: 1.32;
+  /* --fp-k : facteur de TEXTE calculé par impression.js. Une fiche courte
+  remplit la page avec un texte plus grand (jusqu'à 1,35×) au lieu de laisser
+  un tiers de feuille vide en 9 pt (« trop petit, pas adapté au A4 », gérant
+  09/10/2026). Toutes les tailles en pt ci-dessous passent par ce facteur. */
+  --fp-k: 1;
+  font-size: calc(9.2pt * var(--fp-k, 1)); line-height: 1.32;
   /* Reduction calculee (src/lib/impression.js) pour tenir sur UNE page.
   ON UTILISE `zoom`, PAS `transform: scale()` : `transform` ne change pas la
   hauteur de MISE EN PAGE, donc le navigateur continuait de compter deux
@@ -3151,10 +3156,10 @@ body.impression-mesure .zone-impression {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 10mm;
   border-bottom: 1.6pt solid #c9a24b; padding-bottom: 5pt; margin-bottom: 7pt;
 }
-.zone-impression .fp-tete h2 { margin: 0; font-family: Georgia, serif; font-size: 15pt; }
-.zone-impression .fp-tete .fp-sous { margin: 2pt 0 0; font-size: 9pt; color: #333; }
-.zone-impression .fp-ref { text-align: right; font-size: 8.4pt; color: #444; white-space: nowrap; }
-.zone-impression .fp-ref b { display: block; font-size: 13pt; color: #000; letter-spacing: .5pt; }
+.zone-impression .fp-tete h2 { margin: 0; font-family: Georgia, serif; font-size: calc(15pt * var(--fp-k, 1)); }
+.zone-impression .fp-tete .fp-sous { margin: 2pt 0 0; font-size: calc(9pt * var(--fp-k, 1)); color: #333; }
+.zone-impression .fp-ref { text-align: right; font-size: calc(8.4pt * var(--fp-k, 1)); color: #444; white-space: nowrap; }
+.zone-impression .fp-ref b { display: block; font-size: calc(13pt * var(--fp-k, 1)); color: #000; letter-spacing: .5pt; }
 
 /* --- deux colonnes : c'est ce qui fait tenir la fiche sur une page ---
 Colonne de droite figee a 300px : c'est la largeur EXACTE du visuel
@@ -3179,7 +3184,7 @@ garder une bande blanche de 300 px a cote du texte. */
 /* --- blocs --- */
 .zone-impression .fp-bloc { margin: 0 0 6pt; break-inside: avoid; }
 .zone-impression .fp-bloc > h3 {
-  margin: 0 0 3pt; font-family: Georgia, serif; font-size: 10pt;
+  margin: 0 0 3pt; font-family: Georgia, serif; font-size: calc(10pt * var(--fp-k, 1));
   border-bottom: .5pt solid #bbb; padding-bottom: 1.5pt;
 }
 .zone-impression .fp-cle { color: #555; padding-right: 6pt; vertical-align: top; white-space: nowrap; }
@@ -3191,13 +3196,13 @@ garder une bande blanche de 300 px a cote du texte. */
 /* --- articles --- */
 .zone-impression .fp-articles td { border-bottom: .4pt solid #e2e2e2; padding: 2.4pt 0; }
 .zone-impression .fp-articles tr:last-child td { border-bottom: 0; }
-.zone-impression .fp-detail { color: #555; font-size: 8pt; }
+.zone-impression .fp-detail { color: #555; font-size: calc(8pt * var(--fp-k, 1)); }
 .zone-impression .fp-prix { text-align: right; white-space: nowrap; font-weight: 700; padding-left: 6pt; }
 
 /* --- prix --- */
 .zone-impression .fp-argent td:last-child { text-align: right; white-space: nowrap; }
 .zone-impression .fp-argent .fp-total td {
-  border-top: .6pt solid #999; padding-top: 2.5pt; font-weight: 700; font-size: 10pt;
+  border-top: .6pt solid #999; padding-top: 2.5pt; font-weight: 700; font-size: calc(10pt * var(--fp-k, 1));
 }
 
 /* --- le tableau « A GRAVER » : le plus lisible de la feuille --- */
@@ -3207,7 +3212,7 @@ garder une bande blanche de 300 px a cote du texte. */
 }
 .zone-impression .fp-graver td:first-child { width: 34%; font-weight: 700; background: #f2ede1; }
 .zone-impression .fp-graver h3 {
-  margin: 0 0 3pt; font-family: Georgia, serif; font-size: 10.5pt;
+  margin: 0 0 3pt; font-family: Georgia, serif; font-size: calc(10.5pt * var(--fp-k, 1));
   border-bottom: .5pt solid #bbb; padding-bottom: 1.5pt;
 }
 .zone-impression .fp-graver-item { break-inside: avoid; }
@@ -3216,7 +3221,7 @@ garder une bande blanche de 300 px a cote du texte. */
 .zone-impression .fp-dessin img {
   width: 16mm; height: 16mm; object-fit: contain; border: .5pt solid #ccc; background: #fff;
 }
-.zone-impression .fp-dessin span { font-size: 8pt; color: #555; }
+.zone-impression .fp-dessin span { font-size: calc(8pt * var(--fp-k, 1)); color: #555; }
 
 /* --- encadres (demande cliente, gravure, alerte) --- */
 .zone-impression .fp-encadre {
@@ -3227,6 +3232,19 @@ garder une bande blanche de 300 px a cote du texte. */
 
 /* --- colonne de droite : le visuel + les reglages de chaque article --- */
 .zone-impression .fp-visuel { break-inside: avoid; margin: 0 0 7pt; }
+/* 3 visuels et plus (lots « chacun différent », plusieurs articles gravés) :
+la colonne de droite s'allongeait et toute la feuille était réduite à 60 %
+(« ça fait trop petit », gérant 09/10/2026). Les visuels passent alors SOUS le
+texte, côte à côte : la largeur de la page travaille au lieu de sa hauteur.
+La cellule suit la taille réduite du visuel (--fp-vis), donc le levier
+« rapetisser les photos » fait aussi entrer plus de visuels par rangée. */
+.zone-impression .fp-visuels {
+  display: grid; gap: 3mm 4mm; align-items: start; margin: 2pt 0 4pt;
+  grid-template-columns: repeat(auto-fill, minmax(calc(300px * var(--fp-vis, 1) + 2pt), 1fr));
+}
+.zone-impression .fp-visuels { break-inside: auto; }
+.zone-impression .fp-visuels .fp-visuel { margin: 0; min-width: 0; break-inside: avoid; }
+.zone-impression .fp-visuels + .fp-photos figure { width: auto !important; max-width: 90mm; }
 /* La PHOTO est reduite en bloc par `zoom` (jamais par une largeur CSS) : la
 gravure posee dessus est dimensionnee en pixels a partir des 300px de
 GlassPreview, un redimensionnement CSS la decalerait. C'est le premier levier
@@ -3237,12 +3255,12 @@ sinon ils devenaient illisibles au moment ou on en a le plus besoin. */
   border: .5pt solid #bbb; zoom: var(--fp-vis);
 }
 .zone-impression .fp-legende {
-  font-size: 8.4pt; font-weight: 700; margin: 2pt 0 2pt; line-height: 1.25;
+  font-size: calc(8.4pt * var(--fp-k, 1)); font-weight: 700; margin: 2pt 0 2pt; line-height: 1.25;
 }
 /* Les reglages viennent de FicheAtelier, stylés en ligne pour l'ecran :
 on les resserre pour le papier (!important, sinon le style en ligne gagne). */
 .zone-impression .fp-reglages > div {
-  font-size: 7.9pt !important; padding: 1pt 0 !important; gap: 4pt !important;
+  font-size: calc(7.9pt * var(--fp-k, 1)) !important; padding: 1pt 0 !important; gap: 4pt !important;
 }
 .zone-impression .fp-reglages > div > span:first-child {
   min-width: 58pt !important; color: #666 !important;
@@ -3251,13 +3269,13 @@ on les resserre pour le papier (!important, sinon le style en ligne gagne). */
 /* --- photo envoyee par la cliente : GARDEE (demande du gerant), bornee --- */
 .zone-impression .fp-photos figure { width: 100% !important; margin: 0 0 4pt !important; }
 .zone-impression .fp-photos img { max-height: 55mm; object-fit: contain; }
-.zone-impression .fp-photos figcaption { font-size: 7.4pt; color: #666; }
-.zone-impression .fp-photos > p { font-size: 7.8pt; margin: 2pt 0; }
+.zone-impression .fp-photos figcaption { font-size: calc(7.4pt * var(--fp-k, 1)); color: #666; }
+.zone-impression .fp-photos > p { font-size: calc(7.8pt * var(--fp-k, 1)); margin: 2pt 0; }
 
 /* --- pied --- */
 .zone-impression .fp-pied {
   margin-top: 6pt; padding-top: 3pt; border-top: .5pt solid #ccc;
-  font-size: 7.6pt; color: #666; display: flex; justify-content: space-between;
+  font-size: calc(7.6pt * var(--fp-k, 1)); color: #666; display: flex; justify-content: space-between;
 }
 
 .zone-impression * { break-inside: avoid; }

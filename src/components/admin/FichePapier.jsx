@@ -85,6 +85,27 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
   // La colonne de droite n'existe que s'il y a quelque chose à regarder :
   // sinon la feuille garderait une bande blanche de 300 px pour rien.
   const colonneDroite = spec.length > 0 || Boolean(order.customerEmail);
+  // Lot « chacun différent » : un visuel PAR VERRE, avec sa photo (jamais une
+  // seule image pour quatre gravures différentes).
+  const visuelsItems = spec.flatMap((item) => eclaterParVerre(item));
+  const grille = visuelsItems.length >= 3;
+  const visuels = visuelsItems.map((item, i) => (
+    <div key={i} className="fp-visuel">
+      <GlassPreview item={item} />
+      <div className="fp-legende">
+        {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+        {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
+      </div>
+      <div className="fp-reglages">
+        <ReglagesItem item={item} titre={false} />
+      </div>
+    </div>
+  ));
+  const photosEmail = order.customerEmail ? (
+    <div className="fp-photos">
+      <PhotosEmail email={order.customerEmail} adminKey={adminKey} print />
+    </div>
+  ) : null;
 
   return createPortal(
     <div className="zone-impression">
@@ -105,7 +126,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
         </div>
       </header>
 
-      <div className={`fp-corps${colonneDroite ? "" : " seul"}`}>
+      <div className={`fp-corps${colonneDroite && !grille ? "" : " seul"}`}>
         {/* ============================ COLONNE GAUCHE ==================== */}
         <div className="fp-col">
           {/* Ce qui ne doit surtout pas être oublié passe TOUT EN HAUT. */}
@@ -226,30 +247,23 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
         </div>
 
         {/* ============================ COLONNE DROITE ==================== */}
-        {colonneDroite ? (
+        {colonneDroite && !grille ? (
           <div className="fp-col">
-            {/* Lot « chacun différent » : un visuel PAR VERRE, avec sa photo
-                (jamais une seule image pour quatre gravures différentes). */}
-            {spec.flatMap((item) => eclaterParVerre(item)).map((item, i) => (
-              <div key={i} className="fp-visuel">
-                <GlassPreview item={item} />
-                <div className="fp-legende">
-                  {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
-                  {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
-                </div>
-                <div className="fp-reglages">
-                  <ReglagesItem item={item} titre={false} />
-                </div>
-              </div>
-            ))}
-            {order.customerEmail ? (
-              <div className="fp-photos">
-                <PhotosEmail email={order.customerEmail} adminKey={adminKey} print />
-              </div>
-            ) : null}
+            {visuels}
+            {photosEmail}
           </div>
         ) : null}
       </div>
+
+      {/* 3 visuels et plus : sous le texte, côte à côte (voir .fp-visuels dans
+          globals.css). Sinon la colonne de droite s'allongeait et toute la feuille
+          était réduite à 60 % — illisible devant la machine. */}
+      {colonneDroite && grille ? (
+        <>
+          <div className="fp-visuels">{visuels}</div>
+          {photosEmail}
+        </>
+      ) : null}
 
       <footer className="fp-pied">
         <span>Niv Création — fiche interne, à graver à l&apos;identique.</span>
