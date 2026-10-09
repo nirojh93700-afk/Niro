@@ -289,7 +289,7 @@ MAIN = f'''<main class="cg">
     <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
       <div class="cg-stage" id="stage">
         <div class="cg-empty" id="vide">{ic("gem","cg-ic cg-ic-xl")}<p><b>Votre cristal apparaîtra ici</b>Choisissez un modèle dans la galerie.</p></div>
-        <img id="grand" alt="" hidden><span class="cg-bloc cg-bloc-xl" id="bloc" hidden><span class="cg-bloc-in" id="blocin"><img id="dimg" alt=""></span><span class="cg-zperso" id="zperso" hidden><b id="zpn"></b><small id="zpd"></small><small id="zpv"></small></span></span><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
+        <img id="grand" alt="" hidden><span class="cg-bloc cg-bloc-xl" id="bloc" hidden><span class="cg-bloc-in" id="blocin"><img id="dimg" alt=""></span><span class="cg-zperso" id="zperso" hidden><b id="zpn" class="fnt-great-vibes"></b><small id="zpd"></small><small id="zpv"></small></span></span><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
       </div>
       <h3 id="t-pan" class="cg-pname">Votre cristal</h3>
       <p class="cg-pdesc" id="pdesc">Aucun modèle choisi pour l'instant.</p>
