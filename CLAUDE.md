@@ -2832,6 +2832,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   en bois (Savane) est en TÊTE des dernières sorties, étiquette « Bientôt », sans lien ni cœur** (`cartesPuzzles()` dans
   `page.jsx`, puis les 5 dernières créations par date) ; la fenêtre flottante, elle, ne montre que les produits achetables
   (`nouveautesToast`, jamais une carte « Bientôt »).
+  ⛔ **MAIS CE N'EST PAS CE QU'IL VOULAIT (09/10 soir, juste après) : « je t'ai dit deux lignes, mais ça doit être comme avant,
+  que les gens ils peuvent défiler… de la gauche vers la droite comme avant, mais les deux lignes de produits… fais-moi une
+  maquette »** → la grille 2 × 3 EN LIGNE est à remplacer par un RAIL À DEUX LIGNES qui glisse. Maquette faite le soir même :
+  `docs/maquettes/rail-deux-lignes.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/5Mcz1AKiC8VqxcsKsLe3xD,
+  générateur `tools/maquettes/rail-deux-lignes.py <capture de l'accueil>` : variante **A · les deux lignes glissent ensemble**
+  (un seul `.rail` en `grid-auto-flow:column` + `grid-template-rows:auto auto`) ou **B · chaque ligne glisse séparément**
+  (deux `.rail`) ; téléphone = 2 produits par ligne à l'écran, flèches gardées ; 10 produits (puzzle « Bientôt » en tête,
+  puis les dernières sorties par date — `dernieresSorties(R.cartes, 9)` le jour du « applique »). Testée Chromium 390/1280 :
+  0 débordement, 0 erreur JS, glissement vérifié. **En attente de son choix (A ou B) puis de son « applique »** ; d'ici là
+  l'accueil garde la grille 2 × 3 (commit `87640a7`).
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
   photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
