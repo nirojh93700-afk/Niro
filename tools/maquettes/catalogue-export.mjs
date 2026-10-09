@@ -4,7 +4,7 @@
 // `badge` « Nouveau » éteint à 30 jours comme sur le site (estRecent), occasions (occasions.js), photos.
 import { products, CATEGORIES, SUBCATEGORIES } from "../../src/lib/products.js";
 import { OCCASIONS } from "../../src/lib/occasions.js";
-import { estRecent } from "../../src/lib/productDates.js";
+import { estRecent, PRODUCT_DATES } from "../../src/lib/productDates.js";
 const out = products.filter((p) => !p.hidden).map((p) => {
   const prices = (p.variants || []).map((v) => v.price).filter((x) => typeof x === "number");
   const imgs = (p.images || []).map((i) => (typeof i === "string" ? i : i?.src || i?.url)).filter(Boolean);
@@ -15,6 +15,6 @@ const out = products.filter((p) => !p.hidden).map((p) => {
     first: typeof first === "number" ? first : (prices.length ? Math.min(...prices) : null),
     multi: new Set(prices).size > 1, perso: !!p.personalizable,
     occ: OCCASIONS.filter((o) => { try { return o.match(p); } catch { return false; } }).map((o) => o.slug),
-    tagline: p.tagline || "", local: imgs.filter((s) => s.startsWith("/produits/")), img0: imgs[0] || "" };
+    date: PRODUCT_DATES[p.slug] || "", tagline: p.tagline || "", local: imgs.filter((s) => s.startsWith("/produits/")), img0: imgs[0] || "" };
 });
 console.log(JSON.stringify({ CATEGORIES, SUBCATEGORIES, products: out }, null, 1));
