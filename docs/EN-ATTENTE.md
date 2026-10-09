@@ -194,29 +194,16 @@ En attente de SA décision :
   version avec puzzles « Bientôt » (non achetables, CE à faire). Point de retour = commit `44f2f64` (une commande pour revenir).
   Reste à lui : vérifier sur son téléphone ; dire si le coffret doit avoir une remise (non annoncée car inexistante au
   paiement) ; les puzzles passeront en vente sur son « applique le puzzle » (CE + cylindre 3,2 cm avant).
-- 🟠 **Maquette « Tout le cristal » (les 4 maquettes cristal réunies en onglets, + fiche horizontale) — 09/10 soir** :
-  https://claude.ai/artifact/LuDinR6rgPoSWDR6jn2VMX. En attente de son avis.
-- 🟠 **Maquette de la FICHE « Cristal photo 3D — Vertical » dans l'habillage du nouveau site — 09/10 soir** :
-  https://claude.ai/artifact/YcVSFHnGZtdLxaBGEergDN (`docs/maquettes/fiche-cristal-vertical.html`, version 4 = construite comme cristaux-graves, écrin texte seul, galerie du site à gauche). En attente de son avis ;
-  « si c'est bon », il demandera l'application aux autres fiches.
-- 🟠 **Maquette « Cristal photo 3D » (la page /cristaux actuelle, même contenu, habillage du nouveau site) — 09/10 soir** :
-  https://claude.ai/artifact/1J6Mr2CP4SiN3WQvTLbvGb (`docs/maquettes/cristaux-blocs.html`). En attente de son avis puis « applique ».
-- 🟠 **Maquette « Cristaux déjà gravés » réhabillée dans le style du nouveau site (09/10 soir, sa demande)** :
-  https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz (`docs/maquettes/cristaux-graves.html`). ✅ **Enregistrée telle quelle le
-  09/10 soir (version 14).** En attente de son « applique » (= construire une NOUVELLE page à part, `/cristaux` du site inchangée,
-  + remplacer l'encadré « Bientôt » de l'univers Cristal et de l'accueil) — **le prévenir juste avant la mise en ligne**.
-  v11 (09/10 soir) : trois pavés Modèles / Dessins / Zodiaque, 8 cartes + « Afficher plus », 12 signes avec leurs 12 figures,
-  option prénom / date / ville = **+2 € chacun** (tranché par lui le 09/10) ; v12 : ses 2 blocs (Gémeaux, Bouddha) dans le titre ; v13 : carte « Votre propre image ? » retirée de la grille ; v14 : section sur-mesure du bas retirée (page = modèles déjà gravés seulement).
+- ✅ **LES TROIS MAQUETTES CRISTAL EN LIGNE LE 10/10/2026 (« les trois », gérant)** : page **/cristaux-graves** (cristaux déjà
+  gravés, v14, produit `cristal-deja-grave` achetable, rangé dans l'univers Cristal à la place de l'encadré « Bientôt ») · page
+  **/cristaux** dans le nouvel habillage · **écrin** en haut des fiches cristal verticale et horizontale (fiche inchangée dessous).
+  Restent les questions sur les modèles : « Fillette au ballon » (Banksy, droits) · « I Love You » de l'ourson · licence pngtree
+  des 2 dessins de mariés · fée qui ressemble à la Fée Clochette · colibri couleur en double.
 - ✅ **« Les dernières sorties » sur deux lignes qui glissent (version B) — APPLIQUÉE le 09/10 soir** (commit `374bb1b`).
 - ✅ **Maquette « Accueil + univers », 09/10 soir, « OK fais-le »** : parcours « Trouver le bon cadeau » descendu juste avant le
   coffret enfants + phrase « Fait main en France : chaque pièce est gravée et découpée dans notre atelier » sous son titre
   (v11 / v7), puis parcours ramené à DEUX étapes sans budget (v12 / v8). Barre rayons + filtres compacte sur téléphone (v10 / v6).
   Attend maintenant son avis d'ensemble, puis « applique ».
-
-- **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
-  (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
-  « I Love You » de l'ourson · noms des 16 modèles · 15 dessins ajoutés (licence pngtree des 2 mariés, fée qui
-  ressemble à la Fée Clochette, colibri couleur en double) · son « applique ».
 
 - **Remboursement, palier du milieu** : après 24 h, retenue de **10 €** (valeur actuelle) ou **−10 %** ?
 - **Prix du gobelet 40 oz** : ✅ **47,90 € net, livraison en plus** (fixé par le gérant le 03/10/2026, maquette à jour).

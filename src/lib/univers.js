@@ -48,7 +48,7 @@ export const UNIVERS = [
   { id: "cristal", nom: "Cristal photo 3D", short: "Cristal", img: "/produits/cristal-v-femme.jpg",
     accroche: "Votre photo gravée au laser à l'intérieur d'un bloc de cristal.",
     rayons: [{ nom: "Blocs photo 3D", slugs: ["cristal-photo-3d-vertical", "cristal-photo-3d-horizontal"] },
-             { nom: "Cristaux déjà gravés", bientot: "cristaux" },
+             { nom: "Cristaux déjà gravés", slugs: ["cristal-deja-grave"] },
              { nom: "Porte-clés & USB", slugs: ["porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle", "cle-usb-cristal-3d"] }] },
   { id: "verres", nom: "Verres & Carafes", short: "Verres & Carafes", pourqui: true, img: "/produits/verre_a_whisky_exemple_face.jpg",
     accroche: "Verres à whisky, à cocktail, à vin, flûtes et carafe, gravés à la commande.",
@@ -161,7 +161,7 @@ export function rangerCatalogue(catalog) {
     if (!qui.size) for (const q of QUI_UNIVERS[uid] || []) qui.add(q);
     const prix = prixCarte(p);
     cartes.set(p.slug, {
-      slug: p.slug, name: p.name, href: `/produit/${p.slug}`, image: imageDe(p), badge: p.badge || "",
+      slug: p.slug, name: p.name, href: p.pageDediee || `/produit/${p.slug}`, image: imageDe(p), badge: p.badge || "",
       perso: !!p.personalizable, u: uid, prix: prix ? { texte: prix.texte, des: prix.des, valeur: prix.valeur } : null,
       lo: prix ? prix.lo : 0, hi: prix ? prix.hi : 0, qui: [...qui].sort(), occ, date: PRODUCT_DATES[p.slug] || "",
     });

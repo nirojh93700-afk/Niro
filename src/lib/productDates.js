@@ -9,6 +9,7 @@
 export const NOUVEAU_JOURS = 30;
 
 export const PRODUCT_DATES = {
+  "cristal-deja-grave": "2026-10-10",
   "puzzle-photo-grave": "2026-10-09",
   "puzzle-foret": "2026-10-09",
   "puzzle-savane": "2026-10-09",

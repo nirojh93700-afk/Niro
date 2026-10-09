@@ -2702,7 +2702,21 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   des fiches : en cas de conflit, CLAUDE.md gagne.
 - Dossier sans effet sur le build du site (Next ne lit pas `.claude/`).
 
-## 💎 MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — ✅ RÉ-ENREGISTRÉE TELLE QUELLE LE 09/10/2026 SOIR (« Enregistre cette maquette », VERSION 14 de l'artifact) — RIEN en ligne
+## 💎 LES TROIS MAQUETTES CRISTAL — ✅ EN LIGNE LE 10/10/2026 (gérant : « les trois »)
+- **/cristaux-graves** (`src/app/cristaux-graves/page.jsx` + `src/components/cristal/CristauxGraves.jsx`, données
+  `src/lib/cristauxGraves.js` recopiées du générateur, photos `public/produits/cristaux-graves/`) = maquette v14 à l'identique.
+  Achat = produit **`cristal-deja-grave`** (products.js, 8 variantes `cristal-grave-<v|h>-<taille>`, stock des blocs partagé,
+  `engravingPricing` : socle comme les blocs, texte +5 €, `zPrenom` / `zDate` / `zVille` +2 € chacun → prix de confiance au
+  paiement). Sa fiche `/produit/cristal-deja-grave` REDIRIGE vers la page (`pageDediee`), et les cartes des univers y pointent
+  (`href: p.pageDediee`). Rayon « Cristaux déjà gravés » de l'univers Cristal = ce produit (plus d'encadré « Bientôt »).
+- **/cristaux** : `CristalVivant.jsx` réécrit dans l'habillage de `cristaux-blocs.html` (même contenu).
+- **Fiches cristal verticale / horizontale** : `EcrinFicheCristal.jsx` au-dessus du fil d'Ariane ; la fiche dessous est INCHANGÉE.
+- **CSS** : `src/app/cristaux-graves.css` (racine `.cgg`, + écrin des fiches) et `src/app/cristaux-blocs.css` (racine `.cgb`),
+  GÉNÉRÉS par `tools/maquettes/css-cristaux.py` depuis les générateurs des maquettes (chaque sélecteur préfixé par la racine,
+  les deux maquettes ayant les mêmes noms de classes `.cg-*` avec des règles différentes). Ne pas les modifier à la main.
+- Vérifié en local 390 / 1280 : 0 débordement, 0 erreur JS, 1 h1, Grand + socle = 119,80 €, + texte = 124,80 €, Verseau +
+  prénom / date / ville + socle (Grand) = 125,80 €, panier réel, redirection de la fiche.
+### (historique) MAQUETTE « CRISTAUX DÉJÀ GRAVÉS » — RÉ-ENREGISTRÉE TELLE QUELLE LE 09/10/2026 SOIR (« Enregistre cette maquette », VERSION 14 de l'artifact) — RIEN en ligne
 > C'est CETTE version (habillage Mélange, 2 blocs dans le titre, 16 modèles + 15 dessins + 12 signes du zodiaque avec leurs
 > figures, texte +5 €, prénom / date / ville +2 € chacun, format au choix, socle, SANS carte « votre propre image » et SANS
 > section sur-mesure) à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.

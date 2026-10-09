@@ -1,10 +1,10 @@
 // Page collection « Cristal Photo 3D » — regroupe les produits cristal (crystal3d).
 // Le bandeau d'accueil « Créer mon cristal » mène ici : le client choisit sa version
 // (vertical / horizontal…), puis la taille et le prix sur la fiche.
-import Link from "next/link";
 import CristalVivant from "@/components/CristalVivant";
 import { getCatalog } from "@/lib/catalog";
 import { getRatingSummaries } from "@/lib/stock";
+import "../cristaux-blocs.css";
 
 export const dynamic = "force-dynamic";
 
@@ -47,21 +47,7 @@ export default async function CristauxPage() {
     };
   });
 
-  return (
-    <>
-      {/* MULTI-FENÊTRES : animation + les produits en fenêtres */}
-      <CristalVivant products={tiles} />
-
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="container">
-          {items.length === 0 ? (
-            <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>La collection arrive très bientôt. 💎</p>
-          ) : null}
-          <p style={{ textAlign: "center", marginTop: 10 }}>
-            <Link href="/boutique" className="link-underline">← Retour à toute la boutique</Link>
-          </p>
-        </div>
-      </section>
-    </>
-  );
+  // Habillage de la maquette « cristaux-blocs » (mise en ligne le 10/10/2026) : écrin, cartes, note et
+  // retour boutique sont dans CristalVivant ; rien d'autre sur la page.
+  return <CristalVivant products={tiles} />;
 }

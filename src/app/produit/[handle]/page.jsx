@@ -14,6 +14,9 @@ const PREVIEW_TOKEN = "niv2026";
 import { getReviews, getRatingSummaries, getSettings } from "@/lib/stock";
 import { resolveShippingConfig, letterPriceByWeight } from "@/lib/shipping";
 import RecentlyViewed from "@/components/RecentlyViewed";
+import EcrinFicheCristal, { SLUGS_ECRIN } from "@/components/cristal/EcrinFicheCristal";
+import { redirect } from "next/navigation";
+import "../../cristaux-graves.css";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +50,8 @@ export default async function ProductPage({ params, searchParams }) {
     isPreview = !!product;
   }
   if (!product) notFound();
+  // Les cristaux déjà gravés se choisissent sur leur page dédiée (modèle, format, taille, options).
+  if (product.pageDediee) redirect(product.pageDediee);
 
   // Note d'avis du produit (affichée près du prix + étoiles Google).
   try {
@@ -175,6 +180,8 @@ export default async function ProductPage({ params, searchParams }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
+      {/* Écrin des fiches cristal (maquette validée, en ligne le 10/10/2026) : la fiche en dessous est inchangée. */}
+      {SLUGS_ECRIN.includes(product.slug) ? <EcrinFicheCristal product={product} /> : null}
       {/* Fil d'Ariane visible (bon pour la cliente ET pour Google). */}
       <nav className="container" aria-label="Fil d'Ariane" style={{ fontSize: "0.82rem", color: "var(--ink-soft)", padding: "12px 0 0" }}>
         <a href="/" style={{ color: "inherit", textDecoration: "none" }}>Accueil</a>

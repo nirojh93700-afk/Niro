@@ -503,6 +503,20 @@ Un souci à la réception ?
 - Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "cristal-deja-grave": {
+    material: `Taille & Matériaux
+- Cristal optique K9, gravure 3D intérieure au laser, dans notre atelier en France.
+- Vertical ou horizontal, au choix : Petit, Moyen, Grand ou XL (mêmes tailles que nos blocs photo).
+- Socle lumineux LED multicolore en option.`,
+    usage: `Personnalisation & Entretien
+- Choisissez un modèle déjà gravé, un dessin ou votre signe du zodiaque, puis le format et la taille.
+- Texte en plus : +5 €. Zodiaque : prénom, date de naissance et ville, +2 € chacun.
+- Entretien : dépoussiérer avec un chiffon doux et sec (microfibre). Ne pas immerger, éviter les chocs : le cristal est fragile.`,
+    returns: `Expédition & Retour
+- Expédié en colis suivi, soigneusement protégé.
+- Pièce gravée à la commande : non remboursable une fois la gravure lancée (article L221-28).
+- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
+  },
   "puzzle-photo-grave": {
     material: `Taille & Matériaux
 - Plateau en bois clair : 21 × 15 cm.

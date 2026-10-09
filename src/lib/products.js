@@ -1226,6 +1226,52 @@ export const products = [
 <p>Une famille, un groupe d'amis, un couple, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },
 
+  {
+    // « Cristaux déjà gravés » (maquette validée v14, en ligne le 10/10/2026). Le client choisit sur la page
+    // dédiée /cristaux-graves (modèle, dessin ou signe du zodiaque, format, taille, texte, socle) : la fiche
+    // /produit/cristal-deja-grave y redirige (pageDediee). Ce produit porte les PRIX DE CONFIANCE du paiement.
+    slug: "cristal-deja-grave",
+    name: "Cristal déjà gravé",
+    badge: "Nouveau",
+    pageDediee: "/cristaux-graves",
+    weight: 900, pickup: false, letter: false,
+    title: "Cristaux déjà gravés — modèles, dessins et signes du zodiaque gravés en 3D",
+    category: "cristal", subcategory: "cristal", type: "Cristal gravé 3D",
+    tagline: "Un modèle déjà gravé, un dessin ou votre signe du zodiaque, au cœur d'un cristal optique K9.",
+    personalizable: true, personalizationLabel: "Modèle gravé + options",
+    personalizationFields: [
+      { key: "modele", label: "Modèle gravé", optional: true, maxLength: 80 },
+      { key: "format", type: "select", label: "Format", optional: true, options: [{ value: "Vertical", label: "Vertical" }, { value: "Horizontal", label: "Horizontal" }] },
+      { key: "texte", label: "Texte gravé en plus (+5 €)", optional: true, maxLength: 40 },
+      { key: "police", type: "font", label: "Écriture (si texte)", optional: true },
+      { key: "textePos", type: "select", label: "Place du texte", optional: true, options: [{ value: "bas", label: "En bas" }, { value: "haut", label: "En haut" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" }] },
+      { key: "zPrenom", label: "Prénom (zodiaque, +2 €)", optional: true, maxLength: 24 },
+      { key: "zDate", label: "Date et heure de naissance (zodiaque, +2 €)", optional: true, maxLength: 30 },
+      { key: "zVille", label: "Ville (zodiaque, +2 €)", optional: true, maxLength: 24 },
+      { key: "socle", type: "select", label: "Socle lumineux LED", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
+    ],
+    // Même socle et même texte que les blocs photo ; zodiaque : chaque mention écrite = +2 €.
+    engravingPricing: { flatExtras: [
+      { key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-grave-v-petit": 14.9, "cristal-grave-h-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-grave-v-petit": 300, "cristal-grave-h-petit": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-grave-v-petit": "socle-led-carre", "cristal-grave-h-petit": "socle-led-carre" } },
+      { key: "texte", amount: 5 },
+      { key: "zPrenom", amount: 2 },
+      { key: "zDate", amount: 2 },
+      { key: "zVille", amount: 2 },
+    ] },
+    images: ["/produits/cristaux-graves/bouddha.jpg", "/produits/cristaux-graves/rose.jpg", "/produits/cristaux-graves/colibri.jpg"],
+    variants: [
+      { id: "cristal-grave-v-petit", stockId: "bloc-cristal-petit", title: "Vertical · Petit — 5×5×8 cm", price: 39.9, weight: 750 },
+      { id: "cristal-grave-v-moyen", stockId: "bloc-cristal-moyen", title: "Vertical · Moyen — 5×6×10 cm", price: 59.9, weight: 1100 },
+      { id: "cristal-grave-v-grand", stockId: "bloc-cristal-grand", title: "Vertical · Grand — 6×8×12 cm", price: 99.9, weight: 1800 },
+      { id: "cristal-grave-v-xl", stockId: "bloc-cristal-xl", title: "Vertical · XL — 6×10×15 cm", price: 149.9, weight: 2800 },
+      { id: "cristal-grave-h-petit", stockId: "bloc-cristal-petit", title: "Horizontal · Petit — 8×5×5 cm", price: 39.9, weight: 750 },
+      { id: "cristal-grave-h-moyen", stockId: "bloc-cristal-moyen", title: "Horizontal · Moyen — 10×6×5 cm", price: 59.9, weight: 1100 },
+      { id: "cristal-grave-h-grand", stockId: "bloc-cristal-grand", title: "Horizontal · Grand — 12×8×6 cm", price: 99.9, weight: 1800 },
+      { id: "cristal-grave-h-xl", stockId: "bloc-cristal-xl", title: "Horizontal · XL — 15×10×6 cm", price: 149.9, weight: 2800 },
+    ],
+    descriptionHtml: `<p><strong>Des cristaux déjà gravés, prêts à offrir.</strong> Un modèle de nos créations, un dessin ou votre signe du zodiaque, gravé en 3D au cœur d'un cristal optique K9, dans notre atelier en France.</p>
+<p>Vous choisissez le format (vertical ou horizontal), la taille, un texte en plus si vous le souhaitez, et le socle lumineux en option.</p>`,
+  },
   // ===== Bracelets =====
   {
     slug: "bracelet-homme-chaine-acier",

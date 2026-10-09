@@ -20,6 +20,7 @@ export default async function sitemap() {
     "/boutique",
     "/carte-cadeau",
     "/cristaux",
+    "/cristaux-graves",
     "/naissance",
     "/offres",
     "/avis",
