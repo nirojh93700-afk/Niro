@@ -56,7 +56,8 @@ export default async function HomePage() {
   const verres = VERRES5.map(C).filter(Boolean);
   const bijoux = BIJOUX3.map(C).filter(Boolean);
   const mur = R.cartes.filter((c) => c.image);
-  const ruban = ["Gravé en France", nbAvis ? `${noteTexte}/5 sur ${nbAvis} avis` : "", "Livraison offerte dès 45 € sur les bijoux", "Paiement sécurisé"].filter(Boolean);
+  // Ruban or : sans la note d'avis (retirée à la demande du gérant, 09/10 soir).
+  const ruban = ["Gravé en France", "Livraison offerte dès 45 € sur les bijoux", "Paiement sécurisé"];
 
   return (
     <>
