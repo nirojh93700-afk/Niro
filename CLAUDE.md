@@ -2814,6 +2814,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   Livraison suivie · Emballage soigné. ⛔ **Aucun seuil de livraison offerte sur l'accueil** (ni ruban, ni phrase sous les
   bijoux — retirée aussi) : les seuils (45 € bijoux, 60 € verres) restent dans le panier, les fiches et la FAQ. Le bloc carafe
   garde « livraison offerte dès 60 € » comme sur l'ancien accueil.
+- 🪟 **FENÊTRE FLOTTANTE « NOUVEAUTÉ ✦ » — MAQUETTE FAITE LE 09/10 SOIR, EN ATTENTE DE SON CHOIX** (gérant : « t'as supprimé le
+  bandeau où les produits apparaissaient… tu peux faire en deux fenêtres, comme ça on affiche plusieurs produits, fais-moi une
+  petite maquette »). L'ancien accueil avait `NewArrivalsToast` (une carte en bas à gauche, un produit à la fois), retiré avec la
+  refonte. Maquette `docs/maquettes/fenetre-nouveautes.html` (+ `.fragment.html`), générateur
+  `tools/maquettes/fenetre-nouveautes.py <capture de l'accueil>` (vrai accueil en ligne, polices et photos intégrées) : variante
+  **A · deux fenêtres empilées** (un produit chacune, changent ensemble) ou **B · une fenêtre, deux produits côte à côte** ;
+  apparaît après 2,5 s, reste 7 s, passe aux suivants, ✕ mémorisé ; sur téléphone posée AU-DESSUS des deux boutons flottants.
+  Produits = ceux du rail « Les dernières sorties ». Testée 390/1280 : 0 débordement, 0 erreur. **Rien en ligne** : il choisit A ou B,
+  puis « applique » → remettre `NewArrivalsToast` (réécrit sur ce modèle) dans `page.jsx`.
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
   photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
