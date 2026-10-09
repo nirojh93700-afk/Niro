@@ -2758,6 +2758,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     texte sur ordinateur, sous le texte côte à côte sur téléphone, cadre doré à double filet (piste A), légende SOUS la photo
     (« Votre signe du zodiaque » / « Un modèle déjà gravé » — en bandeau par-dessus, elle cachait le nom et la date gravés).
     Vérifié 390/1280 : 0 débordement, 0 erreur JS.
+  · **v13 (09/10 soir, gérant : « enlève cette caisse, c'est plus simple, il peut pas me donner de photos dans cette partie,
+    c'est juste pour les modèles déjà gravés »)** : la carte « Votre propre image ? » (`.cg-own`) est RETIRÉE de la grille des
+    modèles. La section sur-mesure plus bas reste. Ne pas la remettre.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 

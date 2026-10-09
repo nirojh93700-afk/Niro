@@ -196,7 +196,7 @@ En attente de SA décision :
   https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz (`docs/maquettes/cristaux-graves.html`). En attente de son avis puis
   « applique » (= construire la vraie page + remplacer l'encadré « Bientôt » de l'univers Cristal et de l'accueil).
   v11 (09/10 soir) : trois pavés Modèles / Dessins / Zodiaque, 8 cartes + « Afficher plus », 12 signes avec leurs 12 figures,
-  option prénom / date / ville = **+2 € chacun** (tranché par lui le 09/10) ; v12 : ses 2 blocs (Gémeaux, Bouddha) dans le titre.
+  option prénom / date / ville = **+2 € chacun** (tranché par lui le 09/10) ; v12 : ses 2 blocs (Gémeaux, Bouddha) dans le titre ; v13 : carte « Votre propre image ? » retirée de la grille.
 - 🟠 **« Les dernières sorties » sur DEUX LIGNES QUI GLISSENT — MAQUETTE FAITE le 09/10 soir, EN ATTENTE DE SON CHOIX** :
   https://claude.ai/artifact/5Mcz1AKiC8VqxcsKsLe3xD (`docs/maquettes/rail-deux-lignes.html`, générateur
   `tools/maquettes/rail-deux-lignes.py`). A = les deux lignes glissent ensemble · B = chaque ligne glisse à part. Il dit A ou B

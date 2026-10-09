@@ -211,12 +211,9 @@ def tuile(idx, m):
     </button>'''
 
 
-TILES = "\n".join(tuile(i, m) for i, m in enumerate(MODELES)) + f'''
-<a class="cg-own" href="#sur-mesure" data-grp="modeles" data-fam="tous">
-  <span class="cg-own-ic">{ic("photo")}</span>
-  <span><b>Votre propre image ?</b>Une photo, votre animal, un dessin, un logo : on la grave en 3D, rien que pour vous.</span>
-  <em>Voir le sur-mesure {ic("arrow")}</em>
-</a>'''
+TILES = "\n".join(tuile(i, m) for i, m in enumerate(MODELES))
+# (la carte « Votre propre image ? » a été retirée de la grille le 09/10/2026 à la demande du gérant :
+#  cette partie ne sert qu'aux modèles déjà gravés ; le sur-mesure garde sa section plus bas)
 def tuile_dessin(idx, d):
     k, nom, fam = d
     return f'''<button type="button" class="cg-tile cg-dtile" data-i="{idx}" data-grp="dessins" data-fam="{fam}" aria-pressed="false">
@@ -706,12 +703,10 @@ JS = r'''
   var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
   var chips=[].slice.call(document.querySelectorAll('#familles .cg-chip'));
   var grps=[].slice.call(document.querySelectorAll('.cg-grp'));
-  var own=document.querySelector('.cg-own');
   var INTRO={dessins:"Un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix. Rien n'est choisi d'avance.",zodiaque:"Votre signe, sa constellation et sa figure gravés dans le cristal. En option : un prénom, la date et l'heure de naissance, la ville."};
   function visibles(){var n=0,shown=0;
     tiles.forEach(function(t){var ok=t.dataset.grp===st.grp&&(st.grp!=='modeles'||st.fam==='tous'||t.dataset.fam===st.fam);
       if(ok){n++;var show=st.plus||n<=PAGE;t.hidden=!show;if(show)shown++}else t.hidden=true});
-    if(own)own.hidden=st.grp!=='modeles';
     var reste=n-shown;$('plusbtn').hidden=reste<=0;$('plusn').textContent=reste;
     $('familles').hidden=st.grp!=='modeles';$('gintro').hidden=st.grp==='modeles';$('gintro').textContent=INTRO[st.grp]||'';}
   grps.forEach(function(g){g.addEventListener('click',function(){st.grp=g.dataset.grp;st.plus=false;grps.forEach(function(x){x.classList.toggle('on',x===g);x.setAttribute('aria-pressed',x===g)});visibles()})});
