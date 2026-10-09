@@ -2748,7 +2748,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     pièces (véhicules de secours 7 pièces). Si une pièce passe, soit l'agrandir, soit vendre « dès 3 ans » avec l'avertissement
     36 mois + « petits éléments (étouffement) » ;
   · la phrase « Conforme aux exigences de sécurité des jouets (CE, EN 71) » ne s'écrit QUE lorsque le marquage CE sera fait.
-  Rien reporté dans la maquette (enregistrée) : proposé au gérant le 09/10 soir, attendre son « ok ».
+  Rien reporté dans la maquette (enregistrée) : proposé au gérant le 09/10 soir, attendre son « ok ». ✅ Il a dit
+  « enregistre ça aussi » : la formulation ci-dessus est LA mention d'âge retenue pour les puzzles.
+- **« METTRE JUSTE LE PUZZLE » EN LIGNE = POSSIBLE SEUL, INDÉPENDAMMENT DE LA MAQUETTE ACCUEIL (question du gérant, 09/10 soir :
+  « si j'ai envie de mettre que le produit puzzle, t'es capable ? dis-moi avant »)**. Réponse donnée : oui. Le jour où il dit
+  « applique le puzzle » : nouvelle catégorie (nom à lui donner) + les 9 puzzles dans `products.js` (29,90 € prénom compris,
+  `letter:true`, `weight: 75`, 18,5 × 13,5 cm, mention d'âge ci-dessus, prénom 14 car. + 8 écritures, aperçu posé sur le
+  plateau comme la maquette `jeux-enfants.html`), `productInfo.js`, `productDates.js`, `packagingSeed.js`, photos dans
+  `public/produits/`, entrée de menu + boutique + sitemap/flux Google automatiques. L'accueil et les univers du site ne
+  bougent PAS (la maquette « accueil + univers » reste à part). ⚠️ Préalable : marquage CE fait, aucune pièce qui passe
+  dans le cylindre 3,2 cm. Rien ne part sans son « applique ».
 - **Questions posées au gérant** : ~~dimensions~~ (18,5 × 13,5 cm, reçues le 09/10) / épaisseur / essence du bois · ~~âge
   conseillé~~ (2 ans sous surveillance, 09/10) · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre ·
   ~~poids pour le port~~ (75 g, reçu le 09/10) · nom de la catégorie dans le menu.
