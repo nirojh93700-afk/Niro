@@ -2808,8 +2808,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   quantité, **bouton grisé tant que la photo n'est pas envoyée**, « Gravé à la commande », barre de téléphone « Choisir la
   taille » → SOUS le panneau : description, guide des tailles (pavé sable), 3 accordéons, « Commandez en toute confiance »
   (écrin), « Vous aimerez aussi » — tous LUS dans la capture de la vraie fiche. Pas de vidéo (image d'attente).
-- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, 8 cartes, Grand + socle + texte × 2 = 249,60 €, bouton grisé sans
-  photo. **Le site n'est pas touché.** Au « applique » : la fiche cristal (ProductDetail pour `crystal3d`) à refaire dans ce rendu,
+- ✅ **v4 (09/10 soir, gérant : « le haut c'est bien, mais t'enlèves les deux exemples [photos de l'écrin], tu laisses que le
+  texte ; après [la grille] portrait, enfant avec animal… t'as pas besoin, tu laisses comme actuel sur le site »)** : écrin = titre,
+  accroche, réassurances SEULS (plus de photos à droite) ; colonne de gauche = la GALERIE ACTUELLE du site (grande photo arrondie
+  + 8 vignettes + flèches, image d'attente à la place de la vidéo), plus de grille d'exemples ni de titre « Votre photo, gravée
+  en 3D » ; le panneau commence par le nom (plus de grande photo dedans : elle est dans la galerie) ; l'aperçu du texte se pose
+  sur la grande photo de la galerie. **C'est CETTE version (v4) qui est à juger.**
+- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, 8 vignettes, Grand + socle + texte × 2 = 249,60 €, bouton grisé
+  sans photo. **Le site n'est pas touché.** Au « applique » : la fiche cristal (ProductDetail pour `crystal3d`) à refaire dans ce rendu,
   puis « pour les autres » s'il le dit.
 
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne

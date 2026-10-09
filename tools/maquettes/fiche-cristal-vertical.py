@@ -115,20 +115,19 @@ def tuile(i, src, nom):
       <span class="cg-img"><img src="{uri(os.path.join(PUB, src.lstrip('/')), 640, 76)}" alt="{nom}" loading="lazy"><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
       <span class="cg-meta"><span class="cg-tag">{'Le cristal' if i >= 6 else 'Exemple gravé'}</span><b class="cg-nom">{nom}</b></span>
     </button>'''
-TILES = "\n".join(tuile(i, s, n) for i, (s, n) in enumerate(zip(VISUELS, NOMS)))
+THUMBS = "".join(f'<button type="button" class="{"active" if i == 0 else ""}" aria-label="Voir le visuel {i + 1}"><img src="{uri(os.path.join(PUB, v.lstrip("/")), 240, 72)}" alt=""></button>' for i, v in enumerate(VISUELS))
+BIGS = [uri(os.path.join(PUB, v.lstrip("/")), 900, 78) for v in VISUELS]
 SIZES = "".join(
     f'''<button type="button" class="variant-swatch{" active" if t[0] == "Petit" else ""}" data-taille="{t[0]}" aria-pressed="{"true" if t[0] == "Petit" else "false"}">
         <span class="vs-title">{t[0]}</span><span class="vs-sub">{t[1]}</span>
         <span class="vs-price"><span class="vs-now">{t[2]}</span></span></button>''' for t in TAILLES)
 POLICES = "".join(f'<button type="button" class="cg-font fnt-{k}{" on" if k == "playfair" else ""}" data-font="{k}" aria-pressed="{"true" if k == "playfair" else "false"}">{lab}</button>' for k, lab in FONTS)
 PLACES = "".join(f'<button type="button" class="cg-chip{" on" if k == "bas" else ""}" data-pos="{k}" aria-pressed="{"true" if k == "bas" else "false"}">{lab}</button>' for k, lab in (("bas", "En bas"), ("haut", "En haut"), ("gauche", "À gauche"), ("droite", "À droite")))
-HERO1 = uri(os.path.join(PUB, "produits", "cristal-v-femme.jpg"), 600, 78)
-HERO2 = uri(os.path.join(PUB, "produits", "cristal-v-couple.jpg"), 600, 78)
 GRAND0 = uri(os.path.join(PUB, POSTER.lstrip("/")), 900, 78)
 
 MAIN = f'''<main class="cg">
 <section class="cg-intro cg-ecrin">
-  <div class="container cg-ecrin-grid">
+  <div class="container">
     <div class="cg-ecrin-txt">
     <h1>{TITRE.replace(" — gravure personnalisée en France", " — <em>gravure personnalisée en France</em>")}</h1>
     <p class="cg-lede">{TAGLINE}</p>
@@ -138,26 +137,21 @@ MAIN = f'''<main class="cg">
       <li>{ic("truck")}<span><b>Livraison suivie</b>colis &amp; point relais</span></li>
     </ul>
     </div>
-    <div class="cg-ecrin-pics" aria-hidden="true">
-      <figure class="cg-epic"><img src="{HERO1}" alt="" loading="eager"><figcaption>Un portrait</figcaption></figure>
-      <figure class="cg-epic"><img src="{HERO2}" alt="" loading="eager"><figcaption>Un couple</figcaption></figure>
-    </div>
   </div>
 </section>
 
 <section class="cg-shop" id="modeles" aria-labelledby="t-mod">
   <div class="container cg-layout">
     <div class="cg-col">
-      <div class="cg-head">
-        <h2 id="t-mod">Votre photo, gravée en 3D</h2>
-        <p>Touchez un exemple pour le voir en grand, puis choisissez la taille de votre cristal.</p>
+      <div class="gallery-main gallery-contain" id="galerie"><img id="grand" src="{GRAND0}" alt="Cristal photo 3D vertical"><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span>
+        <button type="button" class="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente">‹</button>
+        <button type="button" class="gallery-arrow gallery-arrow-next" aria-label="Photo suivante">›</button>
       </div>
-      <div class="cg-grid" id="grille">{TILES}</div>
+      <div class="gallery-thumbs">{THUMBS}</div>
     </div>
 
     <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
-      <div class="cg-stage" id="stage"><img id="grand" src="{GRAND0}" alt="Cristal photo 3D vertical"><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span></div>
-      <h3 class="cg-pname" id="t-pan">Cristal Photo 3D — Vertical</h3>
+      <h3 class="cg-pname cg-pname-top" id="t-pan">Cristal Photo 3D — Vertical</h3>
       <p class="cg-pdesc" id="pdesc">{TAGLINE}</p>
 
       <div class="field">
@@ -235,6 +229,11 @@ MAIN = nettoie(MAIN)
 
 # Les blocs de la fiche repris SOUS le panneau : même habillage que le reste (rien d'autre n'est ajouté)
 CSS += r'''
+.cg .gallery-main{border-radius:var(--r);box-shadow:var(--sh);position:relative}
+.cg .gallery-main.gallery-contain{background:radial-gradient(120% 90% at 50% 18%,#fffdf8,#f0e8d8 70%,#e7dcc5)}
+.cg .gallery-main img{width:100%;height:100%;object-fit:contain}
+.cg .gallery-thumbs button{border-radius:12px}.cg .gallery-thumbs button.active{border-color:var(--gold)}
+.cg .cg-pname-top{margin-top:0!important}
 .cg-fiche{padding:0 0 clamp(40px,6vw,64px)}
 .cg-fiche-in{max-width:860px}
 .cg-fiche .product-desc h3{font-family:var(--font-display),Georgia,serif;font-weight:600}
@@ -262,12 +261,11 @@ JS = r'''
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
   var st={taille:'Petit',photo:false,txt:false,texte:'',font:'playfair',pos:'bas',socle:false,q:1};
   var $=function(id){return document.getElementById(id)};
-  var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
-  tiles.forEach(function(t){t.addEventListener('click',function(){
-    tiles.forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
-    var g=$('grand');g.src=t.querySelector('img').src;$('barimg').src=g.src;g.style.animation='none';void g.offsetWidth;g.style.animation='';
-    if(window.innerWidth<=860){$('panneau').scrollIntoView({behavior:'smooth',block:'start'})}
-  })});
+  var BIGS=__BIGS__,th=[].slice.call(document.querySelectorAll('.gallery-thumbs button')),cur=0;
+  function montre(i){cur=(i+th.length)%th.length;th.forEach(function(x,k){x.classList.toggle('active',k===cur)});$('grand').src=BIGS[cur];$('barimg').src=BIGS[cur]}
+  th.forEach(function(b,i){b.addEventListener('click',function(){montre(i)})});
+  document.querySelector('.gallery-arrow-prev').addEventListener('click',function(){montre(cur-1)});
+  document.querySelector('.gallery-arrow-next').addEventListener('click',function(){montre(cur+1)});
   [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
     st.taille=b.dataset.taille;[].forEach.call(document.querySelectorAll('[data-taille]'),function(x){var on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on)});maj()})});
   $('photo').addEventListener('click',function(){st.photo=!st.photo;this.classList.toggle('on',st.photo);this.setAttribute('aria-pressed',st.photo);$('photolab').textContent=st.photo?'Photo envoyée':'Choisir une photo';maj()});
@@ -290,10 +288,10 @@ JS = r'''
     $('barprix').textContent=st.taille+' · '+eur(unit);
   }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
-  var vu=false;if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
+  if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
   $('barre').hidden=false;maj();
 })();
-'''.replace("__PRIX__", json.dumps(PRIX)).replace("__SOCLE__", json.dumps(SOCLE_PRIX)).replace("__TXT__", str(TEXTE_PRIX))
+'''.replace("__PRIX__", json.dumps(PRIX)).replace("__BIGS__", json.dumps(BIGS)).replace("__SOCLE__", json.dumps(SOCLE_PRIX)).replace("__TXT__", str(TEXTE_PRIX))
 
 BANNER = '<div class="mq-banner">MAQUETTE — fiche « Cristal photo 3D — Vertical », présentée comme la page des cristaux déjà gravés · <b>rien n\'est encore sur le site</b></div>'
 TITLE = "<title>Fiche Cristal photo 3D vertical — Niv Création (maquette)</title>"
