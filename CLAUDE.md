@@ -2798,8 +2798,19 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « bientôt », bouton → rayon Repas & chambre) ; l'avis « 4,8/5 sur 286 » est remplacé par la VRAIE note du site (bloc masqué
   s'il n'y a aucun avis) ; les panneaux déroulants du menu de la maquette n'existent pas (Header.jsx intact) ; « Cristaux déjà
   gravés » = encadré « Bientôt » non cliquable.
+- 🔴 **INCIDENT DU PREMIER SOIR (09/10, capture du gérant : la photo Bébé & Enfant énorme et les cartes par-dessus sur téléphone)** :
+  `css-univers.py` jetait la RÈGLE ENTIÈRE dès qu'UN de ses sélecteurs touchait l'en-tête/pied de page → la règle
+  `@media (max-width:900px){.mxhero,.enf-grid,.cof,.limited,.mxnoel,.at-row,.mxup-head,.foot-news{grid-template-columns:1fr}}`
+  avait disparu (à cause de `.foot-news`) : accueil et pages univers restaient en 2 colonnes sur téléphone. Corrigé : les
+  sélecteurs sont filtrés UN PAR UN. ⚠️ Le balayage de largeurs ne l'avait pas vu parce qu'il excusait tout élément sous un
+  ancêtre `overflow:clip` — et `.mx` en porte un : **le test exclut maintenant `.mx` lui-même des ancêtres qui excusent**, et
+  vérifie que `.enf-grid` passe à 1 colonne ≤ 900 px. Leçon : un « ✓ » de test ne vaut rien si le filtre excuse le conteneur racine.
+- **Bandeau confiance remis (09/10 soir, gérant : « ils sont où… paiement en plusieurs fois, sécurisé, on avait un petit
+  truc »)** : le bandeau `.trust` du site d'avant (note du site, 4 atouts, logos de paiement, « payez en plusieurs fois sans
+  frais ») est rendu TEL QUEL entre « Nos univers » et l'atelier, HORS des conteneurs `.mx` (la page a deux `.mx`, `Reveal`
+  les gère tous) ; le bloc « avis » de la maquette (note + étoiles) est retiré pour ne pas afficher la note deux fois.
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
-  photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = avis · `mur`.
+  photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
   `/boutique/enfants`, `/boutique/cristal`, `/boutique/mariage`, `/offrir`, `/offrir?qui=elle&occ=noel`, `/cristaux`, 2 fiches
   produit, `/panier`) : 0 débordement, 0 erreur JS, 1 h1 par page (sauf `/panier`, antérieur), parcours joué, filtre budget,

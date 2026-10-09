@@ -58,19 +58,23 @@ def scope_one(s):
     return ".mx " + s
 
 def scope(sel):
-    return ",".join(scope_one(s) for s in split_sel(sel))
+    # les sélecteurs de l'en-tête/tiroir/pied de page sont retirés UN PAR UN (pas la règle entière :
+    # « .mxhero,.enf-grid,…,.foot-news{grid-template-columns:1fr} » doit garder ses autres membres)
+    gardes = [s for s in split_sel(sel) if keep(s)]
+    return ",".join(scope_one(s) for s in gardes)
 
 def render(rules, indent=""):
     out = []
     for sel, body in rules:
         s = re.sub(r"/\*.*?\*/", "", sel, flags=re.S).strip()
         if s.startswith("@media"):
-            inner = render([r for r in parse(body) if keep(r[0])], indent)
+            inner = render(parse(body), indent)
             if inner.strip(): out.append(f"{s}{{\n{inner}}}")
         elif s.startswith("@keyframes") or s.startswith("@font-face"):
             out.append(f"{s}{{{body}}}")
-        elif keep(s):
-            out.append(f"{scope(s)}{{{body.strip()}}}")
+        else:
+            sc = scope(s)
+            if sc: out.append(f"{sc}{{{body.strip()}}}")
     return "\n".join(out) + "\n"
 
 rules = parse(css)

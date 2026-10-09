@@ -7,13 +7,13 @@ import { useEffect } from "react";
 // site mesurée pour les barres collantes (--hdr). Ne rend rien.
 export default function Reveal() {
   useEffect(() => {
-    const root = document.querySelector(".mx");
-    if (!root) return;
+    const roots = [...document.querySelectorAll(".mx")];
+    if (!roots.length) return;
     const header = document.querySelector(".header");
-    const hdr = () => root.style.setProperty("--hdr", `${header ? header.offsetHeight : 0}px`);
+    const hdr = () => roots.forEach((r) => r.style.setProperty("--hdr", `${header ? header.offsetHeight : 0}px`));
     hdr();
     window.addEventListener("resize", hdr);
-    const els = root.querySelectorAll(".rv:not(.in)");
+    const els = roots.flatMap((r) => [...r.querySelectorAll(".rv:not(.in)")]);
     let io = null;
     if ("IntersectionObserver" in window) {
       io = new IntersectionObserver((es) => {

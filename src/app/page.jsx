@@ -5,7 +5,9 @@ import Rail from "@/components/univers/Rail";
 import Finder from "@/components/univers/Finder";
 import MurUnivers from "@/components/univers/MurUnivers";
 import CoffretSavane from "@/components/univers/CoffretSavane";
-import { Ic, Star } from "@/components/univers/icones";
+import { Ic } from "@/components/univers/icones";
+import { PaymentLogos } from "@/components/PaymentBand";
+import PayInfoModal from "@/components/PayInfo";
 import { getSettings, getRatingSummaries } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { rangerCatalogue, dernieresSorties } from "@/lib/univers";
@@ -57,6 +59,7 @@ export default async function HomePage() {
   const ruban = ["Gravé en France", nbAvis ? `${noteTexte}/5 sur ${nbAvis} avis` : "", "Livraison offerte dès 45 € sur les bijoux", "Paiement sécurisé"].filter(Boolean);
 
   return (
+    <>
     <div className="mx">
       <Reveal />
       <div id="contenu">
@@ -208,6 +211,41 @@ export default async function HomePage() {
           </section>
         ) : null}
 
+      </div></div>
+
+      {/* BANDEAU CONFIANCE — celui du site d'avant (4 atouts, logos de paiement, plusieurs fois
+          sans frais), remis à la demande du gérant le 09/10 soir, tel quel, hors du conteneur .mx. */}
+      {show.trust && (
+        <section className="trust">
+          {nbAvis > 0 && (
+            <div className="container">
+              <Link href="/avis" className="site-rating" title="Lire les avis clients">
+                <span className="sr-stars" aria-hidden="true">
+                  {"★★★★★".slice(0, Math.round(note))}
+                  <span className="sr-stars-empty">{"★★★★★".slice(Math.round(note))}</span>
+                </span>
+                <strong>{noteTexte}/5</strong>
+                <span className="sr-count">· {nbAvis} avis clients</span>
+                <span className="sr-verified">Lire les avis →</span>
+              </Link>
+            </div>
+          )}
+          <div className="container trust-grid">
+            <div className="trust-item"><span>🇫🇷</span><strong>Personnalisé en France</strong><small>Atelier français · gravure laser</small></div>
+            <div className="trust-item"><span>✦</span><strong>Sur mesure</strong><small>Gravure & découpe laser de précision</small></div>
+            <div className="trust-item"><span>🔒</span><strong>Paiement sécurisé</strong><small>Carte bancaire via Stripe</small></div>
+            <div className="trust-item"><span>💌</span><strong>Cadeau idéal</strong><small>Une attention qui marque les esprits</small></div>
+          </div>
+          <div className="container trust-pay">
+            <PaymentLogos dark />
+            <p className="trust-pay-line">
+              💳 <strong>Payez en plusieurs fois sans frais</strong> — 4× avec PayPal (dès 30 €) ou 3× avec Klarna (dès 50 €). <PayInfoModal label="En savoir plus" className="trust-pay-link" />
+            </p>
+          </div>
+        </section>
+      )}
+
+      <div className="mx"><div>
         {/* L'ATELIER — énoncé + trois gestes */}
         {show.atelier ? (
           <section className="atelier rv" id="atelier" aria-labelledby="t-at">
@@ -235,15 +273,6 @@ export default async function HomePage() {
         {/* LE MUR */}
         {show.mur ? <MurUnivers items={mur} /> : null}
 
-        {/* AVIS */}
-        {show.trust && nbAvis > 0 ? (
-          <section className="proof rv" aria-label="Avis clients">
-            <div className="stars" aria-hidden="true">{[0, 1, 2, 3, 4].map((i) => <Star key={i} />)}</div>
-            <p className="proof-note"><b>{noteTexte}/5</b> sur {nbAvis} avis clients</p>
-            <Link className="link" href="/avis">Lire les avis <Ic n="arrow" /></Link>
-          </section>
-        ) : null}
-
         {/* SUR MESURE */}
         <section className="custom rv" aria-labelledby="t-cus">
           <div className="custom-in">
@@ -252,7 +281,7 @@ export default async function HomePage() {
             <Bouton href="/contact">Demander un projet sur mesure</Bouton>
           </div>
         </section>
-      </div>
-    </div>
+      </div></div>
+    </>
   );
 }

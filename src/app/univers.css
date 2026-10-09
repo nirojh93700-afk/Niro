@@ -6,6 +6,7 @@
  --serif:var(--font-display),"Playfair Display",Georgia,"Times New Roman",serif;--sans:var(--font-body),"Inter",system-ui,"Helvetica Neue",Arial,sans-serif;
  --r:20px;--r2:14px;--r3:28px;--ease:cubic-bezier(.16,1,.3,1);--ease2:cubic-bezier(.32,.72,0,1);--gut:clamp(16px,4.5vw,72px);--wrap:1300px;--hdr:0px;
  --sh:0 1px 0 rgba(26,18,6,.06),0 14px 30px -22px rgba(26,18,6,.45)}
+.mx *,.mx *::before,.mx *::after{box-sizing:border-box}
 .mx{margin:0;background:var(--cream);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 .mx img{max-width:100%;display:block}
 .mx a{color:inherit;text-decoration:none}
@@ -16,6 +17,7 @@
 .mx ::selection{background:var(--gold-l);color:var(--ink)}
 .mx :focus-visible{outline:2px solid var(--gold-d);outline-offset:3px;border-radius:4px}
 .mx input{caret-color:var(--gold-d)}
+.mx .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .mx [hidden]{display:none!important}
 .mx .mxic{width:20px;height:20px;flex:none}
 .mx .rv{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform 1s var(--ease)}
@@ -189,6 +191,7 @@
 .mx .cof-pics img:first-child{grid-column:1/-1;aspect-ratio:16/9}
 .mx .cof-nom{position:absolute;left:50%;top:28%;transform:translate(-50%,-50%);font:italic 500 clamp(1.5rem,3vw,2.4rem)/1 var(--serif);color:var(--cream);text-shadow:0 2px 16px rgba(0,0,0,.65);pointer-events:none;transition:text-shadow .3s}
 .mx .cof-nom.live{text-shadow:0 0 20px rgba(226,198,126,.85),0 2px 16px rgba(0,0,0,.65)}
+.mx .cof :focus-visible,.mx .limited :focus-visible,.mx .custom :focus-visible,.mx .mxhero :focus-visible{outline-color:var(--gold-l)}
 .mx .limited{background:var(--ink2);color:#f3e8d3;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:clamp(24px,5vw,72px);padding:clamp(40px,6vw,88px) var(--gut);position:relative;isolation:isolate;overflow:hidden}
 .mx .limited::before{content:"";position:absolute;inset:auto -10% -30%;height:120%;background:radial-gradient(60% 60% at 30% 60%,rgba(201,162,75,.18),transparent 70%);z-index:-1;pointer-events:none}
 .mx .limited .mxframe{justify-self:center}
@@ -322,6 +325,7 @@
 .mx .mxbt-big{grid-column:span 2;grid-row:auto;min-height:360px}
 }
 @media (max-width:900px){
+.mx .mxhero,.mx .enf-grid,.mx .cof,.mx .limited,.mx .mxnoel,.mx .at-row,.mx .mxup-head{grid-template-columns:1fr}
 .mx .mxhero{padding-top:32px;gap:28px}
 .mx .mxhero-copy{justify-self:start}
 .mx .mxframe{justify-self:center;width:100%;max-width:440px}
