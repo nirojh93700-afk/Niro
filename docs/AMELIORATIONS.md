@@ -125,3 +125,9 @@
 - **Le parcours en trois étapes comme bloc réutilisable** (09/10, direction Mélange) : les cartes à cocher numérotées ①②③ de
   « Trouver le bon cadeau » sont la même grammaire que le parcours guidé des fiches (carafe, vin, flûte) ; si le Mélange est
   validé, le même composant pourrait servir à la page Offrir du site, au choix d'emballage et au choix de coffret.
+
+- 💡 **Étiquette « Best-seller » automatique (proposée le 10/10/2026, question du gérant « on peut mettre des best-sellers ? »)** :
+  calculée chaque jour sur les VRAIES commandes (90 derniers jours, hors annulées / remboursées / tests, en nombre de pièces),
+  posée sur les 3 à 5 produits les plus vendus (cartes, fiches) et, en option, un rail « Nos meilleures ventes » sur l'accueil.
+  Remplacerait l'étiquette « Best-seller » écrite à la main sur le Collier 3 Cœurs (accueil, bloc bijoux), dont la vérité n'est
+  pas vérifiée. Les chiffres existent déjà (Gestion → Statistiques, « Produits les plus vendus »). En attente : maquette sur son « ok ».
