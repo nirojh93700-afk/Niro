@@ -2753,6 +2753,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > aucun texte < 11 px ; captures regardées ; `impeccable detect` : restent des avertissements assumés (halo or et ruban
 > = signatures de la piste A, italique Playfair = identité du site, tirets dans les NOMS de produits du catalogue).
 > ⚠️ Piège corrigé au passage : le clone du parcours sur la page Offrir gardait `id="trouver"` (doublon d'id).
+> ⛔ **« DIS-MOI AVANT DE LE FAIRE » (gérant, 09/10, deux fois)** : sur cette maquette, tout déplacement ou ajout se PROPOSE
+> d'abord en une phrase, et ne se fait qu'après son « ok ». En attente au 09/10 soir : ① le bloc « Trouver le bon cadeau »
+> à descendre « juste avant les packs pour les enfants » (= avant le coffret assorti de Bébé & Enfant, à confirmer) ;
+> ② **« tu dois mieux vendre le produit »** : dire que c'est fait main en France, gravé en France, découpé en France, dans ce
+> bloc (et à garder en tête pour toute maquette : les arguments de vente « fait main · gravé · découpé en France » doivent
+> être écrits, pas sous-entendus).
 > **Suite = son avis** : s'il valide → c'est CETTE version à reproduire (page.jsx + composants home + CSS, `Header.jsx` intact) ;
 > s'il veut un autre dosage (plus de A, plus de B…), le dire en une phrase suffit, le générateur sépare les trois mondes.
 

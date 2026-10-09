@@ -187,9 +187,11 @@ En attente de SA décision :
 - **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 2)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
   (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10, à reporter dans la maquette sur son accord) ·
   épaisseur / bois · âge conseillé · marquage CE (EN 71) · poids · nom de la catégorie · son « applique ».
-- **Maquette « Accueil + univers » : place du bloc « Trouver le bon cadeau »** — le gérant (09/10) le trouve mieux PLUS BAS
-  que sous le héros et veut qu'on lui dise avant de bouger. Proposé : après les bijoux et les dernières sorties, juste avant
-  Bébé & Enfant. En attente de son « ok » (ou d'un autre emplacement).
+- **Maquette « Accueil + univers » : bloc « Trouver le bon cadeau » — DEUX changements à confirmer (gérant, 09/10 : « dis-moi
+  avant de le faire »)** : ① le déplacer plus bas, **« juste avant les packs pour les enfants »** = juste avant le coffret
+  assorti de Bébé & Enfant (après les quatre créations enfant), compréhension à confirmer ; ② **« mieux vendre le produit »** :
+  dire dans ce bloc que c'est fait main en France, gravé en France, découpé en France (phrase proposée sous le titre :
+  « Fait main en France : chaque pièce est gravée et découpée dans notre atelier. »). Rien bougé tant qu'il n'a pas dit ok.
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
