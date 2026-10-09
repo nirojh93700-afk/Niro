@@ -2726,7 +2726,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 ## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
 > **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
 > versions (sans / avec puzzles) ont été refaites dans un monde qui réunit les trois pistes, en gardant toutes les corrections
-> du 09/10 ; les deux artifacts sont republiés (sans puzzles v10, avec puzzles v6). Détail du monde dans `DESIGN.md` (réécrit).
+> du 09/10 ; les deux artifacts sont republiés (sans puzzles v11, avec puzzles v7). Détail du monde dans `DESIGN.md` (réécrit).
 > · **piste A (L'Écrin)** pour le haut de page, la carafe et le sur mesure : encre, halo or, cadre doré à double filet, laser,
 >   reflet, étiquette nom + prix, **ruban or qui défile** sous le héros (il remplace le bandeau encre du haut) ;
 > · **piste C (Atelier)** pour « Trouver le bon cadeau EN TROIS ÉTAPES » : ① Pour qui ② Pour quelle occasion ③ Quel budget ;
@@ -2762,11 +2762,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > Leçon (3 refus en un jour, tous sur téléphone) : **jamais plus de deux lignes de pavés/puces sur téléphone** ; au-delà, un
 > rail à glisser ou un menu déroulant ; et rien de collant qui dépasse une ligne.
 > ⛔ **« DIS-MOI AVANT DE LE FAIRE » (gérant, 09/10, deux fois)** : sur cette maquette, tout déplacement ou ajout se PROPOSE
-> d'abord en une phrase, et ne se fait qu'après son « ok ». En attente au 09/10 soir : ① le bloc « Trouver le bon cadeau »
-> à descendre « juste avant les packs pour les enfants » (= avant le coffret assorti de Bébé & Enfant, à confirmer) ;
-> ② **« tu dois mieux vendre le produit »** : dire que c'est fait main en France, gravé en France, découpé en France, dans ce
-> bloc (et à garder en tête pour toute maquette : les arguments de vente « fait main · gravé · découpé en France » doivent
-> être écrits, pas sous-entendus).
+> d'abord en une phrase, et ne se fait qu'après son « ok ». ✅ **Son « OK fais-le » du 09/10 soir, appliqué (v11 / v7)** :
+> ① le bloc « Trouver le bon cadeau » est descendu **après les quatre créations Bébé & Enfant et juste avant le coffret
+> assorti** (ordre : écrin → ruban → bijoux → nouveautés → Bébé & Enfant → parcours → coffret → carafe → verres → Noël →
+> univers → atelier → mur → avis → sur mesure ; le coffret a sa propre section `.enf-cof` sable) ;
+> ② **« tu dois mieux vendre le produit »** : sous le titre du parcours, la phrase « Fait main en France : chaque pièce est
+> gravée et découpée dans notre atelier. » (`.fd-lead`). À garder pour toute maquette : les arguments « fait main · gravé ·
+> découpé en France » s'écrivent, ils ne se sous-entendent pas.
 > **Suite = son avis** : s'il valide → c'est CETTE version à reproduire (page.jsx + composants home + CSS, `Header.jsx` intact) ;
 > s'il veut un autre dosage (plus de A, plus de B…), le dire en une phrase suffit, le générateur sépare les trois mondes.
 
@@ -2797,9 +2799,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > vraiment jolis, modernes, classe, luxe, avec les mêmes couleurs ». Les deux versions sont donc REFAITES dans un nouveau
 > monde visuel ; les versions précédentes restent dans git (commit `0d7ae16`) et dans l'historique des artifacts.
 > · **sans puzzles** : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
->   (version 7 = luxe, version 8 = Mélange, version 9 = tuiles photo, **version 10 = filtres compacts sur téléphone**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
+>   (version 7 = luxe, version 8 = Mélange, version 9 = tuiles photo, version 10 = filtres compacts, **version 11 = parcours avant le coffret + fait main en France**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
 > · **avec puzzles** : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM
->   (version 3 = luxe, version 4 = Mélange, version 5 = tuiles photo, **version 6 = filtres compacts sur téléphone**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
+>   (version 3 = luxe, version 4 = Mélange, version 5 = tuiles photo, version 6 = filtres compacts, **version 7 = parcours avant le coffret + fait main en France**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
 > Les deux sortent du MÊME générateur **`tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`** (l'ancien
 > `accueil-v2.py`, qui réutilisait la maquette « accueil moderne », est supprimé). La maquette ENREGISTRÉE
 > `accueil-moderne.html` (04/10) n'est pas touchée.

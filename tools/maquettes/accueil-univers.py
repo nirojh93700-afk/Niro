@@ -367,6 +367,7 @@ BUDGETS = (("0-20", "Moins de", "20 €"), ("20-40", "Entre", "20 et 40 €"), (
 FINDER = f'''<section class="fd rv" id="trouver" aria-labelledby="t-fd">
   <div class="fd-in">
   <h2 id="t-fd">Trouver le bon cadeau <em>en trois étapes</em></h2>
+  <p class="fd-lead">Fait main en France : chaque pièce est gravée et découpée dans notre atelier.</p>
   <div class="fd-step" role="group" aria-label="Pour qui"><div class="fd-h"><b>1</b><span>Pour qui ?</span></div><div class="fts">{"".join(ftile("qui", k, esc(v), QUI_PHOTO[k]) for k, v in POURQUI.items())}</div></div>
   <div class="fd-step" role="group" aria-label="Occasion"><div class="fd-h"><b>2</b><span>Pour quelle occasion ?</span></div><div class="fts"><span class="fetes" data-max="3" data-as="card"></span>{"".join(ftile("occ", v, l, ph) for v, l, ph in OCC_FIXES)}</div></div>
   <div class="fd-step" role="group" aria-label="Budget"><div class="fd-h"><b>3</b><span>Quel budget ?</span></div><div class="fts fts-3">{"".join(fprix(v, a, b) for v, a, b in BUDGETS)}</div></div>
@@ -404,6 +405,9 @@ ENFANTS = f'''<section class="sec enf rv" aria-labelledby="t-enf">
       {btn("Voir tout l’univers", "btn-ink", 'href="#" data-go="enfants"')}
     </div>
   </div>
+</section>
+{FINDER}
+<section class="sec enf enf-cof rv" aria-label="Coffret assorti">
   {coffret("home")}
 </section>'''
 
@@ -505,7 +509,7 @@ FOOTER = f'''<footer class="footer">
 </footer>
 <button type="button" class="ask">{ic("chat")}<span>Une question ?</span></button>'''
 
-ACCUEIL = f'<main id="contenu">{HERO}{FINDER}{BIJOUX}{NOUVEAUTES}{ENFANTS}{CARAFE}{VERRES_SEC}{NOEL}{UNIVERS_HOME}{ATELIER}{MUR}{AVIS}{CUSTOM}</main>'
+ACCUEIL = f'<main id="contenu">{HERO}{BIJOUX}{NOUVEAUTES}{ENFANTS}{CARAFE}{VERRES_SEC}{NOEL}{UNIVERS_HOME}{ATELIER}{MUR}{AVIS}{CUSTOM}</main>'
 
 UNIV_VIEW = ('<main class="uv" id="vueUnivers" hidden><nav class="uv-tabs" aria-label="Univers">'
              + puce("button", 'type="button" data-view="accueil"', "Accueil")
@@ -523,7 +527,7 @@ NOTES = f'''<div class="mbar" role="region" aria-label="Maquette">
   <button type="button" class="mbar-more" id="mbarMore" aria-expanded="false">Ce qui change</button></div>
   <ul class="mbar-notes" id="mbarNotes" hidden>
     <li><b>Le mélange des trois pistes</b> : l’écrin de la piste A pour le haut de page et la carafe (encre, cadre doré à double filet, laser, ruban or qui défile) ; le parcours en trois étapes numérotées de la piste C pour « Trouver le bon cadeau », avec les tuiles photo de la piste A (pour qui, occasion) et trois pavés de prix ; la photo plein cadre et le panneau de verre de la piste B pour les bijoux. Partout ailleurs : le ton chaleureux de la piste C (cartes arrondies, sable, bouton or). Mêmes couleurs, Playfair Display et Inter comme sur le site, logo intouché.</li>
-    <li><b>Accueil</b> : écrin cristal, ruban, trois étapes, bijoux sur photo, nouveautés, Bébé &amp; Enfant + coffret, carafe édition limitée, verres en mosaïque, Noël, « Nos univers », l’atelier en trois gestes, le mur, les avis, le sur mesure, pied de page.</li>
+    <li><b>Accueil</b> : écrin cristal, ruban, bijoux sur photo, nouveautés, Bébé &amp; Enfant, « Trouver le bon cadeau » en trois étapes (fait main en France), coffret, carafe édition limitée, verres en mosaïque, Noël, « Nos univers », l’atelier en trois gestes, le mur, les avis, le sur mesure, pied de page.</li>
     <li><b>Pages univers</b> : un en-tête par univers (titre, accroche, nombre, photo), les rayons et les filtres dans une barre qui reste visible, les mêmes cartes partout, « Toute la boutique » et « Offrir » (le même parcours en trois étapes).</li>
     <li><b>Tout ce qui a été corrigé le 09/10 est gardé</b> : rangement des 75 créations, retour à l’accueil, menus et tiroir, budget sur l’intervalle de prix, boutons grisés, fêtes calculées (nom seul, 3 mois), textes sans « au prénom ».{" Version avec puzzles : « Jeux en bois » et « Cristaux déjà gravés » marqués « Bientôt », coffret Savane." if PUZ else ""}</li>
     <li><b>Mouvement</b> : laser et reflet sur la photo de l’écrin, ruban qui défile, apparition douce au défilement, zoom lent des photos, mur qui s’arrête sous le doigt, respect du réglage « réduire les animations ».</li>
@@ -663,7 +667,8 @@ input{caret-color:var(--gold-d)}
 /* ---- trouver un cadeau : le parcours numéroté de la piste C (sable, cartes blanches à cocher) */
 .fd{background:var(--sand);padding:clamp(44px,6vw,72px) var(--gut)}
 .fd-in{max-width:1100px;margin:0 auto}
-.fd h2{font-size:clamp(1.9rem,3.6vw,3rem);text-align:center;margin-bottom:28px}
+.fd h2{font-size:clamp(1.9rem,3.6vw,3rem);text-align:center;margin-bottom:10px}
+.fd-lead{text-align:center;color:var(--ink);font-weight:500;font-size:1.02rem;margin:0 auto 26px;max-width:46ch}
 .fd-step{margin-bottom:22px}
 .fd-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .fd-h b{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--gold-l);display:inline-flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.05rem;flex:none}
@@ -739,6 +744,7 @@ input{caret-color:var(--gold-d)}
 .enf-copy>p{color:var(--muted);margin:14px 0 16px;max-width:54ch}
 .enf-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}.enf-cats .puce{background:#fff}.enf-cats .puce:hover{background:var(--sand2)}
 .enf .ug-2{gap:22px 18px}.enf-copy .btn{margin-top:24px}
+.enf-cof{padding-top:0}.enf-cof .cof{margin-top:0}
 .cof{margin-top:clamp(32px,5vw,56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(22px,4vw,48px);align-items:center;padding:clamp(24px,4vw,44px);border-radius:var(--r3);background:var(--ink);color:var(--cream)}
 .cof h3{font-size:clamp(1.6rem,2.8vw,2.3rem)}.cof h3 em{color:var(--gold-l)}
 .cof-txt>p{color:var(--on-ink);margin:14px 0 18px}
@@ -905,7 +911,7 @@ input{caret-color:var(--gold-d)}
   .header-centered .logo-img{height:64px}.htop{padding:12px 14px 8px;grid-template-columns:auto 1fr auto}.logo{grid-column:2;justify-self:center}
   .hero{padding:28px var(--gut) 28px}.frame{padding:8px}.laser{display:none}.frame-tag{left:16px;bottom:16px}
   .ruban{font-size:.72rem}
-  .fd{padding:36px var(--gut) 40px}.fd h2{margin-bottom:20px}
+  .fd{padding:36px var(--gut) 40px}.fd h2{margin-bottom:8px}.fd-lead{font-size:.95rem;margin-bottom:20px}
   .fts,.fts:has(> .ft:nth-child(6)){display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * var(--gut));padding:4px var(--gut) 6px;scroll-padding:0 var(--gut)}.fts::-webkit-scrollbar{display:none}
   .fts .ft{flex:0 0 138px;scroll-snap-align:start}.ft-l{padding:30px 10px 9px;font-size:.84rem}
   .fts-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding:0;overflow:visible;max-width:none}.fts-3 .ft{flex:none}.ft-txt{min-height:70px;padding:10px 6px}.ft-txt small{font-size:.72rem}.ft-txt b{font-size:1.05rem}

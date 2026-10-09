@@ -187,12 +187,9 @@ En attente de SA décision :
 - **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 2)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
   (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10, à reporter dans la maquette sur son accord) ·
   épaisseur / bois · âge conseillé · marquage CE (EN 71) · poids · nom de la catégorie · son « applique ».
-- **Maquette « Accueil + univers » : bloc « Trouver le bon cadeau » — DEUX changements à confirmer (gérant, 09/10 : « dis-moi
-  avant de le faire »)** : ① le déplacer plus bas, **« juste avant les packs pour les enfants »** = juste avant le coffret
-  assorti de Bébé & Enfant (après les quatre créations enfant), compréhension à confirmer ; ② **« mieux vendre le produit »** :
-  dire dans ce bloc que c'est fait main en France, gravé en France, découpé en France (phrase proposée sous le titre :
-  « Fait main en France : chaque pièce est gravée et découpée dans notre atelier. »). Rien bougé tant qu'il n'a pas dit ok.
-  (Corrigé sans attendre, car refus net « c'est trop moche » : la barre rayons + filtres des pages univers sur téléphone, le 09/10.)
+- ✅ **Maquette « Accueil + univers », 09/10 soir, « OK fais-le »** : parcours « Trouver le bon cadeau » descendu juste avant le
+  coffret enfants + phrase « Fait main en France : chaque pièce est gravée et découpée dans notre atelier » sous son titre
+  (v11 / v7). Barre rayons + filtres compacte sur téléphone (v10 / v6). Attend maintenant son avis d'ensemble, puis « applique ».
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
@@ -226,7 +223,7 @@ En attente de SA décision :
   Les deux versions sont refaites (écrin de A en haut et pour la carafe, parcours en 3 étapes de C **en tuiles photo** (ses cartes blanches
   refusées le 09/10 : « bizarre »), bijoux plein cadre + verre de B,
   ton chaleureux de C partout, Inter + Playfair, logo intouché, toutes les corrections du 09/10 gardées) et republiées :
-  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 (v10) · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM (v6).
+  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 (v11) · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM (v7).
   Générateur `tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`, monde décrit dans `DESIGN.md`. Les 3 pistes restent
   visibles (https://claude.ai/artifact/8nwU5hA2o4AphYUm941zTC) s'il veut changer le dosage. Rien en ligne : attend « applique ».
 - (historique) **Maquette « Accueil + univers » — VERSION LUXE du 09/10/2026** (feu vert du gérant : « tu peux tout changer sauf le logo ») :
