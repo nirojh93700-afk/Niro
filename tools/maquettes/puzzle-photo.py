@@ -94,6 +94,10 @@ MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1
 BUREAU = uri(os.path.join(ASSETS, "bureau.jpg"))
 MAIN = re.sub(r'(<img[^>]*id="galmain"[^>]*?\ssrc=")[^"]*(")', lambda m: m.group(1) + BUREAU + m.group(2), MAIN, count=1)
 MAIN = MAIN.replace('<div class="gallery-thumbs">', '<div class="gallery-thumbs"><button class="" aria-label="Voir le visuel 0"><img src="' + BUREAU + '" alt=""/></button>', 1)
+# Gérant, 09/10 soir : « depuis quand les gens mettent du bois dans le lave-vaisselle » → phrase d'entretien simplifiée.
+MAIN = MAIN.replace("Entretien : essuyer avec un chiffon sec ou à peine humide. Ne pas tremper, ne pas passer au lave-vaisselle.",
+                    "Entretien : un coup de chiffon sec suffit.")
+assert "lave-vaisselle" not in MAIN
 PRIX = {t: float(re.sub(r"[^0-9,]", "", p).replace(",", ".")) for t, p in
         re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', MAIN)}
 assert len(PRIX) == 4, PRIX
