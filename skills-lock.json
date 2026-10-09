@@ -5,7 +5,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/ab-testing/SKILL.md",
-      "computedHash": "c42af0107540e71dfe9605eca51b5100d96730d0bddf51085fc0c9429e40083c"
+      "computedHash": "faaa826e6f67b4bfd9d450df65327f075b512b25d157a35aa25018400bd2fbe1"
     },
     "accessibility": {
       "source": "addyosmani/web-quality-skills",
@@ -17,37 +17,37 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/ad-creative/SKILL.md",
-      "computedHash": "dd25996e6ef7d682e66b3af66244561fa07fae36c51f3b4841f7684a736160a3"
+      "computedHash": "7c2beab672f7f50542c40472fe45ad4a1920f2395ccf14f79bb54cf58a004b22"
     },
     "ads": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/ads/SKILL.md",
-      "computedHash": "ca9aeda111161aa5ce0d362d0fdbd17d567155c0013b750b8eb0f10959bea115"
+      "computedHash": "e08c38157c84d1b1e635204cbfe938e7fcea05bcbe22f5c0bc6f8b1fdd901208"
     },
     "ai-seo": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/ai-seo/SKILL.md",
-      "computedHash": "ff403d2db73169a0f2b8a36fe597bbe7e97f91b8eaa7e9a4a370a0c1f6775913"
+      "computedHash": "d15d6b1ee35dee306ec904f198e46d5ad7f0ae65e594671c7a1472578c185f0e"
     },
     "analytics": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/analytics/SKILL.md",
-      "computedHash": "86adc6e6beee31bea552592035a818fd4ee844c1db92fac0f8cc46b24962a45a"
+      "computedHash": "1c9cf1dff99c5da6b229c20e0a5fdb50fade4805f887768942cc82e9b567087e"
     },
     "aso": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/aso/SKILL.md",
-      "computedHash": "45b98500bdeea02472f468e0390010e15cd162b5a4a9769d4cb33fbbc459ad33"
+      "computedHash": "12f6cf8fc8309846f2f5628b5f4d06616d000732c668fc19d7d900ca8da57bc3"
     },
     "attribution": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/attribution/SKILL.md",
-      "computedHash": "d00a3c77ceb1ba0ba24aa1e7750bd7b9ab05257db05371580dc407577f5ac666"
+      "computedHash": "9a8af63f4eb9820eb2fce6d83c58506f4b7f39a5470c345c2633e99793c1b2b4"
     },
     "banner-design": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -77,7 +77,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/churn-prevention/SKILL.md",
-      "computedHash": "075cf328d0bbf07c306f891e8bfa9cea1811711cffaad9165f2e61f40eb3ab5b"
+      "computedHash": "4ffd6cb137a92a8e9d7a5982200e95915a4dd8eae683bbc8be1750b7b5b259b3"
     },
     "co-marketing": {
       "source": "coreyhaines31/marketingskills",
@@ -89,7 +89,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/cold-email/SKILL.md",
-      "computedHash": "6d41bee612b1c5301506aefdcbbbea7d2adf71cac40686847eba1fb76f7e9e23"
+      "computedHash": "04df3a3569e02bab321ddbf4723a3a9ce59ebb224500ddd8705e272d3ff16d51"
     },
     "community-marketing": {
       "source": "coreyhaines31/marketingskills",
@@ -101,7 +101,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/competitor-profiling/SKILL.md",
-      "computedHash": "0a0a07049a4e1d302a610a069fcb1539abd95e033d38f64c970424a424962f8b"
+      "computedHash": "cfae4d2a5b6a4b08784aa63784147d8baad61eb9696840b96e182ef4893fd736"
     },
     "competitors": {
       "source": "coreyhaines31/marketingskills",
@@ -113,7 +113,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/connect-recommend/SKILL.md",
-      "computedHash": "182d73a20408fd1248d23553d65975966d55724bdb3abbf0de291988a470dce3"
+      "computedHash": "02e338bde8bb4273ca06ce470f80a6d962364057b8922099ada2a8cf0307447f"
     },
     "connect-required-verification-information": {
       "source": "stripe/ai",
@@ -125,13 +125,13 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/content-strategy/SKILL.md",
-      "computedHash": "e91fcb1011fb0c165d4b80e7d230f08e9cf702945ab180f2b3fabd84b1877bda"
+      "computedHash": "7677dba18780b18ea2247b44d2cc8be05ec1dbec319da51a21cf297eb3d0fd1b"
     },
     "copy-editing": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/copy-editing/SKILL.md",
-      "computedHash": "501b6af6bd7408f9be3f983b697e19d5f7791d8b0fba8b2860f641c78546aad1"
+      "computedHash": "d755d5546c8ccd2b6a77695230a1d54869635cbd52e53545b0ce5bd367850432"
     },
     "copywriting": {
       "source": "coreyhaines31/marketingskills",
@@ -149,7 +149,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/cro/SKILL.md",
-      "computedHash": "07f7a27c57e48f4b67230712f8efbc5bcc01611b35321b3c2c2e5279c9304bcd"
+      "computedHash": "f1974581536c4c860a0f7da4b663e2520dfc79a065327b576b12013dd62ad45e"
     },
     "customer-research": {
       "source": "coreyhaines31/marketingskills",
@@ -191,13 +191,13 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/directory-submissions/SKILL.md",
-      "computedHash": "c1e8659f7491f04ccd1a62f95a15cc78c6bef25655df31853b67ba5a64300381"
+      "computedHash": "417cac1c79ede4aa1abcacb521cf6c6d5bcbf9b1bc1e66266d8a2e52ea447adb"
     },
     "emails": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/emails/SKILL.md",
-      "computedHash": "156156b7a3f1873ea2c415cce01112581993f4cabe3c89b58612692147a3be27"
+      "computedHash": "68b5286faa8cf8ef87feeaa51e1a7db54ae124f5365769d7fc9976d40ed23c4a"
     },
     "events": {
       "source": "coreyhaines31/marketingskills",
@@ -215,49 +215,49 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/faceless-explainer/SKILL.md",
-      "computedHash": "11ccb757db1c440856b71a1cdc0c9a00dba6a4a858da266965666ac9216ceeb6"
+      "computedHash": "8e04b9f45c1efb24e575c419522d932a9f3b6e18097f2f49f3cfcac7ad38cf19"
     },
     "firebase-ai-logic-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-ai-logic-basics/SKILL.md",
-      "computedHash": "5aa0c73be69ffe53e022f9b9fc1bd0e8233048b05fb15b288be8ee34e878b4d9"
+      "computedHash": "51c11582e23ac26eb7de8f6f32ea56862416a011c5f2cfce624a43eeea1247de"
     },
     "firebase-app-hosting-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-app-hosting-basics/SKILL.md",
-      "computedHash": "017ad6e71769b3d7fe58bd54cf208ee91c82b2e32a2fc5f1c55719f22a8ef15b"
+      "computedHash": "8436a5d57de22507627e46316030bb55312e81c2bbbad580b7b3dcd496f75e9b"
     },
     "firebase-auth-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-auth-basics/SKILL.md",
-      "computedHash": "8343927347db469da64b3452810f6b2db05328760dd5448bcce80960829e2dfc"
+      "computedHash": "227d25fccccf6ec49af0116e71a2fae21a0058fa871dba44bcc0e8b391324fb8"
     },
     "firebase-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-basics/SKILL.md",
-      "computedHash": "4ad816ea0a837a622920e411b7745dc74b74a8aa429089145e00f94a51a18abf"
+      "computedHash": "c8e43fcf8fe0c09e033d29f4b915b6b07c8b315a3ff3e8121f4b74132174af39"
     },
     "firebase-crashlytics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-crashlytics/SKILL.md",
-      "computedHash": "7cb04adf4cfaacf94b7bd2f6001e395a1827d15dd29c834ec4efc84c174db2d6"
+      "computedHash": "c36ad50c31d1ef4f81eb64907fcf5020a81d5f8b3f89abe02953d0f9d8a9fac6"
     },
     "firebase-data-connect": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-data-connect-basics/SKILL.md",
-      "computedHash": "b0659a164de50bedfa1514095fc42b67494a35d6b917269604c938c06c8e22c0"
+      "computedHash": "8643db563b7d2dd6e3c9dad73862b8fed4410555fac6a33b530b53d2cab8ba85"
     },
     "firebase-firestore": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-firestore/SKILL.md",
-      "computedHash": "0532fd1754ecb5b61020615b6b4f9bcd902146ea8127b9a872d6659071bd146a"
+      "computedHash": "7be20dbc227195b25d577f660932c7efe8b3df55b336f26c9d1a556cc3db411f"
     },
     "firebase-hosting-basics": {
       "source": "firebase/agent-skills",
@@ -269,19 +269,19 @@
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-remote-config-basics/SKILL.md",
-      "computedHash": "eeac96d95c4637ed15ab60a54bbc36cf0d29d425c3e843d645420ce9bfd1fbc7"
+      "computedHash": "098351eb0cfb9e981b3b19cae595c51e1c60655b0c53372c4be6168baf94e7c0"
     },
     "firebase-security-rules-auditor": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
-      "computedHash": "561c8f8ebbb9c2984cfa08cc4ea29ebfe4b2cb9cf524e5fc7d092af0ad208be8"
+      "computedHash": "3f3b4207c2a0243fce4395c4c6597c1811d2d9890274045ec6554e298d7246ba"
     },
     "firestore-rules-creation": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/firestore-rules-creation/SKILL.md",
-      "computedHash": "f71ddb7db4502f0ab3a8a510226594e85a26b695f935ba1baef331a90e8f0553"
+      "computedHash": "c69dbffa4ad5165ed6dff2da79b8fc9bb96272b2cea0a90b32372845c93f5946"
     },
     "free-tools": {
       "source": "coreyhaines31/marketingskills",
@@ -299,7 +299,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/general-video/SKILL.md",
-      "computedHash": "33bec49812c73a860c70bcae4baf869b1669c00a5946fe1078d0a0f3a693bc97"
+      "computedHash": "d6deba70181518a3e4b6d82706b8d47c2bce80132599ecb711232928a1895b3b"
     },
     "gpt-taste": {
       "source": "Leonxlnx/taste-skill",
@@ -317,13 +317,13 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes/SKILL.md",
-      "computedHash": "967ece0f09efd542d5d6e4d158a583ec577a07b894fa4282d2191d2a7599ab6a"
+      "computedHash": "04c7577109c62b0de2fda5fcf4e578e908d3e0e7c9435d2587c8325fe0bc6006"
     },
     "hyperframes-animation": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-animation/SKILL.md",
-      "computedHash": "fe88f645bdff1294f25484fc606e66640b2c1fc89a26246789113b848e494a17"
+      "computedHash": "e4902360b4578194f8088506a38388ea4355a0b2a690281492fc59591fb3bcfc"
     },
     "hyperframes-audio": {
       "source": "heygen-com/hyperframes",
@@ -335,7 +335,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/hyperframes-cli/SKILL.md",
-      "computedHash": "a0aeda8c1abe4d2d871cac53f1d3083bf001ba9dd78134d3847eb4e184681664"
+      "computedHash": "29a496b4f1ee9e0ce1bbd1d8c29946c6c594e7144e5b1b5c94ec65e2c9fa9ebc"
     },
     "hyperframes-core": {
       "source": "heygen-com/hyperframes",
@@ -395,7 +395,7 @@
       "source": "pbakaus/impeccable",
       "sourceType": "github",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "computedHash": "0ec7c50507fd8c0380628e4245095104dc0623427dd5ea489dbf55742f84ffad"
+      "computedHash": "de7de6829490819b3c18cfdad2c93d002bd428c4b738d29b971ef3dc8f911d08"
     },
     "industrial-brutalist-ui": {
       "source": "Leonxlnx/taste-skill",
@@ -413,13 +413,13 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/launch/SKILL.md",
-      "computedHash": "145d50457370580e0de0c34408fef0faa7522d7daad2d0badf36272b426277e6"
+      "computedHash": "b46c65a3d55e1721a2e65bfe4fc6826ecdc1c6846b62ffee4fead2188f556243"
     },
     "lead-magnets": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/lead-magnets/SKILL.md",
-      "computedHash": "268c83c38cc49d3e437042f5d4e3c31b822deb6012b9d5d7a1370ae500058018"
+      "computedHash": "1956a2253be6ce5f59361d4af7757eb230d92835bff1dd4f7b19af2a1dac89bd"
     },
     "marketing-council": {
       "source": "coreyhaines31/marketingskills",
@@ -437,13 +437,13 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/marketing-loops/SKILL.md",
-      "computedHash": "fb4b9375712c0e529fc87d54cde393988d14c50d2a54287b84267f16c76e255a"
+      "computedHash": "13cfb1de8b26a38429481facc49501e49f48dce54e8ac8dc2f02376a539a5d11"
     },
     "marketing-plan": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/marketing-plan/SKILL.md",
-      "computedHash": "952d20914b6484670bd51de28dd39c58c7f5ed691de4f0129bcdb59dcf84e9f0"
+      "computedHash": "ec3077f904f966256393d4145e1588c42f37090a88e72ca754194c9eb58e9048"
     },
     "marketing-psychology": {
       "source": "coreyhaines31/marketingskills",
@@ -455,7 +455,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/media-use/SKILL.md",
-      "computedHash": "22d4faa291dc4f84e23025f7b7891314979924ac6c340a783ba76bb9eeab4786"
+      "computedHash": "6a74fc2551e116721d92901406e0f69204a957544e58dd5703a23d07d50f8992"
     },
     "metronome": {
       "source": "stripe/ai",
@@ -479,7 +479,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/music-to-video/SKILL.md",
-      "computedHash": "414148d019f0c0f76077465c0684208a2470136dc4d184af04a12dc692b00088"
+      "computedHash": "66793a5bc8dfb9ce03b7721fe42f4a685d8a95bc727602e6d661ec1f4aa9711d"
     },
     "offers": {
       "source": "coreyhaines31/marketingskills",
@@ -521,13 +521,13 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/pricing/SKILL.md",
-      "computedHash": "7972093f0b6caa1b477a29b4c584a0595f11b296dd5bfedec25ade5dcf9c33cf"
+      "computedHash": "09629b8e64b5553c7fc3a9dbb137ed1b415d49bb15f86a766cf2d5b66e6c487e"
     },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/product-launch-video/SKILL.md",
-      "computedHash": "3f4312f9803b69e23f80cbfeccbdef27136c6f2d2186124704f5d993af87b47d"
+      "computedHash": "db277fa882177b5744f64569b80c1381fdbf741ea3924db3a59ea5503815371b"
     },
     "product-marketing": {
       "source": "coreyhaines31/marketingskills",
@@ -545,7 +545,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/prospecting/SKILL.md",
-      "computedHash": "51556e418715c08391d1b8ce9b8a685c6ad60451a3f9a83f6db8c404c4fc6b7e"
+      "computedHash": "6e53e93c68e6f1b19f79549ca504ee69dded349337d36a935297b95aca257052"
     },
     "public-relations": {
       "source": "coreyhaines31/marketingskills",
@@ -563,25 +563,25 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/referrals/SKILL.md",
-      "computedHash": "bf52bd62b10209d1af191253f8914a043ff3a5559e0aa223ad97eb1235916b61"
+      "computedHash": "98c5a6aaac4bf5bbd0b81c67f5c281d70b7dd53442b7027968fd3df11730e3a7"
     },
     "revops": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/revops/SKILL.md",
-      "computedHash": "27b81373849bacd6214a575c876dd1d059b2fdba641d188a64d079b478b88df5"
+      "computedHash": "e36848119b94ecffc8655cba71231fa5b0b44a067f7198c5bc99fc4c3b3f9d9d"
     },
     "sales-enablement": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/sales-enablement/SKILL.md",
-      "computedHash": "96eef5f722e3c3c2c49ebb0513c0cb9cd36106482836f9304e2174d552423ba7"
+      "computedHash": "b1068a9769cf28f6b6bc68220ef080c44bda88b008a5975d81784ad62975c2dc"
     },
     "schema": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/schema/SKILL.md",
-      "computedHash": "2f4807070c77b5c52af3a7e56d2ca5ee12ae2fd8b749d76ab68d3de40f323e78"
+      "computedHash": "6809d198493d08931ea1c35ab40d2fca27c6ae63a07a4bc183b75df51243a374"
     },
     "seo": {
       "source": "addyosmani/web-quality-skills",
@@ -593,13 +593,13 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/seo-audit/SKILL.md",
-      "computedHash": "01f9f8a3feb3ea69c6c212d61189c610f96ef2cc363adc27fd314d78254bf6ae"
+      "computedHash": "6cc692cab02f5a7ae863fee10ffa9d93d8a63cbe7762b7f6c50e04b7283a1d43"
     },
     "signup": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/signup/SKILL.md",
-      "computedHash": "9efbe9bc357581a924baa33a696b6d58a7126b7a4e4c472cebf18ed3d52cd2fd"
+      "computedHash": "1b0c42d304bfaa7759fb0bdbe4041ed66305cdf5c3a98859ce0855fca02f5a5f"
     },
     "site-architecture": {
       "source": "coreyhaines31/marketingskills",
@@ -629,7 +629,7 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/social/SKILL.md",
-      "computedHash": "7eeedd17a4d59d75281ecd7ff6cb6e2992b1095459550e8d97ef1cae522ea389"
+      "computedHash": "fba7865d9f3b69c23bb43457857ad2423c4c122aad8c16b5ac2cba5e7a7e2986"
     },
     "stitch-design-taste": {
       "source": "Leonxlnx/taste-skill",
@@ -647,7 +647,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-best-practices/SKILL.md",
-      "computedHash": "cf989539415bb2d0ca144d3e7d6a82af56bc68bf1634974fa1154cbed17d36a6"
+      "computedHash": "87ff840334557cbd2ff9d0b700c35d15f6d6a37de6db0cdb35c639f9b2e04728"
     },
     "stripe-directory": {
       "source": "stripe/ai",
@@ -671,7 +671,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-projects/SKILL.md",
-      "computedHash": "d5b674901c9eb8b1c21e9d3a22728f9a4e0a8a6e22737ce7c284ff8daa51a765"
+      "computedHash": "45ed7a7dab034f961e102d73fefd0f8498df44bef18e6ca01ce3a2e9a7ba7116"
     },
     "ui-styling": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -689,7 +689,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/upgrade-stripe/SKILL.md",
-      "computedHash": "f42e7b586d3a0eb8fa508f09ca72927fed8020533774cbfb9080f1807c5572e0"
+      "computedHash": "3d9605ec76e2e2f2ce8b549e621168bbb017e06e4ea97be553c6e0e77204a658"
     },
     "vercel-cli-with-tokens": {
       "source": "vercel-labs/agent-skills",
