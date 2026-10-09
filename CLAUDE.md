@@ -2788,29 +2788,29 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 7 cartes, animation jouée. **Le site n'est pas touché.** Au
   « applique » : `src/app/cristaux/page.jsx` + `CristalVivant.jsx` à refaire dans ce rendu (contenu lu du catalogue, inchangé).
 
-## 💎 MAQUETTE DE LA FICHE « CRISTAL PHOTO 3D — VERTICAL » DANS L'HABILLAGE DU NOUVEAU SITE — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
-> Gérant : « fais-moi une maquette pour le vertical quand je vais l'ouvrir » (après : « si c'est bon tu feras [l'application]
-> pour les autres »). Même règle : MÊME CONTENU, MÊMES RÉGLAGES, seule la mise en page change.
-- **Fichier** : `docs/maquettes/fiche-cristal-vertical.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/YcVSFHnGZtdLxaBGEergDN.
-  Générateur `tools/maquettes/fiche-cristal-vertical.py <capture>` ; capture = `curl localhost:3140/produit/cristal-photo-3d-vertical`
-  après `npx next start -p 3140` (build `.next` présent) — gardée dans le scratchpad (`fiche-vertical-src.html`). Le `<main>` de la
-  VRAIE fiche est gardé tel quel (galerie 8 visuels, 4 tailles 39,90/59,90/99,90/149,90, photo, texte +5 €, police, place du
-  texte, guide photo, socle +14,90/+19,90, aperçu témoin, total, 4× / 3×, quantité, panier, favoris, 4 réassurances, pièce
-  personnalisée, description, guide des tailles, 3 accordéons, « Commandez en toute confiance », « Vous aimerez aussi ») ; seule
-  la vidéo est remplacée par son image d'attente (pas de vidéo dans une maquette) ; les `/_next/image?url=` sont ramenés au fichier.
-- **Habillage** (surcouche CSS `.mxf`, classes du site inchangées) : galerie arrondie 20 px sur fond sable, vignettes 12 px
-  cadre or, **fiche = panneau blanc arrondi 28 px** (titre Playfair, prix en or Playfair, champs arrondis 14 px, réassurances en
-  pavés sable, guide des tailles en pavé sable, accordéons en cartes), bloc confiance en ÉCRIN encre & or.
-  🔴 **v2 (09/10 soir, colère du gérant : « pourquoi t'as changé encore la maquette ? … tout doit être identique »)** : la v1 avait
-  des tailles en pavés sable/encre, un total sable, un bouton pilule, des encadrés d'aide colorés — RIEN de tout ça n'est sur
-  `cristaux-graves`. Corrigé en reprenant EXACTEMENT les règles du panneau de cristaux-graves : tailles = style du site
-  (`.crystal-sizes`, nom en bleu du site, prix EN OR SOUS le nom, `position:static`, cadre or quand choisie, 2 par ligne) ;
-  total, quantité, bouton, « Gravé à la commande » = style du site (pas de surcouche) ; textes d'aide = texte simple sans cadre
-  (`.cg-hint`). ⛔ **Règle : une maquette de fiche reprend les règles de `cristaux-graves.py` telles quelles, jamais une
-  variante « améliorée » — tout le site doit être en harmonie.** Petit JS de maquette :
-  tailles, socle, texte, quantité → total (Grand + socle + texte × 2 = 249,60 €), vignettes et flèches de galerie.
-- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, images chargées. **Le site n'est pas touché.** Au « applique » :
-  cette surcouche devient le style des fiches (ProductDetail), à étendre aux autres fiches s'il le dit (« pour les autres »).
+## 💎 MAQUETTE DE LA FICHE « CRISTAL PHOTO 3D — VERTICAL » = LA MÊME PRÉSENTATION QUE « CRISTAUX DÉJÀ GRAVÉS » — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
+> Gérant : « fais-moi une maquette pour le vertical quand je vais l'ouvrir » → deux versions REFUSÉES (v1 = fiche du site avec une
+> surcouche de couleurs ; v2 = idem corrigée) : « je préfère comme c'est actuellement sur le site, c'est trop moche… tu prends la
+> maquette des blocs de cristal déjà gravés, tu analyses comment t'as fait cette maquette, tu refais la même chose pour le
+> vertical ». ⛔ **Leçon : « comme l'autre maquette » = la MÊME PAGE (mêmes blocs, même ordre, même CSS), pas une surcouche de
+> style sur la fiche actuelle. Toute nouvelle maquette de fiche cristal se construit sur `cristaux-graves.py`.**
+- **Fichier** : `docs/maquettes/fiche-cristal-vertical.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/YcVSFHnGZtdLxaBGEergDN
+  (version 3 = la bonne). Générateur `tools/maquettes/fiche-cristal-vertical.py <capture>` ; capture = `curl
+  localhost:3140/produit/cristal-photo-3d-vertical` après `npx next start -p 3140` (gardée dans le scratchpad, `fiche-vertical-src.html`).
+  **Le CSS, les icônes et les 8 écritures sont RELUS dans `cristaux-graves.py`** (regex sur `CSS = r'''…'''`, `CSS += …`, `ICON`,
+  `FONTS`) : impossible d'avoir une couleur ou un réglage différent de l'autre maquette.
+- **Page** (même ordre que cristaux-graves) : écrin encre & or (titre de la fiche avec « gravure personnalisée en France » en or,
+  accroche, 3 réassurances, 2 photos de cristaux verticaux dans un cadre doré) → à gauche « Votre photo, gravée en 3D » = les
+  8 visuels de la fiche en cartes claires (touchés → grande photo du panneau) → à droite le panneau blanc : grande photo, nom,
+  accroche, **« Choisissez la taille »** (4 tailles 39,90 / 59,90 / 99,90 / 149,90, même style), **« Votre photo à graver en 3D »**
+  (ligne à cocher « Choisir une photo » → « Photo envoyée » dans la maquette + les 2 textes d'aide de la fiche en texte simple),
+  « Texte gravé en plus » +5 € (texte, 8 écritures, place, aperçu posé sur la photo), socle +14,90 (Petit) / +19,90, total,
+  quantité, **bouton grisé tant que la photo n'est pas envoyée**, « Gravé à la commande », barre de téléphone « Choisir la
+  taille » → SOUS le panneau : description, guide des tailles (pavé sable), 3 accordéons, « Commandez en toute confiance »
+  (écrin), « Vous aimerez aussi » — tous LUS dans la capture de la vraie fiche. Pas de vidéo (image d'attente).
+- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 1 h1, 8 cartes, Grand + socle + texte × 2 = 249,60 €, bouton grisé sans
+  photo. **Le site n'est pas touché.** Au « applique » : la fiche cristal (ProductDetail pour `crystal3d`) à refaire dans ce rendu,
+  puis « pour les autres » s'il le dit.
 
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.

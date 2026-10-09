@@ -1,22 +1,27 @@
 #!/usr/bin/env python3
-"""Maquette de la FICHE « Cristal photo 3D — Vertical » dans l'habillage du nouveau site — 09/10/2026 soir.
+"""Maquette de la FICHE « Cristal photo 3D — Vertical » — MÊME PRÉSENTATION que la maquette « Cristaux déjà gravés ».
 
-Gérant : « fais-moi une maquette pour le vertical quand je vais l'ouvrir ». Règle : MÊME CONTENU et MÊMES RÉGLAGES que la
-fiche en ligne (galerie, tailles, photo, texte +5 €, police, place du texte, socle, total, quantité, panier, favoris,
-réassurance, description, guide des tailles, accordéons, bloc confiance) — on part du VRAI rendu de la fiche
-(`next start` + capture) et on ne change QUE l'habillage : écrin « Mélange » (encre & or) pour l'en-tête de fiche,
-galerie arrondie 20 px, panneau blanc arrondi 28 px, pavés sable pour les tailles, champs arrondis, cartes claires.
+Gérant, 09/10/2026 soir (après deux versions refusées) : « tu prends la maquette des blocs de cristal déjà gravés, tu regardes,
+tu analyses comment t'as fait cette maquette, tu refais la même chose pour la maquette du vertical ». Donc cette page est
+construite EXACTEMENT comme `cristaux-graves.py` : son CSS est RELU dans ce fichier (pas recopié, pas « amélioré »), mêmes
+blocs dans le même ordre — écrin encre & or (titre, phrase, 3 réassurances, 2 photos dans un cadre doré) → à gauche la galerie
+en cartes claires (nom sous la photo) → à droite le panneau blanc « Votre cristal » (grande photo, tailles, photo à graver,
+texte en option +5 €, socle, total, quantité, bouton grisé tant que la photo n'est pas envoyée, « Gravé à la commande »), barre
+de téléphone → puis, SOUS le panneau, les blocs de la vraie fiche lus dans la capture (description, guide des tailles,
+accordéons, « Commandez en toute confiance », « Vous aimerez aussi »). Contenu = celui de la fiche en ligne (titres, textes,
+tailles 39,90 / 59,90 / 99,90 / 149,90, socle +14,90 petit / +19,90, texte +5 €, les 8 visuels).
 
 Usage : python3 tools/maquettes/fiche-cristal-vertical.py <capture /produit/cristal-photo-3d-vertical.html>
 Sortie : docs/maquettes/fiche-cristal-vertical.html (+ .fragment.html). Rien n'est touché dans le site.
 """
-import base64, io, json, os, re, sys
+import ast, base64, io, json, os, re, sys, urllib.parse
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "docs", "maquettes")
 PUB = os.path.join(ROOT, "public")
 SRC = sys.argv[1]
+REF = open(os.path.join(ROOT, "tools", "maquettes", "cristaux-graves.py"), encoding="utf-8").read()
 
 
 def uri(path, w=900, q=76):
@@ -34,14 +39,13 @@ def raw_uri(path):
     return f"data:{mime};base64," + base64.b64encode(open(path, "rb").read()).decode()
 
 
+# ---------------------------------------------------------------- la coquille du site (capture de la fiche)
 src = open(SRC, encoding="utf-8").read()
 src = re.sub(r"<script\b.*?</script>", "", src, flags=re.S)
 src = re.sub(r'<link[^>]+rel="(?:preload|modulepreload|preconnect|dns-prefetch)"[^>]*>', "", src)
 body_start = src.find(">", src.find("<body")) + 1
 i_main, j_main = src.find("<main"), src.find("</main>") + len("</main>")
-HEADER = src[body_start:i_main]
-FOOTER = src[j_main:src.rfind("</body>")]
-MAIN = src[i_main:j_main]
+HEADER, FOOTER, FICHE = src[body_start:i_main], src[j_main:src.rfind("</body>")], src[i_main:j_main]
 HTML_CLASS = re.search(r'<html[^>]*class="([^"]*)"', src).group(1)
 
 css = ""
@@ -65,117 +69,233 @@ def local_src(m):
     if p.lower().endswith((".jpg", ".jpeg", ".png")) and os.path.getsize(p) > 120_000:
         return f'{m.group(1)}="{uri(p)}"'
     return f'{m.group(1)}="{raw_uri(p)}"'
-for pat in (r'<button[^>]*>💬 Une question \?</button>', r'<a[^>]*href="/boutique">🛍️ La boutique</a>'):
-    HEADER = re.sub(pat, "", HEADER); FOOTER = re.sub(pat, "", FOOTER)
-
-# ---- la fiche : on garde TOUT, on remplace seulement la vidéo par son image d'attente (pas de vidéo dans une maquette)
-POSTER = re.search(r'poster="([^"]+)"', MAIN).group(1)
-MAIN = re.sub(r'<video class="gallery-bg gallery-video"[^>]*></video>', f'<img src="{POSTER}" alt="Cristal photo 3D vertical" id="galmain">', MAIN, 1)
-MAIN = re.sub(r'<button class=" thumb-video" aria-label="Voir la vidéo"><video[^>]*></video></button>',
-              f'<button class="active" aria-label="Voir la vidéo"><img src="{POSTER}" alt=""></button>', MAIN, 1)
-MAIN = MAIN.replace('<a class="cf-shot">', '<a class="cf-shot">')
-MAIN = re.sub(r'<div class="cf-shot"><img src="https://cdn\.shopify\.com[^"]*"[^>]*/></div>', "", MAIN)  # réalisation hébergée ailleurs : injoignable d'ici
-MAIN = MAIN.replace('<main>', '<main class="mxf">', 1)
-import urllib.parse
-def next_image(m):  # <img src="/_next/image?url=%2Fproduits%2Fx.jpg&w=…"> → le fichier local
+def next_image(m):
     q = urllib.parse.parse_qs(urllib.parse.urlparse(m.group(1).replace("&amp;", "&")).query)
     return f'src="{q.get("url", [""])[0]}"'
-MAIN = re.sub(r'src="(/_next/image\?[^"]+)"', next_image, MAIN)
-MAIN = re.sub(r'\s(?:srcset|srcSet)="[^"]*"', "", MAIN)
-for part in ("HEADER", "FOOTER", "MAIN"):
-    globals()[part] = re.sub(r'(src)="(/[^"]+)"', local_src, globals()[part])
-    globals()[part] = re.sub(r'href="/[^"]*"', 'href="#"', globals()[part])
+def nettoie(html):
+    html = re.sub(r'<button[^>]*>💬 Une question \?</button>', "", html)
+    html = re.sub(r'<a[^>]*href="/boutique">🛍️ La boutique</a>', "", html)
+    html = re.sub(r'src="(/_next/image\?[^"]+)"', next_image, html)
+    html = re.sub(r'\s(?:srcset|srcSet)="[^"]*"', "", html)
+    html = re.sub(r'<div class="cf-shot"><img src="https://cdn\.shopify\.com[^"]*"[^>]*/></div>', "", html)
+    html = re.sub(r'(src)="(/[^"]+)"', local_src, html)
+    return re.sub(r'href="/[^"]*"', 'href="#"', html)
+HEADER, FOOTER = nettoie(HEADER), nettoie(FOOTER)
 
-CSS = r'''
-.mq-banner{background:#2b2620;color:#d9c79a;text-align:center;font-size:.78rem;padding:8px 14px;letter-spacing:.02em}
-.mq-banner b{color:#e2c67e}
-.mxf{--cream:#fbf7ee;--paper:#fdfaf3;--sand:#f3e8d3;--sand2:#eadbbf;--ink:#1a1206;--ink2:#241a0c;--muted:#6b5f4b;--gold:#c9a24b;--gold-d:#a98935;--gold-l:#e2c67e;--gold-t:#7c6120;--r:20px;--r2:14px;--r3:28px;--sh:0 14px 36px rgba(26,18,6,.10);--ink-soft:var(--muted);--line:var(--sand2);background:var(--cream)}
-.mxf>nav.container{padding-top:16px!important;color:var(--muted)!important}
-.mxf .product-layout{gap:clamp(22px,3vw,40px);padding:22px 0 64px;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
-/* galerie */
-.mxf .gallery-main{border-radius:var(--r);box-shadow:var(--sh);background:var(--sand)}
-.mxf .gallery-main.gallery-contain{background:radial-gradient(120% 90% at 50% 18%,#fffdf8,#f0e8d8 70%,#e7dcc5)}
-.mxf .gallery-arrow{background:rgba(255,255,255,.9);border:0;box-shadow:0 6px 16px rgba(26,18,6,.14)}
-.mxf .gallery-thumbs{gap:8px;margin-top:12px}
-.mxf .gallery-thumbs button{width:62px;height:62px;border-radius:12px;border:2px solid transparent;background:var(--sand)}
-.mxf .gallery-thumbs button.active{border-color:var(--gold)}
-.mxf .gallery-thumbs button.thumb-video::after{display:none}
-/* panneau = la fiche */
-.mxf .product-info{background:#fff;border-radius:var(--r3);box-shadow:var(--sh);padding:22px 22px 24px}
-.mxf .product-info .breadcrumb{display:none}
-.mxf .product-info h1{font-family:var(--font-display),Georgia,serif;font-weight:600;letter-spacing:-.01em;font-size:clamp(1.45rem,2.6vw,1.9rem);line-height:1.15;margin:0 0 8px;text-wrap:balance}
-.mxf .pd-titrerow{align-items:flex-start}
-.mxf .fav-pastille{border-color:var(--sand2)}
-.mxf .product-info>p[style]{color:var(--muted)!important;margin:0 0 12px!important}
-.mxf .product-info .price-lead{font-family:var(--font-display),Georgia,serif;font-weight:400;font-size:1.7rem;color:var(--gold-t);margin-bottom:18px}
-.mxf .field{margin-bottom:16px}
-.mxf .field label{font-size:.92rem;color:var(--ink)}
-.mxf .field label span[style]{color:var(--muted)!important}
-.mxf .crystal-sizes{grid-template-columns:1fr 1fr}
-.mxf .crystal-sizes .variant-swatch{padding:11px 12px}
-.mxf .crystal-sizes .vs-price{position:static;display:block;margin-top:4px}
-.mxf .field select,.mxf .field input{border:1.5px solid var(--sand2);border-radius:var(--r2);background:#fff;padding:12px 14px}
-.mxf .field select:focus,.mxf .field input:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.18)}
-.mxf .photo-dropzone{border:1.5px dashed var(--sand2);background:#fff;border-radius:var(--r2);color:var(--ink);font-weight:600;padding:16px;text-align:center;display:block;cursor:pointer}
-.mxf .photo-dropzone:hover{border-color:var(--gold)}
-.mxf .perso-hint,.mxf .photo-check-note{background:none;border:0;padding:0;margin:8px 0 14px;color:var(--muted);font-size:.78rem;line-height:1.5}
-.mxf .perso-hint-img{border-radius:var(--r2)}
-.mxf .engrave-preview .ep-label{color:var(--muted);font-size:.8rem}
-.mxf .engrave-preview .ep-plate{border-radius:var(--r2)}
-.mxf .pd-nfois{color:var(--muted);font-size:.84rem}
-.mxf .fav-ligne{color:var(--muted)}
-.mxf .trust-cards{gap:8px}
-.mxf .tcard{border:0;background:var(--sand);border-radius:var(--r2)}
-.mxf .tcard b{color:var(--ink)}.mxf .tcard small{color:var(--muted)}
-.mxf .product-desc{color:var(--ink)}
-.mxf .product-desc h3{font-family:var(--font-display),Georgia,serif;font-weight:600}
-.mxf .crystal-guide-section{background:var(--sand);border-radius:var(--r);padding:18px 16px 22px;margin:22px 0 10px}
-.mxf .crystal-guide-section h3{font-family:var(--font-display),Georgia,serif;text-align:center}
-.mxf .crystal-guide-section .cg-hint{text-align:center}
-.mxf .crystal-guide .cg-item b{color:var(--gold-t)}
-.mxf .info-accordion details{border:1.5px solid var(--sand2);border-radius:var(--r2);background:#fff;margin-bottom:8px;padding:0 14px}
-.mxf .info-accordion summary{padding:13px 0;font-weight:600}
-.mxf .info-accordion .info-body{color:var(--muted);padding-bottom:14px}
-/* bloc confiance = écrin encre & or, comme les ouvertures des autres maquettes */
-.mxf .confiance{background:radial-gradient(60% 90% at 85% 0%,rgba(201,162,75,.30),transparent 60%),var(--ink2);color:#fff;padding:clamp(40px,6vw,64px) 0;border:0}
-.mxf .confiance .cf-eyebrow{display:none}
-.mxf .confiance .cf-title{color:#fff;font-family:var(--font-display),Georgia,serif;font-weight:600}
-.mxf .confiance .cf-sub{color:#d9ccb0}
-.mxf .cf-card{background:rgba(255,255,255,.06);border:1px solid rgba(226,198,126,.35);border-radius:var(--r);box-shadow:none}
-.mxf .cf-card .cf-t{color:#fff}.mxf .cf-card .cf-d{color:#b8a98a}
-.mxf .cf-real-h{color:var(--gold-l)}
-.mxf .cf-shot{border-radius:var(--r2);overflow:hidden;box-shadow:0 0 0 1px rgba(226,198,126,.5)}
-@media (max-width:860px){
-  .mxf .product-layout{grid-template-columns:1fr;gap:18px;padding-top:14px}
-  .mxf .product-info{padding:18px 16px 20px;border-radius:22px}
-  .mxf .gallery-thumbs button{width:56px;height:56px}
-}
+# ---------------------------------------------------------------- le CSS, les icônes et les polices : RELUS dans cristaux-graves.py
+CSS = "".join(re.findall(r"^CSS \+?= r'''(.*?)'''", REF, re.S | re.M))
+ICON = ast.literal_eval("{" + re.search(r"^ICON = \{(.*?)^\}", REF, re.S | re.M).group(1) + "}")
+FONTS = ast.literal_eval(re.search(r"^FONTS = (\[.*?\])", REF, re.S | re.M).group(1))
+def ic(n, cls="cg-ic"):
+    return (f'<svg class="{cls}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" '
+            f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{ICON[n]}</svg>')
+
+# ---------------------------------------------------------------- le contenu de la fiche, lu dans la capture
+TITRE = re.search(r"<h1>(.*?)</h1>", FICHE).group(1)
+TAGLINE = re.search(r'<p style="color:var\(--ink-soft\);margin-top:0">(.*?)</p>', FICHE).group(1)
+TAILLES = re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-sub">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', FICHE)
+PRIX = {t[0]: float(re.sub(r"[^0-9,]", "", t[2]).replace(",", ".")) for t in TAILLES}
+SOCLE_PRIX = {"Petit": 14.90, "Moyen": 19.90, "Grand": 19.90, "XL": 19.90}  # products.js : amount 19,90, 14,90 pour le petit
+TEXTE_PRIX = 5.00
+HINT_PHOTO = re.search(r'<p class="perso-hint" style="margin-top:8px">(.*?)</p>', FICHE).group(1)
+NOTE_PHOTO = re.search(r'<p class="photo-check-note">(.*?)</p>', FICHE).group(1)
+POSTER = re.search(r'poster="([^"]+)"', FICHE).group(1)
+VISUELS = [POSTER] + re.findall(r'<button class="" aria-label="Voir le visuel \d+"><img src="([^"]+)"', FICHE)
+NOMS = ["Amour inconditionnel", "Portrait", "Enfant et son chat", "Couple", "Enfant et son chien", "Entre amis", "Le bloc vierge", "Guide des tailles"]
+PRODUCT_DESC = re.search(r'<div class="product-desc">.*?</div>(?=<div class="crystal-guide-section">)', FICHE, re.S).group(0)
+GUIDE = re.search(r'<div class="crystal-guide-section">.*?</div></div>(?=<div class="info-accordion">)', FICHE, re.S).group(0)
+ACCORD = re.search(r'<div class="info-accordion">.*?</details></div>', FICHE, re.S).group(0)
+CONF = re.search(r'<section class="confiance">.*?</section>', FICHE, re.S).group(0)
+AUSSI = re.search(r'<section class="section"><div class="container"><div class="section-head"><span class="eyebrow">À découvrir</span><h2>Vous aimerez aussi</h2>.*?</section>', FICHE, re.S)
+AUSSI = AUSSI.group(0) if AUSSI else ""
+SOCLE = uri(os.path.join(PUB, "produits", "socle-led-rectangle.jpg"), 300, 74)
+
+def tuile(i, src, nom):
+    return f'''<button type="button" class="cg-tile{' on' if i == 0 else ''}" data-i="{i}" aria-pressed="{'true' if i == 0 else 'false'}">
+      <span class="cg-img"><img src="{uri(os.path.join(PUB, src.lstrip('/')), 640, 76)}" alt="{nom}" loading="lazy"><span class="cg-ok" aria-hidden="true">{ic("check")}</span></span>
+      <span class="cg-meta"><span class="cg-tag">{'Le cristal' if i >= 6 else 'Exemple gravé'}</span><b class="cg-nom">{nom}</b></span>
+    </button>'''
+TILES = "\n".join(tuile(i, s, n) for i, (s, n) in enumerate(zip(VISUELS, NOMS)))
+SIZES = "".join(
+    f'''<button type="button" class="variant-swatch{" active" if t[0] == "Petit" else ""}" data-taille="{t[0]}" aria-pressed="{"true" if t[0] == "Petit" else "false"}">
+        <span class="vs-title">{t[0]}</span><span class="vs-sub">{t[1]}</span>
+        <span class="vs-price"><span class="vs-now">{t[2]}</span></span></button>''' for t in TAILLES)
+POLICES = "".join(f'<button type="button" class="cg-font fnt-{k}{" on" if k == "playfair" else ""}" data-font="{k}" aria-pressed="{"true" if k == "playfair" else "false"}">{lab}</button>' for k, lab in FONTS)
+PLACES = "".join(f'<button type="button" class="cg-chip{" on" if k == "bas" else ""}" data-pos="{k}" aria-pressed="{"true" if k == "bas" else "false"}">{lab}</button>' for k, lab in (("bas", "En bas"), ("haut", "En haut"), ("gauche", "À gauche"), ("droite", "À droite")))
+HERO1 = uri(os.path.join(PUB, "produits", "cristal-v-femme.jpg"), 600, 78)
+HERO2 = uri(os.path.join(PUB, "produits", "cristal-v-couple.jpg"), 600, 78)
+GRAND0 = uri(os.path.join(PUB, POSTER.lstrip("/")), 900, 78)
+
+MAIN = f'''<main class="cg">
+<section class="cg-intro cg-ecrin">
+  <div class="container cg-ecrin-grid">
+    <div class="cg-ecrin-txt">
+    <h1>{TITRE.replace(" — gravure personnalisée en France", " — <em>gravure personnalisée en France</em>")}</h1>
+    <p class="cg-lede">{TAGLINE}</p>
+    <ul class="cg-trust">
+      <li>{ic("gem")}<span><b>Cristal optique K9</b>pureté et éclat</span></li>
+      <li>{ic("pin")}<span><b>Gravé en France</b>dans notre atelier</span></li>
+      <li>{ic("truck")}<span><b>Livraison suivie</b>colis &amp; point relais</span></li>
+    </ul>
+    </div>
+    <div class="cg-ecrin-pics" aria-hidden="true">
+      <figure class="cg-epic"><img src="{HERO1}" alt="" loading="eager"><figcaption>Un portrait</figcaption></figure>
+      <figure class="cg-epic"><img src="{HERO2}" alt="" loading="eager"><figcaption>Un couple</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="cg-shop" id="modeles" aria-labelledby="t-mod">
+  <div class="container cg-layout">
+    <div class="cg-col">
+      <div class="cg-head">
+        <h2 id="t-mod">Votre photo, gravée en 3D</h2>
+        <p>Touchez un exemple pour le voir en grand, puis choisissez la taille de votre cristal.</p>
+      </div>
+      <div class="cg-grid" id="grille">{TILES}</div>
+    </div>
+
+    <aside class="cg-panel" id="panneau" aria-labelledby="t-pan" aria-live="polite">
+      <div class="cg-stage" id="stage"><img id="grand" src="{GRAND0}" alt="Cristal photo 3D vertical"><span class="cg-txtpv fnt-playfair pos-bas" id="txtpv" hidden></span></div>
+      <h3 class="cg-pname" id="t-pan">Cristal Photo 3D — Vertical</h3>
+      <p class="cg-pdesc" id="pdesc">{TAGLINE}</p>
+
+      <div class="field">
+        <label>Choisissez la taille</label>
+        <div class="variant-swatches crystal-sizes" id="tailles">{SIZES}</div>
+      </div>
+
+      <div class="field">
+        <label>Votre photo à graver en 3D</label>
+        <button type="button" class="cg-socle" id="photo" aria-pressed="false">
+          <span class="cg-txt-ic">{ic("photo")}</span>
+          <span><b id="photolab">Choisir une photo</b><small>Nette, bien éclairée, les visages bien visibles</small></span>
+          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
+        </button>
+        <p class="cg-hint">{HINT_PHOTO}</p>
+        <p class="cg-hint">{NOTE_PHOTO}</p>
+      </div>
+
+      <div class="field">
+        <label>Texte gravé en plus (en option)</label>
+        <button type="button" class="cg-socle" id="txton" aria-pressed="false" aria-controls="txtzone">
+          <span class="cg-txt-ic">{ic("pen")}</span>
+          <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec la photo</small></span>
+          <span class="cg-socle-p">+5,00 €</span>
+          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
+        </button>
+        <div class="cg-txt" id="txtzone" hidden>
+          <label class="cg-sub" for="txt">Votre texte</label>
+          <div class="cg-inp"><input id="txt" type="text" maxlength="40" placeholder="Prénom, date, petit mot…" autocomplete="off"><span id="txtn">0/40</span></div>
+          <span class="cg-sub">Écriture</span>
+          <div class="cg-fonts" role="group" aria-label="Écriture du texte">{POLICES}</div>
+          <span class="cg-sub">Où placer le texte ?</span>
+          <div class="cg-pos" role="group" aria-label="Place du texte">{PLACES}</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Socle lumineux LED (en option)</label>
+        <button type="button" class="cg-socle" id="socle" aria-pressed="false">
+          <img src="{SOCLE}" alt="">
+          <span><b>Ajouter le socle lumineux</b><small>LED multicolores, couleurs au toucher, sur prise secteur</small></span>
+          <span class="cg-socle-p" id="soclep">+14,90 €</span>
+          <span class="cg-box" aria-hidden="true">{ic("check")}</span>
+        </button>
+      </div>
+
+      <div class="pd-totbox"><span class="lab">Total tout compris</span><span class="val" id="total">—</span></div>
+      <div class="qty-row">
+        <div class="qty-stepper"><button type="button" id="moins" aria-label="Moins">−</button><span id="qte">1</span><button type="button" id="plus" aria-label="Plus">+</button></div>
+        <button type="button" class="btn btn-gold prc-off" id="ajout" style="flex:1" disabled>Ajouter au panier</button>
+      </div>
+      <p class="prc-addhint" id="manque">Envoyez d'abord la photo à graver.</p>
+      <div class="pd-perso"><b>✦ Gravé à la commande</b><p>Chaque cristal est gravé pour vous dans notre atelier, puis emballé avec soin.</p></div>
+    </aside>
+  </div>
+</section>
+
+<section class="cg-fiche">
+  <div class="container cg-fiche-in">
+    {PRODUCT_DESC}
+    {GUIDE}
+    {ACCORD}
+  </div>
+</section>
+{CONF}
+{AUSSI}
+
+<div class="cg-bar" id="barre" hidden>
+  <img id="barimg" src="{GRAND0}" alt="">
+  <span class="cg-bar-t"><b>Cristal Photo 3D — Vertical</b><small id="barprix"></small></span>
+  <a class="btn btn-gold" href="#panneau">Choisir la taille</a>
+</div>
+</main>'''
+MAIN = nettoie(MAIN)
+
+# Les blocs de la fiche repris SOUS le panneau : même habillage que le reste (rien d'autre n'est ajouté)
+CSS += r'''
+.cg-fiche{padding:0 0 clamp(40px,6vw,64px)}
+.cg-fiche-in{max-width:860px}
+.cg-fiche .product-desc h3{font-family:var(--font-display),Georgia,serif;font-weight:600}
+.cg-fiche .crystal-guide-section{background:var(--sand);border-radius:var(--r);padding:18px 16px 22px;margin:24px 0}
+.cg-fiche .crystal-guide-section h3{font-family:var(--font-display),Georgia,serif;text-align:center}
+.cg-fiche .crystal-guide-section .cg-hint{text-align:center;margin-bottom:18px}
+.cg-fiche .crystal-guide .cg-item b{color:var(--gold-t)}
+.cg-fiche .info-accordion details{border:1.5px solid var(--sand2);border-radius:var(--r2);background:#fff;margin-bottom:8px;padding:0 14px}
+.cg-fiche .info-accordion summary{padding:13px 0;font-weight:600}
+.cg-fiche .info-accordion .info-body{color:var(--muted);padding-bottom:14px}
+.cg .confiance{background:radial-gradient(60% 90% at 85% 0%,rgba(201,162,75,.30),transparent 60%),var(--ink2);color:#fff;padding:clamp(40px,6vw,64px) 0;border:0}
+.cg .confiance .cf-eyebrow{display:none}
+.cg .confiance .cf-title{color:#fff;font-family:var(--font-display),Georgia,serif;font-weight:600}
+.cg .confiance .cf-sub{color:#d9ccb0}
+.cg .cf-card{background:rgba(255,255,255,.06);border:1px solid rgba(226,198,126,.35);border-radius:var(--r);box-shadow:none}
+.cg .cf-card .cf-t{color:#fff}.cg .cf-card .cf-d{color:#b8a98a}
+.cg .cf-real-h{color:var(--gold-l)}
+.cg .cf-shot{border-radius:var(--r2);overflow:hidden;box-shadow:0 0 0 1px rgba(226,198,126,.5)}
+.cg .cg-stage #grand{animation:none}
 '''
 
 JS = r'''
 (function(){
-  var P={Petit:39.9,Moyen:59.9,Grand:99.9,XL:149.9},S={Petit:14.9,Moyen:19.9,Grand:19.9,XL:19.9};
+  var P=__PRIX__, S=__SOCLE__, TX=__TXT__;
   var eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={t:'Petit',q:1};
-  var sw=[].slice.call(document.querySelectorAll('.crystal-sizes .variant-swatch'));
-  var socle=document.getElementById('pf-socle'),txt=document.getElementById('pf-texte'),cnt=document.querySelector('.char-count');
-  var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
-  var qb=document.querySelectorAll('.qty-stepper button');
-  function maj(){var u=P[st.t]+(socle.value==='oui'?S[st.t]:0)+(txt.value.trim()?5:0);tot.textContent=eur(u*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;
-    var o=socle.options[socle.options.length-1];o.textContent='Avec socle LED — +'+eur(S[st.t])}
-  sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();maj()})});
-  socle.addEventListener('change',maj);txt.addEventListener('input',function(){cnt.textContent=txt.value.length+'/40';maj()});
-  qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
-  var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
-  th.forEach(function(b){b.addEventListener('click',function(){th.forEach(function(x){x.classList.remove('active')});b.classList.add('active');main.src=b.querySelector('img').src})});
-  var i=0;document.querySelector('.gallery-arrow-next').addEventListener('click',function(){i=(th.indexOf(document.querySelector('.gallery-thumbs button.active'))+1)%th.length;th[i].click()});
-  document.querySelector('.gallery-arrow-prev').addEventListener('click',function(){i=(th.indexOf(document.querySelector('.gallery-thumbs button.active'))-1+th.length)%th.length;th[i].click()});
+  var st={taille:'Petit',photo:false,txt:false,texte:'',font:'playfair',pos:'bas',socle:false,q:1};
+  var $=function(id){return document.getElementById(id)};
+  var tiles=[].slice.call(document.querySelectorAll('.cg-tile'));
+  tiles.forEach(function(t){t.addEventListener('click',function(){
+    tiles.forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
+    var g=$('grand');g.src=t.querySelector('img').src;$('barimg').src=g.src;g.style.animation='none';void g.offsetWidth;g.style.animation='';
+    if(window.innerWidth<=860){$('panneau').scrollIntoView({behavior:'smooth',block:'start'})}
+  })});
+  [].forEach.call(document.querySelectorAll('[data-taille]'),function(b){b.addEventListener('click',function(){
+    st.taille=b.dataset.taille;[].forEach.call(document.querySelectorAll('[data-taille]'),function(x){var on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on)});maj()})});
+  $('photo').addEventListener('click',function(){st.photo=!st.photo;this.classList.toggle('on',st.photo);this.setAttribute('aria-pressed',st.photo);$('photolab').textContent=st.photo?'Photo envoyée':'Choisir une photo';maj()});
+  $('socle').addEventListener('click',function(){st.socle=!st.socle;this.classList.toggle('on',st.socle);this.setAttribute('aria-pressed',st.socle);maj()});
+  $('txton').addEventListener('click',function(){st.txt=!st.txt;this.classList.toggle('on',st.txt);this.setAttribute('aria-pressed',st.txt);$('txtzone').hidden=!st.txt;if(st.txt)$('txt').focus();maj()});
+  $('txt').addEventListener('input',function(){st.texte=this.value.trim();$('txtn').textContent=this.value.length+'/40';maj()});
+  [].forEach.call(document.querySelectorAll('[data-font]'),function(b){b.addEventListener('click',function(){st.font=b.dataset.font;[].forEach.call(document.querySelectorAll('[data-font]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
+  [].forEach.call(document.querySelectorAll('[data-pos]'),function(b){b.addEventListener('click',function(){st.pos=b.dataset.pos;[].forEach.call(document.querySelectorAll('[data-pos]'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});maj()})});
+  $('moins').addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});
+  $('plus').addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
+  $('ajout').addEventListener('click',function(){var b=this;b.textContent='Ajouté au panier ✓';setTimeout(function(){b.textContent='Ajouter au panier'},2200)});
+  function maj(){
+    $('soclep').textContent='+'+eur(S[st.taille]);$('qte').textContent=st.q;
+    var avecTxt=st.txt&&!!st.texte;
+    var unit=P[st.taille]+(st.socle?S[st.taille]:0)+(avecTxt?TX:0);
+    var ok=st.photo&&(!st.txt||avecTxt);
+    var pv=$('txtpv');pv.hidden=!avecTxt;pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
+    $('total').textContent=eur(unit*st.q);
+    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=!st.photo?'Envoyez d\'abord la photo à graver.':'Écrivez le texte à graver, ou retirez l\'option texte.';
+    $('barprix').textContent=st.taille+' · '+eur(unit);
+  }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
-  maj();
+  var vu=false;if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
+  $('barre').hidden=false;maj();
 })();
-'''
+'''.replace("__PRIX__", json.dumps(PRIX)).replace("__SOCLE__", json.dumps(SOCLE_PRIX)).replace("__TXT__", str(TEXTE_PRIX))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Cristal photo 3D — Vertical » (même contenu, mêmes réglages, nouvel habillage) · <b>rien n\'est encore sur le site</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Cristal photo 3D — Vertical », présentée comme la page des cristaux déjà gravés · <b>rien n\'est encore sur le site</b></div>'
 TITLE = "<title>Fiche Cristal photo 3D vertical — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
@@ -184,4 +304,4 @@ full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="
 frag = f'<meta charset="utf-8">{TITLE}{STYLE}{BODY}<script>{JS}</script>'
 open(os.path.join(OUT, "fiche-cristal-vertical.html"), "w", encoding="utf-8").write(full)
 open(os.path.join(OUT, "fiche-cristal-vertical.fragment.html"), "w", encoding="utf-8").write(frag)
-print("ok", len(full) // 1024, "Ko")
+print("ok", len(full) // 1024, "Ko", PRIX, len(VISUELS), "visuels")
