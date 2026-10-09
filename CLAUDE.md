@@ -2726,7 +2726,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 ## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
 > **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
 > versions (sans / avec puzzles) ont été refaites dans un monde qui réunit les trois pistes, en gardant toutes les corrections
-> du 09/10 ; les deux artifacts sont republiés (sans puzzles v9, avec puzzles v5). Détail du monde dans `DESIGN.md` (réécrit).
+> du 09/10 ; les deux artifacts sont republiés (sans puzzles v10, avec puzzles v6). Détail du monde dans `DESIGN.md` (réécrit).
 > · **piste A (L'Écrin)** pour le haut de page, la carafe et le sur mesure : encre, halo or, cadre doré à double filet, laser,
 >   reflet, étiquette nom + prix, **ruban or qui défile** sous le héros (il remplace le bandeau encre du haut) ;
 > · **piste C (Atelier)** pour « Trouver le bon cadeau EN TROIS ÉTAPES » : ① Pour qui ② Pour quelle occasion ③ Quel budget ;
@@ -2753,6 +2753,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > aucun texte < 11 px ; captures regardées ; `impeccable detect` : restent des avertissements assumés (halo or et ruban
 > = signatures de la piste A, italique Playfair = identité du site, tirets dans les NOMS de produits du catalogue).
 > ⚠️ Piège corrigé au passage : le clone du parcours sur la page Offrir gardait `id="trouver"` (doublon d'id).
+> ⛔ **3ᵉ REFUS DU 09/10 (capture de son téléphone, page « Toute la boutique ») : la barre des rayons + filtres des pages
+> univers** : « sur le portable c'est gênant quand tu descends, c'est trop gros, les cases, c'est trop moche ». Elle était
+> COLLANTE et empilait 7 rayons + 5 « pour qui » + 3 budgets + le tri en puces → un écran entier de pavés beiges qui suivait le
+> défilement. **Corrigé le jour même (téléphone seulement, ordinateur inchangé)** : barre NON collante, rayons sur UNE ligne
+> qu'on fait glisser, et les filtres en trois petits menus déroulants natifs « Pour qui ▾ · Budget ▾ · Trier ▾ » (`.uf-sel`,
+> même logique que les puces : un `change` coche la puce correspondante, les choix sans résultat sont grisés dans le menu).
+> Leçon (3 refus en un jour, tous sur téléphone) : **jamais plus de deux lignes de pavés/puces sur téléphone** ; au-delà, un
+> rail à glisser ou un menu déroulant ; et rien de collant qui dépasse une ligne.
 > ⛔ **« DIS-MOI AVANT DE LE FAIRE » (gérant, 09/10, deux fois)** : sur cette maquette, tout déplacement ou ajout se PROPOSE
 > d'abord en une phrase, et ne se fait qu'après son « ok ». En attente au 09/10 soir : ① le bloc « Trouver le bon cadeau »
 > à descendre « juste avant les packs pour les enfants » (= avant le coffret assorti de Bébé & Enfant, à confirmer) ;
@@ -2789,9 +2797,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > vraiment jolis, modernes, classe, luxe, avec les mêmes couleurs ». Les deux versions sont donc REFAITES dans un nouveau
 > monde visuel ; les versions précédentes restent dans git (commit `0d7ae16`) et dans l'historique des artifacts.
 > · **sans puzzles** : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
->   (version 7 = luxe, version 8 = Mélange, **version 9 = Mélange en tuiles photo**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
+>   (version 7 = luxe, version 8 = Mélange, version 9 = tuiles photo, **version 10 = filtres compacts sur téléphone**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
 > · **avec puzzles** : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM
->   (version 3 = luxe, version 4 = Mélange, **version 5 = Mélange en tuiles photo**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
+>   (version 3 = luxe, version 4 = Mélange, version 5 = tuiles photo, **version 6 = filtres compacts sur téléphone**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
 > Les deux sortent du MÊME générateur **`tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`** (l'ancien
 > `accueil-v2.py`, qui réutilisait la maquette « accueil moderne », est supprimé). La maquette ENREGISTRÉE
 > `accueil-moderne.html` (04/10) n'est pas touchée.

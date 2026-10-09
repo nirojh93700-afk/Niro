@@ -192,6 +192,7 @@ En attente de SA décision :
   assorti de Bébé & Enfant (après les quatre créations enfant), compréhension à confirmer ; ② **« mieux vendre le produit »** :
   dire dans ce bloc que c'est fait main en France, gravé en France, découpé en France (phrase proposée sous le titre :
   « Fait main en France : chaque pièce est gravée et découpée dans notre atelier. »). Rien bougé tant qu'il n'a pas dit ok.
+  (Corrigé sans attendre, car refus net « c'est trop moche » : la barre rayons + filtres des pages univers sur téléphone, le 09/10.)
 
 - **Maquette « Cristaux déjà gravés » (07/10/2026) — ENREGISTRÉE (version 4)** — https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz, rien en ligne :
   (prix = cristaux photo ✅, format au choix du client ✅) · « Fillette au ballon » (Banksy, droits) à garder ? ·
@@ -225,7 +226,7 @@ En attente de SA décision :
   Les deux versions sont refaites (écrin de A en haut et pour la carafe, parcours en 3 étapes de C **en tuiles photo** (ses cartes blanches
   refusées le 09/10 : « bizarre »), bijoux plein cadre + verre de B,
   ton chaleureux de C partout, Inter + Playfair, logo intouché, toutes les corrections du 09/10 gardées) et republiées :
-  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 (v9) · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM (v5).
+  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 (v10) · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM (v6).
   Générateur `tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`, monde décrit dans `DESIGN.md`. Les 3 pistes restent
   visibles (https://claude.ai/artifact/8nwU5hA2o4AphYUm941zTC) s'il veut changer le dosage. Rien en ligne : attend « applique ».
 - (historique) **Maquette « Accueil + univers » — VERSION LUXE du 09/10/2026** (feu vert du gérant : « tu peux tout changer sauf le logo ») :

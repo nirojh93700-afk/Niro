@@ -52,7 +52,9 @@ Le cadre doré de l'écrin garde ses angles presque droits (6 px, filet intérie
   dégradé encre, bord or + pastille or avec une coche quand elle est choisie, grisée à 35 % quand elle ne donnerait
   aucun résultat, une seule par étape. Sur téléphone les tuiles forment un rail qu'on fait défiler (138 px, 2,6
   visibles). Le budget (`.ft-txt`) est un pavé blanc : petit mot + montant en Playfair, choisi = bord or + fond doré clair.
-- **Puce** `.puce` (rayons, filtres, onglets, raccourcis) : pavé sable 14 px, encre quand choisie, 44 px minimum.
+- **Puce** `.puce` (rayons, filtres, onglets, raccourcis) : pavé sable 14 px, encre quand choisie, 44 px minimum. Sur
+  téléphone, jamais plus de deux lignes de puces : les rayons deviennent un rail à glisser et les filtres des menus
+  déroulants natifs (`.uf-sel`, « Pour qui ▾ · Budget ▾ · Trier ▾ »), et la barre n'est plus collante (refus du 09/10).
 - **Carte produit** `.uc` : photo carrée arrondie 20 px, étiquette SOUS la photo (Nouveau, Best-seller, Naissance…),
   nom Inter 600, prix Playfair `--gold-t`, « Prêt à offrir » pour les pièces non gravables, « Personnaliser » qui monte
   sur la photo au survol, cœur en haut à droite (toujours visible au doigt, 44 px).

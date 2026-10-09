@@ -231,13 +231,16 @@ def page_univers(u):
     uid = u["id"]
     chips = "".join(puce("a", f'href="#r-{uid}-{i}"', esc(n)) for i, (n, _) in enumerate(u["rayons"]))
     if uid == "enfants": chips += puce("a", 'href="#coffret-enfants"', "Coffret assorti")
+    def sel(k, label, items):
+        return f'<select class="uf-sel" data-fs="{k}" aria-label="{label}"><option value="">{label}</option>' + "".join(f'<option value="{v}">{l}</option>' for v, l in items) + '</select>'
+    BUD = (("0-20", "Moins de 20 €"), ("20-40", "20 à 40 €"), ("40-999", "Plus de 40 €"))
     filt = ""
     if u.get("pourqui"):
         filt += '<div class="uf-grp" role="group" aria-label="Pour qui"><span>Pour qui</span>' + "".join(
-            puce("button", f'type="button" data-f="qui" data-v="{v}" aria-pressed="false"', esc(l)) for v, l in POURQUI.items()) + "</div>"
+            puce("button", f'type="button" data-f="qui" data-v="{v}" aria-pressed="false"', esc(l)) for v, l in POURQUI.items()) + sel("qui", "Pour qui", [(v, esc(l)) for v, l in POURQUI.items()]) + "</div>"
     filt += '<div class="uf-grp" role="group" aria-label="Budget"><span>Budget</span>' + "".join(
-        puce("button", f'type="button" data-f="budget" data-v="{v}" aria-pressed="false"', l) for v, l in (("0-20", "Moins de 20 €"), ("20-40", "20 à 40 €"), ("40-999", "Plus de 40 €"))) + "</div>"
-    filt += '<label class="uf-sort">Trier <select><option value="">Notre sélection</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></label>'
+        puce("button", f'type="button" data-f="budget" data-v="{v}" aria-pressed="false"', l) for v, l in BUD) + sel("budget", "Budget", BUD) + "</div>"
+    filt += '<label class="uf-sort"><span class="vh">Trier</span><select><option value="">Trier</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></label>'
     blocs = ""
     for i, (n, l) in enumerate(u["rayons"]):
         cards = "".join(carte(s, uid) for s in l) if isinstance(l, list) else bientot(l)
@@ -877,7 +880,8 @@ input{caret-color:var(--gold-d)}
 .uf-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .uf-grp>span{font-size:.84rem;font-weight:600;color:var(--muted);margin-right:6px}
 .uf-sort{margin-left:auto;font-size:.84rem;font-weight:600;color:var(--muted);display:flex;gap:10px;align-items:center}
-.uf-sort select{min-height:44px;padding:9px 14px;border-radius:var(--r2);border:1px solid var(--line2);background:var(--cream);font:inherit;color:var(--ink)}
+.uf-sort select,.uf-sel{min-height:44px;padding:9px 32px 9px 14px;border-radius:var(--r2);border:1px solid var(--line2);background:var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1206' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/16px;font:inherit;font-weight:600;color:var(--ink);appearance:none;-webkit-appearance:none}
+.uf-sel{display:none}.uf-sel.on{border-color:var(--gold);background-color:#fff6dc}
 .ur{padding:30px 0 8px;scroll-margin-top:200px}
 .ur h3{font-size:1.8rem;margin-bottom:20px}.ur h3 small{font:600 .82rem var(--sans);color:var(--muted);margin-left:12px}
 .ur-empty{color:var(--muted)}
@@ -911,7 +915,10 @@ input{caret-color:var(--gold-d)}
   .uc-cta{display:none}.uc .fav{opacity:1;width:44px;height:44px;top:6px;right:6px}
   .mbar-in{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:8px;padding:7px 12px}.mbar-in::-webkit-scrollbar{display:none}.mbar-in>b,.mbar-tabs button,.mbar-more{white-space:nowrap;flex:none;font-size:.74rem}.mbar-more{margin-left:0}
   .rail{grid-auto-columns:68%}
-  .cof-pics{display:none}.uf-sort{margin-left:0}
+  .cof-pics{display:none}
+  .up-bar{position:static;padding:6px 0 10px;border-top:0}.up-rayons{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--gut));padding:2px var(--gut) 6px}.up-rayons::-webkit-scrollbar{display:none}.up-rayons .puce{flex:none;min-height:40px;padding:8px 14px;font-size:.86rem}
+  .uf{display:flex;flex-wrap:nowrap;gap:8px}.uf-grp{flex:1;min-width:0}.uf-grp>span,.uf-grp>.puce,.uf-sort>span{display:none}.uf-sel{display:block;width:100%;font-size:.84rem;padding:9px 26px 9px 10px;background-position:right 8px center}
+  .uf-sort{flex:1;min-width:0;margin-left:0}.uf-sort select{width:100%;font-size:.84rem;padding:9px 26px 9px 10px;background-position:right 8px center}
   .ask{right:14px;bottom:14px;width:50px;height:50px;padding:0;justify-content:center}.ask span{display:none}
   .bento-v{gap:10px;grid-template-rows:none}.bt{min-height:170px}.bt-big{min-height:300px}.bt-lab{padding:36px 12px 12px;font-size:.84rem}.bt-big .bt-name{font-size:1.25rem}
   .up-bar{top:calc(var(--hdr) + 66px)}.foot-grid{grid-template-columns:1fr}.foot-news form{flex-direction:column}.foot-news .btn{justify-content:center}
@@ -1017,8 +1024,11 @@ d.querySelectorAll('.fts').forEach(function(r){r.scrollLeft=0});
 wireFinder(d.getElementById('trouver'));
 /* filtres et tri des pages univers */
 d.querySelectorAll('.up').forEach(function(up){var pool=[].slice.call(up.querySelectorAll('.ug>.uc'));
+  function syncSel(){up.querySelectorAll('select[data-fs]').forEach(function(se){var k=se.dataset.fs,on=up.querySelector('button[data-f="'+k+'"].on');se.value=on?on.dataset.v:'';se.classList.toggle('on',!!on);
+    [].forEach.call(se.options,function(o){if(!o.value)return;var b=up.querySelector('button[data-f="'+k+'"][data-v="'+o.value+'"]');o.disabled=!!(b&&b.classList.contains('off'))})})}
   function run(){var sel=readSel(up,'data-f');up.querySelectorAll('.ur').forEach(function(r){var n=0;r.querySelectorAll('.ug>.uc').forEach(function(c){var ok=match(c,sel);c.hidden=!ok;if(ok)n++});
-    var e=r.querySelector('.ur-empty');if(e)e.hidden=n>0||!r.querySelector('.ug>.uc')});grey(up,'data-f',pool)}
+    var e=r.querySelector('.ur-empty');if(e)e.hidden=n>0||!r.querySelector('.ug>.uc')});grey(up,'data-f',pool);syncSel()}
+  up.querySelectorAll('select[data-fs]').forEach(function(se){se.addEventListener('change',function(){var k=se.dataset.fs,v=se.value;up.querySelectorAll('button[data-f="'+k+'"]').forEach(function(x){setOn(x,x.dataset.v===v)});run()})});
   up.querySelectorAll('button[data-f]').forEach(function(b){b.addEventListener('click',function(){var on=b.classList.contains('on');
     up.querySelectorAll('button[data-f="'+b.dataset.f+'"]').forEach(function(x){setOn(x,false)});setOn(b,!on);run()})});
   var so=up.querySelector('.uf-sort select');if(so)so.addEventListener('change',function(){up.querySelectorAll('.ug').forEach(function(g){
@@ -1026,7 +1036,7 @@ d.querySelectorAll('.up').forEach(function(up){var pool=[].slice.call(up.querySe
     l.forEach(function(c){g.appendChild(c)})})});
   var chips=up.querySelectorAll('.up-rayons a');if(chips.length&&'IntersectionObserver' in window){var io2=new IntersectionObserver(function(es){es.forEach(function(en){if(!en.isIntersecting)return;
     chips.forEach(function(c){c.setAttribute('aria-current',c.getAttribute('href')==='#'+en.target.id?'true':'false')})})},{rootMargin:'-35% 0px -55% 0px'});up.querySelectorAll('.ur,.cof').forEach(function(r){io2.observe(r)})}
-  if(pool.length)grey(up,'data-f',pool)});
+  if(pool.length){grey(up,'data-f',pool);syncSel()}});
 /* coffret : total, remise, prénom en direct */
 d.querySelectorAll('.cof').forEach(function(cf){var tot=cf.querySelector('.cof-tot'),inp=cf.querySelector('.cof-name input'),nom=cf.querySelector('.cof-nom');
   function calc(){var t=0,n=0;cf.querySelectorAll('.cof-pick input').forEach(function(i){if(i.checked){t+=parseFloat(i.dataset.p);n++}});
