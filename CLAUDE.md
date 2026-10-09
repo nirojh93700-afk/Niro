@@ -2769,7 +2769,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > une commande »). Pour revenir : `git revert <commit de l'application>` (ou `git checkout 44f2f64 -- src/app/page.jsx
 > src/app/boutique src/app/offrir/page.jsx src/app/layout.jsx src/app/sitemap.js next.config.js` + supprimer `src/lib/univers*.js`,
 > `src/components/univers/`, `src/app/univers*.css`), build, push. Les réglages de Gestion, commandes, stock ne sont pas dans le code.
-- **Ce qui a changé** : `src/app/page.jsx` (accueil : écrin cristal → ruban → bijoux sur photo → dernières sorties → Bébé & Enfant →
+- **Ce qui a changé** : `src/app/page.jsx` (accueil : écrin cristal → ruban → bijoux sur photo → dernières sorties → **« Verres &
+  carafes gravés, notre spécialité »** (renommé comme avant et remonté juste après les nouveautés à sa demande, 09/10 soir) → Bébé & Enfant →
   parcours 2 étapes → coffret Savane → carafe → verres → Noël → univers → atelier → mur → avis → sur mesure) ·
   `src/app/boutique/page.jsx` (« Toute la boutique », un rayon par univers ; `?q=` garde une recherche) ·
   `src/app/boutique/[categorie]/page.jsx` (pages univers `bijoux / cristal / verres / enfants / mariage / maison / cadeaux` ;

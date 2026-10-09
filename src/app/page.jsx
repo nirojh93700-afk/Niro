@@ -18,7 +18,8 @@ export const metadata = { alternates: { canonical: "/" } };
 // =============================================================================
 // PAGE D'ACCUEIL — maquette « accueil + univers », direction « Mélange »
 // (validée « applique » par le gérant le 09/10/2026, version avec puzzles) :
-// écrin cristal → ruban → bijoux sur photo → dernières sorties → Bébé & Enfant →
+// écrin cristal → ruban → bijoux sur photo → dernières sorties → verres & carafes (notre
+// spécialité, placée ici à la demande du gérant le 09/10 soir) → Bébé & Enfant →
 // « Trouver le bon cadeau » en deux étapes → coffret → carafe édition limitée →
 // verres en mosaïque → Noël → nos univers → l'atelier → le mur → avis → sur mesure.
 // Tout est lu dans le catalogue en direct ; l'en-tête et le pied de page du site
@@ -102,6 +103,25 @@ export default async function HomePage() {
           </Rail>
         ) : null}
 
+        {/* VERRES — mosaïque */}
+        {show.verresBand && verres.length ? (
+          <section className="sec verres rv" aria-labelledby="t-verres">
+            <div className="sec-head">
+              <div><h2 id="t-verres">Verres &amp; carafes gravés, <em>notre spécialité</em></h2><p className="sub">Whisky, vin, champagne, cocktail et carafe, gravés à la commande dans notre atelier.</p></div>
+              <Link className="link" href="/boutique/verres">Voir tous les verres et carafes <Ic n="arrow" /></Link>
+            </div>
+            <div className="bento-v">
+              {verres.map((c, i) => (
+                <Link key={c.slug} className={`mxbt${i === 0 ? " mxbt-big" : ""}`} href={c.href}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="mxbt-img" src={c.image} alt={c.name} loading="lazy" />
+                  <span className="mxbt-lab"><span className="mxbt-name">{c.name}</span><span className="mxbt-price">{prixTexte(c)}</span></span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         {/* BÉBÉ & ENFANT */}
         {enfants ? (
           <section className="sec enf rv" aria-labelledby="t-enf">
@@ -141,25 +161,6 @@ export default async function HomePage() {
               <p>Verre taillé, bouchon à facettes, gravée avec votre prénom ou le modèle de votre choix. Livraison offerte dès 60 € d’achat.</p>
               <p className="lim-price"><b>{prixTexte(carafe)}</b><span>livraison offerte</span></p>
               <Bouton href={carafe.href}>Découvrir la carafe</Bouton>
-            </div>
-          </section>
-        ) : null}
-
-        {/* VERRES — mosaïque */}
-        {show.verresBand && verres.length ? (
-          <section className="sec verres rv" aria-labelledby="t-verres">
-            <div className="sec-head">
-              <div><h2 id="t-verres">Verres &amp; Carafes <em>gravés</em></h2><p className="sub">Whisky, vin, champagne, cocktail et carafe, gravés à la commande dans notre atelier.</p></div>
-              <Link className="link" href="/boutique/verres">Voir tous les verres et carafes <Ic n="arrow" /></Link>
-            </div>
-            <div className="bento-v">
-              {verres.map((c, i) => (
-                <Link key={c.slug} className={`mxbt${i === 0 ? " mxbt-big" : ""}`} href={c.href}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="mxbt-img" src={c.image} alt={c.name} loading="lazy" />
-                  <span className="mxbt-lab"><span className="mxbt-name">{c.name}</span><span className="mxbt-price">{prixTexte(c)}</span></span>
-                </Link>
-              ))}
             </div>
           </section>
         ) : null}
