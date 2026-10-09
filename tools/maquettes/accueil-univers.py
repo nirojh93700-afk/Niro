@@ -2,7 +2,7 @@
 """Maquette « accueil + univers », direction « Mélange » (09/10/2026) — le gérant a refusé la version « luxe » puis
 choisi « Mélange » parmi les trois pistes (A L'Écrin · B Plein cadre · C Atelier). Cette version mélange :
   · piste A pour l'écrin du haut de page et la carafe : encre, halo or, cadre doré à double filet, laser, reflet, ruban or ;
-  · piste C pour « Trouver le bon cadeau » : parcours en trois étapes numérotées, cartes blanches à cocher (la référence
+  · piste C pour « Trouver le bon cadeau » : parcours en deux étapes numérotées (pour qui, occasion), tuiles photo (la référence
     des fiches du site), et le ton chaleureux partout ailleurs (cartes arrondies, sable, bouton or) ;
   · piste B pour les bijoux : photo plein cadre et panneau de verre.
 Mêmes couleurs, Playfair Display + Inter (les polices du site), logo intouché (copie octet pour octet du logo du site).
@@ -302,7 +302,7 @@ def mega(u):
 OFFRIR_PANEL = ('<div class="mg-panel"><div class="mg-cols">'
   '<div><span class="mg-h">Pour qui ?</span>' + "".join(f'<a href="#" data-find="qui:{k}">{v}</a>' for k, v in POURQUI.items()) + '</div>'
   '<div><span class="mg-h">Pour quelle occasion ?</span><span class="fetes" data-max="3" data-as="a"></span><a href="#" data-find="occ:naissance">Naissance &amp; baptême</a><a href="#" data-find="occ:mariage">Mariage</a><a href="#" data-find="occ:anniversaire">Anniversaire</a><a href="#" data-find="occ:amour">Amour</a></div>'
-  '<div><span class="mg-h">Quel budget ?</span><a href="#" data-find="budget:0-20">Moins de 20 €</a><a href="#" data-find="budget:20-40">20 à 40 €</a><a href="#" data-find="budget:40-999">Plus de 40 €</a><a href="#" title="Page du site, inchangée">Carte cadeau</a><a href="#" title="Page du site, inchangée">Promotions</a></div>'
+  '<div><span class="mg-h">Et aussi</span><a href="#" title="Page du site, inchangée">Carte cadeau</a><a href="#" title="Page du site, inchangée">Promotions</a><a href="#" data-go="boutique">Toute la boutique</a></div>'
   f'</div><a class="mg-pic" href="#" data-go="offrir"><img src="{img("/produits/couverts_enfants_ex_prenom.jpg", 520)}" alt=""><span><b>Offrir une carte cadeau, de 20 à 100 €</b>{ic("arrow")}</span></a></div>')
 def pill_new(u): return ' <i class="pill-new">Nouveau</i>' if u.get("neuf") else ""
 NAV = ('<nav class="hnav" aria-label="Principal">'
@@ -356,21 +356,17 @@ def ftile(k, v, label, ph):
     """Tuile photo du parcours « Trouver un cadeau » : une pièce gravée pour illustrer le choix, le libellé posé en bas, une coche or quand elle est choisie."""
     return (f'<button class="ft" type="button" data-k="{k}" data-v="{v}" aria-pressed="false"><span class="ft-ph {tcls(ph)}" aria-hidden="true"></span>'
             f'<span class="ft-l">{label}</span><i class="ft-chk">{ic("check")}</i></button>')
-def fprix(v, petit, gros):
-    return f'<button class="ft ft-txt" type="button" data-k="budget" data-v="{v}" aria-pressed="false"><small>{petit}</small><b>{gros}</b><i class="ft-chk">{ic("check")}</i></button>'
 QUI_PHOTO = {"elle": "/produits/collier-coeur-grave-2.jpg", "lui": "/produits/verre_a_whisky_exemple_face.jpg", "couple": "/produits/cristal-v-couple.jpg",
              "enfant": "/produits/couverts_enfants_ex_enfant.jpg", "parents": "/produits/cristal-h-famille.jpg"}
 OCC_FIXES = (("naissance", "Naissance &amp; baptême", "/produits/couverts_enfants_ex_prenom.jpg"), ("mariage", "Mariage", "/produits/numero_table_arche_geometrique_relief_bois.jpeg"),
              ("anniversaire", "Anniversaire", "/produits/collier-coeur-plaques-1.jpg"), ("amour", "Amour", "/produits/collier-double-coeur-6.jpg"))
 FETE_PHOTO = {"noel": "/produits/carafe_gravee.jpg", "amour": "/produits/collier-double-coeur-6.jpg", "pour-elle famille": "/produits/collier-coeur-grave-2.jpg", "pour-lui famille": "/produits/verre_a_whisky_exemple_face.jpg"}
-BUDGETS = (("0-20", "Moins de", "20 €"), ("20-40", "Entre", "20 et 40 €"), ("40-999", "Plus de", "40 €"))
 FINDER = f'''<section class="fd rv" id="trouver" aria-labelledby="t-fd">
   <div class="fd-in">
-  <h2 id="t-fd">Trouver le bon cadeau <em>en trois étapes</em></h2>
+  <h2 id="t-fd">Trouver le bon cadeau <em>en deux étapes</em></h2>
   <p class="fd-lead">Fait main en France : chaque pièce est gravée et découpée dans notre atelier.</p>
   <div class="fd-step" role="group" aria-label="Pour qui"><div class="fd-h"><b>1</b><span>Pour qui ?</span></div><div class="fts">{"".join(ftile("qui", k, esc(v), QUI_PHOTO[k]) for k, v in POURQUI.items())}</div></div>
   <div class="fd-step" role="group" aria-label="Occasion"><div class="fd-h"><b>2</b><span>Pour quelle occasion ?</span></div><div class="fts"><span class="fetes" data-max="3" data-as="card"></span>{"".join(ftile("occ", v, l, ph) for v, l, ph in OCC_FIXES)}</div></div>
-  <div class="fd-step" role="group" aria-label="Budget"><div class="fd-h"><b>3</b><span>Quel budget ?</span></div><div class="fts fts-3">{"".join(fprix(v, a, b) for v, a, b in BUDGETS)}</div></div>
   <p class="fd-count" id="fdCount" aria-live="polite">Choisissez un ou plusieurs critères.</p>
   <div class="ug fd-res" id="fdRes"></div>
   </div>
@@ -447,7 +443,7 @@ UNIV_TILES = "".join(
 UNIVERS_HOME = f'''<section class="sec univ rv" id="univers" aria-labelledby="t-univ">
   <div class="sec-head"><div><h2 id="t-univ">Nos univers</h2><p class="sub">Toutes nos créations, classées par univers. Les pièces personnalisables sont gravées à la commande dans notre atelier.</p></div></div>
   <div class="ut-grid">{UNIV_TILES}</div>
-  <a class="ut-offrir" href="#" data-go="offrir"><b>Offrir</b><span class="ut-steps"><i><b>1</b>Pour qui</i><i><b>2</b>L’occasion</i><i><b>3</b>Le budget</i></span><span class="ut-txt">Trouvez le bon cadeau en trois étapes.</span>{ic("arrow")}</a>
+  <a class="ut-offrir" href="#" data-go="offrir"><b>Offrir</b><span class="ut-steps"><i><b>1</b>Pour qui</i><i><b>2</b>L’occasion</i></span><span class="ut-txt">Trouvez le bon cadeau en deux étapes.</span>{ic("arrow")}</a>
 </section>'''
 
 ATELIER = f'''<section class="atelier rv" id="atelier" aria-labelledby="t-at">
@@ -518,7 +514,7 @@ UNIV_VIEW = ('<main class="uv" id="vueUnivers" hidden><nav class="uv-tabs" aria-
              + puce("button", 'type="button" data-go="offrir" aria-current="false"', "Offrir") + '</nav>'
              + "".join(page_univers(u) for u in UNIVERS) + page_univers(BOUTIQUE)
              + '<article class="up" id="u-offrir" data-u="offrir" hidden><header class="up-head up-head-solo"><div class="up-txt"><nav class="crumb" aria-label="Fil d’Ariane"><a href="#" data-view="accueil">Accueil</a><span>/</span><span aria-current="page">Offrir</span></nav><h2>Trouver un cadeau</h2>'
-               '<p>Toutes nos créations, selon la personne, l’occasion et le budget.</p></div></header><div id="offrirSlot"></div></article>'
+               '<p>Toutes nos créations, selon la personne et l’occasion.</p></div></header><div id="offrirSlot"></div></article>'
              + '</main>')
 
 NOTES = f'''<div class="mbar" role="region" aria-label="Maquette">
@@ -526,9 +522,9 @@ NOTES = f'''<div class="mbar" role="region" aria-label="Maquette">
   <div class="mbar-tabs" role="tablist"><button type="button" class="on" data-view="accueil">Accueil</button><button type="button" data-view="univers">Pages univers</button></div>
   <button type="button" class="mbar-more" id="mbarMore" aria-expanded="false">Ce qui change</button></div>
   <ul class="mbar-notes" id="mbarNotes" hidden>
-    <li><b>Le mélange des trois pistes</b> : l’écrin de la piste A pour le haut de page et la carafe (encre, cadre doré à double filet, laser, ruban or qui défile) ; le parcours en trois étapes numérotées de la piste C pour « Trouver le bon cadeau », avec les tuiles photo de la piste A (pour qui, occasion) et trois pavés de prix ; la photo plein cadre et le panneau de verre de la piste B pour les bijoux. Partout ailleurs : le ton chaleureux de la piste C (cartes arrondies, sable, bouton or). Mêmes couleurs, Playfair Display et Inter comme sur le site, logo intouché.</li>
-    <li><b>Accueil</b> : écrin cristal, ruban, bijoux sur photo, nouveautés, Bébé &amp; Enfant, « Trouver le bon cadeau » en trois étapes (fait main en France), coffret, carafe édition limitée, verres en mosaïque, Noël, « Nos univers », l’atelier en trois gestes, le mur, les avis, le sur mesure, pied de page.</li>
-    <li><b>Pages univers</b> : un en-tête par univers (titre, accroche, nombre, photo), les rayons et les filtres dans une barre qui reste visible, les mêmes cartes partout, « Toute la boutique » et « Offrir » (le même parcours en trois étapes).</li>
+    <li><b>Le mélange des trois pistes</b> : l’écrin de la piste A pour le haut de page et la carafe (encre, cadre doré à double filet, laser, ruban or qui défile) ; le parcours en deux étapes numérotées de la piste C pour « Trouver le bon cadeau », avec les tuiles photo de la piste A (pour qui, occasion) ; la photo plein cadre et le panneau de verre de la piste B pour les bijoux. Partout ailleurs : le ton chaleureux de la piste C (cartes arrondies, sable, bouton or). Mêmes couleurs, Playfair Display et Inter comme sur le site, logo intouché.</li>
+    <li><b>Accueil</b> : écrin cristal, ruban, bijoux sur photo, nouveautés, Bébé &amp; Enfant, « Trouver le bon cadeau » en deux étapes (fait main en France), coffret, carafe édition limitée, verres en mosaïque, Noël, « Nos univers », l’atelier en trois gestes, le mur, les avis, le sur mesure, pied de page.</li>
+    <li><b>Pages univers</b> : un en-tête par univers (titre, accroche, nombre, photo), les rayons et les filtres dans une barre qui reste visible, les mêmes cartes partout, « Toute la boutique » et « Offrir » (le même parcours en deux étapes).</li>
     <li><b>Tout ce qui a été corrigé le 09/10 est gardé</b> : rangement des 75 créations, retour à l’accueil, menus et tiroir, budget sur l’intervalle de prix, boutons grisés, fêtes calculées (nom seul, 3 mois), textes sans « au prénom ».{" Version avec puzzles : « Jeux en bois » et « Cristaux déjà gravés » marqués « Bientôt », coffret Savane." if PUZ else ""}</li>
     <li><b>Mouvement</b> : laser et reflet sur la photo de l’écrin, ruban qui défile, apparition douce au défilement, zoom lent des photos, mur qui s’arrête sous le doigt, respect du réglage « réduire les animations ».</li>
     <li><b>Photos à vérifier sur le site</b> (hébergées sur le CDN, non copiées ici) : {", ".join(REMOTE)}.</li>
@@ -675,7 +671,6 @@ input{caret-color:var(--gold-d)}
 .fd-h span{font-family:var(--serif);font-weight:600;font-size:1.25rem}
 .fts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .fts:has(> .ft:nth-child(6)){grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.fts-3{grid-template-columns:repeat(3,minmax(0,1fr));max-width:620px}
 .ft{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:var(--sand);border:2px solid transparent;text-align:left;transition:border-color .25s,transform .3s var(--ease),opacity .3s,box-shadow .3s}
 .ft-ph{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 1.2s var(--ease)}
 .ft:hover .ft-ph{transform:scale(1.05)}
@@ -684,9 +679,6 @@ input{caret-color:var(--gold-d)}
 .ft.off{opacity:.35;cursor:not-allowed;transform:none}
 .ft-chk{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(26,18,6,.3)}
 .ft-chk .ic{width:14px;height:14px;color:var(--ink)}.ft.on .ft-chk{display:inline-flex}
-.ft-txt{aspect-ratio:auto;min-height:78px;background:#fff;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 10px;text-align:center}
-.ft-txt .ft-chk{display:none!important}.ft-txt.on{background:#fff6dc}.ft-txt.on b{color:var(--gold-t)}
-.ft-txt small{font-size:.78rem;font-weight:600;color:var(--muted)}.ft-txt b{font-family:var(--serif);font-weight:600;font-size:1.25rem;line-height:1.1;white-space:nowrap}
 .fd-count{margin:22px 0 14px;color:var(--muted);text-align:center}
 .fd-res .uc{animation:fdIn .5s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
 @keyframes fdIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -794,7 +786,7 @@ input{caret-color:var(--gold-d)}
 .fan img{position:absolute;width:52%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);box-shadow:0 30px 60px -30px rgba(0,0,0,.7);transition:transform 1.2s var(--ease)}
 .fan-1{left:0;top:40px;transform:rotate(-7deg)}.fan-2{left:24%;top:0;transform:rotate(2deg);z-index:2}.fan-3{right:0;top:60px;transform:rotate(8deg)}
 .noel:hover .fan-1{transform:rotate(-10deg) translateX(-10px)}.noel:hover .fan-3{transform:rotate(11deg) translateX(10px)}
-/* ---- nos univers : mosaïque, Bijoux en grand ; « Offrir » en trois étapes */
+/* ---- nos univers : mosaïque, Bijoux en grand ; « Offrir » en deux étapes */
 .ut-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .ut{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;display:block;background:var(--sand)}
 .ut-bijoux{grid-column:span 2;aspect-ratio:auto}
@@ -914,7 +906,6 @@ input{caret-color:var(--gold-d)}
   .fd{padding:36px var(--gut) 40px}.fd h2{margin-bottom:8px}.fd-lead{font-size:.95rem;margin-bottom:20px}
   .fts,.fts:has(> .ft:nth-child(6)){display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * var(--gut));padding:4px var(--gut) 6px;scroll-padding:0 var(--gut)}.fts::-webkit-scrollbar{display:none}
   .fts .ft{flex:0 0 138px;scroll-snap-align:start}.ft-l{padding:30px 10px 9px;font-size:.84rem}
-  .fts-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding:0;overflow:visible;max-width:none}.fts-3 .ft{flex:none}.ft-txt{min-height:70px;padding:10px 6px}.ft-txt small{font-size:.72rem}.ft-txt b{font-size:1.05rem}
   .fd-h b{width:30px;height:30px;font-size:.95rem}.fd-h span{font-size:1.15rem}
   .ug,.ug-3,.enf .ug-2{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 10px}
   .glass{padding:20px}.glass .mini{gap:8px}.glass .mini .uc-name{font-size:.76rem}.glass .mini .uc-price{font-size:.88rem}.glass .mini .fav{display:none}

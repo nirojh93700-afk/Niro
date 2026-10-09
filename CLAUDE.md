@@ -2730,28 +2730,32 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **PRIX VALIDÉ LE 07/10 (« 1 », après relevé du marché : 20–55 €, surtout 30–40 €, prénom presque toujours
   compris)** : **29,90 € le puzzle, prénom gravé COMPRIS** (facultatif, « Compris » affiché sur l'option) — version 2
   de l'artifact. Vérifié Chromium 1280/390 : 0 débordement, 0 erreur JS.
-- **Réponse du gérant le 09/10/2026 : un puzzle mesure 18,5 cm de long × 13,5 cm de large** (épaisseur et essence du bois toujours
+- **Réponses du gérant le 09/10/2026 : un puzzle mesure 18,5 cm de long × 13,5 cm de large, et pèse 75 g pour le port**
+  (`weight: 75` le jour du « applique », lettre suivie ≤ 100 g → 4,90 €, comme un bijou ; épaisseur et essence du bois toujours
   inconnues). Pas encore reporté dans la maquette (règle : une maquette enregistrée ne se modifie pas sans son accord) : lui
   demander s'il veut la ligne « 18,5 × 13,5 cm » dans « Votre puzzle ».
 - **Questions posées au gérant** : ~~dimensions~~ (18,5 × 13,5 cm, reçues le 09/10) / épaisseur / essence du bois · âge
-  conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
-  nom de la catégorie dans le menu.
+  conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · ~~poids pour le port~~ (75 g,
+  reçu le 09/10) · nom de la catégorie dans le menu.
 
 ## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
 > **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
 > versions (sans / avec puzzles) ont été refaites dans un monde qui réunit les trois pistes, en gardant toutes les corrections
-> du 09/10 ; les deux artifacts sont republiés (sans puzzles v11, avec puzzles v7). Détail du monde dans `DESIGN.md` (réécrit).
+> du 09/10 ; les deux artifacts sont republiés (sans puzzles v12, avec puzzles v8). Détail du monde dans `DESIGN.md` (réécrit).
 > · **piste A (L'Écrin)** pour le haut de page, la carafe et le sur mesure : encre, halo or, cadre doré à double filet, laser,
 >   reflet, étiquette nom + prix, **ruban or qui défile** sous le héros (il remplace le bandeau encre du haut) ;
-> · **piste C (Atelier)** pour « Trouver le bon cadeau EN TROIS ÉTAPES » : ① Pour qui ② Pour quelle occasion ③ Quel budget ;
->   même grammaire pour « l'atelier en trois gestes » et la tuile « Offrir » ;
+> · **piste C (Atelier)** pour « Trouver le bon cadeau » : ① Pour qui ② Pour quelle occasion — **EN DEUX ÉTAPES depuis le 09/10
+>   soir (gérant : « trois étapes tu mets en deux étapes et t'enlèves la troisième ») : plus d'étape budget dans le parcours ni
+>   dans le menu « Offrir » (la colonne « Quel budget ? » est devenue « Et aussi » : carte cadeau, promotions, toute la
+>   boutique). Le filtre Budget des pages univers, lui, reste.** Même grammaire pour « l'atelier en trois gestes » et la tuile
+>   « Offrir » (① Pour qui ② L'occasion) ;
 >   ⛔ **2ᵉ REFUS DU 09/10 (capture de son téléphone)** : la première version du parcours en **cartes blanches à cocher avec une
 >   petite icône** (`.fc`) → « j'aime pas celui-là, je trouve que c'est bizarre ». Remplacée le jour même par des **TUILES PHOTO**
 >   (`.ft`, piste A) : pour qui = 5 photos de pièces gravées (collier cœur gravé, verre whisky, cristal couple, couverts enfant,
 >   cristal famille), occasion = 5 photos (carafe pour Noël, couverts prénom pour Naissance, numéro de table pour Mariage, collier
->   plaques pour Anniversaire, double cœur pour Amour ; la fête du moment est injectée avec sa photo `FETE_PHOTO`), budget = 3
->   pavés de prix (« Moins de / 20 € », « Entre / 20 et 40 € », « Plus de / 40 € », choisi = bord or + fond doré clair, sans coche).
->   Sur téléphone : rails qu'on fait défiler du doigt (138 px, 2,6 visibles, `scroll-snap`), budget sur 3 pavés ; sur ordinateur :
+>   plaques pour Anniversaire, double cœur pour Amour ; la fête du moment est injectée avec sa photo `FETE_PHOTO`) ; les 3 pavés
+>   de prix du budget ont existé une heure (v9 / v5) puis ont été retirés avec l'étape budget (v12 / v8).
+>   Sur téléphone : rails qu'on fait défiler du doigt (138 px, 2,6 visibles, `scroll-snap`) ; sur ordinateur :
 >   5 tuiles par ligne. ⚠️ Piège : Chrome recale un rail `scroll-snap` sur l'ancienne 1re tuile quand on insère la fête AVANT
 >   elle → `scrollLeft = 0` après l'injection. Leçon : sur téléphone, pas de grandes cartes blanches vides avec une petite
 >   icône ; des photos de pièces gravées, denses, qu'on fait défiler ;
@@ -2813,9 +2817,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > vraiment jolis, modernes, classe, luxe, avec les mêmes couleurs ». Les deux versions sont donc REFAITES dans un nouveau
 > monde visuel ; les versions précédentes restent dans git (commit `0d7ae16`) et dans l'historique des artifacts.
 > · **sans puzzles** : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
->   (version 7 = luxe, version 8 = Mélange, version 9 = tuiles photo, version 10 = filtres compacts, **version 11 = parcours avant le coffret + fait main en France**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
+>   (version 7 = luxe, version 8 = Mélange, version 9 = tuiles photo, version 10 = filtres compacts, version 11 = parcours avant le coffret + fait main en France, **version 12 = deux étapes, sans budget**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
 > · **avec puzzles** : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM
->   (version 3 = luxe, version 4 = Mélange, version 5 = tuiles photo, version 6 = filtres compacts, **version 7 = parcours avant le coffret + fait main en France**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
+>   (version 3 = luxe, version 4 = Mélange, version 5 = tuiles photo, version 6 = filtres compacts, version 7 = parcours avant le coffret + fait main en France, **version 8 = deux étapes, sans budget**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
 > Les deux sortent du MÊME générateur **`tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`** (l'ancien
 > `accueil-v2.py`, qui réutilisait la maquette « accueil moderne », est supprimé). La maquette ENREGISTRÉE
 > `accueil-moderne.html` (04/10) n'est pas touchée.

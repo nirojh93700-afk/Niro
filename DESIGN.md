@@ -12,10 +12,10 @@ Trois pistes réunies dans un seul monde :
   Encre `#241a0c`, halo or en radial, cadre doré à double filet autour de la photo, trait laser qui la parcourt une fois,
   reflet lent, ruban or qui défile avec les quatre preuves (gravé en France · 4,8/5 sur 286 avis · livraison offerte dès
   45 € sur les bijoux · paiement sécurisé).
-- **Le parcours (piste C)** pour tout ce qui demande un choix : « Trouver le bon cadeau » en trois étapes numérotées
-  (① Pour qui ② Pour quelle occasion ③ Quel budget) sur fond sable, comme les fiches produit du site (parcours guidé =
+- **Le parcours (piste C)** pour tout ce qui demande un choix : « Trouver le bon cadeau » en deux étapes numérotées
+  (① Pour qui ② Pour quelle occasion ; l'étape budget a été retirée par le gérant le 09/10) sur fond sable, comme les fiches produit du site (parcours guidé =
   la référence). Les choix sont des TUILES PHOTO de pièces gravées (piste A), pas des cartes blanches à icône : le
-  gérant a refusé ces cartes sur téléphone (« bizarre »). Le budget est en trois pavés de prix. Même grammaire pour
+  gérant a refusé ces cartes sur téléphone (« bizarre »). Même grammaire pour
   « l'atelier en trois gestes » et pour la tuile « Offrir » de « Nos univers ».
 - **Le plein cadre (piste B)** pour les bijoux : grande photo d'ambiance sur toute la largeur, panneau de verre dépoli
   posé dessus (titre, trois bijoux, raccourcis, bouton).
@@ -51,7 +51,7 @@ Le cadre doré de l'écrin garde ses angles presque droits (6 px, filet intérie
 - **Tuile à cocher** `.ft` (parcours) : photo 4:5 d'une pièce gravée, 16 px d'arrondi, libellé blanc posé en bas sur un
   dégradé encre, bord or + pastille or avec une coche quand elle est choisie, grisée à 35 % quand elle ne donnerait
   aucun résultat, une seule par étape. Sur téléphone les tuiles forment un rail qu'on fait défiler (138 px, 2,6
-  visibles). Le budget (`.ft-txt`) est un pavé blanc : petit mot + montant en Playfair, choisi = bord or + fond doré clair.
+  visibles).
 - **Puce** `.puce` (rayons, filtres, onglets, raccourcis) : pavé sable 14 px, encre quand choisie, 44 px minimum. Sur
   téléphone, jamais plus de deux lignes de puces : les rayons deviennent un rail à glisser et les filtres des menus
   déroulants natifs (`.uf-sel`, « Pour qui ▾ · Budget ▾ · Trier ▾ »), et la barre n'est plus collante (refus du 09/10).
@@ -76,8 +76,8 @@ Le cadre doré de l'écrin garde ses angles presque droits (6 px, filet intérie
 - Largeur de lecture 1300 px (1100 px pour le parcours), gouttières fluides (16 à 72 px), sections de 44 à 96 px.
 - En-tête du site : logo centré (92 px, 64 px sur téléphone, arrondi 10 px, intouché), icônes à droite, menu en pavés
   (8 entrées, panneaux au survol) sur une ligne jusqu'à 1021 px, tiroir en dessous. En-tête collant, légèrement translucide.
-- Ordre de l'accueil : écrin cristal → ruban → trois étapes → bijoux sur photo → dernières sorties (rail) → Bébé & Enfant
-  + coffret → carafe (écrin) → verres en mosaïque → Noël (rouge et or, éventail) → Nos univers + tuile Offrir →
+- Ordre de l'accueil : écrin cristal → ruban → bijoux sur photo → dernières sorties (rail) → Bébé & Enfant → parcours en
+  deux étapes → coffret → carafe (écrin) → verres en mosaïque → Noël (rouge et or, éventail) → Nos univers + tuile Offrir →
   l'atelier (énoncé + trois gestes) → le mur → avis → sur mesure (écrin) → pied de page.
-- Téléphone (≤ 640 px) : écrin empilé (texte puis cadre), tuiles du parcours en rails (budget 3 pavés par ligne),
+- Téléphone (≤ 640 px) : écrin empilé (texte puis cadre), tuiles du parcours en rails,
   cartes produit 2 par ligne, rail des nouveautés à 68 %, verres 2 par ligne, univers 2 par ligne.
