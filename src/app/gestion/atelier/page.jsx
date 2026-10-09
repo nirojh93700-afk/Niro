@@ -22,6 +22,7 @@ import FicheDevis from "@/components/admin/FicheDevis";
 import { lignesDevis } from "@/lib/devisGravure";
 import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
+import PhotosEmballage from "@/components/admin/PhotosEmballage";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
@@ -304,6 +305,7 @@ export default function AtelierPage() {
                                 <span className="ov-puce">{op.physique ? "📦" : "✒️"}</span>
                                 <b>{op.libelle}</b>{op.detail ? ` : ${op.detail}` : ""}
                                 {op.montant > 0 ? <span className="ov-montant">+{formatEuro(op.montant)}</span> : null}
+                                {op.libelle === "Emballage" ? <PhotosEmballage detail={op.detail} petit /> : null}
                               </li>
                             ))}
                           </ul>

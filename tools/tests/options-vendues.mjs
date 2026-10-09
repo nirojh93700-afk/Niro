@@ -1,6 +1,6 @@
 // Vérifications « vendu en plus » (npm run test-options) — pures, sans navigateur.
 import { nomLivraison, ressembleAUneAdresse } from "../../src/lib/nomLivraison.js";
-import { optionsArticle, optionsCommande, livraisonCommande } from "../../src/lib/optionsVendues.js";
+import { optionsArticle, optionsCommande, livraisonCommande, emballagesDuDetail } from "../../src/lib/optionsVendues.js";
 let n = 0, ko = 0;
 const check = (nom, cond) => { n++; if (!cond) { ko++; console.log("❌", nom); } else console.log("✅", nom); };
 const has = (opts, re) => opts.some((o) => re.test(`${o.libelle} : ${o.detail}`));
@@ -45,6 +45,23 @@ check("0GTB1LZ5 : prénom Lorenzo / nom Franchi (correction connue)", (() => { c
 check("devis : on prend le nom du devis si le champ nom est une adresse", (() => { const r = nomLivraison({ ref: "ZZZ", shippingName: "12 rue des Lilas", quoteClientName: "Anne Martin" }); return r.complet === "Anne Martin" && r.source === "nom du devis"; })());
 check("adresse sans aucun nom de repli : gardée mais signalée", nomLivraison({ ref: "ZZZ", shippingName: "12 rue des Lilas" }).suspect === true);
 check("commande normale inchangée", (() => { const r = nomLivraison({ shippingName: "Sophie Berardo" }); return r.prenom === "Sophie" && r.nom === "Berardo" && !r.suspect; })());
+
+// --- Photo de l'emballage (09/10/2026) : liaison « Boîte cadeau (+5.90 €) » ↔ bibliothèque
+const LIB = [
+  { id: "sac", name: "Sac cadeau", desc: "Sac carton beige", sell: 1.7, photo: "/a" },
+  { id: "boite-carree", name: "Boîte cadeau", desc: "Boîte carton 9×9 cm (colliers)", sell: 3.9, photo: "/b" },
+  { id: "boite-allongee", name: "Boîte cadeau", desc: "Boîte carton, format bracelet", sell: 5.9, photo: "/c" },
+  { id: "pack-collier", name: "Pack Collier", desc: "Sac + boîte + microfibre", sell: 6.5, photo: "/d" },
+];
+const un = (d) => emballagesDuDetail(d, LIB);
+check("emballage : boîte à 5,90 € = la boîte allongée (bracelet)", un("Boîte cadeau (+5.90 €)")[0].emballage?.id === "boite-allongee");
+check("emballage : boîte à 3,90 € = la boîte carrée (collier)", un("Boîte cadeau (+3.90 €)")[0].emballage?.id === "boite-carree");
+check("emballage : nom unique = trouvé même si le prix a changé depuis", un("Sac cadeau (+1.20 €)")[0].emballage?.id === "sac");
+check("emballage : « offert » + nom ambigu = les deux boîtes proposées, pas de choix au hasard", (() => { const r = un("Boîte cadeau (offert)")[0]; return !r.emballage && r.candidats.length === 2; })());
+check("emballage : deux emballages dans une même ligne", (() => { const r = un("Sac cadeau (+1.70 €), Pack Collier (+6.50 €)"); return r.length === 2 && r[0].emballage?.id === "sac" && r[1].emballage?.id === "pack-collier"; })());
+check("emballage : sans parenthèse (ancien texte) = trouvé par le nom", un("Sac cadeau")[0].emballage?.id === "sac");
+check("emballage : inconnu ou bibliothèque vide = rien, sans erreur", !un("Coffret bambou (+9.00 €)")[0].emballage && emballagesDuDetail("Sac cadeau", [])[0].emballage === null && emballagesDuDetail("", LIB).length === 0);
+check("emballage : accents et majuscules sans importance", un("boite cadeau (+5.90 €)")[0].emballage?.id === "boite-allongee");
 
 console.log(`\n${n - ko}/${n} vérifications au vert`);
 process.exit(ko ? 1 : 0);

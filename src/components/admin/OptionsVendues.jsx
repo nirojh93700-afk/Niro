@@ -7,6 +7,7 @@
 // que je me trompe ». Calcul dans src/lib/optionsVendues.js.
 import { optionsCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
+import PhotosEmballage from "@/components/admin/PhotosEmballage";
 
 export default function OptionsVendues({ order, papier = false }) {
   if (!order) return null;
@@ -33,6 +34,7 @@ export default function OptionsVendues({ order, papier = false }) {
                   <span className="ov-puce">{o.physique ? "📦" : "✒️"}</span>
                   <b>{o.libelle}</b>{o.detail ? ` : ${o.detail}` : ""}
                   {o.montant > 0 ? <span className="ov-montant">+{formatEuro(o.montant)}</span> : null}
+                  {o.libelle === "Emballage" ? <PhotosEmballage detail={o.detail} petit={papier} /> : null}
                 </li>
               ))}
             </ul>

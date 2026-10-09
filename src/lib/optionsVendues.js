@@ -184,3 +184,36 @@ export function optionsCommande(order) {
   const nbOptions = articles.reduce((n, a) => n + a.options.length, 0);
   return { articles, livraison: livraisonCommande(order), nbOptions };
 }
+
+// -----------------------------------------------------------------------------
+// PHOTO DE L'EMBALLAGE sur la fiche de travail (09/10/2026, gérant : « j'ai des commandes
+// boîte cadeau à 5,90 €… il faut que tu mettes la photo des boîtes d'emballage pour tous
+// les emballages, je sais pas c'est lequel »). Relie le texte de la commande
+// (« Boîte cadeau (+5.90 €) ») à la bibliothèque d'emballages de Gestion → Packaging
+// (qui porte déjà une photo par emballage). Deux emballages peuvent porter le même nom
+// (boîte carrée 3,90 € / boîte allongée 5,90 €) : on les départage par le prix payé ; si ça
+// reste ambigu (offert, prix modifié depuis), on renvoie LES DEUX candidats plutôt que de
+// risquer la mauvaise photo.
+const norm = (v) => String(v || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+export function emballagesDuDetail(detail, bibliotheque) {
+  const lib = Array.isArray(bibliotheque) ? bibliotheque : [];
+  const texte = String(detail || "");
+  const morceaux = [];
+  const re = /([^,()]+?)\s*\((?:\+\s*([\d.,]+)\s*€|offert)\)/gi;
+  let m;
+  while ((m = re.exec(texte))) morceaux.push({ nom: m[1].trim(), prix: m[2] != null ? parseFloat(m[2].replace(",", ".")) : 0 });
+  if (!morceaux.length && texte.trim()) morceaux.push({ nom: texte.trim().replace(/\s*\(.*$/, ""), prix: null });
+  return morceaux.map(({ nom, prix }) => {
+    const memes = lib.filter((e) => norm(e.name) === norm(nom));
+    let emballage = null;
+    let candidats = [];
+    if (memes.length === 1) emballage = memes[0];
+    else if (memes.length > 1) {
+      const juste = prix != null ? memes.filter((e) => Math.abs((Number(e.sell) || 0) - prix) < 0.011) : [];
+      if (juste.length === 1) emballage = juste[0];
+      else candidats = memes;
+    }
+    return { nom, prix, emballage, candidats };
+  });
+}
