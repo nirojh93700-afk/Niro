@@ -253,6 +253,7 @@ SIZES = "".join(
 FONTS = [("playfair", "Playfair"), ("cinzel", "Cinzel"), ("cinzel-deco", "Cinzel Deco"), ("montserrat", "Montserrat"),
          ("inter", "Inter"), ("great-vibes", "Great Vibes"), ("allura", "Allura"), ("pacifico", "Pacifico")]
 TEXTE_PRIX = 5.00  # comme les cristaux photo : { key: "texte", amount: 5 }
+ZOD_PRIX = 2.00    # zodiaque : prénom, date, ville = +2 € chacun (gérant, 09/10/2026)
 POLICES = "".join(f'<button type="button" class="cg-font fnt-{k}{" on" if k == "playfair" else ""}" data-font="{k}" aria-pressed="{"true" if k == "playfair" else "false"}">{lab}</button>' for k, lab in FONTS)
 PLACES = "".join(f'<button type="button" class="cg-chip{" on" if k == "bas" else ""}" data-pos="{k}" aria-pressed="{"true" if k == "bas" else "false"}">{lab}</button>' for k, lab in (("bas", "En bas"), ("haut", "En haut"), ("gauche", "À gauche"), ("droite", "À droite")))
 
@@ -314,7 +315,7 @@ MAIN = f'''<main class="cg">
         <button type="button" class="cg-socle" id="txton" aria-pressed="false" aria-controls="txtzone">
           <span class="cg-txt-ic">{ic("pen")}</span>
           <span><b id="txtlab">Ajouter un texte</b><small id="txtsub">Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
-          <span class="cg-socle-p">+5,00 €</span>
+          <span class="cg-socle-p" id="txtp">+5,00 €</span>
           <span class="cg-box" aria-hidden="true">{ic("check")}</span>
         </button>
         <div class="cg-txt" id="txtzone" hidden>
@@ -712,7 +713,8 @@ JS = r'''
     $('t-pan').textContent=m.z?'Signe du '+m.nom:m.nom;$('pdesc').textContent=m.phrase;
     $('barimg').src=src;$('barimg').hidden=!src;$('barnom').textContent=m.nom;
     $('txtlab').textContent=m.z?'Ajouter prénom, date de naissance et ville':'Ajouter un texte';
-    $('txtsub').textContent=m.z?'Comme sur une carte du ciel : gravés sous la constellation':'Un prénom, une date, un petit mot, gravé avec le modèle';
+    $('txtsub').textContent=m.z?'Gravés sous la constellation : +2 € par mention (prénom, date, ville)':'Un prénom, une date, un petit mot, gravé avec le modèle';
+    $('txtp').textContent=m.z?'+2 € chacun':'+'+eur(__TXT__);
     $('txtzod').hidden=!m.z;$('txtlibre').hidden=!!m.z;
     if(window.innerWidth<=860){$('panneau').scrollIntoView({behavior:'smooth',block:'start'})}
     maj();
@@ -734,20 +736,22 @@ JS = r'''
   function maj(){
     var t=T[st.taille];$('soclep').textContent='+'+eur(t.socle);$('qte').textContent=st.q;
     var m=st.i>=0?M[st.i]:null,zod=!!(m&&m.z);
-    var avecTxt=st.txt&&(zod?!!(st.zp||st.zd||st.zv):!!st.texte);
-    var unit=t.prix+(st.socle?t.socle:0)+(avecTxt?__TXT__:0);
+    var nz=zod?[st.zp,(st.zd||st.zh),st.zv].filter(Boolean).length:0;
+    var avecTxt=st.txt&&(zod?nz>0:!!st.texte);
+    var unit=t.prix+(st.socle?t.socle:0)+(avecTxt?(zod?__ZOD__*nz:__TXT__):0);
+    if(zod&&st.txt)$('txtp').textContent=nz>0?'+'+eur(__ZOD__*nz):'+2 € chacun';
     var ok=st.i>=0&&!!st.fmt&&(!st.txt||avecTxt);
     var pv=$('txtpv');pv.hidden=!(avecTxt&&st.i>=0&&!zod);pv.textContent=st.texte;pv.className='cg-txtpv fnt-'+st.font+' pos-'+st.pos;
     var zp=$('zperso');zp.hidden=!(zod&&st.txt);var ex=document.querySelector('#blocin .cg-zex');if(ex)ex.hidden=!!(zod&&st.txt);$('zpn').textContent=st.zp;$('zpd').textContent=[st.zd,st.zh].filter(Boolean).join(' · ');$('zpv').textContent=st.zv;
     $('total').textContent=ok?eur(unit*st.q):'—';
-    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle, un dessin ou votre signe.':!st.fmt?'Il manque le format : vertical ou horizontal.':zod?'Écrivez au moins le prénom, la date ou la ville, ou retirez l\'option.':'Écrivez le texte à graver, ou retirez l\'option texte.';
+    var a=$('ajout');a.disabled=!ok;a.classList.toggle('prc-off',!ok);$('manque').hidden=ok;$('manque').textContent=st.i<0?'Choisissez d\'abord un modèle, un dessin ou votre signe.':!st.fmt?'Il manque le format : vertical ou horizontal.':zod?'Écrivez au moins le prénom, la date ou la ville (+2 € chacun), ou retirez l\'option.':'Écrivez le texte à graver, ou retirez l\'option texte.';
     var bar=$('barre');bar.hidden=st.i<0;if(st.i>=0){$('barprix').textContent=t.nom+' · '+eur(unit)}
   }
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   var vu=false;if('IntersectionObserver' in window){new IntersectionObserver(function(e){vu=e[0].isIntersecting;$('barre').classList.toggle('cg-bar-off',vu)},{threshold:.15}).observe($('panneau'))}
   visibles();maj();
 })();
-'''.replace("__DATA__", DATA).replace("__TXT__", str(TEXTE_PRIX)).replace("__TAILLES__", TAILLES_JS)
+'''.replace("__DATA__", DATA).replace("__TXT__", str(TEXTE_PRIX)).replace("__ZOD__", str(ZOD_PRIX)).replace("__TAILLES__", TAILLES_JS)
 
 BANNER = '<div class="mq-banner">MAQUETTE — page « Cristaux déjà gravés » · <b>rien n\'est encore sur le site</b></div>'
 TITLE = "<title>Cristaux déjà gravés — Niv Création (maquette)</title>"

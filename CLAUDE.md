@@ -2742,10 +2742,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     figures (« je te donne les autres trucs aussi »).
   · **v10 (09/10 soir, il a envoyé 8 figures de plus : Cancer, Scorpion, Balance, Capricorne, Vierge, Bélier, Taureau, Poissons
     + 8 rendus « lampe » d'exemple)** : tout est dans `assets/cristaux-graves/zodiaque/` (`<signe>.png` original, `fig-<signe>.webp`
-    découpe blanche, `<signe>-lampe-exemple.png`). **11 figures sur 12 — il manque le VERSEAU** (constellation schématique en
-    attendant). Cadrage des découpes = (560,230,1460,1045) pour ne pas attraper les textes du bas de ses images. Ses figures
+    découpe blanche, `<signe>-lampe-exemple.png`). **11 figures sur 12 — il manquait le VERSEAU** (reçu ensuite, voir v11). Cadrage des découpes = (560,230,1460,1045) pour ne pas attraper les textes du bas de ses images. Ses figures
     portent DÉJÀ leur constellation → le générateur ne trace sa constellation SVG que pour un signe SANS figure (sinon
     double tracé). `ZFIG` lit automatiquement tout `fig-*.webp` présent.
+  · **v11 (09/10 soir, Verseau reçu + « il faut que tu mettes l'option prénom le lieu et la date deux euros à chaque fois »)** :
+    **12 figures sur 12** (`fig-verseau.webp`, même découpe, plus aucune constellation SVG tracée). ✅ **PRIX TRANCHÉ PAR LE
+    GÉRANT : prénom, date de naissance (avec l'heure) et ville = +2 € CHACUN** (`ZOD_PRIX = 2.00`, remplace le +5 € « à
+    confirmer ») : l'étiquette de l'option dit « +2 € chacun » puis le montant réel (+2 / +4 / +6 €) au fil de la saisie ;
+    l'option cochée sans rien d'écrit laisse le bouton grisé. Le texte libre des modèles / dessins reste à +5 €. Vérifié
+    Chromium 390/1280 : 0 erreur JS, 0 débordement, Verseau + vertical + Moyen 59,90 → prénom 61,90 → + ville 63,90 →
+    + date 65,90 → + socle 85,80 €. Rien en ligne.
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
