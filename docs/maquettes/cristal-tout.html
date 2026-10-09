@@ -1,0 +1,43 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tout le cristal — Niv Création (maquette)</title>
+<style>
+:root{--ink:#1a1206;--ink2:#241a0c;--gold:#c9a24b;--gold-l:#e2c67e;--cream:#fbf7ee;--sand:#f3e8d3;--muted:#6b5f4b}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--cream);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+body{display:flex;flex-direction:column}
+.ct-bar{flex:none;background:var(--ink2);color:#fff;padding:10px 12px 0;box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:2}
+.ct-t{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 4px 8px;font-size:.8rem;color:#d9ccb0}
+.ct-t b{color:var(--gold-l);font-weight:600;font-size:.92rem}
+.ct-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:10px}
+.ct-tabs::-webkit-scrollbar{display:none}
+.ct-tab{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid rgba(226,198,126,.35);border-radius:14px;background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.ct-tab.on{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.ct-n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(226,198,126,.2);color:var(--gold-l);font-size:.75rem}
+.ct-tab.on .ct-n{background:var(--ink);color:var(--gold-l)}
+.ct-zone{flex:1;position:relative;min-height:0}
+.ct-frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#fff}
+.ct-frame.on{display:block}
+@media (max-width:480px){.ct-t span{display:none}}
+</style></head><body>
+<header class="ct-bar">
+  <div class="ct-t"><b>Maquette — tout le cristal</b><span>Rien n'est en ligne · touchez un onglet</span></div>
+  <nav class="ct-tabs" role="tablist" aria-label="Pages cristal"><button type="button" role="tab" class="ct-tab on" data-k="cristaux" aria-selected="true"><span class="ct-n">1</span>Page Cristal photo 3D</button><button type="button" role="tab" class="ct-tab" data-k="graves" aria-selected="false"><span class="ct-n">2</span>Cristaux déjà gravés</button><button type="button" role="tab" class="ct-tab" data-k="vertical" aria-selected="false"><span class="ct-n">3</span>Fiche verticale</button><button type="button" role="tab" class="ct-tab" data-k="horizontal" aria-selected="false"><span class="ct-n">4</span>Fiche horizontale</button></nav>
+</header>
+<main class="ct-zone"><iframe class="ct-frame on" data-k="cristaux" title="Page Cristal photo 3D" src="cristaux-blocs.html"></iframe><iframe class="ct-frame" data-k="graves" title="Cristaux déjà gravés" data-src="cristaux-graves.html"></iframe><iframe class="ct-frame" data-k="vertical" title="Fiche verticale" data-src="fiche-cristal-vertical.html"></iframe><iframe class="ct-frame" data-k="horizontal" title="Fiche horizontale" data-src="fiche-cristal-horizontal.html"></iframe></main>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.ct-tab')),frames=[].slice.call(document.querySelectorAll('.ct-frame'));
+  function ouvre(k){
+    tabs.forEach(function(t){var on=t.dataset.k===k;t.classList.toggle('on',on);t.setAttribute('aria-selected',on)});
+    frames.forEach(function(f){var on=f.dataset.k===k;if(on&&f.dataset.src&&!f.getAttribute('src'))f.src=f.dataset.src;f.classList.toggle('on',on)});
+    var t=tabs.filter(function(x){return x.dataset.k===k})[0];if(t)t.scrollIntoView({inline:'nearest',block:'nearest'});
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){ouvre(t.dataset.k)})});
+  // Dans la page Cristal photo 3D : « Vertical » / « Horizontal » ouvrent la fiche, comme sur le vrai site.
+  var p=frames[0];
+  function relie(){try{var d=p.contentDocument;[].forEach.call(d.querySelectorAll('a.cg-tile'),function(a){var l=(a.getAttribute('aria-label')||'').toLowerCase();
+    var k=l.indexOf('vertical')>=0?'vertical':l.indexOf('horizontal')>=0?'horizontal':null;
+    if(k)a.addEventListener('click',function(e){e.preventDefault();ouvre(k)})})}catch(e){}}
+  p.addEventListener('load',relie);if(p.contentDocument&&p.contentDocument.readyState==='complete')relie();
+})();
+</script></body></html>

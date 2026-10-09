@@ -192,6 +192,8 @@ En attente de SA décision :
   version avec puzzles « Bientôt » (non achetables, CE à faire). Point de retour = commit `44f2f64` (une commande pour revenir).
   Reste à lui : vérifier sur son téléphone ; dire si le coffret doit avoir une remise (non annoncée car inexistante au
   paiement) ; les puzzles passeront en vente sur son « applique le puzzle » (CE + cylindre 3,2 cm avant).
+- 🟠 **Maquette « Tout le cristal » (les 4 maquettes cristal réunies en onglets, + fiche horizontale) — 09/10 soir** :
+  https://claude.ai/artifact/LuDinR6rgPoSWDR6jn2VMX. En attente de son avis.
 - 🟠 **Maquette de la FICHE « Cristal photo 3D — Vertical » dans l'habillage du nouveau site — 09/10 soir** :
   https://claude.ai/artifact/YcVSFHnGZtdLxaBGEergDN (`docs/maquettes/fiche-cristal-vertical.html`, version 4 = construite comme cristaux-graves, écrin texte seul, galerie du site à gauche). En attente de son avis ;
   « si c'est bon », il demandera l'application aux autres fiches.

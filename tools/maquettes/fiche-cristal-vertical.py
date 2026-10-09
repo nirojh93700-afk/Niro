@@ -11,7 +11,8 @@ de téléphone → puis, SOUS le panneau, les blocs de la vraie fiche lus dans l
 accordéons, « Commandez en toute confiance », « Vous aimerez aussi »). Contenu = celui de la fiche en ligne (titres, textes,
 tailles 39,90 / 59,90 / 99,90 / 149,90, socle +14,90 petit / +19,90, texte +5 €, les 8 visuels).
 
-Usage : python3 tools/maquettes/fiche-cristal-vertical.py <capture /produit/cristal-photo-3d-vertical.html>
+Usage : python3 tools/maquettes/fiche-cristal-vertical.py <capture /produit/cristal-photo-3d-vertical.html> [nom de sortie]
+  (même générateur pour l'horizontal : capture de /produit/cristal-photo-3d-horizontal + « fiche-cristal-horizontal »)
 Sortie : docs/maquettes/fiche-cristal-vertical.html (+ .fragment.html). Rien n'est touché dans le site.
 """
 import ast, base64, io, json, os, re, sys, urllib.parse
@@ -21,6 +22,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 OUT = os.path.join(ROOT, "docs", "maquettes")
 PUB = os.path.join(ROOT, "public")
 SRC = sys.argv[1]
+SORTIE = sys.argv[2] if len(sys.argv) > 2 else "fiche-cristal-vertical"
 REF = open(os.path.join(ROOT, "tools", "maquettes", "cristaux-graves.py"), encoding="utf-8").read()
 
 
@@ -92,6 +94,7 @@ def ic(n, cls="cg-ic"):
 
 # ---------------------------------------------------------------- le contenu de la fiche, lu dans la capture
 TITRE = re.search(r"<h1>(.*?)</h1>", FICHE).group(1)
+FORMAT_NOM = "Cristal photo 3D — " + ("Horizontal" if "horizontal" in TITRE.lower() else "Vertical")
 TAGLINE = re.search(r'<p style="color:var\(--ink-soft\);margin-top:0">(.*?)</p>', FICHE).group(1)
 TAILLES = re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-sub">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', FICHE)
 PRIX = {t[0]: float(re.sub(r"[^0-9,]", "", t[2]).replace(",", ".")) for t in TAILLES}
@@ -110,7 +113,7 @@ AUSSI = re.search(r'<section class="section"><div class="container"><div class="
 AUSSI = AUSSI.group(0) if AUSSI else ""
 SOCLE = uri(os.path.join(PUB, "produits", "socle-led-rectangle.jpg"), 300, 74)
 FICHE_ACTUELLE = FICHE[FICHE.find("<div class=\"container\"><div class=\"product-layout\">"):FICHE.rfind("</main>")]
-FICHE_ACTUELLE = re.sub(r'<video class="gallery-bg gallery-video"[^>]*></video>', f'<img src="{POSTER}" alt="Cristal photo 3D vertical" id="galmain">', FICHE_ACTUELLE, 1)
+FICHE_ACTUELLE = re.sub(r'<video class="gallery-bg gallery-video"[^>]*></video>', f'<img src="{POSTER}" alt="{FORMAT_NOM}" id="galmain">', FICHE_ACTUELLE, 1)
 FICHE_ACTUELLE = re.sub(r'<button class=" thumb-video" aria-label="Voir la vidéo"><video[^>]*></video></button>',
                         f'<button class="active" aria-label="Voir la vidéo"><img src="{POSTER}" alt=""></button>', FICHE_ACTUELLE, 1)
 
@@ -179,13 +182,13 @@ JS = r'''
 })();
 '''
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Cristal photo 3D — Vertical » : l\'écrin en haut, la fiche actuelle du site en dessous · <b>rien n\'est encore sur le site</b></div>'
-TITLE = "<title>Fiche Cristal photo 3D vertical — Niv Création (maquette)</title>"
+BANNER = f'<div class="mq-banner">MAQUETTE — fiche « {FORMAT_NOM} » : l\'écrin en haut, la fiche actuelle du site en dessous · <b>rien n\'est encore sur le site</b></div>'
+TITLE = f"<title>Fiche {FORMAT_NOM} — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
 full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
         f"{TITLE}{STYLE}</head><body>{BODY}<script>{JS}</script></body></html>")
 frag = f'<meta charset="utf-8">{TITLE}{STYLE}{BODY}<script>{JS}</script>'
-open(os.path.join(OUT, "fiche-cristal-vertical.html"), "w", encoding="utf-8").write(full)
-open(os.path.join(OUT, "fiche-cristal-vertical.fragment.html"), "w", encoding="utf-8").write(frag)
+open(os.path.join(OUT, f"{SORTIE}.html"), "w", encoding="utf-8").write(full)
+open(os.path.join(OUT, f"{SORTIE}.fragment.html"), "w", encoding="utf-8").write(frag)
 print("ok", len(full) // 1024, "Ko", PRIX, len(VISUELS), "visuels")

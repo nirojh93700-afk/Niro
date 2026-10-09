@@ -2823,6 +2823,19 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   sans photo. **Le site n'est pas touché.** Au « applique » : la fiche cristal (ProductDetail pour `crystal3d`) à refaire dans ce rendu,
   puis « pour les autres » s'il le dit.
 
+## 💎 MAQUETTE « TOUT LE CRISTAL » — LES 4 MAQUETTES CRISTAL RÉUNIES — 09/10/2026 SOIR (RIEN en ligne)
+> Gérant : « tu me rassembles tout ce qui est bloc cristal, même gravé, vertical, horizontal, tu me montres une maquette, ne
+> pousse rien que les maquettes ».
+- **Artifact** https://claude.ai/artifact/LuDinR6rgPoSWDR6jn2VMX (page `docs/maquettes/cristal-tout.html`, générateur
+  `tools/maquettes/cristal-tout.py`) : barre d'onglets ① Page Cristal photo 3D (`cristaux-blocs.html`) ② Cristaux déjà gravés
+  (`cristaux-graves.html`, v14) ③ Fiche verticale (`fiche-cristal-vertical.html`, v5) ④ Fiche horizontale
+  (`fiche-cristal-horizontal.html`, NOUVELLE, même générateur que la verticale : `fiche-cristal-vertical.py <capture>
+  fiche-cristal-horizontal`, écrin en haut + fiche actuelle du site telle quelle). Chaque maquette est chargée dans un cadre,
+  publiée à côté de la page (artifact multi-fichiers) ; aucune n'est modifiée. Dans l'onglet ①, toucher « Vertical » ou
+  « Horizontal » ouvre l'onglet de la fiche, comme le vrai site. Sur téléphone, les onglets tiennent sur UNE ligne qui glisse.
+- Vérifié Chromium 390/1280 (serveur local) : 0 débordement, 0 erreur JS, clic Vertical → fiche verticale, horizontale Grand
+  + socle = 119,80 €, 43 cartes dans les cristaux gravés, images chargées. **Le site n'est pas touché.**
+
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « on va faire une autre maquette, c'est une nouvelle catégorie, c'est des jeux pour les enfants, je te
