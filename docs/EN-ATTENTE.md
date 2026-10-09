@@ -217,9 +217,10 @@ En attente de SA décision :
 - **Accueil moderne** : maquette ENREGISTRÉE le 04/10 (version 5) — https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J — `docs/maquettes/accueil-moderne.html`, générateur `tools/maquettes/accueil-moderne.py`. Attend son « applique ». Rien en ligne.
 
 - **Maquette « Accueil + univers » — direction « MÉLANGE » construite le 09/10 (il a répondu « Mélange » aux 3 pistes) : EN ATTENTE DE SON AVIS.**
-  Les deux versions sont refaites (écrin de A en haut et pour la carafe, parcours en 3 étapes de C, bijoux plein cadre + verre de B,
+  Les deux versions sont refaites (écrin de A en haut et pour la carafe, parcours en 3 étapes de C **en tuiles photo** (ses cartes blanches
+  refusées le 09/10 : « bizarre »), bijoux plein cadre + verre de B,
   ton chaleureux de C partout, Inter + Playfair, logo intouché, toutes les corrections du 09/10 gardées) et republiées :
-  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 (v8) · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM (v4).
+  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 (v9) · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM (v5).
   Générateur `tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`, monde décrit dans `DESIGN.md`. Les 3 pistes restent
   visibles (https://claude.ai/artifact/8nwU5hA2o4AphYUm941zTC) s'il veut changer le dosage. Rien en ligne : attend « applique ».
 - (historique) **Maquette « Accueil + univers » — VERSION LUXE du 09/10/2026** (feu vert du gérant : « tu peux tout changer sauf le logo ») :

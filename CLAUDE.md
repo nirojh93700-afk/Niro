@@ -2723,21 +2723,30 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 ## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
 > **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
 > versions (sans / avec puzzles) ont été refaites dans un monde qui réunit les trois pistes, en gardant toutes les corrections
-> du 09/10 ; les deux artifacts sont republiés (sans puzzles v8, avec puzzles v4). Détail du monde dans `DESIGN.md` (réécrit).
+> du 09/10 ; les deux artifacts sont republiés (sans puzzles v9, avec puzzles v5). Détail du monde dans `DESIGN.md` (réécrit).
 > · **piste A (L'Écrin)** pour le haut de page, la carafe et le sur mesure : encre, halo or, cadre doré à double filet, laser,
 >   reflet, étiquette nom + prix, **ruban or qui défile** sous le héros (il remplace le bandeau encre du haut) ;
-> · **piste C (Atelier)** pour « Trouver le bon cadeau EN TROIS ÉTAPES » : ① Pour qui ② Pour quelle occasion ③ Quel budget,
->   cartes blanches à cocher sur sable (`.fc`, icône + libellé + coche or ; grisées sans résultat), la fête du moment (Noël)
->   injectée comme une carte avec son icône ; même grammaire pour « l'atelier en trois gestes » et la tuile « Offrir » ;
+> · **piste C (Atelier)** pour « Trouver le bon cadeau EN TROIS ÉTAPES » : ① Pour qui ② Pour quelle occasion ③ Quel budget ;
+>   même grammaire pour « l'atelier en trois gestes » et la tuile « Offrir » ;
+>   ⛔ **2ᵉ REFUS DU 09/10 (capture de son téléphone)** : la première version du parcours en **cartes blanches à cocher avec une
+>   petite icône** (`.fc`) → « j'aime pas celui-là, je trouve que c'est bizarre ». Remplacée le jour même par des **TUILES PHOTO**
+>   (`.ft`, piste A) : pour qui = 5 photos de pièces gravées (collier cœur gravé, verre whisky, cristal couple, couverts enfant,
+>   cristal famille), occasion = 5 photos (carafe pour Noël, couverts prénom pour Naissance, numéro de table pour Mariage, collier
+>   plaques pour Anniversaire, double cœur pour Amour ; la fête du moment est injectée avec sa photo `FETE_PHOTO`), budget = 3
+>   pavés de prix (« Moins de / 20 € », « Entre / 20 et 40 € », « Plus de / 40 € », choisi = bord or + fond doré clair, sans coche).
+>   Sur téléphone : rails qu'on fait défiler du doigt (138 px, 2,6 visibles, `scroll-snap`), budget sur 3 pavés ; sur ordinateur :
+>   5 tuiles par ligne. ⚠️ Piège : Chrome recale un rail `scroll-snap` sur l'ancienne 1re tuile quand on insère la fête AVANT
+>   elle → `scrollLeft = 0` après l'injection. Leçon : sur téléphone, pas de grandes cartes blanches vides avec une petite
+>   icône ; des photos de pièces gravées, denses, qu'on fait défiler ;
 >   partout ailleurs le ton de C : crème / sable, photos arrondies 20 px, cartes blanches à ombre douce, bouton or dégradé ;
 > · **piste B (Plein cadre)** pour les bijoux : photo plein cadre (`bracelet-femme-acier-porte.jpg`, bracelet gravé porté)
 >   + panneau de verre dépoli (titre, 3 bijoux dont « Best-seller » Collier 3 Cœurs, raccourcis Femme/Homme/Couple/Bébé,
 >   bouton, livraison offerte dès 45 €).
-> Inter revient à la place de Jost (polices du site). Logo intouché. Jugé d'abord à 390 px : écrin empilé, cartes du
-> parcours 2 par ligne (budget aussi), produits 2 par ligne, verres 2 par ligne (la grande en tête), rail à 68 %.
+> Inter revient à la place de Jost (polices du site). Logo intouché. Jugé d'abord à 390 px : écrin empilé, tuiles du
+> parcours en rails, produits 2 par ligne, verres 2 par ligne (la grande en tête), rail des nouveautés à 68 %.
 > **Vérifié** (`t-mix.mjs`, jetable, supprimé) sur les 2 fichiers à 390 / 640 / 901 / 1024 / 1140 / 1280 px : 0 débordement
-> (accueil + 9 vues), 0 erreur JS, parcours joué (elle + moins de 20 € → 8 idées parmi 12, budget respecté, grisés), carte
-> Noël injectée, page Offrir = le même parcours avec l'état repris, menu sur une ligne à 1280, tiroir à 390, cibles ≥ 44 px,
+> (accueil + 9 vues), 0 erreur JS, parcours joué (elle + moins de 20 € → 8 idées parmi 12, budget respecté, grisés), tuile
+> Noël injectée avec sa photo, page Offrir = le même parcours avec l'état repris, menu sur une ligne à 1280, tiroir à 390, cibles ≥ 44 px,
 > aucun texte < 11 px ; captures regardées ; `impeccable detect` : restent des avertissements assumés (halo or et ruban
 > = signatures de la piste A, italique Playfair = identité du site, tirets dans les NOMS de produits du catalogue).
 > ⚠️ Piège corrigé au passage : le clone du parcours sur la page Offrir gardait `id="trouver"` (doublon d'id).
@@ -2771,9 +2780,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > vraiment jolis, modernes, classe, luxe, avec les mêmes couleurs ». Les deux versions sont donc REFAITES dans un nouveau
 > monde visuel ; les versions précédentes restent dans git (commit `0d7ae16`) et dans l'historique des artifacts.
 > · **sans puzzles** : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
->   (version 7 = luxe, **version 8 = Mélange**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
+>   (version 7 = luxe, version 8 = Mélange, **version 9 = Mélange en tuiles photo**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
 > · **avec puzzles** : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM
->   (version 3 = luxe, **version 4 = Mélange**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
+>   (version 3 = luxe, version 4 = Mélange, **version 5 = Mélange en tuiles photo**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
 > Les deux sortent du MÊME générateur **`tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`** (l'ancien
 > `accueil-v2.py`, qui réutilisait la maquette « accueil moderne », est supprimé). La maquette ENREGISTRÉE
 > `accueil-moderne.html` (04/10) n'est pas touchée.

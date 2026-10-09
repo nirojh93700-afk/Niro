@@ -13,9 +13,10 @@ Trois pistes réunies dans un seul monde :
   reflet lent, ruban or qui défile avec les quatre preuves (gravé en France · 4,8/5 sur 286 avis · livraison offerte dès
   45 € sur les bijoux · paiement sécurisé).
 - **Le parcours (piste C)** pour tout ce qui demande un choix : « Trouver le bon cadeau » en trois étapes numérotées
-  (① Pour qui ② Pour quelle occasion ③ Quel budget), cartes blanches à cocher sur fond sable, exactement comme les
-  fiches produit du site (parcours guidé = la référence). Même grammaire pour « l'atelier en trois gestes » et pour la
-  tuile « Offrir » de « Nos univers ».
+  (① Pour qui ② Pour quelle occasion ③ Quel budget) sur fond sable, comme les fiches produit du site (parcours guidé =
+  la référence). Les choix sont des TUILES PHOTO de pièces gravées (piste A), pas des cartes blanches à icône : le
+  gérant a refusé ces cartes sur téléphone (« bizarre »). Le budget est en trois pavés de prix. Même grammaire pour
+  « l'atelier en trois gestes » et pour la tuile « Offrir » de « Nos univers ».
 - **Le plein cadre (piste B)** pour les bijoux : grande photo d'ambiance sur toute la largeur, panneau de verre dépoli
   posé dessus (titre, trois bijoux, raccourcis, bouton).
 - Partout ailleurs, le ton chaleureux de la piste C : crème et sable, photos arrondies à 20 px, cartes blanches à ombre
@@ -47,9 +48,10 @@ Le cadre doré de l'écrin garde ses angles presque droits (6 px, filet intérie
 ## Composants
 - **Bouton** `.btn` : pilule 52 px, libellé puis flèche ; or en dégradé avec ombre dorée (principal), encre (secondaire,
   passe or au survol), filet (tertiaire, or clair sur encre). Au survol il se soulève de 2 px, la flèche glisse de 3 px.
-- **Carte à cocher** `.fc` (parcours) : blanche, 18 px d'arrondi, icône or au trait, libellé Inter 600, bord or quand
-  elle est choisie + pastille or avec une coche (en ligne sur les cartes de budget) ; grisée à 35 % quand elle ne
-  donnerait aucun résultat ; une seule par étape.
+- **Tuile à cocher** `.ft` (parcours) : photo 4:5 d'une pièce gravée, 16 px d'arrondi, libellé blanc posé en bas sur un
+  dégradé encre, bord or + pastille or avec une coche quand elle est choisie, grisée à 35 % quand elle ne donnerait
+  aucun résultat, une seule par étape. Sur téléphone les tuiles forment un rail qu'on fait défiler (138 px, 2,6
+  visibles). Le budget (`.ft-txt`) est un pavé blanc : petit mot + montant en Playfair, choisi = bord or + fond doré clair.
 - **Puce** `.puce` (rayons, filtres, onglets, raccourcis) : pavé sable 14 px, encre quand choisie, 44 px minimum.
 - **Carte produit** `.uc` : photo carrée arrondie 20 px, étiquette SOUS la photo (Nouveau, Best-seller, Naissance…),
   nom Inter 600, prix Playfair `--gold-t`, « Prêt à offrir » pour les pièces non gravables, « Personnaliser » qui monte
@@ -75,5 +77,5 @@ Le cadre doré de l'écrin garde ses angles presque droits (6 px, filet intérie
 - Ordre de l'accueil : écrin cristal → ruban → trois étapes → bijoux sur photo → dernières sorties (rail) → Bébé & Enfant
   + coffret → carafe (écrin) → verres en mosaïque → Noël (rouge et or, éventail) → Nos univers + tuile Offrir →
   l'atelier (énoncé + trois gestes) → le mur → avis → sur mesure (écrin) → pied de page.
-- Téléphone (≤ 640 px) : écrin empilé (texte puis cadre), cartes du parcours 2 par ligne (la dernière seule sur toute la
-  largeur, budget 3 par ligne), cartes produit 2 par ligne, rail à 68 %, verres 2 par ligne, univers 2 par ligne.
+- Téléphone (≤ 640 px) : écrin empilé (texte puis cadre), tuiles du parcours en rails (budget 3 pavés par ligne),
+  cartes produit 2 par ligne, rail des nouveautés à 68 %, verres 2 par ligne, univers 2 par ligne.

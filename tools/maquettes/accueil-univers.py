@@ -349,18 +349,24 @@ HERO = f'''<section class="hero" id="hero">
 </section>
 <div class="ruban" aria-hidden="true"><div class="ruban-t">{RUBAN_ITEMS}{RUBAN_ITEMS}</div></div>'''
 
-def fcard(k, v, label, icon=None):
-    """Carte à cocher du parcours « Trouver un cadeau » (la référence des fiches du site : étapes numérotées, cartes exclusives)."""
-    return f'<button class="fc" type="button" data-k="{k}" data-v="{v}" aria-pressed="false">{ic(icon) if icon else ""}<span>{label}</span><i class="fc-chk">{ic("check")}</i></button>'
-QUI_ICON = {"elle": "woman", "lui": "man", "couple": "rings", "enfant": "baby", "parents": "family"}
-OCC_FIXES = (("naissance", "Naissance &amp; baptême", "baby"), ("mariage", "Mariage", "rings"), ("anniversaire", "Anniversaire", "cake"), ("amour", "Amour", "heart"))
-BUDGETS = (("0-20", "Moins de 20 €"), ("20-40", "20 à 40 €"), ("40-999", "Plus de 40 €"))
+def ftile(k, v, label, ph):
+    """Tuile photo du parcours « Trouver un cadeau » : une pièce gravée pour illustrer le choix, le libellé posé en bas, une coche or quand elle est choisie."""
+    return (f'<button class="ft" type="button" data-k="{k}" data-v="{v}" aria-pressed="false"><span class="ft-ph {tcls(ph)}" aria-hidden="true"></span>'
+            f'<span class="ft-l">{label}</span><i class="ft-chk">{ic("check")}</i></button>')
+def fprix(v, petit, gros):
+    return f'<button class="ft ft-txt" type="button" data-k="budget" data-v="{v}" aria-pressed="false"><small>{petit}</small><b>{gros}</b><i class="ft-chk">{ic("check")}</i></button>'
+QUI_PHOTO = {"elle": "/produits/collier-coeur-grave-2.jpg", "lui": "/produits/verre_a_whisky_exemple_face.jpg", "couple": "/produits/cristal-v-couple.jpg",
+             "enfant": "/produits/couverts_enfants_ex_enfant.jpg", "parents": "/produits/cristal-h-famille.jpg"}
+OCC_FIXES = (("naissance", "Naissance &amp; baptême", "/produits/couverts_enfants_ex_prenom.jpg"), ("mariage", "Mariage", "/produits/numero_table_arche_geometrique_relief_bois.jpeg"),
+             ("anniversaire", "Anniversaire", "/produits/collier-coeur-plaques-1.jpg"), ("amour", "Amour", "/produits/collier-double-coeur-6.jpg"))
+FETE_PHOTO = {"noel": "/produits/carafe_gravee.jpg", "amour": "/produits/collier-double-coeur-6.jpg", "pour-elle famille": "/produits/collier-coeur-grave-2.jpg", "pour-lui famille": "/produits/verre_a_whisky_exemple_face.jpg"}
+BUDGETS = (("0-20", "Moins de", "20 €"), ("20-40", "Entre", "20 et 40 €"), ("40-999", "Plus de", "40 €"))
 FINDER = f'''<section class="fd rv" id="trouver" aria-labelledby="t-fd">
   <div class="fd-in">
   <h2 id="t-fd">Trouver le bon cadeau <em>en trois étapes</em></h2>
-  <div class="fd-step" role="group" aria-label="Pour qui"><div class="fd-h"><b>1</b><span>Pour qui ?</span></div><div class="fcs">{"".join(fcard("qui", k, esc(v), QUI_ICON[k]) for k, v in POURQUI.items())}</div></div>
-  <div class="fd-step" role="group" aria-label="Occasion"><div class="fd-h"><b>2</b><span>Pour quelle occasion ?</span></div><div class="fcs"><span class="fetes" data-max="3" data-as="card"></span>{"".join(fcard("occ", v, l, i) for v, l, i in OCC_FIXES)}</div></div>
-  <div class="fd-step" role="group" aria-label="Budget"><div class="fd-h"><b>3</b><span>Quel budget ?</span></div><div class="fcs fcs-3">{"".join(fcard("budget", v, l) for v, l in BUDGETS)}</div></div>
+  <div class="fd-step" role="group" aria-label="Pour qui"><div class="fd-h"><b>1</b><span>Pour qui ?</span></div><div class="fts">{"".join(ftile("qui", k, esc(v), QUI_PHOTO[k]) for k, v in POURQUI.items())}</div></div>
+  <div class="fd-step" role="group" aria-label="Occasion"><div class="fd-h"><b>2</b><span>Pour quelle occasion ?</span></div><div class="fts"><span class="fetes" data-max="3" data-as="card"></span>{"".join(ftile("occ", v, l, ph) for v, l, ph in OCC_FIXES)}</div></div>
+  <div class="fd-step" role="group" aria-label="Budget"><div class="fd-h"><b>3</b><span>Quel budget ?</span></div><div class="fts fts-3">{"".join(fprix(v, a, b) for v, a, b in BUDGETS)}</div></div>
   <p class="fd-count" id="fdCount" aria-live="polite">Choisissez un ou plusieurs critères.</p>
   <div class="ug fd-res" id="fdRes"></div>
   </div>
@@ -513,7 +519,7 @@ NOTES = f'''<div class="mbar" role="region" aria-label="Maquette">
   <div class="mbar-tabs" role="tablist"><button type="button" class="on" data-view="accueil">Accueil</button><button type="button" data-view="univers">Pages univers</button></div>
   <button type="button" class="mbar-more" id="mbarMore" aria-expanded="false">Ce qui change</button></div>
   <ul class="mbar-notes" id="mbarNotes" hidden>
-    <li><b>Le mélange des trois pistes</b> : l’écrin de la piste A pour le haut de page et la carafe (encre, cadre doré à double filet, laser, ruban or qui défile) ; le parcours en trois étapes numérotées de la piste C pour « Trouver le bon cadeau » (cartes à cocher, comme les fiches du site) ; la photo plein cadre et le panneau de verre de la piste B pour les bijoux. Partout ailleurs : le ton chaleureux de la piste C (cartes arrondies, sable, bouton or). Mêmes couleurs, Playfair Display et Inter comme sur le site, logo intouché.</li>
+    <li><b>Le mélange des trois pistes</b> : l’écrin de la piste A pour le haut de page et la carafe (encre, cadre doré à double filet, laser, ruban or qui défile) ; le parcours en trois étapes numérotées de la piste C pour « Trouver le bon cadeau », avec les tuiles photo de la piste A (pour qui, occasion) et trois pavés de prix ; la photo plein cadre et le panneau de verre de la piste B pour les bijoux. Partout ailleurs : le ton chaleureux de la piste C (cartes arrondies, sable, bouton or). Mêmes couleurs, Playfair Display et Inter comme sur le site, logo intouché.</li>
     <li><b>Accueil</b> : écrin cristal, ruban, trois étapes, bijoux sur photo, nouveautés, Bébé &amp; Enfant + coffret, carafe édition limitée, verres en mosaïque, Noël, « Nos univers », l’atelier en trois gestes, le mur, les avis, le sur mesure, pied de page.</li>
     <li><b>Pages univers</b> : un en-tête par univers (titre, accroche, nombre, photo), les rayons et les filtres dans une barre qui reste visible, les mêmes cartes partout, « Toute la boutique » et « Offrir » (le même parcours en trois étapes).</li>
     <li><b>Tout ce qui a été corrigé le 09/10 est gardé</b> : rangement des 75 créations, retour à l’accueil, menus et tiroir, budget sur l’intervalle de prix, boutons grisés, fêtes calculées (nom seul, 3 mois), textes sans « au prénom ».{" Version avec puzzles : « Jeux en bois » et « Cristaux déjà gravés » marqués « Bientôt », coffret Savane." if PUZ else ""}</li>
@@ -657,17 +663,22 @@ input{caret-color:var(--gold-d)}
 .fd h2{font-size:clamp(1.9rem,3.6vw,3rem);text-align:center;margin-bottom:28px}
 .fd-step{margin-bottom:22px}
 .fd-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.fd-h b{width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--gold-l);display:inline-flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.05rem;flex:none}
-.fd-h span{font-family:var(--serif);font-weight:600;font-size:1.3rem}
-.fcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.fcs-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.fcs-3 .fc{flex-direction:row;gap:8px}.fcs-3 .fc-chk{position:static}
-.fc{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px 12px;border-radius:18px;background:#fff;box-shadow:var(--sh);border:2px solid transparent;min-height:44px;transition:border-color .25s,transform .3s var(--ease),opacity .3s}
-.fc .ic{width:28px;height:28px;color:var(--gold-d)}.fc>span{font-weight:600;font-size:.92rem;text-align:center;line-height:1.3}
-.fc:hover{transform:translateY(-2px)}.fc.on{border-color:var(--gold)}
-.fc.off{opacity:.35;cursor:not-allowed;transform:none}
-.fc-chk{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center}
-.fc-chk .ic{width:14px;height:14px;color:var(--ink)}.fc.on .fc-chk{display:inline-flex}
+.fd-h b{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--gold-l);display:inline-flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.05rem;flex:none}
+.fd-h span{font-family:var(--serif);font-weight:600;font-size:1.25rem}
+.fts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.fts:has(> .ft:nth-child(6)){grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.fts-3{grid-template-columns:repeat(3,minmax(0,1fr));max-width:620px}
+.ft{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:var(--sand);border:2px solid transparent;text-align:left;transition:border-color .25s,transform .3s var(--ease),opacity .3s,box-shadow .3s}
+.ft-ph{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 1.2s var(--ease)}
+.ft:hover .ft-ph{transform:scale(1.05)}
+.ft-l{position:absolute;left:0;right:0;bottom:0;padding:40px 12px 11px;background:linear-gradient(transparent,rgba(26,18,6,.88));color:#fff;font-weight:600;font-size:.92rem;line-height:1.25}
+.ft.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-l),0 14px 30px -14px rgba(201,162,75,.8)}
+.ft.off{opacity:.35;cursor:not-allowed;transform:none}
+.ft-chk{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(26,18,6,.3)}
+.ft-chk .ic{width:14px;height:14px;color:var(--ink)}.ft.on .ft-chk{display:inline-flex}
+.ft-txt{aspect-ratio:auto;min-height:78px;background:#fff;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 10px;text-align:center}
+.ft-txt .ft-chk{display:none!important}.ft-txt.on{background:#fff6dc}.ft-txt.on b{color:var(--gold-t)}
+.ft-txt small{font-size:.78rem;font-weight:600;color:var(--muted)}.ft-txt b{font-family:var(--serif);font-weight:600;font-size:1.25rem;line-height:1.1;white-space:nowrap}
 .fd-count{margin:22px 0 14px;color:var(--muted);text-align:center}
 .fd-res .uc{animation:fdIn .5s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
 @keyframes fdIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -891,9 +902,10 @@ input{caret-color:var(--gold-d)}
   .hero{padding:28px var(--gut) 28px}.frame{padding:8px}.laser{display:none}.frame-tag{left:16px;bottom:16px}
   .ruban{font-size:.72rem}
   .fd{padding:36px var(--gut) 40px}.fd h2{margin-bottom:20px}
-  .fcs{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fcs>.fc:last-child:nth-child(odd){grid-column:span 2}
-  .fcs-3{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .fc{padding:14px 8px;gap:8px}.fc .ic{width:24px;height:24px}.fc>span{font-size:.84rem}.fcs-3 .fc{padding:14px 8px;gap:6px}.fcs-3 .fc-chk{width:20px;height:20px}.fcs-3 .fc-chk .ic{width:13px;height:13px}
+  .fts,.fts:has(> .ft:nth-child(6)){display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * var(--gut));padding:4px var(--gut) 6px;scroll-padding:0 var(--gut)}.fts::-webkit-scrollbar{display:none}
+  .fts .ft{flex:0 0 138px;scroll-snap-align:start}.ft-l{padding:30px 10px 9px;font-size:.84rem}
+  .fts-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding:0;overflow:visible;max-width:none}.fts-3 .ft{flex:none}.ft-txt{min-height:70px;padding:10px 6px}.ft-txt small{font-size:.72rem}.ft-txt b{font-size:1.05rem}
+  .fd-h b{width:30px;height:30px;font-size:.95rem}.fd-h span{font-size:1.15rem}
   .ug,.ug-3,.enf .ug-2{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 10px}
   .glass{padding:20px}.glass .mini{gap:8px}.glass .mini .uc-name{font-size:.76rem}.glass .mini .uc-price{font-size:.88rem}.glass .mini .fav{display:none}
   .uc-cta{display:none}.uc .fav{opacity:1;width:44px;height:44px;top:6px;right:6px}
@@ -909,7 +921,7 @@ input{caret-color:var(--gold-d)}
 
 # ---------------------------------------------------------------- JS
 JS = r'''
-(function(){var d=document,root=d.documentElement,ARROW='__ARROW__',FI=__FI__,CHK='__CHK__';
+(function(){var d=document,root=d.documentElement,ARROW='__ARROW__',FP=__FP__,CHK='__CHK__';
 var cards=d.getElementById('allCards'),header=d.querySelector('.header'),drw=d.getElementById('drw'),burger=d.getElementById('burger');
 function hdr(){root.style.setProperty('--hdr',(header?header.offsetHeight:0)+'px')}hdr();addEventListener('resize',hdr);
 function setOn(b,on){b.classList.toggle('on',!!on);if(b.hasAttribute('aria-pressed'))b.setAttribute('aria-pressed',on?'true':'false')}
@@ -998,9 +1010,10 @@ function prochainesFetes(){var now=new Date();now.setHours(0,0,0,0);var y=now.ge
   out.forEach(function(f){if(!seen[f.n]&&(f.d-now)/864e5<=92){seen[f.n]=1;res.push({n:f.n,o:f.o,i:f.i,d:f.d})}});return res}
 d.querySelectorAll('.fetes').forEach(function(sl){var par=sl.parentNode;prochainesFetes().forEach(function(f){var el;
   if(sl.dataset.as==='a'){el=d.createElement('a');el.href='#';el.dataset.find='occ:'+f.o;el.textContent=f.n}
-  else{el=d.createElement('button');el.type='button';el.className='fc';el.dataset.k='occ';el.dataset.v=f.o;el.setAttribute('aria-pressed','false');el.innerHTML=(FI[f.i]||'')+'<span></span>'+CHK;el.querySelector('span').textContent=f.n}
+  else{el=d.createElement('button');el.type='button';el.className='ft';el.dataset.k='occ';el.dataset.v=f.o;el.setAttribute('aria-pressed','false');el.innerHTML='<span class="ft-ph '+(FP[f.o]||'')+'" aria-hidden="true"></span><span class="ft-l"></span>'+CHK;el.querySelector('.ft-l').textContent=f.n}
   par.insertBefore(el,sl);
   par.querySelectorAll(sl.dataset.as==='a'?'a[data-find="occ:'+f.o+'"]':'button[data-v="'+f.o+'"]').forEach(function(x){if(x!==el)x.remove()})});sl.remove()});
+d.querySelectorAll('.fts').forEach(function(r){r.scrollLeft=0});
 wireFinder(d.getElementById('trouver'));
 /* filtres et tri des pages univers */
 d.querySelectorAll('.up').forEach(function(up){var pool=[].slice.call(up.querySelectorAll('.ug>.uc'));
@@ -1023,7 +1036,7 @@ d.querySelectorAll('.cof').forEach(function(cf){var tot=cf.querySelector('.cof-t
   inp.addEventListener('input',function(){nom.textContent=this.value.trim()||'Léa';nom.classList.add('live')});
   inp.addEventListener('focus',function(){nom.classList.add('live')});inp.addEventListener('blur',function(){nom.classList.remove('live')});calc()});
 })();
-'''.replace("__ARROW__", ic("arrow")).replace("__FI__", json.dumps({k: ic(k) for k in ("tree", "heart", "family", "woman", "man")})).replace("__CHK__", '<i class="fc-chk">' + ic("check") + '</i>')
+'''.replace("__ARROW__", ic("arrow")).replace("__FP__", json.dumps({k: tcls(v) for k, v in FETE_PHOTO.items()})).replace("__CHK__", '<i class="ft-chk">' + ic("check") + '</i>')
 
 # ---------------------------------------------------------------- sortie
 TITLE = "Accueil et univers (avec puzzles)" if PUZ else "Accueil et univers"
