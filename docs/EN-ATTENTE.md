@@ -185,8 +185,8 @@ En attente de SA décision :
 ## 5. Questions en attente de SA réponse
 
 - **Maquette « Jeux pour enfants » (07/10/2026) — ENREGISTRÉE (version 2)** — https://claude.ai/artifact/HkVPxQEevP5UwD2bn3Sf8x, rien en ligne :
-  (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10, à reporter dans la maquette sur son accord ·
-  poids 75 g ✅ 09/10) · épaisseur / bois · âge conseillé · marquage CE (EN 71) · nom de la catégorie · son « applique ».
+  (prix 29,90 € prénom compris ✅ 07/10 · dimensions 18,5 × 13,5 cm ✅ 09/10 et âge « dès 2 ans, sous la surveillance d'un adulte » ✅ 09/10 soir — formulation proposée, à reporter dans la maquette sur son accord ·
+  poids 75 g ✅ 09/10) · épaisseur / bois · marquage CE (EN 71) · nom de la catégorie · son « applique ».
 - ✅ **Maquette « Accueil + univers », 09/10 soir, « OK fais-le »** : parcours « Trouver le bon cadeau » descendu juste avant le
   coffret enfants + phrase « Fait main en France : chaque pièce est gravée et découpée dans notre atelier » sous son titre
   (v11 / v7), puis parcours ramené à DEUX étapes sans budget (v12 / v8). Barre rayons + filtres compacte sur téléphone (v10 / v6).

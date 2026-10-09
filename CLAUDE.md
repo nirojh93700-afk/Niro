@@ -2734,9 +2734,24 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (`weight: 75` le jour du « applique », lettre suivie ≤ 100 g → 4,90 €, comme un bijou ; épaisseur et essence du bois toujours
   inconnues). Pas encore reporté dans la maquette (règle : une maquette enregistrée ne se modifie pas sans son accord) : lui
   demander s'il veut la ligne « 18,5 × 13,5 cm » dans « Votre puzzle ».
-- **Questions posées au gérant** : ~~dimensions~~ (18,5 × 13,5 cm, reçues le 09/10) / épaisseur / essence du bois · âge
-  conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · ~~poids pour le port~~ (75 g,
-  reçu le 09/10) · nom de la catégorie dans le menu.
+- **ÂGE : « à partir de 2 ans, sous la surveillance d'un adulte » (gérant, 09/10/2026 soir ; « regarde sur Internet comment
+  on peut mettre »)**. Recherche faite (DGCCRF « Sécurité des jouets », directive 2009/48/CE, EN 71-1) — ce qu'il faut savoir :
+  · formulation à écrire sur la fiche, visible AVANT l'achat (une indication d'âge compte comme un avertissement qui décide
+    l'achat, donc sur la page produit, pas seulement sur l'emballage) : **« Dès 2 ans · à utiliser sous la surveillance d'un
+    adulte »** (pastille) et, dans la fiche : **« Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte. »**
+    (« À utiliser sous la surveillance d'un adulte » = la tournure officielle des avertissements de l'annexe V de la directive) ;
+  · ⛔ **ne JAMAIS écrire « Attention ! Ne convient pas aux enfants de moins de 36 mois »** sur ce puzzle : cet avertissement est
+    réservé aux jouets qui ne sont PAS destinés aux moins de 3 ans ; sur un jouet vendu « dès 2 ans » il contredit l'usage
+    prévu et est interdit ;
+  · conséquence « dès 2 ans » = jouet pour moins de 36 mois → **aucune pièce ne doit tenir entièrement dans le cylindre d'essai
+    des petits éléments (Ø 3,17 cm × 5,7 cm, EN 71-1)**, même après le test de chute ; à vérifier surtout sur les petites
+    pièces (véhicules de secours 7 pièces). Si une pièce passe, soit l'agrandir, soit vendre « dès 3 ans » avec l'avertissement
+    36 mois + « petits éléments (étouffement) » ;
+  · la phrase « Conforme aux exigences de sécurité des jouets (CE, EN 71) » ne s'écrit QUE lorsque le marquage CE sera fait.
+  Rien reporté dans la maquette (enregistrée) : proposé au gérant le 09/10 soir, attendre son « ok ».
+- **Questions posées au gérant** : ~~dimensions~~ (18,5 × 13,5 cm, reçues le 09/10) / épaisseur / essence du bois · ~~âge
+  conseillé~~ (2 ans sous surveillance, 09/10) · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre ·
+  ~~poids pour le port~~ (75 g, reçu le 09/10) · nom de la catégorie dans le menu.
 
 ## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
 > **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
