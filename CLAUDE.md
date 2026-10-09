@@ -2809,7 +2809,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   truc »)** : le bandeau `.trust` du site d'avant (note du site, 4 atouts, logos de paiement, « payez en plusieurs fois sans
   frais ») est rendu TEL QUEL entre « Nos univers » et l'atelier, HORS des conteneurs `.mx` (la page a deux `.mx`, `Reveal`
   les gère tous) ; le bloc « avis » de la maquette (note + étoiles) est retiré pour ne pas afficher la note deux fois.
-- **Ruban or sans la note d'avis** (gérant, 09/10 soir : « enlève avis dans la bande ») : Gravé en France · Livraison offerte dès 45 € sur les bijoux · Paiement sécurisé.
+- **Ruban or = réassurance seulement** (gérant, 09/10 soir : « enlève avis dans la bande », puis « livraison gratuite, chaque
+  produit est différent, n'affiche pas ») : Gravé en France · Gravé à la commande dans notre atelier · Paiement sécurisé ·
+  Livraison suivie · Emballage soigné. ⛔ **Aucun seuil de livraison offerte sur l'accueil** (ni ruban, ni phrase sous les
+  bijoux — retirée aussi) : les seuils (45 € bijoux, 60 € verres) restent dans le panier, les fiches et la FAQ. Le bloc carafe
+  garde « livraison offerte dès 60 € » comme sur l'ancien accueil.
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
   photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,

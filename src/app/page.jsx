@@ -56,8 +56,9 @@ export default async function HomePage() {
   const verres = VERRES5.map(C).filter(Boolean);
   const bijoux = BIJOUX3.map(C).filter(Boolean);
   const mur = R.cartes.filter((c) => c.image);
-  // Ruban or : sans la note d'avis (retirée à la demande du gérant, 09/10 soir).
-  const ruban = ["Gravé en France", "Livraison offerte dès 45 € sur les bijoux", "Paiement sécurisé"];
+  // Ruban or : réassurance seulement, sans note d'avis ni seuil de livraison (gérant, 09/10 soir :
+  // chaque produit a son propre seuil, on n'affiche pas « livraison offerte » sur l'accueil).
+  const ruban = ["Gravé en France", "Gravé à la commande dans notre atelier", "Paiement sécurisé", "Livraison suivie", "Emballage soigné"];
 
   return (
     <>
@@ -95,7 +96,6 @@ export default async function HomePage() {
                 {[["elle", "Femme"], ["lui", "Homme"], ["couple", "Couple"], ["enfant", "Bébé"]].map(([k, l]) => <Link key={k} className="puce" href={`/offrir?qui=${k}`}>{l}</Link>)}
               </div>
               <Bouton href="/boutique/bijoux" cls="mxbtn-ink">Voir tous les bijoux</Bouton>
-              <p className="bij-note">Livraison offerte dès 45 € sur les bijoux.</p>
             </div></div>
           </section>
         ) : null}
