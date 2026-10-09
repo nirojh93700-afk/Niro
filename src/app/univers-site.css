@@ -10,3 +10,6 @@
    quand même la fenêtre de mise en page : `clip` coupe sans créer de zone de défilement, donc les
    barres collantes continuent de marcher (overflow:hidden les casserait). */
 .mx{overflow-x:clip}
+/* Rail « Les dernières sorties » sur téléphone : deux cartes par écran (gérant, 09/10 soir : « on peut
+   afficher plusieurs produits, c'est mieux »), au lieu d'une seule carte à 68 %. */
+@media (max-width:640px){.mx .rail{grid-auto-columns:calc(50% - 9px);gap:14px}}

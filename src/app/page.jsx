@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Reveal from "@/components/univers/Reveal";
+import NewArrivalsToast from "@/components/NewArrivalsToast";
 import Carte, { Bouton } from "@/components/univers/Carte";
 import Rail from "@/components/univers/Rail";
 import Finder from "@/components/univers/Finder";
@@ -283,6 +284,8 @@ export default async function HomePage() {
           </div>
         </section>
       </div></div>
+      {/* Petite fenêtre flottante « Nouveauté ✦ » : UNE fenêtre, comme avant (gérant, 09/10 soir). */}
+      <NewArrivalsToast items={nouveaux.map((c) => ({ slug: c.slug, name: c.name, image: c.image }))} />
     </>
   );
 }

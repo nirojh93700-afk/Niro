@@ -2821,8 +2821,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `tools/maquettes/fenetre-nouveautes.py <capture de l'accueil>` (vrai accueil en ligne, polices et photos intégrées) : variante
   **A · deux fenêtres empilées** (un produit chacune, changent ensemble) ou **B · une fenêtre, deux produits côte à côte** ;
   apparaît après 2,5 s, reste 7 s, passe aux suivants, ✕ mémorisé ; sur téléphone posée AU-DESSUS des deux boutons flottants.
-  Produits = ceux du rail « Les dernières sorties ». Testée 390/1280 : 0 débordement, 0 erreur. **Rien en ligne** : il choisit A ou B,
-  puis « applique » → remettre `NewArrivalsToast` (réécrit sur ce modèle) dans `page.jsx`.
+  Produits = ceux du rail « Les dernières sorties ». ✅ **TRANCHÉ le 09/10 soir : « ne mets pas 2 fenêtres, tu mets qu'une » →
+  `NewArrivalsToast` d'avant (une fenêtre, un produit) REMIS tel quel dans `page.jsx` (6 dernières sorties). Et « deux fenêtres »
+  voulait dire LE RAIL « Les dernières sorties » sur téléphone : il montrait UNE carte à 68 % de l'écran → maintenant DEUX cartes
+  par écran (`univers-site.css`, `.mx .rail{grid-auto-columns:calc(50% - 9px)}` ≤ 640 px). La maquette A/B reste dans
+  `docs/maquettes/` à titre d'archive, sans suite.**
 - **Interrupteurs Gestion → Apparence → Sections** toujours lus : `newArrivals` = dernières sorties · `featured` = bijoux sur
   photo · `verresBand` = verres · `noel` · `categories` = nos univers · `atelier` · `trust` = bandeau confiance · `mur`.
 - **Vérifié avant le push** (`next build` OK, `next start` local, Playwright 390 / 1280 px sur `/`, `/boutique`, `/boutique/bijoux`,
