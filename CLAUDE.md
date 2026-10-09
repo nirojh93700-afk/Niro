@@ -2791,7 +2791,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 ## 💎 MAQUETTE DE LA FICHE « CRISTAL PHOTO 3D — VERTICAL » DANS L'HABILLAGE DU NOUVEAU SITE — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
 > Gérant : « fais-moi une maquette pour le vertical quand je vais l'ouvrir » (après : « si c'est bon tu feras [l'application]
 > pour les autres »). Même règle : MÊME CONTENU, MÊMES RÉGLAGES, seule la mise en page change.
-- **Fichier** : `docs/maquettes/fiche-cristal-vertical.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/VHbbRM7EnQkk26AmmsdKuR.
+- **Fichier** : `docs/maquettes/fiche-cristal-vertical.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/YcVSFHnGZtdLxaBGEergDN.
   Générateur `tools/maquettes/fiche-cristal-vertical.py <capture>` ; capture = `curl localhost:3140/produit/cristal-photo-3d-vertical`
   après `npx next start -p 3140` (build `.next` présent) — gardée dans le scratchpad (`fiche-vertical-src.html`). Le `<main>` de la
   VRAIE fiche est gardé tel quel (galerie 8 visuels, 4 tailles 39,90/59,90/99,90/149,90, photo, texte +5 €, police, place du
