@@ -56,9 +56,12 @@ export default async function HomePage() {
   // Les dernières sorties : le puzzle Savane en tête (en vente depuis le 09/10/2026 ; un seul
   // puzzle ici, les 9 ensemble rempliraient la rangée), puis les dernières créations par date
   // d'ajout — 10 en tout, sur DEUX lignes qui glissent (maquette B validée le 09/10/2026).
+  // Le verre à whisky en premier (gérant, 10/10/2026 : « tu peux mettre le verre de whisky en premier »).
+  const whisky = C("verre-a-whisky-grave");
   const puzzle = C("puzzle-savane");
-  const nouveaux = [...(puzzle ? [puzzle] : []),
-    ...dernieresSorties(R.cartes.filter((c) => c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-")), puzzle ? 9 : 10)];
+  const tete = [whisky, puzzle].filter(Boolean);
+  const nouveaux = [...tete,
+    ...dernieresSorties(R.cartes.filter((c) => c.slug !== "verre-a-whisky-grave" && (c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-"))), 10 - tete.length)];
   const moitie = Math.ceil(nouveaux.length / 2);
   const lignesNouveautes = [nouveaux.slice(0, moitie), nouveaux.slice(moitie)].filter((l) => l.length);
   const nouveautesToast = nouveaux.filter((c) => !c.soon).map((c) => ({ slug: c.slug, name: c.name, image: c.image }));
