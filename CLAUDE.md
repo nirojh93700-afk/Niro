@@ -2859,6 +2859,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   de moins de 36 mois (petits éléments) ». ⚠️ 120 pièces sur 21 × 15 cm = pièces d'environ 1,7 cm : à confirmer à la découpe.
 - Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 120 pièces × 2 = 79,80 €, « Choisir une photo » pose la photo en
   noir et blanc sur la grande image.
+- ✅ **v2 (09/10 soir, gérant : « pas besoin de l'âge pour les plus petits… enlever les plus gros morceaux, c'est plus pour les
+  adultes… fais comme sur Internet, c'est à toi de chercher, ne me demande pas tout le temps »)** : **24 · 48 · 80 · 120 pièces
+  à 29,90 · 32,90 · 34,90 · 37,90 €** (marché : Wanapix bois 30 p. 25×18 29,95 € / 96 p. 39,95 € / 150 p. 49,95 € ; Ocadeau 96 p.
+  41,95 € ; Pellicule Photo 96 p. 31,90 € ; Ma Photo Sur Bois, GRAVÉ, 50 p. dès 39,90 €) ; une seule mention « Attention : ne
+  convient pas aux enfants de moins de 36 mois. Petits éléments, risque d'étouffement. » (sous 500 pièces un puzzle reste un
+  jouet → mention obligatoire) ; accroche « un cadeau pour les grands » ; `noEngravePreview: true`. Taille gardée 21 × 15 cm
+  (sa demande « un peu plus grand »), alors que le marché fait plutôt 25 × 18 (30 p.) à 36 × 25 cm (96 p.).
+  ⛔ **Leçon (gérant) : quand une décision se tranche en regardant le marché, CHERCHER ET DÉCIDER soi-même, puis lui dire ce
+  qui a été choisi et pourquoi — ne pas lui renvoyer la question.**
 
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.

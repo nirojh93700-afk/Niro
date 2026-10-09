@@ -9,6 +9,10 @@ La maquette = cette capture TELLE QUELLE (en-tête, fiche du site, pied de page)
 marchent : nombre de pièces → prix et total, vignettes et flèches, et « Choisir une photo » qui pose la photo du client
 sur la grande image, en noir et blanc comme une gravure.
 
+v2 (09/10 soir, gérant : « pas besoin de l'âge pour les plus petits… enlever les plus gros morceaux, c'est plus pour les
+adultes… fais comme sur Internet, c'est à toi de chercher ») : 24 / 48 / 80 / 120 pièces à 29,90 / 32,90 / 34,90 / 37,90 €,
+une seule mention « ne convient pas aux moins de 36 mois, petits éléments » (obligatoire sous 500 pièces).
+
 Usage : python3 tools/maquettes/puzzle-photo.py <capture /produit/puzzle-photo-grave.html>
 Sortie : docs/maquettes/puzzle-photo.html (+ .fragment.html).
 """
@@ -84,10 +88,10 @@ def nettoie(html):
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
-MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)
+MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)  # (déjà absent avec noEngravePreview)
 PRIX = {t: float(re.sub(r"[^0-9,]", "", p).replace(",", ".")) for t, p in
         re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', MAIN)}
-assert len(PRIX) == 6, PRIX
+assert len(PRIX) == 4, PRIX
 
 CSS = r'''
 .mq-banner{background:#2b2620;color:#d9c79a;text-align:center;font-size:.78rem;padding:8px 14px;letter-spacing:.02em}
@@ -98,7 +102,7 @@ CSS = r'''
 JS = r'''
 (function(){
   var P=__PRIX__, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={t:'4 pièces',q:1};
+  var st={t:'24 pièces',q:1};
   var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
   var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
   var qb=document.querySelectorAll('.qty-stepper button');
