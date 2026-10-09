@@ -2720,50 +2720,70 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 
-## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DEUX VERSIONS ENREGISTRÉES LE 08/10/2026 — RIEN en ligne
+## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DEUX VERSIONS ENREGISTRÉES LE 08/10, REFAITES EN ENTIER LE 09/10/2026 — RIEN en ligne
 > ⛔ **INCIDENT 08/10** : sur sa remarque « le puzzle je l'ai pas mis en ligne », j'ai RETIRÉ les puzzles de la maquette
 > enregistrée → « je t'ai pas dit de changer la maquette, enregistre celle-là et celle d'avant ». Une remarque n'est PAS
 > une demande de modification : sur une maquette enregistrée, on DEMANDE avant de toucher (règle du 23/07).
-> Les deux versions sont gardées, à lui de choisir celle à appliquer :
-> · **avec puzzles** (version 4) : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact
->   https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM — rayon « Jeux en bois » (9 puzzles « Bientôt »), « Cristaux déjà
->   gravés — bientôt », coffret Savane (couverts + puzzle + veilleuse) ;
-> · **sans puzzles** (version 5) : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
->   — seulement les 75 produits en ligne, coffret « Chambre d'enfant » (couverts + veilleuse + plaque de porte).
-> Le générateur `accueil-v2.py` produit la version SANS puzzles ; la version avec = fichier figé (commit précédent).
-> Gérant : « reprends la maquette qu'il a déjà, retravaille, et pour tous les univers avec tous les produits…
+> Les deux versions sont gardées, à lui de choisir celle à appliquer. **Depuis le 09/10, UN SEUL générateur produit les
+> deux** (`python3 tools/maquettes/accueil-v2.py <cat.json>` → sans puzzles ; `--puzzles` → avec) : plus de fichier figé,
+> toute correction atteint les deux versions.
+> · **avec puzzles** : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM
+>   (version 2 le 09/10) — rayon « Jeux en bois » (9 puzzles « Bientôt », 29,90 € · prénom compris), encadré « Cristaux déjà
+>   gravés » « Bientôt », coffret Savane (couverts + puzzle + veilleuse) ;
+> · **sans puzzles** : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
+>   (version 6 le 09/10) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » (couverts + veilleuse + plaque de porte).
+> Gérant (08/10) : « reprends la maquette qu'il a déjà, retravaille, et pour tous les univers avec tous les produits…
 > cherche sur Internet plusieurs sites… que mon site soit bien optimisé, bien rangé » (+ « les couverts enfants c'est
-> pas dans la Déco »). La maquette ENREGISTRÉE `accueil-moderne.html` n'est PAS modifiée : `tools/maquettes/accueil-v2.py`
-> lit et exécute son générateur sans écrire ses fichiers, puis retravaille le résultat.
-- **Fichier** : `docs/maquettes/accueil-univers.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6.
-  Catalogue lu dans le code par `tools/maquettes/catalogue-export.mjs` (`node --import ./tools/alias-register.mjs …`,
-  75 produits visibles, occasions de `occasions.js`) → `python3 tools/maquettes/accueil-v2.py <json>`. Le générateur
-  REFUSE de tourner si un produit n'est rangé dans aucun univers (assert) → aucun produit oublié.
-- **Changements** : menu de 15 liens → **8 entrées** (7 univers + « Offrir » avec Pour qui / Occasion / Budget /
-  Carte cadeau / Promotions), panneau déroulant avec rayons + photo ; ☰ du téléphone = vrai tiroir en accordéon ·
-  **« Trouver le cadeau en 3 clics »** sous le héros · **nouvel univers « Bébé & Enfants »** (naissance & baptême,
-  repas = couverts, chambre = veilleuse prénom + plaque de porte) + **coffret assorti « Chambre d'enfant »** (couverts +
-  veilleuse + plaque de porte, prénom écrit une fois, −10 % dès 2 pièces = proposition). ⛔ **Aucun produit qui n'est pas
-  en ligne** (gérant 08/10 : « le puzzle je l'ai pas mis en ligne ») : puzzles et « cristaux déjà gravés » RETIRÉS de la
-  maquette (version 5) — à remettre seulement quand ces produits seront sur le site ·
-  « Nos univers » (8 tuiles avec nombre de créations) remplace « Explorez nos collections » · 2ᵉ vue : **une page
-  par univers avec TOUS les produits rangés par rayon**, filtres Pour qui (bijoux) / Budget, tri par prix.
-  **Textes corrigés le 08/10 sur sa remarque (« y a plein de fautes… veilleuse au prénom, ça se dit pas »)** : l'univers s'appelle
-  « Bébé & Enfant » (singulier, comme les boutiques du marché), on écrit « personnalisé(e) » ou « avec son prénom » et plus jamais
-  « au prénom » / « gravé au prénom » dans MES textes ; plus de « un animal par couvert ». ⚠️ Le NOM du produit en ligne
-  « Veilleuse Arbre de Vie au prénom » vient du catalogue : le renommer = toucher au site → à lui de dire.
-  Rangement : Bijoux 32 (colliers / bracelets) · Cristal 5 · Verres 6 · Bébé & Enfants 8 ·
-  Mariage 9 · Maison & Déco 6 (lumières, bougeoirs) · Petits cadeaux 10 (clés USB, porte-clés & médaille, bureau).
-- **Fêtes automatiques (08/10, « Fête des pères c'est fini… il faut que ça se mette automatiquement »)** : les occasions datées
-  (Noël 25/12 · Saint-Valentin 14/02 · fête des grands-mères 1er dim. de mars · fête des mères dernier dim. de mai, reportée
-  au 1er dim. de juin si Pentecôte · fête des pères 3e dim. de juin) sont CALCULÉES sur la date du jour dans la maquette
-  (`prochainesFetes` dans le JS) : seules celles des **3 prochains mois** (≤ 92 jours) s'affichent, **par leur nom seul** (gérant 08/10 : « mets pas dans
-  combien de jours »), une fête passée disparaît seule. Naissance / Mariage / Anniversaire restent fixes. À reproduire
-  dans `occasions.js` au « applique » (et à proposer pour le bandeau Noël / les pages /offrir).
-- En-tête/logo, héros, bijoux, carafe, Noël, mur, avis, pied de page : inchangés (logo à son adresse source).
-  Prix = ceux du code (remise bijoux −10 % appliquée) ; Gestion peut les avoir changés. 9 produits n'ont pas de photo
-  locale (photos sur le CDN Shopify, injoignable d'ici) → vignette « photo sur le site ».
-- Testée Chromium 1280/390 : 0 débordement, 0 erreur JS, filtres / tiroir / coffret / trouver un cadeau joués.
+> pas dans la Déco ») ; puis (09/10) : « revérifie tout la maquette, corrige ou organise, si tu veux faire des trucs
+> modernes vas-y… on fait la maquette complètement, les deux versions… tu touches pas au site ». La maquette ENREGISTRÉE
+> `accueil-moderne.html` n'est PAS modifiée : `accueil-v2.py` lit et exécute son générateur sans écrire ses fichiers, puis
+> retravaille le résultat (textes hérités corrigés par `body.replace` + assert, JAMAIS dans `accueil-moderne.py`).
+- **Entrée** : `node --import ./tools/alias-register.mjs tools/maquettes/catalogue-export.mjs > <scratchpad>/cat.json`
+  (lecture seule du code : 75 produits visibles, `first` = prix de la 1re variante = prix de la vignette du site, « dès »
+  seulement si c'est la moins chère, `min`/`max`, `perso`, badge « Nouveau » éteint à 30 jours comme le site via `estRecent`,
+  occasions de `occasions.js`, photos). Le générateur REFUSE de tourner si un produit n'est rangé nulle part, si un rayon a
+  moins de 2 créations ou si une carte n'a pas de « Pour qui » (asserts).
+- **Refonte du 09/10** (audit en 5 lentilles — textes, navigation, téléphone, catalogue, design — 92 constats → 40 corrections
+  appliquées, 18 écartées parce qu'elles touchaient l'en-tête, le site ou la maquette enregistrée) :
+  · **rangement** (dédoublonné) : Bijoux 32 (colliers / bracelets) · Cristal photo 3D 5 · Verres & Carafes 6 · Bébé & Enfant 8
+    (naissance & baptême / repas & chambre) · Mariage & Réception 12 (numéros de table / décor de table & menus / verres de
+    réception) · Maison & Déco 7 · Petits cadeaux 13 (clés USB / porte-clés & pièce à graver / bureau) + page « Toute la
+    boutique » (75 = /boutique). Une pièce peut être dans 2 univers (sa carte d'ancre `#p-<slug>` vit dans le premier) ;
+    16 pièces non personnalisables = « Prêt à offrir » (pas de « Personnaliser ») ; prix bijoux = remise −10 % de catalog.js ;
+  · **navigation** : retour à l'accueil par le logo, le fil d'Ariane « Accueil › Boutique › Univers », l'onglet « Accueil » et le
+    tiroir ; onglets d'univers collants avec le nombre de créations ; panneau du menu : titres / produits / « Voir les N »
+    mènent au rayon ou à la carte, ouverture au clavier (Entrée, flèche bas), Échap, et il se referme après un clic ;
+    tiroir = vrai dialogue (focus sur la croix, Échap, défilement bloqué, un seul univers ouvert) ; pied de page : univers +
+    Offrir + « Tout voir », les autres liens portent « Page du site, inchangée » ;
+  · **« Trouver un cadeau en 3 clics »** : Pour qui (elle / lui / couple / bébé & enfant / parents — `occasions.js` + table
+    `QUI_EXTRA` + repli par univers), occasion (fêtes calculées + Naissance & baptême / Mariage / Anniversaire / Amour ;
+    « anniversaire » = tout ce qui n'est pas réservé à mariage/naissance), budget sur l'INTERVALLE [mini, maxi] de la pièce
+    (un cristal 39,90 → 149,90 répond à « Plus de 40 € »), boutons grisés quand ils donneraient 0 résultat, 8 idées +
+    « Voir les N idées » → page Offrir (état recopié), cartes clonées cliquables (plus de saut en haut de page) ;
+  · **fêtes** : Noël · Saint-Valentin · grands-mères · mères (Pentecôte gérée) · pères, calculées sur la date du jour,
+    ≤ 92 jours, NOM SEUL, une fête remplace le bouton fixe de même occasion (jamais deux « Amour ») ;
+  · **design** : cartes `.uc` alignées sur les vignettes validées `.pt` (rayons 20 / 24 / 32 px, nom 600 / .95rem, prix
+    Playfair tabulaire, zoom + nom doré + « Personnaliser » au survol), UNE puce `.puce` de 44 px partout (aria-pressed /
+    aria-current), menu sur une ligne de 901 à 1180 px, bloc Bébé & Enfant 4/8 avec 2 × 2 cartes, coffret avec prénom en
+    direct, bulle « Une question ? » ronde à droite sous 640 px, 9 photos du CDN Shopify chargées par `<img src>` chez le
+    gérant avec repli « photo sur le site » (listées dans « Ce qui change »), barre de maquette compacte (« Masquer les
+    annotations » = la page telle qu'elle serait en ligne) ;
+  · **logo** : `docs/maquettes/assets/logo-source.jpg` intégré, arrondi 10 px comme le site (`.logo-img` 92 / 64 px,
+    `.footer-logo` 190 px). En-tête, héros, bijoux, carafe, Noël, mur, avis, pied de page : inchangés pour le reste.
+- **Textes (règles du gérant, 08/10)** : jamais « au prénom » / « à votre prénom » dans NOS phrases (le seul restant = le nom
+  du produit « Veilleuse Arbre de Vie au prénom », lu du catalogue : le renommer = toucher au site) ; « Bébé & Enfant » au
+  singulier ; pas de nombre en dur ni de note interne visible (« 16 modèles », « maquette du 07/10 », « Océan »…) ;
+  « Couverts enfants personnalisés » = nom du catalogue partout ; pas de compte à rebours ni de date sur les fêtes.
+- **Vérification (méthode à réutiliser)** : script Playwright jetable à la racine (`t-*.mjs`, SUPPRIMÉ après) sur les DEUX
+  fichiers à 901 / 1024 / 1140 / 1280 / 390 px : 0 débordement, 0 erreur JS, ids uniques, aucun `<button>` dans un `<a>`,
+  70 assertions (budget, couple ≤ 8, anniversaire ≥ 40, lampe PSG « pour lui », clic sur un résultat sans saut, page Offrir =
+  N cartes, « Tout voir » = 75, menu ≤ 56 px, cibles ≥ 44 px, tiroir, Échap, badge / cœur, reduced-motion…) → TOUT EST
+  VERT le 09/10, captures regardées (menu, finder, pages Bijoux / Mariage / Petits cadeaux / Bébé & Enfant / cristal
+  « Bientôt », 390 px). ⚠️ Pièges : `scroll-behavior:smooth` fausse une capture prise juste après `scrollIntoView` (forcer
+  `auto`) ; après un clic d'onglet la souris reste sur le menu et le panneau survolé intercepte le clic suivant (la déplacer).
+- **Reste à trancher par lui** : la version (avec / sans puzzles) ; le coffret assorti (prix, −10 % dès 2 pièces, mêmes thèmes
+  sur couverts et puzzle) ; le rangement « Pour qui », l'occasion « Anniversaire » et les fêtes datées à reporter dans
+  `occasions.js` au « applique » (voir `docs/AMELIORATIONS.md`).
 
 ## 🏠 MAQUETTE « ACCUEIL MODERNE » — 03/10/2026 (en attente de son avis, RIEN en ligne)
 > ⛔ **LE LOGO ET L'EN-TÊTE NE SE TOUCHENT PAS** (gérant, 04/10, très ferme : « de quel droit tu touches à mon logo… tu

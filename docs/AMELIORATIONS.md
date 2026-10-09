@@ -83,7 +83,7 @@
 - Le reste de la liste de la vidéo existe déjà : confidentialité, CGV, retours, mentions légales (SIRET), médiation (§9 CGV).
 - Rien n'est appliqué sans son « applique ».
 
-## 🧸 Univers « Bébé & Enfants » + coffret au prénom (08/10/2026, idée après recherche — RIEN construit)
+## 🧸 Univers « Bébé & Enfant » + coffret assorti (08/10/2026, idée après recherche — maquette faite, RIEN construit)
 - Constat : les couverts enfants sont rangés dans « Déco & Maison » (`category: "deco"`, sous-cat. couverts) ;
   la veilleuse au prénom et la plaque de porte enfant aussi ; « Naissance » n'a que plaques + cartes étapes.
 - Recherche (Amikado : rubrique « enfance » ; My 1st Years : par âge + par occasion + coffret « Best of » ;
@@ -101,3 +101,14 @@
 - Proposition : un calendrier (`src/lib/fetes.js`) avec les mêmes règles que la maquette → menu « Offrir », page /offrir,
   bloc « Trouver un cadeau », et le bandeau de l'accueil (Noël → Saint-Valentin → fête des mères → fête des pères) qui
   change tout seul, X jours avant chaque fête. Rien n'est appliqué sans son « applique ».
+
+## 🔎 Vu pendant la refonte de la maquette accueil + univers (09/10/2026 — RIEN construit, à lui de dire)
+- **Champ de recherche dans l'en-tête** : toutes les boutiques comparées en ont un (Amikado, Merci Maman, CadeauGravure) ;
+  le site n'a que la recherche de la page Boutique. L'en-tête ne se touche pas sans sa demande (règle du 04/10) → à proposer.
+- **« Prévenez-moi dès sa sortie » sur les produits « Bientôt »** (puzzles, cristaux déjà gravés), sur le modèle de l'alerte
+  « retour en stock » (`RestockAlerte.jsx`) : une liste d'adresses prête le jour du lancement, aucun e-mail automatique.
+- **`occasions.js` à enrichir au « applique »** : rangement « Pour qui » (elle / lui / couple / bébé & enfant / parents),
+  occasion « Anniversaire », fêtes datées (calendrier `src/lib/fetes.js` proposé plus haut) → menu Offrir, /offrir, bloc
+  « Trouver un cadeau », bandeau Noël. La maquette porte déjà ces règles (`QUI_EXTRA`, `prochainesFetes`).
+- **Prix « dès »** : la vignette du site affiche le prix de la 1re variante avec « dès » même quand une autre variante est
+  moins chère (ex. Arches Bohèmes 18,90 € alors que le lot est à 16,90 €) → à vérifier dans `ProductCard` si c'est voulu.

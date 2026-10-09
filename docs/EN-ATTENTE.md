@@ -216,7 +216,8 @@ En attente de SA décision :
 
 - **Accueil moderne** : maquette ENREGISTRÉE le 04/10 (version 5) — https://claude.ai/artifact/W8kig3DjxpGYeFxxpnpq4J — `docs/maquettes/accueil-moderne.html`, générateur `tools/maquettes/accueil-moderne.py`. Attend son « applique ». Rien en ligne.
 
-- **Maquette « Accueil + univers » (08/10/2026) — ENREGISTRÉE EN 2 VERSIONS** — sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 · avec puzzles
-  https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM, rien en ligne : il choisit la version ;
-  textes corrigés + fêtes des 3 prochains mois calculées seules ; reste à trancher : l'univers « Bébé & Enfants », le coffret « univers assortis » (prix et remise à valider ; même
-  thème d'animaux sur couverts et puzzle à vérifier), « Trouver un cadeau » · puis son « applique ».
+- **Maquette « Accueil + univers » — ENREGISTRÉE EN 2 VERSIONS le 08/10, REFAITE EN ENTIER le 09/10/2026** (audit → 40
+  corrections ; un seul générateur `tools/maquettes/accueil-v2.py <cat.json> [--puzzles]`, les deux versions testées au vert) —
+  sans puzzles https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6 · avec puzzles https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM,
+  rien en ligne : il choisit la version ; reste à trancher : le coffret assorti (prix, −10 % dès 2 pièces, mêmes thèmes sur
+  couverts et puzzle), le rangement « Pour qui » / « Anniversaire » / fêtes datées à reporter dans `occasions.js` · puis son « applique ».
