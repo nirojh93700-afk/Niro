@@ -2774,6 +2774,20 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Questions posées au gérant** : « Fillette au ballon » = œuvre de Banksy (droits d'auteur) ·
   « I Love You » en anglais sur l'ourson · noms des modèles · stock / fabrication de ces modèles par le fournisseur.
 
+## 💎 MAQUETTE « CRISTAL PHOTO 3D » = LA PAGE `/cristaux` DU SITE DANS L'HABILLAGE DU NOUVEAU SITE — 09/10/2026 SOIR (en attente de son avis, RIEN en ligne)
+> Gérant : « je t'ai déjà dit tout doit ressembler, alors fais comme sur cette maquette [cristaux-graves] pour les autres blocs
+> de cristal qui est sur le site… tu touches pas le site… tu changes rien, tu changes juste la mise en page ».
+- **Fichier** : `docs/maquettes/cristaux-blocs.html` (+ `.fragment.html`), artifact https://claude.ai/artifact/1J6Mr2CP4SiN3WQvTLbvGb.
+  Générateur `tools/maquettes/cristaux-blocs.py <capture /cristaux>` : le CONTENU est LU dans la capture de la vraie page
+  (titre « Votre photo devient cristal », phrase, badge et légendes de l'animation du laser, les 5 créations + le socle avec
+  leurs photos, sous-titres et prix « dès … », la note 4,9/5, le lien retour) — rien d'inventé, rien retiré.
+- **Habillage** = celui de `cristaux-graves` : écrin encre & or en ouverture (titre, phrase, 3 réassurances, et l'ANIMATION
+  DU LASER de la page actuelle posée à droite dans un cadre doré, sous le texte sur téléphone), puis « Choisissez votre cristal »
+  en cartes claires arrondies 20 px, étiquette + nom + prix SOUS la photo (3 par ligne, 2 sur téléphone), pavé note blanc,
+  lien retour souligné or. Plus de mosaïque « multi-fenêtres » ni de prix posés sur les photos.
+- Vérifié Chromium 390/1280 : 0 débordement, 0 erreur JS, 7 cartes, animation jouée. **Le site n'est pas touché.** Au
+  « applique » : `src/app/cristaux/page.jsx` + `CristalVivant.jsx` à refaire dans ce rendu (contenu lu du catalogue, inchangé).
+
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
 > Gérant : « on va faire une autre maquette, c'est une nouvelle catégorie, c'est des jeux pour les enfants, je te

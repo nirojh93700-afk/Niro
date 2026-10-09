@@ -192,6 +192,8 @@ En attente de SA décision :
   version avec puzzles « Bientôt » (non achetables, CE à faire). Point de retour = commit `44f2f64` (une commande pour revenir).
   Reste à lui : vérifier sur son téléphone ; dire si le coffret doit avoir une remise (non annoncée car inexistante au
   paiement) ; les puzzles passeront en vente sur son « applique le puzzle » (CE + cylindre 3,2 cm avant).
+- 🟠 **Maquette « Cristal photo 3D » (la page /cristaux actuelle, même contenu, habillage du nouveau site) — 09/10 soir** :
+  https://claude.ai/artifact/1J6Mr2CP4SiN3WQvTLbvGb (`docs/maquettes/cristaux-blocs.html`). En attente de son avis puis « applique ».
 - 🟠 **Maquette « Cristaux déjà gravés » réhabillée dans le style du nouveau site (09/10 soir, sa demande)** :
   https://claude.ai/artifact/X7GRtRJuZ8Hjw66rTZFcVz (`docs/maquettes/cristaux-graves.html`). ✅ **Enregistrée telle quelle le
   09/10 soir (version 14).** En attente de son « applique » (= construire une NOUVELLE page à part, `/cristaux` du site inchangée,
