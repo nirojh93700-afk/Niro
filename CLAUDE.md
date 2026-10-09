@@ -2835,6 +2835,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « Horizontal » ouvre l'onglet de la fiche, comme le vrai site. Sur téléphone, les onglets tiennent sur UNE ligne qui glisse.
 - Vérifié Chromium 390/1280 (serveur local) : 0 débordement, 0 erreur JS, clic Vertical → fiche verticale, horizontale Grand
   + socle = 119,80 €, 43 cartes dans les cristaux gravés, images chargées. **Le site n'est pas touché.**
+- ⚖️ **MOT « CRISTAL » — VÉRIFIÉ LE 09/10 SOIR, LE GÉRANT GARDE TEL QUEL** (« non tu laisses comme ça ») : l'arrêté du 24 mai 2024
+  (JO du 16/06/2024) rend obligatoire la norme NF B30-004 — « cristal supérieur 30 % / au plomb 24 % / sans plomb / cristallin /
+  verre sonore » sont réservés aux verres conformes. Nos blocs sont en verre optique K9 (famille BK7, sans plomb, indice ≈ 1,517,
+  donc pas du cristal au plomb ; seuils du « cristal sans plomb » non lus, norme payante). Concerné : « Cristal optique K9 »
+  (réassurances), « Votre photo devient cristal », « cristaux déjà gravés », et les noms en ligne « Cristal Photo 3D ». Proposé :
+  « verre optique K9 », « bloc photo 3D ». **Il a tranché : on garde « cristal » partout.** Ne pas le reproposer sauf s'il en
+  reparle ; le risque lui a été dit une fois, avec les sources.
 
 ## 🧩 MAQUETTE « JEUX POUR ENFANTS » — NOUVELLE CATÉGORIE — ✅ ENREGISTRÉE TELLE QUELLE LE 07/10/2026 (version 1 de l'artifact) — RIEN en ligne
 > C'est CETTE version à reproduire à l'identique le jour où il dit « applique ». Ne pas la modifier sans sa demande.
