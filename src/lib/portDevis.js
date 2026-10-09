@@ -9,10 +9,17 @@
 //    commande) sinon celui de la fiche ;
 //  · ou « libre » (ex. clé USB 64 Go) → il faut un poids ; calculée comme un colis, sans gratuité.
 // Le choix n'existe que si TOUTES les lignes sont calculables et qu'aucune ligne « Livraison » n'a été
-// ajoutée à la main → les anciens devis restent exactement comme avant. France + Monaco, sans express
-// ni retrait ; point relais seulement si l'option est activée dans Gestion → Livraison.
+// ajoutée à la main → les anciens devis restent exactement comme avant. France + Monaco, sans retrait ;
+// point relais seulement si l'option est activée dans Gestion → Livraison.
+// EXPRESS (09/10/2026, demande du gérant : « il faut que les clients aient accès à l'express par le devis,
+// même avec les liens déjà donnés ») : à domicile, l'Express Chronopost est proposé EN PLUS du port
+// standard, sur la page de paiement Stripe — exactement comme dans la boutique, mêmes règles d'ouverture
+// que `/api/checkout` (date, jamais en mode « délai allongé », coupe-circuit `expressOff`). Rien n'est
+// écrit dans le devis : le choix se fait au paiement, donc les liens déjà envoyés en profitent.
 import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
 import { estLignePort } from "@/lib/remiseDevis";
+import { EXPRESS_START } from "@/lib/shipping";
+import { vacationActive } from "@/lib/vacation";
 
 const PRODUIT_LIBRE = { letter: false, freeShipping: false, freeShipThreshold: 0, category: "", pickup: false };
 
@@ -67,6 +74,11 @@ export function nettoyerRelais(rp) {
 }
 
 // Renvoie { ok, price, option, relaisOk, relaisFull, error } — `option` = entrée `shipping_options` Stripe.
+// Express ouvert ? Mêmes conditions que `/api/checkout` (une seule définition à garder alignée).
+export function expressOuvert(settings) {
+  return Date.now() >= EXPRESS_START && !vacationActive(settings?.vacation) && settings?.shipping?.expressOff !== true;
+}
+
 export function portDevis(q, settings, index, method = "domicile", rp = null) {
   const relaisOk = Boolean(settings?.boxtal?.enabled);
   const e = etat(q?.items, index);
@@ -84,6 +96,11 @@ export function portDevis(q, settings, index, method = "domicile", rp = null) {
       relaisFull: p ? [p.carrierName, p.name, p.street, [p.zipCode, p.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240) : "",
     };
   }
-  const opts = optionsPort(e, { ...base, deliveryMethod: "domicile" });
-  return { ok: true, relaisOk, price: opts[0].shipping_rate_data.fixed_amount.amount / 100, option: opts[0], relaisFull: "" };
+  // À domicile : le port standard EN PREMIER (c'est lui qu'affiche la page du devis), l'Express ensuite.
+  const opts = optionsPort(e, { ...base, deliveryMethod: "domicile", express: expressOuvert(settings) });
+  const ex = opts.find((o) => /express|chronopost/i.test(o?.shipping_rate_data?.display_name || ""));
+  return {
+    ok: true, relaisOk, price: opts[0].shipping_rate_data.fixed_amount.amount / 100, option: opts[0],
+    options: opts, express: ex ? ex.shipping_rate_data.fixed_amount.amount / 100 : null, relaisFull: "",
+  };
 }

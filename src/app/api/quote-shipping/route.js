@@ -22,7 +22,7 @@ export async function POST(req) {
   const dom = portDevis(q, settings, index, "domicile");
   const rel = portDevis(q, settings, index, "relais");
   return Response.json({
-    actif: true, poids: poidsDevis(q.items, index), domicile: dom.price,
+    actif: true, poids: poidsDevis(q.items, index), domicile: dom.price, express: dom.express ?? null,
     relaisOk: rel.ok, relaisDes: rel.ok ? rel.price : null,
   });
 }

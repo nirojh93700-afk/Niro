@@ -44,7 +44,8 @@ export async function POST(req) {
     const r = portDevis(q, await getSettings(), index, method, body?.relaisPoint);
     if (!r.ok) return Response.json({ error: r.error || "Livraison indisponible." }, { status: 400 });
     if (method === "relais" && !r.relaisFull) return Response.json({ error: "Choisissez votre point relais." }, { status: 400 });
-    shippingOpts = [r.option];
+    // À domicile : port standard + Express Chronopost (si ouvert) — la cliente choisit sur la page Stripe.
+    shippingOpts = method === "domicile" && Array.isArray(r.options) ? r.options : [r.option];
     countries = ["FR", "MC"];
     if (r.relaisFull) relaisMeta = { relaisPoint: r.relaisFull };
   }

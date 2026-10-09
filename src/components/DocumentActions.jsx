@@ -113,6 +113,9 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
           {method === "domicile" ? (
             <p style={{ fontSize: "0.82rem", color: "var(--ink-soft)", margin: "10px 0 0", lineHeight: 1.5 }}>
               Votre adresse de livraison et votre téléphone vous seront demandés à l&apos;étape suivante (paiement sécurisé).
+              {tarifs && typeof tarifs.express === "number" ? (
+                <> À cette étape, vous pourrez aussi choisir l&apos;<strong>Express Chronopost</strong> ({euro(tarifs.express)}, 24/48 h après confection).</>
+              ) : null}
             </p>
           ) : (
             <>

@@ -59,5 +59,21 @@ t("3 verres = tarif verres du site (plus que le tarif déco)", prix([verres3]).p
   t("devis ≡ calcul partagé du panier (panier mixte)", JSON.stringify(direct[0]) === JSON.stringify(prix(items).option));
 }
 t("le point relais est nettoyé", nettoyerRelais({ ...rp, name: "x".repeat(200) }).name.length === 80 && nettoyerRelais({ carrier: "MONR" }) === null);
+// --- EXPRESS Chronopost sur les devis (09/10/2026) : proposé à domicile, comme dans la boutique
+const verreUn = { desc: "Verre à whisky gravé sur mesure", qty: 1, price: 25.9, variantId: "verre-1", weight: 600 };
+const dom = prix([verreUn]);
+t("express : proposé à domicile", Array.isArray(dom.options) && dom.options.length === 2, JSON.stringify(dom.options?.map((o) => o.shipping_rate_data.display_name)));
+t("express : le port standard reste EN PREMIER (prix affiché sur la page du devis)", dom.price === 11.9 && dom.option === dom.options[0], String(dom.price));
+t("express : 14,90 € jusqu'à 2 kg", dom.express === 14.9, String(dom.express));
+t("express : libellé reconnu par le webhook (⚡ priorité atelier)", /express|chronopost/i.test(dom.options[1].shipping_rate_data.display_name));
+t("express : jamais en point relais", prix([verreUn], "relais", rp).options === undefined && prix([verreUn], "relais", rp).express === undefined);
+const sansExpress = portDevis({ items: [verreUn], total: 25.9 }, { boxtal: { enabled: true }, shipping: { expressOff: true } }, index, "domicile");
+t("express : coupe-circuit expressOff", sansExpress.express === null && sansExpress.options.length === 1);
+const vacances = portDevis({ items: [verreUn], total: 25.9 }, { boxtal: { enabled: true }, vacation: { enabled: true } }, index, "domicile");
+t("express : coupé en mode délai allongé", vacances.express === null && vacances.options.length === 1);
+const lourd = prix([{ desc: "x", qty: 3, price: 30, variantId: "verre-1", weight: 1300 }]);
+t("express : 19,90 € de 2 à 5 kg", lourd.express === 19.9, String(lourd.express));
+t("express : devis sans choix de livraison = rien de changé", !livraisonActive([{ desc: "Carafe", qty: 1, price: 54.9 }], index));
+
 console.log(ko ? `${ko} échec(s)` : `OK — ${ok} vérifications`);
 process.exit(ko ? 1 : 0);
