@@ -2868,6 +2868,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (sa demande « un peu plus grand »), alors que le marché fait plutôt 25 × 18 (30 p.) à 36 × 25 cm (96 p.).
   · **v3 (09/10 soir)** : 4ᵉ photo envoyée sans commentaire (famille de 3 générations, ambiance bureau) → `assets/puzzle-photo/
     bureau.jpg`, mise EN PREMIER (grande image + 1ʳᵉ vignette) : c'est la plus « cadeau pour adultes ». 4 photos au total.
+  · **v4 (09/10 soir, gérant : « regarde comment les produits sont présentés, y a les détails en dessous comme l'entretien,
+    fais pareil »)** : la capture n'avait PAS les 3 volets (Taille & Matériaux · Personnalisation & Entretien · Expédition &
+    Retour) faute d'entrée `productInfo.js` → refaite avec une entrée (même texte que les puzzles en ligne, adapté : 21 × 15 cm,
+    vérification de la photo, mention 36 mois, entretien chiffon sec, non remboursable L221-28). ⛔ **Toute fiche capturée pour
+    une maquette DOIT avoir son entrée `productInfo.js`, sinon les volets du bas manquent.** Un brouillon avec le bandeau sombre
+    des fiches cristal a été REFUSÉ (« ça ressemble pas à mon site ») : la fiche reste exactement comme les fiches du site.
   ⛔ **Leçon (gérant) : quand une décision se tranche en regardant le marché, CHERCHER ET DÉCIDER soi-même, puis lui dire ce
   qui a été choisi et pourquoi — ne pas lui renvoyer la question.**
 
