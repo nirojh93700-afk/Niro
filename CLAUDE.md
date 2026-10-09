@@ -2720,7 +2720,31 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   conseillé · ⚠️ **jouet pour enfant = marquage CE obligatoire (norme EN 71)** avant de vendre · poids pour le port ·
   nom de la catégorie dans le menu.
 
-## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ⛔ VERSION LUXE DU 09/10/2026 REFUSÉE PAR LE GÉRANT → 3 PISTES À CHOISIR — RIEN en ligne
+## 🗂️ MAQUETTE « ACCUEIL + UNIVERS » — ✅ DIRECTION « MÉLANGE » CONSTRUITE LE 09/10/2026 (en attente de son avis) — RIEN en ligne
+> **09/10 après-midi : le gérant a répondu « Mélange » (deux fois) aux trois pistes, sans dire quelles parties.** Les DEUX
+> versions (sans / avec puzzles) ont été refaites dans un monde qui réunit les trois pistes, en gardant toutes les corrections
+> du 09/10 ; les deux artifacts sont republiés (sans puzzles v8, avec puzzles v4). Détail du monde dans `DESIGN.md` (réécrit).
+> · **piste A (L'Écrin)** pour le haut de page, la carafe et le sur mesure : encre, halo or, cadre doré à double filet, laser,
+>   reflet, étiquette nom + prix, **ruban or qui défile** sous le héros (il remplace le bandeau encre du haut) ;
+> · **piste C (Atelier)** pour « Trouver le bon cadeau EN TROIS ÉTAPES » : ① Pour qui ② Pour quelle occasion ③ Quel budget,
+>   cartes blanches à cocher sur sable (`.fc`, icône + libellé + coche or ; grisées sans résultat), la fête du moment (Noël)
+>   injectée comme une carte avec son icône ; même grammaire pour « l'atelier en trois gestes » et la tuile « Offrir » ;
+>   partout ailleurs le ton de C : crème / sable, photos arrondies 20 px, cartes blanches à ombre douce, bouton or dégradé ;
+> · **piste B (Plein cadre)** pour les bijoux : photo plein cadre (`bracelet-femme-acier-porte.jpg`, bracelet gravé porté)
+>   + panneau de verre dépoli (titre, 3 bijoux dont « Best-seller » Collier 3 Cœurs, raccourcis Femme/Homme/Couple/Bébé,
+>   bouton, livraison offerte dès 45 €).
+> Inter revient à la place de Jost (polices du site). Logo intouché. Jugé d'abord à 390 px : écrin empilé, cartes du
+> parcours 2 par ligne (budget aussi), produits 2 par ligne, verres 2 par ligne (la grande en tête), rail à 68 %.
+> **Vérifié** (`t-mix.mjs`, jetable, supprimé) sur les 2 fichiers à 390 / 640 / 901 / 1024 / 1140 / 1280 px : 0 débordement
+> (accueil + 9 vues), 0 erreur JS, parcours joué (elle + moins de 20 € → 8 idées parmi 12, budget respecté, grisés), carte
+> Noël injectée, page Offrir = le même parcours avec l'état repris, menu sur une ligne à 1280, tiroir à 390, cibles ≥ 44 px,
+> aucun texte < 11 px ; captures regardées ; `impeccable detect` : restent des avertissements assumés (halo or et ruban
+> = signatures de la piste A, italique Playfair = identité du site, tirets dans les NOMS de produits du catalogue).
+> ⚠️ Piège corrigé au passage : le clone du parcours sur la page Offrir gardait `id="trouver"` (doublon d'id).
+> **Suite = son avis** : s'il valide → c'est CETTE version à reproduire (page.jsx + composants home + CSS, `Header.jsx` intact) ;
+> s'il veut un autre dosage (plus de A, plus de B…), le dire en une phrase suffit, le générateur sépare les trois mondes.
+
+### (historique) VERSION LUXE DU 09/10/2026 REFUSÉE PAR LE GÉRANT → 3 PISTES À CHOISIR
 > ⛔⛔ **REFUSÉE LE 09/10/2026 (capture de son téléphone, bloc « Trouver un cadeau en trois clics » avec ses puces) :
 > « j'aime pas, recommence… là ça fait mal, trouve une autre idée… j'aime pas la maquette que t'as fait ».** Ne PAS retoucher
 > cette version luxe : elle reste dans les deux artifacts (sans puzzles v7, avec puzzles v3) et dans git tant qu'il n'a pas
@@ -2737,8 +2761,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > · **C · Atelier** : chaleureux et clair comme le site aujourd'hui (cartes arrondies 20 px, sable, bouton or), collage de
 >   photos, et « Trouver le bon cadeau en trois étapes » en PARCOURS GUIDÉ numéroté ①②③ avec cartes à coche (la référence
 >   des fiches du site). Vérifié Chromium 1280 / 390 : 0 débordement, 0 erreur, chercheur joué.
-> **Suite = la piste qu'il nomme (ou un mélange)** → refaire les DEUX versions (sans / avec puzzles) dans ce monde, en
-> gardant tout ce qui a été corrigé le 09/10 (rangement, navigation, fêtes, textes), puis republier les deux artifacts.
+> **Suite = la piste qu'il nomme (ou un mélange)** → ✅ FAIT : il a dit « Mélange », voir en tête de section.
 
 > ⛔ **INCIDENT 08/10** : sur sa remarque « le puzzle je l'ai pas mis en ligne », j'ai RETIRÉ les puzzles de la maquette
 > enregistrée → « je t'ai pas dit de changer la maquette, enregistre celle-là et celle d'avant ». Une remarque n'est PAS
@@ -2748,13 +2771,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > vraiment jolis, modernes, classe, luxe, avec les mêmes couleurs ». Les deux versions sont donc REFAITES dans un nouveau
 > monde visuel ; les versions précédentes restent dans git (commit `0d7ae16`) et dans l'historique des artifacts.
 > · **sans puzzles** : `docs/maquettes/accueil-univers.html`, artifact https://claude.ai/artifact/Y96RDZxfvpMEHgnMQmmwj6
->   (version 7 = luxe) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
+>   (version 7 = luxe, **version 8 = Mélange**) — seulement les 75 produits en ligne, coffret « Chambre d'enfant » ;
 > · **avec puzzles** : `docs/maquettes/accueil-univers-avec-puzzles.html`, artifact https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM
->   (version 3 = luxe) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
+>   (version 3 = luxe, **version 4 = Mélange**) — rayon « Jeux en bois » (9 puzzles « Bientôt »), encadré « Cristaux déjà gravés », coffret Savane.
 > Les deux sortent du MÊME générateur **`tools/maquettes/accueil-univers.py <cat.json> [--puzzles]`** (l'ancien
 > `accueil-v2.py`, qui réutilisait la maquette « accueil moderne », est supprimé). La maquette ENREGISTRÉE
 > `accueil-moderne.html` (04/10) n'est pas touchée.
-- **Monde visuel (détail dans `DESIGN.md`, vérité produit dans `PRODUCT.md`, fichiers lus par le skill Impeccable)** :
+- **Monde visuel de la version LUXE (remplacé par le Mélange le 09/10 ; `DESIGN.md` décrit maintenant le Mélange, `PRODUCT.md` reste la vérité produit)** :
   papier crème `#fbf7ee`, encre `#1a1206`, or `#c9a24b` en filet et sur les prix (or lisible sur crème = `#7c6120`, contraste
   5,5) ; **Playfair Display** pour les titres (police du site) avec UN mot en italique or ; **Jost** pour le reste
   (proposition, à la place d'Inter) ; photos de pièces GRAVÉES, grandes, rayon 6 px ; boutons pilule avec la flèche dans sa

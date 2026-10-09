@@ -114,12 +114,14 @@
   moins chère (ex. Arches Bohèmes 18,90 € alors que le lot est à 16,90 €) → à vérifier dans `ProductCard` si c'est voulu.
 
 ## ✦ Vu pendant la refonte « luxe » des maquettes accueil + univers (09/10/2026 — RIEN construit, à lui de dire)
-- **Un monde visuel pour TOUT le site** : `DESIGN.md` décrit les jetons (couleurs, Playfair + Jost, rayon 6 px, boutons
-  pilule avec la flèche dans sa pastille, puces 44 px, apparition au défilement). Si la maquette lui plaît, les fiches produit,
+- **Un monde visuel pour TOUT le site** : `DESIGN.md` décrit les jetons (réécrit le 09/10 pour le Mélange : écrin encre et or,
+  parcours en trois étapes, cartes arrondies 20 px, bouton or dégradé, Inter + Playfair). Si la maquette lui plaît, les fiches produit,
   le panier, les pages Offrir et les e-mails pourraient reprendre ces mêmes jetons (une maquette par page, puis « applique »).
 - **Ruban d'en-tête** (livraison offerte dès 45 € sur les bijoux · gravé en France · paiement sécurisé) : les boutiques de
   bijoux en ont toutes un ; sur le site il pourrait remplacer le bandeau « Nouveau » quand il n'y a pas de promotion.
 - **Rail des nouveautés trié par la vraie date d'ajout** (`productDates.js`) et étiquette « Nouveau » éteinte à 30 jours :
   déjà le cas sur le site pour « Vient d'arriver » ; la maquette montre 6 pièces au lieu de 4.
-- **Police d'interface** : Jost (proposée) à la place d'Inter donne le côté « maison de joaillerie » ; changement global
-  (`next/font`) à ne faire qu'après son accord, car il touche toutes les pages.
+- ~~**Police d'interface** : Jost à la place d'Inter~~ — abandonné le 09/10 avec la version luxe : le Mélange garde Inter + Playfair, les polices du site.
+- **Le parcours en trois étapes comme bloc réutilisable** (09/10, direction Mélange) : les cartes à cocher numérotées ①②③ de
+  « Trouver le bon cadeau » sont la même grammaire que le parcours guidé des fiches (carafe, vin, flûte) ; si le Mélange est
+  validé, le même composant pourrait servir à la page Offrir du site, au choix d'emballage et au choix de coffret.
