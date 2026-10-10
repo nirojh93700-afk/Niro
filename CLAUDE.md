@@ -2735,8 +2735,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (copies servant seulement aux artifacts, régénérables) → `484c36b` déployé avec succès. Cause probable = taille du dépôt
   (journaux Firebase illisibles d'ici). ⛔ **Ne plus commiter de `.fragment.html`, et garder le dépôt sous ~440 Mo** : une
   maquette lourde (photos intégrées) se garde dans son artifact + son générateur. Un commit vide ne relance PAS Firebase.
-- ⚠️ **/cristaux ne montre PAS les cristaux déjà gravés** (seulement `crystal3d`) : ils ne sont joignables que par
-  /cristaux-graves et Boutique → Cristal. Carte de lien proposée au gérant le 10/10, en attente de son choix.
+- ✅ **/cristaux montre les cristaux déjà gravés (10/10, « mets les cristal ensemble »)** : carte « Cristaux déjà gravés »
+  (photo Bouddha, « dès 39,90 € ») juste après les deux blocs photo dans `CristalVivant.jsx`, lien `/cristaux-graves`.
+- ✅ **Les deux choix du zodiaque sont visibles DÈS L'ARRIVÉE (10/10, « les clients il faut qu'ils sachent, ils ont deux
+  choix »)** : avant tout choix, la case « Texte gravé en plus » montre « Modèles et dessins : texte +5 € » ET « Signe du
+  zodiaque : deux choix » (+5 € / +8 €) ; toucher une option zodiaque sans signe ouvre la grille des signes (option gardée).
 - **/cristaux-graves** (`src/app/cristaux-graves/page.jsx` + `src/components/cristal/CristauxGraves.jsx`, données
   `src/lib/cristauxGraves.js` recopiées du générateur, photos `public/produits/cristaux-graves/`) = maquette v14 à l'identique.
   Achat = produit **`cristal-deja-grave`** (products.js, 8 variantes `cristal-grave-<v|h>-<taille>`, stock des blocs partagé,
