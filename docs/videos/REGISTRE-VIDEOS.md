@@ -310,3 +310,21 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cristal3d #puzzlebois #cadeaupersonnalise #ideecadeau
+
+## Vidéo 23 — Puzzles en bois (10/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/23-puzzles-bois-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 33 s | 3 Mo |
+
+- **Source** : `tools/video/pub_puzzles_23.py <dossier de sortie>` (liste `PUZZLES` de `pub_cristaux_graves_22.py` ; produit aussi la version 1080 × 1920, ~45 Mo, non gardée dans le dépôt pour sa taille).
+- **Demande du gérant** : « fais-moi une vidéo que sur les bois puzzle ».
+- **Contenu** : les 9 puzzles en bois à prénom (Savane, Forêt, Dinosaures, Véhicules de secours, Australie, Grand Nord, Camping, Jardin enchanté, Fruits & légumes) + 4 photos du puzzle photo gravé. Photos des fiches du site, gravure visible sur toutes.
+
+### Description à copier-coller (livrée le 10/10/2026)
+
+**Vidéo 23 — Puzzles en bois** (Puzzle en bois Savane, Forêt, Dinosaures, Véhicules de secours, Australie, Grand Nord, Camping, Jardin enchanté, Fruits & légumes, Puzzle photo gravé)
+> Des puzzles en bois gravés et découpés dans notre atelier ✨ Au prénom de votre enfant, ou avec votre plus belle photo de famille 💛 Un cadeau à construire ensemble 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #puzzlebois #cadeauenfant #cadeaupersonnalise #ideecadeau
