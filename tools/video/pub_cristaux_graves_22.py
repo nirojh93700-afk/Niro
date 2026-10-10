@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# VIDEO 22 (10/10/2026) — « Cristaux deja graves + zodiaque » (silencieuse, verticale 1080x1920).
+# VIDEO 22 (10/10/2026) — « Cristaux deja graves + zodiaque + puzzles en bois » (silencieuse, verticale 1080x1920).
+# 2e version (10/10, « avec les [cristaux] et puzzle en bois ») : les 9 puzzles a prenom + les 4 photos du puzzle photo grave
+# (planche contact regardee : toutes montrent la gravure) ; segments raccourcis pour tenir ~70 s.
 # Demande du gerant : « fais-moi une video » → theme choisi : cristaux deja graves + zodiaque.
 # Reutilise les fonctions de pub_cristaux_silencieuse.py (fond flou, overlay, cartes, rendu).
 # REGLES : uniquement des pieces ou la GRAVURE est visible (planche contact regardee le 10/10) ;
@@ -33,6 +35,21 @@ BLOCS = [
     ("rose.jpg", "Cristal 3D · Rose éternelle", "Une rose qui ne fanera jamais"),
     ("tour-eiffel.jpg", "Cristal 3D · Tour Eiffel", "Paris, dans tous ses détails"),
 ]
+PUZZLES = [
+    ("puzzle-savane.jpg", "Puzzle en bois · Savane", "Gravé au prénom de votre enfant"),
+    ("puzzle-foret.jpg", "Puzzle en bois · Forêt", "Les animaux de la forêt, gravés et découpés"),
+    ("puzzle-dinosaures.jpg", "Puzzle en bois · Dinosaures", "Un puzzle qui porte son prénom"),
+    ("puzzle-vehicules-secours.jpg", "Puzzle bois · Véhicules de secours", "Pompiers, police, ambulance"),
+    ("puzzle-australie.jpg", "Puzzle en bois · Australie", "Koala, kangourou, cacatoès"),
+    ("puzzle-animaux-amerique.jpg", "Puzzle en bois · Grand Nord", "Bison, ours, aigle, castor"),
+    ("puzzle-camping.jpg", "Puzzle en bois · Camping", "Pour les petits aventuriers"),
+    ("puzzle-jardin-enchante.jpg", "Puzzle en bois · Jardin enchanté", "Fée, papillon, coccinelle"),
+    ("puzzle-fruits-legumes.jpg", "Puzzle en bois · Fruits & légumes", "Gravé, découpé, personnalisé"),
+    ("puzzle-photo-bureau.jpg", "Puzzle photo gravé", "Votre photo de famille, gravée en puzzle"),
+    ("puzzle-photo-famille.jpg", "Puzzle photo gravé", "Trois générations, un seul puzzle"),
+    ("puzzle-photo-enfants.jpg", "Puzzle photo gravé", "Les enfants, à reconstituer ensemble"),
+    ("puzzle-photo-amis.jpg", "Puzzle photo gravé", "Le groupe d’amis, gravé sur bois"),
+]
 SIGNES = ["belier", "taureau", "gemeaux", "cancer", "lion", "vierge", "balance", "scorpion",
           "sagittaire", "capricorne", "verseau", "poissons"]
 NOMS = {"belier": "Bélier", "taureau": "Taureau", "gemeaux": "Gémeaux", "cancer": "Cancer", "lion": "Lion",
@@ -52,16 +69,24 @@ def zodiaque(k):
 def charger(f):
     return Image.open(os.path.join(CG, f)).convert("RGB")
 
+D_BLOC, D_ZOD, D_PUZ = 1.8, 1.2, 1.8
+
+def charger_p(f):
+    return Image.open(os.path.join(SRC, f)).convert("RGB")
+
 def rendre22():
     segs = [("card", card("NiV CRÉATION", "Des cristaux déjà gravés, prêts à offrir"), None, INTRO_DUR)]
     for f, name, sub in BLOCS:
-        segs.append(("prod", fond_flou(charger(f)).resize((int(W * 1.12), int(H * 1.12)), Image.LANCZOS), overlay(name, sub), SEG_DUR))
+        segs.append(("prod", fond_flou(charger(f)).resize((int(W * 1.12), int(H * 1.12)), Image.LANCZOS), overlay(name, sub), D_BLOC))
     segs.append(("card", card("Votre signe du zodiaque", "Sa constellation, son prénom, sa date, sa ville", "Un cristal unique par signe"), None, 2.0))
     for k in SIGNES:
         segs.append(("prod", fond_flou(zodiaque(k)).resize((int(W * 1.12), int(H * 1.12)), Image.LANCZOS),
-                     overlay("Zodiaque · " + NOMS[k], "Votre constellation, gravée dans le cristal"), 1.5))
+                     overlay("Zodiaque · " + NOMS[k], "Votre constellation, gravée dans le cristal"), D_ZOD))
+    segs.append(("card", card("Les puzzles en bois", "Gravés et découpés dans notre atelier", "Au prénom de l’enfant, ou avec votre photo"), None, 2.0))
+    for f, name, sub in PUZZLES:
+        segs.append(("prod", fond_flou(charger_p(f)).resize((int(W * 1.12), int(H * 1.12)), Image.LANCZOS), overlay(name, sub), D_PUZ))
     segs.append(("card", card("nivcreation.fr", "Choisissez le vôtre", "Gravé en France"), None, OUTRO_DUR))
-    nom = "cristaux-graves-zodiaque"
+    nom = "cristaux-zodiaque-puzzles"
     brut = f"{OUT}/22-{nom}-1080x1920.mp4"; final = f"{OUT}/22-{nom}-720x1280.mp4"
     wri = imageio.get_writer(brut, fps=FPS, codec="libx264", quality=8, macro_block_size=1,
                              ffmpeg_params=["-pix_fmt", "yuv420p"], ffmpeg_log_level="error")
@@ -85,6 +110,6 @@ def rendre22():
     subprocess.run([FF, "-y", "-i", brut, "-vf", "scale=720:1280", "-c:v", "libx264", "-profile:v", "main",
                     "-pix_fmt", "yuv420p", "-crf", "26", "-preset", "medium", "-an", "-movflags", "+faststart", final],
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    print(f"Vidéo 22 : {sum(s[3] for s in segs):.1f} s, 1080p {os.path.getsize(brut)//1024} Ko, 720p {os.path.getsize(final)//1024} Ko → {final}")
+    print(f"Vidéo 22 (cristaux + zodiaque + puzzles) : {sum(s[3] for s in segs):.1f} s, 1080p {os.path.getsize(brut)//1024} Ko, 720p {os.path.getsize(final)//1024} Ko → {final}")
 
 rendre22()
