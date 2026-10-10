@@ -510,7 +510,7 @@ Un souci à la réception ?
 - Socle lumineux LED multicolore en option.`,
     usage: `Personnalisation & Entretien
 - Choisissez un modèle déjà gravé, un dessin ou votre signe du zodiaque, puis le format et la taille.
-- Texte gravé en plus : +5 €. Zodiaque : prénom, date de naissance et ville où la personne habite, +2 € chacun.
+- Texte gravé en plus : +5 €. Zodiaque : prénom +5 €, date de naissance +2 €, ville où la personne habite +2 €.
 - Entretien : dépoussiérer avec un chiffon doux et sec (microfibre). Ne pas immerger, éviter les chocs : le cristal est fragile.`,
     returns: `Expédition & Retour
 - Expédié en colis suivi, soigneusement protégé.

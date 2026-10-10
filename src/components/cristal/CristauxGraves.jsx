@@ -2,8 +2,8 @@
 // Page « Cristaux déjà gravés » (/cristaux-graves) — reproduction de la maquette validée
 // docs/maquettes/cristaux-graves.html (version 14), mise en ligne le 10/10/2026 (« les trois » du gérant).
 // Trois pavés (modèles gravés / dessins / zodiaque), 8 cartes puis « Afficher les N autres », panneau
-// « Votre cristal » : format (rien de présélectionné), taille, texte +5 € (zodiaque : prénom, date, ville
-// +2 € chacun), socle LED, total, quantité, bouton grisé tant qu'il manque quelque chose. Le panier reçoit le
+// « Votre cristal » : format (rien de présélectionné), taille, texte +5 € (zodiaque : prénom +5 €, date et ville
+// +2 €), socle LED, total, quantité, bouton grisé tant qu'il manque quelque chose. Le panier reçoit le
 // produit « cristal-deja-grave » : les prix sont recalculés côté serveur au paiement (products.js).
 // Styles : src/app/cristaux-graves.css (généré depuis la maquette, racine .cgg).
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -12,7 +12,7 @@ import { track } from "@/lib/track";
 import IcCg from "./IcCg";
 import {
   CG_DOSSIER, CG_MODELES, CG_DESSINS, CG_ZODIAQUE, CG_FAMILLES, CG_TAILLES,
-  CG_TEXTE_PRIX, CG_ZOD_PRIX, CG_SLUG, cgVariantId,
+  CG_TEXTE_PRIX, CG_ZOD_PRIX, CG_ZOD_NOM_PRIX, CG_SLUG, cgVariantId,
 } from "@/lib/cristauxGraves";
 
 const PAGE = 8;
@@ -86,13 +86,15 @@ export default function CristauxGraves({ prix = {} }) {
   const zod = Boolean(m && m.z);
   const zDate = [zd, zh].filter(Boolean).join(" · ");
   const nz = zod ? [zp, zDate, zv].filter(Boolean).length : 0;
+  // Zodiaque : prénom +5 €, date et ville +2 € chacune.
+  const prixZod = (zp ? CG_ZOD_NOM_PRIX : 0) + [zDate, zv].filter(Boolean).length * CG_ZOD_PRIX;
   const avecTxt = txt && (zod ? nz > 0 : Boolean(texte.trim()));
   const t = T[taille];
-  const unit = t.prix + (socle ? t.socle : 0) + (avecTxt ? (zod ? CG_ZOD_PRIX * nz : CG_TEXTE_PRIX) : 0);
+  const unit = t.prix + (socle ? t.socle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
   const ok = i >= 0 && Boolean(fmt) && (!txt || avecTxt);
   const manque = i < 0 ? "Choisissez d'abord un modèle, un dessin ou votre signe."
     : !fmt ? "Il manque le format : vertical ou horizontal."
-    : zod ? "Écrivez au moins le prénom, la date ou la ville (+2 € chacun), ou retirez l'option."
+    : zod ? "Écrivez au moins le prénom, la date ou la ville, ou retirez l'option."
     : "Écrivez le texte à graver, ou retirez l'option texte.";
 
   // Cartes visibles : groupe, famille (modèles seulement), 8 puis « Afficher les N autres ».
@@ -296,9 +298,9 @@ export default function CristauxGraves({ prix = {} }) {
                 <span className="cg-txt-ic"><IcCg n="pen" /></span>
                 <span>
                   <b>{zod ? "Ajouter prénom, date de naissance et ville" : "Ajouter un texte"}</b>
-                  <small>{zod ? "Gravés sous la constellation : +2 € par mention (prénom, date, ville)" : "Un prénom, une date, un petit mot, gravé avec le modèle"}</small>
+                  <small>{zod ? "Gravés sous la constellation : prénom +5 €, date +2 €, ville +2 €" : "Un prénom, une date, un petit mot, gravé avec le modèle"}</small>
                 </span>
-                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(CG_ZOD_PRIX * nz) : "+2 € chacun") : "+" + eur(CG_TEXTE_PRIX)}</span>
+                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(prixZod) : "dès +2 €") : "+" + eur(CG_TEXTE_PRIX)}</span>
                 <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
               </button>
               <div className="cg-txt" id="txtzone" hidden={!txt}>

@@ -78,6 +78,8 @@ export const CG_TAILLES = [
 // zodiaque : le nom du signe est compris, prénom, date et ville où la personne habite +2 € chacun (09-10/10/2026).
 export const CG_TEXTE_PRIX = 5;
 export const CG_ZOD_PRIX = 2;
+// Gérant, 10/10/2026 : « les noms à cinq euros, les restes deux euros de plus à chaque fois » → prénom +5 €, date et ville +2 €.
+export const CG_ZOD_NOM_PRIX = 5;
 export const CG_SLUG = "cristal-deja-grave";
 // Identifiant de variante : cristal-grave-<v|h>-<taille>
 export const cgVariantId = (fmt, taille) => `cristal-grave-${fmt}-${taille}`;
