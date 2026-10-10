@@ -2727,6 +2727,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - ⛔ **PRIX DU TEXTE (10/10/2026, après erreur) : texte des modèles et dessins = +5 € (gérant 07/10 : « le texte c'est
   payant »), zodiaque = nom du signe COMPRIS, prénom / date / ville où la personne habite +2 € chacun.** J'avais rendu le
   texte « Compris » en lisant mal « le premier texte c'est gratuit » (= le nom du signe) → corrigé (`71a16b0`).
+- 🔴 **DÉPLOIEMENTS FIREBASE EN ÉCHEC DU 09/10 23 h AU 10/10 (3 échecs à ~2 min 40)** : ils ont commencé quand le dépôt est
+  passé de 442 à 463 Mo (maquettes Best-seller, 20 Mo). Repassé à 396 Mo en retirant les 13 `docs/maquettes/*.fragment.html`
+  (copies servant seulement aux artifacts, régénérables) → `484c36b` déployé avec succès. Cause probable = taille du dépôt
+  (journaux Firebase illisibles d'ici). ⛔ **Ne plus commiter de `.fragment.html`, et garder le dépôt sous ~440 Mo** : une
+  maquette lourde (photos intégrées) se garde dans son artifact + son générateur. Un commit vide ne relance PAS Firebase.
 - ⚠️ **/cristaux ne montre PAS les cristaux déjà gravés** (seulement `crystal3d`) : ils ne sont joignables que par
   /cristaux-graves et Boutique → Cristal. Carte de lien proposée au gérant le 10/10, en attente de son choix.
 - **/cristaux-graves** (`src/app/cristaux-graves/page.jsx` + `src/components/cristal/CristauxGraves.jsx`, données
