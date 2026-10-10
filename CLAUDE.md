@@ -2724,6 +2724,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   le retrait préparé en local a été annulé sans être poussé.
 
 ## 💎 LES TROIS MAQUETTES CRISTAL — ✅ EN LIGNE LE 10/10/2026 (gérant : « les trois »)
+- ⛔ **PRIX DU TEXTE (10/10/2026, après erreur) : texte des modèles et dessins = +5 € (gérant 07/10 : « le texte c'est
+  payant »), zodiaque = nom du signe COMPRIS, prénom / date / ville où la personne habite +2 € chacun.** J'avais rendu le
+  texte « Compris » en lisant mal « le premier texte c'est gratuit » (= le nom du signe) → corrigé (`71a16b0`).
+- ⚠️ **/cristaux ne montre PAS les cristaux déjà gravés** (seulement `crystal3d`) : ils ne sont joignables que par
+  /cristaux-graves et Boutique → Cristal. Carte de lien proposée au gérant le 10/10, en attente de son choix.
 - **/cristaux-graves** (`src/app/cristaux-graves/page.jsx` + `src/components/cristal/CristauxGraves.jsx`, données
   `src/lib/cristauxGraves.js` recopiées du générateur, photos `public/produits/cristaux-graves/`) = maquette v14 à l'identique.
   Achat = produit **`cristal-deja-grave`** (products.js, 8 variantes `cristal-grave-<v|h>-<taille>`, stock des blocs partagé,
