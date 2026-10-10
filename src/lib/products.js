@@ -1245,19 +1245,19 @@ export const products = [
       { key: "texte", label: "Texte gravé en plus (+5 €)", optional: true, maxLength: 40 },
       { key: "police", type: "font", label: "Écriture (si texte)", optional: true },
       { key: "textePos", type: "select", label: "Place du texte", optional: true, options: [{ value: "bas", label: "En bas" }, { value: "haut", label: "En haut" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" }] },
-      { key: "zPrenom", label: "Prénom (zodiaque, +5 €)", optional: true, maxLength: 24 },
-      { key: "zDate", label: "Date et heure de naissance (zodiaque, +2 €)", optional: true, maxLength: 30 },
-      { key: "zVille", label: "Ville où la personne habite (zodiaque, +2 €)", optional: true, maxLength: 24 },
+      { key: "zOption", type: "select", label: "Zodiaque : gravure", optional: true, options: [{ value: "", label: "Sans" }, { value: "nom", label: "Le nom gravé (+5 €)" }, { value: "tout", label: "Tout gravé : nom, date, heure, ville (+8 €)" }] },
+      { key: "zPrenom", label: "Prénom ou nom (zodiaque)", optional: true, maxLength: 24 },
+      { key: "zDate", label: "Date et heure de naissance (zodiaque)", optional: true, maxLength: 30 },
+      { key: "zVille", label: "Ville où la personne habite (zodiaque)", optional: true, maxLength: 24 },
       { key: "socle", type: "select", label: "Socle lumineux LED", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    // Même socle que les blocs photo ; zodiaque : prénom +5 €, date et ville +2 € chacune.
+    // Même socle que les blocs photo ; zodiaque : « Le nom » +5 € ou « Tout gravé » +8 €.
     engravingPricing: { flatExtras: [
       { key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-grave-v-petit": 14.9, "cristal-grave-h-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-grave-v-petit": 300, "cristal-grave-h-petit": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-grave-v-petit": "socle-led-carre", "cristal-grave-h-petit": "socle-led-carre" } },
       // Texte des modèles et dessins : +5 €, comme les cristaux photo (gérant, 07/10/2026 : « le texte c'est payant »).
       { key: "texte", amount: 5 },
-      { key: "zPrenom", amount: 5 },
-      { key: "zDate", amount: 2 },
-      { key: "zVille", amount: 2 },
+      { key: "zOption", value: "nom", amount: 5 },
+      { key: "zOption", value: "tout", amount: 8 },
     ] },
     images: ["/produits/cristaux-graves/bouddha.jpg", "/produits/cristaux-graves/rose.jpg", "/produits/cristaux-graves/colibri.jpg"],
     variants: [

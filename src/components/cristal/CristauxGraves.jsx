@@ -2,8 +2,8 @@
 // Page « Cristaux déjà gravés » (/cristaux-graves) — reproduction de la maquette validée
 // docs/maquettes/cristaux-graves.html (version 14), mise en ligne le 10/10/2026 (« les trois » du gérant).
 // Trois pavés (modèles gravés / dessins / zodiaque), 8 cartes puis « Afficher les N autres », panneau
-// « Votre cristal » : format (rien de présélectionné), taille, texte +5 € (zodiaque : prénom +5 €, date et ville
-// +2 €), socle LED, total, quantité, bouton grisé tant qu'il manque quelque chose. Le panier reçoit le
+// « Votre cristal » : format (rien de présélectionné), taille, texte +5 € (zodiaque : « le nom » +5 € ou « tout
+// gravé » +8 €), socle LED, total, quantité, bouton grisé tant qu'il manque quelque chose. Le panier reçoit le
 // produit « cristal-deja-grave » : les prix sont recalculés côté serveur au paiement (products.js).
 // Styles : src/app/cristaux-graves.css (généré depuis la maquette, racine .cgg).
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -12,7 +12,7 @@ import { track } from "@/lib/track";
 import IcCg from "./IcCg";
 import {
   CG_DOSSIER, CG_MODELES, CG_DESSINS, CG_ZODIAQUE, CG_FAMILLES, CG_TAILLES,
-  CG_TEXTE_PRIX, CG_ZOD_PRIX, CG_ZOD_NOM_PRIX, CG_SLUG, cgVariantId,
+  CG_TEXTE_PRIX, CG_ZOD_NOM_PRIX, CG_ZOD_TOUT_PRIX, CG_SLUG, cgVariantId,
 } from "@/lib/cristauxGraves";
 
 const PAGE = 8;
@@ -64,6 +64,7 @@ export default function CristauxGraves({ prix = {} }) {
   const [taille, setTaille] = useState("moyen");
   const [socle, setSocle] = useState(false);
   const [txt, setTxt] = useState(false);
+  const [zopt, setZopt] = useState(""); // zodiaque : "" | "nom" (+5 €) | "tout" (+8 €)
   const [texte, setTexte] = useState("");
   const [font, setFont] = useState("playfair");
   const [pos, setPos] = useState("bas");
@@ -85,16 +86,19 @@ export default function CristauxGraves({ prix = {} }) {
   const m = i >= 0 ? ITEMS[i] : null;
   const zod = Boolean(m && m.z);
   const zDate = [zd, zh].filter(Boolean).join(" · ");
-  const nz = zod ? [zp, zDate, zv].filter(Boolean).length : 0;
-  // Zodiaque : prénom +5 €, date et ville +2 € chacune.
-  const prixZod = (zp ? CG_ZOD_NOM_PRIX : 0) + [zDate, zv].filter(Boolean).length * CG_ZOD_PRIX;
-  const avecTxt = txt && (zod ? nz > 0 : Boolean(texte.trim()));
+  // Zodiaque, deux options au choix (gérant, 10/10/2026) : « Le nom » +5 €, ou « Tout gravé » (nom, date,
+  // heure, ville) +8 €.
+  const ouvert = zod ? Boolean(zopt) : txt;
+  const zodOk = zopt === "nom" ? Boolean(zp) : zopt === "tout" ? Boolean(zp && zd && zv) : false;
+  const prixZod = zopt === "tout" ? CG_ZOD_TOUT_PRIX : zopt === "nom" ? CG_ZOD_NOM_PRIX : 0;
+  const avecTxt = zod ? zodOk : txt && Boolean(texte.trim());
   const t = T[taille];
   const unit = t.prix + (socle ? t.socle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
-  const ok = i >= 0 && Boolean(fmt) && (!txt || avecTxt);
+  const ok = i >= 0 && Boolean(fmt) && (!ouvert || avecTxt);
   const manque = i < 0 ? "Choisissez d'abord un modèle, un dessin ou votre signe."
     : !fmt ? "Il manque le format : vertical ou horizontal."
-    : zod ? "Écrivez au moins le prénom, la date ou la ville, ou retirez l'option."
+    : zod && zopt === "nom" ? "Écrivez le nom à graver, ou retirez l'option."
+    : zod ? "Écrivez le nom, la date et la ville, ou retirez l'option."
     : "Écrivez le texte à graver, ou retirez l'option texte.";
 
   // Cartes visibles : groupe, famille (modèles seulement), 8 puis « Afficher les N autres ».
@@ -118,6 +122,11 @@ export default function CristauxGraves({ prix = {} }) {
     }
   }
 
+  function choisirZod(k) {
+    const v = zopt === k ? "" : k; setZopt(v);
+    if (v) setTimeout(() => { champZod.current?.focus(); }, 0);
+  }
+
   function basculerTexte() {
     const v = !txt; setTxt(v);
     if (v) setTimeout(() => { (zod ? champZod.current : champTexte.current)?.focus(); }, 0);
@@ -132,14 +141,14 @@ export default function CristauxGraves({ prix = {} }) {
     const police = FONTS.find(([k]) => k === font)?.[1] || font;
     const place = PLACES.find(([k]) => k === pos)?.[1] || pos;
     if (avecTxt) {
-      if (zod) { if (zp) fields.zPrenom = zp; if (zDate) fields.zDate = zDate; if (zv) fields.zVille = zv; }
+      if (zod) { fields.zOption = zopt; fields.zPrenom = zp; if (zopt === "tout") { if (zDate) fields.zDate = zDate; fields.zVille = zv; } }
       else fields.texte = texte.trim();
       fields.police = font; fields.textePos = pos;
     }
     const resume = [
       `${genre} : ${m.nom}`, format,
       avecTxt && !zod ? `Texte : « ${texte.trim()} » (${police}, ${place.toLowerCase()})` : "",
-      avecTxt && zod ? [zp && `Prénom : ${zp}`, zDate && `Né(e) le : ${zDate}`, zv && `Habite à : ${zv}`].filter(Boolean).join(" · ") + ` (${police})` : "",
+      avecTxt && zod ? [zopt === "tout" ? "Tout gravé" : "Le nom gravé", `Prénom : ${zp}`, zopt === "tout" && zDate && `Né(e) le : ${zDate}`, zopt === "tout" && `Habite à : ${zv}`].filter(Boolean).join(" · ") + ` (${police})` : "",
       socle ? "Socle lumineux LED" : "",
     ].filter(Boolean).join(" · ");
     const variantTitle = `${format} · ${t.nom} — ${fmt === "h" ? t.h : t.v}`;
@@ -256,9 +265,9 @@ export default function CristauxGraves({ prix = {} }) {
               ) : null}
               {m && m.d ? (
                 <span className={`cg-bloc cg-bloc-xl${m.z ? " cg-zbloc" : ""}${fmt === "h" ? " fmt-h" : ""}`}>
-                  <span className="cg-bloc-in"><BlocContenu it={m} exemple={!(zod && txt)} /></span>
-                  {zod && txt ? (
-                    <span className="cg-zperso"><b className="fnt-great-vibes">{zp}</b><small>{zDate}</small><small>{zv}</small></span>
+                  <span className="cg-bloc-in"><BlocContenu it={m} exemple={!(zod && ouvert)} /></span>
+                  {zod && ouvert ? (
+                    <span className="cg-zperso"><b className="fnt-great-vibes">{zp}</b>{zopt === "tout" ? <><small>{zDate}</small><small>{zv}</small></> : null}</span>
                   ) : null}
                 </span>
               ) : null}
@@ -294,16 +303,25 @@ export default function CristauxGraves({ prix = {} }) {
 
             <div className="field">
               <label>Texte gravé en plus (en option)</label>
-              <button type="button" className={`cg-socle${txt ? " on" : ""}`} aria-pressed={txt} aria-controls="txtzone" onClick={basculerTexte}>
-                <span className="cg-txt-ic"><IcCg n="pen" /></span>
-                <span>
-                  <b>{zod ? "Ajouter prénom, date de naissance et ville" : "Ajouter un texte"}</b>
-                  <small>{zod ? "Gravés sous la constellation : prénom +5 €, date +2 €, ville +2 €" : "Un prénom, une date, un petit mot, gravé avec le modèle"}</small>
-                </span>
-                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(prixZod) : "dès +2 €") : "+" + eur(CG_TEXTE_PRIX)}</span>
-                <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
-              </button>
-              <div className="cg-txt" id="txtzone" hidden={!txt}>
+              {zod ? (
+                [["nom", "Le nom gravé", "Le prénom ou le nom, sous la constellation", CG_ZOD_NOM_PRIX],
+                  ["tout", "Tout gravé", "Le nom, la date, l'heure de naissance et la ville", CG_ZOD_TOUT_PRIX]].map(([k, titre, sous, px]) => (
+                  <button key={k} type="button" className={`cg-socle${zopt === k ? " on" : ""}`} aria-pressed={zopt === k} aria-controls="txtzone" onClick={() => choisirZod(k)}>
+                    <span className="cg-txt-ic"><IcCg n="pen" /></span>
+                    <span><b>{titre}</b><small>{sous}</small></span>
+                    <span className="cg-socle-p">+{eur(px)}</span>
+                    <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
+                  </button>
+                ))
+              ) : (
+                <button type="button" className={`cg-socle${txt ? " on" : ""}`} aria-pressed={txt} aria-controls="txtzone" onClick={basculerTexte}>
+                  <span className="cg-txt-ic"><IcCg n="pen" /></span>
+                  <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
+                  <span className="cg-socle-p">+{eur(CG_TEXTE_PRIX)}</span>
+                  <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
+                </button>
+              )}
+              <div className="cg-txt" id="txtzone" hidden={!ouvert}>
                 <div hidden={zod}>
                   <label className="cg-sub" htmlFor="cg-txt">Votre texte</label>
                   <div className="cg-inp"><input id="cg-txt" ref={champTexte} type="text" maxLength={40} placeholder="Prénom, date, petit mot…" autoComplete="off" value={texte} onChange={(e) => setTexte(e.target.value)} /><span>{texte.length}/40</span></div>
@@ -311,12 +329,14 @@ export default function CristauxGraves({ prix = {} }) {
                 <div hidden={!zod}>
                   <label className="cg-sub" htmlFor="cg-zp">Prénom ou nom</label>
                   <div className="cg-inp"><input id="cg-zp" ref={champZod} type="text" maxLength={24} placeholder="Luna Vance" autoComplete="off" value={zp} onChange={(e) => setZp(e.target.value.trim() ? e.target.value : "")} /></div>
+                  <div hidden={zopt !== "tout"}>
                   <div className="cg-2col">
                     <div><label className="cg-sub" htmlFor="cg-zd">Date de naissance</label><div className="cg-inp"><input id="cg-zd" type="text" maxLength={16} placeholder="24 nov. 2022" autoComplete="off" value={zd} onChange={(e) => setZd(e.target.value.trim() ? e.target.value : "")} /></div></div>
                     <div><label className="cg-sub" htmlFor="cg-zh">Heure</label><div className="cg-inp"><input id="cg-zh" type="text" maxLength={5} placeholder="19:27" autoComplete="off" value={zh} onChange={(e) => setZh(e.target.value.trim() ? e.target.value : "")} /></div></div>
                   </div>
                   <label className="cg-sub" htmlFor="cg-zv">Ville où la personne habite</label>
                   <div className="cg-inp"><input id="cg-zv" type="text" maxLength={24} placeholder="Paris" autoComplete="off" value={zv} onChange={(e) => setZv(e.target.value.trim() ? e.target.value : "")} /></div>
+                  </div>
                 </div>
                 <span className="cg-sub">Écriture</span>
                 <div className="cg-fonts" role="group" aria-label="Écriture du texte">
