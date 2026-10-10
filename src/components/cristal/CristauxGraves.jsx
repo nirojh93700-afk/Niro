@@ -298,7 +298,7 @@ export default function CristauxGraves({ prix = {} }) {
                   <b>{zod ? "Ajouter prénom, date de naissance et ville" : "Ajouter un texte"}</b>
                   <small>{zod ? "Gravés sous la constellation : +2 € par mention (prénom, date, ville)" : "Un prénom, une date, un petit mot, gravé avec le modèle"}</small>
                 </span>
-                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(CG_ZOD_PRIX * nz) : "+2 € chacun") : CG_TEXTE_PRIX > 0 ? "+" + eur(CG_TEXTE_PRIX) : "Compris"}</span>
+                <span className="cg-socle-p">{zod ? (txt && nz > 0 ? "+" + eur(CG_ZOD_PRIX * nz) : "+2 € chacun") : "+" + eur(CG_TEXTE_PRIX)}</span>
                 <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
               </button>
               <div className="cg-txt" id="txtzone" hidden={!txt}>
