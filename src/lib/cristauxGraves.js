@@ -74,9 +74,9 @@ export const CG_TAILLES = [
   { id: "xl", nom: "XL", v: "6×10×15 cm", h: "15×10×6 cm", prix: 149.9, socle: 19.9 },
 ];
 
-// Gérant, 10/10/2026 : « le premier texte c'est gratuit » (modèles et dessins) ; le nom du signe est compris ;
-// zodiaque : prénom, date et ville +2 € chacun.
-export const CG_TEXTE_PRIX = 0;
+// Gérant : texte gravé des modèles et dessins PAYANT, +5 € comme les cristaux photo (07/10/2026) ;
+// zodiaque : le nom du signe est compris, prénom, date et ville où la personne habite +2 € chacun (09-10/10/2026).
+export const CG_TEXTE_PRIX = 5;
 export const CG_ZOD_PRIX = 2;
 export const CG_SLUG = "cristal-deja-grave";
 // Identifiant de variante : cristal-grave-<v|h>-<taille>

@@ -1242,7 +1242,7 @@ export const products = [
     personalizationFields: [
       { key: "modele", label: "Modèle gravé", optional: true, maxLength: 80 },
       { key: "format", type: "select", label: "Format", optional: true, options: [{ value: "Vertical", label: "Vertical" }, { value: "Horizontal", label: "Horizontal" }] },
-      { key: "texte", label: "Texte gravé (compris)", optional: true, maxLength: 40 },
+      { key: "texte", label: "Texte gravé en plus (+5 €)", optional: true, maxLength: 40 },
       { key: "police", type: "font", label: "Écriture (si texte)", optional: true },
       { key: "textePos", type: "select", label: "Place du texte", optional: true, options: [{ value: "bas", label: "En bas" }, { value: "haut", label: "En haut" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" }] },
       { key: "zPrenom", label: "Prénom (zodiaque, +2 €)", optional: true, maxLength: 24 },
@@ -1253,7 +1253,8 @@ export const products = [
     // Même socle que les blocs photo ; zodiaque : prénom, date et ville = +2 € chacun.
     engravingPricing: { flatExtras: [
       { key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-grave-v-petit": 14.9, "cristal-grave-h-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-grave-v-petit": 300, "cristal-grave-h-petit": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-grave-v-petit": "socle-led-carre", "cristal-grave-h-petit": "socle-led-carre" } },
-      // Texte des modèles et dessins : COMPRIS (gérant, 10/10/2026 : « le premier texte c'est gratuit »).
+      // Texte des modèles et dessins : +5 €, comme les cristaux photo (gérant, 07/10/2026 : « le texte c'est payant »).
+      { key: "texte", amount: 5 },
       { key: "zPrenom", amount: 2 },
       { key: "zDate", amount: 2 },
       { key: "zVille", amount: 2 },

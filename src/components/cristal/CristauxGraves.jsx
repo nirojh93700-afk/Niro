@@ -2,7 +2,7 @@
 // Page « Cristaux déjà gravés » (/cristaux-graves) — reproduction de la maquette validée
 // docs/maquettes/cristaux-graves.html (version 14), mise en ligne le 10/10/2026 (« les trois » du gérant).
 // Trois pavés (modèles gravés / dessins / zodiaque), 8 cartes puis « Afficher les N autres », panneau
-// « Votre cristal » : format (rien de présélectionné), taille, texte compris (zodiaque : prénom, date, ville
+// « Votre cristal » : format (rien de présélectionné), taille, texte +5 € (zodiaque : prénom, date, ville
 // +2 € chacun), socle LED, total, quantité, bouton grisé tant qu'il manque quelque chose. Le panier reçoit le
 // produit « cristal-deja-grave » : les prix sont recalculés côté serveur au paiement (products.js).
 // Styles : src/app/cristaux-graves.css (généré depuis la maquette, racine .cgg).
