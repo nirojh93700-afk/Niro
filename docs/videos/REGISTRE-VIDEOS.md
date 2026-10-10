@@ -290,3 +290,23 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cristal3d #cadeaupersonnalise #souvenir #ideecadeau
+
+## Vidéo 22 — Cristaux déjà gravés + zodiaque (10/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/22-cristaux-graves-zodiaque-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 55 s | 2,9 Mo |
+
+- **Source** : `tools/video/pub_cristaux_graves_22.py <dossier de sortie>` (réutilise les fonctions de `pub_cristaux_silencieuse.py` ; produit aussi la version 1080 × 1920, ~40 Mo, non gardée dans le dépôt pour sa taille).
+- **Demande du gérant** : « fais-moi une vidéo » → thème choisi : cristaux déjà gravés + zodiaque (page `/cristaux-graves`).
+- **Contenu** : 14 blocs gravés (Gémeaux, ange, ourson à la rose, cheval de feu, chaton et sapin, Bouddha, cœur dans le cœur, colibri, panda, perroquets, génie, dragon et lys, rose, Tour Eiffel) puis les 12 signes du zodiaque (rendus de gravure : figure, constellation, prénom d'exemple, date, ville).
+- ⛔ **« Fillette au ballon » écartée** (référence à une œuvre de Banksy, droits d'auteur : question encore ouverte pour le gérant).
+- Les 12 signes sont des **rendus de gravure** (pas des photos de blocs) : seuls Gémeaux et Bouddha ont une vraie photo de bloc.
+
+### Description à copier-coller (livrée le 10/10/2026)
+
+**Vidéo 22 — Cristaux déjà gravés & zodiaque** (Cristal 3D Gémeaux, Ange gardien, Ourson à la rose, Cheval de feu, Chaton et sapin, Bouddha au lotus, Cœur dans le cœur, Colibri, Panda, Perroquets, Génie de la lampe, Dragon et lys, Rose éternelle, Tour Eiffel, les 12 signes du zodiaque)
+> Des cristaux déjà gravés, prêts à offrir ✨ Et pour les passionnés d'étoiles : votre signe du zodiaque, sa constellation, votre prénom et votre date, gravés dans le cristal 💛 Un cadeau qui ne ressemble à aucun autre 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cristal3d #zodiaque #cadeaupersonnalise #ideecadeau
