@@ -23,7 +23,7 @@ const PLACES = [["bas", "En bas"], ["haut", "En haut"], ["gauche", "À gauche"],
 const FAM_LABEL = Object.fromEntries(CG_FAMILLES.map((f) => [f.k, f.nom]));
 const INTRO = {
   dessins: "Un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix. Rien n'est choisi d'avance.",
-  zodiaque: "Votre signe, sa constellation et sa figure gravés dans le cristal. En option : un prénom, la date et l'heure de naissance, la ville où la personne habite.",
+  zodiaque: "Votre signe, sa constellation et sa figure gravés dans le cristal. Deux choix en option : le nom gravé (+5 €), ou tout gravé : le nom, la date et l'heure de naissance, la ville où la personne habite (+8 €).",
 };
 
 // Toutes les gravures dans l'ordre de la maquette : modèles, dessins, zodiaque.
@@ -124,6 +124,11 @@ export default function CristauxGraves({ prix = {} }) {
 
   function choisirZod(k) {
     const v = zopt === k ? "" : k; setZopt(v);
+    if (!m) {
+      // Rien de choisi encore : l'option est gardée et la grille passe aux signes pour en choisir un.
+      if (v) { setGrp("zodiaque"); setPlus(false); document.getElementById("modeles")?.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      return;
+    }
     if (v) setTimeout(() => { champZod.current?.focus(); }, 0);
   }
 
@@ -303,24 +308,33 @@ export default function CristauxGraves({ prix = {} }) {
 
             <div className="field">
               <label>Texte gravé en plus (en option)</label>
-              {zod ? (
-                [["nom", "Le nom gravé", "Le prénom ou le nom, sous la constellation", CG_ZOD_NOM_PRIX],
-                  ["tout", "Tout gravé", "Le nom, la date, l'heure de naissance et la ville", CG_ZOD_TOUT_PRIX]].map(([k, titre, sous, px]) => (
-                  <button key={k} type="button" className={`cg-socle${zopt === k ? " on" : ""}`} aria-pressed={zopt === k} aria-controls="txtzone" onClick={() => choisirZod(k)}>
+              {/* Les deux choix du zodiaque sont visibles dès le départ (gérant, 10/10/2026 : « les clients il faut qu'ils
+                  sachent, ils ont deux choix ») ; une fois un modèle ou un dessin choisi, seule la case texte reste. */}
+              {!zod ? (
+                <>
+                  {!m ? <span className="cg-sub">Modèles et dessins</span> : null}
+                  <button type="button" className={`cg-socle${txt ? " on" : ""}`} aria-pressed={txt} aria-controls="txtzone" onClick={basculerTexte}>
                     <span className="cg-txt-ic"><IcCg n="pen" /></span>
-                    <span><b>{titre}</b><small>{sous}</small></span>
-                    <span className="cg-socle-p">+{eur(px)}</span>
+                    <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
+                    <span className="cg-socle-p">+{eur(CG_TEXTE_PRIX)}</span>
                     <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
                   </button>
-                ))
-              ) : (
-                <button type="button" className={`cg-socle${txt ? " on" : ""}`} aria-pressed={txt} aria-controls="txtzone" onClick={basculerTexte}>
-                  <span className="cg-txt-ic"><IcCg n="pen" /></span>
-                  <span><b>Ajouter un texte</b><small>Un prénom, une date, un petit mot, gravé avec le modèle</small></span>
-                  <span className="cg-socle-p">+{eur(CG_TEXTE_PRIX)}</span>
-                  <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
-                </button>
-              )}
+                </>
+              ) : null}
+              {zod || !m ? (
+                <>
+                  {!m ? <span className="cg-sub">Signe du zodiaque : deux choix</span> : null}
+                  {[["nom", "Le nom gravé", "Le prénom ou le nom, sous la constellation", CG_ZOD_NOM_PRIX],
+                    ["tout", "Tout gravé", "Le nom, la date, l'heure de naissance et la ville", CG_ZOD_TOUT_PRIX]].map(([k, titre, sous, px]) => (
+                    <button key={k} type="button" className={`cg-socle${zopt === k ? " on" : ""}`} style={k === "tout" ? { marginTop: 8 } : undefined} aria-pressed={zopt === k} aria-controls="txtzone" onClick={() => choisirZod(k)}>
+                      <span className="cg-txt-ic"><IcCg n="pen" /></span>
+                      <span><b>{titre}</b><small>{sous}</small></span>
+                      <span className="cg-socle-p">+{eur(px)}</span>
+                      <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
+                    </button>
+                  ))}
+                </>
+              ) : null}
               <div className="cg-txt" id="txtzone" hidden={!ouvert}>
                 <div hidden={zod}>
                   <label className="cg-sub" htmlFor="cg-txt">Votre texte</label>
