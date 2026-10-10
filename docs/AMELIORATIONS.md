@@ -135,3 +135,11 @@
   (« Enregistre la maquette Best Seller », version 1)** : c'est CETTE version à reproduire le jour où il dit « applique »
   (classement réel sur 90 jours, 5 produits, rangée après « Les dernières sorties », étiquette posée partout, celle du
   Collier 3 Cœurs retirée s'il n'est pas dans le vrai classement). Ne pas la modifier sans sa demande.
+
+## 💡 Facturation électronique (10/10/2026) — à proposer, rien construit
+- Depuis le 01/09/2026 toutes les entreprises françaises assujetties à la TVA (micro-entreprises comprises) doivent pouvoir
+  RECEVOIR des factures électroniques via une plateforme agréée ; l'ÉMISSION et l'e-reporting deviennent obligatoires pour les
+  micro-entreprises au 01/09/2027 (sources : Pennylane, Compta-Online, facture-electronique-pro.fr — à vérifier sur impots.gouv.fr).
+- Concerne les ventes ENTRE PROFESSIONNELS (devis/factures aux restaurants et bars, aux entreprises) ; les ventes aux particuliers
+  relèvent de l'e-reporting. Source de doute : une seule source annonce un changement de la mention de franchise de TVA (art. L.223-3 CIBS).
+- Piste : adapter Gestion → Devis & factures (format Factur-X / plateforme agréée) et « Achats & factures » (factures fournisseurs reçues).
