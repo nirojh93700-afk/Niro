@@ -13,6 +13,7 @@
 //   - nombre = 0  = "épuisé" (achat bloqué)
 // En local (sans aucun stockage), on retombe sur une mémoire temporaire.
 // =============================================================================
+import nodeCrypto from "crypto";
 import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
@@ -762,9 +763,82 @@ export function productSoldOut(product, stockMap) {
   return tracked.every((s) => s <= 0);
 }
 
-export function isAdmin(req) {
-  const key = req.headers.get("x-admin-key");
-  return Boolean(process.env.ADMIN_PASSWORD) && key === process.env.ADMIN_PASSWORD;
+// --- Mot de passe admin ----------------------------------------------------
+// Au départ, le mot de passe est le secret Firebase ADMIN_PASSWORD. Depuis le 10/10/2026, le gérant peut le
+// changer dans Gestion → Réglages : le nouveau est gardé CHIFFRÉ (scrypt + sel, jamais en clair) dans la
+// section « adminAuth » ; dès qu'il existe, l'ancien (secret Firebase) ne marche plus.
+// ⚠️ En cas d'oubli : supprimer le document Firestore siteConfig/catalog__adminAuth → le secret Firebase
+// redevient le mot de passe.
+const ADMIN_AUTH_SECTION = "adminAuth";
+let adminAuthCache = { val: undefined, at: 0 };
+let adminAuthFreshAt = 0;
+
+function hashAdminPassword(pw, salt) {
+  return nodeCrypto.scryptSync(String(pw), String(salt), 32).toString("hex");
+}
+
+function egalSur(a, b) {
+  const x = Buffer.from(String(a));
+  const y = Buffer.from(String(b));
+  return x.length === y.length && nodeCrypto.timingSafeEqual(x, y);
+}
+
+async function readAdminAuth(fresh = false) {
+  if (!fresh && adminAuthCache.val !== undefined && Date.now() - adminAuthCache.at < FS_CACHE_TTL) return adminAuthCache.val;
+  let val = null;
+  try {
+    const db = useFirestore() ? getFirestoreDb() : null;
+    if (db) {
+      const snap = await db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + ADMIN_AUTH_SECTION).get();
+      if (snap.exists) val = JSON.parse(snap.data()?.json || "null");
+    } else {
+      val = (await getCatalogRaw(fresh))?.[ADMIN_AUTH_SECTION] || null;
+    }
+  } catch {
+    // Lecture impossible : on garde la valeur connue (jamais d'ouverture par défaut).
+    if (adminAuthCache.val !== undefined) return adminAuthCache.val;
+  }
+  val = val && val.hash && val.salt ? val : null;
+  adminAuthCache = { val, at: Date.now() };
+  return val;
+}
+
+function correspond(auth, key) {
+  try { return egalSur(hashAdminPassword(key, auth.salt), auth.hash); } catch { return false; }
+}
+
+export async function checkAdminKey(key) {
+  const k = typeof key === "string" ? key : "";
+  if (!k) return false;
+  let auth = await readAdminAuth(false);
+  if (auth && correspond(auth, k)) return true;
+  // Le mot de passe vient peut-être d'être changé sur un autre serveur : relecture fraîche (au plus toutes les 5 s).
+  if (Date.now() - adminAuthFreshAt > 5000) {
+    adminAuthFreshAt = Date.now();
+    auth = await readAdminAuth(true);
+    if (auth && correspond(auth, k)) return true;
+  }
+  if (auth) return false;
+  return Boolean(process.env.ADMIN_PASSWORD) && egalSur(k, process.env.ADMIN_PASSWORD);
+}
+
+export async function isAdmin(req) {
+  return checkAdminKey(req.headers.get("x-admin-key"));
+}
+
+export async function setAdminPassword(next) {
+  const salt = nodeCrypto.randomBytes(16).toString("hex");
+  const auth = { hash: hashAdminPassword(next, salt), salt, at: new Date().toISOString() };
+  const data = await getCatalogRaw(true);
+  data[ADMIN_AUTH_SECTION] = auth;
+  await persistCatalog(data, [ADMIN_AUTH_SECTION]);
+  adminAuthCache = { val: auth, at: Date.now() };
+  return auth.at;
+}
+
+export async function adminPasswordInfo() {
+  const auth = await readAdminAuth(true);
+  return { change: Boolean(auth), at: auth?.at || null };
 }
 
 // --- Photos personnalisées par produit (ajoutées depuis l'admin) -----------

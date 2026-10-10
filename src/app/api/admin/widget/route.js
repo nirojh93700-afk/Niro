@@ -1,4 +1,4 @@
-import { getBatThreadsMeta, getSettings } from "@/lib/stock";
+import { getBatThreadsMeta, getSettings, checkAdminKey } from "@/lib/stock";
 import { getSiteOrders, listQuotes } from "@/lib/firebase";
 
 export const dynamic = "force-dynamic";
@@ -8,17 +8,17 @@ export const runtime = "nodejs";
 // passe admin, transmis en en-tête `x-admin-key` OU en paramètre `?key=`
 // (plus simple depuis Scriptable). Ne renvoie que des chiffres + un aperçu des
 // dernières commandes — rien de sensible au-delà de ce que la gérante voit déjà.
-function authed(req) {
+async function authed(req) {
   const url = new URL(req.url);
   const key = req.headers.get("x-admin-key") || url.searchParams.get("key") || "";
-  return Boolean(process.env.ADMIN_PASSWORD) && key === process.env.ADMIN_PASSWORD;
+  return checkAdminKey(key);
 }
 
 const PARIS = new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" });
 const dayKey = (ts) => { try { return PARIS.format(new Date(ts)); } catch { return ""; } };
 
 export async function GET(req) {
-  if (!authed(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await authed(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
 
   const orders = (await getSiteOrders(300)) || [];
   const now = Date.now();

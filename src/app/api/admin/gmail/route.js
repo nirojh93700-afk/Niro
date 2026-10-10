@@ -28,7 +28,7 @@ Rédige une réponse en FRANÇAIS, chaleureuse, polie et professionnelle, à l'i
 }
 
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const url = new URL(req.url);
   const action = url.searchParams.get("action") || "status";
   const creds = await getGmailCreds();
@@ -72,7 +72,7 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const action = body?.action;

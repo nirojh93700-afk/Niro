@@ -6,14 +6,14 @@ export const runtime = "nodejs";
 
 // Fil unifié de l'assistant : la conversation est mémorisée côté serveur.
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   return Response.json({ history: await getHubHistory() });
 }
 
 // { text } → ajoute le message, fait travailler l'assistant, mémorise sa réponse.
 // { markAt, done } → marque un message (« appliqué ✓ », « envoyé ✓ »).
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
 
@@ -39,7 +39,7 @@ export async function POST(req) {
 }
 
 export async function DELETE(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   await clearHubHistory();
   return Response.json({ ok: true, history: [] });
 }

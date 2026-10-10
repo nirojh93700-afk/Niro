@@ -13,7 +13,7 @@ function newToken() {
 //        ?token=new → génère (ou régénère) le jeton « boîte mail ».
 // POST → lance un passage (limité à 1 fois / 3 min, sauf { force:true }).
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const url = new URL(req.url);
   let settings = {};
   try { settings = await getSettings(); } catch { settings = {}; }
@@ -27,7 +27,7 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body = {};
   try { body = await req.json(); } catch { body = {}; }
   const r = await syncInbox({ force: Boolean(body?.force) });

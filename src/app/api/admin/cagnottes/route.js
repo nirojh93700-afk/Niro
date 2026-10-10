@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 // Vue d'ensemble de la fidélité (admin) : soldes de cagnotte par cliente + total.
 // Lecture seule — aucune modification ici (le % se règle via /api/admin/settings).
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let cagnottes = [];
   try {
     const list = await listCagnottes(); // uniquement les soldes > 0
@@ -29,7 +29,7 @@ export async function GET(req) {
 // Crédit MANUEL d'une cagnotte (geste commercial décidé par la gérante).
 // Ajouté le 29/08/2026 (geste pour Nina B.). Garde-fous : montant 0,01–100 €.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const email = String(body?.email || "").trim().toLowerCase();

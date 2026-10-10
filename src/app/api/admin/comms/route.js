@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 //                   (aperçus/BAT, réponses importées), fusionnés et triés par date.
 //   GET (sans e-mail) → { meta } : nb de messages + dernier échange, par e-mail.
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const email = String(new URL(req.url).searchParams.get("email") || "").trim().toLowerCase();
   if (!email) return Response.json({ meta: await getCommsMeta() });
 

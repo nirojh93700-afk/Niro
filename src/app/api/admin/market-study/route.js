@@ -40,7 +40,7 @@ async function inBatches(items, size, fn) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: "Clé ANTHROPIC_API_KEY manquante (à configurer)." }, { status: 500 });
   }

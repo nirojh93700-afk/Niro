@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 // Définit (ou retire) le prix promo d'une variante, ou applique une remise
 // en lot sur toute une catégorie (réservé à l'admin).
 export async function POST(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   let body;

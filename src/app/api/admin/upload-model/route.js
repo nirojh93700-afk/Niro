@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 // Reçoit un fichier 3D (.glb / .gltf) depuis l'admin et le stocke.
 // Renvoie l'URL interne /api/model3d/<id> à enregistrer comme modèle du produit.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   try {
     const form = await req.formData();
     const file = form.get("file");

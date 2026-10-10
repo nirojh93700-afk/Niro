@@ -15,13 +15,13 @@ const GRAPH = "https://graph.facebook.com/v19.0";
 
 // Indique si la publication est configurée (sans jamais renvoyer le jeton).
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const s = await getSettings();
   return Response.json({ configured: Boolean(s.social?.igUserId && s.social?.igToken) });
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
 
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }

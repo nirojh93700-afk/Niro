@@ -6,7 +6,7 @@ import { getSiteOrder, updateSiteOrderStatus } from "@/lib/firebase";
 export const dynamic = "force-dynamic";
 
 export async function POST(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   const secret = process.env.STRIPE_SECRET_KEY;

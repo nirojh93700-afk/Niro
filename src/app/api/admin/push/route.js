@@ -8,14 +8,14 @@ export const runtime = "nodejs";
 // GET  → clé publique + nombre d'appareils abonnés.
 // POST { action:"subscribe", subscription, appareil } · { action:"unsubscribe", endpoint } · { action:"test" }
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const keys = await getPushKeys(true);
   const subs = await listPushSubs();
   return Response.json({ publicKey: keys.publicKey, appareils: subs.map((s) => ({ endpoint: s.sub.endpoint, appareil: s.appareil, at: s.at })) });
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body = {};
   try { body = await req.json(); } catch { /* vide */ }
   if (body.action === "subscribe") {

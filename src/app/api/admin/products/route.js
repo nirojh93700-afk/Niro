@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 // Liste tous les produits + variantes + stock + photos + promos (admin).
 export async function GET(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   const map = await getStockMap();

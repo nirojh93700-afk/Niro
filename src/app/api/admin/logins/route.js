@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 // (nom + nombre) pour reconnaître la cliente d'un coup d'œil.
 // =============================================================================
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
 
   const logins = await getLoginsAll();
   const orders = (await getSiteOrders(300).catch(() => null)) || [];

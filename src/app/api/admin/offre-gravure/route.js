@@ -13,7 +13,7 @@ export const runtime = "nodejs";
 //        du gérant : rien ne part de soi-même en dehors du battement du site.
 // =============================================================================
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const s = await getSettings();
   const offre = s.gravureOfferte || {};
   const compte = await runOffreGravureJob({ dryRun: true });
@@ -36,7 +36,7 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body = {};
   try { body = await req.json(); } catch { /* corps vide accepté */ }
   // Nettoyage des codes nominatifs morts (expirés ou déjà utilisés). Les codes

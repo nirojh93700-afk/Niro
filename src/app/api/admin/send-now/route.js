@@ -23,7 +23,7 @@ function fill(tpl, { name = "", ref = "", solde = 0, gagne = 0 } = {}) {
 // Envoi IMMÉDIAT d'un message à une cliente (bouton « Envoyer maintenant »).
 // S'adapte à la cliente choisie (prénom, réf de commande, solde de cagnotte).
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
 

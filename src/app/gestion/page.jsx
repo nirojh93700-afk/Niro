@@ -28,6 +28,7 @@ const QuotesAdmin = dynamic(() => import("@/components/admin/QuotesAdmin"), { lo
 const AppearanceAdmin = dynamic(() => import("@/components/admin/AppearanceAdmin"), { loading: attente });
 const ShippingAdmin = dynamic(() => import("@/components/admin/ShippingAdmin"), { loading: attente });
 const BoxtalKeys = dynamic(() => import("@/components/admin/BoxtalKeys"), { loading: attente });
+const AdminPasswordForm = dynamic(() => import("@/components/admin/AdminPasswordForm"), { loading: attente });
 const ReviewsAdmin = dynamic(() => import("@/components/admin/ReviewsAdmin"), { loading: attente });
 const PromoCodesAdmin = dynamic(() => import("@/components/admin/PromoCodesAdmin"), { loading: attente });
 const NewsletterAdmin = dynamic(() => import("@/components/admin/NewsletterAdmin"), { loading: attente });
@@ -1790,6 +1791,9 @@ export default function GestionPage({ onglet = "" } = {}) {
 
             {/* Clés API Boxtal (point relais) — rangées ici avec les autres. */}
             <BoxtalKeys adminKey={key} />
+
+            {/* Changer le mot de passe de Gestion (10/10/2026). */}
+            <AdminPasswordForm adminKey={key} />
 
             {/* Diagnostic Firebase (connexion réelle à l'appli de gestion) */}
             {firebase && (

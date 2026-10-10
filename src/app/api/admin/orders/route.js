@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 // Liste des commandes du site (réservé à l'admin).
 export async function GET(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   const orders = await getSiteOrders(300);
@@ -19,7 +19,7 @@ export async function GET(req) {
 
 // Met à jour le statut d'une commande (à préparer / expédiée).
 export async function POST(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   let body;
@@ -190,7 +190,7 @@ export async function POST(req) {
 
 // Supprime définitivement une commande (ex : commande de test).
 export async function DELETE(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   let body;

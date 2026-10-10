@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 // BRUT pour qu'on voie exactement ce que Boxtal répond. La base et l'auth sont
 // réglables par query (?base=... &auth=basic|header) pour tester sans redéployer.
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const { appId, appSecret } = await getBoxtalCreds();
   if (!appId || !appSecret) return Response.json({ error: "Clés Boxtal manquantes." }, { status: 400 });
 

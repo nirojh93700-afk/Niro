@@ -12,7 +12,7 @@ const PARIS = new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", year:
 const monthKey = (ts) => { try { const s = PARIS.format(new Date(ts)); return s.slice(3) + "-" + s.slice(0, 2); } catch { return ""; } };
 
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
 
   const [orders, catalog] = await Promise.all([getSiteOrders(500), getCatalogAdmin()]);
 
@@ -130,7 +130,7 @@ export async function GET(req) {
 
 // Cocher / décocher « Déclarée » sur un mois (Gestion → Bénéfices).
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const declared = await setUrssafDeclared(String(body?.month || ""), Boolean(body?.declared));

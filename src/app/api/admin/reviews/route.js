@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 // Tous les avis (admin) — pour modération.
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const all = await getReviews();
   const flat = [];
   for (const [slug, list] of Object.entries(all)) {
@@ -16,7 +16,7 @@ export async function GET(req) {
 
 // Approuver / supprimer / modifier / ajouter un avis.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const { slug, id, action } = body || {};

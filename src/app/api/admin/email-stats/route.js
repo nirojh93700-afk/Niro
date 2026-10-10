@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 // Résultats des campagnes : qui a ouvert, qui a cliqué, qui n'a rien fait.
 // Sert aussi à préparer une relance ciblée (liste "pasOuvert").
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const stats = await getEmailStats();
   const campagnes = Object.entries(stats)
     .map(([id, c]) => {

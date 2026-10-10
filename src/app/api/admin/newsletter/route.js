@@ -11,7 +11,7 @@ const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replac
 
 // Abonnées + liste de produits (pour le sélecteur de nouveautés).
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const subs = await getSubscribersDetailed();
   const birthdays = await getBirthdays();
   let products = [];
@@ -31,7 +31,7 @@ export async function GET(req) {
 //  - avec productSlugs → e-mail « Nouveautés » riche (cartes + photos)
 //  - sinon → message texte simple (comme avant)
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const subject = String(body?.subject || "").trim();

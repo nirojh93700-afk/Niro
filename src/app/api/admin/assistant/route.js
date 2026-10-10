@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 // Assistant catalogue (ancienne interface) — la logique vit dans
 // src/lib/agents/catalogAssistant.js, partagée avec le fil unifié.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const history = Array.isArray(body?.messages) ? body.messages.slice(-12) : [];

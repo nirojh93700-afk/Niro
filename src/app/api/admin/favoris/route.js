@@ -13,7 +13,7 @@ export const runtime = "nodejs";
 // supprimé n'apparaît plus (jamais de vieux prix ni de lien mort).
 // =============================================================================
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
 
   let favoris = {};
   try { favoris = await getFavorisAll(); } catch { favoris = {}; }

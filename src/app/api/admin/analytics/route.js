@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 // Tableau de bord des visites (admin) : agrège les N derniers jours.
 export async function GET(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   const days = Math.min(90, Math.max(7, Number(new URL(req.url).searchParams.get("days")) || 30));

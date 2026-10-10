@@ -3,13 +3,13 @@ import { isAdmin, getTaxonomy, saveTaxonomy } from "@/lib/stock";
 export const dynamic = "force-dynamic";
 
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const taxonomy = await getTaxonomy();
   return Response.json({ ok: true, taxonomy });
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try {
     body = await req.json();

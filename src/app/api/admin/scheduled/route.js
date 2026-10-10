@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 // Liste des messages programmés (admin).
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const list = (await getScheduledEmails()).slice().sort((a, b) => (a.sendAt || 0) - (b.sendAt || 0));
   let dernierEchec = null;
   try { dernierEchec = await getJobNote("scheduled"); } catch { /* ignore */ }
@@ -14,7 +14,7 @@ export async function GET(req) {
 
 // Programmer un message pour une cliente à une date/heure précise.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const to = String(body?.to || "").trim();
@@ -35,7 +35,7 @@ export async function POST(req) {
 
 // Annuler un message programmé (pas encore envoyé).
 export async function DELETE(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const id = new URL(req.url).searchParams.get("id") || "";
   if (!id) return Response.json({ error: "Identifiant manquant." }, { status: 400 });
   await cancelScheduledEmail(id);

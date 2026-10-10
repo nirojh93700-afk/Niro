@@ -11,7 +11,7 @@ let memo = { at: 0, data: null };
 const TTL = 30 * 1000;
 
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   if (memo.data && Date.now() - memo.at < TTL) return Response.json(memo.data);
   const [c, orders] = await Promise.all([
     getAdminCountsData().catch(() => ({ replies: 0, unread: 0, reviews: 0, pros: 0 })),

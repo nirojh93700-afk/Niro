@@ -5,7 +5,7 @@ import { isAdmin, exportAllData } from "@/lib/stock";
 export const dynamic = "force-dynamic";
 
 export async function GET(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   const data = await exportAllData();

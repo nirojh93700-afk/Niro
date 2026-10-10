@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 // L'agent tient la page à jour : avant de répondre, il classe tout seul les pubs,
 // les expéditeurs marqués « Pub », les dossiers sans suite et ce qui a déjà reçu réponse.
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   // Nettoyage + lecture en un seul passage (repli : simple lecture si le nettoyage échoue).
   const all = (await nettoyerMessagesATraiter()) || (await listPendingReplies());
   const items = all.map((it) => ({
@@ -30,7 +30,7 @@ export async function GET(req) {
 //   { action: "traite", id } → déjà réglé hors du site : classée, sans rien bloquer.
 // Rien n'est jamais envoyé d'ici.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body = {};
   try { body = await req.json(); } catch { /* corps vide */ }
   const action = String(body.action || "");

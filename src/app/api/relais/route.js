@@ -107,7 +107,7 @@ export async function GET(req) {
   }
 
   const auth = "Basic " + Buffer.from(`${appId}:${appSecret}`).toString("base64");
-  const admin = isAdmin(req);
+  const admin = await isAdmin(req);
   const opOverride = url.searchParams.get("op");
   const opCandidates = opOverride ? [opOverride] : ["ARRIVAL", "DELIVERY", "COLLECTION", "PICKUP"];
 

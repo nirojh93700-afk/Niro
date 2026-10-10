@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 // Met à jour le stock d'une variante (réservé à l'admin).
 export async function POST(req) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
   let body;

@@ -3277,6 +3277,18 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Au « applique » : reproduire dans `page.jsx` + composants `home/` + CSS, garder `Header.jsx` et le pied de page tels
   quels, garder les interrupteurs Apparence (sections) et le catalogue en direct (prix/noms lus en direct, pas en dur).
 
+## 🔒 MOT DE PASSE DE GESTION MODIFIABLE DANS L'ADMIN — 10/10/2026 (« fais-le directement dans admin, pas besoin de maquette »)
+- Gestion → Réglages → « 🔒 Mot de passe de Gestion » (`AdminPasswordForm.jsx`, API `/api/admin/password` GET/POST
+  `{actuel, nouveau}`, 10 caractères min., double saisie). Après le changement, la page garde la session avec le nouveau.
+- Le nouveau mot de passe est gardé CHIFFRÉ (scrypt + sel) dans la section `adminAuth` (document Firestore
+  `siteConfig/catalog__adminAuth`). Dès qu'il existe, le secret Firebase `ADMIN_PASSWORD` NE MARCHE PLUS pour Gestion
+  (il sert toujours à signer les sessions de l'espace client : les clientes ne sont pas déconnectées).
+- `isAdmin(req)` est devenu ASYNCHRONE (`checkAdminKey`, cache 60 s + relecture fraîche au plus toutes les 5 s si la clé
+  ne correspond pas) : **toujours écrire `if (!(await isAdmin(req)))`** dans une nouvelle route. Le widget iPhone
+  (`/api/admin/widget?key=`) suit aussi le nouveau mot de passe.
+- ⚠️ **En cas d'oubli** : supprimer le document Firestore `siteConfig/catalog__adminAuth` (console Firebase) → le secret
+  Firebase redevient le mot de passe. ⛔ La clé admin ne s'écrit jamais dans un fichier.
+
 ## 📬 RÉPONSE PAR LE BOUTON « RÉPONDRE » → L'AGENT PRÉPARE UNE RÉPONSE (04/10/2026, EN LIGNE)
 > Gérant : « pourquoi l'agent il a pas préparé de réponse… je veux qu'il m'envoie des alertes comme avant ».
 - **Cause** : `/api/reponse/[token]` (bouton des e-mails clients) rangeait le message + alerte « 📬 Réponse de… »

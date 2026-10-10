@@ -3,12 +3,12 @@ import { isAdmin, getPromoCodes, setPromoCode, deletePromoCode, getCodeStats, se
 export const dynamic = "force-dynamic";
 
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   return Response.json({ codes: await getPromoCodes(), stats: await getCodeStats() });
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   // Action « marquer payé » (commission versée à un ambassadeur).
@@ -33,7 +33,7 @@ export async function POST(req) {
 }
 
 export async function DELETE(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const codes = await deletePromoCode(body?.code);

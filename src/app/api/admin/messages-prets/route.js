@@ -17,7 +17,7 @@ export const runtime = "nodejs";
 // le dossier de la cliente ET dans le fil de sa commande.
 // =============================================================================
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let enAttente = [];
   try {
     enAttente = (await listPendingReplies())
@@ -28,7 +28,7 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body = {};
   try { body = await req.json(); } catch { /* corps vide accepté */ }
   if (body?.action !== "queue") return Response.json({ error: "Action inconnue." }, { status: 400 });

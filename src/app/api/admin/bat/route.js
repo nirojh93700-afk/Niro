@@ -48,7 +48,7 @@ async function syncGmailReplies(orderId, th) {
 
 // Effacer la conversation d'aperçu d'une commande (recommencer à zéro).
 export async function DELETE(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const orderId = new URL(req.url).searchParams.get("orderId") || "";
   if (!orderId) return Response.json({ error: "Commande manquante." }, { status: 400 });
   await resetBatThread(orderId);
@@ -69,7 +69,7 @@ async function listUnreadMeta() {
 }
 
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const url = new URL(req.url);
   // Vérification globale des nouvelles réponses (pastilles).
   if (url.searchParams.get("action") === "unread") {
@@ -115,7 +115,7 @@ export async function GET(req) {
 
 // Envoyer un aperçu / message à la cliente (admin) + e-mail avec lien sécurisé.
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const orderId = String(body?.orderId || "").trim();

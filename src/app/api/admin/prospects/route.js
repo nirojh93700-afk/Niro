@@ -20,7 +20,7 @@ const ENVOI_LOT = 12;
 // gérant depuis Gestion → Restaurants & bars, jamais tout seul (pas de cron).
 // =============================================================================
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const email = new URL(req.url).searchParams.get("email");
   if (email) {
     const dossier = await getCommsFor(email).catch(() => ({ messages: [] }));
@@ -52,7 +52,7 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const action = String(body?.action || "");

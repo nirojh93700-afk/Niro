@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 //   du produit (déclenché UNIQUEMENT par le clic de la gérante), puis vide la liste.
 // POST {slug, action:"clear"} : vide la liste SANS rien envoyer.
 export async function GET(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const alerts = await getRestockAlerts();
   let noms = {};
   try { for (const p of await getCatalogAdmin()) noms[p.slug] = p.name || p.slug; } catch { /* noms = slugs */ }
@@ -24,7 +24,7 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  if (!isAdmin(req)) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   const slug = String(body?.slug || "").trim();
