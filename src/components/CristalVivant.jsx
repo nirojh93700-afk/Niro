@@ -97,9 +97,11 @@ export default function CristalVivant({ products = [] }) {
             <h2 id="t-cb">Choisissez votre cristal</h2>
           </div>
           <div className="cg-grid">
-            {products.map((p) => {
+            {products.map((p, i) => {
               const nom = p.name.replace(/\s*—\s*gravure 3d\s*$/i, "");
-              return (
+              // Les cristaux déjà gravés se rangent juste après les deux blocs photo (gérant, 10/10/2026).
+              const apresBlocs = p.slug.startsWith("cristal-photo-3d") && !(products[i + 1]?.slug || "").startsWith("cristal-photo-3d");
+              return [
                 <Link className="cg-tile" key={p.slug} href={`/produit/${p.slug}`} aria-label={nom}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <span className="cg-img">{p.image ? <img src={p.image} alt={nom} loading="lazy" /> : null}</span>
@@ -108,8 +110,15 @@ export default function CristalVivant({ products = [] }) {
                     <b className="cg-nom">{nom}</b>
                     {p.price ? <span className="cg-price">dès {euro(p.price)}</span> : null}
                   </span>
-                </Link>
-              );
+                </Link>,
+                apresBlocs ? (
+                  <Link className="cg-tile" key="cristaux-graves" href="/cristaux-graves" aria-label="Cristaux déjà gravés">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <span className="cg-img"><img src="/produits/cristaux-graves/bouddha.jpg" alt="Cristal déjà gravé" loading="lazy" /></span>
+                    <span className="cg-meta"><span className="cg-tag">modèles, dessins &amp; zodiaque</span><b className="cg-nom">Cristaux déjà gravés</b><span className="cg-price">dès 39,90 €</span></span>
+                  </Link>
+                ) : null,
+              ];
             })}
             <Link className="cg-tile cb-socle" href="/produit/cristal-photo-3d-vertical" aria-label="Socle lumineux">
               {/* eslint-disable-next-line @next/next/no-img-element */}
