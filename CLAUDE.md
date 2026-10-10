@@ -2724,6 +2724,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   le retrait préparé en local a été annulé sans être poussé.
 
 ## 💎 LES TROIS MAQUETTES CRISTAL — ✅ EN LIGNE LE 10/10/2026 (gérant : « les trois »)
+- ✅ **ZODIAQUE = DEUX OPTIONS AU CHOIX (gérant, 10/10/2026, confirmé « Oui, c'est ça »)** : « Le nom gravé » +5 € (prénom
+  ou nom seul) OU « Tout gravé » +8 € (nom, date, heure, ville où la personne habite). Champ `zOption` (nom/tout), prix au
+  paiement par `flatExtras` sur `zOption` ; plus de +2 € par mention (remplacé). « Tout gravé » exige nom, date et ville.
 - ⛔ **PRIX DU TEXTE (10/10/2026, après erreur) : texte des modèles et dessins = +5 € (gérant 07/10 : « le texte c'est
   payant »), zodiaque = nom du signe COMPRIS, prénom / date / ville où la personne habite +2 € chacun.** J'avais rendu le
   texte « Compris » en lisant mal « le premier texte c'est gratuit » (= le nom du signe) → corrigé (`71a16b0`).
