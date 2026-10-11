@@ -30,7 +30,7 @@ export const MATERIEL_KITS = [
     "nom": "Colis verre",
     "detail": "carton + chips + FRAGILE",
     "items": {
-      "carton15": 1,
+      "carton25": 1,
       "chips": 1,
       "fragile": 1
     }
@@ -73,7 +73,8 @@ export const MATERIEL_SEED = [
     "photo": "/materiel/carton-blanc-25x20x15-x15.webp",
     "stock": 15,
     "achete": 15,
-    "sug": true
+    "sug": false,
+    "archive": true
   },
   {
     "id": "carton25",
@@ -91,7 +92,8 @@ export const MATERIEL_SEED = [
     "photo": "/materiel/carton-25x20x15.webp",
     "stock": 25,
     "achete": 25,
-    "sug": false
+    "sug": true,
+    "archive": false
   },
   {
     "id": "boiteb",
@@ -307,7 +309,8 @@ export const MATERIEL_SEED = [
     "photo": "/materiel/pochettes-lin-50.webp",
     "stock": 50,
     "achete": 50,
-    "sug": false
+    "sug": false,
+    "archive": true
   },
   {
     "id": "poch24",
@@ -379,7 +382,8 @@ export const MATERIEL_SEED = [
     "photo": "/materiel/boites-bois-20x10.webp",
     "stock": 6,
     "achete": 6,
-    "sug": false
+    "sug": false,
+    "archive": true
   },
   {
     "id": "a53",

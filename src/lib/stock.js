@@ -2705,6 +2705,7 @@ export async function saveMaterielItem(patch) {
   if ("stock" in patch) it.stock = numOuNull(patch.stock) === null ? null : Math.max(0, Math.round(Number(patch.stock)));
   if ("achete" in patch) it.achete = numOuNull(patch.achete) === null ? null : Math.max(0, Math.round(Number(patch.achete)));
   if ("archive" in patch) it.archive = Boolean(patch.archive);
+  if ("sug" in patch) it.sug = Boolean(patch.sug); // « suggéré » par défaut dans la fenêtre de conditionnement
   data.materiel = items;
   await persistCatalog(data, ["materiel"]);
   return it;
