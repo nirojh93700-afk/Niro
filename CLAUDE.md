@@ -3007,6 +3007,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `public/produits/`, entrée de menu + boutique + sitemap/flux Google automatiques. L'accueil et les univers du site ne
   bougent PAS (la maquette « accueil + univers » reste à part). ⚠️ Préalable : marquage CE fait, aucune pièce qui passe
   dans le cylindre 3,2 cm. Rien ne part sans son « applique ».
+- 💶 **PRIX DES 9 PUZZLES À ENCASTRER : 19,90 € depuis le 11/10/2026** (gérant : « mets le puzzle enfants à 19,90 € »),
+  prénom toujours compris ; avant 29,90 € (`docs/prix-historique.md`). Le puzzle photo gravé n'a pas bougé.
 - ✅✅ **LES 9 PUZZLES SONT EN VENTE DEPUIS LE 09/10/2026 SOIR (ordre du gérant : « mets-le en vente disponible, c'est pas toi
   qui décides »)**. Le marquage CE (EN 71) et le test du cylindre 3,2 cm ne sont PAS faits : il le sait (dit le 09/10), c'est
   sa décision, ne plus le lui opposer. Fiches `puzzle-<thème>` dans `products.js` (catégorie NOUVELLE `jeux` « Jeux en bois »,
