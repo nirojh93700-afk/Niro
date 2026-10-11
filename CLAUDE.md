@@ -3374,13 +3374,20 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   capturée, puis `git checkout`) : le site n'est pas touché.
 - **Bois (photo → nom du fournisseur, à vérifier à la réception)** : Nanmu (brun-orangé uni) · Buis (jaune pâle) · Santal rouge (rouge) ·
   Palissandre de Birmanie (orange veiné) · Ébène (gris anthracite) · Suanzhi (beige gris). Photo = celle de la variante.
-- **v2 (11/10, gérant : « si c'est gravé, c'est plus cher… ils peuvent choisir un dessin que je te donnerai, et un texte »)** : le marque-page
-  SEUL est moins cher, la gravure est un SUPPLÉMENT (même règle que partout : gravure jamais incluse). **Proposé (à valider) : 6,90 € seul ·
-  dessin +3 € · texte +3 € (24 car., 8 écritures) · les deux 12,90 €** (même +3 € par élément que les bijoux et le gobelet). Champ « Dessin
-  gravé » = Sans / Avec (+3 €) puis grille numérotée de dessins (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins) ;
-  plus de texte au verso. Port : lettre suivie (`letter:true`, `weight: 40`, 4,90 € jusqu'à 100 g). Marché : Nature & Découvertes 10,95 €
-  (bois 3 mm, dessins fixes). Coût Alibaba ≈ 0,63 € (0,47 € dès 100, 0,43 € dès 1000) + port d'import (4,66 € pour 1 pièce).
-  À la construction : le dessin = `flatExtras` (`dessin: oui`, +3 €) + `stylepicker` numéroté (`styleImages`), le texte = `textKeys` +3 €.
+- **v3 (11/10 soir, gérant : « je mettrai 9,90 €, marque-page seul, après tu calcules le reste, et je fais des boîtes cadeaux d'un, deux ou
+  quatre »)** : prix relevé sur Etsy pour un marque-page en bois gravé au prénom = 9 à 13,50 € (9,00 · 9,80 · koala + prénom 13,50 ·
+  lot de 3 à 14,90 · photo 22,90). **Prix de la maquette (à valider)** : **seul 9,90 € · dessin +2 € · texte +2 € (les deux 13,90 €)** ·
+  **boîte cadeau bleu nuit +3 € (1 ou 2 marque-pages, boîte longue à 2 élastiques) / +4 € (4 marque-pages)**, sans remise : seul 9,90 ·
+  en boîte 12,90 · coffret de 2 = 22,80 · coffret de 4 = 43,60 (gravure en plus, par marque-page). Les prix des boîtes sont des
+  ESTIMATIONS : coût réel des boîtes non donné. Photos des boîtes (3 envoyées : 8 emplacements, 4, 2) dans
+  `docs/maquettes/assets/marque-pages/` (boite8 non utilisée : il ne vend pas de coffret de 8). Maquette : choix du format (4 cartes), un
+  « bois » par marque-page du coffret, photo de la boîte dans la galerie. Pas encore géré : gravure DIFFÉRENTE par marque-page d'un coffret
+  (réutiliser le bloc « Les N identiques / Chacun différent » des verres au moment de construire).
+- (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
+  Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie
+  (`letter:true`, `weight: 40`, 4,90 € jusqu'à 100 g) ; un coffret de 4 reste sous 100 g à vérifier (boîte + 4 pièces).
+  Coût Alibaba ≈ 0,63 € (0,47 € dès 100, 0,43 € dès 1000) + port d'import (4,66 € pour 1 pièce).
+  À la construction : le dessin = `flatExtras` (`dessin: oui`) + `stylepicker` numéroté (`styleImages`), le texte = `textKeys`.
 - **Précommande** : badge « Précommande » + encadré doré sous le titre : « Les marque-pages sont en cours d'approvisionnement. Votre
   commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées. » ; bouton « Précommander » dans la
   maquette. ⛔ AUCUNE date, aucun « sous X semaines », pas de nom de fournisseur. Le mécanisme « Précommander » n'existe PAS dans le site
