@@ -3390,6 +3390,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   lui demander la photo. ⚠️ **PORT** : une boîte rigide dépasse 3 cm → règle du site « bijou en boîte = petit colis » (6,90 € à domicile) et non lettre
   suivie 4,90 € ; le seul marque-page reste en lettre. À trancher à la construction (le port dépend alors du format choisi, pas seulement du produit).
   Marché relevé sur Etsy : marque-page gravé au prénom 9 à 13,50 € (9,00 · 9,80 · koala + prénom 13,50 · lot de 3 à 14,90 · photo 22,90).
+- **v6 (11/10 soir, gérant : « les photos de la boîte, tu les mets aussi ici… et les photos des marque-pages correspondants à côté des couleurs »)** :
+  chaque carte de FORMAT montre la PHOTO de sa boîte (seul = marque-page, 1 et 2 = boîte longue à 2 élastiques, 4 = boîte à 4 emplacements ; la
+  boîte à 8 emplacements n'est pas utilisée) et, dans un coffret, chaque marque-page choisit sa couleur avec des pastilles PHOTO (la photo du
+  marque-page + le nom de la couleur), plus de menu déroulant. ⚠️ Correspondance boîte ↔ nombre de marque-pages = mon hypothèse (1 et 2 → même
+  photo de boîte longue) : à confirmer, car il dit que les boîtes d'un et de deux n'ont pas le même prix. Règle générale : **un choix visuel
+  (couleur, boîte, modèle) s'affiche toujours avec sa photo, jamais en texte seul ni en menu déroulant.**
 - (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie
