@@ -254,3 +254,4 @@ En attente de SA décision :
 - ⚠️ Avant de commander : demander au fournisseur l'essence réelle de chaque couleur et les documents CITES (palissandre / santal rouge = annexe II).
 - Marque-pages : il doit choisir l'idée A, B, C ou D pour les couleurs d'un coffret (page `marque-pages-idees`) ; la couleur reste en haut.
 - Marque-pages : idée C (fenêtre « Composer mon coffret ») choisie et mise dans la maquette de la fiche (v8) ; reste son avis, les dessins, la photo de la boîte d'un, l'essence réelle des bois (CITES) avant commande.
+- Marque-pages modèle 2 (ajouré, oiseau et magnolia) : maquette faite le 11/10, 4 couleurs + coffret des 4 couleurs ; à confirmer : prix, coffret utilisé, texte au verso, vraie photo de la couleur Sable.
