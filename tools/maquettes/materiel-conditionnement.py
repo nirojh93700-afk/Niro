@@ -32,10 +32,10 @@ ITEMS = [
   # Étiquettes
   dict(id="fragile", cat="eti", nom="Étiquettes FRAGILE 9 × 5 cm", lot="168 étiquettes · 7,99 €", cout=0.05, usage="1 étiquette", stock=168, seuil=30, img="etiquettes-fragile", sug=1),
   # Emballages bijoux (déjà dans Gestion → Emballages : coûts d'achat saisis)
-  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=None, seuil=None, img="emb-sac"),
-  dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=None, seuil=None, img="emb-boite-carree"),
-  dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=None, seuil=None, img="emb-boite-allongee"),
-  dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=None, seuil=None, img="emb-microfibre"),
+  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=100, seuil=20, img="emb-sac"),
+  dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=100, seuil=20, img="emb-boite-carree"),
+  dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=100, seuil=20, img="emb-boite-allongee"),
+  dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=100, seuil=20, img="emb-microfibre"),
   dict(id="poch50", cat="bij", nom="Pochettes à cordon aspect lin, crème 10 × 14 cm", lot="Lot de 50 · 8,78 € (Temu)", cout=0.18, usage="1 pochette", stock=50, seuil=10, img="pochettes-lin-50"),
   dict(id="poch24", cat="bij", nom="Pochettes cadeaux lin beige 10 × 14 cm", lot="Lot de 24 · 6,29 € (Temu)", cout=0.26, usage="1 pochette", stock=24, seuil=6, img="pochettes-lin-24"),
   # Bois à graver
