@@ -133,6 +133,7 @@ body{font-family:var(--font-body);color:var(--ink)}
 .mp-kit{flex:0 0 auto;border:1px dashed #cdb26a;background:#fffaf0;border-radius:12px;padding:8px 12px;text-align:left;cursor:pointer;min-height:44px;font-family:var(--font-body)}
 .mp-kit b{display:block;font-size:.84rem}.mp-kit small{color:var(--ink-soft);font-size:.72rem}
 .mp-filters{flex:0 0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+.mp-filters input{flex:1 1 150px;min-width:150px;border:1px solid var(--line);border-radius:99px;padding:8px 14px;font:500 .84rem var(--font-body);min-height:40px;background:#fff}
 .mp-filters button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 13px;font:600 .8rem var(--font-body);cursor:pointer;min-height:40px;color:var(--ink-soft)}
 .mp-filters button.on{background:#1d1811;border-color:#1d1811;color:#f1e3b8}
 .mp-body{overflow-y:auto;padding:0 16px 12px;flex:1}
@@ -263,7 +264,7 @@ HTML = r"""
       <div class="mp-kpi"><small>À racheter</small><b id="kLow">0</b></div>
       <div class="mp-kpi"><small>Matériel moyen par commande</small><b>2,63 €</b></div>
     </div>
-    <div class="mp-note">➕ <b>Un achat arrive ?</b> Importez la facture ou la capture dans <b>Achats &amp; factures</b> : l'IA lit les lignes et le stock s'ajoute tout seul, comme pour les verres. Les emballages bijoux (sac, boîtes, microfibre) viennent de la page Emballages actuelle : rien à ressaisir.</div>
+    <div class="mp-note">➕ <b>Un achat arrive ?</b> Importez la facture ou la capture dans <b>Achats &amp; factures</b> : l'IA lit les lignes et le stock s'ajoute tout seul, comme pour les verres. Tout est dans une seule liste, sans catégories : emballages bijoux (sac, boîtes, microfibre, repris de la page Emballages actuelle), cartons, calage, étiquettes et bois.</div>
     <div id="rows"></div>
    </section>
   </main>
@@ -293,7 +294,8 @@ const ITEMS=__ITEMS__, CATS=__CATS__, KITS=__KITS__, ORDER=__ORDER__, ICO=__ICO_
 const $=(s)=>document.querySelector(s);
 const eur=(n)=>n.toFixed(2).replace('.',',')+' €';
 const stock0={}; ITEMS.forEach(i=>stock0[i.id]=i.stock);
-let stock={...stock0}, sel={}, filt='tous', done=null;
+let stock={...stock0}, sel={}, filt='tous', query='', done=null;
+const norm=(t)=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 ITEMS.forEach(i=>{ if(i.sug) sel[i.id]=1; });
 function ph(i){return i.photo?`<img src="${i.photo}" alt="">`:`<span class="ic">${ICO[i.ico]}</span>`;}
 function mat(){return ITEMS.reduce((s,i)=>s+(sel[i.id]||0)*i.cout,0);}
@@ -302,9 +304,10 @@ function stockTxt(i){ if(i.stock==null) return '<div class="mp-st">stock : à sa
   const q=sel[i.id]||0, left=stock[i.id]-q, low=left<=i.seuil;
   return `<div class="mp-st${low?' low':''}">stock ${stock[i.id]}${q?` → ${left}`:''}${low?' · à racheter':''}</div>`;}
 function renderKits(){ $('#kits').innerHTML=KITS.map(k=>`<button class="mp-kit" data-k="${k.id}"><b>${k.nom}</b><small>${k.detail}</small></button>`).join(''); }
-function renderFilters(){ const f=[['tous','Tout'],['sug','Suggérés'],...CATS]; $('#filters').innerHTML=f.map(([k,n])=>`<button data-f="${k}" class="${filt===k?'on':''}">${n}</button>`).join(''); }
+function renderFilters(){ const f=[['tous','Tout le matériel'],['sug','Suggérés pour cette commande']]; $('#filters').innerHTML=f.map(([k,n])=>`<button data-f="${k}" class="${filt===k?'on':''}">${n}</button>`).join('')+`<input id="q" type="search" placeholder="Rechercher un matériel…" value="${query}" aria-label="Rechercher un matériel" autocomplete="off">`; }
 function renderGrid(){
-  const list=ITEMS.filter(i=>filt==='tous'||(filt==='sug'?i.sug:i.cat===filt));
+  const list=ITEMS.filter(i=>(filt==='tous'||i.sug)&&(!query||norm(i.nom+' '+i.mat+' '+i.pour+' '+i.lot).includes(norm(query))));
+  if(!list.length){ $('#grid').innerHTML='<p class="mp-st" style="grid-column:1/-1;padding:18px 0">Aucun matériel à ce nom.</p>'; totals(); return; }
   $('#grid').innerHTML=list.map(i=>{const q=sel[i.id]||0; return `<div class="mp-it${q?' on':''}" data-i="${i.id}" tabindex="0" role="button" aria-pressed="${q?'true':'false'}">
     ${i.sug?'<span class="mp-sug">Suggéré</span>':''}<span class="mp-chk">✓</span><div class="mp-ph">${ph(i)}</div>
     <div class="mp-tx"><b>${i.nom}</b><small>${i.lot}</small><small><span class="c">${eur(i.cout)}</span> · ${i.usage}</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small>${stockTxt(i)}</div>
@@ -335,11 +338,12 @@ function packView(){
 }
 function rows(){
   let val=0, low=0;
-  const html=CATS.map(([k,n])=>{ const l=ITEMS.filter(i=>i.cat===k); return `<div class="mp-list"><h3>${n}</h3>${l.map(i=>{
-    const has=i.stock!=null, left=has?stock[i.id]:null, isLow=has&&left<=i.seuil; if(has){val+=left*i.cout*(i.usage.startsWith('1 poignée')?1:1); if(isLow)low++;}
+  const l=ITEMS;
+  const html=`<div class="mp-list"><h3>Tout le matériel · ${l.length} articles</h3>${l.map(i=>{
+    const has=i.stock!=null, left=has?stock[i.id]:null, isLow=has&&left<=i.seuil; if(has){val+=left*i.cout; if(isLow)low++;}
     const pct=has?Math.min(100,Math.round(left/stock0[i.id]*100)):0;
     return `<div class="mp-row"><div class="ph">${ph(i)}</div><div><b>${i.nom}</b><small>${i.lot} · ${eur(i.cout)} / utilisation (${i.usage})</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small></div>
-      <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}).join('')}</div>`;}).join('');
+      <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}).join('')}</div>`;
   $('#rows').innerHTML=html; $('#kVal').textContent=eur(val); $('#kLow').textContent=low; $('#kLow').className=low?'warn':'';
 }
 function go(id){ ['s1','s2'].forEach(s=>{$('#'+s).hidden=(s!==id);}); document.querySelectorAll('.mp-seg button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
@@ -363,6 +367,7 @@ document.addEventListener('click',(e)=>{
     const l=ITEMS.filter(i=>done[i.id]&&i.stock!=null).map(i=>`${i.court} −${done[i.id]}`).join(' · ');
     toast('Enregistré · stock mis à jour : '+l); return; }
 });
+document.addEventListener('input',(e)=>{ if(e.target.id==='q'){ query=e.target.value; renderGrid(); } });
 document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeS(); if((e.key==='Enter'||e.key===' ')&&e.target.dataset&&e.target.dataset.i){ e.preventDefault(); e.target.click(); } });
 packView();
 </script>

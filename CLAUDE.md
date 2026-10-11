@@ -3331,3 +3331,4 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   textes : le dictionnaire `DETAIL` de `materiel-conditionnement.py`. Tailles encore « à saisir » : sac cadeau et microfibre (jamais renseignées dans Emballages),
   boîte allongée (« format bracelet »). Artifact version 3.
 
+- **11/10/2026 (maquette Matériel & conditionnement, v4)** — gérant : « tous les emballages ensemble, pas pour bijoux etc., t'as mis plusieurs catégories ». **UNE SEULE liste, sans catégories** (sac/boîtes/microfibre bijoux mélangés aux cartons, chips, raffia, bois…), filtres réduits à « Tout le matériel » / « Suggérés pour cette commande » + champ de recherche. Écran Matériel = une liste « Tout le matériel · N articles » avec Taille / Matière / Pour / Acheté + barre de stock. Testé 390 / 1280 px : 0 erreur JS, 0 débordement. Toujours une maquette, rien en ligne.
