@@ -3374,10 +3374,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   capturée, puis `git checkout`) : le site n'est pas touché.
 - **Bois (photo → nom du fournisseur, à vérifier à la réception)** : Nanmu (brun-orangé uni) · Buis (jaune pâle) · Santal rouge (rouge) ·
   Palissandre de Birmanie (orange veiné) · Ébène (gris anthracite) · Suanzhi (beige gris). Photo = celle de la variante.
-- **Proposé (à valider)** : **9,90 € le marque-page** (marché : Nature & Découvertes 10,95 € en bois 3 mm, dessins fixes ; aucun prix
-  de marque-page gravé au prénom trouvé), texte d'une face COMPRIS (prénom, mot, date, 24 car., 8 écritures), **texte au verso +3 €**
-  (même logique « 1re gravure comprise, la suivante payante »), lettre suivie (`letter:true`, `weight: 40`, port 4,90 € jusqu'à 100 g).
-  Coût Alibaba ≈ 0,63 € l'unité (0,47 € dès 100, 0,43 € dès 1000) + port d'import (4,66 € si 1 seule pièce ; en lot inconnu).
+- **v2 (11/10, gérant : « si c'est gravé, c'est plus cher… ils peuvent choisir un dessin que je te donnerai, et un texte »)** : le marque-page
+  SEUL est moins cher, la gravure est un SUPPLÉMENT (même règle que partout : gravure jamais incluse). **Proposé (à valider) : 6,90 € seul ·
+  dessin +3 € · texte +3 € (24 car., 8 écritures) · les deux 12,90 €** (même +3 € par élément que les bijoux et le gobelet). Champ « Dessin
+  gravé » = Sans / Avec (+3 €) puis grille numérotée de dessins (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins) ;
+  plus de texte au verso. Port : lettre suivie (`letter:true`, `weight: 40`, 4,90 € jusqu'à 100 g). Marché : Nature & Découvertes 10,95 €
+  (bois 3 mm, dessins fixes). Coût Alibaba ≈ 0,63 € (0,47 € dès 100, 0,43 € dès 1000) + port d'import (4,66 € pour 1 pièce).
+  À la construction : le dessin = `flatExtras` (`dessin: oui`, +3 €) + `stylepicker` numéroté (`styleImages`), le texte = `textKeys` +3 €.
 - **Précommande** : badge « Précommande » + encadré doré sous le titre : « Les marque-pages sont en cours d'approvisionnement. Votre
   commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées. » ; bouton « Précommander » dans la
   maquette. ⛔ AUCUNE date, aucun « sous X semaines », pas de nom de fournisseur. Le mécanisme « Précommander » n'existe PAS dans le site

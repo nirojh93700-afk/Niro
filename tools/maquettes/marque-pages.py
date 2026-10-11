@@ -82,6 +82,11 @@ HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre bois", 1)
+GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin</p><div class="mq-dg">' +
+        "".join(f'<button type="button" class="mq-dtile"><span>{i}</span><small>dessin à venir</small></button>' for i in range(1, 13)) +
+        '</div><p class="mq-dn">Maquette : vos dessins numérotés prendront la place de ces cases.</p></div>')
+MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+3 €\)</option></select></div>)', lambda m: m.group(1) + GRID, MAIN, count=1)
+assert "mq-dessins" in MAIN
 MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
 PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
        'Votre commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées.</span></div>')
@@ -94,7 +99,7 @@ assert len(PRIX) == 6, PRIX
 CSS = r'''
 .mq-banner{background:#2b2620;color:#d9c79a;text-align:center;font-size:.78rem;padding:8px 14px;letter-spacing:.02em}
 .mq-banner b{color:#e2c67e}
-.mq-pre{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:12px 14px;border:1px solid #c9a24b;border-left-width:4px;border-radius:12px;background:#fbf3df;color:#4a3a14;font-size:.88rem;line-height:1.45}.mq-pre b{color:#7c6120;font-size:.95rem}
+.mq-dessins{margin:-4px 0 14px}.mq-dh{font-weight:600;font-size:.9rem;margin:0 0 8px}.mq-dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}.mq-dtile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;aspect-ratio:1;border:1.5px dashed #c9b88a;border-radius:14px;background:#fff;color:#7c6120;cursor:pointer;font:inherit}.mq-dtile span{font-family:Playfair Display,serif;font-size:1.3rem}.mq-dtile small{font-size:.66rem;color:#8a7a52}.mq-dtile.on{border-style:solid;border-color:#a98935;background:#fbf3df}.mq-dn{font-size:.75rem;color:#8a7a52;margin:8px 0 0}.mq-pre{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:12px 14px;border:1px solid #c9a24b;border-left-width:4px;border-radius:12px;background:#fbf3df;color:#4a3a14;font-size:.88rem;line-height:1.45}.mq-pre b{color:#7c6120;font-size:.95rem}
 .mq-photo-ok{display:block;margin-top:8px;font-size:.85rem;color:var(--gold-dark,#a98935);font-weight:600}
 '''
 JS = r'''
@@ -104,9 +109,11 @@ JS = r'''
   var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
   var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
   var qb=document.querySelectorAll('.qty-stepper button');
-  var vin=document.querySelector('input[placeholder="Ex : 2026"]');
-  function maj(){var ex=(vin&&vin.value.trim())?3:0;tot.textContent=eur((P[st.t]+ex)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q}
+  var vin=document.getElementById('pf-texte'),des=document.getElementById('pf-dessin'),grid=document.querySelector('.mq-dessins'),dn=null;
+  function maj(){var ex=((vin&&vin.value.trim())?3:0)+((des&&des.value==='oui')?3:0);tot.textContent=eur((P[st.t]+ex)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q}
   if(vin)vin.addEventListener('input',maj);
+  if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';maj()});
+  [].forEach.call(document.querySelectorAll('.mq-dtile'),function(t){t.addEventListener('click',function(){[].forEach.call(document.querySelectorAll('.mq-dtile'),function(x){x.classList.remove('on')});t.classList.add('on')})});
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
@@ -122,7 +129,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois gravé » (précommande, prix proposé à valider) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois gravé » (précommande, prix proposés à valider) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Marque-page en bois gravé — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
