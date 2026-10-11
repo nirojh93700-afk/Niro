@@ -10,6 +10,11 @@
 
 ## 1. Les changements, du plus récent au plus ancien
 
+### 11/10/2026 — Puzzles en bois à encastrer (les 9) : 29,90 € → 19,90 €
+Demande du gérant : « Mets le puzzle enfants à 19,90 € ». Prénom gravé toujours compris. Le puzzle photo gravé
+(24 à 120 pièces, 29,90 à 37,90 €) n'est PAS concerné. Pour revenir : `price: 29.9` sur les 9 variantes
+`puzzle-<thème>-unite` dans `src/lib/products.js`.
+
 ### 16/09/2026 — Hausse de 3 produits après relevé du marché
 Raison : relevé de marché (`docs/prix-marche.md`). Accord du gérant : « OK applique les
 prix augmentent ». Commits : **`1268fde`** (verre à vin) et **`9c19697`** (flûte +

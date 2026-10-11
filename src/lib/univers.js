@@ -30,7 +30,7 @@ export const PHOTO_GRAVEE = {
 };
 
 // Les 9 puzzles en bois (maquette « Jeux pour enfants », 07/10/2026) : EN VENTE depuis le 09/10/2026
-// (ordre du gérant). 29,90 €, prénom compris. Fiches dans products.js (category "jeux").
+// (ordre du gérant). 19,90 € (gérant, 11/10/2026), prénom compris. Fiches dans products.js (category "jeux").
 export const PUZZLES = [
   ["foret", "Forêt"], ["savane", "Savane"], ["dinosaures", "Dinosaures"], ["animaux-amerique", "Grand Nord"],
   ["australie", "Australie"], ["vehicules-secours", "Véhicules de secours"], ["camping", "Camping"],

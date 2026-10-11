@@ -663,7 +663,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-foret.jpg"],
-    variants: [{ id: "puzzle-foret-unite", title: "Puzzle Forêt", price: 29.9 }],
+    variants: [{ id: "puzzle-foret-unite", title: "Puzzle Forêt", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les animaux de la forêt : 8 pièces à encastrer (renard, lapin, faon, hibou, hérisson, écureuil, ourson, raton laveur), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -690,7 +690,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-savane.jpg"],
-    variants: [{ id: "puzzle-savane-unite", title: "Puzzle Savane", price: 29.9 }],
+    variants: [{ id: "puzzle-savane-unite", title: "Puzzle Savane", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les animaux de la savane : 8 pièces à encastrer (lion, éléphant, girafe, zèbre, rhinocéros, hippopotame, singe, crocodile), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -717,7 +717,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-australie.jpg"],
-    variants: [{ id: "puzzle-australie-unite", title: "Puzzle Australie", price: 29.9 }],
+    variants: [{ id: "puzzle-australie-unite", title: "Puzzle Australie", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les animaux d'Australie : 8 pièces à encastrer (kangourou, koala, émeu, échidné, ornithorynque, cacatoès, phalanger, dingo), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -744,7 +744,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-animaux-amerique.jpg"],
-    variants: [{ id: "puzzle-animaux-amerique-unite", title: "Puzzle Grand Nord", price: 29.9 }],
+    variants: [{ id: "puzzle-animaux-amerique-unite", title: "Puzzle Grand Nord", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les animaux du Grand Nord : 8 pièces à encastrer (bison, aigle, ours, castor, renard, lynx, faon, tamia), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -771,7 +771,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-dinosaures.jpg"],
-    variants: [{ id: "puzzle-dinosaures-unite", title: "Puzzle Dinosaures", price: 29.9 }],
+    variants: [{ id: "puzzle-dinosaures-unite", title: "Puzzle Dinosaures", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les dinosaures : 8 pièces à encastrer (tyrannosaure, tricératops, stégosaure, spinosaure, ptérodactyle, ankylosaure, diplodocus, parasaurolophus), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -798,7 +798,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-vehicules-secours.jpg"],
-    variants: [{ id: "puzzle-vehicules-secours-unite", title: "Puzzle Véhicules de secours", price: 29.9 }],
+    variants: [{ id: "puzzle-vehicules-secours-unite", title: "Puzzle Véhicules de secours", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les véhicules de secours : 7 pièces à encastrer (camion de pompiers, hélicoptère, ambulance, voiture de police, dépanneuse, bateau de sauvetage, 4×4 de secours), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -825,7 +825,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-camping.jpg"],
-    variants: [{ id: "puzzle-camping-unite", title: "Puzzle Camping", price: 29.9 }],
+    variants: [{ id: "puzzle-camping-unite", title: "Puzzle Camping", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>L'aventure en camping : 8 pièces à encastrer (tente, feu de camp, lanterne, sac à dos, boussole, sapin, guimauve, chaussures de marche), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -852,7 +852,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-jardin-enchante.jpg"],
-    variants: [{ id: "puzzle-jardin-enchante-unite", title: "Puzzle Jardin enchanté", price: 29.9 }],
+    variants: [{ id: "puzzle-jardin-enchante-unite", title: "Puzzle Jardin enchanté", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Le jardin enchanté : 8 pièces à encastrer (fée, papillon, lapin, maison champignon, arrosoir, escargot, fleur, coccinelle), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
@@ -879,7 +879,7 @@ export const products = [
       { key: "note-age", type: "note", text: "Conseillé à partir de 2 ans. À utiliser sous la surveillance d'un adulte." },
     ],
     images: ["/produits/puzzle-fruits-legumes.jpg"],
-    variants: [{ id: "puzzle-fruits-legumes-unite", title: "Puzzle Fruits & légumes", price: 29.9 }],
+    variants: [{ id: "puzzle-fruits-legumes-unite", title: "Puzzle Fruits & légumes", price: 19.9 }],
     descriptionHtml: `<p><strong>Un puzzle à encastrer en bois, découpé et gravé dans notre atelier en France.</strong></p>
 <p>Les fruits et légumes : 8 pièces à encastrer (pomme, banane, poire, fraise, brocoli, carotte, citrouille, maïs), chacune avec son encoche pour les petits doigts.</p>
 <h3>Le prénom de votre enfant</h3>
