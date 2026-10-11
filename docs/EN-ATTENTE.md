@@ -249,5 +249,6 @@ En attente de SA décision :
 - 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.
 
 ## 🔖 Marque-pages en bois (précommande) — maquette du 11/10/2026, en attente de son avis
-- Artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa : 6 bois, 9,90 € seul, dessin +2 €, texte +2 €, boîtes cadeau 1/2/4 (+3 / +4 €, coût des boîtes à confirmer), encadré « Précommande · série limitée ».
+- Artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa : 6 couleurs (caramel, blond clair, rouge, cuivré, gris anthracite, gris sable), 9,90 € seul, dessin +2 €, texte +2 €, boîtes cadeau 1/2/4 (+3 / +4 €, coût des boîtes à confirmer), encadré « Précommande · série limitée ».
 - À lui : donner SES dessins (numérotés), valider les prix, la formule de précommande, les noms de bois ; donner les dessins ; dire ce que sont « les boîtes » ; envoyer le modèle suivant.
+- ⚠️ Avant de commander : demander au fournisseur l'essence réelle de chaque couleur et les documents CITES (palissandre / santal rouge = annexe II).

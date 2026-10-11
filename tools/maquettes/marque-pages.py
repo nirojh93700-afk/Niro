@@ -81,7 +81,7 @@ def nettoie(html):
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
-MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre bois", 1)
+MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
 GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin</p><div class="mq-dg">' +
         "".join(f'<button type="button" class="mq-dtile"><span>{i}</span><small>dessin à venir</small></button>' for i in range(1, 13)) +
         '</div><p class="mq-dn">Maquette : vos dessins numérotés prendront la place de ces cases.</p></div>')
@@ -99,7 +99,7 @@ assert cle in MAIN
 MAIN = MAIN.replace(cle, FMT + cle, 1)
 MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
 PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
-       'Votre commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées.</span></div>')
+       'Votre commande est enregistrée dès maintenant, puis gravée à la réception des marque-pages. Quantités limitées.</span></div>')
 MAIN = MAIN.replace('<div class="price-lead">', PRE + '<div class="price-lead">', 1)
 MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)  # (déjà absent avec noEngravePreview)
 PRIX = {t: float(re.sub(r"[^0-9,]", "", p).replace(",", ".")) for t, p in
@@ -115,7 +115,7 @@ CSS = r'''
 JS = r'''
 (function(){
   var P=__PRIX__, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={t:'Nanmu',q:1,n:1,box:0};
+  var st={t:'Caramel',q:1,n:1,box:0};
   var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
   var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
   var qb=document.querySelectorAll('.qty-stepper button');
@@ -123,7 +123,7 @@ JS = r'''
   function maj(){var ex=((vin&&vin.value.trim())?2:0)+((des&&des.value==='oui')?2:0);tot.textContent=eur(((P[st.t]+ex)*st.n+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q}
   var fm=[].slice.call(document.querySelectorAll('.mq-fmt')),bw=document.querySelector('.mq-bois');
   var WOODS=sw.map(function(b){return b.querySelector('.vs-title').textContent.trim()});
-  function bois(){bw.innerHTML='';if(st.n<2){bw.hidden=true;return}bw.hidden=false;for(var i=0;i<st.n;i++){var d=document.createElement('div');d.innerHTML='<label>Marque-page '+(i+1)+' : bois</label><select>'+WOODS.map(function(w){return '<option'+(w===st.t?' selected':'')+'>'+w+'</option>'}).join('')+'</select>';bw.appendChild(d)}}
+  function bois(){bw.innerHTML='';if(st.n<2){bw.hidden=true;return}bw.hidden=false;for(var i=0;i<st.n;i++){var d=document.createElement('div');d.innerHTML='<label>Marque-page '+(i+1)+' : couleur</label><select>'+WOODS.map(function(w){return '<option'+(w===st.t?' selected':'')+'>'+w+'</option>'}).join('')+'</select>';bw.appendChild(d)}}
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;bois();
     if(st.box){montre(th[st.n===4?9:10])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(vin)vin.addEventListener('input',maj);
@@ -144,8 +144,8 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois gravé » (précommande, prix proposés à valider) · <b>rien n\'est en ligne</b></div>'
-TITLE = "<title>Marque-page en bois gravé — Niv Création (maquette)</title>"
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande, prix proposés à valider) · <b>rien n\'est en ligne</b></div>'
+TITLE = "<title>Marque-page en bois personnalisé — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
 full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'

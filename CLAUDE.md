@@ -3372,16 +3372,24 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   générateur `tools/maquettes/marque-pages.py <capture /produit/marque-pages-bois>`, photos `docs/maquettes/assets/marque-pages/`
   (9 : 6 bois + groupe + 2 ambiances, carrées 1100 px). Méthode = celle du puzzle photo (fiche ajoutée à `products.js` EN LOCAL,
   capturée, puis `git checkout`) : le site n'est pas touché.
-- **Bois (photo → nom du fournisseur, à vérifier à la réception)** : Nanmu (brun-orangé uni) · Buis (jaune pâle) · Santal rouge (rouge) ·
-  Palissandre de Birmanie (orange veiné) · Ébène (gris anthracite) · Suanzhi (beige gris). Photo = celle de la variante.
+- **COULEURS, PAS ESSENCES DE BOIS (gérant, 11/10 soir : « c'est pas plutôt choisir la couleur ? regarde sur Internet, il faut que ce soit correct »)** :
+  les noms du fournisseur (Nanmu, Buis, Santal rouge, Palissandre de Birmanie, Ébène, Suanzhi) ne sont PAS fiables : l'« ébène » de la photo est
+  gris (le vrai est noir), le « suanzhi » beige-gris (le vrai est brun-rouge), le « santal rouge » vrai a un veinage noir et rouge sombre → les
+  photos sont probablement teintées. **La fiche vend 6 COULEURS : Caramel (ex « nanmu »), Blond clair (« buis »), Rouge (« santal rouge »),
+  Cuivré (« palissandre »), Gris anthracite (« ébène »), Gris sable (« suanzhi »).** ⛔ Ne JAMAIS écrire un nom d'essence sur la fiche, le
+  panier ou les e-mails tant que le fournisseur n'a pas confirmé par écrit l'essence réelle de chaque teinte. ⚠️ Risque réglementaire à
+  vérifier AVANT de commander : tous les *Dalbergia* (palissandres, « suanzhi » = bois de rose chinois) et le *Pterocarpus santalinus* (santal rouge)
+  sont en annexe II CITES (Dalbergia depuis 2017, santal rouge depuis 1994) ; un permis d'importation CITES peut être exigé à l'entrée dans l'UE
+  (pas de certificat pour vendre ensuite à l'intérieur de l'UE ; sources indirectes, texte officiel UE non lu : règlement (CE) n° 338/97 annexe B).
+  Demander au fournisseur l'essence exacte + s'il fournit les documents CITES. Sinon : choisir des bois sans risque (hêtre, bouleau, noyer, érable).
 - **v3 (11/10 soir, gérant : « je mettrai 9,90 €, marque-page seul, après tu calcules le reste, et je fais des boîtes cadeaux d'un, deux ou
   quatre »)** : prix relevé sur Etsy pour un marque-page en bois gravé au prénom = 9 à 13,50 € (9,00 · 9,80 · koala + prénom 13,50 ·
   lot de 3 à 14,90 · photo 22,90). **Prix de la maquette (à valider)** : **seul 9,90 € · dessin +2 € · texte +2 € (les deux 13,90 €)** ·
   **boîte cadeau bleu nuit +3 € (1 ou 2 marque-pages, boîte longue à 2 élastiques) / +4 € (4 marque-pages)**, sans remise : seul 9,90 ·
   en boîte 12,90 · coffret de 2 = 22,80 · coffret de 4 = 43,60 (gravure en plus, par marque-page). Les prix des boîtes sont des
   ESTIMATIONS : coût réel des boîtes non donné. Photos des boîtes (3 envoyées : 8 emplacements, 4, 2) dans
-  `docs/maquettes/assets/marque-pages/` (boite8 non utilisée : il ne vend pas de coffret de 8). Maquette : choix du format (4 cartes), un
-  « bois » par marque-page du coffret, photo de la boîte dans la galerie. Pas encore géré : gravure DIFFÉRENTE par marque-page d'un coffret
+  `docs/maquettes/assets/marque-pages/` (boite8 non utilisée : il ne vend pas de coffret de 8). Maquette : choix du format (4 cartes), une
+  « couleur » par marque-page du coffret, photo de la boîte dans la galerie. Pas encore géré : gravure DIFFÉRENTE par marque-page d'un coffret
   (réutiliser le bloc « Les N identiques / Chacun différent » des verres au moment de construire).
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie
