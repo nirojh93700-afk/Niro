@@ -87,11 +87,14 @@ GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin
         '</div><p class="mq-dn">Maquette : vos dessins numérotés prendront la place de ces cases.</p></div>')
 MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+2 €\)</option></select></div>)', lambda m: m.group(1) + GRID, MAIN, count=1)
 assert "mq-dessins" in MAIN
-FORMATS = [("Seul", "avec son pompon", 1, 0), ("En boîte cadeau", "1 marque-page, boîte bleu nuit", 1, 3),
-           ("Coffret de 2", "2 marque-pages, boîte bleu nuit", 2, 3), ("Coffret de 4", "4 marque-pages, boîte bleu nuit", 4, 4)]
+OLD_BOX = "Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique."
+assert OLD_BOX in MAIN
+MAIN = MAIN.replace(OLD_BOX, "Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.")
+FORMATS = [("Seul", "avec son pompon", 1, 0), ("En boîte cadeau", "1 marque-page, boîte bleu nuit", 1, 4.9),
+           ("Coffret de 2", "2 marque-pages, boîte bleu nuit", 2, 5.9), ("Coffret de 4", "4 marque-pages, boîte bleu nuit", 4, 7.9)]
 def eur(n): return f"{n:.2f}".replace(".", ",") + " €"
 FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-fmts">' +
-       "".join(f'<button type="button" class="mq-fmt{" on" if i == 0 else ""}" data-n="{n}" data-box="{box}"><b>{t}</b><span>{sub}</span><em>{eur(n * 9.9 + box)}</em></button>'
+       "".join(f'<button type="button" class="mq-fmt{" on" if i == 0 else ""}" data-n="{n}" data-box="{box:g}"><b>{t}</b><span>{sub}</span><em>{eur(n * 9.9 + box)}</em></button>'
                for i, (t, sub, n, box) in enumerate(FORMATS)) +
        '</div><div class="mq-bois" hidden></div></div>')
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'

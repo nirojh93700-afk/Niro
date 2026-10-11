@@ -3382,15 +3382,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   sont en annexe II CITES (Dalbergia depuis 2017, santal rouge depuis 1994) ; un permis d'importation CITES peut être exigé à l'entrée dans l'UE
   (pas de certificat pour vendre ensuite à l'intérieur de l'UE ; sources indirectes, texte officiel UE non lu : règlement (CE) n° 338/97 annexe B).
   Demander au fournisseur l'essence exacte + s'il fournit les documents CITES. Sinon : choisir des bois sans risque (hêtre, bouleau, noyer, érable).
-- **v3 (11/10 soir, gérant : « je mettrai 9,90 €, marque-page seul, après tu calcules le reste, et je fais des boîtes cadeaux d'un, deux ou
-  quatre »)** : prix relevé sur Etsy pour un marque-page en bois gravé au prénom = 9 à 13,50 € (9,00 · 9,80 · koala + prénom 13,50 ·
-  lot de 3 à 14,90 · photo 22,90). **Prix de la maquette (à valider)** : **seul 9,90 € · dessin +2 € · texte +2 € (les deux 13,90 €)** ·
-  **boîte cadeau bleu nuit +3 € (1 ou 2 marque-pages, boîte longue à 2 élastiques) / +4 € (4 marque-pages)**, sans remise : seul 9,90 ·
-  en boîte 12,90 · coffret de 2 = 22,80 · coffret de 4 = 43,60 (gravure en plus, par marque-page). Les prix des boîtes sont des
-  ESTIMATIONS : coût réel des boîtes non donné. Photos des boîtes (3 envoyées : 8 emplacements, 4, 2) dans
-  `docs/maquettes/assets/marque-pages/` (boite8 non utilisée : il ne vend pas de coffret de 8). Maquette : choix du format (4 cartes), une
-  « couleur » par marque-page du coffret, photo de la boîte dans la galerie. Pas encore géré : gravure DIFFÉRENTE par marque-page d'un coffret
-  (réutiliser le bloc « Les N identiques / Chacun différent » des verres au moment de construire).
+- **v5 (11/10 soir, gérant : « les boîtes c'est pas le même prix : 4,90 € pour une boîte seule, tu calcules à partir de là, plus cher pour 2, encore plus pour 4 »)** :
+  **boîte cadeau bleu nuit : 4,90 € (1 marque-page) · 5,90 € (2) · 7,90 € (4)** — le 4,90 € est le prix qu'il donne pour la boîte d'un ; 5,90 et 7,90
+  sont MES calculs (+1 € la 2ᵉ place, +2 € de plus pour la grande boîte), à valider, coût réel des boîtes toujours inconnu. **Totaux sans gravure :
+  seul 9,90 · en boîte 14,80 · coffret de 2 = 25,70 · coffret de 4 = 47,50** ; gravure +2 € dessin / +2 € texte PAR marque-page (coffret de 4 avec
+  les deux = 63,50 €). Trois boîtes distinctes (1, 2, 4) : sa photo de la boîte « 1 » n'existe pas encore (la maquette montre la boîte de 2 à la place) →
+  lui demander la photo. ⚠️ **PORT** : une boîte rigide dépasse 3 cm → règle du site « bijou en boîte = petit colis » (6,90 € à domicile) et non lettre
+  suivie 4,90 € ; le seul marque-page reste en lettre. À trancher à la construction (le port dépend alors du format choisi, pas seulement du produit).
+  Marché relevé sur Etsy : marque-page gravé au prénom 9 à 13,50 € (9,00 · 9,80 · koala + prénom 13,50 · lot de 3 à 14,90 · photo 22,90).
+- (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie
   (`letter:true`, `weight: 40`, 4,90 € jusqu'à 100 g) ; un coffret de 4 reste sous 100 g à vérifier (boîte + 4 pièces).
