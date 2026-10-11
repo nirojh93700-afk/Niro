@@ -3321,4 +3321,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   le doute entre les deux cartons 25×20×15, les stocks et photos des emballages bijoux (à saisir dans Emballages).
 - **À la construction** : section de stock `materiel` (pas de réécriture en bloc : fusion par clé, cf. incident crystalZones), validation une seule
   fois par commande (idempotente), coûts relus par la page Bénéfices (`productCosts.js` mis à jour le 11/10 d'après la facture Metro INV-26-FR-137934).
+- **Mise à jour du 11/10 soir (« j'ai déjà donné des photos »)** : les 4 emballages bijoux (sac, boîte carrée, boîte allongée, microfibre) reprennent
+  leurs VRAIES photos de Gestion → Emballages (`/api/img/<id>`, `settings.packaging`) au lieu d'icônes. Achats Temu / Amazon ajoutés (captures du
+  11/10) : pochettes à cordon lin crème 10×14 lot 50 = 8,78 € · pochettes lin beige 10×14 lot 24 = 6,29 € (lequel acheté ? à confirmer) ·
+  enveloppes à bulles abricot 25×20 lot 30 = 7,74 € · papier de soie plantes dorées 50,8×35,6 « 60 feuilles » = 8,99 € (quantité à confirmer) ·
+  boîtes bois brut 20×10×5 lot 6 = 26,99 € (Amazon, 4,50 la pièce). Total 15 articles de matériel dans la maquette (artifact version 2).
 

@@ -24,28 +24,33 @@ ITEMS = [
   dict(id="carton25", cat="exp", nom="Carton blanc 25,4 × 20,4 × 15,3 cm", lot="Lot de 25 · 27,99 €", cout=1.12, usage="1 carton", stock=25, seuil=8, img="carton-25x20x15"),
   dict(id="boiteb", cat="exp", nom="Boîte postale blanche 30,5 × 22,9 × 10,2 cm", lot="Lot de 20 · 39,99 €", cout=2.00, usage="1 boîte", stock=20, seuil=6, img="boite-blanche-30x23x10"),
   dict(id="boitek", cat="exp", nom="Boîte postale kraft 30,5 × 22,9 × 7,6 cm", lot="Lot de 20 · 32,99 €", cout=1.65, usage="1 boîte", stock=20, seuil=6, img="boite-kraft-30x23x8"),
+  dict(id="bulles", cat="exp", nom="Enveloppes à bulles abricot 25 × 20 cm", lot="Lot de 30 · 7,74 € (Temu)", cout=0.26, usage="1 enveloppe", stock=30, seuil=8, img="bulles-abricot"),
   # Calage
   dict(id="chips", cat="cal", nom="Chips de calage biodégradables, blanc", lot="100 litres · 35,44 €", cout=0.71, usage="1 poignée ≈ 2 L", stock=50, seuil=10, img="chips-calage", sug=1),
   dict(id="raffia", cat="cal", nom="Papier déchiqueté raffia", lot="200 g · 10,99 €", cout=0.55, usage="1 poignée ≈ 10 g", stock=20, seuil=5, img="raffia"),
+  dict(id="soie", cat="cal", nom="Papier de soie motif plantes dorées 50,8 × 35,6 cm", lot="60 feuilles · 8,99 € (Temu, à confirmer)", cout=0.15, usage="1 feuille", stock=60, seuil=15, img="papier-soie"),
   # Étiquettes
   dict(id="fragile", cat="eti", nom="Étiquettes FRAGILE 9 × 5 cm", lot="168 étiquettes · 7,99 €", cout=0.05, usage="1 étiquette", stock=168, seuil=30, img="etiquettes-fragile", sug=1),
   # Emballages bijoux (déjà dans Gestion → Emballages : coûts d'achat saisis)
-  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=None, seuil=None, ico="sac"),
-  dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=None, seuil=None, ico="boite"),
-  dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=None, seuil=None, ico="boite"),
-  dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=None, seuil=None, ico="pochette"),
+  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=None, seuil=None, img="emb-sac"),
+  dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=None, seuil=None, img="emb-boite-carree"),
+  dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=None, seuil=None, img="emb-boite-allongee"),
+  dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=None, seuil=None, img="emb-microfibre"),
+  dict(id="poch50", cat="bij", nom="Pochettes à cordon aspect lin, crème 10 × 14 cm", lot="Lot de 50 · 8,78 € (Temu)", cout=0.18, usage="1 pochette", stock=50, seuil=10, img="pochettes-lin-50"),
+  dict(id="poch24", cat="bij", nom="Pochettes cadeaux lin beige 10 × 14 cm", lot="Lot de 24 · 6,29 € (Temu)", cout=0.26, usage="1 pochette", stock=24, seuil=6, img="pochettes-lin-24"),
   # Bois à graver
   dict(id="a45", cat="bois", nom="Contreplaqué bouleau A4, 5 mm", lot="Lot de 10 · 34,95 €", cout=3.50, usage="1 planche", stock=10, seuil=3, img="panneaux-a4-5mm"),
   dict(id="a410", cat="bois", nom="Contreplaqué bouleau A4, 10 mm", lot="Lot de 10 · 49,95 €", cout=5.00, usage="1 planche", stock=10, seuil=3, img="panneaux-a4-10mm"),
+  dict(id="boisb", cat="bois", nom="Petites boîtes en bois brut 20 × 10 × 5 cm, fermoir métal", lot="Lot de 6 · 26,99 € (Amazon)", cout=4.50, usage="1 boîte", stock=6, seuil=2, img="boites-bois-20x10"),
   dict(id="a53", cat="bois", nom="Contreplaqué tilleul A5, 3 mm", lot="Lot de 12 · 9,99 €", cout=0.83, usage="1 feuille", stock=12, seuil=4, img="panneaux-a5-3mm"),
 ]
 COURT = dict(carton15="Carton 25×20×15", carton25="Carton 25×20×15 (25)", boiteb="Boîte blanche 30×23", boitek="Boîte kraft 30×23",
              chips="Chips de calage", raffia="Raffia", fragile="Étiquette FRAGILE", sac="Sac cadeau", boitec="Boîte carrée",
-             boitea="Boîte allongée", micro="Microfibre", a45="Bouleau A4 5 mm", a410="Bouleau A4 10 mm", a53="Tilleul A5 3 mm")
+             boitea="Boîte allongée", micro="Microfibre", bulles="Enveloppe à bulles", soie="Papier de soie", poch50="Pochette lin (50)", poch24="Pochette lin (24)", boisb="Boîte bois 20×10", a45="Bouleau A4 5 mm", a410="Bouleau A4 10 mm", a53="Tilleul A5 3 mm")
 for it in ITEMS:
     it["court"] = COURT[it["id"]]
     if it.get("img"): it["photo"] = uri(it["img"])
-CATS = [("exp", "Cartons & boîtes"), ("cal", "Calage"), ("eti", "Étiquettes"), ("bij", "Emballages bijoux"), ("bois", "Bois à graver")]
+CATS = [("exp", "Cartons, boîtes & enveloppes"), ("cal", "Calage & papier"), ("eti", "Étiquettes"), ("bij", "Emballages bijoux"), ("bois", "Bois à graver")]
 KITS = [
   dict(id="colis", nom="Colis verre", detail="carton + chips + FRAGILE", items={"carton15": 1, "chips": 1, "fragile": 1}),
   dict(id="packc", nom="Pack collier", detail="sac + boîte + microfibre", items={"sac": 1, "boitec": 1, "micro": 1}),
@@ -148,7 +153,6 @@ body{font-family:var(--font-body);color:var(--ink)}
 .mp-toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1d1811;color:#f1e3b8;padding:12px 18px;border-radius:12px;font-size:.88rem;z-index:99;display:none;max-width:90vw;text-align:center}
 .mp-toast.show{display:block}
 @media (min-width:900px){
- .mp-ph{aspect-ratio:1/1}
  .mp-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:min(1040px,94vw);max-height:90vh;border-radius:22px}
  .mp-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
