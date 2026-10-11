@@ -32,10 +32,10 @@ ITEMS = [
   # Étiquettes
   dict(id="fragile", cat="eti", nom="Étiquettes FRAGILE 9 × 5 cm", lot="168 étiquettes · 7,99 €", cout=0.05, usage="1 étiquette", stock=168, seuil=30, img="etiquettes-fragile", sug=1),
   # Emballages bijoux (déjà dans Gestion → Emballages : coûts d'achat saisis)
-  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=100, seuil=20, img="emb-sac"),
-  dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=100, seuil=20, img="emb-boite-carree"),
-  dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=100, seuil=20, img="emb-boite-allongee"),
-  dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=100, seuil=20, img="emb-microfibre"),
+  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=88, vendu=12, seuil=20, img="emb-sac"),
+  dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=98, vendu=2, seuil=20, img="emb-boite-carree"),
+  dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=99, vendu=1, seuil=20, img="emb-boite-allongee"),
+  dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=99, vendu=1, seuil=20, img="emb-microfibre"),
   dict(id="poch50", cat="bij", nom="Pochettes à cordon aspect lin, crème 10 × 14 cm", lot="Lot de 50 · 8,78 € (Temu)", cout=0.18, usage="1 pochette", stock=50, seuil=10, img="pochettes-lin-50"),
   dict(id="poch24", cat="bij", nom="Pochettes cadeaux lin beige 10 × 14 cm", lot="Lot de 24 · 6,29 € (Temu)", cout=0.26, usage="1 pochette", stock=24, seuil=6, img="pochettes-lin-24"),
   # Bois à graver
@@ -296,6 +296,7 @@ const ITEMS=__ITEMS__, CATS=__CATS__, KITS=__KITS__, ORDER=__ORDER__, ICO=__ICO_
 const $=(s)=>document.querySelector(s);
 const eur=(n)=>n.toFixed(2).replace('.',',')+' €';
 const stock0={}; ITEMS.forEach(i=>stock0[i.id]=i.stock);
+const achete={}; ITEMS.forEach(i=>achete[i.id]=i.stock==null?null:i.stock+(i.vendu||0));
 let stock={...stock0}, sel={}, filt='tous', query='', done=null, view='tout';
 const norm=(t)=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 ITEMS.forEach(i=>{ if(i.sug) sel[i.id]=1; });
@@ -343,9 +344,9 @@ function packView(){
 }
 function rowHtml(i){
   const has=i.stock!=null, left=has?stock[i.id]:null, isLow=has&&left<=i.seuil;
-  const pct=has?Math.min(100,Math.round(left/stock0[i.id]*100)):0;
+  const pct=has?Math.min(100,Math.round(left/achete[i.id]*100)):0;
   return `<div class="mp-row"><div class="ph">${ph(i)}</div><div><b>${i.nom}</b><small>${i.lot} · ${eur(i.cout)} / utilisation (${i.usage})</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small></div>
-      <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}
+      <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${i.vendu?` · ${i.vendu} vendu${i.vendu>1?"s":""} sur ${achete[i.id]}`:''}${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}
 function rows(){
   let val=0, low=0;
   ITEMS.forEach(i=>{ if(i.stock!=null){ val+=stock[i.id]*i.cout; if(stock[i.id]<=i.seuil) low++; } });
