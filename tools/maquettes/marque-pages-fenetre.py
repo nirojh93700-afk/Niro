@@ -81,7 +81,7 @@ MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
 FORMATS = [("Seul", "avec son cordon à perles de verre", 1, 0), ("En boîte cadeau", "1 marque-page, boîte bleu nuit", 1, 4.9),
            ("Coffret de 2", "2 marque-pages, boîte bleu nuit", 2, 5.9), ("Coffret de 4", "4 marque-pages, boîte bleu nuit", 4, 7.9)]
 def eur(n): return f"{n:.2f}".replace(".", ",") + " €"
-BOX_IMG = {1: "boite2", 2: "boite2", 4: "boite4"}
+BOX_IMG = {1: "boite1", 2: "boite2", 4: "boite4"}
 def fmt_card(i, t, sub, n, box):
     img = BOX_IMG[n] if box else None
     pic = f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, img + ".jpg"), 260, 72)}" alt="Boîte cadeau bleu nuit pour {n} marque-page{"s" if n > 1 else ""}"/>' if img else \
@@ -101,7 +101,7 @@ OLD_H = "<h3>Le coffret des quatre couleurs</h3>"
 assert OLD_H in MAIN
 i0 = MAIN.index(OLD_H); i1 = MAIN.index("</p>", i0) + 4
 MAIN = MAIN[:i0] + "<h3>Offrez-le en boîte cadeau</h3><p>Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>" + MAIN[i1:]
-BOXTH = "".join(f'<button class="" aria-label="Voir le visuel {k}"><img src="{uri(os.path.join(ASSETS, n + ".jpg"), 900, 74)}" alt=""/></button>' for k, n in ((6, "boite4"), (7, "boite2")))
+BOXTH = "".join(f'<button class="" aria-label="Voir le visuel {k}"><img src="{uri(os.path.join(ASSETS, n + ".jpg"), 900, 74)}" alt=""/></button>' for k, n in ((6, "boite1"), (7, "boite2"), (8, "boite4")))
 MAIN = MAIN.replace('<div class="gallery-thumbs">', '<div class="gallery-thumbs">', 1)
 j0 = MAIN.index('<div class="gallery-thumbs">'); j1 = MAIN.index("</div>", j0)
 MAIN = MAIN[:j1] + BOXTH + MAIN[j1:]
@@ -164,7 +164,7 @@ JS = r'''
   document.querySelector('.mq-open').addEventListener('click',ouvre);
   document.getElementById('mq-close').addEventListener('click',ferme);document.getElementById('mq-ok').addEventListener('click',ferme);
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
-    if(st.box){montre(th[st.n===4?5:6])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
+    if(st.box){montre(th[{1:5,2:6,4:7}[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(vin)vin.addEventListener('input',maj);
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
     draw();maj()})});

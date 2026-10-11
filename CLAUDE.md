@@ -3460,3 +3460,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Coffret** : celui des photos du fournisseur (plateau bleu-gris au liseré doré, élastiques, boîte kraft à lotus dorés) ≠ les boîtes bleu nuit du modèle 1 → à confirmer
   laquelle il utilisera. Précommande / série limitée identique au modèle 1 (aucune date, aucun fournisseur nommé).
 - **Inconnus** : dimensions, essence réelle des bois (CITES si palissandre / santal), poids, ce que donne le verso. En attente de son avis.
+
+## 📦 BOÎTES DES MARQUE-PAGES : LES ÉLASTIQUES LIENT 1, 2 OU 4 MARQUE-PAGES — CORRECTION DU 11/10/2026 (gérant : « il manque la boîte de quatre »)
+> J'avais mal lu ses 3 photos de boîtes (je n'utilisais que 2 et j'avais écarté la carrée « 8 emplacements »). **Chaque marque-page est tenu par DEUX élastiques (un en haut, un en bas)
+> → le nombre de COLONNES de fentes = le nombre de marque-pages** : boîte LONGUE à 1 colonne = **1 marque-page** · boîte à 2 colonnes (rectangle) = **2 marque-pages** ·
+> boîte CARRÉE à 4 colonnes (4 fentes en haut, 4 en bas) = **4 marque-pages**. Photos : `docs/maquettes/assets/marque-pages/boite1.jpg` (1), `boite2.jpg` (2), `boite4.jpg` (4), idem
+> dans `marque-pages-fenetre/`. Les deux maquettes utilisent maintenant la bonne boîte sur chaque carte de format et dans la galerie (3 photos de boîtes, plus 2 « 8 emplacements » : supprimée).
+> Prix 4,90 / 5,90 / 7,90 € inchangés (à valider). Modèle 2 : la vraie photo de la couleur Sable (marque-page pâle, boîtes kraft à lotus) remplace le recadrage du coffret.

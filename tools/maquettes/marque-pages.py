@@ -55,7 +55,7 @@ def font_face(m):
 css = re.sub(r"@font-face\{[^}]*\}", font_face, css)
 css += ":root{" + ";".join(re.findall(r"\.__variable_[0-9a-f]+\{([^}]*)\}", css)) + "}\n"
 
-PHOTOS = {f"zz-maquette-mp-{k}.jpg": k for k in ["nanmu","buis","santal","palissandre","ebene","suanzhi","groupe","ambiance","eventail","boite4","boite2"]}
+PHOTOS = {f"zz-maquette-mp-{k}.jpg": k for k in ["nanmu","buis","santal","palissandre","ebene","suanzhi","groupe","ambiance","eventail"]}
 def local_src(m):
     chemin = m.group(2)
     nom = chemin.rsplit("/", 1)[-1]
@@ -93,7 +93,7 @@ MAIN = MAIN.replace(OLD_BOX, "Une boîte cadeau bleu nuit pour un, deux ou quatr
 FORMATS = [("Seul", "avec son pompon", 1, 0), ("En boîte cadeau", "1 marque-page, boîte bleu nuit", 1, 4.9),
            ("Coffret de 2", "2 marque-pages, boîte bleu nuit", 2, 5.9), ("Coffret de 4", "4 marque-pages, boîte bleu nuit", 4, 7.9)]
 def eur(n): return f"{n:.2f}".replace(".", ",") + " €"
-BOX_IMG = {0: None, 1: "boite2", 2: "boite2", 4: "boite4"}
+BOX_IMG = {1: "boite1", 2: "boite2", 4: "boite4"}
 def fmt_card(i, t, sub, n, box):
     img = BOX_IMG[n] if box else None
     pic = f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, img + ".jpg"), 260, 72)}" alt="Boîte cadeau bleu nuit pour {n} marque-page{"s" if n > 1 else ""}"/>' if img else \
@@ -109,6 +109,12 @@ cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:60
 assert cle in MAIN
 cle_id = cle.replace('<div style="margin-bottom:6px">', '<div style="margin-bottom:6px" id="mq-grav">')
 MAIN = MAIN.replace(cle, FMT + RECAP + GNOTE + cle_id, 1)
+# Galerie : les 3 boîtes (1, 2 et 4 marque-pages) remplacent les 2 vignettes de boîte de la capture
+j0 = MAIN.index('<div class="gallery-thumbs">'); j1 = MAIN.index("</div>", j0)
+btns = re.findall(r"<button.*?</button>", MAIN[j0:j1], flags=re.S)
+assert len(btns) == 11, len(btns)
+BOXTH = "".join(f'<button class="" aria-label="Voir le visuel {k}"><img src="{uri(os.path.join(ASSETS, n + ".jpg"), 900, 74)}" alt=""/></button>' for k, n in ((10, "boite1"), (11, "boite2"), (12, "boite4")))
+MAIN = MAIN[:j0] + '<div class="gallery-thumbs">' + "".join(btns[:9]) + BOXTH + MAIN[j1:]
 MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
 PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
        'Votre commande est enregistrée dès maintenant, puis gravée à la réception des marque-pages. Quantités limitées.</span></div>')
@@ -169,7 +175,7 @@ JS = r'''
   document.querySelector('.mq-open').addEventListener('click',ouvre);
   document.getElementById('mq-close').addEventListener('click',ferme);document.getElementById('mq-ok').addEventListener('click',ferme);
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
-    if(st.box){montre(th[st.n===4?9:10])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
+    if(st.box){montre(th[{1:9,2:10,4:11}[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(vin)vin.addEventListener('input',maj);
   if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';maj()});
   [].forEach.call(document.querySelectorAll('.mq-dtile'),function(t){t.addEventListener('click',function(){[].forEach.call(document.querySelectorAll('.mq-dtile'),function(x){x.classList.remove('on')});t.classList.add('on')})});
