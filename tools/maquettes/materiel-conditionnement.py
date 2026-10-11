@@ -135,6 +135,8 @@ body{font-family:var(--font-body);color:var(--ink)}
 .mp-filters{flex:0 0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
 .mp-filters input{flex:1 1 150px;min-width:150px;border:1px solid var(--line);border-radius:99px;padding:8px 14px;font:500 .84rem var(--font-body);min-height:40px;background:#fff}
 .mp-filters button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 13px;font:600 .8rem var(--font-body);cursor:pointer;min-height:40px;color:var(--ink-soft)}
+.mp-gh{grid-column:1/-1;margin:8px 0 0;font:700 .76rem var(--font-body);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);border-bottom:1px solid var(--line);padding-bottom:6px}
+.mp-pagev{padding:0 0 12px}
 .mp-filters button.on{background:#1d1811;border-color:#1d1811;color:#f1e3b8}
 .mp-body{overflow-y:auto;padding:0 16px 12px;flex:1}
 .mp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -294,7 +296,7 @@ const ITEMS=__ITEMS__, CATS=__CATS__, KITS=__KITS__, ORDER=__ORDER__, ICO=__ICO_
 const $=(s)=>document.querySelector(s);
 const eur=(n)=>n.toFixed(2).replace('.',',')+' €';
 const stock0={}; ITEMS.forEach(i=>stock0[i.id]=i.stock);
-let stock={...stock0}, sel={}, filt='tous', query='', done=null;
+let stock={...stock0}, sel={}, filt='tous', query='', done=null, view='tout';
 const norm=(t)=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 ITEMS.forEach(i=>{ if(i.sug) sel[i.id]=1; });
 function ph(i){return i.photo?`<img src="${i.photo}" alt="">`:`<span class="ic">${ICO[i.ico]}</span>`;}
@@ -304,14 +306,17 @@ function stockTxt(i){ if(i.stock==null) return '<div class="mp-st">stock : à sa
   const q=sel[i.id]||0, left=stock[i.id]-q, low=left<=i.seuil;
   return `<div class="mp-st${low?' low':''}">stock ${stock[i.id]}${q?` → ${left}`:''}${low?' · à racheter':''}</div>`;}
 function renderKits(){ $('#kits').innerHTML=KITS.map(k=>`<button class="mp-kit" data-k="${k.id}"><b>${k.nom}</b><small>${k.detail}</small></button>`).join(''); }
-function renderFilters(){ const f=[['tous','Tout le matériel'],['sug','Suggérés pour cette commande']]; $('#filters').innerHTML=f.map(([k,n])=>`<button data-f="${k}" class="${filt===k?'on':''}">${n}</button>`).join('')+`<input id="q" type="search" placeholder="Rechercher un matériel…" value="${query}" aria-label="Rechercher un matériel" autocomplete="off">`; }
+function viewBtns(){ return [['tout','Tout ensemble'],['cat','Par catégorie']].map(([k,n])=>`<button data-v="${k}" class="${view===k?'on':''}">${n}</button>`).join(''); }
+function renderFilters(){ const f=[['tous','Tout le matériel'],['sug','Suggérés pour cette commande']]; $('#filters').innerHTML=viewBtns()+f.map(([k,n])=>`<button data-f="${k}" class="${filt===k?'on':''}">${n}</button>`).join('')+`<input id="q" type="search" placeholder="Rechercher un matériel…" value="${query}" aria-label="Rechercher un matériel" autocomplete="off">`; }
+function cardHtml(i){const q=sel[i.id]||0; return `<div class="mp-it${q?' on':''}" data-i="${i.id}" tabindex="0" role="button" aria-pressed="${q?'true':'false'}">
+    ${i.sug?'<span class="mp-sug">Suggéré</span>':''}<span class="mp-chk">✓</span><div class="mp-ph">${ph(i)}</div>
+    <div class="mp-tx"><b>${i.nom}</b><small>${i.lot}</small><small><span class="c">${eur(i.cout)}</span> · ${i.usage}</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small>${stockTxt(i)}</div>
+    <div class="mp-qty"><button data-m="${i.id}" aria-label="Moins">−</button><span>${q}</span><button data-p="${i.id}" aria-label="Plus">+</button></div></div>`;}
 function renderGrid(){
   const list=ITEMS.filter(i=>(filt==='tous'||i.sug)&&(!query||norm(i.nom+' '+i.mat+' '+i.pour+' '+i.lot).includes(norm(query))));
   if(!list.length){ $('#grid').innerHTML='<p class="mp-st" style="grid-column:1/-1;padding:18px 0">Aucun matériel à ce nom.</p>'; totals(); return; }
-  $('#grid').innerHTML=list.map(i=>{const q=sel[i.id]||0; return `<div class="mp-it${q?' on':''}" data-i="${i.id}" tabindex="0" role="button" aria-pressed="${q?'true':'false'}">
-    ${i.sug?'<span class="mp-sug">Suggéré</span>':''}<span class="mp-chk">✓</span><div class="mp-ph">${ph(i)}</div>
-    <div class="mp-tx"><b>${i.nom}</b><small>${i.lot}</small><small><span class="c">${eur(i.cout)}</span> · ${i.usage}</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small>${stockTxt(i)}</div>
-    <div class="mp-qty"><button data-m="${i.id}" aria-label="Moins">−</button><span>${q}</span><button data-p="${i.id}" aria-label="Plus">+</button></div></div>`;}).join('');
+  const grp=view==='cat'?CATS.map(([k,n])=>[n,list.filter(i=>i.cat===k)]).filter(g=>g[1].length):[[null,list]];
+  $('#grid').innerHTML=grp.map(([n,l])=>(n?`<h4 class="mp-gh">${n} · ${l.length}</h4>`:'')+l.map(cardHtml).join('')).join('');
   totals();
 }
 function totals(){
@@ -336,15 +341,17 @@ function packView(){
   $('#packBody').innerHTML=`<div class="mp-used">${used}</div><p class="mp-cost">Matériel <b>${eur(m)}</b> · Gain de la commande <span class="${g>=0?'g':'r'}">${eur(g)}</span></p>`;
   $('#kToday').textContent=eur(m); $('#kGain').textContent=eur(g);
 }
+function rowHtml(i){
+  const has=i.stock!=null, left=has?stock[i.id]:null, isLow=has&&left<=i.seuil;
+  const pct=has?Math.min(100,Math.round(left/stock0[i.id]*100)):0;
+  return `<div class="mp-row"><div class="ph">${ph(i)}</div><div><b>${i.nom}</b><small>${i.lot} · ${eur(i.cout)} / utilisation (${i.usage})</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small></div>
+      <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}
 function rows(){
   let val=0, low=0;
-  const l=ITEMS;
-  const html=`<div class="mp-list"><h3>Tout le matériel · ${l.length} articles</h3>${l.map(i=>{
-    const has=i.stock!=null, left=has?stock[i.id]:null, isLow=has&&left<=i.seuil; if(has){val+=left*i.cout; if(isLow)low++;}
-    const pct=has?Math.min(100,Math.round(left/stock0[i.id]*100)):0;
-    return `<div class="mp-row"><div class="ph">${ph(i)}</div><div><b>${i.nom}</b><small>${i.lot} · ${eur(i.cout)} / utilisation (${i.usage})</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small></div>
-      <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}).join('')}</div>`;
-  $('#rows').innerHTML=html; $('#kVal').textContent=eur(val); $('#kLow').textContent=low; $('#kLow').className=low?'warn':'';
+  ITEMS.forEach(i=>{ if(i.stock!=null){ val+=stock[i.id]*i.cout; if(stock[i.id]<=i.seuil) low++; } });
+  const box=(t,l)=>`<div class="mp-list"><h3>${t} · ${l.length} article${l.length>1?'s':''}</h3>${l.map(rowHtml).join('')}</div>`;
+  const body=view==='cat'?CATS.map(([k,n])=>box(n,ITEMS.filter(i=>i.cat===k))).join(''):box('Tout le matériel',ITEMS);
+  $('#rows').innerHTML=`<div class="mp-filters mp-pagev">${viewBtns()}</div>`+body; $('#kVal').textContent=eur(val); $('#kLow').textContent=low; $('#kLow').className=low?'warn':'';
 }
 function go(id){ ['s1','s2'].forEach(s=>{$('#'+s).hidden=(s!==id);}); document.querySelectorAll('.mp-seg button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
   $('#nav1').classList.toggle('on',id==='s1'); $('#nav2').classList.toggle('on',id==='s2');
@@ -353,6 +360,7 @@ document.addEventListener('click',(e)=>{
   const t=e.target.closest('[data-go]'); if(t){ e.preventDefault(); go(t.dataset.go); return; }
   if(e.target.closest('#openSheet')){ if(done){ sel={...done}; } openS(); return; }
   if(e.target.closest('#closeSheet')||e.target.closest('#cancel')||e.target===$('#scrim')){ closeS(); return; }
+  const v=e.target.closest('[data-v]'); if(v){ view=v.dataset.v; renderFilters(); renderGrid(); if(!$('#s2').hidden) rows(); return; }
   const f=e.target.closest('[data-f]'); if(f){ filt=f.dataset.f; renderFilters(); renderGrid(); return; }
   const k=e.target.closest('[data-k]'); if(k){ const kit=KITS.find(x=>x.id===k.dataset.k); sel={}; Object.assign(sel,kit.items); renderGrid(); return; }
   const p=e.target.closest('[data-p]'); if(p){ e.stopPropagation(); const id=p.dataset.p; if((sel[id]||0)<stock[id]||stock[id]==null) sel[id]=(sel[id]||0)+1; renderGrid(); return; }
