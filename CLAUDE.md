@@ -3416,6 +3416,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   au nombre de marque-pages (1 → 4,90 · 2 → 5,90 · 3 ou 4 → 7,90 · au-delà plusieurs boîtes : 5 = 4+1 → 12,80 · 6 = 4+2 → 13,80 · 8 = 4+4 → 15,80). Avantage
   technique : réutilise le panier actuel (une ligne = un jeu de réglages), pas de nouveau mécanisme « chacun différent » ; la boîte demande une petite logique
   de panier (produit « Boîte cadeau » ajouté selon le nombre de marque-pages). Recommandation faite : E (ou C si on veut tout régler sur la fiche). Attente de son choix.
+- **11/10 soir — IDÉE C CHOISIE (« C ») ET APPLIQUÉE À LA MAQUETTE DE LA FICHE (v8, artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa)** :
+  ordre = ① COULEUR (tout en haut, une rangée de pastilles photo) ② FORMAT (cartes avec photo de la boîte) ③ gravure (texte +2 €, dessin +2 €) pour « Seul » et
+  « En boîte cadeau » (1 marque-page). **Coffret de 2 ou 4** : la gravure de la page disparaît (note explicative) et un récapitulatif en photos + bouton
+  « Composer mon coffret » ouvrent une FENÊTRE (feuille du bas) : pour CHAQUE marque-page, sa couleur (6 pastilles photo), SON texte (+2 €), SON dessin (+2 €) ;
+  l'écriture est la même pour tout le coffret ; total du coffret en direct ; « Valider mon coffret ». Par défaut tous les marque-pages ont la couleur choisie en
+  haut (changer la couleur du haut met à jour ceux qu'il n'a pas touchés) → le coffret est complet sans rien faire, la fenêtre sert à personnaliser. Ça règle
+  le cas « plusieurs couleurs ET plusieurs prénoms » sans nouveau panier. Totaux vérifiés : coffret de 2 rouge « Léa » (+dessin) + gris « Paul » = 31,70 €.
+  À la construction : la fenêtre écrit un réglage PAR marque-page dans le panier (réutiliser le bloc « Les N identiques / Chacun différent » des verres :
+  `perGlass`), la fiche atelier doit lister chaque marque-page (couleur + texte + dessin). En attente de son avis sur la maquette avant tout « applique ».
 - (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie

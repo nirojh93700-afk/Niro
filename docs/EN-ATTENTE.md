@@ -253,3 +253,4 @@ En attente de SA décision :
 - À lui : donner SES dessins (numérotés), valider les prix, la formule de précommande, les noms de bois ; donner les dessins ; dire ce que sont « les boîtes » ; envoyer le modèle suivant.
 - ⚠️ Avant de commander : demander au fournisseur l'essence réelle de chaque couleur et les documents CITES (palissandre / santal rouge = annexe II).
 - Marque-pages : il doit choisir l'idée A, B, C ou D pour les couleurs d'un coffret (page `marque-pages-idees`) ; la couleur reste en haut.
+- Marque-pages : idée C (fenêtre « Composer mon coffret ») choisie et mise dans la maquette de la fiche (v8) ; reste son avis, les dessins, la photo de la boîte d'un, l'essence réelle des bois (CITES) avant commande.
