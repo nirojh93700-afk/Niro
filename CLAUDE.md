@@ -3363,3 +3363,26 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   à la main) · décompte automatique à l'expédition · alerte « à racheter » dans le menu · pochettes lin 50 / 24, papier de soie (60 ?), boîtes bois :
   quantités et usages à confirmer par lui.
 - **11/10/2026 soir — réponses du gérant aux 6 questions du matériel** : pochettes lin = **24** (celles de 50 archivées) · papier de soie = **60** feuilles · boîtes en bois 20×10×5 = **produit à vendre**, pas du matériel (archivées) · raffia = **10 g** par utilisation · **cartons : c'est le lot de 25 (25,4 × 20,4 × 15,3 cm, 1,12 € pièce) qu'il a acheté** (lot de 15 archivé ; il avait d'abord écrit « 15 » par erreur) · tailles du sac / microfibre / boîte allongée : encore « à saisir », il les donnera. Le kit « Colis verre » et le carton « suggéré » utilisent donc `carton25`. `saveMaterielItem` accepte maintenant `sug` (suggéré par défaut).
+
+## 🔖 MAQUETTE « MARQUE-PAGES EN BOIS » — PRÉCOMMANDE, SÉRIE LIMITÉE — 11/10/2026 (en attente de son avis, RIEN en ligne)
+> Gérant : nouveaux produits dont le stock n'est PAS encore arrivé (« je vais commander ») → vendus en précommande / série limitée ;
+> marque-pages en bois, plusieurs modèles donnés un par un, personnalisables avec des dessins qu'il donnera plus tard. 1er modèle =
+> 6 bois avec pompon doré (photos Alibaba).
+- **Artifact** https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa · `docs/maquettes/marque-pages.html` (+ `.fragment.html`, non commité),
+  générateur `tools/maquettes/marque-pages.py <capture /produit/marque-pages-bois>`, photos `docs/maquettes/assets/marque-pages/`
+  (9 : 6 bois + groupe + 2 ambiances, carrées 1100 px). Méthode = celle du puzzle photo (fiche ajoutée à `products.js` EN LOCAL,
+  capturée, puis `git checkout`) : le site n'est pas touché.
+- **Bois (photo → nom du fournisseur, à vérifier à la réception)** : Nanmu (brun-orangé uni) · Buis (jaune pâle) · Santal rouge (rouge) ·
+  Palissandre de Birmanie (orange veiné) · Ébène (gris anthracite) · Suanzhi (beige gris). Photo = celle de la variante.
+- **Proposé (à valider)** : **9,90 € le marque-page** (marché : Nature & Découvertes 10,95 € en bois 3 mm, dessins fixes ; aucun prix
+  de marque-page gravé au prénom trouvé), texte d'une face COMPRIS (prénom, mot, date, 24 car., 8 écritures), **texte au verso +3 €**
+  (même logique « 1re gravure comprise, la suivante payante »), lettre suivie (`letter:true`, `weight: 40`, port 4,90 € jusqu'à 100 g).
+  Coût Alibaba ≈ 0,63 € l'unité (0,47 € dès 100, 0,43 € dès 1000) + port d'import (4,66 € si 1 seule pièce ; en lot inconnu).
+- **Précommande** : badge « Précommande » + encadré doré sous le titre : « Les marque-pages sont en cours d'approvisionnement. Votre
+  commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées. » ; bouton « Précommander » dans la
+  maquette. ⛔ AUCUNE date, aucun « sous X semaines », pas de nom de fournisseur. Le mécanisme « Précommander » n'existe PAS dans le site
+  (bouton = « Ajouter au panier », le stock non suivi = illimité) → à construire si validé (voir docs/AMELIORATIONS.md).
+- **Pas de dimensions** sur la fiche (inconnues : Alibaba dit « norme ») → à mesurer à la réception. **Dessins** : emplacement non prévu
+  tant qu'il ne les a pas donnés (parcours numéroté comme les verres ensuite). Aperçu du texte sur la photo : NON fait (photos en
+  diagonale, bois non vierge « de face »).
+- **Question ouverte** : sa phrase sur « des boîtes » avec les marque-pages (boîte cadeau ? coffret ?) était illisible.

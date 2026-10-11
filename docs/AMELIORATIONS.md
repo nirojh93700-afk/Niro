@@ -143,3 +143,10 @@
 - Concerne les ventes ENTRE PROFESSIONNELS (devis/factures aux restaurants et bars, aux entreprises) ; les ventes aux particuliers
   relèvent de l'e-reporting. Source de doute : une seule source annonce un changement de la mention de franchise de TVA (art. L.223-3 CIBS).
 - Piste : adapter Gestion → Devis & factures (format Factur-X / plateforme agréée) et « Achats & factures » (factures fournisseurs reçues).
+
+## 💡 Précommande / série limitée sur une fiche produit (11/10/2026) — à proposer, rien construit
+- Marque-pages en bois (stock pas encore arrivé) : il faut pouvoir vendre AVANT réception. Aujourd'hui rien n'existe : pas de bouton
+  « Précommander », pas de compteur de places. Idée : champ produit `precommande: { message, limite }` → badge « Précommande »,
+  encadré explicatif sous le titre, bouton « Précommander », mention dans le panier, l'e-mail de confirmation et la fiche atelier
+  (« à graver à réception du stock »), compteur « N places restantes » si `limite` (stock suivi), coupe-circuit à zéro.
+  Réutilisable pour tout futur arrivage (cadeaux de Noël, nouveaux modèles). ⚠️ Règle : aucune date promise.

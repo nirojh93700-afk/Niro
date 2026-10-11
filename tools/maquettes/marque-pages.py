@@ -1,0 +1,134 @@
+#!/usr/bin/env python3
+"""Maquette « Marque-page en bois gravé » — précommande, série limitée — 11/10/2026. RIEN n'est en ligne.
+
+Gérant : nouveaux produits en PRÉCOMMANDE (stock pas encore arrivé, à commander), marque-pages en bois à pompon doré,
+6 bois, personnalisables (dessins à venir, un modèle à la fois ; celui-ci = 6 bois + pompon doré).
+Méthode (comme puzzle-photo.py) : fiche ajoutée SUR LA MACHINE SEULEMENT (products.js / productInfo.js / productDates.js,
+photos `public/produits/zz-maquette-mp-*.jpg`), site construit + `next start`, capture de /produit/marque-pages-bois,
+puis tout remis à l'identique (git checkout + suppression des zz-*). Photos source : docs/maquettes/assets/marque-pages/.
+
+Usage : python3.13 tools/maquettes/marque-pages.py <capture /produit/marque-pages-bois.html>
+Sortie : docs/maquettes/marque-pages.html (+ .fragment.html, jamais commité).
+"""
+import base64, io, json, os, re, sys, urllib.parse
+from PIL import Image
+
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+OUT = os.path.join(ROOT, "docs", "maquettes")
+PUB = os.path.join(ROOT, "public")
+ASSETS = os.path.join(OUT, "assets", "marque-pages")
+SRC = sys.argv[1]
+
+
+def uri(path, w=900, q=78):
+    im = Image.open(path).convert("RGB")
+    if im.width > w:
+        im = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
+    b = io.BytesIO(); im.save(b, "JPEG", quality=q, optimize=True, progressive=True)
+    return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
+
+
+def raw_uri(path):
+    ext = path.rsplit(".", 1)[-1].lower()
+    mime = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "webp": "image/webp", "svg": "image/svg+xml",
+            "woff2": "font/woff2"}.get(ext, "application/octet-stream")
+    return f"data:{mime};base64," + base64.b64encode(open(path, "rb").read()).decode()
+
+
+src = open(SRC, encoding="utf-8").read()
+src = re.sub(r"<script\b.*?</script>", "", src, flags=re.S)
+src = re.sub(r'<link[^>]+rel="(?:preload|modulepreload|preconnect|dns-prefetch)"[^>]*>', "", src)
+body_start = src.find(">", src.find("<body")) + 1
+i_main, j_main = src.find("<main"), src.find("</main>") + len("</main>")
+HEADER, FOOTER, MAIN = src[body_start:i_main], src[j_main:src.rfind("</body>")], src[i_main:j_main]
+HTML_CLASS = re.search(r'<html[^>]*class="([^"]*)"', src).group(1)
+
+css = ""
+for href in re.findall(r'<link rel="stylesheet" href="([^"]+)"', src):
+    css += open(os.path.join(ROOT, ".next", href.replace("/_next/", "", 1)), encoding="utf-8").read() + "\n"
+def font_face(m):
+    bloc = m.group(0)
+    garder = "unicode-range:u+00??" in bloc.lower() or not re.search(r"unicode-range", bloc)
+    def url(u):
+        return f"url({raw_uri(os.path.join(ROOT, '.next', 'static', 'media', u.group(1)))})" if garder else "url(data:font/woff2;base64,)"
+    return re.sub(r"url\(/_next/static/media/([\w.-]+)\)", url, bloc)
+css = re.sub(r"@font-face\{[^}]*\}", font_face, css)
+css += ":root{" + ";".join(re.findall(r"\.__variable_[0-9a-f]+\{([^}]*)\}", css)) + "}\n"
+
+PHOTOS = {f"zz-maquette-mp-{k}.jpg": k for k in ["nanmu","buis","santal","palissandre","ebene","suanzhi","groupe","ambiance","eventail"]}
+def local_src(m):
+    chemin = m.group(2)
+    nom = chemin.rsplit("/", 1)[-1]
+    if nom in PHOTOS:
+        return f'{m.group(1)}="{uri(os.path.join(ASSETS, PHOTOS[nom] + ".jpg"))}"'
+    p = os.path.join(PUB, chemin.lstrip("/"))
+    if not os.path.exists(p):
+        return m.group(0)
+    if p.lower().endswith((".jpg", ".jpeg", ".png")) and os.path.getsize(p) > 120_000:
+        return f'{m.group(1)}="{uri(p)}"'
+    return f'{m.group(1)}="{raw_uri(p)}"'
+def next_image(m):
+    q = urllib.parse.parse_qs(urllib.parse.urlparse(m.group(1).replace("&amp;", "&")).query)
+    return f'src="{q.get("url", [""])[0]}"'
+def nettoie(html):
+    html = re.sub(r'<button[^>]*>💬 Une question \?</button>', "", html)
+    html = re.sub(r'<a[^>]*href="/boutique">🛍️ La boutique</a>', "", html)
+    html = re.sub(r'src="(/_next/image\?[^"]+)"', next_image, html)
+    html = re.sub(r'\s(?:srcset|srcSet)="[^"]*"', "", html)
+    html = re.sub(r'<div class="cf-shot"><img src="https://cdn\.shopify\.com[^"]*"[^>]*/></div>', "", html)
+    html = re.sub(r'(src)="(/[^"]+)"', local_src, html)
+    return re.sub(r'href="/[^"]*"', 'href="#"', html)
+HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
+# La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
+MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
+MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre bois", 1)
+MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
+PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
+       'Votre commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées.</span></div>')
+MAIN = MAIN.replace('<div class="price-lead">', PRE + '<div class="price-lead">', 1)
+MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)  # (déjà absent avec noEngravePreview)
+PRIX = {t: float(re.sub(r"[^0-9,]", "", p).replace(",", ".")) for t, p in
+        re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', MAIN)}
+assert len(PRIX) == 6, PRIX
+
+CSS = r'''
+.mq-banner{background:#2b2620;color:#d9c79a;text-align:center;font-size:.78rem;padding:8px 14px;letter-spacing:.02em}
+.mq-banner b{color:#e2c67e}
+.mq-pre{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:12px 14px;border:1px solid #c9a24b;border-left-width:4px;border-radius:12px;background:#fbf3df;color:#4a3a14;font-size:.88rem;line-height:1.45}.mq-pre b{color:#7c6120;font-size:.95rem}
+.mq-photo-ok{display:block;margin-top:8px;font-size:.85rem;color:var(--gold-dark,#a98935);font-weight:600}
+'''
+JS = r'''
+(function(){
+  var P=__PRIX__, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
+  var st={t:'Nanmu',q:1,v:0};
+  var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
+  var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
+  var qb=document.querySelectorAll('.qty-stepper button');
+  var vin=document.querySelector('input[placeholder="Ex : 2026"]');
+  function maj(){var ex=(vin&&vin.value.trim())?3:0;tot.textContent=eur((P[st.t]+ex)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q}
+  if(vin)vin.addEventListener('input',maj);
+  sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);maj()})});
+  qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
+  var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
+  function montre(b){th.forEach(function(x){x.classList.remove('active')});b.classList.add('active');main.removeAttribute('srcset');main.src=b.querySelector('img').src}
+  th.forEach(function(b){b.addEventListener('click',function(){montre(b)})});
+  if(th[0])th[0].classList.add('active');
+  var nx=document.querySelector('.gallery-arrow-next'),pv=document.querySelector('.gallery-arrow-prev');
+  function idx(){return Math.max(0,th.indexOf(document.querySelector('.gallery-thumbs button.active')))}
+  if(nx)nx.addEventListener('click',function(){montre(th[(idx()+1)%th.length])});
+  if(pv)pv.addEventListener('click',function(){montre(th[(idx()-1+th.length)%th.length])});
+  [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
+  maj();
+})();
+'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False))
+
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois gravé » (précommande, prix proposé à valider) · <b>rien n\'est en ligne</b></div>'
+TITLE = "<title>Marque-page en bois gravé — Niv Création (maquette)</title>"
+STYLE = f"<style>{css}\n{CSS}</style>"
+BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
+full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        f"{TITLE}{STYLE}</head><body>{BODY}<script>{JS}</script></body></html>")
+frag = f'<meta charset="utf-8">{TITLE}{STYLE}{BODY}<script>{JS}</script>'
+open(os.path.join(OUT, "marque-pages.html"), "w", encoding="utf-8").write(full)
+open(os.path.join(OUT, "marque-pages.fragment.html"), "w", encoding="utf-8").write(frag)
+print("ok", len(full) // 1024, "Ko", PRIX)

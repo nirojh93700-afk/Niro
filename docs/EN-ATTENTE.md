@@ -247,3 +247,7 @@ En attente de SA décision :
 - ✅ Page Gestion → Matériel & emballages + bloc « Conditionnement » dans la file de production + matériel déduit dans Bénéfices.
 - ❓ À confirmer par le gérant : pochettes lin (50 ou 24 achetées ?), papier de soie (60 feuilles ?), boîtes en bois (emballage ou produit ?), portions de calage (chips ≈ 2 L, raffia ≈ 10 g), carton 25×20×15 réellement acheté (lot de 15 ou de 25), tailles du sac / de la microfibre / de la boîte allongée, stocks réels de départ.
 - 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.
+
+## 🔖 Marque-pages en bois (précommande) — maquette du 11/10/2026, en attente de son avis
+- Artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa : 6 bois, 9,90 €, texte compris, verso +3 €, encadré « Précommande · série limitée ».
+- À lui : valider le prix, la formule de précommande, les noms de bois ; donner les dessins ; dire ce que sont « les boîtes » ; envoyer le modèle suivant.
