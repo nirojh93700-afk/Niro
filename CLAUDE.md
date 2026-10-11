@@ -3402,6 +3402,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   qui s'applique à tous les marque-pages du coffret) ③ si coffret : case « Une couleur différente pour chaque marque-page » → N cases (1 par marque-page)
   qui se remplissent en touchant les couleurs de la rangée du dessus (toucher une case la vide) ; bouton « Précommander » grisé tant qu'il manque une
   couleur. La carte « Seul » change de photo avec la couleur choisie (et la grande photo de la galerie aussi). Plus aucune rangée de couleurs répétée.
+- **11/10 soir — v7 REFUSÉE (« c'est pas bon du tout, les mots couleurs c'est mal placé, trop en bas, c'était mieux avant »)** : la couleur doit rester
+  TOUT EN HAUT, avant le format (ordre des v1 à v5). Il demande PLUSIEURS IDÉES à choisir. Page de comparaison `docs/maquettes/marque-pages-idees.html`
+  (générateur `tools/maquettes/marque-pages-idees.py`, réutilise le CSS de `marque-pages.html`, `.fragment.html` non commité) : **A** une couleur pour tout le
+  coffret (pour mélanger : 2ᵉ coffret) · **B** + / − sur chaque couleur, jusqu'à 4, la boîte s'adapte (1 → 4,90 · 2 → 5,90 · 3 ou 4 → 7,90) ·
+  **C** fenêtre « Composer mon coffret » (cases + une rangée de couleurs, récap en photos sur la page) · **D** assortiment composé par l'atelier ou une
+  seule couleur. En attente de SON choix ; la maquette de la fiche (`marque-pages.html`, v7) n'est PAS modifiée tant qu'il n'a pas choisi
+  (il faudra alors remettre la couleur avant le format).
 - (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie
