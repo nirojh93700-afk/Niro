@@ -3409,6 +3409,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   **C** fenêtre « Composer mon coffret » (cases + une rangée de couleurs, récap en photos sur la page) · **D** assortiment composé par l'atelier ou une
   seule couleur. En attente de SON choix ; la maquette de la fiche (`marque-pages.html`, v7) n'est PAS modifiée tant qu'il n'a pas choisi
   (il faudra alors remettre la couleur avant le format).
+- **11/10 soir — A et D REFUSÉES (« si le client veut plusieurs couleurs différentes, comment il fait ? réfléchis »)** : l'angle mort = un client qui prend
+  plusieurs couleurs veut aussi, souvent, un TEXTE DIFFÉRENT sur chacune (prénoms) ; A et D (une couleur pour tout le coffret) et même B (+/−, gravure unique)
+  ne le permettent pas. **Idée E ajoutée à la page de comparaison (même artifact)** : UN marque-page à la fois (couleur en haut, puis texte +2 € / dessin +2 €,
+  « Ajouter au panier »), chaque marque-page est une ligne du panier avec SA couleur et SA gravure ; la BOÎTE CADEAU est proposée dans le panier et s'adapte
+  au nombre de marque-pages (1 → 4,90 · 2 → 5,90 · 3 ou 4 → 7,90 · au-delà plusieurs boîtes : 5 = 4+1 → 12,80 · 6 = 4+2 → 13,80 · 8 = 4+4 → 15,80). Avantage
+  technique : réutilise le panier actuel (une ligne = un jeu de réglages), pas de nouveau mécanisme « chacun différent » ; la boîte demande une petite logique
+  de panier (produit « Boîte cadeau » ajouté selon le nombre de marque-pages). Recommandation faite : E (ou C si on veut tout régler sur la fiche). Attente de son choix.
 - (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie

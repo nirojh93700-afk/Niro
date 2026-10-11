@@ -82,6 +82,21 @@ pD = panel("D", "Idée D · L'assortiment choisi par l'atelier",
            '<button type="button" class="mx-opt" data-m="as"><b>Assortiment de l\'atelier</b><span>Une belle association de couleurs, composée par nous.</span><div class="mx-strip">' + strip + '</div></button></div></div>'
            '<div class="mx-total"><span>Total sans gravure</span><b id="d-tot">9,90 €</b></div>')
 
+
+# ---- E : un marque-page à la fois, la boîte se propose au panier
+pE = panel("E", "Idée E · Un marque-page à la fois, la boîte se propose au panier",
+           "Chaque marque-page est choisi et gravé tout seul (sa couleur, son texte, son dessin) puis ajouté au panier ; pour une autre couleur ou un autre texte, on en ajoute un autre. La boîte cadeau se propose dans le panier, et s'adapte au nombre de marque-pages (1, 2, 3 ou 4).",
+           '<p class="mx-step">1 · La fiche : un marque-page</p>'
+           '<div class="field"><label>Choisissez votre couleur</label>' + swatches() + '</div>'
+           '<div class="field"><label>Texte gravé (+2 €) <em class="mx-cnt">facultatif</em></label><input type="text" id="e-txt" maxlength="24" placeholder="Ex : Pour Mamie"/></div>'
+           '<div class="field"><label>Dessin gravé (+2 €) <em class="mx-cnt">facultatif</em></label><select id="e-des"><option value="non">Sans dessin</option><option value="oui">Avec un dessin (+2 €)</option></select></div>'
+           '<div class="mx-total"><span>Ce marque-page</span><b id="e-one">9,90 €</b></div>'
+           '<button type="button" class="mx-btn full" id="e-add" style="margin-top:10px">Ajouter au panier</button><p class="mx-note" id="e-msg"></p>'
+           '<p class="mx-step">2 · Le panier</p><div class="mx-cart" id="e-cart"></div>'
+           '<div class="mx-boxs" id="e-boxs" hidden><img id="e-bimg" src="' + BOX2 + '" alt=""/><div><b>Offrir en boîte cadeau</b><span id="e-btxt"></span>'
+           '<button type="button" class="mx-btn" id="e-badd">Ajouter la boîte</button></div></div>'
+           '<div class="mx-total"><span id="e-tl">Panier</span><b id="e-tot">0,00 €</b></div>')
+
 CSS2 = '''
 .mx-wrap{max-width:1100px;margin:0 auto;padding:18px 16px 60px;font-family:Inter,system-ui,sans-serif;color:#2b2620}
 .mx-banner{background:#2b2620;color:#d9c79a;text-align:center;font-size:.8rem;padding:9px 14px}.mx-banner b{color:#e2c67e}
@@ -106,6 +121,12 @@ CSS2 = '''
 .mx-pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:6px 0 14px}.mx-pk{border:1.5px solid #e4d9bd;border-radius:12px;background:#fff;padding:5px;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}.mx-pk img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}.mx-pk span{font-size:.72rem;color:#5a4d2c}
 .mx-two{display:grid;gap:8px;margin-top:10px}.mx-opt{text-align:left;border:1.5px solid #e4d9bd;border-radius:14px;background:#fff;padding:12px;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:3px}.mx-opt b{font-size:.95rem}.mx-opt span{font-size:.8rem;color:#7a6c48}.mx-opt.on{border-color:#a98935;background:#fbf3df;box-shadow:0 0 0 1px #a98935 inset}.mx-opt .mx-strip{margin-top:8px}
 .mx-p[hidden]{display:none}
+.mx-step{font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#7c6120;margin:4px 0 10px}
+.mx-phone input[type=text],.mx-phone select{width:100%;box-sizing:border-box;min-width:0}
+.mx-cart{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}.mx-line{display:grid;grid-template-columns:52px minmax(0,1fr) auto 28px;gap:10px;align-items:center;border:1px solid #e4d9bd;border-radius:12px;background:#fff;padding:8px}
+.mx-line img{width:52px;height:52px;object-fit:cover;border-radius:8px}.mx-line b{display:block;font-size:.88rem}.mx-line small{display:block;color:#7a6c48;font-size:.75rem;line-height:1.25;overflow-wrap:anywhere}.mx-line em{font-style:normal;font-weight:700;color:#7c6120;font-size:.88rem;white-space:nowrap}
+.mx-line button{border:0;background:#efe6d2;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem}.mx-empty{border:1.5px dashed #c9b88a;border-radius:12px;padding:14px;text-align:center;color:#8a7a52;font-size:.85rem}
+.mx-boxs{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;border:1px solid #e0cf9f;background:#fbf3df;border-radius:14px;padding:10px;margin-bottom:10px}.mx-boxs[hidden]{display:none}.mx-boxs img{width:96px;aspect-ratio:1;object-fit:cover;border-radius:10px}.mx-boxs div{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.mx-boxs span{font-size:.8rem;color:#5a4d2c;line-height:1.35}.mx-boxs .mx-btn{padding:9px 14px;font-size:.85rem;margin-top:2px}
 '''
 JS = r'''
 (function(){
@@ -152,15 +173,33 @@ JS = r'''
   (function(){var r=$('.mx-p[data-p=D]'),st=radio(r),tot=$('#d-tot'),two=$('#d-two'),opts=$$('.mx-opt',r);
     function maj(){seulImg(r,st);tot.textContent=eur(9.9*st.n+st.box);two.hidden=st.n<2}
     st.onc=maj;formats(r,st,maj);opts.forEach(function(o){o.addEventListener('click',function(){opts.forEach(function(x){x.classList.remove('on')});o.classList.add('on')})});maj()})();
+
+  // E
+  (function(){var r=$('.mx-p[data-p=E]'),st=radio(r),txt=$('#e-txt'),des=$('#e-des'),one=$('#e-one'),add=$('#e-add'),msg=$('#e-msg'),cart=$('#e-cart'),boxs=$('#e-boxs'),btxt=$('#e-btxt'),badd=$('#e-badd'),bimg=$('#e-bimg'),tot=$('#e-tot'),tl=$('#e-tl');
+    var lines=[{c:0,t:'Léa',d:false},{c:2,t:'Paul',d:true}],withBox=false;
+    function pu(l){return 9.9+(l.t?2:0)+(l.d?2:0)}
+    function boxes(n){var a=[];while(n>=4){a.push(4);n-=4}if(n>0)a.push(n);return a}
+    function bp(k){return k<=1?4.9:k===2?5.9:7.9}
+    function cur(){return {c:st.c,t:txt.value.trim(),d:des.value==='oui'}}
+    function maj(){var l=cur();one.textContent=eur(pu(l))}
+    function draw(){cart.innerHTML='';if(!lines.length){cart.innerHTML='<div class="mx-empty">Votre panier est vide : ajoutez un marque-page.</div>'}
+      lines.forEach(function(l,i){var d=document.createElement('div');d.className='mx-line';d.innerHTML='<img src="'+IMGS[l.c]+'" alt=""/><div><b>Marque-page · '+NAMES[l.c]+'</b><small>'+(l.t?'Texte : '+l.t:'Sans texte')+(l.d?' · avec un dessin':'')+'</small></div><em>'+eur(pu(l))+'</em><button type="button" aria-label="Retirer">×</button>';d.querySelector('button').addEventListener('click',function(){lines.splice(i,1);draw()});cart.appendChild(d)});
+      var n=lines.length,bs=boxes(n),cost=bs.reduce(function(a,k){return a+bp(k)},0);
+      boxs.hidden=n===0;if(n){bimg.src=n>2?'__B4__':'__B2__';
+        btxt.textContent=(bs.length>1?(bs.length+' boîtes ('+bs.join(' + ')+' marque-pages)'):('Boîte pour '+n+' marque-page'+(n>1?'s':'')))+' : '+eur(cost)+(withBox?' — ajoutée au panier ✓':'');badd.textContent=withBox?'Retirer la boîte':'Ajouter la boîte'}
+      var sum=lines.reduce(function(a,l){return a+pu(l)},0)+(withBox&&n?cost:0);tot.textContent=eur(sum);tl.textContent=n?('Panier : '+n+' marque-page'+(n>1?'s':'')+(withBox?' + boîte cadeau':'')):'Panier'}
+    st.onc=maj;txt.addEventListener('input',maj);des.addEventListener('change',maj);
+    add.addEventListener('click',function(){if(lines.length>=8)return;lines.push(cur());msg.textContent='Ajouté au panier ✓ — choisissez une autre couleur ou un autre texte pour en ajouter un autre.';txt.value='';des.value='non';maj();draw()});
+    badd.addEventListener('click',function(){withBox=!withBox;draw()});maj();draw()})();
 })();
 '''.replace("__NAMES__", str([n for n, _ in COULEURS]).replace("'", '"')).replace("__IMGS__", "[" + ",".join('"' + IMG[n] + '"' for n, _ in COULEURS) + "]").replace("__B4__", BOX4).replace("__B2__", BOX2)
 
 TABS = "".join(f'<button type="button" class="mx-tab" data-p="{k}">{t}</button>' for k, t in
-               [("A", "A · Même couleur"), ("B", "B · + et −"), ("C", "C · Fenêtre"), ("D", "D · Assortiment")])
-BODY = ('<div class="mx-wrap"><div class="mx-banner">MAQUETTE — 4 idées pour choisir les couleurs d\'un coffret · <b>rien n\'est en ligne</b></div>'
+               [("A", "A · Même couleur"), ("B", "B · + et −"), ("C", "C · Fenêtre"), ("D", "D · Assortiment"), ("E", "E · Un à la fois")])
+BODY = ('<div class="mx-wrap"><div class="mx-banner">MAQUETTE — 5 idées pour choisir les couleurs d\'un coffret · <b>rien n\'est en ligne</b></div>'
         '<h1>Marque-pages : choisir les couleurs d\'un coffret</h1>'
-        '<p class="mx-sub">La couleur reste tout en haut, comme avant, puis le format. Quatre façons de gérer les coffrets de 2 ou 4 marque-pages : touchez les onglets, jouez avec chaque idée.</p>'
-        f'<div class="mx-tabs">{TABS}</div>{pA}{pB}{pC}{pD}</div>')
+        '<p class="mx-sub">La couleur reste tout en haut, comme avant, puis le format. Cinq façons de gérer plusieurs marque-pages, avec ou sans boîte : touchez les onglets, jouez avec chaque idée. Question clé : que se passe-t-il quand le client veut plusieurs couleurs différentes, et peut-être un texte différent sur chacune ?</p>'
+        f'<div class="mx-tabs">{TABS}</div>{pA}{pB}{pC}{pD}{pE}</div>')
 TITLE = "<title>Marque-pages, idées de choix (maquette)</title>"
 FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;700&display=swap">'
 frag = f'<meta charset="utf-8">{TITLE}{FONTS}<style>{CSS}\n{CSS2}</style>{BODY}<script>{JS}</script>'
