@@ -3396,6 +3396,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   marque-page + le nom de la couleur), plus de menu déroulant. ⚠️ Correspondance boîte ↔ nombre de marque-pages = mon hypothèse (1 et 2 → même
   photo de boîte longue) : à confirmer, car il dit que les boîtes d'un et de deux n'ont pas le même prix. Règle générale : **un choix visuel
   (couleur, boîte, modèle) s'affiche toujours avec sa photo, jamais en texte seul ni en menu déroulant.**
+- **v7 (11/10 soir, gérant : « quand le client choisit une couleur, ça doit changer… 4 rangées de couleurs, ça fait trop chargé, cherche une autre idée »)** :
+  recherche faite (modèle « bundle builder » : Glossier, apps Shopify Kefi / BOGOS : une couleur par produit OU une seule couleur pour tout le lot ;
+  pastilles photo plutôt que menus). **Retenu** : l'ordre devient ① FORMAT (cartes avec photo de la boîte) ② COULEUR (UNE seule rangée de pastilles photo,
+  qui s'applique à tous les marque-pages du coffret) ③ si coffret : case « Une couleur différente pour chaque marque-page » → N cases (1 par marque-page)
+  qui se remplissent en touchant les couleurs de la rangée du dessus (toucher une case la vide) ; bouton « Précommander » grisé tant qu'il manque une
+  couleur. La carte « Seul » change de photo avec la couleur choisie (et la grande photo de la galerie aussi). Plus aucune rangée de couleurs répétée.
 - (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
 - (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
   Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie

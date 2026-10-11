@@ -101,11 +101,15 @@ def fmt_card(i, t, sub, n, box):
     return (f'<button type="button" class="mq-fmt{" on" if i == 0 else ""}" data-n="{n}" data-box="{box:g}">{pic}'
             f'<span class="mq-ft"><b>{t}</b><span>{sub}</span><em>{eur(n * 9.9 + box)}</em></span></button>')
 FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-fmts">' +
-       "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) +
-       '</div><div class="mq-bois" hidden></div></div>')
+       "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
+BUILDER = ('<div class="mq-mixrow" hidden><label class="mq-mixl"><input type="checkbox" id="mq-mix"/> <span>Une couleur différente pour chaque marque-page</span></label></div>'
+           '<div class="mq-slots" hidden></div><p class="mq-hint" hidden></p>')
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'
 assert cle in MAIN
-MAIN = MAIN.replace(cle, FMT + cle, 1)
+COL = '<div class="field"><label>Choisissez votre couleur'
+assert COL in MAIN
+MAIN = MAIN.replace(COL, FMT + COL, 1)
+MAIN = MAIN.replace(cle, BUILDER + cle, 1)
 MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
 PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
        'Votre commande est enregistrée dès maintenant, puis gravée à la réception des marque-pages. Quantités limitées.</span></div>')
@@ -118,7 +122,7 @@ assert len(PRIX) == 6, PRIX
 CSS = r'''
 .mq-banner{background:#2b2620;color:#d9c79a;text-align:center;font-size:.78rem;padding:8px 14px;letter-spacing:.02em}
 .mq-banner b{color:#e2c67e}
-.mq-fmts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.mq-fmt{display:flex;flex-direction:column;align-items:stretch;gap:8px;text-align:left;padding:8px 8px 10px;border:1.5px solid #e4d9bd;border-radius:14px;background:#fff;color:#2b2620;cursor:pointer;font:inherit}.mq-fimg{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;background:#efe6d2}.mq-ft{display:flex;flex-direction:column;gap:2px;padding:0 4px}.mq-fmt b{font-size:.92rem}.mq-fmt span{font-size:.74rem;color:#7a6c48;line-height:1.3}.mq-fmt em{font-style:normal;font-weight:700;color:#7c6120;margin-top:2px}.mq-fmt.on{border-color:#a98935;background:#fbf3df;box-shadow:0 0 0 1px #a98935 inset}.mq-bois{display:flex;flex-direction:column;gap:12px;margin-top:12px}.mq-bl{font-size:.82rem;color:#7a6c48;margin:0 0 6px}.mq-bl b{color:#2b2620}.mq-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.mq-c{width:100%;padding:3px;border:1.5px solid #e4d9bd;border-radius:10px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit}.mq-c img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block}.mq-c span{font-size:.6rem;line-height:1.1;color:#5a4d2c;text-align:center;min-height:2.2em;display:flex;align-items:center}.mq-c.on{border-color:#a98935;box-shadow:0 0 0 1px #a98935 inset;background:#fbf3df}.mq-dessins{margin:-4px 0 14px}.mq-dh{font-weight:600;font-size:.9rem;margin:0 0 8px}.mq-dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}.mq-dtile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;aspect-ratio:1;border:1.5px dashed #c9b88a;border-radius:14px;background:#fff;color:#7c6120;cursor:pointer;font:inherit}.mq-dtile span{font-family:Playfair Display,serif;font-size:1.3rem}.mq-dtile small{font-size:.66rem;color:#8a7a52}.mq-dtile.on{border-style:solid;border-color:#a98935;background:#fbf3df}.mq-dn{font-size:.75rem;color:#8a7a52;margin:8px 0 0}.mq-pre{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:12px 14px;border:1px solid #c9a24b;border-left-width:4px;border-radius:12px;background:#fbf3df;color:#4a3a14;font-size:.88rem;line-height:1.45}.mq-pre b{color:#7c6120;font-size:.95rem}
+.mq-fmts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.mq-fmt{display:flex;flex-direction:column;align-items:stretch;gap:8px;text-align:left;padding:8px 8px 10px;border:1.5px solid #e4d9bd;border-radius:14px;background:#fff;color:#2b2620;cursor:pointer;font:inherit}.mq-fimg{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;background:#efe6d2}.mq-ft{display:flex;flex-direction:column;gap:2px;padding:0 4px}.mq-fmt b{font-size:.92rem}.mq-fmt span{font-size:.74rem;color:#7a6c48;line-height:1.3}.mq-fmt em{font-style:normal;font-weight:700;color:#7c6120;margin-top:2px}.mq-fmt.on{border-color:#a98935;background:#fbf3df;box-shadow:0 0 0 1px #a98935 inset}.mq-mixrow{margin:-4px 0 12px}.mq-mixl{display:flex;align-items:center;gap:8px;font-size:.88rem;font-weight:500;cursor:pointer}.mq-mixl input{width:18px;height:18px;accent-color:#a98935}.mq-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 6px}.mq-slot{position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1.5px dashed #c9b88a;border-radius:12px;background:#fff;color:#7c6120;font:inherit;cursor:pointer;padding:3px}.mq-slot span{font-family:Playfair Display,serif;font-size:1.2rem}.mq-slot small{font-size:.6rem;color:#8a7a52;line-height:1.1;text-align:center}.mq-slot.full{border-style:solid;border-color:#a98935;background:#fbf3df}.mq-slot img{width:100%;flex:1;min-height:0;object-fit:cover;border-radius:8px}.mq-slot i{position:absolute;top:2px;right:5px;font-style:normal;font-size:.9rem;color:#fff;text-shadow:0 0 3px #000}.mq-hint{font-size:.8rem;color:#8a7a52;margin:0 0 14px}.mq-hint.ok{color:#4f7a3a;font-weight:600}.mq-bois{display:flex;flex-direction:column;gap:12px;margin-top:12px}.mq-bl{font-size:.82rem;color:#7a6c48;margin:0 0 6px}.mq-bl b{color:#2b2620}.mq-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.mq-c{width:100%;padding:3px;border:1.5px solid #e4d9bd;border-radius:10px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit}.mq-c img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block}.mq-c span{font-size:.6rem;line-height:1.1;color:#5a4d2c;text-align:center;min-height:2.2em;display:flex;align-items:center}.mq-c.on{border-color:#a98935;box-shadow:0 0 0 1px #a98935 inset;background:#fbf3df}.mq-dessins{margin:-4px 0 14px}.mq-dh{font-weight:600;font-size:.9rem;margin:0 0 8px}.mq-dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}.mq-dtile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;aspect-ratio:1;border:1.5px dashed #c9b88a;border-radius:14px;background:#fff;color:#7c6120;cursor:pointer;font:inherit}.mq-dtile span{font-family:Playfair Display,serif;font-size:1.3rem}.mq-dtile small{font-size:.66rem;color:#8a7a52}.mq-dtile.on{border-style:solid;border-color:#a98935;background:#fbf3df}.mq-dn{font-size:.75rem;color:#8a7a52;margin:8px 0 0}.mq-pre{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:12px 14px;border:1px solid #c9a24b;border-left-width:4px;border-radius:12px;background:#fbf3df;color:#4a3a14;font-size:.88rem;line-height:1.45}.mq-pre b{color:#7c6120;font-size:.95rem}
 .mq-photo-ok{display:block;margin-top:8px;font-size:.85rem;color:var(--gold-dark,#a98935);font-weight:600}
 '''
 JS = r'''
@@ -130,20 +134,29 @@ JS = r'''
   var qb=document.querySelectorAll('.qty-stepper button');
   var vin=document.getElementById('pf-texte'),des=document.getElementById('pf-dessin'),grid=document.querySelector('.mq-dessins'),dn=null;
   function maj(){var ex=((vin&&vin.value.trim())?2:0)+((des&&des.value==='oui')?2:0);tot.textContent=eur(((P[st.t]+ex)*st.n+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q}
-  var fm=[].slice.call(document.querySelectorAll('.mq-fmt')),bw=document.querySelector('.mq-bois');
+  var fm=[].slice.call(document.querySelectorAll('.mq-fmt'));
   var WOODS=sw.map(function(b){return b.querySelector('.vs-title').textContent.trim()});
   var IMGS=sw.map(function(b){return b.querySelector('img').src});
-  function bois(){bw.innerHTML='';if(st.n<2){bw.hidden=true;return}bw.hidden=false;
-    for(var i=0;i<st.n;i++){(function(i){var d=document.createElement('div');d.innerHTML='<p class="mq-bl">Marque-page '+(i+1)+' : <b></b></p><div class="mq-row"></div>';var lab=d.querySelector('b'),row=d.querySelector('.mq-row');lab.textContent=st.t;
-      WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(w===st.t?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
-        c.addEventListener('click',function(){[].forEach.call(row.children,function(x){x.classList.remove('on')});c.classList.add('on');lab.textContent=w});row.appendChild(c)});
-      bw.appendChild(d)})(i)}}
-  fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;bois();
+  var mixbox=document.getElementById('mq-mix'),mixrow=document.querySelector('.mq-mixrow'),slotsEl=document.querySelector('.mq-slots'),hint=document.querySelector('.mq-hint');
+  var cta=[].filter.call(document.querySelectorAll('.btn-gold'),function(b){return /Précommander/.test(b.textContent)})[0];
+  st.mix=false;st.slots=[];
+  function manque(){if(!st.mix||st.n<2)return 0;var m=0;for(var i=0;i<st.n;i++)if(st.slots[i]==null)m++;return m}
+  function slots(){var on=st.mix&&st.n>1;slotsEl.hidden=hint.hidden=!on;if(cta){var m=manque();cta.disabled=m>0;cta.style.opacity=m>0?'.45':'';cta.style.cursor=m>0?'not-allowed':''}
+    if(!on)return;slotsEl.innerHTML='';
+    for(var i=0;i<st.n;i++){(function(i){var k=st.slots[i],b=document.createElement('button');b.type='button';b.className='mq-slot'+(k!=null?' full':'');
+      b.innerHTML=k!=null?'<img src="'+IMGS[k]+'" alt=""/><small>'+WOODS[k]+'</small><i>×</i>':'<span>'+(i+1)+'</span><small>à choisir</small>';
+      b.setAttribute('aria-label','Marque-page '+(i+1)+(k!=null?' : '+WOODS[k]+' (toucher pour retirer)':' : à choisir'));
+      b.addEventListener('click',function(){st.slots[i]=null;slots()});slotsEl.appendChild(b)})(i)}
+    var m=manque();hint.textContent=m?('Touchez une couleur ci-dessus pour remplir le marque-page '+(st.n-m+1)+' sur '+st.n+'.'):'Coffret complet.';hint.className='mq-hint'+(m?'':' ok')}
+  function plein(k){for(var i=0;i<st.n;i++)if(st.slots[i]==null){st.slots[i]=k;return}st.slots[st.n-1]=k}
+  mixbox.addEventListener('change',function(){st.mix=mixbox.checked;st.slots=[];slots()});
+  fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;
+    mixrow.hidden=st.n<2;mixbox.checked=false;st.mix=false;st.slots=[];slots();
     if(st.box){montre(th[st.n===4?9:10])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(vin)vin.addEventListener('input',maj);
   if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';maj()});
   [].forEach.call(document.querySelectorAll('.mq-dtile'),function(t){t.addEventListener('click',function(){[].forEach.call(document.querySelectorAll('.mq-dtile'),function(x){x.classList.remove('on')});t.classList.add('on')})});
-  sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);maj()})});
+  sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];if(st.mix&&st.n>1){plein(k);slots()}maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
   function montre(b){th.forEach(function(x){x.classList.remove('active')});b.classList.add('active');main.removeAttribute('srcset');main.src=b.querySelector('img').src}
