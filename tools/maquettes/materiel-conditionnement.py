@@ -44,6 +44,32 @@ ITEMS = [
   dict(id="boisb", cat="bois", nom="Petites boîtes en bois brut 20 × 10 × 5 cm, fermoir métal", lot="Lot de 6 · 26,99 € (Amazon)", cout=4.50, usage="1 boîte", stock=6, seuil=2, img="boites-bois-20x10"),
   dict(id="a53", cat="bois", nom="Contreplaqué tilleul A5, 3 mm", lot="Lot de 12 · 9,99 €", cout=0.83, usage="1 feuille", stock=12, seuil=4, img="panneaux-a5-3mm"),
 ]
+# Détails affichés sous chaque photo : taille, matière, pour quels produits (indicatif), où et quand acheté.
+# « pour » = déduit des dimensions des produits du site (verre 47 cl, flûte Ø6,3 × H21,4, whisky Ø7,9 × H9,3, cocktail H12,5, puzzles 18,5 × 13,5 et 21 × 15 cm) : à vérifier.
+DETAIL = dict(
+  carton15=dict(dim="25,4 × 20,3 × 15,3 cm (L × l × h)", mat="Carton ondulé blanc, boîte pliante", pour="Verre à vin, flûte (couchée, 21,4 cm), verres whisky et cocktail : 1 à 2 pièces avec calage", achat="Amazon, RLAVBL (vendu par ArtersEU) · dernier achat 27/07/2026"),
+  carton25=dict(dim="25,4 × 20,4 × 15,3 cm", mat="Carton ondulé blanc, caisse à rabats", pour="Mêmes usages que le carton 25,4 × 20,3 : verres et flûtes, 1 à 2 pièces", achat="Amazon · 27,99 € le lot de 25 (à confirmer : même produit que le lot de 15 ?)"),
+  boiteb=dict(dim="30,5 × 22,9 × 10,2 cm", mat="Boîte postale blanche à rabat, carton ondulé", pour="Puzzles en bois (18,5 × 13,5 et 21 × 15 cm), planches A4 (30 × 21 cm), petits cadeaux à plat", achat="Amazon, RLAVBL (vendu par ArtersEU) · dernier achat 22/09/2026"),
+  boitek=dict(dim="30,5 × 22,9 × 7,6 cm", mat="Boîte postale kraft à rabat, carton ondulé", pour="Puzzles en bois à plat, plaques et objets fins (jusqu'à 7 cm d'épaisseur)", achat="Amazon, HORLIMER (vendu par WallArters) · dernier achat 17/08/2026"),
+  bulles=dict(dim="25 × 20 cm (9,8 × 7,8 pouces)", mat="Enveloppe à bulles de mode, couleur abricot, anti-chute", pour="Bijoux en boîte, porte-clés, petits objets plats (à vérifier selon la pièce)", achat="Temu · lot de 30 · livraison 5 jours ouvrés, importation prise en charge par Temu"),
+  chips=dict(dim="Sac de 100 litres (existe en 50 et 200 L)", mat="Chips de calage bio, biodégradables, blanc, fabriqués en Europe", pour="Caler verres, carafes et cristaux dans les cartons", achat="Amazon, Verpacking · 35,44 € pour 100 L"),
+  raffia=dict(dim="200 g, sachet 32 × 32 × 3 cm", mat="Papier déchiqueté raffia, blanc crème", pour="Calage décoratif des coffrets et boîtes cadeau", achat="Amazon, KdmNzoo (vendu par GoooodGift) · dernier achat 29/09/2026"),
+  soie=dict(dim="50,8 × 35,6 cm la feuille", mat="Papier fin imprimé de plantes dorées", pour="Envelopper verres, cristaux et coffrets avant le calage", achat="Temu · l'offre propose 10, 30 ou 60 feuilles (60 retenues, à confirmer)"),
+  fragile=dict(dim="9 × 5 cm l'étiquette", mat="Autocollants rouge et blanc, texte anglais « Handle with care »", pour="Tous les colis fragiles : verres, flûtes, carafes, cristaux", achat="Amazon, KAHZOR (vendu par anqingxinuo) · dernier achat 27/07/2026"),
+  sac=dict(dim="Taille à saisir (non renseignée dans Emballages)", mat="Sac carton beige, logo Niv Création", pour="Tous les bijoux (colliers et bracelets)", achat="Fournisseur emballages bijoux · poids 28 g · vendu 1,70 € au client"),
+  boitec=dict(dim="9 × 9 cm", mat="Boîte carton, logo Niv Création", pour="Colliers et bracelets fins (Femme Cœur, Papillon, Acier)", achat="Fournisseur emballages bijoux · poids 59 g · vendue 3,90 € au client"),
+  boitea=dict(dim="Format bracelet, taille à saisir", mat="Boîte carton à tiroir, logo Niv Création", pour="Bracelets homme et bracelets longs", achat="Fournisseur emballages bijoux · poids 80 g · vendue 5,90 € au client"),
+  micro=dict(dim="Taille à saisir (non renseignée dans Emballages)", mat="Pochette microfibre, logo Niv Création", pour="Protection et voyage, tous les bijoux", achat="Fournisseur emballages bijoux · poids 15 g · vendue 2,70 € au client"),
+  poch50=dict(dim="10 × 14 cm", mat="Tissu aspect lin crème, cordon de serrage", pour="Colliers, bracelets, porte-clés en pochette", achat="Temu · lot de 50 · livraison gratuite, importation prise en charge par Temu"),
+  poch24=dict(dim="10 × 14 cm", mat="Tissu imitation lin beige, cordon", pour="Colliers, bracelets, porte-clés en pochette", achat="Temu · lot de 24 · livraison 5 jours ouvrés"),
+  a45=dict(dim="30 × 21 cm (A4), 5 mm d'épaisseur", mat="Contreplaqué de bouleau brut", pour="Découpe et gravure laser : supports, plaques, petits objets", achat="Amazon, Creative Deco · dernier achat 12/04/2026"),
+  a410=dict(dim="30 × 21 cm (A4), 10 mm d'épaisseur", mat="Contreplaqué de bouleau brut", pour="Pièces épaisses : socles, supports, plaques", achat="Amazon, Creative Deco · dernier achat 25/03/2026"),
+  a53=dict(dim="21 × 15 cm (A5), 3 mm d'épaisseur", mat="Contreplaqué de tilleul", pour="Puzzles en bois (plateau 18,5 × 13,5 cm), marque-pages, petites pièces", achat="Amazon, TAFONUP (vendu par Systems Ironworks) · 9,99 €"),
+  boisb=dict(dim="20 × 10 × 5 cm", mat="Bois brut (paulownia), fermoir métal bronze", pour="Coffret à graver ou emballage cadeau gravé (à préciser)", achat="Amazon, Sixfolo · dernier achat 06/04/2026 · 4,50 € la pièce"),
+)
+for it in ITEMS:
+    it.update(DETAIL[it["id"]])
+
 COURT = dict(carton15="Carton 25×20×15", carton25="Carton 25×20×15 (25)", boiteb="Boîte blanche 30×23", boitek="Boîte kraft 30×23",
              chips="Chips de calage", raffia="Raffia", fragile="Étiquette FRAGILE", sac="Sac cadeau", boitec="Boîte carrée",
              boitea="Boîte allongée", micro="Microfibre", bulles="Enveloppe à bulles", soie="Papier de soie", poch50="Pochette lin (50)", poch24="Pochette lin (24)", boisb="Boîte bois 20×10", a45="Bouleau A4 5 mm", a410="Bouleau A4 10 mm", a53="Tilleul A5 3 mm")
@@ -122,6 +148,9 @@ body{font-family:var(--font-body);color:var(--ink)}
 .mp-tx{padding:9px 10px 6px;flex:1}
 .mp-tx b{display:block;font-size:.82rem;line-height:1.25;margin-bottom:3px}
 .mp-tx small{display:block;color:var(--ink-soft);font-size:.72rem;line-height:1.3}
+.mp-tx small.dt{margin-top:3px}
+.mp-tx small.dt u,.mp-row small.dt u{text-decoration:none;font-weight:700;color:var(--ink);margin-right:4px}
+.mp-row small.dt{display:block;margin-top:2px}
 .mp-tx .c{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 .mp-st{font-size:.72rem;margin-top:4px;color:var(--ink-soft)}
 .mp-st.low{color:#b32b2b;font-weight:700}
@@ -278,7 +307,7 @@ function renderGrid(){
   const list=ITEMS.filter(i=>filt==='tous'||(filt==='sug'?i.sug:i.cat===filt));
   $('#grid').innerHTML=list.map(i=>{const q=sel[i.id]||0; return `<div class="mp-it${q?' on':''}" data-i="${i.id}" tabindex="0" role="button" aria-pressed="${q?'true':'false'}">
     ${i.sug?'<span class="mp-sug">Suggéré</span>':''}<span class="mp-chk">✓</span><div class="mp-ph">${ph(i)}</div>
-    <div class="mp-tx"><b>${i.nom}</b><small>${i.lot}</small><small><span class="c">${eur(i.cout)}</span> · ${i.usage}</small>${stockTxt(i)}</div>
+    <div class="mp-tx"><b>${i.nom}</b><small>${i.lot}</small><small><span class="c">${eur(i.cout)}</span> · ${i.usage}</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small>${stockTxt(i)}</div>
     <div class="mp-qty"><button data-m="${i.id}" aria-label="Moins">−</button><span>${q}</span><button data-p="${i.id}" aria-label="Plus">+</button></div></div>`;}).join('');
   totals();
 }
@@ -309,7 +338,7 @@ function rows(){
   const html=CATS.map(([k,n])=>{ const l=ITEMS.filter(i=>i.cat===k); return `<div class="mp-list"><h3>${n}</h3>${l.map(i=>{
     const has=i.stock!=null, left=has?stock[i.id]:null, isLow=has&&left<=i.seuil; if(has){val+=left*i.cout*(i.usage.startsWith('1 poignée')?1:1); if(isLow)low++;}
     const pct=has?Math.min(100,Math.round(left/stock0[i.id]*100)):0;
-    return `<div class="mp-row"><div class="ph">${ph(i)}</div><div><b>${i.nom}</b><small>${i.lot} · ${eur(i.cout)} / utilisation (${i.usage})</small></div>
+    return `<div class="mp-row"><div class="ph">${ph(i)}</div><div><b>${i.nom}</b><small>${i.lot} · ${eur(i.cout)} / utilisation (${i.usage})</small><small class="dt"><u>Taille</u> ${i.dim}</small><small class="dt"><u>Matière</u> ${i.mat}</small><small class="dt"><u>Pour</u> ${i.pour}</small><small class="dt"><u>Acheté</u> ${i.achat}</small></div>
       <div class="mp-bar${isLow?' low':''}">${has?`<b>${left}</b><small> restants${isLow?' · à racheter':''}</small><i><u style="width:${pct}%"></u></i>`:'<small>stock à saisir</small>'}</div></div>`;}).join('')}</div>`;}).join('');
   $('#rows').innerHTML=html; $('#kVal').textContent=eur(val); $('#kLow').textContent=low; $('#kLow').className=low?'warn':'';
 }

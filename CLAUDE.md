@@ -3326,4 +3326,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   11/10) : pochettes à cordon lin crème 10×14 lot 50 = 8,78 € · pochettes lin beige 10×14 lot 24 = 6,29 € (lequel acheté ? à confirmer) ·
   enveloppes à bulles abricot 25×20 lot 30 = 7,74 € · papier de soie plantes dorées 50,8×35,6 « 60 feuilles » = 8,99 € (quantité à confirmer) ·
   boîtes bois brut 20×10×5 lot 6 = 26,99 € (Amazon, 4,50 la pièce). Total 15 articles de matériel dans la maquette (artifact version 2).
+- **Détails sous chaque photo (11/10, « il faut que ce soit détaillé pour que je sache »)** : chaque carte porte quatre lignes — **Taille** (dimensions exactes),
+  **Matière**, **Pour** (produits qui y tiennent, déduit des dimensions du site, à vérifier), **Acheté** (site, vendeur, date du dernier achat). Source des
+  textes : le dictionnaire `DETAIL` de `materiel-conditionnement.py`. Tailles encore « à saisir » : sac cadeau et microfibre (jamais renseignées dans Emballages),
+  boîte allongée (« format bracelet »). Artifact version 3.
 
