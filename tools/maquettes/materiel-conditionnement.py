@@ -32,7 +32,7 @@ ITEMS = [
   # Étiquettes
   dict(id="fragile", cat="eti", nom="Étiquettes FRAGILE 9 × 5 cm", lot="168 étiquettes · 7,99 €", cout=0.05, usage="1 étiquette", stock=168, seuil=30, img="etiquettes-fragile", sug=1),
   # Emballages bijoux (déjà dans Gestion → Emballages : coûts d'achat saisis)
-  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=88, vendu=12, seuil=20, img="emb-sac"),
+  dict(id="sac", cat="bij", nom="Sac cadeau", lot="Emballage bijoux", cout=1.00, usage="1 sac", stock=90, vendu=10, seuil=20, img="emb-sac"),
   dict(id="boitec", cat="bij", nom="Boîte cadeau carrée 9 × 9 cm", lot="Colliers et bracelets fins", cout=0.97, usage="1 boîte", stock=98, vendu=2, seuil=20, img="emb-boite-carree"),
   dict(id="boitea", cat="bij", nom="Boîte cadeau allongée", lot="Bracelets homme et longs", cout=0.95, usage="1 boîte", stock=99, vendu=1, seuil=20, img="emb-boite-allongee"),
   dict(id="micro", cat="bij", nom="Pochette microfibre", lot="Protection et voyage", cout=1.00, usage="1 pochette", stock=99, vendu=1, seuil=20, img="emb-microfibre"),
