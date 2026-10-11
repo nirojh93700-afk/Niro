@@ -156,7 +156,7 @@ export default function BeneficesPage() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "8px 14px 60px" }}>
-      <PageHead eyebrow="Finances" title="Bénéfices" subtitle="Ce que tu gagnes réellement : ventes encaissées moins le coût d'achat des produits vendus, moins tes dépenses."
+      <PageHead eyebrow="Finances" title="Bénéfices" subtitle="Ce que tu gagnes réellement : ventes encaissées moins le coût d'achat des produits vendus et le matériel d'emballage utilisé, moins tes dépenses."
         kpis={[
           { label: `Bénéfice net — ${periodLabel}`, value: euro(netProfit), tone: netProfit >= 0 ? "good" : "bad" },
           { label: "Bénéfice brut (avant dépenses)", value: euro(p.profit || 0) },
@@ -175,6 +175,7 @@ export default function BeneficesPage() {
         <Tile big label={`Bénéfice — ${periodLabel}`} value={euro(p.profit)} sub={`Marge ${p.margin} %`} accent={p.profit >= 0 ? "#e2c67e" : "#e78d7a"} />
         <Tile label="Chiffre d'affaires" value={euro(p.revenue)} sub={`${p.units} article(s) vendu(s)`} />
         <Tile label="Coût d'achat" value={euro(p.cost)} sub="Produits vendus" />
+        <Tile label="Matériel d'emballage" value={euro(p.materiel || 0)} sub="Commandes conditionnées" />
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
 
@@ -191,7 +192,7 @@ export default function BeneficesPage() {
       <div style={card}>
         <h2 style={{ marginTop: 0, fontSize: "1.05rem" }}>Dépenses &amp; charges</h2>
         <p style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 0 }}>
-          Tout ce que tu achètes pour fonctionner : <strong>fournitures d&apos;expédition</strong> (cartons, scotch fragile, papier bulle, étiquettes), matériel, petites charges. C&apos;est déduit pour obtenir ton <strong>bénéfice net</strong>.
+          Tout ce que tu achètes pour fonctionner : <strong>fournitures d&apos;expédition</strong> (cartons, scotch fragile, papier bulle, étiquettes), matériel, petites charges. C&apos;est déduit pour obtenir ton <strong>bénéfice net</strong>. ⚠️ Les cartons, calages et emballages que tu coches dans la <a href="/gestion/commandes">file de production</a> (Conditionnement) sont <strong>déjà déduits commande par commande</strong> : ne les ressaisis pas ici, tu les compterais deux fois.
         </p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-end", marginBottom: 12 }}>
           <label style={{ flex: "2 1 160px" }}>

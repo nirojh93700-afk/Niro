@@ -40,6 +40,7 @@ const NAV = [
     { id: "produits", icon: "◧", text: "Produits & stock", href: "/gestion/produits" },
     { id: "categories", icon: "≣", text: "Catégories & ordre", href: "/gestion/categories" },
     { id: "packaging", icon: "▢", text: "Emballages", href: "/gestion/emballages" },
+    { id: "materiel", icon: "⬚", text: "Matériel & emballages", href: "/gestion/materiel" },
     { id: "gravure", icon: "✎", text: "Gravure", href: "/gestion/gravure" },
     { id: "reglages-produits", icon: "⚙", text: "Réglages produits", href: "/gestion/reglages" },
     { id: "tailles", icon: "⌗", text: "Tailles & coûts", href: "/gestion/tailles-conseillees" },

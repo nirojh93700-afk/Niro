@@ -243,3 +243,7 @@ En attente de SA décision :
   https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM, rien en ligne : il choisit la version ; à trancher : Jost ou Inter, le
   coffret assorti (prix, −10 % dès 2 pièces), le rangement « Pour qui » / « Anniversaire » / fêtes datées dans `occasions.js` ·
   puis son « applique ».
+## 📦 Matériel & conditionnement — en ligne le 11/10/2026
+- ✅ Page Gestion → Matériel & emballages + bloc « Conditionnement » dans la file de production + matériel déduit dans Bénéfices.
+- ❓ À confirmer par le gérant : pochettes lin (50 ou 24 achetées ?), papier de soie (60 feuilles ?), boîtes en bois (emballage ou produit ?), portions de calage (chips ≈ 2 L, raffia ≈ 10 g), carton 25×20×15 réellement acheté (lot de 15 ou de 25), tailles du sac / de la microfibre / de la boîte allongée, stocks réels de départ.
+- 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.

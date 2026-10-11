@@ -4,6 +4,10 @@
 import { existsSync } from "node:fs";
 const SRC = new URL("../src/", import.meta.url);
 export function resolve(specifier, context, next) {
+  if (/^\.\.?\//.test(specifier) && context.parentURL && !/\.[a-z]+$/i.test(specifier)) {
+    const cible = new URL(specifier + ".js", context.parentURL);
+    if (existsSync(cible)) return next(cible.href, context); // import relatif sans extension (stock.js)
+  }
   if (!specifier.startsWith("@/")) return next(specifier, context);
   const url = new URL(specifier.slice(2), SRC);
   if (!/\.[a-z]+$/i.test(url.pathname) && existsSync(new URL(url.href + ".js"))) {

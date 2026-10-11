@@ -3337,3 +3337,28 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **11/10/2026 soir (maquette Matériel, v7)** — gérant : « mets à jour par rapport aux ventes, c'est dans les commandes ». Stocks des 4 emballages bijoux = **100 achetés − vendus lus dans les 33 commandes** (`/api/admin/orders`, détail « Emballage : … », annulées exclues) : **sac 88** (10 commandes + 1 sac du Pack Collier + 1 sac du remplacement 0GTB1LZ5) · **boîte carrée 98** (bracelet femme cœur 1S9IOON5 + Pack Collier 0IR8QKHS) · **boîte allongée 99** (bracelet homme chaîne acier 02JTG1UH, +5,90 €) · **microfibre 99** (Pack Collier). Hypothèse : les 100 ont été reçus avant la 1re commande (26/07). Champ `vendu` dans `ITEMS` ; la page Matériel affiche « N vendus sur 100 ». À la construction, ce décompte sera automatique à chaque « Valider » ; d'ici là, recompter si doute.
 - **11/10/2026 soir (maquette Matériel, v8)** — gérant : « prends en compte seulement les colis déjà partis, les commandes en cours je mettrai quand j'envoie ». Le décompte des emballages ne compte QUE les commandes **expédiées / livrées** (pas « à préparer », pas « en gravure »). Résultat : **sac 90** (10 vendus : 8 commandes expédiées + 1 sac du Pack Collier livré + 1 sac du remplacement 0GTB1LZ5), boîte carrée 98, boîte allongée 99, microfibre 99. Exclus car pas partis : 0ZH3LP9M (sac) et 1PUMYQBL (sac). À la construction : le stock ne baisse qu'à « Valider » (au départ du colis), jamais à la commande.
 - **11/10/2026 soir (maquette Matériel, v9)** — gérant : la commande 1PUMYQBL (Nollez Jessica, bracelet cordon à plaque) est déjà emballée mais pas encore expédiée → son sac compte. **Sac = 89** (11 vendus). Règle retenue : un emballage est décompté quand le COLIS EST FAIT (emballé), pas seulement à l'expédition. Reste NON compté : 0ZH3LP9M (sac, à préparer), tant qu'il ne l'a pas emballé.
+
+## 📦 MATÉRIEL & CONDITIONNEMENT — ✅ EN LIGNE LE 11/10/2026 SOIR (« Tu peux mettre en ligne », après la maquette v9)
+> Gérant : « je te donne tout ce que j'ai acheté (cartons, calage, bois…), je coche ce que j'utilise sur la commande, je valide, le stock
+> baisse et ça calcule ce que je dépense et mon bénéfice ; tout doit être lié ». ADMIN SEULEMENT : rien de visible côté clientes.
+- **Page** Gestion → Catalogue → **Matériel & emballages** (`/gestion/materiel`) : 19 articles au départ (`src/lib/materielSeed.js`, photos
+  `public/materiel/`), deux affichages au choix (tout ensemble / par catégorie), recherche, **« + Reçu »** (achat qui arrive : stock et « acheté »
+  montent), **Modifier** (coût d'une utilisation, stock, seuil « à racheter », taille, matière, pour quoi, où acheté), **Archiver**, **+ Ajouter**.
+- **File de production** (`/gestion/commandes`) : bloc « 📦 Conditionnement » dans CHAQUE carte (sauf annulée / remboursée) → fenêtre
+  `Conditionnement.jsx` (cartes à photo, kits colis verre / pack collier / pack bracelet, « Suggérés » selon l'emballage choisi par la cliente,
+  quantités ±, calcul du gain en direct : encaissé − coût du produit (`productCosts.js`) − matériel − étiquette d'envoi − Stripe 1,5 % + 0,25 €).
+  **Valider** = le stock baisse ; **Corriger** = l'ancien matériel est RENDU puis le nouveau décompté (jamais deux fois) ; **Retirer la validation**
+  = tout est rendu. Étiquette d'envoi = estimation modifiable (colis / relais 6,12 €, bijou en lettre 4,45 €, retrait 0 €).
+- **Données** : sections du blob `materiel` (liste + stock) et `materielUsage` (`{ [orderId]: { lines, matCost, gain, … } }`), fonctions
+  `getMateriel / saveMaterielItem / recevoirMateriel / validerMateriel / annulerMateriel` en fin de `stock.js` (lecture FRAÎCHE + écriture
+  ciblée), API `/api/admin/materiel` (GET `?orderId=` · POST `valider / annuler / item / recevoir`). Tant que rien n'est enregistré, le seed est servi.
+- **Bénéfices** : le matériel validé est déduit commande par commande (tuile « Matériel d'emballage », `profit = CA − coût d'achat − matériel`).
+  ⚠️ Ne PAS ressaisir en « Dépenses » les cartons / emballages déjà validés (double comptage) : c'est écrit sur la page.
+- **Stocks de départ au 11/10** : sac 89 · boîte carrée 98 · boîte allongée 99 · microfibre 99 (100 achetés − colis déjà emballés lus dans les
+  commandes ; 0ZH3LP9M pas encore emballé) ; cartons, chips, etc. = quantités achetées.
+- **Tests** : `npm run test-materiel` (12 vérifications : décompte, correction idempotente, annulation, jamais sous zéro, réception, virgule, ajout)
+  + test navigateur 390 / 1280 (page, fenêtre, kit colis → gain 6,68 € sur 1ZNESNSV, 0 erreur, 0 débordement). `tools/alias-loader.mjs` accepte
+  maintenant les imports relatifs sans extension (nécessaire pour importer `stock.js` dans un test).
+- **PAS FAIT (à proposer)** : lien avec **Achats & factures** (l'IA ne propose que les produits du catalogue, pas ce matériel — pour l'instant « + Reçu »
+  à la main) · décompte automatique à l'expédition · alerte « à racheter » dans le menu · pochettes lin 50 / 24, papier de soie (60 ?), boîtes bois :
+  quantités et usages à confirmer par lui.

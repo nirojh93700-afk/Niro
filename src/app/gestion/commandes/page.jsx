@@ -16,6 +16,7 @@ import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { chargerAvecCache } from "@/components/admin/adminCache";
+import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -57,6 +58,15 @@ export default function FileProductionPage() {
   const [q, setQ] = useState("");
   const [showDone, setShowDone] = useState(false);
   const [busy, setBusy] = useState("");
+  const [mat, setMat] = useState(null);        // matériel & conditionnement (stock + validations)
+  const [condOrder, setCondOrder] = useState(null);
+
+  const loadMat = useCallback(async (adminKey) => {
+    try {
+      const r = await fetch("/api/admin/materiel", { headers: { "x-admin-key": adminKey } });
+      if (r.ok) setMat(await r.json());
+    } catch { /* le bloc reste « à faire » */ }
+  }, []);
 
   const load = useCallback(async (adminKey) => {
     setError("");
@@ -69,12 +79,13 @@ export default function FileProductionPage() {
       if (r.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); return; }
       if (!r.ok) { if (!r.data) setError("Erreur de chargement."); return; }
       sessionStorage.setItem("niv-admin-key", adminKey);
+      loadMat(adminKey);
       try {
         const u = await fetch("/api/admin/bat?action=unread", { headers: { "x-admin-key": adminKey } });
         if (u.ok) setUnread((await u.json()).unread || []);
       } catch { /* ignore */ }
     } catch { setError("Erreur de chargement."); }
-  }, []);
+  }, [loadMat]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("niv-admin-key");
@@ -163,21 +174,23 @@ export default function FileProductionPage() {
 
       <div className="file-cols">
         <Colonne titre="● À préparer" n={aPreparer.length} vide="Rien à préparer 🎉">
-          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} />)}
+          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} />)}
         </Colonne>
         <Colonne titre="✏️ En fabrication" n={enFab.length} vide="Aucune pièce en cours.">
-          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} />)}
+          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} />)}
         </Colonne>
         <Colonne titre="📦 Expédiées récemment" n={expediees.length} vide="Aucune expédition récente.">
-          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} compact />)}
+          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} compact />)}
         </Colonne>
       </div>
+
+      {condOrder ? <FenetreConditionnement o={condOrder} adminKey={key} mat={mat} onClose={() => setCondOrder(null)} onSaved={() => loadMat(key)} /> : null}
 
       <details className="file-done" open={showDone} onToggle={(e) => setShowDone(e.currentTarget.open)}>
         <summary>Terminées, annulées, remboursées ({terminees.length})</summary>
         <div className="file-cols" style={{ marginTop: 10 }}>
           <div className="file-col" style={{ gridColumn: "1 / -1", background: "transparent", border: "none", padding: 0 }}>
-            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} compact />)}
+            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} compact />)}
           </div>
         </div>
       </details>
@@ -194,7 +207,7 @@ function Colonne({ titre, n, vide, children }) {
   );
 }
 
-function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
+function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) {
   const [note, setNote] = useState(o.adminNote || "");
   const [editing, setEditing] = useState(false);
   const flags = o.flags || [];
@@ -286,6 +299,8 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact }) {
           </div>
         )}
       </div>
+
+      {!["annulee", "remboursee"].includes(statut) ? <BlocConditionnement o={o} mat={mat} onOpen={() => onCond(o)} /> : null}
 
       <div className="file-actions">
         {statut === "a_preparer" ? <button className="btn btn-gold" disabled={busy} onClick={() => onStatus(o, "en_gravure")}>✏️ Commencer la fabrication</button> : null}

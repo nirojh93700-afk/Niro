@@ -18,6 +18,7 @@ import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
 import { REVIEWS_SEED } from "./reviewsSeed";
+import { MATERIEL_SEED } from "./materielSeed";
 import { trouverProspect, demandeStop, estAvisNonDistribution, PROSPECT_STATUTS } from "./prospects";
 
 const STORE_NAME = "niv-stock";
@@ -2664,4 +2665,113 @@ export function getConfigStatus() {
     ),
     siteUrl: Boolean(process.env.NEXT_PUBLIC_SITE_URL),
   };
+}
+
+// =============================================================================
+// MATÉRIEL & CONDITIONNEMENT (11/10/2026) — cartons, calage, étiquettes, emballages bijoux, bois.
+// Sections du blob : `materiel` (liste des articles + stock) et `materielUsage` ({ [orderId]: validation }).
+// RÈGLES : lecture FRAÎCHE avant chaque écriture (pas de cache 60 s : plusieurs instances du site),
+// écriture CIBLÉE des seules sections touchées, validation idempotente par commande (re-valider
+// RENDEZ d'abord l'ancien matériel au stock, puis décompte le nouveau).
+// =============================================================================
+const MAT_CHAMPS_TXT = ["nom", "court", "lot", "usage", "dim", "mat", "pour", "achat", "photo", "cat"];
+function materielListe(data) {
+  const saved = Array.isArray(data?.materiel) ? data.materiel : null;
+  return saved && saved.length ? saved.map((x) => ({ ...x })) : MATERIEL_SEED.map((x) => ({ ...x }));
+}
+const numOuNull = (v) => (v === null || v === "" || v === undefined ? null : Number.isFinite(Number(v)) ? Number(v) : null);
+
+export async function getMateriel(fresh = true) {
+  const data = await getCatalogRaw(fresh);
+  return { items: materielListe(data), usage: data.materielUsage && typeof data.materielUsage === "object" ? data.materielUsage : {} };
+}
+
+// Modifier un article (stock, seuil, coût, textes…) ou en créer un (patch.nouveau = true).
+export async function saveMaterielItem(patch) {
+  const data = await getCatalogRaw(true);
+  const items = materielListe(data);
+  let it;
+  if (patch.nouveau) {
+    const id = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    it = { id, cat: "exp", nom: "Nouveau matériel", lot: "", cout: 0, usage: "1 pièce", stock: 0, achete: 0, seuil: 0, sug: false };
+    items.push(it);
+  } else {
+    it = items.find((x) => x.id === patch.id);
+    if (!it) return null;
+  }
+  for (const k of MAT_CHAMPS_TXT) if (typeof patch[k] === "string") it[k] = patch[k].slice(0, 400);
+  if ("cout" in patch) it.cout = Math.max(0, Number(String(patch.cout).replace(",", ".")) || 0);
+  if ("seuil" in patch) it.seuil = Math.max(0, parseInt(patch.seuil, 10) || 0);
+  if ("stock" in patch) it.stock = numOuNull(patch.stock) === null ? null : Math.max(0, Math.round(Number(patch.stock)));
+  if ("achete" in patch) it.achete = numOuNull(patch.achete) === null ? null : Math.max(0, Math.round(Number(patch.achete)));
+  if ("archive" in patch) it.archive = Boolean(patch.archive);
+  data.materiel = items;
+  await persistCatalog(data, ["materiel"]);
+  return it;
+}
+
+// Réception d'un achat : +qty en stock (et dans « acheté », pour que la barre reste juste).
+export async function recevoirMateriel(id, qty) {
+  const q = Math.max(0, Math.min(100000, parseInt(qty, 10) || 0));
+  if (!q) return null;
+  const data = await getCatalogRaw(true);
+  const items = materielListe(data);
+  const it = items.find((x) => x.id === id);
+  if (!it) return null;
+  it.stock = (typeof it.stock === "number" ? it.stock : 0) + q;
+  it.achete = (typeof it.achete === "number" ? it.achete : 0) + q;
+  data.materiel = items;
+  await persistCatalog(data, ["materiel"]);
+  return it;
+}
+
+function rendreAuStock(items, lines) {
+  for (const [id, q] of Object.entries(lines || {})) {
+    const it = items.find((x) => x.id === id);
+    if (it && typeof it.stock === "number") it.stock += Number(q) || 0;
+  }
+}
+
+// Valide (ou corrige) le matériel d'une commande. lines : { [idArticle]: quantité }.
+export async function validerMateriel({ orderId, ref, lines, etiquette, stripe, produit, encaisse }) {
+  if (!orderId) return null;
+  const data = await getCatalogRaw(true);
+  const items = materielListe(data);
+  const usage = data.materielUsage && typeof data.materielUsage === "object" ? { ...data.materielUsage } : {};
+  if (usage[orderId]) rendreAuStock(items, usage[orderId].lines); // correction : on rend l'ancien d'abord
+  const propres = {};
+  let matCost = 0;
+  for (const [id, q] of Object.entries(lines || {})) {
+    const n = Math.max(0, Math.min(999, parseInt(q, 10) || 0));
+    const it = items.find((x) => x.id === id);
+    if (!n || !it) continue;
+    propres[id] = n;
+    matCost += n * (Number(it.cout) || 0);
+    if (typeof it.stock === "number") it.stock = Math.max(0, it.stock - n);
+  }
+  const r2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
+  const rec = {
+    at: Date.now(), ref: String(ref || ""), lines: propres, matCost: r2(matCost),
+    etiquette: r2(etiquette), stripe: r2(stripe), produit: r2(produit), encaisse: r2(encaisse),
+  };
+  rec.gain = r2(rec.encaisse - rec.produit - rec.matCost - rec.etiquette - rec.stripe);
+  usage[orderId] = rec;
+  data.materiel = items;
+  data.materielUsage = usage;
+  await persistCatalog(data, ["materiel", "materielUsage"]);
+  return { usage: rec, items };
+}
+
+// Annule la validation d'une commande : le matériel est rendu au stock.
+export async function annulerMateriel(orderId) {
+  const data = await getCatalogRaw(true);
+  const usage = data.materielUsage && typeof data.materielUsage === "object" ? { ...data.materielUsage } : {};
+  if (!usage[orderId]) return null;
+  const items = materielListe(data);
+  rendreAuStock(items, usage[orderId].lines);
+  delete usage[orderId];
+  data.materiel = items;
+  data.materielUsage = usage;
+  await persistCatalog(data, ["materiel", "materielUsage"]);
+  return { items };
 }
