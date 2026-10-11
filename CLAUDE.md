@@ -3449,10 +3449,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   posé sur le fond bleu du plateau → à remplacer par la vraie photo seule quand il l'aura).
 - **Le produit** (d'après les photos, rien d'autre n'est connu) : demi-lune ajourée (croisillons de fenêtre), oiseau bleu sur branche de magnolia IMPRIMÉ en couleurs,
   cordon brun à deux perles de verre. **4 couleurs** : Blond clair · Brun roux · Sable · Brun foncé (jamais de nom d'essence, cf. règle des couleurs du modèle 1).
-- **Formats** : « Seul » 9,90 € · **« Coffret des 4 couleurs »** (un marque-page de chaque couleur, par défaut, dans l'ordre de la photo) 47,50 € = 4 × 9,90 + coffret 7,90 €.
-  Dans « Voir et personnaliser mon coffret » : changer la couleur d'un marque-page, **texte gravé au verso +2 €** par marque-page (le recto est déjà décoré : aucun dessin
-  proposé sur ce modèle). **PROPOSITIONS à valider** : prix 9,90 € comme le modèle 1 (c'est un modèle plus élaboré, il pourrait valoir davantage ; marché non trouvé :
-  seul repère = set de 4 marque-pages bois à perles 33,83 USD sur Pinkoi) ; texte au verso +2 € (verso supposé uni, non vu).
+- **Formats (v2, 11/10 soir, gérant : « c'est comme pour l'autre : seul, par deux, par quatre, à l'unité… sinon tu fais deux maquettes séparées »)** : MÊMES formats, mêmes
+  prix et mêmes boîtes bleu nuit que le modèle 1 : **Seul 9,90 · en boîte 14,80 · coffret de 2 = 25,70 · coffret de 4 = 47,50** (boîte 4,90 / 5,90 / 7,90 €), même fenêtre
+  « Voir et personnaliser mon coffret » (couleur + texte au verso +2 € par marque-page, pas de dessin : recto décoré). Par défaut les marque-pages d'un coffret ont des
+  couleurs DIFFÉRENTES dans l'ordre de ses photos (coffret de 4 = les 4 couleurs). **DEUX MAQUETTES SÉPARÉES** (une par modèle, `marque-pages.html` et `marque-pages-fenetre.html`,
+  deux fiches) ; l'autre option (une seule fiche avec un choix de modèle en tête, jamais de mélange de modèles dans un coffret) est possible si il la préfère. Le coffret
+  du fournisseur (plateau bleu-gris à liseré doré) n'est plus que 7ᵉ photo de la galerie.
+  **PROPOSITIONS à valider** : prix 9,90 € comme le modèle 1 (modèle plus élaboré, marché non trouvé : seul repère = set de 4 marque-pages bois à perles 33,83 USD sur Pinkoi) ;
+  texte au verso +2 € (verso supposé uni, non vu).
 - **Coffret** : celui des photos du fournisseur (plateau bleu-gris au liseré doré, élastiques, boîte kraft à lotus dorés) ≠ les boîtes bleu nuit du modèle 1 → à confirmer
   laquelle il utilisera. Précommande / série limitée identique au modèle 1 (aucune date, aucun fournisseur nommé).
 - **Inconnus** : dimensions, essence réelle des bois (CITES si palissandre / santal), poids, ce que donne le verso. En attente de son avis.

@@ -78,12 +78,13 @@ HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
-FORMATS = [("Seul", "avec son cordon à perles de verre", 1, 0), ("Coffret des 4 couleurs", "un marque-page de chaque couleur, en coffret cadeau", 4, 7.9)]
+FORMATS = [("Seul", "avec son cordon à perles de verre", 1, 0), ("En boîte cadeau", "1 marque-page, boîte bleu nuit", 1, 4.9),
+           ("Coffret de 2", "2 marque-pages, boîte bleu nuit", 2, 5.9), ("Coffret de 4", "4 marque-pages, boîte bleu nuit", 4, 7.9)]
 def eur(n): return f"{n:.2f}".replace(".", ",") + " €"
-BOX_IMG = {4: "groupe"}
+BOX_IMG = {1: "boite2", 2: "boite2", 4: "boite4"}
 def fmt_card(i, t, sub, n, box):
     img = BOX_IMG[n] if box else None
-    pic = f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, img + ".jpg"), 260, 72)}" alt="Coffret cadeau des quatre couleurs"/>' if img else \
+    pic = f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, img + ".jpg"), 260, 72)}" alt="Boîte cadeau bleu nuit pour {n} marque-page{"s" if n > 1 else ""}"/>' if img else \
           f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, "blond.jpg"), 260, 72)}" alt="Marque-page seul avec son cordon"/>'
     return (f'<button type="button" class="mq-fmt{" on" if i == 0 else ""}" data-n="{n}" data-box="{box:g}">{pic}'
             f'<span class="mq-ft"><b>{t}</b><span>{sub}</span><em>{eur(n * 9.9 + box)}</em></span></button>')
@@ -91,11 +92,19 @@ FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-
        "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
 RECAP = ('<div class="mq-recap" id="mq-recap" hidden><p class="mq-rtxt"></p><div class="mq-strip"></div>'
          '<button type="button" class="mq-open">Voir et personnaliser mon coffret</button></div>')
-GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Le coffret contient un marque-page de chaque couleur. Vous pouvez faire graver un texte au verso de chacun dans « Voir et personnaliser mon coffret ».</p>'
+GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de couleurs différentes : vous pouvez en changer et faire graver un texte au verso de chacun dans « Voir et personnaliser mon coffret ».</p>'
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'
 assert cle in MAIN
 cle_id = cle.replace('<div style="margin-bottom:6px">', '<div style="margin-bottom:6px" id="mq-grav">')
 MAIN = MAIN.replace(cle, FMT + RECAP + GNOTE + cle_id, 1)
+OLD_H = "<h3>Le coffret des quatre couleurs</h3>"
+assert OLD_H in MAIN
+i0 = MAIN.index(OLD_H); i1 = MAIN.index("</p>", i0) + 4
+MAIN = MAIN[:i0] + "<h3>Offrez-le en boîte cadeau</h3><p>Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>" + MAIN[i1:]
+BOXTH = "".join(f'<button class="" aria-label="Voir le visuel {k}"><img src="{uri(os.path.join(ASSETS, n + ".jpg"), 900, 74)}" alt=""/></button>' for k, n in ((6, "boite4"), (7, "boite2")))
+MAIN = MAIN.replace('<div class="gallery-thumbs">', '<div class="gallery-thumbs">', 1)
+j0 = MAIN.index('<div class="gallery-thumbs">'); j1 = MAIN.index("</div>", j0)
+MAIN = MAIN[:j1] + BOXTH + MAIN[j1:]
 MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
 PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
        'Votre commande est enregistrée dès maintenant, puis gravée à la réception des marque-pages. Quantités limitées.</span></div>')
@@ -140,7 +149,7 @@ JS = r'''
   function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
     var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||o.t});
     st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+(o.t?'<b>'+o.t.replace(/</g,'&lt;')+'</b>':'');st2.appendChild(d)});
-    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret des quatre couleurs :':'Votre coffret des quatre couleurs, un marque-page de chaque. Vous pouvez changer une couleur ou faire graver un texte au verso :'}
+    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, de couleurs différentes. Vous pouvez changer une couleur ou faire graver un texte au verso :'}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
       d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé au verso (+2 €), facultatif"/>';
@@ -155,7 +164,7 @@ JS = r'''
   document.querySelector('.mq-open').addEventListener('click',ouvre);
   document.getElementById('mq-close').addEventListener('click',ferme);document.getElementById('mq-ok').addEventListener('click',ferme);
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
-    if(st.box){montre(th[4])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
+    if(st.box){montre(th[st.n===4?5:6])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(vin)vin.addEventListener('input',maj);
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
     draw();maj()})});
