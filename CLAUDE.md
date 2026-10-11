@@ -3301,3 +3301,24 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (`sendDraftAlert`, + notification téléphone) avec « Relire, modifier et envoyer ». L'alerte simple « 📬 » ne part
   plus que si le brouillon échoue (repli). Restaurants/bars démarchés : inchangé. Rien ne part au client.
 - Testé en ligne le 04/10 avec un lien envoyé à l'atelier lui-même : brouillon créé (`source:"bouton"`), alerte partie.
+
+## 📦 MAQUETTE « MATÉRIEL & CONDITIONNEMENT » — 11/10/2026 (en attente de son avis, RIEN en ligne)
+> Gérant : « je te donne tout ce que j'ai acheté (cartons, calage, bois…), tu le mets dans la préparation de commande, je coche ce que
+> j'utilise, ça réduit le stock et ça calcule ce que je dépense et mon bénéfice par commande, tout doit être lié » puis « fais une
+> maquette, comme les grands sites, une fenêtre qui s'ouvre avec tous les produits, avec les photos, réunis avec les emballages bijoux ».
+- **Artifact** https://claude.ai/artifact/NX5Nphz6VCshxgoPhk9dZZ · générateur `tools/maquettes/materiel-conditionnement.py <dossier css> <sortie>`
+  (le dossier css = les 3 feuilles de nivcreation.fr : vraies classes `.ash-*` / `.file-*`, seul `.mp-*` est neuf) · photos recadrées dans ses
+  captures Amazon : `docs/maquettes/assets/materiel/`. Le HTML complet (380 Ko, CSS du site inclus) n'est PAS versionné.
+- **Contenu** : bloc « Conditionnement » dans chaque carte de la file de production → fenêtre (feuille du bas sur téléphone, boîte de dialogue
+  sur PC) : kits (colis verre / pack collier / pack bracelet), filtres, cartes à photo cochables avec quantité, matériel suggéré selon le
+  produit, calcul en direct (encaissé − produit − matériel − étiquette − Stripe = gain), « Valider » = le stock baisse, « Corriger » rend le
+  stock. Page « Matériel & stock » : tout au même endroit (cartons, calage, étiquettes, emballages bijoux déjà dans Gestion → Emballages, bois).
+- **Les 10 achats vus (Amazon, TTC)** : cartons blancs 25,4×20,3×15,3 lot 15 = 27,99 € (1,87) · cartons 25,4×20,4×15,3 lot 25 = 27,99 € (1,12) ·
+  boîtes blanches 30,5×22,9×10,2 lot 20 = 39,99 € (2,00) · boîtes kraft 30,5×22,9×7,6 lot 20 = 32,99 € (1,65) · chips de calage bio 100 L = 35,44 € ·
+  raffia 200 g = 10,99 € · étiquettes FRAGILE 168 = 7,99 € · contreplaqué bouleau A4 5 mm lot 10 = 34,95 € · A4 10 mm lot 10 = 49,95 € ·
+  tilleul A5 3 mm lot 12 = 9,99 €. Doublons retirés (A4 10 mm et RLAVBL 15 envoyés deux fois).
+- **À trancher par lui** : les portions de calage (chips ≈ 2 L = 0,71 €, raffia ≈ 10 g = 0,55 €), le stock de départ (= quantités achetées),
+  le doute entre les deux cartons 25×20×15, les stocks et photos des emballages bijoux (à saisir dans Emballages).
+- **À la construction** : section de stock `materiel` (pas de réécriture en bloc : fusion par clé, cf. incident crystalZones), validation une seule
+  fois par commande (idempotente), coûts relus par la page Bénéfices (`productCosts.js` mis à jour le 11/10 d'après la facture Metro INV-26-FR-137934).
+
