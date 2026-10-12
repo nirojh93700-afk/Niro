@@ -29,16 +29,20 @@ const FLAGS = [
 const ACTIFS = new Set(["", "a_preparer", "en_gravure"]);
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
 
+// Jours du CALENDRIER à l'heure française (avant : tranches de 24 h depuis maintenant → une commande d'hier
+// soir regardée ce midi s'affichait « aujourd'hui » à côté de la date d'hier ; gérant, 12/10/2026).
+const JOUR_PARIS = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" });
+const numJour = (t) => Math.round(Date.parse(JOUR_PARIS.format(new Date(t)) + "T00:00:00Z") / 86400000);
 function age(iso) {
   const t = Date.parse(iso || ""); if (!t) return "";
-  const j = Math.floor((Date.now() - t) / 86400000);
+  const j = numJour(Date.now()) - numJour(t);
   if (j <= 0) return "aujourd'hui";
   if (j === 1) return "hier";
   return `il y a ${j} j`;
 }
 function dateFr(iso) {
   const d = new Date(iso || ""); if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", timeZone: "Europe/Paris" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" });
 }
 function livraison(o) {
   const m = String(o.shippingMethod || "").toLowerCase();
