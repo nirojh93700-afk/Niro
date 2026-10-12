@@ -3514,3 +3514,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > Commandes et Catalogue. La file de production NORMALE ne montre plus jamais une précommande (juste une ligne grise « 3 précommandes sont rangées à part → Ouvrir
 > Précommandes »). L'écran Précommandes a SA PROPRE FILE à 3 colonnes : ⏳ En attente d'arrivage → À préparer (arrivées) → Expédiées ; « Arrivage reçu » déplace les cartes
 > dans la 2ᵉ colonne de CE MÊME écran (jamais vers la file normale) ; les précommandes expédiées restent là aussi. Même artifact (version 2). Le site n'est pas touché.
+
+> ✅ **ENREGISTRÉE TELLE QUELLE LE 12/10/2026 (« Enregistre la maquette », version 2 de l'artifact https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw)**. C'est CETTE version
+> à reproduire le jour de l'« applique » : catégorie « Précommandes » à part dans le menu, file normale sans précommande, écran Précommandes avec le tableau des produits
+> (places par couleur, arrivée, « Arrivage reçu », « Prévenir les clientes » = brouillon dans Messages clients, « Rembourser »), sa propre file à 3 colonnes, bloc
+> « Précommande » sur la fiche produit (date d'arrivée + délai → phrase calculée, places par couleur), fiche atelier avec l'encadré « ne pas graver ». Ne pas la modifier sans sa demande.
