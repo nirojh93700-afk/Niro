@@ -258,6 +258,11 @@ En attente de SA décision :
 - 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.
 
 ## 🔖 Marque-pages en bois (précommande) — maquette du 11/10/2026, en attente de son avis
+- **12/10 soir — commande Alibaba passée** (relevé : `docs/marque-pages-commande-alibaba-2026-10-12.md`) : modèle 1 = 6 couleurs × 20,
+  modèle 2 = 4 couleurs × 10, boîtes 10 / 10 / 10, arrivée estimée le 12/12. **Décision du gérant : les prix des maquettes déjà
+  faites restent tels quels** (9,90 / 13,90 €, boîtes 4,90 / 5,90 / 7,90 €, gravure +2 €). Les deux lignes « marque-page
+  métallique » (champagne ×35) et « style papillon » (doré ×5) = **nouveaux produits, maquette PLUS TARD** quand il donnera les
+  photos. Reste à lui demander au moment voulu : places de précommande à reporter, une seule famille de boîtes pour les deux modèles.
 - Artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa : 6 couleurs (caramel, blond clair, rouge, cuivré, gris anthracite, gris sable), 9,90 € seul, dessin +2 €, texte +2 €, boîtes cadeau 1/2/4 (4,90 / 5,90 / 7,90 €, coût des boîtes à confirmer, photo de la boîte d'un à envoyer), encadré « Précommande · série limitée ».
 - À lui : donner SES dessins (numérotés), valider les prix, la formule de précommande, les noms de bois ; donner les dessins ; dire ce que sont « les boîtes » ; envoyer le modèle suivant.
 - ⚠️ Avant de commander : demander au fournisseur l'essence réelle de chaque couleur et les documents CITES (palissandre / santal rouge = annexe II).
