@@ -13,11 +13,47 @@ import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { eclaterParVerre } from "@/lib/orderSpec";
 
+// Champ affiché à la cliente pour cette commande (même règles que la fiche :
+// « afficher si tel choix » et « seulement pour telle option »).
+function champVisible(f, champs, variantTitle) {
+  if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
+  if (f.variantContains && !String(variantTitle || "").includes(f.variantContains)) return false;
+  return true;
+}
+const estTexte = (f) => !f.type || f.type === "text" || f.type === "textarea";
+
+/** Police à graver pour cet article : { label, defaut } ou null.
+ *  Un texte saisi sans police choisie = Playfair, la police que la fiche
+ *  montre déjà sélectionnée et que l'aperçu utilise (commande 0ZH3LP9M du
+ *  11/10/2026 : « Eloïm » arrivé sans police). Un MODÈLE décoré n'en a pas :
+ *  le nom se grave dans l'écriture du modèle. */
+export function policeDeGravure(item) {
+  const produit = getProductBySlug(item?.slug);
+  const champs = item?.fields || {};
+  const vus = (produit?.personalizationFields || []).filter((f) => champVisible(f, champs, item?.variantTitle));
+  const fonte = vus.find((f) => f.type === "font");
+  if (!fonte) return null;
+  const choisie = String(champs[fonte.key] || "").trim();
+  const aDuTexte = vus.some((f) => estTexte(f) && String(champs[f.key] || "").trim());
+  if (!aDuTexte || champs.mode === "modele") return null;
+  if (choisie) return { label: getFontLabel(choisie) || choisie, defaut: false };
+  return { label: getFontLabel("playfair"), defaut: true };
+}
+
 export function lignesGravure(item) {
   const produit = getProductBySlug(item.slug);
   const champs = item.fields || {};
   const lignes = [];
+  const pol = policeDeGravure(item);
   for (const f of produit?.personalizationFields || []) {
+    if (f.type === "font") {
+      // Une seule ligne « Police », écrite dès qu'il y a un texte à graver —
+      // y compris quand la cliente a laissé la police proposée (Playfair).
+      if (pol && !lignes.some((l) => l.police) && champVisible(f, champs, item.variantTitle)) {
+        lignes.push({ face: "Police de gravure", texte: pol.defaut ? `${pol.label} (police proposée, non changée)` : pol.label, police: true });
+      }
+      continue;
+    }
     if (f.type === "note" || f.type === "photo") continue;
     const brut = champs[f.key];
     if (typeof brut !== "string" || !brut.trim()) continue;
@@ -28,10 +64,9 @@ export function lignesGravure(item) {
       .replace(/\s*\(texte inclus\)/gi, "")
       .trim();
     let texte = brut.trim();
-    if (f.type === "font") texte = getFontLabel(texte) || texte;
-    else if (f.type === "select") texte = (f.options || []).find((o) => o.value === texte)?.label || texte;
+    if (f.type === "select") texte = (f.options || []).find((o) => o.value === texte)?.label || texte;
     else if (f.type === "stylepicker") texte = `n° ${texte}`; // renvoie aux dessins numérotés de la fiche
-    lignes.push({ face: f.type === "font" ? "Police de gravure" : face, texte, police: f.type === "font" });
+    lignes.push({ face, texte, police: false });
   }
   return lignes;
 }

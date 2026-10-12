@@ -6,7 +6,7 @@ import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderS
 import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
-import { lignesGravure } from "@/lib/engravingSheet";
+import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -430,6 +430,9 @@ export async function POST(req) {
         </div>`;
       }
       const recap = (it.personalization || "").trim();
+      // Police TOUJOURS écrite dès qu'il y a un texte (Playfair si la cliente n'a rien changé).
+      let pol = null;
+      try { pol = policeDeGravure(it); } catch { pol = null; }
       // Visuel exact préparé par le client (capture) ; sinon la photo brute envoyée.
       const visuals = [it.previewImage, it.previewImageFond].filter(Boolean);
       const imagesHtml = visuals.length
@@ -440,6 +443,7 @@ export async function POST(req) {
           ${titre}
           ${imagesHtml}
           <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(emplacementDe(it))}</p>
+          ${pol ? `<p style="margin:0 0 4px;"><strong>Police :</strong> ${escapeHtml(pol.label)}${pol.defaut ? " (police proposée, non changée par la cliente)" : ""}</p>` : ""}
           ${recap ? `<p style="margin:0;white-space:pre-line;">${escapeHtml(recap)}</p>` : ""}
         </div>`;
     }).join("");

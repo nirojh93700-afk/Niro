@@ -97,7 +97,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
         {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
       </div>
       <div className="fp-reglages">
-        <ReglagesItem item={item} titre={false} />
+        <ReglagesItem item={item} titre={false} police={false} />
       </div>
     </div>
   ));

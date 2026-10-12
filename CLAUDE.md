@@ -57,6 +57,19 @@
   Corrigé partout : fiches (`productInfo.js`), descriptions (`products.js`), encadré « Conseils d'entretien » des bijoux
   (`ProductDetail.jsx`), FAQ, guide « cadeaux homme » (régénéré).
 
+## 🔤 POLICE TOUJOURS CHOISIE ET TOUJOURS ÉCRITE — 12/10/2026 (commande 0ZH3LP9M, bracelet bébé « Eloïm »)
+> Gérant : « il faut que la cliente sache ce qu'elle a sélectionné, moi il faut que je sache… corrige partout, je dois
+> savoir ce que je dois imprimer ». Le menu police des fiches était vide (« — Choisir — », facultatif) alors que l'aperçu
+> montrait Playfair → la commande arrivait SANS police.
+- **Fiches (`ProductDetail.jsx`)** : le menu police n'a plus de choix vide, Playfair est affichée choisie ET enregistrée
+  dès que le champ s'affiche (effet `policesVides`). Le parcours guidé (carafe, vin, flûte, whisky) n'est PAS touché :
+  il gère sa police, et un MODÈLE décoré n'en a pas. Le résumé atelier n'écrit la police que s'il y a un texte.
+- **Gestion / alerte / papier** : `policeDeGravure(item)` (`src/lib/engravingSheet.js`) = police à graver dès qu'il y a un
+  texte ; si rien n'est enregistré (anciennes commandes) → « Playfair (police proposée, non changée) ». Utilisée par
+  `lignesGravure` (tableau « À graver » : fiche commande, /gestion/atelier, fiche imprimée, lots), la ligne « Police »
+  de `ReglagesItem` (écran) et l'e-mail d'alerte 🛎️. Pas de ligne police sans texte, ni en mode `modele`.
+- ⛔ Tout nouveau champ `type:"font"` hérite de ces règles : ne jamais remettre un « — Choisir — » vide sur une police.
+
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
 > informations… j'ai pas la date, qu'est-ce que je grave ? ». Une commande sur devis n'a pas de `spec` :

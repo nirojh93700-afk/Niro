@@ -421,8 +421,11 @@ export default function ProductDetail({ product }) {
   //  - forClient = false : version COMPLÈTE pour l'atelier (admin / e-mail / fiche).
   function buildPersonalization(forClient = false) {
     if (product.personalizationFields) {
+      const aDuTexte = visibleFields.some((f) => (!f.type || f.type === "text" || f.type === "textarea") && (fieldValues[f.key] || "").toString().trim());
       const parts = visibleFields
         .filter((f) => f.type !== "note" && f.type !== "modele" && f.type !== "couverts")
+        // La police n'a de sens que s'il y a un texte à graver.
+        .filter((f) => f.type !== "font" || aDuTexte)
         // Côté cliente : on ne garde que les textes saisis (pas emplacement, police, etc.).
         .filter((f) => !forClient || f.type === "text" || f.type === "textarea" || !f.type)
         .map((f) => {
@@ -561,6 +564,20 @@ export default function ProductDetail({ product }) {
 
   // Police et couleur sélectionnées (pour l'aperçu en direct).
   const fontField = visibleFields.find((f) => f.type === "font");
+  // La police proposée (Playfair) est ENREGISTRÉE dès que le champ s'affiche :
+  // la cliente voit ce qu'elle a sélectionné, l'atelier sait quoi graver
+  // (commande 0ZH3LP9M du 11/10/2026 arrivée sans police). Le parcours guidé
+  // gère sa police lui-même (un modèle décoré n'en a pas).
+  const policesVides = product.parcoursGuide ? "" : visibleFields
+    .filter((f) => f.type === "font" && !fieldValues[f.key]).map((f) => f.key).join(",");
+  useEffect(() => {
+    if (!policesVides) return;
+    setFieldValues((prev) => {
+      const next = { ...prev };
+      for (const k of policesVides.split(",")) if (!next[k]) next[k] = "playfair";
+      return next;
+    });
+  }, [policesVides]);
   const colorField = visibleFields.find((f) => f.type === "color");
   const photoField = visibleFields.find((f) => f.type === "photo");
   const photoUrl = photoField ? fieldValues[photoField.key] : "";
@@ -1827,10 +1844,11 @@ export default function ProductDetail({ product }) {
                       {labelEl}
                       <select
                         id={`pf-${f.key}`}
-                        value={fieldValues[f.key] || ""}
+                        value={fieldValues[f.key] || (f.type === "font" ? "playfair" : "")}
                         onChange={(e) => setField(f.key, e.target.value)}
                       >
-                        <option value="">— Choisir —</option>
+                        {/* Police : Playfair est DÉJÀ choisie (c'est elle que montre l'aperçu) — pas de « — Choisir — » vide. */}
+                        {f.type !== "font" && <option value="">— Choisir —</option>}
                         {opts.map((o) => {
                           const amt = priceForOpt(o.value);
                           const label = amt ? `${o.label} — +${amt.toFixed(2).replace(".", ",")} €` : o.label;
