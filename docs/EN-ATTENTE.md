@@ -56,6 +56,10 @@
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente
+- **📦 Nollez Jessica (1PUMYQBL, bracelet cordon à plaque) — ✅ MAIL « quel nom sur le colis ? » ENVOYÉ le 12/10 par le site**
+  (texte validé de `docs/messages/nollez-1PUMYQBL-nom-livraison.md`, branche de déploiement, envoyé tel quel après vérification :
+  aucune réponse d'elle au mail du 09/10). Le mail annonce un départ DEMAIN (13/10) au nom « cipresso fybie » si elle ne répond pas :
+  surveiller sa réponse (dossier + Gmail) avant d'expédier.
 - **⭐ Mails d'avis du 12/10** : ✅ **6 ENVOYÉS** (Sophie Berardo, Mme Monhardt, Olivier Chesta, Ludovic Noel, Rose Catarino,
   Cécilia Herrera — « envoie juste les commandes envoyées avant »). ⏳ **5 EN ATTENTE** (« pour les autres on va attendre ») :
   Marie Randriamalaza, Anthony Giot, Laura Brimeux (expédiés le 09/10 ; Laura après son PACS du 14/10), Inès Doumi et Lorenzo
