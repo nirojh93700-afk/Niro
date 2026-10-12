@@ -1,3 +1,10 @@
+## ⛔⛔ TOUT TEXTE GRAVÉ EST PAYANT — SUR TOUT PRODUIT, MÊME DANS UN VISUEL FOURNI PAR LE CLIENT (12/10/2026, rappel du gérant : « je t'ai déjà dit, quand y a des textes… tu te fais tout le temps avoir »)
+- Un dessin / une photo / un logo = la gravure comprise dans le prix de la fiche. **Chaque texte en plus (phrase, prénoms, date) se compte au tarif
+  de la fiche** (verre à whisky : +3 € par texte ; cristal : +5 € ; gobelet : 1 élément compris puis +3 € ; bijoux : +3 € par face).
+- Ça vaut AUSSI quand le client envoie « une maquette complète » avec les textes dedans : on compte les textes comme s'ils étaient saisis
+  sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
+- Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
+
 ## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
 > à la suite : sa capture, un e-mail, l'icône du site) : « quand je te dis de pas faire, tu le fais pas,
