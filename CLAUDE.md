@@ -3467,3 +3467,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > boîte CARRÉE à 4 colonnes (4 fentes en haut, 4 en bas) = **4 marque-pages**. Photos : `docs/maquettes/assets/marque-pages/boite1.jpg` (1), `boite2.jpg` (2), `boite4.jpg` (4), idem
 > dans `marque-pages-fenetre/`. Les deux maquettes utilisent maintenant la bonne boîte sur chaque carte de format et dans la galerie (3 photos de boîtes, plus 2 « 8 emplacements » : supprimée).
 > Prix 4,90 / 5,90 / 7,90 € inchangés (à valider). Modèle 2 : la vraie photo de la couleur Sable (marque-page pâle, boîtes kraft à lotus) remplace le recadrage du coffret.
+
+> **12/10/2026 — photos du modèle 2 remplacées (gérant : « remplace les deux autres par cela »)** : `sable.jpg` = marque-page gris-beige sur boîtes kraft à lotus dorés
+> (remplace la photo plus jaune posée le 11/10 soir, qui ressemblait en fait au Blond clair) et `noir.jpg` = Brun foncé (nouvelle photo, même décor). Le Blond clair et le Brun roux
+> gardent leurs photos. Artifact du modèle 2 republié (même lien). La photo jaune pâle (`42190699`) n'est plus utilisée nulle part.
