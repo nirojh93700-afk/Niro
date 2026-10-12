@@ -3377,7 +3377,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   quantités et usages à confirmer par lui.
 - **11/10/2026 soir — réponses du gérant aux 6 questions du matériel** : pochettes lin = **24** (celles de 50 archivées) · papier de soie = **60** feuilles · boîtes en bois 20×10×5 = **produit à vendre**, pas du matériel (archivées) · raffia = **10 g** par utilisation · **cartons : c'est le lot de 25 (25,4 × 20,4 × 15,3 cm, 1,12 € pièce) qu'il a acheté** (lot de 15 archivé ; il avait d'abord écrit « 15 » par erreur) · tailles du sac / microfibre / boîte allongée : encore « à saisir », il les donnera. Le kit « Colis verre » et le carton « suggéré » utilisent donc `carton25`. `saveMaterielItem` accepte maintenant `sug` (suggéré par défaut).
 
-## ✗ PIÈCE RATÉE / À REFAIRE + CONDITIONNEMENT DANS L'ATELIER — 12/10/2026 (construit, PAS EN LIGNE : attend son « mets en ligne »)
+## ✗ PIÈCE RATÉE / À REFAIRE + CONDITIONNEMENT DANS L'ATELIER — 12/10/2026 (« Mets en ligne » reçu ; 1er déploiement en échec Firebase à 2 min 11, relancé)
 > Gérant : « il faut que les packaging soient aussi dans l'Atelier de gravure… et si je grave mal et je recommence, pour chaque
 > produit commandé, un truc “raté / à refaire”, je dis combien, il faut que ça diminue le stock automatiquement ».
 - **Page Atelier** (`/gestion/atelier`) : chaque carte d'article a maintenant le bloc **📦 Conditionnement** de sa commande
