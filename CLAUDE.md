@@ -3477,3 +3477,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > trouvé). **Totaux modèle 2 sans gravure : seul 12,90 · en boîte 17,80 · coffret de 2 = 31,70 · coffret de 4 = 59,50** (boîtes 4,90 / 5,90 / 7,90 € inchangées), texte +2 € par marque-page.
 > À valider par lui. Générateur : constante `PU = 12.9` dans `tools/maquettes/marque-pages-fenetre.py` (le « 9,90 » de la capture est remplacé ; attention, le site écrit « 9,90\u00a0€ »
 > avec une espace insécable).
+
+> **12/10/2026 — PRIX DU MODÈLE 2 FIXÉ PAR LE GÉRANT : 13,90 €** (il a écrit « mais 14,90 € » puis, aussitôt, « 13,90 € » — c'est 13,90 qui compte ; remplace mon 12,90 ci-dessus). Modèle 1 : 9,90 €.
+> **Totaux modèle 2 sans gravure : seul 13,90 · en boîte 18,80 · coffret de 2 = 33,70 · coffret de 4 = 63,50** (boîtes 4,90 / 5,90 / 7,90 € inchangées), texte +2 € par marque-page.
+> Constante `PU = 13.9` dans `tools/maquettes/marque-pages-fenetre.py`.

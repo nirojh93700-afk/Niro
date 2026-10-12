@@ -75,9 +75,9 @@ def nettoie(html):
     html = re.sub(r'(src)="(/[^"]+)"', local_src, html)
     return re.sub(r'href="/[^"]*"', 'href="#"', html)
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
-# 12/10 : modèle plus travaillé (ajouré + imprimé) → un peu plus cher que le modèle 1 (9,90 €)
-PU = 12.9
-MAIN = re.sub(r"9,90(\s|\u202f|\u00a0)€", lambda m: "12,90" + m.group(1) + "€", MAIN)
+# 12/10 : modèle plus travaillé (ajouré + imprimé) → un peu plus cher que le modèle 1 (9,90 €) ; fixé à 13,90 € par le gérant le 12/10
+PU = 13.9
+MAIN = re.sub(r"9,90(\s|\u202f|\u00a0)€", lambda m: "13,90" + m.group(1) + "€", MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
