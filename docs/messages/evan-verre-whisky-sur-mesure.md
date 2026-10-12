@@ -34,25 +34,20 @@ nivcreation.fr
 
 ---
 
-## 2ᵉ mail — question « seulement le logo ? » (demande du gérant, 12/10 soir) — BROUILLON MONTRÉ, RIEN D'ENVOYÉ
+## 2ᵉ mail — ✅ ENVOYÉ le 12/10 soir par le site (« Envoie »), texte exact :
 
-Evan a envoyé sa maquette par mail direct le 12/10 à 21 h 35 (objet « Devis pour verre à whisky personnalisé », pièce jointe
-`IMG_3909.png`, 1122 × 1402) : c'est un RENDU de verre entier (image de synthèse : verre à whisky à fond épais, texte en arc en haut,
-mains entrelacées au centre avec Evan / Gab en écriture anglaise de part et d'autre, « MÊME LOIN, MÊME LIEN » en bas, étoiles),
-pas un fichier à plat du dessin. Copie dans le scratchpad de la session (`evan/maquette.png`).
-
-**Objet :** Re : Devis pour verre à whisky personnalisé
-
-**Message :**
+Objet : Re : Devis pour verre à whisky personnalisé
 
 Bonjour Evan,
 
 Nous avons bien reçu votre maquette, merci.
 
-Avant d'établir votre devis, une question : souhaitez-vous que seul le dessin des mains entrelacées (le logo) soit gravé sur le verre, ou bien le visuel complet, avec les textes « PAS LE MÊME SANG, FRÈRES POURTANT », les prénoms Evan et Gab et « MÊME LOIN, MÊME LIEN » ?
-
-Si c'est le dessin seul, pouvez-vous nous l'envoyer en image à part, en noir sur fond blanc ?
+Avez-vous le logo qui est sur le verre (le dessin des mains entrelacées) en image, pour nous l'envoyer ?
 
 Cordialement,
 Niv Création
 nivcreation.fr
+
+Contexte : sa maquette (mail direct du 12/10 à 21 h 35, pièce jointe `IMG_3909.png`) est un rendu du verre entier, pas un fichier à plat.
+⚠️ Leçon du 12/10 (gérant : « écoute-moi quand je te dis un truc ») : quand il dicte une question précise, le mail pose CETTE question,
+sans alternative ni demande ajoutée de ma part. Un premier brouillon avec « ou bien le visuel complet » + « en noir sur fond blanc » a été refusé.
