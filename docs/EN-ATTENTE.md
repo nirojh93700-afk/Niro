@@ -8,6 +8,28 @@
 ---
 
 ## 0. Côté gérant, après mise en ligne
+- ⚠️ **CRAFIA (autre appli) — COMMANDE À LANCER, PAS ENCORE FAITE (12/10/2026)** : ses fonctions serveur
+  sont bridées à 0 instance depuis le retour du forfait Spark au forfait Blaze. **Le projet est bien repassé
+  en Blaze** (compte « Paiement de Firebase », ID `012534-3055E7-72919F`), mais repasser en Blaze NE remet
+  PAS la limite d'instances : seul un redéploiement le fait. Tant que ce n'est pas lancé, **aucun client
+  Crafia ne peut payer** (testé : les 3 URLs de fonctions répondent `429 · Rate exceeded`).
+  **À lancer sur son Mac, dans l'ordre (les paiements d'abord) :**
+  ```
+  cd ~/Desktop/Crafia-Deploy
+  firebase deploy --only functions:createCheckoutSession,functions:stripeWebhookIA
+  firebase deploy --only functions:importIA,functions:acheterPackIA
+  firebase deploy --only functions:verifySubscription,functions:runAgent
+  firebase deploy --only functions:analyzeMetier,functions:trackPackage
+  firebase deploy --only functions:reconcilierComptes
+  firebase deploy --only functions:sendViaSmtp,functions:testMailAccount
+  firebase deploy --only functions:saveMailAccount,functions:listMailAccounts
+  firebase deploy --only functions:deleteMailAccount,functions:trialReminders
+  firebase deploy --only functions:stripeWebhook,functions:createPortalSession
+  ```
+  Si une commande échoue : garder le message (une API Google doit parfois être réactivée après un retour
+  de Spark). Checklist complète : https://claude.ai/code/artifact/e9cfbd92-9ead-4026-a6e3-16b20f712ca4
+  ⛔ Crafia n'est PAS dans ce dépôt (cf. CLAUDE.md) et **le réseau de l'environnement bloque app.crafia.fr**
+  → impossible de vérifier d'ici après coup ; c'est lui qui lance et qui dit si c'est passé.
 - ✅ **Devis : code promo + livraison choisis par le client — EN LIGNE le 03/10/2026** (« tu peux le mettre en ligne à la place de
   l'ancien », maquette validée, option 1 = calcul du port PARTAGÉ avec le panier : `src/lib/panierPort.js`, utilisé par
   `/api/checkout` ET les devis ; parité prouvée par `npm run test-port-parite`, 6000 paniers). Reste : **UN paiement test boutique**
