@@ -3488,3 +3488,23 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Comparaison des idées de coffret (A à E) : https://claude.ai/artifact/64dwiXNn66qkXYBSVJxkZf (idée C choisie, voir plus haut). C'est CETTE version de chaque maquette à reproduire le jour de l'« applique », sans la modifier avant.
 - ⚠️ **AVANT TOUT PUSH** : les 3 `.html` complets (3 + 3,6 + 1,7 Mo, photos intégrées) ont été commités PLUSIEURS FOIS en local (16 commits d'avance, `.git` = 532 Mo) ; la règle du 10/10 dit « garder le dépôt sous ~440 Mo » (déploiements Firebase en échec au-delà). Vérifier la taille et retirer ces `.html` de l'historique local (ils se régénèrent avec les générateurs + la capture) AVANT de pousser.
 - ⛔ **Précommande : RIEN n'existe dans le site** (voir `docs/AMELIORATIONS.md`) ; le gérant a demandé le 12/10 comment ça fonctionne → explication donnée, décisions à prendre (paiement, places limitées, délai annoncé légalement, panier mixte).
+
+## ⏳ MAQUETTE « PRÉCOMMANDE — CÔTÉ GESTION » — 12/10/2026 (« Fais la maquette de la partie Gestion ») — RIEN en ligne
+- Générateur `tools/maquettes/precommande-gestion.py <dossier css du site> <sortie>` (le dossier css = les 3 feuilles de nivcreation.fr, comme la maquette
+  Matériel ; vraies classes `.ash-*` / `.file-*` / `.dash-chip`, seul `.pc-*` est neuf ; `.fragment.html` non commité). Photos = `docs/maquettes/assets/marque-pages/`.
+  Testée Chromium 390 / 1280 : 0 débordement, 0 erreur JS, les 4 écrans joués (places, arrivage reçu, message, fiche atelier).
+- **4 écrans** : ① **Fiche produit** (Produits & stock → panneau) : bloc « ⏳ Précommande » = case « Vendre en précommande », date d'arrivée prévue, délai de gravure
+  après l'arrivée (5 / 7 / 10 j) → la phrase que lit le client est CALCULÉE (« Expédition à partir du <arrivée + délai> », jamais plus précise), **places par couleur**
+  (= quantité commandée au fournisseur ; vendues / restantes ; couleur à 0 grisée sur la fiche, tout à 0 = plus de bouton), aperçu de ce que voit le client ·
+  ② **File de production** : colonne « ⏳ Précommandes · en attente » AVANT « À préparer », bandeau d'alerte, KPI « places restantes », cartes avec chip
+  « ⏳ Précommande · arrivage prévu le … », une ligne PAR marque-page (couleur + texte + dessin, idée C) et « Commencer la fabrication » GRISÉ · ③ **Précommandes**
+  (nouvel écran sous Commandes) : une ligne par produit (places vendues / restantes, barre, encaissé, « presque épuisé »), bouton **« Arrivage reçu »** (passe toutes les
+  commandes en « À préparer », fiche remise en vente normale, case décochée), « Prévenir les clientes » (= brouillon ouvert dans Messages clients, une cliente à la
+  fois, JAMAIS automatique), « Rembourser une précommande » (seul cas : le fournisseur ne livre pas ; depuis la commande, Stripe ; la règle « jamais remboursé » ne
+  vaut pas tant que rien n'est gravé) · ④ **Fiche atelier** : encadré rouge « ⏳ PRÉCOMMANDE — ne pas graver avant l'arrivage » (vert « à graver » après l'arrivage),
+  « Vendu en plus » (boîte, textes, dessin), tableau une ligne par marque-page (couleur avec photo, texte en Allura, dessin, écriture).
+- **Décisions prises dans la maquette (à valider)** : paiement immédiat · places par couleur · délai affiché calculé et large (jamais de date fine) · stock = places ·
+  mail de confirmation reprend la phrase de la fiche · aucun envoi automatique à l'arrivage · remboursement seulement si le fournisseur fait défaut.
+- **Reste ouvert** : panier mixte (précommande + article en stock : un colis à la fin ou deux envois ?) · prix de la boîte au port (boîte rigide = colis 6,90 €) ·
+  vérifier le délai légal (date ou délai obligatoire ; 30 jours sinon). À la construction : champ produit `precommande:{arrivee, delaiJours, places:{couleur:n}}`,
+  statut de commande `precommande` (avant `a_preparer`), action admin « arrivage-recu », `catalogAudit` signale une précommande dont la date d'arrivée est dépassée.
