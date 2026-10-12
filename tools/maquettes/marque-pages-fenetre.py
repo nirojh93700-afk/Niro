@@ -75,6 +75,9 @@ def nettoie(html):
     html = re.sub(r'(src)="(/[^"]+)"', local_src, html)
     return re.sub(r'href="/[^"]*"', 'href="#"', html)
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
+# 12/10 : modèle plus travaillé (ajouré + imprimé) → un peu plus cher que le modèle 1 (9,90 €)
+PU = 12.9
+MAIN = re.sub(r"9,90(\s|\u202f|\u00a0)€", lambda m: "12,90" + m.group(1) + "€", MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
@@ -87,7 +90,7 @@ def fmt_card(i, t, sub, n, box):
     pic = f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, img + ".jpg"), 260, 72)}" alt="Boîte cadeau bleu nuit pour {n} marque-page{"s" if n > 1 else ""}"/>' if img else \
           f'<img class="mq-fimg" src="{uri(os.path.join(ASSETS, "blond.jpg"), 260, 72)}" alt="Marque-page seul avec son cordon"/>'
     return (f'<button type="button" class="mq-fmt{" on" if i == 0 else ""}" data-n="{n}" data-box="{box:g}">{pic}'
-            f'<span class="mq-ft"><b>{t}</b><span>{sub}</span><em>{eur(n * 9.9 + box)}</em></span></button>')
+            f'<span class="mq-ft"><b>{t}</b><span>{sub}</span><em>{eur(n * PU + box)}</em></span></button>')
 FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-fmts">' +
        "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
 RECAP = ('<div class="mq-recap" id="mq-recap" hidden><p class="mq-rtxt"></p><div class="mq-strip"></div>'

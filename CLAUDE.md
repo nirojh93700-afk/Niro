@@ -3471,3 +3471,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > **12/10/2026 — photos du modèle 2 remplacées (gérant : « remplace les deux autres par cela »)** : `sable.jpg` = marque-page gris-beige sur boîtes kraft à lotus dorés
 > (remplace la photo plus jaune posée le 11/10 soir, qui ressemblait en fait au Blond clair) et `noir.jpg` = Brun foncé (nouvelle photo, même décor). Le Blond clair et le Brun roux
 > gardent leurs photos. Artifact du modèle 2 republié (même lien). La photo jaune pâle (`42190699`) n'est plus utilisée nulle part.
+
+> **12/10/2026 — PRIX DU MODÈLE 2 : 12,90 € (gérant : « celui-là tu dois mettre un peu plus cher que l'autre, c'est plus travaillé, il y a même un dessin »)** — le modèle 1 reste à 9,90 €.
+> Choisi par moi : +3 €, au-dessus du seul repère trouvé (Nature & Découvertes, marque-page bois imprimé simple 10,95 € ; aucun marque-page ajouré + imprimé comparable
+> trouvé). **Totaux modèle 2 sans gravure : seul 12,90 · en boîte 17,80 · coffret de 2 = 31,70 · coffret de 4 = 59,50** (boîtes 4,90 / 5,90 / 7,90 € inchangées), texte +2 € par marque-page.
+> À valider par lui. Générateur : constante `PU = 12.9` dans `tools/maquettes/marque-pages-fenetre.py` (le « 9,90 » de la capture est remplacé ; attention, le site écrit « 9,90\u00a0€ »
+> avec une espace insécable).
