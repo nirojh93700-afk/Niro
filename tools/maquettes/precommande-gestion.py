@@ -2,8 +2,10 @@
 # MAQUETTE « Précommande — côté Gestion » (12/10/2026). Gérant : « Fais la maquette de la partie Gestion ».
 # RIEN n'existe dans le site : la précommande n'est aujourd'hui qu'un affichage dans les maquettes des marque-pages.
 # Quatre écrans dans la même page : ① la fiche produit (Produits & stock → panneau) avec le bloc « Précommande »
-# ② la file de production avec la colonne « ⏳ Précommandes » ③ l'écran « Précommandes » (suivi des places,
-# bouton « Arrivage reçu », message aux clientes) ④ la fiche atelier avec l'encadré « ne pas graver ».
+# ② la file de production NORMALE, qui ne les montre pas (gérant, 12/10 : « tu mélanges pas avec les commandes
+# normales, tu fais une nouvelle catégorie dans admin ») ③ la nouvelle catégorie « Précommandes » du menu : suivi des
+# places, bouton « Arrivage reçu », message aux clientes ET sa propre file (en attente → à préparer → expédiées)
+# ④ la fiche atelier avec l'encadré « ne pas graver ».
 # Usage : python3.13 precommande-gestion.py <dossier css du site> <fichier de sortie>
 # Le dossier css = les 3 feuilles de nivcreation.fr (vraies classes .ash-* / .file-* / .ph-* / .dash-chip) ;
 # seul le bloc .pc-* est neuf. Photos : docs/maquettes/assets/marque-pages/ (réduites à 160 px).
@@ -123,11 +125,13 @@ HTML = r"""
   <div class="ash-brand"><div class="ash-logo">NiV</div><div class="ash-brand-txt"><div class="ash-brand-t">Niv Création</div><div class="ash-brand-s">Espace gestion</div></div></div>
   <nav class="ash-nav">
    <div class="ash-group"><div class="ash-glabel">Commandes</div>
-    <a class="ash-item" href="#" data-go="s2"><span class="ash-ico">▤</span><span class="ash-txt">File de production</span><span class="ash-badge">5</span></a>
-    <a class="ash-item" href="#" data-go="s3"><span class="ash-ico">⏳</span><span class="ash-txt">Précommandes</span><span class="ash-badge" id="navPre">3</span></a>
+    <a class="ash-item" href="#" data-go="s2"><span class="ash-ico">▤</span><span class="ash-txt">File de production</span><span class="ash-badge">2</span></a>
     <a class="ash-item" href="#" data-go="s4"><span class="ash-ico">◈</span><span class="ash-txt">Atelier · fichiers</span></a></div>
+   <div class="ash-group"><div class="ash-glabel">Précommandes</div>
+    <a class="ash-item" href="#" data-go="s3"><span class="ash-ico">⏳</span><span class="ash-txt">Précommandes</span><span class="ash-badge" id="navPre">3</span></a>
+    <a class="ash-item" href="#" data-go="s1"><span class="ash-ico">◧</span><span class="ash-txt">Produits en précommande</span></a></div>
    <div class="ash-group"><div class="ash-glabel">Catalogue</div>
-    <a class="ash-item" href="#" data-go="s1"><span class="ash-ico">◧</span><span class="ash-txt">Produits &amp; stock</span></a>
+    <a class="ash-item" href="#"><span class="ash-ico">◧</span><span class="ash-txt">Produits &amp; stock</span></a>
     <a class="ash-item" href="#"><span class="ash-ico">▢</span><span class="ash-txt">Matériel &amp; emballages</span></a></div>
   </nav>
  </aside>
@@ -142,7 +146,7 @@ HTML = r"""
    <!-- ① FICHE PRODUIT -->
    <section id="s1">
     <h1 class="pc-h1">Marque-page en bois personnalisé</h1>
-    <p class="pc-sub">Produits &amp; stock → panneau de la fiche. Un nouveau bloc « Précommande » s'ajoute sous le stock. Le reste de la fiche (prix, couleurs, gravure) ne change pas.</p>
+    <p class="pc-sub">Dans la nouvelle catégorie « Précommandes » du menu : la liste des produits vendus en précommande, et pour chacun ce bloc. Le reste de la fiche (prix, couleurs, gravure) reste dans Produits &amp; stock et ne change pas.</p>
     <div class="pc-card pc-pre">
      <h3>⏳ Précommande</h3>
      <p>À cocher quand le produit se vend AVANT d'être arrivé. Le client paie tout de suite, comme une commande normale ; la commande attend l'arrivage dans une colonne à part.</p>
@@ -169,25 +173,24 @@ HTML = r"""
       <li>Chaque précommande est marquée <span class="file-chip pre">⏳ Précommande</span> dans la file de production, dans la fiche de la commande et sur la fiche atelier, avec la date d'arrivée prévue.</li>
       <li>Le nombre de places baisse à chaque paiement ; le site refuse une couleur épuisée au paiement (comme une rupture).</li>
       <li>Le mail de confirmation à la cliente reprend la phrase de la fiche (pas de date plus précise que celle écrite ici).</li>
-      <li>Quand le colis arrive, le bouton « Arrivage reçu » de l'écran Précommandes passe toutes les commandes en « À préparer » et remet la fiche en vente normale.</li>
+      <li>Les précommandes ne vont JAMAIS dans la file de production normale : elles vivent dans l'écran « Précommandes », de l'attente jusqu'à l'expédition.</li>
+      <li>Quand le colis arrive, le bouton « Arrivage reçu » de l'écran Précommandes les passe en « À préparer » (toujours dans cet écran) et remet la fiche en vente normale.</li>
      </ul></div>
    </section>
 
    <!-- ② FILE DE PRODUCTION -->
    <section id="s2" hidden>
     <h1 class="pc-h1">File de production</h1>
-    <p class="pc-sub">Les précommandes ont leur colonne, AVANT « À préparer », pour que rien ne se mélange : elles ne sont pas à graver tant que le colis n'est pas arrivé.</p>
-    <div class="pc-alert" id="alertFile"><span>⏳</span><span><b id="aN">3</b> précommandes attendent l'arrivage des marque-pages (prévu le <b id="aD">15/11</b>). Elles ne sont pas à graver.</span><span class="sp"></span><a href="#" data-go="s3" class="btn btn-outline" style="padding:7px 12px;font-size:.82rem">Voir les précommandes →</a></div>
+    <p class="pc-sub">Inchangée : seulement les commandes normales. Les précommandes n'y apparaissent jamais, elles ont leur propre écran.</p>
+    <div class="pc-alert" id="alertFile" style="background:#fff;border-color:var(--line)"><span>⏳</span><span><b id="aN">3</b> précommandes sont rangées à part (arrivage prévu le <b id="aD">15/11</b>).</span><span class="sp"></span><a href="#" data-go="s3" class="btn btn-outline" style="padding:7px 12px;font-size:.82rem">Ouvrir Précommandes →</a></div>
     <div class="file-kpis" style="margin-bottom:14px">
-     <div class="file-kpi"><small>À préparer</small><b id="kPrep">1</b></div>
-     <div class="file-kpi alert"><small>⏳ Précommandes</small><b id="kPre">3</b></div>
+     <div class="file-kpi"><small>À préparer</small><b>1</b></div>
      <div class="file-kpi"><small>En fabrication</small><b>1</b></div>
-     <div class="file-kpi"><small>Places restantes</small><b id="kPl">—</b></div>
+     <div class="file-kpi"><small>Expédiées (7 j)</small><b>4</b></div>
+     <div class="file-kpi"><small>Réponses non lues</small><b>0</b></div>
     </div>
     <div class="file-cols">
-     <div class="file-col" id="colPre"><div class="file-col-h"><span>⏳ Précommandes · en attente</span><span class="n" id="nPre">3</span></div><div id="preCards"></div></div>
-     <div class="file-col"><div class="file-col-h"><span>À préparer</span><span class="n" id="nPrep">1</span></div>
-      <div id="prepCards"></div>
+     <div class="file-col"><div class="file-col-h"><span>À préparer</span><span class="n">1</span></div>
       <div class="file-card">
        <div class="file-card-top"><div><span class="file-pos">1</span><span class="file-ref">#1ZNESNSV</span><span class="dash-chip prep" style="margin-left:8px">À préparer</span></div><div style="text-align:right"><div style="font-weight:800">34,90 €</div><div class="file-age">il y a 5 h · 12/10 06:10</div></div></div>
        <div class="file-who"><strong>Élodie Marchand</strong> <span>· Colis à domicile · 69007 Lyon</span></div>
@@ -203,13 +206,16 @@ HTML = r"""
        <div class="file-actions"><button class="btn btn-gold">Expédier avec n° de suivi</button></div>
       </div>
      </div>
+     <div class="file-col"><div class="file-col-h"><span>Expédiées récentes</span><span class="n">1</span></div>
+      <div class="file-card"><div class="file-card-top"><div><span class="file-ref">#1S9IOON5</span><span class="dash-chip exp" style="margin-left:8px">Expédiée</span></div><div style="text-align:right"><div style="font-weight:800">26,41 €</div><div class="file-age">09/10</div></div></div><div class="file-who"><strong>Enes Varol</strong> <span>· Point relais</span></div></div>
+     </div>
     </div>
    </section>
 
    <!-- ③ PRÉCOMMANDES -->
    <section id="s3" hidden>
     <h1 class="pc-h1">Précommandes</h1>
-    <p class="pc-sub">Nouvel écran sous « Commandes ». Un produit en précommande = une ligne : places vendues, places restantes, arrivée prévue, et le bouton qui bascule tout le jour où le colis arrive.</p>
+    <p class="pc-sub">Nouvelle catégorie du menu, séparée des commandes normales. En haut, les produits en précommande (places, arrivée, bouton « Arrivage reçu ») ; en dessous, LEUR file de production, de l'attente jusqu'à l'expédition. Rien ne se mélange avec la file normale.</p>
     <div class="pc-card">
      <table class="pc-tbl"><thead><tr><th>Produit</th><th>Arrivée prévue</th><th>Places vendues</th><th>Restantes</th><th>Encaissé</th></tr></thead>
       <tbody><tr><td><img src="__IMG_caramel__" alt=""/><div><b>Marque-page en bois personnalisé</b><small style="display:block;color:var(--ink-soft)">6 couleurs · précommande ouverte le 12/10</small></div></td>
@@ -230,7 +236,17 @@ Niv Création
 nivcreation.fr</div>
      <div class="pc-msg" id="rbtBox"><b>Rembourser une précommande</b>Seul cas prévu : le fournisseur ne livre pas (ou pas la couleur commandée). Le remboursement se fait depuis la commande (bouton « Rembourser » existant, Stripe), la place est rendue, et la cliente reçoit le mail de remboursement du site. La règle « article personnalisé jamais remboursé » ne s'applique pas tant que rien n'a été gravé.</div>
     </div>
-    <div class="pc-card"><h3>Les précommandes en cours</h3><p>Dans l'ordre de paiement. La même carte que la file de production, en compact.</p><div id="preList"></div></div>
+    <div class="file-kpis" style="margin-bottom:14px">
+     <div class="file-kpi alert"><small>⏳ En attente d'arrivage</small><b id="kPre">3</b></div>
+     <div class="file-kpi"><small>À préparer (arrivées)</small><b id="kPrep">0</b></div>
+     <div class="file-kpi"><small>Expédiées</small><b>0</b></div>
+     <div class="file-kpi"><small>Places restantes</small><b id="kPl">—</b></div>
+    </div>
+    <div class="file-cols">
+     <div class="file-col" id="colPre"><div class="file-col-h"><span>⏳ En attente d'arrivage</span><span class="n" id="nPre">3</span></div><div id="preCards"></div></div>
+     <div class="file-col"><div class="file-col-h"><span>À préparer · arrivées</span><span class="n" id="nPrep">0</span></div><div id="prepCards"><div class="file-empty">Rien tant que le colis n'est pas arrivé.</div></div></div>
+     <div class="file-col"><div class="file-col-h"><span>Expédiées</span><span class="n">0</span></div><div class="file-empty">Les précommandes expédiées restent ici, pas dans la file normale.</div></div>
+    </div>
    </section>
 
    <!-- ④ FICHE ATELIER -->
@@ -259,7 +275,7 @@ const COULEURS=__COULEURS__, IMG=__IMG__, VENDU=__VENDU__, ORDERS=__ORDERS__;
 const $=s=>document.querySelector(s);
 let recu=false; const places={}; COULEURS.forEach(c=>places[c[0]]=c[3]);
 function go(id){document.querySelectorAll('section[id^=s]').forEach(s=>s.hidden=s.id!==id);document.querySelectorAll('.mp-seg button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
- const g={s1:['Catalogue','Produits & stock'],s2:['Commandes','File de production'],s3:['Commandes','Précommandes'],s4:['Commandes','Atelier · fichiers']}[id];$('#crG').textContent=g[0];$('#crT').textContent=g[1];window.scrollTo(0,0);}
+ const g={s1:['Précommandes','Produits en précommande'],s2:['Commandes','File de production'],s3:['Précommandes','Précommandes'],s4:['Commandes','Atelier · fichiers']}[id];$('#crG').textContent=g[0];$('#crT').textContent=g[1];window.scrollTo(0,0);}
 function fr(d){const x=new Date(d);return isNaN(x)?'—':x.toLocaleDateString('fr-FR');}
 function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),3200);}
@@ -276,15 +292,14 @@ function carte(o,compact){const li=o.mp.map((m,i)=>`<li><img src="${IMG[m.c]}" a
  ${compact?'':`<ul class="pc-mp">${li}</ul>`}
  <div class="file-chips">${recu?'':'<span class="file-chip pre">⏳ Précommande · arrivage prévu le '+$('#tD').textContent+'</span>'}${o.boite?'<span class="file-chip">📦 Boîte cadeau</span>':''}</div>
  ${compact?'':`<div class="file-actions"><button class="btn btn-gold" ${recu?'':'disabled title="Les marque-pages ne sont pas arrivés"'}>Commencer la fabrication</button><button class="btn btn-outline">Fiche complète →</button></div>`}</div>`;}
-function majCartes(){const h=ORDERS.map(o=>carte(o,false)).join('');$('#preCards').innerHTML=recu?'<div class="file-empty">Aucune précommande en attente.</div>':h;$('#prepCards').innerHTML=recu?h:'';
- $('#nPre').textContent=recu?0:ORDERS.length;$('#nPrep').textContent=1+(recu?ORDERS.length:0);$('#kPre').textContent=recu?0:ORDERS.length;$('#kPrep').textContent=1+(recu?ORDERS.length:0);$('#navPre').textContent=recu?0:ORDERS.length;
- $('#preList').innerHTML=ORDERS.map(o=>carte(o,true)).join('');
- const a=$('#alertFile');a.classList.toggle('ok',recu);a.innerHTML=recu?'<span>✅</span><span>Arrivage reçu : les '+ORDERS.length+' précommandes sont passées en « À préparer », la fiche se vend normalement.</span>':'<span>⏳</span><span><b>'+ORDERS.length+'</b> précommandes attendent l\'arrivage des marque-pages (prévu le <b>'+$('#tD').textContent.slice(0,5)+'</b>). Elles ne sont pas à graver.</span><span class="sp"></span><a href="#" data-go="s3" class="btn btn-outline" style="padding:7px 12px;font-size:.82rem">Voir les précommandes →</a>';
+function majCartes(){const h=ORDERS.map(o=>carte(o,false)).join('');$('#preCards').innerHTML=recu?'<div class="file-empty">Aucune précommande en attente.</div>':h;$('#prepCards').innerHTML=recu?h:'<div class="file-empty">Rien tant que le colis n\'est pas arrivé.</div>';
+ $('#nPre').textContent=recu?0:ORDERS.length;$('#nPrep').textContent=recu?ORDERS.length:0;$('#kPre').textContent=recu?0:ORDERS.length;$('#kPrep').textContent=recu?ORDERS.length:0;$('#navPre').textContent=ORDERS.length;
+ const a=$('#alertFile');a.classList.toggle('ok',recu);a.innerHTML=(recu?'<span>✅</span><span>Arrivage reçu : les '+ORDERS.length+' précommandes sont « À préparer » dans leur écran, la fiche se vend normalement.</span>':'<span>⏳</span><span><b>'+ORDERS.length+'</b> précommandes sont rangées à part (arrivage prévu le <b>'+$('#tD').textContent.slice(0,5)+'</b>).</span>')+'<span class="sp"></span><a href="#" data-go="s3" class="btn btn-outline" style="padding:7px 12px;font-size:.82rem">Ouvrir Précommandes →</a>';
  const s=$('#faStop');s.classList.toggle('ok',recu);s.innerHTML=recu?'✅ Marque-pages arrivés — à graver<small>Passée « À préparer » le jour de l\'arrivage.</small>':'⏳ PRÉCOMMANDE — ne pas graver avant l\'arrivage<small>Marque-pages attendus le '+$('#tD').textContent+'. La commande passera « À préparer » quand vous cliquerez « Arrivage reçu ».</small>';
  $('#recu').disabled=recu;$('#recu').textContent=recu?'✅ Arrivage reçu le '+new Date().toLocaleDateString('fr-FR'):'✅ Arrivage reçu → passer les précommandes en « À préparer »';
  if(recu){$('#tog').checked=false;$('#preForm').style.display='none';$('#preOff').style.display='block';}}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t){e.preventDefault();go(t.dataset.go);return;}
- if(e.target.closest('#recu')){recu=true;majPlaces();majCartes();toast('Arrivage reçu : '+ORDERS.length+' commandes passées « À préparer », fiche remise en vente normale.');return;}
+ if(e.target.closest('#recu')){recu=true;majPlaces();majCartes();toast('Arrivage reçu : '+ORDERS.length+' précommandes passées « À préparer » (dans l\'écran Précommandes), fiche remise en vente normale.');return;}
  if(e.target.closest('#msg')){$('#msgBox').classList.toggle('open');$('#rbtBox').classList.remove('open');return;}
  if(e.target.closest('#rbt')){$('#rbtBox').classList.toggle('open');$('#msgBox').classList.remove('open');return;}});
 document.addEventListener('input',e=>{if(e.target.id==='dArr'||e.target.id==='dDel'){majTxt();majCartes();}

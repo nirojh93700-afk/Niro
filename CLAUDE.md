@@ -3508,3 +3508,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Reste ouvert** : panier mixte (précommande + article en stock : un colis à la fin ou deux envois ?) · prix de la boîte au port (boîte rigide = colis 6,90 €) ·
   vérifier le délai légal (date ou délai obligatoire ; 30 jours sinon). À la construction : champ produit `precommande:{arrivee, delaiJours, places:{couleur:n}}`,
   statut de commande `precommande` (avant `a_preparer`), action admin « arrivage-recu », `catalogAudit` signale une précommande dont la date d'arrivée est dépassée.
+
+> **v2 (12/10, gérant : « tu mets toutes les précommandes dedans, tu mélanges pas avec les commandes normales, tu fais une nouvelle catégorie dans admin » + « touche pas
+> le site »)** : « Précommandes » devient une CATÉGORIE À PART du menu de Gestion (groupe « Précommandes » : écran Précommandes + « Produits en précommande »), entre
+> Commandes et Catalogue. La file de production NORMALE ne montre plus jamais une précommande (juste une ligne grise « 3 précommandes sont rangées à part → Ouvrir
+> Précommandes »). L'écran Précommandes a SA PROPRE FILE à 3 colonnes : ⏳ En attente d'arrivage → À préparer (arrivées) → Expédiées ; « Arrivage reçu » déplace les cartes
+> dans la 2ᵉ colonne de CE MÊME écran (jamais vers la file normale) ; les précommandes expédiées restent là aussi. Même artifact (version 2). Le site n'est pas touché.
