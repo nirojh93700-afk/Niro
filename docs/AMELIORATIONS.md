@@ -150,3 +150,5 @@
   encadré explicatif sous le titre, bouton « Précommander », mention dans le panier, l'e-mail de confirmation et la fiche atelier
   (« à graver à réception du stock »), compteur « N places restantes » si `limite` (stock suivi), coupe-circuit à zéro.
   Réutilisable pour tout futur arrivage (cadeaux de Noël, nouveaux modèles). ⚠️ Règle : aucune date promise.
+
+- **Précommande — ce qu'il faudra décider avant de construire (12/10/2026)** : ① paiement tout de suite (le site ne sait payer qu'au moment de la commande) ② nombre de places = quantité commandée au fournisseur (sinon stock illimité) ③ **délai de livraison à annoncer** (obligation légale : une date ou un délai, sinon 30 jours maximum, au-delà le client peut annuler — à vérifier ; en tension avec la règle « aucune date promise » dans les mails) ④ panier mixte (précommande + article en stock : un seul colis à la fin ou deux envois) ⑤ marque « précommande » dans Gestion, la file de production et la fiche atelier ⑥ message « c'est arrivé » envoyé par LUI via Messages clients (jamais automatique) ⑦ remboursement si le fournisseur ne livre pas.

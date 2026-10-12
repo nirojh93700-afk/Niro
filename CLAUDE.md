@@ -3481,3 +3481,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > **12/10/2026 — PRIX DU MODÈLE 2 FIXÉ PAR LE GÉRANT : 13,90 €** (il a écrit « mais 14,90 € » puis, aussitôt, « 13,90 € » — c'est 13,90 qui compte ; remplace mon 12,90 ci-dessus). Modèle 1 : 9,90 €.
 > **Totaux modèle 2 sans gravure : seul 13,90 · en boîte 18,80 · coffret de 2 = 33,70 · coffret de 4 = 63,50** (boîtes 4,90 / 5,90 / 7,90 € inchangées), texte +2 € par marque-page.
 > Constante `PU = 13.9` dans `tools/maquettes/marque-pages-fenetre.py`.
+
+## ✅ LES DEUX MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 12/10/2026 (« Enregistre les deux maquettes ») — RIEN en ligne
+- **Modèle 1 « pompon doré »** : https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa (version 9) · `docs/maquettes/marque-pages.html` · générateur `tools/maquettes/marque-pages.py` · 6 couleurs, 9,90 €.
+- **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/NvwXjxdShBw6a3sz5pdgkW (version 6) · `docs/maquettes/marque-pages-fenetre.html` · générateur `tools/maquettes/marque-pages-fenetre.py` · 4 couleurs, **13,90 €**.
+- Comparaison des idées de coffret (A à E) : https://claude.ai/artifact/64dwiXNn66qkXYBSVJxkZf (idée C choisie, voir plus haut). C'est CETTE version de chaque maquette à reproduire le jour de l'« applique », sans la modifier avant.
+- ⚠️ **AVANT TOUT PUSH** : les 3 `.html` complets (3 + 3,6 + 1,7 Mo, photos intégrées) ont été commités PLUSIEURS FOIS en local (16 commits d'avance, `.git` = 532 Mo) ; la règle du 10/10 dit « garder le dépôt sous ~440 Mo » (déploiements Firebase en échec au-delà). Vérifier la taille et retirer ces `.html` de l'historique local (ils se régénèrent avec les générateurs + la capture) AVANT de pousser.
+- ⛔ **Précommande : RIEN n'existe dans le site** (voir `docs/AMELIORATIONS.md`) ; le gérant a demandé le 12/10 comment ça fonctionne → explication donnée, décisions à prendre (paiement, places limitées, délai annoncé légalement, panier mixte).
