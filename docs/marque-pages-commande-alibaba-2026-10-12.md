@@ -41,3 +41,17 @@ Prix de vente des maquettes : modèle 1 **9,90 €**, modèle 2 **13,90 €**, b
    annexe II : vérifier avec lui les documents d'import avant l'arrivée ; sur le site, couleurs seulement (règle du 11/10).
 6. **Deux lignes inconnues** : « Marque-page métallique » ×35 (champagne) et « style papillon » ×5 (doré) — aucun produit
    correspondant dans les maquettes : nouveau produit à prévoir, ou pièces pour les coffrets ? À lui de dire.
+
+## Gain possible après les ventes (question du gérant, 12/10 soir) — hors « métalliques » (pas de prix de vente)
+| Pièce | Coût rendu | Prix | Marge |
+|---|---|---|---|
+| Modèle 1 | 1,12 € | 9,90 € | 8,78 € |
+| Modèle 2 | 2,11 € | 13,90 € | 11,79 € |
+| Boîte 1 / 2 / 4 | 1,05 / 1,41 / 2,11 € | 4,90 / 5,90 / 7,90 € | 3,85 / 4,49 / 5,79 € |
+| Gravure (texte ou dessin) | temps | +2 € | 2,00 € |
+
+Tout vendu (120 + 40 + 30 boîtes, sans gravure, hors port) : 1 931 € de ventes → **≈ 1 560 €** après l'achat (313 €) et Stripe (≈ 54 €).
+Moitié vendue : ≈ 965 € → **≈ 625 €**. Seuil de rentabilité : 36 marque-pages modèle 1 seuls (ou 27 du modèle 2).
+Gravure sur tout + dessin sur la moitié du modèle 1 : **+ ≈ 440 €** en tout vendu.
+Non compté : port ≈ neutre (4,90 vs 4,45 € · 6,90 vs ≈ 6,12 €) · cotisations URSSAF ≈ 12 % du CA (≈ 230 € en tout vendu) ·
+TVA à l'import éventuelle (jusqu'à ≈ 60 €, selon le transitaire).
