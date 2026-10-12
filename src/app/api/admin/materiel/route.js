@@ -1,4 +1,4 @@
-import { isAdmin, getMateriel, saveMaterielItem, recevoirMateriel, validerMateriel, annulerMateriel } from "@/lib/stock";
+import { isAdmin, getMateriel, saveMaterielItem, recevoirMateriel, validerMateriel, annulerMateriel, getRates, ajouterRate, annulerRate, getStockMap } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
 import { unitCostForItem } from "@/lib/productCosts";
@@ -14,6 +14,8 @@ export const runtime = "nodejs";
 //        { action:"annuler", orderId }                     rend le matériel au stock
 //        { action:"item", id | nouveau:true, …champs }     modifie / crée un article
 //        { action:"recevoir", id, qty }                    réception d'un achat (+ stock)
+//        { action:"rate", orderId, slug, stockId, qty, cout, note… }  pièce ratée : le stock du produit baisse
+//        { action:"annulerRate", id }                      raté saisi par erreur : la quantité est rendue
 // Rien n'est écrit sans un clic du gérant. Écritures ciblées + lecture fraîche (cf. stock.js).
 // =============================================================================
 
@@ -41,7 +43,8 @@ export async function GET(req) {
   if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const orderId = new URL(req.url).searchParams.get("orderId") || "";
   const { items, usage } = await getMateriel(true);
-  const out = { ok: true, items, cats: MATERIEL_CATS, kits: MATERIEL_KITS, utilise: utilise(usage), usages: usage, nbCommandes: Object.keys(usage).length };
+  const [rates, stock] = await Promise.all([getRates(true).catch(() => []), getStockMap().catch(() => ({}))]);
+  const out = { ok: true, items, cats: MATERIEL_CATS, kits: MATERIEL_KITS, utilise: utilise(usage), usages: usage, nbCommandes: Object.keys(usage).length, rates, stock };
   if (orderId) {
     out.usage = usage[orderId] || null;
     const [orders, catalog] = await Promise.all([getSiteOrders(500), getCatalogAdmin()]);
@@ -100,6 +103,16 @@ export async function POST(req) {
     const it = await recevoirMateriel(String(b.id || ""), b.qty);
     if (!it) return Response.json({ error: "Quantité ou article invalide." }, { status: 400 });
     return Response.json({ ok: true, item: it });
+  }
+  if (action === "rate") {
+    if (!b.orderId || !b.slug) return Response.json({ error: "Commande ou produit manquant." }, { status: 400 });
+    const rec = await ajouterRate(b);
+    return Response.json({ ok: true, rate: rec });
+  }
+  if (action === "annulerRate") {
+    const rec = await annulerRate(String(b.id || ""));
+    if (!rec) return Response.json({ error: "Raté introuvable." }, { status: 404 });
+    return Response.json({ ok: true, rate: rec });
   }
   return Response.json({ error: "Action inconnue." }, { status: 400 });
 }

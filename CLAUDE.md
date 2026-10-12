@@ -3376,3 +3376,20 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   à la main) · décompte automatique à l'expédition · alerte « à racheter » dans le menu · pochettes lin 50 / 24, papier de soie (60 ?), boîtes bois :
   quantités et usages à confirmer par lui.
 - **11/10/2026 soir — réponses du gérant aux 6 questions du matériel** : pochettes lin = **24** (celles de 50 archivées) · papier de soie = **60** feuilles · boîtes en bois 20×10×5 = **produit à vendre**, pas du matériel (archivées) · raffia = **10 g** par utilisation · **cartons : c'est le lot de 25 (25,4 × 20,4 × 15,3 cm, 1,12 € pièce) qu'il a acheté** (lot de 15 archivé ; il avait d'abord écrit « 15 » par erreur) · tailles du sac / microfibre / boîte allongée : encore « à saisir », il les donnera. Le kit « Colis verre » et le carton « suggéré » utilisent donc `carton25`. `saveMaterielItem` accepte maintenant `sug` (suggéré par défaut).
+
+## ✗ PIÈCE RATÉE / À REFAIRE + CONDITIONNEMENT DANS L'ATELIER — 12/10/2026 (construit, PAS EN LIGNE : attend son « mets en ligne »)
+> Gérant : « il faut que les packaging soient aussi dans l'Atelier de gravure… et si je grave mal et je recommence, pour chaque
+> produit commandé, un truc “raté / à refaire”, je dis combien, il faut que ça diminue le stock automatiquement ».
+- **Page Atelier** (`/gestion/atelier`) : chaque carte d'article a maintenant le bloc **📦 Conditionnement** de sa commande
+  (même composant et même fenêtre que la file de production) + le bouton **« ✗ Raté — à refaire »**.
+- **File de production** : le même bouton sous chaque article des commandes « à préparer » / « en fabrication ».
+- **Raté** (`src/components/admin/Rates.jsx`) : quantité (±), ligne de stock à baisser (proposée = celle que la commande a
+  décomptée au paiement, `o.stock` ; le verre à vin affiche la taille « 36 cl · Lot de 2 »), coût perdu prérempli
+  (`VARIANT_COSTS`, modifiable), note facultative. Enregistrer = le stock du produit baisse (jamais sous zéro ; stock non
+  suivi = rien retiré, perte gardée). « Annuler » rend exactement ce qui était sorti.
+- **Données** : section `rates` du blob (`ajouterRate` / `annulerRate` / `getRates` en fin de `stock.js`, stock lu en FRAIS),
+  API `/api/admin/materiel` (POST `rate` / `annulerRate`, le GET renvoie aussi `rates` et `stock`).
+- **Argent** : la perte est retirée du gain de la commande (bloc Conditionnement + calcul de la fenêtre) et des Bénéfices
+  (tuile « Pièces ratées », `profit = CA − achat − matériel − ratés`).
+- Vérifié : build OK · `npm run test-materiel` 17 vérifs · navigateur (commande simulée) 390 / 1280 px, atelier + file de
+  production : stock 7 → 5, perte 12,96 €, 0 erreur, 0 débordement.

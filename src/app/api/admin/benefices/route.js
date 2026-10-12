@@ -1,4 +1,4 @@
-import { isAdmin, getUrssafDeclared, setUrssafDeclared, getMateriel } from "@/lib/stock";
+import { isAdmin, getUrssafDeclared, setUrssafDeclared, getMateriel, getRates } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
 import { unitCostForItem } from "@/lib/productCosts";
@@ -17,6 +17,9 @@ export async function GET(req) {
   const [orders, catalog] = await Promise.all([getSiteOrders(500), getCatalogAdmin()]);
   // Matériel d'emballage validé commande par commande (Gestion → file de production → Conditionnement).
   const matUsage = await getMateriel(true).then((m) => m.usage || {}).catch(() => ({}));
+  // Pièces ratées / refaites (12/10/2026) : leur coût d'achat est perdu, déduit commande par commande.
+  const perteParCommande = {};
+  for (const r of await getRates(true).catch(() => [])) perteParCommande[r.orderId] = (perteParCommande[r.orderId] || 0) + (Number(r.cout) || 0);
 
   // --- LIVRE DES RECETTES (?recettes=1) ---------------------------------------
   // Registre chronologique OBLIGATOIRE du micro-entrepreneur. Mentions requises :
@@ -63,10 +66,12 @@ export async function GET(req) {
     // mais compte dans le CA ENCAISSÉ à déclarer (ex. URSSAF) : on la suit aussi par mois.
     const ship = Number(o.shippingPrice) || 0;
     per.all.shipping += ship; if (inYear) per.year.shipping += ship; if (inMonth) per.month.shipping += ship;
-    monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, orders: 0, materiel: 0 };
+    monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, orders: 0, materiel: 0, rates: 0 };
     monthly[mk].shipping += ship;
     const mat = Number(matUsage[o.id]?.matCost) || 0;
     if (mat) { per.all.materiel += mat; if (inYear) per.year.materiel += mat; if (inMonth) per.month.materiel += mat; monthly[mk].materiel = (monthly[mk].materiel || 0) + mat; }
+    const perte = Number(perteParCommande[o.id]) || 0;
+    if (perte) { per.all.rates += perte; if (inYear) per.year.rates += perte; if (inMonth) per.month.rates += perte; monthly[mk].rates = (monthly[mk].rates || 0) + perte; }
     monthly[mk].orders += 1;
     for (const it of (o.items || [])) {
       const qty = Number(it.quantity) || 1;
@@ -89,7 +94,7 @@ export async function GET(req) {
     }
   }
 
-  const finish = (b) => { b.profit = round(b.revenue - b.cost - b.materiel); b.materiel = round(b.materiel); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
+  const finish = (b) => { b.profit = round(b.revenue - b.cost - b.materiel - b.rates); b.materiel = round(b.materiel); b.rates = round(b.rates); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
   finish(per.month); finish(per.year); finish(per.all);
 
   // Série des 12 derniers mois (ordre chronologique).
@@ -100,7 +105,7 @@ export async function GET(req) {
     let m = mm - i, y = yy;
     while (m <= 0) { m += 12; y -= 1; }
     const k = `${y}-${String(m).padStart(2, "0")}`;
-    const v = monthly[k] || { revenue: 0, cost: 0, shipping: 0, orders: 0, materiel: 0 };
+    const v = monthly[k] || { revenue: 0, cost: 0, shipping: 0, orders: 0, materiel: 0, rates: 0 };
     // « ca » = ce qui a été réellement ENCAISSÉ ce mois-là (produits + livraison
     // payée par les clientes) : c'est ce chiffre-là qui sert pour une déclaration
     // (URSSAF…), pas seulement le CA produits utilisé pour calculer la marge.
@@ -111,7 +116,8 @@ export async function GET(req) {
       ca: round(v.revenue + v.shipping),
       cost: round(v.cost),
       materiel: round(v.materiel),
-      profit: round(v.revenue - v.cost - (v.materiel || 0)),
+      rates: round(v.rates || 0),
+      profit: round(v.revenue - v.cost - (v.materiel || 0) - (v.rates || 0)),
       orders: v.orders || 0,
     });
   }
@@ -143,5 +149,5 @@ export async function POST(req) {
   return Response.json({ ok: true, declared });
 }
 
-function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, materiel: 0 }; }
+function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, materiel: 0, rates: 0 }; }
 function round(n) { return Math.round((Number(n) || 0) * 100) / 100; }

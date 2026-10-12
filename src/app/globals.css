@@ -4828,3 +4828,24 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   .mp-row .mp-bar{grid-column:1 / -1;width:auto;text-align:left}
   .mp-row .mp-bar .mp-links{justify-content:flex-start}
 }
+
+/* ===== Pièce ratée / à refaire (12/10/2026) — Rates.jsx, page Atelier + file de production ===== */
+.rt { margin: 10px 0 0; }
+.rt-btn { padding: 6px 12px; font-size: .82rem; border-color: #d9a3a3; color: #9b2c2c; }
+.rt-liste { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 6px; }
+.rt-liste li { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 7px 10px; border-radius: 8px; background: #fdecec; border: 1px solid #f0c4c4; font-size: .84rem; color: #6d1f1f; overflow-wrap: anywhere; }
+.rt-perte { color: #b32b2b; }
+.rt-annul { background: none; border: 0; padding: 4px 2px; font: inherit; font-size: .8rem; color: #7a5a5a; text-decoration: underline; cursor: pointer; min-height: 32px; }
+.rt-form { border: 1px solid #f0c4c4; background: #fffafa; border-radius: 10px; padding: 12px; display: grid; gap: 10px; }
+.rt-titre { font-weight: 700; color: #6d1f1f; font-size: .92rem; }
+.rt-ligne { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: .86rem; }
+.rt-ligne > span:first-child { color: var(--ink-soft); }
+.rt-ligne select, .rt-ligne input { box-sizing: border-box; min-width: 0; flex: 1 1 180px; max-width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: #fff; }
+.rt-note input { flex-basis: 100%; }
+.rt-qty { display: inline-flex; align-items: center; gap: 10px; }
+.rt-qty button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: #fff; font-size: 1.2rem; cursor: pointer; }
+.rt-qty b { min-width: 24px; text-align: center; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.rt-info { margin: 0; font-size: .82rem; color: var(--ink-soft); }
+.rt-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.rt-items { margin: 8px 0 0; display: grid; gap: 4px; }
+.rt-items .rt-nom { font-size: .8rem; color: var(--ink-soft); margin-top: 6px; }

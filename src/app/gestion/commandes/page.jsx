@@ -17,6 +17,7 @@ import PageHead from "@/components/admin/PageHead";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
+import BoutonRate from "@/components/admin/Rates";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -178,13 +179,13 @@ export default function FileProductionPage() {
 
       <div className="file-cols">
         <Colonne titre="● À préparer" n={aPreparer.length} vide="Rien à préparer 🎉">
-          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} />)}
+          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} />)}
         </Colonne>
         <Colonne titre="✏️ En fabrication" n={enFab.length} vide="Aucune pièce en cours.">
-          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} />)}
+          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} />)}
         </Colonne>
         <Colonne titre="📦 Expédiées récemment" n={expediees.length} vide="Aucune expédition récente.">
-          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} compact />)}
+          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} compact />)}
         </Colonne>
       </div>
 
@@ -194,7 +195,7 @@ export default function FileProductionPage() {
         <summary>Terminées, annulées, remboursées ({terminees.length})</summary>
         <div className="file-cols" style={{ marginTop: 10 }}>
           <div className="file-col" style={{ gridColumn: "1 / -1", background: "transparent", border: "none", padding: 0 }}>
-            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} compact />)}
+            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} compact />)}
           </div>
         </div>
       </details>
@@ -211,7 +212,7 @@ function Colonne({ titre, n, vide, children }) {
   );
 }
 
-function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) {
+function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, adminKey, onMat }) {
   const [note, setNote] = useState(o.adminNote || "");
   const [editing, setEditing] = useState(false);
   const flags = o.flags || [];
@@ -267,6 +268,24 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) 
             });
         })()}
       </ul>
+
+      {/* Pièce ratée / à refaire (12/10/2026) : un bouton par article tant que la commande est en cours. */}
+      {!compact && ["a_preparer", "en_gravure"].includes(statut) ? (() => {
+        const specParLigne = apparierSpec(o.items, o.spec);
+        const lignes = (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
+          .filter(({ it }) => it.slug && !/livraison|point relais|retrait/i.test(it.name || ""));
+        if (!lignes.length) return null;
+        return (
+          <div className="rt-items">
+            {lignes.map(({ it, s }, i) => (
+              <div key={i}>
+                {lignes.length > 1 ? <div className="rt-nom">{it.name}</div> : null}
+                <BoutonRate o={o} item={{ slug: it.slug, name: it.name, variantTitle: s?.variantTitle || "" }} mat={mat} adminKey={adminKey} onSaved={onMat} />
+              </div>
+            ))}
+          </div>
+        );
+      })() : null}
 
       {!compact && o.demande ? (
         <div className="file-note-box">

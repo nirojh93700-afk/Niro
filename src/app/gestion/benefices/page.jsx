@@ -176,6 +176,7 @@ export default function BeneficesPage() {
         <Tile label="Chiffre d'affaires" value={euro(p.revenue)} sub={`${p.units} article(s) vendu(s)`} />
         <Tile label="Coût d'achat" value={euro(p.cost)} sub="Produits vendus" />
         <Tile label="Matériel d'emballage" value={euro(p.materiel || 0)} sub="Commandes conditionnées" />
+        <Tile label="Pièces ratées" value={euro(p.rates || 0)} sub="Gravures à refaire" />
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
 

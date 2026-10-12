@@ -2776,3 +2776,70 @@ export async function annulerMateriel(orderId) {
   await persistCatalog(data, ["materiel", "materielUsage"]);
   return { items };
 }
+
+// =============================================================================
+// PIÈCES RATÉES / À REFAIRE (12/10/2026) — gérant : « si je grave mal et je recommence, je dis
+// combien, il faut que ça diminue le stock automatiquement ». Section `rates` du blob (liste) ;
+// chaque raté retire sa quantité de la ligne de stock choisie (si elle est suivie) et garde son coût
+// (déduit dans Bénéfices). « Annuler » rend la quantité au stock. Lecture FRAÎCHE du stock avant
+// d'écrire (plusieurs instances du site), jamais le cache 60 s.
+// =============================================================================
+const RATES_KEEP = 1000;
+async function lireStockFrais() {
+  if (useFirestore()) {
+    const data = await fsReadDoc(KEY);
+    return data || {};
+  }
+  return getStockMap();
+}
+
+export async function getRates(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  return Array.isArray(data.rates) ? data.rates : [];
+}
+
+export async function ajouterRate({ orderId, ref, slug, name, variantTitle, verre, stockId, qty, cout, note }) {
+  const q = Math.max(1, Math.min(99, parseInt(qty, 10) || 1));
+  const sid = String(stockId || "").trim().slice(0, 120);
+  const map = await lireStockFrais();
+  let avant = null, apres = null;
+  if (sid && typeof map[sid] === "number") {
+    avant = map[sid];
+    apres = Math.max(0, avant - q);
+    map[sid] = apres;
+    await persist(map);
+  }
+  const r2 = (v) => Math.round((Number(String(v ?? "").replace(",", ".")) || 0) * 100) / 100;
+  const rec = {
+    id: "rt_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    at: Date.now(), orderId: String(orderId || "").slice(0, 80), ref: String(ref || "").slice(0, 20),
+    slug: String(slug || "").slice(0, 120), name: String(name || "").slice(0, 160),
+    variantTitle: String(variantTitle || "").slice(0, 120), verre: Number(verre) || null,
+    stockId: sid, qty: q, cout: Math.max(0, r2(cout)), note: String(note || "").slice(0, 300),
+    suivi: avant !== null, // false = stock non suivi (illimité) : rien n'a été retiré
+    // retire = ce qui a VRAIMENT quitté le stock (on ne rendra pas plus à l'annulation).
+    retire: avant !== null ? avant - apres : 0, avant, apres,
+  };
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.rates) ? data.rates : [];
+  data.rates = [rec, ...list].slice(0, RATES_KEEP);
+  await persistCatalog(data, ["rates"]);
+  return rec;
+}
+
+export async function annulerRate(id) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.rates) ? data.rates : [];
+  const rec = list.find((r) => r.id === id);
+  if (!rec) return null;
+  if (rec.stockId && rec.retire > 0) {
+    const map = await lireStockFrais();
+    if (typeof map[rec.stockId] === "number") {
+      map[rec.stockId] += rec.retire;
+      await persist(map);
+    }
+  }
+  data.rates = list.filter((r) => r.id !== id);
+  await persistCatalog(data, ["rates"]);
+  return rec;
+}
