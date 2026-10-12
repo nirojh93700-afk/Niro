@@ -56,6 +56,10 @@
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente
+- **🥃 Evan (evan2008.nat@gmail.com) — verre à whisky sur mesure (visuel complet : dessin de mains + 3 textes)** : réponse SANS prix envoyée
+  le 12/10 soir par le site, on attend SA MAQUETTE. Dès qu'elle arrive : devis à régler en ligne, prix gardé en mémoire dans
+  `docs/messages/evan-verre-whisky-sur-mesure.md` (19,90 € + 3 textes × 3 € = 28,90 € · port relais 4,90 / domicile 11,90 €),
+  à montrer au gérant avant tout envoi. Règle écrite le 12/10 en tête de CLAUDE.md : tout texte gravé est payant, même dans un visuel fourni.
 - **📦 Nollez Jessica (1PUMYQBL, bracelet cordon à plaque) — ✅ MAIL « quel nom sur le colis ? » ENVOYÉ le 12/10 par le site**
   (texte validé de `docs/messages/nollez-1PUMYQBL-nom-livraison.md`, branche de déploiement, envoyé tel quel après vérification :
   aucune réponse d'elle au mail du 09/10). Le mail annonce un départ DEMAIN (13/10) au nom « cipresso fybie » si elle ne répond pas :

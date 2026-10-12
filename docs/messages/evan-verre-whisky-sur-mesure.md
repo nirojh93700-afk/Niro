@@ -1,4 +1,4 @@
-# Evan (evan2008.nat@gmail.com) — demande sur mesure du 12/10/2026, 21 h 32 — BROUILLON À VALIDER, RIEN D'ENVOYÉ
+# Evan (evan2008.nat@gmail.com) — demande sur mesure du 12/10/2026, 21 h 32 — ✅ ENVOYÉ le 12/10/2026 au soir par le site (« Envoie »), sans prix
 
 **Décision du gérant (12/10 soir) : PAS DE PRIX dans ce premier mail (« enlève le prix, mais tu le gardes en mémoire ») — on demande
 d'abord sa maquette ; le prix part ensuite, avec le devis, une fois l'image reçue. « Envoie rien » : attendre son « envoie ».**
