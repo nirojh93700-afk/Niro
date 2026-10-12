@@ -1,5 +1,10 @@
 # Evan (evan2008.nat@gmail.com) — demande sur mesure du 12/10/2026, 21 h 32 — BROUILLON À VALIDER, RIEN D'ENVOYÉ
 
+**Décision du gérant (12/10 soir) : PAS DE PRIX dans ce premier mail (« enlève le prix, mais tu le gardes en mémoire ») — on demande
+d'abord sa maquette ; le prix part ensuite, avec le devis, une fois l'image reçue. « Envoie rien » : attendre son « envoie ».**
+**Prix à garder en mémoire pour le devis : verre + dessin 19,90 € · 3 textes × 3 € = 9 € → 28,90 € · port relais 4,90 € / domicile 11,90 €
+(33,80 € ou 40,80 €).**
+
 Demande (formulaire de la fiche Verre à whisky portrait) : reproduire sur UN verre son visuel complet (texte « PAS LE MÊME
 SANG, FRÈRES POURTANT », prénoms Evan et Gab, deux mains entrelacées, « MÊME LOIN, MÊME LIEN »), verre transparent à fond
 épais, inscriptions blanches ; questions : faisable sur un seul verre ? technique (gravure ou impression blanche) ? prix total
@@ -20,9 +25,7 @@ Merci pour votre message. Oui, votre visuel complet peut être gravé sur un seu
 
 Notre verre à whisky est transparent, à fond épais. Nous ne faisons pas d'impression : le visuel est gravé dans le verre, et la gravure ressort en blanc givré sur le verre transparent, ce qui correspond à vos inscriptions blanches. Les traits fins du dessin sont repris par notre atelier avant la gravure pour rester nets.
 
-Prix pour un exemplaire : 19,90 € le verre avec le dessin des mains gravé, plus 3 € par texte gravé : « PAS LE MÊME SANG, FRÈRES POURTANT », les prénoms Evan et Gab, et « MÊME LOIN, MÊME LIEN », soit 28,90 €. La livraison s'ajoute : 4,90 € en point relais ou 11,90 € à domicile, soit 33,80 € ou 40,80 € au total.
-
-Pour lancer votre verre, envoyez-nous votre maquette en répondant à ce message (une image nette, de préférence en noir sur fond blanc). Nous vous adresserons ensuite un devis de 28,90 € plus la livraison, à régler en ligne, et votre verre sera gravé à partir de votre maquette.
+Pour aller plus loin, envoyez-nous votre maquette en répondant à ce message (une image nette, de préférence en noir sur fond blanc). Nous reviendrons vers vous avec le prix pour un exemplaire, livraison comprise, une fois votre image reçue.
 
 Cordialement,
 Niv Création
