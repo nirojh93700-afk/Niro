@@ -56,6 +56,10 @@
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente
+- **⭐ Mails d'avis du 12/10 — 11 BROUILLONS MONTRÉS, RIEN D'ENVOYÉ** : `docs/messages/avis-2026-10-12.md`. Déjà servies : Maëlys
+  (exclue par le gérant), Zaghini (09/10), Alicia, Ophélie, Camille, Laura Nebout, Sonia, Faustine (07/10). À confirmer dans
+  Boxtal avant d'envoyer : Rose, Cécilia (« pas reçu » les 06-07/10), Ludovic (locker), Inès et Lorenzo (retrait), Anthony et
+  Marie (expédiés le 09/10), Laura Brimeux (PACS le 14/10 → attendre). Envoi par `send-client-email` sur son « envoie N ».
 - **🍸 Prospection bars & restaurants (26/09)** : e-mail v4 SANS prix, personnalisé par type + ville
   (tarifs pro sauvegardés, sur demande) + **122 adresses** au total (lot 1 : 30, lot 2 : 92, boutons
   séparés dans l'écran) NON vérifiées (`docs/prospection/`) + écran **Restaurants & bars** ✅ **EN
