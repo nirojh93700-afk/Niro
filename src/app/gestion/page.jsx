@@ -15,6 +15,7 @@ import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
 import { chargerAvecCache, viderCache } from "@/components/admin/adminCache";
 import { ongletDuChemin, cheminDeLOnglet } from "@/components/admin/ongletsGestion";
+import VarBadge from "@/components/admin/VarBadge";
 
 // Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
 // télécharge plus d'un coup le code des 15 onglets.
@@ -1169,11 +1170,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                         )}
                         <div className="co-art-body">
                           <strong>{it.quantity}× {it.name}</strong>
-                          {couleur && (
-                            <span style={{ display: "inline-block", marginLeft: 8, padding: "1px 9px", borderRadius: 999, background: "#f7ecd4", border: "1px solid #e0c88a", color: "#8a6d1f", fontSize: "0.8rem", fontWeight: 700, verticalAlign: "middle" }}>
-                              {couleur}
-                            </span>
-                          )}
+                          <VarBadge texte={couleur} />
                           {reste ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{reste}</span> : null}
                           {/* Encadré « Gravure » lisible : chaque choix sur sa ligne
                               (n° du dessin avec sa vignette, texte, police, photo). */}

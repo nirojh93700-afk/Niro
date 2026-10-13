@@ -10,6 +10,7 @@
 import { useMemo, useState } from "react";
 import { getProductBySlug } from "@/lib/products";
 import { VARIANT_COSTS } from "@/lib/productCosts";
+import VarBadge from "@/components/admin/VarBadge";
 
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
 const jour = (t) => { try { return new Date(t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" }); } catch { return ""; } };
@@ -117,7 +118,7 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
         <button type="button" className="btn btn-outline rt-btn" onClick={ouvrir}>✗ Raté — à refaire</button>
       ) : (
         <div className="rt-form">
-          <div className="rt-titre">Pièce ratée : {item.name || product?.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}{item.verre ? ` (verre ${item.verre})` : ""}</div>
+          <div className="rt-titre">Pièce ratée : {item.name || product?.name}<VarBadge texte={item.variantDetail || item.variantTitle} />{item.verre ? ` (verre ${item.verre})` : ""}</div>
           <div className="rt-ligne">
             <span>Combien de pièces ratées ?</span>
             <span className="rt-qty">

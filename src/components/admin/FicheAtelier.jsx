@@ -15,6 +15,7 @@ import { TableGravure, policeDeGravure } from "@/lib/engravingSheet";
 import FicheDevis from "@/components/admin/FicheDevis";
 import OptionsVendues from "@/components/admin/OptionsVendues";
 import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
+import VarBadge from "@/components/admin/VarBadge";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -126,7 +127,7 @@ export function ReglagesItem({ item, titre = true, police = true }) {
     <>
       {titre && (
         <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          {item.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}
+          {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} grand />
         </div>
       )}
       <Row k="Emplacement" v={item.emplacement === "fond" ? "Au fond du verre" : "Face avant"} />
@@ -200,7 +201,7 @@ function ItemSheet({ item }) {
     return (
       <div style={{ padding: "12px 0", borderTop: "1px dashed #ddd" }}>
         <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          {item.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}
+          {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} grand />
         </div>
         <div style={{ margin: "0 0 8px", padding: "8px 12px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.9rem" }}>
           ⚠️ Lot de {verres.length} verres, CHACUN DIFFÉRENT : {verres.length} photos et {verres.length} textes à graver — un verre = une gravure. Ne pas graver la même chose sur les {verres.length}.

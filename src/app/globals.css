@@ -4858,3 +4858,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 
 /* Taille du verre (13/10/2026) : petit texte sous le titre, comme les tailles de cristal. */
 .variant-swatch .vs-sub { display: block; font-size: .8rem; color: var(--ink-soft); margin-top: 2px; font-weight: 400; }
+
+/* Pastille « produit exact » (VarBadge) — taille / format commandé, bien visible dans Gestion. */
+.var-badge { display: inline-block; margin: 2px 0 2px 8px; padding: 3px 12px; border-radius: 8px; background: #c9a24b; color: #1a1206; border: 2px solid #a98935; font-weight: 800; font-size: 0.95em; line-height: 1.35; letter-spacing: 0.01em; vertical-align: middle; white-space: normal; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.var-badge.grand { font-size: 1.08em; padding: 4px 14px; }
+.var-badge.alerte { background: #fdecec; color: #b32b2b; border-color: #d64545; }

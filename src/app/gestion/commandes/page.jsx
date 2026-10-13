@@ -18,6 +18,7 @@ import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
 import BoutonRate from "@/components/admin/Rates";
+import VarBadge from "@/components/admin/VarBadge";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -275,7 +276,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
                   <span className="q">{it.quantity}×</span>
                   <span>
                     {it.name}
-                    {(s?.variantDetail || it.variantDetail) ? <span className="d" style={{ color: "var(--ink)", fontWeight: 700 }}>{s?.variantDetail || it.variantDetail}</span> : null}
+                    {(s?.variantDetail || it.variantDetail) ? <span className="d"><VarBadge texte={s?.variantDetail || it.variantDetail} /></span> : null}
                     {!compact && details ? <span className="d">{details}</span> : null}
                     {!compact && enLot ? (
                       <>
