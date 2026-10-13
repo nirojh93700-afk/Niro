@@ -3410,3 +3410,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   adresse de l'étiquette ou point relais choisi (le point relais ne s'affichait jamais : `relaisPoint` est un texte).
 - **Boxtal, rappel** : Express payé = **Chrono 18** (dépôt bureau de poste / Pickup, livré à domicile le lendemain avant 18 h),
   jamais une offre « Relais » / « Point retrait » / « Access Point ». « Chrono 18 collecte » = enlèvement chez lui (plus cher).
+
+## 🍷 VERRE À VIN — LA TAILLE SE CHOISIT À DROITE (13/10/2026, gérant : « c'est avec les sélections à l'unité / lot de 2
+## que ça doit aller, pas avec les photos »)
+- ⛔ ANNULE la mise en page du 25/09 (« la taille se choisit sous la photo ») : le choix « Taille du verre » (36 cl / 47 cl)
+  est maintenant dans la colonne de DROITE, juste au-dessus de « Choisissez votre option » (À l'unité / Lot de 2 / Lot de 4),
+  mêmes boutons `variant-swatch` (titre + sous-titre). Cliquer change toujours la galerie et les prix des lots.
+- Seul produit EN LIGNE avec `tailles`. Le gobelet (masqué) garde ses couleurs sous les photos : c'est sa maquette validée.

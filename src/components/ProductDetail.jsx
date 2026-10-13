@@ -1373,27 +1373,6 @@ export default function ProductDetail({ product }) {
           )}
 
 
-          {/* Pastilles de TAILLE sous la photo (verre à vin 36 / 47 cl) : même
-              habillage que les couleurs du gobelet. Cliquer change toute la galerie. */}
-          {product.tailles && (
-            <div className="color-swatches">
-              <div className="cs-label">{product.tailles.label || "Taille"} : <strong>{taille?.title}</strong>{taille?.sub ? ` — ${taille.sub}` : ""}</div>
-              <div className="cs-row">
-                {product.tailles.options.map((o) => (
-                  <button key={o.id} type="button"
-                    className={`cs-btn${o.id === tailleId ? " active" : ""}`}
-                    onClick={() => selectTaille(o.id)} aria-pressed={o.id === tailleId} title={`${o.title}${o.sub ? " — " + o.sub : ""}`}>
-                    {o.image && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={o.image} alt={o.title} />
-                    )}
-                    <span className="cs-name">{o.title}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Pastilles couleur APRÈS les vignettes (produits à galerie par coloris). */}
           {colorGallery && (
             <div className="color-swatches">
@@ -1566,6 +1545,25 @@ export default function ProductDetail({ product }) {
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* TAILLE du verre (verre à vin 36 / 47 cl) : à DROITE, juste au-dessus de « À l'unité / Lot de 2 / Lot de 4 »,
+              mêmes boutons (gérant, 13/10/2026 : « c'est avec ça que ça doit aller, pas avec les photos »).
+              Choisir une taille change aussi la galerie et les prix des lots. */}
+          {product.tailles && (
+            <div className="field">
+              <label>{product.tailles.label || "Taille"}</label>
+              <div className="variant-swatches">
+                {product.tailles.options.map((o) => (
+                  <button key={o.id} type="button"
+                    className={`variant-swatch${o.id === tailleId ? " active" : ""}`}
+                    onClick={() => selectTaille(o.id)} aria-pressed={o.id === tailleId}>
+                    <span className="vs-title">{o.title}</span>
+                    {o.sub ? <span className="vs-sub">{o.sub}</span> : null}
+                  </button>
+                ))}
               </div>
             </div>
           )}
