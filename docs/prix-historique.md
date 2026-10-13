@@ -227,3 +227,17 @@ le code ne changera **rien** sur la fiche. Dans ce cas, le remettre **dans Gesti
   port de 3,20 €) ; artisan le plus proche (Verre Créations, 46 cl cristal) = 19,90 €.
 - Identifiants : `verre-vin-47-1 / -2 / -4` (stock à part ; non suivi = illimité tant que le
   gérant n'a pas saisi 100 dans Gestion → Produits & stock).
+
+## 13/10/2026 — Verre à vin : +2 € par verre (gérant : « Deux euros »)
+Question du gérant « on peut augmenter de combien les verres de vin ? » → proposition +2 €/verre
+(reste sous Verre Créations : 18,90 € le 36 cl identique, 19,90 € le 46 cl), retenue.
+| Variante | AVANT | APRÈS |
+|---|---|---|
+| 36 cl à l'unité (`verre-vin-1`) | 15,90 € | **17,90 €** |
+| 36 cl lot de 2 (`verre-vin-2`) | 29,90 € | **33,90 €** |
+| 36 cl lot de 4 (`verre-vin-4`) | 57,90 € | **63,90 €** (passe au-dessus des 60 € → livraison offerte) |
+| 47 cl à l'unité (`verre-vin-47-1`) | 19,90 € | **21,90 €** |
+| 47 cl lot de 2 (`verre-vin-47-2`) | 36,90 € | **39,90 €** |
+| 47 cl lot de 4 (`verre-vin-47-4`) | 71,90 € | **77,90 €** |
+Coûts inchangés (3,24 € / 5,18 € port compris). Pour revenir en arrière : remettre les prix AVANT dans
+`src/lib/products.js` (le prix peut aussi être recouvert par un réglage Gestion → Produits : vérifier la fiche en ligne).
