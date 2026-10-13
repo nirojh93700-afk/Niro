@@ -93,13 +93,11 @@ export default async function HomePage() {
             {cristal ? <span className="mxframe-tag"><b>{cristal.name}</b><span>{prixTexte(cristal)}</span></span> : null}
           </div>
         </section>
-        <div className="ruban" aria-hidden="true"><div className="ruban-t">{[0, 1].map((k) => ruban.map((t) => <span key={`${k}-${t}`} style={{ display: "contents" }}><span>{t}</span><i>✦</i></span>))}</div></div>
+        <div className="ruban" aria-hidden="true"><div className="ruban-t">{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => ruban.map((t) => <span key={`${k}-${t}`} style={{ display: "contents" }}><span>{t}</span><i>✦</i></span>))}</div></div>
 
         {/* BIJOUX — photo plein cadre et panneau de verre (piste B) */}
         {show.featured && bijoux.length ? (
-          <section className="mxband bij rv" aria-labelledby="t-bij">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="mxband-bg" src="/produits/bracelet-femme-acier-porte.jpg" alt="" />
+          <section className="mxband bij bij2 rv" aria-labelledby="t-bij">
             <div className="mxband-in"><div className="glass">
               <h2 id="t-bij">Des bijoux gravés <em>avec le prénom</em> de votre choix</h2>
               <p>Colliers et bracelets en acier, gravés à la commande dans notre atelier : un prénom, une date, un mot qui compte.</p>
@@ -108,6 +106,17 @@ export default async function HomePage() {
                 {[["elle", "Femme"], ["lui", "Homme"], ["couple", "Couple"], ["enfant", "Bébé"]].map(([k, l]) => <Link key={k} className="puce" href={`/offrir?qui=${k}`}>{l}</Link>)}
               </div>
               <Bouton href="/boutique/bijoux" cls="mxbtn-ink">Voir tous les bijoux</Bouton>
+            </div>
+            {/* Trois bijoux gravés à leur vraie taille (13/10/2026 : la photo du bracelet étirée sur toute
+                la largeur sortait zoomée et floue sur les grands écrans). */}
+            <div className="bij2-mos">
+              {[["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés"]].map(([f, l]) => (
+                <figure key={f}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/produits/${f}`} alt={l} loading="lazy" />
+                  <figcaption>{l}</figcaption>
+                </figure>
+              ))}
             </div></div>
           </section>
         ) : null}

@@ -3417,3 +3417,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   est maintenant dans la colonne de DROITE, juste au-dessus de « Choisissez votre option » (À l'unité / Lot de 2 / Lot de 4),
   mêmes boutons `variant-swatch` (titre + sous-titre). Cliquer change toujours la galerie et les prix des lots.
 - Seul produit EN LIGNE avec `tailles`. Le gobelet (masqué) garde ses couleurs sous les photos : c'est sa maquette validée.
+
+## 🖥️ ACCUEIL SUR TOUS LES ÉCRANS — ✅ EN LIGNE LE 13/10/2026 (« la maquette… j'aime bien, applique »)
+> Gérant, capture de son écran très large : « le bandeau commence qu'à la moitié de l'écran… l'image du bracelet c'est trop
+> zoomé… fais un autre truc ». Maquette https://claude.ai/artifact/HWThfYnqbmHH2pnqrNykLD (avant / après sur 5 largeurs).
+- **Ruban doré** : écrit 10 fois (`page.jsx`), animation 200 s (même vitesse) → plein jusqu'au bord jusqu'à ~6400 px. Avant,
+  il s'arrêtait dès 1280 px (une copie ≈ 1277 px).
+- **Bijoux** : plus de photo de fond étirée. Classe `bij2` : texte + 3 bijoux à gauche, mosaïque de 3 photos gravées à droite
+  (collier 3 cœurs porté, bracelet gravé, bracelets homme), au-dessus sur téléphone.
+- **Carafe + Noël** : contenu centré à la largeur du site (`--wrap`), fond toujours plein écran.
+- CSS dans `univers-site.css` (jamais dans `univers.css`, généré). Vérifié 390 / 1280 / 1920 / 3440 / 5120 : 0 débordement, 0 erreur.
