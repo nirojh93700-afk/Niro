@@ -56,7 +56,7 @@
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente
-- **0E3Y9OBX (Taru Yal / livraison Fabien Guiblet, 2 verres à vin 47 cl, dessin)** : aperçu du dessin reproduit ENVOYÉ le 13/10 à 16 h 19 par le fil Aperçu/BAT (image `/api/img/QPGpw6jFMfM7mxDJeQIz`, « Bonjour, » sans prénom car le nom de la commande est celui du destinataire du cadeau). Attendre sa réponse (Je valide / modification) dans la commande. ⚠️ Sa question du 13/10 (date d'envoi approximative) n'a PAS encore de réponse : brouillon montré, en attente du « envoie » du gérant.
+- **0E3Y9OBX (Taru Yal / livraison Fabien Guiblet, 2 verres à vin 47 cl, dessin)** : aperçu du dessin reproduit ENVOYÉ le 13/10 à 16 h 19 par le fil Aperçu/BAT (image `/api/img/QPGpw6jFMfM7mxDJeQIz`, « Bonjour, » sans prénom car le nom de la commande est celui du destinataire du cadeau). Elle a répondu le 13/10 à 16 h 32 (« Je valide » puis « modification » : « Il y a un verre comme ça et l'autre avec le logo »). Le logo n'existe nulle part chez nous (1 seule image dans la commande, aucune pièce jointe) → **demande du logo ENVOYÉE le 13/10 à 17 h 00** par le fil de la commande (« Vas-y » du gérant). Attendre le logo ; verre 1 = dessin, verre 2 = logo, rien de plus à facturer (photo comprise, aucun texte). ⚠️ Sa question du 13/10 (date d'envoi approximative) n'a PAS encore de réponse : brouillon montré, en attente du « envoie » du gérant.
 
 - **🥃 Evan (evan2008.nat@gmail.com) — verre à whisky sur mesure (visuel complet : dessin de mains + 3 textes)** : réponse SANS prix envoyée
   le 12/10 soir par le site, on attend SA MAQUETTE. Dès qu'elle arrive : devis à régler en ligne, prix gardé en mémoire dans
