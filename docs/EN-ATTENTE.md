@@ -56,6 +56,8 @@
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente
+- **0E3Y9OBX (Taru Yal / livraison Fabien Guiblet, 2 verres à vin 47 cl, dessin)** : aperçu du dessin reproduit ENVOYÉ le 13/10 à 16 h 19 par le fil Aperçu/BAT (image `/api/img/QPGpw6jFMfM7mxDJeQIz`, « Bonjour, » sans prénom car le nom de la commande est celui du destinataire du cadeau). Attendre sa réponse (Je valide / modification) dans la commande. ⚠️ Sa question du 13/10 (date d'envoi approximative) n'a PAS encore de réponse : brouillon montré, en attente du « envoie » du gérant.
+
 - **🥃 Evan (evan2008.nat@gmail.com) — verre à whisky sur mesure (visuel complet : dessin de mains + 3 textes)** : réponse SANS prix envoyée
   le 12/10 soir par le site, on attend SA MAQUETTE. Dès qu'elle arrive : devis à régler en ligne, prix gardé en mémoire dans
   `docs/messages/evan-verre-whisky-sur-mesure.md` (19,90 € + 3 textes × 3 € = 28,90 € · port relais 4,90 / domicile 11,90 €),
