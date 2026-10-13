@@ -126,7 +126,7 @@ export function ReglagesItem({ item, titre = true, police = true }) {
     <>
       {titre && (
         <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+          {item.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}
         </div>
       )}
       <Row k="Emplacement" v={item.emplacement === "fond" ? "Au fond du verre" : "Face avant"} />
@@ -200,7 +200,7 @@ function ItemSheet({ item }) {
     return (
       <div style={{ padding: "12px 0", borderTop: "1px dashed #ddd" }}>
         <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+          {item.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}
         </div>
         <div style={{ margin: "0 0 8px", padding: "8px 12px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.9rem" }}>
           ⚠️ Lot de {verres.length} verres, CHACUN DIFFÉRENT : {verres.length} photos et {verres.length} textes à graver — un verre = une gravure. Ne pas graver la même chose sur les {verres.length}.

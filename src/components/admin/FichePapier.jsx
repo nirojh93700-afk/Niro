@@ -93,7 +93,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
     <div key={i} className="fp-visuel">
       <GlassPreview item={item} />
       <div className="fp-legende">
-        {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+        {item.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}
         {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
       </div>
       <div className="fp-reglages">

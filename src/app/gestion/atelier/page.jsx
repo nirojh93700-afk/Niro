@@ -291,7 +291,7 @@ export default function AtelierPage() {
                 <div key={`${o.id}-${idx}`} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "14px 0", background: "#fff" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
                     <strong style={{ fontSize: "1.02rem" }}>
-                      {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+                      {item.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}
                       {item.verre ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: "#fbf3e6", border: "1px solid #c9a24b", color: "#8a6d1f", fontSize: "0.85rem" }}>Verre {item.verre} / {item.verres}</span> : null}
                     </strong>
                     <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>

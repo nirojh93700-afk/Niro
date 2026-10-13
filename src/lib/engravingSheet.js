@@ -127,7 +127,7 @@ export function TableGravure({ item, titre = true }) {
   const verres = eclaterParVerre(item);
   const entete = titre ? (
     <h3 style={{ margin: "0 0 6px", fontFamily: "Georgia,serif", fontSize: "1.05rem" }}>
-      À graver — {item.name}{item.variantTitle ? ` (${item.variantTitle})` : ""}
+      À graver — {item.name}{(item.variantDetail || item.variantTitle) ? ` (${item.variantDetail || item.variantTitle})` : ""}
     </h3>
   ) : null;
 

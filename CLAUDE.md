@@ -3393,3 +3393,20 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (tuile « Pièces ratées », `profit = CA − achat − matériel − ratés`).
 - Vérifié : build OK · `npm run test-materiel` 17 vérifs · navigateur (commande simulée) 390 / 1280 px, atelier + file de
   production : stock 7 → 5, perte 12,96 €, 0 erreur, 0 débordement.
+
+## 🔎 PRODUIT COMMANDÉ EN DÉTAIL DANS TOUT L'ADMIN + LIVRAISON DÉTAILLÉE — 13/10/2026 (« pousse », EN LIGNE)
+> Gérant : « dans la fiche de gravure je veux les produits en détail… comment tu veux que je sache si le verre de vin fait
+> quelle centilitres… tout le site, il faut que ça soit bien détaillé dans l'admin » + « là je choisis quoi comme mode de
+> livraison » (cristal 1P5XZKRP payé en Express Chronopost, affiché « Domicile »).
+- **`src/lib/detailProduit.js`** : `varianteCommandee` / `detailVariante` / `detaillerCommande` retrouvent la variante EXACTE
+  (1. `variantId` enregistré avec la commande, 2. lignes de stock payées `order.stock`, 3. titre unique) et donnent
+  « 47 cl · Lot de 2 ». Si rien ne tranche : « ⚠️ taille non enregistrée (36 cl ou 47 cl) : à vérifier avec la cliente ».
+- `/api/admin/orders` renvoie chaque commande passée par `detaillerCommande` → `spec[].variantDetail` + `variantId`,
+  `items[].variantDetail`. Affiché : page Atelier, fiche atelier (écran + papier), tableau « À graver », « Vendu en plus »,
+  fiche commande, file de production, fenêtre « Raté ». L'aperçu du verre (`GlassPreview`) suit enfin la bonne taille.
+- **Nouvelles commandes** : `/api/checkout` écrit la taille dans la description Stripe (« 47 cl · Lot de 2 », donc e-mails
+  et Gestion) et `variantId` dans les réglages ; l'alerte 🛎️ affiche la variante exacte.
+- **File de production** : bloc « 🚚 » sur chaque carte : mode exact payé + prix, Express en rouge « à graver EN PRIORITÉ »,
+  adresse de l'étiquette ou point relais choisi (le point relais ne s'affichait jamais : `relaisPoint` est un texte).
+- **Boxtal, rappel** : Express payé = **Chrono 18** (dépôt bureau de poste / Pickup, livré à domicile le lendemain avant 18 h),
+  jamais une offre « Relais » / « Point retrait » / « Access Point ». « Chrono 18 collecte » = enlèvement chez lui (plus cher).

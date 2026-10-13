@@ -174,7 +174,7 @@ export function optionsCommande(order) {
     const options = s ? optionsArticle(s) : optionsDepuisDetails(it.details);
     return {
       nom: String(it.name || s?.name || "Article"),
-      variantTitle: s?.variantTitle || "",
+      variantTitle: s?.variantDetail || s?.variantTitle || "",
       quantite: Number(it.quantity) || 1,
       prix: Number(it.total ?? it.subtotal) || 0,
       options,

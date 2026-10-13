@@ -7,6 +7,7 @@ import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif 
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
+import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -419,7 +420,10 @@ export async function POST(req) {
         </div>`;
     };
     const persoBlocks = specItems.map((it) => {
-      const titre = `<p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${it.variantTitle ? ` — ${escapeHtml(it.variantTitle)}` : ""}</p>`;
+      // Variante EXACTE (taille du verre à vin comprise) — 13/10/2026.
+      let varTxt = it.variantTitle || "";
+      try { varTxt = detailVariante({ stock: session?.metadata?.stock || "" }, it.slug, { variantId: it.variantId, variantTitle: it.variantTitle }).texte || varTxt; } catch { /* titre brut */ }
+      const titre = `<p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${varTxt ? ` — ${escapeHtml(varTxt)}` : ""}</p>`;
       const verres = eclaterParVerre(it);
       if (verres.length > 1) {
         return `

@@ -275,6 +275,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
                   <span className="q">{it.quantity}×</span>
                   <span>
                     {it.name}
+                    {(s?.variantDetail || it.variantDetail) ? <span className="d" style={{ color: "var(--ink)", fontWeight: 700 }}>{s?.variantDetail || it.variantDetail}</span> : null}
                     {!compact && details ? <span className="d">{details}</span> : null}
                     {!compact && enLot ? (
                       <>
@@ -301,7 +302,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
             {lignes.map(({ it, s }, i) => (
               <div key={i}>
                 {lignes.length > 1 ? <div className="rt-nom">{it.name}</div> : null}
-                <BoutonRate o={o} item={{ slug: it.slug, name: it.name, variantTitle: s?.variantTitle || "" }} mat={mat} adminKey={adminKey} onSaved={onMat} />
+                <BoutonRate o={o} item={{ slug: it.slug, name: it.name, variantTitle: s?.variantTitle || "", variantId: s?.variantId, variantDetail: s?.variantDetail || it.variantDetail }} mat={mat} adminKey={adminKey} onSaved={onMat} />
               </div>
             ))}
           </div>

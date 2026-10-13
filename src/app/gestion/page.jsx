@@ -587,7 +587,7 @@ export default function GestionPage({ onglet = "" } = {}) {
   // la ligne de détails : on le sort en évidence pour ne pas graver la mauvaise
   // version. Repli sur le 1er élément des détails (toujours le nom de l'option).
   const couleurArticle = (s, it) => {
-    if (s?.variantTitle) return s.variantTitle;
+    if (s?.variantDetail || s?.variantTitle) return s.variantDetail || s.variantTitle;
     const premier = String(it.details || "").split(" — ")[0].trim();
     return premier && !premier.startsWith("Personnalisation") && !premier.startsWith("Emballage") ? premier : "";
   };
@@ -595,7 +595,10 @@ export default function GestionPage({ onglet = "" } = {}) {
   // Détails SANS la couleur (déjà affichée à part) pour éviter de la répéter.
   const detailsSansCouleur = (it, couleur) => {
     const d = String(it.details || "");
-    return couleur && d.startsWith(couleur) ? d.slice(couleur.length).replace(/^\s*—\s*/, "") : d;
+    if (couleur && d.startsWith(couleur)) return d.slice(couleur.length).replace(/^\s*—\s*/, "");
+    // Libellé détaillé (« 47 cl · Lot de 2 ») : on retire quand même l'option brute du début.
+    const premier = d.split(" — ")[0].trim();
+    return couleur && premier && couleur.includes(premier) ? d.slice(premier.length).replace(/^\s*—\s*/, "") : d;
   };
 
   // Stock prêt à afficher PAR PRODUIT (pour la page fusionnée Produits & Stock).

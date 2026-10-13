@@ -213,7 +213,9 @@ export async function POST(req) {
     const pkgBoite = (pkg.chosen || []).some((id) => /boite|pack/i.test(String(id)));
     ajouterLignePort(etatPort, { product, unitGrams, unitPrice, quantity, pkgBoite });
 
-    const descriptionParts = [variant.title];
+    // Taille du produit (verre à vin 36 / 47 cl…) écrite AVEC l'option : l'atelier sait quoi prendre (13/10/2026).
+    const tailleOpt = variant.taille ? (product.tailles?.options?.find((o) => o.id === variant.taille)?.title || `${variant.taille} cl`) : "";
+    const descriptionParts = [[tailleOpt, variant.title].filter(Boolean).join(" · ")];
     if (extra.amount > 0) {
       descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
     }
@@ -448,7 +450,7 @@ export async function POST(req) {
     // Fiche atelier : on mémorise les réglages détaillés, liés à la session
     // (relus par le webhook pour les joindre à la commande). Sans risque si échec.
     try {
-      const specs = items.map((it) => sanitizeSpec(it.spec)).filter(Boolean);
+      const specs = items.map((it) => { const s = sanitizeSpec(it.spec); return s ? { ...s, variantId: String(it.variantId || "").slice(0, 120) || undefined } : null; }).filter(Boolean);
       if (specs.length) await saveOrderSpec(session.id, specs);
     } catch { /* ignore */ }
 

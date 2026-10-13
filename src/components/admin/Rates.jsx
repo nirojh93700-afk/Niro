@@ -51,11 +51,14 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
   // Ligne proposée : celle que la commande a vraiment décomptée au paiement (bonne taille),
   // sinon celle du choix commandé, sinon la première.
   const defSid = useMemo(() => {
+    // Variante exacte connue (commandes récentes, ou retrouvée par Gestion) : c'est sa ligne de stock.
+    const vExacte = item.variantId ? (product?.variants || []).find((x) => x.id === item.variantId) : null;
+    if (vExacte) return vExacte.stockId || vExacte.id;
     const payes = stocksCommande(o);
     const duTitre = lignes.filter((l) => item.variantTitle && l.titresBruts.includes(item.variantTitle));
     const parPaiement = (duTitre.length ? duTitre : lignes).find((l) => payes.includes(l.sid));
     return parPaiement?.sid || duTitre[0]?.sid || lignes[0]?.sid || "";
-  }, [o, item.variantTitle, lignes]);
+  }, [o, item.variantTitle, item.variantId, product, lignes]);
   const coutDe = (sid) => { const c = VARIANT_COSTS[sid] ?? (Number(product?.cost) > 0 ? Number(product.cost) : null); return c == null ? "" : String(c).replace(".", ","); };
 
   const [ouvert, setOuvert] = useState(false);
@@ -114,7 +117,7 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
         <button type="button" className="btn btn-outline rt-btn" onClick={ouvrir}>✗ Raté — à refaire</button>
       ) : (
         <div className="rt-form">
-          <div className="rt-titre">Pièce ratée : {item.name || product?.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}{item.verre ? ` (verre ${item.verre})` : ""}</div>
+          <div className="rt-titre">Pièce ratée : {item.name || product?.name}{(item.variantDetail || item.variantTitle) ? ` — ${item.variantDetail || item.variantTitle}` : ""}{item.verre ? ` (verre ${item.verre})` : ""}</div>
           <div className="rt-ligne">
             <span>Combien de pièces ratées ?</span>
             <span className="rt-qty">
