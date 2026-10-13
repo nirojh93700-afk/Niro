@@ -16,6 +16,7 @@ import { apparierSpec } from "@/lib/orderSpec";
 import { chargerAvecCache, viderCache } from "@/components/admin/adminCache";
 import { ongletDuChemin, cheminDeLOnglet } from "@/components/admin/ongletsGestion";
 import VarBadge from "@/components/admin/VarBadge";
+import PreparationCommande from "@/components/admin/PreparationCommande";
 
 // Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
 // télécharge plus d'un coup le code des 15 onglets.
@@ -34,6 +35,7 @@ const ReviewsAdmin = dynamic(() => import("@/components/admin/ReviewsAdmin"), { 
 const PromoCodesAdmin = dynamic(() => import("@/components/admin/PromoCodesAdmin"), { loading: attente });
 const NewsletterAdmin = dynamic(() => import("@/components/admin/NewsletterAdmin"), { loading: attente });
 const BatThread = dynamic(() => import("@/components/admin/BatThread"), { loading: attente });
+const FenetreConditionnement = dynamic(() => import("@/components/admin/Conditionnement"), { ssr: false });
 const FicheAtelier = dynamic(() => import("@/components/admin/FicheAtelier"), { loading: attente });
 const AlertesTelephone = dynamic(() => import("@/components/admin/AlertesTelephone"), { ssr: false });
 const BoxtalCopie = dynamic(() => import("@/components/admin/BoxtalCopie"), { loading: attente });
@@ -117,6 +119,14 @@ export default function GestionPage({ onglet = "" } = {}) {
   const [quotes, setQuotes] = useState([]);
   const [vacationCfg, setVacationCfg] = useState(null);
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
+  const [mat, setMat] = useState(null);         // matériel & conditionnement + pièces ratées (13/10/2026)
+  const [condOrder, setCondOrder] = useState(null);
+  const loadMat = useCallback(async (adminKey) => {
+    try {
+      const r = await fetch("/api/admin/materiel", { headers: { "x-admin-key": adminKey } });
+      if (r.ok) setMat(await r.json());
+    } catch { /* le bloc reste « à faire » */ }
+  }, []);
   const [boxtalOpen, setBoxtalOpen] = useState(null); // id de commande dont le panneau « Envoi Boxtal » est ouvert
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -182,6 +192,7 @@ export default function GestionPage({ onglet = "" } = {}) {
           : "Le site met du temps à répondre. Touchez « Réessayer »."), { reseau: true, garde: prod.data != null });
       }
       sessionStorage.setItem("niv-admin-key", adminKey);
+      loadMat(adminKey);
       // 2) Tout le reste EN MÊME TEMPS ; un appel qui rate n'efface rien d'autre.
       const res = await Promise.all(Object.entries(appliquer).map(([u, f]) => chargerAvecCache(u, adminKey, f)));
       if (!res[1].ok && !res[1].data) setError("Les commandes n'ont pas pu être chargées. Touchez « Réessayer ».");
@@ -194,7 +205,7 @@ export default function GestionPage({ onglet = "" } = {}) {
     } finally {
       if (!nouvelEssai) setLoading(false);
     }
-  }, []);
+  }, [loadMat]);
 
   // Vérifie les nouvelles réponses des clientes (lien + e-mail Gmail) et
   // récupère la liste des commandes « non lues » pour les pastilles.
@@ -1262,6 +1273,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {"\n" + o.alerteInterne}
                   </div>
                 )}
+                {/* Conditionnement + pièce ratée, comme dans la file de production (13/10/2026). */}
+                <PreparationCommande o={o} mat={mat} adminKey={key} onCond={setCondOrder} onMat={() => loadMat(key)} />
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", position: "relative", borderColor: batUnread.includes(o.id) ? "#c9a24b" : undefined }}
                     onClick={() => { const opening = batOpen !== o.id; setBatOpen(opening ? o.id : null); if (opening) setBatUnread((u) => u.filter((x) => x !== o.id)); }}>
@@ -1295,6 +1308,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                 {ficheOpen === o.id && (
                   <>
                     <FicheAtelier spec={o.spec} order={o} adminKey={key} />
+                    {/* Matériel utilisé + ratés aussi dans la fiche atelier, au moment de préparer. */}
+                    <PreparationCommande o={o} mat={mat} adminKey={key} onCond={setCondOrder} onMat={() => loadMat(key)} />
                     {/* Copie destinée UNIQUEMENT au papier, placée à la racine de
                        la page (portail) : ainsi l'impression ne sort que cette
                        feuille, sans les pages blanches du reste de l'écran. */}
@@ -1825,6 +1840,7 @@ export default function GestionPage({ onglet = "" } = {}) {
             </p>
           </>
         )}
+      {condOrder ? <FenetreConditionnement o={condOrder} adminKey={key} mat={mat} onClose={() => setCondOrder(null)} onSaved={() => loadMat(key)} /> : null}
     </div>
   );
 }
