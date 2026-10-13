@@ -328,3 +328,21 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #puzzlebois #cadeauenfant #cadeaupersonnalise #ideecadeau
+
+## Vidéo 24 — Puzzle photo gravé (13/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/24-puzzle-photo-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 25 s | 1,8 Mo |
+
+- **Source** : `tools/video/pub_puzzle_photo_24.py <dossier de sortie>` (helpers de `pub_cristaux_graves_22.py` ; produit aussi la version 1080 × 1920, ~29 Mo, non gardée dans le dépôt).
+- **Demande du gérant** : « fais-moi une vidéo sur le puzzle avec la photo » (pas les puzzles enfants à prénom).
+- **Contenu** : les 4 photos de la fiche `puzzle-photo-grave` (bureau, famille, enfants, amis), chacune en plan large puis en gros plan sur les visages gravés. Planche contact regardée le 13/10 : gravure visible sur toutes.
+
+### Description à copier-coller (livrée le 13/10/2026)
+
+**Vidéo 24 — Puzzle photo gravé** (Puzzle photo gravé)
+> Votre plus belle photo, gravée sur bois et découpée en puzzle ✨ De 24 à 120 pièces, à reconstituer en famille ou entre amis 💛 Un souvenir qui se construit 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #puzzlephoto #cadeaupersonnalise #cadeaufamille #ideecadeau
