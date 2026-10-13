@@ -2946,6 +2946,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     variants: [
+      // 13/10/2026 : +2 € par verre (gérant « Deux euros ») → 17,90 / 33,90 / 63,90 et 21,90 / 39,90 / 77,90.
       // PRIX RELEVÉS LE 16/09/2026 (accord du gérant) — 12,90 / 24,90 / 49,90 €
       // nous mettaient 6 € SOUS l'artisan le plus proche sur un verre identique :
       // Verre Créations vend le « Soirée 36 cl » (cristallin Spiegelau, gravé) à
@@ -2954,9 +2955,9 @@ export const products = [
       // ⚠️ Les identifiants verre-vin-1/2/4 sont GARDÉS tels quels (paniers en
       // cours + historique des commandes). Le titre porte « Lot de N » : c'est
       // là que la fiche lit le nombre de verres (glassQty).
-      { id: "verre-vin-1", stockId: "verre-vin-1", taille: "36", title: "À l'unité", price: 15.90, weight: 500 },
-      { id: "verre-vin-2", stockId: "verre-vin-2", taille: "36", title: "Lot de 2", price: 29.90, weight: 900 },
-      { id: "verre-vin-4", stockId: "verre-vin-4", taille: "36", title: "Lot de 4", price: 57.90, weight: 1600 },
+      { id: "verre-vin-1", stockId: "verre-vin-1", taille: "36", title: "À l'unité", price: 17.90, weight: 500 },
+      { id: "verre-vin-2", stockId: "verre-vin-2", taille: "36", title: "Lot de 2", price: 33.90, weight: 900 },
+      { id: "verre-vin-4", stockId: "verre-vin-4", taille: "36", title: "Lot de 4", price: 63.90, weight: 1600 },
       // GRAND VERRE 47 cl — ajouté le 25/09/2026 à la demande du gérant (« le client
       // choisit entre les 2 cl »). Coupe ronde (bourgogne), verrerie de restauration.
       // Prix = même marge en € que le 36 cl, coût 6,54 €/verre port compris
@@ -2964,9 +2965,9 @@ export const products = [
       // `taille` relie la variante à sa pastille. La photo vierge + la zone de
       // gravure sont AUSSI portées ici (`...VIN_47_APERCU`) : la fiche atelier
       // retrouve la variante commandée par son id, pas la taille.
-      { id: "verre-vin-47-1", stockId: "verre-vin-47-1", taille: "47", title: "À l'unité", price: 19.90, weight: 550, ...VIN_47_APERCU },
-      { id: "verre-vin-47-2", stockId: "verre-vin-47-2", taille: "47", title: "Lot de 2", price: 36.90, weight: 1000, ...VIN_47_APERCU },
-      { id: "verre-vin-47-4", stockId: "verre-vin-47-4", taille: "47", title: "Lot de 4", price: 71.90, weight: 1800, ...VIN_47_APERCU },
+      { id: "verre-vin-47-1", stockId: "verre-vin-47-1", taille: "47", title: "À l'unité", price: 21.90, weight: 550, ...VIN_47_APERCU },
+      { id: "verre-vin-47-2", stockId: "verre-vin-47-2", taille: "47", title: "Lot de 2", price: 39.90, weight: 1000, ...VIN_47_APERCU },
+      { id: "verre-vin-47-4", stockId: "verre-vin-47-4", taille: "47", title: "Lot de 4", price: 77.90, weight: 1800, ...VIN_47_APERCU },
     ],
     descriptionHtml: `<p><strong>Un verre à vin professionnel — de la verrerie de restauration — gravé à votre façon.</strong> Deux tailles au choix : le <strong>36 cl</strong>, coupe tulipe en cristal, et le <strong>47 cl</strong>, grand verre à coupe ronde pour les vins rouges. Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct, sur le verre que vous avez choisi.</p>
 <p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
@@ -3142,6 +3143,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     variants: [
+      // 13/10/2026 : +2 € par verre (gérant « Deux euros ») → 17,90 / 33,90 / 63,90 et 21,90 / 39,90 / 77,90.
       // PRIX RELEVÉS LE 16/09/2026 (accord du gérant) — 12,90 / 24,90 / 49,90 €
       // nous mettaient 8 € SOUS le marché : chez Verre Créations, nos deux
       // équivalents exacts en 21 cl (Salute, Sublym) sont à 20,90 et 21,90 €, et
