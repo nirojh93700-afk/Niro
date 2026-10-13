@@ -47,9 +47,29 @@ function dateFr(iso) {
 }
 function livraison(o) {
   const m = String(o.shippingMethod || "").toLowerCase();
+  if (/express|chronopost/.test(m)) return "⚡ Express Chronopost";
   if (o.relaisPoint || m.includes("relais")) return "🏪 Point relais";
-  if (m.includes("main propre") || o.status === "remise_main_propre") return "🤝 Retrait";
+  if (m.includes("main propre") || m.includes("retrait") || o.status === "remise_main_propre") return "🤝 Retrait";
   return "🏠 Domicile";
+}
+
+// Tout le détail de l'envoi (13/10/2026, gérant : « il faut que tu me détailles tout… j'envoie à domicile ou en
+// point relais ? ») : mode exact payé, prix, et l'adresse OU le point relais à mettre sur l'étiquette.
+function DetailLivraison({ o }) {
+  const m = String(o.shippingMethod || "");
+  const express = /express|chronopost/i.test(m);
+  const relais = String(o.relaisPoint || "");
+  const a = o.shippingAddress || null;
+  const adresse = a ? [o.shippingName, a.line1, a.line2, `${a.postal_code || ""} ${a.city || ""}`.trim(), a.country].filter(Boolean).join(", ") : "";
+  const prix = Number(o.shippingPrice) > 0 ? ` · ${euro(o.shippingPrice)}` : "";
+  return (
+    <div className={`file-liv${express ? " express" : ""}`}>
+      <div className="file-liv-mode">🚚 <b>{livraison(o)}</b>{m ? <span> — {m}</span> : null}{prix && !m.includes("€") ? <span>{prix}</span> : null}</div>
+      {express ? <div className="file-liv-alerte">⚡ EXPRESS payé par la cliente : colis Chronopost à domicile, à graver EN PRIORITÉ.</div> : null}
+      {relais ? <div>📍 <b>Point relais choisi :</b> {relais}</div> : null}
+      {adresse ? <div>{relais ? "👤 Coordonnées de la cliente : " : "🏠 Adresse de l'étiquette : "}{adresse}</div> : null}
+    </div>
+  );
 }
 function estUrgent(o) { return o.immediateStart || (o.flags || []).includes("urgent"); }
 
@@ -235,7 +255,8 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         </div>
       </div>
 
-      <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}{o.relaisPoint?.name ? ` — ${o.relaisPoint.name}` : ""}</span></div>
+      <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}</span></div>
+      {!compact ? <DetailLivraison o={o} /> : null}
 
       <ul className="file-items">
         {(() => {

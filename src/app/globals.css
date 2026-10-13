@@ -4849,3 +4849,9 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .rt-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
 .rt-items { margin: 8px 0 0; display: grid; gap: 4px; }
 .rt-items .rt-nom { font-size: .8rem; color: var(--ink-soft); margin-top: 6px; }
+
+/* ===== Détail de livraison sur la file de production (13/10/2026) ===== */
+.file-liv { margin: 8px 0 0; padding: 8px 10px; border-radius: 10px; background: #f7f3ea; border: 1px solid var(--line); font-size: .84rem; display: grid; gap: 4px; overflow-wrap: anywhere; }
+.file-liv span { color: var(--ink-soft); }
+.file-liv.express { background: #fdecec; border-color: #e7a3a3; }
+.file-liv-alerte { color: #b32b2b; font-weight: 700; }
