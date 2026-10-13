@@ -19,6 +19,7 @@ import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
 import BoutonRate from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
+import { modeEnvoi } from "@/lib/etiquettes";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -352,6 +353,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         {statut === "a_preparer" ? <button className="btn btn-gold" disabled={busy} onClick={() => onStatus(o, "en_gravure")}>✏️ Commencer la fabrication</button> : null}
         {(statut === "a_preparer" || statut === "en_gravure") ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "expediee")}>📦 Expédiée (n° de suivi)</button> : null}
         {statut === "expediee" ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "livree")}>✓✓ Livrée</button> : null}
+        {!["annulee", "remboursee"].includes(statut) && modeEnvoi(o).ok ? <Link href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`} className="btn btn-outline">🏷️ Étiquette</Link> : null}
         <Link href={`/gestion/fiches?q=${encodeURIComponent(ref)}`} className="btn btn-outline">Fiche complète →</Link>
       </div>
     </div>

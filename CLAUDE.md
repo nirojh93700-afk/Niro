@@ -3427,3 +3427,23 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (collier 3 cœurs porté, bracelet gravé, bracelets homme), au-dessus sur téléphone.
 - **Carafe + Noël** : contenu centré à la largeur du site (`--wrap`), fond toujours plein écran.
 - CSS dans `univers-site.css` (jamais dans `univers.css`, généré). Vérifié 390 / 1280 / 1920 / 3440 / 5120 : 0 débordement, 0 erreur.
+
+## 🏷️ ÉTIQUETTES D'ADRESSE LA POSTE — ✅ EN LIGNE LE 13/10/2026 (« pour une fois t'as bien fait, tu peux pousser »)
+> Gérant : « quand j'envoie par La Poste, j'ai pas envie d'écrire l'adresse, je veux l'imprimer… planches A4 de 20 étiquettes
+> 45 × 45 mm (4 × 5), marges haut 26, bas 26, gauche 7, droite 8 mm… je dois pouvoir choisir où imprimer si je réutilise la
+> feuille ». Maquette https://claude.ai/artifact/9K8iyXdh5NZPTi4xMdwmyZ validée.
+- **Page** Gestion → Commandes → **Étiquettes d'adresse** (`/gestion/etiquettes`) + bouton **« 🏷️ Étiquette »** sur chaque
+  commande (fiche complète et file de production, `?id=` pré-coche la commande). ① commandes à expédier (cochables ; point
+  relais / express Chronopost / retrait grisés : étiquette Boxtal ou rien) · ② expéditeur : en bas de l'étiquette / sur une
+  étiquette à part / aucun, adresse modifiable (défaut « Niv Création, 6 rue d'Armaillé, 75017 PARIS ») · ③ la feuille à
+  l'échelle : toucher une case = déjà utilisée ; les étiquettes vont sur les cases libres suivantes ; « Feuille neuve »,
+  « Décaler d'une case ». La feuille, le mode et l'expéditeur sont retenus SUR CET ORDINATEUR (localStorage `niv-etiquettes`).
+- **Impression** : `feuilleHtml()` ouvre une fenêtre avec une page A4 SANS marge (`@page{margin:0}`), chaque étiquette posée
+  au millimètre (5 mm entre les cases) ; puis « Les étiquettes sont bien sorties ? Oui, griser ces cases ». Fenêtre à part
+  exprès : le CSS d'impression de l'admin (fiche atelier, marges 10 mm, plein écran) ne s'y applique pas. À conseiller au
+  gérant : imprimer en **taille réelle 100 %**, premier essai sur papier blanc contre la planche.
+- **Fichiers** : `src/lib/etiquettes.js` (pur : `FEUILLE`, `positions`, `modeEnvoi`, `adresseEtiquette` — nom via
+  `nomLivraison`, CP + VILLE en majuscules, pays hors France —, `travaux`, `placer`, `feuilleHtml`) ·
+  `src/app/gestion/etiquettes/page.jsx` · NAV `AdminShell` · CSS `.etq-*` fin de `globals.css`.
+- `npm run test-etiquettes` : 23 vérifications dont le rendu Chromium réel (20 étiquettes = 1 page, case 20 à 157 / 226 mm,
+  45 mm, aucune adresse qui déborde).

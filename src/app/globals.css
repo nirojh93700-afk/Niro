@@ -4863,3 +4863,56 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .var-badge { display: inline-block; margin: 2px 0 2px 8px; padding: 3px 12px; border-radius: 8px; background: #c9a24b; color: #1a1206; border: 2px solid #a98935; font-weight: 800; font-size: 0.95em; line-height: 1.35; letter-spacing: 0.01em; vertical-align: middle; white-space: normal; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .var-badge.grand { font-size: 1.08em; padding: 4px 14px; }
 .var-badge.alerte { background: #fdecec; color: #b32b2b; border-color: #d64545; }
+
+/* ===========================================================================
+   ÉTIQUETTES D'ADRESSE — /gestion/etiquettes (13/10/2026, maquette validée)
+   La feuille A4 est dessinée à l'échelle : 1 mm = var(--mm). Le document imprimé, lui,
+   est généré à part (lib/etiquettes.js → feuilleHtml), en mm réels, page sans marge.
+   =========================================================================== */
+.etq-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:22px;align-items:start}
+@media (max-width:980px){.etq-grid{grid-template-columns:1fr}}
+.etq-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}
+.etq-card+.etq-card{margin-top:16px}
+.etq-card h2{font-size:1rem;line-height:1.3;font-weight:700;margin:0 0 4px;display:flex;align-items:center;gap:10px;font-family:inherit}
+.etq-card h2 .n{width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:inline-grid;place-items:center;font-size:.8rem;flex:none}
+.etq-card .sub{color:var(--ink-soft);font-size:.86rem;margin:0 0 12px}
+.etq-toggle{display:flex;gap:8px;align-items:center;font-size:.84rem;color:var(--ink-soft);margin-bottom:6px;cursor:pointer}
+.etq-ord{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-top:8px;cursor:pointer}
+.etq-ord.on{border-color:var(--gold);background:#fffaf0}
+.etq-ord.off{opacity:.55;cursor:default}
+.etq-ord input,.etq-opt input,.etq-toggle input{accent-color:var(--gold-dark);width:18px;height:18px;flex:none}
+.etq-ord .nm{font-weight:600;overflow-wrap:anywhere}.etq-ord .ad{color:var(--ink-soft);font-size:.84rem;overflow-wrap:anywhere}
+.etq-ord .chip{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.etq-ord .chip.poste{background:#f7ecd4;color:#7c6120}.etq-ord .chip.relais{background:#eee8dc;color:var(--ink-soft)}
+.etq-opts{display:grid;gap:8px}
+.etq-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.etq-opt.on{border-color:var(--gold);background:#fffaf0}
+.etq-opt small{display:block;color:var(--ink-soft)}
+.etq-f{display:block;font-size:.84rem;font-weight:600;margin:12px 0 4px}
+.etq-card textarea{width:100%;box-sizing:border-box;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font:inherit;font-size:.92rem;line-height:1.45;resize:vertical}
+.etq-sheetbox{display:flex;flex-direction:column;gap:12px}
+.etq-tools{display:flex;flex-wrap:wrap;gap:8px}
+.etq-tools .btn[disabled]{opacity:.5;cursor:not-allowed}
+.etq-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--ink-soft)}
+.etq-legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px;border:1px solid var(--line)}
+.etq-legend .l-free{background:#fff}.etq-legend .l-used{background:#d8d1c3}.etq-legend .l-print{background:#f7ecd4;border-color:var(--gold)}
+.etq-status{font-size:.88rem;padding:10px 12px;border-radius:12px;background:#fffaf0;border:1px solid var(--line)}
+.etq-status b{color:#7c6120}
+.etq-status.warn{background:#fdecec;border-color:#efb7b7;color:#b32b2b}
+.etq-status.ok .btn{padding:6px 14px;font-size:.84rem;margin-left:6px}
+.etq-paper{--mm:min(2.75px,calc((100vw - 380px)*.56/210));position:relative;width:calc(210*var(--mm));height:calc(297*var(--mm));background:#fff;box-shadow:0 18px 40px -22px rgba(26,18,6,.45);border:1px solid var(--line);margin:0 auto}
+@media (max-width:980px){.etq-paper{--mm:min(2.75px,calc((100vw - 72px)/210))}}
+.etq-cell{position:absolute;width:calc(45*var(--mm));height:calc(45*var(--mm));border:1px dashed #cbbd9c;border-radius:calc(1.5*var(--mm));background:#fff;cursor:pointer;padding:calc(3*var(--mm));overflow:hidden;text-align:left;font:inherit;color:#000}
+.etq-cell:hover{border-color:var(--gold)}
+.etq-cell:focus-visible{outline:2px solid var(--gold-dark);outline-offset:2px}
+.etq-cell .pos{position:absolute;right:calc(1.4*var(--mm));top:calc(1*var(--mm));font-size:calc(3*var(--mm));color:#b9ab8c;font-weight:600}
+.etq-cell.used{background:repeating-linear-gradient(135deg,#e7e0d2 0 6px,#d8d1c3 6px 12px);border-style:solid;border-color:#cfc6b4}
+.etq-cell.used .pos{color:#8d8370}
+.etq-cell.print{border:1.5px solid var(--gold);background:#fffdf7}
+.etq-cell .lab{display:flex;flex-direction:column;height:100%;font-family:Arial,Helvetica,sans-serif}
+.etq-cell .to{font-size:calc(2.12*var(--mm));letter-spacing:.06em;text-transform:uppercase;color:#555;margin-bottom:calc(.8*var(--mm))}
+.etq-cell .nm{font-weight:700;font-size:calc(3.53*var(--mm));line-height:1.15;overflow-wrap:anywhere}
+.etq-cell .l{font-size:calc(3.18*var(--mm));line-height:1.2;overflow-wrap:anywhere}
+.etq-cell .cp{font-weight:700;font-size:calc(3.35*var(--mm));line-height:1.2;overflow-wrap:anywhere}
+.etq-cell .exp{margin-top:auto;border-top:1px solid #000;padding-top:calc(.8*var(--mm));font-size:calc(2.19*var(--mm));line-height:1.2;color:#222;overflow-wrap:anywhere}
+.etq-cell .ref{margin-top:auto;font-size:calc(1.98*var(--mm));color:#777}

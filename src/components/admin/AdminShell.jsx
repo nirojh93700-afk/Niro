@@ -24,6 +24,7 @@ const NAV = [
     { id: "file", icon: "▤", text: "File de production", href: "/gestion/commandes", badge: "prep" },
     { id: "commandes", icon: "▣", text: "Fiches complètes", href: "/gestion/fiches", badge: "unread" },
     { id: "atelier", icon: "◈", text: "Atelier · fichiers", href: "/gestion/atelier" },
+    { id: "etiquettes", icon: "⬒", text: "Étiquettes d'adresse", href: "/gestion/etiquettes" },
     { id: "devis", icon: "▥", text: "Devis & factures", href: "/gestion/devis" },
   ] },
   { label: "Clients", items: [
