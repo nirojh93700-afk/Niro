@@ -253,3 +253,11 @@ En attente de SA décision :
 - ✅ Page Gestion → Matériel & emballages + bloc « Conditionnement » dans la file de production + matériel déduit dans Bénéfices.
 - ❓ À confirmer par le gérant : pochettes lin (50 ou 24 achetées ?), papier de soie (60 feuilles ?), boîtes en bois (emballage ou produit ?), portions de calage (chips ≈ 2 L, raffia ≈ 10 g), carton 25×20×15 réellement acheté (lot de 15 ou de 25), tailles du sac / de la microfibre / de la boîte allongée, stocks réels de départ.
 - 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.
+
+## 🏷️ Étiquette d'adresse plus jolie — MAQUETTE du 14/10/2026, en attente de son choix
+- `docs/maquettes/etiquette-adresse.html`, artifact https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1.
+  Trois habillages : A Écrin (double filet doré, logo centré en bas) · B Bandeau (pied crème, logo +
+  « Gravé pour vous dans notre atelier » + nivcreation.fr) · C Sobre (coin doré, « Merci pour votre commande »,
+  logo à droite). Adresse toujours en noir, CP + VILLE en gras majuscules ; logo d'origine, en bas.
+- Au « applique » : reporter le modèle choisi dans `feuilleHtml` ET `feuillePdf` (`src/lib/etiquettes.js`),
+  garder le resserrement automatique du texte (adresse longue), relancer `npm run test-etiquettes`.
