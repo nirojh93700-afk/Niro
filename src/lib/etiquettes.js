@@ -53,13 +53,15 @@ export function adresseEtiquette(o) {
 
 // Liste des étiquettes à imprimer, dans l'ordre des commandes cochées.
 // mode : "meme" (expéditeur en bas de l'étiquette) · "apart" (une étiquette en plus) · "non".
-export function travaux(orders, mode) {
+// avecRef : le n° de commande en petit en bas. Par défaut NON (gérant, 14/10/2026 : « une case sans le
+// numéro de commande, que l'adresse et avec le logo » ; le n° seulement quand il en a besoin).
+export function travaux(orders, mode, avecRef = false) {
   const out = [];
   for (const o of orders || []) {
     if (!modeEnvoi(o).ok) continue;
     const ad = adresseEtiquette(o);
-    out.push({ type: "dest", ad, exp: mode === "meme" });
-    if (mode === "apart") out.push({ type: "exp", ad });
+    out.push({ type: "dest", ad, exp: mode === "meme", ref: !!avecRef });
+    if (mode === "apart") out.push({ type: "exp", ad, ref: !!avecRef });
   }
   return out;
 }
@@ -81,20 +83,25 @@ export const lignesExpediteur = (txt) => String(txt || "").split("\n").map((x) =
 // s'il ne charge pas, l'étiquette sort sans logo.
 export const LOGO_ETQ = { w: 12, h: 6.7 }; // cadre en mm ; le logo y tient sans être déformé
 
-function pied(classe, texte, logo, trait) {
+// Bas de l'étiquette : l'expéditeur et/ou le n° de commande à gauche, le logo à droite (rien d'autre
+// si aucun des deux n'est demandé).
+function pied(p, expTxt, logo) {
   const img = logo ? `<img class="logo" src="${esc(logo)}" alt="Niv Création">` : "";
-  return `<div class="pied${trait ? " trait" : ""}"><div class="${classe}">${texte}</div>${img}</div>`;
+  const exp = p.type === "dest" && p.exp ? `<div class="exp">Exp. : ${lignesExpediteur(expTxt).map(esc).join(" · ")}</div>` : "";
+  const ref = p.ref ? `<div class="ref">Commande #${esc(p.ad.ref)}</div>` : "";
+  if (!exp && !ref && !img) return "";
+  return `<div class="pied${exp ? " trait" : ""}"><div class="txt">${exp}${ref}</div>${img}</div>`;
 }
 
 export function contenuEtiquette(p, expTxt, logo) {
   if (p.type === "exp") {
     const l = lignesExpediteur(expTxt);
-    return `<div class="to">Expéditeur</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}${pied("ref", `Commande #${esc(p.ad.ref)}`, logo)}`;
+    return `<div class="to">Expéditeur</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}${pied(p, expTxt, logo)}`;
   }
   const a = p.ad;
   return `<div class="to">Destinataire</div><div class="nm">${esc(a.nom)}</div>${a.lignes.map((x) => `<div class="l">${esc(x)}</div>`).join("")}`
     + `<div class="cp">${esc(a.cpVille)}</div>${a.pays ? `<div class="cp">${esc(a.pays)}</div>` : ""}`
-    + (p.exp ? pied("exp", `Exp. : ${lignesExpediteur(expTxt).map(esc).join(" · ")}`, logo, true) : pied("ref", `Commande #${esc(a.ref)}`, logo));
+    + pied(p, expTxt, logo);
 }
 
 // Document A4 complet, prêt à imprimer : page sans marge, chaque étiquette posée au millimètre.
@@ -115,8 +122,9 @@ export function feuilleHtml(places, expTxt, logo) {
 .cp{font-weight:700;font-size:9.5pt;line-height:1.2;overflow-wrap:anywhere}
 .pied{margin-top:auto;display:flex;align-items:flex-end;gap:1.5mm}
 .pied.trait{border-top:.25mm solid #000;padding-top:.8mm}
-.exp{flex:1;min-width:0;font-size:6.2pt;line-height:1.2;color:#222;overflow-wrap:anywhere}
-.ref{flex:1;min-width:0;font-size:5.6pt;color:#777}
+.txt{flex:1;min-width:0}
+.exp{font-size:6.2pt;line-height:1.2;color:#222;overflow-wrap:anywhere}
+.ref{font-size:5.6pt;line-height:1.2;color:#777}
 .logo{flex:none;width:${LOGO_ETQ.w}mm;height:${LOGO_ETQ.h.toFixed(2)}mm;object-fit:contain;display:block}
 @media screen{body{background:#e9e3d6}.page{margin:10mm auto;background:#fff;box-shadow:0 2mm 6mm rgba(0,0,0,.2)}}
 </style></head><body><div class="page">${cases}</div></body></html>`;
@@ -185,7 +193,6 @@ export function feuillePdf(JsPDF, places, expTxt, logo) {
     if (p.type === "exp") {
       haut.push({ t: "EXPÉDITEUR", s: 6, g: 85 });
       exp.forEach((l, i) => haut.push({ t: l, s: i ? 9 : 10, b: !i }));
-      bas.push({ t: `Commande #${textePdf(p.ad.ref)}`, s: 5.6, g: 119 });
     } else {
       const a = p.ad;
       haut.push({ t: "DESTINATAIRE", s: 6, g: 85 });
@@ -194,8 +201,8 @@ export function feuillePdf(JsPDF, places, expTxt, logo) {
       haut.push({ t: textePdf(a.cpVille), s: 9.5, b: true });
       if (a.pays) haut.push({ t: textePdf(a.pays), s: 9.5, b: true });
       if (p.exp) bas.push({ t: `Exp. : ${exp.join(" · ")}`, s: 6.2, g: 34, trait: true });
-      else bas.push({ t: `Commande #${textePdf(a.ref)}`, s: 5.6, g: 119 });
     }
+    if (p.ref) bas.push({ t: `Commande #${textePdf(p.ad.ref)}`, s: 5.6, g: 119 });
     // Découpe en lignes à la largeur de l'étiquette ; si tout ne tient pas, on réduit.
     const couper = (blocs, k, larg = L) => blocs.flatMap((bl) => {
       doc.setFont("helvetica", bl.b ? "bold" : "normal"); doc.setFontSize(bl.s * k);

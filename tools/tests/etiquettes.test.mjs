@@ -54,6 +54,14 @@ v(/BT\s*\/F\d+ [\d.]+ Tf\s*[\d.]+ TL\s*[\d.]+ g\s*\(DESTINATAIRE\)/.test(src) ||
 v(/453\.5\d* [\d.]+ Td\s*\(DESTINATAIRE\)/.test(src), "PDF : 1re étiquette en case 4 (160 mm du bord gauche)");
 v(/EXP.{1,4}DITEUR/.test(src), "PDF : étiquette expéditeur à part");
 
+// 5 quater. n° de commande : absent par défaut, présent seulement si demandé (14/10/2026)
+const sansRef = feuilleHtml(placer(travaux([dom], "non"), used).places, "Niv");
+v(!sansRef.includes("Commande #"), "par défaut : pas de n° de commande, seulement l'adresse");
+v(feuilleHtml(placer(travaux([dom], "non", true), used).places, "Niv").includes("Commande #A1"), "case cochée : n° de commande en bas");
+v(feuilleHtml(placer(travaux([dom], "meme", true), used).places, "Niv").match(/Exp\. :.*Commande #A1/s), "avec expéditeur ET n° : les deux en bas");
+v(!feuillePdf(jsPDF, placer(travaux([dom], "non"), used).places, "Niv").output().includes("Commande"), "PDF par défaut : pas de n° de commande");
+v(feuillePdf(jsPDF, placer(travaux([dom], "non", true), used).places, "Niv").output().includes("(Commande #A1)"), "PDF case cochée : n° de commande");
+
 // 5 ter. le logo en petit (14/10/2026) : présent dans la page et dans le PDF, 1 seule fois dans le fichier
 import fs from "node:fs";
 const logoJpg = "data:image/jpeg;base64," + fs.readFileSync(new URL("../../docs/maquettes/assets/logo-source.jpg", import.meta.url)).toString("base64");

@@ -3451,6 +3451,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     étiquette (cadre 12 × 6,7 mm, à côté de l'expéditeur ou du n° de commande). C'est le fichier d'ORIGINE du site
     (`IMG_6758.jpg`), servi tel quel par `/api/logo` (même adresse que le site, sinon le navigateur ne peut pas le mettre
     dans le PDF) — aucune copie, aucune retouche. S'il ne charge pas, l'étiquette sort sans logo.
+  · **N° de commande retiré par défaut (14/10/2026, « une case sans le numéro de commande, que l'adresse et avec le
+    logo », le n° seulement « quand j'ai besoin »)** : case à cocher « Ajouter le numéro de commande » (section 2,
+    retenue sur l'appareil, `travaux(orders, mode, avecRef)`). Décochée = adresse + logo (+ l'expéditeur si choisi).
   · Vérifié : test 29/29 + navigateur iPhone 13 et 1440 px (partage d'un PDF dans le geste, cadre caché, aucune
     nouvelle page, 0 erreur). À conseiller : taille réelle 100 %, essai sur papier blanc contre la planche.
 - **Fichiers** : `src/lib/etiquettes.js` (pur : `FEUILLE`, `positions`, `modeEnvoi`, `adresseEtiquette` — nom via

@@ -37,6 +37,7 @@ export default function EtiquettesPage() {
   const [used, setUsed] = useState(() => new Array(NB_CASES).fill(false));
   const [mode, setMode] = useState("meme");
   const [expTxt, setExpTxt] = useState(EXPEDITEUR_DEFAUT);
+  const [avecRef, setAvecRef] = useState(false); // n° de commande sur l'étiquette : seulement si demandé
   const [attente, setAttente] = useState(null); // cases imprimées, en attente du « oui, c'est sorti »
   const [pret, setPret] = useState(false);
   const [apple, setApple] = useState(false);
@@ -50,10 +51,11 @@ export default function EtiquettesPage() {
     if (Array.isArray(s.used) && s.used.length === NB_CASES) setUsed(s.used.map(Boolean));
     if (["meme", "apart", "non"].includes(s.mode)) setMode(s.mode);
     if (typeof s.exp === "string" && s.exp.trim()) setExpTxt(s.exp);
+    if (typeof s.ref === "boolean") setAvecRef(s.ref);
     setPret(true);
     setApple(estApple());
   }, []);
-  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt }); }, [pret, used, mode, expTxt]);
+  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef }); }, [pret, used, mode, expTxt, avecRef]);
 
   const load = useCallback(async (k) => {
     setErr("");
@@ -81,7 +83,7 @@ export default function EtiquettesPage() {
   }, [orders, toutes, coches]);
 
   const choisies = liste.filter((o) => coches.includes(o.id));
-  const jobs = useMemo(() => travaux(choisies, mode), [choisies, mode]);
+  const jobs = useMemo(() => travaux(choisies, mode, avecRef), [choisies, mode, avecRef]);
   const { places, manque, libresApres } = useMemo(() => placer(jobs, used), [jobs, used]);
   const parCase = useMemo(() => Object.fromEntries(places.map((p) => [p.case, p])), [places]);
   const pos = useMemo(() => positions(), []);
@@ -223,6 +225,7 @@ export default function EtiquettesPage() {
                 </label>
               ))}
             </div>
+            <label className="etq-toggle" style={{ marginTop: 12 }}><input type="checkbox" checked={avecRef} onChange={(e) => setAvecRef(e.target.checked)} /> Ajouter le numéro de commande (en petit, en bas de l&apos;étiquette)</label>
             <label className="etq-f" htmlFor="etq-exp-txt">Adresse de l&apos;expéditeur (gardée pour la prochaine fois)</label>
             <textarea id="etq-exp-txt" value={expTxt} onChange={(e) => setExpTxt(e.target.value)} rows={4} />
           </section>

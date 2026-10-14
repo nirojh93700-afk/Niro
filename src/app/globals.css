@@ -4922,6 +4922,7 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .etq-cell .cp{font-weight:700;font-size:calc(3.35*var(--mm));line-height:1.2;overflow-wrap:anywhere}
 .etq-cell .pied{margin-top:auto;display:flex;align-items:flex-end;gap:calc(1.5*var(--mm))}
 .etq-cell .pied.trait{border-top:1px solid #000;padding-top:calc(.8*var(--mm))}
-.etq-cell .exp{flex:1;min-width:0;font-size:calc(2.19*var(--mm));line-height:1.2;color:#222;overflow-wrap:anywhere}
-.etq-cell .ref{flex:1;min-width:0;font-size:calc(1.98*var(--mm));color:#777}
+.etq-cell .pied .txt{flex:1;min-width:0}
+.etq-cell .exp{font-size:calc(2.19*var(--mm));line-height:1.2;color:#222;overflow-wrap:anywhere}
+.etq-cell .ref{font-size:calc(1.98*var(--mm));line-height:1.2;color:#777}
 .etq-cell .logo{flex:none;width:calc(12*var(--mm));height:calc(6.7*var(--mm));object-fit:contain;display:block}
