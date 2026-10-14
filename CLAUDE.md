@@ -3472,3 +3472,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   L'entonnoir devient Visiteurs → Ont rempli un panier → Sont allés au paiement → Ont acheté. `npm run test-stats` (8 vérifs).
 - Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
   (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
+
+## 📮 SUIVI DES COLIS LA POSTE DANS GESTION — 14/10/2026 (« je veux suivre aussi les colis que j'envoie à La Poste… un lien comme pour Boxtal »)
+- `src/lib/suiviColis.js` (`lienSuivi(numero)`, `estNumeroLaPoste`) : un numéro La Poste (13 caractères « chiffre + lettre +
+  11 chiffres » = lettre suivie / Colissimo, ou format international « 2 lettres + 9 chiffres + 2 lettres » = Chronopost,
+  international) ouvre `laposte.fr/outils/suivre-vos-envois?code=<n°>` ; tout autre numéro garde le lien Boxtal d'avant.
+- Branché : fiche commande (`/gestion`, « suivre sur La Poste / Boxtal »), file de production (la pastille 📦 du numéro devient
+  un lien), CRM (« 📍 Suivi La Poste / Boxtal »). Le n° se saisit comme avant (« Expédier » → numéro de suivi).
+- `npm run test-suivi` (7 vérifs). L'e-mail « expédiée » de la cliente garde son lien parcelsapp (inchangé).

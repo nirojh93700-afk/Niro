@@ -15,6 +15,7 @@
     "test-inbox-filter": "node tools/tests/inbox-filter.test.mjs",
     "test-impression": "node tools/tests/impression-fiche.mjs",
     "test-parcours": "node --import ./tools/alias-register.mjs tools/tests/parcours-guide.mjs",
+    "test-suivi": "node --import ./tools/alias-register.mjs tools/tests/suivi-colis.test.mjs",
     "test-stats": "node --import ./tools/alias-register.mjs tools/tests/stats-visites.test.mjs",
     "test-etiquettes": "node --import ./tools/alias-register.mjs tools/tests/etiquettes.test.mjs",
     "test-materiel": "node --import ./tools/alias-register.mjs tools/tests/materiel.test.mjs",

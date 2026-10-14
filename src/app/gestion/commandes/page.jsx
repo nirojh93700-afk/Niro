@@ -11,6 +11,7 @@
 // Gestion → Commandes : bouton « Fiche complète → ».
 // =============================================================================
 
+import { lienSuivi } from "@/lib/suiviColis";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
@@ -322,7 +323,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         {o.immediateStart ? <span className="file-chip red">⚡ Fabrication immédiate</span> : null}
         {unread ? <span className="file-chip red">📬 Nouvelle réponse</span> : null}
         {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
-        {o.tracking ? <span className="file-chip green">📦 {o.tracking}</span> : null}
+        {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking).nom})</a> : null}
         {FLAGS.map((f) => (
           <button key={f.id} type="button" className={`file-chip btn${flags.includes(f.id) ? " on" : ""}`} title="Cliquer pour activer/retirer"
             onClick={() => onAnnotate(o, { flags: flags.includes(f.id) ? flags.filter((x) => x !== f.id) : [...flags, f.id] })}>

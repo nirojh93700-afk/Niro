@@ -1,5 +1,6 @@
 "use client";
 
+import { lienSuivi } from "@/lib/suiviColis";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
@@ -1351,7 +1352,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {o.tracking && (
                       <div style={{ fontSize: "0.85rem", marginBottom: 8 }}>
                         📦 Suivi : <strong>{o.tracking}</strong>{" "}
-                        <a href="https://shipping.boxtal.com/fr/fr/centrale-expeditions/suivi" target="_blank" rel="noreferrer" title="Ouvrir le suivi sur Boxtal">suivre sur Boxtal</a>
+                        <a href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Ouvrir le suivi sur ${lienSuivi(o.tracking).nom}`}>suivre sur {lienSuivi(o.tracking).nom}</a>
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
