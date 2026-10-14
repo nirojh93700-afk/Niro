@@ -3479,4 +3479,6 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   international) ouvre `laposte.fr/outils/suivre-vos-envois?code=<n°>` ; tout autre numéro garde le lien Boxtal d'avant.
 - Branché : fiche commande (`/gestion`, « suivre sur La Poste / Boxtal »), file de production (la pastille 📦 du numéro devient
   un lien), CRM (« 📍 Suivi La Poste / Boxtal »). Le n° se saisit comme avant (« Expédier » → numéro de suivi).
-- `npm run test-suivi` (7 vérifs). L'e-mail « expédiée » de la cliente garde son lien parcelsapp (inchangé).
+- **Corrigé le même jour** (capture 0ZH3LP9M : « suivre sur Boxtal » sur un n° La Poste `87001500427259Z`) : format
+  « 14 chiffres + 1 lettre » reconnu La Poste ; et tout numéro NON reconnu affiche Boxtal **+ un lien La Poste à côté**.
+- `npm run test-suivi` (10 vérifs). L'e-mail « expédiée » de la cliente garde son lien parcelsapp (inchangé).

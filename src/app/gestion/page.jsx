@@ -1352,7 +1352,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {o.tracking && (
                       <div style={{ fontSize: "0.85rem", marginBottom: 8 }}>
                         📦 Suivi : <strong>{o.tracking}</strong>{" "}
-                        <a href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Ouvrir le suivi sur ${lienSuivi(o.tracking).nom}`}>suivre sur {lienSuivi(o.tracking).nom}</a>
+                        <a href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Ouvrir le suivi sur ${lienSuivi(o.tracking).nom}`}>suivre sur {lienSuivi(o.tracking).nom}</a>{lienSuivi(o.tracking).autre && <> · <a href={lienSuivi(o.tracking).autre.url} target="_blank" rel="noreferrer">suivre sur La Poste</a></>}
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>

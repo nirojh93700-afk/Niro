@@ -527,6 +527,9 @@ export default function CrmPage() {
                     {ord.tracking && (
                       <a href={lienSuivi(ord.tracking).url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} title={`Ouvrir le suivi sur ${lienSuivi(ord.tracking).nom}`}>📍 Suivi {lienSuivi(ord.tracking).nom}</a>
                     )}
+                    {ord.tracking && lienSuivi(ord.tracking).autre && (
+                      <a href={lienSuivi(ord.tracking).autre.url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>📍 Suivi La Poste</a>
+                    )}
                   </div>
                 );
               })}

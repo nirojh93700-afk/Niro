@@ -324,6 +324,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         {unread ? <span className="file-chip red">📬 Nouvelle réponse</span> : null}
         {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
         {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking).nom})</a> : null}
+        {o.tracking && lienSuivi(o.tracking).autre ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).autre.url} target="_blank" rel="noreferrer">suivre (La Poste)</a> : null}
         {FLAGS.map((f) => (
           <button key={f.id} type="button" className={`file-chip btn${flags.includes(f.id) ? " on" : ""}`} title="Cliquer pour activer/retirer"
             onClick={() => onAnnotate(o, { flags: flags.includes(f.id) ? flags.filter((x) => x !== f.id) : [...flags, f.id] })}>
