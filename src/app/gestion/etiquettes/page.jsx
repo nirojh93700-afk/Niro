@@ -42,6 +42,7 @@ export default function EtiquettesPage() {
   const [apple, setApple] = useState(false);
   const [pdf, setPdf] = useState(null); // PDF préparé d'avance : « Partager » doit partir dans le geste du doigt
   const cadre = useRef(null);
+  const [logo, setLogo] = useState(null); // { data, w, h } : le logo du site, lu une fois
 
   // Feuille, mode et expéditeur retenus sur cet ordinateur ; commande pré-cochée par ?id= ou ?ref=.
   useEffect(() => {
@@ -88,6 +89,23 @@ export default function EtiquettesPage() {
   function basculer(id) { setCoches((c) => c.includes(id) ? c.filter((x) => x !== id) : [...c, id]); }
   function caseUtilisee(i) { setAttente(null); setUsed((u) => u.map((v, k) => k === i ? !v : v)); }
 
+  // Le logo du site (fichier d'origine, servi par /api/logo), mis en petit sur chaque étiquette.
+  useEffect(() => {
+    let fini = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/logo");
+        if (!r.ok) return;
+        const b = await r.blob();
+        const data = await new Promise((ok, ko) => { const f = new FileReader(); f.onload = () => ok(f.result); f.onerror = ko; f.readAsDataURL(b); });
+        const img = new Image();
+        img.onload = () => { if (!fini) setLogo({ data, w: img.naturalWidth, h: img.naturalHeight }); };
+        img.src = data;
+      } catch { /* étiquettes sans logo */ }
+    })();
+    return () => { fini = true; };
+  }, []);
+
   // Le PDF est refait dès que la feuille change, pour être prêt au moment du clic.
   useEffect(() => {
     let fini = false;
@@ -96,12 +114,12 @@ export default function EtiquettesPage() {
     (async () => {
       try {
         const { jsPDF } = await import("jspdf");
-        const blob = feuillePdf(jsPDF, places, expTxt).output("blob");
+        const blob = feuillePdf(jsPDF, places, expTxt, logo).output("blob");
         if (!fini) setPdf(new File([blob], NOM_PDF, { type: "application/pdf" }));
       } catch { /* l'impression par le navigateur reste possible */ }
     })();
     return () => { fini = true; };
-  }, [places, expTxt]);
+  }, [places, expTxt, logo]);
 
   // Ordinateur : la feuille est écrite dans un cadre invisible de CETTE page, puis imprimée.
   function imprimerCadre() {
@@ -112,11 +130,13 @@ export default function EtiquettesPage() {
     document.body.appendChild(f);
     cadre.current = f;
     const d = f.contentWindow.document;
-    d.open(); d.write(feuilleHtml(places, expTxt)); d.close();
-    setTimeout(() => {
+    d.open(); d.write(feuilleHtml(places, expTxt, logo?.data)); d.close();
+    // On attend que le logo soit dessiné avant d'imprimer (sinon il sort en blanc).
+    const imgs = [...d.images].map((i) => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()));
+    Promise.race([Promise.all(imgs), new Promise((ok) => setTimeout(ok, 2000))]).then(() => setTimeout(() => {
       try { f.contentWindow.focus(); f.contentWindow.print(); }
       catch { setErr("L'impression n'a pas pu s'ouvrir. Utilisez « Enregistrer le PDF », puis imprimez le fichier."); }
-    }, 300);
+    }, 150));
   }
 
   function telecharger() {
@@ -243,7 +263,7 @@ export default function EtiquettesPage() {
                   style={{ left: `calc(${p.x} * var(--mm))`, top: `calc(${p.y} * var(--mm))` }}
                   aria-label={`Case ${i + 1}${used[i] ? ", déjà utilisée" : pl ? ", sera imprimée" : ", libre"}`}
                   onClick={() => caseUtilisee(i)}>
-                  {pl ? <span className="lab" dangerouslySetInnerHTML={{ __html: contenuEtiquette(pl, expTxt) }} /> : null}
+                  {pl ? <span className="lab" dangerouslySetInnerHTML={{ __html: contenuEtiquette(pl, expTxt, logo?.data) }} /> : null}
                   <span className="pos">{i + 1}</span>
                 </button>
               );

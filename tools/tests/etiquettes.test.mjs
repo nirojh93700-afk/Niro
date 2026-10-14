@@ -54,6 +54,17 @@ v(/BT\s*\/F\d+ [\d.]+ Tf\s*[\d.]+ TL\s*[\d.]+ g\s*\(DESTINATAIRE\)/.test(src) ||
 v(/453\.5\d* [\d.]+ Td\s*\(DESTINATAIRE\)/.test(src), "PDF : 1re étiquette en case 4 (160 mm du bord gauche)");
 v(/EXP.{1,4}DITEUR/.test(src), "PDF : étiquette expéditeur à part");
 
+// 5 ter. le logo en petit (14/10/2026) : présent dans la page et dans le PDF, 1 seule fois dans le fichier
+import fs from "node:fs";
+const logoJpg = "data:image/jpeg;base64," + fs.readFileSync(new URL("../../docs/maquettes/assets/logo-source.jpg", import.meta.url)).toString("base64");
+const logo = { data: logoJpg, w: 1376, h: 768 };
+v(feuilleHtml(placer(travaux([dom], "meme"), used).places, "Niv", logoJpg).includes('class="logo"'), "HTML : logo posé sur l'étiquette");
+const dl = feuillePdf(jsPDF, placer(travaux([dom, b, dom, b], "meme"), used).places, "Niv Création\n6 rue d'Armaillé\n75017 PARIS", logo);
+const srcL = dl.output();
+v((srcL.match(/\/Subtype \/Image/g) || []).length === 1, "PDF : le logo n'est rangé qu'une fois dans le fichier");
+v((srcL.match(/\/I\d+ Do/g) || []).length === 4, "PDF : logo dessiné sur les 4 étiquettes");
+v(dl.getNumberOfPages() === 1, "PDF avec logo : 1 page");
+
 // 6. rendu réel : Chromium imprime 1 page, et la 1re étiquette tombe à sa place
 let pw = null;
 try { pw = await import("playwright-core"); } catch { console.log("(Playwright absent : rendu réel non testé)"); }
@@ -61,7 +72,7 @@ if (pw) {
   const b2 = await pw.chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" }).catch(() => null);
   if (b2) {
     const page = await b2.newPage();
-    const tout = feuilleHtml(placer(travaux(new Array(20).fill(dom), "meme"), new Array(20).fill(false)).places, "Niv Création\n6 rue d'Armaillé\n75017 PARIS");
+    const tout = feuilleHtml(placer(travaux(new Array(20).fill(dom), "meme"), new Array(20).fill(false)).places, "Niv Création\n6 rue d'Armaillé\n75017 PARIS", logoJpg);
     await page.setContent(tout);
     await page.emulateMedia({ media: "print" });
     const pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true });

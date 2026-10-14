@@ -3447,6 +3447,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     imprimée ; bouton « Enregistrer le PDF » en plus.
   · Bouton « ‹ Retour aux commandes » en haut de la page et dans le bandeau « Les étiquettes sont bien sorties ? ».
   · PDF : Helvetica (caractères d'Europe de l'Ouest ; « Ł » → « L », `textePdf`), coupure après les traits d'union.
+  · **Logo en petit (14/10/2026, « sur les tickets, tu peux mettre le logo en petit »)** : en bas à droite de chaque
+    étiquette (cadre 12 × 6,7 mm, à côté de l'expéditeur ou du n° de commande). C'est le fichier d'ORIGINE du site
+    (`IMG_6758.jpg`), servi tel quel par `/api/logo` (même adresse que le site, sinon le navigateur ne peut pas le mettre
+    dans le PDF) — aucune copie, aucune retouche. S'il ne charge pas, l'étiquette sort sans logo.
   · Vérifié : test 29/29 + navigateur iPhone 13 et 1440 px (partage d'un PDF dans le geste, cadre caché, aucune
     nouvelle page, 0 erreur). À conseiller : taille réelle 100 %, essai sur papier blanc contre la planche.
 - **Fichiers** : `src/lib/etiquettes.js` (pur : `FEUILLE`, `positions`, `modeEnvoi`, `adresseEtiquette` — nom via

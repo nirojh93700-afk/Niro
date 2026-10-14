@@ -76,23 +76,33 @@ export function placer(jobs, used) {
 const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 export const lignesExpediteur = (txt) => String(txt || "").split("\n").map((x) => x.trim()).filter(Boolean).slice(0, 5);
 
-export function contenuEtiquette(p, expTxt) {
+// Logo du site, en petit, en bas à droite de chaque étiquette (14/10/2026, gérant : « sur les tickets, tu
+// peux mettre le logo en petit »). C'est le fichier d'origine du site, servi tel quel par /api/logo ;
+// s'il ne charge pas, l'étiquette sort sans logo.
+export const LOGO_ETQ = { w: 12, h: 6.7 }; // cadre en mm ; le logo y tient sans être déformé
+
+function pied(classe, texte, logo, trait) {
+  const img = logo ? `<img class="logo" src="${esc(logo)}" alt="Niv Création">` : "";
+  return `<div class="pied${trait ? " trait" : ""}"><div class="${classe}">${texte}</div>${img}</div>`;
+}
+
+export function contenuEtiquette(p, expTxt, logo) {
   if (p.type === "exp") {
     const l = lignesExpediteur(expTxt);
-    return `<div class="to">Expéditeur</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}<div class="ref">Commande #${esc(p.ad.ref)}</div>`;
+    return `<div class="to">Expéditeur</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}${pied("ref", `Commande #${esc(p.ad.ref)}`, logo)}`;
   }
   const a = p.ad;
   return `<div class="to">Destinataire</div><div class="nm">${esc(a.nom)}</div>${a.lignes.map((x) => `<div class="l">${esc(x)}</div>`).join("")}`
     + `<div class="cp">${esc(a.cpVille)}</div>${a.pays ? `<div class="cp">${esc(a.pays)}</div>` : ""}`
-    + (p.exp ? `<div class="exp">Exp. : ${lignesExpediteur(expTxt).map(esc).join(" · ")}</div>` : `<div class="ref">Commande #${esc(a.ref)}</div>`);
+    + (p.exp ? pied("exp", `Exp. : ${lignesExpediteur(expTxt).map(esc).join(" · ")}`, logo, true) : pied("ref", `Commande #${esc(a.ref)}`, logo));
 }
 
 // Document A4 complet, prêt à imprimer : page sans marge, chaque étiquette posée au millimètre.
-export function feuilleHtml(places, expTxt) {
+export function feuilleHtml(places, expTxt, logo) {
   const pos = positions();
   const cases = places.map((p) => {
     const { x, y } = pos[p.case];
-    return `<div class="etq" style="left:${x}mm;top:${y}mm">${contenuEtiquette(p, expTxt)}</div>`;
+    return `<div class="etq" style="left:${x}mm;top:${y}mm">${contenuEtiquette(p, expTxt, logo)}</div>`;
   }).join("");
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Étiquettes d'adresse</title><style>
 @page{size:210mm 297mm;margin:0}
@@ -103,8 +113,11 @@ export function feuilleHtml(places, expTxt) {
 .nm{font-weight:700;font-size:10pt;line-height:1.15;overflow-wrap:anywhere}
 .l{font-size:9pt;line-height:1.2;overflow-wrap:anywhere}
 .cp{font-weight:700;font-size:9.5pt;line-height:1.2;overflow-wrap:anywhere}
-.exp{margin-top:auto;border-top:.25mm solid #000;padding-top:.8mm;font-size:6.2pt;line-height:1.2;color:#222;overflow-wrap:anywhere}
-.ref{margin-top:auto;font-size:5.6pt;color:#777}
+.pied{margin-top:auto;display:flex;align-items:flex-end;gap:1.5mm}
+.pied.trait{border-top:.25mm solid #000;padding-top:.8mm}
+.exp{flex:1;min-width:0;font-size:6.2pt;line-height:1.2;color:#222;overflow-wrap:anywhere}
+.ref{flex:1;min-width:0;font-size:5.6pt;color:#777}
+.logo{flex:none;width:${LOGO_ETQ.w}mm;height:${LOGO_ETQ.h.toFixed(2)}mm;object-fit:contain;display:block}
 @media screen{body{background:#e9e3d6}.page{margin:10mm auto;background:#fff;box-shadow:0 2mm 6mm rgba(0,0,0,.2)}}
 </style></head><body><div class="page">${cases}</div></body></html>`;
 }
@@ -151,11 +164,19 @@ function couperLignes(doc, texte, largeur) {
   return lignes.length ? lignes : [""];
 }
 
-export function feuillePdf(JsPDF, places, expTxt) {
+// logo = { data: « data:image/jpeg;base64,… », w, h } (taille en pixels, pour garder ses proportions).
+export function feuillePdf(JsPDF, places, expTxt, logo) {
   const doc = new JsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
   doc.setProperties({ title: "Étiquettes d'adresse — Niv Création" });
   const pos = positions();
   const P = 3, Pb = 2.6, L = FEUILLE.w - 2 * P;
+  // Logo posé dans son cadre en gardant ses proportions.
+  let lw = 0, lh = 0;
+  if (logo?.data && logo.w > 0 && logo.h > 0) {
+    const k = Math.min(LOGO_ETQ.w / logo.w, LOGO_ETQ.h / logo.h);
+    lw = logo.w * k; lh = logo.h * k;
+  }
+  const Lbas = lw ? L - lw - 1.5 : L;
   for (const p of places) {
     const { x, y } = pos[p.case];
     const exp = lignesExpediteur(expTxt).map(textePdf);
@@ -176,15 +197,15 @@ export function feuillePdf(JsPDF, places, expTxt) {
       else bas.push({ t: `Commande #${textePdf(a.ref)}`, s: 5.6, g: 119 });
     }
     // Découpe en lignes à la largeur de l'étiquette ; si tout ne tient pas, on réduit.
-    const couper = (blocs, k) => blocs.flatMap((bl) => {
+    const couper = (blocs, k, larg = L) => blocs.flatMap((bl) => {
       doc.setFont("helvetica", bl.b ? "bold" : "normal"); doc.setFontSize(bl.s * k);
-      return couperLignes(doc, bl.t, L).map((t, i) => ({ ...bl, t, s: bl.s * k, trait: bl.trait && i === 0 }));
+      return couperLignes(doc, bl.t, larg).map((t, i) => ({ ...bl, t, s: bl.s * k, trait: bl.trait && i === 0 }));
     });
     const haute = (ls) => ls.reduce((h, l) => h + l.s * PT * 1.2, 0);
     let k = 1, H, B;
     for (; k > 0.6; k -= 0.05) {
-      H = couper(haut, k); B = couper(bas, k);
-      if (haute(H) + 0.8 + haute(B) + (B.some((l) => l.trait) ? 1.2 : 0) + 1.5 <= FEUILLE.h - P - Pb) break;
+      H = couper(haut, k); B = couper(bas, k, Lbas);
+      if (haute(H) + 0.8 + Math.max(haute(B), lh) + (B.some((l) => l.trait) ? 1.2 : 0) + 1.5 <= FEUILLE.h - P - Pb) break;
     }
     let cy = y + P;
     H.forEach((l, i) => {
@@ -192,9 +213,14 @@ export function feuillePdf(JsPDF, places, expTxt) {
       if (i === 1 && haut[0].s === 6) cy += 0.8;
       cy += l.s * PT; doc.text(l.t, x + P, cy); cy += l.s * PT * 0.2;
     });
-    let by = y + FEUILLE.h - Pb - haute(B);
+    const bas0 = y + FEUILLE.h - Pb; // bas du contenu
+    let by = bas0 - haute(B);
     if (B.some((l) => l.trait)) {
-      doc.setDrawColor(0); doc.setLineWidth(0.25); doc.line(x + P, by - 0.8, x + FEUILLE.w - P, by - 0.8);
+      const t = bas0 - Math.max(haute(B), lh) - 0.8;
+      doc.setDrawColor(0); doc.setLineWidth(0.25); doc.line(x + P, t, x + FEUILLE.w - P, t);
+    }
+    if (lw) {
+      try { doc.addImage(logo.data, /^data:image\/png/.test(logo.data) ? "PNG" : "JPEG", x + FEUILLE.w - P - lw, bas0 - lh, lw, lh, "logo"); } catch { /* sans logo */ }
     }
     B.forEach((l) => {
       doc.setFont("helvetica", "normal"); doc.setFontSize(l.s); doc.setTextColor(l.g ?? 0);
