@@ -150,7 +150,14 @@
   à chaque fois ; ses propres essais aussi.
 - L'achat n'est compté que si la cliente revient sur la page /merci après Stripe (`track("purchase")` dans `merci/page.jsx`) :
   une cliente qui paie puis ferme l'onglet compte comme un abandon.
-- ✅ CONSTRUIT le 14/10/2026 (« refais le compteur »), en attente du « pousse » : voir CLAUDE.md « COMPTEUR DES PANIERS ».
+- ✅ EN LIGNE le 14/10/2026 (« refais le compteur » puis « pousse ») : voir CLAUDE.md « COMPTEUR DES PANIERS ».
 - Piste d'origine : compter les paniers PAR VISITE (une seule fois par session, comme `trackOnce`), compter l'achat
   au webhook Stripe (côté serveur, sûr), et afficher où ils partent : panier → « Paiements lancés » → payé, plus les paniers
   Stripe expirés (`checkout.session.expired`) qui sont les vrais abandons au paiement.
+
+## 📮 Suivi La Poste affiché DANS Gestion (proposé le 14/10/2026)
+- Aujourd'hui (en ligne le 14/10) : un numéro La Poste ouvre la page de suivi laposte.fr — aucun compte nécessaire.
+- Possible en plus : lire l'état du colis directement dans Gestion (« en cours », « livré ») et passer la commande en
+  « Livrée » toute seule, avec l'API Suivi de La Poste (gratuite, compte sur developer.laposte.fr, clé « Okapi »).
+  Le gérant met la clé lui-même en secret Firebase (`LAPOSTE_OKAPI_KEY`), jamais dans la conversation ni dans un fichier.
+  À construire seulement s'il le demande.
