@@ -5,18 +5,25 @@
 // Imprime l'adresse des envois La Poste sur les planches de 20 étiquettes 45 × 45 mm. Le gérant
 // coche les commandes, choisit où mettre l'expéditeur, grise les cases déjà décollées de sa feuille ;
 // les étiquettes vont sur les cases libres suivantes. La feuille et l'expéditeur sont retenus sur
-// cet ordinateur (localStorage). L'impression ouvre une page A4 aux mesures exactes (lib/etiquettes).
+// cet ordinateur (localStorage). Impression (14/10/2026, « j'imprime comment là ? ») : JAMAIS de
+// nouvelle fenêtre — sur l'iPhone (site posé sur l'écran d'accueil) elle n'avait ni retour ni
+// impression. Ordinateur : la feuille A4 part d'un cadre caché de la page. iPhone / iPad : un PDF
+// aux mêmes millimètres s'ouvre dans « Partager » → « Imprimer ».
 // =============================================================================
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { chargerAvecCache } from "@/components/admin/adminCache";
-import { FEUILLE, NB_CASES, positions, modeEnvoi, travaux, placer, contenuEtiquette, feuilleHtml, EXPEDITEUR_DEFAUT } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT } from "@/lib/etiquettes";
 
 const CLE = "niv-etiquettes";
 const A_EXPEDIER = ["a_preparer", "en_gravure"];
 function lire() { try { return JSON.parse(localStorage.getItem(CLE) || "{}") || {}; } catch { return {}; } }
 function ecrire(v) { try { localStorage.setItem(CLE, JSON.stringify(v)); } catch { /* navigateur sans stockage : rien de grave */ } }
+// iPhone / iPad (un iPad récent se présente comme un Mac, mais tactile).
+const estApple = () => { try { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); } catch { return false; } };
+const NOM_PDF = "etiquettes-niv-creation.pdf";
 const dateFr = (iso) => { try { return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }); } catch { return ""; } };
 
 export default function EtiquettesPage() {
@@ -32,6 +39,9 @@ export default function EtiquettesPage() {
   const [expTxt, setExpTxt] = useState(EXPEDITEUR_DEFAUT);
   const [attente, setAttente] = useState(null); // cases imprimées, en attente du « oui, c'est sorti »
   const [pret, setPret] = useState(false);
+  const [apple, setApple] = useState(false);
+  const [pdf, setPdf] = useState(null); // PDF préparé d'avance : « Partager » doit partir dans le geste du doigt
+  const cadre = useRef(null);
 
   // Feuille, mode et expéditeur retenus sur cet ordinateur ; commande pré-cochée par ?id= ou ?ref=.
   useEffect(() => {
@@ -40,6 +50,7 @@ export default function EtiquettesPage() {
     if (["meme", "apart", "non"].includes(s.mode)) setMode(s.mode);
     if (typeof s.exp === "string" && s.exp.trim()) setExpTxt(s.exp);
     setPret(true);
+    setApple(estApple());
   }, []);
   useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt }); }, [pret, used, mode, expTxt]);
 
@@ -77,14 +88,59 @@ export default function EtiquettesPage() {
   function basculer(id) { setCoches((c) => c.includes(id) ? c.filter((x) => x !== id) : [...c, id]); }
   function caseUtilisee(i) { setAttente(null); setUsed((u) => u.map((v, k) => k === i ? !v : v)); }
 
-  function imprimer() {
+  // Le PDF est refait dès que la feuille change, pour être prêt au moment du clic.
+  useEffect(() => {
+    let fini = false;
+    setPdf(null);
+    if (!places.length) return undefined;
+    (async () => {
+      try {
+        const { jsPDF } = await import("jspdf");
+        const blob = feuillePdf(jsPDF, places, expTxt).output("blob");
+        if (!fini) setPdf(new File([blob], NOM_PDF, { type: "application/pdf" }));
+      } catch { /* l'impression par le navigateur reste possible */ }
+    })();
+    return () => { fini = true; };
+  }, [places, expTxt]);
+
+  // Ordinateur : la feuille est écrite dans un cadre invisible de CETTE page, puis imprimée.
+  function imprimerCadre() {
+    try { cadre.current?.remove(); } catch { /* ignore */ }
+    const f = document.createElement("iframe");
+    f.setAttribute("aria-hidden", "true");
+    f.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden";
+    document.body.appendChild(f);
+    cadre.current = f;
+    const d = f.contentWindow.document;
+    d.open(); d.write(feuilleHtml(places, expTxt)); d.close();
+    setTimeout(() => {
+      try { f.contentWindow.focus(); f.contentWindow.print(); }
+      catch { setErr("L'impression n'a pas pu s'ouvrir. Utilisez « Enregistrer le PDF », puis imprimez le fichier."); }
+    }, 300);
+  }
+
+  function telecharger() {
+    if (!pdf) return;
+    const url = URL.createObjectURL(pdf);
+    const a = document.createElement("a");
+    a.href = url; a.download = NOM_PDF; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  async function imprimer() {
     if (!places.length) return;
-    const w = window.open("", "_blank");
-    if (!w) { setErr("La fenêtre d'impression a été bloquée par le navigateur. Autorisez les fenêtres pour ce site, puis réessayez."); return; }
-    w.document.open(); w.document.write(feuilleHtml(places, expTxt)); w.document.close();
-    const go = () => { try { w.focus(); w.print(); } catch { /* l'utilisateur imprime depuis la fenêtre */ } };
-    if (w.document.readyState === "complete") setTimeout(go, 250); else w.addEventListener("load", () => setTimeout(go, 250));
-    setAttente(places.map((p) => p.case));
+    setErr("");
+    const cases = places.map((p) => p.case);
+    if (apple) {
+      if (!pdf) { setErr("La feuille se prépare… réessayez dans une seconde."); return; }
+      if (navigator.canShare?.({ files: [pdf] })) {
+        try { await navigator.share({ files: [pdf], title: "Étiquettes d'adresse" }); setAttente(cases); }
+        catch (e) { if (e?.name !== "AbortError") setErr("Le menu Partager n'a pas pu s'ouvrir. Réessayez ; si ça recommence, imprimez depuis un ordinateur."); }
+        return;
+      }
+    }
+    imprimerCadre();
+    setAttente(cases);
   }
   function confirmerSortie() { const cs = attente || []; setUsed((u) => u.map((v, k) => v || cs.includes(k))); setAttente(null); }
 
@@ -106,6 +162,7 @@ export default function EtiquettesPage() {
   return (
     <div className="etq-page">
       <PageHead eyebrow="Commandes" title="Étiquettes d'adresse"
+        actions={<Link href="/gestion/commandes" className="btn btn-outline etq-retour">‹ Retour aux commandes</Link>}
         subtitle="Pour les envois par La Poste : l'adresse s'imprime sur vos planches de 20 étiquettes carrées (45 × 45 mm, 4 colonnes × 5 lignes). Touchez les cases déjà décollées sur votre feuille : l'impression ira sur les cases libres."
         kpis={[
           { label: "Cochées", value: String(choisies.length) },
@@ -156,13 +213,20 @@ export default function EtiquettesPage() {
           <div className="etq-tools">
             <button type="button" className="btn btn-outline" onClick={() => { setAttente(null); setUsed(new Array(NB_CASES).fill(false)); }}>Feuille neuve</button>
             <button type="button" className="btn btn-outline" onClick={() => { const k = used.indexOf(false); if (k >= 0) caseUtilisee(k); }}>Décaler d&apos;une case</button>
-            <button type="button" className="btn btn-gold" disabled={!places.length} onClick={imprimer}>Imprimer</button>
+          </div>
+          <div className="etq-print">
+            <button type="button" className="btn btn-gold" disabled={!places.length} onClick={imprimer}>🖨️ Imprimer {places.length ? `(${places.length})` : ""}</button>
+            {apple ? null : <button type="button" className="btn btn-outline" disabled={!pdf} onClick={telecharger}>Enregistrer le PDF</button>}
+            <p className="sub">{apple
+              ? <>Sur iPhone : touchez <b>Imprimer</b>, le menu Partager s&apos;ouvre → choisissez <b>Imprimer</b> → votre imprimante → <b>Imprimer</b>. Vous revenez ici ensuite.</>
+              : <>La fenêtre d&apos;impression s&apos;ouvre : choisissez votre imprimante, échelle <b>100 %</b> (taille réelle), puis Imprimer.</>}</p>
           </div>
           <div className="etq-legend"><span><i className="l-free" />Libre</span><span><i className="l-used" />Déjà utilisée (touchez pour changer)</span><span><i className="l-print" />Sera imprimée</span></div>
           {attente ? (
             <div className="etq-status ok" role="status">
               Les étiquettes sont bien sorties ? <button type="button" className="btn btn-gold" onClick={confirmerSortie}>Oui, griser ces cases</button>{" "}
-              <button type="button" className="btn btn-outline" onClick={() => setAttente(null)}>Non</button>
+              <button type="button" className="btn btn-outline" onClick={() => setAttente(null)}>Non</button>{" "}
+              <Link href="/gestion/commandes" className="btn btn-outline">Retour aux commandes</Link>
             </div>
           ) : (
             <div className={`etq-status${manque ? " warn" : ""}`} role="status">

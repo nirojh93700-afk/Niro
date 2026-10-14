@@ -4893,6 +4893,12 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .etq-sheetbox{display:flex;flex-direction:column;gap:12px}
 .etq-tools{display:flex;flex-wrap:wrap;gap:8px}
 .etq-tools .btn[disabled]{opacity:.5;cursor:not-allowed}
+.etq-print{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.etq-print .btn{min-height:46px}
+.etq-print .btn-gold{font-size:1.02rem;padding-left:26px;padding-right:26px}
+.etq-print .btn[disabled]{opacity:.5;cursor:not-allowed}
+.etq-print .sub{flex-basis:100%;margin:0}
+.etq-retour{white-space:nowrap}
 .etq-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--ink-soft)}
 .etq-legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px;border:1px solid var(--line)}
 .etq-legend .l-free{background:#fff}.etq-legend .l-used{background:#d8d1c3}.etq-legend .l-print{background:#f7ecd4;border-color:var(--gold)}

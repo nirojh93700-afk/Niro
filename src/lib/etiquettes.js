@@ -108,3 +108,98 @@ export function feuilleHtml(places, expTxt) {
 @media screen{body{background:#e9e3d6}.page{margin:10mm auto;background:#fff;box-shadow:0 2mm 6mm rgba(0,0,0,.2)}}
 </style></head><body><div class="page">${cases}</div></body></html>`;
 }
+
+// -----------------------------------------------------------------------------
+// LA MÊME FEUILLE EN PDF (14/10/2026). Le gérant imprime depuis son iPhone (site ajouté à
+// l'écran d'accueil) : là, une nouvelle fenêtre n'a ni bouton retour ni impression qui se
+// lance — il restait bloqué sur une page blanche. Sur iPhone / iPad, on fabrique donc un PDF
+// A4 aux mêmes millimètres et on l'ouvre dans le menu « Partager » d'Apple → « Imprimer ».
+// Polices standard du PDF (Helvetica) : seuls les caractères d'Europe de l'Ouest existent,
+// les autres perdent leur accent (« ł » → « l ») plutôt que de sortir en signes illisibles.
+// -----------------------------------------------------------------------------
+const CP1252 = new Set("€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ");
+const SANS_ACCENT = { "Ł": "L", "ł": "l", "Đ": "D", "đ": "d", "Ħ": "H", "ħ": "h", "ı": "i", "ŀ": "l", "Ŀ": "L" };
+export function textePdf(s) {
+  return [...String(s || "")].map((c) => {
+    if (c.charCodeAt(0) <= 0xff || CP1252.has(c)) return c;
+    if (SANS_ACCENT[c]) return SANS_ACCENT[c];
+    const sans = c.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    return [...sans].every((x) => x.charCodeAt(0) <= 0xff) ? sans : "?";
+  }).join("");
+}
+
+const PT = 25.4 / 72; // 1 point en mm
+
+// Coupe un texte à la largeur voulue comme le fait la page : aux espaces, et APRÈS un trait
+// d'union (« BONNIÈRES- / SUR-SEINE », jamais « BONNIÈRES-SUR / -SEINE ») ; un mot trop long
+// pour une ligne est coupé lettre par lettre.
+function couperLignes(doc, texte, largeur) {
+  const mots = String(texte).split(/(?<=-)|(?= )/).map((m) => m);
+  const lignes = [];
+  let cur = "";
+  const pose = (m) => {
+    const essai = cur + m;
+    if (!cur || doc.getTextWidth(essai.trimStart()) <= largeur) { cur = essai; return; }
+    lignes.push(cur.trim()); cur = m.trimStart();
+  };
+  for (const m of mots) {
+    if (doc.getTextWidth(m.trim()) > largeur) {
+      for (const c of m) { if (cur && doc.getTextWidth((cur + c).trimStart()) > largeur) { lignes.push(cur.trim()); cur = ""; } cur += c; }
+    } else pose(m);
+  }
+  if (cur.trim()) lignes.push(cur.trim());
+  return lignes.length ? lignes : [""];
+}
+
+export function feuillePdf(JsPDF, places, expTxt) {
+  const doc = new JsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+  doc.setProperties({ title: "Étiquettes d'adresse — Niv Création" });
+  const pos = positions();
+  const P = 3, Pb = 2.6, L = FEUILLE.w - 2 * P;
+  for (const p of places) {
+    const { x, y } = pos[p.case];
+    const exp = lignesExpediteur(expTxt).map(textePdf);
+    // Blocs du haut (ce qui se lit) et du bas (expéditeur ou n° de commande), en points.
+    const haut = [], bas = [];
+    if (p.type === "exp") {
+      haut.push({ t: "EXPÉDITEUR", s: 6, g: 85 });
+      exp.forEach((l, i) => haut.push({ t: l, s: i ? 9 : 10, b: !i }));
+      bas.push({ t: `Commande #${textePdf(p.ad.ref)}`, s: 5.6, g: 119 });
+    } else {
+      const a = p.ad;
+      haut.push({ t: "DESTINATAIRE", s: 6, g: 85 });
+      haut.push({ t: textePdf(a.nom), s: 10, b: true });
+      a.lignes.forEach((l) => haut.push({ t: textePdf(l), s: 9 }));
+      haut.push({ t: textePdf(a.cpVille), s: 9.5, b: true });
+      if (a.pays) haut.push({ t: textePdf(a.pays), s: 9.5, b: true });
+      if (p.exp) bas.push({ t: `Exp. : ${exp.join(" · ")}`, s: 6.2, g: 34, trait: true });
+      else bas.push({ t: `Commande #${textePdf(a.ref)}`, s: 5.6, g: 119 });
+    }
+    // Découpe en lignes à la largeur de l'étiquette ; si tout ne tient pas, on réduit.
+    const couper = (blocs, k) => blocs.flatMap((bl) => {
+      doc.setFont("helvetica", bl.b ? "bold" : "normal"); doc.setFontSize(bl.s * k);
+      return couperLignes(doc, bl.t, L).map((t, i) => ({ ...bl, t, s: bl.s * k, trait: bl.trait && i === 0 }));
+    });
+    const haute = (ls) => ls.reduce((h, l) => h + l.s * PT * 1.2, 0);
+    let k = 1, H, B;
+    for (; k > 0.6; k -= 0.05) {
+      H = couper(haut, k); B = couper(bas, k);
+      if (haute(H) + 0.8 + haute(B) + (B.some((l) => l.trait) ? 1.2 : 0) + 1.5 <= FEUILLE.h - P - Pb) break;
+    }
+    let cy = y + P;
+    H.forEach((l, i) => {
+      doc.setFont("helvetica", l.b ? "bold" : "normal"); doc.setFontSize(l.s); doc.setTextColor(l.g ?? 0);
+      if (i === 1 && haut[0].s === 6) cy += 0.8;
+      cy += l.s * PT; doc.text(l.t, x + P, cy); cy += l.s * PT * 0.2;
+    });
+    let by = y + FEUILLE.h - Pb - haute(B);
+    if (B.some((l) => l.trait)) {
+      doc.setDrawColor(0); doc.setLineWidth(0.25); doc.line(x + P, by - 0.8, x + FEUILLE.w - P, by - 0.8);
+    }
+    B.forEach((l) => {
+      doc.setFont("helvetica", "normal"); doc.setFontSize(l.s); doc.setTextColor(l.g ?? 0);
+      by += l.s * PT; doc.text(l.t, x + P, by); by += l.s * PT * 0.2;
+    });
+  }
+  return doc;
+}

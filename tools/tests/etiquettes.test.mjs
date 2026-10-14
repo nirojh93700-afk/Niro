@@ -1,6 +1,7 @@
 // Étiquettes d'adresse (13/10/2026) : géométrie de la planche, choix des cases, contenu, et
 // — si Chromium est là — la feuille imprimée réellement : 1 page A4, cases au bon millimètre.
-import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseEtiquette, travaux, placer, feuilleHtml } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseEtiquette, travaux, placer, feuilleHtml, feuillePdf, textePdf } from "@/lib/etiquettes";
+import { jsPDF } from "jspdf";
 
 let ok = 0, ko = 0;
 const v = (c, m) => { if (c) ok++; else { ko++; console.log("✗", m); } };
@@ -41,6 +42,17 @@ const html = feuilleHtml(placer(travaux([{ ...dom, shippingName: "<b>Jo</b>" }],
 v(html.includes("&lt;b&gt;Jo&lt;/b&gt;") && !html.includes("<b>Jo</b>"), "le nom est échappé");
 v(html.includes("left:157mm;top:26mm"), "1re étiquette en case 4 (157 mm ; 26 mm)");
 v(html.includes("@page{size:210mm 297mm;margin:0}"), "page A4 sans marge");
+
+// 5 bis. le PDF de l'iPhone (14/10/2026) : A4, une page, texte posé dans la bonne case
+v(textePdf("Łukasz Œuvre ’é") === "Lukasz Œuvre ’é", "caractères hors police : accent retiré, le reste gardé");
+const dp = feuillePdf(jsPDF, placer(travaux([dom, b], "apart"), used).places, "Niv Création\n6 rue d'Armaillé\n75017 PARIS");
+v(dp.getNumberOfPages() === 1, "PDF : 1 page");
+v(Math.round(dp.internal.pageSize.getWidth()) === 210 && Math.round(dp.internal.pageSize.getHeight()) === 297, "PDF : format A4");
+const src = dp.output();
+v(/BT\s*\/F\d+ [\d.]+ Tf\s*[\d.]+ TL\s*[\d.]+ g\s*\(DESTINATAIRE\)/.test(src) || src.includes("(DESTINATAIRE)"), "PDF : étiquette destinataire écrite");
+// case 4 (x = 157 mm + 3 mm de marge intérieure = 160 mm = 453,5 pt)
+v(/453\.5\d* [\d.]+ Td\s*\(DESTINATAIRE\)/.test(src), "PDF : 1re étiquette en case 4 (160 mm du bord gauche)");
+v(/EXP.{1,4}DITEUR/.test(src), "PDF : étiquette expéditeur à part");
 
 // 6. rendu réel : Chromium imprime 1 page, et la 1re étiquette tombe à sa place
 let pw = null;
