@@ -116,7 +116,7 @@ export const GUIDES = [
     nav: "Puzzles en bois",
     title: "Puzzles en bois personnalisés — au prénom ou à votre photo",
     description:
-      "Puzzle à encastrer gravé au prénom pour les tout-petits, ou votre photo gravée sur un puzzle en bois de 24 à 120 pièces : comment choisir, et quoi savoir avant de commander.",
+      "Puzzle à encastrer gravé au prénom pour les tout-petits, ou votre photo gravée sur un puzzle en bois de 24 à 100 pièces : comment choisir, et quoi savoir avant de commander.",
   },
   {
     slug: "porte-stylo-bois-personnalise",

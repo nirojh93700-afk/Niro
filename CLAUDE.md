@@ -2936,6 +2936,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   reparle ; le risque lui a été dit une fois, avec les sources.
 
 ## 🧩 PUZZLE PHOTO GRAVÉ — ✅ EN VENTE DEPUIS LE 09/10/2026 SOIR (« tu pousses aussi le puzzle »)
+> **14/10/2026 (gérant : « je peux pas faire 120 »)** : le plus grand choix est **100 pièces** (37,90 €, même identifiant
+> `puzzle-photo-120` gardé pour les paniers) — corrigé partout (fiche, accroche, description, `productInfo`, guide régénéré).
+> Photo de famille « bureau » retirée de la fiche (`puzzle-photo-bureau.jpg` plus utilisé) : la 1re photo est maintenant les enfants.
 > Mis en ligne tel que la maquette v5 : `puzzle-photo-grave` (catégorie `jeux`, rayon « Jeux en bois » en tête, aussi dans
 > « Les dernières sorties »), 24 / 48 / 80 / 120 pièces à 29,90 / 32,90 / 34,90 / 37,90 €, 21 × 15 cm, 95 g lettre suivie,
 > photo obligatoire, mention 36 mois, 4 photos `public/produits/puzzle-photo-{bureau,enfants,famille,amis}.jpg` (bureau en
