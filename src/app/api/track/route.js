@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 // Réception des événements du compteur intégré (visites, vues produit, panier…).
 // Public, mais n'accepte qu'une liste fermée d'événements et ne stocke aucune
 // donnée personnelle. Répond toujours 200 (ne casse jamais le site).
-const ALLOWED = new Set(["session", "pageview", "view_item", "add_to_cart", "begin_checkout", "purchase"]);
+const ALLOWED = new Set(["session", "pageview", "view_item", "add_to_cart", "begin_checkout", "purchase", "cart_open", "checkout_session"]);
 
 export async function POST(req) {
   let body;

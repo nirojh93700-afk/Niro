@@ -1077,6 +1077,7 @@ export default function ProductDetail({ product }) {
     });
     // Statistiques « ajout au panier » : compteur intégré + Google Analytics.
     track("add_to_cart", { slug: product.slug, value: Number((unitPrice * quantity).toFixed(2)) });
+    trackOnce("panier", "cart_open"); // une personne qui remplit un panier (1 fois par visite)
     if (typeof window !== "undefined" && typeof window.gtag === "function") {
       window.gtag("event", "add_to_cart", {
         currency: "EUR",

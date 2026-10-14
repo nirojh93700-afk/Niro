@@ -150,6 +150,7 @@
   à chaque fois ; ses propres essais aussi.
 - L'achat n'est compté que si la cliente revient sur la page /merci après Stripe (`track("purchase")` dans `merci/page.jsx`) :
   une cliente qui paie puis ferme l'onglet compte comme un abandon.
-- Piste (à proposer, rien fait) : compter les paniers PAR VISITE (une seule fois par session, comme `trackOnce`), compter l'achat
+- ✅ CONSTRUIT le 14/10/2026 (« refais le compteur »), en attente du « pousse » : voir CLAUDE.md « COMPTEUR DES PANIERS ».
+- Piste d'origine : compter les paniers PAR VISITE (une seule fois par session, comme `trackOnce`), compter l'achat
   au webhook Stripe (côté serveur, sûr), et afficher où ils partent : panier → « Paiements lancés » → payé, plus les paniers
   Stripe expirés (`checkout.session.expired`) qui sont les vrais abandons au paiement.

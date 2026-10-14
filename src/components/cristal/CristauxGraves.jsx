@@ -8,7 +8,7 @@
 // Styles : src/app/cristaux-graves.css (généré depuis la maquette, racine .cgg).
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart } from "@/components/CartContext";
-import { track } from "@/lib/track";
+import { track, trackOnce } from "@/lib/track";
 import IcCg from "./IcCg";
 import {
   CG_DOSSIER, CG_MODELES, CG_DESSINS, CG_ZODIAQUE, CG_FAMILLES, CG_TAILLES,
@@ -178,6 +178,7 @@ export default function CristauxGraves({ prix = {} }) {
       quantity: q,
     });
     track("add_to_cart", { slug: CG_SLUG, value: Number((unit * q).toFixed(2)) });
+    trackOnce("panier", "cart_open"); // une personne qui remplit un panier (1 fois par visite)
     setAjoute(true);
     setTimeout(() => setAjoute(false), 2200);
   }

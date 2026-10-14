@@ -3461,3 +3461,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `src/app/gestion/etiquettes/page.jsx` · NAV `AdminShell` · CSS `.etq-*` fin de `globals.css`.
 - `npm run test-etiquettes` : 23 vérifications dont le rendu Chromium réel (20 étiquettes = 1 page, case 20 à 157 / 226 mm,
   45 mm, aucune adresse qui déborde).
+
+## 🛒 COMPTEUR DES PANIERS ABANDONNÉS REFAIT — 14/10/2026 (« pourquoi il y a autant d'abandons ? » → « refais le compteur »)
+- Avant (Gestion → Finances → Visiteurs) : « abandons » = clics « Ajouter au panier » − retours sur /merci → gonflé (un panier de
+  3 articles payé = 2 abandons ; une cliente qui paie sans revenir sur /merci = 1 abandon).
+- Maintenant : **ventes = vraies commandes de la boutique** (`/api/admin/analytics` lit `getSiteOrders`, hors test et devis,
+  `src/lib/statsVisites.js` → `ventesParJour`) ; **paniers et paiements = des PERSONNES**, une fois par visite (`trackOnce` →
+  événements `cart_open` / `checkout_session`, champs `cartSessions` / `checkoutSessions` de `siteAnalytics`) ;
+  `bilanPaniers` ne compte que depuis le 1er jour du nouveau compteur et sépare « partis au paiement » / « avant ».
+  L'entonnoir devient Visiteurs → Ont rempli un panier → Sont allés au paiement → Ont acheté. `npm run test-stats` (8 vérifs).
+- Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
+  (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
