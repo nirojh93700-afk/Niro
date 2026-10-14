@@ -3438,10 +3438,17 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   étiquette à part / aucun, adresse modifiable (défaut « Niv Création, 6 rue d'Armaillé, 75017 PARIS ») · ③ la feuille à
   l'échelle : toucher une case = déjà utilisée ; les étiquettes vont sur les cases libres suivantes ; « Feuille neuve »,
   « Décaler d'une case ». La feuille, le mode et l'expéditeur sont retenus SUR CET ORDINATEUR (localStorage `niv-etiquettes`).
-- **Impression** : `feuilleHtml()` ouvre une fenêtre avec une page A4 SANS marge (`@page{margin:0}`), chaque étiquette posée
-  au millimètre (5 mm entre les cases) ; puis « Les étiquettes sont bien sorties ? Oui, griser ces cases ». Fenêtre à part
-  exprès : le CSS d'impression de l'admin (fiche atelier, marges 10 mm, plein écran) ne s'y applique pas. À conseiller au
-  gérant : imprimer en **taille réelle 100 %**, premier essai sur papier blanc contre la planche.
+- **Impression — CORRIGÉE LE 14/10/2026** (gérant, captures iPhone : « j'imprime comment là ? … y a même pas de bouton
+  de retour ») : la 1re version ouvrait une NOUVELLE FENÊTRE ; sur son iPhone (site posé sur l'écran d'accueil) elle
+  n'avait ni retour ni impression → il restait bloqué. ⛔ **Plus jamais de `window.open` pour imprimer dans l'admin.**
+  · **iPhone / iPad** : `feuillePdf(jsPDF, places, exp)` fabrique un PDF A4 aux mêmes millimètres (préparé D'AVANCE
+    dès que la feuille change, car `navigator.share` doit partir dans le geste du doigt) → menu Partager → Imprimer.
+  · **Ordinateur** : la feuille (`feuilleHtml`, `@page` marge 0) est écrite dans un CADRE CACHÉ de la page puis
+    imprimée ; bouton « Enregistrer le PDF » en plus.
+  · Bouton « ‹ Retour aux commandes » en haut de la page et dans le bandeau « Les étiquettes sont bien sorties ? ».
+  · PDF : Helvetica (caractères d'Europe de l'Ouest ; « Ł » → « L », `textePdf`), coupure après les traits d'union.
+  · Vérifié : test 29/29 + navigateur iPhone 13 et 1440 px (partage d'un PDF dans le geste, cadre caché, aucune
+    nouvelle page, 0 erreur). À conseiller : taille réelle 100 %, essai sur papier blanc contre la planche.
 - **Fichiers** : `src/lib/etiquettes.js` (pur : `FEUILLE`, `positions`, `modeEnvoi`, `adresseEtiquette` — nom via
   `nomLivraison`, CP + VILLE en majuscules, pays hors France —, `travaux`, `placer`, `feuilleHtml`) ·
   `src/app/gestion/etiquettes/page.jsx` · NAV `AdminShell` · CSS `.etq-*` fin de `globals.css`.
