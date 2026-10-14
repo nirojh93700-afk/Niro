@@ -213,6 +213,12 @@ En attente de SA décision :
 
 ---
 
+- **💶 Prix de livraison des VERRES à domicile — À TRANCHER PAR LUI (« garde en mémoire pour le prix », 14/10/2026).**
+  Aujourd'hui 11,90 € pour 1-2 verres (`GLASS_TIERS`, ou son réglage dans Gestion → Livraison), 16,90 € pour 3-4.
+  Marché relevé le 14/10 : domicile 6,95 € (Amikado) à 7,90 € (Un Jour Une Surprise, PopCase) ; livraison offerte dès
+  49-89 € ailleurs (lui : 60 €, mieux que la plupart). Coût réel : Boxtal ≈ 6 € TTC + ~2 € carton/calage ; Colissimo
+  guichet 9,59 € / 1 kg. Proposition faite : verres à domicile 7,90 €. RIEN changé tant qu'il ne l'a pas dit.
+
 ## 6. Règles à ne jamais oublier (détail en tête de `CLAUDE.md`)
 
 1. Aucun envoi à un client sans « envoie » explicite, et **uniquement par le site** (règle
