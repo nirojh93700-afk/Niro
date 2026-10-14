@@ -3038,6 +3038,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   ~~poids pour le port~~ (75 g, reçu le 09/10) · nom de la catégorie dans le menu.
 
 ## 🗂️ ACCUEIL + UNIVERS « MÉLANGE » — ✅ APPLIQUÉE AU SITE LE 09/10/2026 SOIR (« Bah applique la maquette avec le puzzle » → « OK, vas-y »)
+
+> 🔗 **14/10/2026 — TOUTE PHOTO DE L'ACCUEIL MÈNE À LA FICHE DU PRODUIT QU'ELLE MONTRE** (gérant : « quand le client clique sur
+> une photo qui lui plaît, il faut qu'il aille directement dans le produit concerné »). Composant `LienPhoto` dans `page.jsx`
+> (lien en `display:contents` = mise en page inchangée, produit masqué = pas de lien) : cristal du héros et de l'atelier,
+> 3 photos de bijoux, couverts (Bébé & Enfant), carafe, 3 photos de Noël, verre à vin ; coffret : `photos` accepte
+> `{src, href, name}`. ⛔ **Toute nouvelle photo posée sur l'accueil doit passer par `LienPhoto`.** ⚠️ Ne pas envelopper une image
+> dans un lien sans vérifier les sélecteurs `:first-child` (cas du coffret, recalé dans `univers-site.css`). Restent volontairement
+> sans fiche : les tuiles « Pour qui / Occasion » (ce sont des choix du parcours) et les tuiles « Nos univers » (une catégorie).
 > **Version appliquée = la maquette AVEC puzzles (v8), puzzles « Bientôt », non achetables** (pas de marquage CE encore ; il n'a
 > pas répondu à « Bientôt ou en vente ? », le « vas-y » a été pris au sens de la maquette telle quelle).
 > ⏪ **POINT DE RETOUR = commit `44f2f64`** (le site tel qu'il était avant, promis au gérant : « si tu veux revenir en arrière,
