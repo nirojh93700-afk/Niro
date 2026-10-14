@@ -34,6 +34,13 @@ const BIJOUX3 = ["collier-3coeurs", "collier-coeur-plaques", "collier-coeur-grav
 const VERRES5 = ["verre-a-whisky-grave", "verre-a-cocktail-grave", "verre-a-vin-grave", "flute-a-champagne-gravee", "carafe-a-whisky-gravee"];
 const ENFANTS4 = ["plaque-de-naissance-coeur", "veilleuse-arbre-de-vie-prenom", "cartes-etapes-bebe-animaux", "bracelet-empreinte-pied-bebe"];
 
+// Chaque photo de l'accueil mène à la fiche du produit qu'elle montre (gérant, 14/10/2026 :
+// « quand le client clique sur une photo qui lui plaît, il faut qu'il aille directement dans le produit »).
+// Le lien est en display:contents (.lien-photo) : la mise en page ne bouge pas. Produit masqué = pas de lien.
+function LienPhoto({ c, children }) {
+  return c?.href ? <Link href={c.href} className="lien-photo" aria-label={c.name}>{children}</Link> : children;
+}
+
 const prixTexte = (c) => (c?.prix ? `${c.prix.des ? "dès " : ""}${c.prix.texte}` : "");
 
 export default async function HomePage() {
@@ -52,6 +59,9 @@ export default async function HomePage() {
   const cristal = C("cristal-photo-3d-vertical");
   const carafe = C("carafe-a-whisky-gravee");
   const couverts = C("couverts-enfants-personnalises");
+  const cristalH = C("cristal-photo-3d-horizontal");
+  const collierPlaques = C("collier-coeur-plaques");
+  const verreVin = C("verre-a-vin-grave");
   const enfants = R.univers.find((u) => u.id === "enfants");
   // Les dernières sorties : le puzzle Savane en tête (en vente depuis le 09/10/2026 ; un seul
   // puzzle ici, les 9 ensemble rempliraient la rangée), puis les dernières créations par date
@@ -59,6 +69,7 @@ export default async function HomePage() {
   // Le verre à whisky en premier (gérant, 10/10/2026 : « tu peux mettre le verre de whisky en premier »).
   const whisky = C("verre-a-whisky-grave");
   const puzzle = C("puzzle-savane");
+  const BIJOUX_PHOTOS = [["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté", "collier-3coeurs"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé", "bracelet-femme-acier"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés", "bracelet-cordon-plaque"]];
   const tete = [whisky, puzzle].filter(Boolean);
   const nouveaux = [...tete,
     ...dernieresSorties(R.cartes.filter((c) => c.slug !== "verre-a-whisky-grave" && (c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-"))), 10 - tete.length)];
@@ -84,14 +95,14 @@ export default async function HomePage() {
             <p className="lead">Gravure photo 3D au cœur d’un cristal K9, réalisée dans notre atelier. Un cadeau qui capte la lumière, et l’émotion.</p>
             <div className="cta-row"><Bouton href="/cristaux">Créer mon cristal</Bouton><Bouton href="/cristaux" cls="mxbtn-ghost" arrow={false}>Voir les tailles et prix</Bouton></div>
           </div>
-          <div className="mxframe" id="arch">
+          <div className="mxframe" id="arch"><LienPhoto c={cristal}>
             <div className="mxframe-in">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/produits/cristal-v-femme.jpg" alt="Portrait de femme gravé en trois dimensions dans un bloc de cristal" fetchPriority="high" />
               <span className="laser" aria-hidden="true"></span>
             </div>
             {cristal ? <span className="mxframe-tag"><b>{cristal.name}</b><span>{prixTexte(cristal)}</span></span> : null}
-          </div>
+          </LienPhoto></div>
         </section>
         <div className="ruban" aria-hidden="true"><div className="ruban-t">{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => ruban.map((t) => <span key={`${k}-${t}`} style={{ display: "contents" }}><span>{t}</span><i>✦</i></span>))}</div></div>
 
@@ -110,12 +121,12 @@ export default async function HomePage() {
             {/* Trois bijoux gravés à leur vraie taille (13/10/2026 : la photo du bracelet étirée sur toute
                 la largeur sortait zoomée et floue sur les grands écrans). */}
             <div className="bij2-mos">
-              {[["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés"]].map(([f, l]) => (
-                <figure key={f}>
+              {BIJOUX_PHOTOS.map(([f, l, slug]) => (
+                <figure key={f}><LienPhoto c={C(slug)}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={`/produits/${f}`} alt={l} loading="lazy" />
                   <figcaption>{l}</figcaption>
-                </figure>
+                </LienPhoto></figure>
               ))}
             </div></div>
           </section>
@@ -150,7 +161,7 @@ export default async function HomePage() {
         {enfants ? (
           <section className="sec enf rv" aria-labelledby="t-enf">
             <div className="enf-grid">
-              <Link className="enf-big" href="/boutique/enfants">
+              <Link className="enf-big" href={couverts?.href || "/boutique/enfants"}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/produits/couverts_enfants_ex_enfant.jpg" alt="Enfant qui mange avec sa cuillère personnalisée" />
                 {couverts ? <span className="enf-lab"><b>{couverts.name}</b><span>{prixTexte(couverts)}</span></span> : null}
@@ -175,10 +186,10 @@ export default async function HomePage() {
         {/* CARAFE — édition limitée (écrin) */}
         {carafe ? (
           <section className="limited rv" aria-labelledby="t-lim">
-            <div className="mxframe mxframe-sq"><div className="mxframe-in">
+            <div className="mxframe mxframe-sq"><LienPhoto c={carafe}><div className="mxframe-in">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/produits/carafe_gravee.jpg" alt="Carafe à whisky gravée, bouchon à facettes" />
-            </div></div>
+            </div></LienPhoto></div>
             <div className="lim-copy">
               <span className="lim-pill"><i></i>Édition limitée</span>
               <h2 id="t-lim">La carafe à whisky <em>gravée</em>, un cadeau d’exception</h2>
@@ -198,13 +209,13 @@ export default async function HomePage() {
               <Bouton href="/offrir?occ=noel">Voir les idées de Noël</Bouton>
               <p className="mxnoel-note">Chaque pièce est gravée une par une : pensez-y tôt.</p>
             </div>
-            <div className="fan" aria-hidden="true">
+            <div className="fan">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="" loading="lazy" />
+              <LienPhoto c={cristalH}><img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="Photo de famille gravée dans un cristal" loading="lazy" /></LienPhoto>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="" loading="lazy" />
+              <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="" loading="lazy" />
+              <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
             </div>
           </section>
         ) : null}
@@ -277,11 +288,11 @@ export default async function HomePage() {
               <li><i className="step-n">3</i><Ic n="gift" /><b>Vous offrez</b><span>Livraison suivie, emballage soigné, une pièce qui n’existe qu’une fois.</span></li>
             </ol>
             <div className="at-row">
-              <div className="at-pics" aria-hidden="true">
+              <div className="at-pics">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="at-1" src="/produits/cristal-v-couple.jpg" alt="" loading="lazy" />
+                <LienPhoto c={cristal}><img className="at-1" src="/produits/cristal-v-couple.jpg" alt="Photo de couple gravée dans un cristal" loading="lazy" /></LienPhoto>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="at-2" src="/produits/verre_vin_exemple_dale.jpg" alt="" loading="lazy" />
+                <LienPhoto c={verreVin}><img className="at-2" src="/produits/verre_vin_exemple_dale.jpg" alt="Verre à vin gravé d'un monogramme" loading="lazy" /></LienPhoto>
               </div>
               <div className="at-copy">
                 <p>Bois noble, acier inoxydable, cristal : nous choisissons des matériaux durables pour des créations qui traversent le temps.</p>

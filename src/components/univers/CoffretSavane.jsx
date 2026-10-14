@@ -16,7 +16,11 @@ export default function CoffretSavane({ id, carteDe }) {
     <Coffret id={id} pieces={pieces} titre="le coffret Savane"
       texte="Les couverts, le puzzle et la veilleuse dans le même thème. Vous écrivez le prénom une seule fois : les pièces sont personnalisées ensemble."
       note="D’autres thèmes suivront dès que le même motif existe sur les couverts et sur le puzzle."
-      photos={["/produits/couverts_enfants_ex_animaux.jpg", "/produits/puzzle-savane.jpg", "/produits/veilleuse-prenom-1.jpg"]}
+      photos={[
+        { src: "/produits/couverts_enfants_ex_animaux.jpg", href: couverts.href, name: couverts.name },
+        { src: "/produits/puzzle-savane.jpg", href: puzzle?.href, name: puzzle?.name },
+        { src: "/produits/veilleuse-prenom-1.jpg", href: veilleuse?.href, name: veilleuse?.name },
+      ]}
       href="/boutique/enfants#r-enfants-1" />
   );
 }
