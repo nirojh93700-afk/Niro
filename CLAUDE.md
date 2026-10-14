@@ -3462,6 +3462,17 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - `npm run test-etiquettes` : 23 vérifications dont le rendu Chromium réel (20 étiquettes = 1 page, case 20 à 157 / 226 mm,
   45 mm, aucune adresse qui déborde).
 
+## 🏷️ ÉTIQUETTES — 4 STYLES AU CHOIX (14/10/2026, « garde tout ce que tu m'as fait dans cette maquette… je changerai
+## quand j'ai envie… tu gardes l'autre version actuelle aussi »)
+- Maquette https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1 intégrée dans `/gestion/etiquettes`, encadré « ✦ Le style de
+  l'étiquette » : **Simple** (la version d'avant, inchangée) · **Écrin** (double filet doré, losange + logo centré en bas) ·
+  **Bandeau** (pied crème : logo + « Gravé pour vous dans notre atelier » + NIVCREATION.FR) · **Sobre** (coin doré,
+  « Merci pour votre commande », logo à droite). Choix retenu sur l'appareil (`niv-etiquettes.modele`).
+- Adresse toujours en noir, CP + VILLE gras majuscules ; or seulement autour ; logo d'origine en bas.
+- Code : `MODELES` / `modeleValide` / `contenuStyle` / `cssModeles()` (un seul CSS, unité `--u` = `var(--mm)` à l'écran,
+  1mm à l'impression) / `resserrerEtiquettes` (adresse longue : le texte se resserre, recopié dans la feuille imprimée) /
+  `dessinerStyle` (PDF iPhone, mêmes mesures) dans `src/lib/etiquettes.js`. `npm run test-etiquettes` : 53 vérifs.
+
 ## 🛒 COMPTEUR DES PANIERS ABANDONNÉS REFAIT — 14/10/2026 (« pourquoi il y a autant d'abandons ? » → « refais le compteur »)
 - Avant (Gestion → Finances → Visiteurs) : « abandons » = clics « Ajouter au panier » − retours sur /merci → gonflé (un panier de
   3 articles payé = 2 abandons ; une cliente qui paie sans revenir sur /merci = 1 abandon).

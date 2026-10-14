@@ -15,7 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { chargerAvecCache } from "@/components/admin/adminCache";
-import { FEUILLE, NB_CASES, positions, modeEnvoi, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT, MODELES, modeleValide, cssModeles, resserrerEtiquettes } from "@/lib/etiquettes";
 
 const CLE = "niv-etiquettes";
 const A_EXPEDIER = ["a_preparer", "en_gravure"];
@@ -38,6 +38,8 @@ export default function EtiquettesPage() {
   const [mode, setMode] = useState("meme");
   const [expTxt, setExpTxt] = useState(EXPEDITEUR_DEFAUT);
   const [avecRef, setAvecRef] = useState(false); // n° de commande sur l'étiquette : seulement si demandé
+  const [modele, setModele] = useState("actuel"); // style de l'étiquette (14/10/2026), retenu sur l'appareil
+  const papier = useRef(null);
   const [attente, setAttente] = useState(null); // cases imprimées, en attente du « oui, c'est sorti »
   const [pret, setPret] = useState(false);
   const [apple, setApple] = useState(false);
@@ -52,10 +54,11 @@ export default function EtiquettesPage() {
     if (["meme", "apart", "non"].includes(s.mode)) setMode(s.mode);
     if (typeof s.exp === "string" && s.exp.trim()) setExpTxt(s.exp);
     if (typeof s.ref === "boolean") setAvecRef(s.ref);
+    if (s.modele) setModele(modeleValide(s.modele));
     setPret(true);
     setApple(estApple());
   }, []);
-  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef }); }, [pret, used, mode, expTxt, avecRef]);
+  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef, modele }); }, [pret, used, mode, expTxt, avecRef, modele]);
 
   const load = useCallback(async (k) => {
     setErr("");
@@ -116,12 +119,15 @@ export default function EtiquettesPage() {
     (async () => {
       try {
         const { jsPDF } = await import("jspdf");
-        const blob = feuillePdf(jsPDF, places, expTxt, logo).output("blob");
+        const blob = feuillePdf(jsPDF, places, expTxt, logo, modele).output("blob");
         if (!fini) setPdf(new File([blob], NOM_PDF, { type: "application/pdf" }));
       } catch { /* l'impression par le navigateur reste possible */ }
     })();
     return () => { fini = true; };
-  }, [places, expTxt, logo]);
+  }, [places, expTxt, logo, modele]);
+
+  // Aperçu : une adresse trop longue se resserre comme à l'impression.
+  useEffect(() => { try { if (papier.current) resserrerEtiquettes(papier.current); } catch { /* ignore */ } });
 
   // Ordinateur : la feuille est écrite dans un cadre invisible de CETTE page, puis imprimée.
   function imprimerCadre() {
@@ -132,7 +138,7 @@ export default function EtiquettesPage() {
     document.body.appendChild(f);
     cadre.current = f;
     const d = f.contentWindow.document;
-    d.open(); d.write(feuilleHtml(places, expTxt, logo?.data)); d.close();
+    d.open(); d.write(feuilleHtml(places, expTxt, logo?.data, modele)); d.close();
     // On attend que le logo soit dessiné avant d'imprimer (sinon il sort en blanc).
     const imgs = [...d.images].map((i) => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()));
     Promise.race([Promise.all(imgs), new Promise((ok) => setTimeout(ok, 2000))]).then(() => setTimeout(() => {
@@ -193,6 +199,7 @@ export default function EtiquettesPage() {
         ]} />
       {err ? <div className="notice" style={{ marginBottom: 12 }}>{err}</div> : null}
 
+      <style dangerouslySetInnerHTML={{ __html: `.etq-cell,.etq-modele .vue{--u:var(--mm)}${cssModeles()}` }} />
       <div className="etq-grid">
         <div>
           <section className="etq-card" aria-labelledby="etq-t1">
@@ -229,6 +236,20 @@ export default function EtiquettesPage() {
             <label className="etq-f" htmlFor="etq-exp-txt">Adresse de l&apos;expéditeur (gardée pour la prochaine fois)</label>
             <textarea id="etq-exp-txt" value={expTxt} onChange={(e) => setExpTxt(e.target.value)} rows={4} />
           </section>
+
+          <section className="etq-card" aria-labelledby="etq-tm">
+            <h2 id="etq-tm"><span className="n">✦</span>Le style de l&apos;étiquette</h2>
+            <p className="sub">Changez quand vous voulez : le choix est gardé pour la prochaine fois. L&apos;adresse reste toujours en noir.</p>
+            <div className="etq-modeles">
+              {MODELES.map((md) => (
+                <label key={md.id} className={`etq-modele${modele === md.id ? " on" : ""}`}>
+                  <input type="radio" name="etq-modele" value={md.id} checked={modele === md.id} onChange={() => setModele(md.id)} />
+                  <span className="vue" aria-hidden="true" dangerouslySetInnerHTML={{ __html: contenuEtiquette({ type: "dest", ad: { nom: "Camille Moreau", lignes: ["12 rue des Lilas"], cpVille: "69003 LYON", pays: "", ref: "" }, exp: false, ref: false }, expTxt, logo?.data, md.id) }} />
+                  <span className="txt"><b>{md.nom}</b><small>{md.desc}</small></span>
+                </label>
+              ))}
+            </div>
+          </section>
         </div>
 
         <section className="etq-card etq-sheetbox" aria-labelledby="etq-t3">
@@ -258,7 +279,7 @@ export default function EtiquettesPage() {
                 : <><b>{jobs.length} étiquette{jobs.length > 1 ? "s" : ""}</b> à imprimer, à partir de la case <b>{places[0].case + 1}</b>. Il restera {libresApres} case{libresApres > 1 ? "s" : ""} libre{libresApres > 1 ? "s" : ""} après.</>}
             </div>
           )}
-          <div className="etq-paper" aria-label="Feuille A4, 20 étiquettes">
+          <div className="etq-paper" ref={papier} aria-label="Feuille A4, 20 étiquettes">
             {pos.map((p, i) => {
               const pl = parCase[i];
               return (
@@ -266,7 +287,7 @@ export default function EtiquettesPage() {
                   style={{ left: `calc(${p.x} * var(--mm))`, top: `calc(${p.y} * var(--mm))` }}
                   aria-label={`Case ${i + 1}${used[i] ? ", déjà utilisée" : pl ? ", sera imprimée" : ", libre"}`}
                   onClick={() => caseUtilisee(i)}>
-                  {pl ? <span className="lab" dangerouslySetInnerHTML={{ __html: contenuEtiquette(pl, expTxt, logo?.data) }} /> : null}
+                  {pl ? <span className="lab" dangerouslySetInnerHTML={{ __html: contenuEtiquette(pl, expTxt, logo?.data, modele) }} /> : null}
                   <span className="pos">{i + 1}</span>
                 </button>
               );

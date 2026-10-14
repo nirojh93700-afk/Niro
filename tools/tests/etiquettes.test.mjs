@@ -1,6 +1,6 @@
 // Étiquettes d'adresse (13/10/2026) : géométrie de la planche, choix des cases, contenu, et
 // — si Chromium est là — la feuille imprimée réellement : 1 page A4, cases au bon millimètre.
-import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseEtiquette, travaux, placer, feuilleHtml, feuillePdf, textePdf } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseEtiquette, travaux, placer, feuilleHtml, feuillePdf, textePdf, MODELES, modeleValide } from "@/lib/etiquettes";
 import { jsPDF } from "jspdf";
 
 let ok = 0, ko = 0;
@@ -73,6 +73,19 @@ v((srcL.match(/\/Subtype \/Image/g) || []).length === 1, "PDF : le logo n'est ra
 v((srcL.match(/\/I\d+ Do/g) || []).length === 4, "PDF : logo dessiné sur les 4 étiquettes");
 v(dl.getNumberOfPages() === 1, "PDF avec logo : 1 page");
 
+// 5 quinquies. les styles d'étiquette (14/10/2026) : la version simple reste, 3 modèles en plus
+v(MODELES.map((m) => m.id).join(",") === "actuel,ecrin,bandeau,sobre" && modeleValide("x") === "actuel", "4 styles, inconnu → simple");
+const longue = { ...dom, ref: "L9", shippingName: "Jean-Baptiste Lefèvre-Dupont", shippingAddress: { line1: "Résidence Les Coteaux, appartement 214", line2: "4 allée du Château-d'Eau", postal_code: "78270", city: "Bonnières-sur-Seine", country: "BE" } };
+for (const m of ["ecrin", "bandeau", "sobre"]) {
+  const h = feuilleHtml(placer(travaux([dom], "meme", true), used).places, "Niv", logoJpg, m);
+  v(h.includes(`mz-${m}`) && h.includes("Commande #A1") && h.includes('class="logo"'), `HTML ${m} : modèle, n° et logo`);
+  const d = feuillePdf(jsPDF, placer(travaux([dom, longue], "apart", true), used).places, "Niv Création\n6 rue d'Armaillé\n75017 PARIS", logo, m);
+  const o = d.output();
+  v(d.getNumberOfPages() === 1 && o.includes("(78270 BONNI") && o.includes("(Commande #L9)") && (o.match(/\/I\d+ Do/g) || []).length === 4, `PDF ${m} : 1 page, adresse, n°, logo sur les 4 étiquettes`);
+}
+v(feuillePdf(jsPDF, placer(travaux([dom], "non"), used).places, "Niv", logo, "bandeau").output().includes("NIVCREATION.FR"), "PDF bandeau : nivcreation.fr");
+v(feuillePdf(jsPDF, placer(travaux([dom], "non"), used).places, "Niv", logo, "sobre").output().includes("Merci pour votre commande"), "PDF sobre : merci");
+
 // 6. rendu réel : Chromium imprime 1 page, et la 1re étiquette tombe à sa place
 let pw = null;
 try { pw = await import("playwright-core"); } catch { console.log("(Playwright absent : rendu réel non testé)"); }
@@ -89,6 +102,15 @@ if (pw) {
     const r = await page.evaluate(() => { const mm = 96 / 25.4; const e = [...document.querySelectorAll(".etq")]; return { n: e.length, x: e[19].getBoundingClientRect().left / mm, y: e[19].getBoundingClientRect().top / mm, w: e[0].getBoundingClientRect().width / mm, deb: e.some((x) => x.scrollHeight > x.clientHeight + 1) }; });
     v(r.n === 20 && Math.abs(r.x - 157) < 0.2 && Math.abs(r.y - 226) < 0.2 && Math.abs(r.w - 45) < 0.1, `case 20 à 157 / 226 mm, 45 mm de large (trouvé ${r.x.toFixed(1)} / ${r.y.toFixed(1)} / ${r.w.toFixed(1)})`);
     v(!r.deb, "aucune adresse ne déborde de son étiquette");
+    for (const m of ["ecrin", "bandeau", "sobre"]) {
+      const jobs = travaux([longue, dom, { ...longue, shippingAddress: { ...longue.shippingAddress, line2: "Escalier C, porte gauche, au fond de la cour" } }], "meme", true);
+      await page.setContent(feuilleHtml(placer(jobs, new Array(20).fill(false)).places, "Niv Création\n6 rue d'Armaillé\n75017 PARIS", logoJpg, m));
+      await page.waitForTimeout(50);
+      const deb = await page.evaluate(() => [...document.querySelectorAll(".mz")].map((e) => { const c = e.querySelector(".main") || e; return c.scrollHeight > c.clientHeight + 1; }));
+      v(deb.length === 3 && !deb.some(Boolean), `${m} : les adresses longues tiennent (resserrées)`);
+      const pdfM = await page.pdf({ preferCSSPageSize: true, printBackground: true });
+      v((pdfM.toString("latin1").match(/\/Type\s*\/Page[^s]/g) || []).length === 1, `${m} : 1 page A4`);
+    }
     await b2.close();
   }
 }

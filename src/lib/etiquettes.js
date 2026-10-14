@@ -93,7 +93,8 @@ function pied(p, expTxt, logo) {
   return `<div class="pied${exp ? " trait" : ""}"><div class="txt">${exp}${ref}</div>${img}</div>`;
 }
 
-export function contenuEtiquette(p, expTxt, logo) {
+export function contenuEtiquette(p, expTxt, logo, modele = "actuel") {
+  if (modeleValide(modele) !== "actuel") return contenuStyle(p, expTxt, logo, modele);
   if (p.type === "exp") {
     const l = lignesExpediteur(expTxt);
     return `<div class="to">Expéditeur</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}${pied(p, expTxt, logo)}`;
@@ -105,11 +106,11 @@ export function contenuEtiquette(p, expTxt, logo) {
 }
 
 // Document A4 complet, prêt à imprimer : page sans marge, chaque étiquette posée au millimètre.
-export function feuilleHtml(places, expTxt, logo) {
+export function feuilleHtml(places, expTxt, logo, modele = "actuel") {
   const pos = positions();
   const cases = places.map((p) => {
     const { x, y } = pos[p.case];
-    return `<div class="etq" style="left:${x}mm;top:${y}mm">${contenuEtiquette(p, expTxt, logo)}</div>`;
+    return `<div class="etq" style="left:${x}mm;top:${y}mm">${contenuEtiquette(p, expTxt, logo, modele)}</div>`;
   }).join("");
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Étiquettes d'adresse</title><style>
 @page{size:210mm 297mm;margin:0}
@@ -127,7 +128,105 @@ export function feuilleHtml(places, expTxt, logo) {
 .ref{font-size:5.6pt;line-height:1.2;color:#777}
 .logo{flex:none;width:${LOGO_ETQ.w}mm;height:${LOGO_ETQ.h.toFixed(2)}mm;object-fit:contain;display:block}
 @media screen{body{background:#e9e3d6}.page{margin:10mm auto;background:#fff;box-shadow:0 2mm 6mm rgba(0,0,0,.2)}}
-</style></head><body><div class="page">${cases}</div></body></html>`;
+.etq{--u:1mm}
+${cssModeles()}
+</style></head><body><div class="page">${cases}</div><script>(${resserrerEtiquettes.toString()})(document);</script></body></html>`;
+}
+
+// =============================================================================
+// STYLES D'ÉTIQUETTE (14/10/2026). Maquette https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1 ; le gérant :
+// « garde tout ce que tu m'as fait dans cette maquette, je choisirai quand j'ai envie de changer…
+// tu gardes l'autre version actuelle aussi ». Quatre modèles au choix dans /gestion/etiquettes,
+// retenus sur l'appareil. L'adresse reste TOUJOURS en noir, CP + VILLE en gras majuscules ; l'or
+// n'habille que le tour ; le logo d'origine reste en bas (son choix du 14/10).
+// Le même CSS sert à l'écran (--u = var(--mm)) et à l'impression (--u = 1mm).
+// =============================================================================
+export const MODELES = [
+  { id: "actuel", nom: "Simple", desc: "La version d'aujourd'hui : l'adresse, le logo en bas à droite." },
+  { id: "ecrin", nom: "Écrin", desc: "Double filet doré tout autour, logo centré en bas." },
+  { id: "bandeau", nom: "Bandeau", desc: "Pied crème avec le logo, « Gravé pour vous dans notre atelier » et nivcreation.fr." },
+  { id: "sobre", nom: "Sobre", desc: "Coin doré, « Merci pour votre commande », logo à droite." },
+];
+export const modeleValide = (m) => (MODELES.some((x) => x.id === m) ? m : "actuel");
+
+const OR = "#a98935", OR_CLAIR = "#d8bf7e", CREME = "#f7efdc", BRUN = "#5b4718";
+const U = (n) => `calc(${n} * var(--u, 1mm))`;
+const T = (pt) => `calc(${(pt * 0.3528).toFixed(3)} * var(--u, 1mm) * var(--k, 1))`;
+const SERIF = `var(--font-display, Georgia), Georgia, "Times New Roman", serif`;
+
+function contenuStyle(p, expTxt, logo, m) {
+  const isExp = p.type === "exp";
+  const to = isExp ? "Expéditeur" : "Destinataire";
+  const expL = lignesExpediteur(expTxt);
+  const adr = isExp
+    ? expL.map((x, i) => `<div class="${!i ? "nm" : i === expL.length - 1 ? "cp" : "l"}">${esc(x)}</div>`).join("")
+    : `<div class="nm">${esc(p.ad.nom)}</div>${p.ad.lignes.map((x) => `<div class="l">${esc(x)}</div>`).join("")}`
+      + `<div class="cp">${esc(p.ad.cpVille)}</div>${p.ad.pays ? `<div class="cp">${esc(p.ad.pays)}</div>` : ""}`;
+  const meta = (!isExp && p.exp ? `<div class="exp">Exp. : ${expL.map(esc).join(" · ")}</div>` : "")
+    + (p.ref ? `<div class="ref">Commande #${esc(p.ad.ref)}</div>` : "");
+  const img = logo ? `<img class="logo" src="${esc(logo)}" alt="Niv Création">` : "";
+  if (m === "ecrin") {
+    const foot = meta ? `<div class="meta"><div class="t">${meta}</div>${img}</div>` : `<div class="orn"><i></i></div>${img}`;
+    return `<div class="mz mz-ecrin"><div class="to">${to}</div>${adr}<div class="foot">${foot}</div></div>`;
+  }
+  if (m === "bandeau") {
+    return `<div class="mz mz-bandeau"><div class="main"><div class="to">${to}</div>${adr}${meta ? `<div class="extra">${meta}</div>` : ""}</div>`
+      + `<div class="band">${img}<div class="t"><span class="tag">Gravé pour vous dans notre atelier</span><span class="site">nivcreation.fr</span></div></div></div>`;
+  }
+  const t = meta || `<span class="merci">${isExp ? "Atelier de personnalisation" : "Merci pour votre commande"}</span>`;
+  return `<div class="mz mz-sobre"><div class="to">${to}</div>${adr}<div class="foot"><div class="t">${t}</div>${img}</div></div>`;
+}
+
+export function cssModeles() {
+  return `
+.mz{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.mz .to{font-size:${T(4.6)};letter-spacing:.16em;text-transform:uppercase;color:${OR};font-weight:700;line-height:1.3;margin:0}
+.mz .nm{font-family:${SERIF};font-weight:700;font-size:${T(9.6)};line-height:1.12;overflow-wrap:anywhere}
+.mz .l{font-size:${T(7.8)};line-height:1.22;overflow-wrap:anywhere;font-weight:400}
+.mz .cp{font-size:${T(8.2)};font-weight:700;line-height:1.22;overflow-wrap:anywhere}
+.mz .exp{font-size:${T(4.9)};line-height:1.25;color:#3d3426;overflow-wrap:anywhere}
+.mz .ref{font-size:${T(4.8)};line-height:1.25;color:#7a6e5a}
+.mz img.logo{display:block;object-fit:contain;flex:none;max-width:none}
+.mz-ecrin{padding:${U(3.1)} ${U(3.4)} ${U(2.4)}}
+.mz-ecrin::before{content:"";position:absolute;inset:${U(1.1)};border:${U(0.28)} solid ${OR};border-radius:${U(1.2)};pointer-events:none}
+.mz-ecrin::after{content:"";position:absolute;inset:${U(1.75)};border:${U(0.12)} solid ${OR_CLAIR};border-radius:${U(0.8)};pointer-events:none}
+.mz-ecrin .to{display:flex;align-items:center;gap:${U(1)};margin-bottom:${U(0.9)}}
+.mz-ecrin .to::after{content:"";flex:1;height:${U(0.12)};background:${OR_CLAIR}}
+.mz-ecrin .foot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:${U(0.5)};padding-top:${U(0.8)}}
+.mz-ecrin .orn{display:flex;align-items:center;gap:${U(1.2)};width:100%}
+.mz-ecrin .orn::before,.mz-ecrin .orn::after{content:"";flex:1;height:${U(0.12)};background:${OR_CLAIR}}
+.mz-ecrin .orn i{width:${U(1.1)};height:${U(1.1)};background:${OR};transform:rotate(45deg);display:block}
+.mz-ecrin img.logo{width:${U(13)};height:${U(7.2)}}
+.mz-ecrin .meta{display:flex;align-items:flex-end;gap:${U(1.5)};width:100%;border-top:${U(0.12)} solid ${OR_CLAIR};padding-top:${U(0.7)}}
+.mz-ecrin .meta .t{flex:1;min-width:0}
+.mz-ecrin .meta img.logo{width:${U(11)};height:${U(6.1)}}
+.mz-bandeau .main{padding:${U(3)} ${U(3.2)} ${U(1.4)};display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.mz-bandeau .to{margin-bottom:${U(0.8)}}
+.mz-bandeau .extra{margin-top:auto;padding-top:${U(0.6)}}
+.mz-bandeau .band{flex:none;box-sizing:border-box;height:${U(9.4)};background:${CREME};border-top:${U(0.3)} solid ${OR};display:flex;align-items:center;gap:${U(1.5)};padding:0 ${U(2.6)}}
+.mz-bandeau img.logo{width:${U(12)};height:${U(6.7)}}
+.mz-bandeau .band .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:${U(0.2)};text-align:right}
+.mz-bandeau .tag{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:${T(5.4)};color:${BRUN};line-height:1.15}
+.mz-bandeau .site{font-size:${T(4.6)};letter-spacing:.12em;text-transform:uppercase;color:${OR};font-weight:700;line-height:1.2}
+.mz-sobre{padding:${U(3.2)} ${U(3.2)} ${U(2.4)}}
+.mz-sobre::before{content:"";position:absolute;left:0;top:0;width:${U(5.2)};height:${U(5.2)};background:linear-gradient(135deg,${OR} 0 50%,transparent 50%)}
+.mz-sobre::after{content:"";position:absolute;left:0;top:0;width:${U(7)};height:${U(7)};background:linear-gradient(135deg,transparent 0 58%,${OR_CLAIR} 58% 61%,transparent 61%)}
+.mz-sobre .to{padding-left:${U(3)};margin-bottom:${U(0.9)}}
+.mz-sobre .foot{margin-top:auto;display:flex;align-items:flex-end;gap:${U(1.5)};border-top:${U(0.15)} solid ${OR_CLAIR};padding-top:${U(0.9)}}
+.mz-sobre .foot .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:${U(0.3)}}
+.mz-sobre .merci{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:${T(5.6)};color:${BRUN}}
+.mz-sobre img.logo{width:${U(12)};height:${U(6.7)}}
+`;
+}
+
+// Adresse trop longue : le texte se resserre (jusqu’à ~50 % au pire) pour tenir dans la case.
+// Fonction autonome : elle est aussi recopiée telle quelle dans la feuille imprimée.
+export function resserrerEtiquettes(root) {
+  root.querySelectorAll(".mz").forEach(function (e) {
+    var c = e.querySelector(".main") || e, k = 1;
+    e.style.removeProperty("--k");
+    while (c.scrollHeight > c.clientHeight + 1 && k > 0.5) { k -= 0.04; e.style.setProperty("--k", k.toFixed(2)); }
+  });
 }
 
 // -----------------------------------------------------------------------------
@@ -173,7 +272,7 @@ function couperLignes(doc, texte, largeur) {
 }
 
 // logo = { data: « data:image/jpeg;base64,… », w, h } (taille en pixels, pour garder ses proportions).
-export function feuillePdf(JsPDF, places, expTxt, logo) {
+export function feuillePdf(JsPDF, places, expTxt, logo, modele = "actuel") {
   const doc = new JsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
   doc.setProperties({ title: "Étiquettes d'adresse — Niv Création" });
   const pos = positions();
@@ -185,8 +284,10 @@ export function feuillePdf(JsPDF, places, expTxt, logo) {
     lw = logo.w * k; lh = logo.h * k;
   }
   const Lbas = lw ? L - lw - 1.5 : L;
+  const m = modeleValide(modele);
   for (const p of places) {
     const { x, y } = pos[p.case];
+    if (m !== "actuel") { dessinerStyle(doc, p, x, y, expTxt, logo, m); continue; }
     const exp = lignesExpediteur(expTxt).map(textePdf);
     // Blocs du haut (ce qui se lit) et du bas (expéditeur ou n° de commande), en points.
     const haut = [], bas = [];
@@ -235,4 +336,127 @@ export function feuillePdf(JsPDF, places, expTxt, logo) {
     });
   }
   return doc;
+}
+
+// ---- Les modèles Écrin / Bandeau / Sobre dans le PDF (iPhone) : mêmes mesures que le CSS ----
+const RGB = { or: [169, 137, 53], clair: [216, 191, 126], creme: [247, 239, 220], brun: [91, 71, 24] };
+function cadreLogo(logo, fw, fh) {
+  if (!logo?.data || !(logo.w > 0) || !(logo.h > 0)) return null;
+  const k = Math.min(fw / logo.w, fh / logo.h);
+  return { w: logo.w * k, h: logo.h * k };
+}
+function poserLogo(doc, logo, d, x, y) {
+  try { doc.addImage(logo.data, /^data:image\/png/.test(logo.data) ? "PNG" : "JPEG", x, y, d.w, d.h, "logo"); } catch { /* sans logo */ }
+}
+function texteEspace(doc, t, x, y, esp, droite) {
+  const w = doc.getTextWidth(t) + esp * Math.max(0, t.length - 1);
+  doc.text(t, droite ? x - w : x, y, { charSpace: esp });
+  return w;
+}
+
+function dessinerStyle(doc, p, x, y, expTxt, logo, m) {
+  const W = FEUILLE.w, isExp = p.type === "exp";
+  const expL = lignesExpediteur(expTxt).map(textePdf);
+  const P = m === "ecrin" ? { t: 3.1, s: 3.4, b: 2.4 } : m === "bandeau" ? { t: 3, s: 3.2, b: 1.4 } : { t: 3.2, s: 3.2, b: 2.4 };
+  const x0 = x + P.s, L = W - 2 * P.s;
+  // Ce qui se lit : nom (serif gras), lignes, CP + VILLE (gras).
+  const adr = isExp
+    ? expL.map((t, i) => ({ t, s: !i ? 9.6 : i === expL.length - 1 ? 8.2 : 7.8, f: !i ? "times" : "helvetica", b: !i || i === expL.length - 1 }))
+    : [{ t: textePdf(p.ad.nom), s: 9.6, f: "times", b: true },
+      ...p.ad.lignes.map((t) => ({ t: textePdf(t), s: 7.8, f: "helvetica" })),
+      { t: textePdf(p.ad.cpVille), s: 8.2, f: "helvetica", b: true },
+      ...(p.ad.pays ? [{ t: textePdf(p.ad.pays), s: 8.2, f: "helvetica", b: true }] : [])];
+  const meta = [];
+  if (!isExp && p.exp) meta.push({ t: `Exp. : ${expL.join(" · ")}`, s: 4.9, f: "helvetica", c: [61, 52, 38] });
+  if (p.ref) meta.push({ t: `Commande #${textePdf(p.ad.ref)}`, s: 4.8, f: "helvetica", c: [122, 110, 90] });
+  const pied = meta.length ? meta : m === "sobre" ? [{ t: isExp ? "Atelier de personnalisation" : "Merci pour votre commande", s: 5.6, f: "times", i: true, c: RGB.brun, fixe: true }] : [];
+
+  const couper = (blocs, k, larg) => blocs.flatMap((bl) => {
+    const s = bl.fixe ? bl.s : bl.s * k;
+    doc.setFont(bl.f, bl.b ? "bold" : bl.i ? "italic" : "normal"); doc.setFontSize(s);
+    return couperLignes(doc, bl.t, larg).map((t) => ({ ...bl, t, s }));
+  });
+  const haute = (ls, lh = 1.2) => ls.reduce((h, l) => h + l.s * PT * lh, 0);
+  const toH = 4.6 * PT * 1.3 + (m === "bandeau" ? 0.8 : 0.9);
+  const dl = { ecrin: meta.length ? cadreLogo(logo, 11, 6.1) : cadreLogo(logo, 13, 7.2), bandeau: cadreLogo(logo, 12, 6.7), sobre: cadreLogo(logo, 12, 6.7) }[m];
+  const largPied = m === "bandeau" ? L : L - (dl ? dl.w + 1.5 : 0);
+  const bas = m === "bandeau" ? y + W - 9.4 - P.b : y + W - P.b;
+  let k = 1, A, B, footH;
+  for (; k > 0.6; k -= 0.04) {
+    A = couper(adr, k, L); B = couper(pied, k, largPied);
+    if (m === "ecrin") footH = meta.length ? 0.8 + 0.7 + Math.max(haute(B, 1.25), dl ? dl.h : 0) : 0.8 + 1.1 + 0.5 + (dl ? dl.h : 0);
+    else if (m === "bandeau") footH = B.length ? 0.6 + haute(B, 1.25) : 0;
+    else footH = 0.9 + Math.max(haute(B, 1.25), dl ? dl.h : 0);
+    if (P.t + toH + haute(A, 1.18) + footH <= bas - y) break;
+  }
+
+  // Décor
+  doc.setLineCap("butt");
+  if (m === "ecrin") {
+    doc.setDrawColor(...RGB.or); doc.setLineWidth(0.28); doc.roundedRect(x + 1.1, y + 1.1, W - 2.2, W - 2.2, 1.2, 1.2, "S");
+    doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.12); doc.roundedRect(x + 1.75, y + 1.75, W - 3.5, W - 3.5, 0.8, 0.8, "S");
+  } else if (m === "bandeau") {
+    doc.setFillColor(...RGB.creme); doc.rect(x, y + W - 9.4, W, 9.4, "F");
+    doc.setDrawColor(...RGB.or); doc.setLineWidth(0.3); doc.line(x, y + W - 9.4, x + W, y + W - 9.4);
+  } else {
+    doc.setFillColor(...RGB.or); doc.triangle(x, y, x + 5.2, y, x, y + 5.2, "F");
+    doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.3); doc.line(x + 1.33, y + 7, x + 7, y + 1.33);
+  }
+
+  // « DESTINATAIRE » / « EXPÉDITEUR » en or espacé
+  let cy = y + P.t + 4.6 * PT;
+  const tx = m === "sobre" ? x0 + 3 : x0;
+  doc.setFont("helvetica", "bold"); doc.setFontSize(4.6); doc.setTextColor(...RGB.or);
+  const tw = texteEspace(doc, isExp ? "EXPÉDITEUR" : "DESTINATAIRE", tx, cy, 0.26);
+  if (m === "ecrin") { doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.12); doc.line(tx + tw + 1, cy - 0.55, x0 + L, cy - 0.55); }
+  cy += 4.6 * PT * 0.3 + (m === "bandeau" ? 0.8 : 0.9);
+
+  // Adresse, en noir
+  A.forEach((l) => {
+    doc.setFont(l.f, l.b ? "bold" : "normal"); doc.setFontSize(l.s); doc.setTextColor(17);
+    cy += l.s * PT; doc.text(l.t, x0, cy); cy += l.s * PT * 0.18;
+  });
+
+  const ecrirePied = (lignes, px, yBas) => {
+    let by = yBas - haute(lignes, 1.25);
+    lignes.forEach((l) => {
+      doc.setFont(l.f, l.i ? "italic" : "normal"); doc.setFontSize(l.s); doc.setTextColor(...(l.c || [0, 0, 0]));
+      by += l.s * PT; doc.text(l.t, px, by); by += l.s * PT * 0.25;
+    });
+  };
+  const fond = y + W - P.b;
+  if (m === "ecrin") {
+    if (meta.length) {
+      const h = Math.max(haute(B, 1.25), dl ? dl.h : 0);
+      doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.12); doc.line(x0, fond - h - 0.7, x0 + L, fond - h - 0.7);
+      ecrirePied(B, x0, fond);
+      if (dl) poserLogo(doc, logo, dl, x0 + L - dl.w, fond - dl.h);
+    } else {
+      const ly = fond - (dl ? dl.h : 0) - 0.5 - 0.55, cx = x + W / 2, h = 0.78;
+      doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.12);
+      doc.line(x0, ly, cx - 1.9, ly); doc.line(cx + 1.9, ly, x0 + L, ly);
+      doc.setFillColor(...RGB.or); doc.lines([[h, h], [-h, h], [-h, -h]], cx, ly - h, [1, 1], "F", true);
+      if (dl) poserLogo(doc, logo, dl, cx - dl.w / 2, fond - dl.h);
+    }
+  } else if (m === "bandeau") {
+    if (B.length) ecrirePied(B, x0, bas);
+    const by0 = y + W - 9.4, mid = by0 + 0.15 + (9.4 - 0.15) / 2;
+    if (dl) poserLogo(doc, logo, dl, x + 2.6, mid - dl.h / 2);
+    const xr = x + W - 2.6, lt = W - 5.2 - (dl ? dl.w + 1.5 : 0);
+    doc.setFont("times", "italic"); doc.setFontSize(5.4);
+    const tag = couperLignes(doc, "Gravé pour vous dans notre atelier", lt);
+    const hTot = tag.length * 5.4 * PT * 1.15 + 0.2 + 4.6 * PT * 1.2;
+    let ty = mid - hTot / 2;
+    doc.setTextColor(...RGB.brun);
+    tag.forEach((t) => { ty += 5.4 * PT; doc.text(t, xr, ty, { align: "right" }); ty += 5.4 * PT * 0.15; });
+    ty += 0.2 + 4.6 * PT;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(4.6); doc.setTextColor(...RGB.or);
+    texteEspace(doc, "NIVCREATION.FR", xr, ty, 0.2, true);
+  } else {
+    const h = Math.max(haute(B, 1.25), dl ? dl.h : 0);
+    doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.15); doc.line(x0, fond - h - 0.9, x0 + L, fond - h - 0.9);
+    ecrirePied(B, x0, fond);
+    if (dl) poserLogo(doc, logo, dl, x0 + L - dl.w, fond - dl.h);
+  }
+  doc.setTextColor(0);
 }

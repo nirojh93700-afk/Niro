@@ -254,7 +254,7 @@ En attente de SA décision :
 - ❓ À confirmer par le gérant : pochettes lin (50 ou 24 achetées ?), papier de soie (60 feuilles ?), boîtes en bois (emballage ou produit ?), portions de calage (chips ≈ 2 L, raffia ≈ 10 g), carton 25×20×15 réellement acheté (lot de 15 ou de 25), tailles du sac / de la microfibre / de la boîte allongée, stocks réels de départ.
 - 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.
 
-## 🏷️ Étiquette d'adresse plus jolie — MAQUETTE du 14/10/2026, en attente de son choix
+## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)
 - `docs/maquettes/etiquette-adresse.html`, artifact https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1.
   Trois habillages : A Écrin (double filet doré, logo centré en bas) · B Bandeau (pied crème, logo +
   « Gravé pour vous dans notre atelier » + nivcreation.fr) · C Sobre (coin doré, « Merci pour votre commande »,
