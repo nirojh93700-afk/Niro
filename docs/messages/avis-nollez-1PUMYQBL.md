@@ -11,7 +11,7 @@ Canal : `POST /api/admin/send-client-email` (bouton « Répondre » ajouté tout
 
 Bonjour,
 
-Nous espérons que votre bracelet cordon à plaque, noir avec sa boucle noire et gravé « E ✵ A ✵ Y », vous plaît, ou fera plaisir à la personne à qui vous l'offrez.
+Nous espérons que votre bracelet cordon à plaque, noir avec sa boucle noire et gravé « E ✵ A ✵ Y », vous plaît.
 
 Votre avis aide d'autres clientes à choisir, et il compte beaucoup pour notre atelier. Pour le laisser, ouvrez simplement ce lien : https://nivcreation.fr/produit/bracelet-cordon-plaque#avis
 Le formulaire vous demandera l'adresse e-mail de votre commande, c'est celle sur laquelle vous recevez ce message.
