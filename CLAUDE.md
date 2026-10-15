@@ -1,3 +1,10 @@
+## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
+- Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui
+  donne soit vérifié AVANT. Une date se vérifie par la commande : `TZ=Europe/Paris date` et le jour de la semaine calculé
+  (`python3 -c "import datetime; print(datetime.date(A,M,J).weekday())"`, 0 = lundi). Jamais un jour de la semaine de tête.
+- Même chose pour un prix (relire la fiche en ligne), un nom, une adresse, une référence de commande, un délai, un numéro :
+  le relire à la source (commande, fiche, mail) avant de l'écrire dans un message ou une réponse.
+
 ## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
 > à la suite : sa capture, un e-mail, l'icône du site) : « quand je te dis de pas faire, tu le fais pas,
