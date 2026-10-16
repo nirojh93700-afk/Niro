@@ -346,3 +346,22 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #puzzlephoto #cadeaupersonnalise #cadeaufamille #ideecadeau
+
+## Vidéo 24 (2ᵉ version) — Puzzle photo gravé, avec les prix actuels (16/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/24-puzzle-photo-v2-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 23 s | 1,6 Mo |
+
+- **Source** : `tools/video/pub_puzzle_photo_24v2.py <dossier de sortie>` (la version 1 du 13/10 reste dans le registre ci-dessus).
+- **Demande du gérant** : « refais la vidéo que t'as faite en dernier, il y a eu des changements de prix sur le puzzle » (la dernière = la vidéo 24, puzzle photo).
+- **Changements** : 100 pièces au plus (plus de 120), prix de chaque choix en pastille (24 p. 29,90 € · 48 p. 32,90 € · 80 p. 34,90 € · 100 p. 37,90 €, relus sur la fiche en ligne le 16/10), photo « bureau » retirée (plus sur la fiche), carte de fin « dès 29,90 € · 24 à 100 pièces ».
+- ⚠️ Une vidéo 23 refaite par erreur le même jour (puzzles à encastrer) n'est pas gardée : ce n'était pas celle qu'il demandait.
+
+### Description à copier-coller (livrée le 16/10/2026)
+
+**Vidéo 24 — Puzzle photo gravé** (Puzzle photo gravé)
+> Votre plus belle photo, gravée sur bois et découpée en puzzle ✨ De 24 à 100 pièces, dès 29,90 €, à reconstituer en famille ou entre amis 💛 Un souvenir qui se construit 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #puzzlephoto #cadeaupersonnalise #cadeaufamille #ideecadeau
