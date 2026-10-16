@@ -182,4 +182,16 @@
   2 verres même photo 43,80 € · photo + logo 46,80 € · lot de 4 avec 4 images 86,90 € · lot de 4 avec 2 images 80,90 €.
   À la construction : compter les images distinctes dans `perGlass` au checkout (comme `textExtra`), affichage « +3 € » sur
   l'onglet du verre, ligne par verre dans le résumé, la fiche atelier et le mail de confirmation.
+- ✅ **RÈGLE DE PRIX VALIDÉE PAR LE GÉRANT LE 16/10/2026 (« OK fais comme ça »)**, maquette v4 (même artifact) :
+  **verre 1 comme aujourd'hui** (image comprise, texte +3 €) ; **chaque verre suivant** : identique au verre 1 (même image,
+  même texte) = rien en plus ; **différent** (autre image et/ou autre texte) = **forfait +5 € tout compris**, image et texte.
+  Conséquence : un texte identique sur tous les verres n'est compté qu'une fois (« À l'unité × 2 » s'aligne sur le lot, où le
+  supplément est déjà ajouté une seule fois). Exemples : 2 verres photo + logo = 48,80 € · même logo + prénoms différents = 51,80 € ·
+  lot de 4 avec 4 images = 92,90 € · 6 verres tout différent = 159,40 €.
+  **Atelier (sa demande : « bien identifié, bien détaillé dans l'atelier gravure »)** : fiche atelier avec un tableau UNE LIGNE PAR VERRE
+  (vignette de l'image, texte entre guillemets, écriture, face), « Vendu en plus » qui liste verre 1 / verre 2 · différent · forfait + 5 €,
+  et la carte de la file de production qui écrit le détail par verre. Même tableau sur la fiche imprimée.
+  **Rien en ligne : attendre son « applique ».** À construire alors : « Chacun différent » dès quantité ≥ 2 sur À l'unité (idée 2),
+  forfait verre différent au checkout (comparer image + texte de chaque verre à ceux du verre 1), alerte « N pièces, 1 seule image »
+  (idée 3), tableau par verre dans `FicheAtelier` / `FichePapier` / `/gestion/atelier`, ligne par verre dans le mail de confirmation.
 
