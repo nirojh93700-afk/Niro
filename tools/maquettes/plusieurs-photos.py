@@ -31,29 +31,34 @@ main = re.sub(r"<script.*?</script>", "", main, flags=re.S)
 
 # Textes de la fiche corrigés (16/10/2026) : 4 façons de graver, 30 modèles, « cristal » seulement pour le 36 cl,
 # description réécrite en blocs courts.
-DESC = ('<div class="product-desc">'
-  '<p><strong>Un verre à vin de restaurant, gravé à votre façon dans notre atelier.</strong></p>'
-  '<p>À offrir pour un mariage, un anniversaire, une crémaillère, ou à garder pour soi.</p>'
-  '<h3>Deux tailles</h3><ul>'
-  '<li><strong>36 cl</strong> : coupe tulipe, en cristal.</li>'
-  '<li><strong>47 cl</strong> : grande coupe ronde, pour les vins rouges.</li></ul>'
-  '<h3>Quatre façons de le graver</h3><ul>'
-  '<li><strong>Un modèle</strong> : 30 dessins numérotés, avec vos prénoms si vous le souhaitez.</li>'
-  '<li><strong>Une lettre fleurie</strong> : votre initiale, avec un prénom au milieu.</li>'
-  '<li><strong>Votre texte</strong> : un prénom, une date, un message, dans l’une de nos 8 écritures.</li>'
-  '<li><strong>Votre photo ou votre logo</strong> : un dessin, une photo, le logo de votre bar ou de votre entreprise.</li></ul>'
-  '<h3>Bon à savoir</h3><ul>'
-  '<li>À l’unité, par 2 ou par 4, dans les deux tailles.</li>'
-  '<li>Gravure laser permanente : elle résiste au lave-vaisselle.</li>'
-  '<li>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</li>'
-  '<li>Emballage protégé, gravé en France dans notre atelier.</li>'
-  '<li>Livraison offerte dès 60 € d’achat.</li></ul></div>')
+DESC = ('<div class="product-desc pd2">'
+  '<p class="pd2-lead"><strong>Un verre à vin de restaurant, gravé à votre façon dans notre atelier.</strong></p>'
+  '<p class="pd2-occ">À offrir pour un mariage, un anniversaire, une crémaillère, ou à garder pour soi.</p>'
+  '<h3>Deux tailles</h3><div class="pd2-sizes">'
+  '<div class="pd2-size"><b>36 cl</b><span>coupe tulipe, en cristal.</span></div>'
+  '<div class="pd2-size"><b>47 cl</b><span>grande coupe ronde, pour les vins rouges.</span></div></div>'
+  '<h3>Quatre façons de le graver</h3><div class="pd2-ways">'
+  '<div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Un modèle</b></p><span>30 dessins numérotés, avec vos prénoms si vous le souhaitez.</span></div>'
+  '<div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Une lettre fleurie</b></p><span>votre initiale, avec un prénom au milieu.</span></div>'
+  '<div class="pd2-way"><p class="pd2-wt"><i>3</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures.</span></div>'
+  '<div class="pd2-way"><p class="pd2-wt"><i>4</i><b>Votre photo ou votre logo</b></p><span>un dessin, une photo, le logo de votre bar ou de votre entreprise.</span></div></div>'
+  '<h3>Bon à savoir</h3><table class="pd2-spec"><tbody>'
+  '<tr><th>Formats</th><td>À l’unité, par 2 ou par 4, dans les deux tailles.</td></tr>'
+  '<tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr>'
+  '<tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr>'
+  '<tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr>'
+  '<tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr>'
+  '</tbody></table></div>')
 i = main.index('<div class="product-desc">'); j = main.index('</div>', i) + len('</div>')
 main = main[:i] + DESC + main[j:]
 main = main.replace("Un verre à vin professionnel, en 36 cl ou en 47 cl, gravé à votre façon : un modèle (n°1 à 20), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
   "Un verre à vin de restaurant, en 36 cl ou en 47 cl, gravé à votre façon : un modèle, une lettre fleurie, votre texte, votre photo ou votre logo.")
 OLD_USAGE = main[main.index("Trois façons de personnaliser"):main.index("c'est du cristal.") + len("c'est du cristal.")]
-main = main.replace(OLD_USAGE, "Quatre façons de graver : un modèle (30 dessins numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo. L’aperçu se met à jour pendant que vous choisissez.\nSur un modèle, les prénoms et la date sont gravés dans l’écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l’évier.")
+main = main.replace(OLD_USAGE, '<table class="pd2-spec pd2-vol"><tbody>'
+  '<tr><th>Gravure</th><td>Quatre façons de graver : un modèle (30 dessins numérotés), une lettre fleurie, votre texte dans l\u2019une de nos 8 écritures, ou votre photo ou votre logo. L\u2019aperçu se met à jour pendant que vous choisissez.</td></tr>'
+  '<tr><th>Modèles</th><td>Sur un modèle, les prénoms et la date sont gravés dans l\u2019écriture du modèle.</td></tr>'
+  '<tr><th>Entretien</th><td>Va au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l\u2019évier.</td></tr>'
+  '</tbody></table>')
 for k in ["Un verre à vin de restaurant, en 36 cl", "Quatre façons de graver", "Quatre façons de le graver"]:
     assert k in main, k
 PH = uri(photo, 300)
@@ -189,6 +194,23 @@ mais <b>une seule photo enregistrée</b>. Elle ne prévient pas la cliente : c�
 <p class="mq-small">Dans les commandes déjà reçues, ce cas n’est arrivé qu’une fois (0E3Y9OBX). Les lots « Chacun différent » (ex. Olivier Chesta, 4 photos) ne déclenchent rien.</p></div>''' % (CARTE, FICHE)
 
 MQCSS = '''
+.pd2 h3{margin:22px 0 10px}
+.pd2-lead{margin:0 0 4px}.pd2-occ{margin:0;color:var(--ink-soft)}
+.pd2-sizes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pd2-size{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pd2-size b{font-family:var(--font-display,serif);font-size:1.35rem;color:var(--gold-dark)}
+.pd2-size span{font-size:.92rem;color:var(--ink-soft);line-height:1.4}
+.pd2-ways{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pd2-way{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.pd2-wt{display:flex;align-items:center;gap:8px;margin:0}.pd2-way i{flex:none;font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--cream-2);color:var(--gold-dark);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.pd2-way b{font-size:.98rem}.pd2-way span{font-size:.9rem;color:var(--ink-soft);line-height:1.45}
+.pd2-spec{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper);font-size:.93rem}
+.pd2-spec th{width:34%;text-align:left;font-weight:600;color:var(--ink);background:var(--cream-2);padding:11px 14px;vertical-align:top}
+.pd2-spec td{padding:11px 14px;color:var(--ink-soft);line-height:1.5}
+.pd2-spec tr+tr th,.pd2-spec tr+tr td{border-top:1px solid var(--line)}
+.pd2-vol{margin-top:14px;white-space:normal}
+@media (max-width:480px){.pd2-way,.pd2-size{padding:12px}.pd2-way b{font-size:.92rem;line-height:1.25}.pd2-way span{font-size:.85rem}.pd2-spec th{width:32%;padding:10px 12px}.pd2-spec td{padding:10px 12px}}
+
 :root{--mq-gold:#a98935;--mq-cream:#fbf7ee;--mq-ink:#1a1206}
 body{background:var(--mq-cream);margin:0}
 .mq-bar{position:sticky;top:0;z-index:50;background:#1a1206;color:#f3e8d3;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:600 .85rem/1.3 system-ui,sans-serif}
