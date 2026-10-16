@@ -171,3 +171,9 @@
   « Des verres différents ? Prenez le lot de 2 puis “Chacun différent” » (le lot est aussi moins cher : 39,90 € au lieu de 43,80 €) ;
   ② ou proposer « Chacun différent » aussi sur « À l'unité » quand la quantité dépasse 1 ; ③ dans Gestion, une pastille
   « 2 verres, 1 seule photo — vérifier » sur ce genre de commande.
+- ✅ **Maquette faite le 16/10/2026** (« fais-moi la maquette des trois et alerte ») : `docs/maquettes/plusieurs-photos.html`,
+  artifact https://claude.ai/artifact/Gey5ZJW7Fh5kjyVPaajYwQ, générateur `tools/maquettes/plusieurs-photos.py <fiche capturée>
+  <.next/static/css> <photo> <sortie>` (vrai rendu de /produit/verre-a-vin-grave, 47 cl, À l'unité, mode photo, quantité 2).
+  Idée 1 encadré sous le bouton · Idée 2 « Chacun différent » sur À l'unité · Idée 3 alerte « 2 verres, 1 seule photo » dans la
+  file de production ET la fiche atelier (pour tous les produits photo). **Rien en ligne : en attente de son choix.**
+
