@@ -3293,6 +3293,11 @@ export const products = [
       { key: "coffret", value: "2verres", amount: 35.80, weight: 900 },
       { key: "coffret", value: "4verres", amount: 71.60, weight: 1800 },
       { key: "date", amount: 3 },
+      // Tout texte gravé est payant (gérant, 16/10/2026 « ok ») : prénom, initiale(s), rôle, texte +3 € chacun.
+      { key: "prenom", amount: 3 },
+      { key: "initiale", amount: 3 },
+      { key: "role", amount: 3 },
+      { key: "texte", amount: 3 },
     ] },
     variants: [
       { id: "carafe-whisky-gravee", stockId: "carafe-whisky-gravee", title: "Carafe gravée", price: 54.90, weight: 1700 },

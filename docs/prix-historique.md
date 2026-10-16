@@ -241,3 +241,11 @@ Question du gérant « on peut augmenter de combien les verres de vin ? » → p
 | 47 cl lot de 4 (`verre-vin-47-4`) | 71,90 € | **77,90 €** |
 Coûts inchangés (3,24 € / 5,18 € port compris). Pour revenir en arrière : remettre les prix AVANT dans
 `src/lib/products.js` (le prix peut aussi être recouvert par un réglage Gestion → Produits : vérifier la fiche en ligne).
+
+## 16/10/2026 — Gravure : les textes deviennent payants (verres + carafe)
+Prix des verres et de la carafe INCHANGÉS ; seule la gravure change.
+- **Verre à vin, flûte** : texte principal et prénom passent de gratuit à **+3 €** (avant : seuls date et initiale +3 €).
+  Règle des verres (`regleVerres`, `src/lib/prixVerres.js`) : verre différent +5 € tout compris, frais des identiques 0 / 2 / 5 €.
+- **Carafe** (`carafe-a-whisky-gravee`) : prénom, initiale(s), rôle et texte passent de gratuit à **+3 € chacun** (date déjà +3 €).
+Pour revenir en arrière : retirer `regleVerres` des 5 verres, remettre `textKeys: ["date", "initiale"]` (vin, flûte) et retirer les
+4 lignes `prenom / initiale / role / texte` des `flatExtras` de la carafe.

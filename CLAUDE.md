@@ -49,7 +49,9 @@
   « payé sans prix affiché » / « prix affiché mais pas payé ».
 - Branché dans la surveillance du catalogue (`catalogAudit.js`, type `texte-prix`, priorité haute → e-mail hebdomadaire + page
   Gestion → Santé du catalogue avec le conseil). Lit le catalogue AVEC les réglages de Gestion.
-- ⚠️ Si `ParcoursGuide.jsx` change ses libellés de prix, mettre `textesPrix.js` à jour (il en recopie les règles).
+- ✅ **Les « +X € » du parcours guidé sont CALCULÉS** (`prixDe` dans `ParcoursGuide.jsx`, avec `engravingExtra`) : plus aucun prix écrit à
+  la main, le test vérifie qu'il n'en revient pas. **Carafe (gérant, 16/10 « ok ») : prénom, initiale(s), rôle, texte +3 € chacun**
+  (`flatExtras`, date déjà +3 €) → modèle + prénom = 57,90 €. Historique dans `docs/prix-historique.md`.
 
 ## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
 - Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui
