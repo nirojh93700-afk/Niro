@@ -41,7 +41,7 @@ PRIX = ('<div class="mq mq-4">'
   '<button type="button" class="pg-opt on">Chacun différent</button></div>'
   '<div class="pg-tabs"><button type="button" class="pg-tab on" data-g="1">Verre 1</button><button type="button" class="pg-tab" data-g="2">Verre 2 <i class="mq-sup">+5 €</i></button></div>'
   '<p class="pg-hint"><b>Verre 1</b> : l’image ou le logo est offert, le texte est à +3 €. <b>Chaque verre suivant</b> : différent (autre image ou autre texte), <b>+5 € tout compris</b>, image et texte ; '
-  'identique au verre 1, rien en plus jusqu’à 3 verres ; <b>à partir de 4 verres identiques, +2 € de frais de gravure en tout</b>.</p></div>'
+  'identique au verre 1, frais de gravure en tout : <b>1 ou 2 verres, aucun · 3 ou 4 verres, +2 € · 5 ou 6 verres, +5 €</b>. Le texte du verre 1 reste à +3 € dans tous les cas.</p></div>'
   '<div class="mq-g1"><div class="field"><label>Verre 1 · votre photo ou logo <span class="mq-ok">offerte</span></label>'
   '<div class="photo-upload"><div class="mq-up"><img src="%s" alt=""><span><b>Photo envoyée ✓</b><small>dessin-couple.jpg</small></span><span class="mq-chg">Changer</span></div></div></div>'
   '<div class="field"><label>Verre 1 · texte sous l’image <span class="prc-opt">(facultatif)</span> <span class="mq-sup">+3 €</span></label><input type="text" maxlength="40" placeholder="Ex. Stephan · 1989" value="Fabien · 2026"></div></div>'
@@ -57,19 +57,23 @@ PRIX = ('<div class="mq mq-4">'
   '<div class="prc-sumrow mq-l2"><span>Verre 2 · différent : gravure du logo + texte « Zoo Bar · 2026 »</span><b>+ 5,00 €</b></div>'
   '<div class="prc-sumrow mq-l2b" hidden><span>Verre 2 · identique au verre 1 (même photo, même texte)</span><b>0,00 €</b></div>'
   '<div class="prc-sumrow prc-sumtot"><span>Total (2 verres)</span><b class="mq-tot">51,80 €</b></div></div>'
-  '<div class="mq-ex"><b>Exemples (verre à vin 47 cl, 21,90 € pièce)</b><table>'
+  '<div class="mq-ex"><b>Frais de gravure pour des verres identiques (en tout, une seule fois)</b><table>'
+  '<tr><td>1 ou 2 verres</td><td>aucun</td></tr><tr><td>3 ou 4 verres</td><td>+ 2 €</td></tr><tr><td>5 ou 6 verres</td><td>+ 5 €</td></tr></table>'
+  '<p class="mq-small">Le texte se paie toujours à part : +3 € sur le verre 1, compris dans les 5 € d’un verre différent.</p>'
+  '<b>Exemples (verre à vin 47 cl, 21,90 € pièce)</b><table>'
   '<tr><td>2 verres, photo + logo, sans texte</td><td>43,80 + 5 = <b>48,80 €</b></td></tr>'
   '<tr><td>2 verres, photo + logo, texte sur le 2ᵉ</td><td>43,80 + 5 = <b>48,80 €</b></td></tr>'
   '<tr><td>2 verres, même logo, prénom différent sur chacun</td><td>43,80 + 3 + 5 = <b>51,80 €</b></td></tr>'
   '<tr><td>2 verres identiques, même logo, même prénom</td><td>43,80 + 3 = <b>46,80 €</b></td></tr>'
   '<tr><td>2 verres identiques, même logo, sans texte</td><td>43,80 = <b>43,80 €</b></td></tr>'
-  '<tr><td>3 verres identiques, même logo, même prénom</td><td>65,70 + 3 = <b>68,70 €</b></td></tr>'
+  '<tr><td>3 verres identiques (À l’unité × 3), même logo, même prénom</td><td>65,70 + 3 + 2 = <b>70,70 €</b></td></tr>'
   '<tr><td>Lot de 4, 2 images, 2 verres chacune</td><td>77,90 + 5 = <b>82,90 €</b></td></tr>'
+  '<tr><td>1 verre, logo + prénom</td><td>21,90 + 3 = <b>24,90 €</b></td></tr>'
   '<tr><td>Lot de 4, 4 images différentes</td><td>77,90 + 3 × 5 = <b>92,90 €</b></td></tr>'
-  '<tr><td>Lot de 4, même image, même prénom partout (frais dès 4 identiques)</td><td>77,90 + 3 + 2 = <b>82,90 €</b></td></tr>'
-  '<tr><td>6 verres, même image, même prénom partout</td><td>131,40 + 3 + 2 = <b>136,40 €</b></td></tr>'
+  '<tr><td>Lot de 4, même image, même prénom partout</td><td>77,90 + 3 + 2 = <b>82,90 €</b></td></tr>'
+  '<tr><td>6 verres, même image, même prénom partout</td><td>131,40 + 3 + 5 = <b>139,40 €</b></td></tr>'
   '<tr><td>6 verres, 6 images et 6 prénoms</td><td>131,40 + 3 + 5 × 5 = <b>159,40 €</b></td></tr></table>'
-  '<p class="mq-small">Règle du 16/10/2026 : verre 1 comme aujourd’hui (image offerte, texte +3 €) ; verre différent +5 € tout compris ; verres identiques : rien en plus jusqu’à 3, puis +2 € de frais de gravure en tout à partir de 4 verres identiques (montant proposé). '
+  '<p class="mq-small">Règle du 16/10/2026 : verre 1 comme aujourd’hui (image offerte, texte +3 €) ; verre différent +5 € tout compris ; verres identiques : frais de gravure en tout, aucun pour 1 ou 2 verres, +2 € pour 3 ou 4, +5 € pour 5 ou 6 (validé par le gérant). Le texte se paie toujours à part. '
   'Le client voit le détail ligne par ligne avant d’ajouter au panier, puis au panier et dans son mail de confirmation.</p></div>'
   '</div>') % (PH, LOGO)
 
@@ -124,7 +128,7 @@ FICHE = '''<div class="mq-fiche"><div class="mq-fiche-h">Fiche atelier — #0E3Y
   <tr><td class="mq-v">Verre 1</td><td><img src="%s" alt=""><span>dessin du couple<br><small>comprise</small></span></td><td><i>aucun</i></td><td>—</td><td>avant · ≈ 4,6 × 8,1 cm</td></tr>
   <tr><td class="mq-v">Verre 2</td><td><img src="%s" alt=""><span>logo Zoo Bar<br><small>différent · forfait 5 €</small></span></td><td>« Zoo Bar · 2026 »</td><td>Cinzel</td><td>avant · ≈ 4,6 × 8,1 cm</td></tr>
   </tbody></table>
-  <p class="mq-small">Une ligne par verre, image en vignette, texte entre guillemets, écriture, face. Le même tableau sur l’écran et sur la fiche imprimée. Des verres identiques au verre 1 s’écrivent « Verres 2 à 4 · identiques au verre 1 · frais de gravure + 2 € en tout » (ou « rien en plus » sous 4 verres).</p></div>''' % (PH, LOGO)
+  <p class="mq-small">Une ligne par verre, image en vignette, texte entre guillemets, écriture, face. Le même tableau sur l’écran et sur la fiche imprimée. Des verres identiques au verre 1 s’écrivent « Verres 2 à 4 · identiques au verre 1 · frais de gravure + 2 € en tout » (« aucun frais » pour 2 verres, « + 5 € en tout » pour 5 ou 6).</p></div>''' % (PH, LOGO)
 GESTION = '''<div class="mq-g"><h2>Dans Gestion → File de production</h2>
 <p class="mq-small">À gauche : l’alerte quand il manque une image, et la même commande passée avec « Chacun différent ». À droite : la fiche atelier, détaillée verre par verre. L’alerte apparaît toute seule quand une commande a <b>plusieurs pièces avec photo</b> (verres, cristaux, carafes, puzzles photo…)
 mais <b>une seule photo enregistrée</b>. Elle ne prévient pas la cliente : c’est un rappel pour toi.</p>
@@ -155,6 +159,7 @@ body[data-v="4"] section.prc-step:nth-of-type(2){display:none}
 .mq-ex table{border-collapse:collapse;margin:8px 0;width:100%}
 .mq-ex td{padding:5px 0;border-bottom:1px solid #f0e6d2}
 .mq-ex td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+@media (max-width:480px){.mq-ex td:last-child{white-space:normal}}
 @media (max-width:480px){.mq-ex td:last-child{white-space:normal}}
 body[data-v="3"] main{display:none}
 .mq-g{display:none;max-width:1100px;margin:20px auto 40px;padding:0 16px;font-family:system-ui,sans-serif}

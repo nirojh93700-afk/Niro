@@ -209,4 +209,12 @@
   maquette v8 : verres identiques au verre 1 = **rien en plus jusqu'à 3 verres**, **+2 € de frais de gravure en tout à partir de 4 verres
   identiques** (montant proposé). 2 identiques même prénom 46,80 € · 3 identiques 68,70 € · lot de 4 identiques 82,90 € · lot de 4 avec
   2 images (2 verres chacune, aucune série de 4) 82,90 €. Le détail du prix écrit la ligne « Verre 2 · identique au verre 1 · 0,00 € ».
+- ✅✅ **GRILLE FINALE VALIDÉE PAR LE GÉRANT LE 16/10/2026 (« Oui c'est ça, fais la maquette »)**, maquette v10 (même artifact) — remplace
+  les essais précédents (2 € par verre, 2 € en tout, gratuit jusqu'à 3) :
+  · verre 1 : image ou logo **offert**, texte **+3 €** (le texte se paie TOUJOURS, même pour 1 ou 2 verres) ;
+  · chaque verre **différent** (autre image et/ou autre texte) : **+5 € tout compris** ;
+  · frais de gravure pour les verres **identiques**, une seule fois par commande : **1 ou 2 verres : aucun · 3 ou 4 : +2 € · 5 ou 6 : +5 €**
+    (au-delà de 6 : non tranché, 5 € par défaut à confirmer).
+  Exemples (verre à vin 47 cl) : 1 verre logo + prénom 24,90 € · 2 identiques 46,80 € · 3 identiques 70,70 € · lot de 4 identiques 82,90 € ·
+  6 identiques 139,40 €. **Rien en ligne : attendre son « applique ».**
 
