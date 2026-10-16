@@ -52,6 +52,17 @@ export async function POST(req) {
     return Response.json({ ok, patch });
   }
 
+  // Corriger l'e-mail d'une commande (16/10/2026, commande 10OPUHMO : la cliente avait tapé « gmail.comn »
+  // au paiement → confirmation rebondie ; sans correction, l'e-mail d'expédition et l'espace client ratent aussi).
+  if (id && body?.action === "email") {
+    const email = String(body.customerEmail || "").trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(email)) return Response.json({ ok: false, error: "Adresse invalide." }, { status: 400 });
+    const order = await getSiteOrder(id);
+    if (!order) return Response.json({ ok: false, error: "Commande introuvable." }, { status: 404 });
+    const ok = await updateSiteOrder(id, { customerEmail: email, emailCorrigeDe: order.customerEmail || "" });
+    return Response.json({ ok, avant: order.customerEmail || "", apres: email });
+  }
+
   // Envoyer MAINTENANT la demande d'avis au client (bouton admin, à la demande).
   // Utilise le même e-mail (avec lien direct vers la fiche produit #avis) que la
   // règle automatique, mais immédiatement.

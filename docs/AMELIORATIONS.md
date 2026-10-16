@@ -234,3 +234,6 @@
   alors que la fiche en propose quatre (la photo / le logo manque), et « c'est du cristal » alors que le 47 cl n'est pas annoncé en cristal.
   À corriger sur son mot.
 
+
+- **16/10/2026 — Adresse e-mail mal tapée au paiement** (commande 10OPUHMO, « gmail.comn ») : signaler au panier une adresse
+  probablement fausse (gmail.comn, gmial.com, hotmial.fr…) avant d'aller payer. Proposé, pas construit.
