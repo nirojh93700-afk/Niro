@@ -29,6 +29,8 @@ function fill(tpl, o) {
 
 // --- 1) Messages programmés + règles automatiques --------------------------
 export async function runScheduledJobs() {
+  // Seul le site en ligne envoie (voir siteAutoriseAEnvoyer, incident du 16/10/2026 : ancien site Netlify).
+  if (process.env.NETLIFY || /netlify\.app/i.test(String(process.env.NEXT_PUBLIC_SITE_URL || ""))) return { skipped: true };
   const now = Date.now();
   let sentManual = 0, sentAuto = 0, failed = 0;
 

@@ -10,8 +10,17 @@ import { offreActive } from "@/lib/offreGravure";
 
 const MIN = 60000;
 
+// 🔴 16/10/2026 : l'ANCIEN site Netlify (exquisite-khapse-7af3a0.netlify.app) tournait encore et envoyait
+// les e-mails automatiques en double (demande d'avis reçue 4 fois par un client) : ses données lui sont
+// propres, son registre anti-doublon ne tenait pas. Seul le site en ligne (Firebase) a le droit d'envoyer.
+export function siteAutoriseAEnvoyer() {
+  const url = String(process.env.NEXT_PUBLIC_SITE_URL || "");
+  return !process.env.NETLIFY && !process.env.NETLIFY_IMAGES_CDN_DOMAIN && !/netlify\.app/i.test(url);
+}
+
 export async function maybeRunJobs() {
   const out = {};
+  if (!siteAutoriseAEnvoyer()) return { skipped: "ancien site : aucune tâche automatique" };
   // Messages programmés + règles auto : au plus une fois toutes les 15 min.
   try {
     if (await claimJob("scheduled", 15 * MIN)) out.scheduled = await runScheduledJobs();

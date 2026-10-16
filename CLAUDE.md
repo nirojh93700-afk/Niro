@@ -50,6 +50,18 @@
   · Vérifié : build · 6 jeux de tests · navigateur 390/1280 (vin 1 verre + texte 20,90 · ×2 identiques 38,80 · 2ᵉ différent 43,80 ·
     3 verres dont 1 différent 61,70 = panier = paiement · cocktail lot de 2 + texte 36,90 · fenêtre photo · 0 erreur, 0 débordement).
 
+## 🔴🔴 « ARRÊTE D'ENVOYER DES MAILS » — DEMANDE D'AVIS REÇUE 4 FOIS PAR LUDOVIC (16/10/2026)
+- Commande 16HGINEA (ludsolo@gmail.com, livrée le 14/10) : demande d'avis reçue à 13 h 46 (site Firebase, par Gmail, NORMAL) puis
+  à 14 h 18, 14 h 30 et 14 h 42 depuis `commande@nivcreation.fr` (Resend) — le lien du bas de ces mails pointe vers
+  **`exquisite-khapse-7af3a0.netlify.app` = l'ANCIEN SITE NETLIFY, TOUJOURS EN MARCHE**. Il lit les commandes dans Firestore mais
+  garde ses réglages et son registre anti-doublon (`autoSent`) chez lui → il renvoie à chaque passage.
+- **Fait** : les 2 règles automatiques (avis J+2, relance inscrites J+4) passées `active:false` dans les réglages du site Firebase
+  (sur son ordre « arrête d'envoyer des mails ») ; ⛔ **ne pas les rallumer sans sa demande**. Code : `siteAutoriseAEnvoyer()`
+  (`heartbeat.js`) + garde dans `runScheduledJobs` → aucune tâche automatique sur un site Netlify (agit seulement si Netlify
+  reconstruit depuis le dépôt : pas garanti).
+- **SEUL VRAI ARRÊT = LE GÉRANT** : supprimer le site sur app.netlify.com (site `exquisite-khapse-7af3a0`) ; injoignable d'ici
+  (proxy) et aucun accès Netlify. Ensuite, dans Stripe → Webhooks, supprimer l'ancien point de terminaison qui vise Netlify s'il existe.
+
 ## 🔎 CONTRÔLE AUTOMATIQUE « TEXTE GRAVÉ ↔ PRIX AFFICHÉ » — 16/10/2026 (« je veux pas que ça ait ce problème ailleurs » → « oui »)
 - `src/lib/textesPrix.js` (`controleTextesPrix(product)`, pur, `npm run test-textes-prix`) : pour chaque case de texte, option par
   option, compare ce que le PAIEMENT fait payer (`engravingExtra`) à ce que la fiche ÉCRIT (« +X € » dans le libellé, ou les libellés
