@@ -217,4 +217,11 @@
     (au-delà de 6 : non tranché, 5 € par défaut à confirmer).
   Exemples (verre à vin 47 cl) : 1 verre logo + prénom 24,90 € · 2 identiques 46,80 € · 3 identiques 70,70 € · lot de 4 identiques 82,90 € ·
   6 identiques 139,40 €. **Rien en ligne : attendre son « applique ».**
+- ✅ **VERSION FINALE DE LA MAQUETTE, 16/10/2026 (« Fais-moi la maquette. Finale »)**, v11 : la grille de prix (image offerte · texte +3 € ·
+  verre différent +5 € · frais verres identiques 1-2 aucun / 3-4 +2 € / 5-6 +5 €) est posée dans le volet **« Personnalisation & Entretien »**
+  de chaque fiche verre (au « applique » : dans `productInfo.js` ou en bloc rendu par `ProductDetail.jsx` pour toutes les fiches verres) ;
+  le tableau d'exemples est marqué « pour toi seulement », il NE va PAS sur le site. C'est CETTE version à reproduire au « applique ».
+- 💡 Vu au passage sur la fiche verre à vin (volet « Personnalisation & Entretien », texte en ligne) : « Trois façons de personnaliser »
+  alors que la fiche en propose quatre (la photo / le logo manque), et « c'est du cristal » alors que le 47 cl n'est pas annoncé en cristal.
+  À corriger sur son mot.
 

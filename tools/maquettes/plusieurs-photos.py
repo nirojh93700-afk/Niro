@@ -57,7 +57,7 @@ PRIX = ('<div class="mq mq-4">'
   '<div class="prc-sumrow mq-l2"><span>Verre 2 · différent : gravure du logo + texte « Zoo Bar · 2026 »</span><b>+ 5,00 €</b></div>'
   '<div class="prc-sumrow mq-l2b" hidden><span>Verre 2 · identique au verre 1 (même photo, même texte)</span><b>0,00 €</b></div>'
   '<div class="prc-sumrow prc-sumtot"><span>Total (2 verres)</span><b class="mq-tot">51,80 €</b></div></div>'
-  '<div class="mq-ex"><b>Frais de gravure pour des verres identiques (en tout, une seule fois)</b><table>'
+  '<div class="mq-ex"><p class="mq-toi">Pour toi seulement : ce tableau d’exemples ne sera pas sur le site. Le client voit la grille dans le volet « Personnalisation & Entretien » (en bas de la fiche) et le détail calculé pour SA commande.</p><b>Frais de gravure pour des verres identiques (en tout, une seule fois)</b><table>'
   '<tr><td>1 ou 2 verres</td><td>aucun</td></tr><tr><td>3 ou 4 verres</td><td>+ 2 €</td></tr><tr><td>5 ou 6 verres</td><td>+ 5 €</td></tr></table>'
   '<p class="mq-small">Le texte se paie toujours à part : +3 € sur le verre 1, compris dans les 5 € d’un verre différent.</p>'
   '<b>Exemples (verre à vin 47 cl, 21,90 € pièce)</b><table>'
@@ -93,6 +93,18 @@ i = main.find('<section class="prc-step">')
 main = main[:i] + IDEE2 + PRIX + main[i:]
 j = main.find('<div class="qty-row">'); k = main.find('<button type="button" class="fav-ligne"', j)
 main = main[:k] + IDEE1 + IDEE2_BAS + main[k:]
+
+
+GRILLE = ('<div class="mq mq-4 mq-grille"><b>Prix de la gravure</b>'
+  '<table><tr><td>Image ou logo du verre 1</td><td>offert</td></tr>'
+  '<tr><td>Texte du verre 1</td><td>+ 3 €</td></tr>'
+  '<tr><td>Chaque verre différent (autre image ou autre texte)</td><td>+ 5 € tout compris</td></tr></table>'
+  '<b>Frais de gravure pour des verres identiques</b> <span class="mq-small">(une seule fois par commande)</span>'
+  '<table><tr><td>1 ou 2 verres</td><td>aucun</td></tr><tr><td>3 ou 4 verres</td><td>+ 2 €</td></tr><tr><td>5 ou 6 verres</td><td>+ 5 €</td></tr></table>'
+  '<p class="mq-small">Le détail exact de votre prix s’affiche avant l’ajout au panier, puis dans votre panier et votre e-mail de confirmation.</p></div>')
+acc = '<summary>✨ Personnalisation &amp; Entretien</summary><div class="info-body">'
+assert acc in main
+main = main.replace(acc, acc + GRILLE, 1)
 
 css = "".join(open(os.path.join(cssdir, f), encoding="utf-8").read() for f in sorted(os.listdir(cssdir)) if f.endswith(".css"))
 
@@ -155,6 +167,11 @@ body[data-v="4"] section.prc-step:nth-of-type(2){display:none}
 .mq-sum .prc-sumrow span{flex:1;min-width:0}
 .mq-sum .prc-sumrow b{white-space:nowrap;flex:none}
 .mq-sumh{font-weight:800;font-size:.9rem;margin-bottom:6px;color:#1a1206}
+.mq-toi{margin:0 0 10px;padding:8px 10px;border-radius:8px;background:#1a1206;color:#f3e8d3;font-size:.8rem;line-height:1.45}
+.mq-grille{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:#fff;border:1px solid #e2c67e;white-space:normal;font-size:.88rem}
+.mq-grille table{border-collapse:collapse;width:100%;margin:6px 0 12px}
+.mq-grille td{padding:5px 0;border-bottom:1px solid #f0e6d2;vertical-align:top}
+.mq-grille td:last-child{text-align:right;font-weight:700;padding-left:10px}
 .mq-ex{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#fff;border:1px solid #e9dcc0;font-size:.86rem}
 .mq-ex table{border-collapse:collapse;margin:8px 0;width:100%}
 .mq-ex td{padding:5px 0;border-bottom:1px solid #f0e6d2}
@@ -191,7 +208,7 @@ body[data-v="3"] .mq-g{display:block}
 '''
 JS = '''<script>
 (function(){var b=document.body,q=document.querySelector(".qty-stepper span"),t=document.querySelectorAll(".pd-totbox .val, .prc-sumtot b");
-function set(v){b.dataset.v=v;document.querySelectorAll(".mq-bar button").forEach(function(x){x.classList.toggle("on",x.dataset.v==v)})}
+function set(v){b.dataset.v=v;var dd=[].slice.call(document.querySelectorAll(".info-accordion details")).filter(function(d){return /Personnalisation/.test(d.textContent)})[0];if(dd)dd.open=(v=="4");document.querySelectorAll(".mq-bar button").forEach(function(x){x.classList.toggle("on",x.dataset.v==v)})}
 document.querySelectorAll(".mq-bar button").forEach(function(x){x.onclick=function(){set(x.dataset.v);window.scrollTo(0,0)}});
 function maj(n){q.textContent=n;t.forEach(function(e){e.textContent=(21.9*n).toFixed(2).replace(".",",")+"\\u00a0€"});
 document.querySelectorAll(".mq-1,.mq-2").forEach(function(e){e.style.visibility=n>1?"":"hidden"})}
@@ -206,7 +223,7 @@ set("1");})();
 
 doc = ('<title>Plusieurs verres, une photo</title><style>%s%s</style>'
        '<div class="mq-bar"><span>Maquette · 1 seule photo pour 2 verres</span>'
-       '<button data-v="1">Idée 1 · encadré</button><button data-v="2">Idée 2 · chacun différent</button><button data-v="3">Idée 3 · alerte Gestion</button><button data-v="4">Prix · verre différent +5 €</button></div>'
+       '<button data-v="1">Idée 1 · encadré</button><button data-v="2">Idée 2 · chacun différent</button><button data-v="3">Idée 3 · alerte Gestion</button><button data-v="4">Prix · version finale</button></div>'
        '<p class="mq-intro">Vrai rendu de la fiche verre à vin : 47 cl, « À l’unité », mode photo, quantité 2 (le cas de la commande 0E3Y9OBX). '
        'Change la quantité avec − / + : les idées 1 et 2 n’apparaissent qu’à partir de 2 verres. L’onglet « Prix » montre la règle : verre 1 comme aujourd’hui, puis +5 € tout compris par verre différent.</p>'
        '%s%s%s') % (css, MQCSS, main, GESTION, JS)
