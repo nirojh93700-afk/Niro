@@ -110,6 +110,10 @@ export async function recordAnalyticsEvent(event, data = {}) {
       if (slug) update.cartByProduct = { [slug]: inc(1) };
       break;
     case "begin_checkout": update.beginCheckout = inc(1); break;
+    // 14/10/2026 : une seule fois PAR VISITE (trackOnce côté navigateur) — c'est ce qui permet de
+    // compter des PERSONNES qui ont rempli un panier / lancé un paiement, et non des clics.
+    case "cart_open": update.cartSessions = inc(1); break;
+    case "checkout_session": update.checkoutSessions = inc(1); break;
     case "purchase":
       update.purchase = inc(1);
       update.revenue = inc(value);
@@ -149,6 +153,7 @@ export async function getAnalyticsSummary(days = 30) {
         viewItem: num(d.viewItem), addToCart: num(d.addToCart),
         beginCheckout: num(d.beginCheckout), purchase: num(d.purchase),
         revenue: num(d.revenue),
+        cartSessions: num(d.cartSessions), checkoutSessions: num(d.checkoutSessions),
       };
     });
     const totals = series.reduce((t, d) => ({
@@ -156,7 +161,8 @@ export async function getAnalyticsSummary(days = 30) {
       viewItem: t.viewItem + d.viewItem, addToCart: t.addToCart + d.addToCart,
       beginCheckout: t.beginCheckout + d.beginCheckout, purchase: t.purchase + d.purchase,
       revenue: t.revenue + d.revenue,
-    }), { sessions: 0, pageviews: 0, viewItem: 0, addToCart: 0, beginCheckout: 0, purchase: 0, revenue: 0 });
+      cartSessions: t.cartSessions + d.cartSessions, checkoutSessions: t.checkoutSessions + d.checkoutSessions,
+    }), { sessions: 0, pageviews: 0, viewItem: 0, addToCart: 0, beginCheckout: 0, purchase: 0, revenue: 0, cartSessions: 0, checkoutSessions: 0 });
     const views = {}, carts = {};
     for (const id of ids) {
       const d = byDate[id]; if (!d) continue;

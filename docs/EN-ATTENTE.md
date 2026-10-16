@@ -228,6 +228,12 @@ En attente de SA décision :
 
 ---
 
+- **💶 Prix de livraison des VERRES à domicile — À TRANCHER PAR LUI (« garde en mémoire pour le prix », 14/10/2026).**
+  Aujourd'hui 11,90 € pour 1-2 verres (`GLASS_TIERS`, ou son réglage dans Gestion → Livraison), 16,90 € pour 3-4.
+  Marché relevé le 14/10 : domicile 6,95 € (Amikado) à 7,90 € (Un Jour Une Surprise, PopCase) ; livraison offerte dès
+  49-89 € ailleurs (lui : 60 €, mieux que la plupart). Coût réel : Boxtal ≈ 6 € TTC + ~2 € carton/calage ; Colissimo
+  guichet 9,59 € / 1 kg. Proposition faite : verres à domicile 7,90 €. RIEN changé tant qu'il ne l'a pas dit.
+
 ## 6. Règles à ne jamais oublier (détail en tête de `CLAUDE.md`)
 
 1. Aucun envoi à un client sans « envoie » explicite, et **uniquement par le site** (règle
@@ -276,3 +282,11 @@ En attente de SA décision :
 - Marque-pages : idée C (fenêtre « Composer mon coffret ») choisie et mise dans la maquette de la fiche (v8) ; reste son avis, les dessins, la photo de la boîte d'un, l'essence réelle des bois (CITES) avant commande.
 - Marque-pages modèle 2 (ajouré, oiseau et magnolia) : maquette faite le 11/10, 4 couleurs + coffret des 4 couleurs ; à confirmer : prix, coffret utilisé, texte au verso, vraie photo de la couleur Sable.
 - Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
+
+## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)
+- `docs/maquettes/etiquette-adresse.html`, artifact https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1.
+  Trois habillages : A Écrin (double filet doré, logo centré en bas) · B Bandeau (pied crème, logo +
+  « Gravé pour vous dans notre atelier » + nivcreation.fr) · C Sobre (coin doré, « Merci pour votre commande »,
+  logo à droite). Adresse toujours en noir, CP + VILLE en gras majuscules ; logo d'origine, en bas.
+- Au « applique » : reporter le modèle choisi dans `feuilleHtml` ET `feuillePdf` (`src/lib/etiquettes.js`),
+  garder le resserrement automatique du texte (adresse longue), relancer `npm run test-etiquettes`.

@@ -5,6 +5,13 @@
   sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
 - Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
 
+## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
+- Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui
+  donne soit vérifié AVANT. Une date se vérifie par la commande : `TZ=Europe/Paris date` et le jour de la semaine calculé
+  (`python3 -c "import datetime; print(datetime.date(A,M,J).weekday())"`, 0 = lundi). Jamais un jour de la semaine de tête.
+- Même chose pour un prix (relire la fiche en ligne), un nom, une adresse, une référence de commande, un délai, un numéro :
+  le relire à la source (commande, fiche, mail) avant de l'écrire dans un message ou une réponse.
+
 ## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
 > à la suite : sa capture, un e-mail, l'icône du site) : « quand je te dis de pas faire, tu le fais pas,
@@ -63,6 +70,19 @@
     à pouvoir citer le lave-vaisselle.
   Corrigé partout : fiches (`productInfo.js`), descriptions (`products.js`), encadré « Conseils d'entretien » des bijoux
   (`ProductDetail.jsx`), FAQ, guide « cadeaux homme » (régénéré).
+
+## 🔤 POLICE TOUJOURS CHOISIE ET TOUJOURS ÉCRITE — 12/10/2026 (commande 0ZH3LP9M, bracelet bébé « Eloïm »)
+> Gérant : « il faut que la cliente sache ce qu'elle a sélectionné, moi il faut que je sache… corrige partout, je dois
+> savoir ce que je dois imprimer ». Le menu police des fiches était vide (« — Choisir — », facultatif) alors que l'aperçu
+> montrait Playfair → la commande arrivait SANS police.
+- **Fiches (`ProductDetail.jsx`)** : le menu police n'a plus de choix vide, Playfair est affichée choisie ET enregistrée
+  dès que le champ s'affiche (effet `policesVides`). Le parcours guidé (carafe, vin, flûte, whisky) n'est PAS touché :
+  il gère sa police, et un MODÈLE décoré n'en a pas. Le résumé atelier n'écrit la police que s'il y a un texte.
+- **Gestion / alerte / papier** : `policeDeGravure(item)` (`src/lib/engravingSheet.js`) = police à graver dès qu'il y a un
+  texte ; si rien n'est enregistré (anciennes commandes) → « Playfair (police proposée, non changée) ». Utilisée par
+  `lignesGravure` (tableau « À graver » : fiche commande, /gestion/atelier, fiche imprimée, lots), la ligne « Police »
+  de `ReglagesItem` (écran) et l'e-mail d'alerte 🛎️. Pas de ligne police sans texte, ni en mode `modele`.
+- ⛔ Tout nouveau champ `type:"font"` hérite de ces règles : ne jamais remettre un « — Choisir — » vide sur une police.
 
 ## 🔧 FICHE ATELIER D'UN DEVIS DE REMPLACEMENT — 02/10/2026
 > Gérant, commande 0GTB1LZ5 (devis DEV-1509, remplacement de 1YPJVC5R) : « il manque la moitié des
@@ -2930,6 +2950,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   reparle ; le risque lui a été dit une fois, avec les sources.
 
 ## 🧩 PUZZLE PHOTO GRAVÉ — ✅ EN VENTE DEPUIS LE 09/10/2026 SOIR (« tu pousses aussi le puzzle »)
+> **14/10/2026 (gérant : « je peux pas faire 120 »)** : le plus grand choix est **100 pièces** (37,90 €, même identifiant
+> `puzzle-photo-120` gardé pour les paniers) — corrigé partout (fiche, accroche, description, `productInfo`, guide régénéré).
+> Photo de famille « bureau » retirée de la fiche (`puzzle-photo-bureau.jpg` plus utilisé) : la 1re photo est maintenant les enfants.
 > Mis en ligne tel que la maquette v5 : `puzzle-photo-grave` (catégorie `jeux`, rayon « Jeux en bois » en tête, aussi dans
 > « Les dernières sorties »), 24 / 48 / 80 / 120 pièces à 29,90 / 32,90 / 34,90 / 37,90 €, 21 × 15 cm, 95 g lettre suivie,
 > photo obligatoire, mention 36 mois, 4 photos `public/produits/puzzle-photo-{bureau,enfants,famille,amis}.jpg` (bureau en
@@ -3029,6 +3052,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   ~~poids pour le port~~ (75 g, reçu le 09/10) · nom de la catégorie dans le menu.
 
 ## 🗂️ ACCUEIL + UNIVERS « MÉLANGE » — ✅ APPLIQUÉE AU SITE LE 09/10/2026 SOIR (« Bah applique la maquette avec le puzzle » → « OK, vas-y »)
+
+> 🔗 **14/10/2026 — TOUTE PHOTO DE L'ACCUEIL MÈNE À LA FICHE DU PRODUIT QU'ELLE MONTRE** (gérant : « quand le client clique sur
+> une photo qui lui plaît, il faut qu'il aille directement dans le produit concerné »). Composant `LienPhoto` dans `page.jsx`
+> (lien en `display:contents` = mise en page inchangée, produit masqué = pas de lien) : cristal du héros et de l'atelier,
+> 3 photos de bijoux, couverts (Bébé & Enfant), carafe, 3 photos de Noël, verre à vin ; coffret : `photos` accepte
+> `{src, href, name}`. ⛔ **Toute nouvelle photo posée sur l'accueil doit passer par `LienPhoto`.** ⚠️ Ne pas envelopper une image
+> dans un lien sans vérifier les sélecteurs `:first-child` (cas du coffret, recalé dans `univers-site.css`). Restent volontairement
+> sans fiche : les tuiles « Pour qui / Occasion » (ce sont des choix du parcours) et les tuiles « Nos univers » (une catégorie).
 > **Version appliquée = la maquette AVEC puzzles (v8), puzzles « Bientôt », non achetables** (pas de marquage CE encore ; il n'a
 > pas répondu à « Bientôt ou en vente ? », le « vas-y » a été pris au sens de la maquette telle quelle).
 > ⏪ **POINT DE RETOUR = commit `44f2f64`** (le site tel qu'il était avant, promis au gérant : « si tu veux revenir en arrière,
@@ -3526,3 +3557,120 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > à reproduire le jour de l'« applique » : catégorie « Précommandes » à part dans le menu, file normale sans précommande, écran Précommandes avec le tableau des produits
 > (places par couleur, arrivée, « Arrivage reçu », « Prévenir les clientes » = brouillon dans Messages clients, « Rembourser »), sa propre file à 3 colonnes, bloc
 > « Précommande » sur la fiche produit (date d'arrivée + délai → phrase calculée, places par couleur), fiche atelier avec l'encadré « ne pas graver ». Ne pas la modifier sans sa demande.
+
+## ✗ PIÈCE RATÉE / À REFAIRE + CONDITIONNEMENT DANS L'ATELIER — 12/10/2026 ✅ EN LIGNE (1er déploiement en échec Firebase à 2 min 11, réussi au 2e essai c30ace8)
+> Gérant : « il faut que les packaging soient aussi dans l'Atelier de gravure… et si je grave mal et je recommence, pour chaque
+> produit commandé, un truc “raté / à refaire”, je dis combien, il faut que ça diminue le stock automatiquement ».
+- **Page Atelier** (`/gestion/atelier`) : chaque carte d'article a maintenant le bloc **📦 Conditionnement** de sa commande
+  (même composant et même fenêtre que la file de production) + le bouton **« ✗ Raté — à refaire »**.
+- **File de production** : le même bouton sous chaque article des commandes « à préparer » / « en fabrication ».
+- **Raté** (`src/components/admin/Rates.jsx`) : quantité (±), ligne de stock à baisser (proposée = celle que la commande a
+  décomptée au paiement, `o.stock` ; le verre à vin affiche la taille « 36 cl · Lot de 2 »), coût perdu prérempli
+  (`VARIANT_COSTS`, modifiable), note facultative. Enregistrer = le stock du produit baisse (jamais sous zéro ; stock non
+  suivi = rien retiré, perte gardée). « Annuler » rend exactement ce qui était sorti.
+- **Données** : section `rates` du blob (`ajouterRate` / `annulerRate` / `getRates` en fin de `stock.js`, stock lu en FRAIS),
+  API `/api/admin/materiel` (POST `rate` / `annulerRate`, le GET renvoie aussi `rates` et `stock`).
+- **Argent** : la perte est retirée du gain de la commande (bloc Conditionnement + calcul de la fenêtre) et des Bénéfices
+  (tuile « Pièces ratées », `profit = CA − achat − matériel − ratés`).
+- Vérifié : build OK · `npm run test-materiel` 17 vérifs · navigateur (commande simulée) 390 / 1280 px, atelier + file de
+  production : stock 7 → 5, perte 12,96 €, 0 erreur, 0 débordement.
+
+## 🔎 PRODUIT COMMANDÉ EN DÉTAIL DANS TOUT L'ADMIN + LIVRAISON DÉTAILLÉE — 13/10/2026 (« pousse », EN LIGNE)
+> Gérant : « dans la fiche de gravure je veux les produits en détail… comment tu veux que je sache si le verre de vin fait
+> quelle centilitres… tout le site, il faut que ça soit bien détaillé dans l'admin » + « là je choisis quoi comme mode de
+> livraison » (cristal 1P5XZKRP payé en Express Chronopost, affiché « Domicile »).
+- **`src/lib/detailProduit.js`** : `varianteCommandee` / `detailVariante` / `detaillerCommande` retrouvent la variante EXACTE
+  (1. `variantId` enregistré avec la commande, 2. lignes de stock payées `order.stock`, 3. titre unique) et donnent
+  « 47 cl · Lot de 2 ». Si rien ne tranche : « ⚠️ taille non enregistrée (36 cl ou 47 cl) : à vérifier avec la cliente ».
+- `/api/admin/orders` renvoie chaque commande passée par `detaillerCommande` → `spec[].variantDetail` + `variantId`,
+  `items[].variantDetail`. Affiché : page Atelier, fiche atelier (écran + papier), tableau « À graver », « Vendu en plus »,
+  fiche commande, file de production, fenêtre « Raté ». L'aperçu du verre (`GlassPreview`) suit enfin la bonne taille.
+- **Nouvelles commandes** : `/api/checkout` écrit la taille dans la description Stripe (« 47 cl · Lot de 2 », donc e-mails
+  et Gestion) et `variantId` dans les réglages ; l'alerte 🛎️ affiche la variante exacte.
+- **File de production** : bloc « 🚚 » sur chaque carte : mode exact payé + prix, Express en rouge « à graver EN PRIORITÉ »,
+  adresse de l'étiquette ou point relais choisi (le point relais ne s'affichait jamais : `relaisPoint` est un texte).
+- **Boxtal, rappel** : Express payé = **Chrono 18** (dépôt bureau de poste / Pickup, livré à domicile le lendemain avant 18 h),
+  jamais une offre « Relais » / « Point retrait » / « Access Point ». « Chrono 18 collecte » = enlèvement chez lui (plus cher).
+
+## 🍷 VERRE À VIN — LA TAILLE SE CHOISIT À DROITE (13/10/2026, gérant : « c'est avec les sélections à l'unité / lot de 2
+## que ça doit aller, pas avec les photos »)
+- ⛔ ANNULE la mise en page du 25/09 (« la taille se choisit sous la photo ») : le choix « Taille du verre » (36 cl / 47 cl)
+  est maintenant dans la colonne de DROITE, juste au-dessus de « Choisissez votre option » (À l'unité / Lot de 2 / Lot de 4),
+  mêmes boutons `variant-swatch` (titre + sous-titre). Cliquer change toujours la galerie et les prix des lots.
+- Seul produit EN LIGNE avec `tailles`. Le gobelet (masqué) garde ses couleurs sous les photos : c'est sa maquette validée.
+
+## 🖥️ ACCUEIL SUR TOUS LES ÉCRANS — ✅ EN LIGNE LE 13/10/2026 (« la maquette… j'aime bien, applique »)
+> Gérant, capture de son écran très large : « le bandeau commence qu'à la moitié de l'écran… l'image du bracelet c'est trop
+> zoomé… fais un autre truc ». Maquette https://claude.ai/artifact/HWThfYnqbmHH2pnqrNykLD (avant / après sur 5 largeurs).
+- **Ruban doré** : écrit 10 fois (`page.jsx`), animation 200 s (même vitesse) → plein jusqu'au bord jusqu'à ~6400 px. Avant,
+  il s'arrêtait dès 1280 px (une copie ≈ 1277 px).
+- **Bijoux** : plus de photo de fond étirée. Classe `bij2` : texte + 3 bijoux à gauche, mosaïque de 3 photos gravées à droite
+  (collier 3 cœurs porté, bracelet gravé, bracelets homme), au-dessus sur téléphone.
+- **Carafe + Noël** : contenu centré à la largeur du site (`--wrap`), fond toujours plein écran.
+- CSS dans `univers-site.css` (jamais dans `univers.css`, généré). Vérifié 390 / 1280 / 1920 / 3440 / 5120 : 0 débordement, 0 erreur.
+
+## 🏷️ ÉTIQUETTES D'ADRESSE LA POSTE — ✅ EN LIGNE LE 13/10/2026 (« pour une fois t'as bien fait, tu peux pousser »)
+> Gérant : « quand j'envoie par La Poste, j'ai pas envie d'écrire l'adresse, je veux l'imprimer… planches A4 de 20 étiquettes
+> 45 × 45 mm (4 × 5), marges haut 26, bas 26, gauche 7, droite 8 mm… je dois pouvoir choisir où imprimer si je réutilise la
+> feuille ». Maquette https://claude.ai/artifact/9K8iyXdh5NZPTi4xMdwmyZ validée.
+- **Page** Gestion → Commandes → **Étiquettes d'adresse** (`/gestion/etiquettes`) + bouton **« 🏷️ Étiquette »** sur chaque
+  commande (fiche complète et file de production, `?id=` pré-coche la commande). ① commandes à expédier (cochables ; point
+  relais / express Chronopost / retrait grisés : étiquette Boxtal ou rien) · ② expéditeur : en bas de l'étiquette / sur une
+  étiquette à part / aucun, adresse modifiable (défaut « Niv Création, 6 rue d'Armaillé, 75017 PARIS ») · ③ la feuille à
+  l'échelle : toucher une case = déjà utilisée ; les étiquettes vont sur les cases libres suivantes ; « Feuille neuve »,
+  « Décaler d'une case ». La feuille, le mode et l'expéditeur sont retenus SUR CET ORDINATEUR (localStorage `niv-etiquettes`).
+- **Impression — CORRIGÉE LE 14/10/2026** (gérant, captures iPhone : « j'imprime comment là ? … y a même pas de bouton
+  de retour ») : la 1re version ouvrait une NOUVELLE FENÊTRE ; sur son iPhone (site posé sur l'écran d'accueil) elle
+  n'avait ni retour ni impression → il restait bloqué. ⛔ **Plus jamais de `window.open` pour imprimer dans l'admin.**
+  · **iPhone / iPad** : `feuillePdf(jsPDF, places, exp)` fabrique un PDF A4 aux mêmes millimètres (préparé D'AVANCE
+    dès que la feuille change, car `navigator.share` doit partir dans le geste du doigt) → menu Partager → Imprimer.
+  · **Ordinateur** : la feuille (`feuilleHtml`, `@page` marge 0) est écrite dans un CADRE CACHÉ de la page puis
+    imprimée ; bouton « Enregistrer le PDF » en plus.
+  · Bouton « ‹ Retour aux commandes » en haut de la page et dans le bandeau « Les étiquettes sont bien sorties ? ».
+  · PDF : Helvetica (caractères d'Europe de l'Ouest ; « Ł » → « L », `textePdf`), coupure après les traits d'union.
+  · **Logo en petit (14/10/2026, « sur les tickets, tu peux mettre le logo en petit »)** : en bas à droite de chaque
+    étiquette (cadre 12 × 6,7 mm, à côté de l'expéditeur ou du n° de commande). C'est le fichier d'ORIGINE du site
+    (`IMG_6758.jpg`), servi tel quel par `/api/logo` (même adresse que le site, sinon le navigateur ne peut pas le mettre
+    dans le PDF) — aucune copie, aucune retouche. S'il ne charge pas, l'étiquette sort sans logo.
+  · **N° de commande retiré par défaut (14/10/2026, « une case sans le numéro de commande, que l'adresse et avec le
+    logo », le n° seulement « quand j'ai besoin »)** : case à cocher « Ajouter le numéro de commande » (section 2,
+    retenue sur l'appareil, `travaux(orders, mode, avecRef)`). Décochée = adresse + logo (+ l'expéditeur si choisi).
+  · Vérifié : test 29/29 + navigateur iPhone 13 et 1440 px (partage d'un PDF dans le geste, cadre caché, aucune
+    nouvelle page, 0 erreur). À conseiller : taille réelle 100 %, essai sur papier blanc contre la planche.
+- **Fichiers** : `src/lib/etiquettes.js` (pur : `FEUILLE`, `positions`, `modeEnvoi`, `adresseEtiquette` — nom via
+  `nomLivraison`, CP + VILLE en majuscules, pays hors France —, `travaux`, `placer`, `feuilleHtml`) ·
+  `src/app/gestion/etiquettes/page.jsx` · NAV `AdminShell` · CSS `.etq-*` fin de `globals.css`.
+- `npm run test-etiquettes` : 23 vérifications dont le rendu Chromium réel (20 étiquettes = 1 page, case 20 à 157 / 226 mm,
+  45 mm, aucune adresse qui déborde).
+
+## 🏷️ ÉTIQUETTES — 4 STYLES AU CHOIX (14/10/2026, « garde tout ce que tu m'as fait dans cette maquette… je changerai
+## quand j'ai envie… tu gardes l'autre version actuelle aussi »)
+- Maquette https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1 intégrée dans `/gestion/etiquettes`, encadré « ✦ Le style de
+  l'étiquette » : **Simple** (la version d'avant, inchangée) · **Écrin** (double filet doré, losange + logo centré en bas) ·
+  **Bandeau** (pied crème : logo + « Gravé pour vous dans notre atelier » + NIVCREATION.FR) · **Sobre** (coin doré,
+  « Merci pour votre commande », logo à droite). Choix retenu sur l'appareil (`niv-etiquettes.modele`).
+- Adresse toujours en noir, CP + VILLE gras majuscules ; or seulement autour ; logo d'origine en bas.
+- Code : `MODELES` / `modeleValide` / `contenuStyle` / `cssModeles()` (un seul CSS, unité `--u` = `var(--mm)` à l'écran,
+  1mm à l'impression) / `resserrerEtiquettes` (adresse longue : le texte se resserre, recopié dans la feuille imprimée) /
+  `dessinerStyle` (PDF iPhone, mêmes mesures) dans `src/lib/etiquettes.js`. `npm run test-etiquettes` : 53 vérifs.
+
+## 🛒 COMPTEUR DES PANIERS ABANDONNÉS REFAIT — 14/10/2026 (« pourquoi il y a autant d'abandons ? » → « refais le compteur »)
+- Avant (Gestion → Finances → Visiteurs) : « abandons » = clics « Ajouter au panier » − retours sur /merci → gonflé (un panier de
+  3 articles payé = 2 abandons ; une cliente qui paie sans revenir sur /merci = 1 abandon).
+- Maintenant : **ventes = vraies commandes de la boutique** (`/api/admin/analytics` lit `getSiteOrders`, hors test et devis,
+  `src/lib/statsVisites.js` → `ventesParJour`) ; **paniers et paiements = des PERSONNES**, une fois par visite (`trackOnce` →
+  événements `cart_open` / `checkout_session`, champs `cartSessions` / `checkoutSessions` de `siteAnalytics`) ;
+  `bilanPaniers` ne compte que depuis le 1er jour du nouveau compteur et sépare « partis au paiement » / « avant ».
+  L'entonnoir devient Visiteurs → Ont rempli un panier → Sont allés au paiement → Ont acheté. `npm run test-stats` (8 vérifs).
+- Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
+  (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
+
+## 📮 SUIVI DES COLIS LA POSTE DANS GESTION — 14/10/2026 (« je veux suivre aussi les colis que j'envoie à La Poste… un lien comme pour Boxtal »)
+- `src/lib/suiviColis.js` (`lienSuivi(numero)`, `estNumeroLaPoste`) : un numéro La Poste (13 caractères « chiffre + lettre +
+  11 chiffres » = lettre suivie / Colissimo, ou format international « 2 lettres + 9 chiffres + 2 lettres » = Chronopost,
+  international) ouvre `laposte.fr/outils/suivre-vos-envois?code=<n°>` ; tout autre numéro garde le lien Boxtal d'avant.
+- Branché : fiche commande (`/gestion`, « suivre sur La Poste / Boxtal »), file de production (la pastille 📦 du numéro devient
+  un lien), CRM (« 📍 Suivi La Poste / Boxtal »). Le n° se saisit comme avant (« Expédier » → numéro de suivi).
+- **Corrigé le même jour** (capture 0ZH3LP9M : « suivre sur Boxtal » sur un n° La Poste `87001500427259Z`) : format
+  « 14 chiffres + 1 lettre » reconnu La Poste ; et tout numéro NON reconnu affiche Boxtal **+ un lien La Poste à côté**.
+- `npm run test-suivi` (10 vérifs). L'e-mail « expédiée » de la cliente garde son lien parcelsapp (inchangé).

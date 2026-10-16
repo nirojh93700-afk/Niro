@@ -33,6 +33,10 @@ Coût d'achat : **3,05 €** (Montese, Metro). Livraison offerte dès 60 €.
 · marge par verre en lot de 2 : 9,40 € → **11,90 €** ;
 · garde un écart net avec le grand format 47 cl à 18,90 €.
 
+**✅ +2 € PAR VERRE LE 13/10/2026** (gérant : « Deux euros ») : **17,90 €** l'unité · **33,90 €** le lot de 2 ·
+**63,90 €** le lot de 4 (passe au-dessus des 60 € → livraison offerte). Toujours 1 € sous Verre Créations (18,90 €).
+Le 47 cl passe à **21,90 / 39,90 / 77,90 €**. Détail dans `docs/prix-historique.md`.
+
 ## 2. Verre à vin grand format ~47 cl — NOUVEAU (commande Ludovic NOEL)
 
 **Prix retenu : 18,90 € l'unité · 34,90 € le lot de 2.** Coût d'achat 3,85 €.

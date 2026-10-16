@@ -11,12 +11,16 @@
 // Gestion → Commandes : bouton « Fiche complète → ».
 // =============================================================================
 
+import { lienSuivi } from "@/lib/suiviColis";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
+import BoutonRate from "@/components/admin/Rates";
+import VarBadge from "@/components/admin/VarBadge";
+import { modeEnvoi } from "@/lib/etiquettes";
 
 const FLAGS = [
   { id: "urgent", label: "🚨 Urgent" },
@@ -29,22 +33,46 @@ const FLAGS = [
 const ACTIFS = new Set(["", "a_preparer", "en_gravure"]);
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
 
+// Jours du CALENDRIER à l'heure française (avant : tranches de 24 h depuis maintenant → une commande d'hier
+// soir regardée ce midi s'affichait « aujourd'hui » à côté de la date d'hier ; gérant, 12/10/2026).
+const JOUR_PARIS = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" });
+const numJour = (t) => Math.round(Date.parse(JOUR_PARIS.format(new Date(t)) + "T00:00:00Z") / 86400000);
 function age(iso) {
   const t = Date.parse(iso || ""); if (!t) return "";
-  const j = Math.floor((Date.now() - t) / 86400000);
+  const j = numJour(Date.now()) - numJour(t);
   if (j <= 0) return "aujourd'hui";
   if (j === 1) return "hier";
   return `il y a ${j} j`;
 }
 function dateFr(iso) {
   const d = new Date(iso || ""); if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", timeZone: "Europe/Paris" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" });
 }
 function livraison(o) {
   const m = String(o.shippingMethod || "").toLowerCase();
+  if (/express|chronopost/.test(m)) return "⚡ Express Chronopost";
   if (o.relaisPoint || m.includes("relais")) return "🏪 Point relais";
-  if (m.includes("main propre") || o.status === "remise_main_propre") return "🤝 Retrait";
+  if (m.includes("main propre") || m.includes("retrait") || o.status === "remise_main_propre") return "🤝 Retrait";
   return "🏠 Domicile";
+}
+
+// Tout le détail de l'envoi (13/10/2026, gérant : « il faut que tu me détailles tout… j'envoie à domicile ou en
+// point relais ? ») : mode exact payé, prix, et l'adresse OU le point relais à mettre sur l'étiquette.
+function DetailLivraison({ o }) {
+  const m = String(o.shippingMethod || "");
+  const express = /express|chronopost/i.test(m);
+  const relais = String(o.relaisPoint || "");
+  const a = o.shippingAddress || null;
+  const adresse = a ? [o.shippingName, a.line1, a.line2, `${a.postal_code || ""} ${a.city || ""}`.trim(), a.country].filter(Boolean).join(", ") : "";
+  const prix = Number(o.shippingPrice) > 0 ? ` · ${euro(o.shippingPrice)}` : "";
+  return (
+    <div className={`file-liv${express ? " express" : ""}`}>
+      <div className="file-liv-mode">🚚 <b>{livraison(o)}</b>{m ? <span> — {m}</span> : null}{prix && !m.includes("€") ? <span>{prix}</span> : null}</div>
+      {express ? <div className="file-liv-alerte">⚡ EXPRESS payé par la cliente : colis Chronopost à domicile, à graver EN PRIORITÉ.</div> : null}
+      {relais ? <div>📍 <b>Point relais choisi :</b> {relais}</div> : null}
+      {adresse ? <div>{relais ? "👤 Coordonnées de la cliente : " : "🏠 Adresse de l'étiquette : "}{adresse}</div> : null}
+    </div>
+  );
 }
 function estUrgent(o) { return o.immediateStart || (o.flags || []).includes("urgent"); }
 
@@ -174,13 +202,13 @@ export default function FileProductionPage() {
 
       <div className="file-cols">
         <Colonne titre="● À préparer" n={aPreparer.length} vide="Rien à préparer 🎉">
-          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} />)}
+          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} />)}
         </Colonne>
         <Colonne titre="✏️ En fabrication" n={enFab.length} vide="Aucune pièce en cours.">
-          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} />)}
+          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} />)}
         </Colonne>
         <Colonne titre="📦 Expédiées récemment" n={expediees.length} vide="Aucune expédition récente.">
-          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} compact />)}
+          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} compact />)}
         </Colonne>
       </div>
 
@@ -190,7 +218,7 @@ export default function FileProductionPage() {
         <summary>Terminées, annulées, remboursées ({terminees.length})</summary>
         <div className="file-cols" style={{ marginTop: 10 }}>
           <div className="file-col" style={{ gridColumn: "1 / -1", background: "transparent", border: "none", padding: 0 }}>
-            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} compact />)}
+            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} compact />)}
           </div>
         </div>
       </details>
@@ -207,7 +235,7 @@ function Colonne({ titre, n, vide, children }) {
   );
 }
 
-function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) {
+function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, adminKey, onMat }) {
   const [note, setNote] = useState(o.adminNote || "");
   const [editing, setEditing] = useState(false);
   const flags = o.flags || [];
@@ -230,7 +258,8 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) 
         </div>
       </div>
 
-      <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}{o.relaisPoint?.name ? ` — ${o.relaisPoint.name}` : ""}</span></div>
+      <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}</span></div>
+      {!compact ? <DetailLivraison o={o} /> : null}
 
       <ul className="file-items">
         {(() => {
@@ -249,6 +278,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) 
                   <span className="q">{it.quantity}×</span>
                   <span>
                     {it.name}
+                    {(s?.variantDetail || it.variantDetail) ? <span className="d"><VarBadge texte={s?.variantDetail || it.variantDetail} /></span> : null}
                     {!compact && details ? <span className="d">{details}</span> : null}
                     {!compact && enLot ? (
                       <>
@@ -264,6 +294,24 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) 
         })()}
       </ul>
 
+      {/* Pièce ratée / à refaire (12/10/2026) : un bouton par article tant que la commande est en cours. */}
+      {!compact && ["a_preparer", "en_gravure"].includes(statut) ? (() => {
+        const specParLigne = apparierSpec(o.items, o.spec);
+        const lignes = (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
+          .filter(({ it }) => it.slug && !/livraison|point relais|retrait/i.test(it.name || ""));
+        if (!lignes.length) return null;
+        return (
+          <div className="rt-items">
+            {lignes.map(({ it, s }, i) => (
+              <div key={i}>
+                {lignes.length > 1 ? <div className="rt-nom">{it.name}</div> : null}
+                <BoutonRate o={o} item={{ slug: it.slug, name: it.name, variantTitle: s?.variantTitle || "", variantId: s?.variantId, variantDetail: s?.variantDetail || it.variantDetail }} mat={mat} adminKey={adminKey} onSaved={onMat} />
+              </div>
+            ))}
+          </div>
+        );
+      })() : null}
+
       {!compact && o.demande ? (
         <div className="file-note-box">
           {o.demande ? <div>📋 <strong>Sur mesure :</strong> {o.demande}</div> : null}
@@ -275,7 +323,8 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) 
         {o.immediateStart ? <span className="file-chip red">⚡ Fabrication immédiate</span> : null}
         {unread ? <span className="file-chip red">📬 Nouvelle réponse</span> : null}
         {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
-        {o.tracking ? <span className="file-chip green">📦 {o.tracking}</span> : null}
+        {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking).nom})</a> : null}
+        {o.tracking && lienSuivi(o.tracking).autre ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).autre.url} target="_blank" rel="noreferrer">suivre (La Poste)</a> : null}
         {FLAGS.map((f) => (
           <button key={f.id} type="button" className={`file-chip btn${flags.includes(f.id) ? " on" : ""}`} title="Cliquer pour activer/retirer"
             onClick={() => onAnnotate(o, { flags: flags.includes(f.id) ? flags.filter((x) => x !== f.id) : [...flags, f.id] })}>
@@ -306,6 +355,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond }) 
         {statut === "a_preparer" ? <button className="btn btn-gold" disabled={busy} onClick={() => onStatus(o, "en_gravure")}>✏️ Commencer la fabrication</button> : null}
         {(statut === "a_preparer" || statut === "en_gravure") ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "expediee")}>📦 Expédiée (n° de suivi)</button> : null}
         {statut === "expediee" ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "livree")}>✓✓ Livrée</button> : null}
+        {!["annulee", "remboursee"].includes(statut) && modeEnvoi(o).ok ? <Link href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`} className="btn btn-outline">🏷️ Étiquette</Link> : null}
         <Link href={`/gestion/fiches?q=${encodeURIComponent(ref)}`} className="btn btn-outline">Fiche complète →</Link>
       </div>
     </div>

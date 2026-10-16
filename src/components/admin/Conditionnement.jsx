@@ -34,6 +34,10 @@ function Photo({ it }) {
 export function BlocConditionnement({ o, mat, onOpen }) {
   const u = mat?.usages?.[o.id];
   const items = mat?.items || [];
+  // Pièces ratées de la commande (Rates.jsx) : leur coût est retiré du gain.
+  const rates = (mat?.rates || []).filter((r) => r.orderId === o.id);
+  const perte = rates.reduce((s, r) => s + (Number(r.cout) || 0), 0);
+  const nbRates = rates.reduce((s, r) => s + (Number(r.qty) || 0), 0);
   return (
     <div className="mp-pack">
       <div className="mp-pack-h"><b>📦 Conditionnement</b><span className={`mp-pill${u ? " ok" : ""}`}>{u ? "✓ Conditionné" : "À faire"}</span></div>
@@ -45,10 +49,10 @@ export function BlocConditionnement({ o, mat, onOpen }) {
               return <span key={id}>{it.photo ? <img src={it.photo} alt="" /> : <span className="ic" />}{it.court || it.nom} ×{q}</span>;
             })}
           </div>
-          <p className="mp-cost">Matériel <b>{euro(u.matCost)}</b> · Gain de la commande <span className={u.gain >= 0 ? "g" : "r"}>{euro(u.gain)}</span></p>
+          <p className="mp-cost">Matériel <b>{euro(u.matCost)}</b>{perte ? <> · Ratés <b style={{ color: "#b32b2b" }}>−{euro(perte)}</b></> : null} · Gain de la commande <span className={u.gain - perte >= 0 ? "g" : "r"}>{euro(u.gain - perte)}</span></p>
         </>
       ) : (
-        <p className="mp-cost" style={{ color: "var(--ink-soft)" }}>Matériel non renseigné. Le gain de cette commande n&apos;est pas encore calculé.</p>
+        <p className="mp-cost" style={{ color: "var(--ink-soft)" }}>Matériel non renseigné. Le gain de cette commande n&apos;est pas encore calculé.{perte ? <> · {nbRates} pièce{nbRates > 1 ? "s" : ""} ratée{nbRates > 1 ? "s" : ""} : <b style={{ color: "#b32b2b" }}>−{euro(perte)}</b></> : null}</p>
       )}
       <button type="button" className="btn btn-gold" onClick={onOpen}>{u ? "Corriger" : "Choisir le matériel utilisé"}</button>
     </div>
@@ -93,7 +97,8 @@ export default function FenetreConditionnement({ o, adminKey, mat, onClose, onSa
   const mCost = items.reduce((s, i) => s + (sel[i.id] || 0) * (Number(i.cout) || 0), 0);
   const est = data?.estimation || { encaisse: Number(o.total) || 0, produit: 0, etiquette: 0, stripe: 0 };
   const et = Number(String(etiq).replace(",", ".")) || 0;
-  const gain = est.encaisse - est.produit - mCost - et - est.stripe;
+  const perte = (mat?.rates || []).filter((r) => r.orderId === o.id).reduce((s, r) => s + (Number(r.cout) || 0), 0);
+  const gain = est.encaisse - est.produit - mCost - et - est.stripe - perte;
   const nbSel = Object.keys(sel).length;
 
   const resteApres = (i) => (typeof i.stock === "number" ? i.stock + (deja[i.id] || 0) - (sel[i.id] || 0) : null);
@@ -184,6 +189,7 @@ export default function FenetreConditionnement({ o, adminKey, mat, onClose, onSa
             <div><span>− Matériel coché</span><span>{euro(mCost)}</span></div>
             <div><span>− Étiquette d&apos;envoi</span><span>{euro(et)}</span></div>
             <div><span>− Frais Stripe (1,5 % + 0,25 €)</span><span>{euro(est.stripe)}</span></div>
+            {perte ? <div><span>− Pièces ratées</span><span>{euro(perte)}</span></div> : null}
             <div className="t"><span>Votre gain</span><span>{euro(gain)}</span></div>
           </div>
           <label className="mp-etiq">Étiquette d&apos;envoi (€) <input inputMode="decimal" value={etiq} onChange={(e) => setEtiq(e.target.value)} /> <small style={{ color: "var(--ink-soft)" }}>estimée, à corriger avec le vrai tarif</small></label>

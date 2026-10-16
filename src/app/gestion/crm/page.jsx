@@ -7,6 +7,7 @@
 // · envoi d'e-mail à l'image de la marque · export CSV. Gratuit (données déjà là).
 // =============================================================================
 
+import { lienSuivi } from "@/lib/suiviColis";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
@@ -524,7 +525,10 @@ export default function CrmPage() {
                     <span style={{ color: col, fontWeight: 600 }}>{label}</span>
                     <span style={{ color: "var(--ink-soft)" }}>{euro(ord.total)}</span>
                     {ord.tracking && (
-                      <a href="https://shipping.boxtal.com/fr/fr/centrale-expeditions/suivi" target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} title="Ouvrir le suivi sur Boxtal">📍 Suivi Boxtal</a>
+                      <a href={lienSuivi(ord.tracking).url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} title={`Ouvrir le suivi sur ${lienSuivi(ord.tracking).nom}`}>📍 Suivi {lienSuivi(ord.tracking).nom}</a>
+                    )}
+                    {ord.tracking && lienSuivi(ord.tracking).autre && (
+                      <a href={lienSuivi(ord.tracking).autre.url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>📍 Suivi La Poste</a>
                     )}
                   </div>
                 );

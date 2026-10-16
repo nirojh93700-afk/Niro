@@ -36,12 +36,17 @@ export default function Coffret({ id = "home", titre, texte, note, pieces, photo
         <Link href={href} className="mxbtn mxbtn-gold"><span>Composer mon coffret</span><Ic n="arrow" /></Link>
         <p className="cof-note">{note}</p>
       </div>
-      <div className="cof-pics" aria-hidden="true">
-        {photos.map((src, i) => (
+      <div className="cof-pics">
+        {photos.map((ph, i) => {
+          // Une photo = une adresse, ou { src, href, name } pour mener à la fiche du produit (14/10/2026).
+          const src = typeof ph === "string" ? ph : ph.src;
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={i} src={src} alt="" loading="lazy" />
-        ))}
-        <span className={`cof-nom${live ? " live" : ""}`}>{prenom.trim() || "Léa"}</span>
+          const img = <img src={src} alt={typeof ph === "string" ? "" : ph.name || ""} loading="lazy" />;
+          return typeof ph !== "string" && ph.href
+            ? <Link key={i} href={ph.href} className="lien-photo" aria-label={ph.name}>{img}</Link>
+            : <span key={i} className="lien-photo">{img}</span>;
+        })}
+        <span className={`cof-nom${live ? " live" : ""}`} aria-hidden="true">{prenom.trim() || "Léa"}</span>
       </div>
     </div>
   );

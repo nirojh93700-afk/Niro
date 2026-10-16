@@ -24,6 +24,9 @@ import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
 import PhotosEmballage from "@/components/admin/PhotosEmballage";
 import { chargerAvecCache } from "@/components/admin/adminCache";
+import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
+import BoutonRate from "@/components/admin/Rates";
+import VarBadge from "@/components/admin/VarBadge";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -127,6 +130,15 @@ export default function AtelierPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState("");
+  // Conditionnement (matériel, comme dans la file de production) + pièces ratées (12/10/2026).
+  const [mat, setMat] = useState(null);
+  const [condOrder, setCondOrder] = useState(null);
+  const loadMat = useCallback(async (adminKey) => {
+    try {
+      const r = await fetch("/api/admin/materiel", { headers: { "x-admin-key": adminKey } });
+      if (r.ok) setMat(await r.json());
+    } catch { /* le reste de la page marche sans */ }
+  }, []);
 
   const load = useCallback(async (adminKey) => {
     setLoading(true); setError("");
@@ -145,11 +157,12 @@ export default function AtelierPage() {
       if (r.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); setLoading(false); return; }
       if (!r.ok && !r.data) { setError("Erreur de chargement."); setLoading(false); return; }
       sessionStorage.setItem("niv-admin-key", adminKey);
+      loadMat(adminKey);
     } catch {
       setError("Erreur de chargement.");
     }
     setLoading(false);
-  }, []);
+  }, [loadMat]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("niv-admin-key");
@@ -279,7 +292,7 @@ export default function AtelierPage() {
                 <div key={`${o.id}-${idx}`} style={{ border: "1px solid var(--line)", borderRadius: 12, padding: 16, margin: "14px 0", background: "#fff" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
                     <strong style={{ fontSize: "1.02rem" }}>
-                      {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+                      {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} grand />
                       {item.verre ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: "#fbf3e6", border: "1px solid #c9a24b", color: "#8a6d1f", fontSize: "0.85rem" }}>Verre {item.verre} / {item.verres}</span> : null}
                     </strong>
                     <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
@@ -352,12 +365,18 @@ export default function AtelierPage() {
                       </div>
                     )}
                   </div>
+
+                  {/* Pièce ratée : la quantité sort du stock du produit (Rates.jsx). */}
+                  <BoutonRate o={o} item={item} mat={mat} adminKey={key} onSaved={() => loadMat(key)} />
+                  {/* Conditionnement de la commande, comme dans la file de production. */}
+                  {!["annulee", "remboursee"].includes(o.status) ? <BlocConditionnement o={o} mat={mat} onOpen={() => setCondOrder(o)} /> : null}
                 </div>
               );
             })}
           </section>
         ));
       })()}
+      {condOrder ? <FenetreConditionnement o={condOrder} adminKey={key} mat={mat} onClose={() => setCondOrder(null)} onSaved={() => loadMat(key)} /> : null}
     </div>
   );
 }

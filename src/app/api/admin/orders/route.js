@@ -1,3 +1,4 @@
+import { detaillerCommande } from "@/lib/detailProduit";
 import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
@@ -14,7 +15,8 @@ export async function GET(req) {
   if (orders === null) {
     return Response.json({ orders: [], firebase: false });
   }
-  return Response.json({ orders, firebase: true });
+  // Produit exact de chaque ligne (taille du verre à vin, etc.) pour tous les écrans de Gestion (13/10/2026).
+  return Response.json({ orders: orders.map((o) => { try { return detaillerCommande(o); } catch { return o; } }), firebase: true });
 }
 
 // Met à jour le statut d'une commande (à préparer / expédiée).

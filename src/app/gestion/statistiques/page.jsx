@@ -9,6 +9,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
+import { bilanPaniers } from "@/lib/statsVisites";
 
 const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 const fmtDay = (iso) => { const [, m, d] = (iso || "").split("-"); return d && m ? `${d}/${m}` : iso; };
@@ -59,10 +60,15 @@ export default function StatsPage() {
     );
   }
 
-  const t = data?.totals || { sessions: 0, viewItem: 0, addToCart: 0, beginCheckout: 0, purchase: 0, revenue: 0 };
-  const series = data?.series || [];
+  const t0 = data?.totals || { sessions: 0, viewItem: 0, addToCart: 0, beginCheckout: 0, purchase: 0, revenue: 0 };
+  // 14/10/2026 : ventes = vraies commandes de la boutique (repli : retours sur /merci).
+  const reel = Boolean(data?.ventesReelles);
+  const t = { ...t0, purchase: reel ? (t0.ventes || 0) : t0.purchase, revenue: reel ? (t0.ventesCA || 0) : t0.revenue };
+  const series = (data?.series || []).map((d) => (reel ? { ...d, purchase: d.ventes || 0, revenue: d.ventesCA || 0 } : d));
   const conv = t.sessions > 0 ? (t.purchase / t.sessions) * 100 : 0;
-  const abandoned = Math.max(0, (t.addToCart || 0) - (t.purchase || 0));
+  // Paniers abandonnés = PERSONNES qui ont rempli un panier sans acheter (plus des clics).
+  const bilan = bilanPaniers(reel ? series.map((d) => ({ ...d, ventes: d.purchase })) : []);
+  const depuisTxt = bilan.mesure ? new Date(bilan.depuis + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
   // Chiffres du JOUR (date de Paris, même format que le compteur serveur).
   const todayIso = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
   const today = series.find((d) => d.date === todayIso) || { sessions: 0, viewItem: 0, addToCart: 0, purchase: 0, revenue: 0 };
@@ -77,7 +83,12 @@ export default function StatsPage() {
     .slice(0, 12);
 
   // Entonnoir : étapes du parcours d'achat.
-  const funnel = [
+  const funnel = bilan.mesure ? [
+    { label: "Visiteurs", value: series.filter((d) => d.date >= bilan.depuis).reduce((n, d) => n + d.sessions, 0), color: "#5b6b8a" },
+    { label: "Ont rempli un panier", value: bilan.paniers, color: "var(--gold)" },
+    { label: "Sont allés au paiement", value: bilan.paiements, color: "#b08d3a" },
+    { label: "Ont acheté", value: bilan.ventes, color: "#256b34" },
+  ] : [
     { label: "Visiteurs", value: t.sessions, color: "#5b6b8a" },
     { label: "Produits vus", value: t.viewItem, color: "#7d8aa6" },
     { label: "Ajouts au panier", value: t.addToCart, color: "var(--gold)" },
@@ -101,7 +112,7 @@ export default function StatsPage() {
           { label: "Visites", value: t.sessions },
           { label: "Achats", value: t.purchase, tone: t.purchase ? "good" : "" },
           { label: "Taux de conversion", value: conv.toFixed(1).replace(".", ",") + " %" },
-          { label: "Paniers abandonnés", value: abandoned, tone: abandoned ? "warn" : "" },
+          { label: "Paniers abandonnés", value: bilan.mesure ? bilan.abandons : "—", tone: bilan.abandons ? "warn" : "" },
         ]} />
 
       <div style={{ display: "flex", gap: 8, margin: "14px 0", flexWrap: "wrap" }}>
@@ -134,10 +145,13 @@ export default function StatsPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
             <Kpi label="Visiteurs" value={t.sessions} sub={`sur ${days} jours`} />
             <Kpi label="Produits vus" value={t.viewItem} />
-            <Kpi label="Ajouts au panier" value={t.addToCart} />
-            <Kpi label="Ventes" value={t.purchase} sub={euro(t.revenue)} />
+            <Kpi label="Clics « Ajouter au panier »" value={t.addToCart} sub="un panier de 3 articles = 3 clics" />
+            <Kpi label="Ventes" value={t.purchase} sub={`${euro(t.revenue)}${reel ? " · commandes réelles" : ""}`} />
             <Kpi label="Taux de conversion" value={`${conv.toFixed(1)} %`} sub="visiteurs → achat" />
-            <Kpi label="Paniers abandonnés" value={abandoned} sub="ajouté mais pas acheté" />
+            <Kpi label="Paniers abandonnés" value={bilan.mesure ? bilan.abandons : "—"}
+              sub={bilan.mesure
+                ? `personnes depuis le ${depuisTxt} : ${bilan.auPaiement} parties au paiement, ${bilan.avantPaiement} avant`
+                : "nouveau compteur : les chiffres arrivent avec les prochaines visites"} />
           </div>
 
           {/* Courbe des visites par jour */}
@@ -164,13 +178,14 @@ export default function StatsPage() {
           {/* Entonnoir d'achat */}
           <div className="admin-block">
             <h3 style={{ marginTop: 0 }}>Parcours d'achat (entonnoir)</h3>
+            {bilan.mesure ? <p style={{ margin: "-4px 0 10px", fontSize: "0.8rem", color: "var(--ink-soft)" }}>Des personnes (une fois par visite), depuis le {depuisTxt}. Les ventes sont les vraies commandes de la boutique (hors devis).</p> : null}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {funnel.map((f, i) => {
                 const prev = i > 0 ? funnel[i - 1].value : f.value;
                 const pct = prev > 0 ? Math.round((f.value / prev) * 100) : 0;
                 return (
                   <div key={f.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ width: 130, fontSize: "0.85rem", flexShrink: 0 }}>{f.label}</span>
+                    <span style={{ width: 150, fontSize: "0.85rem", flexShrink: 0 }}>{f.label}</span>
                     <div style={{ flex: 1, background: "#eee", borderRadius: 6, overflow: "hidden", height: 24 }}>
                       <div style={{ width: `${(f.value / funnelMax) * 100}%`, height: "100%", background: f.color, minWidth: f.value > 0 ? 24 : 0, transition: "width .3s" }} />
                     </div>

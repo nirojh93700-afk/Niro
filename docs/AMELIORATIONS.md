@@ -152,3 +152,85 @@
   Réutilisable pour tout futur arrivage (cadeaux de Noël, nouveaux modèles). ⚠️ Règle : aucune date promise.
 
 - **Précommande — ce qu'il faudra décider avant de construire (12/10/2026)** : ① paiement tout de suite (le site ne sait payer qu'au moment de la commande) ② nombre de places = quantité commandée au fournisseur (sinon stock illimité) ③ **délai de livraison à annoncer** (obligation légale : une date ou un délai, sinon 30 jours maximum, au-delà le client peut annuler — à vérifier ; en tension avec la règle « aucune date promise » dans les mails) ④ panier mixte (précommande + article en stock : un seul colis à la fin ou deux envois) ⑤ marque « précommande » dans Gestion, la file de production et la fiche atelier ⑥ message « c'est arrivé » envoyé par LUI via Messages clients (jamais automatique) ⑦ remboursement si le fournisseur ne livre pas.
+
+## 🛒 « Paniers abandonnés » de Gestion → Visiteurs : chiffre gonflé (14/10/2026, question du gérant « pourquoi autant d'abandons ? »)
+- Le chiffre = clics « Ajouter au panier » − achats (`statistiques/page.jsx`, `abandoned = addToCart − purchase`). Ce n'est PAS
+  un nombre de personnes : une cliente qui met 3 articles puis paie compte 2 « abandons » ; ajouter, retirer, ré-ajouter compte
+  à chaque fois ; ses propres essais aussi.
+- L'achat n'est compté que si la cliente revient sur la page /merci après Stripe (`track("purchase")` dans `merci/page.jsx`) :
+  une cliente qui paie puis ferme l'onglet compte comme un abandon.
+- ✅ EN LIGNE le 14/10/2026 (« refais le compteur » puis « pousse ») : voir CLAUDE.md « COMPTEUR DES PANIERS ».
+- Piste d'origine : compter les paniers PAR VISITE (une seule fois par session, comme `trackOnce`), compter l'achat
+  au webhook Stripe (côté serveur, sûr), et afficher où ils partent : panier → « Paiements lancés » → payé, plus les paniers
+  Stripe expirés (`checkout.session.expired`) qui sont les vrais abandons au paiement.
+
+## 📮 Suivi La Poste affiché DANS Gestion (proposé le 14/10/2026)
+- Aujourd'hui (en ligne le 14/10) : un numéro La Poste ouvre la page de suivi laposte.fr — aucun compte nécessaire.
+- Possible en plus : lire l'état du colis directement dans Gestion (« en cours », « livré ») et passer la commande en
+  « Livrée » toute seule, avec l'API Suivi de La Poste (gratuite, compte sur developer.laposte.fr, clé « Okapi »).
+  Le gérant met la clé lui-même en secret Firebase (`LAPOSTE_OKAPI_KEY`), jamais dans la conversation ni dans un fichier.
+  À construire seulement s'il le demande.
+
+## 💡 16/10/2026 — Plusieurs verres, une seule photo (cas 0E3Y9OBX, logo manquant)
+- **Constat** (vérifié sur les 36 commandes) : la cliente a pris le verre à vin 47 cl **« À l'unité » × 2** au lieu du **« Lot de 2 »** :
+  sur « À l'unité », la fiche n'a qu'**un seul champ photo** (une 2ᵉ image remplace la 1ʳᵉ) et le choix **« Chacun différent »**
+  n'apparaît que sur les lots. Résultat : un seul visuel enregistré pour deux verres, le logo a dû être redemandé par e-mail.
+  C'est la seule commande dans ce cas ; Olivier Chesta (cocktail, lot de 4, « Chacun différent ») a bien eu ses 4 photos.
+- **Pistes** (à proposer, rien de construit) : ① sur une fiche verre, quand la quantité passe à 2 ou plus en mode photo, afficher
+  « Des verres différents ? Prenez le lot de 2 puis “Chacun différent” » (le lot est aussi moins cher : 39,90 € au lieu de 43,80 €) ;
+  ② ou proposer « Chacun différent » aussi sur « À l'unité » quand la quantité dépasse 1 ; ③ dans Gestion, une pastille
+  « 2 verres, 1 seule photo — vérifier » sur ce genre de commande.
+- ✅ **Maquette faite le 16/10/2026** (« fais-moi la maquette des trois et alerte ») : `docs/maquettes/plusieurs-photos.html`,
+  artifact https://claude.ai/artifact/Gey5ZJW7Fh5kjyVPaajYwQ, générateur `tools/maquettes/plusieurs-photos.py <fiche capturée>
+  <.next/static/css> <photo> <sortie>` (vrai rendu de /produit/verre-a-vin-grave, 47 cl, À l'unité, mode photo, quantité 2).
+  Idée 1 encadré sous le bouton · Idée 2 « Chacun différent » sur À l'unité · Idée 3 alerte « 2 verres, 1 seule photo » dans la
+  file de production ET la fiche atelier (pour tous les produits photo). **Rien en ligne : en attente de son choix.**
+- ✅ **Onglet « Prix » ajouté le 16/10 (gérant : « le deuxième, le troisième logo est payant »)** : première image comprise,
+  **chaque verre gravé d'une image DIFFÉRENTE : +3 €** (montant PROPOSÉ, aligné sur le supplément texte des verres, à valider
+  par lui) ; un verre qui reprend la même image ne coûte rien de plus ; les textes restent +3 € chacun. Exemples dans la maquette :
+  2 verres même photo 43,80 € · photo + logo 46,80 € · lot de 4 avec 4 images 86,90 € · lot de 4 avec 2 images 80,90 €.
+  À la construction : compter les images distinctes dans `perGlass` au checkout (comme `textExtra`), affichage « +3 € » sur
+  l'onglet du verre, ligne par verre dans le résumé, la fiche atelier et le mail de confirmation.
+- ✅ **RÈGLE DE PRIX VALIDÉE PAR LE GÉRANT LE 16/10/2026 (« OK fais comme ça »)**, maquette v4 (même artifact) :
+  **verre 1 comme aujourd'hui** (image comprise, texte +3 €) ; **chaque verre suivant** : identique au verre 1 (même image,
+  même texte) = rien en plus ; **différent** (autre image et/ou autre texte) = **forfait +5 € tout compris**, image et texte.
+  Conséquence : un texte identique sur tous les verres n'est compté qu'une fois (« À l'unité × 2 » s'aligne sur le lot, où le
+  supplément est déjà ajouté une seule fois). Exemples : 2 verres photo + logo = 48,80 € · même logo + prénoms différents = 51,80 € ·
+  lot de 4 avec 4 images = 92,90 € · 6 verres tout différent = 159,40 €.
+  **Atelier (sa demande : « bien identifié, bien détaillé dans l'atelier gravure »)** : fiche atelier avec un tableau UNE LIGNE PAR VERRE
+  (vignette de l'image, texte entre guillemets, écriture, face), « Vendu en plus » qui liste verre 1 / verre 2 · différent · forfait + 5 €,
+  et la carte de la file de production qui écrit le détail par verre. Même tableau sur la fiche imprimée.
+  **Rien en ligne : attendre son « applique ».** À construire alors : « Chacun différent » dès quantité ≥ 2 sur À l'unité (idée 2),
+  forfait verre différent au checkout (comparer image + texte de chaque verre à ceux du verre 1), alerte « N pièces, 1 seule image »
+  (idée 3), tableau par verre dans `FicheAtelier` / `FichePapier` / `/gestion/atelier`, ligne par verre dans le mail de confirmation.
+- ✅ **Complément du 16/10 (gérant : « quand c'est le même verre, même logo, même texte, on met un peu plus, frais de gravure ; le client
+  doit savoir en détail ce qu'il paie »)**, maquette v5 : **verre identique au verre 1 = +2 € de frais de gravure** (montant PROPOSÉ,
+  à valider) ; verre différent toujours +5 € tout compris ; verre 1 inchangé. Le résumé de la fiche devient **« Le détail de votre
+  prix »**, ligne par ligne : « 2 verres × 21,90 € », « Verre 1 · gravure de votre photo · comprise », « Verre 1 · texte · aucun », « Verre 2 ·
+  différent : gravure du logo + texte … · + 5,00 € » ou « Verre 2 · identique au verre 1 : frais de gravure · + 2,00 € », total. Le même
+  détail doit se retrouver au panier, dans le mail de confirmation et sur la fiche atelier. ⚠️ Conséquence : un lot « identiques » avec
+  gravure coûte N−1 fois 2 € de plus qu'aujourd'hui (lot de 4 même prénom : 86,90 € au lieu de 80,90 €).
+- ✅ **Précision du gérant, 16/10 (« quatre verres identiques : un petit frais en plus, mais pas pour chaque verre, un seul frais en
+  total »)**, maquette v7 : les **frais de gravure pour les verres identiques = +2 € UNE SEULE FOIS par commande**, quel que soit le
+  nombre de verres identiques (montant proposé). Exemples : lot de 4 même prénom 77,90 + 3 + 2 = 82,90 € · 6 verres identiques
+  136,40 € · lot de 4 avec 2 images (2 verres chacune) 77,90 + 5 + 2 = 84,90 €. Le verre différent reste +5 € chacun.
+- ✅ **Dernier réglage du gérant, 16/10 (« pour deux verres identiques tu enlèves les 2 € ; à partir de quatre tu mets un frais »)**,
+  maquette v8 : verres identiques au verre 1 = **rien en plus jusqu'à 3 verres**, **+2 € de frais de gravure en tout à partir de 4 verres
+  identiques** (montant proposé). 2 identiques même prénom 46,80 € · 3 identiques 68,70 € · lot de 4 identiques 82,90 € · lot de 4 avec
+  2 images (2 verres chacune, aucune série de 4) 82,90 €. Le détail du prix écrit la ligne « Verre 2 · identique au verre 1 · 0,00 € ».
+- ✅✅ **GRILLE FINALE VALIDÉE PAR LE GÉRANT LE 16/10/2026 (« Oui c'est ça, fais la maquette »)**, maquette v10 (même artifact) — remplace
+  les essais précédents (2 € par verre, 2 € en tout, gratuit jusqu'à 3) :
+  · verre 1 : image ou logo **offert**, texte **+3 €** (le texte se paie TOUJOURS, même pour 1 ou 2 verres) ;
+  · chaque verre **différent** (autre image et/ou autre texte) : **+5 € tout compris** ;
+  · frais de gravure pour les verres **identiques**, une seule fois par commande : **1 ou 2 verres : aucun · 3 ou 4 : +2 € · 5 ou 6 : +5 €**
+    (au-delà de 6 : non tranché, 5 € par défaut à confirmer).
+  Exemples (verre à vin 47 cl) : 1 verre logo + prénom 24,90 € · 2 identiques 46,80 € · 3 identiques 70,70 € · lot de 4 identiques 82,90 € ·
+  6 identiques 139,40 €. **Rien en ligne : attendre son « applique ».**
+- ✅ **VERSION FINALE DE LA MAQUETTE, 16/10/2026 (« Fais-moi la maquette. Finale »)**, v11 : la grille de prix (image offerte · texte +3 € ·
+  verre différent +5 € · frais verres identiques 1-2 aucun / 3-4 +2 € / 5-6 +5 €) est posée dans le volet **« Personnalisation & Entretien »**
+  de chaque fiche verre (au « applique » : dans `productInfo.js` ou en bloc rendu par `ProductDetail.jsx` pour toutes les fiches verres) ;
+  le tableau d'exemples est marqué « pour toi seulement », il NE va PAS sur le site. C'est CETTE version à reproduire au « applique ».
+- 💡 Vu au passage sur la fiche verre à vin (volet « Personnalisation & Entretien », texte en ligne) : « Trois façons de personnaliser »
+  alors que la fiche en propose quatre (la photo / le logo manque), et « c'est du cristal » alors que le 47 cl n'est pas annoncé en cristal.
+  À corriger sur son mot.
+

@@ -34,6 +34,7 @@ import { eclaterParVerre } from "@/lib/orderSpec";
 import { getProductBySlug } from "@/lib/products";
 import { formatEuro } from "@/lib/format";
 import { nomLivraison } from "@/lib/nomLivraison";
+import VarBadge from "@/components/admin/VarBadge";
 
 const STATUTS = {
   a_preparer: "À préparer",
@@ -93,11 +94,11 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
     <div key={i} className="fp-visuel">
       <GlassPreview item={item} />
       <div className="fp-legende">
-        {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+        {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} />
         {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
       </div>
       <div className="fp-reglages">
-        <ReglagesItem item={item} titre={false} />
+        <ReglagesItem item={item} titre={false} police={false} />
       </div>
     </div>
   ));

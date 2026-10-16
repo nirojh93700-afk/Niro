@@ -520,7 +520,7 @@ Un souci à la réception ?
   "puzzle-photo-grave": {
     material: `Taille & Matériaux
 - Plateau en bois clair : 21 × 15 cm.
-- 24, 48, 80 ou 120 pièces, découpées au laser.
+- 24, 48, 80 ou 100 pièces, découpées au laser.
 - Votre photo gravée au laser en noir et blanc, dans notre atelier en France.`,
     usage: `Personnalisation & Entretien
 - Envoyez une photo nette et bien éclairée, les visages bien visibles. Votre photo est vérifiée par notre atelier avant la gravure.

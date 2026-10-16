@@ -1,5 +1,6 @@
 "use client";
 
+import { lienSuivi } from "@/lib/suiviColis";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
@@ -15,6 +16,9 @@ import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
 import { chargerAvecCache, viderCache } from "@/components/admin/adminCache";
 import { ongletDuChemin, cheminDeLOnglet } from "@/components/admin/ongletsGestion";
+import VarBadge from "@/components/admin/VarBadge";
+import { modeEnvoi } from "@/lib/etiquettes";
+import PreparationCommande from "@/components/admin/PreparationCommande";
 
 // Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
 // télécharge plus d'un coup le code des 15 onglets.
@@ -33,6 +37,7 @@ const ReviewsAdmin = dynamic(() => import("@/components/admin/ReviewsAdmin"), { 
 const PromoCodesAdmin = dynamic(() => import("@/components/admin/PromoCodesAdmin"), { loading: attente });
 const NewsletterAdmin = dynamic(() => import("@/components/admin/NewsletterAdmin"), { loading: attente });
 const BatThread = dynamic(() => import("@/components/admin/BatThread"), { loading: attente });
+const FenetreConditionnement = dynamic(() => import("@/components/admin/Conditionnement"), { ssr: false });
 const FicheAtelier = dynamic(() => import("@/components/admin/FicheAtelier"), { loading: attente });
 const AlertesTelephone = dynamic(() => import("@/components/admin/AlertesTelephone"), { ssr: false });
 const BoxtalCopie = dynamic(() => import("@/components/admin/BoxtalCopie"), { loading: attente });
@@ -116,6 +121,14 @@ export default function GestionPage({ onglet = "" } = {}) {
   const [quotes, setQuotes] = useState([]);
   const [vacationCfg, setVacationCfg] = useState(null);
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
+  const [mat, setMat] = useState(null);         // matériel & conditionnement + pièces ratées (13/10/2026)
+  const [condOrder, setCondOrder] = useState(null);
+  const loadMat = useCallback(async (adminKey) => {
+    try {
+      const r = await fetch("/api/admin/materiel", { headers: { "x-admin-key": adminKey } });
+      if (r.ok) setMat(await r.json());
+    } catch { /* le bloc reste « à faire » */ }
+  }, []);
   const [boxtalOpen, setBoxtalOpen] = useState(null); // id de commande dont le panneau « Envoi Boxtal » est ouvert
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -181,6 +194,7 @@ export default function GestionPage({ onglet = "" } = {}) {
           : "Le site met du temps à répondre. Touchez « Réessayer »."), { reseau: true, garde: prod.data != null });
       }
       sessionStorage.setItem("niv-admin-key", adminKey);
+      loadMat(adminKey);
       // 2) Tout le reste EN MÊME TEMPS ; un appel qui rate n'efface rien d'autre.
       const res = await Promise.all(Object.entries(appliquer).map(([u, f]) => chargerAvecCache(u, adminKey, f)));
       if (!res[1].ok && !res[1].data) setError("Les commandes n'ont pas pu être chargées. Touchez « Réessayer ».");
@@ -193,7 +207,7 @@ export default function GestionPage({ onglet = "" } = {}) {
     } finally {
       if (!nouvelEssai) setLoading(false);
     }
-  }, []);
+  }, [loadMat]);
 
   // Vérifie les nouvelles réponses des clientes (lien + e-mail Gmail) et
   // récupère la liste des commandes « non lues » pour les pastilles.
@@ -587,7 +601,7 @@ export default function GestionPage({ onglet = "" } = {}) {
   // la ligne de détails : on le sort en évidence pour ne pas graver la mauvaise
   // version. Repli sur le 1er élément des détails (toujours le nom de l'option).
   const couleurArticle = (s, it) => {
-    if (s?.variantTitle) return s.variantTitle;
+    if (s?.variantDetail || s?.variantTitle) return s.variantDetail || s.variantTitle;
     const premier = String(it.details || "").split(" — ")[0].trim();
     return premier && !premier.startsWith("Personnalisation") && !premier.startsWith("Emballage") ? premier : "";
   };
@@ -595,7 +609,10 @@ export default function GestionPage({ onglet = "" } = {}) {
   // Détails SANS la couleur (déjà affichée à part) pour éviter de la répéter.
   const detailsSansCouleur = (it, couleur) => {
     const d = String(it.details || "");
-    return couleur && d.startsWith(couleur) ? d.slice(couleur.length).replace(/^\s*—\s*/, "") : d;
+    if (couleur && d.startsWith(couleur)) return d.slice(couleur.length).replace(/^\s*—\s*/, "");
+    // Libellé détaillé (« 47 cl · Lot de 2 ») : on retire quand même l'option brute du début.
+    const premier = d.split(" — ")[0].trim();
+    return couleur && premier && couleur.includes(premier) ? d.slice(premier.length).replace(/^\s*—\s*/, "") : d;
   };
 
   // Stock prêt à afficher PAR PRODUIT (pour la page fusionnée Produits & Stock).
@@ -1166,11 +1183,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                         )}
                         <div className="co-art-body">
                           <strong>{it.quantity}× {it.name}</strong>
-                          {couleur && (
-                            <span style={{ display: "inline-block", marginLeft: 8, padding: "1px 9px", borderRadius: 999, background: "#f7ecd4", border: "1px solid #e0c88a", color: "#8a6d1f", fontSize: "0.8rem", fontWeight: 700, verticalAlign: "middle" }}>
-                              {couleur}
-                            </span>
-                          )}
+                          <VarBadge texte={couleur} />
                           {reste ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{reste}</span> : null}
                           {/* Encadré « Gravure » lisible : chaque choix sur sa ligne
                               (n° du dessin avec sa vignette, texte, police, photo). */}
@@ -1262,6 +1275,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {"\n" + o.alerteInterne}
                   </div>
                 )}
+                {/* Conditionnement + pièce ratée, comme dans la file de production (13/10/2026). */}
+                <PreparationCommande o={o} mat={mat} adminKey={key} onCond={setCondOrder} onMat={() => loadMat(key)} />
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem", position: "relative", borderColor: batUnread.includes(o.id) ? "#c9a24b" : undefined }}
                     onClick={() => { const opening = batOpen !== o.id; setBatOpen(opening ? o.id : null); if (opening) setBatUnread((u) => u.filter((x) => x !== o.id)); }}>
@@ -1289,12 +1304,18 @@ export default function GestionPage({ onglet = "" } = {}) {
                     onClick={() => setBoxtalOpen(boxtalOpen === o.id ? null : o.id)}>
                     {boxtalOpen === o.id ? "Fermer l'envoi" : "📦 Envoi Boxtal"}
                   </button>
+                  {/* Étiquette d'adresse La Poste sur planche 45 × 45 mm (13/10/2026). */}
+                  {modeEnvoi(o).ok ? (
+                    <a className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`}>🏷️ Étiquette</a>
+                  ) : null}
                 </div>
                 {boxtalOpen === o.id && <BoxtalCopie order={o} />}
                 {batOpen === o.id && <BatThread order={o} adminKey={key} />}
                 {ficheOpen === o.id && (
                   <>
                     <FicheAtelier spec={o.spec} order={o} adminKey={key} />
+                    {/* Matériel utilisé + ratés aussi dans la fiche atelier, au moment de préparer. */}
+                    <PreparationCommande o={o} mat={mat} adminKey={key} onCond={setCondOrder} onMat={() => loadMat(key)} />
                     {/* Copie destinée UNIQUEMENT au papier, placée à la racine de
                        la page (portail) : ainsi l'impression ne sort que cette
                        feuille, sans les pages blanches du reste de l'écran. */}
@@ -1331,7 +1352,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {o.tracking && (
                       <div style={{ fontSize: "0.85rem", marginBottom: 8 }}>
                         📦 Suivi : <strong>{o.tracking}</strong>{" "}
-                        <a href="https://shipping.boxtal.com/fr/fr/centrale-expeditions/suivi" target="_blank" rel="noreferrer" title="Ouvrir le suivi sur Boxtal">suivre sur Boxtal</a>
+                        <a href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Ouvrir le suivi sur ${lienSuivi(o.tracking).nom}`}>suivre sur {lienSuivi(o.tracking).nom}</a>{lienSuivi(o.tracking).autre && <> · <a href={lienSuivi(o.tracking).autre.url} target="_blank" rel="noreferrer">suivre sur La Poste</a></>}
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -1825,6 +1846,7 @@ export default function GestionPage({ onglet = "" } = {}) {
             </p>
           </>
         )}
+      {condOrder ? <FenetreConditionnement o={condOrder} adminKey={key} mat={mat} onClose={() => setCondOrder(null)} onSaved={() => loadMat(key)} /> : null}
     </div>
   );
 }

@@ -8,6 +8,7 @@
 import { optionsCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
 import PhotosEmballage from "@/components/admin/PhotosEmballage";
+import VarBadge from "@/components/admin/VarBadge";
 
 export default function OptionsVendues({ order, papier = false }) {
   if (!order) return null;
@@ -23,7 +24,7 @@ export default function OptionsVendues({ order, papier = false }) {
       {articles.map((a, i) => (
         <div key={i} className="ov-art">
           <div className="ov-nom">
-            <b>{a.quantite} × {a.nom}</b>{a.variantTitle ? <span className="ov-var"> — {a.variantTitle}</span> : null}
+            <b>{a.quantite} × {a.nom}</b><VarBadge texte={a.variantTitle} />
             {a.quantite > 1 ? <span className="ov-qte">⚠️ {a.quantite} exemplaires</span> : null}
             {a.prix ? <span className="ov-prix">{formatEuro(a.prix)}</span> : null}
           </div>

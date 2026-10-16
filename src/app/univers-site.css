@@ -14,3 +14,26 @@
    (maquette B validée par le gérant, 09/10/2026). Sur téléphone : deux produits par ligne à l'écran. */
 .mx .rail-sec .rail+.rail{margin-top:28px}
 @media (max-width:640px){.mx .rail{grid-auto-columns:calc(50% - 7px);gap:14px}.mx .rail-sec .rail+.rail{margin-top:22px}}
+/* TOUS LES ÉCRANS (13/10/2026, maquette « Accueil sur tous les écrans » validée par le gérant) :
+   1 · le ruban doré est écrit 10 fois (5 par moitié animée) → plein jusqu'au bord même à 5120 px ; durée ×5 = même vitesse.
+   2 · bijoux : plus de photo étirée en fond, texte à gauche + mosaïque de 3 bijoux gravés à droite (au-dessus sur téléphone).
+   3 · carafe et Noël : contenu centré à la largeur du site, fond toujours plein écran. */
+.mx .ruban-t{animation-duration:200s}
+.mx .limited,.mx .mxnoel{padding-left:max(var(--gut),calc((100% - var(--wrap))/2));padding-right:max(var(--gut),calc((100% - var(--wrap))/2))}
+.mx .mxband.bij2{background:var(--sand,#f3e8d3);min-height:0;padding:clamp(40px,6vw,88px) var(--gut)}
+.mx .mxband.bij2::after{display:none}
+.mx .bij2 .mxband-in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(28px,4vw,64px);align-items:center}
+.mx .bij2 .glass{width:auto;padding:0;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.mx .bij2 .glass .puce{background:#fff}
+.mx .bij2-mos{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:14px}
+.mx .bij2-mos figure{margin:0;position:relative;border-radius:20px;overflow:hidden;box-shadow:0 24px 50px -30px rgba(26,18,6,.45)}
+.mx .bij2-mos figure:first-child{grid-row:span 2}
+.mx .bij2-mos img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:1}
+.mx .bij2-mos figcaption{position:absolute;left:10px;bottom:10px;background:rgba(26,18,6,.72);color:#f3e8d3;font-size:.72rem;padding:4px 10px;border-radius:99px}
+@media (max-width:900px){.mx .bij2 .mxband-in{grid-template-columns:1fr}.mx .bij2-mos{order:-1}}
+
+/* Photos de l'accueil cliquables vers leur fiche (14/10/2026) : le lien n'a pas de boîte, la mise en page
+   ne bouge pas. Dans le coffret, chaque photo est enveloppée : on recale la 1re (pleine largeur) sur le lien. */
+.mx .lien-photo{display:contents}
+.mx .cof-pics .lien-photo img{grid-column:auto;aspect-ratio:1}
+.mx .cof-pics .lien-photo:first-child img{grid-column:1/-1;aspect-ratio:16/9}

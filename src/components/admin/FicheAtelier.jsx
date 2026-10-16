@@ -11,10 +11,11 @@ import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import { eclaterParVerre } from "@/lib/orderSpec";
-import { TableGravure } from "@/lib/engravingSheet";
+import { TableGravure, policeDeGravure } from "@/lib/engravingSheet";
 import FicheDevis from "@/components/admin/FicheDevis";
 import OptionsVendues from "@/components/admin/OptionsVendues";
 import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
+import VarBadge from "@/components/admin/VarBadge";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -112,7 +113,7 @@ function Row({ k, v }) {
 /** Les réglages d'un article, SANS le visuel ni les boutons.
  *  Exporté pour que la fiche papier (FichePapier) puisse les placer dans sa
  *  propre mise en page A4, au lieu de réimprimer la version écran. */
-export function ReglagesItem({ item, titre = true }) {
+export function ReglagesItem({ item, titre = true, police = true }) {
   if (!item) return null;
   const mv = item.modele;
   const tpl = item.modeleTemplate ? MODELES[item.modeleTemplate] : null;
@@ -120,11 +121,13 @@ export function ReglagesItem({ item, titre = true }) {
   const lay = item.layout?.modele || item.layout?.photo || item.layout?.text;
   const pCrist = getProductBySlug(item.slug);
   const crist = pCrist?.crystal3d && String(item.fields?.texte || "").trim() ? positionTexteCristal(item) : null;
+  // Police à graver, toujours dite (Playfair si la cliente a laissé celle proposée).
+  const pol = police && !mv ? policeDeGravure(item) : null;
   return (
     <>
       {titre && (
         <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+          {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} grand />
         </div>
       )}
       <Row k="Emplacement" v={item.emplacement === "fond" ? "Au fond du verre" : "Face avant"} />
@@ -142,6 +145,7 @@ export function ReglagesItem({ item, titre = true }) {
           {(layout === "classic" || layout === "stack") && mv.motif && mv.motif !== "aucun" && <Row k="Motif" v={motifLabel(mv.motif)} />}
         </>
       )}
+      {pol && <Row k="Police" v={pol.defaut ? `${pol.label} (proposée, non changée par la cliente)` : pol.label} />}
       {item.photoSrc && !mv && <Row k="Logo / photo" v="fournie par la cliente (voir visuel)" />}
       {lay?.label && <Row k="Taille / position" v={lay.label} />}
       {crist && (
@@ -197,7 +201,7 @@ function ItemSheet({ item }) {
     return (
       <div style={{ padding: "12px 0", borderTop: "1px dashed #ddd" }}>
         <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          {item.name}{item.variantTitle ? ` — ${item.variantTitle}` : ""}
+          {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} grand />
         </div>
         <div style={{ margin: "0 0 8px", padding: "8px 12px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.9rem" }}>
           ⚠️ Lot de {verres.length} verres, CHACUN DIFFÉRENT : {verres.length} photos et {verres.length} textes à graver — un verre = une gravure. Ne pas graver la même chose sur les {verres.length}.
