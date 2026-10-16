@@ -56,6 +56,21 @@
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente
+- **0E3Y9OBX (Taru Yal / livraison Fabien Guiblet, 2 verres à vin 47 cl, dessin)** : aperçu du dessin reproduit ENVOYÉ le 13/10 à 16 h 19 par le fil Aperçu/BAT (image `/api/img/QPGpw6jFMfM7mxDJeQIz`, « Bonjour, » sans prénom car le nom de la commande est celui du destinataire du cadeau). Elle a répondu le 13/10 à 16 h 32 (« Je valide » puis « modification » : « Il y a un verre comme ça et l'autre avec le logo »). Le logo n'existe nulle part chez nous (1 seule image dans la commande, aucune pièce jointe) → **demande du logo ENVOYÉE le 13/10 à 17 h 00** par le fil de la commande (« Vas-y » du gérant). Logo « Zoo Bar » reçu par e-mail le 13/10 à 17 h 26 (534 px, couleurs, damier) ; versions N&B préparées (scratchpad) puis **logo RETOUCHÉ par le gérant** envoyé en aperçu à valider le 13/10 à 19 h 31 (image `/api/img/i7LOUlRtyDjENUuGSkQX`, « Envoie »). **Logo validé par la cliente le 13/10** (« Oui parfait merci »). Réponse à sa question de date ENVOYÉE le 15/10 à 14 h 33 : colis expédié vendredi 16/10 (« envoie » du gérant) → **passer la commande en « Expédiée » avec le numéro de suivi le 16/10** (le suivi part alors tout seul). Verre 1 = dessin (validé), verre 2 = logo ; rien de plus à facturer (photo comprise, aucun texte). ⚠️ Sa question du 13/10 (date d'envoi approximative) n'a PAS encore de réponse : brouillon montré, en attente du « envoie » du gérant.
+
+- **🥃 Evan (evan2008.nat@gmail.com) — verre à whisky sur mesure (visuel complet : dessin de mains + 3 textes)** : réponse SANS prix envoyée
+  le 12/10 soir par le site, on attend SA MAQUETTE. Dès qu'elle arrive : devis à régler en ligne, prix gardé en mémoire dans
+  `docs/messages/evan-verre-whisky-sur-mesure.md` (19,90 € + 3 textes × 3 € = 28,90 € · port relais 4,90 / domicile 11,90 €),
+  à montrer au gérant avant tout envoi. Règle écrite le 12/10 en tête de CLAUDE.md : tout texte gravé est payant, même dans un visuel fourni.
+- **📦 Nollez Jessica (1PUMYQBL, bracelet cordon à plaque) — ✅ MAIL « quel nom sur le colis ? » ENVOYÉ le 12/10 par le site**
+  (texte validé de `docs/messages/nollez-1PUMYQBL-nom-livraison.md`, branche de déploiement, envoyé tel quel après vérification :
+  aucune réponse d'elle au mail du 09/10). Le mail annonce un départ DEMAIN (13/10) au nom « cipresso fybie » si elle ne répond pas :
+  surveiller sa réponse (dossier + Gmail) avant d'expédier.
+- **⭐ Mails d'avis du 12/10** : ✅ **6 ENVOYÉS** (Sophie Berardo, Mme Monhardt, Olivier Chesta, Ludovic Noel, Rose Catarino,
+  Cécilia Herrera — « envoie juste les commandes envoyées avant »). ⏳ **5 EN ATTENTE** (« pour les autres on va attendre ») :
+  Marie Randriamalaza, Anthony Giot, Laura Brimeux (expédiés le 09/10 ; Laura après son PACS du 14/10), Inès Doumi et Lorenzo
+  Franchi (colis au point de retrait depuis le 10/10). Brouillons prêts dans `docs/messages/avis-2026-10-12.md`, à envoyer sur
+  son mot. Déjà servies avant : Maëlys, Zaghini, Alicia, Ophélie, Camille, Laura Nebout, Sonia, Faustine.
 - **🍸 Prospection bars & restaurants (26/09)** : e-mail v4 SANS prix, personnalisé par type + ville
   (tarifs pro sauvegardés, sur demande) + **122 adresses** au total (lot 1 : 30, lot 2 : 92, boutons
   séparés dans l'écran) NON vérifiées (`docs/prospection/`) + écran **Restaurants & bars** ✅ **EN
@@ -253,6 +268,20 @@ En attente de SA décision :
 - ✅ Page Gestion → Matériel & emballages + bloc « Conditionnement » dans la file de production + matériel déduit dans Bénéfices.
 - ❓ À confirmer par le gérant : pochettes lin (50 ou 24 achetées ?), papier de soie (60 feuilles ?), boîtes en bois (emballage ou produit ?), portions de calage (chips ≈ 2 L, raffia ≈ 10 g), carton 25×20×15 réellement acheté (lot de 15 ou de 25), tailles du sac / de la microfibre / de la boîte allongée, stocks réels de départ.
 - 💡 Reste à proposer : lien avec Achats & factures, décompte à l'expédition, alerte « à racheter » dans le menu.
+
+## 🔖 Marque-pages en bois (précommande) — maquette du 11/10/2026, en attente de son avis
+- **12/10 soir — commande Alibaba passée** (relevé : `docs/marque-pages-commande-alibaba-2026-10-12.md`) : modèle 1 = 6 couleurs × 20,
+  modèle 2 = 4 couleurs × 10, boîtes 10 / 10 / 10, arrivée estimée le 12/12. **Décision du gérant : les prix des maquettes déjà
+  faites restent tels quels** (9,90 / 13,90 €, boîtes 4,90 / 5,90 / 7,90 €, gravure +2 €). Les deux lignes « marque-page
+  métallique » (champagne ×35) et « style papillon » (doré ×5) = **nouveaux produits, maquette PLUS TARD** quand il donnera les
+  photos. Reste à lui demander au moment voulu : places de précommande à reporter, une seule famille de boîtes pour les deux modèles.
+- Artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa : 6 couleurs (caramel, blond clair, rouge, cuivré, gris anthracite, gris sable), 9,90 € seul, dessin +2 €, texte +2 €, boîtes cadeau 1/2/4 (4,90 / 5,90 / 7,90 €, coût des boîtes à confirmer, photo de la boîte d'un à envoyer), encadré « Précommande · série limitée ».
+- À lui : donner SES dessins (numérotés), valider les prix, la formule de précommande, les noms de bois ; donner les dessins ; dire ce que sont « les boîtes » ; envoyer le modèle suivant.
+- ⚠️ Avant de commander : demander au fournisseur l'essence réelle de chaque couleur et les documents CITES (palissandre / santal rouge = annexe II).
+- Marque-pages : il doit choisir l'idée A, B, C ou D pour les couleurs d'un coffret (page `marque-pages-idees`) ; la couleur reste en haut.
+- Marque-pages : idée C (fenêtre « Composer mon coffret ») choisie et mise dans la maquette de la fiche (v8) ; reste son avis, les dessins, la photo de la boîte d'un, l'essence réelle des bois (CITES) avant commande.
+- Marque-pages modèle 2 (ajouré, oiseau et magnolia) : maquette faite le 11/10, 4 couleurs + coffret des 4 couleurs ; à confirmer : prix, coffret utilisé, texte au verso, vraie photo de la couleur Sable.
+- Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
 
 ## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)
 - `docs/maquettes/etiquette-adresse.html`, artifact https://claude.ai/artifact/Djpa5zALNmWwYzpum1YQE1.

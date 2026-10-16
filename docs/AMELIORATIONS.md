@@ -144,6 +144,15 @@
   relèvent de l'e-reporting. Source de doute : une seule source annonce un changement de la mention de franchise de TVA (art. L.223-3 CIBS).
 - Piste : adapter Gestion → Devis & factures (format Factur-X / plateforme agréée) et « Achats & factures » (factures fournisseurs reçues).
 
+## 💡 Précommande / série limitée sur une fiche produit (11/10/2026) — à proposer, rien construit
+- Marque-pages en bois (stock pas encore arrivé) : il faut pouvoir vendre AVANT réception. Aujourd'hui rien n'existe : pas de bouton
+  « Précommander », pas de compteur de places. Idée : champ produit `precommande: { message, limite }` → badge « Précommande »,
+  encadré explicatif sous le titre, bouton « Précommander », mention dans le panier, l'e-mail de confirmation et la fiche atelier
+  (« à graver à réception du stock »), compteur « N places restantes » si `limite` (stock suivi), coupe-circuit à zéro.
+  Réutilisable pour tout futur arrivage (cadeaux de Noël, nouveaux modèles). ⚠️ Règle : aucune date promise.
+
+- **Précommande — ce qu'il faudra décider avant de construire (12/10/2026)** : ① paiement tout de suite (le site ne sait payer qu'au moment de la commande) ② nombre de places = quantité commandée au fournisseur (sinon stock illimité) ③ **délai de livraison à annoncer** (obligation légale : une date ou un délai, sinon 30 jours maximum, au-delà le client peut annuler — à vérifier ; en tension avec la règle « aucune date promise » dans les mails) ④ panier mixte (précommande + article en stock : un seul colis à la fin ou deux envois) ⑤ marque « précommande » dans Gestion, la file de production et la fiche atelier ⑥ message « c'est arrivé » envoyé par LUI via Messages clients (jamais automatique) ⑦ remboursement si le fournisseur ne livre pas.
+
 ## 🛒 « Paniers abandonnés » de Gestion → Visiteurs : chiffre gonflé (14/10/2026, question du gérant « pourquoi autant d'abandons ? »)
 - Le chiffre = clics « Ajouter au panier » − achats (`statistiques/page.jsx`, `abandoned = addToCart − purchase`). Ce n'est PAS
   un nombre de personnes : une cliente qui met 3 articles puis paie compte 2 « abandons » ; ajouter, retirer, ré-ajouter compte

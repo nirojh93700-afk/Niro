@@ -1,3 +1,29 @@
+## ⛔⛔ TOUT TEXTE GRAVÉ EST PAYANT — SUR TOUT PRODUIT, MÊME DANS UN VISUEL FOURNI PAR LE CLIENT (12/10/2026, rappel du gérant : « je t'ai déjà dit, quand y a des textes… tu te fais tout le temps avoir »)
+- Un dessin / une photo / un logo = la gravure comprise dans le prix de la fiche. **Chaque texte en plus (phrase, prénoms, date) se compte au tarif
+  de la fiche** (verre à whisky : +3 € par texte ; cristal : +5 € ; gobelet : 1 élément compris puis +3 € ; bijoux : +3 € par face).
+- Ça vaut AUSSI quand le client envoie « une maquette complète » avec les textes dedans : on compte les textes comme s'ils étaient saisis
+  sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
+- Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
+
+## 🍷 VERRES : RÈGLE DE PRIX DE LA GRAVURE + FICHE ATELIER DÉTAILLÉE + SAUVEGARDE — 16/10/2026 (RIEN en ligne)
+- **Sauvegarde avant tout changement** (gérant : « avant de modifier le site tu enregistres le site actuel ») : `docs/sauvegardes/2026-10-16/`
+  sur la branche de travail = code en ligne `bcfd1c4f` + données (`/api/admin/export`, SANS les clés secrètes : GitHub les refuse, elles
+  restent dans Firestore) + 36 commandes. ⛔ Ce dossier contient des données clientes : jamais sur la branche du site. Les branches
+  nouvelles et les étiquettes git sont refusées depuis la session : la sauvegarde va sur la branche de travail.
+- **Règle de prix de gravure des verres (validée par le gérant)** : les PRIX DES VERRES NE CHANGENT PAS. Verre 1 : image / logo / modèle
+  offert, texte +3 € ; chaque verre différent +5 € tout compris ; verres identiques : rien pour 1-2, +2 € pour 3-4, +5 € pour 5-6
+  (une fois par commande, au-delà de 6 non tranché). Pour TOUS les verres : vin (maquette https://claude.ai/artifact/WKfxo5sq9QsPezi51uPdkB),
+  flûte, whisky, cocktail, Fête des pères (maquette https://claude.ai/artifact/BSTaqkB9c34WXkxBWzB6at). Hypothèses à confirmer :
+  face + fond reste +7 € par verre ; la date compte dans les 5 € d'un verre différent. Fiche plus courte : règle en une ligne
+  + « Voir les prix », détail du prix replié, texte de l'étape 2 en une phrase, description en cartes et tableaux.
+  ⛔ **Les 4 cartes « Que voulez-vous graver ? » restent TOUJOURS affichées** (gérant : « pour que les gens voient tout ce qu'on peut faire
+  pour tous les verres ») : ne pas les replier sur le choix fait.
+- **Fiche atelier : consignes rangées face par face** (gérant, commande 0XIF6DDO pendentif : « je dois graver du haut vers le bas ou en bas,
+  tout doit être détaillé ») : `src/lib/consignesGravure.js` (pur, `npm run test-consignes`) → `TableGravure` (fiche commande, page Atelier,
+  fiche imprimée) : en tête sens d'écriture avec flèche, police, emplacement face / fond ; un bloc par face, faces VIERGES comprises ;
+  autres réglages ; « Où et à quelle taille graver » en mots (layout enregistré à la commande) ; alerte si la place choisie contredit
+  l'aperçu (cristal). Commit local sur la copie du code du site, **pas poussé : attend son « pousse »**.
+
 ## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
 - Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui
   donne soit vérifié AVANT. Une date se vérifie par la commande : `TZ=Europe/Paris date` et le jour de la semaine calculé
@@ -3394,6 +3420,162 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   à la main) · décompte automatique à l'expédition · alerte « à racheter » dans le menu · pochettes lin 50 / 24, papier de soie (60 ?), boîtes bois :
   quantités et usages à confirmer par lui.
 - **11/10/2026 soir — réponses du gérant aux 6 questions du matériel** : pochettes lin = **24** (celles de 50 archivées) · papier de soie = **60** feuilles · boîtes en bois 20×10×5 = **produit à vendre**, pas du matériel (archivées) · raffia = **10 g** par utilisation · **cartons : c'est le lot de 25 (25,4 × 20,4 × 15,3 cm, 1,12 € pièce) qu'il a acheté** (lot de 15 archivé ; il avait d'abord écrit « 15 » par erreur) · tailles du sac / microfibre / boîte allongée : encore « à saisir », il les donnera. Le kit « Colis verre » et le carton « suggéré » utilisent donc `carton25`. `saveMaterielItem` accepte maintenant `sug` (suggéré par défaut).
+
+## 🔖 MAQUETTE « MARQUE-PAGES EN BOIS » — PRÉCOMMANDE, SÉRIE LIMITÉE — 11/10/2026 (en attente de son avis, RIEN en ligne)
+> Gérant : nouveaux produits dont le stock n'est PAS encore arrivé (« je vais commander ») → vendus en précommande / série limitée ;
+> marque-pages en bois, plusieurs modèles donnés un par un, personnalisables avec des dessins qu'il donnera plus tard. 1er modèle =
+> 6 bois avec pompon doré (photos Alibaba).
+- **Artifact** https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa · `docs/maquettes/marque-pages.html` (+ `.fragment.html`, non commité),
+  générateur `tools/maquettes/marque-pages.py <capture /produit/marque-pages-bois>`, photos `docs/maquettes/assets/marque-pages/`
+  (9 : 6 bois + groupe + 2 ambiances, carrées 1100 px). Méthode = celle du puzzle photo (fiche ajoutée à `products.js` EN LOCAL,
+  capturée, puis `git checkout`) : le site n'est pas touché.
+- **COULEURS, PAS ESSENCES DE BOIS (gérant, 11/10 soir : « c'est pas plutôt choisir la couleur ? regarde sur Internet, il faut que ce soit correct »)** :
+  les noms du fournisseur (Nanmu, Buis, Santal rouge, Palissandre de Birmanie, Ébène, Suanzhi) ne sont PAS fiables : l'« ébène » de la photo est
+  gris (le vrai est noir), le « suanzhi » beige-gris (le vrai est brun-rouge), le « santal rouge » vrai a un veinage noir et rouge sombre → les
+  photos sont probablement teintées. **La fiche vend 6 COULEURS : Caramel (ex « nanmu »), Blond clair (« buis »), Rouge (« santal rouge »),
+  Cuivré (« palissandre »), Gris anthracite (« ébène »), Gris sable (« suanzhi »).** ⛔ Ne JAMAIS écrire un nom d'essence sur la fiche, le
+  panier ou les e-mails tant que le fournisseur n'a pas confirmé par écrit l'essence réelle de chaque teinte. ⚠️ Risque réglementaire à
+  vérifier AVANT de commander : tous les *Dalbergia* (palissandres, « suanzhi » = bois de rose chinois) et le *Pterocarpus santalinus* (santal rouge)
+  sont en annexe II CITES (Dalbergia depuis 2017, santal rouge depuis 1994) ; un permis d'importation CITES peut être exigé à l'entrée dans l'UE
+  (pas de certificat pour vendre ensuite à l'intérieur de l'UE ; sources indirectes, texte officiel UE non lu : règlement (CE) n° 338/97 annexe B).
+  Demander au fournisseur l'essence exacte + s'il fournit les documents CITES. Sinon : choisir des bois sans risque (hêtre, bouleau, noyer, érable).
+- **v5 (11/10 soir, gérant : « les boîtes c'est pas le même prix : 4,90 € pour une boîte seule, tu calcules à partir de là, plus cher pour 2, encore plus pour 4 »)** :
+  **boîte cadeau bleu nuit : 4,90 € (1 marque-page) · 5,90 € (2) · 7,90 € (4)** — le 4,90 € est le prix qu'il donne pour la boîte d'un ; 5,90 et 7,90
+  sont MES calculs (+1 € la 2ᵉ place, +2 € de plus pour la grande boîte), à valider, coût réel des boîtes toujours inconnu. **Totaux sans gravure :
+  seul 9,90 · en boîte 14,80 · coffret de 2 = 25,70 · coffret de 4 = 47,50** ; gravure +2 € dessin / +2 € texte PAR marque-page (coffret de 4 avec
+  les deux = 63,50 €). Trois boîtes distinctes (1, 2, 4) : sa photo de la boîte « 1 » n'existe pas encore (la maquette montre la boîte de 2 à la place) →
+  lui demander la photo. ⚠️ **PORT** : une boîte rigide dépasse 3 cm → règle du site « bijou en boîte = petit colis » (6,90 € à domicile) et non lettre
+  suivie 4,90 € ; le seul marque-page reste en lettre. À trancher à la construction (le port dépend alors du format choisi, pas seulement du produit).
+  Marché relevé sur Etsy : marque-page gravé au prénom 9 à 13,50 € (9,00 · 9,80 · koala + prénom 13,50 · lot de 3 à 14,90 · photo 22,90).
+- **v6 (11/10 soir, gérant : « les photos de la boîte, tu les mets aussi ici… et les photos des marque-pages correspondants à côté des couleurs »)** :
+  chaque carte de FORMAT montre la PHOTO de sa boîte (seul = marque-page, 1 et 2 = boîte longue à 2 élastiques, 4 = boîte à 4 emplacements ; la
+  boîte à 8 emplacements n'est pas utilisée) et, dans un coffret, chaque marque-page choisit sa couleur avec des pastilles PHOTO (la photo du
+  marque-page + le nom de la couleur), plus de menu déroulant. ⚠️ Correspondance boîte ↔ nombre de marque-pages = mon hypothèse (1 et 2 → même
+  photo de boîte longue) : à confirmer, car il dit que les boîtes d'un et de deux n'ont pas le même prix. Règle générale : **un choix visuel
+  (couleur, boîte, modèle) s'affiche toujours avec sa photo, jamais en texte seul ni en menu déroulant.**
+- **v7 (11/10 soir, gérant : « quand le client choisit une couleur, ça doit changer… 4 rangées de couleurs, ça fait trop chargé, cherche une autre idée »)** :
+  recherche faite (modèle « bundle builder » : Glossier, apps Shopify Kefi / BOGOS : une couleur par produit OU une seule couleur pour tout le lot ;
+  pastilles photo plutôt que menus). **Retenu** : l'ordre devient ① FORMAT (cartes avec photo de la boîte) ② COULEUR (UNE seule rangée de pastilles photo,
+  qui s'applique à tous les marque-pages du coffret) ③ si coffret : case « Une couleur différente pour chaque marque-page » → N cases (1 par marque-page)
+  qui se remplissent en touchant les couleurs de la rangée du dessus (toucher une case la vide) ; bouton « Précommander » grisé tant qu'il manque une
+  couleur. La carte « Seul » change de photo avec la couleur choisie (et la grande photo de la galerie aussi). Plus aucune rangée de couleurs répétée.
+- **11/10 soir — v7 REFUSÉE (« c'est pas bon du tout, les mots couleurs c'est mal placé, trop en bas, c'était mieux avant »)** : la couleur doit rester
+  TOUT EN HAUT, avant le format (ordre des v1 à v5). Il demande PLUSIEURS IDÉES à choisir. Page de comparaison `docs/maquettes/marque-pages-idees.html`
+  (générateur `tools/maquettes/marque-pages-idees.py`, réutilise le CSS de `marque-pages.html`, `.fragment.html` non commité) : **A** une couleur pour tout le
+  coffret (pour mélanger : 2ᵉ coffret) · **B** + / − sur chaque couleur, jusqu'à 4, la boîte s'adapte (1 → 4,90 · 2 → 5,90 · 3 ou 4 → 7,90) ·
+  **C** fenêtre « Composer mon coffret » (cases + une rangée de couleurs, récap en photos sur la page) · **D** assortiment composé par l'atelier ou une
+  seule couleur. En attente de SON choix ; la maquette de la fiche (`marque-pages.html`, v7) n'est PAS modifiée tant qu'il n'a pas choisi
+  (il faudra alors remettre la couleur avant le format).
+- **11/10 soir — A et D REFUSÉES (« si le client veut plusieurs couleurs différentes, comment il fait ? réfléchis »)** : l'angle mort = un client qui prend
+  plusieurs couleurs veut aussi, souvent, un TEXTE DIFFÉRENT sur chacune (prénoms) ; A et D (une couleur pour tout le coffret) et même B (+/−, gravure unique)
+  ne le permettent pas. **Idée E ajoutée à la page de comparaison (même artifact)** : UN marque-page à la fois (couleur en haut, puis texte +2 € / dessin +2 €,
+  « Ajouter au panier »), chaque marque-page est une ligne du panier avec SA couleur et SA gravure ; la BOÎTE CADEAU est proposée dans le panier et s'adapte
+  au nombre de marque-pages (1 → 4,90 · 2 → 5,90 · 3 ou 4 → 7,90 · au-delà plusieurs boîtes : 5 = 4+1 → 12,80 · 6 = 4+2 → 13,80 · 8 = 4+4 → 15,80). Avantage
+  technique : réutilise le panier actuel (une ligne = un jeu de réglages), pas de nouveau mécanisme « chacun différent » ; la boîte demande une petite logique
+  de panier (produit « Boîte cadeau » ajouté selon le nombre de marque-pages). Recommandation faite : E (ou C si on veut tout régler sur la fiche). Attente de son choix.
+- **11/10 soir — IDÉE C CHOISIE (« C ») ET APPLIQUÉE À LA MAQUETTE DE LA FICHE (v8, artifact https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa)** :
+  ordre = ① COULEUR (tout en haut, une rangée de pastilles photo) ② FORMAT (cartes avec photo de la boîte) ③ gravure (texte +2 €, dessin +2 €) pour « Seul » et
+  « En boîte cadeau » (1 marque-page). **Coffret de 2 ou 4** : la gravure de la page disparaît (note explicative) et un récapitulatif en photos + bouton
+  « Composer mon coffret » ouvrent une FENÊTRE (feuille du bas) : pour CHAQUE marque-page, sa couleur (6 pastilles photo), SON texte (+2 €), SON dessin (+2 €) ;
+  l'écriture est la même pour tout le coffret ; total du coffret en direct ; « Valider mon coffret ». Par défaut tous les marque-pages ont la couleur choisie en
+  haut (changer la couleur du haut met à jour ceux qu'il n'a pas touchés) → le coffret est complet sans rien faire, la fenêtre sert à personnaliser. Ça règle
+  le cas « plusieurs couleurs ET plusieurs prénoms » sans nouveau panier. Totaux vérifiés : coffret de 2 rouge « Léa » (+dessin) + gris « Paul » = 31,70 €.
+  À la construction : la fenêtre écrit un réglage PAR marque-page dans le panier (réutiliser le bloc « Les N identiques / Chacun différent » des verres :
+  `perGlass`), la fiche atelier doit lister chaque marque-page (couleur + texte + dessin). En attente de son avis sur la maquette avant tout « applique ».
+- (v3, remplacée) boîte +3 € (1 et 2) / +4 € (4) : le gérant a dit que 1 et 2 n'ont pas le même prix.
+- (v2, remplacée) seul 6,90 €, dessin +3 €, texte +3 € : jugé trop bas par le gérant le 11/10.
+  Dessin = grille numérotée (12 cases « dessin à venir » dans la maquette, à remplacer par SES dessins). Port : lettre suivie
+  (`letter:true`, `weight: 40`, 4,90 € jusqu'à 100 g) ; un coffret de 4 reste sous 100 g à vérifier (boîte + 4 pièces).
+  Coût Alibaba ≈ 0,63 € (0,47 € dès 100, 0,43 € dès 1000) + port d'import (4,66 € pour 1 pièce).
+  À la construction : le dessin = `flatExtras` (`dessin: oui`) + `stylepicker` numéroté (`styleImages`), le texte = `textKeys`.
+- **Précommande** : badge « Précommande » + encadré doré sous le titre : « Les marque-pages sont en cours d'approvisionnement. Votre
+  commande est enregistrée dès maintenant, puis gravée à la réception du bois. Quantités limitées. » ; bouton « Précommander » dans la
+  maquette. ⛔ AUCUNE date, aucun « sous X semaines », pas de nom de fournisseur. Le mécanisme « Précommander » n'existe PAS dans le site
+  (bouton = « Ajouter au panier », le stock non suivi = illimité) → à construire si validé (voir docs/AMELIORATIONS.md).
+- **Pas de dimensions** sur la fiche (inconnues : Alibaba dit « norme ») → à mesurer à la réception. **Dessins** : emplacement non prévu
+  tant qu'il ne les a pas donnés (parcours numéroté comme les verres ensuite). Aperçu du texte sur la photo : NON fait (photos en
+  diagonale, bois non vierge « de face »).
+- **Question ouverte** : sa phrase sur « des boîtes » avec les marque-pages (boîte cadeau ? coffret ?) était illisible.
+
+## 🔖 MARQUE-PAGES — MODÈLE 2 « AJOURÉ, OISEAU ET MAGNOLIA » — MAQUETTE DU 11/10/2026 (RIEN en ligne)
+> Gérant : 4 photos (coffret de 4 couleurs + 3 marque-pages seuls) : « il me manquait une couleur, j'ai pas la photo, mais tu dois mettre les quatre couleurs
+> comme ça dans le coffret ».
+- **Artifact** à lire dans l'historique de la session ; fichiers : `docs/maquettes/marque-pages-fenetre.html` (+ `.fragment.html` non commité), générateur
+  `tools/maquettes/marque-pages-fenetre.py <capture /produit/marque-pages-fenetre-oiseau>` (dérivé de `marque-pages.py`), photos
+  `docs/maquettes/assets/marque-pages-fenetre/` (blond, roux, noir, groupe = ses photos ; **sable = RECADRÉE du coffret** : marque-page redressé, voisins masqués,
+  posé sur le fond bleu du plateau → à remplacer par la vraie photo seule quand il l'aura).
+- **Le produit** (d'après les photos, rien d'autre n'est connu) : demi-lune ajourée (croisillons de fenêtre), oiseau bleu sur branche de magnolia IMPRIMÉ en couleurs,
+  cordon brun à deux perles de verre. **4 couleurs** : Blond clair · Brun roux · Sable · Brun foncé (jamais de nom d'essence, cf. règle des couleurs du modèle 1).
+- **Formats (v2, 11/10 soir, gérant : « c'est comme pour l'autre : seul, par deux, par quatre, à l'unité… sinon tu fais deux maquettes séparées »)** : MÊMES formats, mêmes
+  prix et mêmes boîtes bleu nuit que le modèle 1 : **Seul 9,90 · en boîte 14,80 · coffret de 2 = 25,70 · coffret de 4 = 47,50** (boîte 4,90 / 5,90 / 7,90 €), même fenêtre
+  « Voir et personnaliser mon coffret » (couleur + texte au verso +2 € par marque-page, pas de dessin : recto décoré). Par défaut les marque-pages d'un coffret ont des
+  couleurs DIFFÉRENTES dans l'ordre de ses photos (coffret de 4 = les 4 couleurs). **DEUX MAQUETTES SÉPARÉES** (une par modèle, `marque-pages.html` et `marque-pages-fenetre.html`,
+  deux fiches) ; l'autre option (une seule fiche avec un choix de modèle en tête, jamais de mélange de modèles dans un coffret) est possible si il la préfère. Le coffret
+  du fournisseur (plateau bleu-gris à liseré doré) n'est plus que 7ᵉ photo de la galerie.
+  **PROPOSITIONS à valider** : prix 9,90 € comme le modèle 1 (modèle plus élaboré, marché non trouvé : seul repère = set de 4 marque-pages bois à perles 33,83 USD sur Pinkoi) ;
+  texte au verso +2 € (verso supposé uni, non vu).
+- **Coffret** : celui des photos du fournisseur (plateau bleu-gris au liseré doré, élastiques, boîte kraft à lotus dorés) ≠ les boîtes bleu nuit du modèle 1 → à confirmer
+  laquelle il utilisera. Précommande / série limitée identique au modèle 1 (aucune date, aucun fournisseur nommé).
+- **Inconnus** : dimensions, essence réelle des bois (CITES si palissandre / santal), poids, ce que donne le verso. En attente de son avis.
+
+## 📦 BOÎTES DES MARQUE-PAGES : LES ÉLASTIQUES LIENT 1, 2 OU 4 MARQUE-PAGES — CORRECTION DU 11/10/2026 (gérant : « il manque la boîte de quatre »)
+> J'avais mal lu ses 3 photos de boîtes (je n'utilisais que 2 et j'avais écarté la carrée « 8 emplacements »). **Chaque marque-page est tenu par DEUX élastiques (un en haut, un en bas)
+> → le nombre de COLONNES de fentes = le nombre de marque-pages** : boîte LONGUE à 1 colonne = **1 marque-page** · boîte à 2 colonnes (rectangle) = **2 marque-pages** ·
+> boîte CARRÉE à 4 colonnes (4 fentes en haut, 4 en bas) = **4 marque-pages**. Photos : `docs/maquettes/assets/marque-pages/boite1.jpg` (1), `boite2.jpg` (2), `boite4.jpg` (4), idem
+> dans `marque-pages-fenetre/`. Les deux maquettes utilisent maintenant la bonne boîte sur chaque carte de format et dans la galerie (3 photos de boîtes, plus 2 « 8 emplacements » : supprimée).
+> Prix 4,90 / 5,90 / 7,90 € inchangés (à valider). Modèle 2 : la vraie photo de la couleur Sable (marque-page pâle, boîtes kraft à lotus) remplace le recadrage du coffret.
+
+> **12/10/2026 — photos du modèle 2 remplacées (gérant : « remplace les deux autres par cela »)** : `sable.jpg` = marque-page gris-beige sur boîtes kraft à lotus dorés
+> (remplace la photo plus jaune posée le 11/10 soir, qui ressemblait en fait au Blond clair) et `noir.jpg` = Brun foncé (nouvelle photo, même décor). Le Blond clair et le Brun roux
+> gardent leurs photos. Artifact du modèle 2 republié (même lien). La photo jaune pâle (`42190699`) n'est plus utilisée nulle part.
+
+> **12/10/2026 — PRIX DU MODÈLE 2 : 12,90 € (gérant : « celui-là tu dois mettre un peu plus cher que l'autre, c'est plus travaillé, il y a même un dessin »)** — le modèle 1 reste à 9,90 €.
+> Choisi par moi : +3 €, au-dessus du seul repère trouvé (Nature & Découvertes, marque-page bois imprimé simple 10,95 € ; aucun marque-page ajouré + imprimé comparable
+> trouvé). **Totaux modèle 2 sans gravure : seul 12,90 · en boîte 17,80 · coffret de 2 = 31,70 · coffret de 4 = 59,50** (boîtes 4,90 / 5,90 / 7,90 € inchangées), texte +2 € par marque-page.
+> À valider par lui. Générateur : constante `PU = 12.9` dans `tools/maquettes/marque-pages-fenetre.py` (le « 9,90 » de la capture est remplacé ; attention, le site écrit « 9,90\u00a0€ »
+> avec une espace insécable).
+
+> **12/10/2026 — PRIX DU MODÈLE 2 FIXÉ PAR LE GÉRANT : 13,90 €** (il a écrit « mais 14,90 € » puis, aussitôt, « 13,90 € » — c'est 13,90 qui compte ; remplace mon 12,90 ci-dessus). Modèle 1 : 9,90 €.
+> **Totaux modèle 2 sans gravure : seul 13,90 · en boîte 18,80 · coffret de 2 = 33,70 · coffret de 4 = 63,50** (boîtes 4,90 / 5,90 / 7,90 € inchangées), texte +2 € par marque-page.
+> Constante `PU = 13.9` dans `tools/maquettes/marque-pages-fenetre.py`.
+
+## ✅ LES DEUX MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 12/10/2026 (« Enregistre les deux maquettes ») — RIEN en ligne
+- **Modèle 1 « pompon doré »** : https://claude.ai/artifact/SVdzg13dw99fmeg1DSaYUa (version 9) · `docs/maquettes/marque-pages.html` · générateur `tools/maquettes/marque-pages.py` · 6 couleurs, 9,90 €.
+- **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/NvwXjxdShBw6a3sz5pdgkW (version 6) · `docs/maquettes/marque-pages-fenetre.html` · générateur `tools/maquettes/marque-pages-fenetre.py` · 4 couleurs, **13,90 €**.
+- Comparaison des idées de coffret (A à E) : https://claude.ai/artifact/64dwiXNn66qkXYBSVJxkZf (idée C choisie, voir plus haut). C'est CETTE version de chaque maquette à reproduire le jour de l'« applique », sans la modifier avant.
+- ⚠️ **AVANT TOUT PUSH** : les 3 `.html` complets (3 + 3,6 + 1,7 Mo, photos intégrées) ont été commités PLUSIEURS FOIS en local (16 commits d'avance, `.git` = 532 Mo) ; la règle du 10/10 dit « garder le dépôt sous ~440 Mo » (déploiements Firebase en échec au-delà). Vérifier la taille et retirer ces `.html` de l'historique local (ils se régénèrent avec les générateurs + la capture) AVANT de pousser.
+- ⛔ **Précommande : RIEN n'existe dans le site** (voir `docs/AMELIORATIONS.md`) ; le gérant a demandé le 12/10 comment ça fonctionne → explication donnée, décisions à prendre (paiement, places limitées, délai annoncé légalement, panier mixte).
+
+## ⏳ MAQUETTE « PRÉCOMMANDE — CÔTÉ GESTION » — 12/10/2026 (« Fais la maquette de la partie Gestion ») — RIEN en ligne
+- Générateur `tools/maquettes/precommande-gestion.py <dossier css du site> <sortie>` (le dossier css = les 3 feuilles de nivcreation.fr, comme la maquette
+  Matériel ; vraies classes `.ash-*` / `.file-*` / `.dash-chip`, seul `.pc-*` est neuf ; `.fragment.html` non commité). Photos = `docs/maquettes/assets/marque-pages/`.
+  Testée Chromium 390 / 1280 : 0 débordement, 0 erreur JS, les 4 écrans joués (places, arrivage reçu, message, fiche atelier).
+- **4 écrans** : ① **Fiche produit** (Produits & stock → panneau) : bloc « ⏳ Précommande » = case « Vendre en précommande », date d'arrivée prévue, délai de gravure
+  après l'arrivée (5 / 7 / 10 j) → la phrase que lit le client est CALCULÉE (« Expédition à partir du <arrivée + délai> », jamais plus précise), **places par couleur**
+  (= quantité commandée au fournisseur ; vendues / restantes ; couleur à 0 grisée sur la fiche, tout à 0 = plus de bouton), aperçu de ce que voit le client ·
+  ② **File de production** : colonne « ⏳ Précommandes · en attente » AVANT « À préparer », bandeau d'alerte, KPI « places restantes », cartes avec chip
+  « ⏳ Précommande · arrivage prévu le … », une ligne PAR marque-page (couleur + texte + dessin, idée C) et « Commencer la fabrication » GRISÉ · ③ **Précommandes**
+  (nouvel écran sous Commandes) : une ligne par produit (places vendues / restantes, barre, encaissé, « presque épuisé »), bouton **« Arrivage reçu »** (passe toutes les
+  commandes en « À préparer », fiche remise en vente normale, case décochée), « Prévenir les clientes » (= brouillon ouvert dans Messages clients, une cliente à la
+  fois, JAMAIS automatique), « Rembourser une précommande » (seul cas : le fournisseur ne livre pas ; depuis la commande, Stripe ; la règle « jamais remboursé » ne
+  vaut pas tant que rien n'est gravé) · ④ **Fiche atelier** : encadré rouge « ⏳ PRÉCOMMANDE — ne pas graver avant l'arrivage » (vert « à graver » après l'arrivage),
+  « Vendu en plus » (boîte, textes, dessin), tableau une ligne par marque-page (couleur avec photo, texte en Allura, dessin, écriture).
+- **Décisions prises dans la maquette (à valider)** : paiement immédiat · places par couleur · délai affiché calculé et large (jamais de date fine) · stock = places ·
+  mail de confirmation reprend la phrase de la fiche · aucun envoi automatique à l'arrivage · remboursement seulement si le fournisseur fait défaut.
+- **Reste ouvert** : panier mixte (précommande + article en stock : un colis à la fin ou deux envois ?) · prix de la boîte au port (boîte rigide = colis 6,90 €) ·
+  vérifier le délai légal (date ou délai obligatoire ; 30 jours sinon). À la construction : champ produit `precommande:{arrivee, delaiJours, places:{couleur:n}}`,
+  statut de commande `precommande` (avant `a_preparer`), action admin « arrivage-recu », `catalogAudit` signale une précommande dont la date d'arrivée est dépassée.
+
+> **v2 (12/10, gérant : « tu mets toutes les précommandes dedans, tu mélanges pas avec les commandes normales, tu fais une nouvelle catégorie dans admin » + « touche pas
+> le site »)** : « Précommandes » devient une CATÉGORIE À PART du menu de Gestion (groupe « Précommandes » : écran Précommandes + « Produits en précommande »), entre
+> Commandes et Catalogue. La file de production NORMALE ne montre plus jamais une précommande (juste une ligne grise « 3 précommandes sont rangées à part → Ouvrir
+> Précommandes »). L'écran Précommandes a SA PROPRE FILE à 3 colonnes : ⏳ En attente d'arrivage → À préparer (arrivées) → Expédiées ; « Arrivage reçu » déplace les cartes
+> dans la 2ᵉ colonne de CE MÊME écran (jamais vers la file normale) ; les précommandes expédiées restent là aussi. Même artifact (version 2). Le site n'est pas touché.
+
+> ✅ **ENREGISTRÉE TELLE QUELLE LE 12/10/2026 (« Enregistre la maquette », version 2 de l'artifact https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw)**. C'est CETTE version
+> à reproduire le jour de l'« applique » : catégorie « Précommandes » à part dans le menu, file normale sans précommande, écran Précommandes avec le tableau des produits
+> (places par couleur, arrivée, « Arrivage reçu », « Prévenir les clientes » = brouillon dans Messages clients, « Rembourser »), sa propre file à 3 colonnes, bloc
+> « Précommande » sur la fiche produit (date d'arrivée + délai → phrase calculée, places par couleur), fiche atelier avec l'encadré « ne pas graver ». Ne pas la modifier sans sa demande.
 
 ## ✗ PIÈCE RATÉE / À REFAIRE + CONDITIONNEMENT DANS L'ATELIER — 12/10/2026 ✅ EN LIGNE (1er déploiement en échec Firebase à 2 min 11, réussi au 2e essai c30ace8)
 > Gérant : « il faut que les packaging soient aussi dans l'Atelier de gravure… et si je grave mal et je recommence, pour chaque
