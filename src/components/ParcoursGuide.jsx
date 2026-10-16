@@ -15,6 +15,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
+import { engravingExtra } from "@/lib/engravingPrice";
 import { parcoursEtat, modeleChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
 import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
 
@@ -82,8 +83,15 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
     setGrilleOuverte(false);
   }
 
-  // Verres (règle de prix du 16/10/2026) : le texte se paie toujours (+3 €), y compris les prénoms.
-  const RV = Boolean(product.regleVerres);
+  // Verres (règle de prix du 16/10/2026) : le texte se paie toujours, prénoms compris.
+  // Le prix écrit à côté d'une case est LU dans le calcul du paiement (engravingPricing) : jamais un
+  // « +3 € » écrit à la main qui pourrait ne plus correspondre à ce qui est payé (gérant, 16/10/2026).
+  const prixDe = (k, ctx = {}) => {
+    const a = engravingExtra(product, { ...ctx }).amount || 0;
+    const b = engravingExtra(product, { ...ctx, [k]: "x" }).amount || 0;
+    return Math.round((b - a) * 100) / 100;
+  };
+  const ep = (n) => `+${Number.isInteger(n) ? n : n.toFixed(2).replace(".", ",")} €`;
   // Conseils photo : s'ouvrent quand la cliente touche « Choisir une photo » (gérant, 16/10/2026).
   const guide = cfg.guidePhoto || GUIDE_PHOTO_GRAVURE;
   const grille = Object.keys(modeles).map(Number).sort((a, b) => a - b);
@@ -98,7 +106,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   // (sinon le champ perdrait le focus à chaque frappe).
   const commun = E ? (
     <>
-      <div className="field"><label>Date <span className="prc-opt">(facultatif, +3 €)</span></label>
+      <div className="field"><label>Date <span className="prc-opt">(facultatif{prixDe(dateKey, { mode: "texte", texte: "x" }) ? `, ${ep(prixDe(dateKey, { mode: "texte", texte: "x" }))}` : ""})</span></label>
         <input type="text" maxLength={dateMax} placeholder="Ex : 12.06.2024" value={fieldValues[dateKey] || ""} onChange={(e) => set({ [dateKey]: e.target.value })} /></div>
       {cfg.decors?.length > 0 && (
         <div className="field"><label>Décor autour du texte <span className="prc-opt">(facultatif)</span></label>
@@ -237,7 +245,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     const F = PARCOURS_CHAMPS[k];
                     return (
                       <div className="field" key={k}>
-                        <label>{F.label}<span className="prc-opt"> (facultatif{(F.extra || (RV && F.key === "prenom" ? 3 : 0)) ? `, +${F.extra || 3} €` : ""})</span></label>
+                        <label>{F.label}<span className="prc-opt"> (facultatif{prixDe(F.key, { mode: "modele" }) ? `, ${ep(prixDe(F.key, { mode: "modele" }))}` : ""})</span></label>
                         <input type="text" maxLength={F.max} placeholder={F.ph} value={fieldValues[F.key] || ""} onChange={(e) => set({ [F.key]: e.target.value })} />
                       </div>
                     );
@@ -260,7 +268,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     ))}
                   </div>
                   <div className="prc-fields">
-                    <div className="field"><label>Prénom dans la bande <span className="prc-opt">(facultatif{RV ? ", +3 €" : ""})</span></label>
+                    <div className="field"><label>Prénom dans la bande <span className="prc-opt">(facultatif{prixDe("prenom", { mode: "lettre" }) ? `, ${ep(prixDe("prenom", { mode: "lettre" }))}` : ""})</span></label>
                       <input type="text" maxLength={20} placeholder="Ex. Stephan" value={fieldValues.prenom || ""} onChange={(e) => set({ prenom: e.target.value })} /></div>
                     <div className="field"><label>Écriture du prénom</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>
                   </div>
@@ -273,12 +281,12 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
             <div className="prc-mode">
               <div className="prc-one">
                 <div className="prc-fields">
-                  <div className="field"><label>Votre texte à graver{(E || RV) ? <span className="prc-opt"> (+3 €)</span> : null}</label>
+                  <div className="field"><label>Votre texte à graver{prixDe("texte", { mode: "texte" }) ? <span className="prc-opt"> ({ep(prixDe("texte", { mode: "texte" }))})</span> : null}</label>
                     <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · Pour Papa · Merci"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} />
                     <span className="prc-count">{(fieldValues.texte || "").length}/{texteMax}</span></div>
                   {commun || (
                     <>
-                      <div className="field"><label>Date ou année <span className="prc-opt">(facultatif, +3 €)</span></label>
+                      <div className="field"><label>Date ou année <span className="prc-opt">(facultatif{prixDe("date", { mode: "texte", texte: "x" }) ? `, ${ep(prixDe("date", { mode: "texte", texte: "x" }))}` : ""})</span></label>
                         <input type="text" maxLength={20} placeholder="Ex. 1989 · 09.09.25" value={fieldValues.date || ""} onChange={(e) => set({ date: e.target.value })} /></div>
                       <div className="field"><label>Écriture</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>
                     </>
@@ -295,7 +303,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                 <div className="prc-fields">
                   <div className="field"><label>Votre photo ou logo</label>
                     <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} guide={guide} /></div>
-                  <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{(E || RV) ? ", +3 €" : ""})</span></label>
+                  <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{prixDe("texte", { mode: "photo" }) ? `, ${ep(prixDe("texte", { mode: "photo" }))}` : ""})</span></label>
                     <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · 1989"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} /></div>
                   {commun || (fieldValues.texte && <div className="field"><label>Écriture du texte</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>)}
                 </div>

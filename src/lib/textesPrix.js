@@ -3,13 +3,12 @@
 // ailleurs », après une case « Texte sous la photo » sans prix écrit).
 // Pour chaque case de texte d'une fiche, option par option, on compare :
 //   · ce que le PAIEMENT fait payer (engravingExtra, le même calcul que /api/checkout) ;
-//   · ce que la FICHE écrit à côté de la case (« +3 € » dans le libellé, ou le libellé du parcours guidé).
+//   · ce que la FICHE écrit à côté de la case (« +3 € » dans le libellé du champ).
 // Deux anomalies : « payé sans prix affiché » et « prix affiché mais pas payé ».
 // Pur (aucun accès réseau), utilisé par la surveillance du catalogue (catalogAudit.js) et testé par
 // `npm run test-textes-prix`.
 // =============================================================================
 import { engravingExtra } from "./engravingPrice.js";
-import { PARCOURS_CHAMPS } from "./parcoursGuide.js";
 
 const TEXTE = new Set(["text", "textarea"]);
 // Cases de texte que le parcours guidé dessine lui-même (son propre libellé, pas celui du champ).
@@ -46,8 +45,6 @@ export function controleTextesPrix(product) {
   if (!product || !Array.isArray(product.personalizationFields)) return out;
   const vars = Array.isArray(product.variants) && product.variants.length ? product.variants : [{ id: null, title: "" }];
   const cfg = product.parcoursGuide || null;
-  const RV = Boolean(product.regleVerres);
-  const E = Boolean(cfg?.emplacement);
   const vus = new Set();
   const noter = (cle, libelle, v, paye, affiche) => {
     const k = `${cle}|${libelle}|${paye > 0}|${affiche}`;
@@ -66,26 +63,9 @@ export function controleTextesPrix(product) {
       if (!visibleDans(f, v)) continue;
       noter(f.key, f.label || f.key, v, supplement(product, v, contexteDu(f), f.key), prixDans(f.label));
     }
-    // 2. Parcours guidé : mêmes règles d'affichage que ParcoursGuide.jsx.
-    if (cfg) {
-      const cles = new Set(product.personalizationFields.map((f) => f?.key));
-      // Seuls les champs qu'au moins un modèle demande s'affichent (table `champs` des modèles).
-      const demandes = new Set();
-      for (const m of [...Object.values(cfg.modeles || {}), ...(cfg.modelesPhoto || [])]) for (const ch of m?.champs || []) demandes.add(ch);
-      for (const [id, F] of Object.entries(PARCOURS_CHAMPS)) {
-        if (!demandes.has(id) || !cles.has(F.key)) continue;
-        const affiche = Boolean(F.extra || (RV && F.key === "prenom"));
-        noter(F.key, F.label, v, supplement(product, v, { mode: "modele" }, F.key), affiche);
-      }
-      if (cles.has("prenom")) noter("prenom", "Prénom dans la bande (lettre fleurie)", v, supplement(product, v, { mode: "lettre" }, "prenom"), RV);
-      // Date du mode « texte » (et du bloc commun du verre à whisky) : toujours écrite « +3 € ».
-      const dateKey = cfg.dateKey || "date";
-      if (cles.has("texte") && cles.has(dateKey)) noter(dateKey, "Date ou année", v, supplement(product, v, { mode: "texte", texte: "Test" }, dateKey), true);
-      if (cles.has("texte")) {
-        noter("texte", "Votre texte à graver", v, supplement(product, v, { mode: "texte" }, "texte"), E || RV);
-        noter("texte", "Texte sous la photo", v, supplement(product, v, { mode: "photo" }, "texte"), E || RV);
-      }
-    }
+    // 2. Parcours guidé : ses libellés (« +3 € ») sont CALCULÉS par ParcoursGuide.jsx avec engravingExtra
+    //    (prixDe) depuis le 16/10/2026 → ils ne peuvent pas diverger du paiement. Le test
+    //    `npm run test-textes-prix` vérifie qu'aucun prix n'y est réécrit à la main.
   }
   return out;
 }
