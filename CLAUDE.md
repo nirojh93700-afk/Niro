@@ -16,6 +16,9 @@
   flûte, whisky, cocktail, Fête des pères (maquette https://claude.ai/artifact/BSTaqkB9c34WXkxBWzB6at). Hypothèses à confirmer :
   face + fond reste +7 € par verre ; la date compte dans les 5 € d'un verre différent. Fiche plus courte : règle en une ligne
   + « Voir les prix », détail du prix replié, texte de l'étape 2 en une phrase, description en cartes et tableaux.
+  ✅ **Description « comme le verre à vin » (cartes + tableau « Bon à savoir » + volet en tableau, fautes corrigées) : SEULEMENT LES VERRES**
+  (vin, flûte, whisky, cocktail, Fête des pères). ⛔ Pas pour les autres produits (gérant : « laisse tomber… que pour les verres ») ;
+  les bijoux et les autres fiches gardent leur présentation. La maquette des 43 fiches (`descriptions-tout.html`) est ABANDONNÉE.
   ⛔ **Les 4 cartes « Que voulez-vous graver ? » restent TOUJOURS affichées** (gérant : « pour que les gens voient tout ce qu'on peut faire
   pour tous les verres ») : ne pas les replier sur le choix fait.
 - **Fiche atelier : consignes rangées face par face** (gérant, commande 0XIF6DDO pendentif : « je dois graver du haut vers le bas ou en bas,

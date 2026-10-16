@@ -61,12 +61,84 @@ def fin_div(h, i):
         if n == 0: return i + m.end()
     raise ValueError("div non fermé")
 
+
+# Descriptions et volets au format du verre à vin (16/10/2026, gérant : « tu fais comme pour le verre de vin, que pour les verres,
+# la description et tout »). Fautes corrigées : flûte « n° 1 à 19 » (40 modèles) et « dans chaque taille » (une seule taille),
+# whisky « une face du verre » (face, fond ou les deux).
+def _carte(t, x, n=None):
+    return '<div class="pd2-way">%s<b>%s</b></p><span>%s</span></div>' % (('<p class="pd2-wt"><i>%d</i>' % n) if n else '<p class="pd2-wt">', t, x)
+def _desc(lead, occ, verre, titre_f, facons, savoir):
+    return ('<div class="product-desc pd2"><p class="pd2-lead"><strong>%s</strong></p><p class="pd2-occ">%s</p>'
+      '<h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>%s</b><span>%s</span></div></div>'
+      '<h3>%s</h3><div class="pd2-ways">%s</div>'
+      '<h3>Bon à savoir</h3><table class="pd2-spec"><tbody>%s</tbody></table></div>') % (
+        lead, occ, verre[0], verre[1], titre_f, "".join(_carte(t, x, i + 1) for i, (t, x) in enumerate(facons)),
+        "".join("<tr><th>%s</th><td>%s</td></tr>" % r for r in savoir))
+def _volet(rows):
+    return '<table class="pd2-spec pd2-vol"><tbody>%s</tbody></table>' % "".join("<tr><th>%s</th><td>%s</td></tr>" % r for r in rows)
+EMPL = ("Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.")
+COMMUN = [("Gravure", "Gravure laser permanente : elle résiste au lave-vaisselle."),
+          ("Aperçu", "L’aperçu de votre gravure s’affiche sur le verre avant de commander."),
+          ("Emballage", "Emballage protégé, gravé en France dans notre atelier.")]
+TEXTES = {
+ "flute-a-champagne-gravee": dict(
+   tagline=("Une flûte à champagne gravée à votre façon : un modèle (n°1 à 19), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
+            "Une flûte à champagne gravée à votre façon : un modèle, une lettre fleurie, votre texte, votre photo ou votre logo."),
+   desc=_desc("Une flûte à champagne gravée à votre façon, dans notre atelier.",
+     "Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire.",
+     ("21 cl", "flûte à champagne, Ø 6,3 × H 21,4 cm."), "Quatre façons de la graver",
+     [("Un modèle", "40 modèles numérotés, avec vos prénoms si vous le souhaitez."),
+      ("Une lettre fleurie", "votre initiale, avec un prénom au milieu."),
+      ("Votre texte", "un prénom, une date, un message, dans l’une de nos 8 écritures."),
+      ("Votre photo ou votre logo", "un dessin, une photo, le logo de votre bar ou de votre entreprise.")],
+     [("Formats", "À l’unité, par 2 ou par 4.")] + COMMUN + [("Livraison", "Livraison offerte dès 60 € d’achat.")]),
+   volet=_volet([("Gravure", "Quatre façons de graver : un modèle (40 modèles numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo. L’aperçu se met à jour pendant que vous choisissez."),
+                 ("Modèles", "Sur un modèle, les prénoms et la date sont gravés dans l’écriture du modèle."),
+                 ("Entretien", "Va au lave-vaisselle : la gravure ne bouge pas. Manipulez le pied avec précaution, il est fin.")])),
+ "verre-a-whisky-grave": dict(tagline=None,
+   desc=_desc("Votre photo gravée sur un verre à whisky.",
+     "Un portrait, une photo de famille, un souvenir. Idéal pour la Fête des pères, un anniversaire, un cadeau de couple ou d’entreprise.",
+     ("30 cl", "verre à whisky à base épaisse, hauteur ≈ 9 cm."), "Deux façons de le graver",
+     [("Votre photo ou votre logo", "transformé en gravure façon dessin, retravaillé à la main par notre atelier, avec un texte dessous si vous le souhaitez."),
+      ("Votre texte", "un prénom, une date, un message, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.")],
+     [("Formats", "À l’unité, par 2 ou par 4."), EMPL] + COMMUN + [("Livraison", "Livraison offerte dès 60 € d’achat.")]),
+   volet=_volet([("Gravure", "Votre photo, votre logo ou votre texte, dans la police de votre choix. L’atelier vérifie la qualité de la photo avant de graver."),
+                 EMPL,
+                 ("Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude).")])),
+ "verre-a-cocktail-grave": dict(tagline=None,
+   desc=_desc("Un verre à cocktail professionnel, gravé à votre façon.",
+     "Un cadeau qui change du whisky : apéritif entre amis, EVJF, anniversaire, crémaillère ou cadeau d’entreprise.",
+     ("17 cl", "verrerie professionnelle, forme haute, hauteur ≈ 12,5 cm, Ø ≈ 5,2 cm."), "Deux façons de le graver",
+     [("Votre photo ou votre logo", "celui de votre bar, de votre restaurant ou de votre entreprise, avec un texte dessous si vous le souhaitez."),
+      ("Votre texte", "un prénom, une date, une phrase, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.")],
+     [("Formats", "À l’unité, par 2 ou par 4."), EMPL] + COMMUN + [("Livraison", "Livraison offerte dès 60 € d’achat.")]),
+   volet=_volet([("Gravure", "Photo, dessin, logo ou texte au choix, dans la police de votre choix."),
+                 EMPL,
+                 ("Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude).")])),
+ "verre-a-whisky-fete-des-peres": dict(tagline=None,
+   desc=_desc("Le verre à whisky que vous composez vous-même.",
+     "Idéal pour la Fête des pères, un anniversaire, un cadeau de couple ou un souvenir.",
+     ("30 cl", "verre à whisky à base épaisse, hauteur ≈ 9 cm."), "Comment le graver",
+     [("Un modèle", "Route 66, The Bourbon Room, colombes et cœur, « élu Papa de l’année »… avec vos textes et la police de chaque ligne."),
+      ("Une lettre fleurie", "votre initiale, en option."),
+      ("Au fond du verre", "un texte ou un dessin, vu à travers le verre.")],
+     [("Format", "À l’unité.")] + [EMPL] + COMMUN),
+   volet=_volet([("Gravure", "Composez vos lignes, choisissez la police et le motif : l’aperçu s’affiche sur le verre."),
+                 EMPL,
+                 ("Entretien", "Gravure permanente qui résiste au lave-vaisselle. Manipulez-le comme un verre classique : il reste fragile aux chocs.")])),
+}
+
 def fiche(slug, onglet, pluriel, pu, t1, t2, offert, notes, idx):
     page = open(os.path.join(CAP, slug + ".html"), encoding="utf-8").read()
     main = re.search(r"<main.*?</main>", page, re.S).group(0)
     main = re.sub(r"<script.*?</script>", "", main, flags=re.S)
     main = re.sub(r'\ssrcset="[^"]*"', "", main)
     main = re.sub(r'src="([^"]+)"', img_src, main)
+    T = TEXTES[slug]
+    i0 = main.find('<div class="product-desc">')
+    main = main[:i0] + T["desc"] + main[fin_div(main, i0):]
+    if T["tagline"]:
+        main = main.replace(T["tagline"][0], T["tagline"][1])
     tot1 = 2 * pu + 3 + 5
     tot2 = 2 * pu + 3
     bloc = ('<div class="perglass mqv-pg"><div class="pg-choice"><button type="button" class="pg-opt">Les 2 identiques</button>'
@@ -111,7 +183,10 @@ def fiche(slug, onglet, pluriel, pu, t1, t2, offert, notes, idx):
     vol = 'Personnalisation &amp; Entretien</summary><div class="info-body">'
     v = main.find(vol)
     if v >= 0:
-        main = main[:v + len(vol)] + grille(notes) + main[v + len(vol):]
+        g = grille(notes)
+        debut = v + len(vol)
+        fin = main.find("</div>", debut)
+        main = main[:debut] + g + T["volet"] + main[fin:]
     return '<div class="mqv-fiche" data-i="%d" data-t1="%s" data-t2="%s"%s>%s</div>' % (
         idx, eur(tot1), eur(tot2), "" if idx == 0 else " hidden", main)
 
@@ -138,6 +213,20 @@ MQ = r'''
 .mqv-grille td{padding:6px 0;border-bottom:1px solid var(--line);vertical-align:top}
 .mqv-grille td:last-child{text-align:right;white-space:nowrap;padding-left:10px}
 .mqv-v2 input[type=text]{width:100%;box-sizing:border-box}
+.pd2 h3{margin:22px 0 10px}.pd2-lead{margin:0 0 4px}.pd2-occ{margin:0;color:var(--ink-soft)}
+.pd2-sizes{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pd2-sizes.un{grid-template-columns:1fr}
+.pd2-size{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pd2-size b{font-family:var(--font-display,serif);font-size:1.35rem;color:var(--gold-dark)}.pd2-size span{font-size:.92rem;color:var(--ink-soft);line-height:1.4}
+.pd2-ways{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pd2-way{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.pd2-wt{display:flex;align-items:center;gap:8px;margin:0}.pd2-way i{flex:none;font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--cream-2);color:var(--gold-dark);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.pd2-way b{font-size:.98rem}.pd2-way span{font-size:.9rem;color:var(--ink-soft);line-height:1.45}
+.pd2-spec{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper);font-size:.93rem}
+.pd2-spec th{width:34%;text-align:left;font-weight:600;color:var(--ink);background:var(--cream-2);padding:11px 14px;vertical-align:top}
+.pd2-spec td{padding:11px 14px;color:var(--ink-soft);line-height:1.5}.pd2-spec tr+tr th,.pd2-spec tr+tr td{border-top:1px solid var(--line)}
+.pd2-vol{margin-top:14px;white-space:normal}
+@media (max-width:480px){.pd2-way,.pd2-size{padding:12px}.pd2-way b{font-size:.92rem;line-height:1.25}.pd2-way span{font-size:.85rem}.pd2-spec th{width:32%;padding:10px 12px}.pd2-spec td{padding:10px 12px}}
+
 '''
 fiches = "".join(fiche(*p, i) for i, p in enumerate(PRODUITS))
 bar = '<nav class="mqv-bar">' + "".join('<button type="button" data-i="%d"%s>%s</button>' % (i, ' class="on"' if i == 0 else "", p[1]) for i, p in enumerate(PRODUITS)) + "</nav>"
@@ -152,6 +241,8 @@ F.forEach(function(f){
   f.querySelector(".mqv-voirprix").onclick=function(){var g=f.querySelector(".mqv-grille");if(!g)return;var d=g.closest("details");if(d)d.open=true;g.scrollIntoView({behavior:"smooth",block:"start"})};
 });
 })();</script>'''
+for _T in TEXTES.values():
+    if _T["tagline"]: fiches = fiches.replace(_T["tagline"][0], _T["tagline"][1])
 doc = "<title>Verres, règle de gravure</title><style>%s%s</style>%s%s%s" % (css, MQ, bar, fiches, JS)
 open(OUT, "w", encoding="utf-8").write(doc)
 print("ok", OUT, round(len(doc) / 1024), "Ko")
