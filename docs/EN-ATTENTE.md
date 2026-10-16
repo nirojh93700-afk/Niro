@@ -310,3 +310,7 @@ En attente de SA décision :
 - **16/10/2026 — Céline Naulin #10OPUHMO** (verre à whisky face + fond) : le mail du 16/10 20 h 46 lui annonce **un aperçu de sa
   gravure** → à lui envoyer par Gestion → la commande → « Communications & aperçu » avant de graver. Adresse de la commande
   corrigée (naulinceline71@gmail.com, ancienne « …gmail.comn » gardée dans `emailCorrigeDe`).
+
+- **Noms de domaine nivcreation.fr + nivcreation.com : expirent le 28/03/2027, renouvellement auto DÉSACTIVÉ chez Hostinger**
+  (renouvellement 10,99 € et 16,99 €/an). Le gérant veut renouveler pour 3 ans. Rappels programmés sur le site (Messages clients →
+  envois programmés, vers contact.nivcreation@gmail.com) : jeudi 28/01/2027 9 h et vendredi 26/02/2027 9 h.

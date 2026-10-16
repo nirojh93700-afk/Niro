@@ -318,6 +318,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         </div>
       ) : null}
       {o.alerteInterne ? <div className="file-note-box red">🚨 {o.alerteInterne}</div> : null}
+      {o.alerteEmail || o.emailCorrigeDe ? <div className="file-note-box red">✉️ {o.alerteEmail || `E-mail corrigé : « ${o.emailCorrigeDe} » → « ${o.customerEmail} »`}</div> : null}
 
       <div className="file-chips">
         {o.immediateStart ? <span className="file-chip red">⚡ Fabrication immédiate</span> : null}
