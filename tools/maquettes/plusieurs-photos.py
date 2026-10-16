@@ -292,6 +292,7 @@ doc = ('<title>Plusieurs verres, une photo</title><style>%s%s</style>'
        '<p class="mq-intro">Vrai rendu de la fiche verre à vin : 47 cl, « À l’unité », mode photo, quantité 2 (le cas de la commande 0E3Y9OBX). '
        'Change la quantité avec − / + : les idées 1 et 2 n’apparaissent qu’à partir de 2 verres. L’onglet « Prix » montre la règle : verre 1 comme aujourd’hui, puis +5 € tout compris par verre différent.</p>'
        '%s%s%s') % (css, MQCSS, main, GESTION, JS)
+exec(open(os.path.join(os.path.dirname(__file__), 'modale_photo.py')).read())
 if os.environ.get("SITE_SEUL"):
     GUIDE = ('<div class="mq-guide"><img src="%s" alt="Exemples de bonnes et mauvaises photos pour la gravure">'
              '<p>Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d\'espace autour. '
@@ -305,7 +306,8 @@ if os.environ.get("SITE_SEUL"):
     doc = doc.replace(GESTION, "")
     doc = doc.replace("<title>Plusieurs verres, une photo</title>", "<title>Verre à vin, rendu client</title>")
     doc = doc.replace('set("1");})();', 'set("4");})();')
-    doc = doc.replace("<style>", "<style>.mq-1,.mq-2,.mq-2bas{display:none!important}", 1)
+    doc = doc.replace("<style>", "<style>.mq-1,.mq-2,.mq-2bas{display:none!important}" + MODAL_CSS, 1)
+    doc = doc.replace("<script>", MODAL_HTML % uri(os.path.join(ROOT, "produits", "guide-photo-gravure.png"), 900) + "<script>", 1) + MODAL_JS
     # Page plus courte (16/10/2026, gérant : « les clients doivent trop descendre ») :
     # 1) cartes de l'étape 1 repliées sur le choix fait + « Changer » ;
     # 2) règle de prix en une ligne + « Voir les prix » ;
@@ -315,7 +317,7 @@ if os.environ.get("SITE_SEUL"):
     hint = re.search(r'<p class="pg-hint"><b>Verre 1</b>.*?</p>', doc, re.S).group(0)
     doc = doc.replace(hint, '<p class="pg-hint">Verre 2 différent : <strong>+5 €</strong>, image et texte compris. <button type="button" class="mq-lien mq-voirprix">Voir les prix</button></p>', 1)
     doc = doc.replace('<p class="prc-legend">Une photo, un dessin, un logo : téléversez le fichier (JPG, PNG). Photo seule, ou photo + texte, comme vous voulez. Elle se pose sur la grande photo en haut, où vous pouvez la déplacer. L\'atelier vérifie la qualité avant de graver.</p>',
-        '<p class="prc-legend">JPG ou PNG. L\'atelier vérifie la qualité avant de graver.</p>' + GUIDE, 1)
+        '<p class="prc-legend">JPG ou PNG. L\'atelier vérifie la qualité avant de graver.</p>', 1)
     doc = doc.replace('<div class="mq-sumh">Le détail de votre prix</div>',
         '<button type="button" class="mq-sumh mq-sumbtn"><span>Le détail de votre prix</span><em>Voir</em></button>', 1)
     for k in ['mq-voirprix', 'mq-sumbtn', 'JPG ou PNG. L']:

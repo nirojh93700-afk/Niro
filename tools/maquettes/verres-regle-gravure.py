@@ -154,7 +154,7 @@ def fiche(slug, onglet, pluriel, pu, t1, t2, offert, notes, idx):
       '<div class="mqv-v1"><p class="mqv-small">Le verre 1 se personnalise juste en dessous, comme d’habitude. Exemple ici : texte <b>« %s »</b> <i class="mqv-sup">+3 €</i></p></div>'
       '<div class="mqv-v2" hidden><label class="mqv-same"><input type="checkbox" class="mqv-idem"> Identique au verre 1 (même gravure) <span class="mqv-ok">rien en plus</span></label>'
       '<div class="mqv-v2f"><div class="field"><label>Verre 2 · votre photo ou logo <span class="mqv-small">(facultatif)</span></label>'
-      '<div class="photo-upload"><label class="photo-dropzone">Choisir une photo</label></div>' + GUIDE + '</div>'
+      '<div class="photo-upload"><label class="photo-dropzone">Choisir une photo</label></div></div>'
       '<div class="field"><label>Verre 2 · texte <span class="mqv-small">(compris dans les 5 €)</span></label><input type="text" value="%s" readonly></div></div></div>'
       '</div>') % (t1, t2)
     detail = ('<div class="prc-sum mqv-sum"><button type="button" class="mqv-sumbtn"><span>Le détail de votre prix</span><em>Voir</em></button>'
@@ -249,6 +249,7 @@ F.forEach(function(f){
 })();</script>'''
 for _T in TEXTES.values():
     if _T["tagline"]: fiches = fiches.replace(_T["tagline"][0], _T["tagline"][1])
-doc = "<title>Verres, règle de gravure</title><style>%s%s</style>%s%s%s" % (css, MQ, bar, fiches, JS)
+exec(open(os.path.join(os.path.dirname(__file__), "modale_photo.py")).read())
+doc = "<title>Verres, règle de gravure</title><style>%s%s%s</style>%s%s%s%s%s" % (css, MQ, MODAL_CSS, bar, fiches, MODAL_HTML % uri(os.path.join(PUB, "produits", "guide-photo-gravure.png"), 900), JS, MODAL_JS)
 open(OUT, "w", encoding="utf-8").write(doc)
 print("ok", OUT, round(len(doc) / 1024), "Ko")
