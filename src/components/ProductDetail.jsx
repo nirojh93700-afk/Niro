@@ -12,6 +12,7 @@ import VacationNotice from "@/components/VacationNotice";
 import DelaiFabrication from "@/components/DelaiFabrication";
 import RestockAlerte from "@/components/RestockAlerte";
 import { engravingExtra } from "@/lib/engravingPrice";
+import { aEmplacement, lignesDuCote } from "@/lib/apercuCote";
 import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
 import GrillePrixVerres from "./GrillePrixVerres";
 import { packagingExtra } from "@/lib/packaging";
@@ -813,17 +814,27 @@ export default function ProductDetail({ product }) {
   // Aperçu EXACT du montage de la cliente : la photo vierge + le motif/la photo
   // à l'endroit et à la taille qu'elle a choisis (glisser/curseur), + son texte
   // dans sa police. Joint à la commande (admin + e-mail) pour graver à l'identique.
-  async function composeEditorScene(glassUrl, box) {
+  // `cote` (verres face / fond / les deux, 16/10/2026) : le contenu d'UN côté, comme dans l'éditeur
+  // (sa photo, sa place, SES lignes). Le cadre est carré, photo du verre recadrée comme la galerie,
+  // pour que le visuel enregistré soit celui que la cliente a vu.
+  async function composeEditorScene(glassUrl, box, cote = null) {
     const g = await loadImg(glassUrl);
-    const W = g.naturalWidth || 800, H = g.naturalHeight || 800;
+    const gw = g.naturalWidth || 800, gh = g.naturalHeight || 800;
+    const W = cote ? Math.min(1200, Math.max(gw, gh)) : gw, H = cote ? W : gh;
     const c = document.createElement("canvas"); c.width = W; c.height = H;
     const ctx = c.getContext("2d");
-    ctx.drawImage(g, 0, 0, W, H);
-    const art = photoSrc || styleMotifSrc;
+    if (cote) {
+      const k = Math.max(W / gw, H / gh);
+      ctx.drawImage(g, (W - gw * k) / 2, (H - gh * k) / 2, gw * k, gh * k);
+    } else {
+      ctx.drawImage(g, 0, 0, W, H);
+    }
+    const art = cote ? cote.photo : (photoSrc || styleMotifSrc);
+    const linesC = cote ? cote.lines : previewLines;
     if (art) {
       const a = await loadImg(art);
       const ar = (a.naturalWidth || 1) / (a.naturalHeight || 1);
-      const lay = photoLayout;
+      const lay = cote ? cote.photoLayout : photoLayout;
       let dw, dh, ccx, ccy;
       if (lay && lay.size) {
         dw = lay.size * W; dh = dw / ar;
@@ -833,12 +844,13 @@ export default function ProductDetail({ product }) {
         if (dh > box.height * H) { dh = box.height * H * 0.75; dw = dh * ar; }
         ccx = (box.left + box.width / 2) * W; ccy = (box.top + box.height / 2) * H;
       }
-      if (!photoSrc) { ctx.filter = "grayscale(1) contrast(1.15)"; ctx.globalAlpha = 0.92; }
+      if (cote) { ctx.filter = "grayscale(1) contrast(1.5) brightness(1.08)"; ctx.globalAlpha = 0.85; ctx.globalCompositeOperation = "multiply"; }
+      else if (!photoSrc) { ctx.filter = "grayscale(1) contrast(1.15)"; ctx.globalAlpha = 0.92; }
       ctx.drawImage(a, ccx - dw / 2, ccy - dh / 2, dw, dh);
-      ctx.filter = "none"; ctx.globalAlpha = 1;
+      ctx.filter = "none"; ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
     }
-    if (previewLines.length > 0) {
-      const lay = textLayout;
+    if (linesC.length > 0) {
+      const lay = cote ? cote.textLayout : textLayout;
       const fam = fontFamilyFor(getFontClass(fieldValues[fontField?.key] || "playfair"));
       const fs = Math.max(10, (lay?.fitScale || lay?.scale || 0.05) * W);
       ctx.fillStyle = ENGRAVE_PREVIEW;
@@ -847,8 +859,8 @@ export default function ProductDetail({ product }) {
       const tcx = (lay?.cx ?? (box.left + box.width / 2)) * W;
       const tcy = (lay?.cy ?? (box.top + box.height * 0.85)) * H;
       const lh = fs * 1.15;
-      const y0 = tcy - ((previewLines.length - 1) * lh) / 2;
-      previewLines.forEach((l, i) => ctx.fillText(l, tcx, y0 + i * lh));
+      const y0 = tcy - ((linesC.length - 1) * lh) / 2;
+      linesC.forEach((l, i) => ctx.fillText(l, tcx, y0 + i * lh));
     }
     return c.toDataURL("image/jpeg", 0.9);
   }
@@ -1029,7 +1041,40 @@ export default function ProductDetail({ product }) {
         const faceArt = photoSrc || (dsg ? dsg.dark : null);
         // Montage libre (motif n° / photo + texte placés par la cliente) : aperçu
         // composé À L'IDENTIQUE de ce qu'elle voit (position + taille + police).
-        if (!modeleField && (photoSrc || styleMotifSrc || previewLines.length > 0)) {
+        if (!modeleField && aEmplacement(product) && emplacement) {
+          // Verre face / fond / les deux : CHAQUE côté avec SA photo et SON texte (16/10/2026,
+          // commande 10OPUHMO : le texte du fond s'affichait sur la face, le fond n'avait pas son texte).
+          const cote = (s) => {
+            const deux = emplacement === "deux";
+            const fondSeul = !deux && emplacement === "fond";
+            const surFond = s === "fond";
+            return {
+              photo: deux && surFond ? (photoSrcFond || null) : (photoSrc || null),
+              photoLayout: deux && surFond ? photoLayoutFond : photoLayout,
+              textLayout: deux && surFond ? textLayoutFond : textLayout,
+              lines: lignesDuCote(fieldValues, fondSeul ? "fond" : s, deux),
+            };
+          };
+          const compose = async (s) => {
+            const ct = cote(s);
+            if (!ct.photo && !ct.lines.length) return null;
+            const surFond = s === "fond";
+            const composed = await composeEditorScene(surFond ? (product.fondImage || glass) : glass, surFond ? fondBox : faceBox, ct);
+            return (await uploadDataUrl(composed)) || composed;
+          };
+          if (emplacement === "fond") {
+            artworkImageFond = photoSrc || null;
+            previewImageFond = await compose("fond").catch(() => null);
+            previewImage = previewImageFond || photoSrc || null;
+          } else {
+            artworkImage = photoSrc || null;
+            previewImage = (await compose("face").catch(() => null)) || photoSrc || null;
+            if (dualMode) {
+              artworkImageFond = photoSrcFond || null;
+              previewImageFond = (await compose("fond").catch(() => null)) || photoSrcFond || null;
+            }
+          }
+        } else if (!modeleField && (photoSrc || styleMotifSrc || previewLines.length > 0)) {
           artworkImage = photoSrc || styleMotifSrc || null;
           if (photoSrc) previewImage = photoSrc; // repli garanti si le canvas échoue
           try {
@@ -1056,7 +1101,7 @@ export default function ProductDetail({ product }) {
           artworkImage = (await uploadDataUrl(art)) || art;
         }
         // FOND (mode « les deux ») : photo du fond si fournie (texte/motif : pas d'image fixe).
-        if (dualMode) {
+        if (dualMode && !previewImageFond && !(!modeleField && aEmplacement(product))) {
           const fondArt = photoSrcFond || null;
           if (fondArt) {
             artworkImageFond = fondArt;
