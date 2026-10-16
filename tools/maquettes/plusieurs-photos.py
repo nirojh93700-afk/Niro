@@ -18,6 +18,9 @@ def uri(path, w=700):
 
 def img_src(m):
     s = m.group(1)
+    if s.startswith("/_next/image?url="):
+        from urllib.parse import unquote
+        s = unquote(s.split("url=", 1)[1].split("&", 1)[0])
     if s.startswith("/produits/"):
         p = os.path.join(ROOT, s.lstrip("/"))
         if os.path.exists(p): return 'src="%s"' % uri(p)
