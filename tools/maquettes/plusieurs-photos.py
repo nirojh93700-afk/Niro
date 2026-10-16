@@ -89,8 +89,18 @@ IDEE2 = ('<div class="perglass mq mq-2"><div class="pg-choice"><button type="but
          '<p class="pg-hint">Vous configurez le <b>Verre 1</b> — passez d’un verre à l’autre avec les onglets. Chaque verre garde sa photo.</p></div>')
 IDEE2_BAS = '<p class="mq mq-2 mq-2bas">2 verres : une photo pour chacun avec « Chacun différent », plus haut.</p>'
 
+# Bloc « Prix » découpé à sa vraie place dans le parcours : choix + onglets avant l'étape 1,
+# champs par verre dans l'étape 2, détail du prix dans le résumé, exemples (maquette seulement) après.
+k1 = PRIX.index('<div class="mq-g1">'); k2 = PRIX.index('<div class="prc-sum mq-sum">'); k3 = PRIX.index('<div class="mq-ex">')
+P_HAUT = PRIX[:k1] + '</div>'
+P_CHAMPS = '<div class="mq mq-4">' + PRIX[k1:k2] + '</div>'
+P_SUM = '<div class="mq mq-4">' + PRIX[k2:k3] + '</div>'
+P_EX = '<div class="mq mq-4">' + PRIX[k3:-len('</div>')] + '</div>'
 i = main.find('<section class="prc-step">')
-main = main[:i] + IDEE2 + PRIX + main[i:]
+main = main[:i] + IDEE2 + P_HAUT + main[i:]
+a = main.index('<div class="prc-one">'); main = main[:a] + P_CHAMPS + '<div class="prc-one mq-orig">' + main[a + len('<div class="prc-one">'):]
+b = main.index('<div class="prc-sum">'); main = main[:b] + P_SUM + '<div class="prc-sum mq-orig">' + main[b + len('<div class="prc-sum">'):]
+c = main.index('</section>', b) + len('</section>'); main = main[:c] + P_EX + main[c:]
 j = main.find('<div class="qty-row">'); k = main.find('<button type="button" class="fav-ligne"', j)
 main = main[:k] + IDEE1 + IDEE2_BAS + main[k:]
 
@@ -157,7 +167,8 @@ body{background:var(--mq-cream);margin:0}
 .mq-intro{max-width:1100px;margin:14px auto 0;padding:0 16px;font:.9rem/1.5 system-ui,sans-serif;color:#5a4a33}
 .mq{display:none}
 body[data-v="1"] .mq-1,body[data-v="2"] .mq-2,body[data-v="4"] .mq-4{display:block}
-body[data-v="4"] section.prc-step:nth-of-type(2){display:none}
+body[data-v="4"] .mq-orig{display:none}
+.mq-ok,.mq-sup{white-space:nowrap}
 .mq-sup{font-style:normal;font-size:.72rem;font-weight:700;color:#7a1f1f;background:#fdecec;border-radius:999px;padding:2px 7px;margin-left:4px}
 .mq-ok{font-size:.72rem;font-weight:700;color:#1f6b3a;background:#e6f4ea;border-radius:999px;padding:2px 7px;margin-left:4px}
 .mq-same{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:.88rem}
@@ -208,15 +219,16 @@ body[data-v="3"] .mq-g{display:block}
 '''
 JS = '''<script>
 (function(){var b=document.body,q=document.querySelector(".qty-stepper span"),t=document.querySelectorAll(".pd-totbox .val, .prc-sumtot b");
-function set(v){b.dataset.v=v;var dd=[].slice.call(document.querySelectorAll(".info-accordion details")).filter(function(d){return /Personnalisation/.test(d.textContent)})[0];if(dd)dd.open=(v=="4");document.querySelectorAll(".mq-bar button").forEach(function(x){x.classList.toggle("on",x.dataset.v==v)})}
+function set(v){b.dataset.v=v;var dd=[].slice.call(document.querySelectorAll(".info-accordion details")).filter(function(d){return /Personnalisation/.test(d.textContent)})[0];if(dd)dd.open=(v=="4");document.querySelectorAll(".mq-bar button").forEach(function(x){x.classList.toggle("on",x.dataset.v==v)});tot()}
+function tot(){var m=document.querySelector(".mq-tot"),k=document.querySelector(".pd-totbox .val");if(k&&m)k.textContent=b.dataset.v=="4"?m.textContent:(21.9*+q.textContent).toFixed(2).replace(".",",")+"\\u00a0€"}
 document.querySelectorAll(".mq-bar button").forEach(function(x){x.onclick=function(){set(x.dataset.v);window.scrollTo(0,0)}});
 function maj(n){q.textContent=n;t.forEach(function(e){e.textContent=(21.9*n).toFixed(2).replace(".",",")+"\\u00a0€"});
-document.querySelectorAll(".mq-1,.mq-2").forEach(function(e){e.style.visibility=n>1?"":"hidden"})}
+document.querySelectorAll(".mq-1,.mq-2").forEach(function(e){e.style.visibility=n>1?"":"hidden"});tot()}
 var bt=document.querySelectorAll(".qty-stepper button");bt[0].onclick=function(){maj(Math.max(1,+q.textContent-1))};bt[1].onclick=function(){maj(+q.textContent+1)};
 document.querySelectorAll(".pg-opt").forEach(function(o){o.onclick=function(){document.querySelectorAll(".pg-opt").forEach(function(x){x.classList.remove("on")});o.classList.add("on")}});
 document.querySelectorAll(".pg-tab").forEach(function(o,i){o.onclick=function(){document.querySelectorAll(".pg-tab").forEach(function(x){x.classList.remove("on")});o.classList.add("on");document.querySelector(".pg-hint b").textContent="Verre "+(i+1)}});
 document.querySelectorAll(".mq-4 .pg-tab").forEach(function(o){o.onclick=function(){var g=o.dataset.g;document.querySelectorAll(".mq-4 .pg-tab").forEach(function(x){x.classList.toggle("on",x===o)});document.querySelector(".mq-g1").hidden=g!="1";document.querySelector(".mq-g2").hidden=g!="2"}});
-var same=document.getElementById("mq-same");if(same)same.onchange=function(){var on=same.checked;document.querySelector(".mq-g2up").hidden=on;document.querySelector(".mq-l2").style.display=on?"none":"";document.querySelector(".mq-l2b").hidden=!on;document.querySelector(".mq-tot").textContent=on?"46,80 €":"51,80 €";document.querySelector(".mq-4 .pg-tab[data-g='2'] .mq-sup").style.display=on?"none":""};
+var same=document.getElementById("mq-same");if(same)same.onchange=function(){var on=same.checked;document.querySelector(".mq-g2up").hidden=on;document.querySelector(".mq-l2").style.display=on?"none":"";document.querySelector(".mq-l2b").hidden=!on;document.querySelector(".mq-tot").textContent=on?"46,80 €":"51,80 €";document.querySelector(".mq-4 .pg-tab[data-g='2'] .mq-sup").style.display=on?"none":"";tot()};
 var lot=document.querySelector(".mq-lot");if(lot)lot.onclick=function(){lot.outerHTML='<p class="mq-small"><b>Sur le site :</b> la fiche passe sur « Lot de 2 », quantité 1, et le choix « Chacun différent » s’ouvre, une photo par verre.</p>'};
 set("1");})();
 </script>'''
@@ -227,5 +239,15 @@ doc = ('<title>Plusieurs verres, une photo</title><style>%s%s</style>'
        '<p class="mq-intro">Vrai rendu de la fiche verre à vin : 47 cl, « À l’unité », mode photo, quantité 2 (le cas de la commande 0E3Y9OBX). '
        'Change la quantité avec − / + : les idées 1 et 2 n’apparaissent qu’à partir de 2 verres. L’onglet « Prix » montre la règle : verre 1 comme aujourd’hui, puis +5 € tout compris par verre différent.</p>'
        '%s%s%s') % (css, MQCSS, main, GESTION, JS)
+if os.environ.get("SITE_SEUL"):
+    # Rendu client seul : la fiche telle qu'elle sera sur le site (règle finale), sans barre de maquette,
+    # sans idées 1/2, sans Gestion, sans tableau d'exemples.
+    doc = re.sub(r'<div class="mq-bar">.*?</div>', "", doc, count=1, flags=re.S)
+    doc = re.sub(r'<p class="mq-intro">.*?</p>', "", doc, count=1, flags=re.S)
+    doc = re.sub(r'<div class="mq-ex">.*?</table>\s*<p class="mq-small">[^<]*(?:<[^>]+>[^<]*)*?</p></div>', "", doc, count=1, flags=re.S)
+    doc = doc.replace(GESTION, "")
+    doc = doc.replace("<title>Plusieurs verres, une photo</title>", "<title>Verre à vin, rendu client</title>")
+    doc = doc.replace('set("1");})();', 'set("4");})();')
+    doc = doc.replace("<style>", "<style>.mq-1,.mq-2,.mq-2bas{display:none!important}", 1)
 open(out, "w", encoding="utf-8").write(doc)
 print("ok", out, round(len(doc) / 1024), "Ko")
