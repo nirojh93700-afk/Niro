@@ -12,11 +12,13 @@ import VacationNotice from "@/components/VacationNotice";
 import DelaiFabrication from "@/components/DelaiFabrication";
 import RestockAlerte from "@/components/RestockAlerte";
 import { engravingExtra } from "@/lib/engravingPrice";
+import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
+import GrillePrixVerres from "./GrillePrixVerres";
 import { packagingExtra } from "@/lib/packaging";
 import PayInfoModal from "@/components/PayInfo";
 import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
-import PhotoUpload, { CLOUDINARY_READY } from "./PhotoUpload";
+import PhotoUpload, { CLOUDINARY_READY, GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
 import Engrave3D from "./Engrave3D";
 import EngraveHeart3D from "./EngraveHeart3D";
 import EngraveBook3D from "./EngraveBook3D";
@@ -270,7 +272,11 @@ export default function ProductDetail({ product }) {
   }
   // Lot de N verres (vin/flûte) : on lit le nombre dans le titre de la variante.
   const glassQty = (() => { const m = /lot de\s*(\d+)/i.exec(variant?.title || ""); return m ? parseInt(m[1], 10) : 1; })();
-  const supportsPerGlass = (Boolean(product.styleImages) || Boolean(product.perGlassLot)) && glassQty > 1;
+  // Verres (règle de prix du 16/10/2026) : « Chacun différent » dès 2 verres, y compris
+  // « À l'unité » × 2 ou plus (cas 0E3Y9OBX : un logo et une photo pour 2 verres à l'unité).
+  const RV = estRegleVerres(product);
+  const pgCount = RV && glassQty === 1 ? quantity : glassQty;
+  const supportsPerGlass = (Boolean(product.styleImages) || Boolean(product.perGlassLot) || RV) && pgCount > 1;
   // Coloris avec galerie propre (ex. gobelet) : pastilles SOUS la grande photo,
   // et on masque le sélecteur d'option de droite. Cliquer change la grande photo.
   const colorGallery = product.variants?.length > 1 && !product.genderPick &&
@@ -330,6 +336,12 @@ export default function ProductDetail({ product }) {
     }
   }
   const info = getProductInfo(product.slug);
+  // Conseils photo (16/10/2026) : sur toute fiche qui demande une photo à graver, l'image des
+  // bonnes / mauvaises photos s'ouvre quand la cliente touche « Choisir une photo ».
+  const guideNote = (product.personalizationFields || []).find((f) => f.type === "note" && /guide-photo/.test(f.image || ""));
+  const aUnePhoto = (product.personalizationFields || []).some((f) => f.type === "photo");
+  const guidePhoto = guideNote ? { image: guideNote.image, texte: guideNote.text || "" }
+    : (aUnePhoto && (RV || product.parcoursGuide)) ? (product.parcoursGuide?.guidePhoto || GUIDE_PHOTO_GRAVURE) : null;
   const variantStock = stockMap[variant.stockId || variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
   const salePrice = promos[variant.id];
@@ -344,7 +356,12 @@ export default function ProductDetail({ product }) {
     .filter((x) => !/pack/i.test(x.name) && !x.free)
     .reduce((s, x) => s + (Number(x.price) || 0), 0) * 100) / 100;
   const basePrice = hasPromo ? salePrice : variant.price;
-  const unitPrice = basePrice + engrave.amount + pkg.amount + (composition?.extraAmount || 0);
+  // Verres : la gravure est comptée pour TOUTE la ligne (verre 1, verres différents, frais des
+  // identiques) — même calcul que le paiement (src/lib/prixVerres.js).
+  const gravVerres = RV ? prixGravureVerres(product, variant, quantity, fieldValues, perGlass ? syncedGlassConfigs() : null) : null;
+  const unitPrice = gravVerres
+    ? basePrice + pkg.amount + (composition?.extraAmount || 0) + gravVerres.total / quantity
+    : basePrice + engrave.amount + pkg.amount + (composition?.extraAmount || 0);
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
   const refMarkup = Number(product.refMarkup) || 0;
   const refPrice = !hasPromo && refMarkup > 0
@@ -538,8 +555,8 @@ export default function ProductDetail({ product }) {
   function syncedGlassConfigs() {
     const a = [...glassConfigs];
     a[activeGlass] = { ...fieldValues };
-    for (let i = 0; i < glassQty; i++) if (!a[i]) a[i] = {};
-    return a.slice(0, glassQty);
+    for (let i = 0; i < pgCount; i++) if (!a[i]) a[i] = {};
+    return a.slice(0, pgCount);
   }
   function perGlassText(forClient) {
     return syncedGlassConfigs().map((fv, i) => `Verre ${i + 1} : ${glassSummary(fv, forClient)}`).join(forClient ? "  |  " : "  |  ");
@@ -554,12 +571,26 @@ export default function ProductDetail({ product }) {
   }
   function enablePerGlass(on) {
     if (on) {
-      const a = Array.from({ length: glassQty }, (_, i) => (i === 0 ? { ...fieldValues } : {}));
+      const a = Array.from({ length: pgCount }, (_, i) => (i === 0 ? { ...fieldValues } : {}));
       setGlassConfigs(a); setActiveGlass(0); setPerGlass(true);
     } else {
       setFieldValues(glassConfigs[0] || fieldValues);
       setPerGlass(false); setActiveGlass(0);
     }
+  }
+
+  // À l'unité : changer la quantité change le nombre de verres « chacun différent ».
+  useEffect(() => {
+    if (!perGlass) return;
+    if (pgCount < 2) { enablePerGlass(false); return; }
+    if (activeGlass >= pgCount) switchGlass(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pgCount]);
+  function ouvrirPrixVerres() {
+    const g = document.getElementById("prix-gravure-verres");
+    if (!g) return;
+    const d = g.closest("details"); if (d) d.open = true;
+    g.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   // Police et couleur sélectionnées (pour l'aperçu en direct).
@@ -1066,10 +1097,11 @@ export default function ProductDetail({ product }) {
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
-      personalization: perGlass ? perGlassText(true) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "),
+      personalization: [perGlass ? perGlassText(true) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "), gravVerres && gravVerres.lignes.length ? `Gravure : ${detailEnTexte(gravVerres)}` : ""].filter(Boolean).join(" · "),
       fields: (product.engravingPricing || product.motifComposer) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
       perGlass: perGlass ? syncedGlassConfigs() : null, // lot personnalisé : options comptées PAR verre au paiement
+      verresFixe: RV ? true : undefined, // verres : quantité fixée sur la fiche (prix de gravure de la ligne)
       spec: itemSpec,
       pickup: Boolean(product.pickup),
       weight: (Number(variant.weight) || Number(product.weight) || 200) + (engrave.weight || 0) + (pkg.weight || 0), // poids (g) réel par taille + options (socle, emballage) — port & retrait corrects
@@ -1616,17 +1648,17 @@ export default function ProductDetail({ product }) {
             {supportsPerGlass && (
               <div className="perglass">
                 <div className="pg-choice">
-                  <button type="button" className={`pg-opt${!perGlass ? " on" : ""}`} onClick={() => enablePerGlass(false)}>Les {glassQty} identiques</button>
+                  <button type="button" className={`pg-opt${!perGlass ? " on" : ""}`} onClick={() => enablePerGlass(false)}>Les {pgCount} identiques</button>
                   <button type="button" className={`pg-opt${perGlass ? " on" : ""}`} onClick={() => enablePerGlass(true)}>Chacun différent</button>
                 </div>
                 {perGlass && (
                   <>
                     <div className="pg-tabs">
-                      {Array.from({ length: glassQty }, (_, i) => (
+                      {Array.from({ length: pgCount }, (_, i) => (
                         <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                       ))}
                     </div>
-                    <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>
+                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre différent : <strong>+5 €</strong>, image et texte compris. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
                   </>
                 )}
               </div>
@@ -1651,17 +1683,17 @@ export default function ProductDetail({ product }) {
               {supportsPerGlass && (
                 <div className="perglass">
                   <div className="pg-choice">
-                    <button type="button" className={`pg-opt${!perGlass ? " on" : ""}`} onClick={() => enablePerGlass(false)}>Les {glassQty} identiques</button>
+                    <button type="button" className={`pg-opt${!perGlass ? " on" : ""}`} onClick={() => enablePerGlass(false)}>Les {pgCount} identiques</button>
                     <button type="button" className={`pg-opt${perGlass ? " on" : ""}`} onClick={() => enablePerGlass(true)}>Chacun différent</button>
                   </div>
                   {perGlass && (
                     <>
                       <div className="pg-tabs">
-                        {Array.from({ length: glassQty }, (_, i) => (
+                        {Array.from({ length: pgCount }, (_, i) => (
                           <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                         ))}
                       </div>
-                      <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>
+                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre différent : <strong>+5 €</strong>, image et texte compris. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
                     </>
                   )}
                 </div>
@@ -1696,6 +1728,7 @@ export default function ProductDetail({ product }) {
                     </div>
                   );
                 }
+                if (f.type === "note" && guideNote && f.key === guideNote.key) return null; // affichée au choix de la photo
                 if (f.type === "note") {
                   // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).
                   const noteImg = (f.imageByVariant && f.imageByVariant[variant.id]) || f.image;
@@ -1713,7 +1746,7 @@ export default function ProductDetail({ product }) {
                   return (
                     <div className="field" key={f.key}>
                       <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
-                      <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} productSlug={product.slug} />
+                      <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} productSlug={product.slug} guide={guidePhoto} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                       <p className="photo-check-note">
                         Votre photo est vérifiée par notre atelier avant la gravure. Si elle est trop floue, trop sombre ou de qualité insuffisante pour un beau rendu, nous vous recontactons pour la confirmer ou en choisir une autre — afin que votre souvenir soit parfait.
@@ -2031,6 +2064,17 @@ export default function ProductDetail({ product }) {
 
           {error && <div className="notice">{error}</div>}
 
+          {/* Verres : le détail de la gravure, replié (le total reste juste en dessous). */}
+          {!soldOut && gravVerres && gravVerres.lignes.length > 0 && (
+            <details className="pv-detail">
+              <summary><span>Le détail de votre prix</span><em>Voir</em></summary>
+              <div className="pv-row"><span>{gravVerres.nbVerres} verre{gravVerres.nbVerres > 1 ? "s" : ""} · {variant.title}{quantity > 1 ? ` × ${quantity}` : ""}</span><b>{formatEuro((basePrice + pkg.amount) * quantity)}</b></div>
+              {gravVerres.lignes.map((l, i) => (
+                <div className="pv-row" key={i}><span>{l.libelle}</span><b>{l.montant ? `+ ${formatEuro(l.montant)}` : "offert"}</b></div>
+              ))}
+              <div className="pv-row pv-tot"><span>Total</span><b>{formatEuro(unitPrice * quantity)}</b></div>
+            </details>
+          )}
           {/* Total « tout compris » (option + gravure + emballage) dans un encadré doré. */}
           {!soldOut && (
             <div className="pd-totbox">
@@ -2147,10 +2191,17 @@ export default function ProductDetail({ product }) {
                   <div className="info-body">{info.material}</div>
                 </details>
               )}
-              {info.usage && (
+              {(info.usage || RV) && (
                 <details>
                   <summary>✨ Personnalisation & Entretien</summary>
-                  <div className="info-body">{info.usage}</div>
+                  <div className="info-body">
+                    {RV && <GrillePrixVerres id="prix-gravure-verres" faceFond={Boolean((product.engravingPricing?.flatExtras || []).some((e) => e.key === "emplacement"))} />}
+                    {product.voletVerres ? (
+                      <table className="pd2-spec pd2-vol"><tbody>
+                        {product.voletVerres.map(([k, v]) => <tr key={k}><th>{k}</th><td>{v}</td></tr>)}
+                      </tbody></table>
+                    ) : info.usage}
+                  </div>
                 </details>
               )}
               {info.returns && (

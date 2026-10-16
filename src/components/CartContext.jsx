@@ -57,8 +57,10 @@ export function CartProvider({ children }) {
       const pkgKey = Array.isArray(item.packaging) && item.packaging.length
         ? "::pkg=" + item.packaging.slice().sort().join(",")
         : "";
-      const key = lineKey(item.variantId, item.personalization) + pkgKey;
-      const existing = prev.find((i) => i.key === key);
+      // Verres (16/10/2026) : la gravure est chiffrée pour le NOMBRE de verres choisi sur la fiche
+      // → ligne à part, jamais fusionnée, quantité fixe (sinon le prix affiché ne serait plus le prix payé).
+      const key = lineKey(item.variantId, item.personalization) + pkgKey + (item.verresFixe ? "::v=" + Date.now() : "");
+      const existing = item.verresFixe ? null : prev.find((i) => i.key === key);
       if (existing) {
         return prev.map((i) =>
           i.key === key ? { ...i, quantity: i.quantity + item.quantity } : i
@@ -76,7 +78,7 @@ export function CartProvider({ children }) {
   const updateQuantity = useCallback((key, quantity) => {
     setItems((prev) =>
       prev
-        .map((i) => (i.key === key ? { ...i, quantity: Math.max(1, quantity) } : i))
+        .map((i) => (i.key === key && !i.verresFixe ? { ...i, quantity: Math.max(1, quantity) } : i))
         .filter((i) => i.quantity > 0)
     );
   }, []);

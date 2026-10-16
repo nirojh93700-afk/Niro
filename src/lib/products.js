@@ -2419,6 +2419,7 @@ export const products = [
   // ----------------------------- CADEAUX -------------------------------------
   {
     slug: "verre-a-whisky-grave",
+    regleVerres: true, // prix de gravure des verres (16/10/2026, src/lib/prixVerres.js)
     badge: "Nouveau",
     lockImages: true, // galerie pilotée par le code (ignore l'ancienne liste admin)
     lockHidden: true, // publication pilotée par le code (ignore un ancien masquage admin)
@@ -2549,27 +2550,14 @@ export const products = [
       { id: "verre-whisky-grave-2", stockId: "verre-whisky-grave-2", title: "Lot de 2", price: 37.90, weight: 1100 },
       { id: "verre-whisky-grave-4", stockId: "verre-whisky-grave-4", title: "Lot de 4 — livraison offerte", price: 71.90, weight: 2000 },
     ],
-    descriptionHtml: `<p><strong>Votre photo gravée sur un verre à whisky.</strong> Un portrait, une photo de famille, un souvenir : votre image est transformée en gravure façon dessin, puis gravée au laser sur le verre — un cadeau unique et émouvant.</p>
-<p>Vous pouvez aussi ajouter un texte (prénom, date, message), un dessin ou votre logo. Gravure réalisée au laser sur un verre épais à base lourde, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour la Fête des Pères, un anniversaire, un cadeau de couple, un souvenir de famille ou un cadeau d'entreprise.</p>
-<h3>Caractéristiques</h3>
-<ul>
-<li><strong>Verre :</strong> verre à whisky, base épaisse, contenance d'environ 300 ml</li>
-<li><strong>Gravure :</strong> laser, sur une face — votre photo (portrait), et/ou texte, dessin ou logo</li>
-<li><strong>Personnalisation :</strong> votre photo, plus texte au choix (8 polices) et dessin via l'assistant</li>
-<li><strong>Hauteur :</strong> environ 9 cm</li>
-</ul>
-<h3>Points forts</h3>
-<ul>
-<li>Votre photo transformée en gravure, retravaillée à la main par notre atelier</li>
-<li>Gravure permanente, qui résiste au lave-vaisselle</li>
-<li>Aperçu en direct sur le verre avant de commander</li>
-<li>Emballage protégé pour un transport en toute sécurité</li>
-<li>Une idée cadeau personnalisée, pour homme comme pour femme</li>
-</ul>`,
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Votre photo gravée sur un verre à whisky.</strong></p><p class="pd2-occ">Un portrait, une photo de famille, un souvenir. Idéal pour la Fête des pères, un anniversaire, un cadeau de couple ou d’entreprise.</p><h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>30 cl</b><span>verre à whisky à base épaisse, hauteur ≈ 9 cm.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>transformé en gravure façon dessin, retravaillé à la main par notre atelier, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Votre photo, votre logo ou votre texte, dans la police de votre choix. L’atelier vérifie la qualité de la photo avant de graver."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
   },
   {
     // PAGE MODÈLE — propulsée par le moteur partagé (lib/modeles.js, template "peres").
     slug: "verre-a-whisky-fete-des-peres",
+    regleVerres: true, // prix de gravure des verres (16/10/2026, src/lib/prixVerres.js)
+    perGlassLot: true, // « Chacun différent » dès 2 verres commandés
     badge: "Nouveau",
     name: "Verre à whisky à personnaliser",
     cardImage: "/produits/verre_a_whisky_card.jpg", // vignette : verre GRAVÉ (montre la personnalisation)
@@ -2634,18 +2622,12 @@ export const products = [
     variants: [
       { id: "verre-whisky-fete-des-peres", title: "Verre à whisky à personnaliser", price: 19.90 },
     ],
-    descriptionHtml: `<p><strong>Le verre à whisky que vous composez vous-même.</strong> Choisissez un modèle prêt à graver — Route 66, The Bourbon Room, colombes & cœur, « Whisky de… » (votre prénom), « élu PAPA de l'année »… — et ajoutez votre prénom ou votre date.</p>
-<p>Choisissez vos textes, la police de chaque ligne et le modèle : l'aperçu s'affiche en direct sur le verre. Gravure laser permanente, qui résiste au lave-vaisselle. Idéal pour un anniversaire, la Fête des pères, un cadeau de couple, un souvenir ou un cadeau d'entreprise.</p>
-<h3>Caractéristiques</h3>
-<ul>
-<li><strong>Verre :</strong> verre à whisky, base épaisse, contenance d'environ 300 ml</li>
-<li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre</li>
-<li><strong>Personnalisation :</strong> un modèle au choix (ou vos propres textes) + prénom / date, ou une lettre fleurie</li>
-<li><strong>Hauteur :</strong> environ 9 cm</li>
-</ul>`,
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Le verre à whisky que vous composez vous-même.</strong></p><p class="pd2-occ">Idéal pour la Fête des pères, un anniversaire, un cadeau de couple ou un souvenir.</p><h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>30 cl</b><span>verre à whisky à base épaisse, hauteur ≈ 9 cm.</span></div></div><h3>Comment le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Un modèle</b></p><span>Route 66, The Bourbon Room, colombes et cœur, « élu Papa de l’année »… avec vos textes et la police de chaque ligne.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Une lettre fleurie</b></p><span>votre initiale, en option.</span></div><div class="pd2-way"><p class="pd2-wt"><i>3</i><b>Au fond du verre</b></p><span>un texte ou un dessin, vu à travers le verre.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Format</th><td>À l’unité.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Composez vos lignes, choisissez la police et le motif : l’aperçu s’affiche sur le verre."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Gravure permanente qui résiste au lave-vaisselle. Manipulez-le comme un verre classique : il reste fragile aux chocs."]],
   },
   {
     slug: "verre-a-cocktail-grave",
+    regleVerres: true, // prix de gravure des verres (16/10/2026, src/lib/prixVerres.js)
     badge: "Nouveau",
     hidden: false, // PUBLIÉ (26/09/2026, demande explicite du gérant)
     cardImage: "/produits/verre_a_cocktail_garni.jpg",
@@ -2732,26 +2714,12 @@ export const products = [
       { id: "verre-cocktail-grave-2", stockId: "verre-cocktail-grave-2", title: "Lot de 2", price: 33.90, weight: 1000 },
       { id: "verre-cocktail-grave-4", stockId: "verre-cocktail-grave-4", title: "Lot de 4 — livraison offerte", price: 64.90, weight: 1800 },
     ],
-    descriptionHtml: `<p><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong> Un prénom, une date, une phrase qui fait sourire, votre propre photo — ou le logo de votre bar, restaurant ou entreprise : votre idée est gravée au laser sur le verre — un cadeau qui change du whisky, personnel ou professionnel.</p>
-<p>Gravure réalisée au laser sur un verre haut et fin, pour un rendu net et durable qui ne s'efface pas au lavage. Idéal pour un apéritif entre amis, un EVJF, un anniversaire, une pendaison de crémaillère ou un cadeau d'entreprise.</p>
-<h3>Caractéristiques</h3>
-<ul>
-<li><strong>Verre :</strong> verrerie professionnelle, forme haute, contenance 17 cl</li>
-<li><strong>Gravure :</strong> laser, sur la face avant ou au fond du verre (vu à travers le verre) — les deux possibles (+7 €) — votre photo, et/ou texte, dessin ou logo</li>
-<li><strong>Personnalisation :</strong> votre photo ou texte au choix (8 polices), dessin via l'assistant</li>
-<li><strong>Hauteur :</strong> environ 12,5 cm — diamètre environ 5,2 cm</li>
-</ul>
-<h3>Points forts</h3>
-<ul>
-<li>Une idée qui change des verres à whisky habituels</li>
-<li>Gravure permanente, qui résiste au lave-vaisselle</li>
-<li>Aperçu en direct sur le verre avant de commander</li>
-<li>Emballage protégé pour un transport en toute sécurité</li>
-<li>Une idée cadeau originale, pour homme comme pour femme</li>
-</ul>`,
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong></p><p class="pd2-occ">Un cadeau qui change du whisky : apéritif entre amis, EVJF, anniversaire, crémaillère ou cadeau d’entreprise.</p><h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>17 cl</b><span>verrerie professionnelle, forme haute, hauteur ≈ 12,5 cm, Ø ≈ 5,2 cm.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>celui de votre bar, de votre restaurant ou de votre entreprise, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, une phrase, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Photo, dessin, logo ou texte au choix, dans la police de votre choix."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
   },
   {
     slug: "verre-a-vin-grave",
+    regleVerres: true, // prix de gravure des verres (16/10/2026, src/lib/prixVerres.js)
     badge: "Nouveau",
     name: "Verre à vin gravé",
     weight: 500, // fragile : verre + emballage protégé (repli ; poids réel par variante)
@@ -2768,7 +2736,7 @@ export const products = [
     category: "verres",
     subcategory: "vin",
     type: "Verre gravé personnalisé",
-    tagline: "Un verre à vin professionnel, en 36 cl ou en 47 cl, gravé à votre façon : un modèle (n°1 à 20), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
+    tagline: "Un verre à vin de restaurant, en 36 cl ou en 47 cl, gravé à votre façon : un modèle, une lettre fleurie, votre texte, votre photo ou votre logo.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
@@ -2924,7 +2892,7 @@ export const products = [
       },
     },
     // 1re gravure (prénom) incluse ; chaque gravure en plus est payante (+3 €).
-    engravingPricing: { textKeys: ["date", "initiale"], textExtra: 3 },
+    engravingPricing: { textKeys: ["texte", "prenom", "date", "initiale"], textExtra: 3 }, // chaque texte +3 € (16/10/2026)
     personalizationFields: [
       { key: "mode", type: "select", label: "Gravure", optional: true, options: [
         { value: "modele", label: "Un modèle décoré (n°)" },
@@ -2969,25 +2937,12 @@ export const products = [
       { id: "verre-vin-47-2", stockId: "verre-vin-47-2", taille: "47", title: "Lot de 2", price: 39.90, weight: 1000, ...VIN_47_APERCU },
       { id: "verre-vin-47-4", stockId: "verre-vin-47-4", taille: "47", title: "Lot de 4", price: 77.90, weight: 1800, ...VIN_47_APERCU },
     ],
-    descriptionHtml: `<p><strong>Un verre à vin professionnel — de la verrerie de restauration — gravé à votre façon.</strong> Deux tailles au choix : le <strong>36 cl</strong>, coupe tulipe en cristal, et le <strong>47 cl</strong>, grand verre à coupe ronde pour les vins rouges. Choisissez un <strong>modèle prêt</strong> (n°1 à 20 : couples, monogramme, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct, sur le verre que vous avez choisi.</p>
-<p>Gravure laser permanente, qui résiste au lave-vaisselle. Parfait en cadeau (couple, mariage, anniversaire, crémaillère) ou pour se faire plaisir. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
-<h3>Caractéristiques</h3>
-<ul>
-<li><strong>Verre :</strong> verrerie professionnelle, qualité restauration — <strong>36 cl</strong> (cristal, coupe tulipe) ou <strong>47 cl</strong> (coupe ronde, vins rouges)</li>
-<li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
-<li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
-<li><strong>À l'unité, lot de 2 ou lot de 4</strong>, dans chaque taille (livraison offerte dès 60 € d'achat)</li>
-</ul>
-<h3>Points forts</h3>
-<ul>
-<li>Gravure permanente, qui résiste au lave-vaisselle</li>
-<li>Aperçu en direct de votre gravure avant de commander</li>
-<li>Emballage protégé pour un transport en toute sécurité</li>
-<li>Gravé en France, dans notre atelier</li>
-</ul>`,
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre à vin de restaurant, gravé à votre façon dans notre atelier.</strong></p><p class="pd2-occ">À offrir pour un mariage, un anniversaire, une crémaillère, ou à garder pour soi.</p><h3>Deux tailles</h3><div class="pd2-sizes"><div class="pd2-size"><b>36 cl</b><span>coupe tulipe, en cristal.</span></div><div class="pd2-size"><b>47 cl</b><span>grande coupe ronde, pour les vins rouges.</span></div></div><h3>Quatre façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Un modèle</b></p><span>30 dessins numérotés, avec vos prénoms si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Une lettre fleurie</b></p><span>votre initiale, avec un prénom au milieu.</span></div><div class="pd2-way"><p class="pd2-wt"><i>3</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures.</span></div><div class="pd2-way"><p class="pd2-wt"><i>4</i><b>Votre photo ou votre logo</b></p><span>un dessin, une photo, le logo de votre bar ou de votre entreprise.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4, dans les deux tailles.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Quatre façons de graver : un modèle (30 dessins numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo. L’aperçu se met à jour pendant que vous choisissez."], ["Modèles", "Sur un modèle, les prénoms et la date sont gravés dans l’écriture du modèle."], ["Entretien", "Va au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l’évier."]],
   },
   {
     slug: "flute-a-champagne-gravee",
+    regleVerres: true, // prix de gravure des verres (16/10/2026, src/lib/prixVerres.js)
     badge: "Nouveau",
     name: "Flûte à champagne gravée",
     weight: 450,
@@ -3002,7 +2957,7 @@ export const products = [
     category: "verres",
     subcategory: "champagne",
     type: "Verre gravé personnalisé",
-    tagline: "Une flûte à champagne gravée à votre façon : un modèle (n°1 à 19), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
+    tagline: "Une flûte à champagne gravée à votre façon : un modèle, une lettre fleurie, votre texte, votre photo ou votre logo.",
     personalizable: true,
     personalizationLabel: "Modèle au choix, lettre fleurie ou texte (+ prénom, date, police)",
     images: [
@@ -3114,7 +3069,7 @@ export const products = [
       ],
     },
     // 1re gravure (prénom) incluse ; chaque gravure en plus est payante (+3 €).
-    engravingPricing: { textKeys: ["date", "initiale"], textExtra: 3 },
+    engravingPricing: { textKeys: ["texte", "prenom", "date", "initiale"], textExtra: 3 }, // chaque texte +3 € (16/10/2026)
     personalizationFields: [
       { key: "mode", type: "select", label: "Gravure", optional: true, options: [
         { value: "modele", label: "Un modèle décoré (n°)" },
@@ -3157,22 +3112,8 @@ export const products = [
       { id: "flute-2", stockId: "flute-2", title: "Lot de 2", price: 33.90, weight: 800 },
       { id: "flute-4", stockId: "flute-4", title: "Lot de 4 — livraison offerte", price: 64.90, weight: 1400 },
     ],
-    descriptionHtml: `<p><strong>Une flûte à champagne gravée à votre façon.</strong> Choisissez un <strong>modèle prêt</strong> (n°1 à 19 : couples, prénoms & dates, banderoles…), une <strong>lettre fleurie</strong> (monogramme), ou votre <strong>propre texte</strong> — l'aperçu se met à jour en direct.</p>
-<p>Gravure laser permanente, qui résiste au lave-vaisselle. Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire. <strong>Livraison offerte dès 60 € d'achat.</strong></p>
-<h3>Caractéristiques</h3>
-<ul>
-<li><strong>Verre :</strong> flûte à champagne, contenance ~21 cl (Ø 6,3 × H 21,4 cm)</li>
-<li><strong>Gravure :</strong> laser — un modèle au choix, une lettre fleurie ou votre texte</li>
-<li><strong>Personnalisation :</strong> prénom, date, initiale + 8 polices au choix</li>
-<li><strong>À l'unité, lot de 2 ou lot de 4</strong>, dans chaque taille (livraison offerte dès 60 € d'achat)</li>
-</ul>
-<h3>Points forts</h3>
-<ul>
-<li>Gravure permanente, qui résiste au lave-vaisselle</li>
-<li>Aperçu en direct de votre gravure avant de commander</li>
-<li>Emballage protégé pour un transport en toute sécurité</li>
-<li>Gravé en France, dans notre atelier</li>
-</ul>`,
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Une flûte à champagne gravée à votre façon, dans notre atelier.</strong></p><p class="pd2-occ">Idéale pour un mariage, des fiançailles, le Nouvel An ou un anniversaire.</p><h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>21 cl</b><span>flûte à champagne, Ø 6,3 × H 21,4 cm.</span></div></div><h3>Quatre façons de la graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Un modèle</b></p><span>40 modèles numérotés, avec vos prénoms si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Une lettre fleurie</b></p><span>votre initiale, avec un prénom au milieu.</span></div><div class="pd2-way"><p class="pd2-wt"><i>3</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures.</span></div><div class="pd2-way"><p class="pd2-wt"><i>4</i><b>Votre photo ou votre logo</b></p><span>un dessin, une photo, le logo de votre bar ou de votre entreprise.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Quatre façons de graver : un modèle (40 modèles numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo. L’aperçu se met à jour pendant que vous choisissez."], ["Modèles", "Sur un modèle, les prénoms et la date sont gravés dans l’écriture du modèle."], ["Entretien", "Va au lave-vaisselle : la gravure ne bouge pas. Manipulez le pied avec précaution, il est fin."]],
   },
   {
     slug: "carafe-a-whisky-gravee",

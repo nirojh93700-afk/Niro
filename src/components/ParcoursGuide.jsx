@@ -16,7 +16,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
 import { parcoursEtat, modeleChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
-import PhotoUpload from "./PhotoUpload";
+import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
 
 const LETTRES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const MODES = (cfg, nbModeles) => [
@@ -82,6 +82,10 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
     setGrilleOuverte(false);
   }
 
+  // Verres (règle de prix du 16/10/2026) : le texte se paie toujours (+3 €), y compris les prénoms.
+  const RV = Boolean(product.regleVerres);
+  // Conseils photo : s'ouvrent quand la cliente touche « Choisir une photo » (gérant, 16/10/2026).
+  const guide = cfg.guidePhoto || GUIDE_PHOTO_GRAVURE;
   const grille = Object.keys(modeles).map(Number).sort((a, b) => a - b);
   // Numéros d'étapes : ① gravure · [② emplacement] · détail · [coffret] · résumé.
   const nEmpl = E ? 2 : 0;
@@ -114,7 +118,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       <p className="prc-legend">Gravée centrée au fond, elle se découvre à travers le verre. Une photo, un texte, ou les deux.</p>
       <div className="prc-fields">
         <div className="field"><label>Photo pour le fond <span className="prc-opt">(facultatif)</span></label>
-          <PhotoUpload value={fieldValues.photoFond || ""} onChange={(url) => set({ photoFond: url })} productSlug={product.slug} /></div>
+          <PhotoUpload value={fieldValues.photoFond || ""} onChange={(url) => set({ photoFond: url })} productSlug={product.slug} guide={guide} /></div>
         <div className="field"><label>Texte pour le fond <span className="prc-opt">(facultatif)</span></label>
           <input type="text" maxLength={texteMax} placeholder="Prénom, message…" value={fieldValues.texteFond || ""} onChange={(e) => set({ texteFond: e.target.value })} /></div>
       </div>
@@ -233,7 +237,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     const F = PARCOURS_CHAMPS[k];
                     return (
                       <div className="field" key={k}>
-                        <label>{F.label}<span className="prc-opt"> (facultatif{F.extra ? `, +${F.extra} €` : ""})</span></label>
+                        <label>{F.label}<span className="prc-opt"> (facultatif{(F.extra || (RV && F.key === "prenom" ? 3 : 0)) ? `, +${F.extra || 3} €` : ""})</span></label>
                         <input type="text" maxLength={F.max} placeholder={F.ph} value={fieldValues[F.key] || ""} onChange={(e) => set({ [F.key]: e.target.value })} />
                       </div>
                     );
@@ -256,7 +260,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     ))}
                   </div>
                   <div className="prc-fields">
-                    <div className="field"><label>Prénom dans la bande <span className="prc-opt">(facultatif)</span></label>
+                    <div className="field"><label>Prénom dans la bande <span className="prc-opt">(facultatif{RV ? ", +3 €" : ""})</span></label>
                       <input type="text" maxLength={20} placeholder="Ex. Stephan" value={fieldValues.prenom || ""} onChange={(e) => set({ prenom: e.target.value })} /></div>
                     <div className="field"><label>Écriture du prénom</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>
                   </div>
@@ -269,7 +273,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
             <div className="prc-mode">
               <div className="prc-one">
                 <div className="prc-fields">
-                  <div className="field"><label>Votre texte à graver{E ? <span className="prc-opt"> (+3 €)</span> : null}</label>
+                  <div className="field"><label>Votre texte à graver{(E || RV) ? <span className="prc-opt"> (+3 €)</span> : null}</label>
                     <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · Pour Papa · Merci"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} />
                     <span className="prc-count">{(fieldValues.texte || "").length}/{texteMax}</span></div>
                   {commun || (
@@ -286,19 +290,12 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
 
           {mode === "photo" && (
             <div className="prc-mode">
-              <p className="prc-legend">Une photo, un dessin, un logo : téléversez le fichier (JPG, PNG). Photo seule, ou photo + texte, comme vous voulez. Elle se pose sur la grande photo en haut, où vous pouvez la déplacer. L&apos;atelier vérifie la qualité avant de graver.</p>
-              {cfg.guidePhoto && (
-                <details className="prc-guide"><summary>Réussir sa gravure photo — nos conseils</summary>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={cfg.guidePhoto.image} alt="Exemples de bonnes et mauvaises photos pour la gravure" />
-                  <p>{cfg.guidePhoto.texte}</p>
-                </details>
-              )}
+              <p className="prc-legend">JPG ou PNG. L&apos;atelier vérifie la qualité avant de graver.</p>
               <div className="prc-one">
                 <div className="prc-fields">
                   <div className="field"><label>Votre photo ou logo</label>
-                    <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} /></div>
-                  <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{E ? ", +3 €" : ""})</span></label>
+                    <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} guide={guide} /></div>
+                  <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{(E || RV) ? ", +3 €" : ""})</span></label>
                     <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · 1989"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} /></div>
                   {commun || (fieldValues.texte && <div className="field"><label>Écriture du texte</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>)}
                 </div>

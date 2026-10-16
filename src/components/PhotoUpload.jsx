@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // Upload de photo : via Cloudinary si configuré, sinon via /api/upload
 // (stockage dans la base Firebase de l'atelier). Aperçu local immédiat.
@@ -10,6 +10,13 @@ export const CLOUDINARY_READY = Boolean(CLOUD && PRESET);
 // L'upload est possible si Cloudinary OU le stockage Firebase est dispo.
 // (On tente toujours : /api/upload répond proprement si non configuré.)
 export const UPLOAD_AVAILABLE = true;
+
+// Conseils photo affichés AVANT le choix de la photo (gérant, 16/10/2026 : « dès qu'il clique sur
+// Choisir une photo, cette photo doit apparaître »). Image des bonnes / mauvaises photos.
+export const GUIDE_PHOTO_GRAVURE = {
+  image: "/produits/guide-photo-gravure.png",
+  texte: "Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d'espace autour. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier. L'aperçu en ligne est indicatif.",
+};
 
 function readAsDataUrl(file) {
   return new Promise((res, rej) => {
@@ -49,7 +56,9 @@ function compressImage(file, maxDim = 1280, quality = 0.82) {
   });
 }
 
-export default function PhotoUpload({ value, onChange, onUpload, multiple = false, productSlug }) {
+export default function PhotoUpload({ value, onChange, onUpload, multiple = false, productSlug, guide = null }) {
+  const inputRef = useRef(null);
+  const [guideOuvert, setGuideOuvert] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | uploading | done
   const [preview, setPreview] = useState("");
   const [error, setError] = useState("");
@@ -132,20 +141,35 @@ export default function PhotoUpload({ value, onChange, onUpload, multiple = fals
             <div style={{ fontSize: "0.8rem", color: status === "done" ? "#256b34" : "var(--ink-soft)" }}>
               {status === "uploading" ? "Envoi en cours…" : "✓ Photo reçue"}
             </div>
-            <button type="button" onClick={() => { setPreview(""); onChange(""); setStatus("idle"); }} className="photo-remove">
+            <button type="button" onClick={() => { setPreview(""); onChange(""); setStatus("idle"); if (guide && !multiple) setGuideOuvert(true); }} className="photo-remove">
               Changer de photo
             </button>
           </div>
         </div>
       ) : (
-        <label className="photo-dropzone">
-          <input type="file" accept="image/*" multiple={multiple} onChange={handleFile} hidden />
+        <label className="photo-dropzone" onClick={(e) => {
+          // Avec des conseils : on les montre d'abord, le choix du fichier s'ouvre ensuite.
+          if (guide && !multiple && status !== "uploading" && e.target === e.currentTarget) { e.preventDefault(); setGuideOuvert(true); }
+        }}>
+          <input ref={inputRef} type="file" accept="image/*" multiple={multiple} onChange={handleFile} hidden />
           {status === "uploading"
             ? (progress || "Envoi en cours…")
             : (multiple ? "Choisir une ou plusieurs photos" : "Choisir une photo")}
         </label>
       )}
       {error && <span className="char-count" style={{ color: "#b4452f", textAlign: "left" }}>{error}</span>}
+      {guide && guideOuvert && (
+        <div className="pu-guide-fond" onClick={(e) => { if (e.target === e.currentTarget) setGuideOuvert(false); }}>
+          <div className="pu-guide" role="dialog" aria-modal="true" aria-label="Avant de choisir votre photo">
+            <h3>Avant de choisir votre photo</h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={guide.image} alt="Exemples de bonnes et mauvaises photos pour la gravure" />
+            {guide.texte ? <p>{guide.texte}</p> : null}
+            <button type="button" className="pu-guide-ok" onClick={() => { setGuideOuvert(false); inputRef.current?.click(); }}>J&apos;ai compris, choisir ma photo</button>
+            <button type="button" className="pu-guide-non" onClick={() => setGuideOuvert(false)}>Fermer</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

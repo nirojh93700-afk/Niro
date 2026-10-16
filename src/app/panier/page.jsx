@@ -222,9 +222,11 @@ export default function CartPage() {
                 ) : null}
                 <div className="cart-line-bottom">
                   <div className="mini-stepper">
-                    <button onClick={() => updateQuantity(item.key, item.quantity - 1)}>−</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.key, item.quantity + 1)}>+</button>
+                    {item.verresFixe ? <span title="Pour changer le nombre de verres, retournez sur la fiche">× {item.quantity}</span> : (<>
+                      <button onClick={() => updateQuantity(item.key, item.quantity - 1)}>−</button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item.key, item.quantity + 1)}>+</button>
+                    </>)}
                   </div>
                   <strong>{formatEuro(item.price * item.quantity)}</strong>
                 </div>
