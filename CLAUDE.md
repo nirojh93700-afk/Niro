@@ -50,6 +50,15 @@
   · Vérifié : build · 6 jeux de tests · navigateur 390/1280 (vin 1 verre + texte 20,90 · ×2 identiques 38,80 · 2ᵉ différent 43,80 ·
     3 verres dont 1 différent 61,70 = panier = paiement · cocktail lot de 2 + texte 36,90 · fenêtre photo · 0 erreur, 0 débordement).
 
+## 🔎 CONTRÔLE AUTOMATIQUE « TEXTE GRAVÉ ↔ PRIX AFFICHÉ » — 16/10/2026 (« je veux pas que ça ait ce problème ailleurs » → « oui »)
+- `src/lib/textesPrix.js` (`controleTextesPrix(product)`, pur, `npm run test-textes-prix`) : pour chaque case de texte, option par
+  option, compare ce que le PAIEMENT fait payer (`engravingExtra`) à ce que la fiche ÉCRIT (« +X € » dans le libellé, ou les libellés
+  du parcours guidé : champs demandés par les modèles, prénom de la lettre fleurie, texte, texte sous la photo, date). Anomalies :
+  « payé sans prix affiché » / « prix affiché mais pas payé ».
+- Branché dans la surveillance du catalogue (`catalogAudit.js`, type `texte-prix`, priorité haute → e-mail hebdomadaire + page
+  Gestion → Santé du catalogue avec le conseil). Lit le catalogue AVEC les réglages de Gestion.
+- ⚠️ Si `ParcoursGuide.jsx` change ses libellés de prix, mettre `textesPrix.js` à jour (il en recopie les règles).
+
 ## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
 - Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui
   donne soit vérifié AVANT. Une date se vérifie par la commande : `TZ=Europe/Paris date` et le jour de la semaine calculé

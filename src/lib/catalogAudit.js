@@ -16,6 +16,7 @@ import { getSettings } from "./stock";
 import { productInfo } from "./productInfo";
 import { defaultPackagingFor } from "./packaging";
 import { guidePourProduit } from "./guides";
+import { controleTextesPrix } from "./textesPrix";
 
 const RANK = { haute: 0, moyenne: 1, basse: 2 };
 
@@ -58,6 +59,12 @@ export async function auditCatalog() {
     // en vente qu'aucun guide ne couvre (nouvelle catégorie, nouveau type) est signalé, pour qu'on lui crée
     // ou lui choisisse un guide. Les produits d'une catégorie déjà couverte entrent seuls dans leur guide.
     if (!p.hidden && !guidePourProduit(p)) add(p, "guide", "moyenne", "Aucun guide « Idées & conseils » ne couvre ce produit");
+
+    // 6. Texte gravé ↔ prix affiché (gérant, 16/10/2026) : une case de texte payée sans prix écrit à côté,
+    // ou un prix écrit qui n'est pas payé. Lu sur le catalogue AVEC les réglages de Gestion.
+    try {
+      for (const a of controleTextesPrix(p)) add(p, "texte-prix", "haute", a.message);
+    } catch { /* un produit mal formé ne bloque pas la surveillance */ }
   }
 
   issues.sort((a, b) => (RANK[a.severity] ?? 9) - (RANK[b.severity] ?? 9));

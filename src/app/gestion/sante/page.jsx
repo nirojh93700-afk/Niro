@@ -21,6 +21,7 @@ const HINTS = {
   photo: "Gestion → Produits & Stock : ajouter au moins une photo.",
   prix: "Gestion → Produits & Stock : ajouter une variante avec un prix.",
   fiche: "Facultatif : ajouter une fiche détaillée (Taille & Matériaux / Entretien / Retour).",
+  "texte-prix": "Gestion → Produits & Stock → la fiche : écrire le prix dans le libellé de la case (ex. « +3 € »), ou régler le supplément de gravure pour qu'il soit payé.",
 };
 
 export default function SanteCatalogue() {
