@@ -5,6 +5,25 @@
   sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
 - Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
 
+## 🍷 VERRES : RÈGLE DE PRIX DE LA GRAVURE + FICHE ATELIER DÉTAILLÉE + SAUVEGARDE — 16/10/2026 (RIEN en ligne)
+- **Sauvegarde avant tout changement** (gérant : « avant de modifier le site tu enregistres le site actuel ») : `docs/sauvegardes/2026-10-16/`
+  sur la branche de travail = code en ligne `bcfd1c4f` + données (`/api/admin/export`, SANS les clés secrètes : GitHub les refuse, elles
+  restent dans Firestore) + 36 commandes. ⛔ Ce dossier contient des données clientes : jamais sur la branche du site. Les branches
+  nouvelles et les étiquettes git sont refusées depuis la session : la sauvegarde va sur la branche de travail.
+- **Règle de prix de gravure des verres (validée par le gérant)** : les PRIX DES VERRES NE CHANGENT PAS. Verre 1 : image / logo / modèle
+  offert, texte +3 € ; chaque verre différent +5 € tout compris ; verres identiques : rien pour 1-2, +2 € pour 3-4, +5 € pour 5-6
+  (une fois par commande, au-delà de 6 non tranché). Pour TOUS les verres : vin (maquette https://claude.ai/artifact/WKfxo5sq9QsPezi51uPdkB),
+  flûte, whisky, cocktail, Fête des pères (maquette https://claude.ai/artifact/BSTaqkB9c34WXkxBWzB6at). Hypothèses à confirmer :
+  face + fond reste +7 € par verre ; la date compte dans les 5 € d'un verre différent. Fiche plus courte : règle en une ligne
+  + « Voir les prix », détail du prix replié, texte de l'étape 2 en une phrase, description en cartes et tableaux.
+  ⛔ **Les 4 cartes « Que voulez-vous graver ? » restent TOUJOURS affichées** (gérant : « pour que les gens voient tout ce qu'on peut faire
+  pour tous les verres ») : ne pas les replier sur le choix fait.
+- **Fiche atelier : consignes rangées face par face** (gérant, commande 0XIF6DDO pendentif : « je dois graver du haut vers le bas ou en bas,
+  tout doit être détaillé ») : `src/lib/consignesGravure.js` (pur, `npm run test-consignes`) → `TableGravure` (fiche commande, page Atelier,
+  fiche imprimée) : en tête sens d'écriture avec flèche, police, emplacement face / fond ; un bloc par face, faces VIERGES comprises ;
+  autres réglages ; « Où et à quelle taille graver » en mots (layout enregistré à la commande) ; alerte si la place choisie contredit
+  l'aperçu (cristal). Commit local sur la copie du code du site, **pas poussé : attend son « pousse »**.
+
 ## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
 - Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui
   donne soit vérifié AVANT. Une date se vérifie par la commande : `TZ=Europe/Paris date` et le jour de la semaine calculé
