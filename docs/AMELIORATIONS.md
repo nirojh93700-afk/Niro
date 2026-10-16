@@ -176,4 +176,10 @@
   <.next/static/css> <photo> <sortie>` (vrai rendu de /produit/verre-a-vin-grave, 47 cl, À l'unité, mode photo, quantité 2).
   Idée 1 encadré sous le bouton · Idée 2 « Chacun différent » sur À l'unité · Idée 3 alerte « 2 verres, 1 seule photo » dans la
   file de production ET la fiche atelier (pour tous les produits photo). **Rien en ligne : en attente de son choix.**
+- ✅ **Onglet « Prix » ajouté le 16/10 (gérant : « le deuxième, le troisième logo est payant »)** : première image comprise,
+  **chaque verre gravé d'une image DIFFÉRENTE : +3 €** (montant PROPOSÉ, aligné sur le supplément texte des verres, à valider
+  par lui) ; un verre qui reprend la même image ne coûte rien de plus ; les textes restent +3 € chacun. Exemples dans la maquette :
+  2 verres même photo 43,80 € · photo + logo 46,80 € · lot de 4 avec 4 images 86,90 € · lot de 4 avec 2 images 80,90 €.
+  À la construction : compter les images distinctes dans `perGlass` au checkout (comme `textExtra`), affichage « +3 € » sur
+  l'onglet du verre, ligne par verre dans le résumé, la fiche atelier et le mail de confirmation.
 

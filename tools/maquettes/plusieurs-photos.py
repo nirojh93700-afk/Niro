@@ -26,6 +26,7 @@ main = re.sub(r'\ssrcset="[^"]*"', "", main)
 main = re.sub(r'src="([^"]+)"', img_src, main)
 main = re.sub(r"<script.*?</script>", "", main, flags=re.S)
 PH = uri(photo, 300)
+LOGO = uri(sys.argv[5], 300) if len(sys.argv) > 5 else PH
 
 # Photo « envoyée » (état après téléversement), bouton actif, résumé complet
 main = main.replace('<div class="photo-upload"><label class="photo-dropzone"><input accept="image/*" hidden="" type="file">Choisir une photo</label></div>',
@@ -33,6 +34,27 @@ main = main.replace('<div class="photo-upload"><label class="photo-dropzone"><in
 main = main.replace('<b class="prc-miss">Ma photo ou mon logo — à compléter</b>', '<b>Ma photo ou mon logo</b>', 1)
 main = main.replace('<button class="btn btn-gold prc-off" style="flex:1" disabled="">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', 1)
 main = main.replace('<p class="prc-addhint">Ajoutez votre photo ou votre logo (étape 2).</p>', "", 1)
+
+
+PRIX = ('<div class="mq mq-4">'
+  '<div class="perglass"><div class="pg-choice"><button type="button" class="pg-opt">Les 2 identiques</button>'
+  '<button type="button" class="pg-opt on">Chacun différent</button></div>'
+  '<div class="pg-tabs"><button type="button" class="pg-tab on" data-g="1">Verre 1</button><button type="button" class="pg-tab" data-g="2">Verre 2 <i class="mq-sup">+3 €</i></button></div>'
+  '<p class="pg-hint">La première image est <b>comprise</b>. Chaque verre gravé d’une <b>image différente</b> : <b>+3 €</b>. Un verre qui reprend la même image ne coûte rien de plus.</p></div>'
+  '<div class="mq-g1"><div class="field"><label>Verre 1 · votre photo ou logo <span class="mq-ok">comprise</span></label>'
+  '<div class="photo-upload"><div class="mq-up"><img src="%s" alt=""><span><b>Photo envoyée ✓</b><small>dessin-couple.jpg</small></span><span class="mq-chg">Changer</span></div></div></div></div>'
+  '<div class="mq-g2" hidden><label class="mq-same"><input type="checkbox" id="mq-same"> Même image que le verre 1 <span class="mq-ok">rien en plus</span></label>'
+  '<div class="field mq-g2up"><label>Verre 2 · une autre image <span class="mq-sup">+3 €</span></label>'
+  '<div class="photo-upload"><div class="mq-up"><img src="%s" alt=""><span><b>Logo envoyé ✓</b><small>logo-zoo-bar.png</small></span><span class="mq-chg">Changer</span></div></div></div></div>'
+  '<div class="prc-sum mq-sum"><div class="prc-sumrow"><span>Verre 1 · votre photo</span><b>comprise</b></div>'
+  '<div class="prc-sumrow mq-l2"><span>Verre 2 · une autre image</span><b>+ 3,00 €</b></div>'
+  '<div class="prc-sumrow prc-sumtot"><span>Total (2 verres)</span><b class="mq-tot">46,80 €</b></div></div>'
+  '<div class="mq-ex"><b>Exemples</b><table><tr><td>2 verres, même photo</td><td>43,80 €</td></tr>'
+  '<tr><td>2 verres, photo + logo</td><td>46,80 €</td></tr>'
+  '<tr><td>Lot de 4, 4 images différentes</td><td>77,90 € + 9 € = 86,90 €</td></tr>'
+  '<tr><td>Lot de 4, 2 images (2 verres chacune)</td><td>77,90 € + 3 € = 80,90 €</td></tr></table>'
+  '<p class="mq-small">Les textes restent à +3 € chacun, comme aujourd’hui. Le montant de 3 € par image est une proposition, à changer d’un mot.</p></div>'
+  '</div>') % (PH, LOGO)
 
 # IDÉE 1 — encadré sous la quantité
 IDEE1 = ('<div class="mq mq-1"><b>📷 Vos 2 verres sont différents ?</b>'
@@ -47,7 +69,7 @@ IDEE2 = ('<div class="perglass mq mq-2"><div class="pg-choice"><button type="but
 IDEE2_BAS = '<p class="mq mq-2 mq-2bas">2 verres : une photo pour chacun avec « Chacun différent », plus haut.</p>'
 
 i = main.find('<section class="prc-step">')
-main = main[:i] + IDEE2 + main[i:]
+main = main[:i] + IDEE2 + PRIX + main[i:]
 j = main.find('<div class="qty-row">'); k = main.find('<button type="button" class="fav-ligne"', j)
 main = main[:k] + IDEE1 + IDEE2_BAS + main[k:]
 
@@ -82,7 +104,16 @@ body{background:var(--mq-cream);margin:0}
 .mq-bar button.on{background:#c9a24b;border-color:#c9a24b;color:#1a1206}
 .mq-intro{max-width:1100px;margin:14px auto 0;padding:0 16px;font:.9rem/1.5 system-ui,sans-serif;color:#5a4a33}
 .mq{display:none}
-body[data-v="1"] .mq-1,body[data-v="2"] .mq-2{display:block}
+body[data-v="1"] .mq-1,body[data-v="2"] .mq-2,body[data-v="4"] .mq-4{display:block}
+body[data-v="4"] section.prc-step:nth-of-type(2){display:none}
+.mq-sup{font-style:normal;font-size:.72rem;font-weight:700;color:#7a1f1f;background:#fdecec;border-radius:999px;padding:2px 7px;margin-left:4px}
+.mq-ok{font-size:.72rem;font-weight:700;color:#1f6b3a;background:#e6f4ea;border-radius:999px;padding:2px 7px;margin-left:4px}
+.mq-same{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:.88rem}
+.mq-sum{margin-top:12px}
+.mq-ex{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#fff;border:1px solid #e9dcc0;font-size:.86rem}
+.mq-ex table{border-collapse:collapse;margin:8px 0;width:100%}
+.mq-ex td{padding:5px 0;border-bottom:1px solid #f0e6d2}
+.mq-ex td:last-child{text-align:right;font-weight:700;white-space:nowrap}
 body[data-v="3"] main{display:none}
 .mq-g{display:none;max-width:1100px;margin:20px auto 40px;padding:0 16px;font-family:system-ui,sans-serif}
 body[data-v="3"] .mq-g{display:block}
@@ -112,15 +143,17 @@ document.querySelectorAll(".mq-1,.mq-2").forEach(function(e){e.style.visibility=
 var bt=document.querySelectorAll(".qty-stepper button");bt[0].onclick=function(){maj(Math.max(1,+q.textContent-1))};bt[1].onclick=function(){maj(+q.textContent+1)};
 document.querySelectorAll(".pg-opt").forEach(function(o){o.onclick=function(){document.querySelectorAll(".pg-opt").forEach(function(x){x.classList.remove("on")});o.classList.add("on")}});
 document.querySelectorAll(".pg-tab").forEach(function(o,i){o.onclick=function(){document.querySelectorAll(".pg-tab").forEach(function(x){x.classList.remove("on")});o.classList.add("on");document.querySelector(".pg-hint b").textContent="Verre "+(i+1)}});
+document.querySelectorAll(".mq-4 .pg-tab").forEach(function(o){o.onclick=function(){var g=o.dataset.g;document.querySelector(".mq-g1").hidden=g!="1";document.querySelector(".mq-g2").hidden=g!="2"}});
+var same=document.getElementById("mq-same");if(same)same.onchange=function(){var on=same.checked;document.querySelector(".mq-g2up").hidden=on;document.querySelector(".mq-l2").style.display=on?"none":"";document.querySelector(".mq-tot").textContent=on?"43,80 €":"46,80 €";document.querySelector(".mq-4 .pg-tab[data-g='2'] .mq-sup").style.display=on?"none":""};
 var lot=document.querySelector(".mq-lot");if(lot)lot.onclick=function(){lot.outerHTML='<p class="mq-small"><b>Sur le site :</b> la fiche passe sur « Lot de 2 », quantité 1, et le choix « Chacun différent » s’ouvre, une photo par verre.</p>'};
 set("1");})();
 </script>'''
 
 doc = ('<title>Plusieurs verres, une photo</title><style>%s%s</style>'
        '<div class="mq-bar"><span>Maquette · 1 seule photo pour 2 verres</span>'
-       '<button data-v="1">Idée 1 · encadré</button><button data-v="2">Idée 2 · chacun différent</button><button data-v="3">Idée 3 · alerte Gestion</button></div>'
+       '<button data-v="1">Idée 1 · encadré</button><button data-v="2">Idée 2 · chacun différent</button><button data-v="3">Idée 3 · alerte Gestion</button><button data-v="4">Prix · 2ᵉ image payante</button></div>'
        '<p class="mq-intro">Vrai rendu de la fiche verre à vin : 47 cl, « À l’unité », mode photo, quantité 2 (le cas de la commande 0E3Y9OBX). '
-       'Change la quantité avec − / + : les idées 1 et 2 n’apparaissent qu’à partir de 2 verres.</p>'
+       'Change la quantité avec − / + : les idées 1 et 2 n’apparaissent qu’à partir de 2 verres. L’onglet « Prix » montre la règle : première image comprise, chaque image différente en plus payante.</p>'
        '%s%s%s') % (css, MQCSS, main, GESTION, JS)
 open(out, "w", encoding="utf-8").write(doc)
 print("ok", out, round(len(doc) / 1024), "Ko")
