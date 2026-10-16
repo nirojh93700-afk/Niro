@@ -161,3 +161,13 @@
   « Livrée » toute seule, avec l'API Suivi de La Poste (gratuite, compte sur developer.laposte.fr, clé « Okapi »).
   Le gérant met la clé lui-même en secret Firebase (`LAPOSTE_OKAPI_KEY`), jamais dans la conversation ni dans un fichier.
   À construire seulement s'il le demande.
+
+## 💡 16/10/2026 — Plusieurs verres, une seule photo (cas 0E3Y9OBX, logo manquant)
+- **Constat** (vérifié sur les 36 commandes) : la cliente a pris le verre à vin 47 cl **« À l'unité » × 2** au lieu du **« Lot de 2 »** :
+  sur « À l'unité », la fiche n'a qu'**un seul champ photo** (une 2ᵉ image remplace la 1ʳᵉ) et le choix **« Chacun différent »**
+  n'apparaît que sur les lots. Résultat : un seul visuel enregistré pour deux verres, le logo a dû être redemandé par e-mail.
+  C'est la seule commande dans ce cas ; Olivier Chesta (cocktail, lot de 4, « Chacun différent ») a bien eu ses 4 photos.
+- **Pistes** (à proposer, rien de construit) : ① sur une fiche verre, quand la quantité passe à 2 ou plus en mode photo, afficher
+  « Des verres différents ? Prenez le lot de 2 puis “Chacun différent” » (le lot est aussi moins cher : 39,90 € au lieu de 43,80 €) ;
+  ② ou proposer « Chacun différent » aussi sur « À l'unité » quand la quantité dépasse 1 ; ③ dans Gestion, une pastille
+  « 2 verres, 1 seule photo — vérifier » sur ce genre de commande.
