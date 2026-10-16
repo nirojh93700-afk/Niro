@@ -64,6 +64,19 @@
   n'étaient pas dans le tableau. Vérifié : 37 commandes réelles et 89 produits → 0 oubli.
   ⛔ Tout nouveau type de champ doit être rangé dans `consignesGravure` ; s'il ne l'est pas, le contrôle le signale.
 
+## ✉️ ADRESSE E-MAIL MAL TAPÉE AU PAIEMENT — 16/10/2026 (commande 10OPUHMO « gmail.comn », gérant : « tu peux construire »)
+- Gestion : `POST /api/admin/orders {id, action:"email", customerEmail}` corrige l'e-mail d'une commande (ancienne adresse gardée
+  dans `emailCorrigeDe`) — fait pour Céline Naulin (naulinceline71@gmail.com), mail d'explication envoyé par le site le 16/10 20 h 46.
+- `src/lib/emailTypo.js` (pur) : `suggestionEmail` (gmail.comn, gmial.com, gmail.fr, hotmial.fr, orange.f… → domaine courant ;
+  jamais la partie avant @ ; yahoo.it / hotmail.be laissés tranquilles). `src/lib/emailTypoServeur.js` (DNS, serveur seulement :
+  le navigateur n'a pas de module dns) : `verifierEmailCommande` → au webhook Stripe, si le domaine tapé ne reçoit AUCUN mail ET
+  que le domaine proposé, lui, répond → adresse corrigée (confirmation, commande, espace client) + `emailCorrigeDe` ; sinon
+  alerte seulement (`alerteEmail`). Garde : si le DNS dit que même le domaine proposé n'existe pas, rien n'est corrigé.
+  Encadré rouge dans l'e-mail 🛎️, la fiche commande et la file de production.
+- Panier : sous « Votre e-mail » (code promo), « Vouliez-vous dire … ? [Corriger] » (`.em-sugg`).
+- `npm run test-email-typo` (21 vérifs). ⚠️ Constaté au passage : la page panier déborde à 390 px (ligne d'article 443 px de large),
+  défaut ANTÉRIEUR, non corrigé.
+
 ## 🔴🔴 « ARRÊTE D'ENVOYER DES MAILS » — DEMANDE D'AVIS REÇUE 4 FOIS PAR LUDOVIC (16/10/2026)
 - Commande 16HGINEA (ludsolo@gmail.com, livrée le 14/10) : demande d'avis reçue à 13 h 46 (site Firebase, par Gmail, NORMAL) puis
   à 14 h 18, 14 h 30 et 14 h 42 depuis `commande@nivcreation.fr` (Resend) — le lien du bas de ces mails pointe vers

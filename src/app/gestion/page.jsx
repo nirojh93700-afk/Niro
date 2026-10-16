@@ -1276,6 +1276,11 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {"\n" + o.alerteInterne}
                   </div>
                 )}
+                {o.alerteEmail || o.emailCorrigeDe ? (
+                  <div style={{ background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem" }}>
+                    <strong style={{ color: "#b32b2b" }}>⚠️ Adresse e-mail :</strong> {o.alerteEmail || `corrigée — tapée au paiement « ${o.emailCorrigeDe} », remplacée par « ${o.customerEmail} ».`}
+                  </div>
+                ) : null}
                 {/* Conditionnement + pièce ratée, comme dans la file de production (13/10/2026). */}
                 <PreparationCommande o={o} mat={mat} adminKey={key} onCond={setCondOrder} onMat={() => loadMat(key)} />
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>

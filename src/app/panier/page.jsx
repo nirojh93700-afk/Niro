@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
+import { suggestionEmail } from "@/lib/emailTypo";
 import { startCheckout } from "@/lib/checkout";
 import FreeShippingBar from "@/components/FreeShippingBar";
 import CadeauChoix from "@/components/CadeauChoix";
@@ -383,6 +384,16 @@ export default function CartPage() {
               disabled={useCagnotte}
               style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", marginBottom: 8 }}
             />
+            {/* Adresse probablement mal tapée (« gmail.comn », « gmial.com »…) : on propose la bonne (16/10/2026). */}
+            {(() => {
+              const sugg = suggestionEmail(promoEmail);
+              return sugg ? (
+                <p className="em-sugg">
+                  Vouliez-vous dire <b>{sugg}</b> ?{" "}
+                  <button type="button" onClick={() => { setPromoEmail(sugg); setPromoOk(false); setPromoMsg(""); }}>Corriger</button>
+                </p>
+              ) : null;
+            })()}
             <div style={{ display: "flex", gap: 8 }}>
               <input
                 type="text"

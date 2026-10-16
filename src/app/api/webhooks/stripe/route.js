@@ -7,6 +7,7 @@ import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif 
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { oubliesAtelier } from "@/lib/controleAtelier";
+import { verifierEmailCommande } from "@/lib/emailTypoServeur";
 import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
 import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
@@ -322,7 +323,14 @@ export async function POST(req) {
       expand: ["line_items.data.price.product", "shipping_cost.shipping_rate"],
     });
 
-    const customer = session.customer_details || {};
+    const customer = { ...(session.customer_details || {}) };
+    // Adresse mal tapée au paiement (16/10/2026, « gmail.comn ») : si le domaine ne reçoit aucun e-mail et
+    // ressemble à un fournisseur courant, on corrige (confirmation, commande, espace client) ; sinon alerte.
+    let emailVerif = { corrigeeDe: "", alerte: "" };
+    try {
+      emailVerif = await verifierEmailCommande(customer.email || "");
+      if (emailVerif.corrigeeDe) customer.email = emailVerif.email;
+    } catch { /* jamais bloquant */ }
     const shipping =
       session.shipping_details || session.collected_information?.shipping_details || null;
     const currency = session.currency || "eur";
@@ -537,6 +545,7 @@ export async function POST(req) {
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
         ${oublisBlock}
+        ${emailVerif.alerte ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Adresse e-mail de la cliente</strong><p style="margin:6px 0 0;">${escapeHtml(emailVerif.alerte)}</p></div>` : ""}
         ${alerteBlock}
         ${cadeauBlock}
         ${demandeBlock}
@@ -727,6 +736,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       currency,
       customerName: customer.name || "",
       customerEmail: customer.email || "",
+      ...(emailVerif.corrigeeDe ? { emailCorrigeDe: emailVerif.corrigeeDe } : {}),
+      ...(emailVerif.alerte ? { alerteEmail: emailVerif.alerte } : {}),
       customerPhone: customer.phone || "",
       shippingName: shipping?.name || "",
       shippingAddress: shipping?.address || null,
