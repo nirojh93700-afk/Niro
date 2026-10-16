@@ -306,3 +306,7 @@ En attente de SA décision :
   logo à droite). Adresse toujours en noir, CP + VILLE en gras majuscules ; logo d'origine, en bas.
 - Au « applique » : reporter le modèle choisi dans `feuilleHtml` ET `feuillePdf` (`src/lib/etiquettes.js`),
   garder le resserrement automatique du texte (adresse longue), relancer `npm run test-etiquettes`.
+
+- **16/10/2026 — Céline Naulin #10OPUHMO** (verre à whisky face + fond) : le mail du 16/10 20 h 46 lui annonce **un aperçu de sa
+  gravure** → à lui envoyer par Gestion → la commande → « Communications & aperçu » avant de graver. Adresse de la commande
+  corrigée (naulinceline71@gmail.com, ancienne « …gmail.comn » gardée dans `emailCorrigeDe`).
