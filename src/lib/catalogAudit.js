@@ -17,6 +17,7 @@ import { productInfo } from "./productInfo";
 import { defaultPackagingFor } from "./packaging";
 import { guidePourProduit } from "./guides";
 import { controleTextesPrix } from "./textesPrix";
+import { controleProduitAtelier } from "./controleAtelier";
 
 const RANK = { haute: 0, moyenne: 1, basse: 2 };
 
@@ -65,6 +66,12 @@ export async function auditCatalog() {
     try {
       for (const a of controleTextesPrix(p)) add(p, "texte-prix", "haute", a.message);
     } catch { /* un produit mal formé ne bloque pas la surveillance */ }
+
+    // 7. Atelier complet (gérant, 16/10/2026, commande 10OPUHMO) : chaque champ que la cliente peut
+    // remplir doit apparaître dans l'atelier (tableau « À graver », photos, « Vendu en plus »).
+    try {
+      for (const a of controleProduitAtelier(p)) add(p, "atelier", "haute", `« ${a.libelle} » rempli par la cliente n'apparaîtrait pas dans l'atelier${a.option ? ` (${a.option})` : ""}`);
+    } catch { /* idem */ }
   }
 
   issues.sort((a, b) => (RANK[a.severity] ?? 9) - (RANK[b.severity] ?? 9));

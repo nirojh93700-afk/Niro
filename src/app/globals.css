@@ -5002,3 +5002,10 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .apc-photos figure{margin:0;width:150px}
 .apc-photos figcaption{font-size:.8rem;font-weight:600;margin-bottom:4px}
 .apc-photos img{width:100%;border-radius:8px;border:1px solid #ddd;display:block}
+/* Filet de sécurité de l'atelier : choix de la cliente non affiché ailleurs (16/10/2026) */
+.oa{margin:8px 0;padding:8px 12px;border:2px solid #d64545;border-radius:8px;background:#fdecec;color:#7a1f1f}
+.oa-titre{font-weight:700;font-size:.9rem;margin-bottom:4px}
+.oa-liste{margin:0;padding-left:18px;font-size:.9rem}
+.oa-liste li{margin:3px 0;overflow-wrap:anywhere}
+.oa-photo{display:inline-flex;align-items:center;gap:8px;margin-left:6px}
+.oa-photo img{width:70px;border-radius:6px;border:1px solid #d9a3a3}

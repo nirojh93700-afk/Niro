@@ -22,6 +22,7 @@ const HINTS = {
   prix: "Gestion → Produits & Stock : ajouter une variante avec un prix.",
   fiche: "Facultatif : ajouter une fiche détaillée (Taille & Matériaux / Entretien / Retour).",
   "texte-prix": "Gestion → Produits & Stock → la fiche : écrire le prix dans le libellé de la case (ex. « +3 € »), ou régler le supplément de gravure pour qu'il soit payé.",
+  atelier: "À faire par Claude : ranger ce champ dans le tableau « À graver » de l'atelier. En attendant, il s'affiche en rouge sur la page Atelier et dans l'e-mail de commande.",
 };
 
 export default function SanteCatalogue() {

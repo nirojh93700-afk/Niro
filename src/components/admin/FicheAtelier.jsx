@@ -67,7 +67,7 @@ export function GlassPreview({ item }) {
   const p = getProductBySlug(item.slug);
   if (p?.crystal3d && (item.photoSrc || textLinesOf(item, p).lines.length)) return <CristalPreview item={item} p={p} />;
   // Verre face / fond / les deux (whisky, cocktail) : chaque côté tel que la cliente l'a vu.
-  if (aEmplacement(p)) {
+  if (aEmplacement(p) && !item.modele) {
     const cotes = cotesDeLArticle(item);
     return (
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", maxWidth: "100%" }}>

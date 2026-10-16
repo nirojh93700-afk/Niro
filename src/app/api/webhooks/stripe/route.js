@@ -6,6 +6,7 @@ import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderS
 import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
+import { oubliesAtelier } from "@/lib/controleAtelier";
 import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
 import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
@@ -514,8 +515,28 @@ export async function POST(req) {
          </div>`
       : "";
 
+    // Contrôle « tout ce que la cliente a choisi est dans l'atelier » (16/10/2026) : si un choix ne
+    // s'affiche pas dans le tableau « À graver », on le dit ICI, en rouge, avec sa valeur.
+    let oublisBlock = "";
+    try {
+      const lignesOubli = [];
+      for (const sp of specItems) for (const it of eclaterParVerre(sp)) {
+        for (const o of oubliesAtelier(it)) {
+          lignesOubli.push(`<li><strong>${escapeHtml(it.name || it.slug)}${it.verre ? ` — verre ${it.verre}` : ""} · ${escapeHtml(o.libelle)}</strong> : ${o.photo ? `<a href="${escapeHtml(o.valeur.startsWith("/") ? `${BRAND.siteUrl}${o.valeur}` : o.valeur)}">photo envoyée</a>` : escapeHtml(o.valeur)}</li>`);
+        }
+      }
+      if (lignesOubli.length) {
+        oublisBlock = `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;">
+           <strong style="color:#b32b2b;">⚠️ Choix de la cliente à vérifier — ils ne s'affichent pas dans le tableau « À graver »</strong>
+           <ul style="margin:8px 0 0;padding-left:18px;">${lignesOubli.join("")}</ul>
+           <p style="margin:6px 0 0;font-size:12px;">Ils sont aussi affichés en rouge sur la page Atelier. Demande à Claude de ranger ce choix dans le tableau.</p>
+         </div>`;
+      }
+    } catch { /* jamais bloquant */ }
+
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
+        ${oublisBlock}
         ${alerteBlock}
         ${cadeauBlock}
         ${demandeBlock}

@@ -76,7 +76,7 @@ function sideConfig(item, side) {
 // Quels côtés montrer pour un article (face / fond).
 function sidesOf(item) {
   // Verre face / fond / les deux (whisky, cocktail) : les côtés CHOISIS par la cliente.
-  if (aEmplacement(getProductBySlug(item.slug))) return cotesDeLArticle(item);
+  if (aEmplacement(getProductBySlug(item.slug)) && !item.modele) return cotesDeLArticle(item);
   const s = [];
   if (item.previewImage || item.artworkImage || item.emplacement !== "fond") s.push("face");
   if (item.previewImageFond || item.artworkImageFond || item.emplacement === "fond" || item.deuxEmplacement) {
@@ -343,7 +343,7 @@ export default function AtelierPage() {
                           <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>
                             {side === "fond" ? "Fond du verre" : "Face avant"} {cfg ? `· zone ${cfg.widthMm}×${cfg.heightMm} mm` : ""}
                           </div>
-                          {aEmplacement(getProductBySlug(item.slug)) ? (
+                          {aEmplacement(getProductBySlug(item.slug)) && !item.modele ? (
                             <ApercuClient item={item} side={side} titre={false} />
                           ) : preview ? (
                             // eslint-disable-next-line @next/next/no-img-element
