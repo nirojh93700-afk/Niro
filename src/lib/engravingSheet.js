@@ -14,6 +14,7 @@ import { getFontLabel } from "@/lib/fonts";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import VarBadge from "@/components/admin/VarBadge";
 import { consignesGravure } from "@/lib/consignesGravure";
+import OubliesAtelier from "@/components/admin/OubliesAtelier";
 
 // Champ affiché à la cliente pour cette commande (même règles que la fiche :
 // « afficher si tel choix » et « seulement pour telle option »).
@@ -161,6 +162,7 @@ function BlocVerre({ item }) {
         ) : null}
         <div style={{ flex: "1 1 200px", minWidth: 0 }}>
           {lignes.length ? <Consignes item={item} avecPlacement={false} /> : null}
+          <OubliesAtelier item={item} />
           {!lignes.length && !item.photoSrc ? (
             <div style={{ color: "#777", fontSize: "0.85rem" }}>Sans gravure (verre vierge)</div>
           ) : null}
@@ -195,11 +197,13 @@ export function TableGravure({ item, titre = true }) {
   }
 
   const c = consignesGravure(item);
-  if (!c.general.length && !c.faces.length && !c.autres.length && !c.placement.length) return null;
+  const vide = !c.general.length && !c.faces.length && !c.autres.length && !c.placement.length;
   return (
     <div style={{ marginBottom: 12 }}>
-      {entete}
-      <Consignes item={item} />
+      {vide ? null : entete}
+      {vide ? null : <Consignes item={item} />}
+      {/* Filet de sécurité : tout choix de la cliente non affiché ci-dessus (controleAtelier.js). */}
+      <OubliesAtelier item={item} />
     </div>
   );
 }

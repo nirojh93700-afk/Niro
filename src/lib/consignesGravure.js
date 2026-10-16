@@ -20,6 +20,7 @@
 import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
+import { MODELES, layoutLabel } from "@/lib/modeles";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -155,6 +156,37 @@ export function consignesGravure(item) {
     }
     if (groupe) faces.get(groupe.face).push({ k: groupe.quoi, v: valeur, texte: estTexte(f) });
     else autres.push({ k: maj(nettoie(f.label || f.key)), v: valeur, texte: estTexte(f) });
+  }
+
+  // Modèle décoré (Fête des pères…) : ses textes ne sont pas dans les champs (16/10/2026, contrôle
+  // « tout ce que la cliente a choisi est dans l'atelier » : commande 1JXNFE0L sans ses textes).
+  const mv = item?.modele;
+  const tpl = item?.modeleTemplate ? MODELES[item.modeleTemplate] : null;
+  if (mv && tpl) {
+    const style = mv.layout || tpl.layout || "stack";
+    general.push({ k: "Modèle", v: `${tpl.label} — ${layoutLabel(tpl, style)}`, fort: true });
+    for (const l of tpl.lines || []) {
+      if (l.below && mv.addText === false) continue;
+      const t = String(mv.text?.[l.key] || "").trim();
+      if (!t) continue;
+      const fonte = String((mv.fonts || {})[l.key] || l.font || "").replace(/^fnt-/, "");
+      autres.push({ k: l.below ? "Texte ajouté" : l.label, v: fonte ? `${t}  (écriture ${getFontLabel(fonte) || fonte})` : t, texte: true });
+    }
+    if (mv.motif && mv.motif !== "aucun") autres.push({ k: "Motif", v: String(mv.motif), texte: false });
+  }
+  // Couverts enfants : le thème et l'animal choisi pour chaque couvert.
+  for (const f of vus) {
+    if (f.type !== "couverts") continue;
+    const cv = champs[f.key];
+    if (!cv || typeof cv !== "object") continue;
+    const th = (f.themes || []).find((t) => t.key === cv.theme);
+    if (th) autres.push({ k: "Thème des couverts", v: th.label || cv.theme, texte: false });
+    for (const pc of f.pieces || []) {
+      const ak = cv.animals?.[pc.key];
+      if (!ak) continue;
+      const al = ((th?.animals || []).find((a) => a.key === ak) || {}).label || ak;
+      autres.push({ k: pc.label, v: al, texte: false });
+    }
   }
 
   // Police : une seule ligne, écrite dès qu'il y a un texte (même règle que la fiche atelier).

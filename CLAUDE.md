@@ -61,6 +61,16 @@
   (écran + papier) ; les deux photos sont téléchargeables partout ; `consignesGravure` fait un bloc « Face avant » et un bloc
   « Fond du verre ». Marche aussi pour les ANCIENNES commandes (redessiné depuis les réglages, pas depuis la capture).
 - Capture à la commande (`ProductDetail`, `composeEditorScene(…, cote)`) : un visuel par côté, chacun avec ses textes.
+- ✅ **POUR QUE ÇA NE REVIENNE PLUS, SUR AUCUN PRODUIT (« je veux plus le même problème pour les commandes »)** :
+  `src/lib/controleAtelier.js` (`npm run test-controle-atelier`) compare CHAQUE choix de la cliente (texte, photo, liste,
+  modèle, couverts…) à ce que l'atelier affiche (tableau « À graver », photos, « Vendu en plus ») :
+  · filet de sécurité DANS `TableGravure` (`OubliesAtelier.jsx`, encadré rouge « Aussi choisi par la cliente ») → atelier,
+    fiche commande, fiche papier, chaque verre d'un lot : rien de ce qu'elle a choisi ne peut plus être caché ;
+  · encadré rouge en tête de l'e-mail 🛎️ de commande si un choix manque au tableau ;
+  · surveillance du catalogue (type `atelier`, priorité haute) : simulation de tous les champs de chaque produit.
+  Trou trouvé et corrigé au passage : les textes des modèles Fête des pères (commande 1JXNFE0L) et les animaux des couverts
+  n'étaient pas dans le tableau. Vérifié : 37 commandes réelles et 89 produits → 0 oubli.
+  ⛔ Tout nouveau type de champ doit être rangé dans `consignesGravure` ; s'il ne l'est pas, le contrôle le signale.
 
 ## 🔴🔴 « ARRÊTE D'ENVOYER DES MAILS » — DEMANDE D'AVIS REÇUE 4 FOIS PAR LUDOVIC (16/10/2026)
 - Commande 16HGINEA (ludsolo@gmail.com, livrée le 14/10) : demande d'avis reçue à 13 h 46 (site Firebase, par Gmail, NORMAL) puis
