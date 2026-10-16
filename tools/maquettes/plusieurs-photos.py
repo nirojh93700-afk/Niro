@@ -302,5 +302,35 @@ if os.environ.get("SITE_SEUL"):
     doc = doc.replace("<title>Plusieurs verres, une photo</title>", "<title>Verre à vin, rendu client</title>")
     doc = doc.replace('set("1");})();', 'set("4");})();')
     doc = doc.replace("<style>", "<style>.mq-1,.mq-2,.mq-2bas{display:none!important}", 1)
+    # Page plus courte (16/10/2026, gérant : « les clients doivent trop descendre ») :
+    # 1) cartes de l'étape 1 repliées sur le choix fait + « Changer » ;
+    # 2) règle de prix en une ligne + « Voir les prix » ;
+    # 3) détail du prix replié (le total reste dans « Total tout compris ») ;
+    # 4) texte de l'étape 2 en une phrase.
+    doc = doc.replace('<div class="prc-cards">', '<div class="prc-cards mq-fold">', 1)
+    doc = doc.replace("<p class=\"prc-hint\">Un seul choix par <!-- -->verre<!-- -->. Vous pouvez changer d'avis à tout moment.</p>",
+        '<p class="prc-hint"><button type="button" class="mq-lien mq-chgmode">Changer de façon de graver</button></p>', 1)
+    hint = re.search(r'<p class="pg-hint"><b>Verre 1</b>.*?</p>', doc, re.S).group(0)
+    doc = doc.replace(hint, '<p class="pg-hint">Verre 2 différent : <strong>+5 €</strong>, image et texte compris. <button type="button" class="mq-lien mq-voirprix">Voir les prix</button></p>', 1)
+    doc = doc.replace('<p class="prc-legend">Une photo, un dessin, un logo : téléversez le fichier (JPG, PNG). Photo seule, ou photo + texte, comme vous voulez. Elle se pose sur la grande photo en haut, où vous pouvez la déplacer. L\'atelier vérifie la qualité avant de graver.</p>',
+        '<p class="prc-legend">JPG ou PNG. L\'atelier vérifie la qualité avant de graver.</p>', 1)
+    doc = doc.replace('<div class="mq-sumh">Le détail de votre prix</div>',
+        '<button type="button" class="mq-sumh mq-sumbtn"><span>Le détail de votre prix</span><em>Voir</em></button>', 1)
+    for k in ['mq-fold', 'mq-chgmode', 'mq-voirprix', 'mq-sumbtn', 'JPG ou PNG. L']:
+        assert k in doc, k
+    doc = doc.replace("<style>", "<style>"
+        ".mq-fold{grid-template-columns:1fr!important}.mq-fold .prc-card:not(.on){display:none}"
+        ".mq-lien{background:none;border:0;padding:0;font:inherit;color:var(--gold-dark);text-decoration:underline;text-underline-offset:3px;cursor:pointer}"
+        ".mq-sum:not(.open) .prc-sumrow{display:none}"
+        ".mq-sumbtn{display:flex;width:100%;justify-content:space-between;align-items:center;background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}"
+        ".mq-sumbtn em{font-style:normal;font-weight:500;font-size:.9rem;color:var(--gold-dark);text-decoration:underline;text-underline-offset:3px}"
+        ".mq-sum:not(.open){padding-top:12px;padding-bottom:12px}", 1)
+    doc = doc.replace('set("4");})();', 'set("4");'
+        'var cards=document.querySelector(".mq-fold"),chg=document.querySelector(".mq-chgmode");'
+        'if(cards&&chg)chg.onclick=function(){var f=cards.classList.toggle("mq-fold");chg.textContent=f?"Changer de façon de graver":"Garder mon choix"};'
+        'document.querySelectorAll(".prc-cards .prc-card").forEach(function(c){c.addEventListener("click",function(){document.querySelectorAll(".prc-cards .prc-card").forEach(function(x){x.classList.toggle("on",x===c)})})});'
+        'var sb=document.querySelector(".mq-sumbtn");if(sb)sb.onclick=function(){var o=sb.parentNode.classList.toggle("open");sb.querySelector("em").textContent=o?"Masquer":"Voir"};'
+        'var vp=document.querySelector(".mq-voirprix");if(vp)vp.onclick=function(){var g=document.querySelector(".mq-grille");var d=g&&g.closest("details");if(d)d.open=true;if(g)g.scrollIntoView({behavior:"smooth",block:"start"})};'
+        '})();', 1)
 open(out, "w", encoding="utf-8").write(doc)
 print("ok", out, round(len(doc) / 1024), "Ko")
