@@ -40,11 +40,11 @@ PRIX = ('<div class="mq mq-4">'
   '<div class="perglass"><div class="pg-choice"><button type="button" class="pg-opt">Les 2 identiques</button>'
   '<button type="button" class="pg-opt on">Chacun différent</button></div>'
   '<div class="pg-tabs"><button type="button" class="pg-tab on" data-g="1">Verre 1</button><button type="button" class="pg-tab" data-g="2">Verre 2 <i class="mq-sup">+5 €</i></button></div>'
-  '<p class="pg-hint"><b>Verre 1</b> : image comprise, texte +3 €. <b>Chaque verre suivant</b> : identique au verre 1, <b>+2 €</b> de frais de gravure ; '
+  '<p class="pg-hint"><b>Verre 1</b> : l’image ou le logo est offert, le texte est à +3 €. <b>Chaque verre suivant</b> : identique au verre 1, <b>+2 €</b> de frais de gravure ; '
   'différent (autre image ou autre texte), <b>+5 € tout compris</b>, image et texte.</p></div>'
-  '<div class="mq-g1"><div class="field"><label>Verre 1 · votre photo ou logo <span class="mq-ok">comprise</span></label>'
+  '<div class="mq-g1"><div class="field"><label>Verre 1 · votre photo ou logo <span class="mq-ok">offerte</span></label>'
   '<div class="photo-upload"><div class="mq-up"><img src="%s" alt=""><span><b>Photo envoyée ✓</b><small>dessin-couple.jpg</small></span><span class="mq-chg">Changer</span></div></div></div>'
-  '<div class="field"><label>Verre 1 · texte sous l’image <span class="prc-opt">(facultatif)</span> <span class="mq-sup">+3 €</span></label><input type="text" maxlength="40" placeholder="Ex. Stephan · 1989" value=""></div></div>'
+  '<div class="field"><label>Verre 1 · texte sous l’image <span class="prc-opt">(facultatif)</span> <span class="mq-sup">+3 €</span></label><input type="text" maxlength="40" placeholder="Ex. Stephan · 1989" value="Fabien · 2026"></div></div>'
   '<div class="mq-g2" hidden><label class="mq-same"><input type="checkbox" id="mq-same"> Identique au verre 1 (même image, même texte) <span class="mq-sup">+2 € de gravure</span></label>'
   '<div class="mq-g2up"><p class="mq-forfait">Verre différent : <b>+5 € tout compris</b>, l’image et le texte.</p>'
   '<div class="field"><label>Verre 2 · votre photo ou logo</label>'
@@ -52,11 +52,11 @@ PRIX = ('<div class="mq mq-4">'
   '<div class="field"><label>Verre 2 · texte sous l’image <span class="prc-opt">(facultatif, compris dans les 5 €)</span></label><input type="text" maxlength="40" value="Zoo Bar · 2026"></div></div></div>'
   '<div class="prc-sum mq-sum"><div class="mq-sumh">Le détail de votre prix</div>'
   '<div class="prc-sumrow"><span>2 verres à vin 47 cl × 21,90 €</span><b>43,80 €</b></div>'
-  '<div class="prc-sumrow"><span>Verre 1 · gravure de votre photo</span><b>comprise</b></div>'
-  '<div class="prc-sumrow"><span>Verre 1 · texte</span><b>aucun · 0,00 €</b></div>'
+  '<div class="prc-sumrow"><span>Verre 1 · gravure de votre photo</span><b>offerte</b></div>'
+  '<div class="prc-sumrow"><span>Verre 1 · texte « Fabien · 2026 »</span><b>+ 3,00 €</b></div>'
   '<div class="prc-sumrow mq-l2"><span>Verre 2 · différent : gravure du logo + texte « Zoo Bar · 2026 »</span><b>+ 5,00 €</b></div>'
-  '<div class="prc-sumrow mq-l2b" hidden><span>Verre 2 · identique au verre 1 : frais de gravure</span><b>+ 2,00 €</b></div>'
-  '<div class="prc-sumrow prc-sumtot"><span>Total (2 verres)</span><b class="mq-tot">48,80 €</b></div></div>'
+  '<div class="prc-sumrow mq-l2b" hidden><span>Verre 2 · identique au verre 1 (même photo, même texte) : frais de gravure</span><b>+ 2,00 €</b></div>'
+  '<div class="prc-sumrow prc-sumtot"><span>Total (2 verres)</span><b class="mq-tot">51,80 €</b></div></div>'
   '<div class="mq-ex"><b>Exemples (verre à vin 47 cl, 21,90 € pièce)</b><table>'
   '<tr><td>2 verres, photo + logo, sans texte</td><td>43,80 + 5 = <b>48,80 €</b></td></tr>'
   '<tr><td>2 verres, photo + logo, texte sur le 2ᵉ</td><td>43,80 + 5 = <b>48,80 €</b></td></tr>'
@@ -190,7 +190,7 @@ var bt=document.querySelectorAll(".qty-stepper button");bt[0].onclick=function()
 document.querySelectorAll(".pg-opt").forEach(function(o){o.onclick=function(){document.querySelectorAll(".pg-opt").forEach(function(x){x.classList.remove("on")});o.classList.add("on")}});
 document.querySelectorAll(".pg-tab").forEach(function(o,i){o.onclick=function(){document.querySelectorAll(".pg-tab").forEach(function(x){x.classList.remove("on")});o.classList.add("on");document.querySelector(".pg-hint b").textContent="Verre "+(i+1)}});
 document.querySelectorAll(".mq-4 .pg-tab").forEach(function(o){o.onclick=function(){var g=o.dataset.g;document.querySelectorAll(".mq-4 .pg-tab").forEach(function(x){x.classList.toggle("on",x===o)});document.querySelector(".mq-g1").hidden=g!="1";document.querySelector(".mq-g2").hidden=g!="2"}});
-var same=document.getElementById("mq-same");if(same)same.onchange=function(){var on=same.checked;document.querySelector(".mq-g2up").hidden=on;document.querySelector(".mq-l2").style.display=on?"none":"";document.querySelector(".mq-l2b").hidden=!on;document.querySelector(".mq-tot").textContent=on?"45,80 €":"48,80 €";document.querySelector(".mq-4 .pg-tab[data-g='2'] .mq-sup").style.display=on?"none":""};
+var same=document.getElementById("mq-same");if(same)same.onchange=function(){var on=same.checked;document.querySelector(".mq-g2up").hidden=on;document.querySelector(".mq-l2").style.display=on?"none":"";document.querySelector(".mq-l2b").hidden=!on;document.querySelector(".mq-tot").textContent=on?"48,80 €":"51,80 €";document.querySelector(".mq-4 .pg-tab[data-g='2'] .mq-sup").style.display=on?"none":""};
 var lot=document.querySelector(".mq-lot");if(lot)lot.onclick=function(){lot.outerHTML='<p class="mq-small"><b>Sur le site :</b> la fiche passe sur « Lot de 2 », quantité 1, et le choix « Chacun différent » s’ouvre, une photo par verre.</p>'};
 set("1");})();
 </script>'''
