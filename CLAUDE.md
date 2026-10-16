@@ -53,6 +53,9 @@
   reconstruit depuis le dépôt : pas garanti).
 - **SEUL VRAI ARRÊT = LE GÉRANT** : supprimer le site sur app.netlify.com (site `exquisite-khapse-7af3a0`) ; injoignable d'ici
   (proxy) et aucun accès Netlify. Ensuite, dans Stripe → Webhooks, supprimer l'ancien point de terminaison qui vise Netlify s'il existe.
+- ⚠️ **`www.nivcreation.fr` est un CNAME vers ce site Netlify** (vérifié le 16/10) : les visiteurs « www » voient l'ancien site, et
+  c'est ce qui le réveille. **Les 3 étapes (supprimer Netlify → ajouter www dans Firebase App Hosting → changer le CNAME chez
+  Hostinger) sont dans `docs/EN-ATTENTE.md` §0** : le gérant les fera lui-même (« je supprimerai après »). Les lui redonner s'il les demande.
 
 ## 🔎 CONTRÔLE AUTOMATIQUE « TEXTE GRAVÉ ↔ PRIX AFFICHÉ » — 16/10/2026 (« je veux pas que ça ait ce problème ailleurs » → « oui »)
 - `src/lib/textesPrix.js` (`controleTextesPrix(product)`, pur, `npm run test-textes-prix`) : pour chaque case de texte, option par
