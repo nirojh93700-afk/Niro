@@ -5,7 +5,7 @@
   sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
 - Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
 
-## 🍷 VERRES : RÈGLE DE PRIX DE LA GRAVURE + FICHE ATELIER DÉTAILLÉE + SAUVEGARDE — 16/10/2026 (RIEN en ligne)
+## 🍷 VERRES : RÈGLE DE PRIX DE LA GRAVURE + FICHE ATELIER DÉTAILLÉE + SAUVEGARDE — 16/10/2026 (✅ EN LIGNE, « applique »)
 - **Sauvegarde avant tout changement** (gérant : « avant de modifier le site tu enregistres le site actuel ») : `docs/sauvegardes/2026-10-16/`
   sur la branche de travail = code en ligne `bcfd1c4f` + données (`/api/admin/export`, SANS les clés secrètes : GitHub les refuse, elles
   restent dans Firestore) + 36 commandes. ⛔ Ce dossier contient des données clientes : jamais sur la branche du site. Les branches
@@ -30,7 +30,25 @@
   tout doit être détaillé ») : `src/lib/consignesGravure.js` (pur, `npm run test-consignes`) → `TableGravure` (fiche commande, page Atelier,
   fiche imprimée) : en tête sens d'écriture avec flèche, police, emplacement face / fond ; un bloc par face, faces VIERGES comprises ;
   autres réglages ; « Où et à quelle taille graver » en mots (layout enregistré à la commande) ; alerte si la place choisie contredit
-  l'aperçu (cristal). Commit local sur la copie du code du site, **pas poussé : attend son « pousse »**.
+  l'aperçu (cristal). ✅ Poussé et en ligne le 16/10.
+- ✅ **RÈGLE DE PRIX APPLIQUÉE LE 16/10/2026** (gérant : « ça fait 10 fois que je te demande de faire applique les prix ») :
+  · `src/lib/prixVerres.js` (pur, `npm run test-prix-verres`) = UNE fonction `prixGravureVerres` pour la fiche ET le paiement.
+    Au-delà de 6 verres identiques : +5 € (pas tranché par lui, par défaut). Un verre vierge ne coûte rien.
+  · `regleVerres: true` sur vin, flûte, whisky, cocktail, Fête des pères (+ `perGlassLot` sur la Fête des pères). Vin + flûte : le texte
+    principal et le prénom sont devenus payants (+3 €, `textKeys: ["texte","prenom","date","initiale"]`).
+  · « Chacun différent » dès 2 verres, y compris « À l'unité » × 2 (`pgCount` dans `ProductDetail`). Détail du prix replié
+    (`.pv-detail`), grille des prix dans le volet (`GrillePrixVerres.jsx`, ancre `#prix-gravure-verres`), volet en tableau
+    (`product.voletVerres`), descriptions en cartes (`.pd2-*`).
+  · Paiement (`/api/checkout`) : si la gravure de la ligne ne se partage pas au centime entre les verres, la ligne Stripe part en
+    quantité 1 avec `metadata.qte` (nom « … × N ») ; le webhook relit la vraie quantité et retire « × N » du nom. `slug` gardé
+    (`apparierSpec`). ⚠️ **Avant, le panier n'envoyait PAS `perGlass` au paiement** (`src/lib/checkout.js`) : les verres
+    « chacun différent » étaient payés comme le verre 1 — corrigé.
+  · Panier : une ligne de verres a une quantité FIXE (`verresFixe`, jamais fusionnée) — pour changer le nombre de verres, on
+    retourne sur la fiche.
+  · Conseils photo (`/produits/guide-photo-gravure.png`) : s'ouvrent en fenêtre quand la cliente touche « Choisir une photo »
+    (`PhotoUpload` prop `guide`), sur les verres et toute fiche à parcours ; plus affichés en permanence.
+  · Vérifié : build · 6 jeux de tests · navigateur 390/1280 (vin 1 verre + texte 20,90 · ×2 identiques 38,80 · 2ᵉ différent 43,80 ·
+    3 verres dont 1 différent 61,70 = panier = paiement · cocktail lot de 2 + texte 36,90 · fenêtre photo · 0 erreur, 0 débordement).
 
 ## ⛔⛔ VÉRIFIER AVANT DE DONNER QUOI QUE CE SOIT AU GÉRANT (15/10/2026 : « il faut que tu vérifies toujours avant que tu me donnes un truc »)
 - Après une erreur de jour (« demain, jeudi 16 octobre » alors que le 16 était un vendredi), le gérant exige que tout ce que je lui

@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { saveOrderSpec } from "@/lib/firebase";
 import { vacationActive, cadeauColisActif } from "@/lib/vacation";
 import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
+import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
 import { packagingExtra } from "@/lib/packaging";
 import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
 
@@ -169,7 +170,14 @@ export async function POST(req) {
     // Recalcul de confiance du supplément de gravure (depuis les champs envoyés).
     // Lot personnalisé PAR verre : on additionne les options (texte, deux faces…) de CHAQUE verre.
     let extra;
-    if (Array.isArray(item.perGlass) && item.perGlass.length > 0) {
+    // Verres (règle du 16/10/2026) : la gravure se compte pour TOUTE la ligne (verre 1, verres
+    // différents +5 €, frais des verres identiques) — même calcul que la fiche (src/lib/prixVerres.js).
+    const gravV = estRegleVerres(product)
+      ? prixGravureVerres(product, variant, quantity, item.fields || {}, Array.isArray(item.perGlass) && item.perGlass.length ? item.perGlass.slice(0, 60) : null)
+      : null;
+    if (gravV) {
+      extra = { amount: 0, weight: gravV.weight || 0, stockIds: gravV.stockIds || [] };
+    } else if (Array.isArray(item.perGlass) && item.perGlass.length > 0) {
       extra = item.perGlass.slice(0, 12).reduce((acc, fv) => {
         const e = engravingExtra(product, fv || {}, variant.id);
         return {
@@ -198,7 +206,16 @@ export async function POST(req) {
       motifExtraCount = Math.max(0, mc - inc);
       motifExtra = Math.round(motifExtraCount * per * 100) / 100;
     }
-    const unitPrice = basePrice + extra.amount + pkg.amount + motifExtra;
+    let unitPrice = basePrice + extra.amount + pkg.amount + motifExtra;
+    // Verres : si la gravure de la ligne ne se partage pas au centime entre les verres, la ligne
+    // part en UNE seule ligne Stripe (quantité 1, vraie quantité dans metadata.qte) : le montant
+    // payé est exactement celui affiché sur la fiche.
+    let ligneUnique = false;
+    if (gravV && gravV.total > 0) {
+      const cents = Math.round(gravV.total * 100);
+      if (quantity > 1 && cents % quantity !== 0) ligneUnique = true;
+      unitPrice = unitPrice + gravV.total / quantity;
+    }
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
     // Options qui consomment un vrai article du stock (ex. socle lumineux LED) :
@@ -216,6 +233,9 @@ export async function POST(req) {
     // Taille du produit (verre à vin 36 / 47 cl…) écrite AVEC l'option : l'atelier sait quoi prendre (13/10/2026).
     const tailleOpt = variant.taille ? (product.tailles?.options?.find((o) => o.id === variant.taille)?.title || `${variant.taille} cl`) : "";
     const descriptionParts = [[tailleOpt, variant.title].filter(Boolean).join(" · ")];
+    if (gravV && gravV.lignes.length) {
+      descriptionParts.push(`Gravure : ${detailEnTexte(gravV)}`);
+    }
     if (extra.amount > 0) {
       descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
     }
@@ -229,16 +249,19 @@ export async function POST(req) {
       descriptionParts.push(`Personnalisation : ${String(item.personalization).slice(0, 220)}`);
     }
 
+    if (ligneUnique) descriptionParts.unshift(`Quantité : ${quantity}`);
     lineItems.push({
-      quantity,
+      quantity: ligneUnique ? 1 : quantity,
       price_data: {
         currency: "eur",
-        unit_amount: toCents(unitPrice), // prix de confiance (promo appliquée si définie)
+        // prix de confiance (promo appliquée si définie) ; ligne unique = toute la ligne
+        unit_amount: ligneUnique ? Math.round((basePrice + pkg.amount + motifExtra) * 100) * quantity + Math.round(gravV.total * 100) : toCents(unitPrice),
         product_data: {
-          name: product.name,
+          name: ligneUnique ? `${product.name} × ${quantity}` : product.name,
           description: descriptionParts.join(" — "),
           images: (product.images.map(absoluteImage).filter(Boolean)).slice(0, 1),
-          metadata: { slug: product.slug }, // pour l'e-mail « laisser un avis » (lien direct vers le produit)
+          // slug : e-mail « laisser un avis » + appariement des réglages ; qte : vraie quantité d'une ligne unique
+          metadata: ligneUnique ? { slug: product.slug, qte: String(quantity) } : { slug: product.slug },
         },
       },
     });

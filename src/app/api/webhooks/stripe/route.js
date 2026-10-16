@@ -350,7 +350,7 @@ export async function POST(req) {
             <strong>${escapeHtml(name)}</strong>${couleur ? ` <span style="display:inline-block;padding:1px 9px;border-radius:999px;background:#f7ecd4;border:1px solid #e0c88a;color:#8a6d1f;font-size:12px;font-weight:bold;">${escapeHtml(couleur)}</span>` : ""}<br>
             <span style="color:#666;font-size:13px;">${escapeHtml(reste)}</span>
           </td>
-          <td style="padding:8px;border-bottom:1px solid #eee;text-align:center;">${li.quantity}</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;text-align:center;">${Number(li.price?.product?.metadata?.qte) || li.quantity}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap;">${euro(li.amount_total, currency)}</td>
         </tr>`;
       })
@@ -715,12 +715,15 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       alerteInterne, // geste promis au client (affiché en rouge dans Gestion)
       immediateStart,
       items: (session.line_items?.data || []).map((li) => ({
-        name: li.price?.product?.name || li.description || "",
+        name: (li.price?.product?.name || li.description || "").replace(li.price?.product?.metadata?.qte ? / × \d+$/ : /$^/, ""),
         details: li.price?.product?.description || "",
         slug: li.price?.product?.metadata?.slug || "", // pour le lien avis direct
         image: (li.price?.product?.images || [])[0] || "", // vignette dans l'admin
-        quantity: li.quantity,
-        unitPrice: (li.price?.unit_amount || 0) / 100, // prix unitaire avant remise
+        // Verres : une ligne Stripe unique porte la vraie quantité dans metadata.qte (16/10/2026).
+        quantity: Number(li.price?.product?.metadata?.qte) || li.quantity,
+        unitPrice: Number(li.price?.product?.metadata?.qte)
+          ? Math.round((li.amount_subtotal || 0) / Number(li.price.product.metadata.qte)) / 100
+          : (li.price?.unit_amount || 0) / 100, // prix unitaire avant remise
         subtotal: (li.amount_subtotal || 0) / 100,     // ligne avant remise
         total: (li.amount_total || 0) / 100,           // ligne après remise
       })),
