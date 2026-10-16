@@ -194,4 +194,11 @@
   **Rien en ligne : attendre son « applique ».** À construire alors : « Chacun différent » dès quantité ≥ 2 sur À l'unité (idée 2),
   forfait verre différent au checkout (comparer image + texte de chaque verre à ceux du verre 1), alerte « N pièces, 1 seule image »
   (idée 3), tableau par verre dans `FicheAtelier` / `FichePapier` / `/gestion/atelier`, ligne par verre dans le mail de confirmation.
+- ✅ **Complément du 16/10 (gérant : « quand c'est le même verre, même logo, même texte, on met un peu plus, frais de gravure ; le client
+  doit savoir en détail ce qu'il paie »)**, maquette v5 : **verre identique au verre 1 = +2 € de frais de gravure** (montant PROPOSÉ,
+  à valider) ; verre différent toujours +5 € tout compris ; verre 1 inchangé. Le résumé de la fiche devient **« Le détail de votre
+  prix »**, ligne par ligne : « 2 verres × 21,90 € », « Verre 1 · gravure de votre photo · comprise », « Verre 1 · texte · aucun », « Verre 2 ·
+  différent : gravure du logo + texte … · + 5,00 € » ou « Verre 2 · identique au verre 1 : frais de gravure · + 2,00 € », total. Le même
+  détail doit se retrouver au panier, dans le mail de confirmation et sur la fiche atelier. ⚠️ Conséquence : un lot « identiques » avec
+  gravure coûte N−1 fois 2 € de plus qu'aujourd'hui (lot de 4 même prénom : 86,90 € au lieu de 80,90 €).
 
