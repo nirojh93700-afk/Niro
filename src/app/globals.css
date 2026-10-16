@@ -4989,3 +4989,16 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .pd2-spec tr + tr th, .pd2-spec tr + tr td { border-top: 1px solid var(--line); }
 .pd2-vol { margin-top: 14px; white-space: normal; }
 @media (max-width: 480px) { .pd2-way, .pd2-size { padding: 12px; } .pd2-way b { font-size: 0.92rem; line-height: 1.25; } .pd2-way span { font-size: 0.85rem; } .pd2-spec th { width: 32%; padding: 10px 12px; } .pd2-spec td { padding: 10px 12px; } }
+
+/* Aperçu d'un côté du verre tel que la cliente l'a vu (atelier, fiche commande) — 16/10/2026 */
+.apc{margin:0;max-width:100%}
+.apc-titre{font-size:.8rem;font-weight:600;margin-bottom:4px}
+.apc-scene{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:8px;border:1px solid #ddd;background:#f3efe6}
+.apc-scene .apc-verre{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.apc-scene .apc-photo{position:absolute;height:auto;transform:translate(-50%,-50%);opacity:.85;filter:grayscale(1) contrast(1.5) brightness(1.08);mix-blend-mode:multiply;pointer-events:none}
+.apc-scene .apc-texte{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2;white-space:nowrap;pointer-events:none}
+.apc-scene .apc-texte span{text-shadow:0 1px 0 rgba(255,255,255,.55),0 -1px 1px rgba(0,0,0,.35)}
+.apc-photos{display:flex;gap:12px;flex-wrap:wrap}
+.apc-photos figure{margin:0;width:150px}
+.apc-photos figcaption{font-size:.8rem;font-weight:600;margin-bottom:4px}
+.apc-photos img{width:100%;border-radius:8px;border:1px solid #ddd;display:block}

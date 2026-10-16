@@ -27,6 +27,8 @@ import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
 import BoutonRate from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
+import ApercuClient from "@/components/admin/ApercuClient";
+import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -73,6 +75,8 @@ function sideConfig(item, side) {
 
 // Quels côtés montrer pour un article (face / fond).
 function sidesOf(item) {
+  // Verre face / fond / les deux (whisky, cocktail) : les côtés CHOISIS par la cliente.
+  if (aEmplacement(getProductBySlug(item.slug))) return cotesDeLArticle(item);
   const s = [];
   if (item.previewImage || item.artworkImage || item.emplacement !== "fond") s.push("face");
   if (item.previewImageFond || item.artworkImageFond || item.emplacement === "fond" || item.deuxEmplacement) {
@@ -339,7 +343,9 @@ export default function AtelierPage() {
                           <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>
                             {side === "fond" ? "Fond du verre" : "Face avant"} {cfg ? `· zone ${cfg.widthMm}×${cfg.heightMm} mm` : ""}
                           </div>
-                          {preview ? (
+                          {aEmplacement(getProductBySlug(item.slug)) ? (
+                            <ApercuClient item={item} side={side} titre={false} />
+                          ) : preview ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={preview} alt={`Gravure ${side} placée par le client`} style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd", background: "#111" }} />
                           ) : (
@@ -356,14 +362,14 @@ export default function AtelierPage() {
                         </div>
                       );
                     })}
-                    {item.photoSrc && (
-                      <div style={{ width: 160 }}>
-                        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>Photo envoyée{item.verre ? ` — verre ${item.verre}` : ""}</div>
+                    {photosEnvoyees(item).map((ph) => (
+                      <div key={ph.src} style={{ width: 160 }}>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>{ph.titre}{item.verre ? ` — verre ${item.verre}` : ""}</div>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.photoSrc} alt="Photo du client" style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd" }} />
-                        <a href={item.photoSrc} download style={{ fontSize: "0.78rem", color: "var(--gold-dark)" }}>Télécharger</a>
+                        <img src={ph.src} alt={ph.titre} style={{ width: "100%", borderRadius: 8, border: "1px solid #ddd" }} />
+                        <a href={ph.src} download style={{ fontSize: "0.78rem", color: "var(--gold-dark)" }}>Télécharger</a>
                       </div>
-                    )}
+                    ))}
                   </div>
 
                   {/* Pièce ratée : la quantité sort du stock du produit (Rates.jsx). */}

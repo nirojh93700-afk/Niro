@@ -19,6 +19,7 @@
 // =============================================================================
 import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
+import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -119,11 +120,30 @@ export function consignesGravure(item) {
     general.push({ k: "Emplacement", v: EMPLACEMENTS[empl], fort: true });
   }
 
+  // Verre face / fond / les deux (16/10/2026, commande 10OPUHMO) : un bloc PAR CÔTÉ, avec sa photo
+  // et son texte (avant : texte de la face et texte du fond mélangés dans « autres »).
+  const parCote = aEmplacement(produit);
+  const deux = parCote && emplacementDe(item) === "deux";
+  const nomCote = (f) => (deux ? (/Fond$/.test(f.key) ? "Fond du verre" : "Face avant") : (emplacementDe(item) === "fond" ? "Fond du verre" : "Face avant"));
+  const quoiCote = (f) => maj(nettoie(f.label || f.key).replace(/^ajouter\s+(un|une)\s+/i, "").replace(/\s+(pour|du|au)\s+(le\s+)?fond(\s+du\s+verre)?$/i, "").trim()) || "Texte";
+  if (deux) { faces.set("Face avant", []); faces.set("Fond du verre", []); }
+  if (parCote) {
+    const photos = photosEnvoyees(item, produit);
+    for (const ph of photos) {
+      const cote = /fond/.test(ph.titre) && !/face/.test(ph.titre) ? "Fond du verre" : (/ET fond/.test(ph.titre) ? null : (deux ? "Face avant" : nomCote({ key: "photo" })));
+      const cibles = cote ? [cote] : ["Face avant", "Fond du verre"];
+      for (const c of cibles) {
+        if (!faces.has(c)) faces.set(c, []);
+        faces.get(c).push({ k: "Photo / logo", v: "envoyée par la cliente (voir la photo)", texte: false });
+      }
+    }
+  }
+
   let aDuTexte = false;
   for (const f of vus) {
     if (f.type === "note" || f.type === "photo" || f.type === "font") continue;
     if (f.key === "emplacement" || f.key === "mode") continue;
-    const groupe = faceDuChamp(f);
+    const groupe = parCote ? { face: nomCote(f), quoi: quoiCote(f) } : faceDuChamp(f);
     if (groupe && !faces.has(groupe.face)) faces.set(groupe.face, []);
     const brut = champs[f.key];
     if (typeof brut !== "string" || !brut.trim()) continue;

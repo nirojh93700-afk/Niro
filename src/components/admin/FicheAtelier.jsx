@@ -16,6 +16,8 @@ import FicheDevis from "@/components/admin/FicheDevis";
 import OptionsVendues from "@/components/admin/OptionsVendues";
 import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
 import VarBadge from "@/components/admin/VarBadge";
+import ApercuClient from "@/components/admin/ApercuClient";
+import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -64,6 +66,15 @@ function CristalPreview({ item, p }) {
 export function GlassPreview({ item }) {
   const p = getProductBySlug(item.slug);
   if (p?.crystal3d && (item.photoSrc || textLinesOf(item, p).lines.length)) return <CristalPreview item={item} p={p} />;
+  // Verre face / fond / les deux (whisky, cocktail) : chaque côté tel que la cliente l'a vu.
+  if (aEmplacement(p)) {
+    const cotes = cotesDeLArticle(item);
+    return (
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", maxWidth: "100%" }}>
+        {cotes.map((side) => <ApercuClient key={side} item={item} side={side} largeur={cotes.length > 1 ? 220 : 300} />)}
+      </div>
+    );
+  }
   const isFond = item.emplacement === "fond";
   // Cristaux : on grave dans un cristal VIERGE (image « bloc »), jamais sur la
   // photo d'exemple déjà gravée (sinon la photo cliente se pose sur une gravure).
@@ -174,13 +185,13 @@ function SheetCorps({ item, titre = true }) {
         {/* Dans un lot, chaque verre a ses propres textes : on les met en clair
             (le « Résumé » seul ne suffit pas à lire quatre gravures différentes). */}
         {enLot ? <div style={{ margin: "6px 0" }}><TableGravure item={item} titre={false} /></div> : null}
-        {item.photoSrc && (
-          <div style={{ margin: "8px 0" }}>
-            <a href={item.photoSrc} download target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "7px 14px", fontSize: "0.82rem", display: "inline-block", textDecoration: "none" }}>
-              ⬇ Télécharger la photo{enLot ? ` du verre ${item.verre}` : " du client"}
+        {photosEnvoyees(item).map((ph) => (
+          <div key={ph.src} style={{ margin: "8px 0" }}>
+            <a href={ph.src} download target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "7px 14px", fontSize: "0.82rem", display: "inline-block", textDecoration: "none" }}>
+              ⬇ Télécharger la photo{enLot ? ` du verre ${item.verre}` : " du client"}{ph.titre.includes("—") ? ` (${ph.titre.split("— ")[1]})` : ""}
             </a>
           </div>
-        )}
+        ))}
         <details style={{ marginTop: 8 }}>
           <summary style={{ cursor: "pointer", fontSize: "0.8rem", color: "#888" }}>Tous les réglages (brut)</summary>
           <pre style={{ fontSize: "0.72rem", whiteSpace: "pre-wrap", wordBreak: "break-word", background: "#faf7f1", padding: 8, borderRadius: 6, marginTop: 6 }}>
