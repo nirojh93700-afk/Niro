@@ -205,4 +205,8 @@
   total »)**, maquette v7 : les **frais de gravure pour les verres identiques = +2 € UNE SEULE FOIS par commande**, quel que soit le
   nombre de verres identiques (montant proposé). Exemples : lot de 4 même prénom 77,90 + 3 + 2 = 82,90 € · 6 verres identiques
   136,40 € · lot de 4 avec 2 images (2 verres chacune) 77,90 + 5 + 2 = 84,90 €. Le verre différent reste +5 € chacun.
+- ✅ **Dernier réglage du gérant, 16/10 (« pour deux verres identiques tu enlèves les 2 € ; à partir de quatre tu mets un frais »)**,
+  maquette v8 : verres identiques au verre 1 = **rien en plus jusqu'à 3 verres**, **+2 € de frais de gravure en tout à partir de 4 verres
+  identiques** (montant proposé). 2 identiques même prénom 46,80 € · 3 identiques 68,70 € · lot de 4 identiques 82,90 € · lot de 4 avec
+  2 images (2 verres chacune, aucune série de 4) 82,90 €. Le détail du prix écrit la ligne « Verre 2 · identique au verre 1 · 0,00 € ».
 
