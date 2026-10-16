@@ -28,6 +28,34 @@ def img_src(m):
 main = re.sub(r'\ssrcset="[^"]*"', "", main)
 main = re.sub(r'src="([^"]+)"', img_src, main)
 main = re.sub(r"<script.*?</script>", "", main, flags=re.S)
+
+# Textes de la fiche corrigés (16/10/2026) : 4 façons de graver, 30 modèles, « cristal » seulement pour le 36 cl,
+# description réécrite en blocs courts.
+DESC = ('<div class="product-desc">'
+  '<p><strong>Un verre à vin de restaurant, gravé à votre façon dans notre atelier.</strong></p>'
+  '<p>À offrir pour un mariage, un anniversaire, une crémaillère, ou à garder pour soi.</p>'
+  '<h3>Deux tailles</h3><ul>'
+  '<li><strong>36 cl</strong> : coupe tulipe, en cristal.</li>'
+  '<li><strong>47 cl</strong> : grande coupe ronde, pour les vins rouges.</li></ul>'
+  '<h3>Quatre façons de le graver</h3><ul>'
+  '<li><strong>Un modèle</strong> : 30 dessins numérotés, avec vos prénoms si vous le souhaitez.</li>'
+  '<li><strong>Une lettre fleurie</strong> : votre initiale, avec un prénom au milieu.</li>'
+  '<li><strong>Votre texte</strong> : un prénom, une date, un message, dans l’une de nos 8 écritures.</li>'
+  '<li><strong>Votre photo ou votre logo</strong> : un dessin, une photo, le logo de votre bar ou de votre entreprise.</li></ul>'
+  '<h3>Bon à savoir</h3><ul>'
+  '<li>À l’unité, par 2 ou par 4, dans les deux tailles.</li>'
+  '<li>Gravure laser permanente : elle résiste au lave-vaisselle.</li>'
+  '<li>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</li>'
+  '<li>Emballage protégé, gravé en France dans notre atelier.</li>'
+  '<li>Livraison offerte dès 60 € d’achat.</li></ul></div>')
+i = main.index('<div class="product-desc">'); j = main.index('</div>', i) + len('</div>')
+main = main[:i] + DESC + main[j:]
+main = main.replace("Un verre à vin professionnel, en 36 cl ou en 47 cl, gravé à votre façon : un modèle (n°1 à 20), une lettre fleurie, votre texte — ou le logo de votre bar ou entreprise.",
+  "Un verre à vin de restaurant, en 36 cl ou en 47 cl, gravé à votre façon : un modèle, une lettre fleurie, votre texte, votre photo ou votre logo.")
+OLD_USAGE = main[main.index("Trois façons de personnaliser"):main.index("c'est du cristal.") + len("c'est du cristal.")]
+main = main.replace(OLD_USAGE, "Quatre façons de graver : un modèle (30 dessins numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo. L’aperçu se met à jour pendant que vous choisissez.\nSur un modèle, les prénoms et la date sont gravés dans l’écriture du modèle.\nVa au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs contre l’évier.")
+for k in ["Un verre à vin de restaurant, en 36 cl", "Quatre façons de graver", "Quatre façons de le graver"]:
+    assert k in main, k
 PH = uri(photo, 300)
 LOGO = uri(sys.argv[5], 300) if len(sys.argv) > 5 else PH
 
