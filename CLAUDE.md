@@ -19,6 +19,9 @@
   ✅ **Description « comme le verre à vin » (cartes + tableau « Bon à savoir » + volet en tableau, fautes corrigées) : SEULEMENT LES VERRES**
   (vin, flûte, whisky, cocktail, Fête des pères). ⛔ Pas pour les autres produits (gérant : « laisse tomber… que pour les verres ») ;
   les bijoux et les autres fiches gardent leur présentation. La maquette des 43 fiches (`descriptions-tout.html`) est ABANDONNÉE.
+  📷 **Image de conseils photo (`/produits/guide-photo-gravure.png`) PARTOUT où une photo est à graver** (gérant, 16/10 : « t'as oublié de
+  mettre cette photo quand il y a des photos à graver ») : en ligne seulement sur whisky (`parcoursGuide.guidePhoto`) et cocktail (note) ;
+  MANQUE sur vin, flûte, carafe → au « applique », ajouter `guidePhoto` à leur `parcoursGuide`, affiché ouvert (pas replié). Ajoutée aux 2 maquettes.
   ⛔ **Les 4 cartes « Que voulez-vous graver ? » restent TOUJOURS affichées** (gérant : « pour que les gens voient tout ce qu'on peut faire
   pour tous les verres ») : ne pas les replier sur le choix fait.
 - **Fiche atelier : consignes rangées face par face** (gérant, commande 0XIF6DDO pendentif : « je dois graver du haut vers le bas ou en bas,

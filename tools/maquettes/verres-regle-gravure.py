@@ -39,6 +39,11 @@ def img_src(m):
             except Exception: pass
     return 'src=""'
 
+GUIDE = ('<div class="mqv-guide"><img src="%s" alt="Exemples de bonnes et mauvaises photos pour la gravure">'
+         '<p>Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d’espace autour. '
+         'Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, '
+         'puis retravaillée à la main par notre atelier. L’aperçu en ligne est indicatif.</p></div>') % uri(os.path.join(PUB, "produits", "guide-photo-gravure.png"), 900)
+
 def eur(x): return ("%.2f" % x).replace(".", ",") + " €"
 
 def grille(notes):
@@ -149,7 +154,7 @@ def fiche(slug, onglet, pluriel, pu, t1, t2, offert, notes, idx):
       '<div class="mqv-v1"><p class="mqv-small">Le verre 1 se personnalise juste en dessous, comme d’habitude. Exemple ici : texte <b>« %s »</b> <i class="mqv-sup">+3 €</i></p></div>'
       '<div class="mqv-v2" hidden><label class="mqv-same"><input type="checkbox" class="mqv-idem"> Identique au verre 1 (même gravure) <span class="mqv-ok">rien en plus</span></label>'
       '<div class="mqv-v2f"><div class="field"><label>Verre 2 · votre photo ou logo <span class="mqv-small">(facultatif)</span></label>'
-      '<div class="photo-upload"><label class="photo-dropzone">Choisir une photo</label></div></div>'
+      '<div class="photo-upload"><label class="photo-dropzone">Choisir une photo</label></div>' + GUIDE + '</div>'
       '<div class="field"><label>Verre 2 · texte <span class="mqv-small">(compris dans les 5 €)</span></label><input type="text" value="%s" readonly></div></div></div>'
       '</div>') % (t1, t2)
     detail = ('<div class="prc-sum mqv-sum"><button type="button" class="mqv-sumbtn"><span>Le détail de votre prix</span><em>Voir</em></button>'
@@ -213,6 +218,7 @@ MQ = r'''
 .mqv-grille td{padding:6px 0;border-bottom:1px solid var(--line);vertical-align:top}
 .mqv-grille td:last-child{text-align:right;white-space:nowrap;padding-left:10px}
 .mqv-v2 input[type=text]{width:100%;box-sizing:border-box}
+.mqv-guide{margin:10px 0 4px;font-size:.82rem;color:var(--ink-soft)}.mqv-guide img{width:100%;border-radius:10px;border:1px solid var(--line);background:#fff;display:block;margin:0 0 6px}.mqv-guide p{margin:0;line-height:1.5}
 .pd2 h3{margin:22px 0 10px}.pd2-lead{margin:0 0 4px}.pd2-occ{margin:0;color:var(--ink-soft)}
 .pd2-sizes{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pd2-sizes.un{grid-template-columns:1fr}
 .pd2-size{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}

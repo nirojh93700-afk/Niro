@@ -293,6 +293,10 @@ doc = ('<title>Plusieurs verres, une photo</title><style>%s%s</style>'
        'Change la quantité avec − / + : les idées 1 et 2 n’apparaissent qu’à partir de 2 verres. L’onglet « Prix » montre la règle : verre 1 comme aujourd’hui, puis +5 € tout compris par verre différent.</p>'
        '%s%s%s') % (css, MQCSS, main, GESTION, JS)
 if os.environ.get("SITE_SEUL"):
+    GUIDE = ('<div class="mq-guide"><img src="%s" alt="Exemples de bonnes et mauvaises photos pour la gravure">'
+             '<p>Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d\'espace autour. '
+             'Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, '
+             'puis retravaillée à la main par notre atelier. L\'aperçu en ligne est indicatif.</p></div>') % uri(os.path.join(ROOT, "produits", "guide-photo-gravure.png"), 900)
     # Rendu client seul : la fiche telle qu'elle sera sur le site (règle finale), sans barre de maquette,
     # sans idées 1/2, sans Gestion, sans tableau d'exemples.
     doc = re.sub(r'<div class="mq-bar">.*?</div>', "", doc, count=1, flags=re.S)
@@ -311,13 +315,14 @@ if os.environ.get("SITE_SEUL"):
     hint = re.search(r'<p class="pg-hint"><b>Verre 1</b>.*?</p>', doc, re.S).group(0)
     doc = doc.replace(hint, '<p class="pg-hint">Verre 2 différent : <strong>+5 €</strong>, image et texte compris. <button type="button" class="mq-lien mq-voirprix">Voir les prix</button></p>', 1)
     doc = doc.replace('<p class="prc-legend">Une photo, un dessin, un logo : téléversez le fichier (JPG, PNG). Photo seule, ou photo + texte, comme vous voulez. Elle se pose sur la grande photo en haut, où vous pouvez la déplacer. L\'atelier vérifie la qualité avant de graver.</p>',
-        '<p class="prc-legend">JPG ou PNG. L\'atelier vérifie la qualité avant de graver.</p>', 1)
+        '<p class="prc-legend">JPG ou PNG. L\'atelier vérifie la qualité avant de graver.</p>' + GUIDE, 1)
     doc = doc.replace('<div class="mq-sumh">Le détail de votre prix</div>',
         '<button type="button" class="mq-sumh mq-sumbtn"><span>Le détail de votre prix</span><em>Voir</em></button>', 1)
     for k in ['mq-voirprix', 'mq-sumbtn', 'JPG ou PNG. L']:
         assert k in doc, k
     doc = doc.replace("<style>", "<style>"
-                ".mq-lien{background:none;border:0;padding:0;font:inherit;color:var(--gold-dark);text-decoration:underline;text-underline-offset:3px;cursor:pointer}"
+                ".mq-guide{margin:10px 0 14px;font-size:.82rem;color:var(--ink-soft)}.mq-guide img{width:100%;border-radius:10px;border:1px solid var(--line);background:#fff;display:block;margin:0 0 6px}.mq-guide p{margin:0;line-height:1.5}"
+        ".mq-lien{background:none;border:0;padding:0;font:inherit;color:var(--gold-dark);text-decoration:underline;text-underline-offset:3px;cursor:pointer}"
         ".mq-sum:not(.open) .prc-sumrow{display:none}"
         ".mq-sumbtn{display:flex;width:100%;justify-content:space-between;align-items:center;background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}"
         ".mq-sumbtn em{font-style:normal;font-weight:500;font-size:.9rem;color:var(--gold-dark);text-decoration:underline;text-underline-offset:3px}"
