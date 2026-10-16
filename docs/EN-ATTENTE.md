@@ -8,6 +8,22 @@
 ---
 
 ## 0. Côté gérant, après mise en ligne
+- **🔴 ANCIEN SITE NETLIFY À SUPPRIMER + « www » À RÉGLER (16/10/2026 — le gérant le fera lui-même, « je supprimerai après »)**.
+  L'ancien site `exquisite-khapse-7af3a0.netlify.app` tourne encore : il a envoyé 3 demandes d'avis en double à Ludovic
+  (16HGINEA) et continuera (environ toutes les 12 min jusqu'au 19/10) tant qu'il existe. **`www.nivcreation.fr` pointe vers lui**
+  (CNAME vérifié le 16/10) ; `nivcreation.fr` est bien chez Firebase (35.219.200.110). Pas d'accès Netlify / Hostinger / console
+  Firebase d'ici : c'est LUI qui fait les 3 étapes.
+  1. **Supprimer l'ancien site** : app.netlify.com → site **exquisite-khapse-7af3a0** → **Site configuration** → tout en bas
+     **Delete this site** (arrête les mails ; `www.nivcreation.fr` affiche une erreur jusqu'aux étapes 2-3 ; nivcreation.fr intact).
+  2. **Firebase** : console.firebase.google.com → projet **niv-creation** → **App Hosting** → **niv-creation** → **Paramètres** →
+     **Domaines** → **Ajouter un domaine personnalisé** → `www.nivcreation.fr`, **redirigé vers nivcreation.fr** → noter les réglages DNS affichés.
+  3. **Hostinger** : hpanel.hostinger.com → **nivcreation.fr** → **DNS** → supprimer **CNAME « www » → exquisite-khapse-7af3a0.netlify.app**,
+     ajouter les lignes données par Firebase ; attendre « Connecté » dans Firebase.
+  Après : moi, vérifier que Netlify ne répond plus et que `www.nivcreation.fr` arrive sur le vrai site ; dans Stripe → Webhooks,
+  supprimer un éventuel ancien point de terminaison Netlify. Les 2 règles automatiques (avis J+2, relance inscrites J+4) sont
+  **éteintes** depuis le 16/10 : ne les rallumer que sur sa demande.
+- **🌐 Domaine nivcreation.fr à prolonger (16/10)** : acheté chez **Hostinger** (hpanel → Domaines → nivcreation.fr → Renouveler +
+  renouvellement automatique, jusqu'à 10 ans en .fr). Date d'expiration non lue d'ici : c'est lui qui la regarde.
 - ✅ **Devis : code promo + livraison choisis par le client — EN LIGNE le 03/10/2026** (« tu peux le mettre en ligne à la place de
   l'ancien », maquette validée, option 1 = calcul du port PARTAGÉ avec le panier : `src/lib/panierPort.js`, utilisé par
   `/api/checkout` ET les devis ; parité prouvée par `npm run test-port-parite`, 6000 paniers). Reste : **UN paiement test boutique**
