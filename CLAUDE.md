@@ -3777,7 +3777,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
   (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
 
-## 🏷️ ÉTIQUETTES : ADRESSE TROP PETITE À L'IMPRESSION — 17/10/2026 (préparé, en attente de son « pousse »)
+## 🏷️ ÉTIQUETTES : ADRESSE TROP PETITE À L'IMPRESSION — 17/10/2026 (✅ EN LIGNE à 13 h 35, commit d36b52e0)
 > Gérant : « quand j'imprime les adresses la taille est trop petite, t'as respecté la taille que je t'ai donnée ? »
 - La planche était juste (45 × 45 mm, 4 × 5, marges 26/26/7/8, 5 mm entre les cases) : c'est le TEXTE qui était trop petit (8 à 10 pt).
 - `AGRANDI = 1.4` dans `src/lib/etiquettes.js` : nom, lignes et CP + VILLE 1,4 fois plus grands dans les 4 styles, sur la feuille
