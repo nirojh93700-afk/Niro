@@ -16,7 +16,7 @@ import { getSettings } from "./stock";
 import { productInfo } from "./productInfo";
 import { defaultPackagingFor } from "./packaging";
 import { guidePourProduit } from "./guides";
-import { controleTextesPrix } from "./textesPrix";
+import { controleTextesPrix, controlePrixEcrits } from "./textesPrix";
 import { controleProduitAtelier } from "./controleAtelier";
 
 const RANK = { haute: 0, moyenne: 1, basse: 2 };
@@ -65,6 +65,12 @@ export async function auditCatalog() {
     // ou un prix écrit qui n'est pas payé. Lu sur le catalogue AVEC les réglages de Gestion.
     try {
       for (const a of controleTextesPrix(p)) add(p, "texte-prix", "haute", a.message);
+    } catch { /* un produit mal formé ne bloque pas la surveillance */ }
+    // 6 bis. Tout prix écrit (notes, options, accroche, description — celle de Gestion comprise — et fiche
+    // détaillée) doit être un supplément vraiment payé ; des motifs annoncés payants doivent l'être (17/10/2026).
+    try {
+      const info = productInfo[p.slug] || {};
+      for (const a of controlePrixEcrits(p, { "fiche détaillée": [info.material, info.usage].filter(Boolean).join("\n") })) add(p, "prix-ecrit", "haute", a.message);
     } catch { /* un produit mal formé ne bloque pas la surveillance */ }
 
     // 7. Atelier complet (gérant, 16/10/2026, commande 10OPUHMO) : chaque champ que la cliente peut

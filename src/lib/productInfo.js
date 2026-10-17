@@ -133,13 +133,13 @@ Un souci à la réception ?
     material: `Acier inoxydable 316L hypoallergénique
 
 - Sans nickel : adapté aux peaux sensibles.
-- Médaillon cœur ouvrable, 4 faces gravables.
+- Médaillon cœur ouvrable, 5 faces gravables.
 - Chaîne 50 cm.
-- Finitions : Argent ou Bicolore (Or & Argent).
+- Finitions : Argent, Doré ou Bicolore (Or & Argent).
 - Livré dans une élégante boîte cadeau noire.`,
     usage: `Personnalisation & entretien
 
-Personnalisation (4 faces)
+Personnalisation (5 faces)
 - Couverture + 3 pages intérieures + dos (15 caractères max par face).
 - Sur chaque face : un texte, une photo gravée, ou rien — vous combinez librement.
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.

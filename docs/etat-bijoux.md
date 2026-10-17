@@ -4,7 +4,7 @@
 > après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé
 > d'un bijou depuis n'importe quelle conversation, sans relire le code.
 
-> Généré le 2026-09-23 · 32 bijoux dans le code, dont 27 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
+> Généré le 2026-10-17 · 32 bijoux dans le code, dont 27 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
 
 ⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être
 réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code

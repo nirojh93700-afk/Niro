@@ -3763,6 +3763,22 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
   (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
 
+## 🔎 PRIX ÉCRITS ↔ PRIX PAYÉS SUR TOUTES LES FICHES + « MOTIF : AUCUN » À L'ATELIER — 17/10/2026 (« vérifie partout… je veux plus de problème » → « corrige »)
+> Gérant, commande 0XIF6DDO (pendentif) : « y a pas de motif, il a pas choisi le motif ».
+- **Pendentif géométrique** : DEUX clés `engravingPricing` dans le même objet → la 2e effaçait la 1re, les motifs (« le 1er offert,
+  chaque suivant +3 € ») n'étaient JAMAIS payés. Fusionnées en une seule ; la note qui disait « gravure des 4 faces incluse »
+  (faux : face avant incluse, autres faces +3 €) corrigée.
+- **Médaillon cœur ouvrable** : la description enregistrée dans Gestion disait « +3 € par page, photo +5 € » alors que la fiche et
+  le paiement font 5 € et 8 € → corrigée dans Gestion ; titre / accroche / fiche détaillée « 4 faces » → « 5 faces », finition Doré ajoutée.
+- **Atelier** (`consignesGravure`) : une face gravée qui propose un motif non choisi porte « Motif : aucun (la cliente n'en a pas
+  choisi) » ; « Gravure — page 1 », « Motif — page 1 », « Prénom — 1er cœur », « Texte à graver — verso » sont rangés par face
+  (avant, le médaillon livre avait une fausse face « Motif » et ses textes à part).
+- **Pour que ça ne revienne pas** : `controlePrixEcrits` + `supplementsPayes` (`src/lib/textesPrix.js`) → chaque « +X € » / « X € par
+  face » écrit dans les notes, options, accroche, description (Gestion comprise) et fiche détaillée doit être un supplément vraiment
+  payé, et des motifs annoncés payants doivent l'être ; branché dans la surveillance du catalogue (type `prix-ecrit`, priorité haute).
+  `npm run test-textes-prix` vérifie aussi qu'AUCUNE propriété n'est écrite deux fois dans un objet de `products.js`.
+  Les verres à règle de prix (`regleVerres`) restent contrôlés par `npm run test-prix-verres`.
+
 ## 🏷️ ÉTIQUETTES : ADRESSE TROP PETITE À L'IMPRESSION — 17/10/2026 (préparé, en attente de son « pousse »)
 > Gérant : « quand j'imprime les adresses la taille est trop petite, t'as respecté la taille que je t'ai donnée ? »
 - La planche était juste (45 × 45 mm, 4 × 5, marges 26/26/7/8, 5 mm entre les cases) : c'est le TEXTE qui était trop petit (8 à 10 pt).

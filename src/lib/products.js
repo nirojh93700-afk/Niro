@@ -183,10 +183,10 @@ export const products = [
           { value: "backcover", label: "Dos" },
         ] },
     ],
-    title: "Collier médaillon cœur ouvrable — 4 faces gravables",
+    title: "Collier médaillon cœur ouvrable — 5 faces gravables",
     category: "bijoux",
     type: "Collier personnalisé",
-    tagline: "Un cœur qui s'ouvre comme un livre, 4 faces à graver.",
+    tagline: "Un cœur qui s'ouvre comme un livre, 5 faces à graver.",
     personalizable: true,
     personalizationLabel: "Textes à graver (face avant + pages intérieures)",
     images: [
@@ -2242,14 +2242,14 @@ export const products = [
     title: "Collier femme pendentif géométrique à graver",
     category: "bijoux", type: "Collier personnalisé",
     engrave3d: true, // aperçu 3D : barre gravable sur 4 faces (le client fait pivoter)
-    // Gravure des 4 faces incluse. Motifs : le 1er offert, chaque motif suivant +3 €.
-    engravingPricing: { motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
     // La face avant est incluse ; chaque face gravée en plus est payante (+3 €).
-    engravingPricing: { textKeys: ["face2", "face3", "face4"], textExtra: 3 },
+    // Motifs : le 1er est offert, chaque motif suivant +3 €. ⚠️ UN SEUL engravingPricing :
+    // le 17/10/2026, une 2e clé en double effaçait la 1re et les motifs n'étaient jamais payés.
+    engravingPricing: { textKeys: ["face2", "face3", "face4"], textExtra: 3, motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Gravure des 4 faces (texte) incluse. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
+      { key: "note", type: "note", text: "La gravure de la face avant est incluse ; chaque autre face gravée : +3 €. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
       { key: "face1", label: "Face avant — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
       { key: "motif1", type: "motif", label: "Face avant — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Face avant — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
