@@ -5,6 +5,12 @@
   sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
 - Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
 
+## 🔴 MAIL ENVOYÉ DEUX FOIS À CÉLINE NAULIN — 17/10/2026 (aperçu #10OPUHMO, 13 h 07)
+- Après le « Envoie » du gérant, l'aperçu est bien parti par le fil de la commande (`/api/admin/bat`), puis ma commande de
+  VÉRIFICATION a refait le même `POST` → deuxième mail identique 10 s plus tard (vu dans la boîte d'envoi : 13 h 07 min 25 et 35).
+- ⛔ **Une commande de vérification ne contient JAMAIS l'envoi** : on vérifie par une lecture seule (`GET` du fil, boîte d'envoi
+  Gmail), jamais en relançant le `curl -X POST`. Avant tout envoi : un seul `POST`, dans une commande à part, puis lecture.
+
 ## 🍷 VERRES : RÈGLE DE PRIX DE LA GRAVURE + FICHE ATELIER DÉTAILLÉE + SAUVEGARDE — 16/10/2026 (✅ EN LIGNE, « applique »)
 - **Sauvegarde avant tout changement** (gérant : « avant de modifier le site tu enregistres le site actuel ») : `docs/sauvegardes/2026-10-16/`
   sur la branche de travail = code en ligne `bcfd1c4f` + données (`/api/admin/export`, SANS les clés secrètes : GitHub les refuse, elles
