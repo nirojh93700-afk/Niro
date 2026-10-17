@@ -49,7 +49,16 @@ function valeurLisible(f, brut) {
 }
 
 /** Face / zone à laquelle appartient un champ, et le nom du réglage dans cette face. */
+// « Gravure — page 1 », « Motif — page 1 », « Prénom — 1er cœur », « Texte à graver — verso » : le mot
+// générique est AVANT le tiret, la face après (17/10/2026 : sinon « Motif » devenait une face à part).
+const GENERIQUE = /^(gravure|motif|texte(\s+à\s+graver)?|prénom|prenom)$/i;
 function faceDuChamp(f) {
+  const brut = String(f.label || f.key).replace(/,?\s*\+\s*[\d.,]+\s*€/gi, "").replace(/\s*\([^)]*\)/g, "").trim();
+  const g = brut.match(/^(.+?)\s+[—–]\s+(.+)$/);
+  if (g && GENERIQUE.test(g[1].trim()) && !/,/.test(g[2]) && g[2].trim().split(/\s+/).length <= 3) {
+    const a = g[1].trim();
+    return { face: maj(g[2].trim()), quoi: /^(gravure|texte)/i.test(a) ? "Texte" : maj(a.toLowerCase()) };
+  }
   const lab = nettoie(f.label || f.key);
   const m = lab.match(/^(.+?)\s+[—–]\s+(.+)$/);
   if (m) return { face: maj(m[1].trim()), quoi: maj(m[2].trim()) };
@@ -141,12 +150,21 @@ export function consignesGravure(item) {
   }
 
   let aDuTexte = false;
+  // Motifs proposés / choisis, par face (« _ » = hors face) : pour écrire « aucun » quand la cliente
+  // n'en a pas pris (gérant, 17/10/2026, pendentif 0XIF6DDO : « y a pas de motif, il a pas choisi »).
+  const motifsFace = new Map();
   for (const f of vus) {
     if (f.type === "note" || f.type === "photo" || f.type === "font") continue;
     if (f.key === "emplacement" || f.key === "mode") continue;
     const groupe = parCote ? { face: nomCote(f), quoi: quoiCote(f) } : faceDuChamp(f);
     if (groupe && !faces.has(groupe.face)) faces.set(groupe.face, []);
     const brut = champs[f.key];
+    if (f.type === "motif") {
+      const cle = groupe ? groupe.face : "_";
+      const m = motifsFace.get(cle) || { choisi: false };
+      if (typeof brut === "string" && brut.trim()) m.choisi = true;
+      motifsFace.set(cle, m);
+    }
     if (typeof brut !== "string" || !brut.trim()) continue;
     if (estTexte(f)) aDuTexte = true;
     const valeur = valeurLisible(f, brut);
@@ -156,6 +174,15 @@ export function consignesGravure(item) {
     }
     if (groupe) faces.get(groupe.face).push({ k: groupe.quoi, v: valeur, texte: estTexte(f) });
     else autres.push({ k: maj(nettoie(f.label || f.key)), v: valeur, texte: estTexte(f) });
+  }
+
+  // Face gravée (un texte) avec un motif possible mais non choisi : on l'écrit, pour ne pas croire à un oubli.
+  const AUCUN = { k: "Motif", v: "aucun (la cliente n'en a pas choisi)", texte: false };
+  for (const [cle, m] of motifsFace) {
+    if (m.choisi) continue;
+    if (cle === "_") { if (aDuTexte) autres.push({ ...AUCUN }); continue; }
+    const lignes = faces.get(cle);
+    if (lignes && lignes.some((l) => l.texte)) lignes.push({ ...AUCUN });
   }
 
   // Modèle décoré (Fête des pères…) : ses textes ne sont pas dans les champs (16/10/2026, contrôle

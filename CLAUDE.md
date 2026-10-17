@@ -5,12 +5,6 @@
   sur la fiche. Jamais « le visuel complet est compris ». Déjà raté le 10/10 (cristal) et le 12/10 (Evan, verre à whisky) : ne plus le refaire.
 - Dans un devis ou une réponse sur mesure : écrire le détail (verre + dessin X € · N textes × Y € · port) pour que le gérant voie le compte.
 
-## 🔴 MAIL ENVOYÉ DEUX FOIS À CÉLINE NAULIN — 17/10/2026 (aperçu #10OPUHMO, 13 h 07)
-- Après le « Envoie » du gérant, l'aperçu est bien parti par le fil de la commande (`/api/admin/bat`), puis ma commande de
-  VÉRIFICATION a refait le même `POST` → deuxième mail identique 10 s plus tard (vu dans la boîte d'envoi : 13 h 07 min 25 et 35).
-- ⛔ **Une commande de vérification ne contient JAMAIS l'envoi** : on vérifie par une lecture seule (`GET` du fil, boîte d'envoi
-  Gmail), jamais en relançant le `curl -X POST`. Avant tout envoi : un seul `POST`, dans une commande à part, puis lecture.
-
 ## 🍷 VERRES : RÈGLE DE PRIX DE LA GRAVURE + FICHE ATELIER DÉTAILLÉE + SAUVEGARDE — 16/10/2026 (✅ EN LIGNE, « applique »)
 - **Sauvegarde avant tout changement** (gérant : « avant de modifier le site tu enregistres le site actuel ») : `docs/sauvegardes/2026-10-16/`
   sur la branche de travail = code en ligne `bcfd1c4f` + données (`/api/admin/export`, SANS les clés secrètes : GitHub les refuse, elles
@@ -22,14 +16,6 @@
   flûte, whisky, cocktail, Fête des pères (maquette https://claude.ai/artifact/BSTaqkB9c34WXkxBWzB6at). Hypothèses à confirmer :
   face + fond reste +7 € par verre ; la date compte dans les 5 € d'un verre différent. Fiche plus courte : règle en une ligne
   + « Voir les prix », détail du prix replié, texte de l'étape 2 en une phrase, description en cartes et tableaux.
-  ✅ **Description « comme le verre à vin » (cartes + tableau « Bon à savoir » + volet en tableau, fautes corrigées) : SEULEMENT LES VERRES**
-  (vin, flûte, whisky, cocktail, Fête des pères). ⛔ Pas pour les autres produits (gérant : « laisse tomber… que pour les verres ») ;
-  les bijoux et les autres fiches gardent leur présentation. La maquette des 43 fiches (`descriptions-tout.html`) est ABANDONNÉE.
-  📷 **Image de conseils photo (`/produits/guide-photo-gravure.png`) PARTOUT où une photo est à graver** (gérant, 16/10 : « t'as oublié de
-  mettre cette photo quand il y a des photos à graver ») : en ligne seulement sur whisky (`parcoursGuide.guidePhoto`) et cocktail (note) ;
-  MANQUE sur vin, flûte, carafe. ✅ Précision du gérant (16/10) : l'image N'EST PAS affichée en permanence, elle S'OUVRE quand le client touche
-  « Choisir une photo » (fenêtre : image + texte + « J'ai compris, choisir ma photo » qui ouvre le choix du fichier). Au « applique » : dans
-  `PhotoUpload`, pour toutes les fiches qui demandent une photo à graver. Maquettes : `tools/maquettes/modale_photo.py`.
   ⛔ **Les 4 cartes « Que voulez-vous graver ? » restent TOUJOURS affichées** (gérant : « pour que les gens voient tout ce qu'on peut faire
   pour tous les verres ») : ne pas les replier sur le choix fait.
 - **Fiche atelier : consignes rangées face par face** (gérant, commande 0XIF6DDO pendentif : « je dois graver du haut vers le bas ou en bas,
@@ -3776,6 +3762,22 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   L'entonnoir devient Visiteurs → Ont rempli un panier → Sont allés au paiement → Ont acheté. `npm run test-stats` (8 vérifs).
 - Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
   (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
+
+## 🔎 PRIX ÉCRITS ↔ PRIX PAYÉS SUR TOUTES LES FICHES + « MOTIF : AUCUN » À L'ATELIER — 17/10/2026 (« vérifie partout… je veux plus de problème » → « corrige »)
+> Gérant, commande 0XIF6DDO (pendentif) : « y a pas de motif, il a pas choisi le motif ».
+- **Pendentif géométrique** : DEUX clés `engravingPricing` dans le même objet → la 2e effaçait la 1re, les motifs (« le 1er offert,
+  chaque suivant +3 € ») n'étaient JAMAIS payés. Fusionnées en une seule ; la note qui disait « gravure des 4 faces incluse »
+  (faux : face avant incluse, autres faces +3 €) corrigée.
+- **Médaillon cœur ouvrable** : la description enregistrée dans Gestion disait « +3 € par page, photo +5 € » alors que la fiche et
+  le paiement font 5 € et 8 € → corrigée dans Gestion ; titre / accroche / fiche détaillée « 4 faces » → « 5 faces », finition Doré ajoutée.
+- **Atelier** (`consignesGravure`) : une face gravée qui propose un motif non choisi porte « Motif : aucun (la cliente n'en a pas
+  choisi) » ; « Gravure — page 1 », « Motif — page 1 », « Prénom — 1er cœur », « Texte à graver — verso » sont rangés par face
+  (avant, le médaillon livre avait une fausse face « Motif » et ses textes à part).
+- **Pour que ça ne revienne pas** : `controlePrixEcrits` + `supplementsPayes` (`src/lib/textesPrix.js`) → chaque « +X € » / « X € par
+  face » écrit dans les notes, options, accroche, description (Gestion comprise) et fiche détaillée doit être un supplément vraiment
+  payé, et des motifs annoncés payants doivent l'être ; branché dans la surveillance du catalogue (type `prix-ecrit`, priorité haute).
+  `npm run test-textes-prix` vérifie aussi qu'AUCUNE propriété n'est écrite deux fois dans un objet de `products.js`.
+  Les verres à règle de prix (`regleVerres`) restent contrôlés par `npm run test-prix-verres`.
 
 ## 🏷️ ÉTIQUETTES : ADRESSE TROP PETITE À L'IMPRESSION — 17/10/2026 (✅ EN LIGNE à 13 h 35, commit d36b52e0)
 > Gérant : « quand j'imprime les adresses la taille est trop petite, t'as respecté la taille que je t'ai donnée ? »

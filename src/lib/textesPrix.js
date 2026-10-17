@@ -69,3 +69,97 @@ export function controleTextesPrix(product) {
   }
   return out;
 }
+
+// =============================================================================
+// Contrôle « prix écrit ↔ prix payé » sur TOUTE la fiche (17/10/2026, gérant : « vérifie partout… je veux
+// plus de problème »). Trouvé ce jour-là : le pendentif géométrique annonçait « chaque motif +3 € » mais
+// une 2e clé `engravingPricing` en double effaçait la 1re → motifs jamais payés ; et la description du
+// médaillon cœur enregistrée dans Gestion disait « +3 € par page / photo +5 € » alors que le paiement
+// prend 5 € et 8 €. Ici : chaque supplément écrit (« +X € », « X € par face ») dans les notes, libellés,
+// options, l'accroche et la description doit correspondre à un supplément que le paiement fait vraiment
+// payer ; et des motifs annoncés payants doivent l'être.
+// =============================================================================
+const plat = (h) => String(h || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ");
+const nombre = (s) => arrondi(Number(String(s).replace(",", ".")));
+
+/** Tous les montants qu'une case, une option ou un motif ajoute au paiement, sur toutes les variantes. */
+export function supplementsPayes(product) {
+  const out = new Set();
+  const vars = Array.isArray(product.variants) && product.variants.length ? product.variants : [{ id: null, title: "" }];
+  const champs = product.personalizationFields || [];
+  for (const v of vars) {
+    const base = (ctx) => engravingExtra(product, { ...ctx }, v.id).amount || 0;
+    for (const f of champs) {
+      if (!f || f.type === "note" || f.type === "font") continue;
+      const ctx = contexteDu(f);
+      const valeurs = Array.isArray(f.options) && f.options.length ? f.options.map((o) => o.value) : ["Test"];
+      for (const val of valeurs) {
+        const d = arrondi((engravingExtra(product, { ...ctx, [f.key]: String(val) }, v.id).amount || 0) - base(ctx));
+        if (d > 0) out.add(d);
+      }
+    }
+    // Motifs : le 1er peut être offert, les suivants payants → on regarde chaque motif ajouté.
+    const motifs = champs.filter((f) => f && f.type === "motif");
+    let ctx = {}, avant = base(ctx);
+    for (const m of motifs) {
+      ctx = { ...ctx, [m.key]: String(m.options?.[0]?.value || "x") };
+      const apres = engravingExtra(product, ctx, v.id).amount || 0;
+      const d = arrondi(apres - avant);
+      if (d > 0) out.add(d);
+      avant = apres;
+    }
+  }
+  return out;
+}
+
+/** Montants écrits comme SUPPLÉMENTS (« +3 € », « 3 € par face ») dans un texte. */
+export function supplementsEcrits(texte) {
+  const t = plat(texte);
+  const out = [];
+  for (const m of t.matchAll(/\+\s?(\d+(?:[.,]\d+)?)\s?€/g)) out.push({ montant: nombre(m[1]), extrait: t.slice(Math.max(0, m.index - 50), m.index + 25).trim() });
+  for (const m of t.matchAll(/(\d+(?:[.,]\d+)?)\s?€\s+(?:par|la|le)\s+(face|page|zone|cœur|coeur|motif|texte|élément|plaque)\b/gi)) out.push({ montant: nombre(m[1]), extrait: t.slice(Math.max(0, m.index - 50), m.index + 30).trim() });
+  return out;
+}
+
+/**
+ * Anomalies de prix écrits d'une fiche : [{ ou, montant, message }].
+ * `extra` = textes en plus à contrôler (ex. fiche détaillée), { nom: texte }.
+ */
+export function controlePrixEcrits(product, extra = {}) {
+  const out = [];
+  if (!product) return out;
+  // Verres « règle de prix » : leurs montants (+2 / +5 € par verre) viennent de prixGravureVerres, pas
+  // d'engravingExtra — contrôlés à part par `npm run test-prix-verres`.
+  if (product.regleVerres) return out;
+  const payes = supplementsPayes(product);
+  const sources = [];
+  for (const f of product.personalizationFields || []) {
+    if (!f) continue;
+    if (f.type === "note") sources.push(["note de la fiche", f.text]);
+    // Le libellé d'une case de texte est déjà contrôlé par controleTextesPrix.
+    else if (!TEXTE.has(f.type || "text")) sources.push([`« ${f.label || f.key} »`, [f.label, ...(f.options || []).map((o) => o.label)].join(" · ")]);
+  }
+  sources.push(["accroche", product.tagline], ["description", product.descriptionHtml]);
+  for (const [nom, t] of Object.entries(extra || {})) sources.push([nom, t]);
+  const vus = new Set();
+  for (const [ou, texte] of sources) {
+    for (const e of supplementsEcrits(texte)) {
+      if (payes.has(e.montant)) continue;
+      const k = `${ou}|${e.montant}`;
+      if (vus.has(k)) continue;
+      vus.add(k);
+      out.push({ ou, montant: e.montant, message: `${ou} : « …${e.extrait}… » annonce ${euros(e.montant)}, mais aucun choix de la fiche ne fait payer ce montant au paiement (payé : ${[...payes].sort((a, b) => a - b).map(euros).join(", ") || "rien"})` });
+    }
+  }
+  // Motifs annoncés payants mais jamais payés.
+  const champs = product.personalizationFields || [];
+  if (champs.some((f) => f && f.type === "motif")) {
+    const annonce = champs.some((f) => f && /motif[^.]*\+\s?\d/i.test(`${f.text || ""} ${f.label || ""}`));
+    const motifs = champs.filter((f) => f && f.type === "motif");
+    const tous = Object.fromEntries(motifs.map((m) => [m.key, String(m.options?.[0]?.value || "x")]));
+    const v = product.variants?.[0]?.id;
+    const paye = (engravingExtra(product, tous, v).amount || 0) - (engravingExtra(product, {}, v).amount || 0);
+    if (annonce && motifs.length > 1 && paye <= 0) out.push({ ou: "motifs", montant: 0, message: `Les motifs sont annoncés payants sur la fiche, mais ${motifs.length} motifs choisis ne coûtent rien au paiement (réglage engravingPricing.motifKeys manquant ?)` });
+  }
+  return out;
+}
