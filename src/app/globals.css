@@ -3747,6 +3747,11 @@ on les resserre pour le papier (!important, sinon le style en ligne gagne). */
 .file-chip.green { background: #e3efe4; border-color: #bcd9c1; color: #2f6b3d; }
 .file-chip.btn { cursor: pointer; }
 .file-chip.btn:hover { border-color: var(--gold); }
+.file-chip.flag-urgent { background: #fdecec; border-color: #e58f86; color: #b3261e; }
+.file-chip-x { margin-left: 3px; opacity: 0.6; font-weight: 800; }
+.file-chip.add { background: transparent; border-style: dashed; color: #6b6355; font-weight: 600; }
+.file-chip.off { background: #fff; border-style: dashed; color: #6b6355; font-weight: 600; }
+.file-etq { margin-top: 6px; padding: 8px; border-radius: 10px; background: #faf6ee; border: 1px solid var(--line); }
 .file-note { margin-top: 8px; }
 .file-note textarea { width: 100%; box-sizing: border-box; min-height: 44px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 0.86rem; resize: vertical; background: #fffdf8; }
 .file-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }

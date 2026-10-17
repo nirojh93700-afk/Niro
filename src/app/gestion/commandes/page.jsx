@@ -238,6 +238,7 @@ function Colonne({ titre, n, vide, children }) {
 function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, adminKey, onMat }) {
   const [note, setNote] = useState(o.adminNote || "");
   const [editing, setEditing] = useState(false);
+  const [etiqueter, setEtiqueter] = useState(false);
   const flags = o.flags || [];
   const statut = o.status || "a_preparer";
   const chipStatut = { a_preparer: ["prep", "À préparer"], en_gravure: ["grav", "En fabrication"], expediee: ["exp", "Expédiée"], remise_main_propre: ["exp", "Remise en main propre"], livree: ["liv", "Livrée"], annulee: ["ann", "Annulée"], remboursee: ["ann", "Remboursée"] }[statut] || ["prep", statut];
@@ -326,13 +327,29 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
         {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking).nom})</a> : null}
         {o.tracking && lienSuivi(o.tracking).autre ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).autre.url} target="_blank" rel="noreferrer">suivre (La Poste)</a> : null}
-        {FLAGS.map((f) => (
-          <button key={f.id} type="button" className={`file-chip btn${flags.includes(f.id) ? " on" : ""}`} title="Cliquer pour activer/retirer"
-            onClick={() => onAnnotate(o, { flags: flags.includes(f.id) ? flags.filter((x) => x !== f.id) : [...flags, f.id] })}>
-            {f.label}
+        {/* Seules les étiquettes réellement posées s'affichent ; les autres sont rangées derrière « + Étiqueter ». */}
+        {FLAGS.filter((f) => flags.includes(f.id)).map((f) => (
+          <button key={f.id} type="button" className={`file-chip btn on flag-${f.id}`} title="Cliquer pour retirer cette étiquette"
+            onClick={() => onAnnotate(o, { flags: flags.filter((x) => x !== f.id) })}>
+            {f.label} <span aria-hidden="true" className="file-chip-x">×</span>
           </button>
         ))}
+        {FLAGS.some((f) => !flags.includes(f.id)) ? (
+          <button type="button" className="file-chip btn add" aria-expanded={etiqueter} onClick={() => setEtiqueter((v) => !v)}>
+            {etiqueter ? "Fermer" : "+ Étiqueter"}
+          </button>
+        ) : null}
       </div>
+      {etiqueter ? (
+        <div className="file-chips file-etq">
+          {FLAGS.filter((f) => !flags.includes(f.id)).map((f) => (
+            <button key={f.id} type="button" className="file-chip btn off" title="Cliquer pour poser cette étiquette"
+              onClick={() => { onAnnotate(o, { flags: [...flags, f.id] }); setEtiqueter(false); }}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <div className="file-note">
         {editing ? (
