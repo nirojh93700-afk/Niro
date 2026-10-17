@@ -81,6 +81,9 @@ export const lignesExpediteur = (txt) => String(txt || "").split("\n").map((x) =
 // Logo du site, en petit, en bas à droite de chaque étiquette (14/10/2026, gérant : « sur les tickets, tu
 // peux mettre le logo en petit »). C'est le fichier d'origine du site, servi tel quel par /api/logo ;
 // s'il ne charge pas, l'étiquette sort sans logo.
+// Taille de l'adresse (17/10/2026, gérant : « quand j'imprime, la taille est trop petite ») : l'adresse part
+// 1,4 fois plus grande qu'avant et ne se resserre que si elle ne tient pas dans la case.
+export const AGRANDI = 1.4;
 export const LOGO_ETQ = { w: 12, h: 6.7 }; // cadre en mm ; le logo y tient sans être déformé
 
 // Bas de l'étiquette : l'expéditeur et/ou le n° de commande à gauche, le logo à droite (rien d'autre
@@ -118,9 +121,9 @@ export function feuilleHtml(places, expTxt, logo, modele = "actuel") {
 .page{position:relative;width:210mm;height:296mm;overflow:hidden}
 .etq{position:absolute;width:${FEUILLE.w}mm;height:${FEUILLE.h}mm;padding:3mm 3mm 2.6mm;display:flex;flex-direction:column;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .to{font-size:6pt;letter-spacing:.06em;text-transform:uppercase;color:#555;margin-bottom:.8mm}
-.nm{font-weight:700;font-size:10pt;line-height:1.15;overflow-wrap:anywhere}
-.l{font-size:9pt;line-height:1.2;overflow-wrap:anywhere}
-.cp{font-weight:700;font-size:9.5pt;line-height:1.2;overflow-wrap:anywhere}
+.nm{font-weight:700;font-size:calc(${(10 * AGRANDI).toFixed(2)}pt * var(--k, 1));line-height:1.15;overflow-wrap:anywhere}
+.l{font-size:calc(${(9 * AGRANDI).toFixed(2)}pt * var(--k, 1));line-height:1.2;overflow-wrap:anywhere}
+.cp{font-weight:700;font-size:calc(${(9.5 * AGRANDI).toFixed(2)}pt * var(--k, 1));line-height:1.2;overflow-wrap:anywhere}
 .pied{margin-top:auto;display:flex;align-items:flex-end;gap:1.5mm}
 .pied.trait{border-top:.25mm solid #000;padding-top:.8mm}
 .txt{flex:1;min-width:0}
@@ -152,6 +155,8 @@ export const modeleValide = (m) => (MODELES.some((x) => x.id === m) ? m : "actue
 const OR = "#a98935", OR_CLAIR = "#d8bf7e", CREME = "#f7efdc", BRUN = "#5b4718";
 const U = (n) => `calc(${n} * var(--u, 1mm))`;
 const T = (pt) => `calc(${(pt * 0.3528).toFixed(3)} * var(--u, 1mm) * var(--k, 1))`;
+// Mentions décoratives (DESTINATAIRE, « Gravé pour vous… ») : taille fixe, elles ne se resserrent pas.
+const T0 = (pt) => `calc(${(pt * 0.3528).toFixed(3)} * var(--u, 1mm))`;
 const SERIF = `var(--font-display, Georgia), Georgia, "Times New Roman", serif`;
 
 function contenuStyle(p, expTxt, logo, m) {
@@ -180,10 +185,10 @@ function contenuStyle(p, expTxt, logo, m) {
 export function cssModeles() {
   return `
 .mz{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.mz .to{font-size:${T(4.6)};letter-spacing:.16em;text-transform:uppercase;color:${OR};font-weight:700;line-height:1.3;margin:0}
-.mz .nm{font-family:${SERIF};font-weight:700;font-size:${T(9.6)};line-height:1.12;overflow-wrap:anywhere}
-.mz .l{font-size:${T(7.8)};line-height:1.22;overflow-wrap:anywhere;font-weight:400}
-.mz .cp{font-size:${T(8.2)};font-weight:700;line-height:1.22;overflow-wrap:anywhere}
+.mz .to{font-size:${T0(4.6)};letter-spacing:.16em;text-transform:uppercase;color:${OR};font-weight:700;line-height:1.3;margin:0}
+.mz .nm{font-family:${SERIF};font-weight:700;font-size:${T(9.6 * AGRANDI)};line-height:1.12;overflow-wrap:anywhere}
+.mz .l{font-size:${T(7.8 * AGRANDI)};line-height:1.22;overflow-wrap:anywhere;font-weight:400}
+.mz .cp{font-size:${T(8.2 * AGRANDI)};font-weight:700;line-height:1.22;overflow-wrap:anywhere}
 .mz .exp{font-size:${T(4.9)};line-height:1.25;color:#3d3426;overflow-wrap:anywhere}
 .mz .ref{font-size:${T(4.8)};line-height:1.25;color:#7a6e5a}
 .mz img.logo{display:block;object-fit:contain;flex:none;max-width:none}
@@ -206,15 +211,15 @@ export function cssModeles() {
 .mz-bandeau .band{flex:none;box-sizing:border-box;height:${U(9.4)};background:${CREME};border-top:${U(0.3)} solid ${OR};display:flex;align-items:center;gap:${U(1.5)};padding:0 ${U(2.6)}}
 .mz-bandeau img.logo{width:${U(12)};height:${U(6.7)}}
 .mz-bandeau .band .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:${U(0.2)};text-align:right}
-.mz-bandeau .tag{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:${T(5.4)};color:${BRUN};line-height:1.15}
-.mz-bandeau .site{font-size:${T(4.6)};letter-spacing:.12em;text-transform:uppercase;color:${OR};font-weight:700;line-height:1.2}
+.mz-bandeau .tag{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:${T0(5.4)};color:${BRUN};line-height:1.15}
+.mz-bandeau .site{font-size:${T0(4.6)};letter-spacing:.12em;text-transform:uppercase;color:${OR};font-weight:700;line-height:1.2}
 .mz-sobre{padding:${U(3.2)} ${U(3.2)} ${U(2.4)}}
 .mz-sobre::before{content:"";position:absolute;left:0;top:0;width:${U(5.2)};height:${U(5.2)};background:linear-gradient(135deg,${OR} 0 50%,transparent 50%)}
 .mz-sobre::after{content:"";position:absolute;left:0;top:0;width:${U(7)};height:${U(7)};background:linear-gradient(135deg,transparent 0 58%,${OR_CLAIR} 58% 61%,transparent 61%)}
 .mz-sobre .to{padding-left:${U(3)};margin-bottom:${U(0.9)}}
 .mz-sobre .foot{margin-top:auto;display:flex;align-items:flex-end;gap:${U(1.5)};border-top:${U(0.15)} solid ${OR_CLAIR};padding-top:${U(0.9)}}
 .mz-sobre .foot .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:${U(0.3)}}
-.mz-sobre .merci{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:${T(5.6)};color:${BRUN}}
+.mz-sobre .merci{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:${T0(5.6)};color:${BRUN}}
 .mz-sobre img.logo{width:${U(12)};height:${U(6.7)}}
 `;
 }
@@ -222,11 +227,14 @@ export function cssModeles() {
 // Adresse trop longue : le texte se resserre (jusqu’à ~50 % au pire) pour tenir dans la case.
 // Fonction autonome : elle est aussi recopiée telle quelle dans la feuille imprimée.
 export function resserrerEtiquettes(root) {
-  root.querySelectorAll(".mz").forEach(function (e) {
-    var c = e.querySelector(".main") || e, k = 1;
+  var serrer = function (e, c) {
+    var k = 1;
     e.style.removeProperty("--k");
-    while (c.scrollHeight > c.clientHeight + 1 && k > 0.5) { k -= 0.04; e.style.setProperty("--k", k.toFixed(2)); }
-  });
+    while (c.scrollHeight > c.clientHeight + 1 && k > 0.36) { k -= 0.04; e.style.setProperty("--k", k.toFixed(2)); }
+  };
+  root.querySelectorAll(".mz").forEach(function (e) { serrer(e, e.querySelector(".main") || e); });
+  // Style « Simple » : la case elle-même (feuille imprimée) ou son contenu (aperçu de la page).
+  root.querySelectorAll(".etq, .etq-cell .lab").forEach(function (e) { if (!e.querySelector(".mz")) serrer(e, e); });
 }
 
 // -----------------------------------------------------------------------------
@@ -292,26 +300,27 @@ export function feuillePdf(JsPDF, places, expTxt, logo, modele = "actuel") {
     // Blocs du haut (ce qui se lit) et du bas (expéditeur ou n° de commande), en points.
     const haut = [], bas = [];
     if (p.type === "exp") {
-      haut.push({ t: "EXPÉDITEUR", s: 6, g: 85 });
-      exp.forEach((l, i) => haut.push({ t: l, s: i ? 9 : 10, b: !i }));
+      haut.push({ t: "EXPÉDITEUR", s: 6, g: 85, fixe: true });
+      exp.forEach((l, i) => haut.push({ t: l, s: (i ? 9 : 10) * AGRANDI, b: !i }));
     } else {
       const a = p.ad;
-      haut.push({ t: "DESTINATAIRE", s: 6, g: 85 });
-      haut.push({ t: textePdf(a.nom), s: 10, b: true });
-      a.lignes.forEach((l) => haut.push({ t: textePdf(l), s: 9 }));
-      haut.push({ t: textePdf(a.cpVille), s: 9.5, b: true });
-      if (a.pays) haut.push({ t: textePdf(a.pays), s: 9.5, b: true });
+      haut.push({ t: "DESTINATAIRE", s: 6, g: 85, fixe: true });
+      haut.push({ t: textePdf(a.nom), s: 10 * AGRANDI, b: true });
+      a.lignes.forEach((l) => haut.push({ t: textePdf(l), s: 9 * AGRANDI }));
+      haut.push({ t: textePdf(a.cpVille), s: 9.5 * AGRANDI, b: true });
+      if (a.pays) haut.push({ t: textePdf(a.pays), s: 9.5 * AGRANDI, b: true });
       if (p.exp) bas.push({ t: `Exp. : ${exp.join(" · ")}`, s: 6.2, g: 34, trait: true });
     }
     if (p.ref) bas.push({ t: `Commande #${textePdf(p.ad.ref)}`, s: 5.6, g: 119 });
     // Découpe en lignes à la largeur de l'étiquette ; si tout ne tient pas, on réduit.
     const couper = (blocs, k, larg = L) => blocs.flatMap((bl) => {
-      doc.setFont("helvetica", bl.b ? "bold" : "normal"); doc.setFontSize(bl.s * k);
-      return couperLignes(doc, bl.t, larg).map((t, i) => ({ ...bl, t, s: bl.s * k, trait: bl.trait && i === 0 }));
+      const s = bl.fixe ? bl.s : bl.s * k;
+      doc.setFont("helvetica", bl.b ? "bold" : "normal"); doc.setFontSize(s);
+      return couperLignes(doc, bl.t, larg).map((t, i) => ({ ...bl, t, s, trait: bl.trait && i === 0 }));
     });
     const haute = (ls) => ls.reduce((h, l) => h + l.s * PT * 1.2, 0);
     let k = 1, H, B;
-    for (; k > 0.6; k -= 0.05) {
+    for (; k > 0.4; k -= 0.05) {
       H = couper(haut, k); B = couper(bas, k, Lbas);
       if (haute(H) + 0.8 + Math.max(haute(B), lh) + (B.some((l) => l.trait) ? 1.2 : 0) + 1.5 <= FEUILLE.h - P - Pb) break;
     }
@@ -361,11 +370,11 @@ function dessinerStyle(doc, p, x, y, expTxt, logo, m) {
   const x0 = x + P.s, L = W - 2 * P.s;
   // Ce qui se lit : nom (serif gras), lignes, CP + VILLE (gras).
   const adr = isExp
-    ? expL.map((t, i) => ({ t, s: !i ? 9.6 : i === expL.length - 1 ? 8.2 : 7.8, f: !i ? "times" : "helvetica", b: !i || i === expL.length - 1 }))
-    : [{ t: textePdf(p.ad.nom), s: 9.6, f: "times", b: true },
-      ...p.ad.lignes.map((t) => ({ t: textePdf(t), s: 7.8, f: "helvetica" })),
-      { t: textePdf(p.ad.cpVille), s: 8.2, f: "helvetica", b: true },
-      ...(p.ad.pays ? [{ t: textePdf(p.ad.pays), s: 8.2, f: "helvetica", b: true }] : [])];
+    ? expL.map((t, i) => ({ t, s: (!i ? 9.6 : i === expL.length - 1 ? 8.2 : 7.8) * AGRANDI, f: !i ? "times" : "helvetica", b: !i || i === expL.length - 1 }))
+    : [{ t: textePdf(p.ad.nom), s: 9.6 * AGRANDI, f: "times", b: true },
+      ...p.ad.lignes.map((t) => ({ t: textePdf(t), s: 7.8 * AGRANDI, f: "helvetica" })),
+      { t: textePdf(p.ad.cpVille), s: 8.2 * AGRANDI, f: "helvetica", b: true },
+      ...(p.ad.pays ? [{ t: textePdf(p.ad.pays), s: 8.2 * AGRANDI, f: "helvetica", b: true }] : [])];
   const meta = [];
   if (!isExp && p.exp) meta.push({ t: `Exp. : ${expL.join(" · ")}`, s: 4.9, f: "helvetica", c: [61, 52, 38] });
   if (p.ref) meta.push({ t: `Commande #${textePdf(p.ad.ref)}`, s: 4.8, f: "helvetica", c: [122, 110, 90] });
@@ -382,7 +391,7 @@ function dessinerStyle(doc, p, x, y, expTxt, logo, m) {
   const largPied = m === "bandeau" ? L : L - (dl ? dl.w + 1.5 : 0);
   const bas = m === "bandeau" ? y + W - 9.4 - P.b : y + W - P.b;
   let k = 1, A, B, footH;
-  for (; k > 0.6; k -= 0.04) {
+  for (; k > 0.4; k -= 0.04) {
     A = couper(adr, k, L); B = couper(pied, k, largPied);
     if (m === "ecrin") footH = meta.length ? 0.8 + 0.7 + Math.max(haute(B, 1.25), dl ? dl.h : 0) : 0.8 + 1.1 + 0.5 + (dl ? dl.h : 0);
     else if (m === "bandeau") footH = B.length ? 0.6 + haute(B, 1.25) : 0;

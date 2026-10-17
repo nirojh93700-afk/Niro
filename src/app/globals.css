@@ -4917,9 +4917,9 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .etq-cell.print{border:1.5px solid var(--gold);background:#fffdf7}
 .etq-cell .lab{display:flex;flex-direction:column;height:100%;font-family:Arial,Helvetica,sans-serif}
 .etq-cell .to{font-size:calc(2.12*var(--mm));letter-spacing:.06em;text-transform:uppercase;color:#555;margin-bottom:calc(.8*var(--mm))}
-.etq-cell .nm{font-weight:700;font-size:calc(3.53*var(--mm));line-height:1.15;overflow-wrap:anywhere}
-.etq-cell .l{font-size:calc(3.18*var(--mm));line-height:1.2;overflow-wrap:anywhere}
-.etq-cell .cp{font-weight:700;font-size:calc(3.35*var(--mm));line-height:1.2;overflow-wrap:anywhere}
+.etq-cell .nm{font-weight:700;font-size:calc(4.94*var(--mm)*var(--k,1));line-height:1.15;overflow-wrap:anywhere}
+.etq-cell .l{font-size:calc(4.45*var(--mm)*var(--k,1));line-height:1.2;overflow-wrap:anywhere}
+.etq-cell .cp{font-weight:700;font-size:calc(4.69*var(--mm)*var(--k,1));line-height:1.2;overflow-wrap:anywhere}
 .etq-cell .pied{margin-top:auto;display:flex;align-items:flex-end;gap:calc(1.5*var(--mm))}
 .etq-cell .pied.trait{border-top:1px solid #000;padding-top:calc(.8*var(--mm))}
 .etq-cell .pied .txt{flex:1;min-width:0}
@@ -4936,9 +4936,9 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .etq-modele .vue{position:relative;display:block;width:calc(45*var(--mm));height:calc(45*var(--mm));background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:0 auto;font-family:Arial,Helvetica,sans-serif;color:#000}
 .etq-modele .vue>.to,.etq-modele .vue>.nm,.etq-modele .vue>.l,.etq-modele .vue>.cp,.etq-modele .vue>.pied{margin-left:calc(3*var(--mm));margin-right:calc(3*var(--mm))}
 .etq-modele .vue>.to{margin-top:calc(3*var(--mm));font-size:calc(2.12*var(--mm));letter-spacing:.06em;text-transform:uppercase;color:#555;margin-bottom:calc(.8*var(--mm))}
-.etq-modele .vue>.nm{font-weight:700;font-size:calc(3.53*var(--mm));line-height:1.15}
-.etq-modele .vue>.l{font-size:calc(3.18*var(--mm));line-height:1.2}
-.etq-modele .vue>.cp{font-weight:700;font-size:calc(3.35*var(--mm));line-height:1.2}
+.etq-modele .vue>.nm{font-weight:700;font-size:calc(4.94*var(--mm));line-height:1.15}
+.etq-modele .vue>.l{font-size:calc(4.45*var(--mm));line-height:1.2}
+.etq-modele .vue>.cp{font-weight:700;font-size:calc(4.69*var(--mm));line-height:1.2}
 .etq-modele .vue>.pied{position:absolute;left:0;right:0;bottom:calc(2.6*var(--mm));display:flex;justify-content:flex-end}
 .etq-modele .vue>.pied .txt{flex:1}
 .etq-modele .vue>.pied .logo{width:calc(12*var(--mm));height:calc(6.7*var(--mm));object-fit:contain;display:block}
