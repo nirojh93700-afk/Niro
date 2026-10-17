@@ -3763,6 +3763,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
   (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
 
+## 🏷️ ÉTIQUETTES : ADRESSE TROP PETITE À L'IMPRESSION — 17/10/2026 (préparé, en attente de son « pousse »)
+> Gérant : « quand j'imprime les adresses la taille est trop petite, t'as respecté la taille que je t'ai donnée ? »
+- La planche était juste (45 × 45 mm, 4 × 5, marges 26/26/7/8, 5 mm entre les cases) : c'est le TEXTE qui était trop petit (8 à 10 pt).
+- `AGRANDI = 1.4` dans `src/lib/etiquettes.js` : nom, lignes et CP + VILLE 1,4 fois plus grands dans les 4 styles, sur la feuille
+  imprimée (ordinateur), le PDF (iPhone) et l'aperçu (`globals.css .etq-cell` / `.etq-modele .vue`). Une adresse trop longue se
+  resserre toute seule (plancher 0,36 au lieu de 0,5) ; le style Simple se resserre aussi maintenant (avant, une adresse longue
+  était COUPÉE en bas). Les mentions décoratives (DESTINATAIRE, « Gravé pour vous… », « Merci… ») gardent leur taille (`T0`).
+- Avant / après : `docs/maquettes/etiquettes-taille-avant-apres.png`. Rappel à lui donner : imprimer à 100 % (« taille réelle »), jamais « ajuster à la page ».
+
 ## 📮 SUIVI DES COLIS LA POSTE DANS GESTION — 14/10/2026 (« je veux suivre aussi les colis que j'envoie à La Poste… un lien comme pour Boxtal »)
 - `src/lib/suiviColis.js` (`lienSuivi(numero)`, `estNumeroLaPoste`) : un numéro La Poste (13 caractères « chiffre + lettre +
   11 chiffres » = lettre suivie / Colissimo, ou format international « 2 lettres + 9 chiffres + 2 lettres » = Chronopost,
