@@ -11,6 +11,7 @@ import { verifierEmailCommande } from "@/lib/emailTypoServeur";
 import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
 import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
+import { LOGO_URL } from "@/lib/photosLocales";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -54,14 +55,14 @@ function formatAddress(details) {
 // Marque & mise en page des e-mails (or & crème — identité Niv Création)
 // -----------------------------------------------------------------------------
 // LOGO_URL : laisser vide tant que le logo n'est pas hébergé (en-tête typographique
-// élégant en repli). Dès qu'on a le lien (Shopify/Cloudinary/site), le coller ici
+// élégant en repli). Le logo est servi par le site (/logo-niv-creation.jpg) ; pour en changer,
 // ou définir la variable d'environnement LOGO_URL.
 // =============================================================================
 const BRAND = {
   gold: "#a98935",
   cream: "#faf6ee",
   ink: "#2b2620",
-  logoUrl: (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim(),
+  logoUrl: LOGO_URL,
   siteUrl: ((process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").trim().replace(/\/$/, "")),
   siteLabel: "nivcreation.fr",
   contact: process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com",

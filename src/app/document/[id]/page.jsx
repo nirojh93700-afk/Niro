@@ -3,6 +3,7 @@ import { getQuote } from "@/lib/firebase";
 import DocumentActions from "@/components/DocumentActions";
 import { livraisonActive } from "@/lib/portDevis";
 import { indexVariantes } from "@/lib/indexVariantes";
+import { LOGO_FICHIER } from "@/lib/photosLocales";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,7 @@ export default async function DocumentPage({ params }) {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
             <div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111" alt="Niv Création" style={{ height: 64, borderRadius: 8 }} />
+              <img src={LOGO_FICHIER} alt="Niv Création" style={{ height: 64, borderRadius: 8 }} />
               <div style={{ fontSize: "0.82rem", color: "var(--ink-soft)", marginTop: 8, lineHeight: 1.5 }}>
                 Niv Création — Atelier de personnalisation<br />
                 6 rue d'Armaillé, 75017 Paris<br />

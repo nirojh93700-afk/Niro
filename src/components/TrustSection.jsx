@@ -14,10 +14,10 @@ const BADGES = [
 ];
 
 const SHOTS = [
-  "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8007460522_d3ji.jpg",
+  "/produits/catalogue/il_fullxfull.8007460522_d3ji.jpg",
   "/produits/cristal-v-femme.jpg",
   "/produits/arbre-vie-lumineux-2.jpg",
-  "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8086801196_rxih.jpg",
+  "/produits/catalogue/il_fullxfull.8086801196_rxih.jpg",
 ];
 
 export default function TrustSection() {

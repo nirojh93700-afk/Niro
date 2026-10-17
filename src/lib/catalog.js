@@ -19,6 +19,7 @@ import {
 } from "./stock";
 import { resolveCategories } from "./taxonomy";
 import { estRecent } from "./productDates";
+import { sansAncienHebergeur } from "./photosLocales";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
@@ -117,7 +118,7 @@ export async function stripBijouxPromos(promos) {
   const ids = await getBijouxVariantIds();
   const out = {};
   for (const k of Object.keys(promos || {})) if (!ids.has(k)) out[k] = promos[k];
-  return out;
+  return sansAncienHebergeur(out);
 }
 
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).

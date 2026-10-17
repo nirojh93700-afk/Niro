@@ -3,6 +3,7 @@ import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder } from "@/
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
+import { sansAncienHebergeur } from "@/lib/photosLocales";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export async function GET(req) {
     return Response.json({ orders: [], firebase: false });
   }
   // Produit exact de chaque ligne (taille du verre à vin, etc.) pour tous les écrans de Gestion (13/10/2026).
-  return Response.json({ orders: orders.map((o) => { try { return detaillerCommande(o); } catch { return o; } }), firebase: true });
+  return Response.json({ orders: sansAncienHebergeur(orders.map((o) => { try { return detaillerCommande(o); } catch { return o; } })), firebase: true });
 }
 
 // Met à jour le statut d'une commande (à préparer / expédiée).

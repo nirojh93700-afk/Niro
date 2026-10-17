@@ -30,6 +30,7 @@ import { getCatalog } from "@/lib/catalog";
 import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 import { CATEGORIES } from "@/lib/products";
 import { UNIVERS } from "@/lib/univers";
+import { LOGO_URL } from "@/lib/photosLocales";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -95,13 +96,13 @@ const metadataBase_ = {
     type: "website",
     locale: "fr_FR",
     siteName: "Niv Création",
-    images: [{ url: (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim() }],
+    images: [{ url: LOGO_URL }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Niv Création — Créations personnalisées au laser",
     description: "Bijoux, mariage et cadeaux gravés sur mesure, personnalisés en France.",
-    images: [(process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim()],
+    images: [LOGO_URL],
   },
   appleWebApp: {
     capable: true,
@@ -198,7 +199,7 @@ export default async function RootLayout({ children }) {
 
   // Données structurées (SEO) : aide Google à identifier la boutique.
   const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").replace(/\/$/, "");
-  const LOGO = (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim();
+  const LOGO = LOGO_URL;
   const orgLd = {
     "@context": "https://schema.org", "@type": "Store",
     name: "Niv Création", url: SITE_URL, image: LOGO, logo: LOGO,

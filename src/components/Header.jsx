@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "./CartContext";
 import { CATEGORIES } from "@/lib/products";
+import { LOGO_FICHIER } from "@/lib/photosLocales";
 
 export default function Header({ categories }) {
   const { count, setDrawerOpen, hydrated } = useCart();
@@ -33,7 +34,7 @@ export default function Header({ categories }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="logo-img"
-            src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111"
+            src={LOGO_FICHIER}
             alt="Niv Création — Atelier de personnalisation"
           />
         </Link>

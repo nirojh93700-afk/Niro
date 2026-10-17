@@ -1,3 +1,4 @@
+import { LOGO_URL } from "./photosLocales";
 // =============================================================================
 // E-mails de marque Niv Création (or & crème) — utilisé pour les tests d'envoi.
 // Reprend la même mise en page que l'e-mail de confirmation client.
@@ -7,7 +8,7 @@ export const BRAND = {
   gold: "#a98935",
   cream: "#faf6ee",
   ink: "#2b2620",
-  logoUrl: (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim(),
+  logoUrl: LOGO_URL,
   siteUrl: ((process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr").trim().replace(/\/$/, "")),
   siteLabel: "nivcreation.fr",
   contact: process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com",

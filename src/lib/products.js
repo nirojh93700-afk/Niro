@@ -122,12 +122,12 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte à graver (à l'intérieur de l'enveloppe)",
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685300_7l25.jpg?v=1780366782",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7912637465_7d0t.jpg?v=1780366782",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685302_iebi.jpg?v=1780366782",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685290_a50j.jpg?v=1780366782",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685306_sefx.jpg?v=1780366782",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.7864685296_55z9.jpg?v=1780366782",
+      "/produits/catalogue/il_fullxfull.7864685300_7l25.jpg",
+      "/produits/catalogue/il_fullxfull.7912637465_7d0t.jpg",
+      "/produits/catalogue/il_fullxfull.7864685302_iebi.jpg",
+      "/produits/catalogue/il_fullxfull.7864685290_a50j.jpg",
+      "/produits/catalogue/il_fullxfull.7864685306_sefx.jpg",
+      "/produits/catalogue/il_fullxfull.7864685296_55z9.jpg",
     ],
     variants: [
       { id: "env-recto-dore", title: "Recto uniquement / Doré", price: 27.90, stockId: "env-dore" },
@@ -190,12 +190,12 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Textes à graver (face avant + pages intérieures)",
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8007460522_d3ji.jpg?v=1780366817",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8055379169_ip8s.jpg?v=1780366816",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8007460526_h2kk.jpg?v=1780366816",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8007440646_ooc0.jpg?v=1780366816",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8055354801_l7f2.jpg?v=1780366817",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8055354789_4miu.jpg?v=1780366816",
+      "/produits/catalogue/il_fullxfull.8007460522_d3ji.jpg",
+      "/produits/catalogue/il_fullxfull.8055379169_ip8s.jpg",
+      "/produits/catalogue/il_fullxfull.8007460526_h2kk.jpg",
+      "/produits/catalogue/il_fullxfull.8007440646_ooc0.jpg",
+      "/produits/catalogue/il_fullxfull.8055354801_l7f2.jpg",
+      "/produits/catalogue/il_fullxfull.8055354789_4miu.jpg",
     ],
     variants: [
       { id: "med-argent-texte", title: "Argent", price: 38.90 },
@@ -249,9 +249,9 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte à graver + police souhaitée",
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8086801196_rxih.jpg?v=1780366838",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8086800434_d5ag.jpg?v=1780366839",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8134708393_5e02.jpg?v=1780366838",
+      "/produits/catalogue/il_fullxfull.8086801196_rxih.jpg",
+      "/produits/catalogue/il_fullxfull.8086800434_d5ag.jpg",
+      "/produits/catalogue/il_fullxfull.8134708393_5e02.jpg",
     ],
     // Une seule ligne par finition : la gravure n'est plus une variante (voir
     // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
@@ -298,10 +298,10 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Texte à graver + police souhaitée",
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8132632743_pkdt.jpg?v=1780366865",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8132632741_4nw4.jpg?v=1780366864",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8132632747_knt0.jpg?v=1780366864",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/il_fullxfull.8084724218_jxik.jpg?v=1780366864",
+      "/produits/catalogue/il_fullxfull.8132632743_pkdt.jpg",
+      "/produits/catalogue/il_fullxfull.8132632741_4nw4.jpg",
+      "/produits/catalogue/il_fullxfull.8132632747_knt0.jpg",
+      "/produits/catalogue/il_fullxfull.8084724218_jxik.jpg",
     ],
     // Une seule ligne par finition : la gravure n'est plus une variante (voir
     // engravingPricing). Les identifiants sont CONSERVÉS tels quels (suffixe
@@ -345,7 +345,7 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/6eab4878-cbeb-4f83-9620-ea38e73359b9_png.webp?v=1775184450",
+      "/produits/catalogue/6eab4878-cbeb-4f83-9620-ea38e73359b9_png.webp",
     ],
     variants: [
       { id: "arches-unite", title: "À l'unité (1-9)", price: 18.9 },
@@ -391,8 +391,8 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/Gemini_Generated_Image_rdfslxrdfslxrdfs.png?v=1776295960",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/d9bb3a81-dd45-421f-a4ec-fd5831d3d6b6.webp?v=1776295997",
+      "/produits/catalogue/Gemini_Generated_Image_rdfslxrdfslxrdfs.png",
+      "/produits/catalogue/d9bb3a81-dd45-421f-a4ec-fd5831d3d6b6.webp",
     ],
     variants: [
       { id: "euca-unite", title: "À l'unité (1-9)", price: 14.9 },
@@ -541,9 +541,9 @@ export const products = [
       { key: "note", type: "note", text: "Tarif dégressif : 5,90 € à l'unité, 3,50 €/pièce dès 20, 2,90 €/pièce dès 50. Indiquez un prénom par ligne (autant que de pièces commandées)." },
     ],
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/610876bb-4b83-4b09-a722-356af9af8088.webp?v=1776298326",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/a0452f63-4f2b-4f6b-833d-e9f8772be649.webp?v=1776298326",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/Gemini_Generated_Image_nzbs5vnzbs5vnzbs.png?v=1776298347",
+      "/produits/catalogue/610876bb-4b83-4b09-a722-356af9af8088.webp",
+      "/produits/catalogue/a0452f63-4f2b-4f6b-833d-e9f8772be649.webp",
+      "/produits/catalogue/Gemini_Generated_Image_nzbs5vnzbs5vnzbs.png",
     ],
     variants: [
       // 4,50 € → 5,90 € le 16/09/2026 (accord du gérant) : Poupe Poupi vend le même
@@ -593,8 +593,8 @@ export const products = [
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6547.png?v=1780236313",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6734.jpg?v=1780236313",
+      "/produits/catalogue/IMG_6547.png",
+      "/produits/catalogue/IMG_6734.jpg",
     ],
     variants: [
       { id: "menu-unite", title: "À l'unité (1-9)", price: 34.9 },
@@ -918,11 +918,11 @@ export const products = [
       ] },
     ],
     images: [
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6324.png?v=1775091197",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6331.png?v=1775091240",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6330.png?v=1775091271",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6327.png?v=1775091304",
-      "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6335.png?v=1775091343",
+      "/produits/catalogue/IMG_6324.png",
+      "/produits/catalogue/IMG_6331.png",
+      "/produits/catalogue/IMG_6330.png",
+      "/produits/catalogue/IMG_6327.png",
+      "/produits/catalogue/IMG_6335.png",
     ],
     variants: [
       { id: "plaque-default", title: "Plaque personnalisée", price: 29.99 },

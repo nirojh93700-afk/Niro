@@ -1,9 +1,10 @@
+import { LOGO_URL } from "@/lib/photosLocales";
 // Le logo du site, servi TEL QUEL depuis son adresse d'origine (aucune copie, aucune retouche).
 // Sert aux étiquettes d'adresse (/gestion/etiquettes) : le navigateur ne peut pas lire l'image du
 // CDN pour la mettre dans un PDF, alors on la lui donne depuis notre propre adresse.
 export const dynamic = "force-dynamic";
 
-const LOGO = (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim();
+const LOGO = LOGO_URL;
 
 export async function GET() {
   try {

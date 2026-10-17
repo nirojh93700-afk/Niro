@@ -3763,6 +3763,19 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Réponse donnée le même jour sur la livraison : le tarif trop haut est **verres à domicile 11,90 € pour 1-2 verres**
   (`GLASS_TIERS`) ; pistes proposées (7,90 € / offert dès 45 € / afficher le relais 4,90 € sur les fiches), RIEN changé.
 
+## 🖼️ PLUS AUCUNE PHOTO NI LOGO CHEZ SHOPIFY — 17/10/2026 (« fais tout pour qu'on ne parle plus jamais de Shopify »)
+- Avant : le logo (`IMG_6758.jpg`) et 36 photos (9 fiches produit, 4 motifs fleurs, bandeau de confiance, guides) étaient servis par
+  `cdn.shopify.com` (ancienne boutique Shopify) : fermer Shopify les aurait fait disparaître du site.
+- Maintenant : fichiers d'ORIGINE copiés tels quels (sans retouche) dans `public/produits/catalogue/<nom d'origine>` et le logo dans
+  `public/logo-niv-creation.jpg` (mêmes octets que l'ancien `IMG_6758.jpg`). Copie faite par une page temporaire `/api/copie-photos/[nom]`
+  (le réseau de la session bloque Shopify, le serveur du site non), SUPPRIMÉE juste après.
+- `src/lib/photosLocales.js` : `LOGO_FICHIER` (adresse relative), `LOGO_URL` (adresse complète pour e-mails / icônes / Google ; la variable
+  d'environnement LOGO_URL est ignorée si elle pointe encore vers Shopify), `photoLocale` / `sansAncienHebergeur` = toute ancienne adresse
+  Shopify encore enregistrée (réglages de Gestion, descriptions, anciennes commandes) est remplacée à la lecture par la copie du site
+  (branché dans `applyOverride` du catalogue, `getImageOverrides`, `GET /api/admin/orders`). `cdn.shopify.com` retiré de `next.config.js`.
+- `tools/audit-site.mjs` signale en ❌ toute photo encore hébergée hors du site. ⛔ Ne jamais remettre une photo hébergée ailleurs que dans
+  le site (`public/` ou `/api/img/<id>` des téléversements de Gestion).
+
 ## 🔎 PRIX ÉCRITS ↔ PRIX PAYÉS SUR TOUTES LES FICHES + « MOTIF : AUCUN » À L'ATELIER — 17/10/2026 (« vérifie partout… je veux plus de problème » → « corrige »)
 > Gérant, commande 0XIF6DDO (pendentif) : « y a pas de motif, il a pas choisi le motif ».
 - **Pendentif géométrique** : DEUX clés `engravingPricing` dans le même objet → la 2e effaçait la 1re, les motifs (« le 1er offert,

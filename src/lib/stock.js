@@ -19,6 +19,7 @@ import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
 import { REVIEWS_SEED } from "./reviewsSeed";
 import { MATERIEL_SEED } from "./materielSeed";
+import { sansAncienHebergeur } from "./photosLocales";
 import { trouverProspect, demandeStop, estAvisNonDistribution, PROSPECT_STATUTS } from "./prospects";
 
 const STORE_NAME = "niv-stock";
@@ -889,7 +890,7 @@ async function getCatalogRaw(fresh = false) {
 // { slug: [url, url, ...] }
 export async function getImageOverrides() {
   const data = await getCatalogRaw();
-  return data.images || {};
+  return sansAncienHebergeur(data.images || {});
 }
 
 export async function setProductImages(slug, images) {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import { LOGO_FICHIER } from "@/lib/photosLocales";
 
 export default function Footer() {
   return (
@@ -11,7 +12,7 @@ export default function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="footer-logo"
-              src="https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111"
+              src={LOGO_FICHIER}
               alt="Niv Création — Atelier de personnalisation"
             />
             <p style={{ marginTop: 14, maxWidth: 320 }}>

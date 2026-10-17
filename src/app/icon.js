@@ -1,10 +1,11 @@
 import { ImageResponse } from "next/og";
+import { LOGO_URL } from "@/lib/photosLocales";
 
 export const size = { width: 256, height: 256 };
 export const contentType = "image/png";
 export const dynamic = "force-dynamic";
 
-const LOGO = (process.env.LOGO_URL || "https://cdn.shopify.com/s/files/1/0675/7738/0907/files/IMG_6758.jpg?v=1780592111").trim();
+const LOGO = LOGO_URL;
 
 // Icône générale (favicon / Android) : ton logo sur fond crème.
 export default function Icon() {

@@ -211,6 +211,11 @@ async function auditPhotos(htmls) {
   for (const html of htmls) {
     for (const m of motifs) for (const t of html.match(m) || []) trouvees.add(t.replace(/\\+$/, ""));
   }
+  // Toutes les photos doivent être hébergées par le site lui-même (rapatriées le 17/10/2026) :
+  // une photo encore chez l'ancien hébergeur de la boutique disparaîtrait avec lui.
+  const externes = [...trouvees].filter((t) => t.includes("cdn.shopify.com"));
+  if (externes.length) erreur(`${externes.length} photo(s) encore hébergée(s) hors du site (ancienne boutique) : ${externes.slice(0, 3).join(", ")}`);
+  else bon("Toutes les photos sont hébergées par le site");
   const liste = [...trouvees].slice(0, MAX_PHOTOS);
   if (!liste.length) { alerte("Aucune photo détectée (à vérifier à la main)"); return; }
 
