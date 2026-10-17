@@ -365,3 +365,30 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #puzzlephoto #cadeaupersonnalise #cadeaufamille #ideecadeau
+
+## Vidéos 25 et 26 — Verres & carafes gravés / Nos créations gravées (17/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/25-verres-carafes-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 46 s | 2,8 Mo |
+| `docs/videos/26-creations-gravees-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 46 s | 3,2 Mo |
+
+- **Source** : `tools/video/pub_verres_25_26.py <dossier de sortie> [25|26]` (habillage de la vidéo 19 ; produit aussi les versions 1080 × 1920, ~45-50 Mo, non gardées dans le dépôt).
+- **Demande du gérant** : « fais-moi deux vidéos avec mes produits, plus avec les verres ».
+- **25** : 19 photos de verres gravés (carafes, verres à whisky dont Fête des pères et gravé au fond, verres à vin, flûtes, verres à cocktail).
+- **26** : les verres en majorité, entre bijoux (collier cœur, collier 3 cœurs, bracelet cordon), cristaux (portrait, ange, famille) et puzzles (Savane, puzzle photo).
+- Planche contact regardée le 17/10 : gravure visible sur toutes. Écartées : les photos de verres vierges et `flute-grav-04` (gravure illisible).
+
+### Descriptions à copier-coller (livrées le 17/10/2026)
+
+**Vidéo 25 — Verres & carafes gravés** (Carafe à whisky gravée, Verre à whisky photo, Verre à whisky Fête des pères, Verre à vin gravé, Flûtes à champagne gravées, Verre à cocktail gravé)
+> Un prénom, une photo, un logo, gravés sur vos verres ✨ Carafes, verres à whisky, à vin, flûtes et verres à cocktail, gravés à la commande dans notre atelier 🥂 Le cadeau parfait pour trinquer ensemble 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #verregrave #cadeaupersonnalise #cadeaupapa #ideecadeau
+
+**Vidéo 26 — Nos créations gravées** (Carafe à whisky gravée, Verre à whisky photo, Flûtes à champagne gravées, Verre à vin gravé, Verre à cocktail gravé, Collier Cœur à graver, Collier 3 Cœurs, Bracelet cordon à plaque, Cristal Photo 3D, Cristal 3D Ange gardien, Puzzle en bois Savane, Puzzle photo gravé)
+> Des verres, des carafes, des bijoux, du cristal et du bois, gravés pour ceux que vous aimez ✨ Chaque pièce est personnalisée à la commande, dans notre atelier 💛 Trouvez le cadeau qui leur ressemble 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #verregrave #gravure #ideecadeau
