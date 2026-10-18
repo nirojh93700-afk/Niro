@@ -42,3 +42,8 @@
 .mx .uc-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15em .45em}
 .mx .uc-old{color:var(--muted);font-size:.85em;text-decoration-thickness:1px}
 .mx .uc-off{position:absolute;top:10px;left:10px;z-index:2;font-family:var(--sans);font-size:.78rem;font-weight:700;line-height:1;color:#fff;background:#b3412c;border-radius:999px;padding:.4em .65em;box-shadow:0 2px 8px rgba(26,18,6,.18)}
+/* Cœur des favoris en haut à droite de la PHOTO (18/10/2026) : en bas de la carte, il recouvrait le nom et le prix. */
+.mx .uc .fav-pastille-vignette{top:10px;bottom:auto;right:10px}
+/* « .mx button{background:none} » effaçait le fond blanc du cœur : invisible sur les photos sombres. */
+.mx .fav-pastille{background:rgba(255,255,255,.92);color:#b6b0a6;box-shadow:0 1px 5px rgba(0,0,0,.12)}
+.mx .fav-pastille-on,.mx .fav-pastille:hover{color:#d4506a}
