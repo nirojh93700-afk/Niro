@@ -1,4 +1,5 @@
-import { isAdmin, getSettings, getPromoCodes, purgeExpiredPromoCodes, getJobNote, getOffreGravureSent, getCodeUsage } from "@/lib/stock";
+import { isAdmin, getSettings, getPromoCodes, purgeExpiredPromoCodes, getJobNote, getOffreGravureSent, getCodeUsage, getLoginsAll } from "@/lib/stock";
+import { connexionDepuis } from "@/lib/suiviConnexion";
 import { getSiteOrders } from "@/lib/firebase";
 import { runOffreGravureJob } from "@/lib/jobs";
 import { offreActive, OFFRE_GRAVURE_JOURS } from "@/lib/offreGravure";
@@ -42,9 +43,12 @@ export async function GET(req) {
 // remise accordée). Le code est verrouillé sur l'adresse : « utilisé » = par sa destinataire.
 async function suiviDesCodes(codes) {
   try {
-    const [envoyes, usage, commandes] = await Promise.all([
+    const [envoyes, usage, commandes, logins] = await Promise.all([
       getOffreGravureSent(), getCodeUsage().catch(() => ({})), getSiteOrders(1000).catch(() => []),
+      getLoginsAll().catch(() => ({})),
     ]);
+    // Journal des connexions à l'espace client, clé = e-mail en minuscules (18/10/2026).
+    const parEmail = new Map(Object.entries(logins || {}).map(([k, v]) => [String(k).trim().toLowerCase(), v]));
     const parCode = new Map();
     for (const o of commandes || []) {
       const c = String(o.promoCode || "").trim().toUpperCase();
@@ -62,6 +66,7 @@ async function suiviDesCodes(codes) {
       const toTs = (x) => (x?.toMillis ? x.toMillis() : x?._seconds ? x._seconds * 1000 : Number(new Date(x)) || 0);
       return {
         email, code, at, fin, etat,
+        connexion: connexionDepuis(parEmail.get(String(email).trim().toLowerCase()), at),
         commande: o ? {
           id: o.id, ref: o.ref || "", date: toTs(o.createdAt), remise: Number(o.discount) || 0, total: Number(o.total) || 0,
           produit: (o.items || [])[0]?.name || "",

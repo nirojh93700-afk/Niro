@@ -3830,3 +3830,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Corrigé le même jour** (capture 0ZH3LP9M : « suivre sur Boxtal » sur un n° La Poste `87001500427259Z`) : format
   « 14 chiffres + 1 lettre » reconnu La Poste ; et tout numéro NON reconnu affiche Boxtal **+ un lien La Poste à côté**.
 - `npm run test-suivi` (10 vérifs). L'e-mail « expédiée » de la cliente garde son lien parcelsapp (inchangé).
+
+## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
+- Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
+  l'e-mail / lien demandé, jamais ouvert / jamais connectée), filtres « Connectées » / « Jamais connectées », KPI « Se sont connectées ».
+- Lu dans le journal `logins` (espace client, 90 jours, 12 ouvertures max) : AUCUNE donnée nouvelle. Seules les ouvertures APRÈS l'envoi
+  de l'e-mail comptent. `src/lib/suiviConnexion.js` (`connexionDepuis(login, envoyeLe)`, pur) · `suiviDesCodes` dans
+  `/api/admin/offre-gravure` (champ `connexion`) · `SuiviCodes` / `Connexion` dans `src/app/gestion/offre-gravure/page.jsx` · CSS `.ogs-chip.cx-*`.
+- Une visite sans connexion est invisible : « Jamais connectée » ≠ « jamais venue » (écrit sur l'écran).

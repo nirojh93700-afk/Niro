@@ -5027,7 +5027,7 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .ogs-f.sel { background: #1a1206; color: #fff; border-color: #1a1206; }
 .ogs-f b { font-weight: 700; opacity: 0.65; margin-left: 4px; }
 .ogs-search { flex: 1 1 220px; max-width: 320px; border: 1px solid rgba(26, 18, 6, 0.18); border-radius: 10px; padding: 9px 12px; font: inherit; box-sizing: border-box; min-width: 0; }
-.ogs-head, .ogs-row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr) minmax(0, 1.3fr); gap: 12px; align-items: center; }
+.ogs-head, .ogs-row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.75fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px; align-items: center; }
 .ogs-head { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: #6b5f4b; padding: 0 4px 6px; border-bottom: 1px solid rgba(26, 18, 6, 0.1); }
 .ogs-row { padding: 12px 4px; border-bottom: 1px solid rgba(26, 18, 6, 0.08); }
 .ogs-c b { display: block; font-weight: 600; overflow-wrap: anywhere; }
@@ -5037,6 +5037,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .ogs-chip.on { background: #e3f1e3; color: #24692c; }
 .ogs-chip.wait { background: #f3e8d3; color: #7c6120; }
 .ogs-chip.off { background: #eee; color: #777; }
+.ogs-chip.cx-on { background: #fbf2dc; color: #7c6120; }
+.ogs-chip.cx-lien { background: #fdecdc; color: #9a4a12; }
 .ogs-ref { display: inline-block; margin-left: 8px; font-weight: 600; color: #a98935; text-decoration: none; font-size: 0.85rem; }
 .ogs-note { font-size: 0.85rem; color: #6b5f4b; margin: 0; }
 @media (max-width: 720px) {
