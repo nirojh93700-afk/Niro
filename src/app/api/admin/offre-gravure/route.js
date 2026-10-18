@@ -1,6 +1,7 @@
-import { isAdmin, getSettings, getPromoCodes, purgeExpiredPromoCodes, getJobNote } from "@/lib/stock";
+import { isAdmin, getSettings, getPromoCodes, purgeExpiredPromoCodes, getJobNote, getOffreGravureSent, getCodeUsage } from "@/lib/stock";
+import { getSiteOrders } from "@/lib/firebase";
 import { runOffreGravureJob } from "@/lib/jobs";
-import { offreActive } from "@/lib/offreGravure";
+import { offreActive, OFFRE_GRAVURE_JOURS } from "@/lib/offreGravure";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -20,9 +21,9 @@ export async function GET(req) {
   // Depuis le 17/09/2026, chaque cliente reçoit SON code (préfixe + 5 caractères,
   // réservé à son adresse, une seule fois, qui meurt à la fin de l'offre). On
   // compte ici les codes nominatifs encore vivants et ceux à nettoyer.
-  let codesNominatifs = 0, codesANettoyer = 0;
+  let codesNominatifs = 0, codesANettoyer = 0, codes = {};
   try {
-    const codes = await getPromoCodes();
+    codes = await getPromoCodes();
     const now = Date.now();
     for (const def of Object.values(codes)) {
       if (!def?.email) continue;
@@ -32,7 +33,45 @@ export async function GET(req) {
   } catch { /* ignore */ }
   let dernierPassage = null;
   try { dernierPassage = await getJobNote("offreGravure"); } catch { /* ignore */ }
-  return Response.json({ offre, ouverte: Boolean(offreActive(offre)), codesNominatifs, codesANettoyer, dernierPassage, ...compte });
+  const suivi = await suiviDesCodes(codes);
+  return Response.json({ offre, ouverte: Boolean(offreActive(offre)), codesNominatifs, codesANettoyer, dernierPassage, suivi, ...compte });
+}
+
+// SUIVI DES CODES (18/10/2026, maquette validée par le gérant) : une ligne par cliente servie —
+// son adresse, son code, la date d'envoi, la date limite, et s'il a été utilisé (commande reliée,
+// remise accordée). Le code est verrouillé sur l'adresse : « utilisé » = par sa destinataire.
+async function suiviDesCodes(codes) {
+  try {
+    const [envoyes, usage, commandes] = await Promise.all([
+      getOffreGravureSent(), getCodeUsage().catch(() => ({})), getSiteOrders(1000).catch(() => []),
+    ]);
+    const parCode = new Map();
+    for (const o of commandes || []) {
+      const c = String(o.promoCode || "").trim().toUpperCase();
+      if (c && !parCode.has(c)) parCode.set(c, o);
+    }
+    const now = Date.now();
+    return Object.entries(envoyes || {}).map(([email, v]) => {
+      const at = typeof v === "number" ? v : Number(v?.at) || 0;
+      const code = typeof v === "object" && v?.code ? String(v.code).toUpperCase() : "";
+      const def = code ? codes[code] : null;
+      const fin = def?.expiresAt || (at ? at + OFFRE_GRAVURE_JOURS * 86400000 : 0);
+      const o = code ? parCode.get(code) : null;
+      const utiliseSansCommande = !o && code && (usage[code]?.emails || []).length > 0;
+      const etat = o || utiliseSansCommande ? "utilise" : fin && now > fin ? "expire" : "attente";
+      const toTs = (x) => (x?.toMillis ? x.toMillis() : x?._seconds ? x._seconds * 1000 : Number(new Date(x)) || 0);
+      return {
+        email, code, at, fin, etat,
+        commande: o ? {
+          id: o.id, ref: o.ref || "", date: toTs(o.createdAt), remise: Number(o.discount) || 0, total: Number(o.total) || 0,
+          produit: (o.items || [])[0]?.name || "",
+        } : null,
+      };
+    }).sort((a, b) => (b.at || 0) - (a.at || 0));
+  } catch (e) {
+    console.error("Suivi des codes :", e.message);
+    return [];
+  }
 }
 
 export async function POST(req) {

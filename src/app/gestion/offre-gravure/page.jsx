@@ -12,6 +12,51 @@ import { toast } from "@/components/admin/AdminToast";
 // Le texte de l'e-mail s'adapte à l'ancienneté de l'inscription.
 // =============================================================================
 
+const euro = (n) => (Number(n) || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+const jour = (t) => (t ? new Date(t).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" }) : "—");
+const sansAccent = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+// Suivi des codes (18/10/2026, maquette validée) : une ligne par cliente servie.
+function SuiviCodes({ suivi }) {
+  const [filtre, setFiltre] = useState("tous");
+  const [q, setQ] = useState("");
+  const n = (e) => suivi.filter((x) => x.etat === e).length;
+  const FILTRES = [["tous", "Tous", suivi.length], ["utilise", "Utilisés", n("utilise")], ["attente", "Pas encore", n("attente")], ["expire", "Expirés", n("expire")]];
+  const liste = suivi.filter((x) => (filtre === "tous" || x.etat === filtre) && (!q || sansAccent(`${x.email} ${x.code}`).includes(sansAccent(q))));
+  return (
+    <div className="card og-card ogs">
+      <div className="ogs-top">
+        <h2>Suivi des codes</h2>
+        <input className="ogs-search" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher une adresse ou un code…" />
+      </div>
+      <div className="ogs-filtres">
+        {FILTRES.map(([id, label, c]) => (
+          <button key={id} type="button" className={`ogs-f${filtre === id ? " sel" : ""}`} onClick={() => setFiltre(id)}>{label} <b>{c}</b></button>
+        ))}
+      </div>
+      <div>
+        <div className="ogs-head"><span>Cliente</span><span>Son code</span><span>Utilisé ?</span></div>
+        {liste.length ? liste.map((x) => (
+          <div className="ogs-row" key={x.email}>
+            <div className="ogs-c"><b>{x.email}</b><small>Envoyé le {jour(x.at)} · valable jusqu&apos;au {jour(x.fin)}</small></div>
+            <div className="ogs-code">{x.code || "—"}</div>
+            <div className="ogs-etat">
+              {x.etat === "utilise" ? (
+                <>
+                  <span className="ogs-chip on">✓ Utilisé{x.commande?.date ? ` le ${jour(x.commande.date)}` : ""}</span>
+                  {x.commande ? <a className="ogs-ref" href={`/gestion?q=${encodeURIComponent(x.commande.ref || x.commande.id)}#commandes`}>Commande #{x.commande.ref || x.commande.id} →</a> : null}
+                  {x.commande ? <small>{x.commande.produit}{x.commande.remise ? ` · ${euro(x.commande.remise)} offerts` : ""}</small> : null}
+                </>
+              ) : x.etat === "expire" ? <span className="ogs-chip off">Expiré, non utilisé</span> : <span className="ogs-chip wait">Pas encore utilisé</span>}
+            </div>
+          </div>
+        )) : <p className="ogs-note">Aucune cliente dans ce filtre.</p>}
+      </div>
+      <p className="ogs-note">Un code ne marche qu&apos;avec l&apos;adresse à laquelle il a été envoyé : un code « utilisé » l&apos;a forcément été par sa destinataire. La commande s&apos;ouvre d&apos;un clic. Après sa date limite, un code jamais utilisé passe en « Expiré, non utilisé ».</p>
+    </div>
+  );
+}
+
 const AUJ = () => new Date().toISOString().slice(0, 10);
 const DANS_UN_MOIS = () => new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
 
@@ -132,11 +177,15 @@ export default function OffreGravurePage() {
     );
   }
 
+  const suivi = Array.isArray(etat?.suivi) ? etat.suivi : [];
   const kpis = [
     { label: "État", value: etat?.ouverte ? "Offre ouverte" : "Éteinte", tone: etat?.ouverte ? "good" : undefined },
     { label: "À servir maintenant", value: etat?.eligibles ?? 0, sub: "inscrites sans commande", tone: (etat?.eligibles || 0) > 0 ? "warn" : undefined },
     { label: `En attente (moins de ${o.minJours} j)`, value: etat?.attente ?? 0, sub: "servies plus tard, automatiquement" },
     { label: "Déjà reçu l'offre", value: etat?.deja ?? 0 },
+    { label: "Codes utilisés", value: suivi.filter((x) => x.etat === "utilise").length, sub: `sur ${suivi.length} envoyés`, tone: suivi.some((x) => x.etat === "utilise") ? "good" : undefined },
+    { label: "Gravures offertes", value: euro(suivi.reduce((t, x) => t + (x.commande?.remise || 0), 0)), sub: "remises accordées" },
+    { label: "Ventes avec un code", value: euro(suivi.reduce((t, x) => t + (x.commande?.total || 0), 0)), sub: "total des commandes" },
     { label: "Codes personnels actifs", value: etat?.codesNominatifs ?? 0, sub: (etat?.codesANettoyer || 0) > 0 ? `${etat.codesANettoyer} expiré${etat.codesANettoyer > 1 ? "s" : ""} à nettoyer` : "un code par cliente, une seule fois", tone: (etat?.codesANettoyer || 0) > 0 ? "warn" : undefined },
   ];
 
@@ -155,6 +204,8 @@ export default function OffreGravurePage() {
       />
 
       {err ? <p className="err">{err}</p> : null}
+
+      <SuiviCodes suivi={suivi} />
 
       <div className="card og-card">
         <label className="og-switch">
