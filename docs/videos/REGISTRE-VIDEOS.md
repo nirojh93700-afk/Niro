@@ -392,3 +392,22 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #verregrave #gravure #ideecadeau
+
+## Vidéo 27 — Bijoux gravés, nouveaux modèles (18/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/27-bijoux-nouveaux-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 29 s | 1,3 Mo |
+
+- **Source** : `tools/video/pub_bijoux_27.py` (habillage de la vidéo 19).
+- **Demande du gérant** : « une vidéo pour les bijoux, mais pas les mêmes bijoux en avant en premier, change les bijoux ».
+- **En tête** : les bijoux jamais mis en avant : collier Enveloppe Message Secret (2 photos), bracelet Cœur à graver (doré, or rose, argenté), collier Médaillon Cœur ouvrable (doré, argenté). **Puis** collier Double Cœur, Cœur & 2 plaques, 3 Cœurs, Cœur à graver, avec d'autres photos que les vidéos 17, 19 et 20.
+- Planche contact regardée le 18/10 : gravure visible sur toutes. Écartées car vierges ou illisibles : `collier-double-coeur-4`, `collier-coeur-plaques-3`, l'enveloppe portée (`il_fullxfull.7864685306`), `bracelet-coeur-ot-dore-2` et `-porte`.
+
+### Description à copier-coller (livrée le 18/10/2026)
+
+**Vidéo 27 — Bijoux gravés, nouveaux modèles** (Collier Enveloppe Message Secret, Bracelet Cœur à graver, Collier Médaillon Cœur ouvrable, Collier Double Cœur, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Cœur à graver)
+> Un message secret dans une enveloppe, un mot doux sur un cœur, un dessin dans un médaillon ✨ Nos nouveaux bijoux se gravent à la commande, dans notre atelier 💛 Le cadeau qu'elle gardera tout près d'elle 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijougrave #cadeaupersonnalise #bijoupersonnalise #ideecadeau
