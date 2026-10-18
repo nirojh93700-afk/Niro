@@ -49,8 +49,9 @@ p = fiche("collier-femme-pendentif-geometrique");
 delete p.engravingPricing.motifKeys;
 verif(controlePrixEcrits(p).some((a) => a.ou === "motifs"), "pendentif : motifs annoncés +3 € mais non payés → signalé");
 p = fiche("collier-medaillon-coeur-ouvrable");
-p.descriptionHtml = "<li><strong>Pages 1 à 3</strong> — gravure de texte à +3 € par page</li>";
-verif(controlePrixEcrits(p).some((a) => a.montant === 3), "médaillon cœur : description « +3 € par page » alors que la page coûte 5 € → signalé");
+// Depuis le 18/10/2026 la page coûte 3 € : l'ancienne erreur inverse (« +5 € par page ») doit être attrapée.
+p.descriptionHtml = "<li><strong>Pages 1 à 3</strong> — gravure de texte à +5 € par page</li>";
+verif(controlePrixEcrits(p).some((a) => a.montant === 5), "médaillon cœur : description « +5 € par page » alors que la page coûte 3 € → signalé");
 
 // 8. Aucune propriété écrite deux fois dans un même objet de products.js (la 2e efface la 1re sans bruit :
 //    c'est ce qui rendait les motifs du pendentif gratuits). Analyse du code source.

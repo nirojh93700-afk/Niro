@@ -10,6 +10,27 @@
 
 ## 1. Les changements, du plus récent au plus ancien
 
+### 18/10/2026 — Bijoux : chaque texte gravé à +3 €, plus aucune gravure offerte
+Demande du gérant : « Tu mets tout à trois euros, les gravures, y a pas offert le premier ». Prix des bijoux
+inchangés ; seul le supplément de gravure change. Les photos gravées (+8 €) et les motifs (1er offert) ne bougent pas.
+
+| Bijou | **AVANT (à remettre)** | Après |
+|---|---|---|
+| Collier Couple Puzzle | pendentifs 1 et 2 **compris** | +3 € par pendentif |
+| Collier Couple Cœur (lot de 2) | pendentifs 1 et 2 **compris** | +3 € par pendentif |
+| Collier Enveloppe | recto **compris**, verso par l'option « Recto-Verso » (**29,90 €** au code au lieu de 27,90) | +3 € par face, 3 options de couleur (ids `env-recto-*` gardés, `env-rv-*` retirés) |
+| Collier Plaque Acier | recto **compris**, verso **+5 €** | +3 € par face |
+| Médaillon Cœur ouvrable | couverture **comprise**, pages et dos **+5 €** | +3 € par face |
+| Médaillon Livre | couverture **comprise**, pages **+5 €** | +3 € par face |
+| Pendentif géométrique | face avant **comprise** | +3 € par face |
+| Bracelet empreinte bébé | texte **compris** (obligatoire) | +3 €, facultatif |
+| Bracelet gourmette homme | **+4,50 €** | +3 € |
+| Bracelet acier & silicone | **+5,40 €** | +3 € |
+| Collier Cœur & Zircon | **+2,70 €** | +3 € |
+
+Pour revenir : `git show <commit>^:src/lib/products.js` (le commit de ce changement) et recopier les `engravingPricing`,
+libellés et variantes de ces 11 fiches.
+
 ### 11/10/2026 — Puzzles en bois à encastrer (les 9) : 29,90 € → 19,90 €
 Demande du gérant : « Mets le puzzle enfants à 19,90 € ». Prénom gravé toujours compris. Le puzzle photo gravé
 (24 à 120 pièces, 29,90 à 37,90 €) n'est PAS concerné. Pour revenir : `price: 29.9` sur les 9 variantes

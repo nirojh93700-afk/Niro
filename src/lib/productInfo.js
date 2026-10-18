@@ -1078,7 +1078,7 @@ Un souci à la réception ?
 - Finitions : argenté, doré, noir, acier noir, argenté et noir.
 - Style épuré et contemporain.`,
     usage: `Personnalisation & Entretien
-- Recto inclus ; gravure au verso (+5 €) et photo gravée (+8 €) en option.
+- Gravure du texte : +3 € par face (recto ou verso) ; photo gravée (+8 €) en option.
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
 - Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
 - Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,

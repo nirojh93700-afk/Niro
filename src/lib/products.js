@@ -109,9 +109,13 @@ export const products = [
     pickup: false, // remise en main propre possible
     letter: true, // expédiable en Lettre Suivie (léger & fin, < 3 cm)
     subcategory: "femme", // sous-catégorie bijoux
+    // Chaque face gravée : +3 € (règle du gérant, 18/10/2026 : « tout à trois euros, pas de
+    // premier offert »). La face n'est plus une option « Recto / Recto-Verso ».
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3 },
     personalizationFields: [
-      { key: "recto", label: "Texte à graver — recto", placeholder: "Ex : Je t'aime — 12.06.2024", maxLength: 40 },
-      { key: "verso", label: "Texte à graver — verso", placeholder: "Visible au dos de la plaque", maxLength: 40, optional: true, variantContains: "Recto-Verso" },
+      { key: "note", type: "note", text: "La plaque cachée dans l'enveloppe se grave des deux côtés. Chaque face gravée coûte 3 € ; laissez les champs vides pour un bijou sans gravure." },
+      { key: "recto", label: "Texte au recto (+3 €)", placeholder: "Ex : Je t'aime — 12.06.2024", maxLength: 40, optional: true },
+      { key: "verso", label: "Texte au verso (+3 €)", placeholder: "Visible au dos de la plaque", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Collier Enveloppe Message Secret personnalisable",
@@ -129,13 +133,12 @@ export const products = [
       "/produits/catalogue/il_fullxfull.7864685306_sefx.jpg",
       "/produits/catalogue/il_fullxfull.7864685296_55z9.jpg",
     ],
+    // Une option par finition : la gravure est chiffrée par face (engravingPricing).
+    // Identifiants « env-recto-* » GARDÉS pour ne casser ni les paniers ni l'historique.
     variants: [
-      { id: "env-recto-dore", title: "Recto uniquement / Doré", price: 27.90, stockId: "env-dore" },
-      { id: "env-recto-argent", title: "Recto uniquement / Argent", price: 27.90, stockId: "env-argent" },
-      { id: "env-recto-rose", title: "Recto uniquement / Or Rose", price: 27.90, stockId: "env-rose" },
-      { id: "env-rv-dore", title: "Recto-Verso / Doré", price: 29.90, stockId: "env-dore" },
-      { id: "env-rv-argent", title: "Recto-Verso / Argent", price: 29.90, stockId: "env-argent" },
-      { id: "env-rv-rose", title: "Recto-Verso / Or Rose", price: 29.90, stockId: "env-rose" },
+      { id: "env-recto-dore", title: "Doré", price: 27.90, stockId: "env-dore" },
+      { id: "env-recto-argent", title: "Argent", price: 27.90, stockId: "env-argent" },
+      { id: "env-recto-rose", title: "Or Rose", price: 27.90, stockId: "env-rose" },
     ],
     descriptionHtml: `<p>Gardez vos mots les plus précieux près de votre cœur avec ce collier locket unique. Chaque modèle est livré avec sa plaque intérieure prête à être gravée pour vous. Le pendentif en forme d'enveloppe s'ouvre réellement pour révéler cette plaque amovible.</p>
 <p>Ce bijou symbolique permet de dissimuler un secret, une date ou un prénom. Sa conception soignée avec charnière fluide et fermeture sécurisée assure élégance et durabilité. Disponible en trois finitions polies pour s'adapter à toutes vos tenues.</p>
@@ -148,7 +151,7 @@ export const products = [
 </ul>
 <h3>Points forts</h3>
 <ul>
-<li>✨ Plaque intérieure incluse et prête pour la gravure</li>
+<li>✨ Plaque intérieure incluse, gravable au recto et au verso (3 € par face gravée)</li>
 <li>💌 Design interactif et original (enveloppe qui s'ouvre)</li>
 <li>📏 Longueur ajustable pour un confort optimal</li>
 <li>🎁 Parfait cadeau Saint-Valentin, anniversaire ou commémoration</li>
@@ -163,15 +166,15 @@ export const products = [
     letter: true,
     subcategory: "femme",
     engraveHeart3d: true, // ← aperçu 3D cœur éventail (8 faces)
-    // Couverture (texte) incluse, +5 €/page de texte, photo +8 €.
-    engravingPricing: { perExtraPage: 5, includedKey: "cover", photoKey: "photo", photoSurcharge: 8 },
+    // Chaque face de texte gravée : +3 € (couverture comprise, 18/10/2026), photo +8 €.
+    engravingPricing: { textKeys: ["cover", "page1", "page2", "page3", "backcover"], textExtra: 3, photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure de TEXTE de la couverture est incluse ; chaque autre page de texte gravée est à +5 €. Remplissez seulement les faces souhaitées, les autres restent vierges." },
-      { key: "cover", label: "Gravure — Couverture (texte inclus)", placeholder: "Prénom, mot court…", maxLength: 15 },
-      { key: "page1", label: "Gravure — Page 1 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page2", label: "Gravure — Page 2 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "page3", label: "Gravure — Page 3 (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
-      { key: "backcover", label: "Gravure — Dos (+5 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). Chaque face de texte gravée coûte 3 €. Remplissez seulement les faces souhaitées, les autres restent vierges." },
+      { key: "cover", label: "Gravure — Couverture (+3 €)", placeholder: "Prénom, mot court…", maxLength: 15, optional: true },
+      { key: "page1", label: "Gravure — Page 1 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "page2", label: "Gravure — Page 2 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "page3", label: "Gravure — Page 3 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
+      { key: "backcover", label: "Gravure — Dos (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photo", type: "photo", label: "Photo à graver (+8 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+8 €). Choisissez une photo nette, bien éclairée et contrastée. La page qui reçoit la photo ne porte pas de texte." },
       { key: "photoPage", type: "select", label: "Sur quelle page graver la photo ?", requiresField: "photo",
@@ -206,9 +209,9 @@ export const products = [
 <p>Gardez vos souvenirs les plus précieux près de votre cœur. Le médaillon s'ouvre comme un petit livre et révèle <strong>5 faces entièrement personnalisables</strong> à graver selon vos envies.</p>
 <h3>Un médaillon, 5 faces</h3>
 <ul>
-<li><strong>Couverture</strong> — gravure de texte incluse</li>
-<li><strong>Pages 1 à 3</strong> — gravure de texte à +5 € par page</li>
-<li><strong>Dos</strong> — gravure de texte à +5 €</li>
+<li><strong>Couverture</strong> — gravure de texte à +3 €</li>
+<li><strong>Pages 1 à 3</strong> — gravure de texte à +3 € par page</li>
+<li><strong>Dos</strong> — gravure de texte à +3 €</li>
 </ul>
 <p>Sur chaque face : un texte court, ou une <strong>photo gravée (+8 €)</strong> que vous placez sur la page de votre choix (cette page ne porte alors pas de texte).</p>
 <h3>Spécifications</h3>
@@ -235,10 +238,10 @@ export const products = [
     // il suffisait de renommer une option pour que toute la gravure disparaisse.
     // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
     // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
-    engravingPricing: { textKeys: ["texte"], textExtra: 4.5 },
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "La plaque de la gourmette se grave : un prénom, une date, un message. La gravure coûte 4,50 € ; laissez le champ vide pour un bracelet sans gravure." },
-      { key: "texte", label: "Texte à graver (+4,50 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
+      { key: "note", type: "note", text: "La plaque de la gourmette se grave : un prénom, une date, un message. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Bracelet Homme Identité — Gourmette acier inoxydable gravée",
@@ -284,10 +287,10 @@ export const products = [
     // il suffisait de renommer une option pour que toute la gravure disparaisse.
     // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
     // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
-    engravingPricing: { textKeys: ["texte"], textExtra: 5.4 },
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "La plaque acier se grave : un prénom, une date, un message. La gravure coûte 5,40 € ; laissez le champ vide pour un bracelet sans gravure." },
-      { key: "texte", label: "Texte à graver (+5,40 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
+      { key: "note", type: "note", text: "La plaque acier se grave : un prénom, une date, un message. La gravure coûte 3 € ; laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     title: "Bracelet Homme — Acier inoxydable & silicone gravé au laser",
@@ -1342,8 +1345,10 @@ export const products = [
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Le souvenir d'une naissance, gravé à porter sur soi.",
     personalizable: true, personalizationLabel: "Prénom & date + police",
+    // Gravure : +3 € (18/10/2026, « tout à trois euros, pas de premier offert »).
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte", label: "Prénom et/ou date de naissance", placeholder: "Ex : Lina — 12.06.2024", maxLength: 20 },
+      { key: "texte", label: "Prénom et/ou date de naissance (+3 €)", placeholder: "Ex : Lina — 12.06.2024", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -1568,16 +1573,18 @@ export const products = [
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Deux moitiés de cœur à graver, à partager à deux.",
     personalizable: true, personalizationLabel: "Texte des 2 pendentifs + police",
+    // Chaque pendentif gravé : +3 € (18/10/2026, « tout à trois euros, pas de premier offert »).
+    engravingPricing: { textKeys: ["texte1", "texte2"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte1", label: "Texte — pendentif 1", placeholder: "Ex : prénom", maxLength: 20 },
-      { key: "texte2", label: "Texte — pendentif 2", placeholder: "Ex : prénom", maxLength: 20, optional: true },
+      { key: "note", type: "note", text: "Chaque moitié de cœur se grave : un prénom, une initiale, une date. Chaque pendentif gravé coûte 3 € ; laissez un champ vide pour un pendentif sans gravure." },
+      { key: "texte1", label: "Texte — pendentif 1 (+3 €)", placeholder: "Ex : prénom", maxLength: 20, optional: true },
+      { key: "texte2", label: "Texte — pendentif 2 (+3 €)", placeholder: "Ex : prénom", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: ["/produits/collier_c_ur_couple_a_graver_lot_2_pieces_or_rose.jpg"],
     // PRIX BAISSÉ le 15/09/2026 à la demande du gérant (38,90 → 27,90 dans le code,
     // soit 24,90 € barré et 22,41 € payés au lieu de 31,41 €).
-    // La gravure reste COMPRISE dans le prix : les deux moitiés de cœur n'existent
-    // que gravées (c'est le concept du bijou), les deux champs sont obligatoires.
+    // Depuis le 18/10/2026, la gravure n'est plus comprise : +3 € par pendentif gravé.
     variants: [{ id: "couple-coeur-or-rose", title: "Or Rose", price: 27.90 }],
     descriptionHtml: `<p>Un <strong>lot de 2 colliers</strong> formant un cœur, à graver chacun. Le cadeau parfait pour les amoureux.</p>`,
   },
@@ -1590,12 +1597,12 @@ export const products = [
     engravePlate3d: true, // aperçu 3D : plaque recto/verso avec texte + photo
     tagline: "Une plaque d'acier épurée, gravée avec votre texte ou votre photo.",
     personalizable: true, personalizationLabel: "Texte (recto / verso) + photo + police",
-    // Recto inclus ; gravure du verso +5 € ; photo gravée +8 €.
-    engravingPricing: { perExtraPage: 5, includedKey: "recto", photoKey: "photo", photoSurcharge: 8 },
+    // Chaque face de texte gravée : +3 €, recto compris (18/10/2026) ; photo gravée +8 €.
+    engravingPricing: { textKeys: ["recto", "verso"], textExtra: 3, photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Plaque gravable des deux côtés. La gravure du RECTO est incluse ; la gravure du VERSO est à +5 €. Vous pouvez aussi faire graver une PHOTO (+8 €). Remplissez seulement ce que vous souhaitez." },
-      { key: "recto", label: "Texte à graver — recto (inclus)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
-      { key: "verso", label: "Texte à graver — verso (+5 €)", placeholder: "Visible au dos de la plaque", maxLength: 30, optional: true },
+      { key: "note", type: "note", text: "Plaque gravable des deux côtés. Chaque face de texte gravée (recto ou verso) coûte 3 €. Vous pouvez aussi faire graver une PHOTO (+8 €). Remplissez seulement ce que vous souhaitez." },
+      { key: "recto", label: "Texte à graver — recto (+3 €)", placeholder: "Prénom, date, message…", maxLength: 30, optional: true },
+      { key: "verso", label: "Texte à graver — verso (+3 €)", placeholder: "Visible au dos de la plaque", maxLength: 30, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "photo", type: "photo", label: "Photo à graver (+8 €)", optional: true, text: "Optionnel : ajoutez une photo gravée (+8 €). Choisissez une photo nette, bien éclairée et contrastée pour un beau rendu." },
       { key: "photoFace", type: "select", label: "Photo gravée sur quelle face ? (à choisir)", requiresField: "photo",
@@ -1618,7 +1625,7 @@ export const products = [
       { id: "plaque-noir", title: "Noir", price: 30.90, image: "/produits/collier_plaque_a_graver_noir.jpg" },
     ],
     descriptionHtml: `<p>Collier à <strong>plaque rectangulaire</strong> en acier inoxydable, surface lisse gravable des deux côtés. Style épuré et contemporain.</p>
-<p>Personnalisez le <strong>recto</strong> (inclus), ajoutez une gravure au <strong>verso</strong> (+5 €) et même une <strong>photo gravée</strong> (+8 €).</p>`,
+<p>Faites graver le <strong>recto</strong>, le <strong>verso</strong> ou les deux (+3 € par face), et même une <strong>photo gravée</strong> (+8 €).</p>`,
   },
   {
     slug: "collier-coeur-scintillant",
@@ -1689,10 +1696,10 @@ export const products = [
     // il suffisait de renommer une option pour que toute la gravure disparaisse.
     // ⛔ Ne pas remettre de case « Sans / Avec » avec showIfField : elle cachait le
     // champ sans vider sa valeur, un texte saisi puis caché restait facturé.
-    engravingPricing: { textKeys: ["texte"], textExtra: 2.7 },
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Ce collier se porte tel quel ou gravé : un prénom, des initiales ou une date sur le côté du cœur (surface fine, texte court conseillé). La gravure coûte 2,70 € ; laissez le champ vide pour un bijou sans gravure." },
-      { key: "texte", label: "Texte à graver (+2,70 €)", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 15, optional: true },
+      { key: "note", type: "note", text: "Ce collier se porte tel quel ou gravé : un prénom, des initiales ou une date sur le côté du cœur (surface fine, texte court conseillé). La gravure coûte 3 € ; laissez le champ vide pour un bijou sans gravure." },
+      { key: "texte", label: "Texte à graver (+3 €)", placeholder: "Ex. Léa · L&M · 12.09", maxLength: 15, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -1715,7 +1722,7 @@ export const products = [
 <li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD), zircons</li>
 <li><strong>Finition :</strong> doré brillant</li>
 <li><strong>Chaîne :</strong> maille fine, longueur ajustable</li>
-<li><strong>Gravure en option :</strong> prénom, initiales ou date gravés au laser sur le côté du cœur (choisir « Avec gravure »)</li>
+<li><strong>Gravure en option :</strong> prénom, initiales ou date gravés au laser sur le côté du cœur (+3 €)</li>
 </ul>`,
   },
   {
@@ -2170,31 +2177,31 @@ export const products = [
     title: "Collier médaillon livre à graver",
     category: "bijoux", type: "Collier personnalisé",
     engraveBook3d: true, // aperçu 3D : médaillon livre qui s'ouvre (couverture + 3 pages)
-    // Couverture incluse. Texte sur une page intérieure : +5 €. Motifs : le 1er
-    // est offert, chaque motif suivant : +3 €.
+    // Chaque face de texte gravée : +3 €, couverture comprise (18/10/2026). Motifs :
+    // le 1er est offert, chaque motif suivant : +3 €.
     engravingPricing: {
-      textKeys: ["page1", "page2", "page3"],
-      textExtra: 5,
+      textKeys: ["couverture", "page1", "page2", "page3"],
+      textExtra: 3,
       motifKeys: ["motif1", "motif2", "motif3", "motif4"],
       motifExtra: 3,
     },
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
     personalizable: true, personalizationLabel: "Couverture + 3 pages : texte, motif et police",
     personalizationFields: [
-      { key: "note", type: "note", text: "La couverture est incluse. Une page intérieure avec texte : +5 €. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €. Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
-      { key: "couverture", label: "Gravure — couverture (incluse)", maxLength: 30, optional: true },
+      { key: "note", type: "note", text: "Chaque face avec texte (couverture ou page intérieure) : +3 €. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €. Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
+      { key: "couverture", label: "Gravure — couverture (+3 €)", maxLength: 30, optional: true },
       { key: "motif1", type: "motif", label: "Motif — couverture", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Couverture — position du motif", optional: true, requiresField: "motif1",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
-      { key: "page1", label: "Gravure — page 1 (+5 €)", maxLength: 30, optional: true },
+      { key: "page1", label: "Gravure — page 1 (+3 €)", maxLength: 30, optional: true },
       { key: "motif2", type: "motif", label: "Motif — page 1", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos2", type: "select", label: "Page 1 — position du motif", optional: true, requiresField: "motif2",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
-      { key: "page2", label: "Gravure — page 2 (+5 €)", maxLength: 30, optional: true },
+      { key: "page2", label: "Gravure — page 2 (+3 €)", maxLength: 30, optional: true },
       { key: "motif3", type: "motif", label: "Motif — page 2", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos3", type: "select", label: "Page 2 — position du motif", optional: true, requiresField: "motif3",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
-      { key: "page3", label: "Gravure — page 3 (+5 €)", maxLength: 30, optional: true },
+      { key: "page3", label: "Gravure — page 3 (+3 €)", maxLength: 30, optional: true },
       { key: "motif4", type: "motif", label: "Motif — page 3", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos4", type: "select", label: "Page 3 — position du motif", optional: true, requiresField: "motif4",
         options: [{ value: "hg", label: "Haut gauche" }, { value: "hd", label: "Haut droite" }, { value: "bg", label: "Bas gauche" }, { value: "bd", label: "Bas droite" }, { value: "centre", label: "Centré (en haut)" }] },
@@ -2220,9 +2227,12 @@ export const products = [
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Deux pièces qui s'emboîtent, à graver à deux.",
     personalizable: true, personalizationLabel: "Texte des 2 pendentifs + police",
+    // Chaque pendentif gravé : +3 € (18/10/2026, « tout à trois euros, pas de premier offert »).
+    engravingPricing: { textKeys: ["texte1", "texte2"], textExtra: 3 },
     personalizationFields: [
-      { key: "texte1", label: "Texte — pendentif 1", maxLength: 20 },
-      { key: "texte2", label: "Texte — pendentif 2", maxLength: 20, optional: true },
+      { key: "note", type: "note", text: "Chaque pièce du puzzle se grave. Chaque pendentif gravé coûte 3 € ; laissez un champ vide pour un pendentif sans gravure." },
+      { key: "texte1", label: "Texte — pendentif 1 (+3 €)", maxLength: 20, optional: true },
+      { key: "texte2", label: "Texte — pendentif 2 (+3 €)", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -2244,13 +2254,13 @@ export const products = [
     engrave3d: true, // aperçu 3D : barre gravable sur 4 faces (le client fait pivoter)
     tagline: "Une barre verticale gravable sur ses 4 faces : prénoms, dates, coordonnées…",
     personalizable: true, personalizationLabel: "Gravure jusqu'à 4 faces + police",
-    // La face avant est incluse ; chaque face gravée en plus est payante (+3 €).
+    // Chaque face gravée : +3 €, face avant comprise (18/10/2026, plus de face offerte).
     // Motifs : le 1er est offert, chaque motif suivant +3 €. ⚠️ UN SEUL engravingPricing :
     // le 17/10/2026, une 2e clé en double effaçait la 1re et les motifs n'étaient jamais payés.
-    engravingPricing: { textKeys: ["face2", "face3", "face4"], textExtra: 3, motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
+    engravingPricing: { textKeys: ["face1", "face2", "face3", "face4"], textExtra: 3, motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "La gravure de la face avant est incluse ; chaque autre face gravée : +3 €. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
-      { key: "face1", label: "Face avant — texte", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
+      { key: "note", type: "note", text: "Chaque face gravée : +3 €. Côté motifs : le 1er motif est OFFERT, chaque motif supplémentaire +3 €." },
+      { key: "face1", label: "Face avant — texte (+3 €)", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
       { key: "motif1", type: "motif", label: "Face avant — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Face avant — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
       { key: "face2", label: "Face arrière — texte (+3 €)", placeholder: "Ex. une date : 14.07.2024", maxLength: 23, optional: true },

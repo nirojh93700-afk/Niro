@@ -760,7 +760,9 @@ export default function ProductDetail({ product }) {
     : envTitle.includes("argent")
       ? "silver"
       : "gold";
-  const envTwoSided = (variant.title || "").includes("Recto-Verso");
+  // Le verso se montre dès qu'un texte y est saisi (l'option « Recto-Verso » n'existe plus
+  // depuis le 18/10/2026 : chaque face est payée à part).
+  const envTwoSided = Boolean(envFaces[1].trim()) || (variant.title || "").includes("Recto-Verso");
   // Médaillon livre : couverture + 3 pages intérieures (texte + motif + position).
   const bookFaces = [
     fieldValues["couverture"] || "",

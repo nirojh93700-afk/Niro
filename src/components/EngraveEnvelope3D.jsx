@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Aperçu 3D du collier ENVELOPPE : l'enveloppe est ouverte, la plaque (la
 // « feuille ») sort par le haut, puis montre la gravure (recto, et verso si
-// l'option Recto-Verso est choisie). Finition or / argent / or rose.
+// un texte est saisi au verso). Finition or / argent / or rose.
 // À titre indicatif.
 
 const FINISH = {

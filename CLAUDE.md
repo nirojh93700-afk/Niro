@@ -802,7 +802,13 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   quels. **Ne JAMAIS leur ajouter de gravure** et ne jamais les compter comme « gravure incluse » —
   c'était une erreur de mon inventaire, corrigée : la colonne « Gravure » de `docs/etat-bijoux.md`
   distingue maintenant **payante / comprise dans le prix / pas de gravure**.
-- ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : sur les 32 bijoux — **19 font payer la gravure,
+- ✅ **TRANCHÉ LE 18/10/2026 (gérant : « Tu mets tout à trois euros, les gravures, y a pas offert le premier »)** :
+  sur TOUS les bijoux, chaque texte gravé (face, page, pendentif) coûte **+3 €**, aucune première gravure offerte,
+  tous les champs de texte facultatifs avec « (+3 €) » dans le libellé (`textKeys` + `textExtra: 3`). Photos gravées
+  (+8 €) et motifs (1er offert) inchangés. 11 fiches corrigées, anciens prix dans `docs/prix-historique.md`.
+  Collier Enveloppe : l'option « Recto / Recto-Verso » est retirée (ids `env-recto-*` gardés, couleurs seules).
+  La question ci-dessous est donc RÉGLÉE.
+- (historique) ❓ **QUESTION OUVERTE, NE PAS TRANCHER SEUL** : sur les 32 bijoux — **19 font payer la gravure,
   8 la comprennent dans le prix, 5 ne se gravent pas** (liste exacte dans `docs/etat-bijoux.md`,
   colonne « Gravure »). Le gérant a dit le 13/09 « y a que le premier gravure gratuit après c'est
   payant », mais la règle plus ancienne du §10 4bis dit « GRAVURE = TOUJOURS PAYANTE, JAMAIS
