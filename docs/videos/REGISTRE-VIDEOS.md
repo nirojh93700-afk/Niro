@@ -411,3 +411,22 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #bijougrave #cadeaupersonnalise #bijoupersonnalise #ideecadeau
+
+## Vidéo 27 bis — Bijoux gravés en promo, −10 % (18/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/27-bijoux-promo-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 29 s | 1,3 Mo |
+
+- **Source** : `tools/video/pub_bijoux_27_promo.py`.
+- **Demande du gérant** : « refais la même vidéo 27, mais en disant qu'il y a des promos ».
+- Mêmes photos et même ordre que la vidéo 27. Ruban « −10 % SUR LES BIJOUX » sur chaque plan, pastille rouge « PROMO −10 % », cartes d'ouverture « −10 % sur les bijoux » et de fin « Profitez de −10 % ».
+- La remise annoncée est la remise permanente du site sur tous les bijoux (`applyBijouxSale`, prix barré + −10 % au paiement). Aucun prix dans la vidéo.
+
+### Description à copier-coller (livrée le 18/10/2026)
+
+**Vidéo 27 bis — Bijoux gravés en promo** (Collier Enveloppe Message Secret, Bracelet Cœur à graver, Collier Médaillon Cœur ouvrable, Collier Double Cœur, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Cœur à graver)
+> −10 % sur tous nos bijoux gravés ✨ Un message secret dans une enveloppe, un mot doux sur un cœur, un dessin dans un médaillon 💛 Gravés à la commande dans notre atelier, pour un cadeau qu'elle gardera tout près d'elle 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijougrave #promobijoux #cadeaupersonnalise #ideecadeau
