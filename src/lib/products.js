@@ -1761,9 +1761,9 @@ export const products = [
       "/produits/collier-double-coeur-8.jpg",
     ],
     variants: [
-      { id: "collier-double-coeur-dore", title: "Doré", price: 37.90, stockId: "collier-double-coeur-dore", image: "/produits/collier-double-coeur-1.jpg" },
-      { id: "collier-double-coeur-orrose", title: "Or rose", price: 37.90, stockId: "collier-double-coeur-orrose", image: "/produits/collier-double-coeur-5.jpg" },
-      { id: "collier-double-coeur-argente", title: "Argenté", price: 36.90, stockId: "collier-double-coeur-argente", image: "/produits/collier-double-coeur-8.jpg" },
+      { id: "collier-double-coeur-dore", title: "Doré", price: 29.90, stockId: "collier-double-coeur-dore", image: "/produits/collier-double-coeur-1.jpg" },
+      { id: "collier-double-coeur-orrose", title: "Or rose", price: 29.90, stockId: "collier-double-coeur-orrose", image: "/produits/collier-double-coeur-5.jpg" },
+      { id: "collier-double-coeur-argente", title: "Argenté", price: 29.90, stockId: "collier-double-coeur-argente", image: "/produits/collier-double-coeur-8.jpg" },
     ],
     descriptionHtml: `<p>Un pendentif <strong>double cœur</strong> : le premier est orné d'un petit <strong>cœur pavé de zircons</strong>, le second pivote derrière lui et révèle une surface lisse, prête à recevoir <strong>votre message gravé</strong>. Le bijou reste discret au porter, et le mot n'appartient qu'à celle qui le reçoit.</p>
 <h3>Caractéristiques</h3>
@@ -1890,7 +1890,7 @@ export const products = [
       "/produits/bracelet-coeur-chaine-3.jpg",
     ],
     variants: [
-      { id: "bracelet-coeur-chaine-dore", title: "Doré", price: 37.90, stockId: "bracelet-coeur-chaine-dore" },
+      { id: "bracelet-coeur-chaine-dore", title: "Doré", price: 29.90, stockId: "bracelet-coeur-chaine-dore" },
     ],
     descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver au recto comme au verso</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
 <h3>Caractéristiques</h3>
@@ -2024,9 +2024,9 @@ export const products = [
       "/produits/bracelet-homme-plaque-5.jpg",
     ],
     variants: [
-      { id: "bracelet-homme-plaque-noir", title: "Noir chiné", price: 37.90, stockId: "bracelet-homme-plaque-noir", image: "/produits/bracelet-homme-plaque-1.jpg" },
-      { id: "bracelet-homme-plaque-marine", title: "Bleu marine chiné", price: 37.90, stockId: "bracelet-homme-plaque-marine", image: "/produits/bracelet-homme-plaque-4.jpg" },
-      { id: "bracelet-homme-plaque-marron", title: "Marron", price: 37.90, stockId: "bracelet-homme-plaque-marron", image: "/produits/bracelet-homme-plaque-3.jpg" },
+      { id: "bracelet-homme-plaque-noir", title: "Noir chiné", price: 23.90, stockId: "bracelet-homme-plaque-noir", image: "/produits/bracelet-homme-plaque-1.jpg" },
+      { id: "bracelet-homme-plaque-marine", title: "Bleu marine chiné", price: 23.90, stockId: "bracelet-homme-plaque-marine", image: "/produits/bracelet-homme-plaque-4.jpg" },
+      { id: "bracelet-homme-plaque-marron", title: "Marron", price: 23.90, stockId: "bracelet-homme-plaque-marron", image: "/produits/bracelet-homme-plaque-3.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet <strong>masculin et bien fini</strong> : un bracelet souple à l'aspect cuir grainé, une <strong>large plaque en acier poli</strong> maintenue par des anneaux noirs, et un <strong>fermoir à clip en acier</strong> qui se ferme d'un geste.</p>
 <h3>Caractéristiques</h3>
@@ -2155,8 +2155,8 @@ export const products = [
       "/produits/bracelet-perles-pastille-5.jpg",
     ],
     variants: [
-      { id: "bracelet-perles-pastille-dore", title: "Doré", price: 37.90, stockId: "bracelet-perles-pastille-dore", image: "/produits/bracelet-perles-pastille-1.jpg" },
-      { id: "bracelet-perles-pastille-argente", title: "Argenté", price: 36.90, stockId: "bracelet-perles-pastille-argente", image: "/produits/bracelet-perles-pastille-3.jpg" },
+      { id: "bracelet-perles-pastille-dore", title: "Doré", price: 27.90, stockId: "bracelet-perles-pastille-dore", image: "/produits/bracelet-perles-pastille-1.jpg" },
+      { id: "bracelet-perles-pastille-argente", title: "Argenté", price: 27.90, stockId: "bracelet-perles-pastille-argente", image: "/produits/bracelet-perles-pastille-3.jpg" },
     ],
     descriptionHtml: `<p>Un rang de <strong>perles d'acier polies</strong>, une petite <strong>pastille ronde à graver</strong>, et une <strong>chaîne coulissante</strong> terminée par deux billes : le bracelet s'ajuste d'un geste, de <strong>16 à 23 cm</strong>.</p>
 <h3>Caractéristiques</h3>
@@ -2213,9 +2213,9 @@ export const products = [
       "/produits/collier_medaillon_modele_livre_a_graver_dore_et_argente.jpg",
     ],
     variants: [
-      { id: "medaillon-livre-argente", title: "Argenté", price: 40.90, image: "/produits/collier_medaillon_modele_livre_a_graver_argente.jpg" },
-      { id: "medaillon-livre-dore", title: "Doré", price: 40.90, image: "/produits/collier_medaillon_modele_livre_a_graver_dore.jpg" },
-      { id: "medaillon-livre-bicolore", title: "Doré et Argenté", price: 41.90, image: "/produits/collier_medaillon_modele_livre_a_graver_dore_et_argente.jpg" },
+      { id: "medaillon-livre-argente", title: "Argenté", price: 31.90, image: "/produits/collier_medaillon_modele_livre_a_graver_argente.jpg" },
+      { id: "medaillon-livre-dore", title: "Doré", price: 31.90, image: "/produits/collier_medaillon_modele_livre_a_graver_dore.jpg" },
+      { id: "medaillon-livre-bicolore", title: "Doré et Argenté", price: 31.90, image: "/produits/collier_medaillon_modele_livre_a_graver_dore_et_argente.jpg" },
     ],
     descriptionHtml: `<p>Médaillon en forme de <strong>livre</strong> qui s'ouvre. Gravable sur la <strong>couverture</strong> et sur <strong>3 pages à l'intérieur</strong>. En acier inoxydable.</p>`,
   },

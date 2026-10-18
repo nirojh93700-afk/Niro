@@ -10,6 +10,15 @@
 
 ## 1. Les changements, du plus récent au plus ancien
 
+### 18/10/2026 (après-midi) — 5 bijoux de plus : nouveaux prix donnés par le gérant (barré en ,90)
+| Bijou | **AVANT (code → barré → payé)** | Après (code → barré → payé) |
+|---|---|---|
+| Bracelet homme cuir à plaque (`bracelet-homme-plaque-cuir`) | **37,90 → 33,90 → 30,51** | 23,90 → 21,90 → 19,71 |
+| Bracelet perles à pastille (`bracelet-perles-pastille`) | **37,90 / 36,90 argenté → 33,90 / 32,90 → 30,51 / 29,61** | 27,90 → 24,90 → 22,41 |
+| Bracelet cœur grosse chaîne (`bracelet-coeur-chaine`) | **37,90 → 33,90 → 30,51** | 29,90 → 26,90 → 24,21 |
+| Collier double cœur (`collier-double-coeur`) | **37,90 / 36,90 → 33,90 / 32,90 → 30,51 / 29,61** | 29,90 → 26,90 → 24,21 |
+| Collier médaillon livre (`collier-medaillon-livre`) | **40,90 / 41,90 bicolore → 36,90 / 37,90 → 33,21 / 34,11** | 31,90 → 28,90 → 26,01 |
+
 ### 18/10/2026 — 6 colliers : nouveaux prix donnés par le gérant (barré en ,90, payé = barré − 10 %)
 Règle du gérant : « le prix que je te donne = à peu près ce que la cliente paie ; le prix barré finit toujours par ,90 ».
 Prix du code = celui d'où la remise bijoux calcule le barré (`roundTo90(code × 0,9)`).
