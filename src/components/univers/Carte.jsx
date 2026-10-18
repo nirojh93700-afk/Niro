@@ -26,12 +26,19 @@ export default function Carte({ c, badge = "", style }) {
         ) : (
           <span className="uc-none"><Ic n="image" /><small>photo à venir</small></span>
         )}
+        {c.prix?.remise && !c.soon ? <span className="uc-off">−{c.prix.remise} %</span> : null}
         {c.perso && !c.soon ? <span className="uc-cta">Personnaliser</span> : null}
       </span>
       <span className="uc-meta">
         {tag ? <span className={`uc-tag${c.soon ? " uc-tag-soon" : ""}`}>{tag}</span> : null}
         <span className="uc-name">{c.name}</span>
-        {c.prix ? <span className="uc-price">{c.prix.des ? "dès " : ""}{c.prix.texte}</span> : null}
+        {c.prix ? (
+          <span className="uc-price">
+            {c.prix.des ? "dès " : ""}
+            {c.prix.barre ? <s className="uc-old">{c.prix.barre}</s> : null}
+            {c.prix.texte}
+          </span>
+        ) : null}
         {c.soon && c.note ? <span className="uc-note">{c.note}</span> : null}
         {!c.perso && !c.soon ? <span className="uc-note">Prêt à offrir</span> : null}
       </span>

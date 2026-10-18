@@ -37,3 +37,8 @@
 .mx .lien-photo{display:contents}
 .mx .cof-pics .lien-photo img{grid-column:auto;aspect-ratio:1}
 .mx .cof-pics .lien-photo:first-child img{grid-column:1/-1;aspect-ratio:16/9}
+
+/* Prix barré + pastille de remise sur les cartes (18/10/2026, comme la fiche produit) */
+.mx .uc-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15em .45em}
+.mx .uc-old{color:var(--muted);font-size:.85em;text-decoration-thickness:1px}
+.mx .uc-off{position:absolute;top:10px;left:10px;z-index:2;font-family:var(--sans);font-size:.78rem;font-weight:700;line-height:1;color:#fff;background:#b3412c;border-radius:999px;padding:.4em .65em;box-shadow:0 2px 8px rgba(26,18,6,.18)}

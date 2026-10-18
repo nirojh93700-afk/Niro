@@ -117,7 +117,14 @@ export function prixCarte(p) {
   const distinct = new Set(prices).size > 1;
   const des = !hasPromo && distinct && base === Math.min(...prices);
   const valeur = hasPromo ? sale : base;
-  return { texte: formatEuro(valeur), des, valeur, lo: Math.min(valeur, ...prices), hi: Math.max(...prices) };
+  // Prix barré + pastille de remise (bijoux −10 %, promos) : comme sur la fiche produit.
+  const cmp = (p.variants || [])[0]?.compareAt;
+  const barre = hasPromo ? base : Number.isFinite(cmp) && cmp > valeur ? cmp : 0;
+  const remise = barre ? Math.round((1 - valeur / barre) * 100) : 0;
+  return {
+    texte: formatEuro(valeur), des, valeur, lo: Math.min(valeur, ...prices), hi: Math.max(...prices),
+    barre: remise > 0 ? formatEuro(barre) : "", remise: remise > 0 ? remise : 0,
+  };
 }
 
 function imageDe(p) {
@@ -162,7 +169,7 @@ export function rangerCatalogue(catalog) {
     const prix = prixCarte(p);
     cartes.set(p.slug, {
       slug: p.slug, name: p.name, href: p.pageDediee || `/produit/${p.slug}`, image: imageDe(p), badge: p.badge || "",
-      perso: !!p.personalizable, u: uid, prix: prix ? { texte: prix.texte, des: prix.des, valeur: prix.valeur } : null,
+      perso: !!p.personalizable, u: uid, prix: prix ? { texte: prix.texte, des: prix.des, valeur: prix.valeur, barre: prix.barre, remise: prix.remise } : null,
       lo: prix ? prix.lo : 0, hi: prix ? prix.hi : 0, qui: [...qui].sort(), occ, date: PRODUCT_DATES[p.slug] || "",
     });
   }
