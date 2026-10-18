@@ -129,10 +129,10 @@ export function offreGravureEmail({ date = "", code = "GRAVUREOFFERTE", fin = ""
     <p style="margin:0 0 16px;">${ouverturePhrase(date)} Alors voici une attention, pour franchir le pas :</p>
     <div style="text-align:center;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:14px;padding:20px;margin:0 0 16px;">
       <div style="font-family:Georgia,serif;font-size:21px;color:${gold};">Une gravure offerte</div>
-      <div style="color:#7a7268;margin-top:6px;">sur votre première commande</div>
-      <div style="color:#9a9087;font-size:12px;margin-top:4px;">Une seule gravure est offerte : la deuxième gravure et les suivantes restent payantes.</div>
+      <div style="color:#7a7268;margin-top:6px;">sur votre première commande*</div>
       <div style="display:inline-block;margin-top:14px;font-size:20px;font-weight:bold;letter-spacing:3px;color:${gold};background:#fff;border:1px dashed #dcc88f;border-radius:10px;padding:12px 24px;">${code}</div>
       ${echeance}
+      <div style="color:#9a9087;font-size:11px;margin-top:10px;">*Offre valable pour une gravure par commande. Les gravures supplémentaires restent au tarif habituel.</div>
     </div>
     ${ligneCadeau}
     <p style="margin:0 0 18px;">Un prénom sur un bracelet, une date au dos d'une plaque, un visage dans le cristal, une initiale sur un porte-clés, un mot sur un verre : dites-nous ce qui compte, nous le gravons. C'est souvent le cadeau le plus simple qui touche le plus.</p>
