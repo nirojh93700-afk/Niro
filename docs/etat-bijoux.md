@@ -21,7 +21,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | Bijou | Rayon | Prix payé | Gravure | Ce qui est facturé |
 |---|---|---|---|---|
 | **Collier Enveloppe Message Secret** | femme | 22,41 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Médaillon Cœur ouvrable** | femme | 31,41 € – 36,81 € | **payante** | cover +3 € · page1 +3 € · page2 +3 € · page3 +3 € · backcover +3 € · photo +8 € |
+| **Collier Médaillon Cœur ouvrable** | femme | 26,01 € | **payante** | cover +3 € · page1 +3 € · page2 +3 € · page3 +3 € · backcover +3 € · photo +8 € |
 | **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € | **payante** | texte +3 € |
 | **Bracelet Homme Acier & Silicone** | homme | 21,51 € | **payante** | texte +3 € |
 | **Bracelet Homme Tressé & Acier** | homme | 20,61 € – 23,31 € | **payante** | texte +3 € |
@@ -40,14 +40,14 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Collier Perle solitaire** | femme | 17,91 € | _pas de gravure_ | — |
 | **Collier Cœur & Zircon doré** | femme | 22,41 € | **payante** | texte +3 € |
 | **Collier Double Cœur à graver** | femme | 29,61 € – 30,51 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Cœur & 2 plaques à graver** | femme | 29,61 € – 30,51 € | **payante** | coeur +3 € · plaque1 +3 € · plaque2 +3 € |
-| **Collier 3 Cœurs entrelacés à graver** | femme | 30,51 € | **payante** | coeur1 +3 € · coeur2 +3 € · coeur3 +3 € |
+| **Collier Cœur & 2 plaques à graver** | femme | 25,11 € | **payante** | coeur +3 € · plaque1 +3 € · plaque2 +3 € |
+| **Collier 3 Cœurs entrelacés à graver** | femme | 25,11 € | **payante** | coeur1 +3 € · coeur2 +3 € · coeur3 +3 € |
 | **Bracelet Cœur grosse chaîne à graver** | femme | 30,51 € | **payante** | recto +3 € · verso +3 € |
 | **Bracelet cordon à plaque gravée** | homme | 17,91 € | **payante** | texte +3 € |
-| **Collier Médaillon pivotant à graver** | femme | 29,61 € – 30,51 € | **payante** | recto +3 € · verso +3 € |
+| **Collier Médaillon pivotant à graver** | femme | 24,21 € | **payante** | recto +3 € · verso +3 € |
 | **Bracelet homme cuir & plaque à graver** | homme | 30,51 € | **payante** | texte +3 € |
-| **Collier Pastille à graver recto-verso** | femme | 26,91 € – 27,81 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Cœur à graver recto-verso** | femme | 29,61 € – 30,51 € | **payante** | recto +3 € · verso +3 € |
+| **Collier Pastille à graver recto-verso** | femme | 19,71 € | **payante** | recto +3 € · verso +3 € |
+| **Collier Cœur à graver recto-verso** | femme | 22,41 € | **payante** | recto +3 € · verso +3 € |
 | **Bracelet perles à pastille gravée** | femme | 29,61 € – 30,51 € | **payante** | texte +3 € |
 | **Collier Médaillon Livre** | femme | 33,21 € – 34,11 € | **payante** | couverture +3 € · page1 +3 € · page2 +3 € · page3 +3 € |
 | **Collier Couple Puzzle géométrique** | couple | 16,11 € – 18,81 € | **payante** | texte1 +3 € · texte2 +3 € |
@@ -105,9 +105,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Argent | 38,90 € | 34,90 € | **31,41 €** | — |
-| Doré | 38,90 € | 34,90 € | **31,41 €** | — |
-| Bicolore (Or & Argent) | 44,90 € | 40,90 € | **36,81 €** | — |
+| Argent | 31,90 € | 28,90 € | **26,01 €** | — |
+| Doré | 31,90 € | 28,90 € | **26,01 €** | — |
+| Bicolore (Or & Argent) | 31,90 € | 28,90 € | **26,01 €** | — |
 
 **Personnalisation**
 
@@ -124,13 +124,13 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 **Ce que paie la cliente** (option « Argent »)
 
-- sans rien graver : **31,41 €**
-- + cover : **34,41 €**
-- + page1 : **37,41 €**
-- + page2 : **40,41 €**
-- + page3 : **43,41 €**
-- + backcover : **46,41 €**
-- + photo : **54,41 €**
+- sans rien graver : **26,01 €**
+- + cover : **29,01 €**
+- + page1 : **32,01 €**
+- + page2 : **35,01 €**
+- + page3 : **38,01 €**
+- + backcover : **41,01 €**
+- + photo : **49,01 €**
 
 ---
 
@@ -667,9 +667,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Doré | 37,90 € | 33,90 € | **30,51 €** | collier-coeur-plaques-dore |
-| Or rose | 37,90 € | 33,90 € | **30,51 €** | collier-coeur-plaques-orrose |
-| Argenté | 36,90 € | 32,90 € | **29,61 €** | collier-coeur-plaques-argente |
+| Doré | 30,90 € | 27,90 € | **25,11 €** | collier-coeur-plaques-dore |
+| Or rose | 30,90 € | 27,90 € | **25,11 €** | collier-coeur-plaques-orrose |
+| Argenté | 30,90 € | 27,90 € | **25,11 €** | collier-coeur-plaques-argente |
 
 **Personnalisation**
 
@@ -682,10 +682,10 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 **Ce que paie la cliente** (option « Doré »)
 
-- sans rien graver : **30,51 €**
-- + coeur : **33,51 €**
-- + plaque1 : **36,51 €**
-- + plaque2 : **39,51 €**
+- sans rien graver : **25,11 €**
+- + coeur : **28,11 €**
+- + plaque1 : **31,11 €**
+- + plaque2 : **34,11 €**
 
 ---
 
@@ -703,7 +703,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Doré | 37,90 € | 33,90 € | **30,51 €** | collier-3coeurs-dore |
+| Doré | 30,90 € | 27,90 € | **25,11 €** | collier-3coeurs-dore |
 
 **Personnalisation**
 
@@ -716,10 +716,10 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 **Ce que paie la cliente** (option « Doré »)
 
-- sans rien graver : **30,51 €**
-- + coeur1 : **33,51 €**
-- + coeur2 : **36,51 €**
-- + coeur3 : **39,51 €**
+- sans rien graver : **25,11 €**
+- + coeur1 : **28,11 €**
+- + coeur2 : **31,11 €**
+- + coeur3 : **34,11 €**
 
 ---
 
@@ -801,9 +801,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Doré | 37,90 € | 33,90 € | **30,51 €** | collier-medaillon-pivotant-dore |
-| Or rose | 37,90 € | 33,90 € | **30,51 €** | collier-medaillon-pivotant-orrose |
-| Argenté | 36,90 € | 32,90 € | **29,61 €** | collier-medaillon-pivotant-argente |
+| Doré | 29,90 € | 26,90 € | **24,21 €** | collier-medaillon-pivotant-dore |
+| Or rose | 29,90 € | 26,90 € | **24,21 €** | collier-medaillon-pivotant-orrose |
+| Argenté | 29,90 € | 26,90 € | **24,21 €** | collier-medaillon-pivotant-argente |
 
 **Personnalisation**
 
@@ -815,9 +815,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 **Ce que paie la cliente** (option « Doré »)
 
-- sans rien graver : **30,51 €**
-- + recto : **33,51 €**
-- + verso : **36,51 €**
+- sans rien graver : **24,21 €**
+- + recto : **27,21 €**
+- + verso : **30,21 €**
 
 ---
 
@@ -867,9 +867,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Doré | 33,90 € | 30,90 € | **27,81 €** | collier-pastille-dore |
-| Or rose | 33,90 € | 30,90 € | **27,81 €** | collier-pastille-orrose |
-| Argenté | 32,90 € | 29,90 € | **26,91 €** | collier-pastille-argente |
+| Doré | 23,90 € | 21,90 € | **19,71 €** | collier-pastille-dore |
+| Or rose | 23,90 € | 21,90 € | **19,71 €** | collier-pastille-orrose |
+| Argenté | 23,90 € | 21,90 € | **19,71 €** | collier-pastille-argente |
 
 **Personnalisation**
 
@@ -881,9 +881,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 **Ce que paie la cliente** (option « Doré »)
 
-- sans rien graver : **27,81 €**
-- + recto : **30,81 €**
-- + verso : **33,81 €**
+- sans rien graver : **19,71 €**
+- + recto : **22,71 €**
+- + verso : **25,71 €**
 
 ---
 
@@ -901,9 +901,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Doré | 37,90 € | 33,90 € | **30,51 €** | collier-coeur-grave-dore |
-| Or rose | 37,90 € | 33,90 € | **30,51 €** | collier-coeur-grave-orrose |
-| Argenté | 36,90 € | 32,90 € | **29,61 €** | collier-coeur-grave-argente |
+| Doré | 27,90 € | 24,90 € | **22,41 €** | collier-coeur-grave-dore |
+| Or rose | 27,90 € | 24,90 € | **22,41 €** | collier-coeur-grave-orrose |
+| Argenté | 27,90 € | 24,90 € | **22,41 €** | collier-coeur-grave-argente |
 
 **Personnalisation**
 
@@ -915,9 +915,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 **Ce que paie la cliente** (option « Doré »)
 
-- sans rien graver : **30,51 €**
-- + recto : **33,51 €**
-- + verso : **36,51 €**
+- sans rien graver : **22,41 €**
+- + recto : **25,41 €**
+- + verso : **28,41 €**
 
 ---
 

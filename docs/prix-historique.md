@@ -10,6 +10,19 @@
 
 ## 1. Les changements, du plus récent au plus ancien
 
+### 18/10/2026 — 6 colliers : nouveaux prix donnés par le gérant (barré en ,90, payé = barré − 10 %)
+Règle du gérant : « le prix que je te donne = à peu près ce que la cliente paie ; le prix barré finit toujours par ,90 ».
+Prix du code = celui d'où la remise bijoux calcule le barré (`roundTo90(code × 0,9)`).
+
+| Collier | **AVANT (code → barré → payé)** | Après (code → barré → payé) |
+|---|---|---|
+| Cœur plat (`collier-coeur-grave`) | **37,90 / 36,90 argenté → 33,90 / 32,90 → 30,51 / 29,61** | 27,90 → 24,90 → 22,41 |
+| Pastille ronde (`collier-pastille`) | **33,90 / 32,90 argenté → 30,90 / 29,90 → 27,81 / 26,91** | 23,90 → 21,90 → 19,71 |
+| Cœur et deux plaques (`collier-coeur-plaques`) | **37,90 / 36,90 argenté → 33,90 / 32,90 → 30,51 / 29,61** | 30,90 → 27,90 → 25,11 |
+| Trois cœurs (`collier-3coeurs`) | **37,90 → 33,90 → 30,51** | 30,90 → 27,90 → 25,11 |
+| Médaillon pivotant (`collier-medaillon-pivotant`) | **37,90 / 36,90 argenté → 33,90 / 32,90 → 30,51 / 29,61** | 29,90 → 26,90 → 24,21 |
+| Médaillon cœur ouvrable (`collier-medaillon-coeur-ouvrable`) | code 38,90 / bicolore 44,90, mais **en ligne réglé dans Gestion : barré 31,90 → payé 28,71 (bicolore 33,90 → 30,51)** | 31,90 → 28,90 → 26,01 (les 3 couleurs) |
+
 ### 18/10/2026 — Bijoux : chaque texte gravé à +3 €, plus aucune gravure offerte
 Demande du gérant : « Tu mets tout à trois euros, les gravures, y a pas offert le premier ». Prix des bijoux
 inchangés ; seul le supplément de gravure change. Les photos gravées (+8 €) et les motifs (1er offert) ne bougent pas.

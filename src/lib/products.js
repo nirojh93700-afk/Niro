@@ -201,9 +201,9 @@ export const products = [
       "/produits/catalogue/il_fullxfull.8055354789_4miu.jpg",
     ],
     variants: [
-      { id: "med-argent-texte", title: "Argent", price: 38.90 },
-      { id: "med-dore-texte", title: "Doré", price: 38.90 },
-      { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 44.90 },
+      { id: "med-argent-texte", title: "Argent", price: 31.90 },
+      { id: "med-dore-texte", title: "Doré", price: 31.90 },
+      { id: "med-bicolore-texte", title: "Bicolore (Or & Argent)", price: 31.90 },
     ],
     descriptionHtml: `<p><strong>Un bijou élégant et intemporel à personnaliser.</strong></p>
 <p>Gardez vos souvenirs les plus précieux près de votre cœur. Le médaillon s'ouvre comme un petit livre et révèle <strong>5 faces entièrement personnalisables</strong> à graver selon vos envies.</p>
@@ -1805,9 +1805,9 @@ export const products = [
       "/produits/collier-coeur-plaques-4.jpg",
     ],
     variants: [
-      { id: "collier-coeur-plaques-dore", title: "Doré", price: 37.90, stockId: "collier-coeur-plaques-dore", image: "/produits/collier-coeur-plaques-1.jpg" },
-      { id: "collier-coeur-plaques-orrose", title: "Or rose", price: 37.90, stockId: "collier-coeur-plaques-orrose", image: "/produits/collier-coeur-plaques-3.jpg" },
-      { id: "collier-coeur-plaques-argente", title: "Argenté", price: 36.90, stockId: "collier-coeur-plaques-argente", image: "/produits/collier-coeur-plaques-4.jpg" },
+      { id: "collier-coeur-plaques-dore", title: "Doré", price: 30.90, stockId: "collier-coeur-plaques-dore", image: "/produits/collier-coeur-plaques-1.jpg" },
+      { id: "collier-coeur-plaques-orrose", title: "Or rose", price: 30.90, stockId: "collier-coeur-plaques-orrose", image: "/produits/collier-coeur-plaques-3.jpg" },
+      { id: "collier-coeur-plaques-argente", title: "Argenté", price: 30.90, stockId: "collier-coeur-plaques-argente", image: "/produits/collier-coeur-plaques-4.jpg" },
     ],
     descriptionHtml: `<p>Un petit <strong>cœur</strong> et <strong>deux plaques verticales</strong> suspendus à la même chaîne : trois surfaces lisses, prêtes à recevoir ce que vous voulez y faire graver. Deux prénoms et une date, des initiales et une heure, un mot et deux noms — la composition vous appartient.</p>
 <h3>Caractéristiques</h3>
@@ -1850,7 +1850,7 @@ export const products = [
       "/produits/collier-3coeurs-5.jpg",
     ],
     variants: [
-      { id: "collier-3coeurs-dore", title: "Doré", price: 37.90, stockId: "collier-3coeurs-dore" },
+      { id: "collier-3coeurs-dore", title: "Doré", price: 30.90, stockId: "collier-3coeurs-dore" },
     ],
     descriptionHtml: `<p><strong>Trois cœurs ouverts</strong> qui se glissent l'un dans l'autre sur une fine chaîne dorée. Chacun peut porter un <strong>prénom gravé</strong> : les trois enfants, le couple et l'enfant, trois sœurs — trois personnes réunies sur un même bijou.</p>
 <h3>Caractéristiques</h3>
@@ -1979,9 +1979,9 @@ export const products = [
       "/produits/collier-medaillon-pivotant-8.jpg",
     ],
     variants: [
-      { id: "collier-medaillon-pivotant-dore", title: "Doré", price: 37.90, stockId: "collier-medaillon-pivotant-dore", image: "/produits/collier-medaillon-pivotant-1.jpg" },
-      { id: "collier-medaillon-pivotant-orrose", title: "Or rose", price: 37.90, stockId: "collier-medaillon-pivotant-orrose", image: "/produits/collier-medaillon-pivotant-5.jpg" },
-      { id: "collier-medaillon-pivotant-argente", title: "Argenté", price: 36.90, stockId: "collier-medaillon-pivotant-argente", image: "/produits/collier-medaillon-pivotant-6.jpg" },
+      { id: "collier-medaillon-pivotant-dore", title: "Doré", price: 29.90, stockId: "collier-medaillon-pivotant-dore", image: "/produits/collier-medaillon-pivotant-1.jpg" },
+      { id: "collier-medaillon-pivotant-orrose", title: "Or rose", price: 29.90, stockId: "collier-medaillon-pivotant-orrose", image: "/produits/collier-medaillon-pivotant-5.jpg" },
+      { id: "collier-medaillon-pivotant-argente", title: "Argenté", price: 29.90, stockId: "collier-medaillon-pivotant-argente", image: "/produits/collier-medaillon-pivotant-6.jpg" },
     ],
     descriptionHtml: `<p>Un <strong>médaillon rond suspendu dans son anneau</strong>, qui <strong>pivote entre les doigts</strong>. Ce n'est pas qu'un détail de style : c'est ce qui permet de graver <strong>les deux faces</strong> et de les montrer l'une après l'autre.</p>
 <h3>Caractéristiques</h3>
@@ -2067,9 +2067,9 @@ export const products = [
       "/produits/collier-pastille-5.jpg",
     ],
     variants: [
-      { id: "collier-pastille-dore", title: "Doré", price: 33.90, stockId: "collier-pastille-dore", image: "/produits/collier-pastille-2.jpg" },
-      { id: "collier-pastille-orrose", title: "Or rose", price: 33.90, stockId: "collier-pastille-orrose", image: "/produits/collier-pastille-3.jpg" },
-      { id: "collier-pastille-argente", title: "Argenté", price: 32.90, stockId: "collier-pastille-argente", image: "/produits/collier-pastille-4.jpg" },
+      { id: "collier-pastille-dore", title: "Doré", price: 23.90, stockId: "collier-pastille-dore", image: "/produits/collier-pastille-2.jpg" },
+      { id: "collier-pastille-orrose", title: "Or rose", price: 23.90, stockId: "collier-pastille-orrose", image: "/produits/collier-pastille-3.jpg" },
+      { id: "collier-pastille-argente", title: "Argenté", price: 23.90, stockId: "collier-pastille-argente", image: "/produits/collier-pastille-4.jpg" },
     ],
     descriptionHtml: `<p>Une <strong>pastille ronde toute simple</strong> sur une chaîne fine : le bijou qu'on porte tous les jours sans y penser, et qu'on ne quitte plus. Sa surface lisse se grave <strong>des deux côtés</strong>.</p>
 <h3>Caractéristiques</h3>
@@ -2110,9 +2110,9 @@ export const products = [
       "/produits/collier-coeur-grave-5.jpg",
     ],
     variants: [
-      { id: "collier-coeur-grave-dore", title: "Doré", price: 37.90, stockId: "collier-coeur-grave-dore", image: "/produits/collier-coeur-grave-3.jpg" },
-      { id: "collier-coeur-grave-orrose", title: "Or rose", price: 37.90, stockId: "collier-coeur-grave-orrose", image: "/produits/collier-coeur-grave-4.jpg" },
-      { id: "collier-coeur-grave-argente", title: "Argenté", price: 36.90, stockId: "collier-coeur-grave-argente", image: "/produits/collier-coeur-grave-5.jpg" },
+      { id: "collier-coeur-grave-dore", title: "Doré", price: 27.90, stockId: "collier-coeur-grave-dore", image: "/produits/collier-coeur-grave-3.jpg" },
+      { id: "collier-coeur-grave-orrose", title: "Or rose", price: 27.90, stockId: "collier-coeur-grave-orrose", image: "/produits/collier-coeur-grave-4.jpg" },
+      { id: "collier-coeur-grave-argente", title: "Argenté", price: 27.90, stockId: "collier-coeur-grave-argente", image: "/produits/collier-coeur-grave-5.jpg" },
     ],
     descriptionHtml: `<p>Un <strong>cœur plat et lisse</strong> sur une chaîne fine — la forme la plus simple pour dire quelque chose. Sa surface polie se grave <strong>des deux côtés</strong> : un prénom devant, une date derrière, ou un petit mot qu'on garde pour soi.</p>
 <h3>Caractéristiques</h3>

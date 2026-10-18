@@ -1,3 +1,17 @@
+## 💶 PRIX D'UN BIJOU DONNÉ PAR LE GÉRANT = À PEU PRÈS LE PRIX PAYÉ, PRIX BARRÉ TOUJOURS EN ,90 — 18/10/2026
+> Gérant : « quand je dois donner un prix… le prix que tu barres, il faut toujours finir par 0,90 €, et le prix que je vais te
+> demander, je dois l'avoir à peu près dans le prix que les clients doivent payer ».
+- Le montant qu'il donne (« à peu près 25 € ») = ce que la cliente PAIE, environ. On choisit le **prix barré en ,90** dont le
+  prix payé (barré − 10 %, remise bijoux) tombe le plus près de son montant ; « un peu plus de 22 » = le premier au-dessus.
+  Ex. 25 € → barré 27,90 → payé 25,11 · 24 € → barré 26,90 → payé 24,21 · 22 € → barré 24,90 → payé 22,41.
+- Le prix payé ne finit PAS en ,90 (impossible avec −10 %) : c'est le barré qui finit en ,90. Toujours lui montrer
+  « barré X,90 → payé Y » avant d'appliquer.
+- Dans `products.js`, le prix du code = celui d'où `applyBijouxSale` calcule le barré (`roundTo90(code × 0,9)`) : choisir un
+  code en ,90 qui retombe sur le barré voulu (barré 24,90 → code 27,90 ; 21,90 → 23,90 ; 26,90 → 29,90 ; 27,90 → 30,90 ;
+  28,90 → 31,90). Même prix pour toutes les couleurs sauf demande contraire. ⚠️ Un prix réglé dans Gestion passe AVANT le
+  code : comparer avec la fiche en ligne (le JSON de la page porte `price` et `compareAt`).
+- Gravure des bijoux : +3 € par texte gravé, aucun offert (18/10/2026) ; photo gravée +8 €.
+
 ## ⛔⛔ TOUT TEXTE GRAVÉ EST PAYANT — SUR TOUT PRODUIT, MÊME DANS UN VISUEL FOURNI PAR LE CLIENT (12/10/2026, rappel du gérant : « je t'ai déjà dit, quand y a des textes… tu te fais tout le temps avoir »)
 - Un dessin / une photo / un logo = la gravure comprise dans le prix de la fiche. **Chaque texte en plus (phrase, prénoms, date) se compte au tarif
   de la fiche** (verre à whisky : +3 € par texte ; cristal : +5 € ; gobelet : 1 élément compris puis +3 € ; bijoux : +3 € par face).
