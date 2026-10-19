@@ -2678,7 +2678,11 @@ export function getConfigStatus() {
 const MAT_CHAMPS_TXT = ["nom", "court", "lot", "usage", "dim", "mat", "pour", "achat", "photo", "cat"];
 function materielListe(data) {
   const saved = Array.isArray(data?.materiel) ? data.materiel : null;
-  return saved && saved.length ? saved.map((x) => ({ ...x })) : MATERIEL_SEED.map((x) => ({ ...x }));
+  if (!saved || !saved.length) return MATERIEL_SEED.map((x) => ({ ...x }));
+  // Un article ajouté au code après le premier enregistrement (ex. sac blanc et or, 19/10/2026) apparaît
+  // aussi : on ne supprime jamais un article (on l'archive), donc un id absent de la base est un nouveau.
+  const ids = new Set(saved.map((x) => x.id));
+  return [...saved.map((x) => ({ ...x })), ...MATERIEL_SEED.filter((x) => !ids.has(x.id)).map((x) => ({ ...x }))];
 }
 const numOuNull = (v) => (v === null || v === "" || v === undefined ? null : Number.isFinite(Number(v)) ? Number(v) : null);
 

@@ -54,6 +54,16 @@ export const MATERIEL_KITS = [
       "boitea": 1,
       "micro": 1
     }
+  },
+  {
+    "id": "packbor",
+    "nom": "Pack bracelet · sac blanc et or",
+    "detail": "sac blanc et or + boîte allongée + microfibre",
+    "items": {
+      "sacor": 1,
+      "boitea": 1,
+      "micro": 1
+    }
   }
 ];
 export const MATERIEL_SEED = [
@@ -237,6 +247,24 @@ export const MATERIEL_SEED = [
     "photo": "/materiel/emb-sac.webp",
     "stock": 89,
     "achete": 100,
+    "sug": false
+  },
+  {
+    "id": "sacor",
+    "cat": "bij",
+    "nom": "Sac cadeau blanc et or (à anses)",
+    "lot": "Lot de 6 · 10,00 €",
+    "cout": 1.67,
+    "usage": "1 sac",
+    "seuil": 2,
+    "dim": "Taille moyenne, la boîte allongée y entre",
+    "mat": "Papier blanc à bord doré, anses cordon, ruban et papier de soie dorés",
+    "pour": "Seulement les bracelets en boîte allongée (Pack Bracelet) ; envoyé plié à plat",
+    "achat": "Amazon, YAAVAAW · acheté le 19/10/2026",
+    "court": "Sac blanc et or",
+    "photo": "",
+    "stock": 6,
+    "achete": 6,
     "sug": false
   },
   {
