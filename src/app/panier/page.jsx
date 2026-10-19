@@ -131,7 +131,7 @@ export default function CartPage() {
     const code = promoCode.trim().toUpperCase();
     if (!code) return;
     if (appliques.some((a) => a.code === code)) { setPromoMsg("Ce code est déjà appliqué."); return; }
-    if (appliques.length >= 2) { setPromoMsg("Deux codes sont déjà appliqués : retirez-en un pour en mettre un autre."); return; }
+    if (appliques.length >= 2) { setPromoMsg("Retirez un code pour en utiliser un autre."); return; }
     const email = promoEmail.trim().toLowerCase();
     try {
       // Les articles sont envoyés pour l'offre « gravure offerte » : la remise
@@ -156,9 +156,9 @@ export default function CartPage() {
           const deja = appliques[0];
           if (cumulPermis(deja.kind, nouveau.kind)) {
             setAppliques([deja, nouveau]); setPromoCode("");
-            setPromoMsg("✓ Les deux codes sont appliqués au paiement : la gravure est offerte, puis la remise s'applique sur le reste.");
+            setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`);
           } else {
-            setPromoMsg(`Ce code ne se cumule pas avec le code ${deja.code}. Seul le code « gravure offerte » peut s'ajouter à un autre code.`);
+            setPromoMsg(`Ce code ne peut pas être utilisé avec le code ${deja.code} : retirez-le pour utiliser celui-ci.`);
           }
         }
       }
@@ -430,7 +430,7 @@ export default function CartPage() {
                 type="text"
                 value={promoCode}
                 onChange={(e) => { setPromoCode(e.target.value); setPromoMsg(""); }}
-                placeholder="Ex. BIENVENUE10"
+                placeholder={appliques.length ? "Code promo" : "Ex. BIENVENUE10"}
                 disabled={useCagnotte}
                 style={{ flex: 1, padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", textTransform: "uppercase" }}
               />
