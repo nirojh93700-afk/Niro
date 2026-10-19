@@ -1,3 +1,13 @@
+## 🎟️ CODE « GRAVURE OFFERTE » CUMULABLE AVEC UN AUTRE CODE — ✅ EN LIGNE LE 19/10/2026 (« laisse la personne utiliser les 10 % »)
+- Panier : un 2ᵉ code peut s'ajouter SEULEMENT si la paire = un code `kind:"gravure"` + un code ordinaire (bienvenue, parrainage,
+  ambassadeur). Jamais deux codes ordinaires, jamais une carte cadeau. Calcul (`src/lib/cumulCodes.js`, `npm run test-cumul`) :
+  gravure offerte d'abord, puis le code ordinaire sur le reste (bijou 30,51 € + 3 € de gravure → 5,75 € de remise). Un seul coupon
+  Stripe porte les deux ; metadata `promoCode` (ordinaire) + `promoCode2` (gravure) ; le webhook marque les deux « utilisés » ;
+  la commande garde `promoCode2` (affiché « code A + B » dans Gestion et sur la fiche papier).
+- ⛔ **RIEN N'ANNONCE LE CUMUL À LA CLIENTE** (gérant : « faut pas qu'il sache qu'il peut utiliser les deux ») : mêmes messages que
+  pour un seul code, aucune phrase « les deux codes », champ « Code promo » sans exemple une fois un code mis. Ne pas le mentionner
+  dans un e-mail ni sur le site.
+
 ## 💶 PRIX D'UN BIJOU DONNÉ PAR LE GÉRANT = À PEU PRÈS LE PRIX PAYÉ, PRIX BARRÉ TOUJOURS EN ,90 — 18/10/2026
 > Gérant : « quand je dois donner un prix… le prix que tu barres, il faut toujours finir par 0,90 €, et le prix que je vais te
 > demander, je dois l'avoir à peu près dans le prix que les clients doivent payer ».
