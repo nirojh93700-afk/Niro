@@ -1,6 +1,6 @@
 import { getPendingReplyByToken, resolvePendingReply, reopenPendingReply, batAtelierMessage, logComm } from "@/lib/stock";
 import { emailLayout, escapeHtml } from "@/lib/email";
-import { sendClientMail, boutonRepondre } from "@/lib/clientMail";
+import { sendClientMail, boutonRepondre, imageEnTete } from "@/lib/clientMail";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -54,9 +54,12 @@ export async function POST(req, { params }) {
     email: it.email, name: it.name || "", subject,
     excerpt: text.slice(0, 240), orderId: it.orderId || "", orderRef: it.orderRef || "",
   });
+  // Image facultative (un aperçu, 19/10/2026) : seulement un fichier du site.
+  const image = String(body?.image || "").trim();
+  const imageHtml = /^\/(apercus|api\/img)\/[\w.\-]+$/.test(image) ? imageEnTete(image) : "";
   const html = emailLayout({
     heading: "Votre message — Niv Création",
-    bodyHtml: `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(text)}</div>${replyBtn}`,
+    bodyHtml: `${imageHtml}<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(text)}</div>${replyBtn}`,
   });
   const thread = it.gmailThreadId ? { threadId: it.gmailThreadId, messageId: it.messageId || "", references: it.references || "" } : null;
   const sent = await sendClientMail({ to: it.email, subject, html, thread });
