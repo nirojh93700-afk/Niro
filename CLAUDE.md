@@ -1,3 +1,12 @@
+## 🍷 VERRES : LE TEXTE SE PAIE SUR CHAQUE VERRE — ✅ EN LIGNE LE 19/10/2026 (« pour chaque verre gravé, texte c'est payant… mets en ligne »)
+- Remplace la règle du 16/10 sur ce point : **chaque texte = +3 € sur CHAQUE verre**, identique ou différent, quel que soit le nombre.
+  Verre 1 : logo / image / modèle compris + 3 € par texte · verre identique : logo 0 € + 3 € par texte · verre différent : +5 € + 3 € par
+  texte · frais une fois pour les identiques inchangés (3-4 : +2 €, 5 et plus : +5 €) · face + fond +7 € par verre inchangé.
+- Ex. whisky : 1 verre logo + texte 22,90 · 2 identiques 43,90 · 2 différents 48,90 · 6 identiques logo + texte 132,80 · 6 logo seul 114,80.
+- `src/lib/prixVerres.js` (`texte1` refacturé par verre identique, `texteFv` ajouté aux verres différents), `GrillePrixVerres.jsx`,
+  phrase « Verre différent : +5 €, et chaque texte +3 € » (`ProductDetail.jsx`), `npm run test-prix-verres` (19 vérifs). Les 5 verres
+  (`regleVerres`) : vin, flûte, whisky portrait, cocktail, Fête des pères. Anciens montants dans `docs/prix-historique.md`.
+
 ## ✉️ CONSIGNES ENVOYÉES PAR E-MAIL → SUR LA FICHE ATELIER, TOUT SEUL — 19/10/2026 (« il faut que ça soit automatique », 09SZ9VYH)
 - Yohan Dufour (devis DEV-1523, collier puzzle) a écrit APRÈS paiement « gravure sur la pièce de puzzle gauche » : rien ne le montrait
   à l'atelier. Maintenant `MessagesEmail.jsx` (Gmail en lecture seule, `gmailListTextsFrom`, action `messages` de `/api/admin/gmail`,
