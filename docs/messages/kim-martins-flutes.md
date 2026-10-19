@@ -7,7 +7,11 @@
 - 19/10 18 h 43 (bouton Répondre) : « à quelle vitesse… j'ai besoin des verres d'ici le 28 octobre » (mercredi 28/10).
   Le gérant : « tu dis oui ». Prix vérifié : lot de 2 = 33,90 € (image comprise, 2 verres identiques = 0 €), domicile 11,90 €.
 
-## Mail EN ATTENTE — NE PAS SUPPRIMER, NE PAS ENVOYER sans « envoie » (gérant, 19/10 : « supprime pas ce mail, tu gardes en mémoire »)
+- ✅ 19/10 19 h 57 : mail ENVOYÉ par le site (« Oui, envoie avec l'image »), vérifié dans la boîte d'envoi : image des drapeaux
+  du gérant (`public/apercus/kim-martins-drapeaux.png`) en tête, « oui pour le 28 octobre », gravure blanc givré, « Est-ce qu'il
+  vous plaît ? », devis proposé. Le brouillon ci-dessous est REMPLACÉ par ce mail (gardé pour l'historique).
+
+## (historique) Brouillon du 19/10, remplacé par le mail envoyé à 19 h 57
 
 Objet : Re : Vos deux flûtes gravées pour votre premier anniversaire
 
