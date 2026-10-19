@@ -8,7 +8,9 @@
 //     + 7 € s'il est gravé face ET fond ;
 //   · verres IDENTIQUES au verre 1 : frais de gravure UNE fois pour la ligne :
 //     1 ou 2 verres aucun · 3 ou 4 verres +2 € · 5 verres et plus +5 €
-//     (+ 7 € par verre gravé face ET fond) ;
+//     (+ 7 € par verre gravé face ET fond) ; le TEXTE se paie sur CHAQUE verre
+//     (+3 € par texte et par verre — gérant, 19/10/2026 : « pour chaque verre
+//     c'est trois euros de plus pour le texte, c'est pas offert ») ;
 //   · un verre laissé sans gravure ne coûte rien de plus.
 // Une même fonction sert à la fiche (affichage), au panier et au paiement
 // (recalcul de confiance) : le prix affiché est toujours le prix payé.
@@ -69,6 +71,9 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
   const e1 = engravingExtra(product, v1, variantId);
   const empl = (fv) => (fv?.emplacement === "deux" ? engravingExtra(product, { emplacement: "deux" }, variantId).amount : 0);
   const cle1 = empreinte(v1);
+  // Part « texte » du verre 1 (sans le supplément face + fond) : refacturée sur
+  // chaque verre identique.
+  const texte1 = verreGrave(v1) ? Math.max(0, e1.amount - empl(v1)) : 0;
 
   const lignes = [];
   if (verreGrave(v1)) {
@@ -76,20 +81,21 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
     if (e1.amount > 0) lignes.push({ libelle: "Verre 1 · texte et options", montant: arrondi(e1.amount) });
   }
   let identiques = verreGrave(v1) ? 1 : 0, differents = 0, vierges = verreGrave(v1) ? 0 : 1;
-  let plusDiff = 0, plusEmplIdent = 0;
+  let plusDiff = 0, plusEmplIdent = 0, plusTexteIdent = 0;
   for (let i = 1; i < n; i++) {
     const fv = verre(i);
     if (!verreGrave(fv)) { vierges++; continue; }
-    if (empreinte(fv) === cle1) { identiques++; plusEmplIdent += empl(fv); continue; }
+    if (empreinte(fv) === cle1) { identiques++; plusEmplIdent += empl(fv); plusTexteIdent += texte1; continue; }
     differents++;
     plusDiff += PRIX_VERRE_DIFFERENT + empl(fv);
   }
   if (differents) lignes.push({ libelle: `${differents} verre${differents > 1 ? "s" : ""} différent${differents > 1 ? "s" : ""} (image et texte compris)`, montant: arrondi(plusDiff) });
   const frais = identiques > 1 ? fraisIdentiques(identiques) : 0;
   if (identiques > 1) lignes.push({ libelle: `${identiques - 1} verre${identiques > 2 ? "s" : ""} identique${identiques > 2 ? "s" : ""} au verre 1 · frais de gravure`, montant: frais });
+  if (plusTexteIdent) lignes.push({ libelle: `Texte gravé sur ${identiques - 1 > 1 ? `les ${identiques - 1} autres verres` : "l'autre verre"}`, montant: arrondi(plusTexteIdent) });
   if (plusEmplIdent) lignes.push({ libelle: "Gravure face et fond des verres identiques", montant: arrondi(plusEmplIdent) });
 
-  const total = arrondi((verreGrave(v1) ? e1.amount : 0) + plusDiff + frais + plusEmplIdent);
+  const total = arrondi((verreGrave(v1) ? e1.amount : 0) + plusDiff + frais + plusTexteIdent + plusEmplIdent);
   return { total, lignes, nbVerres: n, identiques, differents, vierges, weight: e1.weight || 0, stockIds: e1.stockIds || [] };
 }
 
