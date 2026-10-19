@@ -37,6 +37,14 @@ export const FICHIERS_DEVIS = {
       note: "Commande d'origine 1YPJVC5R (25/08) : même texte, date et police. Cœur : 💜 (décision du gérant, 02/10 — remplace le 💞 de l'original).",
     },
   ],
+  // Devis DEV-1523, Yohan Dufour : réglages relus dans ses e-mails du 18/10/2026.
+  "09SZ9VYH": [
+    {
+      texte: "Tournesol (dessin envoyé par le client, aucun texte)",
+      emplacement: "Pièce GAUCHE du puzzle · la seconde pièce reste sans gravure",
+      note: "Finition argentée. Modèle du tournesol : image « 1000025149.jpg » reçue par e-mail le 18/10 (voir les photos ci-dessous). Le client : « sur la pièce de puzzle gauche comme sur la photo transmise ». Express Chronopost : à graver en priorité.",
+    },
+  ],
 };
 
 // Lignes d'envoi (pas des pièces à fabriquer) : « Livraison… », « Lettre suivie La Poste », « Colis suivi ».
