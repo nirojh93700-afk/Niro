@@ -12,6 +12,7 @@
 // Nom réel de commandes dont le champ « nom » de Stripe est faux (à compléter au besoin).
 export const NOMS_CORRIGES = {
   "0GTB1LZ5": "Lorenzo Franchi", // remplacement de 1YPJVC5R (nom relu dans l'alerte du 25/08)
+  "09SZ9VYH": "Yohan Dufour", // adresse tapée dans le champ « nom » ; nom donné par le client par e-mail le 18/10/2026
 };
 
 const VOIE = /\b(avenue|av\.?|rue|boulevard|bd|chemin|all[ée]e|impasse|route|place|r[ée]sidence|lotissement|quai|cours|square|bis|ter|quater|app(?:art(?:ement)?)?\.?)\b/i;
