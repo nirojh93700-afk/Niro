@@ -37,3 +37,4 @@ Le gérant : « pour 6 verres » (les 4 verres ne sont plus dans le devis).
 - 6 verres, logo seul : 109,80 + 5 × 3 = **124,80 €** (remise 10 % → 112,32 €)
 - 6 verres, logo + texte : 109,80 + 3 + 5 × 5 = **137,80 €** (remise 10 % → 124,02 €)
 Livraison offerte (plus de 60 €). Face + fond : +7 € par verre en plus. Rien de créé dans le site.
+- Avec remise 20 % (demandé le 19/10) : logo seul **99,84 €** · logo + texte **110,24 €**.
