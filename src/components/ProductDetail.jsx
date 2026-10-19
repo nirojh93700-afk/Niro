@@ -1705,7 +1705,7 @@ export default function ProductDetail({ product }) {
                         <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                       ))}
                     </div>
-                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre différent : <strong>+5 €</strong>, et chaque texte <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
+                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre différent : <strong>+5 €</strong>, image et texte compris. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
                   </>
                 )}
               </div>
@@ -1740,7 +1740,7 @@ export default function ProductDetail({ product }) {
                           <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                         ))}
                       </div>
-                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre différent : <strong>+5 €</strong>, et chaque texte <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
+                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre différent : <strong>+5 €</strong>, image et texte compris. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
                     </>
                   )}
                 </div>

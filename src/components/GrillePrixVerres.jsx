@@ -11,8 +11,8 @@ export default function GrillePrixVerres({ id, faceFond = false }) {
       <div className="pv-gt">Prix de la gravure</div>
       <table><tbody>
         <tr><td>Image, logo ou modèle du verre 1</td><td><b>offert</b></td></tr>
-        <tr><td>Texte gravé</td><td><b>+ 3 € par verre</b></td></tr>
-        <tr><td>Chaque verre différent (autre image ou autre texte)</td><td><b>+ {eur(PRIX_VERRE_DIFFERENT)}</b> <small>+ 3 € par texte</small></td></tr>
+        <tr><td>Texte du verre 1</td><td><b>+ 3 €</b></td></tr>
+        <tr><td>Chaque verre différent (autre image ou autre texte)</td><td><b>+ {eur(PRIX_VERRE_DIFFERENT)} tout compris</b></td></tr>
         {faceFond && <tr><td>Gravure face et fond</td><td><b>+ 7 € par verre</b></td></tr>}
       </tbody></table>
       <div className="pv-gt">Frais de gravure pour des verres identiques <small>(une seule fois)</small></div>
