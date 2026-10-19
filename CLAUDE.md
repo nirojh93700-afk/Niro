@@ -1,3 +1,13 @@
+## 🍷 VERRES : NOUVELLE RÈGLE DE GRAVURE — ✅ EN LIGNE LE 19/10/2026 (gérant : « deuxième verre cinq euros logo et texte, qu'un truc sur les deux trois euros… oui »)
+- Remplace la règle du 16/10 (frais « verres identiques » supprimés). **Verre 1** : logo / image / modèle offert, chaque texte +3 €.
+  **Chaque autre verre** (2ᵉ, 3ᵉ…, identique ou différent) : logo + texte = **+5 €** · logo seul ou texte seul = **+3 €** · vierge 0 €.
+  Face + fond +7 € par verre inchangé. Les 5 verres `regleVerres` (vin, flûte, whisky portrait, cocktail, Fête des pères).
+- Ex. whisky : 1 verre logo + texte 22,90 · 2 logo + texte 45,90 · 2 logo seul 40,90 · 6 logo + texte 137,80 · 6 logo seul 124,80.
+- `src/lib/prixVerres.js` (`PRIX_VERRE_SUIVANT`, `aImage` = un champ gravé qui seul ne coûte rien, `aTexte` = un champ payant),
+  `GrillePrixVerres.jsx`, phrase des onglets de verres (`ProductDetail.jsx`), `npm run test-prix-verres` (16 vérifs).
+- ⚠️ Incident du même jour : une version intermédiaire (texte +3 € sur chaque verre) est partie en ligne alors que le gérant avait
+  interrompu (≈ 17 h 25 → retour arrière poussé aussitôt). Une commande de verres passée dans ce créneau a pu être surfacturée.
+
 ## ✉️ CONSIGNES ENVOYÉES PAR E-MAIL → SUR LA FICHE ATELIER, TOUT SEUL — 19/10/2026 (« il faut que ça soit automatique », 09SZ9VYH)
 - Yohan Dufour (devis DEV-1523, collier puzzle) a écrit APRÈS paiement « gravure sur la pièce de puzzle gauche » : rien ne le montrait
   à l'atelier. Maintenant `MessagesEmail.jsx` (Gmail en lecture seule, `gmailListTextsFrom`, action `messages` de `/api/admin/gmail`,

@@ -292,3 +292,9 @@ Prix des verres et de la carafe INCHANGÉS ; seule la gravure change.
 - **Carafe** (`carafe-a-whisky-gravee`) : prénom, initiale(s), rôle et texte passent de gratuit à **+3 € chacun** (date déjà +3 €).
 Pour revenir en arrière : retirer `regleVerres` des 5 verres, remettre `textKeys: ["date", "initiale"]` (vin, flûte) et retirer les
 4 lignes `prenom / initiale / role / texte` des `flatExtras` de la carafe.
+
+## 19/10/2026 — Verres : nouvelle règle de gravure
+Avant (16/10) : verre 1 logo offert + texte 3 € ; verres identiques : texte une fois, frais 0 / +2 / +5 € selon le nombre ; verre différent +5 € tout compris.
+Après : verre 1 inchangé ; chaque autre verre +5 € (logo + texte) ou +3 € (logo seul ou texte seul) ; plus de frais « identiques ».
+Ex. whisky : 2 logo + texte 40,90 → 45,90 € · 2 logo seul 37,90 → 40,90 € · 6 logo + texte 117,80 → 137,80 € · 6 logo seul 114,80 → 124,80 €.
+
