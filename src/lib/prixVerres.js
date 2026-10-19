@@ -4,8 +4,9 @@
 // Les prix des verres ne changent pas. Seule la gravure suit cette règle :
 //   · verre 1 : image / logo / modèle OFFERT, chaque texte au prix de la fiche
 //     (+3 €), options de la fiche (gravure face + fond +7 €…) ;
-//   · chaque verre DIFFÉRENT (autre image et/ou autre texte) : +5 € tout compris,
-//     + 7 € s'il est gravé face ET fond ;
+//   · chaque verre DIFFÉRENT (autre image et/ou autre texte) : +5 €, + SES textes
+//     (+3 € chacun, gérant 19/10/2026 : « pour chaque verre gravé, texte c'est
+//     payant »), + 7 € s'il est gravé face ET fond ;
 //   · verres IDENTIQUES au verre 1 : frais de gravure UNE fois pour la ligne :
 //     1 ou 2 verres aucun · 3 ou 4 verres +2 € · 5 verres et plus +5 €
 //     (+ 7 € par verre gravé face ET fond) ; le TEXTE se paie sur CHAQUE verre
@@ -87,9 +88,10 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
     if (!verreGrave(fv)) { vierges++; continue; }
     if (empreinte(fv) === cle1) { identiques++; plusEmplIdent += empl(fv); plusTexteIdent += texte1; continue; }
     differents++;
-    plusDiff += PRIX_VERRE_DIFFERENT + empl(fv);
+    const texteFv = Math.max(0, engravingExtra(product, fv, variantId).amount - empl(fv));
+    plusDiff += PRIX_VERRE_DIFFERENT + texteFv + empl(fv);
   }
-  if (differents) lignes.push({ libelle: `${differents} verre${differents > 1 ? "s" : ""} différent${differents > 1 ? "s" : ""} (image et texte compris)`, montant: arrondi(plusDiff) });
+  if (differents) lignes.push({ libelle: `${differents} verre${differents > 1 ? "s" : ""} différent${differents > 1 ? "s" : ""} (+5 € chacun, textes en plus)`, montant: arrondi(plusDiff) });
   const frais = identiques > 1 ? fraisIdentiques(identiques) : 0;
   if (identiques > 1) lignes.push({ libelle: `${identiques - 1} verre${identiques > 2 ? "s" : ""} identique${identiques > 2 ? "s" : ""} au verre 1 · frais de gravure`, montant: frais });
   if (plusTexteIdent) lignes.push({ libelle: `Texte gravé sur ${identiques - 1 > 1 ? `les ${identiques - 1} autres verres` : "l'autre verre"}`, montant: arrondi(plusTexteIdent) });

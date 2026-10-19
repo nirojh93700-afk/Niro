@@ -18,14 +18,14 @@ t("3 identiques = texte 3 × 3 + 2", prixGravureVerres(P, U, 3, photoTexte).tota
 t("lot de 4 identiques = texte 3 × 4 + 2", prixGravureVerres(P, L4, 1, photoTexte).total === 14);
 t("6 identiques = texte 3 × 6 + 5", prixGravureVerres(P, U, 6, photoTexte).total === 23);
 const r = prixGravureVerres(P, U, 2, photoTexte, [photoTexte, logo]);
-t("2 verres, le 2e différent = 3 + 5 (cas 0E3Y9OBX)", r.total === 8 && r.differents === 1, JSON.stringify(r));
-t("lot de 4 tous différents = 3 + 15", prixGravureVerres(P, L4, 1, {}, [photoTexte, logo, { texte: "A" }, { texte: "B" }]).total === 18);
-t("lot de 4 : 2 identiques + 2 différents = 3 × 2 + 10", prixGravureVerres(P, L4, 1, {}, [photoTexte, photoTexte, logo, { texte: "B" }]).total === 16);
+t("2 verres, le 2e différent (logo + texte) = 3 + 5 + 3", r.total === 11 && r.differents === 1, JSON.stringify(r));
+t("lot de 4 tous différents = 3 + 3 × (5 + 3)", prixGravureVerres(P, L4, 1, {}, [photoTexte, logo, { texte: "A" }, { texte: "B" }]).total === 27);
+t("lot de 4 : 2 identiques + 2 différents = 3 × 2 + 2 × (5 + 3)", prixGravureVerres(P, L4, 1, {}, [photoTexte, photoTexte, logo, { texte: "B" }]).total === 22);
 t("verre laissé vierge = gratuit", prixGravureVerres(P, L2, 1, {}, [photoTexte, {}]).total === 3);
 t("2 lots de 2 « chacun différent » : le motif se répète par lot", prixGravureVerres(P, L2, 2, {}, [photoTexte, logo]).identiques === 2);
 const w = prixGravureVerres(W, U, 2, { texte: "Papa", emplacement: "deux" });
 t("whisky 2 identiques face+fond = 3 × 2 + 7 + 7", w.total === 20, JSON.stringify(w));
-t("whisky 2e différent face+fond = 3+7 + 5+7", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", emplacement: "deux" }, { texte: "Papy", emplacement: "deux" }]).total === 22);
+t("whisky 2e différent face+fond = 3+7 + 5+3+7", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", emplacement: "deux" }, { texte: "Papy", emplacement: "deux" }]).total === 25);
 t("police seule = pas une gravure", !verreGrave({ police: "allura", emplacement: "face" }));
 t("le détail liste les lignes", r.lignes.some((l) => /différent/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
 console.log(`${ok} vérifications au vert, ${ko} en échec`);
