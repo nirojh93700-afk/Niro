@@ -487,6 +487,9 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
   mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
   Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
+  ⚠️ **Exception décidée par le gérant le 19/10/2026** : Aurélie (aurelie.persoo@hotmail.com, verre à cocktail, photo en couleur
+  demandée → impossible, gravé blanc givré) : « on lui donnera un aperçu avant les gravures » → mail parti le 19/10 13 h 59 lui
+  demandant sa photo et promettant l'aperçu. À sa commande : envoyer l'aperçu par le fil Aperçu / BAT AVANT de graver.
 - ⛔ **AUCUNE PROMESSE DE TEMPO DANS UN MESSAGE CLIENT** (rappel ferme du gérant, 21/09/2026 :
   « je t'ai déjà dit de pas avancer aussitôt »). Interdits : « aussitôt », « au plus vite », « dès le
   règlement », « part dans la journée », « très rapidement », toute date. On décrit ce qui sera fait,
