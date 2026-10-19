@@ -1,3 +1,13 @@
+## ✉️ CONSIGNES ENVOYÉES PAR E-MAIL → SUR LA FICHE ATELIER, TOUT SEUL — 19/10/2026 (« il faut que ça soit automatique », 09SZ9VYH)
+- Yohan Dufour (devis DEV-1523, collier puzzle) a écrit APRÈS paiement « gravure sur la pièce de puzzle gauche » : rien ne le montrait
+  à l'atelier. Maintenant `MessagesEmail.jsx` (Gmail en lecture seule, `gmailListTextsFrom`, action `messages` de `/api/admin/gmail`,
+  texte cité retiré) affiche « ✉️ Ce que la cliente a écrit par e-mail — à lire avant de graver » : fiche atelier (commandes normales
+  ET devis), fiche papier (3 derniers, 400 caractères), page Atelier (une fois par commande). E-mails gardés : depuis 30 jours avant la
+  commande. Les photos jointes restaient déjà affichées par `PhotosEmail`.
+- Rappel déploiement : deux « Build failed » Firebase de suite le 19/10 (16 h 05, 16 h 08) sur des changements minimes, puis succès au
+  3ᵉ envoi. Dépôt à 432 Mo de fichiers suivis (vidéos `docs/videos` + grosses maquettes) : si les échecs se répètent, proposer au
+  gérant de les sortir des fichiers suivis (ils restent dans l'historique).
+
 ## 🎟️ CODE « GRAVURE OFFERTE » CUMULABLE AVEC UN AUTRE CODE — ✅ EN LIGNE LE 19/10/2026 (« laisse la personne utiliser les 10 % »)
 - Panier : un 2ᵉ code peut s'ajouter SEULEMENT si la paire = un code `kind:"gravure"` + un code ordinaire (bienvenue, parrainage,
   ambassadeur). Jamais deux codes ordinaires, jamais une carte cadeau. Calcul (`src/lib/cumulCodes.js`, `npm run test-cumul`) :
