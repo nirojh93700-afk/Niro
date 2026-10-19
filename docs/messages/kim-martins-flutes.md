@@ -27,3 +27,9 @@ nivcreation.fr
 
 Canal d'envoi : jeton de la réponse préparée `/api/reply/pgwnsj7f2lcm79mvu1eg8q38eyynmscmvfhhegm` (POST `{action:"send", subject, text}`).
 ⚠️ Ne pas utiliser le brouillon de l'agent (il dit « nous sommes le 21 » et refuse le 28).
+
+- 19/10 20 h 12 : Kim aime le dessin, demande France à gauche / États-Unis à droite + le prix (photo de 2 flûtes jointe).
+- 19/10 20 h 32 : mail parti par le site avec l'image inversée (`public/apercus/kim-martins-drapeaux-inverses.png`), « nous vous envoyons votre devis ».
+- 19/10 20 h 39 : devis **DEV-1526** (33,90 lot de 2 + 3,00 gravure 2ᵉ flûte = 36,90 €, livraison au choix de Kim) envoyé par le site
+  avec excuses (le devis n'était pas joint au mail de 20 h 32). Lien : https://nivcreation.fr/document/3Qzgnbt5LUoncl3XW6jH.
+  DEV-1524 et DEV-1525 = essais supprimés, jamais envoyés. → Attendre son paiement ; à graver pour le 28/10.
