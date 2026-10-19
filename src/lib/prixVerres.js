@@ -1,5 +1,6 @@
 // =============================================================================
-// Prix de la gravure des VERRES (règle validée par le gérant le 15-16/10/2026).
+// Prix de la gravure des VERRES (règle du 15-16/10/2026, REMPLACÉE le 19/10/2026 :
+// voir PRIX_VERRE_SUIVANT plus bas ; les frais « verres identiques » ne servent plus).
 // -----------------------------------------------------------------------------
 // Les prix des verres ne changent pas. Seule la gravure suit cette règle :
 //   · verre 1 : image / logo / modèle OFFERT, chaque texte au prix de la fiche
@@ -52,6 +53,15 @@ export function fraisIdentiques(n) {
 
 const arrondi = (x) => Math.round(x * 100) / 100;
 
+// RÈGLE DU 19/10/2026 (gérant) : « pour le premier verre le logo est gratuit, le
+// texte c'est payant ; pour le deuxième verre c'est cinq euros pour les deux, le
+// texte et le logo ; s'il n'y a que le logo, c'est trois euros ».
+//   · verre 1 : image / logo / modèle offert, chaque texte au prix de la fiche ;
+//   · chaque AUTRE verre gravé (identique ou différent) : image + texte = +5 €,
+//     image seule OU texte seul = +3 € ; + 7 € s'il est gravé face ET fond ;
+//   · un verre laissé sans gravure ne coûte rien.
+export const PRIX_VERRE_SUIVANT = { complet: 5, simple: 3 };
+
 /**
  * Supplément de gravure d'une ligne de verres.
  * @returns {{ total, lignes:[{libelle, montant}], nbVerres, identiques, differents, vierges, weight, stockIds }}
@@ -61,6 +71,7 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
   const parLot = verresParVariante(variant);
   const n = Math.min(parLot * qte, 200);
   const variantId = variant?.id ?? null;
+  const cfg = product?.engravingPricing || {};
   // Gravure de chaque verre : réglage par verre si « chacun différent », sinon le même partout.
   const liste = Array.isArray(perGlass) && perGlass.length ? perGlass : null;
   const verre = (i) => (liste ? (liste[i % (parLot > 1 ? Math.min(parLot, liste.length) : liste.length)] || {}) : fields) || {};
@@ -68,6 +79,11 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
   const v1 = verre(0);
   const e1 = engravingExtra(product, v1, variantId);
   const empl = (fv) => (fv?.emplacement === "deux" ? engravingExtra(product, { emplacement: "deux" }, variantId).amount : 0);
+  // Le verre porte-t-il une image / un logo / un modèle (un champ gravé qui, seul,
+  // ne coûte rien) ? un texte (un champ qui se paie) ?
+  const aImage = (fv) => Object.entries(fv || {}).some(([k, v]) => !NEUTRES.has(k) && plein(v)
+    && (k === cfg.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
+  const aTexte = (fv) => engravingExtra(product, fv, variantId).amount - empl(fv) > 0;
   const cle1 = empreinte(v1);
 
   const lignes = [];
@@ -76,20 +92,20 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
     if (e1.amount > 0) lignes.push({ libelle: "Verre 1 · texte et options", montant: arrondi(e1.amount) });
   }
   let identiques = verreGrave(v1) ? 1 : 0, differents = 0, vierges = verreGrave(v1) ? 0 : 1;
-  let plusDiff = 0, plusEmplIdent = 0;
+  let complets = 0, simples = 0, plusEmpl = 0;
   for (let i = 1; i < n; i++) {
     const fv = verre(i);
     if (!verreGrave(fv)) { vierges++; continue; }
-    if (empreinte(fv) === cle1) { identiques++; plusEmplIdent += empl(fv); continue; }
-    differents++;
-    plusDiff += PRIX_VERRE_DIFFERENT + empl(fv);
+    if (empreinte(fv) === cle1) identiques++; else differents++;
+    if (aImage(fv) && aTexte(fv)) complets++; else simples++;
+    plusEmpl += empl(fv);
   }
-  if (differents) lignes.push({ libelle: `${differents} verre${differents > 1 ? "s" : ""} différent${differents > 1 ? "s" : ""} (image et texte compris)`, montant: arrondi(plusDiff) });
-  const frais = identiques > 1 ? fraisIdentiques(identiques) : 0;
-  if (identiques > 1) lignes.push({ libelle: `${identiques - 1} verre${identiques > 2 ? "s" : ""} identique${identiques > 2 ? "s" : ""} au verre 1 · frais de gravure`, montant: frais });
-  if (plusEmplIdent) lignes.push({ libelle: "Gravure face et fond des verres identiques", montant: arrondi(plusEmplIdent) });
+  const pl = (k) => (k > 1 ? "s" : "");
+  if (complets) lignes.push({ libelle: `${complets} autre${pl(complets)} verre${pl(complets)} · logo et texte (+${PRIX_VERRE_SUIVANT.complet} € chacun)`, montant: complets * PRIX_VERRE_SUIVANT.complet });
+  if (simples) lignes.push({ libelle: `${simples} autre${pl(simples)} verre${pl(simples)} · logo ou texte seul (+${PRIX_VERRE_SUIVANT.simple} € chacun)`, montant: simples * PRIX_VERRE_SUIVANT.simple });
+  if (plusEmpl) lignes.push({ libelle: "Gravure face et fond des autres verres", montant: arrondi(plusEmpl) });
 
-  const total = arrondi((verreGrave(v1) ? e1.amount : 0) + plusDiff + frais + plusEmplIdent);
+  const total = arrondi((verreGrave(v1) ? e1.amount : 0) + complets * PRIX_VERRE_SUIVANT.complet + simples * PRIX_VERRE_SUIVANT.simple + plusEmpl);
   return { total, lignes, nbVerres: n, identiques, differents, vierges, weight: e1.weight || 0, stockIds: e1.stockIds || [] };
 }
 

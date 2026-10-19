@@ -1,5 +1,5 @@
 // npm run test-prix-verres — règle de prix de la gravure des verres (16/10/2026).
-import { prixGravureVerres, fraisIdentiques, verreGrave } from "../../src/lib/prixVerres.js";
+import { prixGravureVerres, verreGrave } from "../../src/lib/prixVerres.js";
 let ok = 0, ko = 0;
 const t = (nom, cond, info = "") => { if (cond) ok++; else { ko++; console.log("✗", nom, info); } };
 const P = { engravingPricing: { textKeys: ["texte", "prenom", "date", "initiale"], textExtra: 3 } };            // vin / flûte
@@ -7,26 +7,23 @@ const W = { engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key:
 const U = { id: "u", title: "À l'unité" }, L2 = { id: "l2", title: "Lot de 2" }, L4 = { id: "l4", title: "Lot de 4" };
 const photo = { mode: "photo", photo: "/api/img/a" }, photoTexte = { ...photo, texte: "Fabien" }, logo = { mode: "photo", photo: "/api/img/b", texte: "Zoo Bar" };
 
-t("frais 1-2 = 0", fraisIdentiques(1) === 0 && fraisIdentiques(2) === 0);
-t("frais 3-4 = 2", fraisIdentiques(3) === 2 && fraisIdentiques(4) === 2);
-t("frais 5+ = 5", fraisIdentiques(5) === 5 && fraisIdentiques(6) === 5 && fraisIdentiques(9) === 5);
 t("1 verre photo seule = 0", prixGravureVerres(P, U, 1, photo).total === 0);
 t("1 verre photo + texte = 3", prixGravureVerres(P, U, 1, photoTexte).total === 3);
-t("2 identiques (à l'unité × 2) = 3", prixGravureVerres(P, U, 2, photoTexte).total === 3);
-t("lot de 2 identiques = 3", prixGravureVerres(P, L2, 1, photoTexte).total === 3);
-t("3 identiques = 3 + 2", prixGravureVerres(P, U, 3, photoTexte).total === 5);
-t("lot de 4 identiques = 3 + 2", prixGravureVerres(P, L4, 1, photoTexte).total === 5);
-t("6 identiques = 3 + 5", prixGravureVerres(P, U, 6, photoTexte).total === 8);
-const r = prixGravureVerres(P, U, 2, photoTexte, [photoTexte, logo]);
-t("2 verres, le 2e différent = 3 + 5 (cas 0E3Y9OBX)", r.total === 8 && r.differents === 1, JSON.stringify(r));
-t("lot de 4 tous différents = 3 + 15", prixGravureVerres(P, L4, 1, {}, [photoTexte, logo, { texte: "A" }, { texte: "B" }]).total === 18);
-t("lot de 4 : 2 identiques + 2 différents = 3 + 10", prixGravureVerres(P, L4, 1, {}, [photoTexte, photoTexte, logo, { texte: "B" }]).total === 13);
-t("verre laissé vierge = gratuit", prixGravureVerres(P, L2, 1, {}, [photoTexte, {}]).total === 3);
-t("2 lots de 2 « chacun différent » : le motif se répète par lot", prixGravureVerres(P, L2, 2, {}, [photoTexte, logo]).identiques === 2);
-const w = prixGravureVerres(W, U, 2, { texte: "Papa", emplacement: "deux" });
-t("whisky 2 identiques face+fond = 3 + 7 + 7", w.total === 17, JSON.stringify(w));
-t("whisky 2e différent face+fond = 3+7 + 5+7", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", emplacement: "deux" }, { texte: "Papy", emplacement: "deux" }]).total === 22);
-t("police seule = pas une gravure", !verreGrave({ police: "allura", emplacement: "face" }));
-t("le détail liste les lignes", r.lignes.some((l) => /différent/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
+t("2 identiques logo + texte = 3 + 5", prixGravureVerres(P, U, 2, photoTexte).total === 8);
+t("lot de 2 identiques logo + texte = 3 + 5", prixGravureVerres(P, L2, 1, photoTexte).total === 8);
+t("2 identiques logo seul = 0 + 3", prixGravureVerres(P, L2, 1, photo).total === 3);
+t("3 identiques logo + texte = 3 + 5 + 5", prixGravureVerres(P, U, 3, photoTexte).total === 13);
+t("6 identiques logo + texte = 3 + 5 × 5", prixGravureVerres(P, U, 6, photoTexte).total === 28);
+t("6 identiques logo seul = 3 × 5", prixGravureVerres(P, U, 6, photo).total === 15);
+t("2e verre différent logo + texte = 3 + 5", prixGravureVerres(P, U, 2, {}, [photoTexte, logo]).total === 8);
+t("2e verre texte seul = 3 + 3", prixGravureVerres(P, U, 2, {}, [photoTexte, { texte: "B" }]).total === 6);
+t("2e verre vierge = 3", prixGravureVerres(P, U, 2, {}, [photoTexte, {}]).total === 3);
+t("lot de 4 : logo+texte, logo+texte, logo seul, texte seul = 3 + 5 + 3 + 3", prixGravureVerres(P, L4, 1, {}, [photoTexte, logo, photo, { texte: "B" }]).total === 14);
+const w = prixGravureVerres(W, U, 2, { mode: "photo", photo: "x", texte: "Papa", emplacement: "deux" });
+t("whisky 2 identiques logo + texte face+fond = 3+7 + 5+7", w.total === 22, JSON.stringify(w));
+t("whisky 2e verre texte seul face+fond = 3+7 + 3+7", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", emplacement: "deux" }, { texte: "Papy", emplacement: "deux" }]).total === 20);
+t("verre vierge = pas grave", verreGrave({ police: "playfair" }) === false);
+const r = prixGravureVerres(P, U, 2, {}, [photoTexte, logo]);
+t("le détail liste les lignes", r.lignes.some((l) => /logo et texte/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
 console.log(`${ok} vérifications au vert, ${ko} en échec`);
-process.exit(ko ? 1 : 0);
+if (ko) process.exit(1);
