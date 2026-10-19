@@ -7,6 +7,7 @@
 // =============================================================================
 
 import { aEcarter } from "@/lib/inboxFilter";
+import { separerCitation } from "@/lib/mailQuote";
 
 // Échange le refresh token contre un access token temporaire.
 // Jeton d'accès gardé en mémoire (par refresh token) jusqu'à 1 min avant son
@@ -248,6 +249,31 @@ function listAttachments(payload) {
 // Photos envoyées PAR une cliente (pièces jointes image de ses e-mails).
 // Sert aux commandes sur devis : la photo à graver arrive par e-mail et doit
 // apparaître dans la fiche atelier (demande du gérant, 23/09/2026).
+// Ce qu'une cliente a ÉCRIT par e-mail (consignes de gravure envoyées après la
+// commande ou pendant le devis : « sur la pièce gauche », « en majuscules »…).
+// Lecture seule ; le texte cité des réponses est retiré. (19/10/2026, gérant :
+// « il faut que ça soit automatique », commande 09SZ9VYH.)
+export async function gmailListTextsFrom(token, fromEmail, max = 10) {
+  const email = (fromEmail || "").trim();
+  if (!email) return [];
+  const q = encodeURIComponent(`from:${email} newer_than:120d -from:etsy`);
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=${max}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) fail(res, data, "Lecture Gmail impossible.");
+  const out = [];
+  for (const { id } of data.messages || []) {
+    const m = await gmailGetMessage(token, id, true);
+    if (!m) continue;
+    const texte = String(separerCitation(m.body || "").main || "").replace(/\n{3,}/g, "\n\n").trim();
+    if (!texte) continue;
+    const at = Date.parse(m.date) || 0;
+    out.push({ messageId: id, at, subject: m.subject, text: texte.slice(0, 2000), photos: (m.attachments || []).filter((a) => /^image\//i.test(a.mimeType)).length });
+  }
+  return out.sort((a, b) => b.at - a.at);
+}
+
 export async function gmailListPhotosFrom(token, fromEmail, max = 15) {
   const email = (fromEmail || "").trim();
   if (!email) return [];

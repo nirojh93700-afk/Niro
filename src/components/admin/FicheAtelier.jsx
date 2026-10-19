@@ -10,6 +10,7 @@ import { getFontLabel, getFontClass } from "@/lib/fonts";
 import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import MessagesEmail from "@/components/admin/MessagesEmail";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { TableGravure, policeDeGravure } from "@/lib/engravingSheet";
 import FicheDevis from "@/components/admin/FicheDevis";
@@ -249,6 +250,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
         ) : null}
         {/* Une carte par pièce du devis : quantité, texte, style, fichier à graver. */}
         <FicheDevis order={order} />
+        <MessagesEmail email={order.customerEmail} depuis={order.createdAt} adminKey={adminKey} print={print} />
         <PhotosEmail email={order.customerEmail} adminKey={adminKey} print={print} />
       </div>
     );
@@ -267,6 +269,9 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
          version, autre langue…) : on la montre ici aussi, sinon l'atelier
          grave la version du site sans le savoir (Rose Catarino #1Z17IKQ8,
          version portugaise reçue le 15/09 — remarque du gérant, 24/09/2026). */}
+      {order?.customerEmail ? (
+        <MessagesEmail email={order.customerEmail} depuis={order.createdAt} adminKey={adminKey} print={print} />
+      ) : null}
       {order?.customerEmail ? (
         <PhotosEmail email={order.customerEmail} adminKey={adminKey} print={print} masquerSiVide
           titre="📎 Photo(s) renvoyée(s) par e-mail — à comparer avec celle de la commande : la plus récente est la bonne" />

@@ -18,6 +18,7 @@ import { TableGravure } from "@/lib/engravingSheet";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import PageHead from "@/components/admin/PageHead";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import MessagesEmail from "@/components/admin/MessagesEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
 import { lignesDevis } from "@/lib/devisGravure";
 import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
@@ -252,6 +253,7 @@ export default function AtelierPage() {
               ) : null}
               {o.adminNote ? <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "#6b5a2e" }}>📝 {o.adminNote}</p> : null}
               <FicheDevis order={o} />
+              <MessagesEmail email={o.customerEmail} depuis={o.createdAt} adminKey={key} />
               <PhotosEmail email={o.customerEmail} adminKey={key} />
             </div>
           ))}
@@ -307,6 +309,9 @@ export default function AtelierPage() {
 
                   {/* Tableau professionnel « quel texte sur quelle face ». */}
                   <TableGravure item={item} titre={false} />
+                  {/* Consignes envoyées par e-mail (une fois par commande). */}
+                  {g.travaux.findIndex((t) => t.o.id === o.id) === idx
+                    ? <MessagesEmail email={o.customerEmail} depuis={o.createdAt} adminKey={key} /> : null}
                   {/* Vendu en plus avec cet article (emballage, coffret, socle, date…) + livraison. */}
                   {(() => {
                     const opts = optionsArticle(item);

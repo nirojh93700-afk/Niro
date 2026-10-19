@@ -1,5 +1,5 @@
 import { isAdmin, getGmailCreds, setGmailCreds, updateGmail } from "@/lib/stock";
-import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply, gmailMarkRead, gmailListPhotosFrom, gmailGetAttachment } from "@/lib/gmail";
+import { gmailAccessToken, gmailListClientMessages, gmailGetMessage, gmailSendReply, gmailMarkRead, gmailListPhotosFrom, gmailListTextsFrom, gmailGetAttachment } from "@/lib/gmail";
 import Anthropic from "@anthropic-ai/sdk";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +49,12 @@ export async function GET(req) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ photos: [] });
       const photos = await gmailListPhotosFrom(token, email);
       return Response.json({ photos });
+    }
+    // Ce que la cliente a écrit par e-mail (fiche atelier). Lecture seule.
+    if (action === "messages") {
+      const email = (url.searchParams.get("email") || "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ messages: [] });
+      return Response.json({ messages: await gmailListTextsFrom(token, email) });
     }
     if (action === "attachment") {
       const msg = url.searchParams.get("msg") || "";

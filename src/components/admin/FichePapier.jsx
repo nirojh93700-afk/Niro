@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import MessagesEmail from "@/components/admin/MessagesEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
 import OptionsVendues from "@/components/admin/OptionsVendues";
 import { TableGravure } from "@/lib/engravingSheet";
@@ -160,6 +161,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
               <div className="fp-pre">{order.demande}</div>
             </div>
           ) : null}
+          {order.customerEmail ? <MessagesEmail email={order.customerEmail} depuis={order.createdAt} adminKey={adminKey} print /> : null}
 
 
           {/* ------------------------- À GRAVER ---------------------------- */}
