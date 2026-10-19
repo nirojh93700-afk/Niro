@@ -304,6 +304,14 @@ export async function POST(req) {
       const shipping = obj.shipping_cost?.amount_total ?? 0;
       const sales = Math.max(0, ((obj.amount_total ?? 0) - shipping) / 100);
       await recordCommission(md.promoCode, sales);
+      // 2e code cumulé (code « gravure offerte » + un autre code, 19/10/2026) :
+      // son utilisation est enregistrée de la même façon (une fois par personne).
+      if (md.promoCode2) {
+        await recordCodeUsage(md.promoCode2, { ip: md.clientIp || "", email: obj.customer_details?.email || "" });
+        if (md.promoEmail && md.promoEmail !== (obj.customer_details?.email || "").toLowerCase()) {
+          await recordCodeUsage(md.promoCode2, { email: md.promoEmail });
+        }
+      }
       // CARTE CADEAU : on débite le solde du montant réellement déduit. À 0,
       // le code ne vaut plus rien (promo-validate et checkout le refusent).
       if (md.giftUsed) {
@@ -506,7 +514,7 @@ export async function POST(req) {
     let cadeauPromis = "";
     if (!choixCadeau) {
       try {
-        const p = await cadeauPromisPour({ email: customer.email, promoCode: session.metadata?.promoCode });
+        const p = await cadeauPromisPour({ email: customer.email, promoCode: session.metadata?.promoCode2 || session.metadata?.promoCode });
         if (p) { cadeauPromis = p.motif; choixCadeau = "surprise"; }
       } catch { /* jamais bloquant */ }
     }
@@ -732,6 +740,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       subtotal: (session.amount_subtotal || 0) / 100,
       discount: (session.total_details?.amount_discount || 0) / 100,
       promoCode: session.metadata?.promoCode || "",
+      ...(session.metadata?.promoCode2 ? { promoCode2: session.metadata.promoCode2 } : {}),
       cagnotteUsed: Number(session.metadata?.cagnotteAmount || 0) || 0,
       cashbackEarned, // cashback crédité à la cliente pour CETTE commande
       currency,

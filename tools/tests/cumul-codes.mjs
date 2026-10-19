@@ -1,0 +1,14 @@
+import { cumulPermis, remiseCumulee } from "../../src/lib/cumulCodes.js";
+let ko = 0;
+const ok = (c, m) => { if (!c) { ko++; console.log("✗", m); } else console.log("✓", m); };
+ok(cumulPermis("gravure", ""), "gravure + bienvenue : permis");
+ok(cumulPermis("", "gravure"), "bienvenue + gravure (ordre inverse) : permis");
+ok(!cumulPermis("gravure", "gravure"), "deux codes gravure : refusé");
+ok(!cumulPermis("", ""), "deux codes ordinaires : refusé");
+ok(!cumulPermis("gravure", "cadeau"), "gravure + carte cadeau : refusé");
+ok(remiseCumulee(30.51, 3, { type: "percent", value: 10 }) === 5.75, "bijou 30,51 € : 3 € + 10 % de 27,51 = 5,75 €");
+ok(remiseCumulee(114.8, 5, { type: "percent", value: 10 }) === 15.98, "114,80 € : 5 € + 10 % de 109,80 = 15,98 €");
+ok(remiseCumulee(20, 3, { type: "fixed", value: 5 }) === 8, "montant fixe 5 € : 3 + 5 = 8 €");
+ok(remiseCumulee(6, 3, { type: "fixed", value: 5 }) === 6, "jamais plus que le panier");
+ok(remiseCumulee(10, 0, { type: "percent", value: 10 }) === 1, "sans gravure : 10 % seulement");
+if (ko) { console.log(`${ko} échec(s)`); process.exit(1); } else console.log("Tout est bon.");

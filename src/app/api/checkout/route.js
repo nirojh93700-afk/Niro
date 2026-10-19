@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
+import { cumulPermis, remiseCumulee } from "@/lib/cumulCodes";
 import { toCents } from "@/lib/format";
 import { EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
@@ -84,6 +85,11 @@ export async function POST(req) {
 
   const postalCode = String(body?.postalCode || "").trim();
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+  // 2e code (19/10/2026, gérant : « laisse la personne utiliser les 10 % même si
+  // elle utilise le code pour gravure ») : un code « gravure offerte » se cumule
+  // avec UN autre code (bienvenue, parrainage…). Jamais deux codes du même genre.
+  const promoCode2Raw = String(body?.promoCode2 || "").trim().toUpperCase();
+  const promoCode2 = promoCode2Raw && promoCode2Raw !== promoCode ? promoCode2Raw : "";
   // E-mail saisi au panier pour le code promo (limite « une fois par personne »).
   const promoEmailRaw = String(body?.promoEmail || "").trim().toLowerCase();
   const promoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(promoEmailRaw) ? promoEmailRaw : "";
@@ -297,56 +303,88 @@ export async function POST(req) {
   let discounts;
   let appliedCode = "";
   let giftUsed = 0; // carte cadeau : montant réellement déduit (débité au webhook)
+  let appliedCode2 = ""; // code « gravure offerte » cumulé avec un autre code
   if (promoCode) {
     try {
       const codes = await getPromoCodes();
-      const pc = codes[promoCode];
+      // Un code est-il utilisable par cette personne, maintenant ?
       // Code ambassadeur (reusable) : utilisable plusieurs fois. Sinon : 1 fois
       // PAR PERSONNE — on contrôle sur l'e-mail saisi au panier (fiable), et à
       // défaut sur l'adresse internet (ancien comportement, garde-fou).
       // Code NOMINATIF : il n'est valable que pour l'adresse à laquelle il a été
       // envoyé. C'est le garde-fou final — même si quelqu'un contourne le
       // panier, la remise ne s'applique pas ici.
-      const mauvaiseAdresse = pc && pc.email && pc.email !== String(promoEmail || "").trim().toLowerCase();
-      const blocked = mauvaiseAdresse || (pc && !pc.reusable && (promoEmail
-        ? await hasUsedCode(promoCode, { email: promoEmail })
-        : await hasUsedCode(promoCode, { ip: clientIp })));
-      const expired = pc && pc.expiresAt && Date.now() > pc.expiresAt;
-      if (pc && pc.kind === "gravure") {
+      const utilisable = async (code) => {
+        const pc = codes[code];
+        if (!pc) return null;
+        const mauvaiseAdresse = pc.email && pc.email !== String(promoEmail || "").trim().toLowerCase();
+        const blocked = mauvaiseAdresse || (!pc.reusable && (promoEmail
+          ? await hasUsedCode(code, { email: promoEmail })
+          : await hasUsedCode(code, { ip: clientIp })));
+        const expired = pc.expiresAt && Date.now() > pc.expiresAt;
+        return blocked || expired ? null : pc;
+      };
+      const pc = await utilisable(promoCode);
+      const pc2 = promoCode2 ? await utilisable(promoCode2) : null;
+      // CUMUL : exactement un code « gravure offerte » + un code ordinaire
+      // (pourcentage ou montant ; ni carte cadeau, ni second code gravure).
+      const paire = pc && pc2 && cumulPermis(pc.kind, pc2.kind)
+        ? (pc.kind === "gravure" ? { g: promoCode, n: promoCode2, pn: pc2 } : { g: promoCode2, n: promoCode, pn: pc })
+        : null;
+      // Sans cumul possible : le premier code valable s'applique seul (ou, si
+      // le panier n'a aucune gravure payante, le code ordinaire de la paire).
+      const sansGravure = paire && !(gravureOfferte > 0);
+      const seul = sansGravure ? paire.pn : (pc || pc2);
+      const seulCode = sansGravure ? paire.n : (pc ? promoCode : promoCode2);
+      if (paire && gravureOfferte > 0) {
+        // La gravure est offerte d'abord, puis le code ordinaire s'applique sur
+        // le reste du panier (−10 % sur le reste, ou son montant fixe). Un seul
+        // coupon Stripe (une session n'en accepte qu'un) qui porte les deux.
+        const cents = Math.round(remiseCumulee(etatPort.subtotal, gravureOfferte, paire.pn) * 100);
+        if (cents > 0) {
+          appliedCode = paire.n;    // code ordinaire : commission ambassadeur, statistiques
+          appliedCode2 = paire.g;   // code gravure : utilisation enregistrée aussi
+          const coupon = await stripe.coupons.create({
+            amount_off: cents, currency: "eur", duration: "once",
+            name: `Gravure offerte (${paire.g}) + code ${paire.n}`.slice(0, 40),
+          });
+          discounts = [{ coupon: coupon.id }];
+        }
+      } else if (seul && seul.kind === "gravure") {
         // OFFRE « GRAVURE OFFERTE » (règle du gérant, 11/09 puis 17/09/2026) :
         // la remise n'est pas un montant fixe mais le PRIX RÉEL de la première
         // gravure payante du panier — 3 € sur un bijou, 5 € sur un cristal…,
         // une seule par commande, sur n'importe quel produit. Sans gravure
         // payante dans le panier, le code ne déduit rien (et le panier l'a
         // déjà dit à la cliente).
-        if (!blocked && !expired && gravureOfferte > 0) {
-          appliedCode = promoCode;
+        if (gravureOfferte > 0) {
+          appliedCode = seulCode;
           const coupon = await stripe.coupons.create({
             amount_off: Math.round(gravureOfferte * 100), currency: "eur", duration: "once",
-            name: `Gravure offerte (${promoCode})`,
+            name: `Gravure offerte (${seulCode})`,
           });
           discounts = [{ coupon: coupon.id }];
         }
-      } else if (pc && pc.kind === "cadeau" && pc.value > 0 && !blocked && !expired) {
+      } else if (seul && seul.kind === "cadeau" && seul.value > 0) {
         // CARTE CADEAU : on déduit au plus le SOLDE, plafonné au sous-total
         // (jamais de total négatif). Le solde est débité au webhook, une fois
         // le paiement réellement encaissé.
-        const useAmt = Math.min(pc.value, etatPort.subtotal);
+        const useAmt = Math.min(seul.value, etatPort.subtotal);
         if (useAmt > 0.009) {
-          appliedCode = promoCode;
+          appliedCode = seulCode;
           giftUsed = Math.round(useAmt * 100) / 100;
           const coupon = await stripe.coupons.create({
             amount_off: Math.round(useAmt * 100), currency: "eur", duration: "once",
-            name: `Carte cadeau (${promoCode})`,
+            name: `Carte cadeau (${seulCode})`,
           });
           discounts = [{ coupon: coupon.id }];
         }
-      } else if (pc && pc.value > 0 && !blocked && !expired) {
-        appliedCode = promoCode;
+      } else if (seul && seul.value > 0) {
+        appliedCode = seulCode;
         const coupon = await stripe.coupons.create(
-          pc.type === "fixed"
-            ? { amount_off: Math.round(pc.value * 100), currency: "eur", duration: "once", name: `Code ${promoCode}` }
-            : { percent_off: Math.min(100, pc.value), duration: "once", name: `Code ${promoCode}` }
+          seul.type === "fixed"
+            ? { amount_off: Math.round(seul.value * 100), currency: "eur", duration: "once", name: `Code ${seulCode}` }
+            : { percent_off: Math.min(100, seul.value), duration: "once", name: `Code ${seulCode}` }
         );
         discounts = [{ coupon: coupon.id }];
       }
@@ -387,6 +425,7 @@ export async function POST(req) {
         // sert à décrémenter le stock après paiement (variantId:quantité)
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
         promoCode: appliedCode,
+        ...(appliedCode2 ? { promoCode2: appliedCode2 } : {}),
         ...(giftUsed ? { giftUsed: String(giftUsed) } : {}),
         clientIp,
         // E-mail saisi au panier : enregistré comme « ayant utilisé le code »,

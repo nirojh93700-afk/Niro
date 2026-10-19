@@ -1239,7 +1239,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                           l'information, on n'affiche donc pas une mention trompeuse. */}
                       {ligne(`Sous-total produits${remise > 0 || cagnotte > 0 ? " (avant remise)" : ""}`, formatEuro(sousTotal))}
                       {remise > 0 && ligne(
-                        `Remise${o.promoCode ? ` — code ${o.promoCode}` : ""}`,
+                        `Remise${o.promoCode ? ` — code ${o.promoCode}${o.promoCode2 ? ` + ${o.promoCode2}` : ""}` : ""}`,
                         `− ${formatEuro(remise)}`,
                         { color: "#b4452f" }
                       )}

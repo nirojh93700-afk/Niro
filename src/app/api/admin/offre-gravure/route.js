@@ -51,8 +51,10 @@ async function suiviDesCodes(codes) {
     const parEmail = new Map(Object.entries(logins || {}).map(([k, v]) => [String(k).trim().toLowerCase(), v]));
     const parCode = new Map();
     for (const o of commandes || []) {
-      const c = String(o.promoCode || "").trim().toUpperCase();
-      if (c && !parCode.has(c)) parCode.set(c, o);
+      for (const brut of [o.promoCode, o.promoCode2]) {
+        const c = String(brut || "").trim().toUpperCase();
+        if (c && !parCode.has(c)) parCode.set(c, o);
+      }
     }
     const now = Date.now();
     return Object.entries(envoyes || {}).map(([email, v]) => {

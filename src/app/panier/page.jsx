@@ -1,5 +1,6 @@
 "use client";
 
+import { cumulPermis } from "@/lib/cumulCodes";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartContext";
@@ -34,7 +35,9 @@ export default function CartPage() {
   const [postalCode, setPostalCode] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [promoMsg, setPromoMsg] = useState("");
-  const [promoOk, setPromoOk] = useState(false);
+  // Codes appliqués (19/10/2026) : un seul, ou DEUX quand l'un est le code
+  // « gravure offerte » et l'autre un code ordinaire (bienvenue, parrainage…).
+  const [appliques, setAppliques] = useState([]); // [{ code, kind, label }]
   // E-mail demandé pour appliquer un code à usage unique : le blocage se fait
   // alors par PERSONNE (e-mail) et non plus par connexion internet, qui bloquait
   // à tort deux personnes d'un même foyer et laissait passer un changement de réseau.
@@ -118,15 +121,17 @@ export default function CartPage() {
     if (!ref?.code || Date.now() - (ref.ts || 0) > 30 * 24 * 3600 * 1000) return;
     fetch("/api/promo-validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: ref.code }) })
       .then((r) => r.json())
-      .then((d) => { if (d.valid) { setPromoCode(ref.code); setPromoOk(true); setPromoMsg(`✓ Recommandé par un ambassadeur — code ${ref.code} appliqué (${d.label}).`); } })
+      .then((d) => { if (d.valid) { setAppliques([{ code: d.code || ref.code.toUpperCase(), kind: d.kind || "", label: d.label }]); setPromoMsg(`✓ Recommandé par un ambassadeur — code ${ref.code} appliqué (${d.label}).`); } })
       .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function applyPromo() {
-    setPromoMsg(""); setPromoOk(false);
-    const code = promoCode.trim();
+    setPromoMsg("");
+    const code = promoCode.trim().toUpperCase();
     if (!code) return;
+    if (appliques.some((a) => a.code === code)) { setPromoMsg("Ce code est déjà appliqué."); return; }
+    if (appliques.length >= 2) { setPromoMsg("Deux codes sont déjà appliqués : retirez-en un pour en mettre un autre."); return; }
     const email = promoEmail.trim().toLowerCase();
     try {
       // Les articles sont envoyés pour l'offre « gravure offerte » : la remise
@@ -141,7 +146,22 @@ export default function CartPage() {
         body: JSON.stringify({ code, email, items: articles }),
       });
       const d = await res.json();
-      if (d.valid) { setPromoOk(true); setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`); }
+      if (d.valid) {
+        const nouveau = { code: d.code || code, kind: d.kind || "", label: d.label };
+        if (!appliques.length) {
+          setAppliques([nouveau]); setPromoCode("");
+          setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`);
+        } else {
+          // Cumul permis : un code « gravure offerte » + un code ordinaire.
+          const deja = appliques[0];
+          if (cumulPermis(deja.kind, nouveau.kind)) {
+            setAppliques([deja, nouveau]); setPromoCode("");
+            setPromoMsg("✓ Les deux codes sont appliqués au paiement : la gravure est offerte, puis la remise s'applique sur le reste.");
+          } else {
+            setPromoMsg(`Ce code ne se cumule pas avec le code ${deja.code}. Seul le code « gravure offerte » peut s'ajouter à un autre code.`);
+          }
+        }
+      }
       else if (d.noEngraving) setPromoMsg("Ce code offre une gravure : ajoutez un texte à graver sur une pièce de votre panier pour en profiter.");
       else if (d.needEmail) setPromoMsg("Entrez votre e-mail pour utiliser ce code.");
       else if (d.wrongEmail) setPromoMsg("Ce code est réservé à l'adresse e-mail à laquelle il a été envoyé.");
@@ -174,7 +194,7 @@ export default function CartPage() {
       // est cochée, elle a la priorité et le code promo n'est pas envoyé.
       const wantCagnotte = Boolean(useCagnotte && cagnotteUsable > 0);
       // ≥ 80 € = deux cadeaux → on envoie les deux préférences (« femme+homme »).
-      await startCheckout(items, postalCode, wantCagnotte ? "" : (promoOk ? promoCode.trim() : ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase(), total >= 80 ? `${cadeau}+${cadeau2}` : cadeau);
+      await startCheckout(items, postalCode, wantCagnotte ? "" : (appliques[0]?.code || ""), delivery, country, wantCagnotte, promoEmail.trim().toLowerCase(), total >= 80 ? `${cadeau}+${cadeau2}` : cadeau, wantCagnotte ? "" : (appliques[1]?.code || ""));
     } catch (e) {
       setError(e.message);
       setLoading(false);
@@ -360,7 +380,7 @@ export default function CartPage() {
                 <input
                   type="checkbox"
                   checked={useCagnotte}
-                  onChange={(e) => { setUseCagnotte(e.target.checked); if (e.target.checked) { setPromoOk(false); setPromoMsg(""); } }}
+                  onChange={(e) => { setUseCagnotte(e.target.checked); if (e.target.checked) { setAppliques([]); setPromoMsg(""); } }}
                   style={{ marginTop: 3, width: 18, height: 18, accentColor: "#c9a24b", flexShrink: 0 }}
                 />
                 <span>
@@ -378,7 +398,7 @@ export default function CartPage() {
             <input
               type="email"
               value={promoEmail}
-              onChange={(e) => { setPromoEmail(e.target.value); setPromoOk(false); setPromoMsg(""); }}
+              onChange={(e) => { setPromoEmail(e.target.value); setAppliques([]); setPromoMsg(""); }}
               placeholder="Votre e-mail"
               autoComplete="email"
               disabled={useCagnotte}
@@ -390,15 +410,26 @@ export default function CartPage() {
               return sugg ? (
                 <p className="em-sugg">
                   Vouliez-vous dire <b>{sugg}</b> ?{" "}
-                  <button type="button" onClick={() => { setPromoEmail(sugg); setPromoOk(false); setPromoMsg(""); }}>Corriger</button>
+                  <button type="button" onClick={() => { setPromoEmail(sugg); setAppliques([]); setPromoMsg(""); }}>Corriger</button>
                 </p>
               ) : null;
             })()}
+            {appliques.length > 0 && (
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 8px", display: "grid", gap: 6 }}>
+                {appliques.map((a) => (
+                  <li key={a.code} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "8px 12px", border: "1px solid var(--line)", borderRadius: 10, fontSize: "0.86rem" }}>
+                    <span style={{ minWidth: 0, overflowWrap: "anywhere" }}><b>{a.code}</b> · {a.label}</span>
+                    <button type="button" className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem" }}
+                      onClick={() => { setAppliques((l) => l.filter((x) => x.code !== a.code)); setPromoMsg(""); }}>Retirer</button>
+                  </li>
+                ))}
+              </ul>
+            )}
             <div style={{ display: "flex", gap: 8 }}>
               <input
                 type="text"
                 value={promoCode}
-                onChange={(e) => { setPromoCode(e.target.value); setPromoOk(false); setPromoMsg(""); }}
+                onChange={(e) => { setPromoCode(e.target.value); setPromoMsg(""); }}
                 placeholder="Ex. BIENVENUE10"
                 disabled={useCagnotte}
                 style={{ flex: 1, padding: "10px 12px", border: "1px solid var(--line)", borderRadius: 10, font: "inherit", textTransform: "uppercase" }}
@@ -408,7 +439,7 @@ export default function CartPage() {
             {useCagnotte
               ? <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: "var(--ink-soft)" }}>Cagnotte et code promo ne se cumulent pas.</p>
               : (promoMsg
-                ? <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoOk ? "#256b34" : "#b4452f" }}>{promoMsg}</p>
+                ? <p style={{ fontSize: "0.82rem", margin: "6px 0 0", color: promoMsg.startsWith("✓") ? "#256b34" : "#b4452f" }}>{promoMsg}</p>
                 : <p style={{ fontSize: "0.78rem", margin: "6px 0 0", color: "var(--ink-soft)" }}>Votre e-mail sert uniquement à vérifier que le code n&apos;a pas déjà été utilisé.</p>)}
           </div>
 

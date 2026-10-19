@@ -228,7 +228,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
             <table className="fp-table fp-argent">
               <tbody>
                 <L k={`Sous-total${remise > 0 || cagnotte > 0 ? " (avant remise)" : ""}`} v={formatEuro(sousTotal)} />
-                {remise > 0 ? <L k={`Remise${order.promoCode ? ` — ${order.promoCode}` : ""}`} v={`− ${formatEuro(remise)}`} /> : null}
+                {remise > 0 ? <L k={`Remise${order.promoCode ? ` — ${order.promoCode}${order.promoCode2 ? ` + ${order.promoCode2}` : ""}` : ""}`} v={`− ${formatEuro(remise)}`} /> : null}
                 {cagnotte > 0 ? <L k="Cagnotte fidélité" v={`− ${formatEuro(cagnotte)}`} /> : null}
                 <L k="Livraison" v={port > 0 ? formatEuro(port) : "Offerte"} />
                 <tr className="fp-total">
