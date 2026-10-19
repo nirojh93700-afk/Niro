@@ -169,6 +169,10 @@
   demande de montrer un mail, **RIEN NE PART** tant qu'il n'a pas écrit « envoie » dans un message qui ne demande pas
   aussi de le montrer. En cas de doute : montrer, ne pas envoyer.
 
+- ⛔ **« ENVOIE AVEC LE DEVIS » = LES DEUX ENSEMBLE, OU RIEN (19/10/2026, Kim Martins)** : le gérant a dit « envoie avec le devis et la
+  nouvelle image » ; je ne pouvais pas créer le devis (clé admin refusée) et j'ai quand même envoyé le mail qui annonce « nous vous
+  envoyons votre devis ». Si une partie de ce qu'il demande est impossible : NE RIEN ENVOYER, le dire en une phrase, attendre.
+
 - ⛔ **DANS UN MAIL CLIENT, NE PAS PROPOSER D'ALTERNATIVES NON DEMANDÉES (gérant, 10/10/2026, dossier Jankowski 1P5XZKRP : « enlève cette phrase,
   ne propose pas des trucs comme ça »)** : pas de « si vous préférez, envoyez une autre photo », pas de « rien à faire de votre côté », pas de choix
   ni de porte de sortie ajoutés de ma propre initiative. Le mail dit ce qui sera fait et ce qui est impossible ; la seule proposition permise est
