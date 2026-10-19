@@ -31,3 +31,9 @@ Pas de date de livraison promise. Signature : Niv Création · nivcreation.fr.
 Gestion → Devis & factures → Nouveau : client Arnold, 2 lignes (« 4 verres à whisky gravés » ×1 à 71,90 €,
 « 6 verres à whisky gravés » ×1 à 109,80 €), 3ᵉ ligne « Remise 10 % » ×1 à −18,17 € (ou prix des lignes
 déjà remisés : 64,71 € et 98,82 €), et la demande dans « Demande du client ». Ne rien envoyer sans son « envoie ».
+
+## Mise à jour du 19/10/2026 — 6 verres seulement (nouvelle règle de gravure)
+Le gérant : « pour 6 verres » (les 4 verres ne sont plus dans le devis).
+- 6 verres, logo seul : 109,80 + 5 × 3 = **124,80 €** (remise 10 % → 112,32 €)
+- 6 verres, logo + texte : 109,80 + 3 + 5 × 5 = **137,80 €** (remise 10 % → 124,02 €)
+Livraison offerte (plus de 60 €). Face + fond : +7 € par verre en plus. Rien de créé dans le site.
