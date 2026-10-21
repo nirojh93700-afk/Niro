@@ -298,3 +298,8 @@ Avant (16/10) : verre 1 logo offert + texte 3 € ; verres identiques : texte un
 Après : verre 1 inchangé ; chaque autre verre +5 € (logo + texte) ou +3 € (logo seul ou texte seul) ; plus de frais « identiques ».
 Ex. whisky : 2 logo + texte 40,90 → 45,90 € · 2 logo seul 37,90 → 40,90 € · 6 logo + texte 117,80 → 137,80 € · 6 logo seul 114,80 → 124,80 €.
 
+
+## 21/10/2026 — Verres : verre 1, logo OU un texte offert
+Avant (19/10) : verre 1 = logo offert, chaque texte +3 € (un verre à whisky avec un seul texte : 22,90 €).
+Après : verre 1 = une gravure offerte, logo/image/modèle ou, sans logo, le premier texte (whisky texte seul : 19,90 €). Textes en plus +3 €.
+Autres verres inchangés (+5 € logo et texte, +3 € logo seul ou texte seul, +7 € face + fond). Pour revenir : retirer `remise1` dans `src/lib/prixVerres.js`.

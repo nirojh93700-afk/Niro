@@ -21,7 +21,18 @@ t("2e verre vierge = 3", prixGravureVerres(P, U, 2, {}, [photoTexte, {}]).total 
 t("lot de 4 : logo+texte, logo+texte, logo seul, texte seul = 3 + 5 + 3 + 3", prixGravureVerres(P, L4, 1, {}, [photoTexte, logo, photo, { texte: "B" }]).total === 14);
 const w = prixGravureVerres(W, U, 2, { mode: "photo", photo: "x", texte: "Papa", emplacement: "deux" });
 t("whisky 2 identiques logo + texte face+fond = 3+7 + 5+7", w.total === 22, JSON.stringify(w));
-t("whisky 2e verre texte seul face+fond = 3+7 + 3+7", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", emplacement: "deux" }, { texte: "Papy", emplacement: "deux" }]).total === 20);
+t("whisky 2e verre texte seul face+fond = 0+7 + 3+7 (1er texte offert depuis le 21/10)", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", emplacement: "deux" }, { texte: "Papy", emplacement: "deux" }]).total === 17);
+// 21/10/2026 : verre 1 sans logo → le premier texte est offert, les suivants +3 €.
+t("1 verre texte seul = 0", prixGravureVerres(P, U, 1, { mode: "texte", texte: "Léa" }).total === 0);
+t("1 verre texte + date sans logo = 3", prixGravureVerres(P, U, 1, { mode: "texte", texte: "Léa", date: "2024" }).total === 3);
+t("1 verre logo + texte = 3 (inchangé)", prixGravureVerres(P, U, 1, photoTexte).total === 3);
+t("2 identiques texte seul = 0 + 3", prixGravureVerres(P, U, 2, { mode: "texte", texte: "Léa" }).total === 3);
+t("whisky 1 verre texte seul = 0", prixGravureVerres(W, U, 1, { texte: "Papa" }).total === 0);
+t("whisky 1 verre texte + date = 3", prixGravureVerres(W, U, 1, { texte: "Papa", texte2: "2024" }).total === 3);
+t("whisky 1 verre texte seul face+fond = 7", prixGravureVerres(W, U, 1, { texte: "Papa", emplacement: "deux" }).total === 7);
+t("whisky 2 verres texte seul = 0 + 3", prixGravureVerres(W, U, 2, { texte: "Papa" }).total === 3);
+const t1 = prixGravureVerres(W, U, 1, { texte: "Papa" });
+t("détail : premier texte offert", t1.lignes.length === 1 && /premier texte/.test(t1.lignes[0].libelle) && t1.lignes[0].montant === 0, JSON.stringify(t1.lignes));
 t("verre vierge = pas grave", verreGrave({ police: "playfair" }) === false);
 const r = prixGravureVerres(P, U, 2, {}, [photoTexte, logo]);
 t("le détail liste les lignes", r.lignes.some((l) => /logo et texte/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
