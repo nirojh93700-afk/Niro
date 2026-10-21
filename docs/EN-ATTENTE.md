@@ -317,3 +317,4 @@ En attente de SA décision :
 - **Noms de domaine nivcreation.fr + nivcreation.com : expirent le 28/03/2027, renouvellement auto DÉSACTIVÉ chez Hostinger**
   (renouvellement 10,99 € et 16,99 €/an). Le gérant veut renouveler pour 3 ans. Rappels programmés sur le site (Messages clients →
   envois programmés, vers contact.nivcreation@gmail.com) : jeudi 28/01/2027 9 h et vendredi 26/02/2027 9 h.
+- **🍹 Verre à cocktail 33 cl (21/10/2026)** : maquette faite (captures `docs/maquettes/verre-cocktail-33cl-*.png`), choix « Taille du verre » 17 cl / 33 cl comme le verre à vin, mêmes photos et même aperçu. 33 cl : 19,90 / 37,90 / 71,90 € (coût 1,80 €/verre, Metro 19/10). Prêt à appliquer : `git apply docs/patches/verre-cocktail-33cl.patch` puis build + push. **En attente de son « applique ».**
