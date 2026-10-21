@@ -39,6 +39,10 @@ export const VARIANT_COSTS = {
   "verre-cocktail-grave": 1.40,
   "verre-cocktail-grave-2": 2.80,
   "verre-cocktail-grave-4": 5.60,
+  // Verre à cocktail 33 cl : 2 cartons de 12 à 20,10 € + 3,00 € de port (Metro, 19/10/2026) → 1,80 €
+  "verre-cocktail-33": 1.80,
+  "verre-cocktail-33-2": 3.60,
+  "verre-cocktail-33-4": 7.20,
 };
 
 // Trouve le coût d'achat unitaire d'un article de commande, en retrouvant la

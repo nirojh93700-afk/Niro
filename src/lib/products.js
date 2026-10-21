@@ -2706,7 +2706,7 @@ export const products = [
     category: "verres",
     subcategory: "cocktail",
     type: "Verre photo personnalisé",
-    tagline: "Votre photo, un prénom, une phrase — ou le logo de votre bar, restaurant ou entreprise — gravés sur un verre à cocktail.",
+    tagline: "Votre photo, un prénom, une phrase — ou le logo de votre bar, restaurant ou entreprise — gravés sur un verre à cocktail de 17 cl ou de 33 cl.",
     personalizable: true,
     personalizationLabel: "Votre photo à graver (+ texte, date ou logo en option)",
     images: [
@@ -2720,11 +2720,24 @@ export const products = [
       "/produits/verre_a_cocktail_fond_exemple.jpg",
     ],
     variants: [
-      { id: "verre-cocktail-grave", title: "À l'unité", price: 17.90, weight: 550 },
-      { id: "verre-cocktail-grave-2", stockId: "verre-cocktail-grave-2", title: "Lot de 2", price: 33.90, weight: 1000 },
-      { id: "verre-cocktail-grave-4", stockId: "verre-cocktail-grave-4", title: "Lot de 4 — livraison offerte", price: 64.90, weight: 1800 },
+      { id: "verre-cocktail-grave", taille: "17", title: "À l'unité", price: 17.90, weight: 550 },
+      { id: "verre-cocktail-grave-2", taille: "17", stockId: "verre-cocktail-grave-2", title: "Lot de 2", price: 33.90, weight: 1000 },
+      { id: "verre-cocktail-grave-4", taille: "17", stockId: "verre-cocktail-grave-4", title: "Lot de 4", price: 64.90, weight: 1800 },
+      // 33 cl (21/10/2026, gérant) : même gravure, mêmes photos ; prix du verre à whisky.
+      { id: "verre-cocktail-33", taille: "33", title: "À l'unité", price: 19.90, weight: 600 },
+      { id: "verre-cocktail-33-2", taille: "33", title: "Lot de 2", price: 37.90, weight: 1100 },
+      { id: "verre-cocktail-33-4", taille: "33", title: "Lot de 4", price: 71.90, weight: 2000 },
     ],
-    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong></p><p class="pd2-occ">Un cadeau qui change du whisky : apéritif entre amis, EVJF, anniversaire, crémaillère ou cadeau d’entreprise.</p><h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>17 cl</b><span>verrerie professionnelle, forme haute, hauteur ≈ 12,5 cm, Ø ≈ 5,2 cm.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>celui de votre bar, de votre restaurant ou de votre entreprise, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, une phrase, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    // DEUX TAILLES (21/10/2026, gérant : « juste mettre les centilitres comme pour le verre de vin ») :
+    // le choix est à droite, au-dessus des options ; pas de photo à part, la galerie et l'aperçu restent les mêmes.
+    tailles: {
+      label: "Taille du verre",
+      options: [
+        { id: "17", title: "17 cl", sub: "forme haute, ≈ 12,5 cm" },
+        { id: "33", title: "33 cl", sub: "grand verre long drink" },
+      ],
+    },
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong></p><p class="pd2-occ">Un cadeau qui change du whisky : apéritif entre amis, EVJF, anniversaire, crémaillère ou cadeau d’entreprise.</p><h3>Deux tailles</h3><div class="pd2-sizes"><div class="pd2-size"><b>17 cl</b><span>verrerie professionnelle, forme haute, hauteur ≈ 12,5 cm, Ø ≈ 5,2 cm.</span></div><div class="pd2-size"><b>33 cl</b><span>grand verre long drink, verrerie professionnelle, pour les cocktails allongés et les softs.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>celui de votre bar, de votre restaurant ou de votre entreprise, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, une phrase, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
     voletVerres: [["Gravure", "Photo, dessin, logo ou texte au choix, dans la police de votre choix."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
   },
   {

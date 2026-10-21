@@ -739,7 +739,9 @@ Défaut technique ou de gravure
   "verre-a-cocktail-grave": {
     material: `Verre à cocktail, forme haute
 
-- Verrerie professionnelle, contenance 17 cl, hauteur environ 12,5 cm, diamètre environ 5,2 cm.
+- Deux tailles au choix, verrerie professionnelle :
+  · 17 cl : hauteur environ 12,5 cm, diamètre environ 5,2 cm ;
+  · 33 cl : grand verre long drink.
 - Surface lisse idéale pour une gravure laser nette et précise, sur la face ou au fond du verre.
 - Va au lave-vaisselle (la gravure ne s'efface pas).`,
     usage: `Personnalisation
