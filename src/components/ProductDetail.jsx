@@ -13,7 +13,7 @@ import DelaiFabrication from "@/components/DelaiFabrication";
 import RestockAlerte from "@/components/RestockAlerte";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { aEmplacement, lignesDuCote } from "@/lib/apercuCote";
-import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
+import { prixGravureVerres, estRegleVerres, detailEnTexte, texteOffertVerre1 } from "@/lib/prixVerres";
 import GrillePrixVerres from "./GrillePrixVerres";
 import { packagingExtra } from "@/lib/packaging";
 import PayInfoModal from "@/components/PayInfo";
@@ -388,6 +388,11 @@ export default function ProductDetail({ product }) {
       (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement) &&
       (!f.showIfField || fieldValues[f.showIfField] === f.showIfValue)
   );
+  // Verres (21/10/2026) : sur le verre 1 sans logo, le premier texte est offert → son étiquette dit
+  // « (offert) » à la place de « (+3 €) ». Même fonction que le prix (texteOffertVerre1).
+  const cleTexteOffert = RV && (!perGlass || activeGlass === 0)
+    ? texteOffertVerre1(product, fieldValues, variant?.id, visibleFields.map((f) => f.key)) : null;
+  const etiquetteChamp = (f) => (cleTexteOffert === f.key ? String(f.label || "").replace(/\(\+\s*[\d,.]+\s*€\)/, "(offert)") : f.label);
 
   // Menu de personnalisation par onglets (opt-in via product.personaTabs).
   // Chaque onglet = { key, label, sub, fields:[...clés] }. Les champs non listés
@@ -1705,16 +1710,18 @@ export default function ProductDetail({ product }) {
                         <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                       ))}
                     </div>
-                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Chaque autre verre : <strong>+5 €</strong> logo et texte, <strong>+3 €</strong> logo seul. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
+                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre 1 : logo, image ou un texte <strong>offert</strong>, chaque texte en plus +3 €. Chaque autre verre : <strong>+5 €</strong> logo et texte, <strong>+3 €</strong> logo seul ou texte seul. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
                   </>
                 )}
               </div>
             )}
+            {RV && !perGlass && <p className="pg-hint">Verre 1 : votre logo, votre image, votre modèle — ou un texte — est <strong>offert</strong>. Chaque texte en plus : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
             <ParcoursGuide
               product={product}
               fieldValues={fieldValues}
               setFieldValues={setFieldValues}
               unitPrice={unitPrice * quantity}
+              verre1={!perGlass || activeGlass === 0}
             />
             </>
           ) : product.personalizationFields ? (
@@ -1726,6 +1733,7 @@ export default function ProductDetail({ product }) {
                   Personnalisation — gravure
                 </p>
               )}
+              {RV && !perGlass && <p className="pg-hint">Verre 1 : votre logo, votre image, votre modèle — ou un texte — est <strong>offert</strong>. Chaque texte en plus : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
               {/* Lot de N verres : chaque verre identique ou personnalisé différemment */}
               {supportsPerGlass && (
                 <div className="perglass">
@@ -1740,7 +1748,7 @@ export default function ProductDetail({ product }) {
                           <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                         ))}
                       </div>
-                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Chaque autre verre : <strong>+5 €</strong> logo et texte, <strong>+3 €</strong> logo seul. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
+                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre 1 : logo, image ou un texte <strong>offert</strong>, chaque texte en plus +3 €. Chaque autre verre : <strong>+5 €</strong> logo et texte, <strong>+3 €</strong> logo seul ou texte seul. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
                     </>
                   )}
                 </div>
@@ -1765,7 +1773,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "stylepicker") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <StyleScroller
                         images={product.styleImages || {}}
                         groups={f.groups || []}
@@ -1792,7 +1800,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "photo") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <PhotoUpload value={fieldValues[f.key] || ""} onChange={(url) => setField(f.key, url)} productSlug={product.slug} guide={guidePhoto} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                       <p className="photo-check-note">
@@ -1804,7 +1812,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "badge") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <BadgeDesigner value={fieldValues[f.key] || ""} onChange={(u) => setField(f.key, u)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
@@ -1813,7 +1821,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "modele") {
                   return (
                     <div className="field" key={f.key}>
-                      {f.label && <label>{f.label}</label>}
+                      {f.label && <label>{etiquetteChamp(f)}</label>}
                       <ModeleDesigner template={f.template} value={fieldValues[f.key]} onChange={(val) => setField(f.key, val)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
@@ -1834,7 +1842,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "motifniv") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <div className="modele-motifs">
                         {MOTIF_LIST.map((m) => (
                           <button type="button" key={m.id} className={`modele-motif-cell${(fieldValues[f.key] || "") === m.id ? " on" : ""}`} onClick={() => setField(f.key, m.id)} aria-label={m.label}>
@@ -1848,7 +1856,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "motif") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <MotifPicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} />
                     </div>
                   );
@@ -1856,7 +1864,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "lettering") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <LetteringPicker value={fieldValues[f.key] || ""} onChange={(v) => {
                         setField(f.key, v);
                         // Clic sur un style-exemple : la grande photo affiche directement cette photo.
@@ -1869,7 +1877,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "design") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <DesignAssistant prompt={fieldValues[f.promptKey] || ""} value={fieldValues[f.key] || ""} onChange={(u) => setField(f.key, u)} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
@@ -1878,7 +1886,7 @@ export default function ProductDetail({ product }) {
                 if (f.type === "lettreFleurie") {
                   return (
                     <div className="field" key={f.key}>
-                      <label>{f.label}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
+                      <label>{etiquetteChamp(f)}{f.optional && <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>}</label>
                       <LettreFleuriePicker value={fieldValues[f.key] || ""} onChange={(v) => setField(f.key, v)} image={f.image} />
                       {f.text && <p className="perso-hint" style={{ marginTop: 8 }}>{f.text}</p>}
                     </div>
@@ -1886,7 +1894,7 @@ export default function ProductDetail({ product }) {
                 }
                 const labelEl = (
                   <label htmlFor={`pf-${f.key}`}>
-                    {f.label}
+                    {etiquetteChamp(f)}
                     {f.optional && (
                       <span style={{ color: "var(--ink-soft)", fontWeight: 400 }}> (facultatif)</span>
                     )}

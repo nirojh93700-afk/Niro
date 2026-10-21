@@ -85,22 +85,13 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
   const aImage = (fv) => Object.entries(fv || {}).some(([k, v]) => !NEUTRES.has(k) && plein(v)
     && (k === cfg.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
   const aTexte = (fv) => engravingExtra(product, fv, variantId).amount - empl(fv) > 0;
-  // Prix du texte le moins cher d'un verre (le champ payant seul, hors face + fond).
-  const prixPremierTexte = (fv) => {
-    let m = 0;
-    for (const [k, v] of Object.entries(fv || {})) {
-      if (NEUTRES.has(k) || !plein(v)) continue;
-      const a = engravingExtra(product, { [k]: v }, variantId).amount;
-      if (a > 0 && (!m || a < m)) m = a;
-    }
-    return m;
-  };
   const cle1 = empreinte(v1);
 
   // Verre 1 (gérant, 21/10/2026 : « il faut choisir entre logo ou texte ») : UNE gravure offerte —
   // l'image / le logo / le modèle s'il y en a un, sinon le premier texte. Chaque texte en plus +3 €.
   const image1 = aImage(v1);
-  const remise1 = verreGrave(v1) && !image1 && aTexte(v1) ? prixPremierTexte(v1) : 0;
+  const kOffert = verreGrave(v1) && !image1 ? texteOffertVerre1(product, v1, variantId) : null;
+  const remise1 = kOffert ? engravingExtra(product, { [kOffert]: v1[kOffert] }, variantId).amount : 0;
   const montant1 = verreGrave(v1) ? arrondi(e1.amount - remise1) : 0;
   const lignes = [];
   if (verreGrave(v1)) {
@@ -123,6 +114,23 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
 
   const total = arrondi(montant1 + complets * PRIX_VERRE_SUIVANT.complet + simples * PRIX_VERRE_SUIVANT.simple + plusEmpl);
   return { total, lignes, nbVerres: n, identiques, differents, vierges, weight: e1.weight || 0, stockIds: e1.stockIds || [] };
+}
+
+/**
+ * Le texte OFFERT sur le verre 1 quand il n'y a ni image, ni logo, ni modèle : le premier champ
+ * payant REMPLI dans l'ordre de la fiche (ou de `candidats`), sinon le premier candidat payant
+ * (pour l'étiquette « offert » avant la saisie). null s'il y a une image (elle est l'offre) ou rien de payant.
+ * Même fonction pour le prix (prixGravureVerres) et les étiquettes des champs : jamais de contradiction.
+ */
+export function texteOffertVerre1(product, fields = {}, variantId = null, candidats = null) {
+  const fv = fields || {};
+  const ordre = candidats || (product?.personalizationFields || []).map((f) => f.key);
+  const payant = (k) => !NEUTRES.has(k) && engravingExtra(product, { [k]: fv[k] ?? "x" }, variantId).amount > 0;
+  const image = Object.entries(fv).some(([k, v]) => !NEUTRES.has(k) && plein(v)
+    && (k === product?.engravingPricing?.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
+  if (image) return null;
+  const cles = [...ordre, ...Object.keys(fv).filter((k) => !ordre.includes(k))];
+  return cles.find((k) => plein(fv[k]) && payant(k)) || cles.find((k) => payant(k)) || null;
 }
 
 /** Texte court du détail, pour la description de la commande (panier, Stripe, e-mails). */

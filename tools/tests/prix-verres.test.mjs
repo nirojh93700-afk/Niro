@@ -1,5 +1,5 @@
 // npm run test-prix-verres — règle de prix de la gravure des verres (16/10/2026).
-import { prixGravureVerres, verreGrave } from "../../src/lib/prixVerres.js";
+import { prixGravureVerres, verreGrave, texteOffertVerre1 } from "../../src/lib/prixVerres.js";
 let ok = 0, ko = 0;
 const t = (nom, cond, info = "") => { if (cond) ok++; else { ko++; console.log("✗", nom, info); } };
 const P = { engravingPricing: { textKeys: ["texte", "prenom", "date", "initiale"], textExtra: 3 } };            // vin / flûte
@@ -33,6 +33,12 @@ t("whisky 1 verre texte seul face+fond = 7", prixGravureVerres(W, U, 1, { texte:
 t("whisky 2 verres texte seul = 0 + 3", prixGravureVerres(W, U, 2, { texte: "Papa" }).total === 3);
 const t1 = prixGravureVerres(W, U, 1, { texte: "Papa" });
 t("détail : premier texte offert", t1.lignes.length === 1 && /premier texte/.test(t1.lignes[0].libelle) && t1.lignes[0].montant === 0, JSON.stringify(t1.lignes));
+const PF = { ...P, personalizationFields: [{ key: "mode" }, { key: "texte" }, { key: "date" }, { key: "police" }] };
+t("étiquette : rien de rempli → le 1er texte de la fiche est l'offert", texteOffertVerre1(PF, { mode: "texte" }) === "texte");
+t("étiquette : seule la date remplie → c'est elle l'offerte", texteOffertVerre1(PF, { mode: "texte", date: "2024" }) === "date");
+t("étiquette : texte + date → le texte", texteOffertVerre1(PF, { mode: "texte", texte: "Léa", date: "2024" }) === "texte");
+t("étiquette : avec une photo → rien d'offert côté texte", texteOffertVerre1(PF, { mode: "photo", photo: "/api/img/a", texte: "Léa" }) === null);
+t("prix et étiquette d'accord (date seule = 0)", prixGravureVerres(PF, U, 1, { mode: "texte", date: "2024" }).total === 0);
 t("verre vierge = pas grave", verreGrave({ police: "playfair" }) === false);
 const r = prixGravureVerres(P, U, 2, {}, [photoTexte, logo]);
 t("le détail liste les lignes", r.lignes.some((l) => /logo et texte/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));

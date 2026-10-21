@@ -2,8 +2,12 @@
 - Complète la règle du 19/10 : sur le **verre 1**, UNE gravure est offerte — l'image / logo / modèle s'il y en a un, SINON le premier texte.
   Chaque texte en plus +3 €. Ex. whisky 1 verre texte seul 19,90 (avant 22,90) · texte + date 22,90 · logo + texte 22,90 (inchangé) ·
   texte seul face + fond 26,90. Les autres verres ne changent pas (+5 / +3). `prixVerres.js` (`remise1`, ligne « Verre 1 · premier texte :
-  offert »), `GrillePrixVerres.jsx`, `npm run test-prix-verres` (25 vérifs). Les libellés des champs gardent « (+3 €) » : c'est le prix
-  d'un texte en plus ; le détail du prix montre l'offre.
+  offert »), `GrillePrixVerres.jsx`, `npm run test-prix-verres` (30 vérifs).
+- **« Il faut que les clients sachent »** : `texteOffertVerre1(product, fields, variantId, candidats)` (prixVerres.js, pur) dit QUEL texte est
+  offert (le premier rempli dans l'ordre de la fiche, sinon le premier) — la MÊME fonction sert au prix et aux étiquettes : le champ offert
+  affiche « (offert) » à la place de « (+3 €) » (`etiquetteChamp` dans `ProductDetail.jsx`, `px` dans `ParcoursGuide.jsx`, prop `verre1`),
+  et une ligne au-dessus des champs : « Verre 1 : votre logo, votre image, votre modèle — ou un texte — est offert. Chaque texte en plus : +3 €.
+  Voir les prix ». Les libellés de `products.js` gardent « (+3 €) » (contrôle `textesPrix` inchangé).
 
 ## 🍷 VERRES : NOUVELLE RÈGLE DE GRAVURE — ✅ EN LIGNE LE 19/10/2026 (gérant : « deuxième verre cinq euros logo et texte, qu'un truc sur les deux trois euros… oui »)
 - Remplace la règle du 16/10 (frais « verres identiques » supprimés). **Verre 1** : logo / image / modèle offert, chaque texte +3 €.
