@@ -237,3 +237,9 @@
 
 - **16/10/2026 — Adresse e-mail mal tapée au paiement** (commande 10OPUHMO, « gmail.comn ») : signaler au panier une adresse
   probablement fausse (gmail.comn, gmial.com, hotmial.fr…) avant d'aller payer. Proposé, pas construit.
+
+## 21/10/2026 — Vitesse du site (audit `docs/audits/2026-10-21-audit-complet.md`)
+- 💡 Accueil = 21 Mo d'images (mur de l'atelier en pleine taille, 48 photos > 300 Ko dans le site) → compresser en WebP ~1200 px + chargement différé (≈ 3 Mo).
+- 💡 Pages rendues à la demande sans cache (`no-store`, 1–2 s avant le premier octet) → cache 60 s côté serveur.
+- 💡 `minInstances: 0` dans `apphosting.yaml` → `1` pour supprimer le démarrage à froid (~10 €/mois, à confirmer).
+- 💡 16 pages sans h1 (panier, carte cadeau, /offrir/<occasion>, pages légales…) ; flûte / whisky : « Lot de 4 — livraison offerte » à aligner sur vin / cocktail (« Lot de 4 »).
