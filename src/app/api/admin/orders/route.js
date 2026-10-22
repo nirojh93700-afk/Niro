@@ -64,6 +64,20 @@ export async function POST(req) {
     return Response.json({ ok, avant: order.customerEmail || "", apres: email });
   }
 
+  // Changer le point relais d'une commande (22/10/2026, renvoi du verre cassé #1ZGOWMIL vers le point
+  // choisi par la cliente). L'adresse du client reste celle du paiement (contact) ; l'ancienne
+  // livraison est gardée dans `livraisonAvant`.
+  if (id && body?.action === "relais") {
+    const relaisPoint = String(body.relaisPoint || "").trim().slice(0, 300);
+    if (!relaisPoint) return Response.json({ ok: false, error: "Point relais manquant." }, { status: 400 });
+    const order = await getSiteOrder(id);
+    if (!order) return Response.json({ ok: false, error: "Commande introuvable." }, { status: 404 });
+    const patch = { relaisPoint, shippingMethod: String(body.shippingMethod || "Point relais Mondial Relay").slice(0, 120) };
+    if (!order.livraisonAvant) patch.livraisonAvant = { relaisPoint: order.relaisPoint || "", shippingMethod: order.shippingMethod || "", at: Date.now() };
+    const ok = await updateSiteOrder(id, patch);
+    return Response.json({ ok, patch });
+  }
+
   // Envoyer MAINTENANT la demande d'avis au client (bouton admin, à la demande).
   // Utilise le même e-mail (avec lien direct vers la fiche produit #avis) que la
   // règle automatique, mais immédiatement.
