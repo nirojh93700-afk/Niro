@@ -8,9 +8,10 @@
 // =============================================================================
 
 import { useMemo, useState } from "react";
-import { getProductBySlug } from "@/lib/products";
+import { getProductBySlug, products as CATALOGUE } from "@/lib/products";
 import { VARIANT_COSTS } from "@/lib/productCosts";
 import VarBadge from "@/components/admin/VarBadge";
+import { apparierSpec } from "@/lib/orderSpec";
 
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
 const jour = (t) => { try { return new Date(t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" }); } catch { return ""; } };
@@ -38,15 +39,34 @@ function stocksCommande(o) {
 }
 
 // Ratés déjà saisis pour un article d'une commande (somme des coûts pour le gain).
-export function ratesDe(mat, orderId, slug, verre, variantTitle) {
+export function ratesDe(mat, orderId, slug, verre, variantTitle, nom) {
   return (mat?.rates || []).filter((r) => r.orderId === orderId && (!slug || r.slug === slug)
+    && (slug || !nom || r.name === nom)
     && (!verre || !r.verre || r.verre === verre)
     && (!variantTitle || !r.variantTitle || r.variantTitle === variantTitle));
 }
 export const coutRates = (liste) => (liste || []).reduce((s, r) => s + (Number(r.cout) || 0), 0);
 
+// Produit du catalogue qui porte une ligne de stock (lignes de devis : pas d'identifiant produit).
+function produitDuStock(sid) {
+  if (!sid) return "";
+  return CATALOGUE.find((p) => (p.variants || []).some((v) => (v.stockId || v.id) === sid))?.slug || "";
+}
+const CHOIX_PRODUITS = CATALOGUE.filter((p) => (p.variants || []).length)
+  .map((p) => ({ slug: p.slug, name: p.name || p.slug })).sort((a, b) => a.name.localeCompare(b.name, "fr"));
+
 export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
-  const product = getProductBySlug(item.slug);
+  // Ligne de devis (sur mesure) : pas de produit enregistré → on le retrouve par la ligne de stock
+  // retirée au paiement s'il n'y en a qu'une, sinon le gérant le choisit dans la liste.
+  const sansProduit = !item.slug;
+  const slugDevis = useMemo(() => {
+    if (!sansProduit) return "";
+    const payes = stocksCommande(o);
+    return produitDuStock(item.stockId) || (payes.length === 1 ? produitDuStock(payes[0]) : "");
+  }, [sansProduit, o, item.stockId]);
+  const [slugChoisi, setSlugChoisi] = useState(item.slug || slugDevis);
+  const slug = item.slug || slugChoisi;
+  const product = getProductBySlug(slug);
   const lignes = useMemo(() => lignesStock(product), [product]);
   const stock = mat?.stock || {};
   // Ligne proposée : celle que la commande a vraiment décomptée au paiement (bonne taille),
@@ -70,10 +90,18 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
-  const liste = ratesDe(mat, o.id, item.slug, item.verre, item.variantTitle);
+  const liste = ratesDe(mat, o.id, item.slug, item.verre, item.variantTitle, item.name);
   const unit = Number(String(cout).replace(",", ".")) || 0;
   const valeur = typeof stock[sid] === "number" ? stock[sid] : null;
 
+  function choisirProduit(s2) {
+    setSlugChoisi(s2);
+    const p2 = getProductBySlug(s2);
+    const ls = lignesStock(p2);
+    const l = ls.find((x) => stocksCommande(o).includes(x.sid)) || ls[0];
+    const c = l ? (VARIANT_COSTS[l.sid] ?? (Number(p2?.cost) > 0 ? Number(p2.cost) : null)) : null;
+    setSid(l?.sid || ""); setCout(c == null ? "" : String(c).replace(".", ","));
+  }
   function ouvrir() { setQty(1); setSid(defSid); setCout(coutDe(defSid)); setNote(""); setErr(""); setOuvert(true); }
   async function appeler(body) {
     setBusy(true); setErr("");
@@ -85,8 +113,9 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
     } catch (e) { setErr(e.message); return null; } finally { setBusy(false); }
   }
   async function enregistrer() {
+    if (sansProduit && !product) { setErr("Choisissez d'abord le produit raté."); return; }
     const d = await appeler({
-      action: "rate", orderId: o.id, ref: o.ref || "", slug: item.slug, name: item.name || product?.name || "",
+      action: "rate", orderId: o.id, ref: o.ref || "", slug, name: item.name || product?.name || "",
       variantTitle: item.variantTitle || "", verre: item.verre || null, stockId: sid, qty, cout: Math.round(unit * qty * 100) / 100, note,
     });
     if (d) { setOuvert(false); onSaved?.(); }
@@ -119,6 +148,15 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
       ) : (
         <div className="rt-form">
           <div className="rt-titre">Pièce ratée : {item.name || product?.name}<VarBadge texte={item.variantDetail || item.variantTitle} />{item.verre ? ` (verre ${item.verre})` : ""}</div>
+          {sansProduit ? (
+            <label className="rt-ligne">
+              <span>Quel produit ? (commande sur devis)</span>
+              <select value={slugChoisi} onChange={(e) => choisirProduit(e.target.value)}>
+                <option value="">— Choisir le produit raté —</option>
+                {CHOIX_PRODUITS.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
+              </select>
+            </label>
+          ) : null}
           <div className="rt-ligne">
             <span>Combien de pièces ratées ?</span>
             <span className="rt-qty">
@@ -136,7 +174,7 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
             </label>
           ) : null}
           <p className="rt-info">
-            {valeur === null ? "Ce stock n'est pas suivi (illimité) : rien ne sera retiré, mais le coût perdu est gardé."
+            {sansProduit && !product ? "Choisissez le produit pour savoir quel stock baisser." : valeur === null ? "Ce stock n'est pas suivi (illimité) : rien ne sera retiré, mais le coût perdu est gardé."
               : <>Stock {valeur} → <b>{Math.max(0, valeur - qty)}</b> après l&apos;enregistrement.</>}
           </p>
           <label className="rt-ligne">
@@ -151,10 +189,31 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
           {err ? <div className="notice">{err}</div> : null}
           <div className="rt-actions">
             <button type="button" className="btn btn-outline" onClick={() => setOuvert(false)}>Annuler</button>
-            <button type="button" className="btn btn-gold" disabled={busy} onClick={enregistrer}>{busy ? "…" : "Enregistrer le raté"}</button>
+            <button type="button" className="btn btn-gold" disabled={busy || (sansProduit && !product)} onClick={enregistrer}>{busy ? "…" : "Enregistrer le raté"}</button>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Un bouton « Raté — à refaire » par article d'une commande, le MÊME partout (file de production,
+// fiche complète, atelier, commandes sur devis), quel que soit le statut sauf annulée / remboursée
+// (22/10/2026, gérant : « il faut que tout soit pareil… j'ai raté une flûte, je mets où »).
+export function RatesCommande({ o, mat, adminKey, onSaved }) {
+  if (["annulee", "remboursee"].includes(o.status)) return null;
+  const specParLigne = apparierSpec(o.items, o.spec);
+  const lignes = (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
+    .filter(({ it }) => !/livraison|point relais|retrait|exp[ée]dition/i.test(it.name || ""));
+  if (!lignes.length) return null;
+  return (
+    <div className="rt-items">
+      {lignes.map(({ it, s }, i) => (
+        <div key={i}>
+          {lignes.length > 1 ? <div className="rt-nom">{it.name}</div> : null}
+          <BoutonRate o={o} item={{ slug: it.slug || "", name: it.name, stockId: it.stockId || "", variantTitle: s?.variantTitle || "", variantId: s?.variantId, variantDetail: s?.variantDetail || it.variantDetail }} mat={mat} adminKey={adminKey} onSaved={onSaved} />
+        </div>
+      ))}
     </div>
   );
 }

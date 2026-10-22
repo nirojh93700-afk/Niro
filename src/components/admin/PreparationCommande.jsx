@@ -8,28 +8,14 @@
 // =============================================================================
 
 import { BlocConditionnement } from "@/components/admin/Conditionnement";
-import BoutonRate from "@/components/admin/Rates";
-import { apparierSpec } from "@/lib/orderSpec";
+import { RatesCommande } from "@/components/admin/Rates";
 
 export default function PreparationCommande({ o, mat, adminKey, onCond, onMat }) {
   const statut = o.status || "a_preparer";
   if (["annulee", "remboursee"].includes(statut)) return null;
-  const specParLigne = apparierSpec(o.items, o.spec);
-  const lignes = (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
-    .filter(({ it }) => it.slug && !/livraison|point relais|retrait/i.test(it.name || ""));
-  const enCours = ["a_preparer", "en_gravure"].includes(statut);
   return (
     <div style={{ margin: "0 0 10px" }}>
-      {enCours && lignes.length ? (
-        <div className="rt-items">
-          {lignes.map(({ it, s }, i) => (
-            <div key={i}>
-              {lignes.length > 1 ? <div className="rt-nom">{it.name}</div> : null}
-              <BoutonRate o={o} item={{ slug: it.slug, name: it.name, variantTitle: s?.variantTitle || "", variantId: s?.variantId, variantDetail: s?.variantDetail || it.variantDetail }} mat={mat} adminKey={adminKey} onSaved={onMat} />
-            </div>
-          ))}
-        </div>
-      ) : null}
+      <RatesCommande o={o} mat={mat} adminKey={adminKey} onSaved={onMat} />
       <BlocConditionnement o={o} mat={mat} onOpen={() => onCond(o)} />
     </div>
   );

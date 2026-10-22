@@ -26,7 +26,7 @@ import { formatEuro } from "@/lib/format";
 import PhotosEmballage from "@/components/admin/PhotosEmballage";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
-import BoutonRate from "@/components/admin/Rates";
+import BoutonRate, { RatesCommande } from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
@@ -255,6 +255,9 @@ export default function AtelierPage() {
               <FicheDevis order={o} />
               <MessagesEmail email={o.customerEmail} depuis={o.createdAt} adminKey={key} />
               <PhotosEmail email={o.customerEmail} adminKey={key} />
+              {/* Pièce ratée / conditionnement : comme pour les autres commandes (22/10/2026). */}
+              <RatesCommande o={o} mat={mat} adminKey={key} onSaved={() => loadMat(key)} />
+              <BlocConditionnement o={o} mat={mat} onOpen={() => setCondOrder(o)} />
             </div>
           ))}
         </section>

@@ -1,3 +1,9 @@
+## ✗ « RATÉ — À REFAIRE » : LE MÊME BOUTON PARTOUT — 22/10/2026 (gérant : « il faut que tout soit pareil… j'ai raté une flûte, je mets où »)
+- `RatesCommande` (`src/components/admin/Rates.jsx`) = un bouton par article, utilisé par la file de production (TOUTES les cartes, expédiées
+  et terminées comprises), la fiche complète (`PreparationCommande`) et l'atelier (articles + commandes SUR DEVIS, qui n'avaient rien).
+  Tout statut sauf annulée / remboursée. Ligne de devis sans produit : le produit se retrouve par la ligne de stock payée, sinon il le
+  choisit dans une liste. ⛔ Tout nouvel écran de commande passe par `RatesCommande`, jamais un bouton recopié avec ses propres conditions.
+
 ## 👁️ MASQUER UNE CATÉGORIE OU UN RAYON ENTIER — ✅ EN LIGNE LE 22/10/2026 (« applique », maquette https://claude.ai/artifact/Poz1FxBbtpTtGWhFi16nk3)
 - Gestion → Catalogue → **Visibilité sur le site** (`/gestion/visibilite`, API `/api/admin/visibilite`) : interrupteur par catégorie (univers)
   et par rayon, fenêtre de confirmation (produits qui partent, produit rangé aussi ailleurs, onglet du menu), « Masqué depuis le … ».

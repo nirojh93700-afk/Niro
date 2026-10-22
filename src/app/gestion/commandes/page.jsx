@@ -18,7 +18,7 @@ import PageHead from "@/components/admin/PageHead";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
-import BoutonRate from "@/components/admin/Rates";
+import { RatesCommande } from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
 import { modeEnvoi } from "@/lib/etiquettes";
 
@@ -295,23 +295,8 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         })()}
       </ul>
 
-      {/* Pièce ratée / à refaire (12/10/2026) : un bouton par article tant que la commande est en cours. */}
-      {!compact && ["a_preparer", "en_gravure"].includes(statut) ? (() => {
-        const specParLigne = apparierSpec(o.items, o.spec);
-        const lignes = (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
-          .filter(({ it }) => it.slug && !/livraison|point relais|retrait/i.test(it.name || ""));
-        if (!lignes.length) return null;
-        return (
-          <div className="rt-items">
-            {lignes.map(({ it, s }, i) => (
-              <div key={i}>
-                {lignes.length > 1 ? <div className="rt-nom">{it.name}</div> : null}
-                <BoutonRate o={o} item={{ slug: it.slug, name: it.name, variantTitle: s?.variantTitle || "", variantId: s?.variantId, variantDetail: s?.variantDetail || it.variantDetail }} mat={mat} adminKey={adminKey} onSaved={onMat} />
-              </div>
-            ))}
-          </div>
-        );
-      })() : null}
+      {/* Pièce ratée / à refaire : le même bouton partout, tout statut sauf annulée / remboursée (22/10/2026). */}
+      <RatesCommande o={o} mat={mat} adminKey={adminKey} onSaved={onMat} />
 
       {!compact && o.demande ? (
         <div className="file-note-box">
