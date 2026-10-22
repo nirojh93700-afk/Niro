@@ -319,3 +319,5 @@ En attente de SA décision :
   envois programmés, vers contact.nivcreation@gmail.com) : jeudi 28/01/2027 9 h et vendredi 26/02/2027 9 h.
 - **🍹 Verre à cocktail 33 cl (21/10/2026)** : maquette faite (captures `docs/maquettes/verre-cocktail-33cl-*.png`), choix « Taille du verre » 17 cl / 33 cl comme le verre à vin, mêmes photos et même aperçu. 33 cl : 19,90 / 37,90 / 71,90 € (coût 1,80 €/verre, Metro 19/10). ✅ **EN LIGNE le 21/10/2026** (`f87e2335`). Même jour : verre 1 = logo OU un texte offert, étiquettes « (offert) » (poussé sur son « Ok »).
 - **💡 22/10/2026 — Lampe LED PSG** : 3 nouvelles photos (salon sombre / blanc / chaleureux) à la place des anciennes, rien d'autre changé. 1er déploiement Firebase en échec, relancé.
+
+- 22/10/2026 : 1er déploiement de « Visibilité sur le site » en échec côté Firebase (build local OK), relancé.
