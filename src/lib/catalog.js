@@ -31,6 +31,7 @@ function applyOverride(product, ov, images, promos) {
     }
     if (ov.badge === "none") p.badge = ""; // "Aucun" choisi dans l'admin → retire le badge du catalogue
     if (ov.hidden !== undefined) p.hidden = Boolean(ov.hidden); // l'admin décide (publier/masquer) — prime TOUJOURS sur le code
+    if (product.retire) p.hidden = true; // produit retiré du site sur ordre du gérant : rien dans Gestion ne le republie
     if (ov.featured !== undefined) p.featured = Boolean(ov.featured); // mis en avant sur l'accueil (réglé dans l'admin)
     if (ov.pickup !== undefined) p.pickup = Boolean(ov.pickup); // retrait en main propre possible (réglé dans l'admin)
     if (ov.cost !== undefined && ov.cost !== "") p.cost = Number(ov.cost) || 0; // coût de revient (admin : marge)

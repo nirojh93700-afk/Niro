@@ -3512,6 +3512,7 @@ export const products = [
     pickup: false, // envoi seul (pas de retrait)
     letter: false,
     hidden: true, // retirée du site le 22/10/2026 (gérant : « enlève cet article »)
+    retire: true, // reste masquée même si Gestion la marque « visible »
     cardImage: "/produits/arbre-vie-rond-1.jpg",
     subcategory: "lampes",
     category: "deco",
