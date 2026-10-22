@@ -13,7 +13,7 @@ const BADGES = [
   { ic: "💬", t: "On vous accompagne", d: "Une question ? Réponse rapide par message" },
 ];
 
-// « Nos réalisations » (22/10/2026, gérant : « je peux même pas cliquer sur les photos pour aller dans les
+// « Nos coups de cœur » (22/10/2026, gérant : « je peux même pas cliquer sur les photos pour aller dans les
 // articles, et il y a un article qui n'est même pas sur le site ») : chaque photo mène à la fiche de son
 // produit, et la page produit ne garde que les produits EN VENTE (masqués écartés) — d'où la liste de
 // candidats plus longue que les 4 cases. Le tri se fait côté serveur (realisationsVisibles).
@@ -55,7 +55,7 @@ export default function TrustSection({ realisations = [] }) {
 
       {realisations.length > 0 && (
         <div className="cf-real">
-          <div className="cf-real-h">Nos réalisations</div>
+          <div className="cf-real-h">Nos coups de cœur</div>
           <div className="cf-shots">
             {realisations.map((r) => (
               <a key={r.slug} className="cf-shot" href={`/produit/${r.slug}`} aria-label={r.name || "Voir la création"}>

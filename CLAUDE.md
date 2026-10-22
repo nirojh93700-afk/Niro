@@ -1,5 +1,5 @@
 ## 🖼️ PHOTOS DE PRODUITS : TOUJOURS CLIQUABLES, JAMAIS UN PRODUIT MASQUÉ — 22/10/2026 (gérant : « quand je te demande de faire une audit… je peux même pas cliquer sur les photos pour aller dans les articles, et il y a un article que j'ai même pas mis, t'as laissé la photo »)
-- « Nos réalisations » (bas de CHAQUE fiche, `TrustSection.jsx`) montrait 4 photos fixes, sans lien, dont la Lampe Arbre de Vie MASQUÉE.
+- « Nos coups de cœur » (ex « Nos réalisations », bas de CHAQUE fiche, `TrustSection.jsx`) montrait 4 photos fixes, sans lien, dont la Lampe Arbre de Vie MASQUÉE.
   Maintenant : `REALISATIONS` (candidats) + `realisationsVisibles(catalogue, slug)` côté serveur (`produit/[handle]/page.jsx`) → seulement
   des produits EN VENTE, jamais la fiche ouverte, chaque photo = lien vers sa fiche.
 - Aussi : tuile du guide « Déco lumineuse » sur `/idees` (`imageGuideVisible`, photo prise dans une carte dont le produit est en vente),
