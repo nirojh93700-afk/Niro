@@ -3511,7 +3511,7 @@ export const products = [
     weight: 400, // panneau bois rond + socle + pile, emballage protégé
     pickup: false, // envoi seul (pas de retrait)
     letter: false,
-    hidden: false,
+    hidden: true, // retirée du site le 22/10/2026 (gérant : « enlève cet article »)
     cardImage: "/produits/arbre-vie-rond-1.jpg",
     subcategory: "lampes",
     category: "deco",
