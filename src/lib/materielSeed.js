@@ -262,7 +262,7 @@ export const MATERIEL_SEED = [
     "pour": "Seulement les bracelets en boîte allongée (Pack Bracelet) ; envoyé plié à plat",
     "achat": "Amazon, YAAVAAW · acheté le 19/10/2026",
     "court": "Sac blanc et or",
-    "photo": "",
+    "photo": "/materiel/sac-blanc-or.webp",
     "stock": 6,
     "achete": 6,
     "sug": false

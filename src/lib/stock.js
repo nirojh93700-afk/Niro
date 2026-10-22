@@ -2684,7 +2684,9 @@ function materielListe(data) {
   // Un article ajouté au code après le premier enregistrement (ex. sac blanc et or, 19/10/2026) apparaît
   // aussi : on ne supprime jamais un article (on l'archive), donc un id absent de la base est un nouveau.
   const ids = new Set(saved.map((x) => x.id));
-  return [...saved.map((x) => ({ ...x })), ...MATERIEL_SEED.filter((x) => !ids.has(x.id)).map((x) => ({ ...x }))];
+  // Photo ajoutée au code après coup (sac blanc et or, 22/10/2026) : reprise si la base n'en a pas.
+  const photoCode = new Map(MATERIEL_SEED.filter((x) => x.photo).map((x) => [x.id, x.photo]));
+  return [...saved.map((x) => ({ ...x, photo: x.photo || photoCode.get(x.id) || x.photo })), ...MATERIEL_SEED.filter((x) => !ids.has(x.id)).map((x) => ({ ...x }))];
 }
 const numOuNull = (v) => (v === null || v === "" || v === undefined ? null : Number.isFinite(Number(v)) ? Number(v) : null);
 
