@@ -322,3 +322,5 @@ En attente de SA décision :
 - **💡 22/10/2026 — Lampe LED PSG** : 3 nouvelles photos (salon sombre / blanc / chaleureux) à la place des anciennes, rien d'autre changé. 1er déploiement Firebase en échec, relancé.
 
 - 22/10/2026 : 1er déploiement de « Visibilité sur le site » en échec côté Firebase (build local OK), relancé.
+
+- **⭐ Demandes d'avis du 22/10/2026 (19 h 10, par le site, sur l'ordre du gérant)** : 7 envoyées, toutes vues dans la boîte d'envoi — Lorraine Allain 1ZNESNSV · Dembele 1EPMUGMO · Nellycha Mafula 0ZH3LP9M · Marie Randriamalaza 02JTG1UH · Jessica Nollez 1PUMYQBL · Inès Doumi 0JCPPKTU · Anthony Giot 1MR8WS8X. Toutes les commandes plus anciennes avaient déjà reçu la leur. Pas envoyé : Laura Brimeux 0ZGGAEOJ (commande sur devis : le formulaire refuserait son avis), Jankowski 1P5XZKRP (dossier cristal délicat), Enes Varol 1S9IOON5 (bracelet jamais reçu, toujours à l'atelier), Lorenzo Franchi 1YPJVC5R / 0GTB1LZ5 (colis perdu, retrait à Cabourg non confirmé), colis partis après le 15/10. ⛔ Ne plus renvoyer de demande à ces 7.
