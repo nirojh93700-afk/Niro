@@ -30,15 +30,16 @@ export default async function AProposPage() {
             </p>
             <Link href="/boutique" className="btn btn-gold">Découvrir nos créations</Link>
           </div>
-          <div className="hero-visual">
+          {/* La photo mène à la fiche du produit qu'elle montre (22/10/2026). */}
+          <Link href="/produit/menu-de-mariage-bois-grave" className="hero-visual" aria-label="Menu de mariage en bois gravé">
             <Image
               src={getProductBySlug("menu-de-mariage-bois-grave").images[0]}
-              alt="Atelier Niv Création"
+              alt="Menu de mariage en bois gravé — Niv Création"
               width={700}
               height={700}
               priority
             />
-          </div>
+          </Link>
         </div>
       </section>
 

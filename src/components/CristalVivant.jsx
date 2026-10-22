@@ -83,7 +83,7 @@ export default function CristalVivant({ products = [] }) {
               <div className="cvb-badge">En direct de l&apos;atelier</div>
               <div className="cvb-ghost" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <div className="cvb-ph"><img src="/produits/cristal-v-couple.jpg" alt="" /><div className="cvb-laser" /></div>
+              <a className="cvb-ph" href="/produit/cristal-photo-3d-vertical" aria-label="Cristal photo 3D vertical" style={{ display: "block" }}><img src="/produits/cristal-v-couple.jpg" alt="Cristal photo 3D vertical" /><div className="cvb-laser" /></a>
               <div className="cvb-glow" />
               <div className="cvb-cap" dangerouslySetInnerHTML={{ __html: CAPS[0] }} />
             </div>

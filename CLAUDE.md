@@ -1,3 +1,13 @@
+## 🖼️ PHOTOS DE PRODUITS : TOUJOURS CLIQUABLES, JAMAIS UN PRODUIT MASQUÉ — 22/10/2026 (gérant : « quand je te demande de faire une audit… je peux même pas cliquer sur les photos pour aller dans les articles, et il y a un article que j'ai même pas mis, t'as laissé la photo »)
+- « Nos réalisations » (bas de CHAQUE fiche, `TrustSection.jsx`) montrait 4 photos fixes, sans lien, dont la Lampe Arbre de Vie MASQUÉE.
+  Maintenant : `REALISATIONS` (candidats) + `realisationsVisibles(catalogue, slug)` côté serveur (`produit/[handle]/page.jsx`) → seulement
+  des produits EN VENTE, jamais la fiche ouverte, chaque photo = lien vers sa fiche.
+- Aussi : tuile du guide « Déco lumineuse » sur `/idees` (`imageGuideVisible`, photo prise dans une carte dont le produit est en vente),
+  photo d'en-tête des pages univers (`R.lienPhoto`), photo de `/a-propos`, photo animée de `/cristaux` → liens vers leur fiche.
+- ✅ **CONTRÔLE AJOUTÉ À L'AUDIT : `npm run audit-photos`** (`tools/audit-photos.mjs`, `--site` possible) : lit tout le plan du site, signale
+  ❌ toute photo d'un produit qui n'est pas en vente et ⚠️ toute photo de produit sans lien vers sa fiche (hors galerie de la fiche et tuiles
+  de choix). ⛔ **« Vérifie mon site » = `node tools/audit-site.mjs` ET `npm run audit-photos`**, les deux, toujours.
+
 ## 🍷 VERRE 1 : LOGO **OU** UN TEXTE OFFERT — 21/10/2026 (gérant : « si mettre qu'un texte c'est gratuit… il faut choisir entre logo ou texte »)
 - Complète la règle du 19/10 : sur le **verre 1**, UNE gravure est offerte — l'image / logo / modèle s'il y en a un, SINON le premier texte.
   Chaque texte en plus +3 €. Ex. whisky 1 verre texte seul 19,90 (avant 22,90) · texte + date 22,90 · logo + texte 22,90 (inchangé) ·

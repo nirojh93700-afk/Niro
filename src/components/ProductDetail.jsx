@@ -65,7 +65,7 @@ const ENGRAVE_PREVIEW = "#3a2f1d";
 // l'atelier) : elles n'ont pas droit à l'argument « fait main ».
 const PIECES_ACHETEES = ["couverts-enfants-personnalises"];
 
-export default function ProductDetail({ product }) {
+export default function ProductDetail({ product, realisations = [] }) {
   const { addItem } = useCart();
   const [activeImg, setActiveImg] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
@@ -2283,7 +2283,7 @@ export default function ProductDetail({ product }) {
         </div>
       </div>
 
-      <TrustSection />
+      <TrustSection realisations={realisations} />
 
       {(any3d || product.crystal3d) && !isWide && showMini && (photoSrc || previewLines.length > 0 || !product.crystal3d) && (
         <div className={`engrave3d-mini${product.crystal3d ? (crystalZone ? " crystal crystal-real" : " crystal") : ""}`}>

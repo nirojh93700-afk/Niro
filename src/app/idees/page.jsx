@@ -1,6 +1,7 @@
 // Sommaire des guides « Idées & conseils » — /idees
 import Link from "next/link";
-import { getGuides } from "@/lib/guides";
+import { getGuides, imageGuideVisible } from "@/lib/guides";
+import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -11,8 +12,11 @@ export const metadata = {
   alternates: { canonical: "/idees" },
 };
 
-export default function IdeesPage() {
-  const guides = getGuides();
+export default async function IdeesPage() {
+  // Photo de chaque tuile : jamais celle d'un produit masqué (catalogue en direct).
+  let visibles = null;
+  try { visibles = new Set((await getCatalog()).map((p) => p.slug)); } catch { /* garde les photos prévues */ }
+  const guides = getGuides().map((g) => (visibles ? { ...g, image: imageGuideVisible(g, visibles) } : g));
   return (
     <>
       <header className="guide-hero">

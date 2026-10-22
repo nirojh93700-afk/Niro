@@ -19,6 +19,7 @@
     "test-stats": "node --import ./tools/alias-register.mjs tools/tests/stats-visites.test.mjs",
     "test-etiquettes": "node --import ./tools/alias-register.mjs tools/tests/etiquettes.test.mjs",
     "test-materiel": "node --import ./tools/alias-register.mjs tools/tests/materiel.test.mjs",
+    "audit-photos": "node --import ./tools/alias-register.mjs tools/audit-photos.mjs",
     "test-prix-verres": "node --import ./tools/alias-register.mjs tools/tests/prix-verres.test.mjs",
     "test-textes-prix": "node --import ./tools/alias-register.mjs tools/tests/textes-prix.test.mjs",
     "test-consignes": "node --import ./tools/alias-register.mjs tools/tests/consignes.test.mjs",

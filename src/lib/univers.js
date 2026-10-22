@@ -182,7 +182,12 @@ export function rangerCatalogue(catalog) {
     count: cartes.size,
   };
   const carteDe = (s) => cartes.get(s) || null;
-  return { univers, boutique, home, cartes: [...cartes.values()], carteDe, getUnivers: (id) => (id === "boutique" ? boutique : univers.find((u) => u.id === id) || null) };
+  // Photo d'en-tête d'un univers → fiche du produit qu'elle montre (22/10/2026 : toute photo de produit
+  // doit mener à sa fiche). Seulement les produits du catalogue en direct (un produit masqué n'y est pas).
+  const photos = new Map();
+  for (const p of catalog) for (const i of [p.cardImage, imageDe(p), ...(p.images || [])]) if (i && !photos.has(i)) photos.set(i, p.slug);
+  const lienPhoto = (img) => { const c = cartes.get(photos.get(img)); return c ? { href: c.href, name: c.name } : null; };
+  return { univers, boutique, home, cartes: [...cartes.values()], carteDe, lienPhoto, getUnivers: (id) => (id === "boutique" ? boutique : univers.find((u) => u.id === id) || null) };
 }
 
 // Cartes « Bientôt » des puzzles (non cliquables, pas encore en vente).

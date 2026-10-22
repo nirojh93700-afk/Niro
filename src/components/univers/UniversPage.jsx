@@ -32,8 +32,15 @@ export default async function UniversPage({ uid, quiInitial = "" }) {
               <p className="mxup-count">{u.count} créations</p>
             </div>
             <figure className="mxup-fig">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={u.img} alt="" />
+              {R.lienPhoto(u.img) ? (
+                <a href={R.lienPhoto(u.img).href} aria-label={R.lienPhoto(u.img).name} style={{ display: "contents" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={u.img} alt={R.lienPhoto(u.img).name} />
+                </a>
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={u.img} alt="" />
+              )}
             </figure>
           </header>
           <PageUnivers uid={uid} rayons={rayons} pourqui={!!u.pourqui} pourquiLabels={POURQUI} quiInitial={quiInitial}

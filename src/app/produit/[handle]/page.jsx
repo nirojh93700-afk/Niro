@@ -2,6 +2,7 @@ import { lienCategorie } from "@/lib/lienCategorie";
 import { notFound } from "next/navigation";
 import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
 import ProductDetail from "@/components/ProductDetail";
+import { realisationsVisibles } from "@/components/TrustSection";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
@@ -61,8 +62,11 @@ export default async function ProductPage({ params, searchParams }) {
 
   // Ventes croisées : 4 autres produits (même catégorie en priorité).
   let related = [];
+  let realisations = [];
   try {
-    const all = (await getCatalog()).filter((p) => p.slug !== product.slug);
+    const catalogue = await getCatalog();
+    realisations = realisationsVisibles(catalogue, product.slug);
+    const all = catalogue.filter((p) => p.slug !== product.slug);
     const sameCat = all.filter((p) => p.category === product.category);
     related = [...sameCat, ...all.filter((p) => p.category !== product.category)].slice(0, 4);
     const ratings = await getRatingSummaries().catch(() => ({}));
@@ -195,7 +199,7 @@ export default async function ProductPage({ params, searchParams }) {
           Aperçu privé — ce produit n'est pas encore publié (invisible pour les clients).
         </div>
       )}
-      <ProductDetail product={product} />
+      <ProductDetail product={product} realisations={realisations} />
       {guide && (
         <div className="guide-lien-fiche">
           <div className="container">

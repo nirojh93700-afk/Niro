@@ -1,7 +1,7 @@
 // Pages « Idées & conseils » (/idees/…) — guides de conseil pour le référencement.
 // Le contenu vient des maquettes validées (docs/maquettes/guide-*.html), converti
 // par tools/generer-guides.mjs dans src/lib/guidesContent.js.
-import { GUIDES_BLOCS, GUIDES_META } from "./guidesContent";
+import { GUIDES_BLOCS, GUIDES_META, GUIDES_HTML } from "./guidesContent";
 
 // Ordre d'affichage sur /idees + titre & description pour Google.
 export const GUIDES = [
@@ -150,6 +150,20 @@ export function getGuide(slug) {
 
 export function getGuides() {
   return GUIDES.map((g) => getGuide(g.slug)).filter(Boolean);
+}
+
+/**
+ * Photo de la tuile d'un guide (sommaire /idees) : jamais celle d'un produit masqué ou retiré
+ * (22/10/2026 : la lampe Arbre de Vie, masquée, restait en tuile). On garde la photo prévue si son
+ * produit est en vente, sinon la photo de la première carte du guide dont le produit est en vente.
+ */
+export function imageGuideVisible(guide, slugsVisibles) {
+  const html = (GUIDES_HTML && GUIDES_HTML[guide.slug]) || "";
+  const cartes = [...html.matchAll(/<a class="card" href="\/produit\/([\w-]+)"[^>]*>\s*<div class="ph"><img src="([^"]+)"/g)].map((m) => ({ slug: m[1], src: m[2] }));
+  const ok = (c) => slugsVisibles.has(c.slug);
+  const prevue = cartes.find((c) => c.src === guide.image);
+  if (!prevue || ok(prevue)) return guide.image;
+  return (cartes.find(ok) || {}).src || "";
 }
 
 // Guide le plus pertinent pour une fiche produit (lien discret sous la fiche).
