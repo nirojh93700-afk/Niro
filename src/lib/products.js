@@ -3568,6 +3568,7 @@ export const products = [
       "/produits/veilleuse-prenom-2.jpg",
       "/produits/veilleuse-prenom-3.jpg",
       "/produits/veilleuse-prenom-4.jpg",
+      "/produits/veilleuse-prenom-5.jpg",
     ],
     personalizationFields: [
       { key: "couleurLed", type: "select", label: "Couleur de la lumière", options: [
