@@ -3434,7 +3434,7 @@ export const products = [
     pickup: false, // envoi seul (pas de retrait)
     letter: false, // colis (volumineux et fragile)
     hidden: false, // PUBLIÉ
-    cardImage: "/produits/psg-lampe-bleu.jpg",
+    cardImage: "/produits/psg-lampe-salon-sombre.jpg",
     subcategory: "lampes",
     category: "deco",
     type: "Lampe LED déco",
@@ -3442,9 +3442,9 @@ export const products = [
     personalizable: false,
     title: "Lampe LED Paris Saint-Germain — décoration lumineuse gravée, socle bois",
     images: [
-      "/produits/psg-lampe-bleu.jpg",
-      "/produits/psg-lampe-couleur.jpg",
-      "/produits/psg-lampe-ambiance.jpg",
+      "/produits/psg-lampe-salon-sombre.jpg",
+      "/produits/psg-lampe-salon-blanc.jpg",
+      "/produits/psg-lampe-salon-chaleureux.jpg",
     ],
     variants: [
       { id: "lampe-psg-standard", title: "Lampe LED PSG", price: 29.90 },
