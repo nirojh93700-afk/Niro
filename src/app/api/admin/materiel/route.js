@@ -54,7 +54,7 @@ export async function GET(req) {
       let produit = 0, manque = false;
       for (const it of order.items || []) {
         if (/livraison|point relais|retrait/i.test(it.name || "")) continue;
-        const c = unitCostForItem(it, bySlug[it.slug]);
+        const c = unitCostForItem(it, bySlug[it.slug], order.stock);
         if (c == null) { if (it.slug) manque = true; continue; }
         produit += c * (Number(it.quantity) || 1);
       }
@@ -81,7 +81,7 @@ export async function POST(req) {
     let produit = 0;
     for (const it of order.items || []) {
       if (/livraison|point relais|retrait/i.test(it.name || "")) continue;
-      const c = unitCostForItem(it, bySlug[it.slug]);
+      const c = unitCostForItem(it, bySlug[it.slug], order.stock);
       if (c != null) produit += c * (Number(it.quantity) || 1);
     }
     const encaisse = Number(order.total) || 0;

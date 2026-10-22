@@ -77,7 +77,7 @@ export async function GET(req) {
       const qty = Number(it.quantity) || 1;
       const rev = Number(it.total) || 0;
       const slug = it.slug || "";
-      const unitCost = unitCostForItem(it, bySlug[slug]);
+      const unitCost = unitCostForItem(it, bySlug[slug], o.stock);
       const hasCost = unitCost != null;
       const cost = hasCost ? unitCost * qty : 0;
       if (!hasCost) { missing.add(it.name || slug || "?"); missingUnits += qty; }

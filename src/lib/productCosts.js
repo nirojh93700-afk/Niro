@@ -47,9 +47,23 @@ export const VARIANT_COSTS = {
 
 // Trouve le coût d'achat unitaire d'un article de commande, en retrouvant la
 // bonne variante (par le titre présent dans le libellé de l'article).
-export function unitCostForItem(item, product) {
+// `stockIds` (facultatif) = lignes de stock payées par la commande (`order.stock`) :
+// elles désignent la variante EXACTE (ex. « Lot de 4 » existe en 36 cl et en 47 cl).
+export function unitCostForItem(item, product, stockIds = []) {
   if (!product) return null;
   const vs = product.variants || [];
+  const payes = new Set((stockIds || []).map((x) => (Array.isArray(x) ? x[0] : x)).filter(Boolean));
+  const vid = item?.variantId;
+  const norm0 = (x) => String(x || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const texte0 = norm0((item?.name || "") + " " + (item?.details || ""));
+  const parVid = vid ? vs.find((v) => v.id === vid) : null;
+  const payees = vs.filter((v) => payes.has(v.stockId) || payes.has(v.id));
+  // Plusieurs lignes du même produit : la variante payée dont le titre est dans le libellé.
+  const exacte = parVid || (payees.length === 1 ? payees[0] : payees.find((v) => norm0(v.title) && texte0.includes(norm0(v.title))));
+  if (exacte) {
+    const c = VARIANT_COSTS[exacte.stockId] ?? VARIANT_COSTS[exacte.id];
+    if (c != null) return c;
+  }
   const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   const text = norm((item?.name || "") + " " + (item?.details || ""));
   const costOf = (v) => VARIANT_COSTS[v.stockId] ?? VARIANT_COSTS[v.id];
