@@ -1,3 +1,17 @@
+## 👁️ MASQUER UNE CATÉGORIE OU UN RAYON ENTIER — ✅ EN LIGNE LE 22/10/2026 (« applique », maquette https://claude.ai/artifact/Poz1FxBbtpTtGWhFi16nk3)
+- Gestion → Catalogue → **Visibilité sur le site** (`/gestion/visibilite`, API `/api/admin/visibilite`) : interrupteur par catégorie (univers)
+  et par rayon, fenêtre de confirmation (produits qui partent, produit rangé aussi ailleurs, onglet du menu), « Masqué depuis le … ».
+- Réglage = section `visibilite` du catalogue (`getVisibilite` / `setVisibilite` en fin de `stock.js` : lecture fraîche, écriture de cette
+  seule section, clé par clé). Règle pure `src/lib/visibilite.js` (`retiresParGroupe`, `rayonsDe`, `cleRayon` → « maison:bougeoirs »),
+  appliquée dans `getCatalog` (produits retirés partout, fiches 404) et `getCatalogAdmin` (`masqueGroupe` → pastille « masqué · rayon X »
+  dans Produits & stock). Catégorie masquée : onglet du menu, lien du pied de page, page `/boutique/<id>` (→ /boutique), plan du site,
+  entrée « 💎 Cristal » si c'est le cristal. Un produit rangé dans un rayon masqué disparaît du site entier (une seule fiche).
+  Un produit masqué SEUL reste masqué quand son groupe revient. `npm run test-visibilite` (11 vérifs).
+- 🔴 **Pourquoi son « Masqué » de Gestion n'avait pas pris (Veilleuse Arbre de Vie Ronde)** : le formulaire du produit gardait l'ancien
+  « visible » après « Retirer du site » (clé React = slug seul) et le renvoyait au prochain « Enregistrer ». Corrigé : le formulaire se
+  recharge, et `hidden` n'est envoyé que si la case a changé. `saveProductEditAtomic` lit maintenant en frais et n'écrit que
+  `overrides` + `promos`. La veilleuse ronde garde `retire: true` (masquée quoi que dise Gestion : retirer cette ligne pour la remettre).
+
 ## 🖼️ PHOTOS DE PRODUITS : TOUJOURS CLIQUABLES, JAMAIS UN PRODUIT MASQUÉ — 22/10/2026 (gérant : « quand je te demande de faire une audit… je peux même pas cliquer sur les photos pour aller dans les articles, et il y a un article que j'ai même pas mis, t'as laissé la photo »)
 - « Nos coups de cœur » (ex « Nos réalisations », bas de CHAQUE fiche, `TrustSection.jsx`) montrait 4 photos fixes, sans lien, dont la Lampe Arbre de Vie MASQUÉE.
   Maintenant : `REALISATIONS` (candidats) + `realisationsVisibles(catalogue, slug)` côté serveur (`produit/[handle]/page.jsx`) → seulement

@@ -71,14 +71,6 @@
   c'est CETTE version (parcours guidé) qui remplace celle du 25/09. **En attente : les quantités par couleur, puis
   son « mets en ligne ».** Rien n'est en ligne.
 
-## 0 bis. 👁️ Masquer une catégorie ou un rayon d'un geste — MAQUETTE du 22/10/2026, en attente de son avis
-- Demande : « si je veux masquer toute la catégorie lampe, bougeoir… pas que les produits ». Maquette https://claude.ai/artifact/Poz1FxBbtpTtGWhFi16nk3
-  (générateur `tools/maquettes/visibilite-rayons.py <css du site> <groupes.json> <sortie>`). Écran Gestion → Catalogue → « Visibilité sur le site » :
-  interrupteur par catégorie et par rayon, fenêtre de confirmation (produits qui disparaissent, produit présent dans un autre rayon, onglet du menu),
-  un produit masqué seul reste masqué quand on réaffiche son rayon, pastille « masqué · rayon X » dans Produits & stock. RIEN en ligne.
-- Avant de construire : trouver pourquoi son « Masqué » de Gestion sur la Veilleuse Arbre de Vie Ronde n'a pas pris le 22/10
-  (retirée en dur par `retire: true` dans `products.js` + `catalog.js`).
-
 ## 1. Messages / clients en attente
 - **🍷 Céline Druesne #1ZGOWMIL (verre à vin 36 cl « Ma Sister ❤️ », arrivé CASSÉ le 19/10)** : mail parti le 19/10 20 h 45 — nouveau verre gravé renvoyé à nos frais, on lui demande si on peut l'envoyer en point relais Mondial Relay (elle doit indiquer son point). ✅ 20/10 8 h : elle accepte le point relais (« d'accord pour une livraison en point relais ») — son point relais n'est pas précisé. Graver et renvoyer (bien caler la coupe). Statut Gestion encore « à préparer » alors qu'elle a été expédiée le 13/10 (Colissimo 9V35593961247).
 - **🥃 Céline Naulin #10OPUHMO** : mail du 20/10 9 h (écriture Great Vibes proposée) → ✅ elle valide le changement (20/10 10 h 41). Graver en Great Vibes.

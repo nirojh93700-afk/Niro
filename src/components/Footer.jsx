@@ -2,7 +2,9 @@ import Link from "next/link";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { LOGO_FICHIER } from "@/lib/photosLocales";
 
-export default function Footer() {
+export default function Footer({ masques = [] }) {
+  // Catégories masquées dans Gestion → Visibilité sur le site : leurs liens disparaissent aussi d'ici.
+  const vis = (id) => !masques.includes(id);
   return (
     <footer className="footer">
       <div className="container">
@@ -46,11 +48,11 @@ export default function Footer() {
           </div>
           <div>
             <h4>Boutique</h4>
-            <Link href="/boutique/bijoux?sub=femme">Bijoux femme</Link>
-            <Link href="/boutique/bijoux?sub=homme">Bijoux homme</Link>
-            <Link href="/boutique/mariage">Mariage & Réception</Link>
-            <Link href="/boutique/cadeaux">Petits cadeaux</Link>
-            <Link href="/boutique/maison">Maison & Déco</Link>
+            {vis("bijoux") && <Link href="/boutique/bijoux?sub=femme">Bijoux femme</Link>}
+            {vis("bijoux") && <Link href="/boutique/bijoux?sub=homme">Bijoux homme</Link>}
+            {vis("mariage") && <Link href="/boutique/mariage">Mariage & Réception</Link>}
+            {vis("cadeaux") && <Link href="/boutique/cadeaux">Petits cadeaux</Link>}
+            {vis("maison") && <Link href="/boutique/maison">Maison & Déco</Link>}
             <Link href="/boutique">Tout voir</Link>
           </div>
           <div>

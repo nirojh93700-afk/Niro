@@ -15,11 +15,13 @@ import {
   getSettings,
   getStockMap,
   getTaxonomy,
+  getVisibilite,
   productSoldOut,
 } from "./stock";
 import { resolveCategories } from "./taxonomy";
 import { estRecent } from "./productDates";
 import { sansAncienHebergeur } from "./photosLocales";
+import { retiresParGroupe } from "./visibilite";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
@@ -124,7 +126,7 @@ export async function stripBijouxPromos(promos) {
 
 // Renvoie TOUT le catalogue public fusionné (sans les produits masqués).
 export async function getCatalog() {
-  const [images, promos, overrides, custom, settings, stock, taxonomy] = await Promise.all([
+  const [images, promos, overrides, custom, settings, stock, taxonomy, visibilite] = await Promise.all([
     getImageOverrides(),
     getPromos(),
     getProductOverrides(),
@@ -132,6 +134,7 @@ export async function getCatalog() {
     getSettings().catch(() => ({})),
     getStockMap().catch(() => ({})),
     getTaxonomy().catch(() => ({})),
+    getVisibilite().catch(() => ({})),
   ]);
   const refMarkup = Number(settings?.refMarkup) || 0;
   // Emballages : affichés UNIQUEMENT si l'interrupteur maître est activé.
@@ -156,7 +159,9 @@ export async function getCatalog() {
 
   const base = baseProducts.map((p) => categorieSure(applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)), p));
   const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
-  const all = [...base, ...customApplied].filter((p) => !p.hidden && !outOfSeason(p));
+  // Catégories / rayons masqués dans Gestion → Visibilité sur le site : tous leurs produits sortent du site.
+  const parGroupe = retiresParGroupe([...base, ...customApplied], visibilite);
+  const all = [...base, ...customApplied].filter((p) => !p.hidden && !parGroupe.has(p.slug) && !outOfSeason(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
   return all.map((p) => {
     // Correction auto : un bijou sans attribution explicite reçoit son emballage
@@ -179,15 +184,19 @@ export async function getCatalog() {
 
 // Renvoie aussi les produits masqués (pour l'admin).
 export async function getCatalogAdmin() {
-  const [images, promos, overrides, custom] = await Promise.all([
+  const [images, promos, overrides, custom, visibilite] = await Promise.all([
     getImageOverrides(),
     getPromos(),
     getProductOverrides(),
     getCustomProducts(),
+    getVisibilite().catch(() => ({})),
   ]);
   const base = baseProducts.map((p) => ({ ...applyOverride(p, overrides[p.slug], images, promos), custom: false }));
   const customApplied = (custom || []).map((p) => ({ ...applyOverride(p, overrides[p.slug], images, promos), custom: true }));
-  return [...base, ...customApplied];
+  const all = [...base, ...customApplied];
+  // `hidden` = masqué seul ; `masqueGroupe` = retiré par sa catégorie ou son rayon (Visibilité sur le site).
+  const parGroupe = retiresParGroupe(all, visibilite);
+  return all.map((p) => (parGroupe.has(p.slug) ? { ...p, masqueGroupe: parGroupe.get(p.slug) } : p));
 }
 
 export async function getCatalogBySlug(slug) {

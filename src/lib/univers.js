@@ -80,7 +80,7 @@ export const getUnivers = (id) => UNIVERS.find((u) => u.id === id) || null;
 // Anciennes adresses de catégories → univers (redirections).
 export const ANCIENNES_CATEGORIES = { deco: "maison", naissance: "enfants", jeux: "enfants" };
 // Catégorie du produit → univers d'accueil quand une création n'est rangée nulle part.
-const CAT_VERS_UNIVERS = { bijoux: "bijoux", cristal: "cristal", verres: "verres", naissance: "enfants", jeux: "enfants", mariage: "mariage", deco: "maison", cadeaux: "cadeaux" };
+export const CAT_VERS_UNIVERS = { bijoux: "bijoux", cristal: "cristal", verres: "verres", naissance: "enfants", jeux: "enfants", mariage: "mariage", deco: "maison", cadeaux: "cadeaux" };
 
 export const POURQUI = { elle: "Pour elle", lui: "Pour lui", couple: "Pour un couple", enfant: "Pour bébé & enfant", parents: "Pour des parents" };
 const COUPLE = new Set(["collier-couple-coeur-lot2", "collier-couple-puzzle", "flute-a-champagne-gravee", "verre-a-vin-grave",
@@ -174,6 +174,10 @@ export function rangerCatalogue(catalog) {
     });
   }
   for (const u of univers) { u.count = u.vus.size; delete u.vus; }
+  // Rayon vide (tous ses produits masqués, ou rayon masqué dans Gestion → Visibilité) : il disparaît ;
+  // univers sans aucun produit (catégorie masquée) : il disparaît des onglets, du menu de l'accueil, de la boutique.
+  for (const u of univers) u.rayons = u.rayons.filter((r) => r.bientot || r.slugs.length);
+  univers.splice(0, univers.length, ...univers.filter((u) => u.count > 0));
   // « Toute la boutique » : chaque création une seule fois, sous son univers d'accueil.
   const boutique = {
     id: "boutique", nom: "Toute la boutique", short: "Tout", img: "/produits/cristal-v-femme.jpg", pourqui: true,

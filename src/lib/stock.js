@@ -1015,7 +1015,9 @@ export async function resetProductToCode(slug) {
 // les prix promo des variantes. Évite que deux écritures successives sur le
 // même stockage (cohérence différée) ne s'écrasent l'une l'autre.
 export async function saveProductEditAtomic(slug, overridePatch, promoUpdates) {
-  const data = await getCatalogRaw();
+  // Lecture FRAÎCHE (22/10/2026) : avec le cache de 60 s, une autre instance pouvait écrire
+  // les réglages produit pendant ce temps et l'enregistrement les écrasait (même famille que crystalZones).
+  const data = await getCatalogRaw(true);
   // 1) Override produit (nom, prix, etc.)
   data.overrides = data.overrides || {};
   const cur = data.overrides[slug] || {};
@@ -1033,7 +1035,7 @@ export async function saveProductEditAtomic(slug, overridePatch, promoUpdates) {
       else delete data.promos[u.variantId];
     }
   }
-  await persistCatalog(data);
+  await persistCatalog(data, ["overrides", "promos"]);
   return data.overrides[slug] || {};
 }
 
@@ -2847,4 +2849,27 @@ export async function annulerRate(id) {
   data.rates = list.filter((r) => r.id !== id);
   await persistCatalog(data, ["rates"]);
   return rec;
+}
+
+// =============================================================================
+// VISIBILITÉ PAR CATÉGORIE / RAYON (22/10/2026) — section `visibilite` du catalogue.
+// Lecture FRAÎCHE avant écriture et écriture de cette seule section, clé par clé :
+// un enregistrement ne peut jamais effacer le réglage d'un autre groupe (cf. crystalZones).
+// =============================================================================
+export async function getVisibilite(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  const v = data.visibilite || {};
+  return { univers: v.univers || {}, rayons: v.rayons || {} };
+}
+
+export async function setVisibilite(type, cle, masque) {
+  if (type !== "univers" && type !== "rayon") throw new Error("type inconnu");
+  const data = await getCatalogRaw(true);
+  const v = { univers: { ...(data.visibilite?.univers || {}) }, rayons: { ...(data.visibilite?.rayons || {}) } };
+  const bloc = type === "univers" ? v.univers : v.rayons;
+  if (masque) bloc[cle] = { at: new Date().toISOString() };
+  else delete bloc[cle];
+  data.visibilite = v;
+  await persistCatalog(data, ["visibilite"]);
+  return v;
 }

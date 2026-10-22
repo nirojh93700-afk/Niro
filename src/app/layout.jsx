@@ -25,7 +25,7 @@ import RefCapture from "@/components/RefCapture";
 import SiteAnalytics from "@/components/SiteAnalytics";
 import Heartbeat from "@/components/Heartbeat";
 import SalesBanner from "@/components/SalesBanner";
-import { getSettings } from "@/lib/stock";
+import { getSettings, getVisibilite } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { vacationActive, vacationMessage, vacationGiftMessage } from "@/lib/vacation";
 import { CATEGORIES } from "@/lib/products";
@@ -174,7 +174,11 @@ export default async function RootLayout({ children }) {
   // appliquée le 09/10/2026) — Bijoux, Verres & Carafes, Bébé & Enfant, Mariage,
   // Maison & Déco, Petits cadeaux ; le cristal garde son entrée « 💎 » à part.
   // Les catégories des produits (products.js) ne changent pas : voir src/lib/univers.js.
-  let menuCategories = UNIVERS.map((u) => ({ slug: u.id, label: u.nom, short: u.short }));
+  // Catégorie masquée dans Gestion → Visibilité sur le site : son onglet disparaît du menu (22/10/2026).
+  let visibilite = { univers: {} };
+  try { visibilite = await getVisibilite(); } catch { /* jamais bloquant */ }
+  const universCache = (id) => Boolean(visibilite.univers?.[id]);
+  let menuCategories = UNIVERS.filter((u) => !universCache(u.id)).map((u) => ({ slug: u.id, label: u.nom, short: u.short }));
   void CATEGORIES; void getCatalog;
 
   // Accès admin : un cookie correspondant au code d'accès débloque tout
@@ -246,9 +250,9 @@ export default async function RootLayout({ children }) {
                 (on ne parle pas de vacances), masqué sur le panier. */}
             {vacMsg ? <BandeauDelai message={vacMsg} gift={vacGift} /> : null}
             <CartProvider>
-              <Header categories={menuCategories} />
+              <Header categories={menuCategories} cristal={!universCache("cristal")} />
               <main>{children}</main>
-              <Footer />
+              <Footer masques={Object.keys(visibilite.univers || {})} />
               <CartDrawer />
               <ShopButton />
               {settings.agents?.widget !== false ? <QuestionWidget /> : null}

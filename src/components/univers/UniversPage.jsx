@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Reveal from "./Reveal";
 import PageUnivers from "./PageUnivers";
 import CoffretSavane from "./CoffretSavane";
@@ -12,7 +13,7 @@ export default async function UniversPage({ uid, quiInitial = "" }) {
   const catalog = await getCatalog().catch(() => []);
   const R = rangerCatalogue(catalog);
   const u = R.getUnivers(uid);
-  if (!u) return null;
+  if (!u) redirect("/boutique"); // catégorie masquée dans Gestion (ou vide) : retour à toute la boutique
   const rayons = u.rayons.map((r) => ({
     id: r.id, nom: r.nom, bientot: r.bientot || "",
     cards: r.bientot === "puzzles" ? cartesPuzzles() : r.slugs.map(R.carteDe).filter(Boolean),

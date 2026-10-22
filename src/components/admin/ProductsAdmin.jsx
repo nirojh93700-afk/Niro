@@ -106,8 +106,8 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
   const stateOf = (p) => stockState(stockBySlug[p.slug]);
   const counts = {
     total: products.length,
-    visibles: products.filter((p) => !p.hidden).length,
-    masques: products.filter((p) => p.hidden).length,
+    visibles: products.filter((p) => !p.hidden && !p.masqueGroupe).length,
+    masques: products.filter((p) => p.hidden || p.masqueGroupe).length,
     rupture: products.filter((p) => stateOf(p) === "out").length,
     bas: products.filter((p) => stateOf(p) === "low").length,
   };
@@ -116,8 +116,8 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
   const shown = products.filter((p) => {
     if (q && !`${p.name} ${p.slug} ${p.category} ${p.tagline || ""}`.toLowerCase().includes(q)) return false;
     if (catFilter !== "all" && p.category !== catFilter) return false;
-    if (status === "masque" && !p.hidden) return false;
-    if (status === "visible" && p.hidden) return false;
+    if (status === "masque" && !p.hidden && !p.masqueGroupe) return false;
+    if (status === "visible" && (p.hidden || p.masqueGroupe)) return false;
     if (status === "rupture" && stateOf(p) !== "out") return false;
     if (status === "bas" && stateOf(p) !== "low") return false;
     if (status === "nouveau" && p.badge !== "Nouveau") return false;
@@ -235,7 +235,7 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
                   <span className="pt-name">
                     <strong>{p.name}</strong>
                     <span className="pt-tags">
-                      {p.hidden ? <em className="pt-tag off">masqué</em> : null}
+                      {p.hidden ? <em className="pt-tag off">masqué</em> : p.masqueGroupe ? <em className="pt-tag off" title="Gestion → Visibilité sur le site">masqué · {p.masqueGroupe}</em> : null}
                       {p.badge ? <em className="pt-tag badge">{p.badge}</em> : null}
                       {p.custom ? <em className="pt-tag">ajouté</em> : null}
                       {st === "out" ? <em className="pt-tag out">rupture</em> : st === "low" ? <em className="pt-tag low">stock bas</em> : null}
@@ -321,7 +321,7 @@ export default function ProductsAdmin({ adminKey, products, onReload, stockBySlu
               )}
               {openProduct && (
                 <EditProduct
-                  key={openProduct.slug}
+                  key={`${openProduct.slug}:${openProduct.hidden ? 1 : 0}`} // se recharge après « Retirer du site » (sinon l'ancien « visible » repartait à l'enregistrement)
                   product={openProduct}
                   adminKey={adminKey}
                   cats={cats}
@@ -560,7 +560,9 @@ function EditProduct({ product, adminKey, cats = DEF_CATS, onReload, onSave, onD
         <button className="btn btn-gold" onClick={() => {
           const cleanVars = vars.filter((v) => v.title.trim() && Number(v.price) > 0).map((v) => ({ id: v.id, title: v.title.trim(), price: Math.round(Number(v.price) * 100) / 100 }));
           onSave({
-            name, tagline, category, hidden, featured, pickup, badge: badge || "none",
+            name, tagline, category, featured, pickup, badge: badge || "none",
+            // « Masquer » n'est envoyé que si la case a changé : un enregistrement de prix ne doit jamais republier un produit masqué.
+            ...(hidden !== Boolean(product.hidden) ? { hidden } : {}),
             descriptionHtml: desc,
             variants: cleanVars,
             prices: Object.fromEntries(cleanVars.map((v) => [v.id, v.price])),

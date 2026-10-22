@@ -7,7 +7,7 @@ import { useCart } from "./CartContext";
 import { CATEGORIES } from "@/lib/products";
 import { LOGO_FICHIER } from "@/lib/photosLocales";
 
-export default function Header({ categories }) {
+export default function Header({ categories, cristal = true }) {
   const { count, setDrawerOpen, hydrated } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function Header({ categories }) {
   // Catégories à afficher : celles passées (non vides) ou toutes en secours.
   // La famille cristal a sa propre entrée « 💎 Cristal Photo 3D » (page /cristaux) :
   // on retire la catégorie « Cristal » du menu pour ne pas l'avoir en double.
-  const menuCats = (categories && categories.length ? categories : CATEGORIES)
+  const menuCats = (Array.isArray(categories) ? categories : CATEGORIES) // tableau vide = toutes les catégories masquées dans Gestion
     .filter((c) => c.slug !== "cristal");
 
   return (
@@ -87,7 +87,7 @@ export default function Header({ categories }) {
         {menuCats.map((c) => (
           <Link key={c.slug} href={c.slug === "naissance" ? "/naissance" : c.slug === "cristal" ? "/cristaux" : `/boutique/${c.slug}`}>{c.short}</Link>
         ))}
-        <Link href="/cristaux" style={{ color: "#a5822f", fontWeight: 700 }}>💎 Cristal Photo 3D</Link>
+        {cristal && <Link href="/cristaux" style={{ color: "#a5822f", fontWeight: 700 }}>💎 Cristal Photo 3D</Link>}
         <Link href="/offres" style={{ color: "#b4452f", fontWeight: 600 }}>Promotions</Link>
         <Link href="/offrir">Trouver un cadeau</Link>
         <Link href="/carte-cadeau">Carte cadeau</Link>

@@ -39,6 +39,7 @@ const NAV = [
   ] },
   { label: "Catalogue", items: [
     { id: "produits", icon: "◧", text: "Produits & stock", href: "/gestion/produits" },
+    { id: "visibilite", icon: "◎", text: "Visibilité sur le site", href: "/gestion/visibilite" },
     { id: "categories", icon: "≣", text: "Catégories & ordre", href: "/gestion/categories" },
     { id: "packaging", icon: "▢", text: "Emballages", href: "/gestion/emballages" },
     { id: "materiel", icon: "⬚", text: "Matériel & emballages", href: "/gestion/materiel" },

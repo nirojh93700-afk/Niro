@@ -1,0 +1,25 @@
+// npm run test-visibilite — masquer une catégorie / un rayon (22/10/2026).
+import { products } from "../../src/lib/products.js";
+import { retiresParGroupe, cleRayon, rayonsDe, nettoyerVisibilite } from "../../src/lib/visibilite.js";
+let ok = 0, ko = 0;
+const t = (nom, cond) => { if (cond) ok++; else { ko++; console.log("✗", nom); } };
+const vide = retiresParGroupe(products, { univers: {}, rayons: {} });
+t("rien de masqué = rien retiré", vide.size === 0);
+t("clé de rayon lisible", cleRayon("maison", "Lampes & veilleuses") === "maison:lampes-et-veilleuses");
+const bougeoirs = retiresParGroupe(products, { rayons: { "maison:bougeoirs": { at: "x" } } });
+t("Bougeoirs : les 3 bougeoirs", ["bougeoir-mandala-bois", "photophore-fee-bois", "bougeoir-fleur-de-lotus"].every((s) => bougeoirs.get(s) === "rayon Bougeoirs"));
+t("Bougeoirs : les lampes restent", !bougeoirs.has("veilleuse-arbre-de-vie-prenom"));
+const lampes = retiresParGroupe(products, { rayons: { "maison:lampes-et-veilleuses": { at: "x" } } });
+t("Lampes : la veilleuse au prénom part (aussi rangée dans Bébé & Enfant)", lampes.has("veilleuse-arbre-de-vie-prenom"));
+t("Lampes : les couverts enfants restent", !lampes.has("couverts-enfants-personnalises"));
+const maison = retiresParGroupe(products, { univers: { maison: { at: "x" } } });
+t("Maison & Déco : lampes + bougeoirs", maison.has("lampe-led-paris-saint-germain") && maison.has("bougeoir-fleur-de-lotus") && maison.get("bougeoir-fleur-de-lotus") === "catégorie Maison & Déco");
+t("Maison & Déco : aucun bijou", ![...maison.keys()].some((s) => products.find((p) => p.slug === s)?.category === "bijoux"));
+const bijoux = retiresParGroupe(products, { univers: { bijoux: { at: "x" } } });
+t("Bijoux : tous les bijoux", products.filter((p) => p.category === "bijoux").every((p) => bijoux.has(p.slug)));
+const tousRanges = new Set(rayonsDe(products).flatMap((r) => r.slugs));
+t("chaque produit est dans au moins un rayon", products.every((p) => tousRanges.has(p.slug)));
+const n = nettoyerVisibilite({ univers: { maison: { at: "a" }, pirate: { at: "b" } }, rayons: { "maison:bougeoirs": { at: "c" }, "x:y": 1, "<script>": 1 } });
+t("nettoyage : clés inconnues jetées", Object.keys(n.univers).join() === "maison" && Object.keys(n.rayons).join() === "maison:bougeoirs");
+console.log(`${ok} vérifications OK${ko ? `, ${ko} en échec` : ""}`);
+process.exit(ko ? 1 : 0);

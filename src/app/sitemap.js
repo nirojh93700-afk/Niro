@@ -1,5 +1,6 @@
 import { UNIVERS } from "@/lib/univers";
 import { getCatalog } from "@/lib/catalog";
+import { getVisibilite } from "@/lib/stock";
 import { GUIDE_SLUGS } from "@/lib/guides";
 import { OCCASIONS } from "@/lib/occasions";
 
@@ -41,7 +42,10 @@ export default async function sitemap() {
   // Vraies adresses de catégories (/boutique/X). Cristal et naissance ont déjà
   // leur page dédiée (/cristaux, /naissance) dans staticPages.
   // Univers de la boutique (maquette « accueil + univers », 09/10/2026).
+  let vis = { univers: {} };
+  try { vis = await getVisibilite(); } catch { /* jamais bloquant */ }
   const categoryPages = UNIVERS
+    .filter((c) => !vis.univers?.[c.id]) // catégorie masquée dans Gestion : plus annoncée à Google
     .map((c) => ({
       url: `${base}/boutique/${c.id}`,
       lastModified: now,

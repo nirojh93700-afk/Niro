@@ -24,6 +24,7 @@ export async function GET(req) {
       category: p.category,
       subcategory: p.subcategory || "",
       hidden: Boolean(p.hidden),
+      masqueGroupe: p.masqueGroupe || "", // retiré par sa catégorie / son rayon (Visibilité sur le site)
       badge: p.badge || "",
       custom: Boolean(p.custom),
       image: p.images?.[0] || "",
