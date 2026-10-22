@@ -1,3 +1,9 @@
+## 🌐 DOMAINE nivcreation.fr À SORTIR DE HOSTINGER AVANT LE 28/03/2027 — 22/10/2026 (gérant : « quand je te demanderai, tu me diras »)
+- Compte Hostinger restreint définitivement : plus de renouvellement possible chez eux. Plan sûr, SANS coupure, détaillé dans
+  `docs/EN-ATTENTE.md` (« DOMAINE nivcreation.fr ») : captures DNS → Cloudflare DNS gratuit (nuage gris) → serveurs de noms changés
+  dans hPanel (DNSSEC off) → transfert du domaine chez OVHcloud en gardant les serveurs Cloudflare. ⛔ Jamais de transfert tant que
+  les DNS sont chez Hostinger. Le redonner tel quel quand il redemande.
+
 ## ✗ « RATÉ — À REFAIRE » : LE MÊME BOUTON PARTOUT — 22/10/2026 (gérant : « il faut que tout soit pareil… j'ai raté une flûte, je mets où »)
 - `RatesCommande` (`src/components/admin/Rates.jsx`) = un bouton par article, utilisé par la file de production (TOUTES les cartes, expédiées
   et terminées comprises), la fiche complète (`PreparationCommande`) et l'atelier (articles + commandes SUR DEVIS, qui n'avaient rien).
