@@ -1,7 +1,7 @@
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 (« Et enregistrer la maquette ») — RIEN en ligne
 - **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (v3) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
   boîtes 4,90 / 5,90 / 7,90 · fenêtre « Composer mon coffret » (couleur + dessin/photo + texte par marque-page).
-- **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v2, 23/10 : face gravable) · 4 couleurs · **13,90 €** · face : dessin ou photo **+4 €**, texte **+3 €** (haut / bas vertical) · texte au verso **+3 €** · mêmes boîtes.
+- **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
 - Générateurs : `tools/maquettes/marque-pages.py`, `marque-pages-fenetre.py`, `marque-pages-metal.py` (captures `scratchpad/mp-bm/cap1b / cap2b / cap3.html`,
@@ -18,11 +18,12 @@
   horizontal ; **nom en bas = à la VERTICALE** (« de bas en haut ou de haut en bas, pareil »). Dessin en haut = petit, en bas = grand.
   Modèle 1 : face = dos. Modèle 2 : haut = bande au-dessus de la fenêtre ajourée, bas = bande à gauche de la branche ; dos = comme le
   modèle 1. Modèle 3 : rien. ⚠️ Il a marqué des zones sur la FACE du modèle 2 alors que la maquette ne vend que le texte au verso :
-  → ✅ **« Oui la face se grave aussi, ajoute sur la maquette » (23/10)** : maquette du modèle 2 refaite (artifact CKqzt46EGgVntsypefi1Tv v2) :
-  bloc « Sur la face » = dessin ou photo (+4 €, 12 cases « dessin à venir » / « Choisir une photo »), texte sur la face (+3 €), « Place sur la
-  face » (texte en haut · dessin en bas / dessin en haut · texte vertical en bas) ; puis « Au verso » (+3 €, inchangé). Fenêtre du coffret : par
-  marque-page, couleur + face (sans / dessin / photo) + texte face + texte verso ; place et écriture communes. Ex. seul + dessin + Léa + verso
-  = 23,90 € · coffret de 2 avec un dessin, « Léa » et « Paul » au verso = 43,70 €. Mêmes prix que le modèle 1 (gérant : « il faut que ce soit logique »).
+  → ✅ **« Oui la face se grave aussi, ajoute sur la maquette » puis « pour ça y a pas de dessin, on peut faire que du texte, il y a déjà un
+  dessin » (23/10)** : maquette du modèle 2 refaite (artifact CKqzt46EGgVntsypefi1Tv v3) : bloc « Sur la face » = texte (+3 €) + « Place sur la
+  face » (en haut sur une ligne, au-dessus de la fenêtre / en bas à la verticale, à gauche de la branche) ; puis « Au verso » (+3 €, inchangé).
+  ⛔ AUCUN dessin ni photo sur le modèle 2 (le recto est déjà décoré) — la v2 qui en avait a été remplacée. Fenêtre du coffret : par marque-page,
+  couleur + texte face + texte verso ; place et écriture communes. Ex. seul + « Léa » + verso = 19,90 € · coffret de 4 + « Léa » + « Paul » au
+  verso = 69,50 €. Les zones « dessin » qu'il avait marquées sur la face du modèle 2 ne servent donc qu'au texte.
 - Au « applique » : `engrave.box` de la fiche + consignes atelier (« Nom : en bas, à la verticale »…) à partir de ce fichier.
 
 ## 🔖 MARQUE-PAGES — MODÈLE 3 « MÉTAL, PEINTURES CÉLÈBRES » — MAQUETTE DU 23/10/2026 (en attente de son avis, RIEN en ligne)

@@ -18,8 +18,8 @@ Code brut reçu (ZONES-MP) : voir `zones-gravure.json` (regroupé par emplacemen
 - **Modèle 2 (ajouré, oiseau et magnolia)** — face : HAUT = la bande de bois au-dessus de la fenêtre ajourée (y ≈ 0,08–0,16) ;
   BAS = la bande de bois À GAUCHE de la branche, entre la fenêtre et l'oiseau (x ≈ 0,16–0,45, y ≈ 0,49–0,74). Dos = comme le
   modèle 1 (il n'a rien dessiné : « pour l'arrière t'as compris »).
-  ⚠️ La maquette enregistrée du modèle 2 ne vend QUE le texte au verso (+3 €). Ses zones sur la FACE sont enregistrées ; à lui
-  de dire si la face se grave aussi (texte / dessin dans les blancs du bois) avant de toucher la maquette.
+  ✅ Gérant (23/10) : la face du modèle 2 se grave aussi, mais **TEXTE SEULEMENT** (« il y a déjà un dessin ») : texte en haut (horizontal)
+  OU en bas (vertical), +3 €. Les rectangles rouges qu'il a tracés sur m2f valent comme emplacements possibles du texte, pas d'un dessin.
 - Modèle 3 (métal) : pas de gravure, pas de zones.
 
 ## À quoi ça sert (au « applique »)
