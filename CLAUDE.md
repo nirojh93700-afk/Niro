@@ -23,7 +23,7 @@
   modèle 3) → **15,90 € le marque-page, Papillon en coffret 19,90 €** (artifact v4). Marché : unité 5,95 € eBay · 8,99 € La Romancière ·
   18 € Passion Estampes (laiton massif) · Etsy 3,5–11 $ · lots Amazon 7–11 €. Marges : 14,75 € / 18,18 €.
 - Questions au gérant : prix 15,90 / 19,90 à confirmer ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ; photos atelier à
-  refaire (fond vert fournisseur) ; texte modèle 1 = 3 € (tranché le 23/10) ; le modèle 2 garde texte +2 € tant qu'il ne le dit pas.
+  refaire (fond vert fournisseur) ; texte = 3 € sur les modèles 1 ET 2 (23/10 : « il faut que ce soit logique, le dos aussi »). Modèle 2 republié en nouvel artifact https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv ; l'ancien NvwXjxdShBw6a3sz5pdgkW reste en v6 à +2 €.
 
 ## 🌐 DOMAINE nivcreation.fr À SORTIR DE HOSTINGER AVANT LE 28/03/2027 — 22/10/2026 (gérant : « quand je te demanderai, tu me diras »)
 - Compte Hostinger restreint définitivement : plus de renouvellement possible chez eux. Plan sûr, SANS coupure, détaillé dans

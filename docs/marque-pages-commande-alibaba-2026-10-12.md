@@ -71,6 +71,6 @@ Les lignes « métallique » champagne ×35 et papillon ×5 = les **8 tableaux �
 | Boîte de 2 (10) | 0,91 € | **1,43 €** | 5,90 € | 4,47 € |
 | Boîte de 4 (10) | 1,36 € | **2,14 €** | 7,90 € | 5,76 € |
 
-Gravure modèle 1 : texte +3 €, dessin +4 € (23/10). À reporter dans `VARIANT_COSTS` (`src/lib/productCosts.js`) le jour de l'« applique ».
+Gravure (23/10) : modèle 1 texte +3 €, dessin ou photo +4 € ; modèle 2 texte au verso +3 € ; modèle 3 sans gravure. À reporter dans `VARIANT_COSTS` (`src/lib/productCosts.js`) le jour de l'« applique ».
 Tout vendu aux prix des maquettes, sans gravure, hors port : 120 × 9,90 + 40 × 13,90 + 35 × 15,90 + 5 × 19,90 + 10 × (4,90 + 5,90 + 7,90)
 = **2 583 €** → ≈ 2 220 € après l'achat (315 €) et Stripe (≈ 45 €).
