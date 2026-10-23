@@ -302,8 +302,8 @@ En attente de SA décision :
 - Marque-pages : idée C (fenêtre « Composer mon coffret ») choisie et mise dans la maquette de la fiche (v8) ; reste son avis, les dessins, la photo de la boîte d'un, l'essence réelle des bois (CITES) avant commande.
 - Marque-pages modèle 2 (ajouré, oiseau et magnolia) : maquette faite le 11/10, 4 couleurs + coffret des 4 couleurs ; à confirmer : prix, coffret utilisé, texte au verso, vraie photo de la couleur Sable.
 - ✅ 23/10 — **Zones de gravure données par le gérant** (outil à dessin) : `docs/maquettes/assets/marque-pages/zones/` (HAUT = nom horizontal ou petit dessin ·
-  BAS = grand dessin ou nom à la VERTICALE ; modèle 2 : au-dessus de la fenêtre / à gauche de la branche ; dos = comme le modèle 1). ❓ Il a marqué la FACE
-  du modèle 2 alors que la maquette ne vend que le texte au verso : attendre sa réponse avant de toucher la maquette.
+  BAS = grand dessin ou nom à la VERTICALE ; modèle 2 : au-dessus de la fenêtre / à gauche de la branche ; dos = comme le modèle 1). ✅ « Oui la face se grave aussi » → maquette du modèle 2
+  refaite (face : dessin ou photo +4 €, texte +3 €, place haut / bas ; verso +3 €), artifact CKqzt46EGgVntsypefi1Tv v2, en attente de son avis.
 - Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
 
 ## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)
