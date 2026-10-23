@@ -11,6 +11,16 @@
   Coûts rendus et marges : `docs/marque-pages-commande-alibaba-2026-10-12.md`. Précommande : mécanisme encore à construire (maquette Gestion
   https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw). Questions ouvertes : formats du Papillon (déjà en coffret), photos atelier, une seule famille de boîtes.
 
+## 📍 OÙ GRAVER SUR LES MARQUE-PAGES — ZONES DONNÉES PAR LE GÉRANT LE 23/10/2026 (« il faut que je te montre où graver »)
+- Outil à dessin https://claude.ai/artifact/6gNFwNMq5fsE4efqPoS6P6 (photos redressées, rouge = dessin, bleu = nom, « Copier le code »
+  → `ZONES-MP {…}`). Résultat dans `docs/maquettes/assets/marque-pages/zones/` (`zones-gravure.json`, `zones-controle.jpg`, `ZONES-GRAVURE.md`).
+- **Règle** : chaque face a 2 emplacements, **HAUT** (sous le trou) et **BAS** ; chacun reçoit le nom OU le dessin. Nom en haut =
+  horizontal ; **nom en bas = à la VERTICALE** (« de bas en haut ou de haut en bas, pareil »). Dessin en haut = petit, en bas = grand.
+  Modèle 1 : face = dos. Modèle 2 : haut = bande au-dessus de la fenêtre ajourée, bas = bande à gauche de la branche ; dos = comme le
+  modèle 1. Modèle 3 : rien. ⚠️ Il a marqué des zones sur la FACE du modèle 2 alors que la maquette ne vend que le texte au verso :
+  question posée, maquette non touchée.
+- Au « applique » : `engrave.box` de la fiche + consignes atelier (« Nom : en bas, à la verticale »…) à partir de ce fichier.
+
 ## 🔖 MARQUE-PAGES — MODÈLE 3 « MÉTAL, PEINTURES CÉLÈBRES » — MAQUETTE DU 23/10/2026 (en attente de son avis, RIEN en ligne)
 - Gérant : PDF fournisseur (37 modèles métal doré émaillé, Van Gogh / Monet) → commande de **8 tableaux × 5 pièces** (n° 1, 2, 9, 10, 11,
   14, 22, 24 ; n° 22 = papillon livré dans son coffret, 1,20 $ ; les autres 0,80 $). Suivi fournisseur `GFFR26293177616129`. Photos extraites
