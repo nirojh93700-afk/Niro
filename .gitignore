@@ -37,6 +37,9 @@ serviceAccount*.json
 # Fichiers de travail (maquettes, brouillons) — non déployés
 maquette_*.png
 motifs-gravure.zip
+# Maquettes lourdes (photos intégrées) : artifact + générateur suffisent, le dépôt doit rester < 440 Mo
+docs/maquettes/*.fragment.html
+docs/maquettes/carnet-a5.html
 
 # Archives de livraison (motifs, etc.) — non déployées
 *.zip
