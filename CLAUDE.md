@@ -1,3 +1,20 @@
+## 🔖 MARQUE-PAGES — MODÈLE 3 « MÉTAL, PEINTURES CÉLÈBRES » — MAQUETTE DU 23/10/2026 (en attente de son avis, RIEN en ligne)
+- Gérant : PDF fournisseur (37 modèles métal doré émaillé, Van Gogh / Monet) → commande de **8 tableaux × 5 pièces** (n° 1, 2, 9, 10, 11,
+  14, 22, 24 ; n° 22 = papillon livré dans son coffret, 1,20 $ ; les autres 0,80 $). Suivi fournisseur `GFFR26293177616129`. Photos extraites
+  du PDF : `docs/maquettes/assets/marque-pages-metal/` (README = descriptions). « Fais une troisième maquette, comme les autres » (pas d'intégration
+  aux maquettes 1 et 2).
+- **Artifact** https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji · générateur `tools/maquettes/marque-pages-metal.py <capture>` (dérivé de
+  `marque-pages-fenetre.py` ; capture = fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, `next build`, `next start -p 3140`, curl, puis
+  `git checkout` — le site n'a pas été touché). Même parcours que le modèle 2 : 8 modèles en pastilles photo, formats seul / boîte 4,90 / coffret
+  de 2 (5,90) / coffret de 4 (7,90), fenêtre « Voir et personnaliser mon coffret » (tableau + texte au verso +2 € par marque-page), encadré
+  précommande « cinq exemplaires par tableau ». **Prix proposés par moi (marché : occasion 4-9 € sur Vinted, neuf musée/Etsy ≈ 8-13 €) :
+  8,90 € le marque-page, Papillon en coffret 12,90 €** — à valider. Vérifié Chromium 390 / 1280 : 0 débordement, 0 erreur JS, coffret de 4 =
+  43,50 €, + texte « Léa » + papillon = 49,50 €.
+- ⚠️ Les générateurs des modèles 1 et 2 et leurs photos n'étaient PAS sur la branche du site (restés sur `claude/reprise-projet-dfumwy`) :
+  récupérés depuis `9e439653` et commités ici le 23/10. ⛔ Les `.html` / `.fragment.html` des maquettes ne se commitent toujours pas (poids).
+- Questions au gérant : prix ; gravure au verso possible sur ce métal ? ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ;
+  photos atelier à refaire (fond vert fournisseur).
+
 ## 🌐 DOMAINE nivcreation.fr À SORTIR DE HOSTINGER AVANT LE 28/03/2027 — 22/10/2026 (gérant : « quand je te demanderai, tu me diras »)
 - Compte Hostinger restreint définitivement : plus de renouvellement possible chez eux. Plan sûr, SANS coupure, détaillé dans
   `docs/EN-ATTENTE.md` (« DOMAINE nivcreation.fr ») : captures DNS → Cloudflare DNS gratuit (nuage gris) → serveurs de noms changés
