@@ -304,6 +304,9 @@ En attente de SA décision :
 - ✅ 23/10 — **Zones de gravure données par le gérant** (outil à dessin) : `docs/maquettes/assets/marque-pages/zones/` (HAUT = nom horizontal ou petit dessin ·
   BAS = grand dessin ou nom à la VERTICALE ; modèle 2 : au-dessus de la fenêtre / à gauche de la branche ; dos = comme le modèle 1). ✅ « Oui la face se grave aussi » → maquette du modèle 2
   refaite (face : TEXTE seulement +3 €, place haut / bas vertical, pas de dessin « il y a déjà un dessin » ; verso +3 €), artifact CKqzt46EGgVntsypefi1Tv v3, en attente de son avis.
+- ✅ 23/10 soir — « Enregistre toutes les maquettes » : les 3 maquettes marque-pages sont ENREGISTRÉES telles quelles (modèle 1 v3 SS39rAgHXq7yuJpD1vNctu ·
+  modèle 2 v3 CKqzt46EGgVntsypefi1Tv, face texte seul · modèle 3 v4 VaSkxKqaBF6oeRDpQwKcji) + zones de gravure. Reste : son « applique » (fiches + précommande),
+  photos atelier, formats du Papillon, une seule famille de boîtes.
 - Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
 
 ## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)

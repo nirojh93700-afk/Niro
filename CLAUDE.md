@@ -1,4 +1,6 @@
-## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 (« Et enregistrer la maquette ») — RIEN en ligne
+## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
+> Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
+> (`docs/maquettes/assets/marque-pages/zones/`). Ne plus les modifier sans sa demande ; c'est CES versions à reproduire au « applique ».
 - **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (v3) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
   boîtes 4,90 / 5,90 / 7,90 · fenêtre « Composer mon coffret » (couleur + dessin/photo + texte par marque-page).
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
