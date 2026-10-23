@@ -328,3 +328,134 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #puzzlebois #cadeauenfant #cadeaupersonnalise #ideecadeau
+
+## Vidéo 24 — Puzzle photo gravé (13/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/24-puzzle-photo-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 25 s | 1,8 Mo |
+
+- **Source** : `tools/video/pub_puzzle_photo_24.py <dossier de sortie>` (helpers de `pub_cristaux_graves_22.py` ; produit aussi la version 1080 × 1920, ~29 Mo, non gardée dans le dépôt).
+- **Demande du gérant** : « fais-moi une vidéo sur le puzzle avec la photo » (pas les puzzles enfants à prénom).
+- **Contenu** : les 4 photos de la fiche `puzzle-photo-grave` (bureau, famille, enfants, amis), chacune en plan large puis en gros plan sur les visages gravés. Planche contact regardée le 13/10 : gravure visible sur toutes.
+
+### Description à copier-coller (livrée le 13/10/2026)
+
+**Vidéo 24 — Puzzle photo gravé** (Puzzle photo gravé)
+> Votre plus belle photo, gravée sur bois et découpée en puzzle ✨ De 24 à 120 pièces, à reconstituer en famille ou entre amis 💛 Un souvenir qui se construit 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #puzzlephoto #cadeaupersonnalise #cadeaufamille #ideecadeau
+
+## Vidéo 24 (2ᵉ version) — Puzzle photo gravé, avec les prix actuels (16/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/24-puzzle-photo-v2-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 23 s | 1,6 Mo |
+
+- **Source** : `tools/video/pub_puzzle_photo_24v2.py <dossier de sortie>` (la version 1 du 13/10 reste dans le registre ci-dessus).
+- **Demande du gérant** : « refais la vidéo que t'as faite en dernier, il y a eu des changements de prix sur le puzzle » (la dernière = la vidéo 24, puzzle photo).
+- **Changements** : 100 pièces au plus (plus de 120), prix de chaque choix en pastille (24 p. 29,90 € · 48 p. 32,90 € · 80 p. 34,90 € · 100 p. 37,90 €, relus sur la fiche en ligne le 16/10), photo « bureau » retirée (plus sur la fiche), carte de fin « dès 29,90 € · 24 à 100 pièces ».
+- ⚠️ Une vidéo 23 refaite par erreur le même jour (puzzles à encastrer) n'est pas gardée : ce n'était pas celle qu'il demandait.
+
+### Description à copier-coller (livrée le 16/10/2026)
+
+**Vidéo 24 — Puzzle photo gravé** (Puzzle photo gravé)
+> Votre plus belle photo, gravée sur bois et découpée en puzzle ✨ De 24 à 100 pièces, dès 29,90 €, à reconstituer en famille ou entre amis 💛 Un souvenir qui se construit 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #puzzlephoto #cadeaupersonnalise #cadeaufamille #ideecadeau
+
+## Vidéos 25 et 26 — Verres & carafes gravés / Nos créations gravées (17/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/25-verres-carafes-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 46 s | 2,8 Mo |
+| `docs/videos/26-creations-gravees-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 46 s | 3,2 Mo |
+
+- **Source** : `tools/video/pub_verres_25_26.py <dossier de sortie> [25|26]` (habillage de la vidéo 19 ; produit aussi les versions 1080 × 1920, ~45-50 Mo, non gardées dans le dépôt).
+- **Demande du gérant** : « fais-moi deux vidéos avec mes produits, plus avec les verres ».
+- **25** : 19 photos de verres gravés (carafes, verres à whisky dont Fête des pères et gravé au fond, verres à vin, flûtes, verres à cocktail).
+- **26** : les verres en majorité, entre bijoux (collier cœur, collier 3 cœurs, bracelet cordon), cristaux (portrait, ange, famille) et puzzles (Savane, puzzle photo).
+- Planche contact regardée le 17/10 : gravure visible sur toutes. Écartées : les photos de verres vierges et `flute-grav-04` (gravure illisible).
+
+### Descriptions à copier-coller (livrées le 17/10/2026)
+
+**Vidéo 25 — Verres & carafes gravés** (Carafe à whisky gravée, Verre à whisky photo, Verre à whisky Fête des pères, Verre à vin gravé, Flûtes à champagne gravées, Verre à cocktail gravé)
+> Un prénom, une photo, un logo, gravés sur vos verres ✨ Carafes, verres à whisky, à vin, flûtes et verres à cocktail, gravés à la commande dans notre atelier 🥂 Le cadeau parfait pour trinquer ensemble 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #verregrave #cadeaupersonnalise #cadeaupapa #ideecadeau
+
+**Vidéo 26 — Nos créations gravées** (Carafe à whisky gravée, Verre à whisky photo, Flûtes à champagne gravées, Verre à vin gravé, Verre à cocktail gravé, Collier Cœur à graver, Collier 3 Cœurs, Bracelet cordon à plaque, Cristal Photo 3D, Cristal 3D Ange gardien, Puzzle en bois Savane, Puzzle photo gravé)
+> Des verres, des carafes, des bijoux, du cristal et du bois, gravés pour ceux que vous aimez ✨ Chaque pièce est personnalisée à la commande, dans notre atelier 💛 Trouvez le cadeau qui leur ressemble 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #verregrave #gravure #ideecadeau
+
+## Vidéo 27 — Bijoux gravés, nouveaux modèles (18/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/27-bijoux-nouveaux-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 29 s | 1,3 Mo |
+
+- **Source** : `tools/video/pub_bijoux_27.py` (habillage de la vidéo 19).
+- **Demande du gérant** : « une vidéo pour les bijoux, mais pas les mêmes bijoux en avant en premier, change les bijoux ».
+- **En tête** : les bijoux jamais mis en avant : collier Enveloppe Message Secret (2 photos), bracelet Cœur à graver (doré, or rose, argenté), collier Médaillon Cœur ouvrable (doré, argenté). **Puis** collier Double Cœur, Cœur & 2 plaques, 3 Cœurs, Cœur à graver, avec d'autres photos que les vidéos 17, 19 et 20.
+- Planche contact regardée le 18/10 : gravure visible sur toutes. Écartées car vierges ou illisibles : `collier-double-coeur-4`, `collier-coeur-plaques-3`, l'enveloppe portée (`il_fullxfull.7864685306`), `bracelet-coeur-ot-dore-2` et `-porte`.
+
+### Description à copier-coller (livrée le 18/10/2026)
+
+**Vidéo 27 — Bijoux gravés, nouveaux modèles** (Collier Enveloppe Message Secret, Bracelet Cœur à graver, Collier Médaillon Cœur ouvrable, Collier Double Cœur, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Cœur à graver)
+> Un message secret dans une enveloppe, un mot doux sur un cœur, un dessin dans un médaillon ✨ Nos nouveaux bijoux se gravent à la commande, dans notre atelier 💛 Le cadeau qu'elle gardera tout près d'elle 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijougrave #cadeaupersonnalise #bijoupersonnalise #ideecadeau
+
+## Vidéo 27 bis — Bijoux gravés en promo, −10 % (18/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/27-bijoux-promo-720x1280.mp4` | 720 × 1280, 30 i/s, H.264, sans son | 29 s | 1,3 Mo |
+
+- **Source** : `tools/video/pub_bijoux_27_promo.py`.
+- **Demande du gérant** : « refais la même vidéo 27, mais en disant qu'il y a des promos ».
+- Mêmes photos et même ordre que la vidéo 27. Ruban « −10 % SUR LES BIJOUX » sur chaque plan, pastille rouge « PROMO −10 % », cartes d'ouverture « −10 % sur les bijoux » et de fin « Profitez de −10 % ».
+- La remise annoncée est la remise permanente du site sur tous les bijoux (`applyBijouxSale`, prix barré + −10 % au paiement). Aucun prix dans la vidéo.
+
+### Description à copier-coller (livrée le 18/10/2026)
+
+**Vidéo 27 bis — Bijoux gravés en promo** (Collier Enveloppe Message Secret, Bracelet Cœur à graver, Collier Médaillon Cœur ouvrable, Collier Double Cœur, Collier Cœur & 2 plaques, Collier 3 Cœurs entrelacés, Collier Cœur à graver)
+> −10 % sur tous nos bijoux gravés ✨ Un message secret dans une enveloppe, un mot doux sur un cœur, un dessin dans un médaillon 💛 Gravés à la commande dans notre atelier, pour un cadeau qu'elle gardera tout près d'elle 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #bijougrave #promobijoux #cadeaupersonnalise #ideecadeau
+
+## Vidéo 28 — Déco en bois gravée, maison & mariage (24/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/28-deco-bois-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 35,5 s | 6,9 Mo |
+| `docs/videos/28-deco-bois-720x1280.mp4` | 720 × 1280 (légère) | 35,5 s | 2,2 Mo |
+
+- **Source** : `tools/video/pub_deco_bois_28.py [dossier de sortie]` (recette à zones sûres TikTok/Insta des vidéos 16-21 :
+  ruban sous la barre de l'appli, pastille + nom + légende ancrés au-dessus de la zone des icônes).
+- **Demande du gérant** : « fais une vidéo » → famille choisie : la déco en bois (la vidéo 11 du 25/09 portait sur ce thème mais
+  n'est pas dans le dépôt). Les vidéos 24 à 27 bis (faites sur l'autre branche) ont été rapatriées ici le même jour, d'où le n° 28.
+- **Vérifications** : planche contact de 38 photos regardée le 24/10 (gravure ou découpe visible sur toutes les retenues ; écartées :
+  `support-telephone-vierge.jpg`, rien de gravé, et `IMG_6734.jpg`, 512 px) ; produits EN VENTE relus dans le plan du site en ligne
+  (écartés car absents : arbre de vie lumineux, bougeoir mandala, lampe PSG).
+- **Produits (14)** : Support téléphone en bois (photo, lettre fleurie) · Porte-serviettes Colombes · Numéro de table Arche ·
+  Étiquette de serviette (initiales, bordeaux) · Bougeoir Fleur de Lotus · Rond de serviette gravé · Menu de mariage en bois ·
+  Support téléphone ajouré · Porte-stylo Coupe du monde · Numéro de table Arches bohèmes · Photophore Fée · Porte-serviettes fleuri ·
+  Numéro de table Eucalyptus.
+- **Habillage** : cartes encre & or « Le bois, gravé pour vous » / « Gravé dans notre atelier », ruban « ✦ DÉCO EN BOIS GRAVÉE ✦ »,
+  pastille « GRAVÉ ». Aucun prix, aucun délai, aucun nombre de produits.
+
+### Description à copier-coller (livrée le 24/10/2026)
+
+**Vidéo 28 — Déco en bois gravée** (Support téléphone en bois, Porte-serviettes Colombes, Numéro de table, Étiquette de serviette, Bougeoir Fleur de Lotus, Rond de serviette gravé, Menu de mariage en bois, Support téléphone ajouré, Porte-stylo Coupe du monde, Photophore Fée, Porte-serviettes fleuri)
+> Du bois, une gravure, votre idée ✨ Supports téléphone, numéros de table, ronds de serviette, menus de mariage, bougeoirs : chaque pièce est découpée et gravée à la commande, dans notre atelier 💛 Pour la maison comme pour le grand jour 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #decobois #mariage #cadeaupersonnalise #ideecadeau
