@@ -194,7 +194,7 @@ environnement qui laisse passer ces sites, si le gérant le demande.
   https://shop.metro.fr/produits-equipements/art-de-la-table-usage-unique/verrerie/verre-de-degustation/verre-a-pied-grands-cepages-vin-rouge-47-cl-ref176845.html
 - ⛔ **Arcoroc Domaine 47 cl = verre TREMPÉ, se grave mal. À ne pas prendre.**
 
-## Carnet A5 gravé — relevé du 24/10/2026 (recherche web ; fiches concurrentes bloquées d'ici, prix lus dans les extraits)
+## Carnet A5 gravé — relevé du 23/10/2026 (recherche web ; fiches concurrentes bloquées d'ici, prix lus dans les extraits)
 Notre maquette (enregistrée, RIEN en ligne) : carnet seul 12,90 € · gravure couverture +7 € → **19,90 € gravé** · texte au dos +7 €.
 Coût réel : 3,55 € le carnet (reçu Alibaba du 23/10, port compris).
 | Vendeur | Produit | Prix | Gravure |

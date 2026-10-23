@@ -1,3 +1,17 @@
+## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
+- **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v2) · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
+  `tools/maquettes/carnet-a5.py <capture> <champ-photo>` (méthode du puzzle photo : fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, build,
+  `next start -p 3140`, capture Playwright, puis `git checkout` — le site n'a pas été touché) · photos `docs/maquettes/assets/carnet/`.
+- **Produit** (Alibaba, Wenzhou Senyuan, reçu #33986068501043880 du 23/10 : 60 carnets) : A5 21,2 × 14,5 cm, couverture rigide aspect cuir, élastique,
+  100 feuilles 80 g, reliure cousue. **3 coloris : marron, noir, gris** (entourés par lui). ⚠️ « Ship to » du reçu = Cangnan, Wenzhou (Chine) : à vérifier.
+- **Prix (gérant : « c'est sept euros pour les gravures »)** : carnet seul **12,90 €** · gravure de la couverture **+7 €** (texte 2 lignes + 8 écritures,
+  ou logo / dessin / photo) · texte au dos **+7 €** → carnet gravé 19,90 €, les deux faces 26,90 €. **Coût rendu 3,55 €** le carnet (0,89 € + port 153,94 €
+  + frais 6,20 € sur 60). Marché (`docs/prix-marche.md`) : artisans FR gravé 12,50–19,90 €, cuir vegan 39,90 €, Amazon 6,99 € non gravé.
+- Vérifié Chromium 390 / 1280 : 0 débordement, 0 erreur JS, totaux 12,90 → 19,90 → 26,90.
+- **Avant tout « applique »** : vraies photos gravées (couvertures DESSINÉES dans la maquette), pesée réelle (380 g estimé → lettre 8,90 € / relais 4,90 €),
+  puis construire comme un produit normal (§10 : `products.js`, `productInfo.js`, `productDates.js`, `packagingSeed.js`, `textExtra: 7` sur les deux faces).
+  C'est CETTE version à reproduire à l'identique ; ne pas la modifier sans sa demande (règle du 23/07).
+
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
 > Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
 > (`docs/maquettes/assets/marque-pages/zones/`). Ne plus les modifier sans sa demande ; c'est CES versions à reproduire au « applique ».
