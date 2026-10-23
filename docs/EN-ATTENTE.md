@@ -330,3 +330,19 @@ En attente de SA décision :
 - **🌐 DOMAINE nivcreation.fr À SORTIR DE HOSTINGER (22/10/2026, côté gérant)** : compte Hostinger restreint DÉFINITIVEMENT → impossible de renouveler ou d'acheter chez eux ; domaine actif jusqu'au **28/03/2027**. Plan sûr validé par recherche (« je veux pas de coupure ») : ① captures de TOUTES les lignes DNS dans hPanel (A @ 35.219.200.110 Firebase, TXT fah-claim, CNAME _acme-challenge, SPF/DKIM/DMARC Resend, Google…) → je vérifie ; ② compte Cloudflare gratuit, ajouter le domaine, lignes recopiées et comparées, A/CNAME en « DNS only » (nuage gris) ; ③ hPanel : désactiver DNSSEC puis remplacer les serveurs dns-parking.com par ceux de Cloudflare, attendre « Actif » ; ④ seulement alors transfert chez **OVHcloud** (Cloudflare ne vend pas les .fr) : déverrouiller, « Obtenir le code » dans hPanel, transfert OVH en GARDANT les serveurs DNS Cloudflare. ⛔ Ne jamais transférer tant que les DNS sont chez Hostinger (certains registraires suppriment la zone à la fin du transfert → site + e-mails coupés). Au passage : corriger le www (CNAME encore vers Netlify, cf. §0). En attente des captures du gérant.
 
 - **🔖 Marque-pages modèle 3 « métal, peintures célèbres » (23/10/2026)** : maquette https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (8 tableaux × 5 pièces commandés, suivi GFFR26293177616129). Prix proposés 15,90 € / Papillon coffret 19,90 € (23/10 : « plus cher que les deux autres parce que c'est en métal »), SANS gravure (gérant 23/10 : pas de place sur le métal), boîtes 4,90 / 5,90 / 7,90. Modèle 1 : dessin OU photo +4 € / texte +3 € depuis le 23/10 → https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu. En attente de son avis ; rien en ligne. Questions : prix, formats du Papillon, photos atelier ; le modèle 2 garde texte +2 € (à lui de dire s'il passe aussi à 3 €).
+- **🔖 Marque-pages modèle 3 « métal, peintures célèbres » (23/10/2026)** : maquette https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (8 tableaux × 5 pièces commandés, suivi GFFR26293177616129). Prix proposés 12,90 € / Papillon coffret 16,90 € (relevés le 23/10 : « le métal c'est plus cher »), SANS gravure (gérant 23/10 : pas de place sur le métal), boîtes 4,90 / 5,90 / 7,90. Modèle 1 : dessin OU photo +4 € / texte +3 € depuis le 23/10 → https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu. En attente de son avis ; rien en ligne. Questions : prix, formats du Papillon, photos atelier ; le modèle 2 garde texte +2 € (à lui de dire s'il passe aussi à 3 €).
+## 📓 Carnet A5 gravé — MAQUETTE du 23/10/2026, en attente de son avis
+- `docs/maquettes/carnet-a5.html`, artifact https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh, générateur
+  `tools/maquettes/carnet-a5.py` (capture de la vraie fiche, construite sur la machine seulement, rien poussé).
+- Fournisseur (Alibaba, Wenzhou Senyuan) : A5 21,2 × 14,5 cm, couverture rigide aspect cuir, élastique, 100 feuilles 80 g,
+  reliure cousue, 0,88 € pièce dès 20. Coloris retenus (entourés par lui) : marron, noir, gris.
+- Proposé : 17,90 € gravure de la couverture comprise (texte 2 lignes + 8 écritures, ou logo/dessin), texte au dos +3 €.
+  Poids estimé 380 g → lettre suivie 8,90 € / relais 4,90 € : À VÉRIFIER (pesée réelle).
+- Couvertures DESSINÉES dans la maquette : il faudra de vraies photos gravées avant la mise en ligne.
+
+## 🌐 DOMAINE nivcreation.fr — À TRANSFÉRER AVANT LE 28/03/2027 (vu le 23/10/2026)
+- Hostinger a mis une restriction PERMANENTE sur son compte : renouvellement impossible chez eux. Le domaine reste actif
+  jusqu'au 28/03/2027. Il faut le transférer vers un autre registrar (ex. OVHcloud ou Gandi, qui gèrent le .fr).
+- ⚠️ AVANT de changer quoi que ce soit : recopier TOUS les enregistrements DNS actuels (A du site Firebase, TXT fah-claim,
+  CNAME _acme-challenge, MX, SPF/DKIM/DMARC de Resend et de la messagerie) chez le nouveau registrar, sinon le site et les
+  e-mails tombent. C'est LUI qui fait le transfert (son compte) ; on peut lui préparer la liste.
