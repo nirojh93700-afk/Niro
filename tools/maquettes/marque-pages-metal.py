@@ -101,12 +101,16 @@ def fmt_card(i, t, sub, n, box):
 FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-fmts">' +
        "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
 RECAP = ('<div class="mq-recap" id="mq-recap" hidden><p class="mq-rtxt"></p><div class="mq-strip"></div>'
-         '<button type="button" class="mq-open">Voir et personnaliser mon coffret</button></div>')
-GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de tableaux différents : vous pouvez en changer et faire graver un texte au verso de chacun dans « Voir et personnaliser mon coffret ».</p>'
+         '<button type="button" class="mq-open">Composer mon coffret</button></div>')
+GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de tableaux différents : vous pouvez en changer dans « Composer mon coffret ».</p>'
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'
 assert cle in MAIN
-cle_id = cle.replace('<div style="margin-bottom:6px">', '<div style="margin-bottom:6px" id="mq-grav">')
-MAIN = MAIN.replace(cle, FMT + RECAP + GNOTE + cle_id, 1)
+# 23/10, gérant : « sur le métal je peux pas graver, y a pas de place » → le bloc gravure (texte au verso + écriture) est RETIRÉ.
+k0 = MAIN.index(cle); k1 = MAIN.index('<div class="pd-totbox"', k0)
+MAIN = MAIN[:k0] + FMT + RECAP + GNOTE + MAIN[k1:]
+MAIN = re.sub(r"<h3>Un texte au verso</h3>\s*<p>.*?</p>", "", MAIN, count=1, flags=re.S)
+MAIN = re.sub(r"Le dos du marque-page est lisse : un texte peut y être gravé \(\+2 €\), dans l(?:'|&#x27;)une des huit écritures du site\.", "Le marque-page n'est pas gravé : il se choisit tel quel, parmi les huit tableaux.", MAIN)
+MAIN = re.sub(r"Un marque-page gravé est une pièce personnalisée[^<]*?Un marque-page non gravé peut être retourné sous 14 jours, dans son emballage d(?:'|&#x27;)origine\.", "Le marque-page peut être retourné sous 14 jours, dans son emballage d'origine.", MAIN, count=1)
 OLD_H = "<h3>Le coffret de quatre</h3>"
 assert OLD_H in MAIN
 i0 = MAIN.index(OLD_H); i1 = MAIN.index("</p>", i0) + 4
@@ -116,7 +120,7 @@ j0 = MAIN.index('<div class="gallery-thumbs">'); j1 = MAIN.index("</div>", j0)
 MAIN = MAIN[:j1] + BOXTH + MAIN[j1:]
 MAIN = MAIN.replace('<button class="btn btn-gold" style="flex:1">Ajouter au panier</button>', '<button class="btn btn-gold" style="flex:1">Précommander</button>', 1)
 PRE = ('<div class="mq-pre"><b>Précommande · série limitée</b><span>Les marque-pages sont en cours d\'approvisionnement. '
-       'Votre commande est enregistrée dès maintenant, puis gravée à la réception des marque-pages. Quantités limitées : cinq exemplaires par tableau.</span></div>')
+       'Votre commande est enregistrée dès maintenant, puis expédiée à la réception des marque-pages. Quantités limitées : cinq exemplaires par tableau.</span></div>')
 MAIN = MAIN.replace('<div class="price-lead">', PRE + '<div class="price-lead">', 1)
 MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)  # (déjà absent avec noEngravePreview)
 
@@ -145,34 +149,31 @@ JS = r'''
   var NOMS=sw.map(function(b){return b.querySelector('.vs-title').textContent.trim()});
   var IMGS=sw.map(function(b){return b.querySelector('img').src});
   var fm=[].slice.call(document.querySelectorAll('.mq-fmt'));
-  var recap=document.getElementById('mq-recap'),gnote=document.getElementById('mq-gnote'),grav=document.getElementById('mq-grav');
+  var recap=document.getElementById('mq-recap'),gnote=document.getElementById('mq-gnote');
   var sheet=document.getElementById('mq-sheet'),shb=document.getElementById('mq-shb'),shn=document.getElementById('mq-shn'),sht=document.getElementById('mq-sht');
-  function unit(o){return P[NOMS[o.c]]+(o.t.trim()?2:0)}
-  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+((vin&&vin.value.trim())?2:0)}
+  function unit(o){return P[NOMS[o.c]]}
+  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]}
   function maj(){tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box);
     fm.forEach(function(b){var n=+b.dataset.n,bx=+b.dataset.box;var s=n>1&&st.n===n?st.slots.reduce(function(a,o){return a+P[NOMS[o.c]]},0):n*P[st.t];b.querySelector('em').textContent=eur(s+bx)})}
   function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:st.n>1?i%NOMS.length:NOMS.indexOf(st.t),t:'',touched:false})}
-  function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
-    var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||o.t});
-    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+NOMS[o.c]+'</small>'+(o.t?'<b>'+o.t.replace(/</g,'&lt;')+'</b>':'');st2.appendChild(d)});
-    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, de tableaux différents. Vous pouvez changer un tableau ou faire graver un texte au verso :'}
+  function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;if(!on)return;
+    var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched});
+    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+NOMS[o.c]+'</small>';st2.appendChild(d)});
+    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, de tableaux différents. Vous pouvez changer un tableau :'}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
-      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé au verso (+2 €), facultatif"/>';
+      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div>';
       var row=d.querySelector('.mq-row');
       NOMS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj()});row.appendChild(c)});
-      var ti=d.querySelector('input[type=text]');ti.value=o.t;ti.addEventListener('input',function(){o.t=ti.value;o.touched=true;maj()});
-      shb.appendChild(d)});
-    var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');w.appendChild(c);shb.appendChild(w)}}
+      shb.appendChild(d)})}
   function ouvre(){cards();maj();sheet.hidden=false}
   function ferme(){sheet.hidden=true;draw();maj()}
   document.querySelector('.mq-open').addEventListener('click',ouvre);
   document.getElementById('mq-close').addEventListener('click',ferme);document.getElementById('mq-ok').addEventListener('click',ferme);
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
     if(st.box){montre(th[{1:8,2:9,4:10}[st.n]])}else{montre(th[NOMS.indexOf(st.t)])}maj()})});
-  if(vin)vin.addEventListener('input',maj);
-  sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
+    sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
     if(st.n===1)reset();draw();maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));

@@ -12,8 +12,13 @@
   43,50 €, + texte « Léa » + papillon = 49,50 €.
 - ⚠️ Les générateurs des modèles 1 et 2 et leurs photos n'étaient PAS sur la branche du site (restés sur `claude/reprise-projet-dfumwy`) :
   récupérés depuis `9e439653` et commités ici le 23/10. ⛔ Les `.html` / `.fragment.html` des maquettes ne se commitent toujours pas (poids).
-- Questions au gérant : prix ; gravure au verso possible sur ce métal ? ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ;
-  photos atelier à refaire (fond vert fournisseur).
+- ✅ **23/10, réponses du gérant** : « sur le métal je peux pas graver, y a pas de place » → **modèle 3 SANS gravure** (bloc texte au verso retiré, la fenêtre
+  du coffret ne sert qu'à choisir les tableaux, artifact v2). Et **modèle 1 (bois, pompon doré) : dessin ou photo +4 €, texte +2 €** (avant 2 € / 2 €) →
+  nouvel artifact https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (l'ancien SVdzg13dw99fmeg1DSaYUa n'était pas republiable d'ici sans relire 3 Mo ;
+  il reste en v9 avec dessin +2 €). Le modèle 2 (13,90 €, texte +2 €) n'a pas bougé. Capture du modèle 1 repointée sur les CSS du build courant
+  (`scratchpad/mp-bm/cap1b.html`) : les hachages CSS de la capture du 12/10 n'existent plus dans `.next`.
+- Questions au gérant : prix (8,90 / Papillon 12,90) ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ; photos atelier à
+  refaire (fond vert fournisseur) ; « plus d'euros pour les textes » lu comme 2 € (inchangé) — s'il voulait 3 €, le dire.
 
 ## 🌐 DOMAINE nivcreation.fr À SORTIR DE HOSTINGER AVANT LE 28/03/2027 — 22/10/2026 (gérant : « quand je te demanderai, tu me diras »)
 - Compte Hostinger restreint définitivement : plus de renouvellement possible chez eux. Plan sûr, SANS coupure, détaillé dans

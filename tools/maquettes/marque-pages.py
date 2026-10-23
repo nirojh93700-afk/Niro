@@ -82,10 +82,11 @@ HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # La grande image porte un id pour le script ; l'« aperçu témoin » texte du site n'a pas de sens ici (pas de texte à graver).
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
+MAIN = MAIN.replace("Dessin gravé (+2 €)", "Dessin gravé (+4 €)").replace("Avec un dessin (+2 €)", "Avec un dessin (+4 €)").replace("choisissez un dessin (+2 €)", "choisissez un dessin (+4 €)").replace("un dessin (+2 €), d&#x27;un texte", "un dessin (+4 €), d&#x27;un texte")  # 23/10 : dessin ou photo +4 €
 GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin</p><div class="mq-dg">' +
         "".join(f'<button type="button" class="mq-dtile"><span>{i}</span><small>dessin à venir</small></button>' for i in range(1, 13)) +
         '</div><p class="mq-dn">Maquette : vos dessins numérotés prendront la place de ces cases.</p></div>')
-MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+2 €\)</option></select></div>)', lambda m: m.group(1) + GRID, MAIN, count=1)
+MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+4 €\)</option></select></div>)', lambda m: m.group(1) + GRID, MAIN, count=1)
 assert "mq-dessins" in MAIN
 OLD_BOX = "Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique."
 assert OLD_BOX in MAIN
@@ -152,8 +153,8 @@ JS = r'''
   var fm=[].slice.call(document.querySelectorAll('.mq-fmt'));
   var recap=document.getElementById('mq-recap'),gnote=document.getElementById('mq-gnote'),grav=document.getElementById('mq-grav');
   var sheet=document.getElementById('mq-sheet'),shb=document.getElementById('mq-shb'),shn=document.getElementById('mq-shn'),sht=document.getElementById('mq-sht');
-  function unit(o){return P[WOODS[o.c]]+(o.t.trim()?2:0)+(o.d?2:0)}
-  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+((vin&&vin.value.trim())?2:0)+((des&&des.value==='oui')?2:0)}
+  function unit(o){return P[WOODS[o.c]]+(o.t.trim()?2:0)+(o.d?4:0)}
+  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+((vin&&vin.value.trim())?2:0)+((des&&des.value==='oui')?4:0)}
   function maj(){tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box)}
   function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:WOODS.indexOf(st.t),t:'',d:false,touched:false})}
   function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
@@ -162,7 +163,7 @@ JS = r'''
     recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, tous de couleur '+WOODS[st.slots[0].c].toLowerCase()+'. Changez la couleur et la gravure de chacun si vous voulez :'}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
-      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé (+2 €), facultatif"/><label><input type="checkbox"/> <span>Avec un dessin (+2 €)</span></label>';
+      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé (+2 €), facultatif"/><label><input type="checkbox"/> <span>Avec un dessin (+4 €)</span></label>';
       var row=d.querySelector('.mq-row');
       WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj()});row.appendChild(c)});
