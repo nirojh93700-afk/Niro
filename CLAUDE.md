@@ -13,7 +13,7 @@
 - ⚠️ Les générateurs des modèles 1 et 2 et leurs photos n'étaient PAS sur la branche du site (restés sur `claude/reprise-projet-dfumwy`) :
   récupérés depuis `9e439653` et commités ici le 23/10. ⛔ Les `.html` / `.fragment.html` des maquettes ne se commitent toujours pas (poids).
 - ✅ **23/10, réponses du gérant** : « sur le métal je peux pas graver, y a pas de place » → **modèle 3 SANS gravure** (bloc texte au verso retiré, la fenêtre
-  du coffret ne sert qu'à choisir les tableaux, artifact v2). Et **modèle 1 (bois, pompon doré) : dessin ou photo +4 €, texte +3 €** (avant 2 € / 2 € ; texte passé à 3 € sur son « oui » du 23/10) →
+  du coffret ne sert qu'à choisir les tableaux, artifact v2). Et **modèle 1 (bois, pompon doré) : dessin ou photo +4 €, texte +3 €** (avant 2 € / 2 € ; texte passé à 3 € sur son « oui » du 23/10). « C'est dessin ou photo ? » → les DEUX, même prix : menu « Dessin ou photo gravé (+4 €) » = Sans / Avec un dessin / Avec ma photo (bloc « Choisir une photo », gravée en noir et blanc) ; dans la fenêtre du coffret, un menu Sans / dessin / photo par marque-page (artifact v3) →
   nouvel artifact https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (l'ancien SVdzg13dw99fmeg1DSaYUa n'était pas republiable d'ici sans relire 3 Mo ;
   il reste en v9 avec dessin +2 €). Le modèle 2 (13,90 €, texte +2 €) n'a pas bougé. Capture du modèle 1 repointée sur les CSS du build courant
   (`scratchpad/mp-bm/cap1b.html`) : les hachages CSS de la capture du 12/10 n'existent plus dans `.next`.
