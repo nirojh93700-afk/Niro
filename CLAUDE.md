@@ -1,3 +1,16 @@
+## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 (« Et enregistrer la maquette ») — RIEN en ligne
+- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (v3) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
+  boîtes 4,90 / 5,90 / 7,90 · fenêtre « Composer mon coffret » (couleur + dessin/photo + texte par marque-page).
+- **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v1) · 4 couleurs · **13,90 €** · texte au verso **+3 €** · mêmes boîtes.
+- **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
+  **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
+- Générateurs : `tools/maquettes/marque-pages.py`, `marque-pages-fenetre.py`, `marque-pages-metal.py` (captures `scratchpad/mp-bm/cap1b / cap2b / cap3.html`,
+  à refaire si le scratchpad disparaît : fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, build, `next start -p 3140`, curl, `git checkout`).
+  Les anciens artifacts SVdzg13dw99fmeg1DSaYUa (modèle 1, dessin 2 €) et NvwXjxdShBw6a3sz5pdgkW (modèle 2, texte 2 €) sont PÉRIMÉS.
+- C'est CETTE version de chaque maquette à reproduire à l'identique le jour de l'« applique » ; ne pas les modifier sans sa demande (règle du 23/07).
+  Coûts rendus et marges : `docs/marque-pages-commande-alibaba-2026-10-12.md`. Précommande : mécanisme encore à construire (maquette Gestion
+  https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw). Questions ouvertes : formats du Papillon (déjà en coffret), photos atelier, une seule famille de boîtes.
+
 ## 🔖 MARQUE-PAGES — MODÈLE 3 « MÉTAL, PEINTURES CÉLÈBRES » — MAQUETTE DU 23/10/2026 (en attente de son avis, RIEN en ligne)
 - Gérant : PDF fournisseur (37 modèles métal doré émaillé, Van Gogh / Monet) → commande de **8 tableaux × 5 pièces** (n° 1, 2, 9, 10, 11,
   14, 22, 24 ; n° 22 = papillon livré dans son coffret, 1,20 $ ; les autres 0,80 $). Suivi fournisseur `GFFR26293177616129`. Photos extraites
