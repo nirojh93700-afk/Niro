@@ -19,9 +19,10 @@
   (`scratchpad/mp-bm/cap1b.html`) : les hachages CSS de la capture du 12/10 n'existent plus dans `.next`.
 - **Coûts rendus (reçu Alibaba du 23/10, 315,41 € payés, × 1,574 port + frais)** : modèle 1 **1,15 €**, modèle 2 **2,14 €**, métal **1,15 €**, Papillon
   **1,72 €**, boîtes 1,07 / 1,43 / 2,14 € → `docs/marque-pages-commande-alibaba-2026-10-12.md` (restauré sur cette branche). À mettre dans `VARIANT_COSTS` à l'« applique ».
-- ✅ 23/10, « le métal, c'est plus cher, regarde le marché » → **12,90 € le marque-page, Papillon en coffret 16,90 €** (artifact v3). Marché : unité 5,95 € eBay ·
-  8,99 € La Romancière · 18 € Passion Estampes (laiton massif) · Etsy 3,5–11 $ · lots Amazon 7–11 €. Marges : 11,75 € / 15,18 €.
-- Questions au gérant : prix 12,90 / 16,90 à confirmer ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ; photos atelier à
+- ✅ 23/10, « le métal, c'est plus cher, regarde le marché » → 12,90 € puis, « la 3 est plus chère que les deux autres parce que c'est en métal » (ordre voulu : modèle 1 9,90 < modèle 2 13,90 <
+  modèle 3) → **15,90 € le marque-page, Papillon en coffret 19,90 €** (artifact v4). Marché : unité 5,95 € eBay · 8,99 € La Romancière ·
+  18 € Passion Estampes (laiton massif) · Etsy 3,5–11 $ · lots Amazon 7–11 €. Marges : 14,75 € / 18,18 €.
+- Questions au gérant : prix 15,90 / 19,90 à confirmer ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ; photos atelier à
   refaire (fond vert fournisseur) ; texte modèle 1 = 3 € (tranché le 23/10) ; le modèle 2 garde texte +2 € tant qu'il ne le dit pas.
 
 ## 🌐 DOMAINE nivcreation.fr À SORTIR DE HOSTINGER AVANT LE 28/03/2027 — 22/10/2026 (gérant : « quand je te demanderai, tu me diras »)

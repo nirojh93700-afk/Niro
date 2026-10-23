@@ -83,8 +83,10 @@ def nettoie(html):
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 # 23/10, gérant : « le métal, c'est plus cher, regarde le marché » → 12,90 € (Papillon en coffret 16,90 €). Marché relevé : unité 5,95 € (eBay),
 # 8,99 € (La Romancière), 18 € (Passion Estampes, laiton massif), Etsy 3,5–11 $ ; lots Amazon 7–11 €. La capture porte encore 8,90 / 12,90.
-MAIN = re.sub(r"12,90(\s|\u202f|\u00a0)€", lambda m: "16,90" + m.group(1) + "€", MAIN)
-MAIN = re.sub(r"8,90(\s|\u202f|\u00a0)€", lambda m: "12,90" + m.group(1) + "€", MAIN)
+# 23/10 (bis), gérant : « la 3 est plus chère que les deux autres parce que c'est en métal » → au-dessus du modèle 2 (13,90 €) :
+# 15,90 € le marque-page, Papillon en coffret 19,90 € (sous les 18 € du laiton massif Passion Estampes pour l'unité).
+MAIN = re.sub(r"12,90(\s|\u202f|\u00a0)€", lambda m: "19,90" + m.group(1) + "€", MAIN)
+MAIN = re.sub(r"8,90(\s|\u202f|\u00a0)€", lambda m: "15,90" + m.group(1) + "€", MAIN)
 # Prix par modèle lus dans la fiche (après remplacement) — proposés, à valider par le gérant.
 PRIX = {t: float(re.sub(r"[^0-9,]", "", p).replace(",", ".")) for t, p in
         re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', MAIN)}

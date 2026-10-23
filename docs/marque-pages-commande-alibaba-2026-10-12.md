@@ -65,12 +65,12 @@ Les lignes « métallique » champagne ×35 et papillon ×5 = les **8 tableaux �
 |---|---|---|---|---|
 | Modèle 1 bois, pompon doré (6 × 20) | 0,73 € | **1,15 €** | 9,90 € | 8,75 € |
 | Modèle 2 ajouré, oiseau (4 × 10) | 1,36 € | **2,14 €** | 13,90 € | 11,76 € |
-| Modèle 3 métal, 7 tableaux (35) | 0,73 € | **1,15 €** | 12,90 € (proposé le 23/10) | 11,75 € |
-| Modèle 3 Papillon en coffret (5) | 1,09 € | **1,72 €** | 16,90 € (proposé le 23/10) | 15,18 € |
+| Modèle 3 métal, 7 tableaux (35) | 0,73 € | **1,15 €** | 15,90 € (proposé le 23/10) | 14,75 € |
+| Modèle 3 Papillon en coffret (5) | 1,09 € | **1,72 €** | 19,90 € (proposé le 23/10) | 18,18 € |
 | Boîte de 1 (10) | 0,68 € | **1,07 €** | 4,90 € | 3,83 € |
 | Boîte de 2 (10) | 0,91 € | **1,43 €** | 5,90 € | 4,47 € |
 | Boîte de 4 (10) | 1,36 € | **2,14 €** | 7,90 € | 5,76 € |
 
 Gravure modèle 1 : texte +3 €, dessin +4 € (23/10). À reporter dans `VARIANT_COSTS` (`src/lib/productCosts.js`) le jour de l'« applique ».
-Tout vendu aux prix des maquettes, sans gravure, hors port : 120 × 9,90 + 40 × 13,90 + 35 × 12,90 + 5 × 16,90 + 10 × (4,90 + 5,90 + 7,90)
-= **2 463 €** → ≈ 2 105 € après l'achat (315 €) et Stripe (≈ 43 €).
+Tout vendu aux prix des maquettes, sans gravure, hors port : 120 × 9,90 + 40 × 13,90 + 35 × 15,90 + 5 × 19,90 + 10 × (4,90 + 5,90 + 7,90)
+= **2 583 €** → ≈ 2 220 € après l'achat (315 €) et Stripe (≈ 45 €).
