@@ -105,6 +105,16 @@ MAIN = re.sub(r'(<select id="pf-gravure">.*?</select></div>)', lambda m: m.group
 MAIN = MAIN.replace('<option value="texte">', '<option value="texte" selected="">', 1)
 # l'« aperçu témoin » (plaque) n'a pas de sens : l'aperçu est posé sur la couverture
 MAIN = re.sub(r'<div class="engrave-preview">.*?</div></div>', "", MAIN, count=1, flags=re.S)
+# 24/10/2026, gérant (reçu Alibaba : 60 carnets, 213,07 € payés port et frais compris = 3,55 € le carnet) : « c'est sept euros
+# pour les gravures ». Carnet seul 12,90 € ; gravure de la couverture +7 € ; texte au dos +7 €.
+MAIN = MAIN.replace("17,90&nbsp;€", "12,90&nbsp;€")
+MAIN = MAIN.replace("Texte à graver (compris dans le prix)", "Texte à graver (+7 €)")
+MAIN = MAIN.replace("Texte au dos du carnet (+3 €)", "Texte au dos du carnet (+7 €)")
+MAIN = MAIN.replace("<label>Logo ou dessin à graver</label>", "<label>Logo ou dessin à graver (+7 €)</label>")
+MAIN = MAIN.replace('<option value="photo">Un logo ou un dessin</option>',
+                    '<option value="photo">Un logo ou un dessin</option><option value="sans">Sans gravure (carnet seul)</option>', 1)
+MAIN = re.sub(r'(<input id="pf-texte"[^>]*?value=")[^"]*(")', r"\1Camille\2", MAIN, count=1)
+assert "17,90" not in MAIN and "(+7 €)" in MAIN and 'value="sans"' in MAIN
 COUV = {n: uri(os.path.join(ASSETS, f"couverture-{n}.jpg")) for n in ("marron", "noir", "gris")}
 assert "te-line" in MAIN and 'id="pf-texte"' in MAIN and "mq-photo-field" in MAIN
 
@@ -121,7 +131,7 @@ CSS = r'''
 JS = r'''
 (function(){
   var COUV=__COUV__, ENCRE={marron:'#2c160a',noir:'#c9c2b6',gris:'#2f2f31'};
-  var BASE=17.9, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
+  var BASE=12.9, GRAV=7, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
   var st={c:'marron',q:1};
   var main=document.getElementById('galmain'), gm=main.parentNode;
   var blk=document.querySelector('.te-block'); if(blk&&blk.parentNode!==gm) gm.appendChild(blk);
@@ -137,10 +147,10 @@ JS = r'''
     tFields.forEach(function(f){if(f)f.style.display=mode==='texte'?'':'none'}); pfield.style.display=mode==='photo'?'':'none';
     var fnt='fnt-'+(fs?fs.value:'playfair');
     [l1,l2].forEach(function(l){l.className=l.className.replace(/fnt-[\w-]+/g,'').trim()+' '+fnt; l.style.color=ENCRE[st.c]});
-    l1.textContent=mode==='texte'?(t1.value||'Camille'):''; l2.textContent=mode==='texte'?(t2.value||''):'';
+    l1.textContent=mode==='texte'?t1.value:''; l2.textContent=mode==='texte'?(t2.value||''):'';
     blk.style.display=mode==='texte'?'':'none';
     if(logo){logo.style.display=mode==='photo'?'':'none'; logo.classList.toggle('clair',st.c==='noir')}
-    var px=BASE+((dos&&dos.value.trim())?3:0);
+    var px=BASE+((mode==='texte'&&t1.value.trim())||(mode==='photo'&&logo)?GRAV:0)+((dos&&dos.value.trim())?GRAV:0);
     tot.textContent=eur(px*st.q); if(lead) lead.textContent=eur(BASE); qs.textContent=st.q;
     [t1,t2,dos].forEach(cnt);
   }
@@ -170,7 +180,7 @@ JS = r'''
 })();
 '''.replace("__COUV__", json.dumps(COUV))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Carnet A5 gravé » (prix proposé : 17,90 €, à valider · couvertures dessinées en attendant vos photos gravées) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Carnet A5 gravé » (carnet seul 12,90 € · chaque gravure +7 €, à valider · couvertures dessinées en attendant vos photos gravées) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Carnet A5 gravé — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
