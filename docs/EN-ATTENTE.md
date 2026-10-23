@@ -340,6 +340,8 @@ En attente de SA décision :
   + 8 écritures, ou logo/dessin) · texte au dos +7 €. Carnet gravé = 19,90 €.
 - COÛT RÉEL (reçu Alibaba #33986068501043880 du 23/10) : 60 carnets × 0,89 € + port 153,94 € + frais 6,20 € = 213,07 €
   → **3,55 € le carnet** (le port pèse 2,57 €). ⚠️ Adresse « Ship to » du reçu = Cangnan, Wenzhou (Chine) : à vérifier.
+- ✅ 24/10 : maquette ENREGISTRÉE telle quelle (« tu enregistres, tu mets rien en ligne ») ; relevé du marché dans
+  `docs/prix-marche.md` (gravé 12,50–19,90 € chez les artisans FR, 39,90 € cuir vegan, 6,99 € Amazon).
   Poids estimé 380 g → lettre suivie 8,90 € / relais 4,90 € : À VÉRIFIER (pesée réelle).
 - Couvertures DESSINÉES dans la maquette : il faudra de vraies photos gravées avant la mise en ligne.
 

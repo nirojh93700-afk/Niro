@@ -193,3 +193,19 @@ environnement qui laisse passer ces sites, si le gérant le demande.
 - Chef & Sommelier Grands Cépages 47 cl (réf. 176845) :
   https://shop.metro.fr/produits-equipements/art-de-la-table-usage-unique/verrerie/verre-de-degustation/verre-a-pied-grands-cepages-vin-rouge-47-cl-ref176845.html
 - ⛔ **Arcoroc Domaine 47 cl = verre TREMPÉ, se grave mal. À ne pas prendre.**
+
+## Carnet A5 gravé — relevé du 24/10/2026 (recherche web ; fiches concurrentes bloquées d'ici, prix lus dans les extraits)
+Notre maquette (enregistrée, RIEN en ligne) : carnet seul 12,90 € · gravure couverture +7 € → **19,90 € gravé** · texte au dos +7 €.
+Coût réel : 3,55 € le carnet (reçu Alibaba du 23/10, port compris).
+| Vendeur | Produit | Prix | Gravure |
+|---|---|---|---|
+| Rituel d'Ancrage (FR, vend aussi sur Etsy) | carnet cuir vegan gravé au prénom, jusqu'à 20 lettres | 39,90 € (+4 € emballage cadeau) | comprise |
+| L'Atelier Gravure (FR) | carnet de notes A5, motif / mot / signature | 15,90 € | comprise |
+| Cadomaestro (FR) | carnet en liège gravé | dès 14,90 € | comprise |
+| ma-creation-perso (FR) | carnet bambou + stylo gravé / carnet kraft A6 | 19,90 € / 14,90 € | comprise |
+| Atelier Mumu (FR) | carnet couverture bambou gravée | 12,50 € | comprise |
+| Amazon marketplace | carnet A5 « cuir » gravé prénom / monogramme | 6,99 € | comprise |
+| Objets pub (Good Act, Objet Pub Design, Personaliz) | carnet A5 logo, pro, ≥ 50 pièces | 2 à 10 € HT l'unité | marquage logo |
+Lecture : sur le marché des particuliers, **la gravure est toujours comprise** et le carnet gravé se vend 12,50–19,90 €
+(39,90 € pour le cuir vegan « premium »). Notre 19,90 € gravé est dans le haut de la fourchette artisanale ; le 12,90 € seul
+n'a pas d'équivalent (personne ne vend le carnet vierge). Point de vigilance : « aspect cuir » et non « cuir ».
