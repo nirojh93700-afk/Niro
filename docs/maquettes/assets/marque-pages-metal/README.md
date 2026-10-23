@@ -23,3 +23,5 @@ Noms français proposés (à valider) : « Marque-page Amandier en fleurs », «
 ⚠️ Les tableaux sont dans le domaine public, mais les cartes portent les textes/marques du fournisseur : ne pas les montrer telles quelles sur le site.
 
 Maquette de la fiche (23/10/2026) : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji — générateur `tools/maquettes/marque-pages-metal.py`. `boite1/2/4.jpg` = les boîtes bleu nuit des modèles 1 et 2 (copie).
+
+Coût rendu (reçu Alibaba du 23/10, port + frais répartis × 1,574) : **1,15 €** le marque-page, **1,72 €** le Papillon en coffret. Détail : `docs/marque-pages-commande-alibaba-2026-10-12.md`.

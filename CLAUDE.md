@@ -17,6 +17,8 @@
   nouvel artifact https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (l'ancien SVdzg13dw99fmeg1DSaYUa n'était pas republiable d'ici sans relire 3 Mo ;
   il reste en v9 avec dessin +2 €). Le modèle 2 (13,90 €, texte +2 €) n'a pas bougé. Capture du modèle 1 repointée sur les CSS du build courant
   (`scratchpad/mp-bm/cap1b.html`) : les hachages CSS de la capture du 12/10 n'existent plus dans `.next`.
+- **Coûts rendus (reçu Alibaba du 23/10, 315,41 € payés, × 1,574 port + frais)** : modèle 1 **1,15 €**, modèle 2 **2,14 €**, métal **1,15 €**, Papillon
+  **1,72 €**, boîtes 1,07 / 1,43 / 2,14 € → `docs/marque-pages-commande-alibaba-2026-10-12.md` (restauré sur cette branche). À mettre dans `VARIANT_COSTS` à l'« applique ».
 - Questions au gérant : prix (8,90 / Papillon 12,90) ; le Papillon (déjà en coffret) doit-il avoir les formats boîte / coffret ? ; photos atelier à
   refaire (fond vert fournisseur) ; texte modèle 1 = 3 € (tranché le 23/10) ; le modèle 2 garde texte +2 € tant qu'il ne le dit pas.
 
