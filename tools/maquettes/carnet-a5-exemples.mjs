@@ -4,11 +4,16 @@
 import { chromium } from 'playwright-core';
 import fs from 'fs';
 const out = 'docs/maquettes/assets/carnet/exemples/';
+const P = (name) => 'data:image/jpeg;base64,' + fs.readFileSync(`docs/maquettes/assets/marque-pages/exemples/portraits/${name}.jpg`).toString('base64');
 const EX = [
   ['marron', 'face', { haut: { k: 'texte', t: 'Carnet de voyage' }, milieu: { k: 'dessin', n: 64 }, basg: { k: 'texte', t: 'Camille', t2: '2026' } }],
   ['noir', 'face', { haut: { k: 'texte', t: 'Mes recettes' }, milieu: { k: 'dessin', n: 92, t: 'Léa' }, basd: { k: 'texte', t: 'Depuis 2026' } }],
   ['gris', 'face', { milieu: { k: 'texte', t: 'Journal', t2: 'de bord' }, basd: { k: 'texte', t: 'Paul' } }],
   ['marron', 'face', { haut: { k: 'texte', t: 'Inès' }, milieu: { k: 'dessin', n: 65 }, basg: { k: 'texte', t: 'Mes idées' } }],
+  // 24/10 soir (gérant : « tu peux faire la même chose pour le carnet ») : une PHOTO de personne gravée au milieu (= « Mon logo ou mon
+  // propre dessin ») ; portraits = recadrages des photos de cristaux du site (docs/maquettes/assets/marque-pages/exemples/portraits/).
+  ['marron', 'face', { milieu: { k: 'logo', src: P('enfant-chien') }, basg: { k: 'texte', t: 'Camille', t2: '2026' } }],
+  ['noir', 'face', { haut: { k: 'texte', t: 'Nos souvenirs' }, milieu: { k: 'logo', src: P('couple') }, basd: { k: 'texte', t: 'Léa & Paul' } }],
 ];
 const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
 const pg = await br.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2 });

@@ -99,7 +99,7 @@ FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-
        "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
 RECAP = ('<div class="mq-recap" id="mq-recap" hidden><p class="mq-rtxt"></p><div class="mq-strip"></div>'
          '<button type="button" class="mq-open">Voir et personnaliser mon coffret</button></div>')
-GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de couleurs différentes : vous pouvez en changer et faire graver chacun — un texte sur la face (+3 €), et au verso un texte (+3 €), un dessin, un cadre ou une photo (+4 €), en haut et au milieu — dans « Voir et personnaliser mon coffret ».</p>'
+GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de couleurs différentes : vous pouvez en changer et faire graver chacun — un texte sur la face (+3 €) ou votre photo au-dessus de la fenêtre (+4 €), et au verso un texte (+3 €), un dessin, un cadre ou une photo (+4 €), en haut et au milieu — dans « Voir et personnaliser mon coffret ».</p>'
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'
 assert cle in MAIN
 cle_id = cle.replace('<div style="margin-bottom:6px">', '<div style="margin-bottom:6px" id="mq-grav">')
@@ -119,7 +119,7 @@ i0 = MAIN.index(OLD_H); i1 = MAIN.index("</p>", i0) + 4
 OLD_V = "<h3>Un texte au verso</h3>"
 assert OLD_V in MAIN
 v0 = MAIN.index(OLD_V); v1 = MAIN.index("</p>", v0) + 4
-MAIN = MAIN[:v0] + "<h3>Gravé sur la face et au verso</h3><p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez.</p>" + MAIN[v1:]
+MAIN = MAIN[:v0] + "<h3>Gravé sur la face et au verso</h3><p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale ; au-dessus de la fenêtre, vous pouvez aussi faire graver votre photo, en noir et blanc (+4 €), comme un portrait. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez.</p>" + MAIN[v1:]
 MAIN = MAIN[:i0] + "<h3>Offrez-le en boîte cadeau</h3><p>Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>" + MAIN[i1:]
 BOXTH = "".join(f'<button class="mq-thbox" data-n="{n[-1]}" aria-label="Voir le visuel {k}"><img src="{uri(os.path.join(ASSETS, n + ".jpg"), 900, 74)}" alt=""/></button>' for k, n in ((6, "boite1"), (7, "boite2"), (8, "boite4")))
 MAIN = MAIN.replace('<div class="gallery-thumbs">', '<div class="gallery-thumbs">', 1)
@@ -244,12 +244,12 @@ JS = r'''
   reset();draw();maj();
 })();
 '''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK)) \
-    .replace("__ALLOW__", "function(s){return s==='face'?['texte']:['texte','dessin','photo']}").replace("__DEFC__", "st.n>1?i%WOODS.length:WOODS.indexOf(st.t)") \
+    .replace("__ALLOW__", "function(s,z){return s==='face'?(z==='haut'?['texte','photo']:['texte']):['texte','dessin','photo']}").replace("__DEFC__", "st.n>1?i%WOODS.length:WOODS.indexOf(st.t)") \
     .replace("__RTXT__", "'Votre coffret de '+st.n+' marque-pages, de couleurs différentes. Vous pouvez changer une couleur ou faire graver chacun (face et verso) :'") \
     .replace("__SWSLOTS__", "")
 
 DATA = mp_apercu.script_data(2)
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page ajouré, oiseau et magnolia » (précommande · texte face + verso, dessin ou photo au verso, aperçu dans la couleur choisie, coffret pas à pas, quatre emplacements (face = texte, verso = texte / dessin / photo) — 24/10) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page ajouré, oiseau et magnolia » (précommande · texte face + verso, dessin ou photo au verso, aperçu dans la couleur choisie, coffret pas à pas, quatre emplacements (face = texte, photo en haut ; verso = texte / dessin / photo) — 24/10) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Marque-page ajouré, oiseau et magnolia — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}\n{mp_apercu.CSS}\n{mp_apercu.CSS_PLANCHES}</style>"
 SHEET = ('<div id="mq-cgwrap" hidden>' + mp_apercu.grille_planches("cg", "Choisissez votre dessin pour le verso", """Touchez une planche pour l'agrandir et lire les numéros, puis tapez le numéro ci-dessous. Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s'écrit votre texte (n° 88 à 94, 96, 98, 100 à 102).""") + '</div><div class="mq-sheet" id="mq-sheet" hidden><div class="mq-sheetin"><div class="mq-shh"><b id="mq-sht">Mon coffret</b><button type="button" id="mq-close" aria-label="Fermer">×</button></div>'

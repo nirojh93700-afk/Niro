@@ -8,15 +8,25 @@ const file = m === '2' ? 'docs/maquettes/marque-pages-fenetre.html' : 'docs/maqu
 const out = `docs/maquettes/assets/marque-pages/exemples/m${m}/`;
 const T = (text, side, zone, font) => ({ kind: 'texte', text, side, zone, font: font || 'fnt-playfair' });
 const Dz = (num, side, zone, text, font) => ({ kind: 'dessin', num, side, zone, text: text || '', font: font || 'fnt-playfair' });
+// 24/10 soir (gérant : « des photos de personnes gravées… modèle 1 où tu veux, modèle 2 en haut de la face ou au dos ») :
+// portraits d'exemple = recadrages des photos de cristaux du site (docs/maquettes/assets/marque-pages/exemples/portraits/).
+import { readFileSync } from 'fs';
+const P = (name, side, zone) => ({ kind: 'photo', src: 'data:image/jpeg;base64,' + readFileSync(`docs/maquettes/assets/marque-pages/exemples/portraits/${name}.jpg`).toString('base64'), side, zone });
 const EX = m === '2' ? [
   ['Blond clair', [T('Camille', 'face', 'haut'), Dz(62, 'dos', 'bas')]],
   ['Brun roux', [T('Léa', 'face', 'bas', 'fnt-great-vibes'), Dz(92, 'dos', 'bas', 'Paul')]],
   ['Sable', [T('Mes lectures', 'face', 'haut'), T('2026', 'dos', 'haut'), Dz(65, 'dos', 'bas')]],
+  ['Blond clair', [P('femme-visage', 'face', 'haut'), T('Léa', 'dos', 'haut', 'fnt-great-vibes')]],
+  ['Brun roux', [T('Camille', 'face', 'haut'), P('enfant-chien', 'dos', 'bas')]],
+  ['Sable', [T('2026', 'dos', 'haut'), P('couple', 'dos', 'bas')]],
 ] : [
   ['Caramel', [T('Camille', 'face', 'haut'), Dz(8, 'face', 'bas')]],
   ['Gris anthracite', [Dz(92, 'face', 'bas', 'Léa'), T('2026', 'dos', 'haut')]],
   ['Rouge', [T('Paul', 'face', 'haut', 'fnt-great-vibes'), Dz(65, 'face', 'bas'), Dz(7, 'dos', 'bas')]],
   ['Blond clair', [T('Bonne lecture', 'face', 'bas'), T('Inès', 'dos', 'haut', 'fnt-allura')]],
+  ['Caramel', [T('Camille', 'face', 'haut'), P('enfant-chien', 'face', 'bas')]],
+  ['Gris sable', [T('Paul', 'face', 'haut', 'fnt-great-vibes'), P('couple', 'dos', 'bas')]],
+  ['Cuivré', [P('femme-visage', 'face', 'haut'), T('Pour Mamie', 'face', 'bas'), P('femme', 'dos', 'bas')]],
 ];
 execSync(`mkdir -p ${out}`);
 const br = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });

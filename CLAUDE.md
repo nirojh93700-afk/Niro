@@ -1,5 +1,5 @@
 ## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
-- **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v2) · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
+- **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v8 au 24/10 soir : exemples photo) · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
   `tools/maquettes/carnet-a5.py <capture> <champ-photo>` (méthode du puzzle photo : fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, build,
   `next start -p 3140`, capture Playwright, puis `git checkout` — le site n'a pas été touché) · photos `docs/maquettes/assets/carnet/`.
 - **Produit** (Alibaba, Wenzhou Senyuan, reçu #33986068501043880 du 23/10 : 60 carnets) : A5 21,2 × 14,5 cm, couverture rigide aspect cuir, élastique,
@@ -46,7 +46,7 @@
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
 > Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
 > (`docs/maquettes/assets/marque-pages/zones/`). Ne plus les modifier sans sa demande ; c'est CES versions à reproduire au « applique ».
-- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (**v5 du 24/10**, en attente de son avis) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
+- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (**v17 au 24/10 soir**, en attente de son avis) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
   boîtes 4,90 / 5,90 / 7,90 · fenêtre « Composer mon coffret » (couleur + dessin/photo + texte par marque-page).
   · **v4 (24/10, gérant : « intègre les images qu'on a choisies, comme pour le gobelet, avec les numéros… mets ceux que tu conseilles, fais la maquette »)** :
     « Avec un dessin » ouvre les **planches du gobelet** (lues dans `gobelet-configurateur-final.html` : 10 planches de dessins n° 1–74 + les cadres que j'ai
@@ -172,6 +172,21 @@
     (le n° 6 a sa tige sous la fleur). Règle : **avant de servir un dessin dans un aperçu, le regarder dans le sens où il sera gravé**
     (fleur / animal en haut, tige en dessous) : une planche peut être dessinée autrement. Trois maquettes régénérées et republiées :
     modèle 1 v16 · modèle 2 v15 · carnet v7 (exemples inchangés : aucun n'utilise le n° 5). Vérifié 390 / 1280 : 0 erreur, 0 débordement.
+  · ✅ **PHOTOS DE PERSONNES GRAVÉES DANS LES EXEMPLES (24/10 soir, gérant : « des photos comme des personnes gravées pour que [le client]
+    comprenne qu'on peut graver des photos aussi… modèle 1 où tu veux, modèle 2 que en haut [de la face] et au dos en haut ou en bas…
+    montre-moi avant » → « Parfait, tu peux mettre dans les images, la même chose pour le carnet aussi »)** : modèle 1 v17 · modèle 2 v16 ·
+    carnet v8. **Règle du modèle 2 changée : la FACE accepte la photo EN HAUT (au-dessus de la fenêtre, +4 €)**, le bas de la face reste
+    texte seul, le dos = tout (`ALLOW` = `function(s,z)` dans `marque-pages-fenetre.py`, textes de la fiche et bandeau à jour) ; modèle 1 :
+    photo partout (déjà le cas). **Portraits d'exemple** = recadrages des photos de cristaux du site (`docs/maquettes/assets/marque-pages/
+    exemples/portraits/enfant-chien, couple, femme, femme-visage.jpg` ; les photos de puzzle refusées : traits de découpe visibles) — jamais
+    une photo d'une vraie cliente. **3 exemples photo de plus par marque-page** (m1 : Caramel « Camille » + enfant au chien face·bas · Gris
+    sable « Paul » + couple dos·bas · Cuivré portrait face·haut + « Pour Mamie » + femme dos·bas ; m2 : Blond clair portrait face·haut +
+    « Léa » dos · Brun roux « Camille » + enfant dos·bas · Sable « 2026 » + couple dos·bas) et **2 pour le carnet** (marron photo enfant au
+    milieu + « Camille / 2026 » · noir « Nos souvenirs » + couple + « Léa & Paul », kind `logo` = « Mon logo ou mon propre dessin »).
+    Scripts `marque-pages-exemples.mjs` / `carnet-a5-exemples.mjs` (photos lues en data URL), item `{kind:'photo', src, side, zone}` de
+    `mqDemo`. Au passage (e41d2b7a) : la photo de l'aperçu prend toute la largeur de la zone, plus de rectangle clair. Vérifié 390 / 1280 :
+    0 erreur JS, 0 débordement, 20 / 15 / 12 vignettes, exemple cliqué = photo fixe, modèle 2 face·haut = texte ou photo (17,90 €),
+    face·bas = texte seul.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
