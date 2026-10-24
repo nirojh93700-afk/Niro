@@ -291,6 +291,11 @@
   nouvelle image » ; je ne pouvais pas créer le devis (clé admin refusée) et j'ai quand même envoyé le mail qui annonce « nous vous
   envoyons votre devis ». Si une partie de ce qu'il demande est impossible : NE RIEN ENVOYER, le dire en une phrase, attendre.
 
+- ⛔ **DANS UN MAIL CLIENT, AUCUNE PHRASE INVENTÉE OU BIZARRE (gérant, 24/10/2026, mail à Alexandre sur la plaque seule : « t'as vérifié sur
+  Internet pour des phrases comme ça ? … fais plus d'erreurs comme ça »)** : j'avais écrit « Nous vous souhaitons une belle réparation de votre bracelet ».
+  Un mail client n'utilise QUE des formules d'usage du service client français (« Bonjour », « Merci pour votre message », « Bien cordialement »),
+  plus les faits de la commande ou de la question. Pas de vœu ou de tournure de ma propre invention. En cas de doute sur une phrase : la retirer.
+
 - ⛔ **DANS UN MAIL CLIENT, NE PAS PROPOSER D'ALTERNATIVES NON DEMANDÉES (gérant, 10/10/2026, dossier Jankowski 1P5XZKRP : « enlève cette phrase,
   ne propose pas des trucs comme ça »)** : pas de « si vous préférez, envoyez une autre photo », pas de « rien à faire de votre côté », pas de choix
   ni de porte de sortie ajoutés de ma propre initiative. Le mail dit ce qui sera fait et ce qui est impossible ; la seule proposition permise est
