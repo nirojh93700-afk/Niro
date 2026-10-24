@@ -9,11 +9,11 @@ const out = `docs/maquettes/assets/marque-pages/exemples/m${m}/`;
 const T = (text, side, zone, font) => ({ kind: 'texte', text, side, zone, font: font || 'fnt-playfair' });
 const Dz = (num, side, zone, text, font) => ({ kind: 'dessin', num, side, zone, text: text || '', font: font || 'fnt-playfair' });
 const EX = m === '2' ? [
-  ['Blond clair', [T('Camille', 'face', 'haut'), Dz(12, 'dos', 'bas')]],
+  ['Blond clair', [T('Camille', 'face', 'haut'), Dz(62, 'dos', 'bas')]],
   ['Brun roux', [T('Léa', 'face', 'bas', 'fnt-great-vibes'), Dz(92, 'dos', 'bas', 'Paul')]],
   ['Sable', [T('Mes lectures', 'face', 'haut'), T('2026', 'dos', 'haut'), Dz(65, 'dos', 'bas')]],
 ] : [
-  ['Caramel', [T('Camille', 'face', 'haut'), Dz(12, 'face', 'bas')]],
+  ['Caramel', [T('Camille', 'face', 'haut'), Dz(8, 'face', 'bas')]],
   ['Gris anthracite', [Dz(92, 'face', 'bas', 'Léa'), T('2026', 'dos', 'haut')]],
   ['Rouge', [T('Paul', 'face', 'haut', 'fnt-great-vibes'), Dz(65, 'face', 'bas'), Dz(7, 'dos', 'bas')]],
   ['Blond clair', [T('Bonne lecture', 'face', 'bas'), T('Inès', 'dos', 'haut', 'fnt-allura')]],

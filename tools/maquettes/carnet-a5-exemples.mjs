@@ -5,7 +5,7 @@ import { chromium } from 'playwright-core';
 import fs from 'fs';
 const out = 'docs/maquettes/assets/carnet/exemples/';
 const EX = [
-  ['marron', 'face', { haut: { k: 'texte', t: 'Carnet de voyage' }, milieu: { k: 'dessin', n: 12 }, basg: { k: 'texte', t: 'Camille', t2: '2026' } }],
+  ['marron', 'face', { haut: { k: 'texte', t: 'Carnet de voyage' }, milieu: { k: 'dessin', n: 64 }, basg: { k: 'texte', t: 'Camille', t2: '2026' } }],
   ['noir', 'face', { haut: { k: 'texte', t: 'Mes recettes' }, milieu: { k: 'dessin', n: 92, t: 'Léa' }, basd: { k: 'texte', t: 'Depuis 2026' } }],
   ['gris', 'face', { milieu: { k: 'texte', t: 'Journal', t2: 'de bord' }, basd: { k: 'texte', t: 'Paul' } }],
   ['marron', 'face', { haut: { k: 'texte', t: 'Inès' }, milieu: { k: 'dessin', n: 65 }, basg: { k: 'texte', t: 'Mes idées' } }],

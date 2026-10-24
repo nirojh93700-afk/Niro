@@ -155,6 +155,9 @@
     passage : les vignettes des boîtes portent `.mq-thbox[data-n]` (plus d'index fixe dans la galerie), et `mqApercu` RÉAJUSTE la
     taille des textes quand la police arrive après la mesure (« Camille » sortait coupé). Vérifié 390 / 1280 : 17 / 12 vignettes,
     exemple = photo fixe, boîte du coffret retrouvée, 0 erreur.
+    · **v15 / v14 (+ carnet v6) — « enlève la rose, remplace par une autre image plus jolie, juste sur les aperçus, pas dans le
+      fichier »** : la rose n° 12 reste dans les planches, mais plus aucun exemple ne l'utilise → papillons fleuris n° 8 (modèle 1,
+      Caramel), plume aux papillons n° 62 (modèle 2, Blond clair), colibri aux coquelicots n° 64 (carnet, « Carnet de voyage »).
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
