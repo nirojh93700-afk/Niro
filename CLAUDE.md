@@ -115,6 +115,13 @@
       59 à 102 px de large) ; la fiche garde l'aperçu dans la grande photo.
     Vérifié 390 / 1280 : 0 erreur, 0 débordement, modèle 1 seul + dessin 12 (face milieu) + « Léa » (dos haut) + cadre 92 « Paul » (dos
     milieu) = 23,90 € · coffret de 2 + « Paul » + dessin 7 = 32,70 €, « même gravure » = 39,70 € · modèle 2 : 27,90 € · 40,70 / 47,70 €.
+  · **v13 modèle 1 + v12 modèle 2 (24/10 soir, gérant : « il faut le bouton pour valider à côté des chiffres… s'ils veulent un
+    texte au-dessus et un dessin en dessous ou le contraire, il faut qu'ils puissent choisir deux trucs par face »)** : bouton doré
+    **« Valider ✓ »** à côté du numéro du dessin (grisé tant que le numéro n'est pas bon, replie la grille comme la touche Entrée ;
+    `grille_planches` + `mqPlanches`, donc aussi dans le carnet à sa prochaine régénération) ; `CSS_PLANCHES` est maintenant inclus
+    par les deux générateurs. Deux gravures par face = déjà possible avec les quatre menus (Face · en haut = texte, Face · au
+    milieu = dessin, ou l'inverse) : la phrase d'introduction le dit maintenant avec cet exemple. Vérifié 390 : « Léa » en haut +
+    dessin 33 au milieu sur la face = 16,90 € (modèle 1), bouton grisé → actif → grille repliée, 0 erreur.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.

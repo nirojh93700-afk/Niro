@@ -210,7 +210,7 @@ window.mqEdResume=function(v){var r=[],L={'face|haut':'face, en haut','face|bas'
   for(var k in v){var e=v[k],s='';if(e.k==='texte'&&(e.t||'').trim())s='« '+e.t.trim()+' »';else if(e.k==='dessin')s=e.n?(e.n>=75?'cadre n° '+e.n+((e.t||'').trim()?' « '+e.t.trim()+' »':''):'dessin n° '+e.n):'dessin à choisir';else if(e.k==='photo')s=e.src?'votre photo':'photo à envoyer';if(s)r.push(L[k]+' : '+s)}return r};
 window.mqEditeur=function(host,o){ // o = {v, allow(side,zone)→['texte','dessin','photo'], onChange(), cg, cgEl, cgWrap}
   var A=window.MQAP,ed={v:o.v,active:null,blocks:{}};host.innerHTML='';host.classList.add('mq-ed');
-  var intro=document.createElement('p');intro.className='mq-edi';intro.textContent='Quatre emplacements : gravez l\'un d\'eux, ou plusieurs. Un texte +3 €, un dessin, un cadre ou votre photo +4 €. Rien de coché = marque-page nu.';host.appendChild(intro);
+  var intro=document.createElement('p');intro.className='mq-edi';intro.textContent='Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l\'inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 €. Rien de coché = marque-page nu.';host.appendChild(intro);
   window.MQ_EMP.forEach(function(e){var side=e[0],zone=e[1],key=side+'|'+zone,ok=o.allow?o.allow(side,zone):['texte','dessin','photo'];if(!ok.length)return;
     var b=document.createElement('div');b.className='mq-emp';b.dataset.key=key;var lab=((A.labels||{})[side]||{})[zone]||zone;lab=lab.charAt(0).toLowerCase()+lab.slice(1);
     var sub=ok.length===1?(zone==='haut'?'texte sur une ligne':'texte à la verticale'):(zone==='haut'?'texte sur une ligne · dessin petit':'texte à la verticale · dessin grand');
@@ -279,7 +279,8 @@ def grille_planches(id_prefix="mq", titre="Choisissez votre dessin", legende=Non
             f'<div class="prc-grid mq-grid" id="{id_prefix}-gd">' + "".join(planche(s_, a, b, "d", i) for i, (s_, (a, b)) in enumerate(zip(PL, LEG_D)))
             + "".join(planche(s_, a, b, "c", i) for i, (s_, a, b) in enumerate(leg_c)) + '</div>'
             f'<div class="field mq-numf"><label for="{id_prefix}-num">Numéro du dessin ou du cadre</label>'
-            f'<input type="number" id="{id_prefix}-num" min="1" max="102" inputmode="numeric" placeholder="Ex : 12"/></div>'
+            f'<div class="mq-numrow"><input type="number" id="{id_prefix}-num" min="1" max="102" inputmode="numeric" placeholder="Ex : 12"/>'
+            f'<button type="button" class="mq-numok" id="{id_prefix}-numok">Valider ✓</button></div></div>'
             f'<p class="prc-choisi" id="{id_prefix}-dok" hidden></p><button type="button" class="prc-change" id="{id_prefix}-dchg" hidden>Changer de dessin</button>'
             '</div>')
 
@@ -287,7 +288,7 @@ def grille_planches(id_prefix="mq", titre="Choisissez votre dessin", legende=Non
 CSS_PLANCHES = r'''
 .mq-dessins{margin:-4px 0 14px}.mq-dessins [hidden]{display:none!important}.mq-dh{font-weight:600;font-size:.9rem;margin:0 0 8px}.mq-dessins .prc-legend b{color:#2b2620}
 .mq-grid .prc-mimg{aspect-ratio:3/4;background:#fff}.mq-grid .prc-mimg img{object-position:top}.mq-grid .prc-model[data-kind="c"] .prc-mimg{aspect-ratio:4/3}.prc-ml em{font-style:normal;font-weight:700;color:var(--gold-dark,#a98935)}
-.mq-numf{margin:12px 0 0}.mq-numf input{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #e0d3b0;background:#fffdf8;font:inherit}
+.mq-numf{margin:12px 0 0}.mq-numrow{display:flex;gap:8px;align-items:stretch}.mq-numf input{flex:1;min-width:0;width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #e0d3b0;background:#fffdf8;font:inherit}.mq-numok{flex:none;border:0;border-radius:10px;padding:0 16px;background:linear-gradient(#c9a24b,#a98935);color:#fff;font:inherit;font-weight:700;cursor:pointer}.mq-numok:disabled{opacity:.4;cursor:default}
 .mq-zoom{position:fixed;inset:0;background:rgba(20,15,8,.72);z-index:5000;display:flex;align-items:center;justify-content:center;padding:14px}
 .mq-zoom-in{position:relative;max-width:680px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:12px;padding:10px}.mq-zoom-in img{width:100%;height:auto;display:block;border-radius:8px}
 .mq-zoom-x{position:absolute;top:6px;right:6px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:22px;cursor:pointer;color:#2b2620;z-index:5}
@@ -299,11 +300,13 @@ window.mqZoom=function(src){var o=document.createElement('div');o.className='mq-
   o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)};
 window.mqPlanches=function(prefix,ok,onChange){var st={num:0};var gd=document.getElementById(prefix+'-gd'),num=document.getElementById(prefix+'-num'),dok=document.getElementById(prefix+'-dok'),dchg=document.getElementById(prefix+'-dchg'),dleg=document.getElementById(prefix+'-dleg');
   if(!gd)return st;[].forEach.call(gd.querySelectorAll('.prc-model'),function(b){b.addEventListener('click',function(){[].forEach.call(gd.querySelectorAll('.prc-model'),function(x){x.classList.toggle('on',x===b)});window.mqZoom(b.querySelector('img').src)})});
-  function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v}
+  var nok=document.getElementById(prefix+'-numok');
+  function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v;if(nok)nok.hidden=v}
   num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=ok.indexOf(n)>=0?n:0;dok.hidden=!num.value;
     dok.textContent=st.num?(st.num>=75?'Cadre n° '+st.num+' choisi ✓ — votre texte s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓'):'Numéro : 1 à 74 pour un dessin, 88 à 94, 96, 98, 100 à 102 pour un cadre.';
     dok.classList.toggle('prc-miss',!st.num);if(onChange&&!st.quiet)onChange(st.num)});
   num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
   dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})});
+  if(nok){nok.disabled=true;num.addEventListener('input',function(){nok.disabled=!st.num});nok.addEventListener('click',function(){if(st.num){num.blur();plier(true)}})}
   st.set=function(n){var q=st.quiet;st.quiet=true;num.value=n||'';num.dispatchEvent(new Event('input'));st.quiet=q;plier(!!n)};return st};
 '''
