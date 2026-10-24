@@ -106,8 +106,11 @@ def config(modele):
                          "bas": {"nom": {"x": 0.2, "y": 0.6, "w": 0.3, "h": 0.33}, "dessin": {"x": 0.12, "y": 0.58, "w": 0.76, "h": 0.37}}}}
         labels = {"face": {"haut": "Au-dessus de la fenêtre", "bas": "À côté de la fenêtre"}, "dos": {"haut": "En haut", "bas": "Au milieu"}}
     d, asp, centre = dessins()  # modèle 2 : dessins au DOS seulement (24/10, gérant : « il y a de la place au dos »)
+    # 24/10 soir (gérant : « pour la photo, il faut que ce soit centré ») : sur un bois nu, tout est centré en largeur (les rectangles
+    # du 23/10 gardent leur hauteur) ; la face du modèle 2 garde ses places (au-dessus de la fenêtre, à gauche de la branche).
+    centrer = {"face": modele == 1, "dos": True}
     return {"photos": {"face": face, "dos": dos}, "couleurs": couleurs, "ratio": size[0] / size[1], "zones": zones, "labels": labels,
-            "dessins": d, "aspect": asp, "centre": centre}
+            "dessins": d, "aspect": asp, "centre": centre, "centrer": centrer}
 
 
 def html(hauteur=460, id_="mq-ap"):
@@ -128,7 +131,7 @@ CSS = r'''
 .mq-el .ph img{filter:grayscale(1) sepia(.3) brightness(.6) contrast(1.15);opacity:.9}
 .mq-sc .mq-ap{padding:8px;margin:0}
 .mq-steps{display:flex;gap:10px;justify-content:center;padding:4px 0 10px}.mq-step{position:relative;width:52px;border:2px solid #e4d9bd;border-radius:12px;background:#fff;padding:3px;cursor:pointer;font:inherit}.mq-step img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block}.mq-step span{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);background:#2b2620;color:#fff;border-radius:999px;font-size:.68rem;padding:1px 7px}.mq-step.on{border-color:#a98935;box-shadow:0 0 0 1px #a98935}.mq-step.done::after{content:'✓';position:absolute;top:-7px;right:-7px;background:#4f7a3a;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.7rem;display:flex;align-items:center;justify-content:center}
-.mq-same{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:0 0 4px;cursor:pointer}.mq-same input{width:18px;height:18px;accent-color:#a98935;flex:none}.mq-same small{color:#7a6c48}.mq-stepnav{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0 10px}.mq-stepnav button{border:1.5px solid #c9b88a;background:#fff;border-radius:999px;padding:9px 14px;font:inherit;font-weight:600;color:#7c6120;cursor:pointer}.mq-stepnav button:disabled{opacity:.35}.mq-stepn{font-size:.82rem;color:#5a4d2c}.mq-sc[hidden]{display:none}.mq-sc.mq-locked .mq-grav{opacity:.5;pointer-events:none}.mq-lock-note{font-size:.78rem;color:#7a6c48;margin:0}.mq-sc .mq-grav{display:flex;flex-direction:column;gap:8px}.mq-sc .mq-scc{font-weight:400;color:#7a6c48;font-size:.8rem}
+.mq-same{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:0 0 4px;cursor:pointer}.mq-same input{width:18px;height:18px;accent-color:#a98935;flex:none}.mq-same small{color:#7a6c48}.mq-stepnav{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0 10px}.mq-stepnav button{border:1.5px solid #c9b88a;background:#fff;border-radius:999px;padding:9px 14px;font:inherit;font-weight:600;color:#7c6120;cursor:pointer}.mq-stepnav button:disabled{opacity:.35}.mq-stepn{font-size:.82rem;color:#5a4d2c}.mq-sc[hidden]{display:none}.mq-sc.mq-locked .mq-grav{opacity:.5;pointer-events:none}.mq-lock-note{font-size:.78rem;color:#7a6c48;margin:0}.mq-sc .mq-grav{display:flex;flex-direction:column;gap:8px}.mq-sc .mq-sgrav{display:flex;flex-direction:column;gap:8px}.mq-sc .mq-sgrav[hidden]{display:none}.mq-sinfo{margin:0;font-size:.8rem;color:#5a4d2c;line-height:1.35}.mq-sc .mq-dessins{margin:0}.mq-sc .prc-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.mq-sc .prc-ml{font-size:.62rem}.mq-sc .mq-pbtn{align-self:flex-start}.mq-sc .mq-scc{font-weight:400;color:#7a6c48;font-size:.8rem}
 .mq-galap{position:absolute;inset:0;background:#f6efe1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;z-index:2}.mq-galap[hidden]{display:none}.mq-galap .mq-apw{align-items:center}.mq-galap-l{margin:0;font-size:.72rem;color:#7a6c48}.gallery-thumbs .mq-thap{display:flex;align-items:center;justify-content:center;background:#fbf3df;color:#7c6120;font-size:.64rem;font-weight:700;line-height:1.15;text-align:center;border:1.5px dashed #c9b88a;cursor:pointer}.mq-zoom-x{z-index:5}.mq-zoom-in .mq-bm{margin:34px auto 0}
 '''
 
@@ -148,13 +151,13 @@ window.mqPoseCadre=function(el,im,t,cc,bw,bh,asp){cc=cc||[0.5,0.5,0.5];
   var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);t.style.left=((bw-dw)/2+cc[0]*dw)+'px';t.style.top=((bh-dh)/2+cc[1]*dh)+'px';return [t,dw*0.6,dh*(cc[2]||0.5)];};
 // Coffret : UN marque-page à la fois (recherche du 24/10 soir : sur téléphone, 4 fiches empilées descendent trop bas ; un pas-à-pas avec
 // les pastilles de chaque pièce et un récapitulatif visible vaut mieux que des onglets ou des accordéons qui cachent ce qui est saisi).
-window.mqStepper=function(shb,cards,slots,imgs,st,onSame){
+window.mqStepper=function(shb,cards,slots,imgs,st,onSame,onShow){
   var head=document.createElement('div');head.className='mq-steps';
   var pills=cards.map(function(c,i){var b=document.createElement('button');b.type='button';b.className='mq-step';b.innerHTML='<img src="'+imgs[slots[i].c]+'" alt=""/><span>'+(i+1)+'</span>';b.addEventListener('click',function(){show(i)});head.appendChild(b);return b});
   var same=document.createElement('label');same.className='mq-same';same.innerHTML='<input type="checkbox"'+(st.same?' checked':'')+'/><span>La même gravure sur les '+cards.length+' marque-pages <small>(chacun garde sa couleur)</small></span>';
   same.querySelector('input').addEventListener('change',function(e){st.same=e.target.checked;onSame()});
   var nav=document.createElement('div');nav.className='mq-stepnav';nav.innerHTML='<button type="button" class="mq-prev">‹ Précédent</button><span class="mq-stepn"></span><button type="button" class="mq-next">Suivant ›</button>';
-  function show(i){st.cur=i;cards.forEach(function(c,j){c.hidden=j!==i});pills.forEach(function(p,j){p.classList.toggle('on',j===i)});nav.querySelector('.mq-stepn').textContent='Marque-page '+(i+1)+' sur '+cards.length;nav.querySelector('.mq-prev').disabled=i===0;nav.querySelector('.mq-next').textContent=i===cards.length-1?'Terminer ✓':'Suivant ›';shb.scrollTop=0}
+  function show(i){st.cur=i;cards.forEach(function(c,j){c.hidden=j!==i});pills.forEach(function(p,j){p.classList.toggle('on',j===i)});nav.querySelector('.mq-stepn').textContent='Marque-page '+(i+1)+' sur '+cards.length;nav.querySelector('.mq-prev').disabled=i===0;nav.querySelector('.mq-next').textContent=i===cards.length-1?'Terminer ✓':'Suivant ›';shb.scrollTop=0;if(onShow)onShow(i)}
   nav.querySelector('.mq-prev').addEventListener('click',function(){show(Math.max(0,st.cur-1))});
   nav.querySelector('.mq-next').addEventListener('click',function(){if(st.cur===cards.length-1){var ok=document.getElementById('mq-ok');if(ok)ok.click()}else show(st.cur+1)});
   shb.insertBefore(same,shb.firstChild);shb.insertBefore(nav,shb.firstChild);shb.insertBefore(head,shb.firstChild);show(Math.min(st.cur||0,cards.length-1));
@@ -169,8 +172,8 @@ window.mqApercu=function(host,items,hauteur,couleur){ // couleur = titre de la c
     (items||[]).filter(function(e){return e&&e.side===side&&e.kind&&(e.kind!=='texte'||(e.text||'').trim())}).forEach(function(e){
       var z=A.zones[side][e.zone||'haut']; if(!z)return;
       var zz=(e.kind==='texte')?z.nom:z.dessin; var asp=(e.kind==='dessin')?(A.aspect[e.num]||1):(e.kind==='photo'?0.8:9);
-      var vertical=(e.zone==='bas')&&(e.kind!=='dessin'||e.num>=75||asp>1.15); // au milieu : texte, cadre et dessin large = à la verticale ; dessin haut = droit
-      var x=zz.x*W,y=zz.y*H,w=zz.w*W,h=zz.h*H;
+      var vertical=(e.zone==='bas')&&(e.kind==='texte'||(e.kind==='dessin'&&(e.num>=75||asp>1.15))); // au milieu : texte, cadre et dessin large = à la verticale ; dessin haut et photo (portrait) = droits
+      var x=zz.x*W,y=zz.y*H,w=zz.w*W,h=zz.h*H; if(A.centrer&&A.centrer[side])x=(W-w)/2;
       var el=document.createElement('div');el.className='mq-el'+(e.kind==='dessin'&&e.num>=75?' cadre':'');
       if(vertical){ // la boîte est posée tournée de 90° : largeur affichée = h, hauteur = w
         el.style.width=h+'px';el.style.height=w+'px';el.style.left=(x+w/2-h/2)+'px';el.style.top=(y+h/2-w/2)+'px';el.style.transform='rotate(-90deg)';
@@ -254,7 +257,8 @@ window.mqPlanches=function(prefix,ok,onChange){var st={num:0};var gd=document.ge
   function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v}
   num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=ok.indexOf(n)>=0?n:0;dok.hidden=!num.value;
     dok.textContent=st.num?(st.num>=75?'Cadre n° '+st.num+' choisi ✓ — votre texte s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓'):'Numéro : 1 à 74 pour un dessin, 88 à 94, 96, 98, 100 à 102 pour un cadre.';
-    dok.classList.toggle('prc-miss',!st.num);if(onChange)onChange(st.num)});
+    dok.classList.toggle('prc-miss',!st.num);if(onChange&&!st.quiet)onChange(st.num)});
   num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
-  dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})});return st};
+  dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})});
+  st.set=function(n){var q=st.quiet;st.quiet=true;num.value=n||'';num.dispatchEvent(new Event('input'));st.quiet=q;plier(!!n)};return st};
 '''

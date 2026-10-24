@@ -93,6 +93,14 @@
       **« La même gravure sur les N marque-pages (chacun garde sa couleur) »** : la gravure du n° 1 se recopie sur les autres (cartes
       verrouillées, couleur toujours libre) ; `window.mqStepper` dans `mp_apercu.py`. Vérifié 390 / 1280 : 0 erreur, 0 débordement,
       photo = couleur choisie sur la page et dans le coffret, coffret de 4 + « Paul » partout = 59,50 € (modèle 1) / 75,50 € (modèle 2).
+  · **v11 modèle 1 + v10 modèle 2 (24/10 soir, captures du coffret : « pour voir les planches il faut que ce soit différent, le client ne
+    voit pas qu'il y a des choix ; simple, bien expliqué ; la photo, il faut que ce soit centré »)** : dans le coffret, plus de bouton
+    « Voir les planches » ni de case numéro à part : « Avec un dessin » affiche LES PLANCHES dans la carte (une seule grille partagée,
+    déplacée dans la carte du marque-page en cours, `mqPlanches(...).set(n)`), avec une phrase d'explication, le numéro et « Changer
+    de dessin » ; « Avec ma photo » affiche « 📷 Choisir ma photo » + une phrase, et la place s'appelle « Photo : … ». Centrage : sur
+    le bois nu (modèle 1 face et dos, dos du modèle 2) tout est centré en largeur (`centrer` dans `mp_apercu.config`, les rectangles du
+    23/10 gardent leur hauteur) ; la photo n'est plus tournée (portrait, au milieu, droite). La face du modèle 2 garde ses places.
+    Vérifié 390 : grille dans la carte, n° 12 → aperçu, retour sur la carte = numéro retrouvé, photo centrée (x = 0,50), 0 erreur.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
