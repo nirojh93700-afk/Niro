@@ -15,7 +15,7 @@
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
 > Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
 > (`docs/maquettes/assets/marque-pages/zones/`). Ne plus les modifier sans sa demande ; c'est CES versions à reproduire au « applique ».
-- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (**v4 du 24/10**, en attente de son avis) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
+- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (**v5 du 24/10**, en attente de son avis) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
   boîtes 4,90 / 5,90 / 7,90 · fenêtre « Composer mon coffret » (couleur + dessin/photo + texte par marque-page).
   · **v4 (24/10, gérant : « intègre les images qu'on a choisies, comme pour le gobelet, avec les numéros… mets ceux que tu conseilles, fais la maquette »)** :
     « Avec un dessin » ouvre les **planches du gobelet** (lues dans `gobelet-configurateur-final.html` : 10 planches de dessins n° 1–74 + les cadres que j'ai
@@ -26,6 +26,22 @@
     par marque-page, « Voir les planches » (les 14 planches en une fenêtre). Numéros acceptés : 1–74, 88–94, 96–103 (`NUMS_OK` du générateur).
     Vérifié Chromium 390 / 1280 : 0 débordement, 0 erreur JS, dessin 12 = 13,90 → + « Léa » 16,90 · coffret de 2 « Paul » + dessin 7 + photo = 36,70 €.
     Modèle 2 : PAS touché (23/10 : « pas de dessin, il y a déjà un dessin »). Modèle 3 : sans gravure.
+  · **v5 (24/10, gérant : « le client choisit : au-dessus, au milieu ou derrière, pareil pour les deux maquettes… et un aperçu pour
+    qu'il comprenne, pas juste le numéro » → « oui en haut / au milieu, vrai dessin, fais les deux »)** :
+    **Place choisie pour CHAQUE élément** — « Où graver le dessin ? » et « Où graver le texte ? » = 4 pastilles Face · en haut /
+    Face · au milieu / Dos · en haut / Dos · au milieu (la place prise par l'autre élément est grisée ; défaut dessin = face au
+    milieu, texte = face en haut). **Aperçu « Votre aperçu »** sous les champs : face ET dos côte à côte (photo redressée du 23/10,
+    le dos = le même bois nu), le VRAI dessin posé dans sa zone en rendu gravé, le texte dans son écriture (en haut sur une ligne,
+    au milieu à la verticale ; un dessin large ou un cadre se pose aussi à la verticale au milieu, un dessin haut reste droit),
+    toucher = agrandir ; même aperçu (petit) par marque-page dans la fenêtre du coffret, avec un menu de place pour le dessin et
+    un pour le texte. Les 74 dessins + 15 cadres sont DÉCOUPÉS des planches (`docs/maquettes/assets/marque-pages/dessins/`,
+    LISEZ-MOI + CONTROLE.jpg) ; module partagé `tools/maquettes/mp_apercu.py` (photos, zones, dessins, CSS, JS `mqApercu`).
+    ⚠️ L'aperçu montre le bois de la photo (caramel), pas la couleur choisie. Vérifié 390 / 1280 : 0 erreur, 0 débordement.
+  · **Modèle 2 v4 (24/10, même demande)** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv — texte seulement (règle du 23/10
+    gardée) : face « Au-dessus de la fenêtre, sur une ligne » / « À côté de la fenêtre, à la verticale », **verso « En haut » /
+    « Au milieu (vertical) »** (nouveau menu « Place au verso »), aperçu face + dos (dos = photo de la face retournée, bois nu
+    reconstitué sous la fenêtre : `zones/m2-dos-apercu.jpg`), places et aperçu par marque-page dans le coffret (plus de place
+    commune). ❓ Un dessin au DOS du modèle 2 n'a pas été ajouté : il a dit « texte ou dessin » pour le modèle 1 ; à lui de dire.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.

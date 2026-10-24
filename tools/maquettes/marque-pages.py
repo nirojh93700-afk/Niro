@@ -12,6 +12,8 @@ Sortie : docs/maquettes/marque-pages.html (+ .fragment.html, jamais commité).
 """
 import base64, io, json, os, re, sys, urllib.parse
 from PIL import Image
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import mp_apercu  # 24/10 : aperçu face / dos + dessins découpés
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "docs", "maquettes")
@@ -112,10 +114,16 @@ GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin
         '</div>')
 # Place sur le marque-page = les zones données par le gérant le 23/10 (docs/maquettes/assets/marque-pages/zones/) :
 # HAUT (sous le trou) = petit dessin · BAS = grand dessin. Même choix pour la photo.
-PLACE = ('<div class="field mq-placef" id="mq-placef" hidden><label>Place sur le marque-page</label><div class="prc-chips" id="mq-place">'
-         '<button type="button" class="prc-chip on" data-z="haut">En haut, sous le trou <small>(petit)</small></button>'
-         '<button type="button" class="prc-chip" data-z="bas">En bas <small>(grand)</small></button></div>'
-         '<p class="mq-dn" id="mq-placen">Le texte gravé, s\'il y en a un, prend l\'autre emplacement.</p></div>')
+def chips(idn, on):
+    L = [("face", "haut", "Face · en haut"), ("face", "bas", "Face · au milieu"), ("dos", "haut", "Dos · en haut"), ("dos", "bas", "Dos · au milieu")]
+    return f'<div class="prc-chips mq-pl" id="{idn}">' + "".join(
+        f'<button type="button" class="prc-chip{" on" if (sd, z) == on else ""}" data-s="{sd}" data-z="{z}">{lab}</button>' for sd, z, lab in L) + '</div>'
+# Place du dessin / de la photo (24/10, gérant : « au-dessus, au milieu ou derrière ») : zones du 23/10, face = dos.
+PLACE = ('<div class="field mq-placef" id="mq-placef" hidden><label>Où graver le dessin ?</label>' + chips("mq-place", ("face", "bas")) +
+         '<p class="mq-dn" id="mq-placen">En haut, sous le trou : petit. Au milieu : grand. Le texte prend une autre place.</p></div>')
+TPLACE = ('<div class="field mq-placef" id="mq-tplacef"><label>Où graver le texte ?</label>' + chips("mq-tplace", ("face", "haut")) +
+          '<p class="mq-dn">En haut : sur une ligne. Au milieu : écrit à la verticale, le long du marque-page.</p></div>')
+APERCU = mp_apercu.html(460, "mq-ap")
 PHOTO = ('<div class="mq-photo" hidden><label class="mq-pbtn">📷 Choisir une photo<input type="file" accept="image/*" hidden/></label>'
          '<span class="mq-photo-ok" hidden>Photo envoyée ✓ — nous la gravons en noir et blanc sur le bois.</span>'
          '<p class="mq-dn">Une photo nette et bien éclairée donne le meilleur résultat : un visage, un animal, une silhouette.</p></div>')
@@ -123,6 +131,12 @@ PHOTO = ('<div class="mq-photo" hidden><label class="mq-pbtn">📷 Choisir une p
 MAIN = MAIN.replace("Dessin gravé (+4 €)", "Dessin ou photo gravé (+4 €)", 1)
 MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+4 €\)</option>)(</select></div>)', lambda m: m.group(1) + '<option value="photo">Avec ma photo (+4 €)</option>' + m.group(2) + GRID + PHOTO + PLACE, MAIN, count=1)
 assert "mq-dessins" in MAIN and "mq-photo" in MAIN and "mq-placef" in MAIN
+TXT_END = '<span class="char-count">0<!-- -->/<!-- -->24</span></div>'
+assert MAIN.count(TXT_END) == 1
+MAIN = MAIN.replace(TXT_END, TXT_END + TPLACE, 1)
+HINT = '<div><p class="perso-hint">Laissez vide pour un marque-page sans gravure.</p></div>'
+assert HINT in MAIN
+MAIN = MAIN.replace(HINT, APERCU + HINT, 1)
 OLD_BOX = "Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique."
 assert OLD_BOX in MAIN
 MAIN = MAIN.replace(OLD_BOX, "Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.")
@@ -183,12 +197,13 @@ CSS = r'''
 .mq-zoom-in{position:relative;max-width:680px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:12px;padding:10px}
 .mq-zoom-in img{width:100%;height:auto;display:block;border-radius:8px}
 .mq-zoom-x{position:absolute;top:6px;right:6px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:22px;cursor:pointer;color:#2b2620}
+.mq-pl .prc-chip[disabled]{opacity:.38;cursor:not-allowed}.mq-sc select.mq-plsel{width:100%;box-sizing:border-box}
 .mq-sc .mq-snum{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.mq-sc .mq-snum input{flex:1;min-width:120px;padding:11px 12px;border:1px solid #e0d3b0;border-radius:10px;background:#fffdf8;font:inherit;box-sizing:border-box}.mq-sc .mq-snum select{flex:1;min-width:120px}.mq-sc .mq-snum .mq-voir{margin:0;flex:none}.mq-sc .mq-snum[hidden]{display:none}
 '''
 JS = r'''
 (function(){
   var P=__PRIX__, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={t:'Caramel',q:1,n:1,box:0,slots:[]};
+  var st={t:'Caramel',q:1,n:1,box:0,slots:[],dz:{s:'face',z:'bas'},tz:{s:'face',z:'haut'},num:0,photoSrc:null};
   var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
   var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
   var qb=document.querySelectorAll('.qty-stepper button');
@@ -200,7 +215,17 @@ JS = r'''
   var sheet=document.getElementById('mq-sheet'),shb=document.getElementById('mq-shb'),shn=document.getElementById('mq-shn'),sht=document.getElementById('mq-sht');
   function unit(o){return P[WOODS[o.c]]+(o.t.trim()?3:0)+(o.d?4:0)}
   function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+((vin&&vin.value.trim())?3:0)+((des&&(des.value==='oui'||des.value==='photo'))?4:0)}
-  function maj(){tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box)}
+  function polCls(sel){var v=sel&&sel.value;return v?'fnt-'+v:'fnt-playfair'}
+  var polSel=document.getElementById('pf-police');
+  function itemsPrincipal(){var it=[];var k=des?des.value:'';
+    if(k==='oui'&&st.num)it.push({kind:'dessin',num:st.num,text:vin?vin.value:'',font:polCls(polSel),side:st.dz.s,zone:st.dz.z});
+    if(k==='photo')it.push({kind:'photo',src:st.photoSrc,side:st.dz.s,zone:st.dz.z});
+    if(vin&&vin.value.trim()&&!(k==='oui'&&st.num>=75))it.push({kind:'texte',text:vin.value,font:polCls(polSel),side:st.tz.s,zone:st.tz.z});
+    return it}
+  function apercu(){var h=document.querySelector('#mq-ap .mq-apw');if(h&&window.mqApercu)window.mqApercu(h,itemsPrincipal())}
+  function majChips(){[].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(b){var same=b.dataset.s===st.tz.s&&b.dataset.z===st.tz.z;b.disabled=same&&!!(vin&&vin.value.trim());b.classList.toggle('on',b.dataset.s===st.dz.s&&b.dataset.z===st.dz.z)});
+    var dOn=des&&(des.value==='oui'||des.value==='photo');[].forEach.call(document.querySelectorAll('#mq-tplace .prc-chip'),function(b){var same=b.dataset.s===st.dz.s&&b.dataset.z===st.dz.z;b.disabled=same&&!!dOn;b.classList.toggle('on',b.dataset.s===st.tz.s&&b.dataset.z===st.tz.z)})}
+  function maj(){tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box);majChips();apercu()}
   function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:WOODS.indexOf(st.t),t:'',d:false,touched:false})}
   function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
     var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||o.t||o.d});
@@ -209,18 +234,25 @@ JS = r'''
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
       d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé (+3 €), facultatif"/><select class="mq-dsel"><option value="">Sans dessin ni photo</option><option value="oui">Avec un dessin (+4 €)</option><option value="photo">Avec ma photo (+4 €)</option></select>'
-        +'<div class="mq-snum" hidden><input type="number" class="mq-sn" min="1" max="103" inputmode="numeric" placeholder="N° du dessin ou du cadre"/><select class="mq-sp"><option value="haut">En haut (petit)</option><option value="bas">En bas (grand)</option></select><button type="button" class="prc-change mq-voir">Voir les planches</button></div>';
+        +'<div class="mq-snum" hidden><input type="number" class="mq-sn" min="1" max="103" inputmode="numeric" placeholder="N° du dessin ou du cadre"/><select class="mq-sp mq-plsel"><option value="face|bas">Dessin : face, au milieu</option><option value="face|haut">Dessin : face, en haut</option><option value="dos|bas">Dessin : dos, au milieu</option><option value="dos|haut">Dessin : dos, en haut</option></select><button type="button" class="prc-change mq-voir">Voir les planches</button></div>'
+        +'<select class="mq-tp mq-plsel" hidden><option value="face|haut">Texte : face, en haut</option><option value="face|bas">Texte : face, au milieu (vertical)</option><option value="dos|haut">Texte : dos, en haut</option><option value="dos|bas">Texte : dos, au milieu (vertical)</option></select>'
+        +'<div class="mq-ap"><div class="mq-apw" data-h="300"></div></div>';
       d.querySelector('.mq-voir').addEventListener('click',zoomAll);
-      var sn=d.querySelector('.mq-snum'),sni=d.querySelector('.mq-sn'),snp=d.querySelector('.mq-sp');sni.value=o.n||'';snp.value=o.p||'haut';
-      sni.addEventListener('input',function(){var n=parseInt(sni.value,10);o.n=numOk(n)?n:0;sni.style.borderColor=(sni.value&&!o.n)?'#b4552f':''});snp.addEventListener('change',function(){o.p=snp.value});
+      o.dp=o.dp||'face|bas';o.tp=o.tp||'face|haut';
+      var sn=d.querySelector('.mq-snum'),sni=d.querySelector('.mq-sn'),snp=d.querySelector('.mq-sp'),tp=d.querySelector('.mq-tp'),aph=d.querySelector('.mq-apw');sni.value=o.n||'';snp.value=o.dp;tp.value=o.tp;
+      function slotItems(){var it=[],sp=o.dp.split('|'),tq=o.tp.split('|');if(o.d&&o.k==='oui'&&o.n)it.push({kind:'dessin',num:o.n,text:o.t,font:polCls(polSel),side:sp[0],zone:sp[1]});if(o.d&&o.k==='photo')it.push({kind:'photo',side:sp[0],zone:sp[1]});if((o.t||'').trim()&&!(o.d&&o.k==='oui'&&o.n>=75))it.push({kind:'texte',text:o.t,font:polCls(polSel),side:tq[0],zone:tq[1]});return it}
+      function ap(){tp.hidden=!(o.t||'').trim();if(o.d&&o.dp===o.tp&&(o.t||'').trim()){o.tp=(o.dp==='face|haut')?'face|bas':'face|haut';tp.value=o.tp}window.mqApercu(aph,slotItems(),300)}
+      o.ap=ap;
+      sni.addEventListener('input',function(){var n=parseInt(sni.value,10);o.n=numOk(n)?n:0;sni.style.borderColor=(sni.value&&!o.n)?'#b4552f':'';ap()});snp.addEventListener('change',function(){o.dp=snp.value;ap()});tp.addEventListener('change',function(){o.tp=tp.value;ap()});
       var row=d.querySelector('.mq-row');
       WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj()});row.appendChild(c)});
-      var ti=d.querySelector('input[type=text]');ti.value=o.t;ti.addEventListener('input',function(){o.t=ti.value;o.touched=true;maj()});
+      var ti=d.querySelector('input[type=text]');ti.value=o.t;ti.addEventListener('input',function(){o.t=ti.value;o.touched=true;maj();ap()});
       var cb=d.querySelector('.mq-dsel');cb.value=o.d?(o.k||'oui'):'';sn.hidden=cb.value!=='oui';if(cb.value==='photo'){sn.hidden=false;sni.hidden=true}
-      cb.addEventListener('change',function(){o.d=!!cb.value;o.k=cb.value;o.touched=true;sn.hidden=!cb.value;sni.hidden=cb.value==='photo';maj()});
+      cb.addEventListener('change',function(){o.d=!!cb.value;o.k=cb.value;o.touched=true;sn.hidden=!cb.value;sni.hidden=cb.value==='photo';maj();ap()});
+      ap();
       shb.appendChild(d)});
-    var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');w.appendChild(c);shb.appendChild(w)}}
+    var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');c.addEventListener('change',function(){pol.value=c.value;st.slots.forEach(function(o){if(o.ap)o.ap()})});w.appendChild(c);shb.appendChild(w)}}
   function ouvre(){cards();maj();sheet.hidden=false}
   function ferme(){sheet.hidden=true;draw();maj()}
   document.querySelector('.mq-open').addEventListener('click',ouvre);
@@ -230,7 +262,7 @@ JS = r'''
   if(vin)vin.addEventListener('input',maj);
   var pho=document.querySelector('.mq-photo'),placef=document.getElementById('mq-placef');
   if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';if(pho)pho.hidden=des.value!=='photo';if(placef)placef.hidden=!(des.value==='oui'||des.value==='photo');maj()});
-  if(pho){var pf=pho.querySelector('input[type=file]');pf.addEventListener('change',function(){pho.querySelector('.mq-photo-ok').hidden=!pf.files.length})}
+  if(pho){var pf=pho.querySelector('input[type=file]');pf.addEventListener('change',function(){pho.querySelector('.mq-photo-ok').hidden=!pf.files.length;st.photoSrc=null;if(pf.files.length){var r=new FileReader();r.onload=function(){st.photoSrc=r.result;maj()};r.readAsDataURL(pf.files[0])}else maj()})}
   // Planches (comme le gobelet) : toucher = agrandir ; le numéro se tape ; la grille se replie sur le choix.
   var OK=__NUMS__;function numOk(n){return OK.indexOf(n)>=0}function estCadre(n){return n>=75}
   function zoom(src){var o=document.createElement('div');o.className='mq-zoom';o.innerHTML='<div class="mq-zoom-in"><button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><img alt=""/></div>';o.querySelector('img').src=src;
@@ -244,12 +276,12 @@ JS = r'''
     function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v}
     num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=numOk(n)?n:0;dok.hidden=!num.value;
       dok.textContent=st.num?(estCadre(st.num)?'Cadre n° '+st.num+' choisi ✓ — votre texte gravé (+3 €) s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓'):'Numéro : 1 à 74 pour un dessin, 88 à 94 ou 96 à 103 pour un cadre.';
-      dok.classList.toggle('prc-miss',!st.num)});
+      dok.classList.toggle('prc-miss',!st.num);maj()});
     num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
     dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})})}
-  st.place='haut';var placen=document.getElementById('mq-placen');
-  [].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(b){b.addEventListener('click',function(){st.place=b.dataset.z;[].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(x){x.classList.toggle('on',x===b)});
-    placen.textContent=st.place==='haut'?'Le texte gravé, s\'il y en a un, s\'écrit en bas, à la verticale.':'Le texte gravé, s\'il y en a un, s\'écrit en haut, sur une ligne.'})});
+  [].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(b){b.addEventListener('click',function(){if(b.disabled)return;st.dz={s:b.dataset.s,z:b.dataset.z};maj()})});
+  [].forEach.call(document.querySelectorAll('#mq-tplace .prc-chip'),function(b){b.addEventListener('click',function(){if(b.disabled)return;st.tz={s:b.dataset.s,z:b.dataset.z};maj()})});
+  if(polSel)polSel.addEventListener('change',maj);
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
     st.slots.forEach(function(o){if(!o.touched)o.c=k});draw();maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
@@ -266,15 +298,16 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande · dessins numérotés du gobelet, 24/10) · <b>rien n\'est en ligne</b></div>'
+DATA = mp_apercu.script_data(1)
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande · dessins numérotés, place face / dos, aperçu — 24/10) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Marque-page en bois personnalisé — Niv Création (maquette)</title>"
-STYLE = f"<style>{css}\n{CSS}</style>"
+STYLE = f"<style>{css}\n{CSS}\n{mp_apercu.CSS}</style>"
 SHEET = ('<div class="mq-sheet" id="mq-sheet" hidden><div class="mq-sheetin"><div class="mq-shh"><b id="mq-sht">Mon coffret</b><button type="button" id="mq-close" aria-label="Fermer">×</button></div>'
          '<div class="mq-shb" id="mq-shb"></div><div class="mq-shf"><span>Total du coffret<br><b id="mq-shn">0,00 €</b></span><button type="button" class="mq-open" id="mq-ok">Valider mon coffret</button></div></div></div>')
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + SHEET + "</div>"
 full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-        f"{TITLE}{STYLE}</head><body>{BODY}<script>{JS}</script></body></html>")
-frag = f'<meta charset="utf-8">{TITLE}{STYLE}{BODY}<script>{JS}</script>'
+        f"{TITLE}{STYLE}</head><body>{BODY}<script>{DATA}{mp_apercu.JS}</script><script>{JS}</script></body></html>")
+frag = f'<meta charset="utf-8">{TITLE}{STYLE}{BODY}<script>{DATA}{mp_apercu.JS}</script><script>{JS}</script>'
 open(os.path.join(OUT, "marque-pages.html"), "w", encoding="utf-8").write(full)
 open(os.path.join(OUT, "marque-pages.fragment.html"), "w", encoding="utf-8").write(frag)
 print("ok", len(full) // 1024, "Ko", PRIX)
