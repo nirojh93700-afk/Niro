@@ -8,7 +8,7 @@ carte « Composez votre gravure » par le parcours guidé du site (vrai CSS .prc
      (= l'IMAGE PRINCIPALE, obligatoire, au centre de la face — règle validée du 25/09)
   ② le détail : planches (légende + numéros) puis le n°, ou le texte + l'écriture, ou la photo
   ③ Autour de votre gravure (facultatif, +3 € par élément) : dessin n°, cadre/banderole + nom
-     (75–103), lettre fleurie + nom, texte — sur la face, les côtés ou tout autour
+     (75–102), lettre fleurie + nom, texte — sur la face, les côtés ou tout autour
   ④ résumé + total ; « Ajouter au panier » grisé tant que l'image principale n'est pas choisie.
 Règles gardées : 1 élément inclus, +3 € chacun en plus ; 8 écritures du site ; numéros sur le 3D.
 Usage : python3 tools/maquettes/parcours-gobelet.py
@@ -21,13 +21,13 @@ OUT = f"{ROOT}/docs/maquettes/gobelet-parcours-guide.html"
 PRIX = 47.90  # fixé par le gérant le 03/10/2026 (prix net, livraison en plus)
 EXTRA = 3
 
-# Légendes lues sur les planches (numérotation validée : dessins 1–74, cadres 75–103)
+# Légendes lues sur les planches (numérotation validée : dessins 1–74, cadres 75–102)
 LEG_DESSINS = [("1–10", "Fleurs & papillons"), ("11–27", "Roses"), ("28–36", "Volutes & arabesques"),
                ("37–45", "Cœurs & tiges fleuries"), ("46–51", "Fées & clé de sol"), ("52–55", "Fée & coins fleuris"),
                ("56–58", "Cœurs de couple (prénoms)"), ("59–64", "Cœur prénom, plumes, colibri"),
                ("65–70", "Animaux & oiseaux"), ("71–74", "Colibri, fée, musique")]
 LEG_CADRES = [("75–79", "Cadres fleuris"), ("80–81", "Banderoles fleuries"), ("82–91", "Banderoles"),
-              ("92–95", "Cadres classiques"), ("96–101", "Filets"), ("102–103", "Volutes")]
+              ("92–95", "Cadres classiques"), ("96, 98, 100, 101", "Filets"), ("102", "Volute")]
 POLICES = [("playfair", "Playfair", "'Playfair Display',Georgia,serif"), ("cinzel", "Cinzel", "'Cinzel',serif"),
            ("cinzel-deco", "Cinzel Deco", "'Cinzel Decorative',serif"), ("montserrat", "Montserrat", "'Montserrat',sans-serif"),
            ("inter", "Inter", "'Inter',sans-serif"), ("great-vibes", "Great Vibes", "'Great Vibes',cursive"),
@@ -114,7 +114,7 @@ def build():
       <button type="button" class="prc-chip" data-k="dessin">Un autre dessin</button>
       <button type="button" class="prc-chip" data-k="texte">Un texte</button></div></div>
     <div class="prc-x" data-k="cadre"><div class="prc-grid prc-grid-c" id="prc-gc">{g_cadres}</div>
-      <div class="field"><label>Numéro du cadre (75 à 103)</label><input type="number" id="prc-xcn" min="75" max="103" inputmode="numeric" placeholder="Ex : 82"></div></div>
+      <div class="field"><label>Numéro du cadre (75 à 102)</label><input type="number" id="prc-xcn" min="75" max="102" inputmode="numeric" placeholder="Ex : 82"></div></div>
     <div class="prc-x" data-k="lettre" hidden><img class="prc-alpha" src="{GALPHA}" alt="Alphabet fleuri"><div class="prc-letters" id="prc-xlet">{lettres}</div></div>
     <div class="prc-x" data-k="dessin" hidden><p class="prc-legend">Les numéros sont sur les planches de l'étape 2 (1 à 74).</p>
       <div class="field"><label>Numéro du dessin</label><input type="number" id="prc-xdn" min="1" max="74" inputmode="numeric" placeholder="Ex : 7"></div></div>
@@ -323,7 +323,7 @@ button.add{border:0;font:inherit;cursor:pointer;width:100%}
   $("#prc-xadd").addEventListener("click", function(){
     var msg = $("#prc-xmsg"), nom = $("#prc-xnom").value.trim(), e = { kind:xs.k, side:xs.s, zone:xs.z, fontKey:xs.p };
     if (!xs.z) { msg.textContent = "Toutes les places de ce côté sont prises : choisissez un autre côté."; return; }
-    if (xs.k==="cadre") { var n = parseInt($("#prc-xcn").value, 10); if (!(n>=75 && n<=103)) { msg.textContent = "Numéro du cadre : de 75 à 103."; return; } if (!nom) { msg.textContent = "Écrivez le nom à graver au milieu du cadre."; return; } e.cadre = n; e.text = nom; e.label = "Cadre n° " + n + " · « " + nom + " »"; }
+    if (xs.k==="cadre") { var n = parseInt($("#prc-xcn").value, 10); if (!(n>=75 && n<=102 && n!==97 && n!==99)) { msg.textContent = "Numéro du cadre : de 75 à 102 (les n° 97 et 99 n\u2019existent pas : 96, 98 et 102 sont des cadres complets)."; return; } if (!nom) { msg.textContent = "Écrivez le nom à graver au milieu du cadre."; return; } e.cadre = n; e.text = nom; e.label = "Cadre n° " + n + " · « " + nom + " »"; }
     else if (xs.k==="lettre") { if (!xs.l) { msg.textContent = "Choisissez la lettre."; return; } if (!nom) { msg.textContent = "Écrivez le nom à graver dans la lettre."; return; } e.text = xs.l + " · " + nom; e.label = "Lettre fleurie " + xs.l + " · « " + nom + " »"; }
     else if (xs.k==="dessin") { var d = parseInt($("#prc-xdn").value, 10); if (!(d>=1 && d<=74)) { msg.textContent = "Numéro du dessin : de 1 à 74."; return; } e.num = d; e.label = "Dessin n° " + d; }
     else { if (!nom) { msg.textContent = "Écrivez le texte."; return; } e.text = nom; e.label = "Texte « " + nom + " »"; }

@@ -136,19 +136,19 @@ LEG_D = [("1–10", "Fleurs & papillons"), ("11–27", "Roses"), ("28–36", "Vo
          ("46–51", "Fées & clé de sol"), ("52–55", "Fée & coins fleuris"), ("56–58", "Cœurs de couple (prénoms)"),
          ("59–64", "Cœur prénom, plumes, colibri"), ("65–70", "Animaux & oiseaux"), ("71–74", "Colibri, fée, musique")]
 LEG_C = [(CA[2], "88–91", "Rubans fins (sur la planche 82–91)"), (CA[3], "92–94", "Cartouches (sur la planche 92–95)"),
-         (CA[4], "96–101", "Filets & ornements"), (CA[5], "102–103", "Volutes")]
-NUMS_OK = list(range(1, 75)) + list(range(88, 95)) + list(range(96, 104))
+         (CA[4], "96, 98, 100, 101", "Filets & ornements"), (CA[5], "102", "Volute")]
+NUMS_OK = list(range(1, 75)) + list(range(88, 95)) + [96, 98, 100, 101, 102]  # 24/10 soir : 97, 99, 103 n'existent pas (cadres doubles)
 def planche(src, a, b, kind, i):
     return (f'<button type="button" class="prc-model" data-kind="{kind}" data-i="{i}"><span class="prc-mn">{a}</span>'
             f'<span class="prc-mimg prc-mimg-photo"><img src="{src}" alt="Planche {a}" loading="lazy"></span>'
             f'<span class="prc-ml">{b}<br><em>n° {a}</em></span></button>')
 GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin pour le verso</p>'
         '<p class="prc-legend" id="mq-dleg">Touchez une planche pour l\'agrandir et lire les numéros, puis indiquez le numéro. '
-        'Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s\'écrit votre texte du verso (n° 88 à 94, 96 à 103).</p>'
+        'Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s\'écrit votre texte du verso (n° 88 à 94, 96, 98, 100 à 102).</p>'
         '<div class="prc-grid mq-grid" id="mq-gd">' + "".join(planche(s_, a, b, "d", i) for i, (s_, (a, b)) in enumerate(zip(PL, LEG_D)))
         + "".join(planche(s_, a, b, "c", i) for i, (s_, a, b) in enumerate(LEG_C)) + '</div>'
         '<div class="field mq-numf"><label for="mq-num">Numéro du dessin ou du cadre</label>'
-        '<input type="number" id="mq-num" min="1" max="103" inputmode="numeric" placeholder="Ex : 12"/></div>'
+        '<input type="number" id="mq-num" min="1" max="102" inputmode="numeric" placeholder="Ex : 12"/></div>'
         '<p class="prc-choisi" id="mq-dok" hidden></p><button type="button" class="prc-change" id="mq-dchg" hidden>Changer de dessin</button>'
         '</div>')
 PHOTO = ('<div class="mq-photo" hidden><label class="mq-pbtn">📷 Choisir une photo<input type="file" accept="image/*" hidden/></label>'
@@ -247,7 +247,7 @@ JS = r'''
     recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, de couleurs différentes. Vous pouvez changer une couleur ou faire graver chacun (face et verso) :'}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
-      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" class="mq-f" maxlength="24" placeholder="Texte gravé sur la face (+3 €), facultatif"/><select class="mq-dsel mq-fp" hidden><option value="haut">Face : au-dessus de la fenêtre</option><option value="bas">Face : à côté de la fenêtre (vertical)</option></select><input type="text" class="mq-v" maxlength="24" placeholder="Texte gravé au verso (+3 €), facultatif"/><select class="mq-dsel mq-vp" hidden><option value="haut">Verso : en haut</option><option value="bas">Verso : au milieu (vertical)</option></select><select class="mq-dsel mq-ds"><option value="">Sans dessin ni photo au verso</option><option value="oui">Avec un dessin ou un cadre au verso (+4 €)</option><option value="photo">Avec ma photo au verso (+4 €)</option></select><div class="mq-snum" hidden><input type="number" class="mq-sn" min="1" max="103" inputmode="numeric" placeholder="N° du dessin ou du cadre"/><select class="mq-dsel mq-sp mq-plsel"><option value="bas">Dessin : au milieu (grand)</option><option value="haut">Dessin : en haut (petit)</option></select><button type="button" class="prc-change mq-voir">Voir les planches</button></div><div class="mq-ap"><div class="mq-apw" data-h="300"></div></div>';
+      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" class="mq-f" maxlength="24" placeholder="Texte gravé sur la face (+3 €), facultatif"/><select class="mq-dsel mq-fp" hidden><option value="haut">Face : au-dessus de la fenêtre</option><option value="bas">Face : à côté de la fenêtre (vertical)</option></select><input type="text" class="mq-v" maxlength="24" placeholder="Texte gravé au verso (+3 €), facultatif"/><select class="mq-dsel mq-vp" hidden><option value="haut">Verso : en haut</option><option value="bas">Verso : au milieu (vertical)</option></select><select class="mq-dsel mq-ds"><option value="">Sans dessin ni photo au verso</option><option value="oui">Avec un dessin ou un cadre au verso (+4 €)</option><option value="photo">Avec ma photo au verso (+4 €)</option></select><div class="mq-snum" hidden><input type="number" class="mq-sn" min="1" max="102" inputmode="numeric" placeholder="N° du dessin ou du cadre"/><select class="mq-dsel mq-sp mq-plsel"><option value="bas">Dessin : au milieu (grand)</option><option value="haut">Dessin : en haut (petit)</option></select><button type="button" class="prc-change mq-voir">Voir les planches</button></div><div class="mq-ap"><div class="mq-apw" data-h="300"></div></div>';
       var row=d.querySelector('.mq-row');
       WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj()});row.appendChild(c)});
@@ -289,7 +289,7 @@ JS = r'''
   if(gd){[].forEach.call(gd.querySelectorAll('.prc-model'),function(b){b.addEventListener('click',function(){[].forEach.call(gd.querySelectorAll('.prc-model'),function(x){x.classList.toggle('on',x===b)});zoom(b.querySelector('img').src)})});
     var plier=function(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v};
     num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=numOk(n)?n:0;dok.hidden=!num.value;
-      dok.textContent=st.num?(estCadre(st.num)?'Cadre n° '+st.num+' choisi ✓ — votre texte du verso (+3 €) s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓ (au verso)'):'Numéro : 1 à 74 pour un dessin, 88 à 94 ou 96 à 103 pour un cadre.';
+      dok.textContent=st.num?(estCadre(st.num)?'Cadre n° '+st.num+' choisi ✓ — votre texte du verso (+3 €) s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓ (au verso)'):'Numéro : 1 à 74 pour un dessin, 88 à 94, 96, 98, 100 à 102 pour un cadre.';
       dok.classList.toggle('prc-miss',!st.num);maj()});
     num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
     dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})})}

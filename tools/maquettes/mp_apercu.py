@@ -56,13 +56,13 @@ def _centre_trou(im):
     return [round(cx / W, 3), round(cy / H, 3)]
 
 
-# Où s'écrit le texte dans chaque cadre (lu sur les dessins, 24/10 soir) : [x, y, hauteur du texte] en fractions de l'image,
-# ou ["below" | "above", hauteur] = le texte se pose SOUS / AU-DESSUS du dessin (ornement avec un filet : 96, 98 = ornement
-# au-dessus d'un filet → texte dessous ; 97, 99 = filet en haut → texte au-dessus). Rubans 88–91 : sur la bande.
-# Deux filets (100, 101) : entre les deux. Cartouches 92–94 : centre du vide (calculé). Volutes 102–103 : au centre.
+# Où s'écrit le texte dans chaque cadre (lu sur les dessins, 24/10 soir) : [x, y, hauteur du texte] en fractions de l'image
+# (ou ["below" | "above", hauteur] = sous / au-dessus du dessin, plus utilisé). Rubans 88–91 : sur la bande. Cartouches 92–94 :
+# centre du vide (calculé). ⚠️ 24/10 soir, gérant : « 102 et 103, c'est UNE image, pas deux ; pareil 96 et 97, 98 et 99 » →
+# les cadres à deux filets sont 96 (= ex 96 + 97), 98 (= ex 98 + 99), 100, 101 et 102 (= ex 102 + 103) : le texte s'écrit ENTRE
+# les deux filets (bande vide mesurée sur la découpe). Les n° 97, 99 et 103 n'existent plus.
 POSE = {88: [0.5, 0.28, 0.4], 89: [0.5, 0.48, 0.4], 90: [0.5, 0.46, 0.4], 91: [0.5, 0.37, 0.36],
-        96: ["below", 0.8], 97: ["above", 0.8], 98: ["below", 0.8], 99: ["above", 0.8],
-        100: [0.5, 0.62, 0.3], 101: [0.5, 0.655, 0.3], 102: [0.5, 0.5, 0.5], 103: [0.5, 0.5, 0.5]}
+        96: [0.5, 0.601, 0.26], 98: [0.5, 0.614, 0.33], 100: [0.5, 0.613, 0.24], 101: [0.5, 0.65, 0.27], 102: [0.5, 0.5, 0.32]}
 
 
 def dessins():
@@ -116,6 +116,19 @@ CSS = r'''
 '''
 
 JS = r'''
+// Ajuste la taille d'un texte pour qu'il tienne dans maxW × maxH.
+window.mqFit=function(t,maxW,maxH){var fs=maxH;t.style.fontSize=fs+'px';var n=0;while(n++<40&&fs>4&&t.offsetWidth>maxW){fs*=0.9;t.style.fontSize=fs+'px'}};
+// Centrage sur l'ENCRE des lettres (24/10 soir) : la boîte d'une ligne garde de la place sous les lettres pour les jambages →
+// un prénom sans jambage paraît trop haut (ou, à la verticale, décalé) ; on mesure les lettres réelles et on compense (--dx / --dy).
+window.mqCentreEncre=function(t){try{var cs=getComputedStyle(t),fs=parseFloat(cs.fontSize);if(!fs)return;var c=window.mqCentreEncre.c||(window.mqCentreEncre.c=document.createElement('canvas').getContext('2d'));c.font=cs.fontStyle+' '+cs.fontWeight+' '+fs+'px '+cs.fontFamily;var m=c.measureText(t.textContent);
+  var fbA=m.fontBoundingBoxAscent,fbD=m.fontBoundingBoxDescent;if(fbA==null){fbA=fs*0.8;fbD=fs*0.2}var lh=t.offsetHeight||fs,base=(lh-fbA-fbD)/2+fbA;var dy=base-(m.actualBoundingBoxAscent-m.actualBoundingBoxDescent)/2-lh/2;
+  var dx=(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2-m.width/2;t.style.setProperty('--dx',dx.toFixed(2)+'px');t.style.setProperty('--dy',dy.toFixed(2)+'px')}catch(err){}};
+// Pose le dessin d'un cadre (im) et son texte (t) dans une boîte bw × bh ; cc = POSE du cadre ; renvoie [t, maxW, maxH] pour mqFit.
+window.mqPoseCadre=function(el,im,t,cc,bw,bh,asp){cc=cc||[0.5,0.5,0.5];
+  if(cc[0]==='below'||cc[0]==='above'){var dh2=Math.min(bw/asp,bh*0.62),dw2=dh2*asp,th=Math.min(bh-dh2,dh2*cc[1]),top0=(bh-dh2-th)/2,bas=cc[0]==='below';
+    im.style.cssText='position:absolute;left:'+((bw-dw2)/2)+'px;width:'+dw2+'px;height:'+dh2+'px;top:'+(bas?top0:top0+th)+'px';
+    t.style.left=(bw/2)+'px';t.style.top=(bas?top0+dh2+th/2:top0+th/2)+'px';return [t,dw2*0.9,th*0.85];}
+  var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);t.style.left=((bw-dw)/2+cc[0]*dw)+'px';t.style.top=((bh-dh)/2+cc[1]*dh)+'px';return [t,dw*0.6,dh*(cc[2]||0.5)];};
 window.mqApercu=function(host,items,hauteur){
   var A=window.MQAP; if(!A||!host)return; var H=hauteur||+host.dataset.h||460, W=Math.round(H*A.ratio);
   host.innerHTML='';var fits=[];
@@ -134,12 +147,7 @@ window.mqApercu=function(host,items,hauteur){
         var bw=h,bh=w;
       } else {el.style.left=x+'px';el.style.top=y+'px';el.style.width=w+'px';el.style.height=h+'px';var bw=w,bh=h;}
       if(e.kind==='dessin'){var im=document.createElement('img');im.src=A.dessins[e.num]||'';im.alt='';el.appendChild(im);
-        if(e.num>=75&&(e.text||'').trim()){var t=document.createElement('span');t.className='t '+(e.font||'fnt-playfair');t.textContent=e.text.trim();el.appendChild(t);var cc=(A.centre||{})[e.num]||[0.5,0.5,0.5];
-          if(cc[0]==='below'||cc[0]==='above'){ // le texte se pose sous / au-dessus du dessin : le dessin se serre pour lui laisser la place
-            var dh2=Math.min(bw/asp,bh*0.62),dw2=dh2*asp,th=Math.min(bh-dh2,dh2*cc[1]),top0=(bh-dh2-th)/2,bas=cc[0]==='below';
-            im.style.cssText='position:absolute;left:'+((bw-dw2)/2)+'px;width:'+dw2+'px;height:'+dh2+'px;top:'+(bas?top0:top0+th)+'px';
-            t.style.left=(bw/2)+'px';t.style.top=(bas?top0+dh2+th/2:top0+th/2)+'px';fits.push([t,dw2*0.9,th*0.85]);
-          } else {var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);t.style.left=((bw-dw)/2+cc[0]*dw)+'px';t.style.top=((bh-dh)/2+cc[1]*dh)+'px';fits.push([t,dw*0.6,dh*(cc[2]||0.5)]);}}
+        if(e.num>=75&&(e.text||'').trim()){var t=document.createElement('span');t.className='t '+(e.font||'fnt-playfair');t.textContent=e.text.trim();el.appendChild(t);fits.push(window.mqPoseCadre(el,im,t,(A.centre||{})[e.num],bw,bh,asp));}
       } else if(e.kind==='photo'){var p=document.createElement('div');p.className='ph';if(e.src){var pi=document.createElement('img');pi.src=e.src;pi.alt='';p.style.border='0';p.appendChild(pi)}else p.textContent='votre photo';el.appendChild(p)}
       else {var t2=document.createElement('span');t2.className='t '+(e.font||'fnt-playfair');t2.textContent=e.text.trim();el.appendChild(t2);fits.push([t2,bw*0.96,bh*0.9]);}
       bm.appendChild(el);
@@ -147,17 +155,76 @@ window.mqApercu=function(host,items,hauteur){
     bm.addEventListener('click',function(){var o=document.createElement('div');o.className='mq-zoom';var inn=document.createElement('div');inn.className='mq-zoom-in';inn.style.maxWidth='none';inn.style.width='auto';inn.innerHTML='<button type="button" class="mq-zoom-x" aria-label="Fermer">×</button>';var c=bm.cloneNode(true);var k=Math.min(0.8*window.innerHeight/H,(window.innerWidth-60)/W);c.style.zoom=k;c.style.cursor='default';inn.appendChild(c);o.appendChild(inn);o.addEventListener('click',function(ev){if(ev.target===o||ev.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)});
     var lab=document.createElement('small');lab.textContent=side==='face'?'Face':'Dos';s.appendChild(bm);s.appendChild(lab);host.appendChild(s);
   });
-  fits.forEach(function(f){fit(f[0],f[1],f[2]);centre(f[0])});
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fits.forEach(function(f){centre(f[0])})});
-  function fit(t,maxW,maxH){var fs=maxH;t.style.fontSize=fs+'px';var n=0;while(n++<40&&fs>4&&t.offsetWidth>maxW){fs*=0.9;t.style.fontSize=fs+'px'}}
-  // Centrage sur l'ENCRE des lettres (24/10 soir) : la boîte d'une ligne garde de la place sous les lettres pour les jambages →
-  // un prénom sans jambage paraît trop haut (ou, à la verticale, décalé) ; on mesure les lettres réelles et on compense.
-  function centre(t){try{var cs=getComputedStyle(t),fs=parseFloat(cs.fontSize);if(!fs)return;var c=centre.c||(centre.c=document.createElement('canvas').getContext('2d'));c.font=cs.fontStyle+' '+cs.fontWeight+' '+fs+'px '+cs.fontFamily;var m=c.measureText(t.textContent);
-    var fbA=m.fontBoundingBoxAscent,fbD=m.fontBoundingBoxDescent;if(fbA==null){fbA=fs*0.8;fbD=fs*0.2}var lh=t.offsetHeight||fs,base=(lh-fbA-fbD)/2+fbA;var dy=base-(m.actualBoundingBoxAscent-m.actualBoundingBoxDescent)/2-lh/2;
-    var dx=(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2-m.width/2;t.style.setProperty('--dx',dx.toFixed(2)+'px');t.style.setProperty('--dy',dy.toFixed(2)+'px')}catch(err){}}
+  fits.forEach(function(f){window.mqFit(f[0],f[1],f[2]);window.mqCentreEncre(f[0])});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fits.forEach(function(f){window.mqCentreEncre(f[0])})});
 };
 '''
 
 
 def script_data(modele):
     return "window.MQAP=" + json.dumps(config(modele), ensure_ascii=False) + ";"
+
+
+def script_data_dessins():
+    """Seulement les découpes (pour le carnet : pas de photo de marque-page)."""
+    d, asp, centre = dessins()
+    return "window.MQDES=" + json.dumps({"dessins": d, "aspect": asp, "centre": centre}, ensure_ascii=False) + ";"
+
+
+# Les planches du gobelet (maquette validée gobelet-configurateur-final.html) et les numéros acceptés sur un objet étroit
+# (24/10 soir : 97, 99, 103 n'existent pas — 96, 98, 102 sont des cadres complets à deux filets).
+NUMS_OK = list(range(1, 75)) + list(range(88, 95)) + [96, 98, 100, 101, 102]
+LEG_D = [("1–10", "Fleurs & papillons"), ("11–27", "Roses"), ("28–36", "Volutes & arabesques"), ("37–45", "Cœurs & tiges fleuries"),
+         ("46–51", "Fées & clé de sol"), ("52–55", "Fée & coins fleuris"), ("56–58", "Cœurs de couple (prénoms)"),
+         ("59–64", "Cœur prénom, plumes, colibri"), ("65–70", "Animaux & oiseaux"), ("71–74", "Colibri, fée, musique")]
+
+
+def grille_planches(id_prefix="mq", titre="Choisissez votre dessin", legende=None, tous_cadres=False):
+    """Grille des planches (classes .prc-* du site) + champ numéro + « Changer de dessin ». tous_cadres : aussi 75–87 et 95."""
+    import re
+    gob = open(os.path.join(ROOT, "docs", "maquettes", "gobelet-configurateur-final.html"), encoding="utf-8").read()
+    PL = json.loads(re.search(r"var PLANCHES=(\[.*?\]);", gob).group(1))
+    CA = [c["src"] for c in json.loads(re.search(r"var CADRES=(\[.*?\]);", gob).group(1))]
+    leg_c = [(CA[2], "88–91", "Rubans fins (sur la planche 82–91)"), (CA[3], "92–94", "Cartouches (sur la planche 92–95)"),
+             (CA[4], "96, 98, 100, 101", "Filets & ornements"), (CA[5], "102", "Volute")]
+    if tous_cadres:
+        leg_c = [(CA[0], "75–79", "Cadres fleuris"), (CA[1], "80–81", "Banderoles fleuries"), (CA[2], "82–91", "Banderoles & rubans"),
+                 (CA[3], "92–95", "Cartouches"), (CA[4], "96, 98, 100, 101", "Filets & ornements"), (CA[5], "102", "Volute")]
+    def planche(src, a, b, kind, i):
+        return (f'<button type="button" class="prc-model" data-kind="{kind}" data-i="{i}"><span class="prc-mn">{a}</span>'
+                f'<span class="prc-mimg prc-mimg-photo"><img src="{src}" alt="Planche {a}" loading="lazy"></span>'
+                f'<span class="prc-ml">{b}<br><em>n° {a}</em></span></button>')
+    legende = legende or ("Touchez une planche pour l'agrandir et lire les numéros, puis indiquez le numéro. Un <b>dessin</b> (n° 1 à 74) "
+                          "ou un <b>cadre</b> dans lequel s'écrit votre texte (n° 88 à 94, 96, 98, 100 à 102).")
+    return (f'<div class="mq-dessins" id="{id_prefix}-dessins" hidden><p class="mq-dh">{titre}</p>'
+            f'<p class="prc-legend" id="{id_prefix}-dleg">{legende}</p>'
+            f'<div class="prc-grid mq-grid" id="{id_prefix}-gd">' + "".join(planche(s_, a, b, "d", i) for i, (s_, (a, b)) in enumerate(zip(PL, LEG_D)))
+            + "".join(planche(s_, a, b, "c", i) for i, (s_, a, b) in enumerate(leg_c)) + '</div>'
+            f'<div class="field mq-numf"><label for="{id_prefix}-num">Numéro du dessin ou du cadre</label>'
+            f'<input type="number" id="{id_prefix}-num" min="1" max="102" inputmode="numeric" placeholder="Ex : 12"/></div>'
+            f'<p class="prc-choisi" id="{id_prefix}-dok" hidden></p><button type="button" class="prc-change" id="{id_prefix}-dchg" hidden>Changer de dessin</button>'
+            '</div>')
+
+
+CSS_PLANCHES = r'''
+.mq-dessins{margin:-4px 0 14px}.mq-dessins [hidden]{display:none!important}.mq-dh{font-weight:600;font-size:.9rem;margin:0 0 8px}.mq-dessins .prc-legend b{color:#2b2620}
+.mq-grid .prc-mimg{aspect-ratio:3/4;background:#fff}.mq-grid .prc-mimg img{object-position:top}.mq-grid .prc-model[data-kind="c"] .prc-mimg{aspect-ratio:4/3}.prc-ml em{font-style:normal;font-weight:700;color:var(--gold-dark,#a98935)}
+.mq-numf{margin:12px 0 0}.mq-numf input{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #e0d3b0;background:#fffdf8;font:inherit}
+.mq-zoom{position:fixed;inset:0;background:rgba(20,15,8,.72);z-index:5000;display:flex;align-items:center;justify-content:center;padding:14px}
+.mq-zoom-in{position:relative;max-width:680px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:12px;padding:10px}.mq-zoom-in img{width:100%;height:auto;display:block;border-radius:8px}
+.mq-zoom-x{position:absolute;top:6px;right:6px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:22px;cursor:pointer;color:#2b2620;z-index:5}
+'''
+
+# JS de la grille : zoom d'une planche, numéro tapé, grille repliée. mqPlanches(prefix, ok, onChange) → {num}
+JS_PLANCHES = r'''
+window.mqZoom=function(src){var o=document.createElement('div');o.className='mq-zoom';o.innerHTML='<div class="mq-zoom-in"><button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><img alt=""/></div>';o.querySelector('img').src=src;
+  o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)};
+window.mqPlanches=function(prefix,ok,onChange){var st={num:0};var gd=document.getElementById(prefix+'-gd'),num=document.getElementById(prefix+'-num'),dok=document.getElementById(prefix+'-dok'),dchg=document.getElementById(prefix+'-dchg'),dleg=document.getElementById(prefix+'-dleg');
+  if(!gd)return st;[].forEach.call(gd.querySelectorAll('.prc-model'),function(b){b.addEventListener('click',function(){[].forEach.call(gd.querySelectorAll('.prc-model'),function(x){x.classList.toggle('on',x===b)});window.mqZoom(b.querySelector('img').src)})});
+  function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v}
+  num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=ok.indexOf(n)>=0?n:0;dok.hidden=!num.value;
+    dok.textContent=st.num?(st.num>=75?'Cadre n° '+st.num+' choisi ✓ — votre texte s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓'):'Numéro : 1 à 74 pour un dessin, 88 à 94, 96, 98, 100 à 102 pour un cadre.';
+    dok.classList.toggle('prc-miss',!st.num);if(onChange)onChange(st.num)});
+  num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
+  dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})});return st};
+'''

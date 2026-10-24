@@ -8,6 +8,14 @@
   ou logo / dessin / photo) · texte au dos **+7 €** → carnet gravé 19,90 €, les deux faces 26,90 €. **Coût rendu 3,55 €** le carnet (0,89 € + port 153,94 €
   + frais 6,20 € sur 60). Marché (`docs/prix-marche.md`) : artisans FR gravé 12,50–19,90 €, cuir vegan 39,90 €, Amazon 6,99 € non gravé.
 - Vérifié Chromium 390 / 1280 : 0 débordement, 0 erreur JS, totaux 12,90 → 19,90 → 26,90.
+- ✅ **v3 du 24/10 soir (gérant : « ses dessins tu ajoutes aussi sur le carnet en option… et pour les textes »)** : 3ᵉ choix « Un de nos
+  dessins ou cadres (n°) » (le logo devient « Mon logo ou mon propre dessin »), les 14 planches du gobelet (même parcours que les
+  marque-pages), le VRAI dessin gravé sur la couverture (clair sur le noir), un cadre = la 1ʳᵉ ligne du texte AU MILIEU du cadre (centrage
+  sur l'encre des lettres, `mp_apercu.mqPoseCadre`), la 2ᵉ ligne dessous ; un dessin 1–74 = le texte dessous ; le texte seul est centré
+  sur l'encre lui aussi. Prix inchangé (+7 € la couverture, dessin et texte compris ; +7 € le dos). Générateur
+  `tools/maquettes/carnet-a5-dessins.py <base v2>` (la base v2 = la page de l'artifact, relue avec l'outil Artifact `read` + `path`
+  `index.html` ; la capture du 23/10 n'existe plus). Vérifié 390 / 1280 : 0 erreur, 0 débordement, cadre 92 + « Camille » = 19,90 €,
+  + dos = 26,90 €, n° 97 refusé.
 - **Avant tout « applique »** : vraies photos gravées (couvertures DESSINÉES dans la maquette), pesée réelle (380 g estimé → lettre 8,90 € / relais 4,90 €),
   puis construire comme un produit normal (§10 : `products.js`, `productInfo.js`, `productDates.js`, `packagingSeed.js`, `textExtra: 7` sur les deux faces).
   C'est CETTE version à reproduire à l'identique ; ne pas la modifier sans sa demande (règle du 23/07).
@@ -60,6 +68,17 @@
     et le centrage se fait sur l'ENCRE des lettres (mesure canvas : une boîte de texte garde de la place pour les jambages, donc un
     prénom sans jambage paraissait décalé). Vérifié sur les 15 cadres, en haut et au milieu : écart centre du texte / centre du
     cadre ≤ 1 px hors décalage voulu, 0 erreur.
+  · ⛔ **v8 modèle 1 + v7 modèle 2 (24/10 soir, gérant, planches à l'appui : « 102 et 103, c'est une image, pas deux ; pareil 96 et 97,
+    98 et 99 ; vérifie partout, corrige »)** : les ornements à DEUX filets sont UN cadre (le texte s'écrit entre les filets). Numéros
+    gardés pour ne rien décaler ailleurs : **96 (= ex 96 + 97), 98 (= ex 98 + 99), 100, 101, 102 (= ex 102 + 103) ; 97, 99 et 103
+    n'existent plus** (comme le 95 n'est pas retenu). Corrigé : découpes `dessins/096, 098, 102.png` (unions, 097 / 099 / 103 supprimés,
+    86 fichiers, `marque-pages-decoupe-dessins.py` MANUAL 14 / 15), planches rebadgées (`docs/planches/cadres_96-101.png`,
+    `cadres_102.png` ; badges 97 / 99 / 103 effacés), `mp_apercu.POSE` (texte dans la bande vide entre les filets), `NUMS_OK` partagé dans
+    `mp_apercu.py`, les deux générateurs marque-pages, la maquette du **gobelet** (`gobelet-configurateur-final.html` : planches, libellés
+    « Filets 96, 98, 100, 101 » / « Volute 102 », numéros 97 et 99 refusés ; `parcours-gobelet.py` + `gobelet-parcours-guide.html`
+    régénéré, RETIRÉ du suivi git le 24/10 : il se régénère). **Le site n'a pas ces cadres** (le gobelet en ligne, masqué, n'a que les
+    anciens dessins) : rien à corriger côté site. Vérifié : 97 / 99 / 103 refusés sur la fiche et dans le coffret, 96 / 98 / 100 / 102
+    texte entre les filets, 0 erreur.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
