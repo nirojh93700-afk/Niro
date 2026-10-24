@@ -94,6 +94,7 @@ CSS = mp_apercu.CSS + mp_apercu.CSS_PLANCHES + r'''
 .cn-el .l1,.cn-el .l2{white-space:nowrap;line-height:1.05;text-shadow:0 1px 0 hsla(0,0%,100%,.35),0 -1px 1px rgba(0,0,0,.3)}.cn-el .l2{margin-top:.25em;letter-spacing:.03em}
 .cn-el img.d{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;filter:grayscale(1) contrast(1.5);opacity:.9}
 .cn-ov.clair img.d{mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.3);opacity:.82}
+.cn-ov.clair img.g{mix-blend-mode:screen;filter:grayscale(1) contrast(1.15) brightness(.92);opacity:.9} /* 24/10 soir : une PHOTO (logo / portrait) sur le noir reste un positif, clair sur le noir (l'inversion ne vaut que pour les traits des dessins : en négatif, « ça fait vraiment bizarre ») */
 .cn-el.cadre{position:absolute}.cn-el.cadre .t{position:absolute;left:50%;top:50%;width:max-content;white-space:nowrap;line-height:1;--dx:0px;--dy:0px;transform:translate(calc(-50% - var(--dx)),calc(-50% - var(--dy)));text-shadow:0 1px 0 hsla(0,0%,100%,.35),0 -1px 1px rgba(0,0,0,.3)}
 .cn-el img.g{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.cn-el img.g.pos{object-position:left center}.cn-el img.g.posd{object-position:right center}
 .gallery-thumbs .cn-thdos,.gallery-thumbs .cn-thex{position:relative}.gallery-thumbs .cn-thdos span,.gallery-thumbs .cn-thex span{position:absolute;left:0;right:0;bottom:0;background:rgba(43,38,32,.75);color:#fff;font-size:.6rem;font-weight:700;text-align:center;padding:2px 0}

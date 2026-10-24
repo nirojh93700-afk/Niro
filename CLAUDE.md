@@ -1,5 +1,5 @@
 ## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
-- **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v8 au 24/10 soir : exemples photo) · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
+- **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v9 au 24/10 soir : exemples photo ; sur le noir, une photo reste un POSITIF clair sur le noir, l'inversion ne vaut que pour les traits des dessins : la v8 montrait un négatif, « ça fait vraiment bizarre ») · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
   `tools/maquettes/carnet-a5.py <capture> <champ-photo>` (méthode du puzzle photo : fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, build,
   `next start -p 3140`, capture Playwright, puis `git checkout` — le site n'a pas été touché) · photos `docs/maquettes/assets/carnet/`.
 - **Produit** (Alibaba, Wenzhou Senyuan, reçu #33986068501043880 du 23/10 : 60 carnets) : A5 21,2 × 14,5 cm, couverture rigide aspect cuir, élastique,
