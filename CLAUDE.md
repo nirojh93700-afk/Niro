@@ -158,6 +158,13 @@
     · **v15 / v14 (+ carnet v6) — « enlève la rose, remplace par une autre image plus jolie, juste sur les aperçus, pas dans le
       fichier »** : la rose n° 12 reste dans les planches, mais plus aucun exemple ne l'utilise → papillons fleuris n° 8 (modèle 1,
       Caramel), plume aux papillons n° 62 (modèle 2, Blond clair), colibri aux coquelicots n° 64 (carnet, « Carnet de voyage »).
+  · ✅ **ENREGISTRÉES TELLES QUELLES LE 24/10/2026 SOIR (« enregistre les maquettes déjà ») : modèle 1 v15 · modèle 2 v14 · carnet v6 ·
+    précommande Gestion v2.** C'est CES versions à reproduire au « applique » ; ne plus les modifier sans sa demande. **Ses réponses
+    du 24/10 soir aux questions de la précommande** : · places par couleur = la facture Alibaba du 23/10 (modèle 1 : 20 par couleur,
+    modèle 2 : 10 par couleur, boîtes 10 / 10 / 10 pour les deux modèles réunis, voir `docs/marque-pages-commande-alibaba-2026-10-12.md`) ;
+    · port : un marque-page en BOÎTE CADEAU = un COLIS, au prix de l'option que la cliente choisit (relais, domicile, Express Chronopost
+    = le plus cher), c'est-à-dire la règle normale du site, rien de spécial ; le marque-page seul reste en lettre ; · la DATE d'arrivée
+    (phrase « Expédition à partir du … ») : il la donnera. Panier mixte précommande + stock : pas tranché (un seul colis à la fin par défaut).
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
