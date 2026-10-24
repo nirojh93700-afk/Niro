@@ -16,6 +16,20 @@
   `tools/maquettes/carnet-a5-dessins.py <base v2>` (la base v2 = la page de l'artifact, relue avec l'outil Artifact `read` + `path`
   `index.html` ; la capture du 23/10 n'existe plus). Vérifié 390 / 1280 : 0 erreur, 0 débordement, cadre 92 + « Camille » = 19,90 €,
   + dos = 26,90 €, n° 97 refusé.
+- ✅ **v4 du 24/10 soir (gérant : « même pour le carnet, s'il veut choisir plusieurs trucs… écrire tout en bas à gauche et mettre un
+  titre : regarde sur Internet comment ils font »)** — relevé : Amikado fait choisir gauche / centré / droite, Levenger oppose le
+  coin inférieur discret au centre, notonthehighstreet propose un titre OU une inscription dans le coin bas droit, Sense2 facture
+  la couverture arrière en plus → **QUATRE EMPLACEMENTS sur la couverture et quatre au dos** (même système que les marque-pages
+  v12) : En haut (titre, une ligne) · Au milieu (grand) · En bas à gauche · En bas à droite (petits, discrets), chacun = Rien /
+  Un texte (2 lignes possibles) / Un de nos dessins ou cadres (n°, bouton « Valider ✓ ») / Mon logo ou mon propre dessin. Les
+  anciens champs (menu « Que voulez-vous faire graver », texte + 2ᵉ ligne, logo, texte au dos) et l'éditeur à glisser sont
+  REMPLACÉS ; galerie, couleurs, description, volets inchangés ; vignette « Dos » ajoutée (la couverture dessinée retournée,
+  zones décalées de 5 % vers la droite car l'élastique est à gauche). **Prix (mon choix, à valider, règle « c'est sept euros pour
+  les gravures ») : couverture gravée +7 € quel que soit le nombre d'emplacements, dos +7 € pareil** → 12,90 / 19,90 / 26,90 €.
+  Générateur `tools/maquettes/carnet-a5-emplacements.py <base v2>` (remplace `carnet-a5-dessins.py`, gardé pour mémoire ; la
+  base v2 = la page de l'artifact relue avec `read` + `path index.html`). Vérifié 390 / 1280 : titre + rose n° 12 + « Camille /
+  2026 » en bas à gauche = 19,90 €, + dos cadre 92 « Paul » + « Niro » en bas à droite = 26,90 €, noir en clair, photo
+  fournisseur = aperçu masqué, 0 erreur, 0 débordement.
 - **Avant tout « applique »** : vraies photos gravées (couvertures DESSINÉES dans la maquette), pesée réelle (380 g estimé → lettre 8,90 € / relais 4,90 €),
   puis construire comme un produit normal (§10 : `products.js`, `productInfo.js`, `productDates.js`, `packagingSeed.js`, `textExtra: 7` sur les deux faces).
   C'est CETTE version à reproduire à l'identique ; ne pas la modifier sans sa demande (règle du 23/07).
