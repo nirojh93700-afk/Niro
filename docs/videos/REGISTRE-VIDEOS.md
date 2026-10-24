@@ -459,3 +459,30 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #decobois #mariage #cadeaupersonnalise #ideecadeau
+
+
+## Vidéo 29 — Teaser « Bientôt : marque-pages en bois gravés » (24/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `docs/videos/29-teaser-marque-pages-1080x1920.mp4` | 1080 × 1920, 30 i/s, H.264, sans son | 27,5 s | 4,7 Mo |
+| `docs/videos/29-teaser-marque-pages-720x1280.mp4` | 720 × 1280 (légère) | 27,5 s | 1,5 Mo |
+
+- **Source** : `tools/video/teaser_marque_pages_29.py [dossier de sortie]` (recette à zones sûres des vidéos 16-28 ; ruban
+  « ✦ NOUVEAUTÉ · BIENTÔT ✦ », pastille « BIENTÔT », carte finale « Ils arrivent bientôt — inscrivez-vous à la lettre d'information »).
+- **Demande du gérant** : « fais-moi une vidéo avec les marque-pages, tu dis qu'ils arrivent, comme ils font les annonces de nouveautés
+  sur Internet ». Recherche du 24/10 : teaser « bientôt » avec dévoilement progressif, puis compte à rebours en story le jour venu, puis
+  reel de lancement ; « inscrivez-vous pour être prévenu » chez les artisans.
+- ⚠️ **Gravures = les APERÇUS des maquettes** (rendus posés sur les photos redressées du fournisseur, `docs/maquettes/assets/marque-pages/
+  exemples/`), pas des photos de pièces gravées : il n'en existe pas encore (réception attendue la semaine du 26/10). Photos du
+  fournisseur : groupe, éventail, ambiance (modèle 1), groupe (modèle 2), boîte de 4. **À refaire avec les vraies photos gravées**
+  (règle du 22/09). Prénoms d'exemple : Camille, Léa, Inès (jamais le nom du gérant). Aucun prix, aucune date, aucun nombre.
+- **Produits** : Marque-page en bois à pompon doré (modèle 1) · Marque-page ajouré, oiseau et magnolia (modèle 2) · coffret cadeau.
+
+### Description à copier-coller (livrée le 24/10/2026)
+
+**Vidéo 29 — Bientôt : marque-pages en bois gravés** (Marque-page en bois à pompon doré, Marque-page ajouré oiseau et magnolia, Coffret cadeau)
+> Une nouveauté arrive à l'atelier 🆕 Des marque-pages en bois, gravés à votre prénom, à votre dessin ou à votre photo, face et dos ✨ Plusieurs teintes de bois, un modèle ajouré avec son oiseau sur une branche de magnolia, et des coffrets cadeau pour les offrir 🎁 Inscrivez-vous à la lettre d'information pour être prévenu de leur arrivée 💛
+> 👉 nivcreation.fr
+
+#nivcreation #marquepage #cadeaupersonnalise #nouveaute #ideecadeau
