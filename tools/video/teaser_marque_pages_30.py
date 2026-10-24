@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# VIDÉO 30 (24/10/2026) — TEASER « Bientôt : les marque-pages » avec LES TROIS MODÈLES (silencieuse, verticale 1080x1920).
+# VIDÉO 30 (24/10/2026) — TEASER « En avant-première : les marque-pages » avec LES TROIS MODÈLES (silencieuse, verticale 1080x1920).
 # Gérant : « tu me fais une vidéo comme t'as fait tout à l'heure pour les marque-pages [vidéo 29], mais tu laisses les trois
 # modèles, métal aussi ». Même recette que la 29 (ruban « NOUVEAUTÉ · BIENTÔT », pastille, carte finale lettre d'information),
 # + les exemples avec une PHOTO de personne gravée (validés le 24/10 soir) + le modèle 3 « métal, peintures célèbres » (SANS
@@ -31,8 +31,8 @@ MQ = os.path.join(HERE, "..", "..", "docs", "maquettes", "assets")
 M1 = os.path.join(MQ, "marque-pages"); M2 = os.path.join(MQ, "marque-pages-fenetre"); EX = os.path.join(M1, "exemples")
 M3 = os.path.join(MQ, "marque-pages-metal")
 
-RUBAN = "✦  NOUVEAUTÉ  ·  BIENTÔT  ✦"
-PASTILLE = "BIENTÔT"
+RUBAN = "✦  EN AVANT-PREMIÈRE  ✦"
+PASTILLE = "INÉDIT"
 ACCROCHE = "Des marque-pages en bois gravés à votre prénom ou à votre photo, et en métal doré, aux couleurs des grands peintres"
 
 # (fichier, nom du produit, légende, recadrage éventuel dans la photo d'origine)
@@ -138,12 +138,12 @@ def card(big, small, big2=None, haut=None, ink_bg=False):
     return im
 
 def rendre():
-    segs = [("card", card("Bientôt dans l’atelier", ACCROCHE, "NiV CRÉATION", haut=RUBAN, ink_bg=True), None, INTRO_DUR + 0.6)]
+    segs = [("card", card("En avant-première", ACCROCHE, "NiV CRÉATION", haut="✦  INÉDIT  ✦", ink_bg=True), None, INTRO_DUR + 0.6)]
     for f, name, sub, crop in PRODUITS:
         base = fond_flou(charger(f, crop))
         ZW, ZH = int(W * 1.12), int(H * 1.12)
         segs.append(("prod", base.resize((ZW, ZH), Image.LANCZOS), overlay(name, sub), SEG_DUR))
-    segs.append(("card", card("Ils arrivent bientôt", "Inscrivez-vous à la lettre d’information sur nivcreation.fr : vous recevrez l’annonce de leur arrivée",
+    segs.append(("card", card("Prochainement à l’atelier", "Inscrivez-vous à la lettre d’information sur nivcreation.fr : vous recevrez l’annonce de leur arrivée",
                                "nivcreation.fr  ·  Gravé en France", haut=RUBAN, ink_bg=True), None, OUTRO_DUR + 0.6))
     brut = f"{OUT}/{NUM}-{NOM}-brut.mp4"; hd = f"{OUT}/{NUM}-{NOM}-1080x1920.mp4"; final = f"{OUT}/{NUM}-{NOM}-720x1280.mp4"
     wri = imageio.get_writer(brut, fps=FPS, codec="libx264", quality=8, macro_block_size=1,
