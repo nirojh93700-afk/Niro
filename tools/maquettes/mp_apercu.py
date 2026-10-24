@@ -133,6 +133,13 @@ CSS = r'''
 .mq-steps{display:flex;gap:10px;justify-content:center;padding:4px 0 10px}.mq-step{position:relative;width:52px;border:2px solid #e4d9bd;border-radius:12px;background:#fff;padding:3px;cursor:pointer;font:inherit}.mq-step img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block}.mq-step span{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);background:#2b2620;color:#fff;border-radius:999px;font-size:.68rem;padding:1px 7px}.mq-step.on{border-color:#a98935;box-shadow:0 0 0 1px #a98935}.mq-step.done::after{content:'✓';position:absolute;top:-7px;right:-7px;background:#4f7a3a;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.7rem;display:flex;align-items:center;justify-content:center}
 .mq-same{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:0 0 4px;cursor:pointer}.mq-same input{width:18px;height:18px;accent-color:#a98935;flex:none}.mq-same small{color:#7a6c48}.mq-stepnav{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0 10px}.mq-stepnav button{border:1.5px solid #c9b88a;background:#fff;border-radius:999px;padding:9px 14px;font:inherit;font-weight:600;color:#7c6120;cursor:pointer}.mq-stepnav button:disabled{opacity:.35}.mq-stepn{font-size:.82rem;color:#5a4d2c}.mq-sc[hidden]{display:none}.mq-sc.mq-locked .mq-grav{opacity:.5;pointer-events:none}.mq-lock-note{font-size:.78rem;color:#7a6c48;margin:0}.mq-sc .mq-grav{display:flex;flex-direction:column;gap:8px}.mq-sc .mq-sgrav{display:flex;flex-direction:column;gap:8px}.mq-sc .mq-sgrav[hidden]{display:none}.mq-sinfo{margin:0;font-size:.8rem;color:#5a4d2c;line-height:1.35}.mq-sc .mq-dessins{margin:0}.mq-sc .prc-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.mq-sc .prc-ml{font-size:.62rem}.mq-sc .mq-pbtn{align-self:flex-start}.mq-sc .mq-scc{font-weight:400;color:#7a6c48;font-size:.8rem}
 .mq-galap{position:absolute;inset:0;background:#f6efe1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;z-index:2}.mq-galap[hidden]{display:none}.mq-galap .mq-apw{align-items:center}.mq-galap-l{margin:0;font-size:.72rem;color:#7a6c48}.gallery-thumbs .mq-thap{display:flex;align-items:center;justify-content:center;background:#fbf3df;color:#7c6120;font-size:.64rem;font-weight:700;line-height:1.15;text-align:center;border:1.5px dashed #c9b88a;cursor:pointer}.mq-zoom-x{z-index:5}.mq-zoom-in .mq-bm{margin:34px auto 0}
+
+/* 24/10 soir — éditeur à QUATRE emplacements (gérant : « s'il veut ajouter à l'avant et au dos, au-dessus et en bas, il faut qu'ils aient le choix ») */
+.mq-ed{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}.mq-edi{margin:0 0 2px;font-size:.8rem;color:#5a4d2c;line-height:1.35}
+.mq-emp{border:1px solid #e4d9bd;border-radius:12px;background:#fff;padding:8px 10px;display:flex;flex-direction:column;gap:8px}.mq-emp.on{border-color:#a98935;background:#fffdf6;box-shadow:0 0 0 1px #a98935 inset}
+.mq-emph{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr);gap:8px;align-items:center}.mq-empl{display:flex;flex-direction:column;min-width:0}.mq-empl b{font-size:.84rem;line-height:1.2}.mq-empl small{font-size:.68rem;color:#8a7a52;line-height:1.2}
+.mq-ed select.mq-empk,.mq-ed input.mq-empt,.mq-ed input.mq-empct{width:100%;box-sizing:border-box;min-width:0;padding:10px 10px;border:1px solid #e0d3b0;border-radius:10px;background:#fffdf8;font:inherit;font-size:.86rem;color:#2b2620;margin:0}
+.mq-empb{display:flex;flex-direction:column;gap:8px}.mq-emp [hidden]{display:none!important}.mq-empd,.mq-empp{display:flex;flex-direction:column;gap:8px}.mq-empgo{align-self:flex-start}.mq-empcl{display:flex;flex-direction:column;gap:5px;font-size:.8rem;color:#5a4d2c}.mq-empd .mq-dessins{margin:0}.mq-empok{font-size:.84rem;color:#4f7a3a;font-weight:600;margin:0}
 '''
 
 JS = r'''
@@ -191,6 +198,44 @@ window.mqApercu=function(host,items,hauteur,couleur){ // couleur = titre de la c
   fits.forEach(function(f){window.mqFit(f[0],f[1],f[2]);window.mqCentreEncre(f[0])});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fits.forEach(function(f){window.mqCentreEncre(f[0])})});
 };
+// 24/10 soir — QUATRE emplacements par marque-page (gérant : « s'il veut ajouter à l'avant et au dos, au-dessus et en bas, devant ou dos,
+// il faut qu'ils aient le choix ») : chaque emplacement = rien / un texte (+3 €) / un dessin ou un cadre (+4 €, + 3 € si un texte s'écrit
+// dans le cadre) / ma photo (+4 €). Valeurs v = {'face|haut':{k,t,n,src},…} ; le même éditeur sert à la fiche et à chaque carte du coffret.
+window.MQ_EMP=[['face','haut'],['face','bas'],['dos','haut'],['dos','bas']];
+window.mqEdVide=function(){var v={};window.MQ_EMP.forEach(function(e){v[e[0]+'|'+e[1]]={k:'',t:'',n:0,src:null}});return v};
+window.mqEdCopie=function(v){var o={};for(var k in v)o[k]={k:v[k].k,t:v[k].t,n:v[k].n,src:v[k].src};return o};
+window.mqEdPrix=function(v){var p=0;for(var k in v){var e=v[k];if(e.k==='texte'&&(e.t||'').trim())p+=3;else if(e.k==='dessin'&&e.n){p+=4;if(e.n>=75&&(e.t||'').trim())p+=3}else if(e.k==='photo')p+=4}return p};
+window.mqEdItems=function(v,font){var it=[];for(var k in v){var e=v[k],s=k.split('|');if(e.k==='texte'&&(e.t||'').trim())it.push({kind:'texte',text:e.t,font:font,side:s[0],zone:s[1]});else if(e.k==='dessin'&&e.n)it.push({kind:'dessin',num:e.n,text:e.n>=75?e.t:'',font:font,side:s[0],zone:s[1]});else if(e.k==='photo')it.push({kind:'photo',src:e.src,side:s[0],zone:s[1]})}return it};
+window.mqEdResume=function(v){var r=[],L={'face|haut':'face, en haut','face|bas':'face, au milieu','dos|haut':'dos, en haut','dos|bas':'dos, au milieu'};
+  for(var k in v){var e=v[k],s='';if(e.k==='texte'&&(e.t||'').trim())s='« '+e.t.trim()+' »';else if(e.k==='dessin')s=e.n?(e.n>=75?'cadre n° '+e.n+((e.t||'').trim()?' « '+e.t.trim()+' »':''):'dessin n° '+e.n):'dessin à choisir';else if(e.k==='photo')s=e.src?'votre photo':'photo à envoyer';if(s)r.push(L[k]+' : '+s)}return r};
+window.mqEditeur=function(host,o){ // o = {v, allow(side,zone)→['texte','dessin','photo'], onChange(), cg, cgEl, cgWrap}
+  var A=window.MQAP,ed={v:o.v,active:null,blocks:{}};host.innerHTML='';host.classList.add('mq-ed');
+  var intro=document.createElement('p');intro.className='mq-edi';intro.textContent='Quatre emplacements : gravez l\'un d\'eux, ou plusieurs. Un texte +3 €, un dessin, un cadre ou votre photo +4 €. Rien de coché = marque-page nu.';host.appendChild(intro);
+  window.MQ_EMP.forEach(function(e){var side=e[0],zone=e[1],key=side+'|'+zone,ok=o.allow?o.allow(side,zone):['texte','dessin','photo'];if(!ok.length)return;
+    var b=document.createElement('div');b.className='mq-emp';b.dataset.key=key;var lab=((A.labels||{})[side]||{})[zone]||zone;lab=lab.charAt(0).toLowerCase()+lab.slice(1);
+    var sub=ok.length===1?(zone==='haut'?'texte sur une ligne':'texte à la verticale'):(zone==='haut'?'texte sur une ligne · dessin petit':'texte à la verticale · dessin grand');
+    b.innerHTML='<div class="mq-emph"><span class="mq-empl"><b>'+(side==='face'?'Face':'Dos')+' · '+lab+'</b><small>'+sub+'</small></span><select class="mq-empk"><option value="">Rien</option>'+(ok.indexOf('texte')>=0?'<option value="texte">Texte (+3 €)</option>':'')+(ok.indexOf('dessin')>=0?'<option value="dessin">Dessin ou cadre (+4 €)</option>':'')+(ok.indexOf('photo')>=0?'<option value="photo">Ma photo (+4 €)</option>':'')+'</select></div>'
+      +'<div class="mq-empb" hidden><input type="text" class="mq-empt" maxlength="24" placeholder="Ex : Léa"/><div class="mq-empd" hidden><p class="mq-empok" hidden></p><button type="button" class="prc-change mq-empgo" hidden>Choisir dans les planches</button><div class="mq-egrid"></div><label class="mq-empcl" hidden>Votre texte au milieu du cadre (+3 €), facultatif<input type="text" class="mq-empct" maxlength="24" placeholder="Ex : Léa"/></label></div>'
+      +'<div class="mq-empp" hidden><label class="mq-pbtn">📷 Choisir ma photo<input type="file" accept="image/*" hidden/></label><span class="mq-photo-ok" hidden></span><p class="mq-sinfo">Nous la gravons en noir et blanc, bien au centre.</p></div></div>';
+    var sel=b.querySelector('.mq-empk'),tt=b.querySelector('.mq-empt'),ct=b.querySelector('.mq-empct'),go=b.querySelector('.mq-empgo'),pf=b.querySelector('input[type=file]');
+    sel.addEventListener('change',function(){var e2=ed.v[key];e2.k=sel.value;if(e2.k!=='dessin'){e2.n=0;if(ed.active===key)ed.demonte()}if(e2.k!=='photo')e2.src=null;if(e2.k==='dessin')ed.monte(key);else ed.refresh();o.onChange()});
+    tt.addEventListener('input',function(){ed.v[key].t=tt.value;o.onChange()});ct.addEventListener('input',function(){ed.v[key].t=ct.value;o.onChange()});
+    go.addEventListener('click',function(){ed.monte(key);b.scrollIntoView({behavior:'smooth',block:'start'})});
+    pf.addEventListener('change',function(ev){var f=ev.target.files&&ev.target.files[0];if(!f){ed.v[key].src=null;ed.refresh();o.onChange();return}var r=new FileReader();r.onload=function(){ed.v[key].src=r.result;ed.v[key].nom=f.name;ed.refresh();o.onChange()};r.readAsDataURL(f)});
+    ed.blocks[key]=b;host.appendChild(b)});
+  ed.refresh=function(){for(var key in ed.blocks){var b=ed.blocks[key],e=ed.v[key]||{k:''},has=o.cgEl&&o.cgEl.parentNode===b.querySelector('.mq-egrid');
+    b.querySelector('.mq-empk').value=e.k||'';b.classList.toggle('on',!!e.k);b.querySelector('.mq-empb').hidden=!e.k;
+    var tt=b.querySelector('.mq-empt');tt.hidden=e.k!=='texte';if(e.k==='texte'&&tt.value!==(e.t||''))tt.value=e.t||'';
+    var dd=b.querySelector('.mq-empd');dd.hidden=e.k!=='dessin';if(e.k==='dessin'){var okp=b.querySelector('.mq-empok'),go=b.querySelector('.mq-empgo');okp.hidden=has||!e.n;okp.textContent=e.n?(e.n>=75?'Cadre n° '+e.n+' choisi ✓':'Dessin n° '+e.n+' choisi ✓'):'';go.hidden=has;go.textContent=e.n?'Changer de dessin':'Choisir dans les planches';
+      var ct=b.querySelector('.mq-empct');b.querySelector('.mq-empcl').hidden=!(e.n>=75);if(ct.value!==(e.t||''))ct.value=e.t||''}
+    var pp=b.querySelector('.mq-empp');pp.hidden=e.k!=='photo';if(e.k==='photo'){var ok2=b.querySelector('.mq-photo-ok');ok2.hidden=!e.src;ok2.textContent=e.src?'Photo envoyée ✓'+(e.nom?' : '+e.nom:''):''}}};
+  ed.monte=function(key){if(!o.cgEl||!ed.blocks[key])return;ed.active=key;ed.blocks[key].querySelector('.mq-egrid').appendChild(o.cgEl);o.cgEl.hidden=false;window.mqGridOwner=ed;if(o.cg&&o.cg.set)o.cg.set(ed.v[key].n);ed.refresh()};
+  ed.demonte=function(){if(o.cgEl&&window.mqGridOwner===ed){o.cgWrap.appendChild(o.cgEl);window.mqGridOwner=null}ed.active=null;ed.refresh()};
+  ed.remonte=function(){var k=ed.active;if(!k)for(var key in ed.v)if(ed.v[key].k==='dessin'){k=key;break}if(k)ed.monte(k);else ed.refresh()};
+  ed.onNum=function(n){if(!ed.active)return;ed.v[ed.active].n=n;ed.refresh();o.onChange()};
+  ed.set=function(v){ed.v=v;ed.active=null;if(window.mqGridOwner===ed)ed.remonte();else ed.refresh()};
+  ed.refresh();return ed};
+
 '''
 
 

@@ -101,6 +101,20 @@
     le bois nu (modèle 1 face et dos, dos du modèle 2) tout est centré en largeur (`centrer` dans `mp_apercu.config`, les rectangles du
     23/10 gardent leur hauteur) ; la photo n'est plus tournée (portrait, au milieu, droite). La face du modèle 2 garde ses places.
     Vérifié 390 : grille dans la carte, n° 12 → aperçu, retour sur la carte = numéro retrouvé, photo centrée (x = 0,50), 0 erreur.
+  · **v12 modèle 1 + v11 modèle 2 (24/10 soir, capture du coffret, dessin 12 minuscule : « c'est trop petit là, faut que ça soit plus
+    grand en longueur, et s'il veut ajouter à l'avant et au dos, au-dessus et en bas, devant ou dos, il faut qu'ils aient le choix »)** :
+    · **QUATRE EMPLACEMENTS par marque-page**, chacun avec son menu : Face · en haut, Face · au milieu, Dos · en haut, Dos · au milieu =
+      Rien / Texte (+3 €) / Dessin ou cadre (+4 €, + 3 € si un texte s'écrit dans le cadre) / Ma photo (+4 €). Un seul ou plusieurs,
+      au choix. Plus de « place du dessin » ni de « place du texte » : la place EST l'emplacement. Modèle 2 : les deux emplacements de la
+      FACE = texte seulement (23/10), le dos = tout. Éditeur partagé `mp_apercu.mqEditeur(host,{v,allow,cg,cgEl,cgWrap,onChange})` (+
+      `mqEdVide / mqEdCopie / mqEdPrix / mqEdItems / mqEdResume`), le MÊME sur la fiche (`#mq-ed`) et dans chaque carte du coffret ;
+      UNE grille de planches par page (`window.mqGridOwner`), montée dans l'emplacement en cours (« Choisir dans les planches » /
+      « Changer de dessin » dans les autres). Les anciens champs `pf-dessin` / `pf-texte` de la capture sont retirés (écriture et
+      note gardées).
+    · **aperçu du coffret agrandi** : hauteur `min(560, 62 % de l'écran)` (≈ 523 px sur iPhone au lieu de 300 : le marque-page passe de
+      59 à 102 px de large) ; la fiche garde l'aperçu dans la grande photo.
+    Vérifié 390 / 1280 : 0 erreur, 0 débordement, modèle 1 seul + dessin 12 (face milieu) + « Léa » (dos haut) + cadre 92 « Paul » (dos
+    milieu) = 23,90 € · coffret de 2 + « Paul » + dessin 7 = 32,70 €, « même gravure » = 39,70 € · modèle 2 : 27,90 € · 40,70 / 47,70 €.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.

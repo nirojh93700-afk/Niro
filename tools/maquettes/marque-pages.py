@@ -85,54 +85,15 @@ HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
 MAIN = MAIN.replace("Dessin gravé (+2 €)", "Dessin gravé (+4 €)").replace("Avec un dessin (+2 €)", "Avec un dessin (+4 €)").replace("choisissez un dessin (+2 €)", "choisissez un dessin ou une photo (+4 €)").replace("Texte gravé (+2 €)", "Texte gravé (+3 €)").replace("un texte (+2 €)", "un texte (+3 €)")  # 23/10 : texte +3 €.replace("un dessin (+2 €), d&#x27;un texte", "un dessin ou une photo (+4 €), d&#x27;un texte")  # 23/10 : dessin ou photo +4 €
-# 24/10 (gérant : « intègre les images qu'on a choisies, comme pour le gobelet, avec les numéros ») : les planches du
-# gobelet (maquette validée gobelet-configurateur-final.html : dessins 1–74 + cadres 75–103), même façon de choisir que le
-# parcours guidé (grille de planches avec légende, toucher = agrandir, numéro, grille repliée + « Changer de dessin »).
-# Cadres retenus pour un marque-page (étroit) = ceux que j'ai conseillés : rubans fins 88–91, cartouches 92–94, ornements 96–103.
-GOB = open(os.path.join(OUT, "gobelet-configurateur-final.html"), encoding="utf-8").read()
-PL = json.loads(re.search(r"var PLANCHES=(\[.*?\]);", GOB).group(1))
-CA = [c["src"] for c in json.loads(re.search(r"var CADRES=(\[.*?\]);", GOB).group(1))]
-assert len(PL) == 10 and len(CA) == 6
-LEG_D = [("1–10", "Fleurs & papillons"), ("11–27", "Roses"), ("28–36", "Volutes & arabesques"), ("37–45", "Cœurs & tiges fleuries"),
-         ("46–51", "Fées & clé de sol"), ("52–55", "Fée & coins fleuris"), ("56–58", "Cœurs de couple (prénoms)"),
-         ("59–64", "Cœur prénom, plumes, colibri"), ("65–70", "Animaux & oiseaux"), ("71–74", "Colibri, fée, musique")]
-LEG_C = [(CA[2], "88–91", "Rubans fins (sur la planche 82–91)"), (CA[3], "92–94", "Cartouches (sur la planche 92–95)"),
-         (CA[4], "96, 98, 100, 101", "Filets & ornements"), (CA[5], "102", "Volute")]
-NUMS_OK = list(range(1, 75)) + list(range(88, 95)) + [96, 98, 100, 101, 102]  # 24/10 soir : 97, 99, 103 n'existent pas (cadres doubles)
-def planche(src, a, b, kind, i):
-    return (f'<button type="button" class="prc-model" data-kind="{kind}" data-i="{i}"><span class="prc-mn">{a}</span>'
-            f'<span class="prc-mimg prc-mimg-photo"><img src="{src}" alt="Planche {a}" loading="lazy"></span>'
-            f'<span class="prc-ml">{b}<br><em>n° {a}</em></span></button>')
-GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin</p>'
-        '<p class="prc-legend" id="mq-dleg">Touchez une planche pour l\'agrandir et lire les numéros, puis indiquez le numéro. '
-        'Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s\'écrit votre texte (n° 88 à 94, 96, 98, 100 à 102).</p>'
-        '<div class="prc-grid mq-grid" id="mq-gd">' + "".join(planche(s, a, b, "d", i) for i, (s, (a, b)) in enumerate(zip(PL, LEG_D)))
-        + "".join(planche(s, a, b, "c", i) for i, (s, a, b) in enumerate(LEG_C)) + '</div>'
-        '<div class="field mq-numf"><label for="mq-num">Numéro du dessin ou du cadre</label>'
-        '<input type="number" id="mq-num" min="1" max="102" inputmode="numeric" placeholder="Ex : 12"/></div>'
-        '<p class="prc-choisi" id="mq-dok" hidden></p><button type="button" class="prc-change" id="mq-dchg" hidden>Changer de dessin</button>'
-        '</div>')
-# Place sur le marque-page = les zones données par le gérant le 23/10 (docs/maquettes/assets/marque-pages/zones/) :
-# HAUT (sous le trou) = petit dessin · BAS = grand dessin. Même choix pour la photo.
-def chips(idn, on):
-    L = [("face", "haut", "Face · en haut"), ("face", "bas", "Face · au milieu"), ("dos", "haut", "Dos · en haut"), ("dos", "bas", "Dos · au milieu")]
-    return f'<div class="prc-chips mq-pl" id="{idn}">' + "".join(
-        f'<button type="button" class="prc-chip{" on" if (sd, z) == on else ""}" data-s="{sd}" data-z="{z}">{lab}</button>' for sd, z, lab in L) + '</div>'
-# Place du dessin / de la photo (24/10, gérant : « au-dessus, au milieu ou derrière ») : zones du 23/10, face = dos.
-PLACE = ('<div class="field mq-placef" id="mq-placef" hidden><label>Où graver le dessin ?</label>' + chips("mq-place", ("face", "bas")) +
-         '<p class="mq-dn" id="mq-placen">En haut, sous le trou : petit. Au milieu : grand. Le texte prend une autre place.</p></div>')
-TPLACE = ('<div class="field mq-placef" id="mq-tplacef"><label>Où graver le texte ?</label>' + chips("mq-tplace", ("face", "haut")) +
-          '<p class="mq-dn">En haut : sur une ligne. Au milieu : écrit à la verticale, le long du marque-page.</p></div>')
-PHOTO = ('<div class="mq-photo" hidden><label class="mq-pbtn">📷 Choisir une photo<input type="file" accept="image/*" hidden/></label>'
-         '<span class="mq-photo-ok" hidden>Photo envoyée ✓ — nous la gravons en noir et blanc sur le bois.</span>'
-         '<p class="mq-dn">Une photo nette et bien éclairée donne le meilleur résultat : un visage, un animal, une silhouette.</p></div>')
-# 23/10, gérant : « dessin OU photo » au même prix (+4 €) → 3ᵉ choix dans le menu + bloc photo.
-MAIN = MAIN.replace("Dessin gravé (+4 €)", "Dessin ou photo gravé (+4 €)", 1)
-MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+4 €\)</option>)(</select></div>)', lambda m: m.group(1) + '<option value="photo">Avec ma photo (+4 €)</option>' + m.group(2) + GRID + PHOTO + PLACE, MAIN, count=1)
-assert "mq-dessins" in MAIN and "mq-photo" in MAIN and "mq-placef" in MAIN
-TXT_END = '<span class="char-count">0<!-- -->/<!-- -->24</span></div>'
-assert MAIN.count(TXT_END) == 1
-MAIN = MAIN.replace(TXT_END, TXT_END + TPLACE, 1)
+# 24/10 soir (gérant, capture du coffret : « c'est trop petit là… et s'il veut ajouter à l'avant et au dos, au-dessus et en bas,
+# devant ou dos, il faut qu'ils aient le choix ») : les anciens champs (menu dessin / photo, place du dessin, texte, place du texte)
+# sont remplacés par l'éditeur partagé à QUATRE emplacements (mp_apercu.mqEditeur : Face · en haut, Face · au milieu, Dos · en haut,
+# Dos · au milieu, chacun = rien / texte +3 € / dessin ou cadre +4 € / photo +4 €). L'écriture et la note restent. Les planches du
+# gobelet (UNE grille partagée, mp_apercu.grille_planches) se montent dans l'emplacement en cours, sur la fiche comme dans le coffret.
+NUMS_OK = mp_apercu.NUMS_OK
+a0 = MAIN.index('<div class="field"><label for="pf-dessin">'); a1 = MAIN.index('<div class="field"><label for="pf-police">')
+MAIN = MAIN[:a0] + '<div id="mq-ed"></div>' + MAIN[a1:]
+MAIN = MAIN.replace("Laissez vide pour un marque-page sans gravure.", "Laissez « Rien » partout pour un marque-page sans gravure.", 1)
 OLD_BOX = "Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique."
 assert OLD_BOX in MAIN
 MAIN = MAIN.replace(OLD_BOX, "Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.")
@@ -150,7 +111,7 @@ FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-
        "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
 RECAP = ('<div class="mq-recap" id="mq-recap" hidden><p class="mq-rtxt"></p><div class="mq-strip"></div>'
          '<button type="button" class="mq-open">Composer mon coffret</button></div>')
-GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>La gravure (texte, dessin) se choisit pour chaque marque-page dans « Composer mon coffret ».</p>'
+GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>La gravure (texte, dessin, photo — face et dos, en haut et au milieu) se choisit pour chaque marque-page dans « Composer mon coffret ».</p>'
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'
 assert cle in MAIN
 cle_id = cle.replace('<div style="margin-bottom:6px">', '<div style="margin-bottom:6px" id="mq-grav">')
@@ -205,68 +166,49 @@ CSS = r'''
 JS = r'''
 (function(){
   var P=__PRIX__, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={t:'Caramel',q:1,n:1,box:0,slots:[],dz:{s:'face',z:'bas'},tz:{s:'face',z:'haut'},num:0,photoSrc:null,same:false,cur:0};
+  var st={t:'Caramel',q:1,n:1,box:0,slots:[],same:false,cur:0,v:window.mqEdVide()};
   var gm=document.querySelector('.gallery-main'),galap=document.getElementById('mq-galap'),thap=document.querySelector('.mq-thap'),stepper=null;
   var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
   var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
-  var qb=document.querySelectorAll('.qty-stepper button');
-  var vin=document.getElementById('pf-texte'),des=document.getElementById('pf-dessin'),grid=document.querySelector('.mq-dessins');
+  var qb=document.querySelectorAll('.qty-stepper button'),polSel=document.getElementById('pf-police');
   var WOODS=sw.map(function(b){return b.querySelector('.vs-title').textContent.trim()});
   var IMGS=sw.map(function(b){return b.querySelector('img').src});
   var fm=[].slice.call(document.querySelectorAll('.mq-fmt'));
   var recap=document.getElementById('mq-recap'),gnote=document.getElementById('mq-gnote'),grav=document.getElementById('mq-grav');
   var sheet=document.getElementById('mq-sheet'),shb=document.getElementById('mq-shb'),shn=document.getElementById('mq-shn'),sht=document.getElementById('mq-sht');
-  function unit(o){return P[WOODS[o.c]]+(o.t.trim()?3:0)+(o.d?4:0)}
-  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+((vin&&vin.value.trim())?3:0)+((des&&(des.value==='oui'||des.value==='photo'))?4:0)}
-  function polCls(sel){var v=sel&&sel.value;return v?'fnt-'+v:'fnt-playfair'}
-  var polSel=document.getElementById('pf-police');
-  function itemsPrincipal(){var it=[];var k=des?des.value:'';
-    if(k==='oui'&&st.num)it.push({kind:'dessin',num:st.num,text:vin?vin.value:'',font:polCls(polSel),side:st.dz.s,zone:st.dz.z});
-    if(k==='photo')it.push({kind:'photo',src:st.photoSrc,side:st.dz.s,zone:st.dz.z});
-    if(vin&&vin.value.trim()&&!(k==='oui'&&st.num>=75))it.push({kind:'texte',text:vin.value,font:polCls(polSel),side:st.tz.s,zone:st.tz.z});
-    return it}
-  function apercu(){if(!galap)return;var it=itemsPrincipal();if(st.n>1||!it.length){galap.hidden=true;if(thap)thap.classList.remove('active');return}
-    window.mqApercu(galap.querySelector('.mq-apw'),it,Math.round((gm.clientHeight||600)*0.9),st.t);galap.hidden=false;th.forEach(function(x){x.classList.remove('active')});if(thap)thap.classList.add('active')}
-  function copyAll(){var a=st.slots[0];st.slots.slice(1).forEach(function(o){o.t=a.t;o.d=a.d;o.k=a.k;o.n=a.n;o.dp=a.dp;o.tp=a.tp;o.photoSrc=a.photoSrc;if(o.sync)o.sync()})}
-  // UNE grille de planches pour tout le coffret : elle se déplace dans la carte du marque-page en cours (24/10 soir, gérant : « il faut qu'ils voient qu'il y a des choix, simple, bien expliqué »)
+  function polCls(){var v=polSel&&polSel.value;return v?'fnt-'+v:'fnt-playfair'}
+  // UNE grille de planches pour toute la page : elle se déplace dans l'emplacement en cours (fiche ou carte du coffret).
   var cgEl=document.getElementById('cg-dessins'),cgWrap=document.getElementById('mq-cgwrap');
-  var cg=window.mqPlanches('cg',__NUMS__,function(n){var o=st.slots[st.cur];if(o&&o.d&&o.k==='oui'){o.n=n;o.touched=true;maj();if(o.ap)o.ap()}});
-  function majChips(){[].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(b){var same=b.dataset.s===st.tz.s&&b.dataset.z===st.tz.z;b.disabled=same&&!!(vin&&vin.value.trim());b.classList.toggle('on',b.dataset.s===st.dz.s&&b.dataset.z===st.dz.z)});
-    var dOn=des&&(des.value==='oui'||des.value==='photo');[].forEach.call(document.querySelectorAll('#mq-tplace .prc-chip'),function(b){var same=b.dataset.s===st.dz.s&&b.dataset.z===st.dz.z;b.disabled=same&&!!dOn;b.classList.toggle('on',b.dataset.s===st.tz.s&&b.dataset.z===st.tz.z)})}
-  function maj(){if(st.same&&st.n>1)copyAll();if(stepper)stepper.refresh(function(o){return !!(o.t||o.d)});tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box);majChips();apercu()}
-  function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:WOODS.indexOf(st.t),t:'',d:false,touched:false})}
-  function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
-    var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||o.t||o.d});
-    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+(o.t?'<b>'+o.t.replace(/</g,'&lt;')+'</b>':'')+(o.d?'<b>'+(o.k==='photo'?'photo':(o.n?(estCadre(o.n)?'cadre n° ':'dessin n° ')+o.n:'dessin ?'))+'</b>':'');st2.appendChild(d)});
-    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, tous de couleur '+WOODS[st.slots[0].c].toLowerCase()+'. Changez la couleur et la gravure de chacun si vous voulez :'}
+  var cg=window.mqPlanches('cg',__NUMS__,function(n){if(window.mqGridOwner)window.mqGridOwner.onNum(n)});
+  var ALLOW=__ALLOW__;
+  var pageEd=window.mqEditeur(document.getElementById('mq-ed'),{v:st.v,allow:ALLOW,cg:cg,cgEl:cgEl,cgWrap:cgWrap,onChange:function(){maj()}});
+  function unit(o){return P[WOODS[o.c]]+window.mqEdPrix(o.v)}
+  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+window.mqEdPrix(st.v)}
+  function apercu(){if(!galap)return;var it=window.mqEdItems(st.v,polCls());if(st.n>1||!it.length){galap.hidden=true;if(thap)thap.classList.remove('active');return}
+    window.mqApercu(galap.querySelector('.mq-apw'),it,Math.round((gm.clientHeight||600)*0.9),st.t);galap.hidden=false;th.forEach(function(x){x.classList.remove('active')});if(thap)thap.classList.add('active')}
+  function copyAll(){var a=st.slots[0];st.slots.slice(1).forEach(function(o){o.v=window.mqEdCopie(a.v);if(o.sync)o.sync()})}
+  function maj(){if(st.same&&st.n>1)copyAll();if(stepper)stepper.refresh(function(o){return window.mqEdPrix(o.v)>0});tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box);apercu()}
+  function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:__DEFC__,v:window.mqEdVide(),touched:false})}
+  function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on){pageEd.remonte();return}
+    var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||window.mqEdPrix(o.v)>0});
+    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+window.mqEdResume(o.v).map(function(x){return '<b>'+x.replace(/</g,'&lt;')+'</b>'}).join('');st2.appendChild(d)});
+    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':__RTXT__}
+  // Aperçu du coffret : aussi grand que l'écran le permet (24/10 soir, gérant : « c'est trop petit là, il faut que ce soit plus grand en longueur »).
+  function shH(){return Math.round(Math.min(560,window.innerHeight*0.62))}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;var els=[];
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
       d.innerHTML='<p>Marque-page '+(i+1)+' <small class="mq-scc"></small></p><div class="mq-row"></div><p class="mq-lock-note" hidden>Gravé comme le marque-page 1 — décochez « la même gravure » pour le changer.</p>'
-        +'<div class="mq-grav"><input type="text" maxlength="24" placeholder="Texte gravé (+3 €), facultatif"/><select class="mq-dsel"><option value="">Sans dessin ni photo</option><option value="oui">Avec un dessin (+4 €)</option><option value="photo">Avec ma photo (+4 €)</option></select>'
-        +'<div class="mq-sgrav" hidden><p class="mq-sinfo"></p><div class="mq-sgrid"></div><label class="mq-pbtn mq-spho" hidden>📷 Choisir ma photo<input type="file" accept="image/*" hidden/></label><span class="mq-photo-ok" hidden></span><select class="mq-sp mq-plsel"><option value="face|bas" data-l="face, au milieu (grand)">Dessin : face, au milieu</option><option value="face|haut" data-l="face, en haut (petit)">Dessin : face, en haut</option><option value="dos|bas" data-l="dos, au milieu (grand)">Dessin : dos, au milieu</option><option value="dos|haut" data-l="dos, en haut (petit)">Dessin : dos, en haut</option></select></div>'
-        +'<select class="mq-tp mq-plsel" hidden><option value="face|haut">Texte : face, en haut</option><option value="face|bas">Texte : face, au milieu (vertical)</option><option value="dos|haut">Texte : dos, en haut</option><option value="dos|bas">Texte : dos, au milieu (vertical)</option></select></div>'
-        +'<div class="mq-ap"><div class="mq-apw" data-h="300"></div></div>';
-      o.dp=o.dp||'face|bas';o.tp=o.tp||'face|haut';
-      var snp=d.querySelector('.mq-sp'),tp=d.querySelector('.mq-tp'),aph=d.querySelector('.mq-apw'),scc=d.querySelector('.mq-scc');
-      var sg=d.querySelector('.mq-sgrav'),sgrid=d.querySelector('.mq-sgrid'),sinfo=d.querySelector('.mq-sinfo'),spho=d.querySelector('.mq-spho'),spok=d.querySelector('.mq-photo-ok');
-      o.monte=function(){var k=o.d?o.k:'';sg.hidden=!k;if(k==='oui'){sgrid.appendChild(cgEl);cgEl.hidden=false;cg.set(o.n);sinfo.textContent='Choisissez votre dessin : touchez une planche pour l\'agrandir, puis tapez son numéro. Un cadre (88 à 102) = votre texte s\'écrit au milieu du cadre.';spho.hidden=true;spok.hidden=true}
-        else{if(cgEl.parentNode===sgrid){cgWrap.appendChild(cgEl)}if(k==='photo'){sinfo.textContent='Envoyez votre photo : nous la gravons en noir et blanc sur le bois, bien au centre.';spho.hidden=false;spok.hidden=!o.photoSrc}}
-        [].forEach.call(snp.options,function(op){op.textContent=(k==='photo'?'Photo : ':'Dessin : ')+op.dataset.l})};
-      spho.querySelector('input').addEventListener('change',function(ev){var f=ev.target.files&&ev.target.files[0];if(!f){o.photoSrc=null;spok.hidden=true;ap();return}var r=new FileReader();r.onload=function(){o.photoSrc=r.result;spok.hidden=false;spok.textContent='Photo envoyée ✓ : '+f.name;o.touched=true;maj();ap()};r.readAsDataURL(f)});
-      function slotItems(){var it=[],sp=o.dp.split('|'),tq=o.tp.split('|');if(o.d&&o.k==='oui'&&o.n)it.push({kind:'dessin',num:o.n,text:o.t,font:polCls(polSel),side:sp[0],zone:sp[1]});if(o.d&&o.k==='photo')it.push({kind:'photo',src:o.photoSrc,side:sp[0],zone:sp[1]});if((o.t||'').trim()&&!(o.d&&o.k==='oui'&&o.n>=75))it.push({kind:'texte',text:o.t,font:polCls(polSel),side:tq[0],zone:tq[1]});return it}
-      function ap(){tp.hidden=!(o.t||'').trim();if(o.d&&o.dp===o.tp&&(o.t||'').trim()){o.tp=(o.dp==='face|haut')?'face|bas':'face|haut';tp.value=o.tp}scc.textContent='· '+WOODS[o.c];window.mqApercu(aph,slotItems(),300,WOODS[o.c])}
+        +'<div class="mq-grav"><div class="mq-ed"></div></div><div class="mq-ap"><p class="mq-aph">Votre aperçu <small>— touchez pour agrandir</small></p><div class="mq-apw"></div></div>';
+      var aph=d.querySelector('.mq-apw'),scc=d.querySelector('.mq-scc');
+      function ap(){scc.textContent='· '+WOODS[o.c];window.mqApercu(aph,window.mqEdItems(o.v,polCls()),shH(),WOODS[o.c])}
       o.ap=ap;
-      var ti=d.querySelector('input[type=text]'),cb=d.querySelector('.mq-dsel');
-      o.sync=function(){ti.value=o.t||'';cb.value=o.d?(o.k||'oui'):'';snp.value=o.dp;tp.value=o.tp;if(i===st.cur)o.monte();ap()};
-      snp.addEventListener('change',function(){o.dp=snp.value;maj();ap()});tp.addEventListener('change',function(){o.tp=tp.value;maj();ap()});
+      o.ed=window.mqEditeur(d.querySelector('.mq-ed'),{v:o.v,allow:ALLOW,cg:cg,cgEl:cgEl,cgWrap:cgWrap,onChange:function(){o.touched=true;maj();ap()}});
+      o.sync=function(){o.ed.set(o.v);ap()};o.monte=function(){o.ed.remonte()};
       var row=d.querySelector('.mq-row');
       WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj();ap()});row.appendChild(c)});
-      ti.addEventListener('input',function(){o.t=ti.value;o.touched=true;maj();ap()});
-      cb.addEventListener('change',function(){o.d=!!cb.value;o.k=cb.value;if(!o.d)o.n=0;o.touched=true;o.monte();maj();ap()});
-      o.sync();
-      els.push(d);shb.appendChild(d)});
-    var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc mq-pol';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');c.addEventListener('change',function(){pol.value=c.value;st.slots.forEach(function(o){if(o.ap)o.ap()})});w.appendChild(c);shb.appendChild(w)}
+      ap();els.push(d);shb.appendChild(d)});
+    var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc mq-pol';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');c.addEventListener('change',function(){pol.value=c.value;st.slots.forEach(function(o){if(o.ap)o.ap()});maj()});w.appendChild(c);shb.appendChild(w)}
     function lock(){els.forEach(function(d,i){var l=st.same&&i>0;d.classList.toggle('mq-locked',l);d.querySelector('.mq-lock-note').hidden=!l})}
     stepper=window.mqStepper(shb,els,st.slots,IMGS,st,function(){if(st.same)copyAll();lock();maj()},function(i){var o=st.slots[i];if(o&&o.monte)o.monte()});lock()}
   function ouvre(){cards();maj();sheet.hidden=false}
@@ -274,36 +216,14 @@ JS = r'''
   document.querySelector('.mq-open').addEventListener('click',ouvre);
   document.getElementById('mq-close').addEventListener('click',ferme);document.getElementById('mq-ok').addEventListener('click',ferme);
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
-    if(st.box){montre(th[{1:9,2:10,4:11}[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
-  if(vin)vin.addEventListener('input',maj);
-  var pho=document.querySelector('.mq-photo'),placef=document.getElementById('mq-placef');
-  if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';if(pho)pho.hidden=des.value!=='photo';if(placef)placef.hidden=!(des.value==='oui'||des.value==='photo');maj()});
-  if(pho){var pf=pho.querySelector('input[type=file]');pf.addEventListener('change',function(){pho.querySelector('.mq-photo-ok').hidden=!pf.files.length;st.photoSrc=null;if(pf.files.length){var r=new FileReader();r.onload=function(){st.photoSrc=r.result;maj()};r.readAsDataURL(pf.files[0])}else maj()})}
-  // Planches (comme le gobelet) : toucher = agrandir ; le numéro se tape ; la grille se replie sur le choix.
-  var OK=__NUMS__;function numOk(n){return OK.indexOf(n)>=0}function estCadre(n){return n>=75}
-  function zoom(src){var o=document.createElement('div');o.className='mq-zoom';o.innerHTML='<div class="mq-zoom-in"><button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><img alt=""/></div>';o.querySelector('img').src=src;
-    o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)}
-  function zoomAll(){var o=document.createElement('div');o.className='mq-zoom';var inn=document.createElement('div');inn.className='mq-zoom-in';inn.innerHTML='<button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><p class="mq-dh">Les planches : repérez le numéro, puis tapez-le.</p>';
-    [].forEach.call(document.querySelectorAll('#mq-gd .prc-model'),function(b){var im=document.createElement('img');im.src=b.querySelector('img').src;im.alt='';im.style.marginBottom='10px';inn.appendChild(im)});o.appendChild(inn);
-    o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)}
-  var gd=document.getElementById('mq-gd'),num=document.getElementById('mq-num'),dok=document.getElementById('mq-dok'),dchg=document.getElementById('mq-dchg'),dleg=document.getElementById('mq-dleg');
-  st.num=0;
-  if(gd){[].forEach.call(gd.querySelectorAll('.prc-model'),function(b){b.addEventListener('click',function(){[].forEach.call(gd.querySelectorAll('.prc-model'),function(x){x.classList.toggle('on',x===b)});zoom(b.querySelector('img').src)})});
-    function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v}
-    num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=numOk(n)?n:0;dok.hidden=!num.value;
-      dok.textContent=st.num?(estCadre(st.num)?'Cadre n° '+st.num+' choisi ✓ — votre texte gravé (+3 €) s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓'):'Numéro : 1 à 74 pour un dessin, 88 à 94, 96, 98, 100 à 102 pour un cadre.';
-      dok.classList.toggle('prc-miss',!st.num);maj()});
-    num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
-    dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})})}
-  [].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(b){b.addEventListener('click',function(){if(b.disabled)return;st.dz={s:b.dataset.s,z:b.dataset.z};maj()})});
-  [].forEach.call(document.querySelectorAll('#mq-tplace .prc-chip'),function(b){b.addEventListener('click',function(){if(b.disabled)return;st.tz={s:b.dataset.s,z:b.dataset.z};maj()})});
+    if(st.box){montre(th[__BOXTH__[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(polSel)polSel.addEventListener('change',maj);
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
-    st.slots.forEach(function(o){if(!o.touched)o.c=k});draw();maj()})});
+    __SWSLOTS__draw();maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
   function montre(b){th.forEach(function(x){x.classList.remove('active')});b.classList.add('active');if(b.classList.contains('mq-thap')){apercu();return}if(galap)galap.hidden=true;main.removeAttribute('srcset');main.src=b.querySelector('img').src}
-  window.addEventListener('resize',function(){if(galap&&!galap.hidden)apercu()});
+  window.addEventListener('resize',function(){if(galap&&!galap.hidden)apercu();if(sheet&&!sheet.hidden)st.slots.forEach(function(o){if(o.ap)o.ap()})});
   th.forEach(function(b){b.addEventListener('click',function(){montre(b)})});
   if(th[0])th[0].classList.add('active');
   var nx=document.querySelector('.gallery-arrow-next'),pv=document.querySelector('.gallery-arrow-prev');
@@ -313,10 +233,13 @@ JS = r'''
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   reset();draw();maj();
 })();
-'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK))
+'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK)) \
+    .replace("__ALLOW__", "function(){return ['texte','dessin','photo']}").replace("__DEFC__", "WOODS.indexOf(st.t)") \
+    .replace("__RTXT__", "'Votre coffret de '+st.n+' marque-pages, tous de couleur '+WOODS[st.slots[0].c].toLowerCase()+'. Changez la couleur et la gravure de chacun si vous voulez :'") \
+    .replace("__BOXTH__", "{1:9,2:10,4:11}").replace("__SWSLOTS__", "st.slots.forEach(function(o){if(!o.touched)o.c=k});")
 
 DATA = mp_apercu.script_data(1)
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande · dessins numérotés, place face / dos, aperçu dans la couleur choisie, coffret pas à pas — 24/10) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande · dessins numérotés, place face / dos, aperçu dans la couleur choisie, coffret pas à pas, quatre emplacements face / dos — 24/10) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Marque-page en bois personnalisé — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}\n{mp_apercu.CSS}</style>"
 SHEET = ('<div id="mq-cgwrap" hidden>' + mp_apercu.grille_planches("cg", "Choisissez votre dessin", """Touchez une planche pour l'agrandir et lire les numéros, puis tapez le numéro ci-dessous. Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s'écrit votre texte (n° 88 à 94, 96, 98, 100 à 102).""") + '</div><div class="mq-sheet" id="mq-sheet" hidden><div class="mq-sheetin"><div class="mq-shh"><b id="mq-sht">Mon coffret</b><button type="button" id="mq-close" aria-label="Fermer">×</button></div>'

@@ -99,78 +99,27 @@ FMT = ('<div class="field"><label>Choisissez votre format</label><div class="mq-
        "".join(fmt_card(i, *f) for i, f in enumerate(FORMATS)) + '</div></div>')
 RECAP = ('<div class="mq-recap" id="mq-recap" hidden><p class="mq-rtxt"></p><div class="mq-strip"></div>'
          '<button type="button" class="mq-open">Voir et personnaliser mon coffret</button></div>')
-GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de couleurs différentes : vous pouvez en changer et faire graver chacun — un texte sur la face (+3 €), un texte au verso (+3 €), un dessin ou une photo au verso (+4 €) — dans « Voir et personnaliser mon coffret ».</p>'
+GNOTE = '<p class="mq-gnote" id="mq-gnote" hidden>Les marque-pages du coffret sont de couleurs différentes : vous pouvez en changer et faire graver chacun — un texte sur la face (+3 €), et au verso un texte (+3 €), un dessin, un cadre ou une photo (+4 €), en haut et au milieu — dans « Voir et personnaliser mon coffret ».</p>'
 cle = '<div style="margin-bottom:6px"><p style="font-size:0.85rem;font-weight:600;margin-bottom:12px">Personnalisation — gravure</p>'
 assert cle in MAIN
 cle_id = cle.replace('<div style="margin-bottom:6px">', '<div style="margin-bottom:6px" id="mq-grav">')
 MAIN = MAIN.replace(cle, FMT + RECAP + GNOTE + cle_id, 1)
-# 23/10, gérant : « la face se grave aussi » puis « pas de dessin, il y a déjà un dessin : que du texte » (zones : HAUT au-dessus
-# de la fenêtre ajourée, BAS à gauche de la branche ; texte en haut = horizontal, en bas = à la verticale). Texte +3 € comme le modèle 1.
-OPT = '<span style="color:var(--ink-soft);font-weight:400"> (facultatif)</span>'
-FACE = ('<p class="mq-sub">Sur la face</p>'
-        f'<div class="field"><label for="pf-face">Texte gravé sur la face (+3 €){OPT}</label>'
-        '<input id="pf-face" type="text" placeholder="Ex : Léa" maxLength="24" value=""/><span class="char-count">0/24</span></div>'
-        '<div class="field"><label for="pf-place">Place sur la face</label><select id="pf-place">'
-        '<option value="haut" selected="">Au-dessus de la fenêtre, sur une ligne</option>'
-        '<option value="bas">À côté de la fenêtre, à la verticale</option></select>'
-        '<p class="mq-dn">Le dessin de la face est déjà là : seul un texte s\'y ajoute, dans le bois libre.</p></div>'
-        '<p class="mq-sub">Au verso</p>')
-VERSO = '<div class="field"><label for="pf-texte">Texte gravé au verso (+3 €)'
-assert VERSO in MAIN
-MAIN = MAIN.replace(VERSO, FACE + VERSO, 1)
-# 24/10 (gérant : « pareil pour les deux maquettes : au-dessus, au milieu ou derrière » + un aperçu) : place du texte au verso
-# (en haut sur une ligne / au milieu à la verticale) et l'aperçu face + dos sous les champs.
-TXT_END = '<span class="char-count">0<!-- -->/<!-- -->24</span></div>'
-assert MAIN.count(TXT_END) == 1
-VPLACE = ('<div class="field" id="mq-vplacef"><label for="pf-vplace">Place du texte au verso</label><select id="pf-vplace">'
-          '<option value="haut" selected="">En haut, sur une ligne</option><option value="bas">Au milieu, à la verticale</option></select></div>')
-# 24/10 soir (gérant : « pour la maquette 2, mettre l'option pour graver des logos etc. au dos, comme t'as fait pour le 1 : il y a de
-# la place, on peut graver derrière ») : dessin numéroté / cadre / photo au VERSO SEULEMENT (+4 €, comme le modèle 1), avec les
-# planches du gobelet (même parcours que le modèle 1 : planche agrandie au toucher, numéro tapé, grille repliée), place en haut
-# (petit) / au milieu (grand). La face reste TEXTE seul (23/10 : « il y a déjà un dessin »). Cadres retenus : 88–94, 96–103.
-GOB = open(os.path.join(OUT, "gobelet-configurateur-final.html"), encoding="utf-8").read()
-PL = json.loads(re.search(r"var PLANCHES=(\[.*?\]);", GOB).group(1))
-CA = [c["src"] for c in json.loads(re.search(r"var CADRES=(\[.*?\]);", GOB).group(1))]
-assert len(PL) == 10 and len(CA) == 6
-LEG_D = [("1–10", "Fleurs & papillons"), ("11–27", "Roses"), ("28–36", "Volutes & arabesques"), ("37–45", "Cœurs & tiges fleuries"),
-         ("46–51", "Fées & clé de sol"), ("52–55", "Fée & coins fleuris"), ("56–58", "Cœurs de couple (prénoms)"),
-         ("59–64", "Cœur prénom, plumes, colibri"), ("65–70", "Animaux & oiseaux"), ("71–74", "Colibri, fée, musique")]
-LEG_C = [(CA[2], "88–91", "Rubans fins (sur la planche 82–91)"), (CA[3], "92–94", "Cartouches (sur la planche 92–95)"),
-         (CA[4], "96, 98, 100, 101", "Filets & ornements"), (CA[5], "102", "Volute")]
-NUMS_OK = list(range(1, 75)) + list(range(88, 95)) + [96, 98, 100, 101, 102]  # 24/10 soir : 97, 99, 103 n'existent pas (cadres doubles)
-def planche(src, a, b, kind, i):
-    return (f'<button type="button" class="prc-model" data-kind="{kind}" data-i="{i}"><span class="prc-mn">{a}</span>'
-            f'<span class="prc-mimg prc-mimg-photo"><img src="{src}" alt="Planche {a}" loading="lazy"></span>'
-            f'<span class="prc-ml">{b}<br><em>n° {a}</em></span></button>')
-GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin pour le verso</p>'
-        '<p class="prc-legend" id="mq-dleg">Touchez une planche pour l\'agrandir et lire les numéros, puis indiquez le numéro. '
-        'Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s\'écrit votre texte du verso (n° 88 à 94, 96, 98, 100 à 102).</p>'
-        '<div class="prc-grid mq-grid" id="mq-gd">' + "".join(planche(s_, a, b, "d", i) for i, (s_, (a, b)) in enumerate(zip(PL, LEG_D)))
-        + "".join(planche(s_, a, b, "c", i) for i, (s_, a, b) in enumerate(LEG_C)) + '</div>'
-        '<div class="field mq-numf"><label for="mq-num">Numéro du dessin ou du cadre</label>'
-        '<input type="number" id="mq-num" min="1" max="102" inputmode="numeric" placeholder="Ex : 12"/></div>'
-        '<p class="prc-choisi" id="mq-dok" hidden></p><button type="button" class="prc-change" id="mq-dchg" hidden>Changer de dessin</button>'
-        '</div>')
-PHOTO = ('<div class="mq-photo" hidden><label class="mq-pbtn">📷 Choisir une photo<input type="file" accept="image/*" hidden/></label>'
-         '<span class="mq-photo-ok" hidden>Photo envoyée ✓ — nous la gravons en noir et blanc sur le bois, au verso.</span>'
-         '<p class="mq-dn">Une photo nette et bien éclairée donne le meilleur résultat : un visage, un animal, une silhouette.</p></div>')
-VDES = (f'<div class="field"><label for="pf-vdes">Dessin ou photo gravé au verso (+4 €){OPT}</label><select id="pf-vdes">'
-        '<option value="" selected="">Sans dessin ni photo</option><option value="oui">Avec un dessin ou un cadre (+4 €)</option>'
-        '<option value="photo">Avec ma photo (+4 €)</option></select>'
-        '<p class="mq-dn">Le verso est en bois nu : un dessin numéroté, un cadre autour de votre texte, ou votre photo.</p></div>')
-DPLACE = ('<div class="field mq-placef" id="mq-dplacef" hidden><label>Où graver le dessin au verso ?</label><div class="prc-chips mq-pl" id="mq-dplace">'
-          '<button type="button" class="prc-chip" data-z="haut">En haut <small>(petit)</small></button>'
-          '<button type="button" class="prc-chip on" data-z="bas">Au milieu <small>(grand)</small></button></div>'
-          '<p class="mq-dn">Le texte du verso prend l\'autre place. Avec un cadre, le texte s\'écrit au milieu du cadre.</p></div>')
-MAIN = MAIN.replace(TXT_END, TXT_END + VPLACE + VDES + GRID + PHOTO + DPLACE, 1)
-assert "mq-dessins" in MAIN and "mq-photo" in MAIN and "mq-dplacef" in MAIN
+# 23/10 : « la face se grave aussi… pas de dessin, il y a déjà un dessin : que du texte » ; 24/10 soir : dessin / cadre / photo au VERSO
+# (+4 €, « il y a de la place au dos ») ; puis (capture du coffret) « s'il veut ajouter à l'avant et au dos, au-dessus et en bas, il faut
+# qu'ils aient le choix » → l'éditeur partagé à QUATRE emplacements (mp_apercu.mqEditeur) remplace tous les champs : Face · au-dessus de la
+# fenêtre et Face · à côté de la fenêtre = TEXTE seulement (+3 €) ; Dos · en haut et Dos · au milieu = texte +3 € / dessin ou cadre +4 € /
+# photo +4 €. L'écriture et la note restent. Les planches du gobelet (UNE grille partagée) se montent dans l'emplacement en cours.
+NUMS_OK = mp_apercu.NUMS_OK
+a0 = MAIN.index('<div class="field"><label for="pf-texte">'); a1 = MAIN.index('<div class="field"><label for="pf-police">')
+MAIN = MAIN[:a0] + '<div id="mq-ed"></div>' + MAIN[a1:]
+MAIN = MAIN.replace("Laissez vide pour un marque-page sans gravure.", "Laissez « Rien » partout pour un marque-page sans gravure.", 1)
 OLD_H = "<h3>Le coffret des quatre couleurs</h3>"
 assert OLD_H in MAIN
 i0 = MAIN.index(OLD_H); i1 = MAIN.index("</p>", i0) + 4
 OLD_V = "<h3>Un texte au verso</h3>"
 assert OLD_V in MAIN
 v0 = MAIN.index(OLD_V); v1 = MAIN.index("</p>", v0) + 4
-MAIN = MAIN[:v0] + "<h3>Gravé sur la face et au verso</h3><p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu : un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, et si vous le souhaitez un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €), en haut ou au milieu.</p>" + MAIN[v1:]
+MAIN = MAIN[:v0] + "<h3>Gravé sur la face et au verso</h3><p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez.</p>" + MAIN[v1:]
 MAIN = MAIN[:i0] + "<h3>Offrez-le en boîte cadeau</h3><p>Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>" + MAIN[i1:]
 BOXTH = "".join(f'<button class="" aria-label="Voir le visuel {k}"><img src="{uri(os.path.join(ASSETS, n + ".jpg"), 900, 74)}" alt=""/></button>' for k, n in ((6, "boite1"), (7, "boite2"), (8, "boite4")))
 MAIN = MAIN.replace('<div class="gallery-thumbs">', '<div class="gallery-thumbs">', 1)
@@ -218,71 +167,48 @@ CSS = r'''
 JS = r'''
 (function(){
   var P=__PRIX__, eur=function(n){return n.toFixed(2).replace('.',',')+' €'};
-  var st={t:'Blond clair',q:1,n:1,box:0,slots:[],dz:'bas',num:0,photoSrc:null,same:false,cur:0};
+  var st={t:'Blond clair',q:1,n:1,box:0,slots:[],same:false,cur:0,v:window.mqEdVide()};
   var gm=document.querySelector('.gallery-main'),galap=document.getElementById('mq-galap'),thap=document.querySelector('.mq-thap'),stepper=null;
   var sw=[].slice.call(document.querySelectorAll('.variant-swatches .variant-swatch'));
   var tot=document.querySelector('.pd-totbox .val'),lead=document.querySelector('.price-lead'),qs=document.querySelector('.qty-stepper span');
-  var qb=document.querySelectorAll('.qty-stepper button');
-  var vin=document.getElementById('pf-texte'),fac=document.getElementById('pf-face'),pla=document.getElementById('pf-place'),vpl=document.getElementById('pf-vplace'),vplf=document.getElementById('mq-vplacef'),polSel=document.getElementById('pf-police'),vdes=document.getElementById('pf-vdes');
-  function polCls(){var v=polSel&&polSel.value;return v?'fnt-'+v:'fnt-playfair'}
-  function itemsPrincipal(){var it=[],k=vdes?vdes.value:'';if(fac&&fac.value.trim())it.push({kind:'texte',text:fac.value,font:polCls(),side:'face',zone:pla?pla.value:'haut'});
-    if(k==='oui'&&st.num)it.push({kind:'dessin',num:st.num,text:vin?vin.value:'',font:polCls(),side:'dos',zone:st.dz});
-    if(k==='photo')it.push({kind:'photo',src:st.photoSrc,side:'dos',zone:st.dz});
-    if(vin&&vin.value.trim()&&!(k==='oui'&&st.num>=75))it.push({kind:'texte',text:vin.value,font:polCls(),side:'dos',zone:vpl?vpl.value:'haut'});return it}
-  // Le dessin et le texte du verso ne prennent jamais la même place (sauf un cadre : le texte s'écrit dedans).
-  function majChips(){var k=vdes?vdes.value:'',dOn=(k==='oui'||k==='photo'),cadre=(k==='oui'&&st.num>=75),vt=!!(vin&&vin.value.trim());
-    if(vplf)vplf.hidden=cadre;
-    [].forEach.call(document.querySelectorAll('#mq-dplace .prc-chip'),function(b){b.disabled=vt&&!cadre&&b.dataset.z===(vpl?vpl.value:'haut');b.classList.toggle('on',b.dataset.z===st.dz)});
-    if(vpl){[].forEach.call(vpl.options,function(o){o.disabled=dOn&&!cadre&&o.value===st.dz});if(dOn&&!cadre&&vpl.value===st.dz)vpl.value=(st.dz==='haut')?'bas':'haut'}}
-  function apercu(){if(!galap)return;var it=itemsPrincipal();if(st.n>1||!it.length){galap.hidden=true;if(thap)thap.classList.remove('active');return}
-    window.mqApercu(galap.querySelector('.mq-apw'),it,Math.round((gm.clientHeight||600)*0.9),st.t);galap.hidden=false;th.forEach(function(x){x.classList.remove('active')});if(thap)thap.classList.add('active')}
-  function copyAll(){var a=st.slots[0];st.slots.slice(1).forEach(function(o){o.f=a.f;o.fp=a.fp;o.t=a.t;o.vp=a.vp;o.d=a.d;o.k=a.k;o.n=a.n;o.dp=a.dp;o.photoSrc=a.photoSrc;if(o.sync)o.sync()})}
-  var cgEl=document.getElementById('cg-dessins'),cgWrap=document.getElementById('mq-cgwrap');
-  var cg=window.mqPlanches('cg',__NUMS__,function(n){var o=st.slots[st.cur];if(o&&o.d&&o.k==='oui'){o.n=n;o.touched=true;maj();if(o.ap)o.ap()}});
+  var qb=document.querySelectorAll('.qty-stepper button'),polSel=document.getElementById('pf-police');
   var WOODS=sw.map(function(b){return b.querySelector('.vs-title').textContent.trim()});
   var IMGS=sw.map(function(b){return b.querySelector('img').src});
   var fm=[].slice.call(document.querySelectorAll('.mq-fmt'));
   var recap=document.getElementById('mq-recap'),gnote=document.getElementById('mq-gnote'),grav=document.getElementById('mq-grav');
   var sheet=document.getElementById('mq-sheet'),shb=document.getElementById('mq-shb'),shn=document.getElementById('mq-shn'),sht=document.getElementById('mq-sht');
-  function unit(o){return P[WOODS[o.c]]+(o.t.trim()?3:0)+(o.f.trim()?3:0)+(o.d?4:0)}
-  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+((vin&&vin.value.trim())?3:0)+((fac&&fac.value.trim())?3:0)+((vdes&&(vdes.value==='oui'||vdes.value==='photo'))?4:0)}
-  function maj(){if(st.same&&st.n>1)copyAll();if(stepper)stepper.refresh(function(o){return !!(o.t||o.f||o.d)});tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box);majChips();apercu()}
-  function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:st.n>1?i%WOODS.length:WOODS.indexOf(st.t),t:'',f:'',d:false,k:'',n:0,dp:'bas',touched:false})}
-  function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
-    var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||o.t||o.f||o.d});
-    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+(o.f?'<b>'+o.f.replace(/</g,'&lt;')+'</b>':'')+(o.t?'<b>verso : '+o.t.replace(/</g,'&lt;')+'</b>':'')+(o.d?'<b>'+(o.k==='photo'?'photo au verso':(o.n?(estCadre(o.n)?'cadre n° ':'dessin n° ')+o.n+' au verso':'dessin ?'))+'</b>':'');st2.appendChild(d)});
-    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, de couleurs différentes. Vous pouvez changer une couleur ou faire graver chacun (face et verso) :'}
+  function polCls(){var v=polSel&&polSel.value;return v?'fnt-'+v:'fnt-playfair'}
+  // UNE grille de planches pour toute la page : elle se déplace dans l'emplacement en cours (fiche ou carte du coffret).
+  var cgEl=document.getElementById('cg-dessins'),cgWrap=document.getElementById('mq-cgwrap');
+  var cg=window.mqPlanches('cg',__NUMS__,function(n){if(window.mqGridOwner)window.mqGridOwner.onNum(n)});
+  var ALLOW=__ALLOW__;
+  var pageEd=window.mqEditeur(document.getElementById('mq-ed'),{v:st.v,allow:ALLOW,cg:cg,cgEl:cgEl,cgWrap:cgWrap,onChange:function(){maj()}});
+  function unit(o){return P[WOODS[o.c]]+window.mqEdPrix(o.v)}
+  function base(){if(st.n>1)return st.slots.reduce(function(a,o){return a+unit(o)},0);return P[st.t]+window.mqEdPrix(st.v)}
+  function apercu(){if(!galap)return;var it=window.mqEdItems(st.v,polCls());if(st.n>1||!it.length){galap.hidden=true;if(thap)thap.classList.remove('active');return}
+    window.mqApercu(galap.querySelector('.mq-apw'),it,Math.round((gm.clientHeight||600)*0.9),st.t);galap.hidden=false;th.forEach(function(x){x.classList.remove('active')});if(thap)thap.classList.add('active')}
+  function copyAll(){var a=st.slots[0];st.slots.slice(1).forEach(function(o){o.v=window.mqEdCopie(a.v);if(o.sync)o.sync()})}
+  function maj(){if(st.same&&st.n>1)copyAll();if(stepper)stepper.refresh(function(o){return window.mqEdPrix(o.v)>0});tot.textContent=eur((base()+st.box)*st.q);lead.textContent=eur(P[st.t]);qs.textContent=st.q;if(shn)shn.textContent=eur(base()+st.box);apercu()}
+  function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:__DEFC__,v:window.mqEdVide(),touched:false})}
+  function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on){pageEd.remonte();return}
+    var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||window.mqEdPrix(o.v)>0});
+    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+window.mqEdResume(o.v).map(function(x){return '<b>'+x.replace(/</g,'&lt;')+'</b>'}).join('');st2.appendChild(d)});
+    recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':__RTXT__}
+  // Aperçu du coffret : aussi grand que l'écran le permet (24/10 soir, gérant : « c'est trop petit là, il faut que ce soit plus grand en longueur »).
+  function shH(){return Math.round(Math.min(560,window.innerHeight*0.62))}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;var els=[];
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
       d.innerHTML='<p>Marque-page '+(i+1)+' <small class="mq-scc"></small></p><div class="mq-row"></div><p class="mq-lock-note" hidden>Gravé comme le marque-page 1 — décochez « la même gravure » pour le changer.</p>'
-        +'<div class="mq-grav"><input type="text" class="mq-f" maxlength="24" placeholder="Texte gravé sur la face (+3 €), facultatif"/><select class="mq-dsel mq-fp" hidden><option value="haut">Face : au-dessus de la fenêtre</option><option value="bas">Face : à côté de la fenêtre (vertical)</option></select><input type="text" class="mq-v" maxlength="24" placeholder="Texte gravé au verso (+3 €), facultatif"/><select class="mq-dsel mq-vp" hidden><option value="haut">Verso : en haut</option><option value="bas">Verso : au milieu (vertical)</option></select><select class="mq-dsel mq-ds"><option value="">Sans dessin ni photo au verso</option><option value="oui">Avec un dessin ou un cadre au verso (+4 €)</option><option value="photo">Avec ma photo au verso (+4 €)</option></select></div>'
-        +'<div class="mq-sgrav" hidden><p class="mq-sinfo"></p><div class="mq-sgrid"></div><label class="mq-pbtn mq-spho" hidden>📷 Choisir ma photo<input type="file" accept="image/*" hidden/></label><span class="mq-photo-ok" hidden></span><select class="mq-dsel mq-sp mq-plsel"><option value="bas" data-l="au verso, au milieu (grand)">Dessin : au milieu (grand)</option><option value="haut" data-l="au verso, en haut (petit)">Dessin : en haut (petit)</option></select></div>'
-        +'<div class="mq-ap"><div class="mq-apw" data-h="300"></div></div>';
-      var row=d.querySelector('.mq-row');
-      o.fp=o.fp||'haut';o.vp=o.vp||'haut';o.dp=o.dp||'bas';
-      var fp=d.querySelector('.mq-fp'),vp=d.querySelector('.mq-vp'),aph=d.querySelector('.mq-apw'),scc=d.querySelector('.mq-scc');
-      var ds=d.querySelector('.mq-ds'),snp=d.querySelector('.mq-sp');
-      var sg=d.querySelector('.mq-sgrav'),sgrid=d.querySelector('.mq-sgrid'),sinfo=d.querySelector('.mq-sinfo'),spho=d.querySelector('.mq-spho'),spok=d.querySelector('.mq-photo-ok');
-      o.monte=function(){var k=o.d?o.k:'';sg.hidden=!k;if(k==='oui'){sgrid.appendChild(cgEl);cgEl.hidden=false;cg.set(o.n);sinfo.textContent='Choisissez votre dessin : touchez une planche pour l\'agrandir, puis tapez son numéro. Un cadre (88 à 102) = votre texte s\'écrit au milieu du cadre.';spho.hidden=true;spok.hidden=true}
-        else{if(cgEl.parentNode===sgrid){cgWrap.appendChild(cgEl)}if(k==='photo'){sinfo.textContent='Envoyez votre photo : nous la gravons en noir et blanc sur le bois, bien au centre.';spho.hidden=false;spok.hidden=!o.photoSrc}}
-        [].forEach.call(snp.options,function(op){op.textContent=(k==='photo'?'Photo : ':'Dessin : ')+op.dataset.l})};
-      spho.querySelector('input').addEventListener('change',function(ev){var f=ev.target.files&&ev.target.files[0];if(!f){o.photoSrc=null;spok.hidden=true;ap();return}var r=new FileReader();r.onload=function(){o.photoSrc=r.result;spok.hidden=false;spok.textContent='Photo envoyée ✓ : '+f.name;o.touched=true;maj();ap()};r.readAsDataURL(f)});
-      function slotItems(){var it=[],cadre=o.d&&o.k==='oui'&&o.n>=75;if((o.f||'').trim())it.push({kind:'texte',text:o.f,font:polCls(),side:'face',zone:o.fp});
-        if(o.d&&o.k==='oui'&&o.n)it.push({kind:'dessin',num:o.n,text:o.t,font:polCls(),side:'dos',zone:o.dp});if(o.d&&o.k==='photo')it.push({kind:'photo',src:o.photoSrc,side:'dos',zone:o.dp});
-        if((o.t||'').trim()&&!cadre)it.push({kind:'texte',text:o.t,font:polCls(),side:'dos',zone:o.vp});return it}
-      function ap(){fp.hidden=!(o.f||'').trim();var cadre=o.d&&o.k==='oui'&&o.n>=75;vp.hidden=!(o.t||'').trim()||cadre;if(o.d&&!cadre&&(o.t||'').trim()&&o.dp===o.vp){o.vp=(o.dp==='haut')?'bas':'haut';vp.value=o.vp}scc.textContent='· '+WOODS[o.c];window.mqApercu(aph,slotItems(),300,WOODS[o.c])}
+        +'<div class="mq-grav"><div class="mq-ed"></div></div><div class="mq-ap"><p class="mq-aph">Votre aperçu <small>— touchez pour agrandir</small></p><div class="mq-apw"></div></div>';
+      var aph=d.querySelector('.mq-apw'),scc=d.querySelector('.mq-scc');
+      function ap(){scc.textContent='· '+WOODS[o.c];window.mqApercu(aph,window.mqEdItems(o.v,polCls()),shH(),WOODS[o.c])}
       o.ap=ap;
-      var ti=d.querySelector('.mq-v'),tf=d.querySelector('.mq-f');
-      o.sync=function(){tf.value=o.f||'';ti.value=o.t||'';fp.value=o.fp;vp.value=o.vp;ds.value=o.d?(o.k||'oui'):'';snp.value=o.dp;if(i===st.cur)o.monte();ap()};
+      o.ed=window.mqEditeur(d.querySelector('.mq-ed'),{v:o.v,allow:ALLOW,cg:cg,cgEl:cgEl,cgWrap:cgWrap,onChange:function(){o.touched=true;maj();ap()}});
+      o.sync=function(){o.ed.set(o.v);ap()};o.monte=function(){o.ed.remonte()};
+      var row=d.querySelector('.mq-row');
       WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj();ap()});row.appendChild(c)});
-      ds.addEventListener('change',function(){o.d=!!ds.value;o.k=ds.value;if(!o.d)o.n=0;o.touched=true;o.monte();maj();ap()});
-      snp.addEventListener('change',function(){o.dp=snp.value;maj();ap()});
-      ti.addEventListener('input',function(){o.t=ti.value;o.touched=true;maj();ap()});
-      tf.addEventListener('input',function(){o.f=tf.value;o.touched=true;maj();ap()});
-      fp.addEventListener('change',function(){o.fp=fp.value;maj();ap()});vp.addEventListener('change',function(){o.vp=vp.value;maj();ap()});
-      o.sync();
-      els.push(d);shb.appendChild(d)});
+      ap();els.push(d);shb.appendChild(d)});
     var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc mq-pol';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');c.addEventListener('change',function(){pol.value=c.value;st.slots.forEach(function(o){if(o.ap)o.ap()});maj()});w.appendChild(c);shb.appendChild(w)}
     function lock(){els.forEach(function(d,i){var l=st.same&&i>0;d.classList.toggle('mq-locked',l);d.querySelector('.mq-lock-note').hidden=!l})}
     stepper=window.mqStepper(shb,els,st.slots,IMGS,st,function(){if(st.same)copyAll();lock();maj()},function(i){var o=st.slots[i];if(o&&o.monte)o.monte()});lock()}
@@ -291,33 +217,14 @@ JS = r'''
   document.querySelector('.mq-open').addEventListener('click',ouvre);
   document.getElementById('mq-close').addEventListener('click',ferme);document.getElementById('mq-ok').addEventListener('click',ferme);
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
-    if(st.box){montre(th[{1:5,2:6,4:7}[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
-  if(vin)vin.addEventListener('input',maj);if(fac)fac.addEventListener('input',maj);if(pla)pla.addEventListener('change',maj);if(vpl)vpl.addEventListener('change',maj);if(polSel)polSel.addEventListener('change',maj);
-  var grid=document.querySelector('.mq-dessins'),pho=document.querySelector('.mq-photo'),dplacef=document.getElementById('mq-dplacef');
-  if(vdes)vdes.addEventListener('change',function(){if(grid)grid.hidden=vdes.value!=='oui';if(pho)pho.hidden=vdes.value!=='photo';if(dplacef)dplacef.hidden=!(vdes.value==='oui'||vdes.value==='photo');maj()});
-  if(pho){var pf=pho.querySelector('input[type=file]');pf.addEventListener('change',function(){pho.querySelector('.mq-photo-ok').hidden=!pf.files.length;st.photoSrc=null;if(pf.files.length){var r=new FileReader();r.onload=function(){st.photoSrc=r.result;maj()};r.readAsDataURL(pf.files[0])}else maj()})}
-  // Planches (comme le gobelet et le modèle 1) : toucher = agrandir ; le numéro se tape ; la grille se replie sur le choix.
-  var OK=__NUMS__;function numOk(n){return OK.indexOf(n)>=0}function estCadre(n){return n>=75}
-  function zoom(src){var o=document.createElement('div');o.className='mq-zoom';o.innerHTML='<div class="mq-zoom-in"><button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><img alt=""/></div>';o.querySelector('img').src=src;
-    o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)}
-  function zoomAll(){var o=document.createElement('div');o.className='mq-zoom';var inn=document.createElement('div');inn.className='mq-zoom-in';inn.innerHTML='<button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><p class="mq-dh">Les planches : repérez le numéro, puis tapez-le.</p>';
-    [].forEach.call(document.querySelectorAll('#mq-gd .prc-model'),function(b){var im=document.createElement('img');im.src=b.querySelector('img').src;im.alt='';im.style.marginBottom='10px';inn.appendChild(im)});o.appendChild(inn);
-    o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)}
-  var gd=document.getElementById('mq-gd'),num=document.getElementById('mq-num'),dok=document.getElementById('mq-dok'),dchg=document.getElementById('mq-dchg'),dleg=document.getElementById('mq-dleg');
-  if(gd){[].forEach.call(gd.querySelectorAll('.prc-model'),function(b){b.addEventListener('click',function(){[].forEach.call(gd.querySelectorAll('.prc-model'),function(x){x.classList.toggle('on',x===b)});zoom(b.querySelector('img').src)})});
-    var plier=function(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v};
-    num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=numOk(n)?n:0;dok.hidden=!num.value;
-      dok.textContent=st.num?(estCadre(st.num)?'Cadre n° '+st.num+' choisi ✓ — votre texte du verso (+3 €) s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓ (au verso)'):'Numéro : 1 à 74 pour un dessin, 88 à 94, 96, 98, 100 à 102 pour un cadre.';
-      dok.classList.toggle('prc-miss',!st.num);maj()});
-    num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
-    dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})})}
-  [].forEach.call(document.querySelectorAll('#mq-dplace .prc-chip'),function(b){b.addEventListener('click',function(){if(b.disabled)return;st.dz=b.dataset.z;maj()})});
+    if(st.box){montre(th[__BOXTH__[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
+  if(polSel)polSel.addEventListener('change',maj);
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
-    draw();maj()})});
+    __SWSLOTS__draw();maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
   var main=document.getElementById('galmain'),th=[].slice.call(document.querySelectorAll('.gallery-thumbs button'));
   function montre(b){th.forEach(function(x){x.classList.remove('active')});b.classList.add('active');if(b.classList.contains('mq-thap')){apercu();return}if(galap)galap.hidden=true;main.removeAttribute('srcset');main.src=b.querySelector('img').src}
-  window.addEventListener('resize',function(){if(galap&&!galap.hidden)apercu()});
+  window.addEventListener('resize',function(){if(galap&&!galap.hidden)apercu();if(sheet&&!sheet.hidden)st.slots.forEach(function(o){if(o.ap)o.ap()})});
   th.forEach(function(b){b.addEventListener('click',function(){montre(b)})});
   if(th[0])th[0].classList.add('active');
   var nx=document.querySelector('.gallery-arrow-next'),pv=document.querySelector('.gallery-arrow-prev');
@@ -327,10 +234,13 @@ JS = r'''
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   reset();draw();maj();
 })();
-'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK))
+'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK)) \
+    .replace("__ALLOW__", "function(s){return s==='face'?['texte']:['texte','dessin','photo']}").replace("__DEFC__", "st.n>1?i%WOODS.length:WOODS.indexOf(st.t)") \
+    .replace("__RTXT__", "'Votre coffret de '+st.n+' marque-pages, de couleurs différentes. Vous pouvez changer une couleur ou faire graver chacun (face et verso) :'") \
+    .replace("__BOXTH__", "{1:5,2:6,4:7}").replace("__SWSLOTS__", "")
 
 DATA = mp_apercu.script_data(2)
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page ajouré, oiseau et magnolia » (précommande · texte face + verso, dessin ou photo au verso, aperçu dans la couleur choisie, coffret pas à pas — 24/10) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page ajouré, oiseau et magnolia » (précommande · texte face + verso, dessin ou photo au verso, aperçu dans la couleur choisie, coffret pas à pas, quatre emplacements (face = texte, verso = texte / dessin / photo) — 24/10) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Marque-page ajouré, oiseau et magnolia — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}\n{mp_apercu.CSS}</style>"
 SHEET = ('<div id="mq-cgwrap" hidden>' + mp_apercu.grille_planches("cg", "Choisissez votre dessin pour le verso", """Touchez une planche pour l'agrandir et lire les numéros, puis tapez le numéro ci-dessous. Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s'écrit votre texte (n° 88 à 94, 96, 98, 100 à 102).""") + '</div><div class="mq-sheet" id="mq-sheet" hidden><div class="mq-sheetin"><div class="mq-shh"><b id="mq-sht">Mon coffret</b><button type="button" id="mq-close" aria-label="Fermer">×</button></div>'
