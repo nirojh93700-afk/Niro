@@ -196,7 +196,7 @@ window.mqApercu=function(host,items,hauteur,couleur){ // couleur = titre de la c
     var lab=document.createElement('small');lab.textContent=side==='face'?'Face':'Dos';s.appendChild(bm);s.appendChild(lab);host.appendChild(s);
   });
   fits.forEach(function(f){window.mqFit(f[0],f[1],f[2]);window.mqCentreEncre(f[0])});
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fits.forEach(function(f){window.mqCentreEncre(f[0])})});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fits.forEach(function(f){window.mqFit(f[0],f[1],f[2]);window.mqCentreEncre(f[0])})}); // la police peut arriver après la mesure : on réajuste
 };
 // 24/10 soir — QUATRE emplacements par marque-page (gérant : « s'il veut ajouter à l'avant et au dos, au-dessus et en bas, devant ou dos,
 // il faut qu'ils aient le choix ») : chaque emplacement = rien / un texte (+3 €) / un dessin ou un cadre (+4 €, + 3 € si un texte s'écrit

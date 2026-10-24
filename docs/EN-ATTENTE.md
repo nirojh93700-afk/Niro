@@ -313,6 +313,7 @@ En attente de SA décision :
 - 24/10 soir — **v12 modèle 1 + v11 modèle 2 : QUATRE emplacements par marque-page** (Face · en haut / au milieu, Dos · en haut / au milieu, chacun = rien / texte +3 € / dessin ou cadre +4 € / photo +4 € ; modèle 2 : face = texte seul) sur la fiche ET dans chaque carte du coffret, aperçu du coffret agrandi (≈ 523 px sur téléphone). Gérant : « c'est trop petit… s'il veut ajouter à l'avant et au dos, au-dessus et en bas, il faut qu'ils aient le choix ». En attente de son avis ; rien en ligne.
 - 24/10 soir — **v13 / v12 : bouton « Valider ✓ » à côté du numéro du dessin** (demande du gérant) ; deux gravures par face déjà possibles avec les quatre menus. En attente de son avis.
 - 24/10 soir — **Carnet A5 v4 : quatre emplacements par face** (En haut · Au milieu · En bas à gauche · En bas à droite, sur la couverture et au dos ; texte / dessin ou cadre / logo), prix proposé +7 € par face quel que soit le nombre d'emplacements (à valider). Artifact QSD8HCrAzEqrSEYA7viFMh v5 (v5 = 4 images d'exemple dans la galerie, jamais son nom). En attente de son avis.
+- 24/10 soir — **Marque-pages v14 / v13 : images d'exemple de gravure dans la galerie** (4 pour le modèle 1, 3 pour le modèle 2, jamais son nom). En attente de son avis.
 - Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
 
 ## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)

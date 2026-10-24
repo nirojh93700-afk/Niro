@@ -145,6 +145,16 @@
     par les deux générateurs. Deux gravures par face = déjà possible avec les quatre menus (Face · en haut = texte, Face · au
     milieu = dessin, ou l'inverse) : la phrase d'introduction le dit maintenant avec cet exemple. Vérifié 390 : « Léa » en haut +
     dessin 33 au milieu sur la face = 16,90 € (modèle 1), bouton grisé → actif → grille repliée, 0 erreur.
+  · **v14 modèle 1 + v13 modèle 2 (24/10 soir, gérant : « tu fais la même chose pour les marque-pages, exemples d'images »)** :
+    **images d'exemple dans la galerie** (après les couleurs, étiquette « Exemple », ⛔ jamais son nom) — modèle 1 : Caramel
+    « Camille » en haut + rose 12 au milieu · Gris anthracite cadre 92 « Léa » + « 2026 » au dos · Rouge « Paul » + dessin 65,
+    papillon 7 au dos · Blond clair « Bonne lecture » à la verticale + « Inès » au dos ; modèle 2 : Blond clair « Camille » +
+    rose au dos · Brun roux « Léa » à la verticale + cadre 92 « Paul » au dos · Sable « Mes lectures » + « 2026 » et dessin 65 au
+    dos. Rendues par `node tools/maquettes/marque-pages-exemples.mjs 1|2` (`window.mqDemo`, face + dos dans la grande photo, ×2)
+    → `docs/maquettes/assets/marque-pages/exemples/m1|m2/ex*.jpg` (commitées) ; ordre générateur → script → générateur. Au
+    passage : les vignettes des boîtes portent `.mq-thbox[data-n]` (plus d'index fixe dans la galerie), et `mqApercu` RÉAJUSTE la
+    taille des textes quand la police arrive après la mesure (« Camille » sortait coupé). Vérifié 390 / 1280 : 17 / 12 vignettes,
+    exemple = photo fixe, boîte du coffret retrouvée, 0 erreur.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
