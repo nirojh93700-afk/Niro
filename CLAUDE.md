@@ -163,7 +163,7 @@
     du 24/10 soir aux questions de la précommande** : · places par couleur = la facture Alibaba du 23/10 (modèle 1 : 20 par couleur,
     modèle 2 : 10 par couleur, boîtes 10 / 10 / 10 pour les deux modèles réunis, voir `docs/marque-pages-commande-alibaba-2026-10-12.md`) ;
     · port : un marque-page en BOÎTE CADEAU = un COLIS, au prix de l'option que la cliente choisit (relais, domicile, Express Chronopost
-    = le plus cher), c'est-à-dire la règle normale du site, rien de spécial ; le marque-page seul reste en lettre ; · la DATE d'arrivée
+    = le plus cher), c'est-à-dire la règle normale du site, rien de spécial ; **le marque-page seul = LETTRE SUIVIE** (gérant : « c'est pas au grammage, ça sera une lettre suivie, t'as tous les prix ») : grille du site telle quelle, 4,90 € ; · la DATE d'arrivée
     (phrase « Expédition à partir du … ») : il la donnera. Panier mixte précommande + stock : pas tranché (un seul colis à la fin par défaut).
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
