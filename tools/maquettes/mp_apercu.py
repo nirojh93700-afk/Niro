@@ -55,7 +55,7 @@ def config(modele):
                  "dos": {"haut": ZONES["m2f"]["haut"],
                          "bas": {"nom": {"x": 0.2, "y": 0.6, "w": 0.3, "h": 0.33}, "dessin": {"x": 0.12, "y": 0.58, "w": 0.76, "h": 0.37}}}}
         labels = {"face": {"haut": "Au-dessus de la fenêtre", "bas": "À côté de la fenêtre"}, "dos": {"haut": "En haut", "bas": "Au milieu"}}
-    d, asp = dessins() if modele == 1 else ({}, {})  # le modèle 2 ne grave que du texte
+    d, asp = dessins()  # modèle 2 : dessins au DOS seulement (24/10, gérant : « il y a de la place au dos »)
     return {"photos": {"face": face, "dos": dos}, "ratio": size[0] / size[1], "zones": zones, "labels": labels, "dessins": d, "aspect": asp}
 
 
@@ -72,7 +72,7 @@ CSS = r'''
 .mq-el{position:absolute;display:flex;align-items:center;justify-content:center;transform-origin:center center}
 .mq-el img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;opacity:.86;filter:sepia(.35) brightness(.42)}
 .mq-el .t{white-space:nowrap;line-height:1;color:#3a2a12;mix-blend-mode:multiply;opacity:.9}
-.mq-el.cadre .t{position:absolute;left:0;right:0;text-align:center}
+.mq-el.cadre .t{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:max-content;text-align:center}
 .mq-el .ph{width:100%;height:100%;border:1.5px dashed #8a7a52;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#7a6c48;text-align:center;line-height:1.15;background:rgba(255,255,255,.25)}
 .mq-el .ph img{filter:grayscale(1) sepia(.3) brightness(.6) contrast(1.15);opacity:.9}
 .mq-sc .mq-ap{padding:8px;margin:0}.mq-zoom-x{z-index:5}.mq-zoom-in .mq-bm{margin:34px auto 0}
@@ -97,7 +97,7 @@ window.mqApercu=function(host,items,hauteur){
         var bw=h,bh=w;
       } else {el.style.left=x+'px';el.style.top=y+'px';el.style.width=w+'px';el.style.height=h+'px';var bw=w,bh=h;}
       if(e.kind==='dessin'){var im=document.createElement('img');im.src=A.dessins[e.num]||'';im.alt='';el.appendChild(im);
-        if(e.num>=75&&(e.text||'').trim()){var t=document.createElement('span');t.className='t '+(e.font||'fnt-playfair');t.textContent=e.text.trim();el.appendChild(t);fits.push([t,bw*0.62,bh*0.45]);}
+        if(e.num>=75&&(e.text||'').trim()){var t=document.createElement('span');t.className='t '+(e.font||'fnt-playfair');t.textContent=e.text.trim();el.appendChild(t);var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);fits.push([t,dw*0.6,dh*0.5]);}
       } else if(e.kind==='photo'){var p=document.createElement('div');p.className='ph';if(e.src){var pi=document.createElement('img');pi.src=e.src;pi.alt='';p.style.border='0';p.appendChild(pi)}else p.textContent='votre photo';el.appendChild(p)}
       else {var t2=document.createElement('span');t2.className='t '+(e.font||'fnt-playfair');t2.textContent=e.text.trim();el.appendChild(t2);fits.push([t2,bw*0.96,bh*0.9]);}
       bm.appendChild(el);

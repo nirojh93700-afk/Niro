@@ -41,7 +41,18 @@
     gardée) : face « Au-dessus de la fenêtre, sur une ligne » / « À côté de la fenêtre, à la verticale », **verso « En haut » /
     « Au milieu (vertical) »** (nouveau menu « Place au verso »), aperçu face + dos (dos = photo de la face retournée, bois nu
     reconstitué sous la fenêtre : `zones/m2-dos-apercu.jpg`), places et aperçu par marque-page dans le coffret (plus de place
-    commune). ❓ Un dessin au DOS du modèle 2 n'a pas été ajouté : il a dit « texte ou dessin » pour le modèle 1 ; à lui de dire.
+    commune).
+  · **v6 modèle 1 + v5 modèle 2 (24/10 soir, gérant, capture du cadre 92 + « Niro » : « c'est pas adapté la taille, il est trop petit,
+    on voit pas… et pour la maquette 2, mettre l'option pour graver des logos etc. au dos, comme pour le 1, il y a de la place »)** :
+    · **texte dans un cadre** : il était réduit à ~4 px (le `<span>` était étiré à toute la largeur de la boîte, donc toujours « trop
+      large » pour l'ajustement) → centré par `transform`, taille = 50 % de la hauteur AFFICHÉE du cadre (`mp_apercu.py`) : « Niro »
+      sort à 35 px dans le cartouche 92 (aperçu 460), lisible ;
+    · **modèle 2 : dessin / cadre / photo AU VERSO (+4 €)**, menu « Dessin ou photo gravé au verso » (Sans / Avec un dessin ou un cadre /
+      Avec ma photo) + les 14 planches du gobelet (même parcours, `NUMS_OK` 1–74, 88–94, 96–103) + place « En haut (petit) / Au milieu
+      (grand) » ; le texte du verso prend l'autre place (chips et options grisées, bascule automatique), avec un cadre il s'écrit dedans
+      (le menu de place du texte disparaît) ; coffret : menu Sans / dessin / photo + n° + place par marque-page, aperçu avec le dessin au
+      dos (`mp_apercu.config(2)` charge maintenant les découpes). **La FACE reste texte seul** (23/10). Vérifié 390 / 1280 : 0 erreur,
+      0 débordement, seul + « Léa » + dessin 12 = 20,90 € · coffret de 2 + « Paul » + dessin 7 = 40,70 €.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
