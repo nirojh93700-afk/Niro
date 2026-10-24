@@ -30,6 +30,15 @@
   base v2 = la page de l'artifact relue avec `read` + `path index.html`). Vérifié 390 / 1280 : titre + rose n° 12 + « Camille /
   2026 » en bas à gauche = 19,90 €, + dos cadre 92 « Paul » + « Niro » en bas à droite = 26,90 €, noir en clair, photo
   fournisseur = aperçu masqué, 0 erreur, 0 débordement.
+- ✅ **v5 du 24/10 soir (gérant : « pour le nom à droite ou à gauche le client peut choisir ; tu peux mettre des exemples mais pas mon
+  nom ; des exemples de gravure avec un titre, un texte, le prénom en bas : tu fais des images pour montrer aux clients, avec les
+  images »)** : ⛔ **JAMAIS LE NOM DU GÉRANT DANS UN EXEMPLE** (ni « Niro » ni aucun nom de personne réelle ; prénoms d'exemple :
+  Camille, Léa, Paul, Inès). **4 images d'exemple dans la galerie** (après les 3 couvertures, étiquette « Exemple ») : marron « Carnet
+  de voyage » + rose n° 12 + « Camille / 2026 » en bas à gauche · noir « Mes recettes » + cadre 92 « Léa » + « Depuis 2026 » en bas à
+  droite · gris « Journal / de bord » au milieu + « Paul » en bas à droite · marron « Inès » en haut + dessin 65 + « Mes idées » en bas
+  à gauche. Rendues avec le MÊME moteur d'aperçu : `node tools/maquettes/carnet-a5-exemples.mjs` (ouvre la maquette, `window.cnDemo`,
+  capture de `.gallery-main` à ×2 → `docs/maquettes/assets/carnet/exemples/ex1-4.jpg`, 900 px, commitées) ; ordre : générateur →
+  script → générateur. Vérifié 390 / 1280 : 10 vignettes, un exemple cliqué = photo fixe (aperçu masqué), retour couleur = aperçu, 0 erreur.
 - **Avant tout « applique »** : vraies photos gravées (couvertures DESSINÉES dans la maquette), pesée réelle (380 g estimé → lettre 8,90 € / relais 4,90 €),
   puis construire comme un produit normal (§10 : `products.js`, `productInfo.js`, `productDates.js`, `packagingSeed.js`, `textExtra: 7` sur les deux faces).
   C'est CETTE version à reproduire à l'identique ; ne pas la modifier sans sa demande (règle du 23/07).

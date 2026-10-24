@@ -72,7 +72,16 @@ h = h[:a0] + NEW + h[a1:]
 k0 = h.index('<div class="gallery-thumbs">'); k1 = h.index("</div>", k0)
 btns = re.findall(r"<button.*?</button>", h[k0:k1], flags=re.S); assert len(btns) == 5, len(btns)
 THDOS = f'<button type="button" class="cn-thdos" aria-label="Le dos du carnet"><img src="{DOS["marron"]}" alt=""/><span>Dos</span></button>'
-h = h[:k0] + '<div class="gallery-thumbs">' + "".join(btns[:3]) + THDOS + "".join(btns[3:]) + h[k1:]
+# Exemples de gravure (24/10 soir, gérant : « tu fais des exemples d'images pour montrer aux clients, tu mettras avec les images » —
+# ⛔ jamais son nom dans un exemple) : rendus par tools/maquettes/carnet-a5-exemples.mjs avec le MÊME moteur d'aperçu, rangés dans
+# docs/maquettes/assets/carnet/exemples/ ; s'ils manquent, la galerie reste sans exemple (lancer le générateur, puis le script, puis le générateur).
+EXD = os.path.join(ROOT, "docs", "maquettes", "assets", "carnet", "exemples")
+EX = sorted(f for f in os.listdir(EXD) if f.endswith(".jpg")) if os.path.isdir(EXD) else []
+def exuri(f):
+    im = Image.open(os.path.join(EXD, f)).convert("RGB"); b = io.BytesIO(); im.save(b, "JPEG", quality=82, optimize=True, progressive=True)
+    return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
+THEX = "".join(f'<button type="button" class="cn-thex" aria-label="Exemple de gravure {i + 1}"><img src="{exuri(f)}" alt=""/><span>Exemple</span></button>' for i, f in enumerate(EX))
+h = h[:k0] + '<div class="gallery-thumbs">' + "".join(btns[:3]) + THEX + THDOS + "".join(btns[3:]) + h[k1:]
 h = rep(h, "couvertures dessinées en attendant vos photos gravées)", "couvertures dessinées en attendant vos photos gravées · quatre emplacements par face, 24/10)")
 
 CSS = mp_apercu.CSS + mp_apercu.CSS_PLANCHES + r'''
@@ -87,7 +96,7 @@ CSS = mp_apercu.CSS + mp_apercu.CSS_PLANCHES + r'''
 .cn-ov.clair img.d{mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.3);opacity:.82}
 .cn-el.cadre{position:absolute}.cn-el.cadre .t{position:absolute;left:50%;top:50%;width:max-content;white-space:nowrap;line-height:1;--dx:0px;--dy:0px;transform:translate(calc(-50% - var(--dx)),calc(-50% - var(--dy)));text-shadow:0 1px 0 hsla(0,0%,100%,.35),0 -1px 1px rgba(0,0,0,.3)}
 .cn-el img.g{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.cn-el img.g.pos{object-position:left center}.cn-el img.g.posd{object-position:right center}
-.gallery-thumbs .cn-thdos{position:relative}.gallery-thumbs .cn-thdos span{position:absolute;left:0;right:0;bottom:0;background:rgba(43,38,32,.75);color:#fff;font-size:.6rem;font-weight:700;text-align:center;padding:2px 0}
+.gallery-thumbs .cn-thdos,.gallery-thumbs .cn-thex{position:relative}.gallery-thumbs .cn-thdos span,.gallery-thumbs .cn-thex span{position:absolute;left:0;right:0;bottom:0;background:rgba(43,38,32,.75);color:#fff;font-size:.6rem;font-weight:700;text-align:center;padding:2px 0}
 '''
 k = h.rfind("</style>"); h = h[:k] + CSS + h[k:]
 
@@ -167,6 +176,7 @@ JS = r'''
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(20,st.q+1);maj()});
   window.addEventListener('resize',dessine);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(dessine);
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function hh(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)hh();else l.addEventListener('error',hh)});
+  window.cnDemo=function(c,side,v){st.c=c;st.side=side;st.v[side]=Object.assign(vide(),v);sw.forEach(function(x){x.classList.toggle('active',x.querySelector('.vs-title').textContent.trim().toLowerCase()===c)});main.removeAttribute('srcset');main.src=side==='face'?COUV[c]:DOS[c];ov.hidden=false;dessine()}; // sert à carnet-a5-exemples.mjs
   if(th[0])th[0].classList.add('active');maj();
 })();
 </script>'''.replace("__NUMS__", str(mp_apercu.NUMS_OK)).replace("__COUV__", json.dumps(COUV)).replace("__DOS__", json.dumps(DOS))
