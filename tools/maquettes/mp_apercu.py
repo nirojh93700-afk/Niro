@@ -79,7 +79,20 @@ def dessins():
 # Zones par modèle. m1 : face = m1f, dos = m1d (23/10). m2 : face = m2f (haut = au-dessus de la fenêtre, bas = à gauche
 # de la branche, TEXTE seulement) ; dos = bois nu sous la fenêtre ajourée (photo reconstituée m2-dos-apercu.jpg) :
 # haut = même bande qu'au-dessus de la fenêtre, « milieu » = sous la fenêtre.
+# Couleurs de la fiche ↔ photos redressées (tools/maquettes/marque-pages-redresse.py, 24/10 soir : « le visuel doit correspondre
+# à la couleur que le client choisit »). Les clés = les titres des couleurs dans les maquettes.
+COULEURS = {1: [("Caramel", "nanmu"), ("Blond clair", "buis"), ("Rouge", "santal"), ("Cuivré", "palissandre"),
+               ("Gris anthracite", "ebene"), ("Gris sable", "suanzhi")],
+            2: [("Blond clair", "blond"), ("Brun roux", "roux"), ("Sable", "sable"), ("Brun foncé", "noir")]}
+
+
 def config(modele):
+    faces = os.path.join(MP, "zones", "faces")
+    couleurs = {}
+    for nom, f in COULEURS[modele]:
+        face_c, _ = _jpg(os.path.join(faces, f"m{modele}-{f}.jpg"))
+        dos_c = face_c if modele == 1 else _jpg(os.path.join(faces, f"m{modele}-{f}-dos.jpg"))[0]
+        couleurs[nom] = {"face": face_c, "dos": dos_c}
     if modele == 1:
         face, size = _jpg(os.path.join(MP, "zones", "m1-face.jpg"))
         dos, _ = face, None  # le dos du modèle 1 est le même bois nu (la photo du dos reçue est floue)
@@ -93,7 +106,8 @@ def config(modele):
                          "bas": {"nom": {"x": 0.2, "y": 0.6, "w": 0.3, "h": 0.33}, "dessin": {"x": 0.12, "y": 0.58, "w": 0.76, "h": 0.37}}}}
         labels = {"face": {"haut": "Au-dessus de la fenêtre", "bas": "À côté de la fenêtre"}, "dos": {"haut": "En haut", "bas": "Au milieu"}}
     d, asp, centre = dessins()  # modèle 2 : dessins au DOS seulement (24/10, gérant : « il y a de la place au dos »)
-    return {"photos": {"face": face, "dos": dos}, "ratio": size[0] / size[1], "zones": zones, "labels": labels, "dessins": d, "aspect": asp, "centre": centre}
+    return {"photos": {"face": face, "dos": dos}, "couleurs": couleurs, "ratio": size[0] / size[1], "zones": zones, "labels": labels,
+            "dessins": d, "aspect": asp, "centre": centre}
 
 
 def html(hauteur=460, id_="mq-ap"):
@@ -112,7 +126,10 @@ CSS = r'''
 .mq-el.cadre .t{position:absolute;left:50%;top:50%;width:max-content;text-align:center}.mq-el .t{--dx:0px;--dy:0px}.mq-el.cadre .t{transform:translate(calc(-50% - var(--dx)),calc(-50% - var(--dy)))}.mq-el:not(.cadre) .t{transform:translate(calc(0px - var(--dx)),calc(0px - var(--dy)))}
 .mq-el .ph{width:100%;height:100%;border:1.5px dashed #8a7a52;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#7a6c48;text-align:center;line-height:1.15;background:rgba(255,255,255,.25)}
 .mq-el .ph img{filter:grayscale(1) sepia(.3) brightness(.6) contrast(1.15);opacity:.9}
-.mq-sc .mq-ap{padding:8px;margin:0}.mq-zoom-x{z-index:5}.mq-zoom-in .mq-bm{margin:34px auto 0}
+.mq-sc .mq-ap{padding:8px;margin:0}
+.mq-steps{display:flex;gap:10px;justify-content:center;padding:4px 0 10px}.mq-step{position:relative;width:52px;border:2px solid #e4d9bd;border-radius:12px;background:#fff;padding:3px;cursor:pointer;font:inherit}.mq-step img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block}.mq-step span{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);background:#2b2620;color:#fff;border-radius:999px;font-size:.68rem;padding:1px 7px}.mq-step.on{border-color:#a98935;box-shadow:0 0 0 1px #a98935}.mq-step.done::after{content:'✓';position:absolute;top:-7px;right:-7px;background:#4f7a3a;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.7rem;display:flex;align-items:center;justify-content:center}
+.mq-same{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:0 0 4px;cursor:pointer}.mq-same input{width:18px;height:18px;accent-color:#a98935;flex:none}.mq-same small{color:#7a6c48}.mq-stepnav{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0 10px}.mq-stepnav button{border:1.5px solid #c9b88a;background:#fff;border-radius:999px;padding:9px 14px;font:inherit;font-weight:600;color:#7c6120;cursor:pointer}.mq-stepnav button:disabled{opacity:.35}.mq-stepn{font-size:.82rem;color:#5a4d2c}.mq-sc[hidden]{display:none}.mq-sc.mq-locked .mq-grav{opacity:.5;pointer-events:none}.mq-lock-note{font-size:.78rem;color:#7a6c48;margin:0}.mq-sc .mq-grav{display:flex;flex-direction:column;gap:8px}.mq-sc .mq-scc{font-weight:400;color:#7a6c48;font-size:.8rem}
+.mq-galap{position:absolute;inset:0;background:#f6efe1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;z-index:2}.mq-galap[hidden]{display:none}.mq-galap .mq-apw{align-items:center}.mq-galap-l{margin:0;font-size:.72rem;color:#7a6c48}.gallery-thumbs .mq-thap{display:flex;align-items:center;justify-content:center;background:#fbf3df;color:#7c6120;font-size:.64rem;font-weight:700;line-height:1.15;text-align:center;border:1.5px dashed #c9b88a;cursor:pointer}.mq-zoom-x{z-index:5}.mq-zoom-in .mq-bm{margin:34px auto 0}
 '''
 
 JS = r'''
@@ -129,13 +146,26 @@ window.mqPoseCadre=function(el,im,t,cc,bw,bh,asp){cc=cc||[0.5,0.5,0.5];
     im.style.cssText='position:absolute;left:'+((bw-dw2)/2)+'px;width:'+dw2+'px;height:'+dh2+'px;top:'+(bas?top0:top0+th)+'px';
     t.style.left=(bw/2)+'px';t.style.top=(bas?top0+dh2+th/2:top0+th/2)+'px';return [t,dw2*0.9,th*0.85];}
   var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);t.style.left=((bw-dw)/2+cc[0]*dw)+'px';t.style.top=((bh-dh)/2+cc[1]*dh)+'px';return [t,dw*0.6,dh*(cc[2]||0.5)];};
-window.mqApercu=function(host,items,hauteur){
-  var A=window.MQAP; if(!A||!host)return; var H=hauteur||+host.dataset.h||460, W=Math.round(H*A.ratio);
+// Coffret : UN marque-page à la fois (recherche du 24/10 soir : sur téléphone, 4 fiches empilées descendent trop bas ; un pas-à-pas avec
+// les pastilles de chaque pièce et un récapitulatif visible vaut mieux que des onglets ou des accordéons qui cachent ce qui est saisi).
+window.mqStepper=function(shb,cards,slots,imgs,st,onSame){
+  var head=document.createElement('div');head.className='mq-steps';
+  var pills=cards.map(function(c,i){var b=document.createElement('button');b.type='button';b.className='mq-step';b.innerHTML='<img src="'+imgs[slots[i].c]+'" alt=""/><span>'+(i+1)+'</span>';b.addEventListener('click',function(){show(i)});head.appendChild(b);return b});
+  var same=document.createElement('label');same.className='mq-same';same.innerHTML='<input type="checkbox"'+(st.same?' checked':'')+'/><span>La même gravure sur les '+cards.length+' marque-pages <small>(chacun garde sa couleur)</small></span>';
+  same.querySelector('input').addEventListener('change',function(e){st.same=e.target.checked;onSame()});
+  var nav=document.createElement('div');nav.className='mq-stepnav';nav.innerHTML='<button type="button" class="mq-prev">‹ Précédent</button><span class="mq-stepn"></span><button type="button" class="mq-next">Suivant ›</button>';
+  function show(i){st.cur=i;cards.forEach(function(c,j){c.hidden=j!==i});pills.forEach(function(p,j){p.classList.toggle('on',j===i)});nav.querySelector('.mq-stepn').textContent='Marque-page '+(i+1)+' sur '+cards.length;nav.querySelector('.mq-prev').disabled=i===0;nav.querySelector('.mq-next').textContent=i===cards.length-1?'Terminer ✓':'Suivant ›';shb.scrollTop=0}
+  nav.querySelector('.mq-prev').addEventListener('click',function(){show(Math.max(0,st.cur-1))});
+  nav.querySelector('.mq-next').addEventListener('click',function(){if(st.cur===cards.length-1){var ok=document.getElementById('mq-ok');if(ok)ok.click()}else show(st.cur+1)});
+  shb.insertBefore(same,shb.firstChild);shb.insertBefore(nav,shb.firstChild);shb.insertBefore(head,shb.firstChild);show(Math.min(st.cur||0,cards.length-1));
+  return {show:show,refresh:function(done){pills.forEach(function(p,j){p.querySelector('img').src=imgs[slots[j].c];p.classList.toggle('done',!!done(slots[j]))})}}};
+window.mqApercu=function(host,items,hauteur,couleur){ // couleur = titre de la couleur choisie → ses photos redressées (24/10 soir)
+  var A=window.MQAP; if(!A||!host)return; var H=hauteur||+host.dataset.h||460, W=Math.round(H*A.ratio); var PH=(A.couleurs&&A.couleurs[couleur])||A.photos;
   host.innerHTML='';var fits=[];
   ['face','dos'].forEach(function(side){
     var s=document.createElement('div');s.className='mq-aps';
     var bm=document.createElement('div');bm.className='mq-bm';bm.style.width=W+'px';bm.style.height=H+'px';
-    var bg=document.createElement('img');bg.className='bg';bg.src=A.photos[side];bg.alt='';bm.appendChild(bg);
+    var bg=document.createElement('img');bg.className='bg';bg.src=PH[side];bg.alt='';bm.appendChild(bg);
     (items||[]).filter(function(e){return e&&e.side===side&&e.kind&&(e.kind!=='texte'||(e.text||'').trim())}).forEach(function(e){
       var z=A.zones[side][e.zone||'haut']; if(!z)return;
       var zz=(e.kind==='texte')?z.nom:z.dessin; var asp=(e.kind==='dessin')?(A.aspect[e.num]||1):(e.kind==='photo'?0.8:9);

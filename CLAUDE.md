@@ -44,7 +44,7 @@
     toucher = agrandir ; même aperçu (petit) par marque-page dans la fenêtre du coffret, avec un menu de place pour le dessin et
     un pour le texte. Les 74 dessins + 15 cadres sont DÉCOUPÉS des planches (`docs/maquettes/assets/marque-pages/dessins/`,
     LISEZ-MOI + CONTROLE.jpg) ; module partagé `tools/maquettes/mp_apercu.py` (photos, zones, dessins, CSS, JS `mqApercu`).
-    ⚠️ L'aperçu montre le bois de la photo (caramel), pas la couleur choisie. Vérifié 390 / 1280 : 0 erreur, 0 débordement.
+    (L'aperçu montrait le bois caramel quelle que soit la couleur : corrigé en v10, voir plus bas.) Vérifié 390 / 1280 : 0 erreur, 0 débordement.
   · **Modèle 2 v4 (24/10, même demande)** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv — texte seulement (règle du 23/10
     gardée) : face « Au-dessus de la fenêtre, sur une ligne » / « À côté de la fenêtre, à la verticale », **verso « En haut » /
     « Au milieu (vertical) »** (nouveau menu « Place au verso »), aperçu face + dos (dos = photo de la face retournée, bois nu
@@ -79,6 +79,20 @@
     régénéré, RETIRÉ du suivi git le 24/10 : il se régénère). **Le site n'a pas ces cadres** (le gobelet en ligne, masqué, n'a que les
     anciens dessins) : rien à corriger côté site. Vérifié : 97 / 99 / 103 refusés sur la fiche et dans le coffret, 96 / 98 / 100 / 102
     texte entre les filets, 0 erreur.
+  · **v10 modèle 1 + v9 modèle 2 (24/10 soir, gérant : « le visuel doit correspondre à la couleur que le client choisit… quand ils
+    choisissent quatre, personnaliser les quatre un par un sans que ça descende trop bas sur le portable, ou la même chose… l'aperçu
+    comme pour le carnet, sur le côté »)** :
+    · **la couleur choisie** : chaque photo fournisseur est REDRESSÉE (`tools/maquettes/marque-pages-redresse.py`, coins figés par
+      photo → `assets/marque-pages/zones/faces/m1-<bois>.jpg`, `m2-<bois>.jpg` + `-dos.jpg` reconstitué ; le cadrage diffère d'une
+      photo à l'autre) ; `mp_apercu.COULEURS` relie les titres des couleurs aux photos, `mqApercu(host, items, h, couleur)` ;
+    · **l'aperçu dans la grande photo** (comme le carnet) : dès qu'il y a une gravure, la galerie montre face + dos de la couleur
+      choisie (`#mq-galap`), vignette « Votre aperçu » dans la rangée ; plus de bloc « Votre aperçu » sous les champs ;
+    · **coffret pas à pas** (recherche : sur téléphone, 4 fiches empilées descendent trop bas ; Baymard déconseille onglets /
+      accordéons qui cachent ce qui est saisi → un pas-à-pas avec les pastilles de chaque pièce et le récapitulatif visible) :
+      pastilles 1–4 (photo de la couleur, coche quand gravé), UNE carte à la fois, ‹ Précédent / Suivant › / Terminer ✓, et la case
+      **« La même gravure sur les N marque-pages (chacun garde sa couleur) »** : la gravure du n° 1 se recopie sur les autres (cartes
+      verrouillées, couleur toujours libre) ; `window.mqStepper` dans `mp_apercu.py`. Vérifié 390 / 1280 : 0 erreur, 0 débordement,
+      photo = couleur choisie sur la page et dans le coffret, coffret de 4 + « Paul » partout = 59,50 € (modèle 1) / 75,50 € (modèle 2).
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
