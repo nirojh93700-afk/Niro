@@ -165,6 +165,13 @@
     · port : un marque-page en BOÎTE CADEAU = un COLIS, au prix de l'option que la cliente choisit (relais, domicile, Express Chronopost
     = le plus cher), c'est-à-dire la règle normale du site, rien de spécial ; **le marque-page seul = LETTRE SUIVIE** (gérant : « c'est pas au grammage, ça sera une lettre suivie, t'as tous les prix ») : grille du site telle quelle, 4,90 € ; · la DATE d'arrivée
     (phrase « Expédition à partir du … ») : il la donnera. Panier mixte précommande + stock : pas tranché (un seul colis à la fin par défaut).
+  · ⛔ **DESSIN N° 5 À L'ENVERS (24/10 soir, capture du coffret : « ce dessin il est à l'envers, il faut que tu fasses attention sur les
+    dessins »)** : sur la planche du gobelet, le n° 5 est dessiné rose AU PIED, tige qui monte ; la découpe était fidèle à la planche, donc la
+    rose sortait en bas du marque-page. `dessins/005.png` tourné de 180° (rose en haut, tige qui retombe ; `RETOURNES={5}` dans
+    `marque-pages-decoupe-dessins.py`, CONTROLE.jpg et LISEZ-MOI à jour). Les 85 autres découpes revues une par une : dans le bon sens
+    (le n° 6 a sa tige sous la fleur). Règle : **avant de servir un dessin dans un aperçu, le regarder dans le sens où il sera gravé**
+    (fleur / animal en haut, tige en dessous) : une planche peut être dessinée autrement. Trois maquettes régénérées et republiées :
+    modèle 1 v16 · modèle 2 v15 · carnet v7 (exemples inchangés : aucun n'utilise le n° 5). Vérifié 390 / 1280 : 0 erreur, 0 débordement.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.

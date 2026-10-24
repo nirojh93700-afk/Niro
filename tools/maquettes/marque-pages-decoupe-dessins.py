@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw
 from scipy import ndimage as ndi
 S=sys.argv[1]; OUT=sys.argv[2]
 auto=json.load(open(f'{S}/boxes.json'))
+RETOURNES={5}  # dessins tournés de 180° par rapport à la planche (24/10 : le n° 5 avait la rose au pied)
 MANUAL={0:{1:(0,0,400,450),2:(350,70,760,250),3:(130,215,580,475),4:(190,445,560,615),5:(610,240,760,920),6:(0,540,230,1000),
           7:(205,680,420,1260),8:(400,690,620,1150),9:(390,980,760,1349),10:(0,990,260,1349)},
         1:{11:(0,0,180,290),12:(110,85,260,200),13:(210,0,640,80),14:(285,85,760,170),15:(400,190,650,270),16:(305,185,400,330),
@@ -61,7 +62,9 @@ for pi,res in auto.items():
         alpha=np.clip((235-gray)/(235-40),0,1)*own
         sub=alpha[y0:y1,x0:x1]
         rgba=np.zeros((y1-y0,x1-x0,4),np.uint8); rgba[...,3]=(sub*255).astype(np.uint8)
-        Image.fromarray(rgba,'RGBA').save(f'{OUT}/{k:03d}.png')
+        out=Image.fromarray(rgba,'RGBA')
+        if k in RETOURNES: out=out.rotate(180)  # 24/10 soir, gérant : « ce dessin il est à l'envers » (n° 5 : rose en bas sur la planche → rose en haut)
+        out.save(f'{OUT}/{k:03d}.png')
         rows_ct.append((k,Image.open(f'{OUT}/{k:03d}.png')))
 # planche de contrôle
 rows_ct.sort(key=lambda t:t[0]); T=150; cols=15; n=len(rows_ct); R=(n+cols-1)//cols
