@@ -83,16 +83,46 @@ HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 MAIN = MAIN.replace("Choisissez votre modèle", "Choisissez votre couleur", 1)
 MAIN = MAIN.replace("Dessin gravé (+2 €)", "Dessin gravé (+4 €)").replace("Avec un dessin (+2 €)", "Avec un dessin (+4 €)").replace("choisissez un dessin (+2 €)", "choisissez un dessin ou une photo (+4 €)").replace("Texte gravé (+2 €)", "Texte gravé (+3 €)").replace("un texte (+2 €)", "un texte (+3 €)")  # 23/10 : texte +3 €.replace("un dessin (+2 €), d&#x27;un texte", "un dessin ou une photo (+4 €), d&#x27;un texte")  # 23/10 : dessin ou photo +4 €
-GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin</p><div class="mq-dg">' +
-        "".join(f'<button type="button" class="mq-dtile"><span>{i}</span><small>dessin à venir</small></button>' for i in range(1, 13)) +
-        '</div><p class="mq-dn">Maquette : vos dessins numérotés prendront la place de ces cases.</p></div>')
+# 24/10 (gérant : « intègre les images qu'on a choisies, comme pour le gobelet, avec les numéros ») : les planches du
+# gobelet (maquette validée gobelet-configurateur-final.html : dessins 1–74 + cadres 75–103), même façon de choisir que le
+# parcours guidé (grille de planches avec légende, toucher = agrandir, numéro, grille repliée + « Changer de dessin »).
+# Cadres retenus pour un marque-page (étroit) = ceux que j'ai conseillés : rubans fins 88–91, cartouches 92–94, ornements 96–103.
+GOB = open(os.path.join(OUT, "gobelet-configurateur-final.html"), encoding="utf-8").read()
+PL = json.loads(re.search(r"var PLANCHES=(\[.*?\]);", GOB).group(1))
+CA = [c["src"] for c in json.loads(re.search(r"var CADRES=(\[.*?\]);", GOB).group(1))]
+assert len(PL) == 10 and len(CA) == 6
+LEG_D = [("1–10", "Fleurs & papillons"), ("11–27", "Roses"), ("28–36", "Volutes & arabesques"), ("37–45", "Cœurs & tiges fleuries"),
+         ("46–51", "Fées & clé de sol"), ("52–55", "Fée & coins fleuris"), ("56–58", "Cœurs de couple (prénoms)"),
+         ("59–64", "Cœur prénom, plumes, colibri"), ("65–70", "Animaux & oiseaux"), ("71–74", "Colibri, fée, musique")]
+LEG_C = [(CA[2], "88–91", "Rubans fins (sur la planche 82–91)"), (CA[3], "92–94", "Cartouches (sur la planche 92–95)"),
+         (CA[4], "96–101", "Filets & ornements"), (CA[5], "102–103", "Volutes")]
+NUMS_OK = list(range(1, 75)) + list(range(88, 95)) + list(range(96, 104))
+def planche(src, a, b, kind, i):
+    return (f'<button type="button" class="prc-model" data-kind="{kind}" data-i="{i}"><span class="prc-mn">{a}</span>'
+            f'<span class="prc-mimg prc-mimg-photo"><img src="{src}" alt="Planche {a}" loading="lazy"></span>'
+            f'<span class="prc-ml">{b}<br><em>n° {a}</em></span></button>')
+GRID = ('<div class="mq-dessins" hidden><p class="mq-dh">Choisissez votre dessin</p>'
+        '<p class="prc-legend" id="mq-dleg">Touchez une planche pour l\'agrandir et lire les numéros, puis indiquez le numéro. '
+        'Un <b>dessin</b> (n° 1 à 74) ou un <b>cadre</b> dans lequel s\'écrit votre texte (n° 88 à 94, 96 à 103).</p>'
+        '<div class="prc-grid mq-grid" id="mq-gd">' + "".join(planche(s, a, b, "d", i) for i, (s, (a, b)) in enumerate(zip(PL, LEG_D)))
+        + "".join(planche(s, a, b, "c", i) for i, (s, a, b) in enumerate(LEG_C)) + '</div>'
+        '<div class="field mq-numf"><label for="mq-num">Numéro du dessin ou du cadre</label>'
+        '<input type="number" id="mq-num" min="1" max="103" inputmode="numeric" placeholder="Ex : 12"/></div>'
+        '<p class="prc-choisi" id="mq-dok" hidden></p><button type="button" class="prc-change" id="mq-dchg" hidden>Changer de dessin</button>'
+        '</div>')
+# Place sur le marque-page = les zones données par le gérant le 23/10 (docs/maquettes/assets/marque-pages/zones/) :
+# HAUT (sous le trou) = petit dessin · BAS = grand dessin. Même choix pour la photo.
+PLACE = ('<div class="field mq-placef" id="mq-placef" hidden><label>Place sur le marque-page</label><div class="prc-chips" id="mq-place">'
+         '<button type="button" class="prc-chip on" data-z="haut">En haut, sous le trou <small>(petit)</small></button>'
+         '<button type="button" class="prc-chip" data-z="bas">En bas <small>(grand)</small></button></div>'
+         '<p class="mq-dn" id="mq-placen">Le texte gravé, s\'il y en a un, prend l\'autre emplacement.</p></div>')
 PHOTO = ('<div class="mq-photo" hidden><label class="mq-pbtn">📷 Choisir une photo<input type="file" accept="image/*" hidden/></label>'
          '<span class="mq-photo-ok" hidden>Photo envoyée ✓ — nous la gravons en noir et blanc sur le bois.</span>'
          '<p class="mq-dn">Une photo nette et bien éclairée donne le meilleur résultat : un visage, un animal, une silhouette.</p></div>')
 # 23/10, gérant : « dessin OU photo » au même prix (+4 €) → 3ᵉ choix dans le menu + bloc photo.
 MAIN = MAIN.replace("Dessin gravé (+4 €)", "Dessin ou photo gravé (+4 €)", 1)
-MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+4 €\)</option>)(</select></div>)', lambda m: m.group(1) + '<option value="photo">Avec ma photo (+4 €)</option>' + m.group(2) + GRID + PHOTO, MAIN, count=1)
-assert "mq-dessins" in MAIN and "mq-photo" in MAIN
+MAIN = re.sub(r'(<option value="oui">Avec un dessin \(\+4 €\)</option>)(</select></div>)', lambda m: m.group(1) + '<option value="photo">Avec ma photo (+4 €)</option>' + m.group(2) + GRID + PHOTO + PLACE, MAIN, count=1)
+assert "mq-dessins" in MAIN and "mq-photo" in MAIN and "mq-placef" in MAIN
 OLD_BOX = "Une boîte cadeau bleu nuit pour un ou deux marque-pages, une autre pour quatre : chaque marque-page tient dans son élastique."
 assert OLD_BOX in MAIN
 MAIN = MAIN.replace(OLD_BOX, "Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.")
@@ -144,6 +174,16 @@ CSS = r'''
 .mq-banner b{color:#e2c67e}
 .mq-fmts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.mq-fmt{display:flex;flex-direction:column;align-items:stretch;gap:8px;text-align:left;padding:8px 8px 10px;border:1.5px solid #e4d9bd;border-radius:14px;background:#fff;color:#2b2620;cursor:pointer;font:inherit}.mq-fimg{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;background:#efe6d2}.mq-ft{display:flex;flex-direction:column;gap:2px;padding:0 4px}.mq-fmt b{font-size:.92rem}.mq-fmt span{font-size:.74rem;color:#7a6c48;line-height:1.3}.mq-fmt em{font-style:normal;font-weight:700;color:#7c6120;margin-top:2px}.mq-fmt.on{border-color:#a98935;background:#fbf3df;box-shadow:0 0 0 1px #a98935 inset}.mq-mixrow{margin:-4px 0 12px}.mq-mixl{display:flex;align-items:center;gap:8px;font-size:.88rem;font-weight:500;cursor:pointer}.mq-mixl input{width:18px;height:18px;accent-color:#a98935}.mq-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 6px}.mq-slot{position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1.5px dashed #c9b88a;border-radius:12px;background:#fff;color:#7c6120;font:inherit;cursor:pointer;padding:3px}.mq-slot span{font-family:Playfair Display,serif;font-size:1.2rem}.mq-slot small{font-size:.6rem;color:#8a7a52;line-height:1.1;text-align:center}.mq-slot.full{border-style:solid;border-color:#a98935;background:#fbf3df}.mq-slot img{width:100%;flex:1;min-height:0;object-fit:cover;border-radius:8px}.mq-slot i{position:absolute;top:2px;right:5px;font-style:normal;font-size:.9rem;color:#fff;text-shadow:0 0 3px #000}.mq-hint{font-size:.8rem;color:#8a7a52;margin:0 0 14px}.mq-hint.ok{color:#4f7a3a;font-weight:600}.mq-bois{display:flex;flex-direction:column;gap:12px;margin-top:12px}.mq-bl{font-size:.82rem;color:#7a6c48;margin:0 0 6px}.mq-bl b{color:#2b2620}.mq-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.mq-c{width:100%;padding:3px;border:1.5px solid #e4d9bd;border-radius:10px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit}.mq-c img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block}.mq-c span{font-size:.6rem;line-height:1.1;color:#5a4d2c;text-align:center;min-height:2.2em;display:flex;align-items:center}.mq-c.on{border-color:#a98935;box-shadow:0 0 0 1px #a98935 inset;background:#fbf3df}.mq-dessins{margin:-4px 0 14px}.mq-dh{font-weight:600;font-size:.9rem;margin:0 0 8px}.mq-dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}.mq-dtile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;aspect-ratio:1;border:1.5px dashed #c9b88a;border-radius:14px;background:#fff;color:#7c6120;cursor:pointer;font:inherit}.mq-dtile span{font-family:Playfair Display,serif;font-size:1.3rem}.mq-dtile small{font-size:.66rem;color:#8a7a52}.mq-dtile.on{border-style:solid;border-color:#a98935;background:#fbf3df}.mq-dn{font-size:.75rem;color:#8a7a52;margin:8px 0 0}.mq-pre{display:flex;flex-direction:column;gap:4px;margin:10px 0 6px;padding:12px 14px;border:1px solid #c9a24b;border-left-width:4px;border-radius:12px;background:#fbf3df;color:#4a3a14;font-size:.88rem;line-height:1.45}.mq-pre b{color:#7c6120;font-size:.95rem}
 .mq-photo-ok{display:block;margin-top:8px;font-size:.85rem;color:var(--gold-dark,#a98935);font-weight:600}.mq-photo{margin:-4px 0 14px}.mq-pbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1.5px dashed #c9b88a;border-radius:12px;background:#fff;color:#7c6120;font-weight:600;cursor:pointer}
+/* 24/10 : planches du gobelet (classes .prc-* du site) + agrandissement + place */
+.mq-dessins [hidden]{display:none!important}.mq-dessins .prc-legend b{color:#2b2620}.mq-grid .prc-mimg{aspect-ratio:3/4;background:#fff}.mq-grid .prc-mimg img{object-position:top}
+.mq-grid .prc-model[data-kind="c"] .prc-mimg{aspect-ratio:4/3}.prc-ml em{font-style:normal;font-weight:700;color:var(--gold-dark,#a98935)}
+.mq-numf{margin:12px 0 0}.mq-numf input{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #e0d3b0;background:#fffdf8;font:inherit}
+.mq-placef{margin:14px 0 14px}.mq-placef .prc-chip small{font-weight:400;opacity:.8;margin-left:4px}.mq-placef[hidden]{display:none}
+.mq-zoom{position:fixed;inset:0;background:rgba(20,15,8,.72);z-index:5000;display:flex;align-items:center;justify-content:center;padding:14px}
+.mq-zoom-in{position:relative;max-width:680px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:12px;padding:10px}
+.mq-zoom-in img{width:100%;height:auto;display:block;border-radius:8px}
+.mq-zoom-x{position:absolute;top:6px;right:6px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:22px;cursor:pointer;color:#2b2620}
+.mq-sc .mq-snum{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.mq-sc .mq-snum input{flex:1;min-width:120px;padding:11px 12px;border:1px solid #e0d3b0;border-radius:10px;background:#fffdf8;font:inherit;box-sizing:border-box}.mq-sc .mq-snum select{flex:1;min-width:120px}.mq-sc .mq-snum .mq-voir{margin:0;flex:none}.mq-sc .mq-snum[hidden]{display:none}
 '''
 JS = r'''
 (function(){
@@ -164,16 +204,21 @@ JS = r'''
   function reset(){st.slots=[];for(var i=0;i<st.n;i++)st.slots.push({c:WOODS.indexOf(st.t),t:'',d:false,touched:false})}
   function draw(){var on=st.n>1;recap.hidden=gnote.hidden=!on;grav.hidden=on;if(!on)return;
     var st2=recap.querySelector('.mq-strip');st2.innerHTML='';var cust=st.slots.some(function(o){return o.touched||o.t||o.d});
-    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+(o.t?'<b>'+o.t.replace(/</g,'&lt;')+'</b>':'');st2.appendChild(d)});
+    st.slots.forEach(function(o){var d=document.createElement('span');d.className='mq-ch';d.innerHTML='<img src="'+IMGS[o.c]+'" alt=""/><small>'+WOODS[o.c]+'</small>'+(o.t?'<b>'+o.t.replace(/</g,'&lt;')+'</b>':'')+(o.d?'<b>'+(o.k==='photo'?'photo':(o.n?(estCadre(o.n)?'cadre n° ':'dessin n° ')+o.n:'dessin ?'))+'</b>':'');st2.appendChild(d)});
     recap.querySelector('.mq-rtxt').textContent=cust?'Votre coffret de '+st.n+' marque-pages :':'Votre coffret de '+st.n+' marque-pages, tous de couleur '+WOODS[st.slots[0].c].toLowerCase()+'. Changez la couleur et la gravure de chacun si vous voulez :'}
   function cards(){shb.innerHTML='';sht.textContent='Mon coffret de '+st.n;
     st.slots.forEach(function(o,i){var d=document.createElement('div');d.className='mq-sc';
-      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé (+3 €), facultatif"/><select class="mq-dsel"><option value="">Sans dessin ni photo</option><option value="oui">Avec un dessin (+4 €)</option><option value="photo">Avec ma photo (+4 €)</option></select>';
+      d.innerHTML='<p>Marque-page '+(i+1)+'</p><div class="mq-row"></div><input type="text" maxlength="24" placeholder="Texte gravé (+3 €), facultatif"/><select class="mq-dsel"><option value="">Sans dessin ni photo</option><option value="oui">Avec un dessin (+4 €)</option><option value="photo">Avec ma photo (+4 €)</option></select>'
+        +'<div class="mq-snum" hidden><input type="number" class="mq-sn" min="1" max="103" inputmode="numeric" placeholder="N° du dessin ou du cadre"/><select class="mq-sp"><option value="haut">En haut (petit)</option><option value="bas">En bas (grand)</option></select><button type="button" class="prc-change mq-voir">Voir les planches</button></div>';
+      d.querySelector('.mq-voir').addEventListener('click',zoomAll);
+      var sn=d.querySelector('.mq-snum'),sni=d.querySelector('.mq-sn'),snp=d.querySelector('.mq-sp');sni.value=o.n||'';snp.value=o.p||'haut';
+      sni.addEventListener('input',function(){var n=parseInt(sni.value,10);o.n=numOk(n)?n:0;sni.style.borderColor=(sni.value&&!o.n)?'#b4552f':''});snp.addEventListener('change',function(){o.p=snp.value});
       var row=d.querySelector('.mq-row');
       WOODS.forEach(function(w,k){var c=document.createElement('button');c.type='button';c.className='mq-c'+(k===o.c?' on':'');c.setAttribute('aria-label',w);c.innerHTML='<img src="'+IMGS[k]+'" alt=""/><span>'+w+'</span>';
         c.addEventListener('click',function(){o.c=k;o.touched=true;[].forEach.call(row.children,function(x,j){x.classList.toggle('on',j===k)});maj()});row.appendChild(c)});
       var ti=d.querySelector('input[type=text]');ti.value=o.t;ti.addEventListener('input',function(){o.t=ti.value;o.touched=true;maj()});
-      var cb=d.querySelector('.mq-dsel');cb.value=o.d?(o.k||'oui'):'';cb.addEventListener('change',function(){o.d=!!cb.value;o.k=cb.value;o.touched=true;maj()});
+      var cb=d.querySelector('.mq-dsel');cb.value=o.d?(o.k||'oui'):'';sn.hidden=cb.value!=='oui';if(cb.value==='photo'){sn.hidden=false;sni.hidden=true}
+      cb.addEventListener('change',function(){o.d=!!cb.value;o.k=cb.value;o.touched=true;sn.hidden=!cb.value;sni.hidden=cb.value==='photo';maj()});
       shb.appendChild(d)});
     var pol=document.getElementById('pf-police');if(pol){var w=document.createElement('div');w.className='mq-sc';w.innerHTML='<p>Écriture du texte (la même pour tout le coffret)</p>';var c=pol.cloneNode(true);c.removeAttribute('id');w.appendChild(c);shb.appendChild(w)}}
   function ouvre(){cards();maj();sheet.hidden=false}
@@ -183,9 +228,28 @@ JS = r'''
   fm.forEach(function(b){b.addEventListener('click',function(){fm.forEach(function(x){x.classList.remove('on')});b.classList.add('on');st.n=+b.dataset.n;st.box=+b.dataset.box;reset();draw();
     if(st.box){montre(th[{1:9,2:10,4:11}[st.n]])}else{montre(th[WOODS.indexOf(st.t)])}maj()})});
   if(vin)vin.addEventListener('input',maj);
-  var pho=document.querySelector('.mq-photo');if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';if(pho)pho.hidden=des.value!=='photo';maj()});
+  var pho=document.querySelector('.mq-photo'),placef=document.getElementById('mq-placef');
+  if(des)des.addEventListener('change',function(){if(grid)grid.hidden=des.value!=='oui';if(pho)pho.hidden=des.value!=='photo';if(placef)placef.hidden=!(des.value==='oui'||des.value==='photo');maj()});
   if(pho){var pf=pho.querySelector('input[type=file]');pf.addEventListener('change',function(){pho.querySelector('.mq-photo-ok').hidden=!pf.files.length})}
-  [].forEach.call(document.querySelectorAll('.mq-dtile'),function(t){t.addEventListener('click',function(){[].forEach.call(document.querySelectorAll('.mq-dtile'),function(x){x.classList.remove('on')});t.classList.add('on')})});
+  // Planches (comme le gobelet) : toucher = agrandir ; le numéro se tape ; la grille se replie sur le choix.
+  var OK=__NUMS__;function numOk(n){return OK.indexOf(n)>=0}function estCadre(n){return n>=75}
+  function zoom(src){var o=document.createElement('div');o.className='mq-zoom';o.innerHTML='<div class="mq-zoom-in"><button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><img alt=""/></div>';o.querySelector('img').src=src;
+    o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)}
+  function zoomAll(){var o=document.createElement('div');o.className='mq-zoom';var inn=document.createElement('div');inn.className='mq-zoom-in';inn.innerHTML='<button type="button" class="mq-zoom-x" aria-label="Fermer">×</button><p class="mq-dh">Les planches : repérez le numéro, puis tapez-le.</p>';
+    [].forEach.call(document.querySelectorAll('#mq-gd .prc-model'),function(b){var im=document.createElement('img');im.src=b.querySelector('img').src;im.alt='';im.style.marginBottom='10px';inn.appendChild(im)});o.appendChild(inn);
+    o.addEventListener('click',function(e){if(e.target===o||e.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)}
+  var gd=document.getElementById('mq-gd'),num=document.getElementById('mq-num'),dok=document.getElementById('mq-dok'),dchg=document.getElementById('mq-dchg'),dleg=document.getElementById('mq-dleg');
+  st.num=0;
+  if(gd){[].forEach.call(gd.querySelectorAll('.prc-model'),function(b){b.addEventListener('click',function(){[].forEach.call(gd.querySelectorAll('.prc-model'),function(x){x.classList.toggle('on',x===b)});zoom(b.querySelector('img').src)})});
+    function plier(v){gd.hidden=v;dleg.hidden=v;dchg.hidden=!v}
+    num.addEventListener('input',function(){var n=parseInt(num.value,10);st.num=numOk(n)?n:0;dok.hidden=!num.value;
+      dok.textContent=st.num?(estCadre(st.num)?'Cadre n° '+st.num+' choisi ✓ — votre texte gravé (+3 €) s\'écrit au milieu du cadre.':'Dessin n° '+st.num+' choisi ✓'):'Numéro : 1 à 74 pour un dessin, 88 à 94 ou 96 à 103 pour un cadre.';
+      dok.classList.toggle('prc-miss',!st.num)});
+    num.addEventListener('change',function(){if(st.num)plier(true)});num.addEventListener('keydown',function(e){if(e.key==='Enter'&&st.num){e.preventDefault();plier(true)}});
+    dchg.addEventListener('click',function(){plier(false);gd.scrollIntoView({behavior:'smooth',block:'start'})})}
+  st.place='haut';var placen=document.getElementById('mq-placen');
+  [].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(b){b.addEventListener('click',function(){st.place=b.dataset.z;[].forEach.call(document.querySelectorAll('#mq-place .prc-chip'),function(x){x.classList.toggle('on',x===b)});
+    placen.textContent=st.place==='haut'?'Le texte gravé, s\'il y en a un, s\'écrit en bas, à la verticale.':'Le texte gravé, s\'il y en a un, s\'écrit en haut, sur une ligne.'})});
   sw.forEach(function(b){b.addEventListener('click',function(){sw.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');st.t=b.querySelector('.vs-title').textContent.trim();var k=sw.indexOf(b);if(th[k])montre(th[k]);var im=fm[0].querySelector('.mq-fimg');if(im)im.src=IMGS[k];
     st.slots.forEach(function(o){if(!o.touched)o.c=k});draw();maj()})});
   qb[0].addEventListener('click',function(){st.q=Math.max(1,st.q-1);maj()});qb[1].addEventListener('click',function(){st.q=Math.min(9,st.q+1);maj()});
@@ -200,9 +264,9 @@ JS = r'''
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   reset();draw();maj();
 })();
-'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False))
+'''.replace("__PRIX__", json.dumps(PRIX, ensure_ascii=False)).replace("__NUMS__", json.dumps(NUMS_OK))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande, prix proposés à valider) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Marque-page en bois personnalisé » (précommande · dessins numérotés du gobelet, 24/10) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Marque-page en bois personnalisé — Niv Création (maquette)</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 SHEET = ('<div class="mq-sheet" id="mq-sheet" hidden><div class="mq-sheetin"><div class="mq-shh"><b id="mq-sht">Mon coffret</b><button type="button" id="mq-close" aria-label="Fermer">×</button></div>'

@@ -15,8 +15,17 @@
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
 > Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
 > (`docs/maquettes/assets/marque-pages/zones/`). Ne plus les modifier sans sa demande ; c'est CES versions à reproduire au « applique ».
-- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (v3) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
+- **Modèle 1 « bois, pompon doré »** : https://claude.ai/artifact/SS39rAgHXq7yuJpD1vNctu (**v4 du 24/10**, en attente de son avis) · 6 couleurs · **9,90 €** · dessin OU photo **+4 €** · texte **+3 €** ·
   boîtes 4,90 / 5,90 / 7,90 · fenêtre « Composer mon coffret » (couleur + dessin/photo + texte par marque-page).
+  · **v4 (24/10, gérant : « intègre les images qu'on a choisies, comme pour le gobelet, avec les numéros… mets ceux que tu conseilles, fais la maquette »)** :
+    « Avec un dessin » ouvre les **planches du gobelet** (lues dans `gobelet-configurateur-final.html` : 10 planches de dessins n° 1–74 + les cadres que j'ai
+    conseillés pour un marque-page étroit : rubans fins **88–91**, cartouches **92–94**, filets/ornements **96–101**, volutes **102–103** — les grands cadres
+    carrés, le cœur 75–79 et les grosses banderoles 80–87 ne tiennent pas), même parcours que le gobelet (classes `.prc-*` du site : planche agrandie au
+    toucher, numéro tapé, grille repliée + « Changer de dessin » ; un cadre = le texte gravé +3 € s'écrit au milieu). **Place** : « en haut, sous le trou
+    (petit) » / « en bas (grand) » = zones du 23/10 ; le texte prend l'autre emplacement (en bas = à la verticale). Fenêtre du coffret : n° du dessin + place
+    par marque-page, « Voir les planches » (les 14 planches en une fenêtre). Numéros acceptés : 1–74, 88–94, 96–103 (`NUMS_OK` du générateur).
+    Vérifié Chromium 390 / 1280 : 0 débordement, 0 erreur JS, dessin 12 = 13,90 → + « Léa » 16,90 · coffret de 2 « Paul » + dessin 7 + photo = 36,70 €.
+    Modèle 2 : PAS touché (23/10 : « pas de dessin, il y a déjà un dessin »). Modèle 3 : sans gravure.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.

@@ -307,6 +307,7 @@ En attente de SA décision :
 - ✅ 23/10 soir — « Enregistre toutes les maquettes » : les 3 maquettes marque-pages sont ENREGISTRÉES telles quelles (modèle 1 v3 SS39rAgHXq7yuJpD1vNctu ·
   modèle 2 v3 CKqzt46EGgVntsypefi1Tv, face texte seul · modèle 3 v4 VaSkxKqaBF6oeRDpQwKcji) + zones de gravure. Reste : son « applique » (fiches + précommande),
   photos atelier, formats du Papillon, une seule famille de boîtes.
+- 24/10 — **Modèle 1 : les dessins numérotés du gobelet intégrés** (gérant : « intègre les images qu'on a choisies, comme pour le gobelet, avec les numéros… mets ceux que tu conseilles ») : artifact SS39rAgHXq7yuJpD1vNctu **v4** = les 10 planches de dessins (1–74) + les cadres retenus (88–94, 96–103), même parcours que le gobelet (planche agrandie au toucher, numéro tapé, grille repliée + « Changer de dessin »), place « en haut, petit / en bas, grand » (zones du 23/10), et dans le coffret un n° + une place par marque-page + « Voir les planches ». Modèle 2 non touché (pas de dessin). En attente de son avis.
 - Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
 
 ## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)
