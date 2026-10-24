@@ -29,14 +29,51 @@ def _png(path):
     return "data:image/png;base64," + base64.b64encode(open(path, "rb").read()).decode()
 
 
+def _centre_trou(im):
+    """Centre du vide intérieur d'un cadre (fractions de l'image), pour y poser le texte bien au milieu (24/10 soir, gérant :
+    « centre bien le nom pour qu'il soit au milieu dans le dessin »). Cartouches 92–94 : le vide fait > 50 % de la largeur →
+    son centre ; rubans et ornements (pas de vide net) : centre géométrique."""
+    a = im.convert("RGBA").split()[3]; W, H = im.size; px = a.load()
+    rows = range(int(H * .42), int(H * .58) + 1)
+    best, s0 = (0, 0, 0), None
+    for x in range(W + 1):
+        e = x < W and all(px[x, y] < 20 for y in rows)
+        if e and s0 is None: s0 = x
+        if not e and s0 is not None:
+            if x - s0 > best[0]: best = (x - s0, s0, x)
+            s0 = None
+    if best[0] < W * 0.5:
+        return [0.5, 0.5]
+    cx = (best[1] + best[2]) / 2; col = int(cx)
+    bv, s0 = (0, 0, 0), None
+    for y in range(H + 1):
+        e = y < H and px[col, y] < 20
+        if e and s0 is None: s0 = y
+        if not e and s0 is not None:
+            if y - s0 > bv[0]: bv = (y - s0, s0, y)
+            s0 = None
+    cy = (bv[1] + bv[2]) / 2 if bv[0] else H / 2
+    return [round(cx / W, 3), round(cy / H, 3)]
+
+
+# Où s'écrit le texte dans chaque cadre (lu sur les dessins, 24/10 soir) : [x, y, hauteur du texte] en fractions de l'image,
+# ou ["below" | "above", hauteur] = le texte se pose SOUS / AU-DESSUS du dessin (ornement avec un filet : 96, 98 = ornement
+# au-dessus d'un filet → texte dessous ; 97, 99 = filet en haut → texte au-dessus). Rubans 88–91 : sur la bande.
+# Deux filets (100, 101) : entre les deux. Cartouches 92–94 : centre du vide (calculé). Volutes 102–103 : au centre.
+POSE = {88: [0.5, 0.28, 0.4], 89: [0.5, 0.48, 0.4], 90: [0.5, 0.46, 0.4], 91: [0.5, 0.37, 0.36],
+        96: ["below", 0.8], 97: ["above", 0.8], 98: ["below", 0.8], 99: ["above", 0.8],
+        100: [0.5, 0.62, 0.3], 101: [0.5, 0.655, 0.3], 102: [0.5, 0.5, 0.5], 103: [0.5, 0.5, 0.5]}
+
+
 def dessins():
-    d, asp = {}, {}
+    d, asp, centre = {}, {}, {}
     for f in sorted(os.listdir(os.path.join(MP, "dessins"))):
         if f.endswith(".png"):
-            d[int(f[:-4])] = _png(os.path.join(MP, "dessins", f))
-            w, h = Image.open(os.path.join(MP, "dessins", f)).size
-            asp[int(f[:-4])] = round(w / h, 3)
-    return d, asp
+            n = int(f[:-4]); im = Image.open(os.path.join(MP, "dessins", f))
+            d[n] = _png(os.path.join(MP, "dessins", f))
+            asp[n] = round(im.width / im.height, 3)
+            if n >= 75: centre[n] = POSE.get(n) or (_centre_trou(im) + [0.5])
+    return d, asp, centre
 
 
 # Zones par modèle. m1 : face = m1f, dos = m1d (23/10). m2 : face = m2f (haut = au-dessus de la fenêtre, bas = à gauche
@@ -55,8 +92,8 @@ def config(modele):
                  "dos": {"haut": ZONES["m2f"]["haut"],
                          "bas": {"nom": {"x": 0.2, "y": 0.6, "w": 0.3, "h": 0.33}, "dessin": {"x": 0.12, "y": 0.58, "w": 0.76, "h": 0.37}}}}
         labels = {"face": {"haut": "Au-dessus de la fenêtre", "bas": "À côté de la fenêtre"}, "dos": {"haut": "En haut", "bas": "Au milieu"}}
-    d, asp = dessins()  # modèle 2 : dessins au DOS seulement (24/10, gérant : « il y a de la place au dos »)
-    return {"photos": {"face": face, "dos": dos}, "ratio": size[0] / size[1], "zones": zones, "labels": labels, "dessins": d, "aspect": asp}
+    d, asp, centre = dessins()  # modèle 2 : dessins au DOS seulement (24/10, gérant : « il y a de la place au dos »)
+    return {"photos": {"face": face, "dos": dos}, "ratio": size[0] / size[1], "zones": zones, "labels": labels, "dessins": d, "aspect": asp, "centre": centre}
 
 
 def html(hauteur=460, id_="mq-ap"):
@@ -72,7 +109,7 @@ CSS = r'''
 .mq-el{position:absolute;display:flex;align-items:center;justify-content:center;transform-origin:center center}
 .mq-el img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;opacity:.86;filter:sepia(.35) brightness(.42)}
 .mq-el .t{white-space:nowrap;line-height:1;color:#3a2a12;mix-blend-mode:multiply;opacity:.9}
-.mq-el.cadre .t{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:max-content;text-align:center}
+.mq-el.cadre .t{position:absolute;left:50%;top:50%;width:max-content;text-align:center}.mq-el .t{--dx:0px;--dy:0px}.mq-el.cadre .t{transform:translate(calc(-50% - var(--dx)),calc(-50% - var(--dy)))}.mq-el:not(.cadre) .t{transform:translate(calc(0px - var(--dx)),calc(0px - var(--dy)))}
 .mq-el .ph{width:100%;height:100%;border:1.5px dashed #8a7a52;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#7a6c48;text-align:center;line-height:1.15;background:rgba(255,255,255,.25)}
 .mq-el .ph img{filter:grayscale(1) sepia(.3) brightness(.6) contrast(1.15);opacity:.9}
 .mq-sc .mq-ap{padding:8px;margin:0}.mq-zoom-x{z-index:5}.mq-zoom-in .mq-bm{margin:34px auto 0}
@@ -97,7 +134,12 @@ window.mqApercu=function(host,items,hauteur){
         var bw=h,bh=w;
       } else {el.style.left=x+'px';el.style.top=y+'px';el.style.width=w+'px';el.style.height=h+'px';var bw=w,bh=h;}
       if(e.kind==='dessin'){var im=document.createElement('img');im.src=A.dessins[e.num]||'';im.alt='';el.appendChild(im);
-        if(e.num>=75&&(e.text||'').trim()){var t=document.createElement('span');t.className='t '+(e.font||'fnt-playfair');t.textContent=e.text.trim();el.appendChild(t);var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);fits.push([t,dw*0.6,dh*0.5]);}
+        if(e.num>=75&&(e.text||'').trim()){var t=document.createElement('span');t.className='t '+(e.font||'fnt-playfair');t.textContent=e.text.trim();el.appendChild(t);var cc=(A.centre||{})[e.num]||[0.5,0.5,0.5];
+          if(cc[0]==='below'||cc[0]==='above'){ // le texte se pose sous / au-dessus du dessin : le dessin se serre pour lui laisser la place
+            var dh2=Math.min(bw/asp,bh*0.62),dw2=dh2*asp,th=Math.min(bh-dh2,dh2*cc[1]),top0=(bh-dh2-th)/2,bas=cc[0]==='below';
+            im.style.cssText='position:absolute;left:'+((bw-dw2)/2)+'px;width:'+dw2+'px;height:'+dh2+'px;top:'+(bas?top0:top0+th)+'px';
+            t.style.left=(bw/2)+'px';t.style.top=(bas?top0+dh2+th/2:top0+th/2)+'px';fits.push([t,dw2*0.9,th*0.85]);
+          } else {var dw=Math.min(bw,bh*asp),dh=Math.min(bh,bw/asp);t.style.left=((bw-dw)/2+cc[0]*dw)+'px';t.style.top=((bh-dh)/2+cc[1]*dh)+'px';fits.push([t,dw*0.6,dh*(cc[2]||0.5)]);}}
       } else if(e.kind==='photo'){var p=document.createElement('div');p.className='ph';if(e.src){var pi=document.createElement('img');pi.src=e.src;pi.alt='';p.style.border='0';p.appendChild(pi)}else p.textContent='votre photo';el.appendChild(p)}
       else {var t2=document.createElement('span');t2.className='t '+(e.font||'fnt-playfair');t2.textContent=e.text.trim();el.appendChild(t2);fits.push([t2,bw*0.96,bh*0.9]);}
       bm.appendChild(el);
@@ -105,8 +147,14 @@ window.mqApercu=function(host,items,hauteur){
     bm.addEventListener('click',function(){var o=document.createElement('div');o.className='mq-zoom';var inn=document.createElement('div');inn.className='mq-zoom-in';inn.style.maxWidth='none';inn.style.width='auto';inn.innerHTML='<button type="button" class="mq-zoom-x" aria-label="Fermer">×</button>';var c=bm.cloneNode(true);var k=Math.min(0.8*window.innerHeight/H,(window.innerWidth-60)/W);c.style.zoom=k;c.style.cursor='default';inn.appendChild(c);o.appendChild(inn);o.addEventListener('click',function(ev){if(ev.target===o||ev.target.classList.contains('mq-zoom-x'))document.body.removeChild(o)});document.body.appendChild(o)});
     var lab=document.createElement('small');lab.textContent=side==='face'?'Face':'Dos';s.appendChild(bm);s.appendChild(lab);host.appendChild(s);
   });
-  fits.forEach(function(f){fit(f[0],f[1],f[2])});
+  fits.forEach(function(f){fit(f[0],f[1],f[2]);centre(f[0])});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fits.forEach(function(f){centre(f[0])})});
   function fit(t,maxW,maxH){var fs=maxH;t.style.fontSize=fs+'px';var n=0;while(n++<40&&fs>4&&t.offsetWidth>maxW){fs*=0.9;t.style.fontSize=fs+'px'}}
+  // Centrage sur l'ENCRE des lettres (24/10 soir) : la boîte d'une ligne garde de la place sous les lettres pour les jambages →
+  // un prénom sans jambage paraît trop haut (ou, à la verticale, décalé) ; on mesure les lettres réelles et on compense.
+  function centre(t){try{var cs=getComputedStyle(t),fs=parseFloat(cs.fontSize);if(!fs)return;var c=centre.c||(centre.c=document.createElement('canvas').getContext('2d'));c.font=cs.fontStyle+' '+cs.fontWeight+' '+fs+'px '+cs.fontFamily;var m=c.measureText(t.textContent);
+    var fbA=m.fontBoundingBoxAscent,fbD=m.fontBoundingBoxDescent;if(fbA==null){fbA=fs*0.8;fbD=fs*0.2}var lh=t.offsetHeight||fs,base=(lh-fbA-fbD)/2+fbA;var dy=base-(m.actualBoundingBoxAscent-m.actualBoundingBoxDescent)/2-lh/2;
+    var dx=(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2-m.width/2;t.style.setProperty('--dx',dx.toFixed(2)+'px');t.style.setProperty('--dy',dy.toFixed(2)+'px')}catch(err){}}
 };
 '''
 

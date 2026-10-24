@@ -53,6 +53,13 @@
       (le menu de place du texte disparaît) ; coffret : menu Sans / dessin / photo + n° + place par marque-page, aperçu avec le dessin au
       dos (`mp_apercu.config(2)` charge maintenant les découpes). **La FACE reste texte seul** (23/10). Vérifié 390 / 1280 : 0 erreur,
       0 débordement, seul + « Léa » + dessin 12 = 20,90 € · coffret de 2 + « Paul » + dessin 7 = 40,70 €.
+  · **v7 modèle 1 + v6 modèle 2 (24/10 soir, gérant : « centre bien le nom pour qu'il soit au milieu dans le dessin »)** : le texte
+    d'un cadre est posé à un endroit LU SUR CHAQUE DESSIN (`POSE` dans `mp_apercu.py`, + centre du vide calculé pour les cartouches
+    92–94) : rubans 88–91 = sur la bande · cartouches = au milieu du vide · ornements à un filet 96 / 98 = SOUS le filet, 97 / 99 =
+    AU-DESSUS (le dessin se serre pour laisser la place) · deux filets 100 / 101 = entre les deux · volutes 102 / 103 = au centre ;
+    et le centrage se fait sur l'ENCRE des lettres (mesure canvas : une boîte de texte garde de la place pour les jambages, donc un
+    prénom sans jambage paraissait décalé). Vérifié sur les 15 cadres, en haut et au milieu : écart centre du texte / centre du
+    cadre ≤ 1 px hors décalage voulu, 0 erreur.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.
