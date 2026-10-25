@@ -375,8 +375,8 @@
     retourne sur la fiche.
   · Conseils photo (`/produits/guide-photo-gravure.png`) : s'ouvrent en fenêtre quand la cliente touche « Choisir une photo »
     (`PhotoUpload` prop `guide`), sur les verres et toute fiche à parcours ; plus affichés en permanence.
-  · Vérifié : build · 6 jeux de tests · navigateur 390/1280 (vin 1 verre + texte 20,90 · ×2 identiques 38,80 · 2ᵉ différent 43,80 ·
-    3 verres dont 1 différent 61,70 = panier = paiement · cocktail lot de 2 + texte 36,90 · fenêtre photo · 0 erreur, 0 débordement).
+  · Vérifié : build · 6 jeux de tests · navigateur 390/1280 (vin 1 verre + texte, ×2 identiques, 2ᵉ différent,
+    3 verres dont 1 différent : fiche = panier = paiement · cocktail lot de 2 + texte · fenêtre photo · 0 erreur, 0 débordement).
 
 ## 🥃 VERRE FACE + FOND : LES DEUX CÔTÉS DANS L'ATELIER, COMME LA CLIENTE LES A VUS — 16/10/2026 (commande 10OPUHMO, Céline Naulin)
 > Gérant : « je n'ai pas la deuxième photo dans l'atelier de gravure… comme la cliente a choisi, il faut que ce soit pareil ».
@@ -445,13 +445,16 @@
   (`python3 -c "import datetime; print(datetime.date(A,M,J).weekday())"`, 0 = lundi). Jamais un jour de la semaine de tête.
 - Même chose pour un prix (relire la fiche en ligne), un nom, une adresse, une référence de commande, un délai, un numéro :
   le relire à la source (commande, fiche, mail) avant de l'écrire dans un message ou une réponse.
+- ⛔ **UN PRIX QUI CHANGE = L'ANCIEN EST SUPPRIMÉ DE CE FICHIER, DE `docs/EN-ATTENTE.md` ET DE `docs/AMELIORATIONS.md` LE JOUR MÊME (gérant, 25/10/2026 :
+  « qu'on change le prix, tu supprimes les anciens prix »)**. Les anciens prix ne restent QUE dans `docs/prix-historique.md` (pour revenir en arrière), jamais
+  ailleurs ; ce fichier ne note pas de prix du jour : il renvoie à `node tools/prix-fiche.mjs`.
 - ⛔ **PRIX DANS UN MAIL CLIENT OU UN DEVIS = `node tools/prix-fiche.mjs <slug>` JUSTE AVANT D'ÉCRIRE (25/10/2026, gérant : « je veux plus
   d'erreur comme ça »)**. Le script lit la fiche EN LIGNE (réglages de Gestion compris) : options, prix, suppléments de gravure. JAMAIS un prix
-  de mémoire ni recopié de ce fichier : les prix notés ici datent du jour où ils ont été écrits (le 25/10, Nicky a reçu « 15,90 € / 19,90 € »
-  pour le verre à vin, prix d'avant le 13/10 lus ici ; vrais prix 17,90 / 21,90). Dans le message, écrire le détail (verre X € · gravure Y € ·
+  de mémoire ni recopié de ce fichier : les prix notés ici datent du jour où ils ont été écrits (le 25/10, Nicky a reçu des prix du verre à vin
+  d'avant la hausse du 13/10, lus ici). Dans le message, écrire le détail (verre X € · gravure Y € ·
   port) et compter TOUS les textes, y compris face + fond (+7 €). Audit des devis verres du 25/10 : DEV-0003 (Sophie, whisky photo face +
-  texte au fond, 22,90 € au lieu de 29,90 €), DEV-1519 (Julien, prénom + phrase + date, 25,90 € au lieu de 28,90 €), Nicky (−2 €) ;
-  DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl à 18,90 / 16,00 €) fait avant que le 47 cl soit en boutique.
+  texte au fond : face + fond et texte oubliés, −7 €), DEV-1519 (Julien, prénom + phrase + date : un texte oublié, −3 €), Nicky (−2 €) ;
+  DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl sur mesure) fait avant que le 47 cl soit en boutique.
 
 ## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
@@ -1907,7 +1910,7 @@ ne descend jamais sous zéro.
   « Lot de N » : c'est là que la fiche lit le nombre de verres (`glassQty`). Dans `ProductDetail` :
   état `tailleId`, `selectTaille()`, `variantsVisibles` (index GLOBAL gardé pour `selectVariant`).
   Réutilisable pour tout produit à deux dimensions (taille × format).
-- **Prix 47 cl au 25/09 : 19,90 / 36,90 / 71,90 € — PÉRIMÉS depuis le 13/10 (+2 € : 36 cl 17,90 / 33,90 / 63,90 · 47 cl 21,90 / 39,90 / 77,90). Prix du jour : `node tools/prix-fiche.mjs verre-a-vin-grave`** — même marge en € que le 36 cl, coût **6,54 €/verre
+- **Prix : JAMAIS notés ici, lire `node tools/prix-fiche.mjs verre-a-vin-grave`** — même marge en € que le 36 cl, coût **6,54 €/verre
   port compris** (carton de 6 à 29,23 € + 10 € de port, chiffres du gérant, `productCosts.js`).
   Poids 550 / 1000 / 1800 g. Détail dans `docs/prix-historique.md`.
 - **Aperçu par variante** : une variante peut porter `engraveImage` + `engrave` (photo vierge +
@@ -1938,7 +1941,7 @@ ne descend jamais sous zéro.
 - **Stock** : les 3 nouveaux choix n'ont pas d'entrée de stock → **non suivis = illimités**
   (`productSoldOut`). Le gérant veut **100** : à saisir dans Gestion → Produits & stock.
 - **Vérifié au navigateur** (serveur local, `scratchpad/verre47.mjs`, captures données au gérant
-  comme maquette) : défaut = 36 cl, 6 photos, 3 options 15,90/29,90/57,90 · clic 47 cl → 3 photos,
+  comme maquette) : défaut = 36 cl, 6 photos, 3 options (prix du 36 cl) · clic 47 cl → 3 photos,
   options 19,90/36,90/71,90, texte → aperçu sur le 47 (« ≈ 1,1 cm » ; 36 cl : 1,5 cm) · Lot de 2
   conservé en changeant de taille · retour 36 → tulipe · téléphone 390 px sans débordement ·
   0 erreur JS · `test-orderspec` et `test-impression` au vert. ⚠️ Pièges de ce test : fermer le pop-up « Bienvenue » (il arrive
@@ -3139,10 +3142,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > - **Carafe** : `docs/maquettes/carafe-fiche.html` · artifact https://claude.ai/code/artifact/58331379-1fae-43c8-9bc1-bc7f1d308240
 >   - **Prix : 54,90 € livraison offerte** (net, pas de fausse remise). Styles numérotés 1-33 (dont Lettre fleurie n°33), champs Prénom/Nom/Initiale/Rôle/Date, **police par défaut du site** (le nom reprend l'écriture du modèle décoré), aperçu en direct. **Option coffret verres assortis** (carafe + 2/4 verres gravés au même style, verre 24,90 € en coffret au lieu de 26,90 €, **prix barré réel**, livraison offerte). **Jack Daniel's écarté** (marque déposée) → n°32 « Whisky de… » à la place. Planches numérotées : `docs/planches-carafe/`.
 > - **Verre à vin gravé** : `docs/maquettes/verre-vin-fiche.html` · artifact https://claude.ai/code/artifact/10717789-346d-4ef2-ab3b-45801b3a1102
->   - Verre cristal Montese 36 cl (coût d'achat 3,05 €/verre, fournisseur Metro). **Prix : à l'unité 12,90 € + port · lot de 2 24,90 € + port · lot de 4 49,90 € livraison offerte** (livraison offerte dès **45 €** — FAIT via `freeShipThreshold: 45` par produit, cf. §6). Section « Personnalisez votre verre » : **styles numérotés 1-19** (couples, noms & dates, banderoles — planches `docs/planches-verre-vin/`), **lettre fleurie A→Z** (alphabet affiché + boutons), **8 polices du site** (identiques), aperçu en direct. **Note sous le choix de style** : pour les modèles avec prénoms (n°14-17), le prénom/date sont gravés dans l'écriture du modèle (image), pas dans la police. Photos verre : `IMG_9595/9596/9597/9598`.
+>   - Verre cristal Montese 36 cl (coût d'achat 3,05 €/verre, fournisseur Metro). **Prix : voir `node tools/prix-fiche.mjs verre-a-vin-grave`** (livraison offerte dès **45 €** — FAIT via `freeShipThreshold: 45` par produit, cf. §6). Section « Personnalisez votre verre » : **styles numérotés 1-19** (couples, noms & dates, banderoles — planches `docs/planches-verre-vin/`), **lettre fleurie A→Z** (alphabet affiché + boutons), **8 polices du site** (identiques), aperçu en direct. **Note sous le choix de style** : pour les modèles avec prénoms (n°14-17), le prénom/date sont gravés dans l'écriture du modèle (image), pas dans la police. Photos verre : `IMG_9595/9596/9597/9598`.
 > - **Verre à whisky (fiches whisky portrait + fête des pères)** : **METRO Professional Tumbler Lario 30 cl** (fournisseur **Metro**, réf `AAA0000163284`, lot de 12, **acheté — livré le 22/07/2026**, visible dans l'historique Metro). Ø 7,9 × H 9,3 cm, 300 ml, fond lourd, paroi lisse, NON trempé (idéal laser), lave-vaisselle, fabriqué en France. Correspond exactement à la fiche. Équivalent de secours si rupture : Arcoroc Islande 30 cl (réf `AAA0001186981`).
 > - **Flûte à champagne gravée** : `docs/maquettes/flute-champagne-fiche.html` · artifact https://claude.ai/code/artifact/9948bdc8-7ab5-44ec-9c50-2eda30dc2c72
->   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix unité 12,90 €+port / lot2 24,90 €+port / lot4 49,90 € livr. offerte). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
+>   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix : voir `node tools/prix-fiche.mjs flute-a-champagne-gravee`). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
 
 ### 🥤 GOBELET — MAQUETTE « PARCOURS GUIDÉ » ✅ ENREGISTRÉE LE 03/10/2026 (remplace celle du 25/09)
 > Gérant, 03/10 : « Retravailler la maquette comme t'as fait pour les verres de vin » → puis « il faut que ça soit
