@@ -243,3 +243,8 @@
 - 💡 Pages rendues à la demande sans cache (`no-store`, 1–2 s avant le premier octet) → cache 60 s côté serveur.
 - 💡 `minInstances: 0` dans `apphosting.yaml` → `1` pour supprimer le démarrage à froid (~10 €/mois, à confirmer).
 - 💡 16 pages sans h1 (panier, carte cadeau, /offrir/<occasion>, pages légales…) ; flûte / whisky : « Lot de 4 — livraison offerte » à aligner sur vin / cocktail (« Lot de 4 »).
+
+## 🍷 Option « Texte gravé sur le pied » sur les verres à vin (25/10/2026)
+- Demande de Nicky (verre à vin, gravure sur le pied) ; le gérant confirme qu'il peut graver le pied. Aujourd'hui = devis seulement.
+- Idée : champ facultatif « Texte sur le pied » sur `verre-a-vin-grave` (36 et 47 cl), compté comme les autres textes (`prixVerres`,
+  verre 1 : offert s'il est le seul texte, sinon +3 €), rangé dans `consignesGravure` (bloc « Pied du verre »). Maquette d'abord.
