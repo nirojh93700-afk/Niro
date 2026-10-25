@@ -377,7 +377,8 @@ En attente de SA décision :
   (2 € de moins que la fiche) ; correction envoyée par le site le 25/10 à 12 h 50 (17,90 € / 21,90 €, texte sur le pied compris) ; port en plus ; chaque texte en plus +3 €. Elle doit donner le texte et la taille → **devis à faire** à sa réponse.
 - L'option « gravure sur le pied » n'existe pas sur la fiche (devis seulement). Idée : l'ajouter aux verres à vin (voir AMELIORATIONS).
 
-## 🍷 MAQUETTE « TEXTE SUR LE PIED » DU VERRE À VIN — 25/10/2026 (en attente de son avis, RIEN en ligne)
+## 🍷 MAQUETTE « TEXTE SUR LE PIED » DU VERRE À VIN — ✅ ENREGISTRÉE TELLE QUELLE LE 25/10/2026 (« Enregistre la maquette », version 1) — RIEN en ligne
+- C'est CETTE version à reproduire à l'identique le jour du « applique » ; ne pas la modifier sans sa demande.
 - https://claude.ai/artifact/Dmph9pyHNvoMaqmi3S8dzv · générateur `tools/maquettes/verre-vin-pied.py <src.html> <dossier css> <sortie>`
   (src = `curl https://nivcreation.fr/produit/verre-a-vin-grave`, css = les 4 feuilles de la page). Les prix sont LUS dans la capture en ligne.
 - Étape 3 « Un texte sur le pied (facultatif) » avant le résumé : case à cocher, texte 30 caractères, 8 écritures, aperçu du pied vu de dessus

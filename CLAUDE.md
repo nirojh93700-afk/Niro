@@ -43,6 +43,13 @@
   puis construire comme un produit normal (§10 : `products.js`, `productInfo.js`, `productDates.js`, `packagingSeed.js`, `textExtra: 7` sur les deux faces).
   C'est CETTE version à reproduire à l'identique ; ne pas la modifier sans sa demande (règle du 23/07).
 
+## 🍷 MAQUETTE « TEXTE SUR LE PIED » DU VERRE À VIN — ✅ ENREGISTRÉE TELLE QUELLE LE 25/10/2026 (« Enregistre la maquette ») — RIEN en ligne
+- https://claude.ai/artifact/Dmph9pyHNvoMaqmi3S8dzv (version 1) · générateur `tools/maquettes/verre-vin-pied.py <src.html> <dossier css> <sortie>`
+  (src = `curl https://nivcreation.fr/produit/verre-a-vin-grave`, css = ses 4 feuilles ; les prix sont LUS dans la capture en ligne).
+- Étape 3 « Un texte sur le pied (facultatif) » avant le résumé : case, texte 30 caractères, 8 écritures, aperçu du pied vu de dessus
+  (texte en arc autour de la tige) ; compris si c'est la seule gravure du verre 1, sinon +3 € ; le pied seul active « Ajouter au panier ».
+  Détail et suite au « applique » : `docs/EN-ATTENTE.md`. Origine : demande de Nicky (25/10), le gérant peut graver le pied.
+
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
 > Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
 > (`docs/maquettes/assets/marque-pages/zones/`). Ne plus les modifier sans sa demande ; c'est CES versions à reproduire au « applique ».
