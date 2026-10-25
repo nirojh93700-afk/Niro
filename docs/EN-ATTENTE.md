@@ -386,3 +386,37 @@ En attente de SA décision :
   suffit pour activer « Ajouter au panier ». Résumé + total à jour ; bloc « ce que voit l'atelier » (Pied du verre : texte, écriture, en arc).
 - Au « applique » : champ `pied` (texte) + `policePied` dans `verre-a-vin-grave`, compté dans `textKeys`/`prixVerres` (texte offert du verre 1),
   bloc « Pied du verre » dans `consignesGravure`, parcours : le pied seul valide la gravure (`parcoursEtat`).
+
+## 🧭 ÉQUIPE D'AGENTS v2 — ANALYSE ENREGISTRÉE LE 25/10/2026 (« Enregistre ça, je verrai plus tard quand je te demanderai »)
+> Quand il redemande « les agents » : lui redonner CE bloc tel quel (état des lieux + proposition + coûts), puis attendre son « fais la maquette ».
+> Sa demande : « un agent qui gère tout, une tâche par agent, un chef avec qui je parle comme avec toi depuis l'appli admin sur mon téléphone,
+> des agents qui me font un rapport de tout ce qui se passe (produits mis en ligne et leur mise en page, produits à préparer, mails…),
+> une page dans admin pour gérer tout ce monde-là ».
+- **Ce qui existe** : 7 agents + chef (`src/lib/agents/registry.js` : e-mail, avis, newsletter, marketing, technicien, rapport ; le chef délègue
+  à UN agent) · fil unique **✦ Assistant** (bouton en haut de chaque page de Gestion, `hub.js` + `HubChat`, historique 80 messages, propose
+  des changements de catalogue et des brouillons à confirmer d'un clic) · agents de fond du battement (`heartbeat.js` : boîte mail surveillée
+  15 min → mail rangé dans la commande + brouillon à valider ; envois programmés, cashback, anniversaires, offre gravure, baisse de prix) ·
+  surveillance du catalogue (`catalogAudit.js`, 8 contrôles, page Santé du catalogue + e-mail hebdo) · cron hebdo rapport / newsletter /
+  marketing / santé par e-mail (`/api/cron/agents`) · page Gestion → Équipe d'agents (réglages + descriptions).
+- **Ce qui manque** : un JOURNAL des agents (qui a fait quoi, quand, résultat) lisible dans Gestion · un agent « Contrôle produit » qui compare
+  une fiche au GABARIT (§ GABARIT FICHE PRODUIT, entretien par matière, « +X € », date d'ajout, packaging, guide) AVANT la mise en ligne ·
+  un agent « Préparation » (à graver aujourd'hui, express en priorité, en retard +14 j, cadeau promis, matériel à racheter, étiquettes) ·
+  un agent « Courrier » (reçus, brouillons à valider, sans réponse depuis 24 h, devis en attente) · UN rapport quotidien lu dans Gestion
+  (pas seulement par e-mail) · le chef ne connaît pas ce que font les agents de fond · pas de carte par agent (dernier passage, dernier
+  rapport, interrupteur, « lancer maintenant »).
+- **Proposition (maquette d'abord, rien en ligne)** : section `agentLog` du blob (écriture par clé, lecture fraîche) ; 4 agents de fond en
+  CODE PUR (gratuits) qui écrivent dans le journal ; le chef v2 lit le journal (« qu'est-ce qui s'est passé aujourd'hui ? »), lance un agent
+  à la demande, reçoit les RÈGLES de la boutique (résumé de CLAUDE.md), accepte une PHOTO (capture d'écran), a des outils (lire les
+  commandes, le dossier d'une cliente, le matériel, le journal) ; page « Équipe » = une carte par agent + journal filtrable + rapport du
+  jour + coût estimé. Règles inchangées : aucun agent n'envoie rien à une cliente ni ne modifie le site seul ; il ne construit PAS le site
+  (ça reste Claude Code).
+- **Ce qu'il ne pourra jamais faire** : modifier le site / le code / la mise en page, pousser, faire une maquette, vérifier dans un navigateur.
+- **COÛTS (réponse à « ça peut être gratuit ? »)** : tout ce qui est calcul (journal, rapport du jour, contrôle de fiche, alertes) = 0 €.
+  Tout TEXTE rédigé par l'IA passe par `ANTHROPIC_API_KEY` (facturée à l'usage, séparément de son abonnement Claude ; montant exact sur
+  console.anthropic.com → Usage) : AUJOURD'HUI déjà payants = chaque brouillon de réponse de l'agent e-mail (boîte surveillée, contact,
+  bouton Répondre), le fil ✦ Assistant et l'assistant catalogue, l'analyse d'une facture (Achats & factures), le cron hebdo. Modèle réglé
+  = Opus 4.8 (5 $ / 25 $ le million de jetons, ≈ 5–6 ct par message avec le catalogue injecté) ; **Haiku 5.5** = 0,10 $ / 0,50 $ (≈ 0,1 ct
+  par message → 100 messages/jour ≈ 3 €/mois). Proposé : chef en Haiku 5.5 au quotidien, modèle fort seulement sur demande délicate ;
+  éventuellement passer aussi les brouillons de réponses sur Haiku (à juger sur quelques réponses). IA gratuites d'autres éditeurs :
+  déconseillées (limites, règles mal suivies, données clientes utilisées pour l'entraînement).
+- Noté aussi dans `docs/AMELIORATIONS.md` (section « Équipe d'agents v2 »).
