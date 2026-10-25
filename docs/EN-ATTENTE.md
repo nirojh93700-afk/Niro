@@ -376,3 +376,12 @@ En attente de SA décision :
 - Réponse partie par le site (page de validation de l'agent) : texte sur le pied = gravure offerte du verre 1 → ⚠️ ERREUR : prix d'avant le 13/10 annoncés
   (2 € de moins que la fiche) ; correction envoyée par le site le 25/10 à 12 h 50 (17,90 € / 21,90 €, texte sur le pied compris) ; port en plus ; chaque texte en plus +3 €. Elle doit donner le texte et la taille → **devis à faire** à sa réponse.
 - L'option « gravure sur le pied » n'existe pas sur la fiche (devis seulement). Idée : l'ajouter aux verres à vin (voir AMELIORATIONS).
+
+## 🍷 MAQUETTE « TEXTE SUR LE PIED » DU VERRE À VIN — 25/10/2026 (en attente de son avis, RIEN en ligne)
+- https://claude.ai/artifact/Dmph9pyHNvoMaqmi3S8dzv · générateur `tools/maquettes/verre-vin-pied.py <src.html> <dossier css> <sortie>`
+  (src = `curl https://nivcreation.fr/produit/verre-a-vin-grave`, css = les 4 feuilles de la page). Les prix sont LUS dans la capture en ligne.
+- Étape 3 « Un texte sur le pied (facultatif) » avant le résumé : case à cocher, texte 30 caractères, 8 écritures, aperçu du pied vu de dessus
+  (texte en arc autour de la tige). Prix = règle du verre 1 : compris si c'est la seule gravure, sinon +3 € (supplément texte du site). Le pied seul
+  suffit pour activer « Ajouter au panier ». Résumé + total à jour ; bloc « ce que voit l'atelier » (Pied du verre : texte, écriture, en arc).
+- Au « applique » : champ `pied` (texte) + `policePied` dans `verre-a-vin-grave`, compté dans `textKeys`/`prixVerres` (texte offert du verre 1),
+  bloc « Pied du verre » dans `consignesGravure`, parcours : le pied seul valide la gravure (`parcoursEtat`).
