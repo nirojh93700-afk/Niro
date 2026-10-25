@@ -248,3 +248,14 @@
 - Demande de Nicky (verre à vin, gravure sur le pied) ; le gérant confirme qu'il peut graver le pied. Aujourd'hui = devis seulement.
 - Idée : champ facultatif « Texte sur le pied » sur `verre-a-vin-grave` (36 et 47 cl), compté comme les autres textes (`prixVerres`,
   verre 1 : offert s'il est le seul texte, sinon +3 €), rangé dans `consignesGravure` (bloc « Pied du verre »). Maquette d'abord.
+
+## 🧭 Équipe d'agents v2 — un chef, un agent par tâche, des rapports (demande du gérant, 25/10/2026)
+- Demande : « un agent qui gère tout, une tâche par agent, un chef avec qui je parle ; des agents qui me font un rapport de tout ce qui se
+  passe (produits ajoutés et leur mise en page, produits à préparer, mails…), une page dans admin pour gérer tout ce monde-là ».
+- Existe déjà (voir l'analyse donnée le 25/10) : 7 agents + chef (`registry.js`), fil unique Assistant (`hub.js`, `HubChat`), triage
+  autonome des e-mails (brouillons à valider), 5 tâches de fond du battement (`heartbeat.js`), surveillance du catalogue (`catalogAudit`,
+  8 contrôles), cron hebdo rapport / newsletter / marketing / santé par e-mail.
+- Manque : un JOURNAL des agents (qui a fait quoi, quand, résultat) lisible dans Gestion ; un agent « Nouveau produit » qui vérifie une fiche
+  AVANT publication contre le gabarit (§ GABARIT FICHE PRODUIT) ; un agent « Préparation » (commandes à graver, à emballer, en retard, express)
+  ; un rapport quotidien unique (lu dans Gestion, pas seulement par e-mail) ; une page « Équipe » avec une carte par agent (dernier passage,
+  dernier rapport, interrupteur, « lancer maintenant »). Maquette d'abord, rien en ligne.
