@@ -370,3 +370,9 @@ En attente de SA décision :
 - ⚠️ AVANT de changer quoi que ce soit : recopier TOUS les enregistrements DNS actuels (A du site Firebase, TXT fah-claim,
   CNAME _acme-challenge, MX, SPF/DKIM/DMARC de Resend et de la messagerie) chez le nouveau registrar, sinon le site et les
   e-mails tombent. C'est LUI qui fait le transfert (son compte) ; on peut lui préparer la liste.
+
+## 🍷 NICKY (twigglet.73@gmail.com) — GRAVURE SUR LE PIED D'UN VERRE À VIN — répondu le 25/10/2026 à 9 h 12
+- Elle voulait un verre à vin sans pied (nous n'en avons pas) ou une gravure sur le pied. Le gérant : « je peux graver le pied ».
+- Réponse partie par le site (page de validation de l'agent) : texte sur le pied = gravure offerte du verre 1 → 15,90 € (36 cl) /
+  19,90 € (47 cl), port en plus ; chaque texte en plus +3 €. Elle doit donner le texte et la taille → **devis à faire** à sa réponse.
+- L'option « gravure sur le pied » n'existe pas sur la fiche (devis seulement). Idée : l'ajouter aux verres à vin (voir AMELIORATIONS).
