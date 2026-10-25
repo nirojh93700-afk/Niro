@@ -445,6 +445,13 @@
   (`python3 -c "import datetime; print(datetime.date(A,M,J).weekday())"`, 0 = lundi). Jamais un jour de la semaine de tête.
 - Même chose pour un prix (relire la fiche en ligne), un nom, une adresse, une référence de commande, un délai, un numéro :
   le relire à la source (commande, fiche, mail) avant de l'écrire dans un message ou une réponse.
+- ⛔ **PRIX DANS UN MAIL CLIENT OU UN DEVIS = `node tools/prix-fiche.mjs <slug>` JUSTE AVANT D'ÉCRIRE (25/10/2026, gérant : « je veux plus
+  d'erreur comme ça »)**. Le script lit la fiche EN LIGNE (réglages de Gestion compris) : options, prix, suppléments de gravure. JAMAIS un prix
+  de mémoire ni recopié de ce fichier : les prix notés ici datent du jour où ils ont été écrits (le 25/10, Nicky a reçu « 15,90 € / 19,90 € »
+  pour le verre à vin, prix d'avant le 13/10 lus ici ; vrais prix 17,90 / 21,90). Dans le message, écrire le détail (verre X € · gravure Y € ·
+  port) et compter TOUS les textes, y compris face + fond (+7 €). Audit des devis verres du 25/10 : DEV-0003 (Sophie, whisky photo face +
+  texte au fond, 22,90 € au lieu de 29,90 €), DEV-1519 (Julien, prénom + phrase + date, 25,90 € au lieu de 28,90 €), Nicky (−2 €) ;
+  DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl à 18,90 / 16,00 €) fait avant que le 47 cl soit en boutique.
 
 ## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
@@ -1900,7 +1907,7 @@ ne descend jamais sous zéro.
   « Lot de N » : c'est là que la fiche lit le nombre de verres (`glassQty`). Dans `ProductDetail` :
   état `tailleId`, `selectTaille()`, `variantsVisibles` (index GLOBAL gardé pour `selectVariant`).
   Réutilisable pour tout produit à deux dimensions (taille × format).
-- **Prix 47 cl : 19,90 / 36,90 / 71,90 €** — même marge en € que le 36 cl, coût **6,54 €/verre
+- **Prix 47 cl au 25/09 : 19,90 / 36,90 / 71,90 € — PÉRIMÉS depuis le 13/10 (+2 € : 36 cl 17,90 / 33,90 / 63,90 · 47 cl 21,90 / 39,90 / 77,90). Prix du jour : `node tools/prix-fiche.mjs verre-a-vin-grave`** — même marge en € que le 36 cl, coût **6,54 €/verre
   port compris** (carton de 6 à 29,23 € + 10 € de port, chiffres du gérant, `productCosts.js`).
   Poids 550 / 1000 / 1800 g. Détail dans `docs/prix-historique.md`.
 - **Aperçu par variante** : une variante peut porter `engraveImage` + `engrave` (photo vierge +

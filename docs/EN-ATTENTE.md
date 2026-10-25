@@ -373,6 +373,6 @@ En attente de SA décision :
 
 ## 🍷 NICKY (twigglet.73@gmail.com) — GRAVURE SUR LE PIED D'UN VERRE À VIN — répondu le 25/10/2026 à 9 h 12
 - Elle voulait un verre à vin sans pied (nous n'en avons pas) ou une gravure sur le pied. Le gérant : « je peux graver le pied ».
-- Réponse partie par le site (page de validation de l'agent) : texte sur le pied = gravure offerte du verre 1 → 15,90 € (36 cl) /
-  19,90 € (47 cl), port en plus ; chaque texte en plus +3 €. Elle doit donner le texte et la taille → **devis à faire** à sa réponse.
+- Réponse partie par le site (page de validation de l'agent) : texte sur le pied = gravure offerte du verre 1 → ⚠️ ERREUR : annoncé 15,90 € (36 cl) /
+  19,90 € (47 cl) au lieu de 17,90 / 21,90 € (prix du 13/10) ; correction ou prix tenu = décision du gérant en attente ; port en plus ; chaque texte en plus +3 €. Elle doit donner le texte et la taille → **devis à faire** à sa réponse.
 - L'option « gravure sur le pied » n'existe pas sur la fiche (devis seulement). Idée : l'ajouter aux verres à vin (voir AMELIORATIONS).
