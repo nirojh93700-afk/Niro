@@ -310,8 +310,8 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         {o.immediateStart ? <span className="file-chip red">⚡ Fabrication immédiate</span> : null}
         {unread ? <span className="file-chip red">📬 Nouvelle réponse</span> : null}
         {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
-        {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking).nom})</a> : null}
-        {o.tracking && lienSuivi(o.tracking).autre ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking).autre.url} target="_blank" rel="noreferrer">suivre (La Poste)</a> : null}
+        {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking, o).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking, o).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking, o).nom})</a> : null}
+        {o.tracking && lienSuivi(o.tracking, o).autre ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking, o).autre.url} target="_blank" rel="noreferrer">suivre (La Poste)</a> : null}
         {/* Seules les étiquettes réellement posées s'affichent ; les autres sont rangées derrière « + Étiqueter ». */}
         {FLAGS.filter((f) => flags.includes(f.id)).map((f) => (
           <button key={f.id} type="button" className={`file-chip btn on flag-${f.id}`} title="Cliquer pour retirer cette étiquette"

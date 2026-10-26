@@ -4182,6 +4182,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - **Corrigé le même jour** (capture 0ZH3LP9M : « suivre sur Boxtal » sur un n° La Poste `87001500427259Z`) : format
   « 14 chiffres + 1 lettre » reconnu La Poste ; et tout numéro NON reconnu affiche Boxtal **+ un lien La Poste à côté**.
 - `npm run test-suivi` (10 vérifs). L'e-mail « expédiée » de la cliente garde son lien parcelsapp (inchangé).
+- ✅ **MONDIAL RELAY RECONNU — EN LIGNE LE 26/10/2026 (commande 15HSMV8X, Edwige Calaltayut : « le numéro de suivi ne m'indique rien »,
+  et Gestion affichait « suivre sur La Poste » pour un colis en point relais ; gérant : « corrige-moi tout, je veux plus d'erreurs comme ça »)** :
+  un numéro de **8 chiffres** (étiquette Boxtal Mondial Relay, ex. 74550444), ou 10–12 chiffres sur une commande « Mondial Relay », ouvre
+  `mondialrelay.fr/suivi-de-colis/?numeroExpedition=<n°>&codePostal=<CP de la cliente>` (CP lu dans `shippingAddress`, sinon dans le libellé
+  du point relais). `lienSuivi(numero, order)` prend maintenant LA COMMANDE (les 3 écrans de Gestion la passent) ; `lienSuiviClient(numero, order)`
+  = le lien pour la cliente (La Poste / Mondial Relay, sinon parcelsapp, jamais Boxtal) → e-mail « expédiée » (`shippedEmail`, bouton
+  « Suivre mon colis (Mondial Relay) » + ligne « Point de retrait : … ») et espace client. Un numéro vraiment inconnu garde Boxtal + La Poste
+  à côté. ⛔ Tout nouvel endroit qui affiche un suivi passe par `lienSuivi` / `lienSuiviClient` AVEC la commande. `test-suivi` : 25 vérifs.
+  Le lien Mondial Relay n'a pas pu être ouvert d'ici (site bloqué par le réseau) : format pris sur leur page de suivi publique.
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis

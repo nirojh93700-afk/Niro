@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCagnotte, getSettings } from "@/lib/stock";
+import { lienSuiviClient } from "@/lib/suiviColis";
 import EspaceLogin from "@/components/EspaceLogin";
 
 export const dynamic = "force-dynamic";
@@ -102,7 +103,7 @@ export default async function EspacePage({ searchParams }) {
             {active.tracking ? (
               <>
                 <div style={{ fontSize: 13, color: "#7a7060", marginBottom: 8 }}>N° de suivi : <strong>{active.tracking}</strong></div>
-                <a href={`https://parcelsapp.com/fr/tracking/${encodeURIComponent(active.tracking)}`} target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "9px 18px" }}>Suivre mon colis →</a>
+                <a href={lienSuiviClient(active.tracking, active).url} target="_blank" rel="noreferrer" className="btn btn-gold" style={{ padding: "9px 18px" }}>Suivre mon colis →</a>
               </>
             ) : (
               <div style={{ fontSize: 13, color: "#8a7d63" }}>Votre numéro de suivi apparaîtra ici dès l&apos;expédition.</div>
