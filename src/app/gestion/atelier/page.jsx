@@ -310,6 +310,13 @@ export default function AtelierPage() {
                     </span>
                   </div>
 
+                  {/* Date écrite dans l'image non cochée / non lue (26/10/2026) : rappel, jamais un blocage. */}
+                  {Array.isArray(o.alerteImage) && o.alerteImage.length && g.travaux.findIndex((t) => t.o.id === o.id) === idx ? (
+                    <div style={{ background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, padding: "8px 12px", margin: "0 0 10px", fontSize: "0.88rem" }}>
+                      <strong style={{ color: "#b32b2b" }}>⚠️ Date dans l&apos;image — à regarder avant de graver</strong>
+                      {o.alerteImage.map((l, i) => <div key={i}>{l}</div>)}
+                    </div>
+                  ) : null}
                   {/* Tableau professionnel « quel texte sur quelle face ». */}
                   <TableGravure item={item} titre={false} />
                   {/* Consignes envoyées par e-mail (une fois par commande). */}

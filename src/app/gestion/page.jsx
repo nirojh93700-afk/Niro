@@ -1283,6 +1283,12 @@ export default function GestionPage({ onglet = "" } = {}) {
                     <strong style={{ color: "#b32b2b" }}>⚠️ Adresse e-mail :</strong> {o.alerteEmail || `corrigée — tapée au paiement « ${o.emailCorrigeDe} », remplacée par « ${o.customerEmail} ».`}
                   </div>
                 ) : null}
+                {Array.isArray(o.alerteImage) && o.alerteImage.length ? (
+                  <div style={{ background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, padding: "10px 12px", margin: "0 0 10px", fontSize: "0.9rem" }}>
+                    <strong style={{ color: "#b32b2b" }}>⚠️ Date dans l&apos;image — à regarder avant de graver :</strong>
+                    {o.alerteImage.map((l, i) => <div key={i}>{l}</div>)}
+                  </div>
+                ) : null}
                 {/* Conditionnement + pièce ratée, comme dans la file de production (13/10/2026). */}
                 <PreparationCommande o={o} mat={mat} adminKey={key} onCond={setCondOrder} onMat={() => loadMat(key)} />
                 <div style={{ marginBottom: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>

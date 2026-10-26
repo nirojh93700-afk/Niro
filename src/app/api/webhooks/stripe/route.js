@@ -7,6 +7,8 @@ import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif 
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { oubliesAtelier } from "@/lib/controleAtelier";
+import { controleDatesCommande, lignesAlerteImage } from "@/lib/lectureImage";
+import { getProductBySlug } from "@/lib/products";
 import { verifierEmailCommande } from "@/lib/emailTypoServeur";
 import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
 import { detailVariante } from "@/lib/detailProduit";
@@ -551,8 +553,23 @@ export async function POST(req) {
       }
     } catch { /* jamais bloquant */ }
 
+    // Date écrite dans l'image de la cliente (26/10/2026) : l'agent relit chaque photo et compare
+    // avec la case cochée. Jamais bloquant (la commande est déjà payée) : alerte au gérant seulement.
+    let alertesImage = [];
+    try {
+      alertesImage = lignesAlerteImage(await controleDatesCommande(specItems, { eclater: eclaterParVerre, getProduct: getProductBySlug }));
+    } catch { alertesImage = []; }
+    const imageBlock = alertesImage.length
+      ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;">
+           <strong style="color:#b32b2b;">⚠️ Date dans l'image de la cliente — à regarder avant de graver</strong>
+           <ul style="margin:8px 0 0;padding-left:18px;">${alertesImage.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
+           <p style="margin:6px 0 0;font-size:12px;">La commande est passée normalement. À toi de décider : graver tel quel, ou écrire à la cliente pour le complément.</p>
+         </div>`
+      : "";
+
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
+        ${imageBlock}
         ${oublisBlock}
         ${emailVerif.alerte ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Adresse e-mail de la cliente</strong><p style="margin:6px 0 0;">${escapeHtml(emailVerif.alerte)}</p></div>` : ""}
         ${alerteBlock}
@@ -601,7 +618,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     const ownerEmail = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
     await sendEmail({
       to: ownerEmail,
-      subject: `🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
+      subject: `${alertesImage.length ? "⚠️ " : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
       html,
       replyTo: customer.email || undefined,
     });
@@ -748,6 +765,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       customerEmail: customer.email || "",
       ...(emailVerif.corrigeeDe ? { emailCorrigeDe: emailVerif.corrigeeDe } : {}),
       ...(emailVerif.alerte ? { alerteEmail: emailVerif.alerte } : {}),
+      ...(alertesImage.length ? { alerteImage: alertesImage } : {}),
       customerPhone: customer.phone || "",
       shippingName: shipping?.name || "",
       shippingAddress: shipping?.address || null,

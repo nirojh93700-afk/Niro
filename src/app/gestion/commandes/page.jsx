@@ -306,6 +306,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
         </div>
       ) : null}
       {o.alerteInterne ? <div className="file-note-box red">🚨 {o.alerteInterne}</div> : null}
+      {Array.isArray(o.alerteImage) && o.alerteImage.length ? <div className="file-note-box red">⚠️ Date dans l&apos;image — à regarder avant de graver : {o.alerteImage.join(" · ")}</div> : null}
       {o.alerteEmail || o.emailCorrigeDe ? <div className="file-note-box red">✉️ {o.alerteEmail || `E-mail corrigé : « ${o.emailCorrigeDe} » → « ${o.customerEmail} »`}</div> : null}
 
       <div className="file-chips">

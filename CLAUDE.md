@@ -4235,6 +4235,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   message préparé, rien ne part sans lui) + encadré « À regarder avant de graver » à l'atelier.
   v4 (26/10) : l'oubli s'affiche EN ROUGE, bien visible (« Vous avez oublié de cocher la date » + bouton rouge « Cocher la case », case
   entourée de rouge). Prévu pour TOUS les verres à photo (vin 36 et 47 cl, flûte, whisky face/fond, cocktail, Fête des pères) + carafe.
+- ✅ **APPLIQUÉ LE 26/10/2026 (« Applique et pousse »)** — `src/components/DateDansImage.jsx` (case + lecture + messages, rouge si oubli,
+  bouton « Cocher la case », JAMAIS bloquant), champ `type: "imageDate"` (`dateImage`, `photoKey: "photo"` ; `dateImageFond` pour le fond
+  du whisky / cocktail) sur verre à vin, flûte, whisky, cocktail, carafe (Fête des pères : pas de photo, rien). Prix = un texte : `textKeys`
+  (vin, flûte) ou `flatExtras` +3 € (whisky, cocktail, carafe), donc la règle des verres s'applique (lot de 4 : 9 € → 18 €). La case se vide
+  si la photo est retirée ou si « face + fond » est quitté (jamais payée cachée). Lecture : `src/lib/lectureImage.js` (`lireDateImage`,
+  Claude vision, n'accepte QUE `/api/img/<id>`, cache Firestore `imageReadings`, `ecartDate`, `controleDatesCommande`) + `/api/lecture-image`
+  (20 lectures / 10 min par IP). Webhook Stripe : relit chaque photo (12 s max, cache), encadré rouge « ⚠️ Date dans l'image » en tête du
+  🛎️ + « ⚠️ » dans l'objet, `order.alerteImage` affiché dans la fiche commande, la file de production, la fiche atelier, la page Atelier et la
+  fiche papier. `npm run test-date-image` (18 vérifs). ⚠️ Une photo envoyée par Cloudinary (si un jour configuré) n'est pas lue (non vérifiée).
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis

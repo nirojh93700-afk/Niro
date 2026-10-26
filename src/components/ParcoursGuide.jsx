@@ -19,6 +19,7 @@ import { engravingExtra } from "@/lib/engravingPrice";
 import { texteOffertVerre1 } from "@/lib/prixVerres";
 import { parcoursEtat, modeleChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
 import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
+import DateDansImage from "./DateDansImage";
 
 const LETTRES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const MODES = (cfg, nbModeles) => [
@@ -72,7 +73,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       mode: m,
       ...(coffrets.length ? { coffret: prev.coffret || "" } : {}),
       // L'emplacement et la gravure du fond ne dépendent pas du choix photo / texte : on les garde.
-      ...(E ? { emplacement: prev.emplacement || "face", ...(prev.photoFond ? { photoFond: prev.photoFond } : {}), ...(prev.texteFond ? { texteFond: prev.texteFond } : {}) } : {}),
+      ...(E ? { emplacement: prev.emplacement || "face", ...(prev.photoFond ? { photoFond: prev.photoFond } : {}), ...(prev.dateImageFond ? { dateImageFond: prev.dateImageFond } : {}), ...(prev.texteFond ? { texteFond: prev.texteFond } : {}) } : {}),
       ...(m === "modele" ? {} : { police: "playfair" }),
     }));
     setTimeout(() => s2Ref.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
@@ -96,6 +97,13 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   // Verre 1 sans logo (21/10/2026) : le premier texte est offert → « offert » à la place de « +3 € ».
   const cleOffert = verre1 && product.regleVerres ? texteOffertVerre1(product, fieldValues, null, ["texte", dateKey, "prenom", "initiale"]) : null;
   const px = (k, ctx) => (cleOffert === k ? "offert" : ep(prixDe(k, ctx)));
+  // Date écrite dans l'image (26/10/2026) : la case n'existe que si la fiche a le champ « imageDate ».
+  const aDateImage = (k) => (product.personalizationFields || []).some((f) => f.key === k && f.type === "imageDate");
+  const caseDate = (k, photoKey) => (aDateImage(k) ? (
+    <DateDansImage photoUrl={fieldValues[photoKey] || ""} value={fieldValues[k] || ""}
+      onChange={(v) => setFieldValues((prev) => (prev[k] === v ? prev : { ...prev, [k]: v }))}
+      prix={ep(prixDe(k, { mode: "photo", photo: "x" }) || 3)} />
+  ) : null);
   // Conseils photo : s'ouvrent quand la cliente touche « Choisir une photo » (gérant, 16/10/2026).
   const guide = cfg.guidePhoto || GUIDE_PHOTO_GRAVURE;
   const grille = Object.keys(modeles).map(Number).sort((a, b) => a - b);
@@ -130,7 +138,8 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       <p className="prc-legend">Gravée centrée au fond, elle se découvre à travers le verre. Une photo, un texte, ou les deux.</p>
       <div className="prc-fields">
         <div className="field"><label>Photo pour le fond <span className="prc-opt">(facultatif)</span></label>
-          <PhotoUpload value={fieldValues.photoFond || ""} onChange={(url) => set({ photoFond: url })} productSlug={product.slug} guide={guide} /></div>
+          <PhotoUpload value={fieldValues.photoFond || ""} onChange={(url) => set({ photoFond: url })} productSlug={product.slug} guide={guide} />
+          {caseDate("dateImageFond", "photoFond")}</div>
         <div className="field"><label>Texte pour le fond <span className="prc-opt">(facultatif)</span></label>
           <input type="text" maxLength={texteMax} placeholder="Prénom, message…" value={fieldValues.texteFond || ""} onChange={(e) => set({ texteFond: e.target.value })} /></div>
       </div>
@@ -175,7 +184,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
           <div className="prc-sh"><span className="prc-num done">{nEmpl}</span><h3>{E.titre || "Où sur le verre ?"}</h3></div>
           <div className="prc-cofs prc-empl">
             {E.options.map((o) => (
-              <button type="button" key={o.value} className={`prc-cof${empl === o.value ? " on" : ""}`} onClick={() => set({ emplacement: o.value })}>
+              <button type="button" key={o.value} className={`prc-cof${empl === o.value ? " on" : ""}`} onClick={() => set({ emplacement: o.value, ...(o.value !== "deux" ? { dateImageFond: "" } : {}) })}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 {o.image && <img src={o.image} alt="" loading="lazy" />}
                 <b>{o.titre}</b>{o.prix ? <span className="prc-cp">+ {formatEuro(o.prix)}</span> : null}<small>{o.sous}</small>
@@ -306,7 +315,8 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
               <div className="prc-one">
                 <div className="prc-fields">
                   <div className="field"><label>Votre photo ou logo</label>
-                    <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} guide={guide} /></div>
+                    <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} guide={guide} />
+                    {caseDate("dateImage", "photo")}</div>
                   <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{prixDe("texte", { mode: "photo" }) ? `, ${px("texte", { mode: "photo" })}` : ""})</span></label>
                     <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · 1989"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} /></div>
                   {commun || (fieldValues.texte && <div className="field"><label>Écriture du texte</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>)}

@@ -20,6 +20,7 @@ import PayInfoModal from "@/components/PayInfo";
 import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import PhotoUpload, { CLOUDINARY_READY, GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
+import DateDansImage from "./DateDansImage";
 import Engrave3D from "./Engrave3D";
 import EngraveHeart3D from "./EngraveHeart3D";
 import EngraveBook3D from "./EngraveBook3D";
@@ -388,6 +389,10 @@ export default function ProductDetail({ product, realisations = [] }) {
       (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement) &&
       (!f.showIfField || fieldValues[f.showIfField] === f.showIfValue)
   );
+  // Date de l'image du fond (26/10/2026) : la case disparaît sans « face + fond » → elle se vide (jamais payée cachée).
+  useEffect(() => {
+    if (fieldValues.dateImageFond && fieldValues.emplacement !== "deux") setFieldValues((prev) => ({ ...prev, dateImageFond: "" }));
+  }, [fieldValues.dateImageFond, fieldValues.emplacement]);
   // Verres (21/10/2026) : sur le verre 1 sans logo, le premier texte est offert → son étiquette dit
   // « (offert) » à la place de « (+3 €) ». Même fonction que le prix (texteOffertVerre1).
   const cleTexteOffert = RV && (!perGlass || activeGlass === 0)
@@ -1807,6 +1812,14 @@ export default function ProductDetail({ product, realisations = [] }) {
                         Votre photo est vérifiée par notre atelier avant la gravure. Si elle est trop floue, trop sombre ou de qualité insuffisante pour un beau rendu, nous vous recontactons pour la confirmer ou en choisir une autre — afin que votre souvenir soit parfait.
                       </p>
                     </div>
+                  );
+                }
+                if (f.type === "imageDate") {
+                  // Date écrite dans l'image de la cliente (26/10/2026) : case + lecture en direct, jamais bloquant.
+                  const pxDate = engravingExtra(product, { [f.key]: "oui" }, variant?.id).amount || 0;
+                  return (
+                    <DateDansImage key={f.key} photoUrl={fieldValues[f.photoKey] || ""} value={fieldValues[f.key] || ""}
+                      onChange={(v) => setField(f.key, v)} prix={`+${String(pxDate).replace(".", ",")} €`} />
                   );
                 }
                 if (f.type === "badge") {

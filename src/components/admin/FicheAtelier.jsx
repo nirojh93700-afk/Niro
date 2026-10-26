@@ -264,6 +264,12 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
       {/* Tout ce qui est vendu AVEC les pièces (emballage, coffret, socle, date, lot…),
           en clair et en tête — demande du gérant du 02/10/2026. */}
       {order ? <OptionsVendues order={order} /> : null}
+      {Array.isArray(order?.alerteImage) && order.alerteImage.length ? (
+        <div style={{ background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, padding: "8px 12px", margin: "6px 0 10px", fontSize: "0.88rem" }}>
+          <strong style={{ color: "#b32b2b" }}>⚠️ Date dans l&apos;image — à regarder avant de graver</strong>
+          {order.alerteImage.map((l, i) => <div key={i}>{l}</div>)}
+        </div>
+      ) : null}
       {items.map((it, i) => <ItemSheet key={i} item={it} />)}
       {/* Une cliente peut renvoyer sa photo PAR E-MAIL après la commande (autre
          version, autre langue…) : on la montre ici aussi, sinon l'atelier

@@ -567,6 +567,32 @@ export async function storeCustomerUpload(dataUrl, meta = {}) {
 }
 
 // Récupère une photo stockée (data URL) par son identifiant.
+// Lecture d'une image de cliente par l'agent (26/10/2026, « date dans l'image ») :
+// résultat gardé par photo, pour ne pas relire deux fois la même (fiche puis paiement).
+export async function getImageReading(id) {
+  const a = getApp();
+  if (!a || !id) return null;
+  try {
+    const doc = await admin.firestore().collection("imageReadings").doc(String(id)).get();
+    return doc.exists ? doc.data() : null;
+  } catch (e) {
+    console.error("Lecture image (cache):", e.message);
+    return null;
+  }
+}
+
+export async function setImageReading(id, data) {
+  const a = getApp();
+  if (!a || !id) return false;
+  try {
+    await admin.firestore().collection("imageReadings").doc(String(id)).set({ ...data, at: Date.now() });
+    return true;
+  } catch (e) {
+    console.error("Écriture image (cache):", e.message);
+    return false;
+  }
+}
+
 export async function getCustomerUpload(id) {
   const a = getApp();
   if (!a) return null;

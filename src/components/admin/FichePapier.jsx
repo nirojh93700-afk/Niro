@@ -139,6 +139,13 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
             </div>
           ) : null}
 
+          {Array.isArray(order.alerteImage) && order.alerteImage.length ? (
+            <div className="fp-encadre alerte">
+              <strong>⚠️ Date dans l&apos;image — à regarder avant de graver</strong>
+              {order.alerteImage.map((l, i) => <div key={i} className="fp-pre">{l}</div>)}
+            </div>
+          ) : null}
+
           {order.cadeauChoix ? (
             <div className="fp-encadre alerte">
               <strong>
