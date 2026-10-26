@@ -4192,6 +4192,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   à côté. ⛔ Tout nouvel endroit qui affiche un suivi passe par `lienSuivi` / `lienSuiviClient` AVEC la commande. `test-suivi` : 25 vérifs.
   Le lien Mondial Relay n'a pas pu être ouvert d'ici (site bloqué par le réseau) : format pris sur leur page de suivi publique.
 
+## ⏱ DATE LIMITE D'EXPÉDITION EN JOURS OUVRÉS + CALENDAIRES — 26/10/2026 (gérant : « si j'envoie tout demain je suis dans les temps ? … affiche les deux, ouvrables et non ouvrables »)
+- La date affichée sur une commande = le jour du paiement ; Gestion ne calculait AUCUNE date limite. Maintenant `src/lib/delaiCommande.js`
+  (pur, `npm run test-delai`, 13 vérifs) : promesse du site = 5 jours ouvrés de fabrication (lun.–ven., sans les jours fériés français,
+  Pâques calculé), à partir du lendemain de la commande (+1 jour sans « fabrication immédiate », les 24 h pour modifier).
+- `DelaiCommande.jsx` sur chaque carte de la file de production et en tête de chaque fiche complète : « À expédier au plus tard le … (encore
+  N j ouvrés / dernier jour / dépassé de N j ouvrés) · écoulés : N j ouvrés · N j calendaires » (vert / orange / rouge) ; une commande partie
+  affiche « Expédiée en N j ouvrés · N j calendaires · dans les temps / après la date limite ».
+
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
   l'e-mail / lien demandé, jamais ouvert / jamais connectée), filtres « Connectées » / « Jamais connectées », KPI « Se sont connectées ».

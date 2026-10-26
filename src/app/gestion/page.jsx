@@ -1,6 +1,7 @@
 "use client";
 
 import { lienSuivi } from "@/lib/suiviColis";
+import DelaiCommande from "@/components/admin/DelaiCommande";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
@@ -1128,6 +1129,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                   <span className="co-chev" aria-hidden>{isOpen ? "▾" : "▸"}</span>
                 </button>
                 {isOpen && (<div className="co-body">
+                <DelaiCommande order={o} style={{ margin: "6px 0 0" }} />
                 {dupIds.has(o.id) && (
                   <div style={{ margin: "6px 0 0", padding: "7px 10px", background: "#fdecea", border: "1px solid #f1b0a8", borderRadius: 8, color: "#b3261e", fontSize: "0.82rem", fontWeight: 600 }}>
                     ⚠️ Possible doublon — même cliente et même(s) article(s) qu'une autre commande récente. Vérifie avant de fabriquer (ne fabrique qu'une fois si c'est le même paiement).

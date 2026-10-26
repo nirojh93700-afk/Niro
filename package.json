@@ -33,7 +33,8 @@
     "test-cristal-texte": "node tools/tests/cristal-texte.mjs",
     "test-lien-categorie": "node tools/tests/lien-categorie.mjs",
     "test-cumul": "node tools/tests/cumul-codes.mjs",
-    "test-visibilite": "node --import ./tools/alias-register.mjs tools/tests/visibilite.mjs"
+    "test-visibilite": "node --import ./tools/alias-register.mjs tools/tests/visibilite.mjs",
+    "test-delai": "node --import ./tools/alias-register.mjs tools/tests/delai-commande.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

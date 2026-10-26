@@ -12,6 +12,7 @@
 // =============================================================================
 
 import { lienSuivi } from "@/lib/suiviColis";
+import DelaiCommande from "@/components/admin/DelaiCommande";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
@@ -260,6 +261,7 @@ function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, ad
       </div>
 
       <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}</span></div>
+      <DelaiCommande order={o} style={{ margin: "6px 0 2px" }} />
       {!compact ? <DetailLivraison o={o} /> : null}
 
       <ul className="file-items">
