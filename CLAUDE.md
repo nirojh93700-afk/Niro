@@ -4213,6 +4213,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - ✅ **RÈGLE TRANCHÉE (gérant, 26/10/2026)** : dans une image de cliente, l'IMAGE est gratuite (photo, dessin, **LOGO**, symboles, cœurs,
   décors) ; seuls les TEXTES (titre, chaque prénom, phrase) et les DATES se paient, au tarif de la fiche. Ne sont jamais des textes : le nom
   écrit dans un logo, les textes de la scène d'une photo (maillot, panneau). Doriane : titre + 4 prénoms + date = 6 textes → 96,90 €.
+  ⛔ **CORRIGÉ LE MÊME JOUR (gérant : « on considère comme une image, après y a qu'une date, c'est comme sur le site »)** : le visuel (titre et
+  prénoms compris) = UNE image ; seule la DATE compte comme un texte. Doriane = image + date → gravure 18 € → **81,90 €**, livraison offerte.
 - 🧪 **Test du 26/10 sur les 13 photos des commandes** : 10 sans texte (rien à facturer), 2 avec des textes NON payés : 0AYWFAHI (étiquette
   de vin « Herrick & Cook / Good French Red / Shiraz / 2023-2024 », 4 verres 47 cl : logo ou textes ? cas douteux) et 1Z17IKQ8 (Rose,
   « JL & R » + « Merci pour tous ces orgasmes. Continue comme ça ! » au fond du verre à whisky : 2 textes, 6 €). Pièges vus : numéros et
