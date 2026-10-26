@@ -481,6 +481,8 @@
 - ⛔ **« ENVOIE AVEC LE DEVIS » = LES DEUX ENSEMBLE, OU RIEN (19/10/2026, Kim Martins)** : le gérant a dit « envoie avec le devis et la
   nouvelle image » ; je ne pouvais pas créer le devis (clé admin refusée) et j'ai quand même envoyé le mail qui annonce « nous vous
   envoyons votre devis ». Si une partie de ce qu'il demande est impossible : NE RIEN ENVOYER, le dire en une phrase, attendre.
+  **Et « avec le devis » = DANS LE MÊME E-MAIL (26/10/2026, Doriane : maquette et devis partis en deux e-mails, « il fallait être dans le même
+  message »).** Jamais deux e-mails séparés pour ce qu'il demande d'envoyer ensemble ; si l'outil ne sait pas le faire en un seul : le dire AVANT, ne rien envoyer.
 
 - ⛔ **DANS UN MAIL CLIENT, AUCUNE PHRASE INVENTÉE OU BIZARRE (gérant, 24/10/2026, mail à Alexandre sur la plaque seule : « t'as vérifié sur
   Internet pour des phrases comme ça ? … fais plus d'erreurs comme ça »)** : j'avais écrit « Nous vous souhaitons une belle réparation de votre bracelet ».
