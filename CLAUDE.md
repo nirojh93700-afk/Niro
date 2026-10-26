@@ -4228,6 +4228,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   écrite dans votre image ? » Non / Oui → lecture de l'image en direct (2–8 s) → vérifié ✓, ou écart montré AVANT le paiement (« C'est bien une
   date » / « Ce n'est pas une date » = l'atelier vérifiera) ; alerte « image à vérifier » + encadré rouge à l'atelier seulement en cas de doute.
   Lot de 4 : sans date 9 €, avec date 18 €. Visuel d'exemple aux prénoms inventés. En attente de son avis.
+  ⛔ **v2 (gérant, 26/10) : L'AGENT NE BLOQUE JAMAIS LA COMMANDE.** Case à cocher « Mon image contient une date » ; la lecture démarre dès
+  l'envoi de l'image ; « Ajouter au panier » reste TOUJOURS actif (même pendant la lecture, même en cas d'écart). L'agent montre seulement
+  ce qu'elle a oublié (« Votre image contient une date : 12.06.2027. Vous avez peut-être oublié de cocher la case » + bouton « Cocher la
+  case ») ; si elle commande sans cocher, la commande passe et le gérant reçoit l'alerte « date dans l'image non cochée » (écart affiché,
+  message préparé, rien ne part sans lui) + encadré « À regarder avant de graver » à l'atelier.
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis

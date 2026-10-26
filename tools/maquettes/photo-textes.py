@@ -91,6 +91,9 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
 .tx{{margin-top:14px;border:1px solid #e6d9bf;border-radius:14px;background:#fffdf8;padding:14px}}
 .tx h4{{margin:0 0 4px;font:600 15px var(--font-body)}}
 .tx .tx-sub{{margin:0 0 10px;color:#6b5f4f;font-size:13px}}
+.tx-chk{{display:flex;gap:10px;align-items:flex-start;border:1.5px solid #e2d5bb;background:#fff;border-radius:12px;padding:11px 12px;cursor:pointer}}
+.tx-chk input{{width:18px;height:18px;margin:2px 0 0;accent-color:#a98935;flex:0 0 auto}}
+.tx-chk b{{display:block;font-size:14px}} .tx-chk small{{color:#6b5f4f;font-size:12px}}
 .tx-opts{{display:flex;flex-wrap:wrap;gap:8px}}
 .tx-opts button{{flex:1 1 160px;text-align:left;border:1.5px solid #e2d5bb;background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;font:inherit}}
 .tx-opts button b{{display:block;font-size:14px}}
@@ -128,12 +131,12 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
 .mq-q{{max-width:1180px;margin:26px auto 40px;padding:0 16px}}
 .mq-q div{{background:#fff;border:1px dashed #c9a24b;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.55}}
 </style>
-<div class="mq-band">MAQUETTE — rien n'est en ligne · <b>Fiche verre à vin : la cliente dit s'il y a une date dans son image, l'agent vérifie en direct</b></div>
+<div class="mq-band">MAQUETTE — rien n'est en ligne · <b>Fiche verre à vin : la cliente coche la date de son image, l'agent l'aide sans jamais bloquer la commande</b></div>
 
 <div class="mq-part">
   <span class="mq-tag">① Sur la fiche — ce que voit la cliente</span>
-  <h2>La cliente envoie son image, dit s'il y a une date, l'agent vérifie</h2>
-  <p class="mq-lead">Essayez : choisissez un exemple, puis répondez à la question. La lecture prend quelques secondes, pendant que la cliente est encore sur la fiche.</p>
+  <h2>La cliente envoie son image et coche la date, l'agent l'aide sans bloquer</h2>
+  <p class="mq-lead">Essayez : choisissez un exemple. La lecture commence dès que l'image est envoyée et prend quelques secondes. Le bouton « Ajouter au panier » reste toujours actif.</p>
   <div class="mq-try"><button type="button" data-ex="visuel" class="on">Exemple 1 : visuel avec titre, prénoms et une date</button><button type="button" data-ex="photo">Exemple 2 : photo sans texte</button></div>
 </div>
 <main class="container"><div class="product-layout">
@@ -148,33 +151,33 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
       <div class="tx" id="tx">
         <h4>Y a-t-il une date écrite dans votre image ?</h4>
         <p class="tx-sub">Votre image est comprise. Une date écrite dedans se compte comme un texte, au tarif de la fiche.</p>
-        <div class="tx-opts"><button type="button" data-r="non"><b>Non, pas de date</b><small>Image seule</small></button><button type="button" data-r="oui"><b>Oui, il y a une date</b><small>Comptée comme un texte</small></button></div>
+        <label class="tx-chk"><input type="checkbox" id="chk"> <span><b>Mon image contient une date</b><small>Comptée comme un texte : +9,00 € sur vos 4 verres</small></span></label>
         <div id="read"></div>
-        <p class="tx-note">Nous lisons votre image pour vérifier. Si quelque chose ne correspond pas, nous vous contactons avant toute gravure.</p>
+        <p class="tx-note">Nous lisons votre image pour vous aider à ne rien oublier. Si quelque chose ne correspond pas, nous vous contactons avant toute gravure.</p>
       </div>
     </div></section>
   <section class="prc-step"><div class="prc-sh"><span class="prc-num" id="n3">3</span><h3>Résumé de votre gravure</h3></div>
     <div class="prc-sum" id="sum"></div></section>
   </div>
   <div class="pd-totbox"><span class="lab">Total tout compris</span><span class="val" id="tot">63,90 €</span></div>
-  <div class="qty-row"><div class="qty-stepper"><button aria-label="Moins">−</button><span>1</span><button aria-label="Plus">+</button></div><button class="btn btn-gold prc-off" id="add" style="flex:1" disabled>Ajouter au panier</button></div>
-  <p class="prc-addhint" id="hint">Répondez à la question sur la date.</p>
+  <div class="qty-row"><div class="qty-stepper"><button aria-label="Moins">−</button><span>1</span><button aria-label="Plus">+</button></div><button class="btn btn-gold" id="add" style="flex:1">Ajouter au panier</button></div>
+  <p class="prc-addhint" id="hint" style="display:none"></p>
   </div>
 </div></main>
 
 <div class="mq-part">
   <span class="mq-tag">② Pour vous — seulement s'il y a un doute</span>
   <h2>L'alerte que vous recevez, et la fiche atelier</h2>
-  <p class="mq-lead">Quand l'agent et la cliente sont d'accord, vous ne recevez rien de plus que la commande habituelle. L'alerte n'arrive que si la cliente a dit « ce n'est pas une date » ou si l'image était illisible.</p>
+  <p class="mq-lead">La commande n'est jamais bloquée : la cliente peut toujours ajouter au panier et payer. Quand ce qu'elle a coché correspond à l'image, vous ne recevez rien de plus que la commande habituelle. Si elle a oublié de cocher la date (ou si l'image était illisible), la commande passe quand même et vous recevez cette alerte.</p>
   <div class="mq-grid">
-    <div class="mail"><div class="mh">De : <b>Niv Création (site)</b> · À : vous<br>Objet : <b>⚠️ Commande 1ABC23DE — image à vérifier avant de graver</b></div>
+    <div class="mail"><div class="mh">De : <b>Niv Création (site)</b> · À : vous<br>Objet : <b>⚠️ Commande 1ABC23DE — date dans l'image non cochée</b></div>
       <div class="mb">Verre à vin 36 cl · Lot de 4 · Camille D.
-        <div class="rouge"><b>La cliente a répondu :</b> « ce n'est pas une date ».<br><b>L'agent a lu dans l'image :</b> « 12.06.2027 » (sous les prénoms).<br>Payé : 9,00 € de gravure · avec la date ce serait 18,00 € (9,00 € d'écart).</div>
-        À vous de décider : graver tel quel, ou lui demander le complément (elle peut aussi être remboursée, rien n'est gravé).<br><span class="btnm">Ouvrir la commande</span> <span class="btnm" style="background:#fff;border:1px solid #d9c9a8">Message préparé pour la cliente</span>
+        <div class="rouge"><b>Coché par la cliente :</b> pas de date.<br><b>L'agent a lu dans l'image :</b> « 12.06.2027 » (sous les prénoms).<br>Payé : 9,00 € de gravure · avec la date ce serait 18,00 € (9,00 € d'écart).</div>
+        La commande est passée normalement. À vous de décider : graver tel quel, ou lui écrire pour le complément (le message est prêt, rien ne part sans vous).<br><span class="btnm">Ouvrir la commande</span> <span class="btnm" style="background:#fff;border:1px solid #d9c9a8">Message préparé pour la cliente</span>
       </div></div>
     <div class="atl"><h3>Fiche atelier — À graver</h3>
       <div class="vert" id="atl-ok">✓ Image vérifiée par l'agent : 1 date (12.06.2027), payée par la cliente.</div>
-      <div class="rge">⚠️ Exemple de doute : la cliente dit « pas de date », l'agent lit « 12.06.2027 ». <b>Ne pas graver avant d'avoir réglé l'écart.</b></div>
+      <div class="rge">⚠️ Exemple d'écart : date « 12.06.2027 » lue dans l'image, non cochée par la cliente (9,00 € non payés). <b>À regarder avant de graver.</b></div>
       <table><tr><td>Produit</td><td>Verre à vin 36 cl · Lot de 4 · identiques</td></tr>
         <tr><td>Gravure</td><td>Image de la cliente (téléchargeable)</td></tr>
         <tr><td>Lu dans l'image</td><td>Titre « Les témoins de la mariée », 4 symboles, 4 prénoms, date 12.06.2027</td></tr>
@@ -187,49 +190,34 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
 <script>
 (function(){{
   var VIS = {json.dumps(VISUEL)}, PHO = {json.dumps(PHOTO)};
-  var ex = "visuel", rep = "", lu = null, timer = null, ignore = false;
+  var ex = "visuel", lu = null, timer = null;
   var $ = function(id){{ return document.getElementById(id); }};
   function eur(n){{ return n.toFixed(2).replace(".", ",") + " €"; }}
-  function prix(date){{ return date ? 3 + 3 * 5 : 3 * 3; }}
   function render(){{
-    var read = $("read"), sum = $("sum"), add = $("add"), hint = $("hint");
-    document.querySelectorAll(".tx-opts button").forEach(function(b){{ b.classList.toggle("on", b.dataset.r === rep); }});
-    var compteDate = rep === "oui" || (lu === "date" && !ignore);
-    if (!rep) read.innerHTML = "";
-    else if (lu === null) read.innerHTML = '<div class="tx-read tx-wait"><span class="ic"><span class="spin"></span></span><span>Nous lisons votre image…</span></div>';
-    else if ((lu === "date") === (rep === "oui")) read.innerHTML = '<div class="tx-read tx-ok"><span class="ic">✓</span><span>' + (lu === "date" ? "Vérifié : nous voyons bien une date (12.06.2027)." : "Vérifié : nous ne voyons pas de date dans votre image.") + '</span></div>';
-    else if (lu === "date" && rep === "non") read.innerHTML = ignore
-      ? '<div class="tx-read tx-warn"><span class="ic">!</span><span>Noté : l\\'atelier vérifiera votre image avant de graver et vous contactera si besoin.</span></div>'
-      : '<div class="tx-read tx-warn"><span class="ic">!</span><span>Nous voyons une date dans votre image : <b>12.06.2027</b>. Elle est comptée comme un texte (+9,00 € sur vos 4 verres).<div class="acts"><button type="button" class="y" data-a="ok">C\\'est bien une date</button><button type="button" class="n" data-a="no">Ce n\\'est pas une date</button></div></span></div>';
-    else read.innerHTML = '<div class="tx-read tx-warn"><span class="ic">!</span><span>Nous ne voyons pas de date dans votre image. Si elle est bien là, laissez « Oui » : l\\'atelier vérifiera.</span></div>';
-    var g = prix(compteDate);
-    var ok = !!rep && lu !== null;
-    sum.innerHTML = '<div class="prc-sumrow"><span>Gravure</span><b>Votre image' + (compteDate ? " + une date" : "") + '</b></div>'
+    var coche = $("chk").checked, read = $("read");
+    if (lu === null) read.innerHTML = '<div class="tx-read tx-wait"><span class="ic"><span class="spin"></span></span><span>Nous lisons votre image… vous pouvez continuer.</span></div>';
+    else if (lu === "date" && coche) read.innerHTML = '<div class="tx-read tx-ok"><span class="ic">✓</span><span>Parfait : nous voyons bien une date dans votre image (12.06.2027).</span></div>';
+    else if (lu === "date") read.innerHTML = '<div class="tx-read tx-warn"><span class="ic">!</span><span>Votre image contient une date : <b>12.06.2027</b>. Vous avez peut-être oublié de cocher la case ci-dessus : une date est comptée comme un texte (+9,00 € sur vos 4 verres).<div class="acts"><button type="button" class="y" data-a="cocher">Cocher la case</button></div></span></div>';
+    else if (coche) read.innerHTML = '<div class="tx-read tx-warn"><span class="ic">!</span><span>Nous ne voyons pas de date dans votre image. Si elle n\\'en contient pas, vous pouvez décocher la case.</span></div>';
+    else read.innerHTML = '<div class="tx-read tx-ok"><span class="ic">✓</span><span>Rien à ajouter : nous ne voyons pas de date dans votre image.</span></div>';
+    var g = coche ? 3 + 3 * 5 : 3 * 3;
+    $("sum").innerHTML = '<div class="prc-sumrow"><span>Gravure</span><b>Votre image' + (coche ? " + une date" : "") + '</b></div>'
       + '<div class="prc-sumrow"><span>Verres<small>Lot de 4, 36 cl</small></span><b>63,90 €</b></div>'
-      + '<div class="prc-sumrow"><span>Gravure sur les 4 verres<small>' + (compteDate ? "verre 1 : +3 € · verres 2 à 4 : +5 € chacun" : "verre 1 : compris · verres 2 à 4 : +3 € chacun") + '</small></span><b>' + eur(g) + '</b></div>'
+      + '<div class="prc-sumrow"><span>Gravure sur les 4 verres<small>' + (coche ? "verre 1 : +3 € · verres 2 à 4 : +5 € chacun" : "verre 1 : compris · verres 2 à 4 : +3 € chacun") + '</small></span><b>' + eur(g) + '</b></div>'
       + '<div class="prc-sumrow prc-sumtot"><span>Total</span><b>' + eur(63.9 + g) + '</b></div>';
     $("tot").textContent = eur(63.9 + g);
-    $("n3").classList.toggle("done", ok);
-    add.disabled = !ok; add.classList.toggle("prc-off", !ok);
-    hint.textContent = !rep ? "Répondez à la question sur la date." : (lu === null ? "Lecture de votre image en cours…" : ""); hint.style.display = hint.textContent ? "" : "none";
+    $("n3").classList.add("done");
   }}
-  function lire(){{
-    lu = null; ignore = false; render(); clearTimeout(timer);
-    timer = setTimeout(function(){{ lu = ex === "visuel" ? "date" : "rien"; render(); }}, 2200);
-  }}
-  document.querySelectorAll(".tx-opts button").forEach(function(b){{ b.onclick = function(){{ rep = b.dataset.r; if (lu === null || true) lire(); }}; }});
-  $("read").addEventListener("click", function(e){{
-    var a = e.target.closest("[data-a]"); if (!a) return;
-    if (a.dataset.a === "ok") rep = "oui"; else ignore = true;
-    render();
-  }});
+  function lire(){{ lu = null; render(); clearTimeout(timer); timer = setTimeout(function(){{ lu = ex === "visuel" ? "date" : "rien"; render(); }}, 2200); }}
+  $("chk").addEventListener("change", render);
+  $("read").addEventListener("click", function(e){{ if (e.target.closest("[data-a=cocher]")) {{ $("chk").checked = true; render(); }} }});
+  $("add").addEventListener("click", function(){{ var h = $("hint"); h.style.display = ""; h.textContent = "Ajouté au panier ✓ (maquette : rien n'est commandé)."; }});
   document.querySelectorAll(".mq-try button").forEach(function(b){{ b.onclick = function(){{
     ex = b.dataset.ex; document.querySelectorAll(".mq-try button").forEach(function(x){{ x.classList.toggle("on", x === b); }});
     $("gv").innerHTML = ex === "visuel" ? VIS : PHO; $("gv").style.display = ex === "visuel" ? "" : "none";
-    $("thumb").innerHTML = ex === "visuel" ? VIS : PHO;
-    rep = ""; lu = null; ignore = false; clearTimeout(timer); render();
+    $("thumb").innerHTML = ex === "visuel" ? VIS : PHO; $("chk").checked = false; $("hint").style.display = "none"; lire();
   }}; }});
-  render();
+  lire();
 }})();
 </script>
 """
