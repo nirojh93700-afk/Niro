@@ -81,7 +81,7 @@ export function jourFr(n) {
   return dateDe(n).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 }
 
-// Deux lignes pour l'écran (gérant, 26/10 : « c'est là que tu dois afficher les deux dates ») :
+// Deux lignes pour l'écran, sur la carte de la file de production (gérant, 26/10 : « c'est là que tu dois afficher les deux dates ») :
 // « À expédier au plus tard : mer. 28 oct. (jours ouvrés) · lun. 26 oct. (jours calendaires) »
 // « Encore 1 j ouvré · écoulés : 4 j ouvrés · 6 j calendaires ».
 export function lignesDelai(d) {
