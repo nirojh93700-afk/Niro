@@ -4224,7 +4224,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - ✉️ **Doriane (26/10, 19 h 05)** : mail envoyé par le site (81,90 €, point relais conseillé). **Devis DEV-1527 (81,90 €, livraison 0 €) CRÉÉ MAIS
   NON ENVOYÉ** (gérant : « si elle demande, on renverra le devis ») : ne l'envoyer que sur sa demande à elle et son « envoie ».
 - 🧪 **Maquette « date dans l'image »** (rien en ligne) : https://claude.ai/artifact/XJAzEzKSjsoQYj1fGAFHev · générateur
-  `tools/maquettes/photo-textes.py <capture vin.html> <css> <verre vierge> <sortie>`. Fiche verre à vin : après la photo, « Y a-t-il une date
+  `tools/maquettes/photo-textes.py <capture vin.html> <css> public/produits/verre_vin_vierge.jpg <sortie>` (v3 : grande photo comme sur le site, entière dans son cadre, vignettes dessous). Fiche verre à vin : après la photo, « Y a-t-il une date
   écrite dans votre image ? » Non / Oui → lecture de l'image en direct (2–8 s) → vérifié ✓, ou écart montré AVANT le paiement (« C'est bien une
   date » / « Ce n'est pas une date » = l'atelier vérifiera) ; alerte « image à vérifier » + encadré rouge à l'atelier seulement en cas de doute.
   Lot de 4 : sans date 9 €, avec date 18 €. Visuel d'exemple aux prénoms inventés. En attente de son avis.

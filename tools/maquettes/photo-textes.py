@@ -20,7 +20,22 @@ main = re.sub(r"<script.*?</script>", "", main, flags=re.S)
 
 css = "\n".join(open(f, encoding="utf-8").read() for f in sorted(glob.glob(os.path.join(cssdir, "*.css"))))
 css = re.sub(r"url\((?!['\"]?data:)[^)]*\)", "none", css)  # aucune ressource externe (CSP)
-img = "data:image/jpeg;base64," + base64.b64encode(open(vierge, "rb").read()).decode()
+from PIL import Image as _I
+import io as _io
+def _uri(f, haut):
+    im = _I.open(f).convert("RGB"); im.thumbnail((haut * 4, haut))  # proportions d'origine, jamais déformée
+    b = _io.BytesIO(); im.save(b, "JPEG", quality=82); return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode(), im.size
+img, (VW, VH) = _uri(vierge, 900)
+# Zone de gravure de la fiche (products.js, engrave.box du verre à vin) ramenée au cadre carré « contain ».
+_r = VW / VH; _w = min(1, _r); _x0 = (1 - _w) / 2
+BOX = dict(top=.17, left=.36, width=.28, height=.24)
+gw = BOX["width"] * _w; gh = gw * 230 / 300
+gl = _x0 + BOX["left"] * _w; gt = BOX["top"] + (BOX["height"] - gh) / 2
+_PUB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "public")
+THUMBS = ["verre_vin_geniet.jpg", "verre_vin_ambiance.jpg", "verre_vin_exemple_dale.jpg", "verre_vin_grave.jpg", "verre_vin_vierge.jpg", "verre_vin_set.jpg"]
+thumbs = "".join(
+    f'<button class="{"active" if t == "verre_vin_vierge.jpg" else ""}" aria-label="Voir le visuel {i+1}"><img src="{_uri(os.path.join(_PUB, "produits", t), 160)[0]}" alt=""></button>'
+    for i, t in enumerate(THUMBS) if os.path.exists(os.path.join(_PUB, "produits", t)))
 
 # Haut de la fiche (fil d'Ariane, titre, taille, options) = celui du site, « Lot de 4 » choisi.
 a = main.find('<div class="product-info"'); b = main.find('<div class="prc"')
@@ -83,8 +98,7 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
 .mq-try{{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}}
 .mq-try button{{border:1px solid #d9c9a8;background:#fff;border-radius:999px;padding:7px 14px;font:500 13px var(--font-body);cursor:pointer}}
 .mq-try button.on{{background:#1a1206;color:#fff;border-color:#1a1206}}
-.gallery-main{{position:relative}}
-.gallery-main .gv{{position:absolute;left:31%;top:12%;width:38%;mix-blend-mode:multiply;opacity:.5}}
+.gallery-main .gv{{position:absolute;left:{gl*100:.2f}%;top:{gt*100:.2f}%;width:{gw*100:.2f}%;mix-blend-mode:multiply;opacity:.85;z-index:2}}
 .gallery-main .gv svg{{width:100%;height:auto;display:block}}
 .vx{{width:100%;height:auto;display:block}}
 /* nouveau bloc */
@@ -140,8 +154,9 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
   <div class="mq-try"><button type="button" data-ex="visuel" class="on">Exemple 1 : visuel avec titre, prénoms et une date</button><button type="button" data-ex="photo">Exemple 2 : photo sans texte</button></div>
 </div>
 <main class="container"><div class="product-layout">
-  <div><div class="gallery-main"><img src="{img}" alt="Verre à vin 36 cl" width="600" height="600" style="width:100%;height:auto;display:block;border-radius:18px"><div class="gv" id="gv">{VISUEL}</div></div>
-  <p style="font-size:12.5px;color:var(--ink-soft);margin:8px 0 0">Aperçu : votre image posée sur le verre (gravée en blanc givré).</p></div>
+  <div><div class="gallery-main gallery-contain"><img class="gallery-bg" src="{img}" alt="Verre à vin 36 cl"><div class="gv" id="gv">{VISUEL}</div><button type="button" class="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente">‹</button><button type="button" class="gallery-arrow gallery-arrow-next" aria-label="Photo suivante">›</button></div>
+  <p style="font-size:0.8rem;color:var(--ink-soft);font-style:italic;margin:10px 2px 0;line-height:1.4">Aperçu affiché en foncé pour la lisibilité. <strong>Le rendu réel sera dépoli (effet givré sur le verre)</strong>.</p>
+  <div class="gallery-thumbs">{thumbs}</div></div>
   {top}
   {step1}
   <section class="prc-step"><div class="prc-sh"><span class="prc-num done">2</span><h3>Ajoutez votre photo ou votre logo</h3></div>
