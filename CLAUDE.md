@@ -4210,6 +4210,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - `inbox.js` (`imagesJointes`) passe jusqu'à 3 images JPEG / PNG / GIF / WebP (< 3,6 Mo) de l'e-mail à `triageIncomingEmail({ …, images })` ;
   `runAgent` garde un contenu image + texte ; consigne « RÈGLES DE PRIX » dans l'agent e-mail ; le catalogue donné à l'agent écrit la taille
   dans chaque option (« 36 cl · Lot de 4 »), la règle de gravure (`resumeGravure`) et le seuil de livraison offerte.
+- ✅ **RÈGLE TRANCHÉE (gérant, 26/10/2026)** : dans une image de cliente, l'IMAGE est gratuite (photo, dessin, **LOGO**, symboles, cœurs,
+  décors) ; seuls les TEXTES (titre, chaque prénom, phrase) et les DATES se paient, au tarif de la fiche. Ne sont jamais des textes : le nom
+  écrit dans un logo, les textes de la scène d'une photo (maillot, panneau). Doriane : titre + 4 prénoms + date = 6 textes → 96,90 €.
+- 🧪 **Test du 26/10 sur les 13 photos des commandes** : 10 sans texte (rien à facturer), 2 avec des textes NON payés : 0AYWFAHI (étiquette
+  de vin « Herrick & Cook / Good French Red / Shiraz / 2023-2024 », 4 verres 47 cl : logo ou textes ? cas douteux) et 1Z17IKQ8 (Rose,
+  « JL & R » + « Merci pour tous ces orgasmes. Continue comme ça ! » au fond du verre à whisky : 2 textes, 6 €). Pièges vus : numéros et
+  marques de maillots (0VUPEDGJ), écriteaux dans le décor. Projet en attente de son avis : la cliente coche les textes et la date de son
+  image, l'agent la lit en direct, un écart s'affiche AVANT le paiement (rien sur le site tant qu'il n'a pas dit « applique »).
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
