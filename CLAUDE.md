@@ -4223,6 +4223,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   ⛔ Gérant (26/10) : les commandes passées (0AYWFAHI, 1Z17IKQ8) restent comptées comme une image : RIEN à réclamer aux clientes.
 - ✉️ **Doriane (26/10, 19 h 05)** : mail envoyé par le site (81,90 €, point relais conseillé). **Devis DEV-1527 (81,90 €, livraison 0 €) CRÉÉ MAIS
   NON ENVOYÉ** (gérant : « si elle demande, on renverra le devis ») : ne l'envoyer que sur sa demande à elle et son « envoie ».
+  · **26/10 soir** : elle a répondu avec un 2ᵉ visuel en PDF (écritures en italique, symboles au trait fin, polices INCLUSES dans le PDF : c'est
+    un vrai 2ᵉ visuel, pas un PDF abîmé) et demande une maquette avant de payer. **22 h 08 : mail « Votre maquette » parti par le site**
+    (maquette = ses DEUX visuels sur le verre 36 cl, image `/api/img/67jJPByXedNMVdPKQ4Cq`, générateur `scratchpad/dor2/maquette.py`) ; **22 h 09 :
+    devis DEV-1527 envoyé** (81,90 €, même prix pour les deux versions, livraison standard offerte, Express 14,90 € à sa charge). À sa réponse :
+    noter la version choisie (1 = image PNG, 2 = PDF) ; si elle paie sans le dire, la lui demander AVANT de graver.
 - 🧪 **Maquette « date dans l'image »** (rien en ligne) : https://claude.ai/artifact/XJAzEzKSjsoQYj1fGAFHev · générateur
   `tools/maquettes/photo-textes.py <capture vin.html> <css> public/produits/verre_vin_vierge.jpg <sortie>` (v3 : grande photo comme sur le site, entière dans son cadre, vignettes dessous). Fiche verre à vin : après la photo, « Y a-t-il une date
   écrite dans votre image ? » Non / Oui → lecture de l'image en direct (2–8 s) → vérifié ✓, ou écart montré AVANT le paiement (« C'est bien une
