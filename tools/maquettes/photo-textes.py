@@ -107,6 +107,7 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
 .tx .tx-sub{{margin:0 0 10px;color:#6b5f4f;font-size:13px}}
 .tx-chk{{display:flex;gap:10px;align-items:flex-start;border:1.5px solid #e2d5bb;background:#fff;border-radius:12px;padding:11px 12px;cursor:pointer}}
 .tx-chk input{{width:18px;height:18px;margin:2px 0 0;accent-color:#a98935;flex:0 0 auto}}
+.tx-chk.oubli{{border-color:#d9493a;box-shadow:0 0 0 3px rgba(217,73,58,.18)}}
 .tx-chk b{{display:block;font-size:14px}} .tx-chk small{{color:#6b5f4f;font-size:12px}}
 .tx-opts{{display:flex;flex-wrap:wrap;gap:8px}}
 .tx-opts button{{flex:1 1 160px;text-align:left;border:1.5px solid #e2d5bb;background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;font:inherit}}
@@ -119,6 +120,9 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
 .tx-ok{{background:#edf7ef;color:#1f5a2c;border:1px solid #cfe8d4}}
 .tx-warn{{background:#fff6e5;color:#6b4a07;border:1px solid #f0d9a6}}
 .tx-warn .acts{{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}}
+.tx-red{{background:#fdecea;color:#8a1c10;border:2px solid #d9493a;font-size:14px}}
+.tx-red .acts{{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}}
+.tx-red .acts button{{border:0;border-radius:999px;padding:8px 15px;font:700 13px var(--font-body);cursor:pointer;background:#b3261e;color:#fff}}
 .tx-warn .acts button{{border:0;border-radius:999px;padding:7px 13px;font:600 12.5px var(--font-body);cursor:pointer}}
 .tx-warn .acts .y{{background:#1a1206;color:#fff}} .tx-warn .acts .n{{background:#fff;border:1px solid #d9c9a8;color:#3a3024}}
 .tx-note{{margin:10px 0 0;font-size:12px;color:#6b5f4f}}
@@ -166,7 +170,7 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
       <div class="tx" id="tx">
         <h4>Y a-t-il une date écrite dans votre image ?</h4>
         <p class="tx-sub">Votre image est comprise. Une date écrite dedans se compte comme un texte, au tarif de la fiche.</p>
-        <label class="tx-chk"><input type="checkbox" id="chk"> <span><b>Mon image contient une date</b><small>Comptée comme un texte : +9,00 € sur vos 4 verres</small></span></label>
+        <label class="tx-chk" id="chkbox"><input type="checkbox" id="chk"> <span><b>Mon image contient une date</b><small>Comptée comme un texte : +9,00 € sur vos 4 verres</small></span></label>
         <div id="read"></div>
         <p class="tx-note">Nous lisons votre image pour vous aider à ne rien oublier. Si quelque chose ne correspond pas, nous vous contactons avant toute gravure.</p>
       </div>
@@ -212,9 +216,10 @@ body{{background:var(--cream,#fbf7ee);font-family:var(--font-body)}}
     var coche = $("chk").checked, read = $("read");
     if (lu === null) read.innerHTML = '<div class="tx-read tx-wait"><span class="ic"><span class="spin"></span></span><span>Nous lisons votre image… vous pouvez continuer.</span></div>';
     else if (lu === "date" && coche) read.innerHTML = '<div class="tx-read tx-ok"><span class="ic">✓</span><span>Parfait : nous voyons bien une date dans votre image (12.06.2027).</span></div>';
-    else if (lu === "date") read.innerHTML = '<div class="tx-read tx-warn"><span class="ic">!</span><span>Votre image contient une date : <b>12.06.2027</b>. Vous avez peut-être oublié de cocher la case ci-dessus : une date est comptée comme un texte (+9,00 € sur vos 4 verres).<div class="acts"><button type="button" class="y" data-a="cocher">Cocher la case</button></div></span></div>';
+    else if (lu === "date") read.innerHTML = '<div class="tx-read tx-red" role="alert"><span class="ic">⚠️</span><span><b>Vous avez oublié de cocher la date.</b> Votre image contient une date : <b>12.06.2027</b>. Cochez la case ci-dessus : une date est comptée comme un texte (+9,00 € sur vos 4 verres).<div class="acts"><button type="button" class="y" data-a="cocher">Cocher la case</button></div></span></div>';
     else if (coche) read.innerHTML = '<div class="tx-read tx-warn"><span class="ic">!</span><span>Nous ne voyons pas de date dans votre image. Si elle n\\'en contient pas, vous pouvez décocher la case.</span></div>';
     else read.innerHTML = '<div class="tx-read tx-ok"><span class="ic">✓</span><span>Rien à ajouter : nous ne voyons pas de date dans votre image.</span></div>';
+    $("chkbox").classList.toggle("oubli", lu === "date" && !coche);
     var g = coche ? 3 + 3 * 5 : 3 * 3;
     $("sum").innerHTML = '<div class="prc-sumrow"><span>Gravure</span><b>Votre image' + (coche ? " + une date" : "") + '</b></div>'
       + '<div class="prc-sumrow"><span>Verres<small>Lot de 4, 36 cl</small></span><b>63,90 €</b></div>'

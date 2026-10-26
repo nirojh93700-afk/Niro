@@ -4233,6 +4233,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   ce qu'elle a oublié (« Votre image contient une date : 12.06.2027. Vous avez peut-être oublié de cocher la case » + bouton « Cocher la
   case ») ; si elle commande sans cocher, la commande passe et le gérant reçoit l'alerte « date dans l'image non cochée » (écart affiché,
   message préparé, rien ne part sans lui) + encadré « À regarder avant de graver » à l'atelier.
+  v4 (26/10) : l'oubli s'affiche EN ROUGE, bien visible (« Vous avez oublié de cocher la date » + bouton rouge « Cocher la case », case
+  entourée de rouge). Prévu pour TOUS les verres à photo (vin 36 et 47 cl, flûte, whisky face/fond, cocktail, Fête des pères) + carafe.
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
