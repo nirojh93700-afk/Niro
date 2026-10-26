@@ -4221,6 +4221,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   marques de maillots (0VUPEDGJ), écriteaux dans le décor. Projet en attente de son avis : la cliente coche les textes et la date de son
   image, l'agent la lit en direct, un écart s'affiche AVANT le paiement (rien sur le site tant qu'il n'a pas dit « applique »).
   ⛔ Gérant (26/10) : les commandes passées (0AYWFAHI, 1Z17IKQ8) restent comptées comme une image : RIEN à réclamer aux clientes.
+- ✉️ **Doriane (26/10, 19 h 05)** : mail envoyé par le site (81,90 €, point relais conseillé). **Devis DEV-1527 (81,90 €, livraison 0 €) CRÉÉ MAIS
+  NON ENVOYÉ** (gérant : « si elle demande, on renverra le devis ») : ne l'envoyer que sur sa demande à elle et son « envoie ».
+- 🧪 **Maquette « date dans l'image »** (rien en ligne) : https://claude.ai/artifact/XJAzEzKSjsoQYj1fGAFHev · générateur
+  `tools/maquettes/photo-textes.py <capture vin.html> <css> <verre vierge> <sortie>`. Fiche verre à vin : après la photo, « Y a-t-il une date
+  écrite dans votre image ? » Non / Oui → lecture de l'image en direct (2–8 s) → vérifié ✓, ou écart montré AVANT le paiement (« C'est bien une
+  date » / « Ce n'est pas une date » = l'atelier vérifiera) ; alerte « image à vérifier » + encadré rouge à l'atelier seulement en cas de doute.
+  Lot de 4 : sans date 9 €, avec date 18 €. Visuel d'exemple aux prénoms inventés. En attente de son avis.
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
