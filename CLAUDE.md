@@ -4201,6 +4201,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   N j ouvrés / dernier jour / dépassé de N j ouvrés) · écoulés : N j ouvrés · N j calendaires » (vert / orange / rouge) ; une commande partie
   affiche « Expédiée en N j ouvrés · N j calendaires · dans les temps / après la date limite ».
 
+## 🖼️ L'AGENT E-MAIL REGARDE LES IMAGES JOINTES AVANT DE DONNER UN PRIX — 26/10/2026 (préparé, en attente de son « pousse »)
+> Gérant, demande de Doriane Ehret (4 verres à vin 36 cl, maquette jointe) : « tu prends tout ça comme une image, c'est pas qu'une image…
+> il faut que tu le paramètres pour qu'il analyse l'image avant de donner des prix n'importe comment ». L'agent avait répondu 21,90 € HT
+> (prix du 47 cl), livraison dès 45 € (c'est 60 €) et « écrivez-nous » à une cliente qui venait d'écrire.
+- ⛔ **UN VISUEL DE CLIENTE = SES ÉLÉMENTS, PAS « UNE IMAGE »** : chaque texte (titre, CHAQUE prénom, chaque date) et chaque symbole en plus du
+  premier se comptent ; légendes / mentions ajoutées dans son montage (ex. « Niv Création · Verre à vin 36 cl ») et filets décoratifs non.
+- `inbox.js` (`imagesJointes`) passe jusqu'à 3 images JPEG / PNG / GIF / WebP (< 3,6 Mo) de l'e-mail à `triageIncomingEmail({ …, images })` ;
+  `runAgent` garde un contenu image + texte ; consigne « RÈGLES DE PRIX » dans l'agent e-mail ; le catalogue donné à l'agent écrit la taille
+  dans chaque option (« 36 cl · Lot de 4 »), la règle de gravure (`resumeGravure`) et le seuil de livraison offerte.
+
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
   l'e-mail / lien demandé, jamais ouvert / jamais connectée), filtres « Connectées » / « Jamais connectées », KPI « Se sont connectées ».

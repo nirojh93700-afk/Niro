@@ -22,6 +22,23 @@ import { getSiteOrders } from "@/lib/firebase";
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 
 // --- Contexte commun (injecté à la demande dans la consigne) -----------------
+// Règle de prix de la gravure d'une fiche, en une ligne lisible par l'agent (26/10/2026 :
+// il donnait des prix sans savoir ce que coûte chaque texte).
+function resumeGravure(p) {
+  if (p.regleVerres) {
+    return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : image + texte +5 €, image seule ou texte seul +3 € ; face + fond +7 € par verre";
+  }
+  const g = p.engravingPricing;
+  if (!g) return "";
+  const out = [];
+  if (g.textExtra && (g.textKeys || []).length) out.push(`chaque texte +${g.textExtra} €`);
+  if (g.photoSurcharge) out.push(`photo gravée +${g.photoSurcharge} €`);
+  if (g.perExtraPage) out.push(`chaque page en plus +${g.perExtraPage} €`);
+  if (g.modeleSubExtra) out.push(`motif suivant +${g.modeleSubExtra} €`);
+  for (const f of g.flatExtras || []) if (f.amount) out.push(`${f.key}${f.value ? ` (${f.value})` : ""} +${f.amount} €`);
+  return out.join(", ");
+}
+
 async function catalogContext() {
   try {
     const products = await getCatalogAdmin();
@@ -36,13 +53,18 @@ async function catalogContext() {
     } catch { /* la fiche détaillée n'est pas indispensable */ }
     return products
       .map((p) => {
-        const vs = (p.variants || []).map((v) => `${v.title}=${v.price}€`).join(", ");
+        // La taille va DANS le nom de l'option (« 36 cl · Lot de 4 ») : sans elle, l'agent a pris le
+        // prix du 47 cl pour un 36 cl (Doriane, 26/10/2026).
+        const vs = (p.variants || []).map((v) => `${v.taille ? `${v.taille} cl · ` : ""}${v.title}=${v.price}€`).join(", ");
         const mat = (infoFor(p.slug)?.material || "").split("\n")[0].trim().slice(0, 160);
         const perso = (p.personalizationLabel || "").trim().slice(0, 90);
+        const grav = resumeGravure(p);
         return (
           `- ${p.name} (${p.category})${p.hidden ? " [masqué]" : ""} : ${vs}` +
           (mat ? `\n    · ${mat}` : "") +
-          (perso ? `\n    · personnalisation : ${perso}` : "")
+          (perso ? `\n    · personnalisation : ${perso}` : "") +
+          (grav ? `\n    · gravure : ${grav}` : "") +
+          (p.freeShipThreshold ? `\n    · livraison offerte dès ${p.freeShipThreshold} € d'achat` : p.freeShipping ? "\n    · livraison offerte" : "")
         );
       })
       .join("\n");
@@ -160,6 +182,14 @@ RÈGLES DE SERVICE (absolues, quoi que demande la cliente) :
 - Ne garantis JAMAIS une gravure hors de nos 8 écritures (alphabet arabe, chinois, cyrillique, symboles particuliers), un motif hors catalogue, une matière ou une taille que le site ne propose pas : dis que c'est peut-être possible sur demande et que l'atelier vérifie la faisabilité avant de confirmer. Idem pour un délai express : ne le promets pas.
 - ⛔ N'écris JAMAIS de numéro de téléphone, ni le nôtre (nous n'en communiquons pas) ni celui de la cliente. Et ne reprends JAMAIS les coordonnées que la cliente a mises dans son message (téléphone, adresse, e-mail) comme si c'étaient les NÔTRES : incident du 16/09/2026, une réponse invitait la cliente à « nous joindre » sur son propre numéro. Le seul contact à donner est : contact.nivcreation@gmail.com et nivcreation.fr.
 - ⛔ Ne dis pas « nous allons vérifier » pour une information qui est DÉJÀ dans le catalogue ci-dessous (contenance, dimensions, matière, prix, options de personnalisation) : donne le chiffre exact. Si ce que la cliente demande ne correspond pas à ce que nous avons (elle veut 45 cl et notre verre fait 36 cl), DIS-LE clairement et honnêtement, avec notre chiffre réel — ne noie pas la réponse dans « nous étudions votre demande ».
+
+RÈGLES DE PRIX (gérant, 26/10/2026, après une réponse fausse à Doriane : « il doit analyser l'image avant de donner des prix ») :
+- Si la cliente joint une image (maquette, visuel, photo) : REGARDE-LA AVANT de parler de prix. Liste CHAQUE élément à graver : chaque texte (titre, CHAQUE prénom, chaque date, chaque phrase) et chaque dessin ou symbole. Un visuel avec des textes n'est JAMAIS « une image comprise » : les textes qu'il contient se paient comme s'ils étaient tapés sur la fiche (chaque prénom = un texte), et les dessins / symboles en plus du premier se comptent aussi.
+- Ce qui n'est pas à graver ne se compte pas : fond de la photo, légende, filets décoratifs, et les mentions que la cliente a ajoutées dans son montage (par exemple « Niv Création · Verre à vin 36 cl »).
+- Prends le prix sur la BONNE ligne du catalogue (taille ET format : « 36 cl · Lot de 4 »), jamais celui d'une autre taille. Les prix sont TTC : n'écris jamais « HT ». La livraison suit le seuil écrit sur la fiche.
+- Écris le calcul ligne par ligne : produit · gravure élément par élément · livraison · total.
+- Un élément que la règle de la fiche ne chiffre pas clairement (ex. plusieurs symboles sur un verre) : n'invente pas de prix au hasard, mets needs_validation = true et écris dans « reason » ce que la gérante doit confirmer.
+- Ne demande jamais à la cliente de nous écrire ou de nous envoyer sa maquette si elle vient de le faire.
 
 INFORMATIONS DE SERVICE À JOUR (délai réel du site, livraison, FAQ) :
 ${ctx.service || "(non chargées : reste général)"}
@@ -408,9 +438,10 @@ export async function runAgent(agentId, history) {
     .slice(-12)
     .map((m) => ({
       role: m.role === "assistant" ? "assistant" : "user",
-      content: String(m.content || ""),
+      // Un contenu en liste (images + texte, e-mail avec pièce jointe) passe tel quel.
+      content: Array.isArray(m.content) ? m.content : String(m.content || ""),
     }))
-    .filter((m) => m.content.trim());
+    .filter((m) => (Array.isArray(m.content) ? m.content.length : m.content.trim()));
   if (!messages.length) return { error: "Message manquant." };
 
   const client = new Anthropic();
@@ -466,9 +497,11 @@ export async function runAgent(agentId, history) {
 // (cas spécial). Renvoie { ok, reply, subject, needsValidation, reason }.
 // Ne lève jamais : en cas d'échec, renvoie { ok:false } et l'appelant continue.
 // =============================================================================
-export async function triageIncomingEmail({ name, email, subject, message, context = "", origin = "" }) {
+export async function triageIncomingEmail({ name, email, subject, message, context = "", origin = "", images = [] }) {
   if (!process.env.ANTHROPIC_API_KEY) return { ok: false, reason: "Clé Claude absente." };
   const origine = origin || (context ? "boîte mail de la boutique" : "formulaire de contact");
+  // Images lisibles par Claude seulement (JPEG, PNG, GIF, WebP), 3 au plus.
+  const imgs = (images || []).filter((im) => im?.data && /^image\/(jpeg|png|gif|webp)$/i.test(im.mimeType || "")).slice(0, 3);
   const prompt = `E-mail reçu d'une cliente (${origine}).
 Nom : ${name || "(non précisé)"}
 Adresse : ${email || "(non précisée)"}
@@ -483,8 +516,11 @@ ${context}
 ` : ""}
 Le message peut contenir la CITATION de nos e-mails précédents (lignes commençant par « > », « ---- Message d'origine ----», « Le … a écrit : »). La vraie demande de la cliente est le texte qui n'est PAS cité : repère-le, même s'il est au milieu ou à la fin, et réponds à celui-là.
 RÈGLE ABSOLUE (15/09/2026, demande du gérant) : relis TOUT l'historique du contexte AVANT d'écrire. Ne repose JAMAIS une question déjà posée dans un de nos messages précédents ; ce que la cliente a déjà répondu est ACQUIS — appuie-toi dessus au lieu de redemander. Si sa réponse clôt le sujet, propose une confirmation courte de ce qui est acquis, sans re-questionner ; et si aucune réponse n'est vraiment utile, dis-le dans le champ « reason ».
-Rédige la réponse et décide si tu peux répondre seul ou s'il faut la validation de la gérante.`;
-  const res = await runAgent("email", [{ role: "user", content: prompt }]);
+${imgs.length ? `\nLa cliente a joint ${imgs.length} image(s), ci-dessus : regarde-les et applique les RÈGLES DE PRIX (liste chaque élément à graver avant tout prix).\n` : ""}Rédige la réponse et décide si tu peux répondre seul ou s'il faut la validation de la gérante.`;
+  const content = imgs.length
+    ? [...imgs.map((im) => ({ type: "image", source: { type: "base64", media_type: im.mimeType, data: im.data } })), { type: "text", text: prompt }]
+    : prompt;
+  const res = await runAgent("email", [{ role: "user", content }]);
   const a = res?.action;
   if (!a || a.kind !== "email_draft") {
     // L'agent n'a pas produit de réponse exploitable -> on remonte à la gérante.

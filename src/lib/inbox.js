@@ -1,6 +1,6 @@
 import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply, classerEtListerPending, getInboxBlock } from "@/lib/stock";
 import { aEcarter } from "@/lib/inboxFilter";
-import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, looksLikeRealCustomer } from "@/lib/gmail";
+import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, gmailGetAttachment, looksLikeRealCustomer } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
@@ -203,7 +203,8 @@ export async function syncInbox({ force = false } = {}) {
         let draft = null;
         try {
           const context = await buildContext(order, from);
-          draft = await triageIncomingEmail({ name: msg.fromName || from, email: from, subject: msg.subject || "", message: body, context });
+          const images = await imagesJointes(token, msg);
+          draft = await triageIncomingEmail({ name: msg.fromName || from, email: from, subject: msg.subject || "", message: body, context, images });
         } catch { draft = null; }
         try {
           const item = await addPendingReply({
@@ -296,4 +297,23 @@ export async function nettoyerMessagesATraiter() {
       return "";
     });
   } catch { return null; }
+}
+
+// Images jointes à l'e-mail (maquette, photo à graver) pour que l'agent les REGARDE avant de
+// chiffrer (26/10/2026, demande de Doriane : 10 éléments gravés comptés comme « une image »).
+// Formats lisibles par Claude seulement, 3 au plus, moins de 3,6 Mo chacune (limite de 5 Mo
+// une fois encodée). Jamais bloquant : sans image, l'agent répond comme avant.
+async function imagesJointes(token, msg) {
+  const out = [];
+  for (const a of msg?.attachments || []) {
+    if (out.length >= 3) break;
+    const mime = String(a.mimeType || "").toLowerCase().replace("image/jpg", "image/jpeg");
+    if (!/^image\/(jpeg|png|gif|webp)$/.test(mime)) continue;
+    if (Number(a.size) > 3.6 * 1024 * 1024) continue;
+    try {
+      const buf = await gmailGetAttachment(token, msg.id, a.attachmentId);
+      if (buf?.length) out.push({ mimeType: mime, data: buf.toString("base64") });
+    } catch { /* pièce jointe illisible : on continue sans */ }
+  }
+  return out;
 }
