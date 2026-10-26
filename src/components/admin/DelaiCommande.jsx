@@ -1,6 +1,6 @@
 "use client";
 // Date limite d'expédition d'une commande, en jours ouvrés ET calendaires (26/10/2026). Voir src/lib/delaiCommande.js.
-import { delaiCommande, texteDelai } from "@/lib/delaiCommande";
+import { delaiCommande, lignesDelai } from "@/lib/delaiCommande";
 
 const COULEUR = {
   ok: { bg: "#eef7ee", c: "#2e6b34", b: "#cfe6d0" },
@@ -19,7 +19,9 @@ export default function DelaiCommande({ order, style }) {
       title="Délai promis sur le site : 5 jours ouvrés de fabrication (du lundi au vendredi, sans les jours fériés), à partir du lendemain de la commande."
       style={{ background: c.bg, color: c.c, border: `1px solid ${c.b}`, borderRadius: 8, padding: "5px 9px", fontSize: "0.8rem", lineHeight: 1.4, overflowWrap: "anywhere", ...style }}
     >
-      ⏱ {texteDelai(d)}
+      {lignesDelai(d).map((l, i) => (
+        <div key={i} style={i === 0 ? { fontWeight: 600 } : undefined}>{i === 0 ? "⏱ " : ""}{l}</div>
+      ))}
     </div>
   );
 }

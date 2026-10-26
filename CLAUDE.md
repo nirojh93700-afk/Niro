@@ -4196,6 +4196,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - La date affichée sur une commande = le jour du paiement ; Gestion ne calculait AUCUNE date limite. Maintenant `src/lib/delaiCommande.js`
   (pur, `npm run test-delai`, 13 vérifs) : promesse du site = 5 jours ouvrés de fabrication (lun.–ven., sans les jours fériés français,
   Pâques calculé), à partir du lendemain de la commande (+1 jour sans « fabrication immédiate », les 24 h pour modifier).
+- **Les DEUX dates sur la carte** (gérant, 26/10 : « c'est là que tu dois afficher les deux dates, pousse ») : ligne 1 « À expédier au plus tard : mer. 28 oct. (jours ouvrés) · lun. 26 oct. (jours calendaires) » (`limiteCal` = départ + 5 jours calendaires), ligne 2 « Encore N j ouvrés · écoulés : … ». La couleur suit les jours ouvrés (ce que le site promet).
 - `DelaiCommande.jsx` sur chaque carte de la file de production et en tête de chaque fiche complète : « À expédier au plus tard le … (encore
   N j ouvrés / dernier jour / dépassé de N j ouvrés) · écoulés : N j ouvrés · N j calendaires » (vert / orange / rouge) ; une commande partie
   affiche « Expédiée en N j ouvrés · N j calendaires · dans les temps / après la date limite ».

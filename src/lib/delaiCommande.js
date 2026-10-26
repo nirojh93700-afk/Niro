@@ -53,7 +53,7 @@ export function ajouterOuvres(de, nb) {
 
 const STATUTS_FINIS = new Set(["expediee", "livree", "remise_main_propre"]);
 
-// { commande, depart, limite, ouvresEcoules, calendairesEcoules, ouvresRestants, etat, expedieEn? }
+// { commande, depart, limite (jours ouvrés), limiteCal (jours calendaires), ouvresEcoules, calendairesEcoules, ouvresRestants, etat, expedieEn? }
 // etat : "ok" (2 jours ouvrés ou plus devant soi) · "bientot" (0 ou 1) · "depasse" · "parti" (déjà expédiée).
 export function delaiCommande(order, maintenant = Date.now()) {
   const t = Date.parse(order?.createdAt || "");
@@ -61,6 +61,8 @@ export function delaiCommande(order, maintenant = Date.now()) {
   const commande = numJour(t);
   const depart = order?.immediateStart === false ? commande + 1 : commande;
   const limite = ajouterOuvres(depart, DELAI_OUVRES);
+  // Même délai compté en jours calendaires (week-ends et fériés compris), affiché à côté pour comparer.
+  const limiteCal = depart + DELAI_OUVRES;
   const fin = STATUTS_FINIS.has(order?.status) && Date.parse(order?.shippedAt || order?.remisAt || order?.deliveredAt || "")
     ? numJour(Date.parse(order.shippedAt || order.remisAt || order.deliveredAt))
     : null;
@@ -68,25 +70,34 @@ export function delaiCommande(order, maintenant = Date.now()) {
   const ouvresEcoules = ouvresEntre(commande, jour);
   const calendairesEcoules = Math.max(0, jour - commande);
   if (fin != null) {
-    return { commande, depart, limite, ouvresEcoules, calendairesEcoules, ouvresRestants: 0, etat: "parti", aTemps: fin <= limite };
+    return { commande, depart, limite, limiteCal, ouvresEcoules, calendairesEcoules, ouvresRestants: 0, etat: "parti", aTemps: fin <= limite };
   }
   const ouvresRestants = jour > limite ? -ouvresEntre(limite, jour) : ouvresEntre(jour, limite);
   const etat = jour > limite ? "depasse" : ouvresRestants <= 1 ? "bientot" : "ok";
-  return { commande, depart, limite, ouvresEcoules, calendairesEcoules, ouvresRestants, etat };
+  return { commande, depart, limite, limiteCal, ouvresEcoules, calendairesEcoules, ouvresRestants, etat };
 }
 
 export function jourFr(n) {
   return dateDe(n).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 }
 
-// Phrase courte pour l'écran : « À expédier au plus tard le mer. 28 oct. (encore 1 j ouvré) · écoulés : 4 j ouvrés · 5 j calendaires ».
-export function texteDelai(d) {
-  if (!d) return "";
+// Deux lignes pour l'écran (gérant, 26/10 : « c'est là que tu dois afficher les deux dates ») :
+// « À expédier au plus tard : mer. 28 oct. (jours ouvrés) · lun. 26 oct. (jours calendaires) »
+// « Encore 1 j ouvré · écoulés : 4 j ouvrés · 6 j calendaires ».
+export function lignesDelai(d) {
+  if (!d) return [];
   const pl = (n, mot) => `${n} j ${mot}${n > 1 ? "s" : ""}`;
   const ecoule = `${pl(d.ouvresEcoules, "ouvré")} · ${pl(d.calendairesEcoules, "calendaire")}`;
-  if (d.etat === "parti") return `Expédiée en ${ecoule}${d.aTemps ? " · dans les temps" : " · après la date limite"}`;
+  const dates = `${jourFr(d.limite)} (jours ouvrés) · ${jourFr(d.limiteCal)} (jours calendaires)`;
+  if (d.etat === "parti") {
+    return [`Expédiée en ${ecoule}${d.aTemps ? " · dans les temps" : " · après la date limite"}`, `Date limite : ${dates}`];
+  }
   const reste = d.etat === "depasse"
-    ? `dépassé de ${pl(-d.ouvresRestants, "ouvré")}`
-    : d.ouvresRestants === 0 ? "dernier jour" : `encore ${pl(d.ouvresRestants, "ouvré")}`;
-  return `À expédier au plus tard le ${jourFr(d.limite)} (${reste}) · écoulés : ${ecoule}`;
+    ? `Dépassé de ${pl(-d.ouvresRestants, "ouvré")}`
+    : d.ouvresRestants === 0 ? "Dernier jour" : `Encore ${pl(d.ouvresRestants, "ouvré")}`;
+  return [`À expédier au plus tard : ${dates}`, `${reste} · écoulés : ${ecoule}`];
+}
+
+export function texteDelai(d) {
+  return lignesDelai(d).join(" · ");
 }

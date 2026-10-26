@@ -25,8 +25,9 @@ v(m.etat === "depasse" && m.ouvresRestants === -6, "12/10 : dépassé de 6 j ouv
 // Expédiée : figée au jour de l'expédition.
 const e = delaiCommande({ createdAt: "2026-10-19T09:15:00Z", immediateStart: true, status: "expediee", shippedAt: "2026-10-22T14:28:00Z" }, demain);
 v(e.etat === "parti" && e.ouvresEcoules === 3 && e.calendairesEcoules === 3 && e.aTemps, "expédiée en 3 j ouvrés, dans les temps");
-v(/au plus tard le mer\. 28 oct\./.test(texteDelai(p)) && /4 j ouvrés · 6 j calendaires/.test(texteDelai(p)), "phrase : " + texteDelai(p));
-v(/^Expédiée en 3 j ouvrés · 3 j calendaires · dans les temps$/.test(texteDelai(e)), "phrase expédiée : " + texteDelai(e));
+v(p.limiteCal === J("2026-10-26T12:00:00+01:00"), "limite calendaire Pierre = lun. 26/10");
+v(/au plus tard : mer\. 28 oct\. \(jours ouvrés\) · lun\. 26 oct\. \(jours calendaires\)/.test(texteDelai(p)) && /4 j ouvrés · 6 j calendaires/.test(texteDelai(p)), "phrase : " + texteDelai(p));
+v(/^Expédiée en 3 j ouvrés · 3 j calendaires · dans les temps · Date limite : /.test(texteDelai(e)), "phrase expédiée : " + texteDelai(e));
 // Vendredi soir → limite le vendredi suivant (week-end sauté) ; veille du 11 novembre.
 v(ajouterOuvres(J("2026-11-06T20:00:00+01:00"), 5) === J("2026-11-16T12:00:00+01:00"), "ven. 6/11 + 5 j ouvrés = lun. 16/11 (11/11 férié)");
 v(delaiCommande({}) === null, "sans date → rien");
