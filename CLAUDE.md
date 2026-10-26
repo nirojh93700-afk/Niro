@@ -483,6 +483,9 @@
   envoyons votre devis ». Si une partie de ce qu'il demande est impossible : NE RIEN ENVOYER, le dire en une phrase, attendre.
   **Et « avec le devis » = DANS LE MÊME E-MAIL (26/10/2026, Doriane : maquette et devis partis en deux e-mails, « il fallait être dans le même
   message »).** Jamais deux e-mails séparés pour ce qu'il demande d'envoyer ensemble ; si l'outil ne sait pas le faire en un seul : le dire AVANT, ne rien envoyer.
+  ⛔ **Rappel très ferme du gérant (26/10/2026, même soir) : « quand je t'ai dit, on voit tout en même temps, t'envoies tout en même temps,
+  tu recommences plus ».** Ce qu'il demande d'envoyer ENSEMBLE part dans UN SEUL e-mail, au même moment, après qu'il a vu le tout. Aucun renvoi
+  pour « réparer » sans son ordre (le soir même : « t'envoies plus rien », la maquette et le devis étant déjà partis séparément).
 
 - ⛔ **DANS UN MAIL CLIENT, AUCUNE PHRASE INVENTÉE OU BIZARRE (gérant, 24/10/2026, mail à Alexandre sur la plaque seule : « t'as vérifié sur
   Internet pour des phrases comme ça ? … fais plus d'erreurs comme ça »)** : j'avais écrit « Nous vous souhaitons une belle réparation de votre bracelet ».
