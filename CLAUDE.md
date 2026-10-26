@@ -4218,6 +4218,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « JL & R » + « Merci pour tous ces orgasmes. Continue comme ça ! » au fond du verre à whisky : 2 textes, 6 €). Pièges vus : numéros et
   marques de maillots (0VUPEDGJ), écriteaux dans le décor. Projet en attente de son avis : la cliente coche les textes et la date de son
   image, l'agent la lit en direct, un écart s'affiche AVANT le paiement (rien sur le site tant qu'il n'a pas dit « applique »).
+  ⛔ Gérant (26/10) : les commandes passées (0AYWFAHI, 1Z17IKQ8) restent comptées comme une image : RIEN à réclamer aux clientes.
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
