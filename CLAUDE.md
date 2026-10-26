@@ -4244,6 +4244,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (20 lectures / 10 min par IP). Webhook Stripe : relit chaque photo (12 s max, cache), encadré rouge « ⚠️ Date dans l'image » en tête du
   🛎️ + « ⚠️ » dans l'objet, `order.alerteImage` affiché dans la fiche commande, la file de production, la fiche atelier, la page Atelier et la
   fiche papier. `npm run test-date-image` (18 vérifs). ⚠️ Une photo envoyée par Cloudinary (si un jour configuré) n'est pas lue (non vérifiée).
+  ✅ **EN LIGNE le 26/10 (commit 7967231e, déploiement réussi)**. Vérifié en ligne sur de vraies photos de commandes : étiquette de vin
+  0AYWFAHI → « 2023/2024 » trouvée ; maillots 10 et 8 (0VUPEDGJ) → pas de date ; logo « JL & R » (1Z17IKQ8) → pas de date ; photo de couple → pas de date.
+  Navigateur local 390/1280 sur les 6 fiches : bouton jamais grisé, rouge si oubli, « Cocher la case » met à jour le total (vin lot de 4 : 72,90 → 81,90 €).
 
 ## 🔑 « CONNECTÉE ? » DANS LE SUIVI DES CODES — ✅ EN LIGNE LE 18/10/2026 (maquette https://claude.ai/artifact/5TjnF1rVa3FDaMuBBrUvNU, « applique »)
 - Gestion → Marketing → Offre gravure offerte → « Suivi des codes » : colonne « Connectée ? » (🔑 connectée le … · N fois depuis
