@@ -47,3 +47,25 @@
 /* « .mx button{background:none} » effaçait le fond blanc du cœur : invisible sur les photos sombres. */
 .mx .fav-pastille{background:rgba(255,255,255,.92);color:#b6b0a6;box-shadow:0 1px 5px rgba(0,0,0,.12)}
 .mx .fav-pastille-on,.mx .fav-pastille:hover{color:#d4506a}
+
+/* MARQUE-PAGES sur l'accueil (maquette validée le 27/10/2026, tools/maquettes/accueil-marque-pages.py) */
+.mx .mpb{position:relative;margin:28px clamp(16px,4.5vw,72px);border-radius:24px;background:radial-gradient(120% 120% at 15% 0%,#2b2214 0%,#1a1206 60%);color:#f3e8d3;overflow:hidden}
+.mx .mpb-in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center;padding:clamp(28px,5vw,64px);max-width:1180px;margin:0 auto}
+.mx .mpb-pics{position:relative;height:clamp(300px,34vw,440px)}
+.mx .mpb-pic{position:absolute;display:block;border-radius:16px;overflow:hidden;background:#f6efe1;box-shadow:0 18px 40px rgba(0,0,0,.45);border:1px solid rgba(226,198,126,.55)}
+.mx .mpb-pic img{display:block;width:100%;height:100%;object-fit:cover}
+.mx .mpb-pic.p1{left:0;top:4%;width:38%;height:80%;transform:rotate(-5deg);z-index:2}
+.mx .mpb-pic.p2{left:22%;top:0;width:38%;height:84%;transform:rotate(-1deg);z-index:3}
+.mx .mpb-pic.p3{left:42%;top:8%;width:34%;height:74%;transform:rotate(4deg);z-index:1}
+.mx .mpb-pic.p4{right:0;bottom:0;width:44%;height:60%;transform:rotate(6deg);z-index:4}
+.mx .mpb-pill{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.74rem;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:#e2c67e;border:1px solid rgba(226,198,126,.5);border-radius:999px;padding:7px 12px}
+.mx .mpb-pill i{width:7px;height:7px;border-radius:50%;background:#e2c67e;box-shadow:0 0 0 4px rgba(226,198,126,.18)}
+.mx .mpb h2{font-family:var(--font-display),"Playfair Display",serif;font-weight:600;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.12;margin:16px 0 12px;color:#fbf7ee;text-wrap:balance}
+.mx .mpb h2 em{color:#e2c67e}
+.mx .mpb-copy>p{margin:0 0 14px;color:#d9ccb0;line-height:1.6;max-width:52ch}
+.mx .mpb-pts{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px}
+.mx .mpb-pts li{position:relative;padding-left:22px;color:#efe4cc;font-size:.94rem}
+.mx .mpb-pts li::before{content:"✦";position:absolute;left:0;color:#c9a24b}
+.mx .mpb-copy .mpb-price{display:flex;align-items:baseline;gap:8px;margin:0 0 18px}.mx .mpb-price span{font-size:.85rem;color:#bfae86}.mx .mpb-price b{font-size:1.5rem;color:#e2c67e}
+@media (max-width:820px){.mx .mpb-in{grid-template-columns:1fr}.mx .mpb-pics{height:300px;max-width:420px;width:100%;margin:0 auto}}
+@media (max-width:480px){.mx .mpb{margin:22px 16px;border-radius:20px}.mx .mpb-in{padding:26px 18px 28px}.mx .mpb-pics{height:250px}}
