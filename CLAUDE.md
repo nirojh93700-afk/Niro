@@ -14,6 +14,10 @@
   « Vendu en plus » = la boîte. Stock des boîtes `mp-boite-1/2/4` dans Produits & stock (Options & accessoires), retirées de Matériel.
   Coûts dans `VARIANT_COSTS`. `npm run test-marque-pages` (21 vérifs).
 - Vidéo 31 (annonce) : `docs/videos/REGISTRE-VIDEOS.md`.
+- **Maquette « bloc Marque-pages sur l'accueil » (27/10, « fais-moi une maquette pour donner envie »)** : https://claude.ai/artifact/HM4fssV7juQZZEsooPFM3w ·
+  générateur `tools/maquettes/accueil-marque-pages.py <capture accueil>` : bande encre & or « Nos marque-pages gravés sont arrivés » (3 exemples gravés en bois,
+  « à partir de 9,90 € », bouton vers `/boutique/marque-pages`) entre le cristal et les bijoux. ⛔ RIEN en ligne : attendre son « applique ».
+  La fenêtre flottante « Nouveauté ✦ » montre déjà les marque-pages tout seule (dernières sorties par date).
 
 ## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
 - **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v9 au 24/10 soir : exemples photo ; sur le noir, une photo reste un POSITIF clair sur le noir, l'inversion ne vaut que pour les traits des dessins : la v8 montrait un négatif, « ça fait vraiment bizarre ») · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
