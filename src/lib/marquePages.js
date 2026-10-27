@@ -35,19 +35,37 @@ export function mpBoitesPour(n, taille) {
   if (r > 0) out.push(r === 3 ? 4 : r);
   return out;
 }
-/** Le format d'un identifiant (nouveau ou ancien) : { id, n, taille, boites:[tailles], box (1re boîte, compat), titre }. */
+/** Nombre de boîtes de chaque taille → liste de boîtes [4, 4, 1…] (de la plus grande à la plus petite). */
+export function mpBoitesDepuisCompte(cpt) {
+  const out = [];
+  for (const t of [4, 2, 1]) for (let i = 0; i < Math.min(8, Math.max(0, Number(cpt?.[t]) || 0)); i++) out.push(t);
+  return out;
+}
+/** Liste de boîtes → { 1: n, 2: n, 4: n }. */
+export function mpCompteBoites(boites) {
+  const cpt = { 1: 0, 2: 0, 4: 0 };
+  for (const b of boites || []) if (cpt[b] !== undefined) cpt[b]++;
+  return cpt;
+}
+/** Identifiant de format : « n5 » sans boîte, « n5b1-0-1 » = 1 boîte d'une place, 0 de deux, 1 de quatre (la cliente décide). */
+export function mpIdFormat(n, cpt) {
+  return cpt ? `n${n}b${cpt[1] || 0}-${cpt[2] || 0}-${cpt[4] || 0}` : `n${n}`;
+}
+/** Le format d'un identifiant (nouveau ou ancien) : { id, n, boites:[tailles], box (1re boîte, compat), titre }. */
 export function mpFormat(id) {
-  const m = /^n([1-9])(?:b([124]?))?$/.exec(String(id || ""));
+  const m = /^n([1-9])(?:b(?:([0-8])-([0-8])-([0-8])|([124]))?)?$/.exec(String(id || ""));
   if (m) {
     const n = Math.min(MP_MAX, Number(m[1]));
-    const avec = m[2] !== undefined;
-    const taille = avec ? Number(m[2] || 0) || mpBoitesPour(n)[0] : 0;
-    const boites = avec ? mpBoitesPour(n, taille) : [];
+    const avec = String(id).includes("b");
+    let boites = [];
+    if (m[2] !== undefined) boites = mpBoitesDepuisCompte({ 1: Number(m[2]), 2: Number(m[3]), 4: Number(m[4]) });
+    else if (m[5] !== undefined) boites = mpBoitesPour(n, Number(m[5]));
+    else if (avec) boites = mpBoitesPour(n);
     const titre = `${n} marque-page${n > 1 ? "s" : ""}` + (boites.length ? " en boîte cadeau" : " sans boîte");
-    return { id: `n${n}${avec ? `b${taille}` : ""}`, n, taille, boites, box: boites[0] || 0, titre };
+    return { id: avec ? mpIdFormat(n, mpCompteBoites(boites)) : `n${n}`, n, boites, box: boites[0] || 0, titre };
   }
   const f = MP_FORMATS.find((x) => x.id === id);
-  return f ? { ...f, taille: f.box, boites: f.box ? [f.box] : [] } : null;
+  return f ? { ...f, boites: f.box ? [f.box] : [] } : null;
 }
 /** « boîte de 4 places + boîte de 1 place » */
 export function mpBoitesTexte(boites) {

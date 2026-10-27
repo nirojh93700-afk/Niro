@@ -21,7 +21,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import {
-  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpTaillesBoite, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
+  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
 } from "@/lib/marquePages";
 
 const vide = () => Object.fromEntries(MP_EMPLACEMENTS.map(([s, z]) => [`${s}|${z}`, { k: "", t: "", n: 0, src: null }]));
@@ -314,10 +314,8 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   // « Combien de marque-pages ? » puis « Boîte cadeau ? » (27/10/2026).
   const [nb, setNb] = useState(1);
   const [avecBoite, setAvecBoite] = useState(false);
-  const [tailleBoite, setTailleBoite] = useState(0); // 0 = la moins chère pour ce nombre
-  const taillesOk = mpTaillesBoite(nb);
-  const taille = taillesOk.includes(tailleBoite) ? tailleBoite : mpBoitesPour(nb)[0];
-  const fid = `n${nb}${avecBoite ? `b${taille}` : ""}`;
+  const [cptBoites, setCptBoites] = useState({ 1: 0, 2: 0, 4: 0 }); // la cliente décide du nombre de chaque boîte
+  const fid = avecBoite ? mpIdFormat(nb, cptBoites) : `n${nb}`;
   const fmt = mpFormat(fid);
   const [police, setPolice] = useState("playfair");
   const [vPage, setVPage] = useState(vide);
@@ -358,16 +356,19 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   // Changer le nombre garde les marque-pages déjà réglés (on en ajoute ou on retire les derniers).
   function choisirNombre(n) {
     setNb(n); setGrille(null); setCur(0); setMeme(false);
+    if (avecBoite) setCptBoites(mpCompteBoites(mpBoitesPour(n)));
     setSlots((ss) => {
       if (n <= 1) return [];
       const base = ss.length ? ss : [{ c: ci, v: vPage, touched: mpPrixGravure(vPage) > 0 }];
       return Array.from({ length: n }, (_, i) => base[i] || { c: defC(n, i), v: vide(), touched: false });
     });
   }
-  function choisirBoite(on, t = taille) {
+  // Cocher la boîte = la combinaison la moins chère proposée d'office ; elle la modifie ensuite avec les − +.
+  function choisirBoite(on) {
     setAvecBoite(on);
-    if (on) setTailleBoite(t);
-    const b = on ? mpBoitesPour(nb, t)[0] : 0;
+    const cpt = on ? mpCompteBoites(mpBoitesPour(nb)) : { 1: 0, 2: 0, 4: 0 };
+    if (on) setCptBoites(cpt);
+    const b = on ? mpBoitesDepuisCompte(cpt)[0] : 0;
     const idx = b ? galerie.indexOf(boites[b]) : galerie.indexOf(V[ci].image);
     if (idx >= 0) setVue(idx);
   }
@@ -422,9 +423,10 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
 
   // Prix des marque-pages seuls (gravure comprise), puis la ou les boîtes pour ce nombre.
   const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(o.v), 0) : V[ci].price + mpPrixGravure(vPage);
-  const boitesNb = mpBoitesPour(nb, taille);
+  const boitesNb = mpBoitesDepuisCompte(cptBoites);
+  const placesNb = boitesNb.reduce((a, b) => a + b, 0);
   const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);
-  const boiteEpuisee = boitesNb.some((b) => epuise(MP_BOITES[b].stockId));
+  const boiteEpuisee = false;
   const coffret = fmt.n > 1;
   const quoi = avecBoite ? `Votre coffret de ${fmt.n} marque-pages` : `Vos ${fmt.n} marque-pages`;
   const cust = slots.some((o) => o.touched || mpPrixGravure(o.v) > 0);
@@ -549,26 +551,33 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
             <img src={boites[boitesNb[0]]} alt="" />
             <span className="mq-boxt">
               <b>Ajouter la boîte cadeau bleu nuit</b>
-              <span>{boiteEpuisee ? "Momentanément épuisée" : boitesNb.length === 1 ? `Boîte de ${boitesNb[0]} place${boitesNb[0] > 1 ? "s" : ""}${nb > 1 ? ` pour vos ${nb} marque-pages` : ""}` : `${boitesNb.length} boîtes (${boitesNb.join(" + ")} places) pour vos ${nb} marque-pages`}</span>
+              <span>{!avecBoite ? "Boîte bleu nuit, 1, 2 ou 4 places : vous choisissez" : boitesNb.length ? mpBoitesTexte(boitesNb) : "Choisissez vos boîtes ci-dessous"}</span>
             </span>
             <em>+{formatEuro(prixBoitesNb)}</em>
           </label>
-          {avecBoite && taillesOk.length > 1 && (
-            <div className="mq-tailles" role="group" aria-label="Taille de boîte">
-              {taillesOk.map((t) => {
-                const bs = mpBoitesPour(nb, t);
-                const prix = bs.reduce((a, b) => a + MP_BOITES[b].prix, 0);
-                const off = bs.some((b) => epuise(MP_BOITES[b].stockId));
+          {avecBoite && (
+            <div className="mq-boites">
+              {[1, 2, 4].map((t) => {
+                const off = epuise(MP_BOITES[t].stockId, (cptBoites[t] || 0) + 1);
                 return (
-                  <button key={t} type="button" className={`mq-taille${t === taille ? " on" : ""}`} disabled={off} onClick={() => choisirBoite(true, t)}>
+                  <div key={t} className={`mq-boite${cptBoites[t] ? " on" : ""}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={boites[t]} alt="" />
-                    <b>Boîte de {t} place{t > 1 ? "s" : ""}</b>
-                    <span>{off ? "Épuisée" : mpBoitesTexte(bs)}</span>
-                    <em>+{formatEuro(prix)}</em>
-                  </button>
+                    <span className="mq-bt"><b>Boîte de {t} place{t > 1 ? "s" : ""}</b><span>{formatEuro(MP_BOITES[t].prix)} la boîte</span></span>
+                    <div className="qty-stepper mq-bst">
+                      <button type="button" aria-label="Une boîte de moins" disabled={!cptBoites[t]} onClick={() => setCptBoites((c) => ({ ...c, [t]: c[t] - 1 }))}>−</button>
+                      <span>{cptBoites[t] || 0}</span>
+                      <button type="button" aria-label="Une boîte de plus" disabled={off || cptBoites[t] >= 8} onClick={() => setCptBoites((c) => ({ ...c, [t]: (c[t] || 0) + 1 }))}>+</button>
+                    </div>
+                  </div>
                 );
               })}
+              <p className={`mq-places${placesNb < nb ? " warn" : ""}`}>
+                {placesNb === 0 ? "Choisissez vos boîtes avec les + ci-dessus."
+                  : placesNb === nb ? `${placesNb} place${placesNb > 1 ? "s" : ""} pour vos ${nb} marque-page${nb > 1 ? "s" : ""} : tout rentre.`
+                    : placesNb > nb ? `${placesNb} places pour ${nb} marque-page${nb > 1 ? "s" : ""} : ${placesNb - nb} place${placesNb - nb > 1 ? "s" : ""} restera vide.`
+                      : `${placesNb} place${placesNb > 1 ? "s" : ""} pour ${nb} marque-pages : ${nb - placesNb} marque-page${nb - placesNb > 1 ? "s" : ""} sans boîte.`}
+              </p>
             </div>
           )}
 
