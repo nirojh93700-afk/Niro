@@ -2,6 +2,7 @@ import { isAdmin, getUrssafDeclared, setUrssafDeclared, getMateriel, getRates } 
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
 import { unitCostForItem } from "@/lib/productCosts";
+import { etiquetteEstimee, perteRate } from "@/lib/etiquetteEnvoi";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -19,7 +20,7 @@ export async function GET(req) {
   const matUsage = await getMateriel(true).then((m) => m.usage || {}).catch(() => ({}));
   // Pièces ratées / refaites (12/10/2026) : leur coût d'achat est perdu, déduit commande par commande.
   const perteParCommande = {};
-  for (const r of await getRates(true).catch(() => [])) perteParCommande[r.orderId] = (perteParCommande[r.orderId] || 0) + (Number(r.cout) || 0);
+  for (const r of await getRates(true).catch(() => [])) perteParCommande[r.orderId] = (perteParCommande[r.orderId] || 0) + perteRate(r);
 
   // --- LIVRE DES RECETTES (?recettes=1) ---------------------------------------
   // Registre chronologique OBLIGATOIRE du micro-entrepreneur. Mentions requises :
@@ -62,12 +63,18 @@ export async function GET(req) {
     const mk = monthKey(o.createdAt);
     const inMonth = mk === curMonth;
     const inYear = mk.startsWith(curYear);
-    // Livraison encaissée (pour info) — couverte par les clientes, neutre sur le bénéfice,
-    // mais compte dans le CA ENCAISSÉ à déclarer (ex. URSSAF) : on la suit aussi par mois.
+    // Livraison (27/10/2026, gérant : « les bénéfices… par rapport au prix d'envoi ») : la livraison
+    // payée par la cliente ENTRE dans le bénéfice, l'étiquette payée au transporteur en SORT. Avant, la
+    // livraison était dite « neutre » : faux quand elle est offerte (seuil 45 / 60 €) ou quand
+    // l'étiquette coûte moins / plus que ce que la cliente a payé.
+    // Étiquette = celle saisie à « Valider » dans Conditionnement, sinon le prix Boxtal du mode d'envoi.
     const ship = Number(o.shippingPrice) || 0;
-    per.all.shipping += ship; if (inYear) per.year.shipping += ship; if (inMonth) per.month.shipping += ship;
-    monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, orders: 0, materiel: 0, rates: 0 };
-    monthly[mk].shipping += ship;
+    const u = matUsage[o.id];
+    const etiq = u && u.etiquette !== undefined && u.etiquette !== null && u.etiquette !== "" ? Number(u.etiquette) || 0 : etiquetteEstimee(o, (slug) => bySlug[slug]);
+    const addShip = (b) => { b.shipping += ship; b.etiquettes += etiq; };
+    addShip(per.all); if (inYear) addShip(per.year); if (inMonth) addShip(per.month);
+    monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, etiquettes: 0, orders: 0, materiel: 0, rates: 0 };
+    monthly[mk].shipping += ship; monthly[mk].etiquettes += etiq;
     const mat = Number(matUsage[o.id]?.matCost) || 0;
     if (mat) { per.all.materiel += mat; if (inYear) per.year.materiel += mat; if (inMonth) per.month.materiel += mat; monthly[mk].materiel = (monthly[mk].materiel || 0) + mat; }
     const perte = Number(perteParCommande[o.id]) || 0;
@@ -94,7 +101,7 @@ export async function GET(req) {
     }
   }
 
-  const finish = (b) => { b.profit = round(b.revenue - b.cost - b.materiel - b.rates); b.materiel = round(b.materiel); b.rates = round(b.rates); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
+  const finish = (b) => { b.profit = round(b.revenue + b.shipping - b.etiquettes - b.cost - b.materiel - b.rates); b.etiquettes = round(b.etiquettes); b.livraisonNette = round(b.shipping - b.etiquettes); b.materiel = round(b.materiel); b.rates = round(b.rates); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
   finish(per.month); finish(per.year); finish(per.all);
 
   // Série des 12 derniers mois (ordre chronologique).
@@ -105,7 +112,7 @@ export async function GET(req) {
     let m = mm - i, y = yy;
     while (m <= 0) { m += 12; y -= 1; }
     const k = `${y}-${String(m).padStart(2, "0")}`;
-    const v = monthly[k] || { revenue: 0, cost: 0, shipping: 0, orders: 0, materiel: 0, rates: 0 };
+    const v = monthly[k] || { revenue: 0, cost: 0, shipping: 0, etiquettes: 0, orders: 0, materiel: 0, rates: 0 };
     // « ca » = ce qui a été réellement ENCAISSÉ ce mois-là (produits + livraison
     // payée par les clientes) : c'est ce chiffre-là qui sert pour une déclaration
     // (URSSAF…), pas seulement le CA produits utilisé pour calculer la marge.
@@ -117,7 +124,8 @@ export async function GET(req) {
       cost: round(v.cost),
       materiel: round(v.materiel),
       rates: round(v.rates || 0),
-      profit: round(v.revenue - v.cost - (v.materiel || 0) - (v.rates || 0)),
+      etiquettes: round(v.etiquettes || 0),
+      profit: round(v.revenue + v.shipping - (v.etiquettes || 0) - v.cost - (v.materiel || 0) - (v.rates || 0)),
       orders: v.orders || 0,
     });
   }
@@ -149,5 +157,5 @@ export async function POST(req) {
   return Response.json({ ok: true, declared });
 }
 
-function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, materiel: 0, rates: 0 }; }
+function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, etiquettes: 0, materiel: 0, rates: 0 }; }
 function round(n) { return Math.round((Number(n) || 0) * 100) / 100; }

@@ -2822,7 +2822,7 @@ export async function getRates(fresh = false) {
   return Array.isArray(data.rates) ? data.rates : [];
 }
 
-export async function ajouterRate({ orderId, ref, slug, name, variantTitle, verre, stockId, qty, cout, note }) {
+export async function ajouterRate({ orderId, ref, slug, name, variantTitle, verre, stockId, qty, cout, envoi, note }) {
   const q = Math.max(1, Math.min(99, parseInt(qty, 10) || 1));
   const sid = String(stockId || "").trim().slice(0, 120);
   const map = await lireStockFrais();
@@ -2840,6 +2840,8 @@ export async function ajouterRate({ orderId, ref, slug, name, variantTitle, verr
     slug: String(slug || "").slice(0, 120), name: String(name || "").slice(0, 160),
     variantTitle: String(variantTitle || "").slice(0, 120), verre: Number(verre) || null,
     stockId: sid, qty: q, cout: Math.max(0, r2(cout)), note: String(note || "").slice(0, 300),
+    // Colis à renvoyer (pièce cassée à la livraison…) : prix de la nouvelle étiquette, compté dans la perte.
+    envoi: Math.max(0, r2(envoi)),
     suivi: avant !== null, // false = stock non suivi (illimité) : rien n'a été retiré
     // retire = ce qui a VRAIMENT quitté le stock (on ne rendra pas plus à l'annulation).
     retire: avant !== null ? avant - apres : 0, avant, apres,
@@ -2847,6 +2849,20 @@ export async function ajouterRate({ orderId, ref, slug, name, variantTitle, verr
   const data = await getCatalogRaw(true);
   const list = Array.isArray(data.rates) ? data.rates : [];
   data.rates = [rec, ...list].slice(0, RATES_KEEP);
+  await persistCatalog(data, ["rates"]);
+  return rec;
+}
+
+// Corrige le coût d'un raté déjà saisi (pièces et / ou colis renvoyé), sans toucher au stock.
+export async function corrigerRate(id, { cout, envoi } = {}) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.rates) ? data.rates : [];
+  const rec = list.find((r) => r.id === id);
+  if (!rec) return null;
+  const r2 = (v) => Math.max(0, Math.round((Number(String(v ?? "").replace(",", ".")) || 0) * 100) / 100);
+  if (cout !== undefined && cout !== "") rec.cout = r2(cout);
+  if (envoi !== undefined && envoi !== "") rec.envoi = r2(envoi);
+  rec.corrigeLe = Date.now();
   await persistCatalog(data, ["rates"]);
   return rec;
 }

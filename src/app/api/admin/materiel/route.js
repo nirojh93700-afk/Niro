@@ -1,8 +1,9 @@
-import { isAdmin, getMateriel, saveMaterielItem, recevoirMateriel, validerMateriel, annulerMateriel, getRates, ajouterRate, annulerRate, getStockMap } from "@/lib/stock";
+import { isAdmin, getMateriel, saveMaterielItem, recevoirMateriel, validerMateriel, annulerMateriel, getRates, ajouterRate, annulerRate, corrigerRate, getStockMap } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
 import { unitCostForItem } from "@/lib/productCosts";
 import { MATERIEL_CATS, MATERIEL_KITS } from "@/lib/materielSeed";
+import { etiquetteEstimee as etiquetteBase, origineEtiquette } from "@/lib/etiquetteEnvoi";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -22,15 +23,9 @@ export const runtime = "nodejs";
 const r2 = (n) => Math.round((Number(n) || 0) * 100) / 100;
 const stripe = (total) => r2(total * 0.015 + 0.25); // carte européenne : 1,5 % + 0,25 €
 
-// Étiquette d'envoi estimée (modifiable à l'écran) : colis ou point relais ≈ 6,12 € TTC
-// (Mondial Relay 5,10 € HT) ; bijou en lettre suivie ≤ 100 g ≈ 4,45 € (La Poste).
+// Étiquette d'envoi : prix réels Boxtal (src/lib/etiquetteEnvoi.js), modifiable à l'écran.
 function etiquetteEstimee(order, bySlug) {
-  const lignes = (order.items || []).filter((i) => !/livraison|point relais|retrait/i.test(i.name || ""));
-  const retrait = /main propre/i.test(String(order.shippingMethod || ""));
-  if (retrait) return 0;
-  const lettre = lignes.length && lignes.every((i) => bySlug[i.slug]?.letter) && !lignes.some((i) => /bo[iî]te|pack/i.test(i.details || ""));
-  if (lettre && !order.relaisPoint) return 4.45;
-  return 6.12;
+  return etiquetteBase(order, (slug) => bySlug[slug]);
 }
 
 function utilise(usage) {
@@ -59,7 +54,7 @@ export async function GET(req) {
         produit += c * (Number(it.quantity) || 1);
       }
       const encaisse = Number(order.total) || 0;
-      out.estimation = { ref: order.ref || "", encaisse: r2(encaisse), produit: r2(produit), produitIncomplet: manque, etiquette: etiquetteEstimee(order, bySlug), stripe: stripe(encaisse) };
+      out.estimation = { ref: order.ref || "", encaisse: r2(encaisse), produit: r2(produit), produitIncomplet: manque, etiquette: etiquetteEstimee(order, bySlug), etiquetteOrigine: origineEtiquette(order, (slug) => bySlug[slug]), stripe: stripe(encaisse) };
     }
   }
   return Response.json(out);
@@ -107,6 +102,11 @@ export async function POST(req) {
   if (action === "rate") {
     if (!b.orderId || !b.slug) return Response.json({ error: "Commande ou produit manquant." }, { status: 400 });
     const rec = await ajouterRate(b);
+    return Response.json({ ok: true, rate: rec });
+  }
+  if (action === "corrigerRate") {
+    const rec = await corrigerRate(String(b.id || ""), b);
+    if (!rec) return Response.json({ error: "Raté introuvable." }, { status: 404 });
     return Response.json({ ok: true, rate: rec });
   }
   if (action === "annulerRate") {

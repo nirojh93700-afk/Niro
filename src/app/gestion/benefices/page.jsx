@@ -176,17 +176,28 @@ export default function BeneficesPage() {
         <Tile label="Chiffre d'affaires" value={euro(p.revenue)} sub={`${p.units} article(s) vendu(s)`} />
         <Tile label="Coût d'achat" value={euro(p.cost)} sub="Produits vendus" />
         <Tile label="Matériel d'emballage" value={euro(p.materiel || 0)} sub="Commandes conditionnées" />
-        <Tile label="Pièces ratées" value={euro(p.rates || 0)} sub="Gravures à refaire" />
+        <Tile label="Pièces ratées" value={euro(p.rates || 0)} sub="Pièces à refaire + colis renvoyés" />
+        <Tile label="Étiquettes d'envoi" value={euro(p.etiquettes || 0)} sub="Payées au transporteur" />
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
 
-      {/* Livraison — info seulement (couverte par les clientes, neutre sur le bénéfice) */}
-      <div style={{ ...card, background: "#faf6ee", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, padding: "12px 16px" }}>
-        <span style={{ fontSize: "0.9rem" }}>🚚 <strong>Livraison encaissée</strong> (payée par les clientes) — {periodLabel.toLowerCase()}</span>
-        <span style={{ fontWeight: 700, color: "var(--gold-dark)" }}>{euro(p.shipping || 0)}</span>
+      {/* Livraison (27/10/2026) : ce que les clientes ont payé − les étiquettes payées au transporteur, compté dans le bénéfice */}
+      <div style={{ ...card, background: "#faf6ee", padding: "12px 16px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: "0.9rem" }}>
+          <span>🚚 <strong>Livraison payée par les clientes</strong> — {periodLabel.toLowerCase()}</span>
+          <span style={{ fontWeight: 700 }}>{euro(p.shipping || 0)}</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: "0.9rem", marginTop: 4 }}>
+          <span>− Étiquettes payées au transporteur</span>
+          <span style={{ fontWeight: 700 }}>{euro(p.etiquettes || 0)}</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, fontSize: "0.92rem", marginTop: 6, paddingTop: 6, borderTop: "1px solid #eadfc8" }}>
+          <strong>= La livraison vous {Number(p.livraisonNette || 0) >= 0 ? "rapporte" : "coûte"}</strong>
+          <strong style={{ color: Number(p.livraisonNette || 0) >= 0 ? "#2f7d4f" : "#b32b2b" }}>{euro(Math.abs(Number(p.livraisonNette || 0)))}</strong>
+        </div>
       </div>
       <p style={{ fontSize: "0.78rem", color: "var(--ink-soft)", margin: "-8px 0 14px" }}>
-        La livraison est <strong>neutre</strong> : les clientes couvrent ce que tu paies au transporteur → elle n&apos;est pas comptée dans le bénéfice, juste affichée pour info.
+        Compté dans le bénéfice. Étiquette = le prix saisi à « Valider » dans Conditionnement, sinon le prix Boxtal du mode d&apos;envoi (Mondial Relay 3,77 €, Colissimo point retrait 6,31 €, lettre suivie 4,45 €, colis à domicile 6,12 € estimé). Les colis renvoyés sont comptés dans « Pièces ratées ».
       </p>
 
       {/* Dépenses & charges */}

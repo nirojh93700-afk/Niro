@@ -7,6 +7,7 @@
 // Une seule validation par commande : re-valider CORRIGE (l'ancien matériel est rendu au stock).
 // =============================================================================
 
+import { perteRate } from "@/lib/etiquetteEnvoi";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
@@ -36,7 +37,7 @@ export function BlocConditionnement({ o, mat, onOpen }) {
   const items = mat?.items || [];
   // Pièces ratées de la commande (Rates.jsx) : leur coût est retiré du gain.
   const rates = (mat?.rates || []).filter((r) => r.orderId === o.id);
-  const perte = rates.reduce((s, r) => s + (Number(r.cout) || 0), 0);
+  const perte = rates.reduce((s, r) => s + perteRate(r), 0);
   const nbRates = rates.reduce((s, r) => s + (Number(r.qty) || 0), 0);
   return (
     <div className="mp-pack">
@@ -97,7 +98,7 @@ export default function FenetreConditionnement({ o, adminKey, mat, onClose, onSa
   const mCost = items.reduce((s, i) => s + (sel[i.id] || 0) * (Number(i.cout) || 0), 0);
   const est = data?.estimation || { encaisse: Number(o.total) || 0, produit: 0, etiquette: 0, stripe: 0 };
   const et = Number(String(etiq).replace(",", ".")) || 0;
-  const perte = (mat?.rates || []).filter((r) => r.orderId === o.id).reduce((s, r) => s + (Number(r.cout) || 0), 0);
+  const perte = (mat?.rates || []).filter((r) => r.orderId === o.id).reduce((s, r) => s + perteRate(r), 0);
   const gain = est.encaisse - est.produit - mCost - et - est.stripe - perte;
   const nbSel = Object.keys(sel).length;
 
@@ -192,7 +193,7 @@ export default function FenetreConditionnement({ o, adminKey, mat, onClose, onSa
             {perte ? <div><span>− Pièces ratées</span><span>{euro(perte)}</span></div> : null}
             <div className="t"><span>Votre gain</span><span>{euro(gain)}</span></div>
           </div>
-          <label className="mp-etiq">Étiquette d&apos;envoi (€) <input inputMode="decimal" value={etiq} onChange={(e) => setEtiq(e.target.value)} /> <small style={{ color: "var(--ink-soft)" }}>estimée, à corriger avec le vrai tarif</small></label>
+          <label className="mp-etiq">Étiquette d&apos;envoi (€) <input inputMode="decimal" value={etiq} onChange={(e) => setEtiq(e.target.value)} /> <small style={{ color: "var(--ink-soft)" }}>{data?.estimation?.etiquetteOrigine ? `proposée : ${data.estimation.etiquetteOrigine}` : "estimée"}, à corriger avec le prix payé sur Boxtal</small></label>
           <div className="mp-sum">
             <div className="l">Matériel <b>{euro(mCost)}</b> · Gain estimé <b>{euro(gain)}</b><br /><button type="button" onClick={() => setCalc((v) => !v)}>{calc ? "Masquer le calcul" : "Voir le calcul"}</button>{data?.usage ? <button type="button" onClick={retirer} style={{ marginLeft: 12 }}>Retirer la validation</button> : null}</div>
             <div className="r"><button type="button" className="btn btn-outline" onClick={onClose}>Annuler</button><button type="button" className="btn btn-gold" disabled={busy} onClick={valider}>{data?.usage ? "Corriger" : "Valider"}</button></div>

@@ -10,6 +10,7 @@
 import { useMemo, useState } from "react";
 import { getProductBySlug, products as CATALOGUE } from "@/lib/products";
 import { VARIANT_COSTS } from "@/lib/productCosts";
+import { etiquetteEstimee, perteRate } from "@/lib/etiquetteEnvoi";
 import VarBadge from "@/components/admin/VarBadge";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -45,7 +46,16 @@ export function ratesDe(mat, orderId, slug, verre, variantTitle, nom) {
     && (!verre || !r.verre || r.verre === verre)
     && (!variantTitle || !r.variantTitle || r.variantTitle === variantTitle));
 }
-export const coutRates = (liste) => (liste || []).reduce((s, r) => s + (Number(r.cout) || 0), 0);
+// Perte d'un raté = les pièces + le colis renvoyé s'il y en a un (27/10/2026).
+export const coutRates = (liste) => (liste || []).reduce((s, r) => s + perteRate(r), 0);
+
+// Nombre de pièces dans une ligne de stock : « Lot de 4 » = 4 verres. Un raté se compte en PIÈCES,
+// donc son coût = coût du lot ÷ nombre de pièces (27/10/2026 : 3 verres ratés d'un lot de 4 comptés
+// 62,16 € au lieu de 15,54 €, le prix de 3 lots entiers).
+function piecesDe(ligne) {
+  for (const t of ligne?.titresBruts || []) { const m = /lot de (\d+)/i.exec(t); if (m) return Math.max(1, parseInt(m[1], 10)); }
+  return 1;
+}
 
 // Produit du catalogue qui porte une ligne de stock (lignes de devis : pas d'identifiant produit).
 function produitDuStock(sid) {
@@ -74,24 +84,40 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
   const defSid = useMemo(() => {
     // Variante exacte connue (commandes récentes, ou retrouvée par Gestion) : c'est sa ligne de stock.
     const vExacte = item.variantId ? (product?.variants || []).find((x) => x.id === item.variantId) : null;
-    if (vExacte) return vExacte.stockId || vExacte.id;
+    if (vExacte) {
+      // Lot (« Lot de 2 ») : la pièce ratée sort de la ligne « À l'unité » de la même taille, qui compte les pièces.
+      if (/lot de \d+/i.test(vExacte.title || "")) {
+        const unite = (product?.variants || []).find((x) => x !== vExacte && (x.taille || "") === (vExacte.taille || "") && !/lot de \d+/i.test(x.title || ""));
+        if (unite) return unite.stockId || unite.id;
+      }
+      return vExacte.stockId || vExacte.id;
+    }
     const payes = stocksCommande(o);
     const duTitre = lignes.filter((l) => item.variantTitle && l.titresBruts.includes(item.variantTitle));
     const parPaiement = (duTitre.length ? duTitre : lignes).find((l) => payes.includes(l.sid));
     return parPaiement?.sid || duTitre[0]?.sid || lignes[0]?.sid || "";
   }, [o, item.variantTitle, item.variantId, product, lignes]);
-  const coutDe = (sid) => { const c = VARIANT_COSTS[sid] ?? (Number(product?.cost) > 0 ? Number(product.cost) : null); return c == null ? "" : String(c).replace(".", ","); };
+  const coutDe = (sid) => {
+    const c = VARIANT_COSTS[sid] ?? (Number(product?.cost) > 0 ? Number(product.cost) : null);
+    if (c == null) return "";
+    const n = piecesDe(lignes.find((l) => l.sid === sid));
+    return String(Math.round((c / n) * 100) / 100).replace(".", ",");
+  };
+  const envoiDefaut = () => String(etiquetteEstimee(o, getProductBySlug)).replace(".", ",");
 
   const [ouvert, setOuvert] = useState(false);
   const [qty, setQty] = useState(1);
   const [sid, setSid] = useState(defSid);
   const [cout, setCout] = useState(coutDe(defSid));
   const [note, setNote] = useState("");
+  const [renvoi, setRenvoi] = useState(false);
+  const [envoi, setEnvoi] = useState(envoiDefaut());
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
   const liste = ratesDe(mat, o.id, item.slug, item.verre, item.variantTitle, item.name);
   const unit = Number(String(cout).replace(",", ".")) || 0;
+  const prixEnvoi = renvoi ? (Number(String(envoi).replace(",", ".")) || 0) : 0;
   const valeur = typeof stock[sid] === "number" ? stock[sid] : null;
 
   function choisirProduit(s2) {
@@ -100,9 +126,10 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
     const ls = lignesStock(p2);
     const l = ls.find((x) => stocksCommande(o).includes(x.sid)) || ls[0];
     const c = l ? (VARIANT_COSTS[l.sid] ?? (Number(p2?.cost) > 0 ? Number(p2.cost) : null)) : null;
-    setSid(l?.sid || ""); setCout(c == null ? "" : String(c).replace(".", ","));
+    const n = piecesDe(l);
+    setSid(l?.sid || ""); setCout(c == null ? "" : String(Math.round((c / n) * 100) / 100).replace(".", ","));
   }
-  function ouvrir() { setQty(1); setSid(defSid); setCout(coutDe(defSid)); setNote(""); setErr(""); setOuvert(true); }
+  function ouvrir() { setQty(1); setSid(defSid); setCout(coutDe(defSid)); setNote(""); setRenvoi(false); setEnvoi(envoiDefaut()); setErr(""); setOuvert(true); }
   async function appeler(body) {
     setBusy(true); setErr("");
     try {
@@ -116,7 +143,7 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
     if (sansProduit && !product) { setErr("Choisissez d'abord le produit raté."); return; }
     const d = await appeler({
       action: "rate", orderId: o.id, ref: o.ref || "", slug, name: item.name || product?.name || "",
-      variantTitle: item.variantTitle || "", verre: item.verre || null, stockId: sid, qty, cout: Math.round(unit * qty * 100) / 100, note,
+      variantTitle: item.variantTitle || "", verre: item.verre || null, stockId: sid, qty, cout: Math.round(unit * qty * 100) / 100, envoi: prixEnvoi, note,
     });
     if (d) { setOuvert(false); onSaved?.(); }
   }
@@ -135,7 +162,7 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
             <li key={r.id}>
               <span>✗ <b>{r.qty} raté{r.qty > 1 ? "s" : ""}</b> · {jour(r.at)}
                 {r.suivi ? <> · stock {r.avant} → {r.apres}</> : <> · stock non suivi, rien retiré</>}
-                {r.cout ? <> · <b className="rt-perte">−{euro(r.cout)}</b></> : null}
+                {perteRate(r) ? <> · <b className="rt-perte">−{euro(perteRate(r))}</b>{r.envoi ? <> (dont colis renvoyé {euro(r.envoi)})</> : null}</> : null}
                 {r.note ? <> · {r.note}</> : null}
               </span>
               <button type="button" className="rt-annul" disabled={busy} onClick={() => annuler(r)}>Annuler</button>
@@ -178,14 +205,19 @@ export default function BoutonRate({ o, item, mat, adminKey, onSaved }) {
               : <>Stock {valeur} → <b>{Math.max(0, valeur - qty)}</b> après l&apos;enregistrement.</>}
           </p>
           <label className="rt-ligne">
-            <span>Coût d&apos;achat d&apos;une unité de ce stock (€)</span>
+            <span>Coût d&apos;achat d&apos;une pièce (€)</span>
             <input inputMode="decimal" value={cout} onChange={(e) => setCout(e.target.value)} placeholder="ex. 3,24" />
           </label>
           <label className="rt-ligne rt-note">
             <span>Que s&apos;est-il passé ? (facultatif)</span>
             <input value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} placeholder="ex. gravure décalée, verre fendu" />
           </label>
-          <p className="rt-info">Perte : <b className="rt-perte">{euro(unit * qty)}</b>, déduite du gain de la commande et des bénéfices.</p>
+          <label className="rt-ligne rt-renvoi">
+            <span><input type="checkbox" checked={renvoi} onChange={(e) => setRenvoi(e.target.checked)} /> Il faut renvoyer un colis (pièce cassée à la livraison…)</span>
+            {renvoi ? <input inputMode="decimal" value={envoi} onChange={(e) => setEnvoi(e.target.value)} aria-label="Prix du nouvel envoi" /> : null}
+          </label>
+          {renvoi ? <p className="rt-info" style={{ marginTop: -4 }}>Prix de la nouvelle étiquette (€), proposé selon le mode d&apos;envoi de la commande : corrigez-le avec le prix payé sur Boxtal.</p> : null}
+          <p className="rt-info">Perte : <b className="rt-perte">{euro(unit * qty + prixEnvoi)}</b>{prixEnvoi ? <> ({euro(unit * qty)} de pièces + {euro(prixEnvoi)} d&apos;envoi)</> : null}, déduite du gain de la commande et des bénéfices.</p>
           {err ? <div className="notice">{err}</div> : null}
           <div className="rt-actions">
             <button type="button" className="btn btn-outline" onClick={() => setOuvert(false)}>Annuler</button>
