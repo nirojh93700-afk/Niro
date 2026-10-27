@@ -437,3 +437,6 @@ En attente de SA décision :
   (image `/api/img/mCjEwaMiN0ZbLrzTIqRW`), SANS prix, question : textes seuls ou image personnalisée (dessin + textes intégrés) avec maquette.
   Règle du gérant : image créée sur mesure = plus cher (montant non fixé) ; prix du site pour ce verre = 19,90 €, modèle + textes 22,90 €.
 - Newsletter : Monica Gomes retirée (124 inscrites). Adresses mortes à retirer s'il le dit : agatheogot@gmail.com, stephanieb2a@gamil.com.
+
+- **27/10/2026 — Violette (verre whisky « Colombes & cœur », 27,90 €)** : mail sans aperçu envoyé à 13 h 02 (aperçu préparé après paiement). Fichier de gravure VALIDÉ par le gérant : `docs/gravures/violette-colombes/` (45,9 × 53,6 mm). À sa réponse « oui » : préparer le devis 27,90 € + livraison, le montrer avant envoi.
+- **27/10/2026 — Guide « Idées & conseils » marque-pages** (`/idees/marque-pages-personnalises`, maquette `docs/maquettes/guide-marque-pages.html`) : construit et vérifié en local, EN ATTENTE de son « pousse ».

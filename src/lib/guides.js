@@ -126,6 +126,15 @@ export const GUIDES = [
     description:
       "Porte-stylo en bois découpé et gravé, aux couleurs d'une équipe et au prénom de celui qui l'utilise : à qui l'offrir et quoi faire graver.",
   },
+  {
+    // Marque-pages (27/10/2026) : tout produit dont le nom contient « marque-page » y entre tout seul.
+    slug: "marque-pages-personnalises",
+    auto: { motCle: /marque-page/i },
+    nav: "Marque-pages",
+    title: "Marque-pages personnalisés — gravés au prénom, dessin ou photo",
+    description:
+      "Marque-page en bois gravé d'un prénom, d'un dessin ou d'une photo, ou marque-page en métal doré d'après Van Gogh et Monet : comment choisir, quoi faire graver, et la boîte cadeau.",
+  },
 ];
 
 export const GUIDE_SLUGS = GUIDES.map((g) => g.slug);
@@ -178,6 +187,7 @@ export function guidePourProduit(product) {
 
   if (cat === "cristal" || nom.includes("cristal")) return getGuide("cristal-photo-3d");
   if (cat === "jeux") return getGuide("puzzles-bois-personnalises");
+  if (/marque-page/.test(nom)) return getGuide("marque-pages-personnalises");
   if (/support t(é|e)l(é|e)phone/.test(nom)) return getGuide("support-telephone-personnalise");
   if (/porte-stylo/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
   if (/usb/.test(nom)) return getGuide("cle-usb-personnalisee-gravee");

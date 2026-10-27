@@ -32,6 +32,7 @@ const MAP = {
   "guide-porte-stylo.html": "porte-stylo-bois-personnalise",
   "guide-support-telephone.html": "support-telephone-personnalise",
   "guide-puzzles-bois.html": "puzzles-bois-personnalises",
+  "guide-marque-pages.html": "marque-pages-personnalises",
 };
 
 // anciens liens de maquette -> vraies adresses du site
