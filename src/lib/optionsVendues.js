@@ -15,7 +15,7 @@
 //
 // Pure (aucun accès réseau) : testée par `npm run test-options` (tools/tests).
 // =============================================================================
-import { MP_FORMATS, MP_BOITES } from "@/lib/marquePages";
+import { mpFormat, MP_BOITES } from "@/lib/marquePages";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -65,9 +65,9 @@ export function optionsArticle(item) {
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
   // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).
   if (produit?.marquePages && champs.mp && typeof champs.mp === "object") {
-    const fmt = MP_FORMATS.find((f) => f.id === champs.mp.format);
+    const fmt = mpFormat(champs.mp.format);
     const n = (champs.mp.slots || []).length;
-    if (fmt?.box) out.push({ libelle: "Boîte cadeau bleu nuit", detail: `pour ${fmt.box} marque-page${fmt.box > 1 ? "s" : ""}`, montant: MP_BOITES[fmt.box].prix, physique: true });
+    for (const b of fmt?.boites || []) out.push({ libelle: "Boîte cadeau bleu nuit", detail: `pour ${b} marque-page${b > 1 ? "s" : ""}`, montant: MP_BOITES[b].prix, physique: true });
     if (n > 1) out.push({ libelle: "Marque-pages dans la commande", detail: `${n} pièces, chacune avec sa couleur et sa gravure (voir le tableau « À graver »)`, montant: 0, physique: true });
     return out;
   }

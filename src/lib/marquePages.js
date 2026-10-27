@@ -13,6 +13,35 @@ export const MP_FORMATS = [
   { id: "coffret2", n: 2, box: 2, titre: "Coffret de 2" },
   { id: "coffret4", n: 4, box: 4, titre: "Coffret de 4" },
 ];
+// Nombre + boîte au choix (27/10/2026, gérant : « comment le client choisit s'il veut plusieurs marque-pages sans la
+// boîte ? » → « Combien de marque-pages ? » puis « Boîte cadeau ? »). Identifiants « n<k> » (sans boîte) et « n<k>b »
+// (avec boîte), k = 1 à MP_MAX. Les anciens identifiants ci-dessus restent lus (paniers en cours).
+export const MP_MAX = 8;
+/** Boîtes pour n marque-pages : la moins chère qui les range tous (1 → 1 place, 2 → 2, 3 ou 4 → 4, au-delà 4 + le reste). */
+export function mpBoitesPour(n) {
+  const out = [];
+  let r = n;
+  while (r > 4) { out.push(4); r -= 4; }
+  if (r > 0) out.push(r === 3 ? 4 : r);
+  return out;
+}
+/** Le format d'un identifiant (nouveau ou ancien) : { id, n, boites:[tailles], box (1re boîte, compat), titre }. */
+export function mpFormat(id) {
+  const m = /^n([1-9])(b?)$/.exec(String(id || ""));
+  if (m) {
+    const n = Math.min(MP_MAX, Number(m[1]));
+    const boites = m[2] ? mpBoitesPour(n) : [];
+    const titre = `${n} marque-page${n > 1 ? "s" : ""}` + (boites.length ? " en boîte cadeau" : " sans boîte");
+    return { id: `n${n}${m[2]}`, n, boites, box: boites[0] || 0, titre };
+  }
+  const f = MP_FORMATS.find((x) => x.id === id);
+  return f ? { ...f, boites: f.box ? [f.box] : [] } : null;
+}
+/** « boîte de 4 places + boîte de 1 place » */
+export function mpBoitesTexte(boites) {
+  return boites.map((b) => `boîte de ${b} place${b > 1 ? "s" : ""}`).join(" + ");
+}
+
 // Boîtes : stock commun aux trois modèles (10 de chaque reçues le 27/10/2026). Poids estimés (emballées).
 export const MP_BOITES = {
   1: { prix: 4.9, stockId: "mp-boite-1", poids: 60, titre: "Boîte cadeau bleu nuit · 1 marque-page", image: "/marque-pages/m1/boite1.jpg" },
@@ -78,7 +107,7 @@ export function mpPrixGravure(v) {
 export function mpNormaliser(product, raw) {
   const cfg = product?.marquePages;
   if (!cfg || !raw || typeof raw !== "object") return null;
-  const fmt = MP_FORMATS.find((f) => f.id === raw.format);
+  const fmt = mpFormat(raw.format);
   if (!fmt) return null;
   const slots = Array.isArray(raw.slots) ? raw.slots.slice(0, fmt.n) : [];
   if (slots.length !== fmt.n) return null;
@@ -97,8 +126,9 @@ export function mpNormaliser(product, raw) {
  * promos = { variantId: prix promo } (facultatif).
  */
 export function mpCalcul(product, mp, promos = {}) {
-  const fmt = MP_FORMATS.find((f) => f.id === mp.format);
-  const boite = fmt.box ? MP_BOITES[fmt.box] : null;
+  const fmt = mpFormat(mp.format);
+  const lesBoites = fmt.boites.map((b) => MP_BOITES[b]);
+  const boite = lesBoites[0] || null;
   const vById = new Map((product.variants || []).map((x) => [x.id, x]));
   const pieces = mp.slots.map((s) => {
     const variant = vById.get(s.c);
@@ -107,12 +137,13 @@ export function mpCalcul(product, mp, promos = {}) {
     const grav = mpPrixGravure(s.v);
     return { variant, base, grav, prix: r2(base + grav) };
   });
-  const total = r2(pieces.reduce((a, p) => a + p.prix, 0) + (boite ? boite.prix : 0));
+  const prixBoites = lesBoites.reduce((a, b) => a + b.prix, 0);
+  const total = r2(pieces.reduce((a, p) => a + p.prix, 0) + prixBoites);
   const stock = new Map();
   for (const p of pieces) { const sid = p.variant.stockId || p.variant.id; stock.set(sid, (stock.get(sid) || 0) + 1); }
-  if (boite) stock.set(boite.stockId, (stock.get(boite.stockId) || 0) + 1);
-  const grams = pieces.reduce((a, p) => a + (Number(p.variant.weight) || Number(product.weight) || 30), 0) + (boite ? boite.poids : 0);
-  return { fmt, boite, pieces, total, stock: [...stock.entries()], grams, enBoite: Boolean(boite) };
+  for (const b of lesBoites) stock.set(b.stockId, (stock.get(b.stockId) || 0) + 1);
+  const grams = pieces.reduce((a, p) => a + (Number(p.variant.weight) || Number(product.weight) || 30), 0) + lesBoites.reduce((a, b) => a + b.poids, 0);
+  return { fmt, boite, boites: lesBoites, prixBoites: r2(prixBoites), pieces, total, stock: [...stock.entries()], grams, enBoite: lesBoites.length > 0 };
 }
 
 /** Une ligne par emplacement gravé : [{ key, libelle, valeur, texte, img }]. */
@@ -134,7 +165,7 @@ export function mpLignes(modele, v) {
 /** Résumé court (panier, e-mails, Stripe). */
 export function mpResume(product, mp) {
   const c = mpCalcul(product, mp);
-  const morceaux = [c.fmt.titre + (c.boite ? ` (${c.boite.titre.replace(/^Boîte cadeau /, "boîte ")})` : "")];
+  const morceaux = [c.fmt.titre + (c.fmt.boites.length ? ` (${mpBoitesTexte(c.fmt.boites)}, bleu nuit)` : "")];
   const gravure = Boolean(product.marquePages?.gravure);
   c.pieces.forEach((p, i) => {
     const lignes = gravure ? mpLignes(product.marquePages.modele, mp.slots[i].v) : [];

@@ -21,7 +21,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import {
-  MP_FORMATS, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
+  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
 } from "@/lib/marquePages";
 
 const vide = () => Object.fromEntries(MP_EMPLACEMENTS.map(([s, z]) => [`${s}|${z}`, { k: "", t: "", n: 0, src: null }]));
@@ -311,8 +311,11 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   const epuise = (sid, besoin = 1) => typeof stock[sid] === "number" && stock[sid] < besoin;
 
   const [ci, setCi] = useState(0); // couleur choisie en haut
-  const [fid, setFid] = useState("seul");
-  const fmt = MP_FORMATS.find((f) => f.id === fid);
+  // « Combien de marque-pages ? » puis « Boîte cadeau ? » (27/10/2026).
+  const [nb, setNb] = useState(1);
+  const [avecBoite, setAvecBoite] = useState(false);
+  const fid = `n${nb}${avecBoite ? "b" : ""}`;
+  const fmt = mpFormat(fid);
   const [police, setPolice] = useState("playfair");
   const [vPage, setVPage] = useState(vide);
   const defC = (n, i) => (n > 1 && modele !== 1 ? i % V.length : ci);
@@ -321,7 +324,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   const [cur, setCur] = useState(0);
   const [sheet, setSheet] = useState(false);
   const [grille, setGrille] = useState(null);
-  const [qty, setQty] = useState(1);
+  const qty = 1; // le nombre se choisit avec « Combien de marque-pages ? »
   const [ajoute, setAjoute] = useState(false);
   const [vue, setVue] = useState(0); // index de la galerie, ou "ap" = aperçu
   const galRef = useRef(null);
@@ -349,10 +352,19 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
     const idx = galerie.indexOf(V[k].image);
     if (idx >= 0) setVue(idx);
   }
-  function choisirFormat(f) {
-    setFid(f.id); setGrille(null); setCur(0); setMeme(false);
-    setSlots(f.n > 1 ? Array.from({ length: f.n }, (_, i) => ({ c: defC(f.n, i), v: vide(), touched: false })) : []);
-    const idx = f.box ? galerie.indexOf(boites[f.box]) : galerie.indexOf(V[ci].image);
+  // Changer le nombre garde les marque-pages déjà réglés (on en ajoute ou on retire les derniers).
+  function choisirNombre(n) {
+    setNb(n); setGrille(null); setCur(0); setMeme(false);
+    setSlots((ss) => {
+      if (n <= 1) return [];
+      const base = ss.length ? ss : [{ c: ci, v: vPage, touched: mpPrixGravure(vPage) > 0 }];
+      return Array.from({ length: n }, (_, i) => base[i] || { c: defC(n, i), v: vide(), touched: false });
+    });
+  }
+  function choisirBoite(on) {
+    setAvecBoite(on);
+    const b = on ? mpBoitesPour(nb)[0] : 0;
+    const idx = b ? galerie.indexOf(boites[b]) : galerie.indexOf(V[ci].image);
     if (idx >= 0) setVue(idx);
   }
   function majSlot(i, patch) {
@@ -370,7 +382,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   // Disponibilité : chaque couleur demandée + la boîte du format.
   const besoins = {};
   for (const s of composition) { const sid = V[s.c].stockId || V[s.c].id; besoins[sid] = (besoins[sid] || 0) + qty; }
-  if (fmt.box) besoins[MP_BOITES[fmt.box].stockId] = (besoins[MP_BOITES[fmt.box].stockId] || 0) + qty;
+  for (const b of fmt.boites) besoins[MP_BOITES[b].stockId] = (besoins[MP_BOITES[b].stockId] || 0) + qty;
   const manque = Object.entries(besoins).find(([sid, q]) => epuise(sid, q));
   const photoEnCours = composition.some((s) => Object.values(s.v).some((e) => e.k === "photo" && !e.src));
   const dessinManquant = composition.some((s) => Object.values(s.v).some((e) => e.k === "dessin" && !e.n));
@@ -390,7 +402,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
       name: product.name,
       variantTitle: `${fmt.titre} · ${couleurs}`,
       price: total,
-      image: fmt.box ? boites[fmt.box] : V[ci].image || product.images[0],
+      image: fmt.boites.length ? boites[fmt.boites[0]] : V[ci].image || product.images[0],
       personalization: resume,
       fields: { mp: norme },
       cleLigne: cle.replace(/[;,]/g, "") ? cle : undefined,
@@ -404,16 +416,19 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
     setAjoute(true); setTimeout(() => setAjoute(false), 2200);
   }
 
-  const prixFormat = (f) => {
-    if (f.n > 1 && f.id === fid) return slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(o.v), 0) + MP_BOITES[f.box].prix;
-    return f.n * V[ci].price + (f.box ? MP_BOITES[f.box].prix : 0);
-  };
+  // Prix des marque-pages seuls (gravure comprise), puis la ou les boîtes pour ce nombre.
+  const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(o.v), 0) : V[ci].price + mpPrixGravure(vPage);
+  const boitesNb = mpBoitesPour(nb);
+  const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);
+  const boiteEpuisee = boitesNb.some((b) => epuise(MP_BOITES[b].stockId));
   const coffret = fmt.n > 1;
+  const quoi = avecBoite ? `Votre coffret de ${fmt.n} marque-pages` : `Vos ${fmt.n} marque-pages`;
   const cust = slots.some((o) => o.touched || mpPrixGravure(o.v) > 0);
-  const rtxt = cust ? `Votre coffret de ${fmt.n} marque-pages :`
-    : modele === 1 ? `Votre coffret de ${fmt.n} marque-pages, tous de couleur ${(V[slots[0]?.c]?.title || "").toLowerCase()}. Changez la couleur et la gravure de chacun si vous voulez :`
-      : modele === 2 ? `Votre coffret de ${fmt.n} marque-pages, de couleurs différentes. Changez la couleur et la gravure de chacun si vous voulez :`
-        : `Votre coffret de ${fmt.n} marque-pages, de tableaux différents. Changez-les si vous voulez :`;
+  const rtxt = cust ? `${quoi} :`
+    : modele === 1 ? `${quoi}, tous de couleur ${(V[slots[0]?.c]?.title || "").toLowerCase()}. Changez la couleur et la gravure de chacun si vous voulez :`
+      : modele === 2 ? `${quoi}, de couleurs différentes. Changez la couleur et la gravure de chacun si vous voulez :`
+        : `${quoi}, de tableaux différents. Changez-les si vous voulez :`;
+  const composer = gravure ? (avecBoite ? "Composer mon coffret" : "Composer mes marque-pages") : (avecBoite ? "Voir et personnaliser mon coffret" : "Voir et personnaliser mes marque-pages");
   const shH = Math.round(Math.min(560, winH * 0.62));
   const libelleCouleur = modele === 3 ? "Choisissez votre tableau" : "Choisissez votre couleur";
 
@@ -477,22 +492,35 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
           </div>
 
           <div className="field">
-            <label>Choisissez votre format</label>
+            <label>Combien de marque-pages ?</label>
+            <div className="mq-nbs" role="group" aria-label="Nombre de marque-pages">
+              {Array.from({ length: MP_MAX }, (_, i) => i + 1).map((n) => (
+                <button key={n} type="button" className={`mq-nb${n === nb ? " on" : ""}`} aria-pressed={n === nb} onClick={() => choisirNombre(n)}>{n}</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="field">
+            <label>Boîte cadeau ?</label>
             <div className="mq-fmts">
-              {MP_FORMATS.map((f) => {
-                const off = f.box && epuise(MP_BOITES[f.box].stockId);
-                return (
-                  <button key={f.id} type="button" className={`mq-fmt${f.id === fid ? " on" : ""}`} onClick={() => choisirFormat(f)}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="mq-fimg" src={f.box ? boites[f.box] : V[ci].image} alt={f.box ? `Boîte cadeau bleu nuit pour ${f.box} marque-page${f.box > 1 ? "s" : ""}` : "Marque-page seul"} />
-                    <span className="mq-ft">
-                      <b>{f.titre}</b>
-                      <span>{f.id === "seul" ? (modele === 2 ? "avec son cordon à perles de verre" : modele === 3 ? "avec son pompon et sa carte" : "avec son pompon") : `${f.n} marque-page${f.n > 1 ? "s" : ""}, boîte bleu nuit`}</span>
-                      <em>{off ? "Boîte épuisée" : formatEuro(prixFormat(f))}</em>
-                    </span>
-                  </button>
-                );
-              })}
+              <button type="button" className={`mq-fmt${!avecBoite ? " on" : ""}`} onClick={() => choisirBoite(false)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="mq-fimg" src={V[ci].image} alt="Marque-page sans boîte" />
+                <span className="mq-ft">
+                  <b>Sans boîte</b>
+                  <span>{nb > 1 ? `${nb} marque-pages, ` : ""}{modele === 2 ? "avec son cordon à perles de verre" : modele === 3 ? "avec son pompon et sa carte" : "avec son pompon"}</span>
+                  <em>{formatEuro(prixPieces)}</em>
+                </span>
+              </button>
+              <button type="button" className={`mq-fmt${avecBoite ? " on" : ""}`} onClick={() => choisirBoite(true)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="mq-fimg" src={boites[boitesNb[0]]} alt={`Boîte cadeau bleu nuit, ${mpBoitesTexte(boitesNb)}`} />
+                <span className="mq-ft">
+                  <b>En boîte cadeau</b>
+                  <span>Boîte bleu nuit : {mpBoitesTexte(boitesNb)} (+{formatEuro(prixBoitesNb)})</span>
+                  <em>{boiteEpuisee ? "Boîte épuisée" : formatEuro(prixPieces + prixBoitesNb)}</em>
+                </span>
+              </button>
             </div>
           </div>
 
@@ -509,9 +537,9 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
                     </span>
                   ))}
                 </div>
-                <button type="button" className="mq-open" onClick={() => { setSheet(true); setCur(0); setGrille(null); }}>{gravure ? "Composer mon coffret" : "Voir et personnaliser mon coffret"}</button>
+                <button type="button" className="mq-open" onClick={() => { setSheet(true); setCur(0); setGrille(null); }}>{composer}</button>
               </div>
-              <p className="mq-gnote">{gravure ? "La gravure (texte, dessin, photo — face et dos, en haut et au milieu) se choisit pour chaque marque-page dans « Composer mon coffret »." : "Les marque-pages du coffret sont de tableaux différents : vous pouvez en changer dans « Voir et personnaliser mon coffret »."}</p>
+              <p className="mq-gnote">{gravure ? `La gravure (texte, dessin, photo — face et dos, en haut et au milieu) se choisit pour chaque marque-page dans « ${composer} ».` : `Les marque-pages sont de tableaux différents : vous pouvez en changer dans « ${composer} ».`}</p>
             </>
           )}
 
@@ -523,7 +551,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
           )}
           {gravure && (
             <div className="field">
-              <label htmlFor="mp-police">Écriture du texte{coffret ? " (la même pour tout le coffret)" : ""}</label>
+              <label htmlFor="mp-police">Écriture du texte</label>
               <select id="mp-police" value={police} onChange={(e) => setPolice(e.target.value)}>
                 {FONTS.map((f) => <option key={f.key} value={f.key}>{f.label}</option>)}
               </select>
@@ -541,11 +569,6 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
           </p>
           <VacationNotice compact />
           <div className="qty-row">
-            <div className="qty-stepper">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Moins">−</button>
-              <span>{qty}</span>
-              <button onClick={() => setQty((q) => Math.min(9, q + 1))} aria-label="Plus">+</button>
-            </div>
             <button className={`btn btn-gold${bloque ? " prc-off" : ""}`} style={{ flex: 1 }} onClick={ajouter} disabled={bloque}>
               {manque ? "Épuisé" : ajoute ? "Ajouté au panier ✓" : "Ajouter au panier"}
             </button>
@@ -583,7 +606,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
       {sheet && coffret && createPortal(
         <div className="mq-sheet" onClick={(e) => { if (e.target === e.currentTarget) setSheet(false); }}>
           <div className="mq-sheetin">
-            <div className="mq-shh"><b>Mon coffret de {fmt.n}</b><button type="button" aria-label="Fermer" onClick={() => setSheet(false)}>×</button></div>
+            <div className="mq-shh"><b>{avecBoite ? `Mon coffret de ${fmt.n}` : `Mes ${fmt.n} marque-pages`}</b><button type="button" aria-label="Fermer" onClick={() => setSheet(false)}>×</button></div>
             <div className="mq-shb">
               <div className="mq-steps">
                 {slots.map((o, i) => (
@@ -626,14 +649,14 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
               )))}
               {gravure && (
                 <div className="mq-sc mq-pol">
-                  <p>Écriture du texte (la même pour tout le coffret)</p>
+                  <p>Écriture du texte (la même pour tous les marque-pages)</p>
                   <select value={police} onChange={(e) => setPolice(e.target.value)}>
                     {FONTS.map((f) => <option key={f.key} value={f.key}>{f.label}</option>)}
                   </select>
                 </div>
               )}
             </div>
-            <div className="mq-shf"><span>Total du coffret<br /><b>{formatEuro(total)}</b></span><button type="button" className="mq-open" onClick={() => setSheet(false)}>Valider mon coffret</button></div>
+            <div className="mq-shf"><span>{avecBoite ? "Total du coffret" : "Total"}<br /><b>{formatEuro(total)}</b></span><button type="button" className="mq-open" onClick={() => setSheet(false)}>{avecBoite ? "Valider mon coffret" : "Valider mes marque-pages"}</button></div>
           </div>
         </div>, document.body)}
     </div>

@@ -9,3 +9,7 @@
 .mq-sc .mq-row{grid-template-columns:repeat(auto-fill,minmax(64px,1fr))}
 .mq-shh b{font-family:var(--font-display),"Playfair Display",serif}
 @media (max-width:640px){.mq-galap .mq-apw{gap:10px}}
+/* « Combien de marque-pages ? » (27/10/2026) */
+.mp-fiche .mq-nbs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;max-width:440px}
+.mp-fiche .mq-nb{min-width:0;height:44px;padding:0;border:1.5px solid #e4d9bd;border-radius:12px;background:#fff;color:#2b2620;font:inherit;font-weight:600;font-size:1rem;cursor:pointer}
+.mp-fiche .mq-nb.on{border-color:#a98935;background:#fbf3df;box-shadow:0 0 0 1px #a98935 inset;color:#7c6120}

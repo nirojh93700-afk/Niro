@@ -21,7 +21,7 @@ import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel } from "@/lib/modeles";
-import { MP_FORMATS, mpLignes } from "@/lib/marquePages";
+import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -122,8 +122,8 @@ const EMPLACEMENTS = { face: "Face avant du verre", fond: "Fond du verre (lu à 
 function consignesMarquePages(produit, mp) {
   const cfg = produit.marquePages;
   const general = [], faces = [], autres = [];
-  const fmt = MP_FORMATS.find((f) => f.id === mp.format);
-  if (fmt) general.push({ k: "Format", v: fmt.titre + (fmt.box ? ` — boîte cadeau pour ${fmt.box}` : ""), fort: true });
+  const fmt = mpFormat(mp.format);
+  if (fmt) general.push({ k: "Format", v: fmt.titre + (fmt.boites.length ? ` — ${mpBoitesTexte(fmt.boites)}` : ""), fort: true });
   let aDuTexte = false;
   (mp.slots || []).forEach((s, i) => {
     const titre = (produit.variants || []).find((v) => v.id === s.c)?.title || s.c;
