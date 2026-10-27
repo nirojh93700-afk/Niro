@@ -81,8 +81,10 @@ export function GlassPreview({ item }) {
   // photo d'exemple déjà gravée (sinon la photo cliente se pose sur une gravure).
   const blockImg = p?.crystal3d ? (p?.images || []).find((i) => /bloc/.test(i)) : null;
   // Verre à vin 36 / 47 cl : la variante commandée porte sa propre photo vierge.
+  // Bijou en plusieurs couleurs : la photo de la COULEUR commandée (Argenté, Or rose…),
+  // jamais la 1re photo du produit (27/10/2026 : médaillon argenté montré en doré).
   const v = (p?.variants || []).find((x) => x.id === item.variantId);
-  const img = blockImg || (isFond ? p?.fondImage : (v?.engraveImage || p?.engraveImage)) || p?.images?.[0];
+  const img = blockImg || (isFond ? p?.fondImage : (v?.engraveImage || v?.image || p?.engraveImage)) || p?.images?.[0];
   if (!img) return null;
   const W = 300;
   const lay = item.layout?.modele || item.layout?.photo || item.layout?.text;
