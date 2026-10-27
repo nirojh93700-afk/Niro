@@ -21,6 +21,8 @@
   · 27/10 : modèle `newsletterProductsEmail` à largeur SOUPLE (avant, 600 px fixes = mail coupé sur téléphone) ; à la fin d'une campagne
     (plus d'une adresse), UN SEUL récapitulatif au gérant « ✓ Newsletter envoyée : N/N » + adresses en échec (aucune copie par destinataire).
     Gérant : « Envoie les mails, je t'ai dit » → 125 inscrites. 1er déploiement en échec Firebase (aa8f9860, « Build failed » à 2 min 52) : relancé.
+    ✅ ENVOYÉ le 27/10 à 10 h 15 UTC : contrôle à l'atelier (campagne cmvqj1yku) puis 125/125 inscrites, 0 échec (campagne cmvqj2oa8),
+    récapitulatif « ✓ Newsletter envoyée : 125/125 » reçu. Relance éventuelle des non-ouvreuses : objet différent, sur sa demande.
 - **Maquette « bloc Marque-pages sur l'accueil » (27/10, « fais-moi une maquette pour donner envie »)** : https://claude.ai/artifact/HM4fssV7juQZZEsooPFM3w ·
   générateur `tools/maquettes/accueil-marque-pages.py <capture accueil>` : bande encre & or « Nos marque-pages gravés sont arrivés » (3 exemples gravés en bois + le métal Nymphéas, v2 du 27/10 « tu mets aussi le métal »,
   « à partir de 9,90 € », bouton vers `/boutique/marque-pages`) entre le cristal et les bijoux. ✅ EN LIGNE le 27/10 (« Applique la maquette sur l'accueil ») :
