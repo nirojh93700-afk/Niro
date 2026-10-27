@@ -2,6 +2,7 @@ import { lienCategorie } from "@/lib/lienCategorie";
 import { notFound } from "next/navigation";
 import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
 import ProductDetail from "@/components/ProductDetail";
+import MarquePagesFiche from "@/components/marquePages/MarquePagesFiche";
 import { realisationsVisibles } from "@/components/TrustSection";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
@@ -18,6 +19,8 @@ import RecentlyViewed from "@/components/RecentlyViewed";
 import EcrinFicheCristal, { SLUGS_ECRIN } from "@/components/cristal/EcrinFicheCristal";
 import { redirect } from "next/navigation";
 import "../../cristaux-graves.css";
+import "../../marque-pages.css";
+import "../../marque-pages-site.css";
 
 export const dynamic = "force-dynamic";
 
@@ -199,7 +202,9 @@ export default async function ProductPage({ params, searchParams }) {
           Aperçu privé — ce produit n'est pas encore publié (invisible pour les clients).
         </div>
       )}
-      <ProductDetail product={product} realisations={realisations} />
+      {product.marquePages
+        ? <MarquePagesFiche product={product} realisations={realisations} />
+        : <ProductDetail product={product} realisations={realisations} />}
       {guide && (
         <div className="guide-lien-fiche">
           <div className="container">

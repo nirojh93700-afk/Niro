@@ -1,3 +1,4 @@
+import { MP_BOITES } from "@/lib/marquePages";
 import { getStockMap, getImageOverrides, getPromos, isAdmin } from "@/lib/stock";
 import { getCatalogAdmin } from "@/lib/catalog";
 
@@ -90,6 +91,15 @@ export async function GET(req) {
           isOption: true,
         });
       }
+    }
+  }
+  // Boîtes cadeau des marque-pages (27/10/2026) : stock commun aux trois modèles, vendu avec le format.
+  if (products.some((p) => p.marquePages)) {
+    for (const b of Object.values(MP_BOITES)) {
+      if (extrasVus.has(b.stockId)) continue;
+      extrasVus.add(b.stockId);
+      rows.push({ productSlug: "__options", productName: "Options & accessoires", category: "cadeaux", variantId: b.stockId, stockId: b.stockId,
+        variantTitle: b.titre, image: b.image, price: b.prix, salePrice: null, stock: typeof map[b.stockId] === "number" ? map[b.stockId] : null, isOption: true });
     }
   }
   return Response.json({ rows, catalog, editable });

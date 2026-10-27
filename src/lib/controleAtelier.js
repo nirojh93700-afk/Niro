@@ -71,6 +71,7 @@ export function oubliesAtelier(item) {
   const out = [];
   for (const [cle, valeur] of Object.entries(champs)) {
     if (IGNORES.has(cle)) continue;
+    if (cle === "mp" && produit?.marquePages) continue; // marque-pages : rangés pièce par pièce par consignesGravure
     const f = defs.get(cle);
     if (f && (f.type === "note" || f.type === "font")) continue;
     const libelle = String(f?.label || cle).replace(/\s*\(\+[^)]*\)/g, "").trim();

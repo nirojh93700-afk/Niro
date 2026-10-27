@@ -1,3 +1,19 @@
+## 🔖 LES TROIS MARQUE-PAGES — ✅ EN VENTE DEPUIS LE 27/10/2026 (gérant : « mets en vente, sur le site, les maquettes »)
+- Fiches `marque-page-bois-pompon` (9,90 €, 6 couleurs) · `marque-page-bois-oiseau` (13,90 €, 4 couleurs) · `marque-page-metal-peinture`
+  (15,90 €, Papillon · coffret 19,90 €, 8 tableaux, SANS gravure). Rayon « Marque-pages » en tête de l'univers Petits cadeaux.
+- **Fiche dédiée** `src/components/marquePages/MarquePagesFiche.jsx` (choisie dans `produit/[handle]/page.jsx` quand `product.marquePages`)
+  = les maquettes enregistrées (modèle 1 v17, modèle 2 v16, métal v4) SANS l'encadré précommande : couleur, 4 formats (seul / boîte 4,90 /
+  coffret 2 à 5,90 / coffret 4 à 7,90), 4 emplacements de gravure (texte +3, dessin ou photo +4, texte dans un cadre +3), planches du gobelet,
+  aperçu face + dos dans la grande photo, coffret pas à pas + « la même gravure », photos envoyées par `/api/upload`.
+  CSS `src/app/marque-pages.css` (GÉNÉRÉ depuis `mp_apercu.py` + `marque-pages.py`) + `marque-pages-site.css`. Photos `public/marque-pages/`
+  et données `src/lib/marquePagesData.js` GÉNÉRÉES par `python3 tools/marque-pages-site.py`.
+- **Un seul calcul** `src/lib/marquePages.js` (fiche ET paiement : `mpNormaliser`, `mpCalcul`, `mpResume`) ; `/api/checkout` a sa branche
+  marque-pages (stock décompté pièce par pièce + la boîte, boîte ou Papillon = colis, seul = lettre suivie). Panier : `fields.mp`.
+- Atelier : `consignesGravure` fait un bloc par marque-page et par côté (vignette du dessin / de la photo, « texte à la verticale » au milieu) ;
+  « Vendu en plus » = la boîte. Stock des boîtes `mp-boite-1/2/4` dans Produits & stock (Options & accessoires), retirées de Matériel.
+  Coûts dans `VARIANT_COSTS`. `npm run test-marque-pages` (21 vérifs).
+- Vidéo 31 (annonce) : `docs/videos/REGISTRE-VIDEOS.md`.
+
 ## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
 - **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v9 au 24/10 soir : exemples photo ; sur le noir, une photo reste un POSITIF clair sur le noir, l'inversion ne vaut que pour les traits des dessins : la v8 montrait un négatif, « ça fait vraiment bizarre ») · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
   `tools/maquettes/carnet-a5.py <capture> <champ-photo>` (méthode du puzzle photo : fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, build,

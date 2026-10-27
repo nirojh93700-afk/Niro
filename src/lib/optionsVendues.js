@@ -15,6 +15,7 @@
 //
 // Pure (aucun accès réseau) : testée par `npm run test-options` (tools/tests).
 // =============================================================================
+import { MP_FORMATS, MP_BOITES } from "@/lib/marquePages";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -62,6 +63,14 @@ export function optionsArticle(item) {
 
   // 1) Emballage choisi (sac, boîte, pack…) — toujours un objet à glisser dans le colis.
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
+  // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).
+  if (produit?.marquePages && champs.mp && typeof champs.mp === "object") {
+    const fmt = MP_FORMATS.find((f) => f.id === champs.mp.format);
+    const n = (champs.mp.slots || []).length;
+    if (fmt?.box) out.push({ libelle: "Boîte cadeau bleu nuit", detail: `pour ${fmt.box} marque-page${fmt.box > 1 ? "s" : ""}`, montant: MP_BOITES[fmt.box].prix, physique: true });
+    if (n > 1) out.push({ libelle: "Marque-pages dans la commande", detail: `${n} pièces, chacune avec sa couleur et sa gravure (voir le tableau « À graver »)`, montant: 0, physique: true });
+    return out;
+  }
 
   // 2) Suppléments « à plat » : coffret, socle LED, date, 2e emplacement, texte sur un support…
   for (const e of cfg.flatExtras || []) {

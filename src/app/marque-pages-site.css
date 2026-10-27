@@ -1,0 +1,11 @@
+/* Fiches marque-pages (27/10/2026) : compléments du site à la feuille générée marque-pages.css. */
+.mp-fiche .gallery-main{position:relative}
+.mp-fiche .gallery-main .gallery-bg{width:100%;height:100%;object-fit:cover;display:block}
+.mp-fiche .gallery-thumbs .mq-thex{position:relative}
+.mp-fiche .mq-fmts{margin-bottom:4px}
+.mp-polaff{margin:8px 0 0;font-size:1.25rem;color:var(--ink);line-height:1.3}
+.mp-fiche .field-note{margin:6px 0 0;font-size:.8rem;color:var(--ink-soft)}
+.mq-zoom-in-ap{display:flex;justify-content:center;padding:44px 16px 16px}
+.mq-sc .mq-row{grid-template-columns:repeat(auto-fill,minmax(64px,1fr))}
+.mq-shh b{font-family:var(--font-display),"Playfair Display",serif}
+@media (max-width:640px){.mq-galap .mq-apw{gap:10px}}

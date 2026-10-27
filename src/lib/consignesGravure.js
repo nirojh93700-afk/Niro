@@ -21,6 +21,7 @@ import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel } from "@/lib/modeles";
+import { MP_FORMATS, mpLignes } from "@/lib/marquePages";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -116,9 +117,35 @@ export function placementGravure(item) {
 
 const EMPLACEMENTS = { face: "Face avant du verre", fond: "Fond du verre (lu à travers le verre)", deux: "Face avant ET fond du verre" };
 
+// Marque-pages (27/10/2026) : un bloc PAR marque-page et par côté (face / dos), avec sa couleur ; le texte « au milieu »
+// est écrit à la verticale (zones données par le gérant le 23/10). Le dessin et la photo s'affichent en vignette.
+function consignesMarquePages(produit, mp) {
+  const cfg = produit.marquePages;
+  const general = [], faces = [], autres = [];
+  const fmt = MP_FORMATS.find((f) => f.id === mp.format);
+  if (fmt) general.push({ k: "Format", v: fmt.titre + (fmt.box ? ` — boîte cadeau pour ${fmt.box}` : ""), fort: true });
+  let aDuTexte = false;
+  (mp.slots || []).forEach((s, i) => {
+    const titre = (produit.variants || []).find((v) => v.id === s.c)?.title || s.c;
+    if (!cfg.gravure) { autres.push({ k: `Marque-page ${i + 1}`, v: titre, texte: false }); return; }
+    const lignes = mpLignes(cfg.modele, s.v);
+    for (const side of ["face", "dos"]) {
+      const l = lignes.filter((x) => x.side === side).map((x) => {
+        if (x.texte) aDuTexte = true;
+        const ou = x.libelle.replace(/^(Face|Dos), /, "");
+        return { k: ou.charAt(0).toUpperCase() + ou.slice(1) + (x.texte && x.key.endsWith("|bas") ? " · texte à la verticale" : ""), v: x.valeur, texte: x.texte, img: x.img };
+      });
+      faces.push({ nom: `Marque-page ${i + 1} · ${titre} · ${side === "face" ? "Face" : "Dos"}`, lignes: l, vide: !l.length });
+    }
+  });
+  if (aDuTexte) general.push({ k: "Police", v: getFontLabel(mp.police) || mp.police });
+  return { general, faces, autres, placement: [] };
+}
+
 export function consignesGravure(item) {
   const produit = getProductBySlug(item?.slug);
   const champs = item?.fields || {};
+  if (produit?.marquePages && champs.mp && typeof champs.mp === "object") return consignesMarquePages(produit, champs.mp);
   const vus = (produit?.personalizationFields || []).filter((f) => champVisible(f, champs, item?.variantTitle));
   const general = [];
   const autres = [];

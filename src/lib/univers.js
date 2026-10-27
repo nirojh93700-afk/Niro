@@ -69,8 +69,9 @@ export const UNIVERS = [
     rayons: [{ nom: "Lampes & veilleuses", slugs: ["arbre-de-vie-lumineux", "veilleuse-arbre-de-vie-ronde", "veilleuse-arbre-de-vie-prenom", "lampe-led-paris-saint-germain"] },
              { nom: "Bougeoirs", slugs: ["bougeoir-mandala-bois", "photophore-fee-bois", "bougeoir-fleur-de-lotus"] }] },
   { id: "cadeaux", nom: "Petits cadeaux", short: "Petits cadeaux", pourqui: true, img: "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
-    accroche: "Clés USB, porte-clés, pièce à graver et accessoires de bureau, personnalisés ou prêts à offrir.",
-    rayons: [{ nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
+    accroche: "Marque-pages, clés USB, porte-clés, pièce à graver et accessoires de bureau, personnalisés ou prêts à offrir.",
+    rayons: [{ nom: "Marque-pages", slugs: ["marque-page-bois-pompon", "marque-page-bois-oiseau", "marque-page-metal-peinture"] },
+             { nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
              { nom: "Porte-clés & pièce à graver", slugs: ["porte-cles-cuir-a-graver", "piece-ronde-laiton", "porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle"] },
              { nom: "Bureau", slugs: ["support-telephone-bois-grave", "support-telephone-bois-ajoure", "porte-stylo-coq-coupe-du-monde",
                                      "porte-stylo-portugal-coupe-du-monde", "porte-stylo-argentine-coupe-du-monde", "porte-stylo-espagne-coupe-du-monde"] }] },
@@ -94,6 +95,7 @@ const QUI_EXTRA = {
   "verre-a-vin-grave": ["couple", "elle"], "flute-a-champagne-gravee": ["couple", "elle"],
   "cle-usb-personnalisee": ["lui"], "cle-usb-bois-coffret": ["lui"], "cle-usb-cristal-3d": ["lui"],
   "porte-cles-cuir-a-graver": ["lui"], "piece-ronde-laiton": ["lui"],
+  "marque-page-bois-pompon": ["elle", "lui", "parents"], "marque-page-bois-oiseau": ["elle", "parents"], "marque-page-metal-peinture": ["elle", "parents"],
 };
 const QUI_UNIVERS = { verres: ["lui"], maison: ["elle", "parents"], cristal: ["parents", "couple"], mariage: ["maries"], bijoux: ["elle"], enfants: ["enfant"], cadeaux: ["lui", "elle"] };
 

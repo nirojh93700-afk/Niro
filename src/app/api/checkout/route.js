@@ -1,3 +1,4 @@
+import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { cumulPermis, remiseCumulee } from "@/lib/cumulCodes";
@@ -169,6 +170,33 @@ export async function POST(req) {
     }
     const quantity = Math.min(Math.max(parseInt(item.quantity, 10) || 1, 1), 99);
     const { product, variant } = match;
+
+    // Marque-pages (27/10/2026) : format, boîte, une couleur et une gravure PAR marque-page — recalcul de confiance
+    // avec la même fonction que la fiche (src/lib/marquePages.js) ; stock décompté pièce par pièce + la boîte.
+    if (product.marquePages) {
+      const mp = mpNormaliser(product, item.fields?.mp);
+      if (!mp) {
+        return Response.json({ error: "Un marque-page du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
+      }
+      const c = mpCalcul(product, mp);
+      if (!gravureOfferte) gravureOfferte = mpPremiereGravure(mp);
+      for (const [sid, n] of c.stock) boughtVariants.push({ variantId: sid, qty: n * quantity });
+      ajouterLignePort(etatPort, { product, unitGrams: c.grams, unitPrice: c.total, quantity, pkgBoite: c.enBoite || c.pieces.some((p) => p.variant.colis) });
+      lineItems.push({
+        quantity,
+        price_data: {
+          currency: "eur",
+          unit_amount: toCents(c.total),
+          product_data: {
+            name: product.name,
+            description: mpResume(product, mp).slice(0, 900),
+            images: [absoluteImage(c.boite?.image || c.pieces[0].variant.image || product.images[0])].filter(Boolean),
+            metadata: { slug: product.slug },
+          },
+        },
+      });
+      continue;
+    }
 
     // Applique le prix promo s'il est défini et inférieur au prix normal.
     const promo = promos[variant.id];

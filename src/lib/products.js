@@ -614,6 +614,102 @@ export const products = [
 <p><strong>Tarif dégressif :</strong> 34,90 € à l'unité — 31,90 € l'unité dès 10 menus commandés.</p>`,
   },
 
+  // ----------------------------- MARQUE-PAGES ------------------------------
+  // Mis en vente le 27/10/2026 (gérant : « j'ai reçu les articles… mets en vente, sur le site, les maquettes »).
+  // Fiche dédiée (src/components/marquePages/MarquePagesFiche.jsx) = les maquettes enregistrées le 24/10 :
+  // modèle 1 v17, modèle 2 v16, métal v4 — SANS l'encadré précommande. Prix, formats, boîtes, gravure et stock :
+  // src/lib/marquePages.js (le même calcul sur la fiche et au paiement). Une variante = une couleur (ou un tableau).
+  {
+    slug: "marque-page-bois-pompon",
+    name: "Marque-page en bois, pompon doré",
+    badge: "Nouveau",
+    marquePages: { modele: 1, gravure: true },
+    noEngravePreview: true,
+    weight: 30,
+    pickup: false,
+    letter: true,
+    title: "Marque-page en bois à personnaliser, avec pompon doré",
+    category: "cadeaux",
+    type: "Marque-page personnalisé",
+    tagline: "Un marque-page en bois avec son pompon doré, à garder tel quel ou à faire graver d'un dessin, d'une photo ou d'un texte.",
+    personalizable: true,
+    personalizationLabel: "Gravure face et dos : texte, dessin ou photo",
+    images: ["/marque-pages/m1/nanmu.jpg", "/marque-pages/m1/buis.jpg", "/marque-pages/m1/santal.jpg", "/marque-pages/m1/palissandre.jpg", "/marque-pages/m1/ebene.jpg", "/marque-pages/m1/suanzhi.jpg", "/marque-pages/m1/exemple-ex1.jpg", "/marque-pages/m1/exemple-ex2.jpg", "/marque-pages/m1/exemple-ex3.jpg", "/marque-pages/m1/exemple-ex4.jpg", "/marque-pages/m1/exemple-ex5.jpg", "/marque-pages/m1/exemple-ex6.jpg", "/marque-pages/m1/exemple-ex7.jpg", "/marque-pages/m1/groupe.jpg", "/marque-pages/m1/ambiance.jpg", "/marque-pages/m1/eventail.jpg"],
+    variants: [
+      { id: "mp1-caramel", title: "Caramel", price: 9.9, image: "/marque-pages/m1/nanmu.jpg" },
+      { id: "mp1-blond", title: "Blond clair", price: 9.9, image: "/marque-pages/m1/buis.jpg" },
+      { id: "mp1-rouge", title: "Rouge", price: 9.9, image: "/marque-pages/m1/santal.jpg" },
+      { id: "mp1-cuivre", title: "Cuivré", price: 9.9, image: "/marque-pages/m1/palissandre.jpg" },
+      { id: "mp1-anthracite", title: "Gris anthracite", price: 9.9, image: "/marque-pages/m1/ebene.jpg" },
+      { id: "mp1-sable", title: "Gris sable", price: 9.9, image: "/marque-pages/m1/suanzhi.jpg" },
+    ],
+    descriptionHtml: `<p><strong>Un marque-page en bois avec son pompon doré, à garder tel quel ou à faire graver dans notre atelier en France.</strong></p>
+<p>Six couleurs au choix : caramel, blond clair, rouge, cuivré, gris anthracite et gris sable. Le bois a ses nuances : deux marque-pages ne sont jamais tout à fait identiques.</p>
+<h3>Offrez-le en boîte cadeau</h3>
+<p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>
+<h3>La gravure</h3>
+<p>Le marque-page seul est à 9,90 €. Pour le personnaliser, choisissez un dessin ou une photo (+4 €), un texte (+3 €), ou les deux, sur la face comme au dos. Vous choisissez l'écriture parmi les huit du site.</p>`,
+  },
+  {
+    slug: "marque-page-bois-oiseau",
+    name: "Marque-page ajouré, oiseau et magnolia",
+    badge: "Nouveau",
+    marquePages: { modele: 2, gravure: true },
+    noEngravePreview: true,
+    weight: 30,
+    pickup: false,
+    letter: true,
+    title: "Marque-page en bois ajouré, oiseau bleu et magnolia, avec cordon à perles de verre",
+    category: "cadeaux",
+    type: "Marque-page personnalisé",
+    tagline: "Un marque-page en bois à la demi-lune ajourée et à l'oiseau bleu imprimé, avec son cordon à perles de verre.",
+    personalizable: true,
+    personalizationLabel: "Gravure face et verso : texte, dessin ou photo",
+    images: ["/marque-pages/m2/blond.jpg", "/marque-pages/m2/roux.jpg", "/marque-pages/m2/sable.jpg", "/marque-pages/m2/noir.jpg", "/marque-pages/m2/exemple-ex1.jpg", "/marque-pages/m2/exemple-ex2.jpg", "/marque-pages/m2/exemple-ex3.jpg", "/marque-pages/m2/exemple-ex4.jpg", "/marque-pages/m2/exemple-ex5.jpg", "/marque-pages/m2/exemple-ex6.jpg", "/marque-pages/m2/groupe.jpg"],
+    variants: [
+      { id: "mp2-blond", title: "Blond clair", price: 13.9, image: "/marque-pages/m2/blond.jpg" },
+      { id: "mp2-roux", title: "Brun roux", price: 13.9, image: "/marque-pages/m2/roux.jpg" },
+      { id: "mp2-sable", title: "Sable", price: 13.9, image: "/marque-pages/m2/sable.jpg" },
+      { id: "mp2-brun", title: "Brun foncé", price: 13.9, image: "/marque-pages/m2/noir.jpg" },
+    ],
+    descriptionHtml: `<p><strong>Un marque-page en bois à la demi-lune ajourée, avec un oiseau bleu sur une branche de magnolia imprimé en couleurs.</strong></p>
+<p>Quatre couleurs de bois : blond clair, brun roux, sable et brun foncé. Un cordon brun à deux perles de verre complète le marque-page.</p>
+<h3>Offrez-le en boîte cadeau</h3>
+<p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>
+<h3>Gravé sur la face et au verso</h3>
+<p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale ; au-dessus de la fenêtre, vous pouvez aussi faire graver votre photo, en noir et blanc (+4 €), comme un portrait. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez.</p>`,
+  },
+  {
+    slug: "marque-page-metal-peinture",
+    name: "Marque-page en métal doré, peintures célèbres",
+    badge: "Nouveau",
+    marquePages: { modele: 3, gravure: false },
+    noEngravePreview: true,
+    weight: 40,
+    pickup: false,
+    letter: true,
+    title: "Marque-page en métal doré, Van Gogh et Monet, avec pompon",
+    category: "cadeaux",
+    type: "Marque-page",
+    tagline: "Un marque-page en métal doré, finement découpé et émaillé d'après un tableau de Van Gogh ou de Monet, avec son pompon. Huit tableaux au choix.",
+    personalizable: false,
+    images: ["/marque-pages/metal/01-amandier-en-fleurs-van-gogh.jpg", "/marque-pages/metal/02-iris-van-gogh.jpg", "/marque-pages/metal/09-nympheas-monet-pompon.jpg", "/marque-pages/metal/10-roses-blanches-van-gogh-pompon-dore.jpg", "/marque-pages/metal/11-iris-van-gogh-pompon-dore.jpg", "/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg", "/marque-pages/metal/22-nympheas-papillon-monet-coffret.jpg", "/marque-pages/metal/24-tournesols-van-gogh-timbres.jpg"],
+    variants: [
+      { id: "mp3-amandier", title: "Amandier en fleurs", price: 15.9, image: "/marque-pages/metal/01-amandier-en-fleurs-van-gogh.jpg" },
+      { id: "mp3-iris", title: "Iris", price: 15.9, image: "/marque-pages/metal/02-iris-van-gogh.jpg" },
+      { id: "mp3-nympheas", title: "Nymphéas", price: 15.9, image: "/marque-pages/metal/09-nympheas-monet-pompon.jpg" },
+      { id: "mp3-roses", title: "Roses blanches", price: 15.9, image: "/marque-pages/metal/10-roses-blanches-van-gogh-pompon-dore.jpg" },
+      { id: "mp3-iris-dore", title: "Iris · pompon doré", price: 15.9, image: "/marque-pages/metal/11-iris-van-gogh-pompon-dore.jpg" },
+      { id: "mp3-nympheas-dore", title: "Nymphéas · pompon doré", price: 15.9, image: "/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" },
+      { id: "mp3-papillon", title: "Papillon · coffret", price: 19.9, weight: 90, colis: true, image: "/marque-pages/metal/22-nympheas-papillon-monet-coffret.jpg" },
+      { id: "mp3-tournesols", title: "Tournesols · timbres", price: 15.9, image: "/marque-pages/metal/24-tournesols-van-gogh-timbres.jpg" },
+    ],
+    descriptionHtml: `<p><strong>Un marque-page en métal doré, découpé et émaillé d'après une peinture célèbre : Van Gogh ou Monet.</strong> Chaque modèle reprend un tableau — l'Amandier en fleurs, les Iris, les Nymphéas, les Roses blanches, les Tournesols — avec son pompon assorti et sa carte illustrée.</p>
+<p>Cinq exemplaires de chaque tableau seulement.</p>
+<h3>Offrez-le en boîte cadeau</h3>
+<p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre. Le modèle Papillon arrive déjà dans son propre coffret à fenêtre.</p>`,
+  },
+
   // ----------------------------- CADEAUX & DÉCO ------------------------------
   {
     slug: "puzzle-photo-grave",

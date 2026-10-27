@@ -512,3 +512,29 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 
 #nivcreation #marquepage #cadeaupersonnalise #nouveaute #ideecadeau
 
+
+## Vidéo 31 — Annonce « Nouveau : nos marque-pages » (27/10/2026)
+
+| Fichier | Format | Durée | Poids |
+|---|---|---|---|
+| `31-annonce-marque-pages-1080x1920.mp4` (pleine qualité, PAS gardée dans le dépôt : taille du dépôt) | 1080 × 1920, 30 i/s, H.264, sans son | 36,3 s | 7,2 Mo |
+| `docs/videos/31-annonce-marque-pages-720x1280.mp4` | 720 × 1280 (légère) | 36,3 s | 2,3 Mo |
+
+- **Source** : `tools/video/annonce_marque_pages_31.py [dossier de sortie]` (copie du script de la 30, mêmes plans, mêmes images, seuls les textes changent).
+- **Occasion** : les marque-pages sont arrivés et mis en vente le 27/10/2026 → annonce de nouveauté, plus de teaser.
+- **Contenu** : mêmes 14 plans que la 30 (modèle 1 : groupe, prénom, photo d'un enfant gravée, teintes ; modèle 2 : groupe, portrait au-dessus de la
+  fenêtre, prénom ; modèle 3 métal : Roses blanches, Iris, Nymphéas, Amandier en fleurs, Papillon en coffret ; boîte de 4 ; exemple « Pour Mamie »).
+  Ruban « ✦ NOUVEAU À L'ATELIER ✦ » sur chaque plan, pastille « NOUVEAU », carte du début « Nos marque-pages » (bandeau « ✦ NOUVEAU ✦ » au-dessus),
+  carte de fin « Disponibles — Sur nivcreation.fr, à composer et à offrir dès maintenant » + « nivcreation.fr · Gravés en France ». Plus aucune
+  mention « avant-première », « inédit », « prochainement » ni lettre d'information.
+- ⚠️ Bois = toujours les APERÇUS des maquettes (prénoms d'exemple : Camille, Léa, Paul, Inès). Métal = photos du fournisseur recadrées (Papillon :
+  caractères chinois floutés) ; le mot « gravé » n'apparaît jamais sur ses plans. Aucun prix, aucune date, aucun nombre. **À refaire avec les vraies
+  photos gravées de l'atelier.**
+
+### Description à copier-coller (livrée le 27/10/2026)
+
+**Vidéo 31 — Nouveau : nos marque-pages** (Marque-page en bois à pompon doré, Marque-page ajouré oiseau et magnolia, Marque-page en métal doré peintures célèbres)
+> Nouveau à l'atelier 🆕 Nos marque-pages sont arrivés ✨ En bois, gravés à votre prénom ou même à votre photo, un modèle ajouré avec son oiseau sur une branche de magnolia, et des marque-pages en métal doré aux couleurs de Van Gogh et Monet 🎨 À offrir ou à s'offrir, pour tous les amoureux de la lecture 📚💛
+> 👉 nivcreation.fr
+
+#nivcreation #marquepage #cadeaupersonnalise #nouveaute #ideecadeau

@@ -8,6 +8,7 @@
 // Pur (aucun accès réseau), utilisé par la surveillance du catalogue (catalogAudit.js) et testé par
 // `npm run test-textes-prix`.
 // =============================================================================
+import { MP_PRIX, MP_BOITES } from "./marquePages";
 import { engravingExtra } from "./engravingPrice.js";
 
 const TEXTE = new Set(["text", "textarea"]);
@@ -85,6 +86,11 @@ const nombre = (s) => arrondi(Number(String(s).replace(",", ".")));
 /** Tous les montants qu'une case, une option ou un motif ajoute au paiement, sur toutes les variantes. */
 export function supplementsPayes(product) {
   const out = new Set();
+  // Marque-pages (27/10/2026) : gravure et boîtes chiffrées par src/lib/marquePages.js (même calcul au paiement).
+  if (product.marquePages) {
+    if (product.marquePages.gravure) for (const x of [MP_PRIX.texte, MP_PRIX.dessin, MP_PRIX.photo, MP_PRIX.texteCadre]) out.add(x);
+    for (const b of Object.values(MP_BOITES)) out.add(b.prix);
+  }
   const vars = Array.isArray(product.variants) && product.variants.length ? product.variants : [{ id: null, title: "" }];
   const champs = product.personalizationFields || [];
   for (const v of vars) {

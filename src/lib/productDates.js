@@ -9,6 +9,9 @@
 export const NOUVEAU_JOURS = 30;
 
 export const PRODUCT_DATES = {
+  "marque-page-bois-pompon": "2026-10-27",
+  "marque-page-bois-oiseau": "2026-10-27",
+  "marque-page-metal-peinture": "2026-10-27",
   "cristal-deja-grave": "2026-10-10",
   "puzzle-photo-grave": "2026-10-09",
   "puzzle-foret": "2026-10-09",

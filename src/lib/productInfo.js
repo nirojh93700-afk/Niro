@@ -517,6 +517,44 @@ Un souci à la réception ?
 - Pièce gravée à la commande : non remboursable une fois la gravure lancée (article L221-28).
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
+  "marque-page-bois-pompon": {
+    material: `Taille & Matériaux
+- Marque-page en bois, avec un pompon doré.
+- Six couleurs au choix : caramel, blond clair, rouge, cuivré, gris anthracite, gris sable.
+- Dessin, photo et texte gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien.
+- Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
+- Produit gravé à la commande : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "marque-page-bois-oiseau": {
+    material: `Taille & Matériaux
+- Marque-page en bois, demi-lune ajourée, oiseau bleu et magnolia imprimés.
+- Quatre couleurs au choix : blond clair, brun roux, sable, brun foncé.
+- Cordon brun avec deux perles de verre.`,
+    usage: `Personnalisation & Entretien
+- Sur la face : un texte (+3 €) au-dessus de la fenêtre ou à côté, ou votre photo au-dessus de la fenêtre (+4 €).
+- Au verso : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), en haut et au milieu.
+- Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
+- Produit gravé à la commande : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
+  "marque-page-metal-peinture": {
+    material: `Taille & Matériaux
+- Marque-page en métal doré (laiton), découpé et émaillé en couleurs d'après un tableau de Van Gogh ou de Monet, livré avec son pompon et sa carte illustrée.
+- Format courant : environ 14 × 4 cm ; série « timbres » : environ 7 × 3 cm. Le modèle Papillon est livré dans son propre coffret à fenêtre.`,
+    usage: `Personnalisation & Entretien
+- Le marque-page n'est pas gravé : il se choisit tel quel, parmi les huit tableaux.
+- Entretien : un coup de chiffon doux et sec suffit. Évitez l'eau et les produits abrasifs, qui ternissent la dorure et l'émail.`,
+    returns: `Expédition & Retour
+- Envoi en lettre suivie. Une boîte cadeau ou un coffret rigide part en petit colis.
+- Le marque-page peut être retourné sous 14 jours, dans son emballage d'origine.`,
+  },
   "puzzle-photo-grave": {
     material: `Taille & Matériaux
 - Plateau en bois clair : 21 × 15 cm.

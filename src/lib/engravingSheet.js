@@ -125,6 +125,12 @@ function Consignes({ item, avecPlacement = true }) {
                 <div key={i} style={{ padding: "5px 10px", borderTop: i ? "1px solid #eee" : 0 }}>
                   <div style={{ fontSize: "0.75rem", color: "#777" }}>{l.k}</div>
                   <div style={{ fontWeight: 700, fontSize: l.texte ? "1.15rem" : "0.95rem", overflowWrap: "anywhere" }}>{l.v}</div>
+                  {l.img ? (
+                    <a href={l.img} target="_blank" rel="noreferrer">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={l.img} alt="" style={{ width: 72, height: 72, objectFit: "contain", border: "1px solid #ddd", borderRadius: 6, background: "#fff", marginTop: 4 }} />
+                    </a>
+                  ) : null}
                 </div>
               ))}
             </div>

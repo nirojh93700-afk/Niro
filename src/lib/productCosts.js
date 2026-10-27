@@ -6,6 +6,13 @@
 // N'affecte PAS la boutique : sert seulement au calcul du bénéfice.
 // =============================================================================
 export const VARIANT_COSTS = {
+  // Marque-pages — reçu Alibaba n° 33852424501043880 (23/10/2026) : prix × 1,574 (logistique + frais de paiement
+  // répartis au prorata), voir docs/marque-pages-commande-alibaba-2026-10-12.md.
+  "mp1-caramel": 1.15, "mp1-blond": 1.15, "mp1-rouge": 1.15, "mp1-cuivre": 1.15, "mp1-anthracite": 1.15, "mp1-sable": 1.15,
+  "mp2-blond": 2.14, "mp2-roux": 2.14, "mp2-sable": 2.14, "mp2-brun": 2.14,
+  "mp3-amandier": 1.15, "mp3-iris": 1.15, "mp3-nympheas": 1.15, "mp3-roses": 1.15, "mp3-iris-dore": 1.15,
+  "mp3-nympheas-dore": 1.15, "mp3-papillon": 1.72, "mp3-tournesols": 1.15,
+  "mp-boite-1": 1.07, "mp-boite-2": 1.43, "mp-boite-4": 2.14,
   // Blocs cristal (coût rendu par taille)
   "bloc-cristal-petit": 4.40,
   "bloc-cristal-moyen": 6.90,
