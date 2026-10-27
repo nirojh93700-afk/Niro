@@ -492,35 +492,14 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
           </div>
 
           <div className="field">
-            <label>Combien de marque-pages ?</label>
-            <div className="mq-nbs" role="group" aria-label="Nombre de marque-pages">
-              {Array.from({ length: MP_MAX }, (_, i) => i + 1).map((n) => (
-                <button key={n} type="button" className={`mq-nb${n === nb ? " on" : ""}`} aria-pressed={n === nb} onClick={() => choisirNombre(n)}>{n}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <label>Boîte cadeau ?</label>
-            <div className="mq-fmts">
-              <button type="button" className={`mq-fmt${!avecBoite ? " on" : ""}`} onClick={() => choisirBoite(false)}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="mq-fimg" src={V[ci].image} alt="Marque-page sans boîte" />
-                <span className="mq-ft">
-                  <b>Sans boîte</b>
-                  <span>{nb > 1 ? `${nb} marque-pages, ` : ""}{modele === 2 ? "avec son cordon à perles de verre" : modele === 3 ? "avec son pompon et sa carte" : "avec son pompon"}</span>
-                  <em>{formatEuro(prixPieces)}</em>
-                </span>
-              </button>
-              <button type="button" className={`mq-fmt${avecBoite ? " on" : ""}`} onClick={() => choisirBoite(true)}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="mq-fimg" src={boites[boitesNb[0]]} alt={`Boîte cadeau bleu nuit, ${mpBoitesTexte(boitesNb)}`} />
-                <span className="mq-ft">
-                  <b>En boîte cadeau</b>
-                  <span>Boîte bleu nuit : {mpBoitesTexte(boitesNb)} (+{formatEuro(prixBoitesNb)})</span>
-                  <em>{boiteEpuisee ? "Boîte épuisée" : formatEuro(prixPieces + prixBoitesNb)}</em>
-                </span>
-              </button>
+            <label>Quantité</label>
+            <div className="mq-qty">
+              <div className="qty-stepper">
+                <button type="button" onClick={() => choisirNombre(Math.max(1, nb - 1))} aria-label="Un marque-page de moins" disabled={nb <= 1}>−</button>
+                <span>{nb}</span>
+                <button type="button" onClick={() => choisirNombre(Math.min(MP_MAX, nb + 1))} aria-label="Un marque-page de plus" disabled={nb >= MP_MAX}>+</button>
+              </div>
+              <span className="mq-qtyt">{nb > 1 ? `${nb} marque-pages · ${formatEuro(prixPieces)}` : `1 marque-page · ${formatEuro(prixPieces)}`}</span>
             </div>
           </div>
 
@@ -559,6 +538,17 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
               <p className="field-note">Laissez « Rien » partout pour un marque-page sans gravure.</p>
             </div>
           )}
+
+          <label className={`mq-boxopt${avecBoite ? " on" : ""}${boiteEpuisee ? " off" : ""}`}>
+            <input type="checkbox" checked={avecBoite} disabled={boiteEpuisee} onChange={(e) => choisirBoite(e.target.checked)} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={boites[boitesNb[0]]} alt="" />
+            <span className="mq-boxt">
+              <b>Ajouter la boîte cadeau bleu nuit</b>
+              <span>{boiteEpuisee ? "Momentanément épuisée" : boitesNb.length === 1 ? `Boîte de ${boitesNb[0]} place${boitesNb[0] > 1 ? "s" : ""}${nb > 1 ? ` pour vos ${nb} marque-pages` : ""}` : `${boitesNb.length} boîtes (${boitesNb.join(" + ")} places) pour vos ${nb} marque-pages`}</span>
+            </span>
+            <em>+{formatEuro(prixBoitesNb)}</em>
+          </label>
 
           <div className="pd-totbox">
             <span className="lab">Total tout compris</span>
