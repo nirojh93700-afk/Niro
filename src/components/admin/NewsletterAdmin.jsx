@@ -15,6 +15,22 @@ export default function NewsletterAdmin({ adminKey }) {
   const [msg, setMsg] = useState("");
   const [campagnes, setCampagnes] = useState([]);
   const [relance, setRelance] = useState(null); // liste d'e-mails d'une relance ciblée
+  const [aRetirer, setARetirer] = useState("");
+  const [retraitMsg, setRetraitMsg] = useState("");
+
+  // Désinscription à la demande d'une personne (« merci de retirer mon adresse »).
+  async function retirer() {
+    const email = aRetirer.trim().toLowerCase();
+    if (!email) return;
+    if (!window.confirm(`Retirer ${email} de la newsletter ?`)) return;
+    setRetraitMsg("");
+    try {
+      const r = await fetch("/api/admin/newsletter", { method: "DELETE", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ email }) });
+      const d = await r.json();
+      if (!r.ok) { setRetraitMsg(d.error || "Erreur."); return; }
+      setCount(d.count); setARetirer(""); setRetraitMsg(`✓ ${email} ne recevra plus la newsletter.`);
+    } catch { setRetraitMsg("Erreur réseau : rien n'a été retiré."); }
+  }
 
   useEffect(() => {
     fetch("/api/admin/newsletter", { headers: { "x-admin-key": adminKey } })
@@ -68,6 +84,12 @@ export default function NewsletterAdmin({ adminKey }) {
         Envoie une newsletter à tes abonnées, à ton image. C&apos;est <strong>toi</strong> qui choisis et qui envoies.
         {count !== null && <> Actuellement : <strong>{count} abonnée{count > 1 ? "s" : ""}</strong>.</>}
       </p>
+
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 14 }}>
+        <input type="email" placeholder="Retirer une adresse (désinscription)" value={aRetirer} onChange={(e) => setARetirer(e.target.value)} style={{ flex: "1 1 240px", minWidth: 0, boxSizing: "border-box" }} />
+        <button className="btn" onClick={retirer} disabled={!aRetirer.trim()}>Retirer de la liste</button>
+        {retraitMsg && <span style={{ fontSize: "0.85rem" }}>{retraitMsg}</span>}
+      </div>
 
       {relance && (
         <div className="notice" style={{ marginBottom: 14 }}>

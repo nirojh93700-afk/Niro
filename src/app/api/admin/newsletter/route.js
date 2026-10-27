@@ -1,4 +1,4 @@
-import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays, getGmailCreds, startEmailCampaign } from "@/lib/stock";
+import { isAdmin, removeSubscriber, getSubscribers, getSubscribersDetailed, getBirthdays, getGmailCreds, startEmailCampaign } from "@/lib/stock";
 import { addTracking } from "@/lib/emailTrack";
 import { BRAND, emailLayout, escapeHtml, newsletterProductsEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
@@ -120,4 +120,15 @@ export async function POST(req) {
     } catch { /* le récapitulatif ne doit jamais faire échouer la campagne */ }
   }
   return Response.json({ ok: true, sent, total: subs.length, failed, campaignId });
+}
+
+// Désinscription d'une adresse (demande de la personne) : DELETE { email }.
+export async function DELETE(req) {
+  if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
+  let body;
+  try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
+  const ok = await removeSubscriber(body?.email);
+  if (!ok) return Response.json({ error: "Cette adresse n'est pas dans la liste." }, { status: 404 });
+  const count = (await getSubscribers()).length;
+  return Response.json({ ok: true, count });
 }

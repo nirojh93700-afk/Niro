@@ -2301,6 +2301,19 @@ export async function addSubscriber(email) {
   return true;
 }
 
+// Retire une adresse de la newsletter (demande de désinscription). Lecture FRAÎCHE + écriture
+// de la seule section « subscribers ». Renvoie true si l'adresse était inscrite.
+export async function removeSubscriber(email) {
+  const e = String(email || "").trim().toLowerCase();
+  if (!e) return false;
+  const data = await getCatalogRaw(true);
+  const avant = (data.subscribers || []).length;
+  data.subscribers = (data.subscribers || []).filter((s) => String(typeof s === "string" ? s : s?.email || "").trim().toLowerCase() !== e);
+  if (data.subscribers.length === avant) return false;
+  await persistCatalog(data, ["subscribers"]);
+  return true;
+}
+
 // --- Réglages d'apparence (thème) ------------------------------------------
 // Tout est optionnel : un champ vide = on garde la valeur par défaut du site.
 // fresh = true : relit la base sans passer par le cache 60 s (voir getCatalogRaw)
