@@ -430,3 +430,10 @@ En attente de SA décision :
   éventuellement passer aussi les brouillons de réponses sur Haiku (à juger sur quelques réponses). IA gratuites d'autres éditeurs :
   déconseillées (limites, règles mal suivies, données clientes utilisées pour l'entraînement).
 - Noté aussi dans `docs/AMELIORATIONS.md` (section « Équipe d'agents v2 »).
+
+## ✉️ 27/10/2026 — relances et demande Violette (envoyées par le site)
+- 12 h 30 : relance Doriane Ehret (devis DEV-1527, lien de paiement en simple lien) et Mme Grunenberger (verre « Agathe », 17,90 €) — parties.
+- 12 h 39 : Violette (violettegourdin60140@gmail.com, verre à whisky Fête des pères) — aperçu « Joyeux Noël · Je t'aime · Ta fille »
+  (image `/api/img/mCjEwaMiN0ZbLrzTIqRW`), SANS prix, question : textes seuls ou image personnalisée (dessin + textes intégrés) avec maquette.
+  Règle du gérant : image créée sur mesure = plus cher (montant non fixé) ; prix du site pour ce verre = 19,90 €, modèle + textes 22,90 €.
+- Newsletter : Monica Gomes retirée (124 inscrites). Adresses mortes à retirer s'il le dit : agatheogot@gmail.com, stephanieb2a@gamil.com.
