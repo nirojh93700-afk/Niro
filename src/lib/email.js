@@ -141,9 +141,9 @@ export function newsletterProductsEmail({ subject, intro, heading, products = []
     ? `<p style="margin:0 auto;max-width:440px;font-size:15px;line-height:1.6;color:#5c5344;">${escapeHtml(intro)}</p>`
     : "";
   const card = (p) => `
-      <td width="50%" style="padding:8px;" valign="top">
+      <td width="50%" style="padding:6px;width:50%;" valign="top">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #ece0c4;border-radius:12px;overflow:hidden;">
-          <tr><td><a href="${abs(p.url)}" style="text-decoration:none;"><img src="${abs(p.image)}" width="100%" style="display:block;width:100%;height:190px;object-fit:cover;" alt="${escapeHtml(p.name)}"></a></td></tr>
+          <tr><td><a href="${abs(p.url)}" style="text-decoration:none;"><img src="${abs(p.image)}" width="100%" style="display:block;width:100%;height:170px;object-fit:cover;" alt="${escapeHtml(p.name)}"></a></td></tr>
           <tr><td style="padding:12px 12px 14px;text-align:center;">
             <div style="font-size:15px;font-weight:bold;color:#241a0c;">${escapeHtml(p.name)}</div>
             ${p.tagline ? `<div style="font-size:12px;color:#8a7d63;margin:2px 0 8px;">${escapeHtml(p.tagline)}</div>` : `<div style="margin:2px 0 8px;">&nbsp;</div>`}
@@ -158,7 +158,7 @@ export function newsletterProductsEmail({ subject, intro, heading, products = []
   }
   const html = `
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#efe6d4;padding:26px 12px;font-family:Arial,Helvetica,sans-serif;"><tr><td align="center">
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e6d7b8;">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e6d7b8;">
     <tr><td style="background:#faf6ee;padding:26px 30px 18px;border-bottom:3px solid #dcc88f;text-align:center;">
       <div style="font-family:Georgia,serif;font-size:34px;letter-spacing:2px;color:${BRAND.gold};font-weight:bold;line-height:1;">NiV</div>
       <div style="font-family:Georgia,serif;font-size:13px;letter-spacing:6px;color:${BRAND.gold};margin-top:6px;">CRÉATION</div>
@@ -168,7 +168,7 @@ export function newsletterProductsEmail({ subject, intro, heading, products = []
       <h1 style="margin:0 0 12px;font-family:Georgia,serif;font-weight:normal;font-size:26px;color:#241a0c;">${H}</h1>
       ${introHtml}
     </td></tr>
-    <tr><td style="padding:22px 22px 6px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table></td></tr>
+    <tr><td style="padding:18px 10px 6px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;width:100%;">${rows}</table></td></tr>
     <tr><td style="padding:14px 30px 30px;text-align:center;">
       <a href="${site}/boutique" style="display:inline-block;background:${BRAND.gold};color:#241a0c;text-decoration:none;padding:14px 34px;border-radius:9px;font-weight:bold;font-size:15px;">Découvrir toute la boutique →</a>
     </td></tr>
