@@ -150,8 +150,8 @@ export default async function ProductPage({ params, searchParams }) {
 
   // Fil d'Ariane (BreadcrumbList) : « Accueil › Boutique › Catégorie › Produit »
   // → affiché par Google à la place de l'URL brute (meilleur taux de clic).
-  const catLabel = getCategoryLabel(product.category) || "Boutique";
-  const catUrl = categoryUrl(product.category);
+  const catLabel = product.marquePages ? "Marque-pages" : (getCategoryLabel(product.category) || "Boutique");
+  const catUrl = product.marquePages ? "/boutique/marque-pages" : categoryUrl(product.category);
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

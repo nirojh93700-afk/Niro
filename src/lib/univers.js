@@ -68,10 +68,14 @@ export const UNIVERS = [
     accroche: "Lampes, veilleuses et bougeoirs gravés, pour une lumière qui vous ressemble.",
     rayons: [{ nom: "Lampes & veilleuses", slugs: ["arbre-de-vie-lumineux", "veilleuse-arbre-de-vie-ronde", "veilleuse-arbre-de-vie-prenom", "lampe-led-paris-saint-germain"] },
              { nom: "Bougeoirs", slugs: ["bougeoir-mandala-bois", "photophore-fee-bois", "bougeoir-fleur-de-lotus"] }] },
+  // Marque-pages (27/10/2026, gérant : « tu fais pas un petit cadeau… change le nom dans le menu » → « Marque-pages »).
+  { id: "marque-pages", nom: "Marque-pages", short: "Marque-pages", neuf: true, img: "/marque-pages/m1/groupe.jpg",
+    accroche: "Des marque-pages en bois à graver d'un prénom, d'un dessin ou d'une photo, et des marque-pages en métal doré d'après Van Gogh et Monet.",
+    rayons: [{ nom: "Marque-pages en bois", slugs: ["marque-page-bois-pompon", "marque-page-bois-oiseau"] },
+             { nom: "Marque-pages en métal", slugs: ["marque-page-metal-peinture"] }] },
   { id: "cadeaux", nom: "Petits cadeaux", short: "Petits cadeaux", pourqui: true, img: "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
-    accroche: "Marque-pages, clés USB, porte-clés, pièce à graver et accessoires de bureau, personnalisés ou prêts à offrir.",
-    rayons: [{ nom: "Marque-pages", slugs: ["marque-page-bois-pompon", "marque-page-bois-oiseau", "marque-page-metal-peinture"] },
-             { nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
+    accroche: "Clés USB, porte-clés, pièce à graver et accessoires de bureau, personnalisés ou prêts à offrir.",
+    rayons: [{ nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
              { nom: "Porte-clés & pièce à graver", slugs: ["porte-cles-cuir-a-graver", "piece-ronde-laiton", "porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle"] },
              { nom: "Bureau", slugs: ["support-telephone-bois-grave", "support-telephone-bois-ajoure", "porte-stylo-coq-coupe-du-monde",
                                      "porte-stylo-portugal-coupe-du-monde", "porte-stylo-argentine-coupe-du-monde", "porte-stylo-espagne-coupe-du-monde"] }] },
@@ -97,7 +101,7 @@ const QUI_EXTRA = {
   "porte-cles-cuir-a-graver": ["lui"], "piece-ronde-laiton": ["lui"],
   "marque-page-bois-pompon": ["elle", "lui", "parents"], "marque-page-bois-oiseau": ["elle", "parents"], "marque-page-metal-peinture": ["elle", "parents"],
 };
-const QUI_UNIVERS = { verres: ["lui"], maison: ["elle", "parents"], cristal: ["parents", "couple"], mariage: ["maries"], bijoux: ["elle"], enfants: ["enfant"], cadeaux: ["lui", "elle"] };
+const QUI_UNIVERS = { "marque-pages": ["elle", "parents"], verres: ["lui"], maison: ["elle", "parents"], cristal: ["parents", "couple"], mariage: ["maries"], bijoux: ["elle"], enfants: ["enfant"], cadeaux: ["lui", "elle"] };
 
 // Occasions d'un produit (règles d'occasions.js) ; sans occasion → anniversaire + Noël.
 export function occasionsDe(p) {

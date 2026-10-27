@@ -12,8 +12,6 @@ import { useCart } from "@/components/CartContext";
 import { formatEuro } from "@/lib/format";
 import { FONTS } from "@/lib/fonts";
 import { getProductInfo } from "@/lib/productInfo";
-import { lienCategorie } from "@/lib/lienCategorie";
-import { getCategoryLabel } from "@/lib/products";
 import { track, trackOnce } from "@/lib/track";
 import WishlistButton from "@/components/WishlistButton";
 import VacationNotice from "@/components/VacationNotice";
@@ -451,7 +449,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
 
         <div className="product-info">
           <div className="breadcrumb">
-            <Link href="/boutique">Boutique</Link>{" / "}<Link href={lienCategorie(product.category)}>{getCategoryLabel(product.category)}</Link>
+            <Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/marque-pages">Marque-pages</Link>
           </div>
           <div className="pd-titrerow">
             <h1>{product.title}</h1>

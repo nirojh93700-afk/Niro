@@ -1,6 +1,7 @@
 ## 🔖 LES TROIS MARQUE-PAGES — ✅ EN VENTE DEPUIS LE 27/10/2026 (gérant : « mets en vente, sur le site, les maquettes »)
 - Fiches `marque-page-bois-pompon` (9,90 €, 6 couleurs) · `marque-page-bois-oiseau` (13,90 €, 4 couleurs) · `marque-page-metal-peinture`
-  (15,90 €, Papillon · coffret 19,90 €, 8 tableaux, SANS gravure). Rayon « Marque-pages » en tête de l'univers Petits cadeaux.
+  (15,90 €, Papillon · coffret 19,90 €, 8 tableaux, SANS gravure). **Onglet « Marque-pages » dans le menu** (`/boutique/marque-pages`, univers à part, 27/10 :
+  « tu fais pas un petit cadeau » → il a choisi « Marque-pages », « on changera après »), rayons « en bois » / « en métal ».
 - **Fiche dédiée** `src/components/marquePages/MarquePagesFiche.jsx` (choisie dans `produit/[handle]/page.jsx` quand `product.marquePages`)
   = les maquettes enregistrées (modèle 1 v17, modèle 2 v16, métal v4) SANS l'encadré précommande : couleur, 4 formats (seul / boîte 4,90 /
   coffret 2 à 5,90 / coffret 4 à 7,90), 4 emplacements de gravure (texte +3, dessin ou photo +4, texte dans un cadre +3), planches du gobelet,
@@ -493,6 +494,10 @@
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
 > à la suite : sa capture, un e-mail, l'icône du site) : « quand je te dis de pas faire, tu le fais pas,
 > recommence pas pour la prochaine fois sur un autre truc ».
+- ⛔ **JAMAIS UNE QUANTITÉ DE STOCK MONTRÉE AUX CLIENTES, ET RIEN D'AJOUTÉ QU'IL N'A PAS DEMANDÉ (27/10/2026, très ferme)** : j'avais écrit
+  « Cinq exemplaires de chaque tableau seulement » sur la fiche des marque-pages métal (retiré le jour même). Gérant : « tu fais que les trucs
+  je te demande, tu peux me demander un conseil, mais tu fais pas des trucs comme ça ». Aucun nombre d'exemplaires, « plus que N », « série de N »
+  sur le site, dans un mail ou une vidéo. Plus largement : je ne fais QUE ce qu'il demande ; une idée en plus = je la PROPOSE, je ne la mets pas.
 - Dès qu'il dit de NE PAS faire quelque chose, c'est interdit sur-le-champ, pour toute la suite et pour TOUS les sujets.
 - Il est interdit de chercher une **autre façon** d'obtenir le même résultat (autre fichier, autre copie, autre
   chemin, autre outil). Si la seule façon autorisée est impossible : on s'arrête, on le dit en une phrase, on
