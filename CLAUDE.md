@@ -4098,6 +4098,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > (places par couleur, arrivée, « Arrivage reçu », « Prévenir les clientes » = brouillon dans Messages clients, « Rembourser »), sa propre file à 3 colonnes, bloc
 > « Précommande » sur la fiche produit (date d'arrivée + délai → phrase calculée, places par couleur), fiche atelier avec l'encadré « ne pas graver ». Ne pas la modifier sans sa demande.
 
+## 🚚 BÉNÉFICES ET RATÉS AU VRAI PRIX D'ENVOI — ✅ EN LIGNE LE 27/10/2026 (gérant, capture Boxtal : « combien je perds avec les ratés… il y a un problème de calcul »)
+- **Raté compté à la PIÈCE** (`Rates.jsx`, `piecesDe`) : avant, un verre raté d'un « Lot de 4 » coûtait le prix du lot entier (0AYWFAHI : 3 verres 47 cl
+  = 62,16 € au lieu de 15,54 € ; Kim 0XMR9EAS : 1 flûte = 4,98 € au lieu de 2,49 €, corrigés avec l'action `corrigerRate`). Un lot propose la ligne de
+  stock « À l'unité » de la même taille. Case « Il faut renvoyer un colis » → `envoi` (prix de la nouvelle étiquette) compté dans la perte (`perteRate`).
+- **Prix d'étiquette** = source unique `src/lib/etiquetteEnvoi.js` (prix Boxtal HT × 1,2) : Mondial Relay 3,77 € · Colissimo point retrait 6,31 € ·
+  lettre suivie 4,45 € · colis domicile 6,12 € (estimation) ; utilisé par Conditionnement, les ratés et Bénéfices.
+- **Bénéfices** = CA produits + livraison payée − étiquettes − achat − matériel − ratés (avant, la livraison était dite « neutre »). Étiquette = celle
+  saisie à « Valider », sinon le prix du mode d'envoi. La page plantait (500) quand `order.stock` était en texte : corrigé dans `unitCostForItem`.
+- ⚠️ 35 lignes vendues sans coût d'achat connu (bijoux, carafe, devis…) et des lignes « Livraison » de devis comptées comme produits : bénéfice trop haut.
+
 ## ✗ PIÈCE RATÉE / À REFAIRE + CONDITIONNEMENT DANS L'ATELIER — 12/10/2026 ✅ EN LIGNE (1er déploiement en échec Firebase à 2 min 11, réussi au 2e essai c30ace8)
 > Gérant : « il faut que les packaging soient aussi dans l'Atelier de gravure… et si je grave mal et je recommence, pour chaque
 > produit commandé, un truc “raté / à refaire”, je dis combien, il faut que ça diminue le stock automatiquement ».
