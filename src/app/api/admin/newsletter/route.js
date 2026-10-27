@@ -1,6 +1,6 @@
 import { isAdmin, getSubscribers, getSubscribersDetailed, getBirthdays, getGmailCreds, startEmailCampaign } from "@/lib/stock";
 import { addTracking } from "@/lib/emailTrack";
-import { emailLayout, escapeHtml, newsletterProductsEmail } from "@/lib/email";
+import { BRAND, emailLayout, escapeHtml, newsletterProductsEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 import { getCatalog, priceFrom } from "@/lib/catalog";
@@ -87,6 +87,7 @@ export async function POST(req) {
   } catch { campaignId = ""; }
 
   let sent = 0, failed = 0;
+  const echecs = []; // adresses où l'envoi a échoué (récapitulatif au gérant)
   let gmailToken = null;
   try {
     const creds = await getGmailCreds();
@@ -103,9 +104,20 @@ export async function POST(req) {
         sent++;
       } else {
         const r = await sendClientMail({ to, subject, html: perso, bcc: "" });
-        if (r?.ok) sent++; else failed++;
+        if (r?.ok) sent++; else { failed++; echecs.push(to); }
       }
-    } catch { failed++; }
+    } catch { failed++; echecs.push(to); }
+  }
+  // UN SEUL récapitulatif au gérant à la fin (27/10/2026, gérant : « je reçois pas 30 accusés… un accusé en disant tout est
+  // envoyé ou pas »). Aucune copie par destinataire (bcc vide ci-dessus). Un envoi de test à une seule adresse n'en fait pas.
+  if (subs.length > 1) {
+    try {
+      const recap = `<p style="margin:0 0 12px;">Campagne « ${escapeHtml(subject)} » :</p>
+        <p style="margin:0 0 12px;font-size:18px;"><strong>${failed ? "⚠️" : "✓"} ${sent} envoyé${sent > 1 ? "s" : ""} sur ${subs.length}</strong>${failed ? ` · ${failed} échec${failed > 1 ? "s" : ""}` : " — tout est parti."}</p>
+        ${echecs.length ? `<p style="margin:0 0 6px;">Adresses non servies :</p><ul style="margin:0 0 12px;">${echecs.slice(0, 50).map((e) => `<li>${escapeHtml(e)}</li>`).join("")}</ul>` : ""}
+        <p style="margin:0;color:#7a7268;">Ouvertures et clics : Gestion → Marketing → Newsletter.</p>`;
+      await sendClientMail({ to: BRAND.contact, subject: `${failed ? "⚠️" : "✓"} Newsletter envoyée : ${sent}/${subs.length}`, html: emailLayout({ heading: "Récapitulatif d'envoi", bodyHtml: recap }), bcc: "" });
+    } catch { /* le récapitulatif ne doit jamais faire échouer la campagne */ }
   }
   return Response.json({ ok: true, sent, total: subs.length, failed, campaignId });
 }
