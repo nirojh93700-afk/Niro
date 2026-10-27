@@ -59,7 +59,12 @@ export const VARIANT_COSTS = {
 export function unitCostForItem(item, product, stockIds = []) {
   if (!product) return null;
   const vs = product.variants || [];
-  const payes = new Set((stockIds || []).map((x) => (Array.isArray(x) ? x[0] : x)).filter(Boolean));
+  // `order.stock` arrive parfois en TEXTE JSON (métadonnée Stripe) : sans ce garde-fou, la page
+  // Bénéfices plantait (27/10/2026, « (stockIds || []).map is not a function »).
+  let liste = stockIds;
+  if (typeof liste === "string") { try { liste = JSON.parse(liste || "[]"); } catch { liste = []; } }
+  if (!Array.isArray(liste)) liste = [];
+  const payes = new Set(liste.map((x) => (Array.isArray(x) ? x[0] : x)).filter(Boolean));
   const vid = item?.variantId;
   const norm0 = (x) => String(x || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   const texte0 = norm0((item?.name || "") + " " + (item?.details || ""));
