@@ -107,15 +107,16 @@ export default async function HomePage() {
         </section>
         <div className="ruban" aria-hidden="true"><div className="ruban-t">{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => ruban.map((t) => <span key={`${k}-${t}`} style={{ display: "contents" }}><span>{t}</span><i>✦</i></span>))}</div></div>
 
-        {/* MARQUE-PAGES — bande encre & or (maquette validée le 27/10/2026 : « J'aime bien… applique la maquette sur l'accueil ») */}
+        {/* MARQUE-PAGES — bande encre & or (maquette validée le 27/10/2026 : « J'aime bien… applique la maquette sur l'accueil »).
+            Les photos mènent à la page Marque-pages (gérant, 27/10 : « s'il clique sur les photos, ils vont directement dans les marque-pages »). */}
         {mpBois && mpOiseau && mpMetal ? (
           <section className="mpb rv" aria-labelledby="t-mpb">
             <div className="mpb-in">
               <div className="mpb-pics">
-                <span className="mpb-pic p1"><LienPhoto c={mpBois}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex1.jpg" alt="Marque-page en bois gravé « Camille » et papillons" loading="lazy" /></LienPhoto></span>
-                <span className="mpb-pic p2"><LienPhoto c={mpOiseau}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m2/exemple-ex2.jpg" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »" loading="lazy" /></LienPhoto></span>
-                <span className="mpb-pic p3"><LienPhoto c={mpBois}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex7.jpg" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »" loading="lazy" /></LienPhoto></span>
-                <span className="mpb-pic p4"><LienPhoto c={mpMetal}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré" loading="lazy" /></LienPhoto></span>
+                <span className="mpb-pic p1"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex1.jpg" alt="Marque-page en bois gravé « Camille » et papillons" loading="lazy" /></Link></span>
+                <span className="mpb-pic p2"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m2/exemple-ex2.jpg" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »" loading="lazy" /></Link></span>
+                <span className="mpb-pic p3"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex7.jpg" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »" loading="lazy" /></Link></span>
+                <span className="mpb-pic p4"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré" loading="lazy" /></Link></span>
               </div>
               <div className="mpb-copy">
                 <span className="mpb-pill"><i></i>Nouveau à l&apos;atelier</span>
