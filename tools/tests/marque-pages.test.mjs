@@ -47,4 +47,12 @@ ok(c.general.some((g) => g.k === "Police"), "atelier : police");
 ok(oubliesAtelier(item).length === 0, "contrôle atelier : rien d'oublié");
 ok(optionsArticle({ slug: m1.slug, fields: { mp: mpNormaliser(m1, b) } }).some((o) => /Boîte/.test(o.libelle)), "vendu en plus : la boîte");
 ok(/Marque-page 2 : Gris sable/.test(mpResume(m1, mpNormaliser(m1, b))), "résumé par pièce");
+// Quantité + boîtes au choix (27/10/2026) : « n5 » sans boîte, « n5b » = la moins chère, « n5b1-2-0 » = 1 boîte de 1 + 2 de 2
+ok(tot(m1, { format: "n3", slots: ["mp1-rouge", "mp1-sable", "mp1-blond"].map((c) => ({ c })) }) === 29.7, "3 sans boîte = 29,70 €");
+ok(tot(m1, { format: "n5b", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }) === 62.3, "5 en boîte d'office (4 + 1) = 62,30 €");
+const c5 = mpCalcul(m1, mpNormaliser(m1, { format: "n5b1-2-0", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }));
+ok(c5.total === 66.2 && c5.stock.some(([s, q]) => s === "mp-boite-2" && q === 2) && c5.stock.some(([s, q]) => s === "mp-boite-1" && q === 1), "5 en 2 + 2 + 1 = 66,20 €, stock des boîtes compté");
+ok(/2 boîtes de 2 places \+ boîte de 1 place/.test(mpResume(m1, mpNormaliser(m1, { format: "n5b1-2-0", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }))), "résumé : les boîtes choisies");
+ok(mpNormaliser(m1, { format: "n9", slots: [] }) === null && mpNormaliser(m1, { format: "n2b", slots: [{ c: "mp1-rouge" }] }) === null, "nombre hors limite ou pièces manquantes = refusé");
+ok(optionsArticle({ slug: m1.slug, fields: { mp: mpNormaliser(m1, { format: "n5b1-2-0", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }) } }).filter((o) => /Boîte/.test(o.libelle)).length === 3, "vendu en plus : les 3 boîtes");
 console.log(`✓ marque-pages : ${n} vérifications`);

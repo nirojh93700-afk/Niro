@@ -8,6 +8,18 @@
   aperçu face + dos dans la grande photo, coffret pas à pas + « la même gravure », photos envoyées par `/api/upload`.
   CSS `src/app/marque-pages.css` (GÉNÉRÉ depuis `mp_apercu.py` + `marque-pages.py`) + `marque-pages-site.css`. Photos `public/marque-pages/`
   et données `src/lib/marquePagesData.js` GÉNÉRÉES par `python3 tools/marque-pages-site.py`.
+- ✅ **27/10/2026 — QUANTITÉ PUIS BOÎTE CADEAU, LA CLIENTE DÉCIDE (gérant : « comment le client choisit s'il veut plusieurs marque-pages sans
+  la boîte ? … il faut qu'on donne le choix au client » → « Applique »)** : plus de cartes Seul / En boîte / Coffret de 2 / Coffret de 4. Sur
+  la fiche : couleur → **Quantité** (− 1 +, 1 à 8, `MP_MAX`) → gravure (une pièce : sur la page ; plusieurs : « Composer mes marque-pages »,
+  même fenêtre que les coffrets) → case **« Ajouter la boîte cadeau bleu nuit »** juste au-dessus du total. Cochée = le site PROPOSE d'office la
+  combinaison la moins chère (`mpBoitesPour(n)` : 1 → 1 place, 2 → 2, 3-4 → 4, 5 → 4+1, 6 → 4+2, 7-8 → 4+4) puis trois lignes avec photo et
+  − 0 + (boîte de 1 / 2 / 4 places) : **elle décide du nombre de chaque boîte**, ligne verte « N places pour vos N marque-pages : tout rentre »
+  ou orange « 1 marque-page sans boîte » / « 1 place restera vide » — JAMAIS bloquant. Identifiants de format `n<k>` (sans boîte) et
+  `n<k>b<c1>-<c2>-<c4>` (nombre de boîtes de 1, 2, 4 places), les anciens `seul / boite1 / coffret2 / coffret4` restent lus (paniers en cours).
+  `mpFormat(id)`, `mpIdFormat`, `mpCompteBoites`, `mpBoitesDepuisCompte`, `mpBoitesTexte` dans `marquePages.js` ; atelier (`consignesGravure`)
+  et « Vendu en plus » (`optionsVendues`, une ligne PAR boîte) suivent. Le − 1 + du bas de fiche est retiré sur ces fiches. Maquette (captures
+  réelles) https://claude.ai/artifact/YSbZKd3NdNVVnmzaEjTfHC. `npm run test-marque-pages` (27 vérifs). Recherche faite à sa demande : Baymard
+  (60 % des sites expliquent mal l'option cadeau → une case + prix), la quantité en − 1 + comme partout.
 - **Un seul calcul** `src/lib/marquePages.js` (fiche ET paiement : `mpNormaliser`, `mpCalcul`, `mpResume`) ; `/api/checkout` a sa branche
   marque-pages (stock décompté pièce par pièce + la boîte, boîte ou Papillon = colis, seul = lettre suivie). Panier : `fields.mp`.
 - Atelier : `consignesGravure` fait un bloc par marque-page et par côté (vignette du dessin / de la photo, « texte à la verticale » au milieu) ;
