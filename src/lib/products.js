@@ -705,7 +705,6 @@ export const products = [
       { id: "mp3-tournesols", title: "Tournesols · timbres", price: 15.9, image: "/marque-pages/metal/24-tournesols-van-gogh-timbres.jpg" },
     ],
     descriptionHtml: `<p><strong>Un marque-page en métal doré, découpé et émaillé d'après une peinture célèbre : Van Gogh ou Monet.</strong> Chaque modèle reprend un tableau — l'Amandier en fleurs, les Iris, les Nymphéas, les Roses blanches, les Tournesols — avec son pompon assorti et sa carte illustrée.</p>
-<p>Cinq exemplaires de chaque tableau seulement.</p>
 <h3>Offrez-le en boîte cadeau</h3>
 <p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre. Le modèle Papillon arrive déjà dans son propre coffret à fenêtre.</p>`,
   },
