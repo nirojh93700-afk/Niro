@@ -538,3 +538,16 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #marquepage #cadeaupersonnalise #nouveaute #ideecadeau
+
+## Vidéo 32 — Annonce « Nouveau : nos marque-pages », le métal en premier (27/10/2026)
+- Demande du gérant : « on refait une vidéo avec les métal en premier ». Même vidéo que la 31 (36,3 s, 1080 × 1920, sans son), les cinq plans
+  du métal passent en tête (Roses blanches, Iris, Nymphéas, Amandier, Papillon), puis le bois ; accroche du début inversée (métal d'abord).
+- Fichiers : `docs/videos/32-annonce-marque-pages-720x1280.mp4` (720 × 1280, 2,3 Mo) ; pleine qualité 1080 × 1920 (7,2 Mo) dans le dossier temporaire
+  de la session. Script `tools/video/annonce_marque_pages_32.py <dossier de sortie>`.
+- Description livrée :
+
+**Vidéo 32 — Nouveau : nos marque-pages** (Marque-page en métal doré peintures célèbres, Marque-page en bois à pompon doré, Marque-page ajouré oiseau et magnolia)
+> Nouveau à l'atelier 🆕 Nos marque-pages sont arrivés ✨ En métal doré aux couleurs de Van Gogh et Monet 🎨 et en bois, gravés à votre prénom ou même à votre photo, avec un modèle ajouré à l'oiseau sur une branche de magnolia. À offrir ou à s'offrir, pour tous les amoureux de la lecture 📚💛
+> 👉 nivcreation.fr
+
+#nivcreation #marquepage #cadeaupersonnalise #nouveaute #ideecadeau
