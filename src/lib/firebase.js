@@ -341,6 +341,25 @@ export async function emailOrderedProduct(email, slug) {
   }
 }
 
+// Une adresse a-t-elle au moins une vraie commande chez nous (boutique OU devis) ?
+// Sert seulement à aider le gérant à valider un avis (27/10/2026) : jamais bloquant.
+export async function emailACommande(email) {
+  const a = getApp();
+  const e = String(email || "").trim().toLowerCase();
+  if (!a || !e) return false;
+  try {
+    const snap = await admin.firestore().collection("siteOrders").orderBy("createdAt", "desc").limit(5000).get();
+    return snap.docs.some((d) => {
+      const o = d.data();
+      if (o.status === "annulee" || o.status === "remboursee" || o.test) return false;
+      return String(o.customerEmail || "").trim().toLowerCase() === e;
+    });
+  } catch (err) {
+    console.error("emailACommande:", err.message);
+    return false;
+  }
+}
+
 // Cherche une commande par identifiant de paiement Stripe (couvre aussi les
 // anciennes commandes qui n'ont pas de sessionId enregistré).
 export async function findSiteOrderByPaymentIntent(paymentIntentId) {

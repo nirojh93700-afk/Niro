@@ -769,7 +769,15 @@ texte seul = texte obligatoire + police + date · ③ coffret en 3 cartes, « Ca
 d'office · ④ « Résumé de votre gravure » avant le bouton, et **bouton grisé tant qu'aucune gravure
 n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même composant).
 
-## ⭐ AVIS CLIENTS RÉSERVÉS AUX VRAIES ACHETEUSES (27/09/2026)
+## ⭐ AVIS OUVERTS À TOUS, VALIDÉS PAR LE GÉRANT — 27/10/2026 (remplace la règle du 27/09 ci-dessous)
+> Gérant : « il faut que tout le monde puisse noter, c'est moi qui valide toute façon… c'est peut-être pour ça que j'ai pas d'avis ».
+> Kim Martins (commande sur devis DEV-1526) aurait été REFUSÉE : les lignes d'un devis n'ont pas de produit.
+- `/api/reviews` POST n'exige plus d'avoir acheté le produit : e-mail obligatoire (jamais affiché), avis TOUJOURS « À valider »
+  (`approved:false`), rien de publié sans son accord dans Gestion → Avis.
+- Pastille sur chaque avis dans Gestion (`verifie`) : « ✓ A commandé ce produit » / « ✓ Cliente (commande ou devis chez nous) »
+  (`emailACommande`, firebase.js) / « ⚠ Aucune commande trouvée ». Formulaire : « Votre e-mail », plus de « réservé aux acheteuses ».
+
+## ⭐ AVIS CLIENTS RÉSERVÉS AUX VRAIES ACHETEUSES (27/09/2026) — ⛔ REMPLACÉE LE 27/10/2026 (voir au-dessus)
 > Un avis « bof » sans nom déposé sur le Collier Couple Cœur a révélé que **n'importe qui pouvait
 > laisser un avis sur n'importe quelle fiche sans jamais avoir acheté** (formulaire anonyme,
 > aucune vérification). Le gérant a choisi « comme Amazon/Etsy » (option proposée : e-mail

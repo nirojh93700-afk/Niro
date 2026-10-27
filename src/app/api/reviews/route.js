@@ -1,5 +1,5 @@
 import { getReviews, addReview } from "@/lib/stock";
-import { emailOrderedProduct } from "@/lib/firebase";
+import { emailOrderedProduct, emailACommande } from "@/lib/firebase";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +18,12 @@ export async function GET(req) {
   });
 }
 
-// Dépôt d'un avis par une cliente (en attente de validation).
-// Réservé aux vraies acheteuses (27/09/2026, demande du gérant « comme
-// Amazon/Etsy ») : l'e-mail donné doit correspondre à une commande contenant
-// CE produit. L'e-mail n'est jamais renvoyé publiquement (voir /api/reviews GET).
+// Dépôt d'un avis (en attente de validation par le gérant dans Gestion → Avis).
+// 27/10/2026 (gérant : « il faut que tout le monde puisse noter, c'est moi qui valide ») :
+// plus de refus si l'adresse n'a pas acheté CE produit (les clientes sur devis étaient
+// refusées). L'avis est seulement marqué pour aider à valider : « produit » = a commandé
+// ce produit sur la boutique, « client » = a une commande chez nous (devis compris),
+// « non » = aucune commande trouvée. L'e-mail n'est jamais renvoyé publiquement.
 export async function POST(req) {
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
@@ -31,12 +33,13 @@ export async function POST(req) {
   }
   const e = String(email || "").trim();
   if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
-    return Response.json({ error: "Merci d'indiquer l'e-mail utilisé pour votre commande." }, { status: 400 });
+    return Response.json({ error: "Merci d'indiquer votre e-mail." }, { status: 400 });
   }
-  const bought = await emailOrderedProduct(e, slug);
-  if (!bought) {
-    return Response.json({ error: "Cet e-mail ne correspond à aucune commande de ce produit — seules les clientes ayant acheté peuvent laisser un avis." }, { status: 403 });
-  }
-  await addReview(slug, { name, rating, text, photo, email: e });
+  let verifie = "non";
+  try {
+    if (await emailOrderedProduct(e, slug)) verifie = "produit";
+    else if (await emailACommande(e)) verifie = "client";
+  } catch { verifie = "non"; }
+  await addReview(slug, { name, rating, text, photo, email: e, verifie });
   return Response.json({ ok: true });
 }

@@ -2078,6 +2078,8 @@ export async function addReview(slug, review, { approved = false } = {}) {
     photo: String(review.photo || "").slice(0, 600),
     date: customDate || new Date().toISOString(),
     approved: approved === true,
+    // Aide à la validation (27/10/2026) : produit / client / non — vide pour un avis ajouté à la main.
+    verifie: ["produit", "client", "non"].includes(review.verifie) ? review.verifie : "",
   };
   // Anti-doublon : un avis identique déjà présent (double clic, double envoi) est ignoré.
   if (list.some((r) => reviewKey(r) === reviewKey(entry))) return false;

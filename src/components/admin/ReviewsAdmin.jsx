@@ -217,6 +217,11 @@ export default function ReviewsAdmin({ adminKey, products = [] }) {
         <ProductTag slug={r.slug} />
       </div>
       {r.email && <p style={{ margin: "2px 0 0", fontSize: "0.8rem", color: "var(--ink-soft)" }}>{r.email}</p>}
+      {r.verifie && (
+        <p style={{ margin: "4px 0 0", fontSize: "0.78rem", fontWeight: 600, color: r.verifie === "non" ? "#b4452f" : "#2f7d4f" }}>
+          {r.verifie === "produit" ? "✓ A commandé ce produit" : r.verifie === "client" ? "✓ Cliente (commande ou devis chez nous)" : "⚠ Aucune commande trouvée avec cette adresse"}
+        </p>
+      )}
       {editId === r.id ? (
         <EditReviewForm adminKey={adminKey} review={r}
           onDone={() => { setEditId(""); load(); }} onCancel={() => setEditId("")} />
