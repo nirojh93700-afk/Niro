@@ -15,7 +15,7 @@
   Coûts dans `VARIANT_COSTS`. `npm run test-marque-pages` (21 vérifs).
 - Vidéo 31 (annonce) : `docs/videos/REGISTRE-VIDEOS.md`.
 - **Maquette « bloc Marque-pages sur l'accueil » (27/10, « fais-moi une maquette pour donner envie »)** : https://claude.ai/artifact/HM4fssV7juQZZEsooPFM3w ·
-  générateur `tools/maquettes/accueil-marque-pages.py <capture accueil>` : bande encre & or « Nos marque-pages gravés sont arrivés » (3 exemples gravés en bois,
+  générateur `tools/maquettes/accueil-marque-pages.py <capture accueil>` : bande encre & or « Nos marque-pages gravés sont arrivés » (3 exemples gravés en bois + le métal Nymphéas, v2 du 27/10 « tu mets aussi le métal »,
   « à partir de 9,90 € », bouton vers `/boutique/marque-pages`) entre le cristal et les bijoux. ⛔ RIEN en ligne : attendre son « applique ».
   La fenêtre flottante « Nouveauté ✦ » montre déjà les marque-pages tout seule (dernières sorties par date).
 

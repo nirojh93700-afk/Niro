@@ -56,6 +56,7 @@ BLOC = f'''<section class="mpb" aria-labelledby="t-mpb"><span class="mq-tag">Nou
     <a class="mpb-pic p1" href="/boutique/marque-pages"><img src="{img('/marque-pages/m1/exemple-ex1.jpg')}" alt="Marque-page en bois gravé « Camille » et papillons"/></a>
     <a class="mpb-pic p2" href="/boutique/marque-pages"><img src="{img('/marque-pages/m2/exemple-ex2.jpg')}" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »"/></a>
     <a class="mpb-pic p3" href="/boutique/marque-pages"><img src="{img('/marque-pages/m1/exemple-ex7.jpg')}" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »"/></a>
+    <a class="mpb-pic p4" href="/produit/marque-page-metal-peinture"><img src="{img('/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg', 640)}" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré"/></a>
   </div>
   <div class="mpb-copy">
     <span class="mpb-pill"><i></i>Nouveau à l'atelier</span>
@@ -80,9 +81,10 @@ CSS = '''
 .mpb-pics{position:relative;height:clamp(300px,34vw,440px)}
 .mpb-pic{position:absolute;display:block;border-radius:16px;overflow:hidden;background:#f6efe1;box-shadow:0 18px 40px rgba(0,0,0,.45);border:1px solid rgba(226,198,126,.55)}
 .mpb-pic img{display:block;width:100%;height:100%;object-fit:cover}
-.mpb-pic.p1{left:0;top:6%;width:44%;height:84%;transform:rotate(-4deg);z-index:2}
-.mpb-pic.p2{left:30%;top:0;width:44%;height:88%;transform:rotate(2deg);z-index:3}
-.mpb-pic.p3{right:0;top:10%;width:40%;height:80%;transform:rotate(5deg);z-index:1}
+.mpb-pic.p1{left:0;top:4%;width:38%;height:80%;transform:rotate(-5deg);z-index:2}
+.mpb-pic.p2{left:22%;top:0;width:38%;height:84%;transform:rotate(-1deg);z-index:3}
+.mpb-pic.p3{left:42%;top:8%;width:34%;height:74%;transform:rotate(4deg);z-index:1}
+.mpb-pic.p4{right:0;bottom:0;width:44%;height:60%;transform:rotate(6deg);z-index:4}
 .mpb-pill{display:inline-flex;align-items:center;gap:8px;font:600 .74rem/1 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#e2c67e;border:1px solid rgba(226,198,126,.5);border-radius:999px;padding:7px 12px}
 .mpb-pill i{width:7px;height:7px;border-radius:50%;background:#e2c67e;box-shadow:0 0 0 4px rgba(226,198,126,.18)}
 .mpb h2{font-family:var(--font-display),"Playfair Display",serif;font-weight:600;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.12;margin:16px 0 12px;color:#fbf7ee;text-wrap:balance}
