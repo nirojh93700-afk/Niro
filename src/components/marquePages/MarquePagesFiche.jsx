@@ -21,7 +21,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import {
-  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
+  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpTaillesBoite, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
 } from "@/lib/marquePages";
 
 const vide = () => Object.fromEntries(MP_EMPLACEMENTS.map(([s, z]) => [`${s}|${z}`, { k: "", t: "", n: 0, src: null }]));
@@ -314,7 +314,10 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   // « Combien de marque-pages ? » puis « Boîte cadeau ? » (27/10/2026).
   const [nb, setNb] = useState(1);
   const [avecBoite, setAvecBoite] = useState(false);
-  const fid = `n${nb}${avecBoite ? "b" : ""}`;
+  const [tailleBoite, setTailleBoite] = useState(0); // 0 = la moins chère pour ce nombre
+  const taillesOk = mpTaillesBoite(nb);
+  const taille = taillesOk.includes(tailleBoite) ? tailleBoite : mpBoitesPour(nb)[0];
+  const fid = `n${nb}${avecBoite ? `b${taille}` : ""}`;
   const fmt = mpFormat(fid);
   const [police, setPolice] = useState("playfair");
   const [vPage, setVPage] = useState(vide);
@@ -361,9 +364,10 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
       return Array.from({ length: n }, (_, i) => base[i] || { c: defC(n, i), v: vide(), touched: false });
     });
   }
-  function choisirBoite(on) {
+  function choisirBoite(on, t = taille) {
     setAvecBoite(on);
-    const b = on ? mpBoitesPour(nb)[0] : 0;
+    if (on) setTailleBoite(t);
+    const b = on ? mpBoitesPour(nb, t)[0] : 0;
     const idx = b ? galerie.indexOf(boites[b]) : galerie.indexOf(V[ci].image);
     if (idx >= 0) setVue(idx);
   }
@@ -418,7 +422,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
 
   // Prix des marque-pages seuls (gravure comprise), puis la ou les boîtes pour ce nombre.
   const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(o.v), 0) : V[ci].price + mpPrixGravure(vPage);
-  const boitesNb = mpBoitesPour(nb);
+  const boitesNb = mpBoitesPour(nb, taille);
   const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);
   const boiteEpuisee = boitesNb.some((b) => epuise(MP_BOITES[b].stockId));
   const coffret = fmt.n > 1;
@@ -549,6 +553,24 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
             </span>
             <em>+{formatEuro(prixBoitesNb)}</em>
           </label>
+          {avecBoite && taillesOk.length > 1 && (
+            <div className="mq-tailles" role="group" aria-label="Taille de boîte">
+              {taillesOk.map((t) => {
+                const bs = mpBoitesPour(nb, t);
+                const prix = bs.reduce((a, b) => a + MP_BOITES[b].prix, 0);
+                const off = bs.some((b) => epuise(MP_BOITES[b].stockId));
+                return (
+                  <button key={t} type="button" className={`mq-taille${t === taille ? " on" : ""}`} disabled={off} onClick={() => choisirBoite(true, t)}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={boites[t]} alt="" />
+                    <b>Boîte de {t} place{t > 1 ? "s" : ""}</b>
+                    <span>{off ? "Épuisée" : mpBoitesTexte(bs)}</span>
+                    <em>+{formatEuro(prix)}</em>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="pd-totbox">
             <span className="lab">Total tout compris</span>

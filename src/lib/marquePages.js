@@ -15,31 +15,46 @@ export const MP_FORMATS = [
 ];
 // Nombre + boîte au choix (27/10/2026, gérant : « comment le client choisit s'il veut plusieurs marque-pages sans la
 // boîte ? » → « Combien de marque-pages ? » puis « Boîte cadeau ? »). Identifiants « n<k> » (sans boîte) et « n<k>b »
-// (avec boîte), k = 1 à MP_MAX. Les anciens identifiants ci-dessus restent lus (paniers en cours).
+// (avec boîte, « n<k>b<taille> » = taille de boîte choisie), k = 1 à MP_MAX. Les anciens identifiants ci-dessus restent lus (paniers en cours).
 export const MP_MAX = 8;
-/** Boîtes pour n marque-pages : la moins chère qui les range tous (1 → 1 place, 2 → 2, 3 ou 4 → 4, au-delà 4 + le reste). */
-export function mpBoitesPour(n) {
+/** Tailles de boîte proposées pour n marque-pages : celles qui ne dépassent pas n, plus la plus petite qui range tout. */
+export function mpTaillesBoite(n) {
+  const out = [1, 2, 4].filter((t) => t <= n);
+  if (!out.includes(n)) { const sup = [1, 2, 4].find((t) => t >= n); if (sup && !out.includes(sup)) out.push(sup); }
+  return out;
+}
+/**
+ * Boîtes pour n marque-pages avec la taille choisie par la cliente (27/10/2026 : « il faut qu'on donne le choix ») :
+ * autant de boîtes de cette taille que possible, puis la plus petite boîte qui range le reste. Sans taille = la moins chère.
+ */
+export function mpBoitesPour(n, taille) {
+  const t = [1, 2, 4].includes(Number(taille)) ? Number(taille) : 4;
   const out = [];
   let r = n;
-  while (r > 4) { out.push(4); r -= 4; }
+  while (r >= t) { out.push(t); r -= t; }
   if (r > 0) out.push(r === 3 ? 4 : r);
   return out;
 }
-/** Le format d'un identifiant (nouveau ou ancien) : { id, n, boites:[tailles], box (1re boîte, compat), titre }. */
+/** Le format d'un identifiant (nouveau ou ancien) : { id, n, taille, boites:[tailles], box (1re boîte, compat), titre }. */
 export function mpFormat(id) {
-  const m = /^n([1-9])(b?)$/.exec(String(id || ""));
+  const m = /^n([1-9])(?:b([124]?))?$/.exec(String(id || ""));
   if (m) {
     const n = Math.min(MP_MAX, Number(m[1]));
-    const boites = m[2] ? mpBoitesPour(n) : [];
+    const avec = m[2] !== undefined;
+    const taille = avec ? Number(m[2] || 0) || mpBoitesPour(n)[0] : 0;
+    const boites = avec ? mpBoitesPour(n, taille) : [];
     const titre = `${n} marque-page${n > 1 ? "s" : ""}` + (boites.length ? " en boîte cadeau" : " sans boîte");
-    return { id: `n${n}${m[2]}`, n, boites, box: boites[0] || 0, titre };
+    return { id: `n${n}${avec ? `b${taille}` : ""}`, n, taille, boites, box: boites[0] || 0, titre };
   }
   const f = MP_FORMATS.find((x) => x.id === id);
-  return f ? { ...f, boites: f.box ? [f.box] : [] } : null;
+  return f ? { ...f, taille: f.box, boites: f.box ? [f.box] : [] } : null;
 }
 /** « boîte de 4 places + boîte de 1 place » */
 export function mpBoitesTexte(boites) {
-  return boites.map((b) => `boîte de ${b} place${b > 1 ? "s" : ""}`).join(" + ");
+  const cpt = {};
+  for (const b of boites) cpt[b] = (cpt[b] || 0) + 1;
+  return Object.keys(cpt).map(Number).sort((a, b) => b - a)
+    .map((b) => `${cpt[b] > 1 ? `${cpt[b]} boîtes` : "boîte"} de ${b} place${b > 1 ? "s" : ""}`).join(" + ");
 }
 
 // Boîtes : stock commun aux trois modèles (10 de chaque reçues le 27/10/2026). Poids estimés (emballées).
