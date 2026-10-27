@@ -320,8 +320,11 @@ En attente de SA décision :
 - ✅ 24/10 soir — **« On enregistre toutes les maquettes maintenant »** : modèle 1 v17, modèle 2 v16, métal v4, carnet v9, précommande Gestion v2 ENREGISTRÉES telles quelles. **Vidéo 30** livrée (teaser des trois modèles de marque-pages, métal compris) ; à refaire avec les vraies photos à la réception, comme la 29.
 - 24/10 soir — **Vidéo 29, teaser « bientôt » des marque-pages** livrée (registre). ⚠️ Faite avec les aperçus des maquettes (pas de pièce gravée encore) : à refaire avec les vraies photos gravées à la réception.
 - ✅ **27/10/2026 — MARQUE-PAGES REÇUS, PLUS DE PRÉCOMMANDE (gérant : « y a plus de précommande… parce que j'ai reçu les articles »)** :
-  les trois modèles se vendront comme des produits normaux, avec du stock (quantités reçues, a priori celles de la facture Alibaba :
-  modèle 1 20 par couleur, modèle 2 10 par couleur, métal 5 par tableau, boîtes 10 / 10 / 10 — à confirmer par lui). Au « applique » :
+  les trois modèles se vendront comme des produits normaux, avec du stock. **Quantités reçues, données par le gérant le 27/10 :
+  modèle 1 (bois, pompon) 20 par couleur (6 couleurs = 120) · modèle 2 (ajouré, fenêtre) 10 par couleur (4 = 40) · métal 5 par tableau
+  (8 = 40) · boîtes cadeau 10 de 1 place, 10 de 2, 10 de 4.** Les boîtes sont DÉJÀ dans Gestion → Matériel & emballages (27/10,
+  « Boîte cadeau marque-page · 1 / 2 / 4 places », stock 10, coût 1,07 / 1,43 / 2,14 €, sans photo) ; les marque-pages n'ont pas encore de
+  fiche sur le site, leur stock se saisira à la création des fiches. Au « applique » :
   PAS de badge / encadré « Précommande », PAS de bouton « Précommander », PAS de catégorie Précommandes pour eux. La maquette Gestion
   des précommandes (https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw) est GARDÉE pour d'autres produits plus tard (« tu peux laisser
   la page… pour d'autres produits ») : rien construit. Les 3 maquettes marque-pages portent encore l'encadré précommande : ne pas les
