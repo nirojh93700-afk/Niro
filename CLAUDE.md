@@ -198,6 +198,13 @@
     marque-pages modèle 1 v17 · modèle 2 v16 (photo en haut de la face) · modèle 3 métal v4 · carnet A5 v9 · précommande Gestion v2.**
     C'est CES versions à reproduire au « applique » ; ne plus les modifier sans sa demande. Même soir : **vidéo 30** (teaser « bientôt »
     des TROIS modèles, métal compris, exemples photo) → registre `docs/videos/REGISTRE-VIDEOS.md`.
+- ✅ **27/10/2026 — MARQUE-PAGES REÇUS, PLUS DE PRÉCOMMANDE (gérant : « y a plus de précommande… parce que j'ai reçu les articles »)** :
+  les trois modèles se vendront comme des produits normaux, avec du stock (quantités reçues, a priori celles de la facture Alibaba :
+  modèle 1 20 par couleur, modèle 2 10 par couleur, métal 5 par tableau, boîtes 10 / 10 / 10 — à confirmer par lui). Au « applique » :
+  PAS de badge / encadré « Précommande », PAS de bouton « Précommander », PAS de catégorie Précommandes pour eux. La maquette Gestion
+  des précommandes (https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw) est GARDÉE pour d'autres produits plus tard (« tu peux laisser
+  la page… pour d'autres produits ») : rien construit. Les 3 maquettes marque-pages portent encore l'encadré précommande : ne pas les
+  modifier sans sa demande, l'enlever à la construction.
 - **Modèle 2 « ajouré, oiseau et magnolia »** : https://claude.ai/artifact/CKqzt46EGgVntsypefi1Tv (v3, 23/10 : face gravable, TEXTE seulement) · 4 couleurs · **13,90 €** · texte sur la face **+3 €** (en haut / en bas à la verticale, jamais de dessin : le recto est déjà décoré) · texte au verso **+3 €** · mêmes boîtes.
 - **Modèle 3 « métal, peintures célèbres »** : https://claude.ai/artifact/VaSkxKqaBF6oeRDpQwKcji (v4) · 8 tableaux · **15,90 €**, Papillon en coffret **19,90 €** ·
   **SANS gravure** · mêmes boîtes · fenêtre du coffret = choix des tableaux seulement.

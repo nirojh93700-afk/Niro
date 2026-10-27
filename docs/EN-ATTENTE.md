@@ -319,6 +319,13 @@ En attente de SA décision :
 - ✅ 24/10 soir — **Exemples avec une PHOTO de personne gravée** (sa demande, montrés d'abord, puis « Parfait, tu peux mettre dans les images… pour le carnet aussi ») : modèle 1 v17 (3 exemples photo de plus), modèle 2 v16 (3 de plus ; **la face accepte maintenant la photo EN HAUT, +4 €**, le bas de la face reste texte seul), carnet v9 (2 exemples photo ; v8 corrigée : la photo sur le noir sortait en négatif). Portraits = recadrages des photos de cristaux du site (`assets/marque-pages/exemples/portraits/`). En attente de son avis.
 - ✅ 24/10 soir — **« On enregistre toutes les maquettes maintenant »** : modèle 1 v17, modèle 2 v16, métal v4, carnet v9, précommande Gestion v2 ENREGISTRÉES telles quelles. **Vidéo 30** livrée (teaser des trois modèles de marque-pages, métal compris) ; à refaire avec les vraies photos à la réception, comme la 29.
 - 24/10 soir — **Vidéo 29, teaser « bientôt » des marque-pages** livrée (registre). ⚠️ Faite avec les aperçus des maquettes (pas de pièce gravée encore) : à refaire avec les vraies photos gravées à la réception.
+- ✅ **27/10/2026 — MARQUE-PAGES REÇUS, PLUS DE PRÉCOMMANDE (gérant : « y a plus de précommande… parce que j'ai reçu les articles »)** :
+  les trois modèles se vendront comme des produits normaux, avec du stock (quantités reçues, a priori celles de la facture Alibaba :
+  modèle 1 20 par couleur, modèle 2 10 par couleur, métal 5 par tableau, boîtes 10 / 10 / 10 — à confirmer par lui). Au « applique » :
+  PAS de badge / encadré « Précommande », PAS de bouton « Précommander », PAS de catégorie Précommandes pour eux. La maquette Gestion
+  des précommandes (https://claude.ai/artifact/BBriuNsXydfiCN62JgsxUw) est GARDÉE pour d'autres produits plus tard (« tu peux laisser
+  la page… pour d'autres produits ») : rien construit. Les 3 maquettes marque-pages portent encore l'encadré précommande : ne pas les
+  modifier sans sa demande, l'enlever à la construction.
 - Précommande côté Gestion : maquette ENREGISTRÉE le 12/10 (v2, catégorie à part) ; au « applique » : construire ; restent à trancher : panier mixte, port des boîtes, délai légal.
 
 ## 🏷️ Étiquette d'adresse plus jolie — ✅ INTÉGRÉE le 14/10/2026 : les 4 styles au choix dans Gestion (il choisit quand il veut)
