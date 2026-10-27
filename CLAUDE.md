@@ -18,6 +18,9 @@
   gabarit RÉEL `newsletterProductsEmail` (cartes métal, bois pompon, oiseau ; photos = exemples GRAVÉS via `productImages`, bouton « Découvrir » sur le
   métal non gravé via `cta`, titre via `heading` — ajoutés à `/api/admin/newsletter` le 27/10, PAS ENCORE EN LIGNE). ⛔ NON ENVOYÉ : maquette → envoi
   à lui seul pour contrôle → liste après son « envoie ».
+  · 27/10 : modèle `newsletterProductsEmail` à largeur SOUPLE (avant, 600 px fixes = mail coupé sur téléphone) ; à la fin d'une campagne
+    (plus d'une adresse), UN SEUL récapitulatif au gérant « ✓ Newsletter envoyée : N/N » + adresses en échec (aucune copie par destinataire).
+    Gérant : « Envoie les mails, je t'ai dit » → 125 inscrites. 1er déploiement en échec Firebase (aa8f9860, « Build failed » à 2 min 52) : relancé.
 - **Maquette « bloc Marque-pages sur l'accueil » (27/10, « fais-moi une maquette pour donner envie »)** : https://claude.ai/artifact/HM4fssV7juQZZEsooPFM3w ·
   générateur `tools/maquettes/accueil-marque-pages.py <capture accueil>` : bande encre & or « Nos marque-pages gravés sont arrivés » (3 exemples gravés en bois + le métal Nymphéas, v2 du 27/10 « tu mets aussi le métal »,
   « à partir de 9,90 € », bouton vers `/boutique/marque-pages`) entre le cristal et les bijoux. ✅ EN LIGNE le 27/10 (« Applique la maquette sur l'accueil ») :
