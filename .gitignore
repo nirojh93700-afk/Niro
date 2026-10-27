@@ -52,3 +52,4 @@ docs/maquettes/carnet-a5.html
 /.playwright-cli/
 __pycache__/
 docs/maquettes/gobelet-parcours-guide.html
+docs/maquettes/accueil-marque-pages.html
