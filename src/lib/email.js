@@ -148,7 +148,7 @@ export function newsletterProductsEmail({ subject, intro, heading, products = []
             <div style="font-size:15px;font-weight:bold;color:#241a0c;">${escapeHtml(p.name)}</div>
             ${p.tagline ? `<div style="font-size:12px;color:#8a7d63;margin:2px 0 8px;">${escapeHtml(p.tagline)}</div>` : `<div style="margin:2px 0 8px;">&nbsp;</div>`}
             ${p.price ? `<div style="font-size:14px;color:#a98935;font-weight:bold;margin-bottom:10px;">dès ${escapeHtml(p.price)}</div>` : ""}
-            <a href="${abs(p.url)}" style="display:inline-block;background:#241a0c;color:#e2c67e;text-decoration:none;padding:8px 18px;border-radius:7px;font-size:12px;font-weight:bold;">Personnaliser</a>
+            <a href="${abs(p.url)}" style="display:inline-block;background:#241a0c;color:#e2c67e;text-decoration:none;padding:8px 18px;border-radius:7px;font-size:12px;font-weight:bold;">${escapeHtml(p.cta || "Personnaliser")}</a>
           </td></tr>
         </table>
       </td>`;

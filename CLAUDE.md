@@ -14,6 +14,10 @@
   « Vendu en plus » = la boîte. Stock des boîtes `mp-boite-1/2/4` dans Produits & stock (Options & accessoires), retirées de Matériel.
   Coûts dans `VARIANT_COSTS`. `npm run test-marque-pages` (21 vérifs).
 - Vidéo 31 (annonce) : `docs/videos/REGISTRE-VIDEOS.md`.
+- **Mail « Nouveau : nos marque-pages sont arrivés ✦ » (27/10, maquette https://claude.ai/artifact/9jcL4JdfD9k3grgJZ144Mq, `docs/maquettes/mail-marque-pages.html`)** :
+  gabarit RÉEL `newsletterProductsEmail` (cartes métal, bois pompon, oiseau ; photos = exemples GRAVÉS via `productImages`, bouton « Découvrir » sur le
+  métal non gravé via `cta`, titre via `heading` — ajoutés à `/api/admin/newsletter` le 27/10, PAS ENCORE EN LIGNE). ⛔ NON ENVOYÉ : maquette → envoi
+  à lui seul pour contrôle → liste après son « envoie ».
 - **Maquette « bloc Marque-pages sur l'accueil » (27/10, « fais-moi une maquette pour donner envie »)** : https://claude.ai/artifact/HM4fssV7juQZZEsooPFM3w ·
   générateur `tools/maquettes/accueil-marque-pages.py <capture accueil>` : bande encre & or « Nos marque-pages gravés sont arrivés » (3 exemples gravés en bois + le métal Nymphéas, v2 du 27/10 « tu mets aussi le métal »,
   « à partir de 9,90 € », bouton vers `/boutique/marque-pages`) entre le cristal et les bijoux. ✅ EN LIGNE le 27/10 (« Applique la maquette sur l'accueil ») :

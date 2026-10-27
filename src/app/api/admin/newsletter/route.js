@@ -60,11 +60,13 @@ export async function POST(req) {
       name: p.name,
       tagline: p.tagline || "",
       price: euro(priceFrom(p)),
-      image: (p.images || [])[0] || "",
+      // Photo choisie pour l'e-mail (ex. un exemple GRAVÉ plutôt que la photo vierge du fournisseur), sinon la 1re photo.
+      image: (body?.productImages && typeof body.productImages[p.slug] === "string" && body.productImages[p.slug].startsWith("/")) ? body.productImages[p.slug] : ((p.images || [])[0] || ""),
       url: `/produit/${p.slug}`,
+      cta: p.personalizable === false ? "Découvrir" : "Personnaliser", // un produit non gravé ne se « personnalise » pas
     }));
     if (!products.length) return Response.json({ error: "Aucun produit valide sélectionné." }, { status: 400 });
-    ({ html } = newsletterProductsEmail({ subject, intro, products }));
+    ({ html } = newsletterProductsEmail({ subject, intro, heading: String(body?.heading || "").trim(), products }));
   } else {
     if (!message) return Response.json({ error: "Écris un message ou choisis des produits." }, { status: 400 });
     const bodyHtml = `<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
