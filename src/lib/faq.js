@@ -13,6 +13,10 @@ export const FAQ = [
     a: "Sur chaque fiche produit, vous saisissez votre texte (prénom, date, message…), choisissez la police de gravure et, selon le produit, un motif ou une photo. Un aperçu s'affiche en direct pour visualiser le rendu avant de commander.",
   },
   {
+    q: "Pouvez-vous graver une image vraiment personnalisée ?",
+    a: "Oui. Sur les verres, la carafe, le cristal, le support téléphone et nos autres créations gravées, nous gravons l'image de votre choix : photo, logo ou dessin. Sur la fiche du produit, envoyez votre image avec le bouton « Choisir une photo », ou cliquez sur « Faire une demande particulière » pour décrire votre idée : nous vous répondons avec une proposition. Sur les verres, la carafe et le cristal, l'image est comprise dans le prix ; les textes et les dates s'ajoutent au tarif indiqué sur la fiche.",
+  },
+  {
     q: "Puis-je voir un aperçu avant la gravure définitive ?",
     a: "Oui. Pour les commandes personnalisées, nous pouvons vous envoyer par e-mail un aperçu à valider avant de lancer la gravure : vous validez ou demandez une modification en un clic.",
   },

@@ -9,7 +9,7 @@ function hintFor(product) {
   const cat = product?.category;
   const type = (product?.type || product?.name || "votre création").toLowerCase();
   if (cat === "verres")
-    return "Ex. : logo d'entreprise, citation ou phrase, date, gravure des deux côtés, format ou quantité particulière…";
+    return "Ex. : votre propre image ou dessin, logo d'entreprise, citation ou phrase, date, gravure des deux côtés, format ou quantité particulière…";
   if (cat === "mariage")
     return "Ex. : thème et couleurs, date du mariage, nombre d'exemplaires, prénoms, format ou bois souhaité…";
   return `Décrivez votre idée pour ${type} : texte, dimensions, quantité, délai souhaité…`;
@@ -83,6 +83,11 @@ export default function CustomRequestBox({ product }) {
       <br />
       Décrivez ce que vous souhaitez : je vous réponds avec une proposition et un{" "}
       <strong>devis</strong>. Vous ne payez que si le montant vous convient.
+      <div style={{ marginTop: 8 }}>
+        <strong style={{ color: "var(--gold-dark)" }}>✦ Une image vraiment personnalisée ?</strong>{" "}
+        C'est possible : envoyez votre photo, votre logo ou votre dessin, ou décrivez simplement votre idée, et nous
+        la gravons pour vous.
+      </div>
 
       {!open && status !== "ok" && (
         <div style={{ marginTop: 10 }}>
