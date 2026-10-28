@@ -1,3 +1,35 @@
+## 🎄 RUBRIQUE « FÊTES » DANS GESTION (NOËL D'ABORD) — MAQUETTE DU 28/10/2026, EN ATTENTE DE SON AVIS — RIEN en ligne
+> Gérant : « un nouveau truc pour Noël… des gravures vraiment pour Noël… des sacs, des boîtes pour Noël… que pour les verres, la carafe,
+> les supports téléphone, le cristal, tout ce qui est gravure, pas le mariage, pas les bijoux… dès que je décoche, tout ce qui a rapport
+> avec Noël doit disparaître, ça doit revenir normal… une alerte deux mois avant… après ce sera la Saint-Valentin etc.… il faut des
+> numéros sur les images pour que le client sélectionne comme pour les autres… je veux pas de bug ».
+- **Artifact** https://claude.ai/artifact/215micVgntigmyRFXsG49e (version 1) · générateur `tools/maquettes/fetes-noel.py <dossier css> <capture
+  /produit/verre-a-vin-grave> <sortie>` (+ `fetes-noel-export.mjs` qui lit le parcours du vin dans `products.js`) ; css = les 3 feuilles en ligne,
+  capture = `curl nivcreation.fr/produit/verre-a-vin-grave`. Le HTML (2,4 Mo) n'est PAS commité (règle du 10/10). Vérifié Chromium 390 / 1280 :
+  0 débordement, 0 erreur JS, 44 vérifications (`scratchpad/t-fetes.mjs`) : 30 + 25 modèles, filtre Noël, n° 3 + « Camille » + boîte = 25,80 €,
+  éteint → 30 modèles, plus d'emballage, 17,90 €.
+- **Images** : `docs/maquettes/assets/noel/01…25-*.{jpg,png}` = ses 16 images + les 9 lettrages du zip (« Douce magie d'hiver » reçue en
+  double : gardée une fois). **Numérotées Noël n° 1 à 25, LE MÊME numéro dans Gestion et sur toutes les fiches** (à part des numéros des
+  modèles de chaque verre, pour que l'atelier lise « Modèle de Noël n° 7 » partout).
+- **Vue ① Gestion → Fêtes** (nouveau groupe du menu) : une ligne par fête (Noël 25/12/2026 · Saint-Valentin 14/02/2027 · Pâques 28/03/2027 ·
+  Fête des mères 30/05/2027 · Fête des pères 20/06/2027, dates calculées), interrupteur, **alerte 2 mois avant** (bandeau rouge du tableau de
+  bord + e-mail ; Noël : 25/10). Détail de Noël : produits concernés (gravés seulement : 5 verres, carafe, 3 cristaux, 2 supports téléphone
+  cochés ; porte-clés cuir, pièce laiton, puzzle photo, marque-pages à lui de dire ; jamais bijoux ni mariage), les 25 images avec numéro,
+  étiquettes (texte dans l'image, mots de Noël, ⚠ personnage protégé, niveaux de gris) et un prix par image, 2 emballages (sac, boîte : photo à
+  venir, prix et stock à saisir), « déjà sur le site toute l'année » = les 2 cristaux déjà gravés Noël (🔒 jamais retirés, mis en avant).
+- **Vue ② sur le site** (fiche RÉELLE du verre à vin) : Noël allumé = étiquette « 🎄 Noël » sur la carte « Un modèle décoré », chip « 🎄 Noël
+  (n° 1–25) » dans la grille, 25 tuiles à badge rouge « Noël n° X » (légende « Dessin de Noël (+ prénom si vous voulez) »), prénom +3 € comme
+  la règle du vin, bloc « 🎄 Votre emballage de Noël » (Sans / Sac / Boîte) avant le total ; éteint = la fiche d'aujourd'hui à l'identique.
+- **Prix PROPOSÉS, rien décidé (il a dit « payant et gratuit, je te dirai »)** : règle « tout texte gravé est payant » → image avec un texte
+  (« Merry Christmas » n° 2, 7, 9, 13, 16 ; lettrages 17–25) = +3 €, dessin seul = offert ; sac de Noël « offert », boîte « +4,90 € » = EXEMPLES.
+- ⚠️ **À lui dire / à trancher** : n° 8 Tom et Jerry (Warner), n° 13 Mickey et Minnie (Disney), n° 15 le Grinch (Dr. Seuss / Universal) =
+  personnages protégés ; n° 5 Père Noël bras croisés = image en niveaux de gris (demi-teintes), pas un trait ; textes anglais « Merry Christmas » ;
+  photos et prix des sacs / boîtes ; le bandeau Noël de l'accueil et `/offrir/noel` gardent leur interrupteur Apparence (les relier ?).
+- **À la construction (après « applique »)** : réglage `settings.fetes = { noel: { on, date, images:[{n, prix, masquee}], emballages, produits } }`
+  (fusion par clé, jamais de remplacement en bloc), images dans `public/produits/noel/`, `ParcoursGuide` lit un groupe « Noël » ajouté par le
+  catalogue (`getCatalog`) sur les produits cochés, `ProductDetail` ajoute l'emballage de fête (prix au paiement), `consignesGravure` écrit
+  « Modèle de Noël n° X » avec la vignette, alerte J-60 dans le heartbeat + tableau de bord, `catalogAudit` signale une fête passée encore allumée.
+
 ## 🎨 IMAGES VRAIMENT PERSONNALISÉES — À REDIRE AUX CLIENTES (gérant, 28/10/2026 : « beaucoup de gens demandent des images personnalisées… il faut leur redire »)
 - Beaucoup de clientes demandent une image personnalisée. **Réponse à donner (mail, devis, agent e-mail, réseaux) : OUI, l'atelier peut
   faire une image vraiment personnalisée et la graver** partout où il y a de la gravure : **verres** (vin, flûte, whisky, cocktail, tumbler,

@@ -284,6 +284,14 @@ En attente de SA décision :
   https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM, rien en ligne : il choisit la version ; à trancher : Jost ou Inter, le
   coffret assorti (prix, −10 % dès 2 pièces), le rangement « Pour qui » / « Anniversaire » / fêtes datées dans `occasions.js` ·
   puis son « applique ».
+## 🎄 Rubrique « Fêtes » (Noël) — MAQUETTE du 28/10/2026, en attente de son avis
+- Artifact https://claude.ai/artifact/215micVgntigmyRFXsG49e : ① Gestion → Fêtes (interrupteur par fête, alerte 2 mois avant, 25 images de
+  Noël numérotées 1–25, emballages, produits concernés) · ② fiche verre à vin avec Noël allumé / éteint. Détail dans `CLAUDE.md`.
+- **Il doit dire** : quelle image est offerte / payante (proposé : texte = +3 €, dessin = offert) · prix et photos du sac et de la boîte de Noël ·
+  garder ou non Tom et Jerry (8), Mickey et Minnie (13), le Grinch (15) (personnages protégés) · les produits non cochés (porte-clés cuir, pièce
+  laiton, puzzle photo, marque-pages) · relier ou non le bandeau Noël de l'accueil et /offrir/noel à cet interrupteur · d'autres images ?
+- Rien en ligne tant qu'il n'a pas dit « applique ».
+
 ## 📦 Matériel & conditionnement — en ligne le 11/10/2026
 - ✅ Page Gestion → Matériel & emballages + bloc « Conditionnement » dans la file de production + matériel déduit dans Bénéfices.
 - ❓ À confirmer par le gérant : pochettes lin (50 ou 24 achetées ?), papier de soie (60 feuilles ?), boîtes en bois (emballage ou produit ?), portions de calage (chips ≈ 2 L, raffia ≈ 10 g), carton 25×20×15 réellement acheté (lot de 15 ou de 25), tailles du sac / de la microfibre / de la boîte allongée, stocks réels de départ.
