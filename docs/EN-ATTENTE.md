@@ -443,7 +443,8 @@ En attente de SA décision :
 ## ✉️ 27/10/2026 — relances et demande Violette (envoyées par le site)
 - 12 h 30 : relance Doriane Ehret (devis DEV-1527, lien de paiement en simple lien) et Mme Grunenberger (verre « Agathe », 17,90 €) — parties.
 - **28/10, 14 h 55 : Doriane a choisi le VISUEL 1** (image PNG, écritures manuscrites). DEV-1527 toujours « envoyé », pas réglé.
-  Réponse proposée au gérant (choix noté + rappel du devis), NON envoyée : attendre son « envoie ». Graver le visuel 1 à son paiement.
+  ✅ 15 h 42 : mail « Votre devis DEV-1527 » ENVOYÉ par le site (visuel 1 noté, 81,90 €, lien du devis, livraison choisie au paiement :
+  jamais « livraison offerte » écrit, l'Express reste payant). Graver le visuel 1 à son paiement.
 - 12 h 39 : Violette (violettegourdin60140@gmail.com, verre à whisky Fête des pères) — aperçu « Joyeux Noël · Je t'aime · Ta fille »
   (image `/api/img/mCjEwaMiN0ZbLrzTIqRW`), SANS prix, question : textes seuls ou image personnalisée (dessin + textes intégrés) avec maquette.
   Règle du gérant : image créée sur mesure = plus cher (montant non fixé) ; prix du site pour ce verre = 19,90 €, modèle + textes 22,90 €.
