@@ -189,6 +189,7 @@
 ## 🎬 7 VIDÉOS DE NOËL (34 À 40) — ✅ LIVRÉES LE 28/10/2026 (34 validée « la première c'est bon », puis 35 à 40 ; registre `docs/videos/REGISTRE-VIDEOS.md`, prochaine vidéo = 41)
 - Refaire les 7 vidéos de `tools/video/serie_34_40.py` avec l'habillage NOËL + les effets ; montrer la 34 d'abord, attendre sa validation,
   puis les 6 autres. Détail dans `docs/EN-ATTENTE.md` (« 7 VIDÉOS (34 À 40) À REFAIRE POUR NOËL »). Rien avant son mot.
+- ⛔ **« MARQUE-PAGES » = TOUS LES MODÈLES, MÉTAL COMPRIS (gérant, 28/10/2026 : « quand je te demande de faire les marque-pages, il faut que tu prennes toutes les marques, même les métal, pas que le bois »)** : dans une vidéo, un mail, une maquette ou une sélection, mettre le bois à pompon, l'ajouré ET le métal (`public/marque-pages/metal/`, sans gravure : ne jamais l'écrire « gravé »). Vidéo 39 refaite le 28/10 au soir avec le métal (Roses blanches, Nymphéas, Tournesols).
 
 ## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
 - **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v9 au 24/10 soir : exemples photo ; sur le noir, une photo reste un POSITIF clair sur le noir, l'inversion ne vaut que pour les traits des dessins : la v8 montrait un négatif, « ça fait vraiment bizarre ») · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur

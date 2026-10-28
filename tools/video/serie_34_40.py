@@ -99,6 +99,10 @@ V = {
   "c1892": (P("carafe_whiskey_1892.jpg"), "Carafe à whisky gravée", "Son année, son étiquette"),
 }
 M = {
+  "metroses": (MP("metal/10-roses-blanches-van-gogh-pompon-dore.jpg"), "Marque-page en métal", "Les Roses blanches, Van Gogh"),
+  "metnymph": (MP("metal/14-nympheas-monet-pompon-dore.jpg"), "Marque-page en métal", "Les Nymphéas, Monet"),
+  "mettourn": (MP("metal/24-tournesols-van-gogh-timbres.jpg"), "Marque-page en métal", "Les Tournesols, Van Gogh"),
+  "metpap": (MP("metal/22-nympheas-papillon-monet-coffret.jpg"), "Marque-page en métal", "Le Papillon, dans son coffret"),
   "m1e1": (MP("m1/exemple-ex1.jpg"), "Marque-page en bois gravé", "Un prénom et des papillons"),
   "m1e7": (MP("m1/exemple-ex7.jpg"), "Marque-page en bois gravé", "Un portrait et un mot pour Mamie"),
   "m1e2": (MP("m1/exemple-ex2.jpg"), "Marque-page en bois gravé", "Un prénom dans un cadre gravé"),
@@ -156,7 +160,7 @@ VIDEOS = {
            titre="Gravé pour vous", titre_noel="Gravé pour Noël", accroche="Verres, marque-pages et cristal",
            fin=("nivcreation.fr", "Personnalisez le vôtre", "Gravé en France"),
            items=[(CH, "01 · Les verres", "Pour trinquer")] + [V[k] for k in ["c1892", "fl6", "wfond", "cnom"]]
-                 + [(CH, "02 · Les marque-pages", "Pour garder sa page")] + [M[k] for k in ["m1e1", "m2e2", "m1e4"]]
+                 + [(CH, "02 · Les marque-pages", "Pour garder sa page")] + [M[k] for k in ["m1e1", "metroses", "m2e2", "metnymph", "m1e4", "mettourn"]]
                  + [(CH, "03 · Le cristal", "Pour garder un souvenir")] + [C[k] for k in ["chat", "ours", "chatsapin", "amis"]]),
   40: dict(nom="bijoux-verres-cristal", style="plein", seg=1.9,
            titre="Offrir un cadeau gravé", titre_noel="Un cadeau gravé pour Noël", accroche="Bijoux, verres et cristal",

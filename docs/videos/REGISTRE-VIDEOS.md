@@ -613,12 +613,14 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 
 #nivcreation #cadeaupersonnalise #cadeaunoel #gravure #ideecadeau
 
-**Vidéo 39 — Gravé pour Noël** (Carafe à whisky gravée, Flûtes à champagne gravées, Verre à whisky gravé, Verre à cocktail gravé, Marque-page en bois gravé, Marque-page ajouré gravé, Cristal photo 3D, Cristal déjà gravé)
+**Vidéo 39 — Gravé pour Noël** (Carafe à whisky gravée, Flûtes à champagne gravées, Verre à whisky gravé, Verre à cocktail gravé, Marque-page en bois gravé, Marque-page ajouré gravé, Marque-page en métal, Cristal photo 3D, Cristal déjà gravé)
 > 🎄 Pour trinquer, pour garder sa page, pour garder un souvenir : trois idées de cadeaux gravés pour Noël ✨
-> Un prénom, une photo ou un mot, gravés une pièce à la fois dans notre atelier 💛 Commandez tôt 🎁
+> Un prénom, une photo ou un mot gravés dans notre atelier, et des marque-pages en métal aux tableaux de Van Gogh et Monet 💛 Commandez tôt 🎁
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #cadeaunoel #noel2026 #ideecadeau
+
+_(Refaite le 28/10/2026 au soir : le chapitre des marque-pages montre aussi le métal — Roses blanches, Nymphéas, Tournesols.)_
 
 **Vidéo 40 — Un cadeau gravé pour Noël** (Collier Double Cœur, Collier Cœur & plaques, Collier Enveloppe, Collier Cœur gravé, Verre à vin gravé, Flûtes à champagne gravées, Verre à whisky gravé, Cristal photo 3D, Cristal déjà gravé)
 > 🎄 Un bijou à porter, un verre pour trinquer, un cristal pour se souvenir : le cadeau gravé qui ne ressemble à aucun autre ✨
