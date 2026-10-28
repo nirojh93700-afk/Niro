@@ -441,7 +441,8 @@ En attente de SA décision :
 - **27/10/2026 — Violette (verre whisky « Colombes & cœur », 27,90 €)** : mail sans aperçu envoyé à 13 h 02 (aperçu préparé après paiement). Fichier de gravure VALIDÉ par le gérant : `docs/gravures/violette-colombes/` (45,9 × 53,6 mm). À sa réponse « oui » : préparer le devis 27,90 € + livraison, le montrer avant envoi.
 - **27/10/2026 — Guide « Idées & conseils » marque-pages** (`/idees/marque-pages-personnalises`, maquette `docs/maquettes/guide-marque-pages.html`) : construit et vérifié en local, EN ATTENTE de son « pousse ».
 
-## 🎄 PLAN NOËL 2026 + GOOGLE SHOPPING + PORT DES VERRES — 28/10/2026 (objectif du gérant : 4 000 € par mois) — RIEN en ligne, RIEN envoyé
+## 🎄 PLAN NOËL 2026 + GOOGLE SHOPPING + PORT DES VERRES — 28/10/2026 (objectif du gérant : 4 000 € par mois) — ✅ ENREGISTRÉ TEL QUEL (« Enregistre, on verra plus tard »), RIEN en ligne, RIEN envoyé
+- À reprendre QUAND IL LE DIT : ses 3 réponses manquent (dates limites 10 / 14 déc. ?, port des verres 7,90 / 9,90 / 12,90 ?, « pousse » pour la correction du flux).
 - Maquette https://claude.ai/artifact/2MMTv3xT4oeT1ZaAHnzZwo · `docs/maquettes/plan-noel.html` · générateur `tools/maquettes/plan-noel.py`.
 - Dates limites PROPOSÉES (calcul `delaiCommande`, 5 jours ouvrés) : livraison normale jeudi 10 décembre (expédiée au plus tard le jeu. 17) ·
   Express lundi 14 décembre (expédiée au plus tard le lun. 21) · après : carte cadeau. Bandeau Noël : la ligne « pensez-y tôt » remplacée par la date.
