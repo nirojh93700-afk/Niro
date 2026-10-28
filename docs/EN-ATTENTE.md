@@ -453,3 +453,14 @@ En attente de SA décision :
 - Port des verres à domicile PROPOSÉ : 1-2 verres 7,90 € (au lieu de 11,90), 3-4 verres 9,90 € (16,90), 5+ 12,90 € (21,90) ; relais 4,90 € et
   offert dès 60 € inchangés ; afficher « Point relais 4,90 € · offert dès 60 € » sur les fiches verres. Coût d'un envoi 1-2 verres ≈ 7,95 €
   (étiquette 6,12 estimée + carton 1,12 + chips 0,71). En attente de son accord ; si oui : `GLASS_TIERS` (ou Gestion → Livraison) ET `portFR` du flux Google.
+
+## 🎬 7 VIDÉOS (34 À 40) À REFAIRE POUR NOËL — EN ATTENTE DE SON « LANCE LES VIDÉOS » (28/10/2026)
+- Gérant, après la vidéo 34 avec effets : « c'est pas bon, c'est pour Noël que tu dois faire… tu gardes en mémoire, quand je te dirai
+  lance les vidéos, tu relances les sept vidéos, tu me montreras une avant, je valide ». ⛔ RIEN à lancer avant son mot.
+- Au « lance les vidéos » : refaire les 7 avec l'HABILLAGE NOËL (comme la vidéo 13 / 33 : ruban « ✦ IDÉE CADEAU DE NOËL ✦ » sur chaque
+  plan, pastille « NOËL 2026 », cartes rouge & or, fin « Commandez tôt pour Noël », jamais de date tant qu'il ne l'a pas donnée) en GARDANT
+  les effets (titre gravé au laser, reflet, paillettes, entrée des photos, texte qui monte, éclair doré) et les contenus :
+  34 bijoux (+ un peu de cristal / gravure à la fin) · 35 cristal · 36 marque-pages et bois · 37 verres · 38 verres → cristal → marque-pages ·
+  39 verres → marque-pages → cristal · 40 bijoux → verres → cristal. Uniquement des pièces gravées et en vente.
+- Méthode demandée : faire la PREMIÈRE (34), la lui montrer, attendre sa validation, puis les 6 autres. Script : `tools/video/serie_34_40.py`
+  (ajouter l'habillage Noël). Les versions sans Noël ne sont pas livrées (pas de registre).

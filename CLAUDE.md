@@ -46,6 +46,10 @@
   (jeu. 10 déc. / Express lun. 14 déc.), calendrier des newsletters et vidéos, 7 étapes Merchant Center (son compte), port des verres proposé
   7,90 / 9,90 / 12,90 €. Correction du flux Google (`cristal-deja-grave` retiré) commitée en local, NON poussée. Ne rien lancer sans sa demande.
 
+## 🎬 7 VIDÉOS DE NOËL (34 À 40) — ATTENDRE SON « LANCE LES VIDÉOS » (28/10/2026)
+- Refaire les 7 vidéos de `tools/video/serie_34_40.py` avec l'habillage NOËL + les effets ; montrer la 34 d'abord, attendre sa validation,
+  puis les 6 autres. Détail dans `docs/EN-ATTENTE.md` (« 7 VIDÉOS (34 À 40) À REFAIRE POUR NOËL »). Rien avant son mot.
+
 ## 📓 MAQUETTE CARNET A5 GRAVÉ — ✅ ENREGISTRÉE TELLE QUELLE LE 23/10/2026 (« tu enregistres, tu mets rien en ligne » → « Enregistre ») — RIEN en ligne
 - **Artifact** https://claude.ai/artifact/QSD8HCrAzEqrSEYA7viFMh (v9 au 24/10 soir : exemples photo ; sur le noir, une photo reste un POSITIF clair sur le noir, l'inversion ne vaut que pour les traits des dessins : la v8 montrait un négatif, « ça fait vraiment bizarre ») · `docs/maquettes/carnet-a5.html` (1,7 Mo, retiré du suivi git le 23/10 : se régénère avec le générateur) · générateur
   `tools/maquettes/carnet-a5.py <capture> <champ-photo>` (méthode du puzzle photo : fiche ajoutée EN LOCAL à `products.js` + `productInfo.js`, build,
