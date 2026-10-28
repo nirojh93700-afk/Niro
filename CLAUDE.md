@@ -4378,6 +4378,8 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
     (maquette = ses DEUX visuels sur le verre 36 cl, image `/api/img/67jJPByXedNMVdPKQ4Cq`, générateur `scratchpad/dor2/maquette.py`) ; **22 h 09 :
     devis DEV-1527 envoyé** (81,90 €, même prix pour les deux versions, livraison standard offerte, Express 14,90 € à sa charge). À sa réponse :
     noter la version choisie (1 = image PNG, 2 = PDF) ; si elle paie sans le dire, la lui demander AVANT de graver.
+    ✅ **28/10, 14 h 55 : elle a choisi le VISUEL 1** (l'image PNG, écritures manuscrites). DEV-1527 pas encore réglé (statut « envoyé »).
+    Réponse proposée au gérant, NON envoyée. L'agent n'a rien su préparer : il ne voit pas les devis ni les maquettes envoyées.
 - 🧪 **Maquette « date dans l'image »** (rien en ligne) : https://claude.ai/artifact/XJAzEzKSjsoQYj1fGAFHev · générateur
   `tools/maquettes/photo-textes.py <capture vin.html> <css> public/produits/verre_vin_vierge.jpg <sortie>` (v3 : grande photo comme sur le site, entière dans son cadre, vignettes dessous). Fiche verre à vin : après la photo, « Y a-t-il une date
   écrite dans votre image ? » Non / Oui → lecture de l'image en direct (2–8 s) → vérifié ✓, ou écart montré AVANT le paiement (« C'est bien une

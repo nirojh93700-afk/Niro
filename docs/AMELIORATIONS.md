@@ -259,3 +259,5 @@
   AVANT publication contre le gabarit (§ GABARIT FICHE PRODUIT) ; un agent « Préparation » (commandes à graver, à emballer, en retard, express)
   ; un rapport quotidien unique (lu dans Gestion, pas seulement par e-mail) ; une page « Équipe » avec une carte par agent (dernier passage,
   dernier rapport, interrupteur, « lancer maintenant »). Maquette d'abord, rien en ligne.
+
+- 💡 **(28/10/2026) L'agent e-mail ne voit pas les devis** : à la réponse de Doriane (« je souhaite faire graver le visuel 1 »), il a écrit « aucune commande trouvée, je n'ai pas accès aux maquettes » au lieu de préparer une réponse. Piste : ajouter à son contexte (`buildContext`, inbox.js) les devis de la cliente (`listQuotes` par e-mail : numéro, statut, note) et le sujet de nos derniers envois.
