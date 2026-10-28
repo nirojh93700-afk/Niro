@@ -4508,7 +4508,7 @@ export const products = [
   };
   const E37 = { box: { top: 0.13, left: 0.24, width: 0.52, height: 0.44 }, widthMm: 70, maxWidthFrac: 0.34, minWidthFrac: 0.08 };
   const E39 = { box: { top: 0.11, left: 0.31, width: 0.38, height: 0.44 }, widthMm: 55, maxWidthFrac: 0.30, minWidthFrac: 0.07 };
-  const G37 = ["/produits/verre_tumbler_37_ex_maries.jpg", "/produits/verre_tumbler_37_ex_photo.jpg", "/produits/verre_tumbler_37_ex_fee.jpg", "/produits/verre_tumbler_37_ambiance.jpg", "/produits/verre_tumbler_37_whisky.jpg", "/produits/verre_tumbler_37_lot6.jpg", "/produits/verre_tumbler_37_verre.jpg", "/produits/verre_tumbler_37_vierge.jpg"];
+  const G37 = ["/produits/verre_tumbler_37_ex_maries.jpg", "/produits/verre_tumbler_37_ex_photo.jpg", "/produits/verre_tumbler_37_ex_fee.jpg", "/produits/verre_tumbler_37_ambiance.jpg", "/produits/verre_tumbler_37_whisky.jpg", "/produits/verre_tumbler_37_lot6.jpg", "/produits/verre_tumbler_37_vierge.jpg"];
   const G39 = ["/produits/verre_tumbler_39_ex_photo.jpg", "/produits/verre_tumbler_39_ex_maries.jpg", "/produits/verre_tumbler_39_ex_texte.jpg", "/produits/verre_tumbler_39_ex_colombes.jpg", "/produits/verre_tumbler_39_vierge.jpg"];
   // Verre à cocktail : même parcours que le verre à whisky (face / fond / les deux, date, décor)
   // avec, en plus, les modèles et la lettre fleurie de la flûte (28/10/2026).
