@@ -440,3 +440,15 @@ En attente de SA décision :
 
 - **27/10/2026 — Violette (verre whisky « Colombes & cœur », 27,90 €)** : mail sans aperçu envoyé à 13 h 02 (aperçu préparé après paiement). Fichier de gravure VALIDÉ par le gérant : `docs/gravures/violette-colombes/` (45,9 × 53,6 mm). À sa réponse « oui » : préparer le devis 27,90 € + livraison, le montrer avant envoi.
 - **27/10/2026 — Guide « Idées & conseils » marque-pages** (`/idees/marque-pages-personnalises`, maquette `docs/maquettes/guide-marque-pages.html`) : construit et vérifié en local, EN ATTENTE de son « pousse ».
+
+## 🎄 PLAN NOËL 2026 + GOOGLE SHOPPING + PORT DES VERRES — 28/10/2026 (objectif du gérant : 4 000 € par mois) — RIEN en ligne, RIEN envoyé
+- Maquette https://claude.ai/artifact/2MMTv3xT4oeT1ZaAHnzZwo · `docs/maquettes/plan-noel.html` · générateur `tools/maquettes/plan-noel.py`.
+- Dates limites PROPOSÉES (calcul `delaiCommande`, 5 jours ouvrés) : livraison normale jeudi 10 décembre (expédiée au plus tard le jeu. 17) ·
+  Express lundi 14 décembre (expédiée au plus tard le lun. 21) · après : carte cadeau. Bandeau Noël : la ligne « pensez-y tôt » remplacée par la date.
+- Calendrier proposé : newsletters ven. 6 nov., 20 nov., 4 déc. (rappel date), relance non-ouvreuses mar. 8 déc., carte cadeau ven. 11 déc. ;
+  une vidéo chaque vendredi (6, 13, 20, 27 nov.). Chaque envoi : maquette → envoi au gérant seul → liste après son « envoie ».
+- Google Merchant Center : 7 étapes dans la maquette (c'est SON compte). Flux vérifié le 28/10 : 84 produits sur 84 au même prix que la fiche.
+  Correction PRÉPARÉE (commit local, non poussée) : `cristal-deja-grave` (fiche qui redirige, `pageDediee`) sort du flux.
+- Port des verres à domicile PROPOSÉ : 1-2 verres 7,90 € (au lieu de 11,90), 3-4 verres 9,90 € (16,90), 5+ 12,90 € (21,90) ; relais 4,90 € et
+  offert dès 60 € inchangés ; afficher « Point relais 4,90 € · offert dès 60 € » sur les fiches verres. Coût d'un envoi 1-2 verres ≈ 7,95 €
+  (étiquette 6,12 estimée + carton 1,12 + chips 0,71). En attente de son accord ; si oui : `GLASS_TIERS` (ou Gestion → Livraison) ET `portFR` du flux Google.
