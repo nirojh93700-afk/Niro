@@ -101,6 +101,8 @@
     dans Gestion (image de banque, à vérifier avant de graver). Les n° 6 (crèche) et 9 (cerfs et traîneau) n'étaient pas dans ce renvoi
     mais restent. **27 images** partout (`NB_IMAGES`, `FETES[0].images`, KPI, grille : Dessins 18 · Mots 9). 94 vérifs, 0 erreur.
     ⛔ Méthode à garder : toute image renvoyée se compare par empreinte aux fichiers existants AVANT d'être ajoutée.
+  · ✅ **ENREGISTRÉE TELLE QUELLE LE 28/10/2026 SOIR (« Enregistre la maquette telle quelle ») = VERSION 9** : c'est CETTE version à
+    reproduire au « applique » ; ne plus la modifier sans sa demande.
   · **v9 (28/10 soir)** : le gérant a envoyé les versions PROPRES (sans filigrane) des n° 26 et 27 → fichiers remplacés (même
     numéro, même nom, empreinte vérifiée), étiquette « ⚠ filigrane du vendeur » retirée. 94 vérifs, 0 erreur.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
