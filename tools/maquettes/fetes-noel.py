@@ -136,6 +136,12 @@ EMB_NOEL = [
     dict(id="rouge", nom="Boîte rouge au sapin doré", d="12 × 6 × 4 cm · ruban rouge et or · part en colis", px=3.9, cout=0.62, stock=20, photo="4-boite-rouge-G.jpg", colis=True),
     dict(id="pack", nom="Pack de Noël", d="Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette · part en colis", px=5.9, barre=6.8, cout=2.15, stock=20, photo="2-sac-M.jpg", colis=True, couleurs=True, meil=True),
 ]
+# « Convient si le bijou est… » (gérant, 28/10 soir : « la grosse boîte… si ça rentre pas il faut pas le mettre ») : règle par défaut d'après les
+# dimensions (il coche / décoche dans Gestion). seul = bijou nu ou en microfibre · sac = dans le sac cadeau beige · carree = boîte carrée 9 × 9 (colliers) ·
+# allongee = boîte allongée (bracelets, taille à mesurer) · pack = Pack boîte cadeau (sac + boîte + microfibre).
+FIT = dict(sachet=dict(seul=True), pochette=dict(seul=True), sac=dict(seul=True, sac=True, carree=True), ruban=dict(seul=True), rouge=dict(seul=True), pack=dict(seul=True))
+for e in EMB_NOEL:
+    e["fit"] = {k: bool(FIT[e["id"]].get(k)) for k in ("seul", "sac", "carree", "allongee", "pack")}
 ETIQUETTE = dict(nom="Étiquette rouge « Merry Christmas » + ficelle", d="5,4 × 9 cm · offerte avec chaque emballage de Noël", cout=0.05, stock=50, photo="6-etiquettes-I.jpg")
 COULEURS_RUBAN = [("vert", "Vert sapin", "3-5-boite-ruban-C-vert-recadree.jpg"), ("bleu", "Bleu nuit", "3-5-boite-ruban-J-bleu.jpg")]
 for e in EMB_NOEL:
@@ -205,7 +211,10 @@ for btn in re.findall(r'<button type="button" style="[^"]*">(.*?)</button>', mb.
     px = float(prix[-1].replace(",", ".")) if prix else 0.0
     barre = float(prix[0].replace(",", ".")) if len(prix) > 1 else None
     src_img = uri(os.path.join(os.path.dirname(os.path.abspath(capture_bijou)), img.group(1) + ".jpg"), 300, 78) if img and os.path.exists(os.path.join(os.path.dirname(os.path.abspath(capture_bijou)), img.group(1) + ".jpg")) else None
-    PK_JS.append(dict(id="pk%d" % len(PK_JS), nom=nom, d=d, px=px, barre=barre, meil=meil, src=src_img, ico=None if src_img else "✖️"))
+    bas = nom.lower()  # le nom seul : la description de « Sans emballage » parle de boîte
+    cat = ("seul" if (bas.startswith("sans") or "microfibre" in bas) else "pack" if "pack" in bas else "allongee" if ("allong" in bas or "bracelet" in bas)
+           else "carree" if "boîte" in bas else "sac" if "sac" in bas else "seul")
+    PK_JS.append(dict(id="pk%d" % len(PK_JS), nom=nom, d=d, px=px, barre=barre, meil=meil, src=src_img, ico=None if src_img else "✖️", cat=cat))
 assert len(PK_JS) >= 4 and PK_JS[0]["px"] == 0 and all(p["px"] > 0 for p in PK_JS[1:]), [(p["nom"], p["px"]) for p in PK_JS]
 PRIX_BIJOU = float(re.search(r'<div class="pd-totbox"><span class="lab">Total tout compris</span><span class="val">([0-9]+,[0-9]{2})', main_b).group(1).replace(",", "."))
 main_b = main_b[:mb.start()] + '<div id="ft-pk"></div>' + main_b[mb.end():]
@@ -296,7 +305,7 @@ ADMIN = f"""
     <div class="ft-imgs" id="ft-imgs"></div>
 
     <h3 class="ft-h3">Emballages de Noël <span class="ft-h3s">pour les BIJOUX · s'ajoutent sous « Votre emballage » de chaque fiche bijou, en plus des emballages habituels</span></h3>
-    <p class="ft-p ft-note">Vos emballages Temu reçus le 28/10, aux <b>prix que vous avez validés</b>. Le coût rendu comprend la part du port ; le stock = les quantités reçues, il baisse à chaque commande comme dans Matériel &amp; emballages. L'étiquette rouge est <b>offerte</b> avec chaque emballage de Noël. Une boîte rigide part en colis (règle du site) ; sachet et pochette restent en lettre suivie. Regardez l'onglet ③ : la fiche du collier suit ces réglages en direct.</p>
+    <p class="ft-p ft-note">Vos emballages Temu reçus le 28/10, aux <b>prix que vous avez validés</b>. Le coût rendu comprend la part du port ; le stock = les quantités reçues, il baisse à chaque commande comme dans Matériel &amp; emballages. L'étiquette rouge est <b>offerte</b> avec chaque emballage de Noël. Le bijou — ou sa boîte habituelle — va <b>dans</b> l'emballage de Noël : cochez dans quoi chaque emballage accepte le bijou ; <b>ce qui ne rentre pas n'est pas proposé</b> à la cliente (une boîte allongée ne tient dans aucun sachet). Sur la fiche, le bloc de Noël est <b>replié</b> : une ligne « Ajouter un emballage de Noël », qui s'ouvre d'un clic. Une boîte rigide part en colis (règle du site) ; sachet et pochette restent en lettre suivie. Regardez l'onglet ③ : la fiche du collier suit ces réglages en direct.</p>
     <div class="ft-embs" id="ft-embs"></div>
 
     <h3 class="ft-h3">Déjà sur le site toute l'année <span class="ft-h3s">liés à Noël, mais jamais retirés quand Noël s'éteint</span></h3>
@@ -422,6 +431,17 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-embc .couleur{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--ink-soft);margin-top:2px}
 .ft-embc .couleur button{width:auto;display:inline-flex;gap:6px;align-items:center;padding:5px 9px;border-radius:10px;font-size:.78rem}.ft-embc .couleur button img{width:26px;height:26px;border-radius:6px;object-fit:cover}
 .ft-embc .colis{font-size:.72rem;color:var(--ink-soft);font-weight:400;display:block}
+.xn-tog{display:flex;align-items:center;gap:11px;text-align:left;cursor:pointer;font:inherit;width:100%;box-sizing:border-box;margin:-8px 0 18px;padding:11px 13px;border-radius:12px;border:1.5px dashed #c98c86;background:#fff8f6;color:var(--ink)}
+.xn-tog.on{border-style:solid;border-color:#b3261e;background:#fff3f0}
+.xn-tog .ico{font-size:1.3rem}.xn-tog strong{display:block;font-size:.9rem}.xn-tog .d{color:var(--ink-soft);font-size:.78rem;display:block}
+.xn-tog .px{margin-left:auto;font-weight:700;font-size:.85rem;white-space:nowrap;text-align:right}.xn-tog .px i{display:block;font-style:normal;font-weight:600;font-size:.74rem;color:#b3261e}
+.xn-tog .th{flex:0 0 40px;width:40px;height:40px;border-radius:8px;object-fit:cover}
+.ft-embc.xn{border:1.5px solid #e4c4c0;background:#fff8f6;border-radius:14px;padding:12px;margin-top:-8px}
+.ft-embc.xn .t{display:flex;align-items:center;gap:8px}.ft-embc .xn-close{margin-left:auto;flex:0 0 auto;width:auto;padding:5px 9px;font-size:.74rem;font-weight:600;border-radius:9px;min-height:0;color:var(--ink-soft)}
+.xn-no{margin:-8px 0 18px;font-size:.8rem;color:var(--ink-soft)}
+.ft-embn .fit{margin-top:7px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}.ft-embn .fit small{width:100%;margin:0 0 1px;color:var(--ink);font-weight:600}
+.ft-embn .fit label{font-size:.7rem;color:var(--ink-soft);border:1px solid var(--line);border-radius:20px;padding:3px 8px;display:inline-flex;gap:4px;align-items:center;cursor:pointer;background:#fff}
+.ft-embn .fit label.on{border-color:#1c6b3a;color:#1c6b3a;background:#eef7f0}.ft-embn .fit input{margin:0;width:13px;height:13px}
 .ft-embc .t{font-weight:700;font-size:.95rem;margin-bottom:3px}
 .ft-embc .s{margin:0 0 10px;color:var(--ink-soft);font-size:.83rem}
 .ft-embc .opts{display:grid;gap:9px}
@@ -444,7 +464,8 @@ JS = r"""
 (function(){
 var NOEL=__NOEL__, VIN=__VIN__, GROUPES=__GROUPES__, CRISTAUX=__CRISTAUX__, PRIX=__PRIX__, EXTRA=__EXTRA__;
 var EMB=__EMB__, ETQ=__ETQ__, PK=__PK__, PRIX_BIJOU=__PRIX_BIJOU__, COUL=__COUL__;
-var S={noel:true,mode:null,model:null,prenom:'',filtre:'all',ouverte:true,view:'admin',pk:'pk0',couleur:'vert'};
+var FITS=[['seul','bijou seul / microfibre'],['sac','sac cadeau'],['carree','boîte carrée (colliers)'],['allongee','boîte allongée (bracelets)'],['pack','Pack boîte cadeau']];
+var S={noel:true,mode:null,model:null,prenom:'',filtre:'all',ouverte:true,view:'admin',pk:'pk0',xn:'none',xnOpen:false,couleur:'vert'};
 function eur(n){return n.toFixed(2).replace('.',',')+' €'}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function $(s,r){return (r||document).querySelector(s)}
@@ -453,7 +474,7 @@ function $$(s,r){return [].slice.call((r||document).querySelectorAll(s))}
 function setNoel(on){
   S.noel=on;
   if(!on && S.model && S.model.src==='noel'){S.model=null;S.prenom='';}
-  if(!on && EMB.some(function(e){return e.id===S.pk})){S.pk='pk0';}
+  if(!on){S.xn='none';S.xnOpen=false;}
   if(S.filtre==='noel'&&!on)S.filtre='all';
   $$('[data-sw="noel"],[data-sw="noel2"],[data-sw="sync"]').forEach(function(b){b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')});
   $('#ft-swtxt').textContent=on?'Allumée':'Éteinte';
@@ -550,6 +571,9 @@ document.addEventListener('click',function(ev){
   if(ev.target.closest('#prc-change')){S.ouverte=true;renderSite();return}
   t=ev.target.closest('[data-pk]');
   if(t){S.pk=t.getAttribute('data-pk');renderBijou();return}
+  t=ev.target.closest('[data-xn]');
+  if(t){S.xn=t.getAttribute('data-xn');renderBijou();return}
+  if(ev.target.closest('[data-xntog]')){S.xnOpen=!S.xnOpen;renderBijou();return}
   t=ev.target.closest('[data-pc]');
   if(t){S.couleur=t.getAttribute('data-pc');renderBijou();renderEmbAdmin();return}
 });
@@ -561,6 +585,7 @@ document.addEventListener('change',function(ev){
   if(s){var m=NOEL.find(function(x){return x.n===+s.getAttribute('data-prix')});m.prix=+s.value;compteur();renderSite();return}
   var p=ev.target.closest('.ft-prod input');if(p){p.closest('.ft-prod').classList.toggle('on',p.checked)}
   var q=ev.target.closest('select[data-pkprix]');if(q){var e=EMB.find(function(x){return x.id===q.getAttribute('data-pkprix')});e.px=+q.value;renderEmbAdmin();renderBijou();return}
+  var ft=ev.target.closest('input[data-fit]');if(ft){var e3=EMB.find(function(x){return x.id===ft.getAttribute('data-fit')});e3.fit[ft.getAttribute('data-cat')]=ft.checked;ft.closest('label').classList.toggle('on',ft.checked);renderBijou();return}
   var st=ev.target.closest('input[data-pkstock]');if(st){var e2=EMB.find(function(x){return x.id===st.getAttribute('data-pkstock')});e2.stock=Math.max(0,+st.value||0);renderBijou();return}
 });
 function alert_(msg){var b=$('#ft-toast');b.textContent=msg;b.style.display='block';clearTimeout(b._t);b._t=setTimeout(function(){b.style.display='none'},3500)}
@@ -573,33 +598,45 @@ function renderEmbAdmin(){
     var coul=e.couleurs?'<div class="coul">'+COUL.map(function(c){return '<img src="'+c.src+'" alt="" title="'+esc(c.nom)+'">'}).join('')+'<small style="margin:0;align-self:center">vert sapin · bleu nuit</small></div>':'';
     return '<div class="ft-embn'+(e.id==='pack'?' pk':'')+'">'+(e.id==='pack'?'<span class="etq">PACK</span>':'')+'<img src="'+e.src+'" alt=""><div class="b"><b>'+esc(e.nom)+'</b><div class="d">'+esc(e.d)+'</div>'
       +'<div class="ft-emb-l"><label>Prix <select data-pkprix="'+e.id+'">'+opts+'</select></label><label>Stock <input type="number" data-pkstock="'+e.id+'" value="'+e.stock+'" min="0"></label></div>'
-      +'<small>Coût rendu '+eur(e.cout)+' · <span class="marge">marge '+(marge>=0?'+':'−')+eur(Math.abs(marge))+'</span>'+(e.barre?' · prix barré '+eur(e.barre)+' (= boîte + sac)':'')+'</small>'+coul+'</div></div>'}).join('');
+      +'<small>Coût rendu '+eur(e.cout)+' · <span class="marge">marge '+(marge>=0?'+':'−')+eur(Math.abs(marge))+'</span>'+(e.barre?' · prix barré '+eur(e.barre)+' (= boîte + sac)':'')+'</small>'+coul
+      +'<div class="fit"><small>Convient si le bijou est :</small>'+FITS.map(function(f){return '<label'+(e.fit[f[0]]?' class="on"':'')+'><input type="checkbox" data-fit="'+e.id+'" data-cat="'+f[0]+'"'+(e.fit[f[0]]?' checked':'')+'> '+f[1]+'</label>'}).join('')+'</div></div></div>'}).join('');
   h+='<div class="ft-embn"><span class="etq off">OFFERTE</span><img src="'+ETQ.src+'" alt=""><div class="b"><b>'+esc(ETQ.nom)+'</b><div class="d">'+esc(ETQ.d)+'</div><div class="ft-emb-l"><label>Prix <select disabled><option>Offerte</option></select></label><label>Stock <input type="number" value="'+ETQ.stock+'" min="0"></label></div><small>Coût '+eur(ETQ.cout)+' · la cliente ne la choisit pas : elle est mise d’office.</small></div></div>';
   $('#ft-embs').innerHTML=h;
 }
 /* ---------- Site : fiche du collier, bloc « Votre emballage » = options actuelles + options de Noël */
-function pkChoisi(){return PK.concat(EMB).find(function(x){return x.id===S.pk})||PK[0]}
-function totalBijou(){var p=pkChoisi();return PRIX_BIJOU+(p.px||0)}
+function pkChoisi(){return PK.find(function(x){return x.id===S.pk})||PK[0]}
+function xnChoisi(){return EMB.find(function(x){return x.id===S.xn})||null}
+function xnDispo(){var cat=pkChoisi().cat;return EMB.filter(function(e){return e.fit[cat]})}
+function totalBijou(){var x=xnChoisi();return PRIX_BIJOU+(pkChoisi().px||0)+(x?x.px:0)}
 function btnPk(o,noel){
-  var on=S.pk===o.id, img=o.src?'<img class="th" src="'+o.src+'" alt="">':'<span class="ico">'+(o.ico||'🎁')+'</span>';
-  var px=o.px?(o.barre?'<span class="barre">'+eur(o.barre)+'</span>':'')+'+'+eur(o.px):(o.id==='pk0'?'0 €':'Offert');
-  var rup=noel&&o.stock<=0;
-  return '<button type="button" data-pk="'+o.id+'" class="'+(on?'on':'')+'"'+(rup?' disabled style="opacity:.45"':'')+'>'+img+'<span style="min-width:0"><strong>'+(on?'✓ ':'')+esc(o.nom)+(o.meil?'<span class="meil'+(noel?' noel':'')+'">'+(noel?'🎄 NOËL':'MEILLEUR CHOIX')+'</span>':'')+'</strong><span class="d">'+esc(o.d)+(rup?' · épuisé':'')+'</span></span><span class="px">'+px+'</span></button>';
+  var on=noel?S.xn===o.id:S.pk===o.id, img=o.src?'<img class="th" src="'+o.src+'" alt="">':'<span class="ico">'+(o.ico||'🎁')+'</span>';
+  var px=o.px?(o.barre?'<span class="barre">'+eur(o.barre)+'</span>':'')+'+'+eur(o.px):'0 €';
+  var rup=noel&&o.id!=='none'&&o.stock<=0;
+  return '<button type="button" data-'+(noel?'xn':'pk')+'="'+o.id+'" class="'+(on?'on':'')+'"'+(rup?' disabled style="opacity:.45"':'')+'>'+img+'<span style="min-width:0"><strong>'+(on?'✓ ':'')+esc(o.nom)+(o.meil?'<span class="meil'+(noel?' noel':'')+'">'+(noel?'🎄 NOËL':'MEILLEUR CHOIX')+'</span>':'')+'</strong><span class="d">'+esc(o.d)+(rup?' · épuisé':'')+'</span></span><span class="px">'+px+'</span></button>';
 }
 function renderBijou(){
   var host=$('#ft-pk');if(!host)return;
   var h='<div class="ft-embc"><div class="t">Votre emballage</div><p class="s">Choisissez votre présentation cadeau.</p><div class="opts">';
-  h+=PK.map(function(o){return btnPk(o,false)}).join('');
+  h+=PK.map(function(o){return btnPk(o,false)}).join('')+'</div></div>';
   if(S.noel){
-    h+='<div class="sep">🎄 Pour Noël</div>';
-    h+=EMB.map(function(o){return btnPk(o,true)}).join('');
-    var p=pkChoisi();
-    if(p.couleurs){
-      h+='<div class="couleur">Couleur de la boîte : '+COUL.map(function(c){return '<button type="button" data-pc="'+c.id+'" class="'+(S.couleur===c.id?'on':'')+'"><img src="'+c.src+'" alt="">'+(S.couleur===c.id?'✓ ':'')+esc(c.nom)+'</button>'}).join('')+'</div>';
+    var dispo=xnDispo(), x=xnChoisi();
+    if(x&&!dispo.some(function(e){return e.id===x.id})){S.xn='none';x=null;}
+    if(dispo.length){
+      var mini=Math.min.apply(null,dispo.map(function(e){return e.px}));
+      if(!S.xnOpen){
+        if(x){h+='<button type="button" class="xn-tog on" data-xntog><img class="th" src="'+x.src+'" alt=""><span style="min-width:0"><strong>🎄 Emballage de Noël : '+esc(x.nom)+(x.couleurs?' · '+esc(COUL.find(function(c){return c.id===S.couleur}).nom.toLowerCase()):'')+'</strong><span class="d">étiquette « Merry Christmas » offerte</span></span><span class="px">+'+eur(x.px)+'<i>Modifier</i></span></button>';}
+        else{h+='<button type="button" class="xn-tog" data-xntog><span class="ico">🎄</span><span style="min-width:0"><strong>Ajouter un emballage de Noël</strong><span class="d">facultatif · dès '+eur(mini)+' · '+dispo.length+' choix</span></span><span class="px"><i>Voir ▾</i></span></button>';}
+      }else{
+        h+='<div class="ft-embc xn"><div class="t">🎄 Votre emballage de Noël <button type="button" class="xn-close" data-xntog>Fermer ▴</button></div><p class="s">'+(pkChoisi().cat==='seul'?'Le bijou est glissé dedans, prêt à offrir.':'Votre '+esc(pkChoisi().nom.toLowerCase())+' est glissé dedans, prêt à offrir.')+'</p><div class="opts">';
+        h+=btnPk({id:'none',nom:'Sans emballage de Noël',d:'Seulement l’emballage choisi ci-dessus',px:0,ico:'✖️'},true);
+        h+=dispo.map(function(o){return btnPk(o,true)}).join('');
+        if(x&&x.couleurs){h+='<div class="couleur">Couleur de la boîte : '+COUL.map(function(c){return '<button type="button" data-pc="'+c.id+'" class="'+(S.couleur===c.id?'on':'')+'"><img src="'+c.src+'" alt="">'+(S.couleur===c.id?'✓ ':'')+esc(c.nom)+'</button>'}).join('')+'</div>';}
+        h+='<p class="etqoff"><img src="'+ETQ.src+'" alt="">Avec chaque emballage de Noël, l’étiquette « Merry Christmas » et sa ficelle sont offertes.</p></div></div>';
+      }
+    }else if(pkChoisi().cat!=='seul'){
+      h+='<p class="xn-no">🎄 Pas d’emballage de Noël avec cette présentation : elle n’y rentre pas.</p>';
     }
-    h+='<p class="etqoff"><img src="'+ETQ.src+'" alt="">Avec chaque emballage de Noël, l’étiquette « Merry Christmas » et sa ficelle sont offertes.</p>';
   }
-  h+='</div></div>';
   host.innerHTML=h;
   var v=$('#view-bijou .pd-totbox .val');if(v)v.textContent=eur(totalBijou());
 }
@@ -633,7 +670,7 @@ page = f"""<title>Fêtes de l'année</title>
  {header}{main}{footer}
 </div>
 <div class="ft-view ft-site" id="view-bijou">
- <div class="ft-sitebar">Fiche réelle du Collier Cœur gravé · <b>Noël <span class="ft-synctxt">allumé</span></b> · les emballages de Noël s'ajoutent sous « Votre emballage » ; l'interrupteur en haut à droite les retire</div>
+ <div class="ft-sitebar">Fiche réelle du Collier Cœur gravé · <b>Noël <span class="ft-synctxt">allumé</span></b> · une ligne « Ajouter un emballage de Noël » sous « Votre emballage » (repliée, s'ouvre d'un clic, seulement ce qui rentre) ; l'interrupteur en haut à droite la retire</div>
  {header}{main_b}{footer}
 </div>
 <div id="ft-toast"></div>

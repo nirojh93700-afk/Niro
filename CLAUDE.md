@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSION 3 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -55,8 +55,19 @@
     boîte (vert sapin / bleu nuit) pour la boîte à ruban et le pack, ligne « l'étiquette est offerte » ; stock à 0 dans Gestion = option
     grisée « épuisé » ; un prix changé dans Gestion = la fiche suit. Noël éteint = la fiche d'aujourd'hui à l'identique (5 options).
     Onglet ② (verre à vin) : plus de bloc emballage (les emballages de Noël sont pour les bijoux).
-  · Vérifié Chromium 390 / 1280 (`scratchpad/t-fetes2.mjs`, 52 vérifs) : totaux 22,41 → pack 28,31 → sachet 23,31 → boîte 26,31, retour
-    22,41 éteint, 0 erreur JS, 0 débordement. Photo recadrée de la boîte verte ajoutée : `assets/noel/emballages/3-5-boite-ruban-C-vert-recadree.jpg`.
+  · ⛔ **v3 (28/10 soir, gérant : « la grosse boîte… si ça rentre pas il faut pas le mettre… fais en sorte que ça se déroule s'il veut et
+    clique… sur le portable c'est trop, ça fait trop chargé »)** — DEUX COUCHES : la cliente garde son emballage habituel (sans / sac / boîte /
+    microfibre / pack), et le bijou OU sa boîte va DANS l'emballage de Noël. **Ce qui ne rentre pas n'est pas proposé** : règle « Convient si le
+    bijou est : seul / microfibre · sac cadeau · boîte carrée · boîte allongée · Pack » = cases par emballage dans Gestion (défaut d'après les
+    tailles : sachet, pochette, boîte à ruban, boîte rouge, pack = bijou seul ou microfibre seulement ; sac de Noël 19 × 15 × 7 = aussi sac
+    cadeau et boîte carrée ; boîte allongée et Pack boîte cadeau = rien, « à mesurer »). Sur la fiche : **UNE ligne repliée « 🎄 Ajouter un
+    emballage de Noël · facultatif · dès 0,90 € · N choix · Voir ▾ »** sous « Votre emballage » ; un clic l'ouvre (Sans + seulement ce qui rentre,
+    couleur de la boîte, étiquette offerte, « Fermer ▴ ») ; une fois choisi et refermé = résumé « 🎄 Emballage de Noël : Pack de Noël · bleu nuit
+    +5,90 € · Modifier ». Changer d'emballage habituel pour un où le choix de Noël ne rentre plus = le choix de Noël se retire ; si rien ne
+    rentre (Pack boîte cadeau) = une phrase grise, pas de ligne. Total = bijou + emballage habituel + emballage de Noël (22,41 → boîte carrée +
+    sac de Noël = 29,21). Vérifié Chromium 390 / 1280 (`scratchpad/t-fetes2.mjs`, 70 vérifs) : 0 erreur JS, 0 débordement. Photo recadrée de
+    la boîte verte : `assets/noel/emballages/3-5-boite-ruban-C-vert-recadree.jpg`. **À la construction : garder ces règles (`fit` par emballage),
+    le bloc replié, et prévoir la boîte allongée des bracelets (sa taille est à mesurer avant de cocher quoi que ce soit).**
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.
