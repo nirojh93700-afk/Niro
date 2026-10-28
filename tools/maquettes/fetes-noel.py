@@ -4,8 +4,8 @@ décoche, tout ce qui a rapport avec Noël disparaît… une alerte deux mois av
 Deux vues dans une seule page :
   ① Gestion → Fêtes : une ligne par fête, interrupteur, alerte 2 mois avant ; le détail de Noël = produits concernés,
      les 25 images de gravure NUMÉROTÉES (comme les modèles des verres), les emballages de Noël, ce qui reste toute l'année.
-  ② Sur le site : la fiche RÉELLE du verre à vin (capture en ligne), Noël allumé = chip « 🎄 Noël » + 25 modèles numérotés
-     dans la grille des modèles + bloc « Votre emballage de Noël » ; éteint = la fiche d'aujourd'hui, à l'identique.
+  ② Sur le site : la fiche RÉELLE du verre à vin (capture en ligne), Noël allumé = carte À PART « 🎄 Un modèle de Noël »
+     avec sa propre grille de 25 modèles numérotés (v4 du 28/10 soir : plus jamais mélangés aux modèles habituels) + bloc « Votre emballage de Noël » ; éteint = la fiche d'aujourd'hui, à l'identique.
 Usage : python3 tools/maquettes/fetes-noel.py <dossier css du site> <capture /produit/verre-a-vin-grave> <sortie.html> <capture /produit/collier-coeur-grave>
 v2 (28/10 soir) : les emballages de Noël Temu (pour les BIJOUX, prix validés par le gérant) dans Gestion → Fêtes, et un 3ᵉ onglet
 = la fiche RÉELLE du collier cœur gravé : Noël allumé = les emballages de Noël s'ajoutent sous « Votre emballage » ; éteint = la fiche d'aujourd'hui.
@@ -407,9 +407,12 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-sitebar b{color:#7a1512}
 .ft-tag{position:absolute;top:6px;right:6px;background:#a8302a;color:#fff;font-size:.62rem;font-weight:800;border-radius:99px;padding:2px 7px}
 .prc-card{position:relative}
+.prc-model .prc-mn{z-index:2}
 .prc-model.noel .prc-mn{background:#a8302a}
 .prc-model.noel.on .prc-mn{background:#7a1512}
 .prc-chip.noel{border-color:#a8302a;color:#a8302a}.prc-chip.noel.on{background:#a8302a;color:#fff}
+.prc-card.noel{border-color:#e4b9b5;background:#fff8f6}.prc-card.noel.on{border-color:#a8302a;box-shadow:0 0 0 2px rgba(168,48,42,.18)}
+.prc-step.prc-noel .prc-mode{border:1.5px solid #e4b9b5;background:#fff8f6;border-radius:14px;padding:12px}
 .ft-embn{display:flex;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fffdf9;min-width:0;position:relative}
 .ft-embn.pk{grid-column:1/-1;background:linear-gradient(180deg,#fffaf0,#fff);border-color:#cdb26a}
 .ft-embn img{flex:0 0 76px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
@@ -474,6 +477,7 @@ function $$(s,r){return [].slice.call((r||document).querySelectorAll(s))}
 function setNoel(on){
   S.noel=on;
   if(!on && S.model && S.model.src==='noel'){S.model=null;S.prenom='';}
+  if(!on && S.mode==='noel'){S.mode=null;S.filtre='all';}
   if(!on){S.xn='none';S.xnOpen=false;}
   if(S.filtre==='noel'&&!on)S.filtre='all';
   $$('[data-sw="noel"],[data-sw="noel2"],[data-sw="sync"]').forEach(function(b){b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')});
@@ -481,8 +485,8 @@ function setNoel(on){
   $('#etat-noel').innerHTML=on?'<span class="ft-chip on">Allumée · dans '+__JOURS__+' j</span>':'<span class="ft-chip">Éteinte · se rallume d’un clic</span>';
   $('#kpi-on').textContent=on?'Noël':'Aucune';
   $('#ft-etat-txt').innerHTML=on
-    ?'<b>Allumée.</b> Sur les produits cochés, la grille des modèles a un groupe <b>« 🎄 Noël »</b> avec les 25 images numérotées, et sur chaque bijou les <b>emballages de Noël</b> s’ajoutent sous « Votre emballage ». Regardez les onglets ② et ③ : ils suivent cet interrupteur en direct.'
-    :'<b>Éteinte.</b> Plus aucune image de Noël dans les grilles, plus d’emballage de Noël sur les bijoux : les fiches sont redevenues comme avant, à l’identique. Les images et les réglages sont gardés ici pour l’an prochain.';
+    ?'<b>Allumée.</b> Sur les produits cochés, l’étape « Que voulez-vous graver ? » a une carte À PART <b>« 🎄 Un modèle de Noël »</b> (les 25 images numérotées, jamais mélangées aux modèles habituels), et sur chaque bijou les <b>emballages de Noël</b> s’ajoutent sous « Votre emballage ». Regardez les onglets ② et ③ : ils suivent cet interrupteur en direct.'
+    :'<b>Éteinte.</b> Plus de carte « Un modèle de Noël », plus aucune image de Noël, plus d’emballage de Noël sur les bijoux : les fiches sont redevenues comme avant, à l’identique. Les images et les réglages sont gardés ici pour l’an prochain.';
   $$('.ft-synctxt').forEach(function(e){e.textContent=on?'allumé':'éteint'});
   renderSite();renderBijou();
 }
@@ -507,7 +511,7 @@ function compteur(){
 function legNoel(m){return m.mots?'Mots de Noël (+ prénom si vous voulez)':'Dessin de Noël (+ prénom si vous voulez)'}
 function tile(m,noel){
   var on=S.model&&S.model.src===(noel?'noel':'vin')&&S.model.n===m.n;
-  var g=noel?'noel':(GROUPES.find(function(x){return x.nums.indexOf(m.n)>=0})||{}).key;
+  var g=noel?(m.mots?'mots':'dessins'):(GROUPES.find(function(x){return x.nums.indexOf(m.n)>=0})||{}).key;
   var hide=S.filtre!=='all'&&g!==S.filtre;
   return '<button type="button" class="prc-model'+(noel?' noel':'')+(on?' on':'')+(hide?' hide':'')+'" data-src="'+(noel?'noel':'vin')+'" data-n="'+m.n+'" aria-label="Modèle '+(noel?'Noël ':'')+'n° '+m.n+'">'+
     '<span class="prc-mn">'+(noel?'Noël ':'')+'n° '+m.n+'</span><span class="prc-mimg"><img src="'+m.src+'" alt="" loading="lazy"></span><span class="prc-ml">'+esc(noel?legNoel(m):m.legende)+'</span></button>';
@@ -522,21 +526,29 @@ function renderSite(){
   var nb=VIN.length, nbTot=nb+noelVisibles.length;
   var h='<div class="prc-head"><p class="prc-title">Personnalisez votre verre</p><p class="prc-sub">3 petites étapes : dites-nous quoi graver, nous faisons le reste.</p></div>';
   h+='<section class="prc-step"><div class="prc-sh"><span class="prc-num'+(S.mode?' done':'')+'">1</span><h3>Que voulez-vous graver ?</h3></div><div class="prc-cards">';
-  h+='<button type="button" class="prc-card'+(S.mode==='modele'?' on':'')+'" data-mode="modele">'+(S.noel?'<span class="ft-tag">🎄 Noël</span>':'')+'<span class="prc-cimg"><img src="'+VIN[4].src+'" alt=""></span><span class="prc-ctxt"><b>Un modèle décoré</b><small>'+nb+' modèles numérotés'+(S.noel?' + '+noelVisibles.length+' modèles de Noël':'')+', avec vos prénoms si vous voulez.</small></span></button>';
+  h+='<button type="button" class="prc-card'+(S.mode==='modele'?' on':'')+'" data-mode="modele"><span class="prc-cimg"><img src="'+VIN[4].src+'" alt=""></span><span class="prc-ctxt"><b>Un modèle décoré</b><small>'+nb+' modèles numérotés, avec vos prénoms si vous voulez.</small></span></button>';
+  if(S.noel)h+='<button type="button" class="prc-card noel'+(S.mode==='noel'?' on':'')+'" data-mode="noel"><span class="ft-tag">🎄 Noël</span><span class="prc-cimg"><img src="'+NOEL[2].src+'" alt=""></span><span class="prc-ctxt"><b>Un modèle de Noël</b><small>'+noelVisibles.length+' dessins et mots de Noël numérotés, avec vos prénoms si vous voulez.</small></span></button>';
   h+='<button type="button" class="prc-card" data-mode="autre"><span class="prc-cimg prc-cimg-alpha"><img src="'+__ALPHA__+'" alt=""></span><span class="prc-ctxt"><b>Une lettre fleurie</b><small>Votre initiale dans un style fleuri, avec un prénom au milieu si vous le souhaitez.</small></span></button>';
   h+='<button type="button" class="prc-card" data-mode="autre"><span class="prc-cimg prc-cimg-aa"><span class="fnt-great-vibes">Aa</span></span><span class="prc-ctxt"><b>Mon propre texte</b><small>Un prénom, une date, un petit message — dans l’écriture de votre choix. Sans dessin, juste le texte.</small></span></button>';
   h+='<button type="button" class="prc-card" data-mode="autre"><span class="prc-cimg"><span class="prc-cimg-ph" aria-hidden="true">📷</span></span><span class="prc-ctxt"><b>Ma photo ou mon logo</b><small>Envoyez votre photo, un dessin ou le logo de votre entreprise : nous le gravons sur le verre.</small></span></button>';
   h+='</div><p class="prc-hint">Un seul choix par verre. Vous pouvez changer d’avis à tout moment.</p></section>';
   var M=modele();
-  if(S.mode==='modele'){
-    var replie=!!M&&!S.ouverte;
-    h+='<section class="prc-step" id="prc-s2"><div class="prc-sh"><span class="prc-num'+(M?' done':'')+'">2</span><h3>Votre modèle</h3></div><div class="prc-mode">';
-    h+='<div class="prc-chips"><button type="button" class="prc-chip'+(S.filtre==='all'?' on':'')+'" data-f="all">Tous (1–'+nb+(S.noel?' + Noël':'')+')</button>';
-    GROUPES.forEach(function(g){h+='<button type="button" class="prc-chip'+(S.filtre===g.key?' on':'')+'" data-f="'+g.key+'">'+esc(g.label)+'</button>'});
-    if(S.noel)h+='<button type="button" class="prc-chip noel'+(S.filtre==='noel'?' on':'')+'" data-f="noel">🎄 Noël (n° 1–'+noelVisibles.length+')</button>';
-    h+='</div><p class="prc-legend">Sous chaque modèle : ce que vous pouvez nous indiquer (rien n’est obligatoire). Les prénoms et dates que vous voyez sont des exemples : vous mettez les vôtres, dans la même écriture.</p>';
-    h+='<div class="prc-one"><div><div class="prc-grid'+(replie?' picked':'')+'">'+VIN.map(function(m){return tile(m,false)}).join('')+noelVisibles.map(function(m){return tile(m,true)}).join('')+'</div>';
-    if(replie)h+='<button type="button" class="prc-change" id="prc-change">← Changer de modèle (voir les '+nbTot+')</button>';
+  if(S.mode==='modele'||S.mode==='noel'){
+    var replie=!!M&&!S.ouverte, isN=S.mode==='noel';
+    h+='<section class="prc-step'+(isN?' prc-noel':'')+'" id="prc-s2"><div class="prc-sh"><span class="prc-num'+(M?' done':'')+'">2</span><h3>'+(isN?'🎄 Votre modèle de Noël':'Votre modèle')+'</h3></div><div class="prc-mode">';
+    if(isN){
+      var nbD=noelVisibles.filter(function(m){return !m.mots}).length, nbM=noelVisibles.length-nbD;
+      h+='<div class="prc-chips"><button type="button" class="prc-chip'+(S.filtre==='all'?' on':'')+'" data-f="all">Tous (Noël 1–'+noelVisibles.length+')</button><button type="button" class="prc-chip'+(S.filtre==='dessins'?' on':'')+'" data-f="dessins">Dessins ('+nbD+')</button><button type="button" class="prc-chip'+(S.filtre==='mots'?' on':'')+'" data-f="mots">Mots de Noël ('+nbM+')</button></div>';
+      h+='<p class="prc-legend">Les modèles de Noël ont leurs propres numéros (« Noël n° 1 » à « Noël n° '+noelVisibles.length+' »). Sous chacun : un dessin seul est offert, un dessin avec un texte est à +3 €. Ajoutez un prénom si vous voulez.</p>';
+      h+='<div class="prc-one"><div><div class="prc-grid'+(replie?' picked':'')+'">'+noelVisibles.map(function(m){return tile(m,true)}).join('')+'</div>';
+      if(replie)h+='<button type="button" class="prc-change" id="prc-change">← Changer de modèle de Noël (voir les '+noelVisibles.length+')</button>';
+    }else{
+      h+='<div class="prc-chips"><button type="button" class="prc-chip'+(S.filtre==='all'?' on':'')+'" data-f="all">Tous (1–'+nb+')</button>';
+      GROUPES.forEach(function(g){h+='<button type="button" class="prc-chip'+(S.filtre===g.key?' on':'')+'" data-f="'+g.key+'">'+esc(g.label)+'</button>'});
+      h+='</div><p class="prc-legend">Sous chaque modèle : ce que vous pouvez nous indiquer (rien n’est obligatoire). Les prénoms et dates que vous voyez sont des exemples : vous mettez les vôtres, dans la même écriture.</p>';
+      h+='<div class="prc-one"><div><div class="prc-grid'+(replie?' picked':'')+'">'+VIN.map(function(m){return tile(m,false)}).join('')+'</div>';
+      if(replie)h+='<button type="button" class="prc-change" id="prc-change">← Changer de modèle (voir les '+nb+')</button>';
+    }
     h+='</div></div>';
     if(M){
       var lab=S.model.src==='noel'?'Modèle de Noël n° '+M.n:'Modèle n° '+M.n;
@@ -563,7 +575,7 @@ document.addEventListener('click',function(ev){
   t=ev.target.closest('.ft-tabs [data-view]');
   if(t){S.view=t.getAttribute('data-view');$$('.ft-tabs [data-view]').forEach(function(b){b.classList.toggle('on',b===t)});$$('.ft-view').forEach(function(v){v.classList.toggle('on',v.id==='view-'+S.view)});window.scrollTo(0,0);return}
   t=ev.target.closest('.prc-card[data-mode]');
-  if(t){var m=t.getAttribute('data-mode');if(m==='modele'){S.mode='modele';S.ouverte=true;renderSite();var s2=$('#prc-s2');if(s2)s2.scrollIntoView({block:'start',behavior:'smooth'})}else{alert_('Dans cette maquette, seul « Un modèle décoré » est joué : les autres choix sont ceux du site, inchangés.')}return}
+  if(t){var m=t.getAttribute('data-mode');if(m==='modele'||m==='noel'){if(S.mode!==m){S.model=null;S.prenom='';S.filtre='all';}S.mode=m;S.ouverte=true;renderSite();var s2=$('#prc-s2');if(s2)s2.scrollIntoView({block:'start',behavior:'smooth'})}else{alert_('Dans cette maquette, seuls « Un modèle décoré » et « Un modèle de Noël » sont joués : les autres choix sont ceux du site, inchangés.')}return}
   t=ev.target.closest('.prc-chip[data-f]');
   if(t){S.filtre=t.getAttribute('data-f');S.ouverte=true;renderSite();return}
   t=ev.target.closest('.prc-model[data-n]');

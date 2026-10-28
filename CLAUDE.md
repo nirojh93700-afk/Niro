@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  puis VERSION 3 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSIONS 3 et 4 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -68,6 +68,13 @@
     sac de Noël = 29,21). Vérifié Chromium 390 / 1280 (`scratchpad/t-fetes2.mjs`, 70 vérifs) : 0 erreur JS, 0 débordement. Photo recadrée de
     la boîte verte : `assets/noel/emballages/3-5-boite-ruban-C-vert-recadree.jpg`. **À la construction : garder ces règles (`fit` par emballage),
     le bloc replié, et prévoir la boîte allongée des bracelets (sa taille est à mesurer avant de cocher quoi que ce soit).**
+  · ⛔ **v4 (28/10 soir, gérant : « modèle décoré : mélange pas les dessins de Noël et les dessins standard… il faut que ce soit vraiment
+    séparé »)** : la carte « Un modèle décoré » de l'étape 1 redevient EXACTEMENT celle du site (30 modèles, sans étiquette ni chip Noël) et,
+    Noël allumé, une carte À PART **« 🎄 Un modèle de Noël »** (fond rosé, étiquette rouge) ouvre SA propre étape 2 « 🎄 Votre modèle de
+    Noël » : grille des 25 seuls (filtres Tous / Dessins 16 / Mots de Noël 9), « Noël n° 1 » à « Noël n° 25 ». Changer de carte vide le
+    modèle choisi. Noël éteint = la carte disparaît et un modèle de Noël choisi est vidé. ⛔ À la construction : **jamais les images de
+    Noël dans la grille des modèles habituels** — un `mode: "noel"` à part dans `ParcoursGuide` (carte + grille + numéros « Noël n° X »),
+    sur chaque produit coché. Vérifié 390 / 1280 : 84 vérifs, 0 erreur, 0 débordement (`z-index` ajouté au numéro des tuiles).
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.
