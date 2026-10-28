@@ -33,6 +33,11 @@
   écartée) : sachet métallisé rouge 12 × 17 cm (photos INEDACO) · boîte à ruban « Merry Christmas » 11,5 × 7 × 4,5 cm (vert, blanc, bleu
   nuit) · boîte rouge sapin doré 12 × 6 × 4 cm · étiquettes rouges 5,4 × 9 cm + ficelle · pochette bordeaux à languette dorée (taille ?) ·
   sac cabas bordeaux liseré or 19 × 15 × 7 cm. La maquette Fêtes (v1) n'est PAS modifiée sans sa demande.
+  · Photos RENOMMÉES le 28/10 soir d'après SES associations (« A et K → 7, B C J → 3 et 5, D G → 4, E I → 6, F H N → 1, L M → 2 ») :
+    le préfixe = la ligne de la facture Temu, la lettre = la photo envoyée (contrôle md5 fait). ⚠️ La 1re version les avait mal nommées.
+    Sur les fiches : seulement les photos SANS cotes dessinées (gérant) : F, H · M · C, J · G · I · A.
+    Page de choix des prix : https://claude.ai/artifact/QnWFRDN91PNo6J36VejXeN (coûts rendus : pochette 0,80 · sac 1,38 · boîte
+    ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - **Photos des emballages de Noël (commande Temu PO-069-16758227989111712 du 17/10, 13 lignes / 16 articles, reçue le 28/10)** : à récupérer sur
   les fiches Temu. Temu est bloqué dans les anciennes sessions : le gérant a créé le 28/10 l'environnement cloud « Temu » (temu.com, *.temu.com,
   kwcdn.com, *.kwcdn.com + les 3 adresses du site + gestionnaires de paquets) → le faire dans une NOUVELLE session sur cet environnement.
