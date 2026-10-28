@@ -12,7 +12,7 @@ export default function QuestionWidget() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | sending | ok | error
   const [error, setError] = useState("");
-  const hidden = ["/gestion", "/panier", "/paiement", "/merci", "/repondre", "/suivi", "/espace"].some((p) => pathname.startsWith(p));
+  const hidden = ["/gestion", "/panier", "/paiement", "/merci", "/repondre", "/reponse", "/document", "/suivi", "/espace"].some((p) => pathname.startsWith(p));
   if (hidden) return null;
 
   // Fiche produit ouverte au moment de la question : on transmet son slug pour

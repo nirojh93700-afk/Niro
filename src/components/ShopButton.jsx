@@ -8,7 +8,8 @@ import { usePathname } from "next/navigation";
 // produit (où il chevaucherait l'aperçu de gravure flottant en bas à droite).
 export default function ShopButton() {
   const pathname = usePathname();
-  if (pathname && (pathname.startsWith("/gestion") || pathname.startsWith("/produit"))) return null;
+  // + devis / facture et page de réponse aux e-mails (gérant, 28/10/2026) : la cliente y lit son devis, rien par-dessus.
+  if (pathname && ["/gestion", "/produit", "/document", "/reponse", "/repondre"].some((p) => pathname.startsWith(p))) return null;
 
   return (
     <Link
