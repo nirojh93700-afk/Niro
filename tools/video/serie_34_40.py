@@ -11,6 +11,9 @@
 #   carte (papier crème, photo en haut, texte encre en bas, glissé vers le haut) · plein (photo agrandie, barre dorée,
 #   compteur, balayage). Les mélanges ont des cartes de chapitre entre les familles.
 # ⛔ Aucun prix, aucun nombre de produits, aucune date. Usage : python3 tools/video/serie_34_40.py <dossier> [34 35 …]
+# NOËL (28/10/2026, gérant : « c'est pour Noël que tu dois faire… tu me montreras une avant, je valide ») : habillage de la
+# vidéo 13 / 33 sur les 7 vidéos (NOEL = True) — ruban rouge « ✦ IDÉE CADEAU DE NOËL ✦ » en haut de CHAQUE plan, pastille
+# « NOËL 2026 » près du nom, cartes rouge & or, fin « Commandez tôt pour Noël ». Les effets sont gardés.
 import os, sys, subprocess
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -24,6 +27,9 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 W, H, FPS = 1080, 1920, 30
 GOLD = (201, 162, 75); GOLD2 = (226, 198, 126); CREAM = (250, 246, 238); INK = (26, 18, 6); WHITE = (255, 255, 255)
 GREY = (92, 80, 62)
+NOEL = True
+ROUGE = (122, 21, 18); ROUGE2 = (156, 31, 26)
+RUBAN = "✦  IDÉE CADEAU DE NOËL  ✦"; HRUBAN = 96
 SERIFB = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
 SERIF = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
 SANS = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
@@ -119,41 +125,41 @@ M = {
 CH = "chapitre"
 VIDEOS = {
   34: dict(nom="bijoux", style="creme", seg=2.0,
-           titre="Bijoux gravés", accroche="Un prénom, une date, un mot : gravés pour celle ou celui que vous aimez",
+           titre="Bijoux gravés", titre_noel="Des bijoux gravés pour Noël", accroche="Un prénom, une date, un mot : gravés pour celle ou celui que vous aimez",
            fin=("nivcreation.fr", "Choisissez le vôtre", "Gravé en France"),
            items=[B[k] for k in ["coeur2", "double3", "3coeurs", "femme", "plaques1", "cordon", "enveloppe", "coeur1",
                                   "double6", "plaques2"]]
                  + [(CH, "Et aussi", "Cristal, verres et marque-pages gravés")]
                  + [C["couple"], V["wface"], M["m1e7"]]),
   35: dict(nom="cristal", style="ecrin", seg=2.2, ruban="✦  LE CRISTAL GRAVÉ  ✦",
-           titre="Le cristal gravé", accroche="Votre photo en 3D, ou l’un de nos modèles déjà gravés",
+           titre="Le cristal gravé", titre_noel="Du cristal gravé pour Noël", accroche="Votre photo en 3D, ou l’un de nos modèles déjà gravés",
            fin=("Votre photo dans le cristal", "Gravée en 3D dans notre atelier", "nivcreation.fr"),
            items=[C[k] for k in ["femme", "sapin", "famille", "ange", "chien", "rose", "hcouple", "colibri", "chat",
                                   "gemeaux", "cr_coeur", "cheval", "amis", "bouddha"]]),
   36: dict(nom="marque-pages-bois", style="carte", seg=2.1,
-           titre="Marque-pages & bois gravé", accroche="Un prénom, un dessin, une photo : gravés dans le bois",
+           titre="Marque-pages & bois gravé", titre_noel="Du bois gravé pour Noël", accroche="Un prénom, un dessin, une photo : gravés dans le bois",
            fin=("nivcreation.fr", "Gravé à la commande dans notre atelier", "Gravé en France"),
            items=[M[k] for k in ["m1e1", "m1e7", "m2e1", "m1e2", "m2e4", "m1e4", "m2e5", "m1e5",
                                   "puzzlephoto", "savane", "veilleuse", "naissance", "support", "couverts", "table"]]),
   37: dict(nom="verres", style="plein", seg=1.9,
-           titre="Verres & carafe gravés", accroche="Un prénom, un logo, une photo : pour trinquer à vos moments",
+           titre="Verres & carafe gravés", titre_noel="Des verres gravés pour Noël", accroche="Un prénom, un logo, une photo : pour trinquer à vos moments",
            fin=("Trinquez gravé", "Verres, flûtes et carafe personnalisés", "nivcreation.fr"),
            items=[V[k] for k in ["wface", "fl3", "cnom", "dale", "carafe", "wfond", "fl6", "clogo", "papa2", "geniet",
                                   "c1892", "bourbon", "cfond", "ccoul"]]),
   38: dict(nom="verres-cristal-marque-pages", style="ecrin", seg=2.0, ruban="✦  GRAVÉ POUR VOUS  ✦",
-           titre="Nos créations gravées", accroche="Verres, cristal et marque-pages",
+           titre="Nos créations gravées", titre_noel="Nos cadeaux de Noël gravés", accroche="Verres, cristal et marque-pages",
            fin=("Une pièce, une histoire", "Gravée à la commande dans notre atelier", "nivcreation.fr"),
            items=[(CH, "Les verres", "Gravés à votre image")] + [V[k] for k in ["papa1", "clogo", "ccoul", "poule"]]
                  + [(CH, "Le cristal", "Votre photo, ou nos modèles")] + [C[k] for k in ["couple", "eiffel", "hcouple", "lys"]]
                  + [(CH, "Les marque-pages", "Pour les amoureux de lecture")] + [M[k] for k in ["m1e3", "m2e6", "m1e6"]]),
   39: dict(nom="verres-marque-pages-cristal", style="carte", seg=2.0,
-           titre="Gravé pour vous", accroche="Verres, marque-pages et cristal",
+           titre="Gravé pour vous", titre_noel="Gravé pour Noël", accroche="Verres, marque-pages et cristal",
            fin=("nivcreation.fr", "Personnalisez le vôtre", "Gravé en France"),
            items=[(CH, "01 · Les verres", "Pour trinquer")] + [V[k] for k in ["c1892", "fl6", "wfond", "cnom"]]
                  + [(CH, "02 · Les marque-pages", "Pour garder sa page")] + [M[k] for k in ["m1e1", "m2e2", "m1e4"]]
                  + [(CH, "03 · Le cristal", "Pour garder un souvenir")] + [C[k] for k in ["chat", "ours", "chatsapin", "amis"]]),
   40: dict(nom="bijoux-verres-cristal", style="plein", seg=1.9,
-           titre="Offrir un cadeau gravé", accroche="Bijoux, verres et cristal",
+           titre="Offrir un cadeau gravé", titre_noel="Un cadeau gravé pour Noël", accroche="Bijoux, verres et cristal",
            fin=("Un cadeau unique", "Gravé à la commande dans notre atelier", "nivcreation.fr"),
            items=[(CH, "Les bijoux", "Un prénom à porter")] + [B[k] for k in ["double3", "plaques1", "enveloppe", "coeur2"]]
                  + [(CH, "Les verres", "Un message à partager")] + [V[k] for k in ["dale", "fl3", "papa2"]]
@@ -218,6 +224,23 @@ def arrondi(im, r):
     m = Image.new("L", im.size, 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, im.width - 1, im.height - 1), radius=r, fill=255)
     return m
 
+def pastille(d, x, y, fonce=True):
+    """Pastille « NOËL 2026 » (rouge et or), posée près du nom de la pièce."""
+    if not NOEL: return
+    fp = F(SANSB, 30); t = "NOËL 2026"; wp = d.textlength(t, font=fp)
+    if x is None: x = (W - wp - 40) // 2
+    d.rounded_rectangle([x, y, x + wp + 40, y + 48], radius=24, fill=ROUGE2 + (255,))
+    d.text((x + 20, y + 6), t, font=fp, fill=GOLD)
+
+def calque_ruban():
+    """Ruban rouge et or en haut de chaque plan (fixe, il ne clignote pas avec le texte)."""
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    if not NOEL: return lay
+    d = ImageDraw.Draw(lay); fr = F(SANSB_U, 38); wr = d.textlength(RUBAN, font=fr)
+    d.rectangle([0, 0, W, HRUBAN], fill=ROUGE + (255,)); d.rectangle([0, HRUBAN, W, HRUBAN + 6], fill=GOLD + (255,))
+    d.text(((W - wr) // 2, (HRUBAN - 40) // 2 - 4), RUBAN, font=fr, fill=GOLD)
+    return lay
+
 # --- Styles : chaque plan = (fond fixe, photo, position, calque texte) ; le mouvement se fait au rendu --------
 def plan_creme(path, nom, sous, k, n, cfg):
     im = charger(path); fond = flou(im)
@@ -226,6 +249,7 @@ def plan_creme(path, nom, sous, k, n, cfg):
     for y in range(H): p[0, y] = int(215 * max(0, (y - 1120) / (H - 1120)) ** 1.15)
     grad = Image.new("RGBA", (W, H), (15, 12, 9, 255)); grad.putalpha(band.resize((W, H)))
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
+    pastille(d, 60, H - 430)
     d.text((60, H - 360), nom, font=ajuste(d, nom, SERIFB, 74, W - 120, 48), fill=GOLD)
     y = H - 258
     for ln in wrap(d, sous, F(SANS, 44), W - 120): d.text((60, y), ln, font=F(SANS, 44), fill=WHITE); y += 54
@@ -239,9 +263,10 @@ def plan_ecrin(path, nom, sous, k, n, cfg):
     d = ImageDraw.Draw(fond)
     for e, w in ((22, 3), (12, 2)):  # double filet doré
         d.rectangle((x0 - e, y0 - e, x0 + ph.width + e, y0 + ph.height + e), outline=GOLD, width=w)
-    fr = F(SANSB_U, 34); centre(d, cfg.get("ruban", "✦  NIV CRÉATION  ✦"), fr, 150, GOLD)
+    if not NOEL: fr = F(SANSB_U, 34); centre(d, cfg.get("ruban", "✦  NIV CRÉATION  ✦"), fr, 150, GOLD)
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d2 = ImageDraw.Draw(ov)
     ft = ajuste(d2, nom, SERIFB, 68, W - 120, 44); yb = y0 + ph.height + 70
+    if NOEL: pastille(d2, None, yb - 58); yb += 10
     centre(d2, nom, ft, yb, GOLD2)
     y = yb + 92
     for ln in wrap(d2, sous, F(SERIF, 42), W - 160): centre(d2, ln, F(SERIF, 42), y, CREAM); y += 54
@@ -255,11 +280,12 @@ def plan_carte(path, nom, sous, k, n, cfg):
     tmp = ImageDraw.Draw(Image.new("RGB", (10, 10)))
     lignes = wrap(tmp, sous, F(SANS, 44), W - 160)
     bloc = ph.height + 80 + 100 + 56 * len(lignes)          # photo + filet + nom + sous-titre
-    y0 = max(90, (H - 140 - bloc) // 2)
+    y0 = max(150 if NOEL else 90, (H - 140 - bloc) // 2)
     fond = ombre(fond, (x0, y0, x0 + ph.width, y0 + ph.height))
     d = ImageDraw.Draw(fond); yt = y0 + ph.height + 70
     d.rectangle((80, yt, 200, yt + 6), fill=GOLD)
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d2 = ImageDraw.Draw(ov)
+    pastille(d2, 230, yt - 21)
     d2.text((80, yt + 34), nom, font=ajuste(d2, nom, SERIFB, 66, W - 160, 44), fill=INK)
     y = yt + 126
     for ln in lignes: d2.text((80, y), ln, font=F(SANS, 44), fill=GREY); y += 56
@@ -269,10 +295,12 @@ def plan_carte(path, nom, sous, k, n, cfg):
 
 def plan_plein(path, nom, sous, k, n, cfg):
     im = charger(path); fond = flou(im, 0.55, (10, 8, 5))
-    ph = fit(im, W, int(H * 0.62)); pos = ((W - ph.width) // 2, int(H * 0.40) - ph.height // 2)
+    ph = fit(im, W, int(H * (0.58 if NOEL else 0.62))); pos = ((W - ph.width) // 2, int(H * (0.42 if NOEL else 0.40)) - ph.height // 2)
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
-    d.text((60, 70), f"{k:02d}", font=F(SANSB, 64), fill=GOLD)
-    d.text((60 + d.textlength(f"{k:02d}", font=F(SANSB, 64)) + 12, 92), f"/ {n:02d}", font=F(SANS, 34), fill=(220, 205, 170))
+    yc = 130 if NOEL else 70
+    d.text((60, yc), f"{k:02d}", font=F(SANSB, 64), fill=GOLD)
+    d.text((60 + d.textlength(f"{k:02d}", font=F(SANSB, 64)) + 12, yc + 22), f"/ {n:02d}", font=F(SANS, 34), fill=(220, 205, 170))
+    pastille(d, 100, 1366)
     d.rectangle((60, 1430, 70, 1640), fill=GOLD)
     t = nom.upper()
     d.text((100, 1430), t, font=ajuste(d, t, SANSB, 60, W - 160, 38), fill=WHITE)
@@ -285,12 +313,13 @@ PLANS = dict(creme=plan_creme, ecrin=plan_ecrin, carte=plan_carte, plein=plan_pl
 
 def carte_titre(style, haut, grand, petit, bas=None):
     """Fond (décor fixe) + calque du texte, que le rendu « grave au laser » de gauche à droite."""
-    fonce = style in ("ecrin", "plein")
-    base = Image.new("RGB", (W, H), INK if fonce else CREAM)
-    if style == "ecrin": base = halo(base, (70, 50, 18), W // 2, H // 2, 700, 0.6)
-    if style == "plein": base = halo(base, (48, 34, 12), W // 2, H // 2 - 100, 640, 0.5)
+    fonce = NOEL or style in ("ecrin", "plein")
+    base = Image.new("RGB", (W, H), ROUGE if NOEL else (INK if fonce else CREAM))
+    if NOEL: base = halo(base, ROUGE2, W // 2, H // 2 - 60, 700, 0.7)
+    elif style == "ecrin": base = halo(base, (70, 50, 18), W // 2, H // 2, 700, 0.6)
+    elif style == "plein": base = halo(base, (48, 34, 12), W // 2, H // 2 - 100, 640, 0.5)
     db = ImageDraw.Draw(base)
-    if style in ("creme", "ecrin"):
+    if NOEL or style in ("creme", "ecrin"):
         db.rectangle((0, 0, W, 14), fill=GOLD); db.rectangle((0, H - 14, W, H), fill=GOLD)
     lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
     txt = CREAM if fonce else INK
@@ -335,7 +364,8 @@ def avec_alpha(lay, a):
 def rendre(num):
     cfg = VIDEOS[num]; st = cfg["style"]; seg = cfg["seg"]
     nprod = sum(1 for it in cfg["items"] if it[0] != CH)
-    segs = [("carte", carte_titre(st, "✦  NIV CRÉATION  ✦", cfg["titre"], cfg["accroche"]), 2.6, "intro")]
+    if NOEL: segs = [("carte", carte_titre(st, "✦  NOËL 2026  ✦", cfg["titre_noel"], cfg["accroche"], "NiV CRÉATION"), 2.8, "intro")]
+    else: segs = [("carte", carte_titre(st, "✦  NIV CRÉATION  ✦", cfg["titre"], cfg["accroche"]), 2.6, "intro")]
     k = 0
     for it in cfg["items"]:
         if it[0] == CH:
@@ -345,9 +375,11 @@ def rendre(num):
         pl["bande"] = bande_reflet(*pl["photo"].size); pl["pts"] = paillettes(num * 100 + k)
         segs.append(("plan", pl, seg, "plan"))
     f1, f2, f3 = cfg["fin"]
-    segs.append(("carte", carte_titre(st, None, f1, f2, f3), 2.8, "fin"))
+    if NOEL: segs.append(("carte", carte_titre(st, "✦  VOS CADEAUX DE NOËL  ✦", "Commandez tôt pour Noël",
+                                                "Chaque pièce est gravée une par une, à la commande", "nivcreation.fr  ·  Gravé en France"), 3.0, "fin"))
+    else: segs.append(("carte", carte_titre(st, None, f1, f2, f3), 2.8, "fin"))
     total = sum(int(round(x[2] * FPS)) for x in segs)
-    blanc_or = Image.new("RGB", (W, H), (255, 244, 214))
+    blanc_or = Image.new("RGB", (W, H), (255, 244, 214)); RUB = calque_ruban()
 
     def image_carte(c, ts, role):
         fr = c["base"].copy().convert("RGBA")
@@ -401,12 +433,13 @@ def rendre(num):
             dy = int(46 * (1 - ta)); lay = avec_alpha(s["ov"], ta)
             if dy: lay = lay.crop((0, 0, W, H - dy)); fr.alpha_composite(lay, (0, dy))
             else: fr.alpha_composite(lay)
+        if NOEL: fr.alpha_composite(RUB)
         return fr.convert("RGB")
 
     brut = os.path.join(OUT, f"{num}-brut.mp4")
     wri = imageio.get_writer(brut, fps=FPS, codec="libx264", quality=8, macro_block_size=1,
                              ffmpeg_params=["-pix_fmt", "yuv420p"], ffmpeg_log_level="error")
-    TR = int(0.3 * FPS); prec = None; cream = Image.new("RGB", (W, H), CREAM); mi = None; gi = 0
+    TR = int(0.3 * FPS); prec = None; cream = Image.new("RGB", (W, H), ROUGE if NOEL else CREAM); mi = None; gi = 0
     for kind, s, dur, role in segs:
         nf = max(1, int(round(dur * FPS))); dernier = None
         for fi in range(nf):
@@ -433,7 +466,7 @@ def rendre(num):
             wri.append_data(np.asarray(fr)); dernier = fr; gi += 1
         prec = dernier
     wri.close()
-    base = f"{num}-{cfg['nom']}"
+    base = f"{num}-{cfg['nom']}" + ("-noel" if NOEL else "")
     plein = os.path.join(OUT, f"{base}-1080x1920.mp4"); leger = os.path.join(OUT, f"{base}-720x1280.mp4")
     subprocess.run([FF, "-y", "-i", brut, "-c:v", "libx264", "-crf", "22", "-preset", "medium", "-pix_fmt", "yuv420p", "-an",
                     "-movflags", "+faststart", plein], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
