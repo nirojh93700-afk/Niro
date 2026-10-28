@@ -1,7 +1,7 @@
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
-import { cumulPermis, remiseCumulee } from "@/lib/cumulCodes";
+import { cumulPermis, remiseCumulee, remisePourPort } from "@/lib/cumulCodes";
 import { toCents } from "@/lib/format";
 import { EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
@@ -332,6 +332,9 @@ export async function POST(req) {
   let appliedCode = "";
   let giftUsed = 0; // carte cadeau : montant réellement déduit (débité au webhook)
   let appliedCode2 = ""; // code « gravure offerte » cumulé avec un autre code
+  // Ce que le code retire du panier : la livraison offerte se compare au montant
+  // APRÈS la remise (28/10/2026, tous les codes promo ; pas la carte cadeau).
+  let remisePort = 0;
   if (promoCode) {
     try {
       const codes = await getPromoCodes();
@@ -377,6 +380,7 @@ export async function POST(req) {
             name: `Gravure offerte (${paire.g}) + code ${paire.n}`.slice(0, 40),
           });
           discounts = [{ coupon: coupon.id }];
+          remisePort = cents / 100;
         }
       } else if (seul && seul.kind === "gravure") {
         // OFFRE « GRAVURE OFFERTE » (règle du gérant, 11/09 puis 17/09/2026) :
@@ -392,6 +396,7 @@ export async function POST(req) {
             name: `Gravure offerte (${seulCode})`,
           });
           discounts = [{ coupon: coupon.id }];
+          remisePort = remisePourPort(etatPort.subtotal, [{ kind: "gravure", type: "fixed", value: gravureOfferte }]);
         }
       } else if (seul && seul.kind === "cadeau" && seul.value > 0) {
         // CARTE CADEAU : on déduit au plus le SOLDE, plafonné au sous-total
@@ -415,6 +420,7 @@ export async function POST(req) {
             : { percent_off: Math.min(100, seul.value), duration: "once", name: `Code ${seulCode}` }
         );
         discounts = [{ coupon: coupon.id }];
+        remisePort = remisePourPort(etatPort.subtotal, [seul]);
       }
     } catch { /* code ignoré si souci */ }
   }
@@ -496,6 +502,7 @@ export async function POST(req) {
         deliveryMethod, // "domicile" ou "relais" (choisi sur le panier)
         relaisLabel,    // nom du point relais choisi (affiché dans Stripe)
         relaisCarrier,  // transporteur du point relais → tarif au poids correct
+        remise: remisePort, // seuils de livraison offerte comparés au montant APRÈS le code promo
       }),
       // Mode vacances : plus aucun champ → on omet custom_fields (Stripe
       // refuse une liste vide).

@@ -32,3 +32,26 @@ export function remiseCumulee(sousTotal, gravure, code) {
   const partCode = code?.type === "fixed" ? Math.min(reste, v) : reste * Math.min(100, v) / 100;
   return Math.round((g + partCode) * 100) / 100;
 }
+
+/**
+ * SEUIL DE LIVRAISON OFFERTE APRÈS LA REMISE (28/10/2026, gérant : « il faut
+ * qu'elle atteigne 45 € sans les −10 % », pour TOUS les codes promo).
+ * Montant que les codes appliqués retirent du panier, à déduire du sous-total
+ * AVANT de comparer aux seuils (45 € bijoux, 60 € verres…). Une carte cadeau
+ * n'est pas comptée : c'est de l'argent déjà payé. Pur (panier ET paiement).
+ * @param {number} sousTotal  articles (hors livraison)
+ * @param {Array<{kind?:string, type:"percent"|"fixed", value:number}>} codes
+ * @returns {number} remise en euros, au centime
+ */
+export function remisePourPort(sousTotal, codes) {
+  const st = Math.max(0, Number(sousTotal) || 0);
+  const liste = (Array.isArray(codes) ? codes : []).filter((c) => c && c.kind !== "cadeau" && Number(c.value) > 0);
+  if (!liste.length) return 0;
+  const g = liste.find((c) => c.kind === "gravure");
+  const o = liste.find((c) => estOrdinaire(c.kind));
+  if (g && o) return remiseCumulee(st, g.value, o);
+  const c = liste[0];
+  const v = Number(c.value);
+  const r = c.type === "fixed" || c.kind === "gravure" ? Math.min(st, v) : st * Math.min(100, v) / 100;
+  return Math.round(r * 100) / 100;
+}

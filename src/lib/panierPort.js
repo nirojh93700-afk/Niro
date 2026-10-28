@@ -46,15 +46,18 @@ export function ajouterLignePort(e, { product, unitGrams, unitPrice, quantity, p
 }
 
 // Options de livraison (format Stripe `shipping_options`) pour l'état accumulé.
-export function optionsPort(e, { settings, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "FR", express = false, retraitOk = false }) {
+// `remise` = ce que les codes promo retirent (28/10/2026) : les seuils de livraison
+// offerte se comparent à ce que la cliente PAIE, pas au panier avant la remise.
+export function optionsPort(e, { settings, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "FR", express = false, retraitOk = false, remise = 0 }) {
+  const paye = Math.max(0, e.subtotal - (Number(remise) || 0));
   return buildShippingOptions({
-    totalGrams: e.totalGrams, subtotal: e.subtotal, parcelQty: e.parcelQty, glassQty: e.glassQty, letterOnly: e.letterOnly,
+    totalGrams: e.totalGrams, subtotal: paye, parcelQty: e.parcelQty, glassQty: e.glassQty, letterOnly: e.letterOnly,
     bijouxOnly: e.tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
     // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la promesse bijoux
     // « offerte dès 45 € » — qui reste vraie même quand une boîte cadeau fait passer le bijou en petit colis.
     freeShipping: e.allFreeShip
-      || (e.allColisThreshFree && e.parcelQty > 0 && e.subtotal >= e.colisThresh)
-      || (e.tousBijouxLettre && e.bijouEnBoite && e.subtotal >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
+      || (e.allColisThreshFree && e.parcelQty > 0 && paye >= e.colisThresh)
+      || (e.tousBijouxLettre && e.bijouEnBoite && paye >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
     country,
     pickupEligible: e.allPickup && retraitOk,
     express,

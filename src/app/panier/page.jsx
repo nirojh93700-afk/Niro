@@ -1,6 +1,6 @@
 "use client";
 
-import { cumulPermis } from "@/lib/cumulCodes";
+import { cumulPermis, remisePourPort } from "@/lib/cumulCodes";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartContext";
@@ -121,7 +121,7 @@ export default function CartPage() {
     if (!ref?.code || Date.now() - (ref.ts || 0) > 30 * 24 * 3600 * 1000) return;
     fetch("/api/promo-validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: ref.code }) })
       .then((r) => r.json())
-      .then((d) => { if (d.valid) { setAppliques([{ code: d.code || ref.code.toUpperCase(), kind: d.kind || "", label: d.label }]); setPromoMsg(`✓ Recommandé par un ambassadeur — code ${ref.code} appliqué (${d.label}).`); } })
+      .then((d) => { if (d.valid) { setAppliques([{ code: d.code || ref.code.toUpperCase(), kind: d.kind || "", label: d.label, type: d.type, value: Number(d.value) || 0 }]); setPromoMsg(`✓ Recommandé par un ambassadeur — code ${ref.code} appliqué (${d.label}).`); } })
       .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -147,7 +147,7 @@ export default function CartPage() {
       });
       const d = await res.json();
       if (d.valid) {
-        const nouveau = { code: d.code || code, kind: d.kind || "", label: d.label };
+        const nouveau = { code: d.code || code, kind: d.kind || "", label: d.label, type: d.type, value: Number(d.value) || 0 };
         if (!appliques.length) {
           setAppliques([nouveau]); setPromoCode("");
           setPromoMsg(`✓ Code valide (${d.label}) — appliqué au paiement.`);
@@ -264,7 +264,7 @@ export default function CartPage() {
 
         <aside className="cart-summary">
           <h3>Récapitulatif</h3>
-          <FreeShippingBar />
+          <FreeShippingBar remise={useCagnotte ? 0 : remisePourPort(total, appliques)} />
           {/* Mode délai allongé : encadré cadeau (délai + choix de préférence).
               N'affiche RIEN quand le mode est éteint → panier comme avant. */}
           <CadeauChoix value={cadeau} onChange={setCadeau} value2={cadeau2} onChange2={setCadeau2} />

@@ -10,8 +10,10 @@ import DelaiFabrication from "./DelaiFabrication";
 // Barre de progression « livraison offerte » (s'affiche pour un panier 100 %
 // bijoux) + petit bandeau de réassurance. Le seuil suit les tarifs réglés
 // dans l'admin (Gestion → Réglages → 🚚 Livraison), repli sur le code.
-export default function FreeShippingBar({ compact = false }) {
-  const { items, total } = useCart();
+export default function FreeShippingBar({ compact = false, remise = 0 }) {
+  const { items, total: sousTotal } = useCart();
+  // Avec un code promo, le seuil se compare à ce que la cliente PAIE (28/10/2026).
+  const total = Math.max(0, sousTotal - (Number(remise) || 0));
   const [seuil, setSeuil] = useState(BIJOUX_FREE_THRESHOLD);
   useEffect(() => {
     fetch("/api/shipping-config")

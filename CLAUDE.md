@@ -4415,3 +4415,11 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   de l'e-mail comptent. `src/lib/suiviConnexion.js` (`connexionDepuis(login, envoyeLe)`, pur) · `suiviDesCodes` dans
   `/api/admin/offre-gravure` (champ `connexion`) · `SuiviCodes` / `Connexion` dans `src/app/gestion/offre-gravure/page.jsx` · CSS `.ogs-chip.cx-*`.
 - Une visite sans connexion est invisible : « Jamais connectée » ≠ « jamais venue » (écrit sur l'écran).
+
+## 🚚 LIVRAISON OFFERTE COMPTÉE APRÈS LE CODE PROMO — 28/10/2026 (préparé en local, en attente de son « pousse »)
+- Gérant : « il faut qu'elle atteigne 45 € sans les −10 % », pour TOUS les codes promo (bienvenue, parrainage, ambassadeur,
+  gravure offerte, cumul). Les seuils (45 € bijoux, 60 € verres / carafe, 45 € couverts) se comparent au montant APRÈS la remise.
+  Carte cadeau et cagnotte NON comptées (argent déjà payé / pas un code). Les produits « toujours offerts » restent offerts.
+- `remisePourPort(sousTotal, codes)` (`src/lib/cumulCodes.js`) · `optionsPort(e, { remise })` (`panierPort.js`) · `/api/checkout`
+  (`remisePort`) · barre du panier (`FreeShippingBar remise=`). Ex. : bijou 45 € + −10 % = 40,50 € → livraison 4,90 € ;
+  50 € + −10 % = 45 € → offerte. Verres lot 63,90 € + −10 % = 57,51 € → livraison payante.
