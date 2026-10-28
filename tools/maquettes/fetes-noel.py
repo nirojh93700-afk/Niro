@@ -6,7 +6,11 @@ Deux vues dans une seule page :
      les 25 images de gravure NUMÉROTÉES (comme les modèles des verres), les emballages de Noël, ce qui reste toute l'année.
   ② Sur le site : la fiche RÉELLE du verre à vin (capture en ligne), Noël allumé = chip « 🎄 Noël » + 25 modèles numérotés
      dans la grille des modèles + bloc « Votre emballage de Noël » ; éteint = la fiche d'aujourd'hui, à l'identique.
-Usage : python3 tools/maquettes/fetes-noel.py <dossier css du site> <capture /produit/verre-a-vin-grave> <sortie.html>
+Usage : python3 tools/maquettes/fetes-noel.py <dossier css du site> <capture /produit/verre-a-vin-grave> <sortie.html> <capture /produit/collier-coeur-grave>
+v2 (28/10 soir) : les emballages de Noël Temu (pour les BIJOUX, prix validés par le gérant) dans Gestion → Fêtes, et un 3ᵉ onglet
+= la fiche RÉELLE du collier cœur gravé : Noël allumé = les emballages de Noël s'ajoutent sous « Votre emballage » ; éteint = la fiche d'aujourd'hui.
+Les photos des emballages = `docs/maquettes/assets/noel/emballages/` (celles du gérant, sans cotes) ; les photos /api/img/<id> de la capture
+collier sont lues dans le dossier de cette capture (<id>.jpg, téléchargées avec curl).
 Le dossier css = les 3 feuilles en ligne (curl nivcreation.fr/_next/static/css/*.css) : vraies classes .ash-* / .prc-*.
 RIEN n'est en ligne. Les prix des images (offert / payant) et des emballages sont des EXEMPLES à régler par le gérant.
 """
@@ -17,7 +21,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(ROOT, "docs", "maquettes", "assets", "noel")
-css_dir, capture, out = sys.argv[1], sys.argv[2], sys.argv[3]
+css_dir, capture, out, capture_bijou = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+EMB_DIR = os.path.join(ASSETS, "emballages")
 
 CSS = "".join(open(f, encoding="utf-8").read() for f in sorted(glob.glob(os.path.join(css_dir, "*.css"))))
 VIN = json.loads(subprocess.check_output(["node", "--import", os.path.join(ROOT, "tools", "alias-register.mjs"),
@@ -83,7 +88,7 @@ fm = dernier_dimanche(2027, 5)
 if fm == pq + dt.timedelta(days=49):  # Pentecôte → fête des mères le 1er dimanche de juin
     fm = nieme_dimanche(2027, 6, 1)
 FETES = [
-    dict(k="noel", nom="Noël", ico="🎄", date=dt.date(2026, 12, 25), on=True, images=25, emb=2),
+    dict(k="noel", nom="Noël", ico="🎄", date=dt.date(2026, 12, 25), on=True, images=25, emb=6),
     dict(k="valentin", nom="Saint-Valentin", ico="♥", date=dt.date(2027, 2, 14), on=False, images=0, emb=0),
     dict(k="paques", nom="Pâques", ico="🐣", date=pq, on=False, images=0, emb=0),
     dict(k="meres", nom="Fête des mères", ico="✿", date=fm, on=False, images=0, emb=0),
@@ -119,6 +124,24 @@ VIN_JS = [dict(n=int(n), legende=m["legende"], champs=m.get("champs", []), exemp
 
 CRISTAUX = [("chat-sapin.jpg", "Chaton au pied du sapin"), ("sapin.jpg", "Sapin étoilé")]
 CRISTAUX_JS = [dict(nom=nm, src=uri(os.path.join(PUB, "produits", "cristaux-graves", f), 420)) for f, nm in CRISTAUX]
+
+# ------------------------------------------------------------------ emballages de Noël pour les BIJOUX (commande Temu reçue le 28/10)
+# prix = ceux validés par le gérant le 28/10 soir (« C'est bon, mets ces prix avec le pack Noël ») ; coût = coût rendu (facture Temu + part du port) ;
+# stock = quantités reçues. Photos = les siennes, sans cotes (règle du 28/10). La boîte à ruban existe en vert et bleu nuit (la blanche n'a pas été commandée).
+EMB_NOEL = [
+    dict(id="sachet", nom="Sachet rouge de Noël", d="12 × 17 cm · plat, fermeture adhésive · reste en lettre suivie", px=0.9, cout=0.13, stock=52, photo="7-sachet-rouge-A.jpg", colis=False),
+    dict(id="pochette", nom="Pochette à languette dorée", d="Bordeaux et or · pour un collier ou un bracelet · lettre suivie", px=2.9, cout=0.80, stock=40, photo="1-pochette-F.jpg", colis=False),
+    dict(id="sac", nom="Sac de Noël à anses", d="Bordeaux, liseré or, nœud satin · 19 × 15 × 7 cm · plié à plat", px=2.9, cout=1.38, stock=20, photo="2-sac-M.jpg", colis=False),
+    dict(id="ruban", nom="Boîte à ruban « Merry Christmas »", d="11,5 × 7 × 4,5 cm · aimantée · vert sapin ou bleu nuit · part en colis", px=3.9, cout=0.72, stock=48, photo="3-5-boite-ruban-C-vert-recadree.jpg", colis=True, couleurs=True),
+    dict(id="rouge", nom="Boîte rouge au sapin doré", d="12 × 6 × 4 cm · ruban rouge et or · part en colis", px=3.9, cout=0.62, stock=20, photo="4-boite-rouge-G.jpg", colis=True),
+    dict(id="pack", nom="Pack de Noël", d="Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette · part en colis", px=5.9, barre=6.8, cout=2.15, stock=20, photo="2-sac-M.jpg", colis=True, couleurs=True, meil=True),
+]
+ETIQUETTE = dict(nom="Étiquette rouge « Merry Christmas » + ficelle", d="5,4 × 9 cm · offerte avec chaque emballage de Noël", cout=0.05, stock=50, photo="6-etiquettes-I.jpg")
+COULEURS_RUBAN = [("vert", "Vert sapin", "3-5-boite-ruban-C-vert-recadree.jpg"), ("bleu", "Bleu nuit", "3-5-boite-ruban-J-bleu.jpg")]
+for e in EMB_NOEL:
+    e["src"] = uri(os.path.join(EMB_DIR, e["photo"]), 420, 78)
+ETIQUETTE["src"] = uri(os.path.join(EMB_DIR, ETIQUETTE["photo"]), 420, 78)
+COULEURS_JS = [dict(id=i, nom=n, src=uri(os.path.join(EMB_DIR, f), 300, 78)) for i, n, f in COULEURS_RUBAN]
 
 PRODUITS = [  # (nom, coché, note) — seulement des produits GRAVÉS ; jamais bijoux ni mariage (règle du gérant)
     ("Verre à vin gravé (36 et 47 cl)", True, ""), ("Flûte à champagne gravée", True, ""), ("Verre à whisky portrait", True, ""),
@@ -162,6 +185,37 @@ main = neutralise(main)
 main = re.sub(r'<button class="btn btn-gold prc-off" style="flex:1" disabled="">Ajouter au panier</button>',
               '<button class="btn btn-gold prc-off" id="ft-add" style="flex:1" disabled="">Ajouter au panier</button>', main)
 assert 'id="ft-add"' in main, "bouton panier introuvable"
+
+# ------------------------------------------------------------------ la fiche RÉELLE du collier cœur gravé (capture en ligne) : le bloc « Votre emballage » est redessiné
+srcb = open(capture_bijou, encoding="utf-8").read()
+srcb = re.sub(r"<script\b.*?</script>", "", srcb, flags=re.S)
+b0 = srcb.find(">", srcb.find("<body")) + 1
+im_, jm_ = srcb.find("<main"), srcb.find("</main>") + len("</main>")
+main_b = srcb[im_:jm_]
+mb = re.search(r'<div style="margin:6px 0 18px"><div style="font-weight:700;font-size:0\.95rem;margin-bottom:3px">Votre emballage</div>.*?</div></div>(?=<div class="pd-totbox">)', main_b, flags=re.S)
+assert mb, "bloc « Votre emballage » introuvable dans la capture du collier"
+PK_JS = []  # les emballages ACTUELS de la fiche, lus dans la capture (prix tels qu'affichés en ligne)
+for btn in re.findall(r'<button type="button" style="[^"]*">(.*?)</button>', mb.group(0), flags=re.S):
+    img = re.search(r'src="/api/img/([A-Za-z0-9_-]+)"', btn)
+    nom = re.search(r'<strong[^>]*>(.*?)</strong>', btn, flags=re.S).group(1)
+    meil = "MEILLEUR CHOIX" in nom
+    nom = html.unescape(re.sub(r"<[^>]+>|<!--.*?-->|✓ |MEILLEUR CHOIX", "", nom)).strip()
+    d = html.unescape(re.sub(r"<[^>]+>", "", re.search(r'font-size:0\.78rem">(.*?)</span>', btn, flags=re.S).group(1))).strip()
+    prix = re.findall(r"([0-9]+,[0-9]{2})[\s\u00a0]€", btn[btn.find('<span style="margin-left:auto'):])  # le site écrit « 1,70 € » avec une espace insécable
+    px = float(prix[-1].replace(",", ".")) if prix else 0.0
+    barre = float(prix[0].replace(",", ".")) if len(prix) > 1 else None
+    src_img = uri(os.path.join(os.path.dirname(os.path.abspath(capture_bijou)), img.group(1) + ".jpg"), 300, 78) if img and os.path.exists(os.path.join(os.path.dirname(os.path.abspath(capture_bijou)), img.group(1) + ".jpg")) else None
+    PK_JS.append(dict(id="pk%d" % len(PK_JS), nom=nom, d=d, px=px, barre=barre, meil=meil, src=src_img, ico=None if src_img else "✖️"))
+assert len(PK_JS) >= 4 and PK_JS[0]["px"] == 0 and all(p["px"] > 0 for p in PK_JS[1:]), [(p["nom"], p["px"]) for p in PK_JS]
+PRIX_BIJOU = float(re.search(r'<div class="pd-totbox"><span class="lab">Total tout compris</span><span class="val">([0-9]+,[0-9]{2})', main_b).group(1).replace(",", "."))
+main_b = main_b[:mb.start()] + '<div id="ft-pk"></div>' + main_b[mb.end():]
+main_b = main_b.replace('<main>', '<main class="ft-fiche">', 1)
+main_b = neutralise(main_b)
+# photos /api/img/<id> de la galerie du collier : lues dans le dossier de la capture si elles y sont
+def api_img(m):
+    p = os.path.join(os.path.dirname(os.path.abspath(capture_bijou)), m.group(1) + ".jpg")
+    return f'src="{uri(p, 640)}"' if os.path.exists(p) else m.group(0)
+main_b = re.sub(r'src="/api/img/([A-Za-z0-9_-]+)"', api_img, main_b)
 
 # ------------------------------------------------------------------ vue Gestion
 def sw(idn, on, label):
@@ -241,12 +295,9 @@ ADMIN = f"""
     <p class="ft-p ft-note">Prix proposé d'après votre règle « tout texte gravé est payant » : une image qui contient un texte (« Merry Christmas », les mots de Noël 17 à 25) est à <b>+3 €</b>, un dessin seul est <b>offert</b> comme un modèle. Vous changez chaque ligne ; <b>rien n'est décidé</b>.</p>
     <div class="ft-imgs" id="ft-imgs"></div>
 
-    <h3 class="ft-h3">Emballages de Noël <span class="ft-h3s">proposés sur tous les produits cochés, en plus des emballages habituels</span></h3>
-    <div class="ft-embs">
-      <div class="ft-emb"><div class="ft-emb-ph">📷<small>Photo à venir</small></div><div class="ft-emb-b"><b>Sac de Noël</b><div class="ft-emb-l"><label>Prix <select><option>Offert</option><option>+1,90 €</option><option>+2,90 €</option><option>+3,90 €</option></select></label><label>Stock <input type="number" value="0" min="0"></label></div><small>Vous me direz le prix et le stock.</small></div></div>
-      <div class="ft-emb"><div class="ft-emb-ph">📷<small>Photo à venir</small></div><div class="ft-emb-b"><b>Boîte de Noël</b><div class="ft-emb-l"><label>Prix <select><option>Offert</option><option>+3,90 €</option><option selected>+4,90 €</option><option>+5,90 €</option></select></label><label>Stock <input type="number" value="0" min="0"></label></div><small>Une boîte rigide part en colis (règle du site).</small></div></div>
-      <button type="button" class="ft-emb ft-emb-add">+ Ajouter un emballage</button>
-    </div>
+    <h3 class="ft-h3">Emballages de Noël <span class="ft-h3s">pour les BIJOUX · s'ajoutent sous « Votre emballage » de chaque fiche bijou, en plus des emballages habituels</span></h3>
+    <p class="ft-p ft-note">Vos emballages Temu reçus le 28/10, aux <b>prix que vous avez validés</b>. Le coût rendu comprend la part du port ; le stock = les quantités reçues, il baisse à chaque commande comme dans Matériel &amp; emballages. L'étiquette rouge est <b>offerte</b> avec chaque emballage de Noël. Une boîte rigide part en colis (règle du site) ; sachet et pochette restent en lettre suivie. Regardez l'onglet ③ : la fiche du collier suit ces réglages en direct.</p>
+    <div class="ft-embs" id="ft-embs"></div>
 
     <h3 class="ft-h3">Déjà sur le site toute l'année <span class="ft-h3s">liés à Noël, mais jamais retirés quand Noël s'éteint</span></h3>
     <div class="ft-perm" id="ft-perm"></div>
@@ -267,7 +318,8 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;background:#2b2620;border-bottom:1px solid #4a4036}
 .ft-tabs button{border:0;border-radius:9px;padding:9px 13px;min-height:44px;font:600 .86rem var(--font-body);background:transparent;color:#d9cfbd;cursor:pointer}
 .ft-tabs button.on{background:#f1e3b8;color:#1d1811}
-.ft-tabs .ft-sync{margin-left:auto;display:flex;align-items:center;gap:8px;color:#f1e3b8;font-size:.82rem}
+.ft-tabs .ft-sync{margin-left:auto;display:flex;align-items:center;gap:8px;color:#f1e3b8;font-size:.82rem;white-space:nowrap}
+@media (max-width:640px){.ft-tabs{flex-wrap:nowrap;overflow-x:auto;gap:4px;padding:6px 8px;scrollbar-width:none}.ft-tabs::-webkit-scrollbar{display:none}.ft-tabs button{white-space:nowrap;padding:8px 10px;font-size:.8rem;flex:0 0 auto}.ft-tabs .ft-sync{flex:0 0 auto;padding-left:6px}}
 .ft-view{display:none}.ft-view.on{display:block}
 .mp-h1{font-family:var(--font-display);font-size:1.5rem;margin:0 0 4px}
 .mp-sub{color:var(--ink-soft);font-size:.9rem;margin:0 0 16px;line-height:1.5}
@@ -327,7 +379,7 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-img select{width:100%;font:600 .76rem var(--font-body);border:1px solid var(--line);border-radius:8px;padding:6px 7px;background:#fff;min-height:36px;box-sizing:border-box;min-width:0}
 .ft-flag{font-size:.66rem;font-weight:700;border-radius:99px;padding:2px 7px;display:inline-block;margin-right:3px}
 .ft-flag.t{background:#f3e6c2;color:#7a5a12}.ft-flag.d{background:#fde0de;color:#a8302a}.ft-flag.g{background:#e6e3f7;color:#4b3f9c}
-.ft-embs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.ft-embs{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px}
 .ft-emb{display:flex;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fffdf9;min-width:0}
 .ft-emb-ph{flex:0 0 76px;height:76px;border-radius:10px;border:1px dashed #cdb26a;background:#fffaf0;display:grid;place-items:center;align-content:center;color:#9c6b3f;font-size:1.2rem;text-align:center}
 .ft-emb-ph small{display:block;font-size:.62rem;color:var(--ink-soft)}
@@ -349,7 +401,27 @@ body{font-family:var(--font-body);color:var(--ink)}
 .prc-model.noel .prc-mn{background:#a8302a}
 .prc-model.noel.on .prc-mn{background:#7a1512}
 .prc-chip.noel{border-color:#a8302a;color:#a8302a}.prc-chip.noel.on{background:#a8302a;color:#fff}
+.ft-embn{display:flex;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fffdf9;min-width:0;position:relative}
+.ft-embn.pk{grid-column:1/-1;background:linear-gradient(180deg,#fffaf0,#fff);border-color:#cdb26a}
+.ft-embn img{flex:0 0 76px;width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
+.ft-embn .b{min-width:0;flex:1}.ft-embn .b b{display:block;font-size:.92rem;margin-bottom:2px}.ft-embn .b small{display:block;color:var(--ink-soft);font-size:.72rem;margin-top:4px}
+.ft-embn .d{color:var(--ink-soft);font-size:.74rem;margin-bottom:6px}
+.ft-embn .marge{font-size:.72rem;color:#1c6b3a;font-weight:600}
+.ft-embn .etq{position:absolute;top:8px;right:8px;background:#b3261e;color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.3px;border-radius:20px;padding:2px 8px}
+.ft-embn .etq.off{background:#1c6b3a}
+.ft-embn .etq~.b b{padding-right:64px}
+.ft-embn .coul{display:flex;gap:6px;margin-top:6px}.ft-embn .coul img{width:34px;height:34px;flex:0 0 34px;border-radius:8px}
 .ft-embc{margin:6px 0 18px}
+.ft-embc .sep{display:flex;align-items:center;gap:10px;color:#b3261e;font-weight:800;font-size:.8rem;letter-spacing:.3px;margin:4px 0 0}
+.ft-embc .sep:before,.ft-embc .sep:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#d9b7b4)}.ft-embc .sep:after{background:linear-gradient(90deg,#d9b7b4,transparent)}
+.ft-embc .th{flex:0 0 40px;width:40px;height:40px;border-radius:8px;object-fit:cover;display:block}
+.ft-embc .meil{display:inline-block;white-space:nowrap;background:var(--gold);color:#1a1206;font-size:.6rem;font-weight:800;letter-spacing:.2px;border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.ft-embc .meil.noel{background:#b3261e;color:#fff}
+.ft-embc .barre{color:var(--ink-soft);text-decoration:line-through;font-weight:400;font-size:.78rem;margin-right:5px}
+.ft-embc .etqoff{margin:2px 0 0;font-size:.78rem;color:#1c6b3a;display:flex;align-items:center;gap:8px}.ft-embc .etqoff img{width:30px;height:30px;border-radius:6px;object-fit:cover}
+.ft-embc .couleur{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--ink-soft);margin-top:2px}
+.ft-embc .couleur button{width:auto;display:inline-flex;gap:6px;align-items:center;padding:5px 9px;border-radius:10px;font-size:.78rem}.ft-embc .couleur button img{width:26px;height:26px;border-radius:6px;object-fit:cover}
+.ft-embc .colis{font-size:.72rem;color:var(--ink-soft);font-weight:400;display:block}
 .ft-embc .t{font-weight:700;font-size:.95rem;margin-bottom:3px}
 .ft-embc .s{margin:0 0 10px;color:var(--ink-soft);font-size:.83rem}
 .ft-embc .opts{display:grid;gap:9px}
@@ -371,10 +443,8 @@ body{font-family:var(--font-body);color:var(--ink)}
 JS = r"""
 (function(){
 var NOEL=__NOEL__, VIN=__VIN__, GROUPES=__GROUPES__, CRISTAUX=__CRISTAUX__, PRIX=__PRIX__, EXTRA=__EXTRA__;
-var EMB=[{id:'none',ico:'✖️',nom:'Sans emballage de Noël',d:'Livré protégé, comme d’habitude',px:0},
-         {id:'sac',ico:'🎁',nom:'Sac de Noël',d:'Photo à venir',px:0},
-         {id:'boite',ico:'🎄',nom:'Boîte de Noël',d:'Photo à venir · part en colis',px:4.9}];
-var S={noel:true,mode:null,model:null,prenom:'',emb:'none',filtre:'all',ouverte:true,view:'admin'};
+var EMB=__EMB__, ETQ=__ETQ__, PK=__PK__, PRIX_BIJOU=__PRIX_BIJOU__, COUL=__COUL__;
+var S={noel:true,mode:null,model:null,prenom:'',filtre:'all',ouverte:true,view:'admin',pk:'pk0',couleur:'vert'};
 function eur(n){return n.toFixed(2).replace('.',',')+' €'}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function $(s,r){return (r||document).querySelector(s)}
@@ -383,17 +453,17 @@ function $$(s,r){return [].slice.call((r||document).querySelectorAll(s))}
 function setNoel(on){
   S.noel=on;
   if(!on && S.model && S.model.src==='noel'){S.model=null;S.prenom='';}
-  if(!on){S.emb='none';}
+  if(!on && EMB.some(function(e){return e.id===S.pk})){S.pk='pk0';}
   if(S.filtre==='noel'&&!on)S.filtre='all';
   $$('[data-sw="noel"],[data-sw="noel2"],[data-sw="sync"]').forEach(function(b){b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false')});
   $('#ft-swtxt').textContent=on?'Allumée':'Éteinte';
   $('#etat-noel').innerHTML=on?'<span class="ft-chip on">Allumée · dans '+__JOURS__+' j</span>':'<span class="ft-chip">Éteinte · se rallume d’un clic</span>';
   $('#kpi-on').textContent=on?'Noël':'Aucune';
   $('#ft-etat-txt').innerHTML=on
-    ?'<b>Allumée.</b> Sur les produits cochés, la grille des modèles a un groupe <b>« 🎄 Noël »</b> avec les 25 images numérotées, et la case <b>« Votre emballage de Noël »</b> apparaît avant le total. Regardez l’onglet « Sur le site » : il suit cet interrupteur en direct.'
-    :'<b>Éteinte.</b> Plus aucune image de Noël dans les grilles, plus d’emballage de Noël : les fiches sont redevenues comme avant, à l’identique. Les images et les réglages sont gardés ici pour l’an prochain.';
+    ?'<b>Allumée.</b> Sur les produits cochés, la grille des modèles a un groupe <b>« 🎄 Noël »</b> avec les 25 images numérotées, et sur chaque bijou les <b>emballages de Noël</b> s’ajoutent sous « Votre emballage ». Regardez les onglets ② et ③ : ils suivent cet interrupteur en direct.'
+    :'<b>Éteinte.</b> Plus aucune image de Noël dans les grilles, plus d’emballage de Noël sur les bijoux : les fiches sont redevenues comme avant, à l’identique. Les images et les réglages sont gardés ici pour l’an prochain.';
   $$('.ft-synctxt').forEach(function(e){e.textContent=on?'allumé':'éteint'});
-  renderSite();
+  renderSite();renderBijou();
 }
 /* ---------- Gestion : images numérotées, cristaux permanents */
 function renderAdmin(){
@@ -425,7 +495,7 @@ function modele(){
   if(!S.model)return null;
   return S.model.src==='noel'?NOEL.find(function(m){return m.n===S.model.n}):VIN.find(function(m){return m.n===S.model.n});
 }
-function total(){var t=PRIX;if(S.prenom.trim())t+=EXTRA;var e=EMB.find(function(x){return x.id===S.emb});if(e)t+=e.px;return t}
+function total(){var t=PRIX;if(S.prenom.trim())t+=EXTRA;return t}
 function renderSite(){
   var noelVisibles=S.noel?NOEL.filter(function(m){return m.prix>=0}):[];
   var nb=VIN.length, nbTot=nb+noelVisibles.length;
@@ -454,21 +524,13 @@ function renderSite(){
     }
     h+='</div></section>';
   }
-  var embSel=EMB.find(function(x){return x.id===S.emb});
   h+='<section class="prc-step"><div class="prc-sh"><span class="prc-num'+(M?' done':'')+'">3</span><h3>Résumé de votre gravure</h3></div><div class="prc-sum">';
   h+='<div class="prc-sumrow"><span>Gravure</span>'+(M?'<b>'+(S.model.src==='noel'?'Modèle de Noël n° ':'Modèle n° ')+M.n+' · offert</b>':'<b class="prc-miss">à choisir (étape 1)</b>')+'</div>';
   if(S.prenom.trim())h+='<div class="prc-sumrow"><span>Texte « '+esc(S.prenom.trim())+' »</span><b>+'+eur(EXTRA)+'</b></div>';
-  if(S.noel&&embSel&&embSel.id!=='none')h+='<div class="prc-sumrow"><span>'+esc(embSel.nom)+'</span><b>'+(embSel.px?'+'+eur(embSel.px):'offert')+'</b></div>';
   h+='<div class="prc-sumrow prc-sumtot"><span>Total</span><b>'+eur(total())+'</b></div></div></section>';
   $('#prc').innerHTML=h;
-  /* emballage de Noël */
-  var e='';
-  if(S.noel){
-    e='<div class="ft-embc"><div class="t">🎄 Votre emballage de Noël</div><p class="s">Pour offrir le verre tout de suite.</p><div class="opts">'+EMB.map(function(o){
-      return '<button type="button" data-emb="'+o.id+'" class="'+(S.emb===o.id?'on':'')+'"><span class="ico">'+o.ico+'</span><span style="min-width:0"><strong>'+(S.emb===o.id?'✓ ':'')+esc(o.nom)+'</strong><span class="d">'+esc(o.d)+'</span></span><span class="px">'+(o.id==='none'?'0 €':(o.px?'+'+eur(o.px):'Offert'))+(o.id!=='none'?'<i class="ft-ex">exemple</i>':'')+'</span></button>'}).join('')+'</div></div>';
-  }
-  $('#ft-emb').innerHTML=e;
-  $('.pd-totbox .val').textContent=eur(total());
+  $('#ft-emb').innerHTML='';
+  $('#view-site .pd-totbox .val').textContent=eur(total());
   var add=$('#ft-add'), hint=$('.prc-addhint');
   if(M){add.disabled=false;add.classList.remove('prc-off');hint.textContent='Votre gravure est complète.';}
   else{add.disabled=true;add.classList.add('prc-off');hint.textContent='Choisissez votre gravure (étape 1).';}
@@ -486,8 +548,10 @@ document.addEventListener('click',function(ev){
   t=ev.target.closest('.prc-model[data-n]');
   if(t){S.model={src:t.getAttribute('data-src'),n:+t.getAttribute('data-n')};S.ouverte=false;renderSite();return}
   if(ev.target.closest('#prc-change')){S.ouverte=true;renderSite();return}
-  t=ev.target.closest('[data-emb]');
-  if(t){S.emb=t.getAttribute('data-emb');renderSite();return}
+  t=ev.target.closest('[data-pk]');
+  if(t){S.pk=t.getAttribute('data-pk');renderBijou();return}
+  t=ev.target.closest('[data-pc]');
+  if(t){S.couleur=t.getAttribute('data-pc');renderBijou();renderEmbAdmin();return}
 });
 document.addEventListener('input',function(ev){
   if(ev.target.id==='prc-prenom'){S.prenom=ev.target.value;var pos=ev.target.selectionStart;renderSite();var i=$('#prc-prenom');if(i){i.focus();i.setSelectionRange(pos,pos)}}
@@ -496,9 +560,50 @@ document.addEventListener('change',function(ev){
   var s=ev.target.closest('select[data-prix]');
   if(s){var m=NOEL.find(function(x){return x.n===+s.getAttribute('data-prix')});m.prix=+s.value;compteur();renderSite();return}
   var p=ev.target.closest('.ft-prod input');if(p){p.closest('.ft-prod').classList.toggle('on',p.checked)}
+  var q=ev.target.closest('select[data-pkprix]');if(q){var e=EMB.find(function(x){return x.id===q.getAttribute('data-pkprix')});e.px=+q.value;renderEmbAdmin();renderBijou();return}
+  var st=ev.target.closest('input[data-pkstock]');if(st){var e2=EMB.find(function(x){return x.id===st.getAttribute('data-pkstock')});e2.stock=Math.max(0,+st.value||0);renderBijou();return}
 });
 function alert_(msg){var b=$('#ft-toast');b.textContent=msg;b.style.display='block';clearTimeout(b._t);b._t=setTimeout(function(){b.style.display='none'},3500)}
-renderAdmin();setNoel(true);
+/* ---------- Gestion : emballages de Noël (bijoux) */
+function renderEmbAdmin(){
+  var CH=[0,0.9,1.9,2.9,3.9,4.9,5.9,6.9];
+  var h=EMB.map(function(e){
+    var marge=e.px-e.cout;
+    var opts=CH.map(function(v){return '<option value="'+v+'"'+(Math.abs(v-e.px)<.001?' selected':'')+'>'+(v?'+'+eur(v):'Offert')+'</option>'}).join('');
+    var coul=e.couleurs?'<div class="coul">'+COUL.map(function(c){return '<img src="'+c.src+'" alt="" title="'+esc(c.nom)+'">'}).join('')+'<small style="margin:0;align-self:center">vert sapin · bleu nuit</small></div>':'';
+    return '<div class="ft-embn'+(e.id==='pack'?' pk':'')+'">'+(e.id==='pack'?'<span class="etq">PACK</span>':'')+'<img src="'+e.src+'" alt=""><div class="b"><b>'+esc(e.nom)+'</b><div class="d">'+esc(e.d)+'</div>'
+      +'<div class="ft-emb-l"><label>Prix <select data-pkprix="'+e.id+'">'+opts+'</select></label><label>Stock <input type="number" data-pkstock="'+e.id+'" value="'+e.stock+'" min="0"></label></div>'
+      +'<small>Coût rendu '+eur(e.cout)+' · <span class="marge">marge '+(marge>=0?'+':'−')+eur(Math.abs(marge))+'</span>'+(e.barre?' · prix barré '+eur(e.barre)+' (= boîte + sac)':'')+'</small>'+coul+'</div></div>'}).join('');
+  h+='<div class="ft-embn"><span class="etq off">OFFERTE</span><img src="'+ETQ.src+'" alt=""><div class="b"><b>'+esc(ETQ.nom)+'</b><div class="d">'+esc(ETQ.d)+'</div><div class="ft-emb-l"><label>Prix <select disabled><option>Offerte</option></select></label><label>Stock <input type="number" value="'+ETQ.stock+'" min="0"></label></div><small>Coût '+eur(ETQ.cout)+' · la cliente ne la choisit pas : elle est mise d’office.</small></div></div>';
+  $('#ft-embs').innerHTML=h;
+}
+/* ---------- Site : fiche du collier, bloc « Votre emballage » = options actuelles + options de Noël */
+function pkChoisi(){return PK.concat(EMB).find(function(x){return x.id===S.pk})||PK[0]}
+function totalBijou(){var p=pkChoisi();return PRIX_BIJOU+(p.px||0)}
+function btnPk(o,noel){
+  var on=S.pk===o.id, img=o.src?'<img class="th" src="'+o.src+'" alt="">':'<span class="ico">'+(o.ico||'🎁')+'</span>';
+  var px=o.px?(o.barre?'<span class="barre">'+eur(o.barre)+'</span>':'')+'+'+eur(o.px):(o.id==='pk0'?'0 €':'Offert');
+  var rup=noel&&o.stock<=0;
+  return '<button type="button" data-pk="'+o.id+'" class="'+(on?'on':'')+'"'+(rup?' disabled style="opacity:.45"':'')+'>'+img+'<span style="min-width:0"><strong>'+(on?'✓ ':'')+esc(o.nom)+(o.meil?'<span class="meil'+(noel?' noel':'')+'">'+(noel?'🎄 NOËL':'MEILLEUR CHOIX')+'</span>':'')+'</strong><span class="d">'+esc(o.d)+(rup?' · épuisé':'')+'</span></span><span class="px">'+px+'</span></button>';
+}
+function renderBijou(){
+  var host=$('#ft-pk');if(!host)return;
+  var h='<div class="ft-embc"><div class="t">Votre emballage</div><p class="s">Choisissez votre présentation cadeau.</p><div class="opts">';
+  h+=PK.map(function(o){return btnPk(o,false)}).join('');
+  if(S.noel){
+    h+='<div class="sep">🎄 Pour Noël</div>';
+    h+=EMB.map(function(o){return btnPk(o,true)}).join('');
+    var p=pkChoisi();
+    if(p.couleurs){
+      h+='<div class="couleur">Couleur de la boîte : '+COUL.map(function(c){return '<button type="button" data-pc="'+c.id+'" class="'+(S.couleur===c.id?'on':'')+'"><img src="'+c.src+'" alt="">'+(S.couleur===c.id?'✓ ':'')+esc(c.nom)+'</button>'}).join('')+'</div>';
+    }
+    h+='<p class="etqoff"><img src="'+ETQ.src+'" alt="">Avec chaque emballage de Noël, l’étiquette « Merry Christmas » et sa ficelle sont offertes.</p>';
+  }
+  h+='</div></div>';
+  host.innerHTML=h;
+  var v=$('#view-bijou .pd-totbox .val');if(v)v.textContent=eur(totalBijou());
+}
+renderAdmin();renderEmbAdmin();setNoel(true);
 })();
 """
 
@@ -509,7 +614,8 @@ alpha = uri(os.path.join(PUB, "produits", "alphabet-fleuri.jpg"), 300)
 js = (JS.replace("__NOEL__", json.dumps(NOEL_JS, ensure_ascii=False)).replace("__VIN__", json.dumps(VIN_JS, ensure_ascii=False))
       .replace("__GROUPES__", json.dumps(VIN["groupes"], ensure_ascii=False)).replace("__CRISTAUX__", json.dumps(CRISTAUX_JS, ensure_ascii=False))
       .replace("__PRIX__", str(VIN["prix"])).replace("__EXTRA__", str(VIN["textExtra"])).replace("__JOURS__", str(NOEL["jours"]))
-      .replace("__ALPHA__", json.dumps(alpha)))
+      .replace("__ALPHA__", json.dumps(alpha)).replace("__EMB__", json.dumps(EMB_NOEL, ensure_ascii=False)).replace("__ETQ__", json.dumps(ETIQUETTE, ensure_ascii=False))
+      .replace("__PK__", json.dumps(PK_JS, ensure_ascii=False)).replace("__PRIX_BIJOU__", str(PRIX_BIJOU)).replace("__COUL__", json.dumps(COULEURS_JS, ensure_ascii=False)))
 
 page = f"""<title>Fêtes de l'année</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="{GOOGLE}" rel="stylesheet">
@@ -518,13 +624,17 @@ page = f"""<title>Fêtes de l'année</title>
 #ft-toast{{display:none;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1811;color:#f1e3b8;padding:10px 16px;border-radius:12px;font-size:.84rem;z-index:99;max-width:92vw;box-sizing:border-box}}
 </style>
 <main id="ft-app">
-<div class="ft-banner"><b>MAQUETTE « FÊTES »</b> · rien n'est en ligne · prix des images et des emballages = exemples à régler par vous · photos des sacs et boîtes à venir</div>
-<div class="ft-tabs" role="tablist"><button type="button" class="on" data-view="admin">① Gestion → Fêtes</button><button type="button" data-view="site">② Sur le site : verre à vin</button>
+<div class="ft-banner"><b>MAQUETTE « FÊTES »</b> · rien n'est en ligne · prix des images = exemples à régler par vous · emballages de Noël des bijoux = vos prix du 28/10, vos photos</div>
+<div class="ft-tabs" role="tablist"><button type="button" class="on" data-view="admin">① Gestion → Fêtes</button><button type="button" data-view="site">② Site : verre à vin (images)</button><button type="button" data-view="bijou">③ Site : collier (emballages)</button>
  <div class="ft-sync">Noël <span class="ft-synctxt">allumé</span> {sw("sync", True, "Allumer ou éteindre Noël")}</div></div>
 <div class="ft-view on" id="view-admin">{ADMIN}</div>
 <div class="ft-view ft-site" id="view-site">
  <div class="ft-sitebar">Fiche réelle du verre à vin · <b>Noël <span class="ft-synctxt">allumé</span></b> · l'interrupteur en haut à droite éteint Noël : la fiche redevient celle d'aujourd'hui</div>
  {header}{main}{footer}
+</div>
+<div class="ft-view ft-site" id="view-bijou">
+ <div class="ft-sitebar">Fiche réelle du Collier Cœur gravé · <b>Noël <span class="ft-synctxt">allumé</span></b> · les emballages de Noël s'ajoutent sous « Votre emballage » ; l'interrupteur en haut à droite les retire</div>
+ {header}{main_b}{footer}
 </div>
 <div id="ft-toast"></div>
 </main>

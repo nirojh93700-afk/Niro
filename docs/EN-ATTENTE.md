@@ -284,13 +284,15 @@ En attente de SA décision :
   https://claude.ai/artifact/2gPUibrL9LzWW4tY1n3HAM, rien en ligne : il choisit la version ; à trancher : Jost ou Inter, le
   coffret assorti (prix, −10 % dès 2 pièces), le rangement « Pour qui » / « Anniversaire » / fêtes datées dans `occasions.js` ·
   puis son « applique ».
-## 🎄 Rubrique « Fêtes » (Noël) — MAQUETTE ENREGISTRÉE TELLE QUELLE le 28/10/2026 (version 1), rien en ligne
+## 🎄 Rubrique « Fêtes » (Noël) — version 1 enregistrée le 28/10/2026, VERSION 2 du 28/10 soir en attente de son avis, rien en ligne
 - Artifact https://claude.ai/artifact/215micVgntigmyRFXsG49e : ① Gestion → Fêtes (interrupteur par fête, alerte 2 mois avant, 25 images de
-  Noël numérotées 1–25, emballages, produits concernés) · ② fiche verre à vin avec Noël allumé / éteint. Détail dans `CLAUDE.md`.
-- **Il doit dire** : quelle image est offerte / payante (proposé : texte = +3 €, dessin = offert) · prix et photos du sac et de la boîte de Noël ·
-  garder ou non Tom et Jerry (8), Mickey et Minnie (13), le Grinch (15) (personnages protégés) · les produits non cochés (porte-clés cuir, pièce
-  laiton, puzzle photo, marque-pages) · relier ou non le bandeau Noël de l'accueil et /offrir/noel à cet interrupteur · d'autres images ?
-- Photos des sacs / boîtes de Noël = commande Temu PO-069-16758227989111712 : à aller chercher sur Temu dans une NOUVELLE session, environnement « Temu ».
+  Noël numérotées 1–25, **emballages de Noël des BIJOUX à ses prix du 28/10**, produits concernés) · ② fiche verre à vin avec Noël allumé /
+  éteint · **③ fiche réelle du collier cœur gravé : les emballages de Noël sous « Votre emballage »** (v2). Détail dans `CLAUDE.md`.
+- **Il doit dire** : si la v2 lui convient (emballages dans Gestion + sur la fiche du collier) · quelle image est offerte / payante (proposé :
+  texte = +3 €, dessin = offert) · garder ou non Tom et Jerry (8), Mickey et Minnie (13), le Grinch (15) (personnages protégés) · les produits
+  non cochés (porte-clés cuir, pièce laiton, puzzle photo, marque-pages) · relier ou non le bandeau Noël de l'accueil et /offrir/noel à cet
+  interrupteur · d'autres images ? · les emballages de Noël sur TOUS les bijoux, ou seulement certains ?
+- Photos des emballages : reçues de lui le 28/10 (`docs/maquettes/assets/noel/emballages/`), plus besoin d'aller sur Temu.
 - Rien en ligne tant qu'il n'a pas dit « applique ».
 
 ## 📦 Matériel & conditionnement — en ligne le 11/10/2026

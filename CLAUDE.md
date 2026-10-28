@@ -38,6 +38,28 @@
     Sur les fiches : seulement les photos SANS cotes dessinées (gérant) : F, H · M · C, J · G · I · A.
     Page de choix des prix : https://claude.ai/artifact/QnWFRDN91PNo6J36VejXeN (coûts rendus : pochette 0,80 · sac 1,38 · boîte
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
+- ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
+  [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
+  (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
+  · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
+    photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
+    28/10** : sachet rouge 12 × 17 **0,90 €** (coût 0,13, 52) · pochette à languette dorée **2,90 €** (0,80, 40) · sac à anses bordeaux
+    19 × 15 × 7 **2,90 €** (1,38, 20) · boîte à ruban « Merry Christmas » 11,5 × 7 × 4,5, vert sapin OU bleu nuit **3,90 €** (0,72, 48)
+    · boîte rouge au sapin doré 12 × 6 × 4 **3,90 €** (0,62, 20) · **Pack de Noël = boîte à ruban (couleur au choix) + sac + étiquette
+    5,90 €, barré 6,80** (coût 2,15, 20) · étiquette rouge + ficelle **offerte** avec chaque emballage de Noël (0,05, 50). Boîtes = colis
+    (règle du site) ; sachet et pochette = lettre suivie.
+  · **Onglet ③ « Site : collier (emballages) »** = la fiche RÉELLE du Collier Cœur gravé (22,41 €) : Noël allumé = sous « Votre emballage »,
+    APRÈS les 5 options actuelles (lues dans la capture : sans / sac 1,70 / boîte 3,90 / microfibre 2,70 / pack 6,50 barré 8,30), un
+    séparateur « 🎄 Pour Noël » puis les 6 emballages de Noël (photo, prix, pastille « 🎄 NOËL » sur le pack), choix de la couleur de la
+    boîte (vert sapin / bleu nuit) pour la boîte à ruban et le pack, ligne « l'étiquette est offerte » ; stock à 0 dans Gestion = option
+    grisée « épuisé » ; un prix changé dans Gestion = la fiche suit. Noël éteint = la fiche d'aujourd'hui à l'identique (5 options).
+    Onglet ② (verre à vin) : plus de bloc emballage (les emballages de Noël sont pour les bijoux).
+  · Vérifié Chromium 390 / 1280 (`scratchpad/t-fetes2.mjs`, 52 vérifs) : totaux 22,41 → pack 28,31 → sachet 23,31 → boîte 26,31, retour
+    22,41 éteint, 0 erreur JS, 0 débordement. Photo recadrée de la boîte verte ajoutée : `assets/noel/emballages/3-5-boite-ruban-C-vert-recadree.jpg`.
+  · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
+    options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
+    `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.
 - **Photos des emballages de Noël (commande Temu PO-069-16758227989111712 du 17/10, 13 lignes / 16 articles, reçue le 28/10)** : à récupérer sur
   les fiches Temu. Temu est bloqué dans les anciennes sessions : le gérant a créé le 28/10 l'environnement cloud « Temu » (temu.com, *.temu.com,
   kwcdn.com, *.kwcdn.com + les 3 adresses du site + gestionnaires de paquets) → le faire dans une NOUVELLE session sur cet environnement.
