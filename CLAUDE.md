@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  puis VERSIONS 3 à 6 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSIONS 3 à 7 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -88,6 +88,12 @@
     ouvert affiche « Livraison avec … : 4,90 € » ou « 6,90 € à domicile ou 4,90 € en point relais, offerte dès 45 € », le résumé replié aussi.
     À la construction : `colis:true` sur les boîtes et le pack (même règle que les ids `boite` / `pack` : `bijouEnBoite`), `weight` par emballage.
     92 vérifs, 0 erreur, 0 débordement.
+  · **v7 (28/10 soir, capture iPhone : « les deux choix [de couleur], on voit pas trop, il faut que tu le fasses différemment entre le bleu et
+    le vert »)** : le choix de couleur de la boîte à ruban / du pack = deux GRANDES tuiles photo côte à côte (photo 4:3, pastille de couleur
+    vert sapin `#1f5a3a` / bleu nuit `#1f3561`, bordure et coche de la couleur, « · choisi »), la vignette de l'option et du résumé replié
+    passent à la couleur choisie. Photo de la boîte bleue RECADRÉE sur la boîte (`3-5-boite-ruban-J-bleu-recadree.jpg`, l'original J avait
+    80 % de blanc). Gestion : vignette + pastille + nom pour chaque couleur. ⛔ Règle : un choix de couleur se montre avec sa PHOTO en grand
+    et une pastille de la couleur, jamais deux petites vignettes sombres.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.

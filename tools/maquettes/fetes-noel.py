@@ -146,11 +146,11 @@ for e in EMB_NOEL:
 for e in EMB_NOEL:
     e["fit"] = {k: bool(FIT[e["id"]].get(k)) for k in ("seul", "sac", "carree", "allongee", "pack")}
 ETIQUETTE = dict(nom="Étiquette rouge « Merry Christmas » + ficelle", d="5,4 × 9 cm · offerte avec chaque emballage de Noël", cout=0.05, stock=50, photo="6-etiquettes-I.jpg")
-COULEURS_RUBAN = [("vert", "Vert sapin", "3-5-boite-ruban-C-vert-recadree.jpg"), ("bleu", "Bleu nuit", "3-5-boite-ruban-J-bleu.jpg")]
+COULEURS_RUBAN = [("vert", "Vert sapin", "3-5-boite-ruban-C-vert-recadree.jpg", "#1f5a3a"), ("bleu", "Bleu nuit", "3-5-boite-ruban-J-bleu-recadree.jpg", "#1f3561")]
 for e in EMB_NOEL:
     e["src"] = uri(os.path.join(EMB_DIR, e["photo"]), 420, 78)
 ETIQUETTE["src"] = uri(os.path.join(EMB_DIR, ETIQUETTE["photo"]), 420, 78)
-COULEURS_JS = [dict(id=i, nom=n, src=uri(os.path.join(EMB_DIR, f), 300, 78)) for i, n, f in COULEURS_RUBAN]
+COULEURS_JS = [dict(id=i, nom=n, hex=hx, src=uri(os.path.join(EMB_DIR, f), 420, 80)) for i, n, f, hx in COULEURS_RUBAN]
 
 PRODUITS = [  # (nom, coché, note) — seulement des produits GRAVÉS ; jamais bijoux ni mariage (règle du gérant)
     ("Verre à vin gravé (36 et 47 cl)", True, ""), ("Flûte à champagne gravée", True, ""), ("Verre à whisky portrait", True, ""),
@@ -431,7 +431,7 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-embn .etq{position:absolute;top:8px;right:8px;background:#b3261e;color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.3px;border-radius:20px;padding:2px 8px}
 .ft-embn .etq.off{background:#1c6b3a}
 .ft-embn .etq~.b b{padding-right:64px}
-.ft-embn .coul{display:flex;gap:6px;margin-top:6px}.ft-embn .coul img{width:34px;height:34px;flex:0 0 34px;border-radius:8px}
+.ft-embn .coul{display:flex;gap:10px;margin-top:6px}.ft-embn .coul-i{display:flex;align-items:center;gap:5px}.ft-embn .coul img{width:44px;height:34px;flex:0 0 44px;border-radius:8px;object-fit:cover}.ft-embn .coul i{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:0 0 0 1px rgba(0,0,0,.18)}.ft-embn .coul small{margin:0;font-size:.7rem}
 .ft-embc{margin:6px 0 18px}
 .ft-embc .sep{display:flex;align-items:center;gap:10px;color:#b3261e;font-weight:800;font-size:.8rem;letter-spacing:.3px;margin:4px 0 0}
 .ft-embc .sep:before,.ft-embc .sep:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#d9b7b4)}.ft-embc .sep:after{background:linear-gradient(90deg,#d9b7b4,transparent)}
@@ -440,8 +440,16 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-embc .meil.noel{background:#b3261e;color:#fff}
 .ft-embc .barre{color:var(--ink-soft);text-decoration:line-through;font-weight:400;font-size:.78rem;margin-right:5px}
 .ft-embc .etqoff{margin:2px 0 0;font-size:.78rem;color:#1c6b3a;display:flex;align-items:center;gap:8px}.ft-embc .etqoff img{width:30px;height:30px;border-radius:6px;object-fit:cover}
-.ft-embc .couleur{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--ink-soft);margin-top:2px}
-.ft-embc .couleur button{width:auto;display:inline-flex;gap:6px;align-items:center;padding:5px 9px;border-radius:10px;font-size:.78rem}.ft-embc .couleur button img{width:26px;height:26px;border-radius:6px;object-fit:cover}
+.ft-embc .couleur{margin-top:4px;background:#fff;border:1px solid #e9d9d6;border-radius:12px;padding:10px}
+.ft-embc .couleur-t{font-weight:700;font-size:.88rem;margin-bottom:8px}.ft-embc .couleur-t small{font-weight:400;color:var(--ink-soft)}
+.ft-embc .couleur-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ft-embc .couleur-g button{display:block;padding:0;overflow:hidden;border-radius:12px;border:2px solid var(--line);background:#fff;box-shadow:none}
+.ft-embc .couleur-g button.on{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.ft-embc .couleur-ph{display:block;position:relative;aspect-ratio:4/3;background:#f4efe6}.ft-embc .couleur-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ft-embc .couleur-ok{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:.9rem;font-weight:800;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.ft-embc .couleur-n{display:flex;align-items:center;gap:7px;padding:8px 10px;font-size:.84rem;font-weight:700;color:var(--ink);background:#fff}
+.ft-embc .couleur-n i{width:16px;height:16px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.18);flex:0 0 auto}
+.ft-embc .couleur-g button.on .couleur-n{background:color-mix(in srgb,var(--c) 10%,#fff)}
 .ft-embc .colis{font-size:.72rem;color:var(--ink-soft);font-weight:400;display:block}
 .xn-tog{display:flex;align-items:center;gap:11px;text-align:left;cursor:pointer;font:inherit;width:100%;box-sizing:border-box;margin:-8px 0 18px;padding:11px 13px;border-radius:12px;border:1.5px dashed #c98c86;background:#fff8f6;color:var(--ink)}
 .xn-tog.on{border-style:solid;border-color:#b3261e;background:#fff3f0}
@@ -621,7 +629,7 @@ function renderEmbAdmin(){
   var h=EMB.map(function(e){
     var marge=e.px-e.cout;
     var opts=CH.map(function(v){return '<option value="'+v+'"'+(Math.abs(v-e.px)<.001?' selected':'')+'>'+(v?'+'+eur(v):'Offert')+'</option>'}).join('');
-    var coul=e.couleurs?'<div class="coul">'+COUL.map(function(c){return '<img src="'+c.src+'" alt="" title="'+esc(c.nom)+'">'}).join('')+'<small style="margin:0;align-self:center">vert sapin · bleu nuit</small></div>':'';
+    var coul=e.couleurs?'<div class="coul">'+COUL.map(function(c){return '<span class="coul-i"><img src="'+c.src+'" alt=""><i style="background:'+c.hex+'"></i><small>'+esc(c.nom)+'</small></span>'}).join('')+'</div>':'';
     return '<div class="ft-embn'+(e.id==='pack'?' pk':'')+'">'+(e.id==='pack'?'<span class="etq">PACK</span>':'')+'<img src="'+e.src+'" alt=""><div class="b"><b>'+esc(e.nom)+'</b><div class="d">'+esc(e.d)+'</div>'
       +'<div class="ft-emb-l"><label>Prix <select data-pkprix="'+e.id+'">'+opts+'</select></label><label>Stock <input type="number" data-pkstock="'+e.id+'" value="'+e.stock+'" min="0"></label><label>Poids <input type="number" data-pkpoids="'+e.id+'" value="'+e.poids+'" min="0" title="grammes, à peser"></label></div>'
       +'<div class="port">'+(e.colis?'📦 <b>Part en colis</b> (boîte rigide) : cliente 6,90 € à domicile · 4,90 € en relais · offerte dès 45 € · vous ≈ 6,12 €':'✉️ <b>Reste en lettre suivie</b> : cliente 4,90 € jusqu’à 100 g · offerte dès 45 € · vous ≈ 4,45 €')+' · ≈ '+e.poids+' g <i>(à peser)</i></div>'
@@ -642,7 +650,7 @@ function portTxt(x){
 }
 function totalBijou(){var x=xnChoisi();return PRIX_BIJOU+(pkChoisi().px||0)+(x?x.px:0)}
 function btnPk(o,noel){
-  var on=noel?S.xn===o.id:S.pk===o.id, img=o.src?'<img class="th" src="'+o.src+'" alt="">':'<span class="ico">'+(o.ico||'🎁')+'</span>';
+  var on=noel?S.xn===o.id:S.pk===o.id, srcTh=(noel&&o.couleurs&&o.id==='ruban')?COUL.find(function(c){return c.id===S.couleur}).src:o.src, img=srcTh?'<img class="th" src="'+srcTh+'" alt="">':'<span class="ico">'+(o.ico||'🎁')+'</span>';
   var px=o.px?(o.barre?'<span class="barre">'+eur(o.barre)+'</span>':'')+'+'+eur(o.px):'0 €';
   var rup=noel&&o.id!=='none'&&o.stock<=0;
   return '<button type="button" data-'+(noel?'xn':'pk')+'="'+o.id+'" class="'+(on?'on':'')+'"'+(rup?' disabled style="opacity:.45"':'')+'>'+img+'<span style="min-width:0"><strong>'+(on?'✓ ':'')+esc(o.nom)+(o.meil?'<span class="meil'+(noel?' noel':'')+'">'+(noel?'🎄 NOËL':'MEILLEUR CHOIX')+'</span>':'')+'</strong><span class="d">'+esc(o.d)+(rup?' · épuisé':'')+'</span></span><span class="px">'+px+'</span></button>';
@@ -657,13 +665,13 @@ function renderBijou(){
     if(dispo.length){
       var mini=Math.min.apply(null,dispo.map(function(e){return e.px}));
       if(!S.xnOpen){
-        if(x){h+='<button type="button" class="xn-tog on" data-xntog><img class="th" src="'+x.src+'" alt=""><span style="min-width:0"><strong>🎄 Emballage de Noël : '+esc(x.nom)+(x.couleurs?' · '+esc(COUL.find(function(c){return c.id===S.couleur}).nom.toLowerCase()):'')+'</strong><span class="d">étiquette « Merry Christmas » offerte · '+(enColis(x)?'part en colis (6,90 € à domicile, 4,90 € en relais)':'lettre suivie (4,90 €)')+' · offerte dès 45 €</span></span><span class="px">+'+eur(x.px)+'<i>Modifier</i></span></button>';}
+        if(x){h+='<button type="button" class="xn-tog on" data-xntog><img class="th" src="'+((x.couleurs&&x.id==='ruban')?COUL.find(function(c){return c.id===S.couleur}).src:x.src)+'" alt=""><span style="min-width:0"><strong>🎄 Emballage de Noël : '+esc(x.nom)+(x.couleurs?' · '+esc(COUL.find(function(c){return c.id===S.couleur}).nom.toLowerCase()):'')+'</strong><span class="d">étiquette « Merry Christmas » offerte · '+(enColis(x)?'part en colis (6,90 € à domicile, 4,90 € en relais)':'lettre suivie (4,90 €)')+' · offerte dès 45 €</span></span><span class="px">+'+eur(x.px)+'<i>Modifier</i></span></button>';}
         else{h+='<button type="button" class="xn-tog" data-xntog><span class="ico">🎄</span><span style="min-width:0"><strong>Ajouter un emballage de Noël</strong><span class="d">facultatif · dès '+eur(mini)+' · '+dispo.length+' choix</span></span><span class="px"><i>Voir ▾</i></span></button>';}
       }else{
         h+='<div class="ft-embc xn"><div class="t">🎄 Votre emballage de Noël <button type="button" class="xn-close" data-xntog>Fermer ▴</button></div><p class="s">'+(pkChoisi().cat==='seul'?'Le bijou est glissé dedans, prêt à offrir.':'Votre '+esc(pkChoisi().nom.toLowerCase())+' est glissé dedans, prêt à offrir.')+'</p><div class="opts">';
         h+=btnPk({id:'none',nom:'Sans emballage de Noël',d:'Seulement l’emballage choisi ci-dessus',px:0,ico:'✖️'},true);
         h+=dispo.map(function(o){return btnPk(o,true)}).join('');
-        if(x&&x.couleurs){h+='<div class="couleur">Couleur de la boîte : '+COUL.map(function(c){return '<button type="button" data-pc="'+c.id+'" class="'+(S.couleur===c.id?'on':'')+'"><img src="'+c.src+'" alt="">'+(S.couleur===c.id?'✓ ':'')+esc(c.nom)+'</button>'}).join('')+'</div>';}
+        if(x&&x.couleurs){h+='<div class="couleur"><div class="couleur-t">Couleur de la boîte <small>— choisissez</small></div><div class="couleur-g">'+COUL.map(function(c){var on=S.couleur===c.id;return '<button type="button" data-pc="'+c.id+'" class="'+(on?'on':'')+'" style="--c:'+c.hex+'"><span class="couleur-ph"><img src="'+c.src+'" alt="">'+(on?'<span class="couleur-ok">✓</span>':'')+'</span><span class="couleur-n"><i></i>'+esc(c.nom)+(on?' · choisi':'')+'</span></button>'}).join('')+'</div></div>';}
         h+='<p class="etqoff"><img src="'+ETQ.src+'" alt="">Avec chaque emballage de Noël, l’étiquette « Merry Christmas » et sa ficelle sont offertes.</p>';
         h+='<p class="xn-port">'+portTxt(x)+'</p></div></div>';
       }
