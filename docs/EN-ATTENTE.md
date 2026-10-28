@@ -464,3 +464,12 @@ En attente de SA décision :
   39 verres → marque-pages → cristal · 40 bijoux → verres → cristal. Uniquement des pièces gravées et en vente.
 - Méthode demandée : faire la PREMIÈRE (34), la lui montrer, attendre sa validation, puis les 6 autres. Script : `tools/video/serie_34_40.py`
   (ajouter l'habillage Noël). Les versions sans Noël ne sont pas livrées (pas de registre).
+
+## 🥃 VERRE TUMBLER EN CRISTAL GRAVÉ 37 cl — MAQUETTE DU 28/10/2026 (RIEN en ligne)
+- Gérant : Metro « Tumbler Montese 37 cl » (réf AAA0046319226, cristal sans plomb, Ø 8,5 × H 10 cm, lave-vaisselle) ; 2 cartons de 6
+  à 14,82 € + 10 € de livraison → **3,30 € le verre**. « C'est à part, pas avec le whisky » → fiche SÉPARÉE.
+- Maquette (captures réelles, fiche ajoutée en local puis retirée) : https://claude.ai/artifact/3psMJXTiwmLgku2vvdW9kd —
+  slug proposé `verre-tumbler-cristal-grave`, gabarit du verre à whisky (parcours photo / texte, texte +3 €, date dans l'image),
+  face seulement, 19,90 / 37,90 / 71,90 € (lot de 4 livraison offerte), catégorie verres.
+- Avant le « applique » : ses vraies photos (celles envoyées font 192 px ; la 1re montre un verre taillé, pas le Montese),
+  une photo gravée, un essai sur la paroi évasée ; fond du verre plus tard avec une photo du fond.
