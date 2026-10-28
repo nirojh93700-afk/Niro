@@ -29,6 +29,10 @@
   (fusion par clé, jamais de remplacement en bloc), images dans `public/produits/noel/`, `ParcoursGuide` lit un groupe « Noël » ajouté par le
   catalogue (`getCatalog`) sur les produits cochés, `ProductDetail` ajoute l'emballage de fête (prix au paiement), `consignesGravure` écrit
   « Modèle de Noël n° X » avec la vignette, alerte J-60 dans le heartbeat + tableau de bord, `catalogAudit` signale une fête passée encore allumée.
+- ✅ **28/10 soir : le gérant a envoyé lui-même les photos Temu** → `docs/maquettes/assets/noel/emballages/` (13 photos, une 14ᵉ en double
+  écartée) : sachet métallisé rouge 12 × 17 cm (photos INEDACO) · boîte à ruban « Merry Christmas » 11,5 × 7 × 4,5 cm (vert, blanc, bleu
+  nuit) · boîte rouge sapin doré 12 × 6 × 4 cm · étiquettes rouges 5,4 × 9 cm + ficelle · pochette bordeaux à languette dorée (taille ?) ·
+  sac cabas bordeaux liseré or 19 × 15 × 7 cm. La maquette Fêtes (v1) n'est PAS modifiée sans sa demande.
 - **Photos des emballages de Noël (commande Temu PO-069-16758227989111712 du 17/10, 13 lignes / 16 articles, reçue le 28/10)** : à récupérer sur
   les fiches Temu. Temu est bloqué dans les anciennes sessions : le gérant a créé le 28/10 l'environnement cloud « Temu » (temu.com, *.temu.com,
   kwcdn.com, *.kwcdn.com + les 3 adresses du site + gestionnaires de paquets) → le faire dans une NOUVELLE session sur cet environnement.
