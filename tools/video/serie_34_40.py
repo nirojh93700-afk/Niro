@@ -4,6 +4,8 @@
 #   37 verres · 38 verres → cristal → marque-pages · 39 verres → marque-pages → cristal · 40 bijoux → verres → cristal.
 # Sans habillage Noël (pas demandé). Verticales 1080x1920, sans son. UNIQUEMENT des pièces GRAVÉES et EN VENTE
 # (planches contact regardées le 28/10). ⚠️ Marque-pages en bois : aperçus de la maquette (pas encore de photo d'atelier).
+# Effets (28/10, « fais cette vidéo avec des effets ») : titres gravés au laser, reflet qui balaie chaque pièce,
+# paillettes dorées, photo qui arrive un peu grande et se pose, texte qui monte en fondu, éclair doré, barre de progression.
 # Quatre styles, pour que deux vidéos ne se ressemblent pas :
 #   creme (fond flou, nom doré en bas, fondu crème) · ecrin (encre, photo dans un cadre doré, fondu enchaîné) ·
 #   carte (papier crème, photo en haut, texte encre en bas, glissé vers le haut) · plein (photo agrandie, barre dorée,
@@ -220,15 +222,15 @@ def arrondi(im, r):
 def plan_creme(path, nom, sous, k, n, cfg):
     im = charger(path); fond = flou(im)
     ph = fit(im, W - 80, int(H * 0.56)); pos = ((W - ph.width) // 2, int(H * 0.36) - ph.height // 2)
-    ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); band = Image.new("L", (1, H), 0); p = band.load()
+    band = Image.new("L", (1, H), 0); p = band.load()
     for y in range(H): p[0, y] = int(215 * max(0, (y - 1120) / (H - 1120)) ** 1.15)
-    dark = Image.new("RGBA", (W, H), (15, 12, 9, 255)); dark.putalpha(band.resize((W, H))); ov = Image.alpha_composite(ov, dark)
-    d = ImageDraw.Draw(ov)
+    grad = Image.new("RGBA", (W, H), (15, 12, 9, 255)); grad.putalpha(band.resize((W, H)))
+    ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
     d.text((60, H - 360), nom, font=ajuste(d, nom, SERIFB, 74, W - 120, 48), fill=GOLD)
     y = H - 258
     for ln in wrap(d, sous, F(SANS, 44), W - 120): d.text((60, y), ln, font=F(SANS, 44), fill=WHITE); y += 54
     d.text((60, H - 90), "nivcreation.fr", font=F(SANSB, 34), fill=(235, 220, 180))
-    return dict(fond=fond, photo=ph, pos=pos, ov=ov, zoom=(1.08, 1.0), mode="fond")
+    return dict(fond=fond, photo=ph, pos=pos, ov=ov, grad=grad, zoom=(1.04, 1.0), mode="fond")
 
 def plan_ecrin(path, nom, sous, k, n, cfg):
     im = charger(path)
@@ -282,75 +284,153 @@ def plan_plein(path, nom, sous, k, n, cfg):
 PLANS = dict(creme=plan_creme, ecrin=plan_ecrin, carte=plan_carte, plein=plan_plein)
 
 def carte_titre(style, haut, grand, petit, bas=None):
+    """Fond (décor fixe) + calque du texte, que le rendu « grave au laser » de gauche à droite."""
     fonce = style in ("ecrin", "plein")
-    im = Image.new("RGB", (W, H), INK if fonce else CREAM)
-    if style == "ecrin": im = halo(im, (70, 50, 18), W // 2, H // 2, 700, 0.6)
-    d = ImageDraw.Draw(im)
-    txt = CREAM if fonce else INK
+    base = Image.new("RGB", (W, H), INK if fonce else CREAM)
+    if style == "ecrin": base = halo(base, (70, 50, 18), W // 2, H // 2, 700, 0.6)
+    if style == "plein": base = halo(base, (48, 34, 12), W // 2, H // 2 - 100, 640, 0.5)
+    db = ImageDraw.Draw(base)
     if style in ("creme", "ecrin"):
-        d.rectangle((0, 0, W, 14), fill=GOLD); d.rectangle((0, H - 14, W, H), fill=GOLD)
+        db.rectangle((0, 0, W, 14), fill=GOLD); db.rectangle((0, H - 14, W, H), fill=GOLD)
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    txt = CREAM if fonce else INK
     if haut: centre(d, haut, F(SANSB_U, 36), H // 2 - 300, GOLD)
     if style == "plein":
-        fb = ajuste(d, grand.upper(), SANSB, 92, W - 140, 50); centre(d, grand.upper(), fb, H // 2 - 150, WHITE)
+        g = grand.upper(); fb = ajuste(d, g, SANSB, 92, W - 140, 50); yt = H // 2 - 150; centre(d, g, fb, yt, WHITE)
         d.rectangle((W // 2 - 70, H // 2 - 20, W // 2 + 70, H // 2 - 12), fill=GOLD)
     else:
-        fb = ajuste(d, grand, SERIFB, 96, W - 120, 56); centre(d, grand, fb, H // 2 - 160, GOLD)
+        fb = ajuste(d, grand, SERIFB, 96, W - 120, 56); yt = H // 2 - 160; centre(d, grand, fb, yt, GOLD)
     y = H // 2 + 10
     fs = F(SERIF if style == "ecrin" else SANS, 48)
     for ln in wrap(d, petit, fs, W - 160): centre(d, ln, fs, y, txt); y += 62
     if bas: centre(d, bas, F(SANSB, 42), y + 30, GOLD)
-    return im
+    return dict(base=base, lay=lay, ylaser=yt + fb.size // 2 + 10, fonce=fonce)
+
+ease = lambda t: 1 - (1 - max(0.0, min(1.0, t))) ** 3
+
+def bande_reflet(w, h):
+    """Bande lumineuse en biais (masque), large de 3 photos : on la fait glisser pour le reflet."""
+    m = Image.new("L", (3 * w, h), 0); d = ImageDraw.Draw(m); cx = int(1.5 * w); lw = max(30, int(0.16 * w)); sk = int(0.45 * h)
+    d.polygon([(cx - lw + sk, 0), (cx + lw + sk, 0), (cx + lw - sk, h), (cx - lw - sk, h)], fill=120)
+    return m.filter(ImageFilter.GaussianBlur(max(8, lw // 2)))
+
+def paillettes(seed, n=16):
+    r = np.random.default_rng(seed)
+    return [(int(r.uniform(40, W - 40)), int(r.uniform(120, H * 0.72)), r.uniform(0, 1), r.uniform(5, 12)) for _ in range(n)]
+
+def dessine_paillettes(fr, pts, t, fonce=True):
+    d = ImageDraw.Draw(fr); coul = (255, 238, 196) if fonce else (214, 176, 90)
+    for x, y, ph, sz in pts:
+        a = 0.5 + 0.5 * np.sin(2 * np.pi * (t * 1.25 + ph))
+        if a < 0.35: continue
+        L = sz * a; yy = y - 30 * t
+        d.line((x - L, yy, x + L, yy), fill=coul, width=2); d.line((x, yy - L, x, yy + L), fill=coul, width=2)
+        d.ellipse((x - 2, yy - 2, x + 2, yy + 2), fill=(255, 255, 255) if fonce else coul)
+
+def avec_alpha(lay, a):
+    if a >= 0.999: return lay
+    arr = np.asarray(lay).copy(); arr[..., 3] = (arr[..., 3] * a).astype(np.uint8)
+    return Image.fromarray(arr, "RGBA")
 
 def rendre(num):
     cfg = VIDEOS[num]; st = cfg["style"]; seg = cfg["seg"]
     nprod = sum(1 for it in cfg["items"] if it[0] != CH)
-    segs = [("carte", carte_titre(st, "✦  NIV CRÉATION  ✦", cfg["titre"], cfg["accroche"]), 2.3)]
+    segs = [("carte", carte_titre(st, "✦  NIV CRÉATION  ✦", cfg["titre"], cfg["accroche"]), 2.6, "intro")]
     k = 0
     for it in cfg["items"]:
         if it[0] == CH:
-            segs.append(("carte", carte_titre(st, None, it[1], it[2]), 1.2)); continue
+            segs.append(("carte", carte_titre(st, None, it[1], it[2]), 1.4, "chap")); continue
         k += 1
-        segs.append(("plan", PLANS[st](it[0], it[1], it[2], k, nprod, cfg), seg))
+        pl = PLANS[st](it[0], it[1], it[2], k, nprod, cfg)
+        pl["bande"] = bande_reflet(*pl["photo"].size); pl["pts"] = paillettes(num * 100 + k)
+        segs.append(("plan", pl, seg, "plan"))
     f1, f2, f3 = cfg["fin"]
-    segs.append(("carte", carte_titre(st, None, f1, f2, f3), 2.6))
+    segs.append(("carte", carte_titre(st, None, f1, f2, f3), 2.8, "fin"))
+    total = sum(int(round(x[2] * FPS)) for x in segs)
+    blanc_or = Image.new("RGB", (W, H), (255, 244, 214))
 
-    def image(kind, s, prog):
-        if kind == "carte": return s
-        z = s["zoom"][0] + (s["zoom"][1] - s["zoom"][0]) * prog
-        fr = s["fond"].copy(); ph = s["photo"]; x, y = s["pos"]
+    def image_carte(c, ts, role):
+        fr = c["base"].copy().convert("RGBA")
+        duree = 0.55 if role == "chap" else 0.95
+        rv = ease(ts / duree); rx = int(W * rv)
+        if rx > 0: fr.alpha_composite(c["lay"].crop((0, 0, rx, H)), (0, 0))
+        fr = fr.convert("RGB")
+        if 0 < rv < 1:   # point du laser qui grave le titre
+            d = ImageDraw.Draw(fr); y = c["ylaser"]
+            for r_, col in ((26, (120, 90, 30)), (16, (201, 162, 75)), (7, (255, 250, 230))):
+                d.ellipse((rx - r_, y - r_, rx + r_, y + r_), fill=col)
+            rg = np.random.default_rng(int(ts * 1000))
+            for _ in range(5):
+                sx, sy = rx + rg.uniform(-30, 10), y + rg.uniform(-26, 26)
+                d.ellipse((sx - 2, sy - 2, sx + 2, sy + 2), fill=(255, 226, 150))
+        if role in ("intro", "fin") and ts > 1.1:   # reflet qui balaie le titre
+            t2 = (ts - 1.1) / 1.0
+            if t2 < 1:
+                bd = c.get("_bande") or bande_reflet(W, 300); c["_bande"] = bd
+                xo = int((1 - t2) * 2 * W); m = bd.crop((xo, 0, xo + W, 300))
+                fr.paste(blanc_or.crop((0, 0, W, 300)), (0, c["ylaser"] - 150), m)
+        dessine_paillettes(fr, c.setdefault("_pts", paillettes(len(role) * 7 + num)), ts / 2.5, c["fonce"])
+        return fr
+
+    def image_plan(s, prog, ts):
+        dur = seg
+        punch = 1 + 0.10 * (1 - ease(ts / (0.35 * dur)))          # la photo arrive un peu grande et se pose
+        z = (s["zoom"][0] + (s["zoom"][1] - s["zoom"][0]) * prog) * punch
+        fr = s["fond"].copy(); ph = s["photo"]; x, y = s["pos"]; bw, bh = ph.size
         if s["mode"] == "cadre":   # la photo grossit DANS son cadre (le cadre ne bouge pas)
             cw, ch = int(ph.width / z), int(ph.height / z)
             part = ph.crop(((ph.width - cw) // 2, (ph.height - ch) // 2, (ph.width - cw) // 2 + cw, (ph.height - ch) // 2 + ch))
-            fr.paste(part.resize(ph.size, Image.BILINEAR), (x, y))
-        else:
-            if z != 1.0:
-                ph = ph.resize((int(ph.width * z), int(ph.height * z)), Image.BILINEAR)
-                x -= (ph.width - s["photo"].width) // 2; y -= (ph.height - s["photo"].height) // 2
-            if s["mode"] == "glisse": y += int(28 * (1 - prog))
-            if s.get("rayon"): fr.paste(ph, (x, y), arrondi(ph, s["rayon"]))
-            else: fr.paste(ph, (x, y))
-        return Image.alpha_composite(fr.convert("RGBA"), s["ov"]).convert("RGB")
+            ph = part.resize((bw, bh), Image.BILINEAR)
+        elif z != 1.0:
+            ph = ph.resize((int(bw * z), int(bh * z)), Image.BILINEAR)
+            x -= (ph.width - bw) // 2; y -= (ph.height - bh) // 2
+        if s["mode"] == "glisse": y += int(40 * (1 - ease(ts / (0.5 * dur))))
+        # reflet lumineux qui passe sur la pièce
+        t2 = (prog - 0.32) / 0.45
+        if 0 < t2 < 1:
+            xo = int((1 - t2) * 2 * bw); m = s["bande"].crop((xo, 0, xo + bw, bh))
+            if m.size != ph.size: m = m.resize(ph.size, Image.BILINEAR)
+            ph = Image.composite(Image.new("RGB", ph.size, (255, 248, 228)), ph, m)
+        if s.get("rayon"): fr.paste(ph, (x, y), arrondi(ph, s["rayon"]))
+        else: fr.paste(ph, (x, y))
+        dessine_paillettes(fr, s["pts"], ts / 2.2, st != "carte")
+        fr = fr.convert("RGBA")
+        if s.get("grad") is not None: fr.alpha_composite(s["grad"])
+        ta = ease((ts - 0.22) / 0.45)                               # le texte monte en fondu
+        if ta > 0:
+            dy = int(46 * (1 - ta)); lay = avec_alpha(s["ov"], ta)
+            if dy: lay = lay.crop((0, 0, W, H - dy)); fr.alpha_composite(lay, (0, dy))
+            else: fr.alpha_composite(lay)
+        return fr.convert("RGB")
 
     brut = os.path.join(OUT, f"{num}-brut.mp4")
     wri = imageio.get_writer(brut, fps=FPS, codec="libx264", quality=8, macro_block_size=1,
                              ffmpeg_params=["-pix_fmt", "yuv420p"], ffmpeg_log_level="error")
-    TR = int(0.3 * FPS); prec = None; cream = Image.new("RGB", (W, H), CREAM); mi = None
-    for kind, s, dur in segs:
+    TR = int(0.3 * FPS); prec = None; cream = Image.new("RGB", (W, H), CREAM); mi = None; gi = 0
+    for kind, s, dur, role in segs:
         nf = max(1, int(round(dur * FPS))); dernier = None
         for fi in range(nf):
-            fr = image(kind, s, fi / max(1, nf - 1))
+            ts = fi / FPS; prog = fi / max(1, nf - 1)
+            fr = image_carte(s, ts, role) if kind == "carte" else image_plan(s, prog, ts)
             if prec is not None and fi < TR:   # transition propre à chaque style
-                a = (fi + 1) / TR
+                a = ease((fi + 1) / TR)
                 if st == "creme":
                     fr = Image.blend(cream, fr, a)
-                elif st == "ecrin":
-                    fr = Image.blend(prec, fr, a)
+                elif st == "ecrin":   # fondu enchaîné, l'ancien plan grossit en s'effaçant
+                    zz = 1 + 0.08 * a; pw, phh = int(W / zz), int(H / zz)
+                    old = prec.crop(((W - pw) // 2, (H - phh) // 2, (W - pw) // 2 + pw, (H - phh) // 2 + phh)).resize((W, H), Image.BILINEAR)
+                    fr = Image.blend(old, fr, a)
                 elif st == "carte":   # le nouveau plan monte depuis le bas
-                    off = int(H * (1 - a) ** 2); comp = prec.copy(); comp.paste(fr.crop((0, 0, W, H - off)), (0, off)); fr = comp
-                else:                  # balayage de gauche à droite
-                    xw = int(W * a); comp = prec.copy(); comp.paste(fr.crop((0, 0, xw, H)), (0, 0)); fr = comp
+                    off = int(H * (1 - a)); comp = prec.copy(); comp.paste(fr.crop((0, 0, W, H - off)), (0, off)); fr = comp
+                else:                  # balayage de gauche à droite, avec un fil doré
+                    xw = int(W * a); comp = prec.copy(); comp.paste(fr.crop((0, 0, xw, H)), (0, 0))
+                    ImageDraw.Draw(comp).rectangle((xw - 4, 0, xw + 4, H), fill=GOLD); fr = comp
+            if kind == "plan" and st in ("creme", "plein", "ecrin") and fi < 6:   # petit éclair doré à l'arrivée
+                fr = Image.blend(fr, blanc_or, 0.28 * (1 - fi / 6))
+            if st == "plein":   # barre de progression dorée en bas
+                ImageDraw.Draw(fr).rectangle((0, H - 8, int(W * (gi + 1) / total), H), fill=GOLD)
             if kind == "plan" and mi is None and fi == nf // 2: mi = fr.copy()
-            wri.append_data(np.asarray(fr)); dernier = fr
+            wri.append_data(np.asarray(fr)); dernier = fr; gi += 1
         prec = dernier
     wri.close()
     base = f"{num}-{cfg['nom']}"
