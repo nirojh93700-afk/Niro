@@ -1,8 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const KEY = "niv-welcome-subscribed"; // posé seulement quand la cliente s'inscrit
+
+// Pages où la fenêtre ne s'ouvre jamais (gérant, 28/10/2026 : « pas quand ils ouvrent le devis ») :
+// Gestion, et les pages qu'une cliente ouvre depuis un e-mail ou au paiement (devis / facture,
+// réponse, suivi, paiement, retour de paiement). Elle s'ouvre dès qu'elle arrive sur le reste du site.
+export const SANS_FENETRE_BIENVENUE = ["/gestion", "/document", "/reponse", "/repondre", "/suivi", "/paiement", "/merci", "/annule", "/carte-cadeau/merci"];
+export function fenetreBienvenueInterdite(path) {
+  const p = String(path || "");
+  return SANS_FENETRE_BIENVENUE.some((x) => p === x || p.startsWith(x + "/"));
+}
 
 export default function WelcomePopup({ enabled, code, text }) {
   const [show, setShow] = useState(false);
@@ -10,10 +20,12 @@ export default function WelcomePopup({ enabled, code, text }) {
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
 
+  const pathname = usePathname();
+
   useEffect(() => {
     if (!enabled) return;
-    // Jamais dans l'espace de gestion (réservé aux clientes du site).
-    if (typeof window !== "undefined" && window.location.pathname.startsWith("/gestion")) return;
+    // Jamais en Gestion, ni sur un devis / une facture, ni sur les pages ouvertes depuis un e-mail.
+    if (fenetreBienvenueInterdite(pathname)) { setShow(false); return; }
     try {
       if (localStorage.getItem(KEY)) return;          // déjà inscrite → jamais
       if (sessionStorage.getItem("niv-welcome-session")) return; // déjà vue cette visite
@@ -23,7 +35,7 @@ export default function WelcomePopup({ enabled, code, text }) {
       try { sessionStorage.setItem("niv-welcome-session", "1"); } catch { /* ignore */ }
     }, 500); // dès l'arrivée, une fois par connexion
     return () => clearTimeout(t);
-  }, [enabled]);
+  }, [enabled, pathname]);
 
   function close() {
     // On ferme, mais on NE marque PAS comme inscrite → ça réapparaîtra.
