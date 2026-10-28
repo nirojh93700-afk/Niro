@@ -471,5 +471,8 @@ En attente de SA décision :
 - Maquette (captures réelles, fiche ajoutée en local puis retirée) : https://claude.ai/artifact/3psMJXTiwmLgku2vvdW9kd —
   slug proposé `verre-tumbler-cristal-grave`, gabarit du verre à whisky (parcours photo / texte, texte +3 €, date dans l'image),
   face seulement, 19,90 / 37,90 / 71,90 € (lot de 4 livraison offerte), catégorie verres.
+- v2 (28/10, « ajoute cette option, elle est plus grande ») : 2 tailles sur la même fiche — 37 cl (AAA0046319226) et **39 cl High
+  Tumbler** (AAA0046319222, Ø 7 × H 14,4 cm, coût à donner) —, même prix 19,90 / 37,90 / 71,90 € ; gravure = celle de la flûte
+  (40 modèles, lettre fleurie, texte, photo ou logo ; prénom / initiale / date +3 €). Verres non indiqués « trempés » chez Metro.
 - Avant le « applique » : ses vraies photos (celles envoyées font 192 px ; la 1re montre un verre taillé, pas le Montese),
   une photo gravée, un essai sur la paroi évasée ; fond du verre plus tard avec une photo du fond.
