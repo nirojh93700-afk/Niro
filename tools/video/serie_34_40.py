@@ -120,7 +120,7 @@ VIDEOS = {
            titre="Bijoux gravés", accroche="Un prénom, une date, un mot : gravés pour celle ou celui que vous aimez",
            fin=("nivcreation.fr", "Choisissez le vôtre", "Gravé en France"),
            items=[B[k] for k in ["coeur2", "double3", "3coeurs", "femme", "plaques1", "cordon", "enveloppe", "coeur1",
-                                  "double6", "plaques2", "otdore"]]
+                                  "double6", "plaques2"]]
                  + [(CH, "Et aussi", "Cristal, verres et marque-pages gravés")]
                  + [C["couple"], V["wface"], M["m1e7"]]),
   35: dict(nom="cristal", style="ecrin", seg=2.2, ruban="✦  LE CRISTAL GRAVÉ  ✦",
@@ -137,11 +137,11 @@ VIDEOS = {
            titre="Verres & carafe gravés", accroche="Un prénom, un logo, une photo : pour trinquer à vos moments",
            fin=("Trinquez gravé", "Verres, flûtes et carafe personnalisés", "nivcreation.fr"),
            items=[V[k] for k in ["wface", "fl3", "cnom", "dale", "carafe", "wfond", "fl6", "clogo", "papa2", "geniet",
-                                  "c1892", "bourbon", "cfond", "fl2"]]),
+                                  "c1892", "bourbon", "cfond", "ccoul"]]),
   38: dict(nom="verres-cristal-marque-pages", style="ecrin", seg=2.0, ruban="✦  GRAVÉ POUR VOUS  ✦",
            titre="Nos créations gravées", accroche="Verres, cristal et marque-pages",
            fin=("Une pièce, une histoire", "Gravée à la commande dans notre atelier", "nivcreation.fr"),
-           items=[(CH, "Les verres", "Gravés à votre image")] + [V[k] for k in ["papa1", "fl5", "ccoul", "poule"]]
+           items=[(CH, "Les verres", "Gravés à votre image")] + [V[k] for k in ["papa1", "clogo", "ccoul", "poule"]]
                  + [(CH, "Le cristal", "Votre photo, ou nos modèles")] + [C[k] for k in ["couple", "eiffel", "hcouple", "lys"]]
                  + [(CH, "Les marque-pages", "Pour les amoureux de lecture")] + [M[k] for k in ["m1e3", "m2e6", "m1e6"]]),
   39: dict(nom="verres-marque-pages-cristal", style="carte", seg=2.0,
@@ -153,7 +153,7 @@ VIDEOS = {
   40: dict(nom="bijoux-verres-cristal", style="plein", seg=1.9,
            titre="Offrir un cadeau gravé", accroche="Bijoux, verres et cristal",
            fin=("Un cadeau unique", "Gravé à la commande dans notre atelier", "nivcreation.fr"),
-           items=[(CH, "Les bijoux", "Un prénom à porter")] + [B[k] for k in ["double3", "plaques1", "enveloppe", "otdore"]]
+           items=[(CH, "Les bijoux", "Un prénom à porter")] + [B[k] for k in ["double3", "plaques1", "enveloppe", "coeur2"]]
                  + [(CH, "Les verres", "Un message à partager")] + [V[k] for k in ["dale", "fl3", "papa2"]]
                  + [(CH, "Le cristal", "Un souvenir en relief")] + [C[k] for k in ["femme", "cr_coeur", "famille", "genie"]]),
 }
@@ -173,6 +173,19 @@ def ajuste(d, t, path, size, mw, mini=40):
         f = F(path, s)
         if d.textlength(t, font=f) <= mw: return f
     return F(path, mini)
+
+def charger(path):
+    """Ouvre la photo. Les exemples de marque-pages ont de grandes marges crème : on les retire (le marque-page n'est
+    jamais coupé, seules les marges vides autour disparaissent) pour qu'il apparaisse en grand."""
+    im = Image.open(path).convert("RGB")
+    if os.sep + "marque-pages" + os.sep in path:
+        a = np.asarray(im).astype(int); coin = a[5, 5]
+        masque = np.abs(a - coin).sum(axis=2) > 60
+        xs = np.where(masque.mean(axis=0) > 0.08)[0]; ys = np.where(masque.mean(axis=1) > 0.04)[0]
+        if len(xs) and len(ys):
+            m = 30
+            im = im.crop((max(0, xs.min() - m), max(0, ys.min() - m), min(im.width, xs.max() + m), min(im.height, ys.max() + m)))
+    return im
 
 def fit(im, mw, mh):
     s = min(mw / im.width, mh / im.height)
@@ -205,7 +218,7 @@ def arrondi(im, r):
 
 # --- Styles : chaque plan = (fond fixe, photo, position, calque texte) ; le mouvement se fait au rendu --------
 def plan_creme(path, nom, sous, k, n, cfg):
-    im = Image.open(path).convert("RGB"); fond = flou(im)
+    im = charger(path); fond = flou(im)
     ph = fit(im, W - 80, int(H * 0.56)); pos = ((W - ph.width) // 2, int(H * 0.36) - ph.height // 2)
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); band = Image.new("L", (1, H), 0); p = band.load()
     for y in range(H): p[0, y] = int(215 * max(0, (y - 1120) / (H - 1120)) ** 1.15)
@@ -218,7 +231,7 @@ def plan_creme(path, nom, sous, k, n, cfg):
     return dict(fond=fond, photo=ph, pos=pos, ov=ov, zoom=(1.08, 1.0), mode="fond")
 
 def plan_ecrin(path, nom, sous, k, n, cfg):
-    im = Image.open(path).convert("RGB")
+    im = charger(path)
     fond = halo(Image.new("RGB", (W, H), INK), (70, 50, 18), W // 2, 820, 620, 0.55)
     ph = fit(im, 940, 1060); x0 = (W - ph.width) // 2; y0 = 800 - ph.height // 2
     d = ImageDraw.Draw(fond)
@@ -234,7 +247,7 @@ def plan_ecrin(path, nom, sous, k, n, cfg):
     return dict(fond=fond, photo=ph, pos=(x0, y0), ov=ov, zoom=(1.0, 1.06), mode="cadre")
 
 def plan_carte(path, nom, sous, k, n, cfg):
-    im = Image.open(path).convert("RGB")
+    im = charger(path)
     fond = Image.new("RGB", (W, H), CREAM)
     ph = fit(im, 960, 1120); x0 = (W - ph.width) // 2
     tmp = ImageDraw.Draw(Image.new("RGB", (10, 10)))
@@ -253,7 +266,7 @@ def plan_carte(path, nom, sous, k, n, cfg):
     return dict(fond=fond, photo=ph, pos=(x0, y0), ov=ov, zoom=(1.0, 1.0), mode="glisse", rayon=22)
 
 def plan_plein(path, nom, sous, k, n, cfg):
-    im = Image.open(path).convert("RGB"); fond = flou(im, 0.55, (10, 8, 5))
+    im = charger(path); fond = flou(im, 0.55, (10, 8, 5))
     ph = fit(im, W, int(H * 0.62)); pos = ((W - ph.width) // 2, int(H * 0.40) - ph.height // 2)
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
     d.text((60, 70), f"{k:02d}", font=F(SANSB, 64), fill=GOLD)
