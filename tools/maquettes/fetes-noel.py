@@ -112,7 +112,7 @@ IMAGES = [
     (19, "« Sous les étoiles de Noël »", "mots"), (20, "« Mon beau sapin »", "mots"), (21, "« Un soupçon de magie »", "mots"),
     (22, "« Esprit d'hiver »", "mots"), (23, "« Joyeux Noël »", "mots"), (24, "« Petits bonheurs de Noël »", "mots"), (25, "« La saison des merveilles »", "mots"),
     # 28/10 soir : il a renvoyé ses 16 images « pour qu'il ne manque rien » — 14 étaient déjà là (contrôle par empreinte), 2 manquaient :
-    (26, "Renne aux bois décorés", "filigrane"), (27, "Père Noël à lunettes, signe de paix", "filigrane"),
+    (26, "Renne aux bois décorés", ""), (27, "Père Noël à lunettes, signe de paix", ""),
 ]
 NB_IMAGES = len(IMAGES)
 NOEL["images"] = NB_IMAGES

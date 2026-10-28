@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  puis VERSIONS 3 à 8 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSIONS 3 à 9 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -101,6 +101,8 @@
     dans Gestion (image de banque, à vérifier avant de graver). Les n° 6 (crèche) et 9 (cerfs et traîneau) n'étaient pas dans ce renvoi
     mais restent. **27 images** partout (`NB_IMAGES`, `FETES[0].images`, KPI, grille : Dessins 18 · Mots 9). 94 vérifs, 0 erreur.
     ⛔ Méthode à garder : toute image renvoyée se compare par empreinte aux fichiers existants AVANT d'être ajoutée.
+  · **v9 (28/10 soir)** : le gérant a envoyé les versions PROPRES (sans filigrane) des n° 26 et 27 → fichiers remplacés (même
+    numéro, même nom, empreinte vérifiée), étiquette « ⚠ filigrane du vendeur » retirée. 94 vérifs, 0 erreur.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.
