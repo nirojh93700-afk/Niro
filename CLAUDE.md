@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  puis VERSIONS 3 et 4 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSIONS 3 à 5 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -75,6 +75,8 @@
     modèle choisi. Noël éteint = la carte disparaît et un modèle de Noël choisi est vidé. ⛔ À la construction : **jamais les images de
     Noël dans la grille des modèles habituels** — un `mode: "noel"` à part dans `ParcoursGuide` (carte + grille + numéros « Noël n° X »),
     sur chaque produit coché. Vérifié 390 / 1280 : 84 vérifs, 0 erreur, 0 débordement (`z-index` ajouté au numéro des tuiles).
+  · v5 (28/10 soir, « mets cette photo à la place de l'autre ») : photo du sachet rouge = celle qu'il a envoyée (sachet remis en main,
+    table de Noël, filigrane INEDACO) → `assets/noel/emballages/7-sachet-rouge-O-remise.jpg` ; l'ancienne (A) reste dans le dossier, inutilisée.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.

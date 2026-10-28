@@ -129,7 +129,7 @@ CRISTAUX_JS = [dict(nom=nm, src=uri(os.path.join(PUB, "produits", "cristaux-grav
 # prix = ceux validés par le gérant le 28/10 soir (« C'est bon, mets ces prix avec le pack Noël ») ; coût = coût rendu (facture Temu + part du port) ;
 # stock = quantités reçues. Photos = les siennes, sans cotes (règle du 28/10). La boîte à ruban existe en vert et bleu nuit (la blanche n'a pas été commandée).
 EMB_NOEL = [
-    dict(id="sachet", nom="Sachet rouge de Noël", d="12 × 17 cm · plat, fermeture adhésive · reste en lettre suivie", px=0.9, cout=0.13, stock=52, photo="7-sachet-rouge-A.jpg", colis=False),
+    dict(id="sachet", nom="Sachet rouge de Noël", d="12 × 17 cm · plat, fermeture adhésive · reste en lettre suivie", px=0.9, cout=0.13, stock=52, photo="7-sachet-rouge-O-remise.jpg", colis=False),
     dict(id="pochette", nom="Pochette à languette dorée", d="Bordeaux et or · pour un collier ou un bracelet · lettre suivie", px=2.9, cout=0.80, stock=40, photo="1-pochette-F.jpg", colis=False),
     dict(id="sac", nom="Sac de Noël à anses", d="Bordeaux, liseré or, nœud satin · 19 × 15 × 7 cm · plié à plat", px=2.9, cout=1.38, stock=20, photo="2-sac-M.jpg", colis=False),
     dict(id="ruban", nom="Boîte à ruban « Merry Christmas »", d="11,5 × 7 × 4,5 cm · aimantée · vert sapin ou bleu nuit · part en colis", px=3.9, cout=0.72, stock=48, photo="3-5-boite-ruban-C-vert-recadree.jpg", colis=True, couleurs=True),
