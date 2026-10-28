@@ -474,5 +474,10 @@ En attente de SA décision :
 - v2 (28/10, « ajoute cette option, elle est plus grande ») : 2 tailles sur la même fiche — 37 cl (AAA0046319226) et **39 cl High
   Tumbler** (AAA0046319222, Ø 7 × H 14,4 cm, coût à donner) —, même prix 19,90 / 37,90 / 71,90 € ; gravure = celle de la flûte
   (40 modèles, lettre fleurie, texte, photo ou logo ; prénom / initiale / date +3 €). Verres non indiqués « trempés » chez Metro.
+- v3 (28/10, « j'ai qu'une photo… montre des exemples de gravure et mets comme des images ») : 7 images « Exemple » dans la galerie,
+  faites avec le moteur d'aperçu du site (modèles 22, 24, 27, 30 sans prénoms dessinés dedans, photos d'exemple, texte seul ;
+  prénoms Camille, Léa, Paul, Inès) → `docs/maquettes/assets/verre-tumbler/`. Recette : `tools/maquettes/verre-tumbler/fiche-locale.py`
+  (fiche ajoutée en local), build, `next start -p 3140`, `node tools/maquettes/verre-tumbler/exemples.cjs <dossier>`, puis `git checkout`.
+  Les photos Amazon (floues, verre taillé) sont retirées ; seule la photo Metro de chaque verre reste.
 - Avant le « applique » : ses vraies photos (celles envoyées font 192 px ; la 1re montre un verre taillé, pas le Montese),
   une photo gravée, un essai sur la paroi évasée ; fond du verre plus tard avec une photo du fond.
