@@ -1,9 +1,9 @@
-## 🎄 RUBRIQUE « FÊTES » DANS GESTION (NOËL D'ABORD) — MAQUETTE DU 28/10/2026, EN ATTENTE DE SON AVIS — RIEN en ligne
+## 🎄 RUBRIQUE « FÊTES » DANS GESTION (NOËL D'ABORD) — ✅ MAQUETTE ENREGISTRÉE TELLE QUELLE LE 28/10/2026 (« enregistre la maquette », version 1) — RIEN en ligne
 > Gérant : « un nouveau truc pour Noël… des gravures vraiment pour Noël… des sacs, des boîtes pour Noël… que pour les verres, la carafe,
 > les supports téléphone, le cristal, tout ce qui est gravure, pas le mariage, pas les bijoux… dès que je décoche, tout ce qui a rapport
 > avec Noël doit disparaître, ça doit revenir normal… une alerte deux mois avant… après ce sera la Saint-Valentin etc.… il faut des
 > numéros sur les images pour que le client sélectionne comme pour les autres… je veux pas de bug ».
-- **Artifact** https://claude.ai/artifact/215micVgntigmyRFXsG49e (version 1) · générateur `tools/maquettes/fetes-noel.py <dossier css> <capture
+- **Artifact** https://claude.ai/artifact/215micVgntigmyRFXsG49e (version 1 = CELLE à reproduire au « applique », ne pas la modifier sans sa demande) · générateur `tools/maquettes/fetes-noel.py <dossier css> <capture
   /produit/verre-a-vin-grave> <sortie>` (+ `fetes-noel-export.mjs` qui lit le parcours du vin dans `products.js`) ; css = les 3 feuilles en ligne,
   capture = `curl nivcreation.fr/produit/verre-a-vin-grave`. Le HTML (2,4 Mo) n'est PAS commité (règle du 10/10). Vérifié Chromium 390 / 1280 :
   0 débordement, 0 erreur JS, 44 vérifications (`scratchpad/t-fetes.mjs`) : 30 + 25 modèles, filtre Noël, n° 3 + « Camille » + boîte = 25,80 €,
@@ -29,6 +29,9 @@
   (fusion par clé, jamais de remplacement en bloc), images dans `public/produits/noel/`, `ParcoursGuide` lit un groupe « Noël » ajouté par le
   catalogue (`getCatalog`) sur les produits cochés, `ProductDetail` ajoute l'emballage de fête (prix au paiement), `consignesGravure` écrit
   « Modèle de Noël n° X » avec la vignette, alerte J-60 dans le heartbeat + tableau de bord, `catalogAudit` signale une fête passée encore allumée.
+- **Photos des emballages de Noël (commande Temu PO-069-16758227989111712 du 17/10, 13 lignes / 16 articles, reçue le 28/10)** : à récupérer sur
+  les fiches Temu. Temu est bloqué dans les anciennes sessions : le gérant a créé le 28/10 l'environnement cloud « Temu » (temu.com, *.temu.com,
+  kwcdn.com, *.kwcdn.com + les 3 adresses du site + gestionnaires de paquets) → le faire dans une NOUVELLE session sur cet environnement.
 
 ## 🎨 IMAGES VRAIMENT PERSONNALISÉES — À REDIRE AUX CLIENTES (gérant, 28/10/2026 : « beaucoup de gens demandent des images personnalisées… il faut leur redire »)
 - Beaucoup de clientes demandent une image personnalisée. **Réponse à donner (mail, devis, agent e-mail, réseaux) : OUI, l'atelier peut
