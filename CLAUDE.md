@@ -6,7 +6,7 @@
   (elle décrit son idée → devis). L'image est comprise ; seuls les textes et dates se paient, au tarif de la fiche (règle du 26/10).
 - ❓ **À DEMANDER AU GÉRANT avant de chiffrer** : si l'atelier DESSINE l'image (création d'après une idée, pas une image fournie), y a-t-il un
   prix de création en plus ? Tant qu'il n'a pas répondu, ne pas annoncer de prix de création.
-- ✅ Gérant « OK, vas-y » (28/10) : règle « IMAGE PERSONNALISÉE » dans la consigne de l'agent e-mail (`registry.js` ; image à dessiner = aucun prix de création, validation du gérant), question « Pouvez-vous graver une image vraiment personnalisée ? » dans la FAQ (`faq.js`), et phrase « ✦ Une image vraiment personnalisée ? C'est possible… » dans la case « Une demande particulière » des fiches (`CustomRequestBox.jsx`, verres / mariage / cadeaux / déco). Prêt en local, en attente de son « pousse ».
+- ✅ Gérant « OK, vas-y » (28/10) : règle « IMAGE PERSONNALISÉE » dans la consigne de l'agent e-mail (`registry.js` ; image à dessiner = aucun prix de création, validation du gérant), question « Pouvez-vous graver une image vraiment personnalisée ? » dans la FAQ (`faq.js`), et phrase « ✦ Une image vraiment personnalisée ? C'est possible… » dans la case « Une demande particulière » des fiches (`CustomRequestBox.jsx`, verres / mariage / cadeaux / déco). ✅ EN LIGNE le 28/10 (« pousse »).
 
 ## 🥃 VERRE TUMBLER EN CRISTAL + COCKTAIL À 4 FAÇONS DE GRAVER — ✅ EN LIGNE LE 28/10/2026 (gérant : « si tout est bon, tu peux mettre en ligne »)
 - **`verre-tumbler-cristal-grave`** (rayon « Verres à whisky ») : 2 tailles sur la même fiche, comme le verre à vin — 37 cl (Metro Montese

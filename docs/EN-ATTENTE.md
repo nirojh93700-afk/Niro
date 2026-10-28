@@ -439,7 +439,7 @@ En attente de SA décision :
 - Newsletter : Monica Gomes retirée (124 inscrites). Adresses mortes à retirer s'il le dit : agatheogot@gmail.com, stephanieb2a@gamil.com.
 
 - **27/10/2026 — Violette (verre whisky « Colombes & cœur », 27,90 €)** : mail sans aperçu envoyé à 13 h 02 (aperçu préparé après paiement). Fichier de gravure VALIDÉ par le gérant : `docs/gravures/violette-colombes/` (45,9 × 53,6 mm). À sa réponse « oui » : préparer le devis 27,90 € + livraison, le montrer avant envoi.
-- **27/10/2026 — Guide « Idées & conseils » marque-pages** (`/idees/marque-pages-personnalises`, maquette `docs/maquettes/guide-marque-pages.html`) : construit et vérifié en local, EN ATTENTE de son « pousse ».
+- **27/10/2026 — Guide « Idées & conseils » marque-pages** (`/idees/marque-pages-personnalises`, maquette `docs/maquettes/guide-marque-pages.html`) : ✅ en ligne (vérifié le 28/10).
 
 ## 🎄 PLAN NOËL 2026 + GOOGLE SHOPPING + PORT DES VERRES — 28/10/2026 (objectif du gérant : 4 000 € par mois) — ✅ ENREGISTRÉ TEL QUEL (« Enregistre, on verra plus tard »), RIEN en ligne, RIEN envoyé
 - À reprendre QUAND IL LE DIT : ses 3 réponses manquent (dates limites 10 / 14 déc. ?, port des verres 7,90 / 9,90 / 12,90 ?, « pousse » pour la correction du flux).
@@ -483,11 +483,11 @@ En attente de SA décision :
   une photo gravée, un essai sur la paroi évasée ; fond du verre plus tard avec une photo du fond.
 
 - ✅ 28/10 : **verre tumbler EN LIGNE** (2 tailles, 35 modèles, lettre fleurie, exemples), **cocktail** à 4 façons de graver, mini-aperçu
-  sans textes superposés, texte des conseils photo du cristal. Reste : coût du 39 cl, vraies photos gravées des deux tailles.
+  sans textes superposés, texte des conseils photo du cristal. Reste : coût du 39 cl, vraies photos gravées des deux tailles. 28/10 : ses 3 photos du 37 cl (ambiance, whisky, lot de 6) ajoutées à la galerie (192 px, un peu floues : originales à demander).
 - ⚠️ La correction du flux Google (`cristal-deja-grave` retiré) a été RETIRÉE de l'envoi du 28/10 (pas validée) : à remettre sur son « pousse »
   (`!p.pageDediee` dans `src/app/flux-google.xml/route.js`, commit 17a8b1e6).
 
 ## 🎨 IMAGES PERSONNALISÉES (28/10/2026)
 - Règle notée dans CLAUDE.md : toujours redire aux clientes qu'on fait des images vraiment personnalisées (verres, cristal, support téléphone…).
 - Question au gérant : prix de création quand l'atelier dessine l'image d'après une idée ?
-- Proposé : l'ajouter à la consigne de l'agent e-mail + à la FAQ (sur son « applique »).
+- ✅ EN LIGNE le 28/10 (« pousse ») : consigne de l'agent e-mail, question de la FAQ, phrase dans la case « Une demande particulière ».
