@@ -1,3 +1,13 @@
+## 🎨 IMAGES VRAIMENT PERSONNALISÉES — À REDIRE AUX CLIENTES (gérant, 28/10/2026 : « beaucoup de gens demandent des images personnalisées… il faut leur redire »)
+- Beaucoup de clientes demandent une image personnalisée. **Réponse à donner (mail, devis, agent e-mail, réseaux) : OUI, l'atelier peut
+  faire une image vraiment personnalisée et la graver** partout où il y a de la gravure : **verres** (vin, flûte, whisky, cocktail, tumbler,
+  carafe), **cristal**, **support téléphone**, et les autres produits gravés. Ne jamais répondre qu'il faut choisir parmi nos modèles.
+- Rappeler le chemin : sur la fiche, « Ma photo ou mon logo » (elle envoie son image) ou le bouton « Faire une demande particulière »
+  (elle décrit son idée → devis). L'image est comprise ; seuls les textes et dates se paient, au tarif de la fiche (règle du 26/10).
+- ❓ **À DEMANDER AU GÉRANT avant de chiffrer** : si l'atelier DESSINE l'image (création d'après une idée, pas une image fournie), y a-t-il un
+  prix de création en plus ? Tant qu'il n'a pas répondu, ne pas annoncer de prix de création.
+- 💡 Proposé, pas fait : l'écrire dans la consigne de l'agent e-mail (`src/lib/agents/registry.js`) et dans la FAQ, pour que ce soit dit tout seul.
+
 ## 🥃 VERRE TUMBLER EN CRISTAL + COCKTAIL À 4 FAÇONS DE GRAVER — ✅ EN LIGNE LE 28/10/2026 (gérant : « si tout est bon, tu peux mettre en ligne »)
 - **`verre-tumbler-cristal-grave`** (rayon « Verres à whisky ») : 2 tailles sur la même fiche, comme le verre à vin — 37 cl (Metro Montese
   AAA0046319226, Ø 8,5 × H 10) et grand 39 cl (Montese High Tumbler AAA0046319222, Ø 7 × H 14,4). 19,90 / 37,90 / 71,90 € les deux tailles.

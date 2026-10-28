@@ -486,3 +486,8 @@ En attente de SA décision :
   sans textes superposés, texte des conseils photo du cristal. Reste : coût du 39 cl, vraies photos gravées des deux tailles.
 - ⚠️ La correction du flux Google (`cristal-deja-grave` retiré) a été RETIRÉE de l'envoi du 28/10 (pas validée) : à remettre sur son « pousse »
   (`!p.pageDediee` dans `src/app/flux-google.xml/route.js`, commit 17a8b1e6).
+
+## 🎨 IMAGES PERSONNALISÉES (28/10/2026)
+- Règle notée dans CLAUDE.md : toujours redire aux clientes qu'on fait des images vraiment personnalisées (verres, cristal, support téléphone…).
+- Question au gérant : prix de création quand l'atelier dessine l'image d'après une idée ?
+- Proposé : l'ajouter à la consigne de l'agent e-mail + à la FAQ (sur son « applique »).
