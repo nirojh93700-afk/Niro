@@ -481,3 +481,8 @@ En attente de SA décision :
   Les photos Amazon (floues, verre taillé) sont retirées ; seule la photo Metro de chaque verre reste.
 - Avant le « applique » : ses vraies photos (celles envoyées font 192 px ; la 1re montre un verre taillé, pas le Montese),
   une photo gravée, un essai sur la paroi évasée ; fond du verre plus tard avec une photo du fond.
+
+- ✅ 28/10 : **verre tumbler EN LIGNE** (2 tailles, 35 modèles, lettre fleurie, exemples), **cocktail** à 4 façons de graver, mini-aperçu
+  sans textes superposés, texte des conseils photo du cristal. Reste : coût du 39 cl, vraies photos gravées des deux tailles.
+- ⚠️ La correction du flux Google (`cristal-deja-grave` retiré) a été RETIRÉE de l'envoi du 28/10 (pas validée) : à remettre sur son « pousse »
+  (`!p.pageDediee` dans `src/app/flux-google.xml/route.js`, commit 17a8b1e6).

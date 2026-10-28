@@ -9,6 +9,7 @@ export default function MiniGlassPreview({
   glassSrc, contain = false,
   artSrc, artLayout,        // photo/motif posé sur le verre + son placement {cx,cy,size}
   lines = [], textLayout,   // texte gravé + son placement {cx,cy,scale}
+  zoneTexts = [],           // modèle à zones (banderole, cadre) : [{ text, x, y, size }] posés à leur endroit exact
   fontClass = "", color = "#3a2f1d",
   onClose,
 }) {
@@ -52,6 +53,15 @@ export default function MiniGlassPreview({
             ))}
           </div>
         )}
+        {zoneTexts.map((z, i) => (
+          <div
+            key={"z" + i}
+            className="mini-text"
+            style={{ left: `${z.x * 100}%`, top: `${z.y * 100}%`, fontSize: `${Math.max(4, z.size * MW)}px`, color }}
+          >
+            <span className={fontClass}>{z.text}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

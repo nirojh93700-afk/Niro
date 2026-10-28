@@ -27,6 +27,7 @@ export const PHOTO_GRAVEE = {
   "bracelet-femme-acier": "/produits/bracelet-femme-acier-grave.jpg",
   "verre-a-whisky-fete-des-peres": "/produits/verre_whisky_papa_monde_moustache.jpg",
   "verre-a-cocktail-grave": "/produits/verre_a_cocktail_exemple_logo.jpg",
+  "verre-tumbler-cristal-grave": "/produits/verre_tumbler_37_ex_maries.jpg",
 };
 
 // Les 9 puzzles en bois (maquette « Jeux pour enfants », 07/10/2026) : EN VENTE depuis le 09/10/2026
@@ -52,7 +53,7 @@ export const UNIVERS = [
              { nom: "Porte-clés & USB", slugs: ["porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle", "cle-usb-cristal-3d"] }] },
   { id: "verres", nom: "Verres & Carafes", short: "Verres & Carafes", pourqui: true, img: "/produits/verre_a_whisky_exemple_face.jpg",
     accroche: "Verres à whisky, à cocktail, à vin, flûtes et carafe, gravés à la commande.",
-    rayons: [{ nom: "Verres à whisky", slugs: ["verre-a-whisky-grave", "verre-a-whisky-fete-des-peres"] },
+    rayons: [{ nom: "Verres à whisky", slugs: ["verre-a-whisky-grave", "verre-tumbler-cristal-grave", "verre-a-whisky-fete-des-peres"] },
              { nom: "Vin, champagne, cocktail & carafe", slugs: ["verre-a-vin-grave", "flute-a-champagne-gravee", "verre-a-cocktail-grave", "carafe-a-whisky-gravee"] }] },
   { id: "enfants", nom: "Bébé & Enfant", short: "Bébé & Enfant", neuf: true, img: "/produits/couverts_enfants_ex_enfant.jpg",
     accroche: "De la naissance aux premiers repas, des cadeaux personnalisés avec le prénom de votre enfant.",
@@ -91,7 +92,7 @@ export const POURQUI = { elle: "Pour elle", lui: "Pour lui", couple: "Pour un co
 const COUPLE = new Set(["collier-couple-coeur-lot2", "collier-couple-puzzle", "flute-a-champagne-gravee", "verre-a-vin-grave",
   "porte-cles-cristal-led-coeur", "cristal-photo-3d-vertical", "cristal-photo-3d-horizontal"]);
 const QUI_EXTRA = {
-  "verre-a-cocktail-grave": ["elle", "lui", "couple"], "lampe-led-paris-saint-germain": ["lui", "enfant"],
+  "verre-a-cocktail-grave": ["elle", "lui", "couple"], "verre-tumbler-cristal-grave": ["elle", "lui", "couple"], "lampe-led-paris-saint-germain": ["lui", "enfant"],
   "porte-stylo-coq-coupe-du-monde": ["lui", "enfant"], "porte-stylo-portugal-coupe-du-monde": ["lui", "enfant"],
   "porte-stylo-argentine-coupe-du-monde": ["lui", "enfant"], "porte-stylo-espagne-coupe-du-monde": ["lui", "enfant"],
   "support-telephone-bois-grave": ["lui", "elle"], "support-telephone-bois-ajoure": ["lui", "elle"],

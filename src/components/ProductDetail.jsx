@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "./CartContext";
 import { formatEuro, roundTo90 } from "@/lib/format";
-import { getCategoryLabel } from "@/lib/products";
+import { getCategoryLabel, GUIDE_CRISTAL_TEXTE } from "@/lib/products";
 import { getProductInfo } from "@/lib/productInfo";
 import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import VacationNotice from "@/components/VacationNotice";
@@ -342,7 +342,7 @@ export default function ProductDetail({ product, realisations = [] }) {
   // bonnes / mauvaises photos s'ouvre quand la cliente touche « Choisir une photo ».
   const guideNote = (product.personalizationFields || []).find((f) => f.type === "note" && /guide-photo/.test(f.image || ""));
   const aUnePhoto = (product.personalizationFields || []).some((f) => f.type === "photo");
-  const guidePhoto = guideNote ? { image: guideNote.image, texte: guideNote.text || "" }
+  const guidePhoto = guideNote ? { image: guideNote.image, texte: guideNote.text || (product.crystal3d ? GUIDE_CRISTAL_TEXTE : GUIDE_PHOTO_GRAVURE.texte) }
     : (aUnePhoto && (RV || product.parcoursGuide)) ? (product.parcoursGuide?.guidePhoto || GUIDE_PHOTO_GRAVURE) : null;
   const variantStock = stockMap[variant.stockId || variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
@@ -664,8 +664,9 @@ export default function ProductDetail({ product, realisations = [] }) {
   const previewColor = (colorField && fieldValues[colorField.key]) || ENGRAVE_PREVIEW;
 
   // Lignes de texte à montrer dans l'aperçu (champs texte non vides).
+  // (Le texte du FOND n'en fait pas partie : il ne s'affiche que côté fond, mode « les deux ».)
   const previewLines = visibleFields
-    .filter((f) => (f.type === "text" || f.type === "textarea" || !f.type) && !f.noPreview)
+    .filter((f) => (f.type === "text" || f.type === "textarea" || !f.type) && !f.noPreview && f.key !== "texteFond")
     .flatMap((f) => (fieldValues[f.key] || "").split("\n"))
     .map((l) => l.trim())
     .filter(Boolean);
@@ -713,12 +714,41 @@ export default function ProductDetail({ product, realisations = [] }) {
   let editLines;
   if (dualMode && side === "fond") {
     editLines = (fieldValues["texteFond"] || "").split("\n").map((l) => l.trim()).filter(Boolean);
-  } else if (dualMode && side === "face") {
-    editLines = ["texte", "texte2"].flatMap((k) => (fieldValues[k] || "").split("\n")).map((l) => l.trim()).filter(Boolean);
-    if (decorSym && editLines.length) editLines[0] = `${decorSym} ${editLines[0]} ${decorSym}`;
   } else {
+    // Face (y compris en mode « les deux ») : tous les textes de la face — texte, date, et les
+    // prénoms d'un modèle ou d'une lettre fleurie (verre à cocktail, 28/10/2026).
     editLines = (styleTextInMotif || (styleZone && styleMotifSrc)) ? [] : previewLines;
   }
+  // Mini-aperçu d'un modèle à zones (banderole, cadre) : le nom et la date s'écrivent À LEUR
+  // ENDROIT (points t / d du modèle), jamais empilés au milieu du dessin (28/10/2026, gérant :
+  // « fais attention que les textes soient pas superposés »).
+  const miniZoneTexts = (() => {
+    if (styleTextInMotif || !styleZone || !styleMotifSrc || editPhotoSrc || !previewLines.length) return null;
+    const dateTxt = (fieldValues["date"] || "").trim();
+    const nom = previewLines.filter((l) => l !== dateTxt).join(" ");
+    const ml = motifZone
+      ? { cx: (motifZone.left + motifZone.width / 2) / 100, cy: (motifZone.top + motifZone.height / 2) / 100, size: Math.min(motifZone.width / 100, (motifZone.height / 100) / (motifAspect || 1)), aspect: motifAspect || 1 }
+      : { ...photoLayout, aspect: photoLayout?.aspect || motifAspect || 1 };
+    const size = ml.size ?? 0.2, aspect = ml.aspect ?? 1;
+    const pt = (p) => ({ x: (ml.cx ?? 0.5) + ((p?.x ?? 0.5) - 0.5) * size, y: (ml.cy ?? 0.3) + ((p?.y ?? 0.5) - 0.5) * size * aspect });
+    // Taille : jamais plus large que ~60 % du modèle (≈ 0,55 em par caractère).
+    const taille = (txt, base) => Math.min(base, (size * 0.5) / Math.max(1, txt.length * 0.55));
+    const t = nom && styleZone.t ? pt(styleZone.t) : null;
+    const d = dateTxt && styleZone.d ? pt(styleZone.d) : null;
+    // Nom et date sur la même ligne du modèle (banderole) : une seule ligne, sinon ils se chevauchent.
+    if (t && d && Math.abs(t.y - d.y) < size * aspect * 0.08) {
+      const txt = `${nom} · ${dateTxt}`;
+      const tt = taille(txt, size * 0.065);
+      // Trop long pour rester lisible dans la petite fenêtre (150 px) : les prénoms seuls ;
+      // la date reste écrite dans la légende sous la grande photo.
+      if (tt * 150 < 4.2) return [{ text: nom, ...t, x: (t.x + d.x) / 2, size: taille(nom, size * 0.065) }];
+      return [{ text: txt, x: (t.x + d.x) / 2, y: (t.y + d.y) / 2, size: tt }];
+    }
+    const out = [];
+    if (t) out.push({ text: nom, ...t, size: taille(nom, size * 0.09) });
+    if (d) out.push({ text: dateTxt, ...d, size: taille(dateTxt, size * 0.07) });
+    return out;
+  })();
   const setPhotoLayoutSide = (dualMode && side === "fond") ? setPhotoLayoutFond : setPhotoLayout;
   const setTextLayoutSide = (dualMode && side === "fond") ? setTextLayoutFond : setTextLayout;
   const hasTextFields = visibleFields.some(
@@ -1193,7 +1223,8 @@ export default function ProductDetail({ product, realisations = [] }) {
           contain={Boolean(product.photoContain)}
           artSrc={editPhotoSrc || styleMotifSrc}
           artLayout={motifZone && styleMotifSrc && !editPhotoSrc ? { cx: (motifZone.left + motifZone.width / 2) / 100, cy: (motifZone.top + motifZone.height / 2) / 100, size: motifZone.width / 100 } : photoLayout}
-          lines={styleTextInMotif ? [] : previewLines}
+          lines={styleTextInMotif || miniZoneTexts ? [] : previewLines}
+          zoneTexts={miniZoneTexts || []}
           textLayout={textLayout}
           fontClass={previewFontClass}
           color={previewColor}
@@ -1296,12 +1327,12 @@ export default function ProductDetail({ product, realisations = [] }) {
                 </div>
               </div>
             )}
-            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && !motifZone && (
+            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && !motifZone && !(dualMode && isFond) && (
               <PhotoEngraveLayer key={`style-${styleNum}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
             {/* Texte gravé DANS le modèle, aux emplacements exacts : nom au point "t",
                 date au point "d". La police se réduit pour tenir dans le modèle. */}
-            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && styleZone && previewLines.length > 0 && (
+            {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && styleZone && previewLines.length > 0 && !(dualMode && isFond) && (
               <MotifTextZone
                 key={`zone-${styleNum}`}
                 hasName={previewLines.filter((l) => l !== (fieldValues["date"] || "").trim()).length > 0}

@@ -24,6 +24,7 @@ export const PRODUCT_DATES = {
   "puzzle-jardin-enchante": "2026-10-09",
   "puzzle-fruits-legumes": "2026-10-09",
   "verre-a-cocktail-grave": "2026-09-26",
+  "verre-tumbler-cristal-grave": "2026-10-28",
   "collier-enveloppe-message-secret": "2026-06-02",
   "collier-medaillon-coeur-ouvrable": "2026-06-02",
   "bracelet-homme-identite-gourmette": "2026-06-02",

@@ -50,6 +50,11 @@ export const VARIANT_COSTS = {
   "verre-cocktail-33": 1.80,
   "verre-cocktail-33-2": 3.60,
   "verre-cocktail-33-4": 7.20,
+  // Verre tumbler cristal 37 cl : Metro 14,82 € les 6 × 2 cartons + 10 € de livraison = 3,30 € (28/10/2026).
+  // 39 cl : prix Metro pas encore donné.
+  "verre-tumbler-1": 3.30,
+  "verre-tumbler-2": 6.60,
+  "verre-tumbler-4": 13.20,
 };
 
 // Trouve le coût d'achat unitaire d'un article de commande, en retrouvant la

@@ -799,6 +799,24 @@ Annulation
 Un souci à la réception ?
 - Colis abîmé ou erreur de notre part : écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
+  "verre-tumbler-cristal-grave": {
+    material: `Verre tumbler en cristal
+
+- Cristal sans plomb, deux tailles : 37 cl (Ø 8,5 cm, hauteur 10 cm) ou grand 39 cl (Ø 7 cm, hauteur 14,4 cm).
+- Paroi lisse idéale pour une gravure laser nette et précise.
+- Va au lave-vaisselle (la gravure ne s'efface pas).`,
+    usage: `Personnalisation
+- Un modèle numéroté, une lettre fleurie, votre texte, votre photo ou votre logo.
+
+Entretien
+- Lavage à la main recommandé pour préserver la brillance, lave-vaisselle possible.
+- Évitez les chocs thermiques (ne pas passer du congélateur à l'eau chaude).`,
+    returns: `Produit personnalisé après gravure — non remboursable
+
+Annulation
+- Dans les 24 h suivant la commande, avant le démarrage de la gravure : annulation possible.
+- Après gravure : non remboursable (personnalisation unique, article L221-28).`,
+  },
   "verre-a-whisky-grave": {
     material: `Verre à whisky à base épaisse
 

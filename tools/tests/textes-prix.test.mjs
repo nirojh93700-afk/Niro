@@ -14,9 +14,10 @@ const anomalies = products.flatMap((p) => controleTextesPrix(p).map((a) => `${p.
 verif(anomalies.length === 0, `catalogue : aucune case de texte payée sans prix ou affichée sans être payée${anomalies.length ? "\n   " + anomalies.join("\n   ") : ""}`);
 
 // 2. Une case payée dont le libellé perd son « +3 € » est attrapée.
-let p = fiche("verre-a-cocktail-grave");
-p.personalizationFields.find((f) => f.key === "texte2").label = "Date (sous la photo)";
-verif(controleTextesPrix(p).some((a) => a.cle === "texte2" && a.paye === 3 && !a.affiche), "cocktail : date payée 3 € sans prix écrit → signalée");
+// (Le verre à cocktail est passé au parcours guidé le 28/10/2026 : ses prix sont calculés, on teste un bijou.)
+let p = fiche("collier-double-coeur");
+p.personalizationFields.find((f) => f.key === "recto").label = "Texte au recto";
+verif(controleTextesPrix(p).some((a) => a.cle === "recto" && a.paye === 3 && !a.affiche), "collier double cœur : recto payé 3 € sans prix écrit → signalé");
 
 // 3. Un prix écrit qui n'est plus payé est attrapé.
 p = fiche("bracelet-femme-coeur");

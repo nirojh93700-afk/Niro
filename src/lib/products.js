@@ -99,6 +99,11 @@ const VIN_47_APERCU = {
   },
 };
 
+// Texte des conseils photo du cristal (fenêtre « Avant de choisir votre photo ») : avant le
+// 28/10/2026 la fenêtre n'avait que l'image, sans explication (gérant : « pour le cristal y a pas
+// de texte »). Même ton que celui des verres, adapté à la gravure 3D.
+export const GUIDE_CRISTAL_TEXTE = "Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d'espace autour. Évitez les photos sombres, floues, à contre-jour ou trop serrées, et les groupes où les visages sont trop petits. Votre photo est préparée par notre atelier, puis gravée en 3D au cœur du cristal. L'aperçu en ligne est indicatif.";
+
 export const products = [
   // ----------------------------- BIJOUX --------------------------------------
   {
@@ -1096,7 +1101,7 @@ export const products = [
     personalizationLabel: "Photo à graver en 3D",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Votre photo à graver en 3D", text: "Choisissez une photo nette, bien éclairée, avec le(s) visage(s) bien visible(s)." },
-      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: GUIDE_CRISTAL_TEXTE },
     ],
     images: ["/produits/pyramide_en_verre_de_cristal_50mm.jpg"],
     variants: [{ id: "pyramide-cristal-50mm", title: "50 mm", price: 39.9 }],
@@ -1247,7 +1252,7 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel, +5 €) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "textePos", type: "select", label: "Où placer le texte ? (si texte)", optional: true, options: [{ value: "bas", label: "En bas (sous la photo)" }, { value: "haut", label: "En haut" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" }] },
-      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: GUIDE_CRISTAL_TEXTE },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. Petit socle carré pour la taille Petit ; grand socle rectangle pour les tailles Moyen, Grand et XL." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
@@ -1295,7 +1300,7 @@ export const products = [
       { key: "texte", label: "Texte à graver (optionnel, +5 €) — prénom, date, message", placeholder: "Prénom, date, petit mot…", maxLength: 40, optional: true },
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "textePos", type: "select", label: "Où placer le texte ? (si texte)", optional: true, options: [{ value: "bas", label: "En bas (sous la photo)" }, { value: "haut", label: "En haut" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" }] },
-      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: GUIDE_CRISTAL_TEXTE },
       { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-h-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. Petit socle carré pour la taille Petit ; grand socle rectangle pour les tailles Moyen, Grand et XL." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
@@ -2449,7 +2454,7 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
-      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: GUIDE_CRISTAL_TEXTE },
     ],
     images: [
       "/produits/cristal-pcles-coeur-creme.jpg",
@@ -2474,7 +2479,7 @@ export const products = [
     personalizable: true, personalizationLabel: "Photo à graver (+ texte)",
     personalizationFields: [
       { key: "photo", type: "photo", label: "Photo à graver en 3D", text: "Photo nette et contrastée pour un beau rendu." },
-      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: "" },
+      { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: GUIDE_CRISTAL_TEXTE },
     ],
     images: [
       "/produits/cristal-pcles-rect-creme.jpg",
@@ -2752,7 +2757,8 @@ export const products = [
     // `engrave` / `engraveFond` ci-dessous (largeur ET hauteur respectées).
     zoneAdmin: true,
     engrave: {
-      box: { top: 0.36, left: 0.36, width: 0.28, height: 0.38 },
+      // Remontée le 28/10/2026 (gérant : « un peu plus haut ») = le cadre réglé dans Gestion.
+      box: { top: 0.22, left: 0.36, width: 0.28, height: 0.38 },
       // Étalonnage : le verre (Ø 52 mm) occupe 44 % de la photo carrée → 26 % ≈ 31 mm.
       widthMm: 31,
       heightMm: 31,
@@ -2775,12 +2781,31 @@ export const products = [
       minHeightFrac: 0.08,
       round: true,
     },
+    // Parcours guidé (28/10/2026, gérant : « les options comme t'as fait pour les lettres fleuries,
+    // logo et tout, pour le verre de cocktail aussi ») : modèles et lettre fleurie de la flûte en
+    // plus de la photo et du texte ; face / fond / les deux inchangés. Config posée après la liste
+    // des produits (elle reprend les modèles de la flûte).
     personalizationFields: [
+      { key: "mode", type: "select", label: "Gravure", optional: true, options: [
+        { value: "modele", label: "Un modèle décoré (n°)" },
+        { value: "lettre", label: "Une lettre fleurie" },
+        { value: "texte", label: "Mon propre texte" },
+        { value: "photo", label: "Ma photo ou mon logo" },
+      ] },
       { key: "emplacement", type: "select", asChecks: true, label: "Emplacement de la gravure", default: "face", options: [
         { value: "face", label: "Sur la face avant" },
         { value: "fond", label: "Au fond du verre (vu à travers le verre)" },
         { value: "deux", label: "Les deux : face + fond (+7 €)" },
       ] },
+      { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Modèle n°", groups: [
+        { label: "Couples (1–13)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13"] },
+        { label: "Noms & banderoles (14–19)", nums: ["14","15","16","17","18","19"] },
+        { label: "Dessins & occasions (20–35)", nums: ["20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"] },
+      ] },
+      { key: "lettreFleurie", type: "lettreFleurie", optional: true, label: "Lettre fleurie", image: "/produits/alphabet-fleuri.jpg", text: "Regardez l'alphabet et cliquez votre initiale — elle sera gravée dans ce style fleuri." },
+      { key: "prenom", label: "Prénoms / nom / texte (+3 €)", placeholder: "Ex. Camille · Elli & Ben · « Santé »", maxLength: 40, optional: true },
+      { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
+      { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
       { key: "photo", type: "photo", label: "Envoyez votre logo / photo", optional: true, text: "Une fois la photo ajoutée, glissez-la sur le verre et réglez sa taille avec le curseur (la dimension en cm s'affiche)." },
       { key: "dateImage", type: "imageDate", photoKey: "photo", optional: true, label: "Date écrite dans l'image", options: [{ value: "oui", label: "Oui — la date écrite dans l'image est gravée (comptée comme un texte)" }] }, // gérant 26/10/2026 : image comprise, date de l'image = un texte
       { key: "texte", label: "Ajouter un texte sous la photo (+3 €)", placeholder: "Prénom, message…", maxLength: 30, optional: true },
@@ -2800,16 +2825,21 @@ export const products = [
       { key: "texteFond", label: "Texte pour le fond (facultatif)", placeholder: "Prénom, message…", maxLength: 30, optional: true, showIfEmplacement: "deux" },
       { key: "note-photo", type: "note", image: "/produits/guide-photo-gravure.png", imageAlt: "Exemples de bonnes et mauvaises photos pour la gravure", text: "Réussir sa gravure photo : choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles, et un peu d'espace autour du sujet. Une à plusieurs personnes possibles ; pour un groupe, préférez une photo où chaque visage reste net et bien distinct. Évitez les photos sombres, floues, à contre-jour ou trop serrées. Votre photo est transformée en gravure monochrome façon dessin, puis retravaillée à la main par notre atelier avant la gravure laser. L'aperçu en ligne est indicatif : le rendu final est optimisé par l'atelier." },
     ],
-    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "texte2", amount: 3 }, { key: "dateImage", value: "oui", amount: 3 }, { key: "dateImageFond", value: "oui", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · date +3 € · date écrite dans l'image +3 € (26/10/2026) · gravure face+fond +7 €
-    title: "Verre à cocktail personnalisé — photo ou texte gravé, cadeau original",
+    engravingPricing: { flatExtras: [{ key: "texte", amount: 3 }, { key: "texte2", amount: 3 }, { key: "prenom", amount: 3 }, { key: "date", amount: 3 }, { key: "initiale", amount: 3 }, { key: "dateImage", value: "oui", amount: 3 }, { key: "dateImageFond", value: "oui", amount: 3 }, { key: "emplacement", value: "deux", amount: 7 }] }, // texte +3 € · date +3 € · date écrite dans l'image +3 € (26/10/2026) · gravure face+fond +7 €
+    title: "Verre à cocktail personnalisé — modèle, lettre fleurie, photo ou texte gravé",
     category: "verres",
     subcategory: "cocktail",
     type: "Verre photo personnalisé",
-    tagline: "Votre photo, un prénom, une phrase — ou le logo de votre bar, restaurant ou entreprise — gravés sur un verre à cocktail de 17 cl ou de 33 cl.",
+    tagline: "Un modèle, une lettre fleurie, un prénom, votre photo — ou le logo de votre bar, restaurant ou entreprise — gravés sur un verre à cocktail de 17 cl ou de 33 cl.",
     personalizable: true,
-    personalizationLabel: "Votre photo à graver (+ texte, date ou logo en option)",
+    personalizationLabel: "Modèle, lettre fleurie, texte, photo ou logo",
     images: [
       "/produits/verre_a_cocktail_exemple_logo.jpg",
+      // Exemples de modèles et de texte (28/10/2026), faits avec l'aperçu du site, étiquette « Exemple ».
+      "/produits/verre_a_cocktail_ex_maries.jpg",
+      "/produits/verre_a_cocktail_ex_colombes.jpg",
+      "/produits/verre_a_cocktail_ex_fee.jpg",
+      "/produits/verre_a_cocktail_ex_texte.jpg",
       "/produits/verre_a_cocktail_ambiance.jpg",
       "/produits/verre_a_cocktail_vierge.jpg",
       "/produits/verre_a_cocktail_garni.jpg",
@@ -2836,8 +2866,8 @@ export const products = [
         { id: "33", title: "33 cl", sub: "grand verre long drink" },
       ],
     },
-    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong></p><p class="pd2-occ">Un cadeau qui change du whisky : apéritif entre amis, EVJF, anniversaire, crémaillère ou cadeau d’entreprise.</p><h3>Deux tailles</h3><div class="pd2-sizes"><div class="pd2-size"><b>17 cl</b><span>verrerie professionnelle, forme haute, hauteur ≈ 12,5 cm, Ø ≈ 5,2 cm.</span></div><div class="pd2-size"><b>33 cl</b><span>grand verre long drink, verrerie professionnelle, pour les cocktails allongés et les softs.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>celui de votre bar, de votre restaurant ou de votre entreprise, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, une phrase, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
-    voletVerres: [["Gravure", "Photo, dessin, logo ou texte au choix, dans la police de votre choix."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre à cocktail professionnel, gravé à votre façon.</strong></p><p class="pd2-occ">Un cadeau qui change du whisky : apéritif entre amis, EVJF, anniversaire, crémaillère ou cadeau d’entreprise.</p><h3>Deux tailles</h3><div class="pd2-sizes"><div class="pd2-size"><b>17 cl</b><span>verrerie professionnelle, forme haute, hauteur ≈ 12,5 cm, Ø ≈ 5,2 cm.</span></div><div class="pd2-size"><b>33 cl</b><span>grand verre long drink, verrerie professionnelle, pour les cocktails allongés et les softs.</span></div></div><h3>Quatre façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Un modèle</b></p><span>35 modèles numérotés, avec vos prénoms si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Une lettre fleurie</b></p><span>votre initiale, avec un prénom au milieu.</span></div><div class="pd2-way"><p class="pd2-wt"><i>3</i><b>Votre texte</b></p><span>un prénom, une date, une phrase, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>4</i><b>Votre photo ou votre logo</b></p><span>celui de votre bar, de votre restaurant ou de votre entreprise, avec un texte dessous si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Quatre façons de graver : un modèle (35 modèles numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
   },
   {
     slug: "verre-a-vin-grave",
@@ -4458,6 +4488,92 @@ export const products = [
 </ul>`,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// VERRE TUMBLER EN CRISTAL (28/10/2026, gérant : « dans le même verre les deux options, comme le
+// verre de vin… tu peux mettre en ligne ») : 37 cl (Metro Montese AAA0046319226) et grand 39 cl
+// (Montese High Tumbler AAA0046319222). Même gravure que la flûte (40 modèles, lettre fleurie,
+// texte, photo ou logo) : la fiche reprend son parcours, ses modèles et ses zones de texte, pour
+// rester identique si on les modifie. Galeries = images d'exemple faites avec l'aperçu du site
+// (étiquette « Exemple ») + la photo du verre vierge.
+{
+  const flute = products.find((p) => p.slug === "flute-a-champagne-gravee");
+  // Les 35 modèles numérotés de la flûte, sans les 5 « gravures en photo » (n° 36–40 : des photos
+  // de flûtes gravées, qui n'ont pas de sens sur un autre verre).
+  const PARCOURS_VERRE = {
+    ...flute.parcoursGuide,
+    titre: "Personnalisez votre verre", objet: "verre", objetArticle: "le verre",
+    groupes: flute.parcoursGuide.groupes.filter((g) => g.key !== "photos"),
+    modelesPhoto: [],
+  };
+  const E37 = { box: { top: 0.13, left: 0.24, width: 0.52, height: 0.44 }, widthMm: 70, maxWidthFrac: 0.34, minWidthFrac: 0.08 };
+  const E39 = { box: { top: 0.11, left: 0.31, width: 0.38, height: 0.44 }, widthMm: 55, maxWidthFrac: 0.30, minWidthFrac: 0.07 };
+  const G37 = ["/produits/verre_tumbler_37_ex_maries.jpg", "/produits/verre_tumbler_37_ex_photo.jpg", "/produits/verre_tumbler_37_ex_fee.jpg", "/produits/verre_tumbler_37_vierge.jpg"];
+  const G39 = ["/produits/verre_tumbler_39_ex_photo.jpg", "/produits/verre_tumbler_39_ex_maries.jpg", "/produits/verre_tumbler_39_ex_texte.jpg", "/produits/verre_tumbler_39_ex_colombes.jpg", "/produits/verre_tumbler_39_vierge.jpg"];
+  // Verre à cocktail : même parcours que le verre à whisky (face / fond / les deux, date, décor)
+  // avec, en plus, les modèles et la lettre fleurie de la flûte (28/10/2026).
+  const cocktail = products.find((p) => p.slug === "verre-a-cocktail-grave");
+  const whisky = products.find((p) => p.slug === "verre-a-whisky-grave");
+  Object.assign(cocktail, {
+    styleImages: flute.styleImages,
+    styleTextZone: flute.styleTextZone,
+    parcoursGuide: {
+      ...PARCOURS_VERRE,
+      titre: "Personnalisez votre verre à cocktail",
+      modes: ["modele", "lettre", "texte", "photo"],
+      modesTextes: { texte: { sous: "Un prénom, une date, un petit message — dans l'écriture de votre choix, avec un décor autour si vous voulez. Sans photo." } },
+      imagePhoto: "/produits/verre_a_cocktail_exemple_logo.jpg",
+      emplacement: {
+        ...whisky.parcoursGuide.emplacement,
+        options: [
+          { value: "face", titre: "Sur la face avant", sous: "La gravure classique, visible de face.", image: "/produits/verre_a_cocktail_vierge.jpg", resume: "Face avant" },
+          { value: "fond", titre: "Au fond du verre", sous: "Vue de dessus, à travers le verre : se découvre en buvant.", image: "/produits/verre_a_cocktail_fond_vierge.jpg", resume: "Au fond du verre" },
+          { value: "deux", titre: "Les deux : face + fond", sous: "Une gravure sur la face, une autre au fond.", image: "/produits/verre_a_cocktail_fond_exemple.jpg", prix: 7, resume: "Face avant + fond du verre (+7 €)" },
+        ],
+      },
+      dateKey: "texte2", dateMax: 30, texteMax: 30,
+      decors: whisky.parcoursGuide.decors,
+      guidePhoto: whisky.parcoursGuide.guidePhoto,
+    },
+  });
+
+  products.splice(products.indexOf(flute) + 1, 0, {
+    ...flute,
+    slug: "verre-tumbler-cristal-grave",
+    badge: "Nouveau",
+    lockImages: true, // galerie pilotée par le code
+    name: "Verre tumbler en cristal gravé",
+    title: "Verre tumbler en cristal gravé — modèle, lettre fleurie, prénom ou photo",
+    type: "Verre en cristal gravé",
+    subcategory: "whisky",
+    tagline: "Un verre sans pied en cristal, en 37 cl ou en grand 39 cl, gravé à votre façon : un modèle, une lettre fleurie, votre texte, votre photo ou votre logo.",
+    weight: 600,
+    photoContain: false,
+    cardImage: "/produits/verre_tumbler_37_ex_maries.jpg",
+    images: G37,
+    engraveImage: "/produits/verre_tumbler_37_vierge.jpg",
+    engrave: E37,
+    parcoursGuide: PARCOURS_VERRE,
+    personalizationFields: flute.personalizationFields.filter((f) => f.key !== "gravureExemple"),
+    tailles: {
+      label: "Taille du verre",
+      options: [
+        { id: "37", title: "37 cl", sub: "tumbler évasé, Ø 8,5 × H 10 cm", image: "/produits/verre_tumbler_37_vierge.jpg", gallery: G37, engraveImage: "/produits/verre_tumbler_37_vierge.jpg", engrave: E37 },
+        { id: "39", title: "39 cl", sub: "grand tumbler, Ø 7 × H 14,4 cm", image: "/produits/verre_tumbler_39_vierge.jpg", gallery: G39, engraveImage: "/produits/verre_tumbler_39_vierge.jpg", engrave: E39 },
+      ],
+    },
+    variants: [
+      { id: "verre-tumbler-1", title: "À l'unité", price: 19.90, weight: 600, taille: "37" },
+      { id: "verre-tumbler-2", title: "Lot de 2", price: 37.90, weight: 1100, taille: "37" },
+      { id: "verre-tumbler-4", title: "Lot de 4 — livraison offerte", price: 71.90, weight: 2000, taille: "37" },
+      { id: "verre-tumbler-39-1", title: "À l'unité", price: 19.90, weight: 650, taille: "39" },
+      { id: "verre-tumbler-39-2", title: "Lot de 2", price: 37.90, weight: 1200, taille: "39" },
+      { id: "verre-tumbler-39-4", title: "Lot de 4 — livraison offerte", price: 71.90, weight: 2200, taille: "39" },
+    ],
+    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Un verre en cristal sans pied, gravé à votre façon dans notre atelier.</strong></p><p class="pd2-occ">Pour le whisky, un cocktail, l’eau ou le vin. Idéal pour un mariage, un anniversaire, la Fête des pères ou un cadeau d’entreprise.</p><h3>Deux tailles</h3><div class="pd2-sizes"><div class="pd2-size"><b>37 cl</b><span>tumbler évasé en cristal sans plomb, Ø 8,5 cm, hauteur 10 cm.</span></div><div class="pd2-size"><b>39 cl</b><span>grand tumbler en cristal sans plomb, Ø 7 cm, hauteur 14,4 cm.</span></div></div><h3>Quatre façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Un modèle</b></p><span>35 modèles numérotés, avec vos prénoms si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Une lettre fleurie</b></p><span>votre initiale, avec un prénom au milieu.</span></div><div class="pd2-way"><p class="pd2-wt"><i>3</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures.</span></div><div class="pd2-way"><p class="pd2-wt"><i>4</i><b>Votre photo ou votre logo</b></p><span>un dessin, une photo, le logo de votre bar ou de votre entreprise.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4, dans les deux tailles.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander. Les photos marquées « Exemple » montrent des gravures possibles.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+    voletVerres: [["Gravure", "Quatre façons de graver : un modèle (35 modèles numérotés), une lettre fleurie, votre texte dans l’une de nos 8 écritures, ou votre photo ou votre logo. L’aperçu se met à jour pendant que vous choisissez."], ["Modèles", "Sur un modèle, les prénoms et la date sont gravés dans l’écriture du modèle."], ["Entretien", "Va au lave-vaisselle : la gravure ne bouge pas. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
+  });
+}
 
 // --- Helpers ----------------------------------------------------------------
 

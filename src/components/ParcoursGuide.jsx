@@ -64,6 +64,9 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   const set = (patch) => setFieldValues((prev) => ({ ...prev, ...patch }));
 
 
+  // Verres à emplacement (whisky, cocktail) : face / fond / les deux et la gravure du fond restent.
+  const garderEmplacement = (prev) => (E ? { emplacement: prev.emplacement || "face", ...(prev.photoFond ? { photoFond: prev.photoFond } : {}), ...(prev.dateImageFond ? { dateImageFond: prev.dateImageFond } : {}), ...(prev.texteFond ? { texteFond: prev.texteFond } : {}) } : {});
+
   // ① Choix EXCLUSIF : on repart de zéro (seul le coffret est conservé).
   function choisirMode(m) {
     if (m === mode) return;
@@ -73,7 +76,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       mode: m,
       ...(coffrets.length ? { coffret: prev.coffret || "" } : {}),
       // L'emplacement et la gravure du fond ne dépendent pas du choix photo / texte : on les garde.
-      ...(E ? { emplacement: prev.emplacement || "face", ...(prev.photoFond ? { photoFond: prev.photoFond } : {}), ...(prev.dateImageFond ? { dateImageFond: prev.dateImageFond } : {}), ...(prev.texteFond ? { texteFond: prev.texteFond } : {}) } : {}),
+      ...garderEmplacement(prev),
       ...(m === "modele" ? {} : { police: "playfair" }),
     }));
     setTimeout(() => s2Ref.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
@@ -81,7 +84,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   function choisirModele(n, photoValue) {
     // Les champs de l'ancien modèle sont vidés : seuls ceux du nouveau comptent.
     // Un modèle « en photo » écrit gravureExemple (comme avant), un numéroté écrit numstyle.
-    setFieldValues((prev) => ({ mode: "modele", ...(coffrets.length ? { coffret: prev.coffret || "" } : {}), ...(photoValue ? { gravureExemple: photoValue } : { numstyle: String(n) }) }));
+    setFieldValues((prev) => ({ mode: "modele", ...(coffrets.length ? { coffret: prev.coffret || "" } : {}), ...garderEmplacement(prev), ...(photoValue ? { gravureExemple: photoValue } : { numstyle: String(n) }) }));
     setGrilleOuverte(false);
   }
 
@@ -325,7 +328,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
             </div>
           )}
 
-          {E && (mode === "photo" || mode === "texte") && fond}
+          {E && fond}
         </section>
       )}
 

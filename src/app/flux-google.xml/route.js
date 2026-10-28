@@ -69,9 +69,7 @@ function apparel(p) {
 // À ajouter une fois dans Merchant Center : URL = https://nivcreation.fr/flux-google.xml
 export async function GET() {
   let products = [];
-  // Un produit vendu sur une page à part (`pageDediee`, ex. cristaux déjà gravés → /cristaux-graves) n'a pas de
-  // fiche produit à lui : sa fiche redirige, Google refuserait l'article (prix introuvable sur la page).
-  try { products = (await getCatalog()).filter((p) => !p.hidden && !p.pageDediee && (p.images || []).length); } catch { products = []; }
+  try { products = (await getCatalog()).filter((p) => !p.hidden && (p.images || []).length); } catch { products = []; }
 
   const items = products.map((p) => {
     const price = priceFrom(p).toFixed(2);

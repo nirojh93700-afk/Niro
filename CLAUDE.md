@@ -1,3 +1,19 @@
+## 🥃 VERRE TUMBLER EN CRISTAL + COCKTAIL À 4 FAÇONS DE GRAVER — ✅ EN LIGNE LE 28/10/2026 (gérant : « si tout est bon, tu peux mettre en ligne »)
+- **`verre-tumbler-cristal-grave`** (rayon « Verres à whisky ») : 2 tailles sur la même fiche, comme le verre à vin — 37 cl (Metro Montese
+  AAA0046319226, Ø 8,5 × H 10) et grand 39 cl (Montese High Tumbler AAA0046319222, Ø 7 × H 14,4). 19,90 / 37,90 / 71,90 € les deux tailles.
+  Coût 37 cl 3,30 € (2 cartons × 14,82 € + 10 € de port) ; **coût du 39 cl à demander**. Non trempés (cristal sans plomb).
+  Construit APRÈS la liste des produits (`products.splice` derrière la flûte) : reprend le parcours, les modèles (`styleImages`) et les zones
+  de texte (`styleTextZone`) de la flûte, SANS les 5 « gravures en photo » n° 36–40 (photos de flûtes) → 35 modèles. Galeries = images
+  « EXEMPLE » faites avec l'aperçu du site (`tools/maquettes/verre-tumbler/`, sources `docs/maquettes/assets/verre-tumbler/`) + photo vierge.
+- **`verre-a-cocktail-grave`** : passe au parcours guidé (modèle · lettre fleurie · texte · photo) en gardant face / fond / les deux (+7 €),
+  date et décor (config du whisky). Prénom, date, initiale +3 € (flatExtras). `etatVerre` (lib/parcoursGuide.js) accepte modèle et lettre ;
+  le choix d'un modèle garde l'emplacement ; le fond se règle pour tous les modes. 4 images « EXEMPLE » ajoutées à la galerie.
+  Cadre de gravure du code remonté (top 0,22 = cadre de Gestion) — gérant : « un peu plus haut ».
+- **Aperçu « Votre aperçu » (mini-fenêtre)** : sur un modèle à banderole (n° 10–19), le nom et la date s'écrivent À LEUR PLACE (points t / d),
+  plus jamais empilés sur le dessin ; même ligne → une ligne, trop long → les prénoms seuls. Le texte du fond n'apparaît plus sur la face ;
+  en « les deux », les prénoms d'un modèle s'affichent sur la face. Valable pour vin, flûte, carafe aussi.
+- **Cristal** : la fenêtre « Avant de choisir votre photo » a maintenant son texte (`GUIDE_CRISTAL_TEXTE`, products.js), comme les verres.
+
 ## 🔖 LES TROIS MARQUE-PAGES — ✅ EN VENTE DEPUIS LE 27/10/2026 (gérant : « mets en vente, sur le site, les maquettes »)
 - Fiches `marque-page-bois-pompon` (9,90 €, 6 couleurs) · `marque-page-bois-oiseau` (13,90 €, 4 couleurs) · `marque-page-metal-peinture`
   (15,90 €, Papillon · coffret 19,90 €, 8 tableaux, SANS gravure). **Onglet « Marque-pages » dans le menu** (`/boutique/marque-pages`, univers à part, 27/10 :

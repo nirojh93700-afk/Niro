@@ -60,6 +60,15 @@ function etatVerre(product, fv) {
   } else if (mode === "texte") {
     if (!texte) return { ok: false, grav: "Mon propre texte", detail: "", fond: fondTxt, manque: "Écrivez votre texte (étape 3)." };
     grav = `Texte : « ${enDecor(texte)} » (+3 €)`;
+  } else if (mode === "modele" || mode === "lettre") {
+    // Verre à cocktail (28/10/2026) : modèles et lettre fleurie de la flûte, sur la face ;
+    // le fond reste photo ou texte (« les deux »).
+    const r = etatSimple(product, fv);
+    if (!r.ok) return { ...r, fond: fondTxt, manque: r.manque.replace("étape 2", "étape 3") };
+    if (empl === "deux" && !fondTxt) {
+      return { ok: false, grav: r.grav, detail: r.detail, fond: "", manque: "Indiquez ce qui sera gravé au fond du verre : une photo ou un texte (étape 3)." };
+    }
+    return { ...r, fond: fondTxt };
   } else {
     return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
   }
@@ -77,6 +86,10 @@ function etatVerre(product, fv) {
 export function parcoursEtat(product, fv) {
   const cfg = product?.parcoursGuide || {};
   if (cfg.emplacement) return etatVerre(product, fv);
+  return etatSimple(product, fv);
+}
+
+function etatSimple(product, fv) {
   const mode = v(fv, "mode");
   if (!mode) return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
   if (mode === "modele") {
