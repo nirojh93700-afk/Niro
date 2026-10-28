@@ -568,3 +568,61 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaudenoel #cadeaupersonnalise #noel2026 #ideecadeau
+
+## Vidéos 34 à 40 — Série de Noël (28/10/2026)
+- Demande du gérant : 7 vidéos différentes (bijoux, cristal, bois, verres, trois mélanges), refaites « pour Noël ». Habillage de la vidéo 33 sur
+  chaque plan (ruban « ✦ IDÉE CADEAU DE NOËL ✦ », pastille « NOËL 2026 », cartes rouge & or, fin « Commandez tôt pour Noël », aucune date), avec les
+  effets (titre gravé au laser, reflet, paillettes, entrée des photos, texte qui monte, éclair doré). Verticales, sans son, 31 à 37 s.
+- La 34 lui a été montrée d'abord ; validée (« la première c'est bon ») → 35 à 40 rendues le même soir.
+- Script : `python3 tools/video/serie_34_40.py <dossier> [34 35 …]`. Fichiers (720 × 1280 et 1080 × 1920) dans le dossier temporaire de la session,
+  PAS dans le dépôt (taille du dépôt) : se régénèrent avec le script. ⚠️ Les marque-pages sont des aperçus de la maquette (pas de photo d'atelier).
+- Descriptions livrées :
+
+**Vidéo 34 — Bijoux gravés pour Noël** (Collier Cœur gravé, Collier Double Cœur, Collier 3 Cœurs, Bracelet femme gravé, Collier Cœur & plaques, Bracelet à plaque gravée, Collier Enveloppe, Cristal photo 3D, Verre à whisky gravé, Marque-page en bois)
+> 🎄 Cette année, offrez un bijou qui porte son prénom, une date ou un mot qui compte ✨
+> Chaque pièce est gravée une par une dans notre atelier 💛 Commandez tôt pour Noël 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #bijougrave #cadeaunoel #ideecadeau
+
+**Vidéo 35 — Du cristal gravé pour Noël** (Cristal photo 3D, Cristal déjà gravé, Cristal zodiaque)
+> 🎄 Votre photo en 3D au cœur du cristal, ou l'un de nos modèles déjà gravés : sapin, ange, rose, colibri ✨
+> Un cadeau qui garde un souvenir pour toujours 💛 Commandez tôt pour Noël 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cristalgrave #cadeaupersonnalise #cadeaunoel #ideecadeau
+
+**Vidéo 36 — Du bois gravé pour Noël** (Marque-page en bois gravé, Marque-page ajouré gravé, Puzzle photo gravé, Puzzle en bois, Veilleuse au prénom, Plaque de naissance, Support téléphone gravé, Couverts enfant gravés, Numéro de table gravé)
+> 🎄 Un prénom, un dessin, une photo : gravés dans le bois, pour les petits comme pour les grands ✨
+> Marque-pages, puzzles, veilleuse, plaque de naissance… chaque pièce sort de notre atelier 💛 Commandez tôt pour Noël 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #boisgrave #cadeaupersonnalise #cadeaunoel #ideecadeau
+
+**Vidéo 37 — Des verres gravés pour Noël** (Verre à whisky gravé, Flûtes à champagne gravées, Verre à cocktail gravé, Verre à vin gravé, Carafe à whisky gravée)
+> 🎄 Un prénom, un logo ou une photo gravés sur le verre, pour trinquer en famille pendant les fêtes 🥂✨
+> Whisky, champagne, vin, cocktail et carafe, gravés un par un dans notre atelier 💛 Commandez tôt pour Noël 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #verregrave #cadeaupersonnalise #cadeaunoel #ideecadeau
+
+**Vidéo 38 — Nos cadeaux de Noël gravés** (Verre à whisky gravé, Verre à cocktail gravé, Cristal photo 3D, Cristal déjà gravé, Marque-page en bois gravé, Marque-page ajouré gravé)
+> 🎄 Des verres pour trinquer, du cristal pour garder un souvenir, des marque-pages pour les amoureux de lecture 📚✨
+> Chaque cadeau est gravé à la commande dans notre atelier 💛 Commandez tôt pour Noël 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaunoel #gravure #ideecadeau
+
+**Vidéo 39 — Gravé pour Noël** (Carafe à whisky gravée, Flûtes à champagne gravées, Verre à whisky gravé, Verre à cocktail gravé, Marque-page en bois gravé, Marque-page ajouré gravé, Cristal photo 3D, Cristal déjà gravé)
+> 🎄 Pour trinquer, pour garder sa page, pour garder un souvenir : trois idées de cadeaux gravés pour Noël ✨
+> Un prénom, une photo ou un mot, gravés une pièce à la fois dans notre atelier 💛 Commandez tôt 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaunoel #noel2026 #ideecadeau
+
+**Vidéo 40 — Un cadeau gravé pour Noël** (Collier Double Cœur, Collier Cœur & plaques, Collier Enveloppe, Collier Cœur gravé, Verre à vin gravé, Flûtes à champagne gravées, Verre à whisky gravé, Cristal photo 3D, Cristal déjà gravé)
+> 🎄 Un bijou à porter, un verre pour trinquer, un cristal pour se souvenir : le cadeau gravé qui ne ressemble à aucun autre ✨
+> Chaque pièce est gravée à la commande dans notre atelier 💛 Commandez tôt pour Noël 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #bijougrave #cadeaunoel #ideecadeau

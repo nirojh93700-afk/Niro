@@ -186,7 +186,7 @@
   (jeu. 10 déc. / Express lun. 14 déc.), calendrier des newsletters et vidéos, 7 étapes Merchant Center (son compte), port des verres proposé
   7,90 / 9,90 / 12,90 €. Correction du flux Google (`cristal-deja-grave` retiré) commitée en local, NON poussée. Ne rien lancer sans sa demande.
 
-## 🎬 7 VIDÉOS DE NOËL (34 À 40) — ATTENDRE SON « LANCE LES VIDÉOS » (28/10/2026)
+## 🎬 7 VIDÉOS DE NOËL (34 À 40) — ✅ LIVRÉES LE 28/10/2026 (34 validée « la première c'est bon », puis 35 à 40 ; registre `docs/videos/REGISTRE-VIDEOS.md`, prochaine vidéo = 41)
 - Refaire les 7 vidéos de `tools/video/serie_34_40.py` avec l'habillage NOËL + les effets ; montrer la 34 d'abord, attendre sa validation,
   puis les 6 autres. Détail dans `docs/EN-ATTENTE.md` (« 7 VIDÉOS (34 À 40) À REFAIRE POUR NOËL »). Rien avant son mot.
 

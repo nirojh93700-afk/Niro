@@ -468,7 +468,7 @@ En attente de SA décision :
   offert dès 60 € inchangés ; afficher « Point relais 4,90 € · offert dès 60 € » sur les fiches verres. Coût d'un envoi 1-2 verres ≈ 7,95 €
   (étiquette 6,12 estimée + carton 1,12 + chips 0,71). En attente de son accord ; si oui : `GLASS_TIERS` (ou Gestion → Livraison) ET `portFR` du flux Google.
 
-## 🎬 7 VIDÉOS (34 À 40) À REFAIRE POUR NOËL — EN ATTENTE DE SON « LANCE LES VIDÉOS » (28/10/2026)
+## 🎬 7 VIDÉOS (34 À 40) POUR NOËL — ✅ FAITES ET LIVRÉES LE 28/10/2026 (34 validée, 35 à 40 rendues ensuite ; descriptions dans `docs/videos/REGISTRE-VIDEOS.md`)
 - Gérant, après la vidéo 34 avec effets : « c'est pas bon, c'est pour Noël que tu dois faire… tu gardes en mémoire, quand je te dirai
   lance les vidéos, tu relances les sept vidéos, tu me montreras une avant, je valide ». ⛔ RIEN à lancer avant son mot.
 - Au « lance les vidéos » : refaire les 7 avec l'HABILLAGE NOËL (comme la vidéo 13 / 33 : ruban « ✦ IDÉE CADEAU DE NOËL ✦ » sur chaque
