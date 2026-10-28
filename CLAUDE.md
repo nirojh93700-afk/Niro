@@ -8,8 +8,8 @@
   capture = `curl nivcreation.fr/produit/verre-a-vin-grave`. Le HTML (2,4 Mo) n'est PAS commité (règle du 10/10). Vérifié Chromium 390 / 1280 :
   0 débordement, 0 erreur JS, 44 vérifications (`scratchpad/t-fetes.mjs`) : 30 + 25 modèles, filtre Noël, n° 3 + « Camille » + boîte = 25,80 €,
   éteint → 30 modèles, plus d'emballage, 17,90 €.
-- **Images** : `docs/maquettes/assets/noel/01…25-*.{jpg,png}` = ses 16 images + les 9 lettrages du zip (« Douce magie d'hiver » reçue en
-  double : gardée une fois). **Numérotées Noël n° 1 à 25, LE MÊME numéro dans Gestion et sur toutes les fiches** (à part des numéros des
+- **Images** : `docs/maquettes/assets/noel/01…27-*.{jpg,png}` = ses 16 images + les 9 lettrages du zip (« Douce magie d'hiver » reçue en
+  double : gardée une fois) + 2 images renvoyées le 28/10 soir (n° 26, 27 — v8). **Numérotées Noël n° 1 à 27, LE MÊME numéro dans Gestion et sur toutes les fiches** (à part des numéros des
   modèles de chaque verre, pour que l'atelier lise « Modèle de Noël n° 7 » partout).
 - **Vue ① Gestion → Fêtes** (nouveau groupe du menu) : une ligne par fête (Noël 25/12/2026 · Saint-Valentin 14/02/2027 · Pâques 28/03/2027 ·
   Fête des mères 30/05/2027 · Fête des pères 20/06/2027, dates calculées), interrupteur, **alerte 2 mois avant** (bandeau rouge du tableau de
@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  puis VERSIONS 3 à 7 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSIONS 3 à 8 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -94,6 +94,13 @@
     passent à la couleur choisie. Photo de la boîte bleue RECADRÉE sur la boîte (`3-5-boite-ruban-J-bleu-recadree.jpg`, l'original J avait
     80 % de blanc). Gestion : vignette + pastille + nom pour chaque couleur. ⛔ Règle : un choix de couleur se montre avec sa PHOTO en grand
     et une pastille de la couleur, jamais deux petites vignettes sombres.
+  · **v8 (28/10 soir, gérant a RENVOYÉ ses 16 images : « t'as pas tout mis… tout ce qui manque tu rajoutes, ne mets pas en double »)** :
+    contrôle par empreinte d'image (dhash) contre les 25 fichiers : 14 des 16 étaient déjà là (distance 0), **2 manquaient** → ajoutées
+    SANS doublon : **Noël n° 26 « Renne aux bois décorés »** (tête de renne, boules et guirlandes, filigrane WIRESTOCK) et **n° 27 « Père
+    Noël à lunettes, signe de paix »** (filigrane BUYANDCRAFT) → `assets/noel/26-…jpg`, `27-…jpg`, étiquette « ⚠ filigrane du vendeur »
+    dans Gestion (image de banque, à vérifier avant de graver). Les n° 6 (crèche) et 9 (cerfs et traîneau) n'étaient pas dans ce renvoi
+    mais restent. **27 images** partout (`NB_IMAGES`, `FETES[0].images`, KPI, grille : Dessins 18 · Mots 9). 94 vérifs, 0 erreur.
+    ⛔ Méthode à garder : toute image renvoyée se compare par empreinte aux fichiers existants AVANT d'être ajoutée.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.

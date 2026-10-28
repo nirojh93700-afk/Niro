@@ -88,7 +88,7 @@ fm = dernier_dimanche(2027, 5)
 if fm == pq + dt.timedelta(days=49):  # Pentecôte → fête des mères le 1er dimanche de juin
     fm = nieme_dimanche(2027, 6, 1)
 FETES = [
-    dict(k="noel", nom="Noël", ico="🎄", date=dt.date(2026, 12, 25), on=True, images=25, emb=6),
+    dict(k="noel", nom="Noël", ico="🎄", date=dt.date(2026, 12, 25), on=True, images=0, emb=6),
     dict(k="valentin", nom="Saint-Valentin", ico="♥", date=dt.date(2027, 2, 14), on=False, images=0, emb=0),
     dict(k="paques", nom="Pâques", ico="🐣", date=pq, on=False, images=0, emb=0),
     dict(k="meres", nom="Fête des mères", ico="✿", date=fm, on=False, images=0, emb=0),
@@ -111,13 +111,17 @@ IMAGES = [
     (16, "Médaillon aux cerfs « Merry Christmas »", "texte"), (17, "« Douce magie d'hiver »", "mots"), (18, "« Noël tout en douceur »", "mots"),
     (19, "« Sous les étoiles de Noël »", "mots"), (20, "« Mon beau sapin »", "mots"), (21, "« Un soupçon de magie »", "mots"),
     (22, "« Esprit d'hiver »", "mots"), (23, "« Joyeux Noël »", "mots"), (24, "« Petits bonheurs de Noël »", "mots"), (25, "« La saison des merveilles »", "mots"),
+    # 28/10 soir : il a renvoyé ses 16 images « pour qu'il ne manque rien » — 14 étaient déjà là (contrôle par empreinte), 2 manquaient :
+    (26, "Renne aux bois décorés", "filigrane"), (27, "Père Noël à lunettes, signe de paix", "filigrane"),
 ]
+NB_IMAGES = len(IMAGES)
+NOEL["images"] = NB_IMAGES
 FICHIERS = {int(os.path.basename(p)[:2]): p for p in glob.glob(os.path.join(ASSETS, "*.*"))}
 NOEL_JS = []
 for n, nom, flags in IMAGES:
     f = flags.split()
     NOEL_JS.append(dict(n=n, nom=nom, src=uri(FICHIERS[n], 300, 80), texte=("texte" in f or "mots" in f), mots=("mots" in f),
-                        droits=("droits" in f), gris=("gris" in f), prix=(3 if ("texte" in f or "mots" in f) else 0)))
+                        droits=("droits" in f), gris=("gris" in f), filigrane=("filigrane" in f), prix=(3 if ("texte" in f or "mots" in f) else 0)))
 
 VIN_JS = [dict(n=int(n), legende=m["legende"], champs=m.get("champs", []), exemple=m.get("exemple", ""),
                src=uri(os.path.join(PUB, VIN["styleImages"][n].lstrip("/")), 300, 80)) for n, m in sorted(VIN["modeles"].items(), key=lambda x: int(x[0]))]
@@ -281,7 +285,7 @@ ADMIN = f"""
    <div class="mp-kpis">
      <div class="mp-kpi"><small>Fête allumée</small><b id="kpi-on">Noël</b></div>
      <div class="mp-kpi"><small>Prochaine alerte</small><b>{fr(FETES[1]["alerte"])}</b><span class="ft-kpi-s">Saint-Valentin</span></div>
-     <div class="mp-kpi"><small>Images de Noël</small><b>25</b><span class="ft-kpi-s">numérotées 1 à 25</span></div>
+     <div class="mp-kpi"><small>Images de Noël</small><b>{NB_IMAGES}</b><span class="ft-kpi-s">numérotées 1 à {NB_IMAGES}</span></div>
      <div class="mp-kpi"><small>Emballages de Noël</small><b>2</b><span class="ft-kpi-s">prix à régler</span></div>
    </div>
 
@@ -302,7 +306,7 @@ ADMIN = f"""
     <h3 class="ft-h3">Produits concernés <span class="ft-h3s">seulement des produits gravés · jamais les bijoux ni le mariage</span></h3>
     <div class="ft-prods">{prods}</div>
 
-    <h3 class="ft-h3">Images de gravure de Noël <span class="ft-h3s">25 · le client les choisit par leur numéro, comme les autres modèles</span></h3>
+    <h3 class="ft-h3">Images de gravure de Noël <span class="ft-h3s">{NB_IMAGES} · le client les choisit par leur numéro, comme les autres modèles</span></h3>
     <div class="ft-bar"><span id="ft-cnt"></span><button type="button" class="btn btn-outline ft-btn">+ Ajouter des images</button></div>
     <p class="ft-p ft-note">Prix proposé d'après votre règle « tout texte gravé est payant » : une image qui contient un texte (« Merry Christmas », les mots de Noël 17 à 25) est à <b>+3 €</b>, un dessin seul est <b>offert</b> comme un modèle. Vous changez chaque ligne ; <b>rien n'est décidé</b>.</p>
     <div class="ft-imgs" id="ft-imgs"></div>
@@ -518,6 +522,7 @@ function renderAdmin(){
     if(m.mots)flags+='<span class="ft-flag t">mots de Noël</span>';else if(m.texte)flags+='<span class="ft-flag t">texte dans l’image</span>';
     if(m.droits)flags+='<span class="ft-flag d">⚠ personnage protégé</span>';
     if(m.gris)flags+='<span class="ft-flag g">niveaux de gris</span>';
+    if(m.filigrane)flags+='<span class="ft-flag d">⚠ filigrane du vendeur</span>';
     return '<div class="ft-img"><span class="ft-num">Noël n° '+m.n+'</span><div class="ph"><img src="'+m.src+'" alt=""></div><div class="tx"><b>'+esc(m.nom)+'</b>'+(flags?'<span>'+flags+'</span>':'')+
       '<select data-prix="'+m.n+'"><option value="0"'+(m.prix===0?' selected':'')+'>Offerte (comme un modèle)</option><option value="3"'+(m.prix===3?' selected':'')+'>+3 € (comme un texte)</option><option value="-1">Masquée</option></select></div></div>';
   }).join('');
