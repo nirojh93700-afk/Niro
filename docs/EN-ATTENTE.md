@@ -503,3 +503,9 @@ En attente de SA décision :
 - Règle notée dans CLAUDE.md : toujours redire aux clientes qu'on fait des images vraiment personnalisées (verres, cristal, support téléphone…).
 - Question au gérant : prix de création quand l'atelier dessine l'image d'après une idée ?
 - ✅ EN LIGNE le 28/10 (« pousse ») : consigne de l'agent e-mail, question de la FAQ, phrase dans la case « Une demande particulière ».
+
+## ✉️ DORIANE (0G7TBBLF, 4 verres à vin 36 cl, visuel 1) — 28/10/2026
+- Payé le 28/10 à 15 h 51 (BIENVENUE10, 73,71 €, Mondial Relay Bailleul). À expédier au plus tard le mer. 4 nov. (5 jours ouvrés).
+- Elle a demandé une date de livraison : réponse partie par le site le 28/10 à 18 h 15 (fabrication 3 à 5 jours ouvrés,
+  « nous vous enverrons un e-mail dès que votre colis sera parti, avec son numéro de suivi »). Promesse tenue par l'e-mail
+  « expédiée » du site : passer la commande en « Expédiée » AVEC le numéro Mondial Relay.
