@@ -551,3 +551,20 @@ les redemande, le dire franchement et proposer de les régénérer avec les scri
 > 👉 nivcreation.fr
 
 #nivcreation #marquepage #cadeaupersonnalise #nouveaute #ideecadeau
+
+## Vidéo 33 — Noël, cadeaux gravés (28/10/2026)
+- Demande du gérant : « fais-moi une vidéo pour Noël ». 33,7 s, verticale, sans son, même habillage Noël que la vidéo 13 (ruban « IDÉE CADEAU DE
+  NOËL » sur chaque plan, pastille « NOËL 2026 », cartes rouge & or, fin « Commandez tôt pour Noël », aucune date).
+- Produits (13, tous GRAVÉS, planche contact regardée, tous en vente, différents des vidéos 13 à 15) : cristal déjà gravé sapin · puzzle photo
+  famille · collier Double Cœur · carafe 1892 · marque-page bois portrait « Pour Mamie » · verre à cocktail · cristal chat au sapin · verre à whisky
+  « meilleur papa » · collier Cœur & plaques · puzzle savane · bracelet à plaque · cristal ange · marque-page « Camille » papillons.
+  ⚠️ Les deux marque-pages sont des APERÇUS de la maquette (pas encore de photo gravée de l'atelier).
+- Fichiers : `docs/videos/33-noel-720x1280.mp4` (2,0 Mo) ; pleine qualité 1080 × 1920 (6,2 Mo) dans le dossier temporaire de la session.
+  Script `tools/video/noel_33.py <dossier de sortie>`.
+- Description livrée :
+
+**Vidéo 33 — Noël, cadeaux gravés** (Cristal déjà gravé, Puzzle photo gravé, Collier Double Cœur, Carafe à whisky gravée, Marque-page en bois gravé, Verre à cocktail gravé, Verre à whisky gravé, Collier Cœur & plaques, Puzzle en bois, Bracelet à plaque gravée)
+> Noël approche 🎄✨ Cette année, offrez un cadeau qui ne ressemble à aucun autre : un prénom, une photo, un souvenir, gravés dans notre atelier 💛 Cristal, bijoux, verres, puzzles, marque-pages… chaque pièce est gravée une par une, pensez-y tôt 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaudenoel #cadeaupersonnalise #noel2026 #ideecadeau
