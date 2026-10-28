@@ -288,7 +288,7 @@ En attente de SA décision :
 - Artifact https://claude.ai/artifact/215micVgntigmyRFXsG49e : ① Gestion → Fêtes (interrupteur par fête, alerte 2 mois avant, 25 images de
   Noël numérotées 1–25, **emballages de Noël des BIJOUX à ses prix du 28/10**, produits concernés) · ② fiche verre à vin avec Noël allumé /
   éteint · **③ fiche réelle du collier cœur gravé : les emballages de Noël sous « Votre emballage »** (v2). Détail dans `CLAUDE.md`.
-- **Il doit dire** : si la v4 lui convient (carte « Un modèle de Noël » à part avec sa propre grille ; bloc de Noël replié, seulement les emballages où le bijou — ou sa boîte — rentre ; les cases « Convient si » sont à vérifier par lui, surtout la boîte allongée des bracelets : à mesurer) · quelle image est offerte / payante (proposé :
+- **Il doit dire** : si la v4 lui convient (carte « Un modèle de Noël » à part avec sa propre grille ; bloc de Noël replié, seulement les emballages où le bijou — ou sa boîte — rentre ; les cases « Convient si » sont à vérifier par lui, surtout la boîte allongée des bracelets : à mesurer) · **peser les 6 emballages de Noël** (poids estimés dans la maquette ; la pochette + microfibre peut faire passer la lettre à 6,50 €) · quelle image est offerte / payante (proposé :
   texte = +3 €, dessin = offert) · garder ou non Tom et Jerry (8), Mickey et Minnie (13), le Grinch (15) (personnages protégés) · les produits
   non cochés (porte-clés cuir, pièce laiton, puzzle photo, marque-pages) · relier ou non le bandeau Noël de l'accueil et /offrir/noel à cet
   interrupteur · d'autres images ? · les emballages de Noël sur TOUS les bijoux, ou seulement certains ?

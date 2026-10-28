@@ -140,6 +140,9 @@ EMB_NOEL = [
 # dimensions (il coche / décoche dans Gestion). seul = bijou nu ou en microfibre · sac = dans le sac cadeau beige · carree = boîte carrée 9 × 9 (colliers) ·
 # allongee = boîte allongée (bracelets, taille à mesurer) · pack = Pack boîte cadeau (sac + boîte + microfibre).
 FIT = dict(sachet=dict(seul=True), pochette=dict(seul=True), sac=dict(seul=True, sac=True, carree=True), ruban=dict(seul=True), rouge=dict(seul=True), pack=dict(seul=True))
+POIDS = dict(sachet=5, pochette=20, sac=25, ruban=60, rouge=45, pack=90)  # grammes ESTIMÉS (rien n'est pesé) : le port du site se calcule au poids
+for e in EMB_NOEL:
+    e["poids"] = POIDS[e["id"]]
 for e in EMB_NOEL:
     e["fit"] = {k: bool(FIT[e["id"]].get(k)) for k in ("seul", "sac", "carree", "allongee", "pack")}
 ETIQUETTE = dict(nom="Étiquette rouge « Merry Christmas » + ficelle", d="5,4 × 9 cm · offerte avec chaque emballage de Noël", cout=0.05, stock=50, photo="6-etiquettes-I.jpg")
@@ -306,6 +309,12 @@ ADMIN = f"""
 
     <h3 class="ft-h3">Emballages de Noël <span class="ft-h3s">pour les BIJOUX · s'ajoutent sous « Votre emballage » de chaque fiche bijou, en plus des emballages habituels</span></h3>
     <p class="ft-p ft-note">Vos emballages Temu reçus le 28/10, aux <b>prix que vous avez validés</b>. Le coût rendu comprend la part du port ; le stock = les quantités reçues, il baisse à chaque commande comme dans Matériel &amp; emballages. L'étiquette rouge est <b>offerte</b> avec chaque emballage de Noël. Le bijou — ou sa boîte habituelle — va <b>dans</b> l'emballage de Noël : cochez dans quoi chaque emballage accepte le bijou ; <b>ce qui ne rentre pas n'est pas proposé</b> à la cliente (une boîte allongée ne tient dans aucun sachet). Sur la fiche, le bloc de Noël est <b>replié</b> : une ligne « Ajouter un emballage de Noël », qui s'ouvre d'un clic. Une boîte rigide part en colis (règle du site) ; sachet et pochette restent en lettre suivie. Regardez l'onglet ③ : la fiche du collier suit ces réglages en direct.</p>
+    <div class="ft-port"><b>📦 Livraison, prise en compte comme pour vos emballages actuels</b> (règle du site, rien ne change) :
+     <ul><li><b>sachet, pochette, sac de Noël</b> (plat, moins de 3 cm) → le bijou reste en <b>lettre suivie</b> : la cliente paie 4,90 € jusqu'à 100 g (6,50 € de 100 à 250 g), vous payez La Poste ≈ 4,45 € (5,77 €) ;</li>
+     <li><b>boîte à ruban, boîte rouge, pack</b> (boîte rigide) → <b>petit colis</b>, comme votre boîte cadeau d'aujourd'hui : la cliente paie 6,90 € à domicile ou 4,90 € en point relais, vous payez Boxtal ≈ 6,12 € (relais ≈ 3,77 €) ;</li>
+     <li>dès <b>45 €</b> de bijoux, la livraison reste <b>offerte</b> (en lettre comme en boîte, promesse du site) : c'est vous qui payez le port, le prix de l'emballage de Noël doit donc couvrir sa marge seul — c'est le cas pour tous (marge ≥ 0,77 €) ;</li>
+     <li>le port se calcule au <b>poids</b> : le site compte 72 g par bijou + l'emballage. Les grammes ci-dessous sont <b>estimés, à peser</b> ; un bijou en microfibre (15 g) + pochette (≈ 20 g) frôle les 100 g → si la balance confirme, soit on baisse le poids déclaré de la pochette, soit la cliente paie 6,50 € au lieu de 4,90 €.</li></ul>
+     Sur la fiche, chaque emballage de Noël dit s'il part en lettre ou en colis, et le bloc de Noël rappelle le prix de livraison correspondant.</div>
     <div class="ft-embs" id="ft-embs"></div>
 
     <h3 class="ft-h3">Déjà sur le site toute l'année <span class="ft-h3s">liés à Noël, mais jamais retirés quand Noël s'éteint</span></h3>
@@ -442,6 +451,10 @@ body{font-family:var(--font-body);color:var(--ink)}
 .ft-embc.xn{border:1.5px solid #e4c4c0;background:#fff8f6;border-radius:14px;padding:12px;margin-top:-8px}
 .ft-embc.xn .t{display:flex;align-items:center;gap:8px}.ft-embc .xn-close{margin-left:auto;flex:0 0 auto;width:auto;padding:5px 9px;font-size:.74rem;font-weight:600;border-radius:9px;min-height:0;color:var(--ink-soft)}
 .xn-no{margin:-8px 0 18px;font-size:.8rem;color:var(--ink-soft)}
+.xn-port{margin:8px 0 0;font-size:.8rem;color:var(--ink);background:#fff;border:1px solid #e9d9d6;border-radius:10px;padding:8px 10px}
+.ft-embn .port{font-size:.72rem;color:var(--ink);margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 8px}.ft-embn .port i{color:var(--ink-soft)}
+.ft-embn .port b{display:inline;font-size:inherit;margin:0}
+.ft-port{font-size:.82rem;color:var(--ink);background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:10px 14px;margin:0 0 12px}.ft-port ul{margin:6px 0 0;padding-left:18px}.ft-port li{margin:3px 0}
 .ft-embn .fit{margin-top:7px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}.ft-embn .fit small{width:100%;margin:0 0 1px;color:var(--ink);font-weight:600}
 .ft-embn .fit label{font-size:.7rem;color:var(--ink-soft);border:1px solid var(--line);border-radius:20px;padding:3px 8px;display:inline-flex;gap:4px;align-items:center;cursor:pointer;background:#fff}
 .ft-embn .fit label.on{border-color:#1c6b3a;color:#1c6b3a;background:#eef7f0}.ft-embn .fit input{margin:0;width:13px;height:13px}
@@ -598,6 +611,7 @@ document.addEventListener('change',function(ev){
   var p=ev.target.closest('.ft-prod input');if(p){p.closest('.ft-prod').classList.toggle('on',p.checked)}
   var q=ev.target.closest('select[data-pkprix]');if(q){var e=EMB.find(function(x){return x.id===q.getAttribute('data-pkprix')});e.px=+q.value;renderEmbAdmin();renderBijou();return}
   var ft=ev.target.closest('input[data-fit]');if(ft){var e3=EMB.find(function(x){return x.id===ft.getAttribute('data-fit')});e3.fit[ft.getAttribute('data-cat')]=ft.checked;ft.closest('label').classList.toggle('on',ft.checked);renderBijou();return}
+  var pw=ev.target.closest('input[data-pkpoids]');if(pw){var e4=EMB.find(function(x){return x.id===pw.getAttribute('data-pkpoids')});e4.poids=Math.max(0,+pw.value||0);renderBijou();return}
   var st=ev.target.closest('input[data-pkstock]');if(st){var e2=EMB.find(function(x){return x.id===st.getAttribute('data-pkstock')});e2.stock=Math.max(0,+st.value||0);renderBijou();return}
 });
 function alert_(msg){var b=$('#ft-toast');b.textContent=msg;b.style.display='block';clearTimeout(b._t);b._t=setTimeout(function(){b.style.display='none'},3500)}
@@ -609,7 +623,8 @@ function renderEmbAdmin(){
     var opts=CH.map(function(v){return '<option value="'+v+'"'+(Math.abs(v-e.px)<.001?' selected':'')+'>'+(v?'+'+eur(v):'Offert')+'</option>'}).join('');
     var coul=e.couleurs?'<div class="coul">'+COUL.map(function(c){return '<img src="'+c.src+'" alt="" title="'+esc(c.nom)+'">'}).join('')+'<small style="margin:0;align-self:center">vert sapin · bleu nuit</small></div>':'';
     return '<div class="ft-embn'+(e.id==='pack'?' pk':'')+'">'+(e.id==='pack'?'<span class="etq">PACK</span>':'')+'<img src="'+e.src+'" alt=""><div class="b"><b>'+esc(e.nom)+'</b><div class="d">'+esc(e.d)+'</div>'
-      +'<div class="ft-emb-l"><label>Prix <select data-pkprix="'+e.id+'">'+opts+'</select></label><label>Stock <input type="number" data-pkstock="'+e.id+'" value="'+e.stock+'" min="0"></label></div>'
+      +'<div class="ft-emb-l"><label>Prix <select data-pkprix="'+e.id+'">'+opts+'</select></label><label>Stock <input type="number" data-pkstock="'+e.id+'" value="'+e.stock+'" min="0"></label><label>Poids <input type="number" data-pkpoids="'+e.id+'" value="'+e.poids+'" min="0" title="grammes, à peser"></label></div>'
+      +'<div class="port">'+(e.colis?'📦 <b>Part en colis</b> (boîte rigide) : cliente 6,90 € à domicile · 4,90 € en relais · offerte dès 45 € · vous ≈ 6,12 €':'✉️ <b>Reste en lettre suivie</b> : cliente 4,90 € jusqu’à 100 g · offerte dès 45 € · vous ≈ 4,45 €')+' · ≈ '+e.poids+' g <i>(à peser)</i></div>'
       +'<small>Coût rendu '+eur(e.cout)+' · <span class="marge">marge '+(marge>=0?'+':'−')+eur(Math.abs(marge))+'</span>'+(e.barre?' · prix barré '+eur(e.barre)+' (= boîte + sac)':'')+'</small>'+coul
       +'<div class="fit"><small>Convient si le bijou est :</small>'+FITS.map(function(f){return '<label'+(e.fit[f[0]]?' class="on"':'')+'><input type="checkbox" data-fit="'+e.id+'" data-cat="'+f[0]+'"'+(e.fit[f[0]]?' checked':'')+'> '+f[1]+'</label>'}).join('')+'</div></div></div>'}).join('');
   h+='<div class="ft-embn"><span class="etq off">OFFERTE</span><img src="'+ETQ.src+'" alt=""><div class="b"><b>'+esc(ETQ.nom)+'</b><div class="d">'+esc(ETQ.d)+'</div><div class="ft-emb-l"><label>Prix <select disabled><option>Offerte</option></select></label><label>Stock <input type="number" value="'+ETQ.stock+'" min="0"></label></div><small>Coût '+eur(ETQ.cout)+' · la cliente ne la choisit pas : elle est mise d’office.</small></div></div>';
@@ -619,6 +634,12 @@ function renderEmbAdmin(){
 function pkChoisi(){return PK.find(function(x){return x.id===S.pk})||PK[0]}
 function xnChoisi(){return EMB.find(function(x){return x.id===S.xn})||null}
 function xnDispo(){var cat=pkChoisi().cat;return EMB.filter(function(e){return e.fit[cat]})}
+function enColis(x){var p=pkChoisi();return (x&&x.colis)||p.cat==='carree'||p.cat==='allongee'||p.cat==='pack'}
+function portTxt(x){
+  if(!x)return '📦 Livraison : '+(enColis(null)?'votre bijou en boîte part en colis — 6,90 € à domicile ou 4,90 € en point relais':'votre bijou part en lettre suivie — 4,90 €')+', offerte dès 45 € de bijoux.';
+  if(enColis(x))return '📦 Livraison avec '+esc(x.nom.toLowerCase())+' : votre bijou part en petit colis — <b>6,90 €</b> à domicile ou <b>4,90 €</b> en point relais, offerte dès 45 € de bijoux.';
+  return '✉️ Livraison avec '+esc(x.nom.toLowerCase())+' : votre bijou reste en lettre suivie — <b>4,90 €</b>, offerte dès 45 € de bijoux.';
+}
 function totalBijou(){var x=xnChoisi();return PRIX_BIJOU+(pkChoisi().px||0)+(x?x.px:0)}
 function btnPk(o,noel){
   var on=noel?S.xn===o.id:S.pk===o.id, img=o.src?'<img class="th" src="'+o.src+'" alt="">':'<span class="ico">'+(o.ico||'🎁')+'</span>';
@@ -636,14 +657,15 @@ function renderBijou(){
     if(dispo.length){
       var mini=Math.min.apply(null,dispo.map(function(e){return e.px}));
       if(!S.xnOpen){
-        if(x){h+='<button type="button" class="xn-tog on" data-xntog><img class="th" src="'+x.src+'" alt=""><span style="min-width:0"><strong>🎄 Emballage de Noël : '+esc(x.nom)+(x.couleurs?' · '+esc(COUL.find(function(c){return c.id===S.couleur}).nom.toLowerCase()):'')+'</strong><span class="d">étiquette « Merry Christmas » offerte</span></span><span class="px">+'+eur(x.px)+'<i>Modifier</i></span></button>';}
+        if(x){h+='<button type="button" class="xn-tog on" data-xntog><img class="th" src="'+x.src+'" alt=""><span style="min-width:0"><strong>🎄 Emballage de Noël : '+esc(x.nom)+(x.couleurs?' · '+esc(COUL.find(function(c){return c.id===S.couleur}).nom.toLowerCase()):'')+'</strong><span class="d">étiquette « Merry Christmas » offerte · '+(enColis(x)?'part en colis (6,90 € à domicile, 4,90 € en relais)':'lettre suivie (4,90 €)')+' · offerte dès 45 €</span></span><span class="px">+'+eur(x.px)+'<i>Modifier</i></span></button>';}
         else{h+='<button type="button" class="xn-tog" data-xntog><span class="ico">🎄</span><span style="min-width:0"><strong>Ajouter un emballage de Noël</strong><span class="d">facultatif · dès '+eur(mini)+' · '+dispo.length+' choix</span></span><span class="px"><i>Voir ▾</i></span></button>';}
       }else{
         h+='<div class="ft-embc xn"><div class="t">🎄 Votre emballage de Noël <button type="button" class="xn-close" data-xntog>Fermer ▴</button></div><p class="s">'+(pkChoisi().cat==='seul'?'Le bijou est glissé dedans, prêt à offrir.':'Votre '+esc(pkChoisi().nom.toLowerCase())+' est glissé dedans, prêt à offrir.')+'</p><div class="opts">';
         h+=btnPk({id:'none',nom:'Sans emballage de Noël',d:'Seulement l’emballage choisi ci-dessus',px:0,ico:'✖️'},true);
         h+=dispo.map(function(o){return btnPk(o,true)}).join('');
         if(x&&x.couleurs){h+='<div class="couleur">Couleur de la boîte : '+COUL.map(function(c){return '<button type="button" data-pc="'+c.id+'" class="'+(S.couleur===c.id?'on':'')+'"><img src="'+c.src+'" alt="">'+(S.couleur===c.id?'✓ ':'')+esc(c.nom)+'</button>'}).join('')+'</div>';}
-        h+='<p class="etqoff"><img src="'+ETQ.src+'" alt="">Avec chaque emballage de Noël, l’étiquette « Merry Christmas » et sa ficelle sont offertes.</p></div></div>';
+        h+='<p class="etqoff"><img src="'+ETQ.src+'" alt="">Avec chaque emballage de Noël, l’étiquette « Merry Christmas » et sa ficelle sont offertes.</p>';
+        h+='<p class="xn-port">'+portTxt(x)+'</p></div></div>';
       }
     }else if(pkChoisi().cat!=='seul'){
       h+='<p class="xn-no">🎄 Pas d’emballage de Noël avec cette présentation : elle n’y rentre pas.</p>';

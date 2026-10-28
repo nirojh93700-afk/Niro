@@ -40,7 +40,7 @@
     ruban 0,68 / 0,76 · boîte rouge 0,62 · étiquette 0,05 · sachet 0,13 €). Pour les BIJOUX ; prix à donner par lui.
 - ✅ **28/10 soir — MAQUETTE FÊTES v2 (gérant : « C'est bon, mets ces prix avec le pack Noël et prépare-moi la maquette… intègre
   [dans] l'autre maquette de Noël… une maquette comment tu vas mettre sur le site »)** : même artifact 215micVgntigmyRFXsG49e, VERSION 2
-  puis VERSIONS 3 à 5 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
+  puis VERSIONS 3 à 6 le soir même (en attente de son avis). Générateur `tools/maquettes/fetes-noel.py <css> <capture vin> <sortie> <capture /produit/collier-coeur-grave>`
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
@@ -77,6 +77,17 @@
     sur chaque produit coché. Vérifié 390 / 1280 : 84 vérifs, 0 erreur, 0 débordement (`z-index` ajouté au numéro des tuiles).
   · v5 (28/10 soir, « mets cette photo à la place de l'autre ») : photo du sachet rouge = celle qu'il a envoyée (sachet remis en main,
     table de Noël, filigrane INEDACO) → `assets/noel/emballages/7-sachet-rouge-O-remise.jpg` ; l'ancienne (A) reste dans le dossier, inutilisée.
+  · **v6 (28/10 soir, gérant : « les prix que t'as mis, fais attention à prendre en compte aussi les livraisons »)** : règle du site RAPPELÉE et
+    appliquée — sachet / pochette / sac de Noël (plat) = le bijou reste en **lettre suivie** (cliente 4,90 € ≤ 100 g, 6,50 € ≤ 250 g ; lui
+    ≈ 4,45 / 5,77 €) ; boîte à ruban / boîte rouge / pack (boîte rigide) = **petit colis** comme la boîte cadeau actuelle (cliente 6,90 € à
+    domicile, 4,90 € en relais ; lui ≈ 6,12 € Boxtal, 3,77 € relais) ; dès 45 € de bijoux la livraison reste offerte, donc le prix de chaque
+    emballage doit couvrir sa marge seul (vrai pour les 6, marge ≥ 0,77 €). Le port se calcule au POIDS (72 g par bijou + emballages) :
+    **poids ESTIMÉS à peser** — sachet 5 · pochette 20 · sac 25 · boîte ruban 60 · boîte rouge 45 · pack 90 g (champ « Poids » par
+    emballage dans Gestion) ; ⚠️ microfibre 15 + pochette 20 + 72 = 107 g → 6,50 € au lieu de 4,90 : à trancher après pesée. Gestion : encadré
+    « 📦 Livraison » + ligne lettre / colis sur chaque carte ; fiche : chaque option dit « reste en lettre suivie » / « part en colis », le bloc
+    ouvert affiche « Livraison avec … : 4,90 € » ou « 6,90 € à domicile ou 4,90 € en point relais, offerte dès 45 € », le résumé replié aussi.
+    À la construction : `colis:true` sur les boîtes et le pack (même règle que les ids `boite` / `pack` : `bijouEnBoite`), `weight` par emballage.
+    92 vérifs, 0 erreur, 0 débordement.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
     options de Noël au sélecteur `packaging` des bijoux (`packagingExtra` au paiement, stock décompté comme les emballages de Matériel),
     `consignesGravure` / « Vendu en plus » écrivent « Emballage de Noël : pack, boîte bleu nuit » ; étiquette mise d'office.
