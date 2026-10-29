@@ -67,8 +67,9 @@ export const CG_FAMILLES = [
   {"k": "voyage", "nom": "Voyage"},
 ];
 
+// socle = prix du socle en vertical ; socleH = en horizontal (couché, le Petit fait 8 cm : grand socle 13 × 7 cm).
 export const CG_TAILLES = [
-  { id: "petit", nom: "Petit", v: "5×5×8 cm", h: "8×5×5 cm", prix: 39.9, socle: 14.9 },
+  { id: "petit", nom: "Petit", v: "5×5×8 cm", h: "8×5×5 cm", prix: 39.9, socle: 14.9, socleH: 19.9 },
   { id: "moyen", nom: "Moyen", v: "5×6×10 cm", h: "10×6×5 cm", prix: 59.9, socle: 19.9 },
   { id: "grand", nom: "Grand", v: "6×8×12 cm", h: "12×8×6 cm", prix: 99.9, socle: 19.9 },
   { id: "xl", nom: "XL", v: "6×10×15 cm", h: "15×10×6 cm", prix: 149.9, socle: 19.9 },

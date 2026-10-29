@@ -101,7 +101,9 @@ export default function CristauxGraves({ prix = {}, noel = null }) {
   const prixZod = zopt === "tout" ? CG_ZOD_TOUT_PRIX : zopt === "nom" ? CG_ZOD_NOM_PRIX : 0;
   const avecTxt = zod ? zodOk : txt && Boolean(texte.trim());
   const t = T[taille];
-  const unit = t.prix + (socle ? t.socle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
+  // Couché (horizontal), même le Petit prend le grand socle ; le petit socle carré = vertical Petit seulement.
+  const prixSocle = fmt === "h" ? (t.socleH || t.socle) : t.socle;
+  const unit = t.prix + (socle ? prixSocle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
   const ok = i >= 0 && Boolean(fmt) && (!ouvert || avecTxt);
   const manque = i < 0 ? "Choisissez d'abord un modèle, un dessin ou votre signe."
     : !fmt ? "Il manque le format : vertical ou horizontal."
@@ -166,7 +168,7 @@ export default function CristauxGraves({ prix = {}, noel = null }) {
       socle ? "Socle lumineux LED" : "",
     ].filter(Boolean).join(" · ");
     const variantTitle = `${format} · ${t.nom} — ${fmt === "h" ? t.h : t.v}`;
-    const poids = ({ petit: 750, moyen: 1100, grand: 1800, xl: 2800 }[taille] || 900) + (socle ? (taille === "petit" ? 300 : 550) : 0);
+    const poids = ({ petit: 750, moyen: 1100, grand: 1800, xl: 2800 }[taille] || 900) + (socle ? (taille === "petit" && fmt !== "h" ? 300 : 550) : 0);
     addItem({
       productSlug: CG_SLUG,
       variantId,
@@ -382,7 +384,7 @@ export default function CristauxGraves({ prix = {}, noel = null }) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/produits/socle-led-rectangle.jpg" alt="" />
                 <span><b>Ajouter le socle lumineux</b><small>LED multicolores, couleurs au toucher, sur prise secteur</small></span>
-                <span className="cg-socle-p">+{eur(t.socle)}</span>
+                <span className="cg-socle-p">+{eur(prixSocle)}</span>
                 <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
               </button>
             </div>
