@@ -22,6 +22,7 @@ import { resolveCategories } from "./taxonomy";
 import { estRecent } from "./productDates";
 import { sansAncienHebergeur } from "./photosLocales";
 import { retiresParGroupe } from "./visibilite";
+import { configNoel, noelPourProduit, emballagesNoelPourProduit, champsFicheAvecNoel } from "./fetes";
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
@@ -141,6 +142,8 @@ export async function getCatalog() {
   const pkgLive = settings?.packagingLive === true;
   const pkgLib = settings?.packaging;
   const pkgAssign = settings?.productPackaging || {};
+  // 🎄 Noël (Gestion → Fêtes) : éteint = rien n'est ajouté, les fiches restent celles d'aujourd'hui.
+  const noelCfg = configNoel(settings);
   // SÉCURITÉ — une catégorie qui n'existe pas rendrait le produit INVISIBLE dans
   // la boutique (il tomberait dans un rayon inexistant). C'est ce qui est arrivé
   // aux clés USB : leur catégorie avait été remplacée par leur sous-catégorie
@@ -172,11 +175,15 @@ export async function getCatalog() {
     // après l'ajout du produit (dates dans productDates.js). Les autres
     // étiquettes (Promo, etc.) ne sont pas touchées.
     const badge = p.badge === "Nouveau" && !estRecent(p.slug) ? "" : p.badge;
+    const noel = noelPourProduit(p, noelCfg);
+    const packagingNoel = packaging ? emballagesNoelPourProduit(p, noelCfg) : null;
     return {
       ...p,
       badge,
       ...(refMarkup > 0 ? { refMarkup } : {}),
       ...(packaging ? { packaging } : {}),
+      ...(noel ? { noel, personalizationFields: champsFicheAvecNoel(p.personalizationFields, noel) } : {}),
+      ...(packagingNoel ? { packagingNoel } : {}),
       soldOut: productSoldOut(p, stock),
     };
   });

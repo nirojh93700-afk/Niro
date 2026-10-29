@@ -5,7 +5,7 @@ import DelaiCommande from "@/components/admin/DelaiCommande";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
-import { BandeauDelai, MessagesATraiter, ChiffresPeriode } from "@/components/admin/DashBlocks";
+import { BandeauDelai, BandeauFetes, MessagesATraiter, ChiffresPeriode } from "@/components/admin/DashBlocks";
 import { commandesEnRetard } from "@/lib/dashPeriodes";
 import { getCategoryLabel, getProductBySlug } from "@/lib/products";
 import { TableGravure } from "@/lib/engravingSheet";
@@ -122,6 +122,7 @@ export default function GestionPage({ onglet = "" } = {}) {
   const [unreadMeta, setUnreadMeta] = useState([]);
   const [quotes, setQuotes] = useState([]);
   const [vacationCfg, setVacationCfg] = useState(null);
+  const [fetesCfg, setFetesCfg] = useState({});
   const [ficheOpen, setFicheOpen] = useState(null); // id de commande dont la fiche atelier est ouverte
   const [mat, setMat] = useState(null);         // matériel & conditionnement + pièces ratées (13/10/2026)
   const [condOrder, setCondOrder] = useState(null);
@@ -174,6 +175,7 @@ export default function GestionPage({ onglet = "" } = {}) {
         setSiteSettings({ salesGoal: s.salesGoal || 0, crmNotes: s.crmNotes || {}, ventesExternes: Array.isArray(s.ventesExternes) ? s.ventesExternes : [] });
         setGoalInput(String(s.salesGoal || ""));
         setVacationCfg(s.vacation || null);
+        setFetesCfg(s.fetes || {});
       },
       // Réponses aux clientes préparées par l'agent, en attente de validation.
       "/api/admin/pending-replies": (d) => { const liste = d.pending || []; setPendingReplies(liste.length); setPendingList(liste); },
@@ -840,6 +842,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                 <button className="btn btn-gold" style={{ padding: "6px 16px" }} onClick={() => setTab("avis")}>Voir les avis →</button>
               </div>
             )}
+            {/* 🎄 Fêtes : alerte 2 mois avant (Gestion → Fêtes de l'année). */}
+            <BandeauFetes fetes={fetesCfg} />
             {/* ② Mode délai allongé : visible tant qu'il est allumé, avec Éteindre. */}
             <BandeauDelai
               vacation={vacationCfg}

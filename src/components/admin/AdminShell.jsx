@@ -49,6 +49,9 @@ const NAV = [
     { id: "sante", icon: "◐", text: "Santé du catalogue", href: "/gestion/sante" },
     { id: "achats", icon: "⇩", text: "Achats & factures", href: "/gestion/achats" },
   ] },
+  { label: "Fêtes", items: [
+    { id: "fetes", icon: "✦", text: "Fêtes de l'année", href: "/gestion/fetes" },
+  ] },
   { label: "Marketing", items: [
     { id: "newsletter", icon: "▷", text: "Newsletter", href: "/gestion/newsletter" },
     { id: "promos", icon: "%", text: "Promotions", href: "/gestion/promotions" },

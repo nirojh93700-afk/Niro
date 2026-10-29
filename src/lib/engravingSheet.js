@@ -110,6 +110,10 @@ function Consignes({ item, avecPlacement = true }) {
             <div key={i} style={{ ...cG, display: "flex", gap: 10, borderBottom: i < c.general.length - 1 ? cG.borderBottom : 0 }}>
               <span style={{ minWidth: 120, fontWeight: 600, color: "#6b5418" }}>{g.k}</span>
               <span style={{ fontWeight: g.fort ? 800 : 600, fontSize: g.fort ? "1.1rem" : "0.98rem", color: "#2b2620" }}>{g.v}</span>
+              {g.img ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={g.img} alt="" style={{ width: 64, height: 64, objectFit: "contain", border: "1px solid #ddd", borderRadius: 6, background: "#fff", marginLeft: "auto" }} />
+              ) : null}
             </div>
           ))}
         </div>

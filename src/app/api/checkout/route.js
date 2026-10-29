@@ -12,6 +12,7 @@ import { vacationActive, cadeauColisActif } from "@/lib/vacation";
 import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
 import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
 import { packagingExtra } from "@/lib/packaging";
+import { packagingNoelExtra } from "@/lib/fetes";
 import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
 
 // Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
@@ -231,6 +232,9 @@ export async function POST(req) {
     }
     // Recalcul de confiance de l'emballage choisi (prix depuis le catalogue serveur).
     const pkg = packagingExtra(product, item.packaging || []);
+    // 🎄 Emballage de Noël (Gestion → Fêtes allumée) : prix du catalogue serveur, et seulement s'il rentre
+    // avec l'emballage habituel choisi ; boîte ou pack = colis ; étiquette offerte décomptée du stock.
+    const pkgN = packagingNoelExtra(product, item.packagingNoel, item.packaging || []);
     // Recalcul de confiance du configurateur gobelet : motifs en plus de l'inclus.
     let motifExtra = 0, motifExtraCount = 0;
     if (product.motifComposer) {
@@ -240,7 +244,7 @@ export async function POST(req) {
       motifExtraCount = Math.max(0, mc - inc);
       motifExtra = Math.round(motifExtraCount * per * 100) / 100;
     }
-    let unitPrice = basePrice + extra.amount + pkg.amount + motifExtra;
+    let unitPrice = basePrice + extra.amount + pkg.amount + pkgN.amount + motifExtra;
     // Verres : si la gravure de la ligne ne se partage pas au centime entre les verres, la ligne
     // part en UNE seule ligne Stripe (quantité 1, vraie quantité dans metadata.qte) : le montant
     // payé est exactement celui affiché sur la fiche.
@@ -256,12 +260,13 @@ export async function POST(req) {
     // elles sont décomptées comme un produit, sinon on pourrait en vendre plus
     // qu'on n'en a. Le contrôle de rupture ci-dessous les couvre aussi.
     for (const sid of extra.stockIds || []) boughtVariants.push({ variantId: sid, qty: quantity });
+    for (const sid of pkgN.stockIds || []) boughtVariants.push({ variantId: sid, qty: quantity });
     // Poids réel par TAILLE (variant.weight) + poids des options (ex. socle, emballage),
     // multiplié par la quantité → frais de port corrects pour n'importe quel panier.
-    const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0);
+    const unitGrams = (Number(variant.weight) || Number(product.weight) || 200) + (extra.weight || 0) + (pkg.weight || 0) + (pkgN.weight || 0);
     // 📦 Un bijou emballé dans une BOÎTE rigide (boîte cadeau, Pack Collier / Pack Bracelet) dépasse
     // les 3 cm de la Lettre Suivie → il part en petit colis (règle gérante, 31/08/2026).
-    const pkgBoite = (pkg.chosen || []).some((id) => /boite|pack/i.test(String(id)));
+    const pkgBoite = (pkg.chosen || []).some((id) => /boite|pack/i.test(String(id))) || pkgN.colis;
     ajouterLignePort(etatPort, { product, unitGrams, unitPrice, quantity, pkgBoite });
 
     // Taille du produit (verre à vin 36 / 47 cl…) écrite AVEC l'option : l'atelier sait quoi prendre (13/10/2026).
@@ -279,6 +284,7 @@ export async function POST(req) {
     if (pkg.labels.length) {
       descriptionParts.push(`Emballage : ${pkg.labels.join(", ")}`);
     }
+    if (pkgN.label) descriptionParts.push(pkgN.label);
     if (item.personalization) {
       descriptionParts.push(`Personnalisation : ${String(item.personalization).slice(0, 220)}`);
     }
@@ -289,7 +295,7 @@ export async function POST(req) {
       price_data: {
         currency: "eur",
         // prix de confiance (promo appliquée si définie) ; ligne unique = toute la ligne
-        unit_amount: ligneUnique ? Math.round((basePrice + pkg.amount + motifExtra) * 100) * quantity + Math.round(gravV.total * 100) : toCents(unitPrice),
+        unit_amount: ligneUnique ? Math.round((basePrice + pkg.amount + pkgN.amount + motifExtra) * 100) * quantity + Math.round(gravV.total * 100) : toCents(unitPrice),
         product_data: {
           name: ligneUnique ? `${product.name} × ${quantity}` : product.name,
           description: descriptionParts.join(" — "),

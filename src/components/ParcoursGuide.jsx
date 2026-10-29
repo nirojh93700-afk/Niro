@@ -17,7 +17,7 @@ import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
 import { engravingExtra } from "@/lib/engravingPrice";
 import { texteOffertVerre1 } from "@/lib/prixVerres";
-import { parcoursEtat, modeleChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
+import { parcoursEtat, modeleChoisi, noelChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
 import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
 import DateDansImage from "./DateDansImage";
 
@@ -33,6 +33,14 @@ const MODES = (cfg, nbModeles) => [
   .filter((m) => !cfg.modes || cfg.modes.includes(m.key))
   .sort((a, b) => (cfg.modes ? cfg.modes.indexOf(a.key) - cfg.modes.indexOf(b.key) : 0))
   .map((m) => ({ ...m, ...(cfg.modesTextes?.[m.key] || {}) }));
+// 🎄 Noël allumé (Gestion → Fêtes) : une carte À PART, juste après « Un modèle décoré » (ou en tête),
+// jamais mélangée aux modèles habituels (gérant, 28/10/2026).
+const avecNoel = (liste, noel) => {
+  if (!noel?.images?.length) return liste;
+  const carte = { key: "noel", titre: "Un modèle de Noël", sous: `${noel.images.length} dessins et mots de Noël numérotés, avec vos prénoms si vous voulez.` };
+  const i = liste.findIndex((m) => m.key === "modele");
+  return i >= 0 ? [...liste.slice(0, i + 1), carte, ...liste.slice(i + 1)] : [carte, ...liste];
+};
 
 export default function ParcoursGuide({ product, fieldValues, setFieldValues, unitPrice, onValidity, verre1 = true }) {
   const cfg = product.parcoursGuide;
@@ -42,6 +50,8 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   const objet = cfg.objet || "carafe";
   const mode = fieldValues.mode || "";
   const modele = modeleChoisi(product, fieldValues); // { n, legende, champs, exemple, value? } ou null
+  const noel = product.noel || null; // { images, champs } quand Noël est allumé et la fiche cochée
+  const noelM = noelChoisi(product, fieldValues);
   const styleNum = modele ? modele.n : "";
   const nbModeles = Object.keys(modeles).length + modelesPhoto.length;
   const coffrets = cfg.coffrets || [];
@@ -57,6 +67,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   // État d'écran seulement (jamais dans les champs, donc jamais dans le panier).
   const [filtre, setFiltre] = useState("all");
   const [grilleOuverte, setGrilleOuverte] = useState(false);
+  const [filtreNoel, setFiltreNoel] = useState("all");
 
   const etat = useMemo(() => parcoursEtat(product, fieldValues), [product, fieldValues]);
   useEffect(() => { onValidity && onValidity(etat); }, [etat, onValidity]);
@@ -77,7 +88,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       ...(coffrets.length ? { coffret: prev.coffret || "" } : {}),
       // L'emplacement et la gravure du fond ne dépendent pas du choix photo / texte : on les garde.
       ...garderEmplacement(prev),
-      ...(m === "modele" ? {} : { police: "playfair" }),
+      ...(m === "modele" || m === "noel" ? {} : { police: "playfair" }),
     }));
     setTimeout(() => s2Ref.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }
@@ -85,6 +96,10 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
     // Les champs de l'ancien modèle sont vidés : seuls ceux du nouveau comptent.
     // Un modèle « en photo » écrit gravureExemple (comme avant), un numéroté écrit numstyle.
     setFieldValues((prev) => ({ mode: "modele", ...(coffrets.length ? { coffret: prev.coffret || "" } : {}), ...garderEmplacement(prev), ...(photoValue ? { gravureExemple: photoValue } : { numstyle: String(n) }) }));
+    setGrilleOuverte(false);
+  }
+  function choisirNoel(n) {
+    setFieldValues((prev) => ({ mode: "noel", ...(coffrets.length ? { coffret: prev.coffret || "" } : {}), ...garderEmplacement(prev), noelModele: String(n) }));
     setGrilleOuverte(false);
   }
 
@@ -116,6 +131,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   const nCof = coffrets.length ? nDetail + 1 : 0;
   const numSteps = (nCof || nDetail) + 1;
   const replie = Boolean(styleNum) && !grilleOuverte;
+  const replieNoel = Boolean(noelM) && !grilleOuverte;
 
   // Date, décor et écriture (verre à whisky) — un élément JSX, jamais un composant imbriqué
   // (sinon le champ perdrait le focus à chaque frappe).
@@ -157,12 +173,17 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
       <section className="prc-step">
         <div className="prc-sh"><span className={`prc-num${mode ? " done" : ""}`}>1</span><h3>Que voulez-vous graver ?</h3></div>
         <div className="prc-cards">
-          {MODES(cfg, nbModeles).map((m) => (
-            <button type="button" key={m.key} className={`prc-card${mode === m.key ? " on" : ""}`} onClick={() => choisirMode(m.key)}>
+          {avecNoel(MODES(cfg, nbModeles), noel).map((m) => (
+            <button type="button" key={m.key} className={`prc-card${m.key === "noel" ? " noel" : ""}${mode === m.key ? " on" : ""}`} onClick={() => choisirMode(m.key)}>
+              {m.key === "noel" && <span className="prc-tagnoel">🎄 Noël</span>}
               <span className={`prc-cimg${m.key === "lettre" ? " prc-cimg-alpha" : ""}${m.key === "texte" ? " prc-cimg-aa" : ""}${m.key === "photo" && cfg.imagePhoto ? " prc-cimg-photo" : ""}`}>
                 {m.key === "modele" && cfg.vignetteModele && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={cfg.vignetteModele} alt="" />
+                )}
+                {m.key === "noel" && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={(noel.images.find((x) => x.n === 3) || noel.images[0]).src} alt="" />
                 )}
                 {m.key === "lettre" && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -199,9 +220,9 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
 
       {/* ② / ③ */}
       {mode && (
-        <section className="prc-step" ref={s2Ref}>
+        <section className={`prc-step${mode === "noel" ? " prc-noel" : ""}`} ref={s2Ref}>
           <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>{nDetail}</span>
-            <h3>{mode === "modele" ? "Choisissez votre modèle" : mode === "lettre" ? "Choisissez votre lettre" : mode === "photo" ? "Ajoutez votre photo ou votre logo" : "Écrivez votre texte"}</h3></div>
+            <h3>{mode === "noel" ? "🎄 Votre modèle de Noël" : mode === "modele" ? "Choisissez votre modèle" : mode === "lettre" ? "Choisissez votre lettre" : mode === "photo" ? "Ajoutez votre photo ou votre logo" : "Écrivez votre texte"}</h3></div>
 
           {mode === "modele" && (
             <div className="prc-mode">
@@ -270,6 +291,56 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
               )}
             </div>
           )}
+
+          {mode === "noel" && noel && (() => {
+            const nbD = noel.images.filter((m) => !m.mots).length, nbM = noel.images.length - nbD;
+            return (
+              <div className="prc-mode">
+                <div className="prc-chips">
+                  <button type="button" className={`prc-chip${filtreNoel === "all" ? " on" : ""}`} onClick={() => setFiltreNoel("all")}>Tous (Noël 1–{noel.images.length})</button>
+                  {nbD > 0 && <button type="button" className={`prc-chip${filtreNoel === "dessins" ? " on" : ""}`} onClick={() => setFiltreNoel("dessins")}>Dessins ({nbD})</button>}
+                  {nbM > 0 && <button type="button" className={`prc-chip${filtreNoel === "mots" ? " on" : ""}`} onClick={() => setFiltreNoel("mots")}>Mots de Noël ({nbM})</button>}
+                </div>
+                <p className="prc-legend">Les modèles de Noël ont leurs propres numéros (« Noël n° 1 » à « Noël n° {Math.max(...noel.images.map((m) => m.n))} »). Sous chaque modèle : ce que vous pouvez nous indiquer (rien n&apos;est obligatoire).</p>
+                <div className="prc-one">
+                  <div>
+                    <div className={`prc-grid${replieNoel ? " picked" : ""}`}>
+                      {noel.images.map((M) => {
+                        const cache = filtreNoel !== "all" && (filtreNoel === "mots") !== M.mots;
+                        return (
+                          <button type="button" key={M.n} className={`prc-model noel${noelM && String(noelM.n) === String(M.n) ? " on" : ""}${cache ? " hide" : ""}`} onClick={() => choisirNoel(M.n)} aria-label={`Modèle de Noël n° ${M.n} — ${M.nom}`}>
+                            <span className="prc-mn">Noël n° {M.n}</span>
+                            <span className="prc-mimg">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={M.src} alt="" loading="lazy" />
+                            </span>
+                            <span className="prc-ml">{M.mots ? "Mots de Noël" : "Dessin de Noël"} (+ prénoms ou date si vous voulez)</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {replieNoel && (
+                      <button type="button" className="prc-change" onClick={() => setGrilleOuverte(true)}>← Changer de modèle de Noël (voir les {noel.images.length})</button>
+                    )}
+                  </div>
+                </div>
+                {noelM && (
+                  <p className="prc-choisi">Modèle de Noël n° {noelM.n} choisi ✓ — indiquez ce que vous voulez y faire graver (facultatif), dans la même écriture. Regardez la grande photo en haut : il s&apos;y pose.</p>
+                )}
+                {noelM && noelM.champs.length > 0 && (
+                  <div className="prc-fields">
+                    <p className="prc-ftitle">Modèle de Noël n° {noelM.n} — <em>{noelM.nom}</em>. Indiquez :</p>
+                    {noelM.champs.map((F) => (
+                      <div className="field" key={F.key}>
+                        <label>{F.label}<span className="prc-opt"> (facultatif{prixDe(F.key, { mode: "noel", noelModele: noelM.n }) ? `, ${px(F.key, { mode: "noel", noelModele: noelM.n })}` : ""})</span></label>
+                        <input type="text" maxLength={F.max} placeholder={F.ph} value={fieldValues[F.key] || ""} onChange={(e) => set({ [F.key]: e.target.value })} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {mode === "lettre" && (
             <div className="prc-mode">

@@ -23,6 +23,7 @@
     "audit-photos": "node --import ./tools/alias-register.mjs tools/audit-photos.mjs",
     "test-prix-verres": "node --import ./tools/alias-register.mjs tools/tests/prix-verres.test.mjs",
     "test-textes-prix": "node --import ./tools/alias-register.mjs tools/tests/textes-prix.test.mjs",
+    "test-fetes": "node --import ./tools/alias-register.mjs tools/tests/fetes.test.mjs",
     "test-consignes": "node --import ./tools/alias-register.mjs tools/tests/consignes.test.mjs",
     "test-apercu-cote": "node --import ./tools/alias-register.mjs tools/tests/apercu-cote.test.mjs",
     "test-controle-atelier": "node --import ./tools/alias-register.mjs tools/tests/controle-atelier.test.mjs",

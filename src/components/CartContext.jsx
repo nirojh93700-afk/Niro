@@ -57,10 +57,11 @@ export function CartProvider({ children }) {
       const pkgKey = Array.isArray(item.packaging) && item.packaging.length
         ? "::pkg=" + item.packaging.slice().sort().join(",")
         : "";
+      const noelKey = item.packagingNoel?.id ? `::noel=${item.packagingNoel.id}-${item.packagingNoel.couleur || ""}` : "";
       // Verres (16/10/2026) : la gravure est chiffrée pour le NOMBRE de verres choisi sur la fiche
       // → ligne à part, jamais fusionnée, quantité fixe (sinon le prix affiché ne serait plus le prix payé).
       // Marque-pages (27/10/2026) : deux photos différentes ont le même résumé → clé de la composition en plus.
-      const key = lineKey(item.variantId, item.personalization) + pkgKey + (item.cleLigne ? "::c=" + item.cleLigne : "") + (item.verresFixe ? "::v=" + Date.now() : "");
+      const key = lineKey(item.variantId, item.personalization) + pkgKey + noelKey + (item.cleLigne ? "::c=" + item.cleLigne : "") + (item.verresFixe ? "::v=" + Date.now() : "");
       const existing = item.verresFixe ? null : prev.find((i) => i.key === key);
       if (existing) {
         return prev.map((i) =>

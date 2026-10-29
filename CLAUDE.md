@@ -123,6 +123,18 @@
   les fiches Temu. Temu est bloqué dans les anciennes sessions : le gérant a créé le 28/10 l'environnement cloud « Temu » (temu.com, *.temu.com,
   kwcdn.com, *.kwcdn.com + les 3 adresses du site + gestionnaires de paquets) → le faire dans une NOUVELLE session sur cet environnement.
 
+- 🔨 **CONSTRUIT SUR LE SITE LE 29/10/2026 (« Les deux » : pousser ce qui était prêt + construire Noël et le montrer AVANT de pousser) — COMMIT LOCAL, PAS POUSSÉ.**
+  Réglage `settings.fetes` (`setFetes`, fusion clé par clé, lecture fraîche) ; absent = Noël éteint = site inchangé. `src/lib/fetes.js` (dates des
+  fêtes, 27 images `public/produits/noel/`, 6 produits gravés, 6 emballages + étiquette offerte, `packagingNoelExtra`, `champsFicheAvecNoel`) ·
+  Gestion → **Fêtes** (`/gestion/fetes`, API `/api/admin/fetes`) : interrupteur de Noël, produits, images (offerte / masquée), emballages (prix,
+  stock, poids, « convient si », masquer) · bandeau du tableau de bord + e-mail d'alerte au gérant une fois par fête (`fetesAlerte.js`, heartbeat) ·
+  fiches : carte « 🎄 Un modèle de Noël » à part dans `ParcoursGuide` (mode `noel`, champ `noelModele`, image = 1re gravure offerte, texte / date au
+  tarif de la fiche), image posée sur la photo · bijoux : bloc replié « 🎄 Ajouter un emballage de Noël » (`packagingNoel {id, couleur}`, seulement ce
+  qui rentre, boîtes et pack = colis), prix + poids + stock au paiement · atelier : « Modèle de Noël n° X » avec vignette, « Vendu en plus ».
+  Stock de départ posé à la 1re activation (52 / 40 / 20 / 48 / 20 / 50) ; le pack décompte boîte à ruban + sac. `npm run test-fetes` (26 vérifs).
+  Limites : cristaux photo et supports téléphone sans carte Noël (pas de parcours) ; autres fêtes sans images (interrupteur grisé) ; poids estimés.
+  Au push : Noël reste ÉTEINT, il l'allume lui-même dans Gestion → Fêtes.
+
 ## 🎨 IMAGES VRAIMENT PERSONNALISÉES — À REDIRE AUX CLIENTES (gérant, 28/10/2026 : « beaucoup de gens demandent des images personnalisées… il faut leur redire »)
 - Beaucoup de clientes demandent une image personnalisée. **Réponse à donner (mail, devis, agent e-mail, réseaux) : OUI, l'atelier peut
   faire une image vraiment personnalisée et la graver** partout où il y a de la gravure : **verres** (vin, flûte, whisky, cocktail, tumbler,

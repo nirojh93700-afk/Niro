@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FETES as FETES_LISTE, prochaineFete, dateFr } from "@/lib/fetes";
 import { formatEuro } from "@/lib/format";
 import { vacationActive } from "@/lib/vacation";
 import { PERIODES, chiffresPeriode, devisEnAttente, depuis } from "@/lib/dashPeriodes";
@@ -204,6 +205,23 @@ export function ChiffresPeriode({ orders = [], quotes = [], salesGoal = 0, strip
           <button type="button" className={`dq-chip${strip.avis > 0 ? " warn" : " ok"}`} onClick={() => onTab?.("avis")}>Avis à valider <b>{strip.avis}</b></button>
         </div>
       ) : null}
+    </>
+  );
+}
+
+/** 🎄 Fêtes : bandeau rouge dès 2 mois avant une fête (Gestion → Fêtes de l'année). */
+export function BandeauFetes({ fetes }) {
+  const liste = FETES_LISTE.map((f) => ({ ...f, ...prochaineFete(f.k), on: fetes?.[f.k]?.on === true })).filter((f) => f.enAlerte && f.jours >= 0);
+  if (!liste.length) return null;
+  return (
+    <>
+      {liste.map((f) => (
+        <div key={f.k} className="ft-alert" style={{ marginBottom: 14 }}>
+          <span className="ft-alert-ico">{f.ico}</span>
+          <div><b>{f.nom} dans {f.jours} jours</b> ({dateFr(f.date)}). {f.on ? "Allumée sur le site." : "Éteinte sur le site : à préparer (images, emballages, newsletter, vidéos)."}</div>
+          <a href="/gestion/fetes" className="ft-link">Ouvrir Fêtes ›</a>
+        </div>
+      ))}
     </>
   );
 }

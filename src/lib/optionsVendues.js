@@ -63,6 +63,8 @@ export function optionsArticle(item) {
 
   // 1) Emballage choisi (sac, boîte, pack…) — toujours un objet à glisser dans le colis.
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
+  // 🎄 Emballage de Noël : un objet à mettre dans le colis, + l'étiquette « Merry Christmas » mise d'office.
+  if (item.packagingNoel) out.push({ libelle: "🎄 Emballage de Noël", detail: `${String(item.packagingNoel)} — mettre l'étiquette « Merry Christmas » avec sa ficelle`, montant: 0, physique: true });
   // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).
   if (produit?.marquePages && champs.mp && typeof champs.mp === "object") {
     const fmt = mpFormat(champs.mp.format);

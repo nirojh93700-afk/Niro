@@ -22,6 +22,7 @@ import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
+import { NOEL_IMAGES } from "@/lib/fetes";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -228,6 +229,13 @@ export function consignesGravure(item) {
     }
     if (mv.motif && mv.motif !== "aucun") autres.push({ k: "Motif", v: String(mv.motif), texte: false });
   }
+  // 🎄 Modèle de Noël (Gestion → Fêtes) : son numéro « Noël n° X », son nom et sa vignette — le même
+  // numéro dans Gestion, sur la fiche et ici (gérant, 28/10/2026).
+  const nNoel = String(champs.noelModele || "").trim();
+  if (nNoel) {
+    const im = NOEL_IMAGES.find((m) => String(m.n) === nNoel);
+    general.push({ k: "Modèle de Noël", v: `Noël n° ${nNoel}${im ? ` — ${im.nom}` : ""}`, fort: true, img: im?.src || null });
+  }
   // Couverts enfants : le thème et l'animal choisi pour chaque couvert.
   for (const f of vus) {
     if (f.type !== "couverts") continue;
@@ -245,7 +253,7 @@ export function consignesGravure(item) {
 
   // Police : une seule ligne, écrite dès qu'il y a un texte (même règle que la fiche atelier).
   const fonte = vus.find((f) => f.type === "font");
-  if (fonte && aDuTexte && champs.mode !== "modele") {
+  if (fonte && aDuTexte && champs.mode !== "modele" && champs.mode !== "noel") {
     const choisie = String(champs[fonte.key] || "").trim();
     general.push({ k: "Police", v: choisie ? (getFontLabel(choisie) || choisie) : `${getFontLabel("playfair")} (police proposée, non changée)` });
   }

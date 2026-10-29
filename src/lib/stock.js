@@ -2469,6 +2469,9 @@ export async function getSettings(fresh = false) {
     // Dépenses / charges (fournitures d'expédition, cartons, scotch…) pour le
     // bénéfice net (Gestion → Bénéfices).
     expenses: Array.isArray(s.expenses) ? s.expenses : [],
+    // 🎄 Fêtes de l'année (Gestion → Fêtes, 29/10/2026) : { noel: { on, images, produits, emballages } }.
+    // Vide = toutes les fêtes éteintes (le site d'aujourd'hui, à l'identique). Voir src/lib/fetes.js.
+    fetes: (s.fetes && typeof s.fetes === "object") ? s.fetes : {},
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {
@@ -2478,6 +2481,17 @@ export async function getSettings(fresh = false) {
       pointRelaisPrice: Number.isFinite(Number(s.boxtal?.pointRelaisPrice)) ? Number(s.boxtal.pointRelaisPrice) : 4.9,
     },
   };
+}
+
+// 🎄 Fêtes : modification CLÉ PAR CLÉ, sur une lecture fraîche (jamais un remplacement en bloc :
+// incident crystalZones du 26/09/2026). `modif(fetes)` reçoit une copie à modifier et la renvoie.
+export async function setFetes(modif) {
+  const data = await getCatalogRaw(true);
+  const cur = (data.settings?.fetes && typeof data.settings.fetes === "object") ? JSON.parse(JSON.stringify(data.settings.fetes)) : {};
+  const next = modif(cur) || cur;
+  data.settings = { ...(data.settings || {}), fetes: next };
+  await persistCatalog(data);
+  return next;
 }
 
 export async function setSettings(patch) {

@@ -7,6 +7,7 @@ import { runScheduledJobs, runCashbackJobs, runBirthdayJobs, runOffreGravureJob,
 import { syncInbox } from "@/lib/inbox";
 import { syncAllAndListUnread } from "@/lib/batSync";
 import { offreActive } from "@/lib/offreGravure";
+import { runFetesAlerte } from "@/lib/fetesAlerte";
 
 const MIN = 60000;
 
@@ -64,5 +65,9 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("priceWatch", 24 * 60 * MIN)) out.priceWatch = await runPriceWatchJob();
   } catch (e) { out.priceWatchError = e.message; }
+  // 🎄 Fêtes : alerte au gérant 2 mois avant chaque fête (une fois par fête et par an).
+  try {
+    if (await claimJob("fetesAlerte", 12 * 60 * MIN)) out.fetesAlerte = await runFetesAlerte();
+  } catch (e) { out.fetesAlerteError = e.message; }
   return out;
 }

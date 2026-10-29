@@ -16,6 +16,8 @@ import { aEmplacement, lignesDuCote } from "@/lib/apercuCote";
 import { prixGravureVerres, estRegleVerres, detailEnTexte, texteOffertVerre1 } from "@/lib/prixVerres";
 import GrillePrixVerres from "./GrillePrixVerres";
 import { packagingExtra } from "@/lib/packaging";
+import { packagingNoelExtra, emballagesNoelDispo, categorieEmballage } from "@/lib/fetes";
+import { BIJOUX_HOME, BIJOUX_FREE_THRESHOLD } from "@/lib/shipping";
 import PayInfoModal from "@/components/PayInfo";
 import { track, trackOnce } from "@/lib/track";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
@@ -80,6 +82,8 @@ export default function ProductDetail({ product, realisations = [] }) {
   const [showGlassMini, setShowGlassMini] = useState(true); // mini-aperçu flottant du verre (vraie photo)
   const [quantity, setQuantity] = useState(1);
   const [pkgSel, setPkgSel] = useState([]); // emballages payants choisis (ids)
+  const [pkgNoel, setPkgNoel] = useState({ id: "", couleur: "vert" }); // 🎄 emballage de Noël choisi (bijoux)
+  const [pkgNoelOpen, setPkgNoelOpen] = useState(false);
   const [composition, setComposition] = useState(null); // configurateur gobelet (côté + motifs)
   const [added, setAdded] = useState(false);
   const [preparing, setPreparing] = useState(false); // capture du visuel en cours
@@ -352,6 +356,13 @@ export default function ProductDetail({ product, realisations = [] }) {
   const engrave = engravingExtra(product, fieldValues, variant.id);
   // Supplément d'emballage (écrin / pochette choisis) — le sachet offert est inclus d'office.
   const pkg = packagingExtra(product, pkgSel);
+  // 🎄 Emballage de Noël : seulement s'il rentre avec l'emballage habituel choisi (sinon il ne compte pas).
+  const pkgN = packagingNoelExtra(product, pkgNoel, pkgSel);
+  // Emballage habituel changé pour un où le choix de Noël ne rentre plus : le choix de Noël se retire.
+  useEffect(() => {
+    if (pkgNoel.id && !emballagesNoelDispo(product, pkgSel).some((o) => o.id === pkgNoel.id)) setPkgNoel((p) => ({ ...p, id: "" }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pkgSel]);
   // Prix « si acheté séparément » = somme des emballages individuels (hors pack, hors offert).
   // Sert à afficher l'économie du pack (prix barré → prix pack).
   const pkgSinglesSum = Math.round((product.packaging?.options || [])
@@ -362,8 +373,8 @@ export default function ProductDetail({ product, realisations = [] }) {
   // identiques) — même calcul que le paiement (src/lib/prixVerres.js).
   const gravVerres = RV ? prixGravureVerres(product, variant, quantity, fieldValues, perGlass ? syncedGlassConfigs() : null) : null;
   const unitPrice = gravVerres
-    ? basePrice + pkg.amount + (composition?.extraAmount || 0) + gravVerres.total / quantity
-    : basePrice + engrave.amount + pkg.amount + (composition?.extraAmount || 0);
+    ? basePrice + pkg.amount + pkgN.amount + (composition?.extraAmount || 0) + gravVerres.total / quantity
+    : basePrice + engrave.amount + pkg.amount + pkgN.amount + (composition?.extraAmount || 0);
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), sauf si vraie promo en cours.
   const refMarkup = Number(product.refMarkup) || 0;
   const refPrice = !hasPromo && refMarkup > 0
@@ -552,6 +563,7 @@ export default function ProductDetail({ product, realisations = [] }) {
     const p = [];
     if ((fv.numstyle || "").trim()) p.push(`modèle n°${fv.numstyle.trim()}`);
     if ((fv.gravureExemple || "").trim()) p.push(`style « ${fv.gravureExemple.trim()} »`);
+    if ((fv.noelModele || "").trim()) p.push(`modèle de Noël n°${fv.noelModele.trim()}`);
     if ((fv.lettreFleurie || "").trim()) p.push(`lettre fleurie « ${fv.lettreFleurie.trim()} »`);
     if (fv.photo) p.push("photo/logo fourni");
     if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
@@ -682,7 +694,9 @@ export default function ProductDetail({ product, realisations = [] }) {
   // Motif du STYLE choisi (n°) : image posée sur le verre (si le produit a une
   // bibliothèque styleImages { "1": "/produits/…", … }). Se pose comme la photo.
   const styleNum = (fieldValues["numstyle"] || "").trim();
-  const styleMotifSrc = (product.styleImages && product.styleImages[styleNum]) || "";
+  // 🎄 Modèle de Noël (Gestion → Fêtes) : son image se pose sur la photo comme un modèle numéroté.
+  const noelSrc = fieldValues.mode === "noel" ? ((product.noel?.images || []).find((m) => String(m.n) === String(fieldValues.noelModele || ""))?.src || "") : "";
+  const styleMotifSrc = noelSrc || (product.styleImages && product.styleImages[styleNum]) || "";
   // Modèles qui contiennent DÉJÀ le texte (prénoms/cadres/banderoles) : le prénom
   // du client est gravé DANS le style du modèle, au milieu — on ne l'affiche donc
   // PAS en plus sur le verre (mais on le garde pour l'atelier / la commande).
@@ -1174,6 +1188,7 @@ export default function ProductDetail({ product, realisations = [] }) {
       personalization: perGlass ? perGlassText(false) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
       composition: composition || null, // configurateur gobelet (côté + motifs) pour l'atelier
       packaging: pkg.labels.length ? pkg.labels.join(", ") : null, // emballage pour la fiche atelier
+      packagingNoel: pkgN.id ? pkgN.label.replace(/^Emballage de Noël : /, "").replace(/ \(\+[^)]*\)/, "").replace(/ · étiquette.*$/, "") : null,
     };
     addItem({
       productSlug: product.slug,
@@ -1187,11 +1202,12 @@ export default function ProductDetail({ product, realisations = [] }) {
       personalization: [perGlass ? perGlassText(true) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "), gravVerres && gravVerres.lignes.length ? `Gravure : ${detailEnTexte(gravVerres)}` : ""].filter(Boolean).join(" · "),
       fields: (product.engravingPricing || product.motifComposer) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
+      packagingNoel: pkgN.id ? { id: pkgN.id, couleur: pkgN.couleur } : undefined, // 🎄 recalcul serveur au paiement
       perGlass: perGlass ? syncedGlassConfigs() : null, // lot personnalisé : options comptées PAR verre au paiement
       verresFixe: RV ? true : undefined, // verres : quantité fixée sur la fiche (prix de gravure de la ligne)
       spec: itemSpec,
       pickup: Boolean(product.pickup),
-      weight: (Number(variant.weight) || Number(product.weight) || 200) + (engrave.weight || 0) + (pkg.weight || 0), // poids (g) réel par taille + options (socle, emballage) — port & retrait corrects
+      weight: (Number(variant.weight) || Number(product.weight) || 200) + (engrave.weight || 0) + (pkg.weight || 0) + (pkgN.weight || 0), // poids (g) réel par taille + options (socle, emballage) — port & retrait corrects
       quantity,
     });
     // Statistiques « ajout au panier » : compteur intégré + Google Analytics.
@@ -1328,7 +1344,7 @@ export default function ProductDetail({ product, realisations = [] }) {
               </div>
             )}
             {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && !motifZone && !(dualMode && isFond) && (
-              <PhotoEngraveLayer key={`style-${styleNum}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
+              <PhotoEngraveLayer key={`style-${styleNum}${noelSrc}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
             {/* Texte gravé DANS le modèle, aux emplacements exacts : nom au point "t",
                 date au point "d". La police se réduit pour tenir dans le modèle. */}
@@ -2160,6 +2176,78 @@ export default function ProductDetail({ product, realisations = [] }) {
               </div>
             </div>
           )}
+
+          {/* 🎄 Emballage de Noël (Gestion → Fêtes allumée) : une ligne repliée, seulement ce qui rentre (maquette v3-v7). */}
+          {product.packagingNoel && product.packaging?.on && (() => {
+            const dispo = emballagesNoelDispo(product, pkgSel);
+            const coulDe = (o) => (o.couleurs ? (product.packagingNoel.couleurs.find((c) => c.id === pkgNoel.couleur) || product.packagingNoel.couleurs[0]) : null);
+            const thumb = (o) => (coulDe(o) && o.id === "ruban" ? coulDe(o).photo : o.photo);
+            const choisi = dispo.find((o) => o.id === pkgNoel.id) || null;
+            const port = (o) => (o?.colis || /boite|pack/i.test(String(pkgSel[0] || ""))
+              ? <>votre bijou part en petit colis — <b>6,90 €</b> à domicile ou <b>4,90 €</b> en point relais, offerte dès {BIJOUX_FREE_THRESHOLD} € de bijoux.</>
+              : <>votre bijou reste en lettre suivie — <b>{formatEuro(BIJOUX_HOME)}</b>, offerte dès {BIJOUX_FREE_THRESHOLD} € de bijoux.</>);
+            if (!dispo.length) {
+              return categorieEmballage(pkgSel) !== "seul" ? <p className="xn-no">🎄 Pas d&apos;emballage de Noël avec cette présentation : elle n&apos;y rentre pas.</p> : null;
+            }
+            const mini = Math.min(...dispo.map((o) => Number(o.prix) || 0));
+            if (!pkgNoelOpen) {
+              return choisi ? (
+                <button type="button" className="xn-tog on" onClick={() => setPkgNoelOpen(true)}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="th" src={thumb(choisi)} alt="" />
+                  <span style={{ minWidth: 0 }}><strong>🎄 Emballage de Noël : {choisi.nom}{coulDe(choisi) ? ` · ${coulDe(choisi).nom.toLowerCase()}` : ""}</strong>
+                    <span className="d">étiquette « Merry Christmas » offerte · {choisi.colis || /boite|pack/i.test(String(pkgSel[0] || "")) ? "part en colis" : "lettre suivie"}</span></span>
+                  <span className="px">+{formatEuro(choisi.prix)}<i>Modifier</i></span>
+                </button>
+              ) : (
+                <button type="button" className="xn-tog" onClick={() => setPkgNoelOpen(true)}>
+                  <span className="ico">🎄</span>
+                  <span style={{ minWidth: 0 }}><strong>Ajouter un emballage de Noël</strong><span className="d">facultatif · dès {formatEuro(mini)} · {dispo.length} choix</span></span>
+                  <span className="px"><i>Voir ▾</i></span>
+                </button>
+              );
+            }
+            const opt = (o, on, onClick, rupture) => (
+              <button type="button" key={o.id || "none"} className={on ? "on" : ""} onClick={onClick} disabled={rupture} style={rupture ? { opacity: 0.45 } : undefined}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {o.photo ? <img className="th" src={thumb(o)} alt="" /> : <span className="ico">✖️</span>}
+                <span style={{ minWidth: 0 }}><strong>{on ? "✓ " : ""}{o.nom}{o.meil ? <span className="meil noel">🎄 NOËL</span> : null}</strong>
+                  <span className="d">{o.d}{o.id ? (o.colis ? " · part en colis" : " · reste en lettre suivie") : ""}{rupture ? " · épuisé" : ""}</span></span>
+                <span className="px">{o.barre ? <span className="barre">{formatEuro(o.barre)}</span> : null}{o.prix ? `+${formatEuro(o.prix)}` : "0 €"}</span>
+              </button>
+            );
+            const epuise = (o) => (o.stock || []).some((sid) => typeof stockMap[sid] === "number" && stockMap[sid] <= 0);
+            return (
+              <div className="ft-embc xn">
+                <div className="t">🎄 Votre emballage de Noël <button type="button" className="xn-close" onClick={() => setPkgNoelOpen(false)}>Fermer ▴</button></div>
+                <p className="s">{categorieEmballage(pkgSel) === "seul" ? "Le bijou est glissé dedans, prêt à offrir." : "Votre emballage choisi ci-dessus est glissé dedans, prêt à offrir."}</p>
+                <div className="opts">
+                  {opt({ id: "", nom: "Sans emballage de Noël", d: "Seulement l'emballage choisi ci-dessus", prix: 0 }, !choisi, () => setPkgNoel((p) => ({ ...p, id: "" })), false)}
+                  {dispo.map((o) => opt(o, choisi?.id === o.id, () => setPkgNoel((p) => ({ ...p, id: o.id })), epuise(o)))}
+                  {choisi?.couleurs && (
+                    <div className="couleur">
+                      <div className="couleur-t">Couleur de la boîte <small>— choisissez</small></div>
+                      <div className="couleur-g">
+                        {product.packagingNoel.couleurs.map((c) => {
+                          const on = (coulDe(choisi)?.id) === c.id;
+                          return (
+                            <button type="button" key={c.id} className={on ? "on" : ""} style={{ "--c": c.hex }} onClick={() => setPkgNoel((p) => ({ ...p, couleur: c.id }))}>
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <span className="couleur-ph"><img src={c.photo} alt="" />{on ? <span className="couleur-ok">✓</span> : null}</span>
+                              <span className="couleur-n"><i></i>{c.nom}{on ? " · choisi" : ""}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <p className="etqoff"><img src={product.packagingNoel.etiquette.photo} alt="" />Avec chaque emballage de Noël, l&apos;étiquette « Merry Christmas » et sa ficelle sont offertes.</p>
+                  <p className="xn-port">{choisi?.colis || /boite|pack/i.test(String(pkgSel[0] || "")) ? "📦" : "✉️"} Livraison{choisi ? ` avec ${choisi.nom.toLowerCase()}` : ""} : {port(choisi)}</p>
+                </div>
+              </div>
+            );
+          })()}
 
           {error && <div className="notice">{error}</div>}
 

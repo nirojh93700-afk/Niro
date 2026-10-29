@@ -12,6 +12,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
     fields: i.fields,
     perGlass: Array.isArray(i.perGlass) ? i.perGlass : undefined, // « chacun différent » : gravure de chaque verre (prix recalculé au paiement)
     packaging: Array.isArray(i.packaging) ? i.packaging : [], // emballages payants choisis (ids)
+    packagingNoel: i.packagingNoel && i.packagingNoel.id ? { id: String(i.packagingNoel.id), couleur: i.packagingNoel.couleur || null } : undefined, // 🎄 emballage de Noël (recalculé au paiement)
     spec: i.spec || null, // réglages détaillés (fiche atelier)
   }));
 

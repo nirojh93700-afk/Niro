@@ -28,6 +28,12 @@ export function modeleChoisi(product, fv) {
   return null;
 }
 
+/** Le modèle de Noël choisi (Gestion → Fêtes allumée) : { n, nom, src, champs } ou null. */
+export function noelChoisi(product, fv) {
+  const n = v(fv, "noelModele");
+  const im = n ? (product?.noel?.images || []).find((m) => String(m.n) === n) : null;
+  return im ? { ...im, champs: product.noel.champs || [] } : null;
+}
 
 const policeNom = (k) => {
   const noms = { playfair: "Playfair", cinzel: "Cinzel", "cinzel-deco": "Cinzel Decorative", montserrat: "Montserrat", inter: "Inter", "great-vibes": "Great Vibes", allura: "Allura", pacifico: "Pacifico" };
@@ -60,7 +66,7 @@ function etatVerre(product, fv) {
   } else if (mode === "texte") {
     if (!texte) return { ok: false, grav: "Mon propre texte", detail: "", fond: fondTxt, manque: "Écrivez votre texte (étape 3)." };
     grav = `Texte : « ${enDecor(texte)} » (+3 €)`;
-  } else if (mode === "modele" || mode === "lettre") {
+  } else if (mode === "modele" || mode === "lettre" || mode === "noel") {
     // Verre à cocktail (28/10/2026) : modèles et lettre fleurie de la flûte, sur la face ;
     // le fond reste photo ou texte (« les deux »).
     const r = etatSimple(product, fv);
@@ -102,6 +108,12 @@ function etatSimple(product, fv) {
       if (val) parts.push(`${F.label} : ${val}`);
     });
     return { ok: true, grav: `Modèle n° ${M.n} — ${M.legende}`, detail: parts.length ? parts.join(" · ") : "gravé tel quel", manque: "" };
+  }
+  if (mode === "noel") {
+    const M = noelChoisi(product, fv);
+    if (!M) return { ok: false, grav: "Un modèle de Noël", detail: "", manque: "Cliquez le modèle de Noël voulu (étape 2)." };
+    const parts = M.champs.map((F) => (v(fv, F.key) ? `${F.label} : ${v(fv, F.key)}` : null)).filter(Boolean);
+    return { ok: true, grav: `Modèle de Noël n° ${M.n} — ${M.nom}`, detail: parts.length ? parts.join(" · ") : "gravé tel quel", manque: "" };
   }
   if (mode === "lettre") {
     const L = v(fv, "lettreFleurie");
