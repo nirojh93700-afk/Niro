@@ -134,6 +134,10 @@
   Stock de départ posé à la 1re activation (52 / 40 / 20 / 48 / 20 / 50) ; le pack décompte boîte à ruban + sac. `npm run test-fetes` (26 vérifs).
   Limites : cristaux photo et supports téléphone sans carte Noël (pas de parcours) ; autres fêtes sans images (interrupteur grisé) ; poids estimés.
   Au push : Noël reste ÉTEINT, il l'allume lui-même dans Gestion → Fêtes.
+  · 29/10 : Noël ALLUMÉ par le gérant. Aperçu sur le verre = dessins DÉTOURÉS (`noel-NN-trace.png`, fond transparent ; le JPG
+    gardait un carré blanc), poussé 11d5e6d8. **Cristaux déjà gravés** : pavé « 🎄 Noël » (après Dessins) avec les 27 dessins
+    en blanc dans le bloc (`noel-NN-blanc.png`), mêmes tailles / prix / texte +5 € que les dessins, atelier « Modèle de Noël n° X »
+    + image d'origine ; case « Cristaux déjà gravés » dans Gestion → Fêtes → Produits (`noelPourCristaux`).
 
 ## 🎨 IMAGES VRAIMENT PERSONNALISÉES — À REDIRE AUX CLIENTES (gérant, 28/10/2026 : « beaucoup de gens demandent des images personnalisées… il faut leur redire »)
 - Beaucoup de clientes demandent une image personnalisée. **Réponse à donner (mail, devis, agent e-mail, réseaux) : OUI, l'atelier peut

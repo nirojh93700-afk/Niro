@@ -4,6 +4,8 @@
 import CristauxGraves from "@/components/cristal/CristauxGraves";
 import { getCatalogBySlug } from "@/lib/catalog";
 import { CG_SLUG } from "@/lib/cristauxGraves";
+import { getSettings } from "@/lib/stock";
+import { configNoel, noelPourCristaux } from "@/lib/fetes";
 import "../cristaux-graves.css";
 
 export const dynamic = "force-dynamic";
@@ -18,5 +20,8 @@ export default async function CristauxGravesPage() {
   // Prix des tailles lus dans le catalogue (un prix changé dans Gestion s'affiche ici).
   const produit = await getCatalogBySlug(CG_SLUG).catch(() => null);
   const prix = Object.fromEntries((produit?.variants || []).map((v) => [v.id, Number(v.price)]));
-  return <CristauxGraves prix={prix} />;
+  // Noël allumé dans Gestion → Fêtes (et la page cochée) : un pavé « 🎄 Noël » avec les dessins numérotés.
+  const settings = await getSettings().catch(() => ({}));
+  const noel = noelPourCristaux(configNoel(settings));
+  return <CristauxGraves prix={prix} noel={noel} />;
 }

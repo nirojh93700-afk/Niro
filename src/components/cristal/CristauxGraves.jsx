@@ -23,18 +23,19 @@ const PLACES = [["bas", "En bas"], ["haut", "En haut"], ["gauche", "À gauche"],
 const FAM_LABEL = Object.fromEntries(CG_FAMILLES.map((f) => [f.k, f.nom]));
 const INTRO = {
   dessins: "Un dessin gravé en 3D au cœur du cristal, au format et à la taille de votre choix. Rien n'est choisi d'avance.",
+  noel: "Nos dessins de Noël, numérotés « Noël n° 1 » à « Noël n° 27 » comme sur nos verres, gravés en 3D au cœur du cristal, au format et à la taille de votre choix.",
   zodiaque: "Votre signe, sa constellation et sa figure gravés dans le cristal. Deux choix en option : le nom gravé (+5 €), ou tout gravé : le nom, la date et l'heure de naissance, la ville où la personne habite (+8 €).",
 };
 
-// Toutes les gravures dans l'ordre de la maquette : modèles, dessins, zodiaque.
-const ITEMS = [
+// Toutes les gravures dans l'ordre de la maquette : modèles, dessins, zodiaque (+ Noël quand il est allumé).
+const ITEMS_BASE = [
   ...CG_MODELES.map((m) => ({ ...m, grp: "modeles", img: `${CG_DOSSIER}/${m.k}.jpg` })),
   ...CG_DESSINS.map((d) => ({ ...d, grp: "dessins", d: true, img: `${CG_DOSSIER}/dessin-${d.k}.webp`,
     phrase: "Dessin gravé en 3D au cœur du cristal, au format de votre choix." })),
   ...CG_ZODIAQUE.map((z) => ({ ...z, grp: "zodiaque", d: true, z: true, img: `${CG_DOSSIER}/zodiaque-${z.k}.webp`,
     phrase: `Signe du ${z.nom} (${z.dates}) : la constellation et sa figure, gravées en 3D. Ajoutez un prénom, la date de naissance et la ville où la personne habite.` })),
 ];
-const GROUPES = [["modeles", "Modèles gravés", CG_MODELES.length], ["dessins", "Dessins", CG_DESSINS.length], ["zodiaque", "Zodiaque", CG_ZODIAQUE.length]];
+const GROUPES_BASE = [["modeles", "Modèles gravés", CG_MODELES.length], ["dessins", "Dessins", CG_DESSINS.length], ["zodiaque", "Zodiaque", CG_ZODIAQUE.length]];
 
 // Contenu du bloc de cristal dessiné (cartes et panneau) : dessin, ou figure du signe + nom + textes d'exemple.
 function BlocContenu({ it, exemple = true }) {
@@ -54,8 +55,14 @@ function BlocContenu({ it, exemple = true }) {
   return <img src={it.img} alt={`Dessin à graver : ${it.nom}`} loading="lazy" />;
 }
 
-export default function CristauxGraves({ prix = {} }) {
+export default function CristauxGraves({ prix = {}, noel = null }) {
   const { addItem } = useCart();
+  // Noël allumé : dessins blancs dans le bloc (img), image d'origine pour l'atelier (atelier), n° de Noël.
+  const ITEMS = useMemo(() => (noel?.length ? [...ITEMS_BASE, ...noel.map((x) => ({
+    k: `noel-${x.n}`, n: x.n, nom: x.nom, grp: "noel", d: true, noel: true, img: x.blanc || x.src, atelier: x.src,
+    phrase: `Modèle de Noël n° ${x.n}, gravé en 3D au cœur du cristal, au format de votre choix.`,
+  }))] : ITEMS_BASE), [noel]);
+  const GROUPES = useMemo(() => (noel?.length ? [GROUPES_BASE[0], GROUPES_BASE[1], ["noel", "🎄 Noël", noel.length], GROUPES_BASE[2]] : GROUPES_BASE), [noel]);
   const [grp, setGrp] = useState("modeles");
   const [fam, setFam] = useState("tous");
   const [plus, setPlus] = useState(false);
@@ -107,7 +114,7 @@ export default function CristauxGraves({ prix = {} }) {
     const list = ITEMS.map((it, idx) => ({ it, idx })).filter(({ it }) => it.grp === grp && (grp !== "modeles" || fam === "tous" || it.fam === fam));
     const v = plus ? list : list.slice(0, PAGE);
     return { visibles: new Set(v.map((x) => x.idx)), reste: list.length - v.length };
-  }, [grp, fam, plus]);
+  }, [ITEMS, grp, fam, plus]);
 
   useEffect(() => {
     if (!("IntersectionObserver" in window) || !panneau.current) return undefined;
@@ -142,8 +149,9 @@ export default function CristauxGraves({ prix = {} }) {
     if (!ok || !m) return;
     const variantId = cgVariantId(fmt, taille);
     const format = fmt === "h" ? "Horizontal" : "Vertical";
-    const genre = m.z ? "Signe du zodiaque" : m.d ? "Dessin" : "Modèle gravé";
+    const genre = m.noel ? `Modèle de Noël n° ${m.n}` : m.z ? "Signe du zodiaque" : m.d ? "Dessin" : "Modèle gravé";
     const fields = { modele: `${genre} : ${m.nom}`, format, socle: socle ? "oui" : "" };
+    const imgAtelier = m.atelier || m.img;
     const police = FONTS.find(([k]) => k === font)?.[1] || font;
     const place = PLACES.find(([k]) => k === pos)?.[1] || pos;
     if (avecTxt) {
@@ -165,12 +173,12 @@ export default function CristauxGraves({ prix = {} }) {
       name: "Cristal déjà gravé",
       variantTitle,
       price: Math.round(unit * 100) / 100,
-      image: m.img,
+      image: imgAtelier,
       personalization: resume,
       fields,
       spec: {
         slug: CG_SLUG, name: "Cristal déjà gravé", variantTitle,
-        previewImage: m.img, artworkImage: m.img, photoSrc: null,
+        previewImage: imgAtelier, artworkImage: imgAtelier, photoSrc: null,
         fields, personalization: resume, packaging: null,
       },
       pickup: false,
@@ -247,7 +255,7 @@ export default function CristauxGraves({ prix = {} }) {
                       </span>
                     )}
                     <span className="cg-meta">
-                      <span className="cg-tag">{it.z ? "Signe du zodiaque" : it.d ? "Dessin gravé en 3D" : FAM_LABEL[it.fam] || "Modèle gravé"}</span>
+                      <span className="cg-tag">{it.noel ? `Noël n° ${it.n}` : it.z ? "Signe du zodiaque" : it.d ? "Dessin gravé en 3D" : FAM_LABEL[it.fam] || "Modèle gravé"}</span>
                       <b className="cg-nom">{it.nom}</b>
                       <span className="cg-price">dès 39,90 €</span>
                       {it.z ? <span className="cg-ph">{it.dates}</span> : !it.d ? <span className="cg-ph">{it.phrase}</span> : null}
@@ -280,7 +288,7 @@ export default function CristauxGraves({ prix = {} }) {
               ) : null}
               {avecTxt && m && !zod ? <span className={`cg-txtpv fnt-${font} pos-${pos}`}>{texte.trim()}</span> : null}
             </div>
-            <h3 id="t-pan" className="cg-pname">{m ? (m.z ? `Signe du ${m.nom}` : m.nom) : "Votre cristal"}</h3>
+            <h3 id="t-pan" className="cg-pname">{m ? (m.z ? `Signe du ${m.nom}` : m.noel ? `Noël n° ${m.n} · ${m.nom}` : m.nom) : "Votre cristal"}</h3>
             <p className="cg-pdesc">{m ? m.phrase : "Aucun modèle choisi pour l'instant."}</p>
 
             <div className="field">
@@ -399,7 +407,7 @@ export default function CristauxGraves({ prix = {} }) {
       <div className={`cg-bar${barOff ? " cg-bar-off" : ""}`} hidden={!m}>
         {m ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={m.img} alt="" />
+          <img src={m.atelier || m.img} alt="" />
         ) : null}
         <span className="cg-bar-t"><b>{m ? m.nom : ""}</b><small>{t.nom} · {eur(unit)}</small></span>
         <a className="btn btn-gold" href="#panneau">Choisir la taille</a>

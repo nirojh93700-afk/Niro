@@ -62,7 +62,7 @@ export const dateFr = (d) => `${JOURS[d.getUTCDay()]} ${d.getUTCDate()} ${MOIS[d
 // ------------------------------------------------------------------ les 27 images de Noël (n° = Gestion ET fiches)
 // mots = lettrage « mots de Noël » ; texte = un texte fait partie de l'image (elle reste OFFERTE, 29/10) ;
 // droits = personnage protégé (à trancher par le gérant) ; gris = niveaux de gris.
-const I = (n, nom, f = "", ext = "jpg") => ({ n, nom, src: `/produits/noel/noel-${String(n).padStart(2, "0")}.${ext}`, trace: `/produits/noel/noel-${String(n).padStart(2, "0")}-trace.png`, mots: /mots/.test(f), texte: /texte|mots/.test(f), droits: /droits/.test(f), gris: /gris/.test(f) });
+const I = (n, nom, f = "", ext = "jpg") => ({ n, nom, src: `/produits/noel/noel-${String(n).padStart(2, "0")}.${ext}`, trace: `/produits/noel/noel-${String(n).padStart(2, "0")}-trace.png`, blanc: `/produits/noel/noel-${String(n).padStart(2, "0")}-blanc.png`, mots: /mots/.test(f), texte: /texte|mots/.test(f), droits: /droits/.test(f), gris: /gris/.test(f) });
 export const NOEL_IMAGES = [
   I(1, "Cloches de Noël au ruban"), I(2, "Gnomes « Merry Christmas »", "texte"), I(3, "Père Noël, sapin et cadeaux"),
   I(4, "Forêt, cerfs et flocon"), I(5, "Père Noël, bras croisés", "gris"), I(6, "Crèche de la Nativité"),
@@ -83,6 +83,7 @@ export const NOEL_PRODUITS = [
   { slug: "verre-tumbler-cristal-grave", nom: "Verre tumbler en cristal" },
   { slug: "verre-a-cocktail-grave", nom: "Verre à cocktail" },
   { slug: "carafe-a-whisky-gravee", nom: "Carafe à whisky" },
+  { slug: "cristal-deja-grave", nom: "Cristaux déjà gravés (page /cristaux-graves)" },
 ];
 
 // ------------------------------------------------------------------ emballages de Noël pour les BIJOUX (commande Temu reçue le 28/10)
@@ -157,6 +158,15 @@ export function noelPourProduit(product, cfg) {
   if (!p || !p.on) return null;
   const images = cfg.images.filter((m) => !m.masquee).map(({ n, nom, src, trace, mots }) => ({ n, nom, src, trace, mots }));
   return images.length ? { images, champs: champsNoel(product) } : null;
+}
+
+/** Les dessins de Noël de la page « Cristaux déjà gravés » (null si Noël éteint ou la page décochée). */
+export function noelPourCristaux(cfg) {
+  if (!cfg?.on) return null;
+  const p = cfg.produits.find((x) => x.slug === "cristal-deja-grave");
+  if (!p || !p.on) return null;
+  const images = cfg.images.filter((m) => !m.masquee).map(({ n, nom, src, blanc, mots }) => ({ n, nom, src, blanc, mots }));
+  return images.length ? images : null;
 }
 
 /** Emballages de Noël proposés sur un bijou (null si Noël éteint ou pas un bijou). */
