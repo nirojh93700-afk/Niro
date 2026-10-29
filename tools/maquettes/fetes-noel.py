@@ -122,7 +122,7 @@ NOEL_JS = []
 for n, nom, flags in IMAGES:
     f = flags.split()
     NOEL_JS.append(dict(n=n, nom=nom, src=uri(FICHIERS[n], 300, 80), texte=("texte" in f or "mots" in f), mots=("mots" in f),
-                        droits=("droits" in f), gris=("gris" in f), filigrane=("filigrane" in f), prix=0))
+                        droits=("droits" in f), gris=("gris" in f), filigrane=("filigrane" in f), prix=0, champs=["prenoms", "date"]))
 
 VIN_JS = [dict(n=int(n), legende=m["legende"], champs=m.get("champs", []), exemple=m.get("exemple", ""),
                src=uri(os.path.join(PUB, VIN["styleImages"][n].lstrip("/")), 300, 80)) for n, m in sorted(VIN["modeles"].items(), key=lambda x: int(x[0]))]
@@ -309,7 +309,7 @@ ADMIN = f"""
 
     <h3 class="ft-h3">Images de gravure de Noël <span class="ft-h3s">{NB_IMAGES} · le client les choisit par leur numéro, comme les autres modèles</span></h3>
     <div class="ft-bar"><span id="ft-cnt"></span><button type="button" class="btn btn-outline ft-btn">+ Ajouter des images</button></div>
-    <p class="ft-p ft-note">Votre règle (29/10) : l'image de Noël choisie est la <b>première gravure</b>, elle est <b>offerte</b>, même si elle contient un texte (« Merry Christmas », les mots de Noël 17 à 25). Un <b>texte en bas en plus</b> ou une <b>date</b> : <b>+3 €</b> chacun, comme d'habitude. Une image peut être masquée.</p>
+    <p class="ft-p ft-note">Votre règle (29/10) : l'image de Noël choisie est la <b>première gravure</b>, elle est <b>offerte</b>, même si elle contient un texte (« Merry Christmas », les mots de Noël 17 à 25). Sur la fiche, comme les modèles du site : <b>prénoms / nom / texte</b> et <b>date ou année</b>, <b>+3 €</b> chacun, comme d'habitude. Une image peut être masquée.</p>
     <div class="ft-imgs" id="ft-imgs"></div>
 
     <h3 class="ft-h3">Emballages de Noël <span class="ft-h3s">pour les BIJOUX · s'ajoutent sous « Votre emballage » de chaque fiche bijou, en plus des emballages habituels</span></h3>
@@ -532,10 +532,12 @@ function renderAdmin(){
 }
 function compteur(){
   var o=0,m=0; NOEL.forEach(function(x){if(x.prix>=0)o++;else m++});
-  $('#ft-cnt').innerHTML='<b>'+o+'</b> offertes (1re gravure) · <b>'+m+'</b> masquée'+(m>1?'s':'')+' · texte en bas ou date : +3 € chacun · 3 images avec un personnage protégé à trancher';
+  $('#ft-cnt').innerHTML='<b>'+o+'</b> offertes (1re gravure) · <b>'+m+'</b> masquée'+(m>1?'s':'')+' · prénoms / texte ou date en plus : +3 € chacun · 3 images avec un personnage protégé à trancher';
 }
 /* ---------- Site : le parcours du verre à vin, redessiné comme ParcoursGuide.jsx */
-function legNoel(m){return m.mots?'Mots de Noël · offert (+ texte ou date si vous voulez)':'Dessin de Noël · offert (+ texte ou date si vous voulez)'}
+function legNoel(m){return m.mots?'Mots de Noël (+ prénoms ou date si vous voulez)':'Dessin de Noël (+ prénoms ou date si vous voulez)'}
+/* les champs d'un modèle = PARCOURS_CHAMPS du site (src/lib/parcoursGuide.js), libellés et exemples identiques */
+var CHAMPS={prenoms:{key:'prenom',label:'Prénoms / nom / texte',ph:'Ex. Camille · Elli & Ben · « Santé »',max:40},prenom:{key:'prenom',label:'Prénom ou nom',ph:'Ex. Stephan',max:40},date:{key:'date',label:'Date ou année',ph:'Ex. 1989 · 09.09.25',max:20}};
 function tile(m,noel){
   var on=S.model&&S.model.src===(noel?'noel':'vin')&&S.model.n===m.n;
   var g=noel?(m.mots?'mots':'dessins'):(GROUPES.find(function(x){return x.nums.indexOf(m.n)>=0})||{}).key;
@@ -547,7 +549,7 @@ function modele(){
   if(!S.model)return null;
   return S.model.src==='noel'?NOEL.find(function(m){return m.n===S.model.n}):VIN.find(function(m){return m.n===S.model.n});
 }
-function total(){var t=PRIX;if(S.prenom.trim())t+=EXTRA;if(S.date.trim())t+=EXTRA;return t}
+function total(){var t=PRIX,M=modele();if(M)(M.champs||[]).forEach(function(k){var F=CHAMPS[k];if(F&&String(S[F.key]||'').trim())t+=EXTRA});return t}
 function renderSite(){
   var noelVisibles=S.noel?NOEL.filter(function(m){return m.prix>=0}):[];
   var nb=VIN.length, nbTot=nb+noelVisibles.length;
@@ -566,7 +568,7 @@ function renderSite(){
     if(isN){
       var nbD=noelVisibles.filter(function(m){return !m.mots}).length, nbM=noelVisibles.length-nbD;
       h+='<div class="prc-chips"><button type="button" class="prc-chip'+(S.filtre==='all'?' on':'')+'" data-f="all">Tous (Noël 1–'+noelVisibles.length+')</button><button type="button" class="prc-chip'+(S.filtre==='dessins'?' on':'')+'" data-f="dessins">Dessins ('+nbD+')</button><button type="button" class="prc-chip'+(S.filtre==='mots'?' on':'')+'" data-f="mots">Mots de Noël ('+nbM+')</button></div>';
-      h+='<p class="prc-legend">Les modèles de Noël ont leurs propres numéros (« Noël n° 1 » à « Noël n° '+noelVisibles.length+' »). Le modèle de Noël est votre première gravure : il est <b>offert</b>, même s’il contient un texte. Un texte en bas en plus ou une date : +3 € chacun.</p>';
+      h+='<p class="prc-legend">Les modèles de Noël ont leurs propres numéros (« Noël n° 1 » à « Noël n° '+noelVisibles.length+' »). Sous chaque modèle : ce que vous pouvez nous indiquer (rien n’est obligatoire).</p>';
       h+='<div class="prc-one"><div><div class="prc-grid'+(replie?' picked':'')+'">'+noelVisibles.map(function(m){return tile(m,true)}).join('')+'</div>';
       if(replie)h+='<button type="button" class="prc-change" id="prc-change">← Changer de modèle de Noël (voir les '+noelVisibles.length+')</button>';
     }else{
@@ -580,14 +582,17 @@ function renderSite(){
     if(M){
       var lab=S.model.src==='noel'?'Modèle de Noël n° '+M.n:'Modèle n° '+M.n;
       h+='<p class="prc-choisi">'+lab+' choisi ✓ — indiquez ce que vous voulez y faire graver (facultatif), dans la même écriture. Regardez la grande photo en haut : il s’y pose.</p>';
-      h+='<div class="prc-fields"><p class="prc-ftitle">'+lab+' — <em>'+esc(S.model.src==='noel'?legNoel(M):M.legende)+'</em>. Indiquez :</p><div class="prc-field"><label>'+(S.model.src==='noel'?'Texte en bas':'Prénoms / nom / texte')+' <span style="color:var(--ink-soft);font-weight:400">(facultatif · +3 €)</span></label><input id="prc-prenom" maxlength="40" placeholder="Ex. Camille · Elli &amp; Ben · « Santé »" value="'+esc(S.prenom)+'"></div><div class="prc-field"><label>Date <span style="color:var(--ink-soft);font-weight:400">(facultatif · +3 €)</span></label><input id="prc-date" maxlength="20" placeholder="Ex. 25.12.2026" value="'+esc(S.date)+'"></div></div>';
+      if((M.champs||[]).length){
+        h+='<div class="prc-fields"><p class="prc-ftitle">'+lab+' — <em>'+esc(S.model.src==='noel'?legNoel(M):M.legende)+'</em>. Indiquez :</p>';
+        M.champs.forEach(function(k){var F=CHAMPS[k];if(!F)return;h+='<div class="field"><label>'+esc(F.label)+'<span class="prc-opt"> (facultatif, +'+(EXTRA%1?eur(EXTRA):EXTRA+'\u00a0€')+')</span></label><input type="text" data-champ="'+F.key+'" maxlength="'+F.max+'" placeholder="'+esc(F.ph)+'" value="'+esc(S[F.key]||'')+'"></div>'});
+        h+='</div>';
+      }
     }
     h+='</div></section>';
   }
   h+='<section class="prc-step"><div class="prc-sh"><span class="prc-num'+(M?' done':'')+'">3</span><h3>Résumé de votre gravure</h3></div><div class="prc-sum">';
   h+='<div class="prc-sumrow"><span>Gravure</span>'+(M?'<b>'+(S.model.src==='noel'?'Modèle de Noël n° ':'Modèle n° ')+M.n+' · offert</b>':'<b class="prc-miss">à choisir (étape 1)</b>')+'</div>';
-  if(S.prenom.trim())h+='<div class="prc-sumrow"><span>Texte « '+esc(S.prenom.trim())+' »</span><b>+'+eur(EXTRA)+'</b></div>';
-  if(S.date.trim())h+='<div class="prc-sumrow"><span>Date « '+esc(S.date.trim())+' »</span><b>+'+eur(EXTRA)+'</b></div>';
+  if(M)(M.champs||[]).forEach(function(k){var F=CHAMPS[k],v=F?String(S[F.key]||'').trim():'';if(v)h+='<div class="prc-sumrow"><span>'+esc(F.label)+' : '+esc(v)+'</span><b>+'+eur(EXTRA)+'</b></div>'});
   h+='<div class="prc-sumrow prc-sumtot"><span>Total</span><b>'+eur(total())+'</b></div></div></section>';
   $('#prc').innerHTML=h;
   $('#ft-emb').innerHTML='';
@@ -603,7 +608,7 @@ document.addEventListener('click',function(ev){
   t=ev.target.closest('.ft-tabs [data-view]');
   if(t){S.view=t.getAttribute('data-view');$$('.ft-tabs [data-view]').forEach(function(b){b.classList.toggle('on',b===t)});$$('.ft-view').forEach(function(v){v.classList.toggle('on',v.id==='view-'+S.view)});window.scrollTo(0,0);return}
   t=ev.target.closest('.prc-card[data-mode]');
-  if(t){var m=t.getAttribute('data-mode');if(m==='modele'||m==='noel'){if(S.mode!==m){S.model=null;S.prenom='';S.filtre='all';}S.mode=m;S.ouverte=true;renderSite();var s2=$('#prc-s2');if(s2)s2.scrollIntoView({block:'start',behavior:'smooth'})}else{alert_('Dans cette maquette, seuls « Un modèle décoré » et « Un modèle de Noël » sont joués : les autres choix sont ceux du site, inchangés.')}return}
+  if(t){var m=t.getAttribute('data-mode');if(m==='modele'||m==='noel'){if(S.mode!==m){S.model=null;S.prenom='';S.date='';S.filtre='all';}S.mode=m;S.ouverte=true;renderSite();var s2=$('#prc-s2');if(s2)s2.scrollIntoView({block:'start',behavior:'smooth'})}else{alert_('Dans cette maquette, seuls « Un modèle décoré » et « Un modèle de Noël » sont joués : les autres choix sont ceux du site, inchangés.')}return}
   t=ev.target.closest('.prc-chip[data-f]');
   if(t){S.filtre=t.getAttribute('data-f');S.ouverte=true;renderSite();return}
   t=ev.target.closest('.prc-model[data-n]');
@@ -618,7 +623,7 @@ document.addEventListener('click',function(ev){
   if(t){S.couleur=t.getAttribute('data-pc');renderBijou();renderEmbAdmin();return}
 });
 document.addEventListener('input',function(ev){
-  if(ev.target.id==='prc-prenom'||ev.target.id==='prc-date'){var id=ev.target.id;S[id==='prc-date'?'date':'prenom']=ev.target.value;var pos=ev.target.selectionStart;renderSite();var i=$('#'+id);if(i){i.focus();i.setSelectionRange(pos,pos)}}
+  var ch=ev.target.getAttribute&&ev.target.getAttribute('data-champ');if(ch){S[ch]=ev.target.value;var pos=ev.target.selectionStart;renderSite();var i=$('[data-champ="'+ch+'"]');if(i){i.focus();i.setSelectionRange(pos,pos)}}
 });
 document.addEventListener('change',function(ev){
   var s=ev.target.closest('select[data-prix]');

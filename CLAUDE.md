@@ -108,6 +108,11 @@
     (1re gravure) » / « Masquée » (plus de +3 € par image) ; fiche : champs « Texte en bas » + « Date » (+3 € chacun). Vérifié 390 / 1280
     (`scratchpad/t-fetes3.mjs`) : Noël n° 2 seul 17,90 → + texte 20,90 → + date 23,90 €, 0 erreur, 0 débordement. ⛔ Remplace les « prix
     PROPOSÉS » (+3 € par image avec texte) écrits plus haut.
+  · ✅ **v11 (29/10, gérant : « tu fais comme sur le site »)** : le modèle de Noël choisi se remplit EXACTEMENT comme un modèle du site
+    (`ParcoursGuide`) : phrase « Modèle de Noël n° X choisi ✓ — indiquez ce que vous voulez y faire graver (facultatif)… », champs
+    `PARCOURS_CHAMPS` « Prénoms / nom / texte » et « Date ou année » avec « (facultatif, +3 €) », résumé une ligne par champ rempli ; les
+    modèles habituels montrent aussi LEURS champs (n° 1 : prénoms seul ; n° 10 : prénoms + date). À la construction : `champs:["prenoms","date"]`
+    sur chaque image de Noël, prix lus dans `engravingPricing` comme le site. Vérifié 390 / 1280 : Noël seul 17,90 → 20,90 → 23,90 €, 0 erreur.
   · **v9 (28/10 soir)** : le gérant a envoyé les versions PROPRES (sans filigrane) des n° 26 et 27 → fichiers remplacés (même
     numéro, même nom, empreinte vérifiée), étiquette « ⚠ filigrane du vendeur » retirée. 94 vérifs, 0 erreur.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
