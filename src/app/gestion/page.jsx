@@ -829,7 +829,7 @@ export default function GestionPage({ onglet = "" } = {}) {
     <div className="admin-content">
         {/* Rappels (URSSAF, Google Shopping) : sur le tableau de bord seulement,
             pas en tête de chaque onglet (ils repoussaient le contenu, surtout sur mobile). */}
-        {tab === "accueil" ? <><DeclarationReminder /><MerchantReminder /></> : null}
+        {tab === "accueil" ? <><DeclarationReminder adminKey={key} /><MerchantReminder /></> : null}
 
         {error && <div className="notice" style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}><span>{error}</span><button type="button" className="btn btn-gold" style={{ padding: "6px 14px" }} onClick={() => load(key)} disabled={loading}>{loading ? "…" : "Réessayer"}</button></div>}
 

@@ -8,6 +8,7 @@ import { syncInbox } from "@/lib/inbox";
 import { syncAllAndListUnread } from "@/lib/batSync";
 import { offreActive } from "@/lib/offreGravure";
 import { runFetesAlerte } from "@/lib/fetesAlerte";
+import { runUrssafAlerte } from "@/lib/urssafAlerte";
 
 const MIN = 60000;
 
@@ -69,5 +70,9 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("fetesAlerte", 12 * 60 * MIN)) out.fetesAlerte = await runFetesAlerte();
   } catch (e) { out.fetesAlerteError = e.message; }
+  // URSSAF : rappel au gérant 7 jours avant la fin du mois de déclaration, la veille, puis en cas de retard.
+  try {
+    if (await claimJob("urssafAlerte", 6 * 60 * MIN)) out.urssafAlerte = await runUrssafAlerte();
+  } catch (e) { out.urssafAlerteError = e.message; }
   return out;
 }

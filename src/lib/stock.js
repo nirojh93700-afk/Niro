@@ -1798,17 +1798,17 @@ export async function getModelFile(id) {
 // La gérante coche « Déclarée » sur un mois dans Gestion → Bénéfices : on
 // mémorise la date du clic. Sert à afficher automatiquement ce qu'il RESTE à
 // déclarer. data.urssafDeclared = { "2026-07": "2026-08-18T…" }.
-export async function getUrssafDeclared() {
-  const data = await getCatalogRaw();
+export async function getUrssafDeclared(fresh = false) {
+  const data = await getCatalogRaw(fresh);
   return data.urssafDeclared || {};
 }
 export async function setUrssafDeclared(month, on) {
   if (!/^\d{4}-\d{2}$/.test(month || "")) return null;
-  const data = await getCatalogRaw();
-  data.urssafDeclared = data.urssafDeclared || {};
+  const data = await getCatalogRaw(true); // lecture fraîche : jamais d'écrasement par un cache
+  data.urssafDeclared = { ...(data.urssafDeclared || {}) };
   if (on) data.urssafDeclared[month] = new Date().toISOString();
   else delete data.urssafDeclared[month];
-  await persistCatalog(data);
+  await persistCatalog(data, ["urssafDeclared"]);
   return data.urssafDeclared;
 }
 

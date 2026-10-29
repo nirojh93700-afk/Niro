@@ -18,6 +18,7 @@
     "test-suivi": "node --import ./tools/alias-register.mjs tools/tests/suivi-colis.test.mjs",
     "test-stats": "node --import ./tools/alias-register.mjs tools/tests/stats-visites.test.mjs",
     "test-etiquettes": "node --import ./tools/alias-register.mjs tools/tests/etiquettes.test.mjs",
+    "test-urssaf": "node --import ./tools/alias-register.mjs tools/tests/urssaf.test.mjs",
     "test-marque-pages": "node --import ./tools/alias-register.mjs tools/tests/marque-pages.test.mjs",
     "test-materiel": "node --import ./tools/alias-register.mjs tools/tests/materiel.test.mjs",
     "audit-photos": "node --import ./tools/alias-register.mjs tools/audit-photos.mjs",
