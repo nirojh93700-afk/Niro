@@ -628,3 +628,18 @@ _(Refaite le 28/10/2026 au soir : le chapitre des marque-pages montre aussi le m
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #bijougrave #cadeaunoel #ideecadeau
+
+## Vidéo 41 — Verres de Noël pour la déco de table (29/10/2026)
+- Demande du gérant : « vidéo de Noël, c'est pour la déco, ambiance Noël, des effets différents, effets de vente… tu changes un peu les
+  logos ». Verres vierges du site + dessins de Noël du site (un dessin différent par verre ; jamais les n° 8, 13, 15). Effets nouveaux :
+  neige, lumières dorées floues, titre lettre par lettre, avant / après au rideau, carrousel de dessins (« Modèle de Noël n° X »), cartes
+  qui pivotent, écran partagé, tampons qui rebondissent, bouton qui pulse. 31,9 s, sans son, 1080 × 1920 (7,0 Mo) et 720 × 1280 (2,8 Mo).
+- Script : `python3 tools/video/noel_deco_verres_41.py <dossier>` (`--apercu` = 10 images fixes). Fichiers NON commités (taille du dépôt).
+- ⚠️ Les verres gravés sont des APERÇUS (dessin posé sur la photo du verre vierge, comme sur le site), pas des photos d'atelier.
+
+**Vidéo 41 — Des verres de Noël pour décorer la table** (Verre à whisky, Verre à vin, Flûte à champagne, Verre tumbler, Verre à cocktail, Carafe à whisky)
+> 🎄 Une table de fêtes qui vous ressemble : rennes, cloches, sapins, village sous la lune… choisissez votre dessin de Noël et on le grave sur vos verres ✨
+> Ajoutez un prénom, un dessin différent pour chacun 🥂 Gravé dans notre atelier 💛
+> 👉 nivcreation.fr
+
+#nivcreation #decorationnoel #verregrave #tabledenoel #ideecadeau
