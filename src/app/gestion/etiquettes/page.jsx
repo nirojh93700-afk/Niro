@@ -58,22 +58,21 @@ export default function EtiquettesPage() {
     if (typeof s.exp === "string" && s.exp.trim()) setExpTxt(s.exp);
     if (typeof s.ref === "boolean") setAvecRef(s.ref);
     if (s.modele) setModele(modeleValide(s.modele));
-    // Adresses à la main gardées sur cet appareil + celle d'un lien ?adresse=…&site=Etsy (envoyé par l'assistant).
-    let man = Array.isArray(s.manuelles) ? s.manuelles.filter((x) => x && x.shippingAddress) : [];
-    try {
-      const p = new URLSearchParams(window.location.search), txt = p.get("adresse");
-      if (txt) {
-        const a = adresseCollee(txt, `m${Date.now()}`);
-        if (a && !man.some((x) => x.shippingName === a.shippingName && x.shippingAddress.line1 === a.shippingAddress.line1)) man = [...man, { ...a, site: p.get("site") || "Etsy" }];
-        p.delete("adresse"); p.delete("site");
-        window.history.replaceState(null, "", window.location.pathname + (p.toString() ? `?${p}` : ""));
-      }
-    } catch { /* ignore */ }
-    setManuelles(man);
     setPret(true);
     setApple(estApple());
   }, []);
-  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef, modele, manuelles }); }, [pret, used, mode, expTxt, avecRef, modele, manuelles]);
+  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef, modele }); }, [pret, used, mode, expTxt, avecRef, modele]);
+
+  // Adresses à la main (Etsy ou autre) gardées SUR LE SITE (29/10/2026) : visibles sur tous les appareils.
+  const versListe = (adresses) => (adresses || []).map((x) => { const a = adresseCollee(x.texte, x.id); return a ? { ...a, site: x.site } : null; }).filter(Boolean);
+  const adressesApi = useCallback(async (k, corps) => {
+    const r = await fetch("/api/admin/etiquettes-adresses", corps
+      ? { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": k }, body: JSON.stringify(corps) }
+      : { headers: { "x-admin-key": k } });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || "Erreur");
+    setManuelles(versListe(d.adresses));
+  }, []);
 
   const load = useCallback(async (k) => {
     setErr("");
@@ -88,8 +87,16 @@ export default function EtiquettesPage() {
         const o = liste.find((x) => (id && x.id === id) || (ref && String(x.ref).toUpperCase() === ref.toUpperCase()));
         if (o) { setCoches([o.id]); if (!A_EXPEDIER.includes(o.status || "a_preparer")) setToutes(true); }
       } catch { /* ignore */ }
+      try {
+        const p = new URLSearchParams(window.location.search), txt = p.get("adresse");
+        if (txt && adresseCollee(txt)) {
+          await adressesApi(k, { action: "add", texte: txt, site: p.get("site") || "Etsy" });
+          p.delete("adresse"); p.delete("site");
+          window.history.replaceState(null, "", window.location.pathname + (p.toString() ? `?${p}` : ""));
+        } else await adressesApi(k);
+      } catch { /* la liste des adresses à la main ne bloque jamais la page */ }
     } catch { setErr("Les commandes n'ont pas pu être chargées. Réessayez."); }
-  }, []);
+  }, [adressesApi]);
   useEffect(() => { try { const k = sessionStorage.getItem("niv-admin-key"); if (k) load(k); } catch { /* ignore */ } }, [load]);
 
   const liste = useMemo(() => {
@@ -186,7 +193,7 @@ export default function EtiquettesPage() {
     setAttente(cases);
   }
   // Étiquettes sorties : les adresses à la main imprimées sont retirées de la liste.
-  function confirmerSortie() { const cs = attente || []; setUsed((u) => u.map((v, k) => v || cs.includes(k))); setAttente(null); setManuelles([]); }
+  function confirmerSortie() { const cs = attente || []; setUsed((u) => u.map((v, k) => v || cs.includes(k))); setAttente(null); const ids = manuelles.map((x) => x.id); if (ids.length) adressesApi(key, { action: "remove", ids }).catch(() => {}); }
 
   if (!authed) {
     return (
@@ -244,7 +251,7 @@ export default function EtiquettesPage() {
                   <option>Etsy</option><option>Autre</option>
                 </select>
               </label>
-              <button type="button" className="btn btn-gold" disabled={!adresseCollee(colle)} onClick={() => { const a = adresseCollee(colle, `m${Date.now()}`); if (a) { setManuelles((m) => [...m, { ...a, site }]); setColle(""); } }}>Ajouter à la feuille</button>
+              <button type="button" className="btn btn-gold" disabled={!adresseCollee(colle)} onClick={() => { adressesApi(key, { action: "add", texte: colle, site }).then(() => setColle("")).catch((e) => setErr(e.message)); }}>Ajouter à la feuille</button>
             </div>
             {manuelles.map((o) => {
               const a = o.shippingAddress;
@@ -252,7 +259,7 @@ export default function EtiquettesPage() {
                 <div key={o.id} className="etq-ord on" style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
                   <span style={{ minWidth: 0, flex: 1 }}><span className="nm">{o.shippingName}</span>{o.site ? <span className="chip poste" style={{ marginLeft: 6 }}>{o.site}</span> : null}<br />
                     <span className="ad">{[a.line1, a.line2, [a.postal_code, a.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span></span>
-                  <button type="button" className="btn btn-outline" style={{ padding: "4px 10px" }} onClick={() => setManuelles((m) => m.filter((x) => x.id !== o.id))}>Retirer</button>
+                  <button type="button" className="btn btn-outline" style={{ padding: "4px 10px" }} onClick={() => adressesApi(key, { action: "remove", ids: [o.id] }).catch((e) => setErr(e.message))}>Retirer</button>
                 </div>
               );
             })}

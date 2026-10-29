@@ -2920,3 +2920,19 @@ export async function setVisibilite(type, cle, masque) {
   await persistCatalog(data, ["visibilite"]);
   return v;
 }
+
+// ── Adresses à imprimer sur les étiquettes, ajoutées à la main (Etsy ou autre) — 29/10/2026 ────────────
+// Gérant : « mets dans la liste sur le site où il y a les tickets ». Section « etiquettesAdresses » du
+// catalogue : [{ id, site, texte, at }]. Lecture fraîche + écriture de cette seule section.
+export async function getEtiquettesAdresses() {
+  const data = await getCatalogRaw(true);
+  return Array.isArray(data.etiquettesAdresses) ? data.etiquettesAdresses : [];
+}
+
+export async function modifierEtiquettesAdresses(fn) {
+  const data = await getCatalogRaw(true);
+  const liste = Array.isArray(data.etiquettesAdresses) ? data.etiquettesAdresses : [];
+  data.etiquettesAdresses = fn(liste).slice(-60);
+  await persistCatalog(data, ["etiquettesAdresses"]);
+  return data.etiquettesAdresses;
+}
