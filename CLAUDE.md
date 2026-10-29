@@ -1,4 +1,5 @@
-## 🧭 MAQUETTE « GESTION MODERNE » — 29/10/2026 (en attente de son avis, RIEN en ligne)
+## 🧭 MAQUETTE « GESTION MODERNE » — ✅ ENREGISTRÉE TELLE QUELLE LE 29/10/2026 (« Enregistre la maquette », version 1) — RIEN en ligne
+> C'est CETTE version (artifact v1) à reproduire à l'identique le jour de l'« applique » ; ne pas la modifier sans sa demande (règle du 23/07).
 > Gérant : « analyse la page admin… il y a un peu de tout partout, tu supprimes rien… plus fluide, plus professionnel, moderne…
 > cherche comment font les grandes sociétés… fais-moi une maquette, toutes les catégories ».
 - **Artifact** https://claude.ai/artifact/9vB5Px2dAPAsQocvHLoTYp · gabarit `tools/maquettes/gestion-moderne.tpl.html` + générateur
