@@ -12,7 +12,7 @@ v2 (28/10 soir) : les emballages de Noël Temu (pour les BIJOUX, prix validés p
 Les photos des emballages = `docs/maquettes/assets/noel/emballages/` (celles du gérant, sans cotes) ; les photos /api/img/<id> de la capture
 collier sont lues dans le dossier de cette capture (<id>.jpg, téléchargées avec curl).
 Le dossier css = les 3 feuilles en ligne (curl nivcreation.fr/_next/static/css/*.css) : vraies classes .ash-* / .prc-*.
-RIEN n'est en ligne. Les prix des images (offert / payant) et des emballages sont des EXEMPLES à régler par le gérant.
+RIEN n'est en ligne. Images de Noël = 1re gravure OFFERTE (gérant 29/10), texte en bas / date +3 € ; emballages = prix du gérant.
 """
 import base64, datetime as dt, glob, html, io, json, os, re, subprocess, sys
 from PIL import Image
@@ -100,7 +100,8 @@ for f in FETES:
 NOEL = FETES[0]
 
 # ------------------------------------------------------------------ les 25 images de Noël (numéros = ceux de Gestion ET du site)
-# texte = un texte fait partie de l'image (règle « tout texte est payant » → +3 € proposé, à confirmer) ;
+# texte = un texte fait partie de l'image (simple étiquette : gérant 29/10, l'image de Noël choisie = la 1re gravure, OFFERTE,
+# même avec un texte dedans ; un texte en bas en plus ou une date = +3 € chacun, comme d'habitude) ;
 # droits = personnage protégé ; gris = image en niveaux de gris, pas un trait noir et blanc.
 IMAGES = [
     (1, "Cloches de Noël au ruban", ""), (2, "Gnomes « Merry Christmas »", "texte"), (3, "Père Noël, sapin et cadeaux", ""),
@@ -121,7 +122,7 @@ NOEL_JS = []
 for n, nom, flags in IMAGES:
     f = flags.split()
     NOEL_JS.append(dict(n=n, nom=nom, src=uri(FICHIERS[n], 300, 80), texte=("texte" in f or "mots" in f), mots=("mots" in f),
-                        droits=("droits" in f), gris=("gris" in f), filigrane=("filigrane" in f), prix=(3 if ("texte" in f or "mots" in f) else 0)))
+                        droits=("droits" in f), gris=("gris" in f), filigrane=("filigrane" in f), prix=0))
 
 VIN_JS = [dict(n=int(n), legende=m["legende"], champs=m.get("champs", []), exemple=m.get("exemple", ""),
                src=uri(os.path.join(PUB, VIN["styleImages"][n].lstrip("/")), 300, 80)) for n, m in sorted(VIN["modeles"].items(), key=lambda x: int(x[0]))]
@@ -308,7 +309,7 @@ ADMIN = f"""
 
     <h3 class="ft-h3">Images de gravure de Noël <span class="ft-h3s">{NB_IMAGES} · le client les choisit par leur numéro, comme les autres modèles</span></h3>
     <div class="ft-bar"><span id="ft-cnt"></span><button type="button" class="btn btn-outline ft-btn">+ Ajouter des images</button></div>
-    <p class="ft-p ft-note">Prix proposé d'après votre règle « tout texte gravé est payant » : une image qui contient un texte (« Merry Christmas », les mots de Noël 17 à 25) est à <b>+3 €</b>, un dessin seul est <b>offert</b> comme un modèle. Vous changez chaque ligne ; <b>rien n'est décidé</b>.</p>
+    <p class="ft-p ft-note">Votre règle (29/10) : l'image de Noël choisie est la <b>première gravure</b>, elle est <b>offerte</b>, même si elle contient un texte (« Merry Christmas », les mots de Noël 17 à 25). Un <b>texte en bas en plus</b> ou une <b>date</b> : <b>+3 €</b> chacun, comme d'habitude. Une image peut être masquée.</p>
     <div class="ft-imgs" id="ft-imgs"></div>
 
     <h3 class="ft-h3">Emballages de Noël <span class="ft-h3s">pour les BIJOUX · s'ajoutent sous « Votre emballage » de chaque fiche bijou, en plus des emballages habituels</span></h3>
@@ -493,7 +494,7 @@ JS = r"""
 var NOEL=__NOEL__, VIN=__VIN__, GROUPES=__GROUPES__, CRISTAUX=__CRISTAUX__, PRIX=__PRIX__, EXTRA=__EXTRA__;
 var EMB=__EMB__, ETQ=__ETQ__, PK=__PK__, PRIX_BIJOU=__PRIX_BIJOU__, COUL=__COUL__;
 var FITS=[['seul','bijou seul / microfibre'],['sac','sac cadeau'],['carree','boîte carrée (colliers)'],['allongee','boîte allongée (bracelets)'],['pack','Pack boîte cadeau']];
-var S={noel:true,mode:null,model:null,prenom:'',filtre:'all',ouverte:true,view:'admin',pk:'pk0',xn:'none',xnOpen:false,couleur:'vert'};
+var S={noel:true,mode:null,model:null,prenom:'',date:'',filtre:'all',ouverte:true,view:'admin',pk:'pk0',xn:'none',xnOpen:false,couleur:'vert'};
 function eur(n){return n.toFixed(2).replace('.',',')+' €'}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function $(s,r){return (r||document).querySelector(s)}
@@ -501,7 +502,7 @@ function $$(s,r){return [].slice.call((r||document).querySelectorAll(s))}
 /* ---------- état partagé Noël allumé / éteint */
 function setNoel(on){
   S.noel=on;
-  if(!on && S.model && S.model.src==='noel'){S.model=null;S.prenom='';}
+  if(!on && S.model && S.model.src==='noel'){S.model=null;S.prenom='';S.date='';}
   if(!on && S.mode==='noel'){S.mode=null;S.filtre='all';}
   if(!on){S.xn='none';S.xnOpen=false;}
   if(S.filtre==='noel'&&!on)S.filtre='all';
@@ -524,17 +525,17 @@ function renderAdmin(){
     if(m.gris)flags+='<span class="ft-flag g">niveaux de gris</span>';
     if(m.filigrane)flags+='<span class="ft-flag d">⚠ filigrane du vendeur</span>';
     return '<div class="ft-img"><span class="ft-num">Noël n° '+m.n+'</span><div class="ph"><img src="'+m.src+'" alt=""></div><div class="tx"><b>'+esc(m.nom)+'</b>'+(flags?'<span>'+flags+'</span>':'')+
-      '<select data-prix="'+m.n+'"><option value="0"'+(m.prix===0?' selected':'')+'>Offerte (comme un modèle)</option><option value="3"'+(m.prix===3?' selected':'')+'>+3 € (comme un texte)</option><option value="-1">Masquée</option></select></div></div>';
+      '<select data-prix="'+m.n+'"><option value="0"'+(m.prix===0?' selected':'')+'>Offerte (1re gravure)</option><option value="-1"'+(m.prix<0?' selected':'')+'>Masquée</option></select></div></div>';
   }).join('');
   $('#ft-perm').innerHTML=CRISTAUX.map(function(c){return '<div><img src="'+c.src+'" alt=""><div><b>🔒 '+esc(c.nom)+'</b><small>Cristal déjà gravé, famille Noël. Reste en ligne toute l’année ; mis en avant pendant Noël.</small></div></div>'}).join('');
   compteur();
 }
 function compteur(){
-  var o=0,p=0,m=0; NOEL.forEach(function(x){if(x.prix===0)o++;else if(x.prix===3)p++;else m++});
-  $('#ft-cnt').innerHTML='<b>'+o+'</b> offertes · <b>'+p+'</b> à +3 € · <b>'+m+'</b> masquée'+(m>1?'s':'')+' · 3 images avec un personnage protégé à trancher';
+  var o=0,m=0; NOEL.forEach(function(x){if(x.prix>=0)o++;else m++});
+  $('#ft-cnt').innerHTML='<b>'+o+'</b> offertes (1re gravure) · <b>'+m+'</b> masquée'+(m>1?'s':'')+' · texte en bas ou date : +3 € chacun · 3 images avec un personnage protégé à trancher';
 }
 /* ---------- Site : le parcours du verre à vin, redessiné comme ParcoursGuide.jsx */
-function legNoel(m){return m.mots?'Mots de Noël (+ prénom si vous voulez)':'Dessin de Noël (+ prénom si vous voulez)'}
+function legNoel(m){return m.mots?'Mots de Noël · offert (+ texte ou date si vous voulez)':'Dessin de Noël · offert (+ texte ou date si vous voulez)'}
 function tile(m,noel){
   var on=S.model&&S.model.src===(noel?'noel':'vin')&&S.model.n===m.n;
   var g=noel?(m.mots?'mots':'dessins'):(GROUPES.find(function(x){return x.nums.indexOf(m.n)>=0})||{}).key;
@@ -546,7 +547,7 @@ function modele(){
   if(!S.model)return null;
   return S.model.src==='noel'?NOEL.find(function(m){return m.n===S.model.n}):VIN.find(function(m){return m.n===S.model.n});
 }
-function total(){var t=PRIX;if(S.prenom.trim())t+=EXTRA;return t}
+function total(){var t=PRIX;if(S.prenom.trim())t+=EXTRA;if(S.date.trim())t+=EXTRA;return t}
 function renderSite(){
   var noelVisibles=S.noel?NOEL.filter(function(m){return m.prix>=0}):[];
   var nb=VIN.length, nbTot=nb+noelVisibles.length;
@@ -565,7 +566,7 @@ function renderSite(){
     if(isN){
       var nbD=noelVisibles.filter(function(m){return !m.mots}).length, nbM=noelVisibles.length-nbD;
       h+='<div class="prc-chips"><button type="button" class="prc-chip'+(S.filtre==='all'?' on':'')+'" data-f="all">Tous (Noël 1–'+noelVisibles.length+')</button><button type="button" class="prc-chip'+(S.filtre==='dessins'?' on':'')+'" data-f="dessins">Dessins ('+nbD+')</button><button type="button" class="prc-chip'+(S.filtre==='mots'?' on':'')+'" data-f="mots">Mots de Noël ('+nbM+')</button></div>';
-      h+='<p class="prc-legend">Les modèles de Noël ont leurs propres numéros (« Noël n° 1 » à « Noël n° '+noelVisibles.length+' »). Sous chacun : un dessin seul est offert, un dessin avec un texte est à +3 €. Ajoutez un prénom si vous voulez.</p>';
+      h+='<p class="prc-legend">Les modèles de Noël ont leurs propres numéros (« Noël n° 1 » à « Noël n° '+noelVisibles.length+' »). Le modèle de Noël est votre première gravure : il est <b>offert</b>, même s’il contient un texte. Un texte en bas en plus ou une date : +3 € chacun.</p>';
       h+='<div class="prc-one"><div><div class="prc-grid'+(replie?' picked':'')+'">'+noelVisibles.map(function(m){return tile(m,true)}).join('')+'</div>';
       if(replie)h+='<button type="button" class="prc-change" id="prc-change">← Changer de modèle de Noël (voir les '+noelVisibles.length+')</button>';
     }else{
@@ -579,13 +580,14 @@ function renderSite(){
     if(M){
       var lab=S.model.src==='noel'?'Modèle de Noël n° '+M.n:'Modèle n° '+M.n;
       h+='<p class="prc-choisi">'+lab+' choisi ✓ — indiquez ce que vous voulez y faire graver (facultatif), dans la même écriture. Regardez la grande photo en haut : il s’y pose.</p>';
-      h+='<div class="prc-fields"><p class="prc-ftitle">'+lab+' — <em>'+esc(S.model.src==='noel'?legNoel(M):M.legende)+'</em>. Indiquez :</p><div class="prc-field"><label>Prénoms / nom / texte <span style="color:var(--ink-soft);font-weight:400">(facultatif · +3 €)</span></label><input id="prc-prenom" maxlength="40" placeholder="Ex. Camille · Elli &amp; Ben · « Santé »" value="'+esc(S.prenom)+'"></div></div>';
+      h+='<div class="prc-fields"><p class="prc-ftitle">'+lab+' — <em>'+esc(S.model.src==='noel'?legNoel(M):M.legende)+'</em>. Indiquez :</p><div class="prc-field"><label>'+(S.model.src==='noel'?'Texte en bas':'Prénoms / nom / texte')+' <span style="color:var(--ink-soft);font-weight:400">(facultatif · +3 €)</span></label><input id="prc-prenom" maxlength="40" placeholder="Ex. Camille · Elli &amp; Ben · « Santé »" value="'+esc(S.prenom)+'"></div><div class="prc-field"><label>Date <span style="color:var(--ink-soft);font-weight:400">(facultatif · +3 €)</span></label><input id="prc-date" maxlength="20" placeholder="Ex. 25.12.2026" value="'+esc(S.date)+'"></div></div>';
     }
     h+='</div></section>';
   }
   h+='<section class="prc-step"><div class="prc-sh"><span class="prc-num'+(M?' done':'')+'">3</span><h3>Résumé de votre gravure</h3></div><div class="prc-sum">';
   h+='<div class="prc-sumrow"><span>Gravure</span>'+(M?'<b>'+(S.model.src==='noel'?'Modèle de Noël n° ':'Modèle n° ')+M.n+' · offert</b>':'<b class="prc-miss">à choisir (étape 1)</b>')+'</div>';
   if(S.prenom.trim())h+='<div class="prc-sumrow"><span>Texte « '+esc(S.prenom.trim())+' »</span><b>+'+eur(EXTRA)+'</b></div>';
+  if(S.date.trim())h+='<div class="prc-sumrow"><span>Date « '+esc(S.date.trim())+' »</span><b>+'+eur(EXTRA)+'</b></div>';
   h+='<div class="prc-sumrow prc-sumtot"><span>Total</span><b>'+eur(total())+'</b></div></div></section>';
   $('#prc').innerHTML=h;
   $('#ft-emb').innerHTML='';
@@ -616,7 +618,7 @@ document.addEventListener('click',function(ev){
   if(t){S.couleur=t.getAttribute('data-pc');renderBijou();renderEmbAdmin();return}
 });
 document.addEventListener('input',function(ev){
-  if(ev.target.id==='prc-prenom'){S.prenom=ev.target.value;var pos=ev.target.selectionStart;renderSite();var i=$('#prc-prenom');if(i){i.focus();i.setSelectionRange(pos,pos)}}
+  if(ev.target.id==='prc-prenom'||ev.target.id==='prc-date'){var id=ev.target.id;S[id==='prc-date'?'date':'prenom']=ev.target.value;var pos=ev.target.selectionStart;renderSite();var i=$('#'+id);if(i){i.focus();i.setSelectionRange(pos,pos)}}
 });
 document.addEventListener('change',function(ev){
   var s=ev.target.closest('select[data-prix]');
@@ -708,7 +710,7 @@ page = f"""<title>Fêtes de l'année</title>
 #ft-toast{{display:none;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1811;color:#f1e3b8;padding:10px 16px;border-radius:12px;font-size:.84rem;z-index:99;max-width:92vw;box-sizing:border-box}}
 </style>
 <main id="ft-app">
-<div class="ft-banner"><b>MAQUETTE « FÊTES »</b> · rien n'est en ligne · prix des images = exemples à régler par vous · emballages de Noël des bijoux = vos prix du 28/10, vos photos</div>
+<div class="ft-banner"><b>MAQUETTE « FÊTES »</b> · rien n'est en ligne · images de Noël offertes (1re gravure), texte en bas ou date +3 € · emballages de Noël des bijoux = vos prix du 28/10, vos photos</div>
 <div class="ft-tabs" role="tablist"><button type="button" class="on" data-view="admin">① Gestion → Fêtes</button><button type="button" data-view="site">② Site : verre à vin (images)</button><button type="button" data-view="bijou">③ Site : collier (emballages)</button>
  <div class="ft-sync">Noël <span class="ft-synctxt">allumé</span> {sw("sync", True, "Allumer ou éteindre Noël")}</div></div>
 <div class="ft-view on" id="view-admin">{ADMIN}</div>

@@ -20,8 +20,7 @@
 - **Vue ② sur le site** (fiche RÉELLE du verre à vin) : Noël allumé = étiquette « 🎄 Noël » sur la carte « Un modèle décoré », chip « 🎄 Noël
   (n° 1–25) » dans la grille, 25 tuiles à badge rouge « Noël n° X » (légende « Dessin de Noël (+ prénom si vous voulez) »), prénom +3 € comme
   la règle du vin, bloc « 🎄 Votre emballage de Noël » (Sans / Sac / Boîte) avant le total ; éteint = la fiche d'aujourd'hui à l'identique.
-- **Prix PROPOSÉS, rien décidé (il a dit « payant et gratuit, je te dirai »)** : règle « tout texte gravé est payant » → image avec un texte
-  (« Merry Christmas » n° 2, 7, 9, 13, 16 ; lettrages 17–25) = +3 €, dessin seul = offert ; sac de Noël « offert », boîte « +4,90 € » = EXEMPLES.
+- ✅ **Prix des images TRANCHÉS le 29/10 (v10)** : toute image de Noël = 1re gravure offerte (même avec un texte dedans) ; texte en bas +3 €, date +3 €.
 - ⚠️ **À lui dire / à trancher** : n° 8 Tom et Jerry (Warner), n° 13 Mickey et Minnie (Disney), n° 15 le Grinch (Dr. Seuss / Universal) =
   personnages protégés ; n° 5 Père Noël bras croisés = image en niveaux de gris (demi-teintes), pas un trait ; textes anglais « Merry Christmas » ;
   photos et prix des sacs / boîtes ; le bandeau Noël de l'accueil et `/offrir/noel` gardent leur interrupteur Apparence (les relier ?).
@@ -103,6 +102,12 @@
     ⛔ Méthode à garder : toute image renvoyée se compare par empreinte aux fichiers existants AVANT d'être ajoutée.
   · ✅ **ENREGISTRÉE TELLE QUELLE LE 28/10/2026 SOIR (« Enregistre la maquette telle quelle ») = VERSION 9** : c'est CETTE version à
     reproduire au « applique » ; ne plus la modifier sans sa demande.
+  · ✅ **v10 (29/10, gérant : « les logos c'est gratuit… ajoute un texte en bas en plus c'est payant comme d'habitude ou la date… le logo
+    comme le premier gravure, c'est gratuit »)** : RÈGLE TRANCHÉE — l'image de Noël choisie = la 1re gravure, **OFFERTE**, même si elle contient
+    un texte (« Merry Christmas », mots de Noël 17–25) ; **texte en bas en plus +3 €, date +3 €**, comme d'habitude. Gestion : choix « Offerte
+    (1re gravure) » / « Masquée » (plus de +3 € par image) ; fiche : champs « Texte en bas » + « Date » (+3 € chacun). Vérifié 390 / 1280
+    (`scratchpad/t-fetes3.mjs`) : Noël n° 2 seul 17,90 → + texte 20,90 → + date 23,90 €, 0 erreur, 0 débordement. ⛔ Remplace les « prix
+    PROPOSÉS » (+3 € par image avec texte) écrits plus haut.
   · **v9 (28/10 soir)** : le gérant a envoyé les versions PROPRES (sans filigrane) des n° 26 et 27 → fichiers remplacés (même
     numéro, même nom, empreinte vérifiée), étiquette « ⚠ filigrane du vendeur » retirée. 94 vérifs, 0 erreur.
   · **À la construction** : `settings.fetes.noel.emballages[]` (id, prix, stock, couleurs) fusionné par clé ; `ProductDetail` ajoute les
