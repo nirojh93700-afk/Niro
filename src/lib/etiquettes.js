@@ -53,6 +53,24 @@ export function adresseEtiquette(o) {
   };
 }
 
+// Adresse COLLÉE à la main (commande Etsy ou autre, gérant 29/10/2026) → une « commande » que l'étiquette sait
+// imprimer. 1re ligne = nom ; la ligne « 26740 MARSANNE » = code postal + ville ; « France » est retiré ;
+// le reste = la rue (2 lignes au plus). Rien n'est enregistré : c'est seulement pour imprimer.
+export function adresseCollee(texte, id = "m") {
+  const l = String(texte || "").split(/\r?\n/).map((x) => x.trim()).filter(Boolean)
+    .filter((x) => !/^(france|pays de destination)$/i.test(x));
+  if (l.length < 2) return null;
+  const nom = l[0];
+  const iCp = l.findIndex((x, i) => i > 0 && /^\d{4,5}\s+\S/.test(x));
+  let cp = "", ville = "", rue = l.slice(1);
+  if (iCp > 0) {
+    const m = l[iCp].match(/^(\d{4,5})\s+(.+)$/);
+    cp = m[1]; ville = m[2];
+    rue = l.slice(1, iCp).concat(l.slice(iCp + 1));
+  }
+  return { id, manuel: true, ref: "", shippingName: nom, shippingAddress: { line1: rue[0] || "", line2: rue.slice(1, 2).join(" "), postal_code: cp, city: ville, country: "FR" } };
+}
+
 // Liste des étiquettes à imprimer, dans l'ordre des commandes cochées.
 // mode : "meme" (expéditeur en bas de l'étiquette) · "apart" (une étiquette en plus) · "non".
 // avecRef : le n° de commande en petit en bas. Par défaut NON (gérant, 14/10/2026 : « une case sans le

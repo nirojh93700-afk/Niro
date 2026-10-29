@@ -1,6 +1,6 @@
 // Étiquettes d'adresse (13/10/2026) : géométrie de la planche, choix des cases, contenu, et
 // — si Chromium est là — la feuille imprimée réellement : 1 page A4, cases au bon millimètre.
-import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseEtiquette, travaux, placer, feuilleHtml, feuillePdf, textePdf, MODELES, modeleValide } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseEtiquette, adresseCollee, travaux, placer, feuilleHtml, feuillePdf, textePdf, MODELES, modeleValide } from "@/lib/etiquettes";
 import { jsPDF } from "jspdf";
 
 let ok = 0, ko = 0;
@@ -26,6 +26,13 @@ v(!modeEnvoi({ ...dom, shippingAddress: {} }).ok, "sans adresse → rien");
 const a = adresseEtiquette({ ...dom, shippingAddress: { ...dom.shippingAddress, city: "Moliets-et-Maa", postal_code: "40660" } });
 v(a.nom === "Léa Martin" && a.cpVille === "40660 MOLIETS-ET-MAA" && a.pays === "" && a.lignes.length === 2, "nom, 2 lignes, CP + VILLE en majuscules, pas de pays en France");
 v(adresseEtiquette({ ...dom, shippingAddress: { ...dom.shippingAddress, country: "BE" } }).pays === "BELGIQUE", "pays hors France écrit en clair");
+
+// 3 bis. adresse collée à la main (Etsy)
+const ets = adresseCollee("LOUVAT Laure\n610 route des Sablons\n26740 MARSANNE\nFrance");
+v(ets && modeEnvoi(ets).ok, "adresse collée → étiquette");
+const ae = adresseEtiquette(ets);
+v(ae.nom === "LOUVAT Laure" && ae.lignes.join("|") === "610 route des Sablons" && ae.cpVille === "26740 MARSANNE" && !ae.pays, "adresse collée bien découpée");
+v(adresseCollee("une seule ligne") === null, "une seule ligne → rien");
 
 // 4. travaux + placement sur les cases libres
 const b = { ...dom, ref: "B2" }, relais = { ...dom, ref: "R3", relaisPoint: "x" };

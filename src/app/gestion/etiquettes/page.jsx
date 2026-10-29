@@ -15,7 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { chargerAvecCache } from "@/components/admin/adminCache";
-import { FEUILLE, NB_CASES, positions, modeEnvoi, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT, MODELES, modeleValide, cssModeles, resserrerEtiquettes } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseCollee, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT, MODELES, modeleValide, cssModeles, resserrerEtiquettes } from "@/lib/etiquettes";
 
 const CLE = "niv-etiquettes";
 const A_EXPEDIER = ["a_preparer", "en_gravure"];
@@ -33,6 +33,8 @@ export default function EtiquettesPage() {
   const [err, setErr] = useState("");
   const [orders, setOrders] = useState([]);
   const [coches, setCoches] = useState([]);
+  const [manuelles, setManuelles] = useState([]); // adresses collées à la main (Etsy ou autre), 29/10/2026
+  const [colle, setColle] = useState("");
   const [toutes, setToutes] = useState(false);
   const [used, setUsed] = useState(() => new Array(NB_CASES).fill(false));
   const [mode, setMode] = useState("meme");
@@ -85,7 +87,7 @@ export default function EtiquettesPage() {
       .sort((a, b) => +new Date(a.createdAt || 0) - +new Date(b.createdAt || 0));
   }, [orders, toutes, coches]);
 
-  const choisies = liste.filter((o) => coches.includes(o.id));
+  const choisies = [...liste.filter((o) => coches.includes(o.id)), ...manuelles];
   const jobs = useMemo(() => travaux(choisies, mode, avecRef), [choisies, mode, avecRef]);
   const { places, manque, libresApres } = useMemo(() => placer(jobs, used), [jobs, used]);
   const parCase = useMemo(() => Object.fromEntries(places.map((p) => [p.case, p])), [places]);
@@ -217,6 +219,23 @@ export default function EtiquettesPage() {
                 </label>
               );
             }) : <p className="sub">Aucune commande à expédier pour le moment.</p>}
+          </section>
+
+          <section className="etq-card" aria-labelledby="etq-tmain">
+            <h2 id="etq-tmain"><span className="n">+</span>Une adresse à la main (Etsy ou autre)</h2>
+            <p className="sub">Collez l&apos;adresse telle qu&apos;elle est : le nom sur la 1re ligne, puis la rue, puis le code postal et la ville. Elle s&apos;imprime comme les autres.</p>
+            <textarea className="etq-colle" rows={4} value={colle} onChange={(e) => setColle(e.target.value)} placeholder={"LOUVAT Laure\n610 route des Sablons\n26740 MARSANNE\nFrance"} style={{ width: "100%", boxSizing: "border-box", font: "inherit", padding: "8px 10px", borderRadius: 10, border: "1px solid var(--line)" }} />
+            <button type="button" className="btn btn-gold" style={{ marginTop: 8 }} disabled={!adresseCollee(colle)} onClick={() => { const a = adresseCollee(colle, `m${Date.now()}`); if (a) { setManuelles((m) => [...m, a]); setColle(""); } }}>Ajouter à la feuille</button>
+            {manuelles.map((o) => {
+              const a = o.shippingAddress;
+              return (
+                <div key={o.id} className="etq-ord on" style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                  <span style={{ minWidth: 0, flex: 1 }}><span className="nm">{o.shippingName}</span><br />
+                    <span className="ad">{[a.line1, a.line2, [a.postal_code, a.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span></span>
+                  <button type="button" className="btn btn-outline" style={{ padding: "4px 10px" }} onClick={() => setManuelles((m) => m.filter((x) => x.id !== o.id))}>Retirer</button>
+                </div>
+              );
+            })}
           </section>
 
           <section className="etq-card" aria-labelledby="etq-t2">
