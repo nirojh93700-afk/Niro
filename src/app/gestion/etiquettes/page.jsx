@@ -204,7 +204,7 @@ export default function EtiquettesPage() {
         <div>
           <section className="etq-card" aria-labelledby="etq-t1">
             <h2 id="etq-t1"><span className="n">1</span>Les commandes à étiqueter</h2>
-            <p className="sub">Celles qui partent par La Poste. Les points relais et l&apos;express ont leur étiquette Boxtal.</p>
+            <p className="sub">Toutes les commandes avec une adresse (points relais et express compris : c&apos;est l&apos;adresse de la cliente qui s&apos;imprime).</p>
             <label className="etq-toggle"><input type="checkbox" checked={toutes} onChange={(e) => setToutes(e.target.checked)} /> Montrer aussi les commandes déjà expédiées (30 derniers jours)</label>
             {liste.length ? liste.map((o) => {
               const m = modeEnvoi(o), on = coches.includes(o.id) && m.ok, a = o.shippingAddress || {};

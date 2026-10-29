@@ -17,9 +17,9 @@ v(p[19].y + 45 === 271, "case 20 finit à 271 mm (26 mm du bas)");
 // 2. mode d'envoi
 const dom = { ref: "A1", shippingMethod: "Livraison à domicile", shippingName: "Léa Martin", shippingAddress: { line1: "3 rue X", line2: "Bât. B", postal_code: "75001", city: "Paris", country: "FR" } };
 v(modeEnvoi(dom).ok, "domicile → étiquette");
-v(!modeEnvoi({ ...dom, relaisPoint: "Mondial Relay — X" }).ok, "point relais → pas d'étiquette La Poste");
-v(!modeEnvoi({ ...dom, shippingMethod: "Express Chronopost" }).ok, "express → Boxtal");
-v(!modeEnvoi({ ...dom, shippingMethod: "Retrait en main propre" }).ok, "retrait → rien");
+v(modeEnvoi({ ...dom, relaisPoint: "Mondial Relay — X" }).ok, "point relais → étiquette d'adresse aussi (29/10)");
+v(modeEnvoi({ ...dom, shippingMethod: "Express Chronopost" }).ok, "express → étiquette d'adresse aussi");
+v(modeEnvoi({ ...dom, shippingMethod: "Retrait en main propre" }).ok, "retrait → étiquette d'adresse aussi");
 v(!modeEnvoi({ ...dom, shippingAddress: {} }).ok, "sans adresse → rien");
 
 // 3. adresse au format La Poste
@@ -29,7 +29,8 @@ v(adresseEtiquette({ ...dom, shippingAddress: { ...dom.shippingAddress, country:
 
 // 4. travaux + placement sur les cases libres
 const b = { ...dom, ref: "B2" }, relais = { ...dom, ref: "R3", relaisPoint: "x" };
-v(travaux([dom, relais, b], "meme").length === 2, "le point relais est ignoré");
+v(travaux([dom, relais, b], "meme").length === 3, "le point relais a aussi son étiquette (29/10)");
+v(travaux([dom, { ...dom, shippingAddress: {} }, b], "meme").length === 2, "une commande sans adresse est ignorée");
 v(travaux([dom, b], "apart").length === 4, "expéditeur à part = 2 cases par envoi");
 const used = new Array(20).fill(false); used[0] = used[1] = used[2] = true; used[5] = true;
 const pl = placer(travaux([dom, b, dom], "meme"), used);

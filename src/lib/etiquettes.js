@@ -27,13 +27,15 @@ export const EXPEDITEUR_DEFAUT = "Niv Création\n6 rue d'Armaillé\n75017 PARIS"
 
 // Mode d'envoi : une étiquette La Poste n'a de sens que pour un envoi à domicile.
 // Point relais / Express Chronopost → étiquette Boxtal ; retrait → rien à envoyer.
+// Gérant, 29/10/2026 : « pour toutes les commandes il faut que j'imprime l'adresse » → toute commande qui a une
+// adresse se coche (point relais, Express et retrait compris : c'est l'adresse de la cliente qui s'imprime).
 export function modeEnvoi(o) {
   const m = String(o?.shippingMethod || "");
-  if (/retrait|main propre/i.test(m)) return { ok: false, chip: "Retrait" };
-  if (o?.relaisPoint || /relais/i.test(m)) return { ok: false, chip: "Point relais (Boxtal)" };
-  if (/express|chrono/i.test(m)) return { ok: false, chip: "Chronopost (Boxtal)" };
   const a = o?.shippingAddress || {};
   if (!a.line1 || !a.postal_code) return { ok: false, chip: "Adresse manquante" };
+  if (/retrait|main propre/i.test(m)) return { ok: true, chip: "Retrait" };
+  if (o?.relaisPoint || /relais/i.test(m)) return { ok: true, chip: "Point relais" };
+  if (/express|chrono/i.test(m)) return { ok: true, chip: "Chronopost" };
   return { ok: true, chip: /lettre/i.test(m) ? "Lettre suivie" : "Domicile" };
 }
 
