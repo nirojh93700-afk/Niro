@@ -2210,8 +2210,7 @@ export default function ProductDetail({ product, realisations = [] }) {
             }
             const opt = (o, on, onClick, rupture) => (
               <button type="button" key={o.id || "none"} className={on ? "on" : ""} onClick={onClick} disabled={rupture} style={rupture ? { opacity: 0.45 } : undefined}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                {o.photo ? <img className="th" src={thumb(o)} alt="" /> : <span className="ico">✖️</span>}
+                {o.photo ? <ZoomThumb photo={thumb(o)} label={o.nom} size={40} /> : <span className="ico">✖️</span>}
                 <span style={{ minWidth: 0 }}><strong>{on ? "✓ " : ""}{o.nom}{o.meil ? <span className="meil noel">🎄 NOËL</span> : null}</strong>
                   <span className="d">{o.d}{o.id ? (o.colis ? " · part en colis" : " · reste en lettre suivie") : ""}{rupture ? " · épuisé" : ""}</span></span>
                 <span className="px">{o.barre ? <span className="barre">{formatEuro(o.barre)}</span> : null}{o.prix ? `+${formatEuro(o.prix)}` : "0 €"}</span>
@@ -2223,8 +2222,9 @@ export default function ProductDetail({ product, realisations = [] }) {
                 <div className="t">🎄 Votre emballage de Noël <button type="button" className="xn-close" onClick={() => setPkgNoelOpen(false)}>Fermer ▴</button></div>
                 <p className="s">{categorieEmballage(pkgSel) === "seul" ? "Le bijou est glissé dedans, prêt à offrir." : "Votre emballage choisi ci-dessus est glissé dedans, prêt à offrir."}</p>
                 <div className="opts">
-                  {opt({ id: "", nom: "Sans emballage de Noël", d: "Seulement l'emballage choisi ci-dessus", prix: 0 }, !choisi, () => setPkgNoel((p) => ({ ...p, id: "" })), false)}
-                  {dispo.map((o) => opt(o, choisi?.id === o.id, () => setPkgNoel((p) => ({ ...p, id: o.id })), epuise(o)))}
+                  {/* Pas de ligne « Sans emballage de Noël » (gérant, 29/10) : toucher l'emballage choisi le retire. */}
+                  {dispo.map((o) => opt(o, choisi?.id === o.id, () => setPkgNoel((p) => ({ ...p, id: p.id === o.id ? "" : o.id })), epuise(o)))}
+                  {choisi ? <p className="xn-retirer">Touchez à nouveau l&apos;emballage choisi pour le retirer.</p> : null}
                   {choisi?.couleurs && (
                     <div className="couleur">
                       <div className="couleur-t">Couleur de la boîte <small>— choisissez</small></div>
