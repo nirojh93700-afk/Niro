@@ -43,11 +43,12 @@
   (4ᵉ argument = la fiche réelle du collier ; ses photos `/api/img/<id>` sont lues dans le dossier de la capture, `<id>.jpg`).
   · **Gestion → Fêtes → « Emballages de Noël » = POUR LES BIJOUX** (plus les « sac / boîte à venir » des verres de la v1) : 6 cartes à SA
     photo (sans cotes) + l'étiquette offerte, menu prix, stock = quantités reçues, coût rendu et marge calculée. **Prix validés par lui le
-    28/10** : sachet rouge 12 × 17 **0,90 €** (coût 0,13, 52) · pochette à languette dorée **2,90 €** (0,80, 40) · sac à anses bordeaux
-    19 × 15 × 7 **2,90 €** (1,38, 20) · boîte à ruban « Merry Christmas » 11,5 × 7 × 4,5, vert sapin OU bleu nuit **3,90 €** (0,72, 48)
+    28/10** : sachet rouge 12 × 17 **0,90 €** (coût 0,13, 52) · pochette à languette dorée **3,90 €** (0,80, 40) · sac à anses bordeaux
+    19 × 15 × 7 **4,90 €** (1,38, 20) · boîte à ruban « Merry Christmas » 11,5 × 7 × 4,5, vert sapin OU bleu nuit **3,90 €** (0,72, 48)
     · boîte rouge au sapin doré 12 × 6 × 4 **3,90 €** (0,62, 20) · **Pack de Noël = boîte à ruban (couleur au choix) + sac + étiquette
-    5,90 €, barré 6,80** (coût 2,15, 20) · étiquette rouge + ficelle **offerte** avec chaque emballage de Noël (0,05, 50). Boîtes = colis
+    5,90 €, barré 8,80** (= boîte 3,90 + sac 4,90 ; coût 2,15, 20) · étiquette rouge + ficelle **offerte** avec chaque emballage de Noël (0,05, 50). Boîtes = colis
     (règle du site) ; sachet et pochette = lettre suivie.
+    **29/10 (gérant, capture iPhone) : sac à anses 4,90 €, pochette 3,90 €** (v12 de la maquette ; barré du pack recalculé).
   · **Onglet ③ « Site : collier (emballages) »** = la fiche RÉELLE du Collier Cœur gravé (22,41 €) : Noël allumé = sous « Votre emballage »,
     APRÈS les 5 options actuelles (lues dans la capture : sans / sac 1,70 / boîte 3,90 / microfibre 2,70 / pack 6,50 barré 8,30), un
     séparateur « 🎄 Pour Noël » puis les 6 emballages de Noël (photo, prix, pastille « 🎄 NOËL » sur le pack), choix de la couleur de la

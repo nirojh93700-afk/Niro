@@ -131,15 +131,16 @@ CRISTAUX = [("chat-sapin.jpg", "Chaton au pied du sapin"), ("sapin.jpg", "Sapin 
 CRISTAUX_JS = [dict(nom=nm, src=uri(os.path.join(PUB, "produits", "cristaux-graves", f), 420)) for f, nm in CRISTAUX]
 
 # ------------------------------------------------------------------ emballages de Noël pour les BIJOUX (commande Temu reçue le 28/10)
-# prix = ceux validés par le gérant le 28/10 soir (« C'est bon, mets ces prix avec le pack Noël ») ; coût = coût rendu (facture Temu + part du port) ;
+# prix = ceux validés par le gérant le 28/10 soir (« C'est bon, mets ces prix avec le pack Noël »), puis 29/10 : sac 4,90 €, pochette 3,90 €
+# (barré du pack = boîte 3,90 + sac 4,90 = 8,80) ; coût = coût rendu (facture Temu + part du port) ;
 # stock = quantités reçues. Photos = les siennes, sans cotes (règle du 28/10). La boîte à ruban existe en vert et bleu nuit (la blanche n'a pas été commandée).
 EMB_NOEL = [
     dict(id="sachet", nom="Sachet rouge de Noël", d="12 × 17 cm · plat, fermeture adhésive · reste en lettre suivie", px=0.9, cout=0.13, stock=52, photo="7-sachet-rouge-O-remise.jpg", colis=False),
-    dict(id="pochette", nom="Pochette à languette dorée", d="Bordeaux et or · pour un collier ou un bracelet · lettre suivie", px=2.9, cout=0.80, stock=40, photo="1-pochette-F.jpg", colis=False),
-    dict(id="sac", nom="Sac de Noël à anses", d="Bordeaux, liseré or, nœud satin · 19 × 15 × 7 cm · plié à plat", px=2.9, cout=1.38, stock=20, photo="2-sac-M.jpg", colis=False),
+    dict(id="pochette", nom="Pochette à languette dorée", d="Bordeaux et or · pour un collier ou un bracelet · lettre suivie", px=3.9, cout=0.80, stock=40, photo="1-pochette-F.jpg", colis=False),
+    dict(id="sac", nom="Sac de Noël à anses", d="Bordeaux, liseré or, nœud satin · 19 × 15 × 7 cm · plié à plat", px=4.9, cout=1.38, stock=20, photo="2-sac-M.jpg", colis=False),
     dict(id="ruban", nom="Boîte à ruban « Merry Christmas »", d="11,5 × 7 × 4,5 cm · aimantée · vert sapin ou bleu nuit · part en colis", px=3.9, cout=0.72, stock=48, photo="3-5-boite-ruban-C-vert-recadree.jpg", colis=True, couleurs=True),
     dict(id="rouge", nom="Boîte rouge au sapin doré", d="12 × 6 × 4 cm · ruban rouge et or · part en colis", px=3.9, cout=0.62, stock=20, photo="4-boite-rouge-G.jpg", colis=True),
-    dict(id="pack", nom="Pack de Noël", d="Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette · part en colis", px=5.9, barre=6.8, cout=2.15, stock=20, photo="2-sac-M.jpg", colis=True, couleurs=True, meil=True),
+    dict(id="pack", nom="Pack de Noël", d="Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette · part en colis", px=5.9, barre=8.8, cout=2.15, stock=20, photo="2-sac-M.jpg", colis=True, couleurs=True, meil=True),
 ]
 # « Convient si le bijou est… » (gérant, 28/10 soir : « la grosse boîte… si ça rentre pas il faut pas le mettre ») : règle par défaut d'après les
 # dimensions (il coche / décoche dans Gestion). seul = bijou nu ou en microfibre · sac = dans le sac cadeau beige · carree = boîte carrée 9 × 9 (colliers) ·

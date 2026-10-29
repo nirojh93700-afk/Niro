@@ -303,3 +303,7 @@ Ex. whisky : 2 logo + texte 40,90 → 45,90 € · 2 logo seul 37,90 → 40,90 �
 Avant (19/10) : verre 1 = logo offert, chaque texte +3 € (un verre à whisky avec un seul texte : 22,90 €).
 Après : verre 1 = une gravure offerte, logo/image/modèle ou, sans logo, le premier texte (whisky texte seul : 19,90 €). Textes en plus +3 €.
 Autres verres inchangés (+5 € logo et texte, +3 € logo seul ou texte seul, +7 € face + fond). Pour revenir : retirer `remise1` dans `src/lib/prixVerres.js`.
+
+## 29/10/2026 — Emballages de Noël des bijoux (maquette Fêtes, rien en ligne)
+Avant (28/10) : pochette à languette dorée 2,90 € · sac de Noël à anses 2,90 € · pack de Noël 5,90 € barré 6,80 €.
+Après (gérant, 29/10) : pochette 3,90 € · sac 4,90 € · pack 5,90 € barré 8,80 € (= boîte 3,90 + sac 4,90). Générateur `tools/maquettes/fetes-noel.py` (`EMB_NOEL`).
