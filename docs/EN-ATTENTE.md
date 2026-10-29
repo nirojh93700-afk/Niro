@@ -285,7 +285,7 @@ En attente de SA décision :
   coffret assorti (prix, −10 % dès 2 pièces), le rangement « Pour qui » / « Anniversaire » / fêtes datées dans `occasions.js` ·
   puis son « applique ».
 ## 🎄 Rubrique « Fêtes » (Noël) — version 1 enregistrée le 28/10/2026, VERSION 2 du 28/10 soir en attente de son avis, rien en ligne
-- 🔨 **29/10/2026 : CONSTRUIT sur le site (commit local, PAS poussé)**, à montrer au gérant ; attend son « pousse ». Après le push : il allume Noël dans Gestion → Fêtes. Détail dans CLAUDE.md.
+- ✅ **29/10/2026 : EN LIGNE (« Pousse »), Noël éteint**. Après le push : il allume Noël dans Gestion → Fêtes. Détail dans CLAUDE.md.
 - Artifact https://claude.ai/artifact/215micVgntigmyRFXsG49e : ① Gestion → Fêtes (interrupteur par fête, alerte 2 mois avant, 25 images de
   Noël numérotées 1–25, **emballages de Noël des BIJOUX à ses prix du 28/10**, produits concernés) · ② fiche verre à vin avec Noël allumé /
   éteint · **③ fiche réelle du collier cœur gravé : les emballages de Noël sous « Votre emballage »** (v2). Détail dans `CLAUDE.md`.

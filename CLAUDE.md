@@ -123,7 +123,7 @@
   les fiches Temu. Temu est bloqué dans les anciennes sessions : le gérant a créé le 28/10 l'environnement cloud « Temu » (temu.com, *.temu.com,
   kwcdn.com, *.kwcdn.com + les 3 adresses du site + gestionnaires de paquets) → le faire dans une NOUVELLE session sur cet environnement.
 
-- 🔨 **CONSTRUIT SUR LE SITE LE 29/10/2026 (« Les deux » : pousser ce qui était prêt + construire Noël et le montrer AVANT de pousser) — COMMIT LOCAL, PAS POUSSÉ.**
+- 🔨 **CONSTRUIT SUR LE SITE LE 29/10/2026 (« Les deux » : pousser ce qui était prêt + construire Noël et le montrer AVANT de pousser) — ✅ EN LIGNE LE 29/10 (« Pousse », 0cc00e1f, déploiement réussi), NOËL ÉTEINT tant qu'il ne l'allume pas.**
   Réglage `settings.fetes` (`setFetes`, fusion clé par clé, lecture fraîche) ; absent = Noël éteint = site inchangé. `src/lib/fetes.js` (dates des
   fêtes, 27 images `public/produits/noel/`, 6 produits gravés, 6 emballages + étiquette offerte, `packagingNoelExtra`, `champsFicheAvecNoel`) ·
   Gestion → **Fêtes** (`/gestion/fetes`, API `/api/admin/fetes`) : interrupteur de Noël, produits, images (offerte / masquée), emballages (prix,
