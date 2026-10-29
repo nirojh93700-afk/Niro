@@ -1,0 +1,889 @@
+<title>Gestion Niv Création</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap">
+<style>
+/* Mise en page : barre latérale encre (sections + raccourcis), contenu sur papier chaud,
+   chaque section = un en-tête + des sous-onglets ; or réservé aux actions et à l'état actif. */
+:root{
+  --paper:#f8f5ef; --surface:#ffffff; --sunk:#f2ece1; --line:#e6ddcd; --line-2:#d9cdb8;
+  --ink:#1c160d; --muted:#6c6253; --faint:#958a77;
+  --gold:#c9a24b; --gold-2:#a98935; --gold-ink:#7c6120; --gold-bg:#f6ecd4;
+  --side:#18120a; --side-2:#231b10; --side-line:#33291b; --side-fg:#efe6d4; --side-muted:#a2957d;
+  --ok:#2d7347; --ok-bg:#e3f1e7; --warn:#9a5c10; --warn-bg:#fbeed6; --bad:#ad3326; --bad-bg:#fbe3df; --info:#355b86; --info-bg:#e2eaf4;
+  --shadow:0 1px 2px rgba(28,22,13,.06),0 4px 16px rgba(28,22,13,.05);
+  --pop:0 12px 40px rgba(28,22,13,.22);
+  --f-ui:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-title:"Playfair Display",Georgia,"Times New Roman",serif;
+  --r:12px; --r-s:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#13100b; --surface:#1c1710; --sunk:#241e15; --line:#332a1d; --line-2:#433826;
+  --ink:#f2eadb; --muted:#ab9e88; --faint:#857a67;
+  --gold:#d4ae58; --gold-2:#c9a24b; --gold-ink:#e2c67e; --gold-bg:#33291a;
+  --side:#0d0a06; --side-2:#18130c; --side-line:#2a2217; --side-fg:#efe6d4; --side-muted:#9a8d75;
+  --ok:#7cc796; --ok-bg:#16301f; --warn:#e6b25e; --warn-bg:#382810; --bad:#f08b7d; --bad-bg:#3a1a15; --info:#8fb2dc; --info-bg:#172537;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --pop:0 12px 40px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#13100b; --surface:#1c1710; --sunk:#241e15; --line:#332a1d; --line-2:#433826;
+  --ink:#f2eadb; --muted:#ab9e88; --faint:#857a67;
+  --gold:#d4ae58; --gold-2:#c9a24b; --gold-ink:#e2c67e; --gold-bg:#33291a;
+  --side:#0d0a06; --side-2:#18130c; --side-line:#2a2217; --side-fg:#efe6d4; --side-muted:#9a8d75;
+  --ok:#7cc796; --ok-bg:#16301f; --warn:#e6b25e; --warn-bg:#382810; --bad:#f08b7d; --bad-bg:#3a1a15; --info:#8fb2dc; --info-bg:#172537;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --pop:0 12px 40px rgba(0,0,0,.6); color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.num{font-variant-numeric:tabular-nums}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100%}
+.app.mini{grid-template-columns:68px minmax(0,1fr)}
+
+/* ---------- barre latérale ---------- */
+.side{background:var(--side);color:var(--side-fg);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px;padding:14px 12px 12px;overflow-y:auto;border-right:1px solid var(--side-line)}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 6px 8px}
+.brand img{height:34px;width:auto;border-radius:6px;background:#fbf7ee}
+.brand b{font-weight:600;font-size:13px;letter-spacing:.02em}
+.brand small{display:block;color:var(--side-muted);font-size:11.5px}
+.sfind{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--side-line);background:var(--side-2);color:var(--side-muted);border-radius:9px;padding:8px 10px;text-align:left}
+.sfind:hover{color:var(--side-fg);border-color:#4a3d28}
+.sfind span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kbd{font-size:11px;border:1px solid var(--side-line);border-radius:5px;padding:1px 5px;color:var(--side-muted)}
+.slabel{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--side-muted);padding:12px 8px 4px;display:flex;justify-content:space-between;align-items:center}
+.slabel button{background:none;border:0;color:var(--side-muted);font-size:11px;letter-spacing:0;text-transform:none;padding:0}
+.nav{display:flex;flex-direction:column;gap:1px}
+.ni{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;color:var(--side-fg);padding:8px 10px;border-radius:8px;text-align:left;text-decoration:none;font-size:13.5px}
+.ni:hover{background:var(--side-2)}
+.ni.on{background:var(--side-2);box-shadow:inset 2px 0 0 var(--gold)}
+.ni.on .ico{color:var(--gold)}
+.ni .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--gold);color:#1c160d;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.badge.red{background:#d9553f;color:#fff}
+.sub{display:flex;flex-direction:column;margin:2px 0 6px 28px;border-left:1px solid var(--side-line)}
+.sub button{background:none;border:0;color:var(--side-muted);text-align:left;padding:5px 10px;font-size:12.5px;border-radius:0 6px 6px 0}
+.sub button:hover{color:var(--side-fg)}
+.sub button.on{color:var(--side-fg);box-shadow:inset 2px 0 0 var(--gold)}
+.pins{display:flex;flex-direction:column;gap:1px}
+.pins .ni{font-size:12.8px;color:#d9ceb8;padding:6px 10px}
+.pins .ico{width:15px;height:15px;color:var(--side-muted)}
+.sfoot{margin-top:auto;display:flex;flex-direction:column;gap:2px;padding-top:10px;border-top:1px solid var(--side-line)}
+.app.mini .side .t,.app.mini .side .slabel,.app.mini .side .sub,.app.mini .side .brand div,.app.mini .side .sfind span,.app.mini .side .kbd,.app.mini .side .pins,.app.mini .side .badge{display:none}
+.app.mini .ni,.app.mini .sfind{justify-content:center;padding:9px}
+
+/* ---------- haut ---------- */
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding-block:10px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.crumb{flex:1;min-width:0;display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden}
+.crumb b{color:var(--ink);font-weight:600}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;min-width:36px;padding:0 10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;color:var(--ink);position:relative}
+.ibtn:hover{border-color:var(--line-2)}
+.ibtn .dot{position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:#d9553f;border:2px solid var(--surface)}
+.ai{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ai .ico{color:var(--gold)}
+.menu-btn{display:none}
+.note{margin:14px max(24px,env(safe-area-inset-right,0px)) 0 max(24px,env(safe-area-inset-left,0px));padding:9px 12px;border:1px dashed var(--line-2);border-radius:10px;color:var(--muted);font-size:12.5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.note a{color:var(--gold-ink);font-weight:600}
+
+/* ---------- page ---------- */
+.page{padding-block:18px 96px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));width:100%;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.ph{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.ph h1{font-family:var(--f-title);font-weight:600;font-size:28px;line-height:1.15;margin:0;text-wrap:balance}
+.ph p{margin:4px 0 0;color:var(--muted);max-width:68ch}
+.ph .grow{flex:1;min-width:240px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:500;font-size:13.5px;white-space:nowrap}
+.btn:hover{border-color:var(--gold-2)}
+.btn.pri{background:linear-gradient(180deg,#d4b05c,#bf9640);border-color:#ad8835;color:#1c160d;font-weight:600}
+.btn.pri:hover{filter:brightness(1.04)}
+.btn.sm{height:30px;padding:0 10px;font-size:12.5px}
+.btn.ghost{background:none;border-color:transparent;color:var(--gold-ink)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;padding:10px 12px;color:var(--muted);font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;gap:6px;align-items:center}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--ink);border-bottom-color:var(--gold)}
+.tab .badge{height:18px;min-width:18px;font-size:11px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card>h2,.card .ch{font-size:14px;font-weight:600;margin:0;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.ch .grow{flex:1}
+.ch a,.lnk{color:var(--gold-ink);font-weight:500;font-size:12.5px;text-decoration:none;background:none;border:0;padding:0}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.kpi{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.kpi .l{color:var(--muted);font-size:12.5px}
+.kpi .v{font-size:24px;font-weight:600;letter-spacing:-.01em}
+.kpi .d{font-size:12px;display:flex;gap:6px;align-items:center}
+.up{color:var(--ok)} .down{color:var(--bad)}
+.spark{width:100%;height:34px;margin-top:4px}
+.spark path.a{fill:var(--gold-bg);stroke:none}
+.spark path.l{fill:none;stroke:var(--gold-2);stroke-width:1.6}
+.spark circle{fill:var(--gold-2)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;background:var(--surface);padding:2px}
+.seg button{border:0;background:none;padding:5px 10px;border-radius:7px;color:var(--muted);font-size:12.5px}
+.seg button.on{background:var(--sunk);color:var(--ink);font-weight:600}
+
+/* tâches */
+.todo{list-style:none;margin:0;padding:6px}
+.todo li{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px}
+.todo li:hover{background:var(--sunk)}
+.todo .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none}
+.todo .tx{flex:1;min-width:0}
+.todo .tx b{display:block;font-weight:600}
+.todo .tx span{color:var(--muted);font-size:12.5px}
+.t-bad .ic{background:var(--bad-bg);color:var(--bad)} .t-warn .ic{background:var(--warn-bg);color:var(--warn)} .t-info .ic{background:var(--info-bg);color:var(--info)} .t-ok .ic{background:var(--ok-bg);color:var(--ok)} .t-gold .ic{background:var(--gold-bg);color:var(--gold-ink)}
+
+/* tableaux */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--sunk);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:color-mix(in srgb,var(--gold-bg) 45%,transparent)}
+td.r,th.r{text-align:right}
+.ref{font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.who{display:flex;align-items:center;gap:10px;min-width:0}
+.av{width:30px;height:30px;border-radius:50%;background:var(--gold-bg);color:var(--gold-ink);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.th{width:38px;height:38px;border-radius:8px;object-fit:cover;flex:none;background:var(--sunk)}
+.sub2{color:var(--muted);font-size:12.5px}
+.pill{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:11px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-prep{background:var(--warn-bg);color:var(--warn)} .p-grav{background:var(--info-bg);color:var(--info)} .p-exp{background:var(--ok-bg);color:var(--ok)} .p-liv{background:var(--sunk);color:var(--muted)} .p-bad{background:var(--bad-bg);color:var(--bad)} .p-gold{background:var(--gold-bg);color:var(--gold-ink)}
+.chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:6px;border:1px solid var(--line);font-size:12px;color:var(--muted);white-space:nowrap;background:var(--surface)}
+.chip.x{border-color:var(--bad);color:var(--bad);background:var(--bad-bg)}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px;border-bottom:1px solid var(--line)}
+.views{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.vchip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.vchip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.vchip i{font-style:normal;font-variant-numeric:tabular-nums;opacity:.75}
+.search{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:0 10px;height:34px;background:var(--surface);min-width:0}
+.search input{border:0;background:none;outline:0;min-width:0;width:180px}
+.bulk{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--ink);color:var(--paper);border-radius:10px;flex-wrap:wrap}
+.bulk .btn{background:transparent;color:var(--paper);border-color:#5a4b33}
+.cb{width:16px;height:16px;accent-color:var(--gold-2)}
+.stock-in{width:62px;height:30px;border:1px solid var(--line);border-radius:7px;padding:0 8px;background:var(--surface);text-align:right;font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold-2);border-radius:3px}
+.bar.low i{background:var(--warn)} .bar.out i{background:var(--bad)}
+.tg{width:34px;height:20px;border-radius:10px;background:var(--line-2);position:relative;border:0;flex:none}
+.tg::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.tg.on{background:var(--ok)} .tg.on::after{left:16px}
+
+/* messagerie */
+.inbox{display:grid;grid-template-columns:300px minmax(0,1fr) 260px;min-height:560px}
+.ilist{border-right:1px solid var(--line);overflow-y:auto}
+.im{display:flex;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-top:0;border-right:0;width:100%;text-align:left}
+.im:hover{background:var(--sunk)}
+.im.on{background:var(--gold-bg)}
+.im .tx{flex:1;min-width:0}
+.im b{font-weight:600;display:flex;justify-content:space-between;gap:6px}
+.im b small{font-weight:400;color:var(--muted)}
+.im p{margin:2px 0 0;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.im .u{width:8px;height:8px;border-radius:50%;background:var(--gold-2);margin-top:6px;flex:none}
+.thread{display:flex;flex-direction:column;min-width:0}
+.thread header{padding:14px 18px;border-bottom:1px solid var(--line)}
+.thread header h3{margin:0;font-size:15px}
+.msgs{padding:18px;display:flex;flex-direction:column;gap:14px;flex:1}
+.msg{max-width:62ch;padding:12px 14px;border-radius:12px;background:var(--sunk);overflow-wrap:anywhere;line-height:1.6}
+.msg.me{align-self:flex-end;background:var(--gold-bg)}
+.msg small{display:block;color:var(--muted);font-size:11.5px;margin-bottom:4px}
+.draft{border:1px solid var(--gold);border-radius:12px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:10px}
+.draft .h{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--gold-ink)}
+.draft textarea{width:100%;min-height:96px;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper);resize:vertical;line-height:1.55}
+.ctx{border-left:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:14px;font-size:13px}
+.ctx h4{margin:0 0 6px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;text-align:right}
+
+/* cartes matériel */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;padding:14px}
+.mcard{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.mcard img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--sunk);max-width:100%}
+.mcard .top2{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.mcard b{font-weight:600}
+
+/* graphique */
+.chart{width:100%;height:240px}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--f-ui)}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .ca{fill:var(--gold-bg);stroke:var(--gold-2);stroke-width:1}
+.chart .ben{fill:var(--gold-2)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);padding:0 16px 14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* réglages */
+.set{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
+.setnav{position:sticky;top:76px;display:flex;flex-direction:column;gap:2px}
+.setnav button{background:none;border:0;text-align:left;padding:8px 10px;border-radius:8px;color:var(--muted)}
+.setnav button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+.form{display:flex;flex-direction:column;gap:16px}
+.fs{padding:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}
+.fs .d h3{margin:0 0 4px;font-size:14px}
+.fs .d p{margin:0;color:var(--muted);font-size:12.8px}
+.fields{display:flex;flex-direction:column;gap:12px}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:12.5px;font-weight:600}
+.fld input,.fld select{height:36px;border:1px solid var(--line-2);border-radius:8px;padding:0 10px;background:var(--surface);min-width:0;width:100%}
+.fld small{color:var(--muted);font-size:12px}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.savebar{position:sticky;bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--ink);color:var(--paper);border-radius:12px;box-shadow:var(--pop);flex-wrap:wrap}
+.savebar .btn{border-color:#5a4b33;background:transparent;color:var(--paper)}
+.savebar .btn.pri{background:linear-gradient(180deg,#d4b05c,#bf9640);color:#1c160d;border-color:#ad8835}
+
+/* plan */
+.princ{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.pc{padding:16px;display:flex;flex-direction:column;gap:6px}
+.pc h3{margin:0;font-size:14.5px;display:flex;gap:8px;align-items:center}
+.pc h3 .ico{color:var(--gold-2)}
+.pc p{margin:0;color:var(--muted);font-size:13px}
+.pc small{color:var(--faint);font-size:11.5px}
+.same{color:var(--ok);font-weight:600}
+.moved{color:var(--gold-ink);font-weight:600}
+
+/* aperçu d'écran conservé */
+.keep{padding:20px;display:flex;flex-direction:column;gap:12px}
+.keep h3{margin:0;font-size:16px}
+.keep p{margin:0;color:var(--muted);max-width:70ch}
+.skel{display:grid;gap:10px}
+.skel i{display:block;height:12px;border-radius:6px;background:var(--sunk)}
+
+/* tiroir, palette, panneaux */
+.scrim{position:fixed;inset:0;background:rgba(18,13,6,.42);z-index:60;opacity:0;pointer-events:none;transition:opacity .18s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--paper);z-index:70;transform:translateX(102%);transition:transform .22s ease;display:flex;flex-direction:column;box-shadow:var(--pop);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.drawer.on{transform:none}
+.drawer:not(.on),.sheet:not(.on){box-shadow:none;visibility:hidden;transition:transform .22s ease,visibility 0s .22s}
+.dh{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dh h2{margin:0;font-size:17px;flex:1}
+.db{padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.steps{display:flex;gap:0;list-style:none;margin:0;padding:0}
+.steps li{flex:1;text-align:center;font-size:11.5px;color:var(--faint);position:relative;padding-top:18px}
+.steps li::before{content:"";position:absolute;top:4px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--line-2);transform:translateX(-50%);z-index:1}
+.steps li::after{content:"";position:absolute;top:8px;left:-50%;width:100%;height:2px;background:var(--line-2)}
+.steps li:first-child::after{display:none}
+.steps li.done{color:var(--ink)} .steps li.done::before,.steps li.done::after{background:var(--gold-2)}
+.steps li.now{color:var(--gold-ink);font-weight:600} .steps li.now::before{background:var(--surface);border:3px solid var(--gold-2);width:12px;height:12px;top:3px}
+.steps li.now::after{background:var(--gold-2)}
+.engr{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.engr div{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--line)}
+.engr div:last-child{border-bottom:0}
+.engr span{padding:8px 12px}
+.engr span:first-child{background:var(--sunk);color:var(--muted);font-size:12.5px}
+.alertbox{border:1px solid var(--bad);background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:10px 12px;font-weight:600;display:flex;gap:8px;align-items:center}
+.pal{position:fixed;top:12vh;left:50%;transform:translate(-50%,-8px);width:min(640px,calc(100% - 32px));background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);z-index:80;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;display:flex;flex-direction:column;max-height:70vh}
+.pal.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.pal .pin{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.pal .pin input{flex:1;border:0;outline:0;background:none;font-size:16px;min-width:0}
+.pal .res{overflow-y:auto;padding:6px}
+.pal .grp{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px}
+.pal .it{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:9px 10px;border-radius:8px;text-align:left}
+.pal .it .t{flex:1;min-width:0}
+.pal .it small{color:var(--muted)}
+.pal .it.sel{background:var(--gold-bg)}
+.pal .ft{display:flex;gap:14px;padding:9px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;flex-wrap:wrap}
+.pal .ft .kbd{border-color:var(--line);color:var(--muted)}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:70;transform:translateX(102%);transition:transform .22s ease;display:flex;flex-direction:column;box-shadow:var(--pop);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet.on{transform:none}
+.chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.bub{padding:10px 12px;border-radius:12px;background:var(--sunk);max-width:90%;line-height:1.55}
+.bub.me{align-self:flex-end;background:var(--ink);color:var(--paper)}
+.prop{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--paper)}
+.compose{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.compose input{flex:1;height:38px;border:1px solid var(--line-2);border-radius:9px;padding:0 12px;background:var(--paper);min-width:0}
+.pop{position:absolute;top:44px;right:0;width:320px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--pop);z-index:40;padding:6px;text-align:left;color:var(--ink)}
+.pop .todo li{padding:8px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;opacity:0;transition:.2s;z-index:90;pointer-events:none;display:flex;gap:8px;align-items:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast .ico{color:var(--gold)}
+
+/* onglets téléphone */
+.mtabs{display:none}
+
+@media (max-width:1100px){
+  .g2{grid-template-columns:1fr}
+  .inbox{grid-template-columns:260px minmax(0,1fr)}
+  .ctx{display:none}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .app,.app.mini{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:75;transform:translateX(-102%);transition:transform .22s;height:auto;padding-top:calc(14px + env(safe-area-inset-top,0px));padding-left:max(12px,env(safe-area-inset-left,0px))}
+  .side.on{transform:none}
+  .app.mini .side .t,.app.mini .side .slabel,.app.mini .side .sub,.app.mini .side .brand div,.app.mini .side .sfind span,.app.mini .side .kbd,.app.mini .side .pins,.app.mini .side .badge{display:revert}
+  .menu-btn{display:inline-flex}
+  .collapse{display:none}
+  .top{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .note{margin-left:max(16px,env(safe-area-inset-left,0px));margin-right:max(16px,env(safe-area-inset-right,0px))}
+  .page{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .ph h1{font-size:24px}
+  .g3{grid-template-columns:1fr}
+  .set{grid-template-columns:1fr}
+  .setnav{position:static;flex-direction:row;overflow-x:auto}
+  .setnav button{white-space:nowrap}
+  .fs{grid-template-columns:1fr}
+  .inbox{grid-template-columns:1fr}
+  .inbox .thread{display:none}
+  .inbox.open .ilist{display:none} .inbox.open .thread{display:flex}
+  .hide-m{display:none}
+  .ai .t{display:none}
+  .mtabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .mtabs button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 9px;color:var(--muted);font-size:11px;position:relative}
+  .mtabs button.on{color:var(--ink);font-weight:600}
+  .mtabs button.on .ico{color:var(--gold-2)}
+  .mtabs .badge{position:absolute;top:3px;left:calc(50% + 6px);height:17px;min-width:17px;font-size:10.5px}
+  .search input{width:120px}
+}
+@media (max-width:560px){
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi .v{font-size:20px}
+  .crumb span.hide-s{display:none}
+  .pop{position:fixed;left:12px;right:12px;width:auto;top:60px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Menu de Gestion">
+    <div class="brand">
+      <img src="{{LOGO}}" alt="Niv Création">
+      <div><b>Gestion</b><small>nivcreation.fr</small></div>
+    </div>
+    <button class="sfind" id="openPal" type="button"><svg class="ico"><use href="#i-search"/></svg><span>Rechercher…</span><kbd class="kbd">⌘K</kbd></button>
+
+    <div class="slabel"><span>Raccourcis</span><button type="button" id="editPins">Modifier</button></div>
+    <div class="pins" id="pins"></div>
+
+    <div class="slabel"><span>Boutique</span></div>
+    <nav class="nav" id="nav"></nav>
+
+    <div class="sfoot">
+      <button class="ni" type="button" data-go="plan"><svg class="ico"><use href="#i-map"/></svg><span class="t">Ce qui change</span></button>
+      <button class="ni collapse" type="button" id="collapse"><svg class="ico"><use href="#i-panel"/></svg><span class="t">Réduire le menu</span></button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <button class="ibtn menu-btn" id="menuBtn" type="button" aria-label="Ouvrir le menu"><svg class="ico"><use href="#i-menu"/></svg></button>
+      <div class="crumb" id="crumb"></div>
+      <button class="ibtn hide-m" type="button" id="topFind" aria-label="Rechercher"><svg class="ico"><use href="#i-search"/></svg></button>
+      <div style="position:relative">
+        <button class="ibtn" type="button" id="bell" aria-label="Notifications"><svg class="ico"><use href="#i-bell"/></svg><span class="dot"></span></button>
+        <div class="pop" id="bellPop" hidden></div>
+      </div>
+      <button class="ibtn ai" type="button" id="aiBtn"><svg class="ico"><use href="#i-spark"/></svg><span class="t">Assistant</span></button>
+    </header>
+    <div class="note"><svg class="ico"><use href="#i-alert"/></svg>Maquette : les commandes, clientes et chiffres sont des exemples. Rien n'est en ligne. <a href="#plan">Voir ce qui change et où va chaque écran</a></div>
+    <main class="page" id="page"></main>
+  </div>
+</div>
+
+<nav class="mtabs" id="mtabs" aria-label="Onglets"></nav>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Fiche commande"></aside>
+<aside class="sheet" id="sheet" aria-label="Assistant"></aside>
+<div class="pal" id="pal" role="dialog" aria-label="Recherche">
+  <div class="pin"><svg class="ico"><use href="#i-search"/></svg><input id="palIn" placeholder="Une commande, une cliente, un produit, un écran…" autocomplete="off"><kbd class="kbd">Échap</kbd></div>
+  <div class="res" id="palRes"></div>
+  <div class="ft"><span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> choisir</span><span><kbd class="kbd">Entrée</kbd> ouvrir</span><span><kbd class="kbd">G</kbd> puis <kbd class="kbd">C</kbd> Commandes</span></div>
+</div>
+<div class="toast" id="toast"><svg class="ico"><use href="#i-check"/></svg><span></span></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-orders" viewBox="0 0 24 24"><path d="M9 3h6v3H9zM7 4.5H5V21h14V4.5h-2M8 11h8M8 15h5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M21 20v-1a4 4 0 0 0-3-3.8M16 4.2a3.5 3.5 0 0 1 0 6.6"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8zM7.5 7.5h.01"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5l9 4.5 9-4.5M12 12v9"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24"><path d="M3 10v4h4l6 4V6L7 10zM16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></symbol>
+  <symbol id="i-set" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14M20 20l-4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1 1 12 0v5l2 2H4zM10 21h4"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 3 3H7l3-3zM12 12v9"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3 2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h12v10H2zM14 9h4l3 3v4h-7M8 18.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M19 18.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-panel" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM9 4v16"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20zM12 10v4M12 17h.01"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-euro" viewBox="0 0 24 24"><path d="M18 6.5A7 7 0 1 0 18 17.5M4 10h10M4 14h10"/></symbol>
+</svg>
+
+<script>
+const IMG = {{IMGS}};
+const I = (n, c = "ico") => `<svg class="${c}"><use href="#i-${n}"/></svg>`;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const eur = (n) => n.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+
+/* ---------- LE NOUVEAU RANGEMENT : 9 sections, 37 écrans, rien de supprimé ---------- */
+const SECTIONS = [
+  { id: "accueil", t: "Aujourd'hui", ic: "home", tabs: [
+    { id: "jour", t: "Aujourd'hui", old: "Tableau de bord" } ] },
+  { id: "commandes", t: "Commandes", ic: "orders", badge: 7, tabs: [
+    { id: "file", t: "File de production", old: "File de production", badge: 7 },
+    { id: "fiches", t: "Fiches complètes", old: "Fiches complètes" },
+    { id: "atelier", t: "Atelier · fichiers à graver", old: "Atelier · fichiers" },
+    { id: "etiquettes", t: "Étiquettes d'adresse", old: "Étiquettes d'adresse" },
+    { id: "devis", t: "Devis & factures", old: "Devis & factures", badge: 2 } ] },
+  { id: "messages", t: "Messages", ic: "mail", badge: 4, tabs: [
+    { id: "boite", t: "Boîte de réception", old: "Boîte mail", badge: 4 },
+    { id: "valider", t: "Réponses à valider", old: "Assistant (réponses préparées)", badge: 3 },
+    { id: "envois", t: "Envois & modèles", old: "Messages" } ] },
+  { id: "clients", t: "Clients", ic: "users", tabs: [
+    { id: "crm", t: "Clientes", old: "Clients (CRM)" },
+    { id: "avis", t: "Avis", old: "Avis", badge: 1 },
+    { id: "fidelite", t: "Fidélité & cashback", old: "Fidélité & cashback" },
+    { id: "favoris", t: "Favoris", old: "Favoris des clientes" },
+    { id: "connexions", t: "Connexions", old: "Connexions" },
+    { id: "restaurants", t: "Restaurants & bars", old: "Restaurants & bars" } ] },
+  { id: "catalogue", t: "Catalogue", ic: "tag", tabs: [
+    { id: "produits", t: "Produits & stock", old: "Produits & stock" },
+    { id: "visibilite", t: "Visibilité", old: "Visibilité sur le site" },
+    { id: "categories", t: "Catégories & ordre", old: "Catégories & ordre" },
+    { id: "gravure", t: "Gravure", old: "Gravure" },
+    { id: "apercus", t: "Réglage des aperçus", old: "Réglages produits (cristaux, verres, carafe, couverts)" },
+    { id: "tailles", t: "Tailles & coûts", old: "Tailles & coûts" },
+    { id: "sante", t: "Santé du catalogue", old: "Santé du catalogue", badge: 2 } ] },
+  { id: "stock", t: "Stock & achats", ic: "box", badge: 2, tabs: [
+    { id: "materiel", t: "Matériel", old: "Matériel & emballages", badge: 2 },
+    { id: "emballages", t: "Emballages vendus", old: "Emballages" },
+    { id: "achats", t: "Achats & factures", old: "Achats & factures" } ] },
+  { id: "marketing", t: "Marketing", ic: "mega", tabs: [
+    { id: "campagnes", t: "Newsletter", old: "Newsletter" },
+    { id: "promos", t: "Codes promo", old: "Promotions" },
+    { id: "offre", t: "Offre gravure offerte", old: "Offre gravure offerte" },
+    { id: "marche", t: "Étude de marché", old: "Étude de marché" } ] },
+  { id: "finances", t: "Finances", ic: "chart", tabs: [
+    { id: "benefices", t: "Bénéfices", old: "Bénéfices" },
+    { id: "ventes", t: "Ventes", old: "Ventes" },
+    { id: "visiteurs", t: "Visiteurs", old: "Visiteurs" },
+    { id: "compta", t: "Inventaire & compta", old: "Inventaire & compta" } ] },
+  { id: "reglages", t: "Réglages", ic: "set", tabs: [
+    { id: "general", t: "Boutique", old: "Réglages" },
+    { id: "apparence", t: "Apparence du site", old: "Apparence" },
+    { id: "livraison", t: "Livraison", old: "Livraison" },
+    { id: "agents", t: "Équipe d'agents", old: "Équipe d'agents" } ] },
+];
+
+/* Ce que chaque écran garde (texte repris des écrans actuels) */
+const GARDE = {
+  fiches: "La fiche complète de chaque commande : client, articles, réglages de gravure, messages, remboursement, impression. Elle s'ouvre maintenant en panneau à droite depuis la file, sans changer de page.",
+  atelier: "Pour chaque commande : le visuel exact, les réglages et le fichier prêt à graver (PNG, SVG, PDF à l'échelle), le bouton « Raté, à refaire » et le conditionnement.",
+  etiquettes: "Les planches de 20 étiquettes 45 × 45 mm, les 4 styles, les cases déjà utilisées, l'impression iPhone et ordinateur.",
+  devis: "Devis et factures, paiement en ligne, retrait du stock par ligne, commande créée au paiement.",
+  valider: "Chaque réponse préparée par l'assistant, à relire, modifier et envoyer. Rien ne part sans votre clic.",
+  envois: "Les modèles, les envois programmés à l'heure voulue, l'écriture libre à une cliente, toujours avec le bouton « Répondre ».",
+  avis: "Les avis à publier ou masquer, l'ajout d'un avis reçu ailleurs, l'e-mail de l'acheteuse visible ici seulement.",
+  fidelite: "Cagnottes, cashback, parrainage et codes ambassadeurs.",
+  favoris: "Les créations les plus mises de côté et les clientes par création, en lecture seule, avec export.",
+  connexions: "Qui se connecte à son espace client, les liens demandés sans suite, conservé 90 jours.",
+  restaurants: "Les 366 établissements démarchés, leur statut, les réponses et l'envoi groupé.",
+  visibilite: "Masquer ou réafficher une catégorie ou un rayon entier, avec la confirmation des produits concernés.",
+  categories: "Les univers, les rayons et l'ordre des produits.",
+  gravure: "Les supports et réglages de gravure des fiches.",
+  apercus: "Les cadres d'aperçu des cristaux, verres, carafe et couverts, réglés à la souris. Les quatre outils sont réunis sur un seul écran.",
+  tailles: "Le guide des tailles et coûts des pièces en bois.",
+  sante: "Les produits mal configurés : sans emballage, sans photo, sans prix, sans guide, prix écrit différent du prix payé.",
+  emballages: "Les emballages proposés aux clientes (sac, boîtes, microfibre, packs), leurs prix et leur attribution par produit.",
+  achats: "Une facture déposée, lue par l'agent, corrigée puis validée : le stock et les coûts se mettent à jour.",
+  promos: "Les codes promo, la remise rapide par catégorie, le nettoyage des codes expirés.",
+  offre: "L'offre gravure offerte : activation, un code par cliente, suivi des codes et des connexions.",
+  marche: "Les prix des concurrents et les tendances, pour placer vos tarifs.",
+  ventes: "Les ventes par période et les produits les plus vendus.",
+  visiteurs: "Le trafic et l'entonnoir : visiteurs, paniers, paiements, achats.",
+  compta: "L'export comptable, le panier moyen et l'ajustement des stocks.",
+  apparence: "Bandeaux, pop-ups, sections de l'accueil, mode vacances, cadeau dans chaque colis.",
+  livraison: "Les tarifs de livraison, les transporteurs relais, l'Express, l'Europe.",
+  agents: "Les réglages de chaque agent. Pour leur parler, le bouton Assistant est en haut de chaque écran.",
+};
+
+/* ---------- données d'exemple ---------- */
+const ORDERS = [
+  { ref: "3K7QX2LM", nom: "Camille R.", ini: "CR", age: "il y a 2 h", st: "prep", liv: "Express", exp: true, total: 69.80, img: "whisky", art: "Verre à whisky gravé · Lot de 2", det: "Photo + « Meilleur papa »" },
+  { ref: "3J1ZP8DA", nom: "Sarah B.", ini: "SB", age: "il y a 1 j", st: "prep", liv: "Lettre suivie", total: 30.51, img: "coeurs3", art: "Collier 3 Cœurs", det: "Recto « Léa » · Sac cadeau" },
+  { ref: "3H8WK4TV", nom: "Thomas G.", ini: "TG", age: "il y a 2 j", st: "prep", liv: "Point relais", total: 119.80, img: "cristal", art: "Cristal photo 3D vertical · Grand", det: "Socle LED · photo reçue" },
+  { ref: "3G2NR6BE", nom: "Inès M.", ini: "IM", age: "il y a 3 j", st: "grav", liv: "Domicile", total: 57.90, img: "carafe", art: "Carafe à whisky gravée", det: "Modèle n° 18 · « Bernard »" },
+  { ref: "3F5LT1XC", nom: "Julie P.", ini: "JP", age: "il y a 3 j", st: "grav", liv: "Lettre suivie", total: 19.90, img: "savane", art: "Puzzle Savane", det: "Prénom « Nino » · Great Vibes" },
+  { ref: "3E9MD7QA", nom: "Marc D.", ini: "MD", age: "il y a 4 j", st: "prep", liv: "Lettre suivie", total: 27.81, img: "cordon", art: "Bracelet cordon à plaque", det: "Recto « 12.06.2026 »" },
+  { ref: "3D4HS2KW", nom: "Nadia K.", ini: "NK", age: "il y a 5 j", st: "exp", liv: "Point relais", total: 43.80, img: "vin", art: "Verre à vin gravé · 36 cl · Lot de 2", det: "Monogramme « D » · chacun différent" },
+  { ref: "3C6YB9JF", nom: "Léo F.", ini: "LF", age: "il y a 6 j", st: "exp", liv: "Domicile", total: 34.90, img: "couverts", art: "Couverts enfant gravés", det: "Prénom « Mia » · lapin" },
+  { ref: "3B1VC5NZ", nom: "Anaïs T.", ini: "AT", age: "il y a 8 j", st: "liv", liv: "Lettre suivie", total: 22.41, img: "coeurgrave", art: "Collier cœur gravé", det: "Recto « A + J »" },
+];
+const ST = { prep: ["p-prep", "À préparer"], grav: ["p-grav", "En gravure"], exp: ["p-exp", "Expédiée"], liv: ["p-liv", "Livrée"] };
+
+const PRODUITS = [
+  { n: "Collier 3 Cœurs", u: "Bijoux", p: 30.51, s: 14, img: "coeurs3", ch: ["Best-seller"] },
+  { n: "Verre à whisky gravé", u: "Verres & carafes", p: 22.90, s: 6, img: "whisky", ch: [] },
+  { n: "Carafe à whisky gravée", u: "Verres & carafes", p: 54.90, s: 2, img: "carafe", ch: ["Édition limitée"], low: true },
+  { n: "Cristal photo 3D vertical", u: "Cristal", p: 39.90, s: 18, img: "cristal", ch: [] },
+  { n: "Verre à vin gravé", u: "Verres & carafes", p: 15.90, s: 0, img: "vin", ch: [], out: true },
+  { n: "Puzzle Savane", u: "Bébé & Enfant", p: 19.90, s: null, img: "savane", ch: ["Nouveau"] },
+  { n: "Couverts enfant gravés", u: "Bébé & Enfant", p: 34.90, s: 9, img: "couverts", ch: [], warn: "Prix écrit ≠ prix payé" },
+  { n: "Bracelet cordon à plaque", u: "Bijoux", p: 17.91, s: 3, img: "cordon", ch: [], low: true },
+  { n: "Flûte à champagne gravée", u: "Verres & carafes", p: 15.90, s: 22, img: "flute", ch: [], warn: "Pas de photo gravée" },
+];
+
+const MAT = [
+  { n: "Sac cadeau", img: "m_sac", s: 89, max: 100, c: 0.42, use: "Bijoux en lettre" },
+  { n: "Sac blanc et or à anses", img: "m_sacor", s: 4, max: 6, c: 1.67, use: "Bracelets en boîte allongée", low: true },
+  { n: "Boîte carrée", img: "m_carree", s: 98, max: 100, c: 1.07, use: "Colliers, bracelets fins" },
+  { n: "Carton 25 × 20 × 15", img: "m_carton", s: 21, max: 25, c: 1.12, use: "Verres, carafe, cristal" },
+  { n: "Chips de calage", img: "m_chips", s: 6, max: 50, c: 0.71, use: "Colis verre et cristal", low: true },
+  { n: "Étiquettes FRAGILE", img: "m_frag", s: 152, max: 168, c: 0.05, use: "Colis verre" },
+];
+
+const MAILS = [
+  { id: 1, nom: "Camille R.", ini: "CR", sujet: "Photo pour mon verre", ex: "Bonjour, je vous renvoie la photo en meilleure qualité pour la commande…", h: "10 h 12", u: true, draft: true, cmd: "3K7QX2LM" },
+  { id: 2, nom: "Sarah B.", ini: "SB", sujet: "Délai de livraison", ex: "Est-ce que le collier arrivera avant samedi ? C'est pour un anniversaire.", h: "9 h 40", u: true, draft: true, cmd: "3J1ZP8DA" },
+  { id: 3, nom: "Le Bistrot du Port", ini: "BP", sujet: "Re: Le logo de votre établissement", ex: "Bonjour, pouvez-vous nous envoyer vos tarifs pour 24 verres ?", h: "hier", u: true, pro: true, draft: true },
+  { id: 4, nom: "Marc D.", ini: "MD", sujet: "Merci !", ex: "Bien reçu le bracelet, il est magnifique, merci beaucoup.", h: "lun.", u: true },
+  { id: 5, nom: "Inès M.", ini: "IM", sujet: "Re: Votre carafe", ex: "Parfait pour moi, vous pouvez graver Bernard.", h: "lun." },
+];
+
+/* ---------- état ---------- */
+const state = { sec: "accueil", tab: {}, sel: new Set(), view: "toutes", mail: 1, setTab: "general", pins: ["commandes:file", "commandes:etiquettes", "stock:materiel"], recents: ["catalogue:produits", "clients:crm", "finances:benefices"], open: { commandes: true } };
+try { const s = JSON.parse(localStorage.getItem("niv-gestion-maquette") || "{}"); if (Array.isArray(s.pins)) state.pins = s.pins; if (s.mini) document.getElementById("app").classList.add("mini"); } catch (e) {}
+const save = () => { try { localStorage.setItem("niv-gestion-maquette", JSON.stringify({ pins: state.pins, mini: document.getElementById("app").classList.contains("mini") })); } catch (e) {} };
+const secOf = (id) => SECTIONS.find((s) => s.id === id);
+const tabOf = (s) => state.tab[s.id] || s.tabs[0].id;
+const label = (key) => { const [s, t] = key.split(":"); const S = secOf(s); const T = S && S.tabs.find((x) => x.id === t); return T ? { S, T } : null; };
+
+function toast(msg) { const t = document.getElementById("toast"); t.querySelector("span").textContent = msg; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("on"), 2200); }
+
+/* ---------- menu ---------- */
+function renderSide() {
+  const nav = document.getElementById("nav");
+  nav.innerHTML = SECTIONS.map((s) => {
+    const on = state.sec === s.id;
+    const subs = (on || state.open[s.id]) && s.tabs.length > 1 ? `<div class="sub">${s.tabs.map((t) => `<button type="button" class="${on && tabOf(s) === t.id ? "on" : ""}" data-go="${s.id}:${t.id}">${esc(t.t)}</button>`).join("")}</div>` : "";
+    return `<button class="ni ${on ? "on" : ""}" type="button" data-go="${s.id}" title="${esc(s.t)}">${I(s.ic)}<span class="t">${esc(s.t)}</span>${s.badge ? `<span class="badge">${s.badge}</span>` : ""}</button>${subs}`;
+  }).join("");
+  const pins = document.getElementById("pins");
+  const row = (k, ic) => { const L = label(k); return L ? `<button class="ni" type="button" data-go="${k}">${I(ic)}<span class="t">${esc(L.T.t)}</span></button>` : ""; };
+  pins.innerHTML = state.pins.map((k) => row(k, "pin")).join("") + state.recents.filter((k) => !state.pins.includes(k)).slice(0, 3).map((k) => row(k, "clock")).join("");
+  const tabs = [["accueil", "home", "Aujourd'hui"], ["commandes", "orders", "Commandes", 7], ["messages", "mail", "Messages", 4], ["catalogue", "tag", "Produits"], ["plus", "menu", "Plus"]];
+  document.getElementById("mtabs").innerHTML = tabs.map(([id, ic, t, b]) => `<button type="button" data-go="${id}" class="${state.sec === id ? "on" : ""}">${I(ic)}${t}${b ? `<span class="badge">${b}</span>` : ""}</button>`).join("");
+}
+
+/* ---------- vues ---------- */
+function head(title, sub, acts = "") { return `<div class="ph"><div class="grow"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acts">${acts}</div></div>`; }
+function tabsBar(s) { return s.tabs.length > 1 ? `<div class="tabs" role="tablist">${s.tabs.map((t) => `<button class="tab ${tabOf(s) === t.id ? "on" : ""}" role="tab" type="button" data-go="${s.id}:${t.id}">${esc(t.t)}${t.badge ? `<span class="badge">${t.badge}</span>` : ""}</button>`).join("")}</div>` : ""; }
+function spark(pts) { const w = 160, h = 34, mx = Math.max(...pts), mn = Math.min(...pts); const xy = pts.map((v, i) => [i * w / (pts.length - 1), h - 3 - (v - mn) / ((mx - mn) || 1) * (h - 8)]); const l = xy.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" "); const e = xy[xy.length - 1]; return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path class="a" d="${l} L${w} ${h} L0 ${h}Z"/><path class="l" d="${l}"/><circle cx="${e[0]}" cy="${e[1]}" r="2.5"/></svg>`; }
+function img(k) { return IMG[k] ? `<img class="th" src="${IMG[k]}" alt="">` : `<span class="th"></span>`; }
+
+function vAccueil() {
+  return `${head("Bonjour, voici votre journée", "Jeudi 29 octobre · 7 commandes à traiter, dont 1 Express à graver en priorité.", `<div class="seg" role="group"><button type="button">Aujourd'hui</button><button type="button">7 jours</button><button class="on" type="button">Ce mois</button><button type="button">30 jours</button></div>`)}
+  <div class="kpis">
+    ${[["Chiffre d'affaires", "1 842,60 €", "+18 % vs septembre", "up", [8, 9, 7, 11, 10, 13, 12, 15, 14, 17]], ["Commandes", "41", "+6 vs septembre", "up", [3, 4, 3, 5, 4, 6, 5, 6, 7, 8]], ["Panier moyen", "44,94 €", "+2,10 €", "up", [40, 42, 41, 43, 42, 44, 43, 45, 44, 45]], ["Bénéfice estimé", "968,20 €", "après achats, matériel et frais", "", [5, 6, 5, 7, 6, 8, 7, 9, 8, 10]]].map(([l, v, d, c, p]) => `<div class="card kpi"><span class="l">${l}</span><span class="v num">${v}</span><span class="d ${c}">${c ? "▲ " : ""}${d}</span>${spark(p)}</div>`).join("")}
+  </div>
+  <div class="grid g2">
+    <div class="card"><div class="ch">À faire maintenant<span class="grow"></span><span class="sub2 hide-m">les plus urgentes d'abord</span></div>
+      <ul class="todo">
+        ${[["t-bad", "bolt", "1 commande Express à graver en priorité", "3K7QX2LM · Camille R. · payée il y a 2 h", "commandes:file", "Ouvrir"],
+          ["t-warn", "orders", "5 commandes à préparer", "La plus ancienne attend depuis 4 jours (3E9MD7QA)", "commandes:file", "Voir la file"],
+          ["t-gold", "spark", "3 réponses de l'assistant à valider", "Camille R., Sarah B., Le Bistrot du Port", "messages:valider", "Relire"],
+          ["t-info", "euro", "2 devis en attente de paiement", "DEV-1531 · 86,00 € et DEV-1532 · 41,90 €", "commandes:devis", "Relancer"],
+          ["t-warn", "box", "2 articles de matériel à racheter", "Sac blanc et or (4 restants), chips de calage", "stock:materiel", "Voir"],
+          ["t-info", "star", "1 avis à publier", "5 étoiles sur le Collier 3 Cœurs", "clients:avis", "Lire"]].map(([c, ic, b, s, go, a]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b><span>${s}</span></span><button class="btn sm" type="button" data-go="${go}">${a}</button></li>`).join("")}
+      </ul></div>
+    <div class="card"><div class="ch">Activité récente<span class="grow"></span><button class="lnk" type="button">Tout voir</button></div>
+      <ul class="todo">
+        ${[["t-ok", "check", "Commande 3K7QX2LM payée", "Verre à whisky · Express · il y a 2 h"], ["t-gold", "mail", "Camille R. a répondu", "dans la commande 3K7QX2LM · 10 h 12"], ["t-ok", "truck", "3D4HS2KW expédiée", "Point relais · suivi Mondial Relay"], ["t-info", "users", "Nouvelle inscrite à la lettre", "via la fenêtre de bienvenue"], ["t-ok", "star", "Avis 5 étoiles reçu", "Collier 3 Cœurs"]].map(([c, ic, b, s]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b><span>${s}</span></span></li>`).join("")}
+      </ul></div>
+  </div>
+  <div class="card"><div class="ch">Dernières commandes<span class="grow"></span><button class="lnk" type="button" data-go="commandes:file">Toutes les commandes</button></div>${ordersTable(ORDERS.slice(0, 5), false)}</div>`;
+}
+
+function ordersTable(list, checks) {
+  return `<div class="tw"><table><thead><tr>${checks ? `<th style="width:34px"><input type="checkbox" class="cb" id="all" aria-label="Tout cocher"></th>` : ""}<th>Commande</th><th>Cliente</th><th>Articles</th><th class="hide-m">Livraison</th><th>Statut</th><th class="r">Total</th></tr></thead><tbody>
+  ${list.map((o) => `<tr data-order="${o.ref}">${checks ? `<td><input type="checkbox" class="cb" data-sel="${o.ref}" ${state.sel.has(o.ref) ? "checked" : ""} aria-label="Cocher ${o.ref}"></td>` : ""}
+    <td><span class="ref">${o.ref}</span><div class="sub2">${o.age}</div></td>
+    <td><div class="who"><span class="av">${o.ini}</span>${esc(o.nom)}</div></td>
+    <td><div class="who">${img(o.img)}<div style="min-width:0"><div>${esc(o.art)}</div><div class="sub2">${esc(o.det)}</div></div></div></td>
+    <td class="hide-m">${o.exp ? `<span class="pill p-bad">Express</span>` : `<span class="chip">${o.liv}</span>`}</td>
+    <td><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span></td>
+    <td class="r num">${eur(o.total)}</td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+
+function vCommandes(s, t) {
+  if (t === "file") {
+    const V = [["toutes", "Toutes", 9], ["prep", "À préparer", 4], ["grav", "En gravure", 2], ["express", "Express", 1], ["exp", "Expédiées", 2]];
+    const list = ORDERS.filter((o) => state.view === "toutes" || (state.view === "express" ? o.exp : o.st === state.view));
+    return `${head("Commandes", "Dans l'ordre de traitement : Express d'abord, puis les plus anciennes.", `<button class="btn" type="button" data-go="commandes:etiquettes">${I("print")}Étiquettes</button><button class="btn pri" type="button" data-toast="Nouveau devis créé">${I("plus")}Nouveau devis</button>`)}${tabsBar(s)}
+    ${state.sel.size ? `<div class="bulk"><b>${state.sel.size} sélectionnée${state.sel.size > 1 ? "s" : ""}</b><span class="grow"></span><button class="btn sm" type="button" data-toast="Fiches envoyées à l'impression">${I("print")}Imprimer les fiches</button><button class="btn sm" type="button" data-toast="Étiquettes prêtes">Étiquettes</button><button class="btn sm" type="button" data-toast="Passées en gravure">Passer en gravure</button><button class="btn sm" type="button" data-clear>Annuler</button></div>` : ""}
+    <div class="card"><div class="toolbar"><div class="views">${V.map(([id, l, n]) => `<button type="button" class="vchip ${state.view === id ? "on" : ""}" data-view="${id}">${l}<i>${n}</i></button>`).join("")}</div>
+      <label class="search">${I("search")}<input id="qOrders" placeholder="Réf., cliente, produit"></label><button class="btn sm" type="button">${I("filter")}Filtres</button></div>
+      ${ordersTable(list, true)}</div>`;
+  }
+  return keepView(s, t);
+}
+
+function vMessages(s, t) {
+  if (t === "envois") return keepView(s, t);
+  const list = t === "valider" ? MAILS.filter((m) => m.draft) : MAILS;
+  const m = list.find((x) => x.id === state.mail) || list[0];
+  return `${head("Messages", "Tous les e-mails des clientes au même endroit. L'assistant prépare une réponse, vous la relisez avant qu'elle parte.", `<button class="btn pri" type="button" data-toast="Nouveau message">${I("plus")}Écrire à une cliente</button>`)}${tabsBar(s)}
+  <div class="card inbox ${state.mailOpen ? "open" : ""}">
+    <div class="ilist">${list.map((x) => `<button type="button" class="im ${x.id === m.id ? "on" : ""}" data-mail="${x.id}"><span class="av">${x.ini}</span><span class="tx"><b>${esc(x.nom)}<small>${x.h}</small></b><span style="font-size:13px">${esc(x.sujet)}</span><p>${esc(x.ex)}</p>${x.draft ? `<span class="pill p-gold" style="margin-top:6px">Réponse prête</span>` : ""}${x.pro ? ` <span class="chip" style="margin-top:6px">Restaurant</span>` : ""}</span>${x.u ? `<span class="u"></span>` : ""}</button>`).join("")}</div>
+    <div class="thread"><header><button class="btn sm menu-btn" type="button" data-backmail style="margin-bottom:8px">${I("back")}Tous les messages</button><h3>${esc(m.sujet)}</h3><div class="sub2">${esc(m.nom)}${m.cmd ? ` · commande ${m.cmd}` : ""}</div></header>
+      <div class="msgs"><div class="msg"><small>${esc(m.nom)} · ${m.h}</small>${esc(m.ex)} Merci d'avance.</div>
+      ${m.draft ? `<div class="draft"><div class="h">${I("spark")}Réponse préparée par l'assistant</div><textarea id="draftTx">Bonjour,\n\nMerci pour votre message. ${m.pro ? "Nous vous envoyons nos tarifs pour 24 verres gravés à votre logo." : "Nous avons bien reçu votre photo, elle sera utilisée pour la gravure de votre commande."}\n\nBelle journée,\nNiv Création</textarea><div class="acts"><button class="btn pri" type="button" data-toast="Réponse envoyée avec le bouton Répondre">${I("check")}Envoyer</button><button class="btn" type="button">Modifier avec l'assistant</button><button class="btn ghost" type="button" data-toast="Classé sans réponse">Classer sans réponse</button></div></div>` : `<div class="msg me"><small>Niv Création · lun.</small>Merci beaucoup pour votre retour, belle journée.</div>`}
+      </div></div>
+    <div class="ctx"><div><h4>Cliente</h4><div class="who"><span class="av">${m.ini}</span><div><b>${esc(m.nom)}</b><div class="sub2">${m.pro ? "Établissement démarché" : "2 commandes · 74,51 €"}</div></div></div></div>
+      ${m.cmd ? `<div><h4>Commande liée</h4><dl class="kv"><dt>Réf.</dt><dd class="ref">${m.cmd}</dd><dt>Statut</dt><dd><span class="pill p-prep">À préparer</span></dd><dt>Total</dt><dd class="num">69,80 €</dd></dl><button class="btn sm" style="margin-top:10px" type="button" data-order="${m.cmd}">Ouvrir la commande</button></div>` : ""}
+      <div><h4>Historique</h4><div class="sub2">5 messages depuis le 2 octobre, tous rangés ici automatiquement.</div></div></div>
+  </div>`;
+}
+
+function vClients(s, t) {
+  if (t !== "crm") return keepView(s, t);
+  const C = [["Camille R.", "CR", 2, 104.70, "aujourd'hui", "29 oct.", "Fidèle"], ["Sarah B.", "SB", 1, 30.51, "hier", "28 oct.", ""], ["Thomas G.", "TG", 3, 244.50, "il y a 2 j", "—", "Fidèle"], ["Inès M.", "IM", 1, 57.90, "il y a 3 j", "25 oct.", "Mariage"], ["Nadia K.", "NK", 2, 81.70, "il y a 5 j", "—", ""], ["Anaïs T.", "AT", 1, 22.41, "il y a 8 j", "20 oct.", "Code GRAVURE"]];
+  return `${head("Clientes", "Toutes vos clientes, leurs commandes, leurs échanges et leurs segments.", `<button class="btn" type="button">Exporter</button><button class="btn pri" type="button" data-go="messages:envois">Écrire à un segment</button>`)}${tabsBar(s)}
+  <div class="card"><div class="toolbar"><div class="views">${[["Toutes", 214], ["Ont commandé", 41], ["Fidèles", 9], ["Inscrites à la lettre", 173], ["Anniversaire ce mois", 3]].map(([l, n], i) => `<button type="button" class="vchip ${i ? "" : "on"}">${l}<i>${n}</i></button>`).join("")}</div><label class="search">${I("search")}<input id="qClients" placeholder="Nom ou e-mail"></label></div>
+  <div class="tw"><table><thead><tr><th>Cliente</th><th class="r">Commandes</th><th class="r">Dépensé</th><th>Dernière commande</th><th class="hide-m">Connexion</th><th>Segment</th></tr></thead><tbody>
+  ${C.map(([n, i, c, d, l, cx, tag]) => `<tr><td><div class="who"><span class="av">${i}</span>${n}</div></td><td class="r num">${c}</td><td class="r num">${eur(d)}</td><td>${l}</td><td class="hide-m sub2">${cx}</td><td>${tag ? `<span class="chip">${tag}</span>` : ""}</td></tr>`).join("")}
+  </tbody></table></div></div>`;
+}
+
+function vCatalogue(s, t) {
+  if (t !== "produits") return keepView(s, t);
+  return `${head("Produits & stock", "Prix, stock et visibilité de chaque création. Le stock se modifie directement dans la liste.", `<button class="btn" type="button" data-go="stock:achats">${I("box")}Déposer une facture</button><button class="btn pri" type="button" data-toast="Nouveau produit">${I("plus")}Ajouter un produit</button>`)}${tabsBar(s)}
+  <div class="kpis"><div class="card kpi"><span class="l">En vente</span><span class="v num">78</span></div><div class="card kpi"><span class="l">En rupture</span><span class="v num down">1</span></div><div class="card kpi"><span class="l">Stock bas</span><span class="v num" style="color:var(--warn)">2</span></div><div class="card kpi"><span class="l">À corriger</span><span class="v num" style="color:var(--warn)">2</span></div></div>
+  <div class="card"><div class="toolbar"><div class="views">${["Tous", "Bijoux", "Cristal", "Verres & carafes", "Bébé & Enfant", "Mariage", "Maison", "Petits cadeaux"].map((l, i) => `<button type="button" class="vchip ${i ? "" : "on"}">${l}</button>`).join("")}</div><label class="search">${I("search")}<input id="qProd" placeholder="Nom du produit"></label></div>
+  <div class="tw"><table><thead><tr><th>Produit</th><th class="hide-m">Univers</th><th class="r">Prix</th><th class="r">Stock</th><th>Sur le site</th></tr></thead><tbody>
+  ${PRODUITS.map((p, k) => `<tr><td><div class="who">${img(p.img)}<div style="min-width:0"><div>${esc(p.n)}</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">${p.ch.map((c) => `<span class="chip">${c}</span>`).join("")}${p.warn ? `<span class="chip x">${p.warn}</span>` : ""}${p.out ? `<span class="pill p-bad">Rupture</span>` : p.low ? `<span class="pill p-prep">Stock bas</span>` : ""}</div></div></div></td>
+    <td class="hide-m sub2">${p.u}</td><td class="r num">${eur(p.p)}</td>
+    <td class="r">${p.s === null ? `<span class="sub2">non suivi</span>` : `<input class="stock-in" id="stk${k}" value="${p.s}" aria-label="Stock ${esc(p.n)}">`}</td>
+    <td><button type="button" class="tg ${p.out ? "" : "on"}" aria-label="Visible sur le site" data-tg></button></td></tr>`).join("")}
+  </tbody></table></div></div>`;
+}
+
+function vStock(s, t) {
+  if (t !== "materiel") return keepView(s, t);
+  return `${head("Matériel", "Tout ce que vous achetez pour emballer et expédier. Le stock baisse quand vous validez le conditionnement d'une commande.", `<button class="btn" type="button" data-go="stock:achats">Déposer une facture</button><button class="btn pri" type="button" data-toast="Réception enregistrée">${I("plus")}Réception</button>`)}${tabsBar(s)}
+  <div class="card"><div class="toolbar"><div class="views">${["Tout", "À racheter", "Cartons & boîtes", "Calage & papier", "Emballages bijoux", "Bois à graver"].map((l, i) => `<button type="button" class="vchip ${i ? "" : "on"}">${l}${i === 1 ? "<i>2</i>" : ""}</button>`).join("")}</div></div>
+  <div class="mgrid">${MAT.map((m) => `<div class="mcard">${IMG[m.img] ? `<img src="${IMG[m.img]}" alt="">` : ""}<div class="top2"><b>${m.n}</b>${m.low ? `<span class="pill p-prep">À racheter</span>` : ""}</div><div class="bar ${m.low ? "low" : ""}"><i style="width:${Math.max(4, Math.round(m.s / m.max * 100))}%"></i></div><div class="row sub2"><span class="num">${m.s} en stock</span><span class="num">${eur(m.c)} l'utilisation</span></div><div class="sub2">Pour : ${m.use}</div></div>`).join("")}</div></div>`;
+}
+
+function vMarketing(s, t) {
+  if (t !== "campagnes") return keepView(s, t);
+  const R = [["✦ Un prénom, une date, et le bijou devient le sien", "Envoyée le 4 sept.", 173, "48 %", "6,4 %", "3 commandes"], ["Nouveautés de la rentrée", "Envoyée le 18 sept.", 168, "41 %", "4,2 %", "1 commande"], ["Idées cadeaux de Noël", "Brouillon", 0, "—", "—", "—"]];
+  return `${head("Marketing", "Vos lettres, vos codes promo et vos offres. Chaque envoi se relit avant de partir.", `<button class="btn pri" type="button" data-toast="Brouillon créé">${I("plus")}Nouvelle lettre</button>`)}${tabsBar(s)}
+  <div class="grid g2"><div class="card"><div class="ch">Lettres envoyées<span class="grow"></span><span class="sub2">les clics sont fiables, les ouvertures sont une estimation</span></div><div class="tw"><table><thead><tr><th>Lettre</th><th class="r">Envois</th><th class="r">Ouvertures</th><th class="r">Clics</th><th class="hide-m">Ventes</th></tr></thead><tbody>${R.map(([n, d, e, o, c, v]) => `<tr><td><div>${n}</div><div class="sub2">${d}</div></td><td class="r num">${e || "—"}</td><td class="r num">${o}</td><td class="r num">${c}</td><td class="hide-m">${v}</td></tr>`).join("")}</tbody></table></div></div>
+  <div class="card"><div class="ch">Offre gravure offerte<span class="grow"></span><span class="pill p-liv">En pause</span></div><div style="padding:16px;display:flex;flex-direction:column;gap:12px"><dl class="kv"><dt>Codes envoyés</dt><dd class="num">53</dd><dt>Utilisés</dt><dd class="num">7</dd><dt>En attente d'envoi</dt><dd class="num">12 inscrites</dd><dt>Durée par cliente</dt><dd>30 jours</dd></dl><div class="row"><span>Reprendre les envois</span><button type="button" class="tg" data-tg aria-label="Reprendre"></button></div><button class="btn sm" type="button" data-go="marketing:offre">Suivi des codes</button></div></div></div>`;
+}
+
+function vFinances(s, t) {
+  if (t !== "benefices") return keepView(s, t);
+  const M = [["juil.", 412, 190], ["août", 980, 470], ["sept.", 1560, 790], ["oct.", 1843, 968]];
+  const W = 640, H = 220, L = 46, B = 26, top = 12, mx = 2000;
+  const y = (v) => H - B - (v / mx) * (H - B - top);
+  const bw = (W - L - 20) / M.length;
+  const grid = [0, 500, 1000, 1500, 2000].map((v) => `<line class="gl" x1="${L}" x2="${W - 8}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v ? v.toLocaleString("fr-FR") + " €" : "0"}</text>`).join("");
+  const bars = M.map(([m, ca, be], i) => { const x = L + 14 + i * bw; return `<rect class="ca" x="${x}" y="${y(ca)}" width="${bw * .46}" height="${y(0) - y(ca)}" rx="4"/><rect class="ben" x="${x + bw * .48}" y="${y(be)}" width="${bw * .3}" height="${y(0) - y(be)}" rx="4"/><text x="${x + bw * .38}" y="${H - 8}" text-anchor="middle">${m}</text>`; }).join("");
+  const rows = [["Ventes encaissées", 1842.60], ["Coût d'achat des produits vendus", -512.30], ["Matériel d'emballage utilisé", -48.90], ["Pièces ratées", -12.96], ["Frais de paiement", -37.90], ["Dépenses du mois", -262.34]];
+  return `${head("Finances", "Ce que vous gagnez réellement, mois par mois.", `<div class="seg"><button type="button">Mois</button><button class="on" type="button">4 mois</button><button type="button">Année</button></div><button class="btn" type="button">Export comptable</button>`)}${tabsBar(s)}
+  <div class="grid g2"><div class="card"><div class="ch">Ventes et bénéfice</div><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ventes et bénéfice de juillet à octobre">${grid}${bars}</svg><div class="legend"><span><i style="background:var(--gold-bg);border:1px solid var(--gold-2)"></i>Ventes</span><span><i style="background:var(--gold-2)"></i>Bénéfice</span></div></div>
+  <div class="card"><div class="ch">Octobre en détail</div><div class="tw"><table><tbody>${rows.map(([l, v]) => `<tr><td>${l}</td><td class="r num ${v < 0 ? "" : ""}">${eur(v)}</td></tr>`).join("")}<tr><td><b>Bénéfice</b></td><td class="r num"><b>${eur(968.20)}</b></td></tr></tbody></table></div></div></div>`;
+}
+
+function vReglages(s, t) {
+  if (t !== "general") return keepView(s, t);
+  const N = [["general", "Boutique et coordonnées"], ["paiement", "Paiement et e-mails"], ["transport", "Transporteurs (Boxtal)"], ["securite", "Sécurité"]];
+  return `${head("Réglages", "Tous les réglages de la boutique, rangés par sujet.")}${tabsBar(s)}
+  <div class="set"><nav class="setnav">${N.map(([id, l]) => `<button type="button" class="${state.setTab === id ? "on" : ""}" data-set="${id}">${l}</button>`).join("")}</nav>
+  <div class="form">
+    <div class="card fs"><div class="d"><h3>Boutique</h3><p>Nom, adresse de domiciliation et e-mail de contact affichés sur le site et dans les e-mails.</p></div><div class="fields"><div class="fld"><label for="f1">Nom de la boutique</label><input id="f1" value="Niv Création" data-dirty></div><div class="fld"><label for="f2">E-mail de contact</label><input id="f2" value="contact@nivcreation.fr" data-dirty></div><div class="fld"><label for="f3">Adresse</label><input id="f3" value="6 rue d'Armaillé, 75017 Paris" data-dirty><small>Domiciliation légale, jamais l'adresse de l'atelier.</small></div></div></div>
+    <div class="card fs"><div class="d"><h3>E-mail de confirmation</h3><p>Envoyez-vous un exemple pour voir ce que reçoit une cliente.</p></div><div class="fields"><div class="row"><span>Copie de chaque commande pour moi</span><button type="button" class="tg on" data-tg data-dirty aria-label="Copie"></button></div><button class="btn sm" type="button" data-toast="E-mail de test envoyé">Envoyer un e-mail de test</button></div></div>
+    <div class="card fs"><div class="d"><h3>Mot de passe de Gestion</h3><p>10 caractères minimum. Gardé chiffré, jamais affiché.</p></div><div class="fields"><div class="fld"><label for="f4">Mot de passe actuel</label><input id="f4" type="password" value=""></div><div class="fld"><label for="f5">Nouveau mot de passe</label><input id="f5" type="password" value=""></div></div></div>
+    <div class="savebar" id="savebar" hidden><span id="dirtyTx">Modifications non enregistrées</span><div class="acts"><button class="btn" type="button" data-cancel>Annuler</button><button class="btn pri" type="button" data-saveall>Enregistrer</button></div></div>
+  </div></div>`;
+}
+
+function keepView(s, t) {
+  const T = s.tabs.find((x) => x.id === t);
+  return `${head(esc(T.t), "")}${tabsBar(s)}
+  <div class="card keep"><span class="pill p-exp" style="align-self:flex-start">Écran conservé</span><h3>${esc(T.t)}</h3><p>${esc(GARDE[t] || "")}</p><p class="sub2">Ancien nom dans le menu : « ${esc(T.old)} ». Tout son contenu reste, présenté avec le même cadre que les autres écrans : titre, sous-onglets, barre de filtres, tableaux et boutons identiques partout.</p>
+  <div class="skel"><i style="width:60%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:70%"></i></div></div>`;
+}
+
+function vPlan() {
+  const P = [["map", "9 sections au lieu de 37 entrées", "Le menu montre 9 grandes sections. Chaque écran devient un sous-onglet de sa section, en haut de la page. Le menu passe de 37 lignes à 9.", "Shopify, Etsy Shop Manager"],
+    ["home", "« Aujourd'hui » : ce qui attend une action", "L'accueil commence par une liste de tâches classées par urgence : Express, commandes en attente, réponses à valider, devis, matériel, avis. Chaque ligne a son bouton.", "Etsy Shop Manager 2025"],
+    ["search", "Une recherche qui ouvre tout", "⌘K, Ctrl+K ou la touche / : une commande, une cliente, un produit, n'importe quel écran ou une action (« imprimer les étiquettes »).", "Linear, Railway, Vercel"],
+    ["pin", "Raccourcis épinglés et écrans récents", "Vous épinglez les écrans que vous ouvrez tous les jours. Les trois derniers visités s'affichent en dessous.", "Stripe Dashboard"],
+    ["spark", "L'assistant partout, en panneau", "Le bouton Assistant ouvre un panneau à droite sur n'importe quel écran, sans quitter la commande ou le produit en cours.", "Shopify Sidekick (2026)"],
+    ["orders", "Une commande s'ouvre à côté de la liste", "La fiche complète s'ouvre en panneau à droite. Fermer le panneau ramène exactement là où vous étiez.", "Shopify, Stripe"],
+    ["filter", "Vues enregistrées et actions groupées", "En haut de chaque liste, des vues prêtes (À préparer, Express, Expédiées) avec leur nombre. Cocher plusieurs lignes ouvre une barre d'actions : imprimer, étiquettes, statut.", "Shopify, Linear"],
+    ["set", "Un seul cadre pour tous les écrans", "Même titre, mêmes onglets, mêmes boutons, mêmes pastilles de statut, mêmes icônes dessinées. Une barre « Enregistrer » apparaît dès qu'un réglage change.", "Stripe, Polaris"],
+    ["panel", "Menu réductible, téléphone au pouce", "Sur ordinateur, le menu se réduit à ses icônes. Sur téléphone, 5 onglets en bas et le reste derrière « Plus ».", "Shopify mobile, Etsy Seller"]];
+  const rows = SECTIONS.flatMap((s) => s.tabs.map((t) => [t.old, s.t, t.t]));
+  rows.splice(1, 0, ["Assistant", "En haut de chaque écran", "Bouton Assistant (panneau)"]);
+  return `${head("Ce qui change", "Rien n'est supprimé : les 37 écrans actuels sont tous là, rangés autrement. Voici les principes, repris des grands back-offices, puis la place de chaque écran.")}
+  <div class="princ">${P.map(([ic, h, p, src]) => `<div class="card pc"><h3>${I(ic)}${h}</h3><p>${p}</p><small>Vu chez : ${src}</small></div>`).join("")}</div>
+  <div class="card"><div class="ch">Où va chaque écran<span class="grow"></span><span class="sub2">${rows.length} écrans, 0 supprimé</span></div><div class="tw"><table><thead><tr><th>Écran actuel</th><th>Nouvelle section</th><th>Nouvel onglet</th></tr></thead><tbody>${rows.map(([o, s, n]) => `<tr><td>${esc(o)}</td><td class="moved">${esc(s)}</td><td>${esc(n)}</td></tr>`).join("")}</tbody></table></div></div>
+  <div class="card pc"><h3>${I("check")}Ce qui ne bouge pas</h3><p>Les adresses actuelles (/gestion/commandes, /gestion/crm…) continuent de marcher. Les compteurs, la file de production, le conditionnement, les étiquettes, l'impression A4, les règles d'envoi et de validation restent identiques. Les couleurs or, crème et encre de la marque sont gardées.</p></div>
+  <div class="card pc"><h3>${I("alert")}À trancher par vous</h3><p>« Emballages » et « Matériel & emballages » restent deux onglets séparés dans Stock & achats. « Réglages produits » réunit les outils cristal, verres, carafe et couverts. Les textes de Gestion passent tous au « vous » : aujourd'hui certains écrans disent « tu », d'autres « vous ».</p></div>`;
+}
+
+const VIEWS = { accueil: vAccueil, commandes: vCommandes, messages: vMessages, clients: vClients, catalogue: vCatalogue, stock: vStock, marketing: vMarketing, finances: vFinances, reglages: vReglages };
+
+function render() {
+  const page = document.getElementById("page");
+  const crumb = document.getElementById("crumb");
+  if (state.sec === "plan") { page.innerHTML = vPlan(); crumb.innerHTML = `<b>Ce qui change</b>`; }
+  else {
+    const s = secOf(state.sec); const t = tabOf(s);
+    page.innerHTML = VIEWS[s.id](s, t);
+    const T = s.tabs.find((x) => x.id === t);
+    crumb.innerHTML = s.tabs.length > 1 ? `<span class="hide-s">${esc(s.t)}</span><span class="hide-s">›</span><b>${esc(T.t)}</b>` : `<b>${esc(s.t)}</b>`;
+  }
+  renderSide();
+  window.scrollTo(0, 0);
+}
+
+function go(key) {
+  if (key === "plus") { openSide(true); return; }
+  const [s, t] = key.split(":");
+  if (s === "plan") { state.sec = "plan"; }
+  else if (secOf(s)) { state.sec = s; if (t) state.tab[s] = t; state.open[s] = true; const k = s + ":" + tabOf(secOf(s)); state.recents = [k, ...state.recents.filter((x) => x !== k)].slice(0, 6); }
+  state.sel.clear(); state.mailOpen = false;
+  if (location.hash !== "#" + state.sec) history.replaceState(null, "", "#" + state.sec);
+  openSide(false); closeAll(); render();
+}
+
+/* ---------- panneaux ---------- */
+const scrim = document.getElementById("scrim");
+function closeAll() { ["drawer", "sheet", "pal"].forEach((id) => document.getElementById(id).classList.remove("on")); scrim.classList.remove("on"); document.getElementById("bellPop").hidden = true; }
+function openSide(on) { document.getElementById("side").classList.toggle("on", on); scrim.classList.toggle("on", on); }
+
+function openOrder(ref) {
+  const o = ORDERS.find((x) => x.ref === ref) || ORDERS[0];
+  const steps = ["Payée", "À préparer", "Gravure", "Expédiée", "Livrée"];
+  const now = { prep: 1, grav: 2, exp: 3, liv: 4 }[o.st];
+  const d = document.getElementById("drawer");
+  d.innerHTML = `<div class="dh"><h2><span class="ref">${o.ref}</span></h2><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="db">
+    ${o.exp ? `<div class="alertbox">${I("bolt")}Express Chronopost : à graver en priorité</div>` : ""}
+    <ol class="steps">${steps.map((x, i) => `<li class="${i < now ? "done" : i === now ? "now" : ""}">${x}</li>`).join("")}</ol>
+    <div class="card"><div class="ch">À graver</div><div style="padding:14px;display:flex;gap:14px;align-items:flex-start">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="" style="width:88px;height:88px;border-radius:10px;object-fit:cover">` : ""}<div class="engr" style="flex:1;min-width:0"><div><span>Article</span><span>${esc(o.art)}</span></div><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div></div></div>
+    <div class="card"><div class="ch">Vendu en plus</div><div style="padding:12px 16px" class="sub2">${o.img === "coeurs3" ? "Sac cadeau · 1,20 €" : "Rien de plus"}</div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px"><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">CLIENTE</h4><b>${esc(o.nom)}</b><div class="sub2">2 commandes · dossier complet</div></div><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">LIVRAISON</h4><b>${o.liv}</b><div class="sub2">${o.exp ? "Chrono 18 · 14,90 €" : "Adresse vérifiée"}</div></div></div>
+    <div class="card"><div class="ch">Conditionnement<span class="grow"></span><span class="sub2">gain estimé ${eur(o.total * .48)}</span></div><div style="padding:12px 16px" class="sub2">Carton 25 × 20 × 15 · chips de calage · étiquette FRAGILE</div></div>
+    <div class="acts"><button class="btn pri" type="button" data-toast="Passée en gravure">${I("check")}Commencer la gravure</button><button class="btn" type="button" data-toast="Fiche envoyée à l'impression">${I("print")}Imprimer la fiche</button><button class="btn" type="button" data-go="commandes:etiquettes">Étiquette</button><button class="btn" type="button" data-toast="Raté noté, stock mis à jour">Raté, à refaire</button></div>
+  </div>`;
+  d.classList.add("on"); scrim.classList.add("on");
+}
+
+function openAssistant() {
+  const sh = document.getElementById("sheet");
+  sh.innerHTML = `<div class="dh">${I("spark")}<h2>Assistant</h2><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="chat"><div class="bub me">Passe le verre à vin 36 cl en rupture et prépare un mail pour prévenir les inscrites au retour en stock.</div>
+  <div class="bub">Voici ce que je propose. Rien n'est appliqué avant votre clic.</div>
+  <div class="prop"><b>Stock · Verre à vin 36 cl</b><span class="sub2">À l'unité, lot de 2, lot de 4 : stock 0</span><div class="acts"><button class="btn sm pri" type="button" data-toast="Stock mis à jour">Appliquer</button><button class="btn sm" type="button">Annuler</button></div></div>
+  <div class="prop"><b>Brouillon d'e-mail · 7 inscrites</b><span class="sub2">« Il est de retour : le verre à vin gravé… »</span><div class="acts"><button class="btn sm" type="button" data-go="messages:envois">Relire</button></div></div></div>
+  <div class="compose"><input id="aiIn" placeholder="Demandez quelque chose…"><button class="btn pri" type="button" aria-label="Envoyer">${I("arrow")}</button></div>`;
+  sh.classList.add("on"); scrim.classList.add("on");
+}
+
+/* ---------- palette ⌘K ---------- */
+let palSel = 0, palItems = [];
+function palData(q) {
+  const n = (x) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const Q = n(q.trim());
+  const ecr = SECTIONS.flatMap((s) => s.tabs.map((t) => ({ k: s.id + ":" + t.id, t: t.t, s: s.t + (t.old !== t.t ? " · avant : " + t.old : ""), ic: s.ic, g: "Écrans" })));
+  ecr.push({ k: "plan", t: "Ce qui change", s: "Où va chaque écran", ic: "map", g: "Écrans" });
+  const act = [["commandes:etiquettes", "Imprimer les étiquettes d'adresse", "print"], ["commandes:devis", "Créer un devis", "plus"], ["catalogue:produits", "Ajouter un produit", "plus"], ["messages:envois", "Écrire à une cliente", "mail"], ["marketing:promos", "Créer un code promo", "tag"], ["stock:achats", "Déposer une facture fournisseur", "box"]].map(([k, t, ic]) => ({ k, t, s: "Action", ic, g: "Actions" }));
+  const cmd = ORDERS.map((o) => ({ o: o.ref, t: o.ref + " · " + o.nom, s: o.art, ic: "orders", g: "Commandes" }));
+  const all = [...act, ...ecr, ...cmd];
+  return Q ? all.filter((x) => n(x.t + " " + x.s).includes(Q)) : [...act.slice(0, 4), ...ecr.filter((e) => state.pins.includes(e.k)), ...cmd.slice(0, 3)];
+}
+function renderPal() {
+  palItems = palData(document.getElementById("palIn").value);
+  if (palSel >= palItems.length) palSel = 0;
+  let g = "";
+  document.getElementById("palRes").innerHTML = palItems.length ? palItems.map((x, i) => { const h = x.g !== g ? `<div class="grp">${x.g}</div>` : ""; g = x.g; return h + `<button type="button" class="it ${i === palSel ? "sel" : ""}" data-pi="${i}">${I(x.ic)}<span class="t">${esc(x.t)}<br><small>${esc(x.s)}</small></span>${I("arrow")}</button>`; }).join("") : `<div class="grp">Aucun résultat</div>`;
+}
+function openPal() { closeAll(); const p = document.getElementById("pal"); p.classList.add("on"); scrim.classList.add("on"); const i = document.getElementById("palIn"); i.value = ""; palSel = 0; renderPal(); setTimeout(() => i.focus(), 30); }
+function runPal(i) { const x = palItems[i]; if (!x) return; if (x.o) { closeAll(); openOrder(x.o); } else go(x.k); }
+
+/* ---------- événements ---------- */
+document.addEventListener("click", (e) => {
+  const el = (sel) => e.target.closest(sel);
+  let x;
+  if ((x = el("[data-close]"))) { closeAll(); return; }
+  if ((x = el("[data-pi]"))) { runPal(+x.dataset.pi); return; }
+  if ((x = el("[data-sel]")) || (x = el("#all"))) {
+    if (x.id === "all") { ORDERS.forEach((o) => x.checked ? state.sel.add(o.ref) : state.sel.delete(o.ref)); }
+    else x.checked ? state.sel.add(x.dataset.sel) : state.sel.delete(x.dataset.sel);
+    render(); return;
+  }
+  if ((x = el("[data-go]"))) { go(x.dataset.go); return; }
+  if ((x = el("[data-order]"))) { openOrder(x.dataset.order); return; }
+  if ((x = el("[data-view]"))) { state.view = x.dataset.view; render(); return; }
+  if ((x = el("[data-mail]"))) { state.mail = +x.dataset.mail; state.mailOpen = true; render(); return; }
+  if (el("[data-backmail]")) { state.mailOpen = false; render(); return; }
+  if (el("[data-clear]")) { state.sel.clear(); render(); return; }
+  if ((x = el("[data-set]"))) { state.setTab = x.dataset.set; render(); return; }
+  if ((x = el("[data-tg]"))) { x.classList.toggle("on"); if (x.hasAttribute("data-dirty")) dirty(); else toast(x.classList.contains("on") ? "Activé" : "Désactivé"); return; }
+  if (el("[data-cancel]")) { render(); return; }
+  if (el("[data-saveall]")) { document.getElementById("savebar").hidden = true; toast("Réglages enregistrés"); return; }
+  if ((x = el("[data-toast]"))) { toast(x.dataset.toast); return; }
+  if (el("#openPal") || el("#topFind")) { openPal(); return; }
+  if (el("#aiBtn")) { closeAll(); openAssistant(); return; }
+  if (el("#menuBtn")) { openSide(true); return; }
+  if (el("#collapse")) { document.getElementById("app").classList.toggle("mini"); save(); return; }
+  if (el("#editPins")) { const k = state.sec + ":" + (secOf(state.sec) ? tabOf(secOf(state.sec)) : ""); if (label(k)) { state.pins = state.pins.includes(k) ? state.pins.filter((p) => p !== k) : [...state.pins, k].slice(-5); save(); renderSide(); toast(state.pins.includes(k) ? "Écran épinglé" : "Retiré des raccourcis"); } return; }
+  if (el("#bell")) { const p = document.getElementById("bellPop"); p.hidden = !p.hidden; if (!p.hidden) p.innerHTML = `<ul class="todo"><li class="t-bad"><span class="ic">${I("bolt")}</span><span class="tx"><b>Commande Express</b><span>3K7QX2LM · il y a 2 h</span></span></li><li class="t-gold"><span class="ic">${I("mail")}</span><span class="tx"><b>Camille R. a répondu</b><span>10 h 12</span></span></li><li class="t-warn"><span class="ic">${I("box")}</span><span class="tx"><b>Sac blanc et or presque épuisé</b><span>4 restants</span></span></li></ul>`; return; }
+  if (el("#scrim")) { closeAll(); openSide(false); return; }
+  const tr = el("tbody tr[data-order]"); if (tr && !el("input")) { openOrder(tr.dataset.order); return; }
+});
+function dirty() { const b = document.getElementById("savebar"); if (b) { b.hidden = false; } }
+document.addEventListener("input", (e) => {
+  if (e.target.id === "palIn") { palSel = 0; renderPal(); }
+  if (e.target.matches("[data-dirty]")) dirty();
+  if (e.target.classList.contains("stock-in")) { clearTimeout(dirty.h); dirty.h = setTimeout(() => toast("Stock enregistré"), 700); }
+});
+document.addEventListener("keydown", (e) => {
+  const pal = document.getElementById("pal").classList.contains("on");
+  const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); pal ? closeAll() : openPal(); return; }
+  if (e.key === "Escape") { closeAll(); openSide(false); return; }
+  if (pal) {
+    if (e.key === "ArrowDown") { e.preventDefault(); palSel = Math.min(palSel + 1, palItems.length - 1); renderPal(); }
+    if (e.key === "ArrowUp") { e.preventDefault(); palSel = Math.max(palSel - 1, 0); renderPal(); }
+    if (e.key === "Enter") { e.preventDefault(); runPal(palSel); }
+    return;
+  }
+  if (typing) return;
+  if (e.key === "/") { e.preventDefault(); openPal(); return; }
+  if (e.key.toLowerCase() === "g") { keydown.g = Date.now(); return; }
+  if (keydown.g && Date.now() - keydown.g < 900) { const m = { c: "commandes", m: "messages", p: "catalogue", a: "accueil", f: "finances", s: "stock" }[e.key.toLowerCase()]; keydown.g = 0; if (m) go(m); }
+});
+function keydown() {}
+
+function fromHash() { const h = location.hash.replace("#", ""); if (h === "plan" || secOf(h)) { state.sec = h; } render(); }
+window.addEventListener("hashchange", fromHash);
+fromHash();
+</script>
