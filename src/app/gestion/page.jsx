@@ -1323,9 +1323,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {boxtalOpen === o.id ? "Fermer l'envoi" : "📦 Envoi Boxtal"}
                   </button>
                   {/* Étiquette d'adresse La Poste sur planche 45 × 45 mm (13/10/2026). */}
-                  {modeEnvoi(o).ok ? (
-                    <a className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`}>🏷️ Étiquette</a>
-                  ) : null}
+                  <a className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }} href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`}>🏷️ Étiquette</a>
                 </div>
                 {boxtalOpen === o.id && <BoxtalCopie order={o} />}
                 {batOpen === o.id && <BatThread order={o} adminKey={key} />}
