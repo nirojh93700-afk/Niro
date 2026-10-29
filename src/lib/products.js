@@ -1279,7 +1279,7 @@ export const products = [
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Un cadeau qui capte la lumière — et l'émotion.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
 <h3>Socle lumineux LED (en option)</h3>
-<p>Ajoutez le socle lumineux <strong>multicolore</strong> pour illuminer votre cristal : des LED multicolores dont les couleurs changent au toucher. Il <strong>fonctionne sur une prise secteur</strong> et <strong>tout est fourni</strong> : câble USB et adaptateur de prise. La forme du socle s'adapte à la taille choisie.</p>
+<p>Ajoutez le socle lumineux <strong>multicolore</strong> pour illuminer votre cristal de LED multicolores. La forme du socle et son alimentation sont indiquées au moment du choix, selon la taille.</p>
 <h3>Idéal pour</h3>
 <p>Un couple, une naissance, une famille, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },
@@ -1326,7 +1326,7 @@ export const products = [
     descriptionHtml: `<p><strong>Votre photo sculptée en 3D au cœur du cristal.</strong> Format paysage, idéal pour un couple, un groupe ou une photo large.</p>
 <p>Votre image est gravée en trois dimensions à l'intérieur d'un <strong>cristal optique K9</strong> de haute pureté, au laser de précision, dans notre atelier <strong>en France</strong>. Les visages semblent flotter dans le cristal.</p>
 <h3>Socle lumineux LED (en option)</h3>
-<p>Ajoutez le socle lumineux <strong>multicolore</strong> pour illuminer votre cristal : des LED multicolores dont les couleurs changent au toucher. Il <strong>fonctionne sur une prise secteur</strong> et <strong>tout est fourni</strong> : câble USB et adaptateur de prise. Le cristal couché se pose sur le grand socle rectangle, quelle que soit sa taille.</p>
+<p>Ajoutez le socle lumineux <strong>multicolore</strong> pour illuminer votre cristal de LED multicolores. La forme du socle et son alimentation sont indiquées au moment du choix, selon la taille.</p>
 <h3>Idéal pour</h3>
 <p>Une famille, un groupe d'amis, un couple, un mariage, un hommage. Cristal optique K9, gravure photo 3D interne au laser, gravé en France.</p>`,
   },

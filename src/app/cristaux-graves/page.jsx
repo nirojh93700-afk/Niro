@@ -4,7 +4,8 @@
 import CristauxGraves from "@/components/cristal/CristauxGraves";
 import { getCatalogBySlug } from "@/lib/catalog";
 import { CG_SLUG } from "@/lib/cristauxGraves";
-import { getSettings } from "@/lib/stock";
+import { getSettings, getStockMap } from "@/lib/stock";
+import { soclesPourPage } from "@/lib/socles";
 import { configNoel, noelPourCristaux } from "@/lib/fetes";
 import "../cristaux-graves.css";
 
@@ -23,5 +24,7 @@ export default async function CristauxGravesPage() {
   // Noël allumé dans Gestion → Fêtes (et la page cochée) : un pavé « 🎄 Noël » avec les dessins numérotés.
   const settings = await getSettings().catch(() => ({}));
   const noel = noelPourCristaux(configNoel(settings));
-  return <CristauxGraves prix={prix} noel={noel} />;
+  // Socle en vente (ancien tant qu'il en reste, puis le nouveau modèle) : photo et texte du bouton.
+  const socles = soclesPourPage(await getStockMap().catch(() => ({})));
+  return <CristauxGraves prix={prix} noel={noel} socles={socles} />;
 }

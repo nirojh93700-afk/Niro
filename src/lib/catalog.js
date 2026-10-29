@@ -5,6 +5,7 @@
 // (Server-only : utilise les Blobs.)
 // =============================================================================
 import { products as baseProducts } from "./products";
+import { appliquerSocles } from "@/lib/socles";
 import { roundTo90 } from "./format";
 import { resolvePackaging, defaultPackagingFor } from "./packaging";
 import {
@@ -166,7 +167,9 @@ export async function getCatalog() {
   const parGroupe = retiresParGroupe([...base, ...customApplied], visibilite);
   const all = [...base, ...customApplied].filter((p) => !p.hidden && !parGroupe.has(p.slug) && !outOfSeason(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
-  return all.map((p) => {
+  return all.map((p0) => {
+    // Socles lumineux : dès qu'un ancien socle est à 0 en stock, la fiche vend le nouveau modèle (stock, photo, texte).
+    const p = appliquerSocles(p0, stock);
     // Correction auto : un bijou sans attribution explicite reçoit son emballage
     // par défaut selon son type (impossible d'oublier le packaging d'un bijou).
     const assign = pkgAssign[p.slug] || defaultPackagingFor(p);

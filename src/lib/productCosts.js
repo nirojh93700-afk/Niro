@@ -18,6 +18,12 @@ export const VARIANT_COSTS = {
   "bloc-cristal-moyen": 6.90,
   "bloc-cristal-grand": 12.60,
   "bloc-cristal-xl": 20.30,
+  // Socles LED : anciens (reçu Alibaba avr. 2026) · nouveaux, reçu n° 33855788501043880 (commande du 11/10/2026,
+  // 142,87 € payés pour 69,11 € d'articles : port, taxes et frais répartis au prorata, × 2,067).
+  "socle-led-carre": 2.70,
+  "socle-led-rectangle": 3.10,
+  "socle-led-carre-gris": 1.56,
+  "socle-led-rectangle-noir": 5.58,
   // Porte-clés cristal LED
   "pc-cristal-coeur": 1.10,
   "pc-cristal-rectangle": 1.00,

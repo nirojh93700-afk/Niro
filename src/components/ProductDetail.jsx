@@ -1840,9 +1840,10 @@ export default function ProductDetail({ product, realisations = [] }) {
                 if (f.type === "note") {
                   // La photo peut changer selon la taille choisie (ex. socle : petit → carré, autres → rectangle).
                   const noteImg = (f.imageByVariant && f.imageByVariant[variant.id]) || f.image;
+                  const noteTxt = (f.textByVariant && f.textByVariant[variant.id]) || f.text;
                   return (
                     <div key={f.key}>
-                      {f.text && <p className="perso-hint">{f.text}</p>}
+                      {noteTxt && <p className="perso-hint">{noteTxt}</p>}
                       {noteImg && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={noteImg} alt={f.imageAlt || "Conseils pour réussir votre photo"} className="perso-hint-img" />

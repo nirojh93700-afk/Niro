@@ -1,4 +1,5 @@
 import { MP_BOITES } from "@/lib/marquePages";
+import { SOCLES } from "@/lib/socles";
 import { getStockMap, getImageOverrides, getPromos, isAdmin } from "@/lib/stock";
 import { getCatalogAdmin } from "@/lib/catalog";
 
@@ -67,16 +68,15 @@ export async function GET(req) {
   const extrasVus = new Set();
   for (const p of products) {
     for (const e of p.engravingPricing?.flatExtras || []) {
-      const ids = [e.stockId, ...Object.values(e.stockIdByVariant || {})].filter(Boolean);
+      const ids0 = [e.stockId, ...Object.values(e.stockIdByVariant || {})].filter(Boolean);
+      // Socles : le modèle suivant (vendu dès que l'ancien est à 0) a sa propre ligne de stock.
+      const ids = ids0.flatMap((sid) => [sid, SOCLES[sid]?.suivant].filter(Boolean));
       for (const sid of ids) {
         if (extrasVus.has(sid)) continue; // stock commun à plusieurs produits
         extrasVus.add(sid);
         // Bloc à part (pas mélangé aux cristaux) avec sa propre photo, comme les
         // autres articles du stock.
-        const LIBELLES = {
-          "socle-led-carre": { titre: "Socle LED — petit (carré)", image: "/produits/socle-led-carre.jpg" },
-          "socle-led-rectangle": { titre: "Socle LED — grand (rectangle)", image: "/produits/socle-led-rectangle.jpg" },
-        };
+        const LIBELLES = SOCLES;
         rows.push({
           productSlug: "__options",
           productName: "Options & accessoires",

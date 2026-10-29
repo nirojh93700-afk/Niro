@@ -55,7 +55,7 @@ function BlocContenu({ it, exemple = true }) {
   return <img src={it.img} alt={`Dessin à graver : ${it.nom}`} loading="lazy" />;
 }
 
-export default function CristauxGraves({ prix = {}, noel = null }) {
+export default function CristauxGraves({ prix = {}, noel = null, socles = null }) {
   const { addItem } = useCart();
   // Noël allumé : dessins blancs dans le bloc (img), image d'origine pour l'atelier (atelier), n° de Noël.
   const ITEMS = useMemo(() => (noel?.length ? [...ITEMS_BASE, ...noel.map((x) => ({
@@ -103,6 +103,9 @@ export default function CristauxGraves({ prix = {}, noel = null }) {
   const t = T[taille];
   // Couché (horizontal), même le Petit prend le grand socle ; le petit socle carré = vertical Petit seulement.
   const prixSocle = fmt === "h" ? (t.socleH || t.socle) : t.socle;
+  // Socle montré : le petit pour le vertical Petit, le grand pour tout le reste (modèle en vente, voir socles.js).
+  const socleVu = (taille === "petit" && fmt !== "h" ? socles?.carre : socles?.rect)
+    || { image: "/produits/socle-led-rectangle.jpg", court: "LED multicolores" };
   const unit = t.prix + (socle ? prixSocle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
   const ok = i >= 0 && Boolean(fmt) && (!ouvert || avecTxt);
   const manque = i < 0 ? "Choisissez d'abord un modèle, un dessin ou votre signe."
@@ -382,8 +385,8 @@ export default function CristauxGraves({ prix = {}, noel = null }) {
               <label>Socle lumineux LED (en option)</label>
               <button type="button" className={`cg-socle${socle ? " on" : ""}`} aria-pressed={socle} onClick={() => setSocle(!socle)}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/produits/socle-led-rectangle.jpg" alt="" />
-                <span><b>Ajouter le socle lumineux</b><small>LED multicolores, couleurs au toucher, sur prise secteur</small></span>
+                <img src={socleVu.image} alt="" />
+                <span><b>Ajouter le socle lumineux</b><small>{socleVu.court}</small></span>
                 <span className="cg-socle-p">+{eur(prixSocle)}</span>
                 <span className="cg-box" aria-hidden="true"><IcCg n="check" /></span>
               </button>

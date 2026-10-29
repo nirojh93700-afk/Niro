@@ -4530,3 +4530,14 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - `remisePourPort(sousTotal, codes)` (`src/lib/cumulCodes.js`) · `optionsPort(e, { remise })` (`panierPort.js`) · `/api/checkout`
   (`remisePort`) · barre du panier (`FreeShippingBar remise=`). Ex. : bijou 45 € + −10 % = 40,50 € → livraison 4,90 € ;
   50 € + −10 % = 45 € → offerte. Verres lot 63,90 € + −10 % = 57,51 € → livraison payante.
+
+## 💡 SOCLES LED : PETIT = vertical Petit, GRAND = tout le reste + BASCULE AUTOMATIQUE VERS LES NOUVEAUX — 29/10/2026
+- Grand socle rectangle (dessus 13 × 7 cm) = vertical Moyen / Grand / XL et TOUT l'horizontal (Petit compris, 8 cm ; XL 15 cm dépasse
+  de 1 cm de chaque côté, accepté) ; petit socle carré = vertical Petit seulement (dessous 5 × 5). Prix 14,90 / 19,90 € inchangés.
+- **Nouveaux socles** (Alibaba n° 33855788501043880, 20 de chaque) : petit gris argenté (dessus 5,2 × 5,2, piles AAA SEULEMENT) et
+  grand noir (13,5 × 7,3 × 2,5, piles AAA OU câble USB, adaptateur de prise PAS fourni pour l'instant), tous deux multicolores.
+  Coût rendu 1,56 / 5,58 €. Photos `public/produits/socle-led-carre-gris.jpg` / `socle-led-rectangle-noir.jpg` (celles SANS cotes).
+- `src/lib/socles.js` : dès qu'un ancien socle est à 0 en stock, le site vend le suivant (stock `socle-led-carre-gris` /
+  `socle-led-rectangle-noir`, photo, texte), petit et grand chacun de son côté ; appliqué dans `getCatalog` (fiches + paiement),
+  page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
+  `npm run test-socles`.
