@@ -62,7 +62,7 @@ export const dateFr = (d) => `${JOURS[d.getUTCDay()]} ${d.getUTCDate()} ${MOIS[d
 // ------------------------------------------------------------------ les 27 images de Noël (n° = Gestion ET fiches)
 // mots = lettrage « mots de Noël » ; texte = un texte fait partie de l'image (elle reste OFFERTE, 29/10) ;
 // droits = personnage protégé (à trancher par le gérant) ; gris = niveaux de gris.
-const I = (n, nom, f = "", ext = "jpg") => ({ n, nom, src: `/produits/noel/noel-${String(n).padStart(2, "0")}.${ext}`, mots: /mots/.test(f), texte: /texte|mots/.test(f), droits: /droits/.test(f), gris: /gris/.test(f) });
+const I = (n, nom, f = "", ext = "jpg") => ({ n, nom, src: `/produits/noel/noel-${String(n).padStart(2, "0")}.${ext}`, trace: `/produits/noel/noel-${String(n).padStart(2, "0")}-trace.png`, mots: /mots/.test(f), texte: /texte|mots/.test(f), droits: /droits/.test(f), gris: /gris/.test(f) });
 export const NOEL_IMAGES = [
   I(1, "Cloches de Noël au ruban"), I(2, "Gnomes « Merry Christmas »", "texte"), I(3, "Père Noël, sapin et cadeaux"),
   I(4, "Forêt, cerfs et flocon"), I(5, "Père Noël, bras croisés", "gris"), I(6, "Crèche de la Nativité"),
@@ -155,7 +155,7 @@ export function noelPourProduit(product, cfg) {
   if (!cfg?.on || !product?.parcoursGuide) return null;
   const p = cfg.produits.find((x) => x.slug === product.slug);
   if (!p || !p.on) return null;
-  const images = cfg.images.filter((m) => !m.masquee).map(({ n, nom, src, mots }) => ({ n, nom, src, mots }));
+  const images = cfg.images.filter((m) => !m.masquee).map(({ n, nom, src, trace, mots }) => ({ n, nom, src, trace, mots }));
   return images.length ? { images, champs: champsNoel(product) } : null;
 }
 

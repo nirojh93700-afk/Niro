@@ -695,8 +695,9 @@ export default function ProductDetail({ product, realisations = [] }) {
   // bibliothèque styleImages { "1": "/produits/…", … }). Se pose comme la photo.
   const styleNum = (fieldValues["numstyle"] || "").trim();
   // 🎄 Modèle de Noël (Gestion → Fêtes) : son image se pose sur la photo comme un modèle numéroté.
-  const noelSrc = fieldValues.mode === "noel" ? ((product.noel?.images || []).find((m) => String(m.n) === String(fieldValues.noelModele || ""))?.src || "") : "";
-  const styleMotifSrc = noelSrc || (product.styleImages && product.styleImages[styleNum]) || "";
+  const noelSrc = fieldValues.mode === "noel" ? ((product.noel?.images || []).find((m) => String(m.n) === String(fieldValues.noelModele || ""))) : null;
+  const noelSrcImg = noelSrc ? (noelSrc.trace || noelSrc.src || "") : "";
+  const styleMotifSrc = noelSrcImg || (product.styleImages && product.styleImages[styleNum]) || "";
   // Modèles qui contiennent DÉJÀ le texte (prénoms/cadres/banderoles) : le prénom
   // du client est gravé DANS le style du modèle, au milieu — on ne l'affiche donc
   // PAS en plus sur le verre (mais on le garde pour l'atelier / la commande).
@@ -1344,7 +1345,7 @@ export default function ProductDetail({ product, realisations = [] }) {
               </div>
             )}
             {hasImages && showEditor && !editPhotoSrc && styleMotifSrc && !modeleField && !motifZone && !(dualMode && isFond) && (
-              <PhotoEngraveLayer key={`style-${styleNum}${noelSrc}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
+              <PhotoEngraveLayer key={`style-${styleNum}${noelSrcImg}`} photoSrc={styleMotifSrc} cfg={editCfg} light={isFond} onChange={setPhotoLayout} />
             )}
             {/* Texte gravé DANS le modèle, aux emplacements exacts : nom au point "t",
                 date au point "d". La police se réduit pour tenir dans le modèle. */}
