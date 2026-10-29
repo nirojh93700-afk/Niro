@@ -306,4 +306,4 @@ Autres verres inchangés (+5 € logo et texte, +3 € logo seul ou texte seul, 
 
 ## 29/10/2026 — Emballages de Noël des bijoux (maquette Fêtes, rien en ligne)
 Avant (28/10) : pochette à languette dorée 2,90 € · sac de Noël à anses 2,90 € · pack de Noël 5,90 € barré 6,80 €.
-Après (gérant, 29/10) : pochette 3,90 € · sac 4,90 € · pack 5,90 € barré 8,80 € (= boîte 3,90 + sac 4,90). Générateur `tools/maquettes/fetes-noel.py` (`EMB_NOEL`).
+Après (gérant, 29/10) : pochette 3,90 € · sac 4,90 € · pack 7,90 € barré 8,80 € (avant ce jour : 5,90 € barré 6,80 €) (= boîte 3,90 + sac 4,90). Générateur `tools/maquettes/fetes-noel.py` (`EMB_NOEL`).

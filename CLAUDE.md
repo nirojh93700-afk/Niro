@@ -46,9 +46,9 @@
     28/10** : sachet rouge 12 × 17 **0,90 €** (coût 0,13, 52) · pochette à languette dorée **3,90 €** (0,80, 40) · sac à anses bordeaux
     19 × 15 × 7 **4,90 €** (1,38, 20) · boîte à ruban « Merry Christmas » 11,5 × 7 × 4,5, vert sapin OU bleu nuit **3,90 €** (0,72, 48)
     · boîte rouge au sapin doré 12 × 6 × 4 **3,90 €** (0,62, 20) · **Pack de Noël = boîte à ruban (couleur au choix) + sac + étiquette
-    5,90 €, barré 8,80** (= boîte 3,90 + sac 4,90 ; coût 2,15, 20) · étiquette rouge + ficelle **offerte** avec chaque emballage de Noël (0,05, 50). Boîtes = colis
+    7,90 €, barré 8,80** (= boîte 3,90 + sac 4,90 ; coût 2,15, 20) · étiquette rouge + ficelle **offerte** avec chaque emballage de Noël (0,05, 50). Boîtes = colis
     (règle du site) ; sachet et pochette = lettre suivie.
-    **29/10 (gérant, capture iPhone) : sac à anses 4,90 €, pochette 3,90 €** (v12 de la maquette ; barré du pack recalculé).
+    **29/10 (gérant, capture iPhone) : sac à anses 4,90 €, pochette 3,90 €** (v12 de la maquette ; barré du pack recalculé). **Pack de Noël 7,90 €, barré 8,80 €** (gérant, 29/10, v13).
   · **Onglet ③ « Site : collier (emballages) »** = la fiche RÉELLE du Collier Cœur gravé (22,41 €) : Noël allumé = sous « Votre emballage »,
     APRÈS les 5 options actuelles (lues dans la capture : sans / sac 1,70 / boîte 3,90 / microfibre 2,70 / pack 6,50 barré 8,30), un
     séparateur « 🎄 Pour Noël » puis les 6 emballages de Noël (photo, prix, pastille « 🎄 NOËL » sur le pack), choix de la couleur de la
@@ -63,7 +63,7 @@
     cadeau et boîte carrée ; boîte allongée et Pack boîte cadeau = rien, « à mesurer »). Sur la fiche : **UNE ligne repliée « 🎄 Ajouter un
     emballage de Noël · facultatif · dès 0,90 € · N choix · Voir ▾ »** sous « Votre emballage » ; un clic l'ouvre (Sans + seulement ce qui rentre,
     couleur de la boîte, étiquette offerte, « Fermer ▴ ») ; une fois choisi et refermé = résumé « 🎄 Emballage de Noël : Pack de Noël · bleu nuit
-    +5,90 € · Modifier ». Changer d'emballage habituel pour un où le choix de Noël ne rentre plus = le choix de Noël se retire ; si rien ne
+    +7,90 € · Modifier ». Changer d'emballage habituel pour un où le choix de Noël ne rentre plus = le choix de Noël se retire ; si rien ne
     rentre (Pack boîte cadeau) = une phrase grise, pas de ligne. Total = bijou + emballage habituel + emballage de Noël (22,41 → boîte carrée +
     sac de Noël = 29,21). Vérifié Chromium 390 / 1280 (`scratchpad/t-fetes2.mjs`, 70 vérifs) : 0 erreur JS, 0 débordement. Photo recadrée de
     la boîte verte : `assets/noel/emballages/3-5-boite-ruban-C-vert-recadree.jpg`. **À la construction : garder ces règles (`fit` par emballage),

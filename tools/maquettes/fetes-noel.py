@@ -140,7 +140,7 @@ EMB_NOEL = [
     dict(id="sac", nom="Sac de Noël à anses", d="Bordeaux, liseré or, nœud satin · 19 × 15 × 7 cm · plié à plat", px=4.9, cout=1.38, stock=20, photo="2-sac-M.jpg", colis=False),
     dict(id="ruban", nom="Boîte à ruban « Merry Christmas »", d="11,5 × 7 × 4,5 cm · aimantée · vert sapin ou bleu nuit · part en colis", px=3.9, cout=0.72, stock=48, photo="3-5-boite-ruban-C-vert-recadree.jpg", colis=True, couleurs=True),
     dict(id="rouge", nom="Boîte rouge au sapin doré", d="12 × 6 × 4 cm · ruban rouge et or · part en colis", px=3.9, cout=0.62, stock=20, photo="4-boite-rouge-G.jpg", colis=True),
-    dict(id="pack", nom="Pack de Noël", d="Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette · part en colis", px=5.9, barre=8.8, cout=2.15, stock=20, photo="2-sac-M.jpg", colis=True, couleurs=True, meil=True),
+    dict(id="pack", nom="Pack de Noël", d="Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette · part en colis", px=7.9, barre=8.8, cout=2.15, stock=20, photo="2-sac-M.jpg", colis=True, couleurs=True, meil=True),
 ]
 # « Convient si le bijou est… » (gérant, 28/10 soir : « la grosse boîte… si ça rentre pas il faut pas le mettre ») : règle par défaut d'après les
 # dimensions (il coche / décoche dans Gestion). seul = bijou nu ou en microfibre · sac = dans le sac cadeau beige · carree = boîte carrée 9 × 9 (colliers) ·
@@ -638,7 +638,7 @@ document.addEventListener('change',function(ev){
 function alert_(msg){var b=$('#ft-toast');b.textContent=msg;b.style.display='block';clearTimeout(b._t);b._t=setTimeout(function(){b.style.display='none'},3500)}
 /* ---------- Gestion : emballages de Noël (bijoux) */
 function renderEmbAdmin(){
-  var CH=[0,0.9,1.9,2.9,3.9,4.9,5.9,6.9];
+  var CH=[0,0.9,1.9,2.9,3.9,4.9,5.9,6.9,7.9,8.9];
   var h=EMB.map(function(e){
     var marge=e.px-e.cout;
     var opts=CH.map(function(v){return '<option value="'+v+'"'+(Math.abs(v-e.px)<.001?' selected':'')+'>'+(v?'+'+eur(v):'Offert')+'</option>'}).join('');
