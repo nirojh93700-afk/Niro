@@ -35,6 +35,7 @@ export default function EtiquettesPage() {
   const [coches, setCoches] = useState([]);
   const [manuelles, setManuelles] = useState([]); // adresses collées à la main (Etsy ou autre), 29/10/2026
   const [colle, setColle] = useState("");
+  const [site, setSite] = useState("Etsy");
   const [toutes, setToutes] = useState(false);
   const [used, setUsed] = useState(() => new Array(NB_CASES).fill(false));
   const [mode, setMode] = useState("meme");
@@ -57,10 +58,22 @@ export default function EtiquettesPage() {
     if (typeof s.exp === "string" && s.exp.trim()) setExpTxt(s.exp);
     if (typeof s.ref === "boolean") setAvecRef(s.ref);
     if (s.modele) setModele(modeleValide(s.modele));
+    // Adresses à la main gardées sur cet appareil + celle d'un lien ?adresse=…&site=Etsy (envoyé par l'assistant).
+    let man = Array.isArray(s.manuelles) ? s.manuelles.filter((x) => x && x.shippingAddress) : [];
+    try {
+      const p = new URLSearchParams(window.location.search), txt = p.get("adresse");
+      if (txt) {
+        const a = adresseCollee(txt, `m${Date.now()}`);
+        if (a && !man.some((x) => x.shippingName === a.shippingName && x.shippingAddress.line1 === a.shippingAddress.line1)) man = [...man, { ...a, site: p.get("site") || "Etsy" }];
+        p.delete("adresse"); p.delete("site");
+        window.history.replaceState(null, "", window.location.pathname + (p.toString() ? `?${p}` : ""));
+      }
+    } catch { /* ignore */ }
+    setManuelles(man);
     setPret(true);
     setApple(estApple());
   }, []);
-  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef, modele }); }, [pret, used, mode, expTxt, avecRef, modele]);
+  useEffect(() => { if (pret) ecrire({ used, mode, exp: expTxt, ref: avecRef, modele, manuelles }); }, [pret, used, mode, expTxt, avecRef, modele, manuelles]);
 
   const load = useCallback(async (k) => {
     setErr("");
@@ -172,7 +185,8 @@ export default function EtiquettesPage() {
     imprimerCadre();
     setAttente(cases);
   }
-  function confirmerSortie() { const cs = attente || []; setUsed((u) => u.map((v, k) => v || cs.includes(k))); setAttente(null); }
+  // Étiquettes sorties : les adresses à la main imprimées sont retirées de la liste.
+  function confirmerSortie() { const cs = attente || []; setUsed((u) => u.map((v, k) => v || cs.includes(k))); setAttente(null); setManuelles([]); }
 
   if (!authed) {
     return (
@@ -222,15 +236,21 @@ export default function EtiquettesPage() {
           </section>
 
           <section className="etq-card" aria-labelledby="etq-tmain">
-            <h2 id="etq-tmain"><span className="n">+</span>Une adresse à la main (Etsy ou autre)</h2>
-            <p className="sub">Collez l&apos;adresse telle qu&apos;elle est : le nom sur la 1re ligne, puis la rue, puis le code postal et la ville. Elle s&apos;imprime comme les autres.</p>
-            <textarea className="etq-colle" rows={4} value={colle} onChange={(e) => setColle(e.target.value)} placeholder={"LOUVAT Laure\n610 route des Sablons\n26740 MARSANNE\nFrance"} style={{ width: "100%", boxSizing: "border-box", font: "inherit", padding: "8px 10px", borderRadius: 10, border: "1px solid var(--line)" }} />
-            <button type="button" className="btn btn-gold" style={{ marginTop: 8 }} disabled={!adresseCollee(colle)} onClick={() => { const a = adresseCollee(colle, `m${Date.now()}`); if (a) { setManuelles((m) => [...m, a]); setColle(""); } }}>Ajouter à la feuille</button>
+            <h2 id="etq-tmain"><span className="n">+</span>Etsy ou autre : ajouter une adresse</h2>
+            <textarea className="etq-colle" rows={4} value={colle} onChange={(e) => setColle(e.target.value)} placeholder={"Nom Prénom\nRue\nCode postal Ville"} style={{ width: "100%", boxSizing: "border-box", font: "inherit", padding: "8px 10px", borderRadius: 10, border: "1px solid var(--line)" }} />
+            <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 8, flexWrap: "wrap" }}>
+              <label style={{ fontSize: "0.85rem" }}>Site :{" "}
+                <select value={site} onChange={(e) => setSite(e.target.value)} style={{ font: "inherit", padding: "6px 8px", borderRadius: 8, border: "1px solid var(--line)" }}>
+                  <option>Etsy</option><option>Autre</option>
+                </select>
+              </label>
+              <button type="button" className="btn btn-gold" disabled={!adresseCollee(colle)} onClick={() => { const a = adresseCollee(colle, `m${Date.now()}`); if (a) { setManuelles((m) => [...m, { ...a, site }]); setColle(""); } }}>Ajouter à la feuille</button>
+            </div>
             {manuelles.map((o) => {
               const a = o.shippingAddress;
               return (
                 <div key={o.id} className="etq-ord on" style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
-                  <span style={{ minWidth: 0, flex: 1 }}><span className="nm">{o.shippingName}</span><br />
+                  <span style={{ minWidth: 0, flex: 1 }}><span className="nm">{o.shippingName}</span>{o.site ? <span className="chip poste" style={{ marginLeft: 6 }}>{o.site}</span> : null}<br />
                     <span className="ad">{[a.line1, a.line2, [a.postal_code, a.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span></span>
                   <button type="button" className="btn btn-outline" style={{ padding: "4px 10px" }} onClick={() => setManuelles((m) => m.filter((x) => x.id !== o.id))}>Retirer</button>
                 </div>
