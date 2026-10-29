@@ -643,3 +643,5 @@ _(Refaite le 28/10/2026 au soir : le chapitre des marque-pages montre aussi le m
 > 👉 nivcreation.fr
 
 #nivcreation #decorationnoel #verregrave #tabledenoel #ideecadeau
+
+_29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce montage… l'effet ») → à réutiliser pour les prochaines (voir CLAUDE.md, recette vidéo)._

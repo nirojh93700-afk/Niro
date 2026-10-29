@@ -2686,6 +2686,13 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   · **Les vidéos 1 à 13** ne sont PAS dans le dépôt (livrées avant le registre) : elles ne sont que
     dans les transcripts des sessions (`~/.claude/projects/-home-user-Niro/<session>.jsonl`, chercher
     `#nivcreation`) — le dire s'il les redemande, et proposer de les régénérer avec les scripts.
+- ✅ **LES EFFETS DE LA VIDÉO 41 PLAISENT AU GÉRANT (29/10/2026 : « j'aime bien ce montage… je veux dire l'effet », à garder en mémoire)** :
+  script `tools/video/noel_deco_verres_41.py` = la BOÎTE À EFFETS à réutiliser : fond de nuit avec lumières dorées floues (bokeh) + neige
+  qui tombe sur toute la vidéo · titre qui s'écrit lettre par lettre · avant / après au rideau doré (vierge → gravé) · carrousel : le
+  même produit change de dessin avec une pastille « Modèle n° X » · cartes photo qui pivotent en entrant puis avancent doucement ·
+  écran partagé (deux cartes qui arrivent des deux côtés) · tampons qui rebondissent (arguments de vente) · fin avec le bouton
+  nivcreation.fr qui pulse. Photos ENTIÈRES dans des cartes blanches arrondies (jamais recadrées). Pour une nouvelle vidéo : reprendre
+  ces effets (on peut changer l'ordre, les couleurs du fond hors Noël, les produits), sans revenir aux effets des vidéos 33 à 40.
 - **CRÉDITS Higgsfield = payant** : ne JAMAIS lancer sans confirmer, annoncer le coût (`get_cost:true` preflight, ~7,5 crédits/clip 5 s), et attendre l'accord. Le montage gratuit (`pub_gratuite.py`) est la version par défaut.
 
 ---
