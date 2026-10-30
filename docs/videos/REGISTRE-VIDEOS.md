@@ -645,3 +645,17 @@ _(Refaite le 28/10/2026 au soir : le chapitre des marque-pages montre aussi le m
 #nivcreation #decorationnoel #verregrave #tabledenoel #ideecadeau
 
 _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce montage… l'effet ») → à réutiliser pour les prochaines (voir CLAUDE.md, recette vidéo)._
+
+## Vidéo 42 — Bijoux gravés et emballages de Noël (30/10/2026)
+- Demande du gérant : « fais-moi une autre vidéo ». Thème choisi : les bijoux GRAVÉS (planche regardée, gravure visible sur chaque photo) et
+  les nouveaux emballages de Noël du site (sachet, pochette, sac à anses, boîte rouge, boîte à ruban vert sapin / bleu nuit, pack, étiquette
+  offerte). Effets de la vidéo 41 (neige, lumières dorées, titre lettre par lettre, cartes qui pivotent, carrousel, écran partagé, éventail,
+  tampons, bouton qui pulse). 33 s, sans son, 1080 × 1920 (10,7 Mo) et 720 × 1280 (3,6 Mo). Aucun prix.
+- Script : `python3 tools/video/noel_bijoux_emballages_42.py <dossier>` (`--apercu` = images fixes). Fichiers NON commités (taille du dépôt).
+
+**Vidéo 42 — Un bijou gravé dans son emballage de Noël** (Collier Cœur gravé, Collier Cœur & plaques, Collier Double Cœur, Bracelet femme gravé, Bracelet à plaque gravée, Sachet rouge, Pochette dorée, Sac de Noël, Boîte rouge, Boîte à ruban, Pack de Noël)
+> 🎄 Un prénom, une date, un mot doux gravés sur son bijou… et un emballage de Noël pour le glisser sous le sapin ✨
+> Sachet, pochette, sac ou boîte vert sapin / bleu nuit, l'étiquette est offerte 🎁 Gravé dans notre atelier 💛
+> 👉 nivcreation.fr
+
+#nivcreation #bijougrave #cadeaunoel #cadeaupersonnalise #ideecadeau
