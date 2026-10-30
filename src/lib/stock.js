@@ -2551,8 +2551,8 @@ export async function setJobNote(key, note) {
   data.jobNotes[String(key || "")] = note || null;
   await persistCatalog(data, ["jobNotes"]);
 }
-export async function getJobNote(key) {
-  const data = await getCatalogRaw();
+export async function getJobNote(key, fresh = false) {
+  const data = await getCatalogRaw(fresh);
   return (data.jobNotes || {})[String(key || "")] || null;
 }
 

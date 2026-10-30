@@ -4543,6 +4543,15 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   était COUPÉE en bas). Les mentions décoratives (DESTINATAIRE, « Gravé pour vous… », « Merci… ») gardent leur taille (`T0`).
 - Avant / après : `docs/maquettes/etiquettes-taille-avant-apres.png`. Rappel à lui donner : imprimer à 100 % (« taille réelle »), jamais « ajuster à la page ».
 
+## 📂 RANGEMENT DES MAILS CHAQUE SOIR — 30/10/2026 (gérant : « un agent qui, tous les soirs, met en ordre et range dans les dossiers tous les mails, même ceux reçus avant la commande »)
+- **Rattrapage fait le 30/10** sur les 47 commandes (`GET /api/admin/bat?orderId=…&historique=1`) : tous les mails échangés avec chaque
+  cliente (avant ET après la commande, archivés compris, 12 mois) sont dans le fil de sa commande + son dossier ; 2ᵉ passage = 0 à ajouter,
+  492 messages au total, aucune commande sans échange.
+- **Chaque soir dès 21 h (Paris)** : `runRangementMails` (`src/lib/rangementMails.js`) lancé par le battement (`claimJob("rangementMails", 10 min)`)
+  repasse sur toutes les commandes par lots de ~40 s jusqu'à la fin (état du jour dans `jobNotes.rangementMails`). Gmail en LECTURE SEULE, rien
+  n'est envoyé, statut et pastille « non lu » inchangés. Compte rendu dans « Activité récente » de l'accueil ; `GET /api/admin/rangement-mails`
+  (compte rendu) et `POST` (« ranger maintenant »). Les mails hors commande (devis, formulaire) restent rangés par la boîte surveillée (15 min).
+
 ## 📮 SUIVI DES COLIS LA POSTE DANS GESTION — 14/10/2026 (« je veux suivre aussi les colis que j'envoie à La Poste… un lien comme pour Boxtal »)
 - `src/lib/suiviColis.js` (`lienSuivi(numero)`, `estNumeroLaPoste`) : un numéro La Poste (13 caractères « chiffre + lettre +
   11 chiffres » = lettre suivie / Colissimo, ou format international « 2 lettres + 9 chiffres + 2 lettres » = Chronopost,

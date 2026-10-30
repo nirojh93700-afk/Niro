@@ -9,6 +9,7 @@ import { syncAllAndListUnread } from "@/lib/batSync";
 import { offreActive } from "@/lib/offreGravure";
 import { runFetesAlerte } from "@/lib/fetesAlerte";
 import { runUrssafAlerte } from "@/lib/urssafAlerte";
+import { runRangementMails, heureDuRangement } from "@/lib/rangementMails";
 
 const MIN = 60000;
 
@@ -74,5 +75,13 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("urssafAlerte", 6 * 60 * MIN)) out.urssafAlerte = await runUrssafAlerte();
   } catch (e) { out.urssafAlerteError = e.message; }
+  // 📂 Chaque soir (dès 21 h, Paris) : tous les mails de la journée rangés dans le dossier de chaque
+  // commande, y compris ceux reçus AVANT la commande. Par lots, toutes les 10 min jusqu'à la fin.
+  try {
+    if (heureDuRangement() && await claimJob("rangementMails", 10 * MIN)) {
+      const r = await runRangementMails();
+      out.rangementMails = { faits: (r.faits || []).length, total: r.total, ajoutes: r.ajoutes, fini: r.fini };
+    }
+  } catch (e) { out.rangementMailsError = e.message; }
   return out;
 }

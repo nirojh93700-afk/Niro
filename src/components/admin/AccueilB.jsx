@@ -78,6 +78,7 @@ export default function AccueilB({
   const [urgVu, setUrgVu] = useState(true);
   const [materiel, setMateriel] = useState([]);
   const [sante, setSante] = useState(null);
+  const [rangement, setRangement] = useState(null);
 
   useEffect(() => { setLater(lireLater()); }, []);
   // Matériel sous son seuil « à racheter » + santé du catalogue : deux petits appels, une fois.
@@ -89,6 +90,7 @@ export default function AccueilB({
       setMateriel(items);
     }).catch(() => {});
     fetch("/api/admin/catalog-audit", H).then((r) => (r.ok ? r.json() : null)).then((d) => { if (d) setSante(d); }).catch(() => {});
+    fetch("/api/admin/rangement-mails", H).then((r) => (r.ok ? r.json() : null)).then((d) => { if (d?.rangement) setRangement(d.rangement); }).catch(() => {});
   }, [adminKey]);
 
   const actifs = useMemo(() => orders.filter((o) => !o.test && ACTIFS.has(o.status || "a_preparer")), [orders]);
@@ -240,8 +242,14 @@ export default function AccueilB({
     }
     for (const p of pendingList) if (p.at) ev.push({ t: p.at, c: "t-gold", ic: "spark", b: `Réponse préparée pour ${p.name || p.email || "une cliente"}`, s: p.subject || "" });
     for (const u of unreadMeta) { const t = Date.parse(u.lastClientAt || ""); if (t) ev.push({ t, c: "t-gold", ic: "mail", b: `${u.customerName || u.customerEmail || "Une cliente"} a répondu`, s: `dans la commande ${u.ref || ""}` }); }
+    // Rangement des mails du soir (chaque jour dès 21 h) : compte rendu du dernier passage.
+    if (rangement?.at) {
+      const n = (rangement.commandes || []).length;
+      ev.push({ t: rangement.at, c: "t-info", ic: "mail", b: "Mails rangés dans les dossiers des commandes",
+        s: `${rangement.ajoutes ? `${rangement.ajoutes} mail${rangement.ajoutes > 1 ? "s" : ""} ajouté${rangement.ajoutes > 1 ? "s" : ""} dans ${n} commande${n > 1 ? "s" : ""}` : "tout était déjà rangé"} · ${rangement.faits}/${rangement.total || rangement.faits} commandes vérifiées` });
+    }
     return ev.sort((a, b) => b.t - a.t).slice(0, 8);
-  }, [orders, pendingList, unreadMeta]);
+  }, [orders, pendingList, unreadMeta, rangement]);
 
   // ---- Le mois en détail ----
   const mois = useMemo(() => {
