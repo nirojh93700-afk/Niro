@@ -1,11 +1,35 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
 
-> **Mis à jour le 29/09/2026.** Ce fichier est l'index unique pour reprendre le travail depuis
+> **Mis à jour le 30/10/2026 soir.** Ce fichier est l'index unique pour reprendre le travail depuis
 > n'importe quelle conversation : messages à envoyer, maquettes validées non appliquées, projets en
 > pause, actions côté gérant, questions sans réponse. Le détail de chaque sujet reste dans
 > `CLAUDE.md`. **À tenir à jour** : quand une ligne est faite, la barrer ou la retirer.
 
 ---
+
+## ⛳ REPRISE — ÉTAT AU 30/10/2026 SOIR (la conversation précédente est pleine : continuer ici, comme si de rien n'était)
+1. **Alissia (alissiarnd@hotmail.com) — cristal fée + Scorpion** : 2 mails envoyés par le site le 30/10 (le 2ᵉ avec l'aperçu
+   filigrané INTÉGRÉ dans le mail). Tout est dans `docs/clients/alissia-fee-scorpion/` (dessin retenu = fée COURONNÉE, aperçus,
+   mails envoyés, LISEZ-MOI). ⏳ Attendre sa réponse (taille, texte, socle, avis sur l'image). **Avant tout devis : demander au
+   gérant le montant du supplément « image personnalisée »** (jamais donné à la cliente pour l'instant).
+2. **Loris Modugno — commande 0BLBXWKH (cristal)** : il a accepté le format VERTICAL (réponse du 30/10, 16 h 42). Mail de réponse
+   NON envoyé : il a payé le **GRAND socle (+19,90 €, total 67,30 €)** alors que la commande a décompté `socle-led-carre` (petit).
+   ❓ Question posée au gérant, sans réponse : (1) garder le grand socle payé + corriger le stock (+1 petit / −1 grand) ou
+   (2) petit socle + rembourser 5 €. Ensuite : mail adapté (montré avant, « envoie ») + note sur la commande.
+3. **Alertes au gérant dans les indésirables** : elles partent de `onboarding@resend.dev` (adresse d'ESSAI Resend, domaine
+   nivcreation.fr non validé chez Resend). Proposé, NON tranché : filtre Gmail (`from:onboarding@resend.dev` → « Ne jamais
+   envoyer dans le spam ») + valider le domaine chez Resend puis régler `CONTACT_FROM` ; et faire ignorer à l'agent e-mail les
+   messages de resend.com (il a préparé un faux brouillon « Zeno from Resend »). Les mails aux CLIENTES partent du Gmail de
+   l'atelier (fiable), pas de Resend.
+4. **Socles LED** : règle du 30/10 EN LIGNE (vertical Petit/Moyen/Grand = petit socle, vertical XL et tout l'horizontal = grand).
+   Questions ouvertes : piles AAA fournies avec les nouveaux socles ? ; `ADAPTATEUR_NOIR_FOURNI = true` dans `src/lib/socles.js`
+   le jour où il a les adaptateurs. La maquette « choix du socle » (artifact 373o6mxWZZeTHAqHUhDKxN) est ABANDONNÉE.
+5. **Cartons pour les blocs (réponse donnée le 30/10, captures Amazon)** : XL (15 × 10 × 6) → carton EYMPEU 17,8 × 12,7 × 10,2
+   (int. 16,8 × 12,4 × 9,9) · XL + socle → carton 25,4 × 20,4 × 15,3 (déjà au stock) · Grand → EYMPEU 17,8 × 12,7 × 10,2 ·
+   Moyen et Petit → 15,2 × 10,2 × 10,2. Achat éventuel à confirmer par lui ; rien saisi dans Matériel.
+6. **Gestion moderne v3 + accueil B** : EN LIGNE le 30/10 (déploiement 508180c6 réussi). Reste à lui proposer : les 4 écrans
+   « Nouveau (v3) », la fiche commande en panneau à droite (voir section « Gestion moderne » plus bas).
+7. **Règle ajoutée le 30/10** : UN SEUL mail, photo / aperçu intégrés dedans (CLAUDE.md, règles d'envoi).
 
 ## 0. Côté gérant, après mise en ligne
 - **🔴 ANCIEN SITE NETLIFY À SUPPRIMER + « www » À RÉGLER (16/10/2026 — le gérant le fera lui-même, « je supprimerai après »)**.

@@ -1110,6 +1110,11 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   (en attente / à valider / côté gérant) + `docs/AMELIORATIONS.md` (nouveautés possibles), sans rien
   omettre ni inventer. Tenir ces deux fichiers à jour à chaque avancée, dans TOUTES les conversations.
 
+# ⛳ 30/10/2026 SOIR — LA CONVERSATION PRÉCÉDENTE EST PLEINE : CONTINUER ICI
+> Lire **`docs/EN-ATTENTE.md` → « REPRISE — ÉTAT AU 30/10/2026 SOIR »** : Alissia (aperçu fée envoyé, supplément à demander),
+> Loris 0BLBXWKH (grand socle payé, question au gérant), alertes Resend en spam, socles, cartons, Gestion v3 en ligne.
+> Dossier client Alissia : `docs/clients/alissia-fee-scorpion/`.
+
 # ⛳ REPRISE D'UNE SESSION — À LIRE EN PREMIER (mis à jour 09/09/2026)
 > 📋 **`docs/EN-ATTENTE.md` = l'inventaire de tout ce qui est en attente** (messages à envoyer,
 > maquettes validées non appliquées, projets en pause, actions du gérant, questions sans réponse).
