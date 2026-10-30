@@ -84,7 +84,7 @@ export function appliquerSocles(product, stock = {}) {
   return { ...product, engravingPricing: { ...product.engravingPricing, flatExtras }, personalizationFields };
 }
 
-// Page « Cristaux déjà gravés » : le petit (vertical Petit) et le grand (tout le reste) en vente.
+// Page « Cristaux déjà gravés » : le petit (vertical Petit, Moyen, Grand) et le grand (vertical XL + horizontal) en vente.
 export function soclesPourPage(stock = {}) {
   const carre = SOCLES[socleEnVente("socle-led-carre", stock)];
   const rect = SOCLES[socleEnVente("socle-led-rectangle", stock)];

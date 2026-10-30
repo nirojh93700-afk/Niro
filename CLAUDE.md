@@ -4538,7 +4538,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   (`remisePort`) · barre du panier (`FreeShippingBar remise=`). Ex. : bijou 45 € + −10 % = 40,50 € → livraison 4,90 € ;
   50 € + −10 % = 45 € → offerte. Verres lot 63,90 € + −10 % = 57,51 € → livraison payante.
 
-## 💡 SOCLES LED : PETIT = vertical Petit, GRAND = tout le reste + BASCULE AUTOMATIQUE VERS LES NOUVEAUX — 29/10/2026
+## 💡 SOCLES LED : PETIT = vertical Petit / Moyen / Grand, GRAND = vertical XL + tout l'horizontal (gérant, 30/10/2026 : « sur le vertical tu mets des petits socles pour tout, sauf XL » — remplace la règle du 29/10 ci-dessous ; pas de choix laissé à la cliente) + BASCULE AUTOMATIQUE VERS LES NOUVEAUX — 29/10/2026
 - Grand socle rectangle (dessus 13 × 7 cm) = vertical Moyen / Grand / XL et TOUT l'horizontal (Petit compris, 8 cm ; XL 15 cm dépasse
   de 1 cm de chaque côté, accepté) ; petit socle carré = vertical Petit seulement (dessous 5 × 5). Prix 14,90 / 19,90 € inchangés.
 - **Nouveaux socles** (Alibaba n° 33855788501043880, 20 de chaque) : petit gris argenté (dessus 5,2 × 5,2, piles AAA SEULEMENT) et

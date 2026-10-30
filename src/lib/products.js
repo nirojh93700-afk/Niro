@@ -1253,12 +1253,12 @@ export const products = [
       { key: "police", type: "font", label: "Police (si texte)", optional: true },
       { key: "textePos", type: "select", label: "Où placer le texte ? (si texte)", optional: true, options: [{ value: "bas", label: "En bas (sous la photo)" }, { value: "haut", label: "En haut" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" }] },
       { key: "note-photo-cristal", type: "note", image: "/produits/guide-photo-cristal.png", imageAlt: "Comment bien choisir sa photo pour la gravure", text: GUIDE_CRISTAL_TEXTE },
-      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. Petit socle carré pour la taille Petit ; grand socle rectangle pour les tailles Moyen, Grand et XL." },
+      { key: "note-socle", type: "note", image: "/produits/socle-led-rectangle.jpg", imageByVariant: { "cristal-v-petit": "/produits/socle-led-carre.jpg", "cristal-v-moyen": "/produits/socle-led-carre.jpg", "cristal-v-grand": "/produits/socle-led-carre.jpg" }, imageAlt: "Socle lumineux LED multicolore", text: "Socle lumineux LED multicolore (en option) : pose et illumine votre cristal avec des LED multicolores, les couleurs changent au toucher. Il fonctionne sur une prise secteur et tout est fourni — câble USB + adaptateur de prise. L'effet 3D est sublimé, surtout le soir. Petit socle carré pour les tailles Petit, Moyen et Grand ; grand socle rectangle pour la taille XL." },
       { key: "socle", type: "select", label: "Ajouter un socle lumineux LED multicolore", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
     // stockId : le socle LED est un vrai article acheté en quantité limitée →
     // suivi en stock comme un produit (petit socle carré / grand socle rectangle).
-    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-v-petit": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-v-petit": "socle-led-carre" } }, { key: "texte", amount: 5 }] },
+    engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-v-petit": 14.9, "cristal-v-moyen": 14.9, "cristal-v-grand": 14.9 }, weight: 550, weightByVariant: { "cristal-v-petit": 300, "cristal-v-moyen": 300, "cristal-v-grand": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-v-petit": "socle-led-carre", "cristal-v-moyen": "socle-led-carre", "cristal-v-grand": "socle-led-carre" } }, { key: "texte", amount: 5 }] },
     video: "/produits/cristal-video-vertical.mp4",
     videoPoster: "/produits/cristal-video-vertical-poster.jpg",
     images: [
@@ -1306,7 +1306,7 @@ export const products = [
     ],
     // Même stock que le bloc vertical : les socles sont communs aux deux formats.
     // Couché, même le Petit (8 cm de long) prend le grand socle rectangle 13 × 7 cm (gérant, 29/10/2026) ;
-    // le petit socle carré ne sert qu'au vertical Petit (dessous 5 × 5 cm).
+    // le petit socle carré sert au vertical Petit, Moyen et Grand (gérant, 30/10/2026).
     engravingPricing: { flatExtras: [{ key: "socle", value: "oui", amount: 19.9, weight: 550, stockId: "socle-led-rectangle" }, { key: "texte", amount: 5 }] },
     video: "/produits/cristal-video-horizontal.mp4",
     videoPoster: "/produits/cristal-video-horizontal-poster.jpg",
@@ -1356,9 +1356,9 @@ export const products = [
       { key: "zVille", label: "Ville où la personne habite (zodiaque)", optional: true, maxLength: 24 },
       { key: "socle", type: "select", label: "Socle lumineux LED", optional: true, priced: true, options: [{ value: "", label: "Sans socle" }, { value: "oui", label: "Avec socle LED" }] },
     ],
-    // Même socle que les blocs photo (petit carré = vertical Petit seulement) ; zodiaque : « Le nom » +5 € ou « Tout gravé » +8 €.
+    // Même socle que les blocs photo (petit carré = vertical Petit, Moyen, Grand ; grand = vertical XL et tout l'horizontal) ; zodiaque : « Le nom » +5 € ou « Tout gravé » +8 €.
     engravingPricing: { flatExtras: [
-      { key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-grave-v-petit": 14.9 }, weight: 550, weightByVariant: { "cristal-grave-v-petit": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-grave-v-petit": "socle-led-carre" } },
+      { key: "socle", value: "oui", amount: 19.9, amountByVariant: { "cristal-grave-v-petit": 14.9, "cristal-grave-v-moyen": 14.9, "cristal-grave-v-grand": 14.9 }, weight: 550, weightByVariant: { "cristal-grave-v-petit": 300, "cristal-grave-v-moyen": 300, "cristal-grave-v-grand": 300 }, stockId: "socle-led-rectangle", stockIdByVariant: { "cristal-grave-v-petit": "socle-led-carre", "cristal-grave-v-moyen": "socle-led-carre", "cristal-grave-v-grand": "socle-led-carre" } },
       // Texte des modèles et dessins : +5 €, comme les cristaux photo (gérant, 07/10/2026 : « le texte c'est payant »).
       { key: "texte", amount: 5 },
       { key: "zOption", value: "nom", amount: 5 },
