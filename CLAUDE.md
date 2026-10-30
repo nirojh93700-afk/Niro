@@ -814,6 +814,14 @@
   tu recommences plus ».** Ce qu'il demande d'envoyer ENSEMBLE part dans UN SEUL e-mail, au même moment, après qu'il a vu le tout. Aucun renvoi
   pour « réparer » sans son ordre (le soir même : « t'envoies plus rien », la maquette et le devis étant déjà partis séparément).
 
+- ⛔ **UN SEUL MAIL : PHOTO / APERÇU / MAQUETTE INTÉGRÉS DANS LE MAIL, JAMAIS UN MAIL À PART (gérant, 30/10/2026, aperçu
+  d'Alissia : « il faut que ça soit la règle, il faut pas envoyer plusieurs mails si c'est possible pour intégrer »)**. Toute image destinée à
+  une cliente part DANS le même e-mail que le texte : `/api/upload {dataUrl}` → `ref`, puis `/api/admin/send-client-email` avec
+  `imageUrl: "https://nivcreation.fr/api/img/<ref>"` (l'image s'affiche en haut du mail, avant le texte). Avant l'envoi : montrer au gérant le
+  RENDU du mail complet (gabarit `emailLayout` + image + bouton Répondre + signature), puis attendre « envoie ». Le site ajoute déjà
+  « Cordialement, Niv Création, nivcreation.fr » : ne jamais la retaper dans le texte. Une image qu'il ne veut pas voir copiée porte le
+  filigrane « NiV CRÉATION · APERÇU » (doré, diagonale, serré, + grand « NiV CRÉATION » au centre). Si l'outil ne permet pas d'intégrer :
+  le dire AVANT, ne rien envoyer.
 - ⛔ **DANS UN MAIL CLIENT, AUCUNE PHRASE INVENTÉE OU BIZARRE (gérant, 24/10/2026, mail à Alexandre sur la plaque seule : « t'as vérifié sur
   Internet pour des phrases comme ça ? … fais plus d'erreurs comme ça »)** : j'avais écrit « Nous vous souhaitons une belle réparation de votre bracelet ».
   Un mail client n'utilise QUE des formules d'usage du service client français (« Bonjour », « Merci pour votre message », « Bien cordialement »),
