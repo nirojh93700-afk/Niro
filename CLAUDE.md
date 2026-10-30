@@ -1,4 +1,4 @@
-## 🧭 MAQUETTE « GESTION MODERNE » — v1 ENREGISTRÉE LE 29/10/2026, **v2 du 30/10 en attente de son avis** — RIEN en ligne
+## 🧭 MAQUETTE « GESTION MODERNE » — v1 ENREGISTRÉE LE 29/10/2026, v2 du 30/10, **v3 du 30/10 (les 20 nouveautés) en attente de son avis** — RIEN en ligne
 > v1 enregistrée telle quelle (« Enregistre la maquette ») ; v2 = ses améliorations demandées le 30/10. Celle à reproduire au « applique » = celle qu'il validera.
 > Gérant : « analyse la page admin… il y a un peu de tout partout, tu supprimes rien… plus fluide, plus professionnel, moderne…
 > cherche comment font les grandes sociétés… fais-moi une maquette, toutes les catégories ».
@@ -36,8 +36,35 @@
   HubSpot / Linear / Sendcloud / Xero / Zapier → `docs/AMELIORATIONS.md` § « GESTION PLUS AUTONOME » (centre d'actions, règles si/alors
   simulées, réachat calculé, résumé du matin, anomalies, état du système, fil client + résumé IA, tournée du jour en 1 PDF, QR sur les
   fiches, journal + annuler, édition en ligne, assistant à la voix). Proposées seulement ; la maquette v2 n'est pas touchée.
+- ✅ **v3 (30/10/2026, gérant : « tout est connecté, tu peux tout faire quand tu prépares la maquette »)** — même artifact, VERSION 3 :
+  les 20 idées de `docs/AMELIORATIONS.md` § « GESTION PLUS AUTONOME » sont DESSINÉES dans la maquette (générateur inchangé, gabarit étendu ;
+  correctif appliqué par `scratchpad/patch-v3.py`, sauvegarde v2 du gabarit dans le scratchpad). **41 écrans** = 37 + 4 nouveaux dans Réglages
+  (Règles automatiques · Notifications & résumés · Journal d'activité · État du système). Accueil = **centre d'actions** (4 groupes : Urgent ·
+  Aujourd'hui · Cette semaine · Surveillance automatique, bouton « ? » = pourquoi, « ✕ » = ignorer avec motif + Annuler) + résumé du matin ·
+  bandeau rouge persistant « Nouvelle commande » jusqu'au « Vu » + cloche avec historique lu / non lu · file : colonne **date limite** (jours
+  ouvrés), vue « Par date limite » (En retard / Aujourd'hui / Cette semaine / Parties), bouton **« Tournée du jour »** (panneau : fiches +
+  étiquettes + matériel, un PDF) · tiroir commande : **liste de contrôle** 5 étapes (cocher « Expédiée » passe le statut), **photo de la pièce
+  finie** (envoi à la cliente jamais automatique), **QR** de la fiche ; atelier : QR + « Scanner » (panneau de scan avec les cases) ·
+  messages : **étiquettes** (Suivi colis / Avant achat / Problème / Devis / Restaurant / Merci), urgence en rouge, délai de réponse (reste N h /
+  dépassé), filtres, **devis lu** par l'assistant, « Pourquoi ce classement » · clientes : une ligne ouvre le **fil unifié + résumé IA** ·
+  produits : **édition en ligne** du prix et du nom (Entrée = enregistré + Annuler 10 s, Échap = annule) + « Réachat conseillé » ; matériel :
+  « À racheter, calculé » · étude de marché = **veille du lundi** · compta : **rapprochement Stripe**, livre des recettes, trésorerie 30 / 60 /
+  90 j, provision URSSAF · règles **si / alors** (5 cartes, « Simuler » sur 30 jours, règle écrite en français → « Traduire en blocs ») ·
+  journal (avant → après, « Rétablir ») · état du système (11 feux, déploiements) · **toast avec « Annuler »** (10 s, touche Z) sur les actions
+  risquées · palette ⌘K avec **commandes rapides** confirmées (« Éteindre Noël », « Stock X = N » tapé) · assistant : contexte de l'écran +
+  **micro** (dictée simulée). Onglet « Ce qui change » : tableau des 20 nouveautés + leur place. Vérifié Chromium 1280 / 390
+  (`scratchpad/t-gm3.mjs`, 42 / 42 écrans, 0 débordement, 0 erreur JS, 40 vérifications d'interaction). En attente de son avis.
   Au « applique » : `AdminShell.jsx` (NAV en 9 sections + sous-onglets, raccourcis, ⌘K déjà amorcé par `RechercheUniverselle`),
   les adresses actuelles /gestion/* gardées.
+- ⛔⛔ **RÈGLE DU GÉRANT POUR LA MISE EN LIGNE DE GESTION (30/10/2026 : « il faut pas que tu modifies tous les réglages qu'on a
+  déjà faits… les prix, les visuels, les cadres du bloc de cristal pour que les images soient bien imprimées, tous les réglages »)** :
+  la refonte de Gestion ne change QUE l'habillage et le rangement des écrans. AUCUNE donnée enregistrée ne doit bouger :
+  `settings.*` (crystalZones, motifTextZones, packaging, shipping, fetes, sections, vacation…), prix et options des produits
+  (`overrides`), stock, matériel, commandes, codes. Interdits à la construction : toute écriture « en bloc » d'une section
+  (règle crystalZones du 26/09), tout script de migration de données, tout `POST /api/admin/settings` de ma part. Les écrans
+  gardent leurs API actuelles. Avant le push : `npm run build` + export de contrôle `/api/admin/export` AVANT / APRÈS identique
+  (hors horodatages), et le lui dire. 30/10 : il a dit « tout est connecté, tu peux tout faire » → maquette v3 = v2 + les 20 idées.
+
 ## 🎄 RUBRIQUE « FÊTES » DANS GESTION (NOËL D'ABORD) — ✅ MAQUETTE ENREGISTRÉE TELLE QUELLE LE 28/10/2026 (« enregistre la maquette », version 1) — RIEN en ligne
 > Gérant : « un nouveau truc pour Noël… des gravures vraiment pour Noël… des sacs, des boîtes pour Noël… que pour les verres, la carafe,
 > les supports téléphone, le cristal, tout ce qui est gravure, pas le mariage, pas les bijoux… dès que je décoche, tout ce qui a rapport
