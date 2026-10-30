@@ -659,3 +659,17 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #bijougrave #cadeaunoel #cadeaupersonnalise #ideecadeau
+
+## Vidéo 43 — Gravé pour vous : cristal, bois, enfants (30/10/2026)
+- Demande du gérant : « une autre vidéo, mais normal, pas Noël, avec d'autres produits ». Pas de bijoux ni de verres (vidéos 41, 42).
+  Photos où la gravure se voit, produits vérifiés EN VENTE en ligne le 30/10 (la lampe Arbre de Vie, masquée, écartée ; le porte-stylo
+  « Coupe du monde » écarté). Effets de la 41 sans Noël : fond encre et or, poussière dorée qui monte. 33,8 s, sans son,
+  1080 × 1920 (7,9 Mo) et 720 × 1280 (2,5 Mo). Aucun prix.
+- Script : `python3 tools/video/pub_graves_43.py <dossier>` (`--apercu`). Fichiers NON commités.
+
+**Vidéo 43 — Votre photo, votre prénom, gravés pour vous** (Support téléphone en bois, Cristal photo 3D, Puzzle photo gravé, Veilleuse Arbre de Vie au prénom, Couverts enfant gravés, Plaque de naissance, Marque-page en bois, Porte-clés cristal, Puzzle en bois)
+> ✨ Une photo dans le cristal, un prénom sur une veilleuse, un souvenir en puzzle de bois… on grave ce que vous voulez 💛
+> Pour les grands comme pour les petits, chaque pièce est gravée à la commande dans notre atelier 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #cristalgrave #ideecadeau
