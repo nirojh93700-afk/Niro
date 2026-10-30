@@ -44,7 +44,6 @@ BLOC = """<div class="field sv">
 <label>Socle lumineux LED multicolore<span style="color:var(--ink-soft);font-weight:400"> (facultatif)</span></label>
 <p class="perso-hint" style="margin-top:0">Il pose et illumine votre cristal : l'effet 3D est sublimé, surtout le soir.</p>
 <p class="sv-base">Votre cristal <b id="sv-taille">Petit</b> pose une base de <b id="sv-base">5 × 5 cm</b>.</p>
-<p class="sv-xl" id="sv-xl" hidden>Pour la taille XL, choisissez la taille du socle : comparez ses dimensions avec la base de votre cristal.</p>
 <div class="sv-grid">
   <button type="button" class="variant-swatch sv-card active" data-s="sans"><span class="sv-vide">Aucun socle</span><span class="vs-title">Sans socle</span><span class="vs-price"><span class="vs-now">+0 €</span></span></button>
   <button type="button" class="variant-swatch sv-card" data-s="petit"><img src="/produits/socle-led-carre.jpg" alt=""/><span class="vs-title">Petit socle carré</span><span class="vs-sub">Dessus 5 × 5 cm</span><span class="vs-price"><span class="vs-now">+14,90 €</span></span></button>
@@ -75,7 +74,7 @@ EXTRA = """
 .maq-band{background:#1a1206;color:#e2c67e;font:600 .85rem/1.4 system-ui,sans-serif;padding:10px 16px;text-align:center}
 @media (max-width:480px){.sv-grid{gap:6px}.sv-card{padding:8px!important}.sv-card .vs-title{font-size:.8rem}.sv-card .vs-sub{font-size:.72rem}}
 """
-BAND = '<div class="maq-band">Maquette — socle du cristal vertical · Petit, Moyen, Grand : petit socle · XL : la cliente choisit la taille du socle · rien n\'est en ligne</div>'
+BAND = '<div class="maq-band">Maquette — socle du cristal vertical · Petit, Moyen, Grand : petit socle · XL : grand socle · rien n\'est en ligne</div>'
 h = h.replace("<header", BAND + "<header", 1)
 
 JS = """<script>
@@ -90,11 +89,10 @@ JS = """<script>
   var cards=document.querySelectorAll('.sv-card');
   function maj(){
     var xl=taille==='XL';
-    if(!xl&&socle==='grand') socle='sans';
-    cards.forEach(function(c){var s=c.dataset.s;c.hidden=(s==='grand'&&!xl);c.classList.toggle('active',s===socle);c.setAttribute('aria-pressed',s===socle);});
+    if(!xl&&socle==='grand') socle='petit'; if(xl&&socle==='petit') socle='grand';
+    cards.forEach(function(c){var s=c.dataset.s;c.hidden=(s==='grand'&&!xl)||(s==='petit'&&xl);c.classList.toggle('active',s===socle);c.setAttribute('aria-pressed',s===socle);});
     document.getElementById('sv-taille').textContent=taille;
     document.getElementById('sv-base').textContent=T[taille].b;
-    document.getElementById('sv-xl').hidden=!xl;
     var inf=document.getElementById('sv-info');inf.textContent=INFO[socle]||INFO.petit;
     var tot=T[taille].p+S[socle];
     var pl=document.querySelector('.price-lead');if(pl)pl.textContent=fmt(T[taille].p);
