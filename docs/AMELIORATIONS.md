@@ -261,3 +261,73 @@
   dernier rapport, interrupteur, « lancer maintenant »). Maquette d'abord, rien en ligne.
 
 - 💡 **(28/10/2026) L'agent e-mail ne voit pas les devis** : à la réponse de Doriane (« je souhaite faire graver le visuel 1 »), il a écrit « aucune commande trouvée, je n'ai pas accès aux maquettes » au lieu de préparer une réponse. Piste : ajouter à son contexte (`buildContext`, inbox.js) les devis de la cliente (`listQuotes` par e-mail : numéro, statut, note) et le sujet de nos derniers envois.
+
+## 🧭 GESTION « PLUS AUTONOME, ORGANISÉE, MODERNE » — 20 idées tirées d'une recherche mondiale (30/10/2026, gérant : « cherche dans le monde entier et dis-moi ce que tu peux faire d'autre ») — RIEN construit, maquette v2 PAS modifiée
+> Sources regardées : Shopify (Sidekick, Pulse, Flow, Inbox, éditions 2026), Etsy (Shop Manager 2025–2026, appli Seller),
+> Amazon Seller Central 2026 (Action Center, Seller Assistant agentique, Canvas), Stripe (appli mobile, résumés quotidiens),
+> Square (alertes persistantes, juin 2026), WooCommerce 10.x–11 (fulfillments, palette de commandes), Gorgias / Intercom / Front
+> (tri automatique, étiquettes IA), HubSpot / Zendesk (fil client unifié, résumés IA), Linear / Notion (palette, édition en ligne,
+> raccourcis), Sendcloud Pack & Go / Shippo Print (scan, impression groupée), Katana / Odoo (file de production), Xero / QuickBooks /
+> FlowSense / Clockwork (prévision de trésorerie, résumé hebdo, anomalies), Shine / Qonto / Pennylane (URSSAF, rapprochement),
+> Zapier Agents (validation humaine avant action), guides UX 2026 (journal d'activité, annuler, états vides).
+> ⛔ Toutes ces idées respectent ses règles : rien ne part à une cliente sans « envoie », l'assistant PRÉPARE et il DÉCIDE.
+### A · Plus autonome (le site surveille, prépare, propose ; lui valide)
+1. **Centre d'actions unique** (Amazon « Action Center », Shopify « Pulse ») : TOUTES les alertes du site au même endroit, classées
+   par urgence, avec le bouton qui règle le point en un clic et « ignorer » (avec le motif) — stock bas, matériel à racheter, délai
+   d'expédition dépassé, réponse à valider, avis à valider, image à vérifier, fête passée encore allumée, précommande arrivée, code
+   promo qui expire, déploiement en échec. Aujourd'hui ces alertes sont réparties entre e-mails, bandeaux et pages.
+2. **Règles « si… alors… » avec validation** (Shopify Flow, Zapier « Request Approval ») : il écrit la règle en français (« quand un
+   colis est livré depuis 3 jours, prépare la demande d'avis »), l'assistant la traduit, un bouton **« Simuler »** montre sur les
+   vraies commandes ce que la règle aurait fait AVANT de l'allumer (Flow « test events »), et tout envoi reste « à valider ».
+   Modèles de départ : commande express → en tête de file · cliente 2ᵉ commande → étiquette « fidèle » · colis livré → avis préparé ·
+   stock < seuil → ligne dans le centre d'actions.
+3. **Réachat calculé, plus un seuil fixe** (reorder point : vitesse de vente × délai fournisseur + sécurité) pour les produits ET le
+   matériel : « Commander 12 verres 36 cl avant le 14/11 (délai Metro 7 j) » + bouton vers Achats & factures. Les sources montrent
+   qu'un seuil fixe (Shopify « Low » = 10) rate les ruptures sur les produits qui partent vite.
+4. **Résumé du matin** (Stripe appli : « daily summaries », FlowSense : « weekly digest ») : une notification ou un e-mail à l'heure
+   qu'il choisit — commandes de la veille, à expédier aujourd'hui, messages en attente, stock bas, mois en cours vs objectif.
+   Et un **résumé de la semaine** le lundi (ventes, meilleurs produits, anomalies).
+5. **Alertes d'anomalie** (FlowSense, Pulse) : ventes ou visites anormalement basses sur 3 jours, taux de paniers abandonnés qui
+   monte, aucune commande alors que les visites sont normales (= paiement cassé ?), 0 e-mail reçu depuis 48 h (= Gmail coupé ?).
+6. **Page « État du système »** (feux vert / rouge) : battement du site, Gmail connecté, jeton Resend, webhook Stripe, dernier
+   déploiement Firebase (réussi / échoué, avec le commit), ancien site Netlify encore vivant, taille du dépôt. Les incidents des
+   derniers mois (doublons Netlify, jeton Gmail, « Build failed ») auraient été vus tout de suite.
+7. **Fil client unifié + résumé IA** (HubSpot timeline, Zendesk) : une seule chronologie par cliente (commandes, e-mails, devis,
+   avis, favoris, connexions, codes, suivi colis, ratés, photos envoyées) avec, en haut, 2 lignes de résumé écrites par l'assistant
+   (« 2 commandes, attend la carafe, a demandé un aperçu le 15/09 »). Le CRM a déjà « Communications » : il manque le reste et le résumé.
+8. **Boîte de réception triée toute seule** (Front AI tags, Gorgias auto-tagging) : étiquette automatique par message (Question avant
+   achat · Suivi colis · Problème · Devis · Restaurant · Spam), **urgence** en rouge (cliente mécontente, colis perdu), compte à rebours
+   24 h, et l'agent voit ENFIN les devis (il ne les voit pas : constat du 28/10). Rien n'est envoyé seul.
+9. **Veille prix concurrents hebdomadaire** (Pulse avec recherche web, Canvas) : pour chaque produit, le prix du marché relu chaque
+   semaine et un signal « 20 % sous le marché » / « au-dessus » dans le centre d'actions. Besoin de la clé Tavily (en attente).
+10. **Rapprochement Stripe ↔ commandes + livre des recettes** (Pennylane, Qonto) : chaque virement Stripe rapproché des commandes
+    (frais Stripe isolés), écart signalé ; export mensuel « livre des recettes » prêt pour la micro-entreprise ; provision URSSAF
+    (déjà calculée) affichée comme « à mettre de côté » à côté de la trésorerie prévue (Xero : prévision 30 / 60 / 90 jours).
+### B · Mieux organisé (moins de clics, moins d'oublis)
+11. **« Tournée du jour »** (Sendcloud Pack & Go, Shippo Print) : un bouton = UN PDF avec, dans l'ordre de la file, toutes les fiches
+    atelier à graver aujourd'hui + les étiquettes d'adresse + la liste du matériel à sortir. Aujourd'hui : une fiche à la fois.
+12. **QR code sur chaque fiche atelier** (Pack & Go « scanner mode ») : scanner avec le téléphone ouvre la commande et propose
+    « Gravée ✓ · Emballée ✓ · Expédiée ✓ » en un geste ; même QR sur les bacs de matériel pour décompter en scannant.
+13. **Liste de contrôle par commande** (Etsy « Top Tasks », Katana) : gravée · contrôlée · emballée · étiquette · expédiée, cochée sur
+    le téléphone, barre de progression sur la carte ; le statut global suit tout seul la dernière case cochée.
+14. **Vue « quoi expédier et quand »** (Etsy Seller app) : la file groupée En retard / Aujourd'hui / Cette semaine / Plus tard d'après
+    la date limite déjà calculée (`delaiCommande`), tri par date limite par défaut, bascule « par cliente ».
+15. **Journal d'activité + Annuler** (Adminlog, guides audit 2026) : qui a changé quoi (prix, stock, réglage, statut), avant → après,
+    « Rétablir » en un clic, et un « Annuler » de 10 secondes après toute action risquée (annuler une commande, supprimer, remettre à
+    zéro). Protège contre l'incident « réglages effacés » du 26/09.
+16. **Photo de la pièce gravée jointe à la commande** : depuis le téléphone, dans l'Atelier, une photo de la pièce finie avant emballage
+    = preuve rangée dans la commande (litige « pas conforme ») ; et, S'IL le décide, bouton « Envoyer à la cliente » (jamais automatique,
+    jamais promis d'avance — règle du 15/09 inchangée).
+17. **Notifications persistantes** (Square, juin 2026) : une nouvelle commande reste affichée en bandeau dans Gestion jusqu'à ce qu'il
+    l'ouvre (plus de commande « ratée » parce que la notification a glissé) ; cloche avec historique lu / non lu (centre de notifications).
+### C · Plus moderne (ce que font Linear, Shopify, Notion en 2026)
+18. **Édition en ligne partout** (Linear « inline editing ») : prix, stock, nom, statut modifiables directement dans les tableaux avec
+    enregistrement automatique et « Annuler » ; aujourd'hui seul le stock se modifie en ligne (Produits & stock).
+19. **Assistant sur chaque écran, à la voix** (Sidekick 2026 : voix ou texte sur tous les écrans) : il parle au téléphone (« mets le
+    collier cœur à 24,90 », « combien de verres 47 cl il reste ? »), l'assistant montre ce qu'il va faire, il confirme ; l'assistant
+    connaît l'écran ouvert (la commande, le produit).
+20. **Palette qui AGIT** (Linear, WooCommerce 10.8) : ⌘K ne fait pas qu'ouvrir des écrans, il exécute (« expédier 0XIF6DDO », « stock
+    verre 36 cl = 40 », « éteindre Noël »), avec confirmation en ligne ; identifiants stables pour les « récents ».
+### Hors liste, à cause de ses règles
+- Commandes Etsy dans la même file : possible en lecture, mais « Etsy reste dans Etsy » (02/09) → seulement s'il le demande.
+- Demande d'avis automatique après livraison : les envois automatiques sont coupés depuis le 16/10 → ici, PRÉPARÉE puis validée (n° 2).

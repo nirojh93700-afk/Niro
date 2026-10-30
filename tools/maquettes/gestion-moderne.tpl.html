@@ -111,7 +111,7 @@ button{cursor:pointer}
 .card>h2,.card .ch{font-size:14px;font-weight:600;margin:0;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
 .ch .grow{flex:1}
 .ch a,.lnk{color:var(--gold-ink);font-weight:500;font-size:12.5px;text-decoration:none;background:none;border:0;padding:0}
-.grid{display:grid;gap:18px}
+.grid{display:grid;gap:18px} .grid>*,.form>*,.fs>*,.set>*{min-width:0} .fld textarea{width:100%;box-sizing:border-box}
 .g2{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -299,8 +299,128 @@ td.r,th.r{text-align:right}
 .pop{position:absolute;top:44px;right:0;width:320px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--pop);z-index:40;padding:6px;text-align:left;color:var(--ink)}
 .pop .todo li{padding:8px}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;opacity:0;transition:.2s;z-index:90;pointer-events:none;display:flex;gap:8px;align-items:center}
+.toast.on{pointer-events:auto}
+.toast{width:max-content;max-width:calc(100vw - 24px);text-align:left}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .toast .ico{color:var(--gold)}
+
+/* v2 : grille d'étiquettes, entonnoir, tri, tiroir à onglets, raccourcis clavier */
+.sheetgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:min(340px,100%);padding:12px;background:var(--sunk);border-radius:10px;border:1px solid var(--line)}
+.sheetgrid button{aspect-ratio:1;border:1px dashed var(--line-2);background:var(--surface);border-radius:6px;font-size:11px;color:var(--muted)}
+.sheetgrid button.used{background:var(--line);color:var(--faint);border-style:solid}
+.sheetgrid button.next{background:var(--gold-bg);border-color:var(--gold-2);color:var(--gold-ink);font-weight:600}
+.stars{color:var(--gold-2);letter-spacing:1px;white-space:nowrap}
+.funnel{display:flex;flex-direction:column;gap:10px;padding:16px}
+.funnel div{display:grid;grid-template-columns:minmax(120px,170px) 1fr 64px;gap:12px;align-items:center;font-size:13px}
+.funnel i{display:block;height:22px;border-radius:6px;background:var(--gold-2);min-width:4px}
+.upload{border:2px dashed var(--line-2);border-radius:12px;padding:26px;text-align:center;color:var(--muted);margin:14px;background:var(--surface)}
+th.sortable{cursor:pointer;user-select:none} th.sortable:hover{color:var(--ink)} th .arrow{opacity:.55;margin-left:3px}
+.dtabs{display:flex;gap:4px;padding:0 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dtabs button{background:none;border:0;padding:10px 12px;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.dtabs button.on{color:var(--ink);border-bottom-color:var(--gold)}
+.tl{list-style:none;margin:0;padding:4px 0 0 14px;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.tl li{position:relative;font-size:13px}.tl li::before{content:"";position:absolute;left:-19px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--gold-2)}
+.tl small{display:block;color:var(--muted)}
+.confirm{display:flex;gap:8px;align-items:center;padding:10px 12px;background:var(--warn-bg);color:var(--warn);border-radius:10px;font-weight:600;flex-wrap:wrap}
+.shortcuts{position:fixed;inset:0;display:none;place-items:center;z-index:85}
+.shortcuts.on{display:grid}
+.shortcuts .box{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);padding:18px 20px;width:min(440px,calc(100% - 32px))}
+.shortcuts h3{margin:0 0 12px;font-size:15px;display:flex;align-items:center}
+.shortcuts dl{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;margin:0;font-size:13px}
+.shortcuts dt{text-align:right;white-space:nowrap}.shortcuts dd{margin:0;color:var(--muted)}
+.shortcuts .kbd{border-color:var(--line);color:var(--ink)}
+.pinbtn{color:var(--muted)} .pinbtn.on{color:var(--gold-ink)} .pinbtn.on .ico{fill:var(--gold)}
+.empty{padding:34px 16px;text-align:center;color:var(--muted)} .empty b{display:block;color:var(--ink);margin-bottom:4px}
+.crumb button{background:none;border:0;color:var(--muted);padding:0;font:inherit} .crumb button:hover{color:var(--ink);text-decoration:underline}
+.outil{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.outil .ic{width:40px;height:40px;border-radius:10px;background:var(--gold-bg);color:var(--gold-ink);display:grid;place-items:center;flex:none}
+.outil b{display:block} .outil span{color:var(--muted);font-size:12.5px}
+.frame{aspect-ratio:4/3;border:1px solid var(--line);border-radius:12px;background:var(--sunk);position:relative;overflow:hidden;max-width:100%}
+.frame img{width:100%;height:100%;object-fit:cover;opacity:.9}
+.frame .box{position:absolute;left:30%;top:26%;width:40%;height:40%;border:2px dashed var(--gold);border-radius:6px;background:rgba(201,162,75,.12)}
+.frame .box::after{content:"";position:absolute;right:-6px;bottom:-6px;width:12px;height:12px;border-radius:50%;background:var(--gold-2);border:2px solid var(--surface)}
+.rev{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.rev:last-child{border-bottom:0} .rev .tx{flex:1;min-width:0} .rev p{margin:4px 0 6px;line-height:1.55}
+.rev .acts{gap:6px}
+
+
+/* v3 : centre d'actions, bandeau persistant, listes de contrôle, QR, règles, journal, édition en ligne, voix */
+.urg{margin:14px max(24px,env(safe-area-inset-right,0px)) 0 max(24px,env(safe-area-inset-left,0px));display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:12px;background:var(--bad-bg);border:1px solid var(--bad);color:var(--bad);font-weight:600}
+.urg .ico{color:var(--bad)} .urg .grow{flex:1;min-width:160px} .urg small{display:block;font-weight:400;color:var(--muted)}
+.ca-grp{padding:10px 16px 4px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+.ca-grp i{font-style:normal;background:var(--sunk);border-radius:9px;padding:0 7px;color:var(--ink);font-size:11px}
+.ca-grp.bad{color:var(--bad)} .ca-grp.bad i{background:var(--bad-bg);color:var(--bad)}
+.todo li .mini{display:flex;gap:4px;flex:none}
+.todo li .ibtn{height:30px;min-width:30px;padding:0 7px}
+.why{margin:0 10px 8px 56px;padding:8px 10px;background:var(--sunk);border-radius:8px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.ign{margin:0 10px 8px 56px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12.5px}
+.ign select{height:30px;border:1px solid var(--line-2);border-radius:7px;background:var(--surface);padding:0 8px;max-width:100%}
+.todo li.auto .ic{background:var(--sunk);color:var(--muted)}
+.prog{height:4px;border-radius:2px;background:var(--sunk);overflow:hidden;margin-top:5px;width:88px}
+.prog i{display:block;height:100%;background:var(--ok);border-radius:2px}
+.chk{list-style:none;margin:0;padding:6px 0;display:flex;flex-direction:column}
+.chk li{display:flex;gap:10px;align-items:center;padding:7px 14px}
+.chk button{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-2);background:var(--surface);display:grid;place-items:center;flex:none;color:transparent}
+.chk button.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.chk li.on span{color:var(--muted);text-decoration:line-through}
+.chk small{margin-left:auto;color:var(--faint);font-size:11.5px}
+.lim{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:600;white-space:nowrap}
+.lim.late{background:var(--bad-bg);color:var(--bad)} .lim.today{background:var(--warn-bg);color:var(--warn)} .lim.ok{background:var(--ok-bg);color:var(--ok)} .lim.none{background:var(--sunk);color:var(--muted);font-weight:500}
+.grph{display:flex;gap:10px;align-items:center;padding:12px 14px 6px;font-weight:600}
+.grph .lim{margin-left:auto}
+.qrrow{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px dashed var(--line-2);border-radius:10px;background:var(--paper)}
+.qr{display:grid;grid-template-columns:repeat(13,1fr);width:52px;height:52px;flex:none;background:#fff;padding:3px;border-radius:4px;border:1px solid var(--line)}
+.qr i{display:block} .qr i.k{background:#1c160d}
+.qr.big{width:120px;height:120px}
+.photo{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.photo .ph2{width:72px;height:72px;border-radius:10px;border:2px dashed var(--line-2);display:grid;place-items:center;color:var(--faint);flex:none;background:var(--paper);overflow:hidden}
+.photo .ph2 img{width:100%;height:100%;object-fit:cover}
+.led{display:flex;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line)}
+.led:last-child{border-bottom:0}
+.led .l{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:0 0 0 3px color-mix(in srgb,currentColor 18%,transparent)}
+.led.ok{color:var(--ok)} .led.warn{color:var(--warn)} .led.bad{color:var(--bad)}
+.led .l{background:currentColor}
+.led .tx{flex:1;min-width:0;color:var(--ink)} .led .tx small{display:block;color:var(--muted);font-size:12.5px}
+.rule{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.rule .top2{display:flex;gap:10px;align-items:center}
+.rule .top2 b{flex:1;min-width:0}
+.flow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px}
+.flow .k{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:8px;background:var(--sunk)}
+.flow .k b{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-ink)}
+.flow .ar{color:var(--faint)}
+.sim{border:1px solid var(--gold);background:var(--gold-bg);border-radius:10px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.sim b{color:var(--gold-ink)}
+.sim ul{margin:0;padding-left:18px;color:var(--muted)}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:14px}
+.edit{cursor:text;border-bottom:1px dashed var(--line-2);padding:1px 2px;border-radius:3px}
+.edit:hover{background:var(--gold-bg);border-bottom-color:var(--gold)}
+.edit-in{height:30px;border:1px solid var(--gold);border-radius:7px;padding:0 8px;background:var(--surface);width:110px;font-variant-numeric:tabular-nums}
+.toast .undo{margin-left:10px;height:26px;padding:0 10px;border-radius:7px;border:1px solid #6b5a3c;background:transparent;color:var(--gold);font-weight:600}
+.tagx{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;font-size:11px;font-weight:600;white-space:nowrap}
+.tx-suivi{background:var(--info-bg);color:var(--info)} .tx-avant{background:var(--gold-bg);color:var(--gold-ink)} .tx-pb{background:var(--bad-bg);color:var(--bad)} .tx-devis{background:var(--ok-bg);color:var(--ok)} .tx-pro{background:var(--sunk);color:var(--muted)} .tx-merci{background:var(--sunk);color:var(--muted)}
+.im.urgm{box-shadow:inset 3px 0 0 var(--bad)}
+.sla{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.sla.bad{color:var(--bad);font-weight:600}
+.ctl{list-style:none;margin:0;padding:4px 0 0 0;display:flex;flex-direction:column;gap:10px}
+.ctl li{display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.ctl .ic{width:28px;height:28px;border-radius:8px;background:var(--sunk);display:grid;place-items:center;flex:none;color:var(--muted)}
+.ctl small{display:block;color:var(--muted)}
+.resume{border:1px solid var(--gold);background:var(--gold-bg);border-radius:12px;padding:12px 14px;line-height:1.55}
+.resume b{color:var(--gold-ink);display:flex;gap:6px;align-items:center;margin-bottom:4px}
+.mic{width:38px;height:38px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface);display:grid;place-items:center;flex:none}
+.mic.on{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px var(--bad-bg)}}
+.ctxchip{margin:10px 16px 0;display:inline-flex;gap:6px;align-items:center;padding:4px 9px;border-radius:999px;background:var(--sunk);font-size:12px;color:var(--muted)}
+.jrn td small{display:block;color:var(--muted)}
+.diff{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+.diff s{color:var(--faint)} .diff b{color:var(--ink);font-weight:600}
+.palc{margin:6px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wk{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px}
+.wk div{border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.wk small{display:block;color:var(--muted);font-size:12px} .wk b{font-size:18px}
+.reach{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+.reach:last-child{border-bottom:0} .reach small{color:var(--muted);display:block}
+@media (max-width:900px){.wk{grid-template-columns:1fr}.urg{margin-left:16px;margin-right:16px}.why,.ign{margin-left:10px}.reach{grid-template-columns:1fr}}
 
 /* onglets téléphone */
 .mtabs{display:none}
@@ -340,6 +460,7 @@ td.r,th.r{text-align:right}
   .search input{width:120px}
 }
 @media (max-width:560px){
+  .rev{flex-wrap:wrap} .rev .acts{flex-direction:row!important;width:100%;padding-left:42px}
   .kpis{grid-template-columns:1fr 1fr;gap:10px}
   .kpi .v{font-size:20px}
   .crumb span.hide-s{display:none}
@@ -356,7 +477,7 @@ td.r,th.r{text-align:right}
     </div>
     <button class="sfind" id="openPal" type="button"><svg class="ico"><use href="#i-search"/></svg><span>Rechercher…</span><kbd class="kbd">⌘K</kbd></button>
 
-    <div class="slabel"><span>Raccourcis</span><button type="button" id="editPins">Modifier</button></div>
+    <div class="slabel"><span>Raccourcis</span></div>
     <div class="pins" id="pins"></div>
 
     <div class="slabel"><span>Boutique</span></div>
@@ -379,7 +500,8 @@ td.r,th.r{text-align:right}
       </div>
       <button class="ibtn ai" type="button" id="aiBtn"><svg class="ico"><use href="#i-spark"/></svg><span class="t">Assistant</span></button>
     </header>
-    <div class="note"><svg class="ico"><use href="#i-alert"/></svg>Maquette : les commandes, clientes et chiffres sont des exemples. Rien n'est en ligne. <a href="#plan">Voir ce qui change et où va chaque écran</a></div>
+    <div class="note"><svg class="ico"><use href="#i-alert"/></svg>Maquette v3 : les commandes, clientes et chiffres sont des exemples. Rien n'est en ligne. Les réglages existants (prix, cadres des aperçus, livraison…) ne bougent pas. <a href="#plan">Voir ce qui change et les 20 nouveautés</a></div>
+    <div class="urg" id="urg" hidden></div>
     <main class="page" id="page"></main>
   </div>
 </div>
@@ -394,7 +516,9 @@ td.r,th.r{text-align:right}
   <div class="res" id="palRes"></div>
   <div class="ft"><span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> choisir</span><span><kbd class="kbd">Entrée</kbd> ouvrir</span><span><kbd class="kbd">G</kbd> puis <kbd class="kbd">C</kbd> Commandes</span></div>
 </div>
-<div class="toast" id="toast"><svg class="ico"><use href="#i-check"/></svg><span></span></div>
+<div class="toast" id="toast"><svg class="ico"><use href="#i-check"/></svg><span></span><button class="undo" type="button" id="toastUndo" hidden>Annuler</button></div>
+<div class="shortcuts" id="shortcuts" role="dialog" aria-label="Raccourcis clavier"><div class="box"><h3>Raccourcis clavier<span class="grow" style="flex:1"></span><button class="ibtn" type="button" data-close aria-label="Fermer"><svg class="ico"><use href="#i-x"/></svg></button></h3>
+<dl><dt><kbd class="kbd">⌘K</kbd> / <kbd class="kbd">/</kbd></dt><dd>Rechercher un écran, une commande, une action</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">A</kbd></dt><dd>Aujourd'hui</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">C</kbd></dt><dd>Commandes</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">M</kbd></dt><dd>Messages</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">P</kbd></dt><dd>Produits</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">F</kbd></dt><dd>Finances</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">R</kbd></dt><dd>Réglages</dd><dt><kbd class="kbd">Z</kbd></dt><dd>Annuler la dernière action (10 s)</dd><dt><kbd class="kbd">J</kbd> / <kbd class="kbd">K</kbd></dt><dd>Commande suivante / précédente (fiche ouverte)</dd><dt><kbd class="kbd">Échap</kbd></dt><dd>Fermer</dd><dt><kbd class="kbd">?</kbd></dt><dd>Cette aide</dd></dl></div></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
@@ -426,6 +550,11 @@ td.r,th.r{text-align:right}
   <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM5.5 5.5h2v2h-2zM16.5 5.5h2v2h-2zM5.5 16.5h2v2h-2zM14 14h3v3h-3zM19 14h2v2h-2zM14 19h2v2h-2zM18 18h3v3h-3z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4"/></symbol>
   <symbol id="i-euro" viewBox="0 0 24 24"><path d="M18 6.5A7 7 0 1 0 18 17.5M4 10h10M4 14h10"/></symbol>
 </svg>
 
@@ -482,7 +611,11 @@ const SECTIONS = [
     { id: "general", t: "Boutique", old: "Réglages" },
     { id: "apparence", t: "Apparence du site", old: "Apparence" },
     { id: "livraison", t: "Livraison", old: "Livraison" },
-    { id: "agents", t: "Équipe d'agents", old: "Équipe d'agents" } ] },
+    { id: "agents", t: "Équipe d'agents", old: "Équipe d'agents" },
+    { id: "regles", t: "Règles automatiques", old: "Nouveau (v3)" },
+    { id: "notifs", t: "Notifications & résumés", old: "Nouveau (v3)" },
+    { id: "journal", t: "Journal d'activité", old: "Nouveau (v3)" },
+    { id: "systeme", t: "État du système", old: "Nouveau (v3)" } ] },
 ];
 
 /* Ce que chaque écran garde (texte repris des écrans actuels) */
@@ -529,6 +662,10 @@ const ORDERS = [
   { ref: "3C6YB9JF", nom: "Léo F.", ini: "LF", age: "il y a 6 j", st: "exp", liv: "Domicile", total: 34.90, img: "couverts", art: "Couverts enfant gravés", det: "Prénom « Mia » · lapin" },
   { ref: "3B1VC5NZ", nom: "Anaïs T.", ini: "AT", age: "il y a 8 j", st: "liv", liv: "Lettre suivie", total: 22.41, img: "coeurgrave", art: "Collier cœur gravé", det: "Recto « A + J »" },
 ];
+const LIM = { "3K7QX2LM": 1, "3J1ZP8DA": 3, "3H8WK4TV": 2, "3G2NR6BE": -1, "3F5LT1XC": 0, "3E9MD7QA": -2 };
+ORDERS.forEach((o) => { o.lim = LIM[o.ref]; o.chk = o.st === "grav" ? [1, 0, 0, 0, 0] : (o.st === "exp" || o.st === "liv") ? [1, 1, 1, 1, 1] : [0, 0, 0, 0, 0]; o.photo = o.st === "exp" || o.st === "liv"; });
+const CHK = ["Gravée", "Contrôlée", "Emballée", "Étiquette imprimée", "Expédiée"];
+const TAGS = { suivi: ["tx-suivi", "Suivi colis"], avant: ["tx-avant", "Question avant achat"], pb: ["tx-pb", "Problème"], devis: ["tx-devis", "Devis"], pro: ["tx-pro", "Restaurant"], merci: ["tx-merci", "Merci"] };
 const ST = { prep: ["p-prep", "À préparer"], grav: ["p-grav", "En gravure"], exp: ["p-exp", "Expédiée"], liv: ["p-liv", "Livrée"] };
 
 const PRODUITS = [
@@ -558,17 +695,25 @@ const MAILS = [
   { id: 3, nom: "Le Bistrot du Port", ini: "BP", sujet: "Re: Le logo de votre établissement", ex: "Bonjour, pouvez-vous nous envoyer vos tarifs pour 24 verres ?", h: "hier", u: true, pro: true, draft: true },
   { id: 4, nom: "Marc D.", ini: "MD", sujet: "Merci !", ex: "Bien reçu le bracelet, il est magnifique, merci beaucoup.", h: "lun.", u: true },
   { id: 5, nom: "Inès M.", ini: "IM", sujet: "Re: Votre carafe", ex: "Parfait pour moi, vous pouvez graver Bernard.", h: "lun." },
+  { id: 6, nom: "Kim M.", ini: "KM", sujet: "Re: Devis DEV-1526", ex: "Bonjour, est-ce que le devis des flûtes est toujours valable ? Je voudrais régler cette semaine.", h: "8 h 05", u: true, draft: true, devis: "DEV-1526" },
+  { id: 7, nom: "Rose C.", ini: "RC", sujet: "Colis abîmé", ex: "Le carton est arrivé enfoncé et un verre est fêlé, je suis très déçue…", h: "7 h 50", u: true, draft: true, urg: true, cmd: "3D4HS2KW" },
 ];
+const MTAG = { 1: ["avant", 14], 2: ["suivi", 15], 3: ["pro", 30], 4: ["merci", 0], 5: ["merci", 0], 6: ["devis", 16], 7: ["pb", -2] };
+MAILS.forEach((m) => { const [t, sla] = MTAG[m.id] || ["avant", 20]; m.tag = t; m.sla = sla; });
+const CLIENTS = [["Camille R.", "CR", 2, 104.70, "aujourd'hui", "29 oct.", "Fidèle"], ["Sarah B.", "SB", 1, 30.51, "hier", "28 oct.", ""], ["Thomas G.", "TG", 3, 244.50, "il y a 2 j", "—", "Fidèle"], ["Inès M.", "IM", 1, 57.90, "il y a 3 j", "25 oct.", "Mariage"], ["Nadia K.", "NK", 2, 81.70, "il y a 5 j", "—", ""], ["Anaïs T.", "AT", 1, 22.41, "il y a 8 j", "20 oct.", "Code GRAVURE"]];
+const NOTIFS = [["bad", "bolt", "Commande Express 3K7QX2LM", "il y a 2 h", true], ["gold", "mail", "Rose C. : colis abîmé, réponse préparée", "7 h 50", true], ["gold", "mail", "Camille R. a répondu", "10 h 12", true], ["warn", "box", "Sac blanc et or presque épuisé", "hier", false], ["info", "chart", "Résumé du matin envoyé", "7 h 30", false], ["ok", "truck", "3D4HS2KW livrée (Mondial Relay)", "hier", false]];
+const JOURNAL = [["30 oct. 9 h 14", "Vous", "Prix · Collier 3 Cœurs", "33,90 €", "30,51 €", "prix"], ["30 oct. 8 h 02", "Règle « colis livré »", "Demande d'avis préparée · 3D4HS2KW", "—", "à valider", "regle"], ["29 oct. 18 h 40", "Vous", "Stock · Verre à vin 36 cl à l'unité", "12", "0", "stock"], ["29 oct. 18 h 12", "Vous", "Réglage des aperçus · Cristal vertical", "cadre 44 × 40 %", "cadre 44 × 40 % (inchangé)", "reglage"], ["29 oct. 11 h 30", "Vous", "Statut · 3G2NR6BE", "À préparer", "En gravure", "statut"], ["28 oct. 16 h 05", "Assistant (validé par vous)", "Réponse à Sarah B.", "—", "envoyée", "message"], ["28 oct. 9 h 00", "Vous", "Fêtes · Noël", "éteint", "allumé", "reglage"]];
+
 
 /* ---------- état ---------- */
-const state = { sec: "accueil", tab: {}, sel: new Set(), view: "toutes", mail: 1, setTab: "general", pins: ["commandes:file", "commandes:etiquettes", "stock:materiel"], recents: ["catalogue:produits", "clients:crm", "finances:benefices"], open: { commandes: true } };
+const state = { sec: "accueil", tab: {}, sel: new Set(), sort: { key: "", dir: 1 }, dtab: "resume", confirm: "", view: "toutes", mail: 1, setTab: "general", pins: ["commandes:file", "commandes:etiquettes", "stock:materiel"], recents: ["catalogue:produits", "clients:crm", "finances:benefices"], open: { commandes: true } };
 try { const s = JSON.parse(localStorage.getItem("niv-gestion-maquette") || "{}"); if (Array.isArray(s.pins)) state.pins = s.pins; if (s.mini) document.getElementById("app").classList.add("mini"); } catch (e) {}
 const save = () => { try { localStorage.setItem("niv-gestion-maquette", JSON.stringify({ pins: state.pins, mini: document.getElementById("app").classList.contains("mini") })); } catch (e) {} };
 const secOf = (id) => SECTIONS.find((s) => s.id === id);
 const tabOf = (s) => state.tab[s.id] || s.tabs[0].id;
 const label = (key) => { const [s, t] = key.split(":"); const S = secOf(s); const T = S && S.tabs.find((x) => x.id === t); return T ? { S, T } : null; };
 
-function toast(msg) { const t = document.getElementById("toast"); t.querySelector("span").textContent = msg; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("on"), 2200); }
+function toast(msg, undo) { const t = document.getElementById("toast"); t.querySelector("span").textContent = msg; const u = document.getElementById("toastUndo"); u.hidden = !undo; toast.undo = undo || null; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(() => { t.classList.remove("on"); toast.undo = null; }, undo ? 10000 : 2200); }
 
 /* ---------- menu ---------- */
 function renderSide() {
@@ -586,42 +731,72 @@ function renderSide() {
 }
 
 /* ---------- vues ---------- */
-function head(title, sub, acts = "") { return `<div class="ph"><div class="grow"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acts">${acts}</div></div>`; }
+function pinBtn() { const S = secOf(state.sec); if (!S) return ""; const k = S.id + ":" + tabOf(S); const on = state.pins.includes(k); return `<button class="btn sm ghost pinbtn ${on ? "on" : ""}" type="button" data-pin="${k}" title="${on ? "Retirer des raccourcis" : "Épingler dans les raccourcis"}">${I("pin")}${on ? "Épinglé" : "Épingler"}</button>`; }
+function head(title, sub, acts = "") { return `<div class="ph"><div class="grow"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acts">${acts}${pinBtn()}</div></div>`; }
+function dateFR() { const d = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); return d.charAt(0).toUpperCase() + d.slice(1); }
+function stars(n) { return `<span class="stars" aria-label="${n} sur 5">${"★".repeat(n)}${"☆".repeat(5 - n)}</span>`; }
+function tbl(cols, rows, opts = {}) { return `<div class="tw"><table><thead><tr>${cols.map((c) => `<th class="${c.r ? "r" : ""} ${c.m ? "hide-m" : ""}">${c.t}</th>`).join("")}</tr></thead><tbody>${rows.length ? rows.map((r) => `<tr ${opts.row ? opts.row(r) : ""}>${r.map((v, i) => `<td class="${cols[i].r ? "r num" : ""} ${cols[i].m ? "hide-m" : ""}">${v}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${cols.length}"><div class="empty"><b>${opts.vide || "Rien pour le moment"}</b>${opts.videSub || ""}</div></td></tr>`}</tbody></table></div>`; }
+function kpis(list) { return `<div class="kpis">${list.map(([l, v, d, c]) => `<div class="card kpi"><span class="l">${l}</span><span class="v num" style="${c ? `color:var(--${c})` : ""}">${v}</span>${d ? `<span class="d">${d}</span>` : ""}</div>`).join("")}</div>`; }
+function fs(h, p, body) { return `<div class="card fs"><div class="d"><h3>${h}</h3><p>${p}</p></div><div class="fields">${body}</div></div>`; }
+function tg(on, label, dirty) { return `<div class="row"><span>${label}</span><button type="button" class="tg ${on ? "on" : ""}" data-tg ${dirty ? "data-dirty" : ""} aria-label="${esc(label)}"></button></div>`; }
+function fld(id, label, val, small) { return `<div class="fld"><label for="${id}">${label}</label><input id="${id}" value="${esc(val)}" data-dirty>${small ? `<small>${small}</small>` : ""}</div>`; }
 function tabsBar(s) { return s.tabs.length > 1 ? `<div class="tabs" role="tablist">${s.tabs.map((t) => `<button class="tab ${tabOf(s) === t.id ? "on" : ""}" role="tab" type="button" data-go="${s.id}:${t.id}">${esc(t.t)}${t.badge ? `<span class="badge">${t.badge}</span>` : ""}</button>`).join("")}</div>` : ""; }
 function spark(pts) { const w = 160, h = 34, mx = Math.max(...pts), mn = Math.min(...pts); const xy = pts.map((v, i) => [i * w / (pts.length - 1), h - 3 - (v - mn) / ((mx - mn) || 1) * (h - 8)]); const l = xy.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" "); const e = xy[xy.length - 1]; return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path class="a" d="${l} L${w} ${h} L0 ${h}Z"/><path class="l" d="${l}"/><circle cx="${e[0]}" cy="${e[1]}" r="2.5"/></svg>`; }
 function img(k) { return IMG[k] ? `<img class="th" src="${IMG[k]}" alt="">` : `<span class="th"></span>`; }
 
+function limPill(o) { if (o.st === "exp" || o.st === "liv") return `<span class="lim none">partie</span>`; const n = o.lim; return n < 0 ? `<span class="lim late">en retard de ${-n} j</span>` : n === 0 ? `<span class="lim today">aujourd'hui</span>` : `<span class="lim ok">dans ${n} j ouvré${n > 1 ? "s" : ""}</span>`; }
+function progress(o) { const n = o.chk.filter(Boolean).length; return `<div class="prog" title="${n} / 5 étapes"><i style="width:${n * 20}%"></i></div>`; }
+const ACTIONS = [
+  { id: "a1", g: "urgent", c: "t-bad", ic: "bolt", b: "1 commande Express à graver en priorité", s: "3K7QX2LM · Camille R. · payée il y a 2 h · à expédier demain", go: "commandes:file", a: "Ouvrir", why: "Express Chronopost = engagement 24/48 h après confection. Elle passe devant toutes les autres." },
+  { id: "a2", g: "urgent", c: "t-bad", ic: "mail", b: "Rose C. signale un colis abîmé", s: "Réponse préparée par l'assistant · délai de réponse dépassé de 2 h", go: "messages:valider", a: "Relire", why: "Message classé « Problème » par l'assistant (mots : abîmé, fêlé, déçue). Priorité la plus haute de la boîte." },
+  { id: "a3", g: "urgent", c: "t-bad", ic: "clock", b: "2 commandes dépassent la date limite d'expédition", s: "3E9MD7QA (2 j de retard) · 3G2NR6BE (1 j)", go: "commandes:file", a: "Voir", why: "Le site promet 5 jours ouvrés de fabrication. Calcul : jours ouvrés, fériés exclus." },
+  { id: "a4", g: "jour", c: "t-warn", ic: "orders", b: "3 commandes à préparer aujourd'hui ou demain", s: "3F5LT1XC aujourd'hui · 3K7QX2LM demain · 3H8WK4TV dans 2 j", go: "commandes:file", a: "Tournée du jour", why: "Regroupées pour sortir fiches, étiquettes et matériel en une fois." },
+  { id: "a5", g: "jour", c: "t-gold", ic: "spark", b: "4 réponses de l'assistant à valider", s: "Rose C., Kim M. (devis), Camille R., Le Bistrot du Port", go: "messages:valider", a: "Relire", why: "L'assistant a lu chaque message et son dossier (commande, devis, échanges). Rien ne part sans vous." },
+  { id: "a6", g: "jour", c: "t-info", ic: "euro", b: "Kim M. veut régler le devis DEV-1526 cette semaine", s: "Devis envoyé le 25 oct. · 76,80 € · relance préparée", go: "commandes:devis", a: "Voir le devis", why: "Le message de Kim a été rapproché du devis par son e-mail. L'assistant voit maintenant les devis." },
+  { id: "a7", g: "semaine", c: "t-warn", ic: "box", b: "Réachat conseillé : sac blanc et or, chips de calage", s: "Sac : 4 restants, 3 par semaine → commander avant le 6 nov. · Chips : 6 L → avant le 12 nov.", go: "stock:materiel", a: "Préparer", why: "Point de réachat = vitesse d'utilisation × délai de livraison + marge de sécurité, par article. Plus un seuil fixe." },
+  { id: "a8", g: "semaine", c: "t-warn", ic: "tag", b: "Carafe : 2 en stock, 1 vendue par semaine, délai Metro 7 j", s: "Commander 6 carafes avant le 14 nov.", go: "catalogue:produits", a: "Voir", why: "Même calcul que le matériel, appliqué aux produits suivis en stock." },
+  { id: "a9", g: "semaine", c: "t-info", ic: "star", b: "1 avis 5 étoiles à publier", s: "Sarah B. · Collier 3 Cœurs", go: "clients:avis", a: "Lire", why: "Un avis n'est publié que sur votre clic." },
+  { id: "a10", g: "semaine", c: "t-info", ic: "chart", b: "Porte-clés cuir 35 % sous le prix du marché", s: "Veille hebdomadaire du lundi : 7,90 € chez vous, 12,95 à 13,90 € ailleurs", go: "marketing:marche", a: "Voir", why: "Veille automatique chaque lundi sur les 24 produits, avec recherche web. Signalé quand l'écart dépasse 20 %." },
+  { id: "a11", g: "auto", c: "auto", ic: "alert", b: "Anomalie : visites normales hier, 0 commande", s: "2 jours de suite · paiement testé automatiquement : OK · à surveiller", go: "finances:visiteurs", a: "Voir", why: "Comparé aux 4 mêmes jours des semaines précédentes. Le test de paiement a été fait par le site, sans commande réelle." },
+  { id: "a12", g: "auto", c: "auto", ic: "shield", b: "Ancien site Netlify répond encore", s: "www.nivcreation.fr pointe toujours dessus · 3 étapes à faire par vous", go: "reglages:systeme", a: "État du système", why: "Contrôle horaire. Tant qu'il répond, il peut renvoyer d'anciens e-mails automatiques." },
+];
+state.ignored = new Set(); state.whyOpen = ""; state.ignOpen = ""; state.urgSeen = false; state.group = false; state.mtag = "tous"; state.palCmd = null; state.editing = ""; state.unread = new Set([0, 1, 2]);
+function centreActions(compact) {
+  const G = [["urgent", "Urgent", "bad"], ["jour", "Aujourd'hui", ""], ["semaine", "Cette semaine", ""], ["auto", "Surveillance automatique", ""]];
+  const list = ACTIONS.filter((a) => !state.ignored.has(a.id));
+  return `<div class="card"><div class="ch">Centre d'actions<span class="grow"></span><span class="sub2 hide-m">${list.length} points · tout ce qui attend un geste, au même endroit</span></div>
+  ${G.map(([g, l, c]) => { const L = list.filter((a) => a.g === g); if (!L.length) return ""; return `<div class="ca-grp ${c}">${l}<i>${L.length}</i></div><ul class="todo" style="padding-top:0">${L.map((a) => `<li class="${a.c}"><span class="ic">${I(a.ic)}</span><span class="tx"><b>${a.b}</b><span>${a.s}</span></span><span class="mini"><button class="btn sm" type="button" ${a.a === "Tournée du jour" ? "data-tournee" : `data-go="${a.go}"`}>${a.a}</button><button class="ibtn" type="button" data-why="${a.id}" title="Pourquoi ?" aria-label="Pourquoi">?</button><button class="ibtn" type="button" data-ign="${a.id}" title="Ignorer" aria-label="Ignorer">${I("x")}</button></span></li>${state.whyOpen === a.id ? `<div class="why"><b>Pourquoi c'est là :</b> ${a.why}</div>` : ""}${state.ignOpen === a.id ? `<div class="ign">Ignorer parce que <select id="ignWhy"><option>déjà fait</option><option>pas utile</option><option>plus tard</option><option>faux signal</option></select>${btn("Ignorer", "sm", `data-ign-ok="${a.id}"`)}${btn("Garder", "sm ghost", `data-ign-no`)}</div>` : ""}`).join("")}</ul>`; }).join("")}
+  ${list.length ? "" : `<div class="empty"><b>Tout est traité</b>Rien n'attend votre geste.</div>`}</div>`;
+}
 function vAccueil() {
-  return `${head("Bonjour, voici votre journée", "Jeudi 29 octobre · 7 commandes à traiter, dont 1 Express à graver en priorité.", `<div class="seg" role="group"><button type="button">Aujourd'hui</button><button type="button">7 jours</button><button class="on" type="button">Ce mois</button><button type="button">30 jours</button></div>`)}
+  return `${head("Bonjour, voici votre journée", `${dateFR()} · 7 commandes à traiter, dont 1 Express à graver en priorité.`, `<div class="seg" role="group"><button type="button">Aujourd'hui</button><button type="button">7 jours</button><button class="on" type="button">Ce mois</button><button type="button">30 jours</button></div>`)}
   <div class="kpis">
-    ${[["Chiffre d'affaires", "1 842,60 €", "+18 % vs septembre", "up", [8, 9, 7, 11, 10, 13, 12, 15, 14, 17]], ["Commandes", "41", "+6 vs septembre", "up", [3, 4, 3, 5, 4, 6, 5, 6, 7, 8]], ["Panier moyen", "44,94 €", "+2,10 €", "up", [40, 42, 41, 43, 42, 44, 43, 45, 44, 45]], ["Bénéfice estimé", "968,20 €", "après achats, matériel et frais", "", [5, 6, 5, 7, 6, 8, 7, 9, 8, 10]]].map(([l, v, d, c, p]) => `<div class="card kpi"><span class="l">${l}</span><span class="v num">${v}</span><span class="d ${c}">${c ? "▲ " : ""}${d}</span>${spark(p)}</div>`).join("")}
+    ${[["Chiffre d'affaires", "1 842,60 €", "+18 % vs septembre", "up", [8, 9, 7, 11, 10, 13, 12, 15, 14, 17]], ["Commandes", "41", "+6 vs septembre", "up", [3, 4, 3, 5, 4, 6, 5, 6, 7, 8]], ["Panier moyen", "44,94 €", "+2,10 €", "up", [40, 42, 41, 43, 42, 44, 43, 45, 44, 45]], ["Fin de mois estimée", "2 310 €", "à ce rythme · objectif 2 500 €", "", [5, 6, 5, 7, 6, 8, 7, 9, 8, 10]]].map(([l, v, d, c, p]) => `<div class="card kpi"><span class="l">${l}</span><span class="v num">${v}</span><span class="d ${c}">${c ? "▲ " : ""}${d}</span>${spark(p)}</div>`).join("")}
   </div>
   <div class="grid g2">
-    <div class="card"><div class="ch">À faire maintenant<span class="grow"></span><span class="sub2 hide-m">les plus urgentes d'abord</span></div>
+    ${centreActions()}
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="resume"><b>${I("spark")}Résumé du matin · envoyé à 7 h 30 sur votre téléphone</b>Hier : 2 commandes (52,41 €). Aujourd'hui : 3 à expédier dont 1 Express, 4 réponses à valider, 2 articles à racheter. Mois en cours : 1 842 € sur 2 500 € d'objectif. <button class="lnk" type="button" data-go="reglages:notifs">Régler l'heure et le contenu</button></div>
+      <div class="card"><div class="ch">Activité récente<span class="grow"></span><button class="lnk" type="button" data-go="reglages:journal">Journal complet</button></div>
       <ul class="todo">
-        ${[["t-bad", "bolt", "1 commande Express à graver en priorité", "3K7QX2LM · Camille R. · payée il y a 2 h", "commandes:file", "Ouvrir"],
-          ["t-warn", "orders", "5 commandes à préparer", "La plus ancienne attend depuis 4 jours (3E9MD7QA)", "commandes:file", "Voir la file"],
-          ["t-gold", "spark", "3 réponses de l'assistant à valider", "Camille R., Sarah B., Le Bistrot du Port", "messages:valider", "Relire"],
-          ["t-info", "euro", "2 devis en attente de paiement", "DEV-1531 · 86,00 € et DEV-1532 · 41,90 €", "commandes:devis", "Relancer"],
-          ["t-warn", "box", "2 articles de matériel à racheter", "Sac blanc et or (4 restants), chips de calage", "stock:materiel", "Voir"],
-          ["t-info", "star", "1 avis à publier", "5 étoiles sur le Collier 3 Cœurs", "clients:avis", "Lire"]].map(([c, ic, b, s, go, a]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b><span>${s}</span></span><button class="btn sm" type="button" data-go="${go}">${a}</button></li>`).join("")}
+        ${[["t-ok", "check", "Commande 3K7QX2LM payée", "Verre à whisky · Express · il y a 2 h"], ["t-gold", "mail", "Camille R. a répondu", "dans la commande 3K7QX2LM · 10 h 12"], ["t-ok", "truck", "3D4HS2KW livrée", "Point relais · suivi Mondial Relay"], ["t-info", "users", "Nouvelle inscrite à la lettre", "via la fenêtre de bienvenue"], ["t-ok", "star", "Avis 5 étoiles reçu", "Collier 3 Cœurs"]].map(([c, ic, b, s]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b><span>${s}</span></span></li>`).join("")}
       </ul></div>
-    <div class="card"><div class="ch">Activité récente<span class="grow"></span><button class="lnk" type="button">Tout voir</button></div>
-      <ul class="todo">
-        ${[["t-ok", "check", "Commande 3K7QX2LM payée", "Verre à whisky · Express · il y a 2 h"], ["t-gold", "mail", "Camille R. a répondu", "dans la commande 3K7QX2LM · 10 h 12"], ["t-ok", "truck", "3D4HS2KW expédiée", "Point relais · suivi Mondial Relay"], ["t-info", "users", "Nouvelle inscrite à la lettre", "via la fenêtre de bienvenue"], ["t-ok", "star", "Avis 5 étoiles reçu", "Collier 3 Cœurs"]].map(([c, ic, b, s]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b><span>${s}</span></span></li>`).join("")}
-      </ul></div>
+    </div>
   </div>
   <div class="card"><div class="ch">Dernières commandes<span class="grow"></span><button class="lnk" type="button" data-go="commandes:file">Toutes les commandes</button></div>${ordersTable(ORDERS.slice(0, 5), false)}</div>`;
 }
 
+function sth(key, label, r) { const on = state.sort.key === key; return `<th class="sortable ${r ? "r" : ""}" data-sort="${key}">${label}<span class="arrow">${on ? (state.sort.dir > 0 ? "▲" : "▼") : "↕"}</span></th>`; }
+function sortRows(list) { const { key, dir } = state.sort; if (!key) return list; const ord = { prep: 0, grav: 1, exp: 2, liv: 3 }; return [...list].sort((a, b) => { const va = key === "st" ? ord[a.st] : a[key], vb = key === "st" ? ord[b.st] : b[key]; return (va > vb ? 1 : va < vb ? -1 : 0) * dir; }); }
 function ordersTable(list, checks) {
-  return `<div class="tw"><table><thead><tr>${checks ? `<th style="width:34px"><input type="checkbox" class="cb" id="all" aria-label="Tout cocher"></th>` : ""}<th>Commande</th><th>Cliente</th><th>Articles</th><th class="hide-m">Livraison</th><th>Statut</th><th class="r">Total</th></tr></thead><tbody>
-  ${list.map((o) => `<tr data-order="${o.ref}">${checks ? `<td><input type="checkbox" class="cb" data-sel="${o.ref}" ${state.sel.has(o.ref) ? "checked" : ""} aria-label="Cocher ${o.ref}"></td>` : ""}
+  return `<div class="tw"><table><thead><tr>${checks ? `<th style="width:34px"><input type="checkbox" class="cb" id="all" aria-label="Tout cocher"></th>` : ""}${sth("ref", "Commande")}${sth("nom", "Cliente")}<th>Articles</th><th class="hide-m">Livraison</th><th>Date limite</th>${sth("st", "Statut")}${sth("total", "Total", true)}</tr></thead><tbody>
+  ${sortRows(list).map((o) => `<tr data-order="${o.ref}">${checks ? `<td><input type="checkbox" class="cb" data-sel="${o.ref}" ${state.sel.has(o.ref) ? "checked" : ""} aria-label="Cocher ${o.ref}"></td>` : ""}
     <td><span class="ref">${o.ref}</span><div class="sub2">${o.age}</div></td>
     <td><div class="who"><span class="av">${o.ini}</span>${esc(o.nom)}</div></td>
     <td><div class="who">${img(o.img)}<div style="min-width:0"><div>${esc(o.art)}</div><div class="sub2">${esc(o.det)}</div></div></div></td>
     <td class="hide-m">${o.exp ? `<span class="pill p-bad">Express</span>` : `<span class="chip">${o.liv}</span>`}</td>
-    <td><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span></td>
+    <td>${limPill(o)}</td>
+    <td><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span>${progress(o)}</td>
     <td class="r num">${eur(o.total)}</td></tr>`).join("")}
   </tbody></table></div>`;
 }
@@ -630,50 +805,88 @@ function vCommandes(s, t) {
   if (t === "file") {
     const V = [["toutes", "Toutes", 9], ["prep", "À préparer", 4], ["grav", "En gravure", 2], ["express", "Express", 1], ["exp", "Expédiées", 2]];
     const list = ORDERS.filter((o) => state.view === "toutes" || (state.view === "express" ? o.exp : o.st === state.view));
-    return `${head("Commandes", "Dans l'ordre de traitement : Express d'abord, puis les plus anciennes.", `<button class="btn" type="button" data-go="commandes:etiquettes">${I("print")}Étiquettes</button><button class="btn pri" type="button" data-toast="Nouveau devis créé">${I("plus")}Nouveau devis</button>`)}${tabsBar(s)}
+    const groups = [["late", "En retard", (o) => o.lim < 0], ["today", "Aujourd'hui", (o) => o.lim === 0], ["week", "Cette semaine", (o) => o.lim > 0], ["gone", "Parties", (o) => o.st === "exp" || o.st === "liv"]];
+    const actives = list.filter((o) => o.st !== "exp" && o.st !== "liv");
+    const body = state.group
+      ? groups.map(([k, l, f]) => { const L = (k === "gone" ? list : actives).filter(f); if (!L.length) return ""; return `<div class="grph">${l}<span class="sub2" style="font-weight:400">${L.length} commande${L.length > 1 ? "s" : ""}</span>${k === "late" ? `<span class="lim late">à faire d'abord</span>` : k === "today" ? `<span class="lim today">date limite aujourd'hui</span>` : ""}</div>${ordersTable(L, true)}`; }).join("")
+      : ordersTable(list, true);
+    return `${head("Commandes", "Dans l'ordre de traitement : Express d'abord, puis les plus anciennes. La date limite est calculée en jours ouvrés.", `<button class="btn" type="button" data-tournee>${I("print")}Tournée du jour</button><button class="btn" type="button" data-go="commandes:etiquettes">Étiquettes</button><button class="btn pri" type="button" data-toast="Nouveau devis créé">${I("plus")}Nouveau devis</button>`)}${tabsBar(s)}
     ${state.sel.size ? `<div class="bulk"><b>${state.sel.size} sélectionnée${state.sel.size > 1 ? "s" : ""}</b><span class="grow"></span><button class="btn sm" type="button" data-toast="Fiches envoyées à l'impression">${I("print")}Imprimer les fiches</button><button class="btn sm" type="button" data-toast="Étiquettes prêtes">Étiquettes</button><button class="btn sm" type="button" data-toast="Passées en gravure">Passer en gravure</button><button class="btn sm" type="button" data-clear>Annuler</button></div>` : ""}
     <div class="card"><div class="toolbar"><div class="views">${V.map(([id, l, n]) => `<button type="button" class="vchip ${state.view === id ? "on" : ""}" data-view="${id}">${l}<i>${n}</i></button>`).join("")}</div>
-      <label class="search">${I("search")}<input id="qOrders" placeholder="Réf., cliente, produit"></label><button class="btn sm" type="button">${I("filter")}Filtres</button></div>
-      ${ordersTable(list, true)}</div>`;
+      <div class="seg" role="group"><button type="button" class="${state.group ? "" : "on"}" data-group="0">Liste</button><button type="button" class="${state.group ? "on" : ""}" data-group="1">Par date limite</button></div>
+      <label class="search">${I("search")}<input id="qOrders" placeholder="Réf., cliente, produit"></label></div>
+      ${body}</div>`;
   }
   return keepView(s, t);
+}
+function openTournee() {
+  const L = ORDERS.filter((o) => o.st === "prep" || o.st === "grav");
+  const sh = document.getElementById("sheet");
+  sh.innerHTML = `<div class="dh">${I("print")}<h2>Tournée du jour</h2><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="chat" style="gap:14px"><p class="sub2" style="margin:0">Un seul PDF, dans l'ordre de la file : les fiches atelier à graver, les étiquettes d'adresse La Poste et la liste du matériel à sortir. Les commandes en point relais ou Express gardent leur étiquette Boxtal.</p>
+  <div class="card"><div class="ch">${L.length} fiches atelier</div><ul class="todo">${L.map((o) => `<li class="${o.exp ? "t-bad" : "t-warn"}"><span class="ic">${I(o.exp ? "bolt" : "orders")}</span><span class="tx"><b>${o.ref} · ${esc(o.art)}</b><span>${esc(o.det)} · ${limPill(o)}</span></span></li>`).join("")}</ul></div>
+  <div class="card"><div class="ch">${L.filter((o) => o.liv === "Lettre suivie" || o.liv === "Domicile").length} étiquettes d'adresse<span class="grow"></span><span class="sub2">feuille en cours : cases 5 à 9</span></div><div style="padding:10px 16px" class="sub2">${L.filter((o) => o.liv === "Lettre suivie" || o.liv === "Domicile").map((o) => o.nom).join(" · ")}</div></div>
+  <div class="card"><div class="ch">Matériel à sortir</div><ul class="todo">${[["Carton 25 × 20 × 15", "2"], ["Chips de calage", "2 portions"], ["Sac cadeau", "3"], ["Boîte carrée", "1"], ["Étiquettes FRAGILE", "2"]].map(([n, q]) => `<li><span class="ic" style="background:var(--sunk)">${I("box")}</span><span class="tx"><b>${n}</b></span><span class="num">${q}</span></li>`).join("")}</ul></div></div>
+  <div class="compose">${btn(I("print") + "Télécharger le PDF (" + (L.length + 4) + " pages)", "pri", 'data-toast="PDF de la tournée prêt" style="flex:1;justify-content:center"')}</div>`;
+  sh.classList.add("on"); scrim.classList.add("on");
 }
 
 function vMessages(s, t) {
   if (t === "envois") return keepView(s, t);
-  const list = t === "valider" ? MAILS.filter((m) => m.draft) : MAILS;
-  const m = list.find((x) => x.id === state.mail) || list[0];
-  return `${head("Messages", "Tous les e-mails des clientes au même endroit. L'assistant prépare une réponse, vous la relisez avant qu'elle parte.", `<button class="btn pri" type="button" data-toast="Nouveau message">${I("plus")}Écrire à une cliente</button>`)}${tabsBar(s)}
+  let list = t === "valider" ? MAILS.filter((m) => m.draft) : MAILS;
+  if (state.mtag !== "tous") list = list.filter((m) => state.mtag === "urg" ? m.urg || m.sla < 0 : m.tag === state.mtag);
+  const m = list.find((x) => x.id === state.mail) || list[0] || MAILS[0];
+  const sla = (x) => x.sla === 0 ? "" : x.sla < 0 ? `<span class="sla bad">${I("clock")}dépassé de ${-x.sla} h</span>` : `<span class="sla">${I("clock")}reste ${x.sla} h</span>`;
+  const tag = (x) => `<span class="tagx ${TAGS[x.tag][0]}">${TAGS[x.tag][1]}</span>`;
+  const F = [["tous", "Tous", MAILS.length], ["urg", "Urgents", MAILS.filter((x) => x.urg || x.sla < 0).length], ["avant", "Avant achat", 1], ["suivi", "Suivi colis", 1], ["pb", "Problème", 1], ["devis", "Devis", 1], ["pro", "Restaurants", 1]];
+  return `${head("Messages", "Tous les e-mails des clientes au même endroit. L'assistant les classe, repère les urgences et prépare une réponse que vous relisez.", `<button class="btn pri" type="button" data-toast="Nouveau message">${I("plus")}Écrire à une cliente</button>`)}${tabsBar(s)}
   <div class="card inbox ${state.mailOpen ? "open" : ""}">
-    <div class="ilist">${list.map((x) => `<button type="button" class="im ${x.id === m.id ? "on" : ""}" data-mail="${x.id}"><span class="av">${x.ini}</span><span class="tx"><b>${esc(x.nom)}<small>${x.h}</small></b><span style="font-size:13px">${esc(x.sujet)}</span><p>${esc(x.ex)}</p>${x.draft ? `<span class="pill p-gold" style="margin-top:6px">Réponse prête</span>` : ""}${x.pro ? ` <span class="chip" style="margin-top:6px">Restaurant</span>` : ""}</span>${x.u ? `<span class="u"></span>` : ""}</button>`).join("")}</div>
-    <div class="thread"><header><button class="btn sm menu-btn" type="button" data-backmail style="margin-bottom:8px">${I("back")}Tous les messages</button><h3>${esc(m.sujet)}</h3><div class="sub2">${esc(m.nom)}${m.cmd ? ` · commande ${m.cmd}` : ""}</div></header>
+    <div class="ilist"><div class="toolbar" style="padding:8px"><div class="views">${F.map(([k, l, n]) => `<button type="button" class="vchip ${state.mtag === k ? "on" : ""}" data-mtag="${k}">${l}<i>${n}</i></button>`).join("")}</div></div>
+    ${list.map((x) => `<button type="button" class="im ${x.id === m.id ? "on" : ""} ${x.urg || x.sla < 0 ? "urgm" : ""}" data-mail="${x.id}"><span class="av">${x.ini}</span><span class="tx"><b>${esc(x.nom)}<small>${x.h}</small></b><span style="font-size:13px">${esc(x.sujet)}</span><p>${esc(x.ex)}</p><span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center">${tag(x)}${x.draft ? `<span class="pill p-gold">Réponse prête</span>` : ""}${sla(x)}</span></span>${x.u ? `<span class="u"></span>` : ""}</button>`).join("")}${list.length ? "" : `<div class="empty"><b>Aucun message</b>dans ce filtre</div>`}</div>
+    <div class="thread"><header><button class="btn sm menu-btn" type="button" data-backmail style="margin-bottom:8px">${I("back")}Tous les messages</button><h3>${esc(m.sujet)}</h3><div class="sub2" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${esc(m.nom)}${m.cmd ? ` · commande ${m.cmd}` : ""}${m.devis ? ` · devis ${m.devis}` : ""} ${tag(m)} ${sla(m)}</div></header>
       <div class="msgs"><div class="msg"><small>${esc(m.nom)} · ${m.h}</small>${esc(m.ex)} Merci d'avance.</div>
-      ${m.draft ? `<div class="draft"><div class="h">${I("spark")}Réponse préparée par l'assistant</div><textarea id="draftTx">Bonjour,\n\nMerci pour votre message. ${m.pro ? "Nous vous envoyons nos tarifs pour 24 verres gravés à votre logo." : "Nous avons bien reçu votre photo, elle sera utilisée pour la gravure de votre commande."}\n\nBelle journée,\nNiv Création</textarea><div class="acts"><button class="btn pri" type="button" data-toast="Réponse envoyée avec le bouton Répondre">${I("check")}Envoyer</button><button class="btn" type="button">Modifier avec l'assistant</button><button class="btn ghost" type="button" data-toast="Classé sans réponse">Classer sans réponse</button></div></div>` : `<div class="msg me"><small>Niv Création · lun.</small>Merci beaucoup pour votre retour, belle journée.</div>`}
+      ${m.draft ? `<div class="draft"><div class="h">${I("spark")}Réponse préparée par l'assistant${m.urg ? ` <span class="pill p-bad">à traiter en premier</span>` : ""}</div><textarea id="draftTx">Bonjour,\n\nMerci pour votre message. ${m.pro ? "Nous vous envoyons nos tarifs pour 24 verres gravés à votre logo." : m.devis ? "Votre devis DEV-1526 (76,80 €) reste valable : vous pouvez le régler avec le lien reçu le 25 octobre, la livraison se choisit au paiement." : m.urg ? "Nous sommes désolés pour l'état du colis. Pouvez-vous nous envoyer une photo du carton et du verre ? Nous reviendrons vers vous." : "Nous avons bien reçu votre photo, elle sera utilisée pour la gravure de votre commande."}\n\nBien cordialement,\nNiv Création</textarea><div class="acts"><button class="btn pri" type="button" data-toast="Réponse envoyée avec le bouton Répondre">${I("check")}Envoyer</button><button class="btn" type="button" data-ai>Modifier avec l'assistant</button><button class="btn ghost" type="button" data-toast="Classé sans réponse">Classer sans réponse</button></div></div>` : `<div class="msg me"><small>Niv Création · lun.</small>Merci beaucoup pour votre retour, belle journée.</div>`}
       </div></div>
-    <div class="ctx"><div><h4>Cliente</h4><div class="who"><span class="av">${m.ini}</span><div><b>${esc(m.nom)}</b><div class="sub2">${m.pro ? "Établissement démarché" : "2 commandes · 74,51 €"}</div></div></div></div>
-      ${m.cmd ? `<div><h4>Commande liée</h4><dl class="kv"><dt>Réf.</dt><dd class="ref">${m.cmd}</dd><dt>Statut</dt><dd><span class="pill p-prep">À préparer</span></dd><dt>Total</dt><dd class="num">69,80 €</dd></dl><button class="btn sm" style="margin-top:10px" type="button" data-order="${m.cmd}">Ouvrir la commande</button></div>` : ""}
-      <div><h4>Historique</h4><div class="sub2">5 messages depuis le 2 octobre, tous rangés ici automatiquement.</div></div></div>
+    <div class="ctx"><div><h4>Cliente</h4><div class="who"><span class="av">${m.ini}</span><div><b>${esc(m.nom)}</b><div class="sub2">${m.pro ? "Établissement démarché" : "2 commandes · 74,51 €"}</div></div></div>${m.pro ? "" : `<button class="btn sm" style="margin-top:10px" type="button" data-client="0">Fil complet de la cliente</button>`}</div>
+      ${m.cmd ? `<div><h4>Commande liée</h4><dl class="kv"><dt>Réf.</dt><dd class="ref">${m.cmd}</dd><dt>Statut</dt><dd><span class="pill ${ST[(ORDERS.find((o) => o.ref === m.cmd) || ORDERS[0]).st][0]}">${ST[(ORDERS.find((o) => o.ref === m.cmd) || ORDERS[0]).st][1]}</span></dd><dt>Total</dt><dd class="num">${eur((ORDERS.find((o) => o.ref === m.cmd) || ORDERS[0]).total)}</dd></dl><button class="btn sm" style="margin-top:10px" type="button" data-order="${m.cmd}">Ouvrir la commande</button></div>` : ""}
+      ${m.devis ? `<div><h4>Devis lié</h4><dl class="kv"><dt>N°</dt><dd class="ref">${m.devis}</dd><dt>Statut</dt><dd><span class="pill p-prep">Envoyé</span></dd><dt>Total</dt><dd class="num">76,80 €</dd><dt>Envoyé le</dt><dd>25 oct.</dd></dl><button class="btn sm" style="margin-top:10px" type="button" data-go="commandes:devis">Ouvrir le devis</button></div>` : ""}
+      <div><h4>Pourquoi ce classement</h4><div class="sub2">${m.urg ? "Mots repérés : « abîmé », « fêlé », « déçue » → Problème, urgent. Colis livré hier (suivi Mondial Relay)." : m.devis ? "L'adresse correspond au devis DEV-1526 envoyé le 25 oct. et non réglé." : m.tag === "suivi" ? "La cliente a une commande en cours et demande une date : Suivi colis." : m.tag === "pro" ? "Adresse d'un établissement démarché : rangé dans Restaurants & bars." : "Aucune commande en cours ne correspond : question avant achat."}</div></div></div>
   </div>`;
 }
 
 function vClients(s, t) {
   if (t !== "crm") return keepView(s, t);
-  const C = [["Camille R.", "CR", 2, 104.70, "aujourd'hui", "29 oct.", "Fidèle"], ["Sarah B.", "SB", 1, 30.51, "hier", "28 oct.", ""], ["Thomas G.", "TG", 3, 244.50, "il y a 2 j", "—", "Fidèle"], ["Inès M.", "IM", 1, 57.90, "il y a 3 j", "25 oct.", "Mariage"], ["Nadia K.", "NK", 2, 81.70, "il y a 5 j", "—", ""], ["Anaïs T.", "AT", 1, 22.41, "il y a 8 j", "20 oct.", "Code GRAVURE"]];
-  return `${head("Clientes", "Toutes vos clientes, leurs commandes, leurs échanges et leurs segments.", `<button class="btn" type="button">Exporter</button><button class="btn pri" type="button" data-go="messages:envois">Écrire à un segment</button>`)}${tabsBar(s)}
+  return `${head("Clientes", "Toutes vos clientes. Une ligne ouvre son fil complet : commandes, e-mails, devis, avis, favoris, connexions, avec un résumé écrit par l'assistant.", `<button class="btn" type="button">Exporter</button><button class="btn pri" type="button" data-go="messages:envois">Écrire à un segment</button>`)}${tabsBar(s)}
   <div class="card"><div class="toolbar"><div class="views">${[["Toutes", 214], ["Ont commandé", 41], ["Fidèles", 9], ["Inscrites à la lettre", 173], ["Anniversaire ce mois", 3]].map(([l, n], i) => `<button type="button" class="vchip ${i ? "" : "on"}">${l}<i>${n}</i></button>`).join("")}</div><label class="search">${I("search")}<input id="qClients" placeholder="Nom ou e-mail"></label></div>
-  <div class="tw"><table><thead><tr><th>Cliente</th><th class="r">Commandes</th><th class="r">Dépensé</th><th>Dernière commande</th><th class="hide-m">Connexion</th><th>Segment</th></tr></thead><tbody>
-  ${C.map(([n, i, c, d, l, cx, tag]) => `<tr><td><div class="who"><span class="av">${i}</span>${n}</div></td><td class="r num">${c}</td><td class="r num">${eur(d)}</td><td>${l}</td><td class="hide-m sub2">${cx}</td><td>${tag ? `<span class="chip">${tag}</span>` : ""}</td></tr>`).join("")}
+  <div class="tw"><table><thead><tr><th>Cliente</th><th class="r">Commandes</th><th class="r">Dépensé</th><th>Dernière commande</th><th class="hide-m">Connexion</th><th>Segment</th><th></th></tr></thead><tbody>
+  ${CLIENTS.map(([n, i, c, d, l, cx, tag], k) => `<tr data-client="${k}"><td><div class="who"><span class="av">${i}</span>${n}</div></td><td class="r num">${c}</td><td class="r num">${eur(d)}</td><td>${l}</td><td class="hide-m sub2">${cx}</td><td>${tag ? `<span class="chip">${tag}</span>` : ""}</td><td class="r">${I("arrow")}</td></tr>`).join("")}
   </tbody></table></div></div>`;
+}
+function openClient(k) {
+  const [n, i, c, d, l, cx, tag] = CLIENTS[k] || CLIENTS[0];
+  state.curOrder = "";
+  const d2 = document.getElementById("drawer");
+  const TL = [["orders", "Commande 3K7QX2LM · Verre à whisky gravé · Lot de 2 · 69,80 €", "aujourd'hui · Express · à préparer"], ["mail", "A répondu par le bouton « Répondre » : photo en meilleure qualité", "aujourd'hui 10 h 12"], ["alert", "Photo relue : aucune date dans l'image", "aujourd'hui"], ["users", "Connexion à son espace client", "29 oct."], ["star", "Avis 5 étoiles sur le Collier 3 Cœurs", "22 oct."], ["truck", "Commande 2ZZ9KQ1D livrée · lettre suivie", "18 oct."], ["mail", "Nous : « votre colis est parti »", "14 oct."], ["pin", "Favoris : Carafe à whisky gravée, Cristal photo 3D vertical", "12 oct."], ["tag", "Code BIENVENUE10 utilisé", "9 oct."], ["orders", "Commande 2ZZ9KQ1D · Collier 3 Cœurs · 34,90 €", "9 oct."], ["users", "Inscription à la lettre d'information", "2 oct."]];
+  d2.innerHTML = `<div class="dh"><h2><span class="av" style="display:inline-grid;margin-right:8px">${i}</span>${esc(n)}</h2>${tag ? `<span class="chip">${tag}</span>` : ""}<button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="db">
+    <div class="resume"><b>${I("spark")}Résumé par l'assistant</b>${c} commande${c > 1 ? "s" : ""} pour ${eur(d)}. Une commande Express en cours (verre à whisky, photo renvoyée ce matin, à utiliser pour la gravure). A laissé un avis 5 étoiles. Garde la carafe en favori : idée pour Noël.</div>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div class="card kpi"><span class="l">Commandes</span><span class="v num">${c}</span></div><div class="card kpi"><span class="l">Dépensé</span><span class="v num">${eur(d)}</span></div><div class="card kpi"><span class="l">Dernière connexion</span><span class="v" style="font-size:16px">${cx}</span></div></div>
+    <div class="card"><div class="ch">Fil complet<span class="grow"></span><span class="sub2">commandes, e-mails, devis, avis, favoris, connexions, codes, suivi</span></div><div style="padding:14px 16px"><ul class="ctl">${TL.map(([ic, t, w]) => `<li><span class="ic">${I(ic)}</span><div>${t}<small>${w}</small></div></li>`).join("")}</ul></div></div>
+    <div class="acts">${btn(I("mail") + "Écrire", "pri", 'data-go="messages:envois"')}${btn("Commandes", "", 'data-go="commandes:fiches"')}${btn("Exporter le dossier", "", 'data-toast="Dossier exporté"')}</div>
+  </div>`;
+  d2.classList.add("on"); scrim.classList.add("on");
 }
 
 function vCatalogue(s, t) {
   if (t !== "produits") return keepView(s, t);
-  return `${head("Produits & stock", "Prix, stock et visibilité de chaque création. Le stock se modifie directement dans la liste.", `<button class="btn" type="button" data-go="stock:achats">${I("box")}Déposer une facture</button><button class="btn pri" type="button" data-toast="Nouveau produit">${I("plus")}Ajouter un produit</button>`)}${tabsBar(s)}
+  return `${head("Produits & stock", "Prix, nom et stock se modifient directement dans la liste : touchez la valeur, tapez, Entrée. Chaque changement s'enregistre et peut être annulé pendant 10 secondes.", `<button class="btn" type="button" data-go="stock:achats">${I("box")}Déposer une facture</button><button class="btn pri" type="button" data-toast="Nouveau produit">${I("plus")}Ajouter un produit</button>`)}${tabsBar(s)}
   <div class="kpis"><div class="card kpi"><span class="l">En vente</span><span class="v num">78</span></div><div class="card kpi"><span class="l">En rupture</span><span class="v num down">1</span></div><div class="card kpi"><span class="l">Stock bas</span><span class="v num" style="color:var(--warn)">2</span></div><div class="card kpi"><span class="l">À corriger</span><span class="v num" style="color:var(--warn)">2</span></div></div>
+  <div class="card"><div class="ch">Réachat conseillé<span class="grow"></span><span class="sub2 hide-m">vitesse de vente × délai fournisseur + sécurité, par produit</span></div>
+  ${[["Carafe à whisky gravée", "2 en stock · 1 vendue par semaine · délai Metro 7 j", "Commander 6 avant le 14 nov."], ["Bracelet cordon à plaque", "3 en stock · 2 par semaine · délai Nihao 18 j", "Commander 12 avant le 3 nov."], ["Verre à vin 36 cl", "en rupture · 3 par semaine · délai Metro 7 j", "Commander 12 maintenant"]].map(([n, d, a]) => `<div class="reach"><div><b>${n}</b><small>${d}</small></div>${btn(a, "sm", 'data-go="stock:achats"')}</div>`).join("")}</div>
   <div class="card"><div class="toolbar"><div class="views">${["Tous", "Bijoux", "Cristal", "Verres & carafes", "Bébé & Enfant", "Mariage", "Maison", "Petits cadeaux"].map((l, i) => `<button type="button" class="vchip ${i ? "" : "on"}">${l}</button>`).join("")}</div><label class="search">${I("search")}<input id="qProd" placeholder="Nom du produit"></label></div>
   <div class="tw"><table><thead><tr><th>Produit</th><th class="hide-m">Univers</th><th class="r">Prix</th><th class="r">Stock</th><th>Sur le site</th></tr></thead><tbody>
-  ${PRODUITS.map((p, k) => `<tr><td><div class="who">${img(p.img)}<div style="min-width:0"><div>${esc(p.n)}</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">${p.ch.map((c) => `<span class="chip">${c}</span>`).join("")}${p.warn ? `<span class="chip x">${p.warn}</span>` : ""}${p.out ? `<span class="pill p-bad">Rupture</span>` : p.low ? `<span class="pill p-prep">Stock bas</span>` : ""}</div></div></div></td>
-    <td class="hide-m sub2">${p.u}</td><td class="r num">${eur(p.p)}</td>
+  ${PRODUITS.map((p, k) => `<tr><td><div class="who">${img(p.img)}<div style="min-width:0"><div>${state.editing === "n" + k ? `<input class="edit-in" style="width:220px" id="ed" value="${esc(p.n)}" data-edit-key="n${k}">` : `<span class="edit" data-edit="n${k}" title="Modifier le nom">${esc(p.n)}</span>`}</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">${p.ch.map((c) => `<span class="chip">${c}</span>`).join("")}${p.warn ? `<span class="chip x">${p.warn}</span>` : ""}${p.out ? `<span class="pill p-bad">Rupture</span>` : p.low ? `<span class="pill p-prep">Stock bas</span>` : ""}</div></div></div></td>
+    <td class="hide-m sub2">${p.u}</td><td class="r num">${state.editing === "p" + k ? `<input class="edit-in" id="ed" value="${p.p.toFixed(2).replace(".", ",")}" data-edit-key="p${k}">` : `<span class="edit" data-edit="p${k}" title="Modifier le prix">${eur(p.p)}</span>`}</td>
     <td class="r">${p.s === null ? `<span class="sub2">non suivi</span>` : `<input class="stock-in" id="stk${k}" value="${p.s}" aria-label="Stock ${esc(p.n)}">`}</td>
     <td><button type="button" class="tg ${p.out ? "" : "on"}" aria-label="Visible sur le site" data-tg></button></td></tr>`).join("")}
   </tbody></table></div></div>`;
@@ -683,6 +896,8 @@ function vStock(s, t) {
   if (t !== "materiel") return keepView(s, t);
   return `${head("Matériel", "Tout ce que vous achetez pour emballer et expédier. Le stock baisse quand vous validez le conditionnement d'une commande.", `<button class="btn" type="button" data-go="stock:achats">Déposer une facture</button><button class="btn pri" type="button" data-toast="Réception enregistrée">${I("plus")}Réception</button>`)}${tabsBar(s)}
   <div class="card"><div class="toolbar"><div class="views">${["Tout", "À racheter", "Cartons & boîtes", "Calage & papier", "Emballages bijoux", "Bois à graver"].map((l, i) => `<button type="button" class="vchip ${i ? "" : "on"}">${l}${i === 1 ? "<i>2</i>" : ""}</button>`).join("")}</div></div>
+  <div class="ch">À racheter, calculé<span class="grow"></span><span class="sub2 hide-m">consommation réelle × délai de livraison + sécurité</span></div>
+  ${[["Sac blanc et or à anses", "4 restants · 3 par semaine · Amazon 2 j", "Commander 2 lots de 6 avant le 6 nov."], ["Chips de calage", "6 L restants · 2 L par colis · 3 colis par semaine · Amazon 2 j", "Commander 100 L avant le 12 nov."]].map(([n, d, a]) => `<div class="reach"><div><b>${n}</b><small>${d}</small></div>${btn(a, "sm", 'data-toast="Commande préparée dans Achats & factures"')}</div>`).join("")}
   <div class="mgrid">${MAT.map((m) => `<div class="mcard">${IMG[m.img] ? `<img src="${IMG[m.img]}" alt="">` : ""}<div class="top2"><b>${m.n}</b>${m.low ? `<span class="pill p-prep">À racheter</span>` : ""}</div><div class="bar ${m.low ? "low" : ""}"><i style="width:${Math.max(4, Math.round(m.s / m.max * 100))}%"></i></div><div class="row sub2"><span class="num">${m.s} en stock</span><span class="num">${eur(m.c)} l'utilisation</span></div><div class="sub2">Pour : ${m.use}</div></div>`).join("")}</div></div>`;
 }
 
@@ -723,6 +938,7 @@ function vReglages(s, t) {
 
 function keepView(s, t) {
   const T = s.tabs.find((x) => x.id === t);
+  if (VUES[t]) { const v = VUES[t](); return `${head(esc(v.titre || T.t), v.sub || GARDE[t] || "", v.acts || "")}${tabsBar(s)}${v.body}`; }
   return `${head(esc(T.t), "")}${tabsBar(s)}
   <div class="card keep"><span class="pill p-exp" style="align-self:flex-start">Écran conservé</span><h3>${esc(T.t)}</h3><p>${esc(GARDE[t] || "")}</p><p class="sub2">Ancien nom dans le menu : « ${esc(T.old)} ». Tout son contenu reste, présenté avec le même cadre que les autres écrans : titre, sous-onglets, barre de filtres, tableaux et boutons identiques partout.</p>
   <div class="skel"><i style="width:60%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:70%"></i></div></div>`;
@@ -730,22 +946,159 @@ function keepView(s, t) {
 
 function vPlan() {
   const P = [["map", "9 sections au lieu de 37 entrées", "Le menu montre 9 grandes sections. Chaque écran devient un sous-onglet de sa section, en haut de la page. Le menu passe de 37 lignes à 9.", "Shopify, Etsy Shop Manager"],
-    ["home", "« Aujourd'hui » : ce qui attend une action", "L'accueil commence par une liste de tâches classées par urgence : Express, commandes en attente, réponses à valider, devis, matériel, avis. Chaque ligne a son bouton.", "Etsy Shop Manager 2025"],
-    ["search", "Une recherche qui ouvre tout", "⌘K, Ctrl+K ou la touche / : une commande, une cliente, un produit, n'importe quel écran ou une action (« imprimer les étiquettes »).", "Linear, Railway, Vercel"],
+    ["home", "« Aujourd'hui » : ce qui attend une action", "L'accueil commence par le centre d'actions, classé par urgence. Chaque ligne a son bouton, un « pourquoi » et « ignorer » avec un motif.", "Etsy Shop Manager 2025, Amazon Action Center 2026"],
+    ["search", "Une recherche qui ouvre tout et qui agit", "⌘K, Ctrl+K ou la touche / : une commande, une cliente, un produit, un écran, ou une commande rapide (« expédier… », « éteindre Noël ») avec confirmation.", "Linear, Railway, WooCommerce 10.8"],
     ["pin", "Raccourcis épinglés et écrans récents", "Vous épinglez les écrans que vous ouvrez tous les jours. Les trois derniers visités s'affichent en dessous.", "Stripe Dashboard"],
-    ["spark", "L'assistant partout, en panneau", "Le bouton Assistant ouvre un panneau à droite sur n'importe quel écran, sans quitter la commande ou le produit en cours.", "Shopify Sidekick (2026)"],
-    ["orders", "Une commande s'ouvre à côté de la liste", "La fiche complète s'ouvre en panneau à droite. Fermer le panneau ramène exactement là où vous étiez.", "Shopify, Stripe"],
-    ["filter", "Vues enregistrées et actions groupées", "En haut de chaque liste, des vues prêtes (À préparer, Express, Expédiées) avec leur nombre. Cocher plusieurs lignes ouvre une barre d'actions : imprimer, étiquettes, statut.", "Shopify, Linear"],
-    ["set", "Un seul cadre pour tous les écrans", "Même titre, mêmes onglets, mêmes boutons, mêmes pastilles de statut, mêmes icônes dessinées. Une barre « Enregistrer » apparaît dès qu'un réglage change.", "Stripe, Polaris"],
+    ["spark", "L'assistant partout, à la voix", "Le bouton Assistant ouvre un panneau à droite sur n'importe quel écran. Il connaît l'écran ouvert et la commande en cours. Il montre ce qu'il va faire, vous confirmez.", "Shopify Sidekick 2026"],
+    ["orders", "Une commande s'ouvre à côté de la liste", "La fiche complète s'ouvre en panneau à droite, avec sa liste de contrôle, sa photo de pièce finie et son code QR.", "Shopify, Stripe"],
+    ["filter", "Vues enregistrées, date limite, actions groupées", "Des vues prêtes avec leur nombre, une vue « par date limite » (en retard, aujourd'hui, cette semaine), une barre d'actions sur la sélection.", "Shopify, Linear, Etsy Seller"],
+    ["set", "Un seul cadre pour tous les écrans", "Même titre, mêmes onglets, mêmes boutons, mêmes pastilles. Une barre « Enregistrer » apparaît dès qu'un réglage change. Prix et stock se modifient dans la liste.", "Stripe, Polaris, Linear"],
     ["panel", "Menu réductible, téléphone au pouce", "Sur ordinateur, le menu se réduit à ses icônes. Sur téléphone, 5 onglets en bas et le reste derrière « Plus ».", "Shopify mobile, Etsy Seller"]];
+  const V3 = [["Centre d'actions unique", "Aujourd'hui", "Amazon Action Center, Shopify Pulse"], ["Règles « si… alors… » simulées avant d'être allumées", "Réglages › Règles automatiques", "Shopify Flow, Zapier"], ["Réachat calculé (vitesse × délai + sécurité)", "Produits & stock, Matériel", "Shopify Flow, guides de réassort"], ["Résumé du matin et du lundi", "Aujourd'hui, Réglages › Notifications", "Stripe (appli), FlowSense"], ["Alertes d'anomalie", "Centre d'actions, Réglages › Notifications", "FlowSense, Shopify Pulse"], ["État du système (feux vert / rouge)", "Réglages › État du système", "Pratique des grands back-offices"], ["Fil client unifié + résumé par l'assistant", "Clients › Clientes (une ligne)", "HubSpot, Zendesk"], ["Boîte triée : étiquettes, urgences, délai de réponse, devis lus", "Messages", "Front, Gorgias"], ["Veille prix hebdomadaire", "Marketing › Étude de marché", "Shopify Pulse (recherche web), Amazon Canvas"], ["Rapprochement Stripe, livre des recettes, trésorerie prévue", "Finances › Inventaire & compta", "Pennylane, Qonto, Xero"], ["Tournée du jour en un PDF", "Commandes (bouton)", "Sendcloud Pack & Go, Shippo Print"], ["Code QR sur chaque fiche atelier", "Atelier, fiche commande", "Sendcloud (scanner)"], ["Liste de contrôle par commande", "Fiche commande, scan", "Etsy Top Tasks, Katana"], ["Vue « quoi expédier et quand »", "Commandes › Par date limite", "Etsy Seller app"], ["Journal d'activité + Rétablir + Annuler 10 s", "Réglages › Journal, partout", "Adminlog, Linear"], ["Photo de la pièce finie", "Fiche commande", "Pratique atelier"], ["Notifications persistantes et cloche", "Bandeau rouge, cloche en haut", "Square (juin 2026)"], ["Édition en ligne du prix et du nom", "Produits & stock", "Linear"], ["Assistant à la voix, qui connaît l'écran", "Bouton Assistant", "Shopify Sidekick 2026"], ["Palette qui agit, avec confirmation", "⌘K", "Linear, WooCommerce"]];
   const rows = SECTIONS.flatMap((s) => s.tabs.map((t) => [t.old, s.t, t.t]));
   rows.splice(1, 0, ["Assistant", "En haut de chaque écran", "Bouton Assistant (panneau)"]);
-  return `${head("Ce qui change", "Rien n'est supprimé : les 37 écrans actuels sont tous là, rangés autrement. Voici les principes, repris des grands back-offices, puis la place de chaque écran.")}
+  return `${head("Ce qui change", "Rien n'est supprimé : les 37 écrans actuels sont tous là, rangés autrement, et 4 écrans s'ajoutent dans Réglages. Voici les principes, les 20 nouveautés de la v3, puis la place de chaque écran.")}
   <div class="princ">${P.map(([ic, h, p, src]) => `<div class="card pc"><h3>${I(ic)}${h}</h3><p>${p}</p><small>Vu chez : ${src}</small></div>`).join("")}</div>
-  <div class="card"><div class="ch">Où va chaque écran<span class="grow"></span><span class="sub2">${rows.length} écrans, 0 supprimé</span></div><div class="tw"><table><thead><tr><th>Écran actuel</th><th>Nouvelle section</th><th>Nouvel onglet</th></tr></thead><tbody>${rows.map(([o, s, n]) => `<tr><td>${esc(o)}</td><td class="moved">${esc(s)}</td><td>${esc(n)}</td></tr>`).join("")}</tbody></table></div></div>
-  <div class="card pc"><h3>${I("check")}Ce qui ne bouge pas</h3><p>Les adresses actuelles (/gestion/commandes, /gestion/crm…) continuent de marcher. Les compteurs, la file de production, le conditionnement, les étiquettes, l'impression A4, les règles d'envoi et de validation restent identiques. Les couleurs or, crème et encre de la marque sont gardées.</p></div>
-  <div class="card pc"><h3>${I("alert")}À trancher par vous</h3><p>« Emballages » et « Matériel & emballages » restent deux onglets séparés dans Stock & achats. « Réglages produits » réunit les outils cristal, verres, carafe et couverts. Les textes de Gestion passent tous au « vous » : aujourd'hui certains écrans disent « tu », d'autres « vous ».</p></div>`;
+  <div class="card"><div class="ch">Les 20 nouveautés de la v3<span class="grow"></span><span class="sub2">le site surveille, prépare, propose ; vous décidez</span></div><div class="tw"><table><thead><tr><th>#</th><th>Nouveauté</th><th>Où</th><th class="hide-m">Vu chez</th></tr></thead><tbody>${V3.map(([n, w, src], i) => `<tr><td class="num">${i + 1}</td><td>${n}</td><td class="moved">${w}</td><td class="hide-m sub2">${src}</td></tr>`).join("")}</tbody></table></div></div>
+  <div class="card"><div class="ch">Où va chaque écran<span class="grow"></span><span class="sub2">${rows.length} écrans · 0 supprimé · 4 nouveaux</span></div><div class="tw"><table><thead><tr><th>Écran actuel</th><th>Nouvelle section</th><th>Nouvel onglet</th></tr></thead><tbody>${rows.map(([o, s, n]) => `<tr><td>${o.startsWith("Nouveau") ? `<span class="same">${esc(o)}</span>` : esc(o)}</td><td class="moved">${esc(s)}</td><td>${esc(n)}</td></tr>`).join("")}</tbody></table></div></div>
+  <div class="card pc"><h3>${I("shield")}Ce qui ne bouge pas à la mise en ligne</h3><p>Aucun réglage enregistré n'est touché : prix et options des produits, cadres des aperçus (cristal, verres, carafe, couverts), livraison, fêtes, emballages, stock, commandes, codes. Les adresses actuelles (/gestion/commandes, /gestion/crm…) continuent de marcher. Un export des réglages est pris avant et après, et comparé. Les couleurs or, crème et encre de la marque sont gardées.</p></div>
+  <div class="card pc"><h3>${I("alert")}À trancher par vous</h3><p>« Emballages » et « Matériel & emballages » restent deux onglets séparés dans Stock & achats. Les textes de Gestion passent tous au « vous ». L'heure du résumé du matin et les seuils d'anomalie se règlent dans Réglages › Notifications.</p></div>`;
 }
+
+
+/* ---------- v2 : les 28 autres écrans, dessinés avec le même cadre ---------- */
+const pill = (c, t) => `<span class="pill ${c}">${t}</span>`;
+const chip = (t) => `<span class="chip">${t}</span>`;
+const btn = (t, cls = "sm", extra = "") => `<button class="btn ${cls}" type="button" ${extra}>${t}</button>`;
+const tbar = (views, q) => `<div class="toolbar"><div class="views">${views.map((v, i) => `<button type="button" class="vchip ${i ? "" : "on"}">${v[0]}${v[1] !== undefined ? `<i>${v[1]}</i>` : ""}</button>`).join("")}</div>${q ? `<label class="search">${I("search")}<input placeholder="${q}"></label>` : ""}</div>`;
+const who = (ini, nom, sub) => `<div class="who"><span class="av">${ini}</span><div style="min-width:0"><div>${nom}</div>${sub ? `<div class="sub2">${sub}</div>` : ""}</div></div>`;
+const prod = (k, n, sub) => `<div class="who">${img(k)}<div style="min-width:0"><div>${n}</div>${sub ? `<div class="sub2">${sub}</div>` : ""}</div></div>`;
+
+const VUES = {
+  fiches: () => ({ sub: "Toutes les commandes, avec recherche et filtres. Une ligne ouvre la fiche complète en panneau, sans quitter la liste.",
+    acts: btn(I("print") + "Imprimer la sélection", "", 'data-toast="Fiches envoyées à l\'impression"'),
+    body: `<div class="card">${tbar([["Toutes", 41], ["Ce mois", 12], ["Livrées", 24], ["Annulées", 2], ["Avec message non lu", 1]], "Réf., cliente, e-mail, produit")}${ordersTable(ORDERS, true)}</div>` }),
+  atelier: () => ({ sub: "Pour chaque article à graver : le visuel exact tel que la cliente l'a vu, les réglages, le fichier prêt pour la machine.",
+    body: `${tbar([["À graver", 6], ["En gravure", 2], ["Sur devis", 1], ["Tout", 9]])}<div class="mgrid" style="padding:0">${ORDERS.filter((o) => o.st !== "liv" && o.st !== "exp").map((o) => `<div class="mcard">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="">` : ""}<div class="top2"><b><span class="ref">${o.ref}</span></b>${o.exp ? pill("p-bad", "Express") : pill(ST[o.st][0], ST[o.st][1])}</div><div>${esc(o.art)}</div><div class="engr"><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div><div class="acts">${btn("PNG")}${btn("SVG")}${btn("PDF à l'échelle")}</div><div class="qrrow">${qr(o.ref)}<span class="sub2" style="flex:1">Imprimé sur la fiche. Scanné avec le téléphone : la commande s'ouvre, vous cochez gravée, emballée, expédiée.</span>${btn(I("qr"), "sm", `data-scan="${o.ref}" aria-label="Scanner"`)}</div><div class="acts">${btn("Conditionnement", "sm", `data-order="${o.ref}"`)}${btn("✗ Raté, à refaire", "sm ghost", 'data-toast="Raté noté, stock mis à jour"')}</div></div>`).join("")}</div>` }),
+  etiquettes: () => ({ sub: "Planches de 20 étiquettes 45 × 45 mm pour La Poste. Touchez les cases déjà utilisées : l'impression ira sur les suivantes.",
+    acts: btn(I("print") + "Imprimer la planche", "pri", 'data-toast="Planche envoyée à l\'impression"'),
+    body: `<div class="grid g2"><div class="card"><div class="ch">1 · Commandes à expédier par La Poste</div><ul class="todo">${ORDERS.filter((o) => o.st === "prep" || o.st === "grav").map((o) => `<li><input type="checkbox" class="cb" ${o.liv === "Lettre suivie" || o.liv === "Domicile" ? "checked" : "disabled"} aria-label="${o.ref}"><span class="tx"><b>${esc(o.nom)} · <span class="ref">${o.ref}</span></b><span>${o.liv === "Lettre suivie" ? "Lettre suivie" : o.liv === "Domicile" ? "Colis à domicile" : `${o.liv} : étiquette Boxtal, pas ici`}</span></span>${o.exp ? pill("p-bad", "Express") : ""}</li>`).join("")}</ul>
+      <div class="ch">2 · Expéditeur et style</div><div style="padding:14px;display:flex;flex-direction:column;gap:12px"><div class="seg"><button class="on" type="button">En bas de l'étiquette</button><button type="button">Étiquette à part</button><button type="button">Aucun</button></div><div class="seg"><button class="on" type="button">Simple</button><button type="button">Écrin</button><button type="button">Bandeau</button><button type="button">Sobre</button></div>${tg(false, "Ajouter le numéro de commande")}</div></div>
+      <div class="card"><div class="ch">3 · La feuille<span class="grow"></span><span class="sub2">4 cases déjà utilisées</span></div><div style="padding:14px;display:flex;flex-direction:column;gap:12px;align-items:flex-start"><div class="sheetgrid" id="sheet">${Array.from({ length: 20 }, (_, i) => `<button type="button" data-cell="${i}" class="${i < 4 ? "used" : i < 7 ? "next" : ""}">${i + 1}</button>`).join("")}</div><div class="sub2">Grisé = déjà décollée · doré = où vos 3 étiquettes vont s'imprimer</div><div class="acts">${btn("Feuille neuve", "sm", "data-sheet-new")}${btn("Décaler d'une case", "sm", "data-sheet-shift")}</div></div></div></div>` }),
+  devis: () => ({ sub: "Devis et factures. Un devis payé devient une commande, avec sa fiche atelier.",
+    acts: btn(I("plus") + "Nouveau devis", "pri", 'data-toast="Nouveau devis créé"'),
+    body: `<div class="card">${tbar([["Tous", 9], ["Envoyés", 2], ["Payés", 5], ["Brouillons", 1], ["Factures", 4]], "N°, client, objet")}${tbl([{ t: "N°" }, { t: "Client" }, { t: "Objet" }, { t: "Statut" }, { t: "Montant", r: true }, { t: "Envoyé le", m: true }],
+      [["<span class=ref>DEV-1531</span>", who("LB", "Le Bistrot du Port", "restaurant"), "24 verres à vin, logo gravé", pill("p-prep", "Envoyé"), eur(86), "27 oct."], ["<span class=ref>DEV-1532</span>", who("DE", "Doriane E."), "4 verres à vin 36 cl, visuel + date", pill("p-prep", "Envoyé"), eur(41.9), "28 oct."], ["<span class=ref>DEV-1527</span>", who("KM", "Kim M."), "2 flûtes, prénoms + date", pill("p-exp", "Payé · commande 3C6YB9JF"), eur(43.8), "19 oct."], ["<span class=ref>FAC-0088</span>", who("TG", "Thomas G."), "Facture de la commande 3H8WK4TV", pill("p-liv", "Facture"), eur(119.8), "27 oct."], ["<span class=ref>DEV-1533</span>", who("—", "À compléter"), "Carafe + 2 verres assortis", pill("p-liv", "Brouillon"), eur(94.7), "—"]])}</div>` }),
+  envois: () => ({ sub: "Écrire à une cliente, programmer un envoi à l'heure voulue, gérer les modèles. Tout part par le site, avec le bouton « Répondre ».",
+    body: `<div class="grid g2"><div class="form">${fs("Écrire à une cliente", "Le message part avec le gabarit de la marque et le bouton « Répondre à ce message ».", `${fld("e-to", "Adresse e-mail", "camille.r@exemple.fr")}${fld("e-sub", "Objet", "Votre verre à whisky gravé")}<div class="fld"><label for="e-body">Message</label><textarea id="e-body" style="min-height:120px;border:1px solid var(--line-2);border-radius:8px;padding:10px;background:var(--surface);resize:vertical;line-height:1.55">Bonjour,
+
+Merci pour votre message.</textarea></div><div class="acts">${btn(I("check") + "Envoyer", "pri", 'data-toast="Message envoyé"')}${btn("Programmer…", "", 'data-toast="Envoi programmé"')}</div>`)}</div>
+      <div class="form"><div class="card"><div class="ch">Envois programmés<span class="grow"></span>${chip("2 à venir")}</div>${tbl([{ t: "Quand" }, { t: "À" }, { t: "Objet" }, { t: "" }], [["ven. 31 oct. · 9 h 00", "aurore.c@exemple.fr", "Votre carafe et ses verres assortis", btn("Annuler", "sm ghost")], ["lun. 3 nov. · 10 h 00", "inscrites (125)", "✦ Nos idées cadeaux de Noël", btn("Relire", "sm")]])}</div>
+      <div class="card"><div class="ch">Modèles<span class="grow"></span><button class="lnk" type="button">+ Nouveau modèle</button></div><ul class="todo">${[["Colis expédié", "Votre commande est en route, avec le lien de suivi"], ["Avez-vous bien reçu ?", "Contrôle de réception, sans mention du transporteur"], ["Demande d'avis", "Après livraison confirmée seulement"], ["Photo illisible", "Demande d'une photo plus nette pour la gravure"]].map(([b, s]) => `<li class="t-gold"><span class="ic">${I("mail")}</span><span class="tx"><b>${b}</b><span>${s}</span></span>${btn("Utiliser", "sm")}</li>`).join("")}</ul></div></div></div>` }),
+  avis: () => ({ sub: "Les avis déposés par les clientes. Rien n'est publié sans votre clic. L'e-mail n'est visible qu'ici.",
+    acts: btn(I("plus") + "Ajouter un avis reçu ailleurs", "", 'data-toast="Avis ajouté"'),
+    body: `<div class="card">${tbar([["À valider", 1], ["Publiés", 18], ["Masqués", 1]])}${[[5, "Collier 3 Cœurs", "Sarah B.", "Magnifique, la gravure est très fine et le sac cadeau est parfait pour offrir.", "il y a 3 h", true, "✓ A commandé ce produit"], [5, "Carafe à whisky gravée", "Marc D.", "Offert à mon père, il a adoré. Gravure impeccable, emballage soigné.", "il y a 6 j", false, "✓ A commandé ce produit"], [4, "Cristal photo 3D vertical", "Nadia K.", "Très beau rendu, le socle LED change tout le soir.", "il y a 12 j", false, "✓ Cliente"]].map(([n, p, a, t, d, att, ver]) => `<div class="rev"><span class="av">${a.split(" ").map((x) => x[0]).join("")}</span><div class="tx"><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap">${stars(n)}<b>${p}</b><span class="sub2">${a} · ${d}</span>${att ? pill("p-prep", "À valider") : pill("p-exp", "Publié")}</div><p>${t}</p><div class="sub2">${ver} · e-mail visible ici seulement</div></div><div class="acts" style="flex-direction:column">${att ? btn(I("check") + "Publier", "sm pri", 'data-toast="Avis publié"') : ""}${btn(att ? "Masquer" : "Retirer", "sm ghost", 'data-toast="Avis masqué"')}</div></div>`).join("")}</div>` }),
+  fidelite: () => ({ sub: "Cagnottes, cashback, parrainage et codes ambassadeurs.",
+    body: `${kpis([["Cagnottes actives", "23", "pour 184,20 € au total"], ["Cashback versé ce mois", "41,80 €", "sur 12 commandes"], ["Parrainages", "6", "2 ce mois"], ["Ambassadeurs", "3", "commissions à régler : 18 €", "warn"]])}
+      <div class="card"><div class="ch">Cagnottes</div>${tbar([["Toutes", 23], ["À créditer", 2], ["Utilisées", 9]], "Cliente")}${tbl([{ t: "Cliente" }, { t: "Solde", r: true }, { t: "Gagné", r: true }, { t: "Dépensé", r: true }, { t: "Dernier mouvement", m: true }], [[who("CR", "Camille R."), eur(8.2), eur(14.7), eur(6.5), "aujourd'hui"], [who("TG", "Thomas G."), eur(22.4), eur(22.4), eur(0), "il y a 2 j"], [who("NK", "Nadia K."), eur(3.9), eur(11.9), eur(8), "il y a 5 j"]])}</div>` }),
+  favoris: () => ({ sub: "Les créations les plus mises de côté par les clientes connectées. Lecture seule : aucun e-mail ne part d'ici.",
+    acts: btn("Exporter", "", 'data-toast="Export prêt"'),
+    body: `${kpis([["Favoris enregistrés", "212"], ["Clientes avec favoris", "67"], ["Création la plus gardée", "Collier 3 Cœurs"], ["Alertes de prix actives", "14"]])}
+      <div class="card"><div class="ch">Classement</div>${tbl([{ t: "Création" }, { t: "Favoris", r: true }, { t: "Alertes prix", r: true }, { t: "Prix", r: true }], [[prod("coeurs3", "Collier 3 Cœurs", "Bijoux"), "38", "6", eur(30.51)], [prod("cristal", "Cristal photo 3D vertical", "Cristal"), "27", "3", eur(39.9)], [prod("carafe", "Carafe à whisky gravée", "Verres & carafes"), "19", "2", eur(54.9)], [prod("whisky", "Verre à whisky gravé", "Verres & carafes"), "16", "1", eur(22.9)]])}</div>` }),
+  connexions: () => ({ sub: "Qui se connecte à son espace client. Conservé 90 jours. Une visite sans connexion est invisible.",
+    body: `${kpis([["Aujourd'hui", "4"], ["7 jours", "19"], ["Distinctes sur 30 j", "41"], ["Lien demandé sans suite", "3", "clientes qui hésitent", "warn"]])}
+      <div class="card">${tbar([["Toutes", 41], ["Lien sans suite", 3]], "Nom ou e-mail")}${tbl([{ t: "Cliente" }, { t: "Dernière ouverture" }, { t: "Ouvertures", r: true }, { t: "Commandes", r: true }, { t: "" }], [[who("CR", "Camille R.", "camille.r@exemple.fr"), "aujourd'hui, 10 h 05", "7", "2", btn("Dossier", "sm")], [who("SB", "Sarah B.", "sarah.b@exemple.fr"), pill("p-prep", "lien demandé, jamais ouvert"), "0", "1", btn("Dossier", "sm")], [who("LF", "Léo F."), "hier", "2", "1", btn("Dossier", "sm")]])}</div>` }),
+  restaurants: () => ({ sub: "Bars et restaurants démarchés pour la gravure de leur logo sur nos verres. Un seul bouton envoie vraiment.",
+    acts: btn("Envoyer aux établissements prêts (12)", "pri", 'data-toast="12 e-mails envoyés"'),
+    body: `${kpis([["Établissements", "366"], ["E-mails envoyés", "214"], ["Ont répondu", "9", "", "ok"], ["Adresses mortes", "3", "", "bad"]])}
+      <div class="card">${tbar([["Tous", 366], ["À contacter", 140], ["Prêts (vérifiés)", 12], ["Envoyés", 214], ["Ont répondu", 9], ["STOP", 2], ["Adresses mortes", 3]], "Nom, ville, e-mail")}${tbl([{ t: "Établissement" }, { t: "Ville", m: true }, { t: "Statut" }, { t: "Dernier échange", m: true }, { t: "" }], [[who("BP", "Le Bistrot du Port", "bar à cocktails"), "La Rochelle", pill("p-gold", "A répondu · nouveau"), "hier : demande de tarifs pour 24 verres", btn("Répondre", "sm pri", 'data-go="messages:boite"')], [who("CV", "Cave des Halles", "caviste"), "Lyon", pill("p-exp", "Envoyé"), "26 sept.", btn("Relancer", "sm")], [who("LR", "La Rotonde", "brasserie"), "Nantes", pill("p-liv", "À contacter · vérifié"), "—", btn("Écrire", "sm")], [who("BA", "Bar Allel", ""), "Marseille", pill("p-bad", "Adresse invalide"), "a rebondi", btn("Retirer", "sm ghost")]])}</div>` }),
+  visibilite: () => ({ sub: "Masquez un univers ou un rayon entier d'un geste : tous ses produits disparaissent du site. Réaffichez-le et tout revient.",
+    body: `<div class="card">${[["Bijoux", 32, true, ["Colliers", "Bracelets femme", "Bracelets homme"]], ["Cristal", 5, true, ["Blocs photo", "Cristaux déjà gravés"]], ["Verres & carafes", 8, true, ["Verres à vin", "Flûtes", "Whisky & cocktail", "Carafe"]], ["Bébé & Enfant", 18, true, ["Jeux en bois", "Repas & chambre"]], ["Mariage", 12, true, []], ["Maison", 7, false, ["Bougeoirs", "Supports téléphone"]], ["Marque-pages", 3, true, ["En bois", "En métal"]]].map(([u, n, on, rayons]) => `<div style="padding:12px 16px;border-bottom:1px solid var(--line)"><div class="row"><div><b>${u}</b> <span class="sub2">· ${n} produits${on ? "" : " · masqué depuis le 21 oct."}</span></div><button type="button" class="tg ${on ? "on" : ""}" data-tg aria-label="${u}"></button></div>${rayons.length ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${rayons.map((r) => `<span class="chip">${r} <button type="button" class="tg on" data-tg aria-label="${r}" style="width:26px;height:16px;margin-left:4px"></button></span>`).join("")}</div>` : ""}</div>`).join("")}</div>` }),
+  categories: () => ({ sub: "L'ordre des univers dans le menu et des produits dans chaque rayon.",
+    acts: btn(I("check") + "Enregistrer l'ordre", "pri", 'data-toast="Ordre enregistré"'),
+    body: `<div class="card"><ul class="todo">${["Bijoux", "Cristal", "Verres & carafes", "Bébé & Enfant", "Marque-pages", "Mariage", "Maison", "Petits cadeaux"].map((u, i) => `<li><span class="ic" style="background:var(--sunk);color:var(--muted);font-weight:600">${i + 1}</span><span class="tx"><b>${u}</b><span>${[32, 5, 8, 18, 3, 12, 7, 13][i]} produits · ${[3, 2, 4, 2, 2, 1, 2, 1][i]} rayons</span></span><div class="acts">${btn("▲", "sm")}${btn("▼", "sm")}${btn("Ordre des produits", "sm ghost")}</div></li>`).join("")}</ul></div>` }),
+  gravure: () => ({ sub: "Les produits gravables, leurs champs et leurs suppléments. Chaque « +X € » écrit est un supplément vraiment payé.",
+    body: `<div class="card">${tbar([["Tous", 38], ["Verres", 7], ["Bijoux", 19], ["Cristal", 5], ["Bois", 7]], "Produit")}${tbl([{ t: "Produit" }, { t: "Champs de gravure" }, { t: "Suppléments" }, { t: "Contrôle" }], [[prod("whisky", "Verre à whisky gravé"), "photo · texte · date · décor · écriture · face / fond", "texte +3 € · face + fond +7 €", pill("p-exp", "✓ prix cohérents")], [prod("coeurs3", "Collier 3 Cœurs"), "recto · verso · écriture", "+3 € par texte", pill("p-exp", "✓")], [prod("cristal", "Cristal photo 3D vertical"), "photo · texte · place · socle", "texte +5 € · socle 14,90 / 19,90 €", pill("p-exp", "✓")], [prod("couverts", "Couverts enfant gravés"), "prénom · motif par couvert", "compris", pill("p-bad", "prix écrit ≠ payé")]])}</div>` }),
+  apercus: () => ({ sub: "Placez à la souris le cadre où la gravure se pose sur chaque photo. Les quatre outils sont réunis ici ; chaque enregistrement ne touche que son produit.",
+    body: `<div class="grid g2"><div class="form"><div class="card"><div class="ch">Produit à régler</div><div style="padding:12px;display:flex;flex-direction:column;gap:8px">${[["Cristaux (blocs, porte-clés, pyramide)", "8 cadres", "cristal"], ["Verres (vin, flûte, whisky, cocktail, tumbler)", "11 cadres · face et fond", "whisky"], ["Carafe", "2 cadres", "carafe"], ["Couverts enfant", "prénom + motif par couvert", "couverts"]].map(([n, s, k], i) => `<div class="outil" style="${i === 1 ? "border-color:var(--gold-2)" : ""}">${img(k)}<div style="flex:1;min-width:0"><b>${n}</b><span>${s}</span></div>${i === 1 ? pill("p-gold", "ouvert") : btn("Ouvrir", "sm")}</div>`).join("")}</div></div></div>
+      <div class="card"><div class="ch">Verre à whisky · face avant<span class="grow"></span>${chip("cadre : 42 × 38 %")}</div><div style="padding:14px;display:flex;flex-direction:column;gap:12px"><div class="frame">${IMG.whisky ? `<img src="${IMG.whisky}" alt="">` : ""}<div class="box"></div></div>${tg(true, "Utiliser ce cadre sur la fiche", true)}<div class="acts">${btn("Face avant", "sm pri")}${btn("Fond du verre", "sm")}${btn("Replacer au centre", "sm ghost")}</div></div></div></div>` }),
+  tailles: () => ({ sub: "Guide des tailles et des coûts des pièces en bois, pour fixer un prix juste.",
+    body: `<div class="card">${tbl([{ t: "Pièce" }, { t: "Taille conseillée" }, { t: "Bois" }, { t: "Coût matière", r: true }, { t: "Prix de vente", r: true }], [["Plaque de porte enfant", "20 × 12 cm", "tilleul 3 mm", eur(0.3), eur(29.99)], ["Numéro de table", "12 × 10 cm", "tilleul 3 mm", eur(0.15), eur(4.9)], ["Support téléphone", "15 × 9 cm", "bouleau 5 mm", eur(0.6), eur(19.9)], ["Puzzle à encastrer", "18,5 × 13,5 cm", "tilleul 3 mm", eur(0.35), eur(19.9)]])}<div style="padding:12px 16px" class="sub2">Base : une plaque A3 de tilleul 3 mm = 2,40 €.</div></div>` }),
+  sante: () => ({ sub: "Ce que la surveillance automatique a trouvé. Les points importants vous sont aussi envoyés par e-mail chaque semaine.",
+    body: `${kpis([["Produits en vente", "78"], ["Points importants", "2", "", "bad"], ["Points mineurs", "3", "", "warn"], ["Dernier passage", "aujourd'hui 6 h"]])}
+      <div class="card"><ul class="todo">${[["t-bad", "alert", "Couverts enfant gravés : prix écrit différent du prix payé", "La description dit « +3 € », le paiement ne facture rien", "catalogue:gravure", "Corriger"], ["t-bad", "alert", "Flûte à champagne : aucune photo gravée", "La fiche ne montre que des verres vierges", "catalogue:produits", "Voir la fiche"], ["t-warn", "box", "Carafe : stock bas (2)", "Seuil d'alerte : 3", "catalogue:produits", "Voir"], ["t-warn", "tag", "Marque-page métal : aucun guide de conseils ne le couvre", "", "catalogue:produits", "Voir"], ["t-info", "clock", "Noël allumé : dernière mise à jour des images il y a 1 j", "Rien à faire", "", ""]].map(([c, ic, b, s, go, a]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b>${s ? `<span>${s}</span>` : ""}</span>${a ? btn(a, "sm", `data-go="${go}"`) : ""}</li>`).join("")}</ul></div>` }),
+  emballages: () => ({ sub: "Les emballages proposés aux clientes sur les fiches bijoux : prix de vente, stock et attribution par produit.",
+    acts: btn(I("plus") + "Ajouter un emballage", "", 'data-toast="Emballage ajouté"'),
+    body: `<div class="card"><div class="toolbar"><div class="views"><span class="sub2">Visibles sur le site</span></div>${tg(true, "", true).replace('<div class="row">', '<div class="row" style="gap:6px">')}</div><div class="mgrid" style="padding-top:0">${[["m_sac", "Sac cadeau", 1.2, 89, "tous les bijoux"], ["m_carree", "Boîte carrée", 3, 98, "colliers, bracelets fins"], ["m_sacor", "Boîte allongée", 5, 99, "bracelets homme"], ["m_carton", "Pack Collier", 5.5, 99, "sac + boîte + microfibre"]].map(([k, n, p, s, pour]) => `<div class="mcard">${IMG[k] ? `<img src="${IMG[k]}" alt="">` : ""}<div class="top2"><b>${n}</b><b class="num">${eur(p)}</b></div><div class="sub2">Pour : ${pour}</div><div class="row sub2"><span class="num">${s} en stock</span>${btn("Modifier", "sm ghost")}</div></div>`).join("")}</div></div>` }),
+  achats: () => ({ sub: "Déposez une facture ou un reçu : l'agent lit les lignes, retrouve vos produits et propose les quantités. Vous corrigez, vous validez.",
+    body: `<div class="card"><div class="upload">${I("box")}<div style="margin-top:8px"><b>Déposez une facture ici</b> (PDF, photo, CSV)</div><div class="sub2">ou collez le texte de la commande</div>${btn("Choisir un fichier", "sm", 'style="margin-top:10px"')}</div></div>
+      <div class="card"><div class="ch">Historique<span class="grow"></span><button class="lnk" type="button">Exporter</button></div>${tbl([{ t: "Date" }, { t: "Fournisseur" }, { t: "Lignes" }, { t: "Montant", r: true }, { t: "Stock" }], [["23 oct.", "Alibaba · marque-pages", "8 produits + 3 boîtes", eur(315.41), pill("p-exp", "mis à jour")], ["17 oct.", "Temu · emballages de Noël", "6 articles", eur(48.6), pill("p-exp", "mis à jour")], ["11 oct.", "Metro · verres", "3 cartons", eur(74.36), pill("p-exp", "mis à jour")]])}</div>` }),
+  promos: () => ({ sub: "Les codes promo, leur usage et les codes personnels envoyés par l'offre gravure.",
+    acts: btn(I("plus") + "Nouveau code", "pri", 'data-toast="Code créé"') + btn("Nettoyer les codes expirés", "", 'data-toast="12 codes expirés retirés"'),
+    body: `<div class="card">${tbar([["Actifs", 14], ["Ouverts", 4], ["Personnels", 10], ["Expirés", 12]], "Code")}${tbl([{ t: "Code" }, { t: "Remise" }, { t: "Pour" }, { t: "Utilisé", r: true }, { t: "Valable" }, { t: "" }], [["<span class=ref>BIENVENUE10</span>", "−10 %", "nouvelles inscrites", "87", "sans fin", chip("ouvert")], ["<span class=ref>GRAVURE-A7K2</span>", "1 gravure offerte", "camille.r@exemple.fr", "0", "jusqu'au 14 nov.", chip("personnel")], ["<span class=ref>AMB-LEA</span>", "−10 %", "ambassadrice Léa", "12", "sans fin", chip("ouvert")], ["<span class=ref>CADEAU-K9P2M</span>", "solde 30,00 €", "carte cadeau", "0 / 1", "jusqu'au 10 oct. 2027", chip("carte cadeau")]])}</div>` }),
+  offre: () => ({ sub: "L'offre « gravure offerte » aux inscrites qui n'ont jamais commandé : un code personnel, 30 jours, une seule fois.",
+    body: `${kpis([["Codes envoyés", "53"], ["Utilisés", "7", "", "ok"], ["Se sont connectées", "19"], ["En attente d'envoi", "12", "inscrites de plus de 3 jours", "warn"]])}
+      <div class="card"><div class="ch">Réglage<span class="grow"></span>${pill("p-liv", "En pause")}</div><div style="padding:14px;display:flex;flex-direction:column;gap:12px">${tg(false, "Activer l'offre (les inscrites en attente sont servies aussitôt)", true)}<div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">${fld("og-code", "Préfixe du code", "GRAVURE")}${fld("og-jours", "Inscrites depuis au moins (jours)", "3")}</div></div></div>
+      <div class="card"><div class="ch">Suivi des codes</div>${tbar([["Tous", 53], ["Utilisés", 7], ["Connectées", 19], ["Jamais connectées", 34]])}${tbl([{ t: "Cliente" }, { t: "Code" }, { t: "Envoyé le", m: true }, { t: "Connectée ?" }, { t: "Statut" }], [[who("AT", "anais.t@exemple.fr"), "<span class=ref>GRAVURE-M4P9</span>", "20 sept.", pill("p-exp", "🔑 connectée le 22 sept. · 3 fois"), pill("p-exp", "utilisé · 22,41 €")], [who("—", "julie.p@exemple.fr"), "<span class=ref>GRAVURE-Q2W7</span>", "20 sept.", pill("p-prep", "lien demandé, jamais ouvert"), pill("p-liv", "non utilisé")], [who("—", "lea.m@exemple.fr"), "<span class=ref>GRAVURE-B8T3</span>", "25 sept.", chip("jamais connectée"), pill("p-liv", "non utilisé")]])}</div>` }),
+  marche: () => ({ sub: "Veille automatique chaque lundi : les 24 produits sont relus sur le web, un écart de plus de 20 % remonte dans le centre d'actions.",
+    acts: `<div class="row" style="gap:8px"><span class="sub2">Veille du lundi</span><button type="button" class="tg on" data-tg aria-label="Veille hebdomadaire"></button></div>` + btn("Relire maintenant", "pri", 'data-toast="Veille lancée : résultats dans quelques minutes"'),
+    body: `${kpis([["Dernier passage", "lun. 27 oct.", "6 h 10 · 24 produits"], ["Sous le marché", "3", "écart > 20 %", "warn"], ["Au niveau", "17"], ["Au-dessus", "4"]])}
+      <div class="card">${tbar([["Tous", 24], ["Sous le marché", 3], ["Au niveau", 17], ["Au-dessus", 4], ["A bougé ce mois", 2]], "Produit")}${tbl([{ t: "Produit" }, { t: "Notre prix", r: true }, { t: "Marché" }, { t: "Position" }, { t: "Depuis le mois dernier", m: true }], [[prod("whisky", "Verre à whisky gravé"), eur(22.9), "19,90 – 29,90 €", pill("p-exp", "au niveau"), "<span class=sub2>stable</span>"], [prod("cordon", "Porte-clés cuir gravé"), eur(7.9), "12,95 – 13,90 €", pill("p-prep", "35 % sous le marché"), "<span class=up>▲ marché +1 €</span>"], [prod("cristal", "Cristal photo 3D vertical"), eur(39.9), "39 – 169 €", pill("p-exp", "au niveau"), "<span class=sub2>stable</span>"], [prod("savane", "Puzzle à encastrer"), eur(19.9), "20 – 55 €", pill("p-prep", "sous le marché"), "<span class=down>▼ marché −2 €</span>"]])}</div>` }),
+  ventes: () => ({ sub: "Les ventes par période et les créations les plus vendues.",
+    acts: `<div class="seg"><button type="button">Mois</button><button class="on" type="button">90 jours</button><button type="button">Année</button></div>`,
+    body: `${kpis([["Commandes", "121", "90 derniers jours"], ["Pièces vendues", "168"], ["Chiffre d'affaires", "5 214,30 €"], ["Panier moyen", "43,09 €"]])}
+      <div class="card"><div class="ch">Les plus vendus<span class="grow"></span><span class="sub2">en pièces, hors annulées</span></div>${tbl([{ t: "#" }, { t: "Création" }, { t: "Pièces", r: true }, { t: "CA", r: true }, { t: "Part" }], [[1, prod("coeurs3", "Collier 3 Cœurs"), "31", eur(945.81), `<div class="bar" style="width:120px"><i style="width:100%"></i></div>`], [2, prod("whisky", "Verre à whisky gravé"), "26", eur(702.4), `<div class="bar" style="width:120px"><i style="width:84%"></i></div>`], [3, prod("cristal", "Cristal photo 3D vertical"), "14", eur(1118.6), `<div class="bar" style="width:120px"><i style="width:45%"></i></div>`], [4, prod("carafe", "Carafe à whisky gravée"), "9", eur(494.1), `<div class="bar" style="width:120px"><i style="width:29%"></i></div>`], [5, prod("savane", "Puzzle Savane"), "8", eur(159.2), `<div class="bar" style="width:120px"><i style="width:26%"></i></div>`]])}</div>` }),
+  visiteurs: () => ({ sub: "Le trafic du site et l'entonnoir : qui vient, qui remplit un panier, qui paie.",
+    acts: `<div class="seg"><button type="button">7 jours</button><button class="on" type="button">30 jours</button></div>`,
+    body: `${kpis([["Visiteurs", "2 418", "+12 % vs 30 j précédents"], ["Pages vues", "9 702"], ["Depuis Instagram", "31 %"], ["Depuis Google", "44 %"]])}
+      <div class="card"><div class="ch">Entonnoir des 30 derniers jours</div><div class="funnel">${[["Visiteurs", 2418, 100], ["Ont rempli un panier", 212, 8.8], ["Sont allés au paiement", 96, 4], ["Ont acheté", 41, 1.7]].map(([l, n, p]) => `<div><span>${l}</span><i style="width:${Math.max(4, p)}%"></i><span class="num r">${n.toLocaleString("fr-FR")}</span></div>`).join("")}</div><div style="padding:0 16px 14px" class="sub2">Les clics sont fiables ; les ouvertures d'e-mails ne sont qu'un ordre de grandeur.</div></div>` }),
+  compta: () => ({ sub: "Les virements Stripe sont rapprochés des commandes tout seuls, le livre des recettes du mois est prêt à exporter, la trésorerie est prévue à 30, 60 et 90 jours.",
+    acts: btn("Livre des recettes · octobre", "pri", 'data-toast="Livre des recettes prêt (PDF + Excel)"') + btn("Export Excel", "", 'data-toast="Export prêt"') + btn("CSV", "", 'data-toast="Export prêt"'),
+    body: `${kpis([["Encaissé en octobre", "1 842,60 €"], ["Frais Stripe", "37,90 €"], ["Provision URSSAF à mettre de côté", "226,40 €", "12,3 % · déclaration avant le 30 nov.", "warn"], ["Trésorerie prévue à 30 j", "+1 410 €", "après provision et achats prévus", "ok"]])}
+      <div class="grid g2"><div class="card"><div class="ch">Virements Stripe rapprochés<span class="grow"></span>${pill("p-exp", "3 sur 3 · 1 écart expliqué")}</div>${tbl([{ t: "Virement" }, { t: "Montant", r: true }, { t: "Commandes" }, { t: "" }], [["24 oct.", eur(412.30), "9 commandes", pill("p-exp", "rapproché")], ["17 oct.", eur(388.10), "8 commandes", pill("p-exp", "rapproché")], ["10 oct.", eur(290.05), "7 commandes", pill("p-prep", "écart 3,00 € = remboursement partiel 0XIF6DDO")]])}</div>
+      <div class="card"><div class="ch">Trésorerie prévue</div><div class="wk">${[["30 jours", "+1 410 €", "ventes au rythme actuel − achats − URSSAF"], ["60 jours", "+2 980 €", "Noël compris, verres à racheter"], ["90 jours", "+3 650 €", "janvier calme, prudence"]].map(([a, b, c]) => `<div><small>${a}</small><b class="num">${b}</b><small>${c}</small></div>`).join("")}</div></div></div>
+      <div class="card"><div class="ch">Ajustements de stock récents</div>${tbl([{ t: "Date" }, { t: "Produit" }, { t: "Mouvement", r: true }, { t: "Motif" }], [["29 oct.", "Verre à vin 36 cl · À l'unité", "−1", "raté, à refaire (3F5LT1XC)"], ["27 oct.", "Marque-page bois pompon · Caramel", "+20", "réception Alibaba"], ["23 oct.", "Sac cadeau", "−1", "conditionnement 3J1ZP8DA"]])}</div>` }),
+  apparence: () => ({ sub: "Bandeaux, fenêtres, sections de l'accueil, mode vacances. Chaque réglage s'enregistre avec la barre du bas.",
+    body: `<div class="set"><nav class="setnav">${["Sections de l'accueil", "Bandeau & fenêtres", "Mode vacances", "Cadeau dans chaque colis", "Accès & état"].map((l, i) => `<button type="button" class="${i ? "" : "on"}">${l}</button>`).join("")}</nav><div class="form">
+      ${fs("Sections de l'accueil", "Cochez ce qui s'affiche. L'ordre des blocs ne change pas.", [["Dernières sorties", true], ["Bijoux sur photo", true], ["Verres & carafes", true], ["Bandeau Noël + sélection de Noël", true], ["Nos univers", true], ["Bandeau confiance", true], ["Mur de l'atelier", true]].map(([l, on]) => tg(on, l, true)).join(""))}
+      ${fs("Bandeau du haut", "Une phrase courte, visible sur toutes les pages.", `${tg(false, "Afficher le bandeau", true)}${fld("ap-band", "Texte", "Commandez avant le 10 décembre pour Noël")}`)}
+      ${fs("Mode vacances", "La boutique reste ouverte ; le délai est annoncé partout.", `${tg(false, "Activer", true)}<div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">${fld("ap-d1", "Début", "")}${fld("ap-d2", "Fin", "")}</div>`)}
+      <div class="savebar" id="savebar" hidden><span>Modifications non enregistrées</span><div class="acts">${btn("Annuler", "", "data-cancel")}${btn("Enregistrer", "pri", "data-saveall")}</div></div></div></div>` }),
+  livraison: () => ({ sub: "Les tarifs de livraison, par poids et par mode. Les valeurs du code servent de repli si un champ est vide.",
+    acts: btn("Rétablir les tarifs du code", "", 'data-toast="Tarifs rétablis"'),
+    body: `<div class="grid g2"><div class="card"><div class="ch">Lettre suivie (bijoux)</div>${tbl([{ t: "Jusqu'à" }, { t: "Prix cliente", r: true }, { t: "Coût La Poste", r: true }], [["100 g", eur(4.9), eur(4.45)], ["250 g", eur(6.5), eur(5.77)], ["500 g", eur(8.9), eur(8.04)], ["1 kg", eur(10.9), eur(10.23)]])}<div style="padding:12px 16px">${tg(true, "Offerte dès 45 € de bijoux", true)}</div></div>
+      <div class="form"><div class="card"><div class="ch">Colis</div>${tbl([{ t: "Mode" }, { t: "Prix", r: true }, { t: "" }], [["Domicile", eur(6.9), ""], ["Point relais (Mondial Relay, Colissimo, UPS…)", eur(4.9), ""], ["Express Chronopost ≤ 2 kg", eur(14.9), pill("p-exp", "allumé")], ["Verres à domicile, 1 à 2 verres", eur(11.9), pill("p-prep", "à revoir ?")]])}<div style="padding:12px 16px">${tg(true, "Express Chronopost proposé au paiement", true)}${tg(true, "Verres et carafe : offerte dès 60 €", true)}</div></div></div></div>` }),
+  agents: () => ({ sub: "Vos assistants, chacun son rôle. Rien n'est envoyé ni appliqué sans votre clic. Pour leur parler : le bouton Assistant en haut.",
+    body: `<div class="mgrid" style="padding:0">${[["mail", "E-mail", "Lit la boîte, prépare une réponse à valider pour chaque message de cliente", true], ["star", "Avis", "Propose une réponse aux avis et repère ceux à publier", true], ["mega", "Newsletter", "Prépare la lettre du mois à partir des nouveautés", true], ["tag", "Catalogue", "Propose des corrections de fiches (prix, textes, stock) à confirmer", true], ["chart", "Rapport", "Résumé hebdomadaire des ventes, envoyé à vous seul", true], ["set", "Technicien", "Surveille le catalogue et signale les incohérences", true]].map(([ic, n, d, on]) => `<div class="mcard"><div class="top2"><b style="display:flex;gap:8px;align-items:center">${I(ic)}${n}</b><button type="button" class="tg ${on ? "on" : ""}" data-tg aria-label="${n}"></button></div><div class="sub2">${d}</div><div class="acts">${btn("Réglages", "sm")}${btn("Parler", "sm ghost", "data-ai")}</div></div>`).join("")}</div>
+      <div class="card"><div class="ch">Boîte mail surveillée<span class="grow"></span>${pill("p-exp", "dernier passage il y a 4 min")}</div><div style="padding:12px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="sub2">25 derniers e-mails lus · 4 réponses préparées aujourd'hui · Etsy ignoré · les devis sont lus</span><span class="grow" style="flex:1"></span>${btn("Vérifier maintenant", "sm", 'data-toast="Boîte vérifiée : rien de nouveau"')}</div></div>` }),
+  regles: () => ({ sub: "Des règles « quand… alors… » écrites en français. Simulez-les sur vos vraies commandes avant de les allumer. Tout envoi à une cliente reste une réponse à valider.",
+    acts: btn(I("plus") + "Nouvelle règle", "pri", 'data-toast="Écrivez la règle en bas de l’écran"'),
+    body: `<div class="card"><div class="ch">Vos règles<span class="grow"></span><span class="sub2">4 actives · 1 en test</span></div><div class="rules">${[
+      ["r1", true, "Express en tête de file", [["Quand", "une commande est payée"], ["Si", "livraison Express"], ["Alors", "la mettre en tête de la file et m'alerter"]], "déclenchée 3 fois ce mois", "Sur les 41 commandes des 30 derniers jours : 3 Express. Elle aurait alerté 3 fois, jamais à tort."],
+      ["r2", true, "Avis après livraison", [["Quand", "le suivi dit « livré » depuis 3 jours"], ["Alors", "préparer la demande d'avis (à valider)"]], "6 préparées, 6 validées par vous", "Elle aurait préparé 6 demandes d'avis ce mois. Aucune ne serait partie sans votre clic."],
+      ["r3", true, "Cliente fidèle", [["Quand", "une cliente passe sa 2ᵉ commande"], ["Alors", "étiquette « fidèle » + note dans la fiche"]], "2 clientes étiquetées", "4 clientes auraient reçu l'étiquette sur 30 jours (2 déjà étiquetées)."],
+      ["r4", true, "Réachat", [["Quand", "le stock passe sous le point de réachat calculé"], ["Alors", "ligne dans le centre d'actions"]], "2 alertes en cours", "Elle aurait alerté 2 fois ce mois : sac blanc et or (6 nov.), chips (12 nov.)."],
+      ["r5", false, "Photo sans date cochée", [["Quand", "l'assistant lit une date dans l'image"], ["Si", "la case date n'est pas cochée"], ["Alors", "encadré rouge à l'atelier + message préparé"]], "en test, jamais allumée", "Sur les 13 photos de commandes : 1 cas (étiquette de vin 0AYWFAHI). Message qui aurait été préparé : « Votre image contient une date… »."]
+    ].map(([id, on, n, F, last, sim]) => `<div class="rule"><div class="top2"><b>${n}</b>${pill(on ? "p-exp" : "p-liv", on ? "active" : "en test")}<button type="button" class="tg ${on ? "on" : ""}" data-tg aria-label="${n}"></button></div><div class="flow">${F.map(([k, v], i) => `${i ? '<span class="ar">→</span>' : ""}<span class="k"><b>${k}</b>${v}</span>`).join("")}</div><div class="row"><span class="sub2">${last}</span>${btn("Simuler", "sm", `data-sim="${id}"`)}</div>${state.sim === id ? `<div class="sim"><b>Simulation sur les 30 derniers jours</b>${sim}<ul><li>Aucune donnée modifiée, aucun e-mail parti.</li><li>Résultat gardé dans le journal.</li></ul>${btn("Fermer", "sm ghost", "data-sim-close")}</div>` : ""}</div>`).join("")}</div></div>
+    <div class="card fs"><div class="d"><h3>Écrire une règle</h3><p>En français, comme vous la diriez. L'assistant la traduit en blocs, vous vérifiez, vous simulez, puis vous l'allumez.</p></div><div class="fields"><div class="fld"><label for="newRule">Votre règle</label><textarea id="newRule" rows="2" style="border:1px solid var(--line-2);border-radius:8px;padding:10px;background:var(--surface)">Quand un colis en point relais n'est pas retiré au bout de 5 jours, prépare un message à la cliente.</textarea></div><div class="acts">${btn(I("spark") + "Traduire en blocs", "pri", "data-rule-parse")}${btn("Partir d'un modèle", "ghost", 'data-toast="Modèles : Express · Avis · Fidèle · Réachat · Relais non retiré"')}</div>${state.ruleParsed ? `<div class="flow"><span class="k"><b>Quand</b>le suivi dit « en attente au point relais »</span><span class="ar">→</span><span class="k"><b>Si</b>depuis 5 jours</span><span class="ar">→</span><span class="k"><b>Alors</b>préparer un message (à valider)</span></div><div class="sim"><b>Simulation</b>Sur 30 jours : 1 colis concerné (15HSMV8X, retiré le 6ᵉ jour). 1 message aurait été préparé.<div class="acts">${btn("Allumer la règle", "sm pri", 'data-toast="Règle allumée"')}${btn("Garder en test", "sm")}</div></div>` : ""}</div></div>` }),
+  notifs: () => ({ sub: "Ce que le site vous envoie, quand, et par quel canal. Rien de tout cela ne va aux clientes.",
+    body: `<div class="form">${fs("Résumé du matin", "Une notification sur le téléphone, ou un e-mail, à l'heure choisie.", `${tg(true, "Activer le résumé du matin", true)}${fld("n-h", "Heure", "07:30")}<div class="fld"><label>Canal</label><div class="seg" style="flex-wrap:wrap;align-self:flex-start"><button class="on" type="button">Téléphone</button><button type="button">E-mail</button><button type="button">Les deux</button></div></div>${[["Commandes de la veille", true], ["À expédier aujourd'hui", true], ["Réponses à valider", true], ["Stock et matériel à racheter", true], ["Mois en cours vs objectif", true], ["Visites de la veille", false]].map(([l, on]) => tg(on, l, true)).join("")}`)}
+      ${fs("Résumé du lundi", "Une fois par semaine : ventes, meilleurs produits, anomalies, veille des prix.", `${tg(true, "Activer", true)}${fld("n-lh", "Heure", "08:00")}`)}
+      ${fs("Alertes persistantes", "Une nouvelle commande ou un message urgent reste affiché en bandeau dans Gestion jusqu'à ce que vous l'ouvriez.", `${tg(true, "Nouvelle commande", true)}${tg(true, "Message classé « Problème »", true)}${tg(false, "Son sur le téléphone", true)}`)}
+      ${fs("Alertes d'anomalie", "Comparées aux 4 mêmes jours des semaines précédentes.", `${tg(true, "Ventes ou visites anormalement basses sur 2 jours", true)}${tg(true, "Visites normales mais aucune commande", true)}${tg(true, "Aucun e-mail reçu depuis 48 h", true)}${tg(true, "Taux de paniers abandonnés qui monte", true)}`)}
+      <div class="savebar" id="savebar" hidden><span>Modifications non enregistrées</span><div class="acts">${btn("Annuler", "", "data-cancel")}${btn("Enregistrer", "pri", "data-saveall")}</div></div></div>` }),
+  journal: () => ({ sub: "Qui a changé quoi, avant et après. Un clic rétablit l'ancienne valeur. Les actions risquées ont aussi un « Annuler » de 10 secondes.",
+    acts: btn("Exporter", "", 'data-toast="Journal exporté"'),
+    body: `<div class="card">${tbar([["Tout", JOURNAL.length], ["Prix", 1], ["Stock", 1], ["Réglages", 2], ["Statuts", 1], ["Messages", 1], ["Règles", 1]], "Produit, commande, réglage")}
+      <div class="tw"><table class="jrn"><thead><tr><th>Quand</th><th>Qui</th><th>Quoi</th><th>Avant → après</th><th></th></tr></thead><tbody>${JOURNAL.map(([q, w, quoi, av, ap, k], i) => `<tr><td class="sub2" style="white-space:nowrap">${q}</td><td>${w}</td><td>${quoi}</td><td><span class="diff"><s>${av}</s>${I("arrow")}<b>${ap}</b></span></td><td class="r">${av !== "—" && !ap.includes("inchangé") ? btn(I("undo") + "Rétablir", "sm", `data-undo-j="${i}"`) : ""}</td></tr>`).join("")}</tbody></table></div></div>
+      <div class="card pc"><h3>${I("shield")}Ce que le journal protège</h3><p>Un réglage effacé par erreur (cadres des aperçus, prix, livraison) se retrouve ici avec sa valeur d'avant et se rétablit en un clic. Chaque écriture ne touche que sa clé : jamais une section entière.</p></div>` }),
+  systeme: () => ({ sub: "Les feux du site : vert, tout va bien ; orange, à surveiller ; rouge, à faire. Contrôlé toutes les heures par le battement du site.",
+    acts: btn("Vérifier maintenant", "", 'data-toast="Contrôle lancé : tout répond"') + btn("Exporter les réglages", "pri", 'data-toast="Export des réglages prêt (sans les clés secrètes)"'),
+    body: `${kpis([["Feux verts", "9", "", "ok"], ["À surveiller", "1", "taille du dépôt", "warn"], ["À faire", "1", "ancien site Netlify", "bad"], ["Dernier contrôle", "il y a 2 min"]])}
+      <div class="grid g2"><div class="card">${[["ok", "Battement du site", "dernier passage il y a 2 min · boîte mail, envois programmés, fêtes"], ["ok", "Gmail (lecture + envoi par le site)", "jeton valide · dernier e-mail lu il y a 4 min"], ["ok", "Resend (e-mails de secours)", "domaine vérifié"], ["ok", "Webhook Stripe", "dernier événement il y a 2 h · 0 échec sur 30 jours"], ["ok", "Dernier déploiement Firebase", "0cc00e1f · 29 oct. 18 h 12 · réussi en 4 min"], ["ok", "Lecture des images (date dans la photo)", "12 lectures ce mois · 0 erreur"], ["ok", "Veille des prix (Tavily)", "clé connectée · dernier passage lun. 27 oct."], ["ok", "Sauvegarde des réglages", "export automatique chaque nuit · dernier : 6 h 00"], ["ok", "Notifications téléphone", "1 appareil"], ["warn", "Taille du dépôt", "396 Mo sur 440 Mo conseillés · au-delà, les déploiements échouent"], ["bad", "Ancien site Netlify", "répond encore · www.nivcreation.fr pointe dessus · 3 étapes à faire par vous"]].map(([c, t, d]) => `<div class="led ${c}"><span class="l"></span><div class="tx">${t}<small>${d}</small></div>${c === "bad" ? btn("Les 3 étapes", "sm") : ""}</div>`).join("")}</div>
+      <div class="form"><div class="card"><div class="ch">Derniers déploiements</div>${tbl([{ t: "Commit" }, { t: "Quand" }, { t: "Durée", r: true }, { t: "" }], [["0cc00e1f", "29 oct. 18 h 12", "4 min", pill("p-exp", "réussi")], ["11d5e6d8", "29 oct. 21 h 40", "4 min", pill("p-exp", "réussi")], ["aa8f9860", "27 oct. 10 h 02", "2 min 52", pill("p-bad", "échec · relancé")]])}</div>
+      <div class="card pc"><h3>${I("shield")}Mise en ligne de cette maquette</h3><p>Seuls l'habillage et le rangement changent. Prix, options, cadres des aperçus (cristal, verres, carafe), livraison, fêtes, stock, commandes et codes restent exactement tels qu'ils sont. Un export des réglages est pris avant et après, et comparé.</p></div></div></div>` }),
+};
 
 const VIEWS = { accueil: vAccueil, commandes: vCommandes, messages: vMessages, clients: vClients, catalogue: vCatalogue, stock: vStock, marketing: vMarketing, finances: vFinances, reglages: vReglages };
 
@@ -757,9 +1110,9 @@ function render() {
     const s = secOf(state.sec); const t = tabOf(s);
     page.innerHTML = VIEWS[s.id](s, t);
     const T = s.tabs.find((x) => x.id === t);
-    crumb.innerHTML = s.tabs.length > 1 ? `<span class="hide-s">${esc(s.t)}</span><span class="hide-s">›</span><b>${esc(T.t)}</b>` : `<b>${esc(s.t)}</b>`;
+    crumb.innerHTML = s.tabs.length > 1 ? `<button type="button" class="hide-s" data-go="${s.id}">${esc(s.t)}</button><span class="hide-s">›</span><b>${esc(T.t)}</b>` : `<b>${esc(s.t)}</b>`;
   }
-  renderSide();
+  renderSide(); renderUrg(); document.getElementById("bell").querySelector(".dot").style.display = state.unread.size ? "" : "none";
   window.scrollTo(0, 0);
 }
 
@@ -775,35 +1128,47 @@ function go(key) {
 
 /* ---------- panneaux ---------- */
 const scrim = document.getElementById("scrim");
-function closeAll() { ["drawer", "sheet", "pal"].forEach((id) => document.getElementById(id).classList.remove("on")); scrim.classList.remove("on"); document.getElementById("bellPop").hidden = true; }
+function closeAll() { document.getElementById("shortcuts").classList.remove("on"); state.curOrder = ""; state.palCmd = null; state.mic = false; ["drawer", "sheet", "pal"].forEach((id) => document.getElementById(id).classList.remove("on")); scrim.classList.remove("on"); document.getElementById("bellPop").hidden = true; }
 function openSide(on) { document.getElementById("side").classList.toggle("on", on); scrim.classList.toggle("on", on); }
 
-function openOrder(ref) {
+function openOrder(ref, keepTab) {
   const o = ORDERS.find((x) => x.ref === ref) || ORDERS[0];
+  if (!keepTab) { state.dtab = "resume"; state.confirm = ""; }
+  state.curOrder = o.ref; state.lastOrder = o.ref;
+  const idx = ORDERS.indexOf(o); const prev = ORDERS[idx - 1], next = ORDERS[idx + 1];
   const steps = ["Payée", "À préparer", "Gravure", "Expédiée", "Livrée"];
   const now = { prep: 1, grav: 2, exp: 3, liv: 4 }[o.st];
   const d = document.getElementById("drawer");
-  d.innerHTML = `<div class="dh"><h2><span class="ref">${o.ref}</span></h2><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
-  <div class="db">
+  const T = state.dtab;
+  const resume = `
     ${o.exp ? `<div class="alertbox">${I("bolt")}Express Chronopost : à graver en priorité</div>` : ""}
     <ol class="steps">${steps.map((x, i) => `<li class="${i < now ? "done" : i === now ? "now" : ""}">${x}</li>`).join("")}</ol>
-    <div class="card"><div class="ch">À graver</div><div style="padding:14px;display:flex;gap:14px;align-items:flex-start">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="" style="width:88px;height:88px;border-radius:10px;object-fit:cover">` : ""}<div class="engr" style="flex:1;min-width:0"><div><span>Article</span><span>${esc(o.art)}</span></div><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div></div></div>
-    <div class="card"><div class="ch">Vendu en plus</div><div style="padding:12px 16px" class="sub2">${o.img === "coeurs3" ? "Sac cadeau · 1,20 €" : "Rien de plus"}</div></div>
-    <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px"><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">CLIENTE</h4><b>${esc(o.nom)}</b><div class="sub2">2 commandes · dossier complet</div></div><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">LIVRAISON</h4><b>${o.liv}</b><div class="sub2">${o.exp ? "Chrono 18 · 14,90 €" : "Adresse vérifiée"}</div></div></div>
-    <div class="card"><div class="ch">Conditionnement<span class="grow"></span><span class="sub2">gain estimé ${eur(o.total * .48)}</span></div><div style="padding:12px 16px" class="sub2">Carton 25 × 20 × 15 · chips de calage · étiquette FRAGILE</div></div>
-    <div class="acts"><button class="btn pri" type="button" data-toast="Passée en gravure">${I("check")}Commencer la gravure</button><button class="btn" type="button" data-toast="Fiche envoyée à l'impression">${I("print")}Imprimer la fiche</button><button class="btn" type="button" data-go="commandes:etiquettes">Étiquette</button><button class="btn" type="button" data-toast="Raté noté, stock mis à jour">Raté, à refaire</button></div>
-  </div>`;
+    <div class="card"><div class="ch">À graver<span class="grow"></span><button class="lnk" type="button" data-toast="PNG, SVG et PDF téléchargés">Fichiers à graver</button></div><div style="padding:14px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="" style="width:88px;height:88px;border-radius:10px;object-fit:cover">` : ""}<div class="engr" style="flex:1;min-width:200px"><div><span>Article</span><span>${esc(o.art)}</span></div><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div></div></div>
+    <div class="card"><div class="ch">Liste de contrôle<span class="grow"></span><span class="sub2">${o.chk.filter(Boolean).length} / 5</span></div><ul class="chk">${CHK.map((c, i) => `<li class="${o.chk[i] ? "on" : ""}"><button type="button" data-chk="${i}" class="${o.chk[i] ? "on" : ""}" aria-label="${c}">${I("check")}</button><span>${c}</span>${o.chk[i] ? `<small>${["29 oct. 18 h", "29 oct. 18 h", "30 oct. 9 h", "30 oct. 9 h", "30 oct. 11 h"][i]}</small>` : ""}</li>`).join("")}</ul></div>
+    <div class="card"><div class="ch">Photo de la pièce finie<span class="grow"></span><span class="sub2">preuve rangée dans la commande</span></div><div class="photo"><div class="ph2">${o.photo && IMG[o.img] ? `<img src="${IMG[o.img]}" alt="">` : I("cam")}</div><div style="flex:1;min-width:0"><div class="sub2">${o.photo ? "Prise le 30 oct. à 9 h 12, avant emballage." : "Depuis le téléphone, avant d'emballer. Envoyée à la cliente seulement si vous le décidez."}</div><div class="acts" style="margin-top:8px">${btn(I("cam") + (o.photo ? "Reprendre" : "Prendre une photo"), "sm", 'data-photo')}${btn("Envoyer à la cliente", "sm ghost", o.photo ? 'data-toast="Message préparé avec la photo, à valider dans Messages"' : "disabled")}</div></div></div></div>
+    <div class="qrrow" style="margin:0">${qr(o.ref)}<span class="sub2" style="flex:1">Ce code est imprimé sur la fiche atelier. Scanné avec le téléphone, il ouvre cette commande et sa liste de contrôle.</span></div>
+    <div class="card"><div class="ch">Vendu en plus</div><div style="padding:12px 16px" class="sub2">${o.img === "coeurs3" ? "📦 Sac cadeau · 1,20 €" : o.img === "cristal" ? "📦 Socle LED grand · 19,90 €" : "Rien de plus"}</div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px"><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">CLIENTE</h4><b>${esc(o.nom)}</b><div class="sub2">2 commandes · <button class="lnk" type="button" data-go="clients:crm">dossier</button></div></div><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">LIVRAISON</h4><b>${o.liv}</b><div class="sub2">${o.exp ? "Chrono 18 · 14,90 €" : "Adresse vérifiée"}</div></div></div>
+    <div class="card"><div class="ch">Conditionnement<span class="grow"></span><span class="sub2">gain estimé ${eur(o.total * .48)}</span></div><div style="padding:12px 16px" class="sub2">Carton 25 × 20 × 15 · chips de calage · étiquette FRAGILE ${btn("Modifier", "sm ghost", 'data-toast="Fenêtre de conditionnement"')}</div></div>
+    ${state.confirm === "grav" ? `<div class="confirm">Passer ${o.ref} en gravure ?${btn("Oui, commencer", "sm pri", 'data-confirm-ok')}${btn("Non", "sm", 'data-confirm-no')}</div>` : `<div class="acts">${o.st === "prep" ? btn(I("check") + "Commencer la gravure", "pri", "data-confirm=\"grav\"") : o.st === "grav" ? btn(I("truck") + "Expédier avec un n° de suivi", "pri", 'data-toast="Expédiée, cliente prévenue"') : ""}${btn(I("print") + "Imprimer la fiche", "", 'data-toast="Fiche envoyée à l\'impression"')}${btn("Étiquette", "", 'data-go="commandes:etiquettes"')}${btn("Raté, à refaire", "", 'data-toast="Raté noté, stock mis à jour"')}</div>`}`;
+  const messages = `<div class="msgs" style="padding:0"><div class="msg"><small>${esc(o.nom)} · il y a 2 h</small>Bonjour, je vous renvoie la photo en meilleure qualité pour la gravure. Merci !</div><div class="msg me"><small>Niv Création · il y a 1 h</small>Bonjour, merci pour votre photo, elle est bien nette, nous l'utiliserons pour la gravure. Belle journée.</div></div><div class="draft"><div class="h">${I("mail")}Écrire à ${esc(o.nom)}</div><textarea id="dmsg" placeholder="Votre message part avec le bouton « Répondre à ce message »."></textarea><div class="acts">${btn(I("check") + "Envoyer", "pri", 'data-toast="Message envoyé"')}${btn("Envoyer un aperçu avant gravure", "", 'data-toast="Aperçu envoyé"')}</div></div>`;
+  const histo = `<ul class="tl">${[["Payée · Stripe", o.age], ["E-mail de confirmation envoyé à la cliente", o.age], ["Alerte 🛎️ reçue à l'atelier", o.age], ["Photo relue : aucune date dans l'image", "il y a 2 h"], [o.nom + " a répondu par le bouton « Répondre »", "il y a 2 h"], ["Réponse préparée par l'assistant, à valider", "il y a 2 h"]].map(([t, w]) => `<li>${t}<small>${w}</small></li>`).join("")}</ul>`;
+  d.innerHTML = `<div class="dh"><div style="display:flex;gap:4px">${btn(I("back"), "sm", `data-order="${prev ? prev.ref : o.ref}" ${prev ? "" : "disabled"} aria-label="Commande précédente"`)}${btn(I("arrow"), "sm", `data-order="${next ? next.ref : o.ref}" ${next ? "" : "disabled"} aria-label="Commande suivante"`)}</div><h2><span class="ref">${o.ref}</span> <span class="sub2" style="font-weight:400">· ${esc(o.nom)} · ${eur(o.total)}</span></h2><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="dtabs">${[["resume", "Résumé"], ["messages", "Messages"], ["histo", "Historique"]].map(([k, l]) => `<button type="button" class="${T === k ? "on" : ""}" data-dtab="${k}">${l}${k === "messages" ? ' <span class="badge" style="height:16px;min-width:16px;font-size:10px">1</span>' : ""}</button>`).join("")}</div>
+  <div class="db">${T === "resume" ? resume : T === "messages" ? messages : histo}</div>`;
   d.classList.add("on"); scrim.classList.add("on");
 }
 
 function openAssistant() {
   const sh = document.getElementById("sheet");
+  const S0 = secOf(state.sec); const ctx = S0 ? `${S0.t} › ${(S0.tabs.find((x) => x.id === tabOf(S0)) || {}).t}` : "Ce qui change";
   sh.innerHTML = `<div class="dh">${I("spark")}<h2>Assistant</h2><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
-  <div class="chat"><div class="bub me">Passe le verre à vin 36 cl en rupture et prépare un mail pour prévenir les inscrites au retour en stock.</div>
+  <div class="ctxchip">${I("panel")}Écran ouvert : ${esc(ctx)}${state.lastOrder ? ` · commande ${state.lastOrder}` : ""}</div>
+  <div class="chat"><div class="bub me">${I("mic")} <i>(dicté)</i> Passe le verre à vin 36 cl en rupture et prépare un mail pour prévenir les inscrites au retour en stock.</div>
   <div class="bub">Voici ce que je propose. Rien n'est appliqué avant votre clic.</div>
   <div class="prop"><b>Stock · Verre à vin 36 cl</b><span class="sub2">À l'unité, lot de 2, lot de 4 : stock 0</span><div class="acts"><button class="btn sm pri" type="button" data-toast="Stock mis à jour">Appliquer</button><button class="btn sm" type="button">Annuler</button></div></div>
   <div class="prop"><b>Brouillon d'e-mail · 7 inscrites</b><span class="sub2">« Il est de retour : le verre à vin gravé… »</span><div class="acts"><button class="btn sm" type="button" data-go="messages:envois">Relire</button></div></div></div>
-  <div class="compose"><input id="aiIn" placeholder="Demandez quelque chose…"><button class="btn pri" type="button" aria-label="Envoyer">${I("arrow")}</button></div>`;
+  <div class="compose"><button class="mic ${state.mic ? "on" : ""}" type="button" data-mic aria-label="Parler">${I("mic")}</button><input id="aiIn" placeholder="${state.mic ? "Je vous écoute…" : "Demandez ou dictez…"}"><button class="btn pri" type="button" aria-label="Envoyer">${I("arrow")}</button></div>`;
   sh.classList.add("on"); scrim.classList.add("on");
 }
 
@@ -816,17 +1181,40 @@ function palData(q) {
   ecr.push({ k: "plan", t: "Ce qui change", s: "Où va chaque écran", ic: "map", g: "Écrans" });
   const act = [["commandes:etiquettes", "Imprimer les étiquettes d'adresse", "print"], ["commandes:devis", "Créer un devis", "plus"], ["catalogue:produits", "Ajouter un produit", "plus"], ["messages:envois", "Écrire à une cliente", "mail"], ["marketing:promos", "Créer un code promo", "tag"], ["stock:achats", "Déposer une facture fournisseur", "box"]].map(([k, t, ic]) => ({ k, t, s: "Action", ic, g: "Actions" }));
   const cmd = ORDERS.map((o) => ({ o: o.ref, t: o.ref + " · " + o.nom, s: o.art, ic: "orders", g: "Commandes" }));
-  const all = [...act, ...ecr, ...cmd];
-  return Q ? all.filter((x) => n(x.t + " " + x.s).includes(Q)) : [...act.slice(0, 4), ...ecr.filter((e) => state.pins.includes(e.k)), ...cmd.slice(0, 3)];
+  const fast = [["Expédier 3G2NR6BE avec un n° de suivi", "Commande en gravure → expédiée, cliente prévenue", "truck", "Expédiée, cliente prévenue"], ["Passer 3J1ZP8DA en gravure", "À préparer → en gravure", "check", "3J1ZP8DA passée en gravure"], ["Stock verre à vin 36 cl = 40", "À l'unité, lot de 2, lot de 4", "box", "Stock du verre à vin 36 cl : 40"], ["Éteindre Noël", "Les cartes et emballages de Noël disparaissent des fiches", "tag", "Noël éteint sur le site"], ["Tournée du jour", "PDF des fiches, étiquettes et matériel", "print", "PDF de la tournée prêt"]].map(([t, s2, ic, done]) => ({ cmd: true, t, s: s2, ic, g: "Commandes rapides", done }));
+  const m = Q.match(/^stock\s+(.+?)\s*=\s*(\d+)$/); if (m) fast.unshift({ cmd: true, t: `Stock ${m[1]} = ${m[2]}`, s: "Toutes les options de ce produit", ic: "box", g: "Commandes rapides", done: `Stock ${m[1]} : ${m[2]}` });
+  const all = [...act, ...fast, ...ecr, ...cmd];
+  return Q ? all.filter((x) => n(x.t + " " + x.s).includes(Q)) : [...act.slice(0, 3), ...fast.slice(0, 3), ...ecr.filter((e) => state.pins.includes(e.k)), ...cmd.slice(0, 3)];
 }
 function renderPal() {
   palItems = palData(document.getElementById("palIn").value);
   if (palSel >= palItems.length) palSel = 0;
   let g = "";
-  document.getElementById("palRes").innerHTML = palItems.length ? palItems.map((x, i) => { const h = x.g !== g ? `<div class="grp">${x.g}</div>` : ""; g = x.g; return h + `<button type="button" class="it ${i === palSel ? "sel" : ""}" data-pi="${i}">${I(x.ic)}<span class="t">${esc(x.t)}<br><small>${esc(x.s)}</small></span>${I("arrow")}</button>`; }).join("") : `<div class="grp">Aucun résultat</div>`;
+  const pc = state.palCmd ? `<div class="palc">${I("alert")}${esc(state.palCmd.t)} ?${btn("Oui", "sm pri", "data-palok")}${btn("Non", "sm", "data-palno")}</div>` : "";
+  document.getElementById("palRes").innerHTML = pc + (palItems.length ? palItems.map((x, i) => { const h = x.g !== g ? `<div class="grp">${x.g}</div>` : ""; g = x.g; return h + `<button type="button" class="it ${i === palSel ? "sel" : ""}" data-pi="${i}">${I(x.ic)}<span class="t">${esc(x.t)}<br><small>${esc(x.s)}</small></span>${I("arrow")}</button>`; }).join("") : `<div class="grp">Aucun résultat</div>`);
 }
 function openPal() { closeAll(); const p = document.getElementById("pal"); p.classList.add("on"); scrim.classList.add("on"); const i = document.getElementById("palIn"); i.value = ""; palSel = 0; renderPal(); setTimeout(() => i.focus(), 30); }
-function runPal(i) { const x = palItems[i]; if (!x) return; if (x.o) { closeAll(); openOrder(x.o); } else go(x.k); }
+function runPal(i) { const x = palItems[i]; if (!x) return; if (x.cmd) { state.palCmd = x; renderPal(); return; } if (x.o) { closeAll(); openOrder(x.o); } else go(x.k); }
+function qr(ref) { let h = 0; for (const c of ref) h = (h * 31 + c.charCodeAt(0)) >>> 0; const cells = []; for (let i = 0; i < 169; i++) { const x = i % 13, y = Math.floor(i / 13); const eye = (x < 4 && y < 4) || (x > 8 && y < 4) || (x < 4 && y > 8); let k; if (eye) { const ex = x < 4 ? x : x - 9, ey = y < 4 ? y : y - 9; k = ex === 3 || ey === 3 ? 0 : (ex === 0 || ey === 0 || ex === 2 && ey === 2) ? 1 : (ex === 1 && ey === 1) ? 1 : 0; } else { h = (h * 1103515245 + 12345) >>> 0; k = (h >>> 16) & 1; } cells.push(`<i class="${k ? "k" : ""}"></i>`); } return `<span class="qr" aria-hidden="true">${cells.join("")}</span>`; }
+function openScan(ref) {
+  const o = ORDERS.find((x) => x.ref === ref) || ORDERS[0];
+  const sh = document.getElementById("sheet");
+  sh.innerHTML = `<div class="dh">${I("qr")}<h2>Scan · ${o.ref}</h2><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="chat" style="align-items:center;text-align:center"><div class="qr big">${qr(o.ref).replace('<span class="qr" aria-hidden="true">', "").replace("</span>", "")}</div><b>${esc(o.art)}</b><span class="sub2">${esc(o.det)} · ${esc(o.nom)}</span><p class="sub2" style="margin:0">Sur le téléphone, le scan ouvre directement cette commande. Cochez d'un geste :</p>
+  <ul class="chk" style="width:100%;text-align:left">${CHK.map((c, i) => `<li class="${o.chk[i] ? "on" : ""}"><button type="button" data-chk="${i}" data-scan-ref="${o.ref}" class="${o.chk[i] ? "on" : ""}" aria-label="${c}">${I("check")}</button><span>${c}</span></li>`).join("")}</ul></div>
+  <div class="compose">${btn("Ouvrir la fiche complète", "pri", `data-order="${o.ref}" style="flex:1;justify-content:center"`)}</div>`;
+  sh.classList.add("on"); scrim.classList.add("on");
+}
+function renderBell() {
+  const p = document.getElementById("bellPop");
+  p.innerHTML = `<div class="row" style="padding:8px 10px 4px"><b style="font-size:13px">Notifications</b>${btn("Tout marquer lu", "sm ghost", "data-readall")}</div><ul class="todo">${NOTIFS.map(([c, ic, t, w, u], i) => `<li class="t-${c === "gold" ? "gold" : c}" style="${state.unread.has(i) ? "" : "opacity:.6"}"><span class="ic">${I(ic)}</span><span class="tx"><b>${t}</b><span>${w}</span></span>${state.unread.has(i) ? `<span class="u" style="width:8px;height:8px;border-radius:50%;background:var(--gold-2)"></span>` : ""}</li>`).join("")}</ul><div class="sub2" style="padding:6px 10px 8px">Historique gardé 30 jours · <button class="lnk" type="button" data-go="reglages:notifs">réglages</button></div>`;
+  document.getElementById("bell").querySelector(".dot").style.display = state.unread.size ? "" : "none";
+}
+function renderUrg() {
+  const u = document.getElementById("urg");
+  u.hidden = state.urgSeen;
+  if (!u.hidden) u.innerHTML = `${I("bolt")}<div class="grow">Nouvelle commande 3K7QX2LM · Camille R. · Express · 69,80 €<small>Reste affichée tant que vous ne l'avez pas ouverte. Payée il y a 2 h.</small></div>${btn("Ouvrir", "sm pri", 'data-order="3K7QX2LM"')}${btn("Vu", "sm", "data-urgseen")}`;
+}
 
 /* ---------- événements ---------- */
 document.addEventListener("click", (e) => {
@@ -854,32 +1242,77 @@ document.addEventListener("click", (e) => {
   if (el("#aiBtn")) { closeAll(); openAssistant(); return; }
   if (el("#menuBtn")) { openSide(true); return; }
   if (el("#collapse")) { document.getElementById("app").classList.toggle("mini"); save(); return; }
-  if (el("#editPins")) { const k = state.sec + ":" + (secOf(state.sec) ? tabOf(secOf(state.sec)) : ""); if (label(k)) { state.pins = state.pins.includes(k) ? state.pins.filter((p) => p !== k) : [...state.pins, k].slice(-5); save(); renderSide(); toast(state.pins.includes(k) ? "Écran épinglé" : "Retiré des raccourcis"); } return; }
-  if (el("#bell")) { const p = document.getElementById("bellPop"); p.hidden = !p.hidden; if (!p.hidden) p.innerHTML = `<ul class="todo"><li class="t-bad"><span class="ic">${I("bolt")}</span><span class="tx"><b>Commande Express</b><span>3K7QX2LM · il y a 2 h</span></span></li><li class="t-gold"><span class="ic">${I("mail")}</span><span class="tx"><b>Camille R. a répondu</b><span>10 h 12</span></span></li><li class="t-warn"><span class="ic">${I("box")}</span><span class="tx"><b>Sac blanc et or presque épuisé</b><span>4 restants</span></span></li></ul>`; return; }
+  if ((x = el("[data-pin]"))) { const k = x.dataset.pin; state.pins = state.pins.includes(k) ? state.pins.filter((p) => p !== k) : [...state.pins, k].slice(-6); save(); render(); toast(state.pins.includes(k) ? "Écran épinglé dans les raccourcis" : "Retiré des raccourcis"); return; }
+  if ((x = el("[data-sort]"))) { const k = x.dataset.sort; state.sort = state.sort.key === k ? { key: k, dir: -state.sort.dir } : { key: k, dir: 1 }; render(); return; }
+  if ((x = el("[data-cell]"))) { x.classList.toggle("used"); x.classList.remove("next"); relabelSheet(); return; }
+  if (el("[data-sheet-new]")) { document.querySelectorAll("#sheet button").forEach((b) => b.classList.remove("used")); relabelSheet(); toast("Feuille neuve"); return; }
+  if (el("[data-sheet-shift]")) { const first = [...document.querySelectorAll("#sheet button")].find((b) => !b.classList.contains("used")); if (first) first.classList.add("used"); relabelSheet(); return; }
+  if ((x = el("[data-dtab]"))) { state.dtab = x.dataset.dtab; openOrder(state.curOrder, true); return; }
+  if ((x = el("[data-confirm]"))) { state.confirm = x.dataset.confirm; openOrder(state.curOrder, true); return; }
+  if (el("[data-confirm-no]")) { state.confirm = ""; openOrder(state.curOrder, true); return; }
+  if (el("[data-confirm-ok]")) { const o = ORDERS.find((q) => q.ref === state.curOrder); if (o) { const was = o.st; o.st = "grav"; o.chk[0] = 1; toast("Passée en gravure", () => { o.st = was; o.chk[0] = 0; render(); if (state.curOrder === o.ref) openOrder(o.ref, true); toast("Annulé : commande remise à préparer"); }); } state.confirm = ""; openOrder(state.curOrder, true); render(); return; }
+  if (el("#toastUndo")) { const f = toast.undo; toast.undo = null; document.getElementById("toast").classList.remove("on"); if (f) f(); return; }
+  if ((x = el("[data-why]"))) { state.whyOpen = state.whyOpen === x.dataset.why ? "" : x.dataset.why; state.ignOpen = ""; render(); return; }
+  if ((x = el("[data-ign]"))) { state.ignOpen = state.ignOpen === x.dataset.ign ? "" : x.dataset.ign; state.whyOpen = ""; render(); return; }
+  if (el("[data-ign-no]")) { state.ignOpen = ""; render(); return; }
+  if ((x = el("[data-ign-ok]"))) { const id = x.dataset.ignOk; const why = (document.getElementById("ignWhy") || {}).value || ""; state.ignored.add(id); state.ignOpen = ""; render(); toast(`Ignoré (${why}) · le site retient ce motif`, () => { state.ignored.delete(id); render(); }); return; }
+  if (el("[data-urgseen]")) { state.urgSeen = true; renderUrg(); return; }
+  if (el("[data-readall]")) { state.unread.clear(); renderBell(); return; }
+  if (el("[data-tournee]")) { closeAll(); openTournee(); return; }
+  if ((x = el("[data-scan]"))) { closeAll(); openScan(x.dataset.scan); return; }
+  if ((x = el("[data-group]"))) { state.group = x.dataset.group === "1"; render(); return; }
+  if ((x = el("[data-mtag]"))) { state.mtag = x.dataset.mtag; state.mail = 0; render(); return; }
+  if ((x = el("[data-chk]"))) { const ref = x.dataset.scanRef || state.curOrder; const o = ORDERS.find((q) => q.ref === ref); if (o) { const i = +x.dataset.chk; o.chk[i] = o.chk[i] ? 0 : 1; if (i === 4 && o.chk[4] && o.st !== "exp" && o.st !== "liv") { const was = o.st; o.st = "exp"; toast("Expédiée, cliente prévenue", () => { o.st = was; o.chk[4] = 0; render(); }); } } if (x.dataset.scanRef) openScan(ref); else openOrder(ref, true); render(); return; }
+  if (el("[data-photo]")) { const o = ORDERS.find((q) => q.ref === state.curOrder); if (o) { o.photo = true; toast("Photo prise et rangée dans la commande"); openOrder(o.ref, true); } return; }
+  if ((x = el("[data-client]"))) { closeAll(); openClient(+x.dataset.client); return; }
+  if ((x = el("[data-sim]"))) { state.sim = x.dataset.sim; render(); return; }
+  if (el("[data-sim-close]")) { state.sim = ""; render(); return; }
+  if (el("[data-rule-parse]")) { state.ruleParsed = true; render(); return; }
+  if ((x = el("[data-undo-j]"))) { const r = JOURNAL[+x.dataset.undoJ]; toast(`Rétabli : ${r[2]} → ${r[3]}`); return; }
+  if (el("[data-mic]")) { state.mic = !state.mic; openAssistant(); if (state.mic) setTimeout(() => { state.mic = false; const i = document.getElementById("aiIn"); if (i) i.value = "Combien de verres 47 cl il reste ?"; const m2 = document.querySelector("[data-mic]"); if (m2) m2.classList.remove("on"); }, 1800); return; }
+  if (el("[data-palok]")) { const c = state.palCmd; state.palCmd = null; closeAll(); if (c.t.startsWith("Tournée")) { openTournee(); return; } if (c.t.startsWith("Passer 3J1ZP8DA")) { const o = ORDERS.find((q) => q.ref === "3J1ZP8DA"); const was = o.st; o.st = "grav"; render(); toast(c.done, () => { o.st = was; render(); }); return; } if (c.t.startsWith("Expédier 3G2NR6BE")) { const o = ORDERS.find((q) => q.ref === "3G2NR6BE"); const was = o.st; o.st = "exp"; o.chk = [1, 1, 1, 1, 1]; render(); toast(c.done, () => { o.st = was; o.chk = [1, 0, 0, 0, 0]; render(); }); return; } toast(c.done, () => toast("Annulé")); return; }
+  if (el("[data-palno]")) { state.palCmd = null; renderPal(); return; }
+  if ((x = el("[data-edit]"))) { state.editing = x.dataset.edit; render(); const i = document.getElementById("ed"); if (i) { i.focus(); i.select(); } return; }
+  if (el("[data-ai]")) { closeAll(); openAssistant(); return; }
+  if (el("#bell")) { const p = document.getElementById("bellPop"); p.hidden = !p.hidden; if (!p.hidden) renderBell(); return; }
+  if (false) { const p = document.getElementById("bellPop"); p.hidden = !p.hidden; if (!p.hidden) p.innerHTML = `<ul class="todo"><li class="t-bad"><span class="ic">${I("bolt")}</span><span class="tx"><b>Commande Express</b><span>3K7QX2LM · il y a 2 h</span></span></li><li class="t-gold"><span class="ic">${I("mail")}</span><span class="tx"><b>Camille R. a répondu</b><span>10 h 12</span></span></li><li class="t-warn"><span class="ic">${I("box")}</span><span class="tx"><b>Sac blanc et or presque épuisé</b><span>4 restants</span></span></li></ul>`; return; }
   if (el("#scrim")) { closeAll(); openSide(false); return; }
   const tr = el("tbody tr[data-order]"); if (tr && !el("input")) { openOrder(tr.dataset.order); return; }
 });
+function relabelSheet() { let n = 0; document.querySelectorAll("#sheet button").forEach((b) => { b.classList.remove("next"); if (!b.classList.contains("used") && n < 3) { b.classList.add("next"); n++; } }); }
 function dirty() { const b = document.getElementById("savebar"); if (b) { b.hidden = false; } }
 document.addEventListener("input", (e) => {
   if (e.target.id === "palIn") { palSel = 0; renderPal(); }
   if (e.target.matches("[data-dirty]")) dirty();
   if (e.target.classList.contains("stock-in")) { clearTimeout(dirty.h); dirty.h = setTimeout(() => toast("Stock enregistré"), 700); }
 });
+function commitEdit(cancel) {
+  const i = document.getElementById("ed"); if (!i || !state.editing) return; const key = state.editing; state.editing = "";
+  const k = +key.slice(1), p = PRODUITS[k]; if (!p || cancel) { render(); return; }
+  if (key[0] === "p") { const v = parseFloat(String(i.value).replace(",", ".")); if (isFinite(v) && v !== p.p) { const was = p.p; p.p = v; render(); toast(`Prix enregistré : ${eur(v)}`, () => { p.p = was; render(); toast("Prix rétabli"); }); return; } }
+  else { const v = i.value.trim(); if (v && v !== p.n) { const was = p.n; p.n = v; render(); toast("Nom enregistré", () => { p.n = was; render(); toast("Nom rétabli"); }); return; } }
+  render();
+}
+document.addEventListener("focusout", (e) => { if (e.target.id === "ed" && state.editing) setTimeout(() => { if (state.editing && document.getElementById("ed") === e.target) commitEdit(false); }, 0); });
 document.addEventListener("keydown", (e) => {
+  if (e.target.id === "ed") { if (e.key === "Enter") { e.preventDefault(); commitEdit(false); } if (e.key === "Escape") { e.preventDefault(); commitEdit(true); } return; }
   const pal = document.getElementById("pal").classList.contains("on");
   const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); pal ? closeAll() : openPal(); return; }
-  if (e.key === "Escape") { closeAll(); openSide(false); return; }
+  if (e.key === "Escape") { if (document.getElementById("pal").classList.contains("on") && state.palCmd) { state.palCmd = null; renderPal(); return; } closeAll(); openSide(false); return; }
   if (pal) {
     if (e.key === "ArrowDown") { e.preventDefault(); palSel = Math.min(palSel + 1, palItems.length - 1); renderPal(); }
     if (e.key === "ArrowUp") { e.preventDefault(); palSel = Math.max(palSel - 1, 0); renderPal(); }
-    if (e.key === "Enter") { e.preventDefault(); runPal(palSel); }
+    if (e.key === "Enter") { e.preventDefault(); if (state.palCmd) { document.querySelector("[data-palok]").click(); } else runPal(palSel); }
     return;
   }
   if (typing) return;
+  if (e.key === "z" && toast.undo && document.getElementById("toast").classList.contains("on")) { e.preventDefault(); document.getElementById("toastUndo").click(); return; }
   if (e.key === "/") { e.preventDefault(); openPal(); return; }
+  if (e.key === "?") { e.preventDefault(); const sh = document.getElementById("shortcuts"); sh.classList.toggle("on"); return; }
+  if (state.curOrder && document.getElementById("drawer").classList.contains("on") && (e.key === "j" || e.key === "k")) { const i = ORDERS.findIndex((q) => q.ref === state.curOrder); const n = ORDERS[i + (e.key === "j" ? 1 : -1)]; if (n) openOrder(n.ref); return; }
   if (e.key.toLowerCase() === "g") { keydown.g = Date.now(); return; }
-  if (keydown.g && Date.now() - keydown.g < 900) { const m = { c: "commandes", m: "messages", p: "catalogue", a: "accueil", f: "finances", s: "stock" }[e.key.toLowerCase()]; keydown.g = 0; if (m) go(m); }
+  if (keydown.g && Date.now() - keydown.g < 900) { const m = { c: "commandes", m: "messages", p: "catalogue", a: "accueil", f: "finances", s: "stock", r: "reglages" }[e.key.toLowerCase()]; keydown.g = 0; if (m) go(m); }
 });
 function keydown() {}
 
