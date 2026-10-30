@@ -32,6 +32,10 @@
   calculée · fil d'Ariane cliquable · aucune liste vide sans message. Vérifié Chromium 1280 / 390 : 37 / 37 écrans, 0 débordement,
   0 erreur JS, tri, cases de la feuille, épingle, onglets du panneau, J, « ? ». En attente de son avis.
 - **À trancher par lui** : le rangement proposé, garder « Emballages » et « Matériel » séparés, passer tout Gestion au « vous ».
+- 💡 **30/10 : 20 idées de plus (« plus autonome, organisé, moderne »)** après recherche Shopify / Etsy / Amazon / Stripe / Square / Gorgias /
+  HubSpot / Linear / Sendcloud / Xero / Zapier → `docs/AMELIORATIONS.md` § « GESTION PLUS AUTONOME » (centre d'actions, règles si/alors
+  simulées, réachat calculé, résumé du matin, anomalies, état du système, fil client + résumé IA, tournée du jour en 1 PDF, QR sur les
+  fiches, journal + annuler, édition en ligne, assistant à la voix). Proposées seulement ; la maquette v2 n'est pas touchée.
   Au « applique » : `AdminShell.jsx` (NAV en 9 sections + sous-onglets, raccourcis, ⌘K déjà amorcé par `RechercheUniverselle`),
   les adresses actuelles /gestion/* gardées.
 ## 🎄 RUBRIQUE « FÊTES » DANS GESTION (NOËL D'ABORD) — ✅ MAQUETTE ENREGISTRÉE TELLE QUELLE LE 28/10/2026 (« enregistre la maquette », version 1) — RIEN en ligne
